@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:agora_rtc_engine/src/agora_media_base.dart';
 import 'package:agora_rtc_engine/src/agora_rtc_engine.dart';
 import 'package:agora_rtc_engine/src/agora_rtc_engine_ext.dart';
 import 'package:agora_rtc_engine/src/impl/agora_rtc_engine_impl.dart';

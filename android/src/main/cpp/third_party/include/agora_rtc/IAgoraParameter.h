@@ -115,6 +115,7 @@
  * set the video codec type, such as "H264", "JPEG"
  */
 #define KEY_RTC_VIDEO_CODEC_TYPE                      "engine.video.codec_type"
+#define KEY_RTC_VIDEO_MINOR_STREAM_CODEC_TYPE        "engine.video.minor_stream_codec_type"
 #define KEY_RTC_VIDEO_CODEC_INDEX                     "che.video.videoCodecIndex"
 /**
   * only use average QP for quality scaling

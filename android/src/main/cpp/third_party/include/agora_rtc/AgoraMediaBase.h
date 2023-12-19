@@ -35,6 +35,9 @@ static const unsigned int INVALID_TRACK_ID = 0xffffffff;
 static const unsigned int DEFAULT_CONNECTION_ID = 0;
 static const unsigned int DUMMY_CONNECTION_ID = (std::numeric_limits<unsigned int>::max)();
 
+static const int kAdmMaxDeviceNameSize = 128;
+static const int kAdmMaxGuidSize = 128;
+
 
 struct EncodedVideoFrameInfo;
 
@@ -144,6 +147,14 @@ enum AudioRoute
    * The AIRPLAY
    */
   ROUTE_AIRPLAY = 9,
+  /**
+   * The VIRTUAL SOUND CARD
+   */
+  ROUTE_VIRTUAL = 10,
+  /**
+   * The Continuity
+   */
+  ROUTE_CONTINUITY = 11,
 };
 
 /**
@@ -171,15 +182,72 @@ struct AudioParameters {
  * The use mode of the audio data.
  */
 enum RAW_AUDIO_FRAME_OP_MODE_TYPE {
-  /** 0: Read-only mode: Users only read the data from `AudioFrame` without modifying anything. 
+  /** 0: Read-only mode: Users only read the data from `AudioFrame` without modifying anything.
    * For example, when users acquire the data with the Agora SDK, then start the media push.
    */
   RAW_AUDIO_FRAME_OP_MODE_READ_ONLY = 0,
 
-  /** 2: Read and write mode: Users read the data from `AudioFrame`, modify it, and then play it. 
+  /** 2: Read and write mode: Users read the data from `AudioFrame`, modify it, and then play it.
    * For example, when users have their own audio-effect processing module and perform some voice pre-processing, such as a voice change.
    */
   RAW_AUDIO_FRAME_OP_MODE_READ_WRITE = 2,
+};
+
+/**
+ * The struct of AudioDeviceInfo.
+ *
+ * @note
+ * This struct applies to Windows and macOS only.
+ */
+struct AudioDeviceInfo {
+  /**
+   * The name of the device. The maximum name size is 128 bytes. The default value is 0.
+   */
+  char deviceName[kAdmMaxDeviceNameSize];
+  /**
+   * The ID of the device. The maximum size is 128 bytes. The default value is 0.
+   */
+  char deviceId[kAdmMaxGuidSize];
+  /**
+   * Determines whether the current device is selected for audio capturing or playback.
+   * - true: Select the current device for audio capturing or playback.
+   * - false: (Default) Do not select the current device for audio capturing or playback.
+   */
+  bool isCurrentSelected;
+  /**
+   * Determines whether the current device is the audio playout device.
+   * - true: (Default) The current device is the playout device.
+   * - false: The current device is not the playout device.
+   */
+  bool isPlayoutDevice;
+
+  /**
+   * The routing of the device. The default value is ROUTE_DEFAULT.
+   */
+  AudioRoute routing;
+
+  AudioDeviceInfo() : isCurrentSelected(false),
+                      isPlayoutDevice(true),
+                      routing(ROUTE_DEFAULT){
+    memset(deviceName, 0, sizeof(deviceName));
+    memset(deviceId, 0, sizeof(deviceId));
+  }
+
+  AudioDeviceInfo(const AudioDeviceInfo& other) : isCurrentSelected(other.isCurrentSelected),
+                      isPlayoutDevice(other.isPlayoutDevice),
+                      routing(other.routing){
+    memcpy(deviceName, other.deviceName, sizeof(deviceName));
+    memcpy(deviceId, other.deviceId, sizeof(deviceId));
+  }
+
+  AudioDeviceInfo& operator=(const AudioDeviceInfo& other) {
+    isCurrentSelected = other.isCurrentSelected;
+    isPlayoutDevice = other.isPlayoutDevice;
+    routing = other.routing;
+    memcpy(deviceName, other.deviceName, sizeof(deviceName));
+    memcpy(deviceId, other.deviceId, sizeof(deviceId));
+    return *this;
+  }
 };
 
 }  // namespace rtc
@@ -552,6 +620,19 @@ enum CAMERA_VIDEO_SOURCE_TYPE {
 };
 
 /**
+ * The IVideoFrameMetaInfo class.
+ * This interface provides access to metadata information.
+ */
+class IVideoFrameMetaInfo {
+  public:
+    enum META_INFO_KEY {
+      KEY_FACE_CAPTURE = 0,
+    };
+    virtual ~IVideoFrameMetaInfo() {};
+    virtual const char* getMetaInfoStr(META_INFO_KEY key) const = 0;
+};
+
+/**
  * The definition of the ExternalVideoFrame struct.
  */
 struct ExternalVideoFrame {
@@ -657,7 +738,7 @@ struct ExternalVideoFrame {
   /**
    * The timestamp (ms) of the incoming video frame. An incorrect timestamp results in a frame loss or
    * unsynchronized audio and video.
-   * 
+   *
    * Please refer to getAgoraCurrentMonotonicTimeInMs or getCurrentMonotonicTimeInMs
    * to determine how to fill this filed.
    */
@@ -731,7 +812,8 @@ struct VideoFrame {
   textureId(0),
   d3d11Texture2d(NULL),
   alphaBuffer(NULL),
-  pixelBuffer(NULL){
+  pixelBuffer(NULL),
+  metaInfo(NULL){
     memset(matrix, 0, sizeof(matrix));
   }
   /**
@@ -821,6 +903,10 @@ struct VideoFrame {
    *The type of CVPixelBufferRef, for iOS and macOS only.
    */
   void* pixelBuffer;
+  /**
+   *  The pointer to IVideoFrameMetaInfo, which is the interface to get metainfo contents from VideoFrame. 
+   */
+  IVideoFrameMetaInfo* metaInfo;
 };
 
 /**
@@ -928,7 +1014,7 @@ class IAudioFrameObserverBase {
      */
     int samplesPerSec;
     /**
-     * The data buffer of the audio frame. When the audio frame uses a stereo channel, the data 
+     * The data buffer of the audio frame. When the audio frame uses a stereo channel, the data
      * buffer is interleaved.
      *
      * Buffer data size: buffer = samplesPerChannel × channels × bytesPerSample.
@@ -937,8 +1023,8 @@ class IAudioFrameObserverBase {
     /**
      * The timestamp to render the audio data.
      *
-     * You can use this timestamp to restore the order of the captured audio frame, and synchronize 
-     * audio and video frames in video scenarios, including scenarios where external video sources 
+     * You can use this timestamp to restore the order of the captured audio frame, and synchronize
+     * audio and video frames in video scenarios, including scenarios where external video sources
      * are used.
      */
     int64_t renderTimeMs;
@@ -948,12 +1034,16 @@ class IAudioFrameObserverBase {
     int avsync_type;
     /**
      * A reserved parameter.
-     * 
+     *
      * You can use this presentationMs parameter to indicate the presenation milisecond timestamp,
      * this will then filled into audio4 extension part, the remote side could use this pts in av
      * sync process with video frame.
      */
     int64_t presentationMs;
+     /**
+     * The number of the audio track.
+     */
+    int audioTrackNumber;
 
     AudioFrame() : type(FRAME_TYPE_PCM16),
                    samplesPerChannel(0),
@@ -963,7 +1053,8 @@ class IAudioFrameObserverBase {
                    buffer(NULL),
                    renderTimeMs(0),
                    avsync_type(0),
-                   presentationMs(0) {}
+                   presentationMs(0),
+                   audioTrackNumber(0) {}
   };
 
   enum AUDIO_FRAME_POSITION {
@@ -1259,13 +1350,13 @@ class IVideoFrameObserver {
   enum VIDEO_FRAME_PROCESS_MODE {
     /**
      * Read-only mode.
-     * 
+     *
      * In this mode, you do not modify the video frame. The video frame observer is a renderer.
      */
     PROCESS_MODE_READ_ONLY, // Observer works as a pure renderer and will not modify the original frame.
     /**
      * Read and write mode.
-     * 
+     *
      * In this mode, you modify the video frame. The video frame observer is a video filter.
      */
     PROCESS_MODE_READ_WRITE, // Observer works as a filter that will process the video frame and affect the following frame processing in SDK.
@@ -1328,7 +1419,7 @@ class IVideoFrameObserver {
    *
    * After pre-processing, you can send the processed video data back to the SDK by setting the
    * `videoFrame` parameter in this callback.
-   * 
+   *
    * @note
    * - This callback will not be affected by the return values of \ref getVideoFrameProcessMode "getVideoFrameProcessMode", \ref getRotationApplied "getRotationApplied", \ref getMirrorApplied "getMirrorApplied", \ref getObservedFramePosition "getObservedFramePosition".
    * - On Android, this callback is not affected by the return value of \ref getVideoFormatPreference "getVideoFormatPreference"
@@ -1350,7 +1441,7 @@ class IVideoFrameObserver {
    *
    * After post-processing, you can send the processed data back to the SDK by setting the `videoFrame`
    * parameter in this callback.
-   * 
+   *
    * @note This callback does not support sending processed RGBA video data back to the SDK.
    *
    * @param channelId The channel name
@@ -1366,8 +1457,8 @@ class IVideoFrameObserver {
 
   /**
    * Occurs each time the SDK receives a video frame and prompts you to set the process mode of the video frame.
-   * 
-   * After you successfully register the video frame observer, the SDK triggers this callback each time it receives 
+   *
+   * After you successfully register the video frame observer, the SDK triggers this callback each time it receives
    * a video frame. You need to set your preferred process mode in the return value of this callback.
    * @return VIDEO_FRAME_PROCESS_MODE.
    */
@@ -1378,27 +1469,27 @@ class IVideoFrameObserver {
   /**
    * Sets the format of the raw video data output by the SDK.
    *
-   * If you want to get raw video data in a color encoding format other than YUV 420, register this callback when 
-   * calling `registerVideoFrameObserver`. After you successfully register the video frame observer, the SDK triggers 
-   * this callback each time it receives a video frame. You need to set your preferred video data in the return value 
+   * If you want to get raw video data in a color encoding format other than YUV 420, register this callback when
+   * calling `registerVideoFrameObserver`. After you successfully register the video frame observer, the SDK triggers
+   * this callback each time it receives a video frame. You need to set your preferred video data in the return value
    * of this callback.
-   * 
-   * @note If you want the video captured by the sender to be the original format, set the original video data format 
-   * to VIDEO_PIXEL_DEFAULT in the return value. On different platforms, the original video pixel format is also 
+   *
+   * @note If you want the video captured by the sender to be the original format, set the original video data format
+   * to VIDEO_PIXEL_DEFAULT in the return value. On different platforms, the original video pixel format is also
    * different, for the actual video pixel format, see `VideoFrame`.
-   * 
+   *
    * @return Sets the video format. See VIDEO_PIXEL_FORMAT.
    */
   virtual base::VIDEO_PIXEL_FORMAT getVideoFormatPreference() { return base::VIDEO_PIXEL_DEFAULT; }
 
   /**
    * Occurs each time the SDK receives a video frame, and prompts you whether to rotate the captured video.
-   * 
-   * If you want to rotate the captured video according to the rotation member in the `VideoFrame` class, register this 
-   * callback by calling `registerVideoFrameObserver`. After you successfully register the video frame observer, the 
-   * SDK triggers this callback each time it receives a video frame. You need to set whether to rotate the video frame 
+   *
+   * If you want to rotate the captured video according to the rotation member in the `VideoFrame` class, register this
+   * callback by calling `registerVideoFrameObserver`. After you successfully register the video frame observer, the
+   * SDK triggers this callback each time it receives a video frame. You need to set whether to rotate the video frame
    * in the return value of this callback.
-   * 
+   *
    * @note This function only supports video data in RGBA or YUV420.
    *
    * @return Determines whether to rotate.
@@ -1409,12 +1500,12 @@ class IVideoFrameObserver {
 
   /**
    * Occurs each time the SDK receives a video frame and prompts you whether or not to mirror the captured video.
-   * 
-   * If the video data you want to obtain is a mirror image of the original video, you need to register this callback 
-   * when calling `registerVideoFrameObserver`. After you successfully register the video frame observer, the SDK 
-   * triggers this callback each time it receives a video frame. You need to set whether or not to mirror the video 
+   *
+   * If the video data you want to obtain is a mirror image of the original video, you need to register this callback
+   * when calling `registerVideoFrameObserver`. After you successfully register the video frame observer, the SDK
+   * triggers this callback each time it receives a video frame. You need to set whether or not to mirror the video
    * frame in the return value of this callback.
-   * 
+   *
    * @note This function only supports video data in RGBA and YUV420 formats.
    *
    * @return Determines whether to mirror.

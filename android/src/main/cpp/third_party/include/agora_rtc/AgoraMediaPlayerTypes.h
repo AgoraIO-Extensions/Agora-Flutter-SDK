@@ -437,6 +437,17 @@ struct MediaSource {
    */
   bool enableCache;
   /**
+   * Determines whether to enable multi-track audio stream decoding.
+   * Then you can select multi audio track of the media file for playback or publish to channel
+   *
+   * @note
+   * If you use the selectMultiAudioTrack API, you must set enableMultiAudioTrack to true.
+   *
+   * - true: Enable MultiAudioTrack;.
+   * - false: (Default) Disable MultiAudioTrack;.
+   */
+  bool enableMultiAudioTrack;
+  /**
    * Determines whether the opened media resource is a stream through the Agora Broadcast Streaming Network(CDN).
    * - true: It is a stream through the Agora Broadcast Streaming Network.
    * - false: (Default) It is not a stream through the Agora Broadcast Streaming Network.
@@ -454,7 +465,7 @@ struct MediaSource {
   IMediaPlayerCustomDataProvider* provider;
 
   MediaSource() : url(NULL), uri(NULL), startPos(0), autoPlay(true), enableCache(false),
-                  provider(NULL){
+                  enableMultiAudioTrack(false), provider(NULL){
   }
 };
 

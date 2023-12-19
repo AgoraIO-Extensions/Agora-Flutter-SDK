@@ -34,6 +34,7 @@
 #define FUNC_RTCENGINE_GETVERSION "RtcEngine_getVersion"
 #define FUNC_RTCENGINE_GETERRORDESCRIPTION "RtcEngine_getErrorDescription"
 #define FUNC_RTCENGINE_QUERYCODECCAPABILITY "RtcEngine_queryCodecCapability"
+#define FUNC_RTCENGINE_QUERYDEVICESCORE "RtcEngine_queryDeviceScore"
 #define FUNC_RTCENGINE_JOINCHANNEL "RtcEngine_joinChannel"
 #define FUNC_RTCENGINE_JOINCHANNEL2 "RtcEngine_joinChannel2"
 #define FUNC_RTCENGINE_UPDATECHANNELMEDIAOPTIONS                               \
@@ -260,12 +261,18 @@
   "RtcEngine_isCameraAutoExposureFaceModeSupported"
 #define FUNC_RTCENGINE_SETCAMERAAUTOEXPOSUREFACEMODEENABLED                    \
   "RtcEngine_setCameraAutoExposureFaceModeEnabled"
+#define FUNC_RTCENGINE_SETCAMERASTABILIZATIONMODE                              \
+  "RtcEngine_setCameraStabilizationMode"
 #define FUNC_RTCENGINE_SETDEFAULTAUDIOROUTETOSPEAKERPHONE                      \
   "RtcEngine_setDefaultAudioRouteToSpeakerphone"
 #define FUNC_RTCENGINE_SETENABLESPEAKERPHONE "RtcEngine_setEnableSpeakerphone"
 #define FUNC_RTCENGINE_ISSPEAKERPHONEENABLED "RtcEngine_isSpeakerphoneEnabled"
 #define FUNC_RTCENGINE_SETROUTEINCOMMUNICATIONMODE                             \
   "RtcEngine_setRouteInCommunicationMode"
+#define FUNC_RTCENGINE_ISSUPPORTPORTRAITCENTERSTAGE                            \
+  "RtcEngine_isSupportPortraitCenterStage"
+#define FUNC_RTCENGINE_ENABLEPORTRAITCENTERSTAGE                               \
+  "RtcEngine_enablePortraitCenterStage"
 #define FUNC_RTCENGINE_GETSCREENCAPTURESOURCES                                 \
   "RtcEngine_getScreenCaptureSources"
 #define FUNC_RTCENGINE_RELEASESCREENCAPTURESOURCES                             \
@@ -507,6 +514,8 @@
 #define FUNC_MEDIAPLAYER_ISVIDEOMUTED "MediaPlayer_isVideoMuted"*/
 #define FUNC_MEDIAPLAYER_SETPLAYBACKSPEED "MediaPlayer_setPlaybackSpeed"
 #define FUNC_MEDIAPLAYER_SELECTAUDIOTRACK "MediaPlayer_selectAudioTrack"
+#define FUNC_MEDIAPLAYER_SELECTMULTIAUDIOTRACK                                 \
+  "MediaPlayer_selectMultiAudioTrack"
 #define FUNC_MEDIAPLAYER_SETPLAYEROPTION "MediaPlayer_setPlayerOption"
 #define FUNC_MEDIAPLAYER_SETPLAYEROPTION2 "MediaPlayer_setPlayerOption2"
 #define FUNC_MEDIAPLAYER_TAKESCREENSHOT "MediaPlayer_takeScreenshot"
@@ -683,6 +692,10 @@
   "AudioDeviceManager_getPlaybackDefaultDevice"
 #define FUNC_AUDIODEVICEMANAGER_GETRECORDINGDEAFULTDEVICE                      \
   "AudioDeviceManager_getRecordingDefaultDevice"
+#define FUNC_AUDIODEVICEMANAGER_GETPLAYBACKAUDIODEVICEINFO                     \
+  "AudioDeviceManager_getPlaybackAudioDeviceInfo"
+#define FUNC_AUDIODEVICEMANAGER_GETRECORDINGAUDIODEVICEINFO                    \
+  "AudioDeviceManager_getRecordingAudioDeviceInfo"
 // class IAudioDeviceManager end
 
 // class ICloudSpatialAudioEngine start

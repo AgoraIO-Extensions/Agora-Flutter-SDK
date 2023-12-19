@@ -118,6 +118,7 @@ void generatedTestCases(IrisTester irisTester) {
 
       {
         const String requestId = "hello";
+        const MusicCollection? result = null;
         const MusicContentCenterStatusCode errorCode =
             MusicContentCenterStatusCode.kMusicContentCenterStatusOk;
 
@@ -398,3 +399,4 @@ void generatedTestCases(IrisTester irisTester) {
     timeout: const Timeout(Duration(minutes: 2)),
   );
 }
+

@@ -51,6 +51,17 @@ public:
                         char deviceId[MAX_DEVICE_ID_LENGTH]) = 0;
 
   /**
+   * Gets the information of a specified audio device.
+   *
+   * only work on Mac and Win.
+   *
+   * @param index An input parameter that specifies the audio device.
+   *
+   * @return AudioDeviceInfo
+   */
+  virtual AudioDeviceInfo getDevice(int index) = 0;
+
+  /**
    * Specifies a device with the device ID.
    * @param deviceId The device ID.
    * @return

@@ -631,7 +631,7 @@ enum ERROR_CODE_TYPE {
    */
   ERR_SET_CLIENT_ROLE_NOT_AUTHORIZED = 119,
   /**
-   * 120: Decryption fails. The user may have tried to join the channel with a wrong
+   * 120: MediaStream decryption fails. The user may have tried to join the channel with a wrong
    * password. Check your settings or try rejoining the channel.
    */
   ERR_DECRYPTION_FAILED = 120,
@@ -639,6 +639,11 @@ enum ERROR_CODE_TYPE {
    * 121: The user ID is invalid.
    */
   ERR_INVALID_USER_ID = 121,
+  /**
+   * 122: DataStream decryption fails. The peer may have tried to join the channel with a wrong
+   * password, or did't enable datastream encryption
+   */
+  ERR_DATASTREAM_DECRYPTION_FAILED = 122,
   /**
    * 123: The app is banned by the server.
    */
@@ -2602,6 +2607,27 @@ enum CAPTURE_BRIGHTNESS_LEVEL_TYPE {
   CAPTURE_BRIGHTNESS_LEVEL_DARK = 2,
 };
 
+enum CAMERA_STABILIZATION_MODE {
+  /** The camera stabilization mode is disabled. 
+  */
+  CAMERA_STABILIZATION_MODE_OFF = -1,
+  /** device choose stabilization mode automatically. 
+  */
+  CAMERA_STABILIZATION_MODE_AUTO = 0,
+  /** stabilization mode level 1. 
+  */
+  CAMERA_STABILIZATION_MODE_LEVEL_1 = 1,
+  /** stabilization mode level 2. 
+  */
+  CAMERA_STABILIZATION_MODE_LEVEL_2 = 2,
+  /** stabilization mode level 3. 
+  */
+  CAMERA_STABILIZATION_MODE_LEVEL_3 = 3,
+  /** The maximum level of the camera stabilization mode.
+   */
+  CAMERA_STABILIZATION_MODE_MAX_LEVEL = CAMERA_STABILIZATION_MODE_LEVEL_3,
+};
+
 /**
  * Local audio states.
  */
@@ -2755,6 +2781,16 @@ enum LOCAL_VIDEO_STREAM_ERROR {
    * Check whether the ID of the video device is valid.
    */
   LOCAL_VIDEO_STREAM_ERROR_DEVICE_INVALID_ID = 10,
+  /**
+   * 14: (Android only) Video capture was interrupted, possibly due to the camera being occupied
+   * or some policy reasons such as background termination.
+   */
+  LOCAL_VIDEO_STREAM_ERROR_DEVICE_INTERRUPT = 14,
+  /**
+   * 15: (Android only) The device may need to be shut down and restarted to restore camera function, 
+   * or there may be a persistent hardware problem.
+   */
+  LOCAL_VIDEO_STREAM_ERROR_DEVICE_FATAL_ERROR = 15,
   /**
    * 101: The current video capture device is unavailable due to excessive system pressure.
    */
@@ -5484,10 +5520,13 @@ struct EncryptionConfig {
    * In this case, ensure that this parameter is not 0.
    */
   uint8_t encryptionKdfSalt[32];
+    
+  bool datastreamEncryptionEnabled;
 
   EncryptionConfig()
     : encryptionMode(AES_128_GCM2),
-      encryptionKey(NULL)
+      encryptionKey(NULL),
+      datastreamEncryptionEnabled(false)
   {
     memset(encryptionKdfSalt, 0, sizeof(encryptionKdfSalt));
   }
@@ -5527,13 +5566,21 @@ enum ENCRYPTION_ERROR_TYPE {
      */
     ENCRYPTION_ERROR_INTERNAL_FAILURE = 0,
     /**
-     * 1: Decryption errors. Ensure that the receiver and the sender use the same encryption mode and key.
+     * 1: MediaStream decryption errors. Ensure that the receiver and the sender use the same encryption mode and key.
      */
     ENCRYPTION_ERROR_DECRYPTION_FAILURE = 1,
     /**
-     * 2: Encryption errors.
+     * 2: MediaStream encryption errors.
      */
     ENCRYPTION_ERROR_ENCRYPTION_FAILURE = 2,
+    /**
+     * 3: DataStream decryption errors. Ensure that the receiver and the sender use the same encryption mode and key.
+     */
+    ENCRYPTION_ERROR_DATASTREAM_DECRYPTION_FAILURE = 3,
+    /**
+     * 4: DataStream encryption errors.
+     */
+    ENCRYPTION_ERROR_DATASTREAM_ENCRYPTION_FAILURE = 4,
 };
 
 enum UPLOAD_ERROR_REASON

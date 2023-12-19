@@ -172,6 +172,36 @@ void rtcEngineSmokeTestCases() {
   );
 
   testWidgets(
+    'queryDeviceScore',
+    (WidgetTester tester) async {
+      String engineAppId = const String.fromEnvironment('TEST_APP_ID',
+          defaultValue: '<YOUR_APP_ID>');
+
+      RtcEngine rtcEngine = createAgoraRtcEngine();
+      await rtcEngine.initialize(RtcEngineContext(
+        appId: engineAppId,
+        areaCode: AreaCode.areaCodeGlob.value(),
+      ));
+
+      try {
+        await rtcEngine.queryDeviceScore();
+      } catch (e) {
+        if (e is! AgoraRtcException) {
+          debugPrint('[queryDeviceScore] error: ${e.toString()}');
+          rethrow;
+        }
+
+        if (e.code != -4) {
+          // Only not supported error supported.
+          rethrow;
+        }
+      }
+
+      await rtcEngine.release();
+    },
+  );
+
+  testWidgets(
     'preloadChannel',
     (WidgetTester tester) async {
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
@@ -743,10 +773,12 @@ void rtcEngineSmokeTestCases() {
           fps: formatFps,
         );
         const String configDeviceId = "hello";
+        const String configCameraId = "hello";
         const bool configFollowEncodeDimensionRatio = true;
         const CameraCapturerConfiguration config = CameraCapturerConfiguration(
           cameraDirection: configCameraDirection,
           deviceId: configDeviceId,
+          cameraId: configCameraId,
           format: configFormat,
           followEncodeDimensionRatio: configFollowEncodeDimensionRatio,
         );
@@ -5233,10 +5265,12 @@ void rtcEngineSmokeTestCases() {
           fps: formatFps,
         );
         const String configDeviceId = "hello";
+        const String configCameraId = "hello";
         const bool configFollowEncodeDimensionRatio = true;
         const CameraCapturerConfiguration config = CameraCapturerConfiguration(
           cameraDirection: configCameraDirection,
           deviceId: configDeviceId,
+          cameraId: configCameraId,
           format: configFormat,
           followEncodeDimensionRatio: configFollowEncodeDimensionRatio,
         );
@@ -5900,6 +5934,40 @@ void rtcEngineSmokeTestCases() {
   );
 
   testWidgets(
+    'setCameraStabilizationMode',
+    (WidgetTester tester) async {
+      String engineAppId = const String.fromEnvironment('TEST_APP_ID',
+          defaultValue: '<YOUR_APP_ID>');
+
+      RtcEngine rtcEngine = createAgoraRtcEngine();
+      await rtcEngine.initialize(RtcEngineContext(
+        appId: engineAppId,
+        areaCode: AreaCode.areaCodeGlob.value(),
+      ));
+
+      try {
+        const CameraStabilizationMode mode =
+            CameraStabilizationMode.cameraStabilizationModeOff;
+        await rtcEngine.setCameraStabilizationMode(
+          mode,
+        );
+      } catch (e) {
+        if (e is! AgoraRtcException) {
+          debugPrint('[setCameraStabilizationMode] error: ${e.toString()}');
+          rethrow;
+        }
+
+        if (e.code != -4) {
+          // Only not supported error supported.
+          rethrow;
+        }
+      }
+
+      await rtcEngine.release();
+    },
+  );
+
+  testWidgets(
     'setDefaultAudioRouteToSpeakerphone',
     (WidgetTester tester) async {
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
@@ -6016,6 +6084,69 @@ void rtcEngineSmokeTestCases() {
       } catch (e) {
         if (e is! AgoraRtcException) {
           debugPrint('[setRouteInCommunicationMode] error: ${e.toString()}');
+          rethrow;
+        }
+
+        if (e.code != -4) {
+          // Only not supported error supported.
+          rethrow;
+        }
+      }
+
+      await rtcEngine.release();
+    },
+  );
+
+  testWidgets(
+    'isSupportPortraitCenterStage',
+    (WidgetTester tester) async {
+      String engineAppId = const String.fromEnvironment('TEST_APP_ID',
+          defaultValue: '<YOUR_APP_ID>');
+
+      RtcEngine rtcEngine = createAgoraRtcEngine();
+      await rtcEngine.initialize(RtcEngineContext(
+        appId: engineAppId,
+        areaCode: AreaCode.areaCodeGlob.value(),
+      ));
+
+      try {
+        await rtcEngine.isSupportPortraitCenterStage();
+      } catch (e) {
+        if (e is! AgoraRtcException) {
+          debugPrint('[isSupportPortraitCenterStage] error: ${e.toString()}');
+          rethrow;
+        }
+
+        if (e.code != -4) {
+          // Only not supported error supported.
+          rethrow;
+        }
+      }
+
+      await rtcEngine.release();
+    },
+  );
+
+  testWidgets(
+    'enablePortraitCenterStage',
+    (WidgetTester tester) async {
+      String engineAppId = const String.fromEnvironment('TEST_APP_ID',
+          defaultValue: '<YOUR_APP_ID>');
+
+      RtcEngine rtcEngine = createAgoraRtcEngine();
+      await rtcEngine.initialize(RtcEngineContext(
+        appId: engineAppId,
+        areaCode: AreaCode.areaCodeGlob.value(),
+      ));
+
+      try {
+        const bool enabled = true;
+        await rtcEngine.enablePortraitCenterStage(
+          enabled,
+        );
+      } catch (e) {
+        if (e is! AgoraRtcException) {
+          debugPrint('[enablePortraitCenterStage] error: ${e.toString()}');
           rethrow;
         }
 
@@ -7414,10 +7545,12 @@ void rtcEngineSmokeTestCases() {
           fps: formatFps,
         );
         const String configDeviceId = "hello";
+        const String configCameraId = "hello";
         const bool configFollowEncodeDimensionRatio = true;
         const CameraCapturerConfiguration config = CameraCapturerConfiguration(
           cameraDirection: configCameraDirection,
           deviceId: configDeviceId,
+          cameraId: configCameraId,
           format: configFormat,
           followEncodeDimensionRatio: configFollowEncodeDimensionRatio,
         );
@@ -7709,7 +7842,7 @@ void rtcEngineSmokeTestCases() {
               RtmpStreamPublishErrorType errCode) {},
           onRtmpStreamingEvent: (String url, RtmpStreamingEvent eventCode) {},
           onTranscodingUpdated: () {},
-          onAudioRoutingChanged: (int routing) {},
+          onAudioRoutingChanged: (int deviceType, int routing) {},
           onChannelMediaRelayStateChanged:
               (ChannelMediaRelayState state, ChannelMediaRelayError code) {},
           onChannelMediaRelayEvent: (ChannelMediaRelayEvent code) {},
@@ -7921,7 +8054,7 @@ void rtcEngineSmokeTestCases() {
               RtmpStreamPublishErrorType errCode) {},
           onRtmpStreamingEvent: (String url, RtmpStreamingEvent eventCode) {},
           onTranscodingUpdated: () {},
-          onAudioRoutingChanged: (int routing) {},
+          onAudioRoutingChanged: (int deviceType, int routing) {},
           onChannelMediaRelayStateChanged:
               (ChannelMediaRelayState state, ChannelMediaRelayError code) {},
           onChannelMediaRelayEvent: (ChannelMediaRelayEvent code) {},
@@ -8117,10 +8250,12 @@ void rtcEngineSmokeTestCases() {
         const EncryptionMode configEncryptionMode = EncryptionMode.aes128Xts;
         const String configEncryptionKey = "hello";
         Uint8List configEncryptionKdfSalt = Uint8List.fromList([1, 2, 3, 4, 5]);
+        const bool configDatastreamEncryptionEnabled = true;
         final EncryptionConfig config = EncryptionConfig(
           encryptionMode: configEncryptionMode,
           encryptionKey: configEncryptionKey,
           encryptionKdfSalt: configEncryptionKdfSalt,
+          datastreamEncryptionEnabled: configDatastreamEncryptionEnabled,
         );
         await rtcEngine.enableEncryption(
           enabled: enabled,
@@ -10218,3 +10353,4 @@ void rtcEngineSmokeTestCases() {
     },
   );
 }
+

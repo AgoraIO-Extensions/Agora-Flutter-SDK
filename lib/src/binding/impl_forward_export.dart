@@ -1,4 +1,5 @@
 export 'agora_base_event_impl.dart';
+export 'agora_media_base_impl.dart';
 export 'agora_media_base_event_impl.dart';
 export 'agora_media_engine_impl.dart';
 export 'agora_media_player_impl.dart';
