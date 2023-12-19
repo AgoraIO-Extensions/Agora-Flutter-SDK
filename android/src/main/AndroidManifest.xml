@@ -2,16 +2,16 @@
     xmlns:tools="http://schemas.android.com/tools"
     package="io.agora.agora_rtc_ng">
 
-  <uses-permission android:name="android.permission.READ_PHONE_STATE" />
-  <uses-permission android:name="android.permission.INTERNET" />
+  <uses-permission android:name="android.permission.INTERNET"/>
+  <uses-permission android:name="android.permission.READ_PHONE_STATE"/>
   <uses-permission android:name="android.permission.RECORD_AUDIO" />
   <uses-permission android:name="android.permission.CAMERA" />
   <uses-permission android:name="android.permission.MODIFY_AUDIO_SETTINGS" />
-  <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
-  <uses-permission android:name="android.permission.BLUETOOTH" />
   <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
-  <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
-  <uses-permission
-    android:name="android.permission.READ_PRIVILEGED_PHONE_STATE"
-    tools:ignore="ProtectedPermissions" />
+  <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+
+  <!-- The Agora SDK requires Bluetooth permissions in case users are using Bluetooth devices. -->
+  <uses-permission android:name="android.permission.BLUETOOTH" />
+  <!-- For Android 12 and above devices, the following permission is also required. -->
+  <uses-permission android:name="android.permission.BLUETOOTH_CONNECT" />
 </manifest>

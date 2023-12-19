@@ -35,31 +35,28 @@ your [pubspec.yaml](https://flutter.dev/docs/development/packages-and-plugins/us
 Agora Video SDK requires `Camera` and `Microphone` permission to start a video call.
 
 #### Android
+> For the latest permission settings, please refer to the documentation at https://docs.agora.io/en/video-calling/get-started/get-started-sdk?platform=android#project-setup
 
 See the required device permissions from
 the [AndroidManifest.xml](android/src/main/AndroidManifest.xml) file.
 
 ```xml
+<uses-permission android:name="android.permission.INTERNET"/>
+<uses-permission android:name="android.permission.READ_PHONE_STATE"/>
+<uses-permission android:name="android.permission.RECORD_AUDIO" />
+<uses-permission android:name="android.permission.CAMERA" />
+<uses-permission android:name="android.permission.MODIFY_AUDIO_SETTINGS" />
+<uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+<uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 
-<manifest>
-  ...
-  <uses-permission android:name="android.permission.READ_PHONE_STATE" />
-  <uses-permission android:name="android.permission.INTERNET" />
-  <uses-permission android:name="android.permission.RECORD_AUDIO" />
-  <uses-permission android:name="android.permission.CAMERA" />
-  <uses-permission android:name="android.permission.MODIFY_AUDIO_SETTINGS" />
-  <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
-  <uses-permission android:name="android.permission.BLUETOOTH" />
-  <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
-  <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
-  <uses-permission android:name="android.permission.WAKE_LOCK" />
-  <uses-permission android:name="android.permission.READ_PRIVILEGED_PHONE_STATE"
-    tools:ignore="ProtectedPermissions" />
-  ...
-</manifest>
+<!-- The Agora SDK requires Bluetooth permissions in case users are using Bluetooth devices. -->
+<uses-permission android:name="android.permission.BLUETOOTH" />
+<!-- For Android 12 and above devices, the following permission is also required. -->
+<uses-permission android:name="android.permission.BLUETOOTH_CONNECT" />
 ```
 
 #### iOS & macOS
+> For the latest permission settings, please refer to the documentation at https://docs.agora.io/en/video-calling/get-started/get-started-sdk?platform=ios#project-setup
 
 Open the `Info.plist` and add:
 
