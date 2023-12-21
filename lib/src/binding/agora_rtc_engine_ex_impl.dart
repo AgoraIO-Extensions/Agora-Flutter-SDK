@@ -519,7 +519,7 @@ class RtcEngineExImpl extends RtcEngineImpl implements RtcEngineEx {
     final param = createParams({
       'connection': connection.toJson(),
       'enabled': enabled,
-      'deviceName': deviceName
+      if (deviceName != null) 'deviceName': deviceName
     });
     final List<Uint8List> buffers = [];
     buffers.addAll(connection.collectBufferList());

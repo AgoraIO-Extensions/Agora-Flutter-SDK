@@ -329,7 +329,7 @@ class MusicContentCenterImpl implements MusicContentCenter {
       'musicChartId': musicChartId,
       'page': page,
       'pageSize': pageSize,
-      'jsonOption': jsonOption
+      if (jsonOption != null) 'jsonOption': jsonOption
     });
     final callApiResult = await irisMethodChannel.invokeMethod(
         IrisMethodCall(apiType, jsonEncode(param), buffers: null));
@@ -358,7 +358,7 @@ class MusicContentCenterImpl implements MusicContentCenter {
       'keyWord': keyWord,
       'page': page,
       'pageSize': pageSize,
-      'jsonOption': jsonOption
+      if (jsonOption != null) 'jsonOption': jsonOption
     });
     final callApiResult = await irisMethodChannel.invokeMethod(
         IrisMethodCall(apiType, jsonEncode(param), buffers: null));

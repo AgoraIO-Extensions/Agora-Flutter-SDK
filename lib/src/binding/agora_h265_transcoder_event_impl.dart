@@ -23,7 +23,7 @@ class H265TranscoderObserverWrapper implements EventLoopEventHandler {
   bool handleEventInternal(
       String eventName, String eventData, List<Uint8List> buffers) {
     switch (eventName) {
-      case 'onEnableTranscode':
+      case 'onEnableTranscode__agora_rtc_H265_TRANSCODE_RESULT':
         if (h265TranscoderObserver.onEnableTranscode == null) {
           return true;
         }
@@ -38,7 +38,7 @@ class H265TranscoderObserverWrapper implements EventLoopEventHandler {
         h265TranscoderObserver.onEnableTranscode!(result);
         return true;
 
-      case 'onQueryChannel':
+      case 'onQueryChannel__agora_rtc_H265_TRANSCODE_RESULT__const_char_ptr__const_char_ptr':
         if (h265TranscoderObserver.onQueryChannel == null) {
           return true;
         }
@@ -58,7 +58,7 @@ class H265TranscoderObserverWrapper implements EventLoopEventHandler {
             result, originChannel, transcodeChannel);
         return true;
 
-      case 'onTriggerTranscode':
+      case 'onTriggerTranscode__agora_rtc_H265_TRANSCODE_RESULT':
         if (h265TranscoderObserver.onTriggerTranscode == null) {
           return true;
         }
@@ -79,8 +79,8 @@ class H265TranscoderObserverWrapper implements EventLoopEventHandler {
   @override
   bool handleEvent(
       String eventName, String eventData, List<Uint8List> buffers) {
-    if (!eventName.startsWith('H265TranscoderObserver')) return false;
-    final newEvent = eventName.replaceFirst('H265TranscoderObserver_', '');
+    if (!eventName.startsWith('IH265TranscoderObserver')) return false;
+    final newEvent = eventName.replaceFirst('IH265TranscoderObserver_', '');
     if (handleEventInternal(newEvent, eventData, buffers)) {
       return true;
     }

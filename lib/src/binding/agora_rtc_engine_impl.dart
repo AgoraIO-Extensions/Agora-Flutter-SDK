@@ -299,9 +299,6 @@ class RtcEngineImpl implements RtcEngine {
     }
     final rm = callApiResult.data;
     final result = rm['result'];
-    if (result < 0) {
-      throw AgoraRtcException(code: result);
-    }
   }
 
   @override
@@ -2842,7 +2839,8 @@ class RtcEngineImpl implements RtcEngine {
       {required bool enabled, String? deviceName}) async {
     final apiType =
         '${isOverrideClassName ? className : 'RtcEngine'}_enableLoopbackRecording';
-    final param = createParams({'enabled': enabled, 'deviceName': deviceName});
+    final param = createParams(
+        {'enabled': enabled, if (deviceName != null) 'deviceName': deviceName});
     final callApiResult = await irisMethodChannel.invokeMethod(
         IrisMethodCall(apiType, jsonEncode(param), buffers: null));
     if (callApiResult.irisReturnCode < 0) {
