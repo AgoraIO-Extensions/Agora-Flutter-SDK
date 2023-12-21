@@ -18,8 +18,11 @@ class JoinChannelAudio extends StatefulWidget {
 class _State extends State<JoinChannelAudio> {
   late final RtcEngine _engine;
   String channelId = config.channelId;
+  final String _selectedUid = '';
   bool isJoined = false,
       openMicrophone = true,
+      muteMicrophone = false,
+      muteAllRemoteAudio = false,
       enableSpeakerphone = true,
       playEffect = false;
   bool _enableInEarMonitoring = false;
@@ -27,6 +30,7 @@ class _State extends State<JoinChannelAudio> {
       _playbackVolume = 100,
       _inEarMonitoringVolume = 100;
   late TextEditingController _controller;
+  late final TextEditingController _selectedUidController;
   ChannelProfileType _channelProfileType =
       ChannelProfileType.channelProfileLiveBroadcasting;
   late final RtcEngineEventHandler _rtcEngineEventHandler;
@@ -35,6 +39,7 @@ class _State extends State<JoinChannelAudio> {
   void initState() {
     super.initState();
     _controller = TextEditingController(text: channelId);
+    _selectedUidController = TextEditingController(text: _selectedUid);
     _initEngine();
   }
 
@@ -106,6 +111,8 @@ class _State extends State<JoinChannelAudio> {
     setState(() {
       isJoined = false;
       openMicrophone = true;
+      muteMicrophone = false;
+      muteAllRemoteAudio = false;
       enableSpeakerphone = true;
       playEffect = false;
       _enableInEarMonitoring = false;
@@ -120,6 +127,20 @@ class _State extends State<JoinChannelAudio> {
     await _engine.enableLocalAudio(!openMicrophone);
     setState(() {
       openMicrophone = !openMicrophone;
+    });
+  }
+
+  _muteLocalAudioStream() async {
+    await _engine.muteLocalAudioStream(!muteMicrophone);
+    setState(() {
+      muteMicrophone = !muteMicrophone;
+    });
+  }
+
+  _muteAllRemoteAudioStreams() async {
+    await _engine.muteAllRemoteAudioStreams(!muteAllRemoteAudio);
+    setState(() {
+      muteAllRemoteAudio = !muteAllRemoteAudio;
     });
   }
 
@@ -219,6 +240,29 @@ class _State extends State<JoinChannelAudio> {
                 )
               ],
             ),
+            if (kIsWeb) ...[
+              TextField(
+                controller: _selectedUidController,
+                decoration: const InputDecoration(
+                    hintText: 'input userID you want to mute/unmute'),
+              ),
+              ElevatedButton(
+                onPressed: () async {
+                  await _engine.muteRemoteAudioStream(
+                      uid: int.tryParse(_selectedUidController.text) ?? -1,
+                      mute: true);
+                },
+                child: Text('mute Remote Audio'),
+              ),
+              ElevatedButton(
+                onPressed: () async {
+                  await _engine.muteRemoteAudioStream(
+                      uid: int.tryParse(_selectedUidController.text) ?? -1,
+                      mute: false);
+                },
+                child: Text('unmute Remote Audio'),
+              ),
+            ]
           ],
         ),
         Align(
@@ -228,6 +272,18 @@ class _State extends State<JoinChannelAudio> {
                 mainAxisSize: MainAxisSize.min,
                 crossAxisAlignment: CrossAxisAlignment.end,
                 children: [
+                  if (kIsWeb) ...[
+                    ElevatedButton(
+                      onPressed: _muteLocalAudioStream,
+                      child: Text(
+                          'Microphone ${muteMicrophone ? 'muted' : 'unmute'}'),
+                    ),
+                    ElevatedButton(
+                      onPressed: _muteAllRemoteAudioStreams,
+                      child: Text(
+                          'All Remote Microphone ${muteAllRemoteAudio ? 'muted' : 'unmute'}'),
+                    ),
+                  ],
                   ElevatedButton(
                     onPressed: _switchMicrophone,
                     child: Text('Microphone ${openMicrophone ? 'on' : 'off'}'),
