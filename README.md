@@ -89,7 +89,7 @@ Download the `iris_web`(see the link below) artifact and include it as a `<scrip
 </body>
 </html>
 ```
-Download: https://download.agora.io/staging/iris-web-rtc_n423_w4182_0.3.1.js
+Download: https://download.agora.io/staging/iris-web-rtc_n423_w4182_0.4.0.js
 
 **For Testing Purposes**
 
@@ -101,7 +101,7 @@ You can directly depend on the Agora CDN for testing purposes:
 ...
 <body>
   ...
-  <script src="https://download.agora.io/staging/iris-web-rtc_n423_w4182_0.3.1.js"></script>
+  <script src="https://download.agora.io/staging/iris-web-rtc_n423_w4182_0.4.0.js"></script>
 </body>
 </html>
 ```
