@@ -213,7 +213,7 @@ void localSpatialAudioEngineSmokeTestCases() {
       final localSpatialAudioEngine = rtcEngine.getLocalSpatialAudioEngine();
 
       try {
-        const String params = "hello";
+        const String params = "{\"hello\":{\"world\": 0}}";
         await localSpatialAudioEngine.setParameters(
           params,
         );

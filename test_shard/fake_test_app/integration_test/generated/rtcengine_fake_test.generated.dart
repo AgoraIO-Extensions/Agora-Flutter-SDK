@@ -9776,7 +9776,7 @@ void rtcEngineSmokeTestCases() {
       ));
 
       try {
-        const String parameters = "hello";
+        const String parameters = "{\"hello\":{\"world\": 0}}";
         await rtcEngine.setParameters(
           parameters,
         );
