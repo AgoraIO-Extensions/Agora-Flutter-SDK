@@ -90,7 +90,7 @@ class GLContext {
     return is_setup_surface_;
   }
 
-  bool CreateContextAndMakeCurrent(const void *share_context) {
+  bool GLContextMakeCurrent(const void *share_context) {
     // Need recreate context
     if (context_ != EGL_NO_CONTEXT && share_context_ != share_context) {
       eglMakeCurrent(display_, EGL_NO_SURFACE, EGL_NO_SURFACE, EGL_NO_CONTEXT);
@@ -118,6 +118,12 @@ class GLContext {
     if (!result) { CHECK_GL_ERROR() }
 
     return result;
+  }
+
+  void GLContextClearCurrent() {
+    if (context_ != EGL_NO_CONTEXT) {
+        eglMakeCurrent(display_, EGL_NO_SURFACE, EGL_NO_SURFACE, EGL_NO_CONTEXT);
+    }
   }
 
   EGLint Swap() {
@@ -522,8 +528,6 @@ class YUVRendering final : public RenderingOp {
     CHECK_GL_ERROR()
     glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
     CHECK_GL_ERROR()
-    glViewport(0, 0, width, height);
-    CHECK_GL_ERROR()
 
     glEnableVertexAttribArray(aPositionLoc_);
     CHECK_GL_ERROR()
@@ -730,7 +734,7 @@ class NativeTextureRenderer final
       return;
     }
 
-    if (!gl_context_->CreateContextAndMakeCurrent(video_frame->sharedContext)) {
+    if (!gl_context_->GLContextMakeCurrent(video_frame->sharedContext)) {
       LOGCATE("GLContext#CreateContextAndMakeCurrent failed ");
       return;
     }
@@ -756,6 +760,8 @@ class NativeTextureRenderer final
     }
 
     rendering_op_->Rendering(video_frame);
+
+    gl_context_->GLContextClearCurrent();
   }
 
   void Dispose() {
