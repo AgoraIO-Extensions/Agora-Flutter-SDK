@@ -58,8 +58,7 @@ dependencies {
     implementation fileTree(dir: "libs", include: ["*.jar"])
   } else {
     api 'io.agora.rtc:iris-rtc:4.2.6-build.3'
-    api 'io.agora.rtc:full-sdk:4.2.6'
-    api 'io.agora.rtc:full-screen-sharing:4.2.6'
+    api 'io.agora.rtc:voice-sdk:4.2.6'
   }
 }
 
