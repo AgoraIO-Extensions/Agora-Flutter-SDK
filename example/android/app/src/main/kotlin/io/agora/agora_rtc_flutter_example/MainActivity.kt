@@ -37,8 +37,6 @@ class MainActivity: FlutterActivity() {
             }
         }
 
-
-
         sharedNativeHandleMethodChannel = MethodChannel(flutterEngine.dartExecutor, "agora_rtc_engine_example/shared_native_handle")
         sharedNativeHandleMethodChannel.setMethodCallHandler { call, result ->
             when (call.method) {
@@ -47,18 +45,14 @@ class MainActivity: FlutterActivity() {
                     call.argument<String>("appId")?.apply {
                         videoRawDataController = VideoRawDataController(this@MainActivity,this)
                         nativeHandle = videoRawDataController!!.nativeHandle()
-                        Log.e("MainActivity", "nativeHandle native_init: ${nativeHandle}")
                     }
 
                     result.success(nativeHandle)
                 }
                 "native_dispose" -> {
-                    Log.e("MainActivity", "native_dispose llllllll")
                     videoRawDataController?.dispose()
-                    Log.e("MainActivity", "native_dispose pppppppp")
                     videoRawDataController = null
                     result.success(true)
-                    Log.e("MainActivity", "native_dispose uuuuuuu")
                 }
                 else -> {
                     result.notImplemented()

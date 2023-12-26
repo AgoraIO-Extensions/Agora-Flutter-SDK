@@ -21,13 +21,7 @@ class VideoRawDataController(context: Context, myAppId: String ) {
         rtcEngine = RtcEngine.create(RtcEngineConfig().apply {
             mAppId = myAppId
             mContext = context.applicationContext
-            mEventHandler = object : IRtcEngineEventHandler() {
-                override fun onJoinChannelSuccess(channel: String?, uid: Int, elapsed: Int) {
-                    super.onJoinChannelSuccess(channel, uid, elapsed)
-
-                    Log.e("VideoRawDataController", "channel: $channel")
-                }
-            }
+            mEventHandler = object : IRtcEngineEventHandler() { }
         })
 
         rtcEngine!!.registerVideoFrameObserver(object : IVideoFrameObserver {
@@ -102,9 +96,7 @@ class VideoRawDataController(context: Context, myAppId: String ) {
 
     fun dispose() {
         rtcEngine!!.registerVideoFrameObserver(null)
-        Log.e("MainActivity", "native_dispose registerVideoFrameObserver")
         RtcEngine.destroy()
-        Log.e("MainActivity", "native_dispose RtcEngine.destroy()")
         rtcEngine = null
     }
 }
