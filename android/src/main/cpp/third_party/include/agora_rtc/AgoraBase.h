@@ -5997,7 +5997,13 @@ struct LocalAccessPointConfiguration {
   /** Local proxy connection, advanced Config info.
    */
   AdvancedConfigInfo advancedConfig;
-  LocalAccessPointConfiguration() : ipList(NULL), ipListSize(0), domainList(NULL), domainListSize(0), verifyDomainName(NULL), mode(ConnectivityFirst) {}
+  /**
+    * Whether to disable vos-aut:
+    - true: (Default)disable vos-aut.
+    - false: not disable vos-aut
+  */
+  bool disableAut;
+  LocalAccessPointConfiguration() : ipList(NULL), ipListSize(0), domainList(NULL), domainListSize(0), verifyDomainName(NULL), mode(ConnectivityFirst), disableAut(true) {}
 };
 
 /**
