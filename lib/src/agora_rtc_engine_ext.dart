@@ -40,7 +40,7 @@ class AgoraRtcException implements Exception {
 ///
 /// Returns
 /// One RtcEngine object.
-RtcEngine createAgoraRtcEngine({int sharedNativeHandle = 0}) {
+RtcEngine createAgoraRtcEngine({Object? sharedNativeHandle}) {
   return impl.RtcEngineImpl.create(sharedNativeHandle: sharedNativeHandle);
 }
 
@@ -50,7 +50,7 @@ RtcEngine createAgoraRtcEngine({int sharedNativeHandle = 0}) {
 ///
 /// Returns
 /// One RtcEngineEx object.
-RtcEngineEx createAgoraRtcEngineEx({int sharedNativeHandle = 0}) {
+RtcEngineEx createAgoraRtcEngineEx({Object? sharedNativeHandle}) {
   return impl.RtcEngineImpl.create(sharedNativeHandle: sharedNativeHandle);
 }
 

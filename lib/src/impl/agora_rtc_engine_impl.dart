@@ -312,7 +312,7 @@ class SharedNativeHandleInitilizationArgProvider
     implements InitilizationArgProvider {
   const SharedNativeHandleInitilizationArgProvider(this.sharedNativeHandle);
 
-  final int sharedNativeHandle;
+  final Object sharedNativeHandle;
   @override
   IrisHandle provide(IrisApiEngineHandle apiEngineHandle) {
     return ObjectIrisHandle(sharedNativeHandle);
@@ -323,13 +323,13 @@ class RtcEngineImpl extends rtc_engine_ex_binding.RtcEngineExImpl
     implements RtcEngineEx {
   RtcEngineImpl._({
     required IrisMethodChannel irisMethodChannel,
-    int sharedNativeHandle = 0,
+    Object? sharedNativeHandle,
   })  : _sharedNativeHandle = sharedNativeHandle,
         super(irisMethodChannel);
 
   static RtcEngineImpl? _instance;
 
-  int _sharedNativeHandle = 0;
+  Object? _sharedNativeHandle;
 
   InitializationState? _rtcEngineStateInternal;
   InitializationState get _rtcEngineState {
@@ -362,7 +362,7 @@ class RtcEngineImpl extends rtc_engine_ex_binding.RtcEngineExImpl
   late MethodChannel engineMethodChannel;
 
   static RtcEngineEx create({
-    int sharedNativeHandle = 0,
+    Object? sharedNativeHandle,
     IrisMethodChannel? irisMethodChannel,
   }) {
     if (_instance != null) {
@@ -379,7 +379,7 @@ class RtcEngineImpl extends rtc_engine_ex_binding.RtcEngineExImpl
     return _instance!;
   }
 
-  void _updateSharedNativeHandle(int sharedNativeHandle) {
+  void _updateSharedNativeHandle(Object? sharedNativeHandle) {
     if (_sharedNativeHandle != sharedNativeHandle) {
       _sharedNativeHandle = sharedNativeHandle;
     }
@@ -412,14 +412,15 @@ class RtcEngineImpl extends rtc_engine_ex_binding.RtcEngineExImpl
     }
 
     List<InitilizationArgProvider> args = [
-      SharedNativeHandleInitilizationArgProvider(_sharedNativeHandle)
+      if (_sharedNativeHandle != null)
+        SharedNativeHandleInitilizationArgProvider(_sharedNativeHandle!)
     ];
-    // assert(() {
-    //   if (_mockRtcEngineProvider != null) {
-    //     args.add(_mockRtcEngineProvider!);
-    //   }
-    //   return true;
-    // }());
+    assert(() {
+      if (_mockRtcEngineProvider != null) {
+        args.add(_mockRtcEngineProvider!);
+      }
+      return true;
+    }());
 
     await irisMethodChannel.initilize(args);
     await _initializeInternal(context);
