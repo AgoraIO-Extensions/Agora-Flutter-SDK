@@ -1,37 +1,39 @@
 parsers:
-  - name: LegacyCXXParser
-    package: '@agoraio-extensions/terra-legacy-cxx-parser'
+  - name: CXXParser
+    package: '@agoraio-extensions/cxx-parser'
     args:
       includeHeaderDirs:
-        - '@agoraio-extensions/terra_shared_configs:headers/rtc_4.2.3/include'
+        - '@agoraio-extensions/terra_shared_configs:headers/rtc_4.3.0/include'
       parseFiles:
         include:
-          - '@agoraio-extensions/terra_shared_configs:headers/rtc_4.2.3/include/*.h'
+          - '@agoraio-extensions/terra_shared_configs:headers/rtc_4.3.0/include/*.h'
         exclude:
-          - '@agoraio-extensions/terra_shared_configs:headers/rtc_4.2.3/include/AgoraRefPtr.h'
-          - '@agoraio-extensions/terra_shared_configs:headers/rtc_4.2.3/include/time_utils.h'
-          - '@agoraio-extensions/terra_shared_configs:headers/rtc_4.2.3/include/AgoraOptional.h'
-          - '@agoraio-extensions/terra_shared_configs:headers/rtc_4.2.3/include/AgoraRefPtr.h'
-          - '@agoraio-extensions/terra_shared_configs:headers/rtc_4.2.3/include/IAgoraH265Transcoder.h'
-          - '@agoraio-extensions/terra_shared_configs:headers/rtc_4.2.3/include/IAgoraMediaComponentFactory.h'
-          - '@agoraio-extensions/terra_shared_configs:headers/rtc_4.2.3/include/IAgoraParameter.h'
-      customHeaders:
-        - '@agoraio-extensions/terra_shared_configs:headers/rtc_4.2.3/custom_headers/*.h'
-      language: dart
-      legacyRenders:
-        - DartSyntaxRender
-        - DartEventHandlerParamJsonRender
-        - DartCallApiIrisMethodChannelRender
-        - DartEventHandlerIrisMethodChannelRender
-        - DartStructToJsonSerializableRender
-        - DartCallApiEventHandlerBufferExtRender
-        - DartForwardExportRender
+          - '@agoraio-extensions/terra_shared_configs:headers/rtc_4.3.0/include/AgoraRefPtr.h'
+          - '@agoraio-extensions/terra_shared_configs:headers/rtc_4.3.0/include/time_utils.h'
+          - '@agoraio-extensions/terra_shared_configs:headers/rtc_4.3.0/include/AgoraOptional.h'
+          - '@agoraio-extensions/terra_shared_configs:headers/rtc_4.3.0/include/AgoraRefPtr.h'
+          - '@agoraio-extensions/terra_shared_configs:headers/rtc_4.3.0/include/IAgoraMediaComponentFactory.h'
+          - '@agoraio-extensions/terra_shared_configs:headers/rtc_4.3.0/include/IAgoraParameter.h'
 
-renderers:
-  - name: IrisDocRenderer
+  - name: IrisApiIdParser
+    package: '@agoraio-extensions/terra_shared_configs'
+  - path: parsers/cud_node_parser.ts
+    args:
+      configPath: configs/cud_node_parser.config.ts
+
+  - name: PointerToArrayParser
+    package: '@agoraio-extensions/terra_shared_configs'
+
+  # Need put it below `PointerToArrayParser`, since the `PointerToArrayParser` will change the pointer type to array type
+  - path: parsers/dart_syntax_parser.ts
+
+  # This should be ordered in last step
+  - name: MergeNodeParser
     package: '@agoraio-extensions/terra_shared_configs'
     args:
-      language: dart
-      fmtConfig: fmt_dart.yaml
-      exportFilePath: ../../lib/agora_rtc_engine.dart
-      templateUrl: https://github.com/AgoraIO/agora_doc_source/releases/download/master-build/flutter_ng_json_template_en.json
+      configFilePath: configs/merge_node_list.ts
+      ignoreDefaultConfig: true
+
+renderers:
+  - path: renderers/event_handlers_renderer.ts
+  - path: renderers/event_ids_mapping_renderer.ts

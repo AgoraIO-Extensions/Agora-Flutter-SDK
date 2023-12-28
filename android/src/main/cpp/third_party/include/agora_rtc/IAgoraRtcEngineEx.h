@@ -91,6 +91,7 @@ class IRtcEngineEventHandlerEx : public IRtcEngineEventHandler {
   using IRtcEngineEventHandler::onNetworkTypeChanged;
   using IRtcEngineEventHandler::onEncryptionError;
   using IRtcEngineEventHandler::onUploadLogResult;
+  using IRtcEngineEventHandler::onUserInfoUpdated;
   using IRtcEngineEventHandler::onUserAccountUpdated;
   using IRtcEngineEventHandler::onAudioSubscribeStateChanged;
   using IRtcEngineEventHandler::onVideoSubscribeStateChanged;
@@ -98,6 +99,8 @@ class IRtcEngineEventHandlerEx : public IRtcEngineEventHandler {
   using IRtcEngineEventHandler::onVideoPublishStateChanged;
   using IRtcEngineEventHandler::onSnapshotTaken;
   using IRtcEngineEventHandler::onVideoRenderingTracingResult;
+  using IRtcEngineEventHandler::onSetRtmFlagResult;
+  using IRtcEngineEventHandler::onTranscodedStreamLayoutInfo;
 
   virtual const char* eventHandlerType() const { return "event_handler_ex"; }
 
@@ -322,13 +325,13 @@ class IRtcEngineEventHandlerEx : public IRtcEngineEventHandler {
    * you to troubleshoot issues when exceptions occur.
    *
    * The SDK triggers the onLocalVideoStateChanged callback with the state code of `LOCAL_VIDEO_STREAM_STATE_FAILED`
-   * and error code of `LOCAL_VIDEO_STREAM_ERROR_CAPTURE_FAILURE` in the following situations:
+   * and error code of `LOCAL_VIDEO_STREAM_REASON_CAPTURE_FAILURE` in the following situations:
    * - The app switches to the background, and the system gets the camera resource.
    * - The camera starts normally, but does not output video for four consecutive seconds.
    *
    * When the camera outputs the captured video frames, if the video frames are the same for 15
    * consecutive frames, the SDK triggers the `onLocalVideoStateChanged` callback with the state code
-   * of `LOCAL_VIDEO_STREAM_STATE_CAPTURING` and error code of `LOCAL_VIDEO_STREAM_ERROR_CAPTURE_FAILURE`.
+   * of `LOCAL_VIDEO_STREAM_STATE_CAPTURING` and error code of `LOCAL_VIDEO_STREAM_REASON_CAPTURE_FAILURE`.
    * Note that the video frame duplication detection is only available for video frames with a resolution
    * greater than 200 × 200, a frame rate greater than or equal to 10 fps, and a bitrate less than 20 Kbps.
    *
@@ -338,14 +341,14 @@ class IRtcEngineEventHandlerEx : public IRtcEngineEventHandler {
    *
    * @param connection The RtcConnection object.
    * @param state The state of the local video. See #LOCAL_VIDEO_STREAM_STATE.
-   * @param error The detailed error information. See #LOCAL_VIDEO_STREAM_ERROR.
+   * @param reason The detailed error information. See #LOCAL_VIDEO_STREAM_REASON.
    */
   virtual void onLocalVideoStateChanged(const RtcConnection& connection,
                                         LOCAL_VIDEO_STREAM_STATE state,
-                                        LOCAL_VIDEO_STREAM_ERROR errorCode) {
+                                        LOCAL_VIDEO_STREAM_REASON reason) {
     (void)connection;
     (void)state;
-    (void)errorCode;
+    (void)reason;
   }
 
   /**
@@ -762,13 +765,13 @@ class IRtcEngineEventHandlerEx : public IRtcEngineEventHandler {
    *
    * @param connection The RtcConnection object.
    * @param state State of the local audio. See #LOCAL_AUDIO_STREAM_STATE.
-   * @param error The error information of the local audio.
-   * See #LOCAL_AUDIO_STREAM_ERROR.
+   * @param reason The reason information of the local audio.
+   * See #LOCAL_AUDIO_STREAM_REASON.
    */
-  virtual void onLocalAudioStateChanged(const RtcConnection& connection, LOCAL_AUDIO_STREAM_STATE state, LOCAL_AUDIO_STREAM_ERROR error) {
+  virtual void onLocalAudioStateChanged(const RtcConnection& connection, LOCAL_AUDIO_STREAM_STATE state, LOCAL_AUDIO_STREAM_REASON reason) {
     (void)connection;
     (void)state;
-    (void)error;
+    (void)reason;
   }
 
   /** Occurs when the remote audio state changes.
@@ -976,6 +979,7 @@ class IRtcEngineEventHandlerEx : public IRtcEngineEventHandler {
     (void)success;
     (void)reason;
   }
+
   /**
    * Occurs when the user account is updated.
    *
@@ -983,10 +987,10 @@ class IRtcEngineEventHandlerEx : public IRtcEngineEventHandler {
    * @param remoteUid The user ID.
    * @param userAccount The user account.
    */
-  virtual void onUserAccountUpdated(const RtcConnection& connection, uid_t remoteUid, const char* userAccount){
+  virtual void onUserAccountUpdated(const RtcConnection& connection, uid_t remoteUid, const char* remoteUserAccount){
     (void)connection;
     (void)remoteUid;
-    (void)userAccount;
+    (void)remoteUserAccount;
   }
 
   /** Reports the result of taking a video snapshot.
@@ -1026,6 +1030,34 @@ class IRtcEngineEventHandlerEx : public IRtcEngineEventHandler {
     (void)uid;
     (void)currentEvent;
     (void)tracingInfo;
+  }
+
+  /**
+   * Occurs when receive use rtm response.
+   *
+   * @param connection The RtcConnection object.
+   * @param code The error code:
+   */
+  virtual void onSetRtmFlagResult(const RtcConnection& connection, int code) {
+    (void)connection;
+    (void)code;
+  }
+  /**
+   * Occurs when receive a video transcoder stream which has video layout info.
+   *
+   * @param connection The RtcConnection object.
+   * @param uid user id of the transcoded stream.
+   * @param width width of the transcoded stream.
+   * @param height height of the transcoded stream.
+   * @param layoutCount count of layout info in the transcoded stream.
+   * @param layoutlist video layout info list of the transcoded stream.
+   */
+  virtual void onTranscodedStreamLayoutInfo(const RtcConnection& connection, uid_t uid, int width, int height, int layoutCount,const VideoLayout* layoutlist) {
+    (void)uid;
+    (void)width;
+    (void)height;
+    (void)layoutCount;
+    (void)layoutlist;
   }
 };
 
@@ -1488,7 +1520,7 @@ public:
      * - 0: Success.
      * - < 0: Failure.
      */    
-    virtual int adjustUserPlaybackSignalVolumeEx(unsigned int uid, int volume, const RtcConnection& connection) = 0;
+    virtual int adjustUserPlaybackSignalVolumeEx(uid_t uid, int volume, const RtcConnection& connection) = 0;
 
     /** Gets the current connection state of the SDK.
      @param connection The RtcConnection object.
@@ -1561,7 +1593,7 @@ public:
      * - Returns 0: Success.
      * - < 0: Failure.
      */
-    virtual int createDataStreamEx(int* streamId, DataStreamConfig& config, const RtcConnection& connection) = 0;
+    virtual int createDataStreamEx(int* streamId, const DataStreamConfig& config, const RtcConnection& connection) = 0;
     /** Sends a data stream.
      *
      * After calling \ref IRtcEngine::createDataStream "createDataStream", you can call
@@ -1728,35 +1760,6 @@ public:
      *   - -8(ERR_INVALID_STATE): The current status is invalid, only allowed to be called when the role is the broadcaster.
      */
     virtual int startOrUpdateChannelMediaRelayEx(const ChannelMediaRelayConfiguration& configuration, const RtcConnection& connection) = 0;
-  
-    /** Starts to relay media streams across channels.
-     *
-     * @deprecated v4.2.0 Use `startOrUpdateChannelMediaRelayEx` instead.
-     * @param configuration The configuration of the media stream relay:ChannelMediaRelayConfiguration.
-     * @param connection RtcConnection.
-     * @return
-     * - 0: Success.
-     * - < 0: Failure.
-     *   - -1(ERR_FAILED): A general error occurs (no specified reason).
-     *   - -2(ERR_INVALID_ARGUMENT): The argument is invalid.
-     *   - -5(ERR_REFUSED): The request is rejected.
-     *   - -8(ERR_INVALID_STATE): The current status is invalid, only allowed to be called when the role is the broadcaster.
-     */
-    virtual int startChannelMediaRelayEx(const ChannelMediaRelayConfiguration& configuration, const RtcConnection& connection) __deprecated = 0;
-  
-    /** Updates the channels for media stream relay
-     * @deprecated v4.2.0 Use `startOrUpdateChannelMediaRelayEx` instead.
-     * @param configuration The media stream relay configuration: ChannelMediaRelayConfiguration.
-     * @param connection RtcConnection.
-     * @return
-     * - 0: Success.
-     * - < 0: Failure.
-     *   - -1(ERR_FAILED): A general error occurs (no specified reason).
-     *   - -2(ERR_INVALID_ARGUMENT): The argument is invalid.
-     *   - -5(ERR_REFUSED): The request is rejected.
-     *   - -7(ERR_NOT_INITIALIZED): cross channel media streams are not relayed.
-     */
-    virtual int updateChannelMediaRelayEx(const ChannelMediaRelayConfiguration& configuration, const RtcConnection& connection) __deprecated = 0;
   
     /** Stops the media stream relay.
      *
@@ -1942,6 +1945,16 @@ public:
       - -7(ERR_NOT_INITIALIZED): The SDK is not initialized. Initialize the `IRtcEngine` instance before calling this method.
      */
     virtual int startMediaRenderingTracingEx(const RtcConnection& connection) = 0;
+
+    /** Provides the technical preview functionalities or special customizations by configuring the SDK with JSON options.
+    @since v4.3.0
+    @param connection The connection information. See RtcConnection.
+    @param parameters Pointer to the set parameters in a JSON string.
+    @return
+    - 0: Success.
+    - < 0: Failure.
+    */
+    virtual int setParametersEx(const RtcConnection& connection, const char* parameters) = 0;
 };
 
 }  // namespace rtc

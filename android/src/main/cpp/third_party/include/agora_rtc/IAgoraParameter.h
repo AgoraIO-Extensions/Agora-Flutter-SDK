@@ -15,6 +15,7 @@
  */
 
 #pragma once  // NOLINT(build/header_guard)
+#include "AgoraRefPtr.h"
 
 // external key
 /**
@@ -115,6 +116,7 @@
  * set the video codec type, such as "H264", "JPEG"
  */
 #define KEY_RTC_VIDEO_CODEC_TYPE                      "engine.video.codec_type"
+#define KEY_RTC_VIDEO_MINOR_STREAM_CODEC_INDEX        "engine.video.minor_stream_codec_index"
 #define KEY_RTC_VIDEO_CODEC_INDEX                     "che.video.videoCodecIndex"
 /**
   * only use average QP for quality scaling
@@ -144,7 +146,7 @@ typedef CopyableAutoPtr<IString> AString;
 
 namespace base {
 
-class IAgoraParameter {
+class IAgoraParameter : public RefCountInterface {
  public:
   /**
    * release the resource
@@ -300,6 +302,7 @@ class IAgoraParameter {
 
   virtual int convertPath(const char* filePath, agora::util::AString& value) = 0;
 
+  protected:
   virtual ~IAgoraParameter() {}
 };
 

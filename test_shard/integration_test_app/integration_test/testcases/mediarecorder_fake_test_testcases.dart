@@ -5,6 +5,9 @@ import 'package:agora_rtc_engine/src/impl/platform/io/native_iris_api_engine_bin
 import '../fake/fake_iris_method_channel.dart';
 import 'package:agora_rtc_engine/src/impl/agora_rtc_engine_impl.dart';
 import 'package:iris_method_channel/iris_method_channel.dart';
+import 'package:path_provider/path_provider.dart';
+import 'package:path/path.dart' as path;
+import 'dart:io';
 
 class MediaRecorderFakeIrisMethodChannel extends FakeIrisMethodChannel {
   MediaRecorderFakeIrisMethodChannel(PlatformBindingsProvider provider)
@@ -13,7 +16,7 @@ class MediaRecorderFakeIrisMethodChannel extends FakeIrisMethodChannel {
   @override
   Future<CallApiResult> invokeMethod(IrisMethodCall methodCall) async {
     final result = super.invokeMethod(methodCall);
-    if (methodCall.funcName == 'RtcEngine_createMediaRecorder') {
+    if (methodCall.funcName == 'RtcEngine_createMediaRecorder_f779617') {
       return CallApiResult(data: {'result': '1000'}, irisReturnCode: 0);
     }
 
@@ -64,9 +67,13 @@ void testCases() {
         String engineAppId = const String.fromEnvironment('TEST_APP_ID',
             defaultValue: '<YOUR_APP_ID>');
 
+        Directory appDocDir = await getApplicationDocumentsDirectory();
+        String logPath = path.join(appDocDir.path, 'test_log.txt');
+
         await rtcEngine.initialize(RtcEngineContext(
           appId: engineAppId,
           areaCode: AreaCode.areaCodeGlob.value(),
+          logConfig: LogConfig(filePath: logPath),
         ));
 
         MediaRecorder? recorder = await rtcEngine.createMediaRecorder(
@@ -79,13 +86,17 @@ void testCases() {
         await recorder?.stopRecording();
         await rtcEngine.destroyMediaRecorder(recorder!);
 
-        expect(_isCallOnce(irisMethodChannel, 'RtcEngine_createMediaRecorder'),
+        expect(
+            _isCallOnce(
+                irisMethodChannel, 'RtcEngine_createMediaRecorder_f779617'),
+            isTrue);
+        expect(
+            _isCallOnce(irisMethodChannel,
+                'MediaRecorder_setMediaRecorderObserver_e1f7340'),
             isTrue);
         expect(
             _isCallOnce(
-                irisMethodChannel, 'MediaRecorder_setMediaRecorderObserver'),
-            isTrue);
-        expect(_isCallOnce(irisMethodChannel, 'MediaRecorder_startRecording'),
+                irisMethodChannel, 'MediaRecorder_startRecording_94480b3'),
             isTrue);
         expect(_isCallOnce(irisMethodChannel, 'MediaRecorder_stopRecording'),
             isTrue);
@@ -94,7 +105,9 @@ void testCases() {
             _isCallOnce(
                 irisMethodChannel, 'MediaRecorder_unsetMediaRecorderObserver'),
             isTrue);
-        expect(_isCallOnce(irisMethodChannel, 'RtcEngine_destroyMediaRecorder'),
+        expect(
+            _isCallOnce(
+                irisMethodChannel, 'RtcEngine_destroyMediaRecorder_95cdef5'),
             isTrue);
 
         irisMethodChannel.reset();
@@ -109,13 +122,17 @@ void testCases() {
         await recorder?.stopRecording();
         await rtcEngine.destroyMediaRecorder(recorder!);
 
-        expect(_isCallOnce(irisMethodChannel, 'RtcEngine_createMediaRecorder'),
+        expect(
+            _isCallOnce(
+                irisMethodChannel, 'RtcEngine_createMediaRecorder_f779617'),
+            isTrue);
+        expect(
+            _isCallOnce(irisMethodChannel,
+                'MediaRecorder_setMediaRecorderObserver_e1f7340'),
             isTrue);
         expect(
             _isCallOnce(
-                irisMethodChannel, 'MediaRecorder_setMediaRecorderObserver'),
-            isTrue);
-        expect(_isCallOnce(irisMethodChannel, 'MediaRecorder_startRecording'),
+                irisMethodChannel, 'MediaRecorder_startRecording_94480b3'),
             isTrue);
         expect(_isCallOnce(irisMethodChannel, 'MediaRecorder_stopRecording'),
             isTrue);
@@ -124,7 +141,9 @@ void testCases() {
             _isCallOnce(
                 irisMethodChannel, 'MediaRecorder_unsetMediaRecorderObserver'),
             isTrue);
-        expect(_isCallOnce(irisMethodChannel, 'RtcEngine_destroyMediaRecorder'),
+        expect(
+            _isCallOnce(
+                irisMethodChannel, 'RtcEngine_destroyMediaRecorder_95cdef5'),
             isTrue);
       },
     );

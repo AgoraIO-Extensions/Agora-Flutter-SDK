@@ -282,11 +282,11 @@ class _MusicPlayerExampleState extends State<MusicPlayerExample> {
 
     _musicContentCenter.registerEventHandler(MusicContentCenterEventHandler(
       onMusicChartsResult: (String requestId, List<MusicChartInfo> result,
-          MusicContentCenterStatusCode errorCode) {
+          MusicContentCenterStateReason errorCode) {
         logSink.log(
             '[onMusicChartsResult], requestId: $requestId, errorCode: $errorCode, result: ${result.toString()}');
         if (errorCode ==
-            MusicContentCenterStatusCode.kMusicContentCenterStatusOk) {
+            MusicContentCenterStateReason.kMusicContentCenterReasonOk) {
           if (_currentRequestId == requestId) {
             setState(() {
               _musicChartInfos = result;
@@ -295,7 +295,7 @@ class _MusicPlayerExampleState extends State<MusicPlayerExample> {
         }
       },
       onMusicCollectionResult: (String requestId, MusicCollection result,
-          MusicContentCenterStatusCode errorCode) {
+          MusicContentCenterStateReason errorCode) {
         logSink.log(
             '[onMusicCollectionResult], requestId: $requestId, errorCode: $errorCode, result: ${result.toString()}');
 
@@ -314,13 +314,13 @@ class _MusicPlayerExampleState extends State<MusicPlayerExample> {
         int songCode,
         int percent,
         String lyricUrl,
-        PreloadStatusCode status,
-        MusicContentCenterStatusCode errorCode,
+        PreloadState status,
+        MusicContentCenterStateReason errorCode,
       ) {
         logSink.log(
             '[onPreLoadEvent], requestId: $requestId songCode: $songCode, percent: $percent status: $status, errorCode: $errorCode, lyricUrl: $lyricUrl');
         if (_selectedMusic.songCode == songCode &&
-            status == PreloadStatusCode.kPreloadStatusCompleted) {
+            status == PreloadState.kPreloadStateCompleted) {
           _preloadCompleted?.complete();
           _preloadCompleted = null;
         }
@@ -329,7 +329,7 @@ class _MusicPlayerExampleState extends State<MusicPlayerExample> {
         String requestId,
         int songCode,
         String lyricUrl,
-        MusicContentCenterStatusCode errorCode,
+        MusicContentCenterStateReason errorCode,
       ) {
         logSink.log(
             '[onLyricResult], requestId: $requestId songCode: $songCode, lyricUrl: $lyricUrl errorCode: $errorCode');
@@ -344,7 +344,7 @@ class _MusicPlayerExampleState extends State<MusicPlayerExample> {
 
     _mediaPlayerSourceObserver = MediaPlayerSourceObserver(
       onPlayerSourceStateChanged:
-          (MediaPlayerState state, MediaPlayerError ec) async {
+          (MediaPlayerState state, MediaPlayerReason ec) async {
         logSink.log('[onPlayerSourceStateChanged] state: $state ec: $ec');
         if (state == MediaPlayerState.playerStateOpenCompleted) {
           _isPlaying = !_isPlaying;

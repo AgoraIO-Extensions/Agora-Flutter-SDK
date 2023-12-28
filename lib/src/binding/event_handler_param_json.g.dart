@@ -336,7 +336,8 @@ MediaRecorderObserverOnRecorderStateChangedJson
           channelId: json['channelId'] as String?,
           uid: json['uid'] as int?,
           state: $enumDecodeNullable(_$RecorderStateEnumMap, json['state']),
-          error: $enumDecodeNullable(_$RecorderErrorCodeEnumMap, json['error']),
+          reason:
+              $enumDecodeNullable(_$RecorderReasonCodeEnumMap, json['reason']),
         );
 
 Map<String, dynamic> _$MediaRecorderObserverOnRecorderStateChangedJsonToJson(
@@ -345,7 +346,7 @@ Map<String, dynamic> _$MediaRecorderObserverOnRecorderStateChangedJsonToJson(
       'channelId': instance.channelId,
       'uid': instance.uid,
       'state': _$RecorderStateEnumMap[instance.state],
-      'error': _$RecorderErrorCodeEnumMap[instance.error],
+      'reason': _$RecorderReasonCodeEnumMap[instance.reason],
     };
 
 const _$RecorderStateEnumMap = {
@@ -354,12 +355,12 @@ const _$RecorderStateEnumMap = {
   RecorderState.recorderStateStop: 3,
 };
 
-const _$RecorderErrorCodeEnumMap = {
-  RecorderErrorCode.recorderErrorNone: 0,
-  RecorderErrorCode.recorderErrorWriteFailed: 1,
-  RecorderErrorCode.recorderErrorNoStream: 2,
-  RecorderErrorCode.recorderErrorOverMaxDuration: 3,
-  RecorderErrorCode.recorderErrorConfigChanged: 4,
+const _$RecorderReasonCodeEnumMap = {
+  RecorderReasonCode.recorderReasonNone: 0,
+  RecorderReasonCode.recorderReasonWriteFailed: 1,
+  RecorderReasonCode.recorderReasonNoStream: 2,
+  RecorderReasonCode.recorderReasonOverMaxDuration: 3,
+  RecorderReasonCode.recorderReasonConfigChanged: 4,
 };
 
 MediaRecorderObserverOnRecorderInfoUpdatedJson
@@ -379,6 +380,67 @@ Map<String, dynamic> _$MediaRecorderObserverOnRecorderInfoUpdatedJsonToJson(
       'channelId': instance.channelId,
       'uid': instance.uid,
       'info': instance.info?.toJson(),
+    };
+
+H265TranscoderObserverOnEnableTranscodeJson
+    _$H265TranscoderObserverOnEnableTranscodeJsonFromJson(
+            Map<String, dynamic> json) =>
+        H265TranscoderObserverOnEnableTranscodeJson(
+          result:
+              $enumDecodeNullable(_$H265TranscodeResultEnumMap, json['result']),
+        );
+
+Map<String, dynamic> _$H265TranscoderObserverOnEnableTranscodeJsonToJson(
+        H265TranscoderObserverOnEnableTranscodeJson instance) =>
+    <String, dynamic>{
+      'result': _$H265TranscodeResultEnumMap[instance.result],
+    };
+
+const _$H265TranscodeResultEnumMap = {
+  H265TranscodeResult.h265TranscodeResultUnknown: -1,
+  H265TranscodeResult.h265TranscodeResultSuccess: 0,
+  H265TranscodeResult.h265TranscodeResultRequestInvalid: 1,
+  H265TranscodeResult.h265TranscodeResultUnauthorized: 2,
+  H265TranscodeResult.h265TranscodeResultTokenExpired: 3,
+  H265TranscodeResult.h265TranscodeResultForbidden: 4,
+  H265TranscodeResult.h265TranscodeResultNotFound: 5,
+  H265TranscodeResult.h265TranscodeResultConflicted: 6,
+  H265TranscodeResult.h265TranscodeResultNotSupported: 7,
+  H265TranscodeResult.h265TranscodeResultTooOften: 8,
+  H265TranscodeResult.h265TranscodeResultServerInternalError: 9,
+  H265TranscodeResult.h265TranscodeResultServiceUnavailable: 10,
+};
+
+H265TranscoderObserverOnQueryChannelJson
+    _$H265TranscoderObserverOnQueryChannelJsonFromJson(
+            Map<String, dynamic> json) =>
+        H265TranscoderObserverOnQueryChannelJson(
+          result:
+              $enumDecodeNullable(_$H265TranscodeResultEnumMap, json['result']),
+          originChannel: json['originChannel'] as String?,
+          transcodeChannel: json['transcodeChannel'] as String?,
+        );
+
+Map<String, dynamic> _$H265TranscoderObserverOnQueryChannelJsonToJson(
+        H265TranscoderObserverOnQueryChannelJson instance) =>
+    <String, dynamic>{
+      'result': _$H265TranscodeResultEnumMap[instance.result],
+      'originChannel': instance.originChannel,
+      'transcodeChannel': instance.transcodeChannel,
+    };
+
+H265TranscoderObserverOnTriggerTranscodeJson
+    _$H265TranscoderObserverOnTriggerTranscodeJsonFromJson(
+            Map<String, dynamic> json) =>
+        H265TranscoderObserverOnTriggerTranscodeJson(
+          result:
+              $enumDecodeNullable(_$H265TranscodeResultEnumMap, json['result']),
+        );
+
+Map<String, dynamic> _$H265TranscoderObserverOnTriggerTranscodeJsonToJson(
+        H265TranscoderObserverOnTriggerTranscodeJson instance) =>
+    <String, dynamic>{
+      'result': _$H265TranscodeResultEnumMap[instance.result],
     };
 
 MediaPlayerVideoFrameObserverOnFrameJson
@@ -401,7 +463,8 @@ MediaPlayerSourceObserverOnPlayerSourceStateChangedJson
             Map<String, dynamic> json) =>
         MediaPlayerSourceObserverOnPlayerSourceStateChangedJson(
           state: $enumDecodeNullable(_$MediaPlayerStateEnumMap, json['state']),
-          ec: $enumDecodeNullable(_$MediaPlayerErrorEnumMap, json['ec']),
+          reason:
+              $enumDecodeNullable(_$MediaPlayerReasonEnumMap, json['reason']),
         );
 
 Map<String, dynamic>
@@ -409,7 +472,7 @@ Map<String, dynamic>
             MediaPlayerSourceObserverOnPlayerSourceStateChangedJson instance) =>
         <String, dynamic>{
           'state': _$MediaPlayerStateEnumMap[instance.state],
-          'ec': _$MediaPlayerErrorEnumMap[instance.ec],
+          'reason': _$MediaPlayerReasonEnumMap[instance.reason],
         };
 
 const _$MediaPlayerStateEnumMap = {
@@ -431,38 +494,40 @@ const _$MediaPlayerStateEnumMap = {
   MediaPlayerState.playerStateFailed: 100,
 };
 
-const _$MediaPlayerErrorEnumMap = {
-  MediaPlayerError.playerErrorNone: 0,
-  MediaPlayerError.playerErrorInvalidArguments: -1,
-  MediaPlayerError.playerErrorInternal: -2,
-  MediaPlayerError.playerErrorNoResource: -3,
-  MediaPlayerError.playerErrorInvalidMediaSource: -4,
-  MediaPlayerError.playerErrorUnknownStreamType: -5,
-  MediaPlayerError.playerErrorObjNotInitialized: -6,
-  MediaPlayerError.playerErrorCodecNotSupported: -7,
-  MediaPlayerError.playerErrorVideoRenderFailed: -8,
-  MediaPlayerError.playerErrorInvalidState: -9,
-  MediaPlayerError.playerErrorUrlNotFound: -10,
-  MediaPlayerError.playerErrorInvalidConnectionState: -11,
-  MediaPlayerError.playerErrorSrcBufferUnderflow: -12,
-  MediaPlayerError.playerErrorInterrupted: -13,
-  MediaPlayerError.playerErrorNotSupported: -14,
-  MediaPlayerError.playerErrorTokenExpired: -15,
-  MediaPlayerError.playerErrorIpExpired: -16,
-  MediaPlayerError.playerErrorUnknown: -17,
+const _$MediaPlayerReasonEnumMap = {
+  MediaPlayerReason.playerReasonNone: 0,
+  MediaPlayerReason.playerReasonInvalidArguments: -1,
+  MediaPlayerReason.playerReasonInternal: -2,
+  MediaPlayerReason.playerReasonNoResource: -3,
+  MediaPlayerReason.playerReasonInvalidMediaSource: -4,
+  MediaPlayerReason.playerReasonUnknownStreamType: -5,
+  MediaPlayerReason.playerReasonObjNotInitialized: -6,
+  MediaPlayerReason.playerReasonCodecNotSupported: -7,
+  MediaPlayerReason.playerReasonVideoRenderFailed: -8,
+  MediaPlayerReason.playerReasonInvalidState: -9,
+  MediaPlayerReason.playerReasonUrlNotFound: -10,
+  MediaPlayerReason.playerReasonInvalidConnectionState: -11,
+  MediaPlayerReason.playerReasonSrcBufferUnderflow: -12,
+  MediaPlayerReason.playerReasonInterrupted: -13,
+  MediaPlayerReason.playerReasonNotSupported: -14,
+  MediaPlayerReason.playerReasonTokenExpired: -15,
+  MediaPlayerReason.playerReasonIpExpired: -16,
+  MediaPlayerReason.playerReasonUnknown: -17,
 };
 
 MediaPlayerSourceObserverOnPositionChangedJson
     _$MediaPlayerSourceObserverOnPositionChangedJsonFromJson(
             Map<String, dynamic> json) =>
         MediaPlayerSourceObserverOnPositionChangedJson(
-          positionMs: json['position_ms'] as int?,
+          positionMs: json['positionMs'] as int?,
+          timestampMs: json['timestampMs'] as int?,
         );
 
 Map<String, dynamic> _$MediaPlayerSourceObserverOnPositionChangedJsonToJson(
         MediaPlayerSourceObserverOnPositionChangedJson instance) =>
     <String, dynamic>{
-      'position_ms': instance.positionMs,
+      'positionMs': instance.positionMs,
+      'timestampMs': instance.timestampMs,
     };
 
 MediaPlayerSourceObserverOnPlayerEventJson
@@ -606,6 +671,37 @@ Map<String, dynamic> _$MediaPlayerSourceObserverOnPlayerInfoUpdatedJsonToJson(
       'info': instance.info?.toJson(),
     };
 
+MediaPlayerSourceObserverOnPlayerCacheStatsJson
+    _$MediaPlayerSourceObserverOnPlayerCacheStatsJsonFromJson(
+            Map<String, dynamic> json) =>
+        MediaPlayerSourceObserverOnPlayerCacheStatsJson(
+          stats: json['stats'] == null
+              ? null
+              : CacheStatistics.fromJson(json['stats'] as Map<String, dynamic>),
+        );
+
+Map<String, dynamic> _$MediaPlayerSourceObserverOnPlayerCacheStatsJsonToJson(
+        MediaPlayerSourceObserverOnPlayerCacheStatsJson instance) =>
+    <String, dynamic>{
+      'stats': instance.stats?.toJson(),
+    };
+
+MediaPlayerSourceObserverOnPlayerPlaybackStatsJson
+    _$MediaPlayerSourceObserverOnPlayerPlaybackStatsJsonFromJson(
+            Map<String, dynamic> json) =>
+        MediaPlayerSourceObserverOnPlayerPlaybackStatsJson(
+          stats: json['stats'] == null
+              ? null
+              : PlayerPlaybackStats.fromJson(
+                  json['stats'] as Map<String, dynamic>),
+        );
+
+Map<String, dynamic> _$MediaPlayerSourceObserverOnPlayerPlaybackStatsJsonToJson(
+        MediaPlayerSourceObserverOnPlayerPlaybackStatsJson instance) =>
+    <String, dynamic>{
+      'stats': instance.stats?.toJson(),
+    };
+
 MediaPlayerSourceObserverOnAudioVolumeIndicationJson
     _$MediaPlayerSourceObserverOnAudioVolumeIndicationJsonFromJson(
             Map<String, dynamic> json) =>
@@ -628,8 +724,8 @@ MusicContentCenterEventHandlerOnMusicChartsResultJson
           result: (json['result'] as List<dynamic>?)
               ?.map((e) => MusicChartInfo.fromJson(e as Map<String, dynamic>))
               .toList(),
-          errorCode: $enumDecodeNullable(
-              _$MusicContentCenterStatusCodeEnumMap, json['errorCode']),
+          reason: $enumDecodeNullable(
+              _$MusicContentCenterStateReasonEnumMap, json['reason']),
         );
 
 Map<String, dynamic>
@@ -638,20 +734,19 @@ Map<String, dynamic>
         <String, dynamic>{
           'requestId': instance.requestId,
           'result': instance.result?.map((e) => e.toJson()).toList(),
-          'errorCode':
-              _$MusicContentCenterStatusCodeEnumMap[instance.errorCode],
+          'reason': _$MusicContentCenterStateReasonEnumMap[instance.reason],
         };
 
-const _$MusicContentCenterStatusCodeEnumMap = {
-  MusicContentCenterStatusCode.kMusicContentCenterStatusOk: 0,
-  MusicContentCenterStatusCode.kMusicContentCenterStatusErr: 1,
-  MusicContentCenterStatusCode.kMusicContentCenterStatusErrGateway: 2,
-  MusicContentCenterStatusCode
-      .kMusicContentCenterStatusErrPermissionAndResource: 3,
-  MusicContentCenterStatusCode.kMusicContentCenterStatusErrInternalDataParse: 4,
-  MusicContentCenterStatusCode.kMusicContentCenterStatusErrMusicLoading: 5,
-  MusicContentCenterStatusCode.kMusicContentCenterStatusErrMusicDecryption: 6,
-  MusicContentCenterStatusCode.kMusicContentCenterStatusErrHttpInternalError: 7,
+const _$MusicContentCenterStateReasonEnumMap = {
+  MusicContentCenterStateReason.kMusicContentCenterReasonOk: 0,
+  MusicContentCenterStateReason.kMusicContentCenterReasonError: 1,
+  MusicContentCenterStateReason.kMusicContentCenterReasonGateway: 2,
+  MusicContentCenterStateReason.kMusicContentCenterReasonPermissionAndResource:
+      3,
+  MusicContentCenterStateReason.kMusicContentCenterReasonInternalDataParse: 4,
+  MusicContentCenterStateReason.kMusicContentCenterReasonMusicLoading: 5,
+  MusicContentCenterStateReason.kMusicContentCenterReasonMusicDecryption: 6,
+  MusicContentCenterStateReason.kMusicContentCenterReasonHttpInternalError: 7,
 };
 
 MusicContentCenterEventHandlerOnMusicCollectionResultJson
@@ -659,8 +754,8 @@ MusicContentCenterEventHandlerOnMusicCollectionResultJson
             Map<String, dynamic> json) =>
         MusicContentCenterEventHandlerOnMusicCollectionResultJson(
           requestId: json['requestId'] as String?,
-          errorCode: $enumDecodeNullable(
-              _$MusicContentCenterStatusCodeEnumMap, json['errorCode']),
+          reason: $enumDecodeNullable(
+              _$MusicContentCenterStateReasonEnumMap, json['reason']),
         );
 
 Map<String,
@@ -668,7 +763,7 @@ Map<String,
         MusicContentCenterEventHandlerOnMusicCollectionResultJson instance) =>
     <String, dynamic>{
       'requestId': instance.requestId,
-      'errorCode': _$MusicContentCenterStatusCodeEnumMap[instance.errorCode],
+      'reason': _$MusicContentCenterStateReasonEnumMap[instance.reason],
     };
 
 MusicContentCenterEventHandlerOnLyricResultJson
@@ -678,8 +773,8 @@ MusicContentCenterEventHandlerOnLyricResultJson
           requestId: json['requestId'] as String?,
           songCode: json['songCode'] as int?,
           lyricUrl: json['lyricUrl'] as String?,
-          errorCode: $enumDecodeNullable(
-              _$MusicContentCenterStatusCodeEnumMap, json['errorCode']),
+          reason: $enumDecodeNullable(
+              _$MusicContentCenterStateReasonEnumMap, json['reason']),
         );
 
 Map<String, dynamic> _$MusicContentCenterEventHandlerOnLyricResultJsonToJson(
@@ -688,7 +783,7 @@ Map<String, dynamic> _$MusicContentCenterEventHandlerOnLyricResultJsonToJson(
       'requestId': instance.requestId,
       'songCode': instance.songCode,
       'lyricUrl': instance.lyricUrl,
-      'errorCode': _$MusicContentCenterStatusCodeEnumMap[instance.errorCode],
+      'reason': _$MusicContentCenterStateReasonEnumMap[instance.reason],
     };
 
 MusicContentCenterEventHandlerOnSongSimpleInfoResultJson
@@ -698,8 +793,8 @@ MusicContentCenterEventHandlerOnSongSimpleInfoResultJson
           requestId: json['requestId'] as String?,
           songCode: json['songCode'] as int?,
           simpleInfo: json['simpleInfo'] as String?,
-          errorCode: $enumDecodeNullable(
-              _$MusicContentCenterStatusCodeEnumMap, json['errorCode']),
+          reason: $enumDecodeNullable(
+              _$MusicContentCenterStateReasonEnumMap, json['reason']),
         );
 
 Map<String,
@@ -709,7 +804,7 @@ Map<String,
       'requestId': instance.requestId,
       'songCode': instance.songCode,
       'simpleInfo': instance.simpleInfo,
-      'errorCode': _$MusicContentCenterStatusCodeEnumMap[instance.errorCode],
+      'reason': _$MusicContentCenterStateReasonEnumMap[instance.reason],
     };
 
 MusicContentCenterEventHandlerOnPreLoadEventJson
@@ -720,10 +815,9 @@ MusicContentCenterEventHandlerOnPreLoadEventJson
           songCode: json['songCode'] as int?,
           percent: json['percent'] as int?,
           lyricUrl: json['lyricUrl'] as String?,
-          status:
-              $enumDecodeNullable(_$PreloadStatusCodeEnumMap, json['status']),
-          errorCode: $enumDecodeNullable(
-              _$MusicContentCenterStatusCodeEnumMap, json['errorCode']),
+          state: $enumDecodeNullable(_$PreloadStateEnumMap, json['state']),
+          reason: $enumDecodeNullable(
+              _$MusicContentCenterStateReasonEnumMap, json['reason']),
         );
 
 Map<String, dynamic> _$MusicContentCenterEventHandlerOnPreLoadEventJsonToJson(
@@ -733,15 +827,15 @@ Map<String, dynamic> _$MusicContentCenterEventHandlerOnPreLoadEventJsonToJson(
       'songCode': instance.songCode,
       'percent': instance.percent,
       'lyricUrl': instance.lyricUrl,
-      'status': _$PreloadStatusCodeEnumMap[instance.status],
-      'errorCode': _$MusicContentCenterStatusCodeEnumMap[instance.errorCode],
+      'state': _$PreloadStateEnumMap[instance.state],
+      'reason': _$MusicContentCenterStateReasonEnumMap[instance.reason],
     };
 
-const _$PreloadStatusCodeEnumMap = {
-  PreloadStatusCode.kPreloadStatusCompleted: 0,
-  PreloadStatusCode.kPreloadStatusFailed: 1,
-  PreloadStatusCode.kPreloadStatusPreloading: 2,
-  PreloadStatusCode.kPreloadStatusRemoved: 3,
+const _$PreloadStateEnumMap = {
+  PreloadState.kPreloadStateCompleted: 0,
+  PreloadState.kPreloadStateFailed: 1,
+  PreloadState.kPreloadStatePreloading: 2,
+  PreloadState.kPreloadStateRemoved: 3,
 };
 
 RtcEngineEventHandlerOnJoinChannelSuccessJson
@@ -891,7 +985,6 @@ const _$ErrorCodeTypeEnumMap = {
   ErrorCodeType.errAdmStartRecording: 1012,
   ErrorCodeType.errAdmStopRecording: 1013,
   ErrorCodeType.errVdmCameraNotAuthorized: 1501,
-  ErrorCodeType.errAdmApplicationLoopback: 2007,
 };
 
 RtcEngineEventHandlerOnAudioQualityJson
@@ -1282,8 +1375,8 @@ RtcEngineEventHandlerOnLocalVideoStateChangedJson
           source: $enumDecodeNullable(_$VideoSourceTypeEnumMap, json['source']),
           state: $enumDecodeNullable(
               _$LocalVideoStreamStateEnumMap, json['state']),
-          error: $enumDecodeNullable(
-              _$LocalVideoStreamErrorEnumMap, json['error']),
+          reason: $enumDecodeNullable(
+              _$LocalVideoStreamReasonEnumMap, json['reason']),
         );
 
 Map<String, dynamic> _$RtcEngineEventHandlerOnLocalVideoStateChangedJsonToJson(
@@ -1291,7 +1384,7 @@ Map<String, dynamic> _$RtcEngineEventHandlerOnLocalVideoStateChangedJsonToJson(
     <String, dynamic>{
       'source': _$VideoSourceTypeEnumMap[instance.source],
       'state': _$LocalVideoStreamStateEnumMap[instance.state],
-      'error': _$LocalVideoStreamErrorEnumMap[instance.error],
+      'reason': _$LocalVideoStreamReasonEnumMap[instance.reason],
     };
 
 const _$LocalVideoStreamStateEnumMap = {
@@ -1301,33 +1394,34 @@ const _$LocalVideoStreamStateEnumMap = {
   LocalVideoStreamState.localVideoStreamStateFailed: 3,
 };
 
-const _$LocalVideoStreamErrorEnumMap = {
-  LocalVideoStreamError.localVideoStreamErrorOk: 0,
-  LocalVideoStreamError.localVideoStreamErrorFailure: 1,
-  LocalVideoStreamError.localVideoStreamErrorDeviceNoPermission: 2,
-  LocalVideoStreamError.localVideoStreamErrorDeviceBusy: 3,
-  LocalVideoStreamError.localVideoStreamErrorCaptureFailure: 4,
-  LocalVideoStreamError.localVideoStreamErrorEncodeFailure: 5,
-  LocalVideoStreamError.localVideoStreamErrorCaptureInbackground: 6,
-  LocalVideoStreamError.localVideoStreamErrorCaptureMultipleForegroundApps: 7,
-  LocalVideoStreamError.localVideoStreamErrorDeviceNotFound: 8,
-  LocalVideoStreamError.localVideoStreamErrorDeviceDisconnected: 9,
-  LocalVideoStreamError.localVideoStreamErrorDeviceInvalidId: 10,
-  LocalVideoStreamError.localVideoStreamErrorDeviceSystemPressure: 101,
-  LocalVideoStreamError.localVideoStreamErrorScreenCaptureWindowMinimized: 11,
-  LocalVideoStreamError.localVideoStreamErrorScreenCaptureWindowClosed: 12,
-  LocalVideoStreamError.localVideoStreamErrorScreenCaptureWindowOccluded: 13,
-  LocalVideoStreamError.localVideoStreamErrorScreenCaptureWindowNotSupported:
+const _$LocalVideoStreamReasonEnumMap = {
+  LocalVideoStreamReason.localVideoStreamReasonOk: 0,
+  LocalVideoStreamReason.localVideoStreamReasonFailure: 1,
+  LocalVideoStreamReason.localVideoStreamReasonDeviceNoPermission: 2,
+  LocalVideoStreamReason.localVideoStreamReasonDeviceBusy: 3,
+  LocalVideoStreamReason.localVideoStreamReasonCaptureFailure: 4,
+  LocalVideoStreamReason.localVideoStreamReasonCodecNotSupport: 5,
+  LocalVideoStreamReason.localVideoStreamReasonCaptureInbackground: 6,
+  LocalVideoStreamReason.localVideoStreamReasonCaptureMultipleForegroundApps: 7,
+  LocalVideoStreamReason.localVideoStreamReasonDeviceNotFound: 8,
+  LocalVideoStreamReason.localVideoStreamReasonDeviceDisconnected: 9,
+  LocalVideoStreamReason.localVideoStreamReasonDeviceInvalidId: 10,
+  LocalVideoStreamReason.localVideoStreamReasonDeviceSystemPressure: 101,
+  LocalVideoStreamReason.localVideoStreamReasonScreenCaptureWindowMinimized: 11,
+  LocalVideoStreamReason.localVideoStreamReasonScreenCaptureWindowClosed: 12,
+  LocalVideoStreamReason.localVideoStreamReasonScreenCaptureWindowOccluded: 13,
+  LocalVideoStreamReason.localVideoStreamReasonScreenCaptureWindowNotSupported:
       20,
-  LocalVideoStreamError.localVideoStreamErrorScreenCaptureFailure: 21,
-  LocalVideoStreamError.localVideoStreamErrorScreenCaptureNoPermission: 22,
-  LocalVideoStreamError.localVideoStreamErrorScreenCapturePaused: 23,
-  LocalVideoStreamError.localVideoStreamErrorScreenCaptureResumed: 24,
-  LocalVideoStreamError.localVideoStreamErrorScreenCaptureWindowHidden: 25,
-  LocalVideoStreamError
-      .localVideoStreamErrorScreenCaptureWindowRecoverFromHidden: 26,
-  LocalVideoStreamError
-      .localVideoStreamErrorScreenCaptureWindowRecoverFromMinimized: 27,
+  LocalVideoStreamReason.localVideoStreamReasonScreenCaptureFailure: 21,
+  LocalVideoStreamReason.localVideoStreamReasonScreenCaptureNoPermission: 22,
+  LocalVideoStreamReason.localVideoStreamReasonScreenCaptureAutoFallback: 24,
+  LocalVideoStreamReason.localVideoStreamReasonScreenCaptureWindowHidden: 25,
+  LocalVideoStreamReason
+      .localVideoStreamReasonScreenCaptureWindowRecoverFromHidden: 26,
+  LocalVideoStreamReason
+      .localVideoStreamReasonScreenCaptureWindowRecoverFromMinimized: 27,
+  LocalVideoStreamReason.localVideoStreamReasonScreenCapturePaused: 28,
+  LocalVideoStreamReason.localVideoStreamReasonScreenCaptureResumed: 29,
 };
 
 RtcEngineEventHandlerOnRemoteVideoStateChangedJson
@@ -1551,26 +1645,6 @@ Map<String, dynamic> _$RtcEngineEventHandlerOnUserEnableLocalVideoJsonToJson(
       'enabled': instance.enabled,
     };
 
-RtcEngineEventHandlerOnLocalAudioStatsJson
-    _$RtcEngineEventHandlerOnLocalAudioStatsJsonFromJson(
-            Map<String, dynamic> json) =>
-        RtcEngineEventHandlerOnLocalAudioStatsJson(
-          connection: json['connection'] == null
-              ? null
-              : RtcConnection.fromJson(
-                  json['connection'] as Map<String, dynamic>),
-          stats: json['stats'] == null
-              ? null
-              : LocalAudioStats.fromJson(json['stats'] as Map<String, dynamic>),
-        );
-
-Map<String, dynamic> _$RtcEngineEventHandlerOnLocalAudioStatsJsonToJson(
-        RtcEngineEventHandlerOnLocalAudioStatsJson instance) =>
-    <String, dynamic>{
-      'connection': instance.connection?.toJson(),
-      'stats': instance.stats?.toJson(),
-    };
-
 RtcEngineEventHandlerOnRemoteAudioStatsJson
     _$RtcEngineEventHandlerOnRemoteAudioStatsJsonFromJson(
             Map<String, dynamic> json) =>
@@ -1587,6 +1661,26 @@ RtcEngineEventHandlerOnRemoteAudioStatsJson
 
 Map<String, dynamic> _$RtcEngineEventHandlerOnRemoteAudioStatsJsonToJson(
         RtcEngineEventHandlerOnRemoteAudioStatsJson instance) =>
+    <String, dynamic>{
+      'connection': instance.connection?.toJson(),
+      'stats': instance.stats?.toJson(),
+    };
+
+RtcEngineEventHandlerOnLocalAudioStatsJson
+    _$RtcEngineEventHandlerOnLocalAudioStatsJsonFromJson(
+            Map<String, dynamic> json) =>
+        RtcEngineEventHandlerOnLocalAudioStatsJson(
+          connection: json['connection'] == null
+              ? null
+              : RtcConnection.fromJson(
+                  json['connection'] as Map<String, dynamic>),
+          stats: json['stats'] == null
+              ? null
+              : LocalAudioStats.fromJson(json['stats'] as Map<String, dynamic>),
+        );
+
+Map<String, dynamic> _$RtcEngineEventHandlerOnLocalAudioStatsJsonToJson(
+        RtcEngineEventHandlerOnLocalAudioStatsJson instance) =>
     <String, dynamic>{
       'connection': instance.connection?.toJson(),
       'stats': instance.stats?.toJson(),
@@ -1752,8 +1846,8 @@ RtcEngineEventHandlerOnRhythmPlayerStateChangedJson
         RtcEngineEventHandlerOnRhythmPlayerStateChangedJson(
           state: $enumDecodeNullable(
               _$RhythmPlayerStateTypeEnumMap, json['state']),
-          errorCode: $enumDecodeNullable(
-              _$RhythmPlayerErrorTypeEnumMap, json['errorCode']),
+          reason:
+              $enumDecodeNullable(_$RhythmPlayerReasonEnumMap, json['reason']),
         );
 
 Map<String, dynamic>
@@ -1761,7 +1855,7 @@ Map<String, dynamic>
             RtcEngineEventHandlerOnRhythmPlayerStateChangedJson instance) =>
         <String, dynamic>{
           'state': _$RhythmPlayerStateTypeEnumMap[instance.state],
-          'errorCode': _$RhythmPlayerErrorTypeEnumMap[instance.errorCode],
+          'reason': _$RhythmPlayerReasonEnumMap[instance.reason],
         };
 
 const _$RhythmPlayerStateTypeEnumMap = {
@@ -1772,12 +1866,12 @@ const _$RhythmPlayerStateTypeEnumMap = {
   RhythmPlayerStateType.rhythmPlayerStateFailed: 814,
 };
 
-const _$RhythmPlayerErrorTypeEnumMap = {
-  RhythmPlayerErrorType.rhythmPlayerErrorOk: 0,
-  RhythmPlayerErrorType.rhythmPlayerErrorFailed: 1,
-  RhythmPlayerErrorType.rhythmPlayerErrorCanNotOpen: 801,
-  RhythmPlayerErrorType.rhythmPlayerErrorCanNotPlay: 802,
-  RhythmPlayerErrorType.rhythmPlayerErrorFileOverDurationLimit: 803,
+const _$RhythmPlayerReasonEnumMap = {
+  RhythmPlayerReason.rhythmPlayerReasonOk: 0,
+  RhythmPlayerReason.rhythmPlayerReasonFailed: 1,
+  RhythmPlayerReason.rhythmPlayerReasonCanNotOpen: 801,
+  RhythmPlayerReason.rhythmPlayerReasonCanNotPlay: 802,
+  RhythmPlayerReason.rhythmPlayerReasonFileOverDurationLimit: 803,
 };
 
 RtcEngineEventHandlerOnConnectionLostJson
@@ -1961,26 +2055,6 @@ Map<String,
       'elapsed': instance.elapsed,
     };
 
-RtcEngineEventHandlerOnFirstRemoteAudioFrameJson
-    _$RtcEngineEventHandlerOnFirstRemoteAudioFrameJsonFromJson(
-            Map<String, dynamic> json) =>
-        RtcEngineEventHandlerOnFirstRemoteAudioFrameJson(
-          connection: json['connection'] == null
-              ? null
-              : RtcConnection.fromJson(
-                  json['connection'] as Map<String, dynamic>),
-          userId: json['userId'] as int?,
-          elapsed: json['elapsed'] as int?,
-        );
-
-Map<String, dynamic> _$RtcEngineEventHandlerOnFirstRemoteAudioFrameJsonToJson(
-        RtcEngineEventHandlerOnFirstRemoteAudioFrameJson instance) =>
-    <String, dynamic>{
-      'connection': instance.connection?.toJson(),
-      'userId': instance.userId,
-      'elapsed': instance.elapsed,
-    };
-
 RtcEngineEventHandlerOnFirstRemoteAudioDecodedJson
     _$RtcEngineEventHandlerOnFirstRemoteAudioDecodedJsonFromJson(
             Map<String, dynamic> json) =>
@@ -2001,6 +2075,26 @@ Map<String, dynamic> _$RtcEngineEventHandlerOnFirstRemoteAudioDecodedJsonToJson(
       'elapsed': instance.elapsed,
     };
 
+RtcEngineEventHandlerOnFirstRemoteAudioFrameJson
+    _$RtcEngineEventHandlerOnFirstRemoteAudioFrameJsonFromJson(
+            Map<String, dynamic> json) =>
+        RtcEngineEventHandlerOnFirstRemoteAudioFrameJson(
+          connection: json['connection'] == null
+              ? null
+              : RtcConnection.fromJson(
+                  json['connection'] as Map<String, dynamic>),
+          userId: json['userId'] as int?,
+          elapsed: json['elapsed'] as int?,
+        );
+
+Map<String, dynamic> _$RtcEngineEventHandlerOnFirstRemoteAudioFrameJsonToJson(
+        RtcEngineEventHandlerOnFirstRemoteAudioFrameJson instance) =>
+    <String, dynamic>{
+      'connection': instance.connection?.toJson(),
+      'userId': instance.userId,
+      'elapsed': instance.elapsed,
+    };
+
 RtcEngineEventHandlerOnLocalAudioStateChangedJson
     _$RtcEngineEventHandlerOnLocalAudioStateChangedJsonFromJson(
             Map<String, dynamic> json) =>
@@ -2011,8 +2105,8 @@ RtcEngineEventHandlerOnLocalAudioStateChangedJson
                   json['connection'] as Map<String, dynamic>),
           state: $enumDecodeNullable(
               _$LocalAudioStreamStateEnumMap, json['state']),
-          error: $enumDecodeNullable(
-              _$LocalAudioStreamErrorEnumMap, json['error']),
+          reason: $enumDecodeNullable(
+              _$LocalAudioStreamReasonEnumMap, json['reason']),
         );
 
 Map<String, dynamic> _$RtcEngineEventHandlerOnLocalAudioStateChangedJsonToJson(
@@ -2020,7 +2114,7 @@ Map<String, dynamic> _$RtcEngineEventHandlerOnLocalAudioStateChangedJsonToJson(
     <String, dynamic>{
       'connection': instance.connection?.toJson(),
       'state': _$LocalAudioStreamStateEnumMap[instance.state],
-      'error': _$LocalAudioStreamErrorEnumMap[instance.error],
+      'reason': _$LocalAudioStreamReasonEnumMap[instance.reason],
     };
 
 const _$LocalAudioStreamStateEnumMap = {
@@ -2030,18 +2124,18 @@ const _$LocalAudioStreamStateEnumMap = {
   LocalAudioStreamState.localAudioStreamStateFailed: 3,
 };
 
-const _$LocalAudioStreamErrorEnumMap = {
-  LocalAudioStreamError.localAudioStreamErrorOk: 0,
-  LocalAudioStreamError.localAudioStreamErrorFailure: 1,
-  LocalAudioStreamError.localAudioStreamErrorDeviceNoPermission: 2,
-  LocalAudioStreamError.localAudioStreamErrorDeviceBusy: 3,
-  LocalAudioStreamError.localAudioStreamErrorRecordFailure: 4,
-  LocalAudioStreamError.localAudioStreamErrorEncodeFailure: 5,
-  LocalAudioStreamError.localAudioStreamErrorNoRecordingDevice: 6,
-  LocalAudioStreamError.localAudioStreamErrorNoPlayoutDevice: 7,
-  LocalAudioStreamError.localAudioStreamErrorInterrupted: 8,
-  LocalAudioStreamError.localAudioStreamErrorRecordInvalidId: 9,
-  LocalAudioStreamError.localAudioStreamErrorPlayoutInvalidId: 10,
+const _$LocalAudioStreamReasonEnumMap = {
+  LocalAudioStreamReason.localAudioStreamReasonOk: 0,
+  LocalAudioStreamReason.localAudioStreamReasonFailure: 1,
+  LocalAudioStreamReason.localAudioStreamReasonDeviceNoPermission: 2,
+  LocalAudioStreamReason.localAudioStreamReasonDeviceBusy: 3,
+  LocalAudioStreamReason.localAudioStreamReasonRecordFailure: 4,
+  LocalAudioStreamReason.localAudioStreamReasonEncodeFailure: 5,
+  LocalAudioStreamReason.localAudioStreamReasonNoRecordingDevice: 6,
+  LocalAudioStreamReason.localAudioStreamReasonNoPlayoutDevice: 7,
+  LocalAudioStreamReason.localAudioStreamReasonInterrupted: 8,
+  LocalAudioStreamReason.localAudioStreamReasonRecordInvalidId: 9,
+  LocalAudioStreamReason.localAudioStreamReasonPlayoutInvalidId: 10,
 };
 
 RtcEngineEventHandlerOnRemoteAudioStateChangedJson
@@ -2239,8 +2333,8 @@ RtcEngineEventHandlerOnRtmpStreamingStateChangedJson
           url: json['url'] as String?,
           state: $enumDecodeNullable(
               _$RtmpStreamPublishStateEnumMap, json['state']),
-          errCode: $enumDecodeNullable(
-              _$RtmpStreamPublishErrorTypeEnumMap, json['errCode']),
+          reason: $enumDecodeNullable(
+              _$RtmpStreamPublishReasonEnumMap, json['reason']),
         );
 
 Map<String, dynamic>
@@ -2249,7 +2343,7 @@ Map<String, dynamic>
         <String, dynamic>{
           'url': instance.url,
           'state': _$RtmpStreamPublishStateEnumMap[instance.state],
-          'errCode': _$RtmpStreamPublishErrorTypeEnumMap[instance.errCode],
+          'reason': _$RtmpStreamPublishReasonEnumMap[instance.reason],
         };
 
 const _$RtmpStreamPublishStateEnumMap = {
@@ -2261,24 +2355,24 @@ const _$RtmpStreamPublishStateEnumMap = {
   RtmpStreamPublishState.rtmpStreamPublishStateDisconnecting: 5,
 };
 
-const _$RtmpStreamPublishErrorTypeEnumMap = {
-  RtmpStreamPublishErrorType.rtmpStreamPublishErrorOk: 0,
-  RtmpStreamPublishErrorType.rtmpStreamPublishErrorInvalidArgument: 1,
-  RtmpStreamPublishErrorType.rtmpStreamPublishErrorEncryptedStreamNotAllowed: 2,
-  RtmpStreamPublishErrorType.rtmpStreamPublishErrorConnectionTimeout: 3,
-  RtmpStreamPublishErrorType.rtmpStreamPublishErrorInternalServerError: 4,
-  RtmpStreamPublishErrorType.rtmpStreamPublishErrorRtmpServerError: 5,
-  RtmpStreamPublishErrorType.rtmpStreamPublishErrorTooOften: 6,
-  RtmpStreamPublishErrorType.rtmpStreamPublishErrorReachLimit: 7,
-  RtmpStreamPublishErrorType.rtmpStreamPublishErrorNotAuthorized: 8,
-  RtmpStreamPublishErrorType.rtmpStreamPublishErrorStreamNotFound: 9,
-  RtmpStreamPublishErrorType.rtmpStreamPublishErrorFormatNotSupported: 10,
-  RtmpStreamPublishErrorType.rtmpStreamPublishErrorNotBroadcaster: 11,
-  RtmpStreamPublishErrorType.rtmpStreamPublishErrorTranscodingNoMixStream: 13,
-  RtmpStreamPublishErrorType.rtmpStreamPublishErrorNetDown: 14,
-  RtmpStreamPublishErrorType.rtmpStreamPublishErrorInvalidAppid: 15,
-  RtmpStreamPublishErrorType.rtmpStreamPublishErrorInvalidPrivilege: 16,
-  RtmpStreamPublishErrorType.rtmpStreamUnpublishErrorOk: 100,
+const _$RtmpStreamPublishReasonEnumMap = {
+  RtmpStreamPublishReason.rtmpStreamPublishReasonOk: 0,
+  RtmpStreamPublishReason.rtmpStreamPublishReasonInvalidArgument: 1,
+  RtmpStreamPublishReason.rtmpStreamPublishReasonEncryptedStreamNotAllowed: 2,
+  RtmpStreamPublishReason.rtmpStreamPublishReasonConnectionTimeout: 3,
+  RtmpStreamPublishReason.rtmpStreamPublishReasonInternalServerError: 4,
+  RtmpStreamPublishReason.rtmpStreamPublishReasonRtmpServerError: 5,
+  RtmpStreamPublishReason.rtmpStreamPublishReasonTooOften: 6,
+  RtmpStreamPublishReason.rtmpStreamPublishReasonReachLimit: 7,
+  RtmpStreamPublishReason.rtmpStreamPublishReasonNotAuthorized: 8,
+  RtmpStreamPublishReason.rtmpStreamPublishReasonStreamNotFound: 9,
+  RtmpStreamPublishReason.rtmpStreamPublishReasonFormatNotSupported: 10,
+  RtmpStreamPublishReason.rtmpStreamPublishReasonNotBroadcaster: 11,
+  RtmpStreamPublishReason.rtmpStreamPublishReasonTranscodingNoMixStream: 13,
+  RtmpStreamPublishReason.rtmpStreamPublishReasonNetDown: 14,
+  RtmpStreamPublishReason.rtmpStreamPublishReasonInvalidAppid: 15,
+  RtmpStreamPublishReason.rtmpStreamPublishReasonInvalidPrivilege: 16,
+  RtmpStreamPublishReason.rtmpStreamUnpublishReasonOk: 100,
 };
 
 RtcEngineEventHandlerOnRtmpStreamingEventJson
@@ -2364,39 +2458,6 @@ const _$ChannelMediaRelayErrorEnumMap = {
   ChannelMediaRelayError.relayErrorInternalError: 9,
   ChannelMediaRelayError.relayErrorSrcTokenExpired: 10,
   ChannelMediaRelayError.relayErrorDestTokenExpired: 11,
-};
-
-RtcEngineEventHandlerOnChannelMediaRelayEventJson
-    _$RtcEngineEventHandlerOnChannelMediaRelayEventJsonFromJson(
-            Map<String, dynamic> json) =>
-        RtcEngineEventHandlerOnChannelMediaRelayEventJson(
-          code: $enumDecodeNullable(
-              _$ChannelMediaRelayEventEnumMap, json['code']),
-        );
-
-Map<String, dynamic> _$RtcEngineEventHandlerOnChannelMediaRelayEventJsonToJson(
-        RtcEngineEventHandlerOnChannelMediaRelayEventJson instance) =>
-    <String, dynamic>{
-      'code': _$ChannelMediaRelayEventEnumMap[instance.code],
-    };
-
-const _$ChannelMediaRelayEventEnumMap = {
-  ChannelMediaRelayEvent.relayEventNetworkDisconnected: 0,
-  ChannelMediaRelayEvent.relayEventNetworkConnected: 1,
-  ChannelMediaRelayEvent.relayEventPacketJoinedSrcChannel: 2,
-  ChannelMediaRelayEvent.relayEventPacketJoinedDestChannel: 3,
-  ChannelMediaRelayEvent.relayEventPacketSentToDestChannel: 4,
-  ChannelMediaRelayEvent.relayEventPacketReceivedVideoFromSrc: 5,
-  ChannelMediaRelayEvent.relayEventPacketReceivedAudioFromSrc: 6,
-  ChannelMediaRelayEvent.relayEventPacketUpdateDestChannel: 7,
-  ChannelMediaRelayEvent.relayEventPacketUpdateDestChannelRefused: 8,
-  ChannelMediaRelayEvent.relayEventPacketUpdateDestChannelNotChange: 9,
-  ChannelMediaRelayEvent.relayEventPacketUpdateDestChannelIsNull: 10,
-  ChannelMediaRelayEvent.relayEventVideoProfileUpdate: 11,
-  ChannelMediaRelayEvent.relayEventPauseSendPacketToDestChannelSuccess: 12,
-  ChannelMediaRelayEvent.relayEventPauseSendPacketToDestChannelFailed: 13,
-  ChannelMediaRelayEvent.relayEventResumeSendPacketToDestChannelSuccess: 14,
-  ChannelMediaRelayEvent.relayEventResumeSendPacketToDestChannelFailed: 15,
 };
 
 RtcEngineEventHandlerOnLocalPublishFallbackToAudioOnlyJson
@@ -2534,6 +2595,8 @@ const _$ConnectionChangedReasonTypeEnumMap = {
   ConnectionChangedReasonType.connectionChangedTooManyBroadcasters: 20,
   ConnectionChangedReasonType.connectionChangedLicenseValidationFailure: 21,
   ConnectionChangedReasonType.connectionChangedCertificationVeryfyFailure: 22,
+  ConnectionChangedReasonType.connectionChangedStreamChannelNotAvailable: 23,
+  ConnectionChangedReasonType.connectionChangedInconsistentAppid: 24,
 };
 
 RtcEngineEventHandlerOnWlAccMessageJson
@@ -2704,6 +2767,87 @@ Map<String, dynamic> _$RtcEngineEventHandlerOnUserInfoUpdatedJsonToJson(
       'info': instance.info?.toJson(),
     };
 
+RtcEngineEventHandlerOnUserAccountUpdatedJson
+    _$RtcEngineEventHandlerOnUserAccountUpdatedJsonFromJson(
+            Map<String, dynamic> json) =>
+        RtcEngineEventHandlerOnUserAccountUpdatedJson(
+          connection: json['connection'] == null
+              ? null
+              : RtcConnection.fromJson(
+                  json['connection'] as Map<String, dynamic>),
+          remoteUid: json['remoteUid'] as int?,
+          remoteUserAccount: json['remoteUserAccount'] as String?,
+        );
+
+Map<String, dynamic> _$RtcEngineEventHandlerOnUserAccountUpdatedJsonToJson(
+        RtcEngineEventHandlerOnUserAccountUpdatedJson instance) =>
+    <String, dynamic>{
+      'connection': instance.connection?.toJson(),
+      'remoteUid': instance.remoteUid,
+      'remoteUserAccount': instance.remoteUserAccount,
+    };
+
+RtcEngineEventHandlerOnVideoRenderingTracingResultJson
+    _$RtcEngineEventHandlerOnVideoRenderingTracingResultJsonFromJson(
+            Map<String, dynamic> json) =>
+        RtcEngineEventHandlerOnVideoRenderingTracingResultJson(
+          connection: json['connection'] == null
+              ? null
+              : RtcConnection.fromJson(
+                  json['connection'] as Map<String, dynamic>),
+          uid: json['uid'] as int?,
+          currentEvent: $enumDecodeNullable(
+              _$MediaTraceEventEnumMap, json['currentEvent']),
+          tracingInfo: json['tracingInfo'] == null
+              ? null
+              : VideoRenderingTracingInfo.fromJson(
+                  json['tracingInfo'] as Map<String, dynamic>),
+        );
+
+Map<String, dynamic>
+    _$RtcEngineEventHandlerOnVideoRenderingTracingResultJsonToJson(
+            RtcEngineEventHandlerOnVideoRenderingTracingResultJson instance) =>
+        <String, dynamic>{
+          'connection': instance.connection?.toJson(),
+          'uid': instance.uid,
+          'currentEvent': _$MediaTraceEventEnumMap[instance.currentEvent],
+          'tracingInfo': instance.tracingInfo?.toJson(),
+        };
+
+const _$MediaTraceEventEnumMap = {
+  MediaTraceEvent.mediaTraceEventVideoRendered: 0,
+  MediaTraceEvent.mediaTraceEventVideoDecoded: 1,
+};
+
+RtcEngineEventHandlerOnLocalVideoTranscoderErrorJson
+    _$RtcEngineEventHandlerOnLocalVideoTranscoderErrorJsonFromJson(
+            Map<String, dynamic> json) =>
+        RtcEngineEventHandlerOnLocalVideoTranscoderErrorJson(
+          stream: json['stream'] == null
+              ? null
+              : TranscodingVideoStream.fromJson(
+                  json['stream'] as Map<String, dynamic>),
+          error:
+              $enumDecodeNullable(_$VideoTranscoderErrorEnumMap, json['error']),
+        );
+
+Map<String, dynamic>
+    _$RtcEngineEventHandlerOnLocalVideoTranscoderErrorJsonToJson(
+            RtcEngineEventHandlerOnLocalVideoTranscoderErrorJson instance) =>
+        <String, dynamic>{
+          'stream': instance.stream?.toJson(),
+          'error': _$VideoTranscoderErrorEnumMap[instance.error],
+        };
+
+const _$VideoTranscoderErrorEnumMap = {
+  VideoTranscoderError.vtErrVideoSourceNotReady: 1,
+  VideoTranscoderError.vtErrInvalidVideoSourceType: 2,
+  VideoTranscoderError.vtErrInvalidImagePath: 3,
+  VideoTranscoderError.vtErrUnsupportImageFormat: 4,
+  VideoTranscoderError.vtErrInvalidLayout: 5,
+  VideoTranscoderError.vtErrInternal: 20,
+};
+
 RtcEngineEventHandlerOnUploadLogResultJson
     _$RtcEngineEventHandlerOnUploadLogResultJsonFromJson(
             Map<String, dynamic> json) =>
@@ -2841,6 +2985,35 @@ Map<String, dynamic>
           'elapseSinceLastState': instance.elapseSinceLastState,
         };
 
+RtcEngineEventHandlerOnTranscodedStreamLayoutInfoJson
+    _$RtcEngineEventHandlerOnTranscodedStreamLayoutInfoJsonFromJson(
+            Map<String, dynamic> json) =>
+        RtcEngineEventHandlerOnTranscodedStreamLayoutInfoJson(
+          connection: json['connection'] == null
+              ? null
+              : RtcConnection.fromJson(
+                  json['connection'] as Map<String, dynamic>),
+          uid: json['uid'] as int?,
+          width: json['width'] as int?,
+          height: json['height'] as int?,
+          layoutCount: json['layoutCount'] as int?,
+          layoutlist: (json['layoutlist'] as List<dynamic>?)
+              ?.map((e) => VideoLayout.fromJson(e as Map<String, dynamic>))
+              .toList(),
+        );
+
+Map<String, dynamic>
+    _$RtcEngineEventHandlerOnTranscodedStreamLayoutInfoJsonToJson(
+            RtcEngineEventHandlerOnTranscodedStreamLayoutInfoJson instance) =>
+        <String, dynamic>{
+          'connection': instance.connection?.toJson(),
+          'uid': instance.uid,
+          'width': instance.width,
+          'height': instance.height,
+          'layoutCount': instance.layoutCount,
+          'layoutlist': instance.layoutlist?.map((e) => e.toJson()).toList(),
+        };
+
 RtcEngineEventHandlerOnExtensionEventJson
     _$RtcEngineEventHandlerOnExtensionEventJsonFromJson(
             Map<String, dynamic> json) =>
@@ -2909,86 +3082,23 @@ Map<String, dynamic> _$RtcEngineEventHandlerOnExtensionErrorJsonToJson(
       'message': instance.message,
     };
 
-RtcEngineEventHandlerOnUserAccountUpdatedJson
-    _$RtcEngineEventHandlerOnUserAccountUpdatedJsonFromJson(
+RtcEngineEventHandlerOnSetRtmFlagResultJson
+    _$RtcEngineEventHandlerOnSetRtmFlagResultJsonFromJson(
             Map<String, dynamic> json) =>
-        RtcEngineEventHandlerOnUserAccountUpdatedJson(
+        RtcEngineEventHandlerOnSetRtmFlagResultJson(
           connection: json['connection'] == null
               ? null
               : RtcConnection.fromJson(
                   json['connection'] as Map<String, dynamic>),
-          remoteUid: json['remoteUid'] as int?,
-          userAccount: json['userAccount'] as String?,
+          code: json['code'] as int?,
         );
 
-Map<String, dynamic> _$RtcEngineEventHandlerOnUserAccountUpdatedJsonToJson(
-        RtcEngineEventHandlerOnUserAccountUpdatedJson instance) =>
+Map<String, dynamic> _$RtcEngineEventHandlerOnSetRtmFlagResultJsonToJson(
+        RtcEngineEventHandlerOnSetRtmFlagResultJson instance) =>
     <String, dynamic>{
       'connection': instance.connection?.toJson(),
-      'remoteUid': instance.remoteUid,
-      'userAccount': instance.userAccount,
+      'code': instance.code,
     };
-
-RtcEngineEventHandlerOnLocalVideoTranscoderErrorJson
-    _$RtcEngineEventHandlerOnLocalVideoTranscoderErrorJsonFromJson(
-            Map<String, dynamic> json) =>
-        RtcEngineEventHandlerOnLocalVideoTranscoderErrorJson(
-          stream: json['stream'] == null
-              ? null
-              : TranscodingVideoStream.fromJson(
-                  json['stream'] as Map<String, dynamic>),
-          error:
-              $enumDecodeNullable(_$VideoTranscoderErrorEnumMap, json['error']),
-        );
-
-Map<String, dynamic>
-    _$RtcEngineEventHandlerOnLocalVideoTranscoderErrorJsonToJson(
-            RtcEngineEventHandlerOnLocalVideoTranscoderErrorJson instance) =>
-        <String, dynamic>{
-          'stream': instance.stream?.toJson(),
-          'error': _$VideoTranscoderErrorEnumMap[instance.error],
-        };
-
-const _$VideoTranscoderErrorEnumMap = {
-  VideoTranscoderError.vtErrVideoSourceNotReady: 1,
-  VideoTranscoderError.vtErrInvalidVideoSourceType: 2,
-  VideoTranscoderError.vtErrInvalidImagePath: 3,
-  VideoTranscoderError.vtErrUnsupportImageFormat: 4,
-  VideoTranscoderError.vtErrInvalidLayout: 5,
-  VideoTranscoderError.vtErrInternal: 20,
-};
-
-RtcEngineEventHandlerOnVideoRenderingTracingResultJson
-    _$RtcEngineEventHandlerOnVideoRenderingTracingResultJsonFromJson(
-            Map<String, dynamic> json) =>
-        RtcEngineEventHandlerOnVideoRenderingTracingResultJson(
-          connection: json['connection'] == null
-              ? null
-              : RtcConnection.fromJson(
-                  json['connection'] as Map<String, dynamic>),
-          uid: json['uid'] as int?,
-          currentEvent: $enumDecodeNullable(
-              _$MediaTraceEventEnumMap, json['currentEvent']),
-          tracingInfo: json['tracingInfo'] == null
-              ? null
-              : VideoRenderingTracingInfo.fromJson(
-                  json['tracingInfo'] as Map<String, dynamic>),
-        );
-
-Map<String, dynamic>
-    _$RtcEngineEventHandlerOnVideoRenderingTracingResultJsonToJson(
-            RtcEngineEventHandlerOnVideoRenderingTracingResultJson instance) =>
-        <String, dynamic>{
-          'connection': instance.connection?.toJson(),
-          'uid': instance.uid,
-          'currentEvent': _$MediaTraceEventEnumMap[instance.currentEvent],
-          'tracingInfo': instance.tracingInfo?.toJson(),
-        };
-
-const _$MediaTraceEventEnumMap = {
-  MediaTraceEvent.mediaTraceEventVideoRendered: 0,
-  MediaTraceEvent.mediaTraceEventVideoDecoded: 1,
-};
 
 MetadataObserverOnMetadataReceivedJson
     _$MetadataObserverOnMetadataReceivedJsonFromJson(
@@ -3011,8 +3121,8 @@ DirectCdnStreamingEventHandlerOnDirectCdnStreamingStateChangedJson
         DirectCdnStreamingEventHandlerOnDirectCdnStreamingStateChangedJson(
           state: $enumDecodeNullable(
               _$DirectCdnStreamingStateEnumMap, json['state']),
-          error: $enumDecodeNullable(
-              _$DirectCdnStreamingErrorEnumMap, json['error']),
+          reason: $enumDecodeNullable(
+              _$DirectCdnStreamingReasonEnumMap, json['reason']),
           message: json['message'] as String?,
         );
 
@@ -3022,7 +3132,7 @@ Map<String, dynamic>
                 instance) =>
         <String, dynamic>{
           'state': _$DirectCdnStreamingStateEnumMap[instance.state],
-          'error': _$DirectCdnStreamingErrorEnumMap[instance.error],
+          'reason': _$DirectCdnStreamingReasonEnumMap[instance.reason],
           'message': instance.message,
         };
 
@@ -3034,13 +3144,13 @@ const _$DirectCdnStreamingStateEnumMap = {
   DirectCdnStreamingState.directCdnStreamingStateRecovering: 4,
 };
 
-const _$DirectCdnStreamingErrorEnumMap = {
-  DirectCdnStreamingError.directCdnStreamingErrorOk: 0,
-  DirectCdnStreamingError.directCdnStreamingErrorFailed: 1,
-  DirectCdnStreamingError.directCdnStreamingErrorAudioPublication: 2,
-  DirectCdnStreamingError.directCdnStreamingErrorVideoPublication: 3,
-  DirectCdnStreamingError.directCdnStreamingErrorNetConnect: 4,
-  DirectCdnStreamingError.directCdnStreamingErrorBadName: 5,
+const _$DirectCdnStreamingReasonEnumMap = {
+  DirectCdnStreamingReason.directCdnStreamingReasonOk: 0,
+  DirectCdnStreamingReason.directCdnStreamingReasonFailed: 1,
+  DirectCdnStreamingReason.directCdnStreamingReasonAudioPublication: 2,
+  DirectCdnStreamingReason.directCdnStreamingReasonVideoPublication: 3,
+  DirectCdnStreamingReason.directCdnStreamingReasonNetConnect: 4,
+  DirectCdnStreamingReason.directCdnStreamingReasonBadName: 5,
 };
 
 DirectCdnStreamingEventHandlerOnDirectCdnStreamingStatsJson
