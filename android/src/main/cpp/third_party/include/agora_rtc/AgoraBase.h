@@ -2916,6 +2916,14 @@ enum REMOTE_AUDIO_STATE_REASON
    * 7: The remote user leaves the channel.
    */
   REMOTE_AUDIO_REASON_REMOTE_OFFLINE = 7,
+  /**
+   * 8: Not receive any audio packet from remote user.
+   */
+  REMOTE_AUDIO_REASON_REMOTE_NO_PACKET_RECEIVE = 8,
+  /**
+   * 8: Not receive any audio packet from remote user.
+   */
+  REMOTE_AUDIO_REASON_REMOTE_LOCAL_PLAY_FAILED = 9,
 };
 
 /**
@@ -5723,7 +5731,11 @@ enum EAR_MONITORING_FILTER_TYPE {
   /**
    * 4: Enable noise suppression to the in-ear monitor.
    */
-  EAR_MONITORING_FILTER_NOISE_SUPPRESSION = (1<<2)
+  EAR_MONITORING_FILTER_NOISE_SUPPRESSION = (1<<2),
+  /**
+   * 32768: Enable audio filters by reuse post-processing filter to the in-ear monitor.
+   */
+  EAR_MONITORING_FILTER_REUSE_POST_PROCESSING_FILTER = (1<<15),
 };
 
 /**

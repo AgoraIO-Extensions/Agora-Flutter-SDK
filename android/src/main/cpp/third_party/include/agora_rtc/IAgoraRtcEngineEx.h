@@ -1942,6 +1942,25 @@ public:
       - -7(ERR_NOT_INITIALIZED): The SDK is not initialized. Initialize the `IRtcEngine` instance before calling this method.
      */
     virtual int startMediaRenderingTracingEx(const RtcConnection& connection) = 0;
+
+    /**
+     * Gets the current call ID.
+     *
+     * When a user joins a channel on a client, a `callId` is generated to identify
+     * the call.
+     *
+     * After a call ends, you can call `rate` or `complain` to gather feedback from the customer.
+     * These methods require a `callId` parameter. To use these feedback methods, call the this
+     * method first to retrieve the `callId` during the call, and then pass the value as an
+     * argument in the `rate` or `complain` method after the call ends.
+     *
+     * @param callId The reference to the call ID.
+     * @param connection The RtcConnection object.
+     * @return
+     * - The call ID if the method call is successful.
+     * - < 0: Failure.
+    */
+    virtual int getCallIdEx(agora::util::AString& callId, const RtcConnection& connection) = 0;
 };
 
 }  // namespace rtc
