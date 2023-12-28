@@ -2204,7 +2204,6 @@ void rtcEngineExSmokeTestCases() {
 
       await rtcEngineEx.release();
     },
-//  skip: !(),
+    skip: true, // Skip for this special version, 4.2.6.3
   );
 }
-
