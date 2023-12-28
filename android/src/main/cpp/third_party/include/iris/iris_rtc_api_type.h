@@ -26,6 +26,7 @@
   "RtcEngine_startMediaRenderingTracing"
 #define FUNC_RTCENGINEEX_STARTMEDIARENDERINGTRACINGEX                          \
   "RtcEngineEx_startMediaRenderingTracingEx"
+#define FUNC_RTCENGINEEX_SETPARAMETERSEX "RtcEngineEx_setParametersEx"
 #define FUNC_RTCENGINE_ENABLEINSTANTMEDIARENDERING                             \
   "RtcEngine_enableInstantMediaRendering"
 #define FUNC_RTCENGINE_RELEASE "RtcEngine_release"
@@ -34,6 +35,7 @@
 #define FUNC_RTCENGINE_GETVERSION "RtcEngine_getVersion"
 #define FUNC_RTCENGINE_GETERRORDESCRIPTION "RtcEngine_getErrorDescription"
 #define FUNC_RTCENGINE_QUERYCODECCAPABILITY "RtcEngine_queryCodecCapability"
+#define FUNC_RTCENGINE_QUERYDEVICESCORE "RtcEngine_queryDeviceScore"
 #define FUNC_RTCENGINE_JOINCHANNEL "RtcEngine_joinChannel"
 #define FUNC_RTCENGINE_JOINCHANNEL2 "RtcEngine_joinChannel2"
 #define FUNC_RTCENGINE_UPDATECHANNELMEDIAOPTIONS                               \
@@ -74,6 +76,7 @@
 #define FUNC_RTCENGINE_SETUPREMOTEVIDEO "RtcEngine_setupRemoteVideo"
 #define FUNC_RTCENGINE_SETUPLOCALVIDEO "RtcEngine_setupLocalVideo"
 #define FUNC_RTCENGINE_SETVIDEOSCENARIO "RtcEngine_setVideoScenario"
+#define FUNC_RTCENGINE_SETVIDEOQOEPREFERENCE "RtcEngine_setVideoQoEPreference"
 #define FUNC_RTCENGINE_ENABLEAUDIO "RtcEngine_enableAudio"
 #define FUNC_RTCENGINE_DISABLEAUDIO "RtcEngine_disableAudio"
 #define FUNC_RTCENGINE_SETAUDIOPROFILE "RtcEngine_setAudioProfile"
@@ -288,9 +291,6 @@
 #define FUNC_RTCENGINE_GETCALLID "RtcEngine_getCallId"
 #define FUNC_RTCENGINE_RATE "RtcEngine_rate"
 #define FUNC_RTCENGINE_COMPLAIN "RtcEngine_complain"
-//#define FUNC_RTCENGINE_ADDPUBLISHSTREAMURL "RtcEngine_addPublishStreamUrl"
-//#define FUNC_RTCENGINE_REMOVEPUBLISHSTREAMURL "RtcEngine_removePublishStreamUrl"
-//#define FUNC_RTCENGINE_SETLIVETRANSCODING "RtcEngine_setLiveTranscoding"
 #define FUNC_RTCENGINE_STARTRTMPSTREAMWITHOUTTRANSCODING                       \
   "RtcEngine_startRtmpStreamWithoutTranscoding"
 #define FUNC_RTCENGINE_STARTRTMPSTREAMWITHTRANSCODING                          \
@@ -324,7 +324,6 @@
 #define FUNC_RTCENGINE_SENDSTREAMMESSAGE "RtcEngine_sendStreamMessage"
 #define FUNC_RTCENGINE_ADDVIDEOWATERMARK "RtcEngine_addVideoWatermark"
 #define FUNC_RTCENGINE_ADDVIDEOWATERMARK2 "RtcEngine_addVideoWatermark2"
-//#define FUNC_RTCENGINE_CLEARVIDEOWATERMARK "RtcEngine_clearVideoWatermark"
 #define FUNC_RTCENGINE_CLEARVIDEOWATERMARKS "RtcEngine_clearVideoWatermarks"
 #define FUNC_RTCENGINE_PAUSEAUDIO "RtcEngine_pauseAudio"
 #define FUNC_RTCENGINE_RESUMEAUDIO "RtcEngine_resumeAudio"
@@ -352,9 +351,6 @@
 #define FUNC_RTCENGINE_GETUSERINFOBYUSERACCOUNT                                \
   "RtcEngine_getUserInfoByUserAccount"
 #define FUNC_RTCENGINE_GETUSERINFOBYUID "RtcEngine_getUserInfoByUid"
-#define FUNC_RTCENGINE_STARTCHANNELMEDIARELAY "RtcEngine_startChannelMediaRelay"
-#define FUNC_RTCENGINE_UPDATECHANNELMEDIARELAY                                 \
-  "RtcEngine_updateChannelMediaRelay"
 #define FUNC_RTCENGINE_STOPCHANNELMEDIARELAY "RtcEngine_stopChannelMediaRelay"
 #define FUNC_RTCENGINE_PAUSEALLCHANNELMEDIARELAY                               \
   "RtcEngine_pauseAllChannelMediaRelay"
@@ -369,13 +365,7 @@
 #define FUNC_RTCENGINE_STOPDIRECTCDNSTREAMING "RtcEngine_stopDirectCdnStreaming"
 #define FUNC_RTCENGINE_UPDATEDIRECTCDNSTREAMINGMEDIAOPTIONS                    \
   "RtcEngine_updateDirectCdnStreamingMediaOptions"
-//to delete
-//#define FUNC_RTCENGINE_PUSHDIRECTCDNSTREAMINGCUSTOMVIDEOFRAME                  \
-//  "RtcEngine_pushDirectCdnStreamingCustomVideoFrame"
 #define FUNC_RTCENGINE_TAKESNAPSHOT "RtcEngine_takeSnapshot"
-//to delete
-//#define FUNC_RTCENGINE_SETCONTENTINSPECT "RtcEngine_SetContentInspect"
-//#define FUNC_RTCENGINE_SWITCHCHANNEL "RtcEngine_switchChannel"
 #define FUNC_RTCENGINE_STARTRHYTHMPLAYER "RtcEngine_startRhythmPlayer"
 #define FUNC_RTCENGINE_STOPRHYTHMPLAYER "RtcEngine_stopRhythmPlayer"
 #define FUNC_RTCENGINE_CONFIGRHYTHMPLAYER "RtcEngine_configRhythmPlayer"
@@ -385,8 +375,6 @@
   "RtcEngine_adjustCustomAudioPlayoutVolume"
 #define FUNC_RTCENGINE_SETCLOUDPROXY "RtcEngine_setCloudProxy"
 #define FUNC_RTCENGINE_SETLOCALACCESSPOINT "RtcEngine_setLocalAccessPoint"
-//#define FUNC_RTCENGINE_ENABLEFISHEYECORRECTION                                 \
-//  "RtcEngine_enableFishEyeCorrection"
 #define FUNC_RTCENGINE_SETADVANCEDAUDIOOPTIONS                                 \
   "RtcEngine_setAdvancedAudioOptions"
 #define FUNC_RTCENGINE_SETAVSYNCSOURCE "RtcEngine_setAVSyncSource"
@@ -469,7 +457,8 @@
 #define FUNC_RTCENGINE_ISFEATUREAVAILABLEONDEVICE                              \
   "RtcEngine_isFeatureAvailableOnDevice"
 #define FUNC_RTCENGINE_PRELOADCHANNEL "RtcEngine_preloadChannel"
-#define FUNC_RTCENGINE_PRELOADCHANNEL2 "RtcEngine_preloadChannel2"
+#define FUNC_RTCENGINE_PRELOADCHANNELWITHUSERACCOUNT                           \
+  "RtcEngine_preloadChannelWithUserAccount"
 #define FUNC_RTCENGINE_UPDATEPRELOADCHANNELTOKEN                               \
   "RtcEngine_updatePreloadChannelToken"
 // class IRtcEngine end
@@ -501,12 +490,10 @@
 #define FUNC_MEDIAPLAYER_GETSTREAMCOUNT "MediaPlayer_getStreamCount"
 #define FUNC_MEDIAPLAYER_GETSTREAMINFO "MediaPlayer_getStreamInfo"
 #define FUNC_MEDIAPLAYER_SETLOOPCOUNT "MediaPlayer_setLoopCount"
-/*#define FUNC_MEDIAPLAYER_MUTEAUDIO "MediaPlayer_muteAudio"
-#define FUNC_MEDIAPLAYER_ISAUDIOMUTED "MediaPlayer_isAudioMuted"
-#define FUNC_MEDIAPLAYER_MUTEVIDEO "MediaPlayer_muteVideo"
-#define FUNC_MEDIAPLAYER_ISVIDEOMUTED "MediaPlayer_isVideoMuted"*/
 #define FUNC_MEDIAPLAYER_SETPLAYBACKSPEED "MediaPlayer_setPlaybackSpeed"
 #define FUNC_MEDIAPLAYER_SELECTAUDIOTRACK "MediaPlayer_selectAudioTrack"
+#define FUNC_MEDIAPLAYER_SELECTMULTIAUDIOTRACK                                 \
+  "MediaPlayer_selectMultiAudioTrack"
 #define FUNC_MEDIAPLAYER_SETPLAYEROPTION "MediaPlayer_setPlayerOption"
 #define FUNC_MEDIAPLAYER_SETPLAYEROPTION2 "MediaPlayer_setPlayerOption2"
 #define FUNC_MEDIAPLAYER_TAKESCREENSHOT "MediaPlayer_takeScreenshot"
@@ -683,6 +670,10 @@
   "AudioDeviceManager_getPlaybackDefaultDevice"
 #define FUNC_AUDIODEVICEMANAGER_GETRECORDINGDEAFULTDEVICE                      \
   "AudioDeviceManager_getRecordingDefaultDevice"
+#define FUNC_AUDIODEVICEMANAGER_GETPLAYBACKAUDIODEVICEINFO                     \
+  "AudioDeviceManager_getPlaybackAudioDeviceInfo"
+#define FUNC_AUDIODEVICEMANAGER_GETRECORDINGAUDIODEVICEINFO                    \
+  "AudioDeviceManager_getRecordingAudioDeviceInfo"
 // class IAudioDeviceManager end
 
 // class ICloudSpatialAudioEngine start
@@ -847,8 +838,6 @@
 #define FUNC_RTCENGINEEX_GETUSERINFOBYUIDEX "RtcEngineEx_getUserInfoByUidEx"
 #define FUNC_RTCENGINEEX_ENABLEDUALSTREAMMODEEX                                \
   "RtcEngineEx_enableDualStreamModeEx"
-//#define FUNC_RTCENGINEEX_ADDPUBLISHSTREAMURLEX                                 \
-//  "RtcEngineEx_addPublishStreamUrlEx"
 #define FUNC_RTCENGINEEX_SETSUBSCRIBEVIDEOBLOCKLISTEX                          \
   "RtcEngineEx_setSubscribeVideoBlocklistEx"
 
@@ -881,8 +870,6 @@
   "RtcEngineEx_pauseAllChannelMediaRelayEx"
 #define FUNC_RTCENGINEEX_RESUMEALLCHANNELMEDIARELAYEX                          \
   "RtcEngineEx_resumeAllChannelMediaRelayEx"
-#define FUNC_RTCENGINEEX_STARTCHANNELMEDIARELAYEX                              \
-  "RtcEngineEx_startChannelMediaRelayEx"
 #define FUNC_RTCENGINEEX_STARTRTMPSTREAMWITHTRANSCODINGEX                      \
   "RtcEngineEx_startRtmpStreamWithTranscodingEx"
 #define FUNC_RTCENGINEEX_STARTRTMPSTREAMWITHOUTTRANSCODINGEX                   \
@@ -890,8 +877,6 @@
 #define FUNC_RTCENGINEEX_STOPCHANNELMEDIARELAYEX                               \
   "RtcEngineEx_stopChannelMediaRelayEx"
 #define FUNC_RTCENGINEEX_STOPRTMPSTREAMEX "RtcEngineEx_stopRtmpStreamEx"
-#define FUNC_RTCENGINEEX_UPDATECHANNELMEDIARELAYEX                             \
-  "RtcEngineEx_updateChannelMediaRelayEx"
 #define FUNC_RTCENGINEEX_UPDATERTMPTRANSCODINGEX                               \
   "RtcEngineEx_updateRtmpTranscodingEx"
 #define FUNC_RTCENGINEEX_ADJUSTRECORDINGSIGNALVOLUMEEX                         \

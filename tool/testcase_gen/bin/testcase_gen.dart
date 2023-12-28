@@ -58,6 +58,7 @@ void main(List<String> arguments) {
     path.join(srcDir, 'agora_spatial_audio.dart'),
     path.join(srcDir, 'agora_media_recorder.dart'),
     path.join(srcDir, 'agora_music_content_center.dart'),
+    path.join(srcDir, 'agora_h265_transcoder.dart'),
     path.join(srcDir, 'render/media_player_controller.dart'),
   ];
 

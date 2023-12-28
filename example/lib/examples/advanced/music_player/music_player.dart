@@ -344,7 +344,7 @@ class _MusicPlayerExampleState extends State<MusicPlayerExample> {
 
     _mediaPlayerSourceObserver = MediaPlayerSourceObserver(
       onPlayerSourceStateChanged:
-          (MediaPlayerState state, MediaPlayerError ec) async {
+          (MediaPlayerState state, MediaPlayerReason ec) async {
         logSink.log('[onPlayerSourceStateChanged] state: $state ec: $ec');
         if (state == MediaPlayerState.playerStateOpenCompleted) {
           _isPlaying = !_isPlaying;

@@ -610,45 +610,6 @@ abstract class RtcEngineEx implements RtcEngine {
       {required ChannelMediaRelayConfiguration configuration,
       required RtcConnection connection});
 
-  /// Starts relaying media streams across channels. This method can be used to implement scenarios such as co-host across channels.
-  ///
-  /// Deprecated: This method is deprecated. Use startOrUpdateChannelMediaRelayEx instead. After a successful method call, the SDK triggers the onChannelMediaRelayStateChanged and onChannelMediaRelayEvent callbacks, and these callbacks return the state and events of the media stream relay.
-  ///  If the onChannelMediaRelayStateChanged callback returns relayStateRunning (2) and relayOk (0), and the onChannelMediaRelayEvent callback returns relayEventPacketSentToDestChannel (4), it means that the SDK starts relaying media streams between the source channel and the target channel.
-  ///  If the onChannelMediaRelayStateChanged callback returns relayStateFailure (3), an exception occurs during the media stream relay.
-  ///  Call this method after joining the channel.
-  ///  This method takes effect only when you are a host in a live streaming channel.
-  ///  After a successful method call, if you want to call this method again, ensure that you call the stopChannelMediaRelayEx method to quit the current relay.
-  ///  The relaying media streams across channels function needs to be enabled by contacting.
-  ///  Agora does not support string user accounts in this API.
-  ///
-  /// * [configuration] The configuration of the media stream relay. See ChannelMediaRelayConfiguration.
-  /// * [connection] The connection information. See RtcConnection.
-  ///
-  /// Returns
-  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown; and you need to catch the exception and handle it accordingly.
-  ///  < 0: Failure.
-  ///  -1: A general error occurs (no specified reason).
-  ///  -2: The parameter is invalid.
-  ///  -7: The method call was rejected. It may be because the SDK has not been initialized successfully, or the user role is not a host.
-  ///  -8: Internal state error. Probably because the user is not a broadcaster.
-  Future<void> startChannelMediaRelayEx(
-      {required ChannelMediaRelayConfiguration configuration,
-      required RtcConnection connection});
-
-  /// Updates the channels for media stream relay.
-  ///
-  /// Deprecated: This method is deprecated. Use startOrUpdateChannelMediaRelayEx instead. After the media relay starts, if you want to relay the media stream to more channels, or leave the current relay channel, you can call this method. After a successful method call, the SDK triggers the onChannelMediaRelayEvent callback with the relayEventPacketUpdateDestChannel (7) state code. Call the method after successfully calling the startChannelMediaRelayEx method and receiving onChannelMediaRelayStateChanged (relayStateRunning, relayOk); otherwise, the method call fails.
-  ///
-  /// * [configuration] The configuration of the media stream relay. See ChannelMediaRelayConfiguration.
-  /// * [connection] The connection information. See RtcConnection.
-  ///
-  /// Returns
-  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown; and you need to catch the exception and handle it accordingly.
-  ///  < 0: Failure.
-  Future<void> updateChannelMediaRelayEx(
-      {required ChannelMediaRelayConfiguration configuration,
-      required RtcConnection connection});
-
   /// Stops the media stream relay. Once the relay stops, the host quits all the target channels.
   ///
   /// After a successful method call, the SDK triggers the onChannelMediaRelayStateChanged callback. If the callback reports relayStateIdle (0) and relayOk (0), the host successfully stops the relay. If the method call fails, the SDK triggers the onChannelMediaRelayStateChanged callback with the relayErrorServerNoResponse (2) or relayErrorServerConnectionLost (8) status code. You can call the leaveChannel method to leave the channel, and the media stream relay automatically stops.
@@ -784,4 +745,8 @@ abstract class RtcEngineEx implements RtcEngine {
   /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown; and you need to catch the exception and handle it accordingly.
   ///  < 0: Failure.
   Future<void> startMediaRenderingTracingEx(RtcConnection connection);
+
+  /// @nodoc
+  Future<void> setParametersEx(
+      {required RtcConnection connection, required String parameters});
 }

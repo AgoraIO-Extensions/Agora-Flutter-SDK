@@ -94,7 +94,7 @@ const maxLogSize = 20 * 1024 * 1024;
 const minLogSize = 128 * 1024;
 
 /// @nodoc
-const defaultLogSizeInKb = 1024;
+const defaultLogSizeInKb = 2048;
 
 /// Configuration of Agora SDK log files.
 @JsonSerializable(explicitToJson: true, includeIfNull: false)

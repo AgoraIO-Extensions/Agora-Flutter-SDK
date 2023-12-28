@@ -28,7 +28,7 @@ void mediaRecorderSmokeTestCases() {
       try {
         final MediaRecorderObserver callback = MediaRecorderObserver(
           onRecorderStateChanged: (String channelId, int uid,
-              RecorderState state, RecorderErrorCode error) {},
+              RecorderState state, RecorderReasonCode reason) {},
           onRecorderInfoUpdated:
               (String channelId, int uid, RecorderInfo info) {},
         );

@@ -156,6 +156,10 @@ abstract class MediaPlayer {
   Future<void> selectAudioTrack(int index);
 
   /// @nodoc
+  Future<void> selectMultiAudioTrack(
+      {required int playoutTrackIndex, required int publishTrackIndex});
+
+  /// @nodoc
   Future<void> setPlayerOptionInInt({required String key, required int value});
 
   /// @nodoc

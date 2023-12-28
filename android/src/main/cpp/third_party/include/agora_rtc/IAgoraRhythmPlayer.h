@@ -35,19 +35,19 @@ enum RHYTHM_PLAYER_STATE_TYPE {
 };
 
 /**
- The error codes of the rhythm player.
+ The reason codes of the rhythm player.
  */
-enum RHYTHM_PLAYER_ERROR_TYPE {
+enum RHYTHM_PLAYER_REASON {
   /** 0: The rhythm player works well. */
-  RHYTHM_PLAYER_ERROR_OK = 0,
+  RHYTHM_PLAYER_REASON_OK = 0,
   /** 1: The rhythm player occurs a internal error. */
-  RHYTHM_PLAYER_ERROR_FAILED = 1,
+  RHYTHM_PLAYER_REASON_FAILED = 1,
   /** 801: The rhythm player can not open the file. */
-  RHYTHM_PLAYER_ERROR_CAN_NOT_OPEN = 801,
+  RHYTHM_PLAYER_REASON_CAN_NOT_OPEN = 801,
   /** 802: The rhythm player can not play the file. */
-  RHYTHM_PLAYER_ERROR_CAN_NOT_PLAY,
+  RHYTHM_PLAYER_REASON_CAN_NOT_PLAY,
   /** 803: The file duration over the limit. The file duration limit is 1.2 seconds */
-  RHYTHM_PLAYER_ERROR_FILE_OVER_DURATION_LIMIT,
+  RHYTHM_PLAYER_REASON_FILE_OVER_DURATION_LIMIT,
 };
 
 /**

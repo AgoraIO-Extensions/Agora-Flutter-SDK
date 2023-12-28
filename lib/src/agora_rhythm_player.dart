@@ -38,40 +38,40 @@ extension RhythmPlayerStateTypeExt on RhythmPlayerStateType {
   }
 }
 
-/// Virtual Metronome error message.
+/// @nodoc
 @JsonEnum(alwaysCreate: true)
-enum RhythmPlayerErrorType {
-  /// (0): The beat files are played normally without errors.
+enum RhythmPlayerReason {
+  /// @nodoc
   @JsonValue(0)
-  rhythmPlayerErrorOk,
+  rhythmPlayerReasonOk,
 
-  /// 1: A general error; no specific reason.
+  /// @nodoc
   @JsonValue(1)
-  rhythmPlayerErrorFailed,
+  rhythmPlayerReasonFailed,
 
-  /// 801: There is an error when opening the beat files.
+  /// @nodoc
   @JsonValue(801)
-  rhythmPlayerErrorCanNotOpen,
+  rhythmPlayerReasonCanNotOpen,
 
-  /// 802: There is an error when playing the beat files.
+  /// @nodoc
   @JsonValue(802)
-  rhythmPlayerErrorCanNotPlay,
+  rhythmPlayerReasonCanNotPlay,
 
-  /// (803): The duration of the beat file exceeds the limit. The maximum duration is 1.2 seconds.
+  /// @nodoc
   @JsonValue(803)
-  rhythmPlayerErrorFileOverDurationLimit,
+  rhythmPlayerReasonFileOverDurationLimit,
 }
 
 /// @nodoc
-extension RhythmPlayerErrorTypeExt on RhythmPlayerErrorType {
+extension RhythmPlayerReasonExt on RhythmPlayerReason {
   /// @nodoc
-  static RhythmPlayerErrorType fromValue(int value) {
-    return $enumDecode(_$RhythmPlayerErrorTypeEnumMap, value);
+  static RhythmPlayerReason fromValue(int value) {
+    return $enumDecode(_$RhythmPlayerReasonEnumMap, value);
   }
 
   /// @nodoc
   int value() {
-    return _$RhythmPlayerErrorTypeEnumMap[this]!;
+    return _$RhythmPlayerReasonEnumMap[this]!;
   }
 }
 

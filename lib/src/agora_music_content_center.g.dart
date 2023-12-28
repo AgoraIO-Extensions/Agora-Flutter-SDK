@@ -180,12 +180,12 @@ const _$PreloadStatusCodeEnumMap = {
 
 const _$MusicContentCenterStatusCodeEnumMap = {
   MusicContentCenterStatusCode.kMusicContentCenterStatusOk: 0,
-  MusicContentCenterStatusCode.kMusicContentCenterStatusErr: 1,
-  MusicContentCenterStatusCode.kMusicContentCenterStatusErrGateway: 2,
-  MusicContentCenterStatusCode
-      .kMusicContentCenterStatusErrPermissionAndResource: 3,
-  MusicContentCenterStatusCode.kMusicContentCenterStatusErrInternalDataParse: 4,
-  MusicContentCenterStatusCode.kMusicContentCenterStatusErrMusicLoading: 5,
-  MusicContentCenterStatusCode.kMusicContentCenterStatusErrMusicDecryption: 6,
-  MusicContentCenterStatusCode.kMusicContentCenterStatusErrHttpInternalError: 7,
+  MusicContentCenterStatusCode.kMusicContentCenterStatusError: 1,
+  MusicContentCenterStatusCode.kMusicContentCenterStatusGateway: 2,
+  MusicContentCenterStatusCode.kMusicContentCenterStatusPermissionAndResource:
+      3,
+  MusicContentCenterStatusCode.kMusicContentCenterStatusInternalDataParse: 4,
+  MusicContentCenterStatusCode.kMusicContentCenterStatusMusicLoading: 5,
+  MusicContentCenterStatusCode.kMusicContentCenterStatusMusicDecryption: 6,
+  MusicContentCenterStatusCode.kMusicContentCenterStatusHttpInternalError: 7,
 };

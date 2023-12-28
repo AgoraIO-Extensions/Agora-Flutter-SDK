@@ -253,6 +253,7 @@ VideoFrame _$VideoFrameFromJson(Map<String, dynamic> json) => VideoFrame(
       matrix: (json['matrix'] as List<dynamic>?)
           ?.map((e) => (e as num).toDouble())
           .toList(),
+      metaInfo: const VideoFrameMetaInfoConverter().fromJson(json['metaInfo']),
     );
 
 Map<String, dynamic> _$VideoFrameToJson(VideoFrame instance) {
@@ -276,6 +277,8 @@ Map<String, dynamic> _$VideoFrameToJson(VideoFrame instance) {
   writeNotNull('metadata_size', instance.metadataSize);
   writeNotNull('textureId', instance.textureId);
   writeNotNull('matrix', instance.matrix);
+  writeNotNull('metaInfo',
+      const VideoFrameMetaInfoConverter().toJson(instance.metaInfo));
   return val;
 }
 
@@ -289,6 +292,7 @@ AudioFrame _$AudioFrameFromJson(Map<String, dynamic> json) => AudioFrame(
       renderTimeMs: json['renderTimeMs'] as int?,
       avsyncType: json['avsync_type'] as int?,
       presentationMs: json['presentationMs'] as int?,
+      audioTrackNumber: json['audioTrackNumber'] as int?,
     );
 
 Map<String, dynamic> _$AudioFrameToJson(AudioFrame instance) {
@@ -309,6 +313,7 @@ Map<String, dynamic> _$AudioFrameToJson(AudioFrame instance) {
   writeNotNull('renderTimeMs', instance.renderTimeMs);
   writeNotNull('avsync_type', instance.avsyncType);
   writeNotNull('presentationMs', instance.presentationMs);
+  writeNotNull('audioTrackNumber', instance.audioTrackNumber);
   return val;
 }
 
@@ -488,6 +493,7 @@ const _$AudioRouteEnumMap = {
   AudioRoute.routeHdmi: 7,
   AudioRoute.routeDisplayport: 8,
   AudioRoute.routeAirplay: 9,
+  AudioRoute.routeBluetoothSpeaker: 10,
 };
 
 const _$MediaSourceTypeEnumMap = {
@@ -532,6 +538,10 @@ const _$CameraVideoSourceTypeEnumMap = {
   CameraVideoSourceType.videoSourceUnspecified: 2,
 };
 
+const _$MetaInfoKeyEnumMap = {
+  MetaInfoKey.keyFaceCapture: 0,
+};
+
 const _$MediaPlayerSourceTypeEnumMap = {
   MediaPlayerSourceType.mediaPlayerSourceDefault: 0,
   MediaPlayerSourceType.mediaPlayerSourceFullFeatured: 1,
@@ -542,6 +552,7 @@ const _$VideoModulePositionEnumMap = {
   VideoModulePosition.positionPostCapturer: 1,
   VideoModulePosition.positionPreRenderer: 2,
   VideoModulePosition.positionPreEncoder: 4,
+  VideoModulePosition.positionPostCapturerOrigin: 8,
 };
 
 const _$AudioFramePositionEnumMap = {
@@ -569,10 +580,10 @@ const _$RecorderStateEnumMap = {
   RecorderState.recorderStateStop: 3,
 };
 
-const _$RecorderErrorCodeEnumMap = {
-  RecorderErrorCode.recorderErrorNone: 0,
-  RecorderErrorCode.recorderErrorWriteFailed: 1,
-  RecorderErrorCode.recorderErrorNoStream: 2,
-  RecorderErrorCode.recorderErrorOverMaxDuration: 3,
-  RecorderErrorCode.recorderErrorConfigChanged: 4,
+const _$RecorderReasonCodeEnumMap = {
+  RecorderReasonCode.recorderReasonNone: 0,
+  RecorderReasonCode.recorderReasonWriteFailed: 1,
+  RecorderReasonCode.recorderReasonNoStream: 2,
+  RecorderReasonCode.recorderReasonOverMaxDuration: 3,
+  RecorderReasonCode.recorderReasonConfigChanged: 4,
 };

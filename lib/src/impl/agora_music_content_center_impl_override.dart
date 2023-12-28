@@ -70,7 +70,7 @@ class MusicContentCenterEventHandlerWrapper
                 jsonMap);
         paramJson = paramJson.fillBuffers(buffers);
         String? requestId = paramJson.requestId;
-        MusicContentCenterStatusCode? errorCode = paramJson.errorCode;
+        MusicContentCenterStatusCode? errorCode = paramJson.status;
         if (requestId == null || errorCode == null) {
           return true;
         }

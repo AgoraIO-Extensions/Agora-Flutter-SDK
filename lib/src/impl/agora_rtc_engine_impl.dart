@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'dart:typed_data';
 
 import 'package:agora_rtc_engine/src/agora_base.dart';
+import 'package:agora_rtc_engine/src/agora_h265_transcoder.dart';
 import 'package:agora_rtc_engine/src/agora_media_base.dart';
 import 'package:agora_rtc_engine/src/agora_media_engine.dart';
 import 'package:agora_rtc_engine/src/agora_media_player.dart';
@@ -24,6 +25,7 @@ import 'package:agora_rtc_engine/src/binding/agora_rtc_engine_impl.dart'
 import 'package:agora_rtc_engine/src/binding/agora_spatial_audio_impl.dart';
 import 'package:agora_rtc_engine/src/binding/call_api_event_handler_buffer_ext.dart';
 import 'package:agora_rtc_engine/src/binding/event_handler_param_json.dart';
+import 'package:agora_rtc_engine/src/impl/agora_h265_transcoder_impl_override.dart';
 import 'package:agora_rtc_engine/src/impl/agora_media_engine_impl_override.dart'
     as media_engine_impl;
 import 'package:agora_rtc_engine/src/impl/agora_media_recorder_impl_override.dart'
@@ -36,6 +38,7 @@ import 'package:agora_rtc_engine/src/impl/audio_device_manager_impl.dart'
     as audio_device_manager_impl;
 import 'package:agora_rtc_engine/src/impl/media_player_impl.dart'
     as media_player_impl;
+
 import 'package:agora_rtc_engine/src/impl/platform/platform_bindings_provider.dart';
 import 'package:flutter/foundation.dart'
     show ChangeNotifier, debugPrint, defaultTargetPlatform, kIsWeb;
@@ -305,12 +308,28 @@ class InitializationState extends ChangeNotifier {
   }
 }
 
+class SharedNativeHandleInitilizationArgProvider
+    implements InitilizationArgProvider {
+  const SharedNativeHandleInitilizationArgProvider(this.sharedNativeHandle);
+
+  final Object sharedNativeHandle;
+  @override
+  IrisHandle provide(IrisApiEngineHandle apiEngineHandle) {
+    return ObjectIrisHandle(sharedNativeHandle);
+  }
+}
+
 class RtcEngineImpl extends rtc_engine_ex_binding.RtcEngineExImpl
     implements RtcEngineEx {
-  RtcEngineImpl._(IrisMethodChannel irisMethodChannel)
-      : super(irisMethodChannel);
+  RtcEngineImpl._({
+    required IrisMethodChannel irisMethodChannel,
+    Object? sharedNativeHandle,
+  })  : _sharedNativeHandle = sharedNativeHandle,
+        super(irisMethodChannel);
 
   static RtcEngineImpl? _instance;
+
+  Object? _sharedNativeHandle;
 
   InitializationState? _rtcEngineStateInternal;
   InitializationState get _rtcEngineState {
@@ -342,13 +361,28 @@ class RtcEngineImpl extends rtc_engine_ex_binding.RtcEngineExImpl
   @internal
   late MethodChannel engineMethodChannel;
 
-  static RtcEngineEx create({IrisMethodChannel? irisMethodChannel}) {
-    if (_instance != null) return _instance!;
+  static RtcEngineEx create({
+    Object? sharedNativeHandle,
+    IrisMethodChannel? irisMethodChannel,
+  }) {
+    if (_instance != null) {
+      _instance!._updateSharedNativeHandle(sharedNativeHandle);
+      return _instance!;
+    }
 
-    _instance = RtcEngineImpl._(irisMethodChannel ??
-        IrisMethodChannel(createPlatformBindingsProvider()));
+    _instance = RtcEngineImpl._(
+      irisMethodChannel: irisMethodChannel ??
+          IrisMethodChannel(createPlatformBindingsProvider()),
+      sharedNativeHandle: sharedNativeHandle,
+    );
 
     return _instance!;
+  }
+
+  void _updateSharedNativeHandle(Object? sharedNativeHandle) {
+    if (_sharedNativeHandle != sharedNativeHandle) {
+      _sharedNativeHandle = sharedNativeHandle;
+    }
   }
 
   IrisMethodChannel _getIrisMethodChannel() {
@@ -377,7 +411,10 @@ class RtcEngineImpl extends rtc_engine_ex_binding.RtcEngineExImpl
       await engineMethodChannel.invokeMethod('androidInit');
     }
 
-    List<InitilizationArgProvider> args = [];
+    List<InitilizationArgProvider> args = [
+      if (_sharedNativeHandle != null)
+        SharedNativeHandleInitilizationArgProvider(_sharedNativeHandle!)
+    ];
     assert(() {
       if (_mockRtcEngineProvider != null) {
         args.add(_mockRtcEngineProvider!);
@@ -443,6 +480,7 @@ class RtcEngineImpl extends rtc_engine_ex_binding.RtcEngineExImpl
     _isReleased = true;
     _releasingCompleter?.complete(null);
     _releasingCompleter = null;
+    _instance = null;
   }
 
   @override
@@ -709,6 +747,11 @@ class RtcEngineImpl extends rtc_engine_ex_binding.RtcEngineExImpl
   }
 
   @override
+  H265Transcoder getH265Transcoder() {
+    return H265TranscoderImplOverride(irisMethodChannel);
+  }
+
+  @override
   Future<SDKBuildInfo> getVersion() async {
     const apiType = 'RtcEngine_getVersion';
     final param = createParams({});
@@ -806,6 +849,23 @@ class RtcEngineImpl extends rtc_engine_ex_binding.RtcEngineExImpl
     final param = createParams({'sourceType': sourceType.value()});
     final callApiResult = await irisMethodChannel
         .invokeMethod(IrisMethodCall(apiType, jsonEncode(param)));
+    if (callApiResult.irisReturnCode < 0) {
+      throw AgoraRtcException(code: callApiResult.irisReturnCode);
+    }
+    final rm = callApiResult.data;
+    final result = rm['result'];
+    if (result < 0) {
+      throw AgoraRtcException(code: result);
+    }
+  }
+
+  @override
+  Future<void> startPreviewWithoutSourceType() async {
+    final apiType =
+        '${isOverrideClassName ? className : 'RtcEngine'}_startPreview';
+    final param = createParams({});
+    final callApiResult = await irisMethodChannel.invokeMethod(
+        IrisMethodCall(apiType, jsonEncode(param), buffers: null));
     if (callApiResult.irisReturnCode < 0) {
       throw AgoraRtcException(code: callApiResult.irisReturnCode);
     }
@@ -1136,21 +1196,21 @@ class RtcEngineImpl extends rtc_engine_ex_binding.RtcEngineExImpl
     }
   }
 
-  @override
-  Future<void> preloadChannelWithUserAccount(
-      {required String token,
-      required String channelId,
-      required String userAccount}) async {
-    final apiType =
-        '${isOverrideClassName ? className : 'RtcEngine'}_preloadChannel2';
-    final param = createParams(
-        {'token': token, 'channelId': channelId, 'userAccount': userAccount});
-    final callApiResult = await irisMethodChannel.invokeMethod(
-        IrisMethodCall(apiType, jsonEncode(param), buffers: null));
-    if (callApiResult.irisReturnCode < 0) {
-      throw AgoraRtcException(code: callApiResult.irisReturnCode);
-    }
-  }
+  // @override
+  // Future<void> preloadChannelWithUserAccount(
+  //     {required String token,
+  //     required String channelId,
+  //     required String userAccount}) async {
+  //   final apiType =
+  //       '${isOverrideClassName ? className : 'RtcEngine'}_preloadChannel2';
+  //   final param = createParams(
+  //       {'token': token, 'channelId': channelId, 'userAccount': userAccount});
+  //   final callApiResult = await irisMethodChannel.invokeMethod(
+  //       IrisMethodCall(apiType, jsonEncode(param), buffers: null));
+  //   if (callApiResult.irisReturnCode < 0) {
+  //     throw AgoraRtcException(code: callApiResult.irisReturnCode);
+  //   }
+  // }
 
   Future<String?> getAssetAbsolutePath(String assetPath) async {
     if (kIsWeb) {

@@ -14,6 +14,8 @@ class MediaPlayerSourceObserver {
     this.onAgoraCDNTokenWillExpire,
     this.onPlayerSrcInfoChanged,
     this.onPlayerInfoUpdated,
+    this.onPlayerCacheStats,
+    this.onPlayerPlaybackStats,
     this.onAudioVolumeIndication,
   });
 
@@ -23,7 +25,7 @@ class MediaPlayerSourceObserver {
   ///
   /// * [state] The playback state. See MediaPlayerState.
   /// * [ec] The error code. See MediaPlayerError.
-  final void Function(MediaPlayerState state, MediaPlayerError ec)?
+  final void Function(MediaPlayerState state, MediaPlayerReason reason)?
       onPlayerSourceStateChanged;
 
   /// Reports current playback progress.
@@ -31,7 +33,7 @@ class MediaPlayerSourceObserver {
   /// When playing media files, the SDK triggers this callback every two second to report current playback progress.
   ///
   /// * [position] The playback position (ms) of media files.
-  final void Function(int positionMs)? onPositionChanged;
+  final void Function(int positionMs, int timestampMs)? onPositionChanged;
 
   /// Reports the player events.
   ///
@@ -85,6 +87,12 @@ class MediaPlayerSourceObserver {
   ///
   /// * [info] Information related to the media player. See PlayerUpdatedInfo.
   final void Function(PlayerUpdatedInfo info)? onPlayerInfoUpdated;
+
+  /// @nodoc
+  final void Function(CacheStatistics stats)? onPlayerCacheStats;
+
+  /// @nodoc
+  final void Function(PlayerPlaybackStats stats)? onPlayerPlaybackStats;
 
   /// Reports the volume of the media player.
   ///
