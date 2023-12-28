@@ -356,6 +356,17 @@ class RtcEngineExGetUserInfoByUidExJson {
 }
 
 @JsonSerializable(explicitToJson: true)
+class RtcEngineExGetCallIdExJson {
+  const RtcEngineExGetCallIdExJson(this.callId);
+
+  @JsonKey(name: 'callId')
+  final String callId;
+  factory RtcEngineExGetCallIdExJson.fromJson(Map<String, dynamic> json) =>
+      _$RtcEngineExGetCallIdExJsonFromJson(json);
+  Map<String, dynamic> toJson() => _$RtcEngineExGetCallIdExJsonToJson(this);
+}
+
+@JsonSerializable(explicitToJson: true)
 class AudioDeviceManagerGetPlaybackDeviceJson {
   const AudioDeviceManagerGetPlaybackDeviceJson(this.deviceId);
 

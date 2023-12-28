@@ -1152,6 +1152,20 @@ class RtcEngineImpl extends rtc_engine_ex_binding.RtcEngineExImpl
     }
   }
 
+  @override
+  Future<void> startPreviewWithoutSourceType() async {
+    final apiType =
+        '${isOverrideClassName ? className : 'RtcEngine'}_startPreview';
+    final param = createParams({});
+    final callApiResult = await irisMethodChannel.invokeMethod(
+        IrisMethodCall(apiType, jsonEncode(param), buffers: null));
+    if (callApiResult.irisReturnCode < 0) {
+      throw AgoraRtcException(code: callApiResult.irisReturnCode);
+    }
+    final rm = callApiResult.data;
+    final result = rm['result'];
+  }
+
   Future<String?> getAssetAbsolutePath(String assetPath) async {
     if (kIsWeb) {
       // The assets are located in the `assets` directory.

@@ -169,6 +169,7 @@ void mediaEngineSmokeTestCases() {
         const int frameAvsyncType = 10;
         const int framePresentationMs = 10;
         const int frameAudioTrackNumber = 10;
+        const int frameRtpTimestamp = 10;
         final AudioFrame frame = AudioFrame(
           type: frameType,
           samplesPerChannel: frameSamplesPerChannel,
@@ -180,6 +181,7 @@ void mediaEngineSmokeTestCases() {
           avsyncType: frameAvsyncType,
           presentationMs: framePresentationMs,
           audioTrackNumber: frameAudioTrackNumber,
+          rtpTimestamp: frameRtpTimestamp,
         );
         const int trackId = 10;
         await mediaEngine.pushAudioFrame(
@@ -230,6 +232,7 @@ void mediaEngineSmokeTestCases() {
         const int frameAvsyncType = 10;
         const int framePresentationMs = 10;
         const int frameAudioTrackNumber = 10;
+        const int frameRtpTimestamp = 10;
         final AudioFrame frame = AudioFrame(
           type: frameType,
           samplesPerChannel: frameSamplesPerChannel,
@@ -241,6 +244,7 @@ void mediaEngineSmokeTestCases() {
           avsyncType: frameAvsyncType,
           presentationMs: framePresentationMs,
           audioTrackNumber: frameAudioTrackNumber,
+          rtpTimestamp: frameRtpTimestamp,
         );
         await mediaEngine.pullAudioFrame(
           frame,
