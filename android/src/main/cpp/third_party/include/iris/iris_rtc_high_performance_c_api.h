@@ -1,9 +1,7 @@
 
 #pragma once
 
-#include "iris_rtc_base.h"
 #include "iris_rtc_c_api.h"
-EXTERN_C_ENTER
 
 struct IrisSpatialAudioZone {
   //the zone id
@@ -24,9 +22,9 @@ struct IrisSpatialAudioZone {
   float upLength;
   //the audio attenuation of zone
   float audioAttenuation;
-
-  IrisSpatialAudioZone() = default;
 };
+
+EXTERN_C_ENTER
 
 IRIS_API int IRIS_CALL ILocalSpatialAudioEngine_SetMaxAudioRecvCount(
     IrisApiEnginePtr enginePtr, int maxCount);

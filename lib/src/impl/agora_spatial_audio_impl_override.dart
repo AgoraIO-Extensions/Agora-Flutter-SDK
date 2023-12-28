@@ -24,7 +24,7 @@ class LocalSpatialAudioEngineImpl extends spatial_audio_binding
   @override
   Future<void> initialize() async {
     final apiType =
-        '${isOverrideClassName ? className : 'LocalSpatialAudioEngine'}_initialize';
+        '${isOverrideClassName ? className : 'LocalSpatialAudioEngine'}_initialize_cf94fbf';
     final param = createParams({});
     final List<Uint8List> buffers = [];
     final callApiResult = await irisMethodChannel.invokeMethod(

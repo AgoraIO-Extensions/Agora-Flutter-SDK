@@ -11,15 +11,18 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:iris_tester/iris_tester.dart';
 import 'package:iris_method_channel/iris_method_channel.dart';
 
-void generatedTestCases(IrisTester irisTester) {
+import '../testcases/event_ids_mapping.dart';
+
+void generatedTestCases(ValueGetter<IrisTester> irisTester) {
   testWidgets(
-    'onPlaybackAudioFrameBeforeMixing',
+    'AudioFrameObserver.onPlaybackAudioFrameBeforeMixing',
     (WidgetTester tester) async {
       RtcEngine rtcEngine = createAgoraRtcEngine();
       await rtcEngine.initialize(RtcEngineContext(
         appId: 'app_id',
         areaCode: AreaCode.areaCodeGlob.value(),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
       final mediaEngine = rtcEngine.getMediaEngine();
 
       final onPlaybackAudioFrameBeforeMixingCompleter = Completer<bool>();
@@ -50,6 +53,7 @@ void generatedTestCases(IrisTester irisTester) {
         const int audioFrameRenderTimeMs = 10;
         const int audioFrameAvsyncType = 10;
         const int audioFramePresentationMs = 10;
+        const int audioFrameAudioTrackNumber = 10;
         final AudioFrame audioFrame = AudioFrame(
           type: audioFrameType,
           samplesPerChannel: audioFrameSamplesPerChannel,
@@ -60,6 +64,7 @@ void generatedTestCases(IrisTester irisTester) {
           renderTimeMs: audioFrameRenderTimeMs,
           avsyncType: audioFrameAvsyncType,
           presentationMs: audioFramePresentationMs,
+          audioTrackNumber: audioFrameAudioTrackNumber,
         );
 
         final eventJson = {
@@ -68,18 +73,15 @@ void generatedTestCases(IrisTester irisTester) {
           'audioFrame': audioFrame.toJson(),
         };
 
-        if (!kIsWeb) {
-          irisTester.fireEvent(
-              'AudioFrameObserver_onPlaybackAudioFrameBeforeMixing',
-              params: eventJson);
-        } else {
-          final ret = irisTester.fireEvent(
-              'AudioFrameObserver_onPlaybackAudioFrameBeforeMixing',
-              params: eventJson);
-// Delay 200 milliseconds to ensure the callback is called.
+        final eventIds = eventIdsMapping[
+                'AudioFrameObserver_onPlaybackAudioFrameBeforeMixing'] ??
+            [];
+        for (final event in eventIds) {
+          final ret = irisTester().fireEvent(event, params: eventJson);
+          // Delay 200 milliseconds to ensure the callback is called.
           await Future.delayed(const Duration(milliseconds: 200));
-// TODO(littlegnal): Most of callbacks on web are not implemented, we're temporarily skip these callbacks at this time.
-          if (ret) {
+          // TODO(littlegnal): Most of callbacks on web are not implemented, we're temporarily skip these callbacks at this time.
+          if (kIsWeb && ret) {
             if (!onPlaybackAudioFrameBeforeMixingCompleter.isCompleted) {
               onPlaybackAudioFrameBeforeMixingCompleter.complete(true);
             }

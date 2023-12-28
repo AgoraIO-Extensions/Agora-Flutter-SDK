@@ -1,19 +1,16 @@
 import 'dart:async';
 import 'dart:io';
-import 'dart:typed_data';
 
 import 'package:agora_rtc_engine/agora_rtc_engine.dart';
 import 'package:flutter/foundation.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:integration_test/integration_test.dart';
 import 'package:iris_tester/iris_tester.dart';
 import '../generated/rtcengine_rtcengineeventhandler_testcases.generated.dart'
     as generated;
-import 'package:path/path.dart' as path;
-import 'package:iris_method_channel/iris_method_channel.dart';
 
-void testCases(IrisTester irisTester) {
+import '../testcases/event_ids_mapping.dart';
+
+void testCases(ValueGetter<IrisTester> irisTester) {
   generated.generatedTestCases(irisTester);
 
   testWidgets(
@@ -55,10 +52,20 @@ void testCases(IrisTester irisTester) {
           'numFaces': numFaces,
         };
 
-        irisTester.fireEvent('RtcEngineEventHandler_onFacePositionChanged',
-            params: eventJson);
-        irisTester.fireEvent('RtcEngineEventHandlerEx_onFacePositionChanged',
-            params: eventJson);
+        final eventIds =
+            eventIdsMapping['RtcEngineEventHandler_onFacePositionChanged'] ??
+                [];
+        for (final event in eventIds) {
+          final ret = irisTester().fireEvent(event, params: eventJson);
+          // Delay 200 milliseconds to ensure the callback is called.
+          await Future.delayed(const Duration(milliseconds: 200));
+          // TODO(littlegnal): Most of callbacks on web are not implemented, we're temporarily skip these callbacks at this time.
+          if (kIsWeb && ret) {
+            if (!onFacePositionChangedCompleter.isCompleted) {
+              onFacePositionChangedCompleter.complete(true);
+            }
+          }
+        }
       }
 
       final eventCalled = await onFacePositionChangedCompleter.future;

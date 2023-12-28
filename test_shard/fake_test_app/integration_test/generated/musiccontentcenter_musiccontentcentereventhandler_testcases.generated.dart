@@ -11,15 +11,18 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:iris_tester/iris_tester.dart';
 import 'package:iris_method_channel/iris_method_channel.dart';
 
-void generatedTestCases(IrisTester irisTester) {
+import '../testcases/event_ids_mapping.dart';
+
+void generatedTestCases(ValueGetter<IrisTester> irisTester) {
   testWidgets(
-    'onMusicChartsResult',
+    'MusicContentCenterEventHandler.onMusicChartsResult',
     (WidgetTester tester) async {
       RtcEngine rtcEngine = createAgoraRtcEngine();
       await rtcEngine.initialize(RtcEngineContext(
         appId: 'app_id',
         areaCode: AreaCode.areaCodeGlob.value(),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       final musicContentCenter = rtcEngine.getMusicContentCenter();
       const musicContentCenterConfiguration = MusicContentCenterConfiguration(
@@ -29,7 +32,7 @@ void generatedTestCases(IrisTester irisTester) {
       final onMusicChartsResultCompleter = Completer<bool>();
       final theMusicContentCenterEventHandler = MusicContentCenterEventHandler(
         onMusicChartsResult: (String requestId, List result,
-            MusicContentCenterStatusCode errorCode) {
+            MusicContentCenterStateReason reason) {
           onMusicChartsResultCompleter.complete(true);
         },
       );
@@ -44,27 +47,24 @@ void generatedTestCases(IrisTester irisTester) {
       {
         const String requestId = "hello";
         const List<MusicChartInfo> result = [];
-        const MusicContentCenterStatusCode errorCode =
-            MusicContentCenterStatusCode.kMusicContentCenterStatusOk;
+        const MusicContentCenterStateReason reason =
+            MusicContentCenterStateReason.kMusicContentCenterReasonOk;
 
         final eventJson = {
           'requestId': requestId,
           'result': result,
-          'errorCode': errorCode.value(),
+          'reason': reason.value(),
         };
 
-        if (!kIsWeb) {
-          irisTester.fireEvent(
-              'MusicContentCenterEventHandler_onMusicChartsResult',
-              params: eventJson);
-        } else {
-          final ret = irisTester.fireEvent(
-              'MusicContentCenterEventHandler_onMusicChartsResult',
-              params: eventJson);
-// Delay 200 milliseconds to ensure the callback is called.
+        final eventIds = eventIdsMapping[
+                'MusicContentCenterEventHandler_onMusicChartsResult'] ??
+            [];
+        for (final event in eventIds) {
+          final ret = irisTester().fireEvent(event, params: eventJson);
+          // Delay 200 milliseconds to ensure the callback is called.
           await Future.delayed(const Duration(milliseconds: 200));
-// TODO(littlegnal): Most of callbacks on web are not implemented, we're temporarily skip these callbacks at this time.
-          if (ret) {
+          // TODO(littlegnal): Most of callbacks on web are not implemented, we're temporarily skip these callbacks at this time.
+          if (kIsWeb && ret) {
             if (!onMusicChartsResultCompleter.isCompleted) {
               onMusicChartsResultCompleter.complete(true);
             }
@@ -88,13 +88,14 @@ void generatedTestCases(IrisTester irisTester) {
   );
 
   testWidgets(
-    'onMusicCollectionResult',
+    'MusicContentCenterEventHandler.onMusicCollectionResult',
     (WidgetTester tester) async {
       RtcEngine rtcEngine = createAgoraRtcEngine();
       await rtcEngine.initialize(RtcEngineContext(
         appId: 'app_id',
         areaCode: AreaCode.areaCodeGlob.value(),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       final musicContentCenter = rtcEngine.getMusicContentCenter();
       const musicContentCenterConfiguration = MusicContentCenterConfiguration(
@@ -104,7 +105,7 @@ void generatedTestCases(IrisTester irisTester) {
       final onMusicCollectionResultCompleter = Completer<bool>();
       final theMusicContentCenterEventHandler = MusicContentCenterEventHandler(
         onMusicCollectionResult: (String requestId, MusicCollection result,
-            MusicContentCenterStatusCode errorCode) {
+            MusicContentCenterStateReason reason) {
           onMusicCollectionResultCompleter.complete(true);
         },
       );
@@ -118,26 +119,24 @@ void generatedTestCases(IrisTester irisTester) {
 
       {
         const String requestId = "hello";
-        const MusicContentCenterStatusCode errorCode =
-            MusicContentCenterStatusCode.kMusicContentCenterStatusOk;
+        const MusicCollection? result = null;
+        const MusicContentCenterStateReason reason =
+            MusicContentCenterStateReason.kMusicContentCenterReasonOk;
 
         final eventJson = {
           'requestId': requestId,
-          'errorCode': errorCode.value(),
+          'reason': reason.value(),
         };
 
-        if (!kIsWeb) {
-          irisTester.fireEvent(
-              'MusicContentCenterEventHandler_onMusicCollectionResult',
-              params: eventJson);
-        } else {
-          final ret = irisTester.fireEvent(
-              'MusicContentCenterEventHandler_onMusicCollectionResult',
-              params: eventJson);
-// Delay 200 milliseconds to ensure the callback is called.
+        final eventIds = eventIdsMapping[
+                'MusicContentCenterEventHandler_onMusicCollectionResult'] ??
+            [];
+        for (final event in eventIds) {
+          final ret = irisTester().fireEvent(event, params: eventJson);
+          // Delay 200 milliseconds to ensure the callback is called.
           await Future.delayed(const Duration(milliseconds: 200));
-// TODO(littlegnal): Most of callbacks on web are not implemented, we're temporarily skip these callbacks at this time.
-          if (ret) {
+          // TODO(littlegnal): Most of callbacks on web are not implemented, we're temporarily skip these callbacks at this time.
+          if (kIsWeb && ret) {
             if (!onMusicCollectionResultCompleter.isCompleted) {
               onMusicCollectionResultCompleter.complete(true);
             }
@@ -161,13 +160,14 @@ void generatedTestCases(IrisTester irisTester) {
   );
 
   testWidgets(
-    'onLyricResult',
+    'MusicContentCenterEventHandler.onLyricResult',
     (WidgetTester tester) async {
       RtcEngine rtcEngine = createAgoraRtcEngine();
       await rtcEngine.initialize(RtcEngineContext(
         appId: 'app_id',
         areaCode: AreaCode.areaCodeGlob.value(),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       final musicContentCenter = rtcEngine.getMusicContentCenter();
       const musicContentCenterConfiguration = MusicContentCenterConfiguration(
@@ -177,7 +177,7 @@ void generatedTestCases(IrisTester irisTester) {
       final onLyricResultCompleter = Completer<bool>();
       final theMusicContentCenterEventHandler = MusicContentCenterEventHandler(
         onLyricResult: (String requestId, int songCode, String lyricUrl,
-            MusicContentCenterStatusCode errorCode) {
+            MusicContentCenterStateReason reason) {
           onLyricResultCompleter.complete(true);
         },
       );
@@ -193,27 +193,25 @@ void generatedTestCases(IrisTester irisTester) {
         const String requestId = "hello";
         const int songCode = 10;
         const String lyricUrl = "hello";
-        const MusicContentCenterStatusCode errorCode =
-            MusicContentCenterStatusCode.kMusicContentCenterStatusOk;
+        const MusicContentCenterStateReason reason =
+            MusicContentCenterStateReason.kMusicContentCenterReasonOk;
 
         final eventJson = {
           'requestId': requestId,
           'songCode': songCode,
           'lyricUrl': lyricUrl,
-          'errorCode': errorCode.value(),
+          'reason': reason.value(),
         };
 
-        if (!kIsWeb) {
-          irisTester.fireEvent('MusicContentCenterEventHandler_onLyricResult',
-              params: eventJson);
-        } else {
-          final ret = irisTester.fireEvent(
-              'MusicContentCenterEventHandler_onLyricResult',
-              params: eventJson);
-// Delay 200 milliseconds to ensure the callback is called.
+        final eventIds =
+            eventIdsMapping['MusicContentCenterEventHandler_onLyricResult'] ??
+                [];
+        for (final event in eventIds) {
+          final ret = irisTester().fireEvent(event, params: eventJson);
+          // Delay 200 milliseconds to ensure the callback is called.
           await Future.delayed(const Duration(milliseconds: 200));
-// TODO(littlegnal): Most of callbacks on web are not implemented, we're temporarily skip these callbacks at this time.
-          if (ret) {
+          // TODO(littlegnal): Most of callbacks on web are not implemented, we're temporarily skip these callbacks at this time.
+          if (kIsWeb && ret) {
             if (!onLyricResultCompleter.isCompleted) {
               onLyricResultCompleter.complete(true);
             }
@@ -237,13 +235,14 @@ void generatedTestCases(IrisTester irisTester) {
   );
 
   testWidgets(
-    'onSongSimpleInfoResult',
+    'MusicContentCenterEventHandler.onSongSimpleInfoResult',
     (WidgetTester tester) async {
       RtcEngine rtcEngine = createAgoraRtcEngine();
       await rtcEngine.initialize(RtcEngineContext(
         appId: 'app_id',
         areaCode: AreaCode.areaCodeGlob.value(),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       final musicContentCenter = rtcEngine.getMusicContentCenter();
       const musicContentCenterConfiguration = MusicContentCenterConfiguration(
@@ -253,7 +252,7 @@ void generatedTestCases(IrisTester irisTester) {
       final onSongSimpleInfoResultCompleter = Completer<bool>();
       final theMusicContentCenterEventHandler = MusicContentCenterEventHandler(
         onSongSimpleInfoResult: (String requestId, int songCode,
-            String simpleInfo, MusicContentCenterStatusCode errorCode) {
+            String simpleInfo, MusicContentCenterStateReason reason) {
           onSongSimpleInfoResultCompleter.complete(true);
         },
       );
@@ -269,28 +268,25 @@ void generatedTestCases(IrisTester irisTester) {
         const String requestId = "hello";
         const int songCode = 10;
         const String simpleInfo = "hello";
-        const MusicContentCenterStatusCode errorCode =
-            MusicContentCenterStatusCode.kMusicContentCenterStatusOk;
+        const MusicContentCenterStateReason reason =
+            MusicContentCenterStateReason.kMusicContentCenterReasonOk;
 
         final eventJson = {
           'requestId': requestId,
           'songCode': songCode,
           'simpleInfo': simpleInfo,
-          'errorCode': errorCode.value(),
+          'reason': reason.value(),
         };
 
-        if (!kIsWeb) {
-          irisTester.fireEvent(
-              'MusicContentCenterEventHandler_onSongSimpleInfoResult',
-              params: eventJson);
-        } else {
-          final ret = irisTester.fireEvent(
-              'MusicContentCenterEventHandler_onSongSimpleInfoResult',
-              params: eventJson);
-// Delay 200 milliseconds to ensure the callback is called.
+        final eventIds = eventIdsMapping[
+                'MusicContentCenterEventHandler_onSongSimpleInfoResult'] ??
+            [];
+        for (final event in eventIds) {
+          final ret = irisTester().fireEvent(event, params: eventJson);
+          // Delay 200 milliseconds to ensure the callback is called.
           await Future.delayed(const Duration(milliseconds: 200));
-// TODO(littlegnal): Most of callbacks on web are not implemented, we're temporarily skip these callbacks at this time.
-          if (ret) {
+          // TODO(littlegnal): Most of callbacks on web are not implemented, we're temporarily skip these callbacks at this time.
+          if (kIsWeb && ret) {
             if (!onSongSimpleInfoResultCompleter.isCompleted) {
               onSongSimpleInfoResultCompleter.complete(true);
             }
@@ -314,13 +310,14 @@ void generatedTestCases(IrisTester irisTester) {
   );
 
   testWidgets(
-    'onPreLoadEvent',
+    'MusicContentCenterEventHandler.onPreLoadEvent',
     (WidgetTester tester) async {
       RtcEngine rtcEngine = createAgoraRtcEngine();
       await rtcEngine.initialize(RtcEngineContext(
         appId: 'app_id',
         areaCode: AreaCode.areaCodeGlob.value(),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       final musicContentCenter = rtcEngine.getMusicContentCenter();
       const musicContentCenterConfiguration = MusicContentCenterConfiguration(
@@ -333,8 +330,8 @@ void generatedTestCases(IrisTester irisTester) {
             int songCode,
             int percent,
             String lyricUrl,
-            PreloadStatusCode status,
-            MusicContentCenterStatusCode errorCode) {
+            PreloadState state,
+            MusicContentCenterStateReason reason) {
           onPreLoadEventCompleter.complete(true);
         },
       );
@@ -351,31 +348,28 @@ void generatedTestCases(IrisTester irisTester) {
         const int songCode = 10;
         const int percent = 10;
         const String lyricUrl = "hello";
-        const PreloadStatusCode status =
-            PreloadStatusCode.kPreloadStatusCompleted;
-        const MusicContentCenterStatusCode errorCode =
-            MusicContentCenterStatusCode.kMusicContentCenterStatusOk;
+        const PreloadState state = PreloadState.kPreloadStateCompleted;
+        const MusicContentCenterStateReason reason =
+            MusicContentCenterStateReason.kMusicContentCenterReasonOk;
 
         final eventJson = {
           'requestId': requestId,
           'songCode': songCode,
           'percent': percent,
           'lyricUrl': lyricUrl,
-          'status': status.value(),
-          'errorCode': errorCode.value(),
+          'state': state.value(),
+          'reason': reason.value(),
         };
 
-        if (!kIsWeb) {
-          irisTester.fireEvent('MusicContentCenterEventHandler_onPreLoadEvent',
-              params: eventJson);
-        } else {
-          final ret = irisTester.fireEvent(
-              'MusicContentCenterEventHandler_onPreLoadEvent',
-              params: eventJson);
-// Delay 200 milliseconds to ensure the callback is called.
+        final eventIds =
+            eventIdsMapping['MusicContentCenterEventHandler_onPreLoadEvent'] ??
+                [];
+        for (final event in eventIds) {
+          final ret = irisTester().fireEvent(event, params: eventJson);
+          // Delay 200 milliseconds to ensure the callback is called.
           await Future.delayed(const Duration(milliseconds: 200));
-// TODO(littlegnal): Most of callbacks on web are not implemented, we're temporarily skip these callbacks at this time.
-          if (ret) {
+          // TODO(littlegnal): Most of callbacks on web are not implemented, we're temporarily skip these callbacks at this time.
+          if (kIsWeb && ret) {
             if (!onPreLoadEventCompleter.isCompleted) {
               onPreLoadEventCompleter.complete(true);
             }

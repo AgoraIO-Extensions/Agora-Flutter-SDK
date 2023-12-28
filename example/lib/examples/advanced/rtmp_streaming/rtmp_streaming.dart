@@ -94,7 +94,7 @@ class _RtmpStreamingState extends State<RtmpStreaming> {
         });
       },
       onRtmpStreamingStateChanged: (String url, RtmpStreamPublishState state,
-          RtmpStreamPublishErrorType errCode) {
+          RtmpStreamPublishReason errCode) {
         logSink.log(
             '[onRtmpStreamingStateChanged] url: $url state: $state, errCode: $errCode');
       },

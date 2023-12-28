@@ -48,7 +48,9 @@ class IrisTesterIO implements IrisTester {
 
   @override
   void dispose() {
-    calloc.free(_fakeRtcEngineHandle);
+    // calloc.free(_fakeRtcEngineHandle);
+
+    _nativeIrisTesterBinding.DestroyFakeRtcEngine(_fakeRtcEngineHandle);
   }
 
   @override

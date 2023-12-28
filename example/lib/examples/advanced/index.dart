@@ -80,7 +80,7 @@ final advanced = [
       'name': 'StartLocalVideoTranscoder',
       'widget': const StartLocalVideoTranscoder()
     },
-  if (!kIsWeb)
+  if (!kIsWeb && (Platform.isAndroid || Platform.isIOS))
     {'name': 'ProcessVideoRawData', 'widget': const ProcessVideoRawData()},
   if (!kIsWeb)
     {'name': 'ProcessAudioRawData', 'widget': const ProcessAudioRawData()},

@@ -163,7 +163,7 @@ class _State extends State<ChannelMediaRelay> with KeepRemoteVideoViewsMixin {
       return;
     }
 
-    await _engine.startChannelMediaRelay(ChannelMediaRelayConfiguration(
+    await _engine.startOrUpdateChannelMediaRelay(ChannelMediaRelayConfiguration(
       srcInfo: ChannelMediaInfo(
         channelName: _channelController.text,
         token: config.token,

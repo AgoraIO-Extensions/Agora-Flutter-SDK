@@ -3,83 +3,83 @@ part 'agora_music_content_center.g.dart';
 
 /// @nodoc
 @JsonEnum(alwaysCreate: true)
-enum PreloadStatusCode {
+enum PreloadState {
   /// @nodoc
   @JsonValue(0)
-  kPreloadStatusCompleted,
+  kPreloadStateCompleted,
 
   /// @nodoc
   @JsonValue(1)
-  kPreloadStatusFailed,
+  kPreloadStateFailed,
 
   /// @nodoc
   @JsonValue(2)
-  kPreloadStatusPreloading,
+  kPreloadStatePreloading,
 
   /// @nodoc
   @JsonValue(3)
-  kPreloadStatusRemoved,
+  kPreloadStateRemoved,
 }
 
 /// @nodoc
-extension PreloadStatusCodeExt on PreloadStatusCode {
+extension PreloadStateExt on PreloadState {
   /// @nodoc
-  static PreloadStatusCode fromValue(int value) {
-    return $enumDecode(_$PreloadStatusCodeEnumMap, value);
+  static PreloadState fromValue(int value) {
+    return $enumDecode(_$PreloadStateEnumMap, value);
   }
 
   /// @nodoc
   int value() {
-    return _$PreloadStatusCodeEnumMap[this]!;
+    return _$PreloadStateEnumMap[this]!;
   }
 }
 
 /// @nodoc
 @JsonEnum(alwaysCreate: true)
-enum MusicContentCenterStatusCode {
+enum MusicContentCenterStateReason {
   /// @nodoc
   @JsonValue(0)
-  kMusicContentCenterStatusOk,
+  kMusicContentCenterReasonOk,
 
   /// @nodoc
   @JsonValue(1)
-  kMusicContentCenterStatusErr,
+  kMusicContentCenterReasonError,
 
   /// @nodoc
   @JsonValue(2)
-  kMusicContentCenterStatusErrGateway,
+  kMusicContentCenterReasonGateway,
 
   /// @nodoc
   @JsonValue(3)
-  kMusicContentCenterStatusErrPermissionAndResource,
+  kMusicContentCenterReasonPermissionAndResource,
 
   /// @nodoc
   @JsonValue(4)
-  kMusicContentCenterStatusErrInternalDataParse,
+  kMusicContentCenterReasonInternalDataParse,
 
   /// @nodoc
   @JsonValue(5)
-  kMusicContentCenterStatusErrMusicLoading,
+  kMusicContentCenterReasonMusicLoading,
 
   /// @nodoc
   @JsonValue(6)
-  kMusicContentCenterStatusErrMusicDecryption,
+  kMusicContentCenterReasonMusicDecryption,
 
   /// @nodoc
   @JsonValue(7)
-  kMusicContentCenterStatusErrHttpInternalError,
+  kMusicContentCenterReasonHttpInternalError,
 }
 
 /// @nodoc
-extension MusicContentCenterStatusCodeExt on MusicContentCenterStatusCode {
+extension MusicContentCenterStateReasonExt on MusicContentCenterStateReason {
   /// @nodoc
-  static MusicContentCenterStatusCode fromValue(int value) {
-    return $enumDecode(_$MusicContentCenterStatusCodeEnumMap, value);
+  static MusicContentCenterStateReason fromValue(int value) {
+    return $enumDecode(_$MusicContentCenterStateReasonEnumMap, value);
   }
 
   /// @nodoc
   int value() {
-    return _$MusicContentCenterStatusCodeEnumMap[this]!;
+    return _$MusicContentCenterStateReasonEnumMap[this]!;
   }
 }
 
@@ -319,19 +319,31 @@ class MusicContentCenterEventHandler {
 
   /// @nodoc
   final void Function(String requestId, List<MusicChartInfo> result,
-      MusicContentCenterStatusCode errorCode)? onMusicChartsResult;
+      MusicContentCenterStateReason reason)? onMusicChartsResult;
 
   /// @nodoc
   final void Function(String requestId, MusicCollection result,
-      MusicContentCenterStatusCode errorCode)? onMusicCollectionResult;
+      MusicContentCenterStateReason reason)? onMusicCollectionResult;
 
   /// @nodoc
   final void Function(String requestId, int songCode, String lyricUrl,
-      MusicContentCenterStatusCode errorCode)? onLyricResult;
+      MusicContentCenterStateReason reason)? onLyricResult;
 
-  /// @nodoc
+  /// 音乐资源的详细信息回调。
+  ///
+  /// 当你调用 getSongSimpleInfo 获取某一音乐资源的详细信息后，SDK 会触发该回调。
+  ///
+  /// * [reason] 音乐内容中心的请求状态码，详见 MusicContentCenterStateReason 。
+  /// * [requestId] The request ID. 本次请求的唯一标识。
+  /// * [songCode] The code of the music, which is an unique identifier of the music.
+  /// * [simpleInfo] 音乐资源的相关信息，包含下列内容：
+  ///  副歌片段的开始和结束的时间（ms）
+  ///  副歌片段的歌词下载地址
+  ///  副歌片段时长（ms）
+  ///  歌曲名称
+  ///  歌手名
   final void Function(String requestId, int songCode, String simpleInfo,
-      MusicContentCenterStatusCode errorCode)? onSongSimpleInfoResult;
+      MusicContentCenterStateReason reason)? onSongSimpleInfoResult;
 
   /// @nodoc
   final void Function(
@@ -339,8 +351,8 @@ class MusicContentCenterEventHandler {
       int songCode,
       int percent,
       String lyricUrl,
-      PreloadStatusCode status,
-      MusicContentCenterStatusCode errorCode)? onPreLoadEvent;
+      PreloadState state,
+      MusicContentCenterStateReason reason)? onPreLoadEvent;
 }
 
 /// @nodoc

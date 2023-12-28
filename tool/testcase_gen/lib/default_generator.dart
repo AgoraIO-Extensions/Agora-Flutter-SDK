@@ -64,77 +64,83 @@ abstract class DefaultGenerator implements Generator {
     final parameterClass = parseResult.getClazz(parameter.type.type)[0];
     final initBlockParameterListBuilder = StringBuffer();
     final initBlockBuilder = StringBuffer();
+
+    bool shouldBeConst = false;
+    bool isNullable = false;
     if (parameterClass.constructors.isEmpty) {
-      return '';
-    }
+      // If there're not constructors found, default to null.
+      shouldBeConst = true;
+      isNullable = true;
+      initBlockBuilder.write('null');
+    } else {
+      final constructor = parameterClass.constructors[0];
 
-    final constructor = parameterClass.constructors[0];
+      initBlockBuilder.write(parameterClass.name);
+      initBlockBuilder.write('(');
 
-    initBlockBuilder.write(parameterClass.name);
-    initBlockBuilder.write('(');
+      shouldBeConst = constructor.isConst;
 
-    bool shouldBeConst = constructor.isConst;
-
-    for (final cp in parameterClass.constructors[0].parameters) {
-      final adjustedParamName = _concatParamName(parameter.name, cp.name);
-      if (cp.isNamed) {
-        if (cp.type.type == 'Function') {
-          shouldBeConst = false;
-          stdout.writeln(
-              'cp.type.parameters: ${cp.type.parameters.map((e) => e.name.toString()).toString()}');
-          final functionParamsList = cp.type.parameters
-              .map((t) => '${t.type.type} ${t.name}')
-              .join(', ');
-
-          initBlockBuilder.write('${cp.name}:($functionParamsList) { },');
-        } else if (cp.isPrimitiveType) {
-          if (getParamType(cp) == 'Uint8List') {
+      for (final cp in parameterClass.constructors[0].parameters) {
+        final adjustedParamName = _concatParamName(parameter.name, cp.name);
+        if (cp.isNamed) {
+          if (cp.type.type == 'Function') {
             shouldBeConst = false;
-            initBlockParameterListBuilder.writeln(
-                '${getParamType(cp)} $adjustedParamName = ${cp.primitiveDefualtValue()};');
+            stdout.writeln(
+                'cp.type.parameters: ${cp.type.parameters.map((e) => e.name.toString()).toString()}');
+            final functionParamsList = cp.type.parameters
+                .map((t) => '${t.type.type} ${t.name}')
+                .join(', ');
+
+            initBlockBuilder.write('${cp.name}:($functionParamsList) { },');
+          } else if (cp.isPrimitiveType) {
+            if (getParamType(cp) == 'Uint8List') {
+              shouldBeConst = false;
+              initBlockParameterListBuilder.writeln(
+                  '${getParamType(cp)} $adjustedParamName = ${cp.primitiveDefualtValue()};');
+            } else {
+              initBlockParameterListBuilder.writeln(
+                  'const ${getParamType(cp)} $adjustedParamName = ${cp.primitiveDefualtValue()};');
+            }
+
+            initBlockBuilder.write('${cp.name}: $adjustedParamName,');
           } else {
-            initBlockParameterListBuilder.writeln(
-                'const ${getParamType(cp)} $adjustedParamName = ${cp.primitiveDefualtValue()};');
+            createConstructorInitializerForMethodParameter(
+                parseResult, parameter, cp, initializerBuilder);
+            initBlockBuilder.write('${cp.name}: $adjustedParamName,');
           }
-
-          initBlockBuilder.write('${cp.name}: $adjustedParamName,');
         } else {
-          createConstructorInitializerForMethodParameter(
-              parseResult, parameter, cp, initializerBuilder);
-          initBlockBuilder.write('${cp.name}: $adjustedParamName,');
-        }
-      } else {
-        if (cp.type.type == 'Function') {
-          final functionParamsList = cp.type.parameters
-              .map((t) => '${t.type.type} ${t.name}')
-              .join(', ');
+          if (cp.type.type == 'Function') {
+            final functionParamsList = cp.type.parameters
+                .map((t) => '${t.type.type} ${t.name}')
+                .join(', ');
 
-          initBlockBuilder.write('${cp.name}:($functionParamsList) { },');
-        } else if (cp.isPrimitiveType) {
-          if (getParamType(cp) == 'Uint8List') {
-            initBlockParameterListBuilder.writeln(
-                '${getParamType(cp)} $adjustedParamName = ${cp.primitiveDefualtValue()};');
+            initBlockBuilder.write('${cp.name}:($functionParamsList) { },');
+          } else if (cp.isPrimitiveType) {
+            if (getParamType(cp) == 'Uint8List') {
+              initBlockParameterListBuilder.writeln(
+                  '${getParamType(cp)} $adjustedParamName = ${cp.primitiveDefualtValue()};');
+            } else {
+              initBlockParameterListBuilder.writeln(
+                  'const ${getParamType(cp)} $adjustedParamName = ${cp.primitiveDefualtValue()};');
+            }
+
+            initBlockBuilder.write('$adjustedParamName,');
           } else {
-            initBlockParameterListBuilder.writeln(
-                'const ${getParamType(cp)} $adjustedParamName = ${cp.primitiveDefualtValue()};');
+            createConstructorInitializerForMethodParameter(
+                parseResult, parameter, cp, initializerBuilder);
+            initBlockBuilder.write('$adjustedParamName,');
           }
-
-          initBlockBuilder.write('$adjustedParamName,');
-        } else {
-          createConstructorInitializerForMethodParameter(
-              parseResult, parameter, cp, initializerBuilder);
-          initBlockBuilder.write('$adjustedParamName,');
         }
       }
-    }
 
-    initBlockBuilder.write(')');
+      initBlockBuilder.write(')');
+    }
 
     initializerBuilder.write(initBlockParameterListBuilder.toString());
     final keywordPrefix = shouldBeConst ? 'const' : 'final';
 
     initializerBuilder.writeln(
-        '$keywordPrefix ${getParamType(parameter)} ${_concatParamName(rootParameter?.name, parameter.name)} = ${initBlockBuilder.toString()};');
+        '$keywordPrefix ${getParamType(parameter)}${isNullable ? '?' : ''} ${_concatParamName(rootParameter?.name, parameter.name)} = ${initBlockBuilder.toString()};');
     return _concatParamName(rootParameter?.name, parameter.name);
   }
 
@@ -214,8 +220,8 @@ abstract class DefaultGenerator implements Generator {
         }
       }
 
-      String testCase =
-          testCaseTemplate.replaceAll('{{TEST_CASE_NAME}}', methodName);
+      String testCase = testCaseTemplate.replaceAll(
+          '{{TEST_CASE_NAME}}', '${clazz.name}.$methodName');
       testCase = testCase.replaceAll('{{TEST_CASE_BODY}}', pb.toString());
       testCase = testCase.replaceAll('{{TEST_CASE_SKIP}}', skipExpression);
       testCases.add(testCase);

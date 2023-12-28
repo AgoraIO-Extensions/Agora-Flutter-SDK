@@ -1,6 +1,7 @@
 export 'agora_base.dart';
 export 'agora_media_base.dart';
 export 'agora_media_player_types.dart';
+export 'agora_h265_transcoder.dart';
 export 'agora_log.dart';
 export 'agora_media_engine.dart';
 export 'agora_media_player.dart';
@@ -18,3 +19,4 @@ export 'dart:typed_data';
 export 'package:json_annotation/json_annotation.dart';
 export 'package:flutter/foundation.dart';
 export 'package:agora_rtc_engine/src/agora_rtc_engine_ext.dart';
+export 'package:agora_rtc_engine/src/impl/json_converters.dart';

@@ -71,9 +71,7 @@ enum H265_TRANSCODE_RESULT {
 */
 class IH265TranscoderObserver {
  public:
-
   virtual ~IH265TranscoderObserver() {};
-
 
   /**
    * Use to notify the result of invoking enableTranscode interface.
@@ -119,9 +117,8 @@ class IH265TranscoderObserver {
 /**
  * The IH265Transcoder class
 */
-class IH265Transcoder: public RefCountInterface {
+class IH265Transcoder : public RefCountInterface {
  public:
-
   /**
    * Enable transcoding for a channel.
    * @param token The token for authentication.
@@ -154,7 +151,6 @@ class IH265Transcoder: public RefCountInterface {
    * - <0: Failure.
   */
   virtual int triggerTranscode(const char* token, const char* channel, uid_t uid) = 0;
-
   /**
    * Register a IH265TranscoderObserver object.
    * @param observer IH265TranscoderObserver.
@@ -163,7 +159,6 @@ class IH265Transcoder: public RefCountInterface {
    * - <0: Failure.
   */
   virtual int registerTranscoderObserver(IH265TranscoderObserver *observer) = 0;
-
   /**
    * Unregister a IH265TranscoderObserver object.
    * @param observer IH265TranscoderObserver.
@@ -178,5 +173,6 @@ class IH265Transcoder: public RefCountInterface {
   virtual ~IH265Transcoder() {};
 
 };
+
 } // namespace rtc
 } // namespace agora

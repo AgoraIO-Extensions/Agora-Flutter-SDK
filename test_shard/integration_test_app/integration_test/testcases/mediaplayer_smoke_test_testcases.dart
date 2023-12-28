@@ -28,7 +28,7 @@ void testCases() {
       final MediaPlayerSourceObserver mediaPlayerSourceObserver =
           MediaPlayerSourceObserver(
         onPlayerSourceStateChanged:
-            (MediaPlayerState state, MediaPlayerError ec) async {
+            (MediaPlayerState state, MediaPlayerReason ec) async {
           if (state == MediaPlayerState.playerStateOpenCompleted) {
             await mediaPlayerController.play();
           }
@@ -92,7 +92,7 @@ void testCases() {
       final MediaPlayerSourceObserver mediaPlayerSourceObserver =
           MediaPlayerSourceObserver(
         onPlayerSourceStateChanged:
-            (MediaPlayerState state, MediaPlayerError ec) async {
+            (MediaPlayerState state, MediaPlayerReason ec) async {
           if (state == MediaPlayerState.playerStateOpenCompleted) {
             await mediaPlayerController.play();
           }
@@ -158,7 +158,7 @@ void testCases() {
       final MediaPlayerSourceObserver mediaPlayerSourceObserver =
           MediaPlayerSourceObserver(
         onPlayerSourceStateChanged:
-            (MediaPlayerState state, MediaPlayerError ec) async {
+            (MediaPlayerState state, MediaPlayerReason ec) async {
           if (state == MediaPlayerState.playerStateOpenCompleted) {
             await mediaPlayerController.play();
           }

@@ -75,7 +75,7 @@ class AudioDeviceManagerImpl
 
   @override
   Future<AudioDeviceInfo> getPlaybackDeviceInfo() async {
-    const apiType = 'AudioDeviceManager_getPlaybackDeviceInfo';
+    const apiType = 'AudioDeviceManager_getPlaybackDeviceInfo_5540658';
     final param = createParams({});
     final callApiResult = await irisMethodChannel
         .invokeMethod(IrisMethodCall(apiType, jsonEncode(param)));
@@ -89,7 +89,7 @@ class AudioDeviceManagerImpl
 
   @override
   Future<AudioDeviceInfo> getRecordingDeviceInfo() async {
-    const apiType = 'AudioDeviceManager_getRecordingDeviceInfo';
+    const apiType = 'AudioDeviceManager_getRecordingDeviceInfo_5540658';
     final param = createParams({});
     final callApiResult = await irisMethodChannel
         .invokeMethod(IrisMethodCall(apiType, jsonEncode(param)));
