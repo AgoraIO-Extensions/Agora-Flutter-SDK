@@ -40,6 +40,7 @@ void generatedTestCases(IrisTester irisTester) {
 
       {
         const VideoPixelFormat frameType = VideoPixelFormat.videoPixelDefault;
+        const VideoFrameMetaInfo? frameMetaInfo = null;
         const int frameWidth = 10;
         const int frameHeight = 10;
         const int frameYStride = 10;
@@ -76,6 +77,7 @@ void generatedTestCases(IrisTester irisTester) {
           matrix: frameMatrix,
           alphaBuffer: frameAlphaBuffer,
           pixelBuffer: framePixelBuffer,
+          metaInfo: frameMetaInfo,
         );
 
         final eventJson = {

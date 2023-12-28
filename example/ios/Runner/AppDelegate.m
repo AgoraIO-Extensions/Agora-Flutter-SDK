@@ -2,6 +2,13 @@
 #import "AppDelegate.h"
 #import "GeneratedPluginRegistrant.h"
 #import <ReplayKit/ReplayKit.h>
+#import "VideoRawDataController.h"
+
+@interface AppDelegate ()
+
+@property(nonatomic, strong, nullable) VideoRawDataController *videoRawDataController;
+
+@end
 
 @implementation AppDelegate
 
@@ -30,6 +37,42 @@
                 }
             });
         }
+    }];
+    
+    __weak typeof(self) weakSelf = self;
+    
+    FlutterMethodChannel* sharedNativeHandleMethodChannel = [FlutterMethodChannel
+                                            methodChannelWithName:@"agora_rtc_engine_example/shared_native_handle"
+                                            binaryMessenger:controller.binaryMessenger];
+
+    [sharedNativeHandleMethodChannel setMethodCallHandler:^(FlutterMethodCall* call, FlutterResult result) {
+        if (!weakSelf) {
+            result(FlutterMethodNotImplemented);
+            return;
+        }
+        
+        NSDictionary *data = call.arguments;
+        if ([@"native_init" isEqualToString:call.method]) {
+            NSString *appId = data[@"appId"];
+            intptr_t nativeHandle = 0L;
+            if (!weakSelf.videoRawDataController) {
+                weakSelf.videoRawDataController = [[VideoRawDataController alloc] initWith:appId];
+                nativeHandle = [weakSelf.videoRawDataController getNativeHandle];
+                
+            }
+            
+            result(@(nativeHandle));
+            return;
+        } else if ([@"native_dispose" isEqualToString:call.method]) {
+            if (weakSelf.videoRawDataController) {
+                [weakSelf.videoRawDataController dispose];
+                weakSelf.videoRawDataController = NULL;
+            }
+            result(@(true));
+            return;
+        }
+        
+        result(FlutterMethodNotImplemented);
     }];
 
   [GeneratedPluginRegistrant registerWithRegistry:self];

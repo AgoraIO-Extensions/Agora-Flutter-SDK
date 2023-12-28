@@ -168,6 +168,7 @@ void mediaEngineSmokeTestCases() {
         const int frameRenderTimeMs = 10;
         const int frameAvsyncType = 10;
         const int framePresentationMs = 10;
+        const int frameAudioTrackNumber = 10;
         final AudioFrame frame = AudioFrame(
           type: frameType,
           samplesPerChannel: frameSamplesPerChannel,
@@ -178,6 +179,7 @@ void mediaEngineSmokeTestCases() {
           renderTimeMs: frameRenderTimeMs,
           avsyncType: frameAvsyncType,
           presentationMs: framePresentationMs,
+          audioTrackNumber: frameAudioTrackNumber,
         );
         const int trackId = 10;
         await mediaEngine.pushAudioFrame(
@@ -227,6 +229,7 @@ void mediaEngineSmokeTestCases() {
         const int frameRenderTimeMs = 10;
         const int frameAvsyncType = 10;
         const int framePresentationMs = 10;
+        const int frameAudioTrackNumber = 10;
         final AudioFrame frame = AudioFrame(
           type: frameType,
           samplesPerChannel: frameSamplesPerChannel,
@@ -237,6 +240,7 @@ void mediaEngineSmokeTestCases() {
           renderTimeMs: frameRenderTimeMs,
           avsyncType: frameAvsyncType,
           presentationMs: framePresentationMs,
+          audioTrackNumber: frameAudioTrackNumber,
         );
         await mediaEngine.pullAudioFrame(
           frame,
@@ -574,15 +578,16 @@ void mediaEngineSmokeTestCases() {
             VideoOrientation.videoOrientation0;
         const VideoStreamType videoEncodedFrameInfoStreamType =
             VideoStreamType.videoStreamHigh;
+        const int videoEncodedFrameInfoUid = 10;
         const int videoEncodedFrameInfoWidth = 10;
         const int videoEncodedFrameInfoHeight = 10;
         const int videoEncodedFrameInfoFramesPerSecond = 10;
         const int videoEncodedFrameInfoTrackId = 10;
         const int videoEncodedFrameInfoCaptureTimeMs = 10;
         const int videoEncodedFrameInfoDecodeTimeMs = 10;
-        const int videoEncodedFrameInfoUid = 10;
         const EncodedVideoFrameInfo videoEncodedFrameInfo =
             EncodedVideoFrameInfo(
+          uid: videoEncodedFrameInfoUid,
           codecType: videoEncodedFrameInfoCodecType,
           width: videoEncodedFrameInfoWidth,
           height: videoEncodedFrameInfoHeight,
@@ -592,7 +597,6 @@ void mediaEngineSmokeTestCases() {
           trackId: videoEncodedFrameInfoTrackId,
           captureTimeMs: videoEncodedFrameInfoCaptureTimeMs,
           decodeTimeMs: videoEncodedFrameInfoDecodeTimeMs,
-          uid: videoEncodedFrameInfoUid,
           streamType: videoEncodedFrameInfoStreamType,
         );
         const int videoTrackId = 10;

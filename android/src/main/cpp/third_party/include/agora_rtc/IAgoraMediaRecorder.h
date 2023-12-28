@@ -15,6 +15,7 @@ namespace rtc {
 class IMediaRecorder : public RefCountInterface {
  protected:
   virtual ~IMediaRecorder() {}
+
  public:
   /**
    * Registers the IMediaRecorderObserver object.
@@ -62,8 +63,7 @@ class IMediaRecorder : public RefCountInterface {
    *      - The specified path of the recording file exists and is writable.
    *      - The specified format of the recording file is supported.
    *      - The maximum recording duration is correctly set.
-   *      - During remote recording, ensure the channel ID and user ID After calling \ref 
-   *        IRtcEngine::createMediaRecorder did join the channel.
+   *      - During remote recording, ensure the user whose media streams you want record did join the channel.
    *    - `-4(ERR_NOT_SUPPORTED)`: IRtcEngine does not support the request due to one of the following reasons:
    *      - The recording is ongoing.
    *      - The recording stops because an error occurs.

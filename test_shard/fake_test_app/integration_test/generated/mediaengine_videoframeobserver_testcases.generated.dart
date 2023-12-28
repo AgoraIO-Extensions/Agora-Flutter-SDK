@@ -42,6 +42,7 @@ void generatedTestCases(IrisTester irisTester) {
             VideoSourceType.videoSourceCameraPrimary;
         const VideoPixelFormat videoFrameType =
             VideoPixelFormat.videoPixelDefault;
+        const VideoFrameMetaInfo? videoFrameMetaInfo = null;
         const int videoFrameWidth = 10;
         const int videoFrameHeight = 10;
         const int videoFrameYStride = 10;
@@ -79,6 +80,7 @@ void generatedTestCases(IrisTester irisTester) {
           matrix: videoFrameMatrix,
           alphaBuffer: videoFrameAlphaBuffer,
           pixelBuffer: videoFramePixelBuffer,
+          metaInfo: videoFrameMetaInfo,
         );
 
         final eventJson = {
@@ -150,6 +152,7 @@ void generatedTestCases(IrisTester irisTester) {
             VideoSourceType.videoSourceCameraPrimary;
         const VideoPixelFormat videoFrameType =
             VideoPixelFormat.videoPixelDefault;
+        const VideoFrameMetaInfo? videoFrameMetaInfo = null;
         const int videoFrameWidth = 10;
         const int videoFrameHeight = 10;
         const int videoFrameYStride = 10;
@@ -187,6 +190,7 @@ void generatedTestCases(IrisTester irisTester) {
           matrix: videoFrameMatrix,
           alphaBuffer: videoFrameAlphaBuffer,
           pixelBuffer: videoFramePixelBuffer,
+          metaInfo: videoFrameMetaInfo,
         );
 
         final eventJson = {
@@ -255,6 +259,7 @@ void generatedTestCases(IrisTester irisTester) {
       {
         const VideoPixelFormat videoFrameType =
             VideoPixelFormat.videoPixelDefault;
+        const VideoFrameMetaInfo? videoFrameMetaInfo = null;
         const int videoFrameWidth = 10;
         const int videoFrameHeight = 10;
         const int videoFrameYStride = 10;
@@ -292,6 +297,7 @@ void generatedTestCases(IrisTester irisTester) {
           matrix: videoFrameMatrix,
           alphaBuffer: videoFrameAlphaBuffer,
           pixelBuffer: videoFramePixelBuffer,
+          metaInfo: videoFrameMetaInfo,
         );
         const int mediaPlayerId = 10;
 
@@ -364,6 +370,7 @@ void generatedTestCases(IrisTester irisTester) {
         const int remoteUid = 10;
         const VideoPixelFormat videoFrameType =
             VideoPixelFormat.videoPixelDefault;
+        const VideoFrameMetaInfo? videoFrameMetaInfo = null;
         const int videoFrameWidth = 10;
         const int videoFrameHeight = 10;
         const int videoFrameYStride = 10;
@@ -401,6 +408,7 @@ void generatedTestCases(IrisTester irisTester) {
           matrix: videoFrameMatrix,
           alphaBuffer: videoFrameAlphaBuffer,
           pixelBuffer: videoFramePixelBuffer,
+          metaInfo: videoFrameMetaInfo,
         );
 
         final eventJson = {
@@ -470,6 +478,7 @@ void generatedTestCases(IrisTester irisTester) {
       {
         const VideoPixelFormat videoFrameType =
             VideoPixelFormat.videoPixelDefault;
+        const VideoFrameMetaInfo? videoFrameMetaInfo = null;
         const int videoFrameWidth = 10;
         const int videoFrameHeight = 10;
         const int videoFrameYStride = 10;
@@ -507,6 +516,7 @@ void generatedTestCases(IrisTester irisTester) {
           matrix: videoFrameMatrix,
           alphaBuffer: videoFrameAlphaBuffer,
           pixelBuffer: videoFramePixelBuffer,
+          metaInfo: videoFrameMetaInfo,
         );
 
         final eventJson = {

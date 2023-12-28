@@ -539,6 +539,47 @@ testWidgets('{{TEST_CASE_NAME}}', (WidgetTester tester) async {
       registerFunctionName: 'registerEventHandler',
       unregisterFunctionName: 'unregisterEventHandler',
     ),
+    EventHandlerTemplatedTestCase(
+      callerObjClassName: 'H265Transcoder',
+      className: 'H265TranscoderObserver',
+      testCaseFileTemplate: '''
+$defaultHeader
+
+import 'dart:async';
+import 'dart:typed_data';
+
+import 'package:agora_rtc_engine/agora_rtc_engine.dart';
+import 'package:flutter/foundation.dart';
+import 'package:flutter_test/flutter_test.dart';
+import 'package:iris_tester/iris_tester.dart';
+import 'package:iris_method_channel/iris_method_channel.dart';
+
+void generatedTestCases(IrisTester irisTester) {
+  {{TEST_CASES_CONTENT}} 
+}
+''',
+      testCaseTemplate: '''
+testWidgets('{{TEST_CASE_NAME}}', (WidgetTester tester) async {
+      RtcEngine rtcEngine = createAgoraRtcEngine();
+      await rtcEngine.initialize(RtcEngineContext(
+        appId: 'app_id',
+        areaCode: AreaCode.areaCodeGlob.value(),
+      ));
+
+      final h265Transcoder = rtcEngine.getH265Transcoder();
+
+      {{TEST_CASE_BODY}}
+
+      await rtcEngine.release();
+  },
+  timeout: const Timeout(Duration(minutes: 2)),
+);
+''',
+      callerObjName: 'h265Transcoder',
+      outputDir: outputDir,
+      registerFunctionName: 'registerTranscoderObserver',
+      unregisterFunctionName: 'unregisterTranscoderObserver',
+    ),
   ];
   return templatedTestCases;
 }

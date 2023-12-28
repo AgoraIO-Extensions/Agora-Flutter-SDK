@@ -116,7 +116,7 @@ class _State extends State<SpatialAudioWithMediaPlayer> {
           logSink.log('[onCompleted]');
         },
         onPlayerSourceStateChanged:
-            (MediaPlayerState state, MediaPlayerError ec) {
+            (MediaPlayerState state, MediaPlayerReason ec) {
           logSink.log('[onPlayerSourceStateChanged] state: $state ec: $ec');
           if (state == MediaPlayerState.playerStateOpenCompleted) {
             debugPrint('src ${_mediaPlayerController.getPlaySrc()}');
@@ -127,8 +127,9 @@ class _State extends State<SpatialAudioWithMediaPlayer> {
             });
           }
         },
-        onPositionChanged: (int position) {
-          logSink.log('[onPositionChanged] position: $position');
+        onPositionChanged: (int positionMs, int timestampMs) {
+          logSink.log(
+              '[onPositionChanged] position: $positionMs, timestampMs: $timestampMs');
         },
         onPlayerEvent:
             (MediaPlayerEvent eventCode, int elapsedTime, String message) {

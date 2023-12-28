@@ -609,6 +609,7 @@ ChannelMediaOptions _$ChannelMediaOptionsFromJson(Map<String, dynamic> json) =>
       publishMediaPlayerVideoTrack:
           json['publishMediaPlayerVideoTrack'] as bool?,
       publishTranscodedVideoTrack: json['publishTranscodedVideoTrack'] as bool?,
+      publishMixedAudioTrack: json['publishMixedAudioTrack'] as bool?,
       autoSubscribeAudio: json['autoSubscribeAudio'] as bool?,
       autoSubscribeVideo: json['autoSubscribeVideo'] as bool?,
       enableAudioRecordingOrPlayout:
@@ -665,6 +666,7 @@ Map<String, dynamic> _$ChannelMediaOptionsToJson(ChannelMediaOptions instance) {
       'publishMediaPlayerVideoTrack', instance.publishMediaPlayerVideoTrack);
   writeNotNull(
       'publishTranscodedVideoTrack', instance.publishTranscodedVideoTrack);
+  writeNotNull('publishMixedAudioTrack', instance.publishMixedAudioTrack);
   writeNotNull('autoSubscribeAudio', instance.autoSubscribeAudio);
   writeNotNull('autoSubscribeVideo', instance.autoSubscribeVideo);
   writeNotNull(
@@ -1089,13 +1091,13 @@ const _$MaxMetadataSizeTypeEnumMap = {
   MaxMetadataSizeType.maxMetadataSizeInByte: 1024,
 };
 
-const _$DirectCdnStreamingErrorEnumMap = {
-  DirectCdnStreamingError.directCdnStreamingErrorOk: 0,
-  DirectCdnStreamingError.directCdnStreamingErrorFailed: 1,
-  DirectCdnStreamingError.directCdnStreamingErrorAudioPublication: 2,
-  DirectCdnStreamingError.directCdnStreamingErrorVideoPublication: 3,
-  DirectCdnStreamingError.directCdnStreamingErrorNetConnect: 4,
-  DirectCdnStreamingError.directCdnStreamingErrorBadName: 5,
+const _$DirectCdnStreamingReasonEnumMap = {
+  DirectCdnStreamingReason.directCdnStreamingReasonOk: 0,
+  DirectCdnStreamingReason.directCdnStreamingReasonFailed: 1,
+  DirectCdnStreamingReason.directCdnStreamingReasonAudioPublication: 2,
+  DirectCdnStreamingReason.directCdnStreamingReasonVideoPublication: 3,
+  DirectCdnStreamingReason.directCdnStreamingReasonNetConnect: 4,
+  DirectCdnStreamingReason.directCdnStreamingReasonBadName: 5,
 };
 
 const _$DirectCdnStreamingStateEnumMap = {

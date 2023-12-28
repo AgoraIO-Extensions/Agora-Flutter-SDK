@@ -458,10 +458,6 @@ enum ErrorCodeType {
   /// 1501: Permission to access the camera is not granted. Check whether permission to access the camera permission is granted.
   @JsonValue(1501)
   errVdmCameraNotAuthorized,
-
-  /// @nodoc
-  @JsonValue(2007)
-  errAdmApplicationLoopback,
 }
 
 /// @nodoc
@@ -637,7 +633,7 @@ enum InterfaceIdType {
 
   /// @nodoc
   @JsonValue(14)
-  agoraIidMetachatService,
+  agoraIidMetaService,
 
   /// @nodoc
   @JsonValue(15)
@@ -1490,12 +1486,34 @@ class VideoSubscriptionOptions {
   Map<String, dynamic> toJson() => _$VideoSubscriptionOptionsToJson(this);
 }
 
+/// The maximum length of the user account.
+@JsonEnum(alwaysCreate: true)
+enum MaxUserAccountLengthType {
+  /// The maximum length of the user account is 256 bytes.
+  @JsonValue(256)
+  maxUserAccountLength,
+}
+
+/// @nodoc
+extension MaxUserAccountLengthTypeExt on MaxUserAccountLengthType {
+  /// @nodoc
+  static MaxUserAccountLengthType fromValue(int value) {
+    return $enumDecode(_$MaxUserAccountLengthTypeEnumMap, value);
+  }
+
+  /// @nodoc
+  int value() {
+    return _$MaxUserAccountLengthTypeEnumMap[this]!;
+  }
+}
+
 /// Information about externally encoded video frames.
 @JsonSerializable(explicitToJson: true, includeIfNull: false)
 class EncodedVideoFrameInfo {
   /// @nodoc
   const EncodedVideoFrameInfo(
-      {this.codecType,
+      {this.uid,
+      this.codecType,
       this.width,
       this.height,
       this.framesPerSecond,
@@ -1504,8 +1522,11 @@ class EncodedVideoFrameInfo {
       this.trackId,
       this.captureTimeMs,
       this.decodeTimeMs,
-      this.uid,
       this.streamType});
+
+  /// The user ID to push the externally encoded video frame.
+  @JsonKey(name: 'uid')
+  final int? uid;
 
   /// The codec type of the local video stream. See VideoCodecType. The default value is videoCodecH264 (2).
   @JsonKey(name: 'codecType')
@@ -1542,10 +1563,6 @@ class EncodedVideoFrameInfo {
   /// @nodoc
   @JsonKey(name: 'decodeTimeMs')
   final int? decodeTimeMs;
-
-  /// The user ID to push the externally encoded video frame.
-  @JsonKey(name: 'uid')
-  final int? uid;
 
   /// The type of video streams. See VideoStreamType.
   @JsonKey(name: 'streamType')
@@ -2577,6 +2594,39 @@ extension VideoApplicationScenarioTypeExt on VideoApplicationScenarioType {
   }
 }
 
+/// @nodoc
+@JsonEnum(alwaysCreate: true)
+enum VideoQoePreferenceType {
+  /// @nodoc
+  @JsonValue(1)
+  videoQoePreferenceBalance,
+
+  /// @nodoc
+  @JsonValue(2)
+  videoQoePreferenceDelayFirst,
+
+  /// @nodoc
+  @JsonValue(3)
+  videoQoePreferencePictureQualityFirst,
+
+  /// @nodoc
+  @JsonValue(4)
+  videoQoePreferenceFluencyFirst,
+}
+
+/// @nodoc
+extension VideoQoePreferenceTypeExt on VideoQoePreferenceType {
+  /// @nodoc
+  static VideoQoePreferenceType fromValue(int value) {
+    return $enumDecode(_$VideoQoePreferenceTypeEnumMap, value);
+  }
+
+  /// @nodoc
+  int value() {
+    return _$VideoQoePreferenceTypeEnumMap[this]!;
+  }
+}
+
 /// The brightness level of the video image captured by the local camera.
 @JsonEnum(alwaysCreate: true)
 enum CaptureBrightnessLevelType {
@@ -2643,64 +2693,64 @@ extension LocalAudioStreamStateExt on LocalAudioStreamState {
   }
 }
 
-/// Local audio state error codes.
+/// @nodoc
 @JsonEnum(alwaysCreate: true)
-enum LocalAudioStreamError {
-  /// 0: The local audio is normal.
+enum LocalAudioStreamReason {
+  /// @nodoc
   @JsonValue(0)
-  localAudioStreamErrorOk,
+  localAudioStreamReasonOk,
 
-  /// 1: No specified reason for the local audio failure. Remind your users to try to rejoin the channel.
+  /// @nodoc
   @JsonValue(1)
-  localAudioStreamErrorFailure,
+  localAudioStreamReasonFailure,
 
-  /// 2: No permission to use the local audio capturing device. Remind your users to grant permission. Deprecated: This enumerator is deprecated. Please use recordAudio in the onPermissionError callback instead.
+  /// @nodoc
   @JsonValue(2)
-  localAudioStreamErrorDeviceNoPermission,
+  localAudioStreamReasonDeviceNoPermission,
 
-  /// 3: (Android and iOS only) The local audio capture device is already in use. Remind your users to check whether another application occupies the microphone. Local audio capture automatically resumes after the microphone is idle for about five seconds. You can also try to rejoin the channel after the microphone is idle.
+  /// @nodoc
   @JsonValue(3)
-  localAudioStreamErrorDeviceBusy,
+  localAudioStreamReasonDeviceBusy,
 
-  /// 4: The local audio capture fails.
+  /// @nodoc
   @JsonValue(4)
-  localAudioStreamErrorRecordFailure,
+  localAudioStreamReasonRecordFailure,
 
-  /// 5: The local audio encoding fails.
+  /// @nodoc
   @JsonValue(5)
-  localAudioStreamErrorEncodeFailure,
+  localAudioStreamReasonEncodeFailure,
 
-  /// 6: (Windows only) The application cannot find the local audio capture device. Remind your users to check whether the microphone is connected to the device properly in the control plane of the device or if the microphone is working properly.
+  /// @nodoc
   @JsonValue(6)
-  localAudioStreamErrorNoRecordingDevice,
+  localAudioStreamReasonNoRecordingDevice,
 
-  /// 7: (Windows only) The application cannot find the local audio playback device. Remind your users to check whether the speaker is connected to the device properly in the control plane of the device or if the speaker is working properly.
+  /// @nodoc
   @JsonValue(7)
-  localAudioStreamErrorNoPlayoutDevice,
+  localAudioStreamReasonNoPlayoutDevice,
 
-  /// 8: (Android and iOS only) The local audio capture is interrupted by a system call, Siri, or alarm clock. Remind your users to end the phone call, Siri, or alarm clock if the local audio capture is required.
+  /// @nodoc
   @JsonValue(8)
-  localAudioStreamErrorInterrupted,
+  localAudioStreamReasonInterrupted,
 
-  /// 9: (Windows only) The ID of the local audio-capture device is invalid. Check the audio capture device ID.
+  /// @nodoc
   @JsonValue(9)
-  localAudioStreamErrorRecordInvalidId,
+  localAudioStreamReasonRecordInvalidId,
 
-  /// 10: (Windows only) The ID of the local audio-playback device is invalid. Check the audio playback device ID.
+  /// @nodoc
   @JsonValue(10)
-  localAudioStreamErrorPlayoutInvalidId,
+  localAudioStreamReasonPlayoutInvalidId,
 }
 
 /// @nodoc
-extension LocalAudioStreamErrorExt on LocalAudioStreamError {
+extension LocalAudioStreamReasonExt on LocalAudioStreamReason {
   /// @nodoc
-  static LocalAudioStreamError fromValue(int value) {
-    return $enumDecode(_$LocalAudioStreamErrorEnumMap, value);
+  static LocalAudioStreamReason fromValue(int value) {
+    return $enumDecode(_$LocalAudioStreamReasonEnumMap, value);
   }
 
   /// @nodoc
   int value() {
-    return _$LocalAudioStreamErrorEnumMap[this]!;
+    return _$LocalAudioStreamReasonEnumMap[this]!;
   }
 }
 
@@ -2737,115 +2787,116 @@ extension LocalVideoStreamStateExt on LocalVideoStreamState {
   }
 }
 
-/// Local video state error codes.
+/// @nodoc
 @JsonEnum(alwaysCreate: true)
-enum LocalVideoStreamError {
-  /// 0: The local video is normal.
+enum LocalVideoStreamReason {
+  /// @nodoc
   @JsonValue(0)
-  localVideoStreamErrorOk,
+  localVideoStreamReasonOk,
 
-  /// 1: No specified reason for the local video failure.
+  /// @nodoc
   @JsonValue(1)
-  localVideoStreamErrorFailure,
+  localVideoStreamReasonFailure,
 
-  /// 2: No permission to use the local video capturing device. Remind the user to grant permissions and rejoin the channel. Deprecated: This enumerator is deprecated. Please use camera in the onPermissionError callback instead.
+  /// @nodoc
   @JsonValue(2)
-  localVideoStreamErrorDeviceNoPermission,
+  localVideoStreamReasonDeviceNoPermission,
 
-  /// 3: The local video capturing device is in use. Remind the user to check whether another application occupies the camera.
+  /// @nodoc
   @JsonValue(3)
-  localVideoStreamErrorDeviceBusy,
+  localVideoStreamReasonDeviceBusy,
 
-  /// 4: The local video capture fails. Remind your user to check whether the video capture device is working properly, whether the camera is occupied by another application, or try to rejoin the channel.
+  /// @nodoc
   @JsonValue(4)
-  localVideoStreamErrorCaptureFailure,
+  localVideoStreamReasonCaptureFailure,
 
-  /// 5: The local video encoding fails.
+  /// @nodoc
   @JsonValue(5)
-  localVideoStreamErrorEncodeFailure,
+  localVideoStreamReasonCodecNotSupport,
 
-  /// 6: (iOS only) The app is in the background. Remind the user that video capture cannot be performed normally when the app is in the background.
+  /// @nodoc
   @JsonValue(6)
-  localVideoStreamErrorCaptureInbackground,
+  localVideoStreamReasonCaptureInbackground,
 
-  /// 7: (iOS only) The current application window is running in Slide Over, Split View, or Picture in Picture mode, and another app is occupying the camera. Remind the user that the application cannot capture video properly when the app is running in Slide Over, Split View, or Picture in Picture mode and another app is occupying the camera.
+  /// @nodoc
   @JsonValue(7)
-  localVideoStreamErrorCaptureMultipleForegroundApps,
+  localVideoStreamReasonCaptureMultipleForegroundApps,
 
-  /// 8: Fails to find a local video capture device. Remind the user to check whether the camera is connected to the device properly or the camera is working properly, and then to rejoin the channel.
+  /// @nodoc
   @JsonValue(8)
-  localVideoStreamErrorDeviceNotFound,
+  localVideoStreamReasonDeviceNotFound,
 
-  /// 9: (macOS only) The video capture device currently in use is disconnected (such as being unplugged).
+  /// @nodoc
   @JsonValue(9)
-  localVideoStreamErrorDeviceDisconnected,
+  localVideoStreamReasonDeviceDisconnected,
 
-  /// 10: (macOS and Windows only) The SDK cannot find the video device in the video device list. Check whether the ID of the video device is valid.
+  /// @nodoc
   @JsonValue(10)
-  localVideoStreamErrorDeviceInvalidId,
+  localVideoStreamReasonDeviceInvalidId,
 
-  /// 101: The current video capture device is unavailable due to excessive system pressure.
+  /// @nodoc
   @JsonValue(101)
-  localVideoStreamErrorDeviceSystemPressure,
+  localVideoStreamReasonDeviceSystemPressure,
 
-  /// 11: (macOS only) The shared window is minimized when you call startScreenCaptureByWindowId to share a window. The SDK cannot share a minimized window. You can cancel the minimization of this window at the application layer, for example by maximizing this window.
+  /// @nodoc
   @JsonValue(11)
-  localVideoStreamErrorScreenCaptureWindowMinimized,
+  localVideoStreamReasonScreenCaptureWindowMinimized,
 
-  /// 12: (macOS and Windows only) The error code indicates that a window shared by the window ID has been closed or a full-screen window shared by the window ID has exited full-screen mode. After exiting full-screen mode, remote users cannot see the shared window. To prevent remote users from seeing a black screen, Agora recommends that you immediately stop screen sharing. Common scenarios reporting this error code:
-  ///  When the local user closes the shared window, the SDK reports this error code.
-  ///  The local user shows some slides in full-screen mode first, and then shares the windows of the slides. After the user exits full-screen mode, the SDK reports this error code.
-  ///  The local user watches a web video or reads a web document in full-screen mode first, and then shares the window of the web video or document. After the user exits full-screen mode, the SDK reports this error code.
+  /// @nodoc
   @JsonValue(12)
-  localVideoStreamErrorScreenCaptureWindowClosed,
+  localVideoStreamReasonScreenCaptureWindowClosed,
 
-  /// 13: (Windows only) The window being shared is overlapped by another window, so the overlapped area is blacked out by the SDK during window sharing.
+  /// @nodoc
   @JsonValue(13)
-  localVideoStreamErrorScreenCaptureWindowOccluded,
+  localVideoStreamReasonScreenCaptureWindowOccluded,
 
   /// @nodoc
   @JsonValue(20)
-  localVideoStreamErrorScreenCaptureWindowNotSupported,
+  localVideoStreamReasonScreenCaptureWindowNotSupported,
 
   /// @nodoc
   @JsonValue(21)
-  localVideoStreamErrorScreenCaptureFailure,
+  localVideoStreamReasonScreenCaptureFailure,
 
-  /// 22: (Windows and macOS only) No permission for screen capture.
+  /// @nodoc
   @JsonValue(22)
-  localVideoStreamErrorScreenCaptureNoPermission,
+  localVideoStreamReasonScreenCaptureNoPermission,
 
-  /// 23: (Windows only) Screen capture has been paused. Common scenarios reporting this error code: The current screen may have been switched to a secure desktop, such as a UAC dialog box or Winlogon desktop.
-  @JsonValue(23)
-  localVideoStreamErrorScreenCapturePaused,
-
-  /// 24: (Windows only) Screen capture has resumed from paused state.
+  /// @nodoc
   @JsonValue(24)
-  localVideoStreamErrorScreenCaptureResumed,
+  localVideoStreamReasonScreenCaptureAutoFallback,
 
-  /// 25: (Windows only) The window for the current screen capture is hidden and not visible on the current screen.
+  /// @nodoc
   @JsonValue(25)
-  localVideoStreamErrorScreenCaptureWindowHidden,
+  localVideoStreamReasonScreenCaptureWindowHidden,
 
-  /// 26: (Windows only) The window for screen capture has been restored from hidden state.
+  /// @nodoc
   @JsonValue(26)
-  localVideoStreamErrorScreenCaptureWindowRecoverFromHidden,
+  localVideoStreamReasonScreenCaptureWindowRecoverFromHidden,
 
-  /// 27: (Windows only) The window for screen capture has been restored from minimized state.
+  /// @nodoc
   @JsonValue(27)
-  localVideoStreamErrorScreenCaptureWindowRecoverFromMinimized,
+  localVideoStreamReasonScreenCaptureWindowRecoverFromMinimized,
+
+  /// @nodoc
+  @JsonValue(28)
+  localVideoStreamReasonScreenCapturePaused,
+
+  /// @nodoc
+  @JsonValue(29)
+  localVideoStreamReasonScreenCaptureResumed,
 }
 
 /// @nodoc
-extension LocalVideoStreamErrorExt on LocalVideoStreamError {
+extension LocalVideoStreamReasonExt on LocalVideoStreamReason {
   /// @nodoc
-  static LocalVideoStreamError fromValue(int value) {
-    return $enumDecode(_$LocalVideoStreamErrorEnumMap, value);
+  static LocalVideoStreamReason fromValue(int value) {
+    return $enumDecode(_$LocalVideoStreamReasonEnumMap, value);
   }
 
   /// @nodoc
   int value() {
-    return _$LocalVideoStreamErrorEnumMap[this]!;
+    return _$LocalVideoStreamReasonEnumMap[this]!;
   }
 }
 
@@ -3373,7 +3424,10 @@ class LocalAudioStats {
       this.sentBitrate,
       this.internalCodec,
       this.txPacketLossRate,
-      this.audioDeviceDelay});
+      this.audioDeviceDelay,
+      this.audioPlayoutDelay,
+      this.earMonitorDelay,
+      this.aecEstimatedDelay});
 
   /// The number of audio channels.
   @JsonKey(name: 'numChannels')
@@ -3398,6 +3452,18 @@ class LocalAudioStats {
   /// The delay of the audio device module when playing or recording audio.
   @JsonKey(name: 'audioDeviceDelay')
   final int? audioDeviceDelay;
+
+  /// @nodoc
+  @JsonKey(name: 'audioPlayoutDelay')
+  final int? audioPlayoutDelay;
+
+  /// @nodoc
+  @JsonKey(name: 'earMonitorDelay')
+  final int? earMonitorDelay;
+
+  /// @nodoc
+  @JsonKey(name: 'aecEstimatedDelay')
+  final int? aecEstimatedDelay;
 
   /// @nodoc
   factory LocalAudioStats.fromJson(Map<String, dynamic> json) =>
@@ -3450,88 +3516,88 @@ extension RtmpStreamPublishStateExt on RtmpStreamPublishState {
   }
 }
 
-/// Error codes of the RTMP or RTMPS streaming.
+/// @nodoc
 @JsonEnum(alwaysCreate: true)
-enum RtmpStreamPublishErrorType {
-  /// 0: The RTMP or RTMPS streaming has not started or has ended.
+enum RtmpStreamPublishReason {
+  /// @nodoc
   @JsonValue(0)
-  rtmpStreamPublishErrorOk,
+  rtmpStreamPublishReasonOk,
 
-  /// 1: Invalid argument used. Check the parameter setting.
+  /// @nodoc
   @JsonValue(1)
-  rtmpStreamPublishErrorInvalidArgument,
+  rtmpStreamPublishReasonInvalidArgument,
 
-  /// 2: The RTMP or RTMPS streaming is encrypted and cannot be published.
+  /// @nodoc
   @JsonValue(2)
-  rtmpStreamPublishErrorEncryptedStreamNotAllowed,
+  rtmpStreamPublishReasonEncryptedStreamNotAllowed,
 
-  /// 3: Timeout for the RTMP or RTMPS streaming.
+  /// @nodoc
   @JsonValue(3)
-  rtmpStreamPublishErrorConnectionTimeout,
+  rtmpStreamPublishReasonConnectionTimeout,
 
-  /// 4: An error occurs in Agora's streaming server.
+  /// @nodoc
   @JsonValue(4)
-  rtmpStreamPublishErrorInternalServerError,
+  rtmpStreamPublishReasonInternalServerError,
 
-  /// 5: An error occurs in the CDN server.
+  /// @nodoc
   @JsonValue(5)
-  rtmpStreamPublishErrorRtmpServerError,
+  rtmpStreamPublishReasonRtmpServerError,
 
-  /// 6: The RTMP or RTMPS streaming publishes too frequently.
+  /// @nodoc
   @JsonValue(6)
-  rtmpStreamPublishErrorTooOften,
+  rtmpStreamPublishReasonTooOften,
 
-  /// 7: The host publishes more than 10 URLs. Delete the unnecessary URLs before adding new ones.
+  /// @nodoc
   @JsonValue(7)
-  rtmpStreamPublishErrorReachLimit,
+  rtmpStreamPublishReasonReachLimit,
 
-  /// 8: The host manipulates other hosts' URLs. For example, the host updates or stops other hosts' streams. Check your app logic.
+  /// @nodoc
   @JsonValue(8)
-  rtmpStreamPublishErrorNotAuthorized,
+  rtmpStreamPublishReasonNotAuthorized,
 
-  /// 9: Agora's server fails to find the RTMP or RTMPS streaming.
+  /// @nodoc
   @JsonValue(9)
-  rtmpStreamPublishErrorStreamNotFound,
+  rtmpStreamPublishReasonStreamNotFound,
 
-  /// 10: The format of the RTMP or RTMPS streaming URL is not supported. Check whether the URL format is correct.
+  /// @nodoc
   @JsonValue(10)
-  rtmpStreamPublishErrorFormatNotSupported,
+  rtmpStreamPublishReasonFormatNotSupported,
 
-  /// 11: The user role is not host, so the user cannot use the CDN live streaming function. Check your application code logic.
+  /// @nodoc
   @JsonValue(11)
-  rtmpStreamPublishErrorNotBroadcaster,
+  rtmpStreamPublishReasonNotBroadcaster,
 
-  /// 13: The updateRtmpTranscoding method is called to update the transcoding configuration in a scenario where there is streaming without transcoding. Check your application code logic.
+  /// @nodoc
   @JsonValue(13)
-  rtmpStreamPublishErrorTranscodingNoMixStream,
+  rtmpStreamPublishReasonTranscodingNoMixStream,
 
-  /// 14: Errors occurred in the host's network.
+  /// @nodoc
   @JsonValue(14)
-  rtmpStreamPublishErrorNetDown,
+  rtmpStreamPublishReasonNetDown,
 
   /// @nodoc
   @JsonValue(15)
-  rtmpStreamPublishErrorInvalidAppid,
+  rtmpStreamPublishReasonInvalidAppid,
 
-  /// 16: Your project does not have permission to use streaming services. Refer to Media Push to enable the Media Push permission.
+  /// @nodoc
   @JsonValue(16)
-  rtmpStreamPublishErrorInvalidPrivilege,
+  rtmpStreamPublishReasonInvalidPrivilege,
 
-  /// 100: The streaming has been stopped normally. After you stop the Media Push, the SDK returns this value.
+  /// @nodoc
   @JsonValue(100)
-  rtmpStreamUnpublishErrorOk,
+  rtmpStreamUnpublishReasonOk,
 }
 
 /// @nodoc
-extension RtmpStreamPublishErrorTypeExt on RtmpStreamPublishErrorType {
+extension RtmpStreamPublishReasonExt on RtmpStreamPublishReason {
   /// @nodoc
-  static RtmpStreamPublishErrorType fromValue(int value) {
-    return $enumDecode(_$RtmpStreamPublishErrorTypeEnumMap, value);
+  static RtmpStreamPublishReason fromValue(int value) {
+    return $enumDecode(_$RtmpStreamPublishReasonEnumMap, value);
   }
 
   /// @nodoc
   int value() {
-    return _$RtmpStreamPublishErrorTypeEnumMap[this]!;
+    return _$RtmpStreamPublishReasonEnumMap[this]!;
   }
 }
 
@@ -4253,6 +4319,14 @@ enum ConnectionChangedReasonType {
   /// @nodoc
   @JsonValue(22)
   connectionChangedCertificationVeryfyFailure,
+
+  /// @nodoc
+  @JsonValue(23)
+  connectionChangedStreamChannelNotAvailable,
+
+  /// @nodoc
+  @JsonValue(24)
+  connectionChangedInconsistentAppid,
 }
 
 /// @nodoc
@@ -4469,8 +4543,9 @@ extension VideoViewSetupModeExt on VideoViewSetupMode {
 class VideoCanvas {
   /// @nodoc
   const VideoCanvas(
-      {this.view,
-      this.uid,
+      {this.uid,
+      this.subviewUid,
+      this.view,
       this.backgroundColor,
       this.renderMode,
       this.mirrorMode,
@@ -4478,15 +4553,20 @@ class VideoCanvas {
       this.sourceType,
       this.mediaPlayerId,
       this.cropArea,
-      this.enableAlphaMask});
-
-  /// The video display window.
-  @JsonKey(name: 'view')
-  final int? view;
+      this.enableAlphaMask,
+      this.position});
 
   /// The user ID.
   @JsonKey(name: 'uid')
   final int? uid;
+
+  /// @nodoc
+  @JsonKey(name: 'subviewUid')
+  final int? subviewUid;
+
+  /// The video display window.
+  @JsonKey(name: 'view')
+  final int? view;
 
   /// The background color of the video canvas in RGBA format. The default value is 0x00000000, which represents completely transparent black.
   @JsonKey(name: 'backgroundColor')
@@ -4524,6 +4604,10 @@ class VideoCanvas {
   ///  To enable alpha transmission,.
   @JsonKey(name: 'enableAlphaMask')
   final bool? enableAlphaMask;
+
+  /// @nodoc
+  @JsonKey(name: 'position')
+  final VideoModulePosition? position;
 
   /// @nodoc
   factory VideoCanvas.fromJson(Map<String, dynamic> json) =>
@@ -5692,87 +5776,6 @@ extension ChannelMediaRelayErrorExt on ChannelMediaRelayError {
   }
 }
 
-/// The event code of channel media relay.
-@JsonEnum(alwaysCreate: true)
-enum ChannelMediaRelayEvent {
-  /// 0: The user disconnects from the server due to a poor network connection.
-  @JsonValue(0)
-  relayEventNetworkDisconnected,
-
-  /// 1: The user is connected to the server.
-  @JsonValue(1)
-  relayEventNetworkConnected,
-
-  /// 2: The user joins the source channel.
-  @JsonValue(2)
-  relayEventPacketJoinedSrcChannel,
-
-  /// 3: The user joins the target channel.
-  @JsonValue(3)
-  relayEventPacketJoinedDestChannel,
-
-  /// 4: The SDK starts relaying the media stream to the target channel.
-  @JsonValue(4)
-  relayEventPacketSentToDestChannel,
-
-  /// 5: The server receives the audio stream from the source channel.
-  @JsonValue(5)
-  relayEventPacketReceivedVideoFromSrc,
-
-  /// 6: The server receives the audio stream from the source channel.
-  @JsonValue(6)
-  relayEventPacketReceivedAudioFromSrc,
-
-  /// 7: The target channel is updated.
-  @JsonValue(7)
-  relayEventPacketUpdateDestChannel,
-
-  /// @nodoc
-  @JsonValue(8)
-  relayEventPacketUpdateDestChannelRefused,
-
-  /// 9: The target channel does not change, which means that the target channel fails to be updated.
-  @JsonValue(9)
-  relayEventPacketUpdateDestChannelNotChange,
-
-  /// 10: The target channel name is NULL.
-  @JsonValue(10)
-  relayEventPacketUpdateDestChannelIsNull,
-
-  /// 11: The video profile is sent to the server.
-  @JsonValue(11)
-  relayEventVideoProfileUpdate,
-
-  /// 12: The SDK successfully pauses relaying the media stream to target channels.
-  @JsonValue(12)
-  relayEventPauseSendPacketToDestChannelSuccess,
-
-  /// 13: The SDK fails to pause relaying the media stream to target channels.
-  @JsonValue(13)
-  relayEventPauseSendPacketToDestChannelFailed,
-
-  /// 14: The SDK successfully resumes relaying the media stream to target channels.
-  @JsonValue(14)
-  relayEventResumeSendPacketToDestChannelSuccess,
-
-  /// 15: The SDK fails to resume relaying the media stream to target channels.
-  @JsonValue(15)
-  relayEventResumeSendPacketToDestChannelFailed,
-}
-
-/// @nodoc
-extension ChannelMediaRelayEventExt on ChannelMediaRelayEvent {
-  /// @nodoc
-  static ChannelMediaRelayEvent fromValue(int value) {
-    return $enumDecode(_$ChannelMediaRelayEventEnumMap, value);
-  }
-
-  /// @nodoc
-  int value() {
-    return _$ChannelMediaRelayEventEnumMap[this]!;
-  }
-}
-
 /// The state code of the channel media relay.
 @JsonEnum(alwaysCreate: true)
 enum ChannelMediaRelayState {
@@ -5810,7 +5813,11 @@ extension ChannelMediaRelayStateExt on ChannelMediaRelayState {
 @JsonSerializable(explicitToJson: true, includeIfNull: false)
 class ChannelMediaInfo {
   /// @nodoc
-  const ChannelMediaInfo({this.channelName, this.token, this.uid});
+  const ChannelMediaInfo({this.uid, this.channelName, this.token});
+
+  /// The user ID.
+  @JsonKey(name: 'uid')
+  final int? uid;
 
   /// The channel name.
   @JsonKey(name: 'channelName')
@@ -5819,10 +5826,6 @@ class ChannelMediaInfo {
   /// The token that enables the user to join the channel.
   @JsonKey(name: 'token')
   final String? token;
-
-  /// The user ID.
-  @JsonKey(name: 'uid')
-  final int? uid;
 
   /// @nodoc
   factory ChannelMediaInfo.fromJson(Map<String, dynamic> json) =>
@@ -5925,14 +5928,14 @@ class DownlinkNetworkInfo {
 class PeerDownlinkInfo {
   /// @nodoc
   const PeerDownlinkInfo(
-      {this.uid,
+      {this.userId,
       this.streamType,
       this.currentDownscaleLevel,
       this.expectedBitrateBps});
 
   /// @nodoc
-  @JsonKey(name: 'uid')
-  final String? uid;
+  @JsonKey(name: 'userId')
+  final String? userId;
 
   /// @nodoc
   @JsonKey(name: 'stream_type')
@@ -6120,27 +6123,6 @@ extension PermissionTypeExt on PermissionType {
   /// @nodoc
   int value() {
     return _$PermissionTypeEnumMap[this]!;
-  }
-}
-
-/// The maximum length of the user account.
-@JsonEnum(alwaysCreate: true)
-enum MaxUserAccountLengthType {
-  /// The maximum length of the user account is 256 bytes.
-  @JsonValue(256)
-  maxUserAccountLength,
-}
-
-/// @nodoc
-extension MaxUserAccountLengthTypeExt on MaxUserAccountLengthType {
-  /// @nodoc
-  static MaxUserAccountLengthType fromValue(int value) {
-    return $enumDecode(_$MaxUserAccountLengthTypeEnumMap, value);
-  }
-
-  /// @nodoc
-  int value() {
-    return _$MaxUserAccountLengthTypeEnumMap[this]!;
   }
 }
 
@@ -6566,28 +6548,6 @@ extension ConfigFetchTypeExt on ConfigFetchType {
 }
 
 /// @nodoc
-@JsonSerializable(explicitToJson: true, includeIfNull: false)
-class RecorderStreamInfo {
-  /// @nodoc
-  const RecorderStreamInfo({this.channelId, this.uid});
-
-  /// @nodoc
-  @JsonKey(name: 'channelId')
-  final String? channelId;
-
-  /// @nodoc
-  @JsonKey(name: 'uid')
-  final int? uid;
-
-  /// @nodoc
-  factory RecorderStreamInfo.fromJson(Map<String, dynamic> json) =>
-      _$RecorderStreamInfoFromJson(json);
-
-  /// @nodoc
-  Map<String, dynamic> toJson() => _$RecorderStreamInfoToJson(this);
-}
-
-/// @nodoc
 @JsonEnum(alwaysCreate: true)
 enum LocalProxyMode {
   /// @nodoc
@@ -6710,6 +6670,28 @@ class LocalAccessPointConfiguration {
   Map<String, dynamic> toJson() => _$LocalAccessPointConfigurationToJson(this);
 }
 
+/// @nodoc
+@JsonSerializable(explicitToJson: true, includeIfNull: false)
+class RecorderStreamInfo {
+  /// @nodoc
+  const RecorderStreamInfo({this.channelId, this.uid});
+
+  /// @nodoc
+  @JsonKey(name: 'channelId')
+  final String? channelId;
+
+  /// @nodoc
+  @JsonKey(name: 'uid')
+  final int? uid;
+
+  /// @nodoc
+  factory RecorderStreamInfo.fromJson(Map<String, dynamic> json) =>
+      _$RecorderStreamInfoFromJson(json);
+
+  /// @nodoc
+  Map<String, dynamic> toJson() => _$RecorderStreamInfoToJson(this);
+}
+
 /// The spatial audio parameters.
 @JsonSerializable(explicitToJson: true, includeIfNull: false)
 class SpatialAudioParams {
@@ -6762,4 +6744,58 @@ class SpatialAudioParams {
 
   /// @nodoc
   Map<String, dynamic> toJson() => _$SpatialAudioParamsToJson(this);
+}
+
+/// @nodoc
+@JsonSerializable(explicitToJson: true, includeIfNull: false)
+class VideoLayout {
+  /// @nodoc
+  const VideoLayout(
+      {this.channelId,
+      this.uid,
+      this.strUid,
+      this.x,
+      this.y,
+      this.width,
+      this.height,
+      this.videoState});
+
+  /// @nodoc
+  @JsonKey(name: 'channelId')
+  final String? channelId;
+
+  /// @nodoc
+  @JsonKey(name: 'uid')
+  final int? uid;
+
+  /// @nodoc
+  @JsonKey(name: 'strUid')
+  final String? strUid;
+
+  /// @nodoc
+  @JsonKey(name: 'x')
+  final int? x;
+
+  /// @nodoc
+  @JsonKey(name: 'y')
+  final int? y;
+
+  /// @nodoc
+  @JsonKey(name: 'width')
+  final int? width;
+
+  /// @nodoc
+  @JsonKey(name: 'height')
+  final int? height;
+
+  /// @nodoc
+  @JsonKey(name: 'videoState')
+  final int? videoState;
+
+  /// @nodoc
+  factory VideoLayout.fromJson(Map<String, dynamic> json) =>
+      _$VideoLayoutFromJson(json);
+
+  /// @nodoc
+  Map<String, dynamic> toJson() => _$VideoLayoutToJson(this);
 }

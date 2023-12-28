@@ -110,6 +110,10 @@ class _State extends State<StartLocalVideoTranscoder> {
           remoteUid.clear();
         });
       },
+      onLocalVideoTranscoderError: (stream, error) {
+        logSink
+            .log('[onLocalVideoTranscoderError] stream: $stream error: $error');
+      },
     ));
 
     _videoDeviceManager = _engine.getVideoDeviceManager();
@@ -229,6 +233,7 @@ class _State extends State<StartLocalVideoTranscoder> {
 
     await _engine.stopCameraCapture(VideoSourceType.videoSourceCameraPrimary);
     await _engine.stopLocalVideoTranscoder();
+    await _engine.startPreview();
     transcodingVideoStreams.clear();
     _isSecondaryCameraSource = false;
     _isPrimaryScreenSource = false;
@@ -591,16 +596,17 @@ class _State extends State<StartLocalVideoTranscoder> {
         if (!_isReadyPreview) return Container();
         return Stack(
           children: [
-            AgoraVideoView(
-              controller: VideoViewController(
-                rtcEngine: _engine,
-                canvas: const VideoCanvas(
-                  uid: 0,
-                  sourceType: VideoSourceType.videoSourceTranscoded,
-                  renderMode: RenderModeType.renderModeFit,
+            if (_isStartLocalvideoTranscoder)
+              AgoraVideoView(
+                controller: VideoViewController(
+                  rtcEngine: _engine,
+                  canvas: const VideoCanvas(
+                    uid: 0,
+                    sourceType: VideoSourceType.videoSourceTranscoded,
+                    renderMode: RenderModeType.renderModeFit,
+                  ),
                 ),
               ),
-            ),
             Align(
               alignment: Alignment.topLeft,
               child: SingleChildScrollView(

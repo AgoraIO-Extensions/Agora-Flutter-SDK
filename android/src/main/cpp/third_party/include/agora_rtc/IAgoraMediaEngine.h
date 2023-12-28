@@ -58,7 +58,6 @@ class IMediaEngine {
    * - < 0: Failure.
    */
   virtual int registerVideoFrameObserver(IVideoFrameObserver* observer) = 0;
-
   /**
    * Registers a receiver object for the encoded video image.
    *
@@ -73,7 +72,6 @@ class IMediaEngine {
    * - < 0: Failure.
    */
   virtual int registerVideoEncodedFrameObserver(IVideoEncodedFrameObserver* observer) = 0;
-
   /**
    * Pushes the external audio data to the app.
    *
@@ -83,7 +81,8 @@ class IMediaEngine {
    * - 0: Success.
    * - < 0: Failure.
    */
-  virtual int pushAudioFrame(IAudioFrameObserver::AudioFrame* frame, rtc::track_id_t trackId = 0) = 0;
+   
+  virtual int pushAudioFrame(IAudioFrameObserverBase::AudioFrame* frame, rtc::track_id_t trackId = 0) = 0;
 
   /**
    * Pulls the remote audio data.
@@ -101,7 +100,7 @@ class IMediaEngine {
    * - 0: Success.
    * - < 0: Failure.
    */
-  virtual int pullAudioFrame(IAudioFrameObserver::AudioFrame* frame) = 0;
+  virtual int pullAudioFrame(IAudioFrameObserverBase::AudioFrame* frame) = 0;
 
   /**
    * Sets the external video source.
@@ -237,7 +236,6 @@ class IMediaEngine {
    * - < 0: Failure.
    */
   virtual int pushVideoFrame(base::ExternalVideoFrame* frame, unsigned int videoTrackId = 0) = 0;
-
   /**
    * Pushes the encoded video image to the app.
    * @param imageBuffer A pointer to the video image.
@@ -248,10 +246,9 @@ class IMediaEngine {
    * - 0: Success.
    * - < 0: Failure.
    */
-  virtual int pushEncodedVideoImage(const uint8_t* imageBuffer, size_t length,
+  virtual int pushEncodedVideoImage(const unsigned char* imageBuffer, size_t length,
                                     const agora::rtc::EncodedVideoFrameInfo& videoEncodedFrameInfo,
                                     unsigned int videoTrackId = 0) = 0;
-
   /**
    * @hide For internal usage only
    */

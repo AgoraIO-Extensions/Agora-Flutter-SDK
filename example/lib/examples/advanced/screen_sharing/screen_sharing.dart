@@ -64,7 +64,7 @@ class _State extends State<ScreenSharing> with KeepRemoteVideoViewsMixin {
         isJoined = false;
       });
     }, onLocalVideoStateChanged: (VideoSourceType source,
-            LocalVideoStreamState state, LocalVideoStreamError error) {
+            LocalVideoStreamState state, LocalVideoStreamReason error) {
       logSink.log(
           '[onLocalVideoStateChanged] source: $source, state: $state, error: $error');
       if (!(source == VideoSourceType.videoSourceScreen ||

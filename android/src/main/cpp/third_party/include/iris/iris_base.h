@@ -32,7 +32,6 @@ typedef enum IrisAppType {
 } IrisAppType;
 
 typedef enum IrisLogLevel {
-  levelTrace = 0,
   levelDebug = 1,
   levelInfo = 2,
   levelWarn = 3,
@@ -51,7 +50,9 @@ typedef enum IrisError {
   ERR_NULL_POINTER = 1001,
   ERR_SIZE_NOT_MATCHING = 1002,
   ERR_BUFFER_EMPTY = 1005,
-  ERR_FRAM_TYPE_NOT_MATCHING = 10006
+  ERR_FRAM_TYPE_NOT_MATCHING = 1006,
+  ERR_ALREADY_REGISTERED = 1007,
+  ERR_ALREADY_UNREGISTERED = 1008,
 } IrisError;
 
 IRIS_API void enableUseJsonArray(bool enable);

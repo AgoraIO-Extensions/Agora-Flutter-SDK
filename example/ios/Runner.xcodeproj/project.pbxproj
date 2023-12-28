@@ -13,6 +13,7 @@
 		71BBA3BA28AB50E2007B0DBC /* ReplayKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 71BBA3B928AB50E2007B0DBC /* ReplayKit.framework */; };
 		71BBA3BE28AB50E2007B0DBC /* SampleHandler.m in Sources */ = {isa = PBXBuildFile; fileRef = 71BBA3BD28AB50E2007B0DBC /* SampleHandler.m */; };
 		71BBA3C228AB50E2007B0DBC /* ScreenSharing.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = 71BBA3B828AB50E2007B0DBC /* ScreenSharing.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		84969AB62B3ABD9500A81666 /* VideoRawDataController.m in Sources */ = {isa = PBXBuildFile; fileRef = 84969AB52B3ABD9500A81666 /* VideoRawDataController.m */; };
 		978B8F6F1D3862AE00F588F7 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 7AFFD8EE1D35381100E5BB4D /* AppDelegate.m */; };
 		97C146F31CF9000F007C117D /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 97C146F21CF9000F007C117D /* main.m */; };
 		97C146FC1CF9000F007C117D /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 97C146FA1CF9000F007C117D /* Main.storyboard */; };
@@ -71,6 +72,8 @@
 		7AFA3C8E1D35360C0083082E /* Release.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; name = Release.xcconfig; path = Flutter/Release.xcconfig; sourceTree = "<group>"; };
 		7AFFD8ED1D35381100E5BB4D /* AppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		7AFFD8EE1D35381100E5BB4D /* AppDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
+		84969AB42B3ABCB200A81666 /* VideoRawDataController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = VideoRawDataController.h; sourceTree = "<group>"; };
+		84969AB52B3ABD9500A81666 /* VideoRawDataController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = VideoRawDataController.m; sourceTree = "<group>"; };
 		95E2CCC7A17B556B48DA5225 /* Pods-Runner.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Runner.debug.xcconfig"; path = "Target Support Files/Pods-Runner/Pods-Runner.debug.xcconfig"; sourceTree = "<group>"; };
 		9740EEB21CF90195004384FC /* Debug.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; name = Debug.xcconfig; path = Flutter/Debug.xcconfig; sourceTree = "<group>"; };
 		9740EEB31CF90195004384FC /* Generated.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; name = Generated.xcconfig; path = Flutter/Generated.xcconfig; sourceTree = "<group>"; };
@@ -183,6 +186,8 @@
 				97C146F11CF9000F007C117D /* Supporting Files */,
 				1498D2321E8E86230040F4C2 /* GeneratedPluginRegistrant.h */,
 				1498D2331E8E89220040F4C2 /* GeneratedPluginRegistrant.m */,
+				84969AB42B3ABCB200A81666 /* VideoRawDataController.h */,
+				84969AB52B3ABD9500A81666 /* VideoRawDataController.m */,
 			);
 			path = Runner;
 			sourceTree = "<group>";
@@ -407,6 +412,7 @@
 			files = (
 				978B8F6F1D3862AE00F588F7 /* AppDelegate.m in Sources */,
 				97C146F31CF9000F007C117D /* main.m in Sources */,
+				84969AB62B3ABD9500A81666 /* VideoRawDataController.m in Sources */,
 				1498D2341E8E89220040F4C2 /* GeneratedPluginRegistrant.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
