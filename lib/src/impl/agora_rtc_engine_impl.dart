@@ -16,6 +16,8 @@ import 'package:agora_rtc_engine/src/audio_device_manager.dart';
 import 'package:agora_rtc_engine/src/binding/agora_base_event_impl.dart';
 import 'package:agora_rtc_engine/src/binding/agora_media_base_event_impl.dart';
 import 'package:agora_rtc_engine/src/binding/agora_media_engine_impl.dart';
+import 'package:agora_rtc_engine/src/binding/agora_rtc_engine_event_impl.dart'
+    as rtc_engine_event_b;
 import 'package:agora_rtc_engine/src/binding/agora_rtc_engine_event_impl.dart';
 import 'package:agora_rtc_engine/src/binding/agora_rtc_engine_ex_impl.dart'
     as rtc_engine_ex_binding;
@@ -291,6 +293,48 @@ extension MetadataObserverExt on MetadataObserver {
   }
 }
 
+class RtcEngineEventHandlerWrapperOverride
+    extends rtc_engine_event_b.RtcEngineEventHandlerWrapper {
+  const RtcEngineEventHandlerWrapperOverride(
+    RtcEngineEventHandler rtcEngineEventHandler,
+  ) : super(rtcEngineEventHandler);
+
+  @override
+  bool operator ==(Object other) {
+    if (other.runtimeType != runtimeType) {
+      return false;
+    }
+    return other is RtcEngineEventHandlerWrapperOverride &&
+        other.rtcEngineEventHandler == rtcEngineEventHandler;
+  }
+
+  @override
+  int get hashCode => rtcEngineEventHandler.hashCode;
+
+  @override
+  bool handleEventInternal(
+      String eventName, String eventData, List<Uint8List> buffers) {
+    if (eventName == 'onAudioRoutingChanged2' ||
+        eventName == 'onAudioRoutingChanged') {
+      if (rtcEngineEventHandler.onAudioRoutingChanged == null) {
+        return true;
+      }
+      final jsonMap = jsonDecode(eventData);
+      RtcEngineEventHandlerOnAudioRoutingChangedJson paramJson =
+          RtcEngineEventHandlerOnAudioRoutingChangedJson.fromJson(jsonMap);
+      paramJson = paramJson.fillBuffers(buffers);
+      int? deviceType =
+          paramJson.deviceType ?? MediaDeviceType.unknownAudioDevice.value();
+      int? routing = paramJson.routing ?? AudioRoute.routeDefault.value();
+
+      rtcEngineEventHandler.onAudioRoutingChanged!(deviceType, routing);
+      return true;
+    }
+
+    return super.handleEventInternal(eventName, eventData, buffers);
+  }
+}
+
 @internal
 class InitializationState extends ChangeNotifier {
   bool _isInitialzed = false;
@@ -448,7 +492,8 @@ class RtcEngineImpl extends rtc_engine_ex_binding.RtcEngineExImpl
   @override
   void registerEventHandler(
       covariant RtcEngineEventHandler eventHandler) async {
-    final eventHandlerWrapper = RtcEngineEventHandlerWrapper(eventHandler);
+    final eventHandlerWrapper =
+        RtcEngineEventHandlerWrapperOverride(eventHandler);
     final param = createParams({});
 
     await irisMethodChannel.registerEventHandler(
@@ -463,7 +508,8 @@ class RtcEngineImpl extends rtc_engine_ex_binding.RtcEngineExImpl
   @override
   void unregisterEventHandler(
       covariant RtcEngineEventHandler eventHandler) async {
-    final eventHandlerWrapper = RtcEngineEventHandlerWrapper(eventHandler);
+    final eventHandlerWrapper =
+        RtcEngineEventHandlerWrapperOverride(eventHandler);
     final param = createParams({});
 
     await irisMethodChannel.unregisterEventHandler(
