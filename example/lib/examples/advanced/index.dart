@@ -98,6 +98,5 @@ final advanced = [
     },
   if (!kIsWeb && !(Platform.isAndroid || Platform.isIOS))
     {'name': 'PreCallTest', 'widget': const PreCallTest()},
-  if (!kIsWeb && (Platform.isAndroid || Platform.isIOS))
-    {'name': 'MusicPlayer', 'widget': const MusicPlayerExample()},
+  {'name': 'MusicPlayer', 'widget': const MusicPlayerExample()},
 ];
