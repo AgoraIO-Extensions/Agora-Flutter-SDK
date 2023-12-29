@@ -397,7 +397,9 @@ jobs:
           # We generate the screenshots base on the simulator "iPhone 13 Pro Max", so we set the SimDeviceType to iPhone 13 Pro Max.
           # If you need to change the SimDeviceType, you may need to re-generate the screenshots first.
           xcrun simctl create Flutter-iPhone com.apple.CoreSimulator.SimDeviceType.iPhone-13-Pro-Max com.apple.CoreSimulator.SimRuntime.iOS-16-4 | xargs xcrun simctl boot
-      - run: bash ci/rendering_test_ios.sh
+      - name: Run ios rendering test
+        run: |
+          bash ci/rendering_test_ios.sh
 
   rendering_test_macos:
     name: Run Flutter macOS Rendering Tests
@@ -444,7 +446,10 @@ jobs:
             --flutter-package-name=agora_rtc_engine \
             --iris-macos-cdn-url=${IRIS_CDN_URL_MACOS}
       - run: flutter config --enable-macos-desktop
-      - run: bash ci/rendering_test_macos.sh
+      - name: Run macos rendering test
+        run: |
+          export SAVE_DEBUG_GOLDEN="true"
+          bash ci/rendering_test_macos.sh
 
   rendering_test_windows:
     name: Run Flutter Windows Rendering Tests
@@ -491,6 +496,8 @@ jobs:
       - name: Run windows integration test
         shell: bash
         run: |
+          export SAVE_DEBUG_GOLDEN="true"
+
           bash ci/rendering_test_windows.sh
 
   rendering_test_web:
