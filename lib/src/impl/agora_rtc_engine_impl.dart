@@ -324,7 +324,7 @@ class RtcEngineEventHandlerWrapperOverride
           RtcEngineEventHandlerOnAudioRoutingChangedJson.fromJson(jsonMap);
       paramJson = paramJson.fillBuffers(buffers);
       int? deviceType =
-          paramJson.deviceType ?? MediaDeviceType.unknownAudioDevice.value();
+          paramJson.deviceType ?? MediaDeviceType.audioPlayoutDevice.value();
       int? routing = paramJson.routing ?? AudioRoute.routeDefault.value();
 
       rtcEngineEventHandler.onAudioRoutingChanged!(deviceType, routing);
