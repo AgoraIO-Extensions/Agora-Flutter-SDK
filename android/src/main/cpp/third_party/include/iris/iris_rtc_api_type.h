@@ -676,46 +676,6 @@
   "AudioDeviceManager_getRecordingAudioDeviceInfo"
 // class IAudioDeviceManager end
 
-// class ICloudSpatialAudioEngine start
-#define FUNC_CLOUDSPATIALAUDIOENGINE_SETMAXAUDIORECVCOUNT                      \
-  "CloudSpatialAudioEngine_setMaxAudioRecvCount"
-#define FUNC_CLOUDSPATIALAUDIOENGINE_SETAUDIORECVRANGE                         \
-  "CloudSpatialAudioEngine_setAudioRecvRange"
-#define FUNC_CLOUDSPATIALAUDIOENGINE_SETDISTANCEUNIT                           \
-  "CloudSpatialAudioEngine_setDistanceUnit"
-#define FUNC_CLOUDSPATIALAUDIOENGINE_UPDATESELFPOSITION                        \
-  "CloudSpatialAudioEngine_updateSelfPosition"
-#define FUNC_CLOUDSPATIALAUDIOENGINE_UPDATESELFPOSITIONEX                      \
-  "CloudSpatialAudioEngine_updateSelfPositionEx"
-#define FUNC_CLOUDSPATIALAUDIOENGINE_UPDATEPLAYERPOSITIONINFO                  \
-  "CloudSpatialAudioEngine_updatePlayerPositionInfo"
-#define FUNC_CLOUDSPATIALAUDIOENGINE_SETPARAMETERS                             \
-  "CloudSpatialAudioEngine_setParameters"
-#define FUNC_CLOUDSPATIALAUDIOENGINE_INITIALIZE                                \
-  "CloudSpatialAudioEngine_initialize"
-#define FUNC_CLOUDSPATIALAUDIOENGINE_ADDEVENTHANDLER                           \
-  "CloudSpatialAudioEngine_addEventHandler"
-#define FUNC_CLOUDSPATIALAUDIOENGINE_REMOVEEVENTHANDLER                        \
-  "CloudSpatialAudioEngine_removeEventHandler"
-#define FUNC_CLOUDSPATIALAUDIOENGINE_ENABLESPATIALIZER                         \
-  "CloudSpatialAudioEngine_enableSpatializer"
-#define FUNC_CLOUDSPATIALAUDIOENGINE_SETTEAMID                                 \
-  "CloudSpatialAudioEngine_setTeamId"
-#define FUNC_CLOUDSPATIALAUDIOENGINE_SETAUDIORANGEMODE                         \
-  "CloudSpatialAudioEngine_setAudioRangeMode"
-#define FUNC_CLOUDSPATIALAUDIOENGINE_ENTERROOM                                 \
-  "CloudSpatialAudioEngine_enterRoom"
-#define FUNC_CLOUDSPATIALAUDIOENGINE_RENEWTOKEN                                \
-  "CloudSpatialAudioEngine_renewToken"
-#define FUNC_CLOUDSPATIALAUDIOENGINE_EXITROOM "CloudSpatialAudioEngine_exitRoom"
-#define FUNC_CLOUDSPATIALAUDIOENGINE_GETTEAMMATES                              \
-  "CloudSpatialAudioEngine_getTeammates"
-#define FUNC_CLOUDSPATIALAUDIOENGINE_MUTELOCALAUDIOSTREAM                      \
-  "CloudSpatialAudioEngine_muteLocalAudioStream"
-#define FUNC_CLOUDSPATIALAUDIOENGINE_MUTEALLREMOTEAUDIOSTREAMS                 \
-  "CloudSpatialAudioEngine_muteAllRemoteAudioStreams"
-// class ICloudSpatialAudioEngine end
-
 // class ILocalSpatialAudioEngine start
 #define FUNC_LOCALSPATIALAUDIOENGINE_SETMAXAUDIORECVCOUNT                      \
   "LocalSpatialAudioEngine_setMaxAudioRecvCount"
@@ -774,11 +734,8 @@
 #define FUNC_MEDIAENGINE_ENABLECUSTOMAUDIOLOCALPLAYBACK                        \
   "MediaEngine_enableCustomAudioLocalPlayback"
 #define FUNC_MEDIAENGINE_PUSHVIDEOFRAME "MediaEngine_pushVideoFrame"
-#define FUNC_MEDIAENGINE_PUSHVIDEOFRAME2 "MediaEngine_pushVideoFrame2"
 #define FUNC_MEDIAENGINE_PUSHENCODEDVIDEOIMAGE                                 \
   "MediaEngine_pushEncodedVideoImage"
-#define FUNC_MEDIAENGINE_PUSHENCODEDVIDEOIMAGE2                                \
-  "MediaEngine_pushEncodedVideoImage2"
 #define FUNC_MEDIAENGINE_RELEASE "MediaEngine_release"
 #define FUNC_MEDIAENGINE_REGISTERVIDEOFRAMEOBSERVER                            \
   "MediaEngine_registerVideoFrameObserver"

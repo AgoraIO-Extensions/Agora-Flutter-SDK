@@ -44,6 +44,7 @@ typedef enum IrisError {
   ERR_OK = 0,
   ERR_FAILED = 1,
   ERR_INVALID_ARGUMENT = 2,
+  ERR_NOT_SUPPORTED = 4,
   ERR_NOT_INITIALIZED = 7,
 
   /*base from IRIS_VIDEO_PROCESS_ERR::ERR_NULL_POINTER=1*/
@@ -83,8 +84,6 @@ typedef struct IrisCEventHandler {
 
 typedef void *IrisHandle;
 typedef IrisHandle IrisEventHandlerHandle;
-typedef IrisHandle IrisVideoFrameBufferDelegateHandle;
-typedef IrisHandle IrisVideoFrameBufferManagerPtr;
 typedef IrisHandle IrisApiEnginePtr;
 
 EXTERN_C_LEAVE
