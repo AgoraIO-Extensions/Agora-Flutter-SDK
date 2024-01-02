@@ -3,7 +3,7 @@
 
 #include "iris_base.h"
 
-typedef void *IrisRtcRenderingHandle;
+typedef IrisHandle IrisRtcRenderingHandle;
 
 /// The agora::media::base::VideoFrame C projection but remove some unsupported property in C,
 /// e.g., agora::media::base::VideoFrame.sharedContext, agora::media::base::VideoFrame.textureId, etc.
@@ -56,7 +56,7 @@ typedef enum GET_VIDEO_FRAME_CACHE_RETURN_TYPE {
 } GET_VIDEO_FRAME_CACHE_RETURN_TYPE;
 
 IRIS_API IrisRtcRenderingHandle
-CreateIrisRtcRendering(void *iris_api_engine_handle);
+CreateIrisRtcRendering(IrisApiEnginePtr iris_api_engine_handle);
 
 IRIS_API void FreeIrisRtcRendering(IrisRtcRenderingHandle handle);
 

@@ -23,8 +23,8 @@ Pod::Spec.new do |s|
     puts '[plugin_dev] Found .plugin_dev file, use vendored_frameworks instead.'
     s.vendored_frameworks = 'libs/*.xcframework'
   else
-  s.dependency 'AgoraIrisRTC_iOS', '4.3.0-dev.13'
-  s.dependency 'AgoraRtcEngine_iOS_Preview', '4.3.0-dev.14'
+  s.dependency 'AgoraIrisRTC_iOS', '4.3.0-dev.15'
+  s.dependency 'AgoraRtcEngine_iOS_Preview', '4.3.0-dev.15'
   end
   
   s.platform = :ios, '9.0'

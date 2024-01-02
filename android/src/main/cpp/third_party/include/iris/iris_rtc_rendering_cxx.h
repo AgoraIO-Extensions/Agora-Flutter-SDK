@@ -33,7 +33,7 @@ class IRIS_CPP_API IrisRtcRendering {
  public:
   virtual ~IrisRtcRendering() {}
 
-  static IrisRtcRendering *Create(void *iris_api_engine_handle);
+  static IrisRtcRendering *Create(IrisApiEnginePtr iris_api_engine_handle);
 
   /// Add `VideoFrameObserverDelegate` with `config`, return a delegate id that save inside
   /// `IrisRtcRendering`, you should save the id and pass it to `RemoveVideoFrameObserverDelegate`.
