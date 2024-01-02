@@ -784,4 +784,7 @@ abstract class RtcEngineEx implements RtcEngine {
   /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown; and you need to catch the exception and handle it accordingly.
   ///  < 0: Failure.
   Future<void> startMediaRenderingTracingEx(RtcConnection connection);
+
+  /// @nodoc
+  Future<String> getCallIdEx(RtcConnection connection);
 }

@@ -2973,6 +2973,14 @@ enum RemoteAudioStateReason {
   /// 7: The remote user leaves the channel.
   @JsonValue(7)
   remoteAudioReasonRemoteOffline,
+
+  /// @nodoc
+  @JsonValue(8)
+  remoteAudioReasonRemoteNoPacketReceive,
+
+  /// @nodoc
+  @JsonValue(9)
+  remoteAudioReasonRemoteLocalPlayFailed,
 }
 
 /// @nodoc
@@ -6370,6 +6378,10 @@ enum EarMonitoringFilterType {
   /// 1<<2: Enable noise suppression to the in-ear monitor.
   @JsonValue((1 << 2))
   earMonitoringFilterNoiseSuppression,
+
+  /// @nodoc
+  @JsonValue((1 << 15))
+  earMonitoringFilterReusePostProcessingFilter,
 }
 
 /// @nodoc

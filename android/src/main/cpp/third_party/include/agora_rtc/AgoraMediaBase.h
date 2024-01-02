@@ -1044,6 +1044,10 @@ class IAudioFrameObserverBase {
      * The number of the audio track.
      */
     int audioTrackNumber;
+    /**
+     * RTP timestamp of the first sample in the AudioFrame
+     */
+    uint32_t rtpTimestamp;
 
     AudioFrame() : type(FRAME_TYPE_PCM16),
                    samplesPerChannel(0),
@@ -1054,7 +1058,8 @@ class IAudioFrameObserverBase {
                    renderTimeMs(0),
                    avsync_type(0),
                    presentationMs(0),
-                   audioTrackNumber(0) {}
+                   audioTrackNumber(0),
+                   rtpTimestamp(0) {}
   };
 
   enum AUDIO_FRAME_POSITION {

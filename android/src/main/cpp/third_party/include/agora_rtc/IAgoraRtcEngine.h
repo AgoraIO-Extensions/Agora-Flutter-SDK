@@ -1145,6 +1145,12 @@ struct ChannelMediaOptions {
   */
   Optional<bool> publishTranscodedVideoTrack;
   /**
+  * Whether to publish the local mixed track.
+  * - `true`: Publish the audio track of local mixed track.
+  * - `false`: (Default) Do not publish the local mixed track.
+  */
+  Optional<bool> publishMixedAudioTrack;
+  /**
    * Whether to automatically subscribe to all remote audio streams when the user joins a channel:
    * - `true`: (Default) Subscribe to all remote audio streams.
    * - `false`: Do not subscribe to any remote audio stream.
@@ -1259,6 +1265,7 @@ struct ChannelMediaOptions {
       SET_FROM(publishFourthScreenTrack);
 #endif
       SET_FROM(publishTranscodedVideoTrack);
+      SET_FROM(publishMixedAudioTrack);
       SET_FROM(publishCustomAudioTrack);
       SET_FROM(publishCustomAudioTrackId);
       SET_FROM(publishCustomVideoTrack);
@@ -1305,6 +1312,7 @@ struct ChannelMediaOptions {
       ADD_COMPARE(publishFourthScreenTrack);
 #endif
       ADD_COMPARE(publishTranscodedVideoTrack);
+      ADD_COMPARE(publishMixedAudioTrack);
       ADD_COMPARE(publishCustomAudioTrack);
       ADD_COMPARE(publishCustomAudioTrackId);
       ADD_COMPARE(publishCustomVideoTrack);
@@ -1354,6 +1362,7 @@ struct ChannelMediaOptions {
         REPLACE_BY(publishFourthScreenTrack);
 #endif
         REPLACE_BY(publishTranscodedVideoTrack);
+        REPLACE_BY(publishMixedAudioTrack);
         REPLACE_BY(publishCustomAudioTrack);
         REPLACE_BY(publishCustomAudioTrackId);
         REPLACE_BY(publishCustomVideoTrack);

@@ -26,6 +26,7 @@
   "RtcEngine_startMediaRenderingTracing"
 #define FUNC_RTCENGINEEX_STARTMEDIARENDERINGTRACINGEX                          \
   "RtcEngineEx_startMediaRenderingTracingEx"
+#define FUNC_RTCENGINEEX_GETCALLIDEX "RtcEngineEx_getCallIdEx"
 #define FUNC_RTCENGINE_ENABLEINSTANTMEDIARENDERING                             \
   "RtcEngine_enableInstantMediaRendering"
 #define FUNC_RTCENGINE_RELEASE "RtcEngine_release"

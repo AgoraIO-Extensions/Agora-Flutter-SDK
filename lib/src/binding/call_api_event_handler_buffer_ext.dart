@@ -995,7 +995,8 @@ extension AudioFrameBufferExt on AudioFrame {
         renderTimeMs: renderTimeMs,
         avsyncType: avsyncType,
         presentationMs: presentationMs,
-        audioTrackNumber: audioTrackNumber);
+        audioTrackNumber: audioTrackNumber,
+        rtpTimestamp: rtpTimestamp);
   }
 
   List<Uint8List> collectBufferList() {

@@ -1304,6 +1304,7 @@ class ChannelMediaOptions {
       this.publishMediaPlayerAudioTrack,
       this.publishMediaPlayerVideoTrack,
       this.publishTranscodedVideoTrack,
+      this.publishMixedAudioTrack,
       this.autoSubscribeAudio,
       this.autoSubscribeVideo,
       this.enableAudioRecordingOrPlayout,
@@ -1392,6 +1393,10 @@ class ChannelMediaOptions {
   /// Whether to publish the local transcoded video: true : Publish the local transcoded video. false : Do not publish the local transcoded video.
   @JsonKey(name: 'publishTranscodedVideoTrack')
   final bool? publishTranscodedVideoTrack;
+
+  /// @nodoc
+  @JsonKey(name: 'publishMixedAudioTrack')
+  final bool? publishMixedAudioTrack;
 
   /// Whether to automatically subscribe to all remote audio streams when the user joins a channel: true : Subscribe to all remote audio streams. false : Do not automatically subscribe to any remote audio streams.
   @JsonKey(name: 'autoSubscribeAudio')
@@ -3351,6 +3356,9 @@ abstract class RtcEngine {
   ///  < 0: Failure.
   Future<void> startPreview(
       {VideoSourceType sourceType = VideoSourceType.videoSourceCameraPrimary});
+
+  /// @nodoc
+  Future<void> startPreviewWithoutSourceType();
 
   /// Stops the local video preview.
   ///

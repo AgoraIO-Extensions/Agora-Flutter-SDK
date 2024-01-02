@@ -519,7 +519,7 @@ class RtcEngineExImpl extends RtcEngineImpl implements RtcEngineEx {
     final param = createParams({
       'connection': connection.toJson(),
       'enabled': enabled,
-      'deviceName': deviceName
+      if (deviceName != null) 'deviceName': deviceName
     });
     final List<Uint8List> buffers = [];
     buffers.addAll(connection.collectBufferList());
@@ -1225,5 +1225,26 @@ class RtcEngineExImpl extends RtcEngineImpl implements RtcEngineEx {
     if (result < 0) {
       throw AgoraRtcException(code: result);
     }
+  }
+
+  @override
+  Future<String> getCallIdEx(RtcConnection connection) async {
+    final apiType =
+        '${isOverrideClassName ? className : 'RtcEngineEx'}_getCallIdEx';
+    final param = createParams({'connection': connection.toJson()});
+    final List<Uint8List> buffers = [];
+    buffers.addAll(connection.collectBufferList());
+    final callApiResult = await irisMethodChannel.invokeMethod(
+        IrisMethodCall(apiType, jsonEncode(param), buffers: buffers));
+    if (callApiResult.irisReturnCode < 0) {
+      throw AgoraRtcException(code: callApiResult.irisReturnCode);
+    }
+    final rm = callApiResult.data;
+    final result = rm['result'];
+    if (result < 0) {
+      throw AgoraRtcException(code: result);
+    }
+    final getCallIdExJson = RtcEngineExGetCallIdExJson.fromJson(rm);
+    return getCallIdExJson.callId;
   }
 }

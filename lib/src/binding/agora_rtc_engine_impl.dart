@@ -555,6 +555,20 @@ class RtcEngineImpl implements RtcEngine {
   }
 
   @override
+  Future<void> startPreviewWithoutSourceType() async {
+    final apiType =
+        '${isOverrideClassName ? className : 'RtcEngine'}_startPreviewWithoutSourceType';
+    final param = createParams({});
+    final callApiResult = await irisMethodChannel.invokeMethod(
+        IrisMethodCall(apiType, jsonEncode(param), buffers: null));
+    if (callApiResult.irisReturnCode < 0) {
+      throw AgoraRtcException(code: callApiResult.irisReturnCode);
+    }
+    final rm = callApiResult.data;
+    final result = rm['result'];
+  }
+
+  @override
   Future<void> stopPreview(
       {VideoSourceType sourceType =
           VideoSourceType.videoSourceCameraPrimary}) async {
@@ -2744,7 +2758,8 @@ class RtcEngineImpl implements RtcEngine {
       {required bool enabled, String? deviceName}) async {
     final apiType =
         '${isOverrideClassName ? className : 'RtcEngine'}_enableLoopbackRecording';
-    final param = createParams({'enabled': enabled, 'deviceName': deviceName});
+    final param = createParams(
+        {'enabled': enabled, if (deviceName != null) 'deviceName': deviceName});
     final callApiResult = await irisMethodChannel.invokeMethod(
         IrisMethodCall(apiType, jsonEncode(param), buffers: null));
     if (callApiResult.irisReturnCode < 0) {
