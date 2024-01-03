@@ -32,6 +32,7 @@ typedef enum IrisAppType {
 } IrisAppType;
 
 typedef enum IrisLogLevel {
+  levelTrace = 0,
   levelDebug = 1,
   levelInfo = 2,
   levelWarn = 3,

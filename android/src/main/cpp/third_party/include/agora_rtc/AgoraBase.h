@@ -690,6 +690,12 @@ enum ERROR_CODE_TYPE {
   ERR_PCMSEND_FORMAT = 200,           // unsupport pcm format
   ERR_PCMSEND_BUFFEROVERFLOW = 201,  // buffer overflow, the pcm send rate too quickly
 
+  // 250~270 RDT error code
+  ERR_RDT_USER_NOT_EXIST = 250,
+  ERR_RDT_USER_NOT_READY = 251,
+  ERR_RDT_DATA_BLOCKED = 252,
+  ERR_RDT_CMD_EXCEED_LIMIT = 253,
+
   /// @cond
   // signaling: 400~600
   ERR_LOGIN_ALREADY_LOGIN = 428,
@@ -2916,14 +2922,6 @@ enum REMOTE_AUDIO_STATE_REASON
    * 7: The remote user leaves the channel.
    */
   REMOTE_AUDIO_REASON_REMOTE_OFFLINE = 7,
-  /**
-   * 8: Not receive any audio packet from remote user.
-   */
-  REMOTE_AUDIO_REASON_REMOTE_NO_PACKET_RECEIVE = 8,
-  /**
-   * 8: Not receive any audio packet from remote user.
-   */
-  REMOTE_AUDIO_REASON_REMOTE_LOCAL_PLAY_FAILED = 9,
 };
 
 /**
@@ -5731,11 +5729,7 @@ enum EAR_MONITORING_FILTER_TYPE {
   /**
    * 4: Enable noise suppression to the in-ear monitor.
    */
-  EAR_MONITORING_FILTER_NOISE_SUPPRESSION = (1<<2),
-  /**
-   * 32768: Enable audio filters by reuse post-processing filter to the in-ear monitor.
-   */
-  EAR_MONITORING_FILTER_REUSE_POST_PROCESSING_FILTER = (1<<15),
+  EAR_MONITORING_FILTER_NOISE_SUPPRESSION = (1<<2)
 };
 
 /**
@@ -6032,6 +6026,25 @@ struct LocalAccessPointConfiguration {
    */
   AdvancedConfigInfo advancedConfig;
   LocalAccessPointConfiguration() : ipList(NULL), ipListSize(0), domainList(NULL), domainListSize(0), verifyDomainName(NULL), mode(ConnectivityFirst) {}
+};
+
+/**
+ * Reliable Data Transmission Tunnel message type
+ */
+enum RdtStreamType {
+  RDT_STREAM_CMD,    // Reliable; High priority; Limit 256 bytes per packet, 100 packets per second
+  RDT_STREAM_DATA,   // Reliable; Low priority; Restricted by congestion control; Limit 1024 bytes per packet
+};
+
+/**
+ * Reliable Data Transmission tunnel state
+ */
+enum RdtState {
+  RDT_STATE_CLOSED,  // initial or closed
+  RDT_STATE_OPENED,  // opened and can send data
+  RDT_STATE_BLOCKED, // send buffer is full, can't send data, but can send cmd
+  RDT_STATE_PENDING, // reconnecting tunnel, can't send data
+  RDT_STATE_BROKEN,  // rdt tunnel broken, will auto reset and rebuild tunnel
 };
 
 

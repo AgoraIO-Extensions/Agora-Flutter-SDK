@@ -26,7 +26,6 @@
   "RtcEngine_startMediaRenderingTracing"
 #define FUNC_RTCENGINEEX_STARTMEDIARENDERINGTRACINGEX                          \
   "RtcEngineEx_startMediaRenderingTracingEx"
-#define FUNC_RTCENGINEEX_GETCALLIDEX "RtcEngineEx_getCallIdEx"
 #define FUNC_RTCENGINE_ENABLEINSTANTMEDIARENDERING                             \
   "RtcEngine_enableInstantMediaRendering"
 #define FUNC_RTCENGINE_RELEASE "RtcEngine_release"
@@ -330,6 +329,7 @@
 #define FUNC_RTCENGINE_CREATEDATASTREAM "RtcEngine_createDataStream"
 #define FUNC_RTCENGINE_CREATEDATASTREAM2 "RtcEngine_createDataStream2"
 #define FUNC_RTCENGINE_SENDSTREAMMESSAGE "RtcEngine_sendStreamMessage"
+#define FUNC_RTCENGINE_SENDRDTMESSAGE "RtcEngine_sendRdtMessage"
 #define FUNC_RTCENGINE_ADDVIDEOWATERMARK "RtcEngine_addVideoWatermark"
 #define FUNC_RTCENGINE_ADDVIDEOWATERMARK2 "RtcEngine_addVideoWatermark2"
 //#define FUNC_RTCENGINE_CLEARVIDEOWATERMARK "RtcEngine_clearVideoWatermark"
@@ -849,6 +849,7 @@
 #define FUNC_RTCENGINEEX_CREATEDATASTREAMEX "RtcEngineEx_createDataStreamEx"
 #define FUNC_RTCENGINEEX_CREATEDATASTREAMEX2 "RtcEngineEx_createDataStreamEx2"
 #define FUNC_RTCENGINEEX_SENDSTREAMMESSAGEEX "RtcEngineEx_sendStreamMessageEx"
+#define FUNC_RTCENGINEEX_SENDRDTMESSAGEEX "RtcEngineEx_sendRdtMessageEx"
 #define FUNC_RTCENGINEEX_ADDVIDEOWATERMARKEX "RtcEngineEx_addVideoWatermarkEx"
 #define FUNC_RTCENGINEEX_CLEARVIDEOWATERMARKEX                                 \
   "RtcEngineEx_clearVideoWatermarkEx"

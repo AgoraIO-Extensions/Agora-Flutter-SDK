@@ -1145,12 +1145,6 @@ struct ChannelMediaOptions {
   */
   Optional<bool> publishTranscodedVideoTrack;
   /**
-  * Whether to publish the local mixed track.
-  * - `true`: Publish the audio track of local mixed track.
-  * - `false`: (Default) Do not publish the local mixed track.
-  */
-  Optional<bool> publishMixedAudioTrack;
-  /**
    * Whether to automatically subscribe to all remote audio streams when the user joins a channel:
    * - `true`: (Default) Subscribe to all remote audio streams.
    * - `false`: Do not subscribe to any remote audio stream.
@@ -1244,6 +1238,8 @@ struct ChannelMediaOptions {
    */
   Optional<bool> isAudioFilterable;
 
+  Optional<bool> autoConnectRdt;
+
   ChannelMediaOptions() {}
   ~ChannelMediaOptions() {}
 
@@ -1265,7 +1261,6 @@ struct ChannelMediaOptions {
       SET_FROM(publishFourthScreenTrack);
 #endif
       SET_FROM(publishTranscodedVideoTrack);
-      SET_FROM(publishMixedAudioTrack);
       SET_FROM(publishCustomAudioTrack);
       SET_FROM(publishCustomAudioTrackId);
       SET_FROM(publishCustomVideoTrack);
@@ -1288,6 +1283,7 @@ struct ChannelMediaOptions {
       SET_FROM(customVideoTrackId);
       SET_FROM(isAudioFilterable);
       SET_FROM(isInteractiveAudience);
+      SET_FROM(autoConnectRdt);
 #undef SET_FROM
   }
 
@@ -1312,7 +1308,6 @@ struct ChannelMediaOptions {
       ADD_COMPARE(publishFourthScreenTrack);
 #endif
       ADD_COMPARE(publishTranscodedVideoTrack);
-      ADD_COMPARE(publishMixedAudioTrack);
       ADD_COMPARE(publishCustomAudioTrack);
       ADD_COMPARE(publishCustomAudioTrackId);
       ADD_COMPARE(publishCustomVideoTrack);
@@ -1335,6 +1330,7 @@ struct ChannelMediaOptions {
       ADD_COMPARE(customVideoTrackId);
       ADD_COMPARE(isAudioFilterable);
       ADD_COMPARE(isInteractiveAudience);
+      ADD_COMPARE(autoConnectRdt);
       END_COMPARE();
 
 #undef BEGIN_COMPARE
@@ -1362,7 +1358,6 @@ struct ChannelMediaOptions {
         REPLACE_BY(publishFourthScreenTrack);
 #endif
         REPLACE_BY(publishTranscodedVideoTrack);
-        REPLACE_BY(publishMixedAudioTrack);
         REPLACE_BY(publishCustomAudioTrack);
         REPLACE_BY(publishCustomAudioTrackId);
         REPLACE_BY(publishCustomVideoTrack);
@@ -1385,6 +1380,7 @@ struct ChannelMediaOptions {
         REPLACE_BY(customVideoTrackId);
         REPLACE_BY(isAudioFilterable);
         REPLACE_BY(isInteractiveAudience);
+        REPLACE_BY(autoConnectRdt);
 #undef REPLACE_BY
     }
     return *this;
@@ -2217,6 +2213,33 @@ class IRtcEngineEventHandler {
     (void)code;
     (void)missed;
     (void)cached;
+  }
+
+  /** Occurs when the local user receives the rdt data from the remote user.
+   *
+   * The SDK triggers this callback when the user receives the data stream that another user sends
+   * by calling the \ref agora::rtc::IRtcEngine::sendRdtMessage "sendRdtMessage" method.
+   *
+   * @param userId ID of the user who sends the data.
+   * @param type The RDT stream type
+   * @param data The sending data.
+   * @param length The length (byte) of the data.
+   */
+  virtual void onRdtMessage(uid_t userId, RdtStreamType type, const char *data, size_t length) {
+    (void)userId;
+    (void)type;
+    (void)data;
+    (void)length;
+  };
+
+  /** Occurs when the RDT tunnel state changed
+   *
+   * @param userId ID of the user who sends the data.
+   * @param state The RDT tunnel state
+   */
+  virtual void onRdtStateChanged(uid_t userId, RdtState state) {
+    (void)userId;
+    (void)state;
   }
 
   /**
@@ -7508,6 +7531,14 @@ class IRtcEngine : public agora::base::IEngineBase {
    * - < 0: Failure.
    */
   virtual int sendStreamMessage(int streamId, const char* data, size_t length) = 0;
+
+  /** Send Reliable message to remote uid in channel.
+   * @param UserId remote user id.
+   * @param type Reliable Data Transmission tunnel message type.
+   * @param data The pointer to the sent data.
+   * @param length The length of the sent data.
+   */
+  virtual int sendRdtMessage(uid_t uid, RdtStreamType type, const char *data, size_t length) = 0;
 
   /** **DEPRECATED** Adds a watermark image to the local video or CDN live stream.
 
