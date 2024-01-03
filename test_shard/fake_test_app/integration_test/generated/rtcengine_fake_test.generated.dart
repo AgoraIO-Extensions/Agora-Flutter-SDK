@@ -350,7 +350,6 @@ void rtcEngineSmokeTestCases() {
         const bool optionsPublishMediaPlayerAudioTrack = true;
         const bool optionsPublishMediaPlayerVideoTrack = true;
         const bool optionsPublishTranscodedVideoTrack = true;
-        const bool optionsPublishMixedAudioTrack = true;
         const bool optionsAutoSubscribeAudio = true;
         const bool optionsAutoSubscribeVideo = true;
         const bool optionsEnableAudioRecordingOrPlayout = true;
@@ -363,6 +362,7 @@ void rtcEngineSmokeTestCases() {
         const bool optionsIsInteractiveAudience = true;
         const int optionsCustomVideoTrackId = 10;
         const bool optionsIsAudioFilterable = true;
+        const bool optionsAutoConnectRdt = true;
         const ChannelMediaOptions options = ChannelMediaOptions(
           publishCameraTrack: optionsPublishCameraTrack,
           publishSecondaryCameraTrack: optionsPublishSecondaryCameraTrack,
@@ -382,7 +382,6 @@ void rtcEngineSmokeTestCases() {
           publishMediaPlayerAudioTrack: optionsPublishMediaPlayerAudioTrack,
           publishMediaPlayerVideoTrack: optionsPublishMediaPlayerVideoTrack,
           publishTranscodedVideoTrack: optionsPublishTranscodedVideoTrack,
-          publishMixedAudioTrack: optionsPublishMixedAudioTrack,
           autoSubscribeAudio: optionsAutoSubscribeAudio,
           autoSubscribeVideo: optionsAutoSubscribeVideo,
           enableAudioRecordingOrPlayout: optionsEnableAudioRecordingOrPlayout,
@@ -399,6 +398,7 @@ void rtcEngineSmokeTestCases() {
           isInteractiveAudience: optionsIsInteractiveAudience,
           customVideoTrackId: optionsCustomVideoTrackId,
           isAudioFilterable: optionsIsAudioFilterable,
+          autoConnectRdt: optionsAutoConnectRdt,
         );
         await rtcEngine.joinChannel(
           token: token,
@@ -461,7 +461,6 @@ void rtcEngineSmokeTestCases() {
         const bool optionsPublishMediaPlayerAudioTrack = true;
         const bool optionsPublishMediaPlayerVideoTrack = true;
         const bool optionsPublishTranscodedVideoTrack = true;
-        const bool optionsPublishMixedAudioTrack = true;
         const bool optionsAutoSubscribeAudio = true;
         const bool optionsAutoSubscribeVideo = true;
         const bool optionsEnableAudioRecordingOrPlayout = true;
@@ -474,6 +473,7 @@ void rtcEngineSmokeTestCases() {
         const bool optionsIsInteractiveAudience = true;
         const int optionsCustomVideoTrackId = 10;
         const bool optionsIsAudioFilterable = true;
+        const bool optionsAutoConnectRdt = true;
         const ChannelMediaOptions options = ChannelMediaOptions(
           publishCameraTrack: optionsPublishCameraTrack,
           publishSecondaryCameraTrack: optionsPublishSecondaryCameraTrack,
@@ -493,7 +493,6 @@ void rtcEngineSmokeTestCases() {
           publishMediaPlayerAudioTrack: optionsPublishMediaPlayerAudioTrack,
           publishMediaPlayerVideoTrack: optionsPublishMediaPlayerVideoTrack,
           publishTranscodedVideoTrack: optionsPublishTranscodedVideoTrack,
-          publishMixedAudioTrack: optionsPublishMixedAudioTrack,
           autoSubscribeAudio: optionsAutoSubscribeAudio,
           autoSubscribeVideo: optionsAutoSubscribeVideo,
           enableAudioRecordingOrPlayout: optionsEnableAudioRecordingOrPlayout,
@@ -510,6 +509,7 @@ void rtcEngineSmokeTestCases() {
           isInteractiveAudience: optionsIsInteractiveAudience,
           customVideoTrackId: optionsCustomVideoTrackId,
           isAudioFilterable: optionsIsAudioFilterable,
+          autoConnectRdt: optionsAutoConnectRdt,
         );
         await rtcEngine.updateChannelMediaOptions(
           options,
@@ -7840,6 +7840,10 @@ void rtcEngineSmokeTestCases() {
               int streamId, Uint8List data, int length, int sentTs) {},
           onStreamMessageError: (RtcConnection connection, int remoteUid,
               int streamId, ErrorCodeType code, int missed, int cached) {},
+          onRdtMessage: (RtcConnection connection, int userId,
+              RdtStreamType type, Uint8List data, int length) {},
+          onRdtStateChanged:
+              (RtcConnection connection, int userId, RdtState state) {},
           onRequestToken: (RtcConnection connection) {},
           onTokenPrivilegeWillExpire:
               (RtcConnection connection, String token) {},
@@ -8052,6 +8056,10 @@ void rtcEngineSmokeTestCases() {
               int streamId, Uint8List data, int length, int sentTs) {},
           onStreamMessageError: (RtcConnection connection, int remoteUid,
               int streamId, ErrorCodeType code, int missed, int cached) {},
+          onRdtMessage: (RtcConnection connection, int userId,
+              RdtStreamType type, Uint8List data, int length) {},
+          onRdtStateChanged:
+              (RtcConnection connection, int userId, RdtState state) {},
           onRequestToken: (RtcConnection connection) {},
           onTokenPrivilegeWillExpire:
               (RtcConnection connection, String token) {},
@@ -8335,6 +8343,45 @@ void rtcEngineSmokeTestCases() {
       } catch (e) {
         if (e is! AgoraRtcException) {
           debugPrint('[sendStreamMessage] error: ${e.toString()}');
+          rethrow;
+        }
+
+        if (e.code != -4) {
+          // Only not supported error supported.
+          rethrow;
+        }
+      }
+
+      await rtcEngine.release();
+    },
+  );
+
+  testWidgets(
+    'sendRdtMessage',
+    (WidgetTester tester) async {
+      String engineAppId = const String.fromEnvironment('TEST_APP_ID',
+          defaultValue: '<YOUR_APP_ID>');
+
+      RtcEngine rtcEngine = createAgoraRtcEngine();
+      await rtcEngine.initialize(RtcEngineContext(
+        appId: engineAppId,
+        areaCode: AreaCode.areaCodeGlob.value(),
+      ));
+
+      try {
+        const int uid = 10;
+        const RdtStreamType type = RdtStreamType.rdtStreamCmd;
+        Uint8List data = Uint8List.fromList([1, 2, 3, 4, 5]);
+        const int length = 10;
+        await rtcEngine.sendRdtMessage(
+          uid: uid,
+          type: type,
+          data: data,
+          length: length,
+        );
+      } catch (e) {
+        if (e is! AgoraRtcException) {
+          debugPrint('[sendRdtMessage] error: ${e.toString()}');
           rethrow;
         }
 
@@ -8853,7 +8900,6 @@ void rtcEngineSmokeTestCases() {
         const bool optionsPublishMediaPlayerAudioTrack = true;
         const bool optionsPublishMediaPlayerVideoTrack = true;
         const bool optionsPublishTranscodedVideoTrack = true;
-        const bool optionsPublishMixedAudioTrack = true;
         const bool optionsAutoSubscribeAudio = true;
         const bool optionsAutoSubscribeVideo = true;
         const bool optionsEnableAudioRecordingOrPlayout = true;
@@ -8866,6 +8912,7 @@ void rtcEngineSmokeTestCases() {
         const bool optionsIsInteractiveAudience = true;
         const int optionsCustomVideoTrackId = 10;
         const bool optionsIsAudioFilterable = true;
+        const bool optionsAutoConnectRdt = true;
         const ChannelMediaOptions options = ChannelMediaOptions(
           publishCameraTrack: optionsPublishCameraTrack,
           publishSecondaryCameraTrack: optionsPublishSecondaryCameraTrack,
@@ -8885,7 +8932,6 @@ void rtcEngineSmokeTestCases() {
           publishMediaPlayerAudioTrack: optionsPublishMediaPlayerAudioTrack,
           publishMediaPlayerVideoTrack: optionsPublishMediaPlayerVideoTrack,
           publishTranscodedVideoTrack: optionsPublishTranscodedVideoTrack,
-          publishMixedAudioTrack: optionsPublishMixedAudioTrack,
           autoSubscribeAudio: optionsAutoSubscribeAudio,
           autoSubscribeVideo: optionsAutoSubscribeVideo,
           enableAudioRecordingOrPlayout: optionsEnableAudioRecordingOrPlayout,
@@ -8902,6 +8948,7 @@ void rtcEngineSmokeTestCases() {
           isInteractiveAudience: optionsIsInteractiveAudience,
           customVideoTrackId: optionsCustomVideoTrackId,
           isAudioFilterable: optionsIsAudioFilterable,
+          autoConnectRdt: optionsAutoConnectRdt,
         );
         await rtcEngine.joinChannelWithUserAccount(
           token: token,
@@ -8967,7 +9014,6 @@ void rtcEngineSmokeTestCases() {
         const bool optionsPublishMediaPlayerAudioTrack = true;
         const bool optionsPublishMediaPlayerVideoTrack = true;
         const bool optionsPublishTranscodedVideoTrack = true;
-        const bool optionsPublishMixedAudioTrack = true;
         const bool optionsAutoSubscribeAudio = true;
         const bool optionsAutoSubscribeVideo = true;
         const bool optionsEnableAudioRecordingOrPlayout = true;
@@ -8980,6 +9026,7 @@ void rtcEngineSmokeTestCases() {
         const bool optionsIsInteractiveAudience = true;
         const int optionsCustomVideoTrackId = 10;
         const bool optionsIsAudioFilterable = true;
+        const bool optionsAutoConnectRdt = true;
         const ChannelMediaOptions options = ChannelMediaOptions(
           publishCameraTrack: optionsPublishCameraTrack,
           publishSecondaryCameraTrack: optionsPublishSecondaryCameraTrack,
@@ -8999,7 +9046,6 @@ void rtcEngineSmokeTestCases() {
           publishMediaPlayerAudioTrack: optionsPublishMediaPlayerAudioTrack,
           publishMediaPlayerVideoTrack: optionsPublishMediaPlayerVideoTrack,
           publishTranscodedVideoTrack: optionsPublishTranscodedVideoTrack,
-          publishMixedAudioTrack: optionsPublishMixedAudioTrack,
           autoSubscribeAudio: optionsAutoSubscribeAudio,
           autoSubscribeVideo: optionsAutoSubscribeVideo,
           enableAudioRecordingOrPlayout: optionsEnableAudioRecordingOrPlayout,
@@ -9016,6 +9062,7 @@ void rtcEngineSmokeTestCases() {
           isInteractiveAudience: optionsIsInteractiveAudience,
           customVideoTrackId: optionsCustomVideoTrackId,
           isAudioFilterable: optionsIsAudioFilterable,
+          autoConnectRdt: optionsAutoConnectRdt,
         );
         await rtcEngine.joinChannelWithUserAccountEx(
           token: token,

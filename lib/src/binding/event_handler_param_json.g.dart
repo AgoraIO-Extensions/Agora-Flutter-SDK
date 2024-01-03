@@ -882,6 +882,10 @@ const _$ErrorCodeTypeEnumMap = {
   ErrorCodeType.errCertRequest: 168,
   ErrorCodeType.errPcmsendFormat: 200,
   ErrorCodeType.errPcmsendBufferoverflow: 201,
+  ErrorCodeType.errRdtUserNotExist: 250,
+  ErrorCodeType.errRdtUserNotReady: 251,
+  ErrorCodeType.errRdtDataBlocked: 252,
+  ErrorCodeType.errRdtCmdExceedLimit: 253,
   ErrorCodeType.errLoginAlreadyLogin: 428,
   ErrorCodeType.errLoadMediaEngine: 1001,
   ErrorCodeType.errAdmGeneralError: 1005,
@@ -1881,6 +1885,61 @@ Map<String, dynamic> _$RtcEngineEventHandlerOnStreamMessageErrorJsonToJson(
       'cached': instance.cached,
     };
 
+RtcEngineEventHandlerOnRdtMessageJson
+    _$RtcEngineEventHandlerOnRdtMessageJsonFromJson(
+            Map<String, dynamic> json) =>
+        RtcEngineEventHandlerOnRdtMessageJson(
+          connection: json['connection'] == null
+              ? null
+              : RtcConnection.fromJson(
+                  json['connection'] as Map<String, dynamic>),
+          userId: json['userId'] as int?,
+          type: $enumDecodeNullable(_$RdtStreamTypeEnumMap, json['type']),
+          length: json['length'] as int?,
+        );
+
+Map<String, dynamic> _$RtcEngineEventHandlerOnRdtMessageJsonToJson(
+        RtcEngineEventHandlerOnRdtMessageJson instance) =>
+    <String, dynamic>{
+      'connection': instance.connection?.toJson(),
+      'userId': instance.userId,
+      'type': _$RdtStreamTypeEnumMap[instance.type],
+      'length': instance.length,
+    };
+
+const _$RdtStreamTypeEnumMap = {
+  RdtStreamType.rdtStreamCmd: 0,
+  RdtStreamType.rdtStreamData: 1,
+};
+
+RtcEngineEventHandlerOnRdtStateChangedJson
+    _$RtcEngineEventHandlerOnRdtStateChangedJsonFromJson(
+            Map<String, dynamic> json) =>
+        RtcEngineEventHandlerOnRdtStateChangedJson(
+          connection: json['connection'] == null
+              ? null
+              : RtcConnection.fromJson(
+                  json['connection'] as Map<String, dynamic>),
+          userId: json['userId'] as int?,
+          state: $enumDecodeNullable(_$RdtStateEnumMap, json['state']),
+        );
+
+Map<String, dynamic> _$RtcEngineEventHandlerOnRdtStateChangedJsonToJson(
+        RtcEngineEventHandlerOnRdtStateChangedJson instance) =>
+    <String, dynamic>{
+      'connection': instance.connection?.toJson(),
+      'userId': instance.userId,
+      'state': _$RdtStateEnumMap[instance.state],
+    };
+
+const _$RdtStateEnumMap = {
+  RdtState.rdtStateClosed: 0,
+  RdtState.rdtStateOpened: 1,
+  RdtState.rdtStateBlocked: 2,
+  RdtState.rdtStatePending: 3,
+  RdtState.rdtStateBroken: 4,
+};
+
 RtcEngineEventHandlerOnRequestTokenJson
     _$RtcEngineEventHandlerOnRequestTokenJsonFromJson(
             Map<String, dynamic> json) =>
@@ -2089,8 +2148,6 @@ const _$RemoteAudioStateReasonEnumMap = {
   RemoteAudioStateReason.remoteAudioReasonRemoteMuted: 5,
   RemoteAudioStateReason.remoteAudioReasonRemoteUnmuted: 6,
   RemoteAudioStateReason.remoteAudioReasonRemoteOffline: 7,
-  RemoteAudioStateReason.remoteAudioReasonRemoteNoPacketReceive: 8,
-  RemoteAudioStateReason.remoteAudioReasonRemoteLocalPlayFailed: 9,
 };
 
 RtcEngineEventHandlerOnActiveSpeakerJson

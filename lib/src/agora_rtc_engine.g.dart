@@ -611,7 +611,6 @@ ChannelMediaOptions _$ChannelMediaOptionsFromJson(Map<String, dynamic> json) =>
       publishMediaPlayerVideoTrack:
           json['publishMediaPlayerVideoTrack'] as bool?,
       publishTranscodedVideoTrack: json['publishTranscodedVideoTrack'] as bool?,
-      publishMixedAudioTrack: json['publishMixedAudioTrack'] as bool?,
       autoSubscribeAudio: json['autoSubscribeAudio'] as bool?,
       autoSubscribeVideo: json['autoSubscribeVideo'] as bool?,
       enableAudioRecordingOrPlayout:
@@ -634,6 +633,7 @@ ChannelMediaOptions _$ChannelMediaOptionsFromJson(Map<String, dynamic> json) =>
       isInteractiveAudience: json['isInteractiveAudience'] as bool?,
       customVideoTrackId: json['customVideoTrackId'] as int?,
       isAudioFilterable: json['isAudioFilterable'] as bool?,
+      autoConnectRdt: json['autoConnectRdt'] as bool?,
     );
 
 Map<String, dynamic> _$ChannelMediaOptionsToJson(ChannelMediaOptions instance) {
@@ -668,7 +668,6 @@ Map<String, dynamic> _$ChannelMediaOptionsToJson(ChannelMediaOptions instance) {
       'publishMediaPlayerVideoTrack', instance.publishMediaPlayerVideoTrack);
   writeNotNull(
       'publishTranscodedVideoTrack', instance.publishTranscodedVideoTrack);
-  writeNotNull('publishMixedAudioTrack', instance.publishMixedAudioTrack);
   writeNotNull('autoSubscribeAudio', instance.autoSubscribeAudio);
   writeNotNull('autoSubscribeVideo', instance.autoSubscribeVideo);
   writeNotNull(
@@ -691,6 +690,7 @@ Map<String, dynamic> _$ChannelMediaOptionsToJson(ChannelMediaOptions instance) {
   writeNotNull('isInteractiveAudience', instance.isInteractiveAudience);
   writeNotNull('customVideoTrackId', instance.customVideoTrackId);
   writeNotNull('isAudioFilterable', instance.isAudioFilterable);
+  writeNotNull('autoConnectRdt', instance.autoConnectRdt);
   return val;
 }
 

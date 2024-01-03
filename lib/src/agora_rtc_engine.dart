@@ -1304,7 +1304,6 @@ class ChannelMediaOptions {
       this.publishMediaPlayerAudioTrack,
       this.publishMediaPlayerVideoTrack,
       this.publishTranscodedVideoTrack,
-      this.publishMixedAudioTrack,
       this.autoSubscribeAudio,
       this.autoSubscribeVideo,
       this.enableAudioRecordingOrPlayout,
@@ -1320,7 +1319,8 @@ class ChannelMediaOptions {
       this.publishRhythmPlayerTrack,
       this.isInteractiveAudience,
       this.customVideoTrackId,
-      this.isAudioFilterable});
+      this.isAudioFilterable,
+      this.autoConnectRdt});
 
   /// Whether to publish the video captured by the camera: true : Publish the video captured by the camera. false : Do not publish the video captured by the camera.
   @JsonKey(name: 'publishCameraTrack')
@@ -1394,10 +1394,6 @@ class ChannelMediaOptions {
   @JsonKey(name: 'publishTranscodedVideoTrack')
   final bool? publishTranscodedVideoTrack;
 
-  /// @nodoc
-  @JsonKey(name: 'publishMixedAudioTrack')
-  final bool? publishMixedAudioTrack;
-
   /// Whether to automatically subscribe to all remote audio streams when the user joins a channel: true : Subscribe to all remote audio streams. false : Do not automatically subscribe to any remote audio streams.
   @JsonKey(name: 'autoSubscribeAudio')
   final bool? autoSubscribeAudio;
@@ -1465,6 +1461,10 @@ class ChannelMediaOptions {
   /// Whether the audio stream being published is filtered according to the volume algorithm: true : The audio stream is filtered. If the audio stream filter is not enabled, this setting does not takes effect. false : The audio stream is not filtered. If you need to enable this function, contact.
   @JsonKey(name: 'isAudioFilterable')
   final bool? isAudioFilterable;
+
+  /// @nodoc
+  @JsonKey(name: 'autoConnectRdt')
+  final bool? autoConnectRdt;
 
   /// @nodoc
   factory ChannelMediaOptions.fromJson(Map<String, dynamic> json) =>
@@ -1624,6 +1624,8 @@ class RtcEngineEventHandler {
     this.onConnectionBanned,
     this.onStreamMessage,
     this.onStreamMessageError,
+    this.onRdtMessage,
+    this.onRdtStateChanged,
     this.onRequestToken,
     this.onTokenPrivilegeWillExpire,
     this.onLicenseValidationFailure,
@@ -2145,6 +2147,14 @@ class RtcEngineEventHandler {
   /// * [cached] Number of incoming cached messages when the data stream is interrupted.
   final void Function(RtcConnection connection, int remoteUid, int streamId,
       ErrorCodeType code, int missed, int cached)? onStreamMessageError;
+
+  /// @nodoc
+  final void Function(RtcConnection connection, int userId, RdtStreamType type,
+      Uint8List data, int length)? onRdtMessage;
+
+  /// @nodoc
+  final void Function(RtcConnection connection, int userId, RdtState state)?
+      onRdtStateChanged;
 
   /// Occurs when the token expires.
   ///
@@ -5917,6 +5927,13 @@ abstract class RtcEngine {
   ///  < 0: Failure.
   Future<void> sendStreamMessage(
       {required int streamId, required Uint8List data, required int length});
+
+  /// @nodoc
+  Future<void> sendRdtMessage(
+      {required int uid,
+      required RdtStreamType type,
+      required Uint8List data,
+      required int length});
 
   /// Adds a watermark image to the local video.
   ///

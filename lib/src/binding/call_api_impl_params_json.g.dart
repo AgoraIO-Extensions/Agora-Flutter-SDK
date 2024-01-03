@@ -368,18 +368,6 @@ Map<String, dynamic> _$RtcEngineExGetUserInfoByUidExJsonToJson(
       'userInfo': instance.userInfo.toJson(),
     };
 
-RtcEngineExGetCallIdExJson _$RtcEngineExGetCallIdExJsonFromJson(
-        Map<String, dynamic> json) =>
-    RtcEngineExGetCallIdExJson(
-      json['callId'] as String,
-    );
-
-Map<String, dynamic> _$RtcEngineExGetCallIdExJsonToJson(
-        RtcEngineExGetCallIdExJson instance) =>
-    <String, dynamic>{
-      'callId': instance.callId,
-    };
-
 AudioDeviceManagerGetPlaybackDeviceJson
     _$AudioDeviceManagerGetPlaybackDeviceJsonFromJson(
             Map<String, dynamic> json) =>

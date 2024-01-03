@@ -2183,6 +2183,10 @@ const _$ErrorCodeTypeEnumMap = {
   ErrorCodeType.errCertRequest: 168,
   ErrorCodeType.errPcmsendFormat: 200,
   ErrorCodeType.errPcmsendBufferoverflow: 201,
+  ErrorCodeType.errRdtUserNotExist: 250,
+  ErrorCodeType.errRdtUserNotReady: 251,
+  ErrorCodeType.errRdtDataBlocked: 252,
+  ErrorCodeType.errRdtCmdExceedLimit: 253,
   ErrorCodeType.errLoginAlreadyLogin: 428,
   ErrorCodeType.errLoadMediaEngine: 1001,
   ErrorCodeType.errAdmGeneralError: 1005,
@@ -2454,8 +2458,6 @@ const _$RemoteAudioStateReasonEnumMap = {
   RemoteAudioStateReason.remoteAudioReasonRemoteMuted: 5,
   RemoteAudioStateReason.remoteAudioReasonRemoteUnmuted: 6,
   RemoteAudioStateReason.remoteAudioReasonRemoteOffline: 7,
-  RemoteAudioStateReason.remoteAudioReasonRemoteNoPacketReceive: 8,
-  RemoteAudioStateReason.remoteAudioReasonRemoteLocalPlayFailed: 9,
 };
 
 const _$RemoteVideoStateEnumMap = {
@@ -2773,7 +2775,6 @@ const _$EarMonitoringFilterTypeEnumMap = {
   EarMonitoringFilterType.earMonitoringFilterNone: 1,
   EarMonitoringFilterType.earMonitoringFilterBuiltInAudioFilters: 2,
   EarMonitoringFilterType.earMonitoringFilterNoiseSuppression: 4,
-  EarMonitoringFilterType.earMonitoringFilterReusePostProcessingFilter: 32768,
 };
 
 const _$ThreadPriorityTypeEnumMap = {
@@ -2793,4 +2794,17 @@ const _$MediaTraceEventEnumMap = {
 const _$ConfigFetchTypeEnumMap = {
   ConfigFetchType.configFetchTypeInitialize: 1,
   ConfigFetchType.configFetchTypeJoinChannel: 2,
+};
+
+const _$RdtStreamTypeEnumMap = {
+  RdtStreamType.rdtStreamCmd: 0,
+  RdtStreamType.rdtStreamData: 1,
+};
+
+const _$RdtStateEnumMap = {
+  RdtState.rdtStateClosed: 0,
+  RdtState.rdtStateOpened: 1,
+  RdtState.rdtStateBlocked: 2,
+  RdtState.rdtStatePending: 3,
+  RdtState.rdtStateBroken: 4,
 };
