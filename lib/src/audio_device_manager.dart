@@ -69,10 +69,19 @@ abstract class AudioDeviceManager {
   /// An AudioDeviceInfo object, which contains the ID and device name of the audio devices.
   Future<AudioDeviceInfo> getPlaybackDeviceInfo();
 
-  /// @nodoc
+  /// Sets the volume of the audio playback device.
+  ///
+  /// * [volume] The volume of the audio playback device. The value ranges between 0 (lowest volume) and 255 (highest volume).
+  ///
+  /// Returns
+  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown; and you need to catch the exception and handle it accordingly.
+  ///  < 0: Failure.
   Future<void> setPlaybackDeviceVolume(int volume);
 
-  /// @nodoc
+  /// Retrieves the volume of the audio playback device.
+  ///
+  /// Returns
+  /// The volume of the audio playback device. The value range is [0,255].
   Future<int> getPlaybackDeviceVolume();
 
   /// Sets the audio capture device.
@@ -113,7 +122,10 @@ abstract class AudioDeviceManager {
   ///  < 0: Failure.
   Future<void> setRecordingDeviceVolume(int volume);
 
-  /// @nodoc
+  /// Retrieves the volume of the audio recording device.
+  ///
+  /// Returns
+  /// The volume of the audio recording device. The value range is [0,255].
   Future<int> getRecordingDeviceVolume();
 
   /// Sets the loopback device.
