@@ -85,70 +85,70 @@ extension MediaPlayerStateExt on MediaPlayerState {
   }
 }
 
-/// Error codes of the media player.
+/// @nodoc
 @JsonEnum(alwaysCreate: true)
 enum MediaPlayerError {
-  /// 0: No error.
+  /// @nodoc
   @JsonValue(0)
   playerErrorNone,
 
-  /// -1: Invalid arguments.
+  /// @nodoc
   @JsonValue(-1)
   playerErrorInvalidArguments,
 
-  /// -2: Internal error.
+  /// @nodoc
   @JsonValue(-2)
   playerErrorInternal,
 
-  /// -3: No resource.
+  /// @nodoc
   @JsonValue(-3)
   playerErrorNoResource,
 
-  /// -4: Invalid media resource.
+  /// @nodoc
   @JsonValue(-4)
   playerErrorInvalidMediaSource,
 
-  /// -5: The media stream type is unknown.
+  /// @nodoc
   @JsonValue(-5)
   playerErrorUnknownStreamType,
 
-  /// -6: The object is not initialized.
+  /// @nodoc
   @JsonValue(-6)
   playerErrorObjNotInitialized,
 
-  /// -7: The codec is not supported.
+  /// @nodoc
   @JsonValue(-7)
   playerErrorCodecNotSupported,
 
-  /// -8: Invalid renderer.
+  /// @nodoc
   @JsonValue(-8)
   playerErrorVideoRenderFailed,
 
-  /// -9: An error with the internal state of the player occurs.
+  /// @nodoc
   @JsonValue(-9)
   playerErrorInvalidState,
 
-  /// -10: The URL of the media resource cannot be found.
+  /// @nodoc
   @JsonValue(-10)
   playerErrorUrlNotFound,
 
-  /// -11: Invalid connection between the player and the Agora Server.
+  /// @nodoc
   @JsonValue(-11)
   playerErrorInvalidConnectionState,
 
-  /// -12: The playback buffer is insufficient.
+  /// @nodoc
   @JsonValue(-12)
   playerErrorSrcBufferUnderflow,
 
-  /// -13: The playback is interrupted.
+  /// @nodoc
   @JsonValue(-13)
   playerErrorInterrupted,
 
-  /// -14: The SDK does not support the method being called.
+  /// @nodoc
   @JsonValue(-14)
   playerErrorNotSupported,
 
-  /// -15: The authentication information of the media resource is expired.
+  /// @nodoc
   @JsonValue(-15)
   playerErrorTokenExpired,
 
@@ -156,7 +156,7 @@ enum MediaPlayerError {
   @JsonValue(-16)
   playerErrorIpExpired,
 
-  /// -17: An unknown error.
+  /// @nodoc
   @JsonValue(-17)
   playerErrorUnknown,
 }
