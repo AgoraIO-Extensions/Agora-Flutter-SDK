@@ -945,6 +945,49 @@ class RtcEngineEventHandlerWrapper implements EventLoopEventHandler {
             connection, remoteUid, streamId, code, missed, cached);
         return true;
 
+      case 'onRdtMessageEx':
+        if (rtcEngineEventHandler.onRdtMessage == null) {
+          return true;
+        }
+        final jsonMap = jsonDecode(eventData);
+        RtcEngineEventHandlerOnRdtMessageJson paramJson =
+            RtcEngineEventHandlerOnRdtMessageJson.fromJson(jsonMap);
+        paramJson = paramJson.fillBuffers(buffers);
+        RtcConnection? connection = paramJson.connection;
+        int? userId = paramJson.userId;
+        RdtStreamType? type = paramJson.type;
+        Uint8List? data = paramJson.data;
+        int? length = paramJson.length;
+        if (connection == null ||
+            userId == null ||
+            type == null ||
+            data == null ||
+            length == null) {
+          return true;
+        }
+        connection = connection.fillBuffers(buffers);
+        rtcEngineEventHandler.onRdtMessage!(
+            connection, userId, type, data, length);
+        return true;
+
+      case 'onRdtStateChangedEx':
+        if (rtcEngineEventHandler.onRdtStateChanged == null) {
+          return true;
+        }
+        final jsonMap = jsonDecode(eventData);
+        RtcEngineEventHandlerOnRdtStateChangedJson paramJson =
+            RtcEngineEventHandlerOnRdtStateChangedJson.fromJson(jsonMap);
+        paramJson = paramJson.fillBuffers(buffers);
+        RtcConnection? connection = paramJson.connection;
+        int? userId = paramJson.userId;
+        RdtState? state = paramJson.state;
+        if (connection == null || userId == null || state == null) {
+          return true;
+        }
+        connection = connection.fillBuffers(buffers);
+        rtcEngineEventHandler.onRdtStateChanged!(connection, userId, state);
+        return true;
+
       case 'onRequestTokenEx':
         if (rtcEngineEventHandler.onRequestToken == null) {
           return true;

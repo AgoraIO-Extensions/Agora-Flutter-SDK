@@ -3856,6 +3856,162 @@ void generatedTestCases(IrisTester irisTester) {
   );
 
   testWidgets(
+    'onRdtMessage',
+    (WidgetTester tester) async {
+      RtcEngine rtcEngine = createAgoraRtcEngine();
+      await rtcEngine.initialize(RtcEngineContext(
+        appId: 'app_id',
+        areaCode: AreaCode.areaCodeGlob.value(),
+      ));
+
+      final onRdtMessageCompleter = Completer<bool>();
+      final theRtcEngineEventHandler = RtcEngineEventHandler(
+        onRdtMessage: (RtcConnection connection, int userId, RdtStreamType type,
+            Uint8List data, int length) {
+          onRdtMessageCompleter.complete(true);
+        },
+      );
+
+      rtcEngine.registerEventHandler(
+        theRtcEngineEventHandler,
+      );
+
+// Delay 500 milliseconds to ensure the registerEventHandler call completed.
+      await Future.delayed(const Duration(milliseconds: 500));
+
+      {
+        const String connectionChannelId = "hello";
+        const int connectionLocalUid = 10;
+        const RtcConnection connection = RtcConnection(
+          channelId: connectionChannelId,
+          localUid: connectionLocalUid,
+        );
+        const int userId = 10;
+        const RdtStreamType type = RdtStreamType.rdtStreamCmd;
+        Uint8List data = Uint8List.fromList([1, 2, 3, 4, 5]);
+        const int length = 10;
+
+        final eventJson = {
+          'connection': connection.toJson(),
+          'userId': userId,
+          'type': type.value(),
+          'data': data.toList(),
+          'length': length,
+        };
+
+        if (!kIsWeb) {
+          irisTester.fireEvent('RtcEngineEventHandler_onRdtMessage',
+              params: eventJson);
+          irisTester.fireEvent('RtcEngineEventHandlerEx_onRdtMessage',
+              params: eventJson);
+        } else {
+          final ret = irisTester.fireEvent(
+              'RtcEngineEventHandler_onRdtMessageEx',
+              params: eventJson);
+// Delay 200 milliseconds to ensure the callback is called.
+          await Future.delayed(const Duration(milliseconds: 200));
+// TODO(littlegnal): Most of callbacks on web are not implemented, we're temporarily skip these callbacks at this time.
+          if (ret) {
+            if (!onRdtMessageCompleter.isCompleted) {
+              onRdtMessageCompleter.complete(true);
+            }
+          }
+        }
+      }
+
+      final eventCalled = await onRdtMessageCompleter.future;
+      expect(eventCalled, isTrue);
+
+      {
+        rtcEngine.unregisterEventHandler(
+          theRtcEngineEventHandler,
+        );
+      }
+// Delay 500 milliseconds to ensure the unregisterEventHandler call completed.
+      await Future.delayed(const Duration(milliseconds: 500));
+
+      await rtcEngine.release();
+    },
+    timeout: const Timeout(Duration(minutes: 2)),
+  );
+
+  testWidgets(
+    'onRdtStateChanged',
+    (WidgetTester tester) async {
+      RtcEngine rtcEngine = createAgoraRtcEngine();
+      await rtcEngine.initialize(RtcEngineContext(
+        appId: 'app_id',
+        areaCode: AreaCode.areaCodeGlob.value(),
+      ));
+
+      final onRdtStateChangedCompleter = Completer<bool>();
+      final theRtcEngineEventHandler = RtcEngineEventHandler(
+        onRdtStateChanged:
+            (RtcConnection connection, int userId, RdtState state) {
+          onRdtStateChangedCompleter.complete(true);
+        },
+      );
+
+      rtcEngine.registerEventHandler(
+        theRtcEngineEventHandler,
+      );
+
+// Delay 500 milliseconds to ensure the registerEventHandler call completed.
+      await Future.delayed(const Duration(milliseconds: 500));
+
+      {
+        const String connectionChannelId = "hello";
+        const int connectionLocalUid = 10;
+        const RtcConnection connection = RtcConnection(
+          channelId: connectionChannelId,
+          localUid: connectionLocalUid,
+        );
+        const int userId = 10;
+        const RdtState state = RdtState.rdtStateClosed;
+
+        final eventJson = {
+          'connection': connection.toJson(),
+          'userId': userId,
+          'state': state.value(),
+        };
+
+        if (!kIsWeb) {
+          irisTester.fireEvent('RtcEngineEventHandler_onRdtStateChanged',
+              params: eventJson);
+          irisTester.fireEvent('RtcEngineEventHandlerEx_onRdtStateChanged',
+              params: eventJson);
+        } else {
+          final ret = irisTester.fireEvent(
+              'RtcEngineEventHandler_onRdtStateChangedEx',
+              params: eventJson);
+// Delay 200 milliseconds to ensure the callback is called.
+          await Future.delayed(const Duration(milliseconds: 200));
+// TODO(littlegnal): Most of callbacks on web are not implemented, we're temporarily skip these callbacks at this time.
+          if (ret) {
+            if (!onRdtStateChangedCompleter.isCompleted) {
+              onRdtStateChangedCompleter.complete(true);
+            }
+          }
+        }
+      }
+
+      final eventCalled = await onRdtStateChangedCompleter.future;
+      expect(eventCalled, isTrue);
+
+      {
+        rtcEngine.unregisterEventHandler(
+          theRtcEngineEventHandler,
+        );
+      }
+// Delay 500 milliseconds to ensure the unregisterEventHandler call completed.
+      await Future.delayed(const Duration(milliseconds: 500));
+
+      await rtcEngine.release();
+    },
+    timeout: const Timeout(Duration(minutes: 2)),
+  );
+
+  testWidgets(
     'onRequestToken',
     (WidgetTester tester) async {
       RtcEngine rtcEngine = createAgoraRtcEngine();

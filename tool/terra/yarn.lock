@@ -26,7 +26,7 @@ __metadata:
 
 "@agoraio-extensions/terra-legacy-cxx-parser@git@github.com:AgoraIO-Extensions/terra-legacy-cxx-parser.git#head=main":
   version: 0.1.5
-  resolution: "@agoraio-extensions/terra-legacy-cxx-parser@git@github.com:AgoraIO-Extensions/terra-legacy-cxx-parser.git#commit=66036ca9e26651fb4219ab7e3cb46c3b695c87d9"
+  resolution: "@agoraio-extensions/terra-legacy-cxx-parser@git@github.com:AgoraIO-Extensions/terra-legacy-cxx-parser.git#commit=7ba7e37a584ffcfc65bb53ab2461dae1027ab3e3"
   dependencies:
     "@agoraio-extensions/cxx-parser": "git@github.com:AgoraIO-Extensions/terra.git#head=main&workspace=cxx-parser"
     "@agoraio-extensions/terra-core": "git@github.com:AgoraIO-Extensions/terra.git#head=main&workspace=terra-core"
@@ -38,7 +38,7 @@ __metadata:
     ts-node: "npm:^10.9.1"
     typescript: "npm:^5.1.6"
     yaml: "npm:^2.1.3"
-  checksum: a676e29f6958a30b4c6cd92c4ce96896f134c906091a9db4737919c3b8306543ed21816d0cf5485caccf6490395041e619ec1c76396af0e9b23a66fc52e91777
+  checksum: 919ea30e2cddaac38d7e35b87dbdeecbbba976e7a202493096924af14841744a63c5bd153111af2ab7728f459cd6faeae85e7ac29688663f9aba1890bdbd23c3
   languageName: node
   linkType: hard
 
@@ -59,12 +59,12 @@ __metadata:
 
 "@agoraio-extensions/terra_shared_configs@git@github.com:AgoraIO-Extensions/terra_shared_configs.git#head=main":
   version: 1.0.2
-  resolution: "@agoraio-extensions/terra_shared_configs@git@github.com:AgoraIO-Extensions/terra_shared_configs.git#commit=f757788eb5c37970468dcb02bbdd1ecbaa00ae64"
+  resolution: "@agoraio-extensions/terra_shared_configs@git@github.com:AgoraIO-Extensions/terra_shared_configs.git#commit=962274871f9c97dd7d691f5b33770bee69b6e606"
   dependencies:
     "@agoraio-extensions/cxx-parser": "git@github.com:AgoraIO-Extensions/terra.git#head=main&workspace=cxx-parser"
     "@agoraio-extensions/terra-core": "git@github.com:AgoraIO-Extensions/terra.git#head=main&workspace=terra-core"
     mustache: "npm:^4.2.0"
-  checksum: 03d122945f9d4b480915e105100ff9e8219117cab43c9f9179c5c773785b5478d51a1f893c4505c11502aac84610418848e995c476d381967af2cc6d200a2601
+  checksum: 464f1f5a4aacda001aa5c855d05407ce5710e5663885a12ce62161836bb6215793a71caae3afdf847ba3addd3e3e6e24b88534bc349c2d710ed6d8eeffd782e6
   languageName: node
   linkType: hard
 

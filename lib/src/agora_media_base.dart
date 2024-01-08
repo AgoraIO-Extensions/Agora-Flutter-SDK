@@ -1180,8 +1180,7 @@ class AudioFrame {
       this.renderTimeMs,
       this.avsyncType,
       this.presentationMs,
-      this.audioTrackNumber,
-      this.rtpTimestamp});
+      this.audioTrackNumber});
 
   /// The type of the audio frame. See AudioFrameType.
   @JsonKey(name: 'type')
@@ -1224,10 +1223,6 @@ class AudioFrame {
   /// @nodoc
   @JsonKey(name: 'audioTrackNumber')
   final int? audioTrackNumber;
-
-  /// @nodoc
-  @JsonKey(name: 'rtpTimestamp')
-  final int? rtpTimestamp;
 
   /// @nodoc
   factory AudioFrame.fromJson(Map<String, dynamic> json) =>
