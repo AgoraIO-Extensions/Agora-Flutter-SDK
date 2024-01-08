@@ -126,7 +126,7 @@ enum AudioRoute {
   @JsonValue(4)
   routeLoudspeaker,
 
-  /// 5: The audio route is a bluetooth headset.
+  /// @nodoc
   @JsonValue(5)
   routeHeadsetbluetooth,
 
@@ -1519,7 +1519,7 @@ extension MediaRecorderStreamTypeExt on MediaRecorderStreamType {
 /// The current recording state.
 @JsonEnum(alwaysCreate: true)
 enum RecorderState {
-  /// -1: An error occurs during the recording. See RecorderErrorCode for the reason.
+  /// -1: An error occurs during the recording. See for the reason.
   @JsonValue(-1)
   recorderStateError,
 
@@ -1545,26 +1545,26 @@ extension RecorderStateExt on RecorderState {
   }
 }
 
-/// The reason for the state change.
+/// @nodoc
 @JsonEnum(alwaysCreate: true)
 enum RecorderErrorCode {
-  /// 0: No error.
+  /// @nodoc
   @JsonValue(0)
   recorderErrorNone,
 
-  /// 1: The SDK fails to write the recorded data to a file.
+  /// @nodoc
   @JsonValue(1)
   recorderErrorWriteFailed,
 
-  /// 2: The SDK does not detect any audio and video streams, or audio and video streams are interrupted for more than five seconds during recording.
+  /// @nodoc
   @JsonValue(2)
   recorderErrorNoStream,
 
-  /// 3: The recording duration exceeds the upper limit.
+  /// @nodoc
   @JsonValue(3)
   recorderErrorOverMaxDuration,
 
-  /// 4: The recording configuration changes.
+  /// @nodoc
   @JsonValue(4)
   recorderErrorConfigChanged,
 }
