@@ -3,83 +3,83 @@ part 'agora_music_content_center.g.dart';
 
 /// @nodoc
 @JsonEnum(alwaysCreate: true)
-enum PreloadStatusCode {
+enum PreloadState {
   /// @nodoc
   @JsonValue(0)
-  kPreloadStatusCompleted,
+  kPreloadStateCompleted,
 
   /// @nodoc
   @JsonValue(1)
-  kPreloadStatusFailed,
+  kPreloadStateFailed,
 
   /// @nodoc
   @JsonValue(2)
-  kPreloadStatusPreloading,
+  kPreloadStatePreloading,
 
   /// @nodoc
   @JsonValue(3)
-  kPreloadStatusRemoved,
+  kPreloadStateRemoved,
 }
 
 /// @nodoc
-extension PreloadStatusCodeExt on PreloadStatusCode {
+extension PreloadStateExt on PreloadState {
   /// @nodoc
-  static PreloadStatusCode fromValue(int value) {
-    return $enumDecode(_$PreloadStatusCodeEnumMap, value);
+  static PreloadState fromValue(int value) {
+    return $enumDecode(_$PreloadStateEnumMap, value);
   }
 
   /// @nodoc
   int value() {
-    return _$PreloadStatusCodeEnumMap[this]!;
+    return _$PreloadStateEnumMap[this]!;
   }
 }
 
 /// @nodoc
 @JsonEnum(alwaysCreate: true)
-enum MusicContentCenterStatusCode {
+enum MusicContentCenterStateReason {
   /// @nodoc
   @JsonValue(0)
-  kMusicContentCenterStatusOk,
+  kMusicContentCenterReasonOk,
 
   /// @nodoc
   @JsonValue(1)
-  kMusicContentCenterStatusError,
+  kMusicContentCenterReasonError,
 
   /// @nodoc
   @JsonValue(2)
-  kMusicContentCenterStatusGateway,
+  kMusicContentCenterReasonGateway,
 
   /// @nodoc
   @JsonValue(3)
-  kMusicContentCenterStatusPermissionAndResource,
+  kMusicContentCenterReasonPermissionAndResource,
 
   /// @nodoc
   @JsonValue(4)
-  kMusicContentCenterStatusInternalDataParse,
+  kMusicContentCenterReasonInternalDataParse,
 
   /// @nodoc
   @JsonValue(5)
-  kMusicContentCenterStatusMusicLoading,
+  kMusicContentCenterReasonMusicLoading,
 
   /// @nodoc
   @JsonValue(6)
-  kMusicContentCenterStatusMusicDecryption,
+  kMusicContentCenterReasonMusicDecryption,
 
   /// @nodoc
   @JsonValue(7)
-  kMusicContentCenterStatusHttpInternalError,
+  kMusicContentCenterReasonHttpInternalError,
 }
 
 /// @nodoc
-extension MusicContentCenterStatusCodeExt on MusicContentCenterStatusCode {
+extension MusicContentCenterStateReasonExt on MusicContentCenterStateReason {
   /// @nodoc
-  static MusicContentCenterStatusCode fromValue(int value) {
-    return $enumDecode(_$MusicContentCenterStatusCodeEnumMap, value);
+  static MusicContentCenterStateReason fromValue(int value) {
+    return $enumDecode(_$MusicContentCenterStateReasonEnumMap, value);
   }
 
   /// @nodoc
   int value() {
-    return _$MusicContentCenterStatusCodeEnumMap[this]!;
+    return _$MusicContentCenterStateReasonEnumMap[this]!;
   }
 }
 
@@ -319,19 +319,19 @@ class MusicContentCenterEventHandler {
 
   /// @nodoc
   final void Function(String requestId, List<MusicChartInfo> result,
-      MusicContentCenterStatusCode status)? onMusicChartsResult;
+      MusicContentCenterStateReason reason)? onMusicChartsResult;
 
   /// @nodoc
   final void Function(String requestId, MusicCollection result,
-      MusicContentCenterStatusCode status)? onMusicCollectionResult;
+      MusicContentCenterStateReason reason)? onMusicCollectionResult;
 
   /// @nodoc
   final void Function(String requestId, int songCode, String lyricUrl,
-      MusicContentCenterStatusCode status)? onLyricResult;
+      MusicContentCenterStateReason reason)? onLyricResult;
 
   /// @nodoc
   final void Function(String requestId, int songCode, String simpleInfo,
-      MusicContentCenterStatusCode status)? onSongSimpleInfoResult;
+      MusicContentCenterStateReason reason)? onSongSimpleInfoResult;
 
   /// @nodoc
   final void Function(
@@ -339,8 +339,8 @@ class MusicContentCenterEventHandler {
       int songCode,
       int percent,
       String lyricUrl,
-      PreloadStatusCode preloadStatus,
-      MusicContentCenterStatusCode mccStatus)? onPreLoadEvent;
+      PreloadState state,
+      MusicContentCenterStateReason reason)? onPreLoadEvent;
 }
 
 /// @nodoc

@@ -24,7 +24,8 @@ class MusicChartCollectionImpl implements MusicChartCollection {
 
   @override
   Future<int> getCount() async {
-    final apiType = '';
+    final apiType =
+        '${isOverrideClassName ? className : 'MusicChartCollection'}_getCount';
     final param = createParams({});
     final callApiResult = await irisMethodChannel.invokeMethod(
         IrisMethodCall(apiType, jsonEncode(param), buffers: null));
@@ -38,7 +39,8 @@ class MusicChartCollectionImpl implements MusicChartCollection {
 
   @override
   Future<MusicChartInfo> get(int index) async {
-    final apiType = '';
+    final apiType =
+        '${isOverrideClassName ? className : 'MusicChartCollection'}_get';
     final param = createParams({'index': index});
     final callApiResult = await irisMethodChannel.invokeMethod(
         IrisMethodCall(apiType, jsonEncode(param), buffers: null));
@@ -71,7 +73,7 @@ class MusicCollectionImpl implements MusicCollection {
   @override
   int getCount() {
 // Implementation template
-// final apiType = '';
+// final apiType = '${isOverrideClassName ? className : 'MusicCollection'}_getCount';
 // final param = createParams({// // });
 // final callApiResult =  irisMethodChannel.invokeMethod(IrisMethodCall(apiType, jsonEncode(param), buffers:null));
 // if (callApiResult.irisReturnCode < 0) {
@@ -86,7 +88,7 @@ class MusicCollectionImpl implements MusicCollection {
   @override
   int getTotal() {
 // Implementation template
-// final apiType = '';
+// final apiType = '${isOverrideClassName ? className : 'MusicCollection'}_getTotal';
 // final param = createParams({// // });
 // final callApiResult =  irisMethodChannel.invokeMethod(IrisMethodCall(apiType, jsonEncode(param), buffers:null));
 // if (callApiResult.irisReturnCode < 0) {
@@ -101,7 +103,7 @@ class MusicCollectionImpl implements MusicCollection {
   @override
   int getPage() {
 // Implementation template
-// final apiType = '';
+// final apiType = '${isOverrideClassName ? className : 'MusicCollection'}_getPage';
 // final param = createParams({// // });
 // final callApiResult =  irisMethodChannel.invokeMethod(IrisMethodCall(apiType, jsonEncode(param), buffers:null));
 // if (callApiResult.irisReturnCode < 0) {
@@ -116,7 +118,7 @@ class MusicCollectionImpl implements MusicCollection {
   @override
   int getPageSize() {
 // Implementation template
-// final apiType = '';
+// final apiType = '${isOverrideClassName ? className : 'MusicCollection'}_getPageSize';
 // final param = createParams({// // });
 // final callApiResult =  irisMethodChannel.invokeMethod(IrisMethodCall(apiType, jsonEncode(param), buffers:null));
 // if (callApiResult.irisReturnCode < 0) {
@@ -131,7 +133,7 @@ class MusicCollectionImpl implements MusicCollection {
   @override
   Music getMusic(int index) {
 // Implementation template
-// final apiType = '';
+// final apiType = '${isOverrideClassName ? className : 'MusicCollection'}_getMusic';
 // final param = createParams({// 'index':index// });
 // final callApiResult =  irisMethodChannel.invokeMethod(IrisMethodCall(apiType, jsonEncode(param), buffers:null));
 // if (callApiResult.irisReturnCode < 0) {

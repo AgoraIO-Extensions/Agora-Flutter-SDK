@@ -126,7 +126,7 @@ enum AudioRoute {
   @JsonValue(4)
   routeLoudspeaker,
 
-  /// 5: The audio route is a bluetooth headset.
+  /// @nodoc
   @JsonValue(5)
   routeHeadsetbluetooth,
 
@@ -1565,7 +1565,7 @@ extension MediaRecorderStreamTypeExt on MediaRecorderStreamType {
 /// The current recording state.
 @JsonEnum(alwaysCreate: true)
 enum RecorderState {
-  /// -1: An error occurs during the recording. See RecorderErrorCode for the reason.
+  /// -1: An error occurs during the recording. See for the reason.
   @JsonValue(-1)
   recorderStateError,
 

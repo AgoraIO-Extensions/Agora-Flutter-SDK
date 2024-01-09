@@ -620,10 +620,6 @@ enum InterfaceIdType {
   agoraIidMediaEngineRegulator,
 
   /// @nodoc
-  @JsonValue(10)
-  agoraIidCloudSpatialAudio,
-
-  /// @nodoc
   @JsonValue(11)
   agoraIidLocalSpatialAudio,
 
@@ -6632,7 +6628,8 @@ class LocalAccessPointConfiguration {
       this.domainListSize,
       this.verifyDomainName,
       this.mode,
-      this.advancedConfig});
+      this.advancedConfig,
+      this.disableAut});
 
   /// @nodoc
   @JsonKey(name: 'ipList')
@@ -6661,6 +6658,10 @@ class LocalAccessPointConfiguration {
   /// @nodoc
   @JsonKey(name: 'advancedConfig')
   final AdvancedConfigInfo? advancedConfig;
+
+  /// @nodoc
+  @JsonKey(name: 'disableAut')
+  final bool? disableAut;
 
   /// @nodoc
   factory LocalAccessPointConfiguration.fromJson(Map<String, dynamic> json) =>

@@ -24,7 +24,7 @@ class MediaPlayerSourceObserver {
   /// When the state of the media player changes, the SDK triggers this callback to report the current playback state.
   ///
   /// * [state] The playback state. See MediaPlayerState.
-  /// * [ec] The error code. See MediaPlayerError.
+  /// * [ec] The error code.
   final void Function(MediaPlayerState state, MediaPlayerReason reason)?
       onPlayerSourceStateChanged;
 

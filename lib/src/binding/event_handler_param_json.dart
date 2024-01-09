@@ -1109,14 +1109,14 @@ extension MediaPlayerSourceObserverOnAudioVolumeIndicationJsonBufferExt
 @JsonSerializable(explicitToJson: true)
 class MusicContentCenterEventHandlerOnMusicChartsResultJson {
   const MusicContentCenterEventHandlerOnMusicChartsResultJson(
-      {this.requestId, this.result, this.status});
+      {this.requestId, this.result, this.reason});
 
   @JsonKey(name: 'requestId')
   final String? requestId;
   @JsonKey(name: 'result')
   final List<MusicChartInfo>? result;
-  @JsonKey(name: 'status')
-  final MusicContentCenterStatusCode? status;
+  @JsonKey(name: 'reason')
+  final MusicContentCenterStateReason? reason;
   factory MusicContentCenterEventHandlerOnMusicChartsResultJson.fromJson(
           Map<String, dynamic> json) =>
       _$MusicContentCenterEventHandlerOnMusicChartsResultJsonFromJson(json);
@@ -1141,14 +1141,14 @@ extension MusicContentCenterEventHandlerOnMusicChartsResultJsonBufferExt
 @JsonSerializable(explicitToJson: true)
 class MusicContentCenterEventHandlerOnMusicCollectionResultJson {
   const MusicContentCenterEventHandlerOnMusicCollectionResultJson(
-      {this.requestId, this.result, this.status});
+      {this.requestId, this.result, this.reason});
 
   @JsonKey(name: 'requestId')
   final String? requestId;
   @JsonKey(name: 'result', ignore: true)
   final MusicCollection? result;
-  @JsonKey(name: 'status')
-  final MusicContentCenterStatusCode? status;
+  @JsonKey(name: 'reason')
+  final MusicContentCenterStateReason? reason;
   factory MusicContentCenterEventHandlerOnMusicCollectionResultJson.fromJson(
           Map<String, dynamic> json) =>
       _$MusicContentCenterEventHandlerOnMusicCollectionResultJsonFromJson(json);
@@ -1173,7 +1173,7 @@ extension MusicContentCenterEventHandlerOnMusicCollectionResultJsonBufferExt
 @JsonSerializable(explicitToJson: true)
 class MusicContentCenterEventHandlerOnLyricResultJson {
   const MusicContentCenterEventHandlerOnLyricResultJson(
-      {this.requestId, this.songCode, this.lyricUrl, this.status});
+      {this.requestId, this.songCode, this.lyricUrl, this.reason});
 
   @JsonKey(name: 'requestId')
   final String? requestId;
@@ -1181,8 +1181,8 @@ class MusicContentCenterEventHandlerOnLyricResultJson {
   final int? songCode;
   @JsonKey(name: 'lyricUrl')
   final String? lyricUrl;
-  @JsonKey(name: 'status')
-  final MusicContentCenterStatusCode? status;
+  @JsonKey(name: 'reason')
+  final MusicContentCenterStateReason? reason;
   factory MusicContentCenterEventHandlerOnLyricResultJson.fromJson(
           Map<String, dynamic> json) =>
       _$MusicContentCenterEventHandlerOnLyricResultJsonFromJson(json);
@@ -1207,7 +1207,7 @@ extension MusicContentCenterEventHandlerOnLyricResultJsonBufferExt
 @JsonSerializable(explicitToJson: true)
 class MusicContentCenterEventHandlerOnSongSimpleInfoResultJson {
   const MusicContentCenterEventHandlerOnSongSimpleInfoResultJson(
-      {this.requestId, this.songCode, this.simpleInfo, this.status});
+      {this.requestId, this.songCode, this.simpleInfo, this.reason});
 
   @JsonKey(name: 'requestId')
   final String? requestId;
@@ -1215,8 +1215,8 @@ class MusicContentCenterEventHandlerOnSongSimpleInfoResultJson {
   final int? songCode;
   @JsonKey(name: 'simpleInfo')
   final String? simpleInfo;
-  @JsonKey(name: 'status')
-  final MusicContentCenterStatusCode? status;
+  @JsonKey(name: 'reason')
+  final MusicContentCenterStateReason? reason;
   factory MusicContentCenterEventHandlerOnSongSimpleInfoResultJson.fromJson(
           Map<String, dynamic> json) =>
       _$MusicContentCenterEventHandlerOnSongSimpleInfoResultJsonFromJson(json);
@@ -1245,8 +1245,8 @@ class MusicContentCenterEventHandlerOnPreLoadEventJson {
       this.songCode,
       this.percent,
       this.lyricUrl,
-      this.preloadStatus,
-      this.mccStatus});
+      this.state,
+      this.reason});
 
   @JsonKey(name: 'requestId')
   final String? requestId;
@@ -1256,10 +1256,10 @@ class MusicContentCenterEventHandlerOnPreLoadEventJson {
   final int? percent;
   @JsonKey(name: 'lyricUrl')
   final String? lyricUrl;
-  @JsonKey(name: 'preloadStatus')
-  final PreloadStatusCode? preloadStatus;
-  @JsonKey(name: 'mccStatus')
-  final MusicContentCenterStatusCode? mccStatus;
+  @JsonKey(name: 'state')
+  final PreloadState? state;
+  @JsonKey(name: 'reason')
+  final MusicContentCenterStateReason? reason;
   factory MusicContentCenterEventHandlerOnPreLoadEventJson.fromJson(
           Map<String, dynamic> json) =>
       _$MusicContentCenterEventHandlerOnPreLoadEventJsonFromJson(json);
