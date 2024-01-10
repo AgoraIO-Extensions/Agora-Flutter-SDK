@@ -2643,50 +2643,50 @@ extension LocalAudioStreamStateExt on LocalAudioStreamState {
   }
 }
 
-/// Local audio state error codes.
+/// @nodoc
 @JsonEnum(alwaysCreate: true)
 enum LocalAudioStreamError {
-  /// 0: The local audio is normal.
+  /// @nodoc
   @JsonValue(0)
   localAudioStreamErrorOk,
 
-  /// 1: No specified reason for the local audio failure. Remind your users to try to rejoin the channel.
+  /// @nodoc
   @JsonValue(1)
   localAudioStreamErrorFailure,
 
-  /// 2: No permission to use the local audio capturing device. Remind your users to grant permission. Deprecated: This enumerator is deprecated. Please use recordAudio in the onPermissionError callback instead.
+  /// @nodoc
   @JsonValue(2)
   localAudioStreamErrorDeviceNoPermission,
 
-  /// 3: (Android and iOS only) The local audio capture device is already in use. Remind your users to check whether another application occupies the microphone. Local audio capture automatically resumes after the microphone is idle for about five seconds. You can also try to rejoin the channel after the microphone is idle.
+  /// @nodoc
   @JsonValue(3)
   localAudioStreamErrorDeviceBusy,
 
-  /// 4: The local audio capture fails.
+  /// @nodoc
   @JsonValue(4)
   localAudioStreamErrorRecordFailure,
 
-  /// 5: The local audio encoding fails.
+  /// @nodoc
   @JsonValue(5)
   localAudioStreamErrorEncodeFailure,
 
-  /// 6: (Windows only) The application cannot find the local audio capture device. Remind your users to check whether the microphone is connected to the device properly in the control plane of the device or if the microphone is working properly.
+  /// @nodoc
   @JsonValue(6)
   localAudioStreamErrorNoRecordingDevice,
 
-  /// 7: (Windows only) The application cannot find the local audio playback device. Remind your users to check whether the speaker is connected to the device properly in the control plane of the device or if the speaker is working properly.
+  /// @nodoc
   @JsonValue(7)
   localAudioStreamErrorNoPlayoutDevice,
 
-  /// 8: (Android and iOS only) The local audio capture is interrupted by a system call, Siri, or alarm clock. Remind your users to end the phone call, Siri, or alarm clock if the local audio capture is required.
+  /// @nodoc
   @JsonValue(8)
   localAudioStreamErrorInterrupted,
 
-  /// 9: (Windows only) The ID of the local audio-capture device is invalid. Check the audio capture device ID.
+  /// @nodoc
   @JsonValue(9)
   localAudioStreamErrorRecordInvalidId,
 
-  /// 10: (Windows only) The ID of the local audio-playback device is invalid. Check the audio playback device ID.
+  /// @nodoc
   @JsonValue(10)
   localAudioStreamErrorPlayoutInvalidId,
 }
@@ -2737,69 +2737,66 @@ extension LocalVideoStreamStateExt on LocalVideoStreamState {
   }
 }
 
-/// Local video state error codes.
+/// @nodoc
 @JsonEnum(alwaysCreate: true)
 enum LocalVideoStreamError {
-  /// 0: The local video is normal.
+  /// @nodoc
   @JsonValue(0)
   localVideoStreamErrorOk,
 
-  /// 1: No specified reason for the local video failure.
+  /// @nodoc
   @JsonValue(1)
   localVideoStreamErrorFailure,
 
-  /// 2: No permission to use the local video capturing device. Remind the user to grant permissions and rejoin the channel. Deprecated: This enumerator is deprecated. Please use camera in the onPermissionError callback instead.
+  /// @nodoc
   @JsonValue(2)
   localVideoStreamErrorDeviceNoPermission,
 
-  /// 3: The local video capturing device is in use. Remind the user to check whether another application occupies the camera.
+  /// @nodoc
   @JsonValue(3)
   localVideoStreamErrorDeviceBusy,
 
-  /// 4: The local video capture fails. Remind your user to check whether the video capture device is working properly, whether the camera is occupied by another application, or try to rejoin the channel.
+  /// @nodoc
   @JsonValue(4)
   localVideoStreamErrorCaptureFailure,
 
-  /// 5: The local video encoding fails.
+  /// @nodoc
   @JsonValue(5)
   localVideoStreamErrorEncodeFailure,
 
-  /// 6: (iOS only) The app is in the background. Remind the user that video capture cannot be performed normally when the app is in the background.
+  /// @nodoc
   @JsonValue(6)
   localVideoStreamErrorCaptureInbackground,
 
-  /// 7: (iOS only) The current application window is running in Slide Over, Split View, or Picture in Picture mode, and another app is occupying the camera. Remind the user that the application cannot capture video properly when the app is running in Slide Over, Split View, or Picture in Picture mode and another app is occupying the camera.
+  /// @nodoc
   @JsonValue(7)
   localVideoStreamErrorCaptureMultipleForegroundApps,
 
-  /// 8: Fails to find a local video capture device. Remind the user to check whether the camera is connected to the device properly or the camera is working properly, and then to rejoin the channel.
+  /// @nodoc
   @JsonValue(8)
   localVideoStreamErrorDeviceNotFound,
 
-  /// 9: (macOS only) The video capture device currently in use is disconnected (such as being unplugged).
+  /// @nodoc
   @JsonValue(9)
   localVideoStreamErrorDeviceDisconnected,
 
-  /// 10: (macOS and Windows only) The SDK cannot find the video device in the video device list. Check whether the ID of the video device is valid.
+  /// @nodoc
   @JsonValue(10)
   localVideoStreamErrorDeviceInvalidId,
 
-  /// 101: The current video capture device is unavailable due to excessive system pressure.
+  /// @nodoc
   @JsonValue(101)
   localVideoStreamErrorDeviceSystemPressure,
 
-  /// 11: (macOS only) The shared window is minimized when you call startScreenCaptureByWindowId to share a window. The SDK cannot share a minimized window. You can cancel the minimization of this window at the application layer, for example by maximizing this window.
+  /// @nodoc
   @JsonValue(11)
   localVideoStreamErrorScreenCaptureWindowMinimized,
 
-  /// 12: (macOS and Windows only) The error code indicates that a window shared by the window ID has been closed or a full-screen window shared by the window ID has exited full-screen mode. After exiting full-screen mode, remote users cannot see the shared window. To prevent remote users from seeing a black screen, Agora recommends that you immediately stop screen sharing. Common scenarios reporting this error code:
-  ///  When the local user closes the shared window, the SDK reports this error code.
-  ///  The local user shows some slides in full-screen mode first, and then shares the windows of the slides. After the user exits full-screen mode, the SDK reports this error code.
-  ///  The local user watches a web video or reads a web document in full-screen mode first, and then shares the window of the web video or document. After the user exits full-screen mode, the SDK reports this error code.
+  /// @nodoc
   @JsonValue(12)
   localVideoStreamErrorScreenCaptureWindowClosed,
 
-  /// 13: (Windows only) The window being shared is overlapped by another window, so the overlapped area is blacked out by the SDK during window sharing.
+  /// @nodoc
   @JsonValue(13)
   localVideoStreamErrorScreenCaptureWindowOccluded,
 
@@ -2811,27 +2808,27 @@ enum LocalVideoStreamError {
   @JsonValue(21)
   localVideoStreamErrorScreenCaptureFailure,
 
-  /// 22: (Windows and macOS only) No permission for screen capture.
+  /// @nodoc
   @JsonValue(22)
   localVideoStreamErrorScreenCaptureNoPermission,
 
-  /// 23: (Windows only) Screen capture has been paused. Common scenarios reporting this error code: The current screen may have been switched to a secure desktop, such as a UAC dialog box or Winlogon desktop.
+  /// @nodoc
   @JsonValue(23)
   localVideoStreamErrorScreenCapturePaused,
 
-  /// 24: (Windows only) Screen capture has resumed from paused state.
+  /// @nodoc
   @JsonValue(24)
   localVideoStreamErrorScreenCaptureResumed,
 
-  /// 25: (Windows only) The window for the current screen capture is hidden and not visible on the current screen.
+  /// @nodoc
   @JsonValue(25)
   localVideoStreamErrorScreenCaptureWindowHidden,
 
-  /// 26: (Windows only) The window for screen capture has been restored from hidden state.
+  /// @nodoc
   @JsonValue(26)
   localVideoStreamErrorScreenCaptureWindowRecoverFromHidden,
 
-  /// 27: (Windows only) The window for screen capture has been restored from minimized state.
+  /// @nodoc
   @JsonValue(27)
   localVideoStreamErrorScreenCaptureWindowRecoverFromMinimized,
 }
@@ -3450,62 +3447,62 @@ extension RtmpStreamPublishStateExt on RtmpStreamPublishState {
   }
 }
 
-/// Error codes of the RTMP or RTMPS streaming.
+/// @nodoc
 @JsonEnum(alwaysCreate: true)
 enum RtmpStreamPublishErrorType {
-  /// 0: The RTMP or RTMPS streaming has not started or has ended.
+  /// @nodoc
   @JsonValue(0)
   rtmpStreamPublishErrorOk,
 
-  /// 1: Invalid argument used. Check the parameter setting.
+  /// @nodoc
   @JsonValue(1)
   rtmpStreamPublishErrorInvalidArgument,
 
-  /// 2: The RTMP or RTMPS streaming is encrypted and cannot be published.
+  /// @nodoc
   @JsonValue(2)
   rtmpStreamPublishErrorEncryptedStreamNotAllowed,
 
-  /// 3: Timeout for the RTMP or RTMPS streaming.
+  /// @nodoc
   @JsonValue(3)
   rtmpStreamPublishErrorConnectionTimeout,
 
-  /// 4: An error occurs in Agora's streaming server.
+  /// @nodoc
   @JsonValue(4)
   rtmpStreamPublishErrorInternalServerError,
 
-  /// 5: An error occurs in the CDN server.
+  /// @nodoc
   @JsonValue(5)
   rtmpStreamPublishErrorRtmpServerError,
 
-  /// 6: The RTMP or RTMPS streaming publishes too frequently.
+  /// @nodoc
   @JsonValue(6)
   rtmpStreamPublishErrorTooOften,
 
-  /// 7: The host publishes more than 10 URLs. Delete the unnecessary URLs before adding new ones.
+  /// @nodoc
   @JsonValue(7)
   rtmpStreamPublishErrorReachLimit,
 
-  /// 8: The host manipulates other hosts' URLs. For example, the host updates or stops other hosts' streams. Check your app logic.
+  /// @nodoc
   @JsonValue(8)
   rtmpStreamPublishErrorNotAuthorized,
 
-  /// 9: Agora's server fails to find the RTMP or RTMPS streaming.
+  /// @nodoc
   @JsonValue(9)
   rtmpStreamPublishErrorStreamNotFound,
 
-  /// 10: The format of the RTMP or RTMPS streaming URL is not supported. Check whether the URL format is correct.
+  /// @nodoc
   @JsonValue(10)
   rtmpStreamPublishErrorFormatNotSupported,
 
-  /// 11: The user role is not host, so the user cannot use the CDN live streaming function. Check your application code logic.
+  /// @nodoc
   @JsonValue(11)
   rtmpStreamPublishErrorNotBroadcaster,
 
-  /// 13: The updateRtmpTranscoding method is called to update the transcoding configuration in a scenario where there is streaming without transcoding. Check your application code logic.
+  /// @nodoc
   @JsonValue(13)
   rtmpStreamPublishErrorTranscodingNoMixStream,
 
-  /// 14: Errors occurred in the host's network.
+  /// @nodoc
   @JsonValue(14)
   rtmpStreamPublishErrorNetDown,
 
@@ -3513,11 +3510,11 @@ enum RtmpStreamPublishErrorType {
   @JsonValue(15)
   rtmpStreamPublishErrorInvalidAppid,
 
-  /// 16: Your project does not have permission to use streaming services. Refer to Media Push to enable the Media Push permission.
+  /// @nodoc
   @JsonValue(16)
   rtmpStreamPublishErrorInvalidPrivilege,
 
-  /// 100: The streaming has been stopped normally. After you stop the Media Push, the SDK returns this value.
+  /// @nodoc
   @JsonValue(100)
   rtmpStreamUnpublishErrorOk,
 }
