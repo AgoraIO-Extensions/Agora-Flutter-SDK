@@ -15,9 +15,22 @@ parsers:
           - '@agoraio-extensions/terra_shared_configs:headers/rtc_4.3.0/include/IAgoraMediaComponentFactory.h'
           - '@agoraio-extensions/terra_shared_configs:headers/rtc_4.3.0/include/IAgoraParameter.h'
 
-  - path: parsers/iris_api_id_parser.ts
-  # This parser shoule be after `iris_api_id_parser.ts`
-  - path: parsers/merge_rtc_engine_event_handler_parser.ts 
+  - name: IrisApiIdParser
+    package: '@agoraio-extensions/terra_shared_configs'
+    
+  - path: parsers/cud_node_parser.ts
+    args:
+      configPath: configs/cud_node_parser.config.ts
+
+  - name: PointerToArrayParser
+    package: '@agoraio-extensions/terra_shared_configs'
+
+  # This should be ordered in last step
+  - name: MergeNodeParser
+    package: '@agoraio-extensions/terra_shared_configs'
+    args:
+      configFilePath: configs/merge_node_list.ts
+      ignoreDefaultConfig: true
 
 renderers:
   - path: renderers/event_handlers_renderer.ts

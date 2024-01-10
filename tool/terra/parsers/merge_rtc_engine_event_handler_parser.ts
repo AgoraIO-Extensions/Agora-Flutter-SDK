@@ -31,19 +31,21 @@ export default function MergeRtcEngineEventHandlerParser(
   if (rtcEngineEventHandlerClazz && rtcEngineEventHandlerClazz) {
     let adjustMethods: MemberFunction[] = [];
     rtcEngineEventHandlerClazz.asClazz().methods.forEach((method) => {
-      let sameNameMethod = rtcEngineEventHandlerExClazz!
-        .asClazz()
-        .methods.find((it) => it.name == method.name);
-      if (sameNameMethod) {
-        // If there is a method with the same name in `IRtcEngineEventHandlerEx`, use it.
-        adjustMethods.push(sameNameMethod);
-      } else {
-        // Force filter the `eventHandlerType` method.
-        if (method.name != "eventHandlerType") {
+      // Force filter the `eventHandlerType` method.
+      if (method.name != "eventHandlerType") {
+        let sameNameMethod = rtcEngineEventHandlerExClazz!
+          .asClazz()
+          .methods.find((it) => it.name == method.name);
+        if (sameNameMethod) {
+          // If there is a method with the same name in `IRtcEngineEventHandlerEx`, use it.
+          adjustMethods.push(sameNameMethod);
+        } else {
           adjustMethods.push(method);
         }
       }
     });
+
+    rtcEngineEventHandlerClazz.asClazz().methods = adjustMethods;
 
     // After merge the `IRtcEngineEventHandler` and `IRtcEngineEventHandlerEx`,
     // remove the `IRtcEngineEventHandlerEx` from the parse result.

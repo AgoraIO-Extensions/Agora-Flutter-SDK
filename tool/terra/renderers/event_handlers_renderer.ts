@@ -187,6 +187,10 @@ function nameWithUnderscoresToCamelCase(
   nameWithUnderscores: string,
   upperCamelCase: boolean = false
 ): string {
+  if (!nameWithUnderscores.includes("_")) {
+    return nameWithUnderscores;
+  }
+
   const nameWithUnderscoresLower = nameWithUnderscores.toLowerCase();
   const words = nameWithUnderscoresLower.split("_");
   for (let i = 0; i < words.length; i++) {
@@ -215,9 +219,10 @@ function callbackSwithCaseBlock(
         methodName[0].toUpperCase() + methodName.slice(1)
       }Json`;
       let dn = dartMemberName(methodName);
+      let eventName = getIrisApiIdValue(it).split("_").slice(1).join("_");
 
       return `
-case '${getIrisApiIdValue(it)}':
+case '${eventName}':
 if (${firstParamNameForWrapperClass}.${dn} == null) {
     return true;
 }
@@ -244,20 +249,22 @@ ${(function () {
     paramNullCheckList = `if (${paramNullCheckList}) { return true; }`;
   }
 
-  let paramFillBufferList = it.parameters.map((it) => {
-    let typeName = dartTypeName(it.type);
-    let memberName = dartMemberName(it.name);
-    let actualNode = parseResult.resolveNodeByType(it.type);
-    if (actualNode.__TYPE == CXXTYPE.Struct) {
-      if (it.type.kind == SimpleTypeKind.array_t) {
-        return `${memberName} = ${memberName}.map((e) => e.fillBuffers(buffers)).toList();`;
-      } else {
-        return `${memberName} = ${memberName}.fillBuffers(buffers);`;
+  let paramFillBufferList = it.parameters
+    .map((it) => {
+      let typeName = dartTypeName(it.type);
+      let memberName = dartMemberName(it.name);
+      let actualNode = parseResult.resolveNodeByType(it.type);
+      if (actualNode.__TYPE == CXXTYPE.Struct) {
+        if (it.type.kind == SimpleTypeKind.array_t) {
+          return `${memberName} = ${memberName}.map((e) => e.fillBuffers(buffers)).toList();`;
+        } else {
+          return `${memberName} = ${memberName}.fillBuffers(buffers);`;
+        }
       }
-    }
 
-    return "";
-  });
+      return "";
+    })
+    .join("\n");
 
   let paramList = it.parameters.map((it) => dartMemberName(it.name));
 
@@ -291,7 +298,7 @@ export default function EventHandlersRenderer(
         let wrapperClassName = `${className}Wrapper`;
         let hasBaseClass = clazz.base_clazzs.length > 0;
         let firstParamNameForWrapperClass =
-          className[0].toUpperCase() + className.slice(1);
+          className[0].toLowerCase() + className.slice(1);
 
         return `
 class ${wrapperClassName} ${extendBlock} {

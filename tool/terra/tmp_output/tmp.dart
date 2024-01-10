@@ -7,9 +7,9 @@ import 'package:agora_rtc_engine/src/binding/impl_forward_export.dart';
 import 'package:iris_method_channel/iris_method_channel.dart';
   
     class RtcEngineEventHandlerWrapper implements EventLoopEventHandler {
-const RtcEngineEventHandlerWrapper(this.RtcEngineEventHandler);
+const RtcEngineEventHandlerWrapper(this.rtcEngineEventHandler);
 
-final RtcEngineEventHandler RtcEngineEventHandler;
+final RtcEngineEventHandler rtcEngineEventHandler;
 
 @override
 bool operator ==(Object other) {
@@ -17,60 +17,49 @@ bool operator ==(Object other) {
     return false;
   }
   return other is RtcEngineEventHandlerWrapper &&
-      other.RtcEngineEventHandler == RtcEngineEventHandler;
+      other.rtcEngineEventHandler == rtcEngineEventHandler;
 }
 @override
-int get hashCode => RtcEngineEventHandler.hashCode;
+int get hashCode => rtcEngineEventHandler.hashCode;
 
 @override
 bool handleEventInternal(String eventName, String eventData, List<Uint8List> buffers) {
     switch (eventName) {
         
-case 'RtcEngineEventHandler_eventHandlerType':
-if (RtcEngineEventHandler.eventhandlertype == null) {
-    return true;
-}
-final jsonMap = jsonDecode(eventData);
-RtcEngineEventHandlerEventHandlerTypeJson paramJson = RtcEngineEventHandlerEventHandlerTypeJson.fromJson(jsonMap);
-paramJson = paramJson.fillBuffers(buffers);
-RtcEngineEventHandler.eventHandlerType!();
-  return true;
-
-
-case 'RtcEngineEventHandler_onJoinChannelSuccess':
-if (RtcEngineEventHandler.onjoinchannelsuccess == null) {
+case 'onJoinChannelSuccess_80b7fde':
+if (rtcEngineEventHandler.onJoinChannelSuccess == null) {
     return true;
 }
 final jsonMap = jsonDecode(eventData);
 RtcEngineEventHandlerOnJoinChannelSuccessJson paramJson = RtcEngineEventHandlerOnJoinChannelSuccessJson.fromJson(jsonMap);
 paramJson = paramJson.fillBuffers(buffers);
-String? channel = paramJson.channel;
-int? uid = paramJson.uid;
+RtcConnection? connection = paramJson.connection;
 int? elapsed = paramJson.elapsed;
-  if (channel == null||uid == null||elapsed == null) { return true; }
-  ,,
-  RtcEngineEventHandler.onJoinChannelSuccess!(channel,uid,elapsed);
+  if (connection == null||elapsed == null) { return true; }
+  connection = connection.fillBuffers(buffers);
+
+  rtcEngineEventHandler.onJoinChannelSuccess!(connection,elapsed);
   return true;
 
 
-case 'RtcEngineEventHandler_onRejoinChannelSuccess':
-if (RtcEngineEventHandler.onrejoinchannelsuccess == null) {
+case 'onRejoinChannelSuccess_80b7fde':
+if (rtcEngineEventHandler.onRejoinChannelSuccess == null) {
     return true;
 }
 final jsonMap = jsonDecode(eventData);
 RtcEngineEventHandlerOnRejoinChannelSuccessJson paramJson = RtcEngineEventHandlerOnRejoinChannelSuccessJson.fromJson(jsonMap);
 paramJson = paramJson.fillBuffers(buffers);
-String? channel = paramJson.channel;
-int? uid = paramJson.uid;
+RtcConnection? connection = paramJson.connection;
 int? elapsed = paramJson.elapsed;
-  if (channel == null||uid == null||elapsed == null) { return true; }
-  ,,
-  RtcEngineEventHandler.onRejoinChannelSuccess!(channel,uid,elapsed);
+  if (connection == null||elapsed == null) { return true; }
+  connection = connection.fillBuffers(buffers);
+
+  rtcEngineEventHandler.onRejoinChannelSuccess!(connection,elapsed);
   return true;
 
 
-case 'RtcEngineEventHandler_onProxyConnected':
-if (RtcEngineEventHandler.onproxyconnected == null) {
+case 'onProxyConnected':
+if (rtcEngineEventHandler.onProxyConnected == null) {
     return true;
 }
 final jsonMap = jsonDecode(eventData);
@@ -78,49 +67,59 @@ RtcEngineEventHandlerOnProxyConnectedJson paramJson = RtcEngineEventHandlerOnPro
 paramJson = paramJson.fillBuffers(buffers);
 String? channel = paramJson.channel;
 int? uid = paramJson.uid;
-ProxyType? proxytype = paramJson.proxytype;
-String? localproxyip = paramJson.localproxyip;
+ProxyType? proxyType = paramJson.proxyType;
+String? localProxyIp = paramJson.localProxyIp;
 int? elapsed = paramJson.elapsed;
-  if (channel == null||uid == null||proxytype == null||localproxyip == null||elapsed == null) { return true; }
-  ,,,,
-  RtcEngineEventHandler.onProxyConnected!(channel,uid,proxytype,localproxyip,elapsed);
+  if (channel == null||uid == null||proxyType == null||localProxyIp == null||elapsed == null) { return true; }
+  
+
+
+
+
+  rtcEngineEventHandler.onProxyConnected!(channel,uid,proxyType,localProxyIp,elapsed);
   return true;
 
 
-case 'RtcEngineEventHandler_onError':
-if (RtcEngineEventHandler.onerror == null) {
+case 'onError':
+if (rtcEngineEventHandler.onError == null) {
     return true;
 }
 final jsonMap = jsonDecode(eventData);
 RtcEngineEventHandlerOnErrorJson paramJson = RtcEngineEventHandlerOnErrorJson.fromJson(jsonMap);
 paramJson = paramJson.fillBuffers(buffers);
-int? err = paramJson.err;
+ErrorCodeType? err = paramJson.err;
 String? msg = paramJson.msg;
   if (err == null||msg == null) { return true; }
-  ,
-  RtcEngineEventHandler.onError!(err,msg);
+  
+
+  rtcEngineEventHandler.onError!(err,msg);
   return true;
 
 
-case 'RtcEngineEventHandler_onAudioQuality':
-if (RtcEngineEventHandler.onaudioquality == null) {
+case 'onAudioQuality_30407fa2':
+if (rtcEngineEventHandler.onAudioQuality == null) {
     return true;
 }
 final jsonMap = jsonDecode(eventData);
 RtcEngineEventHandlerOnAudioQualityJson paramJson = RtcEngineEventHandlerOnAudioQualityJson.fromJson(jsonMap);
 paramJson = paramJson.fillBuffers(buffers);
-int? uid = paramJson.uid;
-int? quality = paramJson.quality;
+RtcConnection? connection = paramJson.connection;
+int? remoteUid = paramJson.remoteUid;
+QualityType? quality = paramJson.quality;
 int? delay = paramJson.delay;
 int? lost = paramJson.lost;
-  if (uid == null||quality == null||delay == null||lost == null) { return true; }
-  ,,,
-  RtcEngineEventHandler.onAudioQuality!(uid,quality,delay,lost);
+  if (connection == null||remoteUid == null||quality == null||delay == null||lost == null) { return true; }
+  connection = connection.fillBuffers(buffers);
+
+
+
+
+  rtcEngineEventHandler.onAudioQuality!(connection,remoteUid,quality,delay,lost);
   return true;
 
 
-case 'RtcEngineEventHandler_onLastmileProbeResult':
-if (RtcEngineEventHandler.onlastmileproberesult == null) {
+case 'onLastmileProbeResult':
+if (rtcEngineEventHandler.onLastmileProbeResult == null) {
     return true;
 }
 final jsonMap = jsonDecode(eventData);
@@ -128,73 +127,83 @@ RtcEngineEventHandlerOnLastmileProbeResultJson paramJson = RtcEngineEventHandler
 paramJson = paramJson.fillBuffers(buffers);
 LastmileProbeResult? result = paramJson.result;
   if (result == null) { return true; }
-  
-  RtcEngineEventHandler.onLastmileProbeResult!(result);
+  result = result.fillBuffers(buffers);
+  rtcEngineEventHandler.onLastmileProbeResult!(result);
   return true;
 
 
-case 'RtcEngineEventHandler_onAudioVolumeIndication':
-if (RtcEngineEventHandler.onaudiovolumeindication == null) {
+case 'onAudioVolumeIndication_217a10ec':
+if (rtcEngineEventHandler.onAudioVolumeIndication == null) {
     return true;
 }
 final jsonMap = jsonDecode(eventData);
 RtcEngineEventHandlerOnAudioVolumeIndicationJson paramJson = RtcEngineEventHandlerOnAudioVolumeIndicationJson.fromJson(jsonMap);
 paramJson = paramJson.fillBuffers(buffers);
+RtcConnection? connection = paramJson.connection;
 AudioVolumeInfo? speakers = paramJson.speakers;
-int? speakernumber = paramJson.speakernumber;
-int? totalvolume = paramJson.totalvolume;
-  if (speakers == null||speakernumber == null||totalvolume == null) { return true; }
-  ,,
-  RtcEngineEventHandler.onAudioVolumeIndication!(speakers,speakernumber,totalvolume);
+int? speakerNumber = paramJson.speakerNumber;
+int? totalVolume = paramJson.totalVolume;
+  if (connection == null||speakers == null||speakerNumber == null||totalVolume == null) { return true; }
+  connection = connection.fillBuffers(buffers);
+speakers = speakers.fillBuffers(buffers);
+
+
+  rtcEngineEventHandler.onAudioVolumeIndication!(connection,speakers,speakerNumber,totalVolume);
   return true;
 
 
-case 'RtcEngineEventHandler_onLeaveChannel':
-if (RtcEngineEventHandler.onleavechannel == null) {
+case 'onLeaveChannel_14cdbe8f':
+if (rtcEngineEventHandler.onLeaveChannel == null) {
     return true;
 }
 final jsonMap = jsonDecode(eventData);
 RtcEngineEventHandlerOnLeaveChannelJson paramJson = RtcEngineEventHandlerOnLeaveChannelJson.fromJson(jsonMap);
 paramJson = paramJson.fillBuffers(buffers);
+RtcConnection? connection = paramJson.connection;
 RtcStats? stats = paramJson.stats;
-  if (stats == null) { return true; }
-  
-  RtcEngineEventHandler.onLeaveChannel!(stats);
+  if (connection == null||stats == null) { return true; }
+  connection = connection.fillBuffers(buffers);
+stats = stats.fillBuffers(buffers);
+  rtcEngineEventHandler.onLeaveChannel!(connection,stats);
   return true;
 
 
-case 'RtcEngineEventHandler_onRtcStats':
-if (RtcEngineEventHandler.onrtcstats == null) {
+case 'onRtcStats_14cdbe8f':
+if (rtcEngineEventHandler.onRtcStats == null) {
     return true;
 }
 final jsonMap = jsonDecode(eventData);
 RtcEngineEventHandlerOnRtcStatsJson paramJson = RtcEngineEventHandlerOnRtcStatsJson.fromJson(jsonMap);
 paramJson = paramJson.fillBuffers(buffers);
+RtcConnection? connection = paramJson.connection;
 RtcStats? stats = paramJson.stats;
-  if (stats == null) { return true; }
-  
-  RtcEngineEventHandler.onRtcStats!(stats);
+  if (connection == null||stats == null) { return true; }
+  connection = connection.fillBuffers(buffers);
+stats = stats.fillBuffers(buffers);
+  rtcEngineEventHandler.onRtcStats!(connection,stats);
   return true;
 
 
-case 'RtcEngineEventHandler_onAudioDeviceStateChanged':
-if (RtcEngineEventHandler.onaudiodevicestatechanged == null) {
+case 'onAudioDeviceStateChanged':
+if (rtcEngineEventHandler.onAudioDeviceStateChanged == null) {
     return true;
 }
 final jsonMap = jsonDecode(eventData);
 RtcEngineEventHandlerOnAudioDeviceStateChangedJson paramJson = RtcEngineEventHandlerOnAudioDeviceStateChangedJson.fromJson(jsonMap);
 paramJson = paramJson.fillBuffers(buffers);
-String? deviceid = paramJson.deviceid;
-int? devicetype = paramJson.devicetype;
-int? devicestate = paramJson.devicestate;
-  if (deviceid == null||devicetype == null||devicestate == null) { return true; }
-  ,,
-  RtcEngineEventHandler.onAudioDeviceStateChanged!(deviceid,devicetype,devicestate);
+String? deviceId = paramJson.deviceId;
+int? deviceType = paramJson.deviceType;
+int? deviceState = paramJson.deviceState;
+  if (deviceId == null||deviceType == null||deviceState == null) { return true; }
+  
+
+
+  rtcEngineEventHandler.onAudioDeviceStateChanged!(deviceId,deviceType,deviceState);
   return true;
 
 
-case 'RtcEngineEventHandler_onAudioMixingPositionChanged':
-if (RtcEngineEventHandler.onaudiomixingpositionchanged == null) {
+case 'onAudioMixingPositionChanged':
+if (rtcEngineEventHandler.onAudioMixingPositionChanged == null) {
     return true;
 }
 final jsonMap = jsonDecode(eventData);
@@ -203,80 +212,89 @@ paramJson = paramJson.fillBuffers(buffers);
 int? position = paramJson.position;
   if (position == null) { return true; }
   
-  RtcEngineEventHandler.onAudioMixingPositionChanged!(position);
+  rtcEngineEventHandler.onAudioMixingPositionChanged!(position);
   return true;
 
 
-case 'RtcEngineEventHandler_onAudioMixingFinished':
-if (RtcEngineEventHandler.onaudiomixingfinished == null) {
+case 'onAudioMixingFinished':
+if (rtcEngineEventHandler.onAudioMixingFinished == null) {
     return true;
 }
 final jsonMap = jsonDecode(eventData);
 RtcEngineEventHandlerOnAudioMixingFinishedJson paramJson = RtcEngineEventHandlerOnAudioMixingFinishedJson.fromJson(jsonMap);
 paramJson = paramJson.fillBuffers(buffers);
-RtcEngineEventHandler.onAudioMixingFinished!();
+rtcEngineEventHandler.onAudioMixingFinished!();
   return true;
 
 
-case 'RtcEngineEventHandler_onAudioEffectFinished':
-if (RtcEngineEventHandler.onaudioeffectfinished == null) {
+case 'onAudioEffectFinished':
+if (rtcEngineEventHandler.onAudioEffectFinished == null) {
     return true;
 }
 final jsonMap = jsonDecode(eventData);
 RtcEngineEventHandlerOnAudioEffectFinishedJson paramJson = RtcEngineEventHandlerOnAudioEffectFinishedJson.fromJson(jsonMap);
 paramJson = paramJson.fillBuffers(buffers);
-int? soundid = paramJson.soundid;
-  if (soundid == null) { return true; }
+int? soundId = paramJson.soundId;
+  if (soundId == null) { return true; }
   
-  RtcEngineEventHandler.onAudioEffectFinished!(soundid);
+  rtcEngineEventHandler.onAudioEffectFinished!(soundId);
   return true;
 
 
-case 'RtcEngineEventHandler_onVideoDeviceStateChanged':
-if (RtcEngineEventHandler.onvideodevicestatechanged == null) {
+case 'onVideoDeviceStateChanged':
+if (rtcEngineEventHandler.onVideoDeviceStateChanged == null) {
     return true;
 }
 final jsonMap = jsonDecode(eventData);
 RtcEngineEventHandlerOnVideoDeviceStateChangedJson paramJson = RtcEngineEventHandlerOnVideoDeviceStateChangedJson.fromJson(jsonMap);
 paramJson = paramJson.fillBuffers(buffers);
-String? deviceid = paramJson.deviceid;
-int? devicetype = paramJson.devicetype;
-int? devicestate = paramJson.devicestate;
-  if (deviceid == null||devicetype == null||devicestate == null) { return true; }
-  ,,
-  RtcEngineEventHandler.onVideoDeviceStateChanged!(deviceid,devicetype,devicestate);
+String? deviceId = paramJson.deviceId;
+int? deviceType = paramJson.deviceType;
+int? deviceState = paramJson.deviceState;
+  if (deviceId == null||deviceType == null||deviceState == null) { return true; }
+  
+
+
+  rtcEngineEventHandler.onVideoDeviceStateChanged!(deviceId,deviceType,deviceState);
   return true;
 
 
-case 'RtcEngineEventHandler_onNetworkQuality':
-if (RtcEngineEventHandler.onnetworkquality == null) {
+case 'onNetworkQuality_d60a54f':
+if (rtcEngineEventHandler.onNetworkQuality == null) {
     return true;
 }
 final jsonMap = jsonDecode(eventData);
 RtcEngineEventHandlerOnNetworkQualityJson paramJson = RtcEngineEventHandlerOnNetworkQualityJson.fromJson(jsonMap);
 paramJson = paramJson.fillBuffers(buffers);
-int? uid = paramJson.uid;
-int? txquality = paramJson.txquality;
-int? rxquality = paramJson.rxquality;
-  if (uid == null||txquality == null||rxquality == null) { return true; }
-  ,,
-  RtcEngineEventHandler.onNetworkQuality!(uid,txquality,rxquality);
+RtcConnection? connection = paramJson.connection;
+int? remoteUid = paramJson.remoteUid;
+int? txQuality = paramJson.txQuality;
+int? rxQuality = paramJson.rxQuality;
+  if (connection == null||remoteUid == null||txQuality == null||rxQuality == null) { return true; }
+  connection = connection.fillBuffers(buffers);
+
+
+
+  rtcEngineEventHandler.onNetworkQuality!(connection,remoteUid,txQuality,rxQuality);
   return true;
 
 
-case 'RtcEngineEventHandler_onIntraRequestReceived':
-if (RtcEngineEventHandler.onintrarequestreceived == null) {
+case 'onIntraRequestReceived_60e2000d':
+if (rtcEngineEventHandler.onIntraRequestReceived == null) {
     return true;
 }
 final jsonMap = jsonDecode(eventData);
 RtcEngineEventHandlerOnIntraRequestReceivedJson paramJson = RtcEngineEventHandlerOnIntraRequestReceivedJson.fromJson(jsonMap);
 paramJson = paramJson.fillBuffers(buffers);
-RtcEngineEventHandler.onIntraRequestReceived!();
+RtcConnection? connection = paramJson.connection;
+  if (connection == null) { return true; }
+  connection = connection.fillBuffers(buffers);
+  rtcEngineEventHandler.onIntraRequestReceived!(connection);
   return true;
 
 
-case 'RtcEngineEventHandler_onUplinkNetworkInfoUpdated':
-if (RtcEngineEventHandler.onuplinknetworkinfoupdated == null) {
+case 'onUplinkNetworkInfoUpdated':
+if (rtcEngineEventHandler.onUplinkNetworkInfoUpdated == null) {
     return true;
 }
 final jsonMap = jsonDecode(eventData);
@@ -284,13 +302,13 @@ RtcEngineEventHandlerOnUplinkNetworkInfoUpdatedJson paramJson = RtcEngineEventHa
 paramJson = paramJson.fillBuffers(buffers);
 UplinkNetworkInfo? info = paramJson.info;
   if (info == null) { return true; }
-  
-  RtcEngineEventHandler.onUplinkNetworkInfoUpdated!(info);
+  info = info.fillBuffers(buffers);
+  rtcEngineEventHandler.onUplinkNetworkInfoUpdated!(info);
   return true;
 
 
-case 'RtcEngineEventHandler_onDownlinkNetworkInfoUpdated':
-if (RtcEngineEventHandler.ondownlinknetworkinfoupdated == null) {
+case 'onDownlinkNetworkInfoUpdated':
+if (rtcEngineEventHandler.onDownlinkNetworkInfoUpdated == null) {
     return true;
 }
 final jsonMap = jsonDecode(eventData);
@@ -298,13 +316,13 @@ RtcEngineEventHandlerOnDownlinkNetworkInfoUpdatedJson paramJson = RtcEngineEvent
 paramJson = paramJson.fillBuffers(buffers);
 DownlinkNetworkInfo? info = paramJson.info;
   if (info == null) { return true; }
-  
-  RtcEngineEventHandler.onDownlinkNetworkInfoUpdated!(info);
+  info = info.fillBuffers(buffers);
+  rtcEngineEventHandler.onDownlinkNetworkInfoUpdated!(info);
   return true;
 
 
-case 'RtcEngineEventHandler_onLastmileQuality':
-if (RtcEngineEventHandler.onlastmilequality == null) {
+case 'onLastmileQuality':
+if (rtcEngineEventHandler.onLastmileQuality == null) {
     return true;
 }
 final jsonMap = jsonDecode(eventData);
@@ -313,12 +331,12 @@ paramJson = paramJson.fillBuffers(buffers);
 int? quality = paramJson.quality;
   if (quality == null) { return true; }
   
-  RtcEngineEventHandler.onLastmileQuality!(quality);
+  rtcEngineEventHandler.onLastmileQuality!(quality);
   return true;
 
 
-case 'RtcEngineEventHandler_onFirstLocalVideoFrame':
-if (RtcEngineEventHandler.onfirstlocalvideoframe == null) {
+case 'onFirstLocalVideoFrame':
+if (rtcEngineEventHandler.onFirstLocalVideoFrame == null) {
     return true;
 }
 final jsonMap = jsonDecode(eventData);
@@ -329,13 +347,16 @@ int? width = paramJson.width;
 int? height = paramJson.height;
 int? elapsed = paramJson.elapsed;
   if (source == null||width == null||height == null||elapsed == null) { return true; }
-  ,,,
-  RtcEngineEventHandler.onFirstLocalVideoFrame!(source,width,height,elapsed);
+  
+
+
+
+  rtcEngineEventHandler.onFirstLocalVideoFrame!(source,width,height,elapsed);
   return true;
 
 
-case 'RtcEngineEventHandler_onFirstLocalVideoFramePublished':
-if (RtcEngineEventHandler.onfirstlocalvideoframepublished == null) {
+case 'onFirstLocalVideoFramePublished':
+if (rtcEngineEventHandler.onFirstLocalVideoFramePublished == null) {
     return true;
 }
 final jsonMap = jsonDecode(eventData);
@@ -344,48 +365,60 @@ paramJson = paramJson.fillBuffers(buffers);
 VideoSourceType? source = paramJson.source;
 int? elapsed = paramJson.elapsed;
   if (source == null||elapsed == null) { return true; }
-  ,
-  RtcEngineEventHandler.onFirstLocalVideoFramePublished!(source,elapsed);
+  
+
+  rtcEngineEventHandler.onFirstLocalVideoFramePublished!(source,elapsed);
   return true;
 
 
-case 'RtcEngineEventHandler_onFirstRemoteVideoDecoded':
-if (RtcEngineEventHandler.onfirstremotevideodecoded == null) {
+case 'onFirstRemoteVideoDecoded_6a74d420':
+if (rtcEngineEventHandler.onFirstRemoteVideoDecoded == null) {
     return true;
 }
 final jsonMap = jsonDecode(eventData);
 RtcEngineEventHandlerOnFirstRemoteVideoDecodedJson paramJson = RtcEngineEventHandlerOnFirstRemoteVideoDecodedJson.fromJson(jsonMap);
 paramJson = paramJson.fillBuffers(buffers);
-int? uid = paramJson.uid;
+RtcConnection? connection = paramJson.connection;
+int? remoteUid = paramJson.remoteUid;
 int? width = paramJson.width;
 int? height = paramJson.height;
 int? elapsed = paramJson.elapsed;
-  if (uid == null||width == null||height == null||elapsed == null) { return true; }
-  ,,,
-  RtcEngineEventHandler.onFirstRemoteVideoDecoded!(uid,width,height,elapsed);
+  if (connection == null||remoteUid == null||width == null||height == null||elapsed == null) { return true; }
+  connection = connection.fillBuffers(buffers);
+
+
+
+
+  rtcEngineEventHandler.onFirstRemoteVideoDecoded!(connection,remoteUid,width,height,elapsed);
   return true;
 
 
-case 'RtcEngineEventHandler_onVideoSizeChanged':
-if (RtcEngineEventHandler.onvideosizechanged == null) {
+case 'onVideoSizeChanged_d2d7cb7':
+if (rtcEngineEventHandler.onVideoSizeChanged == null) {
     return true;
 }
 final jsonMap = jsonDecode(eventData);
 RtcEngineEventHandlerOnVideoSizeChangedJson paramJson = RtcEngineEventHandlerOnVideoSizeChangedJson.fromJson(jsonMap);
 paramJson = paramJson.fillBuffers(buffers);
-VideoSourceType? sourcetype = paramJson.sourcetype;
+RtcConnection? connection = paramJson.connection;
+VideoSourceType? sourceType = paramJson.sourceType;
 int? uid = paramJson.uid;
 int? width = paramJson.width;
 int? height = paramJson.height;
 int? rotation = paramJson.rotation;
-  if (sourcetype == null||uid == null||width == null||height == null||rotation == null) { return true; }
-  ,,,,
-  RtcEngineEventHandler.onVideoSizeChanged!(sourcetype,uid,width,height,rotation);
+  if (connection == null||sourceType == null||uid == null||width == null||height == null||rotation == null) { return true; }
+  connection = connection.fillBuffers(buffers);
+
+
+
+
+
+  rtcEngineEventHandler.onVideoSizeChanged!(connection,sourceType,uid,width,height,rotation);
   return true;
 
 
-case 'RtcEngineEventHandler_onLocalVideoStateChanged':
-if (RtcEngineEventHandler.onlocalvideostatechanged == null) {
+case 'onLocalVideoStateChanged':
+if (rtcEngineEventHandler.onLocalVideoStateChanged == null) {
     return true;
 }
 final jsonMap = jsonDecode(eventData);
@@ -395,180 +428,217 @@ VideoSourceType? source = paramJson.source;
 LocalVideoStreamState? state = paramJson.state;
 LocalVideoStreamReason? reason = paramJson.reason;
   if (source == null||state == null||reason == null) { return true; }
-  ,,
-  RtcEngineEventHandler.onLocalVideoStateChanged!(source,state,reason);
+  
+
+
+  rtcEngineEventHandler.onLocalVideoStateChanged!(source,state,reason);
   return true;
 
 
-case 'RtcEngineEventHandler_onRemoteVideoStateChanged':
-if (RtcEngineEventHandler.onremotevideostatechanged == null) {
+case 'onRemoteVideoStateChanged_1349175':
+if (rtcEngineEventHandler.onRemoteVideoStateChanged == null) {
     return true;
 }
 final jsonMap = jsonDecode(eventData);
 RtcEngineEventHandlerOnRemoteVideoStateChangedJson paramJson = RtcEngineEventHandlerOnRemoteVideoStateChangedJson.fromJson(jsonMap);
 paramJson = paramJson.fillBuffers(buffers);
-int? uid = paramJson.uid;
+RtcConnection? connection = paramJson.connection;
+int? remoteUid = paramJson.remoteUid;
 RemoteVideoState? state = paramJson.state;
 RemoteVideoStateReason? reason = paramJson.reason;
 int? elapsed = paramJson.elapsed;
-  if (uid == null||state == null||reason == null||elapsed == null) { return true; }
-  ,,,
-  RtcEngineEventHandler.onRemoteVideoStateChanged!(uid,state,reason,elapsed);
+  if (connection == null||remoteUid == null||state == null||reason == null||elapsed == null) { return true; }
+  connection = connection.fillBuffers(buffers);
+
+
+
+
+  rtcEngineEventHandler.onRemoteVideoStateChanged!(connection,remoteUid,state,reason,elapsed);
   return true;
 
 
-case 'RtcEngineEventHandler_onFirstRemoteVideoFrame':
-if (RtcEngineEventHandler.onfirstremotevideoframe == null) {
+case 'onFirstRemoteVideoFrame_6a74d420':
+if (rtcEngineEventHandler.onFirstRemoteVideoFrame == null) {
     return true;
 }
 final jsonMap = jsonDecode(eventData);
 RtcEngineEventHandlerOnFirstRemoteVideoFrameJson paramJson = RtcEngineEventHandlerOnFirstRemoteVideoFrameJson.fromJson(jsonMap);
 paramJson = paramJson.fillBuffers(buffers);
-int? uid = paramJson.uid;
+RtcConnection? connection = paramJson.connection;
+int? remoteUid = paramJson.remoteUid;
 int? width = paramJson.width;
 int? height = paramJson.height;
 int? elapsed = paramJson.elapsed;
-  if (uid == null||width == null||height == null||elapsed == null) { return true; }
-  ,,,
-  RtcEngineEventHandler.onFirstRemoteVideoFrame!(uid,width,height,elapsed);
+  if (connection == null||remoteUid == null||width == null||height == null||elapsed == null) { return true; }
+  connection = connection.fillBuffers(buffers);
+
+
+
+
+  rtcEngineEventHandler.onFirstRemoteVideoFrame!(connection,remoteUid,width,height,elapsed);
   return true;
 
 
-case 'RtcEngineEventHandler_onUserJoined':
-if (RtcEngineEventHandler.onuserjoined == null) {
+case 'onUserJoined_6c4b6d40':
+if (rtcEngineEventHandler.onUserJoined == null) {
     return true;
 }
 final jsonMap = jsonDecode(eventData);
 RtcEngineEventHandlerOnUserJoinedJson paramJson = RtcEngineEventHandlerOnUserJoinedJson.fromJson(jsonMap);
 paramJson = paramJson.fillBuffers(buffers);
-int? uid = paramJson.uid;
+RtcConnection? connection = paramJson.connection;
+int? remoteUid = paramJson.remoteUid;
 int? elapsed = paramJson.elapsed;
-  if (uid == null||elapsed == null) { return true; }
-  ,
-  RtcEngineEventHandler.onUserJoined!(uid,elapsed);
+  if (connection == null||remoteUid == null||elapsed == null) { return true; }
+  connection = connection.fillBuffers(buffers);
+
+
+  rtcEngineEventHandler.onUserJoined!(connection,remoteUid,elapsed);
   return true;
 
 
-case 'RtcEngineEventHandler_onUserOffline':
-if (RtcEngineEventHandler.onuseroffline == null) {
+case 'onUserOffline_213f03dd':
+if (rtcEngineEventHandler.onUserOffline == null) {
     return true;
 }
 final jsonMap = jsonDecode(eventData);
 RtcEngineEventHandlerOnUserOfflineJson paramJson = RtcEngineEventHandlerOnUserOfflineJson.fromJson(jsonMap);
 paramJson = paramJson.fillBuffers(buffers);
-int? uid = paramJson.uid;
+RtcConnection? connection = paramJson.connection;
+int? remoteUid = paramJson.remoteUid;
 UserOfflineReasonType? reason = paramJson.reason;
-  if (uid == null||reason == null) { return true; }
-  ,
-  RtcEngineEventHandler.onUserOffline!(uid,reason);
+  if (connection == null||remoteUid == null||reason == null) { return true; }
+  connection = connection.fillBuffers(buffers);
+
+
+  rtcEngineEventHandler.onUserOffline!(connection,remoteUid,reason);
   return true;
 
 
-case 'RtcEngineEventHandler_onUserMuteAudio':
-if (RtcEngineEventHandler.onusermuteaudio == null) {
+case 'onUserMuteAudio_1d2565c7':
+if (rtcEngineEventHandler.onUserMuteAudio == null) {
     return true;
 }
 final jsonMap = jsonDecode(eventData);
 RtcEngineEventHandlerOnUserMuteAudioJson paramJson = RtcEngineEventHandlerOnUserMuteAudioJson.fromJson(jsonMap);
 paramJson = paramJson.fillBuffers(buffers);
-int? uid = paramJson.uid;
+RtcConnection? connection = paramJson.connection;
+int? remoteUid = paramJson.remoteUid;
 bool? muted = paramJson.muted;
-  if (uid == null||muted == null) { return true; }
-  ,
-  RtcEngineEventHandler.onUserMuteAudio!(uid,muted);
+  if (connection == null||remoteUid == null||muted == null) { return true; }
+  connection = connection.fillBuffers(buffers);
+
+
+  rtcEngineEventHandler.onUserMuteAudio!(connection,remoteUid,muted);
   return true;
 
 
-case 'RtcEngineEventHandler_onUserMuteVideo':
-if (RtcEngineEventHandler.onusermutevideo == null) {
+case 'onUserMuteVideo_1d2565c7':
+if (rtcEngineEventHandler.onUserMuteVideo == null) {
     return true;
 }
 final jsonMap = jsonDecode(eventData);
 RtcEngineEventHandlerOnUserMuteVideoJson paramJson = RtcEngineEventHandlerOnUserMuteVideoJson.fromJson(jsonMap);
 paramJson = paramJson.fillBuffers(buffers);
-int? uid = paramJson.uid;
+RtcConnection? connection = paramJson.connection;
+int? remoteUid = paramJson.remoteUid;
 bool? muted = paramJson.muted;
-  if (uid == null||muted == null) { return true; }
-  ,
-  RtcEngineEventHandler.onUserMuteVideo!(uid,muted);
+  if (connection == null||remoteUid == null||muted == null) { return true; }
+  connection = connection.fillBuffers(buffers);
+
+
+  rtcEngineEventHandler.onUserMuteVideo!(connection,remoteUid,muted);
   return true;
 
 
-case 'RtcEngineEventHandler_onUserEnableVideo':
-if (RtcEngineEventHandler.onuserenablevideo == null) {
+case 'onUserEnableVideo_1d2565c7':
+if (rtcEngineEventHandler.onUserEnableVideo == null) {
     return true;
 }
 final jsonMap = jsonDecode(eventData);
 RtcEngineEventHandlerOnUserEnableVideoJson paramJson = RtcEngineEventHandlerOnUserEnableVideoJson.fromJson(jsonMap);
 paramJson = paramJson.fillBuffers(buffers);
-int? uid = paramJson.uid;
+RtcConnection? connection = paramJson.connection;
+int? remoteUid = paramJson.remoteUid;
 bool? enabled = paramJson.enabled;
-  if (uid == null||enabled == null) { return true; }
-  ,
-  RtcEngineEventHandler.onUserEnableVideo!(uid,enabled);
+  if (connection == null||remoteUid == null||enabled == null) { return true; }
+  connection = connection.fillBuffers(buffers);
+
+
+  rtcEngineEventHandler.onUserEnableVideo!(connection,remoteUid,enabled);
   return true;
 
 
-case 'RtcEngineEventHandler_onUserStateChanged':
-if (RtcEngineEventHandler.onuserstatechanged == null) {
+case 'onUserStateChanged_25ba5f43':
+if (rtcEngineEventHandler.onUserStateChanged == null) {
     return true;
 }
 final jsonMap = jsonDecode(eventData);
 RtcEngineEventHandlerOnUserStateChangedJson paramJson = RtcEngineEventHandlerOnUserStateChangedJson.fromJson(jsonMap);
 paramJson = paramJson.fillBuffers(buffers);
-int? uid = paramJson.uid;
-RemoteUserState? state = paramJson.state;
-  if (uid == null||state == null) { return true; }
-  ,
-  RtcEngineEventHandler.onUserStateChanged!(uid,state);
+RtcConnection? connection = paramJson.connection;
+int? remoteUid = paramJson.remoteUid;
+int? state = paramJson.state;
+  if (connection == null||remoteUid == null||state == null) { return true; }
+  connection = connection.fillBuffers(buffers);
+
+
+  rtcEngineEventHandler.onUserStateChanged!(connection,remoteUid,state);
   return true;
 
 
-case 'RtcEngineEventHandler_onUserEnableLocalVideo':
-if (RtcEngineEventHandler.onuserenablelocalvideo == null) {
+case 'onUserEnableLocalVideo_1d2565c7':
+if (rtcEngineEventHandler.onUserEnableLocalVideo == null) {
     return true;
 }
 final jsonMap = jsonDecode(eventData);
 RtcEngineEventHandlerOnUserEnableLocalVideoJson paramJson = RtcEngineEventHandlerOnUserEnableLocalVideoJson.fromJson(jsonMap);
 paramJson = paramJson.fillBuffers(buffers);
-int? uid = paramJson.uid;
+RtcConnection? connection = paramJson.connection;
+int? remoteUid = paramJson.remoteUid;
 bool? enabled = paramJson.enabled;
-  if (uid == null||enabled == null) { return true; }
-  ,
-  RtcEngineEventHandler.onUserEnableLocalVideo!(uid,enabled);
+  if (connection == null||remoteUid == null||enabled == null) { return true; }
+  connection = connection.fillBuffers(buffers);
+
+
+  rtcEngineEventHandler.onUserEnableLocalVideo!(connection,remoteUid,enabled);
   return true;
 
 
-case 'RtcEngineEventHandler_onRemoteAudioStats':
-if (RtcEngineEventHandler.onremoteaudiostats == null) {
+case 'onRemoteAudioStats_3a0ccade':
+if (rtcEngineEventHandler.onRemoteAudioStats == null) {
     return true;
 }
 final jsonMap = jsonDecode(eventData);
 RtcEngineEventHandlerOnRemoteAudioStatsJson paramJson = RtcEngineEventHandlerOnRemoteAudioStatsJson.fromJson(jsonMap);
 paramJson = paramJson.fillBuffers(buffers);
+RtcConnection? connection = paramJson.connection;
 RemoteAudioStats? stats = paramJson.stats;
-  if (stats == null) { return true; }
-  
-  RtcEngineEventHandler.onRemoteAudioStats!(stats);
+  if (connection == null||stats == null) { return true; }
+  connection = connection.fillBuffers(buffers);
+stats = stats.fillBuffers(buffers);
+  rtcEngineEventHandler.onRemoteAudioStats!(connection,stats);
   return true;
 
 
-case 'RtcEngineEventHandler_onLocalAudioStats':
-if (RtcEngineEventHandler.onlocalaudiostats == null) {
+case 'onLocalAudioStats_57af2185':
+if (rtcEngineEventHandler.onLocalAudioStats == null) {
     return true;
 }
 final jsonMap = jsonDecode(eventData);
 RtcEngineEventHandlerOnLocalAudioStatsJson paramJson = RtcEngineEventHandlerOnLocalAudioStatsJson.fromJson(jsonMap);
 paramJson = paramJson.fillBuffers(buffers);
+RtcConnection? connection = paramJson.connection;
 LocalAudioStats? stats = paramJson.stats;
-  if (stats == null) { return true; }
-  
-  RtcEngineEventHandler.onLocalAudioStats!(stats);
+  if (connection == null||stats == null) { return true; }
+  connection = connection.fillBuffers(buffers);
+stats = stats.fillBuffers(buffers);
+  rtcEngineEventHandler.onLocalAudioStats!(connection,stats);
   return true;
 
 
-case 'RtcEngineEventHandler_onLocalVideoStats':
-if (RtcEngineEventHandler.onlocalvideostats == null) {
+case 'onLocalVideoStats':
+if (rtcEngineEventHandler.onLocalVideoStats == null) {
     return true;
 }
 final jsonMap = jsonDecode(eventData);
@@ -577,38 +647,41 @@ paramJson = paramJson.fillBuffers(buffers);
 VideoSourceType? source = paramJson.source;
 LocalVideoStats? stats = paramJson.stats;
   if (source == null||stats == null) { return true; }
-  ,
-  RtcEngineEventHandler.onLocalVideoStats!(source,stats);
+  
+stats = stats.fillBuffers(buffers);
+  rtcEngineEventHandler.onLocalVideoStats!(source,stats);
   return true;
 
 
-case 'RtcEngineEventHandler_onRemoteVideoStats':
-if (RtcEngineEventHandler.onremotevideostats == null) {
+case 'onRemoteVideoStats_42518bfd':
+if (rtcEngineEventHandler.onRemoteVideoStats == null) {
     return true;
 }
 final jsonMap = jsonDecode(eventData);
 RtcEngineEventHandlerOnRemoteVideoStatsJson paramJson = RtcEngineEventHandlerOnRemoteVideoStatsJson.fromJson(jsonMap);
 paramJson = paramJson.fillBuffers(buffers);
+RtcConnection? connection = paramJson.connection;
 RemoteVideoStats? stats = paramJson.stats;
-  if (stats == null) { return true; }
-  
-  RtcEngineEventHandler.onRemoteVideoStats!(stats);
+  if (connection == null||stats == null) { return true; }
+  connection = connection.fillBuffers(buffers);
+stats = stats.fillBuffers(buffers);
+  rtcEngineEventHandler.onRemoteVideoStats!(connection,stats);
   return true;
 
 
-case 'RtcEngineEventHandler_onCameraReady':
-if (RtcEngineEventHandler.oncameraready == null) {
+case 'onCameraReady':
+if (rtcEngineEventHandler.onCameraReady == null) {
     return true;
 }
 final jsonMap = jsonDecode(eventData);
 RtcEngineEventHandlerOnCameraReadyJson paramJson = RtcEngineEventHandlerOnCameraReadyJson.fromJson(jsonMap);
 paramJson = paramJson.fillBuffers(buffers);
-RtcEngineEventHandler.onCameraReady!();
+rtcEngineEventHandler.onCameraReady!();
   return true;
 
 
-case 'RtcEngineEventHandler_onCameraFocusAreaChanged':
-if (RtcEngineEventHandler.oncamerafocusareachanged == null) {
+case 'onCameraFocusAreaChanged':
+if (rtcEngineEventHandler.onCameraFocusAreaChanged == null) {
     return true;
 }
 final jsonMap = jsonDecode(eventData);
@@ -619,13 +692,16 @@ int? y = paramJson.y;
 int? width = paramJson.width;
 int? height = paramJson.height;
   if (x == null||y == null||width == null||height == null) { return true; }
-  ,,,
-  RtcEngineEventHandler.onCameraFocusAreaChanged!(x,y,width,height);
+  
+
+
+
+  rtcEngineEventHandler.onCameraFocusAreaChanged!(x,y,width,height);
   return true;
 
 
-case 'RtcEngineEventHandler_onCameraExposureAreaChanged':
-if (RtcEngineEventHandler.oncameraexposureareachanged == null) {
+case 'onCameraExposureAreaChanged':
+if (rtcEngineEventHandler.onCameraExposureAreaChanged == null) {
     return true;
 }
 final jsonMap = jsonDecode(eventData);
@@ -636,42 +712,49 @@ int? y = paramJson.y;
 int? width = paramJson.width;
 int? height = paramJson.height;
   if (x == null||y == null||width == null||height == null) { return true; }
-  ,,,
-  RtcEngineEventHandler.onCameraExposureAreaChanged!(x,y,width,height);
+  
+
+
+
+  rtcEngineEventHandler.onCameraExposureAreaChanged!(x,y,width,height);
   return true;
 
 
-case 'RtcEngineEventHandler_onFacePositionChanged':
-if (RtcEngineEventHandler.onfacepositionchanged == null) {
+case 'onFacePositionChanged':
+if (rtcEngineEventHandler.onFacePositionChanged == null) {
     return true;
 }
 final jsonMap = jsonDecode(eventData);
 RtcEngineEventHandlerOnFacePositionChangedJson paramJson = RtcEngineEventHandlerOnFacePositionChangedJson.fromJson(jsonMap);
 paramJson = paramJson.fillBuffers(buffers);
-int? imagewidth = paramJson.imagewidth;
-int? imageheight = paramJson.imageheight;
-Rectangle? vecrectangle = paramJson.vecrectangle;
-int? vecdistance = paramJson.vecdistance;
-int? numfaces = paramJson.numfaces;
-  if (imagewidth == null||imageheight == null||vecrectangle == null||vecdistance == null||numfaces == null) { return true; }
-  ,,,,
-  RtcEngineEventHandler.onFacePositionChanged!(imagewidth,imageheight,vecrectangle,vecdistance,numfaces);
+int? imageWidth = paramJson.imageWidth;
+int? imageHeight = paramJson.imageHeight;
+Rectangle? vecRectangle = paramJson.vecRectangle;
+int? vecDistance = paramJson.vecDistance;
+int? numFaces = paramJson.numFaces;
+  if (imageWidth == null||imageHeight == null||vecRectangle == null||vecDistance == null||numFaces == null) { return true; }
+  
+
+vecRectangle = vecRectangle.fillBuffers(buffers);
+
+
+  rtcEngineEventHandler.onFacePositionChanged!(imageWidth,imageHeight,vecRectangle,vecDistance,numFaces);
   return true;
 
 
-case 'RtcEngineEventHandler_onVideoStopped':
-if (RtcEngineEventHandler.onvideostopped == null) {
+case 'onVideoStopped':
+if (rtcEngineEventHandler.onVideoStopped == null) {
     return true;
 }
 final jsonMap = jsonDecode(eventData);
 RtcEngineEventHandlerOnVideoStoppedJson paramJson = RtcEngineEventHandlerOnVideoStoppedJson.fromJson(jsonMap);
 paramJson = paramJson.fillBuffers(buffers);
-RtcEngineEventHandler.onVideoStopped!();
+rtcEngineEventHandler.onVideoStopped!();
   return true;
 
 
-case 'RtcEngineEventHandler_onAudioMixingStateChanged':
-if (RtcEngineEventHandler.onaudiomixingstatechanged == null) {
+case 'onAudioMixingStateChanged':
+if (rtcEngineEventHandler.onAudioMixingStateChanged == null) {
     return true;
 }
 final jsonMap = jsonDecode(eventData);
@@ -680,13 +763,14 @@ paramJson = paramJson.fillBuffers(buffers);
 AudioMixingStateType? state = paramJson.state;
 AudioMixingReasonType? reason = paramJson.reason;
   if (state == null||reason == null) { return true; }
-  ,
-  RtcEngineEventHandler.onAudioMixingStateChanged!(state,reason);
+  
+
+  rtcEngineEventHandler.onAudioMixingStateChanged!(state,reason);
   return true;
 
 
-case 'RtcEngineEventHandler_onRhythmPlayerStateChanged':
-if (RtcEngineEventHandler.onrhythmplayerstatechanged == null) {
+case 'onRhythmPlayerStateChanged':
+if (rtcEngineEventHandler.onRhythmPlayerStateChanged == null) {
     return true;
 }
 final jsonMap = jsonDecode(eventData);
@@ -695,211 +779,258 @@ paramJson = paramJson.fillBuffers(buffers);
 RhythmPlayerStateType? state = paramJson.state;
 RhythmPlayerReason? reason = paramJson.reason;
   if (state == null||reason == null) { return true; }
-  ,
-  RtcEngineEventHandler.onRhythmPlayerStateChanged!(state,reason);
+  
+
+  rtcEngineEventHandler.onRhythmPlayerStateChanged!(state,reason);
   return true;
 
 
-case 'RtcEngineEventHandler_onConnectionLost':
-if (RtcEngineEventHandler.onconnectionlost == null) {
+case 'onConnectionLost_60e2000d':
+if (rtcEngineEventHandler.onConnectionLost == null) {
     return true;
 }
 final jsonMap = jsonDecode(eventData);
 RtcEngineEventHandlerOnConnectionLostJson paramJson = RtcEngineEventHandlerOnConnectionLostJson.fromJson(jsonMap);
 paramJson = paramJson.fillBuffers(buffers);
-RtcEngineEventHandler.onConnectionLost!();
+RtcConnection? connection = paramJson.connection;
+  if (connection == null) { return true; }
+  connection = connection.fillBuffers(buffers);
+  rtcEngineEventHandler.onConnectionLost!(connection);
   return true;
 
 
-case 'RtcEngineEventHandler_onConnectionInterrupted':
-if (RtcEngineEventHandler.onconnectioninterrupted == null) {
+case 'onConnectionInterrupted_60e2000d':
+if (rtcEngineEventHandler.onConnectionInterrupted == null) {
     return true;
 }
 final jsonMap = jsonDecode(eventData);
 RtcEngineEventHandlerOnConnectionInterruptedJson paramJson = RtcEngineEventHandlerOnConnectionInterruptedJson.fromJson(jsonMap);
 paramJson = paramJson.fillBuffers(buffers);
-RtcEngineEventHandler.onConnectionInterrupted!();
+RtcConnection? connection = paramJson.connection;
+  if (connection == null) { return true; }
+  connection = connection.fillBuffers(buffers);
+  rtcEngineEventHandler.onConnectionInterrupted!(connection);
   return true;
 
 
-case 'RtcEngineEventHandler_onConnectionBanned':
-if (RtcEngineEventHandler.onconnectionbanned == null) {
+case 'onConnectionBanned_60e2000d':
+if (rtcEngineEventHandler.onConnectionBanned == null) {
     return true;
 }
 final jsonMap = jsonDecode(eventData);
 RtcEngineEventHandlerOnConnectionBannedJson paramJson = RtcEngineEventHandlerOnConnectionBannedJson.fromJson(jsonMap);
 paramJson = paramJson.fillBuffers(buffers);
-RtcEngineEventHandler.onConnectionBanned!();
+RtcConnection? connection = paramJson.connection;
+  if (connection == null) { return true; }
+  connection = connection.fillBuffers(buffers);
+  rtcEngineEventHandler.onConnectionBanned!(connection);
   return true;
 
 
-case 'RtcEngineEventHandler_onStreamMessage':
-if (RtcEngineEventHandler.onstreammessage == null) {
+case 'onStreamMessage_59a69d4':
+if (rtcEngineEventHandler.onStreamMessage == null) {
     return true;
 }
 final jsonMap = jsonDecode(eventData);
 RtcEngineEventHandlerOnStreamMessageJson paramJson = RtcEngineEventHandlerOnStreamMessageJson.fromJson(jsonMap);
 paramJson = paramJson.fillBuffers(buffers);
-int? uid = paramJson.uid;
-int? streamid = paramJson.streamid;
+RtcConnection? connection = paramJson.connection;
+int? remoteUid = paramJson.remoteUid;
+int? streamId = paramJson.streamId;
 String? data = paramJson.data;
 int? length = paramJson.length;
-int? sentts = paramJson.sentts;
-  if (uid == null||streamid == null||data == null||length == null||sentts == null) { return true; }
-  ,,,,
-  RtcEngineEventHandler.onStreamMessage!(uid,streamid,data,length,sentts);
+int? sentTs = paramJson.sentTs;
+  if (connection == null||remoteUid == null||streamId == null||data == null||length == null||sentTs == null) { return true; }
+  connection = connection.fillBuffers(buffers);
+
+
+
+
+
+  rtcEngineEventHandler.onStreamMessage!(connection,remoteUid,streamId,data,length,sentTs);
   return true;
 
 
-case 'RtcEngineEventHandler_onStreamMessageError':
-if (RtcEngineEventHandler.onstreammessageerror == null) {
+case 'onStreamMessageError_28dc011':
+if (rtcEngineEventHandler.onStreamMessageError == null) {
     return true;
 }
 final jsonMap = jsonDecode(eventData);
 RtcEngineEventHandlerOnStreamMessageErrorJson paramJson = RtcEngineEventHandlerOnStreamMessageErrorJson.fromJson(jsonMap);
 paramJson = paramJson.fillBuffers(buffers);
-int? uid = paramJson.uid;
-int? streamid = paramJson.streamid;
+RtcConnection? connection = paramJson.connection;
+int? remoteUid = paramJson.remoteUid;
+int? streamId = paramJson.streamId;
 int? code = paramJson.code;
 int? missed = paramJson.missed;
 int? cached = paramJson.cached;
-  if (uid == null||streamid == null||code == null||missed == null||cached == null) { return true; }
-  ,,,,
-  RtcEngineEventHandler.onStreamMessageError!(uid,streamid,code,missed,cached);
+  if (connection == null||remoteUid == null||streamId == null||code == null||missed == null||cached == null) { return true; }
+  connection = connection.fillBuffers(buffers);
+
+
+
+
+
+  rtcEngineEventHandler.onStreamMessageError!(connection,remoteUid,streamId,code,missed,cached);
   return true;
 
 
-case 'RtcEngineEventHandler_onRequestToken':
-if (RtcEngineEventHandler.onrequesttoken == null) {
+case 'onRequestToken_60e2000d':
+if (rtcEngineEventHandler.onRequestToken == null) {
     return true;
 }
 final jsonMap = jsonDecode(eventData);
 RtcEngineEventHandlerOnRequestTokenJson paramJson = RtcEngineEventHandlerOnRequestTokenJson.fromJson(jsonMap);
 paramJson = paramJson.fillBuffers(buffers);
-RtcEngineEventHandler.onRequestToken!();
+RtcConnection? connection = paramJson.connection;
+  if (connection == null) { return true; }
+  connection = connection.fillBuffers(buffers);
+  rtcEngineEventHandler.onRequestToken!(connection);
   return true;
 
 
-case 'RtcEngineEventHandler_onTokenPrivilegeWillExpire':
-if (RtcEngineEventHandler.ontokenprivilegewillexpire == null) {
+case 'onTokenPrivilegeWillExpire_2af4264':
+if (rtcEngineEventHandler.onTokenPrivilegeWillExpire == null) {
     return true;
 }
 final jsonMap = jsonDecode(eventData);
 RtcEngineEventHandlerOnTokenPrivilegeWillExpireJson paramJson = RtcEngineEventHandlerOnTokenPrivilegeWillExpireJson.fromJson(jsonMap);
 paramJson = paramJson.fillBuffers(buffers);
+RtcConnection? connection = paramJson.connection;
 String? token = paramJson.token;
-  if (token == null) { return true; }
-  
-  RtcEngineEventHandler.onTokenPrivilegeWillExpire!(token);
+  if (connection == null||token == null) { return true; }
+  connection = connection.fillBuffers(buffers);
+
+  rtcEngineEventHandler.onTokenPrivilegeWillExpire!(connection,token);
   return true;
 
 
-case 'RtcEngineEventHandler_onLicenseValidationFailure':
-if (RtcEngineEventHandler.onlicensevalidationfailure == null) {
+case 'onLicenseValidationFailure_4f7e523a':
+if (rtcEngineEventHandler.onLicenseValidationFailure == null) {
     return true;
 }
 final jsonMap = jsonDecode(eventData);
 RtcEngineEventHandlerOnLicenseValidationFailureJson paramJson = RtcEngineEventHandlerOnLicenseValidationFailureJson.fromJson(jsonMap);
 paramJson = paramJson.fillBuffers(buffers);
-LicenseErrorType? error = paramJson.error;
-  if (error == null) { return true; }
-  
-  RtcEngineEventHandler.onLicenseValidationFailure!(error);
+RtcConnection? connection = paramJson.connection;
+LicenseErrorType? reason = paramJson.reason;
+  if (connection == null||reason == null) { return true; }
+  connection = connection.fillBuffers(buffers);
+
+  rtcEngineEventHandler.onLicenseValidationFailure!(connection,reason);
   return true;
 
 
-case 'RtcEngineEventHandler_onFirstLocalAudioFramePublished':
-if (RtcEngineEventHandler.onfirstlocalaudioframepublished == null) {
+case 'onFirstLocalAudioFramePublished_80b7fde':
+if (rtcEngineEventHandler.onFirstLocalAudioFramePublished == null) {
     return true;
 }
 final jsonMap = jsonDecode(eventData);
 RtcEngineEventHandlerOnFirstLocalAudioFramePublishedJson paramJson = RtcEngineEventHandlerOnFirstLocalAudioFramePublishedJson.fromJson(jsonMap);
 paramJson = paramJson.fillBuffers(buffers);
+RtcConnection? connection = paramJson.connection;
 int? elapsed = paramJson.elapsed;
-  if (elapsed == null) { return true; }
-  
-  RtcEngineEventHandler.onFirstLocalAudioFramePublished!(elapsed);
+  if (connection == null||elapsed == null) { return true; }
+  connection = connection.fillBuffers(buffers);
+
+  rtcEngineEventHandler.onFirstLocalAudioFramePublished!(connection,elapsed);
   return true;
 
 
-case 'RtcEngineEventHandler_onFirstRemoteAudioDecoded':
-if (RtcEngineEventHandler.onfirstremoteaudiodecoded == null) {
+case 'onFirstRemoteAudioDecoded_6c4b6d40':
+if (rtcEngineEventHandler.onFirstRemoteAudioDecoded == null) {
     return true;
 }
 final jsonMap = jsonDecode(eventData);
 RtcEngineEventHandlerOnFirstRemoteAudioDecodedJson paramJson = RtcEngineEventHandlerOnFirstRemoteAudioDecodedJson.fromJson(jsonMap);
 paramJson = paramJson.fillBuffers(buffers);
+RtcConnection? connection = paramJson.connection;
 int? uid = paramJson.uid;
 int? elapsed = paramJson.elapsed;
-  if (uid == null||elapsed == null) { return true; }
-  ,
-  RtcEngineEventHandler.onFirstRemoteAudioDecoded!(uid,elapsed);
+  if (connection == null||uid == null||elapsed == null) { return true; }
+  connection = connection.fillBuffers(buffers);
+
+
+  rtcEngineEventHandler.onFirstRemoteAudioDecoded!(connection,uid,elapsed);
   return true;
 
 
-case 'RtcEngineEventHandler_onFirstRemoteAudioFrame':
-if (RtcEngineEventHandler.onfirstremoteaudioframe == null) {
+case 'onFirstRemoteAudioFrame_6c4b6d40':
+if (rtcEngineEventHandler.onFirstRemoteAudioFrame == null) {
     return true;
 }
 final jsonMap = jsonDecode(eventData);
 RtcEngineEventHandlerOnFirstRemoteAudioFrameJson paramJson = RtcEngineEventHandlerOnFirstRemoteAudioFrameJson.fromJson(jsonMap);
 paramJson = paramJson.fillBuffers(buffers);
-int? uid = paramJson.uid;
+RtcConnection? connection = paramJson.connection;
+int? userId = paramJson.userId;
 int? elapsed = paramJson.elapsed;
-  if (uid == null||elapsed == null) { return true; }
-  ,
-  RtcEngineEventHandler.onFirstRemoteAudioFrame!(uid,elapsed);
+  if (connection == null||userId == null||elapsed == null) { return true; }
+  connection = connection.fillBuffers(buffers);
+
+
+  rtcEngineEventHandler.onFirstRemoteAudioFrame!(connection,userId,elapsed);
   return true;
 
 
-case 'RtcEngineEventHandler_onLocalAudioStateChanged':
-if (RtcEngineEventHandler.onlocalaudiostatechanged == null) {
+case 'onLocalAudioStateChanged_3ec0d908':
+if (rtcEngineEventHandler.onLocalAudioStateChanged == null) {
     return true;
 }
 final jsonMap = jsonDecode(eventData);
 RtcEngineEventHandlerOnLocalAudioStateChangedJson paramJson = RtcEngineEventHandlerOnLocalAudioStateChangedJson.fromJson(jsonMap);
 paramJson = paramJson.fillBuffers(buffers);
+RtcConnection? connection = paramJson.connection;
 LocalAudioStreamState? state = paramJson.state;
 LocalAudioStreamReason? reason = paramJson.reason;
-  if (state == null||reason == null) { return true; }
-  ,
-  RtcEngineEventHandler.onLocalAudioStateChanged!(state,reason);
+  if (connection == null||state == null||reason == null) { return true; }
+  connection = connection.fillBuffers(buffers);
+
+
+  rtcEngineEventHandler.onLocalAudioStateChanged!(connection,state,reason);
   return true;
 
 
-case 'RtcEngineEventHandler_onRemoteAudioStateChanged':
-if (RtcEngineEventHandler.onremoteaudiostatechanged == null) {
+case 'onRemoteAudioStateChanged_64b072ab':
+if (rtcEngineEventHandler.onRemoteAudioStateChanged == null) {
     return true;
 }
 final jsonMap = jsonDecode(eventData);
 RtcEngineEventHandlerOnRemoteAudioStateChangedJson paramJson = RtcEngineEventHandlerOnRemoteAudioStateChangedJson.fromJson(jsonMap);
 paramJson = paramJson.fillBuffers(buffers);
-int? uid = paramJson.uid;
+RtcConnection? connection = paramJson.connection;
+int? remoteUid = paramJson.remoteUid;
 RemoteAudioState? state = paramJson.state;
 RemoteAudioStateReason? reason = paramJson.reason;
 int? elapsed = paramJson.elapsed;
-  if (uid == null||state == null||reason == null||elapsed == null) { return true; }
-  ,,,
-  RtcEngineEventHandler.onRemoteAudioStateChanged!(uid,state,reason,elapsed);
+  if (connection == null||remoteUid == null||state == null||reason == null||elapsed == null) { return true; }
+  connection = connection.fillBuffers(buffers);
+
+
+
+
+  rtcEngineEventHandler.onRemoteAudioStateChanged!(connection,remoteUid,state,reason,elapsed);
   return true;
 
 
-case 'RtcEngineEventHandler_onActiveSpeaker':
-if (RtcEngineEventHandler.onactivespeaker == null) {
+case 'onActiveSpeaker_27ac42af':
+if (rtcEngineEventHandler.onActiveSpeaker == null) {
     return true;
 }
 final jsonMap = jsonDecode(eventData);
 RtcEngineEventHandlerOnActiveSpeakerJson paramJson = RtcEngineEventHandlerOnActiveSpeakerJson.fromJson(jsonMap);
 paramJson = paramJson.fillBuffers(buffers);
+RtcConnection? connection = paramJson.connection;
 int? uid = paramJson.uid;
-  if (uid == null) { return true; }
-  
-  RtcEngineEventHandler.onActiveSpeaker!(uid);
+  if (connection == null||uid == null) { return true; }
+  connection = connection.fillBuffers(buffers);
+
+  rtcEngineEventHandler.onActiveSpeaker!(connection,uid);
   return true;
 
 
-case 'RtcEngineEventHandler_onContentInspectResult':
-if (RtcEngineEventHandler.oncontentinspectresult == null) {
+case 'onContentInspectResult':
+if (rtcEngineEventHandler.onContentInspectResult == null) {
     return true;
 }
 final jsonMap = jsonDecode(eventData);
@@ -908,77 +1039,92 @@ paramJson = paramJson.fillBuffers(buffers);
 ContentInspectResult? result = paramJson.result;
   if (result == null) { return true; }
   
-  RtcEngineEventHandler.onContentInspectResult!(result);
+  rtcEngineEventHandler.onContentInspectResult!(result);
   return true;
 
 
-case 'RtcEngineEventHandler_onSnapshotTaken':
-if (RtcEngineEventHandler.onsnapshottaken == null) {
+case 'onSnapshotTaken_7b685093':
+if (rtcEngineEventHandler.onSnapshotTaken == null) {
     return true;
 }
 final jsonMap = jsonDecode(eventData);
 RtcEngineEventHandlerOnSnapshotTakenJson paramJson = RtcEngineEventHandlerOnSnapshotTakenJson.fromJson(jsonMap);
 paramJson = paramJson.fillBuffers(buffers);
+RtcConnection? connection = paramJson.connection;
 int? uid = paramJson.uid;
-String? filepath = paramJson.filepath;
+String? filePath = paramJson.filePath;
 int? width = paramJson.width;
 int? height = paramJson.height;
-int? errcode = paramJson.errcode;
-  if (uid == null||filepath == null||width == null||height == null||errcode == null) { return true; }
-  ,,,,
-  RtcEngineEventHandler.onSnapshotTaken!(uid,filepath,width,height,errcode);
+int? errCode = paramJson.errCode;
+  if (connection == null||uid == null||filePath == null||width == null||height == null||errCode == null) { return true; }
+  connection = connection.fillBuffers(buffers);
+
+
+
+
+
+  rtcEngineEventHandler.onSnapshotTaken!(connection,uid,filePath,width,height,errCode);
   return true;
 
 
-case 'RtcEngineEventHandler_onClientRoleChanged':
-if (RtcEngineEventHandler.onclientrolechanged == null) {
+case 'onClientRoleChanged_2bd3b7f4':
+if (rtcEngineEventHandler.onClientRoleChanged == null) {
     return true;
 }
 final jsonMap = jsonDecode(eventData);
 RtcEngineEventHandlerOnClientRoleChangedJson paramJson = RtcEngineEventHandlerOnClientRoleChangedJson.fromJson(jsonMap);
 paramJson = paramJson.fillBuffers(buffers);
-ClientRoleType? oldrole = paramJson.oldrole;
-ClientRoleType? newrole = paramJson.newrole;
-ClientRoleOptions? newroleoptions = paramJson.newroleoptions;
-  if (oldrole == null||newrole == null||newroleoptions == null) { return true; }
-  ,,
-  RtcEngineEventHandler.onClientRoleChanged!(oldrole,newrole,newroleoptions);
+RtcConnection? connection = paramJson.connection;
+ClientRoleType? oldRole = paramJson.oldRole;
+ClientRoleType? newRole = paramJson.newRole;
+ClientRoleOptions? newRoleOptions = paramJson.newRoleOptions;
+  if (connection == null||oldRole == null||newRole == null||newRoleOptions == null) { return true; }
+  connection = connection.fillBuffers(buffers);
+
+
+newRoleOptions = newRoleOptions.fillBuffers(buffers);
+  rtcEngineEventHandler.onClientRoleChanged!(connection,oldRole,newRole,newRoleOptions);
   return true;
 
 
-case 'RtcEngineEventHandler_onClientRoleChangeFailed':
-if (RtcEngineEventHandler.onclientrolechangefailed == null) {
+case 'onClientRoleChangeFailed_6378cb46':
+if (rtcEngineEventHandler.onClientRoleChangeFailed == null) {
     return true;
 }
 final jsonMap = jsonDecode(eventData);
 RtcEngineEventHandlerOnClientRoleChangeFailedJson paramJson = RtcEngineEventHandlerOnClientRoleChangeFailedJson.fromJson(jsonMap);
 paramJson = paramJson.fillBuffers(buffers);
+RtcConnection? connection = paramJson.connection;
 ClientRoleChangeFailedReason? reason = paramJson.reason;
-ClientRoleType? currentrole = paramJson.currentrole;
-  if (reason == null||currentrole == null) { return true; }
-  ,
-  RtcEngineEventHandler.onClientRoleChangeFailed!(reason,currentrole);
+ClientRoleType? currentRole = paramJson.currentRole;
+  if (connection == null||reason == null||currentRole == null) { return true; }
+  connection = connection.fillBuffers(buffers);
+
+
+  rtcEngineEventHandler.onClientRoleChangeFailed!(connection,reason,currentRole);
   return true;
 
 
-case 'RtcEngineEventHandler_onAudioDeviceVolumeChanged':
-if (RtcEngineEventHandler.onaudiodevicevolumechanged == null) {
+case 'onAudioDeviceVolumeChanged':
+if (rtcEngineEventHandler.onAudioDeviceVolumeChanged == null) {
     return true;
 }
 final jsonMap = jsonDecode(eventData);
 RtcEngineEventHandlerOnAudioDeviceVolumeChangedJson paramJson = RtcEngineEventHandlerOnAudioDeviceVolumeChangedJson.fromJson(jsonMap);
 paramJson = paramJson.fillBuffers(buffers);
-MediaDeviceType? devicetype = paramJson.devicetype;
+MediaDeviceType? deviceType = paramJson.deviceType;
 int? volume = paramJson.volume;
 bool? muted = paramJson.muted;
-  if (devicetype == null||volume == null||muted == null) { return true; }
-  ,,
-  RtcEngineEventHandler.onAudioDeviceVolumeChanged!(devicetype,volume,muted);
+  if (deviceType == null||volume == null||muted == null) { return true; }
+  
+
+
+  rtcEngineEventHandler.onAudioDeviceVolumeChanged!(deviceType,volume,muted);
   return true;
 
 
-case 'RtcEngineEventHandler_onRtmpStreamingStateChanged':
-if (RtcEngineEventHandler.onrtmpstreamingstatechanged == null) {
+case 'onRtmpStreamingStateChanged':
+if (rtcEngineEventHandler.onRtmpStreamingStateChanged == null) {
     return true;
 }
 final jsonMap = jsonDecode(eventData);
@@ -988,39 +1134,42 @@ String? url = paramJson.url;
 RtmpStreamPublishState? state = paramJson.state;
 RtmpStreamPublishReason? reason = paramJson.reason;
   if (url == null||state == null||reason == null) { return true; }
-  ,,
-  RtcEngineEventHandler.onRtmpStreamingStateChanged!(url,state,reason);
+  
+
+
+  rtcEngineEventHandler.onRtmpStreamingStateChanged!(url,state,reason);
   return true;
 
 
-case 'RtcEngineEventHandler_onRtmpStreamingEvent':
-if (RtcEngineEventHandler.onrtmpstreamingevent == null) {
+case 'onRtmpStreamingEvent':
+if (rtcEngineEventHandler.onRtmpStreamingEvent == null) {
     return true;
 }
 final jsonMap = jsonDecode(eventData);
 RtcEngineEventHandlerOnRtmpStreamingEventJson paramJson = RtcEngineEventHandlerOnRtmpStreamingEventJson.fromJson(jsonMap);
 paramJson = paramJson.fillBuffers(buffers);
 String? url = paramJson.url;
-RtmpStreamingEvent? eventcode = paramJson.eventcode;
-  if (url == null||eventcode == null) { return true; }
-  ,
-  RtcEngineEventHandler.onRtmpStreamingEvent!(url,eventcode);
+RtmpStreamingEvent? eventCode = paramJson.eventCode;
+  if (url == null||eventCode == null) { return true; }
+  
+
+  rtcEngineEventHandler.onRtmpStreamingEvent!(url,eventCode);
   return true;
 
 
-case 'RtcEngineEventHandler_onTranscodingUpdated':
-if (RtcEngineEventHandler.ontranscodingupdated == null) {
+case 'onTranscodingUpdated':
+if (rtcEngineEventHandler.onTranscodingUpdated == null) {
     return true;
 }
 final jsonMap = jsonDecode(eventData);
 RtcEngineEventHandlerOnTranscodingUpdatedJson paramJson = RtcEngineEventHandlerOnTranscodingUpdatedJson.fromJson(jsonMap);
 paramJson = paramJson.fillBuffers(buffers);
-RtcEngineEventHandler.onTranscodingUpdated!();
+rtcEngineEventHandler.onTranscodingUpdated!();
   return true;
 
 
-case 'RtcEngineEventHandler_onAudioRoutingChanged':
-if (RtcEngineEventHandler.onaudioroutingchanged == null) {
+case 'onAudioRoutingChanged':
+if (rtcEngineEventHandler.onAudioRoutingChanged == null) {
     return true;
 }
 final jsonMap = jsonDecode(eventData);
@@ -1029,12 +1178,12 @@ paramJson = paramJson.fillBuffers(buffers);
 int? routing = paramJson.routing;
   if (routing == null) { return true; }
   
-  RtcEngineEventHandler.onAudioRoutingChanged!(routing);
+  rtcEngineEventHandler.onAudioRoutingChanged!(routing);
   return true;
 
 
-case 'RtcEngineEventHandler_onChannelMediaRelayStateChanged':
-if (RtcEngineEventHandler.onchannelmediarelaystatechanged == null) {
+case 'onChannelMediaRelayStateChanged':
+if (rtcEngineEventHandler.onChannelMediaRelayStateChanged == null) {
     return true;
 }
 final jsonMap = jsonDecode(eventData);
@@ -1043,179 +1192,206 @@ paramJson = paramJson.fillBuffers(buffers);
 int? state = paramJson.state;
 int? code = paramJson.code;
   if (state == null||code == null) { return true; }
-  ,
-  RtcEngineEventHandler.onChannelMediaRelayStateChanged!(state,code);
+  
+
+  rtcEngineEventHandler.onChannelMediaRelayStateChanged!(state,code);
   return true;
 
 
-case 'RtcEngineEventHandler_onLocalPublishFallbackToAudioOnly':
-if (RtcEngineEventHandler.onlocalpublishfallbacktoaudioonly == null) {
+case 'onLocalPublishFallbackToAudioOnly':
+if (rtcEngineEventHandler.onLocalPublishFallbackToAudioOnly == null) {
     return true;
 }
 final jsonMap = jsonDecode(eventData);
 RtcEngineEventHandlerOnLocalPublishFallbackToAudioOnlyJson paramJson = RtcEngineEventHandlerOnLocalPublishFallbackToAudioOnlyJson.fromJson(jsonMap);
 paramJson = paramJson.fillBuffers(buffers);
-bool? isfallbackorrecover = paramJson.isfallbackorrecover;
-  if (isfallbackorrecover == null) { return true; }
+bool? isFallbackOrRecover = paramJson.isFallbackOrRecover;
+  if (isFallbackOrRecover == null) { return true; }
   
-  RtcEngineEventHandler.onLocalPublishFallbackToAudioOnly!(isfallbackorrecover);
+  rtcEngineEventHandler.onLocalPublishFallbackToAudioOnly!(isFallbackOrRecover);
   return true;
 
 
-case 'RtcEngineEventHandler_onRemoteSubscribeFallbackToAudioOnly':
-if (RtcEngineEventHandler.onremotesubscribefallbacktoaudioonly == null) {
+case 'onRemoteSubscribeFallbackToAudioOnly':
+if (rtcEngineEventHandler.onRemoteSubscribeFallbackToAudioOnly == null) {
     return true;
 }
 final jsonMap = jsonDecode(eventData);
 RtcEngineEventHandlerOnRemoteSubscribeFallbackToAudioOnlyJson paramJson = RtcEngineEventHandlerOnRemoteSubscribeFallbackToAudioOnlyJson.fromJson(jsonMap);
 paramJson = paramJson.fillBuffers(buffers);
 int? uid = paramJson.uid;
-bool? isfallbackorrecover = paramJson.isfallbackorrecover;
-  if (uid == null||isfallbackorrecover == null) { return true; }
-  ,
-  RtcEngineEventHandler.onRemoteSubscribeFallbackToAudioOnly!(uid,isfallbackorrecover);
+bool? isFallbackOrRecover = paramJson.isFallbackOrRecover;
+  if (uid == null||isFallbackOrRecover == null) { return true; }
+  
+
+  rtcEngineEventHandler.onRemoteSubscribeFallbackToAudioOnly!(uid,isFallbackOrRecover);
   return true;
 
 
-case 'RtcEngineEventHandler_onRemoteAudioTransportStats':
-if (RtcEngineEventHandler.onremoteaudiotransportstats == null) {
+case 'onRemoteAudioTransportStats_6bd96fe':
+if (rtcEngineEventHandler.onRemoteAudioTransportStats == null) {
     return true;
 }
 final jsonMap = jsonDecode(eventData);
 RtcEngineEventHandlerOnRemoteAudioTransportStatsJson paramJson = RtcEngineEventHandlerOnRemoteAudioTransportStatsJson.fromJson(jsonMap);
 paramJson = paramJson.fillBuffers(buffers);
-int? uid = paramJson.uid;
+RtcConnection? connection = paramJson.connection;
+int? remoteUid = paramJson.remoteUid;
 int? delay = paramJson.delay;
 int? lost = paramJson.lost;
-int? rxkbitrate = paramJson.rxkbitrate;
-  if (uid == null||delay == null||lost == null||rxkbitrate == null) { return true; }
-  ,,,
-  RtcEngineEventHandler.onRemoteAudioTransportStats!(uid,delay,lost,rxkbitrate);
+int? rxKBitRate = paramJson.rxKBitRate;
+  if (connection == null||remoteUid == null||delay == null||lost == null||rxKBitRate == null) { return true; }
+  connection = connection.fillBuffers(buffers);
+
+
+
+
+  rtcEngineEventHandler.onRemoteAudioTransportStats!(connection,remoteUid,delay,lost,rxKBitRate);
   return true;
 
 
-case 'RtcEngineEventHandler_onRemoteVideoTransportStats':
-if (RtcEngineEventHandler.onremotevideotransportstats == null) {
+case 'onRemoteVideoTransportStats_6bd96fe':
+if (rtcEngineEventHandler.onRemoteVideoTransportStats == null) {
     return true;
 }
 final jsonMap = jsonDecode(eventData);
 RtcEngineEventHandlerOnRemoteVideoTransportStatsJson paramJson = RtcEngineEventHandlerOnRemoteVideoTransportStatsJson.fromJson(jsonMap);
 paramJson = paramJson.fillBuffers(buffers);
-int? uid = paramJson.uid;
+RtcConnection? connection = paramJson.connection;
+int? remoteUid = paramJson.remoteUid;
 int? delay = paramJson.delay;
 int? lost = paramJson.lost;
-int? rxkbitrate = paramJson.rxkbitrate;
-  if (uid == null||delay == null||lost == null||rxkbitrate == null) { return true; }
-  ,,,
-  RtcEngineEventHandler.onRemoteVideoTransportStats!(uid,delay,lost,rxkbitrate);
+int? rxKBitRate = paramJson.rxKBitRate;
+  if (connection == null||remoteUid == null||delay == null||lost == null||rxKBitRate == null) { return true; }
+  connection = connection.fillBuffers(buffers);
+
+
+
+
+  rtcEngineEventHandler.onRemoteVideoTransportStats!(connection,remoteUid,delay,lost,rxKBitRate);
   return true;
 
 
-case 'RtcEngineEventHandler_onConnectionStateChanged':
-if (RtcEngineEventHandler.onconnectionstatechanged == null) {
+case 'onConnectionStateChanged_5f9accc5':
+if (rtcEngineEventHandler.onConnectionStateChanged == null) {
     return true;
 }
 final jsonMap = jsonDecode(eventData);
 RtcEngineEventHandlerOnConnectionStateChangedJson paramJson = RtcEngineEventHandlerOnConnectionStateChangedJson.fromJson(jsonMap);
 paramJson = paramJson.fillBuffers(buffers);
+RtcConnection? connection = paramJson.connection;
 ConnectionStateType? state = paramJson.state;
 ConnectionChangedReasonType? reason = paramJson.reason;
-  if (state == null||reason == null) { return true; }
-  ,
-  RtcEngineEventHandler.onConnectionStateChanged!(state,reason);
+  if (connection == null||state == null||reason == null) { return true; }
+  connection = connection.fillBuffers(buffers);
+
+
+  rtcEngineEventHandler.onConnectionStateChanged!(connection,state,reason);
   return true;
 
 
-case 'RtcEngineEventHandler_onWlAccMessage':
-if (RtcEngineEventHandler.onwlaccmessage == null) {
+case 'onWlAccMessage_378b6f81':
+if (rtcEngineEventHandler.onWlAccMessage == null) {
     return true;
 }
 final jsonMap = jsonDecode(eventData);
 RtcEngineEventHandlerOnWlAccMessageJson paramJson = RtcEngineEventHandlerOnWlAccMessageJson.fromJson(jsonMap);
 paramJson = paramJson.fillBuffers(buffers);
+RtcConnection? connection = paramJson.connection;
 WlaccMessageReason? reason = paramJson.reason;
 WlaccSuggestAction? action = paramJson.action;
-String? wlaccmsg = paramJson.wlaccmsg;
-  if (reason == null||action == null||wlaccmsg == null) { return true; }
-  ,,
-  RtcEngineEventHandler.onWlAccMessage!(reason,action,wlaccmsg);
+String? wlAccMsg = paramJson.wlAccMsg;
+  if (connection == null||reason == null||action == null||wlAccMsg == null) { return true; }
+  connection = connection.fillBuffers(buffers);
+
+
+
+  rtcEngineEventHandler.onWlAccMessage!(connection,reason,action,wlAccMsg);
   return true;
 
 
-case 'RtcEngineEventHandler_onWlAccStats':
-if (RtcEngineEventHandler.onwlaccstats == null) {
+case 'onWlAccStats_fbe0105':
+if (rtcEngineEventHandler.onWlAccStats == null) {
     return true;
 }
 final jsonMap = jsonDecode(eventData);
 RtcEngineEventHandlerOnWlAccStatsJson paramJson = RtcEngineEventHandlerOnWlAccStatsJson.fromJson(jsonMap);
 paramJson = paramJson.fillBuffers(buffers);
-WlAccStats? currentstats = paramJson.currentstats;
-WlAccStats? averagestats = paramJson.averagestats;
-  if (currentstats == null||averagestats == null) { return true; }
-  ,
-  RtcEngineEventHandler.onWlAccStats!(currentstats,averagestats);
+RtcConnection? connection = paramJson.connection;
+WlAccStats? currentStats = paramJson.currentStats;
+WlAccStats? averageStats = paramJson.averageStats;
+  if (connection == null||currentStats == null||averageStats == null) { return true; }
+  connection = connection.fillBuffers(buffers);
+currentStats = currentStats.fillBuffers(buffers);
+averageStats = averageStats.fillBuffers(buffers);
+  rtcEngineEventHandler.onWlAccStats!(connection,currentStats,averageStats);
   return true;
 
 
-case 'RtcEngineEventHandler_onNetworkTypeChanged':
-if (RtcEngineEventHandler.onnetworktypechanged == null) {
+case 'onNetworkTypeChanged_600f7edf':
+if (rtcEngineEventHandler.onNetworkTypeChanged == null) {
     return true;
 }
 final jsonMap = jsonDecode(eventData);
 RtcEngineEventHandlerOnNetworkTypeChangedJson paramJson = RtcEngineEventHandlerOnNetworkTypeChangedJson.fromJson(jsonMap);
 paramJson = paramJson.fillBuffers(buffers);
+RtcConnection? connection = paramJson.connection;
 NetworkType? type = paramJson.type;
-  if (type == null) { return true; }
-  
-  RtcEngineEventHandler.onNetworkTypeChanged!(type);
+  if (connection == null||type == null) { return true; }
+  connection = connection.fillBuffers(buffers);
+
+  rtcEngineEventHandler.onNetworkTypeChanged!(connection,type);
   return true;
 
 
-case 'RtcEngineEventHandler_onEncryptionError':
-if (RtcEngineEventHandler.onencryptionerror == null) {
+case 'onEncryptionError_768e5c29':
+if (rtcEngineEventHandler.onEncryptionError == null) {
     return true;
 }
 final jsonMap = jsonDecode(eventData);
 RtcEngineEventHandlerOnEncryptionErrorJson paramJson = RtcEngineEventHandlerOnEncryptionErrorJson.fromJson(jsonMap);
 paramJson = paramJson.fillBuffers(buffers);
-EncryptionErrorType? errortype = paramJson.errortype;
-  if (errortype == null) { return true; }
-  
-  RtcEngineEventHandler.onEncryptionError!(errortype);
+RtcConnection? connection = paramJson.connection;
+EncryptionErrorType? errorType = paramJson.errorType;
+  if (connection == null||errorType == null) { return true; }
+  connection = connection.fillBuffers(buffers);
+
+  rtcEngineEventHandler.onEncryptionError!(connection,errorType);
   return true;
 
 
-case 'RtcEngineEventHandler_onPermissionError':
-if (RtcEngineEventHandler.onpermissionerror == null) {
+case 'onPermissionError':
+if (rtcEngineEventHandler.onPermissionError == null) {
     return true;
 }
 final jsonMap = jsonDecode(eventData);
 RtcEngineEventHandlerOnPermissionErrorJson paramJson = RtcEngineEventHandlerOnPermissionErrorJson.fromJson(jsonMap);
 paramJson = paramJson.fillBuffers(buffers);
-PermissionType? permissiontype = paramJson.permissiontype;
-  if (permissiontype == null) { return true; }
+PermissionType? permissionType = paramJson.permissionType;
+  if (permissionType == null) { return true; }
   
-  RtcEngineEventHandler.onPermissionError!(permissiontype);
+  rtcEngineEventHandler.onPermissionError!(permissionType);
   return true;
 
 
-case 'RtcEngineEventHandler_onLocalUserRegistered':
-if (RtcEngineEventHandler.onlocaluserregistered == null) {
+case 'onLocalUserRegistered':
+if (rtcEngineEventHandler.onLocalUserRegistered == null) {
     return true;
 }
 final jsonMap = jsonDecode(eventData);
 RtcEngineEventHandlerOnLocalUserRegisteredJson paramJson = RtcEngineEventHandlerOnLocalUserRegisteredJson.fromJson(jsonMap);
 paramJson = paramJson.fillBuffers(buffers);
 int? uid = paramJson.uid;
-String? useraccount = paramJson.useraccount;
-  if (uid == null||useraccount == null) { return true; }
-  ,
-  RtcEngineEventHandler.onLocalUserRegistered!(uid,useraccount);
+String? userAccount = paramJson.userAccount;
+  if (uid == null||userAccount == null) { return true; }
+  
+
+  rtcEngineEventHandler.onLocalUserRegistered!(uid,userAccount);
   return true;
 
 
-case 'RtcEngineEventHandler_onUserInfoUpdated':
-if (RtcEngineEventHandler.onuserinfoupdated == null) {
+case 'onUserInfoUpdated':
+if (rtcEngineEventHandler.onUserInfoUpdated == null) {
     return true;
 }
 final jsonMap = jsonDecode(eventData);
@@ -1224,44 +1400,52 @@ paramJson = paramJson.fillBuffers(buffers);
 int? uid = paramJson.uid;
 UserInfo? info = paramJson.info;
   if (uid == null||info == null) { return true; }
-  ,
-  RtcEngineEventHandler.onUserInfoUpdated!(uid,info);
+  
+info = info.fillBuffers(buffers);
+  rtcEngineEventHandler.onUserInfoUpdated!(uid,info);
   return true;
 
 
-case 'RtcEngineEventHandler_onUserAccountUpdated':
-if (RtcEngineEventHandler.onuseraccountupdated == null) {
+case 'onUserAccountUpdated_3079d702':
+if (rtcEngineEventHandler.onUserAccountUpdated == null) {
     return true;
 }
 final jsonMap = jsonDecode(eventData);
 RtcEngineEventHandlerOnUserAccountUpdatedJson paramJson = RtcEngineEventHandlerOnUserAccountUpdatedJson.fromJson(jsonMap);
 paramJson = paramJson.fillBuffers(buffers);
-int? uid = paramJson.uid;
-String? useraccount = paramJson.useraccount;
-  if (uid == null||useraccount == null) { return true; }
-  ,
-  RtcEngineEventHandler.onUserAccountUpdated!(uid,useraccount);
+RtcConnection? connection = paramJson.connection;
+int? remoteUid = paramJson.remoteUid;
+String? remoteUserAccount = paramJson.remoteUserAccount;
+  if (connection == null||remoteUid == null||remoteUserAccount == null) { return true; }
+  connection = connection.fillBuffers(buffers);
+
+
+  rtcEngineEventHandler.onUserAccountUpdated!(connection,remoteUid,remoteUserAccount);
   return true;
 
 
-case 'RtcEngineEventHandler_onVideoRenderingTracingResult':
-if (RtcEngineEventHandler.onvideorenderingtracingresult == null) {
+case 'onVideoRenderingTracingResult_65611169':
+if (rtcEngineEventHandler.onVideoRenderingTracingResult == null) {
     return true;
 }
 final jsonMap = jsonDecode(eventData);
 RtcEngineEventHandlerOnVideoRenderingTracingResultJson paramJson = RtcEngineEventHandlerOnVideoRenderingTracingResultJson.fromJson(jsonMap);
 paramJson = paramJson.fillBuffers(buffers);
+RtcConnection? connection = paramJson.connection;
 int? uid = paramJson.uid;
-MediaTraceEvent? currentevent = paramJson.currentevent;
-VideoRenderingTracingInfo? tracinginfo = paramJson.tracinginfo;
-  if (uid == null||currentevent == null||tracinginfo == null) { return true; }
-  ,,
-  RtcEngineEventHandler.onVideoRenderingTracingResult!(uid,currentevent,tracinginfo);
+MediaTraceEvent? currentEvent = paramJson.currentEvent;
+VideoRenderingTracingInfo? tracingInfo = paramJson.tracingInfo;
+  if (connection == null||uid == null||currentEvent == null||tracingInfo == null) { return true; }
+  connection = connection.fillBuffers(buffers);
+
+
+tracingInfo = tracingInfo.fillBuffers(buffers);
+  rtcEngineEventHandler.onVideoRenderingTracingResult!(connection,uid,currentEvent,tracingInfo);
   return true;
 
 
-case 'RtcEngineEventHandler_onLocalVideoTranscoderError':
-if (RtcEngineEventHandler.onlocalvideotranscodererror == null) {
+case 'onLocalVideoTranscoderError':
+if (rtcEngineEventHandler.onLocalVideoTranscoderError == null) {
     return true;
 }
 final jsonMap = jsonDecode(eventData);
@@ -1270,29 +1454,34 @@ paramJson = paramJson.fillBuffers(buffers);
 TranscodingVideoStream? stream = paramJson.stream;
 VideoTranscoderError? error = paramJson.error;
   if (stream == null||error == null) { return true; }
-  ,
-  RtcEngineEventHandler.onLocalVideoTranscoderError!(stream,error);
+  stream = stream.fillBuffers(buffers);
+
+  rtcEngineEventHandler.onLocalVideoTranscoderError!(stream,error);
   return true;
 
 
-case 'RtcEngineEventHandler_onUploadLogResult':
-if (RtcEngineEventHandler.onuploadlogresult == null) {
+case 'onUploadLogResult_2434cb1e':
+if (rtcEngineEventHandler.onUploadLogResult == null) {
     return true;
 }
 final jsonMap = jsonDecode(eventData);
 RtcEngineEventHandlerOnUploadLogResultJson paramJson = RtcEngineEventHandlerOnUploadLogResultJson.fromJson(jsonMap);
 paramJson = paramJson.fillBuffers(buffers);
-String? requestid = paramJson.requestid;
+RtcConnection? connection = paramJson.connection;
+String? requestId = paramJson.requestId;
 bool? success = paramJson.success;
 UploadErrorReason? reason = paramJson.reason;
-  if (requestid == null||success == null||reason == null) { return true; }
-  ,,
-  RtcEngineEventHandler.onUploadLogResult!(requestid,success,reason);
+  if (connection == null||requestId == null||success == null||reason == null) { return true; }
+  connection = connection.fillBuffers(buffers);
+
+
+
+  rtcEngineEventHandler.onUploadLogResult!(connection,requestId,success,reason);
   return true;
 
 
-case 'RtcEngineEventHandler_onAudioSubscribeStateChanged':
-if (RtcEngineEventHandler.onaudiosubscribestatechanged == null) {
+case 'onAudioSubscribeStateChanged':
+if (rtcEngineEventHandler.onAudioSubscribeStateChanged == null) {
     return true;
 }
 final jsonMap = jsonDecode(eventData);
@@ -1300,17 +1489,21 @@ RtcEngineEventHandlerOnAudioSubscribeStateChangedJson paramJson = RtcEngineEvent
 paramJson = paramJson.fillBuffers(buffers);
 String? channel = paramJson.channel;
 int? uid = paramJson.uid;
-StreamSubscribeState? oldstate = paramJson.oldstate;
-StreamSubscribeState? newstate = paramJson.newstate;
-int? elapsesincelaststate = paramJson.elapsesincelaststate;
-  if (channel == null||uid == null||oldstate == null||newstate == null||elapsesincelaststate == null) { return true; }
-  ,,,,
-  RtcEngineEventHandler.onAudioSubscribeStateChanged!(channel,uid,oldstate,newstate,elapsesincelaststate);
+StreamSubscribeState? oldState = paramJson.oldState;
+StreamSubscribeState? newState = paramJson.newState;
+int? elapseSinceLastState = paramJson.elapseSinceLastState;
+  if (channel == null||uid == null||oldState == null||newState == null||elapseSinceLastState == null) { return true; }
+  
+
+
+
+
+  rtcEngineEventHandler.onAudioSubscribeStateChanged!(channel,uid,oldState,newState,elapseSinceLastState);
   return true;
 
 
-case 'RtcEngineEventHandler_onVideoSubscribeStateChanged':
-if (RtcEngineEventHandler.onvideosubscribestatechanged == null) {
+case 'onVideoSubscribeStateChanged':
+if (rtcEngineEventHandler.onVideoSubscribeStateChanged == null) {
     return true;
 }
 final jsonMap = jsonDecode(eventData);
@@ -1318,34 +1511,41 @@ RtcEngineEventHandlerOnVideoSubscribeStateChangedJson paramJson = RtcEngineEvent
 paramJson = paramJson.fillBuffers(buffers);
 String? channel = paramJson.channel;
 int? uid = paramJson.uid;
-StreamSubscribeState? oldstate = paramJson.oldstate;
-StreamSubscribeState? newstate = paramJson.newstate;
-int? elapsesincelaststate = paramJson.elapsesincelaststate;
-  if (channel == null||uid == null||oldstate == null||newstate == null||elapsesincelaststate == null) { return true; }
-  ,,,,
-  RtcEngineEventHandler.onVideoSubscribeStateChanged!(channel,uid,oldstate,newstate,elapsesincelaststate);
+StreamSubscribeState? oldState = paramJson.oldState;
+StreamSubscribeState? newState = paramJson.newState;
+int? elapseSinceLastState = paramJson.elapseSinceLastState;
+  if (channel == null||uid == null||oldState == null||newState == null||elapseSinceLastState == null) { return true; }
+  
+
+
+
+
+  rtcEngineEventHandler.onVideoSubscribeStateChanged!(channel,uid,oldState,newState,elapseSinceLastState);
   return true;
 
 
-case 'RtcEngineEventHandler_onAudioPublishStateChanged':
-if (RtcEngineEventHandler.onaudiopublishstatechanged == null) {
+case 'onAudioPublishStateChanged':
+if (rtcEngineEventHandler.onAudioPublishStateChanged == null) {
     return true;
 }
 final jsonMap = jsonDecode(eventData);
 RtcEngineEventHandlerOnAudioPublishStateChangedJson paramJson = RtcEngineEventHandlerOnAudioPublishStateChangedJson.fromJson(jsonMap);
 paramJson = paramJson.fillBuffers(buffers);
 String? channel = paramJson.channel;
-StreamPublishState? oldstate = paramJson.oldstate;
-StreamPublishState? newstate = paramJson.newstate;
-int? elapsesincelaststate = paramJson.elapsesincelaststate;
-  if (channel == null||oldstate == null||newstate == null||elapsesincelaststate == null) { return true; }
-  ,,,
-  RtcEngineEventHandler.onAudioPublishStateChanged!(channel,oldstate,newstate,elapsesincelaststate);
+StreamPublishState? oldState = paramJson.oldState;
+StreamPublishState? newState = paramJson.newState;
+int? elapseSinceLastState = paramJson.elapseSinceLastState;
+  if (channel == null||oldState == null||newState == null||elapseSinceLastState == null) { return true; }
+  
+
+
+
+  rtcEngineEventHandler.onAudioPublishStateChanged!(channel,oldState,newState,elapseSinceLastState);
   return true;
 
 
-case 'RtcEngineEventHandler_onVideoPublishStateChanged':
-if (RtcEngineEventHandler.onvideopublishstatechanged == null) {
+case 'onVideoPublishStateChanged':
+if (rtcEngineEventHandler.onVideoPublishStateChanged == null) {
     return true;
 }
 final jsonMap = jsonDecode(eventData);
@@ -1353,35 +1553,45 @@ RtcEngineEventHandlerOnVideoPublishStateChangedJson paramJson = RtcEngineEventHa
 paramJson = paramJson.fillBuffers(buffers);
 VideoSourceType? source = paramJson.source;
 String? channel = paramJson.channel;
-StreamPublishState? oldstate = paramJson.oldstate;
-StreamPublishState? newstate = paramJson.newstate;
-int? elapsesincelaststate = paramJson.elapsesincelaststate;
-  if (source == null||channel == null||oldstate == null||newstate == null||elapsesincelaststate == null) { return true; }
-  ,,,,
-  RtcEngineEventHandler.onVideoPublishStateChanged!(source,channel,oldstate,newstate,elapsesincelaststate);
+StreamPublishState? oldState = paramJson.oldState;
+StreamPublishState? newState = paramJson.newState;
+int? elapseSinceLastState = paramJson.elapseSinceLastState;
+  if (source == null||channel == null||oldState == null||newState == null||elapseSinceLastState == null) { return true; }
+  
+
+
+
+
+  rtcEngineEventHandler.onVideoPublishStateChanged!(source,channel,oldState,newState,elapseSinceLastState);
   return true;
 
 
-case 'RtcEngineEventHandler_onTranscodedStreamLayoutInfo':
-if (RtcEngineEventHandler.ontranscodedstreamlayoutinfo == null) {
+case 'onTranscodedStreamLayoutInfo_218f27a':
+if (rtcEngineEventHandler.onTranscodedStreamLayoutInfo == null) {
     return true;
 }
 final jsonMap = jsonDecode(eventData);
 RtcEngineEventHandlerOnTranscodedStreamLayoutInfoJson paramJson = RtcEngineEventHandlerOnTranscodedStreamLayoutInfoJson.fromJson(jsonMap);
 paramJson = paramJson.fillBuffers(buffers);
+RtcConnection? connection = paramJson.connection;
 int? uid = paramJson.uid;
 int? width = paramJson.width;
 int? height = paramJson.height;
-int? layoutcount = paramJson.layoutcount;
-VideoLayout? layoutlist = paramJson.layoutlist;
-  if (uid == null||width == null||height == null||layoutcount == null||layoutlist == null) { return true; }
-  ,,,,
-  RtcEngineEventHandler.onTranscodedStreamLayoutInfo!(uid,width,height,layoutcount,layoutlist);
+int? layoutCount = paramJson.layoutCount;
+List<VideoLayout>? layoutlist = paramJson.layoutlist;
+  if (connection == null||uid == null||width == null||height == null||layoutCount == null||layoutlist == null) { return true; }
+  connection = connection.fillBuffers(buffers);
+
+
+
+
+layoutlist = layoutlist.map((e) => e.fillBuffers(buffers)).toList();
+  rtcEngineEventHandler.onTranscodedStreamLayoutInfo!(connection,uid,width,height,layoutCount,layoutlist);
   return true;
 
 
-case 'RtcEngineEventHandler_onExtensionEvent':
-if (RtcEngineEventHandler.onextensionevent == null) {
+case 'onExtensionEvent':
+if (rtcEngineEventHandler.onExtensionEvent == null) {
     return true;
 }
 final jsonMap = jsonDecode(eventData);
@@ -1392,13 +1602,16 @@ String? extension = paramJson.extension;
 String? key = paramJson.key;
 String? value = paramJson.value;
   if (provider == null||extension == null||key == null||value == null) { return true; }
-  ,,,
-  RtcEngineEventHandler.onExtensionEvent!(provider,extension,key,value);
+  
+
+
+
+  rtcEngineEventHandler.onExtensionEvent!(provider,extension,key,value);
   return true;
 
 
-case 'RtcEngineEventHandler_onExtensionStarted':
-if (RtcEngineEventHandler.onextensionstarted == null) {
+case 'onExtensionStarted':
+if (rtcEngineEventHandler.onExtensionStarted == null) {
     return true;
 }
 final jsonMap = jsonDecode(eventData);
@@ -1407,13 +1620,14 @@ paramJson = paramJson.fillBuffers(buffers);
 String? provider = paramJson.provider;
 String? extension = paramJson.extension;
   if (provider == null||extension == null) { return true; }
-  ,
-  RtcEngineEventHandler.onExtensionStarted!(provider,extension);
+  
+
+  rtcEngineEventHandler.onExtensionStarted!(provider,extension);
   return true;
 
 
-case 'RtcEngineEventHandler_onExtensionStopped':
-if (RtcEngineEventHandler.onextensionstopped == null) {
+case 'onExtensionStopped':
+if (rtcEngineEventHandler.onExtensionStopped == null) {
     return true;
 }
 final jsonMap = jsonDecode(eventData);
@@ -1422,13 +1636,14 @@ paramJson = paramJson.fillBuffers(buffers);
 String? provider = paramJson.provider;
 String? extension = paramJson.extension;
   if (provider == null||extension == null) { return true; }
-  ,
-  RtcEngineEventHandler.onExtensionStopped!(provider,extension);
+  
+
+  rtcEngineEventHandler.onExtensionStopped!(provider,extension);
   return true;
 
 
-case 'RtcEngineEventHandler_onExtensionError':
-if (RtcEngineEventHandler.onextensionerror == null) {
+case 'onExtensionError':
+if (rtcEngineEventHandler.onExtensionError == null) {
     return true;
 }
 final jsonMap = jsonDecode(eventData);
@@ -1439,22 +1654,27 @@ String? extension = paramJson.extension;
 int? error = paramJson.error;
 String? message = paramJson.message;
   if (provider == null||extension == null||error == null||message == null) { return true; }
-  ,,,
-  RtcEngineEventHandler.onExtensionError!(provider,extension,error,message);
+  
+
+
+
+  rtcEngineEventHandler.onExtensionError!(provider,extension,error,message);
   return true;
 
 
-case 'RtcEngineEventHandler_onSetRtmFlagResult':
-if (RtcEngineEventHandler.onsetrtmflagresult == null) {
+case 'onSetRtmFlagResult_80b7fde':
+if (rtcEngineEventHandler.onSetRtmFlagResult == null) {
     return true;
 }
 final jsonMap = jsonDecode(eventData);
 RtcEngineEventHandlerOnSetRtmFlagResultJson paramJson = RtcEngineEventHandlerOnSetRtmFlagResultJson.fromJson(jsonMap);
 paramJson = paramJson.fillBuffers(buffers);
+RtcConnection? connection = paramJson.connection;
 int? code = paramJson.code;
-  if (code == null) { return true; }
-  
-  RtcEngineEventHandler.onSetRtmFlagResult!(code);
+  if (connection == null||code == null) { return true; }
+  connection = connection.fillBuffers(buffers);
+
+  rtcEngineEventHandler.onSetRtmFlagResult!(connection,code);
   return true;
 
     }
@@ -1470,9 +1690,9 @@ bool handleEvent(String eventName, String eventData, List<Uint8List> buffers) {
 }
 }
 class MetadataObserverWrapper implements EventLoopEventHandler {
-const MetadataObserverWrapper(this.MetadataObserver);
+const MetadataObserverWrapper(this.metadataObserver);
 
-final MetadataObserver MetadataObserver;
+final MetadataObserver metadataObserver;
 
 @override
 bool operator ==(Object other) {
@@ -1480,43 +1700,17 @@ bool operator ==(Object other) {
     return false;
   }
   return other is MetadataObserverWrapper &&
-      other.MetadataObserver == MetadataObserver;
+      other.metadataObserver == metadataObserver;
 }
 @override
-int get hashCode => MetadataObserver.hashCode;
+int get hashCode => metadataObserver.hashCode;
 
 @override
 bool handleEventInternal(String eventName, String eventData, List<Uint8List> buffers) {
     switch (eventName) {
         
-case 'MetadataObserver_getMaxMetadataSize':
-if (MetadataObserver.getmaxmetadatasize == null) {
-    return true;
-}
-final jsonMap = jsonDecode(eventData);
-MetadataObserverGetMaxMetadataSizeJson paramJson = MetadataObserverGetMaxMetadataSizeJson.fromJson(jsonMap);
-paramJson = paramJson.fillBuffers(buffers);
-MetadataObserver.getMaxMetadataSize!();
-  return true;
-
-
-case 'MetadataObserver_onReadyToSendMetadata':
-if (MetadataObserver.onreadytosendmetadata == null) {
-    return true;
-}
-final jsonMap = jsonDecode(eventData);
-MetadataObserverOnReadyToSendMetadataJson paramJson = MetadataObserverOnReadyToSendMetadataJson.fromJson(jsonMap);
-paramJson = paramJson.fillBuffers(buffers);
-Metadata? metadata = paramJson.metadata;
-VideoSourceType? sourceType = paramJson.sourceType;
-  if (metadata == null||sourceType == null) { return true; }
-  ,
-  MetadataObserver.onReadyToSendMetadata!(metadata,sourceType);
-  return true;
-
-
-case 'MetadataObserver_onMetadataReceived':
-if (MetadataObserver.onmetadatareceived == null) {
+case 'onMetadataReceived':
+if (metadataObserver.onMetadataReceived == null) {
     return true;
 }
 final jsonMap = jsonDecode(eventData);
@@ -1524,8 +1718,8 @@ MetadataObserverOnMetadataReceivedJson paramJson = MetadataObserverOnMetadataRec
 paramJson = paramJson.fillBuffers(buffers);
 Metadata? metadata = paramJson.metadata;
   if (metadata == null) { return true; }
-  
-  MetadataObserver.onMetadataReceived!(metadata);
+  metadata = metadata.fillBuffers(buffers);
+  metadataObserver.onMetadataReceived!(metadata);
   return true;
 
     }
@@ -1541,9 +1735,9 @@ bool handleEvent(String eventName, String eventData, List<Uint8List> buffers) {
 }
 }
 class DirectCdnStreamingEventHandlerWrapper implements EventLoopEventHandler {
-const DirectCdnStreamingEventHandlerWrapper(this.DirectCdnStreamingEventHandler);
+const DirectCdnStreamingEventHandlerWrapper(this.directCdnStreamingEventHandler);
 
-final DirectCdnStreamingEventHandler DirectCdnStreamingEventHandler;
+final DirectCdnStreamingEventHandler directCdnStreamingEventHandler;
 
 @override
 bool operator ==(Object other) {
@@ -1551,17 +1745,17 @@ bool operator ==(Object other) {
     return false;
   }
   return other is DirectCdnStreamingEventHandlerWrapper &&
-      other.DirectCdnStreamingEventHandler == DirectCdnStreamingEventHandler;
+      other.directCdnStreamingEventHandler == directCdnStreamingEventHandler;
 }
 @override
-int get hashCode => DirectCdnStreamingEventHandler.hashCode;
+int get hashCode => directCdnStreamingEventHandler.hashCode;
 
 @override
 bool handleEventInternal(String eventName, String eventData, List<Uint8List> buffers) {
     switch (eventName) {
         
-case 'DirectCdnStreamingEventHandler_onDirectCdnStreamingStateChanged':
-if (DirectCdnStreamingEventHandler.ondirectcdnstreamingstatechanged == null) {
+case 'onDirectCdnStreamingStateChanged':
+if (directCdnStreamingEventHandler.onDirectCdnStreamingStateChanged == null) {
     return true;
 }
 final jsonMap = jsonDecode(eventData);
@@ -1571,13 +1765,15 @@ DirectCdnStreamingState? state = paramJson.state;
 DirectCdnStreamingReason? reason = paramJson.reason;
 String? message = paramJson.message;
   if (state == null||reason == null||message == null) { return true; }
-  ,,
-  DirectCdnStreamingEventHandler.onDirectCdnStreamingStateChanged!(state,reason,message);
+  
+
+
+  directCdnStreamingEventHandler.onDirectCdnStreamingStateChanged!(state,reason,message);
   return true;
 
 
-case 'DirectCdnStreamingEventHandler_onDirectCdnStreamingStats':
-if (DirectCdnStreamingEventHandler.ondirectcdnstreamingstats == null) {
+case 'onDirectCdnStreamingStats':
+if (directCdnStreamingEventHandler.onDirectCdnStreamingStats == null) {
     return true;
 }
 final jsonMap = jsonDecode(eventData);
@@ -1585,8 +1781,8 @@ DirectCdnStreamingEventHandlerOnDirectCdnStreamingStatsJson paramJson = DirectCd
 paramJson = paramJson.fillBuffers(buffers);
 DirectCdnStreamingStats? stats = paramJson.stats;
   if (stats == null) { return true; }
-  
-  DirectCdnStreamingEventHandler.onDirectCdnStreamingStats!(stats);
+  stats = stats.fillBuffers(buffers);
+  directCdnStreamingEventHandler.onDirectCdnStreamingStats!(stats);
   return true;
 
     }
