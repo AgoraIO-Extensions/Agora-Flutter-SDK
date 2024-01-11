@@ -23,7 +23,7 @@ class AudioEncodedFrameObserverWrapper implements EventLoopEventHandler {
   bool handleEventInternal(
       String eventName, String eventData, List<Uint8List> buffers) {
     switch (eventName) {
-      case 'onRecordAudioEncodedFrame':
+      case 'onRecordAudioEncodedFrame_d930ddc':
         if (audioEncodedFrameObserver.onRecordAudioEncodedFrame == null) {
           return true;
         }
@@ -46,7 +46,7 @@ class AudioEncodedFrameObserverWrapper implements EventLoopEventHandler {
             frameBuffer, length, audioEncodedFrameInfo);
         return true;
 
-      case 'onPlaybackAudioEncodedFrame':
+      case 'onPlaybackAudioEncodedFrame_d930ddc':
         if (audioEncodedFrameObserver.onPlaybackAudioEncodedFrame == null) {
           return true;
         }
@@ -69,7 +69,7 @@ class AudioEncodedFrameObserverWrapper implements EventLoopEventHandler {
             frameBuffer, length, audioEncodedFrameInfo);
         return true;
 
-      case 'onMixedAudioEncodedFrame':
+      case 'onMixedAudioEncodedFrame_d930ddc':
         if (audioEncodedFrameObserver.onMixedAudioEncodedFrame == null) {
           return true;
         }

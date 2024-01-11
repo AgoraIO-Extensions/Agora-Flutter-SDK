@@ -25,7 +25,7 @@ class VideoFrameMetaInfoImpl implements VideoFrameMetaInfo {
   @override
   Future<String> getMetaInfoStr(MetaInfoKey key) async {
     final apiType =
-        '${isOverrideClassName ? className : 'VideoFrameMetaInfo'}_getMetaInfoStr';
+        '${isOverrideClassName ? className : 'VideoFrameMetaInfo'}_getMetaInfoStr_c81192f';
     final param = createParams({'key': key});
     final callApiResult = await irisMethodChannel.invokeMethod(
         IrisMethodCall(apiType, jsonEncode(param), buffers: null));

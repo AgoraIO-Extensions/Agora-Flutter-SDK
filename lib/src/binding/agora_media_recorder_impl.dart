@@ -25,7 +25,7 @@ class MediaRecorderImpl implements MediaRecorder {
   @override
   Future<void> setMediaRecorderObserver(MediaRecorderObserver callback) async {
     final apiType =
-        '${isOverrideClassName ? className : 'MediaRecorder'}_setMediaRecorderObserver';
+        '${isOverrideClassName ? className : 'MediaRecorder'}_setMediaRecorderObserver_e1f7340';
     final param = createParams({'callback': callback});
     final callApiResult = await irisMethodChannel.invokeMethod(
         IrisMethodCall(apiType, jsonEncode(param), buffers: null));
@@ -42,7 +42,7 @@ class MediaRecorderImpl implements MediaRecorder {
   @override
   Future<void> startRecording(MediaRecorderConfiguration config) async {
     final apiType =
-        '${isOverrideClassName ? className : 'MediaRecorder'}_startRecording';
+        '${isOverrideClassName ? className : 'MediaRecorder'}_startRecording_94480b3';
     final param = createParams({'config': config.toJson()});
     final List<Uint8List> buffers = [];
     buffers.addAll(config.collectBufferList());

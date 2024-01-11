@@ -42,7 +42,7 @@ class LocalSpatialAudioEngineImpl implements LocalSpatialAudioEngine {
   @override
   Future<void> initialize() async {
     final apiType =
-        '${isOverrideClassName ? className : 'LocalSpatialAudioEngine'}_initialize';
+        '${isOverrideClassName ? className : 'LocalSpatialAudioEngine'}_initialize_cf94fbf';
     final param = createParams({});
     final callApiResult = await irisMethodChannel.invokeMethod(
         IrisMethodCall(apiType, jsonEncode(param), buffers: null));
@@ -60,7 +60,7 @@ class LocalSpatialAudioEngineImpl implements LocalSpatialAudioEngine {
   Future<void> updateRemotePosition(
       {required int uid, required RemoteVoicePositionInfo posInfo}) async {
     final apiType =
-        '${isOverrideClassName ? className : 'LocalSpatialAudioEngine'}_updateRemotePosition';
+        '${isOverrideClassName ? className : 'LocalSpatialAudioEngine'}_updateRemotePosition_adc0909';
     final param = createParams({'uid': uid, 'posInfo': posInfo.toJson()});
     final List<Uint8List> buffers = [];
     buffers.addAll(posInfo.collectBufferList());
@@ -82,7 +82,7 @@ class LocalSpatialAudioEngineImpl implements LocalSpatialAudioEngine {
       required RemoteVoicePositionInfo posInfo,
       required RtcConnection connection}) async {
     final apiType =
-        '${isOverrideClassName ? className : 'LocalSpatialAudioEngine'}_updateRemotePositionEx';
+        '${isOverrideClassName ? className : 'LocalSpatialAudioEngine'}_updateRemotePositionEx_f0252d9';
     final param = createParams({
       'uid': uid,
       'posInfo': posInfo.toJson(),
@@ -106,7 +106,7 @@ class LocalSpatialAudioEngineImpl implements LocalSpatialAudioEngine {
   @override
   Future<void> removeRemotePosition(int uid) async {
     final apiType =
-        '${isOverrideClassName ? className : 'LocalSpatialAudioEngine'}_removeRemotePosition';
+        '${isOverrideClassName ? className : 'LocalSpatialAudioEngine'}_removeRemotePosition_c8d091a';
     final param = createParams({'uid': uid});
     final callApiResult = await irisMethodChannel.invokeMethod(
         IrisMethodCall(apiType, jsonEncode(param), buffers: null));
@@ -124,7 +124,7 @@ class LocalSpatialAudioEngineImpl implements LocalSpatialAudioEngine {
   Future<void> removeRemotePositionEx(
       {required int uid, required RtcConnection connection}) async {
     final apiType =
-        '${isOverrideClassName ? className : 'LocalSpatialAudioEngine'}_removeRemotePositionEx';
+        '${isOverrideClassName ? className : 'LocalSpatialAudioEngine'}_removeRemotePositionEx_58a9850';
     final param = createParams({'uid': uid, 'connection': connection.toJson()});
     final List<Uint8List> buffers = [];
     buffers.addAll(connection.collectBufferList());
@@ -143,7 +143,7 @@ class LocalSpatialAudioEngineImpl implements LocalSpatialAudioEngine {
   @override
   Future<void> clearRemotePositionsEx(RtcConnection connection) async {
     final apiType =
-        '${isOverrideClassName ? className : 'LocalSpatialAudioEngine'}_clearRemotePositionsEx';
+        '${isOverrideClassName ? className : 'LocalSpatialAudioEngine'}_clearRemotePositionsEx_c81e1a4';
     final param = createParams({'connection': connection.toJson()});
     final List<Uint8List> buffers = [];
     buffers.addAll(connection.collectBufferList());
@@ -167,7 +167,7 @@ class LocalSpatialAudioEngineImpl implements LocalSpatialAudioEngine {
       required List<double> axisUp,
       required RtcConnection connection}) async {
     final apiType =
-        '${isOverrideClassName ? className : 'LocalSpatialAudioEngine'}_updateSelfPositionEx';
+        '${isOverrideClassName ? className : 'LocalSpatialAudioEngine'}_updateSelfPositionEx_502183a';
     final param = createParams({
       'position': position,
       'axisForward': axisForward,
@@ -192,7 +192,7 @@ class LocalSpatialAudioEngineImpl implements LocalSpatialAudioEngine {
   @override
   Future<void> setMaxAudioRecvCount(int maxCount) async {
     final apiType =
-        '${isOverrideClassName ? className : 'LocalSpatialAudioEngine'}_setMaxAudioRecvCount';
+        '${isOverrideClassName ? className : 'LocalSpatialAudioEngine'}_setMaxAudioRecvCount_46f8ab7';
     final param = createParams({'maxCount': maxCount});
     final callApiResult = await irisMethodChannel.invokeMethod(
         IrisMethodCall(apiType, jsonEncode(param), buffers: null));
@@ -209,7 +209,7 @@ class LocalSpatialAudioEngineImpl implements LocalSpatialAudioEngine {
   @override
   Future<void> setAudioRecvRange(double range) async {
     final apiType =
-        '${isOverrideClassName ? className : 'LocalSpatialAudioEngine'}_setAudioRecvRange';
+        '${isOverrideClassName ? className : 'LocalSpatialAudioEngine'}_setAudioRecvRange_685e803';
     final param = createParams({'range': range});
     final callApiResult = await irisMethodChannel.invokeMethod(
         IrisMethodCall(apiType, jsonEncode(param), buffers: null));
@@ -226,7 +226,7 @@ class LocalSpatialAudioEngineImpl implements LocalSpatialAudioEngine {
   @override
   Future<void> setDistanceUnit(double unit) async {
     final apiType =
-        '${isOverrideClassName ? className : 'LocalSpatialAudioEngine'}_setDistanceUnit';
+        '${isOverrideClassName ? className : 'LocalSpatialAudioEngine'}_setDistanceUnit_685e803';
     final param = createParams({'unit': unit});
     final callApiResult = await irisMethodChannel.invokeMethod(
         IrisMethodCall(apiType, jsonEncode(param), buffers: null));
@@ -247,7 +247,7 @@ class LocalSpatialAudioEngineImpl implements LocalSpatialAudioEngine {
       required List<double> axisRight,
       required List<double> axisUp}) async {
     final apiType =
-        '${isOverrideClassName ? className : 'LocalSpatialAudioEngine'}_updateSelfPosition';
+        '${isOverrideClassName ? className : 'LocalSpatialAudioEngine'}_updateSelfPosition_9c9930f';
     final param = createParams({
       'position': position,
       'axisForward': axisForward,
@@ -271,7 +271,7 @@ class LocalSpatialAudioEngineImpl implements LocalSpatialAudioEngine {
       {required int playerId,
       required RemoteVoicePositionInfo positionInfo}) async {
     final apiType =
-        '${isOverrideClassName ? className : 'LocalSpatialAudioEngine'}_updatePlayerPositionInfo';
+        '${isOverrideClassName ? className : 'LocalSpatialAudioEngine'}_updatePlayerPositionInfo_b37c59d';
     final param = createParams(
         {'playerId': playerId, 'positionInfo': positionInfo.toJson()});
     final List<Uint8List> buffers = [];
@@ -291,7 +291,7 @@ class LocalSpatialAudioEngineImpl implements LocalSpatialAudioEngine {
   @override
   Future<void> setParameters(String params) async {
     final apiType =
-        '${isOverrideClassName ? className : 'LocalSpatialAudioEngine'}_setParameters';
+        '${isOverrideClassName ? className : 'LocalSpatialAudioEngine'}_setParameters_3a2037f';
     final param = createParams({'params': params});
     final callApiResult = await irisMethodChannel.invokeMethod(
         IrisMethodCall(apiType, jsonEncode(param), buffers: null));
@@ -308,7 +308,7 @@ class LocalSpatialAudioEngineImpl implements LocalSpatialAudioEngine {
   @override
   Future<void> muteLocalAudioStream(bool mute) async {
     final apiType =
-        '${isOverrideClassName ? className : 'LocalSpatialAudioEngine'}_muteLocalAudioStream';
+        '${isOverrideClassName ? className : 'LocalSpatialAudioEngine'}_muteLocalAudioStream_5039d15';
     final param = createParams({'mute': mute});
     final callApiResult = await irisMethodChannel.invokeMethod(
         IrisMethodCall(apiType, jsonEncode(param), buffers: null));
@@ -325,7 +325,7 @@ class LocalSpatialAudioEngineImpl implements LocalSpatialAudioEngine {
   @override
   Future<void> muteAllRemoteAudioStreams(bool mute) async {
     final apiType =
-        '${isOverrideClassName ? className : 'LocalSpatialAudioEngine'}_muteAllRemoteAudioStreams';
+        '${isOverrideClassName ? className : 'LocalSpatialAudioEngine'}_muteAllRemoteAudioStreams_5039d15';
     final param = createParams({'mute': mute});
     final callApiResult = await irisMethodChannel.invokeMethod(
         IrisMethodCall(apiType, jsonEncode(param), buffers: null));
@@ -343,7 +343,7 @@ class LocalSpatialAudioEngineImpl implements LocalSpatialAudioEngine {
   Future<void> muteRemoteAudioStream(
       {required int uid, required bool mute}) async {
     final apiType =
-        '${isOverrideClassName ? className : 'LocalSpatialAudioEngine'}_muteRemoteAudioStream';
+        '${isOverrideClassName ? className : 'LocalSpatialAudioEngine'}_muteRemoteAudioStream_dbdc15a';
     final param = createParams({'uid': uid, 'mute': mute});
     final callApiResult = await irisMethodChannel.invokeMethod(
         IrisMethodCall(apiType, jsonEncode(param), buffers: null));
@@ -363,7 +363,7 @@ class LocalSpatialAudioEngineImpl implements LocalSpatialAudioEngine {
       required double attenuation,
       required bool forceSet}) async {
     final apiType =
-        '${isOverrideClassName ? className : 'LocalSpatialAudioEngine'}_setRemoteAudioAttenuation';
+        '${isOverrideClassName ? className : 'LocalSpatialAudioEngine'}_setRemoteAudioAttenuation_74c3e98';
     final param = createParams(
         {'uid': uid, 'attenuation': attenuation, 'forceSet': forceSet});
     final callApiResult = await irisMethodChannel.invokeMethod(
@@ -382,7 +382,7 @@ class LocalSpatialAudioEngineImpl implements LocalSpatialAudioEngine {
   Future<void> setZones(
       {required List<SpatialAudioZone> zones, required int zoneCount}) async {
     final apiType =
-        '${isOverrideClassName ? className : 'LocalSpatialAudioEngine'}_setZones';
+        '${isOverrideClassName ? className : 'LocalSpatialAudioEngine'}_setZones_414a27e';
     final zonesJsonList = zones.map((e) => e.toJson()).toList();
     final param =
         createParams({'zones': zonesJsonList, 'zoneCount': zoneCount});
@@ -408,7 +408,7 @@ class LocalSpatialAudioEngineImpl implements LocalSpatialAudioEngine {
       required double attenuation,
       required bool forceSet}) async {
     final apiType =
-        '${isOverrideClassName ? className : 'LocalSpatialAudioEngine'}_setPlayerAttenuation';
+        '${isOverrideClassName ? className : 'LocalSpatialAudioEngine'}_setPlayerAttenuation_a15bc51';
     final param = createParams({
       'playerId': playerId,
       'attenuation': attenuation,

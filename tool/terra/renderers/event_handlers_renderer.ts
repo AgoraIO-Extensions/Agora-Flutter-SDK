@@ -1,6 +1,5 @@
 import {
   CXXFile,
-  CXXParserConfigs,
   CXXTYPE,
   CXXTerraNode,
   Clazz,
@@ -26,20 +25,6 @@ function processCXXFiles(
   parseResult: ParseResult,
   args: any
 ): CXXFile[] {
-  // let parseFiles = CXXParserConfigs.resolve(
-  //   terraContext.configDir,
-  //   args
-  // ).parseFiles;
-  // // TODO(littlegnal): Fix in `cxx-parser`
-  // let processFiles = (parseFiles.include ?? [])
-  //   .filter((it) => {
-  //     return !(parseFiles.exclude ?? []).includes(it);
-  //   })
-  //   .map((it) => path.basename(it));
-  // return (parseResult.nodes as CXXFile[]).filter((it) => {
-  //   return processFiles.includes(it.fileName);
-  // });
-
   return (parseResult.nodes as CXXFile[]).filter((it) => {
     return it.fileName == "IAgoraRtcEngine.h";
   });
@@ -73,12 +58,6 @@ function getBaseClasses(parseResult: ParseResult, clazz: Clazz): Clazz[] {
   });
 
   return output;
-  // return clazz.base_clazzs
-  //   .filter((it) => !filteredBaseClasses.includes(it))
-  //   .map((it) => {
-  //     return findClassByName(parseResult, it);
-  //   })
-  //   .filter((it) => it !== undefined)!;
 }
 
 function genCallbackExtendBlock(parseResult: ParseResult, clazz: Clazz) {
@@ -183,6 +162,30 @@ function dartTypeName(type: SimpleType): string {
   return dartType;
 }
 
+function upperCamelCaseToLowercaseWithUnderscores(
+  upperCamelCaseName: string
+): string {
+  const result: string[] = [];
+
+  let toSearch = upperCamelCaseName;
+
+  let baseRegex = new RegExp("((I[A-Z]|[A-Z])?[a-z0-9]*)");
+
+  //   const baseRegex = /((I[A-Z]|[A-Z])?[a-z0-9]*)/g;
+  let baseMatch;
+
+  while ((baseMatch = baseRegex.exec(toSearch)) !== null) {
+    let tmp = baseMatch[0];
+    if (tmp.length === 0) {
+      break;
+    }
+    result.push(tmp.toLowerCase());
+    toSearch = toSearch.replace(tmp, "");
+  }
+
+  return result.join("_");
+}
+
 function nameWithUnderscoresToCamelCase(
   nameWithUnderscores: string,
   upperCamelCase: boolean = false
@@ -204,6 +207,12 @@ function nameWithUnderscoresToCamelCase(
   }
 
   return words.join("");
+}
+
+function dartFileName(filePath: string): string {
+  let fileName = path.basename(filePath);
+  fileName = upperCamelCaseToLowercaseWithUnderscores(fileName);
+  return fileName.replace("i", "");
 }
 
 function callbackSwithCaseBlock(
@@ -240,7 +249,6 @@ ${(function () {
 
   let paramNullCheckList = it.parameters
     .map((it) => {
-      let typeName = dartTypeName(it.type);
       let memberName = dartMemberName(it.name);
       return `${memberName} == null`;
     })
@@ -251,7 +259,6 @@ ${(function () {
 
   let paramFillBufferList = it.parameters
     .map((it) => {
-      let typeName = dartTypeName(it.type);
       let memberName = dartMemberName(it.name);
       let actualNode = parseResult.resolveNodeByType(it.type);
       if (actualNode.__TYPE == CXXTYPE.Struct) {
@@ -364,7 +371,7 @@ bool handleEvent(String eventName, String eventData, List<Uint8List> buffers) {
     `.trim();
 
     return {
-      file_name: "tmp.dart",
+      file_name: `${dartFileName(cxxFile.fileName)}_event_impl.dart`,
       file_content: content,
     };
   });

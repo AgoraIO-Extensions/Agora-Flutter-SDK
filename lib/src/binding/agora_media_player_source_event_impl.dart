@@ -23,7 +23,7 @@ class MediaPlayerSourceObserverWrapper implements EventLoopEventHandler {
   bool handleEventInternal(
       String eventName, String eventData, List<Uint8List> buffers) {
     switch (eventName) {
-      case 'onPlayerSourceStateChanged':
+      case 'onPlayerSourceStateChanged_7fb38f1':
         if (mediaPlayerSourceObserver.onPlayerSourceStateChanged == null) {
           return true;
         }
@@ -40,7 +40,7 @@ class MediaPlayerSourceObserverWrapper implements EventLoopEventHandler {
         mediaPlayerSourceObserver.onPlayerSourceStateChanged!(state, reason);
         return true;
 
-      case 'onPositionChanged':
+      case 'onPositionChanged_303b92e':
         if (mediaPlayerSourceObserver.onPositionChanged == null) {
           return true;
         }
@@ -56,7 +56,7 @@ class MediaPlayerSourceObserverWrapper implements EventLoopEventHandler {
         mediaPlayerSourceObserver.onPositionChanged!(positionMs, timestampMs);
         return true;
 
-      case 'onPlayerEvent':
+      case 'onPlayerEvent_50f16fa':
         if (mediaPlayerSourceObserver.onPlayerEvent == null) {
           return true;
         }
@@ -74,7 +74,7 @@ class MediaPlayerSourceObserverWrapper implements EventLoopEventHandler {
             eventCode, elapsedTime, message);
         return true;
 
-      case 'onMetaData':
+      case 'onMetaData_469a01b':
         if (mediaPlayerSourceObserver.onMetaData == null) {
           return true;
         }
@@ -90,7 +90,7 @@ class MediaPlayerSourceObserverWrapper implements EventLoopEventHandler {
         mediaPlayerSourceObserver.onMetaData!(data, length);
         return true;
 
-      case 'onPlayBufferUpdated':
+      case 'onPlayBufferUpdated_f631116':
         if (mediaPlayerSourceObserver.onPlayBufferUpdated == null) {
           return true;
         }
@@ -105,7 +105,7 @@ class MediaPlayerSourceObserverWrapper implements EventLoopEventHandler {
         mediaPlayerSourceObserver.onPlayBufferUpdated!(playCachedBuffer);
         return true;
 
-      case 'onPreloadEvent':
+      case 'onPreloadEvent_a1e3596':
         if (mediaPlayerSourceObserver.onPreloadEvent == null) {
           return true;
         }
@@ -144,7 +144,7 @@ class MediaPlayerSourceObserverWrapper implements EventLoopEventHandler {
         mediaPlayerSourceObserver.onAgoraCDNTokenWillExpire!();
         return true;
 
-      case 'onPlayerSrcInfoChanged':
+      case 'onPlayerSrcInfoChanged_54f3e5a':
         if (mediaPlayerSourceObserver.onPlayerSrcInfoChanged == null) {
           return true;
         }
@@ -163,7 +163,7 @@ class MediaPlayerSourceObserverWrapper implements EventLoopEventHandler {
         mediaPlayerSourceObserver.onPlayerSrcInfoChanged!(from, to);
         return true;
 
-      case 'onPlayerInfoUpdated':
+      case 'onPlayerInfoUpdated_0e902a8':
         if (mediaPlayerSourceObserver.onPlayerInfoUpdated == null) {
           return true;
         }
@@ -179,7 +179,7 @@ class MediaPlayerSourceObserverWrapper implements EventLoopEventHandler {
         mediaPlayerSourceObserver.onPlayerInfoUpdated!(info);
         return true;
 
-      case 'onPlayerCacheStats':
+      case 'onPlayerCacheStats_0145940':
         if (mediaPlayerSourceObserver.onPlayerCacheStats == null) {
           return true;
         }
@@ -195,7 +195,7 @@ class MediaPlayerSourceObserverWrapper implements EventLoopEventHandler {
         mediaPlayerSourceObserver.onPlayerCacheStats!(stats);
         return true;
 
-      case 'onPlayerPlaybackStats':
+      case 'onPlayerPlaybackStats_ffa466f':
         if (mediaPlayerSourceObserver.onPlayerPlaybackStats == null) {
           return true;
         }
@@ -212,7 +212,7 @@ class MediaPlayerSourceObserverWrapper implements EventLoopEventHandler {
         mediaPlayerSourceObserver.onPlayerPlaybackStats!(stats);
         return true;
 
-      case 'onAudioVolumeIndication':
+      case 'onAudioVolumeIndication_46f8ab7':
         if (mediaPlayerSourceObserver.onAudioVolumeIndication == null) {
           return true;
         }

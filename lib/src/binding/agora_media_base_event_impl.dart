@@ -23,7 +23,7 @@ class AudioPcmFrameSinkWrapper implements EventLoopEventHandler {
   bool handleEventInternal(
       String eventName, String eventData, List<Uint8List> buffers) {
     switch (eventName) {
-      case 'onFrame':
+      case 'onFrame_95f515a':
         if (audioPcmFrameSink.onFrame == null) {
           return true;
         }
@@ -73,7 +73,7 @@ class AudioFrameObserverBaseWrapper implements EventLoopEventHandler {
   bool handleEventInternal(
       String eventName, String eventData, List<Uint8List> buffers) {
     switch (eventName) {
-      case 'onRecordAudioFrame':
+      case 'onRecordAudioFrame_4c8de15':
         if (audioFrameObserverBase.onRecordAudioFrame == null) {
           return true;
         }
@@ -90,7 +90,7 @@ class AudioFrameObserverBaseWrapper implements EventLoopEventHandler {
         audioFrameObserverBase.onRecordAudioFrame!(channelId, audioFrame);
         return true;
 
-      case 'onPlaybackAudioFrame':
+      case 'onPlaybackAudioFrame_4c8de15':
         if (audioFrameObserverBase.onPlaybackAudioFrame == null) {
           return true;
         }
@@ -107,7 +107,7 @@ class AudioFrameObserverBaseWrapper implements EventLoopEventHandler {
         audioFrameObserverBase.onPlaybackAudioFrame!(channelId, audioFrame);
         return true;
 
-      case 'onMixedAudioFrame':
+      case 'onMixedAudioFrame_4c8de15':
         if (audioFrameObserverBase.onMixedAudioFrame == null) {
           return true;
         }
@@ -124,7 +124,7 @@ class AudioFrameObserverBaseWrapper implements EventLoopEventHandler {
         audioFrameObserverBase.onMixedAudioFrame!(channelId, audioFrame);
         return true;
 
-      case 'onEarMonitoringAudioFrame':
+      case 'onEarMonitoringAudioFrame_5405a47':
         if (audioFrameObserverBase.onEarMonitoringAudioFrame == null) {
           return true;
         }
@@ -176,7 +176,7 @@ class AudioFrameObserverWrapper extends AudioFrameObserverBaseWrapper {
   bool handleEventInternal(
       String eventName, String eventData, List<Uint8List> buffers) {
     switch (eventName) {
-      case 'onPlaybackAudioFrameBeforeMixing':
+      case 'onPlaybackAudioFrameBeforeMixing_85ec0fc':
         if (audioFrameObserver.onPlaybackAudioFrameBeforeMixing == null) {
           return true;
         }
@@ -230,7 +230,7 @@ class AudioSpectrumObserverWrapper implements EventLoopEventHandler {
   bool handleEventInternal(
       String eventName, String eventData, List<Uint8List> buffers) {
     switch (eventName) {
-      case 'onLocalAudioSpectrum':
+      case 'onLocalAudioSpectrum_5822fed':
         if (audioSpectrumObserver.onLocalAudioSpectrum == null) {
           return true;
         }
@@ -246,7 +246,7 @@ class AudioSpectrumObserverWrapper implements EventLoopEventHandler {
         audioSpectrumObserver.onLocalAudioSpectrum!(data);
         return true;
 
-      case 'onRemoteAudioSpectrum':
+      case 'onRemoteAudioSpectrum_8ea2cde':
         if (audioSpectrumObserver.onRemoteAudioSpectrum == null) {
           return true;
         }
@@ -297,7 +297,7 @@ class VideoEncodedFrameObserverWrapper implements EventLoopEventHandler {
   bool handleEventInternal(
       String eventName, String eventData, List<Uint8List> buffers) {
     switch (eventName) {
-      case 'onEncodedVideoFrameReceived':
+      case 'onEncodedVideoFrameReceived_6922697':
         if (videoEncodedFrameObserver.onEncodedVideoFrameReceived == null) {
           return true;
         }
@@ -356,7 +356,7 @@ class VideoFrameObserverWrapper implements EventLoopEventHandler {
   bool handleEventInternal(
       String eventName, String eventData, List<Uint8List> buffers) {
     switch (eventName) {
-      case 'onCaptureVideoFrame':
+      case 'onCaptureVideoFrame_1673590':
         if (videoFrameObserver.onCaptureVideoFrame == null) {
           return true;
         }
@@ -373,7 +373,7 @@ class VideoFrameObserverWrapper implements EventLoopEventHandler {
         videoFrameObserver.onCaptureVideoFrame!(sourceType, videoFrame);
         return true;
 
-      case 'onPreEncodeVideoFrame':
+      case 'onPreEncodeVideoFrame_1673590':
         if (videoFrameObserver.onPreEncodeVideoFrame == null) {
           return true;
         }
@@ -390,7 +390,7 @@ class VideoFrameObserverWrapper implements EventLoopEventHandler {
         videoFrameObserver.onPreEncodeVideoFrame!(sourceType, videoFrame);
         return true;
 
-      case 'onMediaPlayerVideoFrame':
+      case 'onMediaPlayerVideoFrame_e648e2c':
         if (videoFrameObserver.onMediaPlayerVideoFrame == null) {
           return true;
         }
@@ -407,7 +407,7 @@ class VideoFrameObserverWrapper implements EventLoopEventHandler {
         videoFrameObserver.onMediaPlayerVideoFrame!(videoFrame, mediaPlayerId);
         return true;
 
-      case 'onRenderVideoFrame':
+      case 'onRenderVideoFrame_43dcf82':
         if (videoFrameObserver.onRenderVideoFrame == null) {
           return true;
         }
@@ -426,7 +426,7 @@ class VideoFrameObserverWrapper implements EventLoopEventHandler {
             channelId, remoteUid, videoFrame);
         return true;
 
-      case 'onTranscodedVideoFrame':
+      case 'onTranscodedVideoFrame_27754d8':
         if (videoFrameObserver.onTranscodedVideoFrame == null) {
           return true;
         }
@@ -476,7 +476,7 @@ class MediaRecorderObserverWrapper implements EventLoopEventHandler {
   bool handleEventInternal(
       String eventName, String eventData, List<Uint8List> buffers) {
     switch (eventName) {
-      case 'onRecorderStateChanged':
+      case 'onRecorderStateChanged_c38849f':
         if (mediaRecorderObserver.onRecorderStateChanged == null) {
           return true;
         }
@@ -498,7 +498,7 @@ class MediaRecorderObserverWrapper implements EventLoopEventHandler {
             channelId, uid, state, reason);
         return true;
 
-      case 'onRecorderInfoUpdated':
+      case 'onRecorderInfoUpdated_64fa74a':
         if (mediaRecorderObserver.onRecorderInfoUpdated == null) {
           return true;
         }

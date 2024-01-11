@@ -23,7 +23,7 @@ class H265TranscoderObserverWrapper implements EventLoopEventHandler {
   bool handleEventInternal(
       String eventName, String eventData, List<Uint8List> buffers) {
     switch (eventName) {
-      case 'onEnableTranscode':
+      case 'onEnableTranscode_6ba6646':
         if (h265TranscoderObserver.onEnableTranscode == null) {
           return true;
         }
@@ -38,7 +38,7 @@ class H265TranscoderObserverWrapper implements EventLoopEventHandler {
         h265TranscoderObserver.onEnableTranscode!(result);
         return true;
 
-      case 'onQueryChannel':
+      case 'onQueryChannel_31ba3df':
         if (h265TranscoderObserver.onQueryChannel == null) {
           return true;
         }
@@ -58,7 +58,7 @@ class H265TranscoderObserverWrapper implements EventLoopEventHandler {
             result, originChannel, transcodeChannel);
         return true;
 
-      case 'onTriggerTranscode':
+      case 'onTriggerTranscode_6ba6646':
         if (h265TranscoderObserver.onTriggerTranscode == null) {
           return true;
         }

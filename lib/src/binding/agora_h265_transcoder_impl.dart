@@ -28,7 +28,7 @@ class H265TranscoderImpl implements H265Transcoder {
       required String channel,
       required int uid}) async {
     final apiType =
-        '${isOverrideClassName ? className : 'H265Transcoder'}_enableTranscode';
+        '${isOverrideClassName ? className : 'H265Transcoder'}_enableTranscode_a0779eb';
     final param =
         createParams({'token': token, 'channel': channel, 'uid': uid});
     final callApiResult = await irisMethodChannel.invokeMethod(
@@ -49,7 +49,7 @@ class H265TranscoderImpl implements H265Transcoder {
       required String channel,
       required int uid}) async {
     final apiType =
-        '${isOverrideClassName ? className : 'H265Transcoder'}_queryChannel';
+        '${isOverrideClassName ? className : 'H265Transcoder'}_queryChannel_a0779eb';
     final param =
         createParams({'token': token, 'channel': channel, 'uid': uid});
     final callApiResult = await irisMethodChannel.invokeMethod(
@@ -68,7 +68,7 @@ class H265TranscoderImpl implements H265Transcoder {
       required String channel,
       required int uid}) async {
     final apiType =
-        '${isOverrideClassName ? className : 'H265Transcoder'}_triggerTranscode';
+        '${isOverrideClassName ? className : 'H265Transcoder'}_triggerTranscode_a0779eb';
     final param =
         createParams({'token': token, 'channel': channel, 'uid': uid});
     final callApiResult = await irisMethodChannel.invokeMethod(
@@ -86,7 +86,7 @@ class H265TranscoderImpl implements H265Transcoder {
   @override
   void registerTranscoderObserver(H265TranscoderObserver observer) {
 // Implementation template
-// final apiType = '${isOverrideClassName ? className : 'H265Transcoder'}_registerTranscoderObserver';
+// final apiType = '${isOverrideClassName ? className : 'H265Transcoder'}_registerTranscoderObserver_e1ee996';
 // final param = createParams({// 'observer':observer// });
 // final callApiResult =  irisMethodChannel.invokeMethod(IrisMethodCall(apiType, jsonEncode(param), buffers:null));
 // if (callApiResult.irisReturnCode < 0) {
@@ -103,7 +103,7 @@ class H265TranscoderImpl implements H265Transcoder {
   @override
   void unregisterTranscoderObserver(H265TranscoderObserver observer) {
 // Implementation template
-// final apiType = '${isOverrideClassName ? className : 'H265Transcoder'}_unregisterTranscoderObserver';
+// final apiType = '${isOverrideClassName ? className : 'H265Transcoder'}_unregisterTranscoderObserver_e1ee996';
 // final param = createParams({// 'observer':observer// });
 // final callApiResult =  irisMethodChannel.invokeMethod(IrisMethodCall(apiType, jsonEncode(param), buffers:null));
 // if (callApiResult.irisReturnCode < 0) {

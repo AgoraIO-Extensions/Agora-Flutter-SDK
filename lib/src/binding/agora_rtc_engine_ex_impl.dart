@@ -29,7 +29,7 @@ class RtcEngineExImpl extends RtcEngineImpl implements RtcEngineEx {
       required RtcConnection connection,
       required ChannelMediaOptions options}) async {
     final apiType =
-        '${isOverrideClassName ? className : 'RtcEngineEx'}_joinChannelEx';
+        '${isOverrideClassName ? className : 'RtcEngineEx'}_joinChannelEx_a3cd08c';
     final param = createParams({
       'token': token,
       'connection': connection.toJson(),
@@ -76,7 +76,7 @@ class RtcEngineExImpl extends RtcEngineImpl implements RtcEngineEx {
       {required ChannelMediaOptions options,
       required RtcConnection connection}) async {
     final apiType =
-        '${isOverrideClassName ? className : 'RtcEngineEx'}_updateChannelMediaOptionsEx';
+        '${isOverrideClassName ? className : 'RtcEngineEx'}_updateChannelMediaOptionsEx_457bb35';
     final param = createParams(
         {'options': options.toJson(), 'connection': connection.toJson()});
     final List<Uint8List> buffers = [];
@@ -99,7 +99,7 @@ class RtcEngineExImpl extends RtcEngineImpl implements RtcEngineEx {
       {required VideoEncoderConfiguration config,
       required RtcConnection connection}) async {
     final apiType =
-        '${isOverrideClassName ? className : 'RtcEngineEx'}_setVideoEncoderConfigurationEx';
+        '${isOverrideClassName ? className : 'RtcEngineEx'}_setVideoEncoderConfigurationEx_4670c1e';
     final param = createParams(
         {'config': config.toJson(), 'connection': connection.toJson()});
     final List<Uint8List> buffers = [];
@@ -121,7 +121,7 @@ class RtcEngineExImpl extends RtcEngineImpl implements RtcEngineEx {
   Future<void> setupRemoteVideoEx(
       {required VideoCanvas canvas, required RtcConnection connection}) async {
     final apiType =
-        '${isOverrideClassName ? className : 'RtcEngineEx'}_setupRemoteVideoEx';
+        '${isOverrideClassName ? className : 'RtcEngineEx'}_setupRemoteVideoEx_522a409';
     final param = createParams(
         {'canvas': canvas.toJson(), 'connection': connection.toJson()});
     final List<Uint8List> buffers = [];
@@ -145,7 +145,7 @@ class RtcEngineExImpl extends RtcEngineImpl implements RtcEngineEx {
       required bool mute,
       required RtcConnection connection}) async {
     final apiType =
-        '${isOverrideClassName ? className : 'RtcEngineEx'}_muteRemoteAudioStreamEx';
+        '${isOverrideClassName ? className : 'RtcEngineEx'}_muteRemoteAudioStreamEx_6d93082';
     final param = createParams(
         {'uid': uid, 'mute': mute, 'connection': connection.toJson()});
     final List<Uint8List> buffers = [];
@@ -168,7 +168,7 @@ class RtcEngineExImpl extends RtcEngineImpl implements RtcEngineEx {
       required bool mute,
       required RtcConnection connection}) async {
     final apiType =
-        '${isOverrideClassName ? className : 'RtcEngineEx'}_muteRemoteVideoStreamEx';
+        '${isOverrideClassName ? className : 'RtcEngineEx'}_muteRemoteVideoStreamEx_6d93082';
     final param = createParams(
         {'uid': uid, 'mute': mute, 'connection': connection.toJson()});
     final List<Uint8List> buffers = [];
@@ -191,7 +191,7 @@ class RtcEngineExImpl extends RtcEngineImpl implements RtcEngineEx {
       required VideoStreamType streamType,
       required RtcConnection connection}) async {
     final apiType =
-        '${isOverrideClassName ? className : 'RtcEngineEx'}_setRemoteVideoStreamTypeEx';
+        '${isOverrideClassName ? className : 'RtcEngineEx'}_setRemoteVideoStreamTypeEx_01dc428';
     final param = createParams({
       'uid': uid,
       'streamType': streamType.value(),
@@ -215,7 +215,7 @@ class RtcEngineExImpl extends RtcEngineImpl implements RtcEngineEx {
   Future<void> muteLocalAudioStreamEx(
       {required bool mute, required RtcConnection connection}) async {
     final apiType =
-        '${isOverrideClassName ? className : 'RtcEngineEx'}_muteLocalAudioStreamEx';
+        '${isOverrideClassName ? className : 'RtcEngineEx'}_muteLocalAudioStreamEx_3cf17a4';
     final param =
         createParams({'mute': mute, 'connection': connection.toJson()});
     final List<Uint8List> buffers = [];
@@ -236,7 +236,7 @@ class RtcEngineExImpl extends RtcEngineImpl implements RtcEngineEx {
   Future<void> muteLocalVideoStreamEx(
       {required bool mute, required RtcConnection connection}) async {
     final apiType =
-        '${isOverrideClassName ? className : 'RtcEngineEx'}_muteLocalVideoStreamEx';
+        '${isOverrideClassName ? className : 'RtcEngineEx'}_muteLocalVideoStreamEx_3cf17a4';
     final param =
         createParams({'mute': mute, 'connection': connection.toJson()});
     final List<Uint8List> buffers = [];
@@ -257,7 +257,7 @@ class RtcEngineExImpl extends RtcEngineImpl implements RtcEngineEx {
   Future<void> muteAllRemoteAudioStreamsEx(
       {required bool mute, required RtcConnection connection}) async {
     final apiType =
-        '${isOverrideClassName ? className : 'RtcEngineEx'}_muteAllRemoteAudioStreamsEx';
+        '${isOverrideClassName ? className : 'RtcEngineEx'}_muteAllRemoteAudioStreamsEx_3cf17a4';
     final param =
         createParams({'mute': mute, 'connection': connection.toJson()});
     final List<Uint8List> buffers = [];
@@ -278,7 +278,7 @@ class RtcEngineExImpl extends RtcEngineImpl implements RtcEngineEx {
   Future<void> muteAllRemoteVideoStreamsEx(
       {required bool mute, required RtcConnection connection}) async {
     final apiType =
-        '${isOverrideClassName ? className : 'RtcEngineEx'}_muteAllRemoteVideoStreamsEx';
+        '${isOverrideClassName ? className : 'RtcEngineEx'}_muteAllRemoteVideoStreamsEx_3cf17a4';
     final param =
         createParams({'mute': mute, 'connection': connection.toJson()});
     final List<Uint8List> buffers = [];
@@ -301,7 +301,7 @@ class RtcEngineExImpl extends RtcEngineImpl implements RtcEngineEx {
       required int uidNumber,
       required RtcConnection connection}) async {
     final apiType =
-        '${isOverrideClassName ? className : 'RtcEngineEx'}_setSubscribeAudioBlocklistEx';
+        '${isOverrideClassName ? className : 'RtcEngineEx'}_setSubscribeAudioBlocklistEx_9f1e85c';
     final param = createParams({
       'uidList': uidList,
       'uidNumber': uidNumber,
@@ -327,7 +327,7 @@ class RtcEngineExImpl extends RtcEngineImpl implements RtcEngineEx {
       required int uidNumber,
       required RtcConnection connection}) async {
     final apiType =
-        '${isOverrideClassName ? className : 'RtcEngineEx'}_setSubscribeAudioAllowlistEx';
+        '${isOverrideClassName ? className : 'RtcEngineEx'}_setSubscribeAudioAllowlistEx_9f1e85c';
     final param = createParams({
       'uidList': uidList,
       'uidNumber': uidNumber,
@@ -353,7 +353,7 @@ class RtcEngineExImpl extends RtcEngineImpl implements RtcEngineEx {
       required int uidNumber,
       required RtcConnection connection}) async {
     final apiType =
-        '${isOverrideClassName ? className : 'RtcEngineEx'}_setSubscribeVideoBlocklistEx';
+        '${isOverrideClassName ? className : 'RtcEngineEx'}_setSubscribeVideoBlocklistEx_9f1e85c';
     final param = createParams({
       'uidList': uidList,
       'uidNumber': uidNumber,
@@ -379,7 +379,7 @@ class RtcEngineExImpl extends RtcEngineImpl implements RtcEngineEx {
       required int uidNumber,
       required RtcConnection connection}) async {
     final apiType =
-        '${isOverrideClassName ? className : 'RtcEngineEx'}_setSubscribeVideoAllowlistEx';
+        '${isOverrideClassName ? className : 'RtcEngineEx'}_setSubscribeVideoAllowlistEx_9f1e85c';
     final param = createParams({
       'uidList': uidList,
       'uidNumber': uidNumber,
@@ -405,7 +405,7 @@ class RtcEngineExImpl extends RtcEngineImpl implements RtcEngineEx {
       required VideoSubscriptionOptions options,
       required RtcConnection connection}) async {
     final apiType =
-        '${isOverrideClassName ? className : 'RtcEngineEx'}_setRemoteVideoSubscriptionOptionsEx';
+        '${isOverrideClassName ? className : 'RtcEngineEx'}_setRemoteVideoSubscriptionOptionsEx_3cd36bc';
     final param = createParams({
       'uid': uid,
       'options': options.toJson(),
@@ -433,7 +433,7 @@ class RtcEngineExImpl extends RtcEngineImpl implements RtcEngineEx {
       required double gain,
       required RtcConnection connection}) async {
     final apiType =
-        '${isOverrideClassName ? className : 'RtcEngineEx'}_setRemoteVoicePositionEx';
+        '${isOverrideClassName ? className : 'RtcEngineEx'}_setRemoteVoicePositionEx_fc0471c';
     final param = createParams({
       'uid': uid,
       'pan': pan,
@@ -460,7 +460,7 @@ class RtcEngineExImpl extends RtcEngineImpl implements RtcEngineEx {
       required SpatialAudioParams params,
       required RtcConnection connection}) async {
     final apiType =
-        '${isOverrideClassName ? className : 'RtcEngineEx'}_setRemoteUserSpatialAudioParamsEx';
+        '${isOverrideClassName ? className : 'RtcEngineEx'}_setRemoteUserSpatialAudioParamsEx_40ca9fb';
     final param = createParams({
       'uid': uid,
       'params': params.toJson(),
@@ -488,7 +488,7 @@ class RtcEngineExImpl extends RtcEngineImpl implements RtcEngineEx {
       required VideoMirrorModeType mirrorMode,
       required RtcConnection connection}) async {
     final apiType =
-        '${isOverrideClassName ? className : 'RtcEngineEx'}_setRemoteRenderModeEx';
+        '${isOverrideClassName ? className : 'RtcEngineEx'}_setRemoteRenderModeEx_a72fe4e';
     final param = createParams({
       'uid': uid,
       'renderMode': renderMode.value(),
@@ -515,7 +515,7 @@ class RtcEngineExImpl extends RtcEngineImpl implements RtcEngineEx {
       required bool enabled,
       String? deviceName}) async {
     final apiType =
-        '${isOverrideClassName ? className : 'RtcEngineEx'}_enableLoopbackRecordingEx';
+        '${isOverrideClassName ? className : 'RtcEngineEx'}_enableLoopbackRecordingEx_4f41542';
     final param = createParams({
       'connection': connection.toJson(),
       'enabled': enabled,
@@ -539,7 +539,7 @@ class RtcEngineExImpl extends RtcEngineImpl implements RtcEngineEx {
   Future<void> adjustRecordingSignalVolumeEx(
       {required int volume, required RtcConnection connection}) async {
     final apiType =
-        '${isOverrideClassName ? className : 'RtcEngineEx'}_adjustRecordingSignalVolumeEx';
+        '${isOverrideClassName ? className : 'RtcEngineEx'}_adjustRecordingSignalVolumeEx_e84d10e';
     final param =
         createParams({'volume': volume, 'connection': connection.toJson()});
     final List<Uint8List> buffers = [];
@@ -560,7 +560,7 @@ class RtcEngineExImpl extends RtcEngineImpl implements RtcEngineEx {
   Future<void> muteRecordingSignalEx(
       {required bool mute, required RtcConnection connection}) async {
     final apiType =
-        '${isOverrideClassName ? className : 'RtcEngineEx'}_muteRecordingSignalEx';
+        '${isOverrideClassName ? className : 'RtcEngineEx'}_muteRecordingSignalEx_3cf17a4';
     final param =
         createParams({'mute': mute, 'connection': connection.toJson()});
     final List<Uint8List> buffers = [];
@@ -583,7 +583,7 @@ class RtcEngineExImpl extends RtcEngineImpl implements RtcEngineEx {
       required int volume,
       required RtcConnection connection}) async {
     final apiType =
-        '${isOverrideClassName ? className : 'RtcEngineEx'}_adjustUserPlaybackSignalVolumeEx';
+        '${isOverrideClassName ? className : 'RtcEngineEx'}_adjustUserPlaybackSignalVolumeEx_adbd29c';
     final param = createParams(
         {'uid': uid, 'volume': volume, 'connection': connection.toJson()});
     final List<Uint8List> buffers = [];
@@ -604,7 +604,7 @@ class RtcEngineExImpl extends RtcEngineImpl implements RtcEngineEx {
   Future<ConnectionStateType> getConnectionStateEx(
       RtcConnection connection) async {
     final apiType =
-        '${isOverrideClassName ? className : 'RtcEngineEx'}_getConnectionStateEx';
+        '${isOverrideClassName ? className : 'RtcEngineEx'}_getConnectionStateEx_c81e1a4';
     final param = createParams({'connection': connection.toJson()});
     final List<Uint8List> buffers = [];
     buffers.addAll(connection.collectBufferList());
@@ -624,7 +624,7 @@ class RtcEngineExImpl extends RtcEngineImpl implements RtcEngineEx {
       required bool enabled,
       required EncryptionConfig config}) async {
     final apiType =
-        '${isOverrideClassName ? className : 'RtcEngineEx'}_enableEncryptionEx';
+        '${isOverrideClassName ? className : 'RtcEngineEx'}_enableEncryptionEx_10cd872';
     final param = createParams({
       'connection': connection.toJson(),
       'enabled': enabled,
@@ -678,7 +678,7 @@ class RtcEngineExImpl extends RtcEngineImpl implements RtcEngineEx {
       required int length,
       required RtcConnection connection}) async {
     final apiType =
-        '${isOverrideClassName ? className : 'RtcEngineEx'}_sendStreamMessageEx';
+        '${isOverrideClassName ? className : 'RtcEngineEx'}_sendStreamMessageEx_0c34857';
     final param = createParams({
       'streamId': streamId,
       'length': length,
@@ -705,7 +705,7 @@ class RtcEngineExImpl extends RtcEngineImpl implements RtcEngineEx {
       required WatermarkOptions options,
       required RtcConnection connection}) async {
     final apiType =
-        '${isOverrideClassName ? className : 'RtcEngineEx'}_addVideoWatermarkEx';
+        '${isOverrideClassName ? className : 'RtcEngineEx'}_addVideoWatermarkEx_ad7daa3';
     final param = createParams({
       'watermarkUrl': watermarkUrl,
       'options': options.toJson(),
@@ -729,7 +729,7 @@ class RtcEngineExImpl extends RtcEngineImpl implements RtcEngineEx {
   @override
   Future<void> clearVideoWatermarkEx(RtcConnection connection) async {
     final apiType =
-        '${isOverrideClassName ? className : 'RtcEngineEx'}_clearVideoWatermarkEx';
+        '${isOverrideClassName ? className : 'RtcEngineEx'}_clearVideoWatermarkEx_c81e1a4';
     final param = createParams({'connection': connection.toJson()});
     final List<Uint8List> buffers = [];
     buffers.addAll(connection.collectBufferList());
@@ -754,7 +754,7 @@ class RtcEngineExImpl extends RtcEngineImpl implements RtcEngineEx {
       required int value,
       required RtcConnection connection}) async {
     final apiType =
-        '${isOverrideClassName ? className : 'RtcEngineEx'}_sendCustomReportMessageEx';
+        '${isOverrideClassName ? className : 'RtcEngineEx'}_sendCustomReportMessageEx_833b8a5';
     final param = createParams({
       'id': id,
       'category': category,
@@ -784,7 +784,7 @@ class RtcEngineExImpl extends RtcEngineImpl implements RtcEngineEx {
       required bool reportVad,
       required RtcConnection connection}) async {
     final apiType =
-        '${isOverrideClassName ? className : 'RtcEngineEx'}_enableAudioVolumeIndicationEx';
+        '${isOverrideClassName ? className : 'RtcEngineEx'}_enableAudioVolumeIndicationEx_ac84f2a';
     final param = createParams({
       'interval': interval,
       'smooth': smooth,
@@ -809,7 +809,7 @@ class RtcEngineExImpl extends RtcEngineImpl implements RtcEngineEx {
   Future<void> startRtmpStreamWithoutTranscodingEx(
       {required String url, required RtcConnection connection}) async {
     final apiType =
-        '${isOverrideClassName ? className : 'RtcEngineEx'}_startRtmpStreamWithoutTranscodingEx';
+        '${isOverrideClassName ? className : 'RtcEngineEx'}_startRtmpStreamWithoutTranscodingEx_e405325';
     final param = createParams({'url': url, 'connection': connection.toJson()});
     final List<Uint8List> buffers = [];
     buffers.addAll(connection.collectBufferList());
@@ -831,7 +831,7 @@ class RtcEngineExImpl extends RtcEngineImpl implements RtcEngineEx {
       required LiveTranscoding transcoding,
       required RtcConnection connection}) async {
     final apiType =
-        '${isOverrideClassName ? className : 'RtcEngineEx'}_startRtmpStreamWithTranscodingEx';
+        '${isOverrideClassName ? className : 'RtcEngineEx'}_startRtmpStreamWithTranscodingEx_ab121b5';
     final param = createParams({
       'url': url,
       'transcoding': transcoding.toJson(),
@@ -857,7 +857,7 @@ class RtcEngineExImpl extends RtcEngineImpl implements RtcEngineEx {
       {required LiveTranscoding transcoding,
       required RtcConnection connection}) async {
     final apiType =
-        '${isOverrideClassName ? className : 'RtcEngineEx'}_updateRtmpTranscodingEx';
+        '${isOverrideClassName ? className : 'RtcEngineEx'}_updateRtmpTranscodingEx_77f3ee8';
     final param = createParams({
       'transcoding': transcoding.toJson(),
       'connection': connection.toJson()
@@ -881,7 +881,7 @@ class RtcEngineExImpl extends RtcEngineImpl implements RtcEngineEx {
   Future<void> stopRtmpStreamEx(
       {required String url, required RtcConnection connection}) async {
     final apiType =
-        '${isOverrideClassName ? className : 'RtcEngineEx'}_stopRtmpStreamEx';
+        '${isOverrideClassName ? className : 'RtcEngineEx'}_stopRtmpStreamEx_e405325';
     final param = createParams({'url': url, 'connection': connection.toJson()});
     final List<Uint8List> buffers = [];
     buffers.addAll(connection.collectBufferList());
@@ -902,7 +902,7 @@ class RtcEngineExImpl extends RtcEngineImpl implements RtcEngineEx {
       {required ChannelMediaRelayConfiguration configuration,
       required RtcConnection connection}) async {
     final apiType =
-        '${isOverrideClassName ? className : 'RtcEngineEx'}_startOrUpdateChannelMediaRelayEx';
+        '${isOverrideClassName ? className : 'RtcEngineEx'}_startOrUpdateChannelMediaRelayEx_4ad39a8';
     final param = createParams({
       'configuration': configuration.toJson(),
       'connection': connection.toJson()
@@ -925,7 +925,7 @@ class RtcEngineExImpl extends RtcEngineImpl implements RtcEngineEx {
   @override
   Future<void> stopChannelMediaRelayEx(RtcConnection connection) async {
     final apiType =
-        '${isOverrideClassName ? className : 'RtcEngineEx'}_stopChannelMediaRelayEx';
+        '${isOverrideClassName ? className : 'RtcEngineEx'}_stopChannelMediaRelayEx_c81e1a4';
     final param = createParams({'connection': connection.toJson()});
     final List<Uint8List> buffers = [];
     buffers.addAll(connection.collectBufferList());
@@ -944,7 +944,7 @@ class RtcEngineExImpl extends RtcEngineImpl implements RtcEngineEx {
   @override
   Future<void> pauseAllChannelMediaRelayEx(RtcConnection connection) async {
     final apiType =
-        '${isOverrideClassName ? className : 'RtcEngineEx'}_pauseAllChannelMediaRelayEx';
+        '${isOverrideClassName ? className : 'RtcEngineEx'}_pauseAllChannelMediaRelayEx_c81e1a4';
     final param = createParams({'connection': connection.toJson()});
     final List<Uint8List> buffers = [];
     buffers.addAll(connection.collectBufferList());
@@ -963,7 +963,7 @@ class RtcEngineExImpl extends RtcEngineImpl implements RtcEngineEx {
   @override
   Future<void> resumeAllChannelMediaRelayEx(RtcConnection connection) async {
     final apiType =
-        '${isOverrideClassName ? className : 'RtcEngineEx'}_resumeAllChannelMediaRelayEx';
+        '${isOverrideClassName ? className : 'RtcEngineEx'}_resumeAllChannelMediaRelayEx_c81e1a4';
     final param = createParams({'connection': connection.toJson()});
     final List<Uint8List> buffers = [];
     buffers.addAll(connection.collectBufferList());
@@ -983,7 +983,7 @@ class RtcEngineExImpl extends RtcEngineImpl implements RtcEngineEx {
   Future<UserInfo> getUserInfoByUserAccountEx(
       {required String userAccount, required RtcConnection connection}) async {
     final apiType =
-        '${isOverrideClassName ? className : 'RtcEngineEx'}_getUserInfoByUserAccountEx';
+        '${isOverrideClassName ? className : 'RtcEngineEx'}_getUserInfoByUserAccountEx_ca39cc6';
     final param = createParams(
         {'userAccount': userAccount, 'connection': connection.toJson()});
     final List<Uint8List> buffers = [];
@@ -1007,7 +1007,7 @@ class RtcEngineExImpl extends RtcEngineImpl implements RtcEngineEx {
   Future<UserInfo> getUserInfoByUidEx(
       {required int uid, required RtcConnection connection}) async {
     final apiType =
-        '${isOverrideClassName ? className : 'RtcEngineEx'}_getUserInfoByUidEx';
+        '${isOverrideClassName ? className : 'RtcEngineEx'}_getUserInfoByUidEx_1e78da1';
     final param = createParams({'uid': uid, 'connection': connection.toJson()});
     final List<Uint8List> buffers = [];
     buffers.addAll(connection.collectBufferList());
@@ -1032,7 +1032,7 @@ class RtcEngineExImpl extends RtcEngineImpl implements RtcEngineEx {
       required SimulcastStreamConfig streamConfig,
       required RtcConnection connection}) async {
     final apiType =
-        '${isOverrideClassName ? className : 'RtcEngineEx'}_enableDualStreamModeEx';
+        '${isOverrideClassName ? className : 'RtcEngineEx'}_enableDualStreamModeEx_4b18f41';
     final param = createParams({
       'enabled': enabled,
       'streamConfig': streamConfig.toJson(),
@@ -1059,7 +1059,7 @@ class RtcEngineExImpl extends RtcEngineImpl implements RtcEngineEx {
       required SimulcastStreamConfig streamConfig,
       required RtcConnection connection}) async {
     final apiType =
-        '${isOverrideClassName ? className : 'RtcEngineEx'}_setDualStreamModeEx';
+        '${isOverrideClassName ? className : 'RtcEngineEx'}_setDualStreamModeEx_622d0f3';
     final param = createParams({
       'mode': mode.value(),
       'streamConfig': streamConfig.toJson(),
@@ -1087,7 +1087,7 @@ class RtcEngineExImpl extends RtcEngineImpl implements RtcEngineEx {
       required StreamFallbackOptions option,
       required RtcConnection connection}) async {
     final apiType =
-        '${isOverrideClassName ? className : 'RtcEngineEx'}_setHighPriorityUserListEx';
+        '${isOverrideClassName ? className : 'RtcEngineEx'}_setHighPriorityUserListEx_8736b5c';
     final param = createParams({
       'uidList': uidList,
       'uidNum': uidNum,
@@ -1114,7 +1114,7 @@ class RtcEngineExImpl extends RtcEngineImpl implements RtcEngineEx {
       required int uid,
       required String filePath}) async {
     final apiType =
-        '${isOverrideClassName ? className : 'RtcEngineEx'}_takeSnapshotEx';
+        '${isOverrideClassName ? className : 'RtcEngineEx'}_takeSnapshotEx_de1c015';
     final param = createParams(
         {'connection': connection.toJson(), 'uid': uid, 'filePath': filePath});
     final List<Uint8List> buffers = [];
@@ -1137,7 +1137,7 @@ class RtcEngineExImpl extends RtcEngineImpl implements RtcEngineEx {
       required ContentInspectConfig config,
       required RtcConnection connection}) async {
     final apiType =
-        '${isOverrideClassName ? className : 'RtcEngineEx'}_enableContentInspectEx';
+        '${isOverrideClassName ? className : 'RtcEngineEx'}_enableContentInspectEx_c4e7f69';
     final param = createParams({
       'enabled': enabled,
       'config': config.toJson(),
@@ -1161,7 +1161,7 @@ class RtcEngineExImpl extends RtcEngineImpl implements RtcEngineEx {
   @override
   Future<void> startMediaRenderingTracingEx(RtcConnection connection) async {
     final apiType =
-        '${isOverrideClassName ? className : 'RtcEngineEx'}_startMediaRenderingTracingEx';
+        '${isOverrideClassName ? className : 'RtcEngineEx'}_startMediaRenderingTracingEx_c81e1a4';
     final param = createParams({'connection': connection.toJson()});
     final List<Uint8List> buffers = [];
     buffers.addAll(connection.collectBufferList());
@@ -1181,7 +1181,7 @@ class RtcEngineExImpl extends RtcEngineImpl implements RtcEngineEx {
   Future<void> setParametersEx(
       {required RtcConnection connection, required String parameters}) async {
     final apiType =
-        '${isOverrideClassName ? className : 'RtcEngineEx'}_setParametersEx';
+        '${isOverrideClassName ? className : 'RtcEngineEx'}_setParametersEx_8225ea3';
     final param = createParams(
         {'connection': connection.toJson(), 'parameters': parameters});
     final List<Uint8List> buffers = [];

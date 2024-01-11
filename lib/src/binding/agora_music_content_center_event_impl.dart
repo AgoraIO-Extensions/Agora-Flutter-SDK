@@ -24,7 +24,7 @@ class MusicContentCenterEventHandlerWrapper implements EventLoopEventHandler {
   bool handleEventInternal(
       String eventName, String eventData, List<Uint8List> buffers) {
     switch (eventName) {
-      case 'onMusicChartsResult':
+      case 'onMusicChartsResult_fb18135':
         if (musicContentCenterEventHandler.onMusicChartsResult == null) {
           return true;
         }
@@ -44,7 +44,7 @@ class MusicContentCenterEventHandlerWrapper implements EventLoopEventHandler {
             requestId, result, reason);
         return true;
 
-      case 'onMusicCollectionResult':
+      case 'onMusicCollectionResult_c30c2e6':
         if (musicContentCenterEventHandler.onMusicCollectionResult == null) {
           return true;
         }
@@ -63,7 +63,7 @@ class MusicContentCenterEventHandlerWrapper implements EventLoopEventHandler {
             requestId, result, reason);
         return true;
 
-      case 'onLyricResult':
+      case 'onLyricResult_9ad9c90':
         if (musicContentCenterEventHandler.onLyricResult == null) {
           return true;
         }
@@ -85,7 +85,7 @@ class MusicContentCenterEventHandlerWrapper implements EventLoopEventHandler {
             requestId, songCode, lyricUrl, reason);
         return true;
 
-      case 'onSongSimpleInfoResult':
+      case 'onSongSimpleInfoResult_9ad9c90':
         if (musicContentCenterEventHandler.onSongSimpleInfoResult == null) {
           return true;
         }
@@ -108,7 +108,7 @@ class MusicContentCenterEventHandlerWrapper implements EventLoopEventHandler {
             requestId, songCode, simpleInfo, reason);
         return true;
 
-      case 'onPreLoadEvent':
+      case 'onPreLoadEvent_20170bc':
         if (musicContentCenterEventHandler.onPreLoadEvent == null) {
           return true;
         }
