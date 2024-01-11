@@ -70,7 +70,7 @@ class MediaEngineImpl extends media_engine_impl_binding.MediaEngineImpl
     final eventHandlerWrapper = AudioFrameObserverWrapper(observer);
     final param = createParams({});
 
-    await irisMethodChannel.registerEventHandler(
+    await irisMethodChannel.unregisterEventHandler(
         ScopedEvent(
             scopedKey: _mediaEngineScopedKey,
             registerName: 'MediaEngine_registerAudioFrameObserver',
