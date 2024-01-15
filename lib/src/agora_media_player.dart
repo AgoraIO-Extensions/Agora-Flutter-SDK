@@ -96,7 +96,7 @@ abstract class MediaPlayer {
   ///
   /// Returns
   /// Returns the current playback progress (ms) if the call succeeds.
-  ///  < 0: Failure. See MediaPlayerError.
+  ///  < 0: Failure.
   Future<int> getPlayPosition();
 
   /// Gets the number of the media streams in the media resource.
@@ -105,7 +105,7 @@ abstract class MediaPlayer {
   ///
   /// Returns
   /// The number of the media streams in the media resource if the method call succeeds.
-  ///  < 0: Failure. See MediaPlayerError.
+  ///  < 0: Failure.
   Future<int> getStreamCount();
 
   /// Gets the detailed information of the media stream.
@@ -434,7 +434,7 @@ abstract class MediaPlayerCacheManager {
   ///
   /// Returns
   /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown; and you need to catch the exception and handle it accordingly.
-  ///  < 0: Failure. See MediaPlayerError.
+  ///  < 0: Failure.
   Future<void> removeAllCaches();
 
   /// Deletes a cached media file that is the least recently used.
@@ -443,7 +443,7 @@ abstract class MediaPlayerCacheManager {
   ///
   /// Returns
   /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown; and you need to catch the exception and handle it accordingly.
-  ///  < 0: Failure. See MediaPlayerError.
+  ///  < 0: Failure.
   Future<void> removeOldCache();
 
   /// Deletes a cached media file.
@@ -454,7 +454,7 @@ abstract class MediaPlayerCacheManager {
   ///
   /// Returns
   /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown; and you need to catch the exception and handle it accordingly.
-  ///  < 0: Failure. See MediaPlayerError.
+  ///  < 0: Failure.
   Future<void> removeCacheByUri(String uri);
 
   /// Sets the storage path for the media files that you want to cache.
@@ -465,7 +465,7 @@ abstract class MediaPlayerCacheManager {
   ///
   /// Returns
   /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown; and you need to catch the exception and handle it accordingly.
-  ///  < 0: Failure. See MediaPlayerError.
+  ///  < 0: Failure.
   Future<void> setCacheDir(String path);
 
   /// Sets the maximum number of media files that can be cached.
@@ -474,7 +474,7 @@ abstract class MediaPlayerCacheManager {
   ///
   /// Returns
   /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown; and you need to catch the exception and handle it accordingly.
-  ///  < 0: Failure. See MediaPlayerError.
+  ///  < 0: Failure.
   Future<void> setMaxCacheFileCount(int count);
 
   /// Sets the maximum size of the aggregate storage space for cached media files.
@@ -483,7 +483,7 @@ abstract class MediaPlayerCacheManager {
   ///
   /// Returns
   /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown; and you need to catch the exception and handle it accordingly.
-  ///  < 0: Failure. See MediaPlayerError.
+  ///  < 0: Failure.
   Future<void> setMaxCacheFileSize(int cacheSize);
 
   /// Sets whether to delete cached media files automatically.
@@ -494,7 +494,7 @@ abstract class MediaPlayerCacheManager {
   ///
   /// Returns
   /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown; and you need to catch the exception and handle it accordingly.
-  ///  < 0: Failure. See MediaPlayerError.
+  ///  < 0: Failure.
   Future<void> enableAutoRemoveCache(bool enable);
 
   /// Gets the storage path of the cached media files.
@@ -505,7 +505,7 @@ abstract class MediaPlayerCacheManager {
   ///
   /// Returns
   /// The call succeeds, and the SDK returns the storage path of the cached media files.
-  ///  < 0: Failure. See MediaPlayerError.
+  ///  < 0: Failure.
   Future<String> getCacheDir(int length);
 
   /// Gets the maximum number of media files that can be cached.
@@ -514,7 +514,7 @@ abstract class MediaPlayerCacheManager {
   ///
   /// Returns
   /// > 0: The call succeeds and returns the maximum number of media files that can be cached.
-  ///  < 0: Failure. See MediaPlayerError.
+  ///  < 0: Failure.
   Future<int> getMaxCacheFileCount();
 
   /// Gets the maximum size of the aggregate storage space for cached media files.
@@ -523,14 +523,14 @@ abstract class MediaPlayerCacheManager {
   ///
   /// Returns
   /// > 0: The call succeeds and returns the maximum size (in bytes) of the aggregate storage space for cached media files.
-  ///  < 0: Failure. See MediaPlayerError.
+  ///  < 0: Failure.
   Future<int> getMaxCacheFileSize();
 
   /// Gets the number of media files that are cached.
   ///
   /// Returns
   /// ≥ 0: The call succeeds and returns the number of media files that are cached.
-  ///  < 0: Failure. See MediaPlayerError.
+  ///  < 0: Failure.
   Future<int> getCacheFileCount();
 }
 
