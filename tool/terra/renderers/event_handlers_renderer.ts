@@ -13,12 +13,7 @@ import {
 } from "@agoraio-extensions/terra-core";
 import path from "path";
 import { getIrisApiIdValue } from "../parsers/iris_api_id_parser";
-
-function isCallbackClass(clazz: Clazz): boolean {
-  return new RegExp(
-    "(EventHandler|Observer|Provider|Sink|Callback|ObserverBase|EventHandlerEx)$"
-  ).test(clazz.name);
-}
+import { isCallbackClass } from "./utils";
 
 function processCXXFiles(
   terraContext: TerraContext,
@@ -370,8 +365,9 @@ bool handleEvent(String eventName, String eventData, List<Uint8List> buffers) {
     ${output}
     `.trim();
 
+    let fileName = `${dartFileName(cxxFile.fileName)}_event_impl.dart`;
     return {
-      file_name: `${dartFileName(cxxFile.fileName)}_event_impl.dart`,
+      file_name: `lib/src/binding/${fileName}`,
       file_content: content,
     };
   });

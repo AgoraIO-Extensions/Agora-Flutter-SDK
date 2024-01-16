@@ -34,3 +34,4 @@ parsers:
 
 renderers:
   - path: renderers/event_handlers_renderer.ts
+  - path: renderers/event_ids_mapping_renderer.ts

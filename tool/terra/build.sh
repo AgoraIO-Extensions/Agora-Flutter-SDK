@@ -14,7 +14,7 @@ npm exec terra -- run \
 # Incremental migrate to the new terra, this will override the existing files
 npm exec terra -- run \
     --config ${PROJECT_ROOT}/tool/terra/terra_config_main.yaml  \
-    --output-dir=${PROJECT_ROOT}/lib/src/binding/
+    --output-dir=${PROJECT_ROOT}/
 
 popd
 

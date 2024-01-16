@@ -159,10 +159,32 @@ abstract class MediaPlayer {
   Future<void> selectMultiAudioTrack(
       {required int playoutTrackIndex, required int publishTrackIndex});
 
-  /// @nodoc
+  /// Sets the private options for the media player.
+  ///
+  /// The media player supports setting private options by key and value. Under normal circumstances, you do not need to know the private option settings, and just use the default option settings.
+  ///  Ensure that you call this method before open.
+  ///  If you need to push streams with SEI into the CDN, call setPlayerOptionInInt ("sei_data_with_uuid", 1); otherwise, the loss of SEI might occurs.
+  ///
+  /// * [key] The key of the option.
+  /// * [value] The value of the key.
+  ///
+  /// Returns
+  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown; and you need to catch the exception and handle it accordingly.
+  ///  < 0: Failure.
   Future<void> setPlayerOptionInInt({required String key, required int value});
 
-  /// @nodoc
+  /// Sets the private options for the media player.
+  ///
+  /// The media player supports setting private options by key and value. Under normal circumstances, you do not need to know the private option settings, and just use the default option settings.
+  ///  Ensure that you call this method before open.
+  ///  If you need to push streams with SEI into the CDN, call setPlayerOptionInInt ("sei_data_with_uuid", 1); otherwise, the loss of SEI might occurs.
+  ///
+  /// * [key] The key of the option.
+  /// * [value] The value of the key.
+  ///
+  /// Returns
+  /// 0: Success.
+  ///  < 0: Failure.
   Future<void> setPlayerOptionInString(
       {required String key, required String value});
 

@@ -18,6 +18,8 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:iris_tester/iris_tester.dart';
 import 'package:iris_method_channel/iris_method_channel.dart';
 
+import 'event_ids_mapping.dart';
+
 void generatedTestCases(IrisTester irisTester) {
   {{TEST_CASES_CONTENT}} 
 }
@@ -61,6 +63,8 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:iris_tester/iris_tester.dart';
 import 'package:iris_method_channel/iris_method_channel.dart';
 
+import 'event_ids_mapping.dart';
+
 void generatedTestCases(IrisTester irisTester) {
   {{TEST_CASES_CONTENT}} 
 }
@@ -99,6 +103,8 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:iris_tester/iris_tester.dart';
 import 'package:iris_method_channel/iris_method_channel.dart';
+
+import 'event_ids_mapping.dart';
 
 void generatedTestCases(IrisTester irisTester) {
   {{TEST_CASES_CONTENT}} 
@@ -139,6 +145,8 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:iris_tester/iris_tester.dart';
 import 'package:iris_method_channel/iris_method_channel.dart';
 
+import 'event_ids_mapping.dart';
+
 void generatedTestCases(IrisTester irisTester) {
   {{TEST_CASES_CONTENT}} 
 }
@@ -177,6 +185,8 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:iris_tester/iris_tester.dart';
 import 'package:iris_method_channel/iris_method_channel.dart';
+
+import 'event_ids_mapping.dart';
 
 void generatedTestCases(IrisTester irisTester) {
   {{TEST_CASES_CONTENT}} 
@@ -218,6 +228,8 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:iris_tester/iris_tester.dart';
 import 'package:iris_method_channel/iris_method_channel.dart';
 
+import 'event_ids_mapping.dart';
+
 void generatedTestCases(IrisTester irisTester) {
   {{TEST_CASES_CONTENT}} 
 }
@@ -258,6 +270,8 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:iris_tester/iris_tester.dart';
 import 'package:iris_method_channel/iris_method_channel.dart';
 
+import 'event_ids_mapping.dart';
+
 void generatedTestCases(IrisTester irisTester) {
   {{TEST_CASES_CONTENT}} 
 }
@@ -297,6 +311,8 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:iris_tester/iris_tester.dart';
 import 'package:iris_method_channel/iris_method_channel.dart';
+
+import 'event_ids_mapping.dart';
 
 void generatedTestCases(IrisTester irisTester) {
   {{TEST_CASES_CONTENT}} 
@@ -340,6 +356,8 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:iris_tester/iris_tester.dart';
 import 'package:iris_method_channel/iris_method_channel.dart';
 
+import 'event_ids_mapping.dart';
+
 void generatedTestCases(IrisTester irisTester) {
   {{TEST_CASES_CONTENT}} 
 }
@@ -381,6 +399,8 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:iris_tester/iris_tester.dart';
 import 'package:iris_method_channel/iris_method_channel.dart';
+
+import 'event_ids_mapping.dart';
 
 void generatedTestCases(IrisTester irisTester) {
   {{TEST_CASES_CONTENT}} 
@@ -424,6 +444,8 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:iris_tester/iris_tester.dart';
 import 'package:iris_method_channel/iris_method_channel.dart';
 
+import 'event_ids_mapping.dart';
+
 void generatedTestCases(IrisTester irisTester) {
   {{TEST_CASES_CONTENT}} 
 }
@@ -465,6 +487,8 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:iris_tester/iris_tester.dart';
 import 'package:iris_method_channel/iris_method_channel.dart';
+
+import 'event_ids_mapping.dart';
 
 void generatedTestCases(IrisTester irisTester) {
   {{TEST_CASES_CONTENT}} 
@@ -508,6 +532,8 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:iris_tester/iris_tester.dart';
 import 'package:iris_method_channel/iris_method_channel.dart';
+
+import 'event_ids_mapping.dart';
 
 void generatedTestCases(IrisTester irisTester) {
   {{TEST_CASES_CONTENT}} 
@@ -553,6 +579,8 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:iris_tester/iris_tester.dart';
 import 'package:iris_method_channel/iris_method_channel.dart';
+
+import 'event_ids_mapping.dart';
 
 void generatedTestCases(IrisTester irisTester) {
   {{TEST_CASES_CONTENT}} 

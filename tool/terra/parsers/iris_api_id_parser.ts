@@ -29,13 +29,11 @@ export default function IrisApiIdParser(
         clazz.methods.forEach((method) => {
           method.user_data ??= {};
           method.user_data!["IrisApiIdParser"] = {
-            key: irisApiId(preParseResult!, clazz, method, {
+            key: irisApiId(clazz, method, {
               toUpperCase: true,
-              includeBaseClassMethods: needCheckWithBaseClasses,
             }),
-            value: irisApiId(preParseResult!, clazz, method, {
+            value: irisApiId(clazz, method, {
               toUpperCase: false,
-              includeBaseClassMethods: needCheckWithBaseClasses,
             }),
           };
         });

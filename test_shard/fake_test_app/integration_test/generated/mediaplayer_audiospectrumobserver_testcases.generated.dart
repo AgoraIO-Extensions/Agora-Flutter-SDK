@@ -11,6 +11,8 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:iris_tester/iris_tester.dart';
 import 'package:iris_method_channel/iris_method_channel.dart';
 
+import 'event_ids_mapping.dart';
+
 void generatedTestCases(IrisTester irisTester) {
   testWidgets(
     'onLocalAudioSpectrum',
@@ -53,17 +55,14 @@ void generatedTestCases(IrisTester irisTester) {
           'data': data.toJson(),
         };
 
-        if (!kIsWeb) {
-          irisTester.fireEvent('AudioSpectrumObserver_onLocalAudioSpectrum',
-              params: eventJson);
-        } else {
-          final ret = irisTester.fireEvent(
-              'AudioSpectrumObserver_onLocalAudioSpectrum',
-              params: eventJson);
-// Delay 200 milliseconds to ensure the callback is called.
+        final eventIds =
+            eventIdsMapping['AudioSpectrumObserver_onLocalAudioSpectrum'] ?? [];
+        for (final event in eventIds) {
+          final ret = irisTester.fireEvent(event, params: eventJson);
+          // Delay 200 milliseconds to ensure the callback is called.
           await Future.delayed(const Duration(milliseconds: 200));
-// TODO(littlegnal): Most of callbacks on web are not implemented, we're temporarily skip these callbacks at this time.
-          if (ret) {
+          // TODO(littlegnal): Most of callbacks on web are not implemented, we're temporarily skip these callbacks at this time.
+          if (kIsWeb && ret) {
             if (!onLocalAudioSpectrumCompleter.isCompleted) {
               onLocalAudioSpectrumCompleter.complete(true);
             }
@@ -125,17 +124,15 @@ void generatedTestCases(IrisTester irisTester) {
           'spectrumNumber': spectrumNumber,
         };
 
-        if (!kIsWeb) {
-          irisTester.fireEvent('AudioSpectrumObserver_onRemoteAudioSpectrum',
-              params: eventJson);
-        } else {
-          final ret = irisTester.fireEvent(
-              'AudioSpectrumObserver_onRemoteAudioSpectrum',
-              params: eventJson);
-// Delay 200 milliseconds to ensure the callback is called.
+        final eventIds =
+            eventIdsMapping['AudioSpectrumObserver_onRemoteAudioSpectrum'] ??
+                [];
+        for (final event in eventIds) {
+          final ret = irisTester.fireEvent(event, params: eventJson);
+          // Delay 200 milliseconds to ensure the callback is called.
           await Future.delayed(const Duration(milliseconds: 200));
-// TODO(littlegnal): Most of callbacks on web are not implemented, we're temporarily skip these callbacks at this time.
-          if (ret) {
+          // TODO(littlegnal): Most of callbacks on web are not implemented, we're temporarily skip these callbacks at this time.
+          if (kIsWeb && ret) {
             if (!onRemoteAudioSpectrumCompleter.isCompleted) {
               onRemoteAudioSpectrumCompleter.complete(true);
             }

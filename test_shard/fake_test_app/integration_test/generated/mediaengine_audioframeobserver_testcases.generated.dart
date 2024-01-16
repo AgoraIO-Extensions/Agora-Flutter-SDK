@@ -11,6 +11,8 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:iris_tester/iris_tester.dart';
 import 'package:iris_method_channel/iris_method_channel.dart';
 
+import 'event_ids_mapping.dart';
+
 void generatedTestCases(IrisTester irisTester) {
   testWidgets(
     'onPlaybackAudioFrameBeforeMixing',
@@ -70,18 +72,15 @@ void generatedTestCases(IrisTester irisTester) {
           'audioFrame': audioFrame.toJson(),
         };
 
-        if (!kIsWeb) {
-          irisTester.fireEvent(
-              'AudioFrameObserver_onPlaybackAudioFrameBeforeMixing',
-              params: eventJson);
-        } else {
-          final ret = irisTester.fireEvent(
-              'AudioFrameObserver_onPlaybackAudioFrameBeforeMixing',
-              params: eventJson);
-// Delay 200 milliseconds to ensure the callback is called.
+        final eventIds = eventIdsMapping[
+                'AudioFrameObserver_onPlaybackAudioFrameBeforeMixing'] ??
+            [];
+        for (final event in eventIds) {
+          final ret = irisTester.fireEvent(event, params: eventJson);
+          // Delay 200 milliseconds to ensure the callback is called.
           await Future.delayed(const Duration(milliseconds: 200));
-// TODO(littlegnal): Most of callbacks on web are not implemented, we're temporarily skip these callbacks at this time.
-          if (ret) {
+          // TODO(littlegnal): Most of callbacks on web are not implemented, we're temporarily skip these callbacks at this time.
+          if (kIsWeb && ret) {
             if (!onPlaybackAudioFrameBeforeMixingCompleter.isCompleted) {
               onPlaybackAudioFrameBeforeMixingCompleter.complete(true);
             }
