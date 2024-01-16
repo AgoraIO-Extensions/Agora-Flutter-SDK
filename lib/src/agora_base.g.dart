@@ -2020,6 +2020,7 @@ LocalAccessPointConfiguration _$LocalAccessPointConfigurationFromJson(
           ? null
           : AdvancedConfigInfo.fromJson(
               json['advancedConfig'] as Map<String, dynamic>),
+      disableAut: json['disableAut'] as bool?,
     );
 
 Map<String, dynamic> _$LocalAccessPointConfigurationToJson(
@@ -2039,6 +2040,7 @@ Map<String, dynamic> _$LocalAccessPointConfigurationToJson(
   writeNotNull('verifyDomainName', instance.verifyDomainName);
   writeNotNull('mode', _$LocalProxyModeEnumMap[instance.mode]);
   writeNotNull('advancedConfig', instance.advancedConfig?.toJson());
+  writeNotNull('disableAut', instance.disableAut);
   return val;
 }
 
@@ -2276,7 +2278,6 @@ const _$InterfaceIdTypeEnumMap = {
   InterfaceIdType.agoraIidRtcConnection: 7,
   InterfaceIdType.agoraIidSignalingEngine: 8,
   InterfaceIdType.agoraIidMediaEngineRegulator: 9,
-  InterfaceIdType.agoraIidCloudSpatialAudio: 10,
   InterfaceIdType.agoraIidLocalSpatialAudio: 11,
   InterfaceIdType.agoraIidStateSync: 13,
   InterfaceIdType.agoraIidMetaService: 14,

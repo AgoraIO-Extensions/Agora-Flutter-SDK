@@ -171,21 +171,21 @@ Map<String, dynamic> _$MusicContentCenterConfigurationToJson(
   return val;
 }
 
-const _$PreloadStatusCodeEnumMap = {
-  PreloadStatusCode.kPreloadStatusCompleted: 0,
-  PreloadStatusCode.kPreloadStatusFailed: 1,
-  PreloadStatusCode.kPreloadStatusPreloading: 2,
-  PreloadStatusCode.kPreloadStatusRemoved: 3,
+const _$PreloadStateEnumMap = {
+  PreloadState.kPreloadStateCompleted: 0,
+  PreloadState.kPreloadStateFailed: 1,
+  PreloadState.kPreloadStatePreloading: 2,
+  PreloadState.kPreloadStateRemoved: 3,
 };
 
-const _$MusicContentCenterStatusCodeEnumMap = {
-  MusicContentCenterStatusCode.kMusicContentCenterStatusOk: 0,
-  MusicContentCenterStatusCode.kMusicContentCenterStatusError: 1,
-  MusicContentCenterStatusCode.kMusicContentCenterStatusGateway: 2,
-  MusicContentCenterStatusCode.kMusicContentCenterStatusPermissionAndResource:
+const _$MusicContentCenterStateReasonEnumMap = {
+  MusicContentCenterStateReason.kMusicContentCenterReasonOk: 0,
+  MusicContentCenterStateReason.kMusicContentCenterReasonError: 1,
+  MusicContentCenterStateReason.kMusicContentCenterReasonGateway: 2,
+  MusicContentCenterStateReason.kMusicContentCenterReasonPermissionAndResource:
       3,
-  MusicContentCenterStatusCode.kMusicContentCenterStatusInternalDataParse: 4,
-  MusicContentCenterStatusCode.kMusicContentCenterStatusMusicLoading: 5,
-  MusicContentCenterStatusCode.kMusicContentCenterStatusMusicDecryption: 6,
-  MusicContentCenterStatusCode.kMusicContentCenterStatusHttpInternalError: 7,
+  MusicContentCenterStateReason.kMusicContentCenterReasonInternalDataParse: 4,
+  MusicContentCenterStateReason.kMusicContentCenterReasonMusicLoading: 5,
+  MusicContentCenterStateReason.kMusicContentCenterReasonMusicDecryption: 6,
+  MusicContentCenterStateReason.kMusicContentCenterReasonHttpInternalError: 7,
 };

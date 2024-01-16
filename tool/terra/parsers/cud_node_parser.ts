@@ -45,7 +45,6 @@ function updateOp(sourceNode: CXXTerraNode, opConfig: CUDNodeOp): boolean {
     if (_.isArray(objValue)) {
       for (let i = 0; i < srcValue.length; i++) {
         let srcValueItem = srcValue[i];
-        console.log(`srcValueItem: ${JSON.stringify(srcValueItem)}}`);
 
         for (let j = 0; j < objValue.length; j++) {
           let objValueItem = objValue[j];

@@ -724,8 +724,8 @@ MusicContentCenterEventHandlerOnMusicChartsResultJson
           result: (json['result'] as List<dynamic>?)
               ?.map((e) => MusicChartInfo.fromJson(e as Map<String, dynamic>))
               .toList(),
-          status: $enumDecodeNullable(
-              _$MusicContentCenterStatusCodeEnumMap, json['status']),
+          reason: $enumDecodeNullable(
+              _$MusicContentCenterStateReasonEnumMap, json['reason']),
         );
 
 Map<String, dynamic>
@@ -734,19 +734,19 @@ Map<String, dynamic>
         <String, dynamic>{
           'requestId': instance.requestId,
           'result': instance.result?.map((e) => e.toJson()).toList(),
-          'status': _$MusicContentCenterStatusCodeEnumMap[instance.status],
+          'reason': _$MusicContentCenterStateReasonEnumMap[instance.reason],
         };
 
-const _$MusicContentCenterStatusCodeEnumMap = {
-  MusicContentCenterStatusCode.kMusicContentCenterStatusOk: 0,
-  MusicContentCenterStatusCode.kMusicContentCenterStatusError: 1,
-  MusicContentCenterStatusCode.kMusicContentCenterStatusGateway: 2,
-  MusicContentCenterStatusCode.kMusicContentCenterStatusPermissionAndResource:
+const _$MusicContentCenterStateReasonEnumMap = {
+  MusicContentCenterStateReason.kMusicContentCenterReasonOk: 0,
+  MusicContentCenterStateReason.kMusicContentCenterReasonError: 1,
+  MusicContentCenterStateReason.kMusicContentCenterReasonGateway: 2,
+  MusicContentCenterStateReason.kMusicContentCenterReasonPermissionAndResource:
       3,
-  MusicContentCenterStatusCode.kMusicContentCenterStatusInternalDataParse: 4,
-  MusicContentCenterStatusCode.kMusicContentCenterStatusMusicLoading: 5,
-  MusicContentCenterStatusCode.kMusicContentCenterStatusMusicDecryption: 6,
-  MusicContentCenterStatusCode.kMusicContentCenterStatusHttpInternalError: 7,
+  MusicContentCenterStateReason.kMusicContentCenterReasonInternalDataParse: 4,
+  MusicContentCenterStateReason.kMusicContentCenterReasonMusicLoading: 5,
+  MusicContentCenterStateReason.kMusicContentCenterReasonMusicDecryption: 6,
+  MusicContentCenterStateReason.kMusicContentCenterReasonHttpInternalError: 7,
 };
 
 MusicContentCenterEventHandlerOnMusicCollectionResultJson
@@ -754,8 +754,8 @@ MusicContentCenterEventHandlerOnMusicCollectionResultJson
             Map<String, dynamic> json) =>
         MusicContentCenterEventHandlerOnMusicCollectionResultJson(
           requestId: json['requestId'] as String?,
-          status: $enumDecodeNullable(
-              _$MusicContentCenterStatusCodeEnumMap, json['status']),
+          reason: $enumDecodeNullable(
+              _$MusicContentCenterStateReasonEnumMap, json['reason']),
         );
 
 Map<String,
@@ -763,7 +763,7 @@ Map<String,
         MusicContentCenterEventHandlerOnMusicCollectionResultJson instance) =>
     <String, dynamic>{
       'requestId': instance.requestId,
-      'status': _$MusicContentCenterStatusCodeEnumMap[instance.status],
+      'reason': _$MusicContentCenterStateReasonEnumMap[instance.reason],
     };
 
 MusicContentCenterEventHandlerOnLyricResultJson
@@ -773,8 +773,8 @@ MusicContentCenterEventHandlerOnLyricResultJson
           requestId: json['requestId'] as String?,
           songCode: json['songCode'] as int?,
           lyricUrl: json['lyricUrl'] as String?,
-          status: $enumDecodeNullable(
-              _$MusicContentCenterStatusCodeEnumMap, json['status']),
+          reason: $enumDecodeNullable(
+              _$MusicContentCenterStateReasonEnumMap, json['reason']),
         );
 
 Map<String, dynamic> _$MusicContentCenterEventHandlerOnLyricResultJsonToJson(
@@ -783,7 +783,7 @@ Map<String, dynamic> _$MusicContentCenterEventHandlerOnLyricResultJsonToJson(
       'requestId': instance.requestId,
       'songCode': instance.songCode,
       'lyricUrl': instance.lyricUrl,
-      'status': _$MusicContentCenterStatusCodeEnumMap[instance.status],
+      'reason': _$MusicContentCenterStateReasonEnumMap[instance.reason],
     };
 
 MusicContentCenterEventHandlerOnSongSimpleInfoResultJson
@@ -793,8 +793,8 @@ MusicContentCenterEventHandlerOnSongSimpleInfoResultJson
           requestId: json['requestId'] as String?,
           songCode: json['songCode'] as int?,
           simpleInfo: json['simpleInfo'] as String?,
-          status: $enumDecodeNullable(
-              _$MusicContentCenterStatusCodeEnumMap, json['status']),
+          reason: $enumDecodeNullable(
+              _$MusicContentCenterStateReasonEnumMap, json['reason']),
         );
 
 Map<String,
@@ -804,7 +804,7 @@ Map<String,
       'requestId': instance.requestId,
       'songCode': instance.songCode,
       'simpleInfo': instance.simpleInfo,
-      'status': _$MusicContentCenterStatusCodeEnumMap[instance.status],
+      'reason': _$MusicContentCenterStateReasonEnumMap[instance.reason],
     };
 
 MusicContentCenterEventHandlerOnPreLoadEventJson
@@ -815,10 +815,9 @@ MusicContentCenterEventHandlerOnPreLoadEventJson
           songCode: json['songCode'] as int?,
           percent: json['percent'] as int?,
           lyricUrl: json['lyricUrl'] as String?,
-          preloadStatus: $enumDecodeNullable(
-              _$PreloadStatusCodeEnumMap, json['preloadStatus']),
-          mccStatus: $enumDecodeNullable(
-              _$MusicContentCenterStatusCodeEnumMap, json['mccStatus']),
+          state: $enumDecodeNullable(_$PreloadStateEnumMap, json['state']),
+          reason: $enumDecodeNullable(
+              _$MusicContentCenterStateReasonEnumMap, json['reason']),
         );
 
 Map<String, dynamic> _$MusicContentCenterEventHandlerOnPreLoadEventJsonToJson(
@@ -828,15 +827,15 @@ Map<String, dynamic> _$MusicContentCenterEventHandlerOnPreLoadEventJsonToJson(
       'songCode': instance.songCode,
       'percent': instance.percent,
       'lyricUrl': instance.lyricUrl,
-      'preloadStatus': _$PreloadStatusCodeEnumMap[instance.preloadStatus],
-      'mccStatus': _$MusicContentCenterStatusCodeEnumMap[instance.mccStatus],
+      'state': _$PreloadStateEnumMap[instance.state],
+      'reason': _$MusicContentCenterStateReasonEnumMap[instance.reason],
     };
 
-const _$PreloadStatusCodeEnumMap = {
-  PreloadStatusCode.kPreloadStatusCompleted: 0,
-  PreloadStatusCode.kPreloadStatusFailed: 1,
-  PreloadStatusCode.kPreloadStatusPreloading: 2,
-  PreloadStatusCode.kPreloadStatusRemoved: 3,
+const _$PreloadStateEnumMap = {
+  PreloadState.kPreloadStateCompleted: 0,
+  PreloadState.kPreloadStateFailed: 1,
+  PreloadState.kPreloadStatePreloading: 2,
+  PreloadState.kPreloadStateRemoved: 3,
 };
 
 RtcEngineEventHandlerOnJoinChannelSuccessJson

@@ -148,19 +148,19 @@ void musicContentCenterSmokeTestCases() {
         final MusicContentCenterEventHandler eventHandler =
             MusicContentCenterEventHandler(
           onMusicChartsResult: (String requestId, List result,
-              MusicContentCenterStatusCode status) {},
+              MusicContentCenterStateReason reason) {},
           onMusicCollectionResult: (String requestId, MusicCollection result,
-              MusicContentCenterStatusCode status) {},
+              MusicContentCenterStateReason reason) {},
           onLyricResult: (String requestId, int songCode, String lyricUrl,
-              MusicContentCenterStatusCode status) {},
+              MusicContentCenterStateReason reason) {},
           onSongSimpleInfoResult: (String requestId, int songCode,
-              String simpleInfo, MusicContentCenterStatusCode status) {},
+              String simpleInfo, MusicContentCenterStateReason reason) {},
           onPreLoadEvent: (String requestId,
               int songCode,
               int percent,
               String lyricUrl,
-              PreloadStatusCode preloadStatus,
-              MusicContentCenterStatusCode mccStatus) {},
+              PreloadState state,
+              MusicContentCenterStateReason reason) {},
         );
         musicContentCenter.registerEventHandler(
           eventHandler,

@@ -70,8 +70,8 @@ class MusicContentCenterEventHandlerWrapper
                 jsonMap);
         paramJson = paramJson.fillBuffers(buffers);
         String? requestId = paramJson.requestId;
-        MusicContentCenterStatusCode? errorCode = paramJson.status;
-        if (requestId == null || errorCode == null) {
+        MusicContentCenterStateReason? reason = paramJson.reason;
+        if (requestId == null || reason == null) {
           return true;
         }
 
@@ -80,7 +80,7 @@ class MusicContentCenterEventHandlerWrapper
         final musicCollectionImpl = MusicCollectionImpl(musicCollectionJson);
 
         musicContentCenterEventHandler.onMusicCollectionResult!(
-            requestId, musicCollectionImpl, errorCode);
+            requestId, musicCollectionImpl, reason);
         return true;
     }
 
