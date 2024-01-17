@@ -236,15 +236,15 @@ const eventIdsMapping = {
   "RtcEngineEventHandler_onProxyConnected": [
     "RtcEngineEventHandler_onProxyConnected_9f89fd0"
   ],
-  "RtcEngineEventHandler_onError": ["RtcEngineEventHandler_onError_aaa1a08"],
+  "RtcEngineEventHandler_onError": ["RtcEngineEventHandler_onError_d26c0fd"],
   "RtcEngineEventHandler_onAudioQuality": [
-    "RtcEngineEventHandler_onAudioQuality_ec43b47"
+    "RtcEngineEventHandler_onAudioQuality_5c7294b"
   ],
   "RtcEngineEventHandler_onLastmileProbeResult": [
     "RtcEngineEventHandler_onLastmileProbeResult_42b5843"
   ],
   "RtcEngineEventHandler_onAudioVolumeIndication": [
-    "RtcEngineEventHandler_onAudioVolumeIndication_d29adad"
+    "RtcEngineEventHandler_onAudioVolumeIndication_781482a"
   ],
   "RtcEngineEventHandler_onLeaveChannel": [
     "RtcEngineEventHandler_onLeaveChannel_c8e730d"
@@ -253,7 +253,7 @@ const eventIdsMapping = {
     "RtcEngineEventHandler_onRtcStats_c8e730d"
   ],
   "RtcEngineEventHandler_onAudioDeviceStateChanged": [
-    "RtcEngineEventHandler_onAudioDeviceStateChanged_043d4e0"
+    "RtcEngineEventHandler_onAudioDeviceStateChanged_976d8c3"
   ],
   "RtcEngineEventHandler_onAudioMixingPositionChanged": [
     "RtcEngineEventHandler_onAudioMixingPositionChanged_f631116"
@@ -265,10 +265,10 @@ const eventIdsMapping = {
     "RtcEngineEventHandler_onAudioEffectFinished_46f8ab7"
   ],
   "RtcEngineEventHandler_onVideoDeviceStateChanged": [
-    "RtcEngineEventHandler_onVideoDeviceStateChanged_043d4e0"
+    "RtcEngineEventHandler_onVideoDeviceStateChanged_976d8c3"
   ],
   "RtcEngineEventHandler_onNetworkQuality": [
-    "RtcEngineEventHandler_onNetworkQuality_69f3a52"
+    "RtcEngineEventHandler_onNetworkQuality_34d8b3c"
   ],
   "RtcEngineEventHandler_onIntraRequestReceived": [
     "RtcEngineEventHandler_onIntraRequestReceived_c81e1a4"
@@ -280,7 +280,7 @@ const eventIdsMapping = {
     "RtcEngineEventHandler_onDownlinkNetworkInfoUpdated_e9d5bd9"
   ],
   "RtcEngineEventHandler_onLastmileQuality": [
-    "RtcEngineEventHandler_onLastmileQuality_544f910"
+    "RtcEngineEventHandler_onLastmileQuality_46f8ab7"
   ],
   "RtcEngineEventHandler_onFirstLocalVideoFrame": [
     "RtcEngineEventHandler_onFirstLocalVideoFrame_ebdfd19"
@@ -346,7 +346,7 @@ const eventIdsMapping = {
     "RtcEngineEventHandler_onCameraExposureAreaChanged_41c5354"
   ],
   "RtcEngineEventHandler_onFacePositionChanged": [
-    "RtcEngineEventHandler_onFacePositionChanged_e56adf2"
+    "RtcEngineEventHandler_onFacePositionChanged_197b4a7"
   ],
   "RtcEngineEventHandler_onVideoStopped": [
     "RtcEngineEventHandler_onVideoStopped"
@@ -367,10 +367,10 @@ const eventIdsMapping = {
     "RtcEngineEventHandler_onConnectionBanned_c81e1a4"
   ],
   "RtcEngineEventHandler_onStreamMessage": [
-    "RtcEngineEventHandler_onStreamMessage_b73072b"
+    "RtcEngineEventHandler_onStreamMessage_99898cb"
   ],
   "RtcEngineEventHandler_onStreamMessageError": [
-    "RtcEngineEventHandler_onStreamMessageError_e5c4666"
+    "RtcEngineEventHandler_onStreamMessageError_fe302fc"
   ],
   "RtcEngineEventHandler_onRequestToken": [
     "RtcEngineEventHandler_onRequestToken_c81e1a4"
@@ -427,7 +427,7 @@ const eventIdsMapping = {
     "RtcEngineEventHandler_onAudioRoutingChanged_46f8ab7"
   ],
   "RtcEngineEventHandler_onChannelMediaRelayStateChanged": [
-    "RtcEngineEventHandler_onChannelMediaRelayStateChanged_e0e2b0a"
+    "RtcEngineEventHandler_onChannelMediaRelayStateChanged_4e92b3c"
   ],
   "RtcEngineEventHandler_onLocalPublishFallbackToAudioOnly": [
     "RtcEngineEventHandler_onLocalPublishFallbackToAudioOnly_5039d15"

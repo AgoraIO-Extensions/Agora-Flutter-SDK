@@ -12,7 +12,7 @@ import 'package:iris_method_channel/iris_method_channel.dart';
 
 void rtcEngineSmokeTestCases() {
   testWidgets(
-    'initialize',
+    'RtcEngine.initialize',
     (WidgetTester tester) async {
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
@@ -61,7 +61,7 @@ void rtcEngineSmokeTestCases() {
         );
       } catch (e) {
         if (e is! AgoraRtcException) {
-          debugPrint('[initialize] error: ${e.toString()}');
+          debugPrint('[RtcEngine.initialize] error: ${e.toString()}');
           rethrow;
         }
 
@@ -76,7 +76,7 @@ void rtcEngineSmokeTestCases() {
   );
 
   testWidgets(
-    'getVersion',
+    'RtcEngine.getVersion',
     (WidgetTester tester) async {
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
@@ -91,7 +91,7 @@ void rtcEngineSmokeTestCases() {
         await rtcEngine.getVersion();
       } catch (e) {
         if (e is! AgoraRtcException) {
-          debugPrint('[getVersion] error: ${e.toString()}');
+          debugPrint('[RtcEngine.getVersion] error: ${e.toString()}');
           rethrow;
         }
 
@@ -106,7 +106,7 @@ void rtcEngineSmokeTestCases() {
   );
 
   testWidgets(
-    'getErrorDescription',
+    'RtcEngine.getErrorDescription',
     (WidgetTester tester) async {
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
@@ -124,7 +124,7 @@ void rtcEngineSmokeTestCases() {
         );
       } catch (e) {
         if (e is! AgoraRtcException) {
-          debugPrint('[getErrorDescription] error: ${e.toString()}');
+          debugPrint('[RtcEngine.getErrorDescription] error: ${e.toString()}');
           rethrow;
         }
 
@@ -139,7 +139,7 @@ void rtcEngineSmokeTestCases() {
   );
 
   testWidgets(
-    'queryDeviceScore',
+    'RtcEngine.queryDeviceScore',
     (WidgetTester tester) async {
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
@@ -154,7 +154,7 @@ void rtcEngineSmokeTestCases() {
         await rtcEngine.queryDeviceScore();
       } catch (e) {
         if (e is! AgoraRtcException) {
-          debugPrint('[queryDeviceScore] error: ${e.toString()}');
+          debugPrint('[RtcEngine.queryDeviceScore] error: ${e.toString()}');
           rethrow;
         }
 
@@ -169,7 +169,7 @@ void rtcEngineSmokeTestCases() {
   );
 
   testWidgets(
-    'preloadChannel',
+    'RtcEngine.preloadChannel',
     (WidgetTester tester) async {
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
@@ -191,7 +191,7 @@ void rtcEngineSmokeTestCases() {
         );
       } catch (e) {
         if (e is! AgoraRtcException) {
-          debugPrint('[preloadChannel] error: ${e.toString()}');
+          debugPrint('[RtcEngine.preloadChannel] error: ${e.toString()}');
           rethrow;
         }
 
@@ -206,7 +206,7 @@ void rtcEngineSmokeTestCases() {
   );
 
   testWidgets(
-    'preloadChannelWithUserAccount',
+    'RtcEngine.preloadChannelWithUserAccount',
     (WidgetTester tester) async {
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
@@ -228,7 +228,8 @@ void rtcEngineSmokeTestCases() {
         );
       } catch (e) {
         if (e is! AgoraRtcException) {
-          debugPrint('[preloadChannelWithUserAccount] error: ${e.toString()}');
+          debugPrint(
+              '[RtcEngine.preloadChannelWithUserAccount] error: ${e.toString()}');
           rethrow;
         }
 
@@ -243,7 +244,7 @@ void rtcEngineSmokeTestCases() {
   );
 
   testWidgets(
-    'updatePreloadChannelToken',
+    'RtcEngine.updatePreloadChannelToken',
     (WidgetTester tester) async {
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
@@ -261,7 +262,8 @@ void rtcEngineSmokeTestCases() {
         );
       } catch (e) {
         if (e is! AgoraRtcException) {
-          debugPrint('[updatePreloadChannelToken] error: ${e.toString()}');
+          debugPrint(
+              '[RtcEngine.updatePreloadChannelToken] error: ${e.toString()}');
           rethrow;
         }
 
@@ -276,7 +278,7 @@ void rtcEngineSmokeTestCases() {
   );
 
   testWidgets(
-    'joinChannel',
+    'RtcEngine.joinChannel',
     (WidgetTester tester) async {
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
@@ -375,7 +377,7 @@ void rtcEngineSmokeTestCases() {
         );
       } catch (e) {
         if (e is! AgoraRtcException) {
-          debugPrint('[joinChannel] error: ${e.toString()}');
+          debugPrint('[RtcEngine.joinChannel] error: ${e.toString()}');
           rethrow;
         }
 
@@ -390,7 +392,7 @@ void rtcEngineSmokeTestCases() {
   );
 
   testWidgets(
-    'updateChannelMediaOptions',
+    'RtcEngine.updateChannelMediaOptions',
     (WidgetTester tester) async {
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
@@ -483,7 +485,8 @@ void rtcEngineSmokeTestCases() {
         );
       } catch (e) {
         if (e is! AgoraRtcException) {
-          debugPrint('[updateChannelMediaOptions] error: ${e.toString()}');
+          debugPrint(
+              '[RtcEngine.updateChannelMediaOptions] error: ${e.toString()}');
           rethrow;
         }
 
@@ -498,7 +501,7 @@ void rtcEngineSmokeTestCases() {
   );
 
   testWidgets(
-    'leaveChannel',
+    'RtcEngine.leaveChannel',
     (WidgetTester tester) async {
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
@@ -523,7 +526,7 @@ void rtcEngineSmokeTestCases() {
         );
       } catch (e) {
         if (e is! AgoraRtcException) {
-          debugPrint('[leaveChannel] error: ${e.toString()}');
+          debugPrint('[RtcEngine.leaveChannel] error: ${e.toString()}');
           rethrow;
         }
 
@@ -538,7 +541,7 @@ void rtcEngineSmokeTestCases() {
   );
 
   testWidgets(
-    'renewToken',
+    'RtcEngine.renewToken',
     (WidgetTester tester) async {
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
@@ -556,7 +559,7 @@ void rtcEngineSmokeTestCases() {
         );
       } catch (e) {
         if (e is! AgoraRtcException) {
-          debugPrint('[renewToken] error: ${e.toString()}');
+          debugPrint('[RtcEngine.renewToken] error: ${e.toString()}');
           rethrow;
         }
 
@@ -571,7 +574,7 @@ void rtcEngineSmokeTestCases() {
   );
 
   testWidgets(
-    'setChannelProfile',
+    'RtcEngine.setChannelProfile',
     (WidgetTester tester) async {
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
@@ -590,7 +593,7 @@ void rtcEngineSmokeTestCases() {
         );
       } catch (e) {
         if (e is! AgoraRtcException) {
-          debugPrint('[setChannelProfile] error: ${e.toString()}');
+          debugPrint('[RtcEngine.setChannelProfile] error: ${e.toString()}');
           rethrow;
         }
 
@@ -605,7 +608,7 @@ void rtcEngineSmokeTestCases() {
   );
 
   testWidgets(
-    'setClientRole',
+    'RtcEngine.setClientRole',
     (WidgetTester tester) async {
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
@@ -629,7 +632,7 @@ void rtcEngineSmokeTestCases() {
         );
       } catch (e) {
         if (e is! AgoraRtcException) {
-          debugPrint('[setClientRole] error: ${e.toString()}');
+          debugPrint('[RtcEngine.setClientRole] error: ${e.toString()}');
           rethrow;
         }
 
@@ -644,7 +647,7 @@ void rtcEngineSmokeTestCases() {
   );
 
   testWidgets(
-    'startEchoTest',
+    'RtcEngine.startEchoTest',
     (WidgetTester tester) async {
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
@@ -675,7 +678,7 @@ void rtcEngineSmokeTestCases() {
         );
       } catch (e) {
         if (e is! AgoraRtcException) {
-          debugPrint('[startEchoTest] error: ${e.toString()}');
+          debugPrint('[RtcEngine.startEchoTest] error: ${e.toString()}');
           rethrow;
         }
 
@@ -690,7 +693,7 @@ void rtcEngineSmokeTestCases() {
   );
 
   testWidgets(
-    'stopEchoTest',
+    'RtcEngine.stopEchoTest',
     (WidgetTester tester) async {
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
@@ -705,7 +708,7 @@ void rtcEngineSmokeTestCases() {
         await rtcEngine.stopEchoTest();
       } catch (e) {
         if (e is! AgoraRtcException) {
-          debugPrint('[stopEchoTest] error: ${e.toString()}');
+          debugPrint('[RtcEngine.stopEchoTest] error: ${e.toString()}');
           rethrow;
         }
 
@@ -720,7 +723,7 @@ void rtcEngineSmokeTestCases() {
   );
 
   testWidgets(
-    'enableMultiCamera',
+    'RtcEngine.enableMultiCamera',
     (WidgetTester tester) async {
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
@@ -757,7 +760,7 @@ void rtcEngineSmokeTestCases() {
         );
       } catch (e) {
         if (e is! AgoraRtcException) {
-          debugPrint('[enableMultiCamera] error: ${e.toString()}');
+          debugPrint('[RtcEngine.enableMultiCamera] error: ${e.toString()}');
           rethrow;
         }
 
@@ -772,7 +775,7 @@ void rtcEngineSmokeTestCases() {
   );
 
   testWidgets(
-    'enableVideo',
+    'RtcEngine.enableVideo',
     (WidgetTester tester) async {
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
@@ -787,7 +790,7 @@ void rtcEngineSmokeTestCases() {
         await rtcEngine.enableVideo();
       } catch (e) {
         if (e is! AgoraRtcException) {
-          debugPrint('[enableVideo] error: ${e.toString()}');
+          debugPrint('[RtcEngine.enableVideo] error: ${e.toString()}');
           rethrow;
         }
 
@@ -802,7 +805,7 @@ void rtcEngineSmokeTestCases() {
   );
 
   testWidgets(
-    'disableVideo',
+    'RtcEngine.disableVideo',
     (WidgetTester tester) async {
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
@@ -817,7 +820,7 @@ void rtcEngineSmokeTestCases() {
         await rtcEngine.disableVideo();
       } catch (e) {
         if (e is! AgoraRtcException) {
-          debugPrint('[disableVideo] error: ${e.toString()}');
+          debugPrint('[RtcEngine.disableVideo] error: ${e.toString()}');
           rethrow;
         }
 
@@ -832,7 +835,7 @@ void rtcEngineSmokeTestCases() {
   );
 
   testWidgets(
-    'startPreview',
+    'RtcEngine.startPreview',
     (WidgetTester tester) async {
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
@@ -851,7 +854,7 @@ void rtcEngineSmokeTestCases() {
         );
       } catch (e) {
         if (e is! AgoraRtcException) {
-          debugPrint('[startPreview] error: ${e.toString()}');
+          debugPrint('[RtcEngine.startPreview] error: ${e.toString()}');
           rethrow;
         }
 
@@ -866,7 +869,7 @@ void rtcEngineSmokeTestCases() {
   );
 
   testWidgets(
-    'startPreviewWithoutSourceType',
+    'RtcEngine.startPreviewWithoutSourceType',
     (WidgetTester tester) async {
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
@@ -881,7 +884,8 @@ void rtcEngineSmokeTestCases() {
         await rtcEngine.startPreviewWithoutSourceType();
       } catch (e) {
         if (e is! AgoraRtcException) {
-          debugPrint('[startPreviewWithoutSourceType] error: ${e.toString()}');
+          debugPrint(
+              '[RtcEngine.startPreviewWithoutSourceType] error: ${e.toString()}');
           rethrow;
         }
 
@@ -896,7 +900,7 @@ void rtcEngineSmokeTestCases() {
   );
 
   testWidgets(
-    'stopPreview',
+    'RtcEngine.stopPreview',
     (WidgetTester tester) async {
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
@@ -915,7 +919,7 @@ void rtcEngineSmokeTestCases() {
         );
       } catch (e) {
         if (e is! AgoraRtcException) {
-          debugPrint('[stopPreview] error: ${e.toString()}');
+          debugPrint('[RtcEngine.stopPreview] error: ${e.toString()}');
           rethrow;
         }
 
@@ -930,7 +934,7 @@ void rtcEngineSmokeTestCases() {
   );
 
   testWidgets(
-    'startLastmileProbeTest',
+    'RtcEngine.startLastmileProbeTest',
     (WidgetTester tester) async {
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
@@ -957,7 +961,8 @@ void rtcEngineSmokeTestCases() {
         );
       } catch (e) {
         if (e is! AgoraRtcException) {
-          debugPrint('[startLastmileProbeTest] error: ${e.toString()}');
+          debugPrint(
+              '[RtcEngine.startLastmileProbeTest] error: ${e.toString()}');
           rethrow;
         }
 
@@ -972,7 +977,7 @@ void rtcEngineSmokeTestCases() {
   );
 
   testWidgets(
-    'stopLastmileProbeTest',
+    'RtcEngine.stopLastmileProbeTest',
     (WidgetTester tester) async {
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
@@ -987,7 +992,8 @@ void rtcEngineSmokeTestCases() {
         await rtcEngine.stopLastmileProbeTest();
       } catch (e) {
         if (e is! AgoraRtcException) {
-          debugPrint('[stopLastmileProbeTest] error: ${e.toString()}');
+          debugPrint(
+              '[RtcEngine.stopLastmileProbeTest] error: ${e.toString()}');
           rethrow;
         }
 
@@ -1002,7 +1008,7 @@ void rtcEngineSmokeTestCases() {
   );
 
   testWidgets(
-    'setVideoEncoderConfiguration',
+    'RtcEngine.setVideoEncoderConfiguration',
     (WidgetTester tester) async {
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
@@ -1054,7 +1060,8 @@ void rtcEngineSmokeTestCases() {
         );
       } catch (e) {
         if (e is! AgoraRtcException) {
-          debugPrint('[setVideoEncoderConfiguration] error: ${e.toString()}');
+          debugPrint(
+              '[RtcEngine.setVideoEncoderConfiguration] error: ${e.toString()}');
           rethrow;
         }
 
@@ -1069,7 +1076,7 @@ void rtcEngineSmokeTestCases() {
   );
 
   testWidgets(
-    'setBeautyEffectOptions',
+    'RtcEngine.setBeautyEffectOptions',
     (WidgetTester tester) async {
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
@@ -1103,7 +1110,8 @@ void rtcEngineSmokeTestCases() {
         );
       } catch (e) {
         if (e is! AgoraRtcException) {
-          debugPrint('[setBeautyEffectOptions] error: ${e.toString()}');
+          debugPrint(
+              '[RtcEngine.setBeautyEffectOptions] error: ${e.toString()}');
           rethrow;
         }
 
@@ -1118,7 +1126,7 @@ void rtcEngineSmokeTestCases() {
   );
 
   testWidgets(
-    'setLowlightEnhanceOptions',
+    'RtcEngine.setLowlightEnhanceOptions',
     (WidgetTester tester) async {
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
@@ -1147,7 +1155,8 @@ void rtcEngineSmokeTestCases() {
         );
       } catch (e) {
         if (e is! AgoraRtcException) {
-          debugPrint('[setLowlightEnhanceOptions] error: ${e.toString()}');
+          debugPrint(
+              '[RtcEngine.setLowlightEnhanceOptions] error: ${e.toString()}');
           rethrow;
         }
 
@@ -1162,7 +1171,7 @@ void rtcEngineSmokeTestCases() {
   );
 
   testWidgets(
-    'setVideoDenoiserOptions',
+    'RtcEngine.setVideoDenoiserOptions',
     (WidgetTester tester) async {
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
@@ -1191,7 +1200,8 @@ void rtcEngineSmokeTestCases() {
         );
       } catch (e) {
         if (e is! AgoraRtcException) {
-          debugPrint('[setVideoDenoiserOptions] error: ${e.toString()}');
+          debugPrint(
+              '[RtcEngine.setVideoDenoiserOptions] error: ${e.toString()}');
           rethrow;
         }
 
@@ -1206,7 +1216,7 @@ void rtcEngineSmokeTestCases() {
   );
 
   testWidgets(
-    'setColorEnhanceOptions',
+    'RtcEngine.setColorEnhanceOptions',
     (WidgetTester tester) async {
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
@@ -1233,7 +1243,8 @@ void rtcEngineSmokeTestCases() {
         );
       } catch (e) {
         if (e is! AgoraRtcException) {
-          debugPrint('[setColorEnhanceOptions] error: ${e.toString()}');
+          debugPrint(
+              '[RtcEngine.setColorEnhanceOptions] error: ${e.toString()}');
           rethrow;
         }
 
@@ -1248,7 +1259,7 @@ void rtcEngineSmokeTestCases() {
   );
 
   testWidgets(
-    'enableVirtualBackground',
+    'RtcEngine.enableVirtualBackground',
     (WidgetTester tester) async {
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
@@ -1289,7 +1300,8 @@ void rtcEngineSmokeTestCases() {
         );
       } catch (e) {
         if (e is! AgoraRtcException) {
-          debugPrint('[enableVirtualBackground] error: ${e.toString()}');
+          debugPrint(
+              '[RtcEngine.enableVirtualBackground] error: ${e.toString()}');
           rethrow;
         }
 
@@ -1304,7 +1316,7 @@ void rtcEngineSmokeTestCases() {
   );
 
   testWidgets(
-    'setupRemoteVideo',
+    'RtcEngine.setupRemoteVideo',
     (WidgetTester tester) async {
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
@@ -1360,7 +1372,7 @@ void rtcEngineSmokeTestCases() {
         );
       } catch (e) {
         if (e is! AgoraRtcException) {
-          debugPrint('[setupRemoteVideo] error: ${e.toString()}');
+          debugPrint('[RtcEngine.setupRemoteVideo] error: ${e.toString()}');
           rethrow;
         }
 
@@ -1375,7 +1387,7 @@ void rtcEngineSmokeTestCases() {
   );
 
   testWidgets(
-    'setupLocalVideo',
+    'RtcEngine.setupLocalVideo',
     (WidgetTester tester) async {
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
@@ -1431,7 +1443,7 @@ void rtcEngineSmokeTestCases() {
         );
       } catch (e) {
         if (e is! AgoraRtcException) {
-          debugPrint('[setupLocalVideo] error: ${e.toString()}');
+          debugPrint('[RtcEngine.setupLocalVideo] error: ${e.toString()}');
           rethrow;
         }
 
@@ -1446,7 +1458,7 @@ void rtcEngineSmokeTestCases() {
   );
 
   testWidgets(
-    'setVideoScenario',
+    'RtcEngine.setVideoScenario',
     (WidgetTester tester) async {
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
@@ -1465,7 +1477,7 @@ void rtcEngineSmokeTestCases() {
         );
       } catch (e) {
         if (e is! AgoraRtcException) {
-          debugPrint('[setVideoScenario] error: ${e.toString()}');
+          debugPrint('[RtcEngine.setVideoScenario] error: ${e.toString()}');
           rethrow;
         }
 
@@ -1480,7 +1492,7 @@ void rtcEngineSmokeTestCases() {
   );
 
   testWidgets(
-    'setVideoQoEPreference',
+    'RtcEngine.setVideoQoEPreference',
     (WidgetTester tester) async {
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
@@ -1499,7 +1511,8 @@ void rtcEngineSmokeTestCases() {
         );
       } catch (e) {
         if (e is! AgoraRtcException) {
-          debugPrint('[setVideoQoEPreference] error: ${e.toString()}');
+          debugPrint(
+              '[RtcEngine.setVideoQoEPreference] error: ${e.toString()}');
           rethrow;
         }
 
@@ -1514,7 +1527,7 @@ void rtcEngineSmokeTestCases() {
   );
 
   testWidgets(
-    'enableAudio',
+    'RtcEngine.enableAudio',
     (WidgetTester tester) async {
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
@@ -1529,7 +1542,7 @@ void rtcEngineSmokeTestCases() {
         await rtcEngine.enableAudio();
       } catch (e) {
         if (e is! AgoraRtcException) {
-          debugPrint('[enableAudio] error: ${e.toString()}');
+          debugPrint('[RtcEngine.enableAudio] error: ${e.toString()}');
           rethrow;
         }
 
@@ -1544,7 +1557,7 @@ void rtcEngineSmokeTestCases() {
   );
 
   testWidgets(
-    'disableAudio',
+    'RtcEngine.disableAudio',
     (WidgetTester tester) async {
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
@@ -1559,7 +1572,7 @@ void rtcEngineSmokeTestCases() {
         await rtcEngine.disableAudio();
       } catch (e) {
         if (e is! AgoraRtcException) {
-          debugPrint('[disableAudio] error: ${e.toString()}');
+          debugPrint('[RtcEngine.disableAudio] error: ${e.toString()}');
           rethrow;
         }
 
@@ -1574,7 +1587,7 @@ void rtcEngineSmokeTestCases() {
   );
 
   testWidgets(
-    'setAudioProfile',
+    'RtcEngine.setAudioProfile',
     (WidgetTester tester) async {
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
@@ -1595,7 +1608,7 @@ void rtcEngineSmokeTestCases() {
         );
       } catch (e) {
         if (e is! AgoraRtcException) {
-          debugPrint('[setAudioProfile] error: ${e.toString()}');
+          debugPrint('[RtcEngine.setAudioProfile] error: ${e.toString()}');
           rethrow;
         }
 
@@ -1610,7 +1623,7 @@ void rtcEngineSmokeTestCases() {
   );
 
   testWidgets(
-    'setAudioScenario',
+    'RtcEngine.setAudioScenario',
     (WidgetTester tester) async {
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
@@ -1629,7 +1642,7 @@ void rtcEngineSmokeTestCases() {
         );
       } catch (e) {
         if (e is! AgoraRtcException) {
-          debugPrint('[setAudioScenario] error: ${e.toString()}');
+          debugPrint('[RtcEngine.setAudioScenario] error: ${e.toString()}');
           rethrow;
         }
 
@@ -1644,7 +1657,7 @@ void rtcEngineSmokeTestCases() {
   );
 
   testWidgets(
-    'enableLocalAudio',
+    'RtcEngine.enableLocalAudio',
     (WidgetTester tester) async {
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
@@ -1662,7 +1675,7 @@ void rtcEngineSmokeTestCases() {
         );
       } catch (e) {
         if (e is! AgoraRtcException) {
-          debugPrint('[enableLocalAudio] error: ${e.toString()}');
+          debugPrint('[RtcEngine.enableLocalAudio] error: ${e.toString()}');
           rethrow;
         }
 
@@ -1677,7 +1690,7 @@ void rtcEngineSmokeTestCases() {
   );
 
   testWidgets(
-    'muteLocalAudioStream',
+    'RtcEngine.muteLocalAudioStream',
     (WidgetTester tester) async {
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
@@ -1695,7 +1708,7 @@ void rtcEngineSmokeTestCases() {
         );
       } catch (e) {
         if (e is! AgoraRtcException) {
-          debugPrint('[muteLocalAudioStream] error: ${e.toString()}');
+          debugPrint('[RtcEngine.muteLocalAudioStream] error: ${e.toString()}');
           rethrow;
         }
 
@@ -1710,7 +1723,7 @@ void rtcEngineSmokeTestCases() {
   );
 
   testWidgets(
-    'muteAllRemoteAudioStreams',
+    'RtcEngine.muteAllRemoteAudioStreams',
     (WidgetTester tester) async {
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
@@ -1728,7 +1741,8 @@ void rtcEngineSmokeTestCases() {
         );
       } catch (e) {
         if (e is! AgoraRtcException) {
-          debugPrint('[muteAllRemoteAudioStreams] error: ${e.toString()}');
+          debugPrint(
+              '[RtcEngine.muteAllRemoteAudioStreams] error: ${e.toString()}');
           rethrow;
         }
 
@@ -1743,7 +1757,7 @@ void rtcEngineSmokeTestCases() {
   );
 
   testWidgets(
-    'setDefaultMuteAllRemoteAudioStreams',
+    'RtcEngine.setDefaultMuteAllRemoteAudioStreams',
     (WidgetTester tester) async {
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
@@ -1762,7 +1776,7 @@ void rtcEngineSmokeTestCases() {
       } catch (e) {
         if (e is! AgoraRtcException) {
           debugPrint(
-              '[setDefaultMuteAllRemoteAudioStreams] error: ${e.toString()}');
+              '[RtcEngine.setDefaultMuteAllRemoteAudioStreams] error: ${e.toString()}');
           rethrow;
         }
 
@@ -1777,7 +1791,7 @@ void rtcEngineSmokeTestCases() {
   );
 
   testWidgets(
-    'muteRemoteAudioStream',
+    'RtcEngine.muteRemoteAudioStream',
     (WidgetTester tester) async {
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
@@ -1797,7 +1811,8 @@ void rtcEngineSmokeTestCases() {
         );
       } catch (e) {
         if (e is! AgoraRtcException) {
-          debugPrint('[muteRemoteAudioStream] error: ${e.toString()}');
+          debugPrint(
+              '[RtcEngine.muteRemoteAudioStream] error: ${e.toString()}');
           rethrow;
         }
 
@@ -1812,7 +1827,7 @@ void rtcEngineSmokeTestCases() {
   );
 
   testWidgets(
-    'muteLocalVideoStream',
+    'RtcEngine.muteLocalVideoStream',
     (WidgetTester tester) async {
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
@@ -1830,7 +1845,7 @@ void rtcEngineSmokeTestCases() {
         );
       } catch (e) {
         if (e is! AgoraRtcException) {
-          debugPrint('[muteLocalVideoStream] error: ${e.toString()}');
+          debugPrint('[RtcEngine.muteLocalVideoStream] error: ${e.toString()}');
           rethrow;
         }
 
@@ -1845,7 +1860,7 @@ void rtcEngineSmokeTestCases() {
   );
 
   testWidgets(
-    'enableLocalVideo',
+    'RtcEngine.enableLocalVideo',
     (WidgetTester tester) async {
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
@@ -1863,7 +1878,7 @@ void rtcEngineSmokeTestCases() {
         );
       } catch (e) {
         if (e is! AgoraRtcException) {
-          debugPrint('[enableLocalVideo] error: ${e.toString()}');
+          debugPrint('[RtcEngine.enableLocalVideo] error: ${e.toString()}');
           rethrow;
         }
 
@@ -1878,7 +1893,7 @@ void rtcEngineSmokeTestCases() {
   );
 
   testWidgets(
-    'muteAllRemoteVideoStreams',
+    'RtcEngine.muteAllRemoteVideoStreams',
     (WidgetTester tester) async {
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
@@ -1896,7 +1911,8 @@ void rtcEngineSmokeTestCases() {
         );
       } catch (e) {
         if (e is! AgoraRtcException) {
-          debugPrint('[muteAllRemoteVideoStreams] error: ${e.toString()}');
+          debugPrint(
+              '[RtcEngine.muteAllRemoteVideoStreams] error: ${e.toString()}');
           rethrow;
         }
 
@@ -1911,7 +1927,7 @@ void rtcEngineSmokeTestCases() {
   );
 
   testWidgets(
-    'setDefaultMuteAllRemoteVideoStreams',
+    'RtcEngine.setDefaultMuteAllRemoteVideoStreams',
     (WidgetTester tester) async {
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
@@ -1930,7 +1946,7 @@ void rtcEngineSmokeTestCases() {
       } catch (e) {
         if (e is! AgoraRtcException) {
           debugPrint(
-              '[setDefaultMuteAllRemoteVideoStreams] error: ${e.toString()}');
+              '[RtcEngine.setDefaultMuteAllRemoteVideoStreams] error: ${e.toString()}');
           rethrow;
         }
 
@@ -1945,7 +1961,7 @@ void rtcEngineSmokeTestCases() {
   );
 
   testWidgets(
-    'setRemoteDefaultVideoStreamType',
+    'RtcEngine.setRemoteDefaultVideoStreamType',
     (WidgetTester tester) async {
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
@@ -1964,7 +1980,7 @@ void rtcEngineSmokeTestCases() {
       } catch (e) {
         if (e is! AgoraRtcException) {
           debugPrint(
-              '[setRemoteDefaultVideoStreamType] error: ${e.toString()}');
+              '[RtcEngine.setRemoteDefaultVideoStreamType] error: ${e.toString()}');
           rethrow;
         }
 
@@ -1979,7 +1995,7 @@ void rtcEngineSmokeTestCases() {
   );
 
   testWidgets(
-    'muteRemoteVideoStream',
+    'RtcEngine.muteRemoteVideoStream',
     (WidgetTester tester) async {
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
@@ -1999,7 +2015,8 @@ void rtcEngineSmokeTestCases() {
         );
       } catch (e) {
         if (e is! AgoraRtcException) {
-          debugPrint('[muteRemoteVideoStream] error: ${e.toString()}');
+          debugPrint(
+              '[RtcEngine.muteRemoteVideoStream] error: ${e.toString()}');
           rethrow;
         }
 
@@ -2014,7 +2031,7 @@ void rtcEngineSmokeTestCases() {
   );
 
   testWidgets(
-    'setRemoteVideoStreamType',
+    'RtcEngine.setRemoteVideoStreamType',
     (WidgetTester tester) async {
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
@@ -2034,7 +2051,8 @@ void rtcEngineSmokeTestCases() {
         );
       } catch (e) {
         if (e is! AgoraRtcException) {
-          debugPrint('[setRemoteVideoStreamType] error: ${e.toString()}');
+          debugPrint(
+              '[RtcEngine.setRemoteVideoStreamType] error: ${e.toString()}');
           rethrow;
         }
 
@@ -2049,7 +2067,7 @@ void rtcEngineSmokeTestCases() {
   );
 
   testWidgets(
-    'setRemoteVideoSubscriptionOptions',
+    'RtcEngine.setRemoteVideoSubscriptionOptions',
     (WidgetTester tester) async {
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
@@ -2075,7 +2093,7 @@ void rtcEngineSmokeTestCases() {
       } catch (e) {
         if (e is! AgoraRtcException) {
           debugPrint(
-              '[setRemoteVideoSubscriptionOptions] error: ${e.toString()}');
+              '[RtcEngine.setRemoteVideoSubscriptionOptions] error: ${e.toString()}');
           rethrow;
         }
 
@@ -2090,7 +2108,7 @@ void rtcEngineSmokeTestCases() {
   );
 
   testWidgets(
-    'enableAudioVolumeIndication',
+    'RtcEngine.enableAudioVolumeIndication',
     (WidgetTester tester) async {
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
@@ -2112,7 +2130,8 @@ void rtcEngineSmokeTestCases() {
         );
       } catch (e) {
         if (e is! AgoraRtcException) {
-          debugPrint('[enableAudioVolumeIndication] error: ${e.toString()}');
+          debugPrint(
+              '[RtcEngine.enableAudioVolumeIndication] error: ${e.toString()}');
           rethrow;
         }
 
@@ -2127,7 +2146,7 @@ void rtcEngineSmokeTestCases() {
   );
 
   testWidgets(
-    'startAudioRecording',
+    'RtcEngine.startAudioRecording',
     (WidgetTester tester) async {
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
@@ -2160,7 +2179,7 @@ void rtcEngineSmokeTestCases() {
         );
       } catch (e) {
         if (e is! AgoraRtcException) {
-          debugPrint('[startAudioRecording] error: ${e.toString()}');
+          debugPrint('[RtcEngine.startAudioRecording] error: ${e.toString()}');
           rethrow;
         }
 
@@ -2175,7 +2194,7 @@ void rtcEngineSmokeTestCases() {
   );
 
   testWidgets(
-    'registerAudioEncodedFrameObserver',
+    'RtcEngine.registerAudioEncodedFrameObserver',
     (WidgetTester tester) async {
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
@@ -2212,7 +2231,7 @@ void rtcEngineSmokeTestCases() {
       } catch (e) {
         if (e is! AgoraRtcException) {
           debugPrint(
-              '[registerAudioEncodedFrameObserver] error: ${e.toString()}');
+              '[RtcEngine.registerAudioEncodedFrameObserver] error: ${e.toString()}');
           rethrow;
         }
 
@@ -2227,7 +2246,7 @@ void rtcEngineSmokeTestCases() {
   );
 
   testWidgets(
-    'stopAudioRecording',
+    'RtcEngine.stopAudioRecording',
     (WidgetTester tester) async {
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
@@ -2242,7 +2261,7 @@ void rtcEngineSmokeTestCases() {
         await rtcEngine.stopAudioRecording();
       } catch (e) {
         if (e is! AgoraRtcException) {
-          debugPrint('[stopAudioRecording] error: ${e.toString()}');
+          debugPrint('[RtcEngine.stopAudioRecording] error: ${e.toString()}');
           rethrow;
         }
 
@@ -2257,7 +2276,7 @@ void rtcEngineSmokeTestCases() {
   );
 
   testWidgets(
-    'startAudioMixing',
+    'RtcEngine.startAudioMixing',
     (WidgetTester tester) async {
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
@@ -2281,7 +2300,7 @@ void rtcEngineSmokeTestCases() {
         );
       } catch (e) {
         if (e is! AgoraRtcException) {
-          debugPrint('[startAudioMixing] error: ${e.toString()}');
+          debugPrint('[RtcEngine.startAudioMixing] error: ${e.toString()}');
           rethrow;
         }
 
@@ -2296,7 +2315,7 @@ void rtcEngineSmokeTestCases() {
   );
 
   testWidgets(
-    'stopAudioMixing',
+    'RtcEngine.stopAudioMixing',
     (WidgetTester tester) async {
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
@@ -2311,7 +2330,7 @@ void rtcEngineSmokeTestCases() {
         await rtcEngine.stopAudioMixing();
       } catch (e) {
         if (e is! AgoraRtcException) {
-          debugPrint('[stopAudioMixing] error: ${e.toString()}');
+          debugPrint('[RtcEngine.stopAudioMixing] error: ${e.toString()}');
           rethrow;
         }
 
@@ -2326,7 +2345,7 @@ void rtcEngineSmokeTestCases() {
   );
 
   testWidgets(
-    'pauseAudioMixing',
+    'RtcEngine.pauseAudioMixing',
     (WidgetTester tester) async {
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
@@ -2341,7 +2360,7 @@ void rtcEngineSmokeTestCases() {
         await rtcEngine.pauseAudioMixing();
       } catch (e) {
         if (e is! AgoraRtcException) {
-          debugPrint('[pauseAudioMixing] error: ${e.toString()}');
+          debugPrint('[RtcEngine.pauseAudioMixing] error: ${e.toString()}');
           rethrow;
         }
 
@@ -2356,7 +2375,7 @@ void rtcEngineSmokeTestCases() {
   );
 
   testWidgets(
-    'resumeAudioMixing',
+    'RtcEngine.resumeAudioMixing',
     (WidgetTester tester) async {
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
@@ -2371,7 +2390,7 @@ void rtcEngineSmokeTestCases() {
         await rtcEngine.resumeAudioMixing();
       } catch (e) {
         if (e is! AgoraRtcException) {
-          debugPrint('[resumeAudioMixing] error: ${e.toString()}');
+          debugPrint('[RtcEngine.resumeAudioMixing] error: ${e.toString()}');
           rethrow;
         }
 
@@ -2386,7 +2405,7 @@ void rtcEngineSmokeTestCases() {
   );
 
   testWidgets(
-    'selectAudioTrack',
+    'RtcEngine.selectAudioTrack',
     (WidgetTester tester) async {
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
@@ -2404,7 +2423,7 @@ void rtcEngineSmokeTestCases() {
         );
       } catch (e) {
         if (e is! AgoraRtcException) {
-          debugPrint('[selectAudioTrack] error: ${e.toString()}');
+          debugPrint('[RtcEngine.selectAudioTrack] error: ${e.toString()}');
           rethrow;
         }
 
@@ -2419,7 +2438,7 @@ void rtcEngineSmokeTestCases() {
   );
 
   testWidgets(
-    'getAudioTrackCount',
+    'RtcEngine.getAudioTrackCount',
     (WidgetTester tester) async {
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
@@ -2434,7 +2453,7 @@ void rtcEngineSmokeTestCases() {
         await rtcEngine.getAudioTrackCount();
       } catch (e) {
         if (e is! AgoraRtcException) {
-          debugPrint('[getAudioTrackCount] error: ${e.toString()}');
+          debugPrint('[RtcEngine.getAudioTrackCount] error: ${e.toString()}');
           rethrow;
         }
 
@@ -2449,7 +2468,7 @@ void rtcEngineSmokeTestCases() {
   );
 
   testWidgets(
-    'adjustAudioMixingVolume',
+    'RtcEngine.adjustAudioMixingVolume',
     (WidgetTester tester) async {
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
@@ -2467,7 +2486,8 @@ void rtcEngineSmokeTestCases() {
         );
       } catch (e) {
         if (e is! AgoraRtcException) {
-          debugPrint('[adjustAudioMixingVolume] error: ${e.toString()}');
+          debugPrint(
+              '[RtcEngine.adjustAudioMixingVolume] error: ${e.toString()}');
           rethrow;
         }
 
@@ -2482,7 +2502,7 @@ void rtcEngineSmokeTestCases() {
   );
 
   testWidgets(
-    'adjustAudioMixingPublishVolume',
+    'RtcEngine.adjustAudioMixingPublishVolume',
     (WidgetTester tester) async {
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
@@ -2500,7 +2520,8 @@ void rtcEngineSmokeTestCases() {
         );
       } catch (e) {
         if (e is! AgoraRtcException) {
-          debugPrint('[adjustAudioMixingPublishVolume] error: ${e.toString()}');
+          debugPrint(
+              '[RtcEngine.adjustAudioMixingPublishVolume] error: ${e.toString()}');
           rethrow;
         }
 
@@ -2515,7 +2536,7 @@ void rtcEngineSmokeTestCases() {
   );
 
   testWidgets(
-    'getAudioMixingPublishVolume',
+    'RtcEngine.getAudioMixingPublishVolume',
     (WidgetTester tester) async {
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
@@ -2530,7 +2551,8 @@ void rtcEngineSmokeTestCases() {
         await rtcEngine.getAudioMixingPublishVolume();
       } catch (e) {
         if (e is! AgoraRtcException) {
-          debugPrint('[getAudioMixingPublishVolume] error: ${e.toString()}');
+          debugPrint(
+              '[RtcEngine.getAudioMixingPublishVolume] error: ${e.toString()}');
           rethrow;
         }
 
@@ -2545,7 +2567,7 @@ void rtcEngineSmokeTestCases() {
   );
 
   testWidgets(
-    'adjustAudioMixingPlayoutVolume',
+    'RtcEngine.adjustAudioMixingPlayoutVolume',
     (WidgetTester tester) async {
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
@@ -2563,7 +2585,8 @@ void rtcEngineSmokeTestCases() {
         );
       } catch (e) {
         if (e is! AgoraRtcException) {
-          debugPrint('[adjustAudioMixingPlayoutVolume] error: ${e.toString()}');
+          debugPrint(
+              '[RtcEngine.adjustAudioMixingPlayoutVolume] error: ${e.toString()}');
           rethrow;
         }
 
@@ -2578,7 +2601,7 @@ void rtcEngineSmokeTestCases() {
   );
 
   testWidgets(
-    'getAudioMixingPlayoutVolume',
+    'RtcEngine.getAudioMixingPlayoutVolume',
     (WidgetTester tester) async {
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
@@ -2593,7 +2616,8 @@ void rtcEngineSmokeTestCases() {
         await rtcEngine.getAudioMixingPlayoutVolume();
       } catch (e) {
         if (e is! AgoraRtcException) {
-          debugPrint('[getAudioMixingPlayoutVolume] error: ${e.toString()}');
+          debugPrint(
+              '[RtcEngine.getAudioMixingPlayoutVolume] error: ${e.toString()}');
           rethrow;
         }
 
@@ -2608,7 +2632,7 @@ void rtcEngineSmokeTestCases() {
   );
 
   testWidgets(
-    'getAudioMixingDuration',
+    'RtcEngine.getAudioMixingDuration',
     (WidgetTester tester) async {
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
@@ -2623,7 +2647,8 @@ void rtcEngineSmokeTestCases() {
         await rtcEngine.getAudioMixingDuration();
       } catch (e) {
         if (e is! AgoraRtcException) {
-          debugPrint('[getAudioMixingDuration] error: ${e.toString()}');
+          debugPrint(
+              '[RtcEngine.getAudioMixingDuration] error: ${e.toString()}');
           rethrow;
         }
 
@@ -2638,7 +2663,7 @@ void rtcEngineSmokeTestCases() {
   );
 
   testWidgets(
-    'getAudioMixingCurrentPosition',
+    'RtcEngine.getAudioMixingCurrentPosition',
     (WidgetTester tester) async {
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
@@ -2653,7 +2678,8 @@ void rtcEngineSmokeTestCases() {
         await rtcEngine.getAudioMixingCurrentPosition();
       } catch (e) {
         if (e is! AgoraRtcException) {
-          debugPrint('[getAudioMixingCurrentPosition] error: ${e.toString()}');
+          debugPrint(
+              '[RtcEngine.getAudioMixingCurrentPosition] error: ${e.toString()}');
           rethrow;
         }
 
@@ -2668,7 +2694,7 @@ void rtcEngineSmokeTestCases() {
   );
 
   testWidgets(
-    'setAudioMixingPosition',
+    'RtcEngine.setAudioMixingPosition',
     (WidgetTester tester) async {
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
@@ -2686,7 +2712,8 @@ void rtcEngineSmokeTestCases() {
         );
       } catch (e) {
         if (e is! AgoraRtcException) {
-          debugPrint('[setAudioMixingPosition] error: ${e.toString()}');
+          debugPrint(
+              '[RtcEngine.setAudioMixingPosition] error: ${e.toString()}');
           rethrow;
         }
 
@@ -2701,7 +2728,7 @@ void rtcEngineSmokeTestCases() {
   );
 
   testWidgets(
-    'setAudioMixingDualMonoMode',
+    'RtcEngine.setAudioMixingDualMonoMode',
     (WidgetTester tester) async {
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
@@ -2720,7 +2747,8 @@ void rtcEngineSmokeTestCases() {
         );
       } catch (e) {
         if (e is! AgoraRtcException) {
-          debugPrint('[setAudioMixingDualMonoMode] error: ${e.toString()}');
+          debugPrint(
+              '[RtcEngine.setAudioMixingDualMonoMode] error: ${e.toString()}');
           rethrow;
         }
 
@@ -2735,7 +2763,7 @@ void rtcEngineSmokeTestCases() {
   );
 
   testWidgets(
-    'setAudioMixingPitch',
+    'RtcEngine.setAudioMixingPitch',
     (WidgetTester tester) async {
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
@@ -2753,7 +2781,7 @@ void rtcEngineSmokeTestCases() {
         );
       } catch (e) {
         if (e is! AgoraRtcException) {
-          debugPrint('[setAudioMixingPitch] error: ${e.toString()}');
+          debugPrint('[RtcEngine.setAudioMixingPitch] error: ${e.toString()}');
           rethrow;
         }
 
@@ -2768,7 +2796,7 @@ void rtcEngineSmokeTestCases() {
   );
 
   testWidgets(
-    'getEffectsVolume',
+    'RtcEngine.getEffectsVolume',
     (WidgetTester tester) async {
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
@@ -2783,7 +2811,7 @@ void rtcEngineSmokeTestCases() {
         await rtcEngine.getEffectsVolume();
       } catch (e) {
         if (e is! AgoraRtcException) {
-          debugPrint('[getEffectsVolume] error: ${e.toString()}');
+          debugPrint('[RtcEngine.getEffectsVolume] error: ${e.toString()}');
           rethrow;
         }
 
@@ -2798,7 +2826,7 @@ void rtcEngineSmokeTestCases() {
   );
 
   testWidgets(
-    'setEffectsVolume',
+    'RtcEngine.setEffectsVolume',
     (WidgetTester tester) async {
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
@@ -2816,7 +2844,7 @@ void rtcEngineSmokeTestCases() {
         );
       } catch (e) {
         if (e is! AgoraRtcException) {
-          debugPrint('[setEffectsVolume] error: ${e.toString()}');
+          debugPrint('[RtcEngine.setEffectsVolume] error: ${e.toString()}');
           rethrow;
         }
 
@@ -2831,7 +2859,7 @@ void rtcEngineSmokeTestCases() {
   );
 
   testWidgets(
-    'preloadEffect',
+    'RtcEngine.preloadEffect',
     (WidgetTester tester) async {
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
@@ -2853,7 +2881,7 @@ void rtcEngineSmokeTestCases() {
         );
       } catch (e) {
         if (e is! AgoraRtcException) {
-          debugPrint('[preloadEffect] error: ${e.toString()}');
+          debugPrint('[RtcEngine.preloadEffect] error: ${e.toString()}');
           rethrow;
         }
 
@@ -2868,7 +2896,7 @@ void rtcEngineSmokeTestCases() {
   );
 
   testWidgets(
-    'playEffect',
+    'RtcEngine.playEffect',
     (WidgetTester tester) async {
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
@@ -2900,7 +2928,7 @@ void rtcEngineSmokeTestCases() {
         );
       } catch (e) {
         if (e is! AgoraRtcException) {
-          debugPrint('[playEffect] error: ${e.toString()}');
+          debugPrint('[RtcEngine.playEffect] error: ${e.toString()}');
           rethrow;
         }
 
@@ -2915,7 +2943,7 @@ void rtcEngineSmokeTestCases() {
   );
 
   testWidgets(
-    'playAllEffects',
+    'RtcEngine.playAllEffects',
     (WidgetTester tester) async {
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
@@ -2941,7 +2969,7 @@ void rtcEngineSmokeTestCases() {
         );
       } catch (e) {
         if (e is! AgoraRtcException) {
-          debugPrint('[playAllEffects] error: ${e.toString()}');
+          debugPrint('[RtcEngine.playAllEffects] error: ${e.toString()}');
           rethrow;
         }
 
@@ -2956,7 +2984,7 @@ void rtcEngineSmokeTestCases() {
   );
 
   testWidgets(
-    'getVolumeOfEffect',
+    'RtcEngine.getVolumeOfEffect',
     (WidgetTester tester) async {
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
@@ -2974,7 +3002,7 @@ void rtcEngineSmokeTestCases() {
         );
       } catch (e) {
         if (e is! AgoraRtcException) {
-          debugPrint('[getVolumeOfEffect] error: ${e.toString()}');
+          debugPrint('[RtcEngine.getVolumeOfEffect] error: ${e.toString()}');
           rethrow;
         }
 
@@ -2989,7 +3017,7 @@ void rtcEngineSmokeTestCases() {
   );
 
   testWidgets(
-    'setVolumeOfEffect',
+    'RtcEngine.setVolumeOfEffect',
     (WidgetTester tester) async {
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
@@ -3009,7 +3037,7 @@ void rtcEngineSmokeTestCases() {
         );
       } catch (e) {
         if (e is! AgoraRtcException) {
-          debugPrint('[setVolumeOfEffect] error: ${e.toString()}');
+          debugPrint('[RtcEngine.setVolumeOfEffect] error: ${e.toString()}');
           rethrow;
         }
 
@@ -3024,7 +3052,7 @@ void rtcEngineSmokeTestCases() {
   );
 
   testWidgets(
-    'pauseEffect',
+    'RtcEngine.pauseEffect',
     (WidgetTester tester) async {
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
@@ -3042,7 +3070,7 @@ void rtcEngineSmokeTestCases() {
         );
       } catch (e) {
         if (e is! AgoraRtcException) {
-          debugPrint('[pauseEffect] error: ${e.toString()}');
+          debugPrint('[RtcEngine.pauseEffect] error: ${e.toString()}');
           rethrow;
         }
 
@@ -3057,7 +3085,7 @@ void rtcEngineSmokeTestCases() {
   );
 
   testWidgets(
-    'pauseAllEffects',
+    'RtcEngine.pauseAllEffects',
     (WidgetTester tester) async {
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
@@ -3072,7 +3100,7 @@ void rtcEngineSmokeTestCases() {
         await rtcEngine.pauseAllEffects();
       } catch (e) {
         if (e is! AgoraRtcException) {
-          debugPrint('[pauseAllEffects] error: ${e.toString()}');
+          debugPrint('[RtcEngine.pauseAllEffects] error: ${e.toString()}');
           rethrow;
         }
 
@@ -3087,7 +3115,7 @@ void rtcEngineSmokeTestCases() {
   );
 
   testWidgets(
-    'resumeEffect',
+    'RtcEngine.resumeEffect',
     (WidgetTester tester) async {
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
@@ -3105,7 +3133,7 @@ void rtcEngineSmokeTestCases() {
         );
       } catch (e) {
         if (e is! AgoraRtcException) {
-          debugPrint('[resumeEffect] error: ${e.toString()}');
+          debugPrint('[RtcEngine.resumeEffect] error: ${e.toString()}');
           rethrow;
         }
 
@@ -3120,7 +3148,7 @@ void rtcEngineSmokeTestCases() {
   );
 
   testWidgets(
-    'resumeAllEffects',
+    'RtcEngine.resumeAllEffects',
     (WidgetTester tester) async {
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
@@ -3135,7 +3163,7 @@ void rtcEngineSmokeTestCases() {
         await rtcEngine.resumeAllEffects();
       } catch (e) {
         if (e is! AgoraRtcException) {
-          debugPrint('[resumeAllEffects] error: ${e.toString()}');
+          debugPrint('[RtcEngine.resumeAllEffects] error: ${e.toString()}');
           rethrow;
         }
 
@@ -3150,7 +3178,7 @@ void rtcEngineSmokeTestCases() {
   );
 
   testWidgets(
-    'stopEffect',
+    'RtcEngine.stopEffect',
     (WidgetTester tester) async {
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
@@ -3168,7 +3196,7 @@ void rtcEngineSmokeTestCases() {
         );
       } catch (e) {
         if (e is! AgoraRtcException) {
-          debugPrint('[stopEffect] error: ${e.toString()}');
+          debugPrint('[RtcEngine.stopEffect] error: ${e.toString()}');
           rethrow;
         }
 
@@ -3183,7 +3211,7 @@ void rtcEngineSmokeTestCases() {
   );
 
   testWidgets(
-    'stopAllEffects',
+    'RtcEngine.stopAllEffects',
     (WidgetTester tester) async {
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
@@ -3198,7 +3226,7 @@ void rtcEngineSmokeTestCases() {
         await rtcEngine.stopAllEffects();
       } catch (e) {
         if (e is! AgoraRtcException) {
-          debugPrint('[stopAllEffects] error: ${e.toString()}');
+          debugPrint('[RtcEngine.stopAllEffects] error: ${e.toString()}');
           rethrow;
         }
 
@@ -3213,7 +3241,7 @@ void rtcEngineSmokeTestCases() {
   );
 
   testWidgets(
-    'unloadEffect',
+    'RtcEngine.unloadEffect',
     (WidgetTester tester) async {
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
@@ -3231,7 +3259,7 @@ void rtcEngineSmokeTestCases() {
         );
       } catch (e) {
         if (e is! AgoraRtcException) {
-          debugPrint('[unloadEffect] error: ${e.toString()}');
+          debugPrint('[RtcEngine.unloadEffect] error: ${e.toString()}');
           rethrow;
         }
 
@@ -3246,7 +3274,7 @@ void rtcEngineSmokeTestCases() {
   );
 
   testWidgets(
-    'unloadAllEffects',
+    'RtcEngine.unloadAllEffects',
     (WidgetTester tester) async {
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
@@ -3261,7 +3289,7 @@ void rtcEngineSmokeTestCases() {
         await rtcEngine.unloadAllEffects();
       } catch (e) {
         if (e is! AgoraRtcException) {
-          debugPrint('[unloadAllEffects] error: ${e.toString()}');
+          debugPrint('[RtcEngine.unloadAllEffects] error: ${e.toString()}');
           rethrow;
         }
 
@@ -3276,7 +3304,7 @@ void rtcEngineSmokeTestCases() {
   );
 
   testWidgets(
-    'getEffectDuration',
+    'RtcEngine.getEffectDuration',
     (WidgetTester tester) async {
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
@@ -3294,7 +3322,7 @@ void rtcEngineSmokeTestCases() {
         );
       } catch (e) {
         if (e is! AgoraRtcException) {
-          debugPrint('[getEffectDuration] error: ${e.toString()}');
+          debugPrint('[RtcEngine.getEffectDuration] error: ${e.toString()}');
           rethrow;
         }
 
@@ -3309,7 +3337,7 @@ void rtcEngineSmokeTestCases() {
   );
 
   testWidgets(
-    'setEffectPosition',
+    'RtcEngine.setEffectPosition',
     (WidgetTester tester) async {
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
@@ -3329,7 +3357,7 @@ void rtcEngineSmokeTestCases() {
         );
       } catch (e) {
         if (e is! AgoraRtcException) {
-          debugPrint('[setEffectPosition] error: ${e.toString()}');
+          debugPrint('[RtcEngine.setEffectPosition] error: ${e.toString()}');
           rethrow;
         }
 
@@ -3344,7 +3372,7 @@ void rtcEngineSmokeTestCases() {
   );
 
   testWidgets(
-    'getEffectCurrentPosition',
+    'RtcEngine.getEffectCurrentPosition',
     (WidgetTester tester) async {
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
@@ -3362,7 +3390,8 @@ void rtcEngineSmokeTestCases() {
         );
       } catch (e) {
         if (e is! AgoraRtcException) {
-          debugPrint('[getEffectCurrentPosition] error: ${e.toString()}');
+          debugPrint(
+              '[RtcEngine.getEffectCurrentPosition] error: ${e.toString()}');
           rethrow;
         }
 
@@ -3377,7 +3406,7 @@ void rtcEngineSmokeTestCases() {
   );
 
   testWidgets(
-    'enableSoundPositionIndication',
+    'RtcEngine.enableSoundPositionIndication',
     (WidgetTester tester) async {
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
@@ -3395,7 +3424,8 @@ void rtcEngineSmokeTestCases() {
         );
       } catch (e) {
         if (e is! AgoraRtcException) {
-          debugPrint('[enableSoundPositionIndication] error: ${e.toString()}');
+          debugPrint(
+              '[RtcEngine.enableSoundPositionIndication] error: ${e.toString()}');
           rethrow;
         }
 
@@ -3410,7 +3440,7 @@ void rtcEngineSmokeTestCases() {
   );
 
   testWidgets(
-    'setRemoteVoicePosition',
+    'RtcEngine.setRemoteVoicePosition',
     (WidgetTester tester) async {
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
@@ -3432,7 +3462,8 @@ void rtcEngineSmokeTestCases() {
         );
       } catch (e) {
         if (e is! AgoraRtcException) {
-          debugPrint('[setRemoteVoicePosition] error: ${e.toString()}');
+          debugPrint(
+              '[RtcEngine.setRemoteVoicePosition] error: ${e.toString()}');
           rethrow;
         }
 
@@ -3447,7 +3478,7 @@ void rtcEngineSmokeTestCases() {
   );
 
   testWidgets(
-    'enableSpatialAudio',
+    'RtcEngine.enableSpatialAudio',
     (WidgetTester tester) async {
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
@@ -3465,7 +3496,7 @@ void rtcEngineSmokeTestCases() {
         );
       } catch (e) {
         if (e is! AgoraRtcException) {
-          debugPrint('[enableSpatialAudio] error: ${e.toString()}');
+          debugPrint('[RtcEngine.enableSpatialAudio] error: ${e.toString()}');
           rethrow;
         }
 
@@ -3480,7 +3511,7 @@ void rtcEngineSmokeTestCases() {
   );
 
   testWidgets(
-    'setRemoteUserSpatialAudioParams',
+    'RtcEngine.setRemoteUserSpatialAudioParams',
     (WidgetTester tester) async {
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
@@ -3518,7 +3549,7 @@ void rtcEngineSmokeTestCases() {
       } catch (e) {
         if (e is! AgoraRtcException) {
           debugPrint(
-              '[setRemoteUserSpatialAudioParams] error: ${e.toString()}');
+              '[RtcEngine.setRemoteUserSpatialAudioParams] error: ${e.toString()}');
           rethrow;
         }
 
@@ -3533,7 +3564,7 @@ void rtcEngineSmokeTestCases() {
   );
 
   testWidgets(
-    'setVoiceBeautifierPreset',
+    'RtcEngine.setVoiceBeautifierPreset',
     (WidgetTester tester) async {
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
@@ -3552,7 +3583,8 @@ void rtcEngineSmokeTestCases() {
         );
       } catch (e) {
         if (e is! AgoraRtcException) {
-          debugPrint('[setVoiceBeautifierPreset] error: ${e.toString()}');
+          debugPrint(
+              '[RtcEngine.setVoiceBeautifierPreset] error: ${e.toString()}');
           rethrow;
         }
 
@@ -3567,7 +3599,7 @@ void rtcEngineSmokeTestCases() {
   );
 
   testWidgets(
-    'setAudioEffectPreset',
+    'RtcEngine.setAudioEffectPreset',
     (WidgetTester tester) async {
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
@@ -3585,7 +3617,7 @@ void rtcEngineSmokeTestCases() {
         );
       } catch (e) {
         if (e is! AgoraRtcException) {
-          debugPrint('[setAudioEffectPreset] error: ${e.toString()}');
+          debugPrint('[RtcEngine.setAudioEffectPreset] error: ${e.toString()}');
           rethrow;
         }
 
@@ -3600,7 +3632,7 @@ void rtcEngineSmokeTestCases() {
   );
 
   testWidgets(
-    'setVoiceConversionPreset',
+    'RtcEngine.setVoiceConversionPreset',
     (WidgetTester tester) async {
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
@@ -3619,7 +3651,8 @@ void rtcEngineSmokeTestCases() {
         );
       } catch (e) {
         if (e is! AgoraRtcException) {
-          debugPrint('[setVoiceConversionPreset] error: ${e.toString()}');
+          debugPrint(
+              '[RtcEngine.setVoiceConversionPreset] error: ${e.toString()}');
           rethrow;
         }
 
@@ -3634,7 +3667,7 @@ void rtcEngineSmokeTestCases() {
   );
 
   testWidgets(
-    'setAudioEffectParameters',
+    'RtcEngine.setAudioEffectParameters',
     (WidgetTester tester) async {
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
@@ -3656,7 +3689,8 @@ void rtcEngineSmokeTestCases() {
         );
       } catch (e) {
         if (e is! AgoraRtcException) {
-          debugPrint('[setAudioEffectParameters] error: ${e.toString()}');
+          debugPrint(
+              '[RtcEngine.setAudioEffectParameters] error: ${e.toString()}');
           rethrow;
         }
 
@@ -3671,7 +3705,7 @@ void rtcEngineSmokeTestCases() {
   );
 
   testWidgets(
-    'setVoiceBeautifierParameters',
+    'RtcEngine.setVoiceBeautifierParameters',
     (WidgetTester tester) async {
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
@@ -3694,7 +3728,8 @@ void rtcEngineSmokeTestCases() {
         );
       } catch (e) {
         if (e is! AgoraRtcException) {
-          debugPrint('[setVoiceBeautifierParameters] error: ${e.toString()}');
+          debugPrint(
+              '[RtcEngine.setVoiceBeautifierParameters] error: ${e.toString()}');
           rethrow;
         }
 
@@ -3709,7 +3744,7 @@ void rtcEngineSmokeTestCases() {
   );
 
   testWidgets(
-    'setVoiceConversionParameters',
+    'RtcEngine.setVoiceConversionParameters',
     (WidgetTester tester) async {
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
@@ -3732,7 +3767,8 @@ void rtcEngineSmokeTestCases() {
         );
       } catch (e) {
         if (e is! AgoraRtcException) {
-          debugPrint('[setVoiceConversionParameters] error: ${e.toString()}');
+          debugPrint(
+              '[RtcEngine.setVoiceConversionParameters] error: ${e.toString()}');
           rethrow;
         }
 
@@ -3747,7 +3783,7 @@ void rtcEngineSmokeTestCases() {
   );
 
   testWidgets(
-    'setLocalVoicePitch',
+    'RtcEngine.setLocalVoicePitch',
     (WidgetTester tester) async {
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
@@ -3765,7 +3801,7 @@ void rtcEngineSmokeTestCases() {
         );
       } catch (e) {
         if (e is! AgoraRtcException) {
-          debugPrint('[setLocalVoicePitch] error: ${e.toString()}');
+          debugPrint('[RtcEngine.setLocalVoicePitch] error: ${e.toString()}');
           rethrow;
         }
 
@@ -3780,7 +3816,7 @@ void rtcEngineSmokeTestCases() {
   );
 
   testWidgets(
-    'setLocalVoiceFormant',
+    'RtcEngine.setLocalVoiceFormant',
     (WidgetTester tester) async {
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
@@ -3798,7 +3834,7 @@ void rtcEngineSmokeTestCases() {
         );
       } catch (e) {
         if (e is! AgoraRtcException) {
-          debugPrint('[setLocalVoiceFormant] error: ${e.toString()}');
+          debugPrint('[RtcEngine.setLocalVoiceFormant] error: ${e.toString()}');
           rethrow;
         }
 
@@ -3813,7 +3849,7 @@ void rtcEngineSmokeTestCases() {
   );
 
   testWidgets(
-    'setLocalVoiceEqualization',
+    'RtcEngine.setLocalVoiceEqualization',
     (WidgetTester tester) async {
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
@@ -3834,7 +3870,8 @@ void rtcEngineSmokeTestCases() {
         );
       } catch (e) {
         if (e is! AgoraRtcException) {
-          debugPrint('[setLocalVoiceEqualization] error: ${e.toString()}');
+          debugPrint(
+              '[RtcEngine.setLocalVoiceEqualization] error: ${e.toString()}');
           rethrow;
         }
 
@@ -3849,7 +3886,7 @@ void rtcEngineSmokeTestCases() {
   );
 
   testWidgets(
-    'setLocalVoiceReverb',
+    'RtcEngine.setLocalVoiceReverb',
     (WidgetTester tester) async {
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
@@ -3869,7 +3906,7 @@ void rtcEngineSmokeTestCases() {
         );
       } catch (e) {
         if (e is! AgoraRtcException) {
-          debugPrint('[setLocalVoiceReverb] error: ${e.toString()}');
+          debugPrint('[RtcEngine.setLocalVoiceReverb] error: ${e.toString()}');
           rethrow;
         }
 
@@ -3884,7 +3921,7 @@ void rtcEngineSmokeTestCases() {
   );
 
   testWidgets(
-    'setHeadphoneEQPreset',
+    'RtcEngine.setHeadphoneEQPreset',
     (WidgetTester tester) async {
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
@@ -3903,7 +3940,7 @@ void rtcEngineSmokeTestCases() {
         );
       } catch (e) {
         if (e is! AgoraRtcException) {
-          debugPrint('[setHeadphoneEQPreset] error: ${e.toString()}');
+          debugPrint('[RtcEngine.setHeadphoneEQPreset] error: ${e.toString()}');
           rethrow;
         }
 
@@ -3918,7 +3955,7 @@ void rtcEngineSmokeTestCases() {
   );
 
   testWidgets(
-    'setHeadphoneEQParameters',
+    'RtcEngine.setHeadphoneEQParameters',
     (WidgetTester tester) async {
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
@@ -3938,7 +3975,8 @@ void rtcEngineSmokeTestCases() {
         );
       } catch (e) {
         if (e is! AgoraRtcException) {
-          debugPrint('[setHeadphoneEQParameters] error: ${e.toString()}');
+          debugPrint(
+              '[RtcEngine.setHeadphoneEQParameters] error: ${e.toString()}');
           rethrow;
         }
 
@@ -3953,7 +3991,7 @@ void rtcEngineSmokeTestCases() {
   );
 
   testWidgets(
-    'setLogFile',
+    'RtcEngine.setLogFile',
     (WidgetTester tester) async {
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
@@ -3971,7 +4009,7 @@ void rtcEngineSmokeTestCases() {
         );
       } catch (e) {
         if (e is! AgoraRtcException) {
-          debugPrint('[setLogFile] error: ${e.toString()}');
+          debugPrint('[RtcEngine.setLogFile] error: ${e.toString()}');
           rethrow;
         }
 
@@ -3986,7 +4024,7 @@ void rtcEngineSmokeTestCases() {
   );
 
   testWidgets(
-    'setLogFilter',
+    'RtcEngine.setLogFilter',
     (WidgetTester tester) async {
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
@@ -4004,7 +4042,7 @@ void rtcEngineSmokeTestCases() {
         );
       } catch (e) {
         if (e is! AgoraRtcException) {
-          debugPrint('[setLogFilter] error: ${e.toString()}');
+          debugPrint('[RtcEngine.setLogFilter] error: ${e.toString()}');
           rethrow;
         }
 
@@ -4019,7 +4057,7 @@ void rtcEngineSmokeTestCases() {
   );
 
   testWidgets(
-    'setLogLevel',
+    'RtcEngine.setLogLevel',
     (WidgetTester tester) async {
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
@@ -4037,7 +4075,7 @@ void rtcEngineSmokeTestCases() {
         );
       } catch (e) {
         if (e is! AgoraRtcException) {
-          debugPrint('[setLogLevel] error: ${e.toString()}');
+          debugPrint('[RtcEngine.setLogLevel] error: ${e.toString()}');
           rethrow;
         }
 
@@ -4052,7 +4090,7 @@ void rtcEngineSmokeTestCases() {
   );
 
   testWidgets(
-    'setLogFileSize',
+    'RtcEngine.setLogFileSize',
     (WidgetTester tester) async {
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
@@ -4070,7 +4108,7 @@ void rtcEngineSmokeTestCases() {
         );
       } catch (e) {
         if (e is! AgoraRtcException) {
-          debugPrint('[setLogFileSize] error: ${e.toString()}');
+          debugPrint('[RtcEngine.setLogFileSize] error: ${e.toString()}');
           rethrow;
         }
 
@@ -4085,7 +4123,7 @@ void rtcEngineSmokeTestCases() {
   );
 
   testWidgets(
-    'uploadLogFile',
+    'RtcEngine.uploadLogFile',
     (WidgetTester tester) async {
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
@@ -4100,7 +4138,7 @@ void rtcEngineSmokeTestCases() {
         await rtcEngine.uploadLogFile();
       } catch (e) {
         if (e is! AgoraRtcException) {
-          debugPrint('[uploadLogFile] error: ${e.toString()}');
+          debugPrint('[RtcEngine.uploadLogFile] error: ${e.toString()}');
           rethrow;
         }
 
@@ -4115,7 +4153,7 @@ void rtcEngineSmokeTestCases() {
   );
 
   testWidgets(
-    'setLocalRenderMode',
+    'RtcEngine.setLocalRenderMode',
     (WidgetTester tester) async {
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
@@ -4136,7 +4174,7 @@ void rtcEngineSmokeTestCases() {
         );
       } catch (e) {
         if (e is! AgoraRtcException) {
-          debugPrint('[setLocalRenderMode] error: ${e.toString()}');
+          debugPrint('[RtcEngine.setLocalRenderMode] error: ${e.toString()}');
           rethrow;
         }
 
@@ -4151,7 +4189,7 @@ void rtcEngineSmokeTestCases() {
   );
 
   testWidgets(
-    'setRemoteRenderMode',
+    'RtcEngine.setRemoteRenderMode',
     (WidgetTester tester) async {
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
@@ -4174,7 +4212,7 @@ void rtcEngineSmokeTestCases() {
         );
       } catch (e) {
         if (e is! AgoraRtcException) {
-          debugPrint('[setRemoteRenderMode] error: ${e.toString()}');
+          debugPrint('[RtcEngine.setRemoteRenderMode] error: ${e.toString()}');
           rethrow;
         }
 
@@ -4189,7 +4227,7 @@ void rtcEngineSmokeTestCases() {
   );
 
   testWidgets(
-    'setLocalVideoMirrorMode',
+    'RtcEngine.setLocalVideoMirrorMode',
     (WidgetTester tester) async {
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
@@ -4208,7 +4246,8 @@ void rtcEngineSmokeTestCases() {
         );
       } catch (e) {
         if (e is! AgoraRtcException) {
-          debugPrint('[setLocalVideoMirrorMode] error: ${e.toString()}');
+          debugPrint(
+              '[RtcEngine.setLocalVideoMirrorMode] error: ${e.toString()}');
           rethrow;
         }
 
@@ -4223,7 +4262,7 @@ void rtcEngineSmokeTestCases() {
   );
 
   testWidgets(
-    'enableDualStreamMode',
+    'RtcEngine.enableDualStreamMode',
     (WidgetTester tester) async {
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
@@ -4255,7 +4294,7 @@ void rtcEngineSmokeTestCases() {
         );
       } catch (e) {
         if (e is! AgoraRtcException) {
-          debugPrint('[enableDualStreamMode] error: ${e.toString()}');
+          debugPrint('[RtcEngine.enableDualStreamMode] error: ${e.toString()}');
           rethrow;
         }
 
@@ -4270,7 +4309,7 @@ void rtcEngineSmokeTestCases() {
   );
 
   testWidgets(
-    'setDualStreamMode',
+    'RtcEngine.setDualStreamMode',
     (WidgetTester tester) async {
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
@@ -4303,7 +4342,7 @@ void rtcEngineSmokeTestCases() {
         );
       } catch (e) {
         if (e is! AgoraRtcException) {
-          debugPrint('[setDualStreamMode] error: ${e.toString()}');
+          debugPrint('[RtcEngine.setDualStreamMode] error: ${e.toString()}');
           rethrow;
         }
 
@@ -4318,7 +4357,7 @@ void rtcEngineSmokeTestCases() {
   );
 
   testWidgets(
-    'enableCustomAudioLocalPlayback',
+    'RtcEngine.enableCustomAudioLocalPlayback',
     (WidgetTester tester) async {
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
@@ -4338,7 +4377,8 @@ void rtcEngineSmokeTestCases() {
         );
       } catch (e) {
         if (e is! AgoraRtcException) {
-          debugPrint('[enableCustomAudioLocalPlayback] error: ${e.toString()}');
+          debugPrint(
+              '[RtcEngine.enableCustomAudioLocalPlayback] error: ${e.toString()}');
           rethrow;
         }
 
@@ -4353,7 +4393,7 @@ void rtcEngineSmokeTestCases() {
   );
 
   testWidgets(
-    'setRecordingAudioFrameParameters',
+    'RtcEngine.setRecordingAudioFrameParameters',
     (WidgetTester tester) async {
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
@@ -4379,7 +4419,7 @@ void rtcEngineSmokeTestCases() {
       } catch (e) {
         if (e is! AgoraRtcException) {
           debugPrint(
-              '[setRecordingAudioFrameParameters] error: ${e.toString()}');
+              '[RtcEngine.setRecordingAudioFrameParameters] error: ${e.toString()}');
           rethrow;
         }
 
@@ -4394,7 +4434,7 @@ void rtcEngineSmokeTestCases() {
   );
 
   testWidgets(
-    'setPlaybackAudioFrameParameters',
+    'RtcEngine.setPlaybackAudioFrameParameters',
     (WidgetTester tester) async {
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
@@ -4420,7 +4460,7 @@ void rtcEngineSmokeTestCases() {
       } catch (e) {
         if (e is! AgoraRtcException) {
           debugPrint(
-              '[setPlaybackAudioFrameParameters] error: ${e.toString()}');
+              '[RtcEngine.setPlaybackAudioFrameParameters] error: ${e.toString()}');
           rethrow;
         }
 
@@ -4435,7 +4475,7 @@ void rtcEngineSmokeTestCases() {
   );
 
   testWidgets(
-    'setMixedAudioFrameParameters',
+    'RtcEngine.setMixedAudioFrameParameters',
     (WidgetTester tester) async {
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
@@ -4457,7 +4497,8 @@ void rtcEngineSmokeTestCases() {
         );
       } catch (e) {
         if (e is! AgoraRtcException) {
-          debugPrint('[setMixedAudioFrameParameters] error: ${e.toString()}');
+          debugPrint(
+              '[RtcEngine.setMixedAudioFrameParameters] error: ${e.toString()}');
           rethrow;
         }
 
@@ -4472,7 +4513,7 @@ void rtcEngineSmokeTestCases() {
   );
 
   testWidgets(
-    'setEarMonitoringAudioFrameParameters',
+    'RtcEngine.setEarMonitoringAudioFrameParameters',
     (WidgetTester tester) async {
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
@@ -4498,7 +4539,7 @@ void rtcEngineSmokeTestCases() {
       } catch (e) {
         if (e is! AgoraRtcException) {
           debugPrint(
-              '[setEarMonitoringAudioFrameParameters] error: ${e.toString()}');
+              '[RtcEngine.setEarMonitoringAudioFrameParameters] error: ${e.toString()}');
           rethrow;
         }
 
@@ -4513,7 +4554,7 @@ void rtcEngineSmokeTestCases() {
   );
 
   testWidgets(
-    'setPlaybackAudioFrameBeforeMixingParameters',
+    'RtcEngine.setPlaybackAudioFrameBeforeMixingParameters',
     (WidgetTester tester) async {
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
@@ -4534,7 +4575,7 @@ void rtcEngineSmokeTestCases() {
       } catch (e) {
         if (e is! AgoraRtcException) {
           debugPrint(
-              '[setPlaybackAudioFrameBeforeMixingParameters] error: ${e.toString()}');
+              '[RtcEngine.setPlaybackAudioFrameBeforeMixingParameters] error: ${e.toString()}');
           rethrow;
         }
 
@@ -4549,7 +4590,7 @@ void rtcEngineSmokeTestCases() {
   );
 
   testWidgets(
-    'enableAudioSpectrumMonitor',
+    'RtcEngine.enableAudioSpectrumMonitor',
     (WidgetTester tester) async {
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
@@ -4567,7 +4608,8 @@ void rtcEngineSmokeTestCases() {
         );
       } catch (e) {
         if (e is! AgoraRtcException) {
-          debugPrint('[enableAudioSpectrumMonitor] error: ${e.toString()}');
+          debugPrint(
+              '[RtcEngine.enableAudioSpectrumMonitor] error: ${e.toString()}');
           rethrow;
         }
 
@@ -4582,7 +4624,7 @@ void rtcEngineSmokeTestCases() {
   );
 
   testWidgets(
-    'disableAudioSpectrumMonitor',
+    'RtcEngine.disableAudioSpectrumMonitor',
     (WidgetTester tester) async {
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
@@ -4597,7 +4639,8 @@ void rtcEngineSmokeTestCases() {
         await rtcEngine.disableAudioSpectrumMonitor();
       } catch (e) {
         if (e is! AgoraRtcException) {
-          debugPrint('[disableAudioSpectrumMonitor] error: ${e.toString()}');
+          debugPrint(
+              '[RtcEngine.disableAudioSpectrumMonitor] error: ${e.toString()}');
           rethrow;
         }
 
@@ -4612,7 +4655,7 @@ void rtcEngineSmokeTestCases() {
   );
 
   testWidgets(
-    'registerAudioSpectrumObserver',
+    'RtcEngine.registerAudioSpectrumObserver',
     (WidgetTester tester) async {
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
@@ -4633,7 +4676,8 @@ void rtcEngineSmokeTestCases() {
         );
       } catch (e) {
         if (e is! AgoraRtcException) {
-          debugPrint('[registerAudioSpectrumObserver] error: ${e.toString()}');
+          debugPrint(
+              '[RtcEngine.registerAudioSpectrumObserver] error: ${e.toString()}');
           rethrow;
         }
 
@@ -4648,7 +4692,7 @@ void rtcEngineSmokeTestCases() {
   );
 
   testWidgets(
-    'unregisterAudioSpectrumObserver',
+    'RtcEngine.unregisterAudioSpectrumObserver',
     (WidgetTester tester) async {
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
@@ -4670,7 +4714,7 @@ void rtcEngineSmokeTestCases() {
       } catch (e) {
         if (e is! AgoraRtcException) {
           debugPrint(
-              '[unregisterAudioSpectrumObserver] error: ${e.toString()}');
+              '[RtcEngine.unregisterAudioSpectrumObserver] error: ${e.toString()}');
           rethrow;
         }
 
@@ -4685,7 +4729,7 @@ void rtcEngineSmokeTestCases() {
   );
 
   testWidgets(
-    'adjustRecordingSignalVolume',
+    'RtcEngine.adjustRecordingSignalVolume',
     (WidgetTester tester) async {
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
@@ -4703,7 +4747,8 @@ void rtcEngineSmokeTestCases() {
         );
       } catch (e) {
         if (e is! AgoraRtcException) {
-          debugPrint('[adjustRecordingSignalVolume] error: ${e.toString()}');
+          debugPrint(
+              '[RtcEngine.adjustRecordingSignalVolume] error: ${e.toString()}');
           rethrow;
         }
 
@@ -4718,7 +4763,7 @@ void rtcEngineSmokeTestCases() {
   );
 
   testWidgets(
-    'muteRecordingSignal',
+    'RtcEngine.muteRecordingSignal',
     (WidgetTester tester) async {
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
@@ -4736,7 +4781,7 @@ void rtcEngineSmokeTestCases() {
         );
       } catch (e) {
         if (e is! AgoraRtcException) {
-          debugPrint('[muteRecordingSignal] error: ${e.toString()}');
+          debugPrint('[RtcEngine.muteRecordingSignal] error: ${e.toString()}');
           rethrow;
         }
 
@@ -4751,7 +4796,7 @@ void rtcEngineSmokeTestCases() {
   );
 
   testWidgets(
-    'adjustPlaybackSignalVolume',
+    'RtcEngine.adjustPlaybackSignalVolume',
     (WidgetTester tester) async {
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
@@ -4769,7 +4814,8 @@ void rtcEngineSmokeTestCases() {
         );
       } catch (e) {
         if (e is! AgoraRtcException) {
-          debugPrint('[adjustPlaybackSignalVolume] error: ${e.toString()}');
+          debugPrint(
+              '[RtcEngine.adjustPlaybackSignalVolume] error: ${e.toString()}');
           rethrow;
         }
 
@@ -4784,7 +4830,7 @@ void rtcEngineSmokeTestCases() {
   );
 
   testWidgets(
-    'adjustUserPlaybackSignalVolume',
+    'RtcEngine.adjustUserPlaybackSignalVolume',
     (WidgetTester tester) async {
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
@@ -4804,7 +4850,8 @@ void rtcEngineSmokeTestCases() {
         );
       } catch (e) {
         if (e is! AgoraRtcException) {
-          debugPrint('[adjustUserPlaybackSignalVolume] error: ${e.toString()}');
+          debugPrint(
+              '[RtcEngine.adjustUserPlaybackSignalVolume] error: ${e.toString()}');
           rethrow;
         }
 
@@ -4819,7 +4866,7 @@ void rtcEngineSmokeTestCases() {
   );
 
   testWidgets(
-    'setLocalPublishFallbackOption',
+    'RtcEngine.setLocalPublishFallbackOption',
     (WidgetTester tester) async {
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
@@ -4838,7 +4885,8 @@ void rtcEngineSmokeTestCases() {
         );
       } catch (e) {
         if (e is! AgoraRtcException) {
-          debugPrint('[setLocalPublishFallbackOption] error: ${e.toString()}');
+          debugPrint(
+              '[RtcEngine.setLocalPublishFallbackOption] error: ${e.toString()}');
           rethrow;
         }
 
@@ -4853,7 +4901,7 @@ void rtcEngineSmokeTestCases() {
   );
 
   testWidgets(
-    'setRemoteSubscribeFallbackOption',
+    'RtcEngine.setRemoteSubscribeFallbackOption',
     (WidgetTester tester) async {
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
@@ -4873,7 +4921,7 @@ void rtcEngineSmokeTestCases() {
       } catch (e) {
         if (e is! AgoraRtcException) {
           debugPrint(
-              '[setRemoteSubscribeFallbackOption] error: ${e.toString()}');
+              '[RtcEngine.setRemoteSubscribeFallbackOption] error: ${e.toString()}');
           rethrow;
         }
 
@@ -4888,7 +4936,7 @@ void rtcEngineSmokeTestCases() {
   );
 
   testWidgets(
-    'enableExtension',
+    'RtcEngine.enableExtension',
     (WidgetTester tester) async {
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
@@ -4912,7 +4960,7 @@ void rtcEngineSmokeTestCases() {
         );
       } catch (e) {
         if (e is! AgoraRtcException) {
-          debugPrint('[enableExtension] error: ${e.toString()}');
+          debugPrint('[RtcEngine.enableExtension] error: ${e.toString()}');
           rethrow;
         }
 
@@ -4927,7 +4975,7 @@ void rtcEngineSmokeTestCases() {
   );
 
   testWidgets(
-    'setExtensionProperty',
+    'RtcEngine.setExtensionProperty',
     (WidgetTester tester) async {
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
@@ -4953,7 +5001,7 @@ void rtcEngineSmokeTestCases() {
         );
       } catch (e) {
         if (e is! AgoraRtcException) {
-          debugPrint('[setExtensionProperty] error: ${e.toString()}');
+          debugPrint('[RtcEngine.setExtensionProperty] error: ${e.toString()}');
           rethrow;
         }
 
@@ -4968,7 +5016,7 @@ void rtcEngineSmokeTestCases() {
   );
 
   testWidgets(
-    'getExtensionProperty',
+    'RtcEngine.getExtensionProperty',
     (WidgetTester tester) async {
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
@@ -4994,7 +5042,7 @@ void rtcEngineSmokeTestCases() {
         );
       } catch (e) {
         if (e is! AgoraRtcException) {
-          debugPrint('[getExtensionProperty] error: ${e.toString()}');
+          debugPrint('[RtcEngine.getExtensionProperty] error: ${e.toString()}');
           rethrow;
         }
 
@@ -5009,7 +5057,7 @@ void rtcEngineSmokeTestCases() {
   );
 
   testWidgets(
-    'enableLoopbackRecording',
+    'RtcEngine.enableLoopbackRecording',
     (WidgetTester tester) async {
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
@@ -5029,7 +5077,8 @@ void rtcEngineSmokeTestCases() {
         );
       } catch (e) {
         if (e is! AgoraRtcException) {
-          debugPrint('[enableLoopbackRecording] error: ${e.toString()}');
+          debugPrint(
+              '[RtcEngine.enableLoopbackRecording] error: ${e.toString()}');
           rethrow;
         }
 
@@ -5044,7 +5093,7 @@ void rtcEngineSmokeTestCases() {
   );
 
   testWidgets(
-    'adjustLoopbackSignalVolume',
+    'RtcEngine.adjustLoopbackSignalVolume',
     (WidgetTester tester) async {
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
@@ -5062,7 +5111,8 @@ void rtcEngineSmokeTestCases() {
         );
       } catch (e) {
         if (e is! AgoraRtcException) {
-          debugPrint('[adjustLoopbackSignalVolume] error: ${e.toString()}');
+          debugPrint(
+              '[RtcEngine.adjustLoopbackSignalVolume] error: ${e.toString()}');
           rethrow;
         }
 
@@ -5077,7 +5127,7 @@ void rtcEngineSmokeTestCases() {
   );
 
   testWidgets(
-    'getLoopbackRecordingVolume',
+    'RtcEngine.getLoopbackRecordingVolume',
     (WidgetTester tester) async {
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
@@ -5092,7 +5142,8 @@ void rtcEngineSmokeTestCases() {
         await rtcEngine.getLoopbackRecordingVolume();
       } catch (e) {
         if (e is! AgoraRtcException) {
-          debugPrint('[getLoopbackRecordingVolume] error: ${e.toString()}');
+          debugPrint(
+              '[RtcEngine.getLoopbackRecordingVolume] error: ${e.toString()}');
           rethrow;
         }
 
@@ -5107,7 +5158,7 @@ void rtcEngineSmokeTestCases() {
   );
 
   testWidgets(
-    'enableInEarMonitoring',
+    'RtcEngine.enableInEarMonitoring',
     (WidgetTester tester) async {
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
@@ -5128,7 +5179,8 @@ void rtcEngineSmokeTestCases() {
         );
       } catch (e) {
         if (e is! AgoraRtcException) {
-          debugPrint('[enableInEarMonitoring] error: ${e.toString()}');
+          debugPrint(
+              '[RtcEngine.enableInEarMonitoring] error: ${e.toString()}');
           rethrow;
         }
 
@@ -5143,7 +5195,7 @@ void rtcEngineSmokeTestCases() {
   );
 
   testWidgets(
-    'setInEarMonitoringVolume',
+    'RtcEngine.setInEarMonitoringVolume',
     (WidgetTester tester) async {
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
@@ -5161,7 +5213,8 @@ void rtcEngineSmokeTestCases() {
         );
       } catch (e) {
         if (e is! AgoraRtcException) {
-          debugPrint('[setInEarMonitoringVolume] error: ${e.toString()}');
+          debugPrint(
+              '[RtcEngine.setInEarMonitoringVolume] error: ${e.toString()}');
           rethrow;
         }
 
@@ -5176,7 +5229,7 @@ void rtcEngineSmokeTestCases() {
   );
 
   testWidgets(
-    'loadExtensionProvider',
+    'RtcEngine.loadExtensionProvider',
     (WidgetTester tester) async {
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
@@ -5196,7 +5249,8 @@ void rtcEngineSmokeTestCases() {
         );
       } catch (e) {
         if (e is! AgoraRtcException) {
-          debugPrint('[loadExtensionProvider] error: ${e.toString()}');
+          debugPrint(
+              '[RtcEngine.loadExtensionProvider] error: ${e.toString()}');
           rethrow;
         }
 
@@ -5211,7 +5265,7 @@ void rtcEngineSmokeTestCases() {
   );
 
   testWidgets(
-    'setExtensionProviderProperty',
+    'RtcEngine.setExtensionProviderProperty',
     (WidgetTester tester) async {
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
@@ -5233,7 +5287,8 @@ void rtcEngineSmokeTestCases() {
         );
       } catch (e) {
         if (e is! AgoraRtcException) {
-          debugPrint('[setExtensionProviderProperty] error: ${e.toString()}');
+          debugPrint(
+              '[RtcEngine.setExtensionProviderProperty] error: ${e.toString()}');
           rethrow;
         }
 
@@ -5248,7 +5303,7 @@ void rtcEngineSmokeTestCases() {
   );
 
   testWidgets(
-    'registerExtension',
+    'RtcEngine.registerExtension',
     (WidgetTester tester) async {
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
@@ -5270,7 +5325,7 @@ void rtcEngineSmokeTestCases() {
         );
       } catch (e) {
         if (e is! AgoraRtcException) {
-          debugPrint('[registerExtension] error: ${e.toString()}');
+          debugPrint('[RtcEngine.registerExtension] error: ${e.toString()}');
           rethrow;
         }
 
@@ -5285,7 +5340,7 @@ void rtcEngineSmokeTestCases() {
   );
 
   testWidgets(
-    'setCameraCapturerConfiguration',
+    'RtcEngine.setCameraCapturerConfiguration',
     (WidgetTester tester) async {
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
@@ -5320,7 +5375,8 @@ void rtcEngineSmokeTestCases() {
         );
       } catch (e) {
         if (e is! AgoraRtcException) {
-          debugPrint('[setCameraCapturerConfiguration] error: ${e.toString()}');
+          debugPrint(
+              '[RtcEngine.setCameraCapturerConfiguration] error: ${e.toString()}');
           rethrow;
         }
 
@@ -5335,7 +5391,7 @@ void rtcEngineSmokeTestCases() {
   );
 
   testWidgets(
-    'destroyCustomVideoTrack',
+    'RtcEngine.destroyCustomVideoTrack',
     (WidgetTester tester) async {
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
@@ -5353,7 +5409,8 @@ void rtcEngineSmokeTestCases() {
         );
       } catch (e) {
         if (e is! AgoraRtcException) {
-          debugPrint('[destroyCustomVideoTrack] error: ${e.toString()}');
+          debugPrint(
+              '[RtcEngine.destroyCustomVideoTrack] error: ${e.toString()}');
           rethrow;
         }
 
@@ -5368,7 +5425,7 @@ void rtcEngineSmokeTestCases() {
   );
 
   testWidgets(
-    'destroyCustomEncodedVideoTrack',
+    'RtcEngine.destroyCustomEncodedVideoTrack',
     (WidgetTester tester) async {
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
@@ -5386,7 +5443,8 @@ void rtcEngineSmokeTestCases() {
         );
       } catch (e) {
         if (e is! AgoraRtcException) {
-          debugPrint('[destroyCustomEncodedVideoTrack] error: ${e.toString()}');
+          debugPrint(
+              '[RtcEngine.destroyCustomEncodedVideoTrack] error: ${e.toString()}');
           rethrow;
         }
 
@@ -5401,7 +5459,7 @@ void rtcEngineSmokeTestCases() {
   );
 
   testWidgets(
-    'switchCamera',
+    'RtcEngine.switchCamera',
     (WidgetTester tester) async {
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
@@ -5416,7 +5474,7 @@ void rtcEngineSmokeTestCases() {
         await rtcEngine.switchCamera();
       } catch (e) {
         if (e is! AgoraRtcException) {
-          debugPrint('[switchCamera] error: ${e.toString()}');
+          debugPrint('[RtcEngine.switchCamera] error: ${e.toString()}');
           rethrow;
         }
 
@@ -5431,7 +5489,7 @@ void rtcEngineSmokeTestCases() {
   );
 
   testWidgets(
-    'isCameraZoomSupported',
+    'RtcEngine.isCameraZoomSupported',
     (WidgetTester tester) async {
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
@@ -5446,7 +5504,8 @@ void rtcEngineSmokeTestCases() {
         await rtcEngine.isCameraZoomSupported();
       } catch (e) {
         if (e is! AgoraRtcException) {
-          debugPrint('[isCameraZoomSupported] error: ${e.toString()}');
+          debugPrint(
+              '[RtcEngine.isCameraZoomSupported] error: ${e.toString()}');
           rethrow;
         }
 
@@ -5461,7 +5520,7 @@ void rtcEngineSmokeTestCases() {
   );
 
   testWidgets(
-    'isCameraFaceDetectSupported',
+    'RtcEngine.isCameraFaceDetectSupported',
     (WidgetTester tester) async {
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
@@ -5476,7 +5535,8 @@ void rtcEngineSmokeTestCases() {
         await rtcEngine.isCameraFaceDetectSupported();
       } catch (e) {
         if (e is! AgoraRtcException) {
-          debugPrint('[isCameraFaceDetectSupported] error: ${e.toString()}');
+          debugPrint(
+              '[RtcEngine.isCameraFaceDetectSupported] error: ${e.toString()}');
           rethrow;
         }
 
@@ -5491,7 +5551,7 @@ void rtcEngineSmokeTestCases() {
   );
 
   testWidgets(
-    'isCameraTorchSupported',
+    'RtcEngine.isCameraTorchSupported',
     (WidgetTester tester) async {
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
@@ -5506,7 +5566,8 @@ void rtcEngineSmokeTestCases() {
         await rtcEngine.isCameraTorchSupported();
       } catch (e) {
         if (e is! AgoraRtcException) {
-          debugPrint('[isCameraTorchSupported] error: ${e.toString()}');
+          debugPrint(
+              '[RtcEngine.isCameraTorchSupported] error: ${e.toString()}');
           rethrow;
         }
 
@@ -5521,7 +5582,7 @@ void rtcEngineSmokeTestCases() {
   );
 
   testWidgets(
-    'isCameraFocusSupported',
+    'RtcEngine.isCameraFocusSupported',
     (WidgetTester tester) async {
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
@@ -5536,7 +5597,8 @@ void rtcEngineSmokeTestCases() {
         await rtcEngine.isCameraFocusSupported();
       } catch (e) {
         if (e is! AgoraRtcException) {
-          debugPrint('[isCameraFocusSupported] error: ${e.toString()}');
+          debugPrint(
+              '[RtcEngine.isCameraFocusSupported] error: ${e.toString()}');
           rethrow;
         }
 
@@ -5551,7 +5613,7 @@ void rtcEngineSmokeTestCases() {
   );
 
   testWidgets(
-    'isCameraAutoFocusFaceModeSupported',
+    'RtcEngine.isCameraAutoFocusFaceModeSupported',
     (WidgetTester tester) async {
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
@@ -5567,7 +5629,7 @@ void rtcEngineSmokeTestCases() {
       } catch (e) {
         if (e is! AgoraRtcException) {
           debugPrint(
-              '[isCameraAutoFocusFaceModeSupported] error: ${e.toString()}');
+              '[RtcEngine.isCameraAutoFocusFaceModeSupported] error: ${e.toString()}');
           rethrow;
         }
 
@@ -5582,7 +5644,7 @@ void rtcEngineSmokeTestCases() {
   );
 
   testWidgets(
-    'setCameraZoomFactor',
+    'RtcEngine.setCameraZoomFactor',
     (WidgetTester tester) async {
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
@@ -5600,7 +5662,7 @@ void rtcEngineSmokeTestCases() {
         );
       } catch (e) {
         if (e is! AgoraRtcException) {
-          debugPrint('[setCameraZoomFactor] error: ${e.toString()}');
+          debugPrint('[RtcEngine.setCameraZoomFactor] error: ${e.toString()}');
           rethrow;
         }
 
@@ -5615,7 +5677,7 @@ void rtcEngineSmokeTestCases() {
   );
 
   testWidgets(
-    'enableFaceDetection',
+    'RtcEngine.enableFaceDetection',
     (WidgetTester tester) async {
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
@@ -5633,7 +5695,7 @@ void rtcEngineSmokeTestCases() {
         );
       } catch (e) {
         if (e is! AgoraRtcException) {
-          debugPrint('[enableFaceDetection] error: ${e.toString()}');
+          debugPrint('[RtcEngine.enableFaceDetection] error: ${e.toString()}');
           rethrow;
         }
 
@@ -5648,7 +5710,7 @@ void rtcEngineSmokeTestCases() {
   );
 
   testWidgets(
-    'getCameraMaxZoomFactor',
+    'RtcEngine.getCameraMaxZoomFactor',
     (WidgetTester tester) async {
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
@@ -5663,7 +5725,8 @@ void rtcEngineSmokeTestCases() {
         await rtcEngine.getCameraMaxZoomFactor();
       } catch (e) {
         if (e is! AgoraRtcException) {
-          debugPrint('[getCameraMaxZoomFactor] error: ${e.toString()}');
+          debugPrint(
+              '[RtcEngine.getCameraMaxZoomFactor] error: ${e.toString()}');
           rethrow;
         }
 
@@ -5678,7 +5741,7 @@ void rtcEngineSmokeTestCases() {
   );
 
   testWidgets(
-    'setCameraFocusPositionInPreview',
+    'RtcEngine.setCameraFocusPositionInPreview',
     (WidgetTester tester) async {
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
@@ -5699,7 +5762,7 @@ void rtcEngineSmokeTestCases() {
       } catch (e) {
         if (e is! AgoraRtcException) {
           debugPrint(
-              '[setCameraFocusPositionInPreview] error: ${e.toString()}');
+              '[RtcEngine.setCameraFocusPositionInPreview] error: ${e.toString()}');
           rethrow;
         }
 
@@ -5714,7 +5777,7 @@ void rtcEngineSmokeTestCases() {
   );
 
   testWidgets(
-    'setCameraTorchOn',
+    'RtcEngine.setCameraTorchOn',
     (WidgetTester tester) async {
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
@@ -5732,7 +5795,7 @@ void rtcEngineSmokeTestCases() {
         );
       } catch (e) {
         if (e is! AgoraRtcException) {
-          debugPrint('[setCameraTorchOn] error: ${e.toString()}');
+          debugPrint('[RtcEngine.setCameraTorchOn] error: ${e.toString()}');
           rethrow;
         }
 
@@ -5747,7 +5810,7 @@ void rtcEngineSmokeTestCases() {
   );
 
   testWidgets(
-    'setCameraAutoFocusFaceModeEnabled',
+    'RtcEngine.setCameraAutoFocusFaceModeEnabled',
     (WidgetTester tester) async {
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
@@ -5766,7 +5829,7 @@ void rtcEngineSmokeTestCases() {
       } catch (e) {
         if (e is! AgoraRtcException) {
           debugPrint(
-              '[setCameraAutoFocusFaceModeEnabled] error: ${e.toString()}');
+              '[RtcEngine.setCameraAutoFocusFaceModeEnabled] error: ${e.toString()}');
           rethrow;
         }
 
@@ -5781,7 +5844,7 @@ void rtcEngineSmokeTestCases() {
   );
 
   testWidgets(
-    'isCameraExposurePositionSupported',
+    'RtcEngine.isCameraExposurePositionSupported',
     (WidgetTester tester) async {
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
@@ -5797,7 +5860,7 @@ void rtcEngineSmokeTestCases() {
       } catch (e) {
         if (e is! AgoraRtcException) {
           debugPrint(
-              '[isCameraExposurePositionSupported] error: ${e.toString()}');
+              '[RtcEngine.isCameraExposurePositionSupported] error: ${e.toString()}');
           rethrow;
         }
 
@@ -5812,7 +5875,7 @@ void rtcEngineSmokeTestCases() {
   );
 
   testWidgets(
-    'setCameraExposurePosition',
+    'RtcEngine.setCameraExposurePosition',
     (WidgetTester tester) async {
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
@@ -5832,7 +5895,8 @@ void rtcEngineSmokeTestCases() {
         );
       } catch (e) {
         if (e is! AgoraRtcException) {
-          debugPrint('[setCameraExposurePosition] error: ${e.toString()}');
+          debugPrint(
+              '[RtcEngine.setCameraExposurePosition] error: ${e.toString()}');
           rethrow;
         }
 
@@ -5847,7 +5911,7 @@ void rtcEngineSmokeTestCases() {
   );
 
   testWidgets(
-    'isCameraExposureSupported',
+    'RtcEngine.isCameraExposureSupported',
     (WidgetTester tester) async {
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
@@ -5862,7 +5926,8 @@ void rtcEngineSmokeTestCases() {
         await rtcEngine.isCameraExposureSupported();
       } catch (e) {
         if (e is! AgoraRtcException) {
-          debugPrint('[isCameraExposureSupported] error: ${e.toString()}');
+          debugPrint(
+              '[RtcEngine.isCameraExposureSupported] error: ${e.toString()}');
           rethrow;
         }
 
@@ -5877,7 +5942,7 @@ void rtcEngineSmokeTestCases() {
   );
 
   testWidgets(
-    'setCameraExposureFactor',
+    'RtcEngine.setCameraExposureFactor',
     (WidgetTester tester) async {
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
@@ -5895,7 +5960,8 @@ void rtcEngineSmokeTestCases() {
         );
       } catch (e) {
         if (e is! AgoraRtcException) {
-          debugPrint('[setCameraExposureFactor] error: ${e.toString()}');
+          debugPrint(
+              '[RtcEngine.setCameraExposureFactor] error: ${e.toString()}');
           rethrow;
         }
 
@@ -5910,7 +5976,7 @@ void rtcEngineSmokeTestCases() {
   );
 
   testWidgets(
-    'isCameraAutoExposureFaceModeSupported',
+    'RtcEngine.isCameraAutoExposureFaceModeSupported',
     (WidgetTester tester) async {
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
@@ -5926,7 +5992,7 @@ void rtcEngineSmokeTestCases() {
       } catch (e) {
         if (e is! AgoraRtcException) {
           debugPrint(
-              '[isCameraAutoExposureFaceModeSupported] error: ${e.toString()}');
+              '[RtcEngine.isCameraAutoExposureFaceModeSupported] error: ${e.toString()}');
           rethrow;
         }
 
@@ -5941,7 +6007,7 @@ void rtcEngineSmokeTestCases() {
   );
 
   testWidgets(
-    'setCameraAutoExposureFaceModeEnabled',
+    'RtcEngine.setCameraAutoExposureFaceModeEnabled',
     (WidgetTester tester) async {
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
@@ -5960,7 +6026,7 @@ void rtcEngineSmokeTestCases() {
       } catch (e) {
         if (e is! AgoraRtcException) {
           debugPrint(
-              '[setCameraAutoExposureFaceModeEnabled] error: ${e.toString()}');
+              '[RtcEngine.setCameraAutoExposureFaceModeEnabled] error: ${e.toString()}');
           rethrow;
         }
 
@@ -5975,7 +6041,7 @@ void rtcEngineSmokeTestCases() {
   );
 
   testWidgets(
-    'setDefaultAudioRouteToSpeakerphone',
+    'RtcEngine.setDefaultAudioRouteToSpeakerphone',
     (WidgetTester tester) async {
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
@@ -5994,7 +6060,7 @@ void rtcEngineSmokeTestCases() {
       } catch (e) {
         if (e is! AgoraRtcException) {
           debugPrint(
-              '[setDefaultAudioRouteToSpeakerphone] error: ${e.toString()}');
+              '[RtcEngine.setDefaultAudioRouteToSpeakerphone] error: ${e.toString()}');
           rethrow;
         }
 
@@ -6009,7 +6075,7 @@ void rtcEngineSmokeTestCases() {
   );
 
   testWidgets(
-    'setEnableSpeakerphone',
+    'RtcEngine.setEnableSpeakerphone',
     (WidgetTester tester) async {
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
@@ -6027,7 +6093,8 @@ void rtcEngineSmokeTestCases() {
         );
       } catch (e) {
         if (e is! AgoraRtcException) {
-          debugPrint('[setEnableSpeakerphone] error: ${e.toString()}');
+          debugPrint(
+              '[RtcEngine.setEnableSpeakerphone] error: ${e.toString()}');
           rethrow;
         }
 
@@ -6042,7 +6109,7 @@ void rtcEngineSmokeTestCases() {
   );
 
   testWidgets(
-    'isSpeakerphoneEnabled',
+    'RtcEngine.isSpeakerphoneEnabled',
     (WidgetTester tester) async {
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
@@ -6057,7 +6124,8 @@ void rtcEngineSmokeTestCases() {
         await rtcEngine.isSpeakerphoneEnabled();
       } catch (e) {
         if (e is! AgoraRtcException) {
-          debugPrint('[isSpeakerphoneEnabled] error: ${e.toString()}');
+          debugPrint(
+              '[RtcEngine.isSpeakerphoneEnabled] error: ${e.toString()}');
           rethrow;
         }
 
@@ -6072,7 +6140,7 @@ void rtcEngineSmokeTestCases() {
   );
 
   testWidgets(
-    'setRouteInCommunicationMode',
+    'RtcEngine.setRouteInCommunicationMode',
     (WidgetTester tester) async {
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
@@ -6090,7 +6158,8 @@ void rtcEngineSmokeTestCases() {
         );
       } catch (e) {
         if (e is! AgoraRtcException) {
-          debugPrint('[setRouteInCommunicationMode] error: ${e.toString()}');
+          debugPrint(
+              '[RtcEngine.setRouteInCommunicationMode] error: ${e.toString()}');
           rethrow;
         }
 
@@ -6105,7 +6174,7 @@ void rtcEngineSmokeTestCases() {
   );
 
   testWidgets(
-    'getScreenCaptureSources',
+    'RtcEngine.getScreenCaptureSources',
     (WidgetTester tester) async {
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
@@ -6137,7 +6206,8 @@ void rtcEngineSmokeTestCases() {
         );
       } catch (e) {
         if (e is! AgoraRtcException) {
-          debugPrint('[getScreenCaptureSources] error: ${e.toString()}');
+          debugPrint(
+              '[RtcEngine.getScreenCaptureSources] error: ${e.toString()}');
           rethrow;
         }
 
@@ -6152,7 +6222,7 @@ void rtcEngineSmokeTestCases() {
   );
 
   testWidgets(
-    'setAudioSessionOperationRestriction',
+    'RtcEngine.setAudioSessionOperationRestriction',
     (WidgetTester tester) async {
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
@@ -6173,7 +6243,7 @@ void rtcEngineSmokeTestCases() {
       } catch (e) {
         if (e is! AgoraRtcException) {
           debugPrint(
-              '[setAudioSessionOperationRestriction] error: ${e.toString()}');
+              '[RtcEngine.setAudioSessionOperationRestriction] error: ${e.toString()}');
           rethrow;
         }
 
@@ -6188,7 +6258,7 @@ void rtcEngineSmokeTestCases() {
   );
 
   testWidgets(
-    'startScreenCaptureByDisplayId',
+    'RtcEngine.startScreenCaptureByDisplayId',
     (WidgetTester tester) async {
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
@@ -6245,7 +6315,8 @@ void rtcEngineSmokeTestCases() {
         );
       } catch (e) {
         if (e is! AgoraRtcException) {
-          debugPrint('[startScreenCaptureByDisplayId] error: ${e.toString()}');
+          debugPrint(
+              '[RtcEngine.startScreenCaptureByDisplayId] error: ${e.toString()}');
           rethrow;
         }
 
@@ -6260,7 +6331,7 @@ void rtcEngineSmokeTestCases() {
   );
 
   testWidgets(
-    'startScreenCaptureByScreenRect',
+    'RtcEngine.startScreenCaptureByScreenRect',
     (WidgetTester tester) async {
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
@@ -6326,7 +6397,8 @@ void rtcEngineSmokeTestCases() {
         );
       } catch (e) {
         if (e is! AgoraRtcException) {
-          debugPrint('[startScreenCaptureByScreenRect] error: ${e.toString()}');
+          debugPrint(
+              '[RtcEngine.startScreenCaptureByScreenRect] error: ${e.toString()}');
           rethrow;
         }
 
@@ -6341,7 +6413,7 @@ void rtcEngineSmokeTestCases() {
   );
 
   testWidgets(
-    'getAudioDeviceInfo',
+    'RtcEngine.getAudioDeviceInfo',
     (WidgetTester tester) async {
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
@@ -6356,7 +6428,7 @@ void rtcEngineSmokeTestCases() {
         await rtcEngine.getAudioDeviceInfo();
       } catch (e) {
         if (e is! AgoraRtcException) {
-          debugPrint('[getAudioDeviceInfo] error: ${e.toString()}');
+          debugPrint('[RtcEngine.getAudioDeviceInfo] error: ${e.toString()}');
           rethrow;
         }
 
@@ -6371,7 +6443,7 @@ void rtcEngineSmokeTestCases() {
   );
 
   testWidgets(
-    'startScreenCaptureByWindowId',
+    'RtcEngine.startScreenCaptureByWindowId',
     (WidgetTester tester) async {
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
@@ -6428,7 +6500,8 @@ void rtcEngineSmokeTestCases() {
         );
       } catch (e) {
         if (e is! AgoraRtcException) {
-          debugPrint('[startScreenCaptureByWindowId] error: ${e.toString()}');
+          debugPrint(
+              '[RtcEngine.startScreenCaptureByWindowId] error: ${e.toString()}');
           rethrow;
         }
 
@@ -6443,7 +6516,7 @@ void rtcEngineSmokeTestCases() {
   );
 
   testWidgets(
-    'setScreenCaptureContentHint',
+    'RtcEngine.setScreenCaptureContentHint',
     (WidgetTester tester) async {
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
@@ -6461,7 +6534,8 @@ void rtcEngineSmokeTestCases() {
         );
       } catch (e) {
         if (e is! AgoraRtcException) {
-          debugPrint('[setScreenCaptureContentHint] error: ${e.toString()}');
+          debugPrint(
+              '[RtcEngine.setScreenCaptureContentHint] error: ${e.toString()}');
           rethrow;
         }
 
@@ -6476,7 +6550,7 @@ void rtcEngineSmokeTestCases() {
   );
 
   testWidgets(
-    'updateScreenCaptureRegion',
+    'RtcEngine.updateScreenCaptureRegion',
     (WidgetTester tester) async {
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
@@ -6503,7 +6577,8 @@ void rtcEngineSmokeTestCases() {
         );
       } catch (e) {
         if (e is! AgoraRtcException) {
-          debugPrint('[updateScreenCaptureRegion] error: ${e.toString()}');
+          debugPrint(
+              '[RtcEngine.updateScreenCaptureRegion] error: ${e.toString()}');
           rethrow;
         }
 
@@ -6518,7 +6593,7 @@ void rtcEngineSmokeTestCases() {
   );
 
   testWidgets(
-    'updateScreenCaptureParameters',
+    'RtcEngine.updateScreenCaptureParameters',
     (WidgetTester tester) async {
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
@@ -6562,7 +6637,8 @@ void rtcEngineSmokeTestCases() {
         );
       } catch (e) {
         if (e is! AgoraRtcException) {
-          debugPrint('[updateScreenCaptureParameters] error: ${e.toString()}');
+          debugPrint(
+              '[RtcEngine.updateScreenCaptureParameters] error: ${e.toString()}');
           rethrow;
         }
 
@@ -6577,7 +6653,7 @@ void rtcEngineSmokeTestCases() {
   );
 
   testWidgets(
-    'startScreenCapture',
+    'RtcEngine.startScreenCapture',
     (WidgetTester tester) async {
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
@@ -6628,7 +6704,7 @@ void rtcEngineSmokeTestCases() {
         );
       } catch (e) {
         if (e is! AgoraRtcException) {
-          debugPrint('[startScreenCapture] error: ${e.toString()}');
+          debugPrint('[RtcEngine.startScreenCapture] error: ${e.toString()}');
           rethrow;
         }
 
@@ -6643,7 +6719,7 @@ void rtcEngineSmokeTestCases() {
   );
 
   testWidgets(
-    'startScreenCaptureBySourceType',
+    'RtcEngine.startScreenCaptureBySourceType',
     (WidgetTester tester) async {
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
@@ -6721,7 +6797,8 @@ void rtcEngineSmokeTestCases() {
         );
       } catch (e) {
         if (e is! AgoraRtcException) {
-          debugPrint('[startScreenCaptureBySourceType] error: ${e.toString()}');
+          debugPrint(
+              '[RtcEngine.startScreenCaptureBySourceType] error: ${e.toString()}');
           rethrow;
         }
 
@@ -6736,7 +6813,7 @@ void rtcEngineSmokeTestCases() {
   );
 
   testWidgets(
-    'updateScreenCapture',
+    'RtcEngine.updateScreenCapture',
     (WidgetTester tester) async {
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
@@ -6787,7 +6864,7 @@ void rtcEngineSmokeTestCases() {
         );
       } catch (e) {
         if (e is! AgoraRtcException) {
-          debugPrint('[updateScreenCapture] error: ${e.toString()}');
+          debugPrint('[RtcEngine.updateScreenCapture] error: ${e.toString()}');
           rethrow;
         }
 
@@ -6802,7 +6879,7 @@ void rtcEngineSmokeTestCases() {
   );
 
   testWidgets(
-    'queryScreenCaptureCapability',
+    'RtcEngine.queryScreenCaptureCapability',
     (WidgetTester tester) async {
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
@@ -6817,7 +6894,8 @@ void rtcEngineSmokeTestCases() {
         await rtcEngine.queryScreenCaptureCapability();
       } catch (e) {
         if (e is! AgoraRtcException) {
-          debugPrint('[queryScreenCaptureCapability] error: ${e.toString()}');
+          debugPrint(
+              '[RtcEngine.queryScreenCaptureCapability] error: ${e.toString()}');
           rethrow;
         }
 
@@ -6832,7 +6910,7 @@ void rtcEngineSmokeTestCases() {
   );
 
   testWidgets(
-    'setScreenCaptureScenario',
+    'RtcEngine.setScreenCaptureScenario',
     (WidgetTester tester) async {
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
@@ -6851,7 +6929,8 @@ void rtcEngineSmokeTestCases() {
         );
       } catch (e) {
         if (e is! AgoraRtcException) {
-          debugPrint('[setScreenCaptureScenario] error: ${e.toString()}');
+          debugPrint(
+              '[RtcEngine.setScreenCaptureScenario] error: ${e.toString()}');
           rethrow;
         }
 
@@ -6866,7 +6945,7 @@ void rtcEngineSmokeTestCases() {
   );
 
   testWidgets(
-    'stopScreenCapture',
+    'RtcEngine.stopScreenCapture',
     (WidgetTester tester) async {
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
@@ -6881,7 +6960,7 @@ void rtcEngineSmokeTestCases() {
         await rtcEngine.stopScreenCapture();
       } catch (e) {
         if (e is! AgoraRtcException) {
-          debugPrint('[stopScreenCapture] error: ${e.toString()}');
+          debugPrint('[RtcEngine.stopScreenCapture] error: ${e.toString()}');
           rethrow;
         }
 
@@ -6896,7 +6975,7 @@ void rtcEngineSmokeTestCases() {
   );
 
   testWidgets(
-    'stopScreenCaptureBySourceType',
+    'RtcEngine.stopScreenCaptureBySourceType',
     (WidgetTester tester) async {
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
@@ -6915,7 +6994,8 @@ void rtcEngineSmokeTestCases() {
         );
       } catch (e) {
         if (e is! AgoraRtcException) {
-          debugPrint('[stopScreenCaptureBySourceType] error: ${e.toString()}');
+          debugPrint(
+              '[RtcEngine.stopScreenCaptureBySourceType] error: ${e.toString()}');
           rethrow;
         }
 
@@ -6930,7 +7010,7 @@ void rtcEngineSmokeTestCases() {
   );
 
   testWidgets(
-    'getCallId',
+    'RtcEngine.getCallId',
     (WidgetTester tester) async {
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
@@ -6945,7 +7025,7 @@ void rtcEngineSmokeTestCases() {
         await rtcEngine.getCallId();
       } catch (e) {
         if (e is! AgoraRtcException) {
-          debugPrint('[getCallId] error: ${e.toString()}');
+          debugPrint('[RtcEngine.getCallId] error: ${e.toString()}');
           rethrow;
         }
 
@@ -6960,7 +7040,7 @@ void rtcEngineSmokeTestCases() {
   );
 
   testWidgets(
-    'rate',
+    'RtcEngine.rate',
     (WidgetTester tester) async {
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
@@ -6982,7 +7062,7 @@ void rtcEngineSmokeTestCases() {
         );
       } catch (e) {
         if (e is! AgoraRtcException) {
-          debugPrint('[rate] error: ${e.toString()}');
+          debugPrint('[RtcEngine.rate] error: ${e.toString()}');
           rethrow;
         }
 
@@ -6997,7 +7077,7 @@ void rtcEngineSmokeTestCases() {
   );
 
   testWidgets(
-    'complain',
+    'RtcEngine.complain',
     (WidgetTester tester) async {
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
@@ -7017,7 +7097,7 @@ void rtcEngineSmokeTestCases() {
         );
       } catch (e) {
         if (e is! AgoraRtcException) {
-          debugPrint('[complain] error: ${e.toString()}');
+          debugPrint('[RtcEngine.complain] error: ${e.toString()}');
           rethrow;
         }
 
@@ -7032,7 +7112,7 @@ void rtcEngineSmokeTestCases() {
   );
 
   testWidgets(
-    'startRtmpStreamWithoutTranscoding',
+    'RtcEngine.startRtmpStreamWithoutTranscoding',
     (WidgetTester tester) async {
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
@@ -7051,7 +7131,7 @@ void rtcEngineSmokeTestCases() {
       } catch (e) {
         if (e is! AgoraRtcException) {
           debugPrint(
-              '[startRtmpStreamWithoutTranscoding] error: ${e.toString()}');
+              '[RtcEngine.startRtmpStreamWithoutTranscoding] error: ${e.toString()}');
           rethrow;
         }
 
@@ -7066,7 +7146,7 @@ void rtcEngineSmokeTestCases() {
   );
 
   testWidgets(
-    'startRtmpStreamWithTranscoding',
+    'RtcEngine.startRtmpStreamWithTranscoding',
     (WidgetTester tester) async {
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
@@ -7137,7 +7217,8 @@ void rtcEngineSmokeTestCases() {
         );
       } catch (e) {
         if (e is! AgoraRtcException) {
-          debugPrint('[startRtmpStreamWithTranscoding] error: ${e.toString()}');
+          debugPrint(
+              '[RtcEngine.startRtmpStreamWithTranscoding] error: ${e.toString()}');
           rethrow;
         }
 
@@ -7152,7 +7233,7 @@ void rtcEngineSmokeTestCases() {
   );
 
   testWidgets(
-    'updateRtmpTranscoding',
+    'RtcEngine.updateRtmpTranscoding',
     (WidgetTester tester) async {
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
@@ -7221,7 +7302,8 @@ void rtcEngineSmokeTestCases() {
         );
       } catch (e) {
         if (e is! AgoraRtcException) {
-          debugPrint('[updateRtmpTranscoding] error: ${e.toString()}');
+          debugPrint(
+              '[RtcEngine.updateRtmpTranscoding] error: ${e.toString()}');
           rethrow;
         }
 
@@ -7236,7 +7318,7 @@ void rtcEngineSmokeTestCases() {
   );
 
   testWidgets(
-    'startLocalVideoTranscoder',
+    'RtcEngine.startLocalVideoTranscoder',
     (WidgetTester tester) async {
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
@@ -7303,7 +7385,8 @@ void rtcEngineSmokeTestCases() {
         );
       } catch (e) {
         if (e is! AgoraRtcException) {
-          debugPrint('[startLocalVideoTranscoder] error: ${e.toString()}');
+          debugPrint(
+              '[RtcEngine.startLocalVideoTranscoder] error: ${e.toString()}');
           rethrow;
         }
 
@@ -7318,7 +7401,7 @@ void rtcEngineSmokeTestCases() {
   );
 
   testWidgets(
-    'updateLocalTranscoderConfiguration',
+    'RtcEngine.updateLocalTranscoderConfiguration',
     (WidgetTester tester) async {
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
@@ -7386,7 +7469,7 @@ void rtcEngineSmokeTestCases() {
       } catch (e) {
         if (e is! AgoraRtcException) {
           debugPrint(
-              '[updateLocalTranscoderConfiguration] error: ${e.toString()}');
+              '[RtcEngine.updateLocalTranscoderConfiguration] error: ${e.toString()}');
           rethrow;
         }
 
@@ -7401,7 +7484,7 @@ void rtcEngineSmokeTestCases() {
   );
 
   testWidgets(
-    'stopRtmpStream',
+    'RtcEngine.stopRtmpStream',
     (WidgetTester tester) async {
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
@@ -7419,7 +7502,7 @@ void rtcEngineSmokeTestCases() {
         );
       } catch (e) {
         if (e is! AgoraRtcException) {
-          debugPrint('[stopRtmpStream] error: ${e.toString()}');
+          debugPrint('[RtcEngine.stopRtmpStream] error: ${e.toString()}');
           rethrow;
         }
 
@@ -7434,7 +7517,7 @@ void rtcEngineSmokeTestCases() {
   );
 
   testWidgets(
-    'stopLocalVideoTranscoder',
+    'RtcEngine.stopLocalVideoTranscoder',
     (WidgetTester tester) async {
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
@@ -7449,7 +7532,8 @@ void rtcEngineSmokeTestCases() {
         await rtcEngine.stopLocalVideoTranscoder();
       } catch (e) {
         if (e is! AgoraRtcException) {
-          debugPrint('[stopLocalVideoTranscoder] error: ${e.toString()}');
+          debugPrint(
+              '[RtcEngine.stopLocalVideoTranscoder] error: ${e.toString()}');
           rethrow;
         }
 
@@ -7464,7 +7548,7 @@ void rtcEngineSmokeTestCases() {
   );
 
   testWidgets(
-    'startCameraCapture',
+    'RtcEngine.startCameraCapture',
     (WidgetTester tester) async {
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
@@ -7502,7 +7586,7 @@ void rtcEngineSmokeTestCases() {
         );
       } catch (e) {
         if (e is! AgoraRtcException) {
-          debugPrint('[startCameraCapture] error: ${e.toString()}');
+          debugPrint('[RtcEngine.startCameraCapture] error: ${e.toString()}');
           rethrow;
         }
 
@@ -7517,7 +7601,7 @@ void rtcEngineSmokeTestCases() {
   );
 
   testWidgets(
-    'stopCameraCapture',
+    'RtcEngine.stopCameraCapture',
     (WidgetTester tester) async {
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
@@ -7536,7 +7620,7 @@ void rtcEngineSmokeTestCases() {
         );
       } catch (e) {
         if (e is! AgoraRtcException) {
-          debugPrint('[stopCameraCapture] error: ${e.toString()}');
+          debugPrint('[RtcEngine.stopCameraCapture] error: ${e.toString()}');
           rethrow;
         }
 
@@ -7551,7 +7635,7 @@ void rtcEngineSmokeTestCases() {
   );
 
   testWidgets(
-    'setCameraDeviceOrientation',
+    'RtcEngine.setCameraDeviceOrientation',
     (WidgetTester tester) async {
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
@@ -7571,7 +7655,8 @@ void rtcEngineSmokeTestCases() {
         );
       } catch (e) {
         if (e is! AgoraRtcException) {
-          debugPrint('[setCameraDeviceOrientation] error: ${e.toString()}');
+          debugPrint(
+              '[RtcEngine.setCameraDeviceOrientation] error: ${e.toString()}');
           rethrow;
         }
 
@@ -7586,7 +7671,7 @@ void rtcEngineSmokeTestCases() {
   );
 
   testWidgets(
-    'setScreenCaptureOrientation',
+    'RtcEngine.setScreenCaptureOrientation',
     (WidgetTester tester) async {
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
@@ -7606,7 +7691,8 @@ void rtcEngineSmokeTestCases() {
         );
       } catch (e) {
         if (e is! AgoraRtcException) {
-          debugPrint('[setScreenCaptureOrientation] error: ${e.toString()}');
+          debugPrint(
+              '[RtcEngine.setScreenCaptureOrientation] error: ${e.toString()}');
           rethrow;
         }
 
@@ -7621,7 +7707,7 @@ void rtcEngineSmokeTestCases() {
   );
 
   testWidgets(
-    'getConnectionState',
+    'RtcEngine.getConnectionState',
     (WidgetTester tester) async {
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
@@ -7636,7 +7722,7 @@ void rtcEngineSmokeTestCases() {
         await rtcEngine.getConnectionState();
       } catch (e) {
         if (e is! AgoraRtcException) {
-          debugPrint('[getConnectionState] error: ${e.toString()}');
+          debugPrint('[RtcEngine.getConnectionState] error: ${e.toString()}');
           rethrow;
         }
 
@@ -7651,7 +7737,7 @@ void rtcEngineSmokeTestCases() {
   );
 
   testWidgets(
-    'registerEventHandler',
+    'RtcEngine.registerEventHandler',
     (WidgetTester tester) async {
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
@@ -7849,7 +7935,7 @@ void rtcEngineSmokeTestCases() {
         );
       } catch (e) {
         if (e is! AgoraRtcException) {
-          debugPrint('[registerEventHandler] error: ${e.toString()}');
+          debugPrint('[RtcEngine.registerEventHandler] error: ${e.toString()}');
           rethrow;
         }
 
@@ -7864,7 +7950,7 @@ void rtcEngineSmokeTestCases() {
   );
 
   testWidgets(
-    'unregisterEventHandler',
+    'RtcEngine.unregisterEventHandler',
     (WidgetTester tester) async {
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
@@ -8062,7 +8148,8 @@ void rtcEngineSmokeTestCases() {
         );
       } catch (e) {
         if (e is! AgoraRtcException) {
-          debugPrint('[unregisterEventHandler] error: ${e.toString()}');
+          debugPrint(
+              '[RtcEngine.unregisterEventHandler] error: ${e.toString()}');
           rethrow;
         }
 
@@ -8077,7 +8164,7 @@ void rtcEngineSmokeTestCases() {
   );
 
   testWidgets(
-    'setRemoteUserPriority',
+    'RtcEngine.setRemoteUserPriority',
     (WidgetTester tester) async {
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
@@ -8097,7 +8184,8 @@ void rtcEngineSmokeTestCases() {
         );
       } catch (e) {
         if (e is! AgoraRtcException) {
-          debugPrint('[setRemoteUserPriority] error: ${e.toString()}');
+          debugPrint(
+              '[RtcEngine.setRemoteUserPriority] error: ${e.toString()}');
           rethrow;
         }
 
@@ -8112,7 +8200,7 @@ void rtcEngineSmokeTestCases() {
   );
 
   testWidgets(
-    'setEncryptionMode',
+    'RtcEngine.setEncryptionMode',
     (WidgetTester tester) async {
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
@@ -8130,7 +8218,7 @@ void rtcEngineSmokeTestCases() {
         );
       } catch (e) {
         if (e is! AgoraRtcException) {
-          debugPrint('[setEncryptionMode] error: ${e.toString()}');
+          debugPrint('[RtcEngine.setEncryptionMode] error: ${e.toString()}');
           rethrow;
         }
 
@@ -8145,7 +8233,7 @@ void rtcEngineSmokeTestCases() {
   );
 
   testWidgets(
-    'setEncryptionSecret',
+    'RtcEngine.setEncryptionSecret',
     (WidgetTester tester) async {
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
@@ -8163,7 +8251,7 @@ void rtcEngineSmokeTestCases() {
         );
       } catch (e) {
         if (e is! AgoraRtcException) {
-          debugPrint('[setEncryptionSecret] error: ${e.toString()}');
+          debugPrint('[RtcEngine.setEncryptionSecret] error: ${e.toString()}');
           rethrow;
         }
 
@@ -8178,7 +8266,7 @@ void rtcEngineSmokeTestCases() {
   );
 
   testWidgets(
-    'enableEncryption',
+    'RtcEngine.enableEncryption',
     (WidgetTester tester) async {
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
@@ -8205,7 +8293,7 @@ void rtcEngineSmokeTestCases() {
         );
       } catch (e) {
         if (e is! AgoraRtcException) {
-          debugPrint('[enableEncryption] error: ${e.toString()}');
+          debugPrint('[RtcEngine.enableEncryption] error: ${e.toString()}');
           rethrow;
         }
 
@@ -8220,7 +8308,7 @@ void rtcEngineSmokeTestCases() {
   );
 
   testWidgets(
-    'sendStreamMessage',
+    'RtcEngine.sendStreamMessage',
     (WidgetTester tester) async {
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
@@ -8242,7 +8330,7 @@ void rtcEngineSmokeTestCases() {
         );
       } catch (e) {
         if (e is! AgoraRtcException) {
-          debugPrint('[sendStreamMessage] error: ${e.toString()}');
+          debugPrint('[RtcEngine.sendStreamMessage] error: ${e.toString()}');
           rethrow;
         }
 
@@ -8257,7 +8345,7 @@ void rtcEngineSmokeTestCases() {
   );
 
   testWidgets(
-    'addVideoWatermark',
+    'RtcEngine.addVideoWatermark',
     (WidgetTester tester) async {
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
@@ -8314,7 +8402,7 @@ void rtcEngineSmokeTestCases() {
         );
       } catch (e) {
         if (e is! AgoraRtcException) {
-          debugPrint('[addVideoWatermark] error: ${e.toString()}');
+          debugPrint('[RtcEngine.addVideoWatermark] error: ${e.toString()}');
           rethrow;
         }
 
@@ -8329,7 +8417,7 @@ void rtcEngineSmokeTestCases() {
   );
 
   testWidgets(
-    'clearVideoWatermarks',
+    'RtcEngine.clearVideoWatermarks',
     (WidgetTester tester) async {
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
@@ -8344,7 +8432,7 @@ void rtcEngineSmokeTestCases() {
         await rtcEngine.clearVideoWatermarks();
       } catch (e) {
         if (e is! AgoraRtcException) {
-          debugPrint('[clearVideoWatermarks] error: ${e.toString()}');
+          debugPrint('[RtcEngine.clearVideoWatermarks] error: ${e.toString()}');
           rethrow;
         }
 
@@ -8359,7 +8447,7 @@ void rtcEngineSmokeTestCases() {
   );
 
   testWidgets(
-    'pauseAudio',
+    'RtcEngine.pauseAudio',
     (WidgetTester tester) async {
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
@@ -8374,7 +8462,7 @@ void rtcEngineSmokeTestCases() {
         await rtcEngine.pauseAudio();
       } catch (e) {
         if (e is! AgoraRtcException) {
-          debugPrint('[pauseAudio] error: ${e.toString()}');
+          debugPrint('[RtcEngine.pauseAudio] error: ${e.toString()}');
           rethrow;
         }
 
@@ -8389,7 +8477,7 @@ void rtcEngineSmokeTestCases() {
   );
 
   testWidgets(
-    'resumeAudio',
+    'RtcEngine.resumeAudio',
     (WidgetTester tester) async {
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
@@ -8404,7 +8492,7 @@ void rtcEngineSmokeTestCases() {
         await rtcEngine.resumeAudio();
       } catch (e) {
         if (e is! AgoraRtcException) {
-          debugPrint('[resumeAudio] error: ${e.toString()}');
+          debugPrint('[RtcEngine.resumeAudio] error: ${e.toString()}');
           rethrow;
         }
 
@@ -8419,7 +8507,7 @@ void rtcEngineSmokeTestCases() {
   );
 
   testWidgets(
-    'enableWebSdkInteroperability',
+    'RtcEngine.enableWebSdkInteroperability',
     (WidgetTester tester) async {
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
@@ -8437,7 +8525,8 @@ void rtcEngineSmokeTestCases() {
         );
       } catch (e) {
         if (e is! AgoraRtcException) {
-          debugPrint('[enableWebSdkInteroperability] error: ${e.toString()}');
+          debugPrint(
+              '[RtcEngine.enableWebSdkInteroperability] error: ${e.toString()}');
           rethrow;
         }
 
@@ -8452,7 +8541,7 @@ void rtcEngineSmokeTestCases() {
   );
 
   testWidgets(
-    'sendCustomReportMessage',
+    'RtcEngine.sendCustomReportMessage',
     (WidgetTester tester) async {
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
@@ -8478,7 +8567,8 @@ void rtcEngineSmokeTestCases() {
         );
       } catch (e) {
         if (e is! AgoraRtcException) {
-          debugPrint('[sendCustomReportMessage] error: ${e.toString()}');
+          debugPrint(
+              '[RtcEngine.sendCustomReportMessage] error: ${e.toString()}');
           rethrow;
         }
 
@@ -8493,7 +8583,7 @@ void rtcEngineSmokeTestCases() {
   );
 
   testWidgets(
-    'registerMediaMetadataObserver',
+    'RtcEngine.registerMediaMetadataObserver',
     (WidgetTester tester) async {
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
@@ -8515,7 +8605,8 @@ void rtcEngineSmokeTestCases() {
         );
       } catch (e) {
         if (e is! AgoraRtcException) {
-          debugPrint('[registerMediaMetadataObserver] error: ${e.toString()}');
+          debugPrint(
+              '[RtcEngine.registerMediaMetadataObserver] error: ${e.toString()}');
           rethrow;
         }
 
@@ -8530,7 +8621,7 @@ void rtcEngineSmokeTestCases() {
   );
 
   testWidgets(
-    'unregisterMediaMetadataObserver',
+    'RtcEngine.unregisterMediaMetadataObserver',
     (WidgetTester tester) async {
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
@@ -8553,7 +8644,7 @@ void rtcEngineSmokeTestCases() {
       } catch (e) {
         if (e is! AgoraRtcException) {
           debugPrint(
-              '[unregisterMediaMetadataObserver] error: ${e.toString()}');
+              '[RtcEngine.unregisterMediaMetadataObserver] error: ${e.toString()}');
           rethrow;
         }
 
@@ -8568,7 +8659,7 @@ void rtcEngineSmokeTestCases() {
   );
 
   testWidgets(
-    'startAudioFrameDump',
+    'RtcEngine.startAudioFrameDump',
     (WidgetTester tester) async {
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
@@ -8598,7 +8689,7 @@ void rtcEngineSmokeTestCases() {
         );
       } catch (e) {
         if (e is! AgoraRtcException) {
-          debugPrint('[startAudioFrameDump] error: ${e.toString()}');
+          debugPrint('[RtcEngine.startAudioFrameDump] error: ${e.toString()}');
           rethrow;
         }
 
@@ -8613,7 +8704,7 @@ void rtcEngineSmokeTestCases() {
   );
 
   testWidgets(
-    'stopAudioFrameDump',
+    'RtcEngine.stopAudioFrameDump',
     (WidgetTester tester) async {
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
@@ -8635,7 +8726,7 @@ void rtcEngineSmokeTestCases() {
         );
       } catch (e) {
         if (e is! AgoraRtcException) {
-          debugPrint('[stopAudioFrameDump] error: ${e.toString()}');
+          debugPrint('[RtcEngine.stopAudioFrameDump] error: ${e.toString()}');
           rethrow;
         }
 
@@ -8650,7 +8741,7 @@ void rtcEngineSmokeTestCases() {
   );
 
   testWidgets(
-    'setAINSMode',
+    'RtcEngine.setAINSMode',
     (WidgetTester tester) async {
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
@@ -8670,7 +8761,7 @@ void rtcEngineSmokeTestCases() {
         );
       } catch (e) {
         if (e is! AgoraRtcException) {
-          debugPrint('[setAINSMode] error: ${e.toString()}');
+          debugPrint('[RtcEngine.setAINSMode] error: ${e.toString()}');
           rethrow;
         }
 
@@ -8685,7 +8776,7 @@ void rtcEngineSmokeTestCases() {
   );
 
   testWidgets(
-    'registerLocalUserAccount',
+    'RtcEngine.registerLocalUserAccount',
     (WidgetTester tester) async {
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
@@ -8705,7 +8796,8 @@ void rtcEngineSmokeTestCases() {
         );
       } catch (e) {
         if (e is! AgoraRtcException) {
-          debugPrint('[registerLocalUserAccount] error: ${e.toString()}');
+          debugPrint(
+              '[RtcEngine.registerLocalUserAccount] error: ${e.toString()}');
           rethrow;
         }
 
@@ -8720,7 +8812,7 @@ void rtcEngineSmokeTestCases() {
   );
 
   testWidgets(
-    'joinChannelWithUserAccount',
+    'RtcEngine.joinChannelWithUserAccount',
     (WidgetTester tester) async {
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
@@ -8819,7 +8911,8 @@ void rtcEngineSmokeTestCases() {
         );
       } catch (e) {
         if (e is! AgoraRtcException) {
-          debugPrint('[joinChannelWithUserAccount] error: ${e.toString()}');
+          debugPrint(
+              '[RtcEngine.joinChannelWithUserAccount] error: ${e.toString()}');
           rethrow;
         }
 
@@ -8834,7 +8927,7 @@ void rtcEngineSmokeTestCases() {
   );
 
   testWidgets(
-    'joinChannelWithUserAccountEx',
+    'RtcEngine.joinChannelWithUserAccountEx',
     (WidgetTester tester) async {
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
@@ -8933,7 +9026,8 @@ void rtcEngineSmokeTestCases() {
         );
       } catch (e) {
         if (e is! AgoraRtcException) {
-          debugPrint('[joinChannelWithUserAccountEx] error: ${e.toString()}');
+          debugPrint(
+              '[RtcEngine.joinChannelWithUserAccountEx] error: ${e.toString()}');
           rethrow;
         }
 
@@ -8948,7 +9042,7 @@ void rtcEngineSmokeTestCases() {
   );
 
   testWidgets(
-    'getUserInfoByUserAccount',
+    'RtcEngine.getUserInfoByUserAccount',
     (WidgetTester tester) async {
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
@@ -8966,7 +9060,8 @@ void rtcEngineSmokeTestCases() {
         );
       } catch (e) {
         if (e is! AgoraRtcException) {
-          debugPrint('[getUserInfoByUserAccount] error: ${e.toString()}');
+          debugPrint(
+              '[RtcEngine.getUserInfoByUserAccount] error: ${e.toString()}');
           rethrow;
         }
 
@@ -8981,7 +9076,7 @@ void rtcEngineSmokeTestCases() {
   );
 
   testWidgets(
-    'getUserInfoByUid',
+    'RtcEngine.getUserInfoByUid',
     (WidgetTester tester) async {
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
@@ -8999,7 +9094,7 @@ void rtcEngineSmokeTestCases() {
         );
       } catch (e) {
         if (e is! AgoraRtcException) {
-          debugPrint('[getUserInfoByUid] error: ${e.toString()}');
+          debugPrint('[RtcEngine.getUserInfoByUid] error: ${e.toString()}');
           rethrow;
         }
 
@@ -9014,7 +9109,7 @@ void rtcEngineSmokeTestCases() {
   );
 
   testWidgets(
-    'stopChannelMediaRelay',
+    'RtcEngine.stopChannelMediaRelay',
     (WidgetTester tester) async {
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
@@ -9029,7 +9124,8 @@ void rtcEngineSmokeTestCases() {
         await rtcEngine.stopChannelMediaRelay();
       } catch (e) {
         if (e is! AgoraRtcException) {
-          debugPrint('[stopChannelMediaRelay] error: ${e.toString()}');
+          debugPrint(
+              '[RtcEngine.stopChannelMediaRelay] error: ${e.toString()}');
           rethrow;
         }
 
@@ -9044,7 +9140,7 @@ void rtcEngineSmokeTestCases() {
   );
 
   testWidgets(
-    'pauseAllChannelMediaRelay',
+    'RtcEngine.pauseAllChannelMediaRelay',
     (WidgetTester tester) async {
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
@@ -9059,7 +9155,8 @@ void rtcEngineSmokeTestCases() {
         await rtcEngine.pauseAllChannelMediaRelay();
       } catch (e) {
         if (e is! AgoraRtcException) {
-          debugPrint('[pauseAllChannelMediaRelay] error: ${e.toString()}');
+          debugPrint(
+              '[RtcEngine.pauseAllChannelMediaRelay] error: ${e.toString()}');
           rethrow;
         }
 
@@ -9074,7 +9171,7 @@ void rtcEngineSmokeTestCases() {
   );
 
   testWidgets(
-    'resumeAllChannelMediaRelay',
+    'RtcEngine.resumeAllChannelMediaRelay',
     (WidgetTester tester) async {
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
@@ -9089,7 +9186,8 @@ void rtcEngineSmokeTestCases() {
         await rtcEngine.resumeAllChannelMediaRelay();
       } catch (e) {
         if (e is! AgoraRtcException) {
-          debugPrint('[resumeAllChannelMediaRelay] error: ${e.toString()}');
+          debugPrint(
+              '[RtcEngine.resumeAllChannelMediaRelay] error: ${e.toString()}');
           rethrow;
         }
 
@@ -9104,7 +9202,7 @@ void rtcEngineSmokeTestCases() {
   );
 
   testWidgets(
-    'setDirectCdnStreamingAudioConfiguration',
+    'RtcEngine.setDirectCdnStreamingAudioConfiguration',
     (WidgetTester tester) async {
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
@@ -9123,7 +9221,7 @@ void rtcEngineSmokeTestCases() {
       } catch (e) {
         if (e is! AgoraRtcException) {
           debugPrint(
-              '[setDirectCdnStreamingAudioConfiguration] error: ${e.toString()}');
+              '[RtcEngine.setDirectCdnStreamingAudioConfiguration] error: ${e.toString()}');
           rethrow;
         }
 
@@ -9138,7 +9236,7 @@ void rtcEngineSmokeTestCases() {
   );
 
   testWidgets(
-    'setDirectCdnStreamingVideoConfiguration',
+    'RtcEngine.setDirectCdnStreamingVideoConfiguration',
     (WidgetTester tester) async {
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
@@ -9191,7 +9289,7 @@ void rtcEngineSmokeTestCases() {
       } catch (e) {
         if (e is! AgoraRtcException) {
           debugPrint(
-              '[setDirectCdnStreamingVideoConfiguration] error: ${e.toString()}');
+              '[RtcEngine.setDirectCdnStreamingVideoConfiguration] error: ${e.toString()}');
           rethrow;
         }
 
@@ -9206,7 +9304,7 @@ void rtcEngineSmokeTestCases() {
   );
 
   testWidgets(
-    'startDirectCdnStreaming',
+    'RtcEngine.startDirectCdnStreaming',
     (WidgetTester tester) async {
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
@@ -9249,7 +9347,8 @@ void rtcEngineSmokeTestCases() {
         );
       } catch (e) {
         if (e is! AgoraRtcException) {
-          debugPrint('[startDirectCdnStreaming] error: ${e.toString()}');
+          debugPrint(
+              '[RtcEngine.startDirectCdnStreaming] error: ${e.toString()}');
           rethrow;
         }
 
@@ -9264,7 +9363,7 @@ void rtcEngineSmokeTestCases() {
   );
 
   testWidgets(
-    'stopDirectCdnStreaming',
+    'RtcEngine.stopDirectCdnStreaming',
     (WidgetTester tester) async {
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
@@ -9279,7 +9378,8 @@ void rtcEngineSmokeTestCases() {
         await rtcEngine.stopDirectCdnStreaming();
       } catch (e) {
         if (e is! AgoraRtcException) {
-          debugPrint('[stopDirectCdnStreaming] error: ${e.toString()}');
+          debugPrint(
+              '[RtcEngine.stopDirectCdnStreaming] error: ${e.toString()}');
           rethrow;
         }
 
@@ -9294,7 +9394,7 @@ void rtcEngineSmokeTestCases() {
   );
 
   testWidgets(
-    'updateDirectCdnStreamingMediaOptions',
+    'RtcEngine.updateDirectCdnStreamingMediaOptions',
     (WidgetTester tester) async {
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
@@ -9329,7 +9429,7 @@ void rtcEngineSmokeTestCases() {
       } catch (e) {
         if (e is! AgoraRtcException) {
           debugPrint(
-              '[updateDirectCdnStreamingMediaOptions] error: ${e.toString()}');
+              '[RtcEngine.updateDirectCdnStreamingMediaOptions] error: ${e.toString()}');
           rethrow;
         }
 
@@ -9344,7 +9444,7 @@ void rtcEngineSmokeTestCases() {
   );
 
   testWidgets(
-    'startRhythmPlayer',
+    'RtcEngine.startRhythmPlayer',
     (WidgetTester tester) async {
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
@@ -9371,7 +9471,7 @@ void rtcEngineSmokeTestCases() {
         );
       } catch (e) {
         if (e is! AgoraRtcException) {
-          debugPrint('[startRhythmPlayer] error: ${e.toString()}');
+          debugPrint('[RtcEngine.startRhythmPlayer] error: ${e.toString()}');
           rethrow;
         }
 
@@ -9386,7 +9486,7 @@ void rtcEngineSmokeTestCases() {
   );
 
   testWidgets(
-    'stopRhythmPlayer',
+    'RtcEngine.stopRhythmPlayer',
     (WidgetTester tester) async {
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
@@ -9401,7 +9501,7 @@ void rtcEngineSmokeTestCases() {
         await rtcEngine.stopRhythmPlayer();
       } catch (e) {
         if (e is! AgoraRtcException) {
-          debugPrint('[stopRhythmPlayer] error: ${e.toString()}');
+          debugPrint('[RtcEngine.stopRhythmPlayer] error: ${e.toString()}');
           rethrow;
         }
 
@@ -9416,7 +9516,7 @@ void rtcEngineSmokeTestCases() {
   );
 
   testWidgets(
-    'configRhythmPlayer',
+    'RtcEngine.configRhythmPlayer',
     (WidgetTester tester) async {
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
@@ -9439,7 +9539,7 @@ void rtcEngineSmokeTestCases() {
         );
       } catch (e) {
         if (e is! AgoraRtcException) {
-          debugPrint('[configRhythmPlayer] error: ${e.toString()}');
+          debugPrint('[RtcEngine.configRhythmPlayer] error: ${e.toString()}');
           rethrow;
         }
 
@@ -9454,7 +9554,7 @@ void rtcEngineSmokeTestCases() {
   );
 
   testWidgets(
-    'takeSnapshot',
+    'RtcEngine.takeSnapshot',
     (WidgetTester tester) async {
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
@@ -9474,7 +9574,7 @@ void rtcEngineSmokeTestCases() {
         );
       } catch (e) {
         if (e is! AgoraRtcException) {
-          debugPrint('[takeSnapshot] error: ${e.toString()}');
+          debugPrint('[RtcEngine.takeSnapshot] error: ${e.toString()}');
           rethrow;
         }
 
@@ -9489,7 +9589,7 @@ void rtcEngineSmokeTestCases() {
   );
 
   testWidgets(
-    'enableContentInspect',
+    'RtcEngine.enableContentInspect',
     (WidgetTester tester) async {
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
@@ -9518,7 +9618,7 @@ void rtcEngineSmokeTestCases() {
         );
       } catch (e) {
         if (e is! AgoraRtcException) {
-          debugPrint('[enableContentInspect] error: ${e.toString()}');
+          debugPrint('[RtcEngine.enableContentInspect] error: ${e.toString()}');
           rethrow;
         }
 
@@ -9533,7 +9633,7 @@ void rtcEngineSmokeTestCases() {
   );
 
   testWidgets(
-    'adjustCustomAudioPublishVolume',
+    'RtcEngine.adjustCustomAudioPublishVolume',
     (WidgetTester tester) async {
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
@@ -9553,7 +9653,8 @@ void rtcEngineSmokeTestCases() {
         );
       } catch (e) {
         if (e is! AgoraRtcException) {
-          debugPrint('[adjustCustomAudioPublishVolume] error: ${e.toString()}');
+          debugPrint(
+              '[RtcEngine.adjustCustomAudioPublishVolume] error: ${e.toString()}');
           rethrow;
         }
 
@@ -9568,7 +9669,7 @@ void rtcEngineSmokeTestCases() {
   );
 
   testWidgets(
-    'adjustCustomAudioPlayoutVolume',
+    'RtcEngine.adjustCustomAudioPlayoutVolume',
     (WidgetTester tester) async {
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
@@ -9588,7 +9689,8 @@ void rtcEngineSmokeTestCases() {
         );
       } catch (e) {
         if (e is! AgoraRtcException) {
-          debugPrint('[adjustCustomAudioPlayoutVolume] error: ${e.toString()}');
+          debugPrint(
+              '[RtcEngine.adjustCustomAudioPlayoutVolume] error: ${e.toString()}');
           rethrow;
         }
 
@@ -9603,7 +9705,7 @@ void rtcEngineSmokeTestCases() {
   );
 
   testWidgets(
-    'setCloudProxy',
+    'RtcEngine.setCloudProxy',
     (WidgetTester tester) async {
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
@@ -9621,7 +9723,7 @@ void rtcEngineSmokeTestCases() {
         );
       } catch (e) {
         if (e is! AgoraRtcException) {
-          debugPrint('[setCloudProxy] error: ${e.toString()}');
+          debugPrint('[RtcEngine.setCloudProxy] error: ${e.toString()}');
           rethrow;
         }
 
@@ -9636,7 +9738,7 @@ void rtcEngineSmokeTestCases() {
   );
 
   testWidgets(
-    'setAdvancedAudioOptions',
+    'RtcEngine.setAdvancedAudioOptions',
     (WidgetTester tester) async {
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
@@ -9659,7 +9761,8 @@ void rtcEngineSmokeTestCases() {
         );
       } catch (e) {
         if (e is! AgoraRtcException) {
-          debugPrint('[setAdvancedAudioOptions] error: ${e.toString()}');
+          debugPrint(
+              '[RtcEngine.setAdvancedAudioOptions] error: ${e.toString()}');
           rethrow;
         }
 
@@ -9674,7 +9777,7 @@ void rtcEngineSmokeTestCases() {
   );
 
   testWidgets(
-    'setAVSyncSource',
+    'RtcEngine.setAVSyncSource',
     (WidgetTester tester) async {
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
@@ -9694,7 +9797,7 @@ void rtcEngineSmokeTestCases() {
         );
       } catch (e) {
         if (e is! AgoraRtcException) {
-          debugPrint('[setAVSyncSource] error: ${e.toString()}');
+          debugPrint('[RtcEngine.setAVSyncSource] error: ${e.toString()}');
           rethrow;
         }
 
@@ -9709,7 +9812,7 @@ void rtcEngineSmokeTestCases() {
   );
 
   testWidgets(
-    'enableVideoImageSource',
+    'RtcEngine.enableVideoImageSource',
     (WidgetTester tester) async {
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
@@ -9737,7 +9840,8 @@ void rtcEngineSmokeTestCases() {
         );
       } catch (e) {
         if (e is! AgoraRtcException) {
-          debugPrint('[enableVideoImageSource] error: ${e.toString()}');
+          debugPrint(
+              '[RtcEngine.enableVideoImageSource] error: ${e.toString()}');
           rethrow;
         }
 
@@ -9752,7 +9856,7 @@ void rtcEngineSmokeTestCases() {
   );
 
   testWidgets(
-    'getCurrentMonotonicTimeInMs',
+    'RtcEngine.getCurrentMonotonicTimeInMs',
     (WidgetTester tester) async {
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
@@ -9767,7 +9871,8 @@ void rtcEngineSmokeTestCases() {
         await rtcEngine.getCurrentMonotonicTimeInMs();
       } catch (e) {
         if (e is! AgoraRtcException) {
-          debugPrint('[getCurrentMonotonicTimeInMs] error: ${e.toString()}');
+          debugPrint(
+              '[RtcEngine.getCurrentMonotonicTimeInMs] error: ${e.toString()}');
           rethrow;
         }
 
@@ -9782,7 +9887,7 @@ void rtcEngineSmokeTestCases() {
   );
 
   testWidgets(
-    'enableWirelessAccelerate',
+    'RtcEngine.enableWirelessAccelerate',
     (WidgetTester tester) async {
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
@@ -9800,7 +9905,8 @@ void rtcEngineSmokeTestCases() {
         );
       } catch (e) {
         if (e is! AgoraRtcException) {
-          debugPrint('[enableWirelessAccelerate] error: ${e.toString()}');
+          debugPrint(
+              '[RtcEngine.enableWirelessAccelerate] error: ${e.toString()}');
           rethrow;
         }
 
@@ -9815,7 +9921,7 @@ void rtcEngineSmokeTestCases() {
   );
 
   testWidgets(
-    'getNetworkType',
+    'RtcEngine.getNetworkType',
     (WidgetTester tester) async {
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
@@ -9830,7 +9936,7 @@ void rtcEngineSmokeTestCases() {
         await rtcEngine.getNetworkType();
       } catch (e) {
         if (e is! AgoraRtcException) {
-          debugPrint('[getNetworkType] error: ${e.toString()}');
+          debugPrint('[RtcEngine.getNetworkType] error: ${e.toString()}');
           rethrow;
         }
 
@@ -9845,7 +9951,7 @@ void rtcEngineSmokeTestCases() {
   );
 
   testWidgets(
-    'setParameters',
+    'RtcEngine.setParameters',
     (WidgetTester tester) async {
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
@@ -9863,7 +9969,7 @@ void rtcEngineSmokeTestCases() {
         );
       } catch (e) {
         if (e is! AgoraRtcException) {
-          debugPrint('[setParameters] error: ${e.toString()}');
+          debugPrint('[RtcEngine.setParameters] error: ${e.toString()}');
           rethrow;
         }
 
@@ -9878,7 +9984,7 @@ void rtcEngineSmokeTestCases() {
   );
 
   testWidgets(
-    'startMediaRenderingTracing',
+    'RtcEngine.startMediaRenderingTracing',
     (WidgetTester tester) async {
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
@@ -9893,7 +9999,8 @@ void rtcEngineSmokeTestCases() {
         await rtcEngine.startMediaRenderingTracing();
       } catch (e) {
         if (e is! AgoraRtcException) {
-          debugPrint('[startMediaRenderingTracing] error: ${e.toString()}');
+          debugPrint(
+              '[RtcEngine.startMediaRenderingTracing] error: ${e.toString()}');
           rethrow;
         }
 
@@ -9908,7 +10015,7 @@ void rtcEngineSmokeTestCases() {
   );
 
   testWidgets(
-    'enableInstantMediaRendering',
+    'RtcEngine.enableInstantMediaRendering',
     (WidgetTester tester) async {
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
@@ -9923,7 +10030,8 @@ void rtcEngineSmokeTestCases() {
         await rtcEngine.enableInstantMediaRendering();
       } catch (e) {
         if (e is! AgoraRtcException) {
-          debugPrint('[enableInstantMediaRendering] error: ${e.toString()}');
+          debugPrint(
+              '[RtcEngine.enableInstantMediaRendering] error: ${e.toString()}');
           rethrow;
         }
 
@@ -9938,7 +10046,7 @@ void rtcEngineSmokeTestCases() {
   );
 
   testWidgets(
-    'getNtpWallTimeInMs',
+    'RtcEngine.getNtpWallTimeInMs',
     (WidgetTester tester) async {
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
@@ -9953,7 +10061,7 @@ void rtcEngineSmokeTestCases() {
         await rtcEngine.getNtpWallTimeInMs();
       } catch (e) {
         if (e is! AgoraRtcException) {
-          debugPrint('[getNtpWallTimeInMs] error: ${e.toString()}');
+          debugPrint('[RtcEngine.getNtpWallTimeInMs] error: ${e.toString()}');
           rethrow;
         }
 
@@ -9968,7 +10076,7 @@ void rtcEngineSmokeTestCases() {
   );
 
   testWidgets(
-    'isFeatureAvailableOnDevice',
+    'RtcEngine.isFeatureAvailableOnDevice',
     (WidgetTester tester) async {
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
@@ -9986,7 +10094,8 @@ void rtcEngineSmokeTestCases() {
         );
       } catch (e) {
         if (e is! AgoraRtcException) {
-          debugPrint('[isFeatureAvailableOnDevice] error: ${e.toString()}');
+          debugPrint(
+              '[RtcEngine.isFeatureAvailableOnDevice] error: ${e.toString()}');
           rethrow;
         }
 
@@ -10001,7 +10110,7 @@ void rtcEngineSmokeTestCases() {
   );
 
   testWidgets(
-    'release',
+    'RtcEngine.release',
     (WidgetTester tester) async {
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
@@ -10019,7 +10128,7 @@ void rtcEngineSmokeTestCases() {
         );
       } catch (e) {
         if (e is! AgoraRtcException) {
-          debugPrint('[release] error: ${e.toString()}');
+          debugPrint('[RtcEngine.release] error: ${e.toString()}');
           rethrow;
         }
 
@@ -10034,7 +10143,7 @@ void rtcEngineSmokeTestCases() {
   );
 
   testWidgets(
-    'getAudioDeviceManager',
+    'RtcEngine.getAudioDeviceManager',
     (WidgetTester tester) async {
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
@@ -10049,7 +10158,8 @@ void rtcEngineSmokeTestCases() {
         rtcEngine.getAudioDeviceManager();
       } catch (e) {
         if (e is! AgoraRtcException) {
-          debugPrint('[getAudioDeviceManager] error: ${e.toString()}');
+          debugPrint(
+              '[RtcEngine.getAudioDeviceManager] error: ${e.toString()}');
           rethrow;
         }
 
@@ -10064,7 +10174,7 @@ void rtcEngineSmokeTestCases() {
   );
 
   testWidgets(
-    'getVideoDeviceManager',
+    'RtcEngine.getVideoDeviceManager',
     (WidgetTester tester) async {
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
@@ -10079,7 +10189,8 @@ void rtcEngineSmokeTestCases() {
         rtcEngine.getVideoDeviceManager();
       } catch (e) {
         if (e is! AgoraRtcException) {
-          debugPrint('[getVideoDeviceManager] error: ${e.toString()}');
+          debugPrint(
+              '[RtcEngine.getVideoDeviceManager] error: ${e.toString()}');
           rethrow;
         }
 
@@ -10094,7 +10205,7 @@ void rtcEngineSmokeTestCases() {
   );
 
   testWidgets(
-    'getMusicContentCenter',
+    'RtcEngine.getMusicContentCenter',
     (WidgetTester tester) async {
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
@@ -10109,7 +10220,8 @@ void rtcEngineSmokeTestCases() {
         rtcEngine.getMusicContentCenter();
       } catch (e) {
         if (e is! AgoraRtcException) {
-          debugPrint('[getMusicContentCenter] error: ${e.toString()}');
+          debugPrint(
+              '[RtcEngine.getMusicContentCenter] error: ${e.toString()}');
           rethrow;
         }
 
@@ -10124,7 +10236,7 @@ void rtcEngineSmokeTestCases() {
   );
 
   testWidgets(
-    'getMediaEngine',
+    'RtcEngine.getMediaEngine',
     (WidgetTester tester) async {
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
@@ -10139,7 +10251,7 @@ void rtcEngineSmokeTestCases() {
         rtcEngine.getMediaEngine();
       } catch (e) {
         if (e is! AgoraRtcException) {
-          debugPrint('[getMediaEngine] error: ${e.toString()}');
+          debugPrint('[RtcEngine.getMediaEngine] error: ${e.toString()}');
           rethrow;
         }
 
@@ -10154,7 +10266,7 @@ void rtcEngineSmokeTestCases() {
   );
 
   testWidgets(
-    'getLocalSpatialAudioEngine',
+    'RtcEngine.getLocalSpatialAudioEngine',
     (WidgetTester tester) async {
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
@@ -10169,7 +10281,8 @@ void rtcEngineSmokeTestCases() {
         rtcEngine.getLocalSpatialAudioEngine();
       } catch (e) {
         if (e is! AgoraRtcException) {
-          debugPrint('[getLocalSpatialAudioEngine] error: ${e.toString()}');
+          debugPrint(
+              '[RtcEngine.getLocalSpatialAudioEngine] error: ${e.toString()}');
           rethrow;
         }
 
@@ -10184,7 +10297,7 @@ void rtcEngineSmokeTestCases() {
   );
 
   testWidgets(
-    'getH265Transcoder',
+    'RtcEngine.getH265Transcoder',
     (WidgetTester tester) async {
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
@@ -10199,7 +10312,7 @@ void rtcEngineSmokeTestCases() {
         rtcEngine.getH265Transcoder();
       } catch (e) {
         if (e is! AgoraRtcException) {
-          debugPrint('[getH265Transcoder] error: ${e.toString()}');
+          debugPrint('[RtcEngine.getH265Transcoder] error: ${e.toString()}');
           rethrow;
         }
 
@@ -10214,7 +10327,7 @@ void rtcEngineSmokeTestCases() {
   );
 
   testWidgets(
-    'sendMetaData',
+    'RtcEngine.sendMetaData',
     (WidgetTester tester) async {
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
@@ -10244,7 +10357,7 @@ void rtcEngineSmokeTestCases() {
         );
       } catch (e) {
         if (e is! AgoraRtcException) {
-          debugPrint('[sendMetaData] error: ${e.toString()}');
+          debugPrint('[RtcEngine.sendMetaData] error: ${e.toString()}');
           rethrow;
         }
 
@@ -10259,7 +10372,7 @@ void rtcEngineSmokeTestCases() {
   );
 
   testWidgets(
-    'setMaxMetadataSize',
+    'RtcEngine.setMaxMetadataSize',
     (WidgetTester tester) async {
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
@@ -10277,7 +10390,7 @@ void rtcEngineSmokeTestCases() {
         );
       } catch (e) {
         if (e is! AgoraRtcException) {
-          debugPrint('[setMaxMetadataSize] error: ${e.toString()}');
+          debugPrint('[RtcEngine.setMaxMetadataSize] error: ${e.toString()}');
           rethrow;
         }
 
@@ -10292,7 +10405,7 @@ void rtcEngineSmokeTestCases() {
   );
 
   testWidgets(
-    'unregisterAudioEncodedFrameObserver',
+    'RtcEngine.unregisterAudioEncodedFrameObserver',
     (WidgetTester tester) async {
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
@@ -10318,7 +10431,7 @@ void rtcEngineSmokeTestCases() {
       } catch (e) {
         if (e is! AgoraRtcException) {
           debugPrint(
-              '[unregisterAudioEncodedFrameObserver] error: ${e.toString()}');
+              '[RtcEngine.unregisterAudioEncodedFrameObserver] error: ${e.toString()}');
           rethrow;
         }
 
@@ -10333,7 +10446,7 @@ void rtcEngineSmokeTestCases() {
   );
 
   testWidgets(
-    'getNativeHandle',
+    'RtcEngine.getNativeHandle',
     (WidgetTester tester) async {
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
@@ -10348,7 +10461,7 @@ void rtcEngineSmokeTestCases() {
         await rtcEngine.getNativeHandle();
       } catch (e) {
         if (e is! AgoraRtcException) {
-          debugPrint('[getNativeHandle] error: ${e.toString()}');
+          debugPrint('[RtcEngine.getNativeHandle] error: ${e.toString()}');
           rethrow;
         }
 

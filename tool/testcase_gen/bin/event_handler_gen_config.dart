@@ -9,6 +9,7 @@ List<TemplatedTestCase> createEventHandlerTestCases(String outputDir) {
       testCaseFileTemplate: '''
 $defaultHeader
 
+import 'dart:io';
 import 'dart:async';
 import 'dart:typed_data';
 
@@ -17,6 +18,8 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:iris_tester/iris_tester.dart';
 import 'package:iris_method_channel/iris_method_channel.dart';
+import 'package:path_provider/path_provider.dart';
+import 'package:path/path.dart' as path;
 
 import 'event_ids_mapping.dart';
 
@@ -27,9 +30,12 @@ void generatedTestCases(IrisTester irisTester) {
       testCaseTemplate: '''
 testWidgets('{{TEST_CASE_NAME}}', (WidgetTester tester) async {
       RtcEngine rtcEngine = createAgoraRtcEngine();
+      Directory appDocDir = await getApplicationDocumentsDirectory();
+      String logPath = path.join(appDocDir.path, 'test_log.txt');
       await rtcEngine.initialize(RtcEngineContext(
         appId: 'app_id',
         areaCode: AreaCode.areaCodeGlob.value(),
+        logConfig: LogConfig(filePath: logPath),
       ));
 
       {{TEST_CASE_BODY}}
@@ -54,6 +60,7 @@ testWidgets('{{TEST_CASE_NAME}}', (WidgetTester tester) async {
       testCaseFileTemplate: '''
 $defaultHeader
 
+import 'dart:io';
 import 'dart:async';
 import 'dart:typed_data';
 
@@ -62,6 +69,8 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:iris_tester/iris_tester.dart';
 import 'package:iris_method_channel/iris_method_channel.dart';
+import 'package:path_provider/path_provider.dart';
+import 'package:path/path.dart' as path;
 
 import 'event_ids_mapping.dart';
 
@@ -72,9 +81,12 @@ void generatedTestCases(IrisTester irisTester) {
       testCaseTemplate: '''
 testWidgets('{{TEST_CASE_NAME}}', (WidgetTester tester) async {
       RtcEngine rtcEngine = createAgoraRtcEngine();
+      Directory appDocDir = await getApplicationDocumentsDirectory();
+      String logPath = path.join(appDocDir.path, 'test_log.txt');
       await rtcEngine.initialize(RtcEngineContext(
         appId: 'app_id',
         areaCode: AreaCode.areaCodeGlob.value(),
+        logConfig: LogConfig(filePath: logPath),
       ));
 
       {{TEST_CASE_BODY}}
@@ -95,6 +107,7 @@ testWidgets('{{TEST_CASE_NAME}}', (WidgetTester tester) async {
       testCaseFileTemplate: '''
 $defaultHeader
 
+import 'dart:io';
 import 'dart:async';
 import 'dart:typed_data';
 
@@ -103,6 +116,8 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:iris_tester/iris_tester.dart';
 import 'package:iris_method_channel/iris_method_channel.dart';
+import 'package:path_provider/path_provider.dart';
+import 'package:path/path.dart' as path;
 
 import 'event_ids_mapping.dart';
 
@@ -113,9 +128,12 @@ void generatedTestCases(IrisTester irisTester) {
       testCaseTemplate: '''
 testWidgets('{{TEST_CASE_NAME}}', (WidgetTester tester) async {
       RtcEngine rtcEngine = createAgoraRtcEngine();
+      Directory appDocDir = await getApplicationDocumentsDirectory();
+      String logPath = path.join(appDocDir.path, 'test_log.txt');
       await rtcEngine.initialize(RtcEngineContext(
         appId: 'app_id',
         areaCode: AreaCode.areaCodeGlob.value(),
+        logConfig: LogConfig(filePath: logPath),
       ));
 
       {{TEST_CASE_BODY}}
@@ -136,6 +154,7 @@ testWidgets('{{TEST_CASE_NAME}}', (WidgetTester tester) async {
       testCaseFileTemplate: '''
 $defaultHeader
 
+import 'dart:io';
 import 'dart:async';
 import 'dart:typed_data';
 
@@ -144,6 +163,8 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:iris_tester/iris_tester.dart';
 import 'package:iris_method_channel/iris_method_channel.dart';
+import 'package:path_provider/path_provider.dart';
+import 'package:path/path.dart' as path;
 
 import 'event_ids_mapping.dart';
 
@@ -154,9 +175,12 @@ void generatedTestCases(IrisTester irisTester) {
       testCaseTemplate: '''
 testWidgets('{{TEST_CASE_NAME}}', (WidgetTester tester) async {
       RtcEngine rtcEngine = createAgoraRtcEngine();
+      Directory appDocDir = await getApplicationDocumentsDirectory();
+      String logPath = path.join(appDocDir.path, 'test_log.txt');
       await rtcEngine.initialize(RtcEngineContext(
         appId: 'app_id',
         areaCode: AreaCode.areaCodeGlob.value(),
+        logConfig: LogConfig(filePath: logPath),
       ));
 
       {{TEST_CASE_BODY}}
@@ -177,6 +201,7 @@ testWidgets('{{TEST_CASE_NAME}}', (WidgetTester tester) async {
       testCaseFileTemplate: '''
 $defaultHeader
 
+import 'dart:io';
 import 'dart:async';
 import 'dart:typed_data';
 
@@ -185,6 +210,8 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:iris_tester/iris_tester.dart';
 import 'package:iris_method_channel/iris_method_channel.dart';
+import 'package:path_provider/path_provider.dart';
+import 'package:path/path.dart' as path;
 
 import 'event_ids_mapping.dart';
 
@@ -195,9 +222,12 @@ void generatedTestCases(IrisTester irisTester) {
       testCaseTemplate: '''
 testWidgets('{{TEST_CASE_NAME}}', (WidgetTester tester) async {
       RtcEngine rtcEngine = createAgoraRtcEngine();
+      Directory appDocDir = await getApplicationDocumentsDirectory();
+      String logPath = path.join(appDocDir.path, 'test_log.txt');
       await rtcEngine.initialize(RtcEngineContext(
         appId: 'app_id',
         areaCode: AreaCode.areaCodeGlob.value(),
+        logConfig: LogConfig(filePath: logPath),
       ));
       final mediaEngine = rtcEngine.getMediaEngine();
 
@@ -219,6 +249,7 @@ testWidgets('{{TEST_CASE_NAME}}', (WidgetTester tester) async {
       testCaseFileTemplate: '''
 $defaultHeader
 
+import 'dart:io';
 import 'dart:async';
 import 'dart:typed_data';
 
@@ -227,6 +258,8 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:iris_tester/iris_tester.dart';
 import 'package:iris_method_channel/iris_method_channel.dart';
+import 'package:path_provider/path_provider.dart';
+import 'package:path/path.dart' as path;
 
 import 'event_ids_mapping.dart';
 
@@ -237,9 +270,12 @@ void generatedTestCases(IrisTester irisTester) {
       testCaseTemplate: '''
 testWidgets('{{TEST_CASE_NAME}}', (WidgetTester tester) async {
       RtcEngine rtcEngine = createAgoraRtcEngine();
+      Directory appDocDir = await getApplicationDocumentsDirectory();
+      String logPath = path.join(appDocDir.path, 'test_log.txt');
       await rtcEngine.initialize(RtcEngineContext(
         appId: 'app_id',
         areaCode: AreaCode.areaCodeGlob.value(),
+        logConfig: LogConfig(filePath: logPath),
       ));
       final mediaEngine = rtcEngine.getMediaEngine();
 
@@ -261,6 +297,7 @@ testWidgets('{{TEST_CASE_NAME}}', (WidgetTester tester) async {
       testCaseFileTemplate: '''
 $defaultHeader
 
+import 'dart:io';
 import 'dart:async';
 import 'dart:typed_data';
 
@@ -269,6 +306,8 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:iris_tester/iris_tester.dart';
 import 'package:iris_method_channel/iris_method_channel.dart';
+import 'package:path_provider/path_provider.dart';
+import 'package:path/path.dart' as path;
 
 import 'event_ids_mapping.dart';
 
@@ -279,9 +318,12 @@ void generatedTestCases(IrisTester irisTester) {
       testCaseTemplate: '''
 testWidgets('{{TEST_CASE_NAME}}', (WidgetTester tester) async {
       RtcEngine rtcEngine = createAgoraRtcEngine();
+      Directory appDocDir = await getApplicationDocumentsDirectory();
+      String logPath = path.join(appDocDir.path, 'test_log.txt');
       await rtcEngine.initialize(RtcEngineContext(
         appId: 'app_id',
         areaCode: AreaCode.areaCodeGlob.value(),
+        logConfig: LogConfig(filePath: logPath),
       ));
       final mediaEngine = rtcEngine.getMediaEngine();
 
@@ -303,6 +345,7 @@ testWidgets('{{TEST_CASE_NAME}}', (WidgetTester tester) async {
       testCaseFileTemplate: '''
 $defaultHeader
 
+import 'dart:io';
 import 'dart:async';
 import 'dart:typed_data';
 
@@ -311,6 +354,8 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:iris_tester/iris_tester.dart';
 import 'package:iris_method_channel/iris_method_channel.dart';
+import 'package:path_provider/path_provider.dart';
+import 'package:path/path.dart' as path;
 
 import 'event_ids_mapping.dart';
 
@@ -321,9 +366,12 @@ void generatedTestCases(IrisTester irisTester) {
       testCaseTemplate: '''
 testWidgets('{{TEST_CASE_NAME}}', (WidgetTester tester) async {
       RtcEngine rtcEngine = createAgoraRtcEngine();
+      Directory appDocDir = await getApplicationDocumentsDirectory();
+      String logPath = path.join(appDocDir.path, 'test_log.txt');
       await rtcEngine.initialize(RtcEngineContext(
         appId: 'app_id',
         areaCode: AreaCode.areaCodeGlob.value(),
+        logConfig: LogConfig(filePath: logPath),
       ));
       final mediaPlayerController = MediaPlayerController(
           rtcEngine: rtcEngine, canvas: const VideoCanvas());
@@ -347,6 +395,7 @@ testWidgets('{{TEST_CASE_NAME}}', (WidgetTester tester) async {
       testCaseFileTemplate: '''
 $defaultHeader
 
+import 'dart:io';
 import 'dart:async';
 import 'dart:typed_data';
 
@@ -355,6 +404,8 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:iris_tester/iris_tester.dart';
 import 'package:iris_method_channel/iris_method_channel.dart';
+import 'package:path_provider/path_provider.dart';
+import 'package:path/path.dart' as path;
 
 import 'event_ids_mapping.dart';
 
@@ -365,9 +416,12 @@ void generatedTestCases(IrisTester irisTester) {
       testCaseTemplate: '''
 testWidgets('{{TEST_CASE_NAME}}', (WidgetTester tester) async {
       RtcEngine rtcEngine = createAgoraRtcEngine();
+      Directory appDocDir = await getApplicationDocumentsDirectory();
+      String logPath = path.join(appDocDir.path, 'test_log.txt');
       await rtcEngine.initialize(RtcEngineContext(
         appId: 'app_id',
         areaCode: AreaCode.areaCodeGlob.value(),
+        logConfig: LogConfig(filePath: logPath),
       ));
       MediaPlayerController mediaPlayerController = MediaPlayerController(
           rtcEngine: rtcEngine, canvas: const VideoCanvas());
@@ -391,6 +445,7 @@ testWidgets('{{TEST_CASE_NAME}}', (WidgetTester tester) async {
       testCaseFileTemplate: '''
 $defaultHeader
 
+import 'dart:io';
 import 'dart:async';
 import 'dart:typed_data';
 
@@ -399,6 +454,8 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:iris_tester/iris_tester.dart';
 import 'package:iris_method_channel/iris_method_channel.dart';
+import 'package:path_provider/path_provider.dart';
+import 'package:path/path.dart' as path;
 
 import 'event_ids_mapping.dart';
 
@@ -409,9 +466,12 @@ void generatedTestCases(IrisTester irisTester) {
       testCaseTemplate: '''
 testWidgets('{{TEST_CASE_NAME}}', (WidgetTester tester) async {
       RtcEngine rtcEngine = createAgoraRtcEngine();
+      Directory appDocDir = await getApplicationDocumentsDirectory();
+      String logPath = path.join(appDocDir.path, 'test_log.txt');
       await rtcEngine.initialize(RtcEngineContext(
         appId: 'app_id',
         areaCode: AreaCode.areaCodeGlob.value(),
+        logConfig: LogConfig(filePath: logPath),
       ));
       MediaPlayerController mediaPlayerController = MediaPlayerController(
           rtcEngine: rtcEngine, canvas: const VideoCanvas());
@@ -435,6 +495,7 @@ testWidgets('{{TEST_CASE_NAME}}', (WidgetTester tester) async {
       testCaseFileTemplate: '''
 $defaultHeader
 
+import 'dart:io';
 import 'dart:async';
 import 'dart:typed_data';
 
@@ -443,6 +504,8 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:iris_tester/iris_tester.dart';
 import 'package:iris_method_channel/iris_method_channel.dart';
+import 'package:path_provider/path_provider.dart';
+import 'package:path/path.dart' as path;
 
 import 'event_ids_mapping.dart';
 
@@ -453,9 +516,12 @@ void generatedTestCases(IrisTester irisTester) {
       testCaseTemplate: '''
 testWidgets('{{TEST_CASE_NAME}}', (WidgetTester tester) async {
       RtcEngine rtcEngine = createAgoraRtcEngine();
+      Directory appDocDir = await getApplicationDocumentsDirectory();
+      String logPath = path.join(appDocDir.path, 'test_log.txt');
       await rtcEngine.initialize(RtcEngineContext(
         appId: 'app_id',
         areaCode: AreaCode.areaCodeGlob.value(),
+        logConfig: LogConfig(filePath: logPath),
       ));
       MediaPlayerController mediaPlayerController = MediaPlayerController(
           rtcEngine: rtcEngine, canvas: const VideoCanvas());
@@ -479,6 +545,7 @@ testWidgets('{{TEST_CASE_NAME}}', (WidgetTester tester) async {
       testCaseFileTemplate: '''
 $defaultHeader
 
+import 'dart:io';
 import 'dart:async';
 import 'dart:typed_data';
 
@@ -487,6 +554,8 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:iris_tester/iris_tester.dart';
 import 'package:iris_method_channel/iris_method_channel.dart';
+import 'package:path_provider/path_provider.dart';
+import 'package:path/path.dart' as path;
 
 import 'event_ids_mapping.dart';
 
@@ -497,9 +566,12 @@ void generatedTestCases(IrisTester irisTester) {
       testCaseTemplate: '''
 testWidgets('{{TEST_CASE_NAME}}', (WidgetTester tester) async {
       RtcEngine rtcEngine = createAgoraRtcEngine();
+      Directory appDocDir = await getApplicationDocumentsDirectory();
+      String logPath = path.join(appDocDir.path, 'test_log.txt');
       await rtcEngine.initialize(RtcEngineContext(
         appId: 'app_id',
         areaCode: AreaCode.areaCodeGlob.value(),
+        logConfig: LogConfig(filePath: logPath),
       ));
 
       final mediaRecorder = (await rtcEngine.createMediaRecorder(
@@ -524,6 +596,7 @@ testWidgets('{{TEST_CASE_NAME}}', (WidgetTester tester) async {
       testCaseFileTemplate: '''
 $defaultHeader
 
+import 'dart:io';
 import 'dart:async';
 import 'dart:typed_data';
 
@@ -532,6 +605,8 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:iris_tester/iris_tester.dart';
 import 'package:iris_method_channel/iris_method_channel.dart';
+import 'package:path_provider/path_provider.dart';
+import 'package:path/path.dart' as path;
 
 import 'event_ids_mapping.dart';
 
@@ -542,9 +617,12 @@ void generatedTestCases(IrisTester irisTester) {
       testCaseTemplate: '''
 testWidgets('{{TEST_CASE_NAME}}', (WidgetTester tester) async {
       RtcEngine rtcEngine = createAgoraRtcEngine();
+      Directory appDocDir = await getApplicationDocumentsDirectory();
+      String logPath = path.join(appDocDir.path, 'test_log.txt');
       await rtcEngine.initialize(RtcEngineContext(
         appId: 'app_id',
         areaCode: AreaCode.areaCodeGlob.value(),
+        logConfig: LogConfig(filePath: logPath),
       ));
 
       final musicContentCenter = rtcEngine.getMusicContentCenter();
@@ -571,6 +649,7 @@ testWidgets('{{TEST_CASE_NAME}}', (WidgetTester tester) async {
       testCaseFileTemplate: '''
 $defaultHeader
 
+import 'dart:io';
 import 'dart:async';
 import 'dart:typed_data';
 
@@ -579,6 +658,8 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:iris_tester/iris_tester.dart';
 import 'package:iris_method_channel/iris_method_channel.dart';
+import 'package:path_provider/path_provider.dart';
+import 'package:path/path.dart' as path;
 
 import 'event_ids_mapping.dart';
 
@@ -589,9 +670,12 @@ void generatedTestCases(IrisTester irisTester) {
       testCaseTemplate: '''
 testWidgets('{{TEST_CASE_NAME}}', (WidgetTester tester) async {
       RtcEngine rtcEngine = createAgoraRtcEngine();
+      Directory appDocDir = await getApplicationDocumentsDirectory();
+      String logPath = path.join(appDocDir.path, 'test_log.txt');
       await rtcEngine.initialize(RtcEngineContext(
         appId: 'app_id',
         areaCode: AreaCode.areaCodeGlob.value(),
+        logConfig: LogConfig(filePath: logPath),
       ));
 
       final h265Transcoder = rtcEngine.getH265Transcoder();

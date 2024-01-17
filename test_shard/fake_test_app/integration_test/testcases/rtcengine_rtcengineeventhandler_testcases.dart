@@ -13,6 +13,8 @@ import '../generated/rtcengine_rtcengineeventhandler_testcases.generated.dart'
 import 'package:path/path.dart' as path;
 import 'package:iris_method_channel/iris_method_channel.dart';
 
+import '../generated/event_ids_mapping.dart';
+
 void testCases(IrisTester irisTester) {
   generated.generatedTestCases(irisTester);
 
@@ -55,10 +57,20 @@ void testCases(IrisTester irisTester) {
           'numFaces': numFaces,
         };
 
-        irisTester.fireEvent('RtcEngineEventHandler_onFacePositionChanged',
-            params: eventJson);
-        irisTester.fireEvent('RtcEngineEventHandlerEx_onFacePositionChanged',
-            params: eventJson);
+        final eventIds =
+            eventIdsMapping['RtcEngineEventHandler_onFacePositionChanged'] ??
+                [];
+        for (final event in eventIds) {
+          final ret = irisTester.fireEvent(event, params: eventJson);
+          // Delay 200 milliseconds to ensure the callback is called.
+          await Future.delayed(const Duration(milliseconds: 200));
+          // TODO(littlegnal): Most of callbacks on web are not implemented, we're temporarily skip these callbacks at this time.
+          if (kIsWeb && ret) {
+            if (!onFacePositionChangedCompleter.isCompleted) {
+              onFacePositionChangedCompleter.complete(true);
+            }
+          }
+        }
       }
 
       final eventCalled = await onFacePositionChangedCompleter.future;

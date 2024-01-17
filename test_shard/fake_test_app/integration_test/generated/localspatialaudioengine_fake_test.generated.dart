@@ -11,7 +11,7 @@ import 'package:iris_method_channel/iris_method_channel.dart';
 
 void localSpatialAudioEngineSmokeTestCases() {
   testWidgets(
-    'release',
+    'LocalSpatialAudioEngine.release',
     (WidgetTester tester) async {
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
@@ -29,7 +29,8 @@ void localSpatialAudioEngineSmokeTestCases() {
         await localSpatialAudioEngine.release();
       } catch (e) {
         if (e is! AgoraRtcException) {
-          debugPrint('[release] error: ${e.toString()}');
+          debugPrint(
+              '[LocalSpatialAudioEngine.release] error: ${e.toString()}');
           rethrow;
         }
 
@@ -46,7 +47,7 @@ void localSpatialAudioEngineSmokeTestCases() {
   );
 
   testWidgets(
-    'initialize',
+    'LocalSpatialAudioEngine.initialize',
     (WidgetTester tester) async {
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
@@ -64,7 +65,8 @@ void localSpatialAudioEngineSmokeTestCases() {
         await localSpatialAudioEngine.initialize();
       } catch (e) {
         if (e is! AgoraRtcException) {
-          debugPrint('[initialize] error: ${e.toString()}');
+          debugPrint(
+              '[LocalSpatialAudioEngine.initialize] error: ${e.toString()}');
           rethrow;
         }
 
@@ -81,7 +83,7 @@ void localSpatialAudioEngineSmokeTestCases() {
   );
 
   testWidgets(
-    'updateRemotePosition',
+    'LocalSpatialAudioEngine.updateRemotePosition',
     (WidgetTester tester) async {
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
@@ -109,7 +111,8 @@ void localSpatialAudioEngineSmokeTestCases() {
         );
       } catch (e) {
         if (e is! AgoraRtcException) {
-          debugPrint('[updateRemotePosition] error: ${e.toString()}');
+          debugPrint(
+              '[LocalSpatialAudioEngine.updateRemotePosition] error: ${e.toString()}');
           rethrow;
         }
 
@@ -126,7 +129,7 @@ void localSpatialAudioEngineSmokeTestCases() {
   );
 
   testWidgets(
-    'updateRemotePositionEx',
+    'LocalSpatialAudioEngine.updateRemotePositionEx',
     (WidgetTester tester) async {
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
@@ -161,7 +164,8 @@ void localSpatialAudioEngineSmokeTestCases() {
         );
       } catch (e) {
         if (e is! AgoraRtcException) {
-          debugPrint('[updateRemotePositionEx] error: ${e.toString()}');
+          debugPrint(
+              '[LocalSpatialAudioEngine.updateRemotePositionEx] error: ${e.toString()}');
           rethrow;
         }
 
@@ -178,7 +182,7 @@ void localSpatialAudioEngineSmokeTestCases() {
   );
 
   testWidgets(
-    'removeRemotePosition',
+    'LocalSpatialAudioEngine.removeRemotePosition',
     (WidgetTester tester) async {
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
@@ -199,7 +203,8 @@ void localSpatialAudioEngineSmokeTestCases() {
         );
       } catch (e) {
         if (e is! AgoraRtcException) {
-          debugPrint('[removeRemotePosition] error: ${e.toString()}');
+          debugPrint(
+              '[LocalSpatialAudioEngine.removeRemotePosition] error: ${e.toString()}');
           rethrow;
         }
 
@@ -216,7 +221,7 @@ void localSpatialAudioEngineSmokeTestCases() {
   );
 
   testWidgets(
-    'removeRemotePositionEx',
+    'LocalSpatialAudioEngine.removeRemotePositionEx',
     (WidgetTester tester) async {
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
@@ -244,7 +249,8 @@ void localSpatialAudioEngineSmokeTestCases() {
         );
       } catch (e) {
         if (e is! AgoraRtcException) {
-          debugPrint('[removeRemotePositionEx] error: ${e.toString()}');
+          debugPrint(
+              '[LocalSpatialAudioEngine.removeRemotePositionEx] error: ${e.toString()}');
           rethrow;
         }
 
@@ -261,7 +267,7 @@ void localSpatialAudioEngineSmokeTestCases() {
   );
 
   testWidgets(
-    'clearRemotePositionsEx',
+    'LocalSpatialAudioEngine.clearRemotePositionsEx',
     (WidgetTester tester) async {
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
@@ -287,7 +293,8 @@ void localSpatialAudioEngineSmokeTestCases() {
         );
       } catch (e) {
         if (e is! AgoraRtcException) {
-          debugPrint('[clearRemotePositionsEx] error: ${e.toString()}');
+          debugPrint(
+              '[LocalSpatialAudioEngine.clearRemotePositionsEx] error: ${e.toString()}');
           rethrow;
         }
 
@@ -304,7 +311,7 @@ void localSpatialAudioEngineSmokeTestCases() {
   );
 
   testWidgets(
-    'setMaxAudioRecvCount',
+    'LocalSpatialAudioEngine.setMaxAudioRecvCount',
     (WidgetTester tester) async {
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
@@ -325,7 +332,8 @@ void localSpatialAudioEngineSmokeTestCases() {
         );
       } catch (e) {
         if (e is! AgoraRtcException) {
-          debugPrint('[setMaxAudioRecvCount] error: ${e.toString()}');
+          debugPrint(
+              '[LocalSpatialAudioEngine.setMaxAudioRecvCount] error: ${e.toString()}');
           rethrow;
         }
 
@@ -342,7 +350,7 @@ void localSpatialAudioEngineSmokeTestCases() {
   );
 
   testWidgets(
-    'setAudioRecvRange',
+    'LocalSpatialAudioEngine.setAudioRecvRange',
     (WidgetTester tester) async {
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
@@ -363,7 +371,8 @@ void localSpatialAudioEngineSmokeTestCases() {
         );
       } catch (e) {
         if (e is! AgoraRtcException) {
-          debugPrint('[setAudioRecvRange] error: ${e.toString()}');
+          debugPrint(
+              '[LocalSpatialAudioEngine.setAudioRecvRange] error: ${e.toString()}');
           rethrow;
         }
 
@@ -380,7 +389,7 @@ void localSpatialAudioEngineSmokeTestCases() {
   );
 
   testWidgets(
-    'setDistanceUnit',
+    'LocalSpatialAudioEngine.setDistanceUnit',
     (WidgetTester tester) async {
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
@@ -401,7 +410,8 @@ void localSpatialAudioEngineSmokeTestCases() {
         );
       } catch (e) {
         if (e is! AgoraRtcException) {
-          debugPrint('[setDistanceUnit] error: ${e.toString()}');
+          debugPrint(
+              '[LocalSpatialAudioEngine.setDistanceUnit] error: ${e.toString()}');
           rethrow;
         }
 
@@ -418,7 +428,7 @@ void localSpatialAudioEngineSmokeTestCases() {
   );
 
   testWidgets(
-    'updatePlayerPositionInfo',
+    'LocalSpatialAudioEngine.updatePlayerPositionInfo',
     (WidgetTester tester) async {
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
@@ -446,7 +456,8 @@ void localSpatialAudioEngineSmokeTestCases() {
         );
       } catch (e) {
         if (e is! AgoraRtcException) {
-          debugPrint('[updatePlayerPositionInfo] error: ${e.toString()}');
+          debugPrint(
+              '[LocalSpatialAudioEngine.updatePlayerPositionInfo] error: ${e.toString()}');
           rethrow;
         }
 
@@ -463,7 +474,7 @@ void localSpatialAudioEngineSmokeTestCases() {
   );
 
   testWidgets(
-    'setParameters',
+    'LocalSpatialAudioEngine.setParameters',
     (WidgetTester tester) async {
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
@@ -484,7 +495,8 @@ void localSpatialAudioEngineSmokeTestCases() {
         );
       } catch (e) {
         if (e is! AgoraRtcException) {
-          debugPrint('[setParameters] error: ${e.toString()}');
+          debugPrint(
+              '[LocalSpatialAudioEngine.setParameters] error: ${e.toString()}');
           rethrow;
         }
 
@@ -501,7 +513,7 @@ void localSpatialAudioEngineSmokeTestCases() {
   );
 
   testWidgets(
-    'muteLocalAudioStream',
+    'LocalSpatialAudioEngine.muteLocalAudioStream',
     (WidgetTester tester) async {
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
@@ -522,7 +534,8 @@ void localSpatialAudioEngineSmokeTestCases() {
         );
       } catch (e) {
         if (e is! AgoraRtcException) {
-          debugPrint('[muteLocalAudioStream] error: ${e.toString()}');
+          debugPrint(
+              '[LocalSpatialAudioEngine.muteLocalAudioStream] error: ${e.toString()}');
           rethrow;
         }
 
@@ -539,7 +552,7 @@ void localSpatialAudioEngineSmokeTestCases() {
   );
 
   testWidgets(
-    'muteAllRemoteAudioStreams',
+    'LocalSpatialAudioEngine.muteAllRemoteAudioStreams',
     (WidgetTester tester) async {
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
@@ -560,7 +573,8 @@ void localSpatialAudioEngineSmokeTestCases() {
         );
       } catch (e) {
         if (e is! AgoraRtcException) {
-          debugPrint('[muteAllRemoteAudioStreams] error: ${e.toString()}');
+          debugPrint(
+              '[LocalSpatialAudioEngine.muteAllRemoteAudioStreams] error: ${e.toString()}');
           rethrow;
         }
 
@@ -577,7 +591,7 @@ void localSpatialAudioEngineSmokeTestCases() {
   );
 
   testWidgets(
-    'muteRemoteAudioStream',
+    'LocalSpatialAudioEngine.muteRemoteAudioStream',
     (WidgetTester tester) async {
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
@@ -600,7 +614,8 @@ void localSpatialAudioEngineSmokeTestCases() {
         );
       } catch (e) {
         if (e is! AgoraRtcException) {
-          debugPrint('[muteRemoteAudioStream] error: ${e.toString()}');
+          debugPrint(
+              '[LocalSpatialAudioEngine.muteRemoteAudioStream] error: ${e.toString()}');
           rethrow;
         }
 
@@ -617,7 +632,7 @@ void localSpatialAudioEngineSmokeTestCases() {
   );
 
   testWidgets(
-    'setRemoteAudioAttenuation',
+    'LocalSpatialAudioEngine.setRemoteAudioAttenuation',
     (WidgetTester tester) async {
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
@@ -642,7 +657,8 @@ void localSpatialAudioEngineSmokeTestCases() {
         );
       } catch (e) {
         if (e is! AgoraRtcException) {
-          debugPrint('[setRemoteAudioAttenuation] error: ${e.toString()}');
+          debugPrint(
+              '[LocalSpatialAudioEngine.setRemoteAudioAttenuation] error: ${e.toString()}');
           rethrow;
         }
 
@@ -659,7 +675,7 @@ void localSpatialAudioEngineSmokeTestCases() {
   );
 
   testWidgets(
-    'setZones',
+    'LocalSpatialAudioEngine.setZones',
     (WidgetTester tester) async {
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
@@ -682,7 +698,8 @@ void localSpatialAudioEngineSmokeTestCases() {
         );
       } catch (e) {
         if (e is! AgoraRtcException) {
-          debugPrint('[setZones] error: ${e.toString()}');
+          debugPrint(
+              '[LocalSpatialAudioEngine.setZones] error: ${e.toString()}');
           rethrow;
         }
 
@@ -699,7 +716,7 @@ void localSpatialAudioEngineSmokeTestCases() {
   );
 
   testWidgets(
-    'setPlayerAttenuation',
+    'LocalSpatialAudioEngine.setPlayerAttenuation',
     (WidgetTester tester) async {
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
@@ -724,7 +741,8 @@ void localSpatialAudioEngineSmokeTestCases() {
         );
       } catch (e) {
         if (e is! AgoraRtcException) {
-          debugPrint('[setPlayerAttenuation] error: ${e.toString()}');
+          debugPrint(
+              '[LocalSpatialAudioEngine.setPlayerAttenuation] error: ${e.toString()}');
           rethrow;
         }
 
@@ -741,7 +759,7 @@ void localSpatialAudioEngineSmokeTestCases() {
   );
 
   testWidgets(
-    'clearRemotePositions',
+    'LocalSpatialAudioEngine.clearRemotePositions',
     (WidgetTester tester) async {
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
@@ -759,7 +777,8 @@ void localSpatialAudioEngineSmokeTestCases() {
         await localSpatialAudioEngine.clearRemotePositions();
       } catch (e) {
         if (e is! AgoraRtcException) {
-          debugPrint('[clearRemotePositions] error: ${e.toString()}');
+          debugPrint(
+              '[LocalSpatialAudioEngine.clearRemotePositions] error: ${e.toString()}');
           rethrow;
         }
 

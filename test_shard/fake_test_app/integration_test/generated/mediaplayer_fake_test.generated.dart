@@ -12,7 +12,7 @@ import 'package:iris_method_channel/iris_method_channel.dart';
 
 void mediaPlayerControllerSmokeTestCases() {
   testWidgets(
-    'getMediaPlayerId',
+    'MediaPlayer.getMediaPlayerId',
     (WidgetTester tester) async {
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
@@ -31,7 +31,7 @@ void mediaPlayerControllerSmokeTestCases() {
         mediaPlayerController.getMediaPlayerId();
       } catch (e) {
         if (e is! AgoraRtcException) {
-          debugPrint('[getMediaPlayerId] error: ${e.toString()}');
+          debugPrint('[MediaPlayer.getMediaPlayerId] error: ${e.toString()}');
           rethrow;
         }
 
@@ -48,7 +48,7 @@ void mediaPlayerControllerSmokeTestCases() {
   );
 
   testWidgets(
-    'open',
+    'MediaPlayer.open',
     (WidgetTester tester) async {
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
@@ -72,7 +72,7 @@ void mediaPlayerControllerSmokeTestCases() {
         );
       } catch (e) {
         if (e is! AgoraRtcException) {
-          debugPrint('[open] error: ${e.toString()}');
+          debugPrint('[MediaPlayer.open] error: ${e.toString()}');
           rethrow;
         }
 
@@ -89,7 +89,7 @@ void mediaPlayerControllerSmokeTestCases() {
   );
 
   testWidgets(
-    'openWithMediaSource',
+    'MediaPlayer.openWithMediaSource',
     (WidgetTester tester) async {
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
@@ -128,7 +128,8 @@ void mediaPlayerControllerSmokeTestCases() {
         );
       } catch (e) {
         if (e is! AgoraRtcException) {
-          debugPrint('[openWithMediaSource] error: ${e.toString()}');
+          debugPrint(
+              '[MediaPlayer.openWithMediaSource] error: ${e.toString()}');
           rethrow;
         }
 
@@ -145,7 +146,7 @@ void mediaPlayerControllerSmokeTestCases() {
   );
 
   testWidgets(
-    'play',
+    'MediaPlayer.play',
     (WidgetTester tester) async {
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
@@ -164,7 +165,7 @@ void mediaPlayerControllerSmokeTestCases() {
         await mediaPlayerController.play();
       } catch (e) {
         if (e is! AgoraRtcException) {
-          debugPrint('[play] error: ${e.toString()}');
+          debugPrint('[MediaPlayer.play] error: ${e.toString()}');
           rethrow;
         }
 
@@ -181,7 +182,7 @@ void mediaPlayerControllerSmokeTestCases() {
   );
 
   testWidgets(
-    'pause',
+    'MediaPlayer.pause',
     (WidgetTester tester) async {
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
@@ -200,7 +201,7 @@ void mediaPlayerControllerSmokeTestCases() {
         await mediaPlayerController.pause();
       } catch (e) {
         if (e is! AgoraRtcException) {
-          debugPrint('[pause] error: ${e.toString()}');
+          debugPrint('[MediaPlayer.pause] error: ${e.toString()}');
           rethrow;
         }
 
@@ -217,7 +218,7 @@ void mediaPlayerControllerSmokeTestCases() {
   );
 
   testWidgets(
-    'stop',
+    'MediaPlayer.stop',
     (WidgetTester tester) async {
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
@@ -236,7 +237,7 @@ void mediaPlayerControllerSmokeTestCases() {
         await mediaPlayerController.stop();
       } catch (e) {
         if (e is! AgoraRtcException) {
-          debugPrint('[stop] error: ${e.toString()}');
+          debugPrint('[MediaPlayer.stop] error: ${e.toString()}');
           rethrow;
         }
 
@@ -253,7 +254,7 @@ void mediaPlayerControllerSmokeTestCases() {
   );
 
   testWidgets(
-    'resume',
+    'MediaPlayer.resume',
     (WidgetTester tester) async {
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
@@ -272,7 +273,7 @@ void mediaPlayerControllerSmokeTestCases() {
         await mediaPlayerController.resume();
       } catch (e) {
         if (e is! AgoraRtcException) {
-          debugPrint('[resume] error: ${e.toString()}');
+          debugPrint('[MediaPlayer.resume] error: ${e.toString()}');
           rethrow;
         }
 
@@ -289,7 +290,7 @@ void mediaPlayerControllerSmokeTestCases() {
   );
 
   testWidgets(
-    'seek',
+    'MediaPlayer.seek',
     (WidgetTester tester) async {
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
@@ -311,7 +312,7 @@ void mediaPlayerControllerSmokeTestCases() {
         );
       } catch (e) {
         if (e is! AgoraRtcException) {
-          debugPrint('[seek] error: ${e.toString()}');
+          debugPrint('[MediaPlayer.seek] error: ${e.toString()}');
           rethrow;
         }
 
@@ -328,7 +329,7 @@ void mediaPlayerControllerSmokeTestCases() {
   );
 
   testWidgets(
-    'setAudioPitch',
+    'MediaPlayer.setAudioPitch',
     (WidgetTester tester) async {
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
@@ -350,7 +351,7 @@ void mediaPlayerControllerSmokeTestCases() {
         );
       } catch (e) {
         if (e is! AgoraRtcException) {
-          debugPrint('[setAudioPitch] error: ${e.toString()}');
+          debugPrint('[MediaPlayer.setAudioPitch] error: ${e.toString()}');
           rethrow;
         }
 
@@ -367,7 +368,7 @@ void mediaPlayerControllerSmokeTestCases() {
   );
 
   testWidgets(
-    'getDuration',
+    'MediaPlayer.getDuration',
     (WidgetTester tester) async {
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
@@ -386,7 +387,7 @@ void mediaPlayerControllerSmokeTestCases() {
         await mediaPlayerController.getDuration();
       } catch (e) {
         if (e is! AgoraRtcException) {
-          debugPrint('[getDuration] error: ${e.toString()}');
+          debugPrint('[MediaPlayer.getDuration] error: ${e.toString()}');
           rethrow;
         }
 
@@ -403,7 +404,7 @@ void mediaPlayerControllerSmokeTestCases() {
   );
 
   testWidgets(
-    'getPlayPosition',
+    'MediaPlayer.getPlayPosition',
     (WidgetTester tester) async {
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
@@ -422,7 +423,7 @@ void mediaPlayerControllerSmokeTestCases() {
         await mediaPlayerController.getPlayPosition();
       } catch (e) {
         if (e is! AgoraRtcException) {
-          debugPrint('[getPlayPosition] error: ${e.toString()}');
+          debugPrint('[MediaPlayer.getPlayPosition] error: ${e.toString()}');
           rethrow;
         }
 
@@ -439,7 +440,7 @@ void mediaPlayerControllerSmokeTestCases() {
   );
 
   testWidgets(
-    'getStreamCount',
+    'MediaPlayer.getStreamCount',
     (WidgetTester tester) async {
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
@@ -458,7 +459,7 @@ void mediaPlayerControllerSmokeTestCases() {
         await mediaPlayerController.getStreamCount();
       } catch (e) {
         if (e is! AgoraRtcException) {
-          debugPrint('[getStreamCount] error: ${e.toString()}');
+          debugPrint('[MediaPlayer.getStreamCount] error: ${e.toString()}');
           rethrow;
         }
 
@@ -475,7 +476,7 @@ void mediaPlayerControllerSmokeTestCases() {
   );
 
   testWidgets(
-    'getStreamInfo',
+    'MediaPlayer.getStreamInfo',
     (WidgetTester tester) async {
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
@@ -497,7 +498,7 @@ void mediaPlayerControllerSmokeTestCases() {
         );
       } catch (e) {
         if (e is! AgoraRtcException) {
-          debugPrint('[getStreamInfo] error: ${e.toString()}');
+          debugPrint('[MediaPlayer.getStreamInfo] error: ${e.toString()}');
           rethrow;
         }
 
@@ -514,7 +515,7 @@ void mediaPlayerControllerSmokeTestCases() {
   );
 
   testWidgets(
-    'setLoopCount',
+    'MediaPlayer.setLoopCount',
     (WidgetTester tester) async {
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
@@ -536,7 +537,7 @@ void mediaPlayerControllerSmokeTestCases() {
         );
       } catch (e) {
         if (e is! AgoraRtcException) {
-          debugPrint('[setLoopCount] error: ${e.toString()}');
+          debugPrint('[MediaPlayer.setLoopCount] error: ${e.toString()}');
           rethrow;
         }
 
@@ -553,7 +554,7 @@ void mediaPlayerControllerSmokeTestCases() {
   );
 
   testWidgets(
-    'setPlaybackSpeed',
+    'MediaPlayer.setPlaybackSpeed',
     (WidgetTester tester) async {
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
@@ -575,7 +576,7 @@ void mediaPlayerControllerSmokeTestCases() {
         );
       } catch (e) {
         if (e is! AgoraRtcException) {
-          debugPrint('[setPlaybackSpeed] error: ${e.toString()}');
+          debugPrint('[MediaPlayer.setPlaybackSpeed] error: ${e.toString()}');
           rethrow;
         }
 
@@ -592,7 +593,7 @@ void mediaPlayerControllerSmokeTestCases() {
   );
 
   testWidgets(
-    'selectAudioTrack',
+    'MediaPlayer.selectAudioTrack',
     (WidgetTester tester) async {
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
@@ -614,7 +615,7 @@ void mediaPlayerControllerSmokeTestCases() {
         );
       } catch (e) {
         if (e is! AgoraRtcException) {
-          debugPrint('[selectAudioTrack] error: ${e.toString()}');
+          debugPrint('[MediaPlayer.selectAudioTrack] error: ${e.toString()}');
           rethrow;
         }
 
@@ -631,7 +632,7 @@ void mediaPlayerControllerSmokeTestCases() {
   );
 
   testWidgets(
-    'selectMultiAudioTrack',
+    'MediaPlayer.selectMultiAudioTrack',
     (WidgetTester tester) async {
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
@@ -655,7 +656,8 @@ void mediaPlayerControllerSmokeTestCases() {
         );
       } catch (e) {
         if (e is! AgoraRtcException) {
-          debugPrint('[selectMultiAudioTrack] error: ${e.toString()}');
+          debugPrint(
+              '[MediaPlayer.selectMultiAudioTrack] error: ${e.toString()}');
           rethrow;
         }
 
@@ -672,7 +674,7 @@ void mediaPlayerControllerSmokeTestCases() {
   );
 
   testWidgets(
-    'setPlayerOptionInInt',
+    'MediaPlayer.setPlayerOptionInInt',
     (WidgetTester tester) async {
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
@@ -696,7 +698,8 @@ void mediaPlayerControllerSmokeTestCases() {
         );
       } catch (e) {
         if (e is! AgoraRtcException) {
-          debugPrint('[setPlayerOptionInInt] error: ${e.toString()}');
+          debugPrint(
+              '[MediaPlayer.setPlayerOptionInInt] error: ${e.toString()}');
           rethrow;
         }
 
@@ -713,7 +716,7 @@ void mediaPlayerControllerSmokeTestCases() {
   );
 
   testWidgets(
-    'setPlayerOptionInString',
+    'MediaPlayer.setPlayerOptionInString',
     (WidgetTester tester) async {
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
@@ -737,7 +740,8 @@ void mediaPlayerControllerSmokeTestCases() {
         );
       } catch (e) {
         if (e is! AgoraRtcException) {
-          debugPrint('[setPlayerOptionInString] error: ${e.toString()}');
+          debugPrint(
+              '[MediaPlayer.setPlayerOptionInString] error: ${e.toString()}');
           rethrow;
         }
 
@@ -754,7 +758,7 @@ void mediaPlayerControllerSmokeTestCases() {
   );
 
   testWidgets(
-    'takeScreenshot',
+    'MediaPlayer.takeScreenshot',
     (WidgetTester tester) async {
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
@@ -776,7 +780,7 @@ void mediaPlayerControllerSmokeTestCases() {
         );
       } catch (e) {
         if (e is! AgoraRtcException) {
-          debugPrint('[takeScreenshot] error: ${e.toString()}');
+          debugPrint('[MediaPlayer.takeScreenshot] error: ${e.toString()}');
           rethrow;
         }
 
@@ -793,7 +797,7 @@ void mediaPlayerControllerSmokeTestCases() {
   );
 
   testWidgets(
-    'selectInternalSubtitle',
+    'MediaPlayer.selectInternalSubtitle',
     (WidgetTester tester) async {
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
@@ -815,7 +819,8 @@ void mediaPlayerControllerSmokeTestCases() {
         );
       } catch (e) {
         if (e is! AgoraRtcException) {
-          debugPrint('[selectInternalSubtitle] error: ${e.toString()}');
+          debugPrint(
+              '[MediaPlayer.selectInternalSubtitle] error: ${e.toString()}');
           rethrow;
         }
 
@@ -832,7 +837,7 @@ void mediaPlayerControllerSmokeTestCases() {
   );
 
   testWidgets(
-    'setExternalSubtitle',
+    'MediaPlayer.setExternalSubtitle',
     (WidgetTester tester) async {
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
@@ -854,7 +859,8 @@ void mediaPlayerControllerSmokeTestCases() {
         );
       } catch (e) {
         if (e is! AgoraRtcException) {
-          debugPrint('[setExternalSubtitle] error: ${e.toString()}');
+          debugPrint(
+              '[MediaPlayer.setExternalSubtitle] error: ${e.toString()}');
           rethrow;
         }
 
@@ -871,7 +877,7 @@ void mediaPlayerControllerSmokeTestCases() {
   );
 
   testWidgets(
-    'getState',
+    'MediaPlayer.getState',
     (WidgetTester tester) async {
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
@@ -890,7 +896,7 @@ void mediaPlayerControllerSmokeTestCases() {
         await mediaPlayerController.getState();
       } catch (e) {
         if (e is! AgoraRtcException) {
-          debugPrint('[getState] error: ${e.toString()}');
+          debugPrint('[MediaPlayer.getState] error: ${e.toString()}');
           rethrow;
         }
 
@@ -907,7 +913,7 @@ void mediaPlayerControllerSmokeTestCases() {
   );
 
   testWidgets(
-    'mute',
+    'MediaPlayer.mute',
     (WidgetTester tester) async {
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
@@ -929,7 +935,7 @@ void mediaPlayerControllerSmokeTestCases() {
         );
       } catch (e) {
         if (e is! AgoraRtcException) {
-          debugPrint('[mute] error: ${e.toString()}');
+          debugPrint('[MediaPlayer.mute] error: ${e.toString()}');
           rethrow;
         }
 
@@ -946,7 +952,7 @@ void mediaPlayerControllerSmokeTestCases() {
   );
 
   testWidgets(
-    'getMute',
+    'MediaPlayer.getMute',
     (WidgetTester tester) async {
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
@@ -965,7 +971,7 @@ void mediaPlayerControllerSmokeTestCases() {
         await mediaPlayerController.getMute();
       } catch (e) {
         if (e is! AgoraRtcException) {
-          debugPrint('[getMute] error: ${e.toString()}');
+          debugPrint('[MediaPlayer.getMute] error: ${e.toString()}');
           rethrow;
         }
 
@@ -982,7 +988,7 @@ void mediaPlayerControllerSmokeTestCases() {
   );
 
   testWidgets(
-    'adjustPlayoutVolume',
+    'MediaPlayer.adjustPlayoutVolume',
     (WidgetTester tester) async {
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
@@ -1004,7 +1010,8 @@ void mediaPlayerControllerSmokeTestCases() {
         );
       } catch (e) {
         if (e is! AgoraRtcException) {
-          debugPrint('[adjustPlayoutVolume] error: ${e.toString()}');
+          debugPrint(
+              '[MediaPlayer.adjustPlayoutVolume] error: ${e.toString()}');
           rethrow;
         }
 
@@ -1021,7 +1028,7 @@ void mediaPlayerControllerSmokeTestCases() {
   );
 
   testWidgets(
-    'getPlayoutVolume',
+    'MediaPlayer.getPlayoutVolume',
     (WidgetTester tester) async {
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
@@ -1040,7 +1047,7 @@ void mediaPlayerControllerSmokeTestCases() {
         await mediaPlayerController.getPlayoutVolume();
       } catch (e) {
         if (e is! AgoraRtcException) {
-          debugPrint('[getPlayoutVolume] error: ${e.toString()}');
+          debugPrint('[MediaPlayer.getPlayoutVolume] error: ${e.toString()}');
           rethrow;
         }
 
@@ -1057,7 +1064,7 @@ void mediaPlayerControllerSmokeTestCases() {
   );
 
   testWidgets(
-    'adjustPublishSignalVolume',
+    'MediaPlayer.adjustPublishSignalVolume',
     (WidgetTester tester) async {
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
@@ -1079,7 +1086,8 @@ void mediaPlayerControllerSmokeTestCases() {
         );
       } catch (e) {
         if (e is! AgoraRtcException) {
-          debugPrint('[adjustPublishSignalVolume] error: ${e.toString()}');
+          debugPrint(
+              '[MediaPlayer.adjustPublishSignalVolume] error: ${e.toString()}');
           rethrow;
         }
 
@@ -1096,7 +1104,7 @@ void mediaPlayerControllerSmokeTestCases() {
   );
 
   testWidgets(
-    'getPublishSignalVolume',
+    'MediaPlayer.getPublishSignalVolume',
     (WidgetTester tester) async {
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
@@ -1115,7 +1123,8 @@ void mediaPlayerControllerSmokeTestCases() {
         await mediaPlayerController.getPublishSignalVolume();
       } catch (e) {
         if (e is! AgoraRtcException) {
-          debugPrint('[getPublishSignalVolume] error: ${e.toString()}');
+          debugPrint(
+              '[MediaPlayer.getPublishSignalVolume] error: ${e.toString()}');
           rethrow;
         }
 
@@ -1132,7 +1141,7 @@ void mediaPlayerControllerSmokeTestCases() {
   );
 
   testWidgets(
-    'setView',
+    'MediaPlayer.setView',
     (WidgetTester tester) async {
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
@@ -1154,7 +1163,7 @@ void mediaPlayerControllerSmokeTestCases() {
         );
       } catch (e) {
         if (e is! AgoraRtcException) {
-          debugPrint('[setView] error: ${e.toString()}');
+          debugPrint('[MediaPlayer.setView] error: ${e.toString()}');
           rethrow;
         }
 
@@ -1171,7 +1180,7 @@ void mediaPlayerControllerSmokeTestCases() {
   );
 
   testWidgets(
-    'setRenderMode',
+    'MediaPlayer.setRenderMode',
     (WidgetTester tester) async {
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
@@ -1193,7 +1202,7 @@ void mediaPlayerControllerSmokeTestCases() {
         );
       } catch (e) {
         if (e is! AgoraRtcException) {
-          debugPrint('[setRenderMode] error: ${e.toString()}');
+          debugPrint('[MediaPlayer.setRenderMode] error: ${e.toString()}');
           rethrow;
         }
 
@@ -1210,7 +1219,7 @@ void mediaPlayerControllerSmokeTestCases() {
   );
 
   testWidgets(
-    'registerPlayerSourceObserver',
+    'MediaPlayer.registerPlayerSourceObserver',
     (WidgetTester tester) async {
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
@@ -1248,7 +1257,8 @@ void mediaPlayerControllerSmokeTestCases() {
         );
       } catch (e) {
         if (e is! AgoraRtcException) {
-          debugPrint('[registerPlayerSourceObserver] error: ${e.toString()}');
+          debugPrint(
+              '[MediaPlayer.registerPlayerSourceObserver] error: ${e.toString()}');
           rethrow;
         }
 
@@ -1265,7 +1275,7 @@ void mediaPlayerControllerSmokeTestCases() {
   );
 
   testWidgets(
-    'unregisterPlayerSourceObserver',
+    'MediaPlayer.unregisterPlayerSourceObserver',
     (WidgetTester tester) async {
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
@@ -1303,7 +1313,8 @@ void mediaPlayerControllerSmokeTestCases() {
         );
       } catch (e) {
         if (e is! AgoraRtcException) {
-          debugPrint('[unregisterPlayerSourceObserver] error: ${e.toString()}');
+          debugPrint(
+              '[MediaPlayer.unregisterPlayerSourceObserver] error: ${e.toString()}');
           rethrow;
         }
 
@@ -1320,7 +1331,7 @@ void mediaPlayerControllerSmokeTestCases() {
   );
 
   testWidgets(
-    'registerAudioFrameObserver',
+    'MediaPlayer.registerAudioFrameObserver',
     (WidgetTester tester) async {
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
@@ -1347,7 +1358,8 @@ void mediaPlayerControllerSmokeTestCases() {
         );
       } catch (e) {
         if (e is! AgoraRtcException) {
-          debugPrint('[registerAudioFrameObserver] error: ${e.toString()}');
+          debugPrint(
+              '[MediaPlayer.registerAudioFrameObserver] error: ${e.toString()}');
           rethrow;
         }
 
@@ -1364,7 +1376,7 @@ void mediaPlayerControllerSmokeTestCases() {
   );
 
   testWidgets(
-    'unregisterAudioFrameObserver',
+    'MediaPlayer.unregisterAudioFrameObserver',
     (WidgetTester tester) async {
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
@@ -1388,7 +1400,8 @@ void mediaPlayerControllerSmokeTestCases() {
         );
       } catch (e) {
         if (e is! AgoraRtcException) {
-          debugPrint('[unregisterAudioFrameObserver] error: ${e.toString()}');
+          debugPrint(
+              '[MediaPlayer.unregisterAudioFrameObserver] error: ${e.toString()}');
           rethrow;
         }
 
@@ -1405,7 +1418,7 @@ void mediaPlayerControllerSmokeTestCases() {
   );
 
   testWidgets(
-    'registerVideoFrameObserver',
+    'MediaPlayer.registerVideoFrameObserver',
     (WidgetTester tester) async {
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
@@ -1430,7 +1443,8 @@ void mediaPlayerControllerSmokeTestCases() {
         );
       } catch (e) {
         if (e is! AgoraRtcException) {
-          debugPrint('[registerVideoFrameObserver] error: ${e.toString()}');
+          debugPrint(
+              '[MediaPlayer.registerVideoFrameObserver] error: ${e.toString()}');
           rethrow;
         }
 
@@ -1447,7 +1461,7 @@ void mediaPlayerControllerSmokeTestCases() {
   );
 
   testWidgets(
-    'unregisterVideoFrameObserver',
+    'MediaPlayer.unregisterVideoFrameObserver',
     (WidgetTester tester) async {
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
@@ -1472,7 +1486,8 @@ void mediaPlayerControllerSmokeTestCases() {
         );
       } catch (e) {
         if (e is! AgoraRtcException) {
-          debugPrint('[unregisterVideoFrameObserver] error: ${e.toString()}');
+          debugPrint(
+              '[MediaPlayer.unregisterVideoFrameObserver] error: ${e.toString()}');
           rethrow;
         }
 
@@ -1489,7 +1504,7 @@ void mediaPlayerControllerSmokeTestCases() {
   );
 
   testWidgets(
-    'registerMediaPlayerAudioSpectrumObserver',
+    'MediaPlayer.registerMediaPlayerAudioSpectrumObserver',
     (WidgetTester tester) async {
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
@@ -1517,7 +1532,7 @@ void mediaPlayerControllerSmokeTestCases() {
       } catch (e) {
         if (e is! AgoraRtcException) {
           debugPrint(
-              '[registerMediaPlayerAudioSpectrumObserver] error: ${e.toString()}');
+              '[MediaPlayer.registerMediaPlayerAudioSpectrumObserver] error: ${e.toString()}');
           rethrow;
         }
 
@@ -1534,7 +1549,7 @@ void mediaPlayerControllerSmokeTestCases() {
   );
 
   testWidgets(
-    'unregisterMediaPlayerAudioSpectrumObserver',
+    'MediaPlayer.unregisterMediaPlayerAudioSpectrumObserver',
     (WidgetTester tester) async {
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
@@ -1560,7 +1575,7 @@ void mediaPlayerControllerSmokeTestCases() {
       } catch (e) {
         if (e is! AgoraRtcException) {
           debugPrint(
-              '[unregisterMediaPlayerAudioSpectrumObserver] error: ${e.toString()}');
+              '[MediaPlayer.unregisterMediaPlayerAudioSpectrumObserver] error: ${e.toString()}');
           rethrow;
         }
 
@@ -1577,7 +1592,7 @@ void mediaPlayerControllerSmokeTestCases() {
   );
 
   testWidgets(
-    'setAudioDualMonoMode',
+    'MediaPlayer.setAudioDualMonoMode',
     (WidgetTester tester) async {
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
@@ -1599,7 +1614,8 @@ void mediaPlayerControllerSmokeTestCases() {
         );
       } catch (e) {
         if (e is! AgoraRtcException) {
-          debugPrint('[setAudioDualMonoMode] error: ${e.toString()}');
+          debugPrint(
+              '[MediaPlayer.setAudioDualMonoMode] error: ${e.toString()}');
           rethrow;
         }
 
@@ -1616,7 +1632,7 @@ void mediaPlayerControllerSmokeTestCases() {
   );
 
   testWidgets(
-    'getPlayerSdkVersion',
+    'MediaPlayer.getPlayerSdkVersion',
     (WidgetTester tester) async {
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
@@ -1635,7 +1651,8 @@ void mediaPlayerControllerSmokeTestCases() {
         await mediaPlayerController.getPlayerSdkVersion();
       } catch (e) {
         if (e is! AgoraRtcException) {
-          debugPrint('[getPlayerSdkVersion] error: ${e.toString()}');
+          debugPrint(
+              '[MediaPlayer.getPlayerSdkVersion] error: ${e.toString()}');
           rethrow;
         }
 
@@ -1652,7 +1669,7 @@ void mediaPlayerControllerSmokeTestCases() {
   );
 
   testWidgets(
-    'getPlaySrc',
+    'MediaPlayer.getPlaySrc',
     (WidgetTester tester) async {
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
@@ -1671,7 +1688,7 @@ void mediaPlayerControllerSmokeTestCases() {
         await mediaPlayerController.getPlaySrc();
       } catch (e) {
         if (e is! AgoraRtcException) {
-          debugPrint('[getPlaySrc] error: ${e.toString()}');
+          debugPrint('[MediaPlayer.getPlaySrc] error: ${e.toString()}');
           rethrow;
         }
 
@@ -1688,7 +1705,7 @@ void mediaPlayerControllerSmokeTestCases() {
   );
 
   testWidgets(
-    'openWithAgoraCDNSrc',
+    'MediaPlayer.openWithAgoraCDNSrc',
     (WidgetTester tester) async {
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
@@ -1712,7 +1729,8 @@ void mediaPlayerControllerSmokeTestCases() {
         );
       } catch (e) {
         if (e is! AgoraRtcException) {
-          debugPrint('[openWithAgoraCDNSrc] error: ${e.toString()}');
+          debugPrint(
+              '[MediaPlayer.openWithAgoraCDNSrc] error: ${e.toString()}');
           rethrow;
         }
 
@@ -1729,7 +1747,7 @@ void mediaPlayerControllerSmokeTestCases() {
   );
 
   testWidgets(
-    'getAgoraCDNLineCount',
+    'MediaPlayer.getAgoraCDNLineCount',
     (WidgetTester tester) async {
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
@@ -1748,7 +1766,8 @@ void mediaPlayerControllerSmokeTestCases() {
         await mediaPlayerController.getAgoraCDNLineCount();
       } catch (e) {
         if (e is! AgoraRtcException) {
-          debugPrint('[getAgoraCDNLineCount] error: ${e.toString()}');
+          debugPrint(
+              '[MediaPlayer.getAgoraCDNLineCount] error: ${e.toString()}');
           rethrow;
         }
 
@@ -1765,7 +1784,7 @@ void mediaPlayerControllerSmokeTestCases() {
   );
 
   testWidgets(
-    'switchAgoraCDNLineByIndex',
+    'MediaPlayer.switchAgoraCDNLineByIndex',
     (WidgetTester tester) async {
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
@@ -1787,7 +1806,8 @@ void mediaPlayerControllerSmokeTestCases() {
         );
       } catch (e) {
         if (e is! AgoraRtcException) {
-          debugPrint('[switchAgoraCDNLineByIndex] error: ${e.toString()}');
+          debugPrint(
+              '[MediaPlayer.switchAgoraCDNLineByIndex] error: ${e.toString()}');
           rethrow;
         }
 
@@ -1804,7 +1824,7 @@ void mediaPlayerControllerSmokeTestCases() {
   );
 
   testWidgets(
-    'getCurrentAgoraCDNIndex',
+    'MediaPlayer.getCurrentAgoraCDNIndex',
     (WidgetTester tester) async {
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
@@ -1823,7 +1843,8 @@ void mediaPlayerControllerSmokeTestCases() {
         await mediaPlayerController.getCurrentAgoraCDNIndex();
       } catch (e) {
         if (e is! AgoraRtcException) {
-          debugPrint('[getCurrentAgoraCDNIndex] error: ${e.toString()}');
+          debugPrint(
+              '[MediaPlayer.getCurrentAgoraCDNIndex] error: ${e.toString()}');
           rethrow;
         }
 
@@ -1840,7 +1861,7 @@ void mediaPlayerControllerSmokeTestCases() {
   );
 
   testWidgets(
-    'enableAutoSwitchAgoraCDN',
+    'MediaPlayer.enableAutoSwitchAgoraCDN',
     (WidgetTester tester) async {
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
@@ -1862,7 +1883,8 @@ void mediaPlayerControllerSmokeTestCases() {
         );
       } catch (e) {
         if (e is! AgoraRtcException) {
-          debugPrint('[enableAutoSwitchAgoraCDN] error: ${e.toString()}');
+          debugPrint(
+              '[MediaPlayer.enableAutoSwitchAgoraCDN] error: ${e.toString()}');
           rethrow;
         }
 
@@ -1879,7 +1901,7 @@ void mediaPlayerControllerSmokeTestCases() {
   );
 
   testWidgets(
-    'renewAgoraCDNSrcToken',
+    'MediaPlayer.renewAgoraCDNSrcToken',
     (WidgetTester tester) async {
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
@@ -1903,7 +1925,8 @@ void mediaPlayerControllerSmokeTestCases() {
         );
       } catch (e) {
         if (e is! AgoraRtcException) {
-          debugPrint('[renewAgoraCDNSrcToken] error: ${e.toString()}');
+          debugPrint(
+              '[MediaPlayer.renewAgoraCDNSrcToken] error: ${e.toString()}');
           rethrow;
         }
 
@@ -1920,7 +1943,7 @@ void mediaPlayerControllerSmokeTestCases() {
   );
 
   testWidgets(
-    'switchAgoraCDNSrc',
+    'MediaPlayer.switchAgoraCDNSrc',
     (WidgetTester tester) async {
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
@@ -1944,7 +1967,7 @@ void mediaPlayerControllerSmokeTestCases() {
         );
       } catch (e) {
         if (e is! AgoraRtcException) {
-          debugPrint('[switchAgoraCDNSrc] error: ${e.toString()}');
+          debugPrint('[MediaPlayer.switchAgoraCDNSrc] error: ${e.toString()}');
           rethrow;
         }
 
@@ -1961,7 +1984,7 @@ void mediaPlayerControllerSmokeTestCases() {
   );
 
   testWidgets(
-    'switchSrc',
+    'MediaPlayer.switchSrc',
     (WidgetTester tester) async {
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
@@ -1985,7 +2008,7 @@ void mediaPlayerControllerSmokeTestCases() {
         );
       } catch (e) {
         if (e is! AgoraRtcException) {
-          debugPrint('[switchSrc] error: ${e.toString()}');
+          debugPrint('[MediaPlayer.switchSrc] error: ${e.toString()}');
           rethrow;
         }
 
@@ -2002,7 +2025,7 @@ void mediaPlayerControllerSmokeTestCases() {
   );
 
   testWidgets(
-    'preloadSrc',
+    'MediaPlayer.preloadSrc',
     (WidgetTester tester) async {
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
@@ -2026,7 +2049,7 @@ void mediaPlayerControllerSmokeTestCases() {
         );
       } catch (e) {
         if (e is! AgoraRtcException) {
-          debugPrint('[preloadSrc] error: ${e.toString()}');
+          debugPrint('[MediaPlayer.preloadSrc] error: ${e.toString()}');
           rethrow;
         }
 
@@ -2043,7 +2066,7 @@ void mediaPlayerControllerSmokeTestCases() {
   );
 
   testWidgets(
-    'playPreloadedSrc',
+    'MediaPlayer.playPreloadedSrc',
     (WidgetTester tester) async {
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
@@ -2065,7 +2088,7 @@ void mediaPlayerControllerSmokeTestCases() {
         );
       } catch (e) {
         if (e is! AgoraRtcException) {
-          debugPrint('[playPreloadedSrc] error: ${e.toString()}');
+          debugPrint('[MediaPlayer.playPreloadedSrc] error: ${e.toString()}');
           rethrow;
         }
 
@@ -2082,7 +2105,7 @@ void mediaPlayerControllerSmokeTestCases() {
   );
 
   testWidgets(
-    'unloadSrc',
+    'MediaPlayer.unloadSrc',
     (WidgetTester tester) async {
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
@@ -2104,7 +2127,7 @@ void mediaPlayerControllerSmokeTestCases() {
         );
       } catch (e) {
         if (e is! AgoraRtcException) {
-          debugPrint('[unloadSrc] error: ${e.toString()}');
+          debugPrint('[MediaPlayer.unloadSrc] error: ${e.toString()}');
           rethrow;
         }
 
@@ -2121,7 +2144,7 @@ void mediaPlayerControllerSmokeTestCases() {
   );
 
   testWidgets(
-    'setSpatialAudioParams',
+    'MediaPlayer.setSpatialAudioParams',
     (WidgetTester tester) async {
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
@@ -2160,7 +2183,8 @@ void mediaPlayerControllerSmokeTestCases() {
         );
       } catch (e) {
         if (e is! AgoraRtcException) {
-          debugPrint('[setSpatialAudioParams] error: ${e.toString()}');
+          debugPrint(
+              '[MediaPlayer.setSpatialAudioParams] error: ${e.toString()}');
           rethrow;
         }
 
@@ -2177,7 +2201,7 @@ void mediaPlayerControllerSmokeTestCases() {
   );
 
   testWidgets(
-    'setSoundPositionParams',
+    'MediaPlayer.setSoundPositionParams',
     (WidgetTester tester) async {
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
@@ -2201,7 +2225,8 @@ void mediaPlayerControllerSmokeTestCases() {
         );
       } catch (e) {
         if (e is! AgoraRtcException) {
-          debugPrint('[setSoundPositionParams] error: ${e.toString()}');
+          debugPrint(
+              '[MediaPlayer.setSoundPositionParams] error: ${e.toString()}');
           rethrow;
         }
 

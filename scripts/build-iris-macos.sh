@@ -14,7 +14,9 @@ echo "Cleaning build cache..."
 rm -rf $IRIS_PROJECT_PATH/build
 
 echo "Building iris for mac..."
-bash $SCRIPTS_PATH/build-iris-macos-arch.sh $IRIS_PROJECT_PATH MAC $BUILD_TYPE
+bash $IRIS_PROJECT_PATH/ci/build-mac.sh buildALL $BUILD_TYPE
+
+IRIS_OUTPUT=${IRIS_PROJECT_PATH}/build/android/$IRIS_TYPE/ALL_ARCHITECTURE/output/$BUILD_TYPE
 
 if [[ -d "$AGORA_FLUTTER_PROJECT_PATH/macos/AgoraRtcWrapper.framework" ]]; then
     rm -rf $AGORA_FLUTTER_PROJECT_PATH/macos/AgoraRtcWrapper.framework

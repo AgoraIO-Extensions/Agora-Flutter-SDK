@@ -88,7 +88,7 @@ class RtcEngineEventHandlerWrapper implements EventLoopEventHandler {
             channel, uid, proxyType, localProxyIp, elapsed);
         return true;
 
-      case 'onError_aaa1a08':
+      case 'onError_d26c0fd':
         if (rtcEngineEventHandler.onError == null) {
           return true;
         }
@@ -105,7 +105,7 @@ class RtcEngineEventHandlerWrapper implements EventLoopEventHandler {
         rtcEngineEventHandler.onError!(err, msg);
         return true;
 
-      case 'onAudioQuality_ec43b47':
+      case 'onAudioQuality_5c7294b':
         if (rtcEngineEventHandler.onAudioQuality == null) {
           return true;
         }
@@ -147,7 +147,7 @@ class RtcEngineEventHandlerWrapper implements EventLoopEventHandler {
         rtcEngineEventHandler.onLastmileProbeResult!(result);
         return true;
 
-      case 'onAudioVolumeIndication_d29adad':
+      case 'onAudioVolumeIndication_781482a':
         if (rtcEngineEventHandler.onAudioVolumeIndication == null) {
           return true;
         }
@@ -208,7 +208,7 @@ class RtcEngineEventHandlerWrapper implements EventLoopEventHandler {
         rtcEngineEventHandler.onRtcStats!(connection, stats);
         return true;
 
-      case 'onAudioDeviceStateChanged_043d4e0':
+      case 'onAudioDeviceStateChanged_976d8c3':
         if (rtcEngineEventHandler.onAudioDeviceStateChanged == null) {
           return true;
         }
@@ -272,7 +272,7 @@ class RtcEngineEventHandlerWrapper implements EventLoopEventHandler {
         rtcEngineEventHandler.onAudioEffectFinished!(soundId);
         return true;
 
-      case 'onVideoDeviceStateChanged_043d4e0':
+      case 'onVideoDeviceStateChanged_976d8c3':
         if (rtcEngineEventHandler.onVideoDeviceStateChanged == null) {
           return true;
         }
@@ -292,7 +292,7 @@ class RtcEngineEventHandlerWrapper implements EventLoopEventHandler {
             deviceId, deviceType, deviceState);
         return true;
 
-      case 'onNetworkQuality_69f3a52':
+      case 'onNetworkQuality_34d8b3c':
         if (rtcEngineEventHandler.onNetworkQuality == null) {
           return true;
         }
@@ -366,7 +366,7 @@ class RtcEngineEventHandlerWrapper implements EventLoopEventHandler {
         rtcEngineEventHandler.onDownlinkNetworkInfoUpdated!(info);
         return true;
 
-      case 'onLastmileQuality_544f910':
+      case 'onLastmileQuality_46f8ab7':
         if (rtcEngineEventHandler.onLastmileQuality == null) {
           return true;
         }
@@ -806,7 +806,7 @@ class RtcEngineEventHandlerWrapper implements EventLoopEventHandler {
         rtcEngineEventHandler.onCameraExposureAreaChanged!(x, y, width, height);
         return true;
 
-      case 'onFacePositionChanged_e56adf2':
+      case 'onFacePositionChanged_197b4a7':
         if (rtcEngineEventHandler.onFacePositionChanged == null) {
           return true;
         }
@@ -928,7 +928,7 @@ class RtcEngineEventHandlerWrapper implements EventLoopEventHandler {
         rtcEngineEventHandler.onConnectionBanned!(connection);
         return true;
 
-      case 'onStreamMessage_b73072b':
+      case 'onStreamMessage_99898cb':
         if (rtcEngineEventHandler.onStreamMessage == null) {
           return true;
         }
@@ -956,7 +956,7 @@ class RtcEngineEventHandlerWrapper implements EventLoopEventHandler {
             connection, remoteUid, streamId, data, length, sentTs);
         return true;
 
-      case 'onStreamMessageError_e5c4666':
+      case 'onStreamMessageError_fe302fc':
         if (rtcEngineEventHandler.onStreamMessageError == null) {
           return true;
         }
@@ -1336,7 +1336,7 @@ class RtcEngineEventHandlerWrapper implements EventLoopEventHandler {
         rtcEngineEventHandler.onAudioRoutingChanged!(routing);
         return true;
 
-      case 'onChannelMediaRelayStateChanged_e0e2b0a':
+      case 'onChannelMediaRelayStateChanged_4e92b3c':
         if (rtcEngineEventHandler.onChannelMediaRelayStateChanged == null) {
           return true;
         }

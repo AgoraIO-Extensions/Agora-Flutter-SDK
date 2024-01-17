@@ -12,7 +12,7 @@ import 'package:iris_method_channel/iris_method_channel.dart';
 
 void mediaEngineSmokeTestCases() {
   testWidgets(
-    'registerAudioFrameObserver',
+    'MediaEngine.registerAudioFrameObserver',
     (WidgetTester tester) async {
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
@@ -39,7 +39,8 @@ void mediaEngineSmokeTestCases() {
         );
       } catch (e) {
         if (e is! AgoraRtcException) {
-          debugPrint('[registerAudioFrameObserver] error: ${e.toString()}');
+          debugPrint(
+              '[MediaEngine.registerAudioFrameObserver] error: ${e.toString()}');
           rethrow;
         }
 
@@ -56,7 +57,7 @@ void mediaEngineSmokeTestCases() {
   );
 
   testWidgets(
-    'registerVideoFrameObserver',
+    'MediaEngine.registerVideoFrameObserver',
     (WidgetTester tester) async {
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
@@ -86,7 +87,8 @@ void mediaEngineSmokeTestCases() {
         );
       } catch (e) {
         if (e is! AgoraRtcException) {
-          debugPrint('[registerVideoFrameObserver] error: ${e.toString()}');
+          debugPrint(
+              '[MediaEngine.registerVideoFrameObserver] error: ${e.toString()}');
           rethrow;
         }
 
@@ -103,7 +105,7 @@ void mediaEngineSmokeTestCases() {
   );
 
   testWidgets(
-    'registerVideoEncodedFrameObserver',
+    'MediaEngine.registerVideoEncodedFrameObserver',
     (WidgetTester tester) async {
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
@@ -127,7 +129,7 @@ void mediaEngineSmokeTestCases() {
       } catch (e) {
         if (e is! AgoraRtcException) {
           debugPrint(
-              '[registerVideoEncodedFrameObserver] error: ${e.toString()}');
+              '[MediaEngine.registerVideoEncodedFrameObserver] error: ${e.toString()}');
           rethrow;
         }
 
@@ -144,7 +146,7 @@ void mediaEngineSmokeTestCases() {
   );
 
   testWidgets(
-    'pushAudioFrame',
+    'MediaEngine.pushAudioFrame',
     (WidgetTester tester) async {
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
@@ -188,7 +190,7 @@ void mediaEngineSmokeTestCases() {
         );
       } catch (e) {
         if (e is! AgoraRtcException) {
-          debugPrint('[pushAudioFrame] error: ${e.toString()}');
+          debugPrint('[MediaEngine.pushAudioFrame] error: ${e.toString()}');
           rethrow;
         }
 
@@ -205,7 +207,7 @@ void mediaEngineSmokeTestCases() {
   );
 
   testWidgets(
-    'pullAudioFrame',
+    'MediaEngine.pullAudioFrame',
     (WidgetTester tester) async {
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
@@ -247,7 +249,7 @@ void mediaEngineSmokeTestCases() {
         );
       } catch (e) {
         if (e is! AgoraRtcException) {
-          debugPrint('[pullAudioFrame] error: ${e.toString()}');
+          debugPrint('[MediaEngine.pullAudioFrame] error: ${e.toString()}');
           rethrow;
         }
 
@@ -264,7 +266,7 @@ void mediaEngineSmokeTestCases() {
   );
 
   testWidgets(
-    'setExternalVideoSource',
+    'MediaEngine.setExternalVideoSource',
     (WidgetTester tester) async {
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
@@ -299,7 +301,8 @@ void mediaEngineSmokeTestCases() {
         );
       } catch (e) {
         if (e is! AgoraRtcException) {
-          debugPrint('[setExternalVideoSource] error: ${e.toString()}');
+          debugPrint(
+              '[MediaEngine.setExternalVideoSource] error: ${e.toString()}');
           rethrow;
         }
 
@@ -316,7 +319,7 @@ void mediaEngineSmokeTestCases() {
   );
 
   testWidgets(
-    'setExternalAudioSource',
+    'MediaEngine.setExternalAudioSource',
     (WidgetTester tester) async {
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
@@ -344,7 +347,8 @@ void mediaEngineSmokeTestCases() {
         );
       } catch (e) {
         if (e is! AgoraRtcException) {
-          debugPrint('[setExternalAudioSource] error: ${e.toString()}');
+          debugPrint(
+              '[MediaEngine.setExternalAudioSource] error: ${e.toString()}');
           rethrow;
         }
 
@@ -361,7 +365,7 @@ void mediaEngineSmokeTestCases() {
   );
 
   testWidgets(
-    'destroyCustomAudioTrack',
+    'MediaEngine.destroyCustomAudioTrack',
     (WidgetTester tester) async {
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
@@ -381,7 +385,8 @@ void mediaEngineSmokeTestCases() {
         );
       } catch (e) {
         if (e is! AgoraRtcException) {
-          debugPrint('[destroyCustomAudioTrack] error: ${e.toString()}');
+          debugPrint(
+              '[MediaEngine.destroyCustomAudioTrack] error: ${e.toString()}');
           rethrow;
         }
 
@@ -398,7 +403,7 @@ void mediaEngineSmokeTestCases() {
   );
 
   testWidgets(
-    'setExternalAudioSink',
+    'MediaEngine.setExternalAudioSink',
     (WidgetTester tester) async {
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
@@ -422,7 +427,8 @@ void mediaEngineSmokeTestCases() {
         );
       } catch (e) {
         if (e is! AgoraRtcException) {
-          debugPrint('[setExternalAudioSink] error: ${e.toString()}');
+          debugPrint(
+              '[MediaEngine.setExternalAudioSink] error: ${e.toString()}');
           rethrow;
         }
 
@@ -439,7 +445,7 @@ void mediaEngineSmokeTestCases() {
   );
 
   testWidgets(
-    'enableCustomAudioLocalPlayback',
+    'MediaEngine.enableCustomAudioLocalPlayback',
     (WidgetTester tester) async {
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
@@ -461,7 +467,8 @@ void mediaEngineSmokeTestCases() {
         );
       } catch (e) {
         if (e is! AgoraRtcException) {
-          debugPrint('[enableCustomAudioLocalPlayback] error: ${e.toString()}');
+          debugPrint(
+              '[MediaEngine.enableCustomAudioLocalPlayback] error: ${e.toString()}');
           rethrow;
         }
 
@@ -478,7 +485,7 @@ void mediaEngineSmokeTestCases() {
   );
 
   testWidgets(
-    'pushVideoFrame',
+    'MediaEngine.pushVideoFrame',
     (WidgetTester tester) async {
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
@@ -537,7 +544,7 @@ void mediaEngineSmokeTestCases() {
         );
       } catch (e) {
         if (e is! AgoraRtcException) {
-          debugPrint('[pushVideoFrame] error: ${e.toString()}');
+          debugPrint('[MediaEngine.pushVideoFrame] error: ${e.toString()}');
           rethrow;
         }
 
@@ -554,7 +561,7 @@ void mediaEngineSmokeTestCases() {
   );
 
   testWidgets(
-    'pushEncodedVideoImage',
+    'MediaEngine.pushEncodedVideoImage',
     (WidgetTester tester) async {
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
@@ -608,7 +615,8 @@ void mediaEngineSmokeTestCases() {
         );
       } catch (e) {
         if (e is! AgoraRtcException) {
-          debugPrint('[pushEncodedVideoImage] error: ${e.toString()}');
+          debugPrint(
+              '[MediaEngine.pushEncodedVideoImage] error: ${e.toString()}');
           rethrow;
         }
 
@@ -625,7 +633,7 @@ void mediaEngineSmokeTestCases() {
   );
 
   testWidgets(
-    'release',
+    'MediaEngine.release',
     (WidgetTester tester) async {
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
@@ -642,7 +650,7 @@ void mediaEngineSmokeTestCases() {
         await mediaEngine.release();
       } catch (e) {
         if (e is! AgoraRtcException) {
-          debugPrint('[release] error: ${e.toString()}');
+          debugPrint('[MediaEngine.release] error: ${e.toString()}');
           rethrow;
         }
 
@@ -659,7 +667,7 @@ void mediaEngineSmokeTestCases() {
   );
 
   testWidgets(
-    'unregisterAudioFrameObserver',
+    'MediaEngine.unregisterAudioFrameObserver',
     (WidgetTester tester) async {
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
@@ -686,7 +694,8 @@ void mediaEngineSmokeTestCases() {
         );
       } catch (e) {
         if (e is! AgoraRtcException) {
-          debugPrint('[unregisterAudioFrameObserver] error: ${e.toString()}');
+          debugPrint(
+              '[MediaEngine.unregisterAudioFrameObserver] error: ${e.toString()}');
           rethrow;
         }
 
@@ -703,7 +712,7 @@ void mediaEngineSmokeTestCases() {
   );
 
   testWidgets(
-    'unregisterVideoFrameObserver',
+    'MediaEngine.unregisterVideoFrameObserver',
     (WidgetTester tester) async {
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
@@ -733,7 +742,8 @@ void mediaEngineSmokeTestCases() {
         );
       } catch (e) {
         if (e is! AgoraRtcException) {
-          debugPrint('[unregisterVideoFrameObserver] error: ${e.toString()}');
+          debugPrint(
+              '[MediaEngine.unregisterVideoFrameObserver] error: ${e.toString()}');
           rethrow;
         }
 
@@ -750,7 +760,7 @@ void mediaEngineSmokeTestCases() {
   );
 
   testWidgets(
-    'unregisterVideoEncodedFrameObserver',
+    'MediaEngine.unregisterVideoEncodedFrameObserver',
     (WidgetTester tester) async {
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
@@ -774,7 +784,7 @@ void mediaEngineSmokeTestCases() {
       } catch (e) {
         if (e is! AgoraRtcException) {
           debugPrint(
-              '[unregisterVideoEncodedFrameObserver] error: ${e.toString()}');
+              '[MediaEngine.unregisterVideoEncodedFrameObserver] error: ${e.toString()}');
           rethrow;
         }
 

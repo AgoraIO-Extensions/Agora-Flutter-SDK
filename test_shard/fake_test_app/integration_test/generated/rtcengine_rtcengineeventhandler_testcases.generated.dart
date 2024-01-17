@@ -2,6 +2,7 @@
 
 // ignore_for_file: deprecated_member_use,constant_identifier_names
 
+import 'dart:io';
 import 'dart:async';
 import 'dart:typed_data';
 
@@ -10,17 +11,22 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:iris_tester/iris_tester.dart';
 import 'package:iris_method_channel/iris_method_channel.dart';
+import 'package:path_provider/path_provider.dart';
+import 'package:path/path.dart' as path;
 
 import 'event_ids_mapping.dart';
 
 void generatedTestCases(IrisTester irisTester) {
   testWidgets(
-    'onJoinChannelSuccess',
+    'RtcEngineEventHandler.onJoinChannelSuccess',
     (WidgetTester tester) async {
       RtcEngine rtcEngine = createAgoraRtcEngine();
+      Directory appDocDir = await getApplicationDocumentsDirectory();
+      String logPath = path.join(appDocDir.path, 'test_log.txt');
       await rtcEngine.initialize(RtcEngineContext(
         appId: 'app_id',
         areaCode: AreaCode.areaCodeGlob.value(),
+        logConfig: LogConfig(filePath: logPath),
       ));
 
       final onJoinChannelSuccessCompleter = Completer<bool>();
@@ -83,12 +89,15 @@ void generatedTestCases(IrisTester irisTester) {
   );
 
   testWidgets(
-    'onRejoinChannelSuccess',
+    'RtcEngineEventHandler.onRejoinChannelSuccess',
     (WidgetTester tester) async {
       RtcEngine rtcEngine = createAgoraRtcEngine();
+      Directory appDocDir = await getApplicationDocumentsDirectory();
+      String logPath = path.join(appDocDir.path, 'test_log.txt');
       await rtcEngine.initialize(RtcEngineContext(
         appId: 'app_id',
         areaCode: AreaCode.areaCodeGlob.value(),
+        logConfig: LogConfig(filePath: logPath),
       ));
 
       final onRejoinChannelSuccessCompleter = Completer<bool>();
@@ -152,12 +161,15 @@ void generatedTestCases(IrisTester irisTester) {
   );
 
   testWidgets(
-    'onProxyConnected',
+    'RtcEngineEventHandler.onProxyConnected',
     (WidgetTester tester) async {
       RtcEngine rtcEngine = createAgoraRtcEngine();
+      Directory appDocDir = await getApplicationDocumentsDirectory();
+      String logPath = path.join(appDocDir.path, 'test_log.txt');
       await rtcEngine.initialize(RtcEngineContext(
         appId: 'app_id',
         areaCode: AreaCode.areaCodeGlob.value(),
+        logConfig: LogConfig(filePath: logPath),
       ));
 
       final onProxyConnectedCompleter = Completer<bool>();
@@ -222,12 +234,15 @@ void generatedTestCases(IrisTester irisTester) {
   );
 
   testWidgets(
-    'onError',
+    'RtcEngineEventHandler.onError',
     (WidgetTester tester) async {
       RtcEngine rtcEngine = createAgoraRtcEngine();
+      Directory appDocDir = await getApplicationDocumentsDirectory();
+      String logPath = path.join(appDocDir.path, 'test_log.txt');
       await rtcEngine.initialize(RtcEngineContext(
         appId: 'app_id',
         areaCode: AreaCode.areaCodeGlob.value(),
+        logConfig: LogConfig(filePath: logPath),
       ));
 
       final onErrorCompleter = Completer<bool>();
@@ -284,12 +299,15 @@ void generatedTestCases(IrisTester irisTester) {
   );
 
   testWidgets(
-    'onAudioQuality',
+    'RtcEngineEventHandler.onAudioQuality',
     (WidgetTester tester) async {
       RtcEngine rtcEngine = createAgoraRtcEngine();
+      Directory appDocDir = await getApplicationDocumentsDirectory();
+      String logPath = path.join(appDocDir.path, 'test_log.txt');
       await rtcEngine.initialize(RtcEngineContext(
         appId: 'app_id',
         areaCode: AreaCode.areaCodeGlob.value(),
+        logConfig: LogConfig(filePath: logPath),
       ));
 
       final onAudioQualityCompleter = Completer<bool>();
@@ -359,12 +377,15 @@ void generatedTestCases(IrisTester irisTester) {
   );
 
   testWidgets(
-    'onLastmileProbeResult',
+    'RtcEngineEventHandler.onLastmileProbeResult',
     (WidgetTester tester) async {
       RtcEngine rtcEngine = createAgoraRtcEngine();
+      Directory appDocDir = await getApplicationDocumentsDirectory();
+      String logPath = path.join(appDocDir.path, 'test_log.txt');
       await rtcEngine.initialize(RtcEngineContext(
         appId: 'app_id',
         areaCode: AreaCode.areaCodeGlob.value(),
+        logConfig: LogConfig(filePath: logPath),
       ));
 
       final onLastmileProbeResultCompleter = Completer<bool>();
@@ -447,12 +468,15 @@ void generatedTestCases(IrisTester irisTester) {
   );
 
   testWidgets(
-    'onAudioVolumeIndication',
+    'RtcEngineEventHandler.onAudioVolumeIndication',
     (WidgetTester tester) async {
       RtcEngine rtcEngine = createAgoraRtcEngine();
+      Directory appDocDir = await getApplicationDocumentsDirectory();
+      String logPath = path.join(appDocDir.path, 'test_log.txt');
       await rtcEngine.initialize(RtcEngineContext(
         appId: 'app_id',
         areaCode: AreaCode.areaCodeGlob.value(),
+        logConfig: LogConfig(filePath: logPath),
       ));
 
       final onAudioVolumeIndicationCompleter = Completer<bool>();
@@ -521,12 +545,15 @@ void generatedTestCases(IrisTester irisTester) {
   );
 
   testWidgets(
-    'onLeaveChannel',
+    'RtcEngineEventHandler.onLeaveChannel',
     (WidgetTester tester) async {
       RtcEngine rtcEngine = createAgoraRtcEngine();
+      Directory appDocDir = await getApplicationDocumentsDirectory();
+      String logPath = path.join(appDocDir.path, 'test_log.txt');
       await rtcEngine.initialize(RtcEngineContext(
         appId: 'app_id',
         areaCode: AreaCode.areaCodeGlob.value(),
+        logConfig: LogConfig(filePath: logPath),
       ));
 
       final onLeaveChannelCompleter = Completer<bool>();
@@ -663,12 +690,15 @@ void generatedTestCases(IrisTester irisTester) {
   );
 
   testWidgets(
-    'onRtcStats',
+    'RtcEngineEventHandler.onRtcStats',
     (WidgetTester tester) async {
       RtcEngine rtcEngine = createAgoraRtcEngine();
+      Directory appDocDir = await getApplicationDocumentsDirectory();
+      String logPath = path.join(appDocDir.path, 'test_log.txt');
       await rtcEngine.initialize(RtcEngineContext(
         appId: 'app_id',
         areaCode: AreaCode.areaCodeGlob.value(),
+        logConfig: LogConfig(filePath: logPath),
       ));
 
       final onRtcStatsCompleter = Completer<bool>();
@@ -805,12 +835,15 @@ void generatedTestCases(IrisTester irisTester) {
   );
 
   testWidgets(
-    'onAudioDeviceStateChanged',
+    'RtcEngineEventHandler.onAudioDeviceStateChanged',
     (WidgetTester tester) async {
       RtcEngine rtcEngine = createAgoraRtcEngine();
+      Directory appDocDir = await getApplicationDocumentsDirectory();
+      String logPath = path.join(appDocDir.path, 'test_log.txt');
       await rtcEngine.initialize(RtcEngineContext(
         appId: 'app_id',
         areaCode: AreaCode.areaCodeGlob.value(),
+        logConfig: LogConfig(filePath: logPath),
       ));
 
       final onAudioDeviceStateChangedCompleter = Completer<bool>();
@@ -873,12 +906,15 @@ void generatedTestCases(IrisTester irisTester) {
   );
 
   testWidgets(
-    'onAudioMixingPositionChanged',
+    'RtcEngineEventHandler.onAudioMixingPositionChanged',
     (WidgetTester tester) async {
       RtcEngine rtcEngine = createAgoraRtcEngine();
+      Directory appDocDir = await getApplicationDocumentsDirectory();
+      String logPath = path.join(appDocDir.path, 'test_log.txt');
       await rtcEngine.initialize(RtcEngineContext(
         appId: 'app_id',
         areaCode: AreaCode.areaCodeGlob.value(),
+        logConfig: LogConfig(filePath: logPath),
       ));
 
       final onAudioMixingPositionChangedCompleter = Completer<bool>();
@@ -935,12 +971,15 @@ void generatedTestCases(IrisTester irisTester) {
   );
 
   testWidgets(
-    'onAudioMixingFinished',
+    'RtcEngineEventHandler.onAudioMixingFinished',
     (WidgetTester tester) async {
       RtcEngine rtcEngine = createAgoraRtcEngine();
+      Directory appDocDir = await getApplicationDocumentsDirectory();
+      String logPath = path.join(appDocDir.path, 'test_log.txt');
       await rtcEngine.initialize(RtcEngineContext(
         appId: 'app_id',
         areaCode: AreaCode.areaCodeGlob.value(),
+        logConfig: LogConfig(filePath: logPath),
       ));
 
       final onAudioMixingFinishedCompleter = Completer<bool>();
@@ -993,12 +1032,15 @@ void generatedTestCases(IrisTester irisTester) {
   );
 
   testWidgets(
-    'onAudioEffectFinished',
+    'RtcEngineEventHandler.onAudioEffectFinished',
     (WidgetTester tester) async {
       RtcEngine rtcEngine = createAgoraRtcEngine();
+      Directory appDocDir = await getApplicationDocumentsDirectory();
+      String logPath = path.join(appDocDir.path, 'test_log.txt');
       await rtcEngine.initialize(RtcEngineContext(
         appId: 'app_id',
         areaCode: AreaCode.areaCodeGlob.value(),
+        logConfig: LogConfig(filePath: logPath),
       ));
 
       final onAudioEffectFinishedCompleter = Completer<bool>();
@@ -1055,12 +1097,15 @@ void generatedTestCases(IrisTester irisTester) {
   );
 
   testWidgets(
-    'onVideoDeviceStateChanged',
+    'RtcEngineEventHandler.onVideoDeviceStateChanged',
     (WidgetTester tester) async {
       RtcEngine rtcEngine = createAgoraRtcEngine();
+      Directory appDocDir = await getApplicationDocumentsDirectory();
+      String logPath = path.join(appDocDir.path, 'test_log.txt');
       await rtcEngine.initialize(RtcEngineContext(
         appId: 'app_id',
         areaCode: AreaCode.areaCodeGlob.value(),
+        logConfig: LogConfig(filePath: logPath),
       ));
 
       final onVideoDeviceStateChangedCompleter = Completer<bool>();
@@ -1123,12 +1168,15 @@ void generatedTestCases(IrisTester irisTester) {
   );
 
   testWidgets(
-    'onNetworkQuality',
+    'RtcEngineEventHandler.onNetworkQuality',
     (WidgetTester tester) async {
       RtcEngine rtcEngine = createAgoraRtcEngine();
+      Directory appDocDir = await getApplicationDocumentsDirectory();
+      String logPath = path.join(appDocDir.path, 'test_log.txt');
       await rtcEngine.initialize(RtcEngineContext(
         appId: 'app_id',
         areaCode: AreaCode.areaCodeGlob.value(),
+        logConfig: LogConfig(filePath: logPath),
       ));
 
       final onNetworkQualityCompleter = Completer<bool>();
@@ -1196,12 +1244,15 @@ void generatedTestCases(IrisTester irisTester) {
   );
 
   testWidgets(
-    'onIntraRequestReceived',
+    'RtcEngineEventHandler.onIntraRequestReceived',
     (WidgetTester tester) async {
       RtcEngine rtcEngine = createAgoraRtcEngine();
+      Directory appDocDir = await getApplicationDocumentsDirectory();
+      String logPath = path.join(appDocDir.path, 'test_log.txt');
       await rtcEngine.initialize(RtcEngineContext(
         appId: 'app_id',
         areaCode: AreaCode.areaCodeGlob.value(),
+        logConfig: LogConfig(filePath: logPath),
       ));
 
       final onIntraRequestReceivedCompleter = Completer<bool>();
@@ -1263,12 +1314,15 @@ void generatedTestCases(IrisTester irisTester) {
   );
 
   testWidgets(
-    'onUplinkNetworkInfoUpdated',
+    'RtcEngineEventHandler.onUplinkNetworkInfoUpdated',
     (WidgetTester tester) async {
       RtcEngine rtcEngine = createAgoraRtcEngine();
+      Directory appDocDir = await getApplicationDocumentsDirectory();
+      String logPath = path.join(appDocDir.path, 'test_log.txt');
       await rtcEngine.initialize(RtcEngineContext(
         appId: 'app_id',
         areaCode: AreaCode.areaCodeGlob.value(),
+        logConfig: LogConfig(filePath: logPath),
       ));
 
       final onUplinkNetworkInfoUpdatedCompleter = Completer<bool>();
@@ -1328,12 +1382,15 @@ void generatedTestCases(IrisTester irisTester) {
   );
 
   testWidgets(
-    'onDownlinkNetworkInfoUpdated',
+    'RtcEngineEventHandler.onDownlinkNetworkInfoUpdated',
     (WidgetTester tester) async {
       RtcEngine rtcEngine = createAgoraRtcEngine();
+      Directory appDocDir = await getApplicationDocumentsDirectory();
+      String logPath = path.join(appDocDir.path, 'test_log.txt');
       await rtcEngine.initialize(RtcEngineContext(
         appId: 'app_id',
         areaCode: AreaCode.areaCodeGlob.value(),
+        logConfig: LogConfig(filePath: logPath),
       ));
 
       final onDownlinkNetworkInfoUpdatedCompleter = Completer<bool>();
@@ -1401,12 +1458,15 @@ void generatedTestCases(IrisTester irisTester) {
   );
 
   testWidgets(
-    'onLastmileQuality',
+    'RtcEngineEventHandler.onLastmileQuality',
     (WidgetTester tester) async {
       RtcEngine rtcEngine = createAgoraRtcEngine();
+      Directory appDocDir = await getApplicationDocumentsDirectory();
+      String logPath = path.join(appDocDir.path, 'test_log.txt');
       await rtcEngine.initialize(RtcEngineContext(
         appId: 'app_id',
         areaCode: AreaCode.areaCodeGlob.value(),
+        logConfig: LogConfig(filePath: logPath),
       ));
 
       final onLastmileQualityCompleter = Completer<bool>();
@@ -1462,12 +1522,15 @@ void generatedTestCases(IrisTester irisTester) {
   );
 
   testWidgets(
-    'onFirstLocalVideoFrame',
+    'RtcEngineEventHandler.onFirstLocalVideoFrame',
     (WidgetTester tester) async {
       RtcEngine rtcEngine = createAgoraRtcEngine();
+      Directory appDocDir = await getApplicationDocumentsDirectory();
+      String logPath = path.join(appDocDir.path, 'test_log.txt');
       await rtcEngine.initialize(RtcEngineContext(
         appId: 'app_id',
         areaCode: AreaCode.areaCodeGlob.value(),
+        logConfig: LogConfig(filePath: logPath),
       ));
 
       final onFirstLocalVideoFrameCompleter = Completer<bool>();
@@ -1531,12 +1594,15 @@ void generatedTestCases(IrisTester irisTester) {
   );
 
   testWidgets(
-    'onFirstLocalVideoFramePublished',
+    'RtcEngineEventHandler.onFirstLocalVideoFramePublished',
     (WidgetTester tester) async {
       RtcEngine rtcEngine = createAgoraRtcEngine();
+      Directory appDocDir = await getApplicationDocumentsDirectory();
+      String logPath = path.join(appDocDir.path, 'test_log.txt');
       await rtcEngine.initialize(RtcEngineContext(
         appId: 'app_id',
         areaCode: AreaCode.areaCodeGlob.value(),
+        logConfig: LogConfig(filePath: logPath),
       ));
 
       final onFirstLocalVideoFramePublishedCompleter = Completer<bool>();
@@ -1595,12 +1661,15 @@ void generatedTestCases(IrisTester irisTester) {
   );
 
   testWidgets(
-    'onFirstRemoteVideoDecoded',
+    'RtcEngineEventHandler.onFirstRemoteVideoDecoded',
     (WidgetTester tester) async {
       RtcEngine rtcEngine = createAgoraRtcEngine();
+      Directory appDocDir = await getApplicationDocumentsDirectory();
+      String logPath = path.join(appDocDir.path, 'test_log.txt');
       await rtcEngine.initialize(RtcEngineContext(
         appId: 'app_id',
         areaCode: AreaCode.areaCodeGlob.value(),
+        logConfig: LogConfig(filePath: logPath),
       ));
 
       final onFirstRemoteVideoDecodedCompleter = Completer<bool>();
@@ -1671,12 +1740,15 @@ void generatedTestCases(IrisTester irisTester) {
   );
 
   testWidgets(
-    'onVideoSizeChanged',
+    'RtcEngineEventHandler.onVideoSizeChanged',
     (WidgetTester tester) async {
       RtcEngine rtcEngine = createAgoraRtcEngine();
+      Directory appDocDir = await getApplicationDocumentsDirectory();
+      String logPath = path.join(appDocDir.path, 'test_log.txt');
       await rtcEngine.initialize(RtcEngineContext(
         appId: 'app_id',
         areaCode: AreaCode.areaCodeGlob.value(),
+        logConfig: LogConfig(filePath: logPath),
       ));
 
       final onVideoSizeChangedCompleter = Completer<bool>();
@@ -1753,12 +1825,15 @@ void generatedTestCases(IrisTester irisTester) {
   );
 
   testWidgets(
-    'onLocalVideoStateChanged',
+    'RtcEngineEventHandler.onLocalVideoStateChanged',
     (WidgetTester tester) async {
       RtcEngine rtcEngine = createAgoraRtcEngine();
+      Directory appDocDir = await getApplicationDocumentsDirectory();
+      String logPath = path.join(appDocDir.path, 'test_log.txt');
       await rtcEngine.initialize(RtcEngineContext(
         appId: 'app_id',
         areaCode: AreaCode.areaCodeGlob.value(),
+        logConfig: LogConfig(filePath: logPath),
       ));
 
       final onLocalVideoStateChangedCompleter = Completer<bool>();
@@ -1822,12 +1897,15 @@ void generatedTestCases(IrisTester irisTester) {
   );
 
   testWidgets(
-    'onRemoteVideoStateChanged',
+    'RtcEngineEventHandler.onRemoteVideoStateChanged',
     (WidgetTester tester) async {
       RtcEngine rtcEngine = createAgoraRtcEngine();
+      Directory appDocDir = await getApplicationDocumentsDirectory();
+      String logPath = path.join(appDocDir.path, 'test_log.txt');
       await rtcEngine.initialize(RtcEngineContext(
         appId: 'app_id',
         areaCode: AreaCode.areaCodeGlob.value(),
+        logConfig: LogConfig(filePath: logPath),
       ));
 
       final onRemoteVideoStateChangedCompleter = Completer<bool>();
@@ -1902,12 +1980,15 @@ void generatedTestCases(IrisTester irisTester) {
   );
 
   testWidgets(
-    'onFirstRemoteVideoFrame',
+    'RtcEngineEventHandler.onFirstRemoteVideoFrame',
     (WidgetTester tester) async {
       RtcEngine rtcEngine = createAgoraRtcEngine();
+      Directory appDocDir = await getApplicationDocumentsDirectory();
+      String logPath = path.join(appDocDir.path, 'test_log.txt');
       await rtcEngine.initialize(RtcEngineContext(
         appId: 'app_id',
         areaCode: AreaCode.areaCodeGlob.value(),
+        logConfig: LogConfig(filePath: logPath),
       ));
 
       final onFirstRemoteVideoFrameCompleter = Completer<bool>();
@@ -1978,12 +2059,15 @@ void generatedTestCases(IrisTester irisTester) {
   );
 
   testWidgets(
-    'onUserJoined',
+    'RtcEngineEventHandler.onUserJoined',
     (WidgetTester tester) async {
       RtcEngine rtcEngine = createAgoraRtcEngine();
+      Directory appDocDir = await getApplicationDocumentsDirectory();
+      String logPath = path.join(appDocDir.path, 'test_log.txt');
       await rtcEngine.initialize(RtcEngineContext(
         appId: 'app_id',
         areaCode: AreaCode.areaCodeGlob.value(),
+        logConfig: LogConfig(filePath: logPath),
       ));
 
       final onUserJoinedCompleter = Completer<bool>();
@@ -2048,12 +2132,15 @@ void generatedTestCases(IrisTester irisTester) {
   );
 
   testWidgets(
-    'onUserOffline',
+    'RtcEngineEventHandler.onUserOffline',
     (WidgetTester tester) async {
       RtcEngine rtcEngine = createAgoraRtcEngine();
+      Directory appDocDir = await getApplicationDocumentsDirectory();
+      String logPath = path.join(appDocDir.path, 'test_log.txt');
       await rtcEngine.initialize(RtcEngineContext(
         appId: 'app_id',
         areaCode: AreaCode.areaCodeGlob.value(),
+        logConfig: LogConfig(filePath: logPath),
       ));
 
       final onUserOfflineCompleter = Completer<bool>();
@@ -2120,12 +2207,15 @@ void generatedTestCases(IrisTester irisTester) {
   );
 
   testWidgets(
-    'onUserMuteAudio',
+    'RtcEngineEventHandler.onUserMuteAudio',
     (WidgetTester tester) async {
       RtcEngine rtcEngine = createAgoraRtcEngine();
+      Directory appDocDir = await getApplicationDocumentsDirectory();
+      String logPath = path.join(appDocDir.path, 'test_log.txt');
       await rtcEngine.initialize(RtcEngineContext(
         appId: 'app_id',
         areaCode: AreaCode.areaCodeGlob.value(),
+        logConfig: LogConfig(filePath: logPath),
       ));
 
       final onUserMuteAudioCompleter = Completer<bool>();
@@ -2190,12 +2280,15 @@ void generatedTestCases(IrisTester irisTester) {
   );
 
   testWidgets(
-    'onUserMuteVideo',
+    'RtcEngineEventHandler.onUserMuteVideo',
     (WidgetTester tester) async {
       RtcEngine rtcEngine = createAgoraRtcEngine();
+      Directory appDocDir = await getApplicationDocumentsDirectory();
+      String logPath = path.join(appDocDir.path, 'test_log.txt');
       await rtcEngine.initialize(RtcEngineContext(
         appId: 'app_id',
         areaCode: AreaCode.areaCodeGlob.value(),
+        logConfig: LogConfig(filePath: logPath),
       ));
 
       final onUserMuteVideoCompleter = Completer<bool>();
@@ -2260,12 +2353,15 @@ void generatedTestCases(IrisTester irisTester) {
   );
 
   testWidgets(
-    'onUserEnableVideo',
+    'RtcEngineEventHandler.onUserEnableVideo',
     (WidgetTester tester) async {
       RtcEngine rtcEngine = createAgoraRtcEngine();
+      Directory appDocDir = await getApplicationDocumentsDirectory();
+      String logPath = path.join(appDocDir.path, 'test_log.txt');
       await rtcEngine.initialize(RtcEngineContext(
         appId: 'app_id',
         areaCode: AreaCode.areaCodeGlob.value(),
+        logConfig: LogConfig(filePath: logPath),
       ));
 
       final onUserEnableVideoCompleter = Completer<bool>();
@@ -2331,12 +2427,15 @@ void generatedTestCases(IrisTester irisTester) {
   );
 
   testWidgets(
-    'onUserStateChanged',
+    'RtcEngineEventHandler.onUserStateChanged',
     (WidgetTester tester) async {
       RtcEngine rtcEngine = createAgoraRtcEngine();
+      Directory appDocDir = await getApplicationDocumentsDirectory();
+      String logPath = path.join(appDocDir.path, 'test_log.txt');
       await rtcEngine.initialize(RtcEngineContext(
         appId: 'app_id',
         areaCode: AreaCode.areaCodeGlob.value(),
+        logConfig: LogConfig(filePath: logPath),
       ));
 
       final onUserStateChangedCompleter = Completer<bool>();
@@ -2402,12 +2501,15 @@ void generatedTestCases(IrisTester irisTester) {
   );
 
   testWidgets(
-    'onUserEnableLocalVideo',
+    'RtcEngineEventHandler.onUserEnableLocalVideo',
     (WidgetTester tester) async {
       RtcEngine rtcEngine = createAgoraRtcEngine();
+      Directory appDocDir = await getApplicationDocumentsDirectory();
+      String logPath = path.join(appDocDir.path, 'test_log.txt');
       await rtcEngine.initialize(RtcEngineContext(
         appId: 'app_id',
         areaCode: AreaCode.areaCodeGlob.value(),
+        logConfig: LogConfig(filePath: logPath),
       ));
 
       final onUserEnableLocalVideoCompleter = Completer<bool>();
@@ -2474,12 +2576,15 @@ void generatedTestCases(IrisTester irisTester) {
   );
 
   testWidgets(
-    'onRemoteAudioStats',
+    'RtcEngineEventHandler.onRemoteAudioStats',
     (WidgetTester tester) async {
       RtcEngine rtcEngine = createAgoraRtcEngine();
+      Directory appDocDir = await getApplicationDocumentsDirectory();
+      String logPath = path.join(appDocDir.path, 'test_log.txt');
       await rtcEngine.initialize(RtcEngineContext(
         appId: 'app_id',
         areaCode: AreaCode.areaCodeGlob.value(),
+        logConfig: LogConfig(filePath: logPath),
       ));
 
       final onRemoteAudioStatsCompleter = Completer<bool>();
@@ -2579,12 +2684,15 @@ void generatedTestCases(IrisTester irisTester) {
   );
 
   testWidgets(
-    'onLocalAudioStats',
+    'RtcEngineEventHandler.onLocalAudioStats',
     (WidgetTester tester) async {
       RtcEngine rtcEngine = createAgoraRtcEngine();
+      Directory appDocDir = await getApplicationDocumentsDirectory();
+      String logPath = path.join(appDocDir.path, 'test_log.txt');
       await rtcEngine.initialize(RtcEngineContext(
         appId: 'app_id',
         areaCode: AreaCode.areaCodeGlob.value(),
+        logConfig: LogConfig(filePath: logPath),
       ));
 
       final onLocalAudioStatsCompleter = Completer<bool>();
@@ -2666,12 +2774,15 @@ void generatedTestCases(IrisTester irisTester) {
   );
 
   testWidgets(
-    'onLocalVideoStats',
+    'RtcEngineEventHandler.onLocalVideoStats',
     (WidgetTester tester) async {
       RtcEngine rtcEngine = createAgoraRtcEngine();
+      Directory appDocDir = await getApplicationDocumentsDirectory();
+      String logPath = path.join(appDocDir.path, 'test_log.txt');
       await rtcEngine.initialize(RtcEngineContext(
         appId: 'app_id',
         areaCode: AreaCode.areaCodeGlob.value(),
+        logConfig: LogConfig(filePath: logPath),
       ));
 
       final onLocalVideoStatsCompleter = Completer<bool>();
@@ -2778,12 +2889,15 @@ void generatedTestCases(IrisTester irisTester) {
   );
 
   testWidgets(
-    'onRemoteVideoStats',
+    'RtcEngineEventHandler.onRemoteVideoStats',
     (WidgetTester tester) async {
       RtcEngine rtcEngine = createAgoraRtcEngine();
+      Directory appDocDir = await getApplicationDocumentsDirectory();
+      String logPath = path.join(appDocDir.path, 'test_log.txt');
       await rtcEngine.initialize(RtcEngineContext(
         appId: 'app_id',
         areaCode: AreaCode.areaCodeGlob.value(),
+        logConfig: LogConfig(filePath: logPath),
       ));
 
       final onRemoteVideoStatsCompleter = Completer<bool>();
@@ -2884,12 +2998,15 @@ void generatedTestCases(IrisTester irisTester) {
   );
 
   testWidgets(
-    'onCameraReady',
+    'RtcEngineEventHandler.onCameraReady',
     (WidgetTester tester) async {
       RtcEngine rtcEngine = createAgoraRtcEngine();
+      Directory appDocDir = await getApplicationDocumentsDirectory();
+      String logPath = path.join(appDocDir.path, 'test_log.txt');
       await rtcEngine.initialize(RtcEngineContext(
         appId: 'app_id',
         areaCode: AreaCode.areaCodeGlob.value(),
+        logConfig: LogConfig(filePath: logPath),
       ));
 
       final onCameraReadyCompleter = Completer<bool>();
@@ -2941,12 +3058,15 @@ void generatedTestCases(IrisTester irisTester) {
   );
 
   testWidgets(
-    'onCameraFocusAreaChanged',
+    'RtcEngineEventHandler.onCameraFocusAreaChanged',
     (WidgetTester tester) async {
       RtcEngine rtcEngine = createAgoraRtcEngine();
+      Directory appDocDir = await getApplicationDocumentsDirectory();
+      String logPath = path.join(appDocDir.path, 'test_log.txt');
       await rtcEngine.initialize(RtcEngineContext(
         appId: 'app_id',
         areaCode: AreaCode.areaCodeGlob.value(),
+        logConfig: LogConfig(filePath: logPath),
       ));
 
       final onCameraFocusAreaChangedCompleter = Completer<bool>();
@@ -3009,12 +3129,15 @@ void generatedTestCases(IrisTester irisTester) {
   );
 
   testWidgets(
-    'onCameraExposureAreaChanged',
+    'RtcEngineEventHandler.onCameraExposureAreaChanged',
     (WidgetTester tester) async {
       RtcEngine rtcEngine = createAgoraRtcEngine();
+      Directory appDocDir = await getApplicationDocumentsDirectory();
+      String logPath = path.join(appDocDir.path, 'test_log.txt');
       await rtcEngine.initialize(RtcEngineContext(
         appId: 'app_id',
         areaCode: AreaCode.areaCodeGlob.value(),
+        logConfig: LogConfig(filePath: logPath),
       ));
 
       final onCameraExposureAreaChangedCompleter = Completer<bool>();
@@ -3077,12 +3200,15 @@ void generatedTestCases(IrisTester irisTester) {
   );
 
   testWidgets(
-    'onVideoStopped',
+    'RtcEngineEventHandler.onVideoStopped',
     (WidgetTester tester) async {
       RtcEngine rtcEngine = createAgoraRtcEngine();
+      Directory appDocDir = await getApplicationDocumentsDirectory();
+      String logPath = path.join(appDocDir.path, 'test_log.txt');
       await rtcEngine.initialize(RtcEngineContext(
         appId: 'app_id',
         areaCode: AreaCode.areaCodeGlob.value(),
+        logConfig: LogConfig(filePath: logPath),
       ));
 
       final onVideoStoppedCompleter = Completer<bool>();
@@ -3134,12 +3260,15 @@ void generatedTestCases(IrisTester irisTester) {
   );
 
   testWidgets(
-    'onAudioMixingStateChanged',
+    'RtcEngineEventHandler.onAudioMixingStateChanged',
     (WidgetTester tester) async {
       RtcEngine rtcEngine = createAgoraRtcEngine();
+      Directory appDocDir = await getApplicationDocumentsDirectory();
+      String logPath = path.join(appDocDir.path, 'test_log.txt');
       await rtcEngine.initialize(RtcEngineContext(
         appId: 'app_id',
         areaCode: AreaCode.areaCodeGlob.value(),
+        logConfig: LogConfig(filePath: logPath),
       ));
 
       final onAudioMixingStateChangedCompleter = Completer<bool>();
@@ -3201,12 +3330,15 @@ void generatedTestCases(IrisTester irisTester) {
   );
 
   testWidgets(
-    'onRhythmPlayerStateChanged',
+    'RtcEngineEventHandler.onRhythmPlayerStateChanged',
     (WidgetTester tester) async {
       RtcEngine rtcEngine = createAgoraRtcEngine();
+      Directory appDocDir = await getApplicationDocumentsDirectory();
+      String logPath = path.join(appDocDir.path, 'test_log.txt');
       await rtcEngine.initialize(RtcEngineContext(
         appId: 'app_id',
         areaCode: AreaCode.areaCodeGlob.value(),
+        logConfig: LogConfig(filePath: logPath),
       ));
 
       final onRhythmPlayerStateChangedCompleter = Completer<bool>();
@@ -3268,12 +3400,15 @@ void generatedTestCases(IrisTester irisTester) {
   );
 
   testWidgets(
-    'onConnectionLost',
+    'RtcEngineEventHandler.onConnectionLost',
     (WidgetTester tester) async {
       RtcEngine rtcEngine = createAgoraRtcEngine();
+      Directory appDocDir = await getApplicationDocumentsDirectory();
+      String logPath = path.join(appDocDir.path, 'test_log.txt');
       await rtcEngine.initialize(RtcEngineContext(
         appId: 'app_id',
         areaCode: AreaCode.areaCodeGlob.value(),
+        logConfig: LogConfig(filePath: logPath),
       ));
 
       final onConnectionLostCompleter = Completer<bool>();
@@ -3334,12 +3469,15 @@ void generatedTestCases(IrisTester irisTester) {
   );
 
   testWidgets(
-    'onConnectionInterrupted',
+    'RtcEngineEventHandler.onConnectionInterrupted',
     (WidgetTester tester) async {
       RtcEngine rtcEngine = createAgoraRtcEngine();
+      Directory appDocDir = await getApplicationDocumentsDirectory();
+      String logPath = path.join(appDocDir.path, 'test_log.txt');
       await rtcEngine.initialize(RtcEngineContext(
         appId: 'app_id',
         areaCode: AreaCode.areaCodeGlob.value(),
+        logConfig: LogConfig(filePath: logPath),
       ));
 
       final onConnectionInterruptedCompleter = Completer<bool>();
@@ -3401,12 +3539,15 @@ void generatedTestCases(IrisTester irisTester) {
   );
 
   testWidgets(
-    'onConnectionBanned',
+    'RtcEngineEventHandler.onConnectionBanned',
     (WidgetTester tester) async {
       RtcEngine rtcEngine = createAgoraRtcEngine();
+      Directory appDocDir = await getApplicationDocumentsDirectory();
+      String logPath = path.join(appDocDir.path, 'test_log.txt');
       await rtcEngine.initialize(RtcEngineContext(
         appId: 'app_id',
         areaCode: AreaCode.areaCodeGlob.value(),
+        logConfig: LogConfig(filePath: logPath),
       ));
 
       final onConnectionBannedCompleter = Completer<bool>();
@@ -3467,12 +3608,15 @@ void generatedTestCases(IrisTester irisTester) {
   );
 
   testWidgets(
-    'onStreamMessage',
+    'RtcEngineEventHandler.onStreamMessage',
     (WidgetTester tester) async {
       RtcEngine rtcEngine = createAgoraRtcEngine();
+      Directory appDocDir = await getApplicationDocumentsDirectory();
+      String logPath = path.join(appDocDir.path, 'test_log.txt');
       await rtcEngine.initialize(RtcEngineContext(
         appId: 'app_id',
         areaCode: AreaCode.areaCodeGlob.value(),
+        logConfig: LogConfig(filePath: logPath),
       ));
 
       final onStreamMessageCompleter = Completer<bool>();
@@ -3544,12 +3688,15 @@ void generatedTestCases(IrisTester irisTester) {
   );
 
   testWidgets(
-    'onStreamMessageError',
+    'RtcEngineEventHandler.onStreamMessageError',
     (WidgetTester tester) async {
       RtcEngine rtcEngine = createAgoraRtcEngine();
+      Directory appDocDir = await getApplicationDocumentsDirectory();
+      String logPath = path.join(appDocDir.path, 'test_log.txt');
       await rtcEngine.initialize(RtcEngineContext(
         appId: 'app_id',
         areaCode: AreaCode.areaCodeGlob.value(),
+        logConfig: LogConfig(filePath: logPath),
       ));
 
       final onStreamMessageErrorCompleter = Completer<bool>();
@@ -3621,12 +3768,15 @@ void generatedTestCases(IrisTester irisTester) {
   );
 
   testWidgets(
-    'onRequestToken',
+    'RtcEngineEventHandler.onRequestToken',
     (WidgetTester tester) async {
       RtcEngine rtcEngine = createAgoraRtcEngine();
+      Directory appDocDir = await getApplicationDocumentsDirectory();
+      String logPath = path.join(appDocDir.path, 'test_log.txt');
       await rtcEngine.initialize(RtcEngineContext(
         appId: 'app_id',
         areaCode: AreaCode.areaCodeGlob.value(),
+        logConfig: LogConfig(filePath: logPath),
       ));
 
       final onRequestTokenCompleter = Completer<bool>();
@@ -3687,12 +3837,15 @@ void generatedTestCases(IrisTester irisTester) {
   );
 
   testWidgets(
-    'onTokenPrivilegeWillExpire',
+    'RtcEngineEventHandler.onTokenPrivilegeWillExpire',
     (WidgetTester tester) async {
       RtcEngine rtcEngine = createAgoraRtcEngine();
+      Directory appDocDir = await getApplicationDocumentsDirectory();
+      String logPath = path.join(appDocDir.path, 'test_log.txt');
       await rtcEngine.initialize(RtcEngineContext(
         appId: 'app_id',
         areaCode: AreaCode.areaCodeGlob.value(),
+        logConfig: LogConfig(filePath: logPath),
       ));
 
       final onTokenPrivilegeWillExpireCompleter = Completer<bool>();
@@ -3756,12 +3909,15 @@ void generatedTestCases(IrisTester irisTester) {
   );
 
   testWidgets(
-    'onLicenseValidationFailure',
+    'RtcEngineEventHandler.onLicenseValidationFailure',
     (WidgetTester tester) async {
       RtcEngine rtcEngine = createAgoraRtcEngine();
+      Directory appDocDir = await getApplicationDocumentsDirectory();
+      String logPath = path.join(appDocDir.path, 'test_log.txt');
       await rtcEngine.initialize(RtcEngineContext(
         appId: 'app_id',
         areaCode: AreaCode.areaCodeGlob.value(),
+        logConfig: LogConfig(filePath: logPath),
       ));
 
       final onLicenseValidationFailureCompleter = Completer<bool>();
@@ -3826,12 +3982,15 @@ void generatedTestCases(IrisTester irisTester) {
   );
 
   testWidgets(
-    'onFirstLocalAudioFramePublished',
+    'RtcEngineEventHandler.onFirstLocalAudioFramePublished',
     (WidgetTester tester) async {
       RtcEngine rtcEngine = createAgoraRtcEngine();
+      Directory appDocDir = await getApplicationDocumentsDirectory();
+      String logPath = path.join(appDocDir.path, 'test_log.txt');
       await rtcEngine.initialize(RtcEngineContext(
         appId: 'app_id',
         areaCode: AreaCode.areaCodeGlob.value(),
+        logConfig: LogConfig(filePath: logPath),
       ));
 
       final onFirstLocalAudioFramePublishedCompleter = Completer<bool>();
@@ -3896,12 +4055,15 @@ void generatedTestCases(IrisTester irisTester) {
   );
 
   testWidgets(
-    'onFirstRemoteAudioDecoded',
+    'RtcEngineEventHandler.onFirstRemoteAudioDecoded',
     (WidgetTester tester) async {
       RtcEngine rtcEngine = createAgoraRtcEngine();
+      Directory appDocDir = await getApplicationDocumentsDirectory();
+      String logPath = path.join(appDocDir.path, 'test_log.txt');
       await rtcEngine.initialize(RtcEngineContext(
         appId: 'app_id',
         areaCode: AreaCode.areaCodeGlob.value(),
+        logConfig: LogConfig(filePath: logPath),
       ));
 
       final onFirstRemoteAudioDecodedCompleter = Completer<bool>();
@@ -3968,12 +4130,15 @@ void generatedTestCases(IrisTester irisTester) {
   );
 
   testWidgets(
-    'onFirstRemoteAudioFrame',
+    'RtcEngineEventHandler.onFirstRemoteAudioFrame',
     (WidgetTester tester) async {
       RtcEngine rtcEngine = createAgoraRtcEngine();
+      Directory appDocDir = await getApplicationDocumentsDirectory();
+      String logPath = path.join(appDocDir.path, 'test_log.txt');
       await rtcEngine.initialize(RtcEngineContext(
         appId: 'app_id',
         areaCode: AreaCode.areaCodeGlob.value(),
+        logConfig: LogConfig(filePath: logPath),
       ));
 
       final onFirstRemoteAudioFrameCompleter = Completer<bool>();
@@ -4040,12 +4205,15 @@ void generatedTestCases(IrisTester irisTester) {
   );
 
   testWidgets(
-    'onLocalAudioStateChanged',
+    'RtcEngineEventHandler.onLocalAudioStateChanged',
     (WidgetTester tester) async {
       RtcEngine rtcEngine = createAgoraRtcEngine();
+      Directory appDocDir = await getApplicationDocumentsDirectory();
+      String logPath = path.join(appDocDir.path, 'test_log.txt');
       await rtcEngine.initialize(RtcEngineContext(
         appId: 'app_id',
         areaCode: AreaCode.areaCodeGlob.value(),
+        logConfig: LogConfig(filePath: logPath),
       ));
 
       final onLocalAudioStateChangedCompleter = Completer<bool>();
@@ -4114,12 +4282,15 @@ void generatedTestCases(IrisTester irisTester) {
   );
 
   testWidgets(
-    'onRemoteAudioStateChanged',
+    'RtcEngineEventHandler.onRemoteAudioStateChanged',
     (WidgetTester tester) async {
       RtcEngine rtcEngine = createAgoraRtcEngine();
+      Directory appDocDir = await getApplicationDocumentsDirectory();
+      String logPath = path.join(appDocDir.path, 'test_log.txt');
       await rtcEngine.initialize(RtcEngineContext(
         appId: 'app_id',
         areaCode: AreaCode.areaCodeGlob.value(),
+        logConfig: LogConfig(filePath: logPath),
       ));
 
       final onRemoteAudioStateChangedCompleter = Completer<bool>();
@@ -4194,12 +4365,15 @@ void generatedTestCases(IrisTester irisTester) {
   );
 
   testWidgets(
-    'onActiveSpeaker',
+    'RtcEngineEventHandler.onActiveSpeaker',
     (WidgetTester tester) async {
       RtcEngine rtcEngine = createAgoraRtcEngine();
+      Directory appDocDir = await getApplicationDocumentsDirectory();
+      String logPath = path.join(appDocDir.path, 'test_log.txt');
       await rtcEngine.initialize(RtcEngineContext(
         appId: 'app_id',
         areaCode: AreaCode.areaCodeGlob.value(),
+        logConfig: LogConfig(filePath: logPath),
       ));
 
       final onActiveSpeakerCompleter = Completer<bool>();
@@ -4262,12 +4436,15 @@ void generatedTestCases(IrisTester irisTester) {
   );
 
   testWidgets(
-    'onContentInspectResult',
+    'RtcEngineEventHandler.onContentInspectResult',
     (WidgetTester tester) async {
       RtcEngine rtcEngine = createAgoraRtcEngine();
+      Directory appDocDir = await getApplicationDocumentsDirectory();
+      String logPath = path.join(appDocDir.path, 'test_log.txt');
       await rtcEngine.initialize(RtcEngineContext(
         appId: 'app_id',
         areaCode: AreaCode.areaCodeGlob.value(),
+        logConfig: LogConfig(filePath: logPath),
       ));
 
       final onContentInspectResultCompleter = Completer<bool>();
@@ -4325,12 +4502,15 @@ void generatedTestCases(IrisTester irisTester) {
   );
 
   testWidgets(
-    'onSnapshotTaken',
+    'RtcEngineEventHandler.onSnapshotTaken',
     (WidgetTester tester) async {
       RtcEngine rtcEngine = createAgoraRtcEngine();
+      Directory appDocDir = await getApplicationDocumentsDirectory();
+      String logPath = path.join(appDocDir.path, 'test_log.txt');
       await rtcEngine.initialize(RtcEngineContext(
         appId: 'app_id',
         areaCode: AreaCode.areaCodeGlob.value(),
+        logConfig: LogConfig(filePath: logPath),
       ));
 
       final onSnapshotTakenCompleter = Completer<bool>();
@@ -4402,12 +4582,15 @@ void generatedTestCases(IrisTester irisTester) {
   );
 
   testWidgets(
-    'onClientRoleChanged',
+    'RtcEngineEventHandler.onClientRoleChanged',
     (WidgetTester tester) async {
       RtcEngine rtcEngine = createAgoraRtcEngine();
+      Directory appDocDir = await getApplicationDocumentsDirectory();
+      String logPath = path.join(appDocDir.path, 'test_log.txt');
       await rtcEngine.initialize(RtcEngineContext(
         appId: 'app_id',
         areaCode: AreaCode.areaCodeGlob.value(),
+        logConfig: LogConfig(filePath: logPath),
       ));
 
       final onClientRoleChangedCompleter = Completer<bool>();
@@ -4479,12 +4662,15 @@ void generatedTestCases(IrisTester irisTester) {
   );
 
   testWidgets(
-    'onClientRoleChangeFailed',
+    'RtcEngineEventHandler.onClientRoleChangeFailed',
     (WidgetTester tester) async {
       RtcEngine rtcEngine = createAgoraRtcEngine();
+      Directory appDocDir = await getApplicationDocumentsDirectory();
+      String logPath = path.join(appDocDir.path, 'test_log.txt');
       await rtcEngine.initialize(RtcEngineContext(
         appId: 'app_id',
         areaCode: AreaCode.areaCodeGlob.value(),
+        logConfig: LogConfig(filePath: logPath),
       ));
 
       final onClientRoleChangeFailedCompleter = Completer<bool>();
@@ -4552,12 +4738,15 @@ void generatedTestCases(IrisTester irisTester) {
   );
 
   testWidgets(
-    'onAudioDeviceVolumeChanged',
+    'RtcEngineEventHandler.onAudioDeviceVolumeChanged',
     (WidgetTester tester) async {
       RtcEngine rtcEngine = createAgoraRtcEngine();
+      Directory appDocDir = await getApplicationDocumentsDirectory();
+      String logPath = path.join(appDocDir.path, 'test_log.txt');
       await rtcEngine.initialize(RtcEngineContext(
         appId: 'app_id',
         areaCode: AreaCode.areaCodeGlob.value(),
+        logConfig: LogConfig(filePath: logPath),
       ));
 
       final onAudioDeviceVolumeChangedCompleter = Completer<bool>();
@@ -4619,12 +4808,15 @@ void generatedTestCases(IrisTester irisTester) {
   );
 
   testWidgets(
-    'onRtmpStreamingStateChanged',
+    'RtcEngineEventHandler.onRtmpStreamingStateChanged',
     (WidgetTester tester) async {
       RtcEngine rtcEngine = createAgoraRtcEngine();
+      Directory appDocDir = await getApplicationDocumentsDirectory();
+      String logPath = path.join(appDocDir.path, 'test_log.txt');
       await rtcEngine.initialize(RtcEngineContext(
         appId: 'app_id',
         areaCode: AreaCode.areaCodeGlob.value(),
+        logConfig: LogConfig(filePath: logPath),
       ));
 
       final onRtmpStreamingStateChangedCompleter = Completer<bool>();
@@ -4688,12 +4880,15 @@ void generatedTestCases(IrisTester irisTester) {
   );
 
   testWidgets(
-    'onRtmpStreamingEvent',
+    'RtcEngineEventHandler.onRtmpStreamingEvent',
     (WidgetTester tester) async {
       RtcEngine rtcEngine = createAgoraRtcEngine();
+      Directory appDocDir = await getApplicationDocumentsDirectory();
+      String logPath = path.join(appDocDir.path, 'test_log.txt');
       await rtcEngine.initialize(RtcEngineContext(
         appId: 'app_id',
         areaCode: AreaCode.areaCodeGlob.value(),
+        logConfig: LogConfig(filePath: logPath),
       ));
 
       final onRtmpStreamingEventCompleter = Completer<bool>();
@@ -4752,12 +4947,15 @@ void generatedTestCases(IrisTester irisTester) {
   );
 
   testWidgets(
-    'onTranscodingUpdated',
+    'RtcEngineEventHandler.onTranscodingUpdated',
     (WidgetTester tester) async {
       RtcEngine rtcEngine = createAgoraRtcEngine();
+      Directory appDocDir = await getApplicationDocumentsDirectory();
+      String logPath = path.join(appDocDir.path, 'test_log.txt');
       await rtcEngine.initialize(RtcEngineContext(
         appId: 'app_id',
         areaCode: AreaCode.areaCodeGlob.value(),
+        logConfig: LogConfig(filePath: logPath),
       ));
 
       final onTranscodingUpdatedCompleter = Completer<bool>();
@@ -4809,12 +5007,15 @@ void generatedTestCases(IrisTester irisTester) {
   );
 
   testWidgets(
-    'onAudioRoutingChanged',
+    'RtcEngineEventHandler.onAudioRoutingChanged',
     (WidgetTester tester) async {
       RtcEngine rtcEngine = createAgoraRtcEngine();
+      Directory appDocDir = await getApplicationDocumentsDirectory();
+      String logPath = path.join(appDocDir.path, 'test_log.txt');
       await rtcEngine.initialize(RtcEngineContext(
         appId: 'app_id',
         areaCode: AreaCode.areaCodeGlob.value(),
+        logConfig: LogConfig(filePath: logPath),
       ));
 
       final onAudioRoutingChangedCompleter = Completer<bool>();
@@ -4871,12 +5072,15 @@ void generatedTestCases(IrisTester irisTester) {
   );
 
   testWidgets(
-    'onChannelMediaRelayStateChanged',
+    'RtcEngineEventHandler.onChannelMediaRelayStateChanged',
     (WidgetTester tester) async {
       RtcEngine rtcEngine = createAgoraRtcEngine();
+      Directory appDocDir = await getApplicationDocumentsDirectory();
+      String logPath = path.join(appDocDir.path, 'test_log.txt');
       await rtcEngine.initialize(RtcEngineContext(
         appId: 'app_id',
         areaCode: AreaCode.areaCodeGlob.value(),
+        logConfig: LogConfig(filePath: logPath),
       ));
 
       final onChannelMediaRelayStateChangedCompleter = Completer<bool>();
@@ -4937,12 +5141,15 @@ void generatedTestCases(IrisTester irisTester) {
   );
 
   testWidgets(
-    'onLocalPublishFallbackToAudioOnly',
+    'RtcEngineEventHandler.onLocalPublishFallbackToAudioOnly',
     (WidgetTester tester) async {
       RtcEngine rtcEngine = createAgoraRtcEngine();
+      Directory appDocDir = await getApplicationDocumentsDirectory();
+      String logPath = path.join(appDocDir.path, 'test_log.txt');
       await rtcEngine.initialize(RtcEngineContext(
         appId: 'app_id',
         areaCode: AreaCode.areaCodeGlob.value(),
+        logConfig: LogConfig(filePath: logPath),
       ));
 
       final onLocalPublishFallbackToAudioOnlyCompleter = Completer<bool>();
@@ -5000,12 +5207,15 @@ void generatedTestCases(IrisTester irisTester) {
   );
 
   testWidgets(
-    'onRemoteSubscribeFallbackToAudioOnly',
+    'RtcEngineEventHandler.onRemoteSubscribeFallbackToAudioOnly',
     (WidgetTester tester) async {
       RtcEngine rtcEngine = createAgoraRtcEngine();
+      Directory appDocDir = await getApplicationDocumentsDirectory();
+      String logPath = path.join(appDocDir.path, 'test_log.txt');
       await rtcEngine.initialize(RtcEngineContext(
         appId: 'app_id',
         areaCode: AreaCode.areaCodeGlob.value(),
+        logConfig: LogConfig(filePath: logPath),
       ));
 
       final onRemoteSubscribeFallbackToAudioOnlyCompleter = Completer<bool>();
@@ -5066,12 +5276,15 @@ void generatedTestCases(IrisTester irisTester) {
   );
 
   testWidgets(
-    'onRemoteAudioTransportStats',
+    'RtcEngineEventHandler.onRemoteAudioTransportStats',
     (WidgetTester tester) async {
       RtcEngine rtcEngine = createAgoraRtcEngine();
+      Directory appDocDir = await getApplicationDocumentsDirectory();
+      String logPath = path.join(appDocDir.path, 'test_log.txt');
       await rtcEngine.initialize(RtcEngineContext(
         appId: 'app_id',
         areaCode: AreaCode.areaCodeGlob.value(),
+        logConfig: LogConfig(filePath: logPath),
       ));
 
       final onRemoteAudioTransportStatsCompleter = Completer<bool>();
@@ -5142,12 +5355,15 @@ void generatedTestCases(IrisTester irisTester) {
   );
 
   testWidgets(
-    'onRemoteVideoTransportStats',
+    'RtcEngineEventHandler.onRemoteVideoTransportStats',
     (WidgetTester tester) async {
       RtcEngine rtcEngine = createAgoraRtcEngine();
+      Directory appDocDir = await getApplicationDocumentsDirectory();
+      String logPath = path.join(appDocDir.path, 'test_log.txt');
       await rtcEngine.initialize(RtcEngineContext(
         appId: 'app_id',
         areaCode: AreaCode.areaCodeGlob.value(),
+        logConfig: LogConfig(filePath: logPath),
       ));
 
       final onRemoteVideoTransportStatsCompleter = Completer<bool>();
@@ -5218,12 +5434,15 @@ void generatedTestCases(IrisTester irisTester) {
   );
 
   testWidgets(
-    'onConnectionStateChanged',
+    'RtcEngineEventHandler.onConnectionStateChanged',
     (WidgetTester tester) async {
       RtcEngine rtcEngine = createAgoraRtcEngine();
+      Directory appDocDir = await getApplicationDocumentsDirectory();
+      String logPath = path.join(appDocDir.path, 'test_log.txt');
       await rtcEngine.initialize(RtcEngineContext(
         appId: 'app_id',
         areaCode: AreaCode.areaCodeGlob.value(),
+        logConfig: LogConfig(filePath: logPath),
       ));
 
       final onConnectionStateChangedCompleter = Completer<bool>();
@@ -5292,12 +5511,15 @@ void generatedTestCases(IrisTester irisTester) {
   );
 
   testWidgets(
-    'onWlAccMessage',
+    'RtcEngineEventHandler.onWlAccMessage',
     (WidgetTester tester) async {
       RtcEngine rtcEngine = createAgoraRtcEngine();
+      Directory appDocDir = await getApplicationDocumentsDirectory();
+      String logPath = path.join(appDocDir.path, 'test_log.txt');
       await rtcEngine.initialize(RtcEngineContext(
         appId: 'app_id',
         areaCode: AreaCode.areaCodeGlob.value(),
+        logConfig: LogConfig(filePath: logPath),
       ));
 
       final onWlAccMessageCompleter = Completer<bool>();
@@ -5367,12 +5589,15 @@ void generatedTestCases(IrisTester irisTester) {
   );
 
   testWidgets(
-    'onWlAccStats',
+    'RtcEngineEventHandler.onWlAccStats',
     (WidgetTester tester) async {
       RtcEngine rtcEngine = createAgoraRtcEngine();
+      Directory appDocDir = await getApplicationDocumentsDirectory();
+      String logPath = path.join(appDocDir.path, 'test_log.txt');
       await rtcEngine.initialize(RtcEngineContext(
         appId: 'app_id',
         areaCode: AreaCode.areaCodeGlob.value(),
+        logConfig: LogConfig(filePath: logPath),
       ));
 
       final onWlAccStatsCompleter = Completer<bool>();
@@ -5452,12 +5677,15 @@ void generatedTestCases(IrisTester irisTester) {
   );
 
   testWidgets(
-    'onNetworkTypeChanged',
+    'RtcEngineEventHandler.onNetworkTypeChanged',
     (WidgetTester tester) async {
       RtcEngine rtcEngine = createAgoraRtcEngine();
+      Directory appDocDir = await getApplicationDocumentsDirectory();
+      String logPath = path.join(appDocDir.path, 'test_log.txt');
       await rtcEngine.initialize(RtcEngineContext(
         appId: 'app_id',
         areaCode: AreaCode.areaCodeGlob.value(),
+        logConfig: LogConfig(filePath: logPath),
       ));
 
       final onNetworkTypeChangedCompleter = Completer<bool>();
@@ -5520,12 +5748,15 @@ void generatedTestCases(IrisTester irisTester) {
   );
 
   testWidgets(
-    'onEncryptionError',
+    'RtcEngineEventHandler.onEncryptionError',
     (WidgetTester tester) async {
       RtcEngine rtcEngine = createAgoraRtcEngine();
+      Directory appDocDir = await getApplicationDocumentsDirectory();
+      String logPath = path.join(appDocDir.path, 'test_log.txt');
       await rtcEngine.initialize(RtcEngineContext(
         appId: 'app_id',
         areaCode: AreaCode.areaCodeGlob.value(),
+        logConfig: LogConfig(filePath: logPath),
       ));
 
       final onEncryptionErrorCompleter = Completer<bool>();
@@ -5590,12 +5821,15 @@ void generatedTestCases(IrisTester irisTester) {
   );
 
   testWidgets(
-    'onPermissionError',
+    'RtcEngineEventHandler.onPermissionError',
     (WidgetTester tester) async {
       RtcEngine rtcEngine = createAgoraRtcEngine();
+      Directory appDocDir = await getApplicationDocumentsDirectory();
+      String logPath = path.join(appDocDir.path, 'test_log.txt');
       await rtcEngine.initialize(RtcEngineContext(
         appId: 'app_id',
         areaCode: AreaCode.areaCodeGlob.value(),
+        logConfig: LogConfig(filePath: logPath),
       ));
 
       final onPermissionErrorCompleter = Completer<bool>();
@@ -5651,12 +5885,15 @@ void generatedTestCases(IrisTester irisTester) {
   );
 
   testWidgets(
-    'onLocalUserRegistered',
+    'RtcEngineEventHandler.onLocalUserRegistered',
     (WidgetTester tester) async {
       RtcEngine rtcEngine = createAgoraRtcEngine();
+      Directory appDocDir = await getApplicationDocumentsDirectory();
+      String logPath = path.join(appDocDir.path, 'test_log.txt');
       await rtcEngine.initialize(RtcEngineContext(
         appId: 'app_id',
         areaCode: AreaCode.areaCodeGlob.value(),
+        logConfig: LogConfig(filePath: logPath),
       ));
 
       final onLocalUserRegisteredCompleter = Completer<bool>();
@@ -5715,12 +5952,15 @@ void generatedTestCases(IrisTester irisTester) {
   );
 
   testWidgets(
-    'onUserInfoUpdated',
+    'RtcEngineEventHandler.onUserInfoUpdated',
     (WidgetTester tester) async {
       RtcEngine rtcEngine = createAgoraRtcEngine();
+      Directory appDocDir = await getApplicationDocumentsDirectory();
+      String logPath = path.join(appDocDir.path, 'test_log.txt');
       await rtcEngine.initialize(RtcEngineContext(
         appId: 'app_id',
         areaCode: AreaCode.areaCodeGlob.value(),
+        logConfig: LogConfig(filePath: logPath),
       ));
 
       final onUserInfoUpdatedCompleter = Completer<bool>();
@@ -5783,12 +6023,15 @@ void generatedTestCases(IrisTester irisTester) {
   );
 
   testWidgets(
-    'onUserAccountUpdated',
+    'RtcEngineEventHandler.onUserAccountUpdated',
     (WidgetTester tester) async {
       RtcEngine rtcEngine = createAgoraRtcEngine();
+      Directory appDocDir = await getApplicationDocumentsDirectory();
+      String logPath = path.join(appDocDir.path, 'test_log.txt');
       await rtcEngine.initialize(RtcEngineContext(
         appId: 'app_id',
         areaCode: AreaCode.areaCodeGlob.value(),
+        logConfig: LogConfig(filePath: logPath),
       ));
 
       final onUserAccountUpdatedCompleter = Completer<bool>();
@@ -5854,12 +6097,15 @@ void generatedTestCases(IrisTester irisTester) {
   );
 
   testWidgets(
-    'onVideoRenderingTracingResult',
+    'RtcEngineEventHandler.onVideoRenderingTracingResult',
     (WidgetTester tester) async {
       RtcEngine rtcEngine = createAgoraRtcEngine();
+      Directory appDocDir = await getApplicationDocumentsDirectory();
+      String logPath = path.join(appDocDir.path, 'test_log.txt');
       await rtcEngine.initialize(RtcEngineContext(
         appId: 'app_id',
         areaCode: AreaCode.areaCodeGlob.value(),
+        logConfig: LogConfig(filePath: logPath),
       ));
 
       final onVideoRenderingTracingResultCompleter = Completer<bool>();
@@ -5946,12 +6192,15 @@ void generatedTestCases(IrisTester irisTester) {
   );
 
   testWidgets(
-    'onLocalVideoTranscoderError',
+    'RtcEngineEventHandler.onLocalVideoTranscoderError',
     (WidgetTester tester) async {
       RtcEngine rtcEngine = createAgoraRtcEngine();
+      Directory appDocDir = await getApplicationDocumentsDirectory();
+      String logPath = path.join(appDocDir.path, 'test_log.txt');
       await rtcEngine.initialize(RtcEngineContext(
         appId: 'app_id',
         areaCode: AreaCode.areaCodeGlob.value(),
+        logConfig: LogConfig(filePath: logPath),
       ));
 
       final onLocalVideoTranscoderErrorCompleter = Completer<bool>();
@@ -6036,12 +6285,15 @@ void generatedTestCases(IrisTester irisTester) {
   );
 
   testWidgets(
-    'onUploadLogResult',
+    'RtcEngineEventHandler.onUploadLogResult',
     (WidgetTester tester) async {
       RtcEngine rtcEngine = createAgoraRtcEngine();
+      Directory appDocDir = await getApplicationDocumentsDirectory();
+      String logPath = path.join(appDocDir.path, 'test_log.txt');
       await rtcEngine.initialize(RtcEngineContext(
         appId: 'app_id',
         areaCode: AreaCode.areaCodeGlob.value(),
+        logConfig: LogConfig(filePath: logPath),
       ));
 
       final onUploadLogResultCompleter = Completer<bool>();
@@ -6109,12 +6361,15 @@ void generatedTestCases(IrisTester irisTester) {
   );
 
   testWidgets(
-    'onAudioSubscribeStateChanged',
+    'RtcEngineEventHandler.onAudioSubscribeStateChanged',
     (WidgetTester tester) async {
       RtcEngine rtcEngine = createAgoraRtcEngine();
+      Directory appDocDir = await getApplicationDocumentsDirectory();
+      String logPath = path.join(appDocDir.path, 'test_log.txt');
       await rtcEngine.initialize(RtcEngineContext(
         appId: 'app_id',
         areaCode: AreaCode.areaCodeGlob.value(),
+        logConfig: LogConfig(filePath: logPath),
       ));
 
       final onAudioSubscribeStateChangedCompleter = Completer<bool>();
@@ -6183,12 +6438,15 @@ void generatedTestCases(IrisTester irisTester) {
   );
 
   testWidgets(
-    'onVideoSubscribeStateChanged',
+    'RtcEngineEventHandler.onVideoSubscribeStateChanged',
     (WidgetTester tester) async {
       RtcEngine rtcEngine = createAgoraRtcEngine();
+      Directory appDocDir = await getApplicationDocumentsDirectory();
+      String logPath = path.join(appDocDir.path, 'test_log.txt');
       await rtcEngine.initialize(RtcEngineContext(
         appId: 'app_id',
         areaCode: AreaCode.areaCodeGlob.value(),
+        logConfig: LogConfig(filePath: logPath),
       ));
 
       final onVideoSubscribeStateChangedCompleter = Completer<bool>();
@@ -6257,12 +6515,15 @@ void generatedTestCases(IrisTester irisTester) {
   );
 
   testWidgets(
-    'onAudioPublishStateChanged',
+    'RtcEngineEventHandler.onAudioPublishStateChanged',
     (WidgetTester tester) async {
       RtcEngine rtcEngine = createAgoraRtcEngine();
+      Directory appDocDir = await getApplicationDocumentsDirectory();
+      String logPath = path.join(appDocDir.path, 'test_log.txt');
       await rtcEngine.initialize(RtcEngineContext(
         appId: 'app_id',
         areaCode: AreaCode.areaCodeGlob.value(),
+        logConfig: LogConfig(filePath: logPath),
       ));
 
       final onAudioPublishStateChangedCompleter = Completer<bool>();
@@ -6328,12 +6589,15 @@ void generatedTestCases(IrisTester irisTester) {
   );
 
   testWidgets(
-    'onVideoPublishStateChanged',
+    'RtcEngineEventHandler.onVideoPublishStateChanged',
     (WidgetTester tester) async {
       RtcEngine rtcEngine = createAgoraRtcEngine();
+      Directory appDocDir = await getApplicationDocumentsDirectory();
+      String logPath = path.join(appDocDir.path, 'test_log.txt');
       await rtcEngine.initialize(RtcEngineContext(
         appId: 'app_id',
         areaCode: AreaCode.areaCodeGlob.value(),
+        logConfig: LogConfig(filePath: logPath),
       ));
 
       final onVideoPublishStateChangedCompleter = Completer<bool>();
@@ -6402,12 +6666,15 @@ void generatedTestCases(IrisTester irisTester) {
   );
 
   testWidgets(
-    'onTranscodedStreamLayoutInfo',
+    'RtcEngineEventHandler.onTranscodedStreamLayoutInfo',
     (WidgetTester tester) async {
       RtcEngine rtcEngine = createAgoraRtcEngine();
+      Directory appDocDir = await getApplicationDocumentsDirectory();
+      String logPath = path.join(appDocDir.path, 'test_log.txt');
       await rtcEngine.initialize(RtcEngineContext(
         appId: 'app_id',
         areaCode: AreaCode.areaCodeGlob.value(),
+        logConfig: LogConfig(filePath: logPath),
       ));
 
       final onTranscodedStreamLayoutInfoCompleter = Completer<bool>();
@@ -6480,12 +6747,15 @@ void generatedTestCases(IrisTester irisTester) {
   );
 
   testWidgets(
-    'onExtensionEvent',
+    'RtcEngineEventHandler.onExtensionEvent',
     (WidgetTester tester) async {
       RtcEngine rtcEngine = createAgoraRtcEngine();
+      Directory appDocDir = await getApplicationDocumentsDirectory();
+      String logPath = path.join(appDocDir.path, 'test_log.txt');
       await rtcEngine.initialize(RtcEngineContext(
         appId: 'app_id',
         areaCode: AreaCode.areaCodeGlob.value(),
+        logConfig: LogConfig(filePath: logPath),
       ));
 
       final onExtensionEventCompleter = Completer<bool>();
@@ -6548,12 +6818,15 @@ void generatedTestCases(IrisTester irisTester) {
   );
 
   testWidgets(
-    'onExtensionStarted',
+    'RtcEngineEventHandler.onExtensionStarted',
     (WidgetTester tester) async {
       RtcEngine rtcEngine = createAgoraRtcEngine();
+      Directory appDocDir = await getApplicationDocumentsDirectory();
+      String logPath = path.join(appDocDir.path, 'test_log.txt');
       await rtcEngine.initialize(RtcEngineContext(
         appId: 'app_id',
         areaCode: AreaCode.areaCodeGlob.value(),
+        logConfig: LogConfig(filePath: logPath),
       ));
 
       final onExtensionStartedCompleter = Completer<bool>();
@@ -6611,12 +6884,15 @@ void generatedTestCases(IrisTester irisTester) {
   );
 
   testWidgets(
-    'onExtensionStopped',
+    'RtcEngineEventHandler.onExtensionStopped',
     (WidgetTester tester) async {
       RtcEngine rtcEngine = createAgoraRtcEngine();
+      Directory appDocDir = await getApplicationDocumentsDirectory();
+      String logPath = path.join(appDocDir.path, 'test_log.txt');
       await rtcEngine.initialize(RtcEngineContext(
         appId: 'app_id',
         areaCode: AreaCode.areaCodeGlob.value(),
+        logConfig: LogConfig(filePath: logPath),
       ));
 
       final onExtensionStoppedCompleter = Completer<bool>();
@@ -6674,12 +6950,15 @@ void generatedTestCases(IrisTester irisTester) {
   );
 
   testWidgets(
-    'onExtensionError',
+    'RtcEngineEventHandler.onExtensionError',
     (WidgetTester tester) async {
       RtcEngine rtcEngine = createAgoraRtcEngine();
+      Directory appDocDir = await getApplicationDocumentsDirectory();
+      String logPath = path.join(appDocDir.path, 'test_log.txt');
       await rtcEngine.initialize(RtcEngineContext(
         appId: 'app_id',
         areaCode: AreaCode.areaCodeGlob.value(),
+        logConfig: LogConfig(filePath: logPath),
       ));
 
       final onExtensionErrorCompleter = Completer<bool>();
@@ -6742,12 +7021,15 @@ void generatedTestCases(IrisTester irisTester) {
   );
 
   testWidgets(
-    'onSetRtmFlagResult',
+    'RtcEngineEventHandler.onSetRtmFlagResult',
     (WidgetTester tester) async {
       RtcEngine rtcEngine = createAgoraRtcEngine();
+      Directory appDocDir = await getApplicationDocumentsDirectory();
+      String logPath = path.join(appDocDir.path, 'test_log.txt');
       await rtcEngine.initialize(RtcEngineContext(
         appId: 'app_id',
         areaCode: AreaCode.areaCodeGlob.value(),
+        logConfig: LogConfig(filePath: logPath),
       ));
 
       final onSetRtmFlagResultCompleter = Completer<bool>();

@@ -11,7 +11,7 @@ import 'package:iris_method_channel/iris_method_channel.dart';
 
 void videoDeviceManagerSmokeTestCases() {
   testWidgets(
-    'enumerateVideoDevices',
+    'VideoDeviceManager.enumerateVideoDevices',
     (WidgetTester tester) async {
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
@@ -28,7 +28,8 @@ void videoDeviceManagerSmokeTestCases() {
         await videoDeviceManager.enumerateVideoDevices();
       } catch (e) {
         if (e is! AgoraRtcException) {
-          debugPrint('[enumerateVideoDevices] error: ${e.toString()}');
+          debugPrint(
+              '[VideoDeviceManager.enumerateVideoDevices] error: ${e.toString()}');
           rethrow;
         }
 
@@ -45,7 +46,7 @@ void videoDeviceManagerSmokeTestCases() {
   );
 
   testWidgets(
-    'setDevice',
+    'VideoDeviceManager.setDevice',
     (WidgetTester tester) async {
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
@@ -65,7 +66,7 @@ void videoDeviceManagerSmokeTestCases() {
         );
       } catch (e) {
         if (e is! AgoraRtcException) {
-          debugPrint('[setDevice] error: ${e.toString()}');
+          debugPrint('[VideoDeviceManager.setDevice] error: ${e.toString()}');
           rethrow;
         }
 
@@ -82,7 +83,7 @@ void videoDeviceManagerSmokeTestCases() {
   );
 
   testWidgets(
-    'getDevice',
+    'VideoDeviceManager.getDevice',
     (WidgetTester tester) async {
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
@@ -99,7 +100,7 @@ void videoDeviceManagerSmokeTestCases() {
         await videoDeviceManager.getDevice();
       } catch (e) {
         if (e is! AgoraRtcException) {
-          debugPrint('[getDevice] error: ${e.toString()}');
+          debugPrint('[VideoDeviceManager.getDevice] error: ${e.toString()}');
           rethrow;
         }
 
@@ -116,7 +117,7 @@ void videoDeviceManagerSmokeTestCases() {
   );
 
   testWidgets(
-    'numberOfCapabilities',
+    'VideoDeviceManager.numberOfCapabilities',
     (WidgetTester tester) async {
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
@@ -136,7 +137,8 @@ void videoDeviceManagerSmokeTestCases() {
         );
       } catch (e) {
         if (e is! AgoraRtcException) {
-          debugPrint('[numberOfCapabilities] error: ${e.toString()}');
+          debugPrint(
+              '[VideoDeviceManager.numberOfCapabilities] error: ${e.toString()}');
           rethrow;
         }
 
@@ -153,7 +155,7 @@ void videoDeviceManagerSmokeTestCases() {
   );
 
   testWidgets(
-    'getCapability',
+    'VideoDeviceManager.getCapability',
     (WidgetTester tester) async {
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
@@ -175,7 +177,8 @@ void videoDeviceManagerSmokeTestCases() {
         );
       } catch (e) {
         if (e is! AgoraRtcException) {
-          debugPrint('[getCapability] error: ${e.toString()}');
+          debugPrint(
+              '[VideoDeviceManager.getCapability] error: ${e.toString()}');
           rethrow;
         }
 
@@ -192,7 +195,7 @@ void videoDeviceManagerSmokeTestCases() {
   );
 
   testWidgets(
-    'startDeviceTest',
+    'VideoDeviceManager.startDeviceTest',
     (WidgetTester tester) async {
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
@@ -212,7 +215,8 @@ void videoDeviceManagerSmokeTestCases() {
         );
       } catch (e) {
         if (e is! AgoraRtcException) {
-          debugPrint('[startDeviceTest] error: ${e.toString()}');
+          debugPrint(
+              '[VideoDeviceManager.startDeviceTest] error: ${e.toString()}');
           rethrow;
         }
 
@@ -229,7 +233,7 @@ void videoDeviceManagerSmokeTestCases() {
   );
 
   testWidgets(
-    'stopDeviceTest',
+    'VideoDeviceManager.stopDeviceTest',
     (WidgetTester tester) async {
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
@@ -246,7 +250,8 @@ void videoDeviceManagerSmokeTestCases() {
         await videoDeviceManager.stopDeviceTest();
       } catch (e) {
         if (e is! AgoraRtcException) {
-          debugPrint('[stopDeviceTest] error: ${e.toString()}');
+          debugPrint(
+              '[VideoDeviceManager.stopDeviceTest] error: ${e.toString()}');
           rethrow;
         }
 
@@ -263,7 +268,7 @@ void videoDeviceManagerSmokeTestCases() {
   );
 
   testWidgets(
-    'release',
+    'VideoDeviceManager.release',
     (WidgetTester tester) async {
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
@@ -280,7 +285,7 @@ void videoDeviceManagerSmokeTestCases() {
         await videoDeviceManager.release();
       } catch (e) {
         if (e is! AgoraRtcException) {
-          debugPrint('[release] error: ${e.toString()}');
+          debugPrint('[VideoDeviceManager.release] error: ${e.toString()}');
           rethrow;
         }
 

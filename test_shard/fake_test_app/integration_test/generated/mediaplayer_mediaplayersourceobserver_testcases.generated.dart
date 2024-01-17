@@ -2,6 +2,7 @@
 
 // ignore_for_file: deprecated_member_use,constant_identifier_names
 
+import 'dart:io';
 import 'dart:async';
 import 'dart:typed_data';
 
@@ -10,17 +11,22 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:iris_tester/iris_tester.dart';
 import 'package:iris_method_channel/iris_method_channel.dart';
+import 'package:path_provider/path_provider.dart';
+import 'package:path/path.dart' as path;
 
 import 'event_ids_mapping.dart';
 
 void generatedTestCases(IrisTester irisTester) {
   testWidgets(
-    'onPlayerSourceStateChanged',
+    'MediaPlayerSourceObserver.onPlayerSourceStateChanged',
     (WidgetTester tester) async {
       RtcEngine rtcEngine = createAgoraRtcEngine();
+      Directory appDocDir = await getApplicationDocumentsDirectory();
+      String logPath = path.join(appDocDir.path, 'test_log.txt');
       await rtcEngine.initialize(RtcEngineContext(
         appId: 'app_id',
         areaCode: AreaCode.areaCodeGlob.value(),
+        logConfig: LogConfig(filePath: logPath),
       ));
       final mediaPlayerController = MediaPlayerController(
           rtcEngine: rtcEngine, canvas: const VideoCanvas());
@@ -83,12 +89,15 @@ void generatedTestCases(IrisTester irisTester) {
   );
 
   testWidgets(
-    'onPositionChanged',
+    'MediaPlayerSourceObserver.onPositionChanged',
     (WidgetTester tester) async {
       RtcEngine rtcEngine = createAgoraRtcEngine();
+      Directory appDocDir = await getApplicationDocumentsDirectory();
+      String logPath = path.join(appDocDir.path, 'test_log.txt');
       await rtcEngine.initialize(RtcEngineContext(
         appId: 'app_id',
         areaCode: AreaCode.areaCodeGlob.value(),
+        logConfig: LogConfig(filePath: logPath),
       ));
       final mediaPlayerController = MediaPlayerController(
           rtcEngine: rtcEngine, canvas: const VideoCanvas());
@@ -150,12 +159,15 @@ void generatedTestCases(IrisTester irisTester) {
   );
 
   testWidgets(
-    'onPlayerEvent',
+    'MediaPlayerSourceObserver.onPlayerEvent',
     (WidgetTester tester) async {
       RtcEngine rtcEngine = createAgoraRtcEngine();
+      Directory appDocDir = await getApplicationDocumentsDirectory();
+      String logPath = path.join(appDocDir.path, 'test_log.txt');
       await rtcEngine.initialize(RtcEngineContext(
         appId: 'app_id',
         areaCode: AreaCode.areaCodeGlob.value(),
+        logConfig: LogConfig(filePath: logPath),
       ));
       final mediaPlayerController = MediaPlayerController(
           rtcEngine: rtcEngine, canvas: const VideoCanvas());
@@ -220,12 +232,15 @@ void generatedTestCases(IrisTester irisTester) {
   );
 
   testWidgets(
-    'onMetaData',
+    'MediaPlayerSourceObserver.onMetaData',
     (WidgetTester tester) async {
       RtcEngine rtcEngine = createAgoraRtcEngine();
+      Directory appDocDir = await getApplicationDocumentsDirectory();
+      String logPath = path.join(appDocDir.path, 'test_log.txt');
       await rtcEngine.initialize(RtcEngineContext(
         appId: 'app_id',
         areaCode: AreaCode.areaCodeGlob.value(),
+        logConfig: LogConfig(filePath: logPath),
       ));
       final mediaPlayerController = MediaPlayerController(
           rtcEngine: rtcEngine, canvas: const VideoCanvas());
@@ -286,12 +301,15 @@ void generatedTestCases(IrisTester irisTester) {
   );
 
   testWidgets(
-    'onPlayBufferUpdated',
+    'MediaPlayerSourceObserver.onPlayBufferUpdated',
     (WidgetTester tester) async {
       RtcEngine rtcEngine = createAgoraRtcEngine();
+      Directory appDocDir = await getApplicationDocumentsDirectory();
+      String logPath = path.join(appDocDir.path, 'test_log.txt');
       await rtcEngine.initialize(RtcEngineContext(
         appId: 'app_id',
         areaCode: AreaCode.areaCodeGlob.value(),
+        logConfig: LogConfig(filePath: logPath),
       ));
       final mediaPlayerController = MediaPlayerController(
           rtcEngine: rtcEngine, canvas: const VideoCanvas());
@@ -351,12 +369,15 @@ void generatedTestCases(IrisTester irisTester) {
   );
 
   testWidgets(
-    'onPreloadEvent',
+    'MediaPlayerSourceObserver.onPreloadEvent',
     (WidgetTester tester) async {
       RtcEngine rtcEngine = createAgoraRtcEngine();
+      Directory appDocDir = await getApplicationDocumentsDirectory();
+      String logPath = path.join(appDocDir.path, 'test_log.txt');
       await rtcEngine.initialize(RtcEngineContext(
         appId: 'app_id',
         areaCode: AreaCode.areaCodeGlob.value(),
+        logConfig: LogConfig(filePath: logPath),
       ));
       final mediaPlayerController = MediaPlayerController(
           rtcEngine: rtcEngine, canvas: const VideoCanvas());
@@ -418,12 +439,15 @@ void generatedTestCases(IrisTester irisTester) {
   );
 
   testWidgets(
-    'onCompleted',
+    'MediaPlayerSourceObserver.onCompleted',
     (WidgetTester tester) async {
       RtcEngine rtcEngine = createAgoraRtcEngine();
+      Directory appDocDir = await getApplicationDocumentsDirectory();
+      String logPath = path.join(appDocDir.path, 'test_log.txt');
       await rtcEngine.initialize(RtcEngineContext(
         appId: 'app_id',
         areaCode: AreaCode.areaCodeGlob.value(),
+        logConfig: LogConfig(filePath: logPath),
       ));
       final mediaPlayerController = MediaPlayerController(
           rtcEngine: rtcEngine, canvas: const VideoCanvas());
@@ -478,12 +502,15 @@ void generatedTestCases(IrisTester irisTester) {
   );
 
   testWidgets(
-    'onAgoraCDNTokenWillExpire',
+    'MediaPlayerSourceObserver.onAgoraCDNTokenWillExpire',
     (WidgetTester tester) async {
       RtcEngine rtcEngine = createAgoraRtcEngine();
+      Directory appDocDir = await getApplicationDocumentsDirectory();
+      String logPath = path.join(appDocDir.path, 'test_log.txt');
       await rtcEngine.initialize(RtcEngineContext(
         appId: 'app_id',
         areaCode: AreaCode.areaCodeGlob.value(),
+        logConfig: LogConfig(filePath: logPath),
       ));
       final mediaPlayerController = MediaPlayerController(
           rtcEngine: rtcEngine, canvas: const VideoCanvas());
@@ -539,12 +566,15 @@ void generatedTestCases(IrisTester irisTester) {
   );
 
   testWidgets(
-    'onPlayerSrcInfoChanged',
+    'MediaPlayerSourceObserver.onPlayerSrcInfoChanged',
     (WidgetTester tester) async {
       RtcEngine rtcEngine = createAgoraRtcEngine();
+      Directory appDocDir = await getApplicationDocumentsDirectory();
+      String logPath = path.join(appDocDir.path, 'test_log.txt');
       await rtcEngine.initialize(RtcEngineContext(
         appId: 'app_id',
         areaCode: AreaCode.areaCodeGlob.value(),
+        logConfig: LogConfig(filePath: logPath),
       ));
       final mediaPlayerController = MediaPlayerController(
           rtcEngine: rtcEngine, canvas: const VideoCanvas());
@@ -616,12 +646,15 @@ void generatedTestCases(IrisTester irisTester) {
   );
 
   testWidgets(
-    'onPlayerInfoUpdated',
+    'MediaPlayerSourceObserver.onPlayerInfoUpdated',
     (WidgetTester tester) async {
       RtcEngine rtcEngine = createAgoraRtcEngine();
+      Directory appDocDir = await getApplicationDocumentsDirectory();
+      String logPath = path.join(appDocDir.path, 'test_log.txt');
       await rtcEngine.initialize(RtcEngineContext(
         appId: 'app_id',
         areaCode: AreaCode.areaCodeGlob.value(),
+        logConfig: LogConfig(filePath: logPath),
       ));
       final mediaPlayerController = MediaPlayerController(
           rtcEngine: rtcEngine, canvas: const VideoCanvas());
@@ -696,12 +729,15 @@ void generatedTestCases(IrisTester irisTester) {
   );
 
   testWidgets(
-    'onPlayerCacheStats',
+    'MediaPlayerSourceObserver.onPlayerCacheStats',
     (WidgetTester tester) async {
       RtcEngine rtcEngine = createAgoraRtcEngine();
+      Directory appDocDir = await getApplicationDocumentsDirectory();
+      String logPath = path.join(appDocDir.path, 'test_log.txt');
       await rtcEngine.initialize(RtcEngineContext(
         appId: 'app_id',
         areaCode: AreaCode.areaCodeGlob.value(),
+        logConfig: LogConfig(filePath: logPath),
       ));
       final mediaPlayerController = MediaPlayerController(
           rtcEngine: rtcEngine, canvas: const VideoCanvas());
@@ -768,12 +804,15 @@ void generatedTestCases(IrisTester irisTester) {
   );
 
   testWidgets(
-    'onPlayerPlaybackStats',
+    'MediaPlayerSourceObserver.onPlayerPlaybackStats',
     (WidgetTester tester) async {
       RtcEngine rtcEngine = createAgoraRtcEngine();
+      Directory appDocDir = await getApplicationDocumentsDirectory();
+      String logPath = path.join(appDocDir.path, 'test_log.txt');
       await rtcEngine.initialize(RtcEngineContext(
         appId: 'app_id',
         areaCode: AreaCode.areaCodeGlob.value(),
+        logConfig: LogConfig(filePath: logPath),
       ));
       final mediaPlayerController = MediaPlayerController(
           rtcEngine: rtcEngine, canvas: const VideoCanvas());
@@ -842,12 +881,15 @@ void generatedTestCases(IrisTester irisTester) {
   );
 
   testWidgets(
-    'onAudioVolumeIndication',
+    'MediaPlayerSourceObserver.onAudioVolumeIndication',
     (WidgetTester tester) async {
       RtcEngine rtcEngine = createAgoraRtcEngine();
+      Directory appDocDir = await getApplicationDocumentsDirectory();
+      String logPath = path.join(appDocDir.path, 'test_log.txt');
       await rtcEngine.initialize(RtcEngineContext(
         appId: 'app_id',
         areaCode: AreaCode.areaCodeGlob.value(),
+        logConfig: LogConfig(filePath: logPath),
       ));
       final mediaPlayerController = MediaPlayerController(
           rtcEngine: rtcEngine, canvas: const VideoCanvas());

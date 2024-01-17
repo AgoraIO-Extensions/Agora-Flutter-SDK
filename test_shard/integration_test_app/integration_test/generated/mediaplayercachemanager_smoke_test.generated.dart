@@ -9,7 +9,7 @@ import 'package:integration_test_app/main.dart' as app;
 
 void mediaPlayerCacheManagerSmokeTestCases() {
   testWidgets(
-    'removeAllCaches',
+    'MediaPlayerCacheManager.removeAllCaches',
     (WidgetTester tester) async {
       app.main();
       await tester.pumpAndSettle();
@@ -29,11 +29,12 @@ void mediaPlayerCacheManagerSmokeTestCases() {
         await mediaPlayerCacheManager.removeAllCaches();
       } catch (e) {
         if (e is! AgoraRtcException) {
-          debugPrint('[removeAllCaches] error: ${e.toString()}');
+          debugPrint(
+              '[MediaPlayerCacheManager.removeAllCaches] error: ${e.toString()}');
         }
         expect(e is AgoraRtcException, true);
         debugPrint(
-            '[removeAllCaches] errorcode: ${(e as AgoraRtcException).code}');
+            '[MediaPlayerCacheManager.removeAllCaches] errorcode: ${(e as AgoraRtcException).code}');
       }
 
       await rtcEngine.release();
@@ -42,7 +43,7 @@ void mediaPlayerCacheManagerSmokeTestCases() {
   );
 
   testWidgets(
-    'removeOldCache',
+    'MediaPlayerCacheManager.removeOldCache',
     (WidgetTester tester) async {
       app.main();
       await tester.pumpAndSettle();
@@ -62,11 +63,12 @@ void mediaPlayerCacheManagerSmokeTestCases() {
         await mediaPlayerCacheManager.removeOldCache();
       } catch (e) {
         if (e is! AgoraRtcException) {
-          debugPrint('[removeOldCache] error: ${e.toString()}');
+          debugPrint(
+              '[MediaPlayerCacheManager.removeOldCache] error: ${e.toString()}');
         }
         expect(e is AgoraRtcException, true);
         debugPrint(
-            '[removeOldCache] errorcode: ${(e as AgoraRtcException).code}');
+            '[MediaPlayerCacheManager.removeOldCache] errorcode: ${(e as AgoraRtcException).code}');
       }
 
       await rtcEngine.release();
@@ -75,7 +77,7 @@ void mediaPlayerCacheManagerSmokeTestCases() {
   );
 
   testWidgets(
-    'removeCacheByUri',
+    'MediaPlayerCacheManager.removeCacheByUri',
     (WidgetTester tester) async {
       app.main();
       await tester.pumpAndSettle();
@@ -98,11 +100,12 @@ void mediaPlayerCacheManagerSmokeTestCases() {
         );
       } catch (e) {
         if (e is! AgoraRtcException) {
-          debugPrint('[removeCacheByUri] error: ${e.toString()}');
+          debugPrint(
+              '[MediaPlayerCacheManager.removeCacheByUri] error: ${e.toString()}');
         }
         expect(e is AgoraRtcException, true);
         debugPrint(
-            '[removeCacheByUri] errorcode: ${(e as AgoraRtcException).code}');
+            '[MediaPlayerCacheManager.removeCacheByUri] errorcode: ${(e as AgoraRtcException).code}');
       }
 
       await rtcEngine.release();
@@ -111,7 +114,7 @@ void mediaPlayerCacheManagerSmokeTestCases() {
   );
 
   testWidgets(
-    'setCacheDir',
+    'MediaPlayerCacheManager.setCacheDir',
     (WidgetTester tester) async {
       app.main();
       await tester.pumpAndSettle();
@@ -134,10 +137,12 @@ void mediaPlayerCacheManagerSmokeTestCases() {
         );
       } catch (e) {
         if (e is! AgoraRtcException) {
-          debugPrint('[setCacheDir] error: ${e.toString()}');
+          debugPrint(
+              '[MediaPlayerCacheManager.setCacheDir] error: ${e.toString()}');
         }
         expect(e is AgoraRtcException, true);
-        debugPrint('[setCacheDir] errorcode: ${(e as AgoraRtcException).code}');
+        debugPrint(
+            '[MediaPlayerCacheManager.setCacheDir] errorcode: ${(e as AgoraRtcException).code}');
       }
 
       await rtcEngine.release();
@@ -146,7 +151,7 @@ void mediaPlayerCacheManagerSmokeTestCases() {
   );
 
   testWidgets(
-    'setMaxCacheFileCount',
+    'MediaPlayerCacheManager.setMaxCacheFileCount',
     (WidgetTester tester) async {
       app.main();
       await tester.pumpAndSettle();
@@ -169,11 +174,12 @@ void mediaPlayerCacheManagerSmokeTestCases() {
         );
       } catch (e) {
         if (e is! AgoraRtcException) {
-          debugPrint('[setMaxCacheFileCount] error: ${e.toString()}');
+          debugPrint(
+              '[MediaPlayerCacheManager.setMaxCacheFileCount] error: ${e.toString()}');
         }
         expect(e is AgoraRtcException, true);
         debugPrint(
-            '[setMaxCacheFileCount] errorcode: ${(e as AgoraRtcException).code}');
+            '[MediaPlayerCacheManager.setMaxCacheFileCount] errorcode: ${(e as AgoraRtcException).code}');
       }
 
       await rtcEngine.release();
@@ -182,7 +188,7 @@ void mediaPlayerCacheManagerSmokeTestCases() {
   );
 
   testWidgets(
-    'setMaxCacheFileSize',
+    'MediaPlayerCacheManager.setMaxCacheFileSize',
     (WidgetTester tester) async {
       app.main();
       await tester.pumpAndSettle();
@@ -205,11 +211,12 @@ void mediaPlayerCacheManagerSmokeTestCases() {
         );
       } catch (e) {
         if (e is! AgoraRtcException) {
-          debugPrint('[setMaxCacheFileSize] error: ${e.toString()}');
+          debugPrint(
+              '[MediaPlayerCacheManager.setMaxCacheFileSize] error: ${e.toString()}');
         }
         expect(e is AgoraRtcException, true);
         debugPrint(
-            '[setMaxCacheFileSize] errorcode: ${(e as AgoraRtcException).code}');
+            '[MediaPlayerCacheManager.setMaxCacheFileSize] errorcode: ${(e as AgoraRtcException).code}');
       }
 
       await rtcEngine.release();
@@ -218,7 +225,7 @@ void mediaPlayerCacheManagerSmokeTestCases() {
   );
 
   testWidgets(
-    'enableAutoRemoveCache',
+    'MediaPlayerCacheManager.enableAutoRemoveCache',
     (WidgetTester tester) async {
       app.main();
       await tester.pumpAndSettle();
@@ -241,11 +248,12 @@ void mediaPlayerCacheManagerSmokeTestCases() {
         );
       } catch (e) {
         if (e is! AgoraRtcException) {
-          debugPrint('[enableAutoRemoveCache] error: ${e.toString()}');
+          debugPrint(
+              '[MediaPlayerCacheManager.enableAutoRemoveCache] error: ${e.toString()}');
         }
         expect(e is AgoraRtcException, true);
         debugPrint(
-            '[enableAutoRemoveCache] errorcode: ${(e as AgoraRtcException).code}');
+            '[MediaPlayerCacheManager.enableAutoRemoveCache] errorcode: ${(e as AgoraRtcException).code}');
       }
 
       await rtcEngine.release();
@@ -254,7 +262,7 @@ void mediaPlayerCacheManagerSmokeTestCases() {
   );
 
   testWidgets(
-    'getCacheDir',
+    'MediaPlayerCacheManager.getCacheDir',
     (WidgetTester tester) async {
       app.main();
       await tester.pumpAndSettle();
@@ -277,10 +285,12 @@ void mediaPlayerCacheManagerSmokeTestCases() {
         );
       } catch (e) {
         if (e is! AgoraRtcException) {
-          debugPrint('[getCacheDir] error: ${e.toString()}');
+          debugPrint(
+              '[MediaPlayerCacheManager.getCacheDir] error: ${e.toString()}');
         }
         expect(e is AgoraRtcException, true);
-        debugPrint('[getCacheDir] errorcode: ${(e as AgoraRtcException).code}');
+        debugPrint(
+            '[MediaPlayerCacheManager.getCacheDir] errorcode: ${(e as AgoraRtcException).code}');
       }
 
       await rtcEngine.release();
@@ -289,7 +299,7 @@ void mediaPlayerCacheManagerSmokeTestCases() {
   );
 
   testWidgets(
-    'getMaxCacheFileCount',
+    'MediaPlayerCacheManager.getMaxCacheFileCount',
     (WidgetTester tester) async {
       app.main();
       await tester.pumpAndSettle();
@@ -309,11 +319,12 @@ void mediaPlayerCacheManagerSmokeTestCases() {
         await mediaPlayerCacheManager.getMaxCacheFileCount();
       } catch (e) {
         if (e is! AgoraRtcException) {
-          debugPrint('[getMaxCacheFileCount] error: ${e.toString()}');
+          debugPrint(
+              '[MediaPlayerCacheManager.getMaxCacheFileCount] error: ${e.toString()}');
         }
         expect(e is AgoraRtcException, true);
         debugPrint(
-            '[getMaxCacheFileCount] errorcode: ${(e as AgoraRtcException).code}');
+            '[MediaPlayerCacheManager.getMaxCacheFileCount] errorcode: ${(e as AgoraRtcException).code}');
       }
 
       await rtcEngine.release();
@@ -322,7 +333,7 @@ void mediaPlayerCacheManagerSmokeTestCases() {
   );
 
   testWidgets(
-    'getMaxCacheFileSize',
+    'MediaPlayerCacheManager.getMaxCacheFileSize',
     (WidgetTester tester) async {
       app.main();
       await tester.pumpAndSettle();
@@ -342,11 +353,12 @@ void mediaPlayerCacheManagerSmokeTestCases() {
         await mediaPlayerCacheManager.getMaxCacheFileSize();
       } catch (e) {
         if (e is! AgoraRtcException) {
-          debugPrint('[getMaxCacheFileSize] error: ${e.toString()}');
+          debugPrint(
+              '[MediaPlayerCacheManager.getMaxCacheFileSize] error: ${e.toString()}');
         }
         expect(e is AgoraRtcException, true);
         debugPrint(
-            '[getMaxCacheFileSize] errorcode: ${(e as AgoraRtcException).code}');
+            '[MediaPlayerCacheManager.getMaxCacheFileSize] errorcode: ${(e as AgoraRtcException).code}');
       }
 
       await rtcEngine.release();
@@ -355,7 +367,7 @@ void mediaPlayerCacheManagerSmokeTestCases() {
   );
 
   testWidgets(
-    'getCacheFileCount',
+    'MediaPlayerCacheManager.getCacheFileCount',
     (WidgetTester tester) async {
       app.main();
       await tester.pumpAndSettle();
@@ -375,11 +387,12 @@ void mediaPlayerCacheManagerSmokeTestCases() {
         await mediaPlayerCacheManager.getCacheFileCount();
       } catch (e) {
         if (e is! AgoraRtcException) {
-          debugPrint('[getCacheFileCount] error: ${e.toString()}');
+          debugPrint(
+              '[MediaPlayerCacheManager.getCacheFileCount] error: ${e.toString()}');
         }
         expect(e is AgoraRtcException, true);
         debugPrint(
-            '[getCacheFileCount] errorcode: ${(e as AgoraRtcException).code}');
+            '[MediaPlayerCacheManager.getCacheFileCount] errorcode: ${(e as AgoraRtcException).code}');
       }
 
       await rtcEngine.release();

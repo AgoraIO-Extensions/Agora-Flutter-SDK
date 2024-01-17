@@ -10,7 +10,7 @@ import 'package:iris_method_channel/iris_method_channel.dart';
 
 void generatedTestCases() {
   testWidgets(
-    'enableTranscode',
+    'H265Transcoder.enableTranscode',
     (WidgetTester tester) async {
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
@@ -34,7 +34,7 @@ void generatedTestCases() {
         );
       } catch (e) {
         if (e is! AgoraRtcException) {
-          debugPrint('[enableTranscode] error: ${e.toString()}');
+          debugPrint('[H265Transcoder.enableTranscode] error: ${e.toString()}');
           rethrow;
         }
 
@@ -50,7 +50,7 @@ void generatedTestCases() {
   );
 
   testWidgets(
-    'queryChannel',
+    'H265Transcoder.queryChannel',
     (WidgetTester tester) async {
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
@@ -74,7 +74,7 @@ void generatedTestCases() {
         );
       } catch (e) {
         if (e is! AgoraRtcException) {
-          debugPrint('[queryChannel] error: ${e.toString()}');
+          debugPrint('[H265Transcoder.queryChannel] error: ${e.toString()}');
           rethrow;
         }
 
@@ -90,7 +90,7 @@ void generatedTestCases() {
   );
 
   testWidgets(
-    'triggerTranscode',
+    'H265Transcoder.triggerTranscode',
     (WidgetTester tester) async {
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
@@ -114,7 +114,8 @@ void generatedTestCases() {
         );
       } catch (e) {
         if (e is! AgoraRtcException) {
-          debugPrint('[triggerTranscode] error: ${e.toString()}');
+          debugPrint(
+              '[H265Transcoder.triggerTranscode] error: ${e.toString()}');
           rethrow;
         }
 
@@ -130,7 +131,7 @@ void generatedTestCases() {
   );
 
   testWidgets(
-    'registerTranscoderObserver',
+    'H265Transcoder.registerTranscoderObserver',
     (WidgetTester tester) async {
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
@@ -155,7 +156,8 @@ void generatedTestCases() {
         );
       } catch (e) {
         if (e is! AgoraRtcException) {
-          debugPrint('[registerTranscoderObserver] error: ${e.toString()}');
+          debugPrint(
+              '[H265Transcoder.registerTranscoderObserver] error: ${e.toString()}');
           rethrow;
         }
 
@@ -171,7 +173,7 @@ void generatedTestCases() {
   );
 
   testWidgets(
-    'unregisterTranscoderObserver',
+    'H265Transcoder.unregisterTranscoderObserver',
     (WidgetTester tester) async {
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
@@ -196,7 +198,8 @@ void generatedTestCases() {
         );
       } catch (e) {
         if (e is! AgoraRtcException) {
-          debugPrint('[unregisterTranscoderObserver] error: ${e.toString()}');
+          debugPrint(
+              '[H265Transcoder.unregisterTranscoderObserver] error: ${e.toString()}');
           rethrow;
         }
 

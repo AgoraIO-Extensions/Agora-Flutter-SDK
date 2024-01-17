@@ -17,7 +17,6 @@ parsers:
 
   - name: IrisApiIdParser
     package: '@agoraio-extensions/terra_shared_configs'
-    
   - path: parsers/cud_node_parser.ts
     args:
       configPath: configs/cud_node_parser.config.ts

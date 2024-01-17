@@ -5,6 +5,8 @@ set -x
 MY_PATH=$(realpath $(dirname "$0"))
 PROJECT_ROOT=$(realpath ${MY_PATH}/../..)
 
+bash ${MY_PATH}/prepare.sh
+
 pushd ${MY_PATH}
 
 npm exec terra -- run \
