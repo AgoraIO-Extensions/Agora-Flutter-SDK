@@ -128,7 +128,7 @@ enum AudioRoute {
 
   /// @nodoc
   @JsonValue(5)
-  routeHeadsetbluetooth,
+  routeBluetoothDeviceHfp,
 
   /// 7: The audio route is a USB peripheral device. (For macOS only)
   @JsonValue(6)
@@ -148,7 +148,7 @@ enum AudioRoute {
 
   /// @nodoc
   @JsonValue(10)
-  routeBluetoothSpeaker,
+  routeBluetoothDeviceA2dp,
 }
 
 /// @nodoc

@@ -792,8 +792,9 @@ class RtcEngineImpl extends rtc_engine_ex_binding.RtcEngineExImpl
 
   @override
   Future<void> leaveChannel({LeaveChannelOptions? options}) async {
-    final apiType =
-        options == null ? 'RtcEngine_leaveChannel' : 'RtcEngine_leaveChannel_2c0e3aa';
+    final apiType = options == null
+        ? 'RtcEngine_leaveChannel'
+        : 'RtcEngine_leaveChannel_2c0e3aa';
     final param = createParams({'options': options?.toJson()});
     final callApiResult = await irisMethodChannel
         .invokeMethod(IrisMethodCall(apiType, jsonEncode(param)));

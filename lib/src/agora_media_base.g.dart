@@ -488,12 +488,12 @@ const _$AudioRouteEnumMap = {
   AudioRoute.routeHeadsetnomic: 2,
   AudioRoute.routeSpeakerphone: 3,
   AudioRoute.routeLoudspeaker: 4,
-  AudioRoute.routeHeadsetbluetooth: 5,
+  AudioRoute.routeBluetoothDeviceHfp: 5,
   AudioRoute.routeUsb: 6,
   AudioRoute.routeHdmi: 7,
   AudioRoute.routeDisplayport: 8,
   AudioRoute.routeAirplay: 9,
-  AudioRoute.routeBluetoothSpeaker: 10,
+  AudioRoute.routeBluetoothDeviceA2dp: 10,
 };
 
 const _$MediaSourceTypeEnumMap = {

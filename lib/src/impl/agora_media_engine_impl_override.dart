@@ -59,7 +59,8 @@ class MediaEngineImpl extends media_engine_impl_binding.MediaEngineImpl
     await irisMethodChannel.registerEventHandler(
         ScopedEvent(
             scopedKey: _mediaEngineScopedKey,
-            registerName: 'MediaEngine_registerVideoEncodedFrameObserver_d45d579',
+            registerName:
+                'MediaEngine_registerVideoEncodedFrameObserver_d45d579',
             unregisterName: 'MediaEngine_unregisterVideoEncodedFrameObserver',
             handler: eventHandlerWrapper),
         jsonEncode(param));
@@ -101,7 +102,8 @@ class MediaEngineImpl extends media_engine_impl_binding.MediaEngineImpl
     await irisMethodChannel.unregisterEventHandler(
         ScopedEvent(
             scopedKey: _mediaEngineScopedKey,
-            registerName: 'MediaEngine_registerVideoEncodedFrameObserver_d45d579',
+            registerName:
+                'MediaEngine_registerVideoEncodedFrameObserver_d45d579',
             unregisterName: 'MediaEngine_unregisterVideoEncodedFrameObserver',
             handler: eventHandlerWrapper),
         jsonEncode(param));
