@@ -73,7 +73,7 @@ class MediaEngineImpl extends media_engine_impl_binding.MediaEngineImpl
     await irisMethodChannel.unregisterEventHandler(
         ScopedEvent(
             scopedKey: _mediaEngineScopedKey,
-            registerName: 'MediaEngine_registerAudioFrameObserver',
+            registerName: 'MediaEngine_registerAudioFrameObserver_d873a64',
             unregisterName: 'MediaEngine_unregisterAudioFrameObserver',
             handler: eventHandlerWrapper),
         jsonEncode(param));
@@ -87,7 +87,7 @@ class MediaEngineImpl extends media_engine_impl_binding.MediaEngineImpl
     await irisMethodChannel.unregisterEventHandler(
         ScopedEvent(
             scopedKey: _mediaEngineScopedKey,
-            registerName: 'MediaEngine_registerVideoFrameObserver',
+            registerName: 'MediaEngine_registerVideoFrameObserver_2cc0ef1',
             unregisterName: 'MediaEngine_unregisterVideoFrameObserver',
             handler: eventHandlerWrapper),
         jsonEncode(param));
@@ -101,7 +101,7 @@ class MediaEngineImpl extends media_engine_impl_binding.MediaEngineImpl
     await irisMethodChannel.unregisterEventHandler(
         ScopedEvent(
             scopedKey: _mediaEngineScopedKey,
-            registerName: 'MediaEngine_registerVideoEncodedFrameObserver',
+            registerName: 'MediaEngine_registerVideoEncodedFrameObserver_d45d579',
             unregisterName: 'MediaEngine_unregisterVideoEncodedFrameObserver',
             handler: eventHandlerWrapper),
         jsonEncode(param));
@@ -110,7 +110,7 @@ class MediaEngineImpl extends media_engine_impl_binding.MediaEngineImpl
   @override
   Future<void> pushVideoFrame(
       {required ExternalVideoFrame frame, int videoTrackId = 0}) async {
-    const apiType = 'MediaEngine_pushVideoFrame';
+    const apiType = 'MediaEngine_pushVideoFrame_4e544e2';
     final json = frame.toJson();
     json['eglContext'] = 0;
     json['metadata_buffer'] = 0;

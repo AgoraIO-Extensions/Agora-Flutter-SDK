@@ -153,7 +153,7 @@ extension RtcEngineExt on RtcEngine {
 
   Future<void> _setupRemoteVideoExWeb(
       Object viewHandle, VideoCanvas canvas, RtcConnection connection) async {
-    const apiType = 'RtcEngineEx_setupRemoteVideoEx';
+    const apiType = 'RtcEngineEx_setupRemoteVideoEx_522a409';
     final param = _createParamsWeb(viewHandle, canvas, connection: connection);
     final List<Uint8List> buffers = [];
     buffers.addAll(canvas.collectBufferList());
@@ -172,7 +172,7 @@ extension RtcEngineExt on RtcEngine {
 
   Future<void> _setupRemoteVideoWeb(
       Object viewHandle, VideoCanvas canvas) async {
-    const apiType = 'RtcEngine_setupRemoteVideo';
+    const apiType = 'RtcEngine_setupRemoteVideo_acc9c38';
     final param = _createParamsWeb(viewHandle, canvas);
     final List<Uint8List> buffers = [];
     buffers.addAll(canvas.collectBufferList());
@@ -190,7 +190,7 @@ extension RtcEngineExt on RtcEngine {
 
   Future<void> _setupLocalVideoWeb(
       VideoCanvas canvas, Object viewHandle) async {
-    const apiType = 'RtcEngine_setupLocalVideo';
+    const apiType = 'RtcEngine_setupLocalVideo_acc9c38';
     // The type of the `VideoCanvas.view` is `String` on web
     final param = _createParamsWeb(viewHandle, canvas);
     final List<Uint8List> buffers = [];
@@ -221,7 +221,7 @@ extension ThumbImageBufferExt on ThumbImageBuffer {
 extension RtcEngineEventHandlerExExt on RtcEngineEventHandler {
   bool eventIntercept(String event, String eventData, List<Uint8List> buffers) {
     switch (event) {
-      case 'RtcEngineEventHandler_onStreamMessageEx':
+      case 'RtcEngineEventHandler_onStreamMessage_99898cb':
         if (onStreamMessage == null) break;
         final jsonMap = jsonDecode(eventData);
         RtcEngineEventHandlerOnStreamMessageJson paramJson =
@@ -267,7 +267,7 @@ extension MetadataObserverExt on MetadataObserver {
   bool eventIntercept(String event, String data, List<Uint8List> buffers) {
     final jsonMap = jsonDecode(data);
     switch (event) {
-      case 'MetadataObserver_onMetadataReceived':
+      case 'MetadataObserver_onMetadataReceived_cb7661d':
         if (onMetadataReceived == null) break;
         MetadataObserverOnMetadataReceivedJson paramJson =
             MetadataObserverOnMetadataReceivedJson.fromJson(jsonMap);
@@ -492,8 +492,8 @@ class RtcEngineImpl extends rtc_engine_ex_binding.RtcEngineExImpl
     await irisMethodChannel.registerEventHandler(
         ScopedEvent(
             scopedKey: _rtcEngineImplScopedKey,
-            registerName: 'RtcEngine_registerEventHandler',
-            unregisterName: 'RtcEngine_unregisterEventHandler',
+            registerName: 'RtcEngine_registerEventHandler_5fc0465',
+            unregisterName: 'RtcEngine_unregisterEventHandler_5fc0465',
             handler: eventHandlerWrapper),
         jsonEncode(param));
   }
@@ -507,8 +507,8 @@ class RtcEngineImpl extends rtc_engine_ex_binding.RtcEngineExImpl
     await irisMethodChannel.unregisterEventHandler(
         ScopedEvent(
             scopedKey: _rtcEngineImplScopedKey,
-            registerName: 'RtcEngine_registerEventHandler',
-            unregisterName: 'RtcEngine_unregisterEventHandler',
+            registerName: 'RtcEngine_registerEventHandler_5fc0465',
+            unregisterName: 'RtcEngine_unregisterEventHandler_5fc0465',
             handler: eventHandlerWrapper),
         jsonEncode(param));
   }
@@ -533,7 +533,7 @@ class RtcEngineImpl extends rtc_engine_ex_binding.RtcEngineExImpl
 
   @override
   Future<void> destroyMediaPlayer(covariant MediaPlayer mediaPlayer) async {
-    const apiType = 'RtcEngine_destroyMediaPlayer';
+    const apiType = 'RtcEngine_destroyMediaPlayer_328a49b';
     final playerId = mediaPlayer.getMediaPlayerId();
     final param = createParams({'playerId': playerId});
     final callApiResult = await irisMethodChannel
@@ -551,7 +551,7 @@ class RtcEngineImpl extends rtc_engine_ex_binding.RtcEngineExImpl
   @override
   Future<void> enableEncryption(
       {required bool enabled, required EncryptionConfig config}) async {
-    const apiType = 'RtcEngine_enableEncryption';
+    const apiType = 'RtcEngine_enableEncryption_421c27b';
     final configJsonMap = config.toJson();
     if (config.encryptionKdfSalt != null) {
       configJsonMap['encryptionKdfSalt'] = config.encryptionKdfSalt!;
@@ -576,7 +576,7 @@ class RtcEngineImpl extends rtc_engine_ex_binding.RtcEngineExImpl
       {required RtcConnection connection,
       required bool enabled,
       required EncryptionConfig config}) async {
-    const apiType = 'RtcEngineEx_enableEncryptionEx';
+    const apiType = 'RtcEngineEx_enableEncryptionEx_10cd872';
     final configJsonMap = config.toJson();
     if (config.encryptionKdfSalt != null) {
       configJsonMap['encryptionKdfSalt'] = config.encryptionKdfSalt!;
@@ -605,7 +605,7 @@ class RtcEngineImpl extends rtc_engine_ex_binding.RtcEngineExImpl
       {required SIZE thumbSize,
       required SIZE iconSize,
       required bool includeScreen}) async {
-    const apiType = 'RtcEngine_getScreenCaptureSources';
+    const apiType = 'RtcEngine_getScreenCaptureSources_f3e02cb';
     final param = createParams({
       'thumbSize': thumbSize.toJson(),
       'iconSize': iconSize.toJson(),
@@ -657,8 +657,8 @@ class RtcEngineImpl extends rtc_engine_ex_binding.RtcEngineExImpl
     await irisMethodChannel.registerEventHandler(
         ScopedEvent(
             scopedKey: _rtcEngineImplScopedKey,
-            registerName: 'RtcEngine_registerMediaMetadataObserver',
-            unregisterName: 'RtcEngine_unregisterMediaMetadataObserver',
+            registerName: 'RtcEngine_registerMediaMetadataObserver_8701fec',
+            unregisterName: 'RtcEngine_unregisterMediaMetadataObserver_8701fec',
             handler: eventHandlerWrapper),
         jsonEncode(param));
   }
@@ -672,8 +672,8 @@ class RtcEngineImpl extends rtc_engine_ex_binding.RtcEngineExImpl
     await irisMethodChannel.unregisterEventHandler(
         ScopedEvent(
             scopedKey: _rtcEngineImplScopedKey,
-            registerName: 'RtcEngine_registerMediaMetadataObserver',
-            unregisterName: 'RtcEngine_unregisterMediaMetadataObserver',
+            registerName: 'RtcEngine_registerMediaMetadataObserver_8701fec',
+            unregisterName: 'RtcEngine_unregisterMediaMetadataObserver_8701fec',
             handler: eventHandlerWrapper),
         jsonEncode(param));
   }
@@ -691,7 +691,7 @@ class RtcEngineImpl extends rtc_engine_ex_binding.RtcEngineExImpl
     await irisMethodChannel.registerEventHandler(
         ScopedEvent(
             scopedKey: _rtcEngineImplScopedKey,
-            registerName: 'RtcEngine_startDirectCdnStreaming',
+            registerName: 'RtcEngine_startDirectCdnStreaming_ed8d77b',
             unregisterName: 'RtcEngine_stopDirectCdnStreaming',
             handler: _directCdnStreamingEventHandlerWrapper!),
         jsonEncode(param));
@@ -707,7 +707,7 @@ class RtcEngineImpl extends rtc_engine_ex_binding.RtcEngineExImpl
     await irisMethodChannel.unregisterEventHandler(
         ScopedEvent(
             scopedKey: _rtcEngineImplScopedKey,
-            registerName: 'RtcEngine_startDirectCdnStreaming',
+            registerName: 'RtcEngine_startDirectCdnStreaming_ed8d77b',
             unregisterName: 'RtcEngine_stopDirectCdnStreaming',
             handler: _directCdnStreamingEventHandlerWrapper!),
         jsonEncode(param));
@@ -753,7 +753,7 @@ class RtcEngineImpl extends rtc_engine_ex_binding.RtcEngineExImpl
 
   @override
   Future<SDKBuildInfo> getVersion() async {
-    const apiType = 'RtcEngine_getVersion';
+    const apiType = 'RtcEngine_getVersion_915cb25';
     final param = createParams({});
     final callApiResult = await irisMethodChannel
         .invokeMethod(IrisMethodCall(apiType, jsonEncode(param)));
@@ -771,7 +771,7 @@ class RtcEngineImpl extends rtc_engine_ex_binding.RtcEngineExImpl
       required String channelId,
       required int uid,
       required ChannelMediaOptions options}) async {
-    const apiType = 'RtcEngine_joinChannel2';
+    const apiType = 'RtcEngine_joinChannel_cdbb747';
     final param = createParams({
       'token': token,
       'channelId': channelId,
@@ -793,7 +793,7 @@ class RtcEngineImpl extends rtc_engine_ex_binding.RtcEngineExImpl
   @override
   Future<void> leaveChannel({LeaveChannelOptions? options}) async {
     final apiType =
-        options == null ? 'RtcEngine_leaveChannel' : 'RtcEngine_leaveChannel2';
+        options == null ? 'RtcEngine_leaveChannel' : 'RtcEngine_leaveChannel_2c0e3aa';
     final param = createParams({'options': options?.toJson()});
     final callApiResult = await irisMethodChannel
         .invokeMethod(IrisMethodCall(apiType, jsonEncode(param)));
@@ -811,8 +811,8 @@ class RtcEngineImpl extends rtc_engine_ex_binding.RtcEngineExImpl
   Future<void> setClientRole(
       {required ClientRoleType role, ClientRoleOptions? options}) async {
     final apiType = options == null
-        ? 'RtcEngine_setClientRole'
-        : 'RtcEngine_setClientRole2';
+        ? 'RtcEngine_setClientRole_3426fa6'
+        : 'RtcEngine_setClientRole_b46cc48';
     final param =
         createParams({'role': role.value(), 'options': options?.toJson()});
     final callApiResult = await irisMethodChannel
@@ -829,7 +829,7 @@ class RtcEngineImpl extends rtc_engine_ex_binding.RtcEngineExImpl
 
   @override
   Future<void> startEchoTest(EchoTestConfiguration config) async {
-    const apiType = 'RtcEngine_startEchoTest3';
+    const apiType = 'RtcEngine_startEchoTest_16140d7';
     final param = createParams({'config': config.toJson()});
     final List<Uint8List> buffers = [];
     buffers.addAll(config.collectBufferList());
@@ -845,7 +845,7 @@ class RtcEngineImpl extends rtc_engine_ex_binding.RtcEngineExImpl
       {VideoSourceType sourceType =
           VideoSourceType.videoSourceCameraPrimary}) async {
     if (_instance == null) return;
-    const apiType = 'RtcEngine_startPreview2';
+    const apiType = 'RtcEngine_startPreview_4fd718e';
     final param = createParams({'sourceType': sourceType.value()});
     final callApiResult = await irisMethodChannel
         .invokeMethod(IrisMethodCall(apiType, jsonEncode(param)));
@@ -886,7 +886,7 @@ class RtcEngineImpl extends rtc_engine_ex_binding.RtcEngineExImpl
   Future<void> stopPreview(
       {VideoSourceType sourceType =
           VideoSourceType.videoSourceCameraPrimary}) async {
-    const apiType = 'RtcEngine_stopPreview2';
+    const apiType = 'RtcEngine_stopPreview_4fd718e';
     final param = createParams({'sourceType': sourceType.value()});
     final callApiResult = await irisMethodChannel
         .invokeMethod(IrisMethodCall(apiType, jsonEncode(param)));
@@ -902,7 +902,7 @@ class RtcEngineImpl extends rtc_engine_ex_binding.RtcEngineExImpl
 
   @override
   Future<void> startAudioRecording(AudioRecordingConfiguration config) async {
-    const apiType = 'RtcEngine_startAudioRecording3';
+    const apiType = 'RtcEngine_startAudioRecording_e32bb3b';
     final param = createParams({'config': config.toJson()});
     final callApiResult = await irisMethodChannel
         .invokeMethod(IrisMethodCall(apiType, jsonEncode(param)));
@@ -922,7 +922,7 @@ class RtcEngineImpl extends rtc_engine_ex_binding.RtcEngineExImpl
       required bool loopback,
       required int cycle,
       int startPos = 0}) async {
-    const apiType = 'RtcEngine_startAudioMixing2';
+    const apiType = 'RtcEngine_startAudioMixing_1ee1b1e';
     final param = createParams({
       'filePath': filePath,
       'loopback': loopback,
@@ -947,8 +947,8 @@ class RtcEngineImpl extends rtc_engine_ex_binding.RtcEngineExImpl
       VideoSourceType sourceType = VideoSourceType.videoSourceCameraPrimary,
       SimulcastStreamConfig? streamConfig}) async {
     final apiType = streamConfig == null
-        ? 'RtcEngine_enableDualStreamMode'
-        : 'RtcEngine_enableDualStreamMode2';
+        ? 'RtcEngine_enableDualStreamMode_5039d15'
+        : 'RtcEngine_enableDualStreamMode_9822d8a';
     final param = createParams({
       'enabled': enabled,
       'sourceType': sourceType.value(),
@@ -968,7 +968,7 @@ class RtcEngineImpl extends rtc_engine_ex_binding.RtcEngineExImpl
 
   @override
   Future<int> createDataStream(DataStreamConfig config) async {
-    const apiType = 'RtcEngine_createDataStream2';
+    const apiType = 'RtcEngine_createDataStream_5862815';
     final param = createParams({'config': config.toJson()});
     final callApiResult = await irisMethodChannel
         .invokeMethod(IrisMethodCall(apiType, jsonEncode(param)));
@@ -987,7 +987,7 @@ class RtcEngineImpl extends rtc_engine_ex_binding.RtcEngineExImpl
   @override
   Future<void> addVideoWatermark(
       {required String watermarkUrl, required WatermarkOptions options}) async {
-    const apiType = 'RtcEngine_addVideoWatermark2';
+    const apiType = 'RtcEngine_addVideoWatermark_7480410';
     final param = createParams(
         {'watermarkUrl': watermarkUrl, 'options': options.toJson()});
     final callApiResult = await irisMethodChannel
@@ -1009,8 +1009,8 @@ class RtcEngineImpl extends rtc_engine_ex_binding.RtcEngineExImpl
       required String userAccount,
       ChannelMediaOptions? options}) async {
     final apiType = options == null
-        ? 'RtcEngine_joinChannelWithUserAccount'
-        : 'RtcEngine_joinChannelWithUserAccount2';
+        ? 'RtcEngine_joinChannelWithUserAccount_0e4f59e'
+        : 'RtcEngine_joinChannelWithUserAccount_4685af9';
     final param = createParams({
       'token': token,
       'channelId': channelId,
@@ -1039,7 +1039,7 @@ class RtcEngineImpl extends rtc_engine_ex_binding.RtcEngineExImpl
     await irisMethodChannel.registerEventHandler(
         ScopedEvent(
             scopedKey: _rtcEngineImplScopedKey,
-            registerName: 'RtcEngine_registerAudioEncodedFrameObserver',
+            registerName: 'RtcEngine_registerAudioEncodedFrameObserver_ed4a177',
             unregisterName: 'RtcEngine_unregisterAudioEncodedFrameObserver',
             handler: eventHandlerWrapper),
         jsonEncode(param));
@@ -1054,7 +1054,7 @@ class RtcEngineImpl extends rtc_engine_ex_binding.RtcEngineExImpl
     await irisMethodChannel.unregisterEventHandler(
         ScopedEvent(
             scopedKey: _rtcEngineImplScopedKey,
-            registerName: 'RtcEngine_registerAudioEncodedFrameObserver',
+            registerName: 'RtcEngine_registerAudioEncodedFrameObserver_ed4a177',
             unregisterName: 'RtcEngine_unregisterAudioEncodedFrameObserver',
             handler: eventHandlerWrapper),
         jsonEncode(param));
@@ -1068,8 +1068,8 @@ class RtcEngineImpl extends rtc_engine_ex_binding.RtcEngineExImpl
     await irisMethodChannel.registerEventHandler(
         ScopedEvent(
             scopedKey: _rtcEngineImplScopedKey,
-            registerName: 'RtcEngine_registerAudioSpectrumObserver',
-            unregisterName: 'RtcEngine_unregisterAudioSpectrumObserver',
+            registerName: 'RtcEngine_registerAudioSpectrumObserver_0406ea7',
+            unregisterName: 'RtcEngine_unregisterAudioSpectrumObserver_0406ea7',
             handler: eventHandlerWrapper),
         jsonEncode(param));
   }
@@ -1082,8 +1082,8 @@ class RtcEngineImpl extends rtc_engine_ex_binding.RtcEngineExImpl
     await irisMethodChannel.unregisterEventHandler(
         ScopedEvent(
             scopedKey: _rtcEngineImplScopedKey,
-            registerName: 'RtcEngine_registerAudioSpectrumObserver',
-            unregisterName: 'RtcEngine_unregisterAudioSpectrumObserver',
+            registerName: 'RtcEngine_registerAudioSpectrumObserver_0406ea7',
+            unregisterName: 'RtcEngine_unregisterAudioSpectrumObserver_0406ea7',
             handler: eventHandlerWrapper),
         jsonEncode(param));
   }
@@ -1129,7 +1129,7 @@ class RtcEngineImpl extends rtc_engine_ex_binding.RtcEngineExImpl
   @override
   Future<MediaRecorder?> createMediaRecorder(RecorderStreamInfo info) async {
     final apiType =
-        '${isOverrideClassName ? className : 'RtcEngine'}_createMediaRecorder';
+        '${isOverrideClassName ? className : 'RtcEngine'}_createMediaRecorder_f779617';
     final param = createParams({'info': info.toJson()});
     final List<Uint8List> buffers = [];
     buffers.addAll(info.collectBufferList());
@@ -1151,7 +1151,7 @@ class RtcEngineImpl extends rtc_engine_ex_binding.RtcEngineExImpl
     await impl.dispose();
 
     final apiType =
-        '${isOverrideClassName ? className : 'RtcEngine'}_destroyMediaRecorder';
+        '${isOverrideClassName ? className : 'RtcEngine'}_destroyMediaRecorder_95cdef5';
     final param = createParams({'nativeHandle': impl.strNativeHandle});
     await irisMethodChannel.invokeMethod(
         IrisMethodCall(apiType, jsonEncode(param), buffers: null));
@@ -1162,7 +1162,7 @@ class RtcEngineImpl extends rtc_engine_ex_binding.RtcEngineExImpl
       {required VideoSourceType sourceType,
       required ScreenCaptureConfiguration config}) async {
     final apiType =
-        '${isOverrideClassName ? className : 'RtcEngine'}_startScreenCapture2';
+        '${isOverrideClassName ? className : 'RtcEngine'}_startScreenCapture_9ebb320';
     final param = createParams(
         {'sourceType': sourceType.value(), 'config': config.toJson()});
     final List<Uint8List> buffers = [];
@@ -1182,7 +1182,7 @@ class RtcEngineImpl extends rtc_engine_ex_binding.RtcEngineExImpl
   @override
   Future<void> stopScreenCaptureBySourceType(VideoSourceType sourceType) async {
     final apiType =
-        '${isOverrideClassName ? className : 'RtcEngine'}_stopScreenCapture2';
+        '${isOverrideClassName ? className : 'RtcEngine'}_stopScreenCapture_4fd718e';
     final param = createParams({'sourceType': sourceType.value()});
     final callApiResult = await irisMethodChannel.invokeMethod(
         IrisMethodCall(apiType, jsonEncode(param), buffers: null));

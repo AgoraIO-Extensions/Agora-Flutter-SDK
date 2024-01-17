@@ -60,7 +60,7 @@ class MusicContentCenterEventHandlerWrapper
   bool handleEventInternal(
       String eventName, String eventData, List<Uint8List> buffers) {
     switch (eventName) {
-      case 'onMusicCollectionResult':
+      case 'onMusicCollectionResult_c30c2e6':
         if (musicContentCenterEventHandler.onMusicCollectionResult == null) {
           return true;
         }
@@ -96,7 +96,8 @@ class MusicPlayerImpl extends media_player_impl.MediaPlayerImpl
   @override
   Future<void> openWithSongCode(
       {required int songCode, int startPos = 0}) async {
-    final apiType = '${isOverrideClassName ? className : 'MusicPlayer'}_open';
+    final apiType =
+        '${isOverrideClassName ? className : 'MusicPlayer'}_open_303b92e';
     final param = createParams({'songCode': songCode, 'startPos': startPos});
     final callApiResult = await irisMethodChannel
         .invokeMethod(IrisMethodCall(apiType, jsonEncode(param)));
@@ -163,7 +164,7 @@ class MusicContentCenterImpl extends binding.MusicContentCenterImpl
     await irisMethodChannel.registerEventHandler(
         ScopedEvent(
             scopedKey: _musicContentCenterScopeKey,
-            registerName: 'MusicContentCenter_registerEventHandler',
+            registerName: 'MusicContentCenter_registerEventHandler_ae49451',
             unregisterName: 'MusicContentCenter_unregisterEventHandler',
             handler: eventHandlerWrapper),
         jsonEncode({}));
@@ -179,7 +180,7 @@ class MusicContentCenterImpl extends binding.MusicContentCenterImpl
     await irisMethodChannel.unregisterEventHandler(
         ScopedEvent(
             scopedKey: _musicContentCenterScopeKey,
-            registerName: 'MusicContentCenter_registerEventHandler',
+            registerName: 'MusicContentCenter_registerEventHandler_ae49451',
             unregisterName: 'MusicContentCenter_unregisterEventHandler',
             handler: eventHandlerWrapper),
         jsonEncode({}));
@@ -215,7 +216,7 @@ class MusicContentCenterImpl extends binding.MusicContentCenterImpl
   @override
   Future<bool> isPreloaded(int songCode) async {
     final apiType =
-        '${isOverrideClassName ? className : 'MusicContentCenter'}_isPreloaded';
+        '${isOverrideClassName ? className : 'MusicContentCenter'}_isPreloaded_f631116';
     final param = createParams({'songCode': songCode});
     final callApiResult = await irisMethodChannel
         .invokeMethod(IrisMethodCall(apiType, jsonEncode(param)));
@@ -230,7 +231,7 @@ class MusicContentCenterImpl extends binding.MusicContentCenterImpl
   @override
   Future<String> preload(int songCode) async {
     final apiType =
-        '${isOverrideClassName ? className : 'MusicContentCenter'}_preload2';
+        '${isOverrideClassName ? className : 'MusicContentCenter'}_preload_d3baeab';
     final param = createParams({'songCode': songCode});
     final callApiResult = await irisMethodChannel.invokeMethod(
         IrisMethodCall(apiType, jsonEncode(param), buffers: null));
