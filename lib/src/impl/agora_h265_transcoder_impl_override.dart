@@ -20,10 +20,9 @@ class H265TranscoderImplOverride extends impl_binding.H265TranscoderImpl {
     await irisMethodChannel.registerEventHandler(
         ScopedEvent(
             scopedKey: _observerScopedKey,
-            registerName:
-                'IH265Transcoder__registerTranscoderObserver__agora_rtc_IH265TranscoderObserver_ptr',
+            registerName: 'H265Transcoder_registerTranscoderObserver_e1ee996',
             unregisterName:
-                'IH265Transcoder__unregisterTranscoderObserver__agora_rtc_IH265TranscoderObserver_ptr',
+                'H265Transcoder_unregisterTranscoderObserver_e1ee996',
             handler: observerWrapper),
         jsonEncode(param));
   }
@@ -36,10 +35,9 @@ class H265TranscoderImplOverride extends impl_binding.H265TranscoderImpl {
     await irisMethodChannel.unregisterEventHandler(
         ScopedEvent(
             scopedKey: _observerScopedKey,
-            registerName:
-                'IH265Transcoder__registerTranscoderObserver__agora_rtc_IH265TranscoderObserver_ptr',
+            registerName: 'H265Transcoder_registerTranscoderObserver_e1ee996',
             unregisterName:
-                'IH265Transcoder__unregisterTranscoderObserver__agora_rtc_IH265TranscoderObserver_ptr',
+                'H265Transcoder_unregisterTranscoderObserver_e1ee996',
             handler: observerWrapper),
         jsonEncode(param));
   }
