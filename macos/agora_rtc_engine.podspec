@@ -16,7 +16,7 @@ A new flutter plugin project.
   s.source_files = 'Classes/**/*.{h,mm}', 'Classes/File.swift'
   s.dependency 'FlutterMacOS'
   #   s.dependency 'AgoraRtcWrapper'
-  s.dependency 'AgoraRtcEngine_macOS', '4.1.0'
+  s.dependency 'AgoraRtcEngine_Special_macOS', '4.1.1.25'
   s.dependency 'AgoraIrisRTC_macOS', '4.1.1.21-banban.6'
 
   s.platform = :osx, '10.11'
