@@ -24,9 +24,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@agoraio-extensions/terra-legacy-cxx-parser@git@github.com:AgoraIO-Extensions/terra-legacy-cxx-parser.git#head=main":
-  version: 0.1.5
-  resolution: "@agoraio-extensions/terra-legacy-cxx-parser@git@github.com:AgoraIO-Extensions/terra-legacy-cxx-parser.git#commit=008f1b84aee777364b006684914917393c78356b"
+"@agoraio-extensions/terra-legacy-cxx-parser@portal:/Users/fenglang/codes/aw/terra-legacy-cxx-parser::locator=terra-test%40workspace%3A.":
+  version: 0.0.0-use.local
+  resolution: "@agoraio-extensions/terra-legacy-cxx-parser@portal:/Users/fenglang/codes/aw/terra-legacy-cxx-parser::locator=terra-test%40workspace%3A."
   dependencies:
     "@agoraio-extensions/cxx-parser": "git@github.com:AgoraIO-Extensions/terra.git#head=main&workspace=cxx-parser"
     "@agoraio-extensions/terra-core": "git@github.com:AgoraIO-Extensions/terra.git#head=main&workspace=terra-core"
@@ -38,9 +38,8 @@ __metadata:
     ts-node: "npm:^10.9.1"
     typescript: "npm:^5.1.6"
     yaml: "npm:^2.1.3"
-  checksum: c7af47edb4f36ed3b6fb1f20b04465c88ef1553fd7fb859c86f796a2dada3f9ddf1432115a1379a5a1d0e6e2609f6eb77cd823f83279a859c357b61d46d810c3
   languageName: node
-  linkType: hard
+  linkType: soft
 
 "@agoraio-extensions/terra@git@github.com:AgoraIO-Extensions/terra.git#head=main&workspace=terra":
   version: 0.1.5
@@ -57,16 +56,15 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@agoraio-extensions/terra_shared_configs@git@github.com:AgoraIO-Extensions/terra_shared_configs.git#head=main":
-  version: 1.0.2
-  resolution: "@agoraio-extensions/terra_shared_configs@git@github.com:AgoraIO-Extensions/terra_shared_configs.git#commit=e8b4bae6f85662cd3775050161d812ad4adba319"
+"@agoraio-extensions/terra_shared_configs@portal:/Users/fenglang/codes/aw/terra_shared_configs::locator=terra-test%40workspace%3A.":
+  version: 0.0.0-use.local
+  resolution: "@agoraio-extensions/terra_shared_configs@portal:/Users/fenglang/codes/aw/terra_shared_configs::locator=terra-test%40workspace%3A."
   dependencies:
     "@agoraio-extensions/cxx-parser": "git@github.com:AgoraIO-Extensions/terra.git#head=main&workspace=cxx-parser"
     "@agoraio-extensions/terra-core": "git@github.com:AgoraIO-Extensions/terra.git#head=main&workspace=terra-core"
     mustache: "npm:^4.2.0"
-  checksum: e1dc38d612b3bc672ce27d9613b1129a42b59b4838a963355e5608f94b2927b9f00de472c1d65dcf040553788149ff1ebe1fa978e74f0a98488c0523b785d4e6
   languageName: node
-  linkType: hard
+  linkType: soft
 
 "@ampproject/remapping@npm:^2.2.0":
   version: 2.2.1
