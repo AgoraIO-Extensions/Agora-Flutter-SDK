@@ -13,7 +13,7 @@ import '../generated/rtcengine_rtcengineeventhandler_testcases.generated.dart'
 import 'package:path/path.dart' as path;
 import 'package:iris_method_channel/iris_method_channel.dart';
 
-import '../generated/event_ids_mapping.dart';
+import '../testcases/event_ids_mapping.dart';
 
 void testCases(IrisTester irisTester) {
   generated.generatedTestCases(irisTester);

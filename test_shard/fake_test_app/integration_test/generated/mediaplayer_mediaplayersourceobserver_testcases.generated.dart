@@ -14,7 +14,7 @@ import 'package:iris_method_channel/iris_method_channel.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:path/path.dart' as path;
 
-import 'event_ids_mapping.dart';
+import '../testcases/event_ids_mapping.dart';
 
 void generatedTestCases(IrisTester irisTester) {
   testWidgets(

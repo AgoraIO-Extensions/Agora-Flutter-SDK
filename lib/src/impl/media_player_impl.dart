@@ -231,7 +231,7 @@ class MediaPlayerImpl extends agora_media_player_impl_binding.MediaPlayerImpl
           RawAudioFrameOpModeType.rawAudioFrameOpModeReadOnly}) async {
     final eventHandlerWrapper =
         AudioPcmFrameSinkWrapper(getMediaPlayerId(), observer);
-    final param = createParams({});
+    final param = createParams({'mode': mode.value()});
 
     await irisMethodChannel.registerEventHandler(
         ScopedEvent(

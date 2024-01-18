@@ -1357,6 +1357,9 @@ void mediaPlayerControllerSmokeTestCases() {
           mode: mode,
         );
       } catch (e) {
+                  debugPrint(
+              '[MediaPlayer.registerAudioFrameObserver] 111111error: ${e.toString()}');
+
         if (e is! AgoraRtcException) {
           debugPrint(
               '[MediaPlayer.registerAudioFrameObserver] error: ${e.toString()}');
