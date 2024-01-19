@@ -4595,6 +4595,62 @@ void generatedTestCases() {
   );
 
   testWidgets(
+    'onAudioRoutingChanged',
+    (WidgetTester tester) async {
+      final irisTester = IrisTester();
+      final debugApiEngineIntPtr = irisTester.getDebugApiEngineNativeHandle();
+      setMockIrisMethodChannelNativeHandle(debugApiEngineIntPtr);
+
+      RtcEngine rtcEngine = createAgoraRtcEngine();
+      await rtcEngine.initialize(RtcEngineContext(
+        appId: 'app_id',
+        areaCode: AreaCode.areaCodeGlob.value(),
+      ));
+
+      final onAudioRoutingChangedCompleter = Completer<bool>();
+      final theRtcEngineEventHandler = RtcEngineEventHandler(
+        onAudioRoutingChanged: (int routing) {
+          onAudioRoutingChangedCompleter.complete(true);
+        },
+      );
+
+      rtcEngine.registerEventHandler(
+        theRtcEngineEventHandler,
+      );
+
+// Delay 500 milliseconds to ensure the registerEventHandler call completed.
+      await Future.delayed(const Duration(milliseconds: 500));
+
+      {
+        const int routing = 10;
+
+        final eventJson = {
+          'routing': routing,
+        };
+
+        irisTester.fireEvent('RtcEngineEventHandler_onAudioRoutingChanged',
+            params: eventJson);
+        irisTester.fireEvent('RtcEngineEventHandlerEx_onAudioRoutingChanged',
+            params: eventJson);
+      }
+
+      final eventCalled = await onAudioRoutingChangedCompleter.future;
+      expect(eventCalled, isTrue);
+
+      {
+        rtcEngine.unregisterEventHandler(
+          theRtcEngineEventHandler,
+        );
+      }
+// Delay 500 milliseconds to ensure the unregisterEventHandler call completed.
+      await Future.delayed(const Duration(milliseconds: 500));
+
+      await rtcEngine.release();
+    },
+    timeout: const Timeout(Duration(minutes: 1)),
+  );
+
+  testWidgets(
     'onChannelMediaRelayStateChanged',
     (WidgetTester tester) async {
       final irisTester = IrisTester();
@@ -6384,6 +6440,74 @@ void generatedTestCases() {
       }
 
       final eventCalled = await onTranscodedStreamLayoutInfoCompleter.future;
+      expect(eventCalled, isTrue);
+
+      {
+        rtcEngine.unregisterEventHandler(
+          theRtcEngineEventHandler,
+        );
+      }
+// Delay 500 milliseconds to ensure the unregisterEventHandler call completed.
+      await Future.delayed(const Duration(milliseconds: 500));
+
+      await rtcEngine.release();
+    },
+    timeout: const Timeout(Duration(minutes: 1)),
+  );
+
+  testWidgets(
+    'onAudioMetadataReceived',
+    (WidgetTester tester) async {
+      final irisTester = IrisTester();
+      final debugApiEngineIntPtr = irisTester.getDebugApiEngineNativeHandle();
+      setMockIrisMethodChannelNativeHandle(debugApiEngineIntPtr);
+
+      RtcEngine rtcEngine = createAgoraRtcEngine();
+      await rtcEngine.initialize(RtcEngineContext(
+        appId: 'app_id',
+        areaCode: AreaCode.areaCodeGlob.value(),
+      ));
+
+      final onAudioMetadataReceivedCompleter = Completer<bool>();
+      final theRtcEngineEventHandler = RtcEngineEventHandler(
+        onAudioMetadataReceived: (RtcConnection connection, int uid,
+            Uint8List metadata, int length) {
+          onAudioMetadataReceivedCompleter.complete(true);
+        },
+      );
+
+      rtcEngine.registerEventHandler(
+        theRtcEngineEventHandler,
+      );
+
+// Delay 500 milliseconds to ensure the registerEventHandler call completed.
+      await Future.delayed(const Duration(milliseconds: 500));
+
+      {
+        const String connectionChannelId = "hello";
+        const int connectionLocalUid = 10;
+        const RtcConnection connection = RtcConnection(
+          channelId: connectionChannelId,
+          localUid: connectionLocalUid,
+        );
+        const int uid = 10;
+        Uint8List metadata = Uint8List.fromList([1, 2, 3, 4, 5]);
+        const int length = 10;
+
+        final eventJson = {
+          'connection': connection.toJson(),
+          'uid': uid,
+          'metadata': metadata.toList(),
+          'length': length,
+        };
+
+        irisTester.fireEvent('RtcEngineEventHandler_onAudioMetadataReceived',
+            params: eventJson);
+        irisTester.fireEvent('RtcEngineEventHandlerEx_onAudioMetadataReceived',
+            params: eventJson);
+      }
+
+      final eventCalled = await onAudioMetadataReceivedCompleter.future;
       expect(eventCalled, isTrue);
 
       {

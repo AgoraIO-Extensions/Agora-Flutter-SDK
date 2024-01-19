@@ -102,7 +102,7 @@ abstract class MediaEngine {
 
   /// Pulls the remote audio data.
   ///
-  /// Before calling this method, you need to call setExternalAudioSink to notify the app to enable and set the external rendering. After a successful method call, the app pulls the decoded and mixed audio data for playback.
+  /// Before calling this method, you need to call setExternalAudioSink to notify the app to enable and set the external rendering. After a successful call of this method, the app pulls the decoded and mixed audio data for playback.
   ///  This method only supports pulling data from custom audio source. If you need to pull the data captured by the SDK, do not call this method.
   ///  Call this method after joining a channel.
   ///  Once you enable the external audio sink, the app will not retrieve any audio data from the onPlaybackAudioFrame callback.
@@ -156,10 +156,10 @@ abstract class MediaEngine {
 
   /// Creates a custom audio track.
   ///
-  /// To publish a custom audio source to multiple channels, see the following steps:
+  /// Ensure that you call this method before joining a channel. To publish a custom audio source, see the following steps:
   ///  Call this method to create a custom audio track and get the audio track ID.
-  ///  In ChannelMediaOptions of each channel, set publishCustomAduioTrackId to the audio track ID that you want to publish, and set publishCustomAudioTrack to true.
-  ///  If you call pushAudioFrame, and specify trackId as the audio track ID set in step 2, you can publish the corresponding custom audio source in multiple channels.
+  ///  Call joinChannel to join the channel. In ChannelMediaOptions, set publishCustomAduioTrackId to the audio track ID that you want to publish, and set publishCustomAudioTrack to true.
+  ///  Call pushAudioFrame and specify trackId as the audio track ID set in step 2. You can then publish the corresponding custom audio source in the channel.
   ///
   /// * [trackType] The type of the custom audio track. See AudioTrackType. If audioTrackDirect is specified for this parameter, you must set publishMicrophoneTrack to false in ChannelMediaOptions when calling joinChannel to join the channel; otherwise, joining the channel fails and returns the error code -2.
   /// * [config] The configuration of the custom audio track. See AudioTrackConfig.
@@ -176,7 +176,6 @@ abstract class MediaEngine {
   ///
   /// Returns
   /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown; and you need to catch the exception and handle it accordingly.
-  ///  < 0: Failure.
   Future<void> destroyCustomAudioTrack(int trackId);
 
   /// Sets the external audio sink.
@@ -191,7 +190,6 @@ abstract class MediaEngine {
   ///
   /// Returns
   /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown; and you need to catch the exception and handle it accordingly.
-  ///  < 0: Failure.
   Future<void> setExternalAudioSink(
       {required bool enabled, required int sampleRate, required int channels});
 
@@ -199,9 +197,14 @@ abstract class MediaEngine {
   Future<void> enableCustomAudioLocalPlayback(
       {required int trackId, required bool enabled});
 
-  /// Pushes the external raw video frame to the SDK.
+  /// Pushes the external raw video frame to the SDK through video tracks.
   ///
-  /// If you call createCustomVideoTrack method to get the video track ID, set the customVideoTrackId parameter to the video track ID you want to publish in the ChannelMediaOptions of each channel, and set the publishCustomVideoTrack parameter to true, you can call this method to push the unencoded external video frame to the SDK.
+  /// To publish a custom video source, see the following steps:
+  ///  Call createCustomVideoTrack to create a video track and get the video track ID.
+  ///  Call joinChannel to join the channel. In ChannelMediaOptions, set customVideoTrackId to the video track ID that you want to publish, and set publishCustomVideoTrack to true.
+  ///  Call this method and specify videoTrackId as the video track ID set in step 2. You can then publish the corresponding custom video source in the channel. After calling this method, even if you stop pushing external video frames to the SDK, the custom video stream will still be counted as the video duration usage and incur charges. Agora recommends that you take appropriate measures based on the actual situation to avoid such video billing.
+  ///  If you no longer need to capture external video data, you can call destroyCustomVideoTrack to destroy the custom video track.
+  ///  If you only want to use the external video data for local preview and not publish it in the channel, you can call muteLocalVideoStream to cancel sending video stream or call updateChannelMediaOptions to set publishCustomVideoTrack to false.
   ///
   /// * [frame] The external raw video frame to be pushed. See ExternalVideoFrame.
   /// * [videoTrackId] The video track ID returned by calling the createCustomVideoTrack method. The default value is 0.
@@ -227,7 +230,6 @@ abstract class MediaEngine {
   ///
   /// Returns
   /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown; and you need to catch the exception and handle it accordingly.
-  ///  < 0: Failure.
   void unregisterAudioFrameObserver(AudioFrameObserver observer);
 
   /// Unregisters the video frame observer.

@@ -22,15 +22,16 @@ class MediaPlayerSourceObserver {
   /// When the state of the media player changes, the SDK triggers this callback to report the current playback state.
   ///
   /// * [state] The playback state. See MediaPlayerState.
-  /// * [ec] The error code. See MediaPlayerError.
+  /// * [reason] The reason for the changes in the media player status. See MediaPlayerReason.
   final void Function(MediaPlayerState state, MediaPlayerError ec)?
       onPlayerSourceStateChanged;
 
-  /// Reports current playback progress.
+  /// Reports the playback progress of the media file.
   ///
   /// When playing media files, the SDK triggers this callback every two second to report current playback progress.
   ///
-  /// * [position] The playback position (ms) of media files.
+  /// * [positionMs] The playback position (ms) of media files.
+  /// * [timeStampMs] The NTP timestamp (ms) of the current playback progress.
   final void Function(int positionMs, int timestampMs)? onPositionChanged;
 
   /// Reports the player events.

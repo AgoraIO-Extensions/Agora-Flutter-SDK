@@ -179,6 +179,7 @@ ExternalVideoFrame _$ExternalVideoFrameFromJson(Map<String, dynamic> json) =>
           ?.map((e) => (e as num).toDouble())
           .toList(),
       metadataSize: json['metadata_size'] as int?,
+      fillAlphaBuffer: json['fillAlphaBuffer'] as bool?,
     );
 
 Map<String, dynamic> _$ExternalVideoFrameToJson(ExternalVideoFrame instance) {
@@ -204,6 +205,7 @@ Map<String, dynamic> _$ExternalVideoFrameToJson(ExternalVideoFrame instance) {
   writeNotNull('textureId', instance.textureId);
   writeNotNull('matrix', instance.matrix);
   writeNotNull('metadata_size', instance.metadataSize);
+  writeNotNull('fillAlphaBuffer', instance.fillAlphaBuffer);
   return val;
 }
 

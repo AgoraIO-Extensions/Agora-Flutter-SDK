@@ -3,27 +3,27 @@ parsers:
     package: '@agoraio-extensions/terra-legacy-cxx-parser'
     args:
       language: dart
-      nativeSdkVersion: 4.1.1.21
+      nativeSdkVersion: 4.1.1.25
       includeHeaderDirs:
-        - '@agoraio-extensions/terra_shared_configs:headers/rtc_4.1.1.21/include'
+        - '@agoraio-extensions/terra_shared_configs:headers/rtc_4.1.1.25/include'
       parseFiles:
         include:
-          - '@agoraio-extensions/terra_shared_configs:headers/rtc_4.1.1.21/include/*.h'
+          - '@agoraio-extensions/terra_shared_configs:headers/rtc_4.1.1.25/include/*.h'
         exclude:
-          - '@agoraio-extensions/terra_shared_configs:headers/rtc_4.1.1.21/include/AgoraRefPtr.h'
-          - '@agoraio-extensions/terra_shared_configs:headers/rtc_4.1.1.21/include/time_utils.h'
-          - '@agoraio-extensions/terra_shared_configs:headers/rtc_4.1.1.21/include/AgoraOptional.h'
-          - '@agoraio-extensions/terra_shared_configs:headers/rtc_4.1.1.21/include/AgoraRefPtr.h'
-          - '@agoraio-extensions/terra_shared_configs:headers/rtc_4.1.1.21/include/IAgoraH265Transcoder.h'
-          - '@agoraio-extensions/terra_shared_configs:headers/rtc_4.1.1.21/include/IAgoraMediaComponentFactory.h'
-          - '@agoraio-extensions/terra_shared_configs:headers/rtc_4.1.1.21/include/IAgoraParameter.h'
+          - '@agoraio-extensions/terra_shared_configs:headers/rtc_4.1.1.25/include/AgoraRefPtr.h'
+          - '@agoraio-extensions/terra_shared_configs:headers/rtc_4.1.1.25/include/time_utils.h'
+          - '@agoraio-extensions/terra_shared_configs:headers/rtc_4.1.1.25/include/AgoraOptional.h'
+          - '@agoraio-extensions/terra_shared_configs:headers/rtc_4.1.1.25/include/AgoraRefPtr.h'
+          - '@agoraio-extensions/terra_shared_configs:headers/rtc_4.1.1.25/include/IAgoraH265Transcoder.h'
+          - '@agoraio-extensions/terra_shared_configs:headers/rtc_4.1.1.25/include/IAgoraMediaComponentFactory.h'
+          - '@agoraio-extensions/terra_shared_configs:headers/rtc_4.1.1.25/include/IAgoraParameter.h'
       customHeaders:
-        - '@agoraio-extensions/terra_shared_configs:headers/rtc_4.1.1.21/custom_headers/*.h'
+        - '@agoraio-extensions/terra_shared_configs:headers/rtc_4.1.1.25/custom_headers/*.h'
       legacyRenders:
         - DartSyntaxRender
         - DartEventHandlerParamJsonRender
         - DartCallApiIrisMethodChannelRender
-        - DartEventHandlerIrisMethodChannelRender
+        - DartEventHandlerIrisMethodChannelBefore430Render
         - DartStructToJsonSerializableRender
         - DartCallApiEventHandlerBufferExtRender
         - DartForwardExportRender

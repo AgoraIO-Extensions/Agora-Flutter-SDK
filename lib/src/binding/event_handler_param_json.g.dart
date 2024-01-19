@@ -3060,6 +3060,26 @@ Map<String, dynamic>
           'layoutlist': instance.layoutlist?.map((e) => e.toJson()).toList(),
         };
 
+RtcEngineEventHandlerOnAudioMetadataReceivedJson
+    _$RtcEngineEventHandlerOnAudioMetadataReceivedJsonFromJson(
+            Map<String, dynamic> json) =>
+        RtcEngineEventHandlerOnAudioMetadataReceivedJson(
+          connection: json['connection'] == null
+              ? null
+              : RtcConnection.fromJson(
+                  json['connection'] as Map<String, dynamic>),
+          uid: json['uid'] as int?,
+          length: json['length'] as int?,
+        );
+
+Map<String, dynamic> _$RtcEngineEventHandlerOnAudioMetadataReceivedJsonToJson(
+        RtcEngineEventHandlerOnAudioMetadataReceivedJson instance) =>
+    <String, dynamic>{
+      'connection': instance.connection?.toJson(),
+      'uid': instance.uid,
+      'length': instance.length,
+    };
+
 MetadataObserverOnMetadataReceivedJson
     _$MetadataObserverOnMetadataReceivedJsonFromJson(
             Map<String, dynamic> json) =>
