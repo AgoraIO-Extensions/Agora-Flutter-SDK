@@ -9,6 +9,7 @@ import 'package:iris_tester/iris_tester.dart';
 import 'package:iris_method_channel/iris_method_channel.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:path/path.dart' as path;
+import 'dart:io';
 
 void generatedTestCases() {
   testWidgets(

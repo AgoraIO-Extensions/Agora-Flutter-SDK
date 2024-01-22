@@ -14,6 +14,7 @@ import 'package:flutter/foundation.dart';
 import 'package:integration_test_app/main.dart' as app;
 import 'package:path_provider/path_provider.dart';
 import 'package:path/path.dart' as path;
+import 'dart:io';
 
 void mediaPlayerCacheManagerSmokeTestCases() {
   {{TEST_CASES_CONTENT}} 
@@ -79,6 +80,7 @@ import 'package:iris_tester/iris_tester.dart';
 import 'package:iris_method_channel/iris_method_channel.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:path/path.dart' as path;
+import 'dart:io';
 
 void rtcEngineSmokeTestCases() {
   {{TEST_CASES_CONTENT}}
@@ -149,6 +151,7 @@ import 'package:iris_tester/iris_tester.dart';
 import 'package:iris_method_channel/iris_method_channel.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:path/path.dart' as path;
+import 'dart:io';
 
 void rtcEngineExSmokeTestCases() {
   {{TEST_CASES_CONTENT}}
@@ -215,6 +218,7 @@ import 'package:iris_tester/iris_tester.dart';
 import 'package:iris_method_channel/iris_method_channel.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:path/path.dart' as path;
+import 'dart:io';
 
 void audioDeviceManagerSmokeTestCases() {
   {{TEST_CASES_CONTENT}}
@@ -273,6 +277,7 @@ import 'package:iris_tester/iris_tester.dart';
 import 'package:iris_method_channel/iris_method_channel.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:path/path.dart' as path;
+import 'dart:io';
 
 void videoDeviceManagerSmokeTestCases() {
   {{TEST_CASES_CONTENT}}
@@ -333,6 +338,7 @@ import 'package:iris_tester/iris_tester.dart';
 import 'package:iris_method_channel/iris_method_channel.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:path/path.dart' as path;
+import 'dart:io';
 
 void mediaPlayerControllerSmokeTestCases() {
   {{TEST_CASES_CONTENT}}
@@ -395,6 +401,7 @@ import 'package:iris_tester/iris_tester.dart';
 import 'package:iris_method_channel/iris_method_channel.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:path/path.dart' as path;
+import 'dart:io';
 
 void mediaEngineSmokeTestCases() {
   {{TEST_CASES_CONTENT}}
@@ -454,6 +461,7 @@ import 'package:iris_tester/iris_tester.dart';
 import 'package:iris_method_channel/iris_method_channel.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:path/path.dart' as path;
+import 'dart:io';
 
 void mediaRecorderSmokeTestCases() {
   {{TEST_CASES_CONTENT}}
@@ -514,6 +522,7 @@ import 'package:iris_tester/iris_tester.dart';
 import 'package:iris_method_channel/iris_method_channel.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:path/path.dart' as path;
+import 'dart:io';
 
 void localSpatialAudioEngineSmokeTestCases() {
   {{TEST_CASES_CONTENT}}
@@ -576,6 +585,7 @@ import 'package:iris_tester/iris_tester.dart';
 import 'package:iris_method_channel/iris_method_channel.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:path/path.dart' as path;
+import 'dart:io';
 
 void generatedTestCases() {
   {{TEST_CASES_CONTENT}}
@@ -634,6 +644,7 @@ import 'package:iris_tester/iris_tester.dart';
 import 'package:iris_method_channel/iris_method_channel.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:path/path.dart' as path;
+import 'dart:io';
 
 void musicContentCenterSmokeTestCases() {
   {{TEST_CASES_CONTENT}} 

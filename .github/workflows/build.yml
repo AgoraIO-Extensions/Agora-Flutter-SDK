@@ -153,8 +153,13 @@ jobs:
         if: always()
         run: |
           mkdir iris-logs-macos
-          cp -RP ${HOME}/Library/Containers/com.example.fakeTestApp/Data/Documents/agora-iris.log ./iris-logs-macos/agora-iris-fake-test.log
-          cp -RP ${HOME}/Library/Containers/com.example.integrationTestApp/Data/Documents/agora-iris.log ./iris-logs-macos/agora-iris-integration-test.log
+          if [ -f "${HOME}/Library/Containers/com.example.fakeTestApp/Data/Documents/agora-iris.log" ]; then
+            cp -RP ${HOME}/Library/Containers/com.example.fakeTestApp/Data/Documents/agora-iris.log ./iris-logs-macos/agora-iris-fake-test.log
+          fi
+          if [ -f "${HOME}/Library/Containers/com.example.integrationTestApp/Data/Documents/agora-iris.log" ]; then
+            cp -RP ${HOME}/Library/Containers/com.example.integrationTestApp/Data/Documents/agora-iris.log ./iris-logs-macos/agora-iris-integration-test.log
+          fi
+          
       - name: Upload iris logs macos
         uses: actions/upload-artifact@v4
         if: always()
