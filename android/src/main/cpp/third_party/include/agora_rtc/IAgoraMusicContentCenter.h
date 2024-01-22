@@ -234,7 +234,7 @@ public:
      * 
      * @param requestId The request id is same as that returned by getMusicCharts.
      * @param result The result of music chart collection
-     * @param statusCode The status of the request. See MusicContentCenterStateReason
+     * @param reason The status of the request. See MusicContentCenterStateReason
      */
     virtual void onMusicChartsResult(const char* requestId, agora_refptr<MusicChartCollection> result, MusicContentCenterStateReason reason) = 0;
 
@@ -243,7 +243,7 @@ public:
      * 
      * @param requestId The request id is same as that returned by getMusicCollectionByMusicChartId or searchMusic
      * @param result The result of music collection
-     * @param statusCode The status of the request. See MusicContentCenterStateReason
+     * @param reason The status of the request. See MusicContentCenterStateReason
      */
     virtual void onMusicCollectionResult(const char* requestId, agora_refptr<MusicCollection> result, MusicContentCenterStateReason reason) = 0;
 
@@ -253,7 +253,7 @@ public:
      * @param requestId The request id is same as that returned by getLyric
      * @param songCode Song code
      * @param lyricUrl  The lyric url of this music
-     * @param statusCode The status of the request. See MusicContentCenterStateReason
+     * @param reason The status of the request. See MusicContentCenterStateReason
      */
     virtual void onLyricResult(const char* requestId, int64_t songCode, const char* lyricUrl, MusicContentCenterStateReason reason) = 0;
 
@@ -263,7 +263,7 @@ public:
      * @param requestId The request id is same as that returned by getSongSimpleInfo.
      * @param songCode Song code
      * @param simpleInfo The metadata of the music.
-     * @param statusCode The status of the request. See MusicContentCenterStateReason
+     * @param reason The status of the request. See MusicContentCenterStateReason
      */
     virtual void onSongSimpleInfoResult(const char* requestId, int64_t songCode, const char* simpleInfo, MusicContentCenterStateReason reason) = 0;
 

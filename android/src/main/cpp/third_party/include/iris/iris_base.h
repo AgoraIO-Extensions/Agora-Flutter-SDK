@@ -54,6 +54,7 @@ typedef enum IrisError {
   ERR_FRAM_TYPE_NOT_MATCHING = 1006,
   ERR_ALREADY_REGISTERED = 1007,
   ERR_ALREADY_UNREGISTERED = 1008,
+  ERR_API_NOT_REGISTERED = 1009,
 } IrisError;
 
 IRIS_API void enableUseJsonArray(bool enable);

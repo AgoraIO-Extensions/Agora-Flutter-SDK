@@ -8,6 +8,6 @@ class IApiEngineBase {
   virtual int CallIrisApi(ApiParam *apiParam) = 0;
 };
 
-IRIS_API IApiEngineBase *IRIS_CALL createIrisRtcEngine(void *engine);
+IRIS_API IApiEngineBase *IRIS_CALL createIrisRtcEngine(IrisHandle rtcEngine);
 
-IRIS_API void IRIS_CALL destroyIrisRtcEngine(IApiEngineBase *engine);
+IRIS_API void IRIS_CALL destroyIrisRtcEngine(IApiEngineBase *apiEngine);

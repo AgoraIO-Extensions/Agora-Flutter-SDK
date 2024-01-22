@@ -122,9 +122,9 @@ enum AudioRoute
    */
   ROUTE_LOUDSPEAKER = 4,
   /**
-   * The Bluetooth Headset via HFP.
+   * The Bluetooth Device via HFP.
    */
-  ROUTE_HEADSETBLUETOOTH = 5,
+  ROUTE_BLUETOOTH_DEVICE_HFP = 5,
   /**
    * The USB.
    */
@@ -142,9 +142,9 @@ enum AudioRoute
    */
   ROUTE_AIRPLAY = 9,
   /**
-   * The Bluetooth Speaker via A2DP.
+   * The Bluetooth Device via A2DP.
    */
-  ROUTE_BLUETOOTH_SPEAKER = 10,
+  ROUTE_BLUETOOTH_DEVICE_A2DP = 10,
 };
 
 /**
