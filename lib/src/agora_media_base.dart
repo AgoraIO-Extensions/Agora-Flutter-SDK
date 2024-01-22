@@ -251,7 +251,7 @@ enum MediaSourceType {
   @JsonValue(2)
   primaryCameraSource,
 
-  /// 3: The secondary camera.
+  /// 3: A secondary camera.
   @JsonValue(3)
   secondaryCameraSource,
 
@@ -263,7 +263,7 @@ enum MediaSourceType {
   @JsonValue(5)
   secondaryScreenSource,
 
-  /// @nodoc
+  /// 6. Custom video source.
   @JsonValue(6)
   customVideoSource,
 
@@ -959,7 +959,7 @@ class VideoFrame {
   @JsonKey(name: 'pixelBuffer', ignore: true)
   final Uint8List? pixelBuffer;
 
-  /// @nodoc
+  /// The meta information in the video frame. To use this parameter, please.
   @JsonKey(name: 'metaInfo')
   @VideoFrameMetaInfoConverter()
   final VideoFrameMetaInfo? metaInfo;
@@ -1004,7 +1004,7 @@ extension MediaPlayerSourceTypeExt on MediaPlayerSourceType {
 /// The frame position of the video observer.
 @JsonEnum(alwaysCreate: true)
 enum VideoModulePosition {
-  /// 1: The post-capturer position, which corresponds to the video data in the onCaptureVideoFrame callback.
+  /// 1: The location of the locally collected video data after preprocessing corresponds to the onCaptureVideoFrame callback. The observed video here has the effect of video pre-processing, which can be verified by enabling image enhancement, virtual background, or watermark.
   @JsonValue(1 << 0)
   positionPostCapturer,
 
@@ -1012,11 +1012,13 @@ enum VideoModulePosition {
   @JsonValue(1 << 1)
   positionPreRenderer,
 
-  /// 4: The pre-encoder position, which corresponds to the video data in the onPreEncodeVideoFrame callback.
+  /// 4: The pre-encoder position, which corresponds to the video data in the onPreEncodeVideoFrame callback. The observed video here has the effects of video pre-processing and encoding pre-processing.
+  ///  To verify the pre-processing effects of the video, you can enable image enhancement, virtual background, or watermark.
+  ///  To verify the pre-encoding processing effect, you can set a lower frame rate (for example, 5 fps).
   @JsonValue(1 << 2)
   positionPreEncoder,
 
-  /// @nodoc
+  /// 8: The position after local video capture and before pre-processing. The observed video here does not have pre-processing effects, which can be verified by enabling image enhancement, virtual background, or watermarks.
   @JsonValue(1 << 3)
   positionPostCapturerOrigin,
 }
@@ -1565,7 +1567,7 @@ extension MediaRecorderStreamTypeExt on MediaRecorderStreamType {
 /// The current recording state.
 @JsonEnum(alwaysCreate: true)
 enum RecorderState {
-  /// -1: An error occurs during the recording. See for the reason.
+  /// -1: An error occurs during the recording. See RecorderReasonCode for the reason.
   @JsonValue(-1)
   recorderStateError,
 
@@ -1591,26 +1593,26 @@ extension RecorderStateExt on RecorderState {
   }
 }
 
-/// @nodoc
+/// The reason for the state change.
 @JsonEnum(alwaysCreate: true)
 enum RecorderReasonCode {
-  /// @nodoc
+  /// 0: No error.
   @JsonValue(0)
   recorderReasonNone,
 
-  /// @nodoc
+  /// 1: The SDK fails to write the recorded data to a file.
   @JsonValue(1)
   recorderReasonWriteFailed,
 
-  /// @nodoc
+  /// 2: The SDK does not detect any audio and video streams, or audio and video streams are interrupted for more than five seconds during recording.
   @JsonValue(2)
   recorderReasonNoStream,
 
-  /// @nodoc
+  /// 3: The recording duration exceeds the upper limit.
   @JsonValue(3)
   recorderReasonOverMaxDuration,
 
-  /// @nodoc
+  /// 4: The recording configuration changes.
   @JsonValue(4)
   recorderReasonConfigChanged,
 }

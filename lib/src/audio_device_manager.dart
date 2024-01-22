@@ -50,7 +50,6 @@ abstract class AudioDeviceManager {
   ///
   /// Returns
   /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown; and you need to catch the exception and handle it accordingly.
-  ///  < 0: Failure.
   Future<void> setPlaybackDevice(String deviceId);
 
   /// Retrieves the audio playback device associated with the device ID.
@@ -71,11 +70,12 @@ abstract class AudioDeviceManager {
 
   /// Sets the volume of the audio playback device.
   ///
-  /// * [volume] The volume of the audio playback device. The value ranges between 0 (lowest volume) and 255 (highest volume).
+  /// This method applies to Windows only.
+  ///
+  /// * [volume] The volume of the audio playback device. The value range is [0,255].
   ///
   /// Returns
   /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown; and you need to catch the exception and handle it accordingly.
-  ///  < 0: Failure.
   Future<void> setPlaybackDeviceVolume(int volume);
 
   /// Retrieves the volume of the audio playback device.
@@ -92,7 +92,6 @@ abstract class AudioDeviceManager {
   ///
   /// Returns
   /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown; and you need to catch the exception and handle it accordingly.
-  ///  < 0: Failure.
   Future<void> setRecordingDevice(String deviceId);
 
   /// Gets the current audio recording device.
@@ -119,10 +118,11 @@ abstract class AudioDeviceManager {
   ///
   /// Returns
   /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown; and you need to catch the exception and handle it accordingly.
-  ///  < 0: Failure.
   Future<void> setRecordingDeviceVolume(int volume);
 
   /// Retrieves the volume of the audio recording device.
+  ///
+  /// This method applies to Windows only.
   ///
   /// Returns
   /// The volume of the audio recording device. The value range is [0,255].
@@ -139,7 +139,6 @@ abstract class AudioDeviceManager {
   ///
   /// Returns
   /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown; and you need to catch the exception and handle it accordingly.
-  ///  < 0: Failure.
   Future<void> setLoopbackDevice(String deviceId);
 
   /// Gets the current loopback device.
@@ -156,7 +155,6 @@ abstract class AudioDeviceManager {
   ///
   /// Returns
   /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown; and you need to catch the exception and handle it accordingly.
-  ///  < 0: Failure.
   Future<void> setPlaybackDeviceMute(bool mute);
 
   /// Retrieves whether the audio playback device is muted.
@@ -173,9 +171,7 @@ abstract class AudioDeviceManager {
 
   /// Starts the audio playback device test.
   ///
-  /// This method tests whether the audio playback device works properly. Once a user starts the test, the SDK plays an audio file specified by the user. If the user can hear the audio, the playback device works properly. After calling this method, the SDK triggers the onAudioVolumeIndication callback every 100 ms, reporting uid = 1 and the volume information of the playback device.
-  ///  Ensure that you call this method before joining a channel.
-  ///  This method is for Windows and macOS only.
+  /// This method tests whether the audio device for local playback works properly. Once a user starts the test, the SDK plays an audio file specified by the user. If the user can hear the audio, the playback device works properly. After calling this method, the SDK triggers the onAudioVolumeIndication callback every 100 ms, reporting uid = 1 and the volume information of the playback device. The difference between this method and the startEchoTest method is that the former checks if the local audio playback device is working properly, while the latter can check the audio and video devices and network conditions. Ensure that you call this method before joining a channel. After the test is completed, call stopPlaybackDeviceTest to stop the test before joining a channel.
   ///
   /// * [testAudioFilePath] The path of the audio file. The data format is string in UTF-8.
   ///  Supported file formats: wav, mp3, m4a, and aac.
@@ -183,42 +179,34 @@ abstract class AudioDeviceManager {
   ///
   /// Returns
   /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown; and you need to catch the exception and handle it accordingly.
-  ///  < 0: Failure.
   Future<void> startPlaybackDeviceTest(String testAudioFilePath);
 
   /// Stops the audio playback device test.
   ///
-  /// This method stops the audio playback device test. You must call this method to stop the test after calling the startPlaybackDeviceTest method.
-  ///  This method is for Windows and macOS only.
-  ///  Ensure that you call this method before joining a channel.
+  /// This method stops the audio playback device test. You must call this method to stop the test after calling the startPlaybackDeviceTest method. Ensure that you call this method before joining a channel.
   ///
   /// Returns
   /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown; and you need to catch the exception and handle it accordingly.
-  ///  < 0: Failure.
   Future<void> stopPlaybackDeviceTest();
 
-  /// Starts the audio capture device test.
+  /// Starts the audio capturing device test.
   ///
-  /// This method tests whether the audio capture device works properly. After calling this method, the SDK triggers the onAudioVolumeIndication callback at the time interval set in this method, which reports uid = 0 and the volume information of the capturing device.
-  ///  This method is for Windows and macOS only.
-  ///  Ensure that you call this method before joining a channel.
+  /// This method tests whether the audio capturing device works properly. After calling this method, the SDK triggers the onAudioVolumeIndication callback at the time interval set in this method, which reports uid = 0 and the volume information of the capturing device. The difference between this method and the startEchoTest method is that the former checks if the local audio capturing device is working properly, while the latter can check the audio and video devices and network conditions. Ensure that you call this method before joining a channel. After the test is completed, call stopRecordingDeviceTest to stop the test before joining a channel.
   ///
-  /// * [indicationInterval] The time interval (ms) at which the SDK triggers the onAudioVolumeIndication callback. Agora recommends setting a value greater than 200 ms. This value must not be less than 10 ms; otherwise, you can not receive the onAudioVolumeIndication callback.
+  /// * [indicationInterval] The interval (ms) for triggering the onAudioVolumeIndication callback. This value should be set to greater than 10, otherwise, you will not receive the onAudioVolumeIndication callback and the SDK returns the error code -2. Agora recommends that you set this value to 100.
   ///
   /// Returns
   /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown; and you need to catch the exception and handle it accordingly.
   ///  < 0: Failure.
+  ///  -2: Invalid parameters. Check your parameter settings.
   Future<void> startRecordingDeviceTest(int indicationInterval);
 
-  /// Stops the audio capture device test.
+  /// Stops the audio capturing device test.
   ///
-  /// This method stops the audio capture device test. You must call this method to stop the test after calling the startRecordingDeviceTest method.
-  ///  This method is for Windows and macOS only.
-  ///  Ensure that you call this method before joining a channel.
+  /// This method stops the audio capturing device test. You must call this method to stop the test after calling the startRecordingDeviceTest method. Ensure that you call this method before joining a channel.
   ///
   /// Returns
   /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown; and you need to catch the exception and handle it accordingly.
-  ///  < 0: Failure.
   Future<void> stopRecordingDeviceTest();
 
   /// Starts an audio device loopback test.
@@ -234,7 +222,6 @@ abstract class AudioDeviceManager {
   ///
   /// Returns
   /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown; and you need to catch the exception and handle it accordingly.
-  ///  < 0: Failure.
   Future<void> startAudioDeviceLoopbackTest(int indicationInterval);
 
   /// Stops the audio device loopback test.
@@ -246,7 +233,6 @@ abstract class AudioDeviceManager {
   ///
   /// Returns
   /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown; and you need to catch the exception and handle it accordingly.
-  ///  < 0: Failure.
   Future<void> stopAudioDeviceLoopbackTest();
 
   /// Sets the audio playback device used by the SDK to follow the system default audio playback device.
@@ -257,7 +243,6 @@ abstract class AudioDeviceManager {
   ///
   /// Returns
   /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown; and you need to catch the exception and handle it accordingly.
-  ///  < 0: Failure.
   Future<void> followSystemPlaybackDevice(bool enable);
 
   /// Sets the audio recording device used by the SDK to follow the system default audio recording device.
@@ -268,7 +253,6 @@ abstract class AudioDeviceManager {
   ///
   /// Returns
   /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown; and you need to catch the exception and handle it accordingly.
-  ///  < 0: Failure.
   Future<void> followSystemRecordingDevice(bool enable);
 
   /// Sets whether the loopback device follows the system default playback device.
@@ -279,7 +263,6 @@ abstract class AudioDeviceManager {
   ///
   /// Returns
   /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown; and you need to catch the exception and handle it accordingly.
-  ///  < 0: Failure.
   Future<void> followSystemLoopbackDevice(bool enable);
 
   /// Releases all the resources occupied by the AudioDeviceManager object.

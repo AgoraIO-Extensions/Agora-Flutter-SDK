@@ -24,15 +24,16 @@ class MediaPlayerSourceObserver {
   /// When the state of the media player changes, the SDK triggers this callback to report the current playback state.
   ///
   /// * [state] The playback state. See MediaPlayerState.
-  /// * [ec] The error code.
+  /// * [reason] The reason for the changes in the media player status. See MediaPlayerReason.
   final void Function(MediaPlayerState state, MediaPlayerReason reason)?
       onPlayerSourceStateChanged;
 
-  /// Reports current playback progress.
+  /// Reports the playback progress of the media file.
   ///
   /// When playing media files, the SDK triggers this callback every two second to report current playback progress.
   ///
-  /// * [position] The playback position (ms) of media files.
+  /// * [positionMs] The playback position (ms) of media files.
+  /// * [timeStampMs] The NTP timestamp (ms) of the current playback progress.
   final void Function(int positionMs, int timestampMs)? onPositionChanged;
 
   /// Reports the player events.
@@ -88,10 +89,18 @@ class MediaPlayerSourceObserver {
   /// * [info] Information related to the media player. See PlayerUpdatedInfo.
   final void Function(PlayerUpdatedInfo info)? onPlayerInfoUpdated;
 
-  /// @nodoc
+  /// Reports the statistics of the media file being cached.
+  ///
+  /// After you call the openWithMediaSource method and set enableCache as true, the SDK triggers this callback once per second to report the statistics of the media file being cached.
+  ///
+  /// * [stats] The statistics of the media file being cached. See CacheStatistics.
   final void Function(CacheStatistics stats)? onPlayerCacheStats;
 
-  /// @nodoc
+  /// The statistics of the media file being played.
+  ///
+  /// The SDK triggers this callback once per second to report the statistics of the media file being played.
+  ///
+  /// * [stats] The statistics of the media file. See PlayerPlaybackStats.
   final void Function(PlayerPlaybackStats stats)? onPlayerPlaybackStats;
 
   /// Reports the volume of the media player.

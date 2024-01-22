@@ -85,70 +85,70 @@ extension MediaPlayerStateExt on MediaPlayerState {
   }
 }
 
-/// @nodoc
+/// Reasons for the changes in the media player status.
 @JsonEnum(alwaysCreate: true)
 enum MediaPlayerReason {
-  /// @nodoc
+  /// 0: No error.
   @JsonValue(0)
   playerReasonNone,
 
-  /// @nodoc
+  /// -1: Invalid arguments.
   @JsonValue(-1)
   playerReasonInvalidArguments,
 
-  /// @nodoc
+  /// -2: Internal error.
   @JsonValue(-2)
   playerReasonInternal,
 
-  /// @nodoc
+  /// -3: No resource.
   @JsonValue(-3)
   playerReasonNoResource,
 
-  /// @nodoc
+  /// -4: Invalid media resource.
   @JsonValue(-4)
   playerReasonInvalidMediaSource,
 
-  /// @nodoc
+  /// -5: The media stream type is unknown.
   @JsonValue(-5)
   playerReasonUnknownStreamType,
 
-  /// @nodoc
+  /// -6: The object is not initialized.
   @JsonValue(-6)
   playerReasonObjNotInitialized,
 
-  /// @nodoc
+  /// -7: The codec is not supported.
   @JsonValue(-7)
   playerReasonCodecNotSupported,
 
-  /// @nodoc
+  /// -8: Invalid renderer.
   @JsonValue(-8)
   playerReasonVideoRenderFailed,
 
-  /// @nodoc
+  /// -9: An error with the internal state of the player occurs.
   @JsonValue(-9)
   playerReasonInvalidState,
 
-  /// @nodoc
+  /// -10: The URL of the media resource cannot be found.
   @JsonValue(-10)
   playerReasonUrlNotFound,
 
-  /// @nodoc
+  /// -11: Invalid connection between the player and the Agora Server.
   @JsonValue(-11)
   playerReasonInvalidConnectionState,
 
-  /// @nodoc
+  /// -12: The playback buffer is insufficient.
   @JsonValue(-12)
   playerReasonSrcBufferUnderflow,
 
-  /// @nodoc
+  /// -13: The playback is interrupted.
   @JsonValue(-13)
   playerReasonInterrupted,
 
-  /// @nodoc
+  /// -14: The SDK does not support the method being called.
   @JsonValue(-14)
   playerReasonNotSupported,
 
-  /// @nodoc
+  /// -15: The authentication information of the media resource is expired.
   @JsonValue(-15)
   playerReasonTokenExpired,
 
@@ -156,7 +156,7 @@ enum MediaPlayerReason {
   @JsonValue(-16)
   playerReasonIpExpired,
 
-  /// @nodoc
+  /// -17: An unknown error.
   @JsonValue(-17)
   playerReasonUnknown,
 }
@@ -473,7 +473,7 @@ class CacheStatistics {
   Map<String, dynamic> toJson() => _$CacheStatisticsToJson(this);
 }
 
-/// @nodoc
+/// The information of the media file being played.
 @JsonSerializable(explicitToJson: true, includeIfNull: false)
 class PlayerPlaybackStats {
   /// @nodoc
@@ -483,19 +483,19 @@ class PlayerPlaybackStats {
       this.audioBitrateInKbps,
       this.totalBitrateInKbps});
 
-  /// @nodoc
+  /// The frame rate (fps) of the video.
   @JsonKey(name: 'videoFps')
   final int? videoFps;
 
-  /// @nodoc
+  /// The bitrate (kbps) of the video.
   @JsonKey(name: 'videoBitrateInKbps')
   final int? videoBitrateInKbps;
 
-  /// @nodoc
+  /// The bitrate (kbps) of the audio.
   @JsonKey(name: 'audioBitrateInKbps')
   final int? audioBitrateInKbps;
 
-  /// @nodoc
+  /// The total bitrate (kbps) of the media stream.
   @JsonKey(name: 'totalBitrateInKbps')
   final int? totalBitrateInKbps;
 
@@ -528,23 +528,23 @@ class PlayerUpdatedInfo {
   @JsonKey(name: 'deviceId')
   final String? deviceId;
 
-  /// @nodoc
+  /// Height (pixel) of the video.
   @JsonKey(name: 'videoHeight')
   final int? videoHeight;
 
-  /// @nodoc
+  /// Width (pixel) of the video.
   @JsonKey(name: 'videoWidth')
   final int? videoWidth;
 
-  /// @nodoc
+  /// Audio sample rate (Hz).
   @JsonKey(name: 'audioSampleRate')
   final int? audioSampleRate;
 
-  /// @nodoc
+  /// The number of audio channels.
   @JsonKey(name: 'audioChannels')
   final int? audioChannels;
 
-  /// @nodoc
+  /// The number of bits per audio sample point.
   @JsonKey(name: 'audioBitsPerSample')
   final int? audioBitsPerSample;
 
@@ -593,7 +593,7 @@ class MediaSource {
   @JsonKey(name: 'enableCache')
   final bool? enableCache;
 
-  /// @nodoc
+  /// Whether to allow the selection of different audio tracks when playing this media file: true : Allow to select different audio tracks. false : (Default) Do not allow to select different audio tracks. If you need to set different audio tracks for local playback and publishing to the channel, you need to set this parameter to true, and then call the selectMultiAudioTrack method to select the audio track.
   @JsonKey(name: 'enableMultiAudioTrack')
   final bool? enableMultiAudioTrack;
 

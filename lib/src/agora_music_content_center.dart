@@ -329,7 +329,19 @@ class MusicContentCenterEventHandler {
   final void Function(String requestId, int songCode, String lyricUrl,
       MusicContentCenterStateReason reason)? onLyricResult;
 
-  /// @nodoc
+  /// 音乐资源的详细信息回调。
+  ///
+  /// 当你调用 getSongSimpleInfo 获取某一音乐资源的详细信息后，SDK 会触发该回调。
+  ///
+  /// * [reason] 音乐内容中心的请求状态码，详见 MusicContentCenterStateReason 。
+  /// * [requestId] The request ID. 本次请求的唯一标识。
+  /// * [songCode] The code of the music, which is an unique identifier of the music.
+  /// * [simpleInfo] 音乐资源的相关信息，包含下列内容：
+  ///  副歌片段的开始和结束的时间（ms）
+  ///  副歌片段的歌词下载地址
+  ///  副歌片段时长（ms）
+  ///  歌曲名称
+  ///  歌手名
   final void Function(String requestId, int songCode, String simpleInfo,
       MusicContentCenterStateReason reason)? onSongSimpleInfoResult;
 

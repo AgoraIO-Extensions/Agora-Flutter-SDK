@@ -9,6 +9,8 @@ import 'package:flutter/foundation.dart';
 import 'package:fake_test_app/main.dart' as app;
 import 'package:iris_tester/iris_tester.dart';
 import 'package:iris_method_channel/iris_method_channel.dart';
+import 'package:path_provider/path_provider.dart';
+import 'package:path/path.dart' as path;
 
 void mediaEngineSmokeTestCases() {
   testWidgets(
@@ -17,10 +19,13 @@ void mediaEngineSmokeTestCases() {
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
 
+      Directory appDocDir = await getApplicationDocumentsDirectory();
+      String logPath = path.join(appDocDir.path, 'test_log.txt');
       RtcEngine rtcEngine = createAgoraRtcEngine();
       await rtcEngine.initialize(RtcEngineContext(
         appId: engineAppId,
         areaCode: AreaCode.areaCodeGlob.value(),
+        logConfig: LogConfig(filePath: logPath),
       ));
 
       final mediaEngine = rtcEngine.getMediaEngine();
@@ -62,10 +67,13 @@ void mediaEngineSmokeTestCases() {
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
 
+      Directory appDocDir = await getApplicationDocumentsDirectory();
+      String logPath = path.join(appDocDir.path, 'test_log.txt');
       RtcEngine rtcEngine = createAgoraRtcEngine();
       await rtcEngine.initialize(RtcEngineContext(
         appId: engineAppId,
         areaCode: AreaCode.areaCodeGlob.value(),
+        logConfig: LogConfig(filePath: logPath),
       ));
 
       final mediaEngine = rtcEngine.getMediaEngine();
@@ -110,10 +118,13 @@ void mediaEngineSmokeTestCases() {
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
 
+      Directory appDocDir = await getApplicationDocumentsDirectory();
+      String logPath = path.join(appDocDir.path, 'test_log.txt');
       RtcEngine rtcEngine = createAgoraRtcEngine();
       await rtcEngine.initialize(RtcEngineContext(
         appId: engineAppId,
         areaCode: AreaCode.areaCodeGlob.value(),
+        logConfig: LogConfig(filePath: logPath),
       ));
 
       final mediaEngine = rtcEngine.getMediaEngine();
@@ -151,10 +162,13 @@ void mediaEngineSmokeTestCases() {
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
 
+      Directory appDocDir = await getApplicationDocumentsDirectory();
+      String logPath = path.join(appDocDir.path, 'test_log.txt');
       RtcEngine rtcEngine = createAgoraRtcEngine();
       await rtcEngine.initialize(RtcEngineContext(
         appId: engineAppId,
         areaCode: AreaCode.areaCodeGlob.value(),
+        logConfig: LogConfig(filePath: logPath),
       ));
 
       final mediaEngine = rtcEngine.getMediaEngine();
@@ -212,10 +226,13 @@ void mediaEngineSmokeTestCases() {
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
 
+      Directory appDocDir = await getApplicationDocumentsDirectory();
+      String logPath = path.join(appDocDir.path, 'test_log.txt');
       RtcEngine rtcEngine = createAgoraRtcEngine();
       await rtcEngine.initialize(RtcEngineContext(
         appId: engineAppId,
         areaCode: AreaCode.areaCodeGlob.value(),
+        logConfig: LogConfig(filePath: logPath),
       ));
 
       final mediaEngine = rtcEngine.getMediaEngine();
@@ -271,10 +288,13 @@ void mediaEngineSmokeTestCases() {
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
 
+      Directory appDocDir = await getApplicationDocumentsDirectory();
+      String logPath = path.join(appDocDir.path, 'test_log.txt');
       RtcEngine rtcEngine = createAgoraRtcEngine();
       await rtcEngine.initialize(RtcEngineContext(
         appId: engineAppId,
         areaCode: AreaCode.areaCodeGlob.value(),
+        logConfig: LogConfig(filePath: logPath),
       ));
 
       final mediaEngine = rtcEngine.getMediaEngine();
@@ -324,10 +344,13 @@ void mediaEngineSmokeTestCases() {
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
 
+      Directory appDocDir = await getApplicationDocumentsDirectory();
+      String logPath = path.join(appDocDir.path, 'test_log.txt');
       RtcEngine rtcEngine = createAgoraRtcEngine();
       await rtcEngine.initialize(RtcEngineContext(
         appId: engineAppId,
         areaCode: AreaCode.areaCodeGlob.value(),
+        logConfig: LogConfig(filePath: logPath),
       ));
 
       final mediaEngine = rtcEngine.getMediaEngine();
@@ -370,10 +393,13 @@ void mediaEngineSmokeTestCases() {
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
 
+      Directory appDocDir = await getApplicationDocumentsDirectory();
+      String logPath = path.join(appDocDir.path, 'test_log.txt');
       RtcEngine rtcEngine = createAgoraRtcEngine();
       await rtcEngine.initialize(RtcEngineContext(
         appId: engineAppId,
         areaCode: AreaCode.areaCodeGlob.value(),
+        logConfig: LogConfig(filePath: logPath),
       ));
 
       final mediaEngine = rtcEngine.getMediaEngine();
@@ -408,10 +434,13 @@ void mediaEngineSmokeTestCases() {
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
 
+      Directory appDocDir = await getApplicationDocumentsDirectory();
+      String logPath = path.join(appDocDir.path, 'test_log.txt');
       RtcEngine rtcEngine = createAgoraRtcEngine();
       await rtcEngine.initialize(RtcEngineContext(
         appId: engineAppId,
         areaCode: AreaCode.areaCodeGlob.value(),
+        logConfig: LogConfig(filePath: logPath),
       ));
 
       final mediaEngine = rtcEngine.getMediaEngine();
@@ -450,10 +479,13 @@ void mediaEngineSmokeTestCases() {
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
 
+      Directory appDocDir = await getApplicationDocumentsDirectory();
+      String logPath = path.join(appDocDir.path, 'test_log.txt');
       RtcEngine rtcEngine = createAgoraRtcEngine();
       await rtcEngine.initialize(RtcEngineContext(
         appId: engineAppId,
         areaCode: AreaCode.areaCodeGlob.value(),
+        logConfig: LogConfig(filePath: logPath),
       ));
 
       final mediaEngine = rtcEngine.getMediaEngine();
@@ -490,10 +522,13 @@ void mediaEngineSmokeTestCases() {
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
 
+      Directory appDocDir = await getApplicationDocumentsDirectory();
+      String logPath = path.join(appDocDir.path, 'test_log.txt');
       RtcEngine rtcEngine = createAgoraRtcEngine();
       await rtcEngine.initialize(RtcEngineContext(
         appId: engineAppId,
         areaCode: AreaCode.areaCodeGlob.value(),
+        logConfig: LogConfig(filePath: logPath),
       ));
 
       final mediaEngine = rtcEngine.getMediaEngine();
@@ -566,10 +601,13 @@ void mediaEngineSmokeTestCases() {
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
 
+      Directory appDocDir = await getApplicationDocumentsDirectory();
+      String logPath = path.join(appDocDir.path, 'test_log.txt');
       RtcEngine rtcEngine = createAgoraRtcEngine();
       await rtcEngine.initialize(RtcEngineContext(
         appId: engineAppId,
         areaCode: AreaCode.areaCodeGlob.value(),
+        logConfig: LogConfig(filePath: logPath),
       ));
 
       final mediaEngine = rtcEngine.getMediaEngine();
@@ -638,10 +676,13 @@ void mediaEngineSmokeTestCases() {
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
 
+      Directory appDocDir = await getApplicationDocumentsDirectory();
+      String logPath = path.join(appDocDir.path, 'test_log.txt');
       RtcEngine rtcEngine = createAgoraRtcEngine();
       await rtcEngine.initialize(RtcEngineContext(
         appId: engineAppId,
         areaCode: AreaCode.areaCodeGlob.value(),
+        logConfig: LogConfig(filePath: logPath),
       ));
 
       final mediaEngine = rtcEngine.getMediaEngine();
@@ -672,10 +713,13 @@ void mediaEngineSmokeTestCases() {
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
 
+      Directory appDocDir = await getApplicationDocumentsDirectory();
+      String logPath = path.join(appDocDir.path, 'test_log.txt');
       RtcEngine rtcEngine = createAgoraRtcEngine();
       await rtcEngine.initialize(RtcEngineContext(
         appId: engineAppId,
         areaCode: AreaCode.areaCodeGlob.value(),
+        logConfig: LogConfig(filePath: logPath),
       ));
 
       final mediaEngine = rtcEngine.getMediaEngine();
@@ -717,10 +761,13 @@ void mediaEngineSmokeTestCases() {
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
 
+      Directory appDocDir = await getApplicationDocumentsDirectory();
+      String logPath = path.join(appDocDir.path, 'test_log.txt');
       RtcEngine rtcEngine = createAgoraRtcEngine();
       await rtcEngine.initialize(RtcEngineContext(
         appId: engineAppId,
         areaCode: AreaCode.areaCodeGlob.value(),
+        logConfig: LogConfig(filePath: logPath),
       ));
 
       final mediaEngine = rtcEngine.getMediaEngine();
@@ -765,10 +812,13 @@ void mediaEngineSmokeTestCases() {
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
 
+      Directory appDocDir = await getApplicationDocumentsDirectory();
+      String logPath = path.join(appDocDir.path, 'test_log.txt');
       RtcEngine rtcEngine = createAgoraRtcEngine();
       await rtcEngine.initialize(RtcEngineContext(
         appId: engineAppId,
         areaCode: AreaCode.areaCodeGlob.value(),
+        logConfig: LogConfig(filePath: logPath),
       ));
 
       final mediaEngine = rtcEngine.getMediaEngine();

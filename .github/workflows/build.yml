@@ -149,6 +149,18 @@ jobs:
           cache: true
       - run: flutter config --enable-macos-desktop
       - run: bash ci/run_flutter_macos_integration_test.sh
+      - name: Get iris logs macos
+        if: always()
+        run: |
+          mkdir iris-logs-macos
+          cp -RP ${HOME}/Library/Containers/com.example.fakeTestApp/Data/Documents/agora-iris.log ./iris-logs-macos/agora-iris-fake-test.log
+          cp -RP ${HOME}/Library/Containers/com.example.integrationTestApp/Data/Documents/agora-iris.log ./iris-logs-macos/agora-iris-integration-test.log
+      - name: Upload iris logs macos
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: iris-logs-macos
+          path: iris-logs-macos/*
 
   integration_test_windows:
     name: Run Flutter Windows Integration Tests
