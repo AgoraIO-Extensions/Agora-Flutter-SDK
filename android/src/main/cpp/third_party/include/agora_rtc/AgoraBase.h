@@ -1877,7 +1877,7 @@ struct VideoEncoderConfiguration {
   AdvanceOptions advanceOptions;
 
   VideoEncoderConfiguration(const VideoDimensions& d, int f, int b, ORIENTATION_MODE m, VIDEO_MIRROR_MODE_TYPE mirror = VIDEO_MIRROR_MODE_DISABLED)
-    : codecType(VIDEO_CODEC_H265),
+    : codecType(VIDEO_CODEC_NONE),
       dimensions(d),
       frameRate(f),
       bitrate(b),
@@ -1887,7 +1887,7 @@ struct VideoEncoderConfiguration {
       mirrorMode(mirror),
       advanceOptions(PREFER_AUTO, PREFER_LOW_LATENCY) {}
   VideoEncoderConfiguration(int width, int height, int f, int b, ORIENTATION_MODE m, VIDEO_MIRROR_MODE_TYPE mirror = VIDEO_MIRROR_MODE_DISABLED)
-    : codecType(VIDEO_CODEC_H265),
+    : codecType(VIDEO_CODEC_NONE),
       dimensions(width, height),
       frameRate(f),
       bitrate(b),
@@ -1907,7 +1907,7 @@ struct VideoEncoderConfiguration {
       mirrorMode(config.mirrorMode),
       advanceOptions(config.advanceOptions) {}
   VideoEncoderConfiguration()
-    : codecType(VIDEO_CODEC_H265),
+    : codecType(VIDEO_CODEC_NONE),
       dimensions(FRAME_WIDTH_960, FRAME_HEIGHT_540),
       frameRate(FRAME_RATE_FPS_15),
       bitrate(STANDARD_BITRATE),
