@@ -27,6 +27,7 @@ void videoDeviceManagerSmokeTestCases() {
         areaCode: AreaCode.areaCodeGlob.value(),
         logConfig: LogConfig(filePath: logPath),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       final videoDeviceManager = rtcEngine.getVideoDeviceManager();
 
@@ -65,6 +66,7 @@ void videoDeviceManagerSmokeTestCases() {
         areaCode: AreaCode.areaCodeGlob.value(),
         logConfig: LogConfig(filePath: logPath),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       final videoDeviceManager = rtcEngine.getVideoDeviceManager();
 
@@ -105,6 +107,7 @@ void videoDeviceManagerSmokeTestCases() {
         areaCode: AreaCode.areaCodeGlob.value(),
         logConfig: LogConfig(filePath: logPath),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       final videoDeviceManager = rtcEngine.getVideoDeviceManager();
 
@@ -142,6 +145,7 @@ void videoDeviceManagerSmokeTestCases() {
         areaCode: AreaCode.areaCodeGlob.value(),
         logConfig: LogConfig(filePath: logPath),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       final videoDeviceManager = rtcEngine.getVideoDeviceManager();
 
@@ -183,6 +187,7 @@ void videoDeviceManagerSmokeTestCases() {
         areaCode: AreaCode.areaCodeGlob.value(),
         logConfig: LogConfig(filePath: logPath),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       final videoDeviceManager = rtcEngine.getVideoDeviceManager();
 
@@ -226,6 +231,7 @@ void videoDeviceManagerSmokeTestCases() {
         areaCode: AreaCode.areaCodeGlob.value(),
         logConfig: LogConfig(filePath: logPath),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       final videoDeviceManager = rtcEngine.getVideoDeviceManager();
 
@@ -267,6 +273,7 @@ void videoDeviceManagerSmokeTestCases() {
         areaCode: AreaCode.areaCodeGlob.value(),
         logConfig: LogConfig(filePath: logPath),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       final videoDeviceManager = rtcEngine.getVideoDeviceManager();
 
@@ -305,6 +312,7 @@ void videoDeviceManagerSmokeTestCases() {
         areaCode: AreaCode.areaCodeGlob.value(),
         logConfig: LogConfig(filePath: logPath),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       final videoDeviceManager = rtcEngine.getVideoDeviceManager();
 

@@ -28,6 +28,7 @@ void generatedTestCases(IrisTester irisTester) {
         areaCode: AreaCode.areaCodeGlob.value(),
         logConfig: LogConfig(filePath: logPath),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
       final mediaPlayerController = MediaPlayerController(
           rtcEngine: rtcEngine, canvas: const VideoCanvas());
       await mediaPlayerController.initialize();
@@ -99,6 +100,7 @@ void generatedTestCases(IrisTester irisTester) {
         areaCode: AreaCode.areaCodeGlob.value(),
         logConfig: LogConfig(filePath: logPath),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
       final mediaPlayerController = MediaPlayerController(
           rtcEngine: rtcEngine, canvas: const VideoCanvas());
       await mediaPlayerController.initialize();
@@ -169,6 +171,7 @@ void generatedTestCases(IrisTester irisTester) {
         areaCode: AreaCode.areaCodeGlob.value(),
         logConfig: LogConfig(filePath: logPath),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
       final mediaPlayerController = MediaPlayerController(
           rtcEngine: rtcEngine, canvas: const VideoCanvas());
       await mediaPlayerController.initialize();
@@ -242,6 +245,7 @@ void generatedTestCases(IrisTester irisTester) {
         areaCode: AreaCode.areaCodeGlob.value(),
         logConfig: LogConfig(filePath: logPath),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
       final mediaPlayerController = MediaPlayerController(
           rtcEngine: rtcEngine, canvas: const VideoCanvas());
       await mediaPlayerController.initialize();
@@ -311,6 +315,7 @@ void generatedTestCases(IrisTester irisTester) {
         areaCode: AreaCode.areaCodeGlob.value(),
         logConfig: LogConfig(filePath: logPath),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
       final mediaPlayerController = MediaPlayerController(
           rtcEngine: rtcEngine, canvas: const VideoCanvas());
       await mediaPlayerController.initialize();
@@ -379,6 +384,7 @@ void generatedTestCases(IrisTester irisTester) {
         areaCode: AreaCode.areaCodeGlob.value(),
         logConfig: LogConfig(filePath: logPath),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
       final mediaPlayerController = MediaPlayerController(
           rtcEngine: rtcEngine, canvas: const VideoCanvas());
       await mediaPlayerController.initialize();
@@ -449,6 +455,7 @@ void generatedTestCases(IrisTester irisTester) {
         areaCode: AreaCode.areaCodeGlob.value(),
         logConfig: LogConfig(filePath: logPath),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
       final mediaPlayerController = MediaPlayerController(
           rtcEngine: rtcEngine, canvas: const VideoCanvas());
       await mediaPlayerController.initialize();
@@ -512,6 +519,7 @@ void generatedTestCases(IrisTester irisTester) {
         areaCode: AreaCode.areaCodeGlob.value(),
         logConfig: LogConfig(filePath: logPath),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
       final mediaPlayerController = MediaPlayerController(
           rtcEngine: rtcEngine, canvas: const VideoCanvas());
       await mediaPlayerController.initialize();
@@ -576,6 +584,7 @@ void generatedTestCases(IrisTester irisTester) {
         areaCode: AreaCode.areaCodeGlob.value(),
         logConfig: LogConfig(filePath: logPath),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
       final mediaPlayerController = MediaPlayerController(
           rtcEngine: rtcEngine, canvas: const VideoCanvas());
       await mediaPlayerController.initialize();
@@ -656,6 +665,7 @@ void generatedTestCases(IrisTester irisTester) {
         areaCode: AreaCode.areaCodeGlob.value(),
         logConfig: LogConfig(filePath: logPath),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
       final mediaPlayerController = MediaPlayerController(
           rtcEngine: rtcEngine, canvas: const VideoCanvas());
       await mediaPlayerController.initialize();
@@ -739,6 +749,7 @@ void generatedTestCases(IrisTester irisTester) {
         areaCode: AreaCode.areaCodeGlob.value(),
         logConfig: LogConfig(filePath: logPath),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
       final mediaPlayerController = MediaPlayerController(
           rtcEngine: rtcEngine, canvas: const VideoCanvas());
       await mediaPlayerController.initialize();
@@ -814,6 +825,7 @@ void generatedTestCases(IrisTester irisTester) {
         areaCode: AreaCode.areaCodeGlob.value(),
         logConfig: LogConfig(filePath: logPath),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
       final mediaPlayerController = MediaPlayerController(
           rtcEngine: rtcEngine, canvas: const VideoCanvas());
       await mediaPlayerController.initialize();
@@ -891,6 +903,7 @@ void generatedTestCases(IrisTester irisTester) {
         areaCode: AreaCode.areaCodeGlob.value(),
         logConfig: LogConfig(filePath: logPath),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
       final mediaPlayerController = MediaPlayerController(
           rtcEngine: rtcEngine, canvas: const VideoCanvas());
       await mediaPlayerController.initialize();

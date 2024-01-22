@@ -28,6 +28,7 @@ void mediaPlayerCacheManagerSmokeTestCases() {
         areaCode: AreaCode.areaCodeGlob.value(),
         logConfig: LogConfig(filePath: logPath),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       final mediaPlayerCacheManager = getMediaPlayerCacheManager(rtcEngine);
 
@@ -65,6 +66,7 @@ void mediaPlayerCacheManagerSmokeTestCases() {
         areaCode: AreaCode.areaCodeGlob.value(),
         logConfig: LogConfig(filePath: logPath),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       final mediaPlayerCacheManager = getMediaPlayerCacheManager(rtcEngine);
 
@@ -102,6 +104,7 @@ void mediaPlayerCacheManagerSmokeTestCases() {
         areaCode: AreaCode.areaCodeGlob.value(),
         logConfig: LogConfig(filePath: logPath),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       final mediaPlayerCacheManager = getMediaPlayerCacheManager(rtcEngine);
 
@@ -142,6 +145,7 @@ void mediaPlayerCacheManagerSmokeTestCases() {
         areaCode: AreaCode.areaCodeGlob.value(),
         logConfig: LogConfig(filePath: logPath),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       final mediaPlayerCacheManager = getMediaPlayerCacheManager(rtcEngine);
 
@@ -182,6 +186,7 @@ void mediaPlayerCacheManagerSmokeTestCases() {
         areaCode: AreaCode.areaCodeGlob.value(),
         logConfig: LogConfig(filePath: logPath),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       final mediaPlayerCacheManager = getMediaPlayerCacheManager(rtcEngine);
 
@@ -222,6 +227,7 @@ void mediaPlayerCacheManagerSmokeTestCases() {
         areaCode: AreaCode.areaCodeGlob.value(),
         logConfig: LogConfig(filePath: logPath),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       final mediaPlayerCacheManager = getMediaPlayerCacheManager(rtcEngine);
 
@@ -262,6 +268,7 @@ void mediaPlayerCacheManagerSmokeTestCases() {
         areaCode: AreaCode.areaCodeGlob.value(),
         logConfig: LogConfig(filePath: logPath),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       final mediaPlayerCacheManager = getMediaPlayerCacheManager(rtcEngine);
 
@@ -302,6 +309,7 @@ void mediaPlayerCacheManagerSmokeTestCases() {
         areaCode: AreaCode.areaCodeGlob.value(),
         logConfig: LogConfig(filePath: logPath),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       final mediaPlayerCacheManager = getMediaPlayerCacheManager(rtcEngine);
 
@@ -342,6 +350,7 @@ void mediaPlayerCacheManagerSmokeTestCases() {
         areaCode: AreaCode.areaCodeGlob.value(),
         logConfig: LogConfig(filePath: logPath),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       final mediaPlayerCacheManager = getMediaPlayerCacheManager(rtcEngine);
 
@@ -379,6 +388,7 @@ void mediaPlayerCacheManagerSmokeTestCases() {
         areaCode: AreaCode.areaCodeGlob.value(),
         logConfig: LogConfig(filePath: logPath),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       final mediaPlayerCacheManager = getMediaPlayerCacheManager(rtcEngine);
 
@@ -416,6 +426,7 @@ void mediaPlayerCacheManagerSmokeTestCases() {
         areaCode: AreaCode.areaCodeGlob.value(),
         logConfig: LogConfig(filePath: logPath),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       final mediaPlayerCacheManager = getMediaPlayerCacheManager(rtcEngine);
 

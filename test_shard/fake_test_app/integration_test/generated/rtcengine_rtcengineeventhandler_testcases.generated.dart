@@ -28,6 +28,7 @@ void generatedTestCases(IrisTester irisTester) {
         areaCode: AreaCode.areaCodeGlob.value(),
         logConfig: LogConfig(filePath: logPath),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       final onJoinChannelSuccessCompleter = Completer<bool>();
       final theRtcEngineEventHandler = RtcEngineEventHandler(
@@ -99,6 +100,7 @@ void generatedTestCases(IrisTester irisTester) {
         areaCode: AreaCode.areaCodeGlob.value(),
         logConfig: LogConfig(filePath: logPath),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       final onRejoinChannelSuccessCompleter = Completer<bool>();
       final theRtcEngineEventHandler = RtcEngineEventHandler(
@@ -171,6 +173,7 @@ void generatedTestCases(IrisTester irisTester) {
         areaCode: AreaCode.areaCodeGlob.value(),
         logConfig: LogConfig(filePath: logPath),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       final onProxyConnectedCompleter = Completer<bool>();
       final theRtcEngineEventHandler = RtcEngineEventHandler(
@@ -244,6 +247,7 @@ void generatedTestCases(IrisTester irisTester) {
         areaCode: AreaCode.areaCodeGlob.value(),
         logConfig: LogConfig(filePath: logPath),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       final onErrorCompleter = Completer<bool>();
       final theRtcEngineEventHandler = RtcEngineEventHandler(
@@ -309,6 +313,7 @@ void generatedTestCases(IrisTester irisTester) {
         areaCode: AreaCode.areaCodeGlob.value(),
         logConfig: LogConfig(filePath: logPath),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       final onAudioQualityCompleter = Completer<bool>();
       final theRtcEngineEventHandler = RtcEngineEventHandler(
@@ -387,6 +392,7 @@ void generatedTestCases(IrisTester irisTester) {
         areaCode: AreaCode.areaCodeGlob.value(),
         logConfig: LogConfig(filePath: logPath),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       final onLastmileProbeResultCompleter = Completer<bool>();
       final theRtcEngineEventHandler = RtcEngineEventHandler(
@@ -478,6 +484,7 @@ void generatedTestCases(IrisTester irisTester) {
         areaCode: AreaCode.areaCodeGlob.value(),
         logConfig: LogConfig(filePath: logPath),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       final onAudioVolumeIndicationCompleter = Completer<bool>();
       final theRtcEngineEventHandler = RtcEngineEventHandler(
@@ -555,6 +562,7 @@ void generatedTestCases(IrisTester irisTester) {
         areaCode: AreaCode.areaCodeGlob.value(),
         logConfig: LogConfig(filePath: logPath),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       final onLeaveChannelCompleter = Completer<bool>();
       final theRtcEngineEventHandler = RtcEngineEventHandler(
@@ -700,6 +708,7 @@ void generatedTestCases(IrisTester irisTester) {
         areaCode: AreaCode.areaCodeGlob.value(),
         logConfig: LogConfig(filePath: logPath),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       final onRtcStatsCompleter = Completer<bool>();
       final theRtcEngineEventHandler = RtcEngineEventHandler(
@@ -845,6 +854,7 @@ void generatedTestCases(IrisTester irisTester) {
         areaCode: AreaCode.areaCodeGlob.value(),
         logConfig: LogConfig(filePath: logPath),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       final onAudioDeviceStateChangedCompleter = Completer<bool>();
       final theRtcEngineEventHandler = RtcEngineEventHandler(
@@ -916,6 +926,7 @@ void generatedTestCases(IrisTester irisTester) {
         areaCode: AreaCode.areaCodeGlob.value(),
         logConfig: LogConfig(filePath: logPath),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       final onAudioMixingPositionChangedCompleter = Completer<bool>();
       final theRtcEngineEventHandler = RtcEngineEventHandler(
@@ -981,6 +992,7 @@ void generatedTestCases(IrisTester irisTester) {
         areaCode: AreaCode.areaCodeGlob.value(),
         logConfig: LogConfig(filePath: logPath),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       final onAudioMixingFinishedCompleter = Completer<bool>();
       final theRtcEngineEventHandler = RtcEngineEventHandler(
@@ -1042,6 +1054,7 @@ void generatedTestCases(IrisTester irisTester) {
         areaCode: AreaCode.areaCodeGlob.value(),
         logConfig: LogConfig(filePath: logPath),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       final onAudioEffectFinishedCompleter = Completer<bool>();
       final theRtcEngineEventHandler = RtcEngineEventHandler(
@@ -1107,6 +1120,7 @@ void generatedTestCases(IrisTester irisTester) {
         areaCode: AreaCode.areaCodeGlob.value(),
         logConfig: LogConfig(filePath: logPath),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       final onVideoDeviceStateChangedCompleter = Completer<bool>();
       final theRtcEngineEventHandler = RtcEngineEventHandler(
@@ -1178,6 +1192,7 @@ void generatedTestCases(IrisTester irisTester) {
         areaCode: AreaCode.areaCodeGlob.value(),
         logConfig: LogConfig(filePath: logPath),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       final onNetworkQualityCompleter = Completer<bool>();
       final theRtcEngineEventHandler = RtcEngineEventHandler(
@@ -1254,6 +1269,7 @@ void generatedTestCases(IrisTester irisTester) {
         areaCode: AreaCode.areaCodeGlob.value(),
         logConfig: LogConfig(filePath: logPath),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       final onIntraRequestReceivedCompleter = Completer<bool>();
       final theRtcEngineEventHandler = RtcEngineEventHandler(
@@ -1324,6 +1340,7 @@ void generatedTestCases(IrisTester irisTester) {
         areaCode: AreaCode.areaCodeGlob.value(),
         logConfig: LogConfig(filePath: logPath),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       final onUplinkNetworkInfoUpdatedCompleter = Completer<bool>();
       final theRtcEngineEventHandler = RtcEngineEventHandler(
@@ -1392,6 +1409,7 @@ void generatedTestCases(IrisTester irisTester) {
         areaCode: AreaCode.areaCodeGlob.value(),
         logConfig: LogConfig(filePath: logPath),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       final onDownlinkNetworkInfoUpdatedCompleter = Completer<bool>();
       final theRtcEngineEventHandler = RtcEngineEventHandler(
@@ -1468,6 +1486,7 @@ void generatedTestCases(IrisTester irisTester) {
         areaCode: AreaCode.areaCodeGlob.value(),
         logConfig: LogConfig(filePath: logPath),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       final onLastmileQualityCompleter = Completer<bool>();
       final theRtcEngineEventHandler = RtcEngineEventHandler(
@@ -1532,6 +1551,7 @@ void generatedTestCases(IrisTester irisTester) {
         areaCode: AreaCode.areaCodeGlob.value(),
         logConfig: LogConfig(filePath: logPath),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       final onFirstLocalVideoFrameCompleter = Completer<bool>();
       final theRtcEngineEventHandler = RtcEngineEventHandler(
@@ -1604,6 +1624,7 @@ void generatedTestCases(IrisTester irisTester) {
         areaCode: AreaCode.areaCodeGlob.value(),
         logConfig: LogConfig(filePath: logPath),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       final onFirstLocalVideoFramePublishedCompleter = Completer<bool>();
       final theRtcEngineEventHandler = RtcEngineEventHandler(
@@ -1671,6 +1692,7 @@ void generatedTestCases(IrisTester irisTester) {
         areaCode: AreaCode.areaCodeGlob.value(),
         logConfig: LogConfig(filePath: logPath),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       final onFirstRemoteVideoDecodedCompleter = Completer<bool>();
       final theRtcEngineEventHandler = RtcEngineEventHandler(
@@ -1750,6 +1772,7 @@ void generatedTestCases(IrisTester irisTester) {
         areaCode: AreaCode.areaCodeGlob.value(),
         logConfig: LogConfig(filePath: logPath),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       final onVideoSizeChangedCompleter = Completer<bool>();
       final theRtcEngineEventHandler = RtcEngineEventHandler(
@@ -1835,6 +1858,7 @@ void generatedTestCases(IrisTester irisTester) {
         areaCode: AreaCode.areaCodeGlob.value(),
         logConfig: LogConfig(filePath: logPath),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       final onLocalVideoStateChangedCompleter = Completer<bool>();
       final theRtcEngineEventHandler = RtcEngineEventHandler(
@@ -1907,6 +1931,7 @@ void generatedTestCases(IrisTester irisTester) {
         areaCode: AreaCode.areaCodeGlob.value(),
         logConfig: LogConfig(filePath: logPath),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       final onRemoteVideoStateChangedCompleter = Completer<bool>();
       final theRtcEngineEventHandler = RtcEngineEventHandler(
@@ -1990,6 +2015,7 @@ void generatedTestCases(IrisTester irisTester) {
         areaCode: AreaCode.areaCodeGlob.value(),
         logConfig: LogConfig(filePath: logPath),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       final onFirstRemoteVideoFrameCompleter = Completer<bool>();
       final theRtcEngineEventHandler = RtcEngineEventHandler(
@@ -2069,6 +2095,7 @@ void generatedTestCases(IrisTester irisTester) {
         areaCode: AreaCode.areaCodeGlob.value(),
         logConfig: LogConfig(filePath: logPath),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       final onUserJoinedCompleter = Completer<bool>();
       final theRtcEngineEventHandler = RtcEngineEventHandler(
@@ -2142,6 +2169,7 @@ void generatedTestCases(IrisTester irisTester) {
         areaCode: AreaCode.areaCodeGlob.value(),
         logConfig: LogConfig(filePath: logPath),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       final onUserOfflineCompleter = Completer<bool>();
       final theRtcEngineEventHandler = RtcEngineEventHandler(
@@ -2217,6 +2245,7 @@ void generatedTestCases(IrisTester irisTester) {
         areaCode: AreaCode.areaCodeGlob.value(),
         logConfig: LogConfig(filePath: logPath),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       final onUserMuteAudioCompleter = Completer<bool>();
       final theRtcEngineEventHandler = RtcEngineEventHandler(
@@ -2290,6 +2319,7 @@ void generatedTestCases(IrisTester irisTester) {
         areaCode: AreaCode.areaCodeGlob.value(),
         logConfig: LogConfig(filePath: logPath),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       final onUserMuteVideoCompleter = Completer<bool>();
       final theRtcEngineEventHandler = RtcEngineEventHandler(
@@ -2363,6 +2393,7 @@ void generatedTestCases(IrisTester irisTester) {
         areaCode: AreaCode.areaCodeGlob.value(),
         logConfig: LogConfig(filePath: logPath),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       final onUserEnableVideoCompleter = Completer<bool>();
       final theRtcEngineEventHandler = RtcEngineEventHandler(
@@ -2437,6 +2468,7 @@ void generatedTestCases(IrisTester irisTester) {
         areaCode: AreaCode.areaCodeGlob.value(),
         logConfig: LogConfig(filePath: logPath),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       final onUserStateChangedCompleter = Completer<bool>();
       final theRtcEngineEventHandler = RtcEngineEventHandler(
@@ -2511,6 +2543,7 @@ void generatedTestCases(IrisTester irisTester) {
         areaCode: AreaCode.areaCodeGlob.value(),
         logConfig: LogConfig(filePath: logPath),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       final onUserEnableLocalVideoCompleter = Completer<bool>();
       final theRtcEngineEventHandler = RtcEngineEventHandler(
@@ -2586,6 +2619,7 @@ void generatedTestCases(IrisTester irisTester) {
         areaCode: AreaCode.areaCodeGlob.value(),
         logConfig: LogConfig(filePath: logPath),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       final onRemoteAudioStatsCompleter = Completer<bool>();
       final theRtcEngineEventHandler = RtcEngineEventHandler(
@@ -2694,6 +2728,7 @@ void generatedTestCases(IrisTester irisTester) {
         areaCode: AreaCode.areaCodeGlob.value(),
         logConfig: LogConfig(filePath: logPath),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       final onLocalAudioStatsCompleter = Completer<bool>();
       final theRtcEngineEventHandler = RtcEngineEventHandler(
@@ -2784,6 +2819,7 @@ void generatedTestCases(IrisTester irisTester) {
         areaCode: AreaCode.areaCodeGlob.value(),
         logConfig: LogConfig(filePath: logPath),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       final onLocalVideoStatsCompleter = Completer<bool>();
       final theRtcEngineEventHandler = RtcEngineEventHandler(
@@ -2899,6 +2935,7 @@ void generatedTestCases(IrisTester irisTester) {
         areaCode: AreaCode.areaCodeGlob.value(),
         logConfig: LogConfig(filePath: logPath),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       final onRemoteVideoStatsCompleter = Completer<bool>();
       final theRtcEngineEventHandler = RtcEngineEventHandler(
@@ -3008,6 +3045,7 @@ void generatedTestCases(IrisTester irisTester) {
         areaCode: AreaCode.areaCodeGlob.value(),
         logConfig: LogConfig(filePath: logPath),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       final onCameraReadyCompleter = Completer<bool>();
       final theRtcEngineEventHandler = RtcEngineEventHandler(
@@ -3068,6 +3106,7 @@ void generatedTestCases(IrisTester irisTester) {
         areaCode: AreaCode.areaCodeGlob.value(),
         logConfig: LogConfig(filePath: logPath),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       final onCameraFocusAreaChangedCompleter = Completer<bool>();
       final theRtcEngineEventHandler = RtcEngineEventHandler(
@@ -3139,6 +3178,7 @@ void generatedTestCases(IrisTester irisTester) {
         areaCode: AreaCode.areaCodeGlob.value(),
         logConfig: LogConfig(filePath: logPath),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       final onCameraExposureAreaChangedCompleter = Completer<bool>();
       final theRtcEngineEventHandler = RtcEngineEventHandler(
@@ -3210,6 +3250,7 @@ void generatedTestCases(IrisTester irisTester) {
         areaCode: AreaCode.areaCodeGlob.value(),
         logConfig: LogConfig(filePath: logPath),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       final onVideoStoppedCompleter = Completer<bool>();
       final theRtcEngineEventHandler = RtcEngineEventHandler(
@@ -3270,6 +3311,7 @@ void generatedTestCases(IrisTester irisTester) {
         areaCode: AreaCode.areaCodeGlob.value(),
         logConfig: LogConfig(filePath: logPath),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       final onAudioMixingStateChangedCompleter = Completer<bool>();
       final theRtcEngineEventHandler = RtcEngineEventHandler(
@@ -3340,6 +3382,7 @@ void generatedTestCases(IrisTester irisTester) {
         areaCode: AreaCode.areaCodeGlob.value(),
         logConfig: LogConfig(filePath: logPath),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       final onRhythmPlayerStateChangedCompleter = Completer<bool>();
       final theRtcEngineEventHandler = RtcEngineEventHandler(
@@ -3410,6 +3453,7 @@ void generatedTestCases(IrisTester irisTester) {
         areaCode: AreaCode.areaCodeGlob.value(),
         logConfig: LogConfig(filePath: logPath),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       final onConnectionLostCompleter = Completer<bool>();
       final theRtcEngineEventHandler = RtcEngineEventHandler(
@@ -3479,6 +3523,7 @@ void generatedTestCases(IrisTester irisTester) {
         areaCode: AreaCode.areaCodeGlob.value(),
         logConfig: LogConfig(filePath: logPath),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       final onConnectionInterruptedCompleter = Completer<bool>();
       final theRtcEngineEventHandler = RtcEngineEventHandler(
@@ -3549,6 +3594,7 @@ void generatedTestCases(IrisTester irisTester) {
         areaCode: AreaCode.areaCodeGlob.value(),
         logConfig: LogConfig(filePath: logPath),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       final onConnectionBannedCompleter = Completer<bool>();
       final theRtcEngineEventHandler = RtcEngineEventHandler(
@@ -3618,6 +3664,7 @@ void generatedTestCases(IrisTester irisTester) {
         areaCode: AreaCode.areaCodeGlob.value(),
         logConfig: LogConfig(filePath: logPath),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       final onStreamMessageCompleter = Completer<bool>();
       final theRtcEngineEventHandler = RtcEngineEventHandler(
@@ -3698,6 +3745,7 @@ void generatedTestCases(IrisTester irisTester) {
         areaCode: AreaCode.areaCodeGlob.value(),
         logConfig: LogConfig(filePath: logPath),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       final onStreamMessageErrorCompleter = Completer<bool>();
       final theRtcEngineEventHandler = RtcEngineEventHandler(
@@ -3778,6 +3826,7 @@ void generatedTestCases(IrisTester irisTester) {
         areaCode: AreaCode.areaCodeGlob.value(),
         logConfig: LogConfig(filePath: logPath),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       final onRequestTokenCompleter = Completer<bool>();
       final theRtcEngineEventHandler = RtcEngineEventHandler(
@@ -3847,6 +3896,7 @@ void generatedTestCases(IrisTester irisTester) {
         areaCode: AreaCode.areaCodeGlob.value(),
         logConfig: LogConfig(filePath: logPath),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       final onTokenPrivilegeWillExpireCompleter = Completer<bool>();
       final theRtcEngineEventHandler = RtcEngineEventHandler(
@@ -3919,6 +3969,7 @@ void generatedTestCases(IrisTester irisTester) {
         areaCode: AreaCode.areaCodeGlob.value(),
         logConfig: LogConfig(filePath: logPath),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       final onLicenseValidationFailureCompleter = Completer<bool>();
       final theRtcEngineEventHandler = RtcEngineEventHandler(
@@ -3992,6 +4043,7 @@ void generatedTestCases(IrisTester irisTester) {
         areaCode: AreaCode.areaCodeGlob.value(),
         logConfig: LogConfig(filePath: logPath),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       final onFirstLocalAudioFramePublishedCompleter = Completer<bool>();
       final theRtcEngineEventHandler = RtcEngineEventHandler(
@@ -4065,6 +4117,7 @@ void generatedTestCases(IrisTester irisTester) {
         areaCode: AreaCode.areaCodeGlob.value(),
         logConfig: LogConfig(filePath: logPath),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       final onFirstRemoteAudioDecodedCompleter = Completer<bool>();
       final theRtcEngineEventHandler = RtcEngineEventHandler(
@@ -4140,6 +4193,7 @@ void generatedTestCases(IrisTester irisTester) {
         areaCode: AreaCode.areaCodeGlob.value(),
         logConfig: LogConfig(filePath: logPath),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       final onFirstRemoteAudioFrameCompleter = Completer<bool>();
       final theRtcEngineEventHandler = RtcEngineEventHandler(
@@ -4215,6 +4269,7 @@ void generatedTestCases(IrisTester irisTester) {
         areaCode: AreaCode.areaCodeGlob.value(),
         logConfig: LogConfig(filePath: logPath),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       final onLocalAudioStateChangedCompleter = Completer<bool>();
       final theRtcEngineEventHandler = RtcEngineEventHandler(
@@ -4292,6 +4347,7 @@ void generatedTestCases(IrisTester irisTester) {
         areaCode: AreaCode.areaCodeGlob.value(),
         logConfig: LogConfig(filePath: logPath),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       final onRemoteAudioStateChangedCompleter = Completer<bool>();
       final theRtcEngineEventHandler = RtcEngineEventHandler(
@@ -4375,6 +4431,7 @@ void generatedTestCases(IrisTester irisTester) {
         areaCode: AreaCode.areaCodeGlob.value(),
         logConfig: LogConfig(filePath: logPath),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       final onActiveSpeakerCompleter = Completer<bool>();
       final theRtcEngineEventHandler = RtcEngineEventHandler(
@@ -4446,6 +4503,7 @@ void generatedTestCases(IrisTester irisTester) {
         areaCode: AreaCode.areaCodeGlob.value(),
         logConfig: LogConfig(filePath: logPath),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       final onContentInspectResultCompleter = Completer<bool>();
       final theRtcEngineEventHandler = RtcEngineEventHandler(
@@ -4512,6 +4570,7 @@ void generatedTestCases(IrisTester irisTester) {
         areaCode: AreaCode.areaCodeGlob.value(),
         logConfig: LogConfig(filePath: logPath),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       final onSnapshotTakenCompleter = Completer<bool>();
       final theRtcEngineEventHandler = RtcEngineEventHandler(
@@ -4592,6 +4651,7 @@ void generatedTestCases(IrisTester irisTester) {
         areaCode: AreaCode.areaCodeGlob.value(),
         logConfig: LogConfig(filePath: logPath),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       final onClientRoleChangedCompleter = Completer<bool>();
       final theRtcEngineEventHandler = RtcEngineEventHandler(
@@ -4672,6 +4732,7 @@ void generatedTestCases(IrisTester irisTester) {
         areaCode: AreaCode.areaCodeGlob.value(),
         logConfig: LogConfig(filePath: logPath),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       final onClientRoleChangeFailedCompleter = Completer<bool>();
       final theRtcEngineEventHandler = RtcEngineEventHandler(
@@ -4748,6 +4809,7 @@ void generatedTestCases(IrisTester irisTester) {
         areaCode: AreaCode.areaCodeGlob.value(),
         logConfig: LogConfig(filePath: logPath),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       final onAudioDeviceVolumeChangedCompleter = Completer<bool>();
       final theRtcEngineEventHandler = RtcEngineEventHandler(
@@ -4818,6 +4880,7 @@ void generatedTestCases(IrisTester irisTester) {
         areaCode: AreaCode.areaCodeGlob.value(),
         logConfig: LogConfig(filePath: logPath),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       final onRtmpStreamingStateChangedCompleter = Completer<bool>();
       final theRtcEngineEventHandler = RtcEngineEventHandler(
@@ -4890,6 +4953,7 @@ void generatedTestCases(IrisTester irisTester) {
         areaCode: AreaCode.areaCodeGlob.value(),
         logConfig: LogConfig(filePath: logPath),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       final onRtmpStreamingEventCompleter = Completer<bool>();
       final theRtcEngineEventHandler = RtcEngineEventHandler(
@@ -4957,6 +5021,7 @@ void generatedTestCases(IrisTester irisTester) {
         areaCode: AreaCode.areaCodeGlob.value(),
         logConfig: LogConfig(filePath: logPath),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       final onTranscodingUpdatedCompleter = Completer<bool>();
       final theRtcEngineEventHandler = RtcEngineEventHandler(
@@ -5017,6 +5082,7 @@ void generatedTestCases(IrisTester irisTester) {
         areaCode: AreaCode.areaCodeGlob.value(),
         logConfig: LogConfig(filePath: logPath),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       final onAudioRoutingChangedCompleter = Completer<bool>();
       final theRtcEngineEventHandler = RtcEngineEventHandler(
@@ -5082,6 +5148,7 @@ void generatedTestCases(IrisTester irisTester) {
         areaCode: AreaCode.areaCodeGlob.value(),
         logConfig: LogConfig(filePath: logPath),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       final onChannelMediaRelayStateChangedCompleter = Completer<bool>();
       final theRtcEngineEventHandler = RtcEngineEventHandler(
@@ -5151,6 +5218,7 @@ void generatedTestCases(IrisTester irisTester) {
         areaCode: AreaCode.areaCodeGlob.value(),
         logConfig: LogConfig(filePath: logPath),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       final onLocalPublishFallbackToAudioOnlyCompleter = Completer<bool>();
       final theRtcEngineEventHandler = RtcEngineEventHandler(
@@ -5217,6 +5285,7 @@ void generatedTestCases(IrisTester irisTester) {
         areaCode: AreaCode.areaCodeGlob.value(),
         logConfig: LogConfig(filePath: logPath),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       final onRemoteSubscribeFallbackToAudioOnlyCompleter = Completer<bool>();
       final theRtcEngineEventHandler = RtcEngineEventHandler(
@@ -5286,6 +5355,7 @@ void generatedTestCases(IrisTester irisTester) {
         areaCode: AreaCode.areaCodeGlob.value(),
         logConfig: LogConfig(filePath: logPath),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       final onRemoteAudioTransportStatsCompleter = Completer<bool>();
       final theRtcEngineEventHandler = RtcEngineEventHandler(
@@ -5365,6 +5435,7 @@ void generatedTestCases(IrisTester irisTester) {
         areaCode: AreaCode.areaCodeGlob.value(),
         logConfig: LogConfig(filePath: logPath),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       final onRemoteVideoTransportStatsCompleter = Completer<bool>();
       final theRtcEngineEventHandler = RtcEngineEventHandler(
@@ -5444,6 +5515,7 @@ void generatedTestCases(IrisTester irisTester) {
         areaCode: AreaCode.areaCodeGlob.value(),
         logConfig: LogConfig(filePath: logPath),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       final onConnectionStateChangedCompleter = Completer<bool>();
       final theRtcEngineEventHandler = RtcEngineEventHandler(
@@ -5521,6 +5593,7 @@ void generatedTestCases(IrisTester irisTester) {
         areaCode: AreaCode.areaCodeGlob.value(),
         logConfig: LogConfig(filePath: logPath),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       final onWlAccMessageCompleter = Completer<bool>();
       final theRtcEngineEventHandler = RtcEngineEventHandler(
@@ -5599,6 +5672,7 @@ void generatedTestCases(IrisTester irisTester) {
         areaCode: AreaCode.areaCodeGlob.value(),
         logConfig: LogConfig(filePath: logPath),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       final onWlAccStatsCompleter = Completer<bool>();
       final theRtcEngineEventHandler = RtcEngineEventHandler(
@@ -5687,6 +5761,7 @@ void generatedTestCases(IrisTester irisTester) {
         areaCode: AreaCode.areaCodeGlob.value(),
         logConfig: LogConfig(filePath: logPath),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       final onNetworkTypeChangedCompleter = Completer<bool>();
       final theRtcEngineEventHandler = RtcEngineEventHandler(
@@ -5758,6 +5833,7 @@ void generatedTestCases(IrisTester irisTester) {
         areaCode: AreaCode.areaCodeGlob.value(),
         logConfig: LogConfig(filePath: logPath),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       final onEncryptionErrorCompleter = Completer<bool>();
       final theRtcEngineEventHandler = RtcEngineEventHandler(
@@ -5831,6 +5907,7 @@ void generatedTestCases(IrisTester irisTester) {
         areaCode: AreaCode.areaCodeGlob.value(),
         logConfig: LogConfig(filePath: logPath),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       final onPermissionErrorCompleter = Completer<bool>();
       final theRtcEngineEventHandler = RtcEngineEventHandler(
@@ -5895,6 +5972,7 @@ void generatedTestCases(IrisTester irisTester) {
         areaCode: AreaCode.areaCodeGlob.value(),
         logConfig: LogConfig(filePath: logPath),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       final onLocalUserRegisteredCompleter = Completer<bool>();
       final theRtcEngineEventHandler = RtcEngineEventHandler(
@@ -5962,6 +6040,7 @@ void generatedTestCases(IrisTester irisTester) {
         areaCode: AreaCode.areaCodeGlob.value(),
         logConfig: LogConfig(filePath: logPath),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       final onUserInfoUpdatedCompleter = Completer<bool>();
       final theRtcEngineEventHandler = RtcEngineEventHandler(
@@ -6033,6 +6112,7 @@ void generatedTestCases(IrisTester irisTester) {
         areaCode: AreaCode.areaCodeGlob.value(),
         logConfig: LogConfig(filePath: logPath),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       final onUserAccountUpdatedCompleter = Completer<bool>();
       final theRtcEngineEventHandler = RtcEngineEventHandler(
@@ -6107,6 +6187,7 @@ void generatedTestCases(IrisTester irisTester) {
         areaCode: AreaCode.areaCodeGlob.value(),
         logConfig: LogConfig(filePath: logPath),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       final onVideoRenderingTracingResultCompleter = Completer<bool>();
       final theRtcEngineEventHandler = RtcEngineEventHandler(
@@ -6202,6 +6283,7 @@ void generatedTestCases(IrisTester irisTester) {
         areaCode: AreaCode.areaCodeGlob.value(),
         logConfig: LogConfig(filePath: logPath),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       final onLocalVideoTranscoderErrorCompleter = Completer<bool>();
       final theRtcEngineEventHandler = RtcEngineEventHandler(
@@ -6295,6 +6377,7 @@ void generatedTestCases(IrisTester irisTester) {
         areaCode: AreaCode.areaCodeGlob.value(),
         logConfig: LogConfig(filePath: logPath),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       final onUploadLogResultCompleter = Completer<bool>();
       final theRtcEngineEventHandler = RtcEngineEventHandler(
@@ -6371,6 +6454,7 @@ void generatedTestCases(IrisTester irisTester) {
         areaCode: AreaCode.areaCodeGlob.value(),
         logConfig: LogConfig(filePath: logPath),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       final onAudioSubscribeStateChangedCompleter = Completer<bool>();
       final theRtcEngineEventHandler = RtcEngineEventHandler(
@@ -6448,6 +6532,7 @@ void generatedTestCases(IrisTester irisTester) {
         areaCode: AreaCode.areaCodeGlob.value(),
         logConfig: LogConfig(filePath: logPath),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       final onVideoSubscribeStateChangedCompleter = Completer<bool>();
       final theRtcEngineEventHandler = RtcEngineEventHandler(
@@ -6525,6 +6610,7 @@ void generatedTestCases(IrisTester irisTester) {
         areaCode: AreaCode.areaCodeGlob.value(),
         logConfig: LogConfig(filePath: logPath),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       final onAudioPublishStateChangedCompleter = Completer<bool>();
       final theRtcEngineEventHandler = RtcEngineEventHandler(
@@ -6599,6 +6685,7 @@ void generatedTestCases(IrisTester irisTester) {
         areaCode: AreaCode.areaCodeGlob.value(),
         logConfig: LogConfig(filePath: logPath),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       final onVideoPublishStateChangedCompleter = Completer<bool>();
       final theRtcEngineEventHandler = RtcEngineEventHandler(
@@ -6676,6 +6763,7 @@ void generatedTestCases(IrisTester irisTester) {
         areaCode: AreaCode.areaCodeGlob.value(),
         logConfig: LogConfig(filePath: logPath),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       final onTranscodedStreamLayoutInfoCompleter = Completer<bool>();
       final theRtcEngineEventHandler = RtcEngineEventHandler(
@@ -6757,6 +6845,7 @@ void generatedTestCases(IrisTester irisTester) {
         areaCode: AreaCode.areaCodeGlob.value(),
         logConfig: LogConfig(filePath: logPath),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       final onExtensionEventCompleter = Completer<bool>();
       final theRtcEngineEventHandler = RtcEngineEventHandler(
@@ -6828,6 +6917,7 @@ void generatedTestCases(IrisTester irisTester) {
         areaCode: AreaCode.areaCodeGlob.value(),
         logConfig: LogConfig(filePath: logPath),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       final onExtensionStartedCompleter = Completer<bool>();
       final theRtcEngineEventHandler = RtcEngineEventHandler(
@@ -6894,6 +6984,7 @@ void generatedTestCases(IrisTester irisTester) {
         areaCode: AreaCode.areaCodeGlob.value(),
         logConfig: LogConfig(filePath: logPath),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       final onExtensionStoppedCompleter = Completer<bool>();
       final theRtcEngineEventHandler = RtcEngineEventHandler(
@@ -6960,6 +7051,7 @@ void generatedTestCases(IrisTester irisTester) {
         areaCode: AreaCode.areaCodeGlob.value(),
         logConfig: LogConfig(filePath: logPath),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       final onExtensionErrorCompleter = Completer<bool>();
       final theRtcEngineEventHandler = RtcEngineEventHandler(
@@ -7031,6 +7123,7 @@ void generatedTestCases(IrisTester irisTester) {
         areaCode: AreaCode.areaCodeGlob.value(),
         logConfig: LogConfig(filePath: logPath),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       final onSetRtmFlagResultCompleter = Completer<bool>();
       final theRtcEngineEventHandler = RtcEngineEventHandler(

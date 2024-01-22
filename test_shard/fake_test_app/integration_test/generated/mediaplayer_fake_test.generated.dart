@@ -28,6 +28,7 @@ void mediaPlayerControllerSmokeTestCases() {
         areaCode: AreaCode.areaCodeGlob.value(),
         logConfig: LogConfig(filePath: logPath),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       final mediaPlayerController = MediaPlayerController(
           rtcEngine: rtcEngine, canvas: const VideoCanvas(uid: 0));
@@ -67,6 +68,7 @@ void mediaPlayerControllerSmokeTestCases() {
         areaCode: AreaCode.areaCodeGlob.value(),
         logConfig: LogConfig(filePath: logPath),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       final mediaPlayerController = MediaPlayerController(
           rtcEngine: rtcEngine, canvas: const VideoCanvas(uid: 0));
@@ -111,6 +113,7 @@ void mediaPlayerControllerSmokeTestCases() {
         areaCode: AreaCode.areaCodeGlob.value(),
         logConfig: LogConfig(filePath: logPath),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       final mediaPlayerController = MediaPlayerController(
           rtcEngine: rtcEngine, canvas: const VideoCanvas(uid: 0));
@@ -171,6 +174,7 @@ void mediaPlayerControllerSmokeTestCases() {
         areaCode: AreaCode.areaCodeGlob.value(),
         logConfig: LogConfig(filePath: logPath),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       final mediaPlayerController = MediaPlayerController(
           rtcEngine: rtcEngine, canvas: const VideoCanvas(uid: 0));
@@ -210,6 +214,7 @@ void mediaPlayerControllerSmokeTestCases() {
         areaCode: AreaCode.areaCodeGlob.value(),
         logConfig: LogConfig(filePath: logPath),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       final mediaPlayerController = MediaPlayerController(
           rtcEngine: rtcEngine, canvas: const VideoCanvas(uid: 0));
@@ -249,6 +254,7 @@ void mediaPlayerControllerSmokeTestCases() {
         areaCode: AreaCode.areaCodeGlob.value(),
         logConfig: LogConfig(filePath: logPath),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       final mediaPlayerController = MediaPlayerController(
           rtcEngine: rtcEngine, canvas: const VideoCanvas(uid: 0));
@@ -288,6 +294,7 @@ void mediaPlayerControllerSmokeTestCases() {
         areaCode: AreaCode.areaCodeGlob.value(),
         logConfig: LogConfig(filePath: logPath),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       final mediaPlayerController = MediaPlayerController(
           rtcEngine: rtcEngine, canvas: const VideoCanvas(uid: 0));
@@ -327,6 +334,7 @@ void mediaPlayerControllerSmokeTestCases() {
         areaCode: AreaCode.areaCodeGlob.value(),
         logConfig: LogConfig(filePath: logPath),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       final mediaPlayerController = MediaPlayerController(
           rtcEngine: rtcEngine, canvas: const VideoCanvas(uid: 0));
@@ -369,6 +377,7 @@ void mediaPlayerControllerSmokeTestCases() {
         areaCode: AreaCode.areaCodeGlob.value(),
         logConfig: LogConfig(filePath: logPath),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       final mediaPlayerController = MediaPlayerController(
           rtcEngine: rtcEngine, canvas: const VideoCanvas(uid: 0));
@@ -411,6 +420,7 @@ void mediaPlayerControllerSmokeTestCases() {
         areaCode: AreaCode.areaCodeGlob.value(),
         logConfig: LogConfig(filePath: logPath),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       final mediaPlayerController = MediaPlayerController(
           rtcEngine: rtcEngine, canvas: const VideoCanvas(uid: 0));
@@ -450,6 +460,7 @@ void mediaPlayerControllerSmokeTestCases() {
         areaCode: AreaCode.areaCodeGlob.value(),
         logConfig: LogConfig(filePath: logPath),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       final mediaPlayerController = MediaPlayerController(
           rtcEngine: rtcEngine, canvas: const VideoCanvas(uid: 0));
@@ -489,6 +500,7 @@ void mediaPlayerControllerSmokeTestCases() {
         areaCode: AreaCode.areaCodeGlob.value(),
         logConfig: LogConfig(filePath: logPath),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       final mediaPlayerController = MediaPlayerController(
           rtcEngine: rtcEngine, canvas: const VideoCanvas(uid: 0));
@@ -528,6 +540,7 @@ void mediaPlayerControllerSmokeTestCases() {
         areaCode: AreaCode.areaCodeGlob.value(),
         logConfig: LogConfig(filePath: logPath),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       final mediaPlayerController = MediaPlayerController(
           rtcEngine: rtcEngine, canvas: const VideoCanvas(uid: 0));
@@ -570,6 +583,7 @@ void mediaPlayerControllerSmokeTestCases() {
         areaCode: AreaCode.areaCodeGlob.value(),
         logConfig: LogConfig(filePath: logPath),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       final mediaPlayerController = MediaPlayerController(
           rtcEngine: rtcEngine, canvas: const VideoCanvas(uid: 0));
@@ -612,6 +626,7 @@ void mediaPlayerControllerSmokeTestCases() {
         areaCode: AreaCode.areaCodeGlob.value(),
         logConfig: LogConfig(filePath: logPath),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       final mediaPlayerController = MediaPlayerController(
           rtcEngine: rtcEngine, canvas: const VideoCanvas(uid: 0));
@@ -654,6 +669,7 @@ void mediaPlayerControllerSmokeTestCases() {
         areaCode: AreaCode.areaCodeGlob.value(),
         logConfig: LogConfig(filePath: logPath),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       final mediaPlayerController = MediaPlayerController(
           rtcEngine: rtcEngine, canvas: const VideoCanvas(uid: 0));
@@ -696,6 +712,7 @@ void mediaPlayerControllerSmokeTestCases() {
         areaCode: AreaCode.areaCodeGlob.value(),
         logConfig: LogConfig(filePath: logPath),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       final mediaPlayerController = MediaPlayerController(
           rtcEngine: rtcEngine, canvas: const VideoCanvas(uid: 0));
@@ -741,6 +758,7 @@ void mediaPlayerControllerSmokeTestCases() {
         areaCode: AreaCode.areaCodeGlob.value(),
         logConfig: LogConfig(filePath: logPath),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       final mediaPlayerController = MediaPlayerController(
           rtcEngine: rtcEngine, canvas: const VideoCanvas(uid: 0));
@@ -786,6 +804,7 @@ void mediaPlayerControllerSmokeTestCases() {
         areaCode: AreaCode.areaCodeGlob.value(),
         logConfig: LogConfig(filePath: logPath),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       final mediaPlayerController = MediaPlayerController(
           rtcEngine: rtcEngine, canvas: const VideoCanvas(uid: 0));
@@ -831,6 +850,7 @@ void mediaPlayerControllerSmokeTestCases() {
         areaCode: AreaCode.areaCodeGlob.value(),
         logConfig: LogConfig(filePath: logPath),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       final mediaPlayerController = MediaPlayerController(
           rtcEngine: rtcEngine, canvas: const VideoCanvas(uid: 0));
@@ -873,6 +893,7 @@ void mediaPlayerControllerSmokeTestCases() {
         areaCode: AreaCode.areaCodeGlob.value(),
         logConfig: LogConfig(filePath: logPath),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       final mediaPlayerController = MediaPlayerController(
           rtcEngine: rtcEngine, canvas: const VideoCanvas(uid: 0));
@@ -916,6 +937,7 @@ void mediaPlayerControllerSmokeTestCases() {
         areaCode: AreaCode.areaCodeGlob.value(),
         logConfig: LogConfig(filePath: logPath),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       final mediaPlayerController = MediaPlayerController(
           rtcEngine: rtcEngine, canvas: const VideoCanvas(uid: 0));
@@ -959,6 +981,7 @@ void mediaPlayerControllerSmokeTestCases() {
         areaCode: AreaCode.areaCodeGlob.value(),
         logConfig: LogConfig(filePath: logPath),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       final mediaPlayerController = MediaPlayerController(
           rtcEngine: rtcEngine, canvas: const VideoCanvas(uid: 0));
@@ -998,6 +1021,7 @@ void mediaPlayerControllerSmokeTestCases() {
         areaCode: AreaCode.areaCodeGlob.value(),
         logConfig: LogConfig(filePath: logPath),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       final mediaPlayerController = MediaPlayerController(
           rtcEngine: rtcEngine, canvas: const VideoCanvas(uid: 0));
@@ -1040,6 +1064,7 @@ void mediaPlayerControllerSmokeTestCases() {
         areaCode: AreaCode.areaCodeGlob.value(),
         logConfig: LogConfig(filePath: logPath),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       final mediaPlayerController = MediaPlayerController(
           rtcEngine: rtcEngine, canvas: const VideoCanvas(uid: 0));
@@ -1079,6 +1104,7 @@ void mediaPlayerControllerSmokeTestCases() {
         areaCode: AreaCode.areaCodeGlob.value(),
         logConfig: LogConfig(filePath: logPath),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       final mediaPlayerController = MediaPlayerController(
           rtcEngine: rtcEngine, canvas: const VideoCanvas(uid: 0));
@@ -1122,6 +1148,7 @@ void mediaPlayerControllerSmokeTestCases() {
         areaCode: AreaCode.areaCodeGlob.value(),
         logConfig: LogConfig(filePath: logPath),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       final mediaPlayerController = MediaPlayerController(
           rtcEngine: rtcEngine, canvas: const VideoCanvas(uid: 0));
@@ -1161,6 +1188,7 @@ void mediaPlayerControllerSmokeTestCases() {
         areaCode: AreaCode.areaCodeGlob.value(),
         logConfig: LogConfig(filePath: logPath),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       final mediaPlayerController = MediaPlayerController(
           rtcEngine: rtcEngine, canvas: const VideoCanvas(uid: 0));
@@ -1204,6 +1232,7 @@ void mediaPlayerControllerSmokeTestCases() {
         areaCode: AreaCode.areaCodeGlob.value(),
         logConfig: LogConfig(filePath: logPath),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       final mediaPlayerController = MediaPlayerController(
           rtcEngine: rtcEngine, canvas: const VideoCanvas(uid: 0));
@@ -1244,6 +1273,7 @@ void mediaPlayerControllerSmokeTestCases() {
         areaCode: AreaCode.areaCodeGlob.value(),
         logConfig: LogConfig(filePath: logPath),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       final mediaPlayerController = MediaPlayerController(
           rtcEngine: rtcEngine, canvas: const VideoCanvas(uid: 0));
@@ -1286,6 +1316,7 @@ void mediaPlayerControllerSmokeTestCases() {
         areaCode: AreaCode.areaCodeGlob.value(),
         logConfig: LogConfig(filePath: logPath),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       final mediaPlayerController = MediaPlayerController(
           rtcEngine: rtcEngine, canvas: const VideoCanvas(uid: 0));
@@ -1328,6 +1359,7 @@ void mediaPlayerControllerSmokeTestCases() {
         areaCode: AreaCode.areaCodeGlob.value(),
         logConfig: LogConfig(filePath: logPath),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       final mediaPlayerController = MediaPlayerController(
           rtcEngine: rtcEngine, canvas: const VideoCanvas(uid: 0));
@@ -1387,6 +1419,7 @@ void mediaPlayerControllerSmokeTestCases() {
         areaCode: AreaCode.areaCodeGlob.value(),
         logConfig: LogConfig(filePath: logPath),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       final mediaPlayerController = MediaPlayerController(
           rtcEngine: rtcEngine, canvas: const VideoCanvas(uid: 0));
@@ -1446,6 +1479,7 @@ void mediaPlayerControllerSmokeTestCases() {
         areaCode: AreaCode.areaCodeGlob.value(),
         logConfig: LogConfig(filePath: logPath),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       final mediaPlayerController = MediaPlayerController(
           rtcEngine: rtcEngine, canvas: const VideoCanvas(uid: 0));
@@ -1494,6 +1528,7 @@ void mediaPlayerControllerSmokeTestCases() {
         areaCode: AreaCode.areaCodeGlob.value(),
         logConfig: LogConfig(filePath: logPath),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       final mediaPlayerController = MediaPlayerController(
           rtcEngine: rtcEngine, canvas: const VideoCanvas(uid: 0));
@@ -1539,6 +1574,7 @@ void mediaPlayerControllerSmokeTestCases() {
         areaCode: AreaCode.areaCodeGlob.value(),
         logConfig: LogConfig(filePath: logPath),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       final mediaPlayerController = MediaPlayerController(
           rtcEngine: rtcEngine, canvas: const VideoCanvas(uid: 0));
@@ -1585,6 +1621,7 @@ void mediaPlayerControllerSmokeTestCases() {
         areaCode: AreaCode.areaCodeGlob.value(),
         logConfig: LogConfig(filePath: logPath),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       final mediaPlayerController = MediaPlayerController(
           rtcEngine: rtcEngine, canvas: const VideoCanvas(uid: 0));
@@ -1631,6 +1668,7 @@ void mediaPlayerControllerSmokeTestCases() {
         areaCode: AreaCode.areaCodeGlob.value(),
         logConfig: LogConfig(filePath: logPath),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       final mediaPlayerController = MediaPlayerController(
           rtcEngine: rtcEngine, canvas: const VideoCanvas(uid: 0));
@@ -1679,6 +1717,7 @@ void mediaPlayerControllerSmokeTestCases() {
         areaCode: AreaCode.areaCodeGlob.value(),
         logConfig: LogConfig(filePath: logPath),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       final mediaPlayerController = MediaPlayerController(
           rtcEngine: rtcEngine, canvas: const VideoCanvas(uid: 0));
@@ -1725,6 +1764,7 @@ void mediaPlayerControllerSmokeTestCases() {
         areaCode: AreaCode.areaCodeGlob.value(),
         logConfig: LogConfig(filePath: logPath),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       final mediaPlayerController = MediaPlayerController(
           rtcEngine: rtcEngine, canvas: const VideoCanvas(uid: 0));
@@ -1768,6 +1808,7 @@ void mediaPlayerControllerSmokeTestCases() {
         areaCode: AreaCode.areaCodeGlob.value(),
         logConfig: LogConfig(filePath: logPath),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       final mediaPlayerController = MediaPlayerController(
           rtcEngine: rtcEngine, canvas: const VideoCanvas(uid: 0));
@@ -1808,6 +1849,7 @@ void mediaPlayerControllerSmokeTestCases() {
         areaCode: AreaCode.areaCodeGlob.value(),
         logConfig: LogConfig(filePath: logPath),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       final mediaPlayerController = MediaPlayerController(
           rtcEngine: rtcEngine, canvas: const VideoCanvas(uid: 0));
@@ -1847,6 +1889,7 @@ void mediaPlayerControllerSmokeTestCases() {
         areaCode: AreaCode.areaCodeGlob.value(),
         logConfig: LogConfig(filePath: logPath),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       final mediaPlayerController = MediaPlayerController(
           rtcEngine: rtcEngine, canvas: const VideoCanvas(uid: 0));
@@ -1892,6 +1935,7 @@ void mediaPlayerControllerSmokeTestCases() {
         areaCode: AreaCode.areaCodeGlob.value(),
         logConfig: LogConfig(filePath: logPath),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       final mediaPlayerController = MediaPlayerController(
           rtcEngine: rtcEngine, canvas: const VideoCanvas(uid: 0));
@@ -1932,6 +1976,7 @@ void mediaPlayerControllerSmokeTestCases() {
         areaCode: AreaCode.areaCodeGlob.value(),
         logConfig: LogConfig(filePath: logPath),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       final mediaPlayerController = MediaPlayerController(
           rtcEngine: rtcEngine, canvas: const VideoCanvas(uid: 0));
@@ -1975,6 +2020,7 @@ void mediaPlayerControllerSmokeTestCases() {
         areaCode: AreaCode.areaCodeGlob.value(),
         logConfig: LogConfig(filePath: logPath),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       final mediaPlayerController = MediaPlayerController(
           rtcEngine: rtcEngine, canvas: const VideoCanvas(uid: 0));
@@ -2015,6 +2061,7 @@ void mediaPlayerControllerSmokeTestCases() {
         areaCode: AreaCode.areaCodeGlob.value(),
         logConfig: LogConfig(filePath: logPath),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       final mediaPlayerController = MediaPlayerController(
           rtcEngine: rtcEngine, canvas: const VideoCanvas(uid: 0));
@@ -2058,6 +2105,7 @@ void mediaPlayerControllerSmokeTestCases() {
         areaCode: AreaCode.areaCodeGlob.value(),
         logConfig: LogConfig(filePath: logPath),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       final mediaPlayerController = MediaPlayerController(
           rtcEngine: rtcEngine, canvas: const VideoCanvas(uid: 0));
@@ -2103,6 +2151,7 @@ void mediaPlayerControllerSmokeTestCases() {
         areaCode: AreaCode.areaCodeGlob.value(),
         logConfig: LogConfig(filePath: logPath),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       final mediaPlayerController = MediaPlayerController(
           rtcEngine: rtcEngine, canvas: const VideoCanvas(uid: 0));
@@ -2147,6 +2196,7 @@ void mediaPlayerControllerSmokeTestCases() {
         areaCode: AreaCode.areaCodeGlob.value(),
         logConfig: LogConfig(filePath: logPath),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       final mediaPlayerController = MediaPlayerController(
           rtcEngine: rtcEngine, canvas: const VideoCanvas(uid: 0));
@@ -2191,6 +2241,7 @@ void mediaPlayerControllerSmokeTestCases() {
         areaCode: AreaCode.areaCodeGlob.value(),
         logConfig: LogConfig(filePath: logPath),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       final mediaPlayerController = MediaPlayerController(
           rtcEngine: rtcEngine, canvas: const VideoCanvas(uid: 0));
@@ -2235,6 +2286,7 @@ void mediaPlayerControllerSmokeTestCases() {
         areaCode: AreaCode.areaCodeGlob.value(),
         logConfig: LogConfig(filePath: logPath),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       final mediaPlayerController = MediaPlayerController(
           rtcEngine: rtcEngine, canvas: const VideoCanvas(uid: 0));
@@ -2277,6 +2329,7 @@ void mediaPlayerControllerSmokeTestCases() {
         areaCode: AreaCode.areaCodeGlob.value(),
         logConfig: LogConfig(filePath: logPath),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       final mediaPlayerController = MediaPlayerController(
           rtcEngine: rtcEngine, canvas: const VideoCanvas(uid: 0));
@@ -2319,6 +2372,7 @@ void mediaPlayerControllerSmokeTestCases() {
         areaCode: AreaCode.areaCodeGlob.value(),
         logConfig: LogConfig(filePath: logPath),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       final mediaPlayerController = MediaPlayerController(
           rtcEngine: rtcEngine, canvas: const VideoCanvas(uid: 0));
@@ -2379,6 +2433,7 @@ void mediaPlayerControllerSmokeTestCases() {
         areaCode: AreaCode.areaCodeGlob.value(),
         logConfig: LogConfig(filePath: logPath),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       final mediaPlayerController = MediaPlayerController(
           rtcEngine: rtcEngine, canvas: const VideoCanvas(uid: 0));

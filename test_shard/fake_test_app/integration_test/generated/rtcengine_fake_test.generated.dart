@@ -28,6 +28,7 @@ void rtcEngineSmokeTestCases() {
         areaCode: AreaCode.areaCodeGlob.value(),
         logConfig: LogConfig(filePath: logPath),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
         const ChannelProfileType contextChannelProfile =
@@ -95,6 +96,7 @@ void rtcEngineSmokeTestCases() {
         areaCode: AreaCode.areaCodeGlob.value(),
         logConfig: LogConfig(filePath: logPath),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
         await rtcEngine.getVersion();
@@ -128,6 +130,7 @@ void rtcEngineSmokeTestCases() {
         areaCode: AreaCode.areaCodeGlob.value(),
         logConfig: LogConfig(filePath: logPath),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
         const int code = 10;
@@ -164,6 +167,7 @@ void rtcEngineSmokeTestCases() {
         areaCode: AreaCode.areaCodeGlob.value(),
         logConfig: LogConfig(filePath: logPath),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
         await rtcEngine.queryDeviceScore();
@@ -197,6 +201,7 @@ void rtcEngineSmokeTestCases() {
         areaCode: AreaCode.areaCodeGlob.value(),
         logConfig: LogConfig(filePath: logPath),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
         const String token = "hello";
@@ -237,6 +242,7 @@ void rtcEngineSmokeTestCases() {
         areaCode: AreaCode.areaCodeGlob.value(),
         logConfig: LogConfig(filePath: logPath),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
         const String token = "hello";
@@ -278,6 +284,7 @@ void rtcEngineSmokeTestCases() {
         areaCode: AreaCode.areaCodeGlob.value(),
         logConfig: LogConfig(filePath: logPath),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
         const String token = "hello";
@@ -315,6 +322,7 @@ void rtcEngineSmokeTestCases() {
         areaCode: AreaCode.areaCodeGlob.value(),
         logConfig: LogConfig(filePath: logPath),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
         const String token = "hello";
@@ -432,6 +440,7 @@ void rtcEngineSmokeTestCases() {
         areaCode: AreaCode.areaCodeGlob.value(),
         logConfig: LogConfig(filePath: logPath),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
         const ClientRoleType optionsClientRoleType =
@@ -544,6 +553,7 @@ void rtcEngineSmokeTestCases() {
         areaCode: AreaCode.areaCodeGlob.value(),
         logConfig: LogConfig(filePath: logPath),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
         const bool optionsStopAudioMixing = true;
@@ -587,6 +597,7 @@ void rtcEngineSmokeTestCases() {
         areaCode: AreaCode.areaCodeGlob.value(),
         logConfig: LogConfig(filePath: logPath),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
         const String token = "hello";
@@ -623,6 +634,7 @@ void rtcEngineSmokeTestCases() {
         areaCode: AreaCode.areaCodeGlob.value(),
         logConfig: LogConfig(filePath: logPath),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
         const ChannelProfileType profile =
@@ -660,6 +672,7 @@ void rtcEngineSmokeTestCases() {
         areaCode: AreaCode.areaCodeGlob.value(),
         logConfig: LogConfig(filePath: logPath),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
         const ClientRoleType role = ClientRoleType.clientRoleBroadcaster;
@@ -702,6 +715,7 @@ void rtcEngineSmokeTestCases() {
         areaCode: AreaCode.areaCodeGlob.value(),
         logConfig: LogConfig(filePath: logPath),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
         const int configView = 10;
@@ -751,6 +765,7 @@ void rtcEngineSmokeTestCases() {
         areaCode: AreaCode.areaCodeGlob.value(),
         logConfig: LogConfig(filePath: logPath),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
         await rtcEngine.stopEchoTest();
@@ -784,6 +799,7 @@ void rtcEngineSmokeTestCases() {
         areaCode: AreaCode.areaCodeGlob.value(),
         logConfig: LogConfig(filePath: logPath),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
         const bool enabled = true;
@@ -839,6 +855,7 @@ void rtcEngineSmokeTestCases() {
         areaCode: AreaCode.areaCodeGlob.value(),
         logConfig: LogConfig(filePath: logPath),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
         await rtcEngine.enableVideo();
@@ -872,6 +889,7 @@ void rtcEngineSmokeTestCases() {
         areaCode: AreaCode.areaCodeGlob.value(),
         logConfig: LogConfig(filePath: logPath),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
         await rtcEngine.disableVideo();
@@ -905,6 +923,7 @@ void rtcEngineSmokeTestCases() {
         areaCode: AreaCode.areaCodeGlob.value(),
         logConfig: LogConfig(filePath: logPath),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
         const VideoSourceType sourceType =
@@ -942,6 +961,7 @@ void rtcEngineSmokeTestCases() {
         areaCode: AreaCode.areaCodeGlob.value(),
         logConfig: LogConfig(filePath: logPath),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
         await rtcEngine.startPreviewWithoutSourceType();
@@ -976,6 +996,7 @@ void rtcEngineSmokeTestCases() {
         areaCode: AreaCode.areaCodeGlob.value(),
         logConfig: LogConfig(filePath: logPath),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
         const VideoSourceType sourceType =
@@ -1013,6 +1034,7 @@ void rtcEngineSmokeTestCases() {
         areaCode: AreaCode.areaCodeGlob.value(),
         logConfig: LogConfig(filePath: logPath),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
         const bool configProbeUplink = true;
@@ -1059,6 +1081,7 @@ void rtcEngineSmokeTestCases() {
         areaCode: AreaCode.areaCodeGlob.value(),
         logConfig: LogConfig(filePath: logPath),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
         await rtcEngine.stopLastmileProbeTest();
@@ -1093,6 +1116,7 @@ void rtcEngineSmokeTestCases() {
         areaCode: AreaCode.areaCodeGlob.value(),
         logConfig: LogConfig(filePath: logPath),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
         const VideoCodecType configCodecType = VideoCodecType.videoCodecNone;
@@ -1164,6 +1188,7 @@ void rtcEngineSmokeTestCases() {
         areaCode: AreaCode.areaCodeGlob.value(),
         logConfig: LogConfig(filePath: logPath),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
         const bool enabled = true;
@@ -1217,6 +1242,7 @@ void rtcEngineSmokeTestCases() {
         areaCode: AreaCode.areaCodeGlob.value(),
         logConfig: LogConfig(filePath: logPath),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
         const bool enabled = true;
@@ -1265,6 +1291,7 @@ void rtcEngineSmokeTestCases() {
         areaCode: AreaCode.areaCodeGlob.value(),
         logConfig: LogConfig(filePath: logPath),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
         const bool enabled = true;
@@ -1313,6 +1340,7 @@ void rtcEngineSmokeTestCases() {
         areaCode: AreaCode.areaCodeGlob.value(),
         logConfig: LogConfig(filePath: logPath),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
         const bool enabled = true;
@@ -1359,6 +1387,7 @@ void rtcEngineSmokeTestCases() {
         areaCode: AreaCode.areaCodeGlob.value(),
         logConfig: LogConfig(filePath: logPath),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
         const bool enabled = true;
@@ -1419,6 +1448,7 @@ void rtcEngineSmokeTestCases() {
         areaCode: AreaCode.areaCodeGlob.value(),
         logConfig: LogConfig(filePath: logPath),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
         const RenderModeType canvasRenderMode = RenderModeType.renderModeHidden;
@@ -1493,6 +1523,7 @@ void rtcEngineSmokeTestCases() {
         areaCode: AreaCode.areaCodeGlob.value(),
         logConfig: LogConfig(filePath: logPath),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
         const RenderModeType canvasRenderMode = RenderModeType.renderModeHidden;
@@ -1567,6 +1598,7 @@ void rtcEngineSmokeTestCases() {
         areaCode: AreaCode.areaCodeGlob.value(),
         logConfig: LogConfig(filePath: logPath),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
         const VideoApplicationScenarioType scenarioType =
@@ -1604,6 +1636,7 @@ void rtcEngineSmokeTestCases() {
         areaCode: AreaCode.areaCodeGlob.value(),
         logConfig: LogConfig(filePath: logPath),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
         const VideoQoePreferenceType qoePreference =
@@ -1642,6 +1675,7 @@ void rtcEngineSmokeTestCases() {
         areaCode: AreaCode.areaCodeGlob.value(),
         logConfig: LogConfig(filePath: logPath),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
         await rtcEngine.enableAudio();
@@ -1675,6 +1709,7 @@ void rtcEngineSmokeTestCases() {
         areaCode: AreaCode.areaCodeGlob.value(),
         logConfig: LogConfig(filePath: logPath),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
         await rtcEngine.disableAudio();
@@ -1708,6 +1743,7 @@ void rtcEngineSmokeTestCases() {
         areaCode: AreaCode.areaCodeGlob.value(),
         logConfig: LogConfig(filePath: logPath),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
         const AudioProfileType profile = AudioProfileType.audioProfileDefault;
@@ -1747,6 +1783,7 @@ void rtcEngineSmokeTestCases() {
         areaCode: AreaCode.areaCodeGlob.value(),
         logConfig: LogConfig(filePath: logPath),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
         const AudioScenarioType scenario =
@@ -1784,6 +1821,7 @@ void rtcEngineSmokeTestCases() {
         areaCode: AreaCode.areaCodeGlob.value(),
         logConfig: LogConfig(filePath: logPath),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
         const bool enabled = true;
@@ -1820,6 +1858,7 @@ void rtcEngineSmokeTestCases() {
         areaCode: AreaCode.areaCodeGlob.value(),
         logConfig: LogConfig(filePath: logPath),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
         const bool mute = true;
@@ -1856,6 +1895,7 @@ void rtcEngineSmokeTestCases() {
         areaCode: AreaCode.areaCodeGlob.value(),
         logConfig: LogConfig(filePath: logPath),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
         const bool mute = true;
@@ -1893,6 +1933,7 @@ void rtcEngineSmokeTestCases() {
         areaCode: AreaCode.areaCodeGlob.value(),
         logConfig: LogConfig(filePath: logPath),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
         const bool mute = true;
@@ -1930,6 +1971,7 @@ void rtcEngineSmokeTestCases() {
         areaCode: AreaCode.areaCodeGlob.value(),
         logConfig: LogConfig(filePath: logPath),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
         const int uid = 10;
@@ -1969,6 +2011,7 @@ void rtcEngineSmokeTestCases() {
         areaCode: AreaCode.areaCodeGlob.value(),
         logConfig: LogConfig(filePath: logPath),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
         const bool mute = true;
@@ -2005,6 +2048,7 @@ void rtcEngineSmokeTestCases() {
         areaCode: AreaCode.areaCodeGlob.value(),
         logConfig: LogConfig(filePath: logPath),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
         const bool enabled = true;
@@ -2041,6 +2085,7 @@ void rtcEngineSmokeTestCases() {
         areaCode: AreaCode.areaCodeGlob.value(),
         logConfig: LogConfig(filePath: logPath),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
         const bool mute = true;
@@ -2078,6 +2123,7 @@ void rtcEngineSmokeTestCases() {
         areaCode: AreaCode.areaCodeGlob.value(),
         logConfig: LogConfig(filePath: logPath),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
         const bool mute = true;
@@ -2115,6 +2161,7 @@ void rtcEngineSmokeTestCases() {
         areaCode: AreaCode.areaCodeGlob.value(),
         logConfig: LogConfig(filePath: logPath),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
         const VideoStreamType streamType = VideoStreamType.videoStreamHigh;
@@ -2152,6 +2199,7 @@ void rtcEngineSmokeTestCases() {
         areaCode: AreaCode.areaCodeGlob.value(),
         logConfig: LogConfig(filePath: logPath),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
         const int uid = 10;
@@ -2191,6 +2239,7 @@ void rtcEngineSmokeTestCases() {
         areaCode: AreaCode.areaCodeGlob.value(),
         logConfig: LogConfig(filePath: logPath),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
         const int uid = 10;
@@ -2230,6 +2279,7 @@ void rtcEngineSmokeTestCases() {
         areaCode: AreaCode.areaCodeGlob.value(),
         logConfig: LogConfig(filePath: logPath),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
         const int uid = 10;
@@ -2274,6 +2324,7 @@ void rtcEngineSmokeTestCases() {
         areaCode: AreaCode.areaCodeGlob.value(),
         logConfig: LogConfig(filePath: logPath),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
         const int interval = 10;
@@ -2315,6 +2366,7 @@ void rtcEngineSmokeTestCases() {
         areaCode: AreaCode.areaCodeGlob.value(),
         logConfig: LogConfig(filePath: logPath),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
         const AudioFileRecordingType configFileRecordingType =
@@ -2366,6 +2418,7 @@ void rtcEngineSmokeTestCases() {
         areaCode: AreaCode.areaCodeGlob.value(),
         logConfig: LogConfig(filePath: logPath),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
         const AudioEncodedFrameObserverPosition configPostionType =
@@ -2421,6 +2474,7 @@ void rtcEngineSmokeTestCases() {
         areaCode: AreaCode.areaCodeGlob.value(),
         logConfig: LogConfig(filePath: logPath),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
         await rtcEngine.stopAudioRecording();
@@ -2454,6 +2508,7 @@ void rtcEngineSmokeTestCases() {
         areaCode: AreaCode.areaCodeGlob.value(),
         logConfig: LogConfig(filePath: logPath),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
         const String filePath = "hello";
@@ -2496,6 +2551,7 @@ void rtcEngineSmokeTestCases() {
         areaCode: AreaCode.areaCodeGlob.value(),
         logConfig: LogConfig(filePath: logPath),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
         await rtcEngine.stopAudioMixing();
@@ -2529,6 +2585,7 @@ void rtcEngineSmokeTestCases() {
         areaCode: AreaCode.areaCodeGlob.value(),
         logConfig: LogConfig(filePath: logPath),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
         await rtcEngine.pauseAudioMixing();
@@ -2562,6 +2619,7 @@ void rtcEngineSmokeTestCases() {
         areaCode: AreaCode.areaCodeGlob.value(),
         logConfig: LogConfig(filePath: logPath),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
         await rtcEngine.resumeAudioMixing();
@@ -2595,6 +2653,7 @@ void rtcEngineSmokeTestCases() {
         areaCode: AreaCode.areaCodeGlob.value(),
         logConfig: LogConfig(filePath: logPath),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
         const int index = 10;
@@ -2631,6 +2690,7 @@ void rtcEngineSmokeTestCases() {
         areaCode: AreaCode.areaCodeGlob.value(),
         logConfig: LogConfig(filePath: logPath),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
         await rtcEngine.getAudioTrackCount();
@@ -2664,6 +2724,7 @@ void rtcEngineSmokeTestCases() {
         areaCode: AreaCode.areaCodeGlob.value(),
         logConfig: LogConfig(filePath: logPath),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
         const int volume = 10;
@@ -2701,6 +2762,7 @@ void rtcEngineSmokeTestCases() {
         areaCode: AreaCode.areaCodeGlob.value(),
         logConfig: LogConfig(filePath: logPath),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
         const int volume = 10;
@@ -2738,6 +2800,7 @@ void rtcEngineSmokeTestCases() {
         areaCode: AreaCode.areaCodeGlob.value(),
         logConfig: LogConfig(filePath: logPath),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
         await rtcEngine.getAudioMixingPublishVolume();
@@ -2772,6 +2835,7 @@ void rtcEngineSmokeTestCases() {
         areaCode: AreaCode.areaCodeGlob.value(),
         logConfig: LogConfig(filePath: logPath),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
         const int volume = 10;
@@ -2809,6 +2873,7 @@ void rtcEngineSmokeTestCases() {
         areaCode: AreaCode.areaCodeGlob.value(),
         logConfig: LogConfig(filePath: logPath),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
         await rtcEngine.getAudioMixingPlayoutVolume();
@@ -2843,6 +2908,7 @@ void rtcEngineSmokeTestCases() {
         areaCode: AreaCode.areaCodeGlob.value(),
         logConfig: LogConfig(filePath: logPath),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
         await rtcEngine.getAudioMixingDuration();
@@ -2877,6 +2943,7 @@ void rtcEngineSmokeTestCases() {
         areaCode: AreaCode.areaCodeGlob.value(),
         logConfig: LogConfig(filePath: logPath),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
         await rtcEngine.getAudioMixingCurrentPosition();
@@ -2911,6 +2978,7 @@ void rtcEngineSmokeTestCases() {
         areaCode: AreaCode.areaCodeGlob.value(),
         logConfig: LogConfig(filePath: logPath),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
         const int pos = 10;
@@ -2948,6 +3016,7 @@ void rtcEngineSmokeTestCases() {
         areaCode: AreaCode.areaCodeGlob.value(),
         logConfig: LogConfig(filePath: logPath),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
         const AudioMixingDualMonoMode mode =
@@ -2986,6 +3055,7 @@ void rtcEngineSmokeTestCases() {
         areaCode: AreaCode.areaCodeGlob.value(),
         logConfig: LogConfig(filePath: logPath),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
         const int pitch = 10;
@@ -3022,6 +3092,7 @@ void rtcEngineSmokeTestCases() {
         areaCode: AreaCode.areaCodeGlob.value(),
         logConfig: LogConfig(filePath: logPath),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
         await rtcEngine.getEffectsVolume();
@@ -3055,6 +3126,7 @@ void rtcEngineSmokeTestCases() {
         areaCode: AreaCode.areaCodeGlob.value(),
         logConfig: LogConfig(filePath: logPath),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
         const int volume = 10;
@@ -3091,6 +3163,7 @@ void rtcEngineSmokeTestCases() {
         areaCode: AreaCode.areaCodeGlob.value(),
         logConfig: LogConfig(filePath: logPath),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
         const int soundId = 10;
@@ -3131,6 +3204,7 @@ void rtcEngineSmokeTestCases() {
         areaCode: AreaCode.areaCodeGlob.value(),
         logConfig: LogConfig(filePath: logPath),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
         const int soundId = 10;
@@ -3181,6 +3255,7 @@ void rtcEngineSmokeTestCases() {
         areaCode: AreaCode.areaCodeGlob.value(),
         logConfig: LogConfig(filePath: logPath),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
         const int loopCount = 10;
@@ -3225,6 +3300,7 @@ void rtcEngineSmokeTestCases() {
         areaCode: AreaCode.areaCodeGlob.value(),
         logConfig: LogConfig(filePath: logPath),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
         const int soundId = 10;
@@ -3261,6 +3337,7 @@ void rtcEngineSmokeTestCases() {
         areaCode: AreaCode.areaCodeGlob.value(),
         logConfig: LogConfig(filePath: logPath),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
         const int soundId = 10;
@@ -3299,6 +3376,7 @@ void rtcEngineSmokeTestCases() {
         areaCode: AreaCode.areaCodeGlob.value(),
         logConfig: LogConfig(filePath: logPath),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
         const int soundId = 10;
@@ -3335,6 +3413,7 @@ void rtcEngineSmokeTestCases() {
         areaCode: AreaCode.areaCodeGlob.value(),
         logConfig: LogConfig(filePath: logPath),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
         await rtcEngine.pauseAllEffects();
@@ -3368,6 +3447,7 @@ void rtcEngineSmokeTestCases() {
         areaCode: AreaCode.areaCodeGlob.value(),
         logConfig: LogConfig(filePath: logPath),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
         const int soundId = 10;
@@ -3404,6 +3484,7 @@ void rtcEngineSmokeTestCases() {
         areaCode: AreaCode.areaCodeGlob.value(),
         logConfig: LogConfig(filePath: logPath),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
         await rtcEngine.resumeAllEffects();
@@ -3437,6 +3518,7 @@ void rtcEngineSmokeTestCases() {
         areaCode: AreaCode.areaCodeGlob.value(),
         logConfig: LogConfig(filePath: logPath),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
         const int soundId = 10;
@@ -3473,6 +3555,7 @@ void rtcEngineSmokeTestCases() {
         areaCode: AreaCode.areaCodeGlob.value(),
         logConfig: LogConfig(filePath: logPath),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
         await rtcEngine.stopAllEffects();
@@ -3506,6 +3589,7 @@ void rtcEngineSmokeTestCases() {
         areaCode: AreaCode.areaCodeGlob.value(),
         logConfig: LogConfig(filePath: logPath),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
         const int soundId = 10;
@@ -3542,6 +3626,7 @@ void rtcEngineSmokeTestCases() {
         areaCode: AreaCode.areaCodeGlob.value(),
         logConfig: LogConfig(filePath: logPath),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
         await rtcEngine.unloadAllEffects();
@@ -3575,6 +3660,7 @@ void rtcEngineSmokeTestCases() {
         areaCode: AreaCode.areaCodeGlob.value(),
         logConfig: LogConfig(filePath: logPath),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
         const String filePath = "hello";
@@ -3611,6 +3697,7 @@ void rtcEngineSmokeTestCases() {
         areaCode: AreaCode.areaCodeGlob.value(),
         logConfig: LogConfig(filePath: logPath),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
         const int soundId = 10;
@@ -3649,6 +3736,7 @@ void rtcEngineSmokeTestCases() {
         areaCode: AreaCode.areaCodeGlob.value(),
         logConfig: LogConfig(filePath: logPath),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
         const int soundId = 10;
@@ -3686,6 +3774,7 @@ void rtcEngineSmokeTestCases() {
         areaCode: AreaCode.areaCodeGlob.value(),
         logConfig: LogConfig(filePath: logPath),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
         const bool enabled = true;
@@ -3723,6 +3812,7 @@ void rtcEngineSmokeTestCases() {
         areaCode: AreaCode.areaCodeGlob.value(),
         logConfig: LogConfig(filePath: logPath),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
         const int uid = 10;
@@ -3764,6 +3854,7 @@ void rtcEngineSmokeTestCases() {
         areaCode: AreaCode.areaCodeGlob.value(),
         logConfig: LogConfig(filePath: logPath),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
         const bool enabled = true;
@@ -3800,6 +3891,7 @@ void rtcEngineSmokeTestCases() {
         areaCode: AreaCode.areaCodeGlob.value(),
         logConfig: LogConfig(filePath: logPath),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
         const int uid = 10;
@@ -3856,6 +3948,7 @@ void rtcEngineSmokeTestCases() {
         areaCode: AreaCode.areaCodeGlob.value(),
         logConfig: LogConfig(filePath: logPath),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
         const VoiceBeautifierPreset preset =
@@ -3894,6 +3987,7 @@ void rtcEngineSmokeTestCases() {
         areaCode: AreaCode.areaCodeGlob.value(),
         logConfig: LogConfig(filePath: logPath),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
         const AudioEffectPreset preset = AudioEffectPreset.audioEffectOff;
@@ -3930,6 +4024,7 @@ void rtcEngineSmokeTestCases() {
         areaCode: AreaCode.areaCodeGlob.value(),
         logConfig: LogConfig(filePath: logPath),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
         const VoiceConversionPreset preset =
@@ -3968,6 +4063,7 @@ void rtcEngineSmokeTestCases() {
         areaCode: AreaCode.areaCodeGlob.value(),
         logConfig: LogConfig(filePath: logPath),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
         const AudioEffectPreset preset = AudioEffectPreset.audioEffectOff;
@@ -4009,6 +4105,7 @@ void rtcEngineSmokeTestCases() {
         areaCode: AreaCode.areaCodeGlob.value(),
         logConfig: LogConfig(filePath: logPath),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
         const VoiceBeautifierPreset preset =
@@ -4051,6 +4148,7 @@ void rtcEngineSmokeTestCases() {
         areaCode: AreaCode.areaCodeGlob.value(),
         logConfig: LogConfig(filePath: logPath),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
         const VoiceConversionPreset preset =
@@ -4093,6 +4191,7 @@ void rtcEngineSmokeTestCases() {
         areaCode: AreaCode.areaCodeGlob.value(),
         logConfig: LogConfig(filePath: logPath),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
         const double pitch = 10.0;
@@ -4129,6 +4228,7 @@ void rtcEngineSmokeTestCases() {
         areaCode: AreaCode.areaCodeGlob.value(),
         logConfig: LogConfig(filePath: logPath),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
         const double formantRatio = 10.0;
@@ -4165,6 +4265,7 @@ void rtcEngineSmokeTestCases() {
         areaCode: AreaCode.areaCodeGlob.value(),
         logConfig: LogConfig(filePath: logPath),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
         const AudioEqualizationBandFrequency bandFrequency =
@@ -4205,6 +4306,7 @@ void rtcEngineSmokeTestCases() {
         areaCode: AreaCode.areaCodeGlob.value(),
         logConfig: LogConfig(filePath: logPath),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
         const AudioReverbType reverbKey = AudioReverbType.audioReverbDryLevel;
@@ -4243,6 +4345,7 @@ void rtcEngineSmokeTestCases() {
         areaCode: AreaCode.areaCodeGlob.value(),
         logConfig: LogConfig(filePath: logPath),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
         const HeadphoneEqualizerPreset preset =
@@ -4280,6 +4383,7 @@ void rtcEngineSmokeTestCases() {
         areaCode: AreaCode.areaCodeGlob.value(),
         logConfig: LogConfig(filePath: logPath),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
         const int lowGain = 10;
@@ -4319,6 +4423,7 @@ void rtcEngineSmokeTestCases() {
         areaCode: AreaCode.areaCodeGlob.value(),
         logConfig: LogConfig(filePath: logPath),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
         const String filePath = "hello";
@@ -4355,6 +4460,7 @@ void rtcEngineSmokeTestCases() {
         areaCode: AreaCode.areaCodeGlob.value(),
         logConfig: LogConfig(filePath: logPath),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
         const LogFilterType filter = LogFilterType.logFilterOff;
@@ -4391,6 +4497,7 @@ void rtcEngineSmokeTestCases() {
         areaCode: AreaCode.areaCodeGlob.value(),
         logConfig: LogConfig(filePath: logPath),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
         const LogLevel level = LogLevel.logLevelNone;
@@ -4427,6 +4534,7 @@ void rtcEngineSmokeTestCases() {
         areaCode: AreaCode.areaCodeGlob.value(),
         logConfig: LogConfig(filePath: logPath),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
         const int fileSizeInKBytes = 10;
@@ -4463,6 +4571,7 @@ void rtcEngineSmokeTestCases() {
         areaCode: AreaCode.areaCodeGlob.value(),
         logConfig: LogConfig(filePath: logPath),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
         await rtcEngine.uploadLogFile();
@@ -4496,6 +4605,7 @@ void rtcEngineSmokeTestCases() {
         areaCode: AreaCode.areaCodeGlob.value(),
         logConfig: LogConfig(filePath: logPath),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
         const RenderModeType renderMode = RenderModeType.renderModeHidden;
@@ -4535,6 +4645,7 @@ void rtcEngineSmokeTestCases() {
         areaCode: AreaCode.areaCodeGlob.value(),
         logConfig: LogConfig(filePath: logPath),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
         const int uid = 10;
@@ -4576,6 +4687,7 @@ void rtcEngineSmokeTestCases() {
         areaCode: AreaCode.areaCodeGlob.value(),
         logConfig: LogConfig(filePath: logPath),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
         const VideoMirrorModeType mirrorMode =
@@ -4614,6 +4726,7 @@ void rtcEngineSmokeTestCases() {
         areaCode: AreaCode.areaCodeGlob.value(),
         logConfig: LogConfig(filePath: logPath),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
         const bool enabled = true;
@@ -4664,6 +4777,7 @@ void rtcEngineSmokeTestCases() {
         areaCode: AreaCode.areaCodeGlob.value(),
         logConfig: LogConfig(filePath: logPath),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
         const SimulcastStreamMode mode =
@@ -4715,6 +4829,7 @@ void rtcEngineSmokeTestCases() {
         areaCode: AreaCode.areaCodeGlob.value(),
         logConfig: LogConfig(filePath: logPath),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
         const int trackId = 10;
@@ -4754,6 +4869,7 @@ void rtcEngineSmokeTestCases() {
         areaCode: AreaCode.areaCodeGlob.value(),
         logConfig: LogConfig(filePath: logPath),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
         const int sampleRate = 10;
@@ -4798,6 +4914,7 @@ void rtcEngineSmokeTestCases() {
         areaCode: AreaCode.areaCodeGlob.value(),
         logConfig: LogConfig(filePath: logPath),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
         const int sampleRate = 10;
@@ -4842,6 +4959,7 @@ void rtcEngineSmokeTestCases() {
         areaCode: AreaCode.areaCodeGlob.value(),
         logConfig: LogConfig(filePath: logPath),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
         const int sampleRate = 10;
@@ -4883,6 +5001,7 @@ void rtcEngineSmokeTestCases() {
         areaCode: AreaCode.areaCodeGlob.value(),
         logConfig: LogConfig(filePath: logPath),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
         const int sampleRate = 10;
@@ -4927,6 +5046,7 @@ void rtcEngineSmokeTestCases() {
         areaCode: AreaCode.areaCodeGlob.value(),
         logConfig: LogConfig(filePath: logPath),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
         const int sampleRate = 10;
@@ -4966,6 +5086,7 @@ void rtcEngineSmokeTestCases() {
         areaCode: AreaCode.areaCodeGlob.value(),
         logConfig: LogConfig(filePath: logPath),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
         const int intervalInMS = 10;
@@ -5003,6 +5124,7 @@ void rtcEngineSmokeTestCases() {
         areaCode: AreaCode.areaCodeGlob.value(),
         logConfig: LogConfig(filePath: logPath),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
         await rtcEngine.disableAudioSpectrumMonitor();
@@ -5037,6 +5159,7 @@ void rtcEngineSmokeTestCases() {
         areaCode: AreaCode.areaCodeGlob.value(),
         logConfig: LogConfig(filePath: logPath),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
         final AudioSpectrumObserver observer = AudioSpectrumObserver(
@@ -5077,6 +5200,7 @@ void rtcEngineSmokeTestCases() {
         areaCode: AreaCode.areaCodeGlob.value(),
         logConfig: LogConfig(filePath: logPath),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
         final AudioSpectrumObserver observer = AudioSpectrumObserver(
@@ -5117,6 +5241,7 @@ void rtcEngineSmokeTestCases() {
         areaCode: AreaCode.areaCodeGlob.value(),
         logConfig: LogConfig(filePath: logPath),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
         const int volume = 10;
@@ -5154,6 +5279,7 @@ void rtcEngineSmokeTestCases() {
         areaCode: AreaCode.areaCodeGlob.value(),
         logConfig: LogConfig(filePath: logPath),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
         const bool mute = true;
@@ -5190,6 +5316,7 @@ void rtcEngineSmokeTestCases() {
         areaCode: AreaCode.areaCodeGlob.value(),
         logConfig: LogConfig(filePath: logPath),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
         const int volume = 10;
@@ -5227,6 +5354,7 @@ void rtcEngineSmokeTestCases() {
         areaCode: AreaCode.areaCodeGlob.value(),
         logConfig: LogConfig(filePath: logPath),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
         const int uid = 10;
@@ -5266,6 +5394,7 @@ void rtcEngineSmokeTestCases() {
         areaCode: AreaCode.areaCodeGlob.value(),
         logConfig: LogConfig(filePath: logPath),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
         const StreamFallbackOptions option =
@@ -5304,6 +5433,7 @@ void rtcEngineSmokeTestCases() {
         areaCode: AreaCode.areaCodeGlob.value(),
         logConfig: LogConfig(filePath: logPath),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
         const StreamFallbackOptions option =
@@ -5342,6 +5472,7 @@ void rtcEngineSmokeTestCases() {
         areaCode: AreaCode.areaCodeGlob.value(),
         logConfig: LogConfig(filePath: logPath),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
         const String provider = "hello";
@@ -5384,6 +5515,7 @@ void rtcEngineSmokeTestCases() {
         areaCode: AreaCode.areaCodeGlob.value(),
         logConfig: LogConfig(filePath: logPath),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
         const String provider = "hello";
@@ -5428,6 +5560,7 @@ void rtcEngineSmokeTestCases() {
         areaCode: AreaCode.areaCodeGlob.value(),
         logConfig: LogConfig(filePath: logPath),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
         const String provider = "hello";
@@ -5472,6 +5605,7 @@ void rtcEngineSmokeTestCases() {
         areaCode: AreaCode.areaCodeGlob.value(),
         logConfig: LogConfig(filePath: logPath),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
         const bool enabled = true;
@@ -5511,6 +5645,7 @@ void rtcEngineSmokeTestCases() {
         areaCode: AreaCode.areaCodeGlob.value(),
         logConfig: LogConfig(filePath: logPath),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
         const int volume = 10;
@@ -5548,6 +5683,7 @@ void rtcEngineSmokeTestCases() {
         areaCode: AreaCode.areaCodeGlob.value(),
         logConfig: LogConfig(filePath: logPath),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
         await rtcEngine.getLoopbackRecordingVolume();
@@ -5582,6 +5718,7 @@ void rtcEngineSmokeTestCases() {
         areaCode: AreaCode.areaCodeGlob.value(),
         logConfig: LogConfig(filePath: logPath),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
         const bool enabled = true;
@@ -5622,6 +5759,7 @@ void rtcEngineSmokeTestCases() {
         areaCode: AreaCode.areaCodeGlob.value(),
         logConfig: LogConfig(filePath: logPath),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
         const int volume = 10;
@@ -5659,6 +5797,7 @@ void rtcEngineSmokeTestCases() {
         areaCode: AreaCode.areaCodeGlob.value(),
         logConfig: LogConfig(filePath: logPath),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
         const String path = "hello";
@@ -5698,6 +5837,7 @@ void rtcEngineSmokeTestCases() {
         areaCode: AreaCode.areaCodeGlob.value(),
         logConfig: LogConfig(filePath: logPath),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
         const String provider = "hello";
@@ -5739,6 +5879,7 @@ void rtcEngineSmokeTestCases() {
         areaCode: AreaCode.areaCodeGlob.value(),
         logConfig: LogConfig(filePath: logPath),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
         const String provider = "hello";
@@ -5779,6 +5920,7 @@ void rtcEngineSmokeTestCases() {
         areaCode: AreaCode.areaCodeGlob.value(),
         logConfig: LogConfig(filePath: logPath),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
         const CameraDirection configCameraDirection =
@@ -5833,6 +5975,7 @@ void rtcEngineSmokeTestCases() {
         areaCode: AreaCode.areaCodeGlob.value(),
         logConfig: LogConfig(filePath: logPath),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
         const int videoTrackId = 10;
@@ -5870,6 +6013,7 @@ void rtcEngineSmokeTestCases() {
         areaCode: AreaCode.areaCodeGlob.value(),
         logConfig: LogConfig(filePath: logPath),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
         const int videoTrackId = 10;
@@ -5907,6 +6051,7 @@ void rtcEngineSmokeTestCases() {
         areaCode: AreaCode.areaCodeGlob.value(),
         logConfig: LogConfig(filePath: logPath),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
         await rtcEngine.switchCamera();
@@ -5940,6 +6085,7 @@ void rtcEngineSmokeTestCases() {
         areaCode: AreaCode.areaCodeGlob.value(),
         logConfig: LogConfig(filePath: logPath),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
         await rtcEngine.isCameraZoomSupported();
@@ -5974,6 +6120,7 @@ void rtcEngineSmokeTestCases() {
         areaCode: AreaCode.areaCodeGlob.value(),
         logConfig: LogConfig(filePath: logPath),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
         await rtcEngine.isCameraFaceDetectSupported();
@@ -6008,6 +6155,7 @@ void rtcEngineSmokeTestCases() {
         areaCode: AreaCode.areaCodeGlob.value(),
         logConfig: LogConfig(filePath: logPath),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
         await rtcEngine.isCameraTorchSupported();
@@ -6042,6 +6190,7 @@ void rtcEngineSmokeTestCases() {
         areaCode: AreaCode.areaCodeGlob.value(),
         logConfig: LogConfig(filePath: logPath),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
         await rtcEngine.isCameraFocusSupported();
@@ -6076,6 +6225,7 @@ void rtcEngineSmokeTestCases() {
         areaCode: AreaCode.areaCodeGlob.value(),
         logConfig: LogConfig(filePath: logPath),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
         await rtcEngine.isCameraAutoFocusFaceModeSupported();
@@ -6110,6 +6260,7 @@ void rtcEngineSmokeTestCases() {
         areaCode: AreaCode.areaCodeGlob.value(),
         logConfig: LogConfig(filePath: logPath),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
         const double factor = 10.0;
@@ -6146,6 +6297,7 @@ void rtcEngineSmokeTestCases() {
         areaCode: AreaCode.areaCodeGlob.value(),
         logConfig: LogConfig(filePath: logPath),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
         const bool enabled = true;
@@ -6182,6 +6334,7 @@ void rtcEngineSmokeTestCases() {
         areaCode: AreaCode.areaCodeGlob.value(),
         logConfig: LogConfig(filePath: logPath),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
         await rtcEngine.getCameraMaxZoomFactor();
@@ -6216,6 +6369,7 @@ void rtcEngineSmokeTestCases() {
         areaCode: AreaCode.areaCodeGlob.value(),
         logConfig: LogConfig(filePath: logPath),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
         const double positionX = 10.0;
@@ -6255,6 +6409,7 @@ void rtcEngineSmokeTestCases() {
         areaCode: AreaCode.areaCodeGlob.value(),
         logConfig: LogConfig(filePath: logPath),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
         const bool isOn = true;
@@ -6291,6 +6446,7 @@ void rtcEngineSmokeTestCases() {
         areaCode: AreaCode.areaCodeGlob.value(),
         logConfig: LogConfig(filePath: logPath),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
         const bool enabled = true;
@@ -6328,6 +6484,7 @@ void rtcEngineSmokeTestCases() {
         areaCode: AreaCode.areaCodeGlob.value(),
         logConfig: LogConfig(filePath: logPath),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
         await rtcEngine.isCameraExposurePositionSupported();
@@ -6362,6 +6519,7 @@ void rtcEngineSmokeTestCases() {
         areaCode: AreaCode.areaCodeGlob.value(),
         logConfig: LogConfig(filePath: logPath),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
         const double positionXinView = 10.0;
@@ -6401,6 +6559,7 @@ void rtcEngineSmokeTestCases() {
         areaCode: AreaCode.areaCodeGlob.value(),
         logConfig: LogConfig(filePath: logPath),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
         await rtcEngine.isCameraExposureSupported();
@@ -6435,6 +6594,7 @@ void rtcEngineSmokeTestCases() {
         areaCode: AreaCode.areaCodeGlob.value(),
         logConfig: LogConfig(filePath: logPath),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
         const double factor = 10.0;
@@ -6472,6 +6632,7 @@ void rtcEngineSmokeTestCases() {
         areaCode: AreaCode.areaCodeGlob.value(),
         logConfig: LogConfig(filePath: logPath),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
         await rtcEngine.isCameraAutoExposureFaceModeSupported();
@@ -6506,6 +6667,7 @@ void rtcEngineSmokeTestCases() {
         areaCode: AreaCode.areaCodeGlob.value(),
         logConfig: LogConfig(filePath: logPath),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
         const bool enabled = true;
@@ -6543,6 +6705,7 @@ void rtcEngineSmokeTestCases() {
         areaCode: AreaCode.areaCodeGlob.value(),
         logConfig: LogConfig(filePath: logPath),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
         const bool defaultToSpeaker = true;
@@ -6580,6 +6743,7 @@ void rtcEngineSmokeTestCases() {
         areaCode: AreaCode.areaCodeGlob.value(),
         logConfig: LogConfig(filePath: logPath),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
         const bool speakerOn = true;
@@ -6617,6 +6781,7 @@ void rtcEngineSmokeTestCases() {
         areaCode: AreaCode.areaCodeGlob.value(),
         logConfig: LogConfig(filePath: logPath),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
         await rtcEngine.isSpeakerphoneEnabled();
@@ -6651,6 +6816,7 @@ void rtcEngineSmokeTestCases() {
         areaCode: AreaCode.areaCodeGlob.value(),
         logConfig: LogConfig(filePath: logPath),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
         const int route = 10;
@@ -6688,6 +6854,7 @@ void rtcEngineSmokeTestCases() {
         areaCode: AreaCode.areaCodeGlob.value(),
         logConfig: LogConfig(filePath: logPath),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
         const int thumbSizeWidth = 10;
@@ -6739,6 +6906,7 @@ void rtcEngineSmokeTestCases() {
         areaCode: AreaCode.areaCodeGlob.value(),
         logConfig: LogConfig(filePath: logPath),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
         const AudioSessionOperationRestriction restriction =
@@ -6778,6 +6946,7 @@ void rtcEngineSmokeTestCases() {
         areaCode: AreaCode.areaCodeGlob.value(),
         logConfig: LogConfig(filePath: logPath),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
         const int displayId = 10;
@@ -6854,6 +7023,7 @@ void rtcEngineSmokeTestCases() {
         areaCode: AreaCode.areaCodeGlob.value(),
         logConfig: LogConfig(filePath: logPath),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
         const int screenRectX = 10;
@@ -6939,6 +7109,7 @@ void rtcEngineSmokeTestCases() {
         areaCode: AreaCode.areaCodeGlob.value(),
         logConfig: LogConfig(filePath: logPath),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
         await rtcEngine.getAudioDeviceInfo();
@@ -6972,6 +7143,7 @@ void rtcEngineSmokeTestCases() {
         areaCode: AreaCode.areaCodeGlob.value(),
         logConfig: LogConfig(filePath: logPath),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
         const int windowId = 10;
@@ -7048,6 +7220,7 @@ void rtcEngineSmokeTestCases() {
         areaCode: AreaCode.areaCodeGlob.value(),
         logConfig: LogConfig(filePath: logPath),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
         const VideoContentHint contentHint = VideoContentHint.contentHintNone;
@@ -7085,6 +7258,7 @@ void rtcEngineSmokeTestCases() {
         areaCode: AreaCode.areaCodeGlob.value(),
         logConfig: LogConfig(filePath: logPath),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
         const int regionRectX = 10;
@@ -7131,6 +7305,7 @@ void rtcEngineSmokeTestCases() {
         areaCode: AreaCode.areaCodeGlob.value(),
         logConfig: LogConfig(filePath: logPath),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
         const int dimensionsWidth = 10;
@@ -7194,6 +7369,7 @@ void rtcEngineSmokeTestCases() {
         areaCode: AreaCode.areaCodeGlob.value(),
         logConfig: LogConfig(filePath: logPath),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
         const int audioParamsSampleRate = 10;
@@ -7263,6 +7439,7 @@ void rtcEngineSmokeTestCases() {
         areaCode: AreaCode.areaCodeGlob.value(),
         logConfig: LogConfig(filePath: logPath),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
         const VideoSourceType sourceType =
@@ -7360,6 +7537,7 @@ void rtcEngineSmokeTestCases() {
         areaCode: AreaCode.areaCodeGlob.value(),
         logConfig: LogConfig(filePath: logPath),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
         const int audioParamsSampleRate = 10;
@@ -7429,6 +7607,7 @@ void rtcEngineSmokeTestCases() {
         areaCode: AreaCode.areaCodeGlob.value(),
         logConfig: LogConfig(filePath: logPath),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
         await rtcEngine.queryScreenCaptureCapability();
@@ -7463,6 +7642,7 @@ void rtcEngineSmokeTestCases() {
         areaCode: AreaCode.areaCodeGlob.value(),
         logConfig: LogConfig(filePath: logPath),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
         const ScreenScenarioType screenScenario =
@@ -7501,6 +7681,7 @@ void rtcEngineSmokeTestCases() {
         areaCode: AreaCode.areaCodeGlob.value(),
         logConfig: LogConfig(filePath: logPath),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
         await rtcEngine.stopScreenCapture();
@@ -7534,6 +7715,7 @@ void rtcEngineSmokeTestCases() {
         areaCode: AreaCode.areaCodeGlob.value(),
         logConfig: LogConfig(filePath: logPath),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
         const VideoSourceType sourceType =
@@ -7572,6 +7754,7 @@ void rtcEngineSmokeTestCases() {
         areaCode: AreaCode.areaCodeGlob.value(),
         logConfig: LogConfig(filePath: logPath),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
         await rtcEngine.getCallId();
@@ -7605,6 +7788,7 @@ void rtcEngineSmokeTestCases() {
         areaCode: AreaCode.areaCodeGlob.value(),
         logConfig: LogConfig(filePath: logPath),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
         const String callId = "hello";
@@ -7645,6 +7829,7 @@ void rtcEngineSmokeTestCases() {
         areaCode: AreaCode.areaCodeGlob.value(),
         logConfig: LogConfig(filePath: logPath),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
         const String callId = "hello";
@@ -7683,6 +7868,7 @@ void rtcEngineSmokeTestCases() {
         areaCode: AreaCode.areaCodeGlob.value(),
         logConfig: LogConfig(filePath: logPath),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
         const String url = "hello";
@@ -7720,6 +7906,7 @@ void rtcEngineSmokeTestCases() {
         areaCode: AreaCode.areaCodeGlob.value(),
         logConfig: LogConfig(filePath: logPath),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
         const String url = "hello";
@@ -7810,6 +7997,7 @@ void rtcEngineSmokeTestCases() {
         areaCode: AreaCode.areaCodeGlob.value(),
         logConfig: LogConfig(filePath: logPath),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
         const VideoCodecProfileType transcodingVideoCodecProfile =
@@ -7898,6 +8086,7 @@ void rtcEngineSmokeTestCases() {
         areaCode: AreaCode.areaCodeGlob.value(),
         logConfig: LogConfig(filePath: logPath),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
         const VideoCodecType videoOutputConfigurationCodecType =
@@ -7984,6 +8173,7 @@ void rtcEngineSmokeTestCases() {
         areaCode: AreaCode.areaCodeGlob.value(),
         logConfig: LogConfig(filePath: logPath),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
         const VideoCodecType videoOutputConfigurationCodecType =
@@ -8070,6 +8260,7 @@ void rtcEngineSmokeTestCases() {
         areaCode: AreaCode.areaCodeGlob.value(),
         logConfig: LogConfig(filePath: logPath),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
         const String url = "hello";
@@ -8106,6 +8297,7 @@ void rtcEngineSmokeTestCases() {
         areaCode: AreaCode.areaCodeGlob.value(),
         logConfig: LogConfig(filePath: logPath),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
         await rtcEngine.stopLocalVideoTranscoder();
@@ -8140,6 +8332,7 @@ void rtcEngineSmokeTestCases() {
         areaCode: AreaCode.areaCodeGlob.value(),
         logConfig: LogConfig(filePath: logPath),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
         const VideoSourceType sourceType =
@@ -8196,6 +8389,7 @@ void rtcEngineSmokeTestCases() {
         areaCode: AreaCode.areaCodeGlob.value(),
         logConfig: LogConfig(filePath: logPath),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
         const VideoSourceType sourceType =
@@ -8233,6 +8427,7 @@ void rtcEngineSmokeTestCases() {
         areaCode: AreaCode.areaCodeGlob.value(),
         logConfig: LogConfig(filePath: logPath),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
         const VideoSourceType type = VideoSourceType.videoSourceCameraPrimary;
@@ -8272,6 +8467,7 @@ void rtcEngineSmokeTestCases() {
         areaCode: AreaCode.areaCodeGlob.value(),
         logConfig: LogConfig(filePath: logPath),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
         const VideoSourceType type = VideoSourceType.videoSourceCameraPrimary;
@@ -8311,6 +8507,7 @@ void rtcEngineSmokeTestCases() {
         areaCode: AreaCode.areaCodeGlob.value(),
         logConfig: LogConfig(filePath: logPath),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
         await rtcEngine.getConnectionState();
@@ -8344,6 +8541,7 @@ void rtcEngineSmokeTestCases() {
         areaCode: AreaCode.areaCodeGlob.value(),
         logConfig: LogConfig(filePath: logPath),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
         final RtcEngineEventHandler eventHandler = RtcEngineEventHandler(
@@ -8560,6 +8758,7 @@ void rtcEngineSmokeTestCases() {
         areaCode: AreaCode.areaCodeGlob.value(),
         logConfig: LogConfig(filePath: logPath),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
         final RtcEngineEventHandler eventHandler = RtcEngineEventHandler(
@@ -8777,6 +8976,7 @@ void rtcEngineSmokeTestCases() {
         areaCode: AreaCode.areaCodeGlob.value(),
         logConfig: LogConfig(filePath: logPath),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
         const int uid = 10;
@@ -8816,6 +9016,7 @@ void rtcEngineSmokeTestCases() {
         areaCode: AreaCode.areaCodeGlob.value(),
         logConfig: LogConfig(filePath: logPath),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
         const String encryptionMode = "hello";
@@ -8852,6 +9053,7 @@ void rtcEngineSmokeTestCases() {
         areaCode: AreaCode.areaCodeGlob.value(),
         logConfig: LogConfig(filePath: logPath),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
         const String secret = "hello";
@@ -8888,6 +9090,7 @@ void rtcEngineSmokeTestCases() {
         areaCode: AreaCode.areaCodeGlob.value(),
         logConfig: LogConfig(filePath: logPath),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
         const bool enabled = true;
@@ -8933,6 +9136,7 @@ void rtcEngineSmokeTestCases() {
         areaCode: AreaCode.areaCodeGlob.value(),
         logConfig: LogConfig(filePath: logPath),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
         const int streamId = 10;
@@ -8973,6 +9177,7 @@ void rtcEngineSmokeTestCases() {
         areaCode: AreaCode.areaCodeGlob.value(),
         logConfig: LogConfig(filePath: logPath),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
         const String watermarkUrl = "hello";
@@ -9048,6 +9253,7 @@ void rtcEngineSmokeTestCases() {
         areaCode: AreaCode.areaCodeGlob.value(),
         logConfig: LogConfig(filePath: logPath),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
         await rtcEngine.clearVideoWatermarks();
@@ -9081,6 +9287,7 @@ void rtcEngineSmokeTestCases() {
         areaCode: AreaCode.areaCodeGlob.value(),
         logConfig: LogConfig(filePath: logPath),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
         await rtcEngine.pauseAudio();
@@ -9114,6 +9321,7 @@ void rtcEngineSmokeTestCases() {
         areaCode: AreaCode.areaCodeGlob.value(),
         logConfig: LogConfig(filePath: logPath),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
         await rtcEngine.resumeAudio();
@@ -9147,6 +9355,7 @@ void rtcEngineSmokeTestCases() {
         areaCode: AreaCode.areaCodeGlob.value(),
         logConfig: LogConfig(filePath: logPath),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
         const bool enabled = true;
@@ -9184,6 +9393,7 @@ void rtcEngineSmokeTestCases() {
         areaCode: AreaCode.areaCodeGlob.value(),
         logConfig: LogConfig(filePath: logPath),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
         const String id = "hello";
@@ -9229,6 +9439,7 @@ void rtcEngineSmokeTestCases() {
         areaCode: AreaCode.areaCodeGlob.value(),
         logConfig: LogConfig(filePath: logPath),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
         final MetadataObserver observer = MetadataObserver(
@@ -9270,6 +9481,7 @@ void rtcEngineSmokeTestCases() {
         areaCode: AreaCode.areaCodeGlob.value(),
         logConfig: LogConfig(filePath: logPath),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
         final MetadataObserver observer = MetadataObserver(
@@ -9311,6 +9523,7 @@ void rtcEngineSmokeTestCases() {
         areaCode: AreaCode.areaCodeGlob.value(),
         logConfig: LogConfig(filePath: logPath),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
         const String channelId = "hello";
@@ -9359,6 +9572,7 @@ void rtcEngineSmokeTestCases() {
         areaCode: AreaCode.areaCodeGlob.value(),
         logConfig: LogConfig(filePath: logPath),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
         const String channelId = "hello";
@@ -9399,6 +9613,7 @@ void rtcEngineSmokeTestCases() {
         areaCode: AreaCode.areaCodeGlob.value(),
         logConfig: LogConfig(filePath: logPath),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
         const bool enabled = true;
@@ -9437,6 +9652,7 @@ void rtcEngineSmokeTestCases() {
         areaCode: AreaCode.areaCodeGlob.value(),
         logConfig: LogConfig(filePath: logPath),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
         const String appId = "hello";
@@ -9476,6 +9692,7 @@ void rtcEngineSmokeTestCases() {
         areaCode: AreaCode.areaCodeGlob.value(),
         logConfig: LogConfig(filePath: logPath),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
         const String token = "hello";
@@ -9594,6 +9811,7 @@ void rtcEngineSmokeTestCases() {
         areaCode: AreaCode.areaCodeGlob.value(),
         logConfig: LogConfig(filePath: logPath),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
         const String token = "hello";
@@ -9712,6 +9930,7 @@ void rtcEngineSmokeTestCases() {
         areaCode: AreaCode.areaCodeGlob.value(),
         logConfig: LogConfig(filePath: logPath),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
         const String userAccount = "hello";
@@ -9749,6 +9968,7 @@ void rtcEngineSmokeTestCases() {
         areaCode: AreaCode.areaCodeGlob.value(),
         logConfig: LogConfig(filePath: logPath),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
         const int uid = 10;
@@ -9785,6 +10005,7 @@ void rtcEngineSmokeTestCases() {
         areaCode: AreaCode.areaCodeGlob.value(),
         logConfig: LogConfig(filePath: logPath),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
         await rtcEngine.stopChannelMediaRelay();
@@ -9819,6 +10040,7 @@ void rtcEngineSmokeTestCases() {
         areaCode: AreaCode.areaCodeGlob.value(),
         logConfig: LogConfig(filePath: logPath),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
         await rtcEngine.pauseAllChannelMediaRelay();
@@ -9853,6 +10075,7 @@ void rtcEngineSmokeTestCases() {
         areaCode: AreaCode.areaCodeGlob.value(),
         logConfig: LogConfig(filePath: logPath),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
         await rtcEngine.resumeAllChannelMediaRelay();
@@ -9887,6 +10110,7 @@ void rtcEngineSmokeTestCases() {
         areaCode: AreaCode.areaCodeGlob.value(),
         logConfig: LogConfig(filePath: logPath),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
         const AudioProfileType profile = AudioProfileType.audioProfileDefault;
@@ -9924,6 +10148,7 @@ void rtcEngineSmokeTestCases() {
         areaCode: AreaCode.areaCodeGlob.value(),
         logConfig: LogConfig(filePath: logPath),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
         const VideoCodecType configCodecType = VideoCodecType.videoCodecNone;
@@ -9995,6 +10220,7 @@ void rtcEngineSmokeTestCases() {
         areaCode: AreaCode.areaCodeGlob.value(),
         logConfig: LogConfig(filePath: logPath),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
         final DirectCdnStreamingEventHandler eventHandler =
@@ -10057,6 +10283,7 @@ void rtcEngineSmokeTestCases() {
         areaCode: AreaCode.areaCodeGlob.value(),
         logConfig: LogConfig(filePath: logPath),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
         await rtcEngine.stopDirectCdnStreaming();
@@ -10091,6 +10318,7 @@ void rtcEngineSmokeTestCases() {
         areaCode: AreaCode.areaCodeGlob.value(),
         logConfig: LogConfig(filePath: logPath),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
         const bool optionsPublishCameraTrack = true;
@@ -10144,6 +10372,7 @@ void rtcEngineSmokeTestCases() {
         areaCode: AreaCode.areaCodeGlob.value(),
         logConfig: LogConfig(filePath: logPath),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
         const String sound1 = "hello";
@@ -10189,6 +10418,7 @@ void rtcEngineSmokeTestCases() {
         areaCode: AreaCode.areaCodeGlob.value(),
         logConfig: LogConfig(filePath: logPath),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
         await rtcEngine.stopRhythmPlayer();
@@ -10222,6 +10452,7 @@ void rtcEngineSmokeTestCases() {
         areaCode: AreaCode.areaCodeGlob.value(),
         logConfig: LogConfig(filePath: logPath),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
         const int configBeatsPerMeasure = 10;
@@ -10263,6 +10494,7 @@ void rtcEngineSmokeTestCases() {
         areaCode: AreaCode.areaCodeGlob.value(),
         logConfig: LogConfig(filePath: logPath),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
         const int uid = 10;
@@ -10301,6 +10533,7 @@ void rtcEngineSmokeTestCases() {
         areaCode: AreaCode.areaCodeGlob.value(),
         logConfig: LogConfig(filePath: logPath),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
         const bool enabled = true;
@@ -10348,6 +10581,7 @@ void rtcEngineSmokeTestCases() {
         areaCode: AreaCode.areaCodeGlob.value(),
         logConfig: LogConfig(filePath: logPath),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
         const int trackId = 10;
@@ -10387,6 +10621,7 @@ void rtcEngineSmokeTestCases() {
         areaCode: AreaCode.areaCodeGlob.value(),
         logConfig: LogConfig(filePath: logPath),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
         const int trackId = 10;
@@ -10426,6 +10661,7 @@ void rtcEngineSmokeTestCases() {
         areaCode: AreaCode.areaCodeGlob.value(),
         logConfig: LogConfig(filePath: logPath),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
         const CloudProxyType proxyType = CloudProxyType.noneProxy;
@@ -10462,6 +10698,7 @@ void rtcEngineSmokeTestCases() {
         areaCode: AreaCode.areaCodeGlob.value(),
         logConfig: LogConfig(filePath: logPath),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
         const int optionsAudioProcessingChannels = 10;
@@ -10504,6 +10741,7 @@ void rtcEngineSmokeTestCases() {
         areaCode: AreaCode.areaCodeGlob.value(),
         logConfig: LogConfig(filePath: logPath),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
         const String channelId = "hello";
@@ -10542,6 +10780,7 @@ void rtcEngineSmokeTestCases() {
         areaCode: AreaCode.areaCodeGlob.value(),
         logConfig: LogConfig(filePath: logPath),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
         const bool enable = true;
@@ -10589,6 +10828,7 @@ void rtcEngineSmokeTestCases() {
         areaCode: AreaCode.areaCodeGlob.value(),
         logConfig: LogConfig(filePath: logPath),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
         await rtcEngine.getCurrentMonotonicTimeInMs();
@@ -10623,6 +10863,7 @@ void rtcEngineSmokeTestCases() {
         areaCode: AreaCode.areaCodeGlob.value(),
         logConfig: LogConfig(filePath: logPath),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
         const bool enabled = true;
@@ -10660,6 +10901,7 @@ void rtcEngineSmokeTestCases() {
         areaCode: AreaCode.areaCodeGlob.value(),
         logConfig: LogConfig(filePath: logPath),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
         await rtcEngine.getNetworkType();
@@ -10693,6 +10935,7 @@ void rtcEngineSmokeTestCases() {
         areaCode: AreaCode.areaCodeGlob.value(),
         logConfig: LogConfig(filePath: logPath),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
         const String parameters = "hello";
@@ -10729,6 +10972,7 @@ void rtcEngineSmokeTestCases() {
         areaCode: AreaCode.areaCodeGlob.value(),
         logConfig: LogConfig(filePath: logPath),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
         await rtcEngine.startMediaRenderingTracing();
@@ -10763,6 +11007,7 @@ void rtcEngineSmokeTestCases() {
         areaCode: AreaCode.areaCodeGlob.value(),
         logConfig: LogConfig(filePath: logPath),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
         await rtcEngine.enableInstantMediaRendering();
@@ -10797,6 +11042,7 @@ void rtcEngineSmokeTestCases() {
         areaCode: AreaCode.areaCodeGlob.value(),
         logConfig: LogConfig(filePath: logPath),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
         await rtcEngine.getNtpWallTimeInMs();
@@ -10830,6 +11076,7 @@ void rtcEngineSmokeTestCases() {
         areaCode: AreaCode.areaCodeGlob.value(),
         logConfig: LogConfig(filePath: logPath),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
         const FeatureType type = FeatureType.videoVirtualBackground;
@@ -10867,6 +11114,7 @@ void rtcEngineSmokeTestCases() {
         areaCode: AreaCode.areaCodeGlob.value(),
         logConfig: LogConfig(filePath: logPath),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
         const bool sync = true;
@@ -10903,6 +11151,7 @@ void rtcEngineSmokeTestCases() {
         areaCode: AreaCode.areaCodeGlob.value(),
         logConfig: LogConfig(filePath: logPath),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
         rtcEngine.getAudioDeviceManager();
@@ -10937,6 +11186,7 @@ void rtcEngineSmokeTestCases() {
         areaCode: AreaCode.areaCodeGlob.value(),
         logConfig: LogConfig(filePath: logPath),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
         rtcEngine.getVideoDeviceManager();
@@ -10971,6 +11221,7 @@ void rtcEngineSmokeTestCases() {
         areaCode: AreaCode.areaCodeGlob.value(),
         logConfig: LogConfig(filePath: logPath),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
         rtcEngine.getMusicContentCenter();
@@ -11005,6 +11256,7 @@ void rtcEngineSmokeTestCases() {
         areaCode: AreaCode.areaCodeGlob.value(),
         logConfig: LogConfig(filePath: logPath),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
         rtcEngine.getMediaEngine();
@@ -11038,6 +11290,7 @@ void rtcEngineSmokeTestCases() {
         areaCode: AreaCode.areaCodeGlob.value(),
         logConfig: LogConfig(filePath: logPath),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
         rtcEngine.getLocalSpatialAudioEngine();
@@ -11072,6 +11325,7 @@ void rtcEngineSmokeTestCases() {
         areaCode: AreaCode.areaCodeGlob.value(),
         logConfig: LogConfig(filePath: logPath),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
         rtcEngine.getH265Transcoder();
@@ -11105,6 +11359,7 @@ void rtcEngineSmokeTestCases() {
         areaCode: AreaCode.areaCodeGlob.value(),
         logConfig: LogConfig(filePath: logPath),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
         const int metadataUid = 10;
@@ -11153,6 +11408,7 @@ void rtcEngineSmokeTestCases() {
         areaCode: AreaCode.areaCodeGlob.value(),
         logConfig: LogConfig(filePath: logPath),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
         const int size = 10;
@@ -11189,6 +11445,7 @@ void rtcEngineSmokeTestCases() {
         areaCode: AreaCode.areaCodeGlob.value(),
         logConfig: LogConfig(filePath: logPath),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
         final AudioEncodedFrameObserver observer = AudioEncodedFrameObserver(
@@ -11233,6 +11490,7 @@ void rtcEngineSmokeTestCases() {
         areaCode: AreaCode.areaCodeGlob.value(),
         logConfig: LogConfig(filePath: logPath),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
         await rtcEngine.getNativeHandle();

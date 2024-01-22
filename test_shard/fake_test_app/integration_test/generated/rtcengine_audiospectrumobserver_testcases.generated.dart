@@ -28,6 +28,7 @@ void generatedTestCases(IrisTester irisTester) {
         areaCode: AreaCode.areaCodeGlob.value(),
         logConfig: LogConfig(filePath: logPath),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       final onLocalAudioSpectrumCompleter = Completer<bool>();
       final theAudioSpectrumObserver = AudioSpectrumObserver(
@@ -97,6 +98,7 @@ void generatedTestCases(IrisTester irisTester) {
         areaCode: AreaCode.areaCodeGlob.value(),
         logConfig: LogConfig(filePath: logPath),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       final onRemoteAudioSpectrumCompleter = Completer<bool>();
       final theAudioSpectrumObserver = AudioSpectrumObserver(

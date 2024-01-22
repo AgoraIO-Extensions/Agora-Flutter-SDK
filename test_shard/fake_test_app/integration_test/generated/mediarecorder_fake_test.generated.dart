@@ -27,6 +27,7 @@ void mediaRecorderSmokeTestCases() {
         areaCode: AreaCode.areaCodeGlob.value(),
         logConfig: LogConfig(filePath: logPath),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       final mediaRecorder = (await rtcEngine.createMediaRecorder(
           RecorderStreamInfo(channelId: 'hello', uid: 0)))!;
@@ -74,6 +75,7 @@ void mediaRecorderSmokeTestCases() {
         areaCode: AreaCode.areaCodeGlob.value(),
         logConfig: LogConfig(filePath: logPath),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       final mediaRecorder = (await rtcEngine.createMediaRecorder(
           RecorderStreamInfo(channelId: 'hello', uid: 0)))!;
@@ -128,6 +130,7 @@ void mediaRecorderSmokeTestCases() {
         areaCode: AreaCode.areaCodeGlob.value(),
         logConfig: LogConfig(filePath: logPath),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       final mediaRecorder = (await rtcEngine.createMediaRecorder(
           RecorderStreamInfo(channelId: 'hello', uid: 0)))!;

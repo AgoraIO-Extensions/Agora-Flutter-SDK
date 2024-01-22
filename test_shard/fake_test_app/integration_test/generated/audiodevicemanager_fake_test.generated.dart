@@ -27,6 +27,7 @@ void audioDeviceManagerSmokeTestCases() {
         areaCode: AreaCode.areaCodeGlob.value(),
         logConfig: LogConfig(filePath: logPath),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       final audioDeviceManager = rtcEngine.getAudioDeviceManager();
 
@@ -64,6 +65,7 @@ void audioDeviceManagerSmokeTestCases() {
         areaCode: AreaCode.areaCodeGlob.value(),
         logConfig: LogConfig(filePath: logPath),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       final audioDeviceManager = rtcEngine.getAudioDeviceManager();
 
@@ -101,6 +103,7 @@ void audioDeviceManagerSmokeTestCases() {
         areaCode: AreaCode.areaCodeGlob.value(),
         logConfig: LogConfig(filePath: logPath),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       final audioDeviceManager = rtcEngine.getAudioDeviceManager();
 
@@ -141,6 +144,7 @@ void audioDeviceManagerSmokeTestCases() {
         areaCode: AreaCode.areaCodeGlob.value(),
         logConfig: LogConfig(filePath: logPath),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       final audioDeviceManager = rtcEngine.getAudioDeviceManager();
 
@@ -178,6 +182,7 @@ void audioDeviceManagerSmokeTestCases() {
         areaCode: AreaCode.areaCodeGlob.value(),
         logConfig: LogConfig(filePath: logPath),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       final audioDeviceManager = rtcEngine.getAudioDeviceManager();
 
@@ -215,6 +220,7 @@ void audioDeviceManagerSmokeTestCases() {
         areaCode: AreaCode.areaCodeGlob.value(),
         logConfig: LogConfig(filePath: logPath),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       final audioDeviceManager = rtcEngine.getAudioDeviceManager();
 
@@ -255,6 +261,7 @@ void audioDeviceManagerSmokeTestCases() {
         areaCode: AreaCode.areaCodeGlob.value(),
         logConfig: LogConfig(filePath: logPath),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       final audioDeviceManager = rtcEngine.getAudioDeviceManager();
 
@@ -292,6 +299,7 @@ void audioDeviceManagerSmokeTestCases() {
         areaCode: AreaCode.areaCodeGlob.value(),
         logConfig: LogConfig(filePath: logPath),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       final audioDeviceManager = rtcEngine.getAudioDeviceManager();
 
@@ -332,6 +340,7 @@ void audioDeviceManagerSmokeTestCases() {
         areaCode: AreaCode.areaCodeGlob.value(),
         logConfig: LogConfig(filePath: logPath),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       final audioDeviceManager = rtcEngine.getAudioDeviceManager();
 
@@ -369,6 +378,7 @@ void audioDeviceManagerSmokeTestCases() {
         areaCode: AreaCode.areaCodeGlob.value(),
         logConfig: LogConfig(filePath: logPath),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       final audioDeviceManager = rtcEngine.getAudioDeviceManager();
 
@@ -406,6 +416,7 @@ void audioDeviceManagerSmokeTestCases() {
         areaCode: AreaCode.areaCodeGlob.value(),
         logConfig: LogConfig(filePath: logPath),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       final audioDeviceManager = rtcEngine.getAudioDeviceManager();
 
@@ -446,6 +457,7 @@ void audioDeviceManagerSmokeTestCases() {
         areaCode: AreaCode.areaCodeGlob.value(),
         logConfig: LogConfig(filePath: logPath),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       final audioDeviceManager = rtcEngine.getAudioDeviceManager();
 
@@ -483,6 +495,7 @@ void audioDeviceManagerSmokeTestCases() {
         areaCode: AreaCode.areaCodeGlob.value(),
         logConfig: LogConfig(filePath: logPath),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       final audioDeviceManager = rtcEngine.getAudioDeviceManager();
 
@@ -523,6 +536,7 @@ void audioDeviceManagerSmokeTestCases() {
         areaCode: AreaCode.areaCodeGlob.value(),
         logConfig: LogConfig(filePath: logPath),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       final audioDeviceManager = rtcEngine.getAudioDeviceManager();
 
@@ -560,6 +574,7 @@ void audioDeviceManagerSmokeTestCases() {
         areaCode: AreaCode.areaCodeGlob.value(),
         logConfig: LogConfig(filePath: logPath),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       final audioDeviceManager = rtcEngine.getAudioDeviceManager();
 
@@ -600,6 +615,7 @@ void audioDeviceManagerSmokeTestCases() {
         areaCode: AreaCode.areaCodeGlob.value(),
         logConfig: LogConfig(filePath: logPath),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       final audioDeviceManager = rtcEngine.getAudioDeviceManager();
 
@@ -637,6 +653,7 @@ void audioDeviceManagerSmokeTestCases() {
         areaCode: AreaCode.areaCodeGlob.value(),
         logConfig: LogConfig(filePath: logPath),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       final audioDeviceManager = rtcEngine.getAudioDeviceManager();
 
@@ -677,6 +694,7 @@ void audioDeviceManagerSmokeTestCases() {
         areaCode: AreaCode.areaCodeGlob.value(),
         logConfig: LogConfig(filePath: logPath),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       final audioDeviceManager = rtcEngine.getAudioDeviceManager();
 
@@ -714,6 +732,7 @@ void audioDeviceManagerSmokeTestCases() {
         areaCode: AreaCode.areaCodeGlob.value(),
         logConfig: LogConfig(filePath: logPath),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       final audioDeviceManager = rtcEngine.getAudioDeviceManager();
 
@@ -754,6 +773,7 @@ void audioDeviceManagerSmokeTestCases() {
         areaCode: AreaCode.areaCodeGlob.value(),
         logConfig: LogConfig(filePath: logPath),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       final audioDeviceManager = rtcEngine.getAudioDeviceManager();
 
@@ -791,6 +811,7 @@ void audioDeviceManagerSmokeTestCases() {
         areaCode: AreaCode.areaCodeGlob.value(),
         logConfig: LogConfig(filePath: logPath),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       final audioDeviceManager = rtcEngine.getAudioDeviceManager();
 
@@ -831,6 +852,7 @@ void audioDeviceManagerSmokeTestCases() {
         areaCode: AreaCode.areaCodeGlob.value(),
         logConfig: LogConfig(filePath: logPath),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       final audioDeviceManager = rtcEngine.getAudioDeviceManager();
 
@@ -868,6 +890,7 @@ void audioDeviceManagerSmokeTestCases() {
         areaCode: AreaCode.areaCodeGlob.value(),
         logConfig: LogConfig(filePath: logPath),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       final audioDeviceManager = rtcEngine.getAudioDeviceManager();
 
@@ -908,6 +931,7 @@ void audioDeviceManagerSmokeTestCases() {
         areaCode: AreaCode.areaCodeGlob.value(),
         logConfig: LogConfig(filePath: logPath),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       final audioDeviceManager = rtcEngine.getAudioDeviceManager();
 
@@ -945,6 +969,7 @@ void audioDeviceManagerSmokeTestCases() {
         areaCode: AreaCode.areaCodeGlob.value(),
         logConfig: LogConfig(filePath: logPath),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       final audioDeviceManager = rtcEngine.getAudioDeviceManager();
 
@@ -985,6 +1010,7 @@ void audioDeviceManagerSmokeTestCases() {
         areaCode: AreaCode.areaCodeGlob.value(),
         logConfig: LogConfig(filePath: logPath),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       final audioDeviceManager = rtcEngine.getAudioDeviceManager();
 
@@ -1025,6 +1051,7 @@ void audioDeviceManagerSmokeTestCases() {
         areaCode: AreaCode.areaCodeGlob.value(),
         logConfig: LogConfig(filePath: logPath),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       final audioDeviceManager = rtcEngine.getAudioDeviceManager();
 
@@ -1065,6 +1092,7 @@ void audioDeviceManagerSmokeTestCases() {
         areaCode: AreaCode.areaCodeGlob.value(),
         logConfig: LogConfig(filePath: logPath),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       final audioDeviceManager = rtcEngine.getAudioDeviceManager();
 
@@ -1101,6 +1129,7 @@ void audioDeviceManagerSmokeTestCases() {
         areaCode: AreaCode.areaCodeGlob.value(),
         logConfig: LogConfig(filePath: logPath),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       final audioDeviceManager = rtcEngine.getAudioDeviceManager();
 
@@ -1138,6 +1167,7 @@ void audioDeviceManagerSmokeTestCases() {
         areaCode: AreaCode.areaCodeGlob.value(),
         logConfig: LogConfig(filePath: logPath),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       final audioDeviceManager = rtcEngine.getAudioDeviceManager();
 

@@ -26,6 +26,7 @@ void generatedTestCases() {
         areaCode: AreaCode.areaCodeGlob.value(),
         logConfig: LogConfig(filePath: logPath),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       final h265Transcoder = rtcEngine.getH265Transcoder();
 
@@ -69,6 +70,7 @@ void generatedTestCases() {
         areaCode: AreaCode.areaCodeGlob.value(),
         logConfig: LogConfig(filePath: logPath),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       final h265Transcoder = rtcEngine.getH265Transcoder();
 
@@ -112,6 +114,7 @@ void generatedTestCases() {
         areaCode: AreaCode.areaCodeGlob.value(),
         logConfig: LogConfig(filePath: logPath),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       final h265Transcoder = rtcEngine.getH265Transcoder();
 
@@ -156,6 +159,7 @@ void generatedTestCases() {
         areaCode: AreaCode.areaCodeGlob.value(),
         logConfig: LogConfig(filePath: logPath),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       final h265Transcoder = rtcEngine.getH265Transcoder();
 
@@ -201,6 +205,7 @@ void generatedTestCases() {
         areaCode: AreaCode.areaCodeGlob.value(),
         logConfig: LogConfig(filePath: logPath),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       final h265Transcoder = rtcEngine.getH265Transcoder();
 

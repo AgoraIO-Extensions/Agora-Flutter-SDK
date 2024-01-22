@@ -28,6 +28,7 @@ void mediaEngineSmokeTestCases() {
         areaCode: AreaCode.areaCodeGlob.value(),
         logConfig: LogConfig(filePath: logPath),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       final mediaEngine = rtcEngine.getMediaEngine();
 
@@ -76,6 +77,7 @@ void mediaEngineSmokeTestCases() {
         areaCode: AreaCode.areaCodeGlob.value(),
         logConfig: LogConfig(filePath: logPath),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       final mediaEngine = rtcEngine.getMediaEngine();
 
@@ -127,6 +129,7 @@ void mediaEngineSmokeTestCases() {
         areaCode: AreaCode.areaCodeGlob.value(),
         logConfig: LogConfig(filePath: logPath),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       final mediaEngine = rtcEngine.getMediaEngine();
 
@@ -171,6 +174,7 @@ void mediaEngineSmokeTestCases() {
         areaCode: AreaCode.areaCodeGlob.value(),
         logConfig: LogConfig(filePath: logPath),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       final mediaEngine = rtcEngine.getMediaEngine();
 
@@ -235,6 +239,7 @@ void mediaEngineSmokeTestCases() {
         areaCode: AreaCode.areaCodeGlob.value(),
         logConfig: LogConfig(filePath: logPath),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       final mediaEngine = rtcEngine.getMediaEngine();
 
@@ -297,6 +302,7 @@ void mediaEngineSmokeTestCases() {
         areaCode: AreaCode.areaCodeGlob.value(),
         logConfig: LogConfig(filePath: logPath),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       final mediaEngine = rtcEngine.getMediaEngine();
 
@@ -353,6 +359,7 @@ void mediaEngineSmokeTestCases() {
         areaCode: AreaCode.areaCodeGlob.value(),
         logConfig: LogConfig(filePath: logPath),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       final mediaEngine = rtcEngine.getMediaEngine();
 
@@ -402,6 +409,7 @@ void mediaEngineSmokeTestCases() {
         areaCode: AreaCode.areaCodeGlob.value(),
         logConfig: LogConfig(filePath: logPath),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       final mediaEngine = rtcEngine.getMediaEngine();
 
@@ -443,6 +451,7 @@ void mediaEngineSmokeTestCases() {
         areaCode: AreaCode.areaCodeGlob.value(),
         logConfig: LogConfig(filePath: logPath),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       final mediaEngine = rtcEngine.getMediaEngine();
 
@@ -488,6 +497,7 @@ void mediaEngineSmokeTestCases() {
         areaCode: AreaCode.areaCodeGlob.value(),
         logConfig: LogConfig(filePath: logPath),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       final mediaEngine = rtcEngine.getMediaEngine();
 
@@ -531,6 +541,7 @@ void mediaEngineSmokeTestCases() {
         areaCode: AreaCode.areaCodeGlob.value(),
         logConfig: LogConfig(filePath: logPath),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       final mediaEngine = rtcEngine.getMediaEngine();
 
@@ -610,6 +621,7 @@ void mediaEngineSmokeTestCases() {
         areaCode: AreaCode.areaCodeGlob.value(),
         logConfig: LogConfig(filePath: logPath),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       final mediaEngine = rtcEngine.getMediaEngine();
 
@@ -685,6 +697,7 @@ void mediaEngineSmokeTestCases() {
         areaCode: AreaCode.areaCodeGlob.value(),
         logConfig: LogConfig(filePath: logPath),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       final mediaEngine = rtcEngine.getMediaEngine();
 
@@ -722,6 +735,7 @@ void mediaEngineSmokeTestCases() {
         areaCode: AreaCode.areaCodeGlob.value(),
         logConfig: LogConfig(filePath: logPath),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       final mediaEngine = rtcEngine.getMediaEngine();
 
@@ -770,6 +784,7 @@ void mediaEngineSmokeTestCases() {
         areaCode: AreaCode.areaCodeGlob.value(),
         logConfig: LogConfig(filePath: logPath),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       final mediaEngine = rtcEngine.getMediaEngine();
 
@@ -821,6 +836,7 @@ void mediaEngineSmokeTestCases() {
         areaCode: AreaCode.areaCodeGlob.value(),
         logConfig: LogConfig(filePath: logPath),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       final mediaEngine = rtcEngine.getMediaEngine();
 

@@ -28,6 +28,7 @@ void generatedTestCases(IrisTester irisTester) {
         areaCode: AreaCode.areaCodeGlob.value(),
         logConfig: LogConfig(filePath: logPath),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
       final mediaEngine = rtcEngine.getMediaEngine();
 
       final onPlaybackAudioFrameBeforeMixingCompleter = Completer<bool>();

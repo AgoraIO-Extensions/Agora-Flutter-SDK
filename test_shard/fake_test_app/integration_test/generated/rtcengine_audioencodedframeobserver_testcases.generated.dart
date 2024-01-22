@@ -28,6 +28,7 @@ void generatedTestCases(IrisTester irisTester) {
         areaCode: AreaCode.areaCodeGlob.value(),
         logConfig: LogConfig(filePath: logPath),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       final onRecordAudioEncodedFrameCompleter = Completer<bool>();
       final theAudioEncodedFrameObserver = AudioEncodedFrameObserver(
@@ -132,6 +133,7 @@ void generatedTestCases(IrisTester irisTester) {
         areaCode: AreaCode.areaCodeGlob.value(),
         logConfig: LogConfig(filePath: logPath),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       final onPlaybackAudioEncodedFrameCompleter = Completer<bool>();
       final theAudioEncodedFrameObserver = AudioEncodedFrameObserver(
@@ -236,6 +238,7 @@ void generatedTestCases(IrisTester irisTester) {
         areaCode: AreaCode.areaCodeGlob.value(),
         logConfig: LogConfig(filePath: logPath),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       final onMixedAudioEncodedFrameCompleter = Completer<bool>();
       final theAudioEncodedFrameObserver = AudioEncodedFrameObserver(

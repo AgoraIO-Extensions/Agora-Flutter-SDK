@@ -86,13 +86,17 @@ void testCases() {
         await recorder?.stopRecording();
         await rtcEngine.destroyMediaRecorder(recorder!);
 
-        expect(_isCallOnce(irisMethodChannel, 'RtcEngine_createMediaRecorder_f779617'),
+        expect(
+            _isCallOnce(
+                irisMethodChannel, 'RtcEngine_createMediaRecorder_f779617'),
+            isTrue);
+        expect(
+            _isCallOnce(irisMethodChannel,
+                'MediaRecorder_setMediaRecorderObserver_e1f7340'),
             isTrue);
         expect(
             _isCallOnce(
-                irisMethodChannel, 'MediaRecorder_setMediaRecorderObserver_e1f7340'),
-            isTrue);
-        expect(_isCallOnce(irisMethodChannel, 'MediaRecorder_startRecording_94480b3'),
+                irisMethodChannel, 'MediaRecorder_startRecording_94480b3'),
             isTrue);
         expect(_isCallOnce(irisMethodChannel, 'MediaRecorder_stopRecording'),
             isTrue);
@@ -101,7 +105,9 @@ void testCases() {
             _isCallOnce(
                 irisMethodChannel, 'MediaRecorder_unsetMediaRecorderObserver'),
             isTrue);
-        expect(_isCallOnce(irisMethodChannel, 'RtcEngine_destroyMediaRecorder_95cdef5'),
+        expect(
+            _isCallOnce(
+                irisMethodChannel, 'RtcEngine_destroyMediaRecorder_95cdef5'),
             isTrue);
 
         irisMethodChannel.reset();
@@ -116,13 +122,17 @@ void testCases() {
         await recorder?.stopRecording();
         await rtcEngine.destroyMediaRecorder(recorder!);
 
-        expect(_isCallOnce(irisMethodChannel, 'RtcEngine_createMediaRecorder_f779617'),
+        expect(
+            _isCallOnce(
+                irisMethodChannel, 'RtcEngine_createMediaRecorder_f779617'),
+            isTrue);
+        expect(
+            _isCallOnce(irisMethodChannel,
+                'MediaRecorder_setMediaRecorderObserver_e1f7340'),
             isTrue);
         expect(
             _isCallOnce(
-                irisMethodChannel, 'MediaRecorder_setMediaRecorderObserver_e1f7340'),
-            isTrue);
-        expect(_isCallOnce(irisMethodChannel, 'MediaRecorder_startRecording_94480b3'),
+                irisMethodChannel, 'MediaRecorder_startRecording_94480b3'),
             isTrue);
         expect(_isCallOnce(irisMethodChannel, 'MediaRecorder_stopRecording'),
             isTrue);
@@ -131,7 +141,9 @@ void testCases() {
             _isCallOnce(
                 irisMethodChannel, 'MediaRecorder_unsetMediaRecorderObserver'),
             isTrue);
-        expect(_isCallOnce(irisMethodChannel, 'RtcEngine_destroyMediaRecorder_95cdef5'),
+        expect(
+            _isCallOnce(
+                irisMethodChannel, 'RtcEngine_destroyMediaRecorder_95cdef5'),
             isTrue);
       },
     );

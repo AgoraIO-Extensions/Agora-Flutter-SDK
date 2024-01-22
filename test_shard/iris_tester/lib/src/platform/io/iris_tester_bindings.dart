@@ -41,6 +41,18 @@ class NativeIrisTesterBinding {
   late final _CreateFakeRtcEngine =
       _CreateFakeRtcEnginePtr.asFunction<ffi.Pointer<ffi.Void> Function()>();
 
+  void DestroyFakeRtcEngine(ffi.Pointer<ffi.Void> handle) {
+    return _DestroyFakeRtcEngine(handle);
+  }
+
+  late final _DestroyFakeRtcEnginePtr =
+      _lookup<ffi.NativeFunction<ffi.Void Function(ffi.Pointer<ffi.Void>)>>(
+          'DestroyFakeRtcEngine');
+  late final _DestroyFakeRtcEngine = _DestroyFakeRtcEnginePtr.asFunction<
+      void Function(ffi.Pointer<ffi.Void>)>();
+
+// IRIS_API void IRIS_CALL DestroyFakeRtcEngine(void *handle);
+
   void MockApiResult(
     ffi.Pointer<ffi.Int8> apiType,
     ffi.Pointer<ffi.Int8> param,

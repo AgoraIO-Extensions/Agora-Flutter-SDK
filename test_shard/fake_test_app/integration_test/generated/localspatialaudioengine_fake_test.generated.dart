@@ -27,6 +27,7 @@ void localSpatialAudioEngineSmokeTestCases() {
         areaCode: AreaCode.areaCodeGlob.value(),
         logConfig: LogConfig(filePath: logPath),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       final localSpatialAudioEngine = rtcEngine.getLocalSpatialAudioEngine();
       await localSpatialAudioEngine.initialize();
@@ -66,6 +67,7 @@ void localSpatialAudioEngineSmokeTestCases() {
         areaCode: AreaCode.areaCodeGlob.value(),
         logConfig: LogConfig(filePath: logPath),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       final localSpatialAudioEngine = rtcEngine.getLocalSpatialAudioEngine();
       await localSpatialAudioEngine.initialize();
@@ -105,6 +107,7 @@ void localSpatialAudioEngineSmokeTestCases() {
         areaCode: AreaCode.areaCodeGlob.value(),
         logConfig: LogConfig(filePath: logPath),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       final localSpatialAudioEngine = rtcEngine.getLocalSpatialAudioEngine();
       await localSpatialAudioEngine.initialize();
@@ -154,6 +157,7 @@ void localSpatialAudioEngineSmokeTestCases() {
         areaCode: AreaCode.areaCodeGlob.value(),
         logConfig: LogConfig(filePath: logPath),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       final localSpatialAudioEngine = rtcEngine.getLocalSpatialAudioEngine();
       await localSpatialAudioEngine.initialize();
@@ -210,6 +214,7 @@ void localSpatialAudioEngineSmokeTestCases() {
         areaCode: AreaCode.areaCodeGlob.value(),
         logConfig: LogConfig(filePath: logPath),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       final localSpatialAudioEngine = rtcEngine.getLocalSpatialAudioEngine();
       await localSpatialAudioEngine.initialize();
@@ -252,6 +257,7 @@ void localSpatialAudioEngineSmokeTestCases() {
         areaCode: AreaCode.areaCodeGlob.value(),
         logConfig: LogConfig(filePath: logPath),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       final localSpatialAudioEngine = rtcEngine.getLocalSpatialAudioEngine();
       await localSpatialAudioEngine.initialize();
@@ -301,6 +307,7 @@ void localSpatialAudioEngineSmokeTestCases() {
         areaCode: AreaCode.areaCodeGlob.value(),
         logConfig: LogConfig(filePath: logPath),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       final localSpatialAudioEngine = rtcEngine.getLocalSpatialAudioEngine();
       await localSpatialAudioEngine.initialize();
@@ -348,6 +355,7 @@ void localSpatialAudioEngineSmokeTestCases() {
         areaCode: AreaCode.areaCodeGlob.value(),
         logConfig: LogConfig(filePath: logPath),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       final localSpatialAudioEngine = rtcEngine.getLocalSpatialAudioEngine();
       await localSpatialAudioEngine.initialize();
@@ -390,6 +398,7 @@ void localSpatialAudioEngineSmokeTestCases() {
         areaCode: AreaCode.areaCodeGlob.value(),
         logConfig: LogConfig(filePath: logPath),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       final localSpatialAudioEngine = rtcEngine.getLocalSpatialAudioEngine();
       await localSpatialAudioEngine.initialize();
@@ -432,6 +441,7 @@ void localSpatialAudioEngineSmokeTestCases() {
         areaCode: AreaCode.areaCodeGlob.value(),
         logConfig: LogConfig(filePath: logPath),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       final localSpatialAudioEngine = rtcEngine.getLocalSpatialAudioEngine();
       await localSpatialAudioEngine.initialize();
@@ -474,6 +484,7 @@ void localSpatialAudioEngineSmokeTestCases() {
         areaCode: AreaCode.areaCodeGlob.value(),
         logConfig: LogConfig(filePath: logPath),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       final localSpatialAudioEngine = rtcEngine.getLocalSpatialAudioEngine();
       await localSpatialAudioEngine.initialize();
@@ -523,6 +534,7 @@ void localSpatialAudioEngineSmokeTestCases() {
         areaCode: AreaCode.areaCodeGlob.value(),
         logConfig: LogConfig(filePath: logPath),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       final localSpatialAudioEngine = rtcEngine.getLocalSpatialAudioEngine();
       await localSpatialAudioEngine.initialize();
@@ -565,6 +577,7 @@ void localSpatialAudioEngineSmokeTestCases() {
         areaCode: AreaCode.areaCodeGlob.value(),
         logConfig: LogConfig(filePath: logPath),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       final localSpatialAudioEngine = rtcEngine.getLocalSpatialAudioEngine();
       await localSpatialAudioEngine.initialize();
@@ -607,6 +620,7 @@ void localSpatialAudioEngineSmokeTestCases() {
         areaCode: AreaCode.areaCodeGlob.value(),
         logConfig: LogConfig(filePath: logPath),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       final localSpatialAudioEngine = rtcEngine.getLocalSpatialAudioEngine();
       await localSpatialAudioEngine.initialize();
@@ -649,6 +663,7 @@ void localSpatialAudioEngineSmokeTestCases() {
         areaCode: AreaCode.areaCodeGlob.value(),
         logConfig: LogConfig(filePath: logPath),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       final localSpatialAudioEngine = rtcEngine.getLocalSpatialAudioEngine();
       await localSpatialAudioEngine.initialize();
@@ -693,6 +708,7 @@ void localSpatialAudioEngineSmokeTestCases() {
         areaCode: AreaCode.areaCodeGlob.value(),
         logConfig: LogConfig(filePath: logPath),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       final localSpatialAudioEngine = rtcEngine.getLocalSpatialAudioEngine();
       await localSpatialAudioEngine.initialize();
@@ -739,6 +755,7 @@ void localSpatialAudioEngineSmokeTestCases() {
         areaCode: AreaCode.areaCodeGlob.value(),
         logConfig: LogConfig(filePath: logPath),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       final localSpatialAudioEngine = rtcEngine.getLocalSpatialAudioEngine();
       await localSpatialAudioEngine.initialize();
@@ -783,6 +800,7 @@ void localSpatialAudioEngineSmokeTestCases() {
         areaCode: AreaCode.areaCodeGlob.value(),
         logConfig: LogConfig(filePath: logPath),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       final localSpatialAudioEngine = rtcEngine.getLocalSpatialAudioEngine();
       await localSpatialAudioEngine.initialize();
@@ -829,6 +847,7 @@ void localSpatialAudioEngineSmokeTestCases() {
         areaCode: AreaCode.areaCodeGlob.value(),
         logConfig: LogConfig(filePath: logPath),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       final localSpatialAudioEngine = rtcEngine.getLocalSpatialAudioEngine();
       await localSpatialAudioEngine.initialize();

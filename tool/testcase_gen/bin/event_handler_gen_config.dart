@@ -37,6 +37,7 @@ testWidgets('{{TEST_CASE_NAME}}', (WidgetTester tester) async {
         areaCode: AreaCode.areaCodeGlob.value(),
         logConfig: LogConfig(filePath: logPath),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       {{TEST_CASE_BODY}}
 
@@ -88,6 +89,7 @@ testWidgets('{{TEST_CASE_NAME}}', (WidgetTester tester) async {
         areaCode: AreaCode.areaCodeGlob.value(),
         logConfig: LogConfig(filePath: logPath),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       {{TEST_CASE_BODY}}
 
@@ -135,6 +137,7 @@ testWidgets('{{TEST_CASE_NAME}}', (WidgetTester tester) async {
         areaCode: AreaCode.areaCodeGlob.value(),
         logConfig: LogConfig(filePath: logPath),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       {{TEST_CASE_BODY}}
 
@@ -182,6 +185,7 @@ testWidgets('{{TEST_CASE_NAME}}', (WidgetTester tester) async {
         areaCode: AreaCode.areaCodeGlob.value(),
         logConfig: LogConfig(filePath: logPath),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       {{TEST_CASE_BODY}}
 
@@ -229,6 +233,7 @@ testWidgets('{{TEST_CASE_NAME}}', (WidgetTester tester) async {
         areaCode: AreaCode.areaCodeGlob.value(),
         logConfig: LogConfig(filePath: logPath),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
       final mediaEngine = rtcEngine.getMediaEngine();
 
       {{TEST_CASE_BODY}}
@@ -277,6 +282,7 @@ testWidgets('{{TEST_CASE_NAME}}', (WidgetTester tester) async {
         areaCode: AreaCode.areaCodeGlob.value(),
         logConfig: LogConfig(filePath: logPath),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
       final mediaEngine = rtcEngine.getMediaEngine();
 
       {{TEST_CASE_BODY}}
@@ -325,6 +331,7 @@ testWidgets('{{TEST_CASE_NAME}}', (WidgetTester tester) async {
         areaCode: AreaCode.areaCodeGlob.value(),
         logConfig: LogConfig(filePath: logPath),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
       final mediaEngine = rtcEngine.getMediaEngine();
 
       {{TEST_CASE_BODY}}
@@ -373,6 +380,7 @@ testWidgets('{{TEST_CASE_NAME}}', (WidgetTester tester) async {
         areaCode: AreaCode.areaCodeGlob.value(),
         logConfig: LogConfig(filePath: logPath),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
       final mediaPlayerController = MediaPlayerController(
           rtcEngine: rtcEngine, canvas: const VideoCanvas());
       await mediaPlayerController.initialize();
@@ -423,6 +431,7 @@ testWidgets('{{TEST_CASE_NAME}}', (WidgetTester tester) async {
         areaCode: AreaCode.areaCodeGlob.value(),
         logConfig: LogConfig(filePath: logPath),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
       MediaPlayerController mediaPlayerController = MediaPlayerController(
           rtcEngine: rtcEngine, canvas: const VideoCanvas());
       await mediaPlayerController.initialize();
@@ -473,6 +482,7 @@ testWidgets('{{TEST_CASE_NAME}}', (WidgetTester tester) async {
         areaCode: AreaCode.areaCodeGlob.value(),
         logConfig: LogConfig(filePath: logPath),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
       MediaPlayerController mediaPlayerController = MediaPlayerController(
           rtcEngine: rtcEngine, canvas: const VideoCanvas());
       await mediaPlayerController.initialize();
@@ -523,6 +533,7 @@ testWidgets('{{TEST_CASE_NAME}}', (WidgetTester tester) async {
         areaCode: AreaCode.areaCodeGlob.value(),
         logConfig: LogConfig(filePath: logPath),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
       MediaPlayerController mediaPlayerController = MediaPlayerController(
           rtcEngine: rtcEngine, canvas: const VideoCanvas());
       await mediaPlayerController.initialize();
@@ -573,6 +584,7 @@ testWidgets('{{TEST_CASE_NAME}}', (WidgetTester tester) async {
         areaCode: AreaCode.areaCodeGlob.value(),
         logConfig: LogConfig(filePath: logPath),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       final mediaRecorder = (await rtcEngine.createMediaRecorder(
         RecorderStreamInfo(channelId: 'hello', uid: 0)))!;
@@ -624,6 +636,7 @@ testWidgets('{{TEST_CASE_NAME}}', (WidgetTester tester) async {
         areaCode: AreaCode.areaCodeGlob.value(),
         logConfig: LogConfig(filePath: logPath),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       final musicContentCenter = rtcEngine.getMusicContentCenter();
       const musicContentCenterConfiguration = MusicContentCenterConfiguration(
@@ -677,6 +690,7 @@ testWidgets('{{TEST_CASE_NAME}}', (WidgetTester tester) async {
         areaCode: AreaCode.areaCodeGlob.value(),
         logConfig: LogConfig(filePath: logPath),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       final h265Transcoder = rtcEngine.getH265Transcoder();
 
