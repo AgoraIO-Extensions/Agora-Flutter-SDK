@@ -1,5 +1,8 @@
 import 'package:agora_rtc_engine/agora_rtc_engine.dart';
 import 'package:flutter/material.dart';
+import 'package:path_provider/path_provider.dart';
+import 'package:path/path.dart' as path;
+import 'dart:io';
 
 import 'fake_camera.dart';
 
@@ -40,11 +43,14 @@ class _FakeCameraLocalVideoViewState extends State<FakeCameraLocalVideoView> {
   Future<void> _init() async {
     _rtcEngine = widget.rtcEngine;
 
+    Directory appDocDir = await getApplicationDocumentsDirectory();
+    String logPath = path.join(appDocDir.path, 'test_log.txt');
     String engineAppId = const String.fromEnvironment('TEST_APP_ID',
         defaultValue: '<YOUR_APP_ID>');
     await _rtcEngine.initialize(RtcEngineContext(
       appId: engineAppId,
       areaCode: AreaCode.areaCodeGlob.value(),
+      logConfig: LogConfig(filePath: logPath),
     ));
 
     _fakeCamera = FakeCamera(_rtcEngine);

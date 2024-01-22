@@ -109,6 +109,20 @@ jobs:
           heap-size: 4096M
           disk-size: 8192M
           script: bash ci/run_flutter_integration_test_android.sh
+      - name: Get iris logs android
+        if: always()
+        run: |
+          mkdir iris-logs-android
+          adb exec-out run-as com.example.fake_test_app cat app_flutter/agora-iris.log > ./iris-logs-android/agora-iris-fake-test.log
+          adb exec-out run-as io.agora.integration_test_app.integration_test_app cat app_flutter/agora-iris.log > ./iris-logs-android/agora-iris-integration-test.log
+          adb exec-out run-as com.example.rendering_test cat app_flutter/agora-iris.log > ./iris-logs-android/agora-iris-rendering-test.log
+          
+      - name: Upload iris logs android
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: iris-logs-android
+          path: iris-logs-android/*
 
   integration_test_ios:
     name: Run Flutter iOS Integration Tests
