@@ -37,9 +37,10 @@ class TestInitilizationArgProvider implements InitilizationArgProvider {
 void main() {
   IntegrationTestWidgetsFlutterBinding.ensureInitialized();
 
-  IrisTester irisTester = createIrisTester();
+  IrisTester? irisTester;// = createIrisTester();
 
   setUp(() {
+    irisTester = createIrisTester();
     irisTester.initialize();
     if (kIsWeb) {
       setMockRtcEngineProvider(
@@ -54,9 +55,11 @@ void main() {
     }
   });
 
-  tearDown(() {
+  tearDown(() async {
     setMockRtcEngineProvider(null);
-    // irisTester.dispose();
+    irisTester.dispose();
+    irisTester = null;
+    await Future.delayed(const Duration(milliseconds: 500));
   });
 
   if (!kIsWeb) {
