@@ -4,7 +4,7 @@ set -e
 set -x
 
 MY_PATH=$(dirname "$0")
-PROJECT_ROOT=$(realpath ${MY_PATH}/../..)
+PROJECT_ROOT=${MY_PATH}/..
 
 DOWNLOAD_IRIS_DEBUGGER=${1:-1}
 
