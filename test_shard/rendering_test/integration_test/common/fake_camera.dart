@@ -29,7 +29,7 @@ class FakeCamera {
   }
 
   Future<void> _pushVideoFrame() async {
-    String assetName = 'agoravideoview_rendering_test_solid_spilt';
+    String assetName = 'agoravideoview_rendering_test_solid_spilt_small';
     if (kIsWeb) {
       // Use a small image for performence purpose.
       assetName = 'agoravideoview_rendering_test_solid_spilt_small';
