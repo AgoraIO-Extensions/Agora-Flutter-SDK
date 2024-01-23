@@ -54,7 +54,7 @@ class RtcEngineExImpl extends RtcEngineImpl implements RtcEngineEx {
   Future<void> leaveChannelEx(
       {required RtcConnection connection, LeaveChannelOptions? options}) async {
     final apiType =
-        '${isOverrideClassName ? className : 'RtcEngineEx'}_leaveChannelEx';
+        '${isOverrideClassName ? className : 'RtcEngineEx'}_leaveChannelEx_b03ee9a';
     final param = createParams(
         {'connection': connection.toJson(), 'options': options?.toJson()});
     final List<Uint8List> buffers = [];
@@ -650,7 +650,7 @@ class RtcEngineExImpl extends RtcEngineImpl implements RtcEngineEx {
       {required DataStreamConfig config,
       required RtcConnection connection}) async {
     final apiType =
-        '${isOverrideClassName ? className : 'RtcEngineEx'}_createDataStreamEx';
+        '${isOverrideClassName ? className : 'RtcEngineEx'}_createDataStreamEx_9f641b6';
     final param = createParams(
         {'config': config.toJson(), 'connection': connection.toJson()});
     final List<Uint8List> buffers = [];

@@ -271,7 +271,7 @@ class RtcEngineImpl implements RtcEngine {
       required String channelId,
       required int uid}) async {
     final apiType =
-        '${isOverrideClassName ? className : 'RtcEngine'}_preloadChannel';
+        '${isOverrideClassName ? className : 'RtcEngine'}_preloadChannel_a0779eb';
     final param =
         createParams({'token': token, 'channelId': channelId, 'uid': uid});
     final callApiResult = await irisMethodChannel.invokeMethod(
@@ -289,7 +289,7 @@ class RtcEngineImpl implements RtcEngine {
       required String channelId,
       required String userAccount}) async {
     final apiType =
-        '${isOverrideClassName ? className : 'RtcEngine'}_preloadChannelWithUserAccount';
+        '${isOverrideClassName ? className : 'RtcEngine'}_preloadChannelWithUserAccount_0e4f59e';
     final param = createParams(
         {'token': token, 'channelId': channelId, 'userAccount': userAccount});
     final callApiResult = await irisMethodChannel.invokeMethod(
@@ -325,7 +325,7 @@ class RtcEngineImpl implements RtcEngine {
       required int uid,
       required ChannelMediaOptions options}) async {
     final apiType =
-        '${isOverrideClassName ? className : 'RtcEngine'}_joinChannel';
+        '${isOverrideClassName ? className : 'RtcEngine'}_joinChannel_cdbb747';
     final param = createParams({
       'token': token,
       'channelId': channelId,
@@ -365,7 +365,7 @@ class RtcEngineImpl implements RtcEngine {
   @override
   Future<void> leaveChannel({LeaveChannelOptions? options}) async {
     final apiType =
-        '${isOverrideClassName ? className : 'RtcEngine'}_leaveChannel';
+        '${isOverrideClassName ? className : 'RtcEngine'}_leaveChannel_2c0e3aa';
     final param = createParams({'options': options?.toJson()});
     final List<Uint8List> buffers = [];
     if (options != null) {
@@ -418,7 +418,7 @@ class RtcEngineImpl implements RtcEngine {
   Future<void> setClientRole(
       {required ClientRoleType role, ClientRoleOptions? options}) async {
     final apiType =
-        '${isOverrideClassName ? className : 'RtcEngine'}_setClientRole';
+        '${isOverrideClassName ? className : 'RtcEngine'}_setClientRole_b46cc48';
     final param =
         createParams({'role': role.value(), 'options': options?.toJson()});
     final List<Uint8List> buffers = [];
@@ -437,7 +437,7 @@ class RtcEngineImpl implements RtcEngine {
   @override
   Future<void> startEchoTest(EchoTestConfiguration config) async {
     final apiType =
-        '${isOverrideClassName ? className : 'RtcEngine'}_startEchoTest';
+        '${isOverrideClassName ? className : 'RtcEngine'}_startEchoTest_16140d7';
     final param = createParams({'config': config.toJson()});
     final List<Uint8List> buffers = [];
     buffers.addAll(config.collectBufferList());
@@ -527,7 +527,7 @@ class RtcEngineImpl implements RtcEngine {
       {VideoSourceType sourceType =
           VideoSourceType.videoSourceCameraPrimary}) async {
     final apiType =
-        '${isOverrideClassName ? className : 'RtcEngine'}_startPreview';
+        '${isOverrideClassName ? className : 'RtcEngine'}_startPreview_4fd718e';
     final param = createParams({'sourceType': sourceType.value()});
     final callApiResult = await irisMethodChannel.invokeMethod(
         IrisMethodCall(apiType, jsonEncode(param), buffers: null));
@@ -541,7 +541,7 @@ class RtcEngineImpl implements RtcEngine {
   @override
   Future<void> startPreviewWithoutSourceType() async {
     final apiType =
-        '${isOverrideClassName ? className : 'RtcEngine'}_startPreviewWithoutSourceType';
+        '${isOverrideClassName ? className : 'RtcEngine'}_startPreview';
     final param = createParams({});
     final callApiResult = await irisMethodChannel.invokeMethod(
         IrisMethodCall(apiType, jsonEncode(param), buffers: null));
@@ -557,7 +557,7 @@ class RtcEngineImpl implements RtcEngine {
       {VideoSourceType sourceType =
           VideoSourceType.videoSourceCameraPrimary}) async {
     final apiType =
-        '${isOverrideClassName ? className : 'RtcEngine'}_stopPreview';
+        '${isOverrideClassName ? className : 'RtcEngine'}_stopPreview_4fd718e';
     final param = createParams({'sourceType': sourceType.value()});
     final callApiResult = await irisMethodChannel.invokeMethod(
         IrisMethodCall(apiType, jsonEncode(param), buffers: null));
@@ -871,7 +871,7 @@ class RtcEngineImpl implements RtcEngine {
       AudioScenarioType scenario =
           AudioScenarioType.audioScenarioDefault}) async {
     final apiType =
-        '${isOverrideClassName ? className : 'RtcEngine'}_setAudioProfile';
+        '${isOverrideClassName ? className : 'RtcEngine'}_setAudioProfile_d944543';
     final param = createParams(
         {'profile': profile.value(), 'scenario': scenario.value()});
     final callApiResult = await irisMethodChannel.invokeMethod(
@@ -1224,7 +1224,7 @@ class RtcEngineImpl implements RtcEngine {
   @override
   Future<void> startAudioRecording(AudioRecordingConfiguration config) async {
     final apiType =
-        '${isOverrideClassName ? className : 'RtcEngine'}_startAudioRecording';
+        '${isOverrideClassName ? className : 'RtcEngine'}_startAudioRecording_e32bb3b';
     final param = createParams({'config': config.toJson()});
     final List<Uint8List> buffers = [];
     buffers.addAll(config.collectBufferList());
@@ -1349,7 +1349,7 @@ class RtcEngineImpl implements RtcEngine {
       required int cycle,
       int startPos = 0}) async {
     final apiType =
-        '${isOverrideClassName ? className : 'RtcEngine'}_startAudioMixing';
+        '${isOverrideClassName ? className : 'RtcEngine'}_startAudioMixing_1ee1b1e';
     final param = createParams({
       'filePath': filePath,
       'loopback': loopback,
@@ -2329,7 +2329,7 @@ class RtcEngineImpl implements RtcEngine {
       VideoMirrorModeType mirrorMode =
           VideoMirrorModeType.videoMirrorModeAuto}) async {
     final apiType =
-        '${isOverrideClassName ? className : 'RtcEngine'}_setLocalRenderMode';
+        '${isOverrideClassName ? className : 'RtcEngine'}_setLocalRenderMode_cfb201b';
     final param = createParams(
         {'renderMode': renderMode.value(), 'mirrorMode': mirrorMode.value()});
     final callApiResult = await irisMethodChannel.invokeMethod(
@@ -2386,7 +2386,7 @@ class RtcEngineImpl implements RtcEngine {
   Future<void> enableDualStreamMode(
       {required bool enabled, SimulcastStreamConfig? streamConfig}) async {
     final apiType =
-        '${isOverrideClassName ? className : 'RtcEngine'}_enableDualStreamMode';
+        '${isOverrideClassName ? className : 'RtcEngine'}_enableDualStreamMode_9822d8a';
     final param = createParams(
         {'enabled': enabled, 'streamConfig': streamConfig?.toJson()});
     final List<Uint8List> buffers = [];
@@ -2407,7 +2407,7 @@ class RtcEngineImpl implements RtcEngine {
       {required SimulcastStreamMode mode,
       SimulcastStreamConfig? streamConfig}) async {
     final apiType =
-        '${isOverrideClassName ? className : 'RtcEngine'}_setDualStreamMode';
+        '${isOverrideClassName ? className : 'RtcEngine'}_setDualStreamMode_b3a4f6c';
     final param = createParams(
         {'mode': mode.value(), 'streamConfig': streamConfig?.toJson()});
     final List<Uint8List> buffers = [];
@@ -2762,7 +2762,7 @@ class RtcEngineImpl implements RtcEngine {
       bool enable = true,
       MediaSourceType type = MediaSourceType.unknownMediaSource}) async {
     final apiType =
-        '${isOverrideClassName ? className : 'RtcEngine'}_enableExtension';
+        '${isOverrideClassName ? className : 'RtcEngine'}_enableExtension_0b60a2c';
     final param = createParams({
       'provider': provider,
       'extension': extension,
@@ -2786,7 +2786,7 @@ class RtcEngineImpl implements RtcEngine {
       required String value,
       MediaSourceType type = MediaSourceType.unknownMediaSource}) async {
     final apiType =
-        '${isOverrideClassName ? className : 'RtcEngine'}_setExtensionProperty';
+        '${isOverrideClassName ? className : 'RtcEngine'}_setExtensionProperty_520ac55';
     final param = createParams({
       'provider': provider,
       'extension': extension,
@@ -2811,7 +2811,7 @@ class RtcEngineImpl implements RtcEngine {
       required int bufLen,
       MediaSourceType type = MediaSourceType.unknownMediaSource}) async {
     final apiType =
-        '${isOverrideClassName ? className : 'RtcEngine'}_getExtensionProperty';
+        '${isOverrideClassName ? className : 'RtcEngine'}_getExtensionProperty_38c9723';
     final param = createParams({
       'provider': provider,
       'extension': extension,
@@ -3636,7 +3636,7 @@ class RtcEngineImpl implements RtcEngine {
   Future<void> startScreenCapture(
       ScreenCaptureParameters2 captureParams) async {
     final apiType =
-        '${isOverrideClassName ? className : 'RtcEngine'}_startScreenCapture';
+        '${isOverrideClassName ? className : 'RtcEngine'}_startScreenCapture_270da41';
     final param = createParams({'captureParams': captureParams.toJson()});
     final List<Uint8List> buffers = [];
     buffers.addAll(captureParams.collectBufferList());
@@ -3654,7 +3654,7 @@ class RtcEngineImpl implements RtcEngine {
       {required VideoSourceType sourceType,
       required ScreenCaptureConfiguration config}) async {
     final apiType =
-        '${isOverrideClassName ? className : 'RtcEngine'}_startScreenCaptureBySourceType';
+        '${isOverrideClassName ? className : 'RtcEngine'}_startScreenCapture_9ebb320';
     final param = createParams(
         {'sourceType': sourceType.value(), 'config': config.toJson()});
     final List<Uint8List> buffers = [];
@@ -3738,7 +3738,7 @@ class RtcEngineImpl implements RtcEngine {
   @override
   Future<void> stopScreenCaptureBySourceType(VideoSourceType sourceType) async {
     final apiType =
-        '${isOverrideClassName ? className : 'RtcEngine'}_stopScreenCaptureBySourceType';
+        '${isOverrideClassName ? className : 'RtcEngine'}_stopScreenCapture_4fd718e';
     final param = createParams({'sourceType': sourceType.value()});
     final callApiResult = await irisMethodChannel.invokeMethod(
         IrisMethodCall(apiType, jsonEncode(param), buffers: null));
@@ -4142,7 +4142,7 @@ class RtcEngineImpl implements RtcEngine {
   @override
   Future<int> createDataStream(DataStreamConfig config) async {
     final apiType =
-        '${isOverrideClassName ? className : 'RtcEngine'}_createDataStream';
+        '${isOverrideClassName ? className : 'RtcEngine'}_createDataStream_5862815';
     final param = createParams({'config': config.toJson()});
     final List<Uint8List> buffers = [];
     buffers.addAll(config.collectBufferList());
@@ -4186,7 +4186,7 @@ class RtcEngineImpl implements RtcEngine {
   Future<void> addVideoWatermark(
       {required String watermarkUrl, required WatermarkOptions options}) async {
     final apiType =
-        '${isOverrideClassName ? className : 'RtcEngine'}_addVideoWatermark';
+        '${isOverrideClassName ? className : 'RtcEngine'}_addVideoWatermark_7480410';
     final param = createParams(
         {'watermarkUrl': watermarkUrl, 'options': options.toJson()});
     final List<Uint8List> buffers = [];
@@ -4428,7 +4428,7 @@ class RtcEngineImpl implements RtcEngine {
       required String userAccount,
       ChannelMediaOptions? options}) async {
     final apiType =
-        '${isOverrideClassName ? className : 'RtcEngine'}_joinChannelWithUserAccount';
+        '${isOverrideClassName ? className : 'RtcEngine'}_joinChannelWithUserAccount_4685af9';
     final param = createParams({
       'token': token,
       'channelId': channelId,

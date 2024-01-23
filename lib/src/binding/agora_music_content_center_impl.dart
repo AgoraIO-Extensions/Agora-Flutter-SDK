@@ -168,7 +168,7 @@ class MusicPlayerImpl extends MediaPlayerImpl implements MusicPlayer {
   Future<void> openWithSongCode(
       {required int songCode, int startPos = 0}) async {
     final apiType =
-        '${isOverrideClassName ? className : 'MusicPlayer'}_openWithSongCode';
+        '${isOverrideClassName ? className : 'MusicPlayer'}_open_303b92e';
     final param = createParams({'songCode': songCode, 'startPos': startPos});
     final callApiResult = await irisMethodChannel.invokeMethod(
         IrisMethodCall(apiType, jsonEncode(param), buffers: null));
@@ -379,7 +379,7 @@ class MusicContentCenterImpl implements MusicContentCenter {
   @override
   Future<String> preload(int songCode) async {
     final apiType =
-        '${isOverrideClassName ? className : 'MusicContentCenter'}_preload';
+        '${isOverrideClassName ? className : 'MusicContentCenter'}_preload_d3baeab';
     final param = createParams({'songCode': songCode});
     final callApiResult = await irisMethodChannel.invokeMethod(
         IrisMethodCall(apiType, jsonEncode(param), buffers: null));

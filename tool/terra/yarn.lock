@@ -26,7 +26,7 @@ __metadata:
 
 "@agoraio-extensions/terra-legacy-cxx-parser@git@github.com:AgoraIO-Extensions/terra-legacy-cxx-parser.git#head=main":
   version: 0.1.5
-  resolution: "@agoraio-extensions/terra-legacy-cxx-parser@git@github.com:AgoraIO-Extensions/terra-legacy-cxx-parser.git#commit=609a370eabfcc9569ef9e72d4b9d290202fa513c"
+  resolution: "@agoraio-extensions/terra-legacy-cxx-parser@git@github.com:AgoraIO-Extensions/terra-legacy-cxx-parser.git#commit=8c5a57bc52e6334baeecf32f812ed86924cecbd6"
   dependencies:
     "@agoraio-extensions/cxx-parser": "git@github.com:AgoraIO-Extensions/terra.git#head=main&workspace=cxx-parser"
     "@agoraio-extensions/terra-core": "git@github.com:AgoraIO-Extensions/terra.git#head=main&workspace=terra-core"
@@ -38,7 +38,7 @@ __metadata:
     ts-node: "npm:^10.9.1"
     typescript: "npm:^5.1.6"
     yaml: "npm:^2.1.3"
-  checksum: 87b9a078cd2201f107c2f73232db820d47a150f2c7c44414ae2a45a08aa1fd9722fda050059fa22e2c4fa6a589936f9b84fba3c0b1d010aec94477de91fa7b93
+  checksum: 18fc1a248b82a9dee911a4a83b38a8a708bb9e520646f7c3d02ee8f41f56c34dde87206715e56a9cd31abb0e89e04b850f3de143dbbd0288719901d0bc1b1cda
   languageName: node
   linkType: hard
 
@@ -59,12 +59,12 @@ __metadata:
 
 "@agoraio-extensions/terra_shared_configs@git@github.com:AgoraIO-Extensions/terra_shared_configs.git#head=main":
   version: 1.0.2
-  resolution: "@agoraio-extensions/terra_shared_configs@git@github.com:AgoraIO-Extensions/terra_shared_configs.git#commit=fb3a92347c4caa0f60123cb87c78e5acc14fcc17"
+  resolution: "@agoraio-extensions/terra_shared_configs@git@github.com:AgoraIO-Extensions/terra_shared_configs.git#commit=fc0f16f9e6806f20b7825e9ba170f2817ea5894c"
   dependencies:
     "@agoraio-extensions/cxx-parser": "git@github.com:AgoraIO-Extensions/terra.git#head=main&workspace=cxx-parser"
     "@agoraio-extensions/terra-core": "git@github.com:AgoraIO-Extensions/terra.git#head=main&workspace=terra-core"
     mustache: "npm:^4.2.0"
-  checksum: 3b5e3d12294444751417863212a012132a758bc1ca0655940e530b24a07082a7cfc31810ec1f5bdc99037b184d1501061b70405096df29a81e6b2abf854bc8d7
+  checksum: ea16ae32ab7acb263eebffe8faa07f995525f6db706ed7d1dbf5db4e505fc280911c6faae6780e97590966861ca254e4b6384593a7c2b405f73291b12eca1741
   languageName: node
   linkType: hard
 
@@ -787,12 +787,12 @@ __metadata:
   linkType: hard
 
 "@jridgewell/trace-mapping@npm:^0.3.12, @jridgewell/trace-mapping@npm:^0.3.17, @jridgewell/trace-mapping@npm:^0.3.18, @jridgewell/trace-mapping@npm:^0.3.9":
-  version: 0.3.20
-  resolution: "@jridgewell/trace-mapping@npm:0.3.20"
+  version: 0.3.22
+  resolution: "@jridgewell/trace-mapping@npm:0.3.22"
   dependencies:
     "@jridgewell/resolve-uri": "npm:^3.1.0"
     "@jridgewell/sourcemap-codec": "npm:^1.4.14"
-  checksum: 0ea0b2675cf513ec44dc25605616a3c9b808b9832e74b5b63c44260d66b58558bba65764f81928fc1033ead911f8718dca1134049c3e7a93937faf436671df31
+  checksum: 18cf19f88e2792c1c91515f2b629aae05f3cdbb2e60c3886e16e80725234ce26dd10144c4981c05d9366e7094498c0b4fe5c1a89f4a730d7376a4ba4af448149
   languageName: node
   linkType: hard
 
@@ -1552,9 +1552,9 @@ __metadata:
   linkType: hard
 
 "electron-to-chromium@npm:^1.4.601":
-  version: 1.4.640
-  resolution: "electron-to-chromium@npm:1.4.640"
-  checksum: fe5e2eaf3bdd73c1628ed0a7856a1d6afad99bdcceec6cacf87e7bac31db8514a52084d040b95b956ceba4f95723a6f3cf40a91f21b0061e6490328c9099dc4a
+  version: 1.4.642
+  resolution: "electron-to-chromium@npm:1.4.642"
+  checksum: 1a45c745e4cfa6dd0a756ca7df8295dd227b80a6d3552ccedd9665525aedab53d5335e8b97d64c02a6b10b0c773f8b9c20877875b3a3eb2428330f14d3892f27
   languageName: node
   linkType: hard
 
@@ -3509,8 +3509,8 @@ __metadata:
   linkType: hard
 
 "ts-jest@npm:^29.1.0":
-  version: 29.1.1
-  resolution: "ts-jest@npm:29.1.1"
+  version: 29.1.2
+  resolution: "ts-jest@npm:29.1.2"
   dependencies:
     bs-logger: "npm:0.x"
     fast-json-stable-stringify: "npm:2.x"
@@ -3537,7 +3537,7 @@ __metadata:
       optional: true
   bin:
     ts-jest: cli.js
-  checksum: 6c45e0aeeff9cc54a64f931c43e1b99f4a1f0ddf44786cc128e7e55603ab7473c8c8f62fd83bd7e51bfe83e3c0c683132152efaeb844516bf7c923f4e92d157d
+  checksum: c2f51f0241f89d127d41392decbcb83b5dfd5e57ab9d50220aa7b7e2f9b3f3b07ccdbba33311284df1c41941879e4ddfad44b15a9d0da4b74bd1b98702b729df
   languageName: node
   linkType: hard
 

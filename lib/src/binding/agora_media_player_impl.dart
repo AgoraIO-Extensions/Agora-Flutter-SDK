@@ -323,7 +323,7 @@ class MediaPlayerImpl implements MediaPlayer {
   Future<void> setPlayerOptionInInt(
       {required String key, required int value}) async {
     final apiType =
-        '${isOverrideClassName ? className : 'MediaPlayer'}_setPlayerOptionInInt';
+        '${isOverrideClassName ? className : 'MediaPlayer'}_setPlayerOption_4d05d29';
     final param = createParams({'key': key, 'value': value});
     final callApiResult = await irisMethodChannel.invokeMethod(
         IrisMethodCall(apiType, jsonEncode(param), buffers: null));
@@ -338,7 +338,7 @@ class MediaPlayerImpl implements MediaPlayer {
   Future<void> setPlayerOptionInString(
       {required String key, required String value}) async {
     final apiType =
-        '${isOverrideClassName ? className : 'MediaPlayer'}_setPlayerOptionInString';
+        '${isOverrideClassName ? className : 'MediaPlayer'}_setPlayerOption_ccad422';
     final param = createParams({'key': key, 'value': value});
     final callApiResult = await irisMethodChannel.invokeMethod(
         IrisMethodCall(apiType, jsonEncode(param), buffers: null));
@@ -598,7 +598,7 @@ class MediaPlayerImpl implements MediaPlayer {
       RawAudioFrameOpModeType mode =
           RawAudioFrameOpModeType.rawAudioFrameOpModeReadOnly}) {
 // Implementation template
-// final apiType = '${isOverrideClassName ? className : 'MediaPlayer'}_registerAudioFrameObserver';
+// final apiType = '${isOverrideClassName ? className : 'MediaPlayer'}_registerAudioFrameObserver_a5b510b';
 // final param = createParams({// 'observer':observer, 'mode':mode.value()// });
 // final callApiResult =  irisMethodChannel.invokeMethod(IrisMethodCall(apiType, jsonEncode(param), buffers:null));
 // if (callApiResult.irisReturnCode < 0) {
@@ -629,7 +629,7 @@ class MediaPlayerImpl implements MediaPlayer {
   @override
   void registerVideoFrameObserver(MediaPlayerVideoFrameObserver observer) {
 // Implementation template
-// final apiType = '${isOverrideClassName ? className : 'MediaPlayer'}_registerVideoFrameObserver';
+// final apiType = '${isOverrideClassName ? className : 'MediaPlayer'}_registerVideoFrameObserver_833bd8d';
 // final param = createParams({// 'observer':observer// });
 // final callApiResult =  irisMethodChannel.invokeMethod(IrisMethodCall(apiType, jsonEncode(param), buffers:null));
 // if (callApiResult.irisReturnCode < 0) {
@@ -643,7 +643,7 @@ class MediaPlayerImpl implements MediaPlayer {
   @override
   void unregisterVideoFrameObserver(MediaPlayerVideoFrameObserver observer) {
 // Implementation template
-// final apiType = '${isOverrideClassName ? className : 'MediaPlayer'}_unregisterVideoFrameObserver';
+// final apiType = '${isOverrideClassName ? className : 'MediaPlayer'}_unregisterVideoFrameObserver_5165d4c';
 // final param = createParams({// 'observer':observer// });
 // final callApiResult =  irisMethodChannel.invokeMethod(IrisMethodCall(apiType, jsonEncode(param), buffers:null));
 // if (callApiResult.irisReturnCode < 0) {
