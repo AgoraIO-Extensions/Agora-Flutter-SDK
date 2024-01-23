@@ -55,8 +55,8 @@ void main() {
   });
 
   tearDown(() {
-    irisTester.dispose();
     setMockRtcEngineProvider(null);
+    // irisTester.dispose();
   });
 
   if (!kIsWeb) {
