@@ -28,3 +28,14 @@ flutter packages get
 flutter test integration_test --dart-define=TEST_APP_ID="${TEST_APP_ID}" --verbose
 
 popd
+
+# If the integration test failed, get the iris logs
+if [ $? -ne 0 ]; then
+    echo "Some of integration test failed..."
+    echo "Dump iris logs..."
+
+    mkdir iris-logs-android
+    adb exec-out run-as com.example.fake_test_app cat app_flutter/agora-iris.log > ./iris-logs-android/agora-iris-fake-test.log
+    adb exec-out run-as io.agora.integration_test_app.integration_test_app cat app_flutter/agora-iris.log > ./iris-logs-android/agora-iris-integration-test.log
+    adb exec-out run-as com.example.rendering_test cat app_flutter/agora-iris.log > ./iris-logs-android/agora-iris-rendering-test.log
+fi
