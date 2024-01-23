@@ -37,7 +37,7 @@ class TestInitilizationArgProvider implements InitilizationArgProvider {
 void main() {
   IntegrationTestWidgetsFlutterBinding.ensureInitialized();
 
-  IrisTester? irisTester;// = createIrisTester();
+  IrisTester? irisTester; // = createIrisTester();
 
   setUp(() {
     irisTester = createIrisTester();
@@ -49,7 +49,8 @@ void main() {
       // On IO, the function return from the `irisTester.getTesterArgs()` capture
       // the `Pointer` from `IrisTester`, which is invalid to pass to the `Isolate`,
       // so directly pass the `ObjectIrisHandle` as value to the `setMockRtcEngineProvider`
-      final value = irisTester!.getTesterArgs()[0](const IrisApiEngineHandle(0));
+      final value =
+          irisTester!.getTesterArgs()[0](const IrisApiEngineHandle(0));
       setMockRtcEngineProvider(
           TestInitilizationArgProvider.fromValue(ObjectIrisHandle(value)));
     }

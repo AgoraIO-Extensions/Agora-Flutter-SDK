@@ -16,7 +16,7 @@ import 'package:path/path.dart' as path;
 
 import '../testcases/event_ids_mapping.dart';
 
-void generatedTestCases(IrisTester irisTester) {
+void generatedTestCases(ValueGetter<IrisTester> irisTester) {
   testWidgets(
     'MediaRecorderObserver.onRecorderStateChanged',
     (WidgetTester tester) async {
@@ -65,7 +65,7 @@ void generatedTestCases(IrisTester irisTester) {
             eventIdsMapping['MediaRecorderObserver_onRecorderStateChanged'] ??
                 [];
         for (final event in eventIds) {
-          final ret = irisTester.fireEvent(event, params: eventJson);
+          final ret = irisTester().fireEvent(event, params: eventJson);
           // Delay 200 milliseconds to ensure the callback is called.
           await Future.delayed(const Duration(milliseconds: 200));
           // TODO(littlegnal): Most of callbacks on web are not implemented, we're temporarily skip these callbacks at this time.
@@ -142,7 +142,7 @@ void generatedTestCases(IrisTester irisTester) {
             eventIdsMapping['MediaRecorderObserver_onRecorderInfoUpdated'] ??
                 [];
         for (final event in eventIds) {
-          final ret = irisTester.fireEvent(event, params: eventJson);
+          final ret = irisTester().fireEvent(event, params: eventJson);
           // Delay 200 milliseconds to ensure the callback is called.
           await Future.delayed(const Duration(milliseconds: 200));
           // TODO(littlegnal): Most of callbacks on web are not implemented, we're temporarily skip these callbacks at this time.

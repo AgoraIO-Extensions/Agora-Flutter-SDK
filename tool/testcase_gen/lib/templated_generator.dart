@@ -246,7 +246,7 @@ class TemplatedGenerator extends DefaultGenerator {
   ${jsonBuffer.toString()}
   final eventIds = eventIdsMapping['$event'] ?? [];
   for (final event in eventIds) {
-    final ret = irisTester.fireEvent(event, params: eventJson);
+    final ret = irisTester().fireEvent(event, params: eventJson);
     // Delay 200 milliseconds to ensure the callback is called.
     await Future.delayed(const Duration(milliseconds: 200));
     // TODO(littlegnal): Most of callbacks on web are not implemented, we're temporarily skip these callbacks at this time.

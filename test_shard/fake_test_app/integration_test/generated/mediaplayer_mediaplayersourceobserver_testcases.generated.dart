@@ -16,7 +16,7 @@ import 'package:path/path.dart' as path;
 
 import '../testcases/event_ids_mapping.dart';
 
-void generatedTestCases(IrisTester irisTester) {
+void generatedTestCases(ValueGetter<IrisTester> irisTester) {
   testWidgets(
     'MediaPlayerSourceObserver.onPlayerSourceStateChanged',
     (WidgetTester tester) async {
@@ -61,7 +61,7 @@ void generatedTestCases(IrisTester irisTester) {
                 'MediaPlayerSourceObserver_onPlayerSourceStateChanged'] ??
             [];
         for (final event in eventIds) {
-          final ret = irisTester.fireEvent(event, params: eventJson);
+          final ret = irisTester().fireEvent(event, params: eventJson);
           // Delay 200 milliseconds to ensure the callback is called.
           await Future.delayed(const Duration(milliseconds: 200));
           // TODO(littlegnal): Most of callbacks on web are not implemented, we're temporarily skip these callbacks at this time.
@@ -132,7 +132,7 @@ void generatedTestCases(IrisTester irisTester) {
             eventIdsMapping['MediaPlayerSourceObserver_onPositionChanged'] ??
                 [];
         for (final event in eventIds) {
-          final ret = irisTester.fireEvent(event, params: eventJson);
+          final ret = irisTester().fireEvent(event, params: eventJson);
           // Delay 200 milliseconds to ensure the callback is called.
           await Future.delayed(const Duration(milliseconds: 200));
           // TODO(littlegnal): Most of callbacks on web are not implemented, we're temporarily skip these callbacks at this time.
@@ -206,7 +206,7 @@ void generatedTestCases(IrisTester irisTester) {
         final eventIds =
             eventIdsMapping['MediaPlayerSourceObserver_onPlayerEvent'] ?? [];
         for (final event in eventIds) {
-          final ret = irisTester.fireEvent(event, params: eventJson);
+          final ret = irisTester().fireEvent(event, params: eventJson);
           // Delay 200 milliseconds to ensure the callback is called.
           await Future.delayed(const Duration(milliseconds: 200));
           // TODO(littlegnal): Most of callbacks on web are not implemented, we're temporarily skip these callbacks at this time.
@@ -276,7 +276,7 @@ void generatedTestCases(IrisTester irisTester) {
         final eventIds =
             eventIdsMapping['MediaPlayerSourceObserver_onMetaData'] ?? [];
         for (final event in eventIds) {
-          final ret = irisTester.fireEvent(event, params: eventJson);
+          final ret = irisTester().fireEvent(event, params: eventJson);
           // Delay 200 milliseconds to ensure the callback is called.
           await Future.delayed(const Duration(milliseconds: 200));
           // TODO(littlegnal): Most of callbacks on web are not implemented, we're temporarily skip these callbacks at this time.
@@ -345,7 +345,7 @@ void generatedTestCases(IrisTester irisTester) {
             eventIdsMapping['MediaPlayerSourceObserver_onPlayBufferUpdated'] ??
                 [];
         for (final event in eventIds) {
-          final ret = irisTester.fireEvent(event, params: eventJson);
+          final ret = irisTester().fireEvent(event, params: eventJson);
           // Delay 200 milliseconds to ensure the callback is called.
           await Future.delayed(const Duration(milliseconds: 200));
           // TODO(littlegnal): Most of callbacks on web are not implemented, we're temporarily skip these callbacks at this time.
@@ -416,7 +416,7 @@ void generatedTestCases(IrisTester irisTester) {
         final eventIds =
             eventIdsMapping['MediaPlayerSourceObserver_onPreloadEvent'] ?? [];
         for (final event in eventIds) {
-          final ret = irisTester.fireEvent(event, params: eventJson);
+          final ret = irisTester().fireEvent(event, params: eventJson);
           // Delay 200 milliseconds to ensure the callback is called.
           await Future.delayed(const Duration(milliseconds: 200));
           // TODO(littlegnal): Most of callbacks on web are not implemented, we're temporarily skip these callbacks at this time.
@@ -480,7 +480,7 @@ void generatedTestCases(IrisTester irisTester) {
         final eventIds =
             eventIdsMapping['MediaPlayerSourceObserver_onCompleted'] ?? [];
         for (final event in eventIds) {
-          final ret = irisTester.fireEvent(event, params: eventJson);
+          final ret = irisTester().fireEvent(event, params: eventJson);
           // Delay 200 milliseconds to ensure the callback is called.
           await Future.delayed(const Duration(milliseconds: 200));
           // TODO(littlegnal): Most of callbacks on web are not implemented, we're temporarily skip these callbacks at this time.
@@ -545,7 +545,7 @@ void generatedTestCases(IrisTester irisTester) {
                 'MediaPlayerSourceObserver_onAgoraCDNTokenWillExpire'] ??
             [];
         for (final event in eventIds) {
-          final ret = irisTester.fireEvent(event, params: eventJson);
+          final ret = irisTester().fireEvent(event, params: eventJson);
           // Delay 200 milliseconds to ensure the callback is called.
           await Future.delayed(const Duration(milliseconds: 200));
           // TODO(littlegnal): Most of callbacks on web are not implemented, we're temporarily skip these callbacks at this time.
@@ -626,7 +626,7 @@ void generatedTestCases(IrisTester irisTester) {
                 'MediaPlayerSourceObserver_onPlayerSrcInfoChanged'] ??
             [];
         for (final event in eventIds) {
-          final ret = irisTester.fireEvent(event, params: eventJson);
+          final ret = irisTester().fireEvent(event, params: eventJson);
           // Delay 200 milliseconds to ensure the callback is called.
           await Future.delayed(const Duration(milliseconds: 200));
           // TODO(littlegnal): Most of callbacks on web are not implemented, we're temporarily skip these callbacks at this time.
@@ -710,7 +710,7 @@ void generatedTestCases(IrisTester irisTester) {
             eventIdsMapping['MediaPlayerSourceObserver_onPlayerInfoUpdated'] ??
                 [];
         for (final event in eventIds) {
-          final ret = irisTester.fireEvent(event, params: eventJson);
+          final ret = irisTester().fireEvent(event, params: eventJson);
           // Delay 200 milliseconds to ensure the callback is called.
           await Future.delayed(const Duration(milliseconds: 200));
           // TODO(littlegnal): Most of callbacks on web are not implemented, we're temporarily skip these callbacks at this time.
@@ -786,7 +786,7 @@ void generatedTestCases(IrisTester irisTester) {
             eventIdsMapping['MediaPlayerSourceObserver_onPlayerCacheStats'] ??
                 [];
         for (final event in eventIds) {
-          final ret = irisTester.fireEvent(event, params: eventJson);
+          final ret = irisTester().fireEvent(event, params: eventJson);
           // Delay 200 milliseconds to ensure the callback is called.
           await Future.delayed(const Duration(milliseconds: 200));
           // TODO(littlegnal): Most of callbacks on web are not implemented, we're temporarily skip these callbacks at this time.
@@ -864,7 +864,7 @@ void generatedTestCases(IrisTester irisTester) {
                 'MediaPlayerSourceObserver_onPlayerPlaybackStats'] ??
             [];
         for (final event in eventIds) {
-          final ret = irisTester.fireEvent(event, params: eventJson);
+          final ret = irisTester().fireEvent(event, params: eventJson);
           // Delay 200 milliseconds to ensure the callback is called.
           await Future.delayed(const Duration(milliseconds: 200));
           // TODO(littlegnal): Most of callbacks on web are not implemented, we're temporarily skip these callbacks at this time.
@@ -933,7 +933,7 @@ void generatedTestCases(IrisTester irisTester) {
                 'MediaPlayerSourceObserver_onAudioVolumeIndication'] ??
             [];
         for (final event in eventIds) {
-          final ret = irisTester.fireEvent(event, params: eventJson);
+          final ret = irisTester().fireEvent(event, params: eventJson);
           // Delay 200 milliseconds to ensure the callback is called.
           await Future.delayed(const Duration(milliseconds: 200));
           // TODO(littlegnal): Most of callbacks on web are not implemented, we're temporarily skip these callbacks at this time.

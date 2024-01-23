@@ -23,7 +23,7 @@ import 'package:path/path.dart' as path;
 
 import '../testcases/event_ids_mapping.dart';
 
-void generatedTestCases(IrisTester irisTester) {
+void generatedTestCases(ValueGetter<IrisTester> irisTester) {
   {{TEST_CASES_CONTENT}} 
 }
 ''',
@@ -75,7 +75,7 @@ import 'package:path/path.dart' as path;
 
 import '../testcases/event_ids_mapping.dart';
 
-void generatedTestCases(IrisTester irisTester) {
+void generatedTestCases(ValueGetter<IrisTester> irisTester) {
   {{TEST_CASES_CONTENT}} 
 }
 ''',
@@ -123,7 +123,7 @@ import 'package:path/path.dart' as path;
 
 import '../testcases/event_ids_mapping.dart';
 
-void generatedTestCases(IrisTester irisTester) {
+void generatedTestCases(ValueGetter<IrisTester> irisTester) {
   {{TEST_CASES_CONTENT}} 
 }
 ''',
@@ -171,7 +171,7 @@ import 'package:path/path.dart' as path;
 
 import '../testcases/event_ids_mapping.dart';
 
-void generatedTestCases(IrisTester irisTester) {
+void generatedTestCases(ValueGetter<IrisTester> irisTester) {
   {{TEST_CASES_CONTENT}} 
 }
 ''',
@@ -219,7 +219,7 @@ import 'package:path/path.dart' as path;
 
 import '../testcases/event_ids_mapping.dart';
 
-void generatedTestCases(IrisTester irisTester) {
+void generatedTestCases(ValueGetter<IrisTester> irisTester) {
   {{TEST_CASES_CONTENT}} 
 }
 ''',
@@ -268,7 +268,7 @@ import 'package:path/path.dart' as path;
 
 import '../testcases/event_ids_mapping.dart';
 
-void generatedTestCases(IrisTester irisTester) {
+void generatedTestCases(ValueGetter<IrisTester> irisTester) {
   {{TEST_CASES_CONTENT}} 
 }
 ''',
@@ -317,7 +317,7 @@ import 'package:path/path.dart' as path;
 
 import '../testcases/event_ids_mapping.dart';
 
-void generatedTestCases(IrisTester irisTester) {
+void generatedTestCases(ValueGetter<IrisTester> irisTester) {
   {{TEST_CASES_CONTENT}} 
 }
 ''',
@@ -366,7 +366,7 @@ import 'package:path/path.dart' as path;
 
 import '../testcases/event_ids_mapping.dart';
 
-void generatedTestCases(IrisTester irisTester) {
+void generatedTestCases(ValueGetter<IrisTester> irisTester) {
   {{TEST_CASES_CONTENT}} 
 }
 ''',
@@ -417,7 +417,7 @@ import 'package:path/path.dart' as path;
 
 import '../testcases/event_ids_mapping.dart';
 
-void generatedTestCases(IrisTester irisTester) {
+void generatedTestCases(ValueGetter<IrisTester> irisTester) {
   {{TEST_CASES_CONTENT}} 
 }
 ''',
@@ -468,7 +468,7 @@ import 'package:path/path.dart' as path;
 
 import '../testcases/event_ids_mapping.dart';
 
-void generatedTestCases(IrisTester irisTester) {
+void generatedTestCases(ValueGetter<IrisTester> irisTester) {
   {{TEST_CASES_CONTENT}} 
 }
 ''',
@@ -519,7 +519,7 @@ import 'package:path/path.dart' as path;
 
 import '../testcases/event_ids_mapping.dart';
 
-void generatedTestCases(IrisTester irisTester) {
+void generatedTestCases(ValueGetter<IrisTester> irisTester) {
   {{TEST_CASES_CONTENT}} 
 }
 ''',
@@ -570,7 +570,7 @@ import 'package:path/path.dart' as path;
 
 import '../testcases/event_ids_mapping.dart';
 
-void generatedTestCases(IrisTester irisTester) {
+void generatedTestCases(ValueGetter<IrisTester> irisTester) {
   {{TEST_CASES_CONTENT}} 
 }
 ''',
@@ -622,7 +622,7 @@ import 'package:path/path.dart' as path;
 
 import '../testcases/event_ids_mapping.dart';
 
-void generatedTestCases(IrisTester irisTester) {
+void generatedTestCases(ValueGetter<IrisTester> irisTester) {
   {{TEST_CASES_CONTENT}} 
 }
 ''',
@@ -676,7 +676,7 @@ import 'package:path/path.dart' as path;
 
 import '../testcases/event_ids_mapping.dart';
 
-void generatedTestCases(IrisTester irisTester) {
+void generatedTestCases(ValueGetter<IrisTester> irisTester) {
   {{TEST_CASES_CONTENT}} 
 }
 ''',

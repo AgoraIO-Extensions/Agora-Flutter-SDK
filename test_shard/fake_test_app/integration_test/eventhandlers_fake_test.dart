@@ -33,7 +33,7 @@ import 'package:iris_method_channel/iris_method_channel.dart';
 void main() {
   IntegrationTestWidgetsFlutterBinding.ensureInitialized();
 
-  IrisTester? irisTester; // = createIrisTester();
+  IrisTester? irisTester;// = createIrisTester();
 
   setUp(() {
     irisTester = createIrisTester();
@@ -60,29 +60,29 @@ void main() {
   });
 
   // RtcEngine events
-  rtcengine_rtcengineeventhandler.testCases(irisTester!);
+  rtcengine_rtcengineeventhandler.testCases(() => irisTester!);
 
   // These callbacks not are implemented on web
   if (!kIsWeb) {
-    rtcengine_audiospectrumobserver.generatedTestCases(irisTester!);
-    rtcengine_audioencodedframeobserver.generatedTestCases(irisTester!);
-    rtcengine_metadataobserver.generatedTestCases(irisTester!);
+    rtcengine_audiospectrumobserver.generatedTestCases(() => irisTester!);
+    rtcengine_audioencodedframeobserver.generatedTestCases(() => irisTester!);
+    rtcengine_metadataobserver.generatedTestCases(() => irisTester!);
 
     // MediaEngine events
-    mediaengine_videoframeobserver.generatedTestCases(irisTester!);
-    mediaengine_videoencodedframeobserver.generatedTestCases(irisTester!);
+    mediaengine_videoframeobserver.generatedTestCases(() => irisTester!);
+    mediaengine_videoencodedframeobserver.generatedTestCases(() => irisTester!);
 
     // MediaPlayerController events
-    mediaplayer_audiospectrumobserver.generatedTestCases(irisTester!);
-    mediaplayer_audiopcmframesink.generatedTestCases(irisTester!);
-    mediaplayer_mediaplayersourceobserver.generatedTestCases(irisTester!);
-    mediaplayer_mediaplayervideoframeobserver.generatedTestCases(irisTester!);
+    mediaplayer_audiospectrumobserver.generatedTestCases(() => irisTester!);
+    mediaplayer_audiopcmframesink.generatedTestCases(() => irisTester!);
+    mediaplayer_mediaplayersourceobserver.generatedTestCases(() => irisTester!);
+    mediaplayer_mediaplayervideoframeobserver.generatedTestCases(() => irisTester!);
 
     // MediaRecorder events
-    mediarecorder_mediarecorderobserver.generatedTestCases(irisTester!);
+    mediarecorder_mediarecorderobserver.generatedTestCases(() => irisTester!);
 
     // MusicContentCenter events
     musiccontentcenter_musiccontentcentereventhandler
-        .generatedTestCases(irisTester!);
+        .generatedTestCases(() => irisTester!);
   }
 }

@@ -16,7 +16,7 @@ import 'package:path/path.dart' as path;
 
 import '../testcases/event_ids_mapping.dart';
 
-void generatedTestCases(IrisTester irisTester) {
+void generatedTestCases(ValueGetter<IrisTester> irisTester) {
   testWidgets(
     'RtcEngineEventHandler.onJoinChannelSuccess',
     (WidgetTester tester) async {
@@ -61,7 +61,7 @@ void generatedTestCases(IrisTester irisTester) {
         final eventIds =
             eventIdsMapping['RtcEngineEventHandler_onJoinChannelSuccess'] ?? [];
         for (final event in eventIds) {
-          final ret = irisTester.fireEvent(event, params: eventJson);
+          final ret = irisTester().fireEvent(event, params: eventJson);
           // Delay 200 milliseconds to ensure the callback is called.
           await Future.delayed(const Duration(milliseconds: 200));
           // TODO(littlegnal): Most of callbacks on web are not implemented, we're temporarily skip these callbacks at this time.
@@ -134,7 +134,7 @@ void generatedTestCases(IrisTester irisTester) {
             eventIdsMapping['RtcEngineEventHandler_onRejoinChannelSuccess'] ??
                 [];
         for (final event in eventIds) {
-          final ret = irisTester.fireEvent(event, params: eventJson);
+          final ret = irisTester().fireEvent(event, params: eventJson);
           // Delay 200 milliseconds to ensure the callback is called.
           await Future.delayed(const Duration(milliseconds: 200));
           // TODO(littlegnal): Most of callbacks on web are not implemented, we're temporarily skip these callbacks at this time.
@@ -208,7 +208,7 @@ void generatedTestCases(IrisTester irisTester) {
         final eventIds =
             eventIdsMapping['RtcEngineEventHandler_onProxyConnected'] ?? [];
         for (final event in eventIds) {
-          final ret = irisTester.fireEvent(event, params: eventJson);
+          final ret = irisTester().fireEvent(event, params: eventJson);
           // Delay 200 milliseconds to ensure the callback is called.
           await Future.delayed(const Duration(milliseconds: 200));
           // TODO(littlegnal): Most of callbacks on web are not implemented, we're temporarily skip these callbacks at this time.
@@ -274,7 +274,7 @@ void generatedTestCases(IrisTester irisTester) {
 
         final eventIds = eventIdsMapping['RtcEngineEventHandler_onError'] ?? [];
         for (final event in eventIds) {
-          final ret = irisTester.fireEvent(event, params: eventJson);
+          final ret = irisTester().fireEvent(event, params: eventJson);
           // Delay 200 milliseconds to ensure the callback is called.
           await Future.delayed(const Duration(milliseconds: 200));
           // TODO(littlegnal): Most of callbacks on web are not implemented, we're temporarily skip these callbacks at this time.
@@ -353,7 +353,7 @@ void generatedTestCases(IrisTester irisTester) {
         final eventIds =
             eventIdsMapping['RtcEngineEventHandler_onAudioQuality'] ?? [];
         for (final event in eventIds) {
-          final ret = irisTester.fireEvent(event, params: eventJson);
+          final ret = irisTester().fireEvent(event, params: eventJson);
           // Delay 200 milliseconds to ensure the callback is called.
           await Future.delayed(const Duration(milliseconds: 200));
           // TODO(littlegnal): Most of callbacks on web are not implemented, we're temporarily skip these callbacks at this time.
@@ -445,7 +445,7 @@ void generatedTestCases(IrisTester irisTester) {
             eventIdsMapping['RtcEngineEventHandler_onLastmileProbeResult'] ??
                 [];
         for (final event in eventIds) {
-          final ret = irisTester.fireEvent(event, params: eventJson);
+          final ret = irisTester().fireEvent(event, params: eventJson);
           // Delay 200 milliseconds to ensure the callback is called.
           await Future.delayed(const Duration(milliseconds: 200));
           // TODO(littlegnal): Most of callbacks on web are not implemented, we're temporarily skip these callbacks at this time.
@@ -523,7 +523,7 @@ void generatedTestCases(IrisTester irisTester) {
             eventIdsMapping['RtcEngineEventHandler_onAudioVolumeIndication'] ??
                 [];
         for (final event in eventIds) {
-          final ret = irisTester.fireEvent(event, params: eventJson);
+          final ret = irisTester().fireEvent(event, params: eventJson);
           // Delay 200 milliseconds to ensure the callback is called.
           await Future.delayed(const Duration(milliseconds: 200));
           // TODO(littlegnal): Most of callbacks on web are not implemented, we're temporarily skip these callbacks at this time.
@@ -669,7 +669,7 @@ void generatedTestCases(IrisTester irisTester) {
         final eventIds =
             eventIdsMapping['RtcEngineEventHandler_onLeaveChannel'] ?? [];
         for (final event in eventIds) {
-          final ret = irisTester.fireEvent(event, params: eventJson);
+          final ret = irisTester().fireEvent(event, params: eventJson);
           // Delay 200 milliseconds to ensure the callback is called.
           await Future.delayed(const Duration(milliseconds: 200));
           // TODO(littlegnal): Most of callbacks on web are not implemented, we're temporarily skip these callbacks at this time.
@@ -815,7 +815,7 @@ void generatedTestCases(IrisTester irisTester) {
         final eventIds =
             eventIdsMapping['RtcEngineEventHandler_onRtcStats'] ?? [];
         for (final event in eventIds) {
-          final ret = irisTester.fireEvent(event, params: eventJson);
+          final ret = irisTester().fireEvent(event, params: eventJson);
           // Delay 200 milliseconds to ensure the callback is called.
           await Future.delayed(const Duration(milliseconds: 200));
           // TODO(littlegnal): Most of callbacks on web are not implemented, we're temporarily skip these callbacks at this time.
@@ -887,7 +887,7 @@ void generatedTestCases(IrisTester irisTester) {
                 'RtcEngineEventHandler_onAudioDeviceStateChanged'] ??
             [];
         for (final event in eventIds) {
-          final ret = irisTester.fireEvent(event, params: eventJson);
+          final ret = irisTester().fireEvent(event, params: eventJson);
           // Delay 200 milliseconds to ensure the callback is called.
           await Future.delayed(const Duration(milliseconds: 200));
           // TODO(littlegnal): Most of callbacks on web are not implemented, we're temporarily skip these callbacks at this time.
@@ -953,7 +953,7 @@ void generatedTestCases(IrisTester irisTester) {
                 'RtcEngineEventHandler_onAudioMixingPositionChanged'] ??
             [];
         for (final event in eventIds) {
-          final ret = irisTester.fireEvent(event, params: eventJson);
+          final ret = irisTester().fireEvent(event, params: eventJson);
           // Delay 200 milliseconds to ensure the callback is called.
           await Future.delayed(const Duration(milliseconds: 200));
           // TODO(littlegnal): Most of callbacks on web are not implemented, we're temporarily skip these callbacks at this time.
@@ -1015,7 +1015,7 @@ void generatedTestCases(IrisTester irisTester) {
             eventIdsMapping['RtcEngineEventHandler_onAudioMixingFinished'] ??
                 [];
         for (final event in eventIds) {
-          final ret = irisTester.fireEvent(event, params: eventJson);
+          final ret = irisTester().fireEvent(event, params: eventJson);
           // Delay 200 milliseconds to ensure the callback is called.
           await Future.delayed(const Duration(milliseconds: 200));
           // TODO(littlegnal): Most of callbacks on web are not implemented, we're temporarily skip these callbacks at this time.
@@ -1081,7 +1081,7 @@ void generatedTestCases(IrisTester irisTester) {
             eventIdsMapping['RtcEngineEventHandler_onAudioEffectFinished'] ??
                 [];
         for (final event in eventIds) {
-          final ret = irisTester.fireEvent(event, params: eventJson);
+          final ret = irisTester().fireEvent(event, params: eventJson);
           // Delay 200 milliseconds to ensure the callback is called.
           await Future.delayed(const Duration(milliseconds: 200));
           // TODO(littlegnal): Most of callbacks on web are not implemented, we're temporarily skip these callbacks at this time.
@@ -1153,7 +1153,7 @@ void generatedTestCases(IrisTester irisTester) {
                 'RtcEngineEventHandler_onVideoDeviceStateChanged'] ??
             [];
         for (final event in eventIds) {
-          final ret = irisTester.fireEvent(event, params: eventJson);
+          final ret = irisTester().fireEvent(event, params: eventJson);
           // Delay 200 milliseconds to ensure the callback is called.
           await Future.delayed(const Duration(milliseconds: 200));
           // TODO(littlegnal): Most of callbacks on web are not implemented, we're temporarily skip these callbacks at this time.
@@ -1230,7 +1230,7 @@ void generatedTestCases(IrisTester irisTester) {
         final eventIds =
             eventIdsMapping['RtcEngineEventHandler_onNetworkQuality'] ?? [];
         for (final event in eventIds) {
-          final ret = irisTester.fireEvent(event, params: eventJson);
+          final ret = irisTester().fireEvent(event, params: eventJson);
           // Delay 200 milliseconds to ensure the callback is called.
           await Future.delayed(const Duration(milliseconds: 200));
           // TODO(littlegnal): Most of callbacks on web are not implemented, we're temporarily skip these callbacks at this time.
@@ -1301,7 +1301,7 @@ void generatedTestCases(IrisTester irisTester) {
             eventIdsMapping['RtcEngineEventHandler_onIntraRequestReceived'] ??
                 [];
         for (final event in eventIds) {
-          final ret = irisTester.fireEvent(event, params: eventJson);
+          final ret = irisTester().fireEvent(event, params: eventJson);
           // Delay 200 milliseconds to ensure the callback is called.
           await Future.delayed(const Duration(milliseconds: 200));
           // TODO(littlegnal): Most of callbacks on web are not implemented, we're temporarily skip these callbacks at this time.
@@ -1370,7 +1370,7 @@ void generatedTestCases(IrisTester irisTester) {
                 'RtcEngineEventHandler_onUplinkNetworkInfoUpdated'] ??
             [];
         for (final event in eventIds) {
-          final ret = irisTester.fireEvent(event, params: eventJson);
+          final ret = irisTester().fireEvent(event, params: eventJson);
           // Delay 200 milliseconds to ensure the callback is called.
           await Future.delayed(const Duration(milliseconds: 200));
           // TODO(littlegnal): Most of callbacks on web are not implemented, we're temporarily skip these callbacks at this time.
@@ -1447,7 +1447,7 @@ void generatedTestCases(IrisTester irisTester) {
                 'RtcEngineEventHandler_onDownlinkNetworkInfoUpdated'] ??
             [];
         for (final event in eventIds) {
-          final ret = irisTester.fireEvent(event, params: eventJson);
+          final ret = irisTester().fireEvent(event, params: eventJson);
           // Delay 200 milliseconds to ensure the callback is called.
           await Future.delayed(const Duration(milliseconds: 200));
           // TODO(littlegnal): Most of callbacks on web are not implemented, we're temporarily skip these callbacks at this time.
@@ -1512,7 +1512,7 @@ void generatedTestCases(IrisTester irisTester) {
         final eventIds =
             eventIdsMapping['RtcEngineEventHandler_onLastmileQuality'] ?? [];
         for (final event in eventIds) {
-          final ret = irisTester.fireEvent(event, params: eventJson);
+          final ret = irisTester().fireEvent(event, params: eventJson);
           // Delay 200 milliseconds to ensure the callback is called.
           await Future.delayed(const Duration(milliseconds: 200));
           // TODO(littlegnal): Most of callbacks on web are not implemented, we're temporarily skip these callbacks at this time.
@@ -1585,7 +1585,7 @@ void generatedTestCases(IrisTester irisTester) {
             eventIdsMapping['RtcEngineEventHandler_onFirstLocalVideoFrame'] ??
                 [];
         for (final event in eventIds) {
-          final ret = irisTester.fireEvent(event, params: eventJson);
+          final ret = irisTester().fireEvent(event, params: eventJson);
           // Delay 200 milliseconds to ensure the callback is called.
           await Future.delayed(const Duration(milliseconds: 200));
           // TODO(littlegnal): Most of callbacks on web are not implemented, we're temporarily skip these callbacks at this time.
@@ -1653,7 +1653,7 @@ void generatedTestCases(IrisTester irisTester) {
                 'RtcEngineEventHandler_onFirstLocalVideoFramePublished'] ??
             [];
         for (final event in eventIds) {
-          final ret = irisTester.fireEvent(event, params: eventJson);
+          final ret = irisTester().fireEvent(event, params: eventJson);
           // Delay 200 milliseconds to ensure the callback is called.
           await Future.delayed(const Duration(milliseconds: 200));
           // TODO(littlegnal): Most of callbacks on web are not implemented, we're temporarily skip these callbacks at this time.
@@ -1733,7 +1733,7 @@ void generatedTestCases(IrisTester irisTester) {
                 'RtcEngineEventHandler_onFirstRemoteVideoDecoded'] ??
             [];
         for (final event in eventIds) {
-          final ret = irisTester.fireEvent(event, params: eventJson);
+          final ret = irisTester().fireEvent(event, params: eventJson);
           // Delay 200 milliseconds to ensure the callback is called.
           await Future.delayed(const Duration(milliseconds: 200));
           // TODO(littlegnal): Most of callbacks on web are not implemented, we're temporarily skip these callbacks at this time.
@@ -1819,7 +1819,7 @@ void generatedTestCases(IrisTester irisTester) {
         final eventIds =
             eventIdsMapping['RtcEngineEventHandler_onVideoSizeChanged'] ?? [];
         for (final event in eventIds) {
-          final ret = irisTester.fireEvent(event, params: eventJson);
+          final ret = irisTester().fireEvent(event, params: eventJson);
           // Delay 200 milliseconds to ensure the callback is called.
           await Future.delayed(const Duration(milliseconds: 200));
           // TODO(littlegnal): Most of callbacks on web are not implemented, we're temporarily skip these callbacks at this time.
@@ -1892,7 +1892,7 @@ void generatedTestCases(IrisTester irisTester) {
             eventIdsMapping['RtcEngineEventHandler_onLocalVideoStateChanged'] ??
                 [];
         for (final event in eventIds) {
-          final ret = irisTester.fireEvent(event, params: eventJson);
+          final ret = irisTester().fireEvent(event, params: eventJson);
           // Delay 200 milliseconds to ensure the callback is called.
           await Future.delayed(const Duration(milliseconds: 200));
           // TODO(littlegnal): Most of callbacks on web are not implemented, we're temporarily skip these callbacks at this time.
@@ -1976,7 +1976,7 @@ void generatedTestCases(IrisTester irisTester) {
                 'RtcEngineEventHandler_onRemoteVideoStateChanged'] ??
             [];
         for (final event in eventIds) {
-          final ret = irisTester.fireEvent(event, params: eventJson);
+          final ret = irisTester().fireEvent(event, params: eventJson);
           // Delay 200 milliseconds to ensure the callback is called.
           await Future.delayed(const Duration(milliseconds: 200));
           // TODO(littlegnal): Most of callbacks on web are not implemented, we're temporarily skip these callbacks at this time.
@@ -2056,7 +2056,7 @@ void generatedTestCases(IrisTester irisTester) {
             eventIdsMapping['RtcEngineEventHandler_onFirstRemoteVideoFrame'] ??
                 [];
         for (final event in eventIds) {
-          final ret = irisTester.fireEvent(event, params: eventJson);
+          final ret = irisTester().fireEvent(event, params: eventJson);
           // Delay 200 milliseconds to ensure the callback is called.
           await Future.delayed(const Duration(milliseconds: 200));
           // TODO(littlegnal): Most of callbacks on web are not implemented, we're temporarily skip these callbacks at this time.
@@ -2130,7 +2130,7 @@ void generatedTestCases(IrisTester irisTester) {
         final eventIds =
             eventIdsMapping['RtcEngineEventHandler_onUserJoined'] ?? [];
         for (final event in eventIds) {
-          final ret = irisTester.fireEvent(event, params: eventJson);
+          final ret = irisTester().fireEvent(event, params: eventJson);
           // Delay 200 milliseconds to ensure the callback is called.
           await Future.delayed(const Duration(milliseconds: 200));
           // TODO(littlegnal): Most of callbacks on web are not implemented, we're temporarily skip these callbacks at this time.
@@ -2206,7 +2206,7 @@ void generatedTestCases(IrisTester irisTester) {
         final eventIds =
             eventIdsMapping['RtcEngineEventHandler_onUserOffline'] ?? [];
         for (final event in eventIds) {
-          final ret = irisTester.fireEvent(event, params: eventJson);
+          final ret = irisTester().fireEvent(event, params: eventJson);
           // Delay 200 milliseconds to ensure the callback is called.
           await Future.delayed(const Duration(milliseconds: 200));
           // TODO(littlegnal): Most of callbacks on web are not implemented, we're temporarily skip these callbacks at this time.
@@ -2280,7 +2280,7 @@ void generatedTestCases(IrisTester irisTester) {
         final eventIds =
             eventIdsMapping['RtcEngineEventHandler_onUserMuteAudio'] ?? [];
         for (final event in eventIds) {
-          final ret = irisTester.fireEvent(event, params: eventJson);
+          final ret = irisTester().fireEvent(event, params: eventJson);
           // Delay 200 milliseconds to ensure the callback is called.
           await Future.delayed(const Duration(milliseconds: 200));
           // TODO(littlegnal): Most of callbacks on web are not implemented, we're temporarily skip these callbacks at this time.
@@ -2354,7 +2354,7 @@ void generatedTestCases(IrisTester irisTester) {
         final eventIds =
             eventIdsMapping['RtcEngineEventHandler_onUserMuteVideo'] ?? [];
         for (final event in eventIds) {
-          final ret = irisTester.fireEvent(event, params: eventJson);
+          final ret = irisTester().fireEvent(event, params: eventJson);
           // Delay 200 milliseconds to ensure the callback is called.
           await Future.delayed(const Duration(milliseconds: 200));
           // TODO(littlegnal): Most of callbacks on web are not implemented, we're temporarily skip these callbacks at this time.
@@ -2429,7 +2429,7 @@ void generatedTestCases(IrisTester irisTester) {
         final eventIds =
             eventIdsMapping['RtcEngineEventHandler_onUserEnableVideo'] ?? [];
         for (final event in eventIds) {
-          final ret = irisTester.fireEvent(event, params: eventJson);
+          final ret = irisTester().fireEvent(event, params: eventJson);
           // Delay 200 milliseconds to ensure the callback is called.
           await Future.delayed(const Duration(milliseconds: 200));
           // TODO(littlegnal): Most of callbacks on web are not implemented, we're temporarily skip these callbacks at this time.
@@ -2504,7 +2504,7 @@ void generatedTestCases(IrisTester irisTester) {
         final eventIds =
             eventIdsMapping['RtcEngineEventHandler_onUserStateChanged'] ?? [];
         for (final event in eventIds) {
-          final ret = irisTester.fireEvent(event, params: eventJson);
+          final ret = irisTester().fireEvent(event, params: eventJson);
           // Delay 200 milliseconds to ensure the callback is called.
           await Future.delayed(const Duration(milliseconds: 200));
           // TODO(littlegnal): Most of callbacks on web are not implemented, we're temporarily skip these callbacks at this time.
@@ -2580,7 +2580,7 @@ void generatedTestCases(IrisTester irisTester) {
             eventIdsMapping['RtcEngineEventHandler_onUserEnableLocalVideo'] ??
                 [];
         for (final event in eventIds) {
-          final ret = irisTester.fireEvent(event, params: eventJson);
+          final ret = irisTester().fireEvent(event, params: eventJson);
           // Delay 200 milliseconds to ensure the callback is called.
           await Future.delayed(const Duration(milliseconds: 200));
           // TODO(littlegnal): Most of callbacks on web are not implemented, we're temporarily skip these callbacks at this time.
@@ -2689,7 +2689,7 @@ void generatedTestCases(IrisTester irisTester) {
         final eventIds =
             eventIdsMapping['RtcEngineEventHandler_onRemoteAudioStats'] ?? [];
         for (final event in eventIds) {
-          final ret = irisTester.fireEvent(event, params: eventJson);
+          final ret = irisTester().fireEvent(event, params: eventJson);
           // Delay 200 milliseconds to ensure the callback is called.
           await Future.delayed(const Duration(milliseconds: 200));
           // TODO(littlegnal): Most of callbacks on web are not implemented, we're temporarily skip these callbacks at this time.
@@ -2780,7 +2780,7 @@ void generatedTestCases(IrisTester irisTester) {
         final eventIds =
             eventIdsMapping['RtcEngineEventHandler_onLocalAudioStats'] ?? [];
         for (final event in eventIds) {
-          final ret = irisTester.fireEvent(event, params: eventJson);
+          final ret = irisTester().fireEvent(event, params: eventJson);
           // Delay 200 milliseconds to ensure the callback is called.
           await Future.delayed(const Duration(milliseconds: 200));
           // TODO(littlegnal): Most of callbacks on web are not implemented, we're temporarily skip these callbacks at this time.
@@ -2896,7 +2896,7 @@ void generatedTestCases(IrisTester irisTester) {
         final eventIds =
             eventIdsMapping['RtcEngineEventHandler_onLocalVideoStats'] ?? [];
         for (final event in eventIds) {
-          final ret = irisTester.fireEvent(event, params: eventJson);
+          final ret = irisTester().fireEvent(event, params: eventJson);
           // Delay 200 milliseconds to ensure the callback is called.
           await Future.delayed(const Duration(milliseconds: 200));
           // TODO(littlegnal): Most of callbacks on web are not implemented, we're temporarily skip these callbacks at this time.
@@ -3006,7 +3006,7 @@ void generatedTestCases(IrisTester irisTester) {
         final eventIds =
             eventIdsMapping['RtcEngineEventHandler_onRemoteVideoStats'] ?? [];
         for (final event in eventIds) {
-          final ret = irisTester.fireEvent(event, params: eventJson);
+          final ret = irisTester().fireEvent(event, params: eventJson);
           // Delay 200 milliseconds to ensure the callback is called.
           await Future.delayed(const Duration(milliseconds: 200));
           // TODO(littlegnal): Most of callbacks on web are not implemented, we're temporarily skip these callbacks at this time.
@@ -3067,7 +3067,7 @@ void generatedTestCases(IrisTester irisTester) {
         final eventIds =
             eventIdsMapping['RtcEngineEventHandler_onCameraReady'] ?? [];
         for (final event in eventIds) {
-          final ret = irisTester.fireEvent(event, params: eventJson);
+          final ret = irisTester().fireEvent(event, params: eventJson);
           // Delay 200 milliseconds to ensure the callback is called.
           await Future.delayed(const Duration(milliseconds: 200));
           // TODO(littlegnal): Most of callbacks on web are not implemented, we're temporarily skip these callbacks at this time.
@@ -3139,7 +3139,7 @@ void generatedTestCases(IrisTester irisTester) {
             eventIdsMapping['RtcEngineEventHandler_onCameraFocusAreaChanged'] ??
                 [];
         for (final event in eventIds) {
-          final ret = irisTester.fireEvent(event, params: eventJson);
+          final ret = irisTester().fireEvent(event, params: eventJson);
           // Delay 200 milliseconds to ensure the callback is called.
           await Future.delayed(const Duration(milliseconds: 200));
           // TODO(littlegnal): Most of callbacks on web are not implemented, we're temporarily skip these callbacks at this time.
@@ -3211,7 +3211,7 @@ void generatedTestCases(IrisTester irisTester) {
                 'RtcEngineEventHandler_onCameraExposureAreaChanged'] ??
             [];
         for (final event in eventIds) {
-          final ret = irisTester.fireEvent(event, params: eventJson);
+          final ret = irisTester().fireEvent(event, params: eventJson);
           // Delay 200 milliseconds to ensure the callback is called.
           await Future.delayed(const Duration(milliseconds: 200));
           // TODO(littlegnal): Most of callbacks on web are not implemented, we're temporarily skip these callbacks at this time.
@@ -3272,7 +3272,7 @@ void generatedTestCases(IrisTester irisTester) {
         final eventIds =
             eventIdsMapping['RtcEngineEventHandler_onVideoStopped'] ?? [];
         for (final event in eventIds) {
-          final ret = irisTester.fireEvent(event, params: eventJson);
+          final ret = irisTester().fireEvent(event, params: eventJson);
           // Delay 200 milliseconds to ensure the callback is called.
           await Future.delayed(const Duration(milliseconds: 200));
           // TODO(littlegnal): Most of callbacks on web are not implemented, we're temporarily skip these callbacks at this time.
@@ -3343,7 +3343,7 @@ void generatedTestCases(IrisTester irisTester) {
                 'RtcEngineEventHandler_onAudioMixingStateChanged'] ??
             [];
         for (final event in eventIds) {
-          final ret = irisTester.fireEvent(event, params: eventJson);
+          final ret = irisTester().fireEvent(event, params: eventJson);
           // Delay 200 milliseconds to ensure the callback is called.
           await Future.delayed(const Duration(milliseconds: 200));
           // TODO(littlegnal): Most of callbacks on web are not implemented, we're temporarily skip these callbacks at this time.
@@ -3414,7 +3414,7 @@ void generatedTestCases(IrisTester irisTester) {
                 'RtcEngineEventHandler_onRhythmPlayerStateChanged'] ??
             [];
         for (final event in eventIds) {
-          final ret = irisTester.fireEvent(event, params: eventJson);
+          final ret = irisTester().fireEvent(event, params: eventJson);
           // Delay 200 milliseconds to ensure the callback is called.
           await Future.delayed(const Duration(milliseconds: 200));
           // TODO(littlegnal): Most of callbacks on web are not implemented, we're temporarily skip these callbacks at this time.
@@ -3484,7 +3484,7 @@ void generatedTestCases(IrisTester irisTester) {
         final eventIds =
             eventIdsMapping['RtcEngineEventHandler_onConnectionLost'] ?? [];
         for (final event in eventIds) {
-          final ret = irisTester.fireEvent(event, params: eventJson);
+          final ret = irisTester().fireEvent(event, params: eventJson);
           // Delay 200 milliseconds to ensure the callback is called.
           await Future.delayed(const Duration(milliseconds: 200));
           // TODO(littlegnal): Most of callbacks on web are not implemented, we're temporarily skip these callbacks at this time.
@@ -3555,7 +3555,7 @@ void generatedTestCases(IrisTester irisTester) {
             eventIdsMapping['RtcEngineEventHandler_onConnectionInterrupted'] ??
                 [];
         for (final event in eventIds) {
-          final ret = irisTester.fireEvent(event, params: eventJson);
+          final ret = irisTester().fireEvent(event, params: eventJson);
           // Delay 200 milliseconds to ensure the callback is called.
           await Future.delayed(const Duration(milliseconds: 200));
           // TODO(littlegnal): Most of callbacks on web are not implemented, we're temporarily skip these callbacks at this time.
@@ -3625,7 +3625,7 @@ void generatedTestCases(IrisTester irisTester) {
         final eventIds =
             eventIdsMapping['RtcEngineEventHandler_onConnectionBanned'] ?? [];
         for (final event in eventIds) {
-          final ret = irisTester.fireEvent(event, params: eventJson);
+          final ret = irisTester().fireEvent(event, params: eventJson);
           // Delay 200 milliseconds to ensure the callback is called.
           await Future.delayed(const Duration(milliseconds: 200));
           // TODO(littlegnal): Most of callbacks on web are not implemented, we're temporarily skip these callbacks at this time.
@@ -3706,7 +3706,7 @@ void generatedTestCases(IrisTester irisTester) {
         final eventIds =
             eventIdsMapping['RtcEngineEventHandler_onStreamMessage'] ?? [];
         for (final event in eventIds) {
-          final ret = irisTester.fireEvent(event, params: eventJson);
+          final ret = irisTester().fireEvent(event, params: eventJson);
           // Delay 200 milliseconds to ensure the callback is called.
           await Future.delayed(const Duration(milliseconds: 200));
           // TODO(littlegnal): Most of callbacks on web are not implemented, we're temporarily skip these callbacks at this time.
@@ -3787,7 +3787,7 @@ void generatedTestCases(IrisTester irisTester) {
         final eventIds =
             eventIdsMapping['RtcEngineEventHandler_onStreamMessageError'] ?? [];
         for (final event in eventIds) {
-          final ret = irisTester.fireEvent(event, params: eventJson);
+          final ret = irisTester().fireEvent(event, params: eventJson);
           // Delay 200 milliseconds to ensure the callback is called.
           await Future.delayed(const Duration(milliseconds: 200));
           // TODO(littlegnal): Most of callbacks on web are not implemented, we're temporarily skip these callbacks at this time.
@@ -3857,7 +3857,7 @@ void generatedTestCases(IrisTester irisTester) {
         final eventIds =
             eventIdsMapping['RtcEngineEventHandler_onRequestToken'] ?? [];
         for (final event in eventIds) {
-          final ret = irisTester.fireEvent(event, params: eventJson);
+          final ret = irisTester().fireEvent(event, params: eventJson);
           // Delay 200 milliseconds to ensure the callback is called.
           await Future.delayed(const Duration(milliseconds: 200));
           // TODO(littlegnal): Most of callbacks on web are not implemented, we're temporarily skip these callbacks at this time.
@@ -3930,7 +3930,7 @@ void generatedTestCases(IrisTester irisTester) {
                 'RtcEngineEventHandler_onTokenPrivilegeWillExpire'] ??
             [];
         for (final event in eventIds) {
-          final ret = irisTester.fireEvent(event, params: eventJson);
+          final ret = irisTester().fireEvent(event, params: eventJson);
           // Delay 200 milliseconds to ensure the callback is called.
           await Future.delayed(const Duration(milliseconds: 200));
           // TODO(littlegnal): Most of callbacks on web are not implemented, we're temporarily skip these callbacks at this time.
@@ -4004,7 +4004,7 @@ void generatedTestCases(IrisTester irisTester) {
                 'RtcEngineEventHandler_onLicenseValidationFailure'] ??
             [];
         for (final event in eventIds) {
-          final ret = irisTester.fireEvent(event, params: eventJson);
+          final ret = irisTester().fireEvent(event, params: eventJson);
           // Delay 200 milliseconds to ensure the callback is called.
           await Future.delayed(const Duration(milliseconds: 200));
           // TODO(littlegnal): Most of callbacks on web are not implemented, we're temporarily skip these callbacks at this time.
@@ -4078,7 +4078,7 @@ void generatedTestCases(IrisTester irisTester) {
                 'RtcEngineEventHandler_onFirstLocalAudioFramePublished'] ??
             [];
         for (final event in eventIds) {
-          final ret = irisTester.fireEvent(event, params: eventJson);
+          final ret = irisTester().fireEvent(event, params: eventJson);
           // Delay 200 milliseconds to ensure the callback is called.
           await Future.delayed(const Duration(milliseconds: 200));
           // TODO(littlegnal): Most of callbacks on web are not implemented, we're temporarily skip these callbacks at this time.
@@ -4154,7 +4154,7 @@ void generatedTestCases(IrisTester irisTester) {
                 'RtcEngineEventHandler_onFirstRemoteAudioDecoded'] ??
             [];
         for (final event in eventIds) {
-          final ret = irisTester.fireEvent(event, params: eventJson);
+          final ret = irisTester().fireEvent(event, params: eventJson);
           // Delay 200 milliseconds to ensure the callback is called.
           await Future.delayed(const Duration(milliseconds: 200));
           // TODO(littlegnal): Most of callbacks on web are not implemented, we're temporarily skip these callbacks at this time.
@@ -4230,7 +4230,7 @@ void generatedTestCases(IrisTester irisTester) {
             eventIdsMapping['RtcEngineEventHandler_onFirstRemoteAudioFrame'] ??
                 [];
         for (final event in eventIds) {
-          final ret = irisTester.fireEvent(event, params: eventJson);
+          final ret = irisTester().fireEvent(event, params: eventJson);
           // Delay 200 milliseconds to ensure the callback is called.
           await Future.delayed(const Duration(milliseconds: 200));
           // TODO(littlegnal): Most of callbacks on web are not implemented, we're temporarily skip these callbacks at this time.
@@ -4308,7 +4308,7 @@ void generatedTestCases(IrisTester irisTester) {
             eventIdsMapping['RtcEngineEventHandler_onLocalAudioStateChanged'] ??
                 [];
         for (final event in eventIds) {
-          final ret = irisTester.fireEvent(event, params: eventJson);
+          final ret = irisTester().fireEvent(event, params: eventJson);
           // Delay 200 milliseconds to ensure the callback is called.
           await Future.delayed(const Duration(milliseconds: 200));
           // TODO(littlegnal): Most of callbacks on web are not implemented, we're temporarily skip these callbacks at this time.
@@ -4392,7 +4392,7 @@ void generatedTestCases(IrisTester irisTester) {
                 'RtcEngineEventHandler_onRemoteAudioStateChanged'] ??
             [];
         for (final event in eventIds) {
-          final ret = irisTester.fireEvent(event, params: eventJson);
+          final ret = irisTester().fireEvent(event, params: eventJson);
           // Delay 200 milliseconds to ensure the callback is called.
           await Future.delayed(const Duration(milliseconds: 200));
           // TODO(littlegnal): Most of callbacks on web are not implemented, we're temporarily skip these callbacks at this time.
@@ -4464,7 +4464,7 @@ void generatedTestCases(IrisTester irisTester) {
         final eventIds =
             eventIdsMapping['RtcEngineEventHandler_onActiveSpeaker'] ?? [];
         for (final event in eventIds) {
-          final ret = irisTester.fireEvent(event, params: eventJson);
+          final ret = irisTester().fireEvent(event, params: eventJson);
           // Delay 200 milliseconds to ensure the callback is called.
           await Future.delayed(const Duration(milliseconds: 200));
           // TODO(littlegnal): Most of callbacks on web are not implemented, we're temporarily skip these callbacks at this time.
@@ -4531,7 +4531,7 @@ void generatedTestCases(IrisTester irisTester) {
             eventIdsMapping['RtcEngineEventHandler_onContentInspectResult'] ??
                 [];
         for (final event in eventIds) {
-          final ret = irisTester.fireEvent(event, params: eventJson);
+          final ret = irisTester().fireEvent(event, params: eventJson);
           // Delay 200 milliseconds to ensure the callback is called.
           await Future.delayed(const Duration(milliseconds: 200));
           // TODO(littlegnal): Most of callbacks on web are not implemented, we're temporarily skip these callbacks at this time.
@@ -4612,7 +4612,7 @@ void generatedTestCases(IrisTester irisTester) {
         final eventIds =
             eventIdsMapping['RtcEngineEventHandler_onSnapshotTaken'] ?? [];
         for (final event in eventIds) {
-          final ret = irisTester.fireEvent(event, params: eventJson);
+          final ret = irisTester().fireEvent(event, params: eventJson);
           // Delay 200 milliseconds to ensure the callback is called.
           await Future.delayed(const Duration(milliseconds: 200));
           // TODO(littlegnal): Most of callbacks on web are not implemented, we're temporarily skip these callbacks at this time.
@@ -4693,7 +4693,7 @@ void generatedTestCases(IrisTester irisTester) {
         final eventIds =
             eventIdsMapping['RtcEngineEventHandler_onClientRoleChanged'] ?? [];
         for (final event in eventIds) {
-          final ret = irisTester.fireEvent(event, params: eventJson);
+          final ret = irisTester().fireEvent(event, params: eventJson);
           // Delay 200 milliseconds to ensure the callback is called.
           await Future.delayed(const Duration(milliseconds: 200));
           // TODO(littlegnal): Most of callbacks on web are not implemented, we're temporarily skip these callbacks at this time.
@@ -4770,7 +4770,7 @@ void generatedTestCases(IrisTester irisTester) {
             eventIdsMapping['RtcEngineEventHandler_onClientRoleChangeFailed'] ??
                 [];
         for (final event in eventIds) {
-          final ret = irisTester.fireEvent(event, params: eventJson);
+          final ret = irisTester().fireEvent(event, params: eventJson);
           // Delay 200 milliseconds to ensure the callback is called.
           await Future.delayed(const Duration(milliseconds: 200));
           // TODO(littlegnal): Most of callbacks on web are not implemented, we're temporarily skip these callbacks at this time.
@@ -4841,7 +4841,7 @@ void generatedTestCases(IrisTester irisTester) {
                 'RtcEngineEventHandler_onAudioDeviceVolumeChanged'] ??
             [];
         for (final event in eventIds) {
-          final ret = irisTester.fireEvent(event, params: eventJson);
+          final ret = irisTester().fireEvent(event, params: eventJson);
           // Delay 200 milliseconds to ensure the callback is called.
           await Future.delayed(const Duration(milliseconds: 200));
           // TODO(littlegnal): Most of callbacks on web are not implemented, we're temporarily skip these callbacks at this time.
@@ -4914,7 +4914,7 @@ void generatedTestCases(IrisTester irisTester) {
                 'RtcEngineEventHandler_onRtmpStreamingStateChanged'] ??
             [];
         for (final event in eventIds) {
-          final ret = irisTester.fireEvent(event, params: eventJson);
+          final ret = irisTester().fireEvent(event, params: eventJson);
           // Delay 200 milliseconds to ensure the callback is called.
           await Future.delayed(const Duration(milliseconds: 200));
           // TODO(littlegnal): Most of callbacks on web are not implemented, we're temporarily skip these callbacks at this time.
@@ -4982,7 +4982,7 @@ void generatedTestCases(IrisTester irisTester) {
         final eventIds =
             eventIdsMapping['RtcEngineEventHandler_onRtmpStreamingEvent'] ?? [];
         for (final event in eventIds) {
-          final ret = irisTester.fireEvent(event, params: eventJson);
+          final ret = irisTester().fireEvent(event, params: eventJson);
           // Delay 200 milliseconds to ensure the callback is called.
           await Future.delayed(const Duration(milliseconds: 200));
           // TODO(littlegnal): Most of callbacks on web are not implemented, we're temporarily skip these callbacks at this time.
@@ -5043,7 +5043,7 @@ void generatedTestCases(IrisTester irisTester) {
         final eventIds =
             eventIdsMapping['RtcEngineEventHandler_onTranscodingUpdated'] ?? [];
         for (final event in eventIds) {
-          final ret = irisTester.fireEvent(event, params: eventJson);
+          final ret = irisTester().fireEvent(event, params: eventJson);
           // Delay 200 milliseconds to ensure the callback is called.
           await Future.delayed(const Duration(milliseconds: 200));
           // TODO(littlegnal): Most of callbacks on web are not implemented, we're temporarily skip these callbacks at this time.
@@ -5109,7 +5109,7 @@ void generatedTestCases(IrisTester irisTester) {
             eventIdsMapping['RtcEngineEventHandler_onAudioRoutingChanged'] ??
                 [];
         for (final event in eventIds) {
-          final ret = irisTester.fireEvent(event, params: eventJson);
+          final ret = irisTester().fireEvent(event, params: eventJson);
           // Delay 200 milliseconds to ensure the callback is called.
           await Future.delayed(const Duration(milliseconds: 200));
           // TODO(littlegnal): Most of callbacks on web are not implemented, we're temporarily skip these callbacks at this time.
@@ -5179,7 +5179,7 @@ void generatedTestCases(IrisTester irisTester) {
                 'RtcEngineEventHandler_onChannelMediaRelayStateChanged'] ??
             [];
         for (final event in eventIds) {
-          final ret = irisTester.fireEvent(event, params: eventJson);
+          final ret = irisTester().fireEvent(event, params: eventJson);
           // Delay 200 milliseconds to ensure the callback is called.
           await Future.delayed(const Duration(milliseconds: 200));
           // TODO(littlegnal): Most of callbacks on web are not implemented, we're temporarily skip these callbacks at this time.
@@ -5245,7 +5245,7 @@ void generatedTestCases(IrisTester irisTester) {
                 'RtcEngineEventHandler_onLocalPublishFallbackToAudioOnly'] ??
             [];
         for (final event in eventIds) {
-          final ret = irisTester.fireEvent(event, params: eventJson);
+          final ret = irisTester().fireEvent(event, params: eventJson);
           // Delay 200 milliseconds to ensure the callback is called.
           await Future.delayed(const Duration(milliseconds: 200));
           // TODO(littlegnal): Most of callbacks on web are not implemented, we're temporarily skip these callbacks at this time.
@@ -5315,7 +5315,7 @@ void generatedTestCases(IrisTester irisTester) {
                 'RtcEngineEventHandler_onRemoteSubscribeFallbackToAudioOnly'] ??
             [];
         for (final event in eventIds) {
-          final ret = irisTester.fireEvent(event, params: eventJson);
+          final ret = irisTester().fireEvent(event, params: eventJson);
           // Delay 200 milliseconds to ensure the callback is called.
           await Future.delayed(const Duration(milliseconds: 200));
           // TODO(littlegnal): Most of callbacks on web are not implemented, we're temporarily skip these callbacks at this time.
@@ -5396,7 +5396,7 @@ void generatedTestCases(IrisTester irisTester) {
                 'RtcEngineEventHandler_onRemoteAudioTransportStats'] ??
             [];
         for (final event in eventIds) {
-          final ret = irisTester.fireEvent(event, params: eventJson);
+          final ret = irisTester().fireEvent(event, params: eventJson);
           // Delay 200 milliseconds to ensure the callback is called.
           await Future.delayed(const Duration(milliseconds: 200));
           // TODO(littlegnal): Most of callbacks on web are not implemented, we're temporarily skip these callbacks at this time.
@@ -5476,7 +5476,7 @@ void generatedTestCases(IrisTester irisTester) {
                 'RtcEngineEventHandler_onRemoteVideoTransportStats'] ??
             [];
         for (final event in eventIds) {
-          final ret = irisTester.fireEvent(event, params: eventJson);
+          final ret = irisTester().fireEvent(event, params: eventJson);
           // Delay 200 milliseconds to ensure the callback is called.
           await Future.delayed(const Duration(milliseconds: 200));
           // TODO(littlegnal): Most of callbacks on web are not implemented, we're temporarily skip these callbacks at this time.
@@ -5554,7 +5554,7 @@ void generatedTestCases(IrisTester irisTester) {
             eventIdsMapping['RtcEngineEventHandler_onConnectionStateChanged'] ??
                 [];
         for (final event in eventIds) {
-          final ret = irisTester.fireEvent(event, params: eventJson);
+          final ret = irisTester().fireEvent(event, params: eventJson);
           // Delay 200 milliseconds to ensure the callback is called.
           await Future.delayed(const Duration(milliseconds: 200));
           // TODO(littlegnal): Most of callbacks on web are not implemented, we're temporarily skip these callbacks at this time.
@@ -5633,7 +5633,7 @@ void generatedTestCases(IrisTester irisTester) {
         final eventIds =
             eventIdsMapping['RtcEngineEventHandler_onWlAccMessage'] ?? [];
         for (final event in eventIds) {
-          final ret = irisTester.fireEvent(event, params: eventJson);
+          final ret = irisTester().fireEvent(event, params: eventJson);
           // Delay 200 milliseconds to ensure the callback is called.
           await Future.delayed(const Duration(milliseconds: 200));
           // TODO(littlegnal): Most of callbacks on web are not implemented, we're temporarily skip these callbacks at this time.
@@ -5722,7 +5722,7 @@ void generatedTestCases(IrisTester irisTester) {
         final eventIds =
             eventIdsMapping['RtcEngineEventHandler_onWlAccStats'] ?? [];
         for (final event in eventIds) {
-          final ret = irisTester.fireEvent(event, params: eventJson);
+          final ret = irisTester().fireEvent(event, params: eventJson);
           // Delay 200 milliseconds to ensure the callback is called.
           await Future.delayed(const Duration(milliseconds: 200));
           // TODO(littlegnal): Most of callbacks on web are not implemented, we're temporarily skip these callbacks at this time.
@@ -5794,7 +5794,7 @@ void generatedTestCases(IrisTester irisTester) {
         final eventIds =
             eventIdsMapping['RtcEngineEventHandler_onNetworkTypeChanged'] ?? [];
         for (final event in eventIds) {
-          final ret = irisTester.fireEvent(event, params: eventJson);
+          final ret = irisTester().fireEvent(event, params: eventJson);
           // Delay 200 milliseconds to ensure the callback is called.
           await Future.delayed(const Duration(milliseconds: 200));
           // TODO(littlegnal): Most of callbacks on web are not implemented, we're temporarily skip these callbacks at this time.
@@ -5868,7 +5868,7 @@ void generatedTestCases(IrisTester irisTester) {
         final eventIds =
             eventIdsMapping['RtcEngineEventHandler_onEncryptionError'] ?? [];
         for (final event in eventIds) {
-          final ret = irisTester.fireEvent(event, params: eventJson);
+          final ret = irisTester().fireEvent(event, params: eventJson);
           // Delay 200 milliseconds to ensure the callback is called.
           await Future.delayed(const Duration(milliseconds: 200));
           // TODO(littlegnal): Most of callbacks on web are not implemented, we're temporarily skip these callbacks at this time.
@@ -5933,7 +5933,7 @@ void generatedTestCases(IrisTester irisTester) {
         final eventIds =
             eventIdsMapping['RtcEngineEventHandler_onPermissionError'] ?? [];
         for (final event in eventIds) {
-          final ret = irisTester.fireEvent(event, params: eventJson);
+          final ret = irisTester().fireEvent(event, params: eventJson);
           // Delay 200 milliseconds to ensure the callback is called.
           await Future.delayed(const Duration(milliseconds: 200));
           // TODO(littlegnal): Most of callbacks on web are not implemented, we're temporarily skip these callbacks at this time.
@@ -6001,7 +6001,7 @@ void generatedTestCases(IrisTester irisTester) {
             eventIdsMapping['RtcEngineEventHandler_onLocalUserRegistered'] ??
                 [];
         for (final event in eventIds) {
-          final ret = irisTester.fireEvent(event, params: eventJson);
+          final ret = irisTester().fireEvent(event, params: eventJson);
           // Delay 200 milliseconds to ensure the callback is called.
           await Future.delayed(const Duration(milliseconds: 200));
           // TODO(littlegnal): Most of callbacks on web are not implemented, we're temporarily skip these callbacks at this time.
@@ -6073,7 +6073,7 @@ void generatedTestCases(IrisTester irisTester) {
         final eventIds =
             eventIdsMapping['RtcEngineEventHandler_onUserInfoUpdated'] ?? [];
         for (final event in eventIds) {
-          final ret = irisTester.fireEvent(event, params: eventJson);
+          final ret = irisTester().fireEvent(event, params: eventJson);
           // Delay 200 milliseconds to ensure the callback is called.
           await Future.delayed(const Duration(milliseconds: 200));
           // TODO(littlegnal): Most of callbacks on web are not implemented, we're temporarily skip these callbacks at this time.
@@ -6148,7 +6148,7 @@ void generatedTestCases(IrisTester irisTester) {
         final eventIds =
             eventIdsMapping['RtcEngineEventHandler_onUserAccountUpdated'] ?? [];
         for (final event in eventIds) {
-          final ret = irisTester.fireEvent(event, params: eventJson);
+          final ret = irisTester().fireEvent(event, params: eventJson);
           // Delay 200 milliseconds to ensure the callback is called.
           await Future.delayed(const Duration(milliseconds: 200));
           // TODO(littlegnal): Most of callbacks on web are not implemented, we're temporarily skip these callbacks at this time.
@@ -6244,7 +6244,7 @@ void generatedTestCases(IrisTester irisTester) {
                 'RtcEngineEventHandler_onVideoRenderingTracingResult'] ??
             [];
         for (final event in eventIds) {
-          final ret = irisTester.fireEvent(event, params: eventJson);
+          final ret = irisTester().fireEvent(event, params: eventJson);
           // Delay 200 milliseconds to ensure the callback is called.
           await Future.delayed(const Duration(milliseconds: 200));
           // TODO(littlegnal): Most of callbacks on web are not implemented, we're temporarily skip these callbacks at this time.
@@ -6338,7 +6338,7 @@ void generatedTestCases(IrisTester irisTester) {
                 'RtcEngineEventHandler_onLocalVideoTranscoderError'] ??
             [];
         for (final event in eventIds) {
-          final ret = irisTester.fireEvent(event, params: eventJson);
+          final ret = irisTester().fireEvent(event, params: eventJson);
           // Delay 200 milliseconds to ensure the callback is called.
           await Future.delayed(const Duration(milliseconds: 200));
           // TODO(littlegnal): Most of callbacks on web are not implemented, we're temporarily skip these callbacks at this time.
@@ -6415,7 +6415,7 @@ void generatedTestCases(IrisTester irisTester) {
         final eventIds =
             eventIdsMapping['RtcEngineEventHandler_onUploadLogResult'] ?? [];
         for (final event in eventIds) {
-          final ret = irisTester.fireEvent(event, params: eventJson);
+          final ret = irisTester().fireEvent(event, params: eventJson);
           // Delay 200 milliseconds to ensure the callback is called.
           await Future.delayed(const Duration(milliseconds: 200));
           // TODO(littlegnal): Most of callbacks on web are not implemented, we're temporarily skip these callbacks at this time.
@@ -6493,7 +6493,7 @@ void generatedTestCases(IrisTester irisTester) {
                 'RtcEngineEventHandler_onAudioSubscribeStateChanged'] ??
             [];
         for (final event in eventIds) {
-          final ret = irisTester.fireEvent(event, params: eventJson);
+          final ret = irisTester().fireEvent(event, params: eventJson);
           // Delay 200 milliseconds to ensure the callback is called.
           await Future.delayed(const Duration(milliseconds: 200));
           // TODO(littlegnal): Most of callbacks on web are not implemented, we're temporarily skip these callbacks at this time.
@@ -6571,7 +6571,7 @@ void generatedTestCases(IrisTester irisTester) {
                 'RtcEngineEventHandler_onVideoSubscribeStateChanged'] ??
             [];
         for (final event in eventIds) {
-          final ret = irisTester.fireEvent(event, params: eventJson);
+          final ret = irisTester().fireEvent(event, params: eventJson);
           // Delay 200 milliseconds to ensure the callback is called.
           await Future.delayed(const Duration(milliseconds: 200));
           // TODO(littlegnal): Most of callbacks on web are not implemented, we're temporarily skip these callbacks at this time.
@@ -6646,7 +6646,7 @@ void generatedTestCases(IrisTester irisTester) {
                 'RtcEngineEventHandler_onAudioPublishStateChanged'] ??
             [];
         for (final event in eventIds) {
-          final ret = irisTester.fireEvent(event, params: eventJson);
+          final ret = irisTester().fireEvent(event, params: eventJson);
           // Delay 200 milliseconds to ensure the callback is called.
           await Future.delayed(const Duration(milliseconds: 200));
           // TODO(littlegnal): Most of callbacks on web are not implemented, we're temporarily skip these callbacks at this time.
@@ -6724,7 +6724,7 @@ void generatedTestCases(IrisTester irisTester) {
                 'RtcEngineEventHandler_onVideoPublishStateChanged'] ??
             [];
         for (final event in eventIds) {
-          final ret = irisTester.fireEvent(event, params: eventJson);
+          final ret = irisTester().fireEvent(event, params: eventJson);
           // Delay 200 milliseconds to ensure the callback is called.
           await Future.delayed(const Duration(milliseconds: 200));
           // TODO(littlegnal): Most of callbacks on web are not implemented, we're temporarily skip these callbacks at this time.
@@ -6806,7 +6806,7 @@ void generatedTestCases(IrisTester irisTester) {
                 'RtcEngineEventHandler_onTranscodedStreamLayoutInfo'] ??
             [];
         for (final event in eventIds) {
-          final ret = irisTester.fireEvent(event, params: eventJson);
+          final ret = irisTester().fireEvent(event, params: eventJson);
           // Delay 200 milliseconds to ensure the callback is called.
           await Future.delayed(const Duration(milliseconds: 200));
           // TODO(littlegnal): Most of callbacks on web are not implemented, we're temporarily skip these callbacks at this time.
@@ -6878,7 +6878,7 @@ void generatedTestCases(IrisTester irisTester) {
         final eventIds =
             eventIdsMapping['RtcEngineEventHandler_onExtensionEvent'] ?? [];
         for (final event in eventIds) {
-          final ret = irisTester.fireEvent(event, params: eventJson);
+          final ret = irisTester().fireEvent(event, params: eventJson);
           // Delay 200 milliseconds to ensure the callback is called.
           await Future.delayed(const Duration(milliseconds: 200));
           // TODO(littlegnal): Most of callbacks on web are not implemented, we're temporarily skip these callbacks at this time.
@@ -6945,7 +6945,7 @@ void generatedTestCases(IrisTester irisTester) {
         final eventIds =
             eventIdsMapping['RtcEngineEventHandler_onExtensionStarted'] ?? [];
         for (final event in eventIds) {
-          final ret = irisTester.fireEvent(event, params: eventJson);
+          final ret = irisTester().fireEvent(event, params: eventJson);
           // Delay 200 milliseconds to ensure the callback is called.
           await Future.delayed(const Duration(milliseconds: 200));
           // TODO(littlegnal): Most of callbacks on web are not implemented, we're temporarily skip these callbacks at this time.
@@ -7012,7 +7012,7 @@ void generatedTestCases(IrisTester irisTester) {
         final eventIds =
             eventIdsMapping['RtcEngineEventHandler_onExtensionStopped'] ?? [];
         for (final event in eventIds) {
-          final ret = irisTester.fireEvent(event, params: eventJson);
+          final ret = irisTester().fireEvent(event, params: eventJson);
           // Delay 200 milliseconds to ensure the callback is called.
           await Future.delayed(const Duration(milliseconds: 200));
           // TODO(littlegnal): Most of callbacks on web are not implemented, we're temporarily skip these callbacks at this time.
@@ -7084,7 +7084,7 @@ void generatedTestCases(IrisTester irisTester) {
         final eventIds =
             eventIdsMapping['RtcEngineEventHandler_onExtensionError'] ?? [];
         for (final event in eventIds) {
-          final ret = irisTester.fireEvent(event, params: eventJson);
+          final ret = irisTester().fireEvent(event, params: eventJson);
           // Delay 200 milliseconds to ensure the callback is called.
           await Future.delayed(const Duration(milliseconds: 200));
           // TODO(littlegnal): Most of callbacks on web are not implemented, we're temporarily skip these callbacks at this time.
@@ -7156,7 +7156,7 @@ void generatedTestCases(IrisTester irisTester) {
         final eventIds =
             eventIdsMapping['RtcEngineEventHandler_onSetRtmFlagResult'] ?? [];
         for (final event in eventIds) {
-          final ret = irisTester.fireEvent(event, params: eventJson);
+          final ret = irisTester().fireEvent(event, params: eventJson);
           // Delay 200 milliseconds to ensure the callback is called.
           await Future.delayed(const Duration(milliseconds: 200));
           // TODO(littlegnal): Most of callbacks on web are not implemented, we're temporarily skip these callbacks at this time.
