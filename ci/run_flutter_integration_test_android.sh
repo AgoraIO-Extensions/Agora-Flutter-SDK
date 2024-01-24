@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-set -e
+set +e
 set -x
 
 MY_PATH=$(dirname "$0")
@@ -19,19 +19,6 @@ pushd ${MY_PATH}/../test_shard/fake_test_app
 flutter packages get
 
 flutter test integration_test --verbose
-
-# If the integration test failed, get the iris logs
-if [ $? -ne 0 ]; then
-    echo "Some of integration test failed..."
-    echo "Dump iris logs..."
-
-    OUT_LOG_DIR=${PROJECT_ROOT}/iris-logs-android
-
-    mkdir ${OUT_LOG_DIR}
-    adb exec-out run-as com.example.fake_test_app cat app_flutter/agora-iris.log > ${OUT_LOG_DIR}/agora-iris-fake-test.log
-    adb exec-out run-as io.agora.integration_test_app.integration_test_app cat app_flutter/agora-iris.log > ${OUT_LOG_DIR}/agora-iris-integration-test.log
-    adb exec-out run-as com.example.rendering_test cat app_flutter/agora-iris.log > ${OUT_LOG_DIR}/agora-iris-rendering-test.log
-fi
 
 popd
 
@@ -53,3 +40,23 @@ popd
 #     adb exec-out run-as io.agora.integration_test_app.integration_test_app cat app_flutter/agora-iris.log > ./iris-logs-android/agora-iris-integration-test.log
 #     adb exec-out run-as com.example.rendering_test cat app_flutter/agora-iris.log > ./iris-logs-android/agora-iris-rendering-test.log
 # fi
+
+# https://github.com/ReactiveCircus/android-emulator-runner/issues/316
+EXIT_CODE=$?
+
+set -e
+
+# If the integration test failed, get the iris logs
+if [ ${EXIT_CODE} -ne 0 ]; then
+    echo "Some of integration test failed..."
+    echo "Dump iris logs..."
+
+    OUT_LOG_DIR=${PROJECT_ROOT}/iris-logs-android
+
+    adb logcat -d | tee ${OUT_LOG_DIR}/android-crash-log.txt
+
+    mkdir ${OUT_LOG_DIR}
+    adb exec-out run-as com.example.fake_test_app cat app_flutter/agora-iris.log > ${OUT_LOG_DIR}/agora-iris-fake-test.log
+    adb exec-out run-as io.agora.integration_test_app.integration_test_app cat app_flutter/agora-iris.log > ${OUT_LOG_DIR}/agora-iris-integration-test.log
+    adb exec-out run-as com.example.rendering_test cat app_flutter/agora-iris.log > ${OUT_LOG_DIR}/agora-iris-rendering-test.log
+fi
