@@ -142,6 +142,8 @@ jobs:
       - name: Get iris logs ios
         if: always()
         run: |
+          sleep 30
+
           mkdir -p iris-logs-ios
           xcrun simctl spawn "iPhone 13 Pro Max" log collect --output $(pwd)/iris-logs-ios/logs.logarchive
           
