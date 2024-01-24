@@ -151,13 +151,14 @@ jobs:
         if: always()
         run: |
           mkdir iris-logs-ios
-          xcrun simctl spawn "iPhone 13 Pro Max" log collect --output ./iris-logs-ios
+          # xcrun simctl spawn "iPhone 13 Pro Max" log collect --output ./iris-logs-ios
+          xcrun simctl spawn "iPhone 13 Pro Max" log collect --output ./logs.logarchive
       - name: Upload iris logs ios
         uses: actions/upload-artifact@v4
         if: always()
         with:
           name: iris-logs-ios
-          path: iris-logs-ios/*
+          path: ./*.logarchive
 
   integration_test_macos:
     name: Run Flutter macOS Integration Tests
