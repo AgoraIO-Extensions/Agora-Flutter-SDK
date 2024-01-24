@@ -110,7 +110,7 @@ jobs:
           disk-size: 8192M
           script: |
             adb logcat -c
-            adb logcat *:* &
+            adb logcat *:E *:F &
             $(bash ci/run_flutter_integration_test_android.sh)
       # - name: Get iris logs android
       #   if: always()
@@ -151,7 +151,7 @@ jobs:
         if: always()
         run: |
           mkdir iris-logs-ios
-          xcrun simctl spawn "iPhone 13 Pro Max" log collect --output ./iris-logs-ios/crash-logs.log
+          xcrun simctl spawn "iPhone 13 Pro Max" log collect --output ./iris-logs-ios
       - name: Upload iris logs ios
         uses: actions/upload-artifact@v4
         if: always()
