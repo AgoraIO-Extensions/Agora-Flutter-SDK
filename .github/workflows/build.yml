@@ -207,7 +207,7 @@ jobs:
           flutter-version: ${{ matrix.version }}
           cache: true
       - name: Set up crash dump environment
-        run: .\setup-crash-dumps.ps1
+        run: .\ci\setup-crash-dumps.ps1
         shell: powershell
       - run: flutter config --enable-windows-desktop
       - name: Run windows integration test
