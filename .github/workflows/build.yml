@@ -152,8 +152,7 @@ jobs:
         run: |
           pwd
           mkdir -p iris-logs-ios
-          # xcrun simctl spawn "iPhone 13 Pro Max" log collect --output ./iris-logs-ios
-          xcrun simctl spawn "iPhone 13 Pro Max" log collect --output ./iris-logs-ios/logs.logarchive
+          xcrun simctl spawn "iPhone 13 Pro Max" log collect --output $(pwd)/iris-logs-ios/logs.logarchive
           ls
           ls -la iris-logs-ios
           
