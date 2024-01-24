@@ -150,10 +150,13 @@ jobs:
       - name: Get iris logs ios
         if: always()
         run: |
-          mkdir iris-logs-ios
+          pwd
+          mkdir -p iris-logs-ios
           # xcrun simctl spawn "iPhone 13 Pro Max" log collect --output ./iris-logs-ios
-          xcrun simctl spawn "iPhone 13 Pro Max" log collect --output ./logs.logarchive
+          xcrun simctl spawn "iPhone 13 Pro Max" log collect --output ./iris-logs-ios/logs.logarchive
           ls
+          ls -la iris-logs-ios
+          
       - name: Upload iris logs ios
         uses: actions/upload-artifact@v4
         if: always()
