@@ -110,7 +110,8 @@ jobs:
           disk-size: 8192M
           script: |
             adb logcat -c
-            adb logcat *:E & $(bash ci/run_flutter_integration_test_android.sh)
+            adb logcat *:D *:I &
+            $(bash ci/run_flutter_integration_test_android.sh)
       # - name: Get iris logs android
       #   if: always()
       #   run: |
