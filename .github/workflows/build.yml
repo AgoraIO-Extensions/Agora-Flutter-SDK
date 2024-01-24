@@ -153,6 +153,7 @@ jobs:
           mkdir iris-logs-ios
           # xcrun simctl spawn "iPhone 13 Pro Max" log collect --output ./iris-logs-ios
           xcrun simctl spawn "iPhone 13 Pro Max" log collect --output ./logs.logarchive
+          ls
       - name: Upload iris logs ios
         uses: actions/upload-artifact@v4
         if: always()
