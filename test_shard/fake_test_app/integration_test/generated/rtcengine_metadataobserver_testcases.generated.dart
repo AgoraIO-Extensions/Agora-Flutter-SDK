@@ -26,9 +26,9 @@ void generatedTestCases(ValueGetter<IrisTester> irisTester) {
       await rtcEngine.initialize(RtcEngineContext(
         appId: 'app_id',
         areaCode: AreaCode.areaCodeGlob.value(),
-        logConfig: LogConfig(filePath: logPath),
+        //logConfig: LogConfig(filePath: logPath),
       ));
-      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
+      //await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       final onMetadataReceivedCompleter = Completer<bool>();
       final theMetadataObserver = MetadataObserver(

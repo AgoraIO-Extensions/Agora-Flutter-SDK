@@ -26,9 +26,9 @@ void generatedTestCases(ValueGetter<IrisTester> irisTester) {
       await rtcEngine.initialize(RtcEngineContext(
         appId: 'app_id',
         areaCode: AreaCode.areaCodeGlob.value(),
-        logConfig: LogConfig(filePath: logPath),
+        //logConfig: LogConfig(filePath: logPath),
       ));
-      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
+      //await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
       final mediaEngine = rtcEngine.getMediaEngine();
 
       final onCaptureVideoFrameCompleter = Completer<bool>();
@@ -137,9 +137,9 @@ void generatedTestCases(ValueGetter<IrisTester> irisTester) {
       await rtcEngine.initialize(RtcEngineContext(
         appId: 'app_id',
         areaCode: AreaCode.areaCodeGlob.value(),
-        logConfig: LogConfig(filePath: logPath),
+        //logConfig: LogConfig(filePath: logPath),
       ));
-      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
+      //await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
       final mediaEngine = rtcEngine.getMediaEngine();
 
       final onPreEncodeVideoFrameCompleter = Completer<bool>();
@@ -248,9 +248,9 @@ void generatedTestCases(ValueGetter<IrisTester> irisTester) {
       await rtcEngine.initialize(RtcEngineContext(
         appId: 'app_id',
         areaCode: AreaCode.areaCodeGlob.value(),
-        logConfig: LogConfig(filePath: logPath),
+        //logConfig: LogConfig(filePath: logPath),
       ));
-      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
+      //await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
       final mediaEngine = rtcEngine.getMediaEngine();
 
       final onMediaPlayerVideoFrameCompleter = Completer<bool>();
@@ -357,9 +357,9 @@ void generatedTestCases(ValueGetter<IrisTester> irisTester) {
       await rtcEngine.initialize(RtcEngineContext(
         appId: 'app_id',
         areaCode: AreaCode.areaCodeGlob.value(),
-        logConfig: LogConfig(filePath: logPath),
+        //logConfig: LogConfig(filePath: logPath),
       ));
-      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
+      //await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
       final mediaEngine = rtcEngine.getMediaEngine();
 
       final onRenderVideoFrameCompleter = Completer<bool>();
@@ -469,9 +469,9 @@ void generatedTestCases(ValueGetter<IrisTester> irisTester) {
       await rtcEngine.initialize(RtcEngineContext(
         appId: 'app_id',
         areaCode: AreaCode.areaCodeGlob.value(),
-        logConfig: LogConfig(filePath: logPath),
+        //logConfig: LogConfig(filePath: logPath),
       ));
-      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
+      //await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
       final mediaEngine = rtcEngine.getMediaEngine();
 
       final onTranscodedVideoFrameCompleter = Completer<bool>();

@@ -26,7 +26,7 @@ void rtcEngineExSmokeTestCases() {
       await rtcEngineEx.initialize(RtcEngineContext(
         appId: engineAppId,
         areaCode: AreaCode.areaCodeGlob.value(),
-        logConfig: LogConfig(filePath: logPath),
+        //logConfig: LogConfig(filePath: logPath),
       ));
       await rtcEngineEx.setParameters('{"rtc.enable_debug_log": true}');
 
@@ -148,7 +148,7 @@ void rtcEngineExSmokeTestCases() {
       await rtcEngineEx.initialize(RtcEngineContext(
         appId: engineAppId,
         areaCode: AreaCode.areaCodeGlob.value(),
-        logConfig: LogConfig(filePath: logPath),
+        //logConfig: LogConfig(filePath: logPath),
       ));
       await rtcEngineEx.setParameters('{"rtc.enable_debug_log": true}');
 
@@ -200,7 +200,7 @@ void rtcEngineExSmokeTestCases() {
       await rtcEngineEx.initialize(RtcEngineContext(
         appId: engineAppId,
         areaCode: AreaCode.areaCodeGlob.value(),
-        logConfig: LogConfig(filePath: logPath),
+        //logConfig: LogConfig(filePath: logPath),
       ));
       await rtcEngineEx.setParameters('{"rtc.enable_debug_log": true}');
 
@@ -321,7 +321,7 @@ void rtcEngineExSmokeTestCases() {
       await rtcEngineEx.initialize(RtcEngineContext(
         appId: engineAppId,
         areaCode: AreaCode.areaCodeGlob.value(),
-        logConfig: LogConfig(filePath: logPath),
+        //logConfig: LogConfig(filePath: logPath),
       ));
       await rtcEngineEx.setParameters('{"rtc.enable_debug_log": true}');
 
@@ -401,7 +401,7 @@ void rtcEngineExSmokeTestCases() {
       await rtcEngineEx.initialize(RtcEngineContext(
         appId: engineAppId,
         areaCode: AreaCode.areaCodeGlob.value(),
-        logConfig: LogConfig(filePath: logPath),
+        //logConfig: LogConfig(filePath: logPath),
       ));
       await rtcEngineEx.setParameters('{"rtc.enable_debug_log": true}');
 
@@ -484,7 +484,7 @@ void rtcEngineExSmokeTestCases() {
       await rtcEngineEx.initialize(RtcEngineContext(
         appId: engineAppId,
         areaCode: AreaCode.areaCodeGlob.value(),
-        logConfig: LogConfig(filePath: logPath),
+        //logConfig: LogConfig(filePath: logPath),
       ));
       await rtcEngineEx.setParameters('{"rtc.enable_debug_log": true}');
 
@@ -532,7 +532,7 @@ void rtcEngineExSmokeTestCases() {
       await rtcEngineEx.initialize(RtcEngineContext(
         appId: engineAppId,
         areaCode: AreaCode.areaCodeGlob.value(),
-        logConfig: LogConfig(filePath: logPath),
+        //logConfig: LogConfig(filePath: logPath),
       ));
       await rtcEngineEx.setParameters('{"rtc.enable_debug_log": true}');
 
@@ -580,7 +580,7 @@ void rtcEngineExSmokeTestCases() {
       await rtcEngineEx.initialize(RtcEngineContext(
         appId: engineAppId,
         areaCode: AreaCode.areaCodeGlob.value(),
-        logConfig: LogConfig(filePath: logPath),
+        //logConfig: LogConfig(filePath: logPath),
       ));
       await rtcEngineEx.setParameters('{"rtc.enable_debug_log": true}');
 
@@ -628,7 +628,7 @@ void rtcEngineExSmokeTestCases() {
       await rtcEngineEx.initialize(RtcEngineContext(
         appId: engineAppId,
         areaCode: AreaCode.areaCodeGlob.value(),
-        logConfig: LogConfig(filePath: logPath),
+        //logConfig: LogConfig(filePath: logPath),
       ));
       await rtcEngineEx.setParameters('{"rtc.enable_debug_log": true}');
 
@@ -674,7 +674,7 @@ void rtcEngineExSmokeTestCases() {
       await rtcEngineEx.initialize(RtcEngineContext(
         appId: engineAppId,
         areaCode: AreaCode.areaCodeGlob.value(),
-        logConfig: LogConfig(filePath: logPath),
+        //logConfig: LogConfig(filePath: logPath),
       ));
       await rtcEngineEx.setParameters('{"rtc.enable_debug_log": true}');
 
@@ -720,7 +720,7 @@ void rtcEngineExSmokeTestCases() {
       await rtcEngineEx.initialize(RtcEngineContext(
         appId: engineAppId,
         areaCode: AreaCode.areaCodeGlob.value(),
-        logConfig: LogConfig(filePath: logPath),
+        //logConfig: LogConfig(filePath: logPath),
       ));
       await rtcEngineEx.setParameters('{"rtc.enable_debug_log": true}');
 
@@ -766,7 +766,7 @@ void rtcEngineExSmokeTestCases() {
       await rtcEngineEx.initialize(RtcEngineContext(
         appId: engineAppId,
         areaCode: AreaCode.areaCodeGlob.value(),
-        logConfig: LogConfig(filePath: logPath),
+        //logConfig: LogConfig(filePath: logPath),
       ));
       await rtcEngineEx.setParameters('{"rtc.enable_debug_log": true}');
 
@@ -812,7 +812,7 @@ void rtcEngineExSmokeTestCases() {
       await rtcEngineEx.initialize(RtcEngineContext(
         appId: engineAppId,
         areaCode: AreaCode.areaCodeGlob.value(),
-        logConfig: LogConfig(filePath: logPath),
+        //logConfig: LogConfig(filePath: logPath),
       ));
       await rtcEngineEx.setParameters('{"rtc.enable_debug_log": true}');
 
@@ -865,7 +865,7 @@ void rtcEngineExSmokeTestCases() {
       await rtcEngineEx.initialize(RtcEngineContext(
         appId: engineAppId,
         areaCode: AreaCode.areaCodeGlob.value(),
-        logConfig: LogConfig(filePath: logPath),
+        //logConfig: LogConfig(filePath: logPath),
       ));
       await rtcEngineEx.setParameters('{"rtc.enable_debug_log": true}');
 
@@ -915,7 +915,7 @@ void rtcEngineExSmokeTestCases() {
       await rtcEngineEx.initialize(RtcEngineContext(
         appId: engineAppId,
         areaCode: AreaCode.areaCodeGlob.value(),
-        logConfig: LogConfig(filePath: logPath),
+        //logConfig: LogConfig(filePath: logPath),
       ));
       await rtcEngineEx.setParameters('{"rtc.enable_debug_log": true}');
 
@@ -980,7 +980,7 @@ void rtcEngineExSmokeTestCases() {
       await rtcEngineEx.initialize(RtcEngineContext(
         appId: engineAppId,
         areaCode: AreaCode.areaCodeGlob.value(),
-        logConfig: LogConfig(filePath: logPath),
+        //logConfig: LogConfig(filePath: logPath),
       ));
       await rtcEngineEx.setParameters('{"rtc.enable_debug_log": true}');
 
@@ -1031,7 +1031,7 @@ void rtcEngineExSmokeTestCases() {
       await rtcEngineEx.initialize(RtcEngineContext(
         appId: engineAppId,
         areaCode: AreaCode.areaCodeGlob.value(),
-        logConfig: LogConfig(filePath: logPath),
+        //logConfig: LogConfig(filePath: logPath),
       ));
       await rtcEngineEx.setParameters('{"rtc.enable_debug_log": true}');
 
@@ -1079,7 +1079,7 @@ void rtcEngineExSmokeTestCases() {
       await rtcEngineEx.initialize(RtcEngineContext(
         appId: engineAppId,
         areaCode: AreaCode.areaCodeGlob.value(),
-        logConfig: LogConfig(filePath: logPath),
+        //logConfig: LogConfig(filePath: logPath),
       ));
       await rtcEngineEx.setParameters('{"rtc.enable_debug_log": true}');
 
@@ -1125,7 +1125,7 @@ void rtcEngineExSmokeTestCases() {
       await rtcEngineEx.initialize(RtcEngineContext(
         appId: engineAppId,
         areaCode: AreaCode.areaCodeGlob.value(),
-        logConfig: LogConfig(filePath: logPath),
+        //logConfig: LogConfig(filePath: logPath),
       ));
       await rtcEngineEx.setParameters('{"rtc.enable_debug_log": true}');
 
@@ -1171,7 +1171,7 @@ void rtcEngineExSmokeTestCases() {
       await rtcEngineEx.initialize(RtcEngineContext(
         appId: engineAppId,
         areaCode: AreaCode.areaCodeGlob.value(),
-        logConfig: LogConfig(filePath: logPath),
+        //logConfig: LogConfig(filePath: logPath),
       ));
       await rtcEngineEx.setParameters('{"rtc.enable_debug_log": true}');
 
@@ -1219,7 +1219,7 @@ void rtcEngineExSmokeTestCases() {
       await rtcEngineEx.initialize(RtcEngineContext(
         appId: engineAppId,
         areaCode: AreaCode.areaCodeGlob.value(),
-        logConfig: LogConfig(filePath: logPath),
+        //logConfig: LogConfig(filePath: logPath),
       ));
       await rtcEngineEx.setParameters('{"rtc.enable_debug_log": true}');
 
@@ -1263,7 +1263,7 @@ void rtcEngineExSmokeTestCases() {
       await rtcEngineEx.initialize(RtcEngineContext(
         appId: engineAppId,
         areaCode: AreaCode.areaCodeGlob.value(),
-        logConfig: LogConfig(filePath: logPath),
+        //logConfig: LogConfig(filePath: logPath),
       ));
       await rtcEngineEx.setParameters('{"rtc.enable_debug_log": true}');
 
@@ -1317,7 +1317,7 @@ void rtcEngineExSmokeTestCases() {
       await rtcEngineEx.initialize(RtcEngineContext(
         appId: engineAppId,
         areaCode: AreaCode.areaCodeGlob.value(),
-        logConfig: LogConfig(filePath: logPath),
+        //logConfig: LogConfig(filePath: logPath),
       ));
       await rtcEngineEx.setParameters('{"rtc.enable_debug_log": true}');
 
@@ -1367,7 +1367,7 @@ void rtcEngineExSmokeTestCases() {
       await rtcEngineEx.initialize(RtcEngineContext(
         appId: engineAppId,
         areaCode: AreaCode.areaCodeGlob.value(),
-        logConfig: LogConfig(filePath: logPath),
+        //logConfig: LogConfig(filePath: logPath),
       ));
       await rtcEngineEx.setParameters('{"rtc.enable_debug_log": true}');
 
@@ -1452,7 +1452,7 @@ void rtcEngineExSmokeTestCases() {
       await rtcEngineEx.initialize(RtcEngineContext(
         appId: engineAppId,
         areaCode: AreaCode.areaCodeGlob.value(),
-        logConfig: LogConfig(filePath: logPath),
+        //logConfig: LogConfig(filePath: logPath),
       ));
       await rtcEngineEx.setParameters('{"rtc.enable_debug_log": true}');
 
@@ -1496,7 +1496,7 @@ void rtcEngineExSmokeTestCases() {
       await rtcEngineEx.initialize(RtcEngineContext(
         appId: engineAppId,
         areaCode: AreaCode.areaCodeGlob.value(),
-        logConfig: LogConfig(filePath: logPath),
+        //logConfig: LogConfig(filePath: logPath),
       ));
       await rtcEngineEx.setParameters('{"rtc.enable_debug_log": true}');
 
@@ -1550,7 +1550,7 @@ void rtcEngineExSmokeTestCases() {
       await rtcEngineEx.initialize(RtcEngineContext(
         appId: engineAppId,
         areaCode: AreaCode.areaCodeGlob.value(),
-        logConfig: LogConfig(filePath: logPath),
+        //logConfig: LogConfig(filePath: logPath),
       ));
       await rtcEngineEx.setParameters('{"rtc.enable_debug_log": true}');
 
@@ -1600,7 +1600,7 @@ void rtcEngineExSmokeTestCases() {
       await rtcEngineEx.initialize(RtcEngineContext(
         appId: engineAppId,
         areaCode: AreaCode.areaCodeGlob.value(),
-        logConfig: LogConfig(filePath: logPath),
+        //logConfig: LogConfig(filePath: logPath),
       ));
       await rtcEngineEx.setParameters('{"rtc.enable_debug_log": true}');
 
@@ -1646,7 +1646,7 @@ void rtcEngineExSmokeTestCases() {
       await rtcEngineEx.initialize(RtcEngineContext(
         appId: engineAppId,
         areaCode: AreaCode.areaCodeGlob.value(),
-        logConfig: LogConfig(filePath: logPath),
+        //logConfig: LogConfig(filePath: logPath),
       ));
       await rtcEngineEx.setParameters('{"rtc.enable_debug_log": true}');
 
@@ -1745,7 +1745,7 @@ void rtcEngineExSmokeTestCases() {
       await rtcEngineEx.initialize(RtcEngineContext(
         appId: engineAppId,
         areaCode: AreaCode.areaCodeGlob.value(),
-        logConfig: LogConfig(filePath: logPath),
+        //logConfig: LogConfig(filePath: logPath),
       ));
       await rtcEngineEx.setParameters('{"rtc.enable_debug_log": true}');
 
@@ -1842,7 +1842,7 @@ void rtcEngineExSmokeTestCases() {
       await rtcEngineEx.initialize(RtcEngineContext(
         appId: engineAppId,
         areaCode: AreaCode.areaCodeGlob.value(),
-        logConfig: LogConfig(filePath: logPath),
+        //logConfig: LogConfig(filePath: logPath),
       ));
       await rtcEngineEx.setParameters('{"rtc.enable_debug_log": true}');
 
@@ -1887,7 +1887,7 @@ void rtcEngineExSmokeTestCases() {
       await rtcEngineEx.initialize(RtcEngineContext(
         appId: engineAppId,
         areaCode: AreaCode.areaCodeGlob.value(),
-        logConfig: LogConfig(filePath: logPath),
+        //logConfig: LogConfig(filePath: logPath),
       ));
       await rtcEngineEx.setParameters('{"rtc.enable_debug_log": true}');
 
@@ -1931,7 +1931,7 @@ void rtcEngineExSmokeTestCases() {
       await rtcEngineEx.initialize(RtcEngineContext(
         appId: engineAppId,
         areaCode: AreaCode.areaCodeGlob.value(),
-        logConfig: LogConfig(filePath: logPath),
+        //logConfig: LogConfig(filePath: logPath),
       ));
       await rtcEngineEx.setParameters('{"rtc.enable_debug_log": true}');
 
@@ -1975,7 +1975,7 @@ void rtcEngineExSmokeTestCases() {
       await rtcEngineEx.initialize(RtcEngineContext(
         appId: engineAppId,
         areaCode: AreaCode.areaCodeGlob.value(),
-        logConfig: LogConfig(filePath: logPath),
+        //logConfig: LogConfig(filePath: logPath),
       ));
       await rtcEngineEx.setParameters('{"rtc.enable_debug_log": true}');
 
@@ -2019,7 +2019,7 @@ void rtcEngineExSmokeTestCases() {
       await rtcEngineEx.initialize(RtcEngineContext(
         appId: engineAppId,
         areaCode: AreaCode.areaCodeGlob.value(),
-        logConfig: LogConfig(filePath: logPath),
+        //logConfig: LogConfig(filePath: logPath),
       ));
       await rtcEngineEx.setParameters('{"rtc.enable_debug_log": true}');
 
@@ -2065,7 +2065,7 @@ void rtcEngineExSmokeTestCases() {
       await rtcEngineEx.initialize(RtcEngineContext(
         appId: engineAppId,
         areaCode: AreaCode.areaCodeGlob.value(),
-        logConfig: LogConfig(filePath: logPath),
+        //logConfig: LogConfig(filePath: logPath),
       ));
       await rtcEngineEx.setParameters('{"rtc.enable_debug_log": true}');
 
@@ -2110,7 +2110,7 @@ void rtcEngineExSmokeTestCases() {
       await rtcEngineEx.initialize(RtcEngineContext(
         appId: engineAppId,
         areaCode: AreaCode.areaCodeGlob.value(),
-        logConfig: LogConfig(filePath: logPath),
+        //logConfig: LogConfig(filePath: logPath),
       ));
       await rtcEngineEx.setParameters('{"rtc.enable_debug_log": true}');
 
@@ -2170,7 +2170,7 @@ void rtcEngineExSmokeTestCases() {
       await rtcEngineEx.initialize(RtcEngineContext(
         appId: engineAppId,
         areaCode: AreaCode.areaCodeGlob.value(),
-        logConfig: LogConfig(filePath: logPath),
+        //logConfig: LogConfig(filePath: logPath),
       ));
       await rtcEngineEx.setParameters('{"rtc.enable_debug_log": true}');
 
@@ -2231,7 +2231,7 @@ void rtcEngineExSmokeTestCases() {
       await rtcEngineEx.initialize(RtcEngineContext(
         appId: engineAppId,
         areaCode: AreaCode.areaCodeGlob.value(),
-        logConfig: LogConfig(filePath: logPath),
+        //logConfig: LogConfig(filePath: logPath),
       ));
       await rtcEngineEx.setParameters('{"rtc.enable_debug_log": true}');
 
@@ -2278,7 +2278,7 @@ void rtcEngineExSmokeTestCases() {
       await rtcEngineEx.initialize(RtcEngineContext(
         appId: engineAppId,
         areaCode: AreaCode.areaCodeGlob.value(),
-        logConfig: LogConfig(filePath: logPath),
+        //logConfig: LogConfig(filePath: logPath),
       ));
       await rtcEngineEx.setParameters('{"rtc.enable_debug_log": true}');
 
@@ -2335,7 +2335,7 @@ void rtcEngineExSmokeTestCases() {
       await rtcEngineEx.initialize(RtcEngineContext(
         appId: engineAppId,
         areaCode: AreaCode.areaCodeGlob.value(),
-        logConfig: LogConfig(filePath: logPath),
+        //logConfig: LogConfig(filePath: logPath),
       ));
       await rtcEngineEx.setParameters('{"rtc.enable_debug_log": true}');
 
@@ -2379,7 +2379,7 @@ void rtcEngineExSmokeTestCases() {
       await rtcEngineEx.initialize(RtcEngineContext(
         appId: engineAppId,
         areaCode: AreaCode.areaCodeGlob.value(),
-        logConfig: LogConfig(filePath: logPath),
+        //logConfig: LogConfig(filePath: logPath),
       ));
       await rtcEngineEx.setParameters('{"rtc.enable_debug_log": true}');
 

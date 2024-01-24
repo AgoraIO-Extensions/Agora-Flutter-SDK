@@ -33,7 +33,7 @@ import 'package:iris_method_channel/iris_method_channel.dart';
 void main() {
   IntegrationTestWidgetsFlutterBinding.ensureInitialized();
 
-  IrisTester? irisTester;// = createIrisTester();
+  IrisTester? irisTester; // = createIrisTester();
 
   setUp(() {
     irisTester = createIrisTester();
@@ -76,7 +76,8 @@ void main() {
     mediaplayer_audiospectrumobserver.generatedTestCases(() => irisTester!);
     mediaplayer_audiopcmframesink.generatedTestCases(() => irisTester!);
     mediaplayer_mediaplayersourceobserver.generatedTestCases(() => irisTester!);
-    mediaplayer_mediaplayervideoframeobserver.generatedTestCases(() => irisTester!);
+    mediaplayer_mediaplayervideoframeobserver
+        .generatedTestCases(() => irisTester!);
 
     // MediaRecorder events
     mediarecorder_mediarecorderobserver.generatedTestCases(() => irisTester!);

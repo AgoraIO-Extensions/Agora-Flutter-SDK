@@ -25,9 +25,9 @@ void musicContentCenterSmokeTestCases() {
       await rtcEngine.initialize(RtcEngineContext(
         appId: engineAppId,
         areaCode: AreaCode.areaCodeGlob.value(),
-        logConfig: LogConfig(filePath: logPath),
+        //logConfig: LogConfig(filePath: logPath),
       ));
-      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
+      //await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       final musicContentCenter = rtcEngine.getMusicContentCenter();
 
@@ -78,9 +78,9 @@ void musicContentCenterSmokeTestCases() {
       await rtcEngine.initialize(RtcEngineContext(
         appId: engineAppId,
         areaCode: AreaCode.areaCodeGlob.value(),
-        logConfig: LogConfig(filePath: logPath),
+        //logConfig: LogConfig(filePath: logPath),
       ));
-      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
+      //await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       final musicContentCenter = rtcEngine.getMusicContentCenter();
 
@@ -119,9 +119,9 @@ void musicContentCenterSmokeTestCases() {
       await rtcEngine.initialize(RtcEngineContext(
         appId: engineAppId,
         areaCode: AreaCode.areaCodeGlob.value(),
-        logConfig: LogConfig(filePath: logPath),
+        //logConfig: LogConfig(filePath: logPath),
       ));
-      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
+      //await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       final musicContentCenter = rtcEngine.getMusicContentCenter();
 
@@ -157,9 +157,9 @@ void musicContentCenterSmokeTestCases() {
       await rtcEngine.initialize(RtcEngineContext(
         appId: engineAppId,
         areaCode: AreaCode.areaCodeGlob.value(),
-        logConfig: LogConfig(filePath: logPath),
+        //logConfig: LogConfig(filePath: logPath),
       ));
-      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
+      //await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       final musicContentCenter = rtcEngine.getMusicContentCenter();
 
@@ -215,9 +215,9 @@ void musicContentCenterSmokeTestCases() {
       await rtcEngine.initialize(RtcEngineContext(
         appId: engineAppId,
         areaCode: AreaCode.areaCodeGlob.value(),
-        logConfig: LogConfig(filePath: logPath),
+        //logConfig: LogConfig(filePath: logPath),
       ));
-      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
+      //await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       final musicContentCenter = rtcEngine.getMusicContentCenter();
 
@@ -254,9 +254,9 @@ void musicContentCenterSmokeTestCases() {
       await rtcEngine.initialize(RtcEngineContext(
         appId: engineAppId,
         areaCode: AreaCode.areaCodeGlob.value(),
-        logConfig: LogConfig(filePath: logPath),
+        //logConfig: LogConfig(filePath: logPath),
       ));
-      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
+      //await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       final musicContentCenter = rtcEngine.getMusicContentCenter();
 
@@ -293,9 +293,9 @@ void musicContentCenterSmokeTestCases() {
       await rtcEngine.initialize(RtcEngineContext(
         appId: engineAppId,
         areaCode: AreaCode.areaCodeGlob.value(),
-        logConfig: LogConfig(filePath: logPath),
+        //logConfig: LogConfig(filePath: logPath),
       ));
-      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
+      //await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       final musicContentCenter = rtcEngine.getMusicContentCenter();
 
@@ -341,9 +341,9 @@ void musicContentCenterSmokeTestCases() {
       await rtcEngine.initialize(RtcEngineContext(
         appId: engineAppId,
         areaCode: AreaCode.areaCodeGlob.value(),
-        logConfig: LogConfig(filePath: logPath),
+        //logConfig: LogConfig(filePath: logPath),
       ));
-      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
+      //await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       final musicContentCenter = rtcEngine.getMusicContentCenter();
 
@@ -388,9 +388,9 @@ void musicContentCenterSmokeTestCases() {
       await rtcEngine.initialize(RtcEngineContext(
         appId: engineAppId,
         areaCode: AreaCode.areaCodeGlob.value(),
-        logConfig: LogConfig(filePath: logPath),
+        //logConfig: LogConfig(filePath: logPath),
       ));
-      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
+      //await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       final musicContentCenter = rtcEngine.getMusicContentCenter();
 
@@ -429,9 +429,9 @@ void musicContentCenterSmokeTestCases() {
       await rtcEngine.initialize(RtcEngineContext(
         appId: engineAppId,
         areaCode: AreaCode.areaCodeGlob.value(),
-        logConfig: LogConfig(filePath: logPath),
+        //logConfig: LogConfig(filePath: logPath),
       ));
-      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
+      //await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       final musicContentCenter = rtcEngine.getMusicContentCenter();
 
@@ -470,9 +470,9 @@ void musicContentCenterSmokeTestCases() {
       await rtcEngine.initialize(RtcEngineContext(
         appId: engineAppId,
         areaCode: AreaCode.areaCodeGlob.value(),
-        logConfig: LogConfig(filePath: logPath),
+        //logConfig: LogConfig(filePath: logPath),
       ));
-      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
+      //await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       final musicContentCenter = rtcEngine.getMusicContentCenter();
 
@@ -511,9 +511,9 @@ void musicContentCenterSmokeTestCases() {
       await rtcEngine.initialize(RtcEngineContext(
         appId: engineAppId,
         areaCode: AreaCode.areaCodeGlob.value(),
-        logConfig: LogConfig(filePath: logPath),
+        //logConfig: LogConfig(filePath: logPath),
       ));
-      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
+      //await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       final musicContentCenter = rtcEngine.getMusicContentCenter();
 
@@ -552,9 +552,9 @@ void musicContentCenterSmokeTestCases() {
       await rtcEngine.initialize(RtcEngineContext(
         appId: engineAppId,
         areaCode: AreaCode.areaCodeGlob.value(),
-        logConfig: LogConfig(filePath: logPath),
+        //logConfig: LogConfig(filePath: logPath),
       ));
-      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
+      //await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       final musicContentCenter = rtcEngine.getMusicContentCenter();
 
@@ -595,9 +595,9 @@ void musicContentCenterSmokeTestCases() {
       await rtcEngine.initialize(RtcEngineContext(
         appId: engineAppId,
         areaCode: AreaCode.areaCodeGlob.value(),
-        logConfig: LogConfig(filePath: logPath),
+        //logConfig: LogConfig(filePath: logPath),
       ));
-      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
+      //await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       final musicContentCenter = rtcEngine.getMusicContentCenter();
 
@@ -637,9 +637,9 @@ void musicContentCenterSmokeTestCases() {
       await rtcEngine.initialize(RtcEngineContext(
         appId: engineAppId,
         areaCode: AreaCode.areaCodeGlob.value(),
-        logConfig: LogConfig(filePath: logPath),
+        //logConfig: LogConfig(filePath: logPath),
       ));
-      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
+      //await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       final musicContentCenter = rtcEngine.getMusicContentCenter();
 
