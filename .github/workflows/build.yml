@@ -206,11 +206,21 @@ jobs:
         with:
           flutter-version: ${{ matrix.version }}
           cache: true
+      - name: Set up crash dump environment
+        run: .\setup-crash-dumps.ps1
+        shell: powershell
       - run: flutter config --enable-windows-desktop
       - name: Run windows integration test
         shell: bash
         run: |
           bash ci/run_flutter_windows_integration_test.sh
+
+      - name: Upload crash dumps if exist
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: crash-dumps
+          path: ./CrashDumps/*
 
   integration_test_web:
     name: Run Flutter Web Integration Tests
