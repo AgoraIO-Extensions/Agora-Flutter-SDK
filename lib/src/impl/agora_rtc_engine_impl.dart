@@ -485,6 +485,7 @@ class RtcEngineImpl extends rtc_engine_ex_binding.RtcEngineExImpl
     _releasingCompleter?.complete(null);
     _releasingCompleter = null;
     _instance = null;
+    print('[iris_api_engine] total end end');
   }
 
   @override
