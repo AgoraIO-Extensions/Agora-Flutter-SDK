@@ -55,7 +55,7 @@ void main() {
   tearDown(() async {
     print('[iris_api_engine] tearDown start');
     setMockRtcEngineProvider(null);
-    irisTester!.dispose();
+    // irisTester!.dispose();
     irisTester = null;
     await Future.delayed(const Duration(milliseconds: 500));
     print('[iris_api_engine] tearDown end');
