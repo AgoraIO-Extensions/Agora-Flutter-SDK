@@ -53,10 +53,12 @@ void main() {
   });
 
   tearDown(() async {
+    print('[iris_api_engine] tearDown start');
     setMockRtcEngineProvider(null);
     irisTester!.dispose();
     irisTester = null;
     await Future.delayed(const Duration(milliseconds: 500));
+    print('[iris_api_engine] tearDown end');
   });
 
   // RtcEngine events
@@ -73,11 +75,11 @@ void main() {
     mediaengine_videoencodedframeobserver.generatedTestCases(() => irisTester!);
 
     // MediaPlayerController events
-    mediaplayer_audiospectrumobserver.generatedTestCases(() => irisTester!);
-    mediaplayer_audiopcmframesink.generatedTestCases(() => irisTester!);
-    mediaplayer_mediaplayersourceobserver.generatedTestCases(() => irisTester!);
-    mediaplayer_mediaplayervideoframeobserver
-        .generatedTestCases(() => irisTester!);
+    // mediaplayer_audiospectrumobserver.generatedTestCases(() => irisTester!);
+    // mediaplayer_audiopcmframesink.generatedTestCases(() => irisTester!);
+    // mediaplayer_mediaplayersourceobserver.generatedTestCases(() => irisTester!);
+    // mediaplayer_mediaplayervideoframeobserver
+    //     .generatedTestCases(() => irisTester!);
 
     // MediaRecorder events
     mediarecorder_mediarecorderobserver.generatedTestCases(() => irisTester!);

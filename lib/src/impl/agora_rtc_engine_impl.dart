@@ -474,9 +474,13 @@ class RtcEngineImpl extends rtc_engine_ex_binding.RtcEngineExImpl
 
     await irisMethodChannel.unregisterEventHandlers(_rtcEngineImplScopedKey);
 
+    print('[iris_api_engine] IRtcEngine.release start');
     await super.release(sync: sync);
+    print('[iris_api_engine] IRtcEngine.release end');
 
+    print('[iris_api_engine] dispose IrisApiEngine start');
     await irisMethodChannel.dispose();
+    print('[iris_api_engine] dispose IrisApiEngine end');
     _isReleased = true;
     _releasingCompleter?.complete(null);
     _releasingCompleter = null;
