@@ -66,9 +66,9 @@ void main() {
   });
 
   if (!kIsWeb) {
-    // audiodevicemanager.audioDeviceManagerSmokeTestCases();
-    // localspatialaudioengine.testCases();
-    // mediaplayer.mediaPlayerControllerSmokeTestCases();
+    audiodevicemanager.audioDeviceManagerSmokeTestCases();
+    localspatialaudioengine.testCases();
+    mediaplayer.mediaPlayerControllerSmokeTestCases();
     mediarecorder.mediaRecorderSmokeTestCases();
     musiccontentcenter.musicContentCenterSmokeTestCases();
     rtcengine_debug.testCases();
