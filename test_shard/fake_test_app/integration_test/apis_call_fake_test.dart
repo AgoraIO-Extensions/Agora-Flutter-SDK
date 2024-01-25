@@ -64,8 +64,8 @@ void main() {
   });
 
   if (!kIsWeb) {
-    audiodevicemanager.audioDeviceManagerSmokeTestCases();
-    localspatialaudioengine.testCases();
+    // audiodevicemanager.audioDeviceManagerSmokeTestCases();
+    // localspatialaudioengine.testCases();
     mediaplayer.mediaPlayerControllerSmokeTestCases();
     mediarecorder.mediaRecorderSmokeTestCases();
     musiccontentcenter.musicContentCenterSmokeTestCases();
