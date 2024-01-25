@@ -178,11 +178,11 @@ jobs:
           sleep 30
 
           mkdir iris-logs-macos
-          if [ -f "${HOME}/Library/Containers/com.example.fakeTestApp/Data/Documents/agora-iris.log" ]; then
-            cp -RP ${HOME}/Library/Containers/com.example.fakeTestApp/Data/Documents/agora-iris.log ./iris-logs-macos/agora-iris-fake-test.log
+          if [ -f "${HOME}/Library/Containers/com.example.fakeTestApp/Data/Library/agora-iris.log" ]; then
+            cp -RP ${HOME}/Library/Containers/com.example.fakeTestApp/Data/Library/agora-iris.log ./iris-logs-macos/agora-iris-fake-test.log
           fi
-          if [ -f "${HOME}/Library/Containers/com.example.integrationTestApp/Data/Documents/agora-iris.log" ]; then
-            cp -RP ${HOME}/Library/Containers/com.example.integrationTestApp/Data/Documents/agora-iris.log ./iris-logs-macos/agora-iris-integration-test.log
+          if [ -f "${HOME}/Library/Containers/com.example.integrationTestApp/Data/Library/agora-iris.log" ]; then
+            cp -RP ${HOME}/Library/Containers/com.example.integrationTestApp/Data/Library/agora-iris.log ./iris-logs-macos/agora-iris-integration-test.log
           fi
 
           CRASH_DIR="${HOME}/Library/Logs/DiagnosticReports/"
