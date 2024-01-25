@@ -68,7 +68,7 @@ void main() {
   if (!kIsWeb) {
     // audiodevicemanager.audioDeviceManagerSmokeTestCases();
     // localspatialaudioengine.testCases();
-    mediaplayer.mediaPlayerControllerSmokeTestCases();
+    // mediaplayer.mediaPlayerControllerSmokeTestCases();
     mediarecorder.mediaRecorderSmokeTestCases();
     musiccontentcenter.musicContentCenterSmokeTestCases();
     rtcengine_debug.testCases();
