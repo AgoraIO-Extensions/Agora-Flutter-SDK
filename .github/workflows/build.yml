@@ -110,7 +110,7 @@ jobs:
           disk-size: 8192M
           script: |
             adb logcat -c
-            adb logcat *:E *:F &
+            adb logcat *:E *:F *:I *:D &
             $(bash ci/run_flutter_integration_test_android.sh)
       - name: Upload iris logs android
         uses: actions/upload-artifact@v4
@@ -228,7 +228,7 @@ jobs:
         uses: actions/upload-artifact@v4
         if: always()
         with:
-          name: crash-dumps
+          name: windows-crash-dumps
           path: ./CrashDumps/*
 
   integration_test_web:

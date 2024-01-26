@@ -12,9 +12,6 @@ import 'package:agora_rtc_engine/agora_rtc_engine.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:flutter/foundation.dart';
 import 'package:integration_test_app/main.dart' as app;
-import 'package:path_provider/path_provider.dart';
-import 'package:path/path.dart' as path;
-import 'dart:io';
 
 void mediaPlayerCacheManagerSmokeTestCases() {
   {{TEST_CASES_CONTENT}} 
@@ -28,15 +25,12 @@ testWidgets('{{TEST_CASE_NAME}}', (WidgetTester tester) async {
     String engineAppId = const String.fromEnvironment('TEST_APP_ID',
       defaultValue: '<YOUR_APP_ID>');
 
-    Directory appDocDir = await getApplicationDocumentsDirectory();
-    String logPath = path.join(appDocDir.path, 'test_log.txt');
     RtcEngine rtcEngine = createAgoraRtcEngine();
     await rtcEngine.initialize(RtcEngineContext(
       appId: engineAppId,
       areaCode: AreaCode.areaCodeGlob.value(),
-      //logConfig: LogConfig(filePath: logPath),
     ));
-    //await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
+    await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
     final mediaPlayerCacheManager = getMediaPlayerCacheManager(rtcEngine);
     
@@ -52,6 +46,9 @@ testWidgets('{{TEST_CASE_NAME}}', (WidgetTester tester) async {
     }
 
     await rtcEngine.release();
+
+    // Delay 200 milliseconds to ensure the `await RtcEngine.release()` call completed.
+    await Future.delayed(const Duration(milliseconds: 200));
   },
 //  skip: {{TEST_CASE_SKIP}},
 );
@@ -79,9 +76,6 @@ import 'package:flutter/foundation.dart';
 import 'package:fake_test_app/main.dart' as app;
 import 'package:iris_tester/iris_tester.dart';
 import 'package:iris_method_channel/iris_method_channel.dart';
-import 'package:path_provider/path_provider.dart';
-import 'package:path/path.dart' as path;
-import 'dart:io';
 
 void rtcEngineSmokeTestCases() {
   {{TEST_CASES_CONTENT}}
@@ -92,15 +86,12 @@ testWidgets('{{TEST_CASE_NAME}}', (WidgetTester tester) async {
     String engineAppId = const String.fromEnvironment('TEST_APP_ID',
       defaultValue: '<YOUR_APP_ID>');
 
-    Directory appDocDir = await getApplicationDocumentsDirectory();
-    String logPath = path.join(appDocDir.path, 'test_log.txt');
     RtcEngine rtcEngine = createAgoraRtcEngine();
     await rtcEngine.initialize(RtcEngineContext(
       appId: engineAppId,
       areaCode: AreaCode.areaCodeGlob.value(),
-      //logConfig: LogConfig(filePath: logPath),
     ));
-    //await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
+    await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
     try {
       {{TEST_CASE_BODY}}
@@ -117,6 +108,9 @@ testWidgets('{{TEST_CASE_NAME}}', (WidgetTester tester) async {
     }
 
     await rtcEngine.release();
+
+    // Delay 200 milliseconds to ensure the `await RtcEngine.release()` call completed.
+    await Future.delayed(const Duration(milliseconds: 200));
   },
 );
 ''',
@@ -151,9 +145,6 @@ import 'package:flutter/foundation.dart';
 import 'package:fake_test_app/main.dart' as app;
 import 'package:iris_tester/iris_tester.dart';
 import 'package:iris_method_channel/iris_method_channel.dart';
-import 'package:path_provider/path_provider.dart';
-import 'package:path/path.dart' as path;
-import 'dart:io';
 
 void rtcEngineExSmokeTestCases() {
   {{TEST_CASES_CONTENT}}
@@ -164,13 +155,10 @@ testWidgets('{{TEST_CASE_NAME}}', (WidgetTester tester) async {
     String engineAppId = const String.fromEnvironment('TEST_APP_ID',
       defaultValue: '<YOUR_APP_ID>');
 
-    Directory appDocDir = await getApplicationDocumentsDirectory();
-    String logPath = path.join(appDocDir.path, 'test_log.txt');
     RtcEngineEx rtcEngineEx = createAgoraRtcEngineEx();
     await rtcEngineEx.initialize(RtcEngineContext(
       appId: engineAppId,
       areaCode: AreaCode.areaCodeGlob.value(),
-      //logConfig: LogConfig(filePath: logPath),
     ));
     await rtcEngineEx.setParameters('{"rtc.enable_debug_log": true}');
 
@@ -219,9 +207,6 @@ import 'package:flutter/foundation.dart';
 import 'package:fake_test_app/main.dart' as app;
 import 'package:iris_tester/iris_tester.dart';
 import 'package:iris_method_channel/iris_method_channel.dart';
-import 'package:path_provider/path_provider.dart';
-import 'package:path/path.dart' as path;
-import 'dart:io';
 
 void audioDeviceManagerSmokeTestCases() {
   {{TEST_CASES_CONTENT}}
@@ -232,15 +217,12 @@ testWidgets('{{TEST_CASE_NAME}}', (WidgetTester tester) async {
     String engineAppId = const String.fromEnvironment('TEST_APP_ID',
       defaultValue: '<YOUR_APP_ID>');
 
-    Directory appDocDir = await getApplicationDocumentsDirectory();
-    String logPath = path.join(appDocDir.path, 'test_log.txt');
     RtcEngine rtcEngine = createAgoraRtcEngine();
     await rtcEngine.initialize(RtcEngineContext(
       appId: engineAppId,
       areaCode: AreaCode.areaCodeGlob.value(),
-      //logConfig: LogConfig(filePath: logPath),
     ));
-    //await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
+    await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
     final audioDeviceManager = rtcEngine.getAudioDeviceManager();
 
@@ -260,6 +242,9 @@ testWidgets('{{TEST_CASE_NAME}}', (WidgetTester tester) async {
     
     await audioDeviceManager.release();
     await rtcEngine.release();
+
+    // Delay 200 milliseconds to ensure the `await RtcEngine.release()` call completed.
+    await Future.delayed(const Duration(milliseconds: 200));
   },
 );
 ''',
@@ -279,9 +264,6 @@ import 'package:flutter/foundation.dart';
 import 'package:fake_test_app/main.dart' as app;
 import 'package:iris_tester/iris_tester.dart';
 import 'package:iris_method_channel/iris_method_channel.dart';
-import 'package:path_provider/path_provider.dart';
-import 'package:path/path.dart' as path;
-import 'dart:io';
 
 void videoDeviceManagerSmokeTestCases() {
   {{TEST_CASES_CONTENT}}
@@ -292,15 +274,12 @@ testWidgets('{{TEST_CASE_NAME}}', (WidgetTester tester) async {
     String engineAppId = const String.fromEnvironment('TEST_APP_ID',
       defaultValue: '<YOUR_APP_ID>');
 
-    Directory appDocDir = await getApplicationDocumentsDirectory();
-    String logPath = path.join(appDocDir.path, 'test_log.txt');
     RtcEngine rtcEngine = createAgoraRtcEngine();
     await rtcEngine.initialize(RtcEngineContext(
       appId: engineAppId,
       areaCode: AreaCode.areaCodeGlob.value(),
-      //logConfig: LogConfig(filePath: logPath),
     ));
-    //await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
+    await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
     final videoDeviceManager = rtcEngine.getVideoDeviceManager();
 
@@ -320,6 +299,9 @@ testWidgets('{{TEST_CASE_NAME}}', (WidgetTester tester) async {
 
     await videoDeviceManager.release();
     await rtcEngine.release();
+
+    // Delay 200 milliseconds to ensure the `await RtcEngine.release()` call completed.
+    await Future.delayed(const Duration(milliseconds: 200));
   },
 //  skip: {{TEST_CASE_SKIP}},
 );
@@ -341,9 +323,6 @@ import 'package:flutter/foundation.dart';
 import 'package:fake_test_app/main.dart' as app;
 import 'package:iris_tester/iris_tester.dart';
 import 'package:iris_method_channel/iris_method_channel.dart';
-import 'package:path_provider/path_provider.dart';
-import 'package:path/path.dart' as path;
-import 'dart:io';
 
 void mediaPlayerControllerSmokeTestCases() {
   {{TEST_CASES_CONTENT}}
@@ -354,15 +333,12 @@ testWidgets('{{TEST_CASE_NAME}}', (WidgetTester tester) async {
     String engineAppId = const String.fromEnvironment('TEST_APP_ID',
       defaultValue: '<YOUR_APP_ID>');
 
-    Directory appDocDir = await getApplicationDocumentsDirectory();
-    String logPath = path.join(appDocDir.path, 'test_log.txt');
     RtcEngine rtcEngine = createAgoraRtcEngine();
     await rtcEngine.initialize(RtcEngineContext(
       appId: engineAppId,
       areaCode: AreaCode.areaCodeGlob.value(),
-      //logConfig: LogConfig(filePath: logPath),
     ));
-    //await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
+    await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
     final mediaPlayerController = MediaPlayerController(
         rtcEngine: rtcEngine, canvas: const VideoCanvas(uid: 0));
@@ -384,6 +360,9 @@ testWidgets('{{TEST_CASE_NAME}}', (WidgetTester tester) async {
 
     await mediaPlayerController.dispose();
     await rtcEngine.release();
+
+    // Delay 200 milliseconds to ensure the `await RtcEngine.release()` call completed.
+    await Future.delayed(const Duration(milliseconds: 200));
   },
 //  skip: {{TEST_CASE_SKIP}},
 );
@@ -405,9 +384,6 @@ import 'package:flutter/foundation.dart';
 import 'package:fake_test_app/main.dart' as app;
 import 'package:iris_tester/iris_tester.dart';
 import 'package:iris_method_channel/iris_method_channel.dart';
-import 'package:path_provider/path_provider.dart';
-import 'package:path/path.dart' as path;
-import 'dart:io';
 
 void mediaEngineSmokeTestCases() {
   {{TEST_CASES_CONTENT}}
@@ -418,15 +394,12 @@ testWidgets('{{TEST_CASE_NAME}}', (WidgetTester tester) async {
     String engineAppId = const String.fromEnvironment('TEST_APP_ID',
       defaultValue: '<YOUR_APP_ID>');
 
-    Directory appDocDir = await getApplicationDocumentsDirectory();
-    String logPath = path.join(appDocDir.path, 'test_log.txt');
     RtcEngine rtcEngine = createAgoraRtcEngine();
     await rtcEngine.initialize(RtcEngineContext(
       appId: engineAppId,
       areaCode: AreaCode.areaCodeGlob.value(),
-      //logConfig: LogConfig(filePath: logPath),
     ));
-    //await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
+    await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
     final mediaEngine = rtcEngine.getMediaEngine();
     
@@ -446,6 +419,9 @@ testWidgets('{{TEST_CASE_NAME}}', (WidgetTester tester) async {
 
     await mediaEngine.release();
     await rtcEngine.release();
+
+    // Delay 200 milliseconds to ensure the `await RtcEngine.release()` call completed.
+    await Future.delayed(const Duration(milliseconds: 200));
   },
 //  skip: {{TEST_CASE_SKIP}},
 );
@@ -466,9 +442,6 @@ import 'package:flutter/foundation.dart';
 import 'package:fake_test_app/main.dart' as app;
 import 'package:iris_tester/iris_tester.dart';
 import 'package:iris_method_channel/iris_method_channel.dart';
-import 'package:path_provider/path_provider.dart';
-import 'package:path/path.dart' as path;
-import 'dart:io';
 
 void mediaRecorderSmokeTestCases() {
   {{TEST_CASES_CONTENT}}
@@ -479,15 +452,12 @@ testWidgets('{{TEST_CASE_NAME}}', (WidgetTester tester) async {
     String engineAppId = const String.fromEnvironment('TEST_APP_ID',
       defaultValue: '<YOUR_APP_ID>');
 
-    Directory appDocDir = await getApplicationDocumentsDirectory();
-    String logPath = path.join(appDocDir.path, 'test_log.txt');
     RtcEngine rtcEngine = createAgoraRtcEngine();
     await rtcEngine.initialize(RtcEngineContext(
       appId: engineAppId,
       areaCode: AreaCode.areaCodeGlob.value(),
-      //logConfig: LogConfig(filePath: logPath),
     ));
-    //await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
+    await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
     final mediaRecorder = (await rtcEngine.createMediaRecorder(
       RecorderStreamInfo(channelId: 'hello', uid: 0)))!;
@@ -508,6 +478,9 @@ testWidgets('{{TEST_CASE_NAME}}', (WidgetTester tester) async {
 
     await rtcEngine.destroyMediaRecorder(mediaRecorder);
     await rtcEngine.release();
+
+    // Delay 200 milliseconds to ensure the `await RtcEngine.release()` call completed.
+    await Future.delayed(const Duration(milliseconds: 200));
   },
 //  skip: {{TEST_CASE_SKIP}},
 );
@@ -528,9 +501,6 @@ import 'package:flutter/foundation.dart';
 import 'package:fake_test_app/main.dart' as app;
 import 'package:iris_tester/iris_tester.dart';
 import 'package:iris_method_channel/iris_method_channel.dart';
-import 'package:path_provider/path_provider.dart';
-import 'package:path/path.dart' as path;
-import 'dart:io';
 
 void localSpatialAudioEngineSmokeTestCases() {
   {{TEST_CASES_CONTENT}}
@@ -541,15 +511,12 @@ testWidgets('{{TEST_CASE_NAME}}', (WidgetTester tester) async {
     String engineAppId = const String.fromEnvironment('TEST_APP_ID',
       defaultValue: '<YOUR_APP_ID>');
 
-    Directory appDocDir = await getApplicationDocumentsDirectory();
-    String logPath = path.join(appDocDir.path, 'test_log.txt');
     RtcEngine rtcEngine = createAgoraRtcEngine();
     await rtcEngine.initialize(RtcEngineContext(
       appId: engineAppId,
       areaCode: AreaCode.areaCodeGlob.value(),
-      //logConfig: LogConfig(filePath: logPath),
     ));
-    //await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
+    await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
     final localSpatialAudioEngine = rtcEngine.getLocalSpatialAudioEngine();
     await localSpatialAudioEngine.initialize();
@@ -570,6 +537,9 @@ testWidgets('{{TEST_CASE_NAME}}', (WidgetTester tester) async {
 
     await localSpatialAudioEngine.release();
     await rtcEngine.release();
+
+    // Delay 200 milliseconds to ensure the `await RtcEngine.release()` call completed.
+    await Future.delayed(const Duration(milliseconds: 200));
   },
 //  skip: {{TEST_CASE_SKIP}},
 );
@@ -592,9 +562,6 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:flutter/foundation.dart';
 import 'package:iris_tester/iris_tester.dart';
 import 'package:iris_method_channel/iris_method_channel.dart';
-import 'package:path_provider/path_provider.dart';
-import 'package:path/path.dart' as path;
-import 'dart:io';
 
 void generatedTestCases() {
   {{TEST_CASES_CONTENT}}
@@ -605,15 +572,12 @@ testWidgets('{{TEST_CASE_NAME}}', (WidgetTester tester) async {
     String engineAppId = const String.fromEnvironment('TEST_APP_ID',
       defaultValue: '<YOUR_APP_ID>');
 
-    Directory appDocDir = await getApplicationDocumentsDirectory();
-    String logPath = path.join(appDocDir.path, 'test_log.txt');
     RtcEngine rtcEngine = createAgoraRtcEngine();
     await rtcEngine.initialize(RtcEngineContext(
       appId: engineAppId,
       areaCode: AreaCode.areaCodeGlob.value(),
-      //logConfig: LogConfig(filePath: logPath),
     ));
-    //await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
+    await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
     final h265Transcoder = rtcEngine.getH265Transcoder();
     
@@ -632,6 +596,9 @@ testWidgets('{{TEST_CASE_NAME}}', (WidgetTester tester) async {
     }
 
     await rtcEngine.release();
+
+    // Delay 200 milliseconds to ensure the `await RtcEngine.release()` call completed.
+    await Future.delayed(const Duration(milliseconds: 200));
   },
 //  skip: {{TEST_CASE_SKIP}},
 );
@@ -652,9 +619,6 @@ import 'package:flutter/foundation.dart';
 import 'package:fake_test_app/main.dart' as app;
 import 'package:iris_tester/iris_tester.dart';
 import 'package:iris_method_channel/iris_method_channel.dart';
-import 'package:path_provider/path_provider.dart';
-import 'package:path/path.dart' as path;
-import 'dart:io';
 
 void musicContentCenterSmokeTestCases() {
   {{TEST_CASES_CONTENT}} 
@@ -665,15 +629,12 @@ testWidgets('{{TEST_CASE_NAME}}', (WidgetTester tester) async {
     String engineAppId = const String.fromEnvironment('TEST_APP_ID',
       defaultValue: '<YOUR_APP_ID>');
 
-    Directory appDocDir = await getApplicationDocumentsDirectory();
-    String logPath = path.join(appDocDir.path, 'test_log.txt');
     RtcEngine rtcEngine = createAgoraRtcEngine();
     await rtcEngine.initialize(RtcEngineContext(
       appId: engineAppId,
       areaCode: AreaCode.areaCodeGlob.value(),
-      //logConfig: LogConfig(filePath: logPath),
     ));
-    //await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
+    await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
     final musicContentCenter = rtcEngine.getMusicContentCenter();
     
@@ -693,6 +654,9 @@ testWidgets('{{TEST_CASE_NAME}}', (WidgetTester tester) async {
 
     await musicContentCenter.release();
     await rtcEngine.release();
+
+    // Delay 200 milliseconds to ensure the `await RtcEngine.release()` call completed.
+    await Future.delayed(const Duration(milliseconds: 200));
   },
 //  skip: {{TEST_CASE_SKIP}},
 );

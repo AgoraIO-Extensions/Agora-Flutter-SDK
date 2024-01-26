@@ -1063,7 +1063,7 @@ extension VideoCodecCapabilityLevelExt on VideoCodecCapabilityLevel {
 /// Video codec types.
 @JsonEnum(alwaysCreate: true)
 enum VideoCodecType {
-  /// @nodoc
+  /// 0: (Default) Unspecified codec format. The SDK automatically matches the appropriate codec format based on the current video stream's resolution and device performance.
   @JsonValue(0)
   videoCodecNone,
 
@@ -1075,7 +1075,7 @@ enum VideoCodecType {
   @JsonValue(2)
   videoCodecH264,
 
-  /// 3: (Default) Standard H.265. In certain scenarios, such as low resolution of the captured video stream or limited device performance, the SDK automatically adjusts to the H.264 encoding format.
+  /// 3: Standard H.265.
   @JsonValue(3)
   videoCodecH265,
 
@@ -6223,7 +6223,7 @@ class EchoTestConfiguration {
   @JsonKey(name: 'enableAudio')
   final bool? enableAudio;
 
-  /// Whether to enable the video device for the loop test: true : (Default) Enable the video device. To test the video device, set this parameter as true. false : Disable the video device.
+  /// Whether to enable the video device for the loop test. Currently, video device loop test is not supported. Please set this parameter to false.
   @JsonKey(name: 'enableVideo')
   final bool? enableVideo;
 

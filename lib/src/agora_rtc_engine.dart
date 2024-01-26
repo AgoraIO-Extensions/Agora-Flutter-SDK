@@ -1859,7 +1859,6 @@ class RtcEngineEventHandler {
   ///  The remote user stops sending the video stream and re-sends it after 15 seconds. Reasons for such an interruption include:
   ///  The remote user leaves the channel.
   ///  The remote user drops offline.
-  ///  The remote user calls muteLocalVideoStream to stop sending the video stream.
   ///  The remote user calls disableVideo to disable video.
   ///
   /// * [connection] The connection information. See RtcConnection.
@@ -3580,7 +3579,7 @@ abstract class RtcEngine {
   /// Disables the audio module.
   ///
   /// This method disables the internal engine and can be called anytime after initialization. It is still valid after one leaves channel.
-  ///  This method resets the internal engine and takes some time to take effect. Agora recommends using the following API methods to control the audio modules separately: enableLocalAudio : Whether to enable the microphone to create the local audio stream. muteLocalAudioStream : Whether to publish the local audio stream. muteRemoteAudioStream : Whether to subscribe and play the remote audio stream. muteAllRemoteAudioStreams : Whether to subscribe to and play all remote audio streams.
+  ///  This method resets the internal engine and takes some time to take effect. Agora recommends using the following API methods to control the audio modules separately: enableLocalAudio : Whether to enable the microphone to create the local audio stream. enableLoopbackRecording : Whether to enable loopback audio capturing. muteLocalAudioStream : Whether to publish the local audio stream. muteRemoteAudioStream : Whether to subscribe and play the remote audio stream. muteAllRemoteAudioStreams : Whether to subscribe to and play all remote audio streams.
   ///
   /// Returns
   /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown; and you need to catch the exception and handle it accordingly.
@@ -4596,8 +4595,8 @@ abstract class RtcEngine {
   /// The SDK defaults to enabling low-quality video stream adaptive mode (autoSimulcastStream) on the sender side, which means the sender does not actively send low-quality video stream. The receiver can initiate a low-quality video stream request by calling setRemoteVideoStreamType, and the sender then automatically starts sending low-quality video stream upon receiving the request.
   ///  If you want to modify this behavior, you can call this method and set mode to disableSimulcastStream (never send low-quality video streams) or enableSimulcastStream (always send low-quality video streams).
   ///  If you want to restore the default behavior after making changes, you can call this method again with mode set to autoSimulcastStream. The difference and connection between this method and enableDualStreamMode is as follows:
-  ///  When calling this method and setting mode to disableSimulcastStream, it has the same effect as calling and setting enabled to false.
-  ///  When calling this method and setting mode to enableSimulcastStream, it has the same effect as calling and setting enabled to true.
+  ///  When calling this method and setting mode to disableSimulcastStream, it has the same effect as calling enableDualStreamMode and setting enabled to false.
+  ///  When calling this method and setting mode to enableSimulcastStream, it has the same effect as calling enableDualStreamMode and setting enabled to true.
   ///  Both methods can be called before and after joining a channel. If both methods are used, the settings in the method called later takes precedence.
   ///
   /// * [mode] The mode in which the video stream is sent. See SimulcastStreamMode.
@@ -4879,8 +4878,9 @@ abstract class RtcEngine {
   ///  This method applies to the macOS and Windows only.
   ///  macOS does not support loopback audio capture of the default sound card. If you need to use this function, use a virtual sound card and pass its name to the deviceName parameter. Agora recommends using AgoraALD as the virtual sound card for audio capturing.
   ///  You can call this method either before or after joining a channel.
+  ///  If you call the disableAudio method to disable the audio module, audio capturing will be disabled as well. If you need to enable audio capturing, call the enableAudio method to enable the audio module and then call the enableLoopbackRecording method.
   ///
-  /// * [enabled] Whether to enable loopback audio capturing. true : Enable loopback audio capturing. false : (Default) Disable loopback audio capturing.
+  /// * [enabled] Sets whether to enable loopback audio capturing. true : Enable loopback audio capturing. false : (Default) Disable loopback audio capturing.
   /// * [deviceName] macOS: The device name of the virtual sound card. The default value is set to NULL, which means using AgoraALD for loopback audio capturing.
   ///  Windows: The device name of the sound card. The default is set to NULL, which means the SDK uses the sound card of your device for loopback audio capturing.
   ///
@@ -5417,7 +5417,7 @@ abstract class RtcEngine {
 
   /// Starts screen capture.
   ///
-  /// This method, as well as startScreenCapture, startScreenCaptureByDisplayId, and startScreenCaptureByWindowId, all have the capability to start screen capture, with the following differences: startScreenCapture only applies to Android and iOS, whereas this method only applies to Windows and iOS. startScreenCaptureByDisplayId and startScreenCaptureByWindowId only support capturing video from a single screen or window. By calling this method and specifying the sourceType parameter, you can capture multiple video streams used for local video mixing or multi-channel publishing.
+  /// This method, as well as startScreenCapture, startScreenCaptureByDisplayId, and startScreenCaptureByWindowId, can all be used to start screen capture, with the following differences: startScreenCapture only applies to Android and iOS, whereas this method only applies to Windows and iOS. startScreenCaptureByDisplayId and startScreenCaptureByWindowId only support capturing video from a single screen or window. By calling this method and specifying the sourceType parameter, you can capture multiple video streams used for local video mixing or multi-channel publishing.
   ///  This method applies to the macOS and Windows only.
   ///  If you call this method to start screen capture, Agora recommends that you call stopScreenCaptureBySourceType to stop the capture and avoid using stopScreenCapture.
   ///
@@ -5655,8 +5655,7 @@ abstract class RtcEngine {
 
   /// Adds event handlers
   ///
-  /// The SDK uses the RtcEngineEventHandler class to send callbacks to the app. The app inherits the methods of this class to receive these callbacks. All methods in this class have default (empty) implementations. Therefore, apps only need to inherits callbacks according to the scenarios. In the callbacks, avoid time-consuming tasks or calling APIs that can block the thread, such as the sendStreamMessage method.
-  /// Otherwise, the SDK may not work properly.
+  /// The SDK uses the RtcEngineEventHandler class to send callbacks to the app. The app inherits the methods of this class to receive these callbacks. All methods in this class have default (empty) implementations. Therefore, apps only need to inherits callbacks according to the scenarios. In the callbacks, avoid time-consuming tasks or calling APIs that can block the thread, such as the sendStreamMessage method. Otherwise, the SDK may not work properly.
   ///
   /// * [eventHandler] Callback events to be added. See RtcEngineEventHandler.
   ///
@@ -5735,8 +5734,7 @@ abstract class RtcEngine {
   /// Sends data stream messages to all users in a channel. The SDK has the following restrictions on this method:
   ///  Up to 30 packets can be sent per second in a channel with each packet having a maximum size of 1 KB.
   ///  Each client can send up to 6 KB of data per second.
-  ///  Each user can have up to five data streams simultaneously. A successful method call triggers the onStreamMessage callback on the remote client, from which the remote user gets the stream message.
-  /// A failed method call triggers the onStreamMessageError callback on the remote client.
+  ///  Each user can have up to five data streams simultaneously. A successful method call triggers the onStreamMessage callback on the remote client, from which the remote user gets the stream message. A failed method call triggers the onStreamMessageError callback on the remote client.
   ///  Ensure that you call createDataStream to create a data channel before calling this method.
   ///  In live streaming scenarios, this method only applies to hosts.
   ///

@@ -6,9 +6,6 @@ import 'package:agora_rtc_engine/agora_rtc_engine.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:flutter/foundation.dart';
 import 'package:integration_test_app/main.dart' as app;
-import 'package:path_provider/path_provider.dart';
-import 'package:path/path.dart' as path;
-import 'dart:io';
 
 void mediaPlayerCacheManagerSmokeTestCases() {
   testWidgets(
@@ -20,15 +17,12 @@ void mediaPlayerCacheManagerSmokeTestCases() {
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
 
-      Directory appDocDir = await getApplicationDocumentsDirectory();
-      String logPath = path.join(appDocDir.path, 'test_log.txt');
       RtcEngine rtcEngine = createAgoraRtcEngine();
       await rtcEngine.initialize(RtcEngineContext(
         appId: engineAppId,
         areaCode: AreaCode.areaCodeGlob.value(),
-        //logConfig: LogConfig(filePath: logPath),
       ));
-      //await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       final mediaPlayerCacheManager = getMediaPlayerCacheManager(rtcEngine);
 
@@ -45,6 +39,9 @@ void mediaPlayerCacheManagerSmokeTestCases() {
       }
 
       await rtcEngine.release();
+
+      // Delay 200 milliseconds to ensure the `await RtcEngine.release()` call completed.
+      await Future.delayed(const Duration(milliseconds: 200));
     },
 //  skip: !(),
   );
@@ -58,15 +55,12 @@ void mediaPlayerCacheManagerSmokeTestCases() {
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
 
-      Directory appDocDir = await getApplicationDocumentsDirectory();
-      String logPath = path.join(appDocDir.path, 'test_log.txt');
       RtcEngine rtcEngine = createAgoraRtcEngine();
       await rtcEngine.initialize(RtcEngineContext(
         appId: engineAppId,
         areaCode: AreaCode.areaCodeGlob.value(),
-        //logConfig: LogConfig(filePath: logPath),
       ));
-      //await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       final mediaPlayerCacheManager = getMediaPlayerCacheManager(rtcEngine);
 
@@ -83,6 +77,9 @@ void mediaPlayerCacheManagerSmokeTestCases() {
       }
 
       await rtcEngine.release();
+
+      // Delay 200 milliseconds to ensure the `await RtcEngine.release()` call completed.
+      await Future.delayed(const Duration(milliseconds: 200));
     },
 //  skip: !(),
   );
@@ -96,15 +93,12 @@ void mediaPlayerCacheManagerSmokeTestCases() {
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
 
-      Directory appDocDir = await getApplicationDocumentsDirectory();
-      String logPath = path.join(appDocDir.path, 'test_log.txt');
       RtcEngine rtcEngine = createAgoraRtcEngine();
       await rtcEngine.initialize(RtcEngineContext(
         appId: engineAppId,
         areaCode: AreaCode.areaCodeGlob.value(),
-        //logConfig: LogConfig(filePath: logPath),
       ));
-      //await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       final mediaPlayerCacheManager = getMediaPlayerCacheManager(rtcEngine);
 
@@ -124,6 +118,9 @@ void mediaPlayerCacheManagerSmokeTestCases() {
       }
 
       await rtcEngine.release();
+
+      // Delay 200 milliseconds to ensure the `await RtcEngine.release()` call completed.
+      await Future.delayed(const Duration(milliseconds: 200));
     },
 //  skip: !(),
   );
@@ -137,15 +134,12 @@ void mediaPlayerCacheManagerSmokeTestCases() {
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
 
-      Directory appDocDir = await getApplicationDocumentsDirectory();
-      String logPath = path.join(appDocDir.path, 'test_log.txt');
       RtcEngine rtcEngine = createAgoraRtcEngine();
       await rtcEngine.initialize(RtcEngineContext(
         appId: engineAppId,
         areaCode: AreaCode.areaCodeGlob.value(),
-        //logConfig: LogConfig(filePath: logPath),
       ));
-      //await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       final mediaPlayerCacheManager = getMediaPlayerCacheManager(rtcEngine);
 
@@ -165,6 +159,9 @@ void mediaPlayerCacheManagerSmokeTestCases() {
       }
 
       await rtcEngine.release();
+
+      // Delay 200 milliseconds to ensure the `await RtcEngine.release()` call completed.
+      await Future.delayed(const Duration(milliseconds: 200));
     },
 //  skip: !(),
   );
@@ -178,15 +175,12 @@ void mediaPlayerCacheManagerSmokeTestCases() {
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
 
-      Directory appDocDir = await getApplicationDocumentsDirectory();
-      String logPath = path.join(appDocDir.path, 'test_log.txt');
       RtcEngine rtcEngine = createAgoraRtcEngine();
       await rtcEngine.initialize(RtcEngineContext(
         appId: engineAppId,
         areaCode: AreaCode.areaCodeGlob.value(),
-        //logConfig: LogConfig(filePath: logPath),
       ));
-      //await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       final mediaPlayerCacheManager = getMediaPlayerCacheManager(rtcEngine);
 
@@ -206,6 +200,9 @@ void mediaPlayerCacheManagerSmokeTestCases() {
       }
 
       await rtcEngine.release();
+
+      // Delay 200 milliseconds to ensure the `await RtcEngine.release()` call completed.
+      await Future.delayed(const Duration(milliseconds: 200));
     },
 //  skip: !(),
   );
@@ -219,15 +216,12 @@ void mediaPlayerCacheManagerSmokeTestCases() {
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
 
-      Directory appDocDir = await getApplicationDocumentsDirectory();
-      String logPath = path.join(appDocDir.path, 'test_log.txt');
       RtcEngine rtcEngine = createAgoraRtcEngine();
       await rtcEngine.initialize(RtcEngineContext(
         appId: engineAppId,
         areaCode: AreaCode.areaCodeGlob.value(),
-        //logConfig: LogConfig(filePath: logPath),
       ));
-      //await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       final mediaPlayerCacheManager = getMediaPlayerCacheManager(rtcEngine);
 
@@ -247,6 +241,9 @@ void mediaPlayerCacheManagerSmokeTestCases() {
       }
 
       await rtcEngine.release();
+
+      // Delay 200 milliseconds to ensure the `await RtcEngine.release()` call completed.
+      await Future.delayed(const Duration(milliseconds: 200));
     },
 //  skip: !(),
   );
@@ -260,15 +257,12 @@ void mediaPlayerCacheManagerSmokeTestCases() {
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
 
-      Directory appDocDir = await getApplicationDocumentsDirectory();
-      String logPath = path.join(appDocDir.path, 'test_log.txt');
       RtcEngine rtcEngine = createAgoraRtcEngine();
       await rtcEngine.initialize(RtcEngineContext(
         appId: engineAppId,
         areaCode: AreaCode.areaCodeGlob.value(),
-        //logConfig: LogConfig(filePath: logPath),
       ));
-      //await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       final mediaPlayerCacheManager = getMediaPlayerCacheManager(rtcEngine);
 
@@ -288,6 +282,9 @@ void mediaPlayerCacheManagerSmokeTestCases() {
       }
 
       await rtcEngine.release();
+
+      // Delay 200 milliseconds to ensure the `await RtcEngine.release()` call completed.
+      await Future.delayed(const Duration(milliseconds: 200));
     },
 //  skip: !(),
   );
@@ -301,15 +298,12 @@ void mediaPlayerCacheManagerSmokeTestCases() {
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
 
-      Directory appDocDir = await getApplicationDocumentsDirectory();
-      String logPath = path.join(appDocDir.path, 'test_log.txt');
       RtcEngine rtcEngine = createAgoraRtcEngine();
       await rtcEngine.initialize(RtcEngineContext(
         appId: engineAppId,
         areaCode: AreaCode.areaCodeGlob.value(),
-        //logConfig: LogConfig(filePath: logPath),
       ));
-      //await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       final mediaPlayerCacheManager = getMediaPlayerCacheManager(rtcEngine);
 
@@ -329,6 +323,9 @@ void mediaPlayerCacheManagerSmokeTestCases() {
       }
 
       await rtcEngine.release();
+
+      // Delay 200 milliseconds to ensure the `await RtcEngine.release()` call completed.
+      await Future.delayed(const Duration(milliseconds: 200));
     },
 //  skip: !(),
   );
@@ -342,15 +339,12 @@ void mediaPlayerCacheManagerSmokeTestCases() {
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
 
-      Directory appDocDir = await getApplicationDocumentsDirectory();
-      String logPath = path.join(appDocDir.path, 'test_log.txt');
       RtcEngine rtcEngine = createAgoraRtcEngine();
       await rtcEngine.initialize(RtcEngineContext(
         appId: engineAppId,
         areaCode: AreaCode.areaCodeGlob.value(),
-        //logConfig: LogConfig(filePath: logPath),
       ));
-      //await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       final mediaPlayerCacheManager = getMediaPlayerCacheManager(rtcEngine);
 
@@ -367,6 +361,9 @@ void mediaPlayerCacheManagerSmokeTestCases() {
       }
 
       await rtcEngine.release();
+
+      // Delay 200 milliseconds to ensure the `await RtcEngine.release()` call completed.
+      await Future.delayed(const Duration(milliseconds: 200));
     },
 //  skip: !(),
   );
@@ -380,15 +377,12 @@ void mediaPlayerCacheManagerSmokeTestCases() {
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
 
-      Directory appDocDir = await getApplicationDocumentsDirectory();
-      String logPath = path.join(appDocDir.path, 'test_log.txt');
       RtcEngine rtcEngine = createAgoraRtcEngine();
       await rtcEngine.initialize(RtcEngineContext(
         appId: engineAppId,
         areaCode: AreaCode.areaCodeGlob.value(),
-        //logConfig: LogConfig(filePath: logPath),
       ));
-      //await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       final mediaPlayerCacheManager = getMediaPlayerCacheManager(rtcEngine);
 
@@ -405,6 +399,9 @@ void mediaPlayerCacheManagerSmokeTestCases() {
       }
 
       await rtcEngine.release();
+
+      // Delay 200 milliseconds to ensure the `await RtcEngine.release()` call completed.
+      await Future.delayed(const Duration(milliseconds: 200));
     },
 //  skip: !(),
   );
@@ -418,15 +415,12 @@ void mediaPlayerCacheManagerSmokeTestCases() {
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
 
-      Directory appDocDir = await getApplicationDocumentsDirectory();
-      String logPath = path.join(appDocDir.path, 'test_log.txt');
       RtcEngine rtcEngine = createAgoraRtcEngine();
       await rtcEngine.initialize(RtcEngineContext(
         appId: engineAppId,
         areaCode: AreaCode.areaCodeGlob.value(),
-        //logConfig: LogConfig(filePath: logPath),
       ));
-      //await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       final mediaPlayerCacheManager = getMediaPlayerCacheManager(rtcEngine);
 
@@ -443,6 +437,9 @@ void mediaPlayerCacheManagerSmokeTestCases() {
       }
 
       await rtcEngine.release();
+
+      // Delay 200 milliseconds to ensure the `await RtcEngine.release()` call completed.
+      await Future.delayed(const Duration(milliseconds: 200));
     },
 //  skip: !(),
   );

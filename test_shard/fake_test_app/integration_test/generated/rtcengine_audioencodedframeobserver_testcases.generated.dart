@@ -2,7 +2,6 @@
 
 // ignore_for_file: deprecated_member_use,constant_identifier_names
 
-import 'dart:io';
 import 'dart:async';
 import 'dart:typed_data';
 
@@ -11,8 +10,6 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:iris_tester/iris_tester.dart';
 import 'package:iris_method_channel/iris_method_channel.dart';
-import 'package:path_provider/path_provider.dart';
-import 'package:path/path.dart' as path;
 
 import '../testcases/event_ids_mapping.dart';
 
@@ -21,14 +18,11 @@ void generatedTestCases(ValueGetter<IrisTester> irisTester) {
     'AudioEncodedFrameObserver.onRecordAudioEncodedFrame',
     (WidgetTester tester) async {
       RtcEngine rtcEngine = createAgoraRtcEngine();
-      Directory appDocDir = await getApplicationDocumentsDirectory();
-      String logPath = path.join(appDocDir.path, 'test_log.txt');
       await rtcEngine.initialize(RtcEngineContext(
         appId: 'app_id',
         areaCode: AreaCode.areaCodeGlob.value(),
-        //logConfig: LogConfig(filePath: logPath),
       ));
-      //await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       final onRecordAudioEncodedFrameCompleter = Completer<bool>();
       final theAudioEncodedFrameObserver = AudioEncodedFrameObserver(
@@ -118,6 +112,9 @@ void generatedTestCases(ValueGetter<IrisTester> irisTester) {
       await Future.delayed(const Duration(milliseconds: 500));
 
       await rtcEngine.release();
+
+      // Delay 200 milliseconds to ensure the `await RtcEngine.release()` call completed.
+      await Future.delayed(const Duration(milliseconds: 200));
     },
     timeout: const Timeout(Duration(minutes: 2)),
   );
@@ -126,14 +123,11 @@ void generatedTestCases(ValueGetter<IrisTester> irisTester) {
     'AudioEncodedFrameObserver.onPlaybackAudioEncodedFrame',
     (WidgetTester tester) async {
       RtcEngine rtcEngine = createAgoraRtcEngine();
-      Directory appDocDir = await getApplicationDocumentsDirectory();
-      String logPath = path.join(appDocDir.path, 'test_log.txt');
       await rtcEngine.initialize(RtcEngineContext(
         appId: 'app_id',
         areaCode: AreaCode.areaCodeGlob.value(),
-        //logConfig: LogConfig(filePath: logPath),
       ));
-      //await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       final onPlaybackAudioEncodedFrameCompleter = Completer<bool>();
       final theAudioEncodedFrameObserver = AudioEncodedFrameObserver(
@@ -223,6 +217,9 @@ void generatedTestCases(ValueGetter<IrisTester> irisTester) {
       await Future.delayed(const Duration(milliseconds: 500));
 
       await rtcEngine.release();
+
+      // Delay 200 milliseconds to ensure the `await RtcEngine.release()` call completed.
+      await Future.delayed(const Duration(milliseconds: 200));
     },
     timeout: const Timeout(Duration(minutes: 2)),
   );
@@ -231,14 +228,11 @@ void generatedTestCases(ValueGetter<IrisTester> irisTester) {
     'AudioEncodedFrameObserver.onMixedAudioEncodedFrame',
     (WidgetTester tester) async {
       RtcEngine rtcEngine = createAgoraRtcEngine();
-      Directory appDocDir = await getApplicationDocumentsDirectory();
-      String logPath = path.join(appDocDir.path, 'test_log.txt');
       await rtcEngine.initialize(RtcEngineContext(
         appId: 'app_id',
         areaCode: AreaCode.areaCodeGlob.value(),
-        //logConfig: LogConfig(filePath: logPath),
       ));
-      //await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       final onMixedAudioEncodedFrameCompleter = Completer<bool>();
       final theAudioEncodedFrameObserver = AudioEncodedFrameObserver(
@@ -328,6 +322,9 @@ void generatedTestCases(ValueGetter<IrisTester> irisTester) {
       await Future.delayed(const Duration(milliseconds: 500));
 
       await rtcEngine.release();
+
+      // Delay 200 milliseconds to ensure the `await RtcEngine.release()` call completed.
+      await Future.delayed(const Duration(milliseconds: 200));
     },
     timeout: const Timeout(Duration(minutes: 2)),
   );

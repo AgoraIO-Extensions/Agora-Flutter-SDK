@@ -8,9 +8,6 @@ import 'package:flutter/foundation.dart';
 import 'package:fake_test_app/main.dart' as app;
 import 'package:iris_tester/iris_tester.dart';
 import 'package:iris_method_channel/iris_method_channel.dart';
-import 'package:path_provider/path_provider.dart';
-import 'package:path/path.dart' as path;
-import 'dart:io';
 
 void mediaRecorderSmokeTestCases() {
   testWidgets(
@@ -19,15 +16,12 @@ void mediaRecorderSmokeTestCases() {
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
 
-      Directory appDocDir = await getApplicationDocumentsDirectory();
-      String logPath = path.join(appDocDir.path, 'test_log.txt');
       RtcEngine rtcEngine = createAgoraRtcEngine();
       await rtcEngine.initialize(RtcEngineContext(
         appId: engineAppId,
         areaCode: AreaCode.areaCodeGlob.value(),
-        //logConfig: LogConfig(filePath: logPath),
       ));
-      //await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       final mediaRecorder = (await rtcEngine.createMediaRecorder(
           RecorderStreamInfo(channelId: 'hello', uid: 0)))!;
@@ -57,6 +51,9 @@ void mediaRecorderSmokeTestCases() {
 
       await rtcEngine.destroyMediaRecorder(mediaRecorder);
       await rtcEngine.release();
+
+      // Delay 200 milliseconds to ensure the `await RtcEngine.release()` call completed.
+      await Future.delayed(const Duration(milliseconds: 200));
     },
 //  skip: !(),
   );
@@ -67,15 +64,12 @@ void mediaRecorderSmokeTestCases() {
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
 
-      Directory appDocDir = await getApplicationDocumentsDirectory();
-      String logPath = path.join(appDocDir.path, 'test_log.txt');
       RtcEngine rtcEngine = createAgoraRtcEngine();
       await rtcEngine.initialize(RtcEngineContext(
         appId: engineAppId,
         areaCode: AreaCode.areaCodeGlob.value(),
-        //logConfig: LogConfig(filePath: logPath),
       ));
-      //await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       final mediaRecorder = (await rtcEngine.createMediaRecorder(
           RecorderStreamInfo(channelId: 'hello', uid: 0)))!;
@@ -112,6 +106,9 @@ void mediaRecorderSmokeTestCases() {
 
       await rtcEngine.destroyMediaRecorder(mediaRecorder);
       await rtcEngine.release();
+
+      // Delay 200 milliseconds to ensure the `await RtcEngine.release()` call completed.
+      await Future.delayed(const Duration(milliseconds: 200));
     },
 //  skip: !(),
   );
@@ -122,15 +119,12 @@ void mediaRecorderSmokeTestCases() {
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
 
-      Directory appDocDir = await getApplicationDocumentsDirectory();
-      String logPath = path.join(appDocDir.path, 'test_log.txt');
       RtcEngine rtcEngine = createAgoraRtcEngine();
       await rtcEngine.initialize(RtcEngineContext(
         appId: engineAppId,
         areaCode: AreaCode.areaCodeGlob.value(),
-        //logConfig: LogConfig(filePath: logPath),
       ));
-      //await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       final mediaRecorder = (await rtcEngine.createMediaRecorder(
           RecorderStreamInfo(channelId: 'hello', uid: 0)))!;
@@ -151,6 +145,9 @@ void mediaRecorderSmokeTestCases() {
 
       await rtcEngine.destroyMediaRecorder(mediaRecorder);
       await rtcEngine.release();
+
+      // Delay 200 milliseconds to ensure the `await RtcEngine.release()` call completed.
+      await Future.delayed(const Duration(milliseconds: 200));
     },
 //  skip: !(),
   );

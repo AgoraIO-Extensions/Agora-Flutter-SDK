@@ -58,7 +58,7 @@ void main() {
     await Future.delayed(const Duration(milliseconds: 500));
     irisTester!.dispose();
     irisTester = null;
-    
+
     print('[iris_api_engine] tearDown end');
   });
 

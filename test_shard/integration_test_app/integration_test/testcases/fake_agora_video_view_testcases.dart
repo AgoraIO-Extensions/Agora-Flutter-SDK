@@ -166,7 +166,7 @@ void testCases() {
             await videoViewCreatedCompleter.future;
 
             final setupLocalVideoCalls = irisMethodChannel.methodCallQueue
-                .where((e) => e.funcName == 'RtcEngine_setupLocalVideo')
+                .where((e) => e.funcName == 'RtcEngine_setupLocalVideo_acc9c38')
                 .toList();
 
             final jsonMap2 = jsonDecode(setupLocalVideoCalls[0].params);
@@ -182,7 +182,7 @@ void testCases() {
 
             // Check `VideoViewControllerBaseMixin`'s `disposeRender` called
             final disposeLocalVideoCalls = irisMethodChannel.methodCallQueue
-                .where((e) => e.funcName == 'RtcEngine_setupLocalVideo')
+                .where((e) => e.funcName == 'RtcEngine_setupLocalVideo_acc9c38')
                 .toList();
 
             final disposeLocalVideoCallsJsonMap =
@@ -231,7 +231,8 @@ void testCases() {
               await videoViewCreatedCompleter.future;
 
               final setupLocalVideoCalls = irisMethodChannel.methodCallQueue
-                  .where((e) => e.funcName == 'RtcEngine_setupLocalVideo')
+                  .where(
+                      (e) => e.funcName == 'RtcEngine_setupLocalVideo_acc9c38')
                   .toList();
 
               final jsonMap2 = jsonDecode(setupLocalVideoCalls[0].params);
@@ -247,7 +248,8 @@ void testCases() {
 
               // Check `VideoViewControllerBaseMixin`'s `disposeRender` called
               final disposeLocalVideoCalls = irisMethodChannel.methodCallQueue
-                  .where((e) => e.funcName == 'RtcEngine_setupLocalVideo')
+                  .where(
+                      (e) => e.funcName == 'RtcEngine_setupLocalVideo_acc9c38')
                   .toList();
 
               final disposeLocalVideoCallsJsonMap =
@@ -293,7 +295,8 @@ void testCases() {
             // Check `setupLocalVideo` calls
             {
               final setupLocalVideoCalls = irisMethodChannel.methodCallQueue
-                  .where((e) => e.funcName == 'RtcEngine_setupLocalVideo')
+                  .where(
+                      (e) => e.funcName == 'RtcEngine_setupLocalVideo_acc9c38')
                   .toList();
 
               final jsonMap2 = jsonDecode(setupLocalVideoCalls[0].params);
@@ -353,7 +356,8 @@ void testCases() {
             // Check `setupRemoteVideoEx` calls
             {
               final setupRemoteVideoExCalls = irisMethodChannel.methodCallQueue
-                  .where((e) => e.funcName == 'RtcEngineEx_setupRemoteVideoEx')
+                  .where((e) =>
+                      e.funcName == 'RtcEngineEx_setupRemoteVideoEx_522a409')
                   .toList();
 
               final jsonMap1 = jsonDecode(setupRemoteVideoExCalls[0].params);
@@ -408,7 +412,8 @@ void testCases() {
             // Check `setupLocalVideo` calls
             {
               final setupLocalVideoCalls = irisMethodChannel.methodCallQueue
-                  .where((e) => e.funcName == 'RtcEngine_setupLocalVideo')
+                  .where(
+                      (e) => e.funcName == 'RtcEngine_setupLocalVideo_acc9c38')
                   .toList();
 
               final jsonMap1 = jsonDecode(setupLocalVideoCalls[0].params);
@@ -421,7 +426,8 @@ void testCases() {
             // Check `setupRemoteVideoEx` calls
             {
               final setupRemoteVideoExCalls = irisMethodChannel.methodCallQueue
-                  .where((e) => e.funcName == 'RtcEngineEx_setupRemoteVideoEx')
+                  .where((e) =>
+                      e.funcName == 'RtcEngineEx_setupRemoteVideoEx_522a409')
                   .toList();
 
               final jsonMap1 = jsonDecode(setupRemoteVideoExCalls[0].params);
@@ -711,7 +717,7 @@ void testCases() {
           isFakeRemoveHotRestartListener: false,
           isFakeDispose: false,
           delayInvokeMethod: {
-            'RtcEngine_setupLocalVideo': 5000
+            'RtcEngine_setupLocalVideo_acc9c38': 5000
           }, // delay the `RtcEngine_setupLocalVideo` to 5s, make it complete after `Widget.dispose` more easier
         );
 

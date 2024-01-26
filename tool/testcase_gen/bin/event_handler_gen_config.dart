@@ -9,7 +9,6 @@ List<TemplatedTestCase> createEventHandlerTestCases(String outputDir) {
       testCaseFileTemplate: '''
 $defaultHeader
 
-import 'dart:io';
 import 'dart:async';
 import 'dart:typed_data';
 
@@ -18,8 +17,6 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:iris_tester/iris_tester.dart';
 import 'package:iris_method_channel/iris_method_channel.dart';
-import 'package:path_provider/path_provider.dart';
-import 'package:path/path.dart' as path;
 
 import '../testcases/event_ids_mapping.dart';
 
@@ -30,18 +27,18 @@ void generatedTestCases(ValueGetter<IrisTester> irisTester) {
       testCaseTemplate: '''
 testWidgets('{{TEST_CASE_NAME}}', (WidgetTester tester) async {
       RtcEngine rtcEngine = createAgoraRtcEngine();
-      Directory appDocDir = await getApplicationDocumentsDirectory();
-      String logPath = path.join(appDocDir.path, 'test_log.txt');
       await rtcEngine.initialize(RtcEngineContext(
         appId: 'app_id',
         areaCode: AreaCode.areaCodeGlob.value(),
-        //logConfig: LogConfig(filePath: logPath),
       ));
-      //await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       {{TEST_CASE_BODY}}
 
       await rtcEngine.release();
+
+      // Delay 200 milliseconds to ensure the `await RtcEngine.release()` call completed.
+      await Future.delayed(const Duration(milliseconds: 200));
   },
   timeout: const Timeout(Duration(minutes: 2)),
 );
@@ -61,7 +58,6 @@ testWidgets('{{TEST_CASE_NAME}}', (WidgetTester tester) async {
       testCaseFileTemplate: '''
 $defaultHeader
 
-import 'dart:io';
 import 'dart:async';
 import 'dart:typed_data';
 
@@ -70,8 +66,6 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:iris_tester/iris_tester.dart';
 import 'package:iris_method_channel/iris_method_channel.dart';
-import 'package:path_provider/path_provider.dart';
-import 'package:path/path.dart' as path;
 
 import '../testcases/event_ids_mapping.dart';
 
@@ -82,18 +76,18 @@ void generatedTestCases(ValueGetter<IrisTester> irisTester) {
       testCaseTemplate: '''
 testWidgets('{{TEST_CASE_NAME}}', (WidgetTester tester) async {
       RtcEngine rtcEngine = createAgoraRtcEngine();
-      Directory appDocDir = await getApplicationDocumentsDirectory();
-      String logPath = path.join(appDocDir.path, 'test_log.txt');
       await rtcEngine.initialize(RtcEngineContext(
         appId: 'app_id',
         areaCode: AreaCode.areaCodeGlob.value(),
-        //logConfig: LogConfig(filePath: logPath),
       ));
-      //await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       {{TEST_CASE_BODY}}
 
       await rtcEngine.release();
+
+      // Delay 200 milliseconds to ensure the `await RtcEngine.release()` call completed.
+      await Future.delayed(const Duration(milliseconds: 200));
   },
   timeout: const Timeout(Duration(minutes: 2)),
 );
@@ -109,7 +103,6 @@ testWidgets('{{TEST_CASE_NAME}}', (WidgetTester tester) async {
       testCaseFileTemplate: '''
 $defaultHeader
 
-import 'dart:io';
 import 'dart:async';
 import 'dart:typed_data';
 
@@ -118,8 +111,6 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:iris_tester/iris_tester.dart';
 import 'package:iris_method_channel/iris_method_channel.dart';
-import 'package:path_provider/path_provider.dart';
-import 'package:path/path.dart' as path;
 
 import '../testcases/event_ids_mapping.dart';
 
@@ -130,18 +121,18 @@ void generatedTestCases(ValueGetter<IrisTester> irisTester) {
       testCaseTemplate: '''
 testWidgets('{{TEST_CASE_NAME}}', (WidgetTester tester) async {
       RtcEngine rtcEngine = createAgoraRtcEngine();
-      Directory appDocDir = await getApplicationDocumentsDirectory();
-      String logPath = path.join(appDocDir.path, 'test_log.txt');
       await rtcEngine.initialize(RtcEngineContext(
         appId: 'app_id',
         areaCode: AreaCode.areaCodeGlob.value(),
-        //logConfig: LogConfig(filePath: logPath),
       ));
-      //await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       {{TEST_CASE_BODY}}
 
       await rtcEngine.release();
+
+      // Delay 200 milliseconds to ensure the `await RtcEngine.release()` call completed.
+      await Future.delayed(const Duration(milliseconds: 200));
   },
   timeout: const Timeout(Duration(minutes: 2)),
 );
@@ -157,7 +148,6 @@ testWidgets('{{TEST_CASE_NAME}}', (WidgetTester tester) async {
       testCaseFileTemplate: '''
 $defaultHeader
 
-import 'dart:io';
 import 'dart:async';
 import 'dart:typed_data';
 
@@ -166,8 +156,6 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:iris_tester/iris_tester.dart';
 import 'package:iris_method_channel/iris_method_channel.dart';
-import 'package:path_provider/path_provider.dart';
-import 'package:path/path.dart' as path;
 
 import '../testcases/event_ids_mapping.dart';
 
@@ -178,18 +166,18 @@ void generatedTestCases(ValueGetter<IrisTester> irisTester) {
       testCaseTemplate: '''
 testWidgets('{{TEST_CASE_NAME}}', (WidgetTester tester) async {
       RtcEngine rtcEngine = createAgoraRtcEngine();
-      Directory appDocDir = await getApplicationDocumentsDirectory();
-      String logPath = path.join(appDocDir.path, 'test_log.txt');
       await rtcEngine.initialize(RtcEngineContext(
         appId: 'app_id',
         areaCode: AreaCode.areaCodeGlob.value(),
-        //logConfig: LogConfig(filePath: logPath),
       ));
-      //await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       {{TEST_CASE_BODY}}
 
       await rtcEngine.release();
+
+      // Delay 200 milliseconds to ensure the `await RtcEngine.release()` call completed.
+      await Future.delayed(const Duration(milliseconds: 200));
   },
   timeout: const Timeout(Duration(minutes: 2)),
 );
@@ -205,7 +193,6 @@ testWidgets('{{TEST_CASE_NAME}}', (WidgetTester tester) async {
       testCaseFileTemplate: '''
 $defaultHeader
 
-import 'dart:io';
 import 'dart:async';
 import 'dart:typed_data';
 
@@ -214,8 +201,6 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:iris_tester/iris_tester.dart';
 import 'package:iris_method_channel/iris_method_channel.dart';
-import 'package:path_provider/path_provider.dart';
-import 'package:path/path.dart' as path;
 
 import '../testcases/event_ids_mapping.dart';
 
@@ -226,19 +211,19 @@ void generatedTestCases(ValueGetter<IrisTester> irisTester) {
       testCaseTemplate: '''
 testWidgets('{{TEST_CASE_NAME}}', (WidgetTester tester) async {
       RtcEngine rtcEngine = createAgoraRtcEngine();
-      Directory appDocDir = await getApplicationDocumentsDirectory();
-      String logPath = path.join(appDocDir.path, 'test_log.txt');
       await rtcEngine.initialize(RtcEngineContext(
         appId: 'app_id',
         areaCode: AreaCode.areaCodeGlob.value(),
-        //logConfig: LogConfig(filePath: logPath),
       ));
-      //await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
       final mediaEngine = rtcEngine.getMediaEngine();
 
       {{TEST_CASE_BODY}}
 
       await rtcEngine.release();
+
+      // Delay 200 milliseconds to ensure the `await RtcEngine.release()` call completed.
+      await Future.delayed(const Duration(milliseconds: 200));
   },
   timeout: const Timeout(Duration(minutes: 2)),
 );
@@ -254,7 +239,6 @@ testWidgets('{{TEST_CASE_NAME}}', (WidgetTester tester) async {
       testCaseFileTemplate: '''
 $defaultHeader
 
-import 'dart:io';
 import 'dart:async';
 import 'dart:typed_data';
 
@@ -263,8 +247,6 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:iris_tester/iris_tester.dart';
 import 'package:iris_method_channel/iris_method_channel.dart';
-import 'package:path_provider/path_provider.dart';
-import 'package:path/path.dart' as path;
 
 import '../testcases/event_ids_mapping.dart';
 
@@ -275,19 +257,19 @@ void generatedTestCases(ValueGetter<IrisTester> irisTester) {
       testCaseTemplate: '''
 testWidgets('{{TEST_CASE_NAME}}', (WidgetTester tester) async {
       RtcEngine rtcEngine = createAgoraRtcEngine();
-      Directory appDocDir = await getApplicationDocumentsDirectory();
-      String logPath = path.join(appDocDir.path, 'test_log.txt');
       await rtcEngine.initialize(RtcEngineContext(
         appId: 'app_id',
         areaCode: AreaCode.areaCodeGlob.value(),
-        //logConfig: LogConfig(filePath: logPath),
       ));
-      //await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
       final mediaEngine = rtcEngine.getMediaEngine();
 
       {{TEST_CASE_BODY}}
 
       await rtcEngine.release();
+
+      // Delay 200 milliseconds to ensure the `await RtcEngine.release()` call completed.
+      await Future.delayed(const Duration(milliseconds: 200));
   },
   timeout: const Timeout(Duration(minutes: 2)),
 );
@@ -303,7 +285,6 @@ testWidgets('{{TEST_CASE_NAME}}', (WidgetTester tester) async {
       testCaseFileTemplate: '''
 $defaultHeader
 
-import 'dart:io';
 import 'dart:async';
 import 'dart:typed_data';
 
@@ -312,8 +293,6 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:iris_tester/iris_tester.dart';
 import 'package:iris_method_channel/iris_method_channel.dart';
-import 'package:path_provider/path_provider.dart';
-import 'package:path/path.dart' as path;
 
 import '../testcases/event_ids_mapping.dart';
 
@@ -324,19 +303,19 @@ void generatedTestCases(ValueGetter<IrisTester> irisTester) {
       testCaseTemplate: '''
 testWidgets('{{TEST_CASE_NAME}}', (WidgetTester tester) async {
       RtcEngine rtcEngine = createAgoraRtcEngine();
-      Directory appDocDir = await getApplicationDocumentsDirectory();
-      String logPath = path.join(appDocDir.path, 'test_log.txt');
       await rtcEngine.initialize(RtcEngineContext(
         appId: 'app_id',
         areaCode: AreaCode.areaCodeGlob.value(),
-        //logConfig: LogConfig(filePath: logPath),
       ));
-      //await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
       final mediaEngine = rtcEngine.getMediaEngine();
 
       {{TEST_CASE_BODY}}
 
       await rtcEngine.release();
+
+      // Delay 200 milliseconds to ensure the `await RtcEngine.release()` call completed.
+      await Future.delayed(const Duration(milliseconds: 200));
   },
   timeout: const Timeout(Duration(minutes: 2)),
 );
@@ -352,7 +331,6 @@ testWidgets('{{TEST_CASE_NAME}}', (WidgetTester tester) async {
       testCaseFileTemplate: '''
 $defaultHeader
 
-import 'dart:io';
 import 'dart:async';
 import 'dart:typed_data';
 
@@ -361,8 +339,6 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:iris_tester/iris_tester.dart';
 import 'package:iris_method_channel/iris_method_channel.dart';
-import 'package:path_provider/path_provider.dart';
-import 'package:path/path.dart' as path;
 
 import '../testcases/event_ids_mapping.dart';
 
@@ -373,14 +349,11 @@ void generatedTestCases(ValueGetter<IrisTester> irisTester) {
       testCaseTemplate: '''
 testWidgets('{{TEST_CASE_NAME}}', (WidgetTester tester) async {
       RtcEngine rtcEngine = createAgoraRtcEngine();
-      Directory appDocDir = await getApplicationDocumentsDirectory();
-      String logPath = path.join(appDocDir.path, 'test_log.txt');
       await rtcEngine.initialize(RtcEngineContext(
         appId: 'app_id',
         areaCode: AreaCode.areaCodeGlob.value(),
-        //logConfig: LogConfig(filePath: logPath),
       ));
-      //await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
       final mediaPlayerController = MediaPlayerController(
           rtcEngine: rtcEngine, canvas: const VideoCanvas());
       await mediaPlayerController.initialize();
@@ -388,6 +361,9 @@ testWidgets('{{TEST_CASE_NAME}}', (WidgetTester tester) async {
       {{TEST_CASE_BODY}}
 
       await rtcEngine.release();
+
+      // Delay 200 milliseconds to ensure the `await RtcEngine.release()` call completed.
+      await Future.delayed(const Duration(milliseconds: 200));
   },
   timeout: const Timeout(Duration(minutes: 2)),
 );
@@ -403,7 +379,6 @@ testWidgets('{{TEST_CASE_NAME}}', (WidgetTester tester) async {
       testCaseFileTemplate: '''
 $defaultHeader
 
-import 'dart:io';
 import 'dart:async';
 import 'dart:typed_data';
 
@@ -412,8 +387,6 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:iris_tester/iris_tester.dart';
 import 'package:iris_method_channel/iris_method_channel.dart';
-import 'package:path_provider/path_provider.dart';
-import 'package:path/path.dart' as path;
 
 import '../testcases/event_ids_mapping.dart';
 
@@ -424,14 +397,11 @@ void generatedTestCases(ValueGetter<IrisTester> irisTester) {
       testCaseTemplate: '''
 testWidgets('{{TEST_CASE_NAME}}', (WidgetTester tester) async {
       RtcEngine rtcEngine = createAgoraRtcEngine();
-      Directory appDocDir = await getApplicationDocumentsDirectory();
-      String logPath = path.join(appDocDir.path, 'test_log.txt');
       await rtcEngine.initialize(RtcEngineContext(
         appId: 'app_id',
         areaCode: AreaCode.areaCodeGlob.value(),
-        //logConfig: LogConfig(filePath: logPath),
       ));
-      //await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
       MediaPlayerController mediaPlayerController = MediaPlayerController(
           rtcEngine: rtcEngine, canvas: const VideoCanvas());
       await mediaPlayerController.initialize();
@@ -439,6 +409,9 @@ testWidgets('{{TEST_CASE_NAME}}', (WidgetTester tester) async {
       {{TEST_CASE_BODY}}
 
       await rtcEngine.release();
+
+      // Delay 200 milliseconds to ensure the `await RtcEngine.release()` call completed.
+      await Future.delayed(const Duration(milliseconds: 200));
   },
   timeout: const Timeout(Duration(minutes: 2)),
 );
@@ -454,7 +427,6 @@ testWidgets('{{TEST_CASE_NAME}}', (WidgetTester tester) async {
       testCaseFileTemplate: '''
 $defaultHeader
 
-import 'dart:io';
 import 'dart:async';
 import 'dart:typed_data';
 
@@ -463,8 +435,6 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:iris_tester/iris_tester.dart';
 import 'package:iris_method_channel/iris_method_channel.dart';
-import 'package:path_provider/path_provider.dart';
-import 'package:path/path.dart' as path;
 
 import '../testcases/event_ids_mapping.dart';
 
@@ -475,14 +445,11 @@ void generatedTestCases(ValueGetter<IrisTester> irisTester) {
       testCaseTemplate: '''
 testWidgets('{{TEST_CASE_NAME}}', (WidgetTester tester) async {
       RtcEngine rtcEngine = createAgoraRtcEngine();
-      Directory appDocDir = await getApplicationDocumentsDirectory();
-      String logPath = path.join(appDocDir.path, 'test_log.txt');
       await rtcEngine.initialize(RtcEngineContext(
         appId: 'app_id',
         areaCode: AreaCode.areaCodeGlob.value(),
-        //logConfig: LogConfig(filePath: logPath),
       ));
-      //await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
       MediaPlayerController mediaPlayerController = MediaPlayerController(
           rtcEngine: rtcEngine, canvas: const VideoCanvas());
       await mediaPlayerController.initialize();
@@ -490,6 +457,9 @@ testWidgets('{{TEST_CASE_NAME}}', (WidgetTester tester) async {
       {{TEST_CASE_BODY}}
 
       await rtcEngine.release();
+
+      // Delay 200 milliseconds to ensure the `await RtcEngine.release()` call completed.
+      await Future.delayed(const Duration(milliseconds: 200));
   },
   timeout: const Timeout(Duration(minutes: 2)),
 );
@@ -505,7 +475,6 @@ testWidgets('{{TEST_CASE_NAME}}', (WidgetTester tester) async {
       testCaseFileTemplate: '''
 $defaultHeader
 
-import 'dart:io';
 import 'dart:async';
 import 'dart:typed_data';
 
@@ -514,8 +483,6 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:iris_tester/iris_tester.dart';
 import 'package:iris_method_channel/iris_method_channel.dart';
-import 'package:path_provider/path_provider.dart';
-import 'package:path/path.dart' as path;
 
 import '../testcases/event_ids_mapping.dart';
 
@@ -526,14 +493,11 @@ void generatedTestCases(ValueGetter<IrisTester> irisTester) {
       testCaseTemplate: '''
 testWidgets('{{TEST_CASE_NAME}}', (WidgetTester tester) async {
       RtcEngine rtcEngine = createAgoraRtcEngine();
-      Directory appDocDir = await getApplicationDocumentsDirectory();
-      String logPath = path.join(appDocDir.path, 'test_log.txt');
       await rtcEngine.initialize(RtcEngineContext(
         appId: 'app_id',
         areaCode: AreaCode.areaCodeGlob.value(),
-        //logConfig: LogConfig(filePath: logPath),
       ));
-      //await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
       MediaPlayerController mediaPlayerController = MediaPlayerController(
           rtcEngine: rtcEngine, canvas: const VideoCanvas());
       await mediaPlayerController.initialize();
@@ -541,6 +505,9 @@ testWidgets('{{TEST_CASE_NAME}}', (WidgetTester tester) async {
       {{TEST_CASE_BODY}}
 
       await rtcEngine.release();
+
+      // Delay 200 milliseconds to ensure the `await RtcEngine.release()` call completed.
+      await Future.delayed(const Duration(milliseconds: 200));
   },
   timeout: const Timeout(Duration(minutes: 2)),
 );
@@ -556,7 +523,6 @@ testWidgets('{{TEST_CASE_NAME}}', (WidgetTester tester) async {
       testCaseFileTemplate: '''
 $defaultHeader
 
-import 'dart:io';
 import 'dart:async';
 import 'dart:typed_data';
 
@@ -565,8 +531,6 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:iris_tester/iris_tester.dart';
 import 'package:iris_method_channel/iris_method_channel.dart';
-import 'package:path_provider/path_provider.dart';
-import 'package:path/path.dart' as path;
 
 import '../testcases/event_ids_mapping.dart';
 
@@ -577,14 +541,11 @@ void generatedTestCases(ValueGetter<IrisTester> irisTester) {
       testCaseTemplate: '''
 testWidgets('{{TEST_CASE_NAME}}', (WidgetTester tester) async {
       RtcEngine rtcEngine = createAgoraRtcEngine();
-      Directory appDocDir = await getApplicationDocumentsDirectory();
-      String logPath = path.join(appDocDir.path, 'test_log.txt');
       await rtcEngine.initialize(RtcEngineContext(
         appId: 'app_id',
         areaCode: AreaCode.areaCodeGlob.value(),
-        //logConfig: LogConfig(filePath: logPath),
       ));
-      //await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       final mediaRecorder = (await rtcEngine.createMediaRecorder(
         RecorderStreamInfo(channelId: 'hello', uid: 0)))!;
@@ -593,6 +554,9 @@ testWidgets('{{TEST_CASE_NAME}}', (WidgetTester tester) async {
 
       await rtcEngine.destroyMediaRecorder(mediaRecorder);
       await rtcEngine.release();
+
+      // Delay 200 milliseconds to ensure the `await RtcEngine.release()` call completed.
+      await Future.delayed(const Duration(milliseconds: 200));
   },
   timeout: const Timeout(Duration(minutes: 2)),
 );
@@ -608,7 +572,6 @@ testWidgets('{{TEST_CASE_NAME}}', (WidgetTester tester) async {
       testCaseFileTemplate: '''
 $defaultHeader
 
-import 'dart:io';
 import 'dart:async';
 import 'dart:typed_data';
 
@@ -617,8 +580,6 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:iris_tester/iris_tester.dart';
 import 'package:iris_method_channel/iris_method_channel.dart';
-import 'package:path_provider/path_provider.dart';
-import 'package:path/path.dart' as path;
 
 import '../testcases/event_ids_mapping.dart';
 
@@ -629,14 +590,11 @@ void generatedTestCases(ValueGetter<IrisTester> irisTester) {
       testCaseTemplate: '''
 testWidgets('{{TEST_CASE_NAME}}', (WidgetTester tester) async {
       RtcEngine rtcEngine = createAgoraRtcEngine();
-      Directory appDocDir = await getApplicationDocumentsDirectory();
-      String logPath = path.join(appDocDir.path, 'test_log.txt');
       await rtcEngine.initialize(RtcEngineContext(
         appId: 'app_id',
         areaCode: AreaCode.areaCodeGlob.value(),
-        //logConfig: LogConfig(filePath: logPath),
       ));
-      //await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       final musicContentCenter = rtcEngine.getMusicContentCenter();
       const musicContentCenterConfiguration = MusicContentCenterConfiguration(
@@ -647,6 +605,9 @@ testWidgets('{{TEST_CASE_NAME}}', (WidgetTester tester) async {
 
       await musicContentCenter.release();
       await rtcEngine.release();
+
+      // Delay 200 milliseconds to ensure the `await RtcEngine.release()` call completed.
+      await Future.delayed(const Duration(milliseconds: 200));
   },
   timeout: const Timeout(Duration(minutes: 2)),
 );
@@ -662,7 +623,6 @@ testWidgets('{{TEST_CASE_NAME}}', (WidgetTester tester) async {
       testCaseFileTemplate: '''
 $defaultHeader
 
-import 'dart:io';
 import 'dart:async';
 import 'dart:typed_data';
 
@@ -671,8 +631,6 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:iris_tester/iris_tester.dart';
 import 'package:iris_method_channel/iris_method_channel.dart';
-import 'package:path_provider/path_provider.dart';
-import 'package:path/path.dart' as path;
 
 import '../testcases/event_ids_mapping.dart';
 
@@ -683,20 +641,20 @@ void generatedTestCases(ValueGetter<IrisTester> irisTester) {
       testCaseTemplate: '''
 testWidgets('{{TEST_CASE_NAME}}', (WidgetTester tester) async {
       RtcEngine rtcEngine = createAgoraRtcEngine();
-      Directory appDocDir = await getApplicationDocumentsDirectory();
-      String logPath = path.join(appDocDir.path, 'test_log.txt');
       await rtcEngine.initialize(RtcEngineContext(
         appId: 'app_id',
         areaCode: AreaCode.areaCodeGlob.value(),
-        //logConfig: LogConfig(filePath: logPath),
       ));
-      //await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       final h265Transcoder = rtcEngine.getH265Transcoder();
 
       {{TEST_CASE_BODY}}
 
       await rtcEngine.release();
+
+      // Delay 200 milliseconds to ensure the `await RtcEngine.release()` call completed.
+      await Future.delayed(const Duration(milliseconds: 200));
   },
   timeout: const Timeout(Duration(minutes: 2)),
 );

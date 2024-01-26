@@ -2,7 +2,6 @@
 
 // ignore_for_file: deprecated_member_use,constant_identifier_names
 
-import 'dart:io';
 import 'dart:async';
 import 'dart:typed_data';
 
@@ -11,8 +10,6 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:iris_tester/iris_tester.dart';
 import 'package:iris_method_channel/iris_method_channel.dart';
-import 'package:path_provider/path_provider.dart';
-import 'package:path/path.dart' as path;
 
 import '../testcases/event_ids_mapping.dart';
 
@@ -21,14 +18,11 @@ void generatedTestCases(ValueGetter<IrisTester> irisTester) {
     'RtcEngineEventHandler.onJoinChannelSuccess',
     (WidgetTester tester) async {
       RtcEngine rtcEngine = createAgoraRtcEngine();
-      Directory appDocDir = await getApplicationDocumentsDirectory();
-      String logPath = path.join(appDocDir.path, 'test_log.txt');
       await rtcEngine.initialize(RtcEngineContext(
         appId: 'app_id',
         areaCode: AreaCode.areaCodeGlob.value(),
-        //logConfig: LogConfig(filePath: logPath),
       ));
-      //await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       final onJoinChannelSuccessCompleter = Completer<bool>();
       final theRtcEngineEventHandler = RtcEngineEventHandler(
@@ -85,6 +79,9 @@ void generatedTestCases(ValueGetter<IrisTester> irisTester) {
       await Future.delayed(const Duration(milliseconds: 500));
 
       await rtcEngine.release();
+
+      // Delay 200 milliseconds to ensure the `await RtcEngine.release()` call completed.
+      await Future.delayed(const Duration(milliseconds: 200));
     },
     timeout: const Timeout(Duration(minutes: 2)),
   );
@@ -93,14 +90,11 @@ void generatedTestCases(ValueGetter<IrisTester> irisTester) {
     'RtcEngineEventHandler.onRejoinChannelSuccess',
     (WidgetTester tester) async {
       RtcEngine rtcEngine = createAgoraRtcEngine();
-      Directory appDocDir = await getApplicationDocumentsDirectory();
-      String logPath = path.join(appDocDir.path, 'test_log.txt');
       await rtcEngine.initialize(RtcEngineContext(
         appId: 'app_id',
         areaCode: AreaCode.areaCodeGlob.value(),
-        //logConfig: LogConfig(filePath: logPath),
       ));
-      //await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       final onRejoinChannelSuccessCompleter = Completer<bool>();
       final theRtcEngineEventHandler = RtcEngineEventHandler(
@@ -158,6 +152,9 @@ void generatedTestCases(ValueGetter<IrisTester> irisTester) {
       await Future.delayed(const Duration(milliseconds: 500));
 
       await rtcEngine.release();
+
+      // Delay 200 milliseconds to ensure the `await RtcEngine.release()` call completed.
+      await Future.delayed(const Duration(milliseconds: 200));
     },
     timeout: const Timeout(Duration(minutes: 2)),
   );
@@ -166,14 +163,11 @@ void generatedTestCases(ValueGetter<IrisTester> irisTester) {
     'RtcEngineEventHandler.onProxyConnected',
     (WidgetTester tester) async {
       RtcEngine rtcEngine = createAgoraRtcEngine();
-      Directory appDocDir = await getApplicationDocumentsDirectory();
-      String logPath = path.join(appDocDir.path, 'test_log.txt');
       await rtcEngine.initialize(RtcEngineContext(
         appId: 'app_id',
         areaCode: AreaCode.areaCodeGlob.value(),
-        //logConfig: LogConfig(filePath: logPath),
       ));
-      //await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       final onProxyConnectedCompleter = Completer<bool>();
       final theRtcEngineEventHandler = RtcEngineEventHandler(
@@ -232,6 +226,9 @@ void generatedTestCases(ValueGetter<IrisTester> irisTester) {
       await Future.delayed(const Duration(milliseconds: 500));
 
       await rtcEngine.release();
+
+      // Delay 200 milliseconds to ensure the `await RtcEngine.release()` call completed.
+      await Future.delayed(const Duration(milliseconds: 200));
     },
     timeout: const Timeout(Duration(minutes: 2)),
   );
@@ -240,14 +237,11 @@ void generatedTestCases(ValueGetter<IrisTester> irisTester) {
     'RtcEngineEventHandler.onError',
     (WidgetTester tester) async {
       RtcEngine rtcEngine = createAgoraRtcEngine();
-      Directory appDocDir = await getApplicationDocumentsDirectory();
-      String logPath = path.join(appDocDir.path, 'test_log.txt');
       await rtcEngine.initialize(RtcEngineContext(
         appId: 'app_id',
         areaCode: AreaCode.areaCodeGlob.value(),
-        //logConfig: LogConfig(filePath: logPath),
       ));
-      //await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       final onErrorCompleter = Completer<bool>();
       final theRtcEngineEventHandler = RtcEngineEventHandler(
@@ -298,6 +292,9 @@ void generatedTestCases(ValueGetter<IrisTester> irisTester) {
       await Future.delayed(const Duration(milliseconds: 500));
 
       await rtcEngine.release();
+
+      // Delay 200 milliseconds to ensure the `await RtcEngine.release()` call completed.
+      await Future.delayed(const Duration(milliseconds: 200));
     },
     timeout: const Timeout(Duration(minutes: 2)),
   );
@@ -306,14 +303,11 @@ void generatedTestCases(ValueGetter<IrisTester> irisTester) {
     'RtcEngineEventHandler.onAudioQuality',
     (WidgetTester tester) async {
       RtcEngine rtcEngine = createAgoraRtcEngine();
-      Directory appDocDir = await getApplicationDocumentsDirectory();
-      String logPath = path.join(appDocDir.path, 'test_log.txt');
       await rtcEngine.initialize(RtcEngineContext(
         appId: 'app_id',
         areaCode: AreaCode.areaCodeGlob.value(),
-        //logConfig: LogConfig(filePath: logPath),
       ));
-      //await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       final onAudioQualityCompleter = Completer<bool>();
       final theRtcEngineEventHandler = RtcEngineEventHandler(
@@ -377,6 +371,9 @@ void generatedTestCases(ValueGetter<IrisTester> irisTester) {
       await Future.delayed(const Duration(milliseconds: 500));
 
       await rtcEngine.release();
+
+      // Delay 200 milliseconds to ensure the `await RtcEngine.release()` call completed.
+      await Future.delayed(const Duration(milliseconds: 200));
     },
     timeout: const Timeout(Duration(minutes: 2)),
   );
@@ -385,14 +382,11 @@ void generatedTestCases(ValueGetter<IrisTester> irisTester) {
     'RtcEngineEventHandler.onLastmileProbeResult',
     (WidgetTester tester) async {
       RtcEngine rtcEngine = createAgoraRtcEngine();
-      Directory appDocDir = await getApplicationDocumentsDirectory();
-      String logPath = path.join(appDocDir.path, 'test_log.txt');
       await rtcEngine.initialize(RtcEngineContext(
         appId: 'app_id',
         areaCode: AreaCode.areaCodeGlob.value(),
-        //logConfig: LogConfig(filePath: logPath),
       ));
-      //await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       final onLastmileProbeResultCompleter = Completer<bool>();
       final theRtcEngineEventHandler = RtcEngineEventHandler(
@@ -469,6 +463,9 @@ void generatedTestCases(ValueGetter<IrisTester> irisTester) {
       await Future.delayed(const Duration(milliseconds: 500));
 
       await rtcEngine.release();
+
+      // Delay 200 milliseconds to ensure the `await RtcEngine.release()` call completed.
+      await Future.delayed(const Duration(milliseconds: 200));
     },
     timeout: const Timeout(Duration(minutes: 2)),
   );
@@ -477,14 +474,11 @@ void generatedTestCases(ValueGetter<IrisTester> irisTester) {
     'RtcEngineEventHandler.onAudioVolumeIndication',
     (WidgetTester tester) async {
       RtcEngine rtcEngine = createAgoraRtcEngine();
-      Directory appDocDir = await getApplicationDocumentsDirectory();
-      String logPath = path.join(appDocDir.path, 'test_log.txt');
       await rtcEngine.initialize(RtcEngineContext(
         appId: 'app_id',
         areaCode: AreaCode.areaCodeGlob.value(),
-        //logConfig: LogConfig(filePath: logPath),
       ));
-      //await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       final onAudioVolumeIndicationCompleter = Completer<bool>();
       final theRtcEngineEventHandler = RtcEngineEventHandler(
@@ -547,6 +541,9 @@ void generatedTestCases(ValueGetter<IrisTester> irisTester) {
       await Future.delayed(const Duration(milliseconds: 500));
 
       await rtcEngine.release();
+
+      // Delay 200 milliseconds to ensure the `await RtcEngine.release()` call completed.
+      await Future.delayed(const Duration(milliseconds: 200));
     },
     timeout: const Timeout(Duration(minutes: 2)),
   );
@@ -555,14 +552,11 @@ void generatedTestCases(ValueGetter<IrisTester> irisTester) {
     'RtcEngineEventHandler.onLeaveChannel',
     (WidgetTester tester) async {
       RtcEngine rtcEngine = createAgoraRtcEngine();
-      Directory appDocDir = await getApplicationDocumentsDirectory();
-      String logPath = path.join(appDocDir.path, 'test_log.txt');
       await rtcEngine.initialize(RtcEngineContext(
         appId: 'app_id',
         areaCode: AreaCode.areaCodeGlob.value(),
-        //logConfig: LogConfig(filePath: logPath),
       ));
-      //await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       final onLeaveChannelCompleter = Completer<bool>();
       final theRtcEngineEventHandler = RtcEngineEventHandler(
@@ -693,6 +687,9 @@ void generatedTestCases(ValueGetter<IrisTester> irisTester) {
       await Future.delayed(const Duration(milliseconds: 500));
 
       await rtcEngine.release();
+
+      // Delay 200 milliseconds to ensure the `await RtcEngine.release()` call completed.
+      await Future.delayed(const Duration(milliseconds: 200));
     },
     timeout: const Timeout(Duration(minutes: 2)),
   );
@@ -701,14 +698,11 @@ void generatedTestCases(ValueGetter<IrisTester> irisTester) {
     'RtcEngineEventHandler.onRtcStats',
     (WidgetTester tester) async {
       RtcEngine rtcEngine = createAgoraRtcEngine();
-      Directory appDocDir = await getApplicationDocumentsDirectory();
-      String logPath = path.join(appDocDir.path, 'test_log.txt');
       await rtcEngine.initialize(RtcEngineContext(
         appId: 'app_id',
         areaCode: AreaCode.areaCodeGlob.value(),
-        //logConfig: LogConfig(filePath: logPath),
       ));
-      //await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       final onRtcStatsCompleter = Completer<bool>();
       final theRtcEngineEventHandler = RtcEngineEventHandler(
@@ -839,6 +833,9 @@ void generatedTestCases(ValueGetter<IrisTester> irisTester) {
       await Future.delayed(const Duration(milliseconds: 500));
 
       await rtcEngine.release();
+
+      // Delay 200 milliseconds to ensure the `await RtcEngine.release()` call completed.
+      await Future.delayed(const Duration(milliseconds: 200));
     },
     timeout: const Timeout(Duration(minutes: 2)),
   );
@@ -847,14 +844,11 @@ void generatedTestCases(ValueGetter<IrisTester> irisTester) {
     'RtcEngineEventHandler.onAudioDeviceStateChanged',
     (WidgetTester tester) async {
       RtcEngine rtcEngine = createAgoraRtcEngine();
-      Directory appDocDir = await getApplicationDocumentsDirectory();
-      String logPath = path.join(appDocDir.path, 'test_log.txt');
       await rtcEngine.initialize(RtcEngineContext(
         appId: 'app_id',
         areaCode: AreaCode.areaCodeGlob.value(),
-        //logConfig: LogConfig(filePath: logPath),
       ));
-      //await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       final onAudioDeviceStateChangedCompleter = Completer<bool>();
       final theRtcEngineEventHandler = RtcEngineEventHandler(
@@ -911,6 +905,9 @@ void generatedTestCases(ValueGetter<IrisTester> irisTester) {
       await Future.delayed(const Duration(milliseconds: 500));
 
       await rtcEngine.release();
+
+      // Delay 200 milliseconds to ensure the `await RtcEngine.release()` call completed.
+      await Future.delayed(const Duration(milliseconds: 200));
     },
     timeout: const Timeout(Duration(minutes: 2)),
   );
@@ -919,14 +916,11 @@ void generatedTestCases(ValueGetter<IrisTester> irisTester) {
     'RtcEngineEventHandler.onAudioMixingPositionChanged',
     (WidgetTester tester) async {
       RtcEngine rtcEngine = createAgoraRtcEngine();
-      Directory appDocDir = await getApplicationDocumentsDirectory();
-      String logPath = path.join(appDocDir.path, 'test_log.txt');
       await rtcEngine.initialize(RtcEngineContext(
         appId: 'app_id',
         areaCode: AreaCode.areaCodeGlob.value(),
-        //logConfig: LogConfig(filePath: logPath),
       ));
-      //await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       final onAudioMixingPositionChangedCompleter = Completer<bool>();
       final theRtcEngineEventHandler = RtcEngineEventHandler(
@@ -977,6 +971,9 @@ void generatedTestCases(ValueGetter<IrisTester> irisTester) {
       await Future.delayed(const Duration(milliseconds: 500));
 
       await rtcEngine.release();
+
+      // Delay 200 milliseconds to ensure the `await RtcEngine.release()` call completed.
+      await Future.delayed(const Duration(milliseconds: 200));
     },
     timeout: const Timeout(Duration(minutes: 2)),
   );
@@ -985,14 +982,11 @@ void generatedTestCases(ValueGetter<IrisTester> irisTester) {
     'RtcEngineEventHandler.onAudioMixingFinished',
     (WidgetTester tester) async {
       RtcEngine rtcEngine = createAgoraRtcEngine();
-      Directory appDocDir = await getApplicationDocumentsDirectory();
-      String logPath = path.join(appDocDir.path, 'test_log.txt');
       await rtcEngine.initialize(RtcEngineContext(
         appId: 'app_id',
         areaCode: AreaCode.areaCodeGlob.value(),
-        //logConfig: LogConfig(filePath: logPath),
       ));
-      //await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       final onAudioMixingFinishedCompleter = Completer<bool>();
       final theRtcEngineEventHandler = RtcEngineEventHandler(
@@ -1039,6 +1033,9 @@ void generatedTestCases(ValueGetter<IrisTester> irisTester) {
       await Future.delayed(const Duration(milliseconds: 500));
 
       await rtcEngine.release();
+
+      // Delay 200 milliseconds to ensure the `await RtcEngine.release()` call completed.
+      await Future.delayed(const Duration(milliseconds: 200));
     },
     timeout: const Timeout(Duration(minutes: 2)),
   );
@@ -1047,14 +1044,11 @@ void generatedTestCases(ValueGetter<IrisTester> irisTester) {
     'RtcEngineEventHandler.onAudioEffectFinished',
     (WidgetTester tester) async {
       RtcEngine rtcEngine = createAgoraRtcEngine();
-      Directory appDocDir = await getApplicationDocumentsDirectory();
-      String logPath = path.join(appDocDir.path, 'test_log.txt');
       await rtcEngine.initialize(RtcEngineContext(
         appId: 'app_id',
         areaCode: AreaCode.areaCodeGlob.value(),
-        //logConfig: LogConfig(filePath: logPath),
       ));
-      //await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       final onAudioEffectFinishedCompleter = Completer<bool>();
       final theRtcEngineEventHandler = RtcEngineEventHandler(
@@ -1105,6 +1099,9 @@ void generatedTestCases(ValueGetter<IrisTester> irisTester) {
       await Future.delayed(const Duration(milliseconds: 500));
 
       await rtcEngine.release();
+
+      // Delay 200 milliseconds to ensure the `await RtcEngine.release()` call completed.
+      await Future.delayed(const Duration(milliseconds: 200));
     },
     timeout: const Timeout(Duration(minutes: 2)),
   );
@@ -1113,14 +1110,11 @@ void generatedTestCases(ValueGetter<IrisTester> irisTester) {
     'RtcEngineEventHandler.onVideoDeviceStateChanged',
     (WidgetTester tester) async {
       RtcEngine rtcEngine = createAgoraRtcEngine();
-      Directory appDocDir = await getApplicationDocumentsDirectory();
-      String logPath = path.join(appDocDir.path, 'test_log.txt');
       await rtcEngine.initialize(RtcEngineContext(
         appId: 'app_id',
         areaCode: AreaCode.areaCodeGlob.value(),
-        //logConfig: LogConfig(filePath: logPath),
       ));
-      //await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       final onVideoDeviceStateChangedCompleter = Completer<bool>();
       final theRtcEngineEventHandler = RtcEngineEventHandler(
@@ -1177,6 +1171,9 @@ void generatedTestCases(ValueGetter<IrisTester> irisTester) {
       await Future.delayed(const Duration(milliseconds: 500));
 
       await rtcEngine.release();
+
+      // Delay 200 milliseconds to ensure the `await RtcEngine.release()` call completed.
+      await Future.delayed(const Duration(milliseconds: 200));
     },
     timeout: const Timeout(Duration(minutes: 2)),
   );
@@ -1185,14 +1182,11 @@ void generatedTestCases(ValueGetter<IrisTester> irisTester) {
     'RtcEngineEventHandler.onNetworkQuality',
     (WidgetTester tester) async {
       RtcEngine rtcEngine = createAgoraRtcEngine();
-      Directory appDocDir = await getApplicationDocumentsDirectory();
-      String logPath = path.join(appDocDir.path, 'test_log.txt');
       await rtcEngine.initialize(RtcEngineContext(
         appId: 'app_id',
         areaCode: AreaCode.areaCodeGlob.value(),
-        //logConfig: LogConfig(filePath: logPath),
       ));
-      //await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       final onNetworkQualityCompleter = Completer<bool>();
       final theRtcEngineEventHandler = RtcEngineEventHandler(
@@ -1254,6 +1248,9 @@ void generatedTestCases(ValueGetter<IrisTester> irisTester) {
       await Future.delayed(const Duration(milliseconds: 500));
 
       await rtcEngine.release();
+
+      // Delay 200 milliseconds to ensure the `await RtcEngine.release()` call completed.
+      await Future.delayed(const Duration(milliseconds: 200));
     },
     timeout: const Timeout(Duration(minutes: 2)),
   );
@@ -1262,14 +1259,11 @@ void generatedTestCases(ValueGetter<IrisTester> irisTester) {
     'RtcEngineEventHandler.onIntraRequestReceived',
     (WidgetTester tester) async {
       RtcEngine rtcEngine = createAgoraRtcEngine();
-      Directory appDocDir = await getApplicationDocumentsDirectory();
-      String logPath = path.join(appDocDir.path, 'test_log.txt');
       await rtcEngine.initialize(RtcEngineContext(
         appId: 'app_id',
         areaCode: AreaCode.areaCodeGlob.value(),
-        //logConfig: LogConfig(filePath: logPath),
       ));
-      //await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       final onIntraRequestReceivedCompleter = Completer<bool>();
       final theRtcEngineEventHandler = RtcEngineEventHandler(
@@ -1325,6 +1319,9 @@ void generatedTestCases(ValueGetter<IrisTester> irisTester) {
       await Future.delayed(const Duration(milliseconds: 500));
 
       await rtcEngine.release();
+
+      // Delay 200 milliseconds to ensure the `await RtcEngine.release()` call completed.
+      await Future.delayed(const Duration(milliseconds: 200));
     },
     timeout: const Timeout(Duration(minutes: 2)),
   );
@@ -1333,14 +1330,11 @@ void generatedTestCases(ValueGetter<IrisTester> irisTester) {
     'RtcEngineEventHandler.onUplinkNetworkInfoUpdated',
     (WidgetTester tester) async {
       RtcEngine rtcEngine = createAgoraRtcEngine();
-      Directory appDocDir = await getApplicationDocumentsDirectory();
-      String logPath = path.join(appDocDir.path, 'test_log.txt');
       await rtcEngine.initialize(RtcEngineContext(
         appId: 'app_id',
         areaCode: AreaCode.areaCodeGlob.value(),
-        //logConfig: LogConfig(filePath: logPath),
       ));
-      //await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       final onUplinkNetworkInfoUpdatedCompleter = Completer<bool>();
       final theRtcEngineEventHandler = RtcEngineEventHandler(
@@ -1394,6 +1388,9 @@ void generatedTestCases(ValueGetter<IrisTester> irisTester) {
       await Future.delayed(const Duration(milliseconds: 500));
 
       await rtcEngine.release();
+
+      // Delay 200 milliseconds to ensure the `await RtcEngine.release()` call completed.
+      await Future.delayed(const Duration(milliseconds: 200));
     },
     timeout: const Timeout(Duration(minutes: 2)),
   );
@@ -1402,14 +1399,11 @@ void generatedTestCases(ValueGetter<IrisTester> irisTester) {
     'RtcEngineEventHandler.onDownlinkNetworkInfoUpdated',
     (WidgetTester tester) async {
       RtcEngine rtcEngine = createAgoraRtcEngine();
-      Directory appDocDir = await getApplicationDocumentsDirectory();
-      String logPath = path.join(appDocDir.path, 'test_log.txt');
       await rtcEngine.initialize(RtcEngineContext(
         appId: 'app_id',
         areaCode: AreaCode.areaCodeGlob.value(),
-        //logConfig: LogConfig(filePath: logPath),
       ));
-      //await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       final onDownlinkNetworkInfoUpdatedCompleter = Completer<bool>();
       final theRtcEngineEventHandler = RtcEngineEventHandler(
@@ -1471,6 +1465,9 @@ void generatedTestCases(ValueGetter<IrisTester> irisTester) {
       await Future.delayed(const Duration(milliseconds: 500));
 
       await rtcEngine.release();
+
+      // Delay 200 milliseconds to ensure the `await RtcEngine.release()` call completed.
+      await Future.delayed(const Duration(milliseconds: 200));
     },
     timeout: const Timeout(Duration(minutes: 2)),
   );
@@ -1479,14 +1476,11 @@ void generatedTestCases(ValueGetter<IrisTester> irisTester) {
     'RtcEngineEventHandler.onLastmileQuality',
     (WidgetTester tester) async {
       RtcEngine rtcEngine = createAgoraRtcEngine();
-      Directory appDocDir = await getApplicationDocumentsDirectory();
-      String logPath = path.join(appDocDir.path, 'test_log.txt');
       await rtcEngine.initialize(RtcEngineContext(
         appId: 'app_id',
         areaCode: AreaCode.areaCodeGlob.value(),
-        //logConfig: LogConfig(filePath: logPath),
       ));
-      //await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       final onLastmileQualityCompleter = Completer<bool>();
       final theRtcEngineEventHandler = RtcEngineEventHandler(
@@ -1536,6 +1530,9 @@ void generatedTestCases(ValueGetter<IrisTester> irisTester) {
       await Future.delayed(const Duration(milliseconds: 500));
 
       await rtcEngine.release();
+
+      // Delay 200 milliseconds to ensure the `await RtcEngine.release()` call completed.
+      await Future.delayed(const Duration(milliseconds: 200));
     },
     timeout: const Timeout(Duration(minutes: 2)),
   );
@@ -1544,14 +1541,11 @@ void generatedTestCases(ValueGetter<IrisTester> irisTester) {
     'RtcEngineEventHandler.onFirstLocalVideoFrame',
     (WidgetTester tester) async {
       RtcEngine rtcEngine = createAgoraRtcEngine();
-      Directory appDocDir = await getApplicationDocumentsDirectory();
-      String logPath = path.join(appDocDir.path, 'test_log.txt');
       await rtcEngine.initialize(RtcEngineContext(
         appId: 'app_id',
         areaCode: AreaCode.areaCodeGlob.value(),
-        //logConfig: LogConfig(filePath: logPath),
       ));
-      //await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       final onFirstLocalVideoFrameCompleter = Completer<bool>();
       final theRtcEngineEventHandler = RtcEngineEventHandler(
@@ -1609,6 +1603,9 @@ void generatedTestCases(ValueGetter<IrisTester> irisTester) {
       await Future.delayed(const Duration(milliseconds: 500));
 
       await rtcEngine.release();
+
+      // Delay 200 milliseconds to ensure the `await RtcEngine.release()` call completed.
+      await Future.delayed(const Duration(milliseconds: 200));
     },
     timeout: const Timeout(Duration(minutes: 2)),
   );
@@ -1617,14 +1614,11 @@ void generatedTestCases(ValueGetter<IrisTester> irisTester) {
     'RtcEngineEventHandler.onFirstLocalVideoFramePublished',
     (WidgetTester tester) async {
       RtcEngine rtcEngine = createAgoraRtcEngine();
-      Directory appDocDir = await getApplicationDocumentsDirectory();
-      String logPath = path.join(appDocDir.path, 'test_log.txt');
       await rtcEngine.initialize(RtcEngineContext(
         appId: 'app_id',
         areaCode: AreaCode.areaCodeGlob.value(),
-        //logConfig: LogConfig(filePath: logPath),
       ));
-      //await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       final onFirstLocalVideoFramePublishedCompleter = Completer<bool>();
       final theRtcEngineEventHandler = RtcEngineEventHandler(
@@ -1677,6 +1671,9 @@ void generatedTestCases(ValueGetter<IrisTester> irisTester) {
       await Future.delayed(const Duration(milliseconds: 500));
 
       await rtcEngine.release();
+
+      // Delay 200 milliseconds to ensure the `await RtcEngine.release()` call completed.
+      await Future.delayed(const Duration(milliseconds: 200));
     },
     timeout: const Timeout(Duration(minutes: 2)),
   );
@@ -1685,14 +1682,11 @@ void generatedTestCases(ValueGetter<IrisTester> irisTester) {
     'RtcEngineEventHandler.onFirstRemoteVideoDecoded',
     (WidgetTester tester) async {
       RtcEngine rtcEngine = createAgoraRtcEngine();
-      Directory appDocDir = await getApplicationDocumentsDirectory();
-      String logPath = path.join(appDocDir.path, 'test_log.txt');
       await rtcEngine.initialize(RtcEngineContext(
         appId: 'app_id',
         areaCode: AreaCode.areaCodeGlob.value(),
-        //logConfig: LogConfig(filePath: logPath),
       ));
-      //await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       final onFirstRemoteVideoDecodedCompleter = Completer<bool>();
       final theRtcEngineEventHandler = RtcEngineEventHandler(
@@ -1757,6 +1751,9 @@ void generatedTestCases(ValueGetter<IrisTester> irisTester) {
       await Future.delayed(const Duration(milliseconds: 500));
 
       await rtcEngine.release();
+
+      // Delay 200 milliseconds to ensure the `await RtcEngine.release()` call completed.
+      await Future.delayed(const Duration(milliseconds: 200));
     },
     timeout: const Timeout(Duration(minutes: 2)),
   );
@@ -1765,14 +1762,11 @@ void generatedTestCases(ValueGetter<IrisTester> irisTester) {
     'RtcEngineEventHandler.onVideoSizeChanged',
     (WidgetTester tester) async {
       RtcEngine rtcEngine = createAgoraRtcEngine();
-      Directory appDocDir = await getApplicationDocumentsDirectory();
-      String logPath = path.join(appDocDir.path, 'test_log.txt');
       await rtcEngine.initialize(RtcEngineContext(
         appId: 'app_id',
         areaCode: AreaCode.areaCodeGlob.value(),
-        //logConfig: LogConfig(filePath: logPath),
       ));
-      //await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       final onVideoSizeChangedCompleter = Completer<bool>();
       final theRtcEngineEventHandler = RtcEngineEventHandler(
@@ -1843,6 +1837,9 @@ void generatedTestCases(ValueGetter<IrisTester> irisTester) {
       await Future.delayed(const Duration(milliseconds: 500));
 
       await rtcEngine.release();
+
+      // Delay 200 milliseconds to ensure the `await RtcEngine.release()` call completed.
+      await Future.delayed(const Duration(milliseconds: 200));
     },
     timeout: const Timeout(Duration(minutes: 2)),
   );
@@ -1851,14 +1848,11 @@ void generatedTestCases(ValueGetter<IrisTester> irisTester) {
     'RtcEngineEventHandler.onLocalVideoStateChanged',
     (WidgetTester tester) async {
       RtcEngine rtcEngine = createAgoraRtcEngine();
-      Directory appDocDir = await getApplicationDocumentsDirectory();
-      String logPath = path.join(appDocDir.path, 'test_log.txt');
       await rtcEngine.initialize(RtcEngineContext(
         appId: 'app_id',
         areaCode: AreaCode.areaCodeGlob.value(),
-        //logConfig: LogConfig(filePath: logPath),
       ));
-      //await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       final onLocalVideoStateChangedCompleter = Completer<bool>();
       final theRtcEngineEventHandler = RtcEngineEventHandler(
@@ -1916,6 +1910,9 @@ void generatedTestCases(ValueGetter<IrisTester> irisTester) {
       await Future.delayed(const Duration(milliseconds: 500));
 
       await rtcEngine.release();
+
+      // Delay 200 milliseconds to ensure the `await RtcEngine.release()` call completed.
+      await Future.delayed(const Duration(milliseconds: 200));
     },
     timeout: const Timeout(Duration(minutes: 2)),
   );
@@ -1924,14 +1921,11 @@ void generatedTestCases(ValueGetter<IrisTester> irisTester) {
     'RtcEngineEventHandler.onRemoteVideoStateChanged',
     (WidgetTester tester) async {
       RtcEngine rtcEngine = createAgoraRtcEngine();
-      Directory appDocDir = await getApplicationDocumentsDirectory();
-      String logPath = path.join(appDocDir.path, 'test_log.txt');
       await rtcEngine.initialize(RtcEngineContext(
         appId: 'app_id',
         areaCode: AreaCode.areaCodeGlob.value(),
-        //logConfig: LogConfig(filePath: logPath),
       ));
-      //await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       final onRemoteVideoStateChangedCompleter = Completer<bool>();
       final theRtcEngineEventHandler = RtcEngineEventHandler(
@@ -2000,6 +1994,9 @@ void generatedTestCases(ValueGetter<IrisTester> irisTester) {
       await Future.delayed(const Duration(milliseconds: 500));
 
       await rtcEngine.release();
+
+      // Delay 200 milliseconds to ensure the `await RtcEngine.release()` call completed.
+      await Future.delayed(const Duration(milliseconds: 200));
     },
     timeout: const Timeout(Duration(minutes: 2)),
   );
@@ -2008,14 +2005,11 @@ void generatedTestCases(ValueGetter<IrisTester> irisTester) {
     'RtcEngineEventHandler.onFirstRemoteVideoFrame',
     (WidgetTester tester) async {
       RtcEngine rtcEngine = createAgoraRtcEngine();
-      Directory appDocDir = await getApplicationDocumentsDirectory();
-      String logPath = path.join(appDocDir.path, 'test_log.txt');
       await rtcEngine.initialize(RtcEngineContext(
         appId: 'app_id',
         areaCode: AreaCode.areaCodeGlob.value(),
-        //logConfig: LogConfig(filePath: logPath),
       ));
-      //await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       final onFirstRemoteVideoFrameCompleter = Completer<bool>();
       final theRtcEngineEventHandler = RtcEngineEventHandler(
@@ -2080,6 +2074,9 @@ void generatedTestCases(ValueGetter<IrisTester> irisTester) {
       await Future.delayed(const Duration(milliseconds: 500));
 
       await rtcEngine.release();
+
+      // Delay 200 milliseconds to ensure the `await RtcEngine.release()` call completed.
+      await Future.delayed(const Duration(milliseconds: 200));
     },
     timeout: const Timeout(Duration(minutes: 2)),
   );
@@ -2088,14 +2085,11 @@ void generatedTestCases(ValueGetter<IrisTester> irisTester) {
     'RtcEngineEventHandler.onUserJoined',
     (WidgetTester tester) async {
       RtcEngine rtcEngine = createAgoraRtcEngine();
-      Directory appDocDir = await getApplicationDocumentsDirectory();
-      String logPath = path.join(appDocDir.path, 'test_log.txt');
       await rtcEngine.initialize(RtcEngineContext(
         appId: 'app_id',
         areaCode: AreaCode.areaCodeGlob.value(),
-        //logConfig: LogConfig(filePath: logPath),
       ));
-      //await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       final onUserJoinedCompleter = Completer<bool>();
       final theRtcEngineEventHandler = RtcEngineEventHandler(
@@ -2154,6 +2148,9 @@ void generatedTestCases(ValueGetter<IrisTester> irisTester) {
       await Future.delayed(const Duration(milliseconds: 500));
 
       await rtcEngine.release();
+
+      // Delay 200 milliseconds to ensure the `await RtcEngine.release()` call completed.
+      await Future.delayed(const Duration(milliseconds: 200));
     },
     timeout: const Timeout(Duration(minutes: 2)),
   );
@@ -2162,14 +2159,11 @@ void generatedTestCases(ValueGetter<IrisTester> irisTester) {
     'RtcEngineEventHandler.onUserOffline',
     (WidgetTester tester) async {
       RtcEngine rtcEngine = createAgoraRtcEngine();
-      Directory appDocDir = await getApplicationDocumentsDirectory();
-      String logPath = path.join(appDocDir.path, 'test_log.txt');
       await rtcEngine.initialize(RtcEngineContext(
         appId: 'app_id',
         areaCode: AreaCode.areaCodeGlob.value(),
-        //logConfig: LogConfig(filePath: logPath),
       ));
-      //await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       final onUserOfflineCompleter = Completer<bool>();
       final theRtcEngineEventHandler = RtcEngineEventHandler(
@@ -2230,6 +2224,9 @@ void generatedTestCases(ValueGetter<IrisTester> irisTester) {
       await Future.delayed(const Duration(milliseconds: 500));
 
       await rtcEngine.release();
+
+      // Delay 200 milliseconds to ensure the `await RtcEngine.release()` call completed.
+      await Future.delayed(const Duration(milliseconds: 200));
     },
     timeout: const Timeout(Duration(minutes: 2)),
   );
@@ -2238,14 +2235,11 @@ void generatedTestCases(ValueGetter<IrisTester> irisTester) {
     'RtcEngineEventHandler.onUserMuteAudio',
     (WidgetTester tester) async {
       RtcEngine rtcEngine = createAgoraRtcEngine();
-      Directory appDocDir = await getApplicationDocumentsDirectory();
-      String logPath = path.join(appDocDir.path, 'test_log.txt');
       await rtcEngine.initialize(RtcEngineContext(
         appId: 'app_id',
         areaCode: AreaCode.areaCodeGlob.value(),
-        //logConfig: LogConfig(filePath: logPath),
       ));
-      //await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       final onUserMuteAudioCompleter = Completer<bool>();
       final theRtcEngineEventHandler = RtcEngineEventHandler(
@@ -2304,6 +2298,9 @@ void generatedTestCases(ValueGetter<IrisTester> irisTester) {
       await Future.delayed(const Duration(milliseconds: 500));
 
       await rtcEngine.release();
+
+      // Delay 200 milliseconds to ensure the `await RtcEngine.release()` call completed.
+      await Future.delayed(const Duration(milliseconds: 200));
     },
     timeout: const Timeout(Duration(minutes: 2)),
   );
@@ -2312,14 +2309,11 @@ void generatedTestCases(ValueGetter<IrisTester> irisTester) {
     'RtcEngineEventHandler.onUserMuteVideo',
     (WidgetTester tester) async {
       RtcEngine rtcEngine = createAgoraRtcEngine();
-      Directory appDocDir = await getApplicationDocumentsDirectory();
-      String logPath = path.join(appDocDir.path, 'test_log.txt');
       await rtcEngine.initialize(RtcEngineContext(
         appId: 'app_id',
         areaCode: AreaCode.areaCodeGlob.value(),
-        //logConfig: LogConfig(filePath: logPath),
       ));
-      //await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       final onUserMuteVideoCompleter = Completer<bool>();
       final theRtcEngineEventHandler = RtcEngineEventHandler(
@@ -2378,6 +2372,9 @@ void generatedTestCases(ValueGetter<IrisTester> irisTester) {
       await Future.delayed(const Duration(milliseconds: 500));
 
       await rtcEngine.release();
+
+      // Delay 200 milliseconds to ensure the `await RtcEngine.release()` call completed.
+      await Future.delayed(const Duration(milliseconds: 200));
     },
     timeout: const Timeout(Duration(minutes: 2)),
   );
@@ -2386,14 +2383,11 @@ void generatedTestCases(ValueGetter<IrisTester> irisTester) {
     'RtcEngineEventHandler.onUserEnableVideo',
     (WidgetTester tester) async {
       RtcEngine rtcEngine = createAgoraRtcEngine();
-      Directory appDocDir = await getApplicationDocumentsDirectory();
-      String logPath = path.join(appDocDir.path, 'test_log.txt');
       await rtcEngine.initialize(RtcEngineContext(
         appId: 'app_id',
         areaCode: AreaCode.areaCodeGlob.value(),
-        //logConfig: LogConfig(filePath: logPath),
       ));
-      //await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       final onUserEnableVideoCompleter = Completer<bool>();
       final theRtcEngineEventHandler = RtcEngineEventHandler(
@@ -2453,6 +2447,9 @@ void generatedTestCases(ValueGetter<IrisTester> irisTester) {
       await Future.delayed(const Duration(milliseconds: 500));
 
       await rtcEngine.release();
+
+      // Delay 200 milliseconds to ensure the `await RtcEngine.release()` call completed.
+      await Future.delayed(const Duration(milliseconds: 200));
     },
     timeout: const Timeout(Duration(minutes: 2)),
   );
@@ -2461,14 +2458,11 @@ void generatedTestCases(ValueGetter<IrisTester> irisTester) {
     'RtcEngineEventHandler.onUserStateChanged',
     (WidgetTester tester) async {
       RtcEngine rtcEngine = createAgoraRtcEngine();
-      Directory appDocDir = await getApplicationDocumentsDirectory();
-      String logPath = path.join(appDocDir.path, 'test_log.txt');
       await rtcEngine.initialize(RtcEngineContext(
         appId: 'app_id',
         areaCode: AreaCode.areaCodeGlob.value(),
-        //logConfig: LogConfig(filePath: logPath),
       ));
-      //await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       final onUserStateChangedCompleter = Completer<bool>();
       final theRtcEngineEventHandler = RtcEngineEventHandler(
@@ -2528,6 +2522,9 @@ void generatedTestCases(ValueGetter<IrisTester> irisTester) {
       await Future.delayed(const Duration(milliseconds: 500));
 
       await rtcEngine.release();
+
+      // Delay 200 milliseconds to ensure the `await RtcEngine.release()` call completed.
+      await Future.delayed(const Duration(milliseconds: 200));
     },
     timeout: const Timeout(Duration(minutes: 2)),
   );
@@ -2536,14 +2533,11 @@ void generatedTestCases(ValueGetter<IrisTester> irisTester) {
     'RtcEngineEventHandler.onUserEnableLocalVideo',
     (WidgetTester tester) async {
       RtcEngine rtcEngine = createAgoraRtcEngine();
-      Directory appDocDir = await getApplicationDocumentsDirectory();
-      String logPath = path.join(appDocDir.path, 'test_log.txt');
       await rtcEngine.initialize(RtcEngineContext(
         appId: 'app_id',
         areaCode: AreaCode.areaCodeGlob.value(),
-        //logConfig: LogConfig(filePath: logPath),
       ));
-      //await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       final onUserEnableLocalVideoCompleter = Completer<bool>();
       final theRtcEngineEventHandler = RtcEngineEventHandler(
@@ -2604,6 +2598,9 @@ void generatedTestCases(ValueGetter<IrisTester> irisTester) {
       await Future.delayed(const Duration(milliseconds: 500));
 
       await rtcEngine.release();
+
+      // Delay 200 milliseconds to ensure the `await RtcEngine.release()` call completed.
+      await Future.delayed(const Duration(milliseconds: 200));
     },
     timeout: const Timeout(Duration(minutes: 2)),
   );
@@ -2612,14 +2609,11 @@ void generatedTestCases(ValueGetter<IrisTester> irisTester) {
     'RtcEngineEventHandler.onRemoteAudioStats',
     (WidgetTester tester) async {
       RtcEngine rtcEngine = createAgoraRtcEngine();
-      Directory appDocDir = await getApplicationDocumentsDirectory();
-      String logPath = path.join(appDocDir.path, 'test_log.txt');
       await rtcEngine.initialize(RtcEngineContext(
         appId: 'app_id',
         areaCode: AreaCode.areaCodeGlob.value(),
-        //logConfig: LogConfig(filePath: logPath),
       ));
-      //await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       final onRemoteAudioStatsCompleter = Completer<bool>();
       final theRtcEngineEventHandler = RtcEngineEventHandler(
@@ -2713,6 +2707,9 @@ void generatedTestCases(ValueGetter<IrisTester> irisTester) {
       await Future.delayed(const Duration(milliseconds: 500));
 
       await rtcEngine.release();
+
+      // Delay 200 milliseconds to ensure the `await RtcEngine.release()` call completed.
+      await Future.delayed(const Duration(milliseconds: 200));
     },
     timeout: const Timeout(Duration(minutes: 2)),
   );
@@ -2721,14 +2718,11 @@ void generatedTestCases(ValueGetter<IrisTester> irisTester) {
     'RtcEngineEventHandler.onLocalAudioStats',
     (WidgetTester tester) async {
       RtcEngine rtcEngine = createAgoraRtcEngine();
-      Directory appDocDir = await getApplicationDocumentsDirectory();
-      String logPath = path.join(appDocDir.path, 'test_log.txt');
       await rtcEngine.initialize(RtcEngineContext(
         appId: 'app_id',
         areaCode: AreaCode.areaCodeGlob.value(),
-        //logConfig: LogConfig(filePath: logPath),
       ));
-      //await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       final onLocalAudioStatsCompleter = Completer<bool>();
       final theRtcEngineEventHandler = RtcEngineEventHandler(
@@ -2804,6 +2798,9 @@ void generatedTestCases(ValueGetter<IrisTester> irisTester) {
       await Future.delayed(const Duration(milliseconds: 500));
 
       await rtcEngine.release();
+
+      // Delay 200 milliseconds to ensure the `await RtcEngine.release()` call completed.
+      await Future.delayed(const Duration(milliseconds: 200));
     },
     timeout: const Timeout(Duration(minutes: 2)),
   );
@@ -2812,14 +2809,11 @@ void generatedTestCases(ValueGetter<IrisTester> irisTester) {
     'RtcEngineEventHandler.onLocalVideoStats',
     (WidgetTester tester) async {
       RtcEngine rtcEngine = createAgoraRtcEngine();
-      Directory appDocDir = await getApplicationDocumentsDirectory();
-      String logPath = path.join(appDocDir.path, 'test_log.txt');
       await rtcEngine.initialize(RtcEngineContext(
         appId: 'app_id',
         areaCode: AreaCode.areaCodeGlob.value(),
-        //logConfig: LogConfig(filePath: logPath),
       ));
-      //await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       final onLocalVideoStatsCompleter = Completer<bool>();
       final theRtcEngineEventHandler = RtcEngineEventHandler(
@@ -2920,6 +2914,9 @@ void generatedTestCases(ValueGetter<IrisTester> irisTester) {
       await Future.delayed(const Duration(milliseconds: 500));
 
       await rtcEngine.release();
+
+      // Delay 200 milliseconds to ensure the `await RtcEngine.release()` call completed.
+      await Future.delayed(const Duration(milliseconds: 200));
     },
     timeout: const Timeout(Duration(minutes: 2)),
   );
@@ -2928,14 +2925,11 @@ void generatedTestCases(ValueGetter<IrisTester> irisTester) {
     'RtcEngineEventHandler.onRemoteVideoStats',
     (WidgetTester tester) async {
       RtcEngine rtcEngine = createAgoraRtcEngine();
-      Directory appDocDir = await getApplicationDocumentsDirectory();
-      String logPath = path.join(appDocDir.path, 'test_log.txt');
       await rtcEngine.initialize(RtcEngineContext(
         appId: 'app_id',
         areaCode: AreaCode.areaCodeGlob.value(),
-        //logConfig: LogConfig(filePath: logPath),
       ));
-      //await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       final onRemoteVideoStatsCompleter = Completer<bool>();
       final theRtcEngineEventHandler = RtcEngineEventHandler(
@@ -3030,6 +3024,9 @@ void generatedTestCases(ValueGetter<IrisTester> irisTester) {
       await Future.delayed(const Duration(milliseconds: 500));
 
       await rtcEngine.release();
+
+      // Delay 200 milliseconds to ensure the `await RtcEngine.release()` call completed.
+      await Future.delayed(const Duration(milliseconds: 200));
     },
     timeout: const Timeout(Duration(minutes: 2)),
   );
@@ -3038,14 +3035,11 @@ void generatedTestCases(ValueGetter<IrisTester> irisTester) {
     'RtcEngineEventHandler.onCameraReady',
     (WidgetTester tester) async {
       RtcEngine rtcEngine = createAgoraRtcEngine();
-      Directory appDocDir = await getApplicationDocumentsDirectory();
-      String logPath = path.join(appDocDir.path, 'test_log.txt');
       await rtcEngine.initialize(RtcEngineContext(
         appId: 'app_id',
         areaCode: AreaCode.areaCodeGlob.value(),
-        //logConfig: LogConfig(filePath: logPath),
       ));
-      //await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       final onCameraReadyCompleter = Completer<bool>();
       final theRtcEngineEventHandler = RtcEngineEventHandler(
@@ -3091,6 +3085,9 @@ void generatedTestCases(ValueGetter<IrisTester> irisTester) {
       await Future.delayed(const Duration(milliseconds: 500));
 
       await rtcEngine.release();
+
+      // Delay 200 milliseconds to ensure the `await RtcEngine.release()` call completed.
+      await Future.delayed(const Duration(milliseconds: 200));
     },
     timeout: const Timeout(Duration(minutes: 2)),
   );
@@ -3099,14 +3096,11 @@ void generatedTestCases(ValueGetter<IrisTester> irisTester) {
     'RtcEngineEventHandler.onCameraFocusAreaChanged',
     (WidgetTester tester) async {
       RtcEngine rtcEngine = createAgoraRtcEngine();
-      Directory appDocDir = await getApplicationDocumentsDirectory();
-      String logPath = path.join(appDocDir.path, 'test_log.txt');
       await rtcEngine.initialize(RtcEngineContext(
         appId: 'app_id',
         areaCode: AreaCode.areaCodeGlob.value(),
-        //logConfig: LogConfig(filePath: logPath),
       ));
-      //await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       final onCameraFocusAreaChangedCompleter = Completer<bool>();
       final theRtcEngineEventHandler = RtcEngineEventHandler(
@@ -3163,6 +3157,9 @@ void generatedTestCases(ValueGetter<IrisTester> irisTester) {
       await Future.delayed(const Duration(milliseconds: 500));
 
       await rtcEngine.release();
+
+      // Delay 200 milliseconds to ensure the `await RtcEngine.release()` call completed.
+      await Future.delayed(const Duration(milliseconds: 200));
     },
     timeout: const Timeout(Duration(minutes: 2)),
   );
@@ -3171,14 +3168,11 @@ void generatedTestCases(ValueGetter<IrisTester> irisTester) {
     'RtcEngineEventHandler.onCameraExposureAreaChanged',
     (WidgetTester tester) async {
       RtcEngine rtcEngine = createAgoraRtcEngine();
-      Directory appDocDir = await getApplicationDocumentsDirectory();
-      String logPath = path.join(appDocDir.path, 'test_log.txt');
       await rtcEngine.initialize(RtcEngineContext(
         appId: 'app_id',
         areaCode: AreaCode.areaCodeGlob.value(),
-        //logConfig: LogConfig(filePath: logPath),
       ));
-      //await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       final onCameraExposureAreaChangedCompleter = Completer<bool>();
       final theRtcEngineEventHandler = RtcEngineEventHandler(
@@ -3235,6 +3229,9 @@ void generatedTestCases(ValueGetter<IrisTester> irisTester) {
       await Future.delayed(const Duration(milliseconds: 500));
 
       await rtcEngine.release();
+
+      // Delay 200 milliseconds to ensure the `await RtcEngine.release()` call completed.
+      await Future.delayed(const Duration(milliseconds: 200));
     },
     timeout: const Timeout(Duration(minutes: 2)),
   );
@@ -3243,14 +3240,11 @@ void generatedTestCases(ValueGetter<IrisTester> irisTester) {
     'RtcEngineEventHandler.onVideoStopped',
     (WidgetTester tester) async {
       RtcEngine rtcEngine = createAgoraRtcEngine();
-      Directory appDocDir = await getApplicationDocumentsDirectory();
-      String logPath = path.join(appDocDir.path, 'test_log.txt');
       await rtcEngine.initialize(RtcEngineContext(
         appId: 'app_id',
         areaCode: AreaCode.areaCodeGlob.value(),
-        //logConfig: LogConfig(filePath: logPath),
       ));
-      //await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       final onVideoStoppedCompleter = Completer<bool>();
       final theRtcEngineEventHandler = RtcEngineEventHandler(
@@ -3296,6 +3290,9 @@ void generatedTestCases(ValueGetter<IrisTester> irisTester) {
       await Future.delayed(const Duration(milliseconds: 500));
 
       await rtcEngine.release();
+
+      // Delay 200 milliseconds to ensure the `await RtcEngine.release()` call completed.
+      await Future.delayed(const Duration(milliseconds: 200));
     },
     timeout: const Timeout(Duration(minutes: 2)),
   );
@@ -3304,14 +3301,11 @@ void generatedTestCases(ValueGetter<IrisTester> irisTester) {
     'RtcEngineEventHandler.onAudioMixingStateChanged',
     (WidgetTester tester) async {
       RtcEngine rtcEngine = createAgoraRtcEngine();
-      Directory appDocDir = await getApplicationDocumentsDirectory();
-      String logPath = path.join(appDocDir.path, 'test_log.txt');
       await rtcEngine.initialize(RtcEngineContext(
         appId: 'app_id',
         areaCode: AreaCode.areaCodeGlob.value(),
-        //logConfig: LogConfig(filePath: logPath),
       ));
-      //await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       final onAudioMixingStateChangedCompleter = Completer<bool>();
       final theRtcEngineEventHandler = RtcEngineEventHandler(
@@ -3367,6 +3361,9 @@ void generatedTestCases(ValueGetter<IrisTester> irisTester) {
       await Future.delayed(const Duration(milliseconds: 500));
 
       await rtcEngine.release();
+
+      // Delay 200 milliseconds to ensure the `await RtcEngine.release()` call completed.
+      await Future.delayed(const Duration(milliseconds: 200));
     },
     timeout: const Timeout(Duration(minutes: 2)),
   );
@@ -3375,14 +3372,11 @@ void generatedTestCases(ValueGetter<IrisTester> irisTester) {
     'RtcEngineEventHandler.onRhythmPlayerStateChanged',
     (WidgetTester tester) async {
       RtcEngine rtcEngine = createAgoraRtcEngine();
-      Directory appDocDir = await getApplicationDocumentsDirectory();
-      String logPath = path.join(appDocDir.path, 'test_log.txt');
       await rtcEngine.initialize(RtcEngineContext(
         appId: 'app_id',
         areaCode: AreaCode.areaCodeGlob.value(),
-        //logConfig: LogConfig(filePath: logPath),
       ));
-      //await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       final onRhythmPlayerStateChangedCompleter = Completer<bool>();
       final theRtcEngineEventHandler = RtcEngineEventHandler(
@@ -3438,6 +3432,9 @@ void generatedTestCases(ValueGetter<IrisTester> irisTester) {
       await Future.delayed(const Duration(milliseconds: 500));
 
       await rtcEngine.release();
+
+      // Delay 200 milliseconds to ensure the `await RtcEngine.release()` call completed.
+      await Future.delayed(const Duration(milliseconds: 200));
     },
     timeout: const Timeout(Duration(minutes: 2)),
   );
@@ -3446,14 +3443,11 @@ void generatedTestCases(ValueGetter<IrisTester> irisTester) {
     'RtcEngineEventHandler.onConnectionLost',
     (WidgetTester tester) async {
       RtcEngine rtcEngine = createAgoraRtcEngine();
-      Directory appDocDir = await getApplicationDocumentsDirectory();
-      String logPath = path.join(appDocDir.path, 'test_log.txt');
       await rtcEngine.initialize(RtcEngineContext(
         appId: 'app_id',
         areaCode: AreaCode.areaCodeGlob.value(),
-        //logConfig: LogConfig(filePath: logPath),
       ));
-      //await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       final onConnectionLostCompleter = Completer<bool>();
       final theRtcEngineEventHandler = RtcEngineEventHandler(
@@ -3508,6 +3502,9 @@ void generatedTestCases(ValueGetter<IrisTester> irisTester) {
       await Future.delayed(const Duration(milliseconds: 500));
 
       await rtcEngine.release();
+
+      // Delay 200 milliseconds to ensure the `await RtcEngine.release()` call completed.
+      await Future.delayed(const Duration(milliseconds: 200));
     },
     timeout: const Timeout(Duration(minutes: 2)),
   );
@@ -3516,14 +3513,11 @@ void generatedTestCases(ValueGetter<IrisTester> irisTester) {
     'RtcEngineEventHandler.onConnectionInterrupted',
     (WidgetTester tester) async {
       RtcEngine rtcEngine = createAgoraRtcEngine();
-      Directory appDocDir = await getApplicationDocumentsDirectory();
-      String logPath = path.join(appDocDir.path, 'test_log.txt');
       await rtcEngine.initialize(RtcEngineContext(
         appId: 'app_id',
         areaCode: AreaCode.areaCodeGlob.value(),
-        //logConfig: LogConfig(filePath: logPath),
       ));
-      //await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       final onConnectionInterruptedCompleter = Completer<bool>();
       final theRtcEngineEventHandler = RtcEngineEventHandler(
@@ -3579,6 +3573,9 @@ void generatedTestCases(ValueGetter<IrisTester> irisTester) {
       await Future.delayed(const Duration(milliseconds: 500));
 
       await rtcEngine.release();
+
+      // Delay 200 milliseconds to ensure the `await RtcEngine.release()` call completed.
+      await Future.delayed(const Duration(milliseconds: 200));
     },
     timeout: const Timeout(Duration(minutes: 2)),
   );
@@ -3587,14 +3584,11 @@ void generatedTestCases(ValueGetter<IrisTester> irisTester) {
     'RtcEngineEventHandler.onConnectionBanned',
     (WidgetTester tester) async {
       RtcEngine rtcEngine = createAgoraRtcEngine();
-      Directory appDocDir = await getApplicationDocumentsDirectory();
-      String logPath = path.join(appDocDir.path, 'test_log.txt');
       await rtcEngine.initialize(RtcEngineContext(
         appId: 'app_id',
         areaCode: AreaCode.areaCodeGlob.value(),
-        //logConfig: LogConfig(filePath: logPath),
       ));
-      //await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       final onConnectionBannedCompleter = Completer<bool>();
       final theRtcEngineEventHandler = RtcEngineEventHandler(
@@ -3649,6 +3643,9 @@ void generatedTestCases(ValueGetter<IrisTester> irisTester) {
       await Future.delayed(const Duration(milliseconds: 500));
 
       await rtcEngine.release();
+
+      // Delay 200 milliseconds to ensure the `await RtcEngine.release()` call completed.
+      await Future.delayed(const Duration(milliseconds: 200));
     },
     timeout: const Timeout(Duration(minutes: 2)),
   );
@@ -3657,14 +3654,11 @@ void generatedTestCases(ValueGetter<IrisTester> irisTester) {
     'RtcEngineEventHandler.onStreamMessage',
     (WidgetTester tester) async {
       RtcEngine rtcEngine = createAgoraRtcEngine();
-      Directory appDocDir = await getApplicationDocumentsDirectory();
-      String logPath = path.join(appDocDir.path, 'test_log.txt');
       await rtcEngine.initialize(RtcEngineContext(
         appId: 'app_id',
         areaCode: AreaCode.areaCodeGlob.value(),
-        //logConfig: LogConfig(filePath: logPath),
       ));
-      //await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       final onStreamMessageCompleter = Completer<bool>();
       final theRtcEngineEventHandler = RtcEngineEventHandler(
@@ -3730,6 +3724,9 @@ void generatedTestCases(ValueGetter<IrisTester> irisTester) {
       await Future.delayed(const Duration(milliseconds: 500));
 
       await rtcEngine.release();
+
+      // Delay 200 milliseconds to ensure the `await RtcEngine.release()` call completed.
+      await Future.delayed(const Duration(milliseconds: 200));
     },
     timeout: const Timeout(Duration(minutes: 2)),
   );
@@ -3738,14 +3735,11 @@ void generatedTestCases(ValueGetter<IrisTester> irisTester) {
     'RtcEngineEventHandler.onStreamMessageError',
     (WidgetTester tester) async {
       RtcEngine rtcEngine = createAgoraRtcEngine();
-      Directory appDocDir = await getApplicationDocumentsDirectory();
-      String logPath = path.join(appDocDir.path, 'test_log.txt');
       await rtcEngine.initialize(RtcEngineContext(
         appId: 'app_id',
         areaCode: AreaCode.areaCodeGlob.value(),
-        //logConfig: LogConfig(filePath: logPath),
       ));
-      //await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       final onStreamMessageErrorCompleter = Completer<bool>();
       final theRtcEngineEventHandler = RtcEngineEventHandler(
@@ -3811,6 +3805,9 @@ void generatedTestCases(ValueGetter<IrisTester> irisTester) {
       await Future.delayed(const Duration(milliseconds: 500));
 
       await rtcEngine.release();
+
+      // Delay 200 milliseconds to ensure the `await RtcEngine.release()` call completed.
+      await Future.delayed(const Duration(milliseconds: 200));
     },
     timeout: const Timeout(Duration(minutes: 2)),
   );
@@ -3819,14 +3816,11 @@ void generatedTestCases(ValueGetter<IrisTester> irisTester) {
     'RtcEngineEventHandler.onRequestToken',
     (WidgetTester tester) async {
       RtcEngine rtcEngine = createAgoraRtcEngine();
-      Directory appDocDir = await getApplicationDocumentsDirectory();
-      String logPath = path.join(appDocDir.path, 'test_log.txt');
       await rtcEngine.initialize(RtcEngineContext(
         appId: 'app_id',
         areaCode: AreaCode.areaCodeGlob.value(),
-        //logConfig: LogConfig(filePath: logPath),
       ));
-      //await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       final onRequestTokenCompleter = Completer<bool>();
       final theRtcEngineEventHandler = RtcEngineEventHandler(
@@ -3881,6 +3875,9 @@ void generatedTestCases(ValueGetter<IrisTester> irisTester) {
       await Future.delayed(const Duration(milliseconds: 500));
 
       await rtcEngine.release();
+
+      // Delay 200 milliseconds to ensure the `await RtcEngine.release()` call completed.
+      await Future.delayed(const Duration(milliseconds: 200));
     },
     timeout: const Timeout(Duration(minutes: 2)),
   );
@@ -3889,14 +3886,11 @@ void generatedTestCases(ValueGetter<IrisTester> irisTester) {
     'RtcEngineEventHandler.onTokenPrivilegeWillExpire',
     (WidgetTester tester) async {
       RtcEngine rtcEngine = createAgoraRtcEngine();
-      Directory appDocDir = await getApplicationDocumentsDirectory();
-      String logPath = path.join(appDocDir.path, 'test_log.txt');
       await rtcEngine.initialize(RtcEngineContext(
         appId: 'app_id',
         areaCode: AreaCode.areaCodeGlob.value(),
-        //logConfig: LogConfig(filePath: logPath),
       ));
-      //await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       final onTokenPrivilegeWillExpireCompleter = Completer<bool>();
       final theRtcEngineEventHandler = RtcEngineEventHandler(
@@ -3954,6 +3948,9 @@ void generatedTestCases(ValueGetter<IrisTester> irisTester) {
       await Future.delayed(const Duration(milliseconds: 500));
 
       await rtcEngine.release();
+
+      // Delay 200 milliseconds to ensure the `await RtcEngine.release()` call completed.
+      await Future.delayed(const Duration(milliseconds: 200));
     },
     timeout: const Timeout(Duration(minutes: 2)),
   );
@@ -3962,14 +3959,11 @@ void generatedTestCases(ValueGetter<IrisTester> irisTester) {
     'RtcEngineEventHandler.onLicenseValidationFailure',
     (WidgetTester tester) async {
       RtcEngine rtcEngine = createAgoraRtcEngine();
-      Directory appDocDir = await getApplicationDocumentsDirectory();
-      String logPath = path.join(appDocDir.path, 'test_log.txt');
       await rtcEngine.initialize(RtcEngineContext(
         appId: 'app_id',
         areaCode: AreaCode.areaCodeGlob.value(),
-        //logConfig: LogConfig(filePath: logPath),
       ));
-      //await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       final onLicenseValidationFailureCompleter = Completer<bool>();
       final theRtcEngineEventHandler = RtcEngineEventHandler(
@@ -4028,6 +4022,9 @@ void generatedTestCases(ValueGetter<IrisTester> irisTester) {
       await Future.delayed(const Duration(milliseconds: 500));
 
       await rtcEngine.release();
+
+      // Delay 200 milliseconds to ensure the `await RtcEngine.release()` call completed.
+      await Future.delayed(const Duration(milliseconds: 200));
     },
     timeout: const Timeout(Duration(minutes: 2)),
   );
@@ -4036,14 +4033,11 @@ void generatedTestCases(ValueGetter<IrisTester> irisTester) {
     'RtcEngineEventHandler.onFirstLocalAudioFramePublished',
     (WidgetTester tester) async {
       RtcEngine rtcEngine = createAgoraRtcEngine();
-      Directory appDocDir = await getApplicationDocumentsDirectory();
-      String logPath = path.join(appDocDir.path, 'test_log.txt');
       await rtcEngine.initialize(RtcEngineContext(
         appId: 'app_id',
         areaCode: AreaCode.areaCodeGlob.value(),
-        //logConfig: LogConfig(filePath: logPath),
       ));
-      //await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       final onFirstLocalAudioFramePublishedCompleter = Completer<bool>();
       final theRtcEngineEventHandler = RtcEngineEventHandler(
@@ -4102,6 +4096,9 @@ void generatedTestCases(ValueGetter<IrisTester> irisTester) {
       await Future.delayed(const Duration(milliseconds: 500));
 
       await rtcEngine.release();
+
+      // Delay 200 milliseconds to ensure the `await RtcEngine.release()` call completed.
+      await Future.delayed(const Duration(milliseconds: 200));
     },
     timeout: const Timeout(Duration(minutes: 2)),
   );
@@ -4110,14 +4107,11 @@ void generatedTestCases(ValueGetter<IrisTester> irisTester) {
     'RtcEngineEventHandler.onFirstRemoteAudioDecoded',
     (WidgetTester tester) async {
       RtcEngine rtcEngine = createAgoraRtcEngine();
-      Directory appDocDir = await getApplicationDocumentsDirectory();
-      String logPath = path.join(appDocDir.path, 'test_log.txt');
       await rtcEngine.initialize(RtcEngineContext(
         appId: 'app_id',
         areaCode: AreaCode.areaCodeGlob.value(),
-        //logConfig: LogConfig(filePath: logPath),
       ));
-      //await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       final onFirstRemoteAudioDecodedCompleter = Completer<bool>();
       final theRtcEngineEventHandler = RtcEngineEventHandler(
@@ -4178,6 +4172,9 @@ void generatedTestCases(ValueGetter<IrisTester> irisTester) {
       await Future.delayed(const Duration(milliseconds: 500));
 
       await rtcEngine.release();
+
+      // Delay 200 milliseconds to ensure the `await RtcEngine.release()` call completed.
+      await Future.delayed(const Duration(milliseconds: 200));
     },
     timeout: const Timeout(Duration(minutes: 2)),
   );
@@ -4186,14 +4183,11 @@ void generatedTestCases(ValueGetter<IrisTester> irisTester) {
     'RtcEngineEventHandler.onFirstRemoteAudioFrame',
     (WidgetTester tester) async {
       RtcEngine rtcEngine = createAgoraRtcEngine();
-      Directory appDocDir = await getApplicationDocumentsDirectory();
-      String logPath = path.join(appDocDir.path, 'test_log.txt');
       await rtcEngine.initialize(RtcEngineContext(
         appId: 'app_id',
         areaCode: AreaCode.areaCodeGlob.value(),
-        //logConfig: LogConfig(filePath: logPath),
       ));
-      //await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       final onFirstRemoteAudioFrameCompleter = Completer<bool>();
       final theRtcEngineEventHandler = RtcEngineEventHandler(
@@ -4254,6 +4248,9 @@ void generatedTestCases(ValueGetter<IrisTester> irisTester) {
       await Future.delayed(const Duration(milliseconds: 500));
 
       await rtcEngine.release();
+
+      // Delay 200 milliseconds to ensure the `await RtcEngine.release()` call completed.
+      await Future.delayed(const Duration(milliseconds: 200));
     },
     timeout: const Timeout(Duration(minutes: 2)),
   );
@@ -4262,14 +4259,11 @@ void generatedTestCases(ValueGetter<IrisTester> irisTester) {
     'RtcEngineEventHandler.onLocalAudioStateChanged',
     (WidgetTester tester) async {
       RtcEngine rtcEngine = createAgoraRtcEngine();
-      Directory appDocDir = await getApplicationDocumentsDirectory();
-      String logPath = path.join(appDocDir.path, 'test_log.txt');
       await rtcEngine.initialize(RtcEngineContext(
         appId: 'app_id',
         areaCode: AreaCode.areaCodeGlob.value(),
-        //logConfig: LogConfig(filePath: logPath),
       ));
-      //await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       final onLocalAudioStateChangedCompleter = Completer<bool>();
       final theRtcEngineEventHandler = RtcEngineEventHandler(
@@ -4332,6 +4326,9 @@ void generatedTestCases(ValueGetter<IrisTester> irisTester) {
       await Future.delayed(const Duration(milliseconds: 500));
 
       await rtcEngine.release();
+
+      // Delay 200 milliseconds to ensure the `await RtcEngine.release()` call completed.
+      await Future.delayed(const Duration(milliseconds: 200));
     },
     timeout: const Timeout(Duration(minutes: 2)),
   );
@@ -4340,14 +4337,11 @@ void generatedTestCases(ValueGetter<IrisTester> irisTester) {
     'RtcEngineEventHandler.onRemoteAudioStateChanged',
     (WidgetTester tester) async {
       RtcEngine rtcEngine = createAgoraRtcEngine();
-      Directory appDocDir = await getApplicationDocumentsDirectory();
-      String logPath = path.join(appDocDir.path, 'test_log.txt');
       await rtcEngine.initialize(RtcEngineContext(
         appId: 'app_id',
         areaCode: AreaCode.areaCodeGlob.value(),
-        //logConfig: LogConfig(filePath: logPath),
       ));
-      //await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       final onRemoteAudioStateChangedCompleter = Completer<bool>();
       final theRtcEngineEventHandler = RtcEngineEventHandler(
@@ -4416,6 +4410,9 @@ void generatedTestCases(ValueGetter<IrisTester> irisTester) {
       await Future.delayed(const Duration(milliseconds: 500));
 
       await rtcEngine.release();
+
+      // Delay 200 milliseconds to ensure the `await RtcEngine.release()` call completed.
+      await Future.delayed(const Duration(milliseconds: 200));
     },
     timeout: const Timeout(Duration(minutes: 2)),
   );
@@ -4424,14 +4421,11 @@ void generatedTestCases(ValueGetter<IrisTester> irisTester) {
     'RtcEngineEventHandler.onActiveSpeaker',
     (WidgetTester tester) async {
       RtcEngine rtcEngine = createAgoraRtcEngine();
-      Directory appDocDir = await getApplicationDocumentsDirectory();
-      String logPath = path.join(appDocDir.path, 'test_log.txt');
       await rtcEngine.initialize(RtcEngineContext(
         appId: 'app_id',
         areaCode: AreaCode.areaCodeGlob.value(),
-        //logConfig: LogConfig(filePath: logPath),
       ));
-      //await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       final onActiveSpeakerCompleter = Completer<bool>();
       final theRtcEngineEventHandler = RtcEngineEventHandler(
@@ -4488,6 +4482,9 @@ void generatedTestCases(ValueGetter<IrisTester> irisTester) {
       await Future.delayed(const Duration(milliseconds: 500));
 
       await rtcEngine.release();
+
+      // Delay 200 milliseconds to ensure the `await RtcEngine.release()` call completed.
+      await Future.delayed(const Duration(milliseconds: 200));
     },
     timeout: const Timeout(Duration(minutes: 2)),
   );
@@ -4496,14 +4493,11 @@ void generatedTestCases(ValueGetter<IrisTester> irisTester) {
     'RtcEngineEventHandler.onContentInspectResult',
     (WidgetTester tester) async {
       RtcEngine rtcEngine = createAgoraRtcEngine();
-      Directory appDocDir = await getApplicationDocumentsDirectory();
-      String logPath = path.join(appDocDir.path, 'test_log.txt');
       await rtcEngine.initialize(RtcEngineContext(
         appId: 'app_id',
         areaCode: AreaCode.areaCodeGlob.value(),
-        //logConfig: LogConfig(filePath: logPath),
       ));
-      //await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       final onContentInspectResultCompleter = Completer<bool>();
       final theRtcEngineEventHandler = RtcEngineEventHandler(
@@ -4555,6 +4549,9 @@ void generatedTestCases(ValueGetter<IrisTester> irisTester) {
       await Future.delayed(const Duration(milliseconds: 500));
 
       await rtcEngine.release();
+
+      // Delay 200 milliseconds to ensure the `await RtcEngine.release()` call completed.
+      await Future.delayed(const Duration(milliseconds: 200));
     },
     timeout: const Timeout(Duration(minutes: 2)),
   );
@@ -4563,14 +4560,11 @@ void generatedTestCases(ValueGetter<IrisTester> irisTester) {
     'RtcEngineEventHandler.onSnapshotTaken',
     (WidgetTester tester) async {
       RtcEngine rtcEngine = createAgoraRtcEngine();
-      Directory appDocDir = await getApplicationDocumentsDirectory();
-      String logPath = path.join(appDocDir.path, 'test_log.txt');
       await rtcEngine.initialize(RtcEngineContext(
         appId: 'app_id',
         areaCode: AreaCode.areaCodeGlob.value(),
-        //logConfig: LogConfig(filePath: logPath),
       ));
-      //await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       final onSnapshotTakenCompleter = Completer<bool>();
       final theRtcEngineEventHandler = RtcEngineEventHandler(
@@ -4636,6 +4630,9 @@ void generatedTestCases(ValueGetter<IrisTester> irisTester) {
       await Future.delayed(const Duration(milliseconds: 500));
 
       await rtcEngine.release();
+
+      // Delay 200 milliseconds to ensure the `await RtcEngine.release()` call completed.
+      await Future.delayed(const Duration(milliseconds: 200));
     },
     timeout: const Timeout(Duration(minutes: 2)),
   );
@@ -4644,14 +4641,11 @@ void generatedTestCases(ValueGetter<IrisTester> irisTester) {
     'RtcEngineEventHandler.onClientRoleChanged',
     (WidgetTester tester) async {
       RtcEngine rtcEngine = createAgoraRtcEngine();
-      Directory appDocDir = await getApplicationDocumentsDirectory();
-      String logPath = path.join(appDocDir.path, 'test_log.txt');
       await rtcEngine.initialize(RtcEngineContext(
         appId: 'app_id',
         areaCode: AreaCode.areaCodeGlob.value(),
-        //logConfig: LogConfig(filePath: logPath),
       ));
-      //await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       final onClientRoleChangedCompleter = Completer<bool>();
       final theRtcEngineEventHandler = RtcEngineEventHandler(
@@ -4717,6 +4711,9 @@ void generatedTestCases(ValueGetter<IrisTester> irisTester) {
       await Future.delayed(const Duration(milliseconds: 500));
 
       await rtcEngine.release();
+
+      // Delay 200 milliseconds to ensure the `await RtcEngine.release()` call completed.
+      await Future.delayed(const Duration(milliseconds: 200));
     },
     timeout: const Timeout(Duration(minutes: 2)),
   );
@@ -4725,14 +4722,11 @@ void generatedTestCases(ValueGetter<IrisTester> irisTester) {
     'RtcEngineEventHandler.onClientRoleChangeFailed',
     (WidgetTester tester) async {
       RtcEngine rtcEngine = createAgoraRtcEngine();
-      Directory appDocDir = await getApplicationDocumentsDirectory();
-      String logPath = path.join(appDocDir.path, 'test_log.txt');
       await rtcEngine.initialize(RtcEngineContext(
         appId: 'app_id',
         areaCode: AreaCode.areaCodeGlob.value(),
-        //logConfig: LogConfig(filePath: logPath),
       ));
-      //await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       final onClientRoleChangeFailedCompleter = Completer<bool>();
       final theRtcEngineEventHandler = RtcEngineEventHandler(
@@ -4794,6 +4788,9 @@ void generatedTestCases(ValueGetter<IrisTester> irisTester) {
       await Future.delayed(const Duration(milliseconds: 500));
 
       await rtcEngine.release();
+
+      // Delay 200 milliseconds to ensure the `await RtcEngine.release()` call completed.
+      await Future.delayed(const Duration(milliseconds: 200));
     },
     timeout: const Timeout(Duration(minutes: 2)),
   );
@@ -4802,14 +4799,11 @@ void generatedTestCases(ValueGetter<IrisTester> irisTester) {
     'RtcEngineEventHandler.onAudioDeviceVolumeChanged',
     (WidgetTester tester) async {
       RtcEngine rtcEngine = createAgoraRtcEngine();
-      Directory appDocDir = await getApplicationDocumentsDirectory();
-      String logPath = path.join(appDocDir.path, 'test_log.txt');
       await rtcEngine.initialize(RtcEngineContext(
         appId: 'app_id',
         areaCode: AreaCode.areaCodeGlob.value(),
-        //logConfig: LogConfig(filePath: logPath),
       ));
-      //await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       final onAudioDeviceVolumeChangedCompleter = Completer<bool>();
       final theRtcEngineEventHandler = RtcEngineEventHandler(
@@ -4865,6 +4859,9 @@ void generatedTestCases(ValueGetter<IrisTester> irisTester) {
       await Future.delayed(const Duration(milliseconds: 500));
 
       await rtcEngine.release();
+
+      // Delay 200 milliseconds to ensure the `await RtcEngine.release()` call completed.
+      await Future.delayed(const Duration(milliseconds: 200));
     },
     timeout: const Timeout(Duration(minutes: 2)),
   );
@@ -4873,14 +4870,11 @@ void generatedTestCases(ValueGetter<IrisTester> irisTester) {
     'RtcEngineEventHandler.onRtmpStreamingStateChanged',
     (WidgetTester tester) async {
       RtcEngine rtcEngine = createAgoraRtcEngine();
-      Directory appDocDir = await getApplicationDocumentsDirectory();
-      String logPath = path.join(appDocDir.path, 'test_log.txt');
       await rtcEngine.initialize(RtcEngineContext(
         appId: 'app_id',
         areaCode: AreaCode.areaCodeGlob.value(),
-        //logConfig: LogConfig(filePath: logPath),
       ));
-      //await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       final onRtmpStreamingStateChangedCompleter = Completer<bool>();
       final theRtcEngineEventHandler = RtcEngineEventHandler(
@@ -4938,6 +4932,9 @@ void generatedTestCases(ValueGetter<IrisTester> irisTester) {
       await Future.delayed(const Duration(milliseconds: 500));
 
       await rtcEngine.release();
+
+      // Delay 200 milliseconds to ensure the `await RtcEngine.release()` call completed.
+      await Future.delayed(const Duration(milliseconds: 200));
     },
     timeout: const Timeout(Duration(minutes: 2)),
   );
@@ -4946,14 +4943,11 @@ void generatedTestCases(ValueGetter<IrisTester> irisTester) {
     'RtcEngineEventHandler.onRtmpStreamingEvent',
     (WidgetTester tester) async {
       RtcEngine rtcEngine = createAgoraRtcEngine();
-      Directory appDocDir = await getApplicationDocumentsDirectory();
-      String logPath = path.join(appDocDir.path, 'test_log.txt');
       await rtcEngine.initialize(RtcEngineContext(
         appId: 'app_id',
         areaCode: AreaCode.areaCodeGlob.value(),
-        //logConfig: LogConfig(filePath: logPath),
       ));
-      //await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       final onRtmpStreamingEventCompleter = Completer<bool>();
       final theRtcEngineEventHandler = RtcEngineEventHandler(
@@ -5006,6 +5000,9 @@ void generatedTestCases(ValueGetter<IrisTester> irisTester) {
       await Future.delayed(const Duration(milliseconds: 500));
 
       await rtcEngine.release();
+
+      // Delay 200 milliseconds to ensure the `await RtcEngine.release()` call completed.
+      await Future.delayed(const Duration(milliseconds: 200));
     },
     timeout: const Timeout(Duration(minutes: 2)),
   );
@@ -5014,14 +5011,11 @@ void generatedTestCases(ValueGetter<IrisTester> irisTester) {
     'RtcEngineEventHandler.onTranscodingUpdated',
     (WidgetTester tester) async {
       RtcEngine rtcEngine = createAgoraRtcEngine();
-      Directory appDocDir = await getApplicationDocumentsDirectory();
-      String logPath = path.join(appDocDir.path, 'test_log.txt');
       await rtcEngine.initialize(RtcEngineContext(
         appId: 'app_id',
         areaCode: AreaCode.areaCodeGlob.value(),
-        //logConfig: LogConfig(filePath: logPath),
       ));
-      //await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       final onTranscodingUpdatedCompleter = Completer<bool>();
       final theRtcEngineEventHandler = RtcEngineEventHandler(
@@ -5067,6 +5061,9 @@ void generatedTestCases(ValueGetter<IrisTester> irisTester) {
       await Future.delayed(const Duration(milliseconds: 500));
 
       await rtcEngine.release();
+
+      // Delay 200 milliseconds to ensure the `await RtcEngine.release()` call completed.
+      await Future.delayed(const Duration(milliseconds: 200));
     },
     timeout: const Timeout(Duration(minutes: 2)),
   );
@@ -5075,14 +5072,11 @@ void generatedTestCases(ValueGetter<IrisTester> irisTester) {
     'RtcEngineEventHandler.onAudioRoutingChanged',
     (WidgetTester tester) async {
       RtcEngine rtcEngine = createAgoraRtcEngine();
-      Directory appDocDir = await getApplicationDocumentsDirectory();
-      String logPath = path.join(appDocDir.path, 'test_log.txt');
       await rtcEngine.initialize(RtcEngineContext(
         appId: 'app_id',
         areaCode: AreaCode.areaCodeGlob.value(),
-        //logConfig: LogConfig(filePath: logPath),
       ));
-      //await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       final onAudioRoutingChangedCompleter = Completer<bool>();
       final theRtcEngineEventHandler = RtcEngineEventHandler(
@@ -5133,6 +5127,9 @@ void generatedTestCases(ValueGetter<IrisTester> irisTester) {
       await Future.delayed(const Duration(milliseconds: 500));
 
       await rtcEngine.release();
+
+      // Delay 200 milliseconds to ensure the `await RtcEngine.release()` call completed.
+      await Future.delayed(const Duration(milliseconds: 200));
     },
     timeout: const Timeout(Duration(minutes: 2)),
   );
@@ -5141,14 +5138,11 @@ void generatedTestCases(ValueGetter<IrisTester> irisTester) {
     'RtcEngineEventHandler.onChannelMediaRelayStateChanged',
     (WidgetTester tester) async {
       RtcEngine rtcEngine = createAgoraRtcEngine();
-      Directory appDocDir = await getApplicationDocumentsDirectory();
-      String logPath = path.join(appDocDir.path, 'test_log.txt');
       await rtcEngine.initialize(RtcEngineContext(
         appId: 'app_id',
         areaCode: AreaCode.areaCodeGlob.value(),
-        //logConfig: LogConfig(filePath: logPath),
       ));
-      //await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       final onChannelMediaRelayStateChangedCompleter = Completer<bool>();
       final theRtcEngineEventHandler = RtcEngineEventHandler(
@@ -5203,6 +5197,9 @@ void generatedTestCases(ValueGetter<IrisTester> irisTester) {
       await Future.delayed(const Duration(milliseconds: 500));
 
       await rtcEngine.release();
+
+      // Delay 200 milliseconds to ensure the `await RtcEngine.release()` call completed.
+      await Future.delayed(const Duration(milliseconds: 200));
     },
     timeout: const Timeout(Duration(minutes: 2)),
   );
@@ -5211,14 +5208,11 @@ void generatedTestCases(ValueGetter<IrisTester> irisTester) {
     'RtcEngineEventHandler.onLocalPublishFallbackToAudioOnly',
     (WidgetTester tester) async {
       RtcEngine rtcEngine = createAgoraRtcEngine();
-      Directory appDocDir = await getApplicationDocumentsDirectory();
-      String logPath = path.join(appDocDir.path, 'test_log.txt');
       await rtcEngine.initialize(RtcEngineContext(
         appId: 'app_id',
         areaCode: AreaCode.areaCodeGlob.value(),
-        //logConfig: LogConfig(filePath: logPath),
       ));
-      //await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       final onLocalPublishFallbackToAudioOnlyCompleter = Completer<bool>();
       final theRtcEngineEventHandler = RtcEngineEventHandler(
@@ -5270,6 +5264,9 @@ void generatedTestCases(ValueGetter<IrisTester> irisTester) {
       await Future.delayed(const Duration(milliseconds: 500));
 
       await rtcEngine.release();
+
+      // Delay 200 milliseconds to ensure the `await RtcEngine.release()` call completed.
+      await Future.delayed(const Duration(milliseconds: 200));
     },
     timeout: const Timeout(Duration(minutes: 2)),
   );
@@ -5278,14 +5275,11 @@ void generatedTestCases(ValueGetter<IrisTester> irisTester) {
     'RtcEngineEventHandler.onRemoteSubscribeFallbackToAudioOnly',
     (WidgetTester tester) async {
       RtcEngine rtcEngine = createAgoraRtcEngine();
-      Directory appDocDir = await getApplicationDocumentsDirectory();
-      String logPath = path.join(appDocDir.path, 'test_log.txt');
       await rtcEngine.initialize(RtcEngineContext(
         appId: 'app_id',
         areaCode: AreaCode.areaCodeGlob.value(),
-        //logConfig: LogConfig(filePath: logPath),
       ));
-      //await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       final onRemoteSubscribeFallbackToAudioOnlyCompleter = Completer<bool>();
       final theRtcEngineEventHandler = RtcEngineEventHandler(
@@ -5340,6 +5334,9 @@ void generatedTestCases(ValueGetter<IrisTester> irisTester) {
       await Future.delayed(const Duration(milliseconds: 500));
 
       await rtcEngine.release();
+
+      // Delay 200 milliseconds to ensure the `await RtcEngine.release()` call completed.
+      await Future.delayed(const Duration(milliseconds: 200));
     },
     timeout: const Timeout(Duration(minutes: 2)),
   );
@@ -5348,14 +5345,11 @@ void generatedTestCases(ValueGetter<IrisTester> irisTester) {
     'RtcEngineEventHandler.onRemoteAudioTransportStats',
     (WidgetTester tester) async {
       RtcEngine rtcEngine = createAgoraRtcEngine();
-      Directory appDocDir = await getApplicationDocumentsDirectory();
-      String logPath = path.join(appDocDir.path, 'test_log.txt');
       await rtcEngine.initialize(RtcEngineContext(
         appId: 'app_id',
         areaCode: AreaCode.areaCodeGlob.value(),
-        //logConfig: LogConfig(filePath: logPath),
       ));
-      //await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       final onRemoteAudioTransportStatsCompleter = Completer<bool>();
       final theRtcEngineEventHandler = RtcEngineEventHandler(
@@ -5420,6 +5414,9 @@ void generatedTestCases(ValueGetter<IrisTester> irisTester) {
       await Future.delayed(const Duration(milliseconds: 500));
 
       await rtcEngine.release();
+
+      // Delay 200 milliseconds to ensure the `await RtcEngine.release()` call completed.
+      await Future.delayed(const Duration(milliseconds: 200));
     },
     timeout: const Timeout(Duration(minutes: 2)),
   );
@@ -5428,14 +5425,11 @@ void generatedTestCases(ValueGetter<IrisTester> irisTester) {
     'RtcEngineEventHandler.onRemoteVideoTransportStats',
     (WidgetTester tester) async {
       RtcEngine rtcEngine = createAgoraRtcEngine();
-      Directory appDocDir = await getApplicationDocumentsDirectory();
-      String logPath = path.join(appDocDir.path, 'test_log.txt');
       await rtcEngine.initialize(RtcEngineContext(
         appId: 'app_id',
         areaCode: AreaCode.areaCodeGlob.value(),
-        //logConfig: LogConfig(filePath: logPath),
       ));
-      //await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       final onRemoteVideoTransportStatsCompleter = Completer<bool>();
       final theRtcEngineEventHandler = RtcEngineEventHandler(
@@ -5500,6 +5494,9 @@ void generatedTestCases(ValueGetter<IrisTester> irisTester) {
       await Future.delayed(const Duration(milliseconds: 500));
 
       await rtcEngine.release();
+
+      // Delay 200 milliseconds to ensure the `await RtcEngine.release()` call completed.
+      await Future.delayed(const Duration(milliseconds: 200));
     },
     timeout: const Timeout(Duration(minutes: 2)),
   );
@@ -5508,14 +5505,11 @@ void generatedTestCases(ValueGetter<IrisTester> irisTester) {
     'RtcEngineEventHandler.onConnectionStateChanged',
     (WidgetTester tester) async {
       RtcEngine rtcEngine = createAgoraRtcEngine();
-      Directory appDocDir = await getApplicationDocumentsDirectory();
-      String logPath = path.join(appDocDir.path, 'test_log.txt');
       await rtcEngine.initialize(RtcEngineContext(
         appId: 'app_id',
         areaCode: AreaCode.areaCodeGlob.value(),
-        //logConfig: LogConfig(filePath: logPath),
       ));
-      //await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       final onConnectionStateChangedCompleter = Completer<bool>();
       final theRtcEngineEventHandler = RtcEngineEventHandler(
@@ -5578,6 +5572,9 @@ void generatedTestCases(ValueGetter<IrisTester> irisTester) {
       await Future.delayed(const Duration(milliseconds: 500));
 
       await rtcEngine.release();
+
+      // Delay 200 milliseconds to ensure the `await RtcEngine.release()` call completed.
+      await Future.delayed(const Duration(milliseconds: 200));
     },
     timeout: const Timeout(Duration(minutes: 2)),
   );
@@ -5586,14 +5583,11 @@ void generatedTestCases(ValueGetter<IrisTester> irisTester) {
     'RtcEngineEventHandler.onWlAccMessage',
     (WidgetTester tester) async {
       RtcEngine rtcEngine = createAgoraRtcEngine();
-      Directory appDocDir = await getApplicationDocumentsDirectory();
-      String logPath = path.join(appDocDir.path, 'test_log.txt');
       await rtcEngine.initialize(RtcEngineContext(
         appId: 'app_id',
         areaCode: AreaCode.areaCodeGlob.value(),
-        //logConfig: LogConfig(filePath: logPath),
       ));
-      //await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       final onWlAccMessageCompleter = Completer<bool>();
       final theRtcEngineEventHandler = RtcEngineEventHandler(
@@ -5657,6 +5651,9 @@ void generatedTestCases(ValueGetter<IrisTester> irisTester) {
       await Future.delayed(const Duration(milliseconds: 500));
 
       await rtcEngine.release();
+
+      // Delay 200 milliseconds to ensure the `await RtcEngine.release()` call completed.
+      await Future.delayed(const Duration(milliseconds: 200));
     },
     timeout: const Timeout(Duration(minutes: 2)),
   );
@@ -5665,14 +5662,11 @@ void generatedTestCases(ValueGetter<IrisTester> irisTester) {
     'RtcEngineEventHandler.onWlAccStats',
     (WidgetTester tester) async {
       RtcEngine rtcEngine = createAgoraRtcEngine();
-      Directory appDocDir = await getApplicationDocumentsDirectory();
-      String logPath = path.join(appDocDir.path, 'test_log.txt');
       await rtcEngine.initialize(RtcEngineContext(
         appId: 'app_id',
         areaCode: AreaCode.areaCodeGlob.value(),
-        //logConfig: LogConfig(filePath: logPath),
       ));
-      //await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       final onWlAccStatsCompleter = Completer<bool>();
       final theRtcEngineEventHandler = RtcEngineEventHandler(
@@ -5746,6 +5740,9 @@ void generatedTestCases(ValueGetter<IrisTester> irisTester) {
       await Future.delayed(const Duration(milliseconds: 500));
 
       await rtcEngine.release();
+
+      // Delay 200 milliseconds to ensure the `await RtcEngine.release()` call completed.
+      await Future.delayed(const Duration(milliseconds: 200));
     },
     timeout: const Timeout(Duration(minutes: 2)),
   );
@@ -5754,14 +5751,11 @@ void generatedTestCases(ValueGetter<IrisTester> irisTester) {
     'RtcEngineEventHandler.onNetworkTypeChanged',
     (WidgetTester tester) async {
       RtcEngine rtcEngine = createAgoraRtcEngine();
-      Directory appDocDir = await getApplicationDocumentsDirectory();
-      String logPath = path.join(appDocDir.path, 'test_log.txt');
       await rtcEngine.initialize(RtcEngineContext(
         appId: 'app_id',
         areaCode: AreaCode.areaCodeGlob.value(),
-        //logConfig: LogConfig(filePath: logPath),
       ));
-      //await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       final onNetworkTypeChangedCompleter = Completer<bool>();
       final theRtcEngineEventHandler = RtcEngineEventHandler(
@@ -5818,6 +5812,9 @@ void generatedTestCases(ValueGetter<IrisTester> irisTester) {
       await Future.delayed(const Duration(milliseconds: 500));
 
       await rtcEngine.release();
+
+      // Delay 200 milliseconds to ensure the `await RtcEngine.release()` call completed.
+      await Future.delayed(const Duration(milliseconds: 200));
     },
     timeout: const Timeout(Duration(minutes: 2)),
   );
@@ -5826,14 +5823,11 @@ void generatedTestCases(ValueGetter<IrisTester> irisTester) {
     'RtcEngineEventHandler.onEncryptionError',
     (WidgetTester tester) async {
       RtcEngine rtcEngine = createAgoraRtcEngine();
-      Directory appDocDir = await getApplicationDocumentsDirectory();
-      String logPath = path.join(appDocDir.path, 'test_log.txt');
       await rtcEngine.initialize(RtcEngineContext(
         appId: 'app_id',
         areaCode: AreaCode.areaCodeGlob.value(),
-        //logConfig: LogConfig(filePath: logPath),
       ));
-      //await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       final onEncryptionErrorCompleter = Completer<bool>();
       final theRtcEngineEventHandler = RtcEngineEventHandler(
@@ -5892,6 +5886,9 @@ void generatedTestCases(ValueGetter<IrisTester> irisTester) {
       await Future.delayed(const Duration(milliseconds: 500));
 
       await rtcEngine.release();
+
+      // Delay 200 milliseconds to ensure the `await RtcEngine.release()` call completed.
+      await Future.delayed(const Duration(milliseconds: 200));
     },
     timeout: const Timeout(Duration(minutes: 2)),
   );
@@ -5900,14 +5897,11 @@ void generatedTestCases(ValueGetter<IrisTester> irisTester) {
     'RtcEngineEventHandler.onPermissionError',
     (WidgetTester tester) async {
       RtcEngine rtcEngine = createAgoraRtcEngine();
-      Directory appDocDir = await getApplicationDocumentsDirectory();
-      String logPath = path.join(appDocDir.path, 'test_log.txt');
       await rtcEngine.initialize(RtcEngineContext(
         appId: 'app_id',
         areaCode: AreaCode.areaCodeGlob.value(),
-        //logConfig: LogConfig(filePath: logPath),
       ));
-      //await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       final onPermissionErrorCompleter = Completer<bool>();
       final theRtcEngineEventHandler = RtcEngineEventHandler(
@@ -5957,6 +5951,9 @@ void generatedTestCases(ValueGetter<IrisTester> irisTester) {
       await Future.delayed(const Duration(milliseconds: 500));
 
       await rtcEngine.release();
+
+      // Delay 200 milliseconds to ensure the `await RtcEngine.release()` call completed.
+      await Future.delayed(const Duration(milliseconds: 200));
     },
     timeout: const Timeout(Duration(minutes: 2)),
   );
@@ -5965,14 +5962,11 @@ void generatedTestCases(ValueGetter<IrisTester> irisTester) {
     'RtcEngineEventHandler.onLocalUserRegistered',
     (WidgetTester tester) async {
       RtcEngine rtcEngine = createAgoraRtcEngine();
-      Directory appDocDir = await getApplicationDocumentsDirectory();
-      String logPath = path.join(appDocDir.path, 'test_log.txt');
       await rtcEngine.initialize(RtcEngineContext(
         appId: 'app_id',
         areaCode: AreaCode.areaCodeGlob.value(),
-        //logConfig: LogConfig(filePath: logPath),
       ));
-      //await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       final onLocalUserRegisteredCompleter = Completer<bool>();
       final theRtcEngineEventHandler = RtcEngineEventHandler(
@@ -6025,6 +6019,9 @@ void generatedTestCases(ValueGetter<IrisTester> irisTester) {
       await Future.delayed(const Duration(milliseconds: 500));
 
       await rtcEngine.release();
+
+      // Delay 200 milliseconds to ensure the `await RtcEngine.release()` call completed.
+      await Future.delayed(const Duration(milliseconds: 200));
     },
     timeout: const Timeout(Duration(minutes: 2)),
   );
@@ -6033,14 +6030,11 @@ void generatedTestCases(ValueGetter<IrisTester> irisTester) {
     'RtcEngineEventHandler.onUserInfoUpdated',
     (WidgetTester tester) async {
       RtcEngine rtcEngine = createAgoraRtcEngine();
-      Directory appDocDir = await getApplicationDocumentsDirectory();
-      String logPath = path.join(appDocDir.path, 'test_log.txt');
       await rtcEngine.initialize(RtcEngineContext(
         appId: 'app_id',
         areaCode: AreaCode.areaCodeGlob.value(),
-        //logConfig: LogConfig(filePath: logPath),
       ));
-      //await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       final onUserInfoUpdatedCompleter = Completer<bool>();
       final theRtcEngineEventHandler = RtcEngineEventHandler(
@@ -6097,6 +6091,9 @@ void generatedTestCases(ValueGetter<IrisTester> irisTester) {
       await Future.delayed(const Duration(milliseconds: 500));
 
       await rtcEngine.release();
+
+      // Delay 200 milliseconds to ensure the `await RtcEngine.release()` call completed.
+      await Future.delayed(const Duration(milliseconds: 200));
     },
     timeout: const Timeout(Duration(minutes: 2)),
   );
@@ -6105,14 +6102,11 @@ void generatedTestCases(ValueGetter<IrisTester> irisTester) {
     'RtcEngineEventHandler.onUserAccountUpdated',
     (WidgetTester tester) async {
       RtcEngine rtcEngine = createAgoraRtcEngine();
-      Directory appDocDir = await getApplicationDocumentsDirectory();
-      String logPath = path.join(appDocDir.path, 'test_log.txt');
       await rtcEngine.initialize(RtcEngineContext(
         appId: 'app_id',
         areaCode: AreaCode.areaCodeGlob.value(),
-        //logConfig: LogConfig(filePath: logPath),
       ));
-      //await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       final onUserAccountUpdatedCompleter = Completer<bool>();
       final theRtcEngineEventHandler = RtcEngineEventHandler(
@@ -6172,6 +6166,9 @@ void generatedTestCases(ValueGetter<IrisTester> irisTester) {
       await Future.delayed(const Duration(milliseconds: 500));
 
       await rtcEngine.release();
+
+      // Delay 200 milliseconds to ensure the `await RtcEngine.release()` call completed.
+      await Future.delayed(const Duration(milliseconds: 200));
     },
     timeout: const Timeout(Duration(minutes: 2)),
   );
@@ -6180,14 +6177,11 @@ void generatedTestCases(ValueGetter<IrisTester> irisTester) {
     'RtcEngineEventHandler.onVideoRenderingTracingResult',
     (WidgetTester tester) async {
       RtcEngine rtcEngine = createAgoraRtcEngine();
-      Directory appDocDir = await getApplicationDocumentsDirectory();
-      String logPath = path.join(appDocDir.path, 'test_log.txt');
       await rtcEngine.initialize(RtcEngineContext(
         appId: 'app_id',
         areaCode: AreaCode.areaCodeGlob.value(),
-        //logConfig: LogConfig(filePath: logPath),
       ));
-      //await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       final onVideoRenderingTracingResultCompleter = Completer<bool>();
       final theRtcEngineEventHandler = RtcEngineEventHandler(
@@ -6268,6 +6262,9 @@ void generatedTestCases(ValueGetter<IrisTester> irisTester) {
       await Future.delayed(const Duration(milliseconds: 500));
 
       await rtcEngine.release();
+
+      // Delay 200 milliseconds to ensure the `await RtcEngine.release()` call completed.
+      await Future.delayed(const Duration(milliseconds: 200));
     },
     timeout: const Timeout(Duration(minutes: 2)),
   );
@@ -6276,14 +6273,11 @@ void generatedTestCases(ValueGetter<IrisTester> irisTester) {
     'RtcEngineEventHandler.onLocalVideoTranscoderError',
     (WidgetTester tester) async {
       RtcEngine rtcEngine = createAgoraRtcEngine();
-      Directory appDocDir = await getApplicationDocumentsDirectory();
-      String logPath = path.join(appDocDir.path, 'test_log.txt');
       await rtcEngine.initialize(RtcEngineContext(
         appId: 'app_id',
         areaCode: AreaCode.areaCodeGlob.value(),
-        //logConfig: LogConfig(filePath: logPath),
       ));
-      //await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       final onLocalVideoTranscoderErrorCompleter = Completer<bool>();
       final theRtcEngineEventHandler = RtcEngineEventHandler(
@@ -6362,6 +6356,9 @@ void generatedTestCases(ValueGetter<IrisTester> irisTester) {
       await Future.delayed(const Duration(milliseconds: 500));
 
       await rtcEngine.release();
+
+      // Delay 200 milliseconds to ensure the `await RtcEngine.release()` call completed.
+      await Future.delayed(const Duration(milliseconds: 200));
     },
     timeout: const Timeout(Duration(minutes: 2)),
   );
@@ -6370,14 +6367,11 @@ void generatedTestCases(ValueGetter<IrisTester> irisTester) {
     'RtcEngineEventHandler.onUploadLogResult',
     (WidgetTester tester) async {
       RtcEngine rtcEngine = createAgoraRtcEngine();
-      Directory appDocDir = await getApplicationDocumentsDirectory();
-      String logPath = path.join(appDocDir.path, 'test_log.txt');
       await rtcEngine.initialize(RtcEngineContext(
         appId: 'app_id',
         areaCode: AreaCode.areaCodeGlob.value(),
-        //logConfig: LogConfig(filePath: logPath),
       ));
-      //await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       final onUploadLogResultCompleter = Completer<bool>();
       final theRtcEngineEventHandler = RtcEngineEventHandler(
@@ -6439,6 +6433,9 @@ void generatedTestCases(ValueGetter<IrisTester> irisTester) {
       await Future.delayed(const Duration(milliseconds: 500));
 
       await rtcEngine.release();
+
+      // Delay 200 milliseconds to ensure the `await RtcEngine.release()` call completed.
+      await Future.delayed(const Duration(milliseconds: 200));
     },
     timeout: const Timeout(Duration(minutes: 2)),
   );
@@ -6447,14 +6444,11 @@ void generatedTestCases(ValueGetter<IrisTester> irisTester) {
     'RtcEngineEventHandler.onAudioSubscribeStateChanged',
     (WidgetTester tester) async {
       RtcEngine rtcEngine = createAgoraRtcEngine();
-      Directory appDocDir = await getApplicationDocumentsDirectory();
-      String logPath = path.join(appDocDir.path, 'test_log.txt');
       await rtcEngine.initialize(RtcEngineContext(
         appId: 'app_id',
         areaCode: AreaCode.areaCodeGlob.value(),
-        //logConfig: LogConfig(filePath: logPath),
       ));
-      //await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       final onAudioSubscribeStateChangedCompleter = Completer<bool>();
       final theRtcEngineEventHandler = RtcEngineEventHandler(
@@ -6517,6 +6511,9 @@ void generatedTestCases(ValueGetter<IrisTester> irisTester) {
       await Future.delayed(const Duration(milliseconds: 500));
 
       await rtcEngine.release();
+
+      // Delay 200 milliseconds to ensure the `await RtcEngine.release()` call completed.
+      await Future.delayed(const Duration(milliseconds: 200));
     },
     timeout: const Timeout(Duration(minutes: 2)),
   );
@@ -6525,14 +6522,11 @@ void generatedTestCases(ValueGetter<IrisTester> irisTester) {
     'RtcEngineEventHandler.onVideoSubscribeStateChanged',
     (WidgetTester tester) async {
       RtcEngine rtcEngine = createAgoraRtcEngine();
-      Directory appDocDir = await getApplicationDocumentsDirectory();
-      String logPath = path.join(appDocDir.path, 'test_log.txt');
       await rtcEngine.initialize(RtcEngineContext(
         appId: 'app_id',
         areaCode: AreaCode.areaCodeGlob.value(),
-        //logConfig: LogConfig(filePath: logPath),
       ));
-      //await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       final onVideoSubscribeStateChangedCompleter = Completer<bool>();
       final theRtcEngineEventHandler = RtcEngineEventHandler(
@@ -6595,6 +6589,9 @@ void generatedTestCases(ValueGetter<IrisTester> irisTester) {
       await Future.delayed(const Duration(milliseconds: 500));
 
       await rtcEngine.release();
+
+      // Delay 200 milliseconds to ensure the `await RtcEngine.release()` call completed.
+      await Future.delayed(const Duration(milliseconds: 200));
     },
     timeout: const Timeout(Duration(minutes: 2)),
   );
@@ -6603,14 +6600,11 @@ void generatedTestCases(ValueGetter<IrisTester> irisTester) {
     'RtcEngineEventHandler.onAudioPublishStateChanged',
     (WidgetTester tester) async {
       RtcEngine rtcEngine = createAgoraRtcEngine();
-      Directory appDocDir = await getApplicationDocumentsDirectory();
-      String logPath = path.join(appDocDir.path, 'test_log.txt');
       await rtcEngine.initialize(RtcEngineContext(
         appId: 'app_id',
         areaCode: AreaCode.areaCodeGlob.value(),
-        //logConfig: LogConfig(filePath: logPath),
       ));
-      //await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       final onAudioPublishStateChangedCompleter = Completer<bool>();
       final theRtcEngineEventHandler = RtcEngineEventHandler(
@@ -6670,6 +6664,9 @@ void generatedTestCases(ValueGetter<IrisTester> irisTester) {
       await Future.delayed(const Duration(milliseconds: 500));
 
       await rtcEngine.release();
+
+      // Delay 200 milliseconds to ensure the `await RtcEngine.release()` call completed.
+      await Future.delayed(const Duration(milliseconds: 200));
     },
     timeout: const Timeout(Duration(minutes: 2)),
   );
@@ -6678,14 +6675,11 @@ void generatedTestCases(ValueGetter<IrisTester> irisTester) {
     'RtcEngineEventHandler.onVideoPublishStateChanged',
     (WidgetTester tester) async {
       RtcEngine rtcEngine = createAgoraRtcEngine();
-      Directory appDocDir = await getApplicationDocumentsDirectory();
-      String logPath = path.join(appDocDir.path, 'test_log.txt');
       await rtcEngine.initialize(RtcEngineContext(
         appId: 'app_id',
         areaCode: AreaCode.areaCodeGlob.value(),
-        //logConfig: LogConfig(filePath: logPath),
       ));
-      //await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       final onVideoPublishStateChangedCompleter = Completer<bool>();
       final theRtcEngineEventHandler = RtcEngineEventHandler(
@@ -6748,6 +6742,9 @@ void generatedTestCases(ValueGetter<IrisTester> irisTester) {
       await Future.delayed(const Duration(milliseconds: 500));
 
       await rtcEngine.release();
+
+      // Delay 200 milliseconds to ensure the `await RtcEngine.release()` call completed.
+      await Future.delayed(const Duration(milliseconds: 200));
     },
     timeout: const Timeout(Duration(minutes: 2)),
   );
@@ -6756,14 +6753,11 @@ void generatedTestCases(ValueGetter<IrisTester> irisTester) {
     'RtcEngineEventHandler.onTranscodedStreamLayoutInfo',
     (WidgetTester tester) async {
       RtcEngine rtcEngine = createAgoraRtcEngine();
-      Directory appDocDir = await getApplicationDocumentsDirectory();
-      String logPath = path.join(appDocDir.path, 'test_log.txt');
       await rtcEngine.initialize(RtcEngineContext(
         appId: 'app_id',
         areaCode: AreaCode.areaCodeGlob.value(),
-        //logConfig: LogConfig(filePath: logPath),
       ));
-      //await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       final onTranscodedStreamLayoutInfoCompleter = Completer<bool>();
       final theRtcEngineEventHandler = RtcEngineEventHandler(
@@ -6830,6 +6824,9 @@ void generatedTestCases(ValueGetter<IrisTester> irisTester) {
       await Future.delayed(const Duration(milliseconds: 500));
 
       await rtcEngine.release();
+
+      // Delay 200 milliseconds to ensure the `await RtcEngine.release()` call completed.
+      await Future.delayed(const Duration(milliseconds: 200));
     },
     timeout: const Timeout(Duration(minutes: 2)),
   );
@@ -6838,14 +6835,11 @@ void generatedTestCases(ValueGetter<IrisTester> irisTester) {
     'RtcEngineEventHandler.onExtensionEvent',
     (WidgetTester tester) async {
       RtcEngine rtcEngine = createAgoraRtcEngine();
-      Directory appDocDir = await getApplicationDocumentsDirectory();
-      String logPath = path.join(appDocDir.path, 'test_log.txt');
       await rtcEngine.initialize(RtcEngineContext(
         appId: 'app_id',
         areaCode: AreaCode.areaCodeGlob.value(),
-        //logConfig: LogConfig(filePath: logPath),
       ));
-      //await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       final onExtensionEventCompleter = Completer<bool>();
       final theRtcEngineEventHandler = RtcEngineEventHandler(
@@ -6902,6 +6896,9 @@ void generatedTestCases(ValueGetter<IrisTester> irisTester) {
       await Future.delayed(const Duration(milliseconds: 500));
 
       await rtcEngine.release();
+
+      // Delay 200 milliseconds to ensure the `await RtcEngine.release()` call completed.
+      await Future.delayed(const Duration(milliseconds: 200));
     },
     timeout: const Timeout(Duration(minutes: 2)),
   );
@@ -6910,14 +6907,11 @@ void generatedTestCases(ValueGetter<IrisTester> irisTester) {
     'RtcEngineEventHandler.onExtensionStarted',
     (WidgetTester tester) async {
       RtcEngine rtcEngine = createAgoraRtcEngine();
-      Directory appDocDir = await getApplicationDocumentsDirectory();
-      String logPath = path.join(appDocDir.path, 'test_log.txt');
       await rtcEngine.initialize(RtcEngineContext(
         appId: 'app_id',
         areaCode: AreaCode.areaCodeGlob.value(),
-        //logConfig: LogConfig(filePath: logPath),
       ));
-      //await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       final onExtensionStartedCompleter = Completer<bool>();
       final theRtcEngineEventHandler = RtcEngineEventHandler(
@@ -6969,6 +6963,9 @@ void generatedTestCases(ValueGetter<IrisTester> irisTester) {
       await Future.delayed(const Duration(milliseconds: 500));
 
       await rtcEngine.release();
+
+      // Delay 200 milliseconds to ensure the `await RtcEngine.release()` call completed.
+      await Future.delayed(const Duration(milliseconds: 200));
     },
     timeout: const Timeout(Duration(minutes: 2)),
   );
@@ -6977,14 +6974,11 @@ void generatedTestCases(ValueGetter<IrisTester> irisTester) {
     'RtcEngineEventHandler.onExtensionStopped',
     (WidgetTester tester) async {
       RtcEngine rtcEngine = createAgoraRtcEngine();
-      Directory appDocDir = await getApplicationDocumentsDirectory();
-      String logPath = path.join(appDocDir.path, 'test_log.txt');
       await rtcEngine.initialize(RtcEngineContext(
         appId: 'app_id',
         areaCode: AreaCode.areaCodeGlob.value(),
-        //logConfig: LogConfig(filePath: logPath),
       ));
-      //await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       final onExtensionStoppedCompleter = Completer<bool>();
       final theRtcEngineEventHandler = RtcEngineEventHandler(
@@ -7036,6 +7030,9 @@ void generatedTestCases(ValueGetter<IrisTester> irisTester) {
       await Future.delayed(const Duration(milliseconds: 500));
 
       await rtcEngine.release();
+
+      // Delay 200 milliseconds to ensure the `await RtcEngine.release()` call completed.
+      await Future.delayed(const Duration(milliseconds: 200));
     },
     timeout: const Timeout(Duration(minutes: 2)),
   );
@@ -7044,14 +7041,11 @@ void generatedTestCases(ValueGetter<IrisTester> irisTester) {
     'RtcEngineEventHandler.onExtensionError',
     (WidgetTester tester) async {
       RtcEngine rtcEngine = createAgoraRtcEngine();
-      Directory appDocDir = await getApplicationDocumentsDirectory();
-      String logPath = path.join(appDocDir.path, 'test_log.txt');
       await rtcEngine.initialize(RtcEngineContext(
         appId: 'app_id',
         areaCode: AreaCode.areaCodeGlob.value(),
-        //logConfig: LogConfig(filePath: logPath),
       ));
-      //await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       final onExtensionErrorCompleter = Completer<bool>();
       final theRtcEngineEventHandler = RtcEngineEventHandler(
@@ -7108,6 +7102,9 @@ void generatedTestCases(ValueGetter<IrisTester> irisTester) {
       await Future.delayed(const Duration(milliseconds: 500));
 
       await rtcEngine.release();
+
+      // Delay 200 milliseconds to ensure the `await RtcEngine.release()` call completed.
+      await Future.delayed(const Duration(milliseconds: 200));
     },
     timeout: const Timeout(Duration(minutes: 2)),
   );
@@ -7116,14 +7113,11 @@ void generatedTestCases(ValueGetter<IrisTester> irisTester) {
     'RtcEngineEventHandler.onSetRtmFlagResult',
     (WidgetTester tester) async {
       RtcEngine rtcEngine = createAgoraRtcEngine();
-      Directory appDocDir = await getApplicationDocumentsDirectory();
-      String logPath = path.join(appDocDir.path, 'test_log.txt');
       await rtcEngine.initialize(RtcEngineContext(
         appId: 'app_id',
         areaCode: AreaCode.areaCodeGlob.value(),
-        //logConfig: LogConfig(filePath: logPath),
       ));
-      //await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       final onSetRtmFlagResultCompleter = Completer<bool>();
       final theRtcEngineEventHandler = RtcEngineEventHandler(
@@ -7180,6 +7174,9 @@ void generatedTestCases(ValueGetter<IrisTester> irisTester) {
       await Future.delayed(const Duration(milliseconds: 500));
 
       await rtcEngine.release();
+
+      // Delay 200 milliseconds to ensure the `await RtcEngine.release()` call completed.
+      await Future.delayed(const Duration(milliseconds: 200));
     },
     timeout: const Timeout(Duration(minutes: 2)),
   );

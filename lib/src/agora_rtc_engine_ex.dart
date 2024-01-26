@@ -416,8 +416,7 @@ abstract class RtcEngineEx implements RtcEngine {
   /// After calling createDataStreamEx, you can call this method to send data stream messages to all users in the channel. The SDK has the following restrictions on this method:
   ///  Up to 60 packets can be sent per second in a channel with each packet having a maximum size of 1 KB.
   ///  Each client can send up to 30 KB of data per second.
-  ///  Each user can have up to five data streams simultaneously. A successful method call triggers the onStreamMessage callback on the remote client, from which the remote user gets the stream message.
-  /// A failed method call triggers the onStreamMessageError callback on the remote client.
+  ///  Each user can have up to five data streams simultaneously. A successful method call triggers the onStreamMessage callback on the remote client, from which the remote user gets the stream message. A failed method call triggers the onStreamMessageError callback on the remote client.
   ///  Ensure that you call createDataStreamEx to create a data channel before calling this method.
   ///  This method applies only to the COMMUNICATION profile or to the hosts in the LIVE_BROADCASTING profile. If an audience in the LIVE_BROADCASTING profile calls this method, the audience may be switched to a host.
   ///
