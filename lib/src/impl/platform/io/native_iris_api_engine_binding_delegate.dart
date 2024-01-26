@@ -50,9 +50,7 @@ class NativeIrisApiEngineBindingsDelegate
       }
     }
 
-    print('[iris_api_engine] createApiEngine start');
     final apiEnginePtr = _binding.CreateIrisApiEngine(enginePtr);
-    print('[iris_api_engine] createApiEngine end');
 
     return CreateApiEngineResult(IrisApiEngineHandle(apiEnginePtr));
   }
@@ -168,9 +166,7 @@ class NativeIrisApiEngineBindingsDelegate
 
   @override
   void destroyNativeApiEngine(IrisApiEngineHandle apiEnginePtr) {
-    print('[iris_api_engine] destroyNativeApiEngine start');
     _binding.DestroyIrisApiEngine(apiEnginePtr() as ffi.Pointer<ffi.Void>);
-    print('[iris_api_engine] destroyNativeApiEngine end');
   }
 
   @override

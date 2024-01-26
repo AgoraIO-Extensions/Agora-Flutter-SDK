@@ -460,8 +460,6 @@ void testCases() {
 
     //         final videoViewCreatedCompleter = Completer<void>();
 
-    //         print('1111');
-
     //         await tester.pumpWidget(_RenderViewWidget(
     //           rtcEngine: rtcEngine,
     //           onRtcEngineInitialized: () {

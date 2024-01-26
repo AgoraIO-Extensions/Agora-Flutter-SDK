@@ -33,7 +33,7 @@ import 'package:iris_method_channel/iris_method_channel.dart';
 void main() {
   IntegrationTestWidgetsFlutterBinding.ensureInitialized();
 
-  IrisTester? irisTester; // = createIrisTester();
+  IrisTester? irisTester;
 
   setUp(() {
     irisTester = createIrisTester();
@@ -53,13 +53,9 @@ void main() {
   });
 
   tearDown(() async {
-    print('[iris_api_engine] tearDown start');
     setMockRtcEngineProvider(null);
-    await Future.delayed(const Duration(milliseconds: 500));
     irisTester!.dispose();
     irisTester = null;
-
-    print('[iris_api_engine] tearDown end');
   });
 
   // RtcEngine events

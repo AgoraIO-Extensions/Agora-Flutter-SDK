@@ -396,7 +396,6 @@ class RtcEngineImpl extends rtc_engine_ex_binding.RtcEngineExImpl
 
   @override
   Future<void> initialize(RtcEngineContext context) async {
-    print('[iris_api_engine] IRtcEngine.initialize start');
     // The `RtcEngine` is a singleton, a new `initialize` should be called after the
     // previous `release` is completed, or the following API calls maybe call to the
     // previous `RtcEngine` instance, which maybe cause some unexpected error. so we
@@ -437,7 +436,6 @@ class RtcEngineImpl extends rtc_engine_ex_binding.RtcEngineExImpl
     _isReleased = false;
     _initializingCompleter?.complete(null);
     _initializingCompleter = null;
-    print('[iris_api_engine] IRtcEngine.initialize end');
   }
 
   @internal
@@ -476,18 +474,13 @@ class RtcEngineImpl extends rtc_engine_ex_binding.RtcEngineExImpl
 
     await irisMethodChannel.unregisterEventHandlers(_rtcEngineImplScopedKey);
 
-    print('[iris_api_engine] IRtcEngine.release start');
     await super.release(sync: sync);
-    print('[iris_api_engine] IRtcEngine.release end');
 
-    print('[iris_api_engine] dispose IrisApiEngine start');
     await irisMethodChannel.dispose();
-    print('[iris_api_engine] dispose IrisApiEngine end');
     _isReleased = true;
     _releasingCompleter?.complete(null);
     _releasingCompleter = null;
     _instance = null;
-    print('[iris_api_engine] total end end');
   }
 
   @override
