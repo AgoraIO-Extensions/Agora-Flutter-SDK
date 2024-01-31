@@ -173,6 +173,7 @@
 #define FUNC_RTCENGINE_SETLOGLEVEL "RtcEngine_setLogLevel"
 #define FUNC_RTCENGINE_SETLOGFILESIZE "RtcEngine_setLogFileSize"
 #define FUNC_RTCENGINE_UPLOADLOGFILE "RtcEngine_uploadLogFile"
+#define FUNC_RTCENGINE_WRITELOG "RtcEngine_writeLog"
 #define FUNC_RTCENGINE_SETLOCALRENDERMODE "RtcEngine_setLocalRenderMode"
 #define FUNC_RTCENGINE_SETREMOTERENDERMODE "RtcEngine_setRemoteRenderMode"
 #define FUNC_RTCENGINE_SETLOCALRENDERMODE2 "RtcEngine_setLocalRenderMode2"

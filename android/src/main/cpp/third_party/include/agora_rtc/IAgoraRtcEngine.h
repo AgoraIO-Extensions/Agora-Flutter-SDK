@@ -5902,6 +5902,23 @@ class IRtcEngine : public agora::base::IEngineBase {
    */
   virtual int uploadLogFile(agora::util::AString& requestId) = 0;
 
+   /** * Write the log to SDK . @technical preview
+   *
+   * You can Write the log to SDK log files of the specified level.
+   *
+   * @param level The log level:
+   * - `LOG_LEVEL_NONE (0x0000)`: Do not output any log file.
+   * - `LOG_LEVEL_INFO (0x0001)`: (Recommended) Output log files of the INFO level.
+   * - `LOG_LEVEL_WARN (0x0002)`: Output log files of the WARN level.
+   * - `LOG_LEVEL_ERROR (0x0004)`: Output log files of the ERROR level.
+   * - `LOG_LEVEL_FATAL (0x0008)`: Output log files of the FATAL level.
+   *
+   *  @return
+   *  - 0: Success.
+   *  - < 0: Failure.
+   */
+  virtual int writeLog(commons::LOG_LEVEL level, const char* fmt, ...) = 0;
+
   /**
    * Updates the display mode of the local video view.
    *
