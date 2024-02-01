@@ -1,5 +1,7 @@
 import 'package:agora_rtc_engine/src/agora_base.dart';
 import 'package:agora_rtc_engine/src/agora_media_base.dart';
+import 'package:agora_rtc_engine/src/agora_rtc_engine.dart';
+import 'package:agora_rtc_engine/src/agora_rtc_engine_ex.dart';
 
 import 'package:agora_rtc_engine/src/impl/video_view_controller_impl.dart';
 import 'package:agora_rtc_engine/src/render/agora_video_view.dart';
@@ -206,6 +208,33 @@ class _AgoraRtcRenderPlatformViewState extends State<AgoraRtcRenderPlatformView>
   }
 }
 
+/// Delegate of the `VideoViewController` to handle the state of the texture rendering.
+class _VideoViewControllerInternal with VideoViewControllerBaseMixin {
+  _VideoViewControllerInternal(this._controller);
+
+  final VideoViewControllerBase _controller;
+
+  @override
+  VideoCanvas get canvas => _controller.canvas;
+
+  @override
+  RtcConnection? get connection => _controller.connection;
+
+  @override
+  bool get useAndroidSurfaceView => _controller.useAndroidSurfaceView;
+
+  @override
+  bool get useFlutterTexture => _controller.useFlutterTexture;
+
+  @override
+  int getVideoSourceType() {
+    return _controller.getVideoSourceType();
+  }
+
+  @override
+  RtcEngine get rtcEngine => _controller.rtcEngine;
+}
+
 class AgoraRtcRenderTexture extends StatefulWidget {
   const AgoraRtcRenderTexture({
     Key? key,
@@ -227,6 +256,8 @@ class _AgoraRtcRenderTextureState extends State<AgoraRtcRenderTexture>
 
   VoidCallback? _listener;
 
+  _VideoViewControllerInternal? _controllerInternal;
+
   @override
   void initState() {
     super.initState();
@@ -235,24 +266,26 @@ class _AgoraRtcRenderTextureState extends State<AgoraRtcRenderTexture>
   }
 
   Future<void> _initialize() async {
-    if (!_controller(widget.controller).isInitialzed) {
+    final sourceController = widget.controller;
+    _controllerInternal = _VideoViewControllerInternal(sourceController);
+
+    if (!_controllerInternal!.isInitialzed) {
       _listener ??= () {
-        _controller(widget.controller)
-            .removeInitializedCompletedListener(_listener!);
+        _controllerInternal!.removeInitializedCompletedListener(_listener!);
         _listener = null;
+
         _initializeTexture();
       };
-      _controller(widget.controller)
-          .addInitializedCompletedListener(_listener!);
+      _controllerInternal!.addInitializedCompletedListener(_listener!);
     } else {
       await _initializeTexture();
     }
   }
 
   Future<void> _initializeTexture() async {
-    final oldTextureId = widget.controller.getTextureId();
-    await widget.controller.initializeRender();
-    final textureId = widget.controller.getTextureId();
+    final oldTextureId = _controllerInternal!.getTextureId();
+    await _controllerInternal!.initializeRender();
+    final textureId = _controllerInternal!.getTextureId();
     if (oldTextureId != textureId) {
       _width = 0;
       _height = 0;
@@ -272,11 +305,14 @@ class _AgoraRtcRenderTextureState extends State<AgoraRtcRenderTexture>
 
   Future<void> _didUpdateWidget(
       covariant AgoraRtcRenderTexture oldWidget) async {
-    if (!oldWidget.controller.isSame(widget.controller)) {
-      await oldWidget.controller.disposeRender();
+    if (_controllerInternal == null ||
+        _controllerInternal!.getTextureId() == kTextureNotInit) {
+      return;
+    }
+    if (!oldWidget.controller.isSame(widget.controller) &&
+        _controllerInternal != null) {
+      await _controllerInternal!.disposeRender();
       await _initialize();
-    } else {
-      _controller(widget.controller).updateController(oldWidget.controller);
     }
   }
 
@@ -284,22 +320,26 @@ class _AgoraRtcRenderTextureState extends State<AgoraRtcRenderTexture>
   void deactivate() {
     super.deactivate();
     if (_listener != null) {
-      _controller(widget.controller)
-          .removeInitializedCompletedListener(_listener!);
+      _controllerInternal?.removeInitializedCompletedListener(_listener!);
       _listener = null;
     }
   }
 
   @override
   void dispose() {
-    widget.controller.disposeRender();
+    _controllerInternal?.disposeRender();
+    _controllerInternal = null;
+
     super.dispose();
   }
 
   @override
   void maybeCreateChannel(int viewId, String viewType) {
-    // Only handle render mode on macos at this time
-    final textureId = widget.controller.getTextureId();
+    if (_controllerInternal == null) {
+      return;
+    }
+    final textureId = _controllerInternal!.getTextureId();
+
     methodChannel = MethodChannel('agora_rtc_engine/texture_render_$textureId');
     methodChannel!.setMethodCallHandler((call) async {
       if (call.method == 'onSizeChanged') {
@@ -394,25 +434,28 @@ class _AgoraRtcRenderTextureState extends State<AgoraRtcRenderTexture>
   @override
   Widget build(BuildContext context) {
     Widget result = const SizedBox.expand();
-
-    if (widget.controller.getTextureId() != kTextureNotInit) {
+    if (_controllerInternal == null) {
+      return result;
+    }
+    final controller = _controllerInternal!;
+    if (controller.getTextureId() != kTextureNotInit) {
       if (_height != 0 && _width != 0) {
-        result = buildTexure(widget.controller.getTextureId());
-        final renderMode = widget.controller.canvas.renderMode ??
-            RenderModeType.renderModeHidden;
+        result = buildTexure(controller.getTextureId());
+        final renderMode =
+            controller.canvas.renderMode ?? RenderModeType.renderModeHidden;
 
-        if (widget.controller.shouldHandlerRenderMode) {
+        if (controller.shouldHandlerRenderMode) {
           result = _applyRenderMode(renderMode, result);
           VideoMirrorModeType mirrorMode;
-          if (widget.controller.isLocalUid) {
-            mirrorMode = widget.controller.canvas.mirrorMode ??
+          if (controller.isLocalUid) {
+            mirrorMode = controller.canvas.mirrorMode ??
                 VideoMirrorModeType.videoMirrorModeEnabled;
           } else {
-            mirrorMode = widget.controller.canvas.mirrorMode ??
+            mirrorMode = controller.canvas.mirrorMode ??
                 VideoMirrorModeType.videoMirrorModeDisabled;
           }
 
-          final sourceType = widget.controller.canvas.sourceType ??
+          final sourceType = controller.canvas.sourceType ??
               VideoSourceType.videoSourceCameraPrimary;
 
           result = _applyMirrorMode(mirrorMode, result, sourceType);
