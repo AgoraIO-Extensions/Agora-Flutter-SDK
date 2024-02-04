@@ -212,7 +212,7 @@ class _AgoraRtcRenderPlatformViewState extends State<AgoraRtcRenderPlatformView>
 class _VideoViewControllerInternal with VideoViewControllerBaseMixin {
   _VideoViewControllerInternal(this._controller);
 
-  final VideoViewControllerBase _controller;
+  final VideoViewControllerBaseMixin _controller;
 
   @override
   VideoCanvas get canvas => _controller.canvas;
@@ -233,6 +233,37 @@ class _VideoViewControllerInternal with VideoViewControllerBaseMixin {
 
   @override
   RtcEngine get rtcEngine => _controller.rtcEngine;
+
+  @override
+  bool get shouldHandlerRenderMode => _controller.shouldHandlerRenderMode;
+
+  @override
+  void addInitializedCompletedListener(VoidCallback listener) =>
+      _controller.addInitializedCompletedListener(listener);
+
+  @override
+  void removeInitializedCompletedListener(VoidCallback listener) =>
+      _controller.removeInitializedCompletedListener(listener);
+
+  @override
+  Future<void> dispose() => _controller.dispose();
+
+  @override
+  Future<void> disposeRenderInternal() => _controller.disposeRenderInternal();
+
+  @override
+  Future<int> createTextureRender(
+    int uid,
+    String channelId,
+    int videoSourceType,
+    int videoViewSetupMode,
+  ) =>
+      _controller.createTextureRender(
+          uid, channelId, videoSourceType, videoViewSetupMode);
+
+  @override
+  Future<void> setupView(int nativeViewPtr) =>
+      _controller.setupView(nativeViewPtr);
 }
 
 class AgoraRtcRenderTexture extends StatefulWidget {
@@ -256,7 +287,7 @@ class _AgoraRtcRenderTextureState extends State<AgoraRtcRenderTexture>
 
   VoidCallback? _listener;
 
-  _VideoViewControllerInternal? _controllerInternal;
+  VideoViewControllerBaseMixin? _controllerInternal;
 
   @override
   void initState() {
@@ -267,7 +298,8 @@ class _AgoraRtcRenderTextureState extends State<AgoraRtcRenderTexture>
 
   Future<void> _initialize() async {
     final sourceController = widget.controller;
-    _controllerInternal = _VideoViewControllerInternal(sourceController);
+    _controllerInternal = _VideoViewControllerInternal(
+        sourceController as VideoViewControllerBaseMixin);
 
     if (!_controllerInternal!.isInitialzed) {
       _listener ??= () {
