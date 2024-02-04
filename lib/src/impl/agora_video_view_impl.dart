@@ -214,6 +214,8 @@ class _VideoViewControllerInternal with VideoViewControllerBaseMixin {
 
   final VideoViewControllerBaseMixin _controller;
 
+  int _textureId = kTextureNotInit;
+
   @override
   VideoCanvas get canvas => _controller.canvas;
 
@@ -238,6 +240,9 @@ class _VideoViewControllerInternal with VideoViewControllerBaseMixin {
   bool get shouldHandlerRenderMode => _controller.shouldHandlerRenderMode;
 
   @override
+  int getTextureId() => _textureId;
+
+  @override
   void addInitializedCompletedListener(VoidCallback listener) =>
       _controller.addInitializedCompletedListener(listener);
 
@@ -260,6 +265,13 @@ class _VideoViewControllerInternal with VideoViewControllerBaseMixin {
   ) =>
       _controller.createTextureRender(
           uid, channelId, videoSourceType, videoViewSetupMode);
+
+  @override
+  Future<void> initializeRender() async {
+    await _controller.initializeRender();
+    // Renew the texture id
+    _textureId = _controller.getTextureId();
+  }
 
   @override
   Future<void> setupView(int nativeViewPtr) =>
