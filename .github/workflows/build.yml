@@ -389,6 +389,60 @@ jobs:
           heap-size: 4096M
           disk-size: 8192M
           script: bash ci/rendering_test_android.sh
+  
+  # Compatibility testing for Android API level 23
+  rendering_test_android_api_23:
+    name: Run Flutter Android Rendering Tests
+    if: ${{ !contains(github.event.pull_request.labels.*.name, 'ci:skip') }}
+    runs-on: macos-13-arm64
+    timeout-minutes: 120
+    env:
+      TEST_APP_ID: ${{ secrets.MY_APP_ID }}
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-java@v1
+        with:
+          java-version: '11'
+      - uses: subosito/flutter-action@v2
+        with:
+          flutter-version: '3.x'
+          cache: true
+      - name: Checkout hoe
+        uses: actions/checkout@v3
+        with:
+          repository: littleGnAl/hoe
+          ref: littlegnal/update
+          path: hoe
+      - name: Download iris artifacts
+        if: ${{ contains(github.event.pull_request.labels.*.name, 'integration_test:iris_artifacts') }}
+        run: |
+          source scripts/artifacts_version.sh
+
+          PROJECT_DIR=$(pwd)
+
+          mkdir -p output
+          cd hoe
+          dart pub get
+          dart run bin/hoe.dart build-agora-flutter-example \
+            --setup-local-dev \
+            --project-dir=${PROJECT_DIR} \
+            --artifacts-output-dir=${PROJECT_DIR}/output \
+            --platforms=android,macos \
+            --apple-package-name=io.agora.agoraRtcEngineExample \
+            --flutter-package-name=agora_rtc_engine \
+            --iris-android-cdn-url=${IRIS_CDN_URL_ANDROID} \
+            --iris-macos-cdn-url=${IRIS_CDN_URL_MACOS}
+      - run: flutter config --enable-macos-desktop
+      - name: run flutter android integration tests
+        uses: reactivecircus/android-emulator-runner@v2
+        with:
+          api-level: 23
+          arch: x86_64
+          profile: pixel_5
+          ram-size: 2048M
+          heap-size: 4096M
+          disk-size: 8192M
+          script: bash ci/rendering_test_android.sh
 
   rendering_test_ios:
     name: Run Flutter iOS Rendering Tests
