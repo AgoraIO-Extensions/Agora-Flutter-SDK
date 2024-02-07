@@ -57,7 +57,10 @@ function nameWithUnderscoresToCamelCase(
 function _dartFileName(filePath: string): string {
   let fileName = path.basename(filePath);
   fileName = upperCamelCaseToLowercaseWithUnderscores(fileName);
-  return fileName.replace("i", "");
+  if (fileName.startsWith("i")) {
+    fileName = fileName.replace("i", "");
+  }
+  return fileName;
 }
 
 function upperCamelCaseToLowercaseWithUnderscores(

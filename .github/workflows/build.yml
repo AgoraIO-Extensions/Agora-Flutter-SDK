@@ -394,7 +394,7 @@ jobs:
   rendering_test_android_api_23:
     name: Run Flutter Android Rendering Tests(API level 23)
     if: ${{ !contains(github.event.pull_request.labels.*.name, 'ci:skip') }}
-    runs-on: macos-13-arm64
+    runs-on: macos-13
     timeout-minutes: 120
     env:
       TEST_APP_ID: ${{ secrets.MY_APP_ID }}
