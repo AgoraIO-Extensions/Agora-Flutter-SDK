@@ -7,11 +7,11 @@ class RemoteVoicePositionInfo {
   /// @nodoc
   const RemoteVoicePositionInfo({this.position, this.forward});
 
-  /// The coordinates in the world coordinate system. This parameter is an array of length 3, and the three values represent the front, right, and top coordinates in turn.
+  /// @nodoc
   @JsonKey(name: 'position')
   final List<double>? position;
 
-  /// The unit vector of the x axis in the coordinate system. This parameter is an array of length 3, and the three values represent the front, right, and top coordinates in turn.
+  /// @nodoc
   @JsonKey(name: 'forward')
   final List<double>? forward;
 
@@ -103,7 +103,6 @@ abstract class BaseSpatialAudioEngine {
   ///
   /// Returns
   /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown; and you need to catch the exception and handle it accordingly.
-  ///  < 0: Failure.
   Future<void> setMaxAudioRecvCount(int maxCount);
 
   /// Sets the audio reception range of the local user.
@@ -114,7 +113,6 @@ abstract class BaseSpatialAudioEngine {
   ///
   /// Returns
   /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown; and you need to catch the exception and handle it accordingly.
-  ///  < 0: Failure.
   Future<void> setAudioRecvRange(double range);
 
   /// Sets the length (in meters) of the game engine distance per unit.
@@ -125,21 +123,19 @@ abstract class BaseSpatialAudioEngine {
   ///
   /// Returns
   /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown; and you need to catch the exception and handle it accordingly.
-  ///  < 0: Failure.
   Future<void> setDistanceUnit(double unit);
 
   /// Updates the spatial position of the local user.
   ///
   /// Under the LocalSpatialAudioEngine class, this method needs to be used with updateRemotePosition. The SDK calculates the relative position between the local and remote users according to this method and the parameter settings in updateRemotePosition, and then calculates the user's spatial audio effect parameters.
   ///
-  /// * [position] The coordinates in the world coordinate system. This parameter is an array of length 3, and the three values represent the front, right, and top coordinates in turn.
-  /// * [axisForward] The unit vector of the x axis in the coordinate system. This parameter is an array of length 3, and the three values represent the front, right, and top coordinates in turn.
+  ///
+  ///
   /// * [axisRight] The unit vector of the y axis in the coordinate system. This parameter is an array of length 3, and the three values represent the front, right, and top coordinates in turn.
   /// * [axisUp] The unit vector of the z axis in the coordinate system. This parameter is an array of length 3, and the three values represent the front, right, and top coordinates in turn.
   ///
   /// Returns
   /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown; and you need to catch the exception and handle it accordingly.
-  ///  < 0: Failure.
   Future<void> updateSelfPosition(
       {required List<double> position,
       required List<double> axisForward,
@@ -163,7 +159,6 @@ abstract class BaseSpatialAudioEngine {
   ///
   /// Returns
   /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown; and you need to catch the exception and handle it accordingly.
-  ///  < 0: Failure.
   Future<void> updatePlayerPositionInfo(
       {required int playerId, required RemoteVoicePositionInfo positionInfo});
 
@@ -181,7 +176,6 @@ abstract class BaseSpatialAudioEngine {
   ///
   /// Returns
   /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown; and you need to catch the exception and handle it accordingly.
-  ///  < 0: Failure.
   Future<void> muteLocalAudioStream(bool mute);
 
   /// Stops or resumes subscribing to the audio streams of all remote users.
@@ -195,7 +189,6 @@ abstract class BaseSpatialAudioEngine {
   ///
   /// Returns
   /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown; and you need to catch the exception and handle it accordingly.
-  ///  < 0: Failure.
   Future<void> muteAllRemoteAudioStreams(bool mute);
 
   /// Sets the sound insulation area.
@@ -205,12 +198,11 @@ abstract class BaseSpatialAudioEngine {
   ///  If the user or media player is in the same sound insulation area, it is not affected by SpatialAudioZone, and the sound attenuation effect is determined by the attenuation parameter in setPlayerAttenuation or setRemoteAudioAttenuation. If you do not call setPlayerAttenuation or setRemoteAudioAttenuation, the default sound attenuation coefficient of the SDK is 0.5, which simulates the attenuation of the sound in the real environment.
   ///  If the sound source and the receiver belong to two sound insulation areas, the receiver cannot hear the sound source. If this method is called multiple times, the last sound insulation area set takes effect.
   ///
-  /// * [zones] Sound insulation area settings. See SpatialAudioZone. On the Windows platform, it is necessary to ensure that the number of members in the zones array is equal to the value of zoneCount; otherwise, it may cause a crash.
+  /// * [zones] Sound insulation area settings. See SpatialAudioZone. When you set this parameter to NULL, it means clearing all sound insulation zones. On the Windows platform, it is necessary to ensure that the number of members in the zones array is equal to the value of zoneCount; otherwise, it may cause a crash.
   /// * [zoneCount] The number of sound insulation areas.
   ///
   /// Returns
   /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown; and you need to catch the exception and handle it accordingly.
-  ///  < 0: Failure.
   Future<void> setZones(
       {required List<SpatialAudioZone> zones, required int zoneCount});
 
@@ -228,7 +220,6 @@ abstract class BaseSpatialAudioEngine {
   ///
   /// Returns
   /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown; and you need to catch the exception and handle it accordingly.
-  ///  < 0: Failure.
   Future<void> setPlayerAttenuation(
       {required int playerId,
       required double attenuation,
@@ -244,7 +235,6 @@ abstract class BaseSpatialAudioEngine {
   ///
   /// Returns
   /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown; and you need to catch the exception and handle it accordingly.
-  ///  < 0: Failure.
   Future<void> muteRemoteAudioStream({required int uid, required bool mute});
 }
 
@@ -259,7 +249,6 @@ abstract class LocalSpatialAudioEngine implements BaseSpatialAudioEngine {
   ///
   /// Returns
   /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown; and you need to catch the exception and handle it accordingly.
-  ///  < 0: Failure.
   Future<void> initialize();
 
   /// Updates the spatial position of the specified remote user.
@@ -271,7 +260,6 @@ abstract class LocalSpatialAudioEngine implements BaseSpatialAudioEngine {
   ///
   /// Returns
   /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown; and you need to catch the exception and handle it accordingly.
-  ///  < 0: Failure.
   Future<void> updateRemotePosition(
       {required int uid, required RemoteVoicePositionInfo posInfo});
 
@@ -289,7 +277,6 @@ abstract class LocalSpatialAudioEngine implements BaseSpatialAudioEngine {
   ///
   /// Returns
   /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown; and you need to catch the exception and handle it accordingly.
-  ///  < 0: Failure.
   Future<void> removeRemotePosition(int uid);
 
   /// @nodoc
@@ -302,7 +289,6 @@ abstract class LocalSpatialAudioEngine implements BaseSpatialAudioEngine {
   ///
   /// Returns
   /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown; and you need to catch the exception and handle it accordingly.
-  ///  < 0: Failure.
   Future<void> clearRemotePositions();
 
   /// @nodoc
@@ -322,7 +308,6 @@ abstract class LocalSpatialAudioEngine implements BaseSpatialAudioEngine {
   ///
   /// Returns
   /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown; and you need to catch the exception and handle it accordingly.
-  ///  < 0: Failure.
   Future<void> setRemoteAudioAttenuation(
       {required int uid, required double attenuation, required bool forceSet});
 }
