@@ -381,7 +381,7 @@ jobs:
             --iris-ios-cdn-url=${IRIS_CDN_URL_IOS}
       - uses: futureware-tech/simulator-action@v3
         with:
-          model: 'iPhone 13 Pro Max'
+          model: 'iPhone 14 Pro Max'
       - run: bash ci/rendering_test_ios.sh
 
   rendering_test_macos:
