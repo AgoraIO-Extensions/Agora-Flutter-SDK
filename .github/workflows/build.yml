@@ -104,7 +104,7 @@ jobs:
     strategy:
       matrix:
         version: ["2.10.5", "3.x"]
-    runs-on: macos-12
+    runs-on: macos-13
     timeout-minutes: 120
     env:
       TEST_APP_ID: ${{ secrets.MY_APP_ID }}
@@ -114,9 +114,9 @@ jobs:
         with:
           flutter-version: ${{ matrix.version }}
           cache: true
-      - uses: futureware-tech/simulator-action@v1
+      - uses: futureware-tech/simulator-action@v3
         with:
-          model: 'iPhone 13 Pro Max'
+          model: 'iPhone 14 Pro Max'
       - run: bash ci/run_flutter_integration_test_ios.sh
 
   integration_test_macos:
