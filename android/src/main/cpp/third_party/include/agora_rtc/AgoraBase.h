@@ -1171,7 +1171,7 @@ enum VIDEO_CODEC_TYPE {
     */
   VIDEO_CODEC_AV1 = 12,
   /**
-   * 5: VP9.
+   * 13: VP9.
    */
   VIDEO_CODEC_VP9 = 13,
   /**
