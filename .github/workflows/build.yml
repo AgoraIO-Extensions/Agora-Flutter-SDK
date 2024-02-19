@@ -440,7 +440,7 @@ jobs:
           arch: x86_64
           profile: pixel_5
           ram-size: 2048M
-          heap-size: 4096M
+          heap-size: 2048M
           disk-size: 8192M
           script: bash ci/rendering_test_android.sh
 
