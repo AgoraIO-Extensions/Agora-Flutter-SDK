@@ -103,7 +103,7 @@ jobs:
     if: ${{ !contains(github.event.pull_request.labels.*.name, 'ci:skip') }}
     strategy:
       matrix:
-        version: ["2.10.5", "3.x"]
+        version: ["2.10.5", "3.16"]
     runs-on: macos-12
     timeout-minutes: 120
     env:
