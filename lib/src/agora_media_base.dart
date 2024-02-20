@@ -126,7 +126,7 @@ enum AudioRoute {
   @JsonValue(4)
   routeLoudspeaker,
 
-  /// 5: The audio route is a bluetooth headset.
+  /// 5: The audio route is a Bluetooth device using the HFP protocol.
   @JsonValue(5)
   routeHeadsetbluetooth,
 
@@ -247,7 +247,7 @@ enum MediaSourceType {
   @JsonValue(2)
   primaryCameraSource,
 
-  /// 3: The secondary camera.
+  /// 3: A secondary camera.
   @JsonValue(3)
   secondaryCameraSource,
 
@@ -259,7 +259,7 @@ enum MediaSourceType {
   @JsonValue(5)
   secondaryScreenSource,
 
-  /// @nodoc
+  /// 6. Custom video source.
   @JsonValue(6)
   customVideoSource,
 
@@ -967,7 +967,7 @@ extension MediaPlayerSourceTypeExt on MediaPlayerSourceType {
 /// The frame position of the video observer.
 @JsonEnum(alwaysCreate: true)
 enum VideoModulePosition {
-  /// 1: The post-capturer position, which corresponds to the video data in the onCaptureVideoFrame callback.
+  /// 1: The location of the locally collected video data after preprocessing corresponds to the onCaptureVideoFrame callback. The observed video here has the effect of video pre-processing, which can be verified by enabling image enhancement, virtual background, or watermark.
   @JsonValue(1 << 0)
   positionPostCapturer,
 
@@ -975,7 +975,9 @@ enum VideoModulePosition {
   @JsonValue(1 << 1)
   positionPreRenderer,
 
-  /// 4: The pre-encoder position, which corresponds to the video data in the onPreEncodeVideoFrame callback.
+  /// 4: The pre-encoder position, which corresponds to the video data in the onPreEncodeVideoFrame callback. The observed video here has the effects of video pre-processing and encoding pre-processing.
+  ///  To verify the pre-processing effects of the video, you can enable image enhancement, virtual background, or watermark.
+  ///  To verify the pre-encoding processing effect, you can set a lower frame rate (for example, 5 fps).
   @JsonValue(1 << 2)
   positionPreEncoder,
 }
@@ -1519,7 +1521,7 @@ extension MediaRecorderStreamTypeExt on MediaRecorderStreamType {
 /// The current recording state.
 @JsonEnum(alwaysCreate: true)
 enum RecorderState {
-  /// -1: An error occurs during the recording. See RecorderErrorCode for the reason.
+  /// -1: An error occurs during the recording. See RecorderReasonCode for the reason.
   @JsonValue(-1)
   recorderStateError,
 
@@ -1545,26 +1547,26 @@ extension RecorderStateExt on RecorderState {
   }
 }
 
-/// The reason for the state change.
+/// @nodoc
 @JsonEnum(alwaysCreate: true)
 enum RecorderErrorCode {
-  /// 0: No error.
+  /// @nodoc
   @JsonValue(0)
   recorderErrorNone,
 
-  /// 1: The SDK fails to write the recorded data to a file.
+  /// @nodoc
   @JsonValue(1)
   recorderErrorWriteFailed,
 
-  /// 2: The SDK does not detect any audio and video streams, or audio and video streams are interrupted for more than five seconds during recording.
+  /// @nodoc
   @JsonValue(2)
   recorderErrorNoStream,
 
-  /// 3: The recording duration exceeds the upper limit.
+  /// @nodoc
   @JsonValue(3)
   recorderErrorOverMaxDuration,
 
-  /// 4: The recording configuration changes.
+  /// @nodoc
   @JsonValue(4)
   recorderErrorConfigChanged,
 }
