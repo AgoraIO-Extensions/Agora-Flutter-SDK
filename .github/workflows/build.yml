@@ -384,6 +384,12 @@ jobs:
           model: 'iPhone 14 Pro Max'
       - run: bash ci/rendering_test_ios.sh
 
+      - uses: actions/upload-artifact@v3
+        if: failure()
+        with:
+          name: debug-golden-files-ios
+          path: test_shard/rendering_test/screenshot/*.debug.png
+
   rendering_test_macos:
     name: Run Flutter macOS Rendering Tests
     if: ${{ !contains(github.event.pull_request.labels.*.name, 'ci:skip') }}
