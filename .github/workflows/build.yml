@@ -126,9 +126,9 @@ jobs:
         with:
           flutter-version: ${{ matrix.version }}
           cache: true
-      - uses: futureware-tech/simulator-action@v1
+      - uses: futureware-tech/simulator-action@v3
         with:
-          model: 'iPhone 13 Pro Max'
+          model: 'iPhone 14 Pro Max'
       - run: bash ci/run_flutter_integration_test_ios.sh
 
   integration_test_macos:
@@ -359,7 +359,7 @@ jobs:
     if: ${{ !contains(github.event.pull_request.labels.*.name, 'ci:skip') }}
     strategy:
       matrix:
-        version: ["3.x"]
+        version: ["3.16"]
     runs-on: macos-13 # Rendering test on ios simulator need macos 13+
     timeout-minutes: 60
     env:
@@ -391,13 +391,16 @@ jobs:
             --apple-package-name=io.agora.agoraRtcEngineExample \
             --flutter-package-name=agora_rtc_engine \
             --iris-ios-cdn-url=${IRIS_CDN_URL_IOS}
-      - name: Create ios simulator
-        run: |
-          xcrun simctl list
-          # We generate the screenshots base on the simulator "iPhone 13 Pro Max", so we set the SimDeviceType to iPhone 13 Pro Max.
-          # If you need to change the SimDeviceType, you may need to re-generate the screenshots first.
-          xcrun simctl create Flutter-iPhone com.apple.CoreSimulator.SimDeviceType.iPhone-13-Pro-Max com.apple.CoreSimulator.SimRuntime.iOS-16-4 | xargs xcrun simctl boot
+      - uses: futureware-tech/simulator-action@v3
+        with:
+          model: 'iPhone 14 Pro Max'
       - run: bash ci/rendering_test_ios.sh
+
+      - uses: actions/upload-artifact@v3
+        if: failure()
+        with:
+          name: debug-golden-files-ios
+          path: test_shard/rendering_test/screenshot/*.debug.png
 
   rendering_test_macos:
     name: Run Flutter macOS Rendering Tests
@@ -499,7 +502,9 @@ jobs:
     if: ${{ !contains(github.event.pull_request.labels.*.name, 'ci:skip') }}
     strategy:
       matrix:
-        version: ['3.x']
+        # TODO(littlegnal): Temporily pin the Flutter SDK version to 3.16, since the rendering on web not work correct after 3.16, 
+        # see https://github.com/AgoraIO-Extensions/Agora-Flutter-SDK/actions/runs/7958003510/job/21721962323?pr=1572
+        version: ['3.16']
     runs-on: ubuntu-latest
     timeout-minutes: 60
     env:
