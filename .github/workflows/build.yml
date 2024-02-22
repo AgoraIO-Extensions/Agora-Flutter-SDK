@@ -347,7 +347,7 @@ jobs:
     if: ${{ !contains(github.event.pull_request.labels.*.name, 'ci:skip') }}
     strategy:
       matrix:
-        version: ["3.16"]
+        version: ["3.x"]
     runs-on: macos-13 # Rendering test on ios simulator need macos 13+
     timeout-minutes: 60
     env:
