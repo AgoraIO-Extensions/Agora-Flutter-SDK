@@ -7,6 +7,10 @@
 
 - (BOOL)application:(UIApplication *)application
     didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
+    // On low power mode, the system force keep the screen on for 30s only,
+    // we keep the screen on to help internal testing.
+    [application setIdleTimerDisabled: YES];
+    
     FlutterViewController* controller = (FlutterViewController*) self.window.rootViewController;
 
     FlutterMethodChannel* screensharingIOSChannel = [FlutterMethodChannel
