@@ -52,6 +52,12 @@ class _State extends State<JoinChannelVideo> {
     await _engine.initialize(RtcEngineContext(
       appId: config.appId,
     ));
+
+    await _engine.setParameters('{"engine.video.codec_type":"1"}');
+    await _engine.setParameters('{"rtc.video.enable_pvc":false}');
+    await _engine
+        .setParameters('{"rtc.video.enable_sr":{"mode":2,"enabled":false}}');
+    await _engine.setParameters('{"engine.video.enable_hw_encoder":false}');
     _rtcEngineEventHandler = RtcEngineEventHandler(
       onError: (ErrorCodeType err, String msg) {
         logSink.log('[onError] err: $err, msg: $msg');
