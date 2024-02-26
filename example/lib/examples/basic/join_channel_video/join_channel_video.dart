@@ -53,7 +53,7 @@ class _State extends State<JoinChannelVideo> {
       appId: config.appId,
     ));
 
-    await _engine.setParameters('{"engine.video.codec_type":"1"}');
+    await _engine.setParameters('{"engine.video.codec_type":"2"}');
     await _engine.setParameters('{"rtc.video.enable_pvc":false}');
     await _engine
         .setParameters('{"rtc.video.enable_sr":{"mode":2,"enabled":false}}');
