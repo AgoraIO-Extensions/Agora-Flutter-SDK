@@ -58,7 +58,7 @@ class _State extends State<JoinChannelVideo> {
     await _engine
         .setParameters('{"rtc.video.enable_sr":{"mode":2,"enabled":false}}');
     await _engine.setParameters('{"engine.video.enable_hw_encoder":false}');
-    await _engine.setParameters('{“che.audio.aec.split_srate_for_48k":16000}');
+    await _engine.setParameters('{"che.audio.aec.split_srate_for_48k":16000}');
     _rtcEngineEventHandler = RtcEngineEventHandler(
       onError: (ErrorCodeType err, String msg) {
         logSink.log('[onError] err: $err, msg: $msg');
