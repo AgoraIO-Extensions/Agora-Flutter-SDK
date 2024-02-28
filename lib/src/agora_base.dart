@@ -3578,7 +3578,7 @@ enum RtmpStreamPublishReason {
   @JsonValue(15)
   rtmpStreamPublishReasonInvalidAppid,
 
-  /// 16: Your project does not have permission to use streaming services. Refer to Media Push to enable the Media Push permission.
+  /// 16: Your project does not have permission to use streaming services.
   @JsonValue(16)
   rtmpStreamPublishReasonInvalidPrivilege,
 
