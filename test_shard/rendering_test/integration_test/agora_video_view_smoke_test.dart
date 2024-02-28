@@ -322,7 +322,6 @@ void main() {
                 },
                 onFirstFrame: () async {
                   if (!onFrameCompleter.isCompleted) {
-                    await rtcEngine.startPreview();
                     onFrameCompleter.complete(null);
                   }
                 }));

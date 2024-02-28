@@ -93,7 +93,7 @@ class MediaRecorderImpl extends media_recorder_impl_binding.MediaRecorderImpl
 
   @override
   Future<void> setMediaRecorderObserver(MediaRecorderObserver callback) async {
-    const apiType = 'MediaRecorder_setMediaRecorderObserver';
+    const apiType = 'MediaRecorder_setMediaRecorderObserver_e1f7340';
 
     final param = createParams({});
 
@@ -103,7 +103,7 @@ class MediaRecorderImpl extends media_recorder_impl_binding.MediaRecorderImpl
     await irisMethodChannel.registerEventHandler(
         ScopedEvent(
             scopedKey: _mediaRecorderScopedKey,
-            registerName: 'MediaRecorder_setMediaRecorderObserver',
+            registerName: 'MediaRecorder_setMediaRecorderObserver_e1f7340',
             unregisterName: 'MediaRecorder_unsetMediaRecorderObserver',
             handler: _mediaRecorderObserver!),
         jsonEncode(param));
@@ -119,7 +119,7 @@ class MediaRecorderImpl extends media_recorder_impl_binding.MediaRecorderImpl
     await irisMethodChannel.unregisterEventHandler(
         ScopedEvent(
             scopedKey: _mediaRecorderScopedKey,
-            registerName: 'MediaRecorder_setMediaRecorderObserver',
+            registerName: 'MediaRecorder_setMediaRecorderObserver_e1f7340',
             unregisterName: 'MediaRecorder_unsetMediaRecorderObserver',
             handler: _mediaRecorderObserver!),
         jsonEncode(param));

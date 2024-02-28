@@ -101,7 +101,7 @@ class _State extends State<MediaPlayer> {
           logSink.log('[onCompleted]');
         },
         onPlayerSourceStateChanged:
-            (MediaPlayerState state, MediaPlayerError ec) async {
+            (MediaPlayerState state, MediaPlayerReason ec) async {
           logSink.log('[onPlayerSourceStateChanged] state: $state ec: $ec');
           if (state == MediaPlayerState.playerStateOpenCompleted) {
             _streamCount = await _mediaPlayerController.getStreamCount();
@@ -126,11 +126,12 @@ class _State extends State<MediaPlayer> {
 
           setState(() {});
         },
-        onPositionChanged: (int position) {
-          logSink.log('[onPositionChanged] position: $position');
+        onPositionChanged: (int positionMs, int timestampMs) {
+          logSink.log(
+              '[onPositionChanged] position: $positionMs, timestampMs: $timestampMs');
 
           setState(() {
-            _seekPos = position;
+            _seekPos = positionMs;
           });
         },
         onPlayerEvent:

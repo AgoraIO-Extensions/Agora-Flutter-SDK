@@ -85,92 +85,92 @@ extension MediaPlayerStateExt on MediaPlayerState {
   }
 }
 
-/// Error codes of the media player.
+/// Reasons for the changes in the media player status.
 @JsonEnum(alwaysCreate: true)
-enum MediaPlayerError {
+enum MediaPlayerReason {
   /// 0: No error.
   @JsonValue(0)
-  playerErrorNone,
+  playerReasonNone,
 
   /// -1: Invalid arguments.
   @JsonValue(-1)
-  playerErrorInvalidArguments,
+  playerReasonInvalidArguments,
 
   /// -2: Internal error.
   @JsonValue(-2)
-  playerErrorInternal,
+  playerReasonInternal,
 
   /// -3: No resource.
   @JsonValue(-3)
-  playerErrorNoResource,
+  playerReasonNoResource,
 
   /// -4: Invalid media resource.
   @JsonValue(-4)
-  playerErrorInvalidMediaSource,
+  playerReasonInvalidMediaSource,
 
   /// -5: The media stream type is unknown.
   @JsonValue(-5)
-  playerErrorUnknownStreamType,
+  playerReasonUnknownStreamType,
 
   /// -6: The object is not initialized.
   @JsonValue(-6)
-  playerErrorObjNotInitialized,
+  playerReasonObjNotInitialized,
 
   /// -7: The codec is not supported.
   @JsonValue(-7)
-  playerErrorCodecNotSupported,
+  playerReasonCodecNotSupported,
 
   /// -8: Invalid renderer.
   @JsonValue(-8)
-  playerErrorVideoRenderFailed,
+  playerReasonVideoRenderFailed,
 
   /// -9: An error with the internal state of the player occurs.
   @JsonValue(-9)
-  playerErrorInvalidState,
+  playerReasonInvalidState,
 
   /// -10: The URL of the media resource cannot be found.
   @JsonValue(-10)
-  playerErrorUrlNotFound,
+  playerReasonUrlNotFound,
 
   /// -11: Invalid connection between the player and the Agora Server.
   @JsonValue(-11)
-  playerErrorInvalidConnectionState,
+  playerReasonInvalidConnectionState,
 
   /// -12: The playback buffer is insufficient.
   @JsonValue(-12)
-  playerErrorSrcBufferUnderflow,
+  playerReasonSrcBufferUnderflow,
 
   /// -13: The playback is interrupted.
   @JsonValue(-13)
-  playerErrorInterrupted,
+  playerReasonInterrupted,
 
   /// -14: The SDK does not support the method being called.
   @JsonValue(-14)
-  playerErrorNotSupported,
+  playerReasonNotSupported,
 
   /// -15: The authentication information of the media resource is expired.
   @JsonValue(-15)
-  playerErrorTokenExpired,
+  playerReasonTokenExpired,
 
   /// @nodoc
   @JsonValue(-16)
-  playerErrorIpExpired,
+  playerReasonIpExpired,
 
   /// -17: An unknown error.
   @JsonValue(-17)
-  playerErrorUnknown,
+  playerReasonUnknown,
 }
 
 /// @nodoc
-extension MediaPlayerErrorExt on MediaPlayerError {
+extension MediaPlayerReasonExt on MediaPlayerReason {
   /// @nodoc
-  static MediaPlayerError fromValue(int value) {
-    return $enumDecode(_$MediaPlayerErrorEnumMap, value);
+  static MediaPlayerReason fromValue(int value) {
+    return $enumDecode(_$MediaPlayerReasonEnumMap, value);
   }
 
   /// @nodoc
   int value() {
-    return _$MediaPlayerErrorEnumMap[this]!;
+    return _$MediaPlayerReasonEnumMap[this]!;
   }
 }
 
@@ -473,23 +473,80 @@ class CacheStatistics {
   Map<String, dynamic> toJson() => _$CacheStatisticsToJson(this);
 }
 
+/// The information of the media file being played.
+@JsonSerializable(explicitToJson: true, includeIfNull: false)
+class PlayerPlaybackStats {
+  /// @nodoc
+  const PlayerPlaybackStats(
+      {this.videoFps,
+      this.videoBitrateInKbps,
+      this.audioBitrateInKbps,
+      this.totalBitrateInKbps});
+
+  /// The frame rate (fps) of the video.
+  @JsonKey(name: 'videoFps')
+  final int? videoFps;
+
+  /// The bitrate (kbps) of the video.
+  @JsonKey(name: 'videoBitrateInKbps')
+  final int? videoBitrateInKbps;
+
+  /// The bitrate (kbps) of the audio.
+  @JsonKey(name: 'audioBitrateInKbps')
+  final int? audioBitrateInKbps;
+
+  /// The total bitrate (kbps) of the media stream.
+  @JsonKey(name: 'totalBitrateInKbps')
+  final int? totalBitrateInKbps;
+
+  /// @nodoc
+  factory PlayerPlaybackStats.fromJson(Map<String, dynamic> json) =>
+      _$PlayerPlaybackStatsFromJson(json);
+
+  /// @nodoc
+  Map<String, dynamic> toJson() => _$PlayerPlaybackStatsToJson(this);
+}
+
 /// Information related to the media player.
 @JsonSerializable(explicitToJson: true, includeIfNull: false)
 class PlayerUpdatedInfo {
   /// @nodoc
-  const PlayerUpdatedInfo({this.playerId, this.deviceId, this.cacheStatistics});
+  const PlayerUpdatedInfo(
+      {this.internalPlayerUuid,
+      this.deviceId,
+      this.videoHeight,
+      this.videoWidth,
+      this.audioSampleRate,
+      this.audioChannels,
+      this.audioBitsPerSample});
 
-  /// The ID of a media player.
-  @JsonKey(name: 'playerId')
-  final String? playerId;
+  /// @nodoc
+  @JsonKey(name: 'internalPlayerUuid')
+  final String? internalPlayerUuid;
 
   /// The ID of a deivce.
   @JsonKey(name: 'deviceId')
   final String? deviceId;
 
-  /// The statistics about the media file being cached. If you call the openWithMediaSource method and set enableCache as true, the statistics about the media file being cached is updated every second after the media file is played. See CacheStatistics.
-  @JsonKey(name: 'cacheStatistics')
-  final CacheStatistics? cacheStatistics;
+  /// Height (pixel) of the video.
+  @JsonKey(name: 'videoHeight')
+  final int? videoHeight;
+
+  /// Width (pixel) of the video.
+  @JsonKey(name: 'videoWidth')
+  final int? videoWidth;
+
+  /// Audio sample rate (Hz).
+  @JsonKey(name: 'audioSampleRate')
+  final int? audioSampleRate;
+
+  /// The number of audio channels.
+  @JsonKey(name: 'audioChannels')
+  final int? audioChannels;
+
+  /// The number of bits per audio sample point.
+  @JsonKey(name: 'audioBitsPerSample')
+  final int? audioBitsPerSample;
 
   /// @nodoc
   factory PlayerUpdatedInfo.fromJson(Map<String, dynamic> json) =>
@@ -509,6 +566,7 @@ class MediaSource {
       this.startPos,
       this.autoPlay,
       this.enableCache,
+      this.enableMultiAudioTrack,
       this.isAgoraSource,
       this.isLiveSource});
 
@@ -534,6 +592,10 @@ class MediaSource {
   ///  If you enable this function, the Media Player caches part of the media file being played on your local device, and you can play the cached media file without internet connection. The statistics about the media file being cached are updated every second after the media file is played. See CacheStatistics.
   @JsonKey(name: 'enableCache')
   final bool? enableCache;
+
+  /// Whether to allow the selection of different audio tracks when playing this media file: true : Allow to select different audio tracks. false : (Default) Do not allow to select different audio tracks. If you need to set different audio tracks for local playback and publishing to the channel, you need to set this parameter to true, and then call the selectMultiAudioTrack method to select the audio track.
+  @JsonKey(name: 'enableMultiAudioTrack')
+  final bool? enableMultiAudioTrack;
 
   /// Whether the media resource to be opened is a live stream or on-demand video distributed through Media Broadcast service: true : The media resource to be played is a live or on-demand video distributed through Media Broadcast service. false : (Default) The media resource is not a live stream or on-demand video distributed through Media Broadcast service. If you need to open a live stream or on-demand video distributed through Broadcast Streaming service, pass in the URL of the media resource to url, and set isAgoraSource as true; otherwise, you don't need to set the isAgoraSource parameter.
   @JsonKey(name: 'isAgoraSource')

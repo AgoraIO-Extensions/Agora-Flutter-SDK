@@ -11,7 +11,7 @@ import 'package:iris_method_channel/iris_method_channel.dart';
 
 void musicContentCenterSmokeTestCases() {
   testWidgets(
-    'initialize',
+    'MusicContentCenter.initialize',
     (WidgetTester tester) async {
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
@@ -21,6 +21,7 @@ void musicContentCenterSmokeTestCases() {
         appId: engineAppId,
         areaCode: AreaCode.areaCodeGlob.value(),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       final musicContentCenter = rtcEngine.getMusicContentCenter();
 
@@ -43,7 +44,7 @@ void musicContentCenterSmokeTestCases() {
         );
       } catch (e) {
         if (e is! AgoraRtcException) {
-          debugPrint('[initialize] error: ${e.toString()}');
+          debugPrint('[MusicContentCenter.initialize] error: ${e.toString()}');
           rethrow;
         }
 
@@ -60,7 +61,7 @@ void musicContentCenterSmokeTestCases() {
   );
 
   testWidgets(
-    'renewToken',
+    'MusicContentCenter.renewToken',
     (WidgetTester tester) async {
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
@@ -70,6 +71,7 @@ void musicContentCenterSmokeTestCases() {
         appId: engineAppId,
         areaCode: AreaCode.areaCodeGlob.value(),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       final musicContentCenter = rtcEngine.getMusicContentCenter();
 
@@ -80,7 +82,7 @@ void musicContentCenterSmokeTestCases() {
         );
       } catch (e) {
         if (e is! AgoraRtcException) {
-          debugPrint('[renewToken] error: ${e.toString()}');
+          debugPrint('[MusicContentCenter.renewToken] error: ${e.toString()}');
           rethrow;
         }
 
@@ -97,7 +99,7 @@ void musicContentCenterSmokeTestCases() {
   );
 
   testWidgets(
-    'release',
+    'MusicContentCenter.release',
     (WidgetTester tester) async {
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
@@ -107,6 +109,7 @@ void musicContentCenterSmokeTestCases() {
         appId: engineAppId,
         areaCode: AreaCode.areaCodeGlob.value(),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       final musicContentCenter = rtcEngine.getMusicContentCenter();
 
@@ -114,7 +117,7 @@ void musicContentCenterSmokeTestCases() {
         await musicContentCenter.release();
       } catch (e) {
         if (e is! AgoraRtcException) {
-          debugPrint('[release] error: ${e.toString()}');
+          debugPrint('[MusicContentCenter.release] error: ${e.toString()}');
           rethrow;
         }
 
@@ -131,7 +134,7 @@ void musicContentCenterSmokeTestCases() {
   );
 
   testWidgets(
-    'registerEventHandler',
+    'MusicContentCenter.registerEventHandler',
     (WidgetTester tester) async {
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
@@ -141,6 +144,7 @@ void musicContentCenterSmokeTestCases() {
         appId: engineAppId,
         areaCode: AreaCode.areaCodeGlob.value(),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       final musicContentCenter = rtcEngine.getMusicContentCenter();
 
@@ -148,26 +152,27 @@ void musicContentCenterSmokeTestCases() {
         final MusicContentCenterEventHandler eventHandler =
             MusicContentCenterEventHandler(
           onMusicChartsResult: (String requestId, List result,
-              MusicContentCenterStatusCode errorCode) {},
+              MusicContentCenterStateReason reason) {},
           onMusicCollectionResult: (String requestId, MusicCollection result,
-              MusicContentCenterStatusCode errorCode) {},
+              MusicContentCenterStateReason reason) {},
           onLyricResult: (String requestId, int songCode, String lyricUrl,
-              MusicContentCenterStatusCode errorCode) {},
+              MusicContentCenterStateReason reason) {},
           onSongSimpleInfoResult: (String requestId, int songCode,
-              String simpleInfo, MusicContentCenterStatusCode errorCode) {},
+              String simpleInfo, MusicContentCenterStateReason reason) {},
           onPreLoadEvent: (String requestId,
               int songCode,
               int percent,
               String lyricUrl,
-              PreloadStatusCode status,
-              MusicContentCenterStatusCode errorCode) {},
+              PreloadState state,
+              MusicContentCenterStateReason reason) {},
         );
         musicContentCenter.registerEventHandler(
           eventHandler,
         );
       } catch (e) {
         if (e is! AgoraRtcException) {
-          debugPrint('[registerEventHandler] error: ${e.toString()}');
+          debugPrint(
+              '[MusicContentCenter.registerEventHandler] error: ${e.toString()}');
           rethrow;
         }
 
@@ -184,7 +189,7 @@ void musicContentCenterSmokeTestCases() {
   );
 
   testWidgets(
-    'unregisterEventHandler',
+    'MusicContentCenter.unregisterEventHandler',
     (WidgetTester tester) async {
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
@@ -194,6 +199,7 @@ void musicContentCenterSmokeTestCases() {
         appId: engineAppId,
         areaCode: AreaCode.areaCodeGlob.value(),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       final musicContentCenter = rtcEngine.getMusicContentCenter();
 
@@ -201,7 +207,8 @@ void musicContentCenterSmokeTestCases() {
         musicContentCenter.unregisterEventHandler();
       } catch (e) {
         if (e is! AgoraRtcException) {
-          debugPrint('[unregisterEventHandler] error: ${e.toString()}');
+          debugPrint(
+              '[MusicContentCenter.unregisterEventHandler] error: ${e.toString()}');
           rethrow;
         }
 
@@ -218,7 +225,7 @@ void musicContentCenterSmokeTestCases() {
   );
 
   testWidgets(
-    'getMusicCharts',
+    'MusicContentCenter.getMusicCharts',
     (WidgetTester tester) async {
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
@@ -228,6 +235,7 @@ void musicContentCenterSmokeTestCases() {
         appId: engineAppId,
         areaCode: AreaCode.areaCodeGlob.value(),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       final musicContentCenter = rtcEngine.getMusicContentCenter();
 
@@ -235,7 +243,8 @@ void musicContentCenterSmokeTestCases() {
         await musicContentCenter.getMusicCharts();
       } catch (e) {
         if (e is! AgoraRtcException) {
-          debugPrint('[getMusicCharts] error: ${e.toString()}');
+          debugPrint(
+              '[MusicContentCenter.getMusicCharts] error: ${e.toString()}');
           rethrow;
         }
 
@@ -252,7 +261,7 @@ void musicContentCenterSmokeTestCases() {
   );
 
   testWidgets(
-    'getMusicCollectionByMusicChartId',
+    'MusicContentCenter.getMusicCollectionByMusicChartId',
     (WidgetTester tester) async {
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
@@ -262,6 +271,7 @@ void musicContentCenterSmokeTestCases() {
         appId: engineAppId,
         areaCode: AreaCode.areaCodeGlob.value(),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       final musicContentCenter = rtcEngine.getMusicContentCenter();
 
@@ -279,7 +289,7 @@ void musicContentCenterSmokeTestCases() {
       } catch (e) {
         if (e is! AgoraRtcException) {
           debugPrint(
-              '[getMusicCollectionByMusicChartId] error: ${e.toString()}');
+              '[MusicContentCenter.getMusicCollectionByMusicChartId] error: ${e.toString()}');
           rethrow;
         }
 
@@ -296,7 +306,7 @@ void musicContentCenterSmokeTestCases() {
   );
 
   testWidgets(
-    'searchMusic',
+    'MusicContentCenter.searchMusic',
     (WidgetTester tester) async {
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
@@ -306,6 +316,7 @@ void musicContentCenterSmokeTestCases() {
         appId: engineAppId,
         areaCode: AreaCode.areaCodeGlob.value(),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       final musicContentCenter = rtcEngine.getMusicContentCenter();
 
@@ -322,7 +333,7 @@ void musicContentCenterSmokeTestCases() {
         );
       } catch (e) {
         if (e is! AgoraRtcException) {
-          debugPrint('[searchMusic] error: ${e.toString()}');
+          debugPrint('[MusicContentCenter.searchMusic] error: ${e.toString()}');
           rethrow;
         }
 
@@ -339,7 +350,7 @@ void musicContentCenterSmokeTestCases() {
   );
 
   testWidgets(
-    'preload',
+    'MusicContentCenter.preload',
     (WidgetTester tester) async {
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
@@ -349,6 +360,7 @@ void musicContentCenterSmokeTestCases() {
         appId: engineAppId,
         areaCode: AreaCode.areaCodeGlob.value(),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       final musicContentCenter = rtcEngine.getMusicContentCenter();
 
@@ -359,7 +371,7 @@ void musicContentCenterSmokeTestCases() {
         );
       } catch (e) {
         if (e is! AgoraRtcException) {
-          debugPrint('[preload] error: ${e.toString()}');
+          debugPrint('[MusicContentCenter.preload] error: ${e.toString()}');
           rethrow;
         }
 
@@ -376,7 +388,7 @@ void musicContentCenterSmokeTestCases() {
   );
 
   testWidgets(
-    'removeCache',
+    'MusicContentCenter.removeCache',
     (WidgetTester tester) async {
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
@@ -386,6 +398,7 @@ void musicContentCenterSmokeTestCases() {
         appId: engineAppId,
         areaCode: AreaCode.areaCodeGlob.value(),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       final musicContentCenter = rtcEngine.getMusicContentCenter();
 
@@ -396,7 +409,7 @@ void musicContentCenterSmokeTestCases() {
         );
       } catch (e) {
         if (e is! AgoraRtcException) {
-          debugPrint('[removeCache] error: ${e.toString()}');
+          debugPrint('[MusicContentCenter.removeCache] error: ${e.toString()}');
           rethrow;
         }
 
@@ -413,7 +426,7 @@ void musicContentCenterSmokeTestCases() {
   );
 
   testWidgets(
-    'getCaches',
+    'MusicContentCenter.getCaches',
     (WidgetTester tester) async {
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
@@ -423,6 +436,7 @@ void musicContentCenterSmokeTestCases() {
         appId: engineAppId,
         areaCode: AreaCode.areaCodeGlob.value(),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       final musicContentCenter = rtcEngine.getMusicContentCenter();
 
@@ -433,7 +447,7 @@ void musicContentCenterSmokeTestCases() {
         );
       } catch (e) {
         if (e is! AgoraRtcException) {
-          debugPrint('[getCaches] error: ${e.toString()}');
+          debugPrint('[MusicContentCenter.getCaches] error: ${e.toString()}');
           rethrow;
         }
 
@@ -450,7 +464,7 @@ void musicContentCenterSmokeTestCases() {
   );
 
   testWidgets(
-    'isPreloaded',
+    'MusicContentCenter.isPreloaded',
     (WidgetTester tester) async {
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
@@ -460,6 +474,7 @@ void musicContentCenterSmokeTestCases() {
         appId: engineAppId,
         areaCode: AreaCode.areaCodeGlob.value(),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       final musicContentCenter = rtcEngine.getMusicContentCenter();
 
@@ -470,7 +485,7 @@ void musicContentCenterSmokeTestCases() {
         );
       } catch (e) {
         if (e is! AgoraRtcException) {
-          debugPrint('[isPreloaded] error: ${e.toString()}');
+          debugPrint('[MusicContentCenter.isPreloaded] error: ${e.toString()}');
           rethrow;
         }
 
@@ -487,7 +502,7 @@ void musicContentCenterSmokeTestCases() {
   );
 
   testWidgets(
-    'getLyric',
+    'MusicContentCenter.getLyric',
     (WidgetTester tester) async {
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
@@ -497,6 +512,7 @@ void musicContentCenterSmokeTestCases() {
         appId: engineAppId,
         areaCode: AreaCode.areaCodeGlob.value(),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       final musicContentCenter = rtcEngine.getMusicContentCenter();
 
@@ -509,7 +525,7 @@ void musicContentCenterSmokeTestCases() {
         );
       } catch (e) {
         if (e is! AgoraRtcException) {
-          debugPrint('[getLyric] error: ${e.toString()}');
+          debugPrint('[MusicContentCenter.getLyric] error: ${e.toString()}');
           rethrow;
         }
 
@@ -526,7 +542,7 @@ void musicContentCenterSmokeTestCases() {
   );
 
   testWidgets(
-    'getSongSimpleInfo',
+    'MusicContentCenter.getSongSimpleInfo',
     (WidgetTester tester) async {
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
@@ -536,6 +552,7 @@ void musicContentCenterSmokeTestCases() {
         appId: engineAppId,
         areaCode: AreaCode.areaCodeGlob.value(),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       final musicContentCenter = rtcEngine.getMusicContentCenter();
 
@@ -546,7 +563,8 @@ void musicContentCenterSmokeTestCases() {
         );
       } catch (e) {
         if (e is! AgoraRtcException) {
-          debugPrint('[getSongSimpleInfo] error: ${e.toString()}');
+          debugPrint(
+              '[MusicContentCenter.getSongSimpleInfo] error: ${e.toString()}');
           rethrow;
         }
 
@@ -563,7 +581,7 @@ void musicContentCenterSmokeTestCases() {
   );
 
   testWidgets(
-    'getInternalSongCode',
+    'MusicContentCenter.getInternalSongCode',
     (WidgetTester tester) async {
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
@@ -573,6 +591,7 @@ void musicContentCenterSmokeTestCases() {
         appId: engineAppId,
         areaCode: AreaCode.areaCodeGlob.value(),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       final musicContentCenter = rtcEngine.getMusicContentCenter();
 
@@ -585,7 +604,8 @@ void musicContentCenterSmokeTestCases() {
         );
       } catch (e) {
         if (e is! AgoraRtcException) {
-          debugPrint('[getInternalSongCode] error: ${e.toString()}');
+          debugPrint(
+              '[MusicContentCenter.getInternalSongCode] error: ${e.toString()}');
           rethrow;
         }
 

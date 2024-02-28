@@ -167,8 +167,7 @@ class _State extends State<StreamMessage> with KeepRemoteVideoViewsMixin {
               child: RemoteVideoViewsWidget(
                 key: keepRemoteVideoViewsKey,
                 rtcEngine: _engine,
-                channelId: _controller.text,
-                connectionUid: int.tryParse(_controller.text),
+                channelId: _channelIdController.text,
               ),
             )
           ],

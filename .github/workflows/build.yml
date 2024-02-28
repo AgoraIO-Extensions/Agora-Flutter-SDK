@@ -36,6 +36,18 @@ jobs:
             echo Pub Score too low.
             exit 1
           fi
+
+  flutter_ut:
+    name: Flutter unit test
+    if: ${{ !contains(github.event.pull_request.labels.*.name, 'ci:skip') }}
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: subosito/flutter-action@v2
+        with:
+          channel: 'stable'
+      - run: flutter test
+
   attach_docs:
     name: Attach dartdoc
     runs-on: ubuntu-latest
@@ -137,6 +149,32 @@ jobs:
           cache: true
       - run: flutter config --enable-macos-desktop
       - run: bash ci/run_flutter_macos_integration_test.sh
+      - name: Get iris logs macos
+        if: always()
+        run: |
+          sleep 30
+
+          mkdir iris-logs-macos
+          if [ -f "${HOME}/Library/Containers/com.example.fakeTestApp/Data/Library/agora-iris.log" ]; then
+            cp -RP ${HOME}/Library/Containers/com.example.fakeTestApp/Data/Library/agora-iris.log ./iris-logs-macos/agora-iris-fake-test.log
+          fi
+          if [ -f "${HOME}/Library/Containers/com.example.integrationTestApp/Data/Library/agora-iris.log" ]; then
+            cp -RP ${HOME}/Library/Containers/com.example.integrationTestApp/Data/Library/agora-iris.log ./iris-logs-macos/agora-iris-integration-test.log
+          fi
+
+          CRASH_DIR="${HOME}/Library/Logs/DiagnosticReports/"
+          OUTPUT_CRASH_DIR=./iris-logs-macos/crash
+          mkdir -p ${OUTPUT_CRASH_DIR}
+
+          # Copy all files
+          cp -RP $CRASH_DIR* $OUTPUT_CRASH_DIR
+          
+      - name: Upload iris logs macos
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: iris-logs-macos-${{ matrix.version }}
+          path: iris-logs-macos/*
 
   integration_test_windows:
     name: Run Flutter Windows Integration Tests
@@ -154,11 +192,21 @@ jobs:
         with:
           flutter-version: ${{ matrix.version }}
           cache: true
+      - name: Set up crash dump environment
+        run: .\ci\setup-crash-dumps.ps1
+        shell: powershell
       - run: flutter config --enable-windows-desktop
       - name: Run windows integration test
         shell: bash
         run: |
           bash ci/run_flutter_windows_integration_test.sh
+
+      - name: Upload crash dumps if exist
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: windows-crash-dumps-${{ matrix.version }}
+          path: ./CrashDumps/*
 
   integration_test_web:
     name: Run Flutter Web Integration Tests
@@ -435,7 +483,10 @@ jobs:
             --flutter-package-name=agora_rtc_engine \
             --iris-macos-cdn-url=${IRIS_CDN_URL_MACOS}
       - run: flutter config --enable-macos-desktop
-      - run: bash ci/rendering_test_macos.sh
+      - name: Run macos rendering test
+        run: |
+          export SAVE_DEBUG_GOLDEN="true"
+          bash ci/rendering_test_macos.sh
 
   rendering_test_windows:
     name: Run Flutter Windows Rendering Tests
@@ -482,6 +533,8 @@ jobs:
       - name: Run windows integration test
         shell: bash
         run: |
+          export SAVE_DEBUG_GOLDEN="true"
+
           bash ci/rendering_test_windows.sh
 
   rendering_test_web:
