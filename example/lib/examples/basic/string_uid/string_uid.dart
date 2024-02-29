@@ -58,6 +58,9 @@ class _State extends State<StringUid> {
           isJoined = true;
         });
       },
+      onUserInfoUpdated: (int uid, UserInfo info) {
+        logSink.log('[onUserInfoUpdated] uid: ${uid} UserInfo: ${info}');
+      },
       onLeaveChannel: (RtcConnection connection, RtcStats stats) {
         logSink.log(
             '[onLeaveChannel] connection: ${connection.toJson()} stats: ${stats.toJson()}');

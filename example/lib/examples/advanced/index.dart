@@ -51,7 +51,7 @@ final advanced = [
       'name': 'SetVideoEncoderConfiguration',
       'widget': const SetVideoEncoderConfiguration()
     },
-  if (!kIsWeb) {'name': 'StreamMessage', 'widget': const StreamMessage()},
+  {'name': 'StreamMessage', 'widget': const StreamMessage()},
   if (!kIsWeb) {'name': 'VoiceChanger', 'widget': const VoiceChanger()},
   if (!kIsWeb)
     {

@@ -18,7 +18,12 @@ class JoinChannelVideo extends StatefulWidget {
 class _State extends State<JoinChannelVideo> {
   late final RtcEngine _engine;
 
-  bool isJoined = false, switchCamera = true, switchRender = true;
+  bool isJoined = false,
+      switchCamera = true,
+      switchRender = true,
+      openCamera = true,
+      muteCamera = false,
+      muteAllRemoteVideo = false;
   Set<int> remoteUid = {};
   late TextEditingController _controller;
   bool _isUseFlutterTexture = false;
@@ -108,12 +113,38 @@ class _State extends State<JoinChannelVideo> {
 
   Future<void> _leaveChannel() async {
     await _engine.leaveChannel();
+    setState(() {
+      openCamera = true;
+      muteCamera = false;
+      muteAllRemoteVideo = false;
+    });
   }
 
   Future<void> _switchCamera() async {
     await _engine.switchCamera();
     setState(() {
       switchCamera = !switchCamera;
+    });
+  }
+
+  _openCamera() async {
+    await _engine.enableLocalVideo(!openCamera);
+    setState(() {
+      openCamera = !openCamera;
+    });
+  }
+  
+  _muteLocalVideoStream() async {
+    await _engine.muteLocalVideoStream(!muteCamera);
+    setState(() {
+      muteCamera = !muteCamera;
+    });
+  }
+
+  _muteAllRemoteVideoStreams() async {
+    await _engine.muteAllRemoteVideoStreams(!muteAllRemoteVideo);
+    setState(() {
+      muteAllRemoteVideo = !muteAllRemoteVideo;
     });
   }
 
@@ -266,6 +297,24 @@ class _State extends State<JoinChannelVideo> {
               ElevatedButton(
                 onPressed: _switchCamera,
                 child: Text('Camera ${switchCamera ? 'front' : 'rear'}'),
+              ),
+            ],
+            if (kIsWeb) ...[
+              const SizedBox(
+                height: 20,
+              ),
+              ElevatedButton(
+                onPressed: _muteLocalVideoStream,
+                child: Text('Camera ${muteCamera ? 'muted' : 'unmute'}'),
+              ),
+              ElevatedButton(
+                onPressed: _muteAllRemoteVideoStreams,
+                child: Text(
+                    'All Remote Camera ${muteAllRemoteVideo ? 'muted' : 'unmute'}'),
+              ),
+              ElevatedButton(
+                onPressed: _openCamera,
+                child: Text('Camera ${openCamera ? 'on' : 'off'}'),
               ),
             ],
           ],
