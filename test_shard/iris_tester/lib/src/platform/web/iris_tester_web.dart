@@ -21,6 +21,7 @@ class IrisTesterWeb implements IrisTester {
 
     isCreatedIrisRtcEngineFake = true;
     _irisRtcEngineFake = bindings.createIrisRtcEngineFake(irisApiEngine);
+    bindings.irisMock();
 
     return _irisRtcEngineFake;
   }
