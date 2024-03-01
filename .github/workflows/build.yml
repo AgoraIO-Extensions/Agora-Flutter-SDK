@@ -18,7 +18,7 @@ jobs:
     steps:
       - uses: actions/checkout@v3
       # Fix error: "fatal: detected dubious ownership in repository at '/github/workspace'"
-      - run: git config --global --add safe.directory '/github/workspace'
+      - run: git config --system --add safe.directory '/github/workspace'
       - uses: subosito/flutter-action@v2
         with:
           channel: 'stable'
