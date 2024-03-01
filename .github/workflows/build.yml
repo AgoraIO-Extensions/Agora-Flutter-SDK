@@ -16,14 +16,14 @@ jobs:
     if: ${{ !contains(github.event.pull_request.labels.*.name, 'ci:skip') }}
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
-      # Fix error: "fatal: detected dubious ownership in repository at '/github/workspace'"
-      - run: git config --global --add safe.directory /github/workspace
+      - uses: actions/checkout@v4
       - uses: subosito/flutter-action@v2
         with:
           channel: 'stable'
       - name: Check Dart Format
         run: bash ci/dart_pub_publish_check.sh
+      # Fix error: "fatal: detected dubious ownership in repository at '/github/workspace'"
+      - run: git config --global --add safe.directory /github/workspace
       - uses: axel-op/dart-package-analyzer@v3
         id: analysis
         with:
