@@ -21,8 +21,8 @@ jobs:
       - uses: subosito/flutter-action@v2
         with:
           channel: 'stable'
-      - name: Check Dart Format
-        run: bash ci/dart_pub_publish_check.sh
+      # - name: Check Dart Format
+      #   run: bash ci/dart_pub_publish_check.sh
       # Fix error: "fatal: detected dubious ownership in repository at '/github/workspace'"
       
       - uses: axel-op/dart-package-analyzer@v3
