@@ -17,7 +17,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - run: sudo git config --system --add safe.directory '/github/workspace'
+      - run: sudo git config --system --add safe.directory '*'
       - uses: subosito/flutter-action@v2
         with:
           channel: 'stable'
