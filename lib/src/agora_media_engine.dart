@@ -96,13 +96,12 @@ abstract class MediaEngine {
 
   /// Pulls the remote audio data.
   ///
-  /// Before calling this method, you need to call setExternalAudioSink to notify the app to enable and set the external rendering. After a successful call of this method, the app pulls the decoded and mixed audio data for playback.
-  ///  This method only supports pulling data from custom audio source. If you need to pull the data captured by the SDK, do not call this method.
+  /// Before calling this method, call setExternalAudioSink (enabled : true) to notify the app to enable and set the external audio rendering. After a successful call of this method, the app pulls the decoded and mixed audio data for playback.
   ///  Call this method after joining a channel.
-  ///  Once you enable the external audio sink, the app will not retrieve any audio data from the onPlaybackAudioFrame callback.
-  ///  The difference between this method and the onPlaybackAudioFrame callback is as follows:
+  ///  Both this method and onPlaybackAudioFrame callback can be used to get audio data after remote mixing. Note that after calling setExternalAudioSink to enable external audio rendering, the app no longer receives data from the onPlaybackAudioFrame callback. Therefore, you should choose between this method and the onPlaybackAudioFrame callback based on your actual business requirements. The specific distinctions between them are as follows:
+  ///  After calling this method, the app automatically pulls the audio data from the SDK. By setting the audio data parameters, the SDK adjusts the frame buffer to help the app handle latency, effectively avoiding audio playback jitter.
   ///  The SDK sends the audio data to the app through the onPlaybackAudioFrame callback. Any delay in processing the audio frames may result in audio jitter.
-  ///  After a successful method call, the app automatically pulls the audio data from the SDK. After setting the audio data parameters, the SDK adjusts the frame buffer and avoids problems caused by jitter in the external audio playback.
+  ///  This method is only used for retrieving audio data after remote mixing. If you need to get audio data from different audio processing stages such as capture and playback, you can register the corresponding callbacks by calling registerAudioFrameObserver.
   ///
   /// * [frame] Pointers to AudioFrame.
   ///
