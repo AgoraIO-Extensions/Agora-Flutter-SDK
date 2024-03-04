@@ -10,6 +10,7 @@ class FakeIrisMethodChannelConfig {
     this.isFakeRemoveHotRestartListener = true,
     this.isFakeDispose = true,
     this.delayInvokeMethod = const {},
+    this.fakeInvokeMethods = const {},
   });
 
   final bool isFakeInitilize;
@@ -19,6 +20,7 @@ class FakeIrisMethodChannelConfig {
   final bool isFakeRemoveHotRestartListener;
   final bool isFakeDispose;
   final Map<String, int> delayInvokeMethod;
+  final Map<String, CallApiResult> fakeInvokeMethods;
 
   FakeIrisMethodChannelConfig copyWith({
     bool? isFakeInitilize,
@@ -28,6 +30,7 @@ class FakeIrisMethodChannelConfig {
     bool? isFakeRemoveHotRestartListener,
     bool? isFakeDispose,
     Map<String, int>? delayInvokeMethod,
+    Map<String, CallApiResult>? fakeInvokeMethods
   }) {
     return FakeIrisMethodChannelConfig(
       isFakeInitilize: isFakeInitilize ?? this.isFakeInitilize,
@@ -40,6 +43,7 @@ class FakeIrisMethodChannelConfig {
           isFakeRemoveHotRestartListener ?? this.isFakeRemoveHotRestartListener,
       isFakeDispose: isFakeDispose ?? this.isFakeDispose,
       delayInvokeMethod: delayInvokeMethod ?? this.delayInvokeMethod,
+      fakeInvokeMethods: fakeInvokeMethods ?? this.fakeInvokeMethods,
     );
   }
 }
@@ -77,6 +81,9 @@ class FakeIrisMethodChannel extends IrisMethodChannel {
 
     if (_config.isFakeInvokeMethod) {
       await __maybeDelay();
+      if (_config.fakeInvokeMethods.containsKey(methodCall.funcName)) {
+        return _config.fakeInvokeMethods[methodCall.funcName]!;
+      }
       return CallApiResult(data: {'result': 0}, irisReturnCode: 0);
     }
 
