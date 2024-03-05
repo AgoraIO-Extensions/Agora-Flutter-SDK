@@ -72,6 +72,15 @@ class _State extends State<JoinChannelAudio> {
           isJoined = true;
         });
       },
+      onRemoteAudioStateChanged: (
+          RtcConnection connection,
+          int remoteUid,
+          RemoteAudioState state,
+          RemoteAudioStateReason reason,
+          int elapsed) {
+        logSink.log(
+            '[onRemoteAudioStateChanged] connection: $connection remoteUid: $remoteUid state: $state reason: $reason');
+      },
       onLeaveChannel: (RtcConnection connection, RtcStats stats) {
         logSink.log(
             '[onLeaveChannel] connection: ${connection.toJson()} stats: ${stats.toJson()}');

@@ -91,6 +91,15 @@ class _State extends State<JoinChannelVideo> {
           remoteUid.clear();
         });
       },
+      onRemoteVideoStateChanged: (
+          RtcConnection connection,
+          int remoteUid,
+          RemoteVideoState state,
+          RemoteVideoStateReason reason,
+          int elapsed) {
+        logSink.log(
+            '[onRemoteVideoStateChanged] connection: $connection remoteUid: $remoteUid state: $state reason: $reason');
+      },
     );
 
     _engine.registerEventHandler(_rtcEngineEventHandler);
