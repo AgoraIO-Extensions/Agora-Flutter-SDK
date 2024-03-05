@@ -98,7 +98,7 @@ class _State extends State<JoinChannelVideo> {
           RemoteVideoStateReason reason,
           int elapsed) {
         logSink.log(
-            '[onRemoteVideoStateChanged] connection: $connection remoteUid: $remoteUid state: $state reason: $reason');
+            '[onRemoteVideoStateChanged] connection: ${connection.toJson()} remoteUid: $remoteUid state: $state reason: $reason elapsed: $elapsed');
       },
     );
 
