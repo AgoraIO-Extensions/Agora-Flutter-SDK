@@ -707,7 +707,7 @@ class NativeTextureRenderer final
     }
   }
 
-  ~NativeTextureRenderer() final { Dispose(); }
+  ~NativeTextureRenderer() final {}
 
   void OnVideoFrameReceived(const void *videoFrame,
                             const IrisRtcVideoFrameConfig &config,
