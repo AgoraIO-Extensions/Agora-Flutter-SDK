@@ -1973,7 +1973,7 @@ class WatermarkOptions {
       this.watermarkRatio,
       this.mode});
 
-  /// Is the watermark visible in the local preview view? true : (Default) The watermark is visible in the local preview view. false : The watermark is not visible in the local preview view.
+  /// Whether the watermark is visible in the local preview view: true : (Default) The watermark is visible in the local preview view. false : The watermark is not visible in the local preview view.
   @JsonKey(name: 'visibleInPreview')
   final bool? visibleInPreview;
 
@@ -3578,7 +3578,7 @@ enum RtmpStreamPublishReason {
   @JsonValue(15)
   rtmpStreamPublishReasonInvalidAppid,
 
-  /// 16: Your project does not have permission to use streaming services. Refer to Media Push to enable the Media Push permission.
+  /// 16: Your project does not have permission to use streaming services.
   @JsonValue(16)
   rtmpStreamPublishReasonInvalidPrivilege,
 
@@ -5721,7 +5721,7 @@ enum ChannelMediaRelayError {
   @JsonValue(1)
   relayErrorServerErrorResponse,
 
-  /// 2: No server response. You can call leaveChannel to leave the channel. This error can also occur if your project has not enabled co-host token authentication. You can to enable the service for cohosting across channels before starting a channel media relay.
+  /// 2: No server response. This error may be caused by poor network connections. If this error occurs when initiating a channel media relay, you can try again later; if this error occurs during channel media relay, you can call leaveChannel to leave the channel. This error can also occur if the channel media relay service is not enabled in the project. You can contact to enable the service.
   @JsonValue(2)
   relayErrorServerNoResponse,
 
