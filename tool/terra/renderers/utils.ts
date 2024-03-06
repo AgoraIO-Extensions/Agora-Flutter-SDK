@@ -177,34 +177,6 @@ export function renderJsonSerializable(
   return output;
 }
 
-// /// Setting mode of the view.
-// @JsonEnum(alwaysCreate: true)
-// enum VideoViewSetupMode {
-//   /// 0: (Default) Replaces a view.
-//   @JsonValue(0)
-//   videoViewSetupReplace,
-
-//   /// 1: Adds a view.
-//   @JsonValue(1)
-//   videoViewSetupAdd,
-
-//   /// 2: Deletes a view.
-//   @JsonValue(2)
-//   videoViewSetupRemove,
-// }
-
-// /// @nodoc
-// extension VideoViewSetupModeExt on VideoViewSetupMode {
-//   /// @nodoc
-//   static VideoViewSetupMode fromValue(int value) {
-//     return $enumDecode(_$VideoViewSetupModeEnumMap, value);
-//   }
-
-//   /// @nodoc
-//   int value() {
-//     return _$VideoViewSetupModeEnumMap[this]!;
-//   }
-// }
 export function renderEnumJsonSerializable(enumz: Enumz) {
   let enumName = dartName(enumz);
   return `
