@@ -37,11 +37,6 @@ export default function ApiInterfaceRenderer(
   args: any,
   parseResult: ParseResult
 ): RenderResult[] {
-  // let cxxFiles = (parseResult!.nodes as CXXFile[]).filter((cxxFile) => {
-  //   return cxxFile.nodes.find((node) => {
-  //     return node.__TYPE == CXXTYPE.Clazz && !isCallbackClass(node as Clazz);
-  //   });
-  // });
   let renderResults = (parseResult!.nodes as CXXFile[]).map((cxxFile) => {
     let subContents = cxxFile.nodes
       .filter((it) => it.name.length > 0)
@@ -75,7 +70,6 @@ export default function ApiInterfaceRenderer(
       })
       .join("\n\n");
 
-    // cxx_parser.isStruct(node);
 
     let isNeedImportGDartFile =
       cxxFile.nodes.find((node) => {
@@ -124,7 +118,6 @@ abstract class ${dartName(clazz)} ${implementsBlock} {
 
 export function renderCallbackClass(parseResult: ParseResult, clazz: Clazz) {
   let clazzName = dartName(clazz);
-  let baseClasses = getBaseClasses(parseResult, clazz);
   let baseClassMethods = getBaseClassMethods(parseResult, clazz);
   let baseClassNames = getBaseClasses(parseResult, clazz).map((it) =>
     dartName(it)
@@ -153,7 +146,6 @@ ${baseClassMethods.map((it) => `${dartName(it)} : ${dartName(it)},`).join("")}
   clazz.methods.forEach((method) => {
     constructorParameters.push(`this.${dartName(method)},`);
   });
-  // constructorParameters.push(",");
 
   let constructorBlock = _trim(`
   /// Construct the [${clazzName}].
@@ -359,10 +351,6 @@ export function functionSignature(
   let parameterListBlock = memberFunction.parameters
     .map((param) => {
       let typeNode = parseResult.resolveNodeByType(param.type);
-      //   let typeName = dartName(typeNode);
-      //   if (typeNode.__TYPE == CXXTYPE.TypeAlias) {
-      //     typeName = dartName(param.type);
-      //   }
       let typeName = dartName(param.type);
       let variableName = dartName(param);
 

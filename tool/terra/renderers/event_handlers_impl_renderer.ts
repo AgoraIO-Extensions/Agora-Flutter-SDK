@@ -10,23 +10,19 @@ import {
   RenderResult,
   TerraContext,
 } from "@agoraio-extensions/terra-core";
-import { getIrisApiIdValue } from "../parsers/iris_api_id_parser";
 import { isCallbackClass } from "./utils";
 import { dartFileName, dartName } from "../parsers/dart_syntax_parser";
+import { getIrisApiIdValue } from "@agoraio-extensions/terra_shared_configs";
 
 function processCXXFiles(
   terraContext: TerraContext,
   parseResult: ParseResult,
   args: any
 ): CXXFile[] {
-  // return parseResult.nodes as CXXFile[];
   return (parseResult.nodes as CXXFile[]).filter((cxxFile) => {
-
     return cxxFile.nodes.find((node) => {
       return node.__TYPE == CXXTYPE.Clazz && isCallbackClass(node as Clazz);
     });
-
-    // return it.fileName == "IAgoraRtcEngine.h";
   });
 }
 
@@ -84,8 +80,9 @@ function callbackSwithCaseBlock(
     .map((it) => {
       let className = clazz.name;
       let methodName = it.name;
-      let jsonClassName = `${className.replace("I", "")}${methodName[0].toUpperCase() + methodName.slice(1)
-        }Json`;
+      let jsonClassName = `${className.replace("I", "")}${
+        methodName[0].toUpperCase() + methodName.slice(1)
+      }Json`;
       let dn = dartName(it);
       let eventName = getIrisApiIdValue(it).split("_").slice(1).join("_");
       // Fall back to method name if `getIrisApiIdValue` is empty. This is happen for that nodes from custom headers.
@@ -102,54 +99,56 @@ final jsonMap = jsonDecode(eventData);
 ${jsonClassName} paramJson = ${jsonClassName}.fromJson(jsonMap);
 paramJson = paramJson.fillBuffers(buffers);
 ${(function () {
-          let paramIntList = it.parameters
-            .map((it) => {
-              let typeName = dartName(it.type);
-              let memberName = dartName(it);
-              return `${typeName}? ${memberName} = paramJson.${memberName};`;
-            })
-            .join("\n");
+  let paramIntList = it.parameters
+    .map((it) => {
+      let typeName = dartName(it.type);
+      let memberName = dartName(it);
+      return `${typeName}? ${memberName} = paramJson.${memberName};`;
+    })
+    .join("\n");
 
-          let paramNullCheckList = it.parameters
-            .map((it) => {
-              let memberName = dartName(it);
-              return `${memberName} == null`;
-            })
-            .join("||");
-          if (paramNullCheckList.length) {
-            paramNullCheckList = `if (${paramNullCheckList}) { return true; }`;
-          }
+  let paramNullCheckList = it.parameters
+    .map((it) => {
+      let memberName = dartName(it);
+      return `${memberName} == null`;
+    })
+    .join("||");
+  if (paramNullCheckList.length) {
+    paramNullCheckList = `if (${paramNullCheckList}) { return true; }`;
+  }
 
-          let paramFillBufferList = it.parameters
-            .map((it) => {
-              let memberName = dartName(it);
-              let actualNode = parseResult.resolveNodeByType(it.type);
-              if (actualNode.__TYPE == CXXTYPE.TypeAlias) {
-                actualNode = parseResult.resolveNodeByType(actualNode.asTypeAlias()!.underlyingType);
-              }
-              if (actualNode.__TYPE == CXXTYPE.Struct) {
-                if (it.type.kind == SimpleTypeKind.array_t) {
-                  return `${memberName} = ${memberName}.map((e) => e.fillBuffers(buffers)).toList();`;
-                } else {
-                  return `${memberName} = ${memberName}.fillBuffers(buffers);`;
-                }
-              }
+  let paramFillBufferList = it.parameters
+    .map((it) => {
+      let memberName = dartName(it);
+      let actualNode = parseResult.resolveNodeByType(it.type);
+      if (actualNode.__TYPE == CXXTYPE.TypeAlias) {
+        actualNode = parseResult.resolveNodeByType(
+          actualNode.asTypeAlias()!.underlyingType
+        );
+      }
+      if (actualNode.__TYPE == CXXTYPE.Struct) {
+        if (it.type.kind == SimpleTypeKind.array_t) {
+          return `${memberName} = ${memberName}.map((e) => e.fillBuffers(buffers)).toList();`;
+        } else {
+          return `${memberName} = ${memberName}.fillBuffers(buffers);`;
+        }
+      }
 
-              return "";
-            })
-            .join("\n")
-            .trim();
+      return "";
+    })
+    .join("\n")
+    .trim();
 
-          let paramList = it.parameters.map((it) => dartName(it));
+  let paramList = it.parameters.map((it) => dartName(it));
 
-          return `
+  return `
   ${paramIntList}
   ${paramNullCheckList}
   ${paramFillBufferList}
   ${firstParamNameForWrapperClass}.${methodName}!(${paramList});
   return true;
   `.trim();
-        })()}
+})()}
 `;
     })
     .join("\n");
@@ -177,15 +176,15 @@ export default function EventHandlersImplRenderer(
         return `
 class ${wrapperClassName} ${extendBlock} {
 ${(function () {
-            // Constructor
-            let callSuperBlock = hasBaseClass
-              ? `: super(${firstParamNameForWrapperClass})`
-              : "";
+  // Constructor
+  let callSuperBlock = hasBaseClass
+    ? `: super(${firstParamNameForWrapperClass})`
+    : "";
 
-            return `
+  return `
     const ${wrapperClassName}(this.${firstParamNameForWrapperClass})${callSuperBlock};
     `.trim();
-          })()}
+})()}
 
 final ${className} ${firstParamNameForWrapperClass};
 
@@ -204,10 +203,10 @@ int get hashCode => ${firstParamNameForWrapperClass}.hashCode;
 bool handleEventInternal(String eventName, String eventData, List<Uint8List> buffers) {
     switch (eventName) {
         ${callbackSwithCaseBlock(
-            parseResult,
-            clazz,
-            firstParamNameForWrapperClass
-          )}
+          parseResult,
+          clazz,
+          firstParamNameForWrapperClass
+        )}
     }
     return false;
 }
@@ -218,13 +217,13 @@ bool handleEvent(String eventName, String eventData, List<Uint8List> buffers) {
     final newEvent = eventName.replaceFirst('${className}_', '');
     if (handleEventInternal(newEvent, eventData, buffers)) { return true; }
     ${(function () {
-            // handle return block
-            if (hasBaseClass) {
-              return "return super.handleEventInternal(newEvent, eventData, buffers);";
-            }
+      // handle return block
+      if (hasBaseClass) {
+        return "return super.handleEventInternal(newEvent, eventData, buffers);";
+      }
 
-            return "return false;";
-          })()}
+      return "return false;";
+    })()}
 }
 }
 `.trim();

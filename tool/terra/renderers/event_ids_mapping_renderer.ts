@@ -20,12 +20,6 @@ function isNeedCheckWithBaseClasses(clazz: Clazz): boolean {
   return funcNeedCheckWithBaseClasses.includes(clazz.fullName);
 }
 
-/// Event Ids mapping of iris api id.
-// const eventIdsMapping = {
-//   "H265TranscoderObserver_onQueryChannel",
-//   ["H265TranscoderObserver_onQueryChannel_ppp"],
-// };
-
 export default function EventIdsMappingRenderer(
   terraContext: TerraContext,
   args: any,

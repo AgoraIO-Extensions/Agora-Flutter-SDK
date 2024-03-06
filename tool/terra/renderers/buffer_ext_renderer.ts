@@ -40,7 +40,6 @@ ${extensionContents}
 }
 
 export function renderBufferExtBlock(parseResult: ParseResult, structName: string, memberVariables: MemberVariable[]) {
-  // let structName = dartName(structt);
   let extName = `${structName}BufferExt`;
 
   let bufferMemberNames = memberVariables.filter((member) => dartName(member.type) == 'Uint8List').map((member) => dartName(member));

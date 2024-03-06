@@ -133,10 +133,6 @@ export default function CallApiImplRenderer(
   return renderResults;
 }
 
-function variableToMemberVariable(it: Variable): any {
-  throw new Error("Function not implemented.");
-}
-
 interface JsonMapInitBlock {
   preInitBlock: string;
   nullCheckBlock: string;
@@ -150,7 +146,6 @@ function callApiImplBlock(
   clazz: Clazz,
   method: MemberFunction
 ): string {
-  // let clazz = method.parent!.asClazz();
   let className = dartName(clazz);
   console.log(`callApiImplBlock className: ${className}`);
   let methodName = dartName(method);
@@ -244,10 +239,6 @@ function callApiImplBlock(
   } else if (returnTypeNode.__TYPE == CXXTYPE.Enumz) {
     returnBlock = `return ${dartName(returnTypeNode)}Ext.fromValue(result);`;
   } else if (method.return_type.name != "void") {
-    // let returnType = dartName(returnTypeNode);
-    // if (returnTypeNode.__TYPE == CXXTYPE.TypeAlias) {
-    //   returnType = dartName(method.return_type);
-    // }
     let returnType = dartName(method.return_type);
     returnBlock = `return result as ${returnType};`;
   } else {
