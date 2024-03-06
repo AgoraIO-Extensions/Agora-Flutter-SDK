@@ -41,7 +41,6 @@ class RtcEngineEventHandlerWrapper implements EventLoopEventHandler {
           return true;
         }
         connection = connection.fillBuffers(buffers);
-
         rtcEngineEventHandler.onJoinChannelSuccess!(connection, elapsed);
         return true;
 
@@ -59,7 +58,6 @@ class RtcEngineEventHandlerWrapper implements EventLoopEventHandler {
           return true;
         }
         connection = connection.fillBuffers(buffers);
-
         rtcEngineEventHandler.onRejoinChannelSuccess!(connection, elapsed);
         return true;
 
@@ -126,7 +124,6 @@ class RtcEngineEventHandlerWrapper implements EventLoopEventHandler {
           return true;
         }
         connection = connection.fillBuffers(buffers);
-
         rtcEngineEventHandler.onAudioQuality!(
             connection, remoteUid, quality, delay, lost);
         return true;
@@ -167,7 +164,6 @@ class RtcEngineEventHandlerWrapper implements EventLoopEventHandler {
         }
         connection = connection.fillBuffers(buffers);
         speakers = speakers.map((e) => e.fillBuffers(buffers)).toList();
-
         rtcEngineEventHandler.onAudioVolumeIndication!(
             connection, speakers, speakerNumber, totalVolume);
         return true;
@@ -311,7 +307,6 @@ class RtcEngineEventHandlerWrapper implements EventLoopEventHandler {
           return true;
         }
         connection = connection.fillBuffers(buffers);
-
         rtcEngineEventHandler.onNetworkQuality!(
             connection, remoteUid, txQuality, rxQuality);
         return true;
@@ -445,7 +440,6 @@ class RtcEngineEventHandlerWrapper implements EventLoopEventHandler {
           return true;
         }
         connection = connection.fillBuffers(buffers);
-
         rtcEngineEventHandler.onFirstRemoteVideoDecoded!(
             connection, remoteUid, width, height, elapsed);
         return true;
@@ -473,7 +467,6 @@ class RtcEngineEventHandlerWrapper implements EventLoopEventHandler {
           return true;
         }
         connection = connection.fillBuffers(buffers);
-
         rtcEngineEventHandler.onVideoSizeChanged!(
             connection, sourceType, uid, width, height, rotation);
         return true;
@@ -518,7 +511,6 @@ class RtcEngineEventHandlerWrapper implements EventLoopEventHandler {
           return true;
         }
         connection = connection.fillBuffers(buffers);
-
         rtcEngineEventHandler.onRemoteVideoStateChanged!(
             connection, remoteUid, state, reason, elapsed);
         return true;
@@ -544,7 +536,6 @@ class RtcEngineEventHandlerWrapper implements EventLoopEventHandler {
           return true;
         }
         connection = connection.fillBuffers(buffers);
-
         rtcEngineEventHandler.onFirstRemoteVideoFrame!(
             connection, remoteUid, width, height, elapsed);
         return true;
@@ -564,7 +555,6 @@ class RtcEngineEventHandlerWrapper implements EventLoopEventHandler {
           return true;
         }
         connection = connection.fillBuffers(buffers);
-
         rtcEngineEventHandler.onUserJoined!(connection, remoteUid, elapsed);
         return true;
 
@@ -583,7 +573,6 @@ class RtcEngineEventHandlerWrapper implements EventLoopEventHandler {
           return true;
         }
         connection = connection.fillBuffers(buffers);
-
         rtcEngineEventHandler.onUserOffline!(connection, remoteUid, reason);
         return true;
 
@@ -602,7 +591,6 @@ class RtcEngineEventHandlerWrapper implements EventLoopEventHandler {
           return true;
         }
         connection = connection.fillBuffers(buffers);
-
         rtcEngineEventHandler.onUserMuteAudio!(connection, remoteUid, muted);
         return true;
 
@@ -621,7 +609,6 @@ class RtcEngineEventHandlerWrapper implements EventLoopEventHandler {
           return true;
         }
         connection = connection.fillBuffers(buffers);
-
         rtcEngineEventHandler.onUserMuteVideo!(connection, remoteUid, muted);
         return true;
 
@@ -640,7 +627,6 @@ class RtcEngineEventHandlerWrapper implements EventLoopEventHandler {
           return true;
         }
         connection = connection.fillBuffers(buffers);
-
         rtcEngineEventHandler.onUserEnableVideo!(
             connection, remoteUid, enabled);
         return true;
@@ -660,7 +646,6 @@ class RtcEngineEventHandlerWrapper implements EventLoopEventHandler {
           return true;
         }
         connection = connection.fillBuffers(buffers);
-
         rtcEngineEventHandler.onUserStateChanged!(connection, remoteUid, state);
         return true;
 
@@ -679,7 +664,6 @@ class RtcEngineEventHandlerWrapper implements EventLoopEventHandler {
           return true;
         }
         connection = connection.fillBuffers(buffers);
-
         rtcEngineEventHandler.onUserEnableLocalVideo!(
             connection, remoteUid, enabled);
         return true;
@@ -733,7 +717,6 @@ class RtcEngineEventHandlerWrapper implements EventLoopEventHandler {
         if (source == null || stats == null) {
           return true;
         }
-
         stats = stats.fillBuffers(buffers);
         rtcEngineEventHandler.onLocalVideoStats!(source, stats);
         return true;
@@ -826,9 +809,7 @@ class RtcEngineEventHandlerWrapper implements EventLoopEventHandler {
             numFaces == null) {
           return true;
         }
-
         vecRectangle = vecRectangle.map((e) => e.fillBuffers(buffers)).toList();
-
         rtcEngineEventHandler.onFacePositionChanged!(
             imageWidth, imageHeight, vecRectangle, vecDistance, numFaces);
         return true;
@@ -951,7 +932,6 @@ class RtcEngineEventHandlerWrapper implements EventLoopEventHandler {
           return true;
         }
         connection = connection.fillBuffers(buffers);
-
         rtcEngineEventHandler.onStreamMessage!(
             connection, remoteUid, streamId, data, length, sentTs);
         return true;
@@ -979,7 +959,6 @@ class RtcEngineEventHandlerWrapper implements EventLoopEventHandler {
           return true;
         }
         connection = connection.fillBuffers(buffers);
-
         rtcEngineEventHandler.onStreamMessageError!(
             connection, remoteUid, streamId, code, missed, cached);
         return true;
@@ -1015,7 +994,6 @@ class RtcEngineEventHandlerWrapper implements EventLoopEventHandler {
           return true;
         }
         connection = connection.fillBuffers(buffers);
-
         rtcEngineEventHandler.onTokenPrivilegeWillExpire!(connection, token);
         return true;
 
@@ -1034,7 +1012,6 @@ class RtcEngineEventHandlerWrapper implements EventLoopEventHandler {
           return true;
         }
         connection = connection.fillBuffers(buffers);
-
         rtcEngineEventHandler.onLicenseValidationFailure!(connection, reason);
         return true;
 
@@ -1053,7 +1030,6 @@ class RtcEngineEventHandlerWrapper implements EventLoopEventHandler {
           return true;
         }
         connection = connection.fillBuffers(buffers);
-
         rtcEngineEventHandler.onFirstLocalAudioFramePublished!(
             connection, elapsed);
         return true;
@@ -1074,7 +1050,6 @@ class RtcEngineEventHandlerWrapper implements EventLoopEventHandler {
           return true;
         }
         connection = connection.fillBuffers(buffers);
-
         rtcEngineEventHandler.onFirstRemoteAudioDecoded!(
             connection, uid, elapsed);
         return true;
@@ -1094,7 +1069,6 @@ class RtcEngineEventHandlerWrapper implements EventLoopEventHandler {
           return true;
         }
         connection = connection.fillBuffers(buffers);
-
         rtcEngineEventHandler.onFirstRemoteAudioFrame!(
             connection, userId, elapsed);
         return true;
@@ -1114,7 +1088,6 @@ class RtcEngineEventHandlerWrapper implements EventLoopEventHandler {
           return true;
         }
         connection = connection.fillBuffers(buffers);
-
         rtcEngineEventHandler.onLocalAudioStateChanged!(
             connection, state, reason);
         return true;
@@ -1141,7 +1114,6 @@ class RtcEngineEventHandlerWrapper implements EventLoopEventHandler {
           return true;
         }
         connection = connection.fillBuffers(buffers);
-
         rtcEngineEventHandler.onRemoteAudioStateChanged!(
             connection, remoteUid, state, reason, elapsed);
         return true;
@@ -1160,7 +1132,6 @@ class RtcEngineEventHandlerWrapper implements EventLoopEventHandler {
           return true;
         }
         connection = connection.fillBuffers(buffers);
-
         rtcEngineEventHandler.onActiveSpeaker!(connection, uid);
         return true;
 
@@ -1203,7 +1174,6 @@ class RtcEngineEventHandlerWrapper implements EventLoopEventHandler {
           return true;
         }
         connection = connection.fillBuffers(buffers);
-
         rtcEngineEventHandler.onSnapshotTaken!(
             connection, uid, filePath, width, height, errCode);
         return true;
@@ -1248,7 +1218,6 @@ class RtcEngineEventHandlerWrapper implements EventLoopEventHandler {
           return true;
         }
         connection = connection.fillBuffers(buffers);
-
         rtcEngineEventHandler.onClientRoleChangeFailed!(
             connection, reason, currentRole);
         return true;
@@ -1415,7 +1384,6 @@ class RtcEngineEventHandlerWrapper implements EventLoopEventHandler {
           return true;
         }
         connection = connection.fillBuffers(buffers);
-
         rtcEngineEventHandler.onRemoteAudioTransportStats!(
             connection, remoteUid, delay, lost, rxKBitRate);
         return true;
@@ -1442,7 +1410,6 @@ class RtcEngineEventHandlerWrapper implements EventLoopEventHandler {
           return true;
         }
         connection = connection.fillBuffers(buffers);
-
         rtcEngineEventHandler.onRemoteVideoTransportStats!(
             connection, remoteUid, delay, lost, rxKBitRate);
         return true;
@@ -1462,7 +1429,6 @@ class RtcEngineEventHandlerWrapper implements EventLoopEventHandler {
           return true;
         }
         connection = connection.fillBuffers(buffers);
-
         rtcEngineEventHandler.onConnectionStateChanged!(
             connection, state, reason);
         return true;
@@ -1486,7 +1452,6 @@ class RtcEngineEventHandlerWrapper implements EventLoopEventHandler {
           return true;
         }
         connection = connection.fillBuffers(buffers);
-
         rtcEngineEventHandler.onWlAccMessage!(
             connection, reason, action, wlAccMsg);
         return true;
@@ -1528,7 +1493,6 @@ class RtcEngineEventHandlerWrapper implements EventLoopEventHandler {
           return true;
         }
         connection = connection.fillBuffers(buffers);
-
         rtcEngineEventHandler.onNetworkTypeChanged!(connection, type);
         return true;
 
@@ -1546,7 +1510,6 @@ class RtcEngineEventHandlerWrapper implements EventLoopEventHandler {
           return true;
         }
         connection = connection.fillBuffers(buffers);
-
         rtcEngineEventHandler.onEncryptionError!(connection, errorType);
         return true;
 
@@ -1596,7 +1559,6 @@ class RtcEngineEventHandlerWrapper implements EventLoopEventHandler {
         if (uid == null || info == null) {
           return true;
         }
-
         info = info.fillBuffers(buffers);
         rtcEngineEventHandler.onUserInfoUpdated!(uid, info);
         return true;
@@ -1618,7 +1580,6 @@ class RtcEngineEventHandlerWrapper implements EventLoopEventHandler {
           return true;
         }
         connection = connection.fillBuffers(buffers);
-
         rtcEngineEventHandler.onUserAccountUpdated!(
             connection, remoteUid, remoteUserAccount);
         return true;
@@ -1664,7 +1625,6 @@ class RtcEngineEventHandlerWrapper implements EventLoopEventHandler {
           return true;
         }
         stream = stream.fillBuffers(buffers);
-
         rtcEngineEventHandler.onLocalVideoTranscoderError!(stream, error);
         return true;
 
@@ -1687,7 +1647,6 @@ class RtcEngineEventHandlerWrapper implements EventLoopEventHandler {
           return true;
         }
         connection = connection.fillBuffers(buffers);
-
         rtcEngineEventHandler.onUploadLogResult!(
             connection, requestId, success, reason);
         return true;
@@ -1918,7 +1877,6 @@ class RtcEngineEventHandlerWrapper implements EventLoopEventHandler {
           return true;
         }
         connection = connection.fillBuffers(buffers);
-
         rtcEngineEventHandler.onSetRtmFlagResult!(connection, code);
         return true;
     }

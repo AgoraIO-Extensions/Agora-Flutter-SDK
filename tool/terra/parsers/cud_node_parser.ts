@@ -197,3 +197,7 @@ function deleteNodeInParseResult(
 
   return parseResult;
 }
+
+export function isNodeMatched(sourceNode: CXXTerraNode, nodeToMatch: any): boolean {
+  return _.isMatch(sourceNode, nodeToMatch);
+}

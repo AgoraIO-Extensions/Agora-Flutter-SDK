@@ -20,12 +20,6 @@ parsers:
       nativeSdkVersion: 4.3.0
       legacyRenders:
         - DartSyntaxRender
-        - DartEventHandlerParamJsonRender
-        - DartCallApiIrisMethodChannelRender
-        - DartEventHandlerIrisMethodChannelRender
-        - DartStructToJsonSerializableRender
-        - DartCallApiEventHandlerBufferExtRender
-        - DartForwardExportRender
 
 renderers:
   - name: IrisDocRenderer
