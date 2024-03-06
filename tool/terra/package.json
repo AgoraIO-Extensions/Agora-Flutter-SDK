@@ -22,9 +22,5 @@
     "ts-node": "^10.9.1",
     "typescript": "^5.1.6"
   },
-  "packageManager": "yarn@4.1.1",
-  "resolutions": {
-    "@agoraio-extensions/terra_shared_configs": "portal:/Users/fenglang/codes/aw/terra_shared_configs",
-    "@agoraio-extensions/cxx-parser": "portal:/Users/fenglang/codes/aw/terra/cxx-parser"
-  }
+  "packageManager": "yarn@4.1.1"
 }

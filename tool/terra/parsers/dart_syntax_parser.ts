@@ -105,7 +105,6 @@ function upperCamelCaseToLowercaseWithUnderscores(
 
   let baseRegex = new RegExp("((I[A-Z]|[A-Z])?[a-z0-9]*)");
 
-  //   const baseRegex = /((I[A-Z]|[A-Z])?[a-z0-9]*)/g;
   let baseMatch;
 
   while ((baseMatch = baseRegex.exec(toSearch)) !== null) {
@@ -153,11 +152,6 @@ const _cppStdTypeToDartTypeMappping: Map<string, string> = new Map([
 ]);
 
 function _dartTypeName(parseResult: ParseResult, type: SimpleType): string {
-  // let dartType = type.name.trimNamespace();
-  // if (type.kind == SimpleTypeKind.template_t) {
-  //   dartType = type.template_arguments[0]?.trimNamespace() ?? dartType;
-  // }
-
   let typeNode = parseResult.resolveNodeByType(type);
   let dartType = typeNode.name.trimNamespace();
   if (typeNode.__TYPE == CXXTYPE.Clazz || typeNode.__TYPE == CXXTYPE.Struct) {
@@ -168,11 +162,7 @@ function _dartTypeName(parseResult: ParseResult, type: SimpleType): string {
     } else {
       dartType = _dartClassName(dartType);
     }
-  }
-  // else if (typeNode.__TYPE == CXXTYPE.TypeAlias) {
-  //   dartType = type.name.trimNamespace();
-  // }
-  else if (
+  } else if (
     typeNode.isSimpleType() &&
     typeNode.asSimpleType().kind == SimpleTypeKind.template_t &&
     typeNode.asSimpleType().template_arguments.length > 0
