@@ -888,38 +888,6 @@ void rtcEngineSmokeTestCases() {
   );
 
   testWidgets(
-    'RtcEngine.startPreviewWithoutSourceType',
-    (WidgetTester tester) async {
-      String engineAppId = const String.fromEnvironment('TEST_APP_ID',
-          defaultValue: '<YOUR_APP_ID>');
-
-      RtcEngine rtcEngine = createAgoraRtcEngine();
-      await rtcEngine.initialize(RtcEngineContext(
-        appId: engineAppId,
-        areaCode: AreaCode.areaCodeGlob.value(),
-      ));
-      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
-
-      try {
-        await rtcEngine.startPreviewWithoutSourceType();
-      } catch (e) {
-        if (e is! AgoraRtcException) {
-          debugPrint(
-              '[RtcEngine.startPreviewWithoutSourceType] error: ${e.toString()}');
-          rethrow;
-        }
-
-        if (e.code != -4) {
-          // Only not supported error supported.
-          rethrow;
-        }
-      }
-
-      await rtcEngine.release();
-    },
-  );
-
-  testWidgets(
     'RtcEngine.stopPreview',
     (WidgetTester tester) async {
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
@@ -6895,101 +6863,6 @@ void rtcEngineSmokeTestCases() {
   );
 
   testWidgets(
-    'RtcEngine.startScreenCaptureBySourceType',
-    (WidgetTester tester) async {
-      String engineAppId = const String.fromEnvironment('TEST_APP_ID',
-          defaultValue: '<YOUR_APP_ID>');
-
-      RtcEngine rtcEngine = createAgoraRtcEngine();
-      await rtcEngine.initialize(RtcEngineContext(
-        appId: engineAppId,
-        areaCode: AreaCode.areaCodeGlob.value(),
-      ));
-      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
-
-      try {
-        const VideoSourceType sourceType =
-            VideoSourceType.videoSourceCameraPrimary;
-        const int screenRectX = 10;
-        const int screenRectY = 10;
-        const int screenRectWidth = 10;
-        const int screenRectHeight = 10;
-        const Rectangle configScreenRect = Rectangle(
-          x: screenRectX,
-          y: screenRectY,
-          width: screenRectWidth,
-          height: screenRectHeight,
-        );
-        const int dimensionsWidth = 10;
-        const int dimensionsHeight = 10;
-        const VideoDimensions paramsDimensions = VideoDimensions(
-          width: dimensionsWidth,
-          height: dimensionsHeight,
-        );
-        const int paramsFrameRate = 10;
-        const int paramsBitrate = 10;
-        const bool paramsCaptureMouseCursor = true;
-        const bool paramsWindowFocus = true;
-        const List<int> paramsExcludeWindowList = [];
-        const int paramsExcludeWindowCount = 10;
-        const int paramsHighLightWidth = 10;
-        const int paramsHighLightColor = 10;
-        const bool paramsEnableHighLight = true;
-        const ScreenCaptureParameters configParams = ScreenCaptureParameters(
-          dimensions: paramsDimensions,
-          frameRate: paramsFrameRate,
-          bitrate: paramsBitrate,
-          captureMouseCursor: paramsCaptureMouseCursor,
-          windowFocus: paramsWindowFocus,
-          excludeWindowList: paramsExcludeWindowList,
-          excludeWindowCount: paramsExcludeWindowCount,
-          highLightWidth: paramsHighLightWidth,
-          highLightColor: paramsHighLightColor,
-          enableHighLight: paramsEnableHighLight,
-        );
-        const int regionRectX = 10;
-        const int regionRectY = 10;
-        const int regionRectWidth = 10;
-        const int regionRectHeight = 10;
-        const Rectangle configRegionRect = Rectangle(
-          x: regionRectX,
-          y: regionRectY,
-          width: regionRectWidth,
-          height: regionRectHeight,
-        );
-        const bool configIsCaptureWindow = true;
-        const int configDisplayId = 10;
-        const int configWindowId = 10;
-        const ScreenCaptureConfiguration config = ScreenCaptureConfiguration(
-          isCaptureWindow: configIsCaptureWindow,
-          displayId: configDisplayId,
-          screenRect: configScreenRect,
-          windowId: configWindowId,
-          params: configParams,
-          regionRect: configRegionRect,
-        );
-        await rtcEngine.startScreenCaptureBySourceType(
-          sourceType: sourceType,
-          config: config,
-        );
-      } catch (e) {
-        if (e is! AgoraRtcException) {
-          debugPrint(
-              '[RtcEngine.startScreenCaptureBySourceType] error: ${e.toString()}');
-          rethrow;
-        }
-
-        if (e.code != -4) {
-          // Only not supported error supported.
-          rethrow;
-        }
-      }
-
-      await rtcEngine.release();
-    },
-  );
-
-  testWidgets(
     'RtcEngine.updateScreenCapture',
     (WidgetTester tester) async {
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
@@ -7142,42 +7015,6 @@ void rtcEngineSmokeTestCases() {
       } catch (e) {
         if (e is! AgoraRtcException) {
           debugPrint('[RtcEngine.stopScreenCapture] error: ${e.toString()}');
-          rethrow;
-        }
-
-        if (e.code != -4) {
-          // Only not supported error supported.
-          rethrow;
-        }
-      }
-
-      await rtcEngine.release();
-    },
-  );
-
-  testWidgets(
-    'RtcEngine.stopScreenCaptureBySourceType',
-    (WidgetTester tester) async {
-      String engineAppId = const String.fromEnvironment('TEST_APP_ID',
-          defaultValue: '<YOUR_APP_ID>');
-
-      RtcEngine rtcEngine = createAgoraRtcEngine();
-      await rtcEngine.initialize(RtcEngineContext(
-        appId: engineAppId,
-        areaCode: AreaCode.areaCodeGlob.value(),
-      ));
-      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
-
-      try {
-        const VideoSourceType sourceType =
-            VideoSourceType.videoSourceCameraPrimary;
-        await rtcEngine.stopScreenCaptureBySourceType(
-          sourceType,
-        );
-      } catch (e) {
-        if (e is! AgoraRtcException) {
-          debugPrint(
-              '[RtcEngine.stopScreenCaptureBySourceType] error: ${e.toString()}');
           rethrow;
         }
 
@@ -10357,6 +10194,137 @@ void rtcEngineSmokeTestCases() {
   );
 
   testWidgets(
+    'RtcEngine.startScreenCaptureBySourceType',
+    (WidgetTester tester) async {
+      String engineAppId = const String.fromEnvironment('TEST_APP_ID',
+          defaultValue: '<YOUR_APP_ID>');
+
+      RtcEngine rtcEngine = createAgoraRtcEngine();
+      await rtcEngine.initialize(RtcEngineContext(
+        appId: engineAppId,
+        areaCode: AreaCode.areaCodeGlob.value(),
+      ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
+
+      try {
+        const VideoSourceType sourceType =
+            VideoSourceType.videoSourceCameraPrimary;
+        const int screenRectX = 10;
+        const int screenRectY = 10;
+        const int screenRectWidth = 10;
+        const int screenRectHeight = 10;
+        const Rectangle configScreenRect = Rectangle(
+          x: screenRectX,
+          y: screenRectY,
+          width: screenRectWidth,
+          height: screenRectHeight,
+        );
+        const int dimensionsWidth = 10;
+        const int dimensionsHeight = 10;
+        const VideoDimensions paramsDimensions = VideoDimensions(
+          width: dimensionsWidth,
+          height: dimensionsHeight,
+        );
+        const int paramsFrameRate = 10;
+        const int paramsBitrate = 10;
+        const bool paramsCaptureMouseCursor = true;
+        const bool paramsWindowFocus = true;
+        const List<int> paramsExcludeWindowList = [];
+        const int paramsExcludeWindowCount = 10;
+        const int paramsHighLightWidth = 10;
+        const int paramsHighLightColor = 10;
+        const bool paramsEnableHighLight = true;
+        const ScreenCaptureParameters configParams = ScreenCaptureParameters(
+          dimensions: paramsDimensions,
+          frameRate: paramsFrameRate,
+          bitrate: paramsBitrate,
+          captureMouseCursor: paramsCaptureMouseCursor,
+          windowFocus: paramsWindowFocus,
+          excludeWindowList: paramsExcludeWindowList,
+          excludeWindowCount: paramsExcludeWindowCount,
+          highLightWidth: paramsHighLightWidth,
+          highLightColor: paramsHighLightColor,
+          enableHighLight: paramsEnableHighLight,
+        );
+        const int regionRectX = 10;
+        const int regionRectY = 10;
+        const int regionRectWidth = 10;
+        const int regionRectHeight = 10;
+        const Rectangle configRegionRect = Rectangle(
+          x: regionRectX,
+          y: regionRectY,
+          width: regionRectWidth,
+          height: regionRectHeight,
+        );
+        const bool configIsCaptureWindow = true;
+        const int configDisplayId = 10;
+        const int configWindowId = 10;
+        const ScreenCaptureConfiguration config = ScreenCaptureConfiguration(
+          isCaptureWindow: configIsCaptureWindow,
+          displayId: configDisplayId,
+          screenRect: configScreenRect,
+          windowId: configWindowId,
+          params: configParams,
+          regionRect: configRegionRect,
+        );
+        await rtcEngine.startScreenCaptureBySourceType(
+          sourceType: sourceType,
+          config: config,
+        );
+      } catch (e) {
+        if (e is! AgoraRtcException) {
+          debugPrint(
+              '[RtcEngine.startScreenCaptureBySourceType] error: ${e.toString()}');
+          rethrow;
+        }
+
+        if (e.code != -4) {
+          // Only not supported error supported.
+          rethrow;
+        }
+      }
+
+      await rtcEngine.release();
+    },
+  );
+
+  testWidgets(
+    'RtcEngine.stopScreenCaptureBySourceType',
+    (WidgetTester tester) async {
+      String engineAppId = const String.fromEnvironment('TEST_APP_ID',
+          defaultValue: '<YOUR_APP_ID>');
+
+      RtcEngine rtcEngine = createAgoraRtcEngine();
+      await rtcEngine.initialize(RtcEngineContext(
+        appId: engineAppId,
+        areaCode: AreaCode.areaCodeGlob.value(),
+      ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
+
+      try {
+        const VideoSourceType sourceType =
+            VideoSourceType.videoSourceCameraPrimary;
+        await rtcEngine.stopScreenCaptureBySourceType(
+          sourceType,
+        );
+      } catch (e) {
+        if (e is! AgoraRtcException) {
+          debugPrint(
+              '[RtcEngine.stopScreenCaptureBySourceType] error: ${e.toString()}');
+          rethrow;
+        }
+
+        if (e.code != -4) {
+          // Only not supported error supported.
+          rethrow;
+        }
+      }
+
+      await rtcEngine.release();
+    },
+  );
+
+  testWidgets(
     'RtcEngine.release',
     (WidgetTester tester) async {
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
@@ -10377,6 +10345,38 @@ void rtcEngineSmokeTestCases() {
       } catch (e) {
         if (e is! AgoraRtcException) {
           debugPrint('[RtcEngine.release] error: ${e.toString()}');
+          rethrow;
+        }
+
+        if (e.code != -4) {
+          // Only not supported error supported.
+          rethrow;
+        }
+      }
+
+      await rtcEngine.release();
+    },
+  );
+
+  testWidgets(
+    'RtcEngine.startPreviewWithoutSourceType',
+    (WidgetTester tester) async {
+      String engineAppId = const String.fromEnvironment('TEST_APP_ID',
+          defaultValue: '<YOUR_APP_ID>');
+
+      RtcEngine rtcEngine = createAgoraRtcEngine();
+      await rtcEngine.initialize(RtcEngineContext(
+        appId: engineAppId,
+        areaCode: AreaCode.areaCodeGlob.value(),
+      ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
+
+      try {
+        await rtcEngine.startPreviewWithoutSourceType();
+      } catch (e) {
+        if (e is! AgoraRtcException) {
+          debugPrint(
+              '[RtcEngine.startPreviewWithoutSourceType] error: ${e.toString()}');
           rethrow;
         }
 

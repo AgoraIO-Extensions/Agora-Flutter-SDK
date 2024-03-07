@@ -1,17 +1,5 @@
 /// Event Ids mapping of iris api id.
 const eventIdsMapping = {
-  "PacketObserver_onSendAudioPacket": [
-    "PacketObserver_onSendAudioPacket_4ad95e3"
-  ],
-  "PacketObserver_onSendVideoPacket": [
-    "PacketObserver_onSendVideoPacket_4ad95e3"
-  ],
-  "PacketObserver_onReceiveAudioPacket": [
-    "PacketObserver_onReceiveAudioPacket_4ad95e3"
-  ],
-  "PacketObserver_onReceiveVideoPacket": [
-    "PacketObserver_onReceiveVideoPacket_4ad95e3"
-  ],
   "AudioEncodedFrameObserver_onRecordAudioEncodedFrame": [
     "AudioEncodedFrameObserver_onRecordAudioEncodedFrame_d930ddc"
   ],
@@ -21,82 +9,21 @@ const eventIdsMapping = {
   "AudioEncodedFrameObserver_onMixedAudioEncodedFrame": [
     "AudioEncodedFrameObserver_onMixedAudioEncodedFrame_d930ddc"
   ],
-  "LicenseCallback_onCertificateRequired": [
-    "LicenseCallback_onCertificateRequired"
-  ],
-  "LicenseCallback_onLicenseRequest": ["LicenseCallback_onLicenseRequest"],
-  "LicenseCallback_onLicenseValidated": ["LicenseCallback_onLicenseValidated"],
-  "LicenseCallback_onLicenseError": ["LicenseCallback_onLicenseError_46f8ab7"],
-  "VideoFrameObserver_onFrame": ["VideoFrameObserver_onFrame_d715140"],
-  "VideoFrameObserver_isExternal": [
-    "VideoFrameObserver_isExternal",
-    "VideoFrameObserver_isExternal"
-  ],
-  "VideoFrameObserver_getVideoFormatPreference": [
-    "VideoFrameObserver_getVideoFormatPreference",
-    "VideoFrameObserver_getVideoFormatPreference"
-  ],
   "AudioPcmFrameSink_onFrame": ["AudioPcmFrameSink_onFrame_95f515a"],
   "AudioFrameObserverBase_onRecordAudioFrame": [
-    "AudioFrameObserver_onRecordAudioFrame_4c8de15"
+    "AudioFrameObserverBase_onRecordAudioFrame_4c8de15"
   ],
   "AudioFrameObserverBase_onPlaybackAudioFrame": [
-    "AudioFrameObserver_onPlaybackAudioFrame_4c8de15"
+    "AudioFrameObserverBase_onPlaybackAudioFrame_4c8de15"
   ],
   "AudioFrameObserverBase_onMixedAudioFrame": [
-    "AudioFrameObserver_onMixedAudioFrame_4c8de15"
+    "AudioFrameObserverBase_onMixedAudioFrame_4c8de15"
   ],
   "AudioFrameObserverBase_onEarMonitoringAudioFrame": [
-    "AudioFrameObserver_onEarMonitoringAudioFrame_5405a47"
-  ],
-  "AudioFrameObserverBase_onPlaybackAudioFrameBeforeMixing": [
-    "AudioFrameObserver_onPlaybackAudioFrameBeforeMixing_9215cc7"
-  ],
-  "AudioFrameObserverBase_getObservedAudioFramePosition": [
-    "AudioFrameObserver_getObservedAudioFramePosition"
-  ],
-  "AudioFrameObserverBase_getPlaybackAudioParams": [
-    "AudioFrameObserver_getPlaybackAudioParams"
-  ],
-  "AudioFrameObserverBase_getRecordAudioParams": [
-    "AudioFrameObserver_getRecordAudioParams"
-  ],
-  "AudioFrameObserverBase_getMixedAudioParams": [
-    "AudioFrameObserver_getMixedAudioParams"
-  ],
-  "AudioFrameObserverBase_getEarMonitoringAudioParams": [
-    "AudioFrameObserver_getEarMonitoringAudioParams"
+    "AudioFrameObserverBase_onEarMonitoringAudioFrame_5405a47"
   ],
   "AudioFrameObserver_onPlaybackAudioFrameBeforeMixing": [
-    "AudioFrameObserver_onPlaybackAudioFrameBeforeMixing_85ec0fc",
-    "AudioFrameObserver_onPlaybackAudioFrameBeforeMixing_9215cc7"
-  ],
-  "AudioFrameObserver_onRecordAudioFrame": [
-    "AudioFrameObserver_onRecordAudioFrame_4c8de15"
-  ],
-  "AudioFrameObserver_onPlaybackAudioFrame": [
-    "AudioFrameObserver_onPlaybackAudioFrame_4c8de15"
-  ],
-  "AudioFrameObserver_onMixedAudioFrame": [
-    "AudioFrameObserver_onMixedAudioFrame_4c8de15"
-  ],
-  "AudioFrameObserver_onEarMonitoringAudioFrame": [
-    "AudioFrameObserver_onEarMonitoringAudioFrame_5405a47"
-  ],
-  "AudioFrameObserver_getObservedAudioFramePosition": [
-    "AudioFrameObserver_getObservedAudioFramePosition"
-  ],
-  "AudioFrameObserver_getPlaybackAudioParams": [
-    "AudioFrameObserver_getPlaybackAudioParams"
-  ],
-  "AudioFrameObserver_getRecordAudioParams": [
-    "AudioFrameObserver_getRecordAudioParams"
-  ],
-  "AudioFrameObserver_getMixedAudioParams": [
-    "AudioFrameObserver_getMixedAudioParams"
-  ],
-  "AudioFrameObserver_getEarMonitoringAudioParams": [
-    "AudioFrameObserver_getEarMonitoringAudioParams"
+    "AudioFrameObserver_onPlaybackAudioFrameBeforeMixing_85ec0fc"
   ],
   "AudioSpectrumObserver_onLocalAudioSpectrum": [
     "AudioSpectrumObserver_onLocalAudioSpectrum_5822fed"
@@ -122,29 +49,11 @@ const eventIdsMapping = {
   "VideoFrameObserver_onTranscodedVideoFrame": [
     "VideoFrameObserver_onTranscodedVideoFrame_27754d8"
   ],
-  "VideoFrameObserver_getVideoFrameProcessMode": [
-    "VideoFrameObserver_getVideoFrameProcessMode"
-  ],
-  "VideoFrameObserver_getRotationApplied": [
-    "VideoFrameObserver_getRotationApplied"
-  ],
-  "VideoFrameObserver_getMirrorApplied": [
-    "VideoFrameObserver_getMirrorApplied"
-  ],
-  "VideoFrameObserver_getObservedFramePosition": [
-    "VideoFrameObserver_getObservedFramePosition"
-  ],
   "MediaRecorderObserver_onRecorderStateChanged": [
     "MediaRecorderObserver_onRecorderStateChanged_c38849f"
   ],
   "MediaRecorderObserver_onRecorderInfoUpdated": [
     "MediaRecorderObserver_onRecorderInfoUpdated_64fa74a"
-  ],
-  "MediaPlayerCustomDataProvider_onReadData": [
-    "MediaPlayerCustomDataProvider_onReadData_6e75338"
-  ],
-  "MediaPlayerCustomDataProvider_onSeek": [
-    "MediaPlayerCustomDataProvider_onSeek_624d569"
   ],
   "H265TranscoderObserver_onEnableTranscode": [
     "H265TranscoderObserver_onEnableTranscode_6ba6646"
@@ -193,24 +102,6 @@ const eventIdsMapping = {
   ],
   "MediaPlayerSourceObserver_onAudioVolumeIndication": [
     "MediaPlayerSourceObserver_onAudioVolumeIndication_46f8ab7"
-  ],
-  "MediaStreamingSourceObserver_onStateChanged": [
-    "MediaStreamingSourceObserver_onStateChanged_245f90c"
-  ],
-  "MediaStreamingSourceObserver_onOpenDone": [
-    "MediaStreamingSourceObserver_onOpenDone_2dddc98"
-  ],
-  "MediaStreamingSourceObserver_onSeekDone": [
-    "MediaStreamingSourceObserver_onSeekDone_2dddc98"
-  ],
-  "MediaStreamingSourceObserver_onEofOnce": [
-    "MediaStreamingSourceObserver_onEofOnce_303b92e"
-  ],
-  "MediaStreamingSourceObserver_onProgress": [
-    "MediaStreamingSourceObserver_onProgress_f631116"
-  ],
-  "MediaStreamingSourceObserver_onMetaData": [
-    "MediaStreamingSourceObserver_onMetaData_469a01b"
   ],
   "MusicContentCenterEventHandler_onMusicChartsResult": [
     "MusicContentCenterEventHandler_onMusicChartsResult_fb18135"

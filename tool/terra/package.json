@@ -1,5 +1,5 @@
 {
-  "name": "terra-test",
+  "name": "terra-script",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
@@ -22,5 +22,5 @@
     "ts-node": "^10.9.1",
     "typescript": "^5.1.6"
   },
-  "packageManager": "yarn@4.1.0"
+  "packageManager": "yarn@4.1.1"
 }

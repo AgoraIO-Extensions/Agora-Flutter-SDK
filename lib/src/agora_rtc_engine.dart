@@ -3343,18 +3343,6 @@ abstract class RtcEngine {
   Future<void> startPreview(
       {VideoSourceType sourceType = VideoSourceType.videoSourceCameraPrimary});
 
-  /// Enables the local video preview.
-  ///
-  /// You can call this method to enable local video preview. Call this method after the following:
-  ///  Call setupLocalVideo to initialize the local preview.
-  ///  Call enableVideo to enable the video module.
-  ///  The local preview enables the mirror mode by default.
-  ///  After the local video preview is enabled, if you call leaveChannel to exit the channel, the local preview remains until you call stopPreview to disable it.
-  ///
-  /// Returns
-  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown; and you need to catch the exception and handle it accordingly.
-  Future<void> startPreviewWithoutSourceType();
-
   /// Stops the local video preview.
   ///
   /// After calling startPreview to start the preview, if you want to close the local video preview, call this method. Call this method before joining a channel or after leaving a channel.
@@ -5413,23 +5401,6 @@ abstract class RtcEngine {
   /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown; and you need to catch the exception and handle it accordingly.
   Future<void> startScreenCapture(ScreenCaptureParameters2 captureParams);
 
-  /// Starts screen capture.
-  ///
-  /// This method, as well as startScreenCapture, startScreenCaptureByDisplayId, and startScreenCaptureByWindowId, can all be used to start screen capture, with the following differences: startScreenCapture only applies to Android and iOS, whereas this method only applies to Windows and iOS. startScreenCaptureByDisplayId and startScreenCaptureByWindowId only support capturing video from a single screen or window. By calling this method and specifying the sourceType parameter, you can capture multiple video streams used for local video mixing or multi-channel publishing.
-  ///  This method applies to the macOS and Windows only.
-  ///  If you call this method to start screen capture, Agora recommends that you call stopScreenCaptureBySourceType to stop the capture and avoid using stopScreenCapture.
-  ///
-  /// * [sourceType] The type of the video source. See VideoSourceType.
-  ///  Windows supports up to four screen capture video streams.
-  ///  macOS supports only one screen capture video stream. You can only set this parameter to videoSourceScreen (2).
-  /// * [config] The configuration of the captured screen. See ScreenCaptureConfiguration.
-  ///
-  /// Returns
-  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown; and you need to catch the exception and handle it accordingly.
-  Future<void> startScreenCaptureBySourceType(
-      {required VideoSourceType sourceType,
-      required ScreenCaptureConfiguration config});
-
   /// Updates the screen capturing parameters.
   ///
   /// If the system audio is not captured when screen sharing is enabled, and then you want to update the parameter configuration and publish the system audio, you can refer to the following steps:
@@ -5468,18 +5439,6 @@ abstract class RtcEngine {
   /// Returns
   /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown; and you need to catch the exception and handle it accordingly.
   Future<void> stopScreenCapture();
-
-  /// Stops screen capture.
-  ///
-  /// After calling startScreenCaptureBySourceType to start capturing video from one or more screens, you can call this method and set the sourceType parameter to stop capturing from the specified screens.
-  ///  This method applies to the macOS and Windows only.
-  ///  If you call startScreenCapture, startScreenCaptureByWindowId, or startScreenCaptureByDisplayId to start screen capure, Agora recommends that you call stopScreenCapture instead to stop the capture.
-  ///
-  /// * [sourceType] The type of the video source. See VideoSourceType.
-  ///
-  /// Returns
-  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown; and you need to catch the exception and handle it accordingly.
-  Future<void> stopScreenCaptureBySourceType(VideoSourceType sourceType);
 
   /// Retrieves the call ID.
   ///
@@ -6272,6 +6231,35 @@ abstract class RtcEngine {
   /// true : The current device supports the specified feature. false : The current device does not support the specified feature.
   Future<bool> isFeatureAvailableOnDevice(FeatureType type);
 
+  /// Starts screen capture.
+  ///
+  /// This method, as well as startScreenCapture, startScreenCaptureByDisplayId, and startScreenCaptureByWindowId, can all be used to start screen capture, with the following differences: startScreenCapture only applies to Android and iOS, whereas this method only applies to Windows and iOS. startScreenCaptureByDisplayId and startScreenCaptureByWindowId only support capturing video from a single screen or window. By calling this method and specifying the sourceType parameter, you can capture multiple video streams used for local video mixing or multi-channel publishing.
+  ///  This method applies to the macOS and Windows only.
+  ///  If you call this method to start screen capture, Agora recommends that you call stopScreenCaptureBySourceType to stop the capture and avoid using stopScreenCapture.
+  ///
+  /// * [sourceType] The type of the video source. See VideoSourceType.
+  ///  Windows supports up to four screen capture video streams.
+  ///  macOS supports only one screen capture video stream. You can only set this parameter to videoSourceScreen (2).
+  /// * [config] The configuration of the captured screen. See ScreenCaptureConfiguration.
+  ///
+  /// Returns
+  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown; and you need to catch the exception and handle it accordingly.
+  Future<void> startScreenCaptureBySourceType(
+      {required VideoSourceType sourceType,
+      required ScreenCaptureConfiguration config});
+
+  /// Stops screen capture.
+  ///
+  /// After calling startScreenCaptureBySourceType to start capturing video from one or more screens, you can call this method and set the sourceType parameter to stop capturing from the specified screens.
+  ///  This method applies to the macOS and Windows only.
+  ///  If you call startScreenCapture, startScreenCaptureByWindowId, or startScreenCaptureByDisplayId to start screen capure, Agora recommends that you call stopScreenCapture instead to stop the capture.
+  ///
+  /// * [sourceType] The type of the video source. See VideoSourceType.
+  ///
+  /// Returns
+  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown; and you need to catch the exception and handle it accordingly.
+  Future<void> stopScreenCaptureBySourceType(VideoSourceType sourceType);
+
   /// Releases the RtcEngine instance.
   ///
   /// This method releases all resources used by the Agora SDK. Use this method for apps in which users occasionally make voice or video calls. When users do not make calls, you can free up resources for other operations. After a successful method call, you can no longer use any method or callback in the SDK anymore. If you want to use the real-time communication functions again, you must call createAgoraRtcEngine and initialize to create a new RtcEngine instance.
@@ -6280,6 +6268,18 @@ abstract class RtcEngine {
   ///
   /// * [sync] Whether the method is called synchronously: true : Synchronous call. false : Asynchronous call. Currently this method only supports synchronous calls. Do not set this parameter to this value.
   Future<void> release({bool sync = false});
+
+  /// Enables the local video preview.
+  ///
+  /// You can call this method to enable local video preview. Call this method after the following:
+  ///  Call setupLocalVideo to initialize the local preview.
+  ///  Call enableVideo to enable the video module.
+  ///  The local preview enables the mirror mode by default.
+  ///  After the local video preview is enabled, if you call leaveChannel to exit the channel, the local preview remains until you call stopPreview to disable it.
+  ///
+  /// Returns
+  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown; and you need to catch the exception and handle it accordingly.
+  Future<void> startPreviewWithoutSourceType();
 
   /// Gets the AudioDeviceManager object to manage audio devices.
   ///

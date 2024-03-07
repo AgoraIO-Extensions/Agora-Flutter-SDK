@@ -691,92 +691,6 @@ void mediaPlayerControllerSmokeTestCases() {
   );
 
   testWidgets(
-    'MediaPlayer.setPlayerOptionInInt',
-    (WidgetTester tester) async {
-      String engineAppId = const String.fromEnvironment('TEST_APP_ID',
-          defaultValue: '<YOUR_APP_ID>');
-
-      RtcEngine rtcEngine = createAgoraRtcEngine();
-      await rtcEngine.initialize(RtcEngineContext(
-        appId: engineAppId,
-        areaCode: AreaCode.areaCodeGlob.value(),
-      ));
-      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
-
-      final mediaPlayerController = MediaPlayerController(
-          rtcEngine: rtcEngine, canvas: const VideoCanvas(uid: 0));
-      await mediaPlayerController.initialize();
-
-      try {
-        const String key = "hello";
-        const int value = 10;
-        await mediaPlayerController.setPlayerOptionInInt(
-          key: key,
-          value: value,
-        );
-      } catch (e) {
-        if (e is! AgoraRtcException) {
-          debugPrint(
-              '[MediaPlayer.setPlayerOptionInInt] error: ${e.toString()}');
-          rethrow;
-        }
-
-        if (e.code != -4) {
-          // Only not supported error supported.
-          rethrow;
-        }
-      }
-
-      await mediaPlayerController.dispose();
-      await rtcEngine.release();
-    },
-//  skip: !(),
-  );
-
-  testWidgets(
-    'MediaPlayer.setPlayerOptionInString',
-    (WidgetTester tester) async {
-      String engineAppId = const String.fromEnvironment('TEST_APP_ID',
-          defaultValue: '<YOUR_APP_ID>');
-
-      RtcEngine rtcEngine = createAgoraRtcEngine();
-      await rtcEngine.initialize(RtcEngineContext(
-        appId: engineAppId,
-        areaCode: AreaCode.areaCodeGlob.value(),
-      ));
-      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
-
-      final mediaPlayerController = MediaPlayerController(
-          rtcEngine: rtcEngine, canvas: const VideoCanvas(uid: 0));
-      await mediaPlayerController.initialize();
-
-      try {
-        const String key = "hello";
-        const String value = "hello";
-        await mediaPlayerController.setPlayerOptionInString(
-          key: key,
-          value: value,
-        );
-      } catch (e) {
-        if (e is! AgoraRtcException) {
-          debugPrint(
-              '[MediaPlayer.setPlayerOptionInString] error: ${e.toString()}');
-          rethrow;
-        }
-
-        if (e.code != -4) {
-          // Only not supported error supported.
-          rethrow;
-        }
-      }
-
-      await mediaPlayerController.dispose();
-      await rtcEngine.release();
-    },
-//  skip: !(),
-  );
-
-  testWidgets(
     'MediaPlayer.takeScreenshot',
     (WidgetTester tester) async {
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
@@ -2282,6 +2196,92 @@ void mediaPlayerControllerSmokeTestCases() {
         if (e is! AgoraRtcException) {
           debugPrint(
               '[MediaPlayer.setSoundPositionParams] error: ${e.toString()}');
+          rethrow;
+        }
+
+        if (e.code != -4) {
+          // Only not supported error supported.
+          rethrow;
+        }
+      }
+
+      await mediaPlayerController.dispose();
+      await rtcEngine.release();
+    },
+//  skip: !(),
+  );
+
+  testWidgets(
+    'MediaPlayer.setPlayerOptionInInt',
+    (WidgetTester tester) async {
+      String engineAppId = const String.fromEnvironment('TEST_APP_ID',
+          defaultValue: '<YOUR_APP_ID>');
+
+      RtcEngine rtcEngine = createAgoraRtcEngine();
+      await rtcEngine.initialize(RtcEngineContext(
+        appId: engineAppId,
+        areaCode: AreaCode.areaCodeGlob.value(),
+      ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
+
+      final mediaPlayerController = MediaPlayerController(
+          rtcEngine: rtcEngine, canvas: const VideoCanvas(uid: 0));
+      await mediaPlayerController.initialize();
+
+      try {
+        const String key = "hello";
+        const int value = 10;
+        await mediaPlayerController.setPlayerOptionInInt(
+          key: key,
+          value: value,
+        );
+      } catch (e) {
+        if (e is! AgoraRtcException) {
+          debugPrint(
+              '[MediaPlayer.setPlayerOptionInInt] error: ${e.toString()}');
+          rethrow;
+        }
+
+        if (e.code != -4) {
+          // Only not supported error supported.
+          rethrow;
+        }
+      }
+
+      await mediaPlayerController.dispose();
+      await rtcEngine.release();
+    },
+//  skip: !(),
+  );
+
+  testWidgets(
+    'MediaPlayer.setPlayerOptionInString',
+    (WidgetTester tester) async {
+      String engineAppId = const String.fromEnvironment('TEST_APP_ID',
+          defaultValue: '<YOUR_APP_ID>');
+
+      RtcEngine rtcEngine = createAgoraRtcEngine();
+      await rtcEngine.initialize(RtcEngineContext(
+        appId: engineAppId,
+        areaCode: AreaCode.areaCodeGlob.value(),
+      ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
+
+      final mediaPlayerController = MediaPlayerController(
+          rtcEngine: rtcEngine, canvas: const VideoCanvas(uid: 0));
+      await mediaPlayerController.initialize();
+
+      try {
+        const String key = "hello";
+        const String value = "hello";
+        await mediaPlayerController.setPlayerOptionInString(
+          key: key,
+          value: value,
+        );
+      } catch (e) {
+        if (e is! AgoraRtcException) {
+          debugPrint(
+              '[MediaPlayer.setPlayerOptionInString] error: ${e.toString()}');
           rethrow;
         }
 
