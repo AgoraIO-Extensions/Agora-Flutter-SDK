@@ -100,8 +100,7 @@ export function isNeedIgnoreJsonInJsonObject(
   type: SimpleType
 ): boolean {
   let isIgnoreJson = ignoreJsonTypes.includes(dartName(type));
-  // isIgnoreJson =
-  //   isIgnoreJson || parseResult.resolveNodeByType(type).__TYPE == CXXTYPE.Clazz;
+
   return isIgnoreJson;
 }
 
@@ -130,12 +129,6 @@ export function renderJsonSerializable(
   jsonClassName: string,
   memberVariables: MemberVariable[]
 ) {
-  // let structName = dartName(structt);
-  // let extName = `${structName}BufferExt`;
-
-  // let bufferMemberNames = memberVariables.filter((member) => dartName(member.type) == 'Uint8List').map((member) => dartName(member));
-  // let constructorNamedParams = memberVariables.map((it) => `${dartName(it)}: ${dartName(it)}`);
-
   let output = `
   @JsonSerializable(explicitToJson: true, includeIfNull: false)
   class ${jsonClassName} {
