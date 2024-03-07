@@ -64,7 +64,6 @@ const eventIdsMapping = {
   "H265TranscoderObserver_onTriggerTranscode": [
     "H265TranscoderObserver_onTriggerTranscode_6ba6646"
   ],
-  "MediaPlayerVideoFrameObserver_onFrame": [""],
   "MediaPlayerSourceObserver_onPlayerSourceStateChanged": [
     "MediaPlayerSourceObserver_onPlayerSourceStateChanged_7fb38f1"
   ],

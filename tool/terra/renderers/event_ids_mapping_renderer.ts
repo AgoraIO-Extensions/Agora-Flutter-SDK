@@ -32,14 +32,16 @@ export default function EventIdsMappingRenderer(
     cxxFile.nodes.forEach((node) => {
       if (node.__TYPE == CXXTYPE.Clazz) {
         let clazz = node as Clazz;
-        let needCheckWithBaseClasses = isNeedCheckWithBaseClasses(clazz);
         clazz.methods.forEach((method) => {
           if (isCallbackClass(clazz)) {
             let key = `${clazz.name.replace("I", "")}_${method.name}`;
-            if (!eventIdsMapping.has(key)) {
-              eventIdsMapping.set(key, []);
+            let value = getIrisApiIdValue(method);
+            if (value.length > 0) {
+              if (!eventIdsMapping.has(key)) {
+                eventIdsMapping.set(key, []);
+              }
+              eventIdsMapping.get(key)?.push(value);
             }
-            eventIdsMapping.get(key)?.push(getIrisApiIdValue(method));
           }
         });
       }
