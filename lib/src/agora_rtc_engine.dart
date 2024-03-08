@@ -490,7 +490,8 @@ class RemoteAudioStats {
       this.publishDuration,
       this.qoeQuality,
       this.qualityChangedReason,
-      this.rxAudioBytes});
+      this.rxAudioBytes,
+      this.e2eDelay});
 
   /// The user ID of the remote user.
   @JsonKey(name: 'uid')
@@ -563,6 +564,10 @@ class RemoteAudioStats {
   /// @nodoc
   @JsonKey(name: 'rxAudioBytes')
   final int? rxAudioBytes;
+
+  /// @nodoc
+  @JsonKey(name: 'e2eDelay')
+  final int? e2eDelay;
 
   /// @nodoc
   factory RemoteAudioStats.fromJson(Map<String, dynamic> json) =>
@@ -999,6 +1004,7 @@ class CameraCapturerConfiguration {
   const CameraCapturerConfiguration(
       {this.cameraDirection,
       this.deviceId,
+      this.cameraId,
       this.format,
       this.followEncodeDimensionRatio});
 
@@ -1009,6 +1015,10 @@ class CameraCapturerConfiguration {
   /// This method applies to Windows only. The ID of the camera. The maximum length is MaxDeviceIdLengthType.
   @JsonKey(name: 'deviceId')
   final String? deviceId;
+
+  /// @nodoc
+  @JsonKey(name: 'cameraId')
+  final String? cameraId;
 
   /// The format of the video frame. See VideoFormat.
   @JsonKey(name: 'format')
@@ -1300,6 +1310,7 @@ class ChannelMediaOptions {
       this.publishMediaPlayerVideoTrack,
       this.publishTranscodedVideoTrack,
       this.publishMixedAudioTrack,
+      this.publishLipSyncTrack,
       this.autoSubscribeAudio,
       this.autoSubscribeVideo,
       this.enableAudioRecordingOrPlayout,
@@ -1392,6 +1403,10 @@ class ChannelMediaOptions {
   /// @nodoc
   @JsonKey(name: 'publishMixedAudioTrack')
   final bool? publishMixedAudioTrack;
+
+  /// @nodoc
+  @JsonKey(name: 'publishLipSyncTrack')
+  final bool? publishLipSyncTrack;
 
   /// Whether to automatically subscribe to all remote audio streams when the user joins a channel: true : Subscribe to all remote audio streams. false : Do not automatically subscribe to any remote audio streams.
   @JsonKey(name: 'autoSubscribeAudio')
@@ -1663,6 +1678,7 @@ class RtcEngineEventHandler {
     this.onAudioPublishStateChanged,
     this.onVideoPublishStateChanged,
     this.onTranscodedStreamLayoutInfo,
+    this.onAudioMetadataReceived,
     this.onExtensionEvent,
     this.onExtensionStarted,
     this.onExtensionStopped,
@@ -2533,6 +2549,11 @@ class RtcEngineEventHandler {
       int height,
       int layoutCount,
       List<VideoLayout> layoutlist)? onTranscodedStreamLayoutInfo;
+
+  /// @nodoc
+  final void Function(
+          RtcConnection connection, int uid, Uint8List metadata, int length)?
+      onAudioMetadataReceived;
 
   /// The event callback of the extension.
   ///
@@ -4045,6 +4066,9 @@ abstract class RtcEngine {
   /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown; and you need to catch the exception and handle it accordingly.
   Future<void> setAudioMixingPitch(int pitch);
 
+  /// @nodoc
+  Future<void> setAudioMixingPlaybackSpeed(int speed);
+
   /// Retrieves the volume of the audio effects.
   ///
   /// The volume is an integer ranging from 0 to 100. The default value is 100, which means the original volume. Call this method after playEffect.
@@ -4517,6 +4541,9 @@ abstract class RtcEngine {
 
   /// @nodoc
   Future<String> uploadLogFile();
+
+  /// @nodoc
+  Future<void> writeLog({required LogLevel level, required String fmt});
 
   /// Updates the display mode of the local video view.
   ///
@@ -5195,6 +5222,9 @@ abstract class RtcEngine {
   /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown; and you need to catch the exception and handle it accordingly.
   Future<void> setCameraAutoExposureFaceModeEnabled(bool enabled);
 
+  /// @nodoc
+  Future<void> setCameraStabilizationMode(CameraStabilizationMode mode);
+
   /// Sets the default audio playback route.
   ///
   /// This method applies to Android and iOS only.
@@ -5251,6 +5281,12 @@ abstract class RtcEngine {
   /// Returns
   /// Without practical meaning.
   Future<void> setRouteInCommunicationMode(int route);
+
+  /// @nodoc
+  Future<bool> isSupportPortraitCenterStage();
+
+  /// @nodoc
+  Future<void> enablePortraitCenterStage(bool enabled);
 
   /// Gets a list of shareable screens and windows.
   ///
@@ -6231,6 +6267,10 @@ abstract class RtcEngine {
   /// true : The current device supports the specified feature. false : The current device does not support the specified feature.
   Future<bool> isFeatureAvailableOnDevice(FeatureType type);
 
+  /// @nodoc
+  Future<void> sendAudioMetadata(
+      {required Uint8List metadata, required int length});
+
   /// Starts screen capture.
   ///
   /// This method, as well as startScreenCapture, startScreenCaptureByDisplayId, and startScreenCaptureByWindowId, can all be used to start screen capture, with the following differences: startScreenCapture only applies to Android and iOS, whereas this method only applies to Windows and iOS. startScreenCaptureByDisplayId and startScreenCaptureByWindowId only support capturing video from a single screen or window. By calling this method and specifying the sourceType parameter, you can capture multiple video streams used for local video mixing or multi-channel publishing.
@@ -6770,11 +6810,15 @@ class VideoDeviceInfo {
 @JsonSerializable(explicitToJson: true, includeIfNull: false)
 class AudioDeviceInfo {
   /// @nodoc
-  const AudioDeviceInfo({this.deviceId, this.deviceName});
+  const AudioDeviceInfo({this.deviceId, this.deviceTypeName, this.deviceName});
 
   /// The device ID.
   @JsonKey(name: 'deviceId')
   final String? deviceId;
+
+  /// @nodoc
+  @JsonKey(name: 'deviceTypeName')
+  final String? deviceTypeName;
 
   /// The device name.
   @JsonKey(name: 'deviceName')

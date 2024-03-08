@@ -1631,6 +1631,23 @@ class RtcEngineImpl implements RtcEngine {
   }
 
   @override
+  Future<void> setAudioMixingPlaybackSpeed(int speed) async {
+    final apiType =
+        '${isOverrideClassName ? className : 'RtcEngine'}_setAudioMixingPlaybackSpeed_46f8ab7';
+    final param = createParams({'speed': speed});
+    final callApiResult = await irisMethodChannel.invokeMethod(
+        IrisMethodCall(apiType, jsonEncode(param), buffers: null));
+    if (callApiResult.irisReturnCode < 0) {
+      throw AgoraRtcException(code: callApiResult.irisReturnCode);
+    }
+    final rm = callApiResult.data;
+    final result = rm['result'];
+    if (result < 0) {
+      throw AgoraRtcException(code: result);
+    }
+  }
+
+  @override
   Future<int> getEffectsVolume() async {
     final apiType =
         '${isOverrideClassName ? className : 'RtcEngine'}_getEffectsVolume';
@@ -2341,6 +2358,23 @@ class RtcEngineImpl implements RtcEngine {
     }
     final uploadLogFileJson = RtcEngineUploadLogFileJson.fromJson(rm);
     return uploadLogFileJson.requestId;
+  }
+
+  @override
+  Future<void> writeLog({required LogLevel level, required String fmt}) async {
+    final apiType =
+        '${isOverrideClassName ? className : 'RtcEngine'}_writeLog_62889f6';
+    final param = createParams({'level': level.value(), 'fmt': fmt});
+    final callApiResult = await irisMethodChannel.invokeMethod(
+        IrisMethodCall(apiType, jsonEncode(param), buffers: null));
+    if (callApiResult.irisReturnCode < 0) {
+      throw AgoraRtcException(code: callApiResult.irisReturnCode);
+    }
+    final rm = callApiResult.data;
+    final result = rm['result'];
+    if (result < 0) {
+      throw AgoraRtcException(code: result);
+    }
   }
 
   @override
@@ -3402,6 +3436,23 @@ class RtcEngineImpl implements RtcEngine {
   }
 
   @override
+  Future<void> setCameraStabilizationMode(CameraStabilizationMode mode) async {
+    final apiType =
+        '${isOverrideClassName ? className : 'RtcEngine'}_setCameraStabilizationMode_701b981';
+    final param = createParams({'mode': mode.value()});
+    final callApiResult = await irisMethodChannel.invokeMethod(
+        IrisMethodCall(apiType, jsonEncode(param), buffers: null));
+    if (callApiResult.irisReturnCode < 0) {
+      throw AgoraRtcException(code: callApiResult.irisReturnCode);
+    }
+    final rm = callApiResult.data;
+    final result = rm['result'];
+    if (result < 0) {
+      throw AgoraRtcException(code: result);
+    }
+  }
+
+  @override
   Future<void> setDefaultAudioRouteToSpeakerphone(bool defaultToSpeaker) async {
     final apiType =
         '${isOverrideClassName ? className : 'RtcEngine'}_setDefaultAudioRouteToSpeakerphone_5039d15';
@@ -3455,6 +3506,38 @@ class RtcEngineImpl implements RtcEngine {
     final apiType =
         '${isOverrideClassName ? className : 'RtcEngine'}_setRouteInCommunicationMode_46f8ab7';
     final param = createParams({'route': route});
+    final callApiResult = await irisMethodChannel.invokeMethod(
+        IrisMethodCall(apiType, jsonEncode(param), buffers: null));
+    if (callApiResult.irisReturnCode < 0) {
+      throw AgoraRtcException(code: callApiResult.irisReturnCode);
+    }
+    final rm = callApiResult.data;
+    final result = rm['result'];
+    if (result < 0) {
+      throw AgoraRtcException(code: result);
+    }
+  }
+
+  @override
+  Future<bool> isSupportPortraitCenterStage() async {
+    final apiType =
+        '${isOverrideClassName ? className : 'RtcEngine'}_isSupportPortraitCenterStage';
+    final param = createParams({});
+    final callApiResult = await irisMethodChannel.invokeMethod(
+        IrisMethodCall(apiType, jsonEncode(param), buffers: null));
+    if (callApiResult.irisReturnCode < 0) {
+      throw AgoraRtcException(code: callApiResult.irisReturnCode);
+    }
+    final rm = callApiResult.data;
+    final result = rm['result'];
+    return result as bool;
+  }
+
+  @override
+  Future<void> enablePortraitCenterStage(bool enabled) async {
+    final apiType =
+        '${isOverrideClassName ? className : 'RtcEngine'}_enablePortraitCenterStage_5039d15';
+    final param = createParams({'enabled': enabled});
     final callApiResult = await irisMethodChannel.invokeMethod(
         IrisMethodCall(apiType, jsonEncode(param), buffers: null));
     if (callApiResult.irisReturnCode < 0) {
@@ -5055,6 +5138,26 @@ class RtcEngineImpl implements RtcEngine {
     final rm = callApiResult.data;
     final result = rm['result'];
     return result as bool;
+  }
+
+  @override
+  Future<void> sendAudioMetadata(
+      {required Uint8List metadata, required int length}) async {
+    final apiType =
+        '${isOverrideClassName ? className : 'RtcEngine'}_sendAudioMetadata_878f309';
+    final param = createParams({'length': length});
+    final List<Uint8List> buffers = [];
+    buffers.add(metadata);
+    final callApiResult = await irisMethodChannel.invokeMethod(
+        IrisMethodCall(apiType, jsonEncode(param), buffers: buffers));
+    if (callApiResult.irisReturnCode < 0) {
+      throw AgoraRtcException(code: callApiResult.irisReturnCode);
+    }
+    final rm = callApiResult.data;
+    final result = rm['result'];
+    if (result < 0) {
+      throw AgoraRtcException(code: result);
+    }
   }
 
   @override
