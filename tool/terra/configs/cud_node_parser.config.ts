@@ -582,6 +582,29 @@ const updateNodes = [
       },
     },
   },
+  // agora::rtc::IRtcEngineEventHandler::onAudioMetadataReceived
+  {
+    node: {
+      __TYPE: CXXTYPE.Variable,
+      name: "metadata",
+      namespaces: ["agora", "rtc"],
+      parent_name: "onAudioMetadataReceived",
+    },
+    updated: {
+      __TYPE: CXXTYPE.Variable,
+      name: "metadata",
+      namespaces: ["agora", "rtc"],
+      parent_name: "onAudioMetadataReceived",
+      type: {
+        __TYPE: CXXTYPE.SimpleType,
+        is_builtin_type: false,
+        is_const: true,
+        kind: SimpleTypeKind.pointer_t,
+        name: "uint8_t",
+        source: "const uint8_t*",
+      },
+    },
+  },
 
   //
   // agora::rtc::IRtcEngineEventHandlerEx
@@ -1105,6 +1128,29 @@ const updateNodes = [
       },
     },
   },
+  // agora::rtc::IRtcEngineEx::sendAudioMetadataEx
+  {
+    node: {
+      __TYPE: CXXTYPE.Variable,
+      name: "metadata",
+      namespaces: ["agora", "rtc"],
+      parent_name: "sendAudioMetadataEx",
+    },
+    updated: {
+      __TYPE: CXXTYPE.Variable,
+      name: "metadata",
+      namespaces: ["agora", "rtc"],
+      parent_name: "sendAudioMetadataEx",
+      type: {
+        __TYPE: CXXTYPE.SimpleType,
+        is_builtin_type: false,
+        is_const: true,
+        kind: SimpleTypeKind.pointer_t,
+        name: "uint8_t",
+        source: "const uint8_t*",
+      },
+    },
+  },
   // agora::rtc::IRtcEngine
   // agora::rtc::IRtcEngine::queryCodecCapability
   {
@@ -1390,6 +1436,29 @@ const updateNodes = [
         kind: SimpleTypeKind.array_t,
         name: "agora::rtc::SpatialAudioZone",
         source: "const agora::rtc::SpatialAudioZone*",
+      },
+    },
+  },
+  // agora::rtc::IRtcEngine::sendAudioMetadata
+  {
+    node: {
+      __TYPE: CXXTYPE.Variable,
+      name: "metadata",
+      namespaces: ["agora", "rtc"],
+      parent_name: "sendAudioMetadata",
+    },
+    updated: {
+      __TYPE: CXXTYPE.Variable,
+      name: "metadata",
+      namespaces: ["agora", "rtc"],
+      parent_name: "sendAudioMetadata",
+      type: {
+        __TYPE: CXXTYPE.SimpleType,
+        is_builtin_type: false,
+        is_const: true,
+        kind: SimpleTypeKind.pointer_t,
+        name: "uint8_t",
+        source: "const uint8_t*",
       },
     },
   },

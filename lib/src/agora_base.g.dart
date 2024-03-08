@@ -206,6 +206,7 @@ EncodedVideoFrameInfo _$EncodedVideoFrameInfoFromJson(
       decodeTimeMs: json['decodeTimeMs'] as int?,
       streamType:
           $enumDecodeNullable(_$VideoStreamTypeEnumMap, json['streamType']),
+      presentationMs: json['presentationMs'] as int?,
     );
 
 Map<String, dynamic> _$EncodedVideoFrameInfoToJson(
@@ -229,6 +230,7 @@ Map<String, dynamic> _$EncodedVideoFrameInfoToJson(
   writeNotNull('captureTimeMs', instance.captureTimeMs);
   writeNotNull('decodeTimeMs', instance.decodeTimeMs);
   writeNotNull('streamType', _$VideoStreamTypeEnumMap[instance.streamType]);
+  writeNotNull('presentationMs', instance.presentationMs);
   return val;
 }
 
@@ -739,6 +741,7 @@ const _$VideoSourceTypeEnumMap = {
   VideoSourceType.videoSourceCameraFourth: 12,
   VideoSourceType.videoSourceScreenThird: 13,
   VideoSourceType.videoSourceScreenFourth: 14,
+  VideoSourceType.videoSourceSpeechDriven: 15,
   VideoSourceType.videoSourceUnknown: 100,
 };
 
@@ -1756,6 +1759,7 @@ EncryptionConfig _$EncryptionConfigFromJson(Map<String, dynamic> json) =>
       encryptionMode:
           $enumDecodeNullable(_$EncryptionModeEnumMap, json['encryptionMode']),
       encryptionKey: json['encryptionKey'] as String?,
+      datastreamEncryptionEnabled: json['datastreamEncryptionEnabled'] as bool?,
     );
 
 Map<String, dynamic> _$EncryptionConfigToJson(EncryptionConfig instance) {
@@ -1770,6 +1774,8 @@ Map<String, dynamic> _$EncryptionConfigToJson(EncryptionConfig instance) {
   writeNotNull(
       'encryptionMode', _$EncryptionModeEnumMap[instance.encryptionMode]);
   writeNotNull('encryptionKey', instance.encryptionKey);
+  writeNotNull(
+      'datastreamEncryptionEnabled', instance.datastreamEncryptionEnabled);
   return val;
 }
 
@@ -2211,6 +2217,7 @@ const _$ErrorCodeTypeEnumMap = {
   ErrorCodeType.errSetClientRoleNotAuthorized: 119,
   ErrorCodeType.errDecryptionFailed: 120,
   ErrorCodeType.errInvalidUserId: 121,
+  ErrorCodeType.errDatastreamDecryptionFailed: 122,
   ErrorCodeType.errClientIsBannedByServer: 123,
   ErrorCodeType.errEncryptedStreamNotAllowedPublish: 130,
   ErrorCodeType.errLicenseCredentialInvalid: 131,
@@ -2425,6 +2432,15 @@ const _$CaptureBrightnessLevelTypeEnumMap = {
   CaptureBrightnessLevelType.captureBrightnessLevelDark: 2,
 };
 
+const _$CameraStabilizationModeEnumMap = {
+  CameraStabilizationMode.cameraStabilizationModeOff: -1,
+  CameraStabilizationMode.cameraStabilizationModeAuto: 0,
+  CameraStabilizationMode.cameraStabilizationModeLevel1: 1,
+  CameraStabilizationMode.cameraStabilizationModeLevel2: 2,
+  CameraStabilizationMode.cameraStabilizationModeLevel3: 3,
+  CameraStabilizationMode.cameraStabilizationModeMaxLevel: 3,
+};
+
 const _$LocalAudioStreamStateEnumMap = {
   LocalAudioStreamState.localAudioStreamStateStopped: 0,
   LocalAudioStreamState.localAudioStreamStateRecording: 1,
@@ -2465,6 +2481,8 @@ const _$LocalVideoStreamReasonEnumMap = {
   LocalVideoStreamReason.localVideoStreamReasonDeviceNotFound: 8,
   LocalVideoStreamReason.localVideoStreamReasonDeviceDisconnected: 9,
   LocalVideoStreamReason.localVideoStreamReasonDeviceInvalidId: 10,
+  LocalVideoStreamReason.localVideoStreamErrorDeviceInterrupt: 14,
+  LocalVideoStreamReason.localVideoStreamErrorDeviceFatalError: 15,
   LocalVideoStreamReason.localVideoStreamReasonDeviceSystemPressure: 101,
   LocalVideoStreamReason.localVideoStreamReasonScreenCaptureWindowMinimized: 11,
   LocalVideoStreamReason.localVideoStreamReasonScreenCaptureWindowClosed: 12,
@@ -2500,6 +2518,8 @@ const _$RemoteAudioStateReasonEnumMap = {
   RemoteAudioStateReason.remoteAudioReasonRemoteMuted: 5,
   RemoteAudioStateReason.remoteAudioReasonRemoteUnmuted: 6,
   RemoteAudioStateReason.remoteAudioReasonRemoteOffline: 7,
+  RemoteAudioStateReason.remoteAudioReasonNoPacketReceive: 8,
+  RemoteAudioStateReason.remoteAudioReasonLocalPlayFailed: 9,
 };
 
 const _$RemoteVideoStateEnumMap = {
@@ -2679,6 +2699,7 @@ const _$AudioEffectPresetEnumMap = {
   AudioEffectPreset.roomAcousticsEthereal: 33621760,
   AudioEffectPreset.roomAcoustics3dVoice: 33622016,
   AudioEffectPreset.roomAcousticsVirtualSurroundSound: 33622272,
+  AudioEffectPreset.roomAcousticsChorus: 33623296,
   AudioEffectPreset.voiceChangerEffectUncle: 33685760,
   AudioEffectPreset.voiceChangerEffectOldman: 33686016,
   AudioEffectPreset.voiceChangerEffectBoy: 33686272,
@@ -2762,6 +2783,8 @@ const _$EncryptionErrorTypeEnumMap = {
   EncryptionErrorType.encryptionErrorInternalFailure: 0,
   EncryptionErrorType.encryptionErrorDecryptionFailure: 1,
   EncryptionErrorType.encryptionErrorEncryptionFailure: 2,
+  EncryptionErrorType.encryptionErrorDatastreamDecryptionFailure: 3,
+  EncryptionErrorType.encryptionErrorDatastreamEncryptionFailure: 4,
 };
 
 const _$UploadErrorReasonEnumMap = {
@@ -2794,6 +2817,7 @@ const _$EarMonitoringFilterTypeEnumMap = {
   EarMonitoringFilterType.earMonitoringFilterNone: 1,
   EarMonitoringFilterType.earMonitoringFilterBuiltInAudioFilters: 2,
   EarMonitoringFilterType.earMonitoringFilterNoiseSuppression: 4,
+  EarMonitoringFilterType.earMonitoringFilterReusePostProcessingFilter: 32768,
 };
 
 const _$ThreadPriorityTypeEnumMap = {
