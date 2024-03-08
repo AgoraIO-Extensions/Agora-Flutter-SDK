@@ -1,11 +1,9 @@
 import {
   CXXFile,
   CXXTYPE,
-  CXXTerraNode,
   Clazz,
   MemberFunction,
   SimpleTypeKind,
-  Variable,
 } from "@agoraio-extensions/cxx-parser";
 import {
   ParseResult,
@@ -16,28 +14,21 @@ import {
   _trim,
   defaultDartHeader,
   defaultIgnoreForFile,
-  getBaseClassMethods,
   getBaseClasses,
   isCallbackClass,
   isDartBufferType,
-  isNeedIgnoreJsonInJsonObject,
-  isNullableType,
   isNullableVariable,
-  isRegisterCallbackFunction,
-  isUnregisterCallbackFunction,
+  renderJsonSerializable,
+  variableToMemberVariable,
 } from "./utils";
 import {
   dartFileName,
   dartName,
-  toDartMemberName,
   toDartStyleNaming,
 } from "../parsers/dart_syntax_parser";
-import { renderBufferExtBlock } from "./buffer_ext_renderer";
-import { isNodeMatched } from "../parsers/cud_node_parser";
 import {
   getIrisApiIdValue,
   getOutVariable,
-  isOverridedReturnType,
 } from "@agoraio-extensions/terra_shared_configs";
 import {
   functionSignature,
@@ -62,7 +53,6 @@ export default function CallApiImplRenderer(
       .map((it) => {
         let clazz = it.asClazz();
         let clazzName = dartName(clazz);
-        console.log(`renderResults clazzName: ${clazzName}`);
         let methods = clazz.methods;
         let methodImpls = methods
           .map((method) => callApiImplBlock(parseResult, clazz, method))
@@ -130,7 +120,7 @@ export default function CallApiImplRenderer(
     };
   });
 
-  return renderResults;
+  return [...renderResults, callApiImplParamsJsonFile(parseResult, cxxFiles)];
 }
 
 interface JsonMapInitBlock {
@@ -147,7 +137,6 @@ function callApiImplBlock(
   method: MemberFunction
 ): string {
   let className = dartName(clazz);
-  console.log(`callApiImplBlock className: ${className}`);
   let methodName = dartName(method);
 
   let paramJsonMapBlock = method.parameters.map((param) => {
@@ -211,9 +200,6 @@ function callApiImplBlock(
   let isNeedAddBufferExtBlock =
     paramJsonMapBlock.find((it) => it.addBufferExtBlock) != undefined;
   let buffersValueInJsonMap = isNeedAddBufferExtBlock ? "buffers" : "null";
-
-  let ttt = getIrisApiIdValue(method).split("_").slice(1).join("_");
-  console.log(`callApiImplBlock tt: ${getIrisApiIdValue(method)} ttt: ${ttt}`);
 
   let apiType = `final apiType = \'\${isOverrideClassName ? className : '${className}'}_${getIrisApiIdValue(
     method
@@ -290,4 +276,63 @@ ${funcSignature} {
 }
 `
   );
+}
+
+/// Generate the file: lib/src/binding/call_api_impl_params_json.dart
+function callApiImplParamsJsonFile(
+  parseResult: ParseResult,
+  cxxFiles: CXXFile[]
+): RenderResult {
+  let nodes = cxxFiles.flatMap((cxxFile) => {
+    return cxxFile.nodes
+      .filter((it) => it.__TYPE == CXXTYPE.Clazz)
+      .filter((it) => !isCallbackClass(it.asClazz()));
+  });
+
+  let jsonClassContents = nodes
+    .map((node) => {
+      let clazz = node.asClazz();
+      let className = dartName(clazz);
+      let methods = clazz.methods;
+
+      return methods
+        .map((method) => {
+          let methodName = dartName(method);
+          let jsonClassName = `${className}${toDartStyleNaming(
+            methodName,
+            true
+          )}Json`;
+          let output = "";
+          let outVariable = getOutVariable(method);
+          if (outVariable) {
+            output = renderJsonSerializable(
+              parseResult,
+              jsonClassName,
+              [variableToMemberVariable(outVariable)],
+              {
+                forceExplicitNullableType: false,
+                forceNamingConstructor: false,
+              }
+            );
+          }
+
+          return output;
+        })
+        .filter((it) => it.length > 0)
+        .join("\n\n");
+    })
+    .join("\n\n");
+
+  return {
+    file_name: "lib/src/binding/call_api_impl_params_json.dart",
+    file_content: _trim(`
+${defaultDartHeader}
+
+${defaultIgnoreForFile}
+
+import 'package:agora_rtc_engine/src/binding_forward_export.dart';
+part 'call_api_impl_params_json.g.dart';
+
+${jsonClassContents}`),
+  };
 }

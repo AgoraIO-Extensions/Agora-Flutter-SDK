@@ -1,11 +1,7 @@
 import {
   CXXFile,
   CXXTYPE,
-  Clazz,
   MemberFunction,
-  MemberVariable,
-  Struct,
-  Variable,
 } from "@agoraio-extensions/cxx-parser";
 import {
   ParseResult,
@@ -16,10 +12,10 @@ import {
   defaultDartHeader,
   defaultIgnoreForFile,
   isCallbackClass,
-  isNeedIgnoreJsonInJsonObject,
   renderJsonSerializable,
+  variableToMemberVariable,
 } from "./utils";
-import { dartFileName, dartName } from "../parsers/dart_syntax_parser";
+import { dartName } from "../parsers/dart_syntax_parser";
 import { renderBufferExtBlock } from "./buffer_ext_renderer";
 
 /// Generate the files:
@@ -78,12 +74,4 @@ ${subContents}
       file_content: content,
     },
   ];
-}
-
-function variableToMemberVariable(it: Variable): MemberVariable {
-  return {
-    name: it.name,
-    type: it.type,
-    user_data: it.user_data,
-  } as MemberVariable;
 }

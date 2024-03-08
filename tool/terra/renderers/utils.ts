@@ -127,17 +127,29 @@ export function _trim(
 export function renderJsonSerializable(
   parseResult: ParseResult,
   jsonClassName: string,
-  memberVariables: MemberVariable[]
+  memberVariables: MemberVariable[],
+  options?: {
+    forceExplicitNullableType: boolean;
+    forceNamingConstructor: boolean;
+  }
 ) {
+  let forceExplicitNullableType: boolean =
+    options?.forceExplicitNullableType ?? true;
+  let forceNamingConstructor: boolean = options?.forceNamingConstructor ?? true;
+
+  let initializeBlock =
+    memberVariables.length > 0
+      ? `${memberVariables.map((it) => `this.${dartName(it)}`).join(",")}`
+      : "";
+  if (forceNamingConstructor && initializeBlock.length) {
+    initializeBlock = `{${initializeBlock}}`;
+  }
+
   let output = `
   @JsonSerializable(explicitToJson: true, includeIfNull: false)
   class ${jsonClassName} {
     const ${jsonClassName}(
-      ${
-        memberVariables.length > 0
-          ? `{${memberVariables.map((it) => `this.${dartName(it)}`).join(",")}}`
-          : ""
-      }
+      ${initializeBlock}
     );
 
     ${memberVariables
@@ -153,10 +165,11 @@ export function renderJsonSerializable(
         let isClazz =
           actualNode.__TYPE == CXXTYPE.Clazz &&
           dartName(actualNode) == "VideoFrameMetaInfo";
+        let nullableSurffix = forceExplicitNullableType ? "?" : "";
         return `
       ${isClazz ? `@${dartName(actualNode)}Converter()` : ""}
       @JsonKey(name: '${it.name}'${isIgnoreJson ? ", ignore: true" : ""})
-      final ${dartName(it.type)}? ${dartName(it)};
+      final ${dartName(it.type)}${nullableSurffix} ${dartName(it)};
       `.trim();
       })
       .join("\n\n")}
@@ -197,4 +210,12 @@ extension ${enumName}Ext on ${enumName} {
   }
 }
 `;
+}
+
+export function variableToMemberVariable(it: Variable): MemberVariable {
+  return {
+    name: it.name,
+    type: it.type,
+    user_data: it.user_data,
+  } as MemberVariable;
 }

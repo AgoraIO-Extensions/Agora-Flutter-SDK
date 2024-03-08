@@ -12,6 +12,7 @@ import { ParseResult, TerraContext } from "@agoraio-extensions/terra-core";
 import { setUserdata } from "../renderers/utils";
 
 import path from "path";
+import { getOutVariable } from "@agoraio-extensions/terra_shared_configs";
 
 const userDataKey = "DartSyntaxParser";
 
@@ -234,6 +235,16 @@ export default function DartSyntaxParser(
           setUserdata(method.return_type, userDataKey, {
             dartName: _dartTypeName(preParseResult!, method.return_type),
           });
+
+          // If the `ReturnTypeParser` is applied, the `ReturnTypeParser` phase is executed before the `DartSyntaxParser`.
+          // Therefore, the parameter associated with the out variable's naming may not be set.
+          // In such cases, we need to reapply the naming here to ensure consistency.
+          let outVariable = getOutVariable(method);
+          if (outVariable) {
+            setUserdata(outVariable, userDataKey, {
+              dartName: toDartStyleNaming(outVariable.name),
+            });
+          }
 
           method.parameters.forEach((param) => {
             setUserdata(param.type, userDataKey, {
