@@ -960,8 +960,8 @@ class VideoFrame {
   final Uint8List? pixelBuffer;
 
   /// The meta information in the video frame. To use this parameter, please.
-  @JsonKey(name: 'metaInfo')
   @VideoFrameMetaInfoConverter()
+  @JsonKey(name: 'metaInfo')
   final VideoFrameMetaInfo? metaInfo;
 
   /// @nodoc

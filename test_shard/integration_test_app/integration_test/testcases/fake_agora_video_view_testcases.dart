@@ -11,6 +11,7 @@ import 'package:agora_rtc_engine/src/impl/agora_rtc_engine_impl.dart';
 import '../fake/fake_iris_method_channel.dart';
 import 'package:agora_rtc_engine/src/impl/platform/io/global_video_view_controller_platform_io.dart';
 import 'package:agora_rtc_engine/src/impl/platform/io/native_iris_api_engine_binding_delegate.dart';
+import 'package:iris_method_channel/iris_method_channel.dart';
 
 class _RenderViewWidget extends StatefulWidget {
   const _RenderViewWidget({
@@ -191,6 +192,11 @@ void testCases() {
 
     setUp(() {
       irisMethodChannel.reset();
+      irisMethodChannel.config =
+          FakeIrisMethodChannelConfig(fakeInvokeMethods: {
+        'CreateIrisRtcRendering': CallApiResult(
+            data: {'irisRtcRenderingHandle': 100}, irisReturnCode: 0)
+      });
     });
 
     group(

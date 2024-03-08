@@ -17,12 +17,40 @@ parsers:
 
   - name: IrisApiIdParser
     package: '@agoraio-extensions/terra_shared_configs'
+
+  - name: AddNodeParser
+    package: '@agoraio-extensions/terra_shared_configs'
+    args:
+      customHeaderFileNamePrefix: 'Custom'
+      includeHeaderDirs:
+        - '@agoraio-extensions/terra_shared_configs:headers/rtc_4.3.0/include'
+      parseFiles:
+        include:
+          - '@agoraio-extensions/terra_shared_configs:headers/rtc_4.3.0/include/*.h'
+          - '@agoraio-extensions/terra_shared_configs:headers/rtc_4.3.0/custom_headers/*.h'
+        exclude:
+          - '@agoraio-extensions/terra_shared_configs:headers/rtc_4.3.0/include/time_utils.h'
+          - '@agoraio-extensions/terra_shared_configs:headers/rtc_4.3.0/include/IAgoraMediaComponentFactory.h'
+
   - path: parsers/cud_node_parser.ts
     args:
       configPath: configs/cud_node_parser.config.ts
 
   - name: PointerToArrayParser
     package: '@agoraio-extensions/terra_shared_configs'
+
+  - name: RemoveNodeParser
+    package: '@agoraio-extensions/terra_shared_configs'
+
+  - name: ReturnTypeParser
+    package: '@agoraio-extensions/terra_shared_configs'
+    args:
+      convertReturnToVoid: true
+
+  - name: FixEnumConstantParser
+    package: '@agoraio-extensions/terra_shared_configs'
+    args:
+      skipCalEnumValue: true
 
   # Need put it below `PointerToArrayParser`, since the `PointerToArrayParser` will change the pointer type to array type
   - path: parsers/dart_syntax_parser.ts
@@ -35,5 +63,18 @@ parsers:
       ignoreDefaultConfig: true
 
 renderers:
-  - path: renderers/event_handlers_renderer.ts
+  - path: renderers/event_handlers_impl_renderer.ts
   - path: renderers/event_ids_mapping_renderer.ts
+  - path: renderers/forward_export_renderer.ts
+  - path: renderers/buffer_ext_renderer.ts
+  - path: renderers/event_handler_impl_params_json_renderer.ts
+  - path: renderers/callapi_impl_renderer.ts
+  - path: renderers/api_interface_renderer.ts
+  # Put it to last step
+  - name: IrisDocRenderer
+    package: '@agoraio-extensions/terra_shared_configs'
+    args:
+      language: dart
+      fmtConfig: fmt_dart.yaml
+      exportFilePath: ../../lib/agora_rtc_engine.dart
+      templateUrl: https://github.com/AgoraIO/agora_doc_source/releases/download/master-build/flutter_ng_json_template_en.json

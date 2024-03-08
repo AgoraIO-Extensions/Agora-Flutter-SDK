@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:convert';
 import 'dart:io';
 import 'dart:math';
 
@@ -7,8 +6,6 @@ import 'package:agora_rtc_engine/agora_rtc_engine.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:agora_rtc_engine/src/impl/agora_rtc_engine_impl.dart';
-import '../fake/fake_iris_method_channel.dart';
 
 class _RenderViewWidget extends StatefulWidget {
   const _RenderViewWidget({
@@ -322,6 +319,49 @@ void testCases() {
       await tester.pumpWidget(Container());
       await tester.pumpAndSettle(const Duration(milliseconds: 5000));
     }
+
+    expect(find.byType(AgoraVideoView), findsNothing);
+  });
+
+  testWidgets('Dispose AgoraVideoView after RtcEngine.release',
+      (WidgetTester tester) async {
+    final videoViewCreatedCompleter = Completer<bool>();
+    final key = GlobalKey<_RenderViewWidgetState>();
+
+    await tester.pumpWidget(_RenderViewWidget(
+      key: key,
+      builder: (context, engine) {
+        return SizedBox(
+          height: 100,
+          width: 100,
+          child: AgoraVideoView(
+            controller: VideoViewController(
+              rtcEngine: engine,
+              canvas: const VideoCanvas(uid: 0),
+              useFlutterTexture: true,
+            ),
+            onAgoraVideoViewCreated: (viewId) {
+              if (!videoViewCreatedCompleter.isCompleted) {
+                videoViewCreatedCompleter.complete(true);
+              }
+            },
+          ),
+        );
+      },
+    ));
+
+    await tester.pumpAndSettle(const Duration(milliseconds: 5000));
+    // pumpAndSettle again to ensure the `AgoraVideoView` shown
+    await tester.pumpAndSettle(const Duration(milliseconds: 5000));
+
+    await videoViewCreatedCompleter.future;
+
+    // Call `RtcEngine.release` before `AgoraVideoView` dispose
+    await key.currentState?._dispose();
+
+    await tester.pumpWidget(Container());
+    await tester.pumpAndSettle(const Duration(milliseconds: 5000));
+    await Future.delayed(const Duration(seconds: 5));
 
     expect(find.byType(AgoraVideoView), findsNothing);
   });

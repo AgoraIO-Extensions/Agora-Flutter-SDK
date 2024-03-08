@@ -34,6 +34,8 @@ private:
 
     bool DestroyTextureRender(int64_t textureId);
 
+    void Dispose();
+
 public:
     VideoViewController(flutter::TextureRegistrar *texture_registrar, flutter::BinaryMessenger *messenger_);
     virtual ~VideoViewController();

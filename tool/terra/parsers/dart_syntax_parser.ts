@@ -3,13 +3,16 @@ import {
   CXXTYPE,
   CXXTerraNode,
   Clazz,
+  Enumz,
   SimpleType,
   SimpleTypeKind,
+  TypeAlias,
 } from "@agoraio-extensions/cxx-parser";
 import { ParseResult, TerraContext } from "@agoraio-extensions/terra-core";
 import { setUserdata } from "../renderers/utils";
 
 import path from "path";
+import { getOutVariable } from "@agoraio-extensions/terra_shared_configs";
 
 const userDataKey = "DartSyntaxParser";
 
@@ -18,17 +21,41 @@ export interface DartSyntaxParserValue {
   dartName?: string;
 }
 
-function _dartClassName(clazz: Clazz): string {
-  let name = clazz.name;
-  if (name.startsWith("I")) {
+function _dartClassName(name: string): string {
+  // `IRtcEngine` -> `RtcEngine`
+  // `Input` -> `Input`
+  if (
+    name !== name.toUpperCase() && // not all uppercase
+    name.startsWith("I") &&
+    name.length > 1 &&
+    name[1] === name[1].toUpperCase()
+  ) {
     name = name.replace("I", "");
   }
 
-  return name;
+  return nameWithUnderscoresToCamelCase(name, true);
 }
 
-function _dartMemberName(memberName: string): string {
-  return nameWithUnderscoresToCamelCase(memberName);
+export function toDartMemberName(memberName: string): string {
+  return nameWithUnderscoresToCamelCase(memberName.trimNamespace());
+}
+
+export function toDartStyleNaming(
+  memberName: string,
+  upperCamelCase: boolean = false
+): string {
+  let name = nameWithUnderscoresToCamelCase(
+    memberName.trimNamespace(),
+    upperCamelCase
+  );
+
+  if (upperCamelCase && name[0] == name[0].toLowerCase()) {
+    name = name[0].toUpperCase() + name.slice(1);
+  } else if (!upperCamelCase && name[0] == name[0].toUpperCase()) {
+    name = name[0].toLowerCase() + name.slice(1);
+  }
+
+  return name;
 }
 
 function nameWithUnderscoresToCamelCase(
@@ -36,6 +63,13 @@ function nameWithUnderscoresToCamelCase(
   upperCamelCase: boolean = false
 ): string {
   if (!nameWithUnderscores.includes("_")) {
+    if (
+      !upperCamelCase &&
+      nameWithUnderscores === nameWithUnderscores.toUpperCase()
+    ) {
+      nameWithUnderscores = nameWithUnderscores.toLowerCase();
+    }
+
     return nameWithUnderscores;
   }
 
@@ -44,7 +78,7 @@ function nameWithUnderscoresToCamelCase(
   for (let i = 0; i < words.length; i++) {
     let word = words[i];
 
-    if ((i === 0 && upperCamelCase) || i !== 0) {
+    if (word.length > 0 && ((i === 0 && upperCamelCase) || i !== 0)) {
       word = word[0].toUpperCase() + word.slice(1);
     }
 
@@ -72,7 +106,6 @@ function upperCamelCaseToLowercaseWithUnderscores(
 
   let baseRegex = new RegExp("((I[A-Z]|[A-Z])?[a-z0-9]*)");
 
-  //   const baseRegex = /((I[A-Z]|[A-Z])?[a-z0-9]*)/g;
   let baseMatch;
 
   while ((baseMatch = baseRegex.exec(toSearch)) !== null) {
@@ -119,10 +152,23 @@ const _cppStdTypeToDartTypeMappping: Map<string, string> = new Map([
   ["intptr_t", "int"],
 ]);
 
-function _dartTypeName(type: SimpleType): string {
-  let dartType = type.name.trimNamespace();
-  if (type.kind == SimpleTypeKind.template_t) {
-    dartType = type.template_arguments[0];
+function _dartTypeName(parseResult: ParseResult, type: SimpleType): string {
+  let typeNode = parseResult.resolveNodeByType(type);
+  let dartType = typeNode.name.trimNamespace();
+  if (typeNode.__TYPE == CXXTYPE.Clazz || typeNode.__TYPE == CXXTYPE.Struct) {
+    dartType = _dartClassName(dartType);
+  } else if (typeNode.__TYPE == CXXTYPE.Enumz) {
+    if (dartType.length == 0) {
+      dartType = (typeNode.parent?.name.trimNamespace() ?? "") + "Enum";
+    } else {
+      dartType = _dartClassName(dartType);
+    }
+  } else if (
+    typeNode.isSimpleType() &&
+    typeNode.asSimpleType().kind == SimpleTypeKind.template_t &&
+    typeNode.asSimpleType().template_arguments.length > 0
+  ) {
+    dartType = typeNode.asSimpleType().template_arguments[0].trimNamespace();
   }
 
   if (
@@ -178,27 +224,74 @@ export default function DartSyntaxParser(
         let clazz = node as Clazz;
 
         setUserdata(clazz, userDataKey, {
-          dartName: _dartClassName(clazz),
+          dartName: _dartClassName(clazz.name),
         });
 
         clazz.methods.forEach((method) => {
           setUserdata(method, userDataKey, {
-            dartName: _dartMemberName(method.name),
+            dartName: toDartStyleNaming(method.name),
           });
 
           setUserdata(method.return_type, userDataKey, {
-            dartName: _dartTypeName(method.return_type),
+            dartName: _dartTypeName(preParseResult!, method.return_type),
           });
+
+          // If the `ReturnTypeParser` is applied, the `ReturnTypeParser` phase is executed before the `DartSyntaxParser`.
+          // Therefore, the parameter associated with the out variable's naming may not be set.
+          // In such cases, we need to reapply the naming here to ensure consistency.
+          let outVariable = getOutVariable(method);
+          if (outVariable) {
+            setUserdata(outVariable, userDataKey, {
+              dartName: toDartStyleNaming(outVariable.name),
+            });
+          }
 
           method.parameters.forEach((param) => {
             setUserdata(param.type, userDataKey, {
-              dartName: _dartTypeName(param.type),
+              dartName: _dartTypeName(preParseResult!, param.type),
             });
 
             setUserdata(param, userDataKey, {
-              dartName: _dartMemberName(param.name),
+              dartName: toDartStyleNaming(param.name),
             });
           });
+        });
+
+        clazz.member_variables.forEach((member) => {
+          setUserdata(member, userDataKey, {
+            dartName: toDartStyleNaming(member.name),
+          });
+
+          setUserdata(member.type, userDataKey, {
+            dartName: _dartTypeName(preParseResult!, member.type),
+          });
+        });
+      } else if (node.__TYPE == CXXTYPE.TypeAlias) {
+        let typeAlias = node as TypeAlias;
+        setUserdata(typeAlias, userDataKey, {
+          dartName: toDartStyleNaming(typeAlias.name),
+        });
+        setUserdata(typeAlias.underlyingType, userDataKey, {
+          dartName: _dartTypeName(preParseResult!, typeAlias.underlyingType),
+        });
+      } else if (node.__TYPE == CXXTYPE.Enumz) {
+        let enumz = node as Enumz;
+        setUserdata(enumz, userDataKey, {
+          dartName: _dartClassName(enumz.name),
+        });
+        enumz.enum_constants.forEach((enumConstant) => {
+          setUserdata(enumConstant, userDataKey, {
+            dartName: toDartStyleNaming(enumConstant.name),
+          });
+        });
+      } else if (node.isVariable()) {
+        let v = node.asVariable();
+        setUserdata(v, userDataKey, {
+          dartName: toDartStyleNaming(v.name),
+        });
+
+        setUserdata(v.type, userDataKey, {
+          dartName: _dartTypeName(preParseResult!, v.type),
         });
       }
     });

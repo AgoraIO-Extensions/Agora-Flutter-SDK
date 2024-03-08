@@ -132,6 +132,8 @@
 @property(nonatomic) PlatformRenderPool* platformRenderPool;
 
 @property(nonatomic, strong) FlutterMethodChannel *methodChannel;
+
+- (void)dispose;
 @end
 
 @implementation VideoViewController
@@ -186,6 +188,9 @@
       [self dePlatformRenderRef:platformViewId];
       
       result(@(YES));
+  } else if ([@"dispose" isEqualToString:call.method]) {
+      [self dispose];
+      result(@(YES));
   }
 }
 
@@ -229,6 +234,13 @@
       return YES;
     }
     return NO;
+}
+
+- (void)dispose {
+    for (TextureRender * textureRender in self.textureRenders.allValues) {
+        [textureRender dispose];
+    }
+    [self.textureRenders removeAllObjects];
 }
 
 @end

@@ -25,9 +25,6 @@ class GlobalVideoViewControllerIO extends GlobalVideoViewControllerPlatfrom {
   @override
   int get irisRtcRenderingHandle => _irisRtcRenderingHandle;
 
-  final Map<int, Completer<void>> _destroyTextureRenderCompleters = {};
-  bool _isDetachVFBMing = false;
-
   void _hotRestartListener(Object? message) {
     assert(() {
       // Free `IrisRtcRendering` when hot restart
@@ -64,34 +61,28 @@ class GlobalVideoViewControllerIO extends GlobalVideoViewControllerPlatfrom {
       return;
     }
 
+    final irisRtcRenderingHandle = _irisRtcRenderingHandle;
+    _irisRtcRenderingHandle = 0;
+
     irisMethodChannel.removeHotRestartListener(_hotRestartListener);
 
-    _isDetachVFBMing = true;
-
-    // Need wait for all `destroyTextureRender` functions are called completed before
-    // `FreeIrisVideoFrameBufferManager`, if not, the `destroyTextureRender`(call
-    // `IrisVideoFrameBufferManager.DisableVideoFrameBuffer` in native side) and
-    // `FreeIrisVideoFrameBufferManager` will be called parallelly, which will cause crash.
-    for (final completer in _destroyTextureRenderCompleters.values) {
-      if (!completer.isCompleted) {
-        await completer.future;
-      }
-    }
-    _destroyTextureRenderCompleters.clear();
+    await methodChannel.invokeMethod('dispose');
 
     await irisMethodChannel.invokeMethod(IrisMethodCall(
       'FreeIrisRtcRendering',
       jsonEncode({
         'irisRtcEngineNativeHandle': irisRtcEngineIntPtr,
-        'irisRtcRenderingHandle': _irisRtcRenderingHandle,
+        'irisRtcRenderingHandle': irisRtcRenderingHandle,
       }),
     ));
-    _irisRtcRenderingHandle = 0;
   }
 
   @override
   Future<int> createTextureRender(int uid, String channelId,
       int videoSourceType, int videoViewSetupMode) async {
+    if (_irisRtcRenderingHandle == 0) {
+      return kTextureNotInit;
+    }
     final textureId =
         await methodChannel.invokeMethod<int>('createTextureRender', {
       'irisRtcRenderingHandle': _irisRtcRenderingHandle,
@@ -106,16 +97,11 @@ class GlobalVideoViewControllerIO extends GlobalVideoViewControllerPlatfrom {
   /// Call `IrisVideoFrameBufferManager.DisableVideoFrameBuffer` in the native side
   @override
   Future<void> destroyTextureRender(int textureId) async {
-    _destroyTextureRenderCompleters.putIfAbsent(
-        textureId, () => Completer<void>());
+    if (_irisRtcRenderingHandle == 0) {
+      return;
+    }
 
     await methodChannel.invokeMethod('destroyTextureRender', textureId);
-
-    _destroyTextureRenderCompleters[textureId]?.complete(null);
-
-    if (!_isDetachVFBMing) {
-      _destroyTextureRenderCompleters.remove(textureId);
-    }
   }
 
   /// Decrease the ref count of the native view(`UIView` in iOS) of the `platformViewId`.

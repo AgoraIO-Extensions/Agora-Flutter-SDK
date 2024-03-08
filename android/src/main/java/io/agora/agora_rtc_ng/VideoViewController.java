@@ -56,6 +56,7 @@ class SimpleRef {
 class PlatformRenderPool {
 
     private final Map<Integer, SimpleRef> renders = new HashMap<>();
+
     SimpleRef createView(int platformViewId,
                          Context context,
                          AgoraPlatformViewFactory.PlatformViewProvider viewProvider) {
@@ -182,10 +183,8 @@ public class VideoViewController implements MethodChannel.MethodCallHandler {
             case "createTextureRender": {
                 final Map<?, ?> args = (Map<?, ?>) call.arguments;
 
-                @SuppressWarnings("ConstantConditions")
-                final long irisRtcRenderingHandle = getLong(args.get("irisRtcRenderingHandle"));
-                @SuppressWarnings("ConstantConditions")
-                final long uid = getLong(args.get("uid"));
+                @SuppressWarnings("ConstantConditions") final long irisRtcRenderingHandle = getLong(args.get("irisRtcRenderingHandle"));
+                @SuppressWarnings("ConstantConditions") final long uid = getLong(args.get("uid"));
                 final String channelId = (String) args.get("channelId");
                 final int videoSourceType = (int) args.get("videoSourceType");
                 final int videoViewSetupMode = (int) args.get("videoViewSetupMode");
@@ -205,11 +204,23 @@ public class VideoViewController implements MethodChannel.MethodCallHandler {
                 result.success(success);
                 break;
             }
+            case "dispose": {
+                disposeAllRenderers();
+                result.success(true);
+                break;
+            }
             case "updateTextureRenderData":
             default:
                 result.notImplemented();
                 break;
         }
+    }
+
+    private void disposeAllRenderers() {
+        for (final TextureRenderer textureRenderer : textureRendererMap.values()) {
+            textureRenderer.dispose();
+        }
+        textureRendererMap.clear();
     }
 
     /**

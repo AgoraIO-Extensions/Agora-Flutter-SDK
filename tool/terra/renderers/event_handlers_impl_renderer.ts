@@ -10,17 +10,19 @@ import {
   RenderResult,
   TerraContext,
 } from "@agoraio-extensions/terra-core";
-import { getIrisApiIdValue } from "../parsers/iris_api_id_parser";
 import { isCallbackClass } from "./utils";
 import { dartFileName, dartName } from "../parsers/dart_syntax_parser";
+import { getIrisApiIdValue } from "@agoraio-extensions/terra_shared_configs";
 
 function processCXXFiles(
   terraContext: TerraContext,
   parseResult: ParseResult,
   args: any
 ): CXXFile[] {
-  return (parseResult.nodes as CXXFile[]).filter((it) => {
-    return it.fileName == "IAgoraRtcEngine.h";
+  return (parseResult.nodes as CXXFile[]).filter((cxxFile) => {
+    return cxxFile.nodes.find((node) => {
+      return node.__TYPE == CXXTYPE.Clazz && isCallbackClass(node as Clazz);
+    });
   });
 }
 
@@ -57,7 +59,7 @@ function getBaseClasses(parseResult: ParseResult, clazz: Clazz): Clazz[] {
 function genCallbackExtendBlock(parseResult: ParseResult, clazz: Clazz) {
   let extendBlock = "";
   let wrapperClassName = getBaseClasses(parseResult, clazz).map(
-    (it) => `${it.name}Wrapper`
+    (it) => `${dartName(it)}Wrapper`
   );
   if (wrapperClassName.length === 0) {
     extendBlock = `implements EventLoopEventHandler`;
@@ -83,6 +85,10 @@ function callbackSwithCaseBlock(
       }Json`;
       let dn = dartName(it);
       let eventName = getIrisApiIdValue(it).split("_").slice(1).join("_");
+      // Fall back to method name if `getIrisApiIdValue` is empty. This is happen for that nodes from custom headers.
+      if (eventName === "") {
+        eventName = it.name;
+      }
 
       return `
 case '${eventName}':
@@ -115,6 +121,11 @@ ${(function () {
     .map((it) => {
       let memberName = dartName(it);
       let actualNode = parseResult.resolveNodeByType(it.type);
+      if (actualNode.__TYPE == CXXTYPE.TypeAlias) {
+        actualNode = parseResult.resolveNodeByType(
+          actualNode.asTypeAlias()!.underlyingType
+        );
+      }
       if (actualNode.__TYPE == CXXTYPE.Struct) {
         if (it.type.kind == SimpleTypeKind.array_t) {
           return `${memberName} = ${memberName}.map((e) => e.fillBuffers(buffers)).toList();`;
@@ -125,7 +136,8 @@ ${(function () {
 
       return "";
     })
-    .join("\n");
+    .join("\n")
+    .trim();
 
   let paramList = it.parameters.map((it) => dartName(it));
 
@@ -142,7 +154,7 @@ ${(function () {
     .join("\n");
 }
 
-export default function EventHandlersRenderer(
+export default function EventHandlersImplRenderer(
   terraContext: TerraContext,
   args: any,
   parseResult: ParseResult

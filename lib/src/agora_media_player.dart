@@ -145,32 +145,18 @@ abstract class MediaPlayer {
   /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown; and you need to catch the exception and handle it accordingly.
   Future<void> selectAudioTrack(int index);
 
-  /// @nodoc
+  /// Selects the audio tracks that you want to play on your local device and publish to the channel respectively.
+  ///
+  /// You can call this method to determine the audio track to be played on your local device and published to the channel. Before calling this method, you need to open the media file with the openWithMediaSource method and set enableMultiAudioTrack in MediaSource as true.
+  ///
+  /// * [playoutTrackIndex] The index of audio tracks for local playback. You can obtain the index through getStreamInfo.
+  /// * [publishTrackIndex] The index of audio tracks to be published in the channel. You can obtain the index through getStreamInfo.
+  ///
+  /// Returns
+  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown; and you need to catch the exception and handle it accordingly.
+  ///  < 0: Failure.
   Future<void> selectMultiAudioTrack(
       {required int playoutTrackIndex, required int publishTrackIndex});
-
-  /// Set media player options for providing technical previews or special customization features.
-  ///
-  /// The media player supports setting options through key and value. In general, you don't need to know about the option settings. You can use the default option settings of the media player. The difference between this method and setPlayerOptionInString is that the value parameter of this method is of type Int, while the value of setPlayerOptionInString is of type String. These two methods cannot be used together. Ensure that you call this method before open or openWithMediaSource.
-  ///
-  /// * [key] The key of the option.
-  /// * [value] The value of the key.
-  ///
-  /// Returns
-  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown; and you need to catch the exception and handle it accordingly.
-  Future<void> setPlayerOptionInInt({required String key, required int value});
-
-  /// Set media player options for providing technical previews or special customization features.
-  ///
-  /// Ensure that you call this method before open or openWithMediaSource. The media player supports setting options through key and value. In general, you don't need to know about the option settings. You can use the default option settings of the media player. The difference between this method and setPlayerOptionInInt is that the value parameter of this method is of type String, while the value of setPlayerOptionInInt is of type String. These two methods cannot be used together.
-  ///
-  /// * [key] The key of the option.
-  /// * [value] The value of the key.
-  ///
-  /// Returns
-  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown; and you need to catch the exception and handle it accordingly.
-  Future<void> setPlayerOptionInString(
-      {required String key, required String value});
 
   /// @nodoc
   Future<void> takeScreenshot(String filename);
@@ -420,6 +406,29 @@ abstract class MediaPlayer {
   /// @nodoc
   Future<void> setSoundPositionParams(
       {required double pan, required double gain});
+
+  /// Set media player options for providing technical previews or special customization features.
+  ///
+  /// The media player supports setting options through key and value. In general, you don't need to know about the option settings. You can use the default option settings of the media player. The difference between this method and setPlayerOptionInString is that the value parameter of this method is of type Int, while the value of setPlayerOptionInString is of type String. These two methods cannot be used together. Ensure that you call this method before open or openWithMediaSource.
+  ///
+  /// * [key] The key of the option.
+  /// * [value] The value of the key.
+  ///
+  /// Returns
+  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown; and you need to catch the exception and handle it accordingly.
+  Future<void> setPlayerOptionInInt({required String key, required int value});
+
+  /// Set media player options for providing technical previews or special customization features.
+  ///
+  /// Ensure that you call this method before open or openWithMediaSource. The media player supports setting options through key and value. In general, you don't need to know about the option settings. You can use the default option settings of the media player. The difference between this method and setPlayerOptionInInt is that the value parameter of this method is of type String, while the value of setPlayerOptionInInt is of type String. These two methods cannot be used together.
+  ///
+  /// * [key] The key of the option.
+  /// * [value] The value of the key.
+  ///
+  /// Returns
+  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown; and you need to catch the exception and handle it accordingly.
+  Future<void> setPlayerOptionInString(
+      {required String key, required String value});
 }
 
 /// This class provides methods to manage cached media files.
