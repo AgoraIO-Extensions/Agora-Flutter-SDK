@@ -45,11 +45,11 @@ public class IrisRenderer {
     if (callback != null) { callback.onSizeChanged(width, height); }
   }
 
-  public void startRenderingToSurface(Surface surface) {
+  public void startRenderingToSurface(Surface surface, int width, int height) {
     if (nativeRendererHandle != 0L) { return; }
     nativeRendererHandle = nativeStartRenderingToSurface(
         videoFrameManagerNativeHandle, surface, uid, channelId, videoSourceType,
-        videoViewSetupMode);
+        videoViewSetupMode, width, height);
   }
 
   public void stopRenderingToSurface() {
@@ -63,7 +63,7 @@ public class IrisRenderer {
                                                     Surface surface, long uid,
                                                     String channelId,
                                                     int videoSourceType,
-                                                    int videoViewSetupMode);
+                                                    int videoViewSetupMode, int width, int height);
 
   private native void nativeStopRenderingToSurface(long nativeRendererHandle);
 }
