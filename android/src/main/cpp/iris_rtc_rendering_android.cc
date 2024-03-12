@@ -126,6 +126,15 @@ class GLContext {
     }
   }
 
+  void TEST() {
+      EGLint __width;
+      EGLint __height;
+      eglQuerySurface(display_,surface_,EGL_WIDTH,&__width);
+      eglQuerySurface(display_,surface_,EGL_HEIGHT,&__height);
+
+      LOGCATE("TEST TEST TEST __width: %d __height: %d", __width, __height);
+  }
+
   EGLint Swap() {
     eglSwapBuffers(display_, surface_);
     CHECK_GL_ERROR()
@@ -303,6 +312,7 @@ public:
         CHECK_GL_ERROR()
         glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
         CHECK_GL_ERROR()
+        glViewport(0, 0, video_frame->width, video_frame->height);
 
         // Bind 2D texture
         glActiveTexture(GL_TEXTURE0);
@@ -409,6 +419,8 @@ public:
         CHECK_GL_ERROR()
         glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
         CHECK_GL_ERROR()
+        glViewport(0.0f, 0.0f, video_frame->width, video_frame->height);
+        CHECK_GL_ERROR()
 
         // Bind external oes texture
         glActiveTexture(GL_TEXTURE0);
@@ -491,8 +503,9 @@ private:
 class YUVRendering final : public RenderingOp {
 
  public:
-  explicit YUVRendering(std::shared_ptr<GLContext> &gl_context)
-      : RenderingOp(gl_context) {
+  explicit YUVRendering(std::shared_ptr<GLContext> &gl_context, GLsizei vp_width,
+    GLsizei vp_height)
+      : RenderingOp(gl_context), vp_width_(vp_width), vp_height_(vp_height) {
     LOGCATD("Rendering with YUVRendering");
     shader_ =
         std::make_unique<ScopedShader>(vertex_shader_yuv_, frag_shader_yuv_);
@@ -527,6 +540,9 @@ class YUVRendering final : public RenderingOp {
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
     CHECK_GL_ERROR()
     glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
+    CHECK_GL_ERROR()
+
+    glViewport(0.0f, 0.0f, width, height);
     CHECK_GL_ERROR()
 
     glEnableVertexAttribArray(aPositionLoc_);
@@ -672,6 +688,9 @@ class YUVRendering final : public RenderingOp {
   GLint vTextureLoc_;
 
   std::unique_ptr<ScopedShader> shader_;
+
+    GLsizei vp_width_;
+    GLsizei vp_height_;
 };
 
 class NativeTextureRenderer final
@@ -680,9 +699,9 @@ class NativeTextureRenderer final
   explicit NativeTextureRenderer(
       JNIEnv *env, jobject j_iris_renderer_obj, jobject surface_jni,
       agora::iris::IrisRtcRendering *iris_rtc_rendering, unsigned int uid,
-      const char *channel_id, int video_source_type, int video_view_setup_mode)
+      const char *channel_id, int video_source_type, int video_view_setup_mode, int vp_width, int vp_height)
       : jvm_(nullptr), iris_rtc_rendering_(iris_rtc_rendering), width_(0),
-        height_(0) {
+        height_(0), vp_width_(vp_width), vp_height_(vp_height) {
     env->GetJavaVM(&jvm_);
     j_iris_renderer_obj_ = env->NewGlobalRef(j_iris_renderer_obj);
     jclass j_caller_class = env->GetObjectClass(j_iris_renderer_obj_);
@@ -727,6 +746,7 @@ class NativeTextureRenderer final
       NotifySizeChangeCallback(video_frame->width, video_frame->height);
       width_ = video_frame->width;
       height_ = video_frame->height;
+        return;
     }
 
     if (!gl_context_->SetupSurface(native_windows_)) {
@@ -743,6 +763,8 @@ class NativeTextureRenderer final
       rendering_op_.reset();
     }
 
+//    gl_context_->TEST();
+
     if (!rendering_op_) {
       if (video_frame->type == agora::media::base::VIDEO_PIXEL_FORMAT::VIDEO_TEXTURE_2D) {
         rendering_op_ = std::make_unique<Texture2DRendering>(gl_context_);
@@ -751,7 +773,8 @@ class NativeTextureRenderer final
         rendering_op_ = std::make_unique<OESTextureRendering>(gl_context_);
       } else if (video_frame->type
                  == agora::media::base::VIDEO_PIXEL_FORMAT::VIDEO_PIXEL_I420) {
-        rendering_op_ = std::make_unique<YUVRendering>(gl_context_);
+          LOGCATE("vp_width_: %d, vp_height_: %d", vp_width_, vp_height_);
+        rendering_op_ = std::make_unique<YUVRendering>(gl_context_, vp_width_, vp_height_);
       } else {
         // NOT SUPPORTED.
         LOGCATE("NOT SUPPORTED format: %d", video_frame->type);
@@ -802,6 +825,9 @@ class NativeTextureRenderer final
   int width_;
   int height_;
 
+    int vp_width_;
+    int vp_height_;
+
   int delegate_id_;
 
   std::shared_ptr<GLContext> gl_context_;
@@ -818,14 +844,14 @@ extern "C" JNIEXPORT jlong JNICALL
 Java_io_agora_agora_1rtc_1ng_IrisRenderer_nativeStartRenderingToSurface(
     JNIEnv *env, jobject thiz, jlong buffer_manager_int_ptr, jobject surface,
     jlong uid, jstring channel_id, jint video_source_type,
-    jint video_view_setup_mode) {
+    jint video_view_setup_mode, jint width, jint height) {
   auto *iris_rtc_rendering =
       reinterpret_cast<agora::iris::IrisRtcRendering *>(buffer_manager_int_ptr);
 
   auto *j_channel_id = env->GetStringUTFChars(channel_id, nullptr);
   auto *renderer = new NativeTextureRenderer(
       env, thiz, surface, iris_rtc_rendering, uid, j_channel_id,
-      video_source_type, video_view_setup_mode);
+      video_source_type, video_view_setup_mode, width, height);
   env->ReleaseStringUTFChars(channel_id, j_channel_id);
   return reinterpret_cast<jlong>(renderer);
 }

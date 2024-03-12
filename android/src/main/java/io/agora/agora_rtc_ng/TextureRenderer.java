@@ -3,6 +3,7 @@ package io.agora.agora_rtc_ng;
 import android.graphics.SurfaceTexture;
 import android.os.Handler;
 import android.os.Looper;
+import android.util.Log;
 import android.view.Surface;
 
 import androidx.annotation.NonNull;
@@ -79,7 +80,13 @@ public class TextureRenderer {
         this.irisRenderer.setCallback(new IrisRenderer.Callback() {
             @Override
             public void onSizeChanged(int width, int height) {
+                if (flutterSurfaceTexture != null) {
+                    flutterSurfaceTexture.setDefaultBufferSize(width, height);
+                }
+
                 handler.post(() -> {
+
+
                     methodChannel.invokeMethod(
                             "onSizeChanged",
                             new HashMap<String, Integer>() {{
@@ -102,11 +109,12 @@ public class TextureRenderer {
         }
 
         if (this.width != width || this.height != height) {
-            st.setDefaultBufferSize(width, height);
+//            st.setDefaultBufferSize(width, height);
 
             // Only call `irisRenderer.startRenderingToSurface` in the first time.
             if (this.width == 0 && this.height == 0) {
-                this.irisRenderer.startRenderingToSurface(renderSurface);
+                Log.e("TextureRenderer", "width: " + width + ", height: " + height);
+                this.irisRenderer.startRenderingToSurface(renderSurface, width, height);
             }
 
             this.width = width;
