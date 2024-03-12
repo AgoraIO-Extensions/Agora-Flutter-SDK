@@ -30,6 +30,9 @@ class EventParam {
 @JS('createIrisRtcEngineFake')
 external Object createIrisRtcEngineFake(Object irisApiEngine);
 
+@JS('irisMock')
+external void irisMock();
+
 @JS('triggerEventWithFakeApiEngine')
 external int triggerEventWithFakeApiEngine(
   // ignore: non_constant_identifier_names

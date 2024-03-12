@@ -9,5 +9,5 @@ final basic = [
   {'name': 'Basic'},
   {'name': 'JoinChannelAudio', 'widget': const JoinChannelAudio()},
   {'name': 'JoinChannelVideo', 'widget': const JoinChannelVideo()},
-  if (!kIsWeb) {'name': 'StringUid', 'widget': const StringUid()}
+  {'name': 'StringUid', 'widget': const StringUid()}
 ];

@@ -20,6 +20,7 @@ class _State extends State<StringUid> {
   late final RtcEngine _engine;
   bool isJoined = false;
   late TextEditingController _controller0, _controller1;
+  late final RtcEngineEventHandler _rtcEngineEventHandler;
 
   @override
   void initState() {
@@ -36,6 +37,7 @@ class _State extends State<StringUid> {
   }
 
   Future<void> _dispose() async {
+    _engine.unregisterEventHandler(_rtcEngineEventHandler);
     await _engine.leaveChannel();
     await _engine.release();
   }
@@ -47,7 +49,7 @@ class _State extends State<StringUid> {
       channelProfile: ChannelProfileType.channelProfileLiveBroadcasting,
     ));
 
-    _engine.registerEventHandler(RtcEngineEventHandler(
+    _rtcEngineEventHandler = RtcEngineEventHandler(
       onError: (ErrorCodeType err, String msg) {
         logSink.log('[onError] err: $err, msg: $msg');
       },
@@ -58,6 +60,10 @@ class _State extends State<StringUid> {
           isJoined = true;
         });
       },
+      onUserInfoUpdated: (int uid, UserInfo info) {
+        logSink
+            .log('[onUserInfoUpdated] uid: ${uid} UserInfo: ${info.toJson()}');
+      },
       onLeaveChannel: (RtcConnection connection, RtcStats stats) {
         logSink.log(
             '[onLeaveChannel] connection: ${connection.toJson()} stats: ${stats.toJson()}');
@@ -65,7 +71,8 @@ class _State extends State<StringUid> {
           isJoined = false;
         });
       },
-    ));
+    );
+    _engine.registerEventHandler(_rtcEngineEventHandler);
 
     await _engine.enableAudio();
     await _engine.setClientRole(role: ClientRoleType.clientRoleBroadcaster);
