@@ -4,7 +4,7 @@ import 'package:agora_rtc_engine_example/components/example_actions_widget.dart'
 import 'package:agora_rtc_engine_example/components/log_sink.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:video_raw_data/video_raw_data.dart';
+// import 'package:video_raw_data/video_raw_data.dart';
 
 /// ProcessVideoRawData Example
 ///
@@ -29,8 +29,8 @@ class _State extends State<ProcessVideoRawData> {
   ChannelProfileType _channelProfileType =
       ChannelProfileType.channelProfileLiveBroadcasting;
 
-  final VideoRawDataController _videoRawDataController =
-      VideoRawDataController();
+  // final VideoRawDataController _videoRawDataController =
+  //     VideoRawDataController();
 
   @override
   void initState() {
@@ -47,7 +47,7 @@ class _State extends State<ProcessVideoRawData> {
   }
 
   Future<void> _dispose() async {
-    _videoRawDataController.dispose();
+    // _videoRawDataController.dispose();
     await _engine.leaveChannel();
     await _engine.release();
   }
@@ -99,7 +99,7 @@ class _State extends State<ProcessVideoRawData> {
 
     final nativeHandle = await _engine.getNativeHandle();
 
-    _videoRawDataController.initialize(nativeHandle);
+    // _videoRawDataController.initialize(nativeHandle);
 
     await _engine.startPreview();
 
