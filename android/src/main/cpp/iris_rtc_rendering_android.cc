@@ -91,16 +91,29 @@ class GLContext {
   }
 
   bool GLContextMakeCurrent(const void *share_context) {
+      LOGCATE("GLContextMakeCurrent111 sharedContext： %lld", (int64_t)share_context);
+      LOGCATE("GLContextMakeCurrent111 share_context_： %lld", (int64_t)share_context_);
+      LOGCATE("GLContextMakeCurrent111 context_： %lld", (int64_t)context_);
     // Need recreate context
     if (context_ != EGL_NO_CONTEXT && share_context_ != share_context) {
-      eglMakeCurrent(display_, EGL_NO_SURFACE, EGL_NO_SURFACE, EGL_NO_CONTEXT);
-      eglDestroyContext(display_, context_);
+        LOGCATE("GLContextMakeCurrent 222 sharedContext： %lld, share_context_: %lld", (int64_t)share_context, (int64_t)share_context_);
+//        eglDestroyContext(display_, context_);
+        CHECK_GL_ERROR()
+        LOGCATE("GLContextMakeCurrent 333 sharedContext： %lld, share_context_: %lld", (int64_t)share_context, (int64_t)share_context_);
+//      eglMakeCurrent(display_, EGL_NO_SURFACE, EGL_NO_SURFACE, EGL_NO_CONTEXT);
+
+
+//      eglDestroyContext(display_, context_);
+        LOGCATE("GLContextMakeCurrent 3334444 sharedContext： %lld, share_context_: %lld", (int64_t)share_context, (int64_t)share_context_);
+        CHECK_GL_ERROR()
       context_ = EGL_NO_CONTEXT;
       share_context_ = EGL_NO_CONTEXT;
     }
 
     if (context_ == EGL_NO_CONTEXT) {
+        LOGCATE("GLContextMakeCurrent 4444 sharedContext： %lld", (int64_t)share_context);
       share_context_ = (EGLContext) share_context;
+        LOGCATE("GLContextMakeCurrent 4444444 sharedContext： %lld", (int64_t)share_context_);
       const EGLint context_attribs[] = {EGL_CONTEXT_CLIENT_VERSION,
                                         2,// Request opengl ES2.0
                                         EGL_NONE};
@@ -288,8 +301,9 @@ class RenderingOp {
 
 class Texture2DRendering final : public RenderingOp {
 public:
-    explicit Texture2DRendering(std::shared_ptr<GLContext> &gl_context)
-            : RenderingOp(gl_context) {
+    explicit Texture2DRendering(std::shared_ptr<GLContext> &gl_context, GLsizei vp_width,
+            GLsizei vp_height)
+            : RenderingOp(gl_context), vp_width_(vp_width), vp_height_(vp_height) {
         LOGCATD("Rendering with Texture2DRendering");
         shader_ = std::make_unique<ScopedShader>(vertex_shader_tex_2d_, frag_shader_tex_2d_);
         GLuint program = shader_->GetProgram();
@@ -325,8 +339,16 @@ public:
         glVertexAttribPointer(texCoordLoc_, 2, GL_FLOAT, false, 0, texCoords);
         glEnableVertexAttribArray(texCoordLoc_);
 
+                // Modify the texture transformation matrix
+        float modifiedTexMatrix[16];
+        for (int i = 0; i < 16; ++i) {
+            modifiedTexMatrix[i] = texMatrix[i];
+        }
+        modifiedTexMatrix[0] *= vp_width_;
+        modifiedTexMatrix[5] *= vp_height_;
+
         // Copy the texture transformation matrix over.
-        glUniformMatrix4fv(texMatrixLoc_, 1, GL_FALSE, texMatrix);
+        glUniformMatrix4fv(texMatrixLoc_, 1, GL_FALSE, modifiedTexMatrix);
 
         glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_SHORT, indices);
 
@@ -389,6 +411,9 @@ private:
     GLint texMatrixLoc_;
     GLint texSamplerLoc_;
     std::unique_ptr<ScopedShader> shader_;
+
+    GLsizei vp_width_;
+    GLsizei vp_height_;
 };
 
 
@@ -511,11 +536,18 @@ class YUVRendering final : public RenderingOp {
         std::make_unique<ScopedShader>(vertex_shader_yuv_, frag_shader_yuv_);
     GLuint program = shader_->GetProgram();
     aPositionLoc_ = glGetAttribLocation(program, "aPosition");
+      CHECK_GL_ERROR()
     texCoordLoc_ = glGetAttribLocation(program, "aTextCoord");
+      CHECK_GL_ERROR()
 
     yTextureLoc_ = glGetUniformLocation(program, "yTexture");
+      CHECK_GL_ERROR()
     uTextureLoc_ = glGetUniformLocation(program, "uTexture");
+      CHECK_GL_ERROR()
     vTextureLoc_ = glGetUniformLocation(program, "vTexture");
+      CHECK_GL_ERROR()
+      transformMatLoc_ = glGetUniformLocation(program, "transformMat");
+      CHECK_GL_ERROR()
 
     glGenTextures(3, texs_);
     CHECK_GL_ERROR()
@@ -566,6 +598,29 @@ class YUVRendering final : public RenderingOp {
     glVertexAttribPointer(texCoordLoc_, 2, GL_FLOAT, GL_FALSE,
                           2 * sizeof(float), fragment);
     CHECK_GL_ERROR()
+
+      float aspectRatioFrame = static_cast<float>(width) / static_cast<float>(height);
+      float aspectRatioTarget = vp_width_ / vp_height_;
+
+      float scaleX = 1.0, scaleY = 1.0;
+      if (aspectRatioFrame > aspectRatioTarget) {
+          // 按宽度fit，计算需要的Y缩放
+          scaleY = aspectRatioFrame / aspectRatioTarget;
+      } else {
+          // 按高度fit，计算需要的X缩放
+          scaleX = aspectRatioTarget / aspectRatioFrame;
+      }
+
+      // 生成缩放矩阵，这里简化处理，不考虑Z轴
+      float mvpMatrix[16] = {
+              scaleX, 0.0f, 0.0f, 0.0f,
+              0.0f, scaleY, 0.0f, 0.0f,
+              0.0f, 0.0f, 1.0f, 0.0f,
+              0.0f, 0.0f, 0.0f, 1.0f
+      };
+
+      glUniformMatrix4fv(transformMatLoc_, 1, GL_FALSE, mvpMatrix);
+      CHECK_GL_ERROR()
 
     // y buffer texture
     glActiveTexture(GL_TEXTURE0);
@@ -643,14 +698,15 @@ class YUVRendering final : public RenderingOp {
   }
 
  private:
-  const char *vertex_shader_yuv_ =
-      "attribute vec4 aPosition;\n"
-      "attribute vec2 aTextCoord;\n"
-      "varying vec2 vTextCoord;\n"
-      "void main() {\n"
-      "    vTextCoord = vec2(aTextCoord.x, 1.0 - aTextCoord.y);\n"
-      "    gl_Position = aPosition;\n"
-      "}\n";
+    const char *vertex_shader_yuv_ =
+            "uniform mat4 transformMat;\n"
+            "attribute vec4 aPosition;\n"
+            "attribute vec2 aTextCoord;\n"
+            "varying vec2 vTextCoord;\n"
+            "void main() {\n"
+            "    vTextCoord = vec2(aTextCoord.x, 1.0 - aTextCoord.y);\n"
+            "    gl_Position = transformMat * aPosition;\n"
+            "}\n";
 
   const char *frag_shader_yuv_ =
       "precision mediump float;\n"
@@ -682,6 +738,7 @@ class YUVRendering final : public RenderingOp {
 
   GLint aPositionLoc_;
   GLint texCoordLoc_;
+    GLint transformMatLoc_;
 
   GLint yTextureLoc_;
   GLint uTextureLoc_;
@@ -710,7 +767,7 @@ class NativeTextureRenderer final
     env->DeleteLocalRef(j_caller_class);
 
     native_windows_ = ANativeWindow_fromSurface(env, surface_jni);
-    gl_context_ = std::make_shared<GLContext>(native_windows_);
+//    gl_context_ = std::make_shared<GLContext>(native_windows_);
 
     IrisRtcVideoFrameConfig config;
     config.uid = uid;
@@ -742,6 +799,8 @@ class NativeTextureRenderer final
 
     if (video_frame->width == 0 || video_frame->height == 0) { return; }
 
+      LOGCATE("video_frame_format: %d, %d, %d, %d", config.video_frame_format, video_frame->type, config.video_source_type, config.uid);
+
     if (width_ != video_frame->width || height_ != video_frame->height) {
       NotifySizeChangeCallback(video_frame->width, video_frame->height);
       width_ = video_frame->width;
@@ -749,25 +808,44 @@ class NativeTextureRenderer final
         return;
     }
 
+      if (rendering_op_ && rendering_op_->Format() != video_frame->type) {
+          rendering_op_.reset();
+//      gl_context_->GLContextClearCurrent();
+          if (gl_context_) {
+              gl_context_.reset();
+          }
+          return;
+      }
+
+    if (!gl_context_) {
+        gl_context_ = std::make_shared<GLContext>(native_windows_);
+    }
+
     if (!gl_context_->SetupSurface(native_windows_)) {
       LOGCATE("GLContext#SetupSurface failed ");
+
       return;
     }
 
+      LOGCATE("video_frame->sharedContext： %lld", (int64_t)video_frame->sharedContext);
     if (!gl_context_->GLContextMakeCurrent(video_frame->sharedContext)) {
       LOGCATE("GLContext#CreateContextAndMakeCurrent failed ");
+
       return;
     }
 
-    if (rendering_op_ && rendering_op_->Format() != video_frame->type) {
-      rendering_op_.reset();
-    }
+//    if (rendering_op_ && rendering_op_->Format() != video_frame->type) {
+//      rendering_op_.reset();
+////      gl_context_->GLContextClearCurrent();
+//        gl_context_.reset();
+//      return;
+//    }
 
 //    gl_context_->TEST();
 
     if (!rendering_op_) {
       if (video_frame->type == agora::media::base::VIDEO_PIXEL_FORMAT::VIDEO_TEXTURE_2D) {
-        rendering_op_ = std::make_unique<Texture2DRendering>(gl_context_);
+        rendering_op_ = std::make_unique<Texture2DRendering>(gl_context_, vp_width_, vp_height_);
       } else if (video_frame->type
           == agora::media::base::VIDEO_PIXEL_FORMAT::VIDEO_TEXTURE_OES) {
         rendering_op_ = std::make_unique<OESTextureRendering>(gl_context_);
