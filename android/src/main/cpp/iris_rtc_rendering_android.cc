@@ -569,12 +569,14 @@ class YUVRendering final : public RenderingOp {
     int uStride = video_frame->uStride;
     int vStride = video_frame->vStride;
 
+    LOGCATE("width: %d, height  %d, yStride  %d, uStride  %d, vStride  %d", width, height, yStride, uStride, vStride);
+
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
     CHECK_GL_ERROR()
     glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
     CHECK_GL_ERROR()
 
-    glViewport(0.0f, 0.0f, width, height);
+    glViewport(0.0f, 0.0f, vp_width_, vp_height_);
     CHECK_GL_ERROR()
 
     glEnableVertexAttribArray(aPositionLoc_);
@@ -599,26 +601,20 @@ class YUVRendering final : public RenderingOp {
                           2 * sizeof(float), fragment);
     CHECK_GL_ERROR()
 
-      float aspectRatioFrame = static_cast<float>(width) / static_cast<float>(height);
-      float aspectRatioTarget = vp_width_ / vp_height_;
-
+      float aspectRatioVideo = video_frame->width / (float)video_frame->height;
+      float aspectRatioView = vp_width_ / (float)vp_height_;
       float scaleX = 1.0, scaleY = 1.0;
-      if (aspectRatioFrame > aspectRatioTarget) {
-          // 按宽度fit，计算需要的Y缩放
-          scaleY = aspectRatioFrame / aspectRatioTarget;
+      if (aspectRatioView > aspectRatioVideo) {
+          scaleX = aspectRatioVideo / aspectRatioView;
       } else {
-          // 按高度fit，计算需要的X缩放
-          scaleX = aspectRatioTarget / aspectRatioFrame;
+          scaleY = aspectRatioView / aspectRatioVideo;
       }
-
-      // 生成缩放矩阵，这里简化处理，不考虑Z轴
       float mvpMatrix[16] = {
-              scaleX, 0.0f, 0.0f, 0.0f,
-              0.0f, scaleY, 0.0f, 0.0f,
-              0.0f, 0.0f, 1.0f, 0.0f,
-              0.0f, 0.0f, 0.0f, 1.0f
+              scaleX, 0, 0, 0,
+              0, scaleY, 0, 0,
+              0, 0, 1, 0,
+              0, 0, 0, 1
       };
-
       glUniformMatrix4fv(transformMatLoc_, 1, GL_FALSE, mvpMatrix);
       CHECK_GL_ERROR()
 
@@ -841,7 +837,7 @@ class NativeTextureRenderer final
 //      return;
 //    }
 
-//    gl_context_->TEST();
+    gl_context_->TEST();
 
     if (!rendering_op_) {
       if (video_frame->type == agora::media::base::VIDEO_PIXEL_FORMAT::VIDEO_TEXTURE_2D) {
@@ -861,6 +857,8 @@ class NativeTextureRenderer final
     }
 
     rendering_op_->Rendering(video_frame);
+      LOGCATE("gl_context_->TEST()");
+      gl_context_->TEST();
 
     gl_context_->GLContextClearCurrent();
   }
