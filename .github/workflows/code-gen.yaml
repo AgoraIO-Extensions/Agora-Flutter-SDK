@@ -17,7 +17,7 @@ on:
 
 jobs:
   run_code_gen:
-    runs-on: ubuntu-latest
+    runs-on: macos-13
     steps:
       - uses: actions/checkout@v3
         with:
@@ -32,10 +32,18 @@ jobs:
       - name: Reconfigure git to use HTTP authentication
         run: |
           git config --global url."https://${{ secrets.GH_TOKEN }}@github.com/".insteadOf ssh://git@github.com/
+      - name: Cache LLVM and Clang
+        id: cache-llvm
+        uses: actions/cache@v3
+        with:
+          path: |
+            ./llvm
+          key: macos-llvm-15.0.7
       - name: Install LLVM and Clang
         uses: KyleMayes/install-llvm-action@v1
         with:
-          version: "15.0.6" # Need ping version to 15.x
+          version: "15.0.7" # Need ping version to 15.x
+          cached: ${{ steps.cache-llvm.outputs.cache-hit }} 
       - uses: subosito/flutter-action@v2
         with:
           channel: 'stable'
