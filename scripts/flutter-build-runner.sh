@@ -26,6 +26,6 @@ pushd ${AGORA_FLUTTER_PROJECT_PATH}
 #     rm -rf $AGORA_FLUTTER_PROJECT_PATH/test_shard/rendering_test/ios/.symlinks
 # fi
 
-flutter packages pub run build_runner build --delete-conflicting-outputs
+flutter packages pub run build_runner build # --delete-conflicting-outputs
 
 popd
