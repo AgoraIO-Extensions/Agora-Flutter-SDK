@@ -7,7 +7,7 @@ AGORA_FLUTTER_PROJECT_PATH=$(realpath ${MY_PATH}/..)
 
 pushd ${AGORA_FLUTTER_PROJECT_PATH}
 
-if [! ${GITHUB_ACTIONS}]; then
+if [ ${GITHUB_ACTIONS} != true ]; then
     rm -rf $AGORA_FLUTTER_PROJECT_PATH/example/macos/Flutter/ephemeral
     rm -rf $AGORA_FLUTTER_PROJECT_PATH/example/windows/Flutter/ephemeral
     rm -rf $AGORA_FLUTTER_PROJECT_PATH/example/linux/Flutter/ephemeral
