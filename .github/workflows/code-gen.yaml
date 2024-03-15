@@ -32,6 +32,10 @@ jobs:
       - name: Reconfigure git to use HTTP authentication
         run: |
           git config --global url."https://${{ secrets.GH_TOKEN }}@github.com/".insteadOf ssh://git@github.com/
+      - name: Install LLVM and Clang
+        uses: KyleMayes/install-llvm-action@v1
+        with:
+          version: "15.0.6" # Need ping version to 15.x
       - uses: subosito/flutter-action@v2
         with:
           channel: 'stable'
