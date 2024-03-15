@@ -23,9 +23,13 @@ jobs:
         with:
           ref: ${{ inputs.target_branch }}
           fetch-depth: 0
-      - uses: actions/setup-node@v4
+      - name: enable corepack
+        run: corepack enable
+      - name: set node
+        uses: actions/setup-node@v4
         with:
-          node-version: 20
+          node-version: 'lts/*'
+          cache: 'yarn'
       - uses: subosito/flutter-action@v2
         with:
           channel: 'stable'
