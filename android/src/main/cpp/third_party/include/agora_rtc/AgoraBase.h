@@ -2827,12 +2827,12 @@ enum LOCAL_VIDEO_STREAM_REASON {
    * 14: (Android only) Video capture was interrupted, possibly due to the camera being occupied
    * or some policy reasons such as background termination.
    */
-  LOCAL_VIDEO_STREAM_ERROR_DEVICE_INTERRUPT = 14,
+  LOCAL_VIDEO_STREAM_REASON_DEVICE_INTERRUPT = 14,
   /**
    * 15: (Android only) The device may need to be shut down and restarted to restore camera function, 
    * or there may be a persistent hardware problem.
    */
-  LOCAL_VIDEO_STREAM_ERROR_DEVICE_FATAL_ERROR = 15,
+  LOCAL_VIDEO_STREAM_REASON_DEVICE_FATAL_ERROR = 15,
   /**
    * 101: The current video capture device is unavailable due to excessive system pressure.
    */
