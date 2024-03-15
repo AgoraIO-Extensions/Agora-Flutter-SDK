@@ -9,7 +9,6 @@ pushd ${MY_PATH}
 rm -rf .yarnrc.yml
 rm -rf yarn.lock
 
-touch yarn.lock
 echo "nodeLinker: node-modules" >> .yarnrc.yml
 echo "enableImmutableInstalls: false" >> .yarnrc.yml
 yarn set version berry
