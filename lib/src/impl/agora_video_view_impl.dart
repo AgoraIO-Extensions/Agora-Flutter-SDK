@@ -438,7 +438,7 @@ class _AgoraRtcRenderTextureState extends State<AgoraRtcRenderTexture>
       );
     }
 
-        //  return child;
+    //  return child;
   }
 
   bool _isScreenSource(VideoSourceType sourceType) {
@@ -471,9 +471,9 @@ class _AgoraRtcRenderTextureState extends State<AgoraRtcRenderTexture>
     assert(defaultTargetPlatform == TargetPlatform.android);
 
     double width = MediaQuery.of(context).size.width;
-double height = MediaQuery.of(context).size.height;
+    double height = MediaQuery.of(context).size.height;
 
-print('_setSizeNative width: $width, height: $height');
+    print('_setSizeNative width: $width, height: $height');
     // Call `SurfaceTexture.setDefaultBufferSize` on Android， or the video will be
     // black screen
     await methodChannel!.invokeMethod('setSizeNative', {

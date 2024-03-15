@@ -2882,11 +2882,11 @@ enum LocalVideoStreamReason {
 
   /// @nodoc
   @JsonValue(14)
-  localVideoStreamErrorDeviceInterrupt,
+  localVideoStreamReasonDeviceInterrupt,
 
   /// @nodoc
   @JsonValue(15)
-  localVideoStreamErrorDeviceFatalError,
+  localVideoStreamReasonDeviceFatalError,
 
   /// 101: The current video capture device is unavailable due to excessive system pressure.
   @JsonValue(101)
