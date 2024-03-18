@@ -23,9 +23,20 @@ jobs:
         with:
           ref: ${{ inputs.target_branch }}
           fetch-depth: 0
-      - uses: actions/setup-node@v4
+      - name: enable corepack
+        run: corepack enable
+      - name: set node
+        uses: actions/setup-node@v4
         with:
-          node-version: 20
+          node-version: 'lts/*'
+      - name: Reconfigure git to use HTTP authentication
+        run: |
+          git config --global url."https://${{ secrets.GH_TOKEN }}@github.com/".insteadOf ssh://git@github.com/
+      - name: Install LLVM and Clang
+        uses: KyleMayes/install-llvm-action@v1
+        with:
+          version: "15.0.6" # Need ping version to 15.x
+          directory: ${{ runner.temp }}/llvm
       - uses: subosito/flutter-action@v2
         with:
           channel: 'stable'
