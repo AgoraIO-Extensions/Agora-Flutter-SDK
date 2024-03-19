@@ -610,6 +610,32 @@ extension VideoFrameObserverOnTranscodedVideoFrameJsonBufferExt
 }
 
 @JsonSerializable(explicitToJson: true, includeIfNull: false)
+class FaceInfoObserverOnFaceInfoJson {
+  const FaceInfoObserverOnFaceInfoJson({this.outFaceInfo});
+
+  @JsonKey(name: 'outFaceInfo')
+  final String? outFaceInfo;
+
+  factory FaceInfoObserverOnFaceInfoJson.fromJson(Map<String, dynamic> json) =>
+      _$FaceInfoObserverOnFaceInfoJsonFromJson(json);
+
+  Map<String, dynamic> toJson() => _$FaceInfoObserverOnFaceInfoJsonToJson(this);
+}
+
+extension FaceInfoObserverOnFaceInfoJsonBufferExt
+    on FaceInfoObserverOnFaceInfoJson {
+  FaceInfoObserverOnFaceInfoJson fillBuffers(List<Uint8List> bufferList) {
+    if (bufferList.isEmpty) return this;
+    return this;
+  }
+
+  List<Uint8List> collectBufferList() {
+    final bufferList = <Uint8List>[];
+    return bufferList;
+  }
+}
+
+@JsonSerializable(explicitToJson: true, includeIfNull: false)
 class MediaRecorderObserverOnRecorderStateChangedJson {
   const MediaRecorderObserverOnRecorderStateChangedJson(
       {this.channelId, this.uid, this.state, this.reason});
@@ -4603,6 +4629,53 @@ extension RtcEngineEventHandlerOnTranscodedStreamLayoutInfoJsonBufferExt
 
   List<Uint8List> collectBufferList() {
     final bufferList = <Uint8List>[];
+    return bufferList;
+  }
+}
+
+@JsonSerializable(explicitToJson: true, includeIfNull: false)
+class RtcEngineEventHandlerOnAudioMetadataReceivedJson {
+  const RtcEngineEventHandlerOnAudioMetadataReceivedJson(
+      {this.connection, this.uid, this.metadata, this.length});
+
+  @JsonKey(name: 'connection')
+  final RtcConnection? connection;
+
+  @JsonKey(name: 'uid')
+  final int? uid;
+
+  @JsonKey(name: 'metadata', ignore: true)
+  final Uint8List? metadata;
+
+  @JsonKey(name: 'length')
+  final int? length;
+
+  factory RtcEngineEventHandlerOnAudioMetadataReceivedJson.fromJson(
+          Map<String, dynamic> json) =>
+      _$RtcEngineEventHandlerOnAudioMetadataReceivedJsonFromJson(json);
+
+  Map<String, dynamic> toJson() =>
+      _$RtcEngineEventHandlerOnAudioMetadataReceivedJsonToJson(this);
+}
+
+extension RtcEngineEventHandlerOnAudioMetadataReceivedJsonBufferExt
+    on RtcEngineEventHandlerOnAudioMetadataReceivedJson {
+  RtcEngineEventHandlerOnAudioMetadataReceivedJson fillBuffers(
+      List<Uint8List> bufferList) {
+    if (bufferList.isEmpty) return this;
+    Uint8List? metadata;
+    if (bufferList.length > 0) {
+      metadata = bufferList[0];
+    }
+    return RtcEngineEventHandlerOnAudioMetadataReceivedJson(
+        connection: connection, uid: uid, metadata: metadata, length: length);
+  }
+
+  List<Uint8List> collectBufferList() {
+    final bufferList = <Uint8List>[];
+    if (metadata != null) {
+      bufferList.add(metadata!);
+    }
     return bufferList;
   }
 }
