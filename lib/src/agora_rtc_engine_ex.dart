@@ -713,4 +713,13 @@ abstract class RtcEngineEx implements RtcEngine {
   /// @nodoc
   Future<void> setParametersEx(
       {required RtcConnection connection, required String parameters});
+
+  /// @nodoc
+  Future<String> getCallIdEx(RtcConnection connection);
+
+  /// @nodoc
+  Future<void> sendAudioMetadataEx(
+      {required RtcConnection connection,
+      required Uint8List metadata,
+      required int length});
 }

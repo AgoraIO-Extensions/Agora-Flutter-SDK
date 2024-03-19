@@ -343,6 +343,10 @@ enum ErrorCodeType {
   @JsonValue(121)
   errInvalidUserId,
 
+  /// @nodoc
+  @JsonValue(122)
+  errDatastreamDecryptionFailed,
+
   /// 123: The user is banned from the server.
   @JsonValue(123)
   errClientIsBannedByServer,
@@ -1518,7 +1522,8 @@ class EncodedVideoFrameInfo {
       this.trackId,
       this.captureTimeMs,
       this.decodeTimeMs,
-      this.streamType});
+      this.streamType,
+      this.presentationMs});
 
   /// The user ID to push the externally encoded video frame.
   @JsonKey(name: 'uid')
@@ -1563,6 +1568,10 @@ class EncodedVideoFrameInfo {
   /// The type of video streams. See VideoStreamType.
   @JsonKey(name: 'streamType')
   final VideoStreamType? streamType;
+
+  /// @nodoc
+  @JsonKey(name: 'presentationMs')
+  final int? presentationMs;
 
   /// @nodoc
   factory EncodedVideoFrameInfo.fromJson(Map<String, dynamic> json) =>
@@ -2656,6 +2665,47 @@ extension CaptureBrightnessLevelTypeExt on CaptureBrightnessLevelType {
   }
 }
 
+/// @nodoc
+@JsonEnum(alwaysCreate: true)
+enum CameraStabilizationMode {
+  /// @nodoc
+  @JsonValue(-1)
+  cameraStabilizationModeOff,
+
+  /// @nodoc
+  @JsonValue(0)
+  cameraStabilizationModeAuto,
+
+  /// @nodoc
+  @JsonValue(1)
+  cameraStabilizationModeLevel1,
+
+  /// @nodoc
+  @JsonValue(2)
+  cameraStabilizationModeLevel2,
+
+  /// @nodoc
+  @JsonValue(3)
+  cameraStabilizationModeLevel3,
+
+  /// @nodoc
+  @JsonValue(3)
+  cameraStabilizationModeMaxLevel,
+}
+
+/// @nodoc
+extension CameraStabilizationModeExt on CameraStabilizationMode {
+  /// @nodoc
+  static CameraStabilizationMode fromValue(int value) {
+    return $enumDecode(_$CameraStabilizationModeEnumMap, value);
+  }
+
+  /// @nodoc
+  int value() {
+    return _$CameraStabilizationModeEnumMap[this]!;
+  }
+}
+
 /// The state of the local audio.
 @JsonEnum(alwaysCreate: true)
 enum LocalAudioStreamState {
@@ -2830,6 +2880,14 @@ enum LocalVideoStreamReason {
   @JsonValue(10)
   localVideoStreamReasonDeviceInvalidId,
 
+  /// @nodoc
+  @JsonValue(14)
+  localVideoStreamReasonDeviceInterrupt,
+
+  /// @nodoc
+  @JsonValue(15)
+  localVideoStreamReasonDeviceFatalError,
+
   /// 101: The current video capture device is unavailable due to excessive system pressure.
   @JsonValue(101)
   localVideoStreamReasonDeviceSystemPressure,
@@ -2970,6 +3028,14 @@ enum RemoteAudioStateReason {
   /// 7: The remote user leaves the channel.
   @JsonValue(7)
   remoteAudioReasonRemoteOffline,
+
+  /// @nodoc
+  @JsonValue(8)
+  remoteAudioReasonNoPacketReceive,
+
+  /// @nodoc
+  @JsonValue(9)
+  remoteAudioReasonLocalPlayFailed,
 }
 
 /// @nodoc
@@ -5169,6 +5235,10 @@ enum AudioEffectPreset {
   @JsonValue(0x02010900)
   roomAcousticsVirtualSurroundSound,
 
+  /// @nodoc
+  @JsonValue(0x02010D00)
+  roomAcousticsChorus,
+
   /// A middle-aged man's voice. Agora recommends using this preset to process a male-sounding voice; otherwise, you may not hear the anticipated voice effect.
   @JsonValue(0x02020100)
   voiceChangerEffectUncle,
@@ -6016,7 +6086,10 @@ extension EncryptionModeExt on EncryptionMode {
 class EncryptionConfig {
   /// @nodoc
   const EncryptionConfig(
-      {this.encryptionMode, this.encryptionKey, this.encryptionKdfSalt});
+      {this.encryptionMode,
+      this.encryptionKey,
+      this.encryptionKdfSalt,
+      this.datastreamEncryptionEnabled});
 
   /// The built-in encryption mode. See EncryptionMode. Agora recommends using aes128Gcm2 or aes256Gcm2 encrypted mode. These two modes support the use of salt for higher security.
   @JsonKey(name: 'encryptionMode')
@@ -6029,6 +6102,10 @@ class EncryptionConfig {
   /// Salt, 32 bytes in length. Agora recommends that you use OpenSSL to generate salt on the server side. See Media Stream Encryption for details. This parameter takes effect only in aes128Gcm2 or aes256Gcm2 encrypted mode. In this case, ensure that this parameter is not 0.
   @JsonKey(name: 'encryptionKdfSalt', ignore: true)
   final Uint8List? encryptionKdfSalt;
+
+  /// @nodoc
+  @JsonKey(name: 'datastreamEncryptionEnabled')
+  final bool? datastreamEncryptionEnabled;
 
   /// @nodoc
   factory EncryptionConfig.fromJson(Map<String, dynamic> json) =>
@@ -6052,6 +6129,14 @@ enum EncryptionErrorType {
   /// 2: Encryption errors.
   @JsonValue(2)
   encryptionErrorEncryptionFailure,
+
+  /// @nodoc
+  @JsonValue(3)
+  encryptionErrorDatastreamDecryptionFailure,
+
+  /// @nodoc
+  @JsonValue(4)
+  encryptionErrorDatastreamEncryptionFailure,
 }
 
 /// @nodoc
@@ -6285,6 +6370,10 @@ enum EarMonitoringFilterType {
   /// 1<<2: Enable noise suppression to the in-ear monitor.
   @JsonValue((1 << 2))
   earMonitoringFilterNoiseSuppression,
+
+  /// @nodoc
+  @JsonValue((1 << 15))
+  earMonitoringFilterReusePostProcessingFilter,
 }
 
 /// @nodoc

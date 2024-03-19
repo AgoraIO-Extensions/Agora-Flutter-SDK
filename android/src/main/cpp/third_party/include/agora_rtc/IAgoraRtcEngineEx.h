@@ -101,6 +101,7 @@ class IRtcEngineEventHandlerEx : public IRtcEngineEventHandler {
   using IRtcEngineEventHandler::onVideoRenderingTracingResult;
   using IRtcEngineEventHandler::onSetRtmFlagResult;
   using IRtcEngineEventHandler::onTranscodedStreamLayoutInfo;
+  using IRtcEngineEventHandler::onAudioMetadataReceived;
 
   virtual const char* eventHandlerType() const { return "event_handler_ex"; }
 
@@ -1059,6 +1060,19 @@ class IRtcEngineEventHandlerEx : public IRtcEngineEventHandler {
     (void)layoutCount;
     (void)layoutlist;
   }
+
+  /**
+   * The audio metadata received.
+   *
+   * @param connection The RtcConnection object.
+   * @param uid ID of the remote user.
+   * @param metadata The pointer of metadata
+   * @param length Size of metadata
+   */
+  virtual void onAudioMetadataReceived(const RtcConnection& connection, uid_t uid, const char* metadata, size_t length) {
+    (void)metadata;
+    (void)length;
+  }
 };
 
 class IRtcEngineEx : public IRtcEngine {
@@ -1955,6 +1969,37 @@ public:
     - < 0: Failure.
     */
     virtual int setParametersEx(const RtcConnection& connection, const char* parameters) = 0;
+
+    /**
+     * Gets the current call ID.
+     *
+     * When a user joins a channel on a client, a `callId` is generated to identify
+     * the call.
+     *
+     * After a call ends, you can call `rate` or `complain` to gather feedback from the customer.
+     * These methods require a `callId` parameter. To use these feedback methods, call the this
+     * method first to retrieve the `callId` during the call, and then pass the value as an
+     * argument in the `rate` or `complain` method after the call ends.
+     *
+     * @param callId The reference to the call ID.
+     * @param connection The RtcConnection object.
+     * @return
+     * - The call ID if the method call is successful.
+     * - < 0: Failure.
+    */
+    virtual int getCallIdEx(agora::util::AString& callId, const RtcConnection& connection) = 0;
+
+    /**
+     * send audio metadata
+     * @since v4.3.1
+     * @param connection The RtcConnection object.
+     * @param metadata The pointer of metadata
+     * @param length Size of metadata
+     * @return
+     * - 0: success
+     * - <0: failure
+    */
+    virtual int sendAudioMetadataEx(const RtcConnection& connection, const char* metadata, size_t length) = 0;
 };
 
 }  // namespace rtc

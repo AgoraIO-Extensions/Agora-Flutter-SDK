@@ -59,6 +59,7 @@ void generatedTestCases(ValueGetter<IrisTester> irisTester) {
         const int videoEncodedFrameInfoTrackId = 10;
         const int videoEncodedFrameInfoCaptureTimeMs = 10;
         const int videoEncodedFrameInfoDecodeTimeMs = 10;
+        const int videoEncodedFrameInfoPresentationMs = 10;
         const EncodedVideoFrameInfo videoEncodedFrameInfo =
             EncodedVideoFrameInfo(
           uid: videoEncodedFrameInfoUid,
@@ -72,6 +73,7 @@ void generatedTestCases(ValueGetter<IrisTester> irisTester) {
           captureTimeMs: videoEncodedFrameInfoCaptureTimeMs,
           decodeTimeMs: videoEncodedFrameInfoDecodeTimeMs,
           streamType: videoEncodedFrameInfoStreamType,
+          presentationMs: videoEncodedFrameInfoPresentationMs,
         );
 
         final eventJson = {

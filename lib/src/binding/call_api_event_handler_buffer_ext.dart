@@ -625,7 +625,8 @@ extension EncryptionConfigBufferExt on EncryptionConfig {
     return EncryptionConfig(
         encryptionMode: encryptionMode,
         encryptionKey: encryptionKey,
-        encryptionKdfSalt: encryptionKdfSalt);
+        encryptionKdfSalt: encryptionKdfSalt,
+        datastreamEncryptionEnabled: datastreamEncryptionEnabled);
   }
 
   List<Uint8List> collectBufferList() {
@@ -887,6 +888,7 @@ extension ExternalVideoFrameBufferExt on ExternalVideoFrame {
         metadataBuffer: metadataBuffer,
         metadataSize: metadataSize,
         alphaBuffer: alphaBuffer,
+        fillAlphaBuffer: fillAlphaBuffer,
         textureSliceIndex: textureSliceIndex);
   }
 
@@ -995,7 +997,8 @@ extension AudioFrameBufferExt on AudioFrame {
         renderTimeMs: renderTimeMs,
         avsyncType: avsyncType,
         presentationMs: presentationMs,
-        audioTrackNumber: audioTrackNumber);
+        audioTrackNumber: audioTrackNumber,
+        rtpTimestamp: rtpTimestamp);
   }
 
   List<Uint8List> collectBufferList() {
