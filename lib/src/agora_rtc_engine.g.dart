@@ -122,6 +122,7 @@ RemoteAudioStats _$RemoteAudioStatsFromJson(Map<String, dynamic> json) =>
       qoeQuality: json['qoeQuality'] as int?,
       qualityChangedReason: json['qualityChangedReason'] as int?,
       rxAudioBytes: json['rxAudioBytes'] as int?,
+      e2eDelay: json['e2eDelay'] as int?,
     );
 
 Map<String, dynamic> _$RemoteAudioStatsToJson(RemoteAudioStats instance) {
@@ -152,6 +153,7 @@ Map<String, dynamic> _$RemoteAudioStatsToJson(RemoteAudioStats instance) {
   writeNotNull('qoeQuality', instance.qoeQuality);
   writeNotNull('qualityChangedReason', instance.qualityChangedReason);
   writeNotNull('rxAudioBytes', instance.rxAudioBytes);
+  writeNotNull('e2eDelay', instance.e2eDelay);
   return val;
 }
 
@@ -373,6 +375,7 @@ CameraCapturerConfiguration _$CameraCapturerConfigurationFromJson(
       cameraDirection: $enumDecodeNullable(
           _$CameraDirectionEnumMap, json['cameraDirection']),
       deviceId: json['deviceId'] as String?,
+      cameraId: json['cameraId'] as String?,
       format: json['format'] == null
           ? null
           : VideoFormat.fromJson(json['format'] as Map<String, dynamic>),
@@ -392,6 +395,7 @@ Map<String, dynamic> _$CameraCapturerConfigurationToJson(
   writeNotNull(
       'cameraDirection', _$CameraDirectionEnumMap[instance.cameraDirection]);
   writeNotNull('deviceId', instance.deviceId);
+  writeNotNull('cameraId', instance.cameraId);
   writeNotNull('format', instance.format?.toJson());
   writeNotNull(
       'followEncodeDimensionRatio', instance.followEncodeDimensionRatio);
@@ -610,6 +614,7 @@ ChannelMediaOptions _$ChannelMediaOptionsFromJson(Map<String, dynamic> json) =>
           json['publishMediaPlayerVideoTrack'] as bool?,
       publishTranscodedVideoTrack: json['publishTranscodedVideoTrack'] as bool?,
       publishMixedAudioTrack: json['publishMixedAudioTrack'] as bool?,
+      publishLipSyncTrack: json['publishLipSyncTrack'] as bool?,
       autoSubscribeAudio: json['autoSubscribeAudio'] as bool?,
       autoSubscribeVideo: json['autoSubscribeVideo'] as bool?,
       enableAudioRecordingOrPlayout:
@@ -667,6 +672,7 @@ Map<String, dynamic> _$ChannelMediaOptionsToJson(ChannelMediaOptions instance) {
   writeNotNull(
       'publishTranscodedVideoTrack', instance.publishTranscodedVideoTrack);
   writeNotNull('publishMixedAudioTrack', instance.publishMixedAudioTrack);
+  writeNotNull('publishLipSyncTrack', instance.publishLipSyncTrack);
   writeNotNull('autoSubscribeAudio', instance.autoSubscribeAudio);
   writeNotNull('autoSubscribeVideo', instance.autoSubscribeVideo);
   writeNotNull(
@@ -918,6 +924,7 @@ const _$MediaSourceTypeEnumMap = {
   MediaSourceType.rtcImageGifSource: 10,
   MediaSourceType.remoteVideoSource: 11,
   MediaSourceType.transcodedVideoSource: 12,
+  MediaSourceType.speechDrivenVideoSource: 13,
   MediaSourceType.unknownMediaSource: 100,
 };
 
@@ -963,6 +970,7 @@ Map<String, dynamic> _$VideoDeviceInfoToJson(VideoDeviceInfo instance) {
 AudioDeviceInfo _$AudioDeviceInfoFromJson(Map<String, dynamic> json) =>
     AudioDeviceInfo(
       deviceId: json['deviceId'] as String?,
+      deviceTypeName: json['deviceTypeName'] as String?,
       deviceName: json['deviceName'] as String?,
     );
 
@@ -976,6 +984,7 @@ Map<String, dynamic> _$AudioDeviceInfoToJson(AudioDeviceInfo instance) {
   }
 
   writeNotNull('deviceId', instance.deviceId);
+  writeNotNull('deviceTypeName', instance.deviceTypeName);
   writeNotNull('deviceName', instance.deviceName);
   return val;
 }

@@ -84,6 +84,9 @@ abstract class MediaEngine {
   /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown; and you need to catch the exception and handle it accordingly.
   void registerVideoEncodedFrameObserver(VideoEncodedFrameObserver observer);
 
+  /// @nodoc
+  void registerFaceInfoObserver(FaceInfoObserver observer);
+
   /// Pushes the external audio frame.
   ///
   /// * [frame] The external audio frame. See AudioFrame.
@@ -240,4 +243,7 @@ abstract class MediaEngine {
   /// Returns
   /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown; and you need to catch the exception and handle it accordingly.
   void unregisterVideoEncodedFrameObserver(VideoEncodedFrameObserver observer);
+
+  /// @nodoc
+  void unregisterFaceInfoObserver(FaceInfoObserver observer);
 }

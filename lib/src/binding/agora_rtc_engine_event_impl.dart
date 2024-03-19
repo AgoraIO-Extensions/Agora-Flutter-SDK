@@ -1783,6 +1783,29 @@ class RtcEngineEventHandlerWrapper implements EventLoopEventHandler {
             connection, uid, width, height, layoutCount, layoutlist);
         return true;
 
+      case 'onAudioMetadataReceived_0d4eb96':
+        if (rtcEngineEventHandler.onAudioMetadataReceived == null) {
+          return true;
+        }
+        final jsonMap = jsonDecode(eventData);
+        RtcEngineEventHandlerOnAudioMetadataReceivedJson paramJson =
+            RtcEngineEventHandlerOnAudioMetadataReceivedJson.fromJson(jsonMap);
+        paramJson = paramJson.fillBuffers(buffers);
+        RtcConnection? connection = paramJson.connection;
+        int? uid = paramJson.uid;
+        Uint8List? metadata = paramJson.metadata;
+        int? length = paramJson.length;
+        if (connection == null ||
+            uid == null ||
+            metadata == null ||
+            length == null) {
+          return true;
+        }
+        connection = connection.fillBuffers(buffers);
+        rtcEngineEventHandler.onAudioMetadataReceived!(
+            connection, uid, metadata, length);
+        return true;
+
       case 'onExtensionEvent_062d13c':
         if (rtcEngineEventHandler.onExtensionEvent == null) {
           return true;
