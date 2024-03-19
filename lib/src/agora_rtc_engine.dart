@@ -490,7 +490,8 @@ class RemoteAudioStats {
       this.publishDuration,
       this.qoeQuality,
       this.qualityChangedReason,
-      this.rxAudioBytes});
+      this.rxAudioBytes,
+      this.e2eDelay});
 
   /// The user ID of the remote user.
   @JsonKey(name: 'uid')
@@ -563,6 +564,10 @@ class RemoteAudioStats {
   /// @nodoc
   @JsonKey(name: 'rxAudioBytes')
   final int? rxAudioBytes;
+
+  /// @nodoc
+  @JsonKey(name: 'e2eDelay')
+  final int? e2eDelay;
 
   /// @nodoc
   factory RemoteAudioStats.fromJson(Map<String, dynamic> json) =>
@@ -999,6 +1004,7 @@ class CameraCapturerConfiguration {
   const CameraCapturerConfiguration(
       {this.cameraDirection,
       this.deviceId,
+      this.cameraId,
       this.format,
       this.followEncodeDimensionRatio});
 
@@ -1009,6 +1015,10 @@ class CameraCapturerConfiguration {
   /// This method applies to Windows only. The ID of the camera. The maximum length is MaxDeviceIdLengthType.
   @JsonKey(name: 'deviceId')
   final String? deviceId;
+
+  /// @nodoc
+  @JsonKey(name: 'cameraId')
+  final String? cameraId;
 
   /// The format of the video frame. See VideoFormat.
   @JsonKey(name: 'format')
@@ -1300,6 +1310,7 @@ class ChannelMediaOptions {
       this.publishMediaPlayerVideoTrack,
       this.publishTranscodedVideoTrack,
       this.publishMixedAudioTrack,
+      this.publishLipSyncTrack,
       this.autoSubscribeAudio,
       this.autoSubscribeVideo,
       this.enableAudioRecordingOrPlayout,
@@ -1392,6 +1403,10 @@ class ChannelMediaOptions {
   /// @nodoc
   @JsonKey(name: 'publishMixedAudioTrack')
   final bool? publishMixedAudioTrack;
+
+  /// @nodoc
+  @JsonKey(name: 'publishLipSyncTrack')
+  final bool? publishLipSyncTrack;
 
   /// Whether to automatically subscribe to all remote audio streams when the user joins a channel: true : Subscribe to all remote audio streams. false : Do not automatically subscribe to any remote audio streams.
   @JsonKey(name: 'autoSubscribeAudio')
@@ -1663,6 +1678,7 @@ class RtcEngineEventHandler {
     this.onAudioPublishStateChanged,
     this.onVideoPublishStateChanged,
     this.onTranscodedStreamLayoutInfo,
+    this.onAudioMetadataReceived,
     this.onExtensionEvent,
     this.onExtensionStarted,
     this.onExtensionStopped,
@@ -2534,6 +2550,11 @@ class RtcEngineEventHandler {
       int layoutCount,
       List<VideoLayout> layoutlist)? onTranscodedStreamLayoutInfo;
 
+  /// @nodoc
+  final void Function(
+          RtcConnection connection, int uid, Uint8List metadata, int length)?
+      onAudioMetadataReceived;
+
   /// The event callback of the extension.
   ///
   /// To listen for events while the extension is running, you need to register this callback.
@@ -3122,38 +3143,7 @@ abstract class RtcEngine {
   Future<void> preloadChannel(
       {required String token, required String channelId, required int uid});
 
-  /// Preloads a channel with token, channelId, and userAccount.
-  ///
-  /// When audience members need to switch between different channels frequently, calling the method can help shortening the time of joining a channel, thus reducing the time it takes for audience members to hear and see the host. As it may take a while for the SDK to preload a channel, Agora recommends that you call this method as soon as possible after obtaining the channel name and user ID to join a channel. If you join a preloaded channel, leave it and want to rejoin the same channel, you do not need to call this method unless the token for preloading the channel expires.
-  ///  Failing to preload a channel does not mean that you can't join a channel, nor will it increase the time of joining a channel.
-  ///  One RtcEngine instance supports preloading 20 channels at most. When exceeding this limit, the latest 20 preloaded channels take effect.
-  ///  When calling this method, ensure you set the user role as audience and do not set the audio scenario as audioScenarioChorus, otherwise, this method does not take effect.
-  ///  You also need to make sure that the User Account, channel ID and token passed in for preloading are the same as the values passed in when joining the channel, otherwise, this method does not take effect.
-  ///
-  /// * [token] The token generated on your server for authentication. When the token for preloading channels expires, you can update the token based on the number of channels you preload.
-  ///  When preloading one channel, calling this method to pass in the new token.
-  ///  When preloading more than one channels:
-  ///  If you use a wildcard token for all preloaded channels, call updatePreloadChannelToken to update the token. When generating a wildcard token, ensure the user ID is not set as 0.
-  ///  If you use different tokens to preload different channels, call this method to pass in your user ID, channel name and the new token.
-  /// * [channelId] The channel name that you want to preload. This parameter signifies the channel in which users engage in real-time audio and video interaction. Under the premise of the same App ID, users who fill in the same channel ID enter the same channel for audio and video interaction. The string length must be less than 64 bytes. Supported characters (89 characters in total):
-  ///  All lowercase English letters: a to z.
-  ///  All uppercase English letters: A to Z.
-  ///  All numeric characters: 0 to 9.
-  ///  Space
-  ///  "!", "#", "$", "%", "&", "(", ")", "+", "-", ":", ";", "<", "=", ".", ">", "?", "@", "[", "]", "^", "_", "{", "}", "|", "~", ","
-  /// * [userAccount] The user account. This parameter is used to identify the user in the channel for real-time audio and video engagement. You need to set and manage user accounts yourself and ensure that each user account in the same channel is unique. The maximum length of this parameter is 255 bytes. Ensure that you set this parameter and do not set it as NULL. Supported characters are (89 in total):
-  ///  The 26 lowercase English letters: a to z.
-  ///  The 26 uppercase English letters: A to Z.
-  ///  All numeric characters: 0 to 9.
-  ///  Space
-  ///  "!", "#", "$", "%", "&", "(", ")", "+", "-", ":", ";", "<", "=", ".", ">", "?", "@", "[", "]", "^", "_", "{", "}", "|", "~", ","
-  ///
-  /// Returns
-  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown; and you need to catch the exception and handle it accordingly.
-  ///  < 0: Failure.
-  ///  -2: The parameter is invalid. For example, the User Account is empty. You need to pass in a valid parameter and join the channel again.
-  ///  -7: The RtcEngine object has not been initialized. You need to initialize the RtcEngine object before calling this method.
-  ///  -102: The channel name is invalid. You need to pass in a valid channel name and join the channel again.
+  /// @nodoc
   Future<void> preloadChannelWithUserAccount(
       {required String token,
       required String channelId,
@@ -4045,6 +4035,9 @@ abstract class RtcEngine {
   /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown; and you need to catch the exception and handle it accordingly.
   Future<void> setAudioMixingPitch(int pitch);
 
+  /// @nodoc
+  Future<void> setAudioMixingPlaybackSpeed(int speed);
+
   /// Retrieves the volume of the audio effects.
   ///
   /// The volume is an integer ranging from 0 to 100. The default value is 100, which means the original volume. Call this method after playEffect.
@@ -4517,6 +4510,9 @@ abstract class RtcEngine {
 
   /// @nodoc
   Future<String> uploadLogFile();
+
+  /// @nodoc
+  Future<void> writeLog({required LogLevel level, required String fmt});
 
   /// Updates the display mode of the local video view.
   ///
@@ -5195,6 +5191,9 @@ abstract class RtcEngine {
   /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown; and you need to catch the exception and handle it accordingly.
   Future<void> setCameraAutoExposureFaceModeEnabled(bool enabled);
 
+  /// @nodoc
+  Future<void> setCameraStabilizationMode(CameraStabilizationMode mode);
+
   /// Sets the default audio playback route.
   ///
   /// This method applies to Android and iOS only.
@@ -5251,6 +5250,12 @@ abstract class RtcEngine {
   /// Returns
   /// Without practical meaning.
   Future<void> setRouteInCommunicationMode(int route);
+
+  /// @nodoc
+  Future<bool> isSupportPortraitCenterStage();
+
+  /// @nodoc
+  Future<void> enablePortraitCenterStage(bool enabled);
 
   /// Gets a list of shareable screens and windows.
   ///
@@ -6231,6 +6236,10 @@ abstract class RtcEngine {
   /// true : The current device supports the specified feature. false : The current device does not support the specified feature.
   Future<bool> isFeatureAvailableOnDevice(FeatureType type);
 
+  /// @nodoc
+  Future<void> sendAudioMetadata(
+      {required Uint8List metadata, required int length});
+
   /// Starts screen capture.
   ///
   /// This method, as well as startScreenCapture, startScreenCaptureByDisplayId, and startScreenCaptureByWindowId, can all be used to start screen capture, with the following differences: startScreenCapture only applies to Android and iOS, whereas this method only applies to Windows and iOS. startScreenCaptureByDisplayId and startScreenCaptureByWindowId only support capturing video from a single screen or window. By calling this method and specifying the sourceType parameter, you can capture multiple video streams used for local video mixing or multi-channel publishing.
@@ -6770,11 +6779,15 @@ class VideoDeviceInfo {
 @JsonSerializable(explicitToJson: true, includeIfNull: false)
 class AudioDeviceInfo {
   /// @nodoc
-  const AudioDeviceInfo({this.deviceId, this.deviceName});
+  const AudioDeviceInfo({this.deviceId, this.deviceTypeName, this.deviceName});
 
   /// The device ID.
   @JsonKey(name: 'deviceId')
   final String? deviceId;
+
+  /// @nodoc
+  @JsonKey(name: 'deviceTypeName')
+  final String? deviceTypeName;
 
   /// The device name.
   @JsonKey(name: 'deviceName')

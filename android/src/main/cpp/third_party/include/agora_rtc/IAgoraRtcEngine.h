@@ -443,6 +443,10 @@ struct RemoteAudioStats
    * The total number of audio bytes received (bytes), inluding the FEC bytes, represented by an aggregate value.
    */
   unsigned int rxAudioBytes;
+  /**
+   * The end-to-end delay (ms) from the sender to the receiver.
+   */
+  int e2eDelay;
 
   RemoteAudioStats()
       : uid(0),
@@ -462,7 +466,8 @@ struct RemoteAudioStats
         publishDuration(0),
         qoeQuality(0),
         qualityChangedReason(0),
-        rxAudioBytes(0) {}
+        rxAudioBytes(0),
+        e2eDelay(0) {}
 };
 
 /**
@@ -797,14 +802,26 @@ struct CameraCapturerConfiguration {
   /** For windows. The device ID of the playback device. The maximum length is #MAX_DEVICE_ID_LENGTH. */
   char deviceId[MAX_DEVICE_ID_LENGTH];
 #endif
+
+#if defined(__ANDROID__)
+  /**
+   * The camera id.
+   */
+  char cameraId[MAX_DEVICE_ID_LENGTH];
+#endif
   /** The video format. See VideoFormat. */
   VideoFormat format;
   bool followEncodeDimensionRatio;
   CameraCapturerConfiguration() : followEncodeDimensionRatio(true) {
 #if defined(__ANDROID__) || (defined(__APPLE__) && TARGET_OS_IOS)
   cameraDirection = CAMERA_REAR;
+
 #else
   memset(deviceId, 0, sizeof(deviceId));
+#endif
+
+#if defined(__ANDROID__)
+  memset(cameraId, 0, sizeof(cameraId));
 #endif
   }
 };
@@ -1141,6 +1158,12 @@ struct ChannelMediaOptions {
   */
   Optional<bool> publishMixedAudioTrack;
   /**
+   * Whether to publish the local lip sync video track.
+   * - `true`: Publish the video track of local lip sync  video track.
+   * - `false`: (Default) Do not publish the local lip sync  video track.
+   */
+  Optional<bool> publishLipSyncTrack;
+  /**
    * Whether to automatically subscribe to all remote audio streams when the user joins a channel:
    * - `true`: (Default) Subscribe to all remote audio streams.
    * - `false`: Do not subscribe to any remote audio stream.
@@ -1256,6 +1279,7 @@ struct ChannelMediaOptions {
 #endif
       SET_FROM(publishTranscodedVideoTrack);
       SET_FROM(publishMixedAudioTrack);
+      SET_FROM(publishLipSyncTrack);
       SET_FROM(publishCustomAudioTrack);
       SET_FROM(publishCustomAudioTrackId);
       SET_FROM(publishCustomVideoTrack);
@@ -1303,6 +1327,7 @@ struct ChannelMediaOptions {
 #endif
       ADD_COMPARE(publishTranscodedVideoTrack);
       ADD_COMPARE(publishMixedAudioTrack);
+      ADD_COMPARE(publishLipSyncTrack);
       ADD_COMPARE(publishCustomAudioTrack);
       ADD_COMPARE(publishCustomAudioTrackId);
       ADD_COMPARE(publishCustomVideoTrack);
@@ -1353,6 +1378,7 @@ struct ChannelMediaOptions {
 #endif
         REPLACE_BY(publishTranscodedVideoTrack);
         REPLACE_BY(publishMixedAudioTrack);
+        REPLACE_BY(publishLipSyncTrack);
         REPLACE_BY(publishCustomAudioTrack);
         REPLACE_BY(publishCustomAudioTrackId);
         REPLACE_BY(publishCustomVideoTrack);
@@ -2824,6 +2850,19 @@ class IRtcEngineEventHandler {
     (void)height;
     (void)layoutCount;
     (void)layoutlist;
+  }
+
+  /**
+   * Occurs when the SDK receives audio metadata.
+   * @since v4.3.1
+   * @param uid ID of the remote user.
+   * @param metadata The pointer of metadata
+   * @param length Size of metadata
+   */
+  virtual void onAudioMetadataReceived(uid_t uid, const char* metadata, size_t length) {
+    (void)uid;
+    (void)metadata;
+    (void)length;
   }
 
   /**
@@ -5179,6 +5218,24 @@ class IRtcEngine : public agora::base::IEngineBase {
    * - < 0: Failure.
    */
   virtual int setAudioMixingPitch(int pitch) = 0;
+
+  /**
+   * Sets the playback speed of the current music file.
+   *
+   * @note Call this method after calling \ref IRtcEngine::startAudioMixing(const char*,bool,bool,int,int) "startAudioMixing" [2/2]
+   * and receiving the \ref IRtcEngineEventHandler::onAudioMixingStateChanged "onAudioMixingStateChanged" (AUDIO_MIXING_STATE_PLAYING) callback.
+   *
+   * @param speed The playback speed. Agora recommends that you limit this value to between 50 and 400, defined as follows:
+   * - 50: Half the original speed.
+   * - 100: The original speed.
+   * - 400: 4 times the original speed.
+   *
+   * @return
+   * - 0: Success.
+   * - < 0: Failure.
+   */
+  virtual int setAudioMixingPlaybackSpeed(int speed) = 0;
+  
   /**
    * Gets the volume of audio effects.
    *
@@ -5898,6 +5955,23 @@ class IRtcEngine : public agora::base::IEngineBase {
    */
   virtual int uploadLogFile(agora::util::AString& requestId) = 0;
 
+   /** * Write the log to SDK . @technical preview
+   *
+   * You can Write the log to SDK log files of the specified level.
+   *
+   * @param level The log level:
+   * - `LOG_LEVEL_NONE (0x0000)`: Do not output any log file.
+   * - `LOG_LEVEL_INFO (0x0001)`: (Recommended) Output log files of the INFO level.
+   * - `LOG_LEVEL_WARN (0x0002)`: Output log files of the WARN level.
+   * - `LOG_LEVEL_ERROR (0x0004)`: Output log files of the ERROR level.
+   * - `LOG_LEVEL_FATAL (0x0008)`: Output log files of the FATAL level.
+   *
+   *  @return
+   *  - 0: Success.
+   *  - < 0: Failure.
+   */
+  virtual int writeLog(commons::LOG_LEVEL level, const char* fmt, ...) = 0;
+
   /**
    * Updates the display mode of the local video view.
    *
@@ -5960,7 +6034,7 @@ class IRtcEngine : public agora::base::IEngineBase {
    * - 0: Success.
    * - < 0: Failure.
    */
-  virtual int setLocalRenderMode(media::base::RENDER_MODE_TYPE renderMode) = 0;
+  virtual int setLocalRenderMode(media::base::RENDER_MODE_TYPE renderMode) __deprecated = 0;
 
   /**
    * Sets the local video mirror mode.
@@ -5973,7 +6047,7 @@ class IRtcEngine : public agora::base::IEngineBase {
    * - 0: Success.
    * - < 0: Failure.
    */
-  virtual int setLocalVideoMirrorMode(VIDEO_MIRROR_MODE_TYPE mirrorMode) = 0;
+  virtual int setLocalVideoMirrorMode(VIDEO_MIRROR_MODE_TYPE mirrorMode) __deprecated = 0;
 
   /**
    * Enables or disables the dual video stream mode.
@@ -6769,6 +6843,13 @@ class IRtcEngine : public agora::base::IEngineBase {
    * - false: Do not enable the auto exposure face function.
    */
   virtual int setCameraAutoExposureFaceModeEnabled(bool enabled) = 0;
+
+  /**
+   * set camera stabilization mode.If open stabilization mode, fov will be smaller and capture latency will be longer.
+   *
+   * @param mode specifies the camera stabilization mode.
+   */
+  virtual int setCameraStabilizationMode(CAMERA_STABILIZATION_MODE mode) = 0;
 #endif
 
   /** Sets the default audio route (for Android and iOS only).
@@ -6852,6 +6933,27 @@ class IRtcEngine : public agora::base::IEngineBase {
   virtual int setRouteInCommunicationMode(int route) = 0;
 
 #endif  // __ANDROID__ || (__APPLE__ && TARGET_OS_IOS)
+
+#if defined(__APPLE__)
+  /**
+   * Checks whether the center stage is supported. Use this method after starting the camera.
+   *
+   * @return
+   * - true: The center stage is supported.
+   * - false: The center stage is not supported.
+   */
+  virtual bool isSupportPortraitCenterStage() = 0;
+
+  /** Enables the camera Center Stage.
+   * @param enabled enable Center Stage:
+   * - true: Enable Center Stage.
+   * - false: Disable Center Stage.
+   * @return
+   * - 0: Success.
+   * - < 0: Failure.
+   */
+  virtual int enablePortraitCenterStage(bool enabled) = 0;
+#endif
 
 #if defined(_WIN32) || (defined(__APPLE__) && TARGET_OS_MAC && !TARGET_OS_IPHONE)
   /** Get \ref ScreenCaptureSourceInfo list including available windows and screens.
@@ -8244,6 +8346,17 @@ class IRtcEngine : public agora::base::IEngineBase {
    * - false: not available.
    */
   virtual bool isFeatureAvailableOnDevice(FeatureType type) = 0;
+
+  /**
+   * @brief send audio metadata
+   * @since v4.3.1
+   * @param metadata The pointer of metadata
+   * @param length Size of metadata
+   * @return
+   * - 0: success
+   * - <0: failure
+  */
+  virtual int sendAudioMetadata(const char* metadata, size_t length) = 0;
 };
 
 // The following types are either deprecated or not implmented yet.

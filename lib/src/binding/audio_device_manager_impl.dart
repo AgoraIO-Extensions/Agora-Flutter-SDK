@@ -93,7 +93,7 @@ class AudioDeviceManagerImpl implements AudioDeviceManager {
   @override
   Future<AudioDeviceInfo> getPlaybackDeviceInfo() async {
     final apiType =
-        '${isOverrideClassName ? className : 'AudioDeviceManager'}_getPlaybackDeviceInfo_5540658';
+        '${isOverrideClassName ? className : 'AudioDeviceManager'}_getPlaybackDeviceInfo_ed3a96d';
     final param = createParams({});
     final callApiResult = await irisMethodChannel.invokeMethod(
         IrisMethodCall(apiType, jsonEncode(param), buffers: null));
@@ -182,7 +182,7 @@ class AudioDeviceManagerImpl implements AudioDeviceManager {
   @override
   Future<AudioDeviceInfo> getRecordingDeviceInfo() async {
     final apiType =
-        '${isOverrideClassName ? className : 'AudioDeviceManager'}_getRecordingDeviceInfo_5540658';
+        '${isOverrideClassName ? className : 'AudioDeviceManager'}_getRecordingDeviceInfo_ed3a96d';
     final param = createParams({});
     final callApiResult = await irisMethodChannel.invokeMethod(
         IrisMethodCall(apiType, jsonEncode(param), buffers: null));
