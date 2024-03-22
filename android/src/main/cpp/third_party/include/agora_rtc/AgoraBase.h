@@ -1186,6 +1186,28 @@ enum VIDEO_CODEC_TYPE {
 };
 
 /**
+ * Camera focal length type.
+ */
+enum CAMERA_FOCAL_LENGTH_TYPE {
+  /**
+   * By default, there are no wide-angle and ultra-wide-angle properties.
+   */
+  CAMERA_FOCAL_LENGTH_DEFAULT = 0,
+  /**
+   * Lens with focal length from 24mm to 35mm.
+   */
+  CAMERA_FOCAL_LENGTH_WIDE_ANGLE = 1,
+  /**
+   * Lens with focal length of less than 24mm.
+   */
+  CAMERA_FOCAL_LENGTH_URLTRA_WIDE = 2,
+  /**
+   * Telephoto lens.
+   */
+  CAMERA_FOCAL_LENGTH_TELEPHOTO = 3,
+};
+
+/**
  * The CC (Congestion Control) mode options.
  */
 enum TCcMode {
@@ -1774,6 +1796,14 @@ struct CodecCapInfo {
   CodecCapLevels codecLevels;
 
   CodecCapInfo(): codecType(VIDEO_CODEC_NONE), codecCapMask(0) {}
+};
+
+/** FocalLengthInfo contains the IDs of the front and rear cameras, along with the wide-angle types. */
+struct FocalLengthInfo {
+  /** The camera direction. */
+  int cameraDirection;
+  /** Camera focal segment type. */
+  CAMERA_FOCAL_LENGTH_TYPE focalLengthType;
 };
 
 /**
