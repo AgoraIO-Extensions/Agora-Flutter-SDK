@@ -798,6 +798,16 @@ struct CameraCapturerConfiguration {
    * The camera direction.
    */
   CAMERA_DIRECTION cameraDirection;
+
+  /*- CAMERA_FOCAL_LENGTH_TYPE.CAMERA_FOCAL_LENGTH_DEFAULT:
+  For iOS, if iPhone/iPad has 3 or 2 back camera, it means combination of triple (wide + ultra wide + telephoto) camera
+  or dual wide(wide + ultra wide) camera.In this situation, you can apply for ultra wide len by set smaller zoom fator
+  and bigger zoom fator for telephoto len.Otherwise, it always means wide back/front camera.
+
+  - CAMERA_FOCAL_LENGTH_TYPE.CAMERA_FOCAL_LENGTH_WIDE_ANGLE:wide camera
+  - CAMERA_FOCAL_LENGTH_TYPE.CAMERA_FOCAL_LENGTH_URLTRA_WIDE:ultra wide camera
+  - CAMERA_FOCAL_LENGTH_TYPE.CAMERA_FOCAL_LENGTH_TELEPHOTO:telephoto camera*/
+  CAMERA_FOCAL_LENGTH_TYPE cameraFocalLengthType;
 #else
   /** For windows. The device ID of the playback device. The maximum length is #MAX_DEVICE_ID_LENGTH. */
   char deviceId[MAX_DEVICE_ID_LENGTH];
@@ -2135,6 +2145,25 @@ class IRtcEngineEventHandler {
     (void) vecDistance;
     (void) numFaces;
   }
+
+#if defined(__ANDROID__)
+  /**
+   * When the actual configuration is different from the preset configuration, the callback is triggered.
+   *
+   * @param direction Camera orientation, front or back.
+   * @param focalLengthType The focal length of the camera, wide Angle, super wide Angle or ordinary lens.
+   * @param width Camera acquisition width.
+   * @param height Camera acquisition width.
+   * @param frameRate Camera acquisition frameRate.
+   */
+  virtual void onCameraCapturerConfigurationChanged(int direction, int focalLengthType, int width, int height, int frameRate) {
+  (void)direction;
+  (void)focalLengthType;
+  (void)width;
+  (void)height;
+  (void)frameRate;
+  }
+#endif // __ANDROID__
 #endif
   /**
    * Occurs when the video stops playing.
@@ -7060,7 +7089,6 @@ class IRtcEngine : public agora::base::IEngineBase {
    * - < 0: Failure..
    */
   virtual int getAudioDeviceInfo(DeviceInfo& deviceInfo) = 0;
-
 #endif  // __ANDROID__
 
 #if defined(_WIN32) || (defined(__APPLE__) && TARGET_OS_MAC && !TARGET_OS_IPHONE)
@@ -7171,6 +7199,19 @@ class IRtcEngine : public agora::base::IEngineBase {
    * - < 0: Failure.
    */
   virtual int queryScreenCaptureCapability() = 0;
+
+  /**
+   * Query all focal attributes supported by the camera.
+   * 
+   * @param focalLengthInfos The camera supports the collection of focal segments.Ensure the size of array is not less than 8.
+   * 
+   * @param size The camera supports the size of the focal segment set. Ensure the size is not less than 8.
+   * 
+   * @return
+   * - 0: Success.
+   * - < 0: Failure..
+   */
+  virtual int queryCameraFocalLengthCapability(agora::rtc::FocalLengthInfo* focalLengthInfos, int& size) = 0;
 #endif
 
 #if defined(_WIN32) || defined(__APPLE__) || defined(__ANDROID__)

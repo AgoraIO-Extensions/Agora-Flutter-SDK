@@ -519,6 +519,7 @@ enum VIDEO_PIXEL_FORMAT {
   VIDEO_TEXTURE_ID3D11TEXTURE2D = 17,
   /**
    * 18: I010. 10bit I420 data.
+   * @technical preview
    */
   VIDEO_PIXEL_I010 = 18,
 };
