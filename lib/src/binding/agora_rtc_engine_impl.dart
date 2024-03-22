@@ -3806,6 +3806,26 @@ class RtcEngineImpl implements RtcEngine {
   }
 
   @override
+  Future<List<FocalLengthInfo>> queryCameraFocalLengthCapability() async {
+    final apiType =
+        '${isOverrideClassName ? className : 'RtcEngine'}_queryCameraFocalLengthCapability_2dee6af';
+    final param = createParams({});
+    final callApiResult = await irisMethodChannel.invokeMethod(
+        IrisMethodCall(apiType, jsonEncode(param), buffers: null));
+    if (callApiResult.irisReturnCode < 0) {
+      throw AgoraRtcException(code: callApiResult.irisReturnCode);
+    }
+    final rm = callApiResult.data;
+    final result = rm['result'];
+    if (result < 0) {
+      throw AgoraRtcException(code: result);
+    }
+    final queryCameraFocalLengthCapabilityJson =
+        RtcEngineQueryCameraFocalLengthCapabilityJson.fromJson(rm);
+    return queryCameraFocalLengthCapabilityJson.focalLengthInfos;
+  }
+
+  @override
   Future<void> setScreenCaptureScenario(
       ScreenScenarioType screenScenario) async {
     final apiType =

@@ -758,6 +758,8 @@ void rtcEngineSmokeTestCases() {
         const bool enabled = true;
         const CameraDirection configCameraDirection =
             CameraDirection.cameraRear;
+        const CameraFocalLengthType configCameraFocalLengthType =
+            CameraFocalLengthType.cameraFocalLengthDefault;
         const int formatWidth = 10;
         const int formatHeight = 10;
         const int formatFps = 10;
@@ -771,6 +773,7 @@ void rtcEngineSmokeTestCases() {
         const bool configFollowEncodeDimensionRatio = true;
         const CameraCapturerConfiguration config = CameraCapturerConfiguration(
           cameraDirection: configCameraDirection,
+          cameraFocalLengthType: configCameraFocalLengthType,
           deviceId: configDeviceId,
           cameraId: configCameraId,
           format: configFormat,
@@ -5541,6 +5544,8 @@ void rtcEngineSmokeTestCases() {
       try {
         const CameraDirection configCameraDirection =
             CameraDirection.cameraRear;
+        const CameraFocalLengthType configCameraFocalLengthType =
+            CameraFocalLengthType.cameraFocalLengthDefault;
         const int formatWidth = 10;
         const int formatHeight = 10;
         const int formatFps = 10;
@@ -5554,6 +5559,7 @@ void rtcEngineSmokeTestCases() {
         const bool configFollowEncodeDimensionRatio = true;
         const CameraCapturerConfiguration config = CameraCapturerConfiguration(
           cameraDirection: configCameraDirection,
+          cameraFocalLengthType: configCameraFocalLengthType,
           deviceId: configDeviceId,
           cameraId: configCameraId,
           format: configFormat,
@@ -7144,6 +7150,38 @@ void rtcEngineSmokeTestCases() {
   );
 
   testWidgets(
+    'RtcEngine.queryCameraFocalLengthCapability',
+    (WidgetTester tester) async {
+      String engineAppId = const String.fromEnvironment('TEST_APP_ID',
+          defaultValue: '<YOUR_APP_ID>');
+
+      RtcEngine rtcEngine = createAgoraRtcEngine();
+      await rtcEngine.initialize(RtcEngineContext(
+        appId: engineAppId,
+        areaCode: AreaCode.areaCodeGlob.value(),
+      ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
+
+      try {
+        await rtcEngine.queryCameraFocalLengthCapability();
+      } catch (e) {
+        if (e is! AgoraRtcException) {
+          debugPrint(
+              '[RtcEngine.queryCameraFocalLengthCapability] error: ${e.toString()}');
+          rethrow;
+        }
+
+        if (e.code != -4) {
+          // Only not supported error supported.
+          rethrow;
+        }
+      }
+
+      await rtcEngine.release();
+    },
+  );
+
+  testWidgets(
     'RtcEngine.setScreenCaptureScenario',
     (WidgetTester tester) async {
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
@@ -7776,6 +7814,8 @@ void rtcEngineSmokeTestCases() {
             VideoSourceType.videoSourceCameraPrimary;
         const CameraDirection configCameraDirection =
             CameraDirection.cameraRear;
+        const CameraFocalLengthType configCameraFocalLengthType =
+            CameraFocalLengthType.cameraFocalLengthDefault;
         const int formatWidth = 10;
         const int formatHeight = 10;
         const int formatFps = 10;
@@ -7789,6 +7829,7 @@ void rtcEngineSmokeTestCases() {
         const bool configFollowEncodeDimensionRatio = true;
         const CameraCapturerConfiguration config = CameraCapturerConfiguration(
           cameraDirection: configCameraDirection,
+          cameraFocalLengthType: configCameraFocalLengthType,
           deviceId: configDeviceId,
           cameraId: configCameraId,
           format: configFormat,
@@ -8041,6 +8082,8 @@ void rtcEngineSmokeTestCases() {
           onCameraExposureAreaChanged: (int x, int y, int width, int height) {},
           onFacePositionChanged: (int imageWidth, int imageHeight,
               List vecRectangle, List vecDistance, int numFaces) {},
+          onCameraCapturerConfigurationChanged: (int direction,
+              int focalLengthType, int width, int height, int frameRate) {},
           onVideoStopped: () {},
           onAudioMixingStateChanged:
               (AudioMixingStateType state, AudioMixingReasonType reason) {},
@@ -8257,6 +8300,8 @@ void rtcEngineSmokeTestCases() {
           onCameraExposureAreaChanged: (int x, int y, int width, int height) {},
           onFacePositionChanged: (int imageWidth, int imageHeight,
               List vecRectangle, List vecDistance, int numFaces) {},
+          onCameraCapturerConfigurationChanged: (int direction,
+              int focalLengthType, int width, int height, int frameRate) {},
           onVideoStopped: () {},
           onAudioMixingStateChanged:
               (AudioMixingStateType state, AudioMixingReasonType reason) {},

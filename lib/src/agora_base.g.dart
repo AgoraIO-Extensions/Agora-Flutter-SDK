@@ -342,6 +342,35 @@ Map<String, dynamic> _$CodecCapInfoToJson(CodecCapInfo instance) {
   return val;
 }
 
+FocalLengthInfo _$FocalLengthInfoFromJson(Map<String, dynamic> json) =>
+    FocalLengthInfo(
+      cameraDirection: json['cameraDirection'] as int?,
+      focalLengthType: $enumDecodeNullable(
+          _$CameraFocalLengthTypeEnumMap, json['focalLengthType']),
+    );
+
+Map<String, dynamic> _$FocalLengthInfoToJson(FocalLengthInfo instance) {
+  final val = <String, dynamic>{};
+
+  void writeNotNull(String key, dynamic value) {
+    if (value != null) {
+      val[key] = value;
+    }
+  }
+
+  writeNotNull('cameraDirection', instance.cameraDirection);
+  writeNotNull('focalLengthType',
+      _$CameraFocalLengthTypeEnumMap[instance.focalLengthType]);
+  return val;
+}
+
+const _$CameraFocalLengthTypeEnumMap = {
+  CameraFocalLengthType.cameraFocalLengthDefault: 0,
+  CameraFocalLengthType.cameraFocalLengthWideAngle: 1,
+  CameraFocalLengthType.cameraFocalLengthUrltraWide: 2,
+  CameraFocalLengthType.cameraFocalLengthTelephoto: 3,
+};
+
 VideoEncoderConfiguration _$VideoEncoderConfigurationFromJson(
         Map<String, dynamic> json) =>
     VideoEncoderConfiguration(

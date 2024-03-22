@@ -125,6 +125,18 @@ extension CodecCapInfoBufferExt on CodecCapInfo {
   }
 }
 
+extension FocalLengthInfoBufferExt on FocalLengthInfo {
+  FocalLengthInfo fillBuffers(List<Uint8List> bufferList) {
+    if (bufferList.isEmpty) return this;
+    return this;
+  }
+
+  List<Uint8List> collectBufferList() {
+    final bufferList = <Uint8List>[];
+    return bufferList;
+  }
+}
+
 extension VideoEncoderConfigurationBufferExt on VideoEncoderConfiguration {
   VideoEncoderConfiguration fillBuffers(List<Uint8List> bufferList) {
     if (bufferList.isEmpty) return this;
