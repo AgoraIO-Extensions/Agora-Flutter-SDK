@@ -316,6 +316,21 @@ class RtcEngineGetAudioDeviceInfoJson {
 }
 
 @JsonSerializable(explicitToJson: true, includeIfNull: false)
+class RtcEngineQueryCameraFocalLengthCapabilityJson {
+  const RtcEngineQueryCameraFocalLengthCapabilityJson(this.focalLengthInfos);
+
+  @JsonKey(name: 'focalLengthInfos')
+  final List<FocalLengthInfo> focalLengthInfos;
+
+  factory RtcEngineQueryCameraFocalLengthCapabilityJson.fromJson(
+          Map<String, dynamic> json) =>
+      _$RtcEngineQueryCameraFocalLengthCapabilityJsonFromJson(json);
+
+  Map<String, dynamic> toJson() =>
+      _$RtcEngineQueryCameraFocalLengthCapabilityJsonToJson(this);
+}
+
+@JsonSerializable(explicitToJson: true, includeIfNull: false)
 class RtcEngineGetCallIdJson {
   const RtcEngineGetCallIdJson(this.callId);
 

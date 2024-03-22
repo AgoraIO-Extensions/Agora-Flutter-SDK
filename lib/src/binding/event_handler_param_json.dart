@@ -2882,6 +2882,54 @@ extension RtcEngineEventHandlerOnFacePositionChangedJsonBufferExt
 }
 
 @JsonSerializable(explicitToJson: true, includeIfNull: false)
+class RtcEngineEventHandlerOnCameraCapturerConfigurationChangedJson {
+  const RtcEngineEventHandlerOnCameraCapturerConfigurationChangedJson(
+      {this.direction,
+      this.focalLengthType,
+      this.width,
+      this.height,
+      this.frameRate});
+
+  @JsonKey(name: 'direction')
+  final int? direction;
+
+  @JsonKey(name: 'focalLengthType')
+  final int? focalLengthType;
+
+  @JsonKey(name: 'width')
+  final int? width;
+
+  @JsonKey(name: 'height')
+  final int? height;
+
+  @JsonKey(name: 'frameRate')
+  final int? frameRate;
+
+  factory RtcEngineEventHandlerOnCameraCapturerConfigurationChangedJson.fromJson(
+          Map<String, dynamic> json) =>
+      _$RtcEngineEventHandlerOnCameraCapturerConfigurationChangedJsonFromJson(
+          json);
+
+  Map<String, dynamic> toJson() =>
+      _$RtcEngineEventHandlerOnCameraCapturerConfigurationChangedJsonToJson(
+          this);
+}
+
+extension RtcEngineEventHandlerOnCameraCapturerConfigurationChangedJsonBufferExt
+    on RtcEngineEventHandlerOnCameraCapturerConfigurationChangedJson {
+  RtcEngineEventHandlerOnCameraCapturerConfigurationChangedJson fillBuffers(
+      List<Uint8List> bufferList) {
+    if (bufferList.isEmpty) return this;
+    return this;
+  }
+
+  List<Uint8List> collectBufferList() {
+    final bufferList = <Uint8List>[];
+    return bufferList;
+  }
+}
+
+@JsonSerializable(explicitToJson: true, includeIfNull: false)
 class RtcEngineEventHandlerOnVideoStoppedJson {
   const RtcEngineEventHandlerOnVideoStoppedJson();
 

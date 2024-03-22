@@ -350,6 +350,13 @@ const deleteNodes = [
     parent_name: "IRtcEngine",
     namespaces: ["agora", "rtc", "ext"],
   },
+  // agora::rtc::IRtcEngine::queryCameraFocalLengthCapability
+  {
+    __TYPE: CXXTYPE.Variable,
+    name: "size",
+    namespaces: ["agora", "rtc"],
+    parent_name: "queryCameraFocalLengthCapability",
+  },
 ];
 
 const updateNodes = [
@@ -1459,6 +1466,27 @@ const updateNodes = [
         kind: SimpleTypeKind.pointer_t,
         name: "uint8_t",
         source: "const uint8_t*",
+      },
+    },
+  },
+  // agora::rtc::IRtcEngine::queryCameraFocalLengthCapability
+  {
+    node: {
+      __TYPE: CXXTYPE.Variable,
+      name: "focalLengthInfos",
+      namespaces: ["agora", "rtc"],
+      parent_name: "queryCameraFocalLengthCapability",
+    },
+    updated: {
+      __TYPE: CXXTYPE.Variable,
+      name: "focalLengthInfos",
+      namespaces: ["agora", "rtc"],
+      parent_name: "queryCameraFocalLengthCapability",
+      type: {
+        __TYPE: CXXTYPE.SimpleType,
+        is_builtin_type: false,
+        is_const: false,
+        kind: SimpleTypeKind.array_t,
       },
     },
   },
