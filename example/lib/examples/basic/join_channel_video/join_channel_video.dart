@@ -91,12 +91,8 @@ class _State extends State<JoinChannelVideo> {
           remoteUid.clear();
         });
       },
-      onRemoteVideoStateChanged: (
-          RtcConnection connection,
-          int remoteUid,
-          RemoteVideoState state,
-          RemoteVideoStateReason reason,
-          int elapsed) {
+      onRemoteVideoStateChanged: (RtcConnection connection, int remoteUid,
+          RemoteVideoState state, RemoteVideoStateReason reason, int elapsed) {
         logSink.log(
             '[onRemoteVideoStateChanged] connection: ${connection.toJson()} remoteUid: $remoteUid state: $state reason: $reason elapsed: $elapsed');
       },
@@ -142,7 +138,7 @@ class _State extends State<JoinChannelVideo> {
       openCamera = !openCamera;
     });
   }
-  
+
   _muteLocalVideoStream() async {
     await _engine.muteLocalVideoStream(!muteCamera);
     setState(() {

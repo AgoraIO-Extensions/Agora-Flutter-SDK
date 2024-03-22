@@ -3119,6 +3119,79 @@ void generatedTestCases(ValueGetter<IrisTester> irisTester) {
   );
 
   testWidgets(
+    'RtcEngineEventHandler.onCameraCapturerConfigurationChanged',
+    (WidgetTester tester) async {
+      RtcEngine rtcEngine = createAgoraRtcEngine();
+      await rtcEngine.initialize(RtcEngineContext(
+        appId: 'app_id',
+        areaCode: AreaCode.areaCodeGlob.value(),
+      ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
+
+      final onCameraCapturerConfigurationChangedCompleter = Completer<bool>();
+      final theRtcEngineEventHandler = RtcEngineEventHandler(
+        onCameraCapturerConfigurationChanged: (int direction,
+            int focalLengthType, int width, int height, int frameRate) {
+          onCameraCapturerConfigurationChangedCompleter.complete(true);
+        },
+      );
+
+      rtcEngine.registerEventHandler(
+        theRtcEngineEventHandler,
+      );
+
+// Delay 500 milliseconds to ensure the registerEventHandler call completed.
+      await Future.delayed(const Duration(milliseconds: 500));
+
+      {
+        const int direction = 10;
+        const int focalLengthType = 10;
+        const int width = 10;
+        const int height = 10;
+        const int frameRate = 10;
+
+        final eventJson = {
+          'direction': direction,
+          'focalLengthType': focalLengthType,
+          'width': width,
+          'height': height,
+          'frameRate': frameRate,
+        };
+
+        final eventIds = eventIdsMapping[
+                'RtcEngineEventHandler_onCameraCapturerConfigurationChanged'] ??
+            [];
+        for (final event in eventIds) {
+          final ret = irisTester().fireEvent(event, params: eventJson);
+          // Delay 200 milliseconds to ensure the callback is called.
+          await Future.delayed(const Duration(milliseconds: 200));
+          // TODO(littlegnal): Most of callbacks on web are not implemented, we're temporarily skip these callbacks at this time.
+          if (kIsWeb && ret) {
+            if (!onCameraCapturerConfigurationChangedCompleter.isCompleted) {
+              onCameraCapturerConfigurationChangedCompleter.complete(true);
+            }
+          }
+        }
+      }
+
+      final eventCalled =
+          await onCameraCapturerConfigurationChangedCompleter.future;
+      expect(eventCalled, isTrue);
+
+      {
+        rtcEngine.unregisterEventHandler(
+          theRtcEngineEventHandler,
+        );
+      }
+// Delay 500 milliseconds to ensure the unregisterEventHandler call completed.
+      await Future.delayed(const Duration(milliseconds: 500));
+
+      await rtcEngine.release();
+    },
+    timeout: const Timeout(Duration(minutes: 2)),
+  );
+
+  testWidgets(
     'RtcEngineEventHandler.onVideoStopped',
     (WidgetTester tester) async {
       RtcEngine rtcEngine = createAgoraRtcEngine();

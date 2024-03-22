@@ -1003,6 +1003,7 @@ class CameraCapturerConfiguration {
   /// @nodoc
   const CameraCapturerConfiguration(
       {this.cameraDirection,
+      this.cameraFocalLengthType,
       this.deviceId,
       this.cameraId,
       this.format,
@@ -1011,6 +1012,10 @@ class CameraCapturerConfiguration {
   /// This parameter applies to Android and iOS only. The camera direction. See CameraDirection.
   @JsonKey(name: 'cameraDirection')
   final CameraDirection? cameraDirection;
+
+  /// @nodoc
+  @JsonKey(name: 'cameraFocalLengthType')
+  final CameraFocalLengthType? cameraFocalLengthType;
 
   /// This method applies to Windows only. The ID of the camera. The maximum length is MaxDeviceIdLengthType.
   @JsonKey(name: 'deviceId')
@@ -1630,6 +1635,7 @@ class RtcEngineEventHandler {
     this.onCameraFocusAreaChanged,
     this.onCameraExposureAreaChanged,
     this.onFacePositionChanged,
+    this.onCameraCapturerConfigurationChanged,
     this.onVideoStopped,
     this.onAudioMixingStateChanged,
     this.onRhythmPlayerStateChanged,
@@ -2086,6 +2092,10 @@ class RtcEngineEventHandler {
       List<Rectangle> vecRectangle,
       List<int> vecDistance,
       int numFaces)? onFacePositionChanged;
+
+  /// @nodoc
+  final void Function(int direction, int focalLengthType, int width, int height,
+      int frameRate)? onCameraCapturerConfigurationChanged;
 
   /// Occurs when the video stops playing.
   ///
@@ -5426,6 +5436,9 @@ abstract class RtcEngine {
   /// The highest frame rate supported by the device, if the method is called successfully. See ScreenCaptureFramerateCapability.
   ///  < 0: Failure.
   Future<int> queryScreenCaptureCapability();
+
+  /// @nodoc
+  Future<List<FocalLengthInfo>> queryCameraFocalLengthCapability();
 
   /// Sets the screen sharing scenario.
   ///
