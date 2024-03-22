@@ -1119,6 +1119,39 @@ extension VideoCodecTypeExt on VideoCodecType {
 
 /// @nodoc
 @JsonEnum(alwaysCreate: true)
+enum CameraFocalLengthType {
+  /// @nodoc
+  @JsonValue(0)
+  cameraFocalLengthDefault,
+
+  /// @nodoc
+  @JsonValue(1)
+  cameraFocalLengthWideAngle,
+
+  /// @nodoc
+  @JsonValue(2)
+  cameraFocalLengthUrltraWide,
+
+  /// @nodoc
+  @JsonValue(3)
+  cameraFocalLengthTelephoto,
+}
+
+/// @nodoc
+extension CameraFocalLengthTypeExt on CameraFocalLengthType {
+  /// @nodoc
+  static CameraFocalLengthType fromValue(int value) {
+    return $enumDecode(_$CameraFocalLengthTypeEnumMap, value);
+  }
+
+  /// @nodoc
+  int value() {
+    return _$CameraFocalLengthTypeEnumMap[this]!;
+  }
+}
+
+/// @nodoc
+@JsonEnum(alwaysCreate: true)
 enum TCcMode {
   /// @nodoc
   @JsonValue(0)
@@ -1771,6 +1804,28 @@ class CodecCapInfo {
 
   /// @nodoc
   Map<String, dynamic> toJson() => _$CodecCapInfoToJson(this);
+}
+
+/// @nodoc
+@JsonSerializable(explicitToJson: true, includeIfNull: false)
+class FocalLengthInfo {
+  /// @nodoc
+  const FocalLengthInfo({this.cameraDirection, this.focalLengthType});
+
+  /// @nodoc
+  @JsonKey(name: 'cameraDirection')
+  final int? cameraDirection;
+
+  /// @nodoc
+  @JsonKey(name: 'focalLengthType')
+  final CameraFocalLengthType? focalLengthType;
+
+  /// @nodoc
+  factory FocalLengthInfo.fromJson(Map<String, dynamic> json) =>
+      _$FocalLengthInfoFromJson(json);
+
+  /// @nodoc
+  Map<String, dynamic> toJson() => _$FocalLengthInfoToJson(this);
 }
 
 /// Video encoder configurations.
