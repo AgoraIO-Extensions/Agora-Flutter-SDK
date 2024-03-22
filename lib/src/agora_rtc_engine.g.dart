@@ -374,6 +374,8 @@ CameraCapturerConfiguration _$CameraCapturerConfigurationFromJson(
     CameraCapturerConfiguration(
       cameraDirection: $enumDecodeNullable(
           _$CameraDirectionEnumMap, json['cameraDirection']),
+      cameraFocalLengthType: $enumDecodeNullable(
+          _$CameraFocalLengthTypeEnumMap, json['cameraFocalLengthType']),
       deviceId: json['deviceId'] as String?,
       cameraId: json['cameraId'] as String?,
       format: json['format'] == null
@@ -394,6 +396,8 @@ Map<String, dynamic> _$CameraCapturerConfigurationToJson(
 
   writeNotNull(
       'cameraDirection', _$CameraDirectionEnumMap[instance.cameraDirection]);
+  writeNotNull('cameraFocalLengthType',
+      _$CameraFocalLengthTypeEnumMap[instance.cameraFocalLengthType]);
   writeNotNull('deviceId', instance.deviceId);
   writeNotNull('cameraId', instance.cameraId);
   writeNotNull('format', instance.format?.toJson());
@@ -405,6 +409,13 @@ Map<String, dynamic> _$CameraCapturerConfigurationToJson(
 const _$CameraDirectionEnumMap = {
   CameraDirection.cameraRear: 0,
   CameraDirection.cameraFront: 1,
+};
+
+const _$CameraFocalLengthTypeEnumMap = {
+  CameraFocalLengthType.cameraFocalLengthDefault: 0,
+  CameraFocalLengthType.cameraFocalLengthWideAngle: 1,
+  CameraFocalLengthType.cameraFocalLengthUrltraWide: 2,
+  CameraFocalLengthType.cameraFocalLengthTelephoto: 3,
 };
 
 ScreenCaptureConfiguration _$ScreenCaptureConfigurationFromJson(
