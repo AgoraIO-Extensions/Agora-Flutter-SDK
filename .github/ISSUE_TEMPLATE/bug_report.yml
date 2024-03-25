@@ -13,6 +13,8 @@ body:
       description: The version of the agora_rtc_engine.
       placeholder: |
         6.3.0
+    validations:
+      required: true
   - type: checkboxes
     attributes:
       label: Platforms affected
