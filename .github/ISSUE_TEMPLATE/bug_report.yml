@@ -1,0 +1,112 @@
+name: Bug Report
+description: Submit a bug report.
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Before filling out the form, please consider the following:
+        - Make sure to search the [existing issues](https://github.com/AgoraIO-Extensions/Agora-Flutter-SDK/issues) to see if your bug has already been reported.
+        - For urgent issues, please submit a ticket to [Agora Support](https://www.agora.io/en/customer-support/) for a prompt response.
+  - type: textarea
+    attributes:
+      label: Version of the agora_rtc_engine
+      description: The version of the agora_rtc_engine.
+      placeholder: |
+        6.3.0
+  - type: checkboxes
+    attributes:
+      label: Platforms affected
+      options:
+        - label: Android
+        - label: iOS
+        - label: macOS
+        - label: Windows
+        - label: Web
+  - type: textarea
+    attributes:
+      label: Steps to reproduce
+      description: Please tell us exactly how to reproduce the problem you are running into.
+      placeholder: |
+        1. ...
+        2. ...
+        3. ...
+    validations:
+      required: true
+  - type: textarea
+    attributes:
+      label: Expected results
+      description: Please tell us what is expected to happen.
+    validations:
+      required: true
+  - type: textarea
+    attributes:
+      label: Actual results
+      description: Please tell us what is actually happening.
+    validations:
+      required: true
+  - type: textarea
+    attributes:
+      label: Code sample
+      description: |
+        To help us better understand and address the issue, please provide a minimal reproducible sample that demonstrates the problem.
+        Instead of uploading screenshots of text, we kindly ask you to use code blocks or the methods mentioned above to share your code sample.
+        This will greatly assist us in diagnosing and resolving the issue effectively.
+      value: |
+        <details open><summary>Code sample</summary>
+
+        ```dart
+        [Paste your code here]
+        ```
+
+        </details>
+    validations:
+      required: false
+  - type: textarea
+    attributes:
+      label: Screenshots or Video
+      description: |
+        Upload any screenshots or video of the bug if applicable.
+      value: |
+        <details open>
+        <summary>Screenshots / Video demonstration</summary>
+
+        [Upload media here]
+
+        </details>
+  - type: textarea
+    attributes:
+      label: Logs
+      description: |
+        To help us diagnose and resolve the issue effectively, please include the full logs when you encounter the problem.
+
+        Here are the default log paths for different platforms:
+        - Android: /storage/emulated/0/Android/data/<packagename>/files/agora-iris.log
+        - iOS: App Sandbox/Library/caches/agora-iris.log
+        - macOS: /Users/<username>/Library/Containers/<AppBundleIdentifier>/Data/Library/Logs/agora-iris.log
+        - Windows: C:\Users\<user_name>\AppData\Local\Agora\<process_name>\agora-iris.log
+
+        Please avoid uploading screenshots of text. Instead, use code blocks or the methods mentioned above to share the logs.
+        Remember to remove any sensitive information before sharing.
+      value: |
+        <details open><summary>Logs</summary>
+
+        ```console
+        [Paste your logs here]
+        ```
+
+        </details>
+  - type: textarea
+    attributes:
+      label: Flutter Doctor output
+      description: |
+        Please provide the full output of running `flutter doctor -v`
+      value: |
+        <details open><summary>Doctor output</summary>
+
+        ```console
+        [Paste your output here]
+        ```
+
+        </details>
+    validations:
+      required: true
