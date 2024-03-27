@@ -115,7 +115,6 @@
 /**
  * set the video codec type, such as "H264", "JPEG"
  */
-#define KEY_RTC_VIDEO_CODEC_TYPE                      "engine.video.codec_type"
 #define KEY_RTC_VIDEO_MINOR_STREAM_CODEC_INDEX        "engine.video.minor_stream_codec_index"
 #define KEY_RTC_VIDEO_CODEC_INDEX                     "che.video.videoCodecIndex"
 /**

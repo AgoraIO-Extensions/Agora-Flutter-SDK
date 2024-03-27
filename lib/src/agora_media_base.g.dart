@@ -181,6 +181,7 @@ ExternalVideoFrame _$ExternalVideoFrameFromJson(Map<String, dynamic> json) =>
           ?.map((e) => (e as num).toDouble())
           .toList(),
       metadataSize: json['metadata_size'] as int?,
+      fillAlphaBuffer: json['fillAlphaBuffer'] as bool?,
       textureSliceIndex: json['texture_slice_index'] as int?,
     );
 
@@ -207,6 +208,7 @@ Map<String, dynamic> _$ExternalVideoFrameToJson(ExternalVideoFrame instance) {
   writeNotNull('textureId', instance.textureId);
   writeNotNull('matrix', instance.matrix);
   writeNotNull('metadata_size', instance.metadataSize);
+  writeNotNull('fillAlphaBuffer', instance.fillAlphaBuffer);
   writeNotNull('texture_slice_index', instance.textureSliceIndex);
   return val;
 }
@@ -231,6 +233,7 @@ const _$VideoPixelFormatEnumMap = {
   VideoPixelFormat.videoCvpixelBgra: 14,
   VideoPixelFormat.videoPixelI422: 16,
   VideoPixelFormat.videoTextureId3d11texture2d: 17,
+  VideoPixelFormat.videoPixelI010: 18,
 };
 
 const _$EglContextTypeEnumMap = {
@@ -293,6 +296,7 @@ AudioFrame _$AudioFrameFromJson(Map<String, dynamic> json) => AudioFrame(
       avsyncType: json['avsync_type'] as int?,
       presentationMs: json['presentationMs'] as int?,
       audioTrackNumber: json['audioTrackNumber'] as int?,
+      rtpTimestamp: json['rtpTimestamp'] as int?,
     );
 
 Map<String, dynamic> _$AudioFrameToJson(AudioFrame instance) {
@@ -314,6 +318,7 @@ Map<String, dynamic> _$AudioFrameToJson(AudioFrame instance) {
   writeNotNull('avsync_type', instance.avsyncType);
   writeNotNull('presentationMs', instance.presentationMs);
   writeNotNull('audioTrackNumber', instance.audioTrackNumber);
+  writeNotNull('rtpTimestamp', instance.rtpTimestamp);
   return val;
 }
 
@@ -478,6 +483,7 @@ const _$VideoSourceTypeEnumMap = {
   VideoSourceType.videoSourceCameraFourth: 12,
   VideoSourceType.videoSourceScreenThird: 13,
   VideoSourceType.videoSourceScreenFourth: 14,
+  VideoSourceType.videoSourceSpeechDriven: 15,
   VideoSourceType.videoSourceUnknown: 100,
 };
 
@@ -510,6 +516,7 @@ const _$MediaSourceTypeEnumMap = {
   MediaSourceType.rtcImageGifSource: 10,
   MediaSourceType.remoteVideoSource: 11,
   MediaSourceType.transcodedVideoSource: 12,
+  MediaSourceType.speechDrivenVideoSource: 13,
   MediaSourceType.unknownMediaSource: 100,
 };
 

@@ -51,6 +51,20 @@ public:
                         char deviceId[MAX_DEVICE_ID_LENGTH]) = 0;
 
   /**
+   * Gets the information of a specified audio device.
+   * @note 
+   * @param index An input parameter that specifies the audio device.
+   * @param deviceName An output parameter that indicates the device name.
+   * @param deviceTypeName An output parameter that indicates the device type name. such as Built-in, USB, HDMI, etc. (MacOS only)
+   * @param deviceId An output parameter that indicates the device ID.
+   * @return
+   * - 0: Success.
+   * - < 0: Failure.
+   */
+  virtual int getDevice(int index, char deviceName[MAX_DEVICE_ID_LENGTH], char deviceTypeName[MAX_DEVICE_ID_LENGTH],
+                        char deviceId[MAX_DEVICE_ID_LENGTH]) = 0;                      
+
+  /**
    * Specifies a device with the device ID.
    * @param deviceId The device ID.
    * @return
@@ -70,6 +84,19 @@ public:
    * - < 0: Failure.
    */
   virtual int getDefaultDevice(char deviceName[MAX_DEVICE_ID_LENGTH], char deviceId[MAX_DEVICE_ID_LENGTH]) = 0;
+
+   /**
+   * Gets the default audio device of the system (for macOS and Windows only).
+   *
+   * @param deviceName The name of the system default audio device.
+   * @param deviceTypeName The device type name of the the system default audio device, such as Built-in, USB, HDMI, etc. (MacOS only)
+   * @param deviceId The device ID of the the system default audio device.
+   *
+   * @return
+   * - 0: Success.
+   * - < 0: Failure.
+   */
+  virtual int getDefaultDevice(char deviceName[MAX_DEVICE_ID_LENGTH], char deviceTypeName[MAX_DEVICE_ID_LENGTH], char deviceId[MAX_DEVICE_ID_LENGTH]) = 0; 
 
   /**
    * Sets the volume of the app.
@@ -200,6 +227,17 @@ public:
                                     char deviceName[MAX_DEVICE_ID_LENGTH]) = 0;
 
   /**
+   * Gets the device ID and device name and device type name of the audio playback device.
+   * @param deviceId An output parameter that specifies the ID of the audio playback device.
+   * @param deviceName An output parameter that specifies the name of the audio playback device.
+   * @param deviceTypeName An output parameter that specifies the device type name. such as Built-in, USB, HDMI, etc. (MacOS only)
+   * @return
+   * - 0: Success.
+   * - < 0: Failure.
+   */
+  virtual int getPlaybackDeviceInfo(char deviceId[MAX_DEVICE_ID_LENGTH], char deviceName[MAX_DEVICE_ID_LENGTH], char deviceTypeName[MAX_DEVICE_ID_LENGTH]) = 0;
+
+  /**
    * Sets the volume of the audio playback device.
    * @param volume The volume of the audio playing device. The value range is
    * [0, 255].
@@ -254,6 +292,18 @@ public:
   virtual int getRecordingDeviceInfo(char deviceId[MAX_DEVICE_ID_LENGTH],
                                      char deviceName[MAX_DEVICE_ID_LENGTH]) = 0;
 
+  /**
+   * Gets the device ID and device name and device type name of the audio recording device.
+   *
+   * @param deviceId An output parameter that indicates the device id.
+   * @param deviceName An output parameter that indicates the device name.
+   * @param deviceTypeName An output parameter that indicates the device type name. such as Built-in, USB, HDMI, etc. (MacOS only)
+   * @return
+   * - 0: Success.
+   * - < 0: Failure.
+   */
+  virtual int getRecordingDeviceInfo(char deviceId[MAX_DEVICE_ID_LENGTH], char deviceName[MAX_DEVICE_ID_LENGTH], char deviceTypeName[MAX_DEVICE_ID_LENGTH]) = 0;    
+                               
   /**
    * Sets the volume of the recording device.
    * @param volume The volume of the recording device. The value range is [0,

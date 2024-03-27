@@ -282,6 +282,22 @@ Map<String, dynamic> _$RtcEngineGetAudioDeviceInfoJsonToJson(
       'deviceInfo': instance.deviceInfo.toJson(),
     };
 
+RtcEngineQueryCameraFocalLengthCapabilityJson
+    _$RtcEngineQueryCameraFocalLengthCapabilityJsonFromJson(
+            Map<String, dynamic> json) =>
+        RtcEngineQueryCameraFocalLengthCapabilityJson(
+          (json['focalLengthInfos'] as List<dynamic>)
+              .map((e) => FocalLengthInfo.fromJson(e as Map<String, dynamic>))
+              .toList(),
+        );
+
+Map<String, dynamic> _$RtcEngineQueryCameraFocalLengthCapabilityJsonToJson(
+        RtcEngineQueryCameraFocalLengthCapabilityJson instance) =>
+    <String, dynamic>{
+      'focalLengthInfos':
+          instance.focalLengthInfos.map((e) => e.toJson()).toList(),
+    };
+
 RtcEngineGetCallIdJson _$RtcEngineGetCallIdJsonFromJson(
         Map<String, dynamic> json) =>
     RtcEngineGetCallIdJson(
@@ -366,6 +382,18 @@ Map<String, dynamic> _$RtcEngineExGetUserInfoByUidExJsonToJson(
         RtcEngineExGetUserInfoByUidExJson instance) =>
     <String, dynamic>{
       'userInfo': instance.userInfo.toJson(),
+    };
+
+RtcEngineExGetCallIdExJson _$RtcEngineExGetCallIdExJsonFromJson(
+        Map<String, dynamic> json) =>
+    RtcEngineExGetCallIdExJson(
+      json['callId'] as String,
+    );
+
+Map<String, dynamic> _$RtcEngineExGetCallIdExJsonToJson(
+        RtcEngineExGetCallIdExJson instance) =>
+    <String, dynamic>{
+      'callId': instance.callId,
     };
 
 AudioDeviceManagerGetPlaybackDeviceJson

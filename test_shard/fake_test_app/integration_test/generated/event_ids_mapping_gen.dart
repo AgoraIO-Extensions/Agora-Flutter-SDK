@@ -49,6 +49,7 @@ const eventIdsMapping = {
   "VideoFrameObserver_onTranscodedVideoFrame": [
     "VideoFrameObserver_onTranscodedVideoFrame_27754d8"
   ],
+  "FaceInfoObserver_onFaceInfo": ["FaceInfoObserver_onFaceInfo_3a2037f"],
   "MediaRecorderObserver_onRecorderStateChanged": [
     "MediaRecorderObserver_onRecorderStateChanged_c38849f"
   ],
@@ -239,6 +240,9 @@ const eventIdsMapping = {
   "RtcEngineEventHandler_onFacePositionChanged": [
     "RtcEngineEventHandler_onFacePositionChanged_197b4a7"
   ],
+  "RtcEngineEventHandler_onCameraCapturerConfigurationChanged": [
+    "RtcEngineEventHandler_onCameraCapturerConfigurationChanged_8c68d23"
+  ],
   "RtcEngineEventHandler_onVideoStopped": [
     "RtcEngineEventHandler_onVideoStopped"
   ],
@@ -382,6 +386,9 @@ const eventIdsMapping = {
   ],
   "RtcEngineEventHandler_onTranscodedStreamLayoutInfo": [
     "RtcEngineEventHandler_onTranscodedStreamLayoutInfo_48f6419"
+  ],
+  "RtcEngineEventHandler_onAudioMetadataReceived": [
+    "RtcEngineEventHandler_onAudioMetadataReceived_0d4eb96"
   ],
   "RtcEngineEventHandler_onExtensionEvent": [
     "RtcEngineEventHandler_onExtensionEvent_062d13c"

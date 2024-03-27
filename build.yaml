@@ -1,5 +1,8 @@
 targets:
   $default:
+    sources:
+      exclude:
+        - example
     builders:
       source_gen|combining_builder:
         options:

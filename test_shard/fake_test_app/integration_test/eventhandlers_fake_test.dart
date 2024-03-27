@@ -15,6 +15,8 @@ import 'generated/mediaengine_videoframeobserver_testcases.generated.dart'
     as mediaengine_videoframeobserver;
 import 'generated/mediaengine_videoencodedframeobserver_testcases.generated.dart'
     as mediaengine_videoencodedframeobserver;
+import 'generated/mediaengine_faceinfoobserver_testcases.generated.dart'
+    as mediaengine_faceinfoobserver;
 import 'generated/mediaplayer_audiospectrumobserver_testcases.generated.dart'
     as mediaplayer_audiospectrumobserver;
 import 'generated/mediaplayer_audiopcmframesink_testcases.generated.dart'
@@ -70,6 +72,7 @@ void main() {
     // MediaEngine events
     mediaengine_videoframeobserver.generatedTestCases(() => irisTester!);
     mediaengine_videoencodedframeobserver.generatedTestCases(() => irisTester!);
+    mediaengine_faceinfoobserver.generatedTestCases(() => irisTester!);
 
     // MediaPlayerController events
     mediaplayer_audiospectrumobserver.generatedTestCases(() => irisTester!);

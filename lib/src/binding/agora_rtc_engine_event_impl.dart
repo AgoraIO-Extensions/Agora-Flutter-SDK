@@ -814,6 +814,34 @@ class RtcEngineEventHandlerWrapper implements EventLoopEventHandler {
             imageWidth, imageHeight, vecRectangle, vecDistance, numFaces);
         return true;
 
+      case 'onCameraCapturerConfigurationChanged_8c68d23':
+        if (rtcEngineEventHandler.onCameraCapturerConfigurationChanged ==
+            null) {
+          return true;
+        }
+        final jsonMap = jsonDecode(eventData);
+        RtcEngineEventHandlerOnCameraCapturerConfigurationChangedJson
+            paramJson =
+            RtcEngineEventHandlerOnCameraCapturerConfigurationChangedJson
+                .fromJson(jsonMap);
+        paramJson = paramJson.fillBuffers(buffers);
+        int? direction = paramJson.direction;
+        int? focalLengthType = paramJson.focalLengthType;
+        int? width = paramJson.width;
+        int? height = paramJson.height;
+        int? frameRate = paramJson.frameRate;
+        if (direction == null ||
+            focalLengthType == null ||
+            width == null ||
+            height == null ||
+            frameRate == null) {
+          return true;
+        }
+
+        rtcEngineEventHandler.onCameraCapturerConfigurationChanged!(
+            direction, focalLengthType, width, height, frameRate);
+        return true;
+
       case 'onVideoStopped':
         if (rtcEngineEventHandler.onVideoStopped == null) {
           return true;
@@ -1781,6 +1809,29 @@ class RtcEngineEventHandlerWrapper implements EventLoopEventHandler {
         layoutlist = layoutlist.map((e) => e.fillBuffers(buffers)).toList();
         rtcEngineEventHandler.onTranscodedStreamLayoutInfo!(
             connection, uid, width, height, layoutCount, layoutlist);
+        return true;
+
+      case 'onAudioMetadataReceived_0d4eb96':
+        if (rtcEngineEventHandler.onAudioMetadataReceived == null) {
+          return true;
+        }
+        final jsonMap = jsonDecode(eventData);
+        RtcEngineEventHandlerOnAudioMetadataReceivedJson paramJson =
+            RtcEngineEventHandlerOnAudioMetadataReceivedJson.fromJson(jsonMap);
+        paramJson = paramJson.fillBuffers(buffers);
+        RtcConnection? connection = paramJson.connection;
+        int? uid = paramJson.uid;
+        Uint8List? metadata = paramJson.metadata;
+        int? length = paramJson.length;
+        if (connection == null ||
+            uid == null ||
+            metadata == null ||
+            length == null) {
+          return true;
+        }
+        connection = connection.fillBuffers(buffers);
+        rtcEngineEventHandler.onAudioMetadataReceived!(
+            connection, uid, metadata, length);
         return true;
 
       case 'onExtensionEvent_062d13c':

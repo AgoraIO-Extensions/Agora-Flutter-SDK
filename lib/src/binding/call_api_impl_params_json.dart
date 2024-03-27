@@ -316,6 +316,21 @@ class RtcEngineGetAudioDeviceInfoJson {
 }
 
 @JsonSerializable(explicitToJson: true, includeIfNull: false)
+class RtcEngineQueryCameraFocalLengthCapabilityJson {
+  const RtcEngineQueryCameraFocalLengthCapabilityJson(this.focalLengthInfos);
+
+  @JsonKey(name: 'focalLengthInfos')
+  final List<FocalLengthInfo> focalLengthInfos;
+
+  factory RtcEngineQueryCameraFocalLengthCapabilityJson.fromJson(
+          Map<String, dynamic> json) =>
+      _$RtcEngineQueryCameraFocalLengthCapabilityJsonFromJson(json);
+
+  Map<String, dynamic> toJson() =>
+      _$RtcEngineQueryCameraFocalLengthCapabilityJsonToJson(this);
+}
+
+@JsonSerializable(explicitToJson: true, includeIfNull: false)
 class RtcEngineGetCallIdJson {
   const RtcEngineGetCallIdJson(this.callId);
 
@@ -412,6 +427,19 @@ class RtcEngineExGetUserInfoByUidExJson {
 
   Map<String, dynamic> toJson() =>
       _$RtcEngineExGetUserInfoByUidExJsonToJson(this);
+}
+
+@JsonSerializable(explicitToJson: true, includeIfNull: false)
+class RtcEngineExGetCallIdExJson {
+  const RtcEngineExGetCallIdExJson(this.callId);
+
+  @JsonKey(name: 'callId')
+  final String callId;
+
+  factory RtcEngineExGetCallIdExJson.fromJson(Map<String, dynamic> json) =>
+      _$RtcEngineExGetCallIdExJsonFromJson(json);
+
+  Map<String, dynamic> toJson() => _$RtcEngineExGetCallIdExJsonToJson(this);
 }
 
 @JsonSerializable(explicitToJson: true, includeIfNull: false)

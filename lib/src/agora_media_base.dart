@@ -81,6 +81,10 @@ enum VideoSourceType {
   @JsonValue(14)
   videoSourceScreenFourth,
 
+  /// @nodoc
+  @JsonValue(15)
+  videoSourceSpeechDriven,
+
   /// 100: An unknown video source.
   @JsonValue(100)
   videoSourceUnknown,
@@ -290,6 +294,10 @@ enum MediaSourceType {
   /// @nodoc
   @JsonValue(12)
   transcodedVideoSource,
+
+  /// @nodoc
+  @JsonValue(13)
+  speechDrivenVideoSource,
 
   /// 100: Unknown media source.
   @JsonValue(100)
@@ -602,6 +610,10 @@ enum VideoPixelFormat {
   /// 17: The ID3D11TEXTURE2D format. Currently supported types are DXGI_FORMAT_B8G8R8A8_UNORM, DXGI_FORMAT_B8G8R8A8_TYPELESS and DXGI_FORMAT_NV12.
   @JsonValue(17)
   videoTextureId3d11texture2d,
+
+  /// @nodoc
+  @JsonValue(18)
+  videoPixelI010,
 }
 
 /// @nodoc
@@ -724,6 +736,7 @@ class ExternalVideoFrame {
       this.metadataBuffer,
       this.metadataSize,
       this.alphaBuffer,
+      this.fillAlphaBuffer,
       this.textureSliceIndex});
 
   /// The video type. See VideoBufferType.
@@ -793,6 +806,10 @@ class ExternalVideoFrame {
   /// @nodoc
   @JsonKey(name: 'alphaBuffer', ignore: true)
   final Uint8List? alphaBuffer;
+
+  /// @nodoc
+  @JsonKey(name: 'fillAlphaBuffer')
+  final bool? fillAlphaBuffer;
 
   /// This parameter only applies to video data in Windows Texture format. It represents an index of an ID3D11Texture2D texture object used by the video frame in the ID3D11Texture2D array.
   @JsonKey(name: 'texture_slice_index')
@@ -1137,7 +1154,8 @@ class AudioFrame {
       this.renderTimeMs,
       this.avsyncType,
       this.presentationMs,
-      this.audioTrackNumber});
+      this.audioTrackNumber,
+      this.rtpTimestamp});
 
   /// The type of the audio frame. See AudioFrameType.
   @JsonKey(name: 'type')
@@ -1180,6 +1198,10 @@ class AudioFrame {
   /// @nodoc
   @JsonKey(name: 'audioTrackNumber')
   final int? audioTrackNumber;
+
+  /// @nodoc
+  @JsonKey(name: 'rtpTimestamp')
+  final int? rtpTimestamp;
 
   /// @nodoc
   factory AudioFrame.fromJson(Map<String, dynamic> json) =>
@@ -1667,6 +1689,17 @@ class MediaRecorderConfiguration {
 
   /// @nodoc
   Map<String, dynamic> toJson() => _$MediaRecorderConfigurationToJson(this);
+}
+
+/// @nodoc
+class FaceInfoObserver {
+  /// @nodoc
+  const FaceInfoObserver({
+    this.onFaceInfo,
+  });
+
+  /// @nodoc
+  final void Function(String outFaceInfo)? onFaceInfo;
 }
 
 /// @nodoc

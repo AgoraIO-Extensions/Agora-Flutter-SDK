@@ -76,6 +76,23 @@ class MediaEngineImpl implements MediaEngine {
   }
 
   @override
+  void registerFaceInfoObserver(FaceInfoObserver observer) {
+    // Implementation template
+// final apiType = '${isOverrideClassName ? className : 'MediaEngine'}_registerFaceInfoObserver_0303ed6';
+// final param = createParams({
+//   'observer': observer
+// });
+// final callApiResult = await irisMethodChannel.invokeMethod(IrisMethodCall(apiType, jsonEncode(param), buffers:null));
+// if (callApiResult.irisReturnCode < 0) {
+//   throw AgoraRtcException(code: callApiResult.irisReturnCode);
+// }
+// final rm = callApiResult.data;
+// final result = rm['result'];
+// if (result < 0) { throw AgoraRtcException(code: result); }
+    throw UnimplementedError('Unimplement for registerFaceInfoObserver');
+  }
+
+  @override
   Future<void> pushAudioFrame(
       {required AudioFrame frame, int trackId = 0}) async {
     final apiType =
@@ -362,5 +379,22 @@ class MediaEngineImpl implements MediaEngine {
 // if (result < 0) { throw AgoraRtcException(code: result); }
     throw UnimplementedError(
         'Unimplement for unregisterVideoEncodedFrameObserver');
+  }
+
+  @override
+  void unregisterFaceInfoObserver(FaceInfoObserver observer) {
+    // Implementation template
+// final apiType = '${isOverrideClassName ? className : 'MediaEngine'}_unregisterFaceInfoObserver';
+// final param = createParams({
+//   'observer': observer
+// });
+// final callApiResult = await irisMethodChannel.invokeMethod(IrisMethodCall(apiType, jsonEncode(param), buffers:null));
+// if (callApiResult.irisReturnCode < 0) {
+//   throw AgoraRtcException(code: callApiResult.irisReturnCode);
+// }
+// final rm = callApiResult.data;
+// final result = rm['result'];
+// if (result < 0) { throw AgoraRtcException(code: result); }
+    throw UnimplementedError('Unimplement for unregisterFaceInfoObserver');
   }
 }

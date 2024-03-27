@@ -150,4 +150,32 @@ class MediaEngineImpl extends media_engine_impl_binding.MediaEngineImpl
   Future<void> dispose() async {
     await release();
   }
+
+  @override
+  void registerFaceInfoObserver(FaceInfoObserver observer) async {
+    final eventHandlerWrapper = FaceInfoObserverWrapper(observer);
+    final param = createParams({});
+
+    await irisMethodChannel.registerEventHandler(
+        ScopedEvent(
+            scopedKey: _mediaEngineScopedKey,
+            registerName: 'MediaEngine_registerFaceInfoObserver_0303ed6',
+            unregisterName: 'MediaEngine_unregisterFaceInfoObserver',
+            handler: eventHandlerWrapper),
+        jsonEncode(param));
+  }
+
+  @override
+  void unregisterFaceInfoObserver(FaceInfoObserver observer) async {
+    final eventHandlerWrapper = FaceInfoObserverWrapper(observer);
+    final param = createParams({});
+
+    await irisMethodChannel.unregisterEventHandler(
+        ScopedEvent(
+            scopedKey: _mediaEngineScopedKey,
+            registerName: 'MediaEngine_registerFaceInfoObserver_0303ed6',
+            unregisterName: 'MediaEngine_unregisterFaceInfoObserver',
+            handler: eventHandlerWrapper),
+        jsonEncode(param));
+  }
 }

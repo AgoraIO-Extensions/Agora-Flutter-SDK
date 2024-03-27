@@ -366,6 +366,7 @@ const _$VideoSourceTypeEnumMap = {
   VideoSourceType.videoSourceCameraFourth: 12,
   VideoSourceType.videoSourceScreenThird: 13,
   VideoSourceType.videoSourceScreenFourth: 14,
+  VideoSourceType.videoSourceSpeechDriven: 15,
   VideoSourceType.videoSourceUnknown: 100,
 };
 
@@ -467,6 +468,26 @@ Map<String, dynamic> _$VideoFrameObserverOnTranscodedVideoFrameJsonToJson(
   }
 
   writeNotNull('videoFrame', instance.videoFrame?.toJson());
+  return val;
+}
+
+FaceInfoObserverOnFaceInfoJson _$FaceInfoObserverOnFaceInfoJsonFromJson(
+        Map<String, dynamic> json) =>
+    FaceInfoObserverOnFaceInfoJson(
+      outFaceInfo: json['outFaceInfo'] as String?,
+    );
+
+Map<String, dynamic> _$FaceInfoObserverOnFaceInfoJsonToJson(
+    FaceInfoObserverOnFaceInfoJson instance) {
+  final val = <String, dynamic>{};
+
+  void writeNotNull(String key, dynamic value) {
+    if (value != null) {
+      val[key] = value;
+    }
+  }
+
+  writeNotNull('outFaceInfo', instance.outFaceInfo);
   return val;
 }
 
@@ -1310,6 +1331,7 @@ const _$ErrorCodeTypeEnumMap = {
   ErrorCodeType.errSetClientRoleNotAuthorized: 119,
   ErrorCodeType.errDecryptionFailed: 120,
   ErrorCodeType.errInvalidUserId: 121,
+  ErrorCodeType.errDatastreamDecryptionFailed: 122,
   ErrorCodeType.errClientIsBannedByServer: 123,
   ErrorCodeType.errEncryptedStreamNotAllowedPublish: 130,
   ErrorCodeType.errLicenseCredentialInvalid: 131,
@@ -1914,6 +1936,8 @@ const _$LocalVideoStreamReasonEnumMap = {
   LocalVideoStreamReason.localVideoStreamReasonDeviceNotFound: 8,
   LocalVideoStreamReason.localVideoStreamReasonDeviceDisconnected: 9,
   LocalVideoStreamReason.localVideoStreamReasonDeviceInvalidId: 10,
+  LocalVideoStreamReason.localVideoStreamReasonDeviceInterrupt: 14,
+  LocalVideoStreamReason.localVideoStreamReasonDeviceFatalError: 15,
   LocalVideoStreamReason.localVideoStreamReasonDeviceSystemPressure: 101,
   LocalVideoStreamReason.localVideoStreamReasonScreenCaptureWindowMinimized: 11,
   LocalVideoStreamReason.localVideoStreamReasonScreenCaptureWindowClosed: 12,
@@ -2434,6 +2458,37 @@ Map<String, dynamic> _$RtcEngineEventHandlerOnFacePositionChangedJsonToJson(
   return val;
 }
 
+RtcEngineEventHandlerOnCameraCapturerConfigurationChangedJson
+    _$RtcEngineEventHandlerOnCameraCapturerConfigurationChangedJsonFromJson(
+            Map<String, dynamic> json) =>
+        RtcEngineEventHandlerOnCameraCapturerConfigurationChangedJson(
+          direction: json['direction'] as int?,
+          focalLengthType: json['focalLengthType'] as int?,
+          width: json['width'] as int?,
+          height: json['height'] as int?,
+          frameRate: json['frameRate'] as int?,
+        );
+
+Map<String, dynamic>
+    _$RtcEngineEventHandlerOnCameraCapturerConfigurationChangedJsonToJson(
+        RtcEngineEventHandlerOnCameraCapturerConfigurationChangedJson
+            instance) {
+  final val = <String, dynamic>{};
+
+  void writeNotNull(String key, dynamic value) {
+    if (value != null) {
+      val[key] = value;
+    }
+  }
+
+  writeNotNull('direction', instance.direction);
+  writeNotNull('focalLengthType', instance.focalLengthType);
+  writeNotNull('width', instance.width);
+  writeNotNull('height', instance.height);
+  writeNotNull('frameRate', instance.frameRate);
+  return val;
+}
+
 RtcEngineEventHandlerOnVideoStoppedJson
     _$RtcEngineEventHandlerOnVideoStoppedJsonFromJson(
             Map<String, dynamic> json) =>
@@ -2937,6 +2992,8 @@ const _$RemoteAudioStateReasonEnumMap = {
   RemoteAudioStateReason.remoteAudioReasonRemoteMuted: 5,
   RemoteAudioStateReason.remoteAudioReasonRemoteUnmuted: 6,
   RemoteAudioStateReason.remoteAudioReasonRemoteOffline: 7,
+  RemoteAudioStateReason.remoteAudioReasonNoPacketReceive: 8,
+  RemoteAudioStateReason.remoteAudioReasonLocalPlayFailed: 9,
 };
 
 RtcEngineEventHandlerOnActiveSpeakerJson
@@ -3623,6 +3680,8 @@ const _$EncryptionErrorTypeEnumMap = {
   EncryptionErrorType.encryptionErrorInternalFailure: 0,
   EncryptionErrorType.encryptionErrorDecryptionFailure: 1,
   EncryptionErrorType.encryptionErrorEncryptionFailure: 2,
+  EncryptionErrorType.encryptionErrorDatastreamDecryptionFailure: 3,
+  EncryptionErrorType.encryptionErrorDatastreamEncryptionFailure: 4,
 };
 
 RtcEngineEventHandlerOnPermissionErrorJson
@@ -4019,6 +4078,34 @@ Map<String, dynamic>
   writeNotNull('layoutCount', instance.layoutCount);
   writeNotNull(
       'layoutlist', instance.layoutlist?.map((e) => e.toJson()).toList());
+  return val;
+}
+
+RtcEngineEventHandlerOnAudioMetadataReceivedJson
+    _$RtcEngineEventHandlerOnAudioMetadataReceivedJsonFromJson(
+            Map<String, dynamic> json) =>
+        RtcEngineEventHandlerOnAudioMetadataReceivedJson(
+          connection: json['connection'] == null
+              ? null
+              : RtcConnection.fromJson(
+                  json['connection'] as Map<String, dynamic>),
+          uid: json['uid'] as int?,
+          length: json['length'] as int?,
+        );
+
+Map<String, dynamic> _$RtcEngineEventHandlerOnAudioMetadataReceivedJsonToJson(
+    RtcEngineEventHandlerOnAudioMetadataReceivedJson instance) {
+  final val = <String, dynamic>{};
+
+  void writeNotNull(String key, dynamic value) {
+    if (value != null) {
+      val[key] = value;
+    }
+  }
+
+  writeNotNull('connection', instance.connection?.toJson());
+  writeNotNull('uid', instance.uid);
+  writeNotNull('length', instance.length);
   return val;
 }
 
