@@ -7,6 +7,25 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 /// ProcessVideoRawData Example
+/// 
+/// This example demonstrates how to create a `RtcEngine` (Android)/`AgoraRtcEngineKit` (iOS)
+/// and share the native handle with the Flutter side. By doing so, the `agora_rtc_engine` 
+/// acts as a proxy, allowing you to invoke the functions of the `RtcEngine` (Android)/`AgoraRtcEngineKit` (iOS).
+/// 
+/// The key point of how to use it:
+/// * Initializes the `RtcEngine` (Android)/`AgoraRtcEngineKit` (iOS) on the native side.
+/// * Retrieves the native handle through the `RtcEngine.getNativeHandle`(Android)/`AgoraRtcEngineKit.getNativeHandle`(iOS) 
+///   function on the native side, and passes it to the Flutter side through the Flutter `MethodChannel`.
+/// * Passes the native handle to the `createAgoraRtcEngine`(Flutter) on the Flutter side, 
+///   then the `RtcEngine`(Flutter) can call the functions through the shared native handle.
+/// 
+/// This example creates a `RtcEngine` (Android)/`AgoraRtcEngineKit` (iOS) on the native side
+/// and registers the video frame observer to modify the video raw data. It makes the local 
+/// preview appear in gray for demonstration purposes.
+/// 
+/// The native side implementation can be found at:
+/// - Android: `example/android/app/src/main/kotlin/io/agora/agora_rtc_flutter_example/VideoRawDataController.kt`
+/// - iOS: `example/ios/Runner/VideoRawDataController.m`
 class ProcessVideoRawData extends StatefulWidget {
   /// Construct the [ProcessVideoRawData]
   const ProcessVideoRawData({Key? key}) : super(key: key);
@@ -46,15 +65,27 @@ class _State extends State<ProcessVideoRawData> {
   Future<void> _dispose() async {
     await _engine.leaveChannel();
     await _engine.release();
+    // Destroys the `RtcEngine`(Android)/`AgoraRtcEngineKit`(iOS) on native side.
+    // Note that this should be called after the Flutter side `RtcEngine.release` function.
+    //
+    // See native side implementation:
+    // Android: `example/android/app/src/main/kotlin/io/agora/agora_rtc_flutter_example/MainActivity.kt`
+    // iOS: `example/ios/Runner/AppDelegate.m`
     await _sharedNativeHandleChannel.invokeMethod('native_dispose');
   }
 
   Future<void> _initEngine() async {
+    // Initializes the `RtcEngine`(Android)/`AgoraRtcEngineKit`(iOS) on native side, 
+    // and retrieves the native handle of `RtcEngine`(Android)/`AgoraRtcEngineKit`(iOS).
+    //
+    // See native side implementation:
+    // Android: `example/android/app/src/main/kotlin/io/agora/agora_rtc_flutter_example/MainActivity.kt`
+    // iOS: `example/ios/Runner/AppDelegate.m`
     final sharedNativeHandle = await _sharedNativeHandleChannel.invokeMethod(
       'native_init',
       {'appId': config.appId},
     );
-
+    // Passes the native handle from `RtcEngine`(Android)/`AgoraRtcEngineKit`(iOS) on native side.
     _engine = createAgoraRtcEngine(sharedNativeHandle: sharedNativeHandle);
     await _engine.initialize(RtcEngineContext(
       appId: config.appId,
