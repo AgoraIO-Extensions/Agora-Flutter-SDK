@@ -106,6 +106,15 @@ You can directly depend on the Agora CDN for testing purposes:
 </html>
 ```
 
+### Interact with Agora RTC Native SDK(Android/iOS only)
+> **NOTE**: This feature requires `agora_rtc_engine` >= 6.3.0
+
+Due to performance constraints, direct implementation of advanced features like video and audio raw data processing is not currently feasible in Flutter side.
+
+We enable you to create an `RtcEngine` within Flutter by utilizing the native handle from the `RtcEngine`(Android) or `AgoraRtcEngineKit`(iOS) of the Agora RTC Native SDK. This approach enables your application to directly utilize the advanced features of the Agora RTC Native SDK through the `agora_rtc_engine` package, bridging the gap between native capabilities and Flutter's environment.
+
+More detail, please check the [ProcessVideoRawData](example/lib/examples/advanced/process_video_raw_data/process_video_raw_data.dart) example for reference.
+
 ## API Reference Resources
 
 * [Flutter](https://api-ref.agora.io/en/voice-sdk/flutter/6.x/API/rtc_api_overview_ng.html)
