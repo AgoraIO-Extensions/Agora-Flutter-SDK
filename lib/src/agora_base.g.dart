@@ -283,10 +283,48 @@ const _$CompressionPreferenceEnumMap = {
   CompressionPreference.preferQuality: 1,
 };
 
+CodecCapLevels _$CodecCapLevelsFromJson(Map<String, dynamic> json) =>
+    CodecCapLevels(
+      hwDecodingLevel: $enumDecodeNullable(
+          _$VideoCodecCapabilityLevelEnumMap, json['hwDecodingLevel']),
+      swDecodingLevel: $enumDecodeNullable(
+          _$VideoCodecCapabilityLevelEnumMap, json['swDecodingLevel']),
+    );
+
+Map<String, dynamic> _$CodecCapLevelsToJson(CodecCapLevels instance) {
+  final val = <String, dynamic>{};
+
+  void writeNotNull(String key, dynamic value) {
+    if (value != null) {
+      val[key] = value;
+    }
+  }
+
+  writeNotNull('hwDecodingLevel',
+      _$VideoCodecCapabilityLevelEnumMap[instance.hwDecodingLevel]);
+  writeNotNull('swDecodingLevel',
+      _$VideoCodecCapabilityLevelEnumMap[instance.swDecodingLevel]);
+  return val;
+}
+
+const _$VideoCodecCapabilityLevelEnumMap = {
+  VideoCodecCapabilityLevel.codecCapabilityLevelUnspecified: -1,
+  VideoCodecCapabilityLevel.codecCapabilityLevelBasicSupport: 5,
+  VideoCodecCapabilityLevel.codecCapabilityLevel1080p30fps: 10,
+  VideoCodecCapabilityLevel.codecCapabilityLevel1080p60fps: 20,
+  VideoCodecCapabilityLevel.codecCapabilityLevel2k30fps: 23,
+  VideoCodecCapabilityLevel.codecCapabilityLevel2k60fps: 26,
+  VideoCodecCapabilityLevel.codecCapabilityLevel4k60fps: 30,
+};
+
 CodecCapInfo _$CodecCapInfoFromJson(Map<String, dynamic> json) => CodecCapInfo(
       codecType:
-          $enumDecodeNullable(_$VideoCodecTypeEnumMap, json['codec_type']),
-      codecCapMask: json['codec_cap_mask'] as int?,
+          $enumDecodeNullable(_$VideoCodecTypeEnumMap, json['codecType']),
+      codecCapMask: json['codecCapMask'] as int?,
+      codecLevels: json['codecLevels'] == null
+          ? null
+          : CodecCapLevels.fromJson(
+              json['codecLevels'] as Map<String, dynamic>),
     );
 
 Map<String, dynamic> _$CodecCapInfoToJson(CodecCapInfo instance) {
@@ -298,8 +336,9 @@ Map<String, dynamic> _$CodecCapInfoToJson(CodecCapInfo instance) {
     }
   }
 
-  writeNotNull('codec_type', _$VideoCodecTypeEnumMap[instance.codecType]);
-  writeNotNull('codec_cap_mask', instance.codecCapMask);
+  writeNotNull('codecType', _$VideoCodecTypeEnumMap[instance.codecType]);
+  writeNotNull('codecCapMask', instance.codecCapMask);
+  writeNotNull('codecLevels', instance.codecLevels?.toJson());
   return val;
 }
 
@@ -777,6 +816,8 @@ LocalAudioStats _$LocalAudioStatsFromJson(Map<String, dynamic> json) =>
       audioPlayoutDelay: json['audioPlayoutDelay'] as int?,
       earMonitorDelay: json['earMonitorDelay'] as int?,
       aecEstimatedDelay: json['aecEstimatedDelay'] as int?,
+      aedVoiceRes: json['aedVoiceRes'] as int?,
+      aedMusicRes: json['aedMusicRes'] as int?,
     );
 
 Map<String, dynamic> _$LocalAudioStatsToJson(LocalAudioStats instance) {
@@ -797,6 +838,8 @@ Map<String, dynamic> _$LocalAudioStatsToJson(LocalAudioStats instance) {
   writeNotNull('audioPlayoutDelay', instance.audioPlayoutDelay);
   writeNotNull('earMonitorDelay', instance.earMonitorDelay);
   writeNotNull('aecEstimatedDelay', instance.aecEstimatedDelay);
+  writeNotNull('aedVoiceRes', instance.aedVoiceRes);
+  writeNotNull('aedMusicRes', instance.aedMusicRes);
   return val;
 }
 
@@ -2304,6 +2347,8 @@ const _$LocalVideoStreamErrorEnumMap = {
   LocalVideoStreamError.localVideoStreamErrorScreenCaptureWindowHidden: 25,
   LocalVideoStreamError
       .localVideoStreamErrorScreenCaptureWindowRecoverFromHidden: 26,
+  LocalVideoStreamError
+      .localVideoStreamErrorScreenCaptureWindowRecoverFromMinimized: 27,
 };
 
 const _$RemoteAudioStateEnumMap = {

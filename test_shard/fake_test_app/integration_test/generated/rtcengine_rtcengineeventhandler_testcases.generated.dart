@@ -2406,6 +2406,8 @@ void generatedTestCases() {
         const int statsAudioPlayoutDelay = 10;
         const int statsEarMonitorDelay = 10;
         const int statsAecEstimatedDelay = 10;
+        const int statsAedVoiceRes = 10;
+        const int statsAedMusicRes = 10;
         const LocalAudioStats stats = LocalAudioStats(
           numChannels: statsNumChannels,
           sentSampleRate: statsSentSampleRate,
@@ -2416,6 +2418,8 @@ void generatedTestCases() {
           audioPlayoutDelay: statsAudioPlayoutDelay,
           earMonitorDelay: statsEarMonitorDelay,
           aecEstimatedDelay: statsAecEstimatedDelay,
+          aedVoiceRes: statsAedVoiceRes,
+          aedMusicRes: statsAedMusicRes,
         );
 
         final eventJson = {
@@ -2495,6 +2499,7 @@ void generatedTestCases() {
         const int statsQoeQuality = 10;
         const int statsQualityChangedReason = 10;
         const int statsRxAudioBytes = 10;
+        const int statsE2eDelay = 10;
         const RemoteAudioStats stats = RemoteAudioStats(
           uid: statsUid,
           quality: statsQuality,
@@ -2512,6 +2517,7 @@ void generatedTestCases() {
           qoeQuality: statsQoeQuality,
           qualityChangedReason: statsQualityChangedReason,
           rxAudioBytes: statsRxAudioBytes,
+          e2eDelay: statsE2eDelay,
         );
 
         final eventJson = {
@@ -6193,6 +6199,336 @@ void generatedTestCases() {
       }
 
       final eventCalled = await onUserAccountUpdatedCompleter.future;
+      expect(eventCalled, isTrue);
+
+      {
+        rtcEngine.unregisterEventHandler(
+          theRtcEngineEventHandler,
+        );
+      }
+// Delay 500 milliseconds to ensure the unregisterEventHandler call completed.
+      await Future.delayed(const Duration(milliseconds: 500));
+
+      await rtcEngine.release();
+    },
+    timeout: const Timeout(Duration(minutes: 1)),
+  );
+
+//   testWidgets(
+//     'needExtensionContext',
+//     (WidgetTester tester) async {
+//       final irisTester = IrisTester();
+//       final debugApiEngineIntPtr = irisTester.getDebugApiEngineNativeHandle();
+//       setMockIrisMethodChannelNativeHandle(debugApiEngineIntPtr);
+
+//       RtcEngine rtcEngine = createAgoraRtcEngine();
+//       await rtcEngine.initialize(RtcEngineContext(
+//         appId: 'app_id',
+//         areaCode: AreaCode.areaCodeGlob.value(),
+//       ));
+
+//       final needExtensionContextCompleter = Completer<bool>();
+//       final theRtcEngineEventHandler = RtcEngineEventHandler(
+//         needExtensionContext: () {
+//           needExtensionContextCompleter.complete(true);
+//         },
+//       );
+
+//       rtcEngine.registerEventHandler(
+//         theRtcEngineEventHandler,
+//       );
+
+// // Delay 500 milliseconds to ensure the registerEventHandler call completed.
+//       await Future.delayed(const Duration(milliseconds: 500));
+
+//       {
+//         final eventJson = {};
+
+//         irisTester.fireEvent('RtcEngineEventHandler_needExtensionContext',
+//             params: eventJson);
+//         irisTester.fireEvent('RtcEngineEventHandlerEx_needExtensionContext',
+//             params: eventJson);
+//       }
+
+//       final eventCalled = await needExtensionContextCompleter.future;
+//       expect(eventCalled, isTrue);
+
+//       {
+//         rtcEngine.unregisterEventHandler(
+//           theRtcEngineEventHandler,
+//         );
+//       }
+// // Delay 500 milliseconds to ensure the unregisterEventHandler call completed.
+//       await Future.delayed(const Duration(milliseconds: 500));
+
+//       await rtcEngine.release();
+//     },
+//     timeout: const Timeout(Duration(minutes: 1)),
+//   );
+
+  testWidgets(
+    'onExtensionEventWithContext',
+    (WidgetTester tester) async {
+      final irisTester = IrisTester();
+      final debugApiEngineIntPtr = irisTester.getDebugApiEngineNativeHandle();
+      setMockIrisMethodChannelNativeHandle(debugApiEngineIntPtr);
+
+      RtcEngine rtcEngine = createAgoraRtcEngine();
+      await rtcEngine.initialize(RtcEngineContext(
+        appId: 'app_id',
+        areaCode: AreaCode.areaCodeGlob.value(),
+      ));
+
+      final onExtensionEventWithContextCompleter = Completer<bool>();
+      final theRtcEngineEventHandler = RtcEngineEventHandler(
+        onExtensionEventWithContext:
+            (ExtensionContext context, String key, String value) {
+          onExtensionEventWithContextCompleter.complete(true);
+        },
+      );
+
+      rtcEngine.registerEventHandler(
+        theRtcEngineEventHandler,
+      );
+
+// Delay 500 milliseconds to ensure the registerEventHandler call completed.
+      await Future.delayed(const Duration(milliseconds: 500));
+
+      {
+        const bool contextIsValid = true;
+        const int contextUid = 10;
+        const String contextProviderName = "hello";
+        const String contextExtensionName = "hello";
+        const ExtensionContext context = ExtensionContext(
+          isValid: contextIsValid,
+          uid: contextUid,
+          providerName: contextProviderName,
+          extensionName: contextExtensionName,
+        );
+        const String key = "hello";
+        const String value = "hello";
+
+        final eventJson = {
+          'context': context.toJson(),
+          'key': key,
+          'value': value,
+        };
+
+        irisTester.fireEvent(
+            'RtcEngineEventHandler_onExtensionEventWithContext',
+            params: eventJson);
+        irisTester.fireEvent(
+            'RtcEngineEventHandlerEx_onExtensionEventWithContext',
+            params: eventJson);
+      }
+
+      final eventCalled = await onExtensionEventWithContextCompleter.future;
+      expect(eventCalled, isTrue);
+
+      {
+        rtcEngine.unregisterEventHandler(
+          theRtcEngineEventHandler,
+        );
+      }
+// Delay 500 milliseconds to ensure the unregisterEventHandler call completed.
+      await Future.delayed(const Duration(milliseconds: 500));
+
+      await rtcEngine.release();
+    },
+    timeout: const Timeout(Duration(minutes: 1)),
+  );
+
+  testWidgets(
+    'onExtensionStartedWithContext',
+    (WidgetTester tester) async {
+      final irisTester = IrisTester();
+      final debugApiEngineIntPtr = irisTester.getDebugApiEngineNativeHandle();
+      setMockIrisMethodChannelNativeHandle(debugApiEngineIntPtr);
+
+      RtcEngine rtcEngine = createAgoraRtcEngine();
+      await rtcEngine.initialize(RtcEngineContext(
+        appId: 'app_id',
+        areaCode: AreaCode.areaCodeGlob.value(),
+      ));
+
+      final onExtensionStartedWithContextCompleter = Completer<bool>();
+      final theRtcEngineEventHandler = RtcEngineEventHandler(
+        onExtensionStartedWithContext: (ExtensionContext context) {
+          onExtensionStartedWithContextCompleter.complete(true);
+        },
+      );
+
+      rtcEngine.registerEventHandler(
+        theRtcEngineEventHandler,
+      );
+
+// Delay 500 milliseconds to ensure the registerEventHandler call completed.
+      await Future.delayed(const Duration(milliseconds: 500));
+
+      {
+        const bool contextIsValid = true;
+        const int contextUid = 10;
+        const String contextProviderName = "hello";
+        const String contextExtensionName = "hello";
+        const ExtensionContext context = ExtensionContext(
+          isValid: contextIsValid,
+          uid: contextUid,
+          providerName: contextProviderName,
+          extensionName: contextExtensionName,
+        );
+
+        final eventJson = {
+          'context': context.toJson(),
+        };
+
+        irisTester.fireEvent(
+            'RtcEngineEventHandler_onExtensionStartedWithContext',
+            params: eventJson);
+        irisTester.fireEvent(
+            'RtcEngineEventHandlerEx_onExtensionStartedWithContext',
+            params: eventJson);
+      }
+
+      final eventCalled = await onExtensionStartedWithContextCompleter.future;
+      expect(eventCalled, isTrue);
+
+      {
+        rtcEngine.unregisterEventHandler(
+          theRtcEngineEventHandler,
+        );
+      }
+// Delay 500 milliseconds to ensure the unregisterEventHandler call completed.
+      await Future.delayed(const Duration(milliseconds: 500));
+
+      await rtcEngine.release();
+    },
+    timeout: const Timeout(Duration(minutes: 1)),
+  );
+
+  testWidgets(
+    'onExtensionStoppedWithContext',
+    (WidgetTester tester) async {
+      final irisTester = IrisTester();
+      final debugApiEngineIntPtr = irisTester.getDebugApiEngineNativeHandle();
+      setMockIrisMethodChannelNativeHandle(debugApiEngineIntPtr);
+
+      RtcEngine rtcEngine = createAgoraRtcEngine();
+      await rtcEngine.initialize(RtcEngineContext(
+        appId: 'app_id',
+        areaCode: AreaCode.areaCodeGlob.value(),
+      ));
+
+      final onExtensionStoppedWithContextCompleter = Completer<bool>();
+      final theRtcEngineEventHandler = RtcEngineEventHandler(
+        onExtensionStoppedWithContext: (ExtensionContext context) {
+          onExtensionStoppedWithContextCompleter.complete(true);
+        },
+      );
+
+      rtcEngine.registerEventHandler(
+        theRtcEngineEventHandler,
+      );
+
+// Delay 500 milliseconds to ensure the registerEventHandler call completed.
+      await Future.delayed(const Duration(milliseconds: 500));
+
+      {
+        const bool contextIsValid = true;
+        const int contextUid = 10;
+        const String contextProviderName = "hello";
+        const String contextExtensionName = "hello";
+        const ExtensionContext context = ExtensionContext(
+          isValid: contextIsValid,
+          uid: contextUid,
+          providerName: contextProviderName,
+          extensionName: contextExtensionName,
+        );
+
+        final eventJson = {
+          'context': context.toJson(),
+        };
+
+        irisTester.fireEvent(
+            'RtcEngineEventHandler_onExtensionStoppedWithContext',
+            params: eventJson);
+        irisTester.fireEvent(
+            'RtcEngineEventHandlerEx_onExtensionStoppedWithContext',
+            params: eventJson);
+      }
+
+      final eventCalled = await onExtensionStoppedWithContextCompleter.future;
+      expect(eventCalled, isTrue);
+
+      {
+        rtcEngine.unregisterEventHandler(
+          theRtcEngineEventHandler,
+        );
+      }
+// Delay 500 milliseconds to ensure the unregisterEventHandler call completed.
+      await Future.delayed(const Duration(milliseconds: 500));
+
+      await rtcEngine.release();
+    },
+    timeout: const Timeout(Duration(minutes: 1)),
+  );
+
+  testWidgets(
+    'onExtensionErrorWithContext',
+    (WidgetTester tester) async {
+      final irisTester = IrisTester();
+      final debugApiEngineIntPtr = irisTester.getDebugApiEngineNativeHandle();
+      setMockIrisMethodChannelNativeHandle(debugApiEngineIntPtr);
+
+      RtcEngine rtcEngine = createAgoraRtcEngine();
+      await rtcEngine.initialize(RtcEngineContext(
+        appId: 'app_id',
+        areaCode: AreaCode.areaCodeGlob.value(),
+      ));
+
+      final onExtensionErrorWithContextCompleter = Completer<bool>();
+      final theRtcEngineEventHandler = RtcEngineEventHandler(
+        onExtensionErrorWithContext:
+            (ExtensionContext context, int error, String message) {
+          onExtensionErrorWithContextCompleter.complete(true);
+        },
+      );
+
+      rtcEngine.registerEventHandler(
+        theRtcEngineEventHandler,
+      );
+
+// Delay 500 milliseconds to ensure the registerEventHandler call completed.
+      await Future.delayed(const Duration(milliseconds: 500));
+
+      {
+        const bool contextIsValid = true;
+        const int contextUid = 10;
+        const String contextProviderName = "hello";
+        const String contextExtensionName = "hello";
+        const ExtensionContext context = ExtensionContext(
+          isValid: contextIsValid,
+          uid: contextUid,
+          providerName: contextProviderName,
+          extensionName: contextExtensionName,
+        );
+        const int error = 10;
+        const String message = "hello";
+
+        final eventJson = {
+          'context': context.toJson(),
+          'error': error,
+          'message': message,
+        };
+
+        irisTester.fireEvent(
+            'RtcEngineEventHandler_onExtensionErrorWithContext',
+            params: eventJson);
+        irisTester.fireEvent(
+            'RtcEngineEventHandlerEx_onExtensionErrorWithContext',
+            params: eventJson);
+      }
+
+      final eventCalled = await onExtensionErrorWithContextCompleter.future;
       expect(eventCalled, isTrue);
 
       {

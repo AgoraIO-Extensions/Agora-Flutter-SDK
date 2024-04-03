@@ -1035,10 +1035,55 @@ extension ScreenCaptureCapabilityLevelExt on ScreenCaptureCapabilityLevel {
   }
 }
 
+/// The level of the codec capability.
+@JsonEnum(alwaysCreate: true)
+enum VideoCodecCapabilityLevel {
+  /// -1: Unsupported video type. Currently, only H.264 and H.265 formats are supported. If the video is in another format, this value will be returned.
+  @JsonValue(-1)
+  codecCapabilityLevelUnspecified,
+
+  /// 5: Supports encoding and decoding videos up to 1080p and 30 fps.
+  @JsonValue(5)
+  codecCapabilityLevelBasicSupport,
+
+  /// 10: Supports encoding and decoding videos up to1080p and 30 fps.
+  @JsonValue(10)
+  codecCapabilityLevel1080p30fps,
+
+  /// 20: Support encoding and decoding videos up to 1080p and 60 fps.
+  @JsonValue(20)
+  codecCapabilityLevel1080p60fps,
+
+  /// @nodoc
+  @JsonValue(23)
+  codecCapabilityLevel2k30fps,
+
+  /// @nodoc
+  @JsonValue(26)
+  codecCapabilityLevel2k60fps,
+
+  /// 30: Support encoding and decoding videos up to 4K and 30 fps.
+  @JsonValue(30)
+  codecCapabilityLevel4k60fps,
+}
+
+/// @nodoc
+extension VideoCodecCapabilityLevelExt on VideoCodecCapabilityLevel {
+  /// @nodoc
+  static VideoCodecCapabilityLevel fromValue(int value) {
+    return $enumDecode(_$VideoCodecCapabilityLevelEnumMap, value);
+  }
+
+  /// @nodoc
+  int value() {
+    return _$VideoCodecCapabilityLevelEnumMap[this]!;
+  }
+}
+
 /// Video codec types.
 @JsonEnum(alwaysCreate: true)
 enum VideoCodecType {
-  /// @nodoc
+  /// 0: (Default) Unspecified codec format. The SDK automatically matches the appropriate codec format based on the current video stream's resolution and device performance.
   @JsonValue(0)
   videoCodecNone,
 
@@ -1050,7 +1095,7 @@ enum VideoCodecType {
   @JsonValue(2)
   videoCodecH264,
 
-  /// 3: (Default) Standard H.265. In certain scenarios, such as low resolution of the captured video stream or limited device performance, the SDK automatically adjusts to the H.264 encoding format.
+  /// 3: Standard H.265.
   @JsonValue(3)
   videoCodecH265,
 
@@ -1695,19 +1740,45 @@ extension CodecCapMaskExt on CodecCapMask {
   }
 }
 
+/// The level of the codec capability.
+@JsonSerializable(explicitToJson: true, includeIfNull: false)
+class CodecCapLevels {
+  /// @nodoc
+  const CodecCapLevels({this.hwDecodingLevel, this.swDecodingLevel});
+
+  /// Hardware decoding capability level, which represents the device's ability to perform hardware decoding on videos of different quality. See VideoCodecCapabilityLevel.
+  @JsonKey(name: 'hwDecodingLevel')
+  final VideoCodecCapabilityLevel? hwDecodingLevel;
+
+  /// Software decoding capability level, which represents the device's ability to perform software decoding on videos of different quality. See VideoCodecCapabilityLevel.
+  @JsonKey(name: 'swDecodingLevel')
+  final VideoCodecCapabilityLevel? swDecodingLevel;
+
+  /// @nodoc
+  factory CodecCapLevels.fromJson(Map<String, dynamic> json) =>
+      _$CodecCapLevelsFromJson(json);
+
+  /// @nodoc
+  Map<String, dynamic> toJson() => _$CodecCapLevelsToJson(this);
+}
+
 /// The codec capability of the device.
 @JsonSerializable(explicitToJson: true, includeIfNull: false)
 class CodecCapInfo {
   /// @nodoc
-  const CodecCapInfo({this.codecType, this.codecCapMask});
+  const CodecCapInfo({this.codecType, this.codecCapMask, this.codecLevels});
 
   /// The video codec types. See VideoCodecType.
-  @JsonKey(name: 'codec_type')
+  @JsonKey(name: 'codecType')
   final VideoCodecType? codecType;
 
   /// The bit mask of the codec type. See CodecCapMask.
-  @JsonKey(name: 'codec_cap_mask')
+  @JsonKey(name: 'codecCapMask')
   final int? codecCapMask;
+
+  /// The level of the codec capability. See CodecCapLevels.
+  @JsonKey(name: 'codecLevels')
+  final CodecCapLevels? codecLevels;
 
   /// @nodoc
   factory CodecCapInfo.fromJson(Map<String, dynamic> json) =>
@@ -1926,7 +1997,7 @@ class WatermarkOptions {
       this.watermarkRatio,
       this.mode});
 
-  /// Is the watermark visible in the local preview view? true : (Default) The watermark is visible in the local preview view. false : The watermark is not visible in the local preview view.
+  /// Whether the watermark is visible in the local preview view: true : (Default) The watermark is visible in the local preview view. false : The watermark is not visible in the local preview view.
   @JsonKey(name: 'visibleInPreview')
   final bool? visibleInPreview;
 
@@ -2731,6 +2802,10 @@ enum LocalVideoStreamError {
   /// @nodoc
   @JsonValue(26)
   localVideoStreamErrorScreenCaptureWindowRecoverFromHidden,
+
+  /// @nodoc
+  @JsonValue(27)
+  localVideoStreamErrorScreenCaptureWindowRecoverFromMinimized,
 }
 
 /// @nodoc
@@ -3273,7 +3348,9 @@ class LocalAudioStats {
       this.audioDeviceDelay,
       this.audioPlayoutDelay,
       this.earMonitorDelay,
-      this.aecEstimatedDelay});
+      this.aecEstimatedDelay,
+      this.aedVoiceRes,
+      this.aedMusicRes});
 
   /// The number of audio channels.
   @JsonKey(name: 'numChannels')
@@ -3310,6 +3387,14 @@ class LocalAudioStats {
   /// Acoustic echo cancellation (AEC) module estimated delay (ms), which is the signal delay between when audio is played locally before being locally captured.
   @JsonKey(name: 'aecEstimatedDelay')
   final int? aecEstimatedDelay;
+
+  /// @nodoc
+  @JsonKey(name: 'aedVoiceRes')
+  final int? aedVoiceRes;
+
+  /// @nodoc
+  @JsonKey(name: 'aedMusicRes')
+  final int? aedMusicRes;
 
   /// @nodoc
   factory LocalAudioStats.fromJson(Map<String, dynamic> json) =>
@@ -5539,7 +5624,7 @@ enum ChannelMediaRelayError {
   @JsonValue(1)
   relayErrorServerErrorResponse,
 
-  /// 2: No server response. You can call leaveChannel to leave the channel. This error can also occur if your project has not enabled co-host token authentication. You can to enable the service for cohosting across channels before starting a channel media relay.
+  /// 2: No server response. This error may be caused by poor network connections. If this error occurs when initiating a channel media relay, you can try again later; if this error occurs during channel media relay, you can call leaveChannel to leave the channel. This error can also occur if the channel media relay service is not enabled in the project. You can contact to enable the service.
   @JsonValue(2)
   relayErrorServerNoResponse,
 
@@ -6144,7 +6229,7 @@ class EchoTestConfiguration {
   @JsonKey(name: 'enableAudio')
   final bool? enableAudio;
 
-  /// Whether to enable the video device for the loop test: true : (Default) Enable the video device. To test the video device, set this parameter as true. false : Disable the video device.
+  /// Whether to enable the video device for the loop test. Currently, video device loop test is not supported. Please set this parameter to false.
   @JsonKey(name: 'enableVideo')
   final bool? enableVideo;
 

@@ -1782,6 +1782,90 @@ class RtcEngineEventHandlerWrapper implements EventLoopEventHandler {
             connection, remoteUid, userAccount);
         return true;
 
+      case 'needExtensionContext':
+        if (rtcEngineEventHandler.needExtensionContext == null) {
+          return true;
+        }
+        final jsonMap = jsonDecode(eventData);
+        RtcEngineEventHandlerNeedExtensionContextJson paramJson =
+            RtcEngineEventHandlerNeedExtensionContextJson.fromJson(jsonMap);
+        paramJson = paramJson.fillBuffers(buffers);
+        rtcEngineEventHandler.needExtensionContext!();
+        return true;
+
+      case 'onExtensionEventWithContext':
+        if (rtcEngineEventHandler.onExtensionEventWithContext == null) {
+          return true;
+        }
+        final jsonMap = jsonDecode(eventData);
+        RtcEngineEventHandlerOnExtensionEventWithContextJson paramJson =
+            RtcEngineEventHandlerOnExtensionEventWithContextJson.fromJson(
+                jsonMap);
+        paramJson = paramJson.fillBuffers(buffers);
+        ExtensionContext? context = paramJson.context;
+        String? key = paramJson.key;
+        String? value = paramJson.value;
+        if (context == null || key == null || value == null) {
+          return true;
+        }
+        context = context.fillBuffers(buffers);
+        rtcEngineEventHandler.onExtensionEventWithContext!(context, key, value);
+        return true;
+
+      case 'onExtensionStartedWithContext':
+        if (rtcEngineEventHandler.onExtensionStartedWithContext == null) {
+          return true;
+        }
+        final jsonMap = jsonDecode(eventData);
+        RtcEngineEventHandlerOnExtensionStartedWithContextJson paramJson =
+            RtcEngineEventHandlerOnExtensionStartedWithContextJson.fromJson(
+                jsonMap);
+        paramJson = paramJson.fillBuffers(buffers);
+        ExtensionContext? context = paramJson.context;
+        if (context == null) {
+          return true;
+        }
+        context = context.fillBuffers(buffers);
+        rtcEngineEventHandler.onExtensionStartedWithContext!(context);
+        return true;
+
+      case 'onExtensionStoppedWithContext':
+        if (rtcEngineEventHandler.onExtensionStoppedWithContext == null) {
+          return true;
+        }
+        final jsonMap = jsonDecode(eventData);
+        RtcEngineEventHandlerOnExtensionStoppedWithContextJson paramJson =
+            RtcEngineEventHandlerOnExtensionStoppedWithContextJson.fromJson(
+                jsonMap);
+        paramJson = paramJson.fillBuffers(buffers);
+        ExtensionContext? context = paramJson.context;
+        if (context == null) {
+          return true;
+        }
+        context = context.fillBuffers(buffers);
+        rtcEngineEventHandler.onExtensionStoppedWithContext!(context);
+        return true;
+
+      case 'onExtensionErrorWithContext':
+        if (rtcEngineEventHandler.onExtensionErrorWithContext == null) {
+          return true;
+        }
+        final jsonMap = jsonDecode(eventData);
+        RtcEngineEventHandlerOnExtensionErrorWithContextJson paramJson =
+            RtcEngineEventHandlerOnExtensionErrorWithContextJson.fromJson(
+                jsonMap);
+        paramJson = paramJson.fillBuffers(buffers);
+        ExtensionContext? context = paramJson.context;
+        int? error = paramJson.error;
+        String? message = paramJson.message;
+        if (context == null || error == null || message == null) {
+          return true;
+        }
+        context = context.fillBuffers(buffers);
+        rtcEngineEventHandler.onExtensionErrorWithContext!(
+            context, error, message);
+        return true;
+
       case 'onVideoRenderingTracingResultEx':
         if (rtcEngineEventHandler.onVideoRenderingTracingResult == null) {
           return true;

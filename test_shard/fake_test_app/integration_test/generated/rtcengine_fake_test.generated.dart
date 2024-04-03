@@ -4476,6 +4476,45 @@ void rtcEngineSmokeTestCases() {
   );
 
   testWidgets(
+    'writeLog',
+    (WidgetTester tester) async {
+      final irisTester = IrisTester();
+      final debugApiEngineIntPtr = irisTester.createDebugApiEngine();
+      setMockIrisMethodChannelNativeHandle(debugApiEngineIntPtr);
+
+      String engineAppId = const String.fromEnvironment('TEST_APP_ID',
+          defaultValue: '<YOUR_APP_ID>');
+
+      RtcEngine rtcEngine = createAgoraRtcEngine();
+      await rtcEngine.initialize(RtcEngineContext(
+        appId: engineAppId,
+        areaCode: AreaCode.areaCodeGlob.value(),
+      ));
+
+      try {
+        const LogLevel level = LogLevel.logLevelNone;
+        const String fmt = "hello";
+        await rtcEngine.writeLog(
+          level: level,
+          fmt: fmt,
+        );
+      } catch (e) {
+        if (e is! AgoraRtcException) {
+          debugPrint('[writeLog] error: ${e.toString()}');
+          rethrow;
+        }
+
+        if (e.code != -4) {
+          // Only not supported error supported.
+          rethrow;
+        }
+      }
+
+      await rtcEngine.release();
+    },
+  );
+
+  testWidgets(
     'setLocalRenderMode',
     (WidgetTester tester) async {
       final irisTester = IrisTester();
@@ -8595,6 +8634,13 @@ void rtcEngineSmokeTestCases() {
               (String provider, String extension, int error, String message) {},
           onUserAccountUpdated:
               (RtcConnection connection, int remoteUid, String userAccount) {},
+          // needExtensionContext: () {},
+          onExtensionEventWithContext:
+              (ExtensionContext context, String key, String value) {},
+          onExtensionStartedWithContext: (ExtensionContext context) {},
+          onExtensionStoppedWithContext: (ExtensionContext context) {},
+          onExtensionErrorWithContext:
+              (ExtensionContext context, int error, String message) {},
           onVideoRenderingTracingResult: (RtcConnection connection,
               int uid,
               MediaTraceEvent currentEvent,
@@ -8816,6 +8862,13 @@ void rtcEngineSmokeTestCases() {
               (String provider, String extension, int error, String message) {},
           onUserAccountUpdated:
               (RtcConnection connection, int remoteUid, String userAccount) {},
+          // needExtensionContext: () {},
+          onExtensionEventWithContext:
+              (ExtensionContext context, String key, String value) {},
+          onExtensionStartedWithContext: (ExtensionContext context) {},
+          onExtensionStoppedWithContext: (ExtensionContext context) {},
+          onExtensionErrorWithContext:
+              (ExtensionContext context, int error, String message) {},
           onVideoRenderingTracingResult: (RtcConnection connection,
               int uid,
               MediaTraceEvent currentEvent,

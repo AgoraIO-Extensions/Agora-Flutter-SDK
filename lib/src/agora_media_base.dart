@@ -10,6 +10,37 @@ const defaultConnectionId = 0;
 /// @nodoc
 const dummyConnectionId = 4294967295;
 
+/// @nodoc
+@JsonSerializable(explicitToJson: true, includeIfNull: false)
+class ExtensionContext {
+  /// @nodoc
+  const ExtensionContext(
+      {this.isValid, this.uid, this.providerName, this.extensionName});
+
+  /// @nodoc
+  @JsonKey(name: 'isValid')
+  final bool? isValid;
+
+  /// @nodoc
+  @JsonKey(name: 'uid')
+  final int? uid;
+
+  /// @nodoc
+  @JsonKey(name: 'providerName')
+  final String? providerName;
+
+  /// @nodoc
+  @JsonKey(name: 'extensionName')
+  final String? extensionName;
+
+  /// @nodoc
+  factory ExtensionContext.fromJson(Map<String, dynamic> json) =>
+      _$ExtensionContextFromJson(json);
+
+  /// @nodoc
+  Map<String, dynamic> toJson() => _$ExtensionContextToJson(this);
+}
+
 /// The type of the video source.
 @JsonEnum(alwaysCreate: true)
 enum VideoSourceType {
