@@ -1351,6 +1351,8 @@ const _$LocalVideoStreamErrorEnumMap = {
   LocalVideoStreamError.localVideoStreamErrorScreenCaptureWindowHidden: 25,
   LocalVideoStreamError
       .localVideoStreamErrorScreenCaptureWindowRecoverFromHidden: 26,
+  LocalVideoStreamError
+      .localVideoStreamErrorScreenCaptureWindowRecoverFromMinimized: 27,
 };
 
 RtcEngineEventHandlerOnRemoteVideoStateChangedJson
@@ -2968,6 +2970,91 @@ Map<String, dynamic> _$RtcEngineEventHandlerOnUserAccountUpdatedJsonToJson(
       'remoteUid': instance.remoteUid,
       'userAccount': instance.userAccount,
     };
+
+RtcEngineEventHandlerNeedExtensionContextJson
+    _$RtcEngineEventHandlerNeedExtensionContextJsonFromJson(
+            Map<String, dynamic> json) =>
+        RtcEngineEventHandlerNeedExtensionContextJson();
+
+Map<String, dynamic> _$RtcEngineEventHandlerNeedExtensionContextJsonToJson(
+        RtcEngineEventHandlerNeedExtensionContextJson instance) =>
+    <String, dynamic>{};
+
+RtcEngineEventHandlerOnExtensionEventWithContextJson
+    _$RtcEngineEventHandlerOnExtensionEventWithContextJsonFromJson(
+            Map<String, dynamic> json) =>
+        RtcEngineEventHandlerOnExtensionEventWithContextJson(
+          context: json['context'] == null
+              ? null
+              : ExtensionContext.fromJson(
+                  json['context'] as Map<String, dynamic>),
+          key: json['key'] as String?,
+          value: json['value'] as String?,
+        );
+
+Map<String, dynamic>
+    _$RtcEngineEventHandlerOnExtensionEventWithContextJsonToJson(
+            RtcEngineEventHandlerOnExtensionEventWithContextJson instance) =>
+        <String, dynamic>{
+          'context': instance.context?.toJson(),
+          'key': instance.key,
+          'value': instance.value,
+        };
+
+RtcEngineEventHandlerOnExtensionStartedWithContextJson
+    _$RtcEngineEventHandlerOnExtensionStartedWithContextJsonFromJson(
+            Map<String, dynamic> json) =>
+        RtcEngineEventHandlerOnExtensionStartedWithContextJson(
+          context: json['context'] == null
+              ? null
+              : ExtensionContext.fromJson(
+                  json['context'] as Map<String, dynamic>),
+        );
+
+Map<String, dynamic>
+    _$RtcEngineEventHandlerOnExtensionStartedWithContextJsonToJson(
+            RtcEngineEventHandlerOnExtensionStartedWithContextJson instance) =>
+        <String, dynamic>{
+          'context': instance.context?.toJson(),
+        };
+
+RtcEngineEventHandlerOnExtensionStoppedWithContextJson
+    _$RtcEngineEventHandlerOnExtensionStoppedWithContextJsonFromJson(
+            Map<String, dynamic> json) =>
+        RtcEngineEventHandlerOnExtensionStoppedWithContextJson(
+          context: json['context'] == null
+              ? null
+              : ExtensionContext.fromJson(
+                  json['context'] as Map<String, dynamic>),
+        );
+
+Map<String, dynamic>
+    _$RtcEngineEventHandlerOnExtensionStoppedWithContextJsonToJson(
+            RtcEngineEventHandlerOnExtensionStoppedWithContextJson instance) =>
+        <String, dynamic>{
+          'context': instance.context?.toJson(),
+        };
+
+RtcEngineEventHandlerOnExtensionErrorWithContextJson
+    _$RtcEngineEventHandlerOnExtensionErrorWithContextJsonFromJson(
+            Map<String, dynamic> json) =>
+        RtcEngineEventHandlerOnExtensionErrorWithContextJson(
+          context: json['context'] == null
+              ? null
+              : ExtensionContext.fromJson(
+                  json['context'] as Map<String, dynamic>),
+          error: json['error'] as int?,
+          message: json['message'] as String?,
+        );
+
+Map<String, dynamic>
+    _$RtcEngineEventHandlerOnExtensionErrorWithContextJsonToJson(
+            RtcEngineEventHandlerOnExtensionErrorWithContextJson instance) =>
+        <String, dynamic>{
+          'context': instance.context?.toJson(),
+          'error': instance.error,
+          'message': instance.message,
+        };
 
 RtcEngineEventHandlerOnVideoRenderingTracingResultJson
     _$RtcEngineEventHandlerOnVideoRenderingTracingResultJsonFromJson(

@@ -120,6 +120,7 @@ RemoteAudioStats _$RemoteAudioStatsFromJson(Map<String, dynamic> json) =>
       qoeQuality: json['qoeQuality'] as int?,
       qualityChangedReason: json['qualityChangedReason'] as int?,
       rxAudioBytes: json['rxAudioBytes'] as int?,
+      e2eDelay: json['e2eDelay'] as int?,
     );
 
 Map<String, dynamic> _$RemoteAudioStatsToJson(RemoteAudioStats instance) {
@@ -147,6 +148,7 @@ Map<String, dynamic> _$RemoteAudioStatsToJson(RemoteAudioStats instance) {
   writeNotNull('qoeQuality', instance.qoeQuality);
   writeNotNull('qualityChangedReason', instance.qualityChangedReason);
   writeNotNull('rxAudioBytes', instance.rxAudioBytes);
+  writeNotNull('e2eDelay', instance.e2eDelay);
   return val;
 }
 

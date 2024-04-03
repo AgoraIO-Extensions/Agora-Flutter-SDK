@@ -8,6 +8,30 @@ part of 'agora_media_base.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
+ExtensionContext _$ExtensionContextFromJson(Map<String, dynamic> json) =>
+    ExtensionContext(
+      isValid: json['isValid'] as bool?,
+      uid: json['uid'] as int?,
+      providerName: json['providerName'] as String?,
+      extensionName: json['extensionName'] as String?,
+    );
+
+Map<String, dynamic> _$ExtensionContextToJson(ExtensionContext instance) {
+  final val = <String, dynamic>{};
+
+  void writeNotNull(String key, dynamic value) {
+    if (value != null) {
+      val[key] = value;
+    }
+  }
+
+  writeNotNull('isValid', instance.isValid);
+  writeNotNull('uid', instance.uid);
+  writeNotNull('providerName', instance.providerName);
+  writeNotNull('extensionName', instance.extensionName);
+  return val;
+}
+
 AudioParameters _$AudioParametersFromJson(Map<String, dynamic> json) =>
     AudioParameters(
       sampleRate: json['sample_rate'] as int?,

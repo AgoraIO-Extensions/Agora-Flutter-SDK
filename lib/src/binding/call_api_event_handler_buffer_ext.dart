@@ -100,6 +100,18 @@ extension AdvanceOptionsBufferExt on AdvanceOptions {
   }
 }
 
+extension CodecCapLevelsBufferExt on CodecCapLevels {
+  CodecCapLevels fillBuffers(List<Uint8List> bufferList) {
+    if (bufferList.isEmpty) return this;
+    return this;
+  }
+
+  List<Uint8List> collectBufferList() {
+    final bufferList = <Uint8List>[];
+    return bufferList;
+  }
+}
+
 extension CodecCapInfoBufferExt on CodecCapInfo {
   CodecCapInfo fillBuffers(List<Uint8List> bufferList) {
     if (bufferList.isEmpty) return this;
@@ -710,6 +722,18 @@ extension SpatialAudioParamsBufferExt on SpatialAudioParams {
 
 extension VideoLayoutBufferExt on VideoLayout {
   VideoLayout fillBuffers(List<Uint8List> bufferList) {
+    if (bufferList.isEmpty) return this;
+    return this;
+  }
+
+  List<Uint8List> collectBufferList() {
+    final bufferList = <Uint8List>[];
+    return bufferList;
+  }
+}
+
+extension ExtensionContextBufferExt on ExtensionContext {
+  ExtensionContext fillBuffers(List<Uint8List> bufferList) {
     if (bufferList.isEmpty) return this;
     return this;
   }

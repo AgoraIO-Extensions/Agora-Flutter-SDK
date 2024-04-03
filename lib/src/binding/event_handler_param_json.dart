@@ -4144,6 +4144,149 @@ extension RtcEngineEventHandlerOnUserAccountUpdatedJsonBufferExt
 }
 
 @JsonSerializable(explicitToJson: true)
+class RtcEngineEventHandlerNeedExtensionContextJson {
+  const RtcEngineEventHandlerNeedExtensionContextJson();
+
+  factory RtcEngineEventHandlerNeedExtensionContextJson.fromJson(
+          Map<String, dynamic> json) =>
+      _$RtcEngineEventHandlerNeedExtensionContextJsonFromJson(json);
+  Map<String, dynamic> toJson() =>
+      _$RtcEngineEventHandlerNeedExtensionContextJsonToJson(this);
+}
+
+extension RtcEngineEventHandlerNeedExtensionContextJsonBufferExt
+    on RtcEngineEventHandlerNeedExtensionContextJson {
+  RtcEngineEventHandlerNeedExtensionContextJson fillBuffers(
+      List<Uint8List> bufferList) {
+    if (bufferList.isEmpty) return this;
+    return this;
+  }
+
+  List<Uint8List> collectBufferList() {
+    final bufferList = <Uint8List>[];
+    return bufferList;
+  }
+}
+
+@JsonSerializable(explicitToJson: true)
+class RtcEngineEventHandlerOnExtensionEventWithContextJson {
+  const RtcEngineEventHandlerOnExtensionEventWithContextJson(
+      {this.context, this.key, this.value});
+
+  @JsonKey(name: 'context')
+  final ExtensionContext? context;
+  @JsonKey(name: 'key')
+  final String? key;
+  @JsonKey(name: 'value')
+  final String? value;
+  factory RtcEngineEventHandlerOnExtensionEventWithContextJson.fromJson(
+          Map<String, dynamic> json) =>
+      _$RtcEngineEventHandlerOnExtensionEventWithContextJsonFromJson(json);
+  Map<String, dynamic> toJson() =>
+      _$RtcEngineEventHandlerOnExtensionEventWithContextJsonToJson(this);
+}
+
+extension RtcEngineEventHandlerOnExtensionEventWithContextJsonBufferExt
+    on RtcEngineEventHandlerOnExtensionEventWithContextJson {
+  RtcEngineEventHandlerOnExtensionEventWithContextJson fillBuffers(
+      List<Uint8List> bufferList) {
+    if (bufferList.isEmpty) return this;
+    return this;
+  }
+
+  List<Uint8List> collectBufferList() {
+    final bufferList = <Uint8List>[];
+    return bufferList;
+  }
+}
+
+@JsonSerializable(explicitToJson: true)
+class RtcEngineEventHandlerOnExtensionStartedWithContextJson {
+  const RtcEngineEventHandlerOnExtensionStartedWithContextJson({this.context});
+
+  @JsonKey(name: 'context')
+  final ExtensionContext? context;
+  factory RtcEngineEventHandlerOnExtensionStartedWithContextJson.fromJson(
+          Map<String, dynamic> json) =>
+      _$RtcEngineEventHandlerOnExtensionStartedWithContextJsonFromJson(json);
+  Map<String, dynamic> toJson() =>
+      _$RtcEngineEventHandlerOnExtensionStartedWithContextJsonToJson(this);
+}
+
+extension RtcEngineEventHandlerOnExtensionStartedWithContextJsonBufferExt
+    on RtcEngineEventHandlerOnExtensionStartedWithContextJson {
+  RtcEngineEventHandlerOnExtensionStartedWithContextJson fillBuffers(
+      List<Uint8List> bufferList) {
+    if (bufferList.isEmpty) return this;
+    return this;
+  }
+
+  List<Uint8List> collectBufferList() {
+    final bufferList = <Uint8List>[];
+    return bufferList;
+  }
+}
+
+@JsonSerializable(explicitToJson: true)
+class RtcEngineEventHandlerOnExtensionStoppedWithContextJson {
+  const RtcEngineEventHandlerOnExtensionStoppedWithContextJson({this.context});
+
+  @JsonKey(name: 'context')
+  final ExtensionContext? context;
+  factory RtcEngineEventHandlerOnExtensionStoppedWithContextJson.fromJson(
+          Map<String, dynamic> json) =>
+      _$RtcEngineEventHandlerOnExtensionStoppedWithContextJsonFromJson(json);
+  Map<String, dynamic> toJson() =>
+      _$RtcEngineEventHandlerOnExtensionStoppedWithContextJsonToJson(this);
+}
+
+extension RtcEngineEventHandlerOnExtensionStoppedWithContextJsonBufferExt
+    on RtcEngineEventHandlerOnExtensionStoppedWithContextJson {
+  RtcEngineEventHandlerOnExtensionStoppedWithContextJson fillBuffers(
+      List<Uint8List> bufferList) {
+    if (bufferList.isEmpty) return this;
+    return this;
+  }
+
+  List<Uint8List> collectBufferList() {
+    final bufferList = <Uint8List>[];
+    return bufferList;
+  }
+}
+
+@JsonSerializable(explicitToJson: true)
+class RtcEngineEventHandlerOnExtensionErrorWithContextJson {
+  const RtcEngineEventHandlerOnExtensionErrorWithContextJson(
+      {this.context, this.error, this.message});
+
+  @JsonKey(name: 'context')
+  final ExtensionContext? context;
+  @JsonKey(name: 'error')
+  final int? error;
+  @JsonKey(name: 'message')
+  final String? message;
+  factory RtcEngineEventHandlerOnExtensionErrorWithContextJson.fromJson(
+          Map<String, dynamic> json) =>
+      _$RtcEngineEventHandlerOnExtensionErrorWithContextJsonFromJson(json);
+  Map<String, dynamic> toJson() =>
+      _$RtcEngineEventHandlerOnExtensionErrorWithContextJsonToJson(this);
+}
+
+extension RtcEngineEventHandlerOnExtensionErrorWithContextJsonBufferExt
+    on RtcEngineEventHandlerOnExtensionErrorWithContextJson {
+  RtcEngineEventHandlerOnExtensionErrorWithContextJson fillBuffers(
+      List<Uint8List> bufferList) {
+    if (bufferList.isEmpty) return this;
+    return this;
+  }
+
+  List<Uint8List> collectBufferList() {
+    final bufferList = <Uint8List>[];
+    return bufferList;
+  }
+}
+
+@JsonSerializable(explicitToJson: true)
 class RtcEngineEventHandlerOnVideoRenderingTracingResultJson {
   const RtcEngineEventHandlerOnVideoRenderingTracingResultJson(
       {this.connection, this.uid, this.currentEvent, this.tracingInfo});
