@@ -130,11 +130,11 @@ enum AudioRoute {
   @JsonValue(5)
   routeBluetoothDeviceHfp,
 
-  /// 7: The audio route is a USB peripheral device. (For macOS only)
+  /// 6: The audio route is a USB peripheral device. (For macOS only)
   @JsonValue(6)
   routeUsb,
 
-  /// 6: The audio route is an HDMI peripheral device. (For macOS only)
+  /// 7: The audio route is an HDMI peripheral device. (For macOS only)
   @JsonValue(7)
   routeHdmi,
 
@@ -899,15 +899,15 @@ class VideoFrame {
   @JsonKey(name: 'height')
   final int? height;
 
-  /// For YUV data, the line span of the Y buffer; for RGBA data, the total data length.
+  /// For YUV data, the line span of the Y buffer; for RGBA data, the total data length. When dealing with video data, it is necessary to process the offset between each line of pixel data based on this parameter, otherwise it may result in image distortion.
   @JsonKey(name: 'yStride')
   final int? yStride;
 
-  /// For YUV data, the line span of the U buffer; for RGBA data, the value is 0.
+  /// For YUV data, the line span of the U buffer; for RGBA data, the value is 0. When dealing with video data, it is necessary to process the offset between each line of pixel data based on this parameter, otherwise it may result in image distortion.
   @JsonKey(name: 'uStride')
   final int? uStride;
 
-  /// For YUV data, the line span of the V buffer; for RGBA data, the value is 0.
+  /// For YUV data, the line span of the V buffer; for RGBA data, the value is 0. When dealing with video data, it is necessary to process the offset between each line of pixel data based on this parameter, otherwise it may result in image distortion.
   @JsonKey(name: 'vStride')
   final int? vStride;
 
@@ -1391,9 +1391,6 @@ class VideoEncodedFrameObserver {
   /// * [imageBuffer] The encoded video image buffer.
   /// * [length] The data length of the video image.
   /// * [videoEncodedFrameInfo] For the information of the encoded video frame, see EncodedVideoFrameInfo.
-  ///
-  /// Returns
-  /// Without practical meaning.
   final void Function(int uid, Uint8List imageBuffer, int length,
       EncodedVideoFrameInfo videoEncodedFrameInfo)? onEncodedVideoFrameReceived;
 }
