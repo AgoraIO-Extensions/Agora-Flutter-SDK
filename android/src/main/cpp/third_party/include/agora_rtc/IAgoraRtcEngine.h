@@ -2887,6 +2887,7 @@ class IRtcEngineEventHandler {
    * @param uid ID of the remote user.
    * @param metadata The pointer of metadata
    * @param length Size of metadata
+   * @technical preview 
    */
   virtual void onAudioMetadataReceived(uid_t uid, const char* metadata, size_t length) {
     (void)uid;
@@ -8396,6 +8397,7 @@ class IRtcEngine : public agora::base::IEngineBase {
    * @return
    * - 0: success
    * - <0: failure
+   * @technical preview
   */
   virtual int sendAudioMetadata(const char* metadata, size_t length) = 0;
 };
