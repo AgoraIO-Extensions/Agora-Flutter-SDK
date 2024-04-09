@@ -1068,6 +1068,7 @@ class IRtcEngineEventHandlerEx : public IRtcEngineEventHandler {
    * @param uid ID of the remote user.
    * @param metadata The pointer of metadata
    * @param length Size of metadata
+   * @technical preview 
    */
   virtual void onAudioMetadataReceived(const RtcConnection& connection, uid_t uid, const char* metadata, size_t length) {
     (void)metadata;
@@ -1998,6 +1999,7 @@ public:
      * @return
      * - 0: success
      * - <0: failure
+     * @technical preview
     */
     virtual int sendAudioMetadataEx(const RtcConnection& connection, const char* metadata, size_t length) = 0;
 };
