@@ -1172,8 +1172,9 @@ enum VIDEO_CODEC_TYPE {
    */
   VIDEO_CODEC_GENERIC_H264 = 7,
   /**
-    * 12: AV1.
-    */
+   * 12: AV1.
+   * @technical preview
+   */
   VIDEO_CODEC_AV1 = 12,
   /**
    * 13: VP9.
