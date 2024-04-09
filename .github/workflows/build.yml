@@ -98,7 +98,11 @@ jobs:
       - uses: subosito/flutter-action@v2
         with:
           flutter-version: ${{ matrix.version }}
-      - run: flutter config --enable-macos-desktop
+      - name: Enable KVM
+        run: |
+          echo 'KERNEL=="kvm", GROUP="kvm", MODE="0666", OPTIONS+="static_node=kvm"' | sudo tee /etc/udev/rules.d/99-kvm4all.rules
+          sudo udevadm control --reload-rules
+          sudo udevadm trigger --name-match=kvm
       - name: run flutter android integration tests
         uses: reactivecircus/android-emulator-runner@v2
         with:
@@ -197,7 +201,6 @@ jobs:
   build_android_ubuntu:
     name: Build Android on Ubuntu
     if: ${{ !contains(github.event.pull_request.labels.*.name, 'ci:skip') }}
-    needs: flutter_codestyle_check
     strategy:
       matrix:
         version: ["3.7.0", "3.x"]
@@ -300,11 +303,10 @@ jobs:
         run: flutter build web
         working-directory: example
 
-  # Run android rendering test in macos is more stable
   rendering_test_android:
     name: Run Flutter Android Rendering Tests
     if: ${{ !contains(github.event.pull_request.labels.*.name, 'ci:skip') }}
-    runs-on: macos-12
+    runs-on: ubuntu-latest
     timeout-minutes: 120
     env:
       TEST_APP_ID: ${{ secrets.MY_APP_ID }}
@@ -342,7 +344,11 @@ jobs:
             --flutter-package-name=agora_rtc_engine \
             --iris-android-cdn-url=${IRIS_CDN_URL_ANDROID} \
             --iris-macos-cdn-url=${IRIS_CDN_URL_MACOS}
-      - run: flutter config --enable-macos-desktop
+      - name: Enable KVM
+        run: |
+          echo 'KERNEL=="kvm", GROUP="kvm", MODE="0666", OPTIONS+="static_node=kvm"' | sudo tee /etc/udev/rules.d/99-kvm4all.rules
+          sudo udevadm control --reload-rules
+          sudo udevadm trigger --name-match=kvm
       - name: run flutter android integration tests
         uses: reactivecircus/android-emulator-runner@v2
         with:
