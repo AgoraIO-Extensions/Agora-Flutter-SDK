@@ -52,7 +52,7 @@ dependencies {
     implementation fileTree(dir: "libs", include: ["*.jar"])
   } else {
     api 'io.agora.rtc:iris-rtc:4.2.6.8-build.1'
-    api 'io.agora.rtc:agora-special-full:4.2.6.8.MINI.VIDEO'
+    api 'io.agora.rtc:agora-special-full:4.2.6.8.KK'
   }
 }
 
