@@ -46,7 +46,7 @@ typedef struct IrisRtcVideoFrameConfig {
   int video_view_setup_mode;
 
   /// int value of agora::media::base::VIDEO_MODULE_POSITION.
-  /// Default value is 
+  /// Default value is
   /// `agora::media::base::VIDEO_MODULE_POSITION::POSITION_PRE_ENCODER | agora::media::base::VIDEO_MODULE_POSITION::POSITION_PRE_RENDERER`
   uint32_t observed_frame_position;
 } IrisRtcVideoFrameConfig;
