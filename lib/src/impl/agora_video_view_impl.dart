@@ -465,16 +465,6 @@ class _AgoraRtcRenderTextureState extends State<AgoraRtcRenderTexture>
     return child;
   }
 
-  Future<void> _setSizeNative(Size size, Offset position) async {
-    assert(defaultTargetPlatform == TargetPlatform.android);
-    // Call `SurfaceTexture.setDefaultBufferSize` on Android， or the video will be
-    // black screen
-    await methodChannel!.invokeMethod('setSizeNative', {
-      'width': size.width.toInt(),
-      'height': size.height.toInt(),
-    });
-  }
-
   @override
   Widget build(BuildContext context) {
     Widget result = const SizedBox.expand();
@@ -508,63 +498,8 @@ class _AgoraRtcRenderTextureState extends State<AgoraRtcRenderTexture>
           result = _applyRenderMode(RenderModeType.renderModeFit, result);
         }
       }
-
-      // Only need to size in native side on Android
-      if (!kIsWeb && defaultTargetPlatform == TargetPlatform.android) {
-        result = _SizeChangedAwareWidget(
-          onChange: (size) {
-            _setSizeNative(size, Offset.zero);
-          },
-          child: result,
-        );
-      }
     }
 
     return result;
-  }
-}
-
-typedef _OnWidgetSizeChange = void Function(Size size);
-
-class _SizeChangedAwareRenderObject extends RenderProxyBox {
-  Size? oldSize;
-  _OnWidgetSizeChange onChange;
-
-  _SizeChangedAwareRenderObject(this.onChange);
-
-  @override
-  void performLayout() {
-    super.performLayout();
-
-    Size newSize = child!.size;
-    if (oldSize == newSize) return;
-
-    oldSize = newSize;
-    // Compatible with Flutter SDK 2.10.x
-    // ignore: invalid_null_aware_operator
-    SchedulerBinding.instance?.addPostFrameCallback((_) {
-      onChange(newSize);
-    });
-  }
-}
-
-class _SizeChangedAwareWidget extends SingleChildRenderObjectWidget {
-  final _OnWidgetSizeChange onChange;
-
-  const _SizeChangedAwareWidget({
-    Key? key,
-    required this.onChange,
-    required Widget child,
-  }) : super(key: key, child: child);
-
-  @override
-  RenderObject createRenderObject(BuildContext context) {
-    return _SizeChangedAwareRenderObject(onChange);
-  }
-
-  @override
-  void updateRenderObject(BuildContext context,
-      covariant _SizeChangedAwareRenderObject renderObject) {
-    renderObject.onChange = onChange;
   }
 }

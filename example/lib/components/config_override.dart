@@ -45,4 +45,8 @@ class ExampleConfigOverride {
   void set(String name, String value) {
     _overridedConfig[name] = value;
   }
+
+  /// Internal testing flag
+  bool get isInternalTesting =>
+      const bool.fromEnvironment('INTERNAL_TESTING', defaultValue: false);
 }
