@@ -303,6 +303,8 @@ public:
         CHECK_GL_ERROR()
         glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
         CHECK_GL_ERROR()
+        glViewport(0, 0, video_frame->width, video_frame->height);
+        CHECK_GL_ERROR()
 
         // Bind 2D texture
         glActiveTexture(GL_TEXTURE0);
@@ -408,6 +410,8 @@ public:
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
         CHECK_GL_ERROR()
         glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
+        CHECK_GL_ERROR()
+        glViewport(0, 0, video_frame->width, video_frame->height);
         CHECK_GL_ERROR()
 
         // Bind external oes texture
@@ -528,6 +532,8 @@ class YUVRendering final : public RenderingOp {
     CHECK_GL_ERROR()
     glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
     CHECK_GL_ERROR()
+    glViewport(0, 0, width, height);
+    CHECK_GL_ERROR()
 
     glEnableVertexAttribArray(aPositionLoc_);
     CHECK_GL_ERROR()
@@ -538,8 +544,8 @@ class YUVRendering final : public RenderingOp {
 
     // Adjust the tex coords to avoid green edge issue
     float sFactor = 1.0f;
-    if (video_frame->width != video_frame->yStride) {
-      sFactor = (float) video_frame->width / (float) video_frame->yStride - 0.02f;
+    if (width != yStride) {
+      sFactor = (float) width / (float) yStride - 0.02f;
     }
 
     float fragment[] = {sFactor, 0.0f, 0.0f, 0.0f, sFactor, 1.0f, 0.0f, 1.0f};
@@ -704,6 +710,8 @@ class NativeTextureRenderer final
       strcpy(config.channelId, "");
     }
     config.video_view_setup_mode = video_view_setup_mode;
+    config.observed_frame_position = agora::media::base::VIDEO_MODULE_POSITION::POSITION_POST_CAPTURER
+            | agora::media::base::VIDEO_MODULE_POSITION::POSITION_PRE_RENDERER;
 
     if (iris_rtc_rendering_) {
       delegate_id_ =
