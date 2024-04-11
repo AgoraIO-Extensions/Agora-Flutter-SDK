@@ -65,6 +65,12 @@ Future<void> matchScreenShotDesktop(
       if (updateGolden == 'true') {
         imageFile.writeAsBytesSync(imageBytes);
       } else {
+        if ((Platform.environment['SAVE_DEBUG_GOLDEN'] ?? 'false') == 'true') {
+          final File debugGoldenFile =
+              File('screenshot/$screenshotName.debug.png');
+          debugGoldenFile.writeAsBytesSync(imageBytes);
+        }
+
         final expectedImage = decodePng(imageFile.readAsBytesSync());
 
         double tolerance = 0.3;
