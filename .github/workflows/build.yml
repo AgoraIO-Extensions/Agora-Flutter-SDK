@@ -396,6 +396,12 @@ jobs:
           disk-size: 8192M
           script: bash ci/rendering_test_android.sh
 
+      - uses: actions/upload-artifact@v3
+        if: always()
+        with:
+          name: android-debug-golden-files
+          path: test_shard/rendering_test/screenshot/*.debug.png
+
   rendering_test_ios:
     name: Run Flutter iOS Rendering Tests
     if: ${{ !contains(github.event.pull_request.labels.*.name, 'ci:skip') }}
@@ -439,9 +445,9 @@ jobs:
       - run: bash ci/rendering_test_ios.sh
 
       - uses: actions/upload-artifact@v3
-        if: failure()
+        if: always()
         with:
-          name: debug-golden-files-ios
+          name: ios-debug-golden-files
           path: test_shard/rendering_test/screenshot/*.debug.png
 
   rendering_test_macos:
@@ -493,6 +499,11 @@ jobs:
         run: |
           export SAVE_DEBUG_GOLDEN="true"
           bash ci/rendering_test_macos.sh
+      - uses: actions/upload-artifact@v3
+        if: always()
+        with:
+          name: macos-debug-golden-files
+          path: test_shard/rendering_test/screenshot/*.debug.png
 
   rendering_test_windows:
     name: Run Flutter Windows Rendering Tests
@@ -542,6 +553,11 @@ jobs:
           export SAVE_DEBUG_GOLDEN="true"
 
           bash ci/rendering_test_windows.sh
+      - uses: actions/upload-artifact@v3
+        if: always()
+        with:
+          name: windows-debug-golden-files
+          path: test_shard/rendering_test/screenshot/*.debug.png
 
   rendering_test_web:
     name: Run Flutter Web Rendering Tests
@@ -570,7 +586,7 @@ jobs:
           bash ci/run_rendering_test.sh web
 
       - uses: actions/upload-artifact@v3
-        if: failure()
+        if: always()
         with:
-          name: debug-golden-files
+          name: web-debug-golden-files
           path: test_shard/rendering_test/screenshot/*.debug.png
