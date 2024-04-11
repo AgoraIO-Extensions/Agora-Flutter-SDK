@@ -92,7 +92,10 @@ class _RemoteVideoViewState extends State<RemoteVideoView> {
 
     videoFrameObserver = VideoFrameObserver(
       onRenderVideoFrame: (channelId, remoteUid, videoFrame) {
-        widget.onRendered(rtcEngine);
+        // Delay 2 seconds to ensure the first frame showed
+        Future.delayed(const Duration(seconds: 2), () {
+          widget.onRendered(rtcEngine);
+        });
       },
     );
 
