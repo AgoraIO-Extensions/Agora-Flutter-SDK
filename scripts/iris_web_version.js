@@ -2,7 +2,7 @@
 
 // This url should be same as the url inside the `example/web/index.html`
 const irisWebUrl = 'https://download.agora.io/sdk/release/iris-web-rtc_n430_w4200_0.6.0.js';
-const irisWebFakeUrl = 'https://download.agora.io/sdk/release/iris-web-rtc-fake_n430_w4200_0.6.0.js';
+const irisWebFakeUrl = 'https://download.agora.io/sdk/release/iris-web-rtc-fake_n430_w4200_0.7.0-pre.js';
 
 (function() {
     var scriptLoaded = false;
