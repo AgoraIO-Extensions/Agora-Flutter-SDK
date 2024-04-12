@@ -118,7 +118,7 @@ TextureRender::CopyPixelBuffer(size_t width, size_t height)
 
 void TextureRender::UpdateData(unsigned int uid, const std::string &channelId, unsigned int videoSourceType, unsigned int videoViewSetupMode)
 {
-    IrisRtcVideoFrameConfig config;
+    IrisRtcVideoFrameConfig config = EmptyIrisRtcVideoFrameConfig;
     config.uid = uid;
     config.video_source_type = videoSourceType;
     config.video_frame_format = agora::media::base::VIDEO_PIXEL_FORMAT::VIDEO_PIXEL_RGBA;

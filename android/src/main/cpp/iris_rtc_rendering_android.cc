@@ -699,7 +699,7 @@ class NativeTextureRenderer final
     native_windows_ = ANativeWindow_fromSurface(env, surface_jni);
     gl_context_ = std::make_shared<GLContext>(native_windows_);
 
-    IrisRtcVideoFrameConfig config;
+    IrisRtcVideoFrameConfig config = EmptyIrisRtcVideoFrameConfig;
     config.uid = uid;
     config.video_source_type = video_source_type;
     config.video_frame_format =
