@@ -797,7 +797,7 @@ struct CameraCapturerConfiguration {
   /**
    * The camera direction.
    */
-  CAMERA_DIRECTION cameraDirection;
+  Optional<CAMERA_DIRECTION> cameraDirection;
 
   /*- CAMERA_FOCAL_LENGTH_TYPE.CAMERA_FOCAL_LENGTH_DEFAULT:
   For iOS, if iPhone/iPad has 3 or 2 back camera, it means combination of triple (wide + ultra wide + telephoto) camera
@@ -807,33 +807,22 @@ struct CameraCapturerConfiguration {
   - CAMERA_FOCAL_LENGTH_TYPE.CAMERA_FOCAL_LENGTH_WIDE_ANGLE:wide camera
   - CAMERA_FOCAL_LENGTH_TYPE.CAMERA_FOCAL_LENGTH_URLTRA_WIDE:ultra wide camera
   - CAMERA_FOCAL_LENGTH_TYPE.CAMERA_FOCAL_LENGTH_TELEPHOTO:telephoto camera*/
-  CAMERA_FOCAL_LENGTH_TYPE cameraFocalLengthType;
+  Optional<CAMERA_FOCAL_LENGTH_TYPE> cameraFocalLengthType;
 #else
-  /** For windows. The device ID of the playback device. The maximum length is #MAX_DEVICE_ID_LENGTH. */
-  char deviceId[MAX_DEVICE_ID_LENGTH];
+  /** For windows. The device ID of the playback device. */
+  Optional<const char *> deviceId;
 #endif
 
 #if defined(__ANDROID__)
   /**
    * The camera id.
    */
-  char cameraId[MAX_DEVICE_ID_LENGTH];
+  Optional<const char *> cameraId;
 #endif
-  /** The video format. See VideoFormat. */
+  Optional<bool> followEncodeDimensionRatio;
+    /** The video format. See VideoFormat. */
   VideoFormat format;
-  bool followEncodeDimensionRatio;
-  CameraCapturerConfiguration() : followEncodeDimensionRatio(true) {
-#if defined(__ANDROID__) || (defined(__APPLE__) && TARGET_OS_IOS)
-  cameraDirection = CAMERA_REAR;
-
-#else
-  memset(deviceId, 0, sizeof(deviceId));
-#endif
-
-#if defined(__ANDROID__)
-  memset(cameraId, 0, sizeof(cameraId));
-#endif
-  }
+  CameraCapturerConfiguration() : format(VideoFormat(0, 0, 0)) {}
 };
 /**
  * The configuration of the captured screen.
@@ -2145,25 +2134,6 @@ class IRtcEngineEventHandler {
     (void) vecDistance;
     (void) numFaces;
   }
-
-#if defined(__ANDROID__)
-  /**
-   * When the actual configuration is different from the preset configuration, the callback is triggered.
-   *
-   * @param direction Camera orientation, front or back.
-   * @param focalLengthType The focal length of the camera, wide Angle, super wide Angle or ordinary lens.
-   * @param width Camera acquisition width.
-   * @param height Camera acquisition width.
-   * @param frameRate Camera acquisition frameRate.
-   */
-  virtual void onCameraCapturerConfigurationChanged(int direction, int focalLengthType, int width, int height, int frameRate) {
-  (void)direction;
-  (void)focalLengthType;
-  (void)width;
-  (void)height;
-  (void)frameRate;
-  }
-#endif // __ANDROID__
 #endif
   /**
    * Occurs when the video stops playing.
@@ -6972,7 +6942,7 @@ class IRtcEngine : public agora::base::IEngineBase {
    * - true: The center stage is supported.
    * - false: The center stage is not supported.
    */
-  virtual bool isSupportPortraitCenterStage() = 0;
+  virtual bool isCameraCenterStageSupported() = 0;
 
   /** Enables the camera Center Stage.
    * @param enabled enable Center Stage:
@@ -6982,7 +6952,7 @@ class IRtcEngine : public agora::base::IEngineBase {
    * - 0: Success.
    * - < 0: Failure.
    */
-  virtual int enablePortraitCenterStage(bool enabled) = 0;
+  virtual int enableCameraCenterStage(bool enabled) = 0;
 #endif
 
 #if defined(_WIN32) || (defined(__APPLE__) && TARGET_OS_MAC && !TARGET_OS_IPHONE)
