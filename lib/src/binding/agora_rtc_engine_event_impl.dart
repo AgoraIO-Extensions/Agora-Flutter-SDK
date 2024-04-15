@@ -814,34 +814,6 @@ class RtcEngineEventHandlerWrapper implements EventLoopEventHandler {
             imageWidth, imageHeight, vecRectangle, vecDistance, numFaces);
         return true;
 
-      case 'onCameraCapturerConfigurationChanged_8c68d23':
-        if (rtcEngineEventHandler.onCameraCapturerConfigurationChanged ==
-            null) {
-          return true;
-        }
-        final jsonMap = jsonDecode(eventData);
-        RtcEngineEventHandlerOnCameraCapturerConfigurationChangedJson
-            paramJson =
-            RtcEngineEventHandlerOnCameraCapturerConfigurationChangedJson
-                .fromJson(jsonMap);
-        paramJson = paramJson.fillBuffers(buffers);
-        int? direction = paramJson.direction;
-        int? focalLengthType = paramJson.focalLengthType;
-        int? width = paramJson.width;
-        int? height = paramJson.height;
-        int? frameRate = paramJson.frameRate;
-        if (direction == null ||
-            focalLengthType == null ||
-            width == null ||
-            height == null ||
-            frameRate == null) {
-          return true;
-        }
-
-        rtcEngineEventHandler.onCameraCapturerConfigurationChanged!(
-            direction, focalLengthType, width, height, frameRate);
-        return true;
-
       case 'onVideoStopped':
         if (rtcEngineEventHandler.onVideoStopped == null) {
           return true;

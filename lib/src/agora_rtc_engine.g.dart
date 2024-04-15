@@ -378,10 +378,10 @@ CameraCapturerConfiguration _$CameraCapturerConfigurationFromJson(
           _$CameraFocalLengthTypeEnumMap, json['cameraFocalLengthType']),
       deviceId: json['deviceId'] as String?,
       cameraId: json['cameraId'] as String?,
+      followEncodeDimensionRatio: json['followEncodeDimensionRatio'] as bool?,
       format: json['format'] == null
           ? null
           : VideoFormat.fromJson(json['format'] as Map<String, dynamic>),
-      followEncodeDimensionRatio: json['followEncodeDimensionRatio'] as bool?,
     );
 
 Map<String, dynamic> _$CameraCapturerConfigurationToJson(
@@ -400,9 +400,9 @@ Map<String, dynamic> _$CameraCapturerConfigurationToJson(
       _$CameraFocalLengthTypeEnumMap[instance.cameraFocalLengthType]);
   writeNotNull('deviceId', instance.deviceId);
   writeNotNull('cameraId', instance.cameraId);
-  writeNotNull('format', instance.format?.toJson());
   writeNotNull(
       'followEncodeDimensionRatio', instance.followEncodeDimensionRatio);
+  writeNotNull('format', instance.format?.toJson());
   return val;
 }
 

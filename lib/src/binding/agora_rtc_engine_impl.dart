@@ -3519,9 +3519,9 @@ class RtcEngineImpl implements RtcEngine {
   }
 
   @override
-  Future<bool> isSupportPortraitCenterStage() async {
+  Future<bool> isCameraCenterStageSupported() async {
     final apiType =
-        '${isOverrideClassName ? className : 'RtcEngine'}_isSupportPortraitCenterStage';
+        '${isOverrideClassName ? className : 'RtcEngine'}_isCameraCenterStageSupported';
     final param = createParams({});
     final callApiResult = await irisMethodChannel.invokeMethod(
         IrisMethodCall(apiType, jsonEncode(param), buffers: null));
@@ -3534,9 +3534,9 @@ class RtcEngineImpl implements RtcEngine {
   }
 
   @override
-  Future<void> enablePortraitCenterStage(bool enabled) async {
+  Future<void> enableCameraCenterStage(bool enabled) async {
     final apiType =
-        '${isOverrideClassName ? className : 'RtcEngine'}_enablePortraitCenterStage_5039d15';
+        '${isOverrideClassName ? className : 'RtcEngine'}_enableCameraCenterStage_5039d15';
     final param = createParams({'enabled': enabled});
     final callApiResult = await irisMethodChannel.invokeMethod(
         IrisMethodCall(apiType, jsonEncode(param), buffers: null));

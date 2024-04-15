@@ -240,9 +240,6 @@ const eventIdsMapping = {
   "RtcEngineEventHandler_onFacePositionChanged": [
     "RtcEngineEventHandler_onFacePositionChanged_197b4a7"
   ],
-  "RtcEngineEventHandler_onCameraCapturerConfigurationChanged": [
-    "RtcEngineEventHandler_onCameraCapturerConfigurationChanged_8c68d23"
-  ],
   "RtcEngineEventHandler_onVideoStopped": [
     "RtcEngineEventHandler_onVideoStopped"
   ],
