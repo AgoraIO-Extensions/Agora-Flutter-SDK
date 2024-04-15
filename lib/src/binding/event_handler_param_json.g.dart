@@ -2458,37 +2458,6 @@ Map<String, dynamic> _$RtcEngineEventHandlerOnFacePositionChangedJsonToJson(
   return val;
 }
 
-RtcEngineEventHandlerOnCameraCapturerConfigurationChangedJson
-    _$RtcEngineEventHandlerOnCameraCapturerConfigurationChangedJsonFromJson(
-            Map<String, dynamic> json) =>
-        RtcEngineEventHandlerOnCameraCapturerConfigurationChangedJson(
-          direction: json['direction'] as int?,
-          focalLengthType: json['focalLengthType'] as int?,
-          width: json['width'] as int?,
-          height: json['height'] as int?,
-          frameRate: json['frameRate'] as int?,
-        );
-
-Map<String, dynamic>
-    _$RtcEngineEventHandlerOnCameraCapturerConfigurationChangedJsonToJson(
-        RtcEngineEventHandlerOnCameraCapturerConfigurationChangedJson
-            instance) {
-  final val = <String, dynamic>{};
-
-  void writeNotNull(String key, dynamic value) {
-    if (value != null) {
-      val[key] = value;
-    }
-  }
-
-  writeNotNull('direction', instance.direction);
-  writeNotNull('focalLengthType', instance.focalLengthType);
-  writeNotNull('width', instance.width);
-  writeNotNull('height', instance.height);
-  writeNotNull('frameRate', instance.frameRate);
-  return val;
-}
-
 RtcEngineEventHandlerOnVideoStoppedJson
     _$RtcEngineEventHandlerOnVideoStoppedJsonFromJson(
             Map<String, dynamic> json) =>

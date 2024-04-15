@@ -1006,8 +1006,8 @@ class CameraCapturerConfiguration {
       this.cameraFocalLengthType,
       this.deviceId,
       this.cameraId,
-      this.format,
-      this.followEncodeDimensionRatio});
+      this.followEncodeDimensionRatio,
+      this.format});
 
   /// This parameter applies to Android and iOS only. The camera direction. See CameraDirection.
   @JsonKey(name: 'cameraDirection')
@@ -1025,13 +1025,13 @@ class CameraCapturerConfiguration {
   @JsonKey(name: 'cameraId')
   final String? cameraId;
 
-  /// The format of the video frame. See VideoFormat.
-  @JsonKey(name: 'format')
-  final VideoFormat? format;
-
   /// Whether to follow the video aspect ratio set in setVideoEncoderConfiguration : true : (Default) Follow the set video aspect ratio. The SDK crops the captured video according to the set video aspect ratio and synchronously changes the local preview screen and the video frame in onCaptureVideoFrame and onPreEncodeVideoFrame. false : Do not follow the system default audio playback device. The SDK does not change the aspect ratio of the captured video frame.
   @JsonKey(name: 'followEncodeDimensionRatio')
   final bool? followEncodeDimensionRatio;
+
+  /// The format of the video frame. See VideoFormat.
+  @JsonKey(name: 'format')
+  final VideoFormat? format;
 
   /// @nodoc
   factory CameraCapturerConfiguration.fromJson(Map<String, dynamic> json) =>
@@ -1635,7 +1635,6 @@ class RtcEngineEventHandler {
     this.onCameraFocusAreaChanged,
     this.onCameraExposureAreaChanged,
     this.onFacePositionChanged,
-    this.onCameraCapturerConfigurationChanged,
     this.onVideoStopped,
     this.onAudioMixingStateChanged,
     this.onRhythmPlayerStateChanged,
@@ -2004,11 +2003,11 @@ class RtcEngineEventHandler {
 
   /// Occurs when a specific remote user enables/disables the local video capturing function.
   ///
-  /// The SDK triggers this callback when the remote user resumes or stops capturing the video stream by calling the enableLocalVideo method.
+  /// Deprecated: This callback is deprecated, use the following enumerations in the onRemoteVideoStateChanged callback: remoteVideoStateStopped (0) and remoteVideoStateReasonRemoteMuted (5). remoteVideoStateDecoding (2) and remoteVideoStateReasonRemoteUnmuted (6). The SDK triggers this callback when the remote user resumes or stops capturing the video stream by calling the enableLocalVideo method.
   ///
   /// * [connection] The connection information. See RtcConnection.
   /// * [remoteUid] The user ID of the remote user.
-  /// * [enabled] Whether the specified remote user enables/disables the local video capturing function: true : The video module is enabled. Other users in the channel can see the video of this remote user. false : The video module is disabled. Other users in the channel can no longer receive the video stream from this remote user, while this remote user can still receive the video streams from other users.
+  /// * [enabled] Whether the specified remote user enables/disables local video capturing: true : The video module is enabled. Other users in the channel can see the video of this remote user. false : The video module is disabled. Other users in the channel can no longer receive the video stream from this remote user, while this remote user can still receive the video streams from other users.
   final void Function(RtcConnection connection, int remoteUid, bool enabled)?
       onUserEnableLocalVideo;
 
@@ -2093,10 +2092,6 @@ class RtcEngineEventHandler {
       List<int> vecDistance,
       int numFaces)? onFacePositionChanged;
 
-  /// @nodoc
-  final void Function(int direction, int focalLengthType, int width, int height,
-      int frameRate)? onCameraCapturerConfigurationChanged;
-
   /// Occurs when the video stops playing.
   ///
   /// Deprecated: Use localVideoStreamStateStopped (0) in the onLocalVideoStateChanged callback instead. The application can use this callback to change the configuration of the view (for example, displaying other pictures in the view) after the video stops playing.
@@ -2163,7 +2158,7 @@ class RtcEngineEventHandler {
   /// * [connection] The connection information. See RtcConnection.
   /// * [remoteUid] The ID of the remote user sending the message.
   /// * [streamId] The stream ID of the received message.
-  /// * [code] ErrorCodeType The error code.
+  /// * [code] The error code. See ErrorCodeType.
   /// * [missed] The number of lost messages.
   /// * [cached] Number of incoming cached messages when the data stream is interrupted.
   final void Function(RtcConnection connection, int remoteUid, int streamId,
@@ -3176,9 +3171,10 @@ abstract class RtcEngine {
   ///  The remote client: onUserJoined, if the user joining the channel is in the Communication profile or is a host in the Live-broadcasting profile. When the connection between the client and Agora's server is interrupted due to poor network conditions, the SDK tries reconnecting to the server. When the local client successfully rejoins the channel, the SDK triggers the onRejoinChannelSuccess callback on the local client.
   ///  This method allows users to join only one channel at a time.
   ///  Ensure that the app ID you use to generate the token is the same app ID that you pass in the initialize method; otherwise, you may fail to join the channel by token.
+  ///  If you choose the Testing Mode (using an App ID for authentication) for your project and call this method to join a channel, you will automatically exit the channel after 24 hours.
   ///
   /// * [token] The token generated on your server for authentication. If you need to join different channels at the same time or switch between channels, Agora recommends using a wildcard token so that you don't need to apply for a new token every time joining a channel.
-  /// * [channelId] The channel name. This parameter signifies the channel in which users engage in real-time audio and video interaction. Under the premise of the same App ID, users who fill in the same channel ID enter the same channel for audio and video interaction. The string length must be less than 64 bytes. Supported characters:
+  /// * [channelId] The channel name. This parameter signifies the channel in which users engage in real-time audio and video interaction. Under the premise of the same App ID, users who fill in the same channel ID enter the same channel for audio and video interaction. The string length must be less than 64 bytes. Supported characters (89 characters in total):
   ///  All lowercase English letters: a to z.
   ///  All uppercase English letters: A to Z.
   ///  All numeric characters: 0 to 9.
@@ -3386,7 +3382,7 @@ abstract class RtcEngine {
   /// Sets the image enhancement options.
   ///
   /// Enables or disables image enhancement, and sets the options.
-  ///  Call this method before calling enableVideo or startPreview.
+  ///  Call this method after calling enableVideo or startPreview.
   ///  This method relies on the image enhancement dynamic library libagora_clear_vision_extension.dll. If the dynamic library is deleted, the function cannot be enabled normally.
   ///  This feature has high requirements on device performance. When calling this method, the SDK automatically checks the capabilities of the current device.
   ///
@@ -3466,7 +3462,7 @@ abstract class RtcEngine {
 
   /// Enables/Disables the virtual background.
   ///
-  /// The virtual background feature enables the local user to replace their original background with a static image, dynamic video, blurred background, or portrait-background segmentation to achieve picture-in-picture effect. Once the virtual background feature is enabled, all users in the channel can see the custom background. Call this method before calling enableVideo or startPreview.
+  /// The virtual background feature enables the local user to replace their original background with a static image, dynamic video, blurred background, or portrait-background segmentation to achieve picture-in-picture effect. Once the virtual background feature is enabled, all users in the channel can see the custom background. Call this method after calling enableVideo or startPreview.
   ///  This feature has high requirements on device performance. When calling this method, the SDK automatically checks the capabilities of the current device. Agora recommends you use virtual background on devices with the following processors:
   ///  Snapdragon 700 series 750G and later
   ///  Snapdragon 800 series 835 and later
@@ -4954,7 +4950,7 @@ abstract class RtcEngine {
   ///
   /// After the extension is loaded, you can call this method to register the extension.
   ///  Before calling this method, you need to call loadExtensionProvider to load the extension first.
-  ///  For extensions external to the SDK (such as Extensions Marketplace extensions and SDK extensions), you need to call this method before calling setExtensionProperty.
+  ///  For extensions external to the SDK (such as those from Extensions Marketplace and SDK Extensions), you need to call this method before calling setExtensionProperty.
   ///
   /// * [provider] The name of the extension provider.
   /// * [extension] The name of the extension.
@@ -5262,10 +5258,10 @@ abstract class RtcEngine {
   Future<void> setRouteInCommunicationMode(int route);
 
   /// @nodoc
-  Future<bool> isSupportPortraitCenterStage();
+  Future<bool> isCameraCenterStageSupported();
 
   /// @nodoc
-  Future<void> enablePortraitCenterStage(bool enabled);
+  Future<void> enableCameraCenterStage(bool enabled);
 
   /// Gets a list of shareable screens and windows.
   ///
@@ -5638,11 +5634,11 @@ abstract class RtcEngine {
   /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown; and you need to catch the exception and handle it accordingly.
   void registerEventHandler(RtcEngineEventHandler eventHandler);
 
-  /// Removes the specified callback handler.
+  /// Removes the specified callback events.
   ///
-  /// This method removes the specified callback handler. For callback events that you want to listen for only once, call this method to remove the relevant callback handler after you have received them.
+  /// You can call this method too remove all added callback events.
   ///
-  /// * [eventHandler] The callback handler to be deleted. See RtcEngineEventHandler.
+  /// * [eventHandler] Callback events to be removed. See RtcEngineEventHandler.
   ///
   /// Returns
   /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown; and you need to catch the exception and handle it accordingly.
@@ -5856,18 +5852,19 @@ abstract class RtcEngine {
 
   /// Joins the channel with a user account, and configures whether to automatically subscribe to audio or video streams after joining the channel.
   ///
-  /// This method allows a user to join the channel with the user account. After the user successfully joins the channel, the SDK triggers the following callbacks:
+  /// To ensure smooth communication, use the same parameter type to identify the user. For example, if a user joins the channel with a user ID, then ensure all the other users use the user ID too. The same applies to the user account. If a user joins the channel with the Agora Web SDK, ensure that the ID of the user is set to the same parameter type.
+  ///  If you choose the Testing Mode (using an App ID for authentication) for your project and call this method to join a channel, you will automatically exit the channel after 24 hours. This method allows a user to join the channel with the user account. After the user successfully joins the channel, the SDK triggers the following callbacks:
   ///  The local client: onLocalUserRegistered, onJoinChannelSuccess and onConnectionStateChanged callbacks.
-  ///  The remote client: The onUserJoined callback, if the user is in the COMMUNICATION profile, and the onUserInfoUpdated callback if the user is a host in the LIVE_BROADCASTING profile. Once a user joins the channel, the user subscribes to the audio and video streams of all the other users in the channel by default, giving rise to usage and billing calculation. To stop subscribing to a specified stream or all remote streams, call the corresponding mute methods. To ensure smooth communication, use the same parameter type to identify the user. For example, if a user joins the channel with a user ID, then ensure all the other users use the user ID too. The same applies to the user account. If a user joins the channel with the Agora Web SDK, ensure that the ID of the user is set to the same parameter type.
+  ///  The remote client: The onUserJoined callback, if the user is in the COMMUNICATION profile, and the onUserInfoUpdated callback if the user is a host in the LIVE_BROADCASTING profile. Once a user joins the channel, the user subscribes to the audio and video streams of all the other users in the channel by default, giving rise to usage and billing calculation. To stop subscribing to a specified stream or all remote streams, call the corresponding mute methods.
   ///
   /// * [token] The token generated on your server for authentication. If you need to join different channels at the same time or switch between channels, Agora recommends using a wildcard token so that you don't need to apply for a new token every time joining a channel.
-  /// * [channelId] The channel name. This parameter signifies the channel in which users engage in real-time audio and video interaction. Under the premise of the same App ID, users who fill in the same channel ID enter the same channel for audio and video interaction. The string length must be less than 64 bytes. Supported characters:
+  /// * [channelId] The channel name. This parameter signifies the channel in which users engage in real-time audio and video interaction. Under the premise of the same App ID, users who fill in the same channel ID enter the same channel for audio and video interaction. The string length must be less than 64 bytes. Supported characters (89 characters in total):
   ///  All lowercase English letters: a to z.
   ///  All uppercase English letters: A to Z.
   ///  All numeric characters: 0 to 9.
   ///  Space
   ///  "!", "#", "$", "%", "&", "(", ")", "+", "-", ":", ";", "<", "=", ".", ">", "?", "@", "[", "]", "^", "_", "{", "}", "|", "~", ","
-  /// * [userAccount] The user account. This parameter is used to identify the user in the channel for real-time audio and video engagement. You need to set and manage user accounts yourself and ensure that each user account in the same channel is unique. The maximum length of this parameter is 255 bytes. Ensure that you set this parameter and do not set it as NULL. Supported characters are (89 in total):
+  /// * [userAccount] The user account. This parameter is used to identify the user in the channel for real-time audio and video engagement. You need to set and manage user accounts yourself and ensure that each user account in the same channel is unique. The maximum length of this parameter is 255 bytes. Ensure that you set this parameter and do not set it as NULL. Supported characters are as follows(89 in total):
   ///  The 26 lowercase English letters: a to z.
   ///  The 26 uppercase English letters: A to Z.
   ///  All numeric characters: 0 to 9.
@@ -5893,18 +5890,19 @@ abstract class RtcEngine {
 
   /// Joins the channel with a user account, and configures whether to automatically subscribe to audio or video streams after joining the channel.
   ///
-  /// To ensure smooth communication, use the same parameter type to identify the user. For example, if a user joins the channel with a user ID, then ensure all the other users use the user ID too. The same applies to the user account. If a user joins the channel with the Agora Web SDK, ensure that the ID of the user is set to the same parameter type. Once a user joins the channel, the user subscribes to the audio and video streams of all the other users in the channel by default, giving rise to usage and billing calculation. To stop subscribing to a specified stream or all remote streams, call the corresponding mute methods. This method allows a user to join the channel with the user account. After the user successfully joins the channel, the SDK triggers the following callbacks:
+  /// To ensure smooth communication, use the same parameter type to identify the user. For example, if a user joins the channel with a user ID, then ensure all the other users use the user ID too. The same applies to the user account. If a user joins the channel with the Agora Web SDK, ensure that the ID of the user is set to the same parameter type.
+  ///  If you choose the Testing Mode (using an App ID for authentication) for your project and call this method to join a channel, you will automatically exit the channel after 24 hours. Once a user joins the channel, the user subscribes to the audio and video streams of all the other users in the channel by default, giving rise to usage and billing calculation. To stop subscribing to a specified stream or all remote streams, call the corresponding mute methods. This method allows a user to join the channel with the user account. After the user successfully joins the channel, the SDK triggers the following callbacks:
   ///  The local client: onLocalUserRegistered, onJoinChannelSuccess and onConnectionStateChanged callbacks.
   ///  The remote client: The onUserJoined callback, if the user is in the COMMUNICATION profile, and the onUserInfoUpdated callback if the user is a host in the LIVE_BROADCASTING profile.
   ///
   /// * [token] The token generated on your server for authentication. If you need to join different channels at the same time or switch between channels, Agora recommends using a wildcard token so that you don't need to apply for a new token every time joining a channel.
-  /// * [channelId] The channel name. This parameter signifies the channel in which users engage in real-time audio and video interaction. Under the premise of the same App ID, users who fill in the same channel ID enter the same channel for audio and video interaction. The string length must be less than 64 bytes. Supported characters:
+  /// * [channelId] The channel name. This parameter signifies the channel in which users engage in real-time audio and video interaction. Under the premise of the same App ID, users who fill in the same channel ID enter the same channel for audio and video interaction. The string length must be less than 64 bytes. Supported characters (89 characters in total):
   ///  All lowercase English letters: a to z.
   ///  All uppercase English letters: A to Z.
   ///  All numeric characters: 0 to 9.
   ///  Space
   ///  "!", "#", "$", "%", "&", "(", ")", "+", "-", ":", ";", "<", "=", ".", ">", "?", "@", "[", "]", "^", "_", "{", "}", "|", "~", ","
-  /// * [userAccount] The user account. This parameter is used to identify the user in the channel for real-time audio and video engagement. You need to set and manage user accounts yourself and ensure that each user account in the same channel is unique. The maximum length of this parameter is 255 bytes. Ensure that you set this parameter and do not set it as NULL. Supported characters are (89 in total):
+  /// * [userAccount] The user account. This parameter is used to identify the user in the channel for real-time audio and video engagement. You need to set and manage user accounts yourself and ensure that each user account in the same channel is unique. The maximum length of this parameter is 255 bytes. Ensure that you set this parameter and do not set it as NULL. Supported characters are as follows(89 in total):
   ///  The 26 lowercase English letters: a to z.
   ///  The 26 uppercase English letters: A to Z.
   ///  All numeric characters: 0 to 9.
