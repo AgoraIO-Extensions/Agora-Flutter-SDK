@@ -776,8 +776,8 @@ void rtcEngineSmokeTestCases() {
           cameraFocalLengthType: configCameraFocalLengthType,
           deviceId: configDeviceId,
           cameraId: configCameraId,
-          format: configFormat,
           followEncodeDimensionRatio: configFollowEncodeDimensionRatio,
+          format: configFormat,
         );
         await rtcEngine.enableMultiCamera(
           enabled: enabled,
@@ -5562,8 +5562,8 @@ void rtcEngineSmokeTestCases() {
           cameraFocalLengthType: configCameraFocalLengthType,
           deviceId: configDeviceId,
           cameraId: configCameraId,
-          format: configFormat,
           followEncodeDimensionRatio: configFollowEncodeDimensionRatio,
+          format: configFormat,
         );
         await rtcEngine.setCameraCapturerConfiguration(
           config,
@@ -6429,7 +6429,7 @@ void rtcEngineSmokeTestCases() {
   );
 
   testWidgets(
-    'RtcEngine.isSupportPortraitCenterStage',
+    'RtcEngine.isCameraCenterStageSupported',
     (WidgetTester tester) async {
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
@@ -6442,11 +6442,11 @@ void rtcEngineSmokeTestCases() {
       await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
-        await rtcEngine.isSupportPortraitCenterStage();
+        await rtcEngine.isCameraCenterStageSupported();
       } catch (e) {
         if (e is! AgoraRtcException) {
           debugPrint(
-              '[RtcEngine.isSupportPortraitCenterStage] error: ${e.toString()}');
+              '[RtcEngine.isCameraCenterStageSupported] error: ${e.toString()}');
           rethrow;
         }
 
@@ -6461,7 +6461,7 @@ void rtcEngineSmokeTestCases() {
   );
 
   testWidgets(
-    'RtcEngine.enablePortraitCenterStage',
+    'RtcEngine.enableCameraCenterStage',
     (WidgetTester tester) async {
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
@@ -6475,13 +6475,13 @@ void rtcEngineSmokeTestCases() {
 
       try {
         const bool enabled = true;
-        await rtcEngine.enablePortraitCenterStage(
+        await rtcEngine.enableCameraCenterStage(
           enabled,
         );
       } catch (e) {
         if (e is! AgoraRtcException) {
           debugPrint(
-              '[RtcEngine.enablePortraitCenterStage] error: ${e.toString()}');
+              '[RtcEngine.enableCameraCenterStage] error: ${e.toString()}');
           rethrow;
         }
 
@@ -7832,8 +7832,8 @@ void rtcEngineSmokeTestCases() {
           cameraFocalLengthType: configCameraFocalLengthType,
           deviceId: configDeviceId,
           cameraId: configCameraId,
-          format: configFormat,
           followEncodeDimensionRatio: configFollowEncodeDimensionRatio,
+          format: configFormat,
         );
         await rtcEngine.startCameraCapture(
           sourceType: sourceType,
@@ -8082,8 +8082,6 @@ void rtcEngineSmokeTestCases() {
           onCameraExposureAreaChanged: (int x, int y, int width, int height) {},
           onFacePositionChanged: (int imageWidth, int imageHeight,
               List vecRectangle, List vecDistance, int numFaces) {},
-          onCameraCapturerConfigurationChanged: (int direction,
-              int focalLengthType, int width, int height, int frameRate) {},
           onVideoStopped: () {},
           onAudioMixingStateChanged:
               (AudioMixingStateType state, AudioMixingReasonType reason) {},
@@ -8300,8 +8298,6 @@ void rtcEngineSmokeTestCases() {
           onCameraExposureAreaChanged: (int x, int y, int width, int height) {},
           onFacePositionChanged: (int imageWidth, int imageHeight,
               List vecRectangle, List vecDistance, int numFaces) {},
-          onCameraCapturerConfigurationChanged: (int direction,
-              int focalLengthType, int width, int height, int frameRate) {},
           onVideoStopped: () {},
           onAudioMixingStateChanged:
               (AudioMixingStateType state, AudioMixingReasonType reason) {},
