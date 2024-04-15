@@ -3,6 +3,7 @@ targets:
     sources:
       exclude:
         - example/
+        - example/**/**.dart
     builders:
       source_gen|combining_builder:
         options:
