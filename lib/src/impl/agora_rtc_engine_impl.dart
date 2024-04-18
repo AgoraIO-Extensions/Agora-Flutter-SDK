@@ -40,6 +40,7 @@ import 'package:agora_rtc_engine/src/impl/media_player_impl.dart'
     as media_player_impl;
 
 import 'package:agora_rtc_engine/src/impl/platform/platform_bindings_provider.dart';
+import 'package:async/async.dart' show AsyncMemoizer;
 import 'package:flutter/foundation.dart'
     show ChangeNotifier, debugPrint, defaultTargetPlatform, kIsWeb;
 import 'package:flutter/services.dart' show MethodChannel;
@@ -319,6 +320,14 @@ class SharedNativeHandleInitilizationArgProvider
   }
 }
 
+enum _RtcEngineState {
+  notInitialize,
+  initializing,
+  initialized,
+  disposing,
+  disposed,
+}
+
 class RtcEngineImpl extends rtc_engine_ex_binding.RtcEngineExImpl
     implements RtcEngineEx {
   RtcEngineImpl._({
@@ -361,6 +370,10 @@ class RtcEngineImpl extends rtc_engine_ex_binding.RtcEngineExImpl
   @internal
   late MethodChannel engineMethodChannel;
 
+  AsyncMemoizer? _initializeCallOnce;
+
+  _RtcEngineState __rtcEngineState = _RtcEngineState.notInitialize;
+
   static RtcEngineEx create({
     Object? sharedNativeHandle,
     IrisMethodChannel? irisMethodChannel,
@@ -394,6 +407,19 @@ class RtcEngineImpl extends rtc_engine_ex_binding.RtcEngineExImpl
         .attachVideoFrameBufferManager(irisMethodChannel.getApiEngineHandle());
   }
 
+  Future<void> _runIfNotInit(Future<void> Function() func) async {
+    __rtcEngineState = _RtcEngineState.initializing;
+    await func();
+    __rtcEngineState = _RtcEngineState.initialized;
+  }
+
+  Future<void> _disposeIfInit(Future<void> Function() func) async {
+    assert(__rtcEngineState == _RtcEngineState.initialized);
+    __rtcEngineState = _RtcEngineState.disposing;
+    await func();
+    __rtcEngineState = _RtcEngineState.disposed;
+  }
+
   @override
   Future<void> initialize(RtcEngineContext context) async {
     // The `RtcEngine` is a singleton, a new `initialize` should be called after the
@@ -404,26 +430,35 @@ class RtcEngineImpl extends rtc_engine_ex_binding.RtcEngineExImpl
       await _releasingCompleter?.future;
     }
 
-    _initializingCompleter = Completer<void>();
-    engineMethodChannel = const MethodChannel('agora_rtc_ng');
-
-    if (!kIsWeb && defaultTargetPlatform == TargetPlatform.android) {
-      await engineMethodChannel.invokeMethod('androidInit');
+    // If previous initialization still in progess, skip it.
+    if (_initializingCompleter != null &&
+        !_initializingCompleter!.isCompleted) {
+      return;
     }
 
-    List<InitilizationArgProvider> args = [
-      if (_sharedNativeHandle != null)
-        SharedNativeHandleInitilizationArgProvider(_sharedNativeHandle!)
-    ];
-    assert(() {
-      if (_mockRtcEngineProvider != null) {
-        args.add(_mockRtcEngineProvider!);
-      }
-      return true;
-    }());
+    _initializingCompleter = Completer<void>();
+    _initializeCallOnce ??= AsyncMemoizer();
+    await _initializeCallOnce!.runOnce(() async {
+      engineMethodChannel = const MethodChannel('agora_rtc_ng');
 
-    await irisMethodChannel.initilize(args);
-    await _initializeInternal(context);
+      if (!kIsWeb && defaultTargetPlatform == TargetPlatform.android) {
+        await engineMethodChannel.invokeMethod('androidInit');
+      }
+
+      List<InitilizationArgProvider> args = [
+        if (_sharedNativeHandle != null)
+          SharedNativeHandleInitilizationArgProvider(_sharedNativeHandle!)
+      ];
+      assert(() {
+        if (_mockRtcEngineProvider != null) {
+          args.add(_mockRtcEngineProvider!);
+        }
+        return true;
+      }());
+
+      await irisMethodChannel.initilize(args);
+      await _initializeInternal(context);
+    });
 
     await super.initialize(context);
 
@@ -457,6 +492,11 @@ class RtcEngineImpl extends rtc_engine_ex_binding.RtcEngineExImpl
       await _initializingCompleter?.future;
     }
 
+    // If previous release still in progess, skip it.
+    if (_releasingCompleter != null && !_releasingCompleter!.isCompleted) {
+      return;
+    }
+
     if (!_rtcEngineState.isInitialzed || _isReleased) {
       return;
     }
@@ -480,6 +520,8 @@ class RtcEngineImpl extends rtc_engine_ex_binding.RtcEngineExImpl
     _isReleased = true;
     _releasingCompleter?.complete(null);
     _releasingCompleter = null;
+    assert(!_initializeCallOnce!.hasRun);
+    _initializeCallOnce = null;
     _instance = null;
   }
 

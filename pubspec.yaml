@@ -15,9 +15,10 @@ dependencies:
     sdk: flutter
   json_annotation: ^4.4.0
   ffi: '>=1.1.2'
-  async: ^2.8.2
+  async: '>=2.8.2'
   meta: ^1.7.0
-  iris_method_channel: 2.1.0
+  iris_method_channel:
+    path: /Users/admin/codes/iris_method_channel_flutter
   js: '>=0.6.3'
 dev_dependencies:
   flutter_test:
