@@ -42,7 +42,12 @@ import 'package:agora_rtc_engine/src/impl/media_player_impl.dart'
 import 'package:agora_rtc_engine/src/impl/platform/platform_bindings_provider.dart';
 import 'package:async/async.dart' show AsyncMemoizer;
 import 'package:flutter/foundation.dart'
-    show ChangeNotifier, debugPrint, defaultTargetPlatform, kIsWeb;
+    show
+        ChangeNotifier,
+        debugPrint,
+        defaultTargetPlatform,
+        kIsWeb,
+        visibleForTesting;
 import 'package:flutter/services.dart' show MethodChannel;
 import 'package:flutter/widgets.dart' show VoidCallback, TargetPlatform;
 import 'package:iris_method_channel/iris_method_channel.dart';
@@ -320,14 +325,6 @@ class SharedNativeHandleInitilizationArgProvider
   }
 }
 
-enum _RtcEngineState {
-  notInitialize,
-  initializing,
-  initialized,
-  disposing,
-  disposed,
-}
-
 class RtcEngineImpl extends rtc_engine_ex_binding.RtcEngineExImpl
     implements RtcEngineEx {
   RtcEngineImpl._({
@@ -372,8 +369,6 @@ class RtcEngineImpl extends rtc_engine_ex_binding.RtcEngineExImpl
 
   AsyncMemoizer? _initializeCallOnce;
 
-  _RtcEngineState __rtcEngineState = _RtcEngineState.notInitialize;
-
   static RtcEngineEx create({
     Object? sharedNativeHandle,
     IrisMethodChannel? irisMethodChannel,
@@ -392,6 +387,17 @@ class RtcEngineImpl extends rtc_engine_ex_binding.RtcEngineExImpl
     return _instance!;
   }
 
+  @visibleForTesting
+  static RtcEngineEx createForTesting({
+    Object? sharedNativeHandle,
+    required IrisMethodChannel irisMethodChannel,
+  }) {
+    return RtcEngineImpl._(
+      irisMethodChannel: irisMethodChannel,
+      sharedNativeHandle: sharedNativeHandle,
+    );
+  }
+
   void _updateSharedNativeHandle(Object? sharedNativeHandle) {
     if (_sharedNativeHandle != sharedNativeHandle) {
       _sharedNativeHandle = sharedNativeHandle;
@@ -405,19 +411,6 @@ class RtcEngineImpl extends rtc_engine_ex_binding.RtcEngineExImpl
   Future<void> _initializeInternal(RtcEngineContext context) async {
     await globalVideoViewController
         .attachVideoFrameBufferManager(irisMethodChannel.getApiEngineHandle());
-  }
-
-  Future<void> _runIfNotInit(Future<void> Function() func) async {
-    __rtcEngineState = _RtcEngineState.initializing;
-    await func();
-    __rtcEngineState = _RtcEngineState.initialized;
-  }
-
-  Future<void> _disposeIfInit(Future<void> Function() func) async {
-    assert(__rtcEngineState == _RtcEngineState.initialized);
-    __rtcEngineState = _RtcEngineState.disposing;
-    await func();
-    __rtcEngineState = _RtcEngineState.disposed;
   }
 
   @override
@@ -520,7 +513,7 @@ class RtcEngineImpl extends rtc_engine_ex_binding.RtcEngineExImpl
     _isReleased = true;
     _releasingCompleter?.complete(null);
     _releasingCompleter = null;
-    assert(!_initializeCallOnce!.hasRun);
+    assert(_initializeCallOnce!.hasRun);
     _initializeCallOnce = null;
     _instance = null;
   }

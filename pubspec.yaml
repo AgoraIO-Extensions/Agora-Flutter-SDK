@@ -18,7 +18,9 @@ dependencies:
   async: '>=2.8.2'
   meta: ^1.7.0
   iris_method_channel:
-    path: /Users/admin/codes/iris_method_channel_flutter
+    git:
+      url: https://github.com/AgoraIO-Extensions/iris_method_channel_flutter.git
+      ref: littlegnal/isolate-spawn-once
   js: '>=0.6.3'
 dev_dependencies:
   flutter_test:
