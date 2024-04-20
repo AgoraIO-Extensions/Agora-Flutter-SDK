@@ -65,11 +65,11 @@ enum VideoSourceType {
   @JsonValue(10)
   videoSourceTranscoded,
 
-  /// 11: (For Windows and macOS only) The third camera.
+  /// 11: (For Android, Windows, and macOS only) The third camera.
   @JsonValue(11)
   videoSourceCameraThird,
 
-  /// 12: (For Windows and macOS only) The fourth camera.
+  /// 12: (For Android, Windows, and macOS only) The fourth camera.
   @JsonValue(12)
   videoSourceCameraFourth,
 
@@ -130,11 +130,11 @@ enum AudioRoute {
   @JsonValue(5)
   routeBluetoothDeviceHfp,
 
-  /// 7: The audio route is a USB peripheral device. (For macOS only)
+  /// 6: The audio route is a USB peripheral device. (For macOS only)
   @JsonValue(6)
   routeUsb,
 
-  /// 6: The audio route is an HDMI peripheral device. (For macOS only)
+  /// 7: The audio route is an HDMI peripheral device. (For macOS only)
   @JsonValue(7)
   routeHdmi,
 
@@ -263,7 +263,7 @@ enum MediaSourceType {
   @JsonValue(5)
   secondaryScreenSource,
 
-  /// 6. Custom video source.
+  /// 6: Custom video source.
   @JsonValue(6)
   customVideoSource,
 
@@ -899,15 +899,15 @@ class VideoFrame {
   @JsonKey(name: 'height')
   final int? height;
 
-  /// For YUV data, the line span of the Y buffer; for RGBA data, the total data length.
+  /// For YUV data, the line span of the Y buffer; for RGBA data, the total data length. When dealing with video data, it is necessary to process the offset between each line of pixel data based on this parameter, otherwise it may result in image distortion.
   @JsonKey(name: 'yStride')
   final int? yStride;
 
-  /// For YUV data, the line span of the U buffer; for RGBA data, the value is 0.
+  /// For YUV data, the line span of the U buffer; for RGBA data, the value is 0. When dealing with video data, it is necessary to process the offset between each line of pixel data based on this parameter, otherwise it may result in image distortion.
   @JsonKey(name: 'uStride')
   final int? uStride;
 
-  /// For YUV data, the line span of the V buffer; for RGBA data, the value is 0.
+  /// For YUV data, the line span of the V buffer; for RGBA data, the value is 0. When dealing with video data, it is necessary to process the offset between each line of pixel data based on this parameter, otherwise it may result in image distortion.
   @JsonKey(name: 'vStride')
   final int? vStride;
 
@@ -927,7 +927,7 @@ class VideoFrame {
   @JsonKey(name: 'rotation')
   final int? rotation;
 
-  /// The Unix timestamp (ms) when the video frame is rendered. This timestamp can be used to guide the rendering of the video frame. It is required.
+  /// The Unix timestamp (ms) when the video frame is rendered. This timestamp can be used to guide the rendering of the video frame. This parameter is required.
   @JsonKey(name: 'renderTimeMs')
   final int? renderTimeMs;
 
@@ -1147,7 +1147,7 @@ class AudioFrame {
   @JsonKey(name: 'samplesPerChannel')
   final int? samplesPerChannel;
 
-  /// The number of bytes per sample. The number of bytes per audio sample, which is usually 16-bit (2-byte).
+  /// The number of bytes per sample. For PCM, this parameter is generally set to 16 bits (2 bytes).
   @JsonKey(name: 'bytesPerSample')
   final BytesPerSample? bytesPerSample;
 
@@ -1391,9 +1391,6 @@ class VideoEncodedFrameObserver {
   /// * [imageBuffer] The encoded video image buffer.
   /// * [length] The data length of the video image.
   /// * [videoEncodedFrameInfo] For the information of the encoded video frame, see EncodedVideoFrameInfo.
-  ///
-  /// Returns
-  /// Without practical meaning.
   final void Function(int uid, Uint8List imageBuffer, int length,
       EncodedVideoFrameInfo videoEncodedFrameInfo)? onEncodedVideoFrameReceived;
 }
