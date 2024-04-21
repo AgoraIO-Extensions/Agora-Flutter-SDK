@@ -55,7 +55,7 @@ void testCases() {
         MediaRecorderFakeIrisMethodChannel(
             IrisApiEngineNativeBindingDelegateProvider());
     final RtcEngine rtcEngine =
-        RtcEngineImpl.create(irisMethodChannel: irisMethodChannel);
+        RtcEngineImpl.createForTesting(irisMethodChannel: irisMethodChannel);
 
     setUp(() {
       irisMethodChannel.reset();
@@ -121,6 +121,7 @@ void testCases() {
             const MediaRecorderConfiguration(storagePath: 'path'));
         await recorder?.stopRecording();
         await rtcEngine.destroyMediaRecorder(recorder!);
+        await rtcEngine.release();
 
         expect(
             _isCallOnce(

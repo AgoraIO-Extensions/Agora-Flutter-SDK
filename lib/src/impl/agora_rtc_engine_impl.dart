@@ -40,8 +40,14 @@ import 'package:agora_rtc_engine/src/impl/media_player_impl.dart'
     as media_player_impl;
 
 import 'package:agora_rtc_engine/src/impl/platform/platform_bindings_provider.dart';
+import 'package:async/async.dart' show AsyncMemoizer;
 import 'package:flutter/foundation.dart'
-    show ChangeNotifier, debugPrint, defaultTargetPlatform, kIsWeb;
+    show
+        ChangeNotifier,
+        debugPrint,
+        defaultTargetPlatform,
+        kIsWeb,
+        visibleForTesting;
 import 'package:flutter/services.dart' show MethodChannel;
 import 'package:flutter/widgets.dart' show VoidCallback, TargetPlatform;
 import 'package:iris_method_channel/iris_method_channel.dart';
@@ -361,6 +367,8 @@ class RtcEngineImpl extends rtc_engine_ex_binding.RtcEngineExImpl
   @internal
   late MethodChannel engineMethodChannel;
 
+  AsyncMemoizer? _initializeCallOnce;
+
   static RtcEngineEx create({
     Object? sharedNativeHandle,
     IrisMethodChannel? irisMethodChannel,
@@ -377,6 +385,17 @@ class RtcEngineImpl extends rtc_engine_ex_binding.RtcEngineExImpl
     );
 
     return _instance!;
+  }
+
+  @visibleForTesting
+  static RtcEngineEx createForTesting({
+    Object? sharedNativeHandle,
+    required IrisMethodChannel irisMethodChannel,
+  }) {
+    return RtcEngineImpl._(
+      irisMethodChannel: irisMethodChannel,
+      sharedNativeHandle: sharedNativeHandle,
+    );
   }
 
   void _updateSharedNativeHandle(Object? sharedNativeHandle) {
@@ -404,26 +423,35 @@ class RtcEngineImpl extends rtc_engine_ex_binding.RtcEngineExImpl
       await _releasingCompleter?.future;
     }
 
-    _initializingCompleter = Completer<void>();
-    engineMethodChannel = const MethodChannel('agora_rtc_ng');
-
-    if (!kIsWeb && defaultTargetPlatform == TargetPlatform.android) {
-      await engineMethodChannel.invokeMethod('androidInit');
+    // If previous initialization still in progess, skip it.
+    if (_initializingCompleter != null &&
+        !_initializingCompleter!.isCompleted) {
+      return;
     }
 
-    List<InitilizationArgProvider> args = [
-      if (_sharedNativeHandle != null)
-        SharedNativeHandleInitilizationArgProvider(_sharedNativeHandle!)
-    ];
-    assert(() {
-      if (_mockRtcEngineProvider != null) {
-        args.add(_mockRtcEngineProvider!);
-      }
-      return true;
-    }());
+    _initializingCompleter = Completer<void>();
+    _initializeCallOnce ??= AsyncMemoizer();
+    await _initializeCallOnce!.runOnce(() async {
+      engineMethodChannel = const MethodChannel('agora_rtc_ng');
 
-    await irisMethodChannel.initilize(args);
-    await _initializeInternal(context);
+      if (!kIsWeb && defaultTargetPlatform == TargetPlatform.android) {
+        await engineMethodChannel.invokeMethod('androidInit');
+      }
+
+      List<InitilizationArgProvider> args = [
+        if (_sharedNativeHandle != null)
+          SharedNativeHandleInitilizationArgProvider(_sharedNativeHandle!)
+      ];
+      assert(() {
+        if (_mockRtcEngineProvider != null) {
+          args.add(_mockRtcEngineProvider!);
+        }
+        return true;
+      }());
+
+      await irisMethodChannel.initilize(args);
+      await _initializeInternal(context);
+    });
 
     await super.initialize(context);
 
@@ -457,6 +485,11 @@ class RtcEngineImpl extends rtc_engine_ex_binding.RtcEngineExImpl
       await _initializingCompleter?.future;
     }
 
+    // If previous release still in progess, skip it.
+    if (_releasingCompleter != null && !_releasingCompleter!.isCompleted) {
+      return;
+    }
+
     if (!_rtcEngineState.isInitialzed || _isReleased) {
       return;
     }
@@ -480,6 +513,8 @@ class RtcEngineImpl extends rtc_engine_ex_binding.RtcEngineExImpl
     _isReleased = true;
     _releasingCompleter?.complete(null);
     _releasingCompleter = null;
+    assert(_initializeCallOnce!.hasRun);
+    _initializeCallOnce = null;
     _instance = null;
   }
 

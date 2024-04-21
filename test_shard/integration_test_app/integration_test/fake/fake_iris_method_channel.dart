@@ -60,6 +60,7 @@ class FakeIrisMethodChannel extends IrisMethodChannel {
   @override
   Future<InitilizationResult?> initilize(
       List<InitilizationArgProvider> args) async {
+    methodCallQueue.add(const IrisMethodCall('initilize', '{}'));
     if (_config.isFakeInitilize) {
       return null;
     }
@@ -93,6 +94,7 @@ class FakeIrisMethodChannel extends IrisMethodChannel {
 
   @override
   int getApiEngineHandle() {
+    methodCallQueue.add(const IrisMethodCall('getApiEngineHandle', '{}'));
     if (_config.isFakeGetNativeHandle) {
       return 100;
     }
@@ -101,6 +103,7 @@ class FakeIrisMethodChannel extends IrisMethodChannel {
 
   @override
   VoidCallback addHotRestartListener(HotRestartListener listener) {
+    methodCallQueue.add(const IrisMethodCall('addHotRestartListener', '{}'));
     if (_config.isFakeAddHotRestartListener) {
       return () {};
     }
@@ -110,6 +113,7 @@ class FakeIrisMethodChannel extends IrisMethodChannel {
 
   @override
   void removeHotRestartListener(HotRestartListener listener) {
+    methodCallQueue.add(const IrisMethodCall('removeHotRestartListener', '{}'));
     if (_config.isFakeRemoveHotRestartListener) {
       return;
     }
@@ -119,6 +123,7 @@ class FakeIrisMethodChannel extends IrisMethodChannel {
 
   @override
   Future<void> dispose() async {
+    methodCallQueue.add(const IrisMethodCall('dispose', '{}'));
     if (_config.isFakeDispose) {
       return;
     }
