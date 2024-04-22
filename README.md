@@ -115,6 +115,13 @@ We enable you to create an `RtcEngine` within Flutter by utilizing the native ha
 
 More detail, please check the [ProcessVideoRawData](example/lib/examples/advanced/process_video_raw_data/process_video_raw_data.dart) example for reference.
 
+### Known issues
+#### iOS not work on release mode
+
+If you experience issues with iOS not working in release mode, you may need to set the configuration below to avoid stripping symbols.
+
+Please refer to the [Flutter documentation](https://docs.flutter.dev/platform-integration/ios/c-interop#stripping-ios-symbols) for more information.
+
 ## API Reference Resources
 
 * [Flutter](https://api-ref.agora.io/en/voice-sdk/flutter/6.x/API/rtc_api_overview_ng.html)
