@@ -20,6 +20,8 @@ class _View {
           ..id = _getViewType(platformViewId)
           ..style.width = '100%'
           ..style.height = '100%' {
+    // Wait until the element is injected into the DOM,
+    // see https://github.com/flutter/flutter/issues/143922#issuecomment-1960133128
     final observer = html.IntersectionObserver((entries, observer) {
       if (_element.isConnected == true) {
         observer.unobserve(_element);
