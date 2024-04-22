@@ -335,7 +335,7 @@ enum ErrorCodeType {
   @JsonValue(119)
   errSetClientRoleNotAuthorized,
 
-  /// 120: Decryption fails. The user might have entered an incorrect password to join the channel. Check the entered password, or tell the user to try rejoining the channel.
+  /// 120: Media streams decryption fails. The user might use an incorrect password to join the channel. Check the entered password, or tell the user to try rejoining the channel.
   @JsonValue(120)
   errDecryptionFailed,
 
@@ -1882,11 +1882,11 @@ class SimulcastStreamConfig {
   /// @nodoc
   const SimulcastStreamConfig({this.dimensions, this.kBitrate, this.framerate});
 
-  /// The video dimension. See VideoDimensions. The default value is 160 × 120.
+  /// The video dimension. See VideoDimensions. The default value is 50% of the high-quality video stream.
   @JsonKey(name: 'dimensions')
   final VideoDimensions? dimensions;
 
-  /// Video receive bitrate (Kbps), represented by an instantaneous value. The default value is 65.
+  /// Video receive bitrate (Kbps), represented by an instantaneous value. This parameter does not need to be set. The SDK automatically matches the most suitable bitrate based on the video resolution and frame rate you set.
   @JsonKey(name: 'kBitrate')
   final int? kBitrate;
 
@@ -2470,15 +2470,15 @@ class VideoFormat {
   /// @nodoc
   const VideoFormat({this.width, this.height, this.fps});
 
-  /// The width (px) of the video frame.
+  /// The width (px) of the video frame. The default value is 960.
   @JsonKey(name: 'width')
   final int? width;
 
-  /// The height (px) of the video frame.
+  /// The height (px) of the video frame. The default value is 540.
   @JsonKey(name: 'height')
   final int? height;
 
-  /// The video frame rate (fps).
+  /// The video frame rate (fps). The default value is 15.
   @JsonKey(name: 'fps')
   final int? fps;
 
@@ -2716,23 +2716,23 @@ enum LocalAudioStreamReason {
   @JsonValue(5)
   localAudioStreamReasonEncodeFailure,
 
-  /// 6: (Windows and macOS only) No local audio capture device. Remind your users to check whether the microphone is connected to the device properly in the control plane of the device or if the microphone is working properly.
+  /// 6: (Windows and macOS only) No local audio capture device. Remind your users to check whether the microphone is connected to the device properly in the control panel of the device or if the microphone is working properly.
   @JsonValue(6)
   localAudioStreamReasonNoRecordingDevice,
 
-  /// 7: (Windows and macOS only) No local audio capture device. Remind your users to check whether the speaker is connected to the device properly in the control plane of the device or if the speaker is working properly.
+  /// 7: (Windows and macOS only) No local audio capture device. Remind your users to check whether the speaker is connected to the device properly in the control panel of the device or if the speaker is working properly.
   @JsonValue(7)
   localAudioStreamReasonNoPlayoutDevice,
 
-  /// 8: (Android and iOS only) The local audio capture is interrupted by a system call, Siri, or alarm clock. Remind your users to end the phone call, Siri, or alarm clock if the local audio capture is required.
+  /// 8: (Android and iOS only) The local audio capture is interrupted by a system call, smart assistants, or alarm clock. Prompt your users to end the phone call, smart assistants, or alarm clock if the local audio capture is required.
   @JsonValue(8)
   localAudioStreamReasonInterrupted,
 
-  /// 9: (Windows only) The ID of the local audio-capture device is invalid. Check the audio capture device ID.
+  /// 9: (Windows only) The ID of the local audio-capture device is invalid. Prompt the user to check the audio capture device ID.
   @JsonValue(9)
   localAudioStreamReasonRecordInvalidId,
 
-  /// 10: (Windows only) The ID of the local audio-playback device is invalid. Check the audio playback device ID.
+  /// 10: (Windows only) The ID of the local audio-playback device is invalid. Prompt the user to check the audio playback device ID.
   @JsonValue(10)
   localAudioStreamReasonPlayoutInvalidId,
 }
@@ -2794,15 +2794,15 @@ enum LocalVideoStreamReason {
   @JsonValue(1)
   localVideoStreamReasonFailure,
 
-  /// 2: No permission to use the local video capturing device. Remind the user to grant permissions and rejoin the channel. Deprecated: This enumerator is deprecated. Please use camera in the onPermissionError callback instead.
+  /// 2: No permission to use the local video capturing device. Prompt the user to grant permissions and rejoin the channel. Deprecated: This enumerator is deprecated. Please use camera in the onPermissionError callback instead.
   @JsonValue(2)
   localVideoStreamReasonDeviceNoPermission,
 
-  /// 3: The local video capturing device is in use. Remind the user to check whether another application occupies the camera.
+  /// 3: The local video capturing device is in use. Prompt the user to check if the camera is being used by another app, or try to rejoin the channel.
   @JsonValue(3)
   localVideoStreamReasonDeviceBusy,
 
-  /// 4: The local video capture fails. Remind your user to check whether the video capture device is working properly, whether the camera is occupied by another application, or try to rejoin the channel.
+  /// 4: The local video capture fails. Prompt the user to check whether the video capture device is working properly, whether the camera is used by another app, or try to rejoin the channel.
   @JsonValue(4)
   localVideoStreamReasonCaptureFailure,
 
@@ -2810,11 +2810,11 @@ enum LocalVideoStreamReason {
   @JsonValue(5)
   localVideoStreamReasonCodecNotSupport,
 
-  /// 6: (iOS only) The app is in the background. Remind the user that video capture cannot be performed normally when the app is in the background.
+  /// 6: (iOS only) The app is in the background. Prompt the user that video capture cannot be performed normally when the app is in the background.
   @JsonValue(6)
   localVideoStreamReasonCaptureInbackground,
 
-  /// 7: (iOS only) The current application window is running in Slide Over, Split View, or Picture in Picture mode, and another app is occupying the camera. Remind the user that the application cannot capture video properly when the app is running in Slide Over, Split View, or Picture in Picture mode and another app is occupying the camera.
+  /// 7: (iOS only) The current app window is running in Slide Over, Split View, or Picture in Picture mode, and another app is occupying the camera. Prompt the user that the app cannot capture video properly when it is running in Slide Over, Split View, or Picture in Picture mode and another app is occupying the camera.
   @JsonValue(7)
   localVideoStreamReasonCaptureMultipleForegroundApps,
 
@@ -2834,12 +2834,12 @@ enum LocalVideoStreamReason {
   @JsonValue(101)
   localVideoStreamReasonDeviceSystemPressure,
 
-  /// 11: (macOS and Windows only) The shared windows is minimized when you call the startScreenCaptureByWindowId method to share a window. The SDK cannot share a minimized window. You can cancel the minimization of this window at the application layer, for example by maximizing this window.
+  /// 11: (macOS and Windows only) The shared window is minimized when you call the startScreenCaptureByWindowId method to share a window. The SDK cannot share a minimized window. Please prompt the user to unminimize the shared window.
   @JsonValue(11)
   localVideoStreamReasonScreenCaptureWindowMinimized,
 
   /// 12: (macOS and Windows only) The error code indicates that a window shared by the window ID has been closed or a full-screen window shared by the window ID has exited full-screen mode. After exiting full-screen mode, remote users cannot see the shared window. To prevent remote users from seeing a black screen, Agora recommends that you immediately stop screen sharing. Common scenarios reporting this error code:
-  ///  When the local user closes the shared window, the SDK reports this error code.
+  ///  The local user closes the shared window.
   ///  The local user shows some slides in full-screen mode first, and then shares the windows of the slides. After the user exits full-screen mode, the SDK reports this error code.
   ///  The local user watches a web video or reads a web document in full-screen mode first, and then shares the window of the web video or document. After the user exits full-screen mode, the SDK reports this error code.
   @JsonValue(12)
@@ -2873,7 +2873,7 @@ enum LocalVideoStreamReason {
   @JsonValue(26)
   localVideoStreamReasonScreenCaptureWindowRecoverFromHidden,
 
-  /// 27: (Windows only) The window for screen capture has been restored from minimized state.
+  /// 27: (macOS and Windows only) The window for screen capture has been restored from the minimized state.
   @JsonValue(27)
   localVideoStreamReasonScreenCaptureWindowRecoverFromMinimized,
 
@@ -4563,7 +4563,7 @@ class VideoCanvas {
   @JsonKey(name: 'subviewUid')
   final int? subviewUid;
 
-  /// The video display window.
+  /// The video display window. In one VideoCanvas, you can only choose to set either view or surfaceTexture. If both are set, only the settings in view take effect.
   @JsonKey(name: 'view')
   final int? view;
 
@@ -4597,8 +4597,7 @@ class VideoCanvas {
   @JsonKey(name: 'cropArea')
   final Rectangle? cropArea;
 
-  /// (Optional) Whether the receiver enables alpha mask rendering: true : The receiver enables alpha mask rendering. false : (default) The receiver disables alpha mask rendering. Alpha mask rendering can create images with transparent effects and extract portraits from videos. When used in combination with other methods, you can implement effects such as portrait-in-picture and watermarking.
-  ///  This property applies to macOS only.
+  /// (Optional) Whether the receiver enables alpha mask rendering: true : The receiver enables alpha mask rendering. false : (Default) The receiver disables alpha mask rendering. Alpha mask rendering can create images with transparent effects and extract portraits from videos. When used in combination with other methods, you can implement effects such as portrait-in-picture and watermarking.
   ///  The receiver can render alpha channel information only when the sender enables alpha transmission.
   ///  To enable alpha transmission,.
   @JsonKey(name: 'enableAlphaMask')
@@ -4963,7 +4962,7 @@ class SegmentationProperty {
   @JsonKey(name: 'modelType')
   final SegModelType? modelType;
 
-  /// The range of accuracy for identifying green colors (different shades of green) in the view. The value range is [0,1], and the default value is 0.5. The larger the value, the wider the range of identifiable shades of green. When the value of this parameter is too large, the edge of the portrait and the green color in the portrait range are also detected. Agora recommends that you dynamically adjust the value of this parameter according to the actual effect. This parameter only takes effect when modelType is set to segModelGreen.
+  /// The accuracy range for recognizing background colors in the image. The value range is [0,1], and the default value is 0.5. The larger the value, the wider the range of identifiable shades of pure color. When the value of this parameter is too large, the edge of the portrait and the pure color in the portrait range are also detected. Agora recommends that you dynamically adjust the value of this parameter according to the actual effect. This parameter only takes effect when modelType is set to segModelGreen.
   @JsonKey(name: 'greenCapacity')
   final double? greenCapacity;
 
@@ -6045,11 +6044,11 @@ enum EncryptionErrorType {
   @JsonValue(0)
   encryptionErrorInternalFailure,
 
-  /// 1: Decryption errors. Ensure that the receiver and the sender use the same encryption mode and key.
+  /// 1: Media stream decryption error. Ensure that the receiver and the sender use the same encryption mode and key.
   @JsonValue(1)
   encryptionErrorDecryptionFailure,
 
-  /// 2: Encryption errors.
+  /// 2: Media stream encryption error.
   @JsonValue(2)
   encryptionErrorEncryptionFailure,
 }
@@ -6271,18 +6270,18 @@ class UserInfo {
   Map<String, dynamic> toJson() => _$UserInfoToJson(this);
 }
 
-/// The audio filter of in-ear monitoring.
+/// The audio filter types of in-ear monitoring.
 @JsonEnum(alwaysCreate: true)
 enum EarMonitoringFilterType {
-  /// 1<<0: Do not add an audio filter to the in-ear monitor.
+  /// 1<<0: No audio filter added to in-ear monitoring.
   @JsonValue((1 << 0))
   earMonitoringFilterNone,
 
-  /// 1<<1: Add an audio filter to the in-ear monitor. If you implement functions such as voice beautifier and audio effect, users can hear the voice after adding these effects.
+  /// 1<<1: Add vocal effects audio filter to in-ear monitoring. If you implement functions such as voice beautifier and audio effect, users can hear the voice after adding these effects.
   @JsonValue((1 << 1))
   earMonitoringFilterBuiltInAudioFilters,
 
-  /// 1<<2: Enable noise suppression to the in-ear monitor.
+  /// 1<<2: Add noise suppression audio filter to in-ear monitoring.
   @JsonValue((1 << 2))
   earMonitoringFilterNoiseSuppression,
 }
