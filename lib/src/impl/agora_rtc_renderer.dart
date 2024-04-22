@@ -81,24 +81,24 @@ mixin RtcRenderMixin<T extends StatefulWidget> on State<T> {
     // `kIsWeb` check needs put first, since `defaultTargetPlatform == TargetPlatform.android` or
     // `defaultTargetPlatform == TargetPlatform.iOS` is true in mobile web.
     if (kIsWeb) {
-      // return HtmlElementView(
-      //   viewType: viewType,
-      //   onPlatformViewCreated: _onPlatformViewCreated(
-      //     viewType,
-      //     onPlatformViewCreated,
-      //   ),
-      // );
-      return HtmlElementView.fromTagName(
-  tagName: 'div',
-  onElementCreated: (element) {
-    // (element as html.DivElement)
-    //   ..id = 'myOtherDivId'
-    //   ..style.width = '100px'
-    //   ..style.height = '100px'
-    //   ..style.backgroundColor = 'red';
-    print('HtmlElementView.fromTagName');
-  },
-);
+      return HtmlElementView(
+        viewType: viewType,
+        onPlatformViewCreated: _onPlatformViewCreated(
+          viewType,
+          onPlatformViewCreated,
+        ),
+      );
+//       return HtmlElementView.fromTagName(
+//   tagName: 'div',
+//   onElementCreated: (element) {
+//     // (element as html.DivElement)
+//     //   ..id = 'myOtherDivId'
+//     //   ..style.width = '100px'
+//     //   ..style.height = '100px'
+//     //   ..style.backgroundColor = 'red';
+//     print('HtmlElementView.fromTagName');
+//   },
+// );
     }
 
     if (defaultTargetPlatform == TargetPlatform.android) {
