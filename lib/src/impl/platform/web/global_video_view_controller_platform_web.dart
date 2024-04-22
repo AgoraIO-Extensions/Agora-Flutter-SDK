@@ -26,8 +26,12 @@ class _View {
     //     ..style.height = '100%';
 
     final observer = html.IntersectionObserver((entries, observer) {
-      observer.unobserve(_div);
-      _viewCompleter.complete(_div);
+      print(
+          '_platformViewId: ${_platformViewId}, entries: ${entries.toString()}, _div.isConnected: ${_div.isConnected}');
+      if (_div.isConnected == true) {
+        observer.unobserve(_div);
+        _viewCompleter.complete(_div);
+      }
     });
     observer.observe(_div);
   }
@@ -57,7 +61,7 @@ class GlobalVideoViewControllerWeb extends GlobalVideoViewControllerPlatfrom {
       //   ..style.width = '100%'
       //   ..style.height = '100%';
 
-        final view = _View(viewId);
+      final view = _View(viewId);
 
       // _viewMap[viewId] = div;
       _viewMap[viewId] = view;
@@ -92,6 +96,7 @@ class GlobalVideoViewControllerWeb extends GlobalVideoViewControllerPlatfrom {
 
     print('setupVideoView');
     final divId = await div.getHandle();
+    print('divId: $divId');
 
     // await super.setupVideoView(div.id, videoCanvas, connection: connection);
     await super.setupVideoView(divId, videoCanvas, connection: connection);
