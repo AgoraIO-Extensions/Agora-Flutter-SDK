@@ -48,7 +48,10 @@ class GlobalVideoViewControllerWeb extends GlobalVideoViewControllerPlatfrom {
     // The `viewHandle` is the platform view id on web
     final viewId = viewHandle as int;
 
-    final div = _viewMap[viewId]!;
+    // final div = _viewMap[viewId]!;
+    // ignore: undefined_prefixed_name
+     final div = ui.platformViewRegistry.getViewById(viewId)
+        as DivElement;
 
     await super.setupVideoView(div.id, videoCanvas, connection: connection);
   }
