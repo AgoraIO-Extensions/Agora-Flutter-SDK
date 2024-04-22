@@ -31,6 +31,7 @@ class GlobalVideoViewControllerWeb extends GlobalVideoViewControllerPlatfrom {
         ..style.height = '100%';
 
       _viewMap[viewId] = div;
+      print('registerViewFactory');
 
       return div;
     });
@@ -52,6 +53,8 @@ class GlobalVideoViewControllerWeb extends GlobalVideoViewControllerPlatfrom {
     // ignore: undefined_prefixed_name
      final div = ui.platformViewRegistry.getViewById(viewId)
         as DivElement;
+
+        print('setupVideoView');
 
     await super.setupVideoView(div.id, videoCanvas, connection: connection);
   }
