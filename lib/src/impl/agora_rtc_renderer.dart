@@ -91,11 +91,12 @@ mixin RtcRenderMixin<T extends StatefulWidget> on State<T> {
       return HtmlElementView.fromTagName(
   tagName: 'div',
   onElementCreated: (element) {
-    (element as html.DivElement)
-      ..id = 'myOtherDivId'
-      ..style.width = '100px'
-      ..style.height = '100px'
-      ..style.backgroundColor = 'red';
+    // (element as html.DivElement)
+    //   ..id = 'myOtherDivId'
+    //   ..style.width = '100px'
+    //   ..style.height = '100px'
+    //   ..style.backgroundColor = 'red';
+    print('HtmlElementView.fromTagName');
   },
 );
     }
