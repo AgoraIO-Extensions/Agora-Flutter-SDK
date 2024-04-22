@@ -3,6 +3,7 @@
 #include <functional>
 
 #include "AgoraMediaBase.h"
+#include <chrono>
 
 using namespace flutter;
 
@@ -12,7 +13,8 @@ TextureRender::TextureRender(flutter::BinaryMessenger *messenger,
     : registrar_(registrar),
       iris_rtc_rendering_(iris_rtc_rendering),
       delegate_id_(agora::iris::INVALID_DELEGATE_ID),
-      is_dirty_(false)
+      is_dirty_(false),
+      last_render_time_ms_(0)
 {
     // Create flutter desktop pixelbuffer texture;
     texture_ =
@@ -46,6 +48,23 @@ void TextureRender::OnVideoFrameReceived(const void *videoFrame,
 
     if (!is_dirty_)
     {
+        if (last_render_time_ms_ == 0)
+        {
+            last_render_time_ms_ = std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now().time_since_epoch()).count();
+        }
+        else
+        {
+            uint64_t current_time_ms = std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now().time_since_epoch()).count();
+            int fps = 15;
+            int interval = 1000 / fps;
+            if (current_time_ms - last_render_time_ms_ < interval)
+            {
+                // std::cout << "skip frame" << std::endl;
+                return;
+            }
+            last_render_time_ms_ = current_time_ms;
+        }
+
         const agora::media::base::VideoFrame *video_frame = static_cast<const agora::media::base::VideoFrame *>(videoFrame);
 
         const uint32_t bytes_per_pixel = 4;
