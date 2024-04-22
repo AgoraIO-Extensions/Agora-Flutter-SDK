@@ -88,17 +88,6 @@ mixin RtcRenderMixin<T extends StatefulWidget> on State<T> {
           onPlatformViewCreated,
         ),
       );
-//       return HtmlElementView.fromTagName(
-//   tagName: 'div',
-//   onElementCreated: (element) {
-//     // (element as html.DivElement)
-//     //   ..id = 'myOtherDivId'
-//     //   ..style.width = '100px'
-//     //   ..style.height = '100px'
-//     //   ..style.backgroundColor = 'red';
-//     print('HtmlElementView.fromTagName');
-//   },
-// );
     }
 
     if (defaultTargetPlatform == TargetPlatform.android) {

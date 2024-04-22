@@ -15,38 +15,32 @@ String _getViewType(int id) {
 }
 
 class _View {
-  _View(this._platformViewId)
-      : _div = html.DivElement()
-          ..id = _getViewType(_platformViewId)
+  _View(int platformViewId)
+      : _element = html.DivElement()
+          ..id = _getViewType(platformViewId)
           ..style.width = '100%'
           ..style.height = '100%' {
-    // this._div = html.DivElement()
-    //     ..id = _getViewType(platformViewId)
-    //     ..style.width = '100%'
-    //     ..style.height = '100%';
-
     final observer = html.IntersectionObserver((entries, observer) {
-      print(
-          '_platformViewId: ${_platformViewId}, entries: ${entries.toString()}, _div.isConnected: ${_div.isConnected}');
-      if (_div.isConnected == true) {
-        observer.unobserve(_div);
-        _viewCompleter.complete(_div);
+      if (_element.isConnected == true) {
+        observer.unobserve(_element);
+        _viewCompleter.complete(_element);
       }
     });
-    observer.observe(_div);
+    observer.observe(_element);
   }
-  final int _platformViewId;
-  final html.DivElement _div;
+
+  final html.HtmlElement _element;
+  html.HtmlElement get element => _element;
+
   final _viewCompleter = Completer<html.HtmlElement>();
-  Future<String> getHandle() async {
+
+  Future<String> waitAndGetId() async {
     final div = await _viewCompleter.future;
     return div.id;
   }
 }
 
 // TODO(littlegnal): Need handle remove view logic on web
-// final Map<int, html.HtmlElement> _viewMap = {};
-
 final Map<int, _View> _viewMap = {};
 
 class GlobalVideoViewControllerWeb extends GlobalVideoViewControllerPlatfrom {
@@ -56,23 +50,9 @@ class GlobalVideoViewControllerWeb extends GlobalVideoViewControllerPlatfrom {
     // ignore: undefined_prefixed_name
     ui.platformViewRegistry.registerViewFactory(_platformRendererViewType,
         (int viewId) {
-      // final div = html.DivElement()
-      //   ..id = _getViewType(viewId)
-      //   ..style.width = '100%'
-      //   ..style.height = '100%';
-
       final view = _View(viewId);
-
-      // _viewMap[viewId] = div;
       _viewMap[viewId] = view;
-      print('registerViewFactory');
-
-      // final observer = html.IntersectionObserver((entries, observer) {
-      //   observer.unobserve(div);
-      // });
-      // observer.observe(div);
-
-      return view._div;
+      return view.element;
     });
   }
 
@@ -89,16 +69,8 @@ class GlobalVideoViewControllerWeb extends GlobalVideoViewControllerPlatfrom {
     final viewId = viewHandle as int;
 
     final div = _viewMap[viewId]!;
-    // ignore: undefined_prefixed_name
-    // final div = ui.platformViewRegistry.getViewById(viewId) as html.DivElement;
+    final divId = await div.waitAndGetId();
 
-    // context.callMethod();
-
-    print('setupVideoView');
-    final divId = await div.getHandle();
-    print('divId: $divId');
-
-    // await super.setupVideoView(div.id, videoCanvas, connection: connection);
     await super.setupVideoView(divId, videoCanvas, connection: connection);
   }
 }
