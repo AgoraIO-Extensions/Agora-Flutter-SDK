@@ -1,6 +1,5 @@
 import 'dart:async';
-// ignore: avoid_web_libraries_in_flutter
-import 'dart:html';
+import 'dart:html' as html;
 import 'dart:ui' as ui;
 
 import 'package:agora_rtc_engine/agora_rtc_engine.dart';
@@ -15,8 +14,36 @@ String _getViewType(int id) {
   return 'agora_rtc_engine/${_platformRendererViewType}_$id';
 }
 
+class _View {
+  _View(int platformViewId)
+      : _element = html.DivElement()
+          ..id = _getViewType(platformViewId)
+          ..style.width = '100%'
+          ..style.height = '100%' {
+    // Wait until the element is injected into the DOM,
+    // see https://github.com/flutter/flutter/issues/143922#issuecomment-1960133128
+    final observer = html.IntersectionObserver((entries, observer) {
+      if (_element.isConnected == true) {
+        observer.unobserve(_element);
+        _viewCompleter.complete(_element);
+      }
+    });
+    observer.observe(_element);
+  }
+
+  final html.HtmlElement _element;
+  html.HtmlElement get element => _element;
+
+  final _viewCompleter = Completer<html.HtmlElement>();
+
+  Future<String> waitAndGetId() async {
+    final div = await _viewCompleter.future;
+    return div.id;
+  }
+}
+
 // TODO(littlegnal): Need handle remove view logic on web
-final Map<int, HtmlElement> _viewMap = {};
+final Map<int, _View> _viewMap = {};
 
 class GlobalVideoViewControllerWeb extends GlobalVideoViewControllerPlatfrom {
   GlobalVideoViewControllerWeb(
@@ -25,14 +52,9 @@ class GlobalVideoViewControllerWeb extends GlobalVideoViewControllerPlatfrom {
     // ignore: undefined_prefixed_name
     ui.platformViewRegistry.registerViewFactory(_platformRendererViewType,
         (int viewId) {
-      final div = DivElement()
-        ..id = _getViewType(viewId)
-        ..style.width = '100%'
-        ..style.height = '100%';
-
-      _viewMap[viewId] = div;
-
-      return div;
+      final view = _View(viewId);
+      _viewMap[viewId] = view;
+      return view.element;
     });
   }
 
@@ -49,7 +71,8 @@ class GlobalVideoViewControllerWeb extends GlobalVideoViewControllerPlatfrom {
     final viewId = viewHandle as int;
 
     final div = _viewMap[viewId]!;
+    final divId = await div.waitAndGetId();
 
-    await super.setupVideoView(div.id, videoCanvas, connection: connection);
+    await super.setupVideoView(divId, videoCanvas, connection: connection);
   }
 }
