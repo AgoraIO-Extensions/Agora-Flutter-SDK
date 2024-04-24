@@ -527,9 +527,7 @@ jobs:
     if: ${{ !contains(github.event.pull_request.labels.*.name, 'ci:skip') }}
     strategy:
       matrix:
-        # TODO(littlegnal): Temporily pin the Flutter SDK version to 3.16, since the rendering on web not work correct after 3.16, 
-        # see https://github.com/AgoraIO-Extensions/Agora-Flutter-SDK/actions/runs/7958003510/job/21721962323?pr=1572
-        version: ['3.16']
+        version: ['3.x']
     runs-on: ubuntu-latest
     timeout-minutes: 60
     env:
