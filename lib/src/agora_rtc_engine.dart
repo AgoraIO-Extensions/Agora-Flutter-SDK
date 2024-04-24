@@ -565,7 +565,7 @@ class RemoteAudioStats {
   @JsonKey(name: 'rxAudioBytes')
   final int? rxAudioBytes;
 
-  /// @nodoc
+  /// End-to-end audio delay (in milliseconds), which refers to the time from when the audio is captured by the remote user to when it is played by the local user.
   @JsonKey(name: 'e2eDelay')
   final int? e2eDelay;
 
@@ -946,11 +946,11 @@ class PublisherConfiguration {
 /// The camera direction.
 @JsonEnum(alwaysCreate: true)
 enum CameraDirection {
-  /// The rear camera.
+  /// 0: The rear camera.
   @JsonValue(0)
   cameraRear,
 
-  /// The front camera.
+  /// 1: (Default) The front camera.
   @JsonValue(1)
   cameraFront,
 }
@@ -1009,27 +1009,36 @@ class CameraCapturerConfiguration {
       this.followEncodeDimensionRatio,
       this.format});
 
-  /// This parameter applies to Android and iOS only. The camera direction. See CameraDirection.
+  /// (Optional) The camera direction. See CameraDirection. This parameter is for Android and iOS only.
   @JsonKey(name: 'cameraDirection')
   final CameraDirection? cameraDirection;
 
-  /// @nodoc
+  /// (Optional) The camera focal length type. See CameraFocalLengthType.
+  ///  This parameter is for Android and iOS only.
+  ///  To set the focal length type of the camera, it is only supported to specify the camera through cameraDirection, and not supported to specify it through cameraId.
+  ///  For iOS devices equipped with multi-lens rear cameras, such as those featuring dual-camera (wide-angle and ultra-wide-angle) or triple-camera (wide-angle, ultra-wide-angle, and telephoto), you can use one of the following methods to capture video with an ultra-wide-angle perspective:
+  ///  Method one: Set this parameter to cameraFocalLengthUltraWide (2) (ultra-wide lens).
+  ///  Method two: Set this parameter to cameraFocalLengthDefault (0) (standard lens), then call setCameraZoomFactor to set the camera's zoom factor to a value less than 1.0, with the minimum setting being 0.5. The difference is that the size of the ultra-wide angle in method one is not adjustable, whereas method two supports adjusting the camera's zoom factor freely.
   @JsonKey(name: 'cameraFocalLengthType')
   final CameraFocalLengthType? cameraFocalLengthType;
 
-  /// This method applies to Windows only. The ID of the camera. The maximum length is MaxDeviceIdLengthType.
+  /// The camera ID. The maximum length is MaxDeviceIdLengthType. This parameter is for Windows and macOS only.
   @JsonKey(name: 'deviceId')
   final String? deviceId;
 
-  /// @nodoc
+  /// (Optional) The camera ID. The default value is the camera ID of the front camera. You can get the camera ID through the Android native system API, see and for details.
+  ///  This parameter is for Android only.
+  ///  This parameter and cameraDirection are mutually exclusive in specifying the camera; you can choose one based on your needs. The differences are as follows:
+  ///  Specifying the camera via cameraDirection is more straightforward. You only need to indicate the camera direction (front or rear), without specifying a specific camera ID; the SDK will retrieve and confirm the actual camera ID through Android native system APIs.
+  ///  Specifying via cameraId allows for more precise identification of a particular camera. For devices with multiple cameras, where cameraDirection cannot recognize or access all available cameras, it is recommended to use cameraId to specify the desired camera ID directly.
   @JsonKey(name: 'cameraId')
   final String? cameraId;
 
-  /// Whether to follow the video aspect ratio set in setVideoEncoderConfiguration : true : (Default) Follow the set video aspect ratio. The SDK crops the captured video according to the set video aspect ratio and synchronously changes the local preview screen and the video frame in onCaptureVideoFrame and onPreEncodeVideoFrame. false : Do not follow the system default audio playback device. The SDK does not change the aspect ratio of the captured video frame.
+  /// (Optional) Whether to follow the video aspect ratio set in setVideoEncoderConfiguration : true : (Default) Follow the set video aspect ratio. The SDK crops the captured video according to the set video aspect ratio and synchronously changes the local preview screen and the video frame in onCaptureVideoFrame and onPreEncodeVideoFrame. false : Do not follow the system default audio playback device. The SDK does not change the aspect ratio of the captured video frame.
   @JsonKey(name: 'followEncodeDimensionRatio')
   final bool? followEncodeDimensionRatio;
 
-  /// The format of the video frame. See VideoFormat.
+  /// (Optional) The format of the video frame. See VideoFormat.
   @JsonKey(name: 'format')
   final VideoFormat? format;
 
@@ -1341,11 +1350,11 @@ class ChannelMediaOptions {
   @JsonKey(name: 'publishSecondaryCameraTrack')
   final bool? publishSecondaryCameraTrack;
 
-  /// Whether to publish the video captured by the third camera: true : Publish the video captured by the third camera. false : Do not publish the video captured by the third camera. This is for Windows and macOS only.
+  /// Whether to publish the video captured by the third camera: true : Publish the video captured by the third camera. false : Do not publish the video captured by the third camera. This parameter is for Android, Windows and macOS only.
   @JsonKey(name: 'publishThirdCameraTrack')
   final bool? publishThirdCameraTrack;
 
-  /// Whether to publish the video captured by the fourth camera: true : Publish the video captured by the fourth camera. false : Do not publish the video captured by the fourth camera. This is for Windows and macOS only.
+  /// Whether to publish the video captured by the fourth camera: true : Publish the video captured by the fourth camera. false : Do not publish the video captured by the fourth camera. This parameter is for Android, Windows and macOS only.
   @JsonKey(name: 'publishFourthCameraTrack')
   final bool? publishFourthCameraTrack;
 
@@ -1353,11 +1362,11 @@ class ChannelMediaOptions {
   @JsonKey(name: 'publishMicrophoneTrack')
   final bool? publishMicrophoneTrack;
 
-  /// Whether to publish the video captured from the screen: true : Publish the video captured from the screen. false : Do not publish the video captured from the screen. This parameter applies to Android and iOS only.
+  /// Whether to publish the video captured from the screen: true : Publish the video captured from the screen. false : Do not publish the video captured from the screen. This parameter is for Android and iOS only.
   @JsonKey(name: 'publishScreenCaptureVideo')
   final bool? publishScreenCaptureVideo;
 
-  /// Whether to publish the audio captured from the screen: true : Publish the audio captured from the screen. false : Publish the audio captured from the screen. This parameter applies to Android and iOS only.
+  /// Whether to publish the audio captured from the screen: true : Publish the audio captured from the screen. false : Publish the audio captured from the screen. This parameter is for Android and iOS only.
   @JsonKey(name: 'publishScreenCaptureAudio')
   final bool? publishScreenCaptureAudio;
 
@@ -1445,7 +1454,7 @@ class ChannelMediaOptions {
   @JsonKey(name: 'channelProfile')
   final ChannelProfileType? channelProfile;
 
-  /// @nodoc
+  /// Delay (in milliseconds) for sending audio frames. You can use this parameter to set the delay of the audio frames that need to be sent, to ensure audio and video synchronization. To switch off the delay, set the value to 0.
   @JsonKey(name: 'audioDelayMs')
   final int? audioDelayMs;
 
@@ -1793,7 +1802,7 @@ class RtcEngineEventHandler {
   /// * [position] The playback progress (ms).
   ///
   /// Returns
-  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown; and you need to catch the exception and handle it accordingly.
+  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown. You need to catch the exception and handle it accordingly.
   final void Function(int position)? onAudioMixingPositionChanged;
 
   /// Occurs when the playback of the local music file finishes.
@@ -1903,11 +1912,7 @@ class RtcEngineEventHandler {
 
   /// Occurs when the local video stream state changes.
   ///
-  /// When the state of the local video stream changes (including the state of the video capture and encoding), the SDK triggers this callback to report the current state. This callback indicates the state of the local video stream, including camera capturing and video encoding, and allows you to troubleshoot issues when exceptions occur. The SDK triggers the onLocalVideoStateChanged callback with the state code of localVideoStreamStateFailed and error code of localVideoStreamReasonCaptureFailure in the following situations:
-  ///  The app switches to the background, and the system gets the camera resource.
-  ///  For Android 9 and later versions, after an app is in the background for a period, the system automatically revokes camera permissions.
-  ///  For Android 6 and later versions, if the camera is held by a third-party app for a certain duration and then released, the SDK triggers this callback and reports the onLocalVideoStateChanged (localVideoStreamStateCapturing, localVideoStreamReasonOk) callback.
-  ///  The camera starts normally, but does not output video frames for four consecutive seconds. When the camera outputs the captured video frames, if the video frames are the same for 15 consecutive frames, the SDK triggers the onLocalVideoStateChanged callback with the state code of localVideoStreamStateCapturing and error code of localVideoStreamReasonCaptureFailure. Note that the video frame duplication detection is only available for video frames with a resolution greater than 200 × 200, a frame rate greater than or equal to 10 fps, and a bitrate less than 20 Kbps. For some device models, the SDK does not trigger this callback when the state of the local video changes while the local video capturing device is in use, so you have to make your own timeout judgment.
+  /// When the status of the local video changes, the SDK triggers this callback to report the current local video state and the reason for the state change.
   ///
   /// * [source] The type of the video source. See VideoSourceType.
   /// * [state] The state of the local video, see LocalVideoStreamState.
@@ -2623,7 +2628,7 @@ abstract class VideoDeviceManager {
   /// * [deviceIdUTF8] The device ID. You can get the device ID by calling enumerateVideoDevices. The maximum length is MaxDeviceIdLengthType.
   ///
   /// Returns
-  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown; and you need to catch the exception and handle it accordingly.
+  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown. You need to catch the exception and handle it accordingly.
   Future<void> setDevice(String deviceIdUTF8);
 
   /// Retrieves the current video capture device.
@@ -2641,7 +2646,7 @@ abstract class VideoDeviceManager {
   /// * [deviceIdUTF8] The ID of the video capture device.
   ///
   /// Returns
-  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown; and you need to catch the exception and handle it accordingly.
+  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown. You need to catch the exception and handle it accordingly.
   ///  ≤ 0: Failure.
   Future<int> numberOfCapabilities(String deviceIdUTF8);
 
@@ -3080,7 +3085,7 @@ abstract class RtcEngine {
   /// * [context] Configurations for the RtcEngine instance. See RtcEngineContext.
   ///
   /// Returns
-  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown; and you need to catch the exception and handle it accordingly.
+  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown. You need to catch the exception and handle it accordingly.
   ///  < 0: Failure.
   ///  -1: A general error occurs (no specified reason).
   ///  -2: The parameter is invalid.
@@ -3141,7 +3146,7 @@ abstract class RtcEngine {
   /// * [uid] The user ID. This parameter is used to identify the user in the channel for real-time audio and video interaction. You need to set and manage user IDs yourself, and ensure that each user ID in the same channel is unique. This parameter is a 32-bit unsigned integer. The value range is 1 to 2 32 -1. If the user ID is not assigned (or set to 0), the SDK assigns a random user ID and returns it in the onJoinChannelSuccess callback. Your application must record and maintain the returned user ID, because the SDK does not do so.
   ///
   /// Returns
-  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown; and you need to catch the exception and handle it accordingly.
+  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown. You need to catch the exception and handle it accordingly.
   ///  < 0: Failure.
   ///  -7: The RtcEngine object has not been initialized. You need to initialize the RtcEngine object before calling this method.
   ///  -102: The channel name is invalid. You need to pass in a valid channel name and join the channel again.
@@ -3161,7 +3166,7 @@ abstract class RtcEngine {
   /// * [token] The new token.
   ///
   /// Returns
-  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown; and you need to catch the exception and handle it accordingly.
+  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown. You need to catch the exception and handle it accordingly.
   Future<void> updatePreloadChannelToken(String token);
 
   /// Joins a channel with media options.
@@ -3184,7 +3189,7 @@ abstract class RtcEngine {
   /// * [options] The channel media options. See ChannelMediaOptions.
   ///
   /// Returns
-  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown; and you need to catch the exception and handle it accordingly.
+  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown. You need to catch the exception and handle it accordingly.
   ///  < 0: Failure.
   ///  -2: The parameter is invalid. For example, the token is invalid, the uid parameter is not set to an integer, or the value of a member in ChannelMediaOptions is invalid. You need to pass in a valid parameter and join the channel again.
   ///  -3: Failes to initialize the RtcEngine object. You need to reinitialize the RtcEngine object.
@@ -3204,7 +3209,7 @@ abstract class RtcEngine {
   /// * [options] The channel media options. See ChannelMediaOptions.
   ///
   /// Returns
-  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown; and you need to catch the exception and handle it accordingly.
+  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown. You need to catch the exception and handle it accordingly.
   Future<void> updateChannelMediaOptions(ChannelMediaOptions options);
 
   /// Sets channel options and leaves the channel.
@@ -3215,7 +3220,7 @@ abstract class RtcEngine {
   /// * [options] The options for leaving the channel. See LeaveChannelOptions.
   ///
   /// Returns
-  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown; and you need to catch the exception and handle it accordingly.
+  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown. You need to catch the exception and handle it accordingly.
   Future<void> leaveChannel({LeaveChannelOptions? options});
 
   /// Renews the token.
@@ -3225,7 +3230,7 @@ abstract class RtcEngine {
   /// * [token] The new token.
   ///
   /// Returns
-  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown; and you need to catch the exception and handle it accordingly.
+  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown. You need to catch the exception and handle it accordingly.
   Future<void> renewToken(String token);
 
   /// Sets the channel profile.
@@ -3237,7 +3242,7 @@ abstract class RtcEngine {
   /// * [profile] The channel profile. See ChannelProfileType.
   ///
   /// Returns
-  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown; and you need to catch the exception and handle it accordingly.
+  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown. You need to catch the exception and handle it accordingly.
   ///  < 0: Failure.
   ///  -2: The parameter is invalid.
   ///  -7: The SDK is not initialized.
@@ -3254,7 +3259,7 @@ abstract class RtcEngine {
   /// * [options] The detailed options of a user, including the user level. See ClientRoleOptions.
   ///
   /// Returns
-  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown; and you need to catch the exception and handle it accordingly.
+  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown. You need to catch the exception and handle it accordingly.
   Future<void> setClientRole(
       {required ClientRoleType role, ClientRoleOptions? options});
 
@@ -3275,7 +3280,7 @@ abstract class RtcEngine {
   /// Stops the audio call test.
   ///
   /// Returns
-  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown; and you need to catch the exception and handle it accordingly.
+  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown. You need to catch the exception and handle it accordingly.
   Future<void> stopEchoTest();
 
   /// Enables or disables multi-camera capture.
@@ -3298,19 +3303,16 @@ abstract class RtcEngine {
   /// * [config] Capture configuration for the second camera. See CameraCapturerConfiguration.
   ///
   /// Returns
-  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown; and you need to catch the exception and handle it accordingly.
+  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown. You need to catch the exception and handle it accordingly.
   Future<void> enableMultiCamera(
       {required bool enabled, required CameraCapturerConfiguration config});
 
   /// Enables the video module.
   ///
-  /// Call this method either before joining a channel or during a call. If this method is called before joining a channel, the call starts in the video mode; if called during a call, the audio call switches to a video call. Call disableVideo to disable the video mode. A successful call of this method triggers the onRemoteVideoStateChanged callback on the remote client.
-  ///  This method enables the internal engine and is valid after leaving the channel.
-  ///  Calling this method will reset the entire engine, resulting in a slow response time. Instead of callling this method, you can independently control a specific video module based on your actual needs using the following methods: enableLocalVideo : Whether to enable the camera to create the local video stream. muteLocalVideoStream : Whether to publish the local video stream. muteRemoteVideoStream : Whether to subscribe to and play the remote video stream. muteAllRemoteVideoStreams : Whether to subscribe to and play all remote video streams.
-  ///  A successful call of this method resets enableLocalVideo, muteRemoteVideoStream, and muteAllRemoteVideoStreams. Proceed it with caution.
+  /// The video module is disabled by default, call this method to enable it. If you need to disable the video module later, you need to call disableVideo.
   ///
   /// Returns
-  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown; and you need to catch the exception and handle it accordingly.
+  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown. You need to catch the exception and handle it accordingly.
   Future<void> enableVideo();
 
   /// Disables the video module.
@@ -3320,7 +3322,7 @@ abstract class RtcEngine {
   ///  This method resets the internal engine and thus might takes some time to take effect. Agora recommends using the following APIs to control the video modules separately: enableLocalVideo : Whether to enable the camera to create the local video stream. muteLocalVideoStream : Whether to publish the local video stream. muteRemoteVideoStream : Whether to subscribe to and play the remote video stream. muteAllRemoteVideoStreams : Whether to subscribe to and play all remote video streams.
   ///
   /// Returns
-  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown; and you need to catch the exception and handle it accordingly.
+  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown. You need to catch the exception and handle it accordingly.
   Future<void> disableVideo();
 
   /// Enables the local video preview and specifies the video source for the preview.
@@ -3335,7 +3337,7 @@ abstract class RtcEngine {
   /// * [sourceType] The type of the video source. See VideoSourceType.
   ///
   /// Returns
-  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown; and you need to catch the exception and handle it accordingly.
+  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown. You need to catch the exception and handle it accordingly.
   Future<void> startPreview(
       {VideoSourceType sourceType = VideoSourceType.videoSourceCameraPrimary});
 
@@ -3346,7 +3348,7 @@ abstract class RtcEngine {
   /// * [sourceType] The type of the video source. See VideoSourceType.
   ///
   /// Returns
-  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown; and you need to catch the exception and handle it accordingly.
+  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown. You need to catch the exception and handle it accordingly.
   ///  < 0: Failure.
   Future<void> stopPreview(
       {VideoSourceType sourceType = VideoSourceType.videoSourceCameraPrimary});
@@ -3360,13 +3362,13 @@ abstract class RtcEngine {
   /// * [config] The configurations of the last-mile network probe test. See LastmileProbeConfig.
   ///
   /// Returns
-  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown; and you need to catch the exception and handle it accordingly.
+  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown. You need to catch the exception and handle it accordingly.
   Future<void> startLastmileProbeTest(LastmileProbeConfig config);
 
   /// Stops the last mile network probe test.
   ///
   /// Returns
-  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown; and you need to catch the exception and handle it accordingly.
+  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown. You need to catch the exception and handle it accordingly.
   Future<void> stopLastmileProbeTest();
 
   /// Sets the video encoder configuration.
@@ -3376,7 +3378,7 @@ abstract class RtcEngine {
   /// * [config] Video profile. See VideoEncoderConfiguration.
   ///
   /// Returns
-  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown; and you need to catch the exception and handle it accordingly.
+  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown. You need to catch the exception and handle it accordingly.
   Future<void> setVideoEncoderConfiguration(VideoEncoderConfiguration config);
 
   /// Sets the image enhancement options.
@@ -3391,7 +3393,7 @@ abstract class RtcEngine {
   /// * [type] Source type of the extension. See MediaSourceType.
   ///
   /// Returns
-  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown; and you need to catch the exception and handle it accordingly.
+  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown. You need to catch the exception and handle it accordingly.
   Future<void> setBeautyEffectOptions(
       {required bool enabled,
       required BeautyOptions options,
@@ -3412,7 +3414,7 @@ abstract class RtcEngine {
   /// * [type] The type of the video source. See MediaSourceType.
   ///
   /// Returns
-  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown; and you need to catch the exception and handle it accordingly.
+  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown. You need to catch the exception and handle it accordingly.
   Future<void> setLowlightEnhanceOptions(
       {required bool enabled,
       required LowlightEnhanceOptions options,
@@ -3433,7 +3435,7 @@ abstract class RtcEngine {
   /// * [type] The type of the video source. See MediaSourceType.
   ///
   /// Returns
-  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown; and you need to catch the exception and handle it accordingly.
+  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown. You need to catch the exception and handle it accordingly.
   Future<void> setVideoDenoiserOptions(
       {required bool enabled,
       required VideoDenoiserOptions options,
@@ -3454,7 +3456,7 @@ abstract class RtcEngine {
   /// * [type] The type of the video source. See MediaSourceType.
   ///
   /// Returns
-  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown; and you need to catch the exception and handle it accordingly.
+  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown. You need to catch the exception and handle it accordingly.
   Future<void> setColorEnhanceOptions(
       {required bool enabled,
       required ColorEnhanceOptions options,
@@ -3488,7 +3490,7 @@ abstract class RtcEngine {
   ///  If you want to use the second camera to capture video, set this parameter to secondaryCameraSource.
   ///
   /// Returns
-  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown; and you need to catch the exception and handle it accordingly.
+  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown. You need to catch the exception and handle it accordingly.
   Future<void> enableVirtualBackground(
       {required bool enabled,
       required VirtualBackgroundSource backgroundSource,
@@ -3504,7 +3506,7 @@ abstract class RtcEngine {
   /// * [canvas] The remote video view and settings. See VideoCanvas.
   ///
   /// Returns
-  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown; and you need to catch the exception and handle it accordingly.
+  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown. You need to catch the exception and handle it accordingly.
   ///  < 0: Failure.
   Future<void> setupRemoteVideo(VideoCanvas canvas);
 
@@ -3517,7 +3519,7 @@ abstract class RtcEngine {
   /// * [canvas] The local video view and settings. See VideoCanvas.
   ///
   /// Returns
-  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown; and you need to catch the exception and handle it accordingly.
+  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown. You need to catch the exception and handle it accordingly.
   ///  < 0: Failure.
   Future<void> setupLocalVideo(VideoCanvas canvas);
 
@@ -3541,7 +3543,7 @@ abstract class RtcEngine {
   ///  Bitrate: 500 Kbps
   ///
   /// Returns
-  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown; and you need to catch the exception and handle it accordingly.
+  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown. You need to catch the exception and handle it accordingly.
   Future<void> setVideoScenario(VideoApplicationScenarioType scenarioType);
 
   /// @nodoc
@@ -3555,7 +3557,7 @@ abstract class RtcEngine {
   ///  A successful call of this method resets enableLocalAudio, muteRemoteAudioStream, and muteAllRemoteAudioStreams. Proceed it with caution.
   ///
   /// Returns
-  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown; and you need to catch the exception and handle it accordingly.
+  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown. You need to catch the exception and handle it accordingly.
   Future<void> enableAudio();
 
   /// Disables the audio module.
@@ -3564,7 +3566,7 @@ abstract class RtcEngine {
   ///  This method resets the internal engine and takes some time to take effect. Agora recommends using the following API methods to control the audio modules separately: enableLocalAudio : Whether to enable the microphone to create the local audio stream. enableLoopbackRecording : Whether to enable loopback audio capturing. muteLocalAudioStream : Whether to publish the local audio stream. muteRemoteAudioStream : Whether to subscribe and play the remote audio stream. muteAllRemoteAudioStreams : Whether to subscribe to and play all remote audio streams.
   ///
   /// Returns
-  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown; and you need to catch the exception and handle it accordingly.
+  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown. You need to catch the exception and handle it accordingly.
   Future<void> disableAudio();
 
   /// Sets the audio profile and audio scenario.
@@ -3577,7 +3579,7 @@ abstract class RtcEngine {
   /// * [scenario] The audio scenarios. Under different audio scenarios, the device uses different volume types. See AudioScenarioType.
   ///
   /// Returns
-  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown; and you need to catch the exception and handle it accordingly.
+  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown. You need to catch the exception and handle it accordingly.
   Future<void> setAudioProfile(
       {required AudioProfileType profile,
       AudioScenarioType scenario = AudioScenarioType.audioScenarioDefault});
@@ -3590,7 +3592,7 @@ abstract class RtcEngine {
   /// * [scenario] The audio scenarios. Under different audio scenarios, the device uses different volume types. See AudioScenarioType.
   ///
   /// Returns
-  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown; and you need to catch the exception and handle it accordingly.
+  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown. You need to catch the exception and handle it accordingly.
   Future<void> setAudioScenario(AudioScenarioType scenario);
 
   /// Enables or disables the local audio capture.
@@ -3602,7 +3604,7 @@ abstract class RtcEngine {
   /// * [enabled] true : (Default) Re-enable the local audio function, that is, to start the local audio capturing device (for example, the microphone). false : Disable the local audio function, that is, to stop local audio capturing.
   ///
   /// Returns
-  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown; and you need to catch the exception and handle it accordingly.
+  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown. You need to catch the exception and handle it accordingly.
   Future<void> enableLocalAudio(bool enabled);
 
   /// Stops or resumes publishing the local audio stream.
@@ -3612,7 +3614,7 @@ abstract class RtcEngine {
   /// * [mute] Whether to stop publishing the local audio stream: true : Stops publishing the local audio stream. false : (Default) Resumes publishing the local audio stream.
   ///
   /// Returns
-  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown; and you need to catch the exception and handle it accordingly.
+  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown. You need to catch the exception and handle it accordingly.
   Future<void> muteLocalAudioStream(bool mute);
 
   /// Stops or resumes subscribing to the audio streams of all remote users.
@@ -3624,7 +3626,7 @@ abstract class RtcEngine {
   /// * [mute] Whether to stop subscribing to the audio streams of all remote users: true : Stops subscribing to the audio streams of all remote users. false : (Default) Subscribes to the audio streams of all remote users by default.
   ///
   /// Returns
-  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown; and you need to catch the exception and handle it accordingly.
+  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown. You need to catch the exception and handle it accordingly.
   Future<void> muteAllRemoteAudioStreams(bool mute);
 
   /// @nodoc
@@ -3638,7 +3640,7 @@ abstract class RtcEngine {
   /// * [mute] Whether to subscribe to the specified remote user's audio stream. true : Stop subscribing to the audio stream of the specified user. false : (Default) Subscribe to the audio stream of the specified user.
   ///
   /// Returns
-  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown; and you need to catch the exception and handle it accordingly.
+  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown. You need to catch the exception and handle it accordingly.
   Future<void> muteRemoteAudioStream({required int uid, required bool mute});
 
   /// Stops or resumes publishing the local video stream.
@@ -3650,7 +3652,7 @@ abstract class RtcEngine {
   /// * [mute] Whether to stop publishing the local video stream. true : Stop publishing the local video stream. false : (Default) Publish the local video stream.
   ///
   /// Returns
-  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown; and you need to catch the exception and handle it accordingly.
+  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown. You need to catch the exception and handle it accordingly.
   Future<void> muteLocalVideoStream(bool mute);
 
   /// Enables/Disables the local video capture.
@@ -3662,7 +3664,7 @@ abstract class RtcEngine {
   /// * [enabled] Whether to enable the local video capture. true : (Default) Enable the local video capture. false : Disable the local video capture. Once the local video is disabled, the remote users cannot receive the video stream of the local user, while the local user can still receive the video streams of remote users. When set to false, this method does not require a local camera.
   ///
   /// Returns
-  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown; and you need to catch the exception and handle it accordingly.
+  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown. You need to catch the exception and handle it accordingly.
   Future<void> enableLocalVideo(bool enabled);
 
   /// Stops or resumes subscribing to the video streams of all remote users.
@@ -3674,7 +3676,7 @@ abstract class RtcEngine {
   /// * [mute] Whether to stop subscribing to the video streams of all remote users. true : Stop subscribing to the video streams of all remote users. false : (Default) Subscribe to the audio streams of all remote users by default.
   ///
   /// Returns
-  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown; and you need to catch the exception and handle it accordingly.
+  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown. You need to catch the exception and handle it accordingly.
   Future<void> muteAllRemoteVideoStreams(bool mute);
 
   /// @nodoc
@@ -3689,7 +3691,7 @@ abstract class RtcEngine {
   /// * [streamType] The default video-stream type. See VideoStreamType.
   ///
   /// Returns
-  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown; and you need to catch the exception and handle it accordingly.
+  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown. You need to catch the exception and handle it accordingly.
   Future<void> setRemoteDefaultVideoStreamType(VideoStreamType streamType);
 
   /// Stops or resumes subscribing to the video stream of a specified user.
@@ -3700,7 +3702,7 @@ abstract class RtcEngine {
   /// * [mute] Whether to subscribe to the specified remote user's video stream. true : Stop subscribing to the video streams of the specified user. false : (Default) Subscribe to the video stream of the specified user.
   ///
   /// Returns
-  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown; and you need to catch the exception and handle it accordingly.
+  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown. You need to catch the exception and handle it accordingly.
   ///  < 0: Failure.
   Future<void> muteRemoteVideoStream({required int uid, required bool mute});
 
@@ -3716,7 +3718,7 @@ abstract class RtcEngine {
   /// * [streamType] The video stream type, see VideoStreamType.
   ///
   /// Returns
-  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown; and you need to catch the exception and handle it accordingly.
+  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown. You need to catch the exception and handle it accordingly.
   Future<void> setRemoteVideoStreamType(
       {required int uid, required VideoStreamType streamType});
 
@@ -3735,7 +3737,7 @@ abstract class RtcEngine {
   /// * [options] The video subscription options. See VideoSubscriptionOptions.
   ///
   /// Returns
-  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown; and you need to catch the exception and handle it accordingly.
+  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown. You need to catch the exception and handle it accordingly.
   Future<void> setRemoteVideoSubscriptionOptions(
       {required int uid, required VideoSubscriptionOptions options});
 
@@ -3751,7 +3753,7 @@ abstract class RtcEngine {
   /// * [uidNumber] The number of users in the user ID list.
   ///
   /// Returns
-  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown; and you need to catch the exception and handle it accordingly.
+  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown. You need to catch the exception and handle it accordingly.
   Future<void> setSubscribeAudioBlocklist(
       {required List<int> uidList, required int uidNumber});
 
@@ -3767,7 +3769,7 @@ abstract class RtcEngine {
   /// * [uidNumber] The number of users in the user ID list.
   ///
   /// Returns
-  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown; and you need to catch the exception and handle it accordingly.
+  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown. You need to catch the exception and handle it accordingly.
   Future<void> setSubscribeAudioAllowlist(
       {required List<int> uidList, required int uidNumber});
 
@@ -3783,7 +3785,7 @@ abstract class RtcEngine {
   /// * [uidNumber] The number of users in the user ID list.
   ///
   /// Returns
-  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown; and you need to catch the exception and handle it accordingly.
+  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown. You need to catch the exception and handle it accordingly.
   Future<void> setSubscribeVideoBlocklist(
       {required List<int> uidList, required int uidNumber});
 
@@ -3799,7 +3801,7 @@ abstract class RtcEngine {
   /// * [uidNumber] The number of users in the user ID list.
   ///
   /// Returns
-  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown; and you need to catch the exception and handle it accordingly.
+  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown. You need to catch the exception and handle it accordingly.
   Future<void> setSubscribeVideoAllowlist(
       {required List<int> uidList, required int uidNumber});
 
@@ -3814,7 +3816,7 @@ abstract class RtcEngine {
   /// * [reportVad] true : Enables the voice activity detection of the local user. Once it is enabled, the vad parameter of the onAudioVolumeIndication callback reports the voice activity status of the local user. false : (Default) Disables the voice activity detection of the local user. Once it is disabled, the vad parameter of the onAudioVolumeIndication callback does not report the voice activity status of the local user, except for the scenario where the engine automatically detects the voice activity of the local user.
   ///
   /// Returns
-  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown; and you need to catch the exception and handle it accordingly.
+  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown. You need to catch the exception and handle it accordingly.
   ///  < 0: Failure.
   Future<void> enableAudioVolumeIndication(
       {required int interval, required int smooth, required bool reportVad});
@@ -3828,7 +3830,7 @@ abstract class RtcEngine {
   /// * [config] Recording configurations. See AudioRecordingConfiguration.
   ///
   /// Returns
-  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown; and you need to catch the exception and handle it accordingly.
+  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown. You need to catch the exception and handle it accordingly.
   Future<void> startAudioRecording(AudioRecordingConfiguration config);
 
   /// Registers an encoded audio observer.
@@ -3840,7 +3842,7 @@ abstract class RtcEngine {
   /// * [observer] The encoded audio observer. See AudioEncodedFrameObserver.
   ///
   /// Returns
-  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown; and you need to catch the exception and handle it accordingly.
+  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown. You need to catch the exception and handle it accordingly.
   void registerAudioEncodedFrameObserver(
       {required AudioEncodedFrameObserverConfig config,
       required AudioEncodedFrameObserver observer});
@@ -3848,7 +3850,7 @@ abstract class RtcEngine {
   /// Stops the audio recording on the client.
   ///
   /// Returns
-  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown; and you need to catch the exception and handle it accordingly.
+  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown. You need to catch the exception and handle it accordingly.
   Future<void> stopAudioRecording();
 
   /// Creates a media player instance.
@@ -3861,7 +3863,7 @@ abstract class RtcEngine {
   /// Destroys the media player instance.
   ///
   /// Returns
-  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown; and you need to catch the exception and handle it accordingly.
+  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown. You need to catch the exception and handle it accordingly.
   ///  < 0: Failure.
   Future<void> destroyMediaPlayer(MediaPlayer mediaPlayer);
 
@@ -3889,7 +3891,7 @@ abstract class RtcEngine {
   /// * [startPos] The playback position (ms) of the music file.
   ///
   /// Returns
-  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown; and you need to catch the exception and handle it accordingly.
+  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown. You need to catch the exception and handle it accordingly.
   Future<void> startAudioMixing(
       {required String filePath,
       required bool loopback,
@@ -3901,7 +3903,7 @@ abstract class RtcEngine {
   /// This method stops the audio mixing. Call this method when you are in a channel.
   ///
   /// Returns
-  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown; and you need to catch the exception and handle it accordingly.
+  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown. You need to catch the exception and handle it accordingly.
   Future<void> stopAudioMixing();
 
   /// Pauses playing and mixing the music file.
@@ -3909,7 +3911,7 @@ abstract class RtcEngine {
   /// Call this method after joining a channel.
   ///
   /// Returns
-  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown; and you need to catch the exception and handle it accordingly.
+  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown. You need to catch the exception and handle it accordingly.
   Future<void> pauseAudioMixing();
 
   /// Resumes playing and mixing the music file.
@@ -3917,7 +3919,7 @@ abstract class RtcEngine {
   /// This method resumes playing and mixing the music file. Call this method when you are in a channel.
   ///
   /// Returns
-  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown; and you need to catch the exception and handle it accordingly.
+  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown. You need to catch the exception and handle it accordingly.
   Future<void> resumeAudioMixing();
 
   /// Selects the audio track used during playback.
@@ -3929,7 +3931,7 @@ abstract class RtcEngine {
   /// * [index] The audio track you want to specify. The value range is [0, getAudioTrackCount ()].
   ///
   /// Returns
-  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown; and you need to catch the exception and handle it accordingly.
+  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown. You need to catch the exception and handle it accordingly.
   Future<void> selectAudioTrack(int index);
 
   /// Gets the index of audio tracks of the current music file.
@@ -3949,7 +3951,7 @@ abstract class RtcEngine {
   /// * [volume] Audio mixing volume. The value ranges between 0 and 100. The default value is 100, which means the original volume.
   ///
   /// Returns
-  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown; and you need to catch the exception and handle it accordingly.
+  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown. You need to catch the exception and handle it accordingly.
   Future<void> adjustAudioMixingVolume(int volume);
 
   /// Adjusts the volume of audio mixing for publishing.
@@ -3959,7 +3961,7 @@ abstract class RtcEngine {
   /// * [volume] The volume of audio mixing for local playback. The value ranges between 0 and 100 (default). 100 represents the original volume.
   ///
   /// Returns
-  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown; and you need to catch the exception and handle it accordingly.
+  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown. You need to catch the exception and handle it accordingly.
   Future<void> adjustAudioMixingPublishVolume(int volume);
 
   /// Retrieves the audio mixing volume for publishing.
@@ -3978,7 +3980,7 @@ abstract class RtcEngine {
   /// * [volume] The volume of audio mixing for local playback. The value ranges between 0 and 100 (default). 100 represents the original volume.
   ///
   /// Returns
-  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown; and you need to catch the exception and handle it accordingly.
+  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown. You need to catch the exception and handle it accordingly.
   Future<void> adjustAudioMixingPlayoutVolume(int volume);
 
   /// Retrieves the audio mixing volume for local playback.
@@ -4016,7 +4018,7 @@ abstract class RtcEngine {
   /// * [pos] Integer. The playback position (ms).
   ///
   /// Returns
-  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown; and you need to catch the exception and handle it accordingly.
+  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown. You need to catch the exception and handle it accordingly.
   Future<void> setAudioMixingPosition(int pos);
 
   /// Sets the channel mode of the current audio file.
@@ -4028,7 +4030,7 @@ abstract class RtcEngine {
   /// * [mode] The channel mode. See AudioMixingDualMonoMode.
   ///
   /// Returns
-  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown; and you need to catch the exception and handle it accordingly.
+  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown. You need to catch the exception and handle it accordingly.
   Future<void> setAudioMixingDualMonoMode(AudioMixingDualMonoMode mode);
 
   /// Sets the pitch of the local music file.
@@ -4038,10 +4040,20 @@ abstract class RtcEngine {
   /// * [pitch] Sets the pitch of the local music file by the chromatic scale. The default value is 0, which means keeping the original pitch. The value ranges from -12 to 12, and the pitch value between consecutive values is a chromatic value. The greater the absolute value of this parameter, the higher or lower the pitch of the local music file.
   ///
   /// Returns
-  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown; and you need to catch the exception and handle it accordingly.
+  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown. You need to catch the exception and handle it accordingly.
   Future<void> setAudioMixingPitch(int pitch);
 
-  /// @nodoc
+  /// Sets the playback speed of the current audio file.
+  ///
+  /// Ensure you call this method after calling startAudioMixing receiving the onAudioMixingStateChanged callback reporting the state as audioMixingStatePlaying.
+  ///
+  /// * [speed] The playback speed. Agora recommends that you set this to a value between 50 and 400, defined as follows:
+  ///  50: Half the original speed.
+  ///  100: The original speed.
+  ///  400: 4 times the original speed.
+  ///
+  /// Returns
+  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown. You need to catch the exception and handle it accordingly.
   Future<void> setAudioMixingPlaybackSpeed(int speed);
 
   /// Retrieves the volume of the audio effects.
@@ -4060,7 +4072,7 @@ abstract class RtcEngine {
   /// * [volume] The playback volume. The value range is [0, 100]. The default value is 100, which represents the original volume.
   ///
   /// Returns
-  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown; and you need to catch the exception and handle it accordingly.
+  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown. You need to catch the exception and handle it accordingly.
   Future<void> setEffectsVolume(int volume);
 
   /// Preloads a specified audio effect file into the memory.
@@ -4075,7 +4087,7 @@ abstract class RtcEngine {
   /// * [startPos] The playback position (ms) of the audio effect file.
   ///
   /// Returns
-  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown; and you need to catch the exception and handle it accordingly.
+  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown. You need to catch the exception and handle it accordingly.
   Future<void> preloadEffect(
       {required int soundId, required String filePath, int startPos = 0});
 
@@ -4098,7 +4110,7 @@ abstract class RtcEngine {
   /// * [startPos] The playback position (ms) of the audio effect file.
   ///
   /// Returns
-  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown; and you need to catch the exception and handle it accordingly.
+  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown. You need to catch the exception and handle it accordingly.
   ///  < 0: Failure.
   Future<void> playEffect(
       {required int soundId,
@@ -4127,7 +4139,7 @@ abstract class RtcEngine {
   /// * [publish] Whether to publish the audio effect to the remote users: true : Publish the audio effect to the remote users. Both the local user and remote users can hear the audio effect. false : (Default) Do not publish the audio effect to the remote users. Only the local user can hear the audio effect.
   ///
   /// Returns
-  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown; and you need to catch the exception and handle it accordingly.
+  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown. You need to catch the exception and handle it accordingly.
   Future<void> playAllEffects(
       {required int loopCount,
       required double pitch,
@@ -4150,7 +4162,7 @@ abstract class RtcEngine {
   /// * [volume] The playback volume. The value range is [0, 100]. The default value is 100, which represents the original volume.
   ///
   /// Returns
-  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown; and you need to catch the exception and handle it accordingly.
+  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown. You need to catch the exception and handle it accordingly.
   Future<void> setVolumeOfEffect({required int soundId, required int volume});
 
   /// Pauses a specified audio effect file.
@@ -4158,13 +4170,13 @@ abstract class RtcEngine {
   /// * [soundId] The audio effect ID. The ID of each audio effect file is unique.
   ///
   /// Returns
-  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown; and you need to catch the exception and handle it accordingly.
+  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown. You need to catch the exception and handle it accordingly.
   Future<void> pauseEffect(int soundId);
 
   /// Pauses all audio effects.
   ///
   /// Returns
-  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown; and you need to catch the exception and handle it accordingly.
+  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown. You need to catch the exception and handle it accordingly.
   Future<void> pauseAllEffects();
 
   /// Resumes playing a specified audio effect.
@@ -4172,13 +4184,13 @@ abstract class RtcEngine {
   /// * [soundId] The audio effect ID. The ID of each audio effect file is unique.
   ///
   /// Returns
-  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown; and you need to catch the exception and handle it accordingly.
+  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown. You need to catch the exception and handle it accordingly.
   Future<void> resumeEffect(int soundId);
 
   /// Resumes playing all audio effect files.
   ///
   /// Returns
-  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown; and you need to catch the exception and handle it accordingly.
+  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown. You need to catch the exception and handle it accordingly.
   Future<void> resumeAllEffects();
 
   /// Stops playing a specified audio effect.
@@ -4186,13 +4198,13 @@ abstract class RtcEngine {
   /// * [soundId] The ID of the audio effect. Each audio effect has a unique ID.
   ///
   /// Returns
-  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown; and you need to catch the exception and handle it accordingly.
+  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown. You need to catch the exception and handle it accordingly.
   Future<void> stopEffect(int soundId);
 
   /// Stops playing all audio effects.
   ///
   /// Returns
-  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown; and you need to catch the exception and handle it accordingly.
+  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown. You need to catch the exception and handle it accordingly.
   Future<void> stopAllEffects();
 
   /// Releases a specified preloaded audio effect from the memory.
@@ -4200,13 +4212,13 @@ abstract class RtcEngine {
   /// * [soundId] The ID of the audio effect. Each audio effect has a unique ID.
   ///
   /// Returns
-  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown; and you need to catch the exception and handle it accordingly.
+  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown. You need to catch the exception and handle it accordingly.
   Future<void> unloadEffect(int soundId);
 
   /// Releases a specified preloaded audio effect from the memory.
   ///
   /// Returns
-  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown; and you need to catch the exception and handle it accordingly.
+  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown. You need to catch the exception and handle it accordingly.
   Future<void> unloadAllEffects();
 
   /// Retrieves the duration of the audio effect file.
@@ -4231,7 +4243,7 @@ abstract class RtcEngine {
   /// * [pos] The playback position (ms) of the audio effect file.
   ///
   /// Returns
-  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown; and you need to catch the exception and handle it accordingly.
+  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown. You need to catch the exception and handle it accordingly.
   Future<void> setEffectPosition({required int soundId, required int pos});
 
   /// Retrieves the playback position of the audio effect file.
@@ -4252,7 +4264,7 @@ abstract class RtcEngine {
   /// * [enabled] Whether to enable stereo panning for remote users: true : Enable stereo panning. false : Disable stereo panning.
   ///
   /// Returns
-  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown; and you need to catch the exception and handle it accordingly.
+  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown. You need to catch the exception and handle it accordingly.
   Future<void> enableSoundPositionIndication(bool enabled);
 
   /// Sets the 2D position (the position on the horizontal plane) of the remote user's voice.
@@ -4270,7 +4282,7 @@ abstract class RtcEngine {
   /// * [gain] The volume of the remote user. The value ranges from 0.0 to 100.0. The default value is 100.0 (the original volume of the remote user). The smaller the value, the lower the volume.
   ///
   /// Returns
-  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown; and you need to catch the exception and handle it accordingly.
+  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown. You need to catch the exception and handle it accordingly.
   Future<void> setRemoteVoicePosition(
       {required int uid, required double pan, required double gain});
 
@@ -4283,7 +4295,7 @@ abstract class RtcEngine {
   /// * [enabled] Whether to enable the spatial audio effect: true : Enable the spatial audio effect. false : Disable the spatial audio effect.
   ///
   /// Returns
-  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown; and you need to catch the exception and handle it accordingly.
+  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown. You need to catch the exception and handle it accordingly.
   Future<void> enableSpatialAudio(bool enabled);
 
   /// Sets the spatial audio effect parameters of the remote user.
@@ -4294,7 +4306,7 @@ abstract class RtcEngine {
   /// * [params] The spatial audio parameters. See SpatialAudioParams.
   ///
   /// Returns
-  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown; and you need to catch the exception and handle it accordingly.
+  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown. You need to catch the exception and handle it accordingly.
   Future<void> setRemoteUserSpatialAudioParams(
       {required int uid, required SpatialAudioParams params});
 
@@ -4310,7 +4322,7 @@ abstract class RtcEngine {
   /// * [preset] The preset voice beautifier effect options: VoiceBeautifierPreset.
   ///
   /// Returns
-  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown; and you need to catch the exception and handle it accordingly.
+  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown. You need to catch the exception and handle it accordingly.
   Future<void> setVoiceBeautifierPreset(VoiceBeautifierPreset preset);
 
   /// Sets an SDK preset audio effect.
@@ -4326,7 +4338,7 @@ abstract class RtcEngine {
   /// * [preset] The options for SDK preset audio effects. See AudioEffectPreset.
   ///
   /// Returns
-  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown; and you need to catch the exception and handle it accordingly.
+  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown. You need to catch the exception and handle it accordingly.
   Future<void> setAudioEffectPreset(AudioEffectPreset preset);
 
   /// Sets a preset voice beautifier effect.
@@ -4341,7 +4353,7 @@ abstract class RtcEngine {
   /// * [preset] The options for the preset voice beautifier effects: VoiceConversionPreset.
   ///
   /// Returns
-  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown; and you need to catch the exception and handle it accordingly.
+  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown. You need to catch the exception and handle it accordingly.
   ///  < 0: Failure.
   Future<void> setVoiceConversionPreset(VoiceConversionPreset preset);
 
@@ -4365,7 +4377,7 @@ abstract class RtcEngine {
   ///  If you set preset to pitchCorrection, param2 indicates the tonic pitch of the pitch correction effect: 1 : A 2 : A# 3 : B 4 : (Default) C 5 : C# 6 : D 7 : D# 8 : E 9 : F 10 : F# 11 : G 12 : G#
   ///
   /// Returns
-  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown; and you need to catch the exception and handle it accordingly.
+  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown. You need to catch the exception and handle it accordingly.
   Future<void> setAudioEffectParameters(
       {required AudioEffectPreset preset,
       required int param1,
@@ -4384,7 +4396,7 @@ abstract class RtcEngine {
   /// * [param2] The reverberation effect options for the singing voice: 1 : The reverberation effect sounds like singing in a small room. 2 : The reverberation effect sounds like singing in a large room. 3 : The reverberation effect sounds like singing in a hall.
   ///
   /// Returns
-  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown; and you need to catch the exception and handle it accordingly.
+  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown. You need to catch the exception and handle it accordingly.
   Future<void> setVoiceBeautifierParameters(
       {required VoiceBeautifierPreset preset,
       required int param1,
@@ -4403,7 +4415,7 @@ abstract class RtcEngine {
   /// * [pitch] The local voice pitch. The value range is [0.5,2.0]. The lower the value, the lower the pitch. The default value is 1.0 (no change to the pitch).
   ///
   /// Returns
-  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown; and you need to catch the exception and handle it accordingly.
+  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown. You need to catch the exception and handle it accordingly.
   Future<void> setLocalVoicePitch(double pitch);
 
   /// Set the formant ratio to change the timbre of human voice.
@@ -4413,7 +4425,7 @@ abstract class RtcEngine {
   /// * [formantRatio] The formant ratio. The value range is [-1.0, 1.0]. The default value is 0.0, which means do not change the timbre of the voice. Agora recommends setting this value within the range of [-0.4, 0.6]. Otherwise, the voice may be seriously distorted.
   ///
   /// Returns
-  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown; and you need to catch the exception and handle it accordingly.
+  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown. You need to catch the exception and handle it accordingly.
   Future<void> setLocalVoiceFormant(double formantRatio);
 
   /// Sets the local voice equalization effect.
@@ -4424,7 +4436,7 @@ abstract class RtcEngine {
   /// * [bandGain] The gain of each band in dB. The value ranges between -15 and 15. The default value is 0.
   ///
   /// Returns
-  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown; and you need to catch the exception and handle it accordingly.
+  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown. You need to catch the exception and handle it accordingly.
   Future<void> setLocalVoiceEqualization(
       {required AudioEqualizationBandFrequency bandFrequency,
       required int bandGain});
@@ -4437,7 +4449,7 @@ abstract class RtcEngine {
   /// * [value] The value of the reverberation key.
   ///
   /// Returns
-  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown; and you need to catch the exception and handle it accordingly.
+  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown. You need to catch the exception and handle it accordingly.
   Future<void> setLocalVoiceReverb(
       {required AudioReverbType reverbKey, required int value});
 
@@ -4448,7 +4460,7 @@ abstract class RtcEngine {
   /// * [preset] The preset headphone equalization effect. See HeadphoneEqualizerPreset.
   ///
   /// Returns
-  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown; and you need to catch the exception and handle it accordingly.
+  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown. You need to catch the exception and handle it accordingly.
   Future<void> setHeadphoneEQPreset(HeadphoneEqualizerPreset preset);
 
   /// Sets the low- and high-frequency parameters of the headphone equalizer.
@@ -4459,7 +4471,7 @@ abstract class RtcEngine {
   /// * [highGain] The high-frequency parameters of the headphone equalizer. The value range is [-10,10]. The larger the value, the sharper the sound.
   ///
   /// Returns
-  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown; and you need to catch the exception and handle it accordingly.
+  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown. You need to catch the exception and handle it accordingly.
   Future<void> setHeadphoneEQParameters(
       {required int lowGain, required int highGain});
 
@@ -4470,7 +4482,7 @@ abstract class RtcEngine {
   /// * [filePath] The complete path of the log files. These log files are encoded in UTF-8.
   ///
   /// Returns
-  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown; and you need to catch the exception and handle it accordingly.
+  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown. You need to catch the exception and handle it accordingly.
   Future<void> setLogFile(String filePath);
 
   /// Sets the log output level of the SDK.
@@ -4480,7 +4492,7 @@ abstract class RtcEngine {
   /// * [filter] The output log level of the SDK. See LogFilterType.
   ///
   /// Returns
-  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown; and you need to catch the exception and handle it accordingly.
+  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown. You need to catch the exception and handle it accordingly.
   Future<void> setLogFilter(LogFilterType filter);
 
   /// Sets the output log level of the SDK.
@@ -4490,7 +4502,7 @@ abstract class RtcEngine {
   /// * [level] The log level: LogLevel.
   ///
   /// Returns
-  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown; and you need to catch the exception and handle it accordingly.
+  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown. You need to catch the exception and handle it accordingly.
   Future<void> setLogLevel(LogLevel level);
 
   /// Sets the log file size.
@@ -4511,7 +4523,7 @@ abstract class RtcEngine {
   /// * [fileSizeInKBytes] The size (KB) of an agorasdk.log file. The value range is [128,20480]. The default value is 2,048 KB. If you set fileSizeInKByte smaller than 128 KB, the SDK automatically adjusts it to 128 KB; if you set fileSizeInKByte greater than 20,480 KB, the SDK automatically adjusts it to 20,480 KB.
   ///
   /// Returns
-  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown; and you need to catch the exception and handle it accordingly.
+  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown. You need to catch the exception and handle it accordingly.
   Future<void> setLogFileSize(int fileSizeInKBytes);
 
   /// @nodoc
@@ -4531,7 +4543,7 @@ abstract class RtcEngine {
   /// * [mirrorMode] The mirror mode of the local video view. See VideoMirrorModeType. If you use a front camera, the SDK enables the mirror mode by default; if you use a rear camera, the SDK disables the mirror mode by default.
   ///
   /// Returns
-  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown; and you need to catch the exception and handle it accordingly.
+  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown. You need to catch the exception and handle it accordingly.
   Future<void> setLocalRenderMode(
       {required RenderModeType renderMode,
       VideoMirrorModeType mirrorMode =
@@ -4548,7 +4560,7 @@ abstract class RtcEngine {
   /// * [mirrorMode] The mirror mode of the remote user view. See VideoMirrorModeType.
   ///
   /// Returns
-  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown; and you need to catch the exception and handle it accordingly.
+  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown. You need to catch the exception and handle it accordingly.
   ///  < 0: Failure.
   Future<void> setRemoteRenderMode(
       {required int uid,
@@ -4562,7 +4574,7 @@ abstract class RtcEngine {
   /// * [mirrorMode] The local video mirror mode. See VideoMirrorModeType.
   ///
   /// Returns
-  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown; and you need to catch the exception and handle it accordingly.
+  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown. You need to catch the exception and handle it accordingly.
   Future<void> setLocalVideoMirrorMode(VideoMirrorModeType mirrorMode);
 
   /// Sets the dual-stream mode on the sender side and the low-quality video stream.
@@ -4578,7 +4590,7 @@ abstract class RtcEngine {
   /// * [streamConfig] The configuration of the low-quality video stream. See SimulcastStreamConfig. When setting mode to disableSimulcastStream, setting streamConfig will not take effect.
   ///
   /// Returns
-  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown; and you need to catch the exception and handle it accordingly.
+  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown. You need to catch the exception and handle it accordingly.
   Future<void> enableDualStreamMode(
       {required bool enabled, SimulcastStreamConfig? streamConfig});
 
@@ -4595,7 +4607,7 @@ abstract class RtcEngine {
   /// * [streamConfig] The configuration of the low-quality video stream. See SimulcastStreamConfig. When setting mode to disableSimulcastStream, setting streamConfig will not take effect.
   ///
   /// Returns
-  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown; and you need to catch the exception and handle it accordingly.
+  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown. You need to catch the exception and handle it accordingly.
   Future<void> setDualStreamMode(
       {required SimulcastStreamMode mode, SimulcastStreamConfig? streamConfig});
 
@@ -4607,7 +4619,7 @@ abstract class RtcEngine {
   /// * [enabled] Whether to play the external audio source: true : Play the external audio source. false : (Default) Do not play the external source.
   ///
   /// Returns
-  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown; and you need to catch the exception and handle it accordingly.
+  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown. You need to catch the exception and handle it accordingly.
   Future<void> enableCustomAudioLocalPlayback(
       {required int trackId, required bool enabled});
 
@@ -4625,7 +4637,7 @@ abstract class RtcEngine {
   /// * [samplesPerCall] The number of data samples returned in the onRecordAudioFrame callback, such as 1024 for the Media Push.
   ///
   /// Returns
-  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown; and you need to catch the exception and handle it accordingly.
+  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown. You need to catch the exception and handle it accordingly.
   ///  < 0: Failure.
   Future<void> setRecordingAudioFrameParameters(
       {required int sampleRate,
@@ -4647,7 +4659,7 @@ abstract class RtcEngine {
   /// * [samplesPerCall] The number of data samples returned in the onPlaybackAudioFrame callback, such as 1024 for the Media Push.
   ///
   /// Returns
-  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown; and you need to catch the exception and handle it accordingly.
+  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown. You need to catch the exception and handle it accordingly.
   ///  < 0: Failure.
   Future<void> setPlaybackAudioFrameParameters(
       {required int sampleRate,
@@ -4662,7 +4674,7 @@ abstract class RtcEngine {
   /// * [samplesPerCall] Sets the number of samples. In Media Push scenarios, set it as 1024.
   ///
   /// Returns
-  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown; and you need to catch the exception and handle it accordingly.
+  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown. You need to catch the exception and handle it accordingly.
   Future<void> setMixedAudioFrameParameters(
       {required int sampleRate,
       required int channel,
@@ -4682,7 +4694,7 @@ abstract class RtcEngine {
   /// * [samplesPerCall] The number of data samples reported in the onEarMonitoringAudioFrame callback, such as 1,024 for the Media Push.
   ///
   /// Returns
-  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown; and you need to catch the exception and handle it accordingly.
+  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown. You need to catch the exception and handle it accordingly.
   ///  < 0: Failure.
   Future<void> setEarMonitoringAudioFrameParameters(
       {required int sampleRate,
@@ -4696,7 +4708,7 @@ abstract class RtcEngine {
   /// * [channel] The number of channels of the audio data, which can be set as 1 (Mono) or 2 (Stereo).
   ///
   /// Returns
-  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown; and you need to catch the exception and handle it accordingly.
+  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown. You need to catch the exception and handle it accordingly.
   Future<void> setPlaybackAudioFrameBeforeMixingParameters(
       {required int sampleRate, required int channel});
 
@@ -4707,7 +4719,7 @@ abstract class RtcEngine {
   /// * [intervalInMS] The interval (in milliseconds) at which the SDK triggers the onLocalAudioSpectrum and onRemoteAudioSpectrum callbacks. The default value is 100. Do not set this parameter to a value less than 10, otherwise calling this method would fail.
   ///
   /// Returns
-  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown; and you need to catch the exception and handle it accordingly.
+  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown. You need to catch the exception and handle it accordingly.
   Future<void> enableAudioSpectrumMonitor({int intervalInMS = 100});
 
   /// Disables audio spectrum monitoring.
@@ -4715,7 +4727,7 @@ abstract class RtcEngine {
   /// After calling enableAudioSpectrumMonitor, if you want to disable audio spectrum monitoring, you can call this method. You can call this method either before or after joining a channel.
   ///
   /// Returns
-  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown; and you need to catch the exception and handle it accordingly.
+  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown. You need to catch the exception and handle it accordingly.
   Future<void> disableAudioSpectrumMonitor();
 
   /// Register an audio spectrum observer.
@@ -4725,7 +4737,7 @@ abstract class RtcEngine {
   /// * [observer] The audio spectrum observer. See AudioSpectrumObserver.
   ///
   /// Returns
-  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown; and you need to catch the exception and handle it accordingly.
+  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown. You need to catch the exception and handle it accordingly.
   void registerAudioSpectrumObserver(AudioSpectrumObserver observer);
 
   /// Unregisters the audio spectrum observer.
@@ -4733,7 +4745,7 @@ abstract class RtcEngine {
   /// After calling registerAudioSpectrumObserver, if you want to disable audio spectrum monitoring, you can call this method. You can call this method either before or after joining a channel.
   ///
   /// Returns
-  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown; and you need to catch the exception and handle it accordingly.
+  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown. You need to catch the exception and handle it accordingly.
   void unregisterAudioSpectrumObserver(AudioSpectrumObserver observer);
 
   /// Adjusts the capturing signal volume.
@@ -4746,7 +4758,7 @@ abstract class RtcEngine {
   ///  400: Four times the original volume (amplifying the audio signals by four times).
   ///
   /// Returns
-  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown; and you need to catch the exception and handle it accordingly.
+  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown. You need to catch the exception and handle it accordingly.
   Future<void> adjustRecordingSignalVolume(int volume);
 
   /// Whether to mute the recording signal.
@@ -4754,7 +4766,7 @@ abstract class RtcEngine {
   /// * [mute] true : The media file is muted. false : (Default) Do not mute the recording signal. If you have already called adjustRecordingSignalVolume to adjust the volume, then when you call this method and set it to true, the SDK will record the current volume and mute it. To restore the previous volume, call this method again and set it to false.
   ///
   /// Returns
-  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown; and you need to catch the exception and handle it accordingly.
+  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown. You need to catch the exception and handle it accordingly.
   Future<void> muteRecordingSignal(bool mute);
 
   /// Adjusts the playback signal volume of all remote users.
@@ -4768,7 +4780,7 @@ abstract class RtcEngine {
   ///  400: Four times the original volume (amplifying the audio signals by four times).
   ///
   /// Returns
-  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown; and you need to catch the exception and handle it accordingly.
+  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown. You need to catch the exception and handle it accordingly.
   Future<void> adjustPlaybackSignalVolume(int volume);
 
   /// Adjusts the playback signal volume of a specified remote user.
@@ -4781,7 +4793,7 @@ abstract class RtcEngine {
   /// * [volume] Audio mixing volume. The value ranges between 0 and 100. The default value is 100, which means the original volume.
   ///
   /// Returns
-  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown; and you need to catch the exception and handle it accordingly.
+  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown. You need to catch the exception and handle it accordingly.
   Future<void> adjustUserPlaybackSignalVolume(
       {required int uid, required int volume});
 
@@ -4795,7 +4807,7 @@ abstract class RtcEngine {
   /// * [option] Fallback options for the subscribed stream. See StreamFallbackOptions.
   ///
   /// Returns
-  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown; and you need to catch the exception and handle it accordingly.
+  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown. You need to catch the exception and handle it accordingly.
   Future<void> setRemoteSubscribeFallbackOption(StreamFallbackOptions option);
 
   /// @nodoc
@@ -4816,7 +4828,7 @@ abstract class RtcEngine {
   /// * [type] Source type of the extension. See MediaSourceType.
   ///
   /// Returns
-  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown; and you need to catch the exception and handle it accordingly.
+  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown. You need to catch the exception and handle it accordingly.
   Future<void> enableExtension(
       {required String provider,
       required String extension,
@@ -4834,7 +4846,7 @@ abstract class RtcEngine {
   /// * [type] Source type of the extension. See MediaSourceType.
   ///
   /// Returns
-  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown; and you need to catch the exception and handle it accordingly.
+  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown. You need to catch the exception and handle it accordingly.
   Future<void> setExtensionProperty(
       {required String provider,
       required String extension,
@@ -4873,7 +4885,7 @@ abstract class RtcEngine {
   ///  Windows: The device name of the sound card. The default is set to NULL, which means the SDK uses the sound card of your device for loopback audio capturing.
   ///
   /// Returns
-  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown; and you need to catch the exception and handle it accordingly.
+  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown. You need to catch the exception and handle it accordingly.
   Future<void> enableLoopbackRecording(
       {required bool enabled, String? deviceName});
 
@@ -4884,7 +4896,7 @@ abstract class RtcEngine {
   /// * [volume] Audio mixing volume. The value ranges between 0 and 100. The default value is 100, which means the original volume.
   ///
   /// Returns
-  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown; and you need to catch the exception and handle it accordingly.
+  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown. You need to catch the exception and handle it accordingly.
   ///  < 0: Failure.
   Future<void> adjustLoopbackSignalVolume(int volume);
 
@@ -4898,10 +4910,10 @@ abstract class RtcEngine {
   ///  You can call this method either before or after joining a channel.
   ///
   /// * [enabled] Enables or disables in-ear monitoring. true : Enables in-ear monitoring. false : (Default) Disables in-ear monitoring.
-  /// * [includeAudioFilters] The audio filter of in-ear monitoring: See EarMonitoringFilterType.
+  /// * [includeAudioFilters] The audio filter types of in-ear monitoring. See EarMonitoringFilterType.
   ///
   /// Returns
-  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown; and you need to catch the exception and handle it accordingly.
+  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown. You need to catch the exception and handle it accordingly.
   ///  < 0: Failure.
   ///  - 8: Make sure the current audio routing is Bluetooth or headset.
   Future<void> enableInEarMonitoring(
@@ -4918,7 +4930,7 @@ abstract class RtcEngine {
   ///  400: Four times the original volume.
   ///
   /// Returns
-  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown; and you need to catch the exception and handle it accordingly.
+  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown. You need to catch the exception and handle it accordingly.
   Future<void> setInEarMonitoringVolume(int volume);
 
   /// Adds an extension to the SDK.
@@ -4929,7 +4941,7 @@ abstract class RtcEngine {
   /// * [unloadAfterUse] Whether to uninstall the current extension when you no longer using it: true : Uninstall the extension when the RtcEngine is destroyed. false : (Rcommended) Do not uninstall the extension until the process terminates.
   ///
   /// Returns
-  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown; and you need to catch the exception and handle it accordingly.
+  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown. You need to catch the exception and handle it accordingly.
   Future<void> loadExtensionProvider(
       {required String path, bool unloadAfterUse = false});
 
@@ -4942,7 +4954,7 @@ abstract class RtcEngine {
   /// * [value] The value of the extension key.
   ///
   /// Returns
-  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown; and you need to catch the exception and handle it accordingly.
+  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown. You need to catch the exception and handle it accordingly.
   Future<void> setExtensionProviderProperty(
       {required String provider, required String key, required String value});
 
@@ -4957,7 +4969,7 @@ abstract class RtcEngine {
   /// * [type] Source type of the extension. See MediaSourceType.
   ///
   /// Returns
-  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown; and you need to catch the exception and handle it accordingly.
+  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown. You need to catch the exception and handle it accordingly.
   Future<void> registerExtension(
       {required String provider,
       required String extension,
@@ -4967,11 +4979,13 @@ abstract class RtcEngine {
   ///
   /// This method is for Android and iOS only.
   ///  Call this method before enabling local camera capture, such as before calling startPreview and joinChannel.
+  ///  To adjust the camera focal length configuration, It is recommended to call queryCameraFocalLengthCapability first to check the device's focal length capabilities, and then configure based on the query results.
+  ///  Due to limitations on some Android devices, even if you set the focal length type according to the results returned in queryCameraFocalLengthCapability, the settings may not take effect.
   ///
-  /// * [config] The camera capture configuration. See CameraCapturerConfiguration.
+  /// * [config] The camera capture configuration. See CameraCapturerConfiguration. In this method, you do not need to set the deviceId parameter.
   ///
   /// Returns
-  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown; and you need to catch the exception and handle it accordingly.
+  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown. You need to catch the exception and handle it accordingly.
   ///  < 0: Failure.
   Future<void> setCameraCapturerConfiguration(
       CameraCapturerConfiguration config);
@@ -4996,7 +5010,7 @@ abstract class RtcEngine {
   /// * [videoTrackId] The video track ID returned by calling the createCustomVideoTrack method.
   ///
   /// Returns
-  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown; and you need to catch the exception and handle it accordingly.
+  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown. You need to catch the exception and handle it accordingly.
   Future<void> destroyCustomVideoTrack(int videoTrackId);
 
   /// @nodoc
@@ -5004,11 +5018,13 @@ abstract class RtcEngine {
 
   /// Switches between front and rear cameras.
   ///
-  /// This method is for Android and iOS only.
+  /// You can call this method to dynamically switch cameras based on the actual camera availability during the app's runtime, without having to restart the video stream or reconfigure the video source.
+  ///  This method is for Android and iOS only.
   ///  This method must be called after the camera is successfully enabled, that is, after the SDK triggers the onLocalVideoStateChanged callback and returns the local video state as localVideoStreamStateCapturing (1).
+  ///  This method only switches the camera for the video stream captured by the first camera, that is, the video source set to videoSourceCamera (0) when calling startCameraCapture.
   ///
   /// Returns
-  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown; and you need to catch the exception and handle it accordingly.
+  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown. You need to catch the exception and handle it accordingly.
   Future<void> switchCamera();
 
   /// Checks whether the device supports camera zoom.
@@ -5058,15 +5074,16 @@ abstract class RtcEngine {
   /// true : The device supports the face auto-focus function. false : The device does not support the face auto-focus function.
   Future<bool> isCameraAutoFocusFaceModeSupported();
 
-  /// Sets the camera zoom ratio.
+  /// Sets the camera zoom factor.
   ///
-  /// You must call this method after enableVideo. The setting result will take effect after the camera is successfully turned on, that is, after the SDK triggers the onLocalVideoStateChanged callback and returns the local video state as localVideoStreamStateCapturing (1).
+  /// For iOS devices equipped with multi-lens rear cameras, such as those featuring dual-camera (wide-angle and ultra-wide-angle) or triple-camera (wide-angle, ultra-wide-angle, and telephoto), you can call setCameraCapturerConfiguration first to set the cameraFocalLengthType as cameraFocalLengthDefault (0) (standard lens). Then, adjust the camera zoom factor to a value less than 1.0. This configuration allows you to capture video with an ultra-wide-angle perspective.
+  ///  You must call this method after enableVideo. The setting result will take effect after the camera is successfully turned on, that is, after the SDK triggers the onLocalVideoStateChanged callback and returns the local video state as localVideoStreamStateCapturing (1).
   ///  This method is for Android and iOS only.
   ///
-  /// * [factor] The camera zoom ratio. The value ranges between 1.0 and the maximum zoom supported by the device. You can get the maximum zoom ratio supported by the device by calling the getCameraMaxZoomFactor method.
+  /// * [factor] The camera zoom factor. For devices that do not support ultra-wide-angle, the value ranges from 1.0 to the maximum zoom factor; for devices that support ultra-wide-angle, the value ranges from 0.5 to the maximum zoom factor. You can get the maximum zoom factor supported by the device by calling the getCameraMaxZoomFactor method.
   ///
   /// Returns
-  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown; and you need to catch the exception and handle it accordingly.
+  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown. You need to catch the exception and handle it accordingly.
   ///  < 0: if the method if failed.
   Future<void> setCameraZoomFactor(double factor);
 
@@ -5080,7 +5097,7 @@ abstract class RtcEngine {
   /// * [enabled] Whether to enable face detection for the local user: true : Enable face detection. false : (Default) Disable face detection.
   ///
   /// Returns
-  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown; and you need to catch the exception and handle it accordingly.
+  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown. You need to catch the exception and handle it accordingly.
   Future<void> enableFaceDetection(bool enabled);
 
   /// Gets the maximum zoom ratio supported by the camera.
@@ -5102,7 +5119,7 @@ abstract class RtcEngine {
   /// * [positionY] The vertical coordinate of the touchpoint in the view.
   ///
   /// Returns
-  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown; and you need to catch the exception and handle it accordingly.
+  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown. You need to catch the exception and handle it accordingly.
   Future<void> setCameraFocusPositionInPreview(
       {required double positionX, required double positionY});
 
@@ -5114,7 +5131,7 @@ abstract class RtcEngine {
   /// * [isOn] Whether to turn on the camera flash: true : Turn on the flash. false : (Default) Turn off the flash.
   ///
   /// Returns
-  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown; and you need to catch the exception and handle it accordingly.
+  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown. You need to catch the exception and handle it accordingly.
   Future<void> setCameraTorchOn(bool isOn);
 
   /// Enables the camera auto-face focus function.
@@ -5126,7 +5143,7 @@ abstract class RtcEngine {
   /// * [enabled] Whether to enable face autofocus: true : Enable the camera auto-face focus function. false : Disable face autofocus.
   ///
   /// Returns
-  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown; and you need to catch the exception and handle it accordingly.
+  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown. You need to catch the exception and handle it accordingly.
   Future<void> setCameraAutoFocusFaceModeEnabled(bool enabled);
 
   /// Checks whether the device supports manual exposure.
@@ -5148,7 +5165,7 @@ abstract class RtcEngine {
   /// * [positionYinView] The vertical coordinate of the touchpoint in the view.
   ///
   /// Returns
-  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown; and you need to catch the exception and handle it accordingly.
+  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown. You need to catch the exception and handle it accordingly.
   Future<void> setCameraExposurePosition(
       {required double positionXinView, required double positionYinView});
 
@@ -5174,7 +5191,7 @@ abstract class RtcEngine {
   /// * [factor] The camera exposure value. The default value is 0, which means using the default exposure of the camera. The larger the value, the greater the exposure. When the video image is overexposed, you can reduce the exposure value; when the video image is underexposed and the dark details are lost, you can increase the exposure value. If the exposure value you specified is beyond the range supported by the device, the SDK will automatically adjust it to the actual supported range of the device. On Android, the value range is [-20.0, 20.0]. On iOS, the value range is [-8.0, 8.0].
   ///
   /// Returns
-  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown; and you need to catch the exception and handle it accordingly.
+  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown. You need to catch the exception and handle it accordingly.
   Future<void> setCameraExposureFactor(double factor);
 
   /// Checks whether the device supports auto exposure.
@@ -5194,10 +5211,17 @@ abstract class RtcEngine {
   /// * [enabled] Whether to enable auto exposure: true : Enable auto exposure. false : Disable auto exposure.
   ///
   /// Returns
-  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown; and you need to catch the exception and handle it accordingly.
+  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown. You need to catch the exception and handle it accordingly.
   Future<void> setCameraAutoExposureFaceModeEnabled(bool enabled);
 
-  /// @nodoc
+  /// Set the camera stabilization mode.
+  ///
+  /// This method applies to iOS only. The camera stabilization mode is off by default. You need to call this method to turn it on and set the appropriate stabilization mode.
+  ///
+  /// * [mode] Camera stabilization mode. See CameraStabilizationMode.
+  ///
+  /// Returns
+  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown. You need to catch the exception and handle it accordingly.
   Future<void> setCameraStabilizationMode(CameraStabilizationMode mode);
 
   /// Sets the default audio playback route.
@@ -5212,7 +5236,7 @@ abstract class RtcEngine {
   /// * [defaultToSpeaker] Whether to set the speakerphone as the default audio route: true : Set the speakerphone as the default audio route. false : Set the earpiece as the default audio route.
   ///
   /// Returns
-  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown; and you need to catch the exception and handle it accordingly.
+  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown. You need to catch the exception and handle it accordingly.
   Future<void> setDefaultAudioRouteToSpeakerphone(bool defaultToSpeaker);
 
   /// Enables/Disables the audio route to the speakerphone.
@@ -5225,7 +5249,7 @@ abstract class RtcEngine {
   /// * [speakerOn] Sets whether to enable the speakerphone or earpiece: true : Enable device state monitoring. The audio route is the speakerphone. false : Disable device state monitoring. The audio route is the earpiece.
   ///
   /// Returns
-  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown; and you need to catch the exception and handle it accordingly.
+  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown. You need to catch the exception and handle it accordingly.
   Future<void> setEnableSpeakerphone(bool speakerOn);
 
   /// Checks whether the speakerphone is enabled.
@@ -5257,10 +5281,22 @@ abstract class RtcEngine {
   /// Without practical meaning.
   Future<void> setRouteInCommunicationMode(int route);
 
-  /// @nodoc
+  /// Check if the camera supports the portrait lock feature.
+  ///
+  /// This method is for Windows and macOS only. Before calling enableCameraCenterStage to enable portrait lock, it is recommended to call this method to check if the current device supports portrait lock.
+  ///
+  /// Returns
+  /// true : The current camera supports the portrait lock feature. false : The current camera supports the portrait lock feature.
   Future<bool> isCameraCenterStageSupported();
 
-  /// @nodoc
+  /// Enables or disables the portrait lock feature.
+  ///
+  /// The portrait lock feature is off by default. You need to call this method to turn it on. If you need to disable this feature, you need to call this method again and set enabled to false. This method is for Windows and macOS only.
+  ///
+  /// * [enabled] Whether to enable the portrait lock feature: true : Enable portrait lock. false : Disable portrait lock.
+  ///
+  /// Returns
+  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown. You need to catch the exception and handle it accordingly.
   Future<void> enableCameraCenterStage(bool enabled);
 
   /// Gets a list of shareable screens and windows.
@@ -5287,7 +5323,7 @@ abstract class RtcEngine {
   /// * [restriction] The operational permission of the SDK on the audio session. See AudioSessionOperationRestriction. This parameter is in bit mask format, and each bit corresponds to a permission.
   ///
   /// Returns
-  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown; and you need to catch the exception and handle it accordingly.
+  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown. You need to catch the exception and handle it accordingly.
   Future<void> setAudioSessionOperationRestriction(
       AudioSessionOperationRestriction restriction);
 
@@ -5302,7 +5338,7 @@ abstract class RtcEngine {
   /// * [captureParams] Screen sharing configurations. The default video dimension is 1920 x 1080, that is, 2,073,600 pixels. Agora uses the value of this parameter to calculate the charges. See ScreenCaptureParameters.
   ///
   /// Returns
-  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown; and you need to catch the exception and handle it accordingly.
+  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown. You need to catch the exception and handle it accordingly.
   Future<void> startScreenCaptureByDisplayId(
       {required int displayId,
       required Rectangle regionRect,
@@ -5319,7 +5355,7 @@ abstract class RtcEngine {
   /// * [captureParams] The screen sharing encoding parameters. The default video resolution is 1920 × 1080, that is, 2,073,600 pixels. Agora uses the value of this parameter to calculate the charges. See ScreenCaptureParameters.
   ///
   /// Returns
-  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown; and you need to catch the exception and handle it accordingly.
+  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown. You need to catch the exception and handle it accordingly.
   Future<void> startScreenCaptureByScreenRect(
       {required Rectangle screenRect,
       required Rectangle regionRect,
@@ -5350,7 +5386,7 @@ abstract class RtcEngine {
   /// * [captureParams] Screen sharing configurations. The default video resolution is 1920 × 1080, that is, 2,073,600 pixels. Agora uses the value of this parameter to calculate the charges. See ScreenCaptureParameters.
   ///
   /// Returns
-  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown; and you need to catch the exception and handle it accordingly.
+  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown. You need to catch the exception and handle it accordingly.
   Future<void> startScreenCaptureByWindowId(
       {required int windowId,
       required Rectangle regionRect,
@@ -5363,7 +5399,7 @@ abstract class RtcEngine {
   /// * [contentHint] The content hint for screen sharing. See VideoContentHint.
   ///
   /// Returns
-  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown; and you need to catch the exception and handle it accordingly.
+  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown. You need to catch the exception and handle it accordingly.
   Future<void> setScreenCaptureContentHint(VideoContentHint contentHint);
 
   /// Updates the screen capturing region.
@@ -5373,7 +5409,7 @@ abstract class RtcEngine {
   /// * [regionRect] The relative location of the screen-share area to the screen or window. If you do not set this parameter, the SDK shares the whole screen or window. See Rectangle. If the specified region overruns the screen or window, the SDK shares only the region within it; if you set width or height as 0, the SDK shares the whole screen or window.
   ///
   /// Returns
-  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown; and you need to catch the exception and handle it accordingly.
+  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown. You need to catch the exception and handle it accordingly.
   Future<void> updateScreenCaptureRegion(Rectangle regionRect);
 
   /// Updates the screen capturing parameters.
@@ -5384,7 +5420,7 @@ abstract class RtcEngine {
   /// * [captureParams] The screen sharing encoding parameters. The default video resolution is 1920 × 1080, that is, 2,073,600 pixels. Agora uses the value of this parameter to calculate the charges. See ScreenCaptureParameters.
   ///
   /// Returns
-  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown; and you need to catch the exception and handle it accordingly.
+  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown. You need to catch the exception and handle it accordingly.
   Future<void> updateScreenCaptureParameters(
       ScreenCaptureParameters captureParams);
 
@@ -5409,7 +5445,7 @@ abstract class RtcEngine {
   /// * [captureParams] The screen sharing encoding parameters. The default video dimension is 1920 x 1080, that is, 2,073,600 pixels. Agora uses the value of this parameter to calculate the charges. See ScreenCaptureParameters2.
   ///
   /// Returns
-  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown; and you need to catch the exception and handle it accordingly.
+  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown. You need to catch the exception and handle it accordingly.
   Future<void> startScreenCapture(ScreenCaptureParameters2 captureParams);
 
   /// Updates the screen capturing parameters.
@@ -5423,7 +5459,7 @@ abstract class RtcEngine {
   /// * [captureParams] The screen sharing encoding parameters. The default video resolution is 1920 × 1080, that is, 2,073,600 pixels. Agora uses the value of this parameter to calculate the charges. See ScreenCaptureParameters2.
   ///
   /// Returns
-  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown; and you need to catch the exception and handle it accordingly.
+  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown. You need to catch the exception and handle it accordingly.
   Future<void> updateScreenCapture(ScreenCaptureParameters2 captureParams);
 
   /// Queries the highest frame rate supported by the device during screen sharing.
@@ -5433,7 +5469,12 @@ abstract class RtcEngine {
   ///  < 0: Failure.
   Future<int> queryScreenCaptureCapability();
 
-  /// @nodoc
+  /// Queries the focal length capability supported by the camera.
+  ///
+  /// If you want to enable the wide-angle or ultra-wide-angle mode for camera capture, it is recommended to start by calling this method to check whether the device supports the required focal length capability. Then, adjust the camera's focal length configuration based on the query result by calling setCameraCapturerConfiguration, ensuring the best camera capture performance. This method is for Android and iOS only.
+  ///
+  /// Returns
+  /// Returns an array of FocalLengthInfo objects, which contain the camera's orientation and focal length type.
   Future<List<FocalLengthInfo>> queryCameraFocalLengthCapability();
 
   /// Sets the screen sharing scenario.
@@ -5443,7 +5484,7 @@ abstract class RtcEngine {
   /// * [screenScenario] The screen sharing scenario. See ScreenScenarioType.
   ///
   /// Returns
-  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown; and you need to catch the exception and handle it accordingly.
+  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown. You need to catch the exception and handle it accordingly.
   Future<void> setScreenCaptureScenario(ScreenScenarioType screenScenario);
 
   /// Stops screen capture.
@@ -5451,12 +5492,12 @@ abstract class RtcEngine {
   /// After calling startScreenCaptureByWindowId or startScreenCaptureByDisplayId to start screen capture, call this method to stop screen capture.
   ///
   /// Returns
-  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown; and you need to catch the exception and handle it accordingly.
+  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown. You need to catch the exception and handle it accordingly.
   Future<void> stopScreenCapture();
 
   /// Retrieves the call ID.
   ///
-  /// When a user joins a channel on a client, a callId is generated to identify the call from the client. Some methods, such as rate and complain, must be called after the call ends to submit feedback to the SDK. These methods require the callId parameter. Call this method after joining a channel.
+  /// When a user joins a channel on a client, a callId is generated to identify the call from the client. You can call this method to get the callId parameter, and pass it in when calling methods such as rate and complain. Call this method after joining a channel.
   ///
   /// Returns
   /// The current call ID.
@@ -5471,7 +5512,7 @@ abstract class RtcEngine {
   /// * [description] A description of the call. The string length should be less than 800 bytes.
   ///
   /// Returns
-  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown; and you need to catch the exception and handle it accordingly.
+  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown. You need to catch the exception and handle it accordingly.
   Future<void> rate(
       {required String callId,
       required int rating,
@@ -5485,7 +5526,7 @@ abstract class RtcEngine {
   /// * [description] A description of the call. The string length should be less than 800 bytes.
   ///
   /// Returns
-  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown; and you need to catch the exception and handle it accordingly.
+  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown. You need to catch the exception and handle it accordingly.
   Future<void> complain({required String callId, required String description});
 
   /// Starts pushing media streams to a CDN without transcoding.
@@ -5497,7 +5538,7 @@ abstract class RtcEngine {
   /// * [url] The address of Media Push. The format is RTMP or RTMPS. The character length cannot exceed 1024 bytes. Special characters such as Chinese characters are not supported.
   ///
   /// Returns
-  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown; and you need to catch the exception and handle it accordingly.
+  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown. You need to catch the exception and handle it accordingly.
   Future<void> startRtmpStreamWithoutTranscoding(String url);
 
   /// Starts Media Push and sets the transcoding configuration.
@@ -5511,7 +5552,7 @@ abstract class RtcEngine {
   /// * [transcoding] The transcoding configuration for Media Push. See LiveTranscoding.
   ///
   /// Returns
-  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown; and you need to catch the exception and handle it accordingly.
+  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown. You need to catch the exception and handle it accordingly.
   Future<void> startRtmpStreamWithTranscoding(
       {required String url, required LiveTranscoding transcoding});
 
@@ -5522,26 +5563,19 @@ abstract class RtcEngine {
   /// * [transcoding] The transcoding configuration for Media Push. See LiveTranscoding.
   ///
   /// Returns
-  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown; and you need to catch the exception and handle it accordingly.
+  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown. You need to catch the exception and handle it accordingly.
   Future<void> updateRtmpTranscoding(LiveTranscoding transcoding);
 
   /// Starts the local video mixing.
   ///
   /// After calling this method, you can merge multiple video streams into one video stream locally. For example, you can merge the video streams captured by the camera, screen sharing, media player, remote video, video files, images, etc. into one video stream, and then publish the mixed video stream to the channel.
-  ///  Local video mixing requires more CPU resources. Therefore, Agora recommends enabling this function on devices with higher performance.
-  ///  If you need to mix locally captured video streams, the SDK supports the following capture combinations:
-  ///  On the Windows platform, it supports up to 4 video streams captured by cameras + 4 screen sharing streams.
-  ///  On the macOS platform, it supports up to 4 video streams captured by cameras + 1 screen sharing stream.
-  ///  On Android and iOS platforms, it supports video streams captured by up to 2 cameras (the device itself needs to support dual cameras or supports external cameras) + 1 screen sharing stream.
-  ///  If you need to mix the locally collected video streams, you need to call this method after startCameraCapture or startScreenCaptureBySourceType.
-  ///  If you want to publish the mixed video stream to the channel, you need to set publishTranscodedVideoTrack in ChannelMediaOptions to true when calling joinChannel or updateChannelMediaOptions.
   ///
   /// * [config] Configuration of the local video mixing, see LocalTranscoderConfiguration.
   ///  The maximum resolution of each video stream participating in the local video mixing is 4096 × 2160. If this limit is exceeded, video mixing does not take effect.
   ///  The maximum resolution of the mixed video stream is 4096 × 2160.
   ///
   /// Returns
-  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown; and you need to catch the exception and handle it accordingly.
+  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown. You need to catch the exception and handle it accordingly.
   Future<void> startLocalVideoTranscoder(LocalTranscoderConfiguration config);
 
   /// Updates the local video mixing configuration.
@@ -5551,7 +5585,7 @@ abstract class RtcEngine {
   /// * [config] Configuration of the local video mixing, see LocalTranscoderConfiguration.
   ///
   /// Returns
-  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown; and you need to catch the exception and handle it accordingly.
+  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown. You need to catch the exception and handle it accordingly.
   Future<void> updateLocalTranscoderConfiguration(
       LocalTranscoderConfiguration config);
 
@@ -5562,7 +5596,7 @@ abstract class RtcEngine {
   /// * [url] The address of Media Push. The format is RTMP or RTMPS. The character length cannot exceed 1024 bytes. Special characters such as Chinese characters are not supported.
   ///
   /// Returns
-  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown; and you need to catch the exception and handle it accordingly.
+  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown. You need to catch the exception and handle it accordingly.
   Future<void> stopRtmpStream(String url);
 
   /// Stops the local video mixing.
@@ -5570,7 +5604,7 @@ abstract class RtcEngine {
   /// After calling startLocalVideoTranscoder, call this method if you want to stop the local video mixing.
   ///
   /// Returns
-  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown; and you need to catch the exception and handle it accordingly.
+  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown. You need to catch the exception and handle it accordingly.
   Future<void> stopLocalVideoTranscoder();
 
   /// Starts camera capture.
@@ -5578,12 +5612,13 @@ abstract class RtcEngine {
   /// You can call this method to start capturing video from one or more cameras by specifying sourceType. On the iOS platform, if you want to enable multi-camera capture, you need to call enableMultiCamera and set enabled to true before calling this method.
   ///
   /// * [sourceType] The type of the video source. See VideoSourceType.
-  ///  On the mobile platforms, you can capture video from up to 2 cameras, provided the device has dual cameras or supports an external camera.
+  ///  On iOS devices, you can capture video from up to 2 cameras, provided the device has multiple cameras or supports external cameras.
+  ///  On Android devices, you can capture video from up to 4 cameras, provided the device has multiple cameras or supports external cameras.
   ///  On the desktop platforms, you can capture video from up to 4 cameras.
   /// * [config] The configuration of the video capture. See CameraCapturerConfiguration. On the iOS platform, this parameter has no practical function. Use the config parameter in enableMultiCamera instead to set the video capture configuration.
   ///
   /// Returns
-  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown; and you need to catch the exception and handle it accordingly.
+  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown. You need to catch the exception and handle it accordingly.
   Future<void> startCameraCapture(
       {required VideoSourceType sourceType,
       required CameraCapturerConfiguration config});
@@ -5595,7 +5630,7 @@ abstract class RtcEngine {
   /// * [sourceType] The type of the video source. See VideoSourceType.
   ///
   /// Returns
-  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown; and you need to catch the exception and handle it accordingly.
+  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown. You need to catch the exception and handle it accordingly.
   Future<void> stopCameraCapture(VideoSourceType sourceType);
 
   /// Sets the rotation angle of the captured video.
@@ -5608,7 +5643,7 @@ abstract class RtcEngine {
   /// * [orientation] The clockwise rotation angle. See VideoOrientation.
   ///
   /// Returns
-  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown; and you need to catch the exception and handle it accordingly.
+  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown. You need to catch the exception and handle it accordingly.
   Future<void> setCameraDeviceOrientation(
       {required VideoSourceType type, required VideoOrientation orientation});
 
@@ -5631,7 +5666,7 @@ abstract class RtcEngine {
   /// * [eventHandler] Callback events to be added. See RtcEngineEventHandler.
   ///
   /// Returns
-  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown; and you need to catch the exception and handle it accordingly.
+  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown. You need to catch the exception and handle it accordingly.
   void registerEventHandler(RtcEngineEventHandler eventHandler);
 
   /// Removes the specified callback events.
@@ -5641,7 +5676,7 @@ abstract class RtcEngine {
   /// * [eventHandler] Callback events to be removed. See RtcEngineEventHandler.
   ///
   /// Returns
-  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown; and you need to catch the exception and handle it accordingly.
+  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown. You need to catch the exception and handle it accordingly.
   void unregisterEventHandler(RtcEngineEventHandler eventHandler);
 
   /// @nodoc
@@ -5662,7 +5697,7 @@ abstract class RtcEngine {
   ///  "": When this parameter is set as null, the encryption mode is set as " aes-128-gcm " by default.
   ///
   /// Returns
-  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown; and you need to catch the exception and handle it accordingly.
+  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown. You need to catch the exception and handle it accordingly.
   Future<void> setEncryptionMode(String encryptionMode);
 
   /// Enables built-in encryption with an encryption password before users join a channel.
@@ -5674,18 +5709,18 @@ abstract class RtcEngine {
   /// * [secret] The encryption password.
   ///
   /// Returns
-  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown; and you need to catch the exception and handle it accordingly.
+  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown. You need to catch the exception and handle it accordingly.
   Future<void> setEncryptionSecret(String secret);
 
   /// Enables or disables the built-in encryption.
   ///
   /// In scenarios requiring high security, Agora recommends calling this method to enable the built-in encryption before joining a channel. All users in the same channel must use the same encryption mode and encryption key. After the user leaves the channel, the SDK automatically disables the built-in encryption. To enable the built-in encryption, call this method before the user joins the channel again. If you enable the built-in encryption, you cannot use the Media Push function.
   ///
-  /// * [enabled] Whether to enable built-in encryption: true : Enable the built-in encryption. false : Disable the built-in encryption.
+  /// * [enabled] Whether to enable built-in encryption: true : Enable the built-in encryption. false : (Default) Disable the built-in encryption.
   /// * [config] Built-in encryption configurations. See EncryptionConfig.
   ///
   /// Returns
-  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown; and you need to catch the exception and handle it accordingly.
+  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown. You need to catch the exception and handle it accordingly.
   Future<void> enableEncryption(
       {required bool enabled, required EncryptionConfig config});
 
@@ -5714,7 +5749,7 @@ abstract class RtcEngine {
   /// * [length] The length of the data.
   ///
   /// Returns
-  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown; and you need to catch the exception and handle it accordingly.
+  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown. You need to catch the exception and handle it accordingly.
   Future<void> sendStreamMessage(
       {required int streamId, required Uint8List data, required int length});
 
@@ -5734,14 +5769,14 @@ abstract class RtcEngine {
   /// * [options] The options of the watermark image to be added. See WatermarkOptions.
   ///
   /// Returns
-  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown; and you need to catch the exception and handle it accordingly.
+  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown. You need to catch the exception and handle it accordingly.
   Future<void> addVideoWatermark(
       {required String watermarkUrl, required WatermarkOptions options});
 
   /// Removes the watermark image from the video stream.
   ///
   /// Returns
-  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown; and you need to catch the exception and handle it accordingly.
+  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown. You need to catch the exception and handle it accordingly.
   Future<void> clearVideoWatermarks();
 
   /// @nodoc
@@ -5757,7 +5792,7 @@ abstract class RtcEngine {
   /// * [enabled] Whether to enable interoperability: true : Enable interoperability. false : (Default) Disable interoperability.
   ///
   /// Returns
-  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown; and you need to catch the exception and handle it accordingly.
+  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown. You need to catch the exception and handle it accordingly.
   Future<void> enableWebSdkInteroperability(bool enabled);
 
   /// Reports customized messages.
@@ -5779,7 +5814,7 @@ abstract class RtcEngine {
   /// * [type] The metadata type. The SDK currently only supports videoMetadata.
   ///
   /// Returns
-  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown; and you need to catch the exception and handle it accordingly.
+  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown. You need to catch the exception and handle it accordingly.
   ///  < 0: Failure.
   void registerMediaMetadataObserver(
       {required MetadataObserver observer, required MetadataType type});
@@ -5790,7 +5825,7 @@ abstract class RtcEngine {
   /// * [type] The metadata type. The SDK currently only supports videoMetadata.
   ///
   /// Returns
-  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown; and you need to catch the exception and handle it accordingly.
+  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown. You need to catch the exception and handle it accordingly.
   ///  < 0: Failure.
   void unregisterMediaMetadataObserver(
       {required MetadataObserver observer, required MetadataType type});
@@ -5824,7 +5859,7 @@ abstract class RtcEngine {
   /// * [mode] The AI noise suppression modes. See AudioAinsMode.
   ///
   /// Returns
-  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown; and you need to catch the exception and handle it accordingly.
+  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown. You need to catch the exception and handle it accordingly.
   Future<void> setAINSMode(
       {required bool enabled, required AudioAinsMode mode});
 
@@ -5846,7 +5881,7 @@ abstract class RtcEngine {
   ///  "!", "#", "$", "%", "&", "(", ")", "+", "-", ":", ";", "<", "=", ".", ">", "?", "@", "[", "]", "^", "_", "{", "}", "|", "~", ","
   ///
   /// Returns
-  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown; and you need to catch the exception and handle it accordingly.
+  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown. You need to catch the exception and handle it accordingly.
   Future<void> registerLocalUserAccount(
       {required String appId, required String userAccount});
 
@@ -5873,7 +5908,7 @@ abstract class RtcEngine {
   /// * [options] The channel media options. See ChannelMediaOptions.
   ///
   /// Returns
-  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown; and you need to catch the exception and handle it accordingly.
+  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown. You need to catch the exception and handle it accordingly.
   ///  < 0: Failure.
   ///  -2: The parameter is invalid. For example, the token is invalid, the uid parameter is not set to an integer, or the value of a member in ChannelMediaOptions is invalid. You need to pass in a valid parameter and join the channel again.
   ///  -3: Failes to initialize the RtcEngine object. You need to reinitialize the RtcEngine object.
@@ -5911,7 +5946,7 @@ abstract class RtcEngine {
   /// * [options] The channel media options. See ChannelMediaOptions.
   ///
   /// Returns
-  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown; and you need to catch the exception and handle it accordingly.
+  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown. You need to catch the exception and handle it accordingly.
   Future<void> joinChannelWithUserAccountEx(
       {required String token,
       required String channelId,
@@ -5953,7 +5988,7 @@ abstract class RtcEngine {
   /// * [configuration] The configuration of the media stream relay. See ChannelMediaRelayConfiguration.
   ///
   /// Returns
-  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown; and you need to catch the exception and handle it accordingly.
+  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown. You need to catch the exception and handle it accordingly.
   ///  < 0: Failure.
   ///  -1: A general error occurs (no specified reason).
   ///  -2: The parameter is invalid.
@@ -5967,7 +6002,7 @@ abstract class RtcEngine {
   /// After a successful method call, the SDK triggers the onChannelMediaRelayStateChanged callback. If the callback reports relayStateIdle (0) and relayOk (0), the host successfully stops the relay. If the method call fails, the SDK triggers the onChannelMediaRelayStateChanged callback with the relayErrorServerNoResponse (2) or relayErrorServerConnectionLost (8) status code. You can call the leaveChannel method to leave the channel, and the media stream relay automatically stops.
   ///
   /// Returns
-  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown; and you need to catch the exception and handle it accordingly.
+  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown. You need to catch the exception and handle it accordingly.
   ///  < 0: Failure.
   Future<void> stopChannelMediaRelay();
 
@@ -5976,7 +6011,7 @@ abstract class RtcEngine {
   /// After the cross-channel media stream relay starts, you can call this method to pause relaying media streams to all target channels; after the pause, if you want to resume the relay, call resumeAllChannelMediaRelay. Call this method after startOrUpdateChannelMediaRelay.
   ///
   /// Returns
-  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown; and you need to catch the exception and handle it accordingly.
+  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown. You need to catch the exception and handle it accordingly.
   Future<void> pauseAllChannelMediaRelay();
 
   /// Resumes the media stream relay to all target channels.
@@ -5984,7 +6019,7 @@ abstract class RtcEngine {
   /// After calling the pauseAllChannelMediaRelay method, you can call this method to resume relaying media streams to all destination channels. Call this method after pauseAllChannelMediaRelay.
   ///
   /// Returns
-  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown; and you need to catch the exception and handle it accordingly.
+  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown. You need to catch the exception and handle it accordingly.
   ///  < 0: Failure.
   Future<void> resumeAllChannelMediaRelay();
 
@@ -5995,7 +6030,7 @@ abstract class RtcEngine {
   /// * [profile] The audio profile, including the sampling rate, bitrate, encoding mode, and the number of channels. See AudioProfileType.
   ///
   /// Returns
-  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown; and you need to catch the exception and handle it accordingly.
+  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown. You need to catch the exception and handle it accordingly.
   Future<void> setDirectCdnStreamingAudioConfiguration(
       AudioProfileType profile);
 
@@ -6006,7 +6041,7 @@ abstract class RtcEngine {
   /// * [config] Video profile. See VideoEncoderConfiguration. During CDN live streaming, Agora only supports setting OrientationMode as orientationModeFixedLandscape or orientationModeFixedPortrait.
   ///
   /// Returns
-  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown; and you need to catch the exception and handle it accordingly.
+  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown. You need to catch the exception and handle it accordingly.
   Future<void> setDirectCdnStreamingVideoConfiguration(
       VideoEncoderConfiguration config);
 
@@ -6019,7 +6054,7 @@ abstract class RtcEngine {
   /// * [options] The media setting options for the host. See DirectCdnStreamingMediaOptions.
   ///
   /// Returns
-  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown; and you need to catch the exception and handle it accordingly.
+  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown. You need to catch the exception and handle it accordingly.
   Future<void> startDirectCdnStreaming(
       {required DirectCdnStreamingEventHandler eventHandler,
       required String publishUrl,
@@ -6028,7 +6063,7 @@ abstract class RtcEngine {
   /// Stops pushing media streams to the CDN directly.
   ///
   /// Returns
-  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown; and you need to catch the exception and handle it accordingly.
+  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown. You need to catch the exception and handle it accordingly.
   Future<void> stopDirectCdnStreaming();
 
   /// @nodoc
@@ -6047,7 +6082,7 @@ abstract class RtcEngine {
   /// * [config] The metronome configuration. See AgoraRhythmPlayerConfig.
   ///
   /// Returns
-  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown; and you need to catch the exception and handle it accordingly.
+  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown. You need to catch the exception and handle it accordingly.
   Future<void> startRhythmPlayer(
       {required String sound1,
       required String sound2,
@@ -6058,7 +6093,7 @@ abstract class RtcEngine {
   /// After calling startRhythmPlayer, you can call this method to disable the virtual metronome. This method is for Android and iOS only.
   ///
   /// Returns
-  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown; and you need to catch the exception and handle it accordingly.
+  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown. You need to catch the exception and handle it accordingly.
   Future<void> stopRhythmPlayer();
 
   /// Configures the virtual metronome.
@@ -6070,7 +6105,7 @@ abstract class RtcEngine {
   /// * [config] The metronome configuration. See AgoraRhythmPlayerConfig.
   ///
   /// Returns
-  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown; and you need to catch the exception and handle it accordingly.
+  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown. You need to catch the exception and handle it accordingly.
   Future<void> configRhythmPlayer(AgoraRhythmPlayerConfig config);
 
   /// Takes a snapshot of a video stream.
@@ -6088,7 +6123,7 @@ abstract class RtcEngine {
   ///  Android: /storage/emulated/0/Android/data/<package name>/files/example.jpg Ensure that the path you specify exists and is writable.
   ///
   /// Returns
-  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown; and you need to catch the exception and handle it accordingly.
+  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown. You need to catch the exception and handle it accordingly.
   Future<void> takeSnapshot({required int uid, required String filePath});
 
   /// Enables or disables video screenshot and upload.
@@ -6099,7 +6134,7 @@ abstract class RtcEngine {
   /// * [config] Configuration of video screenshot and upload. See ContentInspectConfig. When the video moderation module is set to video moderation via Agora self-developed extension(contentInspectSupervision), the video screenshot and upload dynamic library libagora_content_inspect_extension.dll is required. Deleting this library disables the screenshot and upload feature.
   ///
   /// Returns
-  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown; and you need to catch the exception and handle it accordingly.
+  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown. You need to catch the exception and handle it accordingly.
   Future<void> enableContentInspect(
       {required bool enabled, required ContentInspectConfig config});
 
@@ -6111,7 +6146,7 @@ abstract class RtcEngine {
   /// * [volume] The volume of the audio source. The value can range from 0 to 100. 0 means mute; 100 means the original volume.
   ///
   /// Returns
-  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown; and you need to catch the exception and handle it accordingly.
+  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown. You need to catch the exception and handle it accordingly.
   ///  < 0: Failure.
   Future<void> adjustCustomAudioPublishVolume(
       {required int trackId, required int volume});
@@ -6124,7 +6159,7 @@ abstract class RtcEngine {
   /// * [volume] The volume of the audio source. The value can range from 0 to 100. 0 means mute; 100 means the original volume.
   ///
   /// Returns
-  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown; and you need to catch the exception and handle it accordingly.
+  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown. You need to catch the exception and handle it accordingly.
   ///  < 0: Failure.
   Future<void> adjustCustomAudioPlayoutVolume(
       {required int trackId, required int volume});
@@ -6139,7 +6174,7 @@ abstract class RtcEngine {
   /// * [proxyType] The type of the cloud proxy. See CloudProxyType. This parameter is mandatory. The SDK reports an error if you do not pass in a value.
   ///
   /// Returns
-  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown; and you need to catch the exception and handle it accordingly.
+  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown. You need to catch the exception and handle it accordingly.
   Future<void> setCloudProxy(CloudProxyType proxyType);
 
   /// @nodoc
@@ -6152,7 +6187,7 @@ abstract class RtcEngine {
   /// * [options] The advanced options for audio. See AdvancedAudioOptions.
   ///
   /// Returns
-  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown; and you need to catch the exception and handle it accordingly.
+  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown. You need to catch the exception and handle it accordingly.
   Future<void> setAdvancedAudioOptions(
       {required AdvancedAudioOptions options, int sourceType = 0});
 
@@ -6167,7 +6202,7 @@ abstract class RtcEngine {
   /// * [options] Image configurations. See ImageTrackOptions.
   ///
   /// Returns
-  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown; and you need to catch the exception and handle it accordingly.
+  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown. You need to catch the exception and handle it accordingly.
   ///  < 0: Failure.
   Future<void> enableVideoImageSource(
       {required bool enable, required ImageTrackOptions options});
@@ -6206,7 +6241,7 @@ abstract class RtcEngine {
   /// * [parameters] Pointer to the set parameters in a JSON string.
   ///
   /// Returns
-  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown; and you need to catch the exception and handle it accordingly.
+  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown. You need to catch the exception and handle it accordingly.
   Future<void> setParameters(String parameters);
 
   /// Enables tracing the video frame rendering process.
@@ -6216,7 +6251,7 @@ abstract class RtcEngine {
   ///  After the local user leaves the current channel, the SDK automatically resets the time point to the next time when the user successfully joins the channel.
   ///
   /// Returns
-  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown; and you need to catch the exception and handle it accordingly.
+  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown. You need to catch the exception and handle it accordingly.
   Future<void> startMediaRenderingTracing();
 
   /// Enables audio and video frame instant rendering.
@@ -6226,7 +6261,7 @@ abstract class RtcEngine {
   ///  In this mode, the SDK uses Agora's custom encryption algorithm to shorten the time required to establish transmission links, and the security is reduced compared to the standard DTLS (Datagram Transport Layer Security). If the application scenario requires higher security standards, Agora recommends that you do not use this method.
   ///
   /// Returns
-  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown; and you need to catch the exception and handle it accordingly.
+  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown. You need to catch the exception and handle it accordingly.
   Future<void> enableInstantMediaRendering();
 
   /// Gets the current NTP (Network Time Protocol) time.
@@ -6263,7 +6298,7 @@ abstract class RtcEngine {
   /// * [config] The configuration of the captured screen. See ScreenCaptureConfiguration.
   ///
   /// Returns
-  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown; and you need to catch the exception and handle it accordingly.
+  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown. You need to catch the exception and handle it accordingly.
   Future<void> startScreenCaptureBySourceType(
       {required VideoSourceType sourceType,
       required ScreenCaptureConfiguration config});
@@ -6277,7 +6312,7 @@ abstract class RtcEngine {
   /// * [sourceType] The type of the video source. See VideoSourceType.
   ///
   /// Returns
-  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown; and you need to catch the exception and handle it accordingly.
+  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown. You need to catch the exception and handle it accordingly.
   Future<void> stopScreenCaptureBySourceType(VideoSourceType sourceType);
 
   /// Releases the RtcEngine instance.
@@ -6298,7 +6333,7 @@ abstract class RtcEngine {
   ///  After the local video preview is enabled, if you call leaveChannel to exit the channel, the local preview remains until you call stopPreview to disable it.
   ///
   /// Returns
-  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown; and you need to catch the exception and handle it accordingly.
+  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown. You need to catch the exception and handle it accordingly.
   Future<void> startPreviewWithoutSourceType();
 
   /// Gets the AudioDeviceManager object to manage audio devices.
@@ -6346,7 +6381,7 @@ abstract class RtcEngine {
   /// * [sourceType] The type of the video source. See VideoSourceType.
   ///
   /// Returns
-  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown; and you need to catch the exception and handle it accordingly.
+  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown. You need to catch the exception and handle it accordingly.
   ///  < 0: Failure.
   Future<void> sendMetaData(
       {required Metadata metadata, required VideoSourceType sourceType});
@@ -6358,7 +6393,7 @@ abstract class RtcEngine {
   /// * [size] The maximum size of media metadata.
   ///
   /// Returns
-  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown; and you need to catch the exception and handle it accordingly.
+  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown. You need to catch the exception and handle it accordingly.
   ///  < 0: Failure.
   Future<void> setMaxMetadataSize(int size);
 
@@ -6367,7 +6402,7 @@ abstract class RtcEngine {
   /// * [observer] The encoded audio observer. See AudioEncodedFrameObserver.
   ///
   /// Returns
-  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown; and you need to catch the exception and handle it accordingly.
+  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown. You need to catch the exception and handle it accordingly.
   void unregisterAudioEncodedFrameObserver(AudioEncodedFrameObserver observer);
 
   /// Gets the C++ handle of the Native SDK.
@@ -6786,7 +6821,7 @@ class VideoDeviceInfo {
   Map<String, dynamic> toJson() => _$VideoDeviceInfoToJson(this);
 }
 
-/// The AudioDeviceInfo class that contains the ID and device name of the audio devices.
+/// The AudioDeviceInfo class that contains the ID, name and type of the audio devices.
 @JsonSerializable(explicitToJson: true, includeIfNull: false)
 class AudioDeviceInfo {
   /// @nodoc
@@ -6796,7 +6831,7 @@ class AudioDeviceInfo {
   @JsonKey(name: 'deviceId')
   final String? deviceId;
 
-  /// @nodoc
+  /// Output parameter; indicates the type of audio devices, such as built-in, USB and HDMI.
   @JsonKey(name: 'deviceTypeName')
   final String? deviceTypeName;
 
