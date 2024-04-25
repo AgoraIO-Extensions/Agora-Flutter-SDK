@@ -102,11 +102,11 @@ class LogConfig {
   /// @nodoc
   const LogConfig({this.filePath, this.fileSizeInKB, this.level});
 
-  /// The complete path of the log files. Ensure that the path for the log file exists and is writable. You can use this parameter to rename the log files.
+  /// The complete path of the log files. Agora recommends using the default log directory. If you need to modify the default directory, ensure that the directory you specify exists and is writable.
   @JsonKey(name: 'filePath')
   final String? filePath;
 
-  /// The size (KB) of an agorasdk.log file. The value range is [128, 20480]. The default value is 1,024 KB. If you set fileSizeInKByte smaller than 128 KB, the SDK automatically adjusts it to 128 KB; if you set fileSizeInKByte greater than 20,480 KB, the SDK automatically adjusts it to 20,480 KB.
+  /// The size (KB) of an agorasdk.log file. The value range is [128,20480]. The default value is 2,048 KB. If you set fileSizeInKByte smaller than 128 KB, the SDK automatically adjusts it to 128 KB; if you set fileSizeInKByte greater than 20,480 KB, the SDK automatically adjusts it to 20,480 KB.
   @JsonKey(name: 'fileSizeInKB')
   final int? fileSizeInKB;
 

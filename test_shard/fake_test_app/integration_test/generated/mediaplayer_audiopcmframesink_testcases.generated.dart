@@ -11,15 +11,18 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:iris_tester/iris_tester.dart';
 import 'package:iris_method_channel/iris_method_channel.dart';
 
-void generatedTestCases(IrisTester irisTester) {
+import '../testcases/event_ids_mapping.dart';
+
+void generatedTestCases(ValueGetter<IrisTester> irisTester) {
   testWidgets(
-    'onFrame',
+    'AudioPcmFrameSink.onFrame',
     (WidgetTester tester) async {
       RtcEngine rtcEngine = createAgoraRtcEngine();
       await rtcEngine.initialize(RtcEngineContext(
         appId: 'app_id',
         areaCode: AreaCode.areaCodeGlob.value(),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
       MediaPlayerController mediaPlayerController = MediaPlayerController(
           rtcEngine: rtcEngine, canvas: const VideoCanvas());
       await mediaPlayerController.initialize();
@@ -63,15 +66,13 @@ void generatedTestCases(IrisTester irisTester) {
           'frame': frame.toJson(),
         };
 
-        if (!kIsWeb) {
-          irisTester.fireEvent('AudioPcmFrameSink_onFrame', params: eventJson);
-        } else {
-          final ret = irisTester.fireEvent('AudioPcmFrameSink_onFrame',
-              params: eventJson);
-// Delay 200 milliseconds to ensure the callback is called.
+        final eventIds = eventIdsMapping['AudioPcmFrameSink_onFrame'] ?? [];
+        for (final event in eventIds) {
+          final ret = irisTester().fireEvent(event, params: eventJson);
+          // Delay 200 milliseconds to ensure the callback is called.
           await Future.delayed(const Duration(milliseconds: 200));
-// TODO(littlegnal): Most of callbacks on web are not implemented, we're temporarily skip these callbacks at this time.
-          if (ret) {
+          // TODO(littlegnal): Most of callbacks on web are not implemented, we're temporarily skip these callbacks at this time.
+          if (kIsWeb && ret) {
             if (!onFrameCompleter.isCompleted) {
               onFrameCompleter.complete(true);
             }

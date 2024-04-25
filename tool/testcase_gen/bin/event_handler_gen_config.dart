@@ -18,7 +18,9 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:iris_tester/iris_tester.dart';
 import 'package:iris_method_channel/iris_method_channel.dart';
 
-void generatedTestCases(IrisTester irisTester) {
+import '../testcases/event_ids_mapping.dart';
+
+void generatedTestCases(ValueGetter<IrisTester> irisTester) {
   {{TEST_CASES_CONTENT}} 
 }
 ''',
@@ -29,6 +31,7 @@ testWidgets('{{TEST_CASE_NAME}}', (WidgetTester tester) async {
         appId: 'app_id',
         areaCode: AreaCode.areaCodeGlob.value(),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       {{TEST_CASE_BODY}}
 
@@ -44,7 +47,6 @@ testWidgets('{{TEST_CASE_NAME}}', (WidgetTester tester) async {
       unregisterFunctionName: 'unregisterEventHandler',
       skipMemberFunctions: [
         'onFacePositionChanged',
-        'onAudioRoutingChanged',
       ],
     ),
     EventHandlerTemplatedTestCase(
@@ -62,7 +64,9 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:iris_tester/iris_tester.dart';
 import 'package:iris_method_channel/iris_method_channel.dart';
 
-void generatedTestCases(IrisTester irisTester) {
+import '../testcases/event_ids_mapping.dart';
+
+void generatedTestCases(ValueGetter<IrisTester> irisTester) {
   {{TEST_CASES_CONTENT}} 
 }
 ''',
@@ -73,6 +77,7 @@ testWidgets('{{TEST_CASE_NAME}}', (WidgetTester tester) async {
         appId: 'app_id',
         areaCode: AreaCode.areaCodeGlob.value(),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       {{TEST_CASE_BODY}}
 
@@ -101,7 +106,9 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:iris_tester/iris_tester.dart';
 import 'package:iris_method_channel/iris_method_channel.dart';
 
-void generatedTestCases(IrisTester irisTester) {
+import '../testcases/event_ids_mapping.dart';
+
+void generatedTestCases(ValueGetter<IrisTester> irisTester) {
   {{TEST_CASES_CONTENT}} 
 }
 ''',
@@ -112,6 +119,7 @@ testWidgets('{{TEST_CASE_NAME}}', (WidgetTester tester) async {
         appId: 'app_id',
         areaCode: AreaCode.areaCodeGlob.value(),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       {{TEST_CASE_BODY}}
 
@@ -140,7 +148,9 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:iris_tester/iris_tester.dart';
 import 'package:iris_method_channel/iris_method_channel.dart';
 
-void generatedTestCases(IrisTester irisTester) {
+import '../testcases/event_ids_mapping.dart';
+
+void generatedTestCases(ValueGetter<IrisTester> irisTester) {
   {{TEST_CASES_CONTENT}} 
 }
 ''',
@@ -151,6 +161,7 @@ testWidgets('{{TEST_CASE_NAME}}', (WidgetTester tester) async {
         appId: 'app_id',
         areaCode: AreaCode.areaCodeGlob.value(),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       {{TEST_CASE_BODY}}
 
@@ -179,7 +190,9 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:iris_tester/iris_tester.dart';
 import 'package:iris_method_channel/iris_method_channel.dart';
 
-void generatedTestCases(IrisTester irisTester) {
+import '../testcases/event_ids_mapping.dart';
+
+void generatedTestCases(ValueGetter<IrisTester> irisTester) {
   {{TEST_CASES_CONTENT}} 
 }
 ''',
@@ -190,6 +203,7 @@ testWidgets('{{TEST_CASE_NAME}}', (WidgetTester tester) async {
         appId: 'app_id',
         areaCode: AreaCode.areaCodeGlob.value(),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
       final mediaEngine = rtcEngine.getMediaEngine();
 
       {{TEST_CASE_BODY}}
@@ -219,7 +233,9 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:iris_tester/iris_tester.dart';
 import 'package:iris_method_channel/iris_method_channel.dart';
 
-void generatedTestCases(IrisTester irisTester) {
+import '../testcases/event_ids_mapping.dart';
+
+void generatedTestCases(ValueGetter<IrisTester> irisTester) {
   {{TEST_CASES_CONTENT}} 
 }
 ''',
@@ -230,6 +246,7 @@ testWidgets('{{TEST_CASE_NAME}}', (WidgetTester tester) async {
         appId: 'app_id',
         areaCode: AreaCode.areaCodeGlob.value(),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
       final mediaEngine = rtcEngine.getMediaEngine();
 
       {{TEST_CASE_BODY}}
@@ -259,7 +276,9 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:iris_tester/iris_tester.dart';
 import 'package:iris_method_channel/iris_method_channel.dart';
 
-void generatedTestCases(IrisTester irisTester) {
+import '../testcases/event_ids_mapping.dart';
+
+void generatedTestCases(ValueGetter<IrisTester> irisTester) {
   {{TEST_CASES_CONTENT}} 
 }
 ''',
@@ -270,6 +289,7 @@ testWidgets('{{TEST_CASE_NAME}}', (WidgetTester tester) async {
         appId: 'app_id',
         areaCode: AreaCode.areaCodeGlob.value(),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
       final mediaEngine = rtcEngine.getMediaEngine();
 
       {{TEST_CASE_BODY}}
@@ -299,7 +319,9 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:iris_tester/iris_tester.dart';
 import 'package:iris_method_channel/iris_method_channel.dart';
 
-void generatedTestCases(IrisTester irisTester) {
+import '../testcases/event_ids_mapping.dart';
+
+void generatedTestCases(ValueGetter<IrisTester> irisTester) {
   {{TEST_CASES_CONTENT}} 
 }
 ''',
@@ -310,6 +332,7 @@ testWidgets('{{TEST_CASE_NAME}}', (WidgetTester tester) async {
         appId: 'app_id',
         areaCode: AreaCode.areaCodeGlob.value(),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
       final mediaPlayerController = MediaPlayerController(
           rtcEngine: rtcEngine, canvas: const VideoCanvas());
       await mediaPlayerController.initialize();
@@ -341,7 +364,9 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:iris_tester/iris_tester.dart';
 import 'package:iris_method_channel/iris_method_channel.dart';
 
-void generatedTestCases(IrisTester irisTester) {
+import '../testcases/event_ids_mapping.dart';
+
+void generatedTestCases(ValueGetter<IrisTester> irisTester) {
   {{TEST_CASES_CONTENT}} 
 }
 ''',
@@ -352,6 +377,7 @@ testWidgets('{{TEST_CASE_NAME}}', (WidgetTester tester) async {
         appId: 'app_id',
         areaCode: AreaCode.areaCodeGlob.value(),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
       MediaPlayerController mediaPlayerController = MediaPlayerController(
           rtcEngine: rtcEngine, canvas: const VideoCanvas());
       await mediaPlayerController.initialize();
@@ -383,7 +409,9 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:iris_tester/iris_tester.dart';
 import 'package:iris_method_channel/iris_method_channel.dart';
 
-void generatedTestCases(IrisTester irisTester) {
+import '../testcases/event_ids_mapping.dart';
+
+void generatedTestCases(ValueGetter<IrisTester> irisTester) {
   {{TEST_CASES_CONTENT}} 
 }
 ''',
@@ -394,6 +422,7 @@ testWidgets('{{TEST_CASE_NAME}}', (WidgetTester tester) async {
         appId: 'app_id',
         areaCode: AreaCode.areaCodeGlob.value(),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
       MediaPlayerController mediaPlayerController = MediaPlayerController(
           rtcEngine: rtcEngine, canvas: const VideoCanvas());
       await mediaPlayerController.initialize();
@@ -425,7 +454,9 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:iris_tester/iris_tester.dart';
 import 'package:iris_method_channel/iris_method_channel.dart';
 
-void generatedTestCases(IrisTester irisTester) {
+import '../testcases/event_ids_mapping.dart';
+
+void generatedTestCases(ValueGetter<IrisTester> irisTester) {
   {{TEST_CASES_CONTENT}} 
 }
 ''',
@@ -436,6 +467,7 @@ testWidgets('{{TEST_CASE_NAME}}', (WidgetTester tester) async {
         appId: 'app_id',
         areaCode: AreaCode.areaCodeGlob.value(),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
       MediaPlayerController mediaPlayerController = MediaPlayerController(
           rtcEngine: rtcEngine, canvas: const VideoCanvas());
       await mediaPlayerController.initialize();
@@ -467,7 +499,9 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:iris_tester/iris_tester.dart';
 import 'package:iris_method_channel/iris_method_channel.dart';
 
-void generatedTestCases(IrisTester irisTester) {
+import '../testcases/event_ids_mapping.dart';
+
+void generatedTestCases(ValueGetter<IrisTester> irisTester) {
   {{TEST_CASES_CONTENT}} 
 }
 ''',
@@ -478,6 +512,7 @@ testWidgets('{{TEST_CASE_NAME}}', (WidgetTester tester) async {
         appId: 'app_id',
         areaCode: AreaCode.areaCodeGlob.value(),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       final mediaRecorder = (await rtcEngine.createMediaRecorder(
         RecorderStreamInfo(channelId: 'hello', uid: 0)))!;
@@ -510,7 +545,9 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:iris_tester/iris_tester.dart';
 import 'package:iris_method_channel/iris_method_channel.dart';
 
-void generatedTestCases(IrisTester irisTester) {
+import '../testcases/event_ids_mapping.dart';
+
+void generatedTestCases(ValueGetter<IrisTester> irisTester) {
   {{TEST_CASES_CONTENT}} 
 }
 ''',
@@ -521,6 +558,7 @@ testWidgets('{{TEST_CASE_NAME}}', (WidgetTester tester) async {
         appId: 'app_id',
         areaCode: AreaCode.areaCodeGlob.value(),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       final musicContentCenter = rtcEngine.getMusicContentCenter();
       const musicContentCenterConfiguration = MusicContentCenterConfiguration(
