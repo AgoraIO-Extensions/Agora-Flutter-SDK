@@ -1,5 +1,5 @@
 {
-  "name": "terra-test",
+  "name": "terra-script",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
@@ -9,15 +9,22 @@
   "author": "",
   "license": "MIT",
   "devDependencies": {
+    "@types/lodash": "^4",
     "@types/node": "^20.6.0"
   },
   "dependencies": {
+    "@agoraio-extensions/cxx-parser": "git@github.com:AgoraIO-Extensions/terra.git#head=main&workspace=cxx-parser",
     "@agoraio-extensions/terra": "git@github.com:AgoraIO-Extensions/terra.git#head=main&workspace=terra",
     "@agoraio-extensions/terra-core": "git@github.com:AgoraIO-Extensions/terra.git#head=main&workspace=terra-core",
     "@agoraio-extensions/terra-legacy-cxx-parser": "git@github.com:AgoraIO-Extensions/terra-legacy-cxx-parser.git#head=main",
     "@agoraio-extensions/terra_shared_configs": "git@github.com:AgoraIO-Extensions/terra_shared_configs.git#head=main",
+    "lodash": "^4.17.21",
     "ts-node": "^10.9.1",
     "typescript": "^5.1.6"
   },
-  "packageManager": "yarn@4.0.2"
+  "packageManager": "yarn@4.1.1",
+  "resolutions": {
+    "@agoraio-extensions/terra_shared_configs": "portal:/Users/fenglang/codes/aw/terra_shared_configs",
+    "@agoraio-extensions/cxx-parser": "portal:/Users/fenglang/codes/aw/terra/cxx-parser"
+  }
 }

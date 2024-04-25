@@ -12,7 +12,7 @@ import 'package:iris_method_channel/iris_method_channel.dart';
 
 void rtcEngineSmokeTestCases() {
   testWidgets(
-    'release',
+    'RtcEngine.release',
     (WidgetTester tester) async {
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
@@ -22,6 +22,7 @@ void rtcEngineSmokeTestCases() {
         appId: engineAppId,
         areaCode: AreaCode.areaCodeGlob.value(),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
         const bool sync = true;
@@ -30,7 +31,7 @@ void rtcEngineSmokeTestCases() {
         );
       } catch (e) {
         if (e is! AgoraRtcException) {
-          debugPrint('[release] error: ${e.toString()}');
+          debugPrint('[RtcEngine.release] error: ${e.toString()}');
           rethrow;
         }
 
@@ -45,7 +46,7 @@ void rtcEngineSmokeTestCases() {
   );
 
   testWidgets(
-    'initialize',
+    'RtcEngine.initialize',
     (WidgetTester tester) async {
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
@@ -55,6 +56,7 @@ void rtcEngineSmokeTestCases() {
         appId: engineAppId,
         areaCode: AreaCode.areaCodeGlob.value(),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
         const ChannelProfileType contextChannelProfile =
@@ -94,7 +96,7 @@ void rtcEngineSmokeTestCases() {
         );
       } catch (e) {
         if (e is! AgoraRtcException) {
-          debugPrint('[initialize] error: ${e.toString()}');
+          debugPrint('[RtcEngine.initialize] error: ${e.toString()}');
           rethrow;
         }
 
@@ -109,7 +111,7 @@ void rtcEngineSmokeTestCases() {
   );
 
   testWidgets(
-    'getVersion',
+    'RtcEngine.getVersion',
     (WidgetTester tester) async {
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
@@ -119,12 +121,13 @@ void rtcEngineSmokeTestCases() {
         appId: engineAppId,
         areaCode: AreaCode.areaCodeGlob.value(),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
         await rtcEngine.getVersion();
       } catch (e) {
         if (e is! AgoraRtcException) {
-          debugPrint('[getVersion] error: ${e.toString()}');
+          debugPrint('[RtcEngine.getVersion] error: ${e.toString()}');
           rethrow;
         }
 
@@ -139,7 +142,7 @@ void rtcEngineSmokeTestCases() {
   );
 
   testWidgets(
-    'getErrorDescription',
+    'RtcEngine.getErrorDescription',
     (WidgetTester tester) async {
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
@@ -149,6 +152,7 @@ void rtcEngineSmokeTestCases() {
         appId: engineAppId,
         areaCode: AreaCode.areaCodeGlob.value(),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
         const int code = 10;
@@ -157,7 +161,7 @@ void rtcEngineSmokeTestCases() {
         );
       } catch (e) {
         if (e is! AgoraRtcException) {
-          debugPrint('[getErrorDescription] error: ${e.toString()}');
+          debugPrint('[RtcEngine.getErrorDescription] error: ${e.toString()}');
           rethrow;
         }
 
@@ -172,7 +176,7 @@ void rtcEngineSmokeTestCases() {
   );
 
   testWidgets(
-    'queryDeviceScore',
+    'RtcEngine.queryDeviceScore',
     (WidgetTester tester) async {
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
@@ -182,12 +186,13 @@ void rtcEngineSmokeTestCases() {
         appId: engineAppId,
         areaCode: AreaCode.areaCodeGlob.value(),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
         await rtcEngine.queryDeviceScore();
       } catch (e) {
         if (e is! AgoraRtcException) {
-          debugPrint('[queryDeviceScore] error: ${e.toString()}');
+          debugPrint('[RtcEngine.queryDeviceScore] error: ${e.toString()}');
           rethrow;
         }
 
@@ -202,7 +207,7 @@ void rtcEngineSmokeTestCases() {
   );
 
   testWidgets(
-    'preloadChannel',
+    'RtcEngine.preloadChannel',
     (WidgetTester tester) async {
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
@@ -212,6 +217,7 @@ void rtcEngineSmokeTestCases() {
         appId: engineAppId,
         areaCode: AreaCode.areaCodeGlob.value(),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
         const String token = "hello";
@@ -224,7 +230,7 @@ void rtcEngineSmokeTestCases() {
         );
       } catch (e) {
         if (e is! AgoraRtcException) {
-          debugPrint('[preloadChannel] error: ${e.toString()}');
+          debugPrint('[RtcEngine.preloadChannel] error: ${e.toString()}');
           rethrow;
         }
 
@@ -239,7 +245,7 @@ void rtcEngineSmokeTestCases() {
   );
 
   testWidgets(
-    'preloadChannelWithUserAccount',
+    'RtcEngine.updatePreloadChannelToken',
     (WidgetTester tester) async {
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
@@ -249,43 +255,7 @@ void rtcEngineSmokeTestCases() {
         appId: engineAppId,
         areaCode: AreaCode.areaCodeGlob.value(),
       ));
-
-      try {
-        const String token = "hello";
-        const String channelId = "hello";
-        const String userAccount = "hello";
-        await rtcEngine.preloadChannelWithUserAccount(
-          token: token,
-          channelId: channelId,
-          userAccount: userAccount,
-        );
-      } catch (e) {
-        if (e is! AgoraRtcException) {
-          debugPrint('[preloadChannelWithUserAccount] error: ${e.toString()}');
-          rethrow;
-        }
-
-        if (e.code != -4) {
-          // Only not supported error supported.
-          rethrow;
-        }
-      }
-
-      await rtcEngine.release();
-    },
-  );
-
-  testWidgets(
-    'updatePreloadChannelToken',
-    (WidgetTester tester) async {
-      String engineAppId = const String.fromEnvironment('TEST_APP_ID',
-          defaultValue: '<YOUR_APP_ID>');
-
-      RtcEngine rtcEngine = createAgoraRtcEngine();
-      await rtcEngine.initialize(RtcEngineContext(
-        appId: engineAppId,
-        areaCode: AreaCode.areaCodeGlob.value(),
-      ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
         const String token = "hello";
@@ -294,7 +264,8 @@ void rtcEngineSmokeTestCases() {
         );
       } catch (e) {
         if (e is! AgoraRtcException) {
-          debugPrint('[updatePreloadChannelToken] error: ${e.toString()}');
+          debugPrint(
+              '[RtcEngine.updatePreloadChannelToken] error: ${e.toString()}');
           rethrow;
         }
 
@@ -309,7 +280,7 @@ void rtcEngineSmokeTestCases() {
   );
 
   testWidgets(
-    'joinChannel',
+    'RtcEngine.joinChannel',
     (WidgetTester tester) async {
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
@@ -319,6 +290,7 @@ void rtcEngineSmokeTestCases() {
         appId: engineAppId,
         areaCode: AreaCode.areaCodeGlob.value(),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
         const String token = "hello";
@@ -351,6 +323,8 @@ void rtcEngineSmokeTestCases() {
         const bool optionsPublishMediaPlayerVideoTrack = true;
         const bool optionsPublishTranscodedVideoTrack = true;
         const bool optionsPublishMixedAudioTrack = true;
+        const int optionsMixPolicyForMixedTrack = 10;
+        const bool optionsPublishLipSyncTrack = true;
         const bool optionsAutoSubscribeAudio = true;
         const bool optionsAutoSubscribeVideo = true;
         const bool optionsEnableAudioRecordingOrPlayout = true;
@@ -383,6 +357,8 @@ void rtcEngineSmokeTestCases() {
           publishMediaPlayerVideoTrack: optionsPublishMediaPlayerVideoTrack,
           publishTranscodedVideoTrack: optionsPublishTranscodedVideoTrack,
           publishMixedAudioTrack: optionsPublishMixedAudioTrack,
+          mixPolicyForMixedTrack: optionsMixPolicyForMixedTrack,
+          publishLipSyncTrack: optionsPublishLipSyncTrack,
           autoSubscribeAudio: optionsAutoSubscribeAudio,
           autoSubscribeVideo: optionsAutoSubscribeVideo,
           enableAudioRecordingOrPlayout: optionsEnableAudioRecordingOrPlayout,
@@ -408,7 +384,7 @@ void rtcEngineSmokeTestCases() {
         );
       } catch (e) {
         if (e is! AgoraRtcException) {
-          debugPrint('[joinChannel] error: ${e.toString()}');
+          debugPrint('[RtcEngine.joinChannel] error: ${e.toString()}');
           rethrow;
         }
 
@@ -423,7 +399,7 @@ void rtcEngineSmokeTestCases() {
   );
 
   testWidgets(
-    'updateChannelMediaOptions',
+    'RtcEngine.updateChannelMediaOptions',
     (WidgetTester tester) async {
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
@@ -433,6 +409,7 @@ void rtcEngineSmokeTestCases() {
         appId: engineAppId,
         areaCode: AreaCode.areaCodeGlob.value(),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
         const ClientRoleType optionsClientRoleType =
@@ -462,6 +439,8 @@ void rtcEngineSmokeTestCases() {
         const bool optionsPublishMediaPlayerVideoTrack = true;
         const bool optionsPublishTranscodedVideoTrack = true;
         const bool optionsPublishMixedAudioTrack = true;
+        const int optionsMixPolicyForMixedTrack = 10;
+        const bool optionsPublishLipSyncTrack = true;
         const bool optionsAutoSubscribeAudio = true;
         const bool optionsAutoSubscribeVideo = true;
         const bool optionsEnableAudioRecordingOrPlayout = true;
@@ -494,6 +473,8 @@ void rtcEngineSmokeTestCases() {
           publishMediaPlayerVideoTrack: optionsPublishMediaPlayerVideoTrack,
           publishTranscodedVideoTrack: optionsPublishTranscodedVideoTrack,
           publishMixedAudioTrack: optionsPublishMixedAudioTrack,
+          mixPolicyForMixedTrack: optionsMixPolicyForMixedTrack,
+          publishLipSyncTrack: optionsPublishLipSyncTrack,
           autoSubscribeAudio: optionsAutoSubscribeAudio,
           autoSubscribeVideo: optionsAutoSubscribeVideo,
           enableAudioRecordingOrPlayout: optionsEnableAudioRecordingOrPlayout,
@@ -516,7 +497,8 @@ void rtcEngineSmokeTestCases() {
         );
       } catch (e) {
         if (e is! AgoraRtcException) {
-          debugPrint('[updateChannelMediaOptions] error: ${e.toString()}');
+          debugPrint(
+              '[RtcEngine.updateChannelMediaOptions] error: ${e.toString()}');
           rethrow;
         }
 
@@ -531,7 +513,7 @@ void rtcEngineSmokeTestCases() {
   );
 
   testWidgets(
-    'leaveChannel',
+    'RtcEngine.leaveChannel',
     (WidgetTester tester) async {
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
@@ -541,6 +523,7 @@ void rtcEngineSmokeTestCases() {
         appId: engineAppId,
         areaCode: AreaCode.areaCodeGlob.value(),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
         const bool optionsStopAudioMixing = true;
@@ -556,7 +539,7 @@ void rtcEngineSmokeTestCases() {
         );
       } catch (e) {
         if (e is! AgoraRtcException) {
-          debugPrint('[leaveChannel] error: ${e.toString()}');
+          debugPrint('[RtcEngine.leaveChannel] error: ${e.toString()}');
           rethrow;
         }
 
@@ -571,7 +554,7 @@ void rtcEngineSmokeTestCases() {
   );
 
   testWidgets(
-    'renewToken',
+    'RtcEngine.renewToken',
     (WidgetTester tester) async {
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
@@ -581,6 +564,7 @@ void rtcEngineSmokeTestCases() {
         appId: engineAppId,
         areaCode: AreaCode.areaCodeGlob.value(),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
         const String token = "hello";
@@ -589,7 +573,7 @@ void rtcEngineSmokeTestCases() {
         );
       } catch (e) {
         if (e is! AgoraRtcException) {
-          debugPrint('[renewToken] error: ${e.toString()}');
+          debugPrint('[RtcEngine.renewToken] error: ${e.toString()}');
           rethrow;
         }
 
@@ -604,7 +588,7 @@ void rtcEngineSmokeTestCases() {
   );
 
   testWidgets(
-    'setChannelProfile',
+    'RtcEngine.setChannelProfile',
     (WidgetTester tester) async {
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
@@ -614,6 +598,7 @@ void rtcEngineSmokeTestCases() {
         appId: engineAppId,
         areaCode: AreaCode.areaCodeGlob.value(),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
         const ChannelProfileType profile =
@@ -623,7 +608,7 @@ void rtcEngineSmokeTestCases() {
         );
       } catch (e) {
         if (e is! AgoraRtcException) {
-          debugPrint('[setChannelProfile] error: ${e.toString()}');
+          debugPrint('[RtcEngine.setChannelProfile] error: ${e.toString()}');
           rethrow;
         }
 
@@ -638,7 +623,7 @@ void rtcEngineSmokeTestCases() {
   );
 
   testWidgets(
-    'setClientRole',
+    'RtcEngine.setClientRole',
     (WidgetTester tester) async {
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
@@ -648,6 +633,7 @@ void rtcEngineSmokeTestCases() {
         appId: engineAppId,
         areaCode: AreaCode.areaCodeGlob.value(),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
         const ClientRoleType role = ClientRoleType.clientRoleBroadcaster;
@@ -662,7 +648,7 @@ void rtcEngineSmokeTestCases() {
         );
       } catch (e) {
         if (e is! AgoraRtcException) {
-          debugPrint('[setClientRole] error: ${e.toString()}');
+          debugPrint('[RtcEngine.setClientRole] error: ${e.toString()}');
           rethrow;
         }
 
@@ -677,7 +663,7 @@ void rtcEngineSmokeTestCases() {
   );
 
   testWidgets(
-    'startEchoTest',
+    'RtcEngine.startEchoTest',
     (WidgetTester tester) async {
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
@@ -687,6 +673,7 @@ void rtcEngineSmokeTestCases() {
         appId: engineAppId,
         areaCode: AreaCode.areaCodeGlob.value(),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
         const int configView = 10;
@@ -708,7 +695,7 @@ void rtcEngineSmokeTestCases() {
         );
       } catch (e) {
         if (e is! AgoraRtcException) {
-          debugPrint('[startEchoTest] error: ${e.toString()}');
+          debugPrint('[RtcEngine.startEchoTest] error: ${e.toString()}');
           rethrow;
         }
 
@@ -723,7 +710,7 @@ void rtcEngineSmokeTestCases() {
   );
 
   testWidgets(
-    'stopEchoTest',
+    'RtcEngine.stopEchoTest',
     (WidgetTester tester) async {
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
@@ -733,12 +720,13 @@ void rtcEngineSmokeTestCases() {
         appId: engineAppId,
         areaCode: AreaCode.areaCodeGlob.value(),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
         await rtcEngine.stopEchoTest();
       } catch (e) {
         if (e is! AgoraRtcException) {
-          debugPrint('[stopEchoTest] error: ${e.toString()}');
+          debugPrint('[RtcEngine.stopEchoTest] error: ${e.toString()}');
           rethrow;
         }
 
@@ -753,7 +741,7 @@ void rtcEngineSmokeTestCases() {
   );
 
   testWidgets(
-    'enableMultiCamera',
+    'RtcEngine.enableMultiCamera',
     (WidgetTester tester) async {
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
@@ -763,6 +751,7 @@ void rtcEngineSmokeTestCases() {
         appId: engineAppId,
         areaCode: AreaCode.areaCodeGlob.value(),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
         const bool enabled = true;
@@ -792,7 +781,7 @@ void rtcEngineSmokeTestCases() {
         );
       } catch (e) {
         if (e is! AgoraRtcException) {
-          debugPrint('[enableMultiCamera] error: ${e.toString()}');
+          debugPrint('[RtcEngine.enableMultiCamera] error: ${e.toString()}');
           rethrow;
         }
 
@@ -807,7 +796,7 @@ void rtcEngineSmokeTestCases() {
   );
 
   testWidgets(
-    'enableVideo',
+    'RtcEngine.enableVideo',
     (WidgetTester tester) async {
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
@@ -817,12 +806,13 @@ void rtcEngineSmokeTestCases() {
         appId: engineAppId,
         areaCode: AreaCode.areaCodeGlob.value(),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
         await rtcEngine.enableVideo();
       } catch (e) {
         if (e is! AgoraRtcException) {
-          debugPrint('[enableVideo] error: ${e.toString()}');
+          debugPrint('[RtcEngine.enableVideo] error: ${e.toString()}');
           rethrow;
         }
 
@@ -837,7 +827,7 @@ void rtcEngineSmokeTestCases() {
   );
 
   testWidgets(
-    'disableVideo',
+    'RtcEngine.disableVideo',
     (WidgetTester tester) async {
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
@@ -847,12 +837,13 @@ void rtcEngineSmokeTestCases() {
         appId: engineAppId,
         areaCode: AreaCode.areaCodeGlob.value(),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
         await rtcEngine.disableVideo();
       } catch (e) {
         if (e is! AgoraRtcException) {
-          debugPrint('[disableVideo] error: ${e.toString()}');
+          debugPrint('[RtcEngine.disableVideo] error: ${e.toString()}');
           rethrow;
         }
 
@@ -867,7 +858,7 @@ void rtcEngineSmokeTestCases() {
   );
 
   testWidgets(
-    'startPreview',
+    'RtcEngine.startPreview',
     (WidgetTester tester) async {
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
@@ -877,6 +868,7 @@ void rtcEngineSmokeTestCases() {
         appId: engineAppId,
         areaCode: AreaCode.areaCodeGlob.value(),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
         const VideoSourceType sourceType =
@@ -886,7 +878,7 @@ void rtcEngineSmokeTestCases() {
         );
       } catch (e) {
         if (e is! AgoraRtcException) {
-          debugPrint('[startPreview] error: ${e.toString()}');
+          debugPrint('[RtcEngine.startPreview] error: ${e.toString()}');
           rethrow;
         }
 
@@ -901,7 +893,7 @@ void rtcEngineSmokeTestCases() {
   );
 
   testWidgets(
-    'startPreviewWithoutSourceType',
+    'RtcEngine.stopPreview',
     (WidgetTester tester) async {
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
@@ -911,36 +903,7 @@ void rtcEngineSmokeTestCases() {
         appId: engineAppId,
         areaCode: AreaCode.areaCodeGlob.value(),
       ));
-
-      try {
-        await rtcEngine.startPreviewWithoutSourceType();
-      } catch (e) {
-        if (e is! AgoraRtcException) {
-          debugPrint('[startPreviewWithoutSourceType] error: ${e.toString()}');
-          rethrow;
-        }
-
-        if (e.code != -4) {
-          // Only not supported error supported.
-          rethrow;
-        }
-      }
-
-      await rtcEngine.release();
-    },
-  );
-
-  testWidgets(
-    'stopPreview',
-    (WidgetTester tester) async {
-      String engineAppId = const String.fromEnvironment('TEST_APP_ID',
-          defaultValue: '<YOUR_APP_ID>');
-
-      RtcEngine rtcEngine = createAgoraRtcEngine();
-      await rtcEngine.initialize(RtcEngineContext(
-        appId: engineAppId,
-        areaCode: AreaCode.areaCodeGlob.value(),
-      ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
         const VideoSourceType sourceType =
@@ -950,7 +913,7 @@ void rtcEngineSmokeTestCases() {
         );
       } catch (e) {
         if (e is! AgoraRtcException) {
-          debugPrint('[stopPreview] error: ${e.toString()}');
+          debugPrint('[RtcEngine.stopPreview] error: ${e.toString()}');
           rethrow;
         }
 
@@ -965,7 +928,7 @@ void rtcEngineSmokeTestCases() {
   );
 
   testWidgets(
-    'startLastmileProbeTest',
+    'RtcEngine.startLastmileProbeTest',
     (WidgetTester tester) async {
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
@@ -975,6 +938,7 @@ void rtcEngineSmokeTestCases() {
         appId: engineAppId,
         areaCode: AreaCode.areaCodeGlob.value(),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
         const bool configProbeUplink = true;
@@ -992,7 +956,8 @@ void rtcEngineSmokeTestCases() {
         );
       } catch (e) {
         if (e is! AgoraRtcException) {
-          debugPrint('[startLastmileProbeTest] error: ${e.toString()}');
+          debugPrint(
+              '[RtcEngine.startLastmileProbeTest] error: ${e.toString()}');
           rethrow;
         }
 
@@ -1007,7 +972,7 @@ void rtcEngineSmokeTestCases() {
   );
 
   testWidgets(
-    'stopLastmileProbeTest',
+    'RtcEngine.stopLastmileProbeTest',
     (WidgetTester tester) async {
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
@@ -1017,12 +982,14 @@ void rtcEngineSmokeTestCases() {
         appId: engineAppId,
         areaCode: AreaCode.areaCodeGlob.value(),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
         await rtcEngine.stopLastmileProbeTest();
       } catch (e) {
         if (e is! AgoraRtcException) {
-          debugPrint('[stopLastmileProbeTest] error: ${e.toString()}');
+          debugPrint(
+              '[RtcEngine.stopLastmileProbeTest] error: ${e.toString()}');
           rethrow;
         }
 
@@ -1037,7 +1004,7 @@ void rtcEngineSmokeTestCases() {
   );
 
   testWidgets(
-    'setVideoEncoderConfiguration',
+    'RtcEngine.setVideoEncoderConfiguration',
     (WidgetTester tester) async {
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
@@ -1047,6 +1014,7 @@ void rtcEngineSmokeTestCases() {
         appId: engineAppId,
         areaCode: AreaCode.areaCodeGlob.value(),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
         const VideoCodecType configCodecType = VideoCodecType.videoCodecNone;
@@ -1089,7 +1057,8 @@ void rtcEngineSmokeTestCases() {
         );
       } catch (e) {
         if (e is! AgoraRtcException) {
-          debugPrint('[setVideoEncoderConfiguration] error: ${e.toString()}');
+          debugPrint(
+              '[RtcEngine.setVideoEncoderConfiguration] error: ${e.toString()}');
           rethrow;
         }
 
@@ -1104,7 +1073,7 @@ void rtcEngineSmokeTestCases() {
   );
 
   testWidgets(
-    'setBeautyEffectOptions',
+    'RtcEngine.setBeautyEffectOptions',
     (WidgetTester tester) async {
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
@@ -1114,6 +1083,7 @@ void rtcEngineSmokeTestCases() {
         appId: engineAppId,
         areaCode: AreaCode.areaCodeGlob.value(),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
         const bool enabled = true;
@@ -1138,7 +1108,8 @@ void rtcEngineSmokeTestCases() {
         );
       } catch (e) {
         if (e is! AgoraRtcException) {
-          debugPrint('[setBeautyEffectOptions] error: ${e.toString()}');
+          debugPrint(
+              '[RtcEngine.setBeautyEffectOptions] error: ${e.toString()}');
           rethrow;
         }
 
@@ -1153,7 +1124,7 @@ void rtcEngineSmokeTestCases() {
   );
 
   testWidgets(
-    'setLowlightEnhanceOptions',
+    'RtcEngine.setLowlightEnhanceOptions',
     (WidgetTester tester) async {
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
@@ -1163,6 +1134,7 @@ void rtcEngineSmokeTestCases() {
         appId: engineAppId,
         areaCode: AreaCode.areaCodeGlob.value(),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
         const bool enabled = true;
@@ -1182,7 +1154,8 @@ void rtcEngineSmokeTestCases() {
         );
       } catch (e) {
         if (e is! AgoraRtcException) {
-          debugPrint('[setLowlightEnhanceOptions] error: ${e.toString()}');
+          debugPrint(
+              '[RtcEngine.setLowlightEnhanceOptions] error: ${e.toString()}');
           rethrow;
         }
 
@@ -1197,7 +1170,7 @@ void rtcEngineSmokeTestCases() {
   );
 
   testWidgets(
-    'setVideoDenoiserOptions',
+    'RtcEngine.setVideoDenoiserOptions',
     (WidgetTester tester) async {
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
@@ -1207,6 +1180,7 @@ void rtcEngineSmokeTestCases() {
         appId: engineAppId,
         areaCode: AreaCode.areaCodeGlob.value(),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
         const bool enabled = true;
@@ -1226,7 +1200,8 @@ void rtcEngineSmokeTestCases() {
         );
       } catch (e) {
         if (e is! AgoraRtcException) {
-          debugPrint('[setVideoDenoiserOptions] error: ${e.toString()}');
+          debugPrint(
+              '[RtcEngine.setVideoDenoiserOptions] error: ${e.toString()}');
           rethrow;
         }
 
@@ -1241,7 +1216,7 @@ void rtcEngineSmokeTestCases() {
   );
 
   testWidgets(
-    'setColorEnhanceOptions',
+    'RtcEngine.setColorEnhanceOptions',
     (WidgetTester tester) async {
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
@@ -1251,6 +1226,7 @@ void rtcEngineSmokeTestCases() {
         appId: engineAppId,
         areaCode: AreaCode.areaCodeGlob.value(),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
         const bool enabled = true;
@@ -1268,7 +1244,8 @@ void rtcEngineSmokeTestCases() {
         );
       } catch (e) {
         if (e is! AgoraRtcException) {
-          debugPrint('[setColorEnhanceOptions] error: ${e.toString()}');
+          debugPrint(
+              '[RtcEngine.setColorEnhanceOptions] error: ${e.toString()}');
           rethrow;
         }
 
@@ -1283,7 +1260,7 @@ void rtcEngineSmokeTestCases() {
   );
 
   testWidgets(
-    'enableVirtualBackground',
+    'RtcEngine.enableVirtualBackground',
     (WidgetTester tester) async {
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
@@ -1293,6 +1270,7 @@ void rtcEngineSmokeTestCases() {
         appId: engineAppId,
         areaCode: AreaCode.areaCodeGlob.value(),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
         const bool enabled = true;
@@ -1324,7 +1302,8 @@ void rtcEngineSmokeTestCases() {
         );
       } catch (e) {
         if (e is! AgoraRtcException) {
-          debugPrint('[enableVirtualBackground] error: ${e.toString()}');
+          debugPrint(
+              '[RtcEngine.enableVirtualBackground] error: ${e.toString()}');
           rethrow;
         }
 
@@ -1339,7 +1318,7 @@ void rtcEngineSmokeTestCases() {
   );
 
   testWidgets(
-    'setupRemoteVideo',
+    'RtcEngine.setupRemoteVideo',
     (WidgetTester tester) async {
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
@@ -1349,6 +1328,7 @@ void rtcEngineSmokeTestCases() {
         appId: engineAppId,
         areaCode: AreaCode.areaCodeGlob.value(),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
         const RenderModeType canvasRenderMode = RenderModeType.renderModeHidden;
@@ -1390,7 +1370,7 @@ void rtcEngineSmokeTestCases() {
         );
       } catch (e) {
         if (e is! AgoraRtcException) {
-          debugPrint('[setupRemoteVideo] error: ${e.toString()}');
+          debugPrint('[RtcEngine.setupRemoteVideo] error: ${e.toString()}');
           rethrow;
         }
 
@@ -1405,7 +1385,7 @@ void rtcEngineSmokeTestCases() {
   );
 
   testWidgets(
-    'setupLocalVideo',
+    'RtcEngine.setupLocalVideo',
     (WidgetTester tester) async {
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
@@ -1415,6 +1395,7 @@ void rtcEngineSmokeTestCases() {
         appId: engineAppId,
         areaCode: AreaCode.areaCodeGlob.value(),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
         const RenderModeType canvasRenderMode = RenderModeType.renderModeHidden;
@@ -1456,7 +1437,7 @@ void rtcEngineSmokeTestCases() {
         );
       } catch (e) {
         if (e is! AgoraRtcException) {
-          debugPrint('[setupLocalVideo] error: ${e.toString()}');
+          debugPrint('[RtcEngine.setupLocalVideo] error: ${e.toString()}');
           rethrow;
         }
 
@@ -1471,7 +1452,7 @@ void rtcEngineSmokeTestCases() {
   );
 
   testWidgets(
-    'setVideoScenario',
+    'RtcEngine.setVideoScenario',
     (WidgetTester tester) async {
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
@@ -1481,6 +1462,7 @@ void rtcEngineSmokeTestCases() {
         appId: engineAppId,
         areaCode: AreaCode.areaCodeGlob.value(),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
         const VideoApplicationScenarioType scenarioType =
@@ -1490,7 +1472,7 @@ void rtcEngineSmokeTestCases() {
         );
       } catch (e) {
         if (e is! AgoraRtcException) {
-          debugPrint('[setVideoScenario] error: ${e.toString()}');
+          debugPrint('[RtcEngine.setVideoScenario] error: ${e.toString()}');
           rethrow;
         }
 
@@ -1505,7 +1487,7 @@ void rtcEngineSmokeTestCases() {
   );
 
   testWidgets(
-    'enableAudio',
+    'RtcEngine.enableAudio',
     (WidgetTester tester) async {
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
@@ -1515,12 +1497,13 @@ void rtcEngineSmokeTestCases() {
         appId: engineAppId,
         areaCode: AreaCode.areaCodeGlob.value(),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
         await rtcEngine.enableAudio();
       } catch (e) {
         if (e is! AgoraRtcException) {
-          debugPrint('[enableAudio] error: ${e.toString()}');
+          debugPrint('[RtcEngine.enableAudio] error: ${e.toString()}');
           rethrow;
         }
 
@@ -1535,7 +1518,7 @@ void rtcEngineSmokeTestCases() {
   );
 
   testWidgets(
-    'disableAudio',
+    'RtcEngine.disableAudio',
     (WidgetTester tester) async {
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
@@ -1545,12 +1528,13 @@ void rtcEngineSmokeTestCases() {
         appId: engineAppId,
         areaCode: AreaCode.areaCodeGlob.value(),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
         await rtcEngine.disableAudio();
       } catch (e) {
         if (e is! AgoraRtcException) {
-          debugPrint('[disableAudio] error: ${e.toString()}');
+          debugPrint('[RtcEngine.disableAudio] error: ${e.toString()}');
           rethrow;
         }
 
@@ -1565,7 +1549,7 @@ void rtcEngineSmokeTestCases() {
   );
 
   testWidgets(
-    'setAudioProfile',
+    'RtcEngine.setAudioProfile',
     (WidgetTester tester) async {
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
@@ -1575,6 +1559,7 @@ void rtcEngineSmokeTestCases() {
         appId: engineAppId,
         areaCode: AreaCode.areaCodeGlob.value(),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
         const AudioProfileType profile = AudioProfileType.audioProfileDefault;
@@ -1586,7 +1571,7 @@ void rtcEngineSmokeTestCases() {
         );
       } catch (e) {
         if (e is! AgoraRtcException) {
-          debugPrint('[setAudioProfile] error: ${e.toString()}');
+          debugPrint('[RtcEngine.setAudioProfile] error: ${e.toString()}');
           rethrow;
         }
 
@@ -1601,7 +1586,7 @@ void rtcEngineSmokeTestCases() {
   );
 
   testWidgets(
-    'setAudioScenario',
+    'RtcEngine.setAudioScenario',
     (WidgetTester tester) async {
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
@@ -1611,6 +1596,7 @@ void rtcEngineSmokeTestCases() {
         appId: engineAppId,
         areaCode: AreaCode.areaCodeGlob.value(),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
         const AudioScenarioType scenario =
@@ -1620,7 +1606,7 @@ void rtcEngineSmokeTestCases() {
         );
       } catch (e) {
         if (e is! AgoraRtcException) {
-          debugPrint('[setAudioScenario] error: ${e.toString()}');
+          debugPrint('[RtcEngine.setAudioScenario] error: ${e.toString()}');
           rethrow;
         }
 
@@ -1635,7 +1621,7 @@ void rtcEngineSmokeTestCases() {
   );
 
   testWidgets(
-    'enableLocalAudio',
+    'RtcEngine.enableLocalAudio',
     (WidgetTester tester) async {
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
@@ -1645,6 +1631,7 @@ void rtcEngineSmokeTestCases() {
         appId: engineAppId,
         areaCode: AreaCode.areaCodeGlob.value(),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
         const bool enabled = true;
@@ -1653,7 +1640,7 @@ void rtcEngineSmokeTestCases() {
         );
       } catch (e) {
         if (e is! AgoraRtcException) {
-          debugPrint('[enableLocalAudio] error: ${e.toString()}');
+          debugPrint('[RtcEngine.enableLocalAudio] error: ${e.toString()}');
           rethrow;
         }
 
@@ -1668,7 +1655,7 @@ void rtcEngineSmokeTestCases() {
   );
 
   testWidgets(
-    'muteLocalAudioStream',
+    'RtcEngine.muteLocalAudioStream',
     (WidgetTester tester) async {
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
@@ -1678,6 +1665,7 @@ void rtcEngineSmokeTestCases() {
         appId: engineAppId,
         areaCode: AreaCode.areaCodeGlob.value(),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
         const bool mute = true;
@@ -1686,7 +1674,7 @@ void rtcEngineSmokeTestCases() {
         );
       } catch (e) {
         if (e is! AgoraRtcException) {
-          debugPrint('[muteLocalAudioStream] error: ${e.toString()}');
+          debugPrint('[RtcEngine.muteLocalAudioStream] error: ${e.toString()}');
           rethrow;
         }
 
@@ -1701,7 +1689,7 @@ void rtcEngineSmokeTestCases() {
   );
 
   testWidgets(
-    'muteAllRemoteAudioStreams',
+    'RtcEngine.muteAllRemoteAudioStreams',
     (WidgetTester tester) async {
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
@@ -1711,6 +1699,7 @@ void rtcEngineSmokeTestCases() {
         appId: engineAppId,
         areaCode: AreaCode.areaCodeGlob.value(),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
         const bool mute = true;
@@ -1719,7 +1708,8 @@ void rtcEngineSmokeTestCases() {
         );
       } catch (e) {
         if (e is! AgoraRtcException) {
-          debugPrint('[muteAllRemoteAudioStreams] error: ${e.toString()}');
+          debugPrint(
+              '[RtcEngine.muteAllRemoteAudioStreams] error: ${e.toString()}');
           rethrow;
         }
 
@@ -1734,7 +1724,7 @@ void rtcEngineSmokeTestCases() {
   );
 
   testWidgets(
-    'setDefaultMuteAllRemoteAudioStreams',
+    'RtcEngine.setDefaultMuteAllRemoteAudioStreams',
     (WidgetTester tester) async {
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
@@ -1744,6 +1734,7 @@ void rtcEngineSmokeTestCases() {
         appId: engineAppId,
         areaCode: AreaCode.areaCodeGlob.value(),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
         const bool mute = true;
@@ -1753,7 +1744,7 @@ void rtcEngineSmokeTestCases() {
       } catch (e) {
         if (e is! AgoraRtcException) {
           debugPrint(
-              '[setDefaultMuteAllRemoteAudioStreams] error: ${e.toString()}');
+              '[RtcEngine.setDefaultMuteAllRemoteAudioStreams] error: ${e.toString()}');
           rethrow;
         }
 
@@ -1768,7 +1759,7 @@ void rtcEngineSmokeTestCases() {
   );
 
   testWidgets(
-    'muteRemoteAudioStream',
+    'RtcEngine.muteRemoteAudioStream',
     (WidgetTester tester) async {
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
@@ -1778,6 +1769,7 @@ void rtcEngineSmokeTestCases() {
         appId: engineAppId,
         areaCode: AreaCode.areaCodeGlob.value(),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
         const int uid = 10;
@@ -1788,7 +1780,8 @@ void rtcEngineSmokeTestCases() {
         );
       } catch (e) {
         if (e is! AgoraRtcException) {
-          debugPrint('[muteRemoteAudioStream] error: ${e.toString()}');
+          debugPrint(
+              '[RtcEngine.muteRemoteAudioStream] error: ${e.toString()}');
           rethrow;
         }
 
@@ -1803,7 +1796,7 @@ void rtcEngineSmokeTestCases() {
   );
 
   testWidgets(
-    'muteLocalVideoStream',
+    'RtcEngine.muteLocalVideoStream',
     (WidgetTester tester) async {
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
@@ -1813,6 +1806,7 @@ void rtcEngineSmokeTestCases() {
         appId: engineAppId,
         areaCode: AreaCode.areaCodeGlob.value(),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
         const bool mute = true;
@@ -1821,7 +1815,7 @@ void rtcEngineSmokeTestCases() {
         );
       } catch (e) {
         if (e is! AgoraRtcException) {
-          debugPrint('[muteLocalVideoStream] error: ${e.toString()}');
+          debugPrint('[RtcEngine.muteLocalVideoStream] error: ${e.toString()}');
           rethrow;
         }
 
@@ -1836,7 +1830,7 @@ void rtcEngineSmokeTestCases() {
   );
 
   testWidgets(
-    'enableLocalVideo',
+    'RtcEngine.enableLocalVideo',
     (WidgetTester tester) async {
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
@@ -1846,6 +1840,7 @@ void rtcEngineSmokeTestCases() {
         appId: engineAppId,
         areaCode: AreaCode.areaCodeGlob.value(),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
         const bool enabled = true;
@@ -1854,7 +1849,7 @@ void rtcEngineSmokeTestCases() {
         );
       } catch (e) {
         if (e is! AgoraRtcException) {
-          debugPrint('[enableLocalVideo] error: ${e.toString()}');
+          debugPrint('[RtcEngine.enableLocalVideo] error: ${e.toString()}');
           rethrow;
         }
 
@@ -1869,7 +1864,7 @@ void rtcEngineSmokeTestCases() {
   );
 
   testWidgets(
-    'muteAllRemoteVideoStreams',
+    'RtcEngine.muteAllRemoteVideoStreams',
     (WidgetTester tester) async {
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
@@ -1879,6 +1874,7 @@ void rtcEngineSmokeTestCases() {
         appId: engineAppId,
         areaCode: AreaCode.areaCodeGlob.value(),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
         const bool mute = true;
@@ -1887,7 +1883,8 @@ void rtcEngineSmokeTestCases() {
         );
       } catch (e) {
         if (e is! AgoraRtcException) {
-          debugPrint('[muteAllRemoteVideoStreams] error: ${e.toString()}');
+          debugPrint(
+              '[RtcEngine.muteAllRemoteVideoStreams] error: ${e.toString()}');
           rethrow;
         }
 
@@ -1902,7 +1899,7 @@ void rtcEngineSmokeTestCases() {
   );
 
   testWidgets(
-    'setDefaultMuteAllRemoteVideoStreams',
+    'RtcEngine.setDefaultMuteAllRemoteVideoStreams',
     (WidgetTester tester) async {
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
@@ -1912,6 +1909,7 @@ void rtcEngineSmokeTestCases() {
         appId: engineAppId,
         areaCode: AreaCode.areaCodeGlob.value(),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
         const bool mute = true;
@@ -1921,7 +1919,7 @@ void rtcEngineSmokeTestCases() {
       } catch (e) {
         if (e is! AgoraRtcException) {
           debugPrint(
-              '[setDefaultMuteAllRemoteVideoStreams] error: ${e.toString()}');
+              '[RtcEngine.setDefaultMuteAllRemoteVideoStreams] error: ${e.toString()}');
           rethrow;
         }
 
@@ -1936,7 +1934,7 @@ void rtcEngineSmokeTestCases() {
   );
 
   testWidgets(
-    'muteRemoteVideoStream',
+    'RtcEngine.muteRemoteVideoStream',
     (WidgetTester tester) async {
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
@@ -1946,6 +1944,7 @@ void rtcEngineSmokeTestCases() {
         appId: engineAppId,
         areaCode: AreaCode.areaCodeGlob.value(),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
         const int uid = 10;
@@ -1956,7 +1955,8 @@ void rtcEngineSmokeTestCases() {
         );
       } catch (e) {
         if (e is! AgoraRtcException) {
-          debugPrint('[muteRemoteVideoStream] error: ${e.toString()}');
+          debugPrint(
+              '[RtcEngine.muteRemoteVideoStream] error: ${e.toString()}');
           rethrow;
         }
 
@@ -1971,7 +1971,7 @@ void rtcEngineSmokeTestCases() {
   );
 
   testWidgets(
-    'setRemoteVideoStreamType',
+    'RtcEngine.setRemoteVideoStreamType',
     (WidgetTester tester) async {
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
@@ -1981,6 +1981,7 @@ void rtcEngineSmokeTestCases() {
         appId: engineAppId,
         areaCode: AreaCode.areaCodeGlob.value(),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
         const int uid = 10;
@@ -1991,7 +1992,8 @@ void rtcEngineSmokeTestCases() {
         );
       } catch (e) {
         if (e is! AgoraRtcException) {
-          debugPrint('[setRemoteVideoStreamType] error: ${e.toString()}');
+          debugPrint(
+              '[RtcEngine.setRemoteVideoStreamType] error: ${e.toString()}');
           rethrow;
         }
 
@@ -2006,7 +2008,7 @@ void rtcEngineSmokeTestCases() {
   );
 
   testWidgets(
-    'setRemoteVideoSubscriptionOptions',
+    'RtcEngine.setRemoteVideoSubscriptionOptions',
     (WidgetTester tester) async {
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
@@ -2016,6 +2018,7 @@ void rtcEngineSmokeTestCases() {
         appId: engineAppId,
         areaCode: AreaCode.areaCodeGlob.value(),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
         const int uid = 10;
@@ -2032,7 +2035,7 @@ void rtcEngineSmokeTestCases() {
       } catch (e) {
         if (e is! AgoraRtcException) {
           debugPrint(
-              '[setRemoteVideoSubscriptionOptions] error: ${e.toString()}');
+              '[RtcEngine.setRemoteVideoSubscriptionOptions] error: ${e.toString()}');
           rethrow;
         }
 
@@ -2047,7 +2050,7 @@ void rtcEngineSmokeTestCases() {
   );
 
   testWidgets(
-    'setRemoteDefaultVideoStreamType',
+    'RtcEngine.setRemoteDefaultVideoStreamType',
     (WidgetTester tester) async {
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
@@ -2057,6 +2060,7 @@ void rtcEngineSmokeTestCases() {
         appId: engineAppId,
         areaCode: AreaCode.areaCodeGlob.value(),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
         const VideoStreamType streamType = VideoStreamType.videoStreamHigh;
@@ -2066,7 +2070,7 @@ void rtcEngineSmokeTestCases() {
       } catch (e) {
         if (e is! AgoraRtcException) {
           debugPrint(
-              '[setRemoteDefaultVideoStreamType] error: ${e.toString()}');
+              '[RtcEngine.setRemoteDefaultVideoStreamType] error: ${e.toString()}');
           rethrow;
         }
 
@@ -2081,7 +2085,7 @@ void rtcEngineSmokeTestCases() {
   );
 
   testWidgets(
-    'enableAudioVolumeIndication',
+    'RtcEngine.enableAudioVolumeIndication',
     (WidgetTester tester) async {
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
@@ -2091,6 +2095,7 @@ void rtcEngineSmokeTestCases() {
         appId: engineAppId,
         areaCode: AreaCode.areaCodeGlob.value(),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
         const int interval = 10;
@@ -2103,7 +2108,8 @@ void rtcEngineSmokeTestCases() {
         );
       } catch (e) {
         if (e is! AgoraRtcException) {
-          debugPrint('[enableAudioVolumeIndication] error: ${e.toString()}');
+          debugPrint(
+              '[RtcEngine.enableAudioVolumeIndication] error: ${e.toString()}');
           rethrow;
         }
 
@@ -2118,7 +2124,7 @@ void rtcEngineSmokeTestCases() {
   );
 
   testWidgets(
-    'startAudioRecording',
+    'RtcEngine.startAudioRecording',
     (WidgetTester tester) async {
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
@@ -2128,6 +2134,7 @@ void rtcEngineSmokeTestCases() {
         appId: engineAppId,
         areaCode: AreaCode.areaCodeGlob.value(),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
         const AudioFileRecordingType configFileRecordingType =
@@ -2151,7 +2158,7 @@ void rtcEngineSmokeTestCases() {
         );
       } catch (e) {
         if (e is! AgoraRtcException) {
-          debugPrint('[startAudioRecording] error: ${e.toString()}');
+          debugPrint('[RtcEngine.startAudioRecording] error: ${e.toString()}');
           rethrow;
         }
 
@@ -2166,7 +2173,7 @@ void rtcEngineSmokeTestCases() {
   );
 
   testWidgets(
-    'registerAudioEncodedFrameObserver',
+    'RtcEngine.registerAudioEncodedFrameObserver',
     (WidgetTester tester) async {
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
@@ -2176,6 +2183,7 @@ void rtcEngineSmokeTestCases() {
         appId: engineAppId,
         areaCode: AreaCode.areaCodeGlob.value(),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
         const AudioEncodedFrameObserverPosition configPostionType =
@@ -2203,7 +2211,7 @@ void rtcEngineSmokeTestCases() {
       } catch (e) {
         if (e is! AgoraRtcException) {
           debugPrint(
-              '[registerAudioEncodedFrameObserver] error: ${e.toString()}');
+              '[RtcEngine.registerAudioEncodedFrameObserver] error: ${e.toString()}');
           rethrow;
         }
 
@@ -2218,7 +2226,7 @@ void rtcEngineSmokeTestCases() {
   );
 
   testWidgets(
-    'stopAudioRecording',
+    'RtcEngine.stopAudioRecording',
     (WidgetTester tester) async {
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
@@ -2228,12 +2236,13 @@ void rtcEngineSmokeTestCases() {
         appId: engineAppId,
         areaCode: AreaCode.areaCodeGlob.value(),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
         await rtcEngine.stopAudioRecording();
       } catch (e) {
         if (e is! AgoraRtcException) {
-          debugPrint('[stopAudioRecording] error: ${e.toString()}');
+          debugPrint('[RtcEngine.stopAudioRecording] error: ${e.toString()}');
           rethrow;
         }
 
@@ -2248,7 +2257,7 @@ void rtcEngineSmokeTestCases() {
   );
 
   testWidgets(
-    'startAudioMixing',
+    'RtcEngine.startAudioMixing',
     (WidgetTester tester) async {
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
@@ -2258,6 +2267,7 @@ void rtcEngineSmokeTestCases() {
         appId: engineAppId,
         areaCode: AreaCode.areaCodeGlob.value(),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
         const String filePath = "hello";
@@ -2272,7 +2282,7 @@ void rtcEngineSmokeTestCases() {
         );
       } catch (e) {
         if (e is! AgoraRtcException) {
-          debugPrint('[startAudioMixing] error: ${e.toString()}');
+          debugPrint('[RtcEngine.startAudioMixing] error: ${e.toString()}');
           rethrow;
         }
 
@@ -2287,7 +2297,7 @@ void rtcEngineSmokeTestCases() {
   );
 
   testWidgets(
-    'stopAudioMixing',
+    'RtcEngine.stopAudioMixing',
     (WidgetTester tester) async {
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
@@ -2297,12 +2307,13 @@ void rtcEngineSmokeTestCases() {
         appId: engineAppId,
         areaCode: AreaCode.areaCodeGlob.value(),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
         await rtcEngine.stopAudioMixing();
       } catch (e) {
         if (e is! AgoraRtcException) {
-          debugPrint('[stopAudioMixing] error: ${e.toString()}');
+          debugPrint('[RtcEngine.stopAudioMixing] error: ${e.toString()}');
           rethrow;
         }
 
@@ -2317,7 +2328,7 @@ void rtcEngineSmokeTestCases() {
   );
 
   testWidgets(
-    'pauseAudioMixing',
+    'RtcEngine.pauseAudioMixing',
     (WidgetTester tester) async {
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
@@ -2327,12 +2338,13 @@ void rtcEngineSmokeTestCases() {
         appId: engineAppId,
         areaCode: AreaCode.areaCodeGlob.value(),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
         await rtcEngine.pauseAudioMixing();
       } catch (e) {
         if (e is! AgoraRtcException) {
-          debugPrint('[pauseAudioMixing] error: ${e.toString()}');
+          debugPrint('[RtcEngine.pauseAudioMixing] error: ${e.toString()}');
           rethrow;
         }
 
@@ -2347,7 +2359,7 @@ void rtcEngineSmokeTestCases() {
   );
 
   testWidgets(
-    'resumeAudioMixing',
+    'RtcEngine.resumeAudioMixing',
     (WidgetTester tester) async {
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
@@ -2357,12 +2369,13 @@ void rtcEngineSmokeTestCases() {
         appId: engineAppId,
         areaCode: AreaCode.areaCodeGlob.value(),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
         await rtcEngine.resumeAudioMixing();
       } catch (e) {
         if (e is! AgoraRtcException) {
-          debugPrint('[resumeAudioMixing] error: ${e.toString()}');
+          debugPrint('[RtcEngine.resumeAudioMixing] error: ${e.toString()}');
           rethrow;
         }
 
@@ -2377,7 +2390,7 @@ void rtcEngineSmokeTestCases() {
   );
 
   testWidgets(
-    'selectAudioTrack',
+    'RtcEngine.selectAudioTrack',
     (WidgetTester tester) async {
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
@@ -2387,6 +2400,7 @@ void rtcEngineSmokeTestCases() {
         appId: engineAppId,
         areaCode: AreaCode.areaCodeGlob.value(),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
         const int index = 10;
@@ -2395,7 +2409,7 @@ void rtcEngineSmokeTestCases() {
         );
       } catch (e) {
         if (e is! AgoraRtcException) {
-          debugPrint('[selectAudioTrack] error: ${e.toString()}');
+          debugPrint('[RtcEngine.selectAudioTrack] error: ${e.toString()}');
           rethrow;
         }
 
@@ -2410,7 +2424,7 @@ void rtcEngineSmokeTestCases() {
   );
 
   testWidgets(
-    'getAudioTrackCount',
+    'RtcEngine.getAudioTrackCount',
     (WidgetTester tester) async {
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
@@ -2420,12 +2434,13 @@ void rtcEngineSmokeTestCases() {
         appId: engineAppId,
         areaCode: AreaCode.areaCodeGlob.value(),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
         await rtcEngine.getAudioTrackCount();
       } catch (e) {
         if (e is! AgoraRtcException) {
-          debugPrint('[getAudioTrackCount] error: ${e.toString()}');
+          debugPrint('[RtcEngine.getAudioTrackCount] error: ${e.toString()}');
           rethrow;
         }
 
@@ -2440,7 +2455,7 @@ void rtcEngineSmokeTestCases() {
   );
 
   testWidgets(
-    'adjustAudioMixingVolume',
+    'RtcEngine.adjustAudioMixingVolume',
     (WidgetTester tester) async {
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
@@ -2450,6 +2465,7 @@ void rtcEngineSmokeTestCases() {
         appId: engineAppId,
         areaCode: AreaCode.areaCodeGlob.value(),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
         const int volume = 10;
@@ -2458,7 +2474,8 @@ void rtcEngineSmokeTestCases() {
         );
       } catch (e) {
         if (e is! AgoraRtcException) {
-          debugPrint('[adjustAudioMixingVolume] error: ${e.toString()}');
+          debugPrint(
+              '[RtcEngine.adjustAudioMixingVolume] error: ${e.toString()}');
           rethrow;
         }
 
@@ -2473,7 +2490,7 @@ void rtcEngineSmokeTestCases() {
   );
 
   testWidgets(
-    'adjustAudioMixingPublishVolume',
+    'RtcEngine.adjustAudioMixingPublishVolume',
     (WidgetTester tester) async {
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
@@ -2483,6 +2500,7 @@ void rtcEngineSmokeTestCases() {
         appId: engineAppId,
         areaCode: AreaCode.areaCodeGlob.value(),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
         const int volume = 10;
@@ -2491,7 +2509,8 @@ void rtcEngineSmokeTestCases() {
         );
       } catch (e) {
         if (e is! AgoraRtcException) {
-          debugPrint('[adjustAudioMixingPublishVolume] error: ${e.toString()}');
+          debugPrint(
+              '[RtcEngine.adjustAudioMixingPublishVolume] error: ${e.toString()}');
           rethrow;
         }
 
@@ -2506,7 +2525,7 @@ void rtcEngineSmokeTestCases() {
   );
 
   testWidgets(
-    'getAudioMixingPublishVolume',
+    'RtcEngine.getAudioMixingPublishVolume',
     (WidgetTester tester) async {
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
@@ -2516,12 +2535,14 @@ void rtcEngineSmokeTestCases() {
         appId: engineAppId,
         areaCode: AreaCode.areaCodeGlob.value(),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
         await rtcEngine.getAudioMixingPublishVolume();
       } catch (e) {
         if (e is! AgoraRtcException) {
-          debugPrint('[getAudioMixingPublishVolume] error: ${e.toString()}');
+          debugPrint(
+              '[RtcEngine.getAudioMixingPublishVolume] error: ${e.toString()}');
           rethrow;
         }
 
@@ -2536,7 +2557,7 @@ void rtcEngineSmokeTestCases() {
   );
 
   testWidgets(
-    'adjustAudioMixingPlayoutVolume',
+    'RtcEngine.adjustAudioMixingPlayoutVolume',
     (WidgetTester tester) async {
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
@@ -2546,6 +2567,7 @@ void rtcEngineSmokeTestCases() {
         appId: engineAppId,
         areaCode: AreaCode.areaCodeGlob.value(),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
         const int volume = 10;
@@ -2554,7 +2576,8 @@ void rtcEngineSmokeTestCases() {
         );
       } catch (e) {
         if (e is! AgoraRtcException) {
-          debugPrint('[adjustAudioMixingPlayoutVolume] error: ${e.toString()}');
+          debugPrint(
+              '[RtcEngine.adjustAudioMixingPlayoutVolume] error: ${e.toString()}');
           rethrow;
         }
 
@@ -2569,7 +2592,7 @@ void rtcEngineSmokeTestCases() {
   );
 
   testWidgets(
-    'getAudioMixingPlayoutVolume',
+    'RtcEngine.getAudioMixingPlayoutVolume',
     (WidgetTester tester) async {
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
@@ -2579,12 +2602,14 @@ void rtcEngineSmokeTestCases() {
         appId: engineAppId,
         areaCode: AreaCode.areaCodeGlob.value(),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
         await rtcEngine.getAudioMixingPlayoutVolume();
       } catch (e) {
         if (e is! AgoraRtcException) {
-          debugPrint('[getAudioMixingPlayoutVolume] error: ${e.toString()}');
+          debugPrint(
+              '[RtcEngine.getAudioMixingPlayoutVolume] error: ${e.toString()}');
           rethrow;
         }
 
@@ -2599,7 +2624,7 @@ void rtcEngineSmokeTestCases() {
   );
 
   testWidgets(
-    'getAudioMixingDuration',
+    'RtcEngine.getAudioMixingDuration',
     (WidgetTester tester) async {
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
@@ -2609,12 +2634,14 @@ void rtcEngineSmokeTestCases() {
         appId: engineAppId,
         areaCode: AreaCode.areaCodeGlob.value(),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
         await rtcEngine.getAudioMixingDuration();
       } catch (e) {
         if (e is! AgoraRtcException) {
-          debugPrint('[getAudioMixingDuration] error: ${e.toString()}');
+          debugPrint(
+              '[RtcEngine.getAudioMixingDuration] error: ${e.toString()}');
           rethrow;
         }
 
@@ -2629,7 +2656,7 @@ void rtcEngineSmokeTestCases() {
   );
 
   testWidgets(
-    'getAudioMixingCurrentPosition',
+    'RtcEngine.getAudioMixingCurrentPosition',
     (WidgetTester tester) async {
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
@@ -2639,12 +2666,14 @@ void rtcEngineSmokeTestCases() {
         appId: engineAppId,
         areaCode: AreaCode.areaCodeGlob.value(),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
         await rtcEngine.getAudioMixingCurrentPosition();
       } catch (e) {
         if (e is! AgoraRtcException) {
-          debugPrint('[getAudioMixingCurrentPosition] error: ${e.toString()}');
+          debugPrint(
+              '[RtcEngine.getAudioMixingCurrentPosition] error: ${e.toString()}');
           rethrow;
         }
 
@@ -2659,7 +2688,7 @@ void rtcEngineSmokeTestCases() {
   );
 
   testWidgets(
-    'setAudioMixingPosition',
+    'RtcEngine.setAudioMixingPosition',
     (WidgetTester tester) async {
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
@@ -2669,6 +2698,7 @@ void rtcEngineSmokeTestCases() {
         appId: engineAppId,
         areaCode: AreaCode.areaCodeGlob.value(),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
         const int pos = 10;
@@ -2677,7 +2707,8 @@ void rtcEngineSmokeTestCases() {
         );
       } catch (e) {
         if (e is! AgoraRtcException) {
-          debugPrint('[setAudioMixingPosition] error: ${e.toString()}');
+          debugPrint(
+              '[RtcEngine.setAudioMixingPosition] error: ${e.toString()}');
           rethrow;
         }
 
@@ -2692,7 +2723,7 @@ void rtcEngineSmokeTestCases() {
   );
 
   testWidgets(
-    'setAudioMixingDualMonoMode',
+    'RtcEngine.setAudioMixingDualMonoMode',
     (WidgetTester tester) async {
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
@@ -2702,6 +2733,7 @@ void rtcEngineSmokeTestCases() {
         appId: engineAppId,
         areaCode: AreaCode.areaCodeGlob.value(),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
         const AudioMixingDualMonoMode mode =
@@ -2711,7 +2743,8 @@ void rtcEngineSmokeTestCases() {
         );
       } catch (e) {
         if (e is! AgoraRtcException) {
-          debugPrint('[setAudioMixingDualMonoMode] error: ${e.toString()}');
+          debugPrint(
+              '[RtcEngine.setAudioMixingDualMonoMode] error: ${e.toString()}');
           rethrow;
         }
 
@@ -2726,7 +2759,7 @@ void rtcEngineSmokeTestCases() {
   );
 
   testWidgets(
-    'setAudioMixingPitch',
+    'RtcEngine.setAudioMixingPitch',
     (WidgetTester tester) async {
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
@@ -2736,6 +2769,7 @@ void rtcEngineSmokeTestCases() {
         appId: engineAppId,
         areaCode: AreaCode.areaCodeGlob.value(),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
         const int pitch = 10;
@@ -2744,7 +2778,7 @@ void rtcEngineSmokeTestCases() {
         );
       } catch (e) {
         if (e is! AgoraRtcException) {
-          debugPrint('[setAudioMixingPitch] error: ${e.toString()}');
+          debugPrint('[RtcEngine.setAudioMixingPitch] error: ${e.toString()}');
           rethrow;
         }
 
@@ -2759,7 +2793,7 @@ void rtcEngineSmokeTestCases() {
   );
 
   testWidgets(
-    'getEffectsVolume',
+    'RtcEngine.getEffectsVolume',
     (WidgetTester tester) async {
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
@@ -2769,12 +2803,13 @@ void rtcEngineSmokeTestCases() {
         appId: engineAppId,
         areaCode: AreaCode.areaCodeGlob.value(),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
         await rtcEngine.getEffectsVolume();
       } catch (e) {
         if (e is! AgoraRtcException) {
-          debugPrint('[getEffectsVolume] error: ${e.toString()}');
+          debugPrint('[RtcEngine.getEffectsVolume] error: ${e.toString()}');
           rethrow;
         }
 
@@ -2789,7 +2824,7 @@ void rtcEngineSmokeTestCases() {
   );
 
   testWidgets(
-    'setEffectsVolume',
+    'RtcEngine.setEffectsVolume',
     (WidgetTester tester) async {
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
@@ -2799,6 +2834,7 @@ void rtcEngineSmokeTestCases() {
         appId: engineAppId,
         areaCode: AreaCode.areaCodeGlob.value(),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
         const int volume = 10;
@@ -2807,7 +2843,7 @@ void rtcEngineSmokeTestCases() {
         );
       } catch (e) {
         if (e is! AgoraRtcException) {
-          debugPrint('[setEffectsVolume] error: ${e.toString()}');
+          debugPrint('[RtcEngine.setEffectsVolume] error: ${e.toString()}');
           rethrow;
         }
 
@@ -2822,7 +2858,7 @@ void rtcEngineSmokeTestCases() {
   );
 
   testWidgets(
-    'preloadEffect',
+    'RtcEngine.preloadEffect',
     (WidgetTester tester) async {
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
@@ -2832,6 +2868,7 @@ void rtcEngineSmokeTestCases() {
         appId: engineAppId,
         areaCode: AreaCode.areaCodeGlob.value(),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
         const int soundId = 10;
@@ -2844,7 +2881,7 @@ void rtcEngineSmokeTestCases() {
         );
       } catch (e) {
         if (e is! AgoraRtcException) {
-          debugPrint('[preloadEffect] error: ${e.toString()}');
+          debugPrint('[RtcEngine.preloadEffect] error: ${e.toString()}');
           rethrow;
         }
 
@@ -2859,7 +2896,7 @@ void rtcEngineSmokeTestCases() {
   );
 
   testWidgets(
-    'playEffect',
+    'RtcEngine.playEffect',
     (WidgetTester tester) async {
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
@@ -2869,6 +2906,7 @@ void rtcEngineSmokeTestCases() {
         appId: engineAppId,
         areaCode: AreaCode.areaCodeGlob.value(),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
         const int soundId = 10;
@@ -2891,7 +2929,7 @@ void rtcEngineSmokeTestCases() {
         );
       } catch (e) {
         if (e is! AgoraRtcException) {
-          debugPrint('[playEffect] error: ${e.toString()}');
+          debugPrint('[RtcEngine.playEffect] error: ${e.toString()}');
           rethrow;
         }
 
@@ -2906,7 +2944,7 @@ void rtcEngineSmokeTestCases() {
   );
 
   testWidgets(
-    'playAllEffects',
+    'RtcEngine.playAllEffects',
     (WidgetTester tester) async {
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
@@ -2916,6 +2954,7 @@ void rtcEngineSmokeTestCases() {
         appId: engineAppId,
         areaCode: AreaCode.areaCodeGlob.value(),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
         const int loopCount = 10;
@@ -2932,7 +2971,7 @@ void rtcEngineSmokeTestCases() {
         );
       } catch (e) {
         if (e is! AgoraRtcException) {
-          debugPrint('[playAllEffects] error: ${e.toString()}');
+          debugPrint('[RtcEngine.playAllEffects] error: ${e.toString()}');
           rethrow;
         }
 
@@ -2947,7 +2986,7 @@ void rtcEngineSmokeTestCases() {
   );
 
   testWidgets(
-    'getVolumeOfEffect',
+    'RtcEngine.getVolumeOfEffect',
     (WidgetTester tester) async {
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
@@ -2957,6 +2996,7 @@ void rtcEngineSmokeTestCases() {
         appId: engineAppId,
         areaCode: AreaCode.areaCodeGlob.value(),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
         const int soundId = 10;
@@ -2965,7 +3005,7 @@ void rtcEngineSmokeTestCases() {
         );
       } catch (e) {
         if (e is! AgoraRtcException) {
-          debugPrint('[getVolumeOfEffect] error: ${e.toString()}');
+          debugPrint('[RtcEngine.getVolumeOfEffect] error: ${e.toString()}');
           rethrow;
         }
 
@@ -2980,7 +3020,7 @@ void rtcEngineSmokeTestCases() {
   );
 
   testWidgets(
-    'setVolumeOfEffect',
+    'RtcEngine.setVolumeOfEffect',
     (WidgetTester tester) async {
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
@@ -2990,6 +3030,7 @@ void rtcEngineSmokeTestCases() {
         appId: engineAppId,
         areaCode: AreaCode.areaCodeGlob.value(),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
         const int soundId = 10;
@@ -3000,7 +3041,7 @@ void rtcEngineSmokeTestCases() {
         );
       } catch (e) {
         if (e is! AgoraRtcException) {
-          debugPrint('[setVolumeOfEffect] error: ${e.toString()}');
+          debugPrint('[RtcEngine.setVolumeOfEffect] error: ${e.toString()}');
           rethrow;
         }
 
@@ -3015,7 +3056,7 @@ void rtcEngineSmokeTestCases() {
   );
 
   testWidgets(
-    'pauseEffect',
+    'RtcEngine.pauseEffect',
     (WidgetTester tester) async {
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
@@ -3025,6 +3066,7 @@ void rtcEngineSmokeTestCases() {
         appId: engineAppId,
         areaCode: AreaCode.areaCodeGlob.value(),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
         const int soundId = 10;
@@ -3033,7 +3075,7 @@ void rtcEngineSmokeTestCases() {
         );
       } catch (e) {
         if (e is! AgoraRtcException) {
-          debugPrint('[pauseEffect] error: ${e.toString()}');
+          debugPrint('[RtcEngine.pauseEffect] error: ${e.toString()}');
           rethrow;
         }
 
@@ -3048,7 +3090,7 @@ void rtcEngineSmokeTestCases() {
   );
 
   testWidgets(
-    'pauseAllEffects',
+    'RtcEngine.pauseAllEffects',
     (WidgetTester tester) async {
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
@@ -3058,12 +3100,13 @@ void rtcEngineSmokeTestCases() {
         appId: engineAppId,
         areaCode: AreaCode.areaCodeGlob.value(),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
         await rtcEngine.pauseAllEffects();
       } catch (e) {
         if (e is! AgoraRtcException) {
-          debugPrint('[pauseAllEffects] error: ${e.toString()}');
+          debugPrint('[RtcEngine.pauseAllEffects] error: ${e.toString()}');
           rethrow;
         }
 
@@ -3078,7 +3121,7 @@ void rtcEngineSmokeTestCases() {
   );
 
   testWidgets(
-    'resumeEffect',
+    'RtcEngine.resumeEffect',
     (WidgetTester tester) async {
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
@@ -3088,6 +3131,7 @@ void rtcEngineSmokeTestCases() {
         appId: engineAppId,
         areaCode: AreaCode.areaCodeGlob.value(),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
         const int soundId = 10;
@@ -3096,7 +3140,7 @@ void rtcEngineSmokeTestCases() {
         );
       } catch (e) {
         if (e is! AgoraRtcException) {
-          debugPrint('[resumeEffect] error: ${e.toString()}');
+          debugPrint('[RtcEngine.resumeEffect] error: ${e.toString()}');
           rethrow;
         }
 
@@ -3111,7 +3155,7 @@ void rtcEngineSmokeTestCases() {
   );
 
   testWidgets(
-    'resumeAllEffects',
+    'RtcEngine.resumeAllEffects',
     (WidgetTester tester) async {
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
@@ -3121,12 +3165,13 @@ void rtcEngineSmokeTestCases() {
         appId: engineAppId,
         areaCode: AreaCode.areaCodeGlob.value(),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
         await rtcEngine.resumeAllEffects();
       } catch (e) {
         if (e is! AgoraRtcException) {
-          debugPrint('[resumeAllEffects] error: ${e.toString()}');
+          debugPrint('[RtcEngine.resumeAllEffects] error: ${e.toString()}');
           rethrow;
         }
 
@@ -3141,7 +3186,7 @@ void rtcEngineSmokeTestCases() {
   );
 
   testWidgets(
-    'stopEffect',
+    'RtcEngine.stopEffect',
     (WidgetTester tester) async {
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
@@ -3151,6 +3196,7 @@ void rtcEngineSmokeTestCases() {
         appId: engineAppId,
         areaCode: AreaCode.areaCodeGlob.value(),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
         const int soundId = 10;
@@ -3159,7 +3205,7 @@ void rtcEngineSmokeTestCases() {
         );
       } catch (e) {
         if (e is! AgoraRtcException) {
-          debugPrint('[stopEffect] error: ${e.toString()}');
+          debugPrint('[RtcEngine.stopEffect] error: ${e.toString()}');
           rethrow;
         }
 
@@ -3174,7 +3220,7 @@ void rtcEngineSmokeTestCases() {
   );
 
   testWidgets(
-    'stopAllEffects',
+    'RtcEngine.stopAllEffects',
     (WidgetTester tester) async {
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
@@ -3184,12 +3230,13 @@ void rtcEngineSmokeTestCases() {
         appId: engineAppId,
         areaCode: AreaCode.areaCodeGlob.value(),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
         await rtcEngine.stopAllEffects();
       } catch (e) {
         if (e is! AgoraRtcException) {
-          debugPrint('[stopAllEffects] error: ${e.toString()}');
+          debugPrint('[RtcEngine.stopAllEffects] error: ${e.toString()}');
           rethrow;
         }
 
@@ -3204,7 +3251,7 @@ void rtcEngineSmokeTestCases() {
   );
 
   testWidgets(
-    'unloadEffect',
+    'RtcEngine.unloadEffect',
     (WidgetTester tester) async {
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
@@ -3214,6 +3261,7 @@ void rtcEngineSmokeTestCases() {
         appId: engineAppId,
         areaCode: AreaCode.areaCodeGlob.value(),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
         const int soundId = 10;
@@ -3222,7 +3270,7 @@ void rtcEngineSmokeTestCases() {
         );
       } catch (e) {
         if (e is! AgoraRtcException) {
-          debugPrint('[unloadEffect] error: ${e.toString()}');
+          debugPrint('[RtcEngine.unloadEffect] error: ${e.toString()}');
           rethrow;
         }
 
@@ -3237,7 +3285,7 @@ void rtcEngineSmokeTestCases() {
   );
 
   testWidgets(
-    'unloadAllEffects',
+    'RtcEngine.unloadAllEffects',
     (WidgetTester tester) async {
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
@@ -3247,12 +3295,13 @@ void rtcEngineSmokeTestCases() {
         appId: engineAppId,
         areaCode: AreaCode.areaCodeGlob.value(),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
         await rtcEngine.unloadAllEffects();
       } catch (e) {
         if (e is! AgoraRtcException) {
-          debugPrint('[unloadAllEffects] error: ${e.toString()}');
+          debugPrint('[RtcEngine.unloadAllEffects] error: ${e.toString()}');
           rethrow;
         }
 
@@ -3267,7 +3316,7 @@ void rtcEngineSmokeTestCases() {
   );
 
   testWidgets(
-    'getEffectDuration',
+    'RtcEngine.getEffectDuration',
     (WidgetTester tester) async {
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
@@ -3277,6 +3326,7 @@ void rtcEngineSmokeTestCases() {
         appId: engineAppId,
         areaCode: AreaCode.areaCodeGlob.value(),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
         const String filePath = "hello";
@@ -3285,7 +3335,7 @@ void rtcEngineSmokeTestCases() {
         );
       } catch (e) {
         if (e is! AgoraRtcException) {
-          debugPrint('[getEffectDuration] error: ${e.toString()}');
+          debugPrint('[RtcEngine.getEffectDuration] error: ${e.toString()}');
           rethrow;
         }
 
@@ -3300,7 +3350,7 @@ void rtcEngineSmokeTestCases() {
   );
 
   testWidgets(
-    'setEffectPosition',
+    'RtcEngine.setEffectPosition',
     (WidgetTester tester) async {
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
@@ -3310,6 +3360,7 @@ void rtcEngineSmokeTestCases() {
         appId: engineAppId,
         areaCode: AreaCode.areaCodeGlob.value(),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
         const int soundId = 10;
@@ -3320,7 +3371,7 @@ void rtcEngineSmokeTestCases() {
         );
       } catch (e) {
         if (e is! AgoraRtcException) {
-          debugPrint('[setEffectPosition] error: ${e.toString()}');
+          debugPrint('[RtcEngine.setEffectPosition] error: ${e.toString()}');
           rethrow;
         }
 
@@ -3335,7 +3386,7 @@ void rtcEngineSmokeTestCases() {
   );
 
   testWidgets(
-    'getEffectCurrentPosition',
+    'RtcEngine.getEffectCurrentPosition',
     (WidgetTester tester) async {
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
@@ -3345,6 +3396,7 @@ void rtcEngineSmokeTestCases() {
         appId: engineAppId,
         areaCode: AreaCode.areaCodeGlob.value(),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
         const int soundId = 10;
@@ -3353,7 +3405,8 @@ void rtcEngineSmokeTestCases() {
         );
       } catch (e) {
         if (e is! AgoraRtcException) {
-          debugPrint('[getEffectCurrentPosition] error: ${e.toString()}');
+          debugPrint(
+              '[RtcEngine.getEffectCurrentPosition] error: ${e.toString()}');
           rethrow;
         }
 
@@ -3368,7 +3421,7 @@ void rtcEngineSmokeTestCases() {
   );
 
   testWidgets(
-    'enableSoundPositionIndication',
+    'RtcEngine.enableSoundPositionIndication',
     (WidgetTester tester) async {
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
@@ -3378,6 +3431,7 @@ void rtcEngineSmokeTestCases() {
         appId: engineAppId,
         areaCode: AreaCode.areaCodeGlob.value(),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
         const bool enabled = true;
@@ -3386,7 +3440,8 @@ void rtcEngineSmokeTestCases() {
         );
       } catch (e) {
         if (e is! AgoraRtcException) {
-          debugPrint('[enableSoundPositionIndication] error: ${e.toString()}');
+          debugPrint(
+              '[RtcEngine.enableSoundPositionIndication] error: ${e.toString()}');
           rethrow;
         }
 
@@ -3401,7 +3456,7 @@ void rtcEngineSmokeTestCases() {
   );
 
   testWidgets(
-    'setRemoteVoicePosition',
+    'RtcEngine.setRemoteVoicePosition',
     (WidgetTester tester) async {
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
@@ -3411,6 +3466,7 @@ void rtcEngineSmokeTestCases() {
         appId: engineAppId,
         areaCode: AreaCode.areaCodeGlob.value(),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
         const int uid = 10;
@@ -3423,7 +3479,8 @@ void rtcEngineSmokeTestCases() {
         );
       } catch (e) {
         if (e is! AgoraRtcException) {
-          debugPrint('[setRemoteVoicePosition] error: ${e.toString()}');
+          debugPrint(
+              '[RtcEngine.setRemoteVoicePosition] error: ${e.toString()}');
           rethrow;
         }
 
@@ -3438,7 +3495,7 @@ void rtcEngineSmokeTestCases() {
   );
 
   testWidgets(
-    'enableSpatialAudio',
+    'RtcEngine.enableSpatialAudio',
     (WidgetTester tester) async {
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
@@ -3448,6 +3505,7 @@ void rtcEngineSmokeTestCases() {
         appId: engineAppId,
         areaCode: AreaCode.areaCodeGlob.value(),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
         const bool enabled = true;
@@ -3456,7 +3514,7 @@ void rtcEngineSmokeTestCases() {
         );
       } catch (e) {
         if (e is! AgoraRtcException) {
-          debugPrint('[enableSpatialAudio] error: ${e.toString()}');
+          debugPrint('[RtcEngine.enableSpatialAudio] error: ${e.toString()}');
           rethrow;
         }
 
@@ -3471,7 +3529,7 @@ void rtcEngineSmokeTestCases() {
   );
 
   testWidgets(
-    'setRemoteUserSpatialAudioParams',
+    'RtcEngine.setRemoteUserSpatialAudioParams',
     (WidgetTester tester) async {
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
@@ -3481,6 +3539,7 @@ void rtcEngineSmokeTestCases() {
         appId: engineAppId,
         areaCode: AreaCode.areaCodeGlob.value(),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
         const int uid = 10;
@@ -3509,7 +3568,7 @@ void rtcEngineSmokeTestCases() {
       } catch (e) {
         if (e is! AgoraRtcException) {
           debugPrint(
-              '[setRemoteUserSpatialAudioParams] error: ${e.toString()}');
+              '[RtcEngine.setRemoteUserSpatialAudioParams] error: ${e.toString()}');
           rethrow;
         }
 
@@ -3524,7 +3583,7 @@ void rtcEngineSmokeTestCases() {
   );
 
   testWidgets(
-    'setVoiceBeautifierPreset',
+    'RtcEngine.setVoiceBeautifierPreset',
     (WidgetTester tester) async {
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
@@ -3534,6 +3593,7 @@ void rtcEngineSmokeTestCases() {
         appId: engineAppId,
         areaCode: AreaCode.areaCodeGlob.value(),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
         const VoiceBeautifierPreset preset =
@@ -3543,7 +3603,8 @@ void rtcEngineSmokeTestCases() {
         );
       } catch (e) {
         if (e is! AgoraRtcException) {
-          debugPrint('[setVoiceBeautifierPreset] error: ${e.toString()}');
+          debugPrint(
+              '[RtcEngine.setVoiceBeautifierPreset] error: ${e.toString()}');
           rethrow;
         }
 
@@ -3558,7 +3619,7 @@ void rtcEngineSmokeTestCases() {
   );
 
   testWidgets(
-    'setAudioEffectPreset',
+    'RtcEngine.setAudioEffectPreset',
     (WidgetTester tester) async {
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
@@ -3568,6 +3629,7 @@ void rtcEngineSmokeTestCases() {
         appId: engineAppId,
         areaCode: AreaCode.areaCodeGlob.value(),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
         const AudioEffectPreset preset = AudioEffectPreset.audioEffectOff;
@@ -3576,7 +3638,7 @@ void rtcEngineSmokeTestCases() {
         );
       } catch (e) {
         if (e is! AgoraRtcException) {
-          debugPrint('[setAudioEffectPreset] error: ${e.toString()}');
+          debugPrint('[RtcEngine.setAudioEffectPreset] error: ${e.toString()}');
           rethrow;
         }
 
@@ -3591,7 +3653,7 @@ void rtcEngineSmokeTestCases() {
   );
 
   testWidgets(
-    'setVoiceConversionPreset',
+    'RtcEngine.setVoiceConversionPreset',
     (WidgetTester tester) async {
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
@@ -3601,6 +3663,7 @@ void rtcEngineSmokeTestCases() {
         appId: engineAppId,
         areaCode: AreaCode.areaCodeGlob.value(),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
         const VoiceConversionPreset preset =
@@ -3610,7 +3673,8 @@ void rtcEngineSmokeTestCases() {
         );
       } catch (e) {
         if (e is! AgoraRtcException) {
-          debugPrint('[setVoiceConversionPreset] error: ${e.toString()}');
+          debugPrint(
+              '[RtcEngine.setVoiceConversionPreset] error: ${e.toString()}');
           rethrow;
         }
 
@@ -3625,7 +3689,7 @@ void rtcEngineSmokeTestCases() {
   );
 
   testWidgets(
-    'setAudioEffectParameters',
+    'RtcEngine.setAudioEffectParameters',
     (WidgetTester tester) async {
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
@@ -3635,6 +3699,7 @@ void rtcEngineSmokeTestCases() {
         appId: engineAppId,
         areaCode: AreaCode.areaCodeGlob.value(),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
         const AudioEffectPreset preset = AudioEffectPreset.audioEffectOff;
@@ -3647,7 +3712,8 @@ void rtcEngineSmokeTestCases() {
         );
       } catch (e) {
         if (e is! AgoraRtcException) {
-          debugPrint('[setAudioEffectParameters] error: ${e.toString()}');
+          debugPrint(
+              '[RtcEngine.setAudioEffectParameters] error: ${e.toString()}');
           rethrow;
         }
 
@@ -3662,7 +3728,7 @@ void rtcEngineSmokeTestCases() {
   );
 
   testWidgets(
-    'setVoiceBeautifierParameters',
+    'RtcEngine.setVoiceBeautifierParameters',
     (WidgetTester tester) async {
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
@@ -3672,6 +3738,7 @@ void rtcEngineSmokeTestCases() {
         appId: engineAppId,
         areaCode: AreaCode.areaCodeGlob.value(),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
         const VoiceBeautifierPreset preset =
@@ -3685,7 +3752,8 @@ void rtcEngineSmokeTestCases() {
         );
       } catch (e) {
         if (e is! AgoraRtcException) {
-          debugPrint('[setVoiceBeautifierParameters] error: ${e.toString()}');
+          debugPrint(
+              '[RtcEngine.setVoiceBeautifierParameters] error: ${e.toString()}');
           rethrow;
         }
 
@@ -3700,7 +3768,7 @@ void rtcEngineSmokeTestCases() {
   );
 
   testWidgets(
-    'setVoiceConversionParameters',
+    'RtcEngine.setVoiceConversionParameters',
     (WidgetTester tester) async {
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
@@ -3710,6 +3778,7 @@ void rtcEngineSmokeTestCases() {
         appId: engineAppId,
         areaCode: AreaCode.areaCodeGlob.value(),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
         const VoiceConversionPreset preset =
@@ -3723,7 +3792,8 @@ void rtcEngineSmokeTestCases() {
         );
       } catch (e) {
         if (e is! AgoraRtcException) {
-          debugPrint('[setVoiceConversionParameters] error: ${e.toString()}');
+          debugPrint(
+              '[RtcEngine.setVoiceConversionParameters] error: ${e.toString()}');
           rethrow;
         }
 
@@ -3738,7 +3808,7 @@ void rtcEngineSmokeTestCases() {
   );
 
   testWidgets(
-    'setLocalVoicePitch',
+    'RtcEngine.setLocalVoicePitch',
     (WidgetTester tester) async {
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
@@ -3748,6 +3818,7 @@ void rtcEngineSmokeTestCases() {
         appId: engineAppId,
         areaCode: AreaCode.areaCodeGlob.value(),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
         const double pitch = 10.0;
@@ -3756,7 +3827,7 @@ void rtcEngineSmokeTestCases() {
         );
       } catch (e) {
         if (e is! AgoraRtcException) {
-          debugPrint('[setLocalVoicePitch] error: ${e.toString()}');
+          debugPrint('[RtcEngine.setLocalVoicePitch] error: ${e.toString()}');
           rethrow;
         }
 
@@ -3771,7 +3842,7 @@ void rtcEngineSmokeTestCases() {
   );
 
   testWidgets(
-    'setLocalVoiceFormant',
+    'RtcEngine.setLocalVoiceFormant',
     (WidgetTester tester) async {
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
@@ -3781,6 +3852,7 @@ void rtcEngineSmokeTestCases() {
         appId: engineAppId,
         areaCode: AreaCode.areaCodeGlob.value(),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
         const double formantRatio = 10.0;
@@ -3789,7 +3861,7 @@ void rtcEngineSmokeTestCases() {
         );
       } catch (e) {
         if (e is! AgoraRtcException) {
-          debugPrint('[setLocalVoiceFormant] error: ${e.toString()}');
+          debugPrint('[RtcEngine.setLocalVoiceFormant] error: ${e.toString()}');
           rethrow;
         }
 
@@ -3804,7 +3876,7 @@ void rtcEngineSmokeTestCases() {
   );
 
   testWidgets(
-    'setLocalVoiceEqualization',
+    'RtcEngine.setLocalVoiceEqualization',
     (WidgetTester tester) async {
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
@@ -3814,6 +3886,7 @@ void rtcEngineSmokeTestCases() {
         appId: engineAppId,
         areaCode: AreaCode.areaCodeGlob.value(),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
         const AudioEqualizationBandFrequency bandFrequency =
@@ -3825,7 +3898,8 @@ void rtcEngineSmokeTestCases() {
         );
       } catch (e) {
         if (e is! AgoraRtcException) {
-          debugPrint('[setLocalVoiceEqualization] error: ${e.toString()}');
+          debugPrint(
+              '[RtcEngine.setLocalVoiceEqualization] error: ${e.toString()}');
           rethrow;
         }
 
@@ -3840,7 +3914,7 @@ void rtcEngineSmokeTestCases() {
   );
 
   testWidgets(
-    'setLocalVoiceReverb',
+    'RtcEngine.setLocalVoiceReverb',
     (WidgetTester tester) async {
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
@@ -3850,6 +3924,7 @@ void rtcEngineSmokeTestCases() {
         appId: engineAppId,
         areaCode: AreaCode.areaCodeGlob.value(),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
         const AudioReverbType reverbKey = AudioReverbType.audioReverbDryLevel;
@@ -3860,7 +3935,7 @@ void rtcEngineSmokeTestCases() {
         );
       } catch (e) {
         if (e is! AgoraRtcException) {
-          debugPrint('[setLocalVoiceReverb] error: ${e.toString()}');
+          debugPrint('[RtcEngine.setLocalVoiceReverb] error: ${e.toString()}');
           rethrow;
         }
 
@@ -3875,7 +3950,7 @@ void rtcEngineSmokeTestCases() {
   );
 
   testWidgets(
-    'setHeadphoneEQPreset',
+    'RtcEngine.setHeadphoneEQPreset',
     (WidgetTester tester) async {
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
@@ -3885,6 +3960,7 @@ void rtcEngineSmokeTestCases() {
         appId: engineAppId,
         areaCode: AreaCode.areaCodeGlob.value(),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
         const HeadphoneEqualizerPreset preset =
@@ -3894,7 +3970,7 @@ void rtcEngineSmokeTestCases() {
         );
       } catch (e) {
         if (e is! AgoraRtcException) {
-          debugPrint('[setHeadphoneEQPreset] error: ${e.toString()}');
+          debugPrint('[RtcEngine.setHeadphoneEQPreset] error: ${e.toString()}');
           rethrow;
         }
 
@@ -3909,7 +3985,7 @@ void rtcEngineSmokeTestCases() {
   );
 
   testWidgets(
-    'setHeadphoneEQParameters',
+    'RtcEngine.setHeadphoneEQParameters',
     (WidgetTester tester) async {
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
@@ -3919,6 +3995,7 @@ void rtcEngineSmokeTestCases() {
         appId: engineAppId,
         areaCode: AreaCode.areaCodeGlob.value(),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
         const int lowGain = 10;
@@ -3929,7 +4006,8 @@ void rtcEngineSmokeTestCases() {
         );
       } catch (e) {
         if (e is! AgoraRtcException) {
-          debugPrint('[setHeadphoneEQParameters] error: ${e.toString()}');
+          debugPrint(
+              '[RtcEngine.setHeadphoneEQParameters] error: ${e.toString()}');
           rethrow;
         }
 
@@ -3944,7 +4022,7 @@ void rtcEngineSmokeTestCases() {
   );
 
   testWidgets(
-    'setLogFile',
+    'RtcEngine.setLogFile',
     (WidgetTester tester) async {
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
@@ -3954,6 +4032,7 @@ void rtcEngineSmokeTestCases() {
         appId: engineAppId,
         areaCode: AreaCode.areaCodeGlob.value(),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
         const String filePath = "hello";
@@ -3962,7 +4041,7 @@ void rtcEngineSmokeTestCases() {
         );
       } catch (e) {
         if (e is! AgoraRtcException) {
-          debugPrint('[setLogFile] error: ${e.toString()}');
+          debugPrint('[RtcEngine.setLogFile] error: ${e.toString()}');
           rethrow;
         }
 
@@ -3977,7 +4056,7 @@ void rtcEngineSmokeTestCases() {
   );
 
   testWidgets(
-    'setLogFilter',
+    'RtcEngine.setLogFilter',
     (WidgetTester tester) async {
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
@@ -3987,6 +4066,7 @@ void rtcEngineSmokeTestCases() {
         appId: engineAppId,
         areaCode: AreaCode.areaCodeGlob.value(),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
         const LogFilterType filter = LogFilterType.logFilterOff;
@@ -3995,7 +4075,7 @@ void rtcEngineSmokeTestCases() {
         );
       } catch (e) {
         if (e is! AgoraRtcException) {
-          debugPrint('[setLogFilter] error: ${e.toString()}');
+          debugPrint('[RtcEngine.setLogFilter] error: ${e.toString()}');
           rethrow;
         }
 
@@ -4010,7 +4090,7 @@ void rtcEngineSmokeTestCases() {
   );
 
   testWidgets(
-    'setLogLevel',
+    'RtcEngine.setLogLevel',
     (WidgetTester tester) async {
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
@@ -4020,6 +4100,7 @@ void rtcEngineSmokeTestCases() {
         appId: engineAppId,
         areaCode: AreaCode.areaCodeGlob.value(),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
         const LogLevel level = LogLevel.logLevelNone;
@@ -4028,7 +4109,7 @@ void rtcEngineSmokeTestCases() {
         );
       } catch (e) {
         if (e is! AgoraRtcException) {
-          debugPrint('[setLogLevel] error: ${e.toString()}');
+          debugPrint('[RtcEngine.setLogLevel] error: ${e.toString()}');
           rethrow;
         }
 
@@ -4043,7 +4124,7 @@ void rtcEngineSmokeTestCases() {
   );
 
   testWidgets(
-    'setLogFileSize',
+    'RtcEngine.setLogFileSize',
     (WidgetTester tester) async {
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
@@ -4053,6 +4134,7 @@ void rtcEngineSmokeTestCases() {
         appId: engineAppId,
         areaCode: AreaCode.areaCodeGlob.value(),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
         const int fileSizeInKBytes = 10;
@@ -4061,7 +4143,7 @@ void rtcEngineSmokeTestCases() {
         );
       } catch (e) {
         if (e is! AgoraRtcException) {
-          debugPrint('[setLogFileSize] error: ${e.toString()}');
+          debugPrint('[RtcEngine.setLogFileSize] error: ${e.toString()}');
           rethrow;
         }
 
@@ -4076,7 +4158,7 @@ void rtcEngineSmokeTestCases() {
   );
 
   testWidgets(
-    'uploadLogFile',
+    'RtcEngine.uploadLogFile',
     (WidgetTester tester) async {
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
@@ -4086,12 +4168,13 @@ void rtcEngineSmokeTestCases() {
         appId: engineAppId,
         areaCode: AreaCode.areaCodeGlob.value(),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
         await rtcEngine.uploadLogFile();
       } catch (e) {
         if (e is! AgoraRtcException) {
-          debugPrint('[uploadLogFile] error: ${e.toString()}');
+          debugPrint('[RtcEngine.uploadLogFile] error: ${e.toString()}');
           rethrow;
         }
 
@@ -4106,7 +4189,7 @@ void rtcEngineSmokeTestCases() {
   );
 
   testWidgets(
-    'setLocalRenderMode',
+    'RtcEngine.writeLog',
     (WidgetTester tester) async {
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
@@ -4116,6 +4199,43 @@ void rtcEngineSmokeTestCases() {
         appId: engineAppId,
         areaCode: AreaCode.areaCodeGlob.value(),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
+
+      try {
+        const LogLevel level = LogLevel.logLevelNone;
+        const String fmt = "hello";
+        await rtcEngine.writeLog(
+          level: level,
+          fmt: fmt,
+        );
+      } catch (e) {
+        if (e is! AgoraRtcException) {
+          debugPrint('[RtcEngine.writeLog] error: ${e.toString()}');
+          rethrow;
+        }
+
+        if (e.code != -4) {
+          // Only not supported error supported.
+          rethrow;
+        }
+      }
+
+      await rtcEngine.release();
+    },
+  );
+
+  testWidgets(
+    'RtcEngine.setLocalRenderMode',
+    (WidgetTester tester) async {
+      String engineAppId = const String.fromEnvironment('TEST_APP_ID',
+          defaultValue: '<YOUR_APP_ID>');
+
+      RtcEngine rtcEngine = createAgoraRtcEngine();
+      await rtcEngine.initialize(RtcEngineContext(
+        appId: engineAppId,
+        areaCode: AreaCode.areaCodeGlob.value(),
+      ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
         const RenderModeType renderMode = RenderModeType.renderModeHidden;
@@ -4127,7 +4247,7 @@ void rtcEngineSmokeTestCases() {
         );
       } catch (e) {
         if (e is! AgoraRtcException) {
-          debugPrint('[setLocalRenderMode] error: ${e.toString()}');
+          debugPrint('[RtcEngine.setLocalRenderMode] error: ${e.toString()}');
           rethrow;
         }
 
@@ -4142,7 +4262,7 @@ void rtcEngineSmokeTestCases() {
   );
 
   testWidgets(
-    'setRemoteRenderMode',
+    'RtcEngine.setRemoteRenderMode',
     (WidgetTester tester) async {
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
@@ -4152,6 +4272,7 @@ void rtcEngineSmokeTestCases() {
         appId: engineAppId,
         areaCode: AreaCode.areaCodeGlob.value(),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
         const int uid = 10;
@@ -4165,7 +4286,7 @@ void rtcEngineSmokeTestCases() {
         );
       } catch (e) {
         if (e is! AgoraRtcException) {
-          debugPrint('[setRemoteRenderMode] error: ${e.toString()}');
+          debugPrint('[RtcEngine.setRemoteRenderMode] error: ${e.toString()}');
           rethrow;
         }
 
@@ -4180,7 +4301,7 @@ void rtcEngineSmokeTestCases() {
   );
 
   testWidgets(
-    'setLocalVideoMirrorMode',
+    'RtcEngine.setLocalVideoMirrorMode',
     (WidgetTester tester) async {
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
@@ -4190,6 +4311,7 @@ void rtcEngineSmokeTestCases() {
         appId: engineAppId,
         areaCode: AreaCode.areaCodeGlob.value(),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
         const VideoMirrorModeType mirrorMode =
@@ -4199,7 +4321,8 @@ void rtcEngineSmokeTestCases() {
         );
       } catch (e) {
         if (e is! AgoraRtcException) {
-          debugPrint('[setLocalVideoMirrorMode] error: ${e.toString()}');
+          debugPrint(
+              '[RtcEngine.setLocalVideoMirrorMode] error: ${e.toString()}');
           rethrow;
         }
 
@@ -4214,7 +4337,7 @@ void rtcEngineSmokeTestCases() {
   );
 
   testWidgets(
-    'enableDualStreamMode',
+    'RtcEngine.enableDualStreamMode',
     (WidgetTester tester) async {
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
@@ -4224,6 +4347,7 @@ void rtcEngineSmokeTestCases() {
         appId: engineAppId,
         areaCode: AreaCode.areaCodeGlob.value(),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
         const bool enabled = true;
@@ -4246,7 +4370,7 @@ void rtcEngineSmokeTestCases() {
         );
       } catch (e) {
         if (e is! AgoraRtcException) {
-          debugPrint('[enableDualStreamMode] error: ${e.toString()}');
+          debugPrint('[RtcEngine.enableDualStreamMode] error: ${e.toString()}');
           rethrow;
         }
 
@@ -4261,7 +4385,7 @@ void rtcEngineSmokeTestCases() {
   );
 
   testWidgets(
-    'setDualStreamMode',
+    'RtcEngine.setDualStreamMode',
     (WidgetTester tester) async {
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
@@ -4271,6 +4395,7 @@ void rtcEngineSmokeTestCases() {
         appId: engineAppId,
         areaCode: AreaCode.areaCodeGlob.value(),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
         const SimulcastStreamMode mode =
@@ -4294,7 +4419,7 @@ void rtcEngineSmokeTestCases() {
         );
       } catch (e) {
         if (e is! AgoraRtcException) {
-          debugPrint('[setDualStreamMode] error: ${e.toString()}');
+          debugPrint('[RtcEngine.setDualStreamMode] error: ${e.toString()}');
           rethrow;
         }
 
@@ -4309,7 +4434,7 @@ void rtcEngineSmokeTestCases() {
   );
 
   testWidgets(
-    'enableCustomAudioLocalPlayback',
+    'RtcEngine.enableCustomAudioLocalPlayback',
     (WidgetTester tester) async {
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
@@ -4319,6 +4444,7 @@ void rtcEngineSmokeTestCases() {
         appId: engineAppId,
         areaCode: AreaCode.areaCodeGlob.value(),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
         const int trackId = 10;
@@ -4329,7 +4455,8 @@ void rtcEngineSmokeTestCases() {
         );
       } catch (e) {
         if (e is! AgoraRtcException) {
-          debugPrint('[enableCustomAudioLocalPlayback] error: ${e.toString()}');
+          debugPrint(
+              '[RtcEngine.enableCustomAudioLocalPlayback] error: ${e.toString()}');
           rethrow;
         }
 
@@ -4344,7 +4471,7 @@ void rtcEngineSmokeTestCases() {
   );
 
   testWidgets(
-    'setRecordingAudioFrameParameters',
+    'RtcEngine.setRecordingAudioFrameParameters',
     (WidgetTester tester) async {
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
@@ -4354,6 +4481,7 @@ void rtcEngineSmokeTestCases() {
         appId: engineAppId,
         areaCode: AreaCode.areaCodeGlob.value(),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
         const int sampleRate = 10;
@@ -4370,7 +4498,7 @@ void rtcEngineSmokeTestCases() {
       } catch (e) {
         if (e is! AgoraRtcException) {
           debugPrint(
-              '[setRecordingAudioFrameParameters] error: ${e.toString()}');
+              '[RtcEngine.setRecordingAudioFrameParameters] error: ${e.toString()}');
           rethrow;
         }
 
@@ -4385,7 +4513,7 @@ void rtcEngineSmokeTestCases() {
   );
 
   testWidgets(
-    'setPlaybackAudioFrameParameters',
+    'RtcEngine.setPlaybackAudioFrameParameters',
     (WidgetTester tester) async {
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
@@ -4395,6 +4523,7 @@ void rtcEngineSmokeTestCases() {
         appId: engineAppId,
         areaCode: AreaCode.areaCodeGlob.value(),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
         const int sampleRate = 10;
@@ -4411,7 +4540,7 @@ void rtcEngineSmokeTestCases() {
       } catch (e) {
         if (e is! AgoraRtcException) {
           debugPrint(
-              '[setPlaybackAudioFrameParameters] error: ${e.toString()}');
+              '[RtcEngine.setPlaybackAudioFrameParameters] error: ${e.toString()}');
           rethrow;
         }
 
@@ -4426,7 +4555,7 @@ void rtcEngineSmokeTestCases() {
   );
 
   testWidgets(
-    'setMixedAudioFrameParameters',
+    'RtcEngine.setMixedAudioFrameParameters',
     (WidgetTester tester) async {
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
@@ -4436,6 +4565,7 @@ void rtcEngineSmokeTestCases() {
         appId: engineAppId,
         areaCode: AreaCode.areaCodeGlob.value(),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
         const int sampleRate = 10;
@@ -4448,7 +4578,8 @@ void rtcEngineSmokeTestCases() {
         );
       } catch (e) {
         if (e is! AgoraRtcException) {
-          debugPrint('[setMixedAudioFrameParameters] error: ${e.toString()}');
+          debugPrint(
+              '[RtcEngine.setMixedAudioFrameParameters] error: ${e.toString()}');
           rethrow;
         }
 
@@ -4463,7 +4594,7 @@ void rtcEngineSmokeTestCases() {
   );
 
   testWidgets(
-    'setEarMonitoringAudioFrameParameters',
+    'RtcEngine.setEarMonitoringAudioFrameParameters',
     (WidgetTester tester) async {
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
@@ -4473,6 +4604,7 @@ void rtcEngineSmokeTestCases() {
         appId: engineAppId,
         areaCode: AreaCode.areaCodeGlob.value(),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
         const int sampleRate = 10;
@@ -4489,7 +4621,7 @@ void rtcEngineSmokeTestCases() {
       } catch (e) {
         if (e is! AgoraRtcException) {
           debugPrint(
-              '[setEarMonitoringAudioFrameParameters] error: ${e.toString()}');
+              '[RtcEngine.setEarMonitoringAudioFrameParameters] error: ${e.toString()}');
           rethrow;
         }
 
@@ -4504,7 +4636,7 @@ void rtcEngineSmokeTestCases() {
   );
 
   testWidgets(
-    'setPlaybackAudioFrameBeforeMixingParameters',
+    'RtcEngine.setPlaybackAudioFrameBeforeMixingParameters',
     (WidgetTester tester) async {
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
@@ -4514,6 +4646,7 @@ void rtcEngineSmokeTestCases() {
         appId: engineAppId,
         areaCode: AreaCode.areaCodeGlob.value(),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
         const int sampleRate = 10;
@@ -4525,7 +4658,7 @@ void rtcEngineSmokeTestCases() {
       } catch (e) {
         if (e is! AgoraRtcException) {
           debugPrint(
-              '[setPlaybackAudioFrameBeforeMixingParameters] error: ${e.toString()}');
+              '[RtcEngine.setPlaybackAudioFrameBeforeMixingParameters] error: ${e.toString()}');
           rethrow;
         }
 
@@ -4540,7 +4673,7 @@ void rtcEngineSmokeTestCases() {
   );
 
   testWidgets(
-    'enableAudioSpectrumMonitor',
+    'RtcEngine.enableAudioSpectrumMonitor',
     (WidgetTester tester) async {
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
@@ -4550,6 +4683,7 @@ void rtcEngineSmokeTestCases() {
         appId: engineAppId,
         areaCode: AreaCode.areaCodeGlob.value(),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
         const int intervalInMS = 10;
@@ -4558,7 +4692,8 @@ void rtcEngineSmokeTestCases() {
         );
       } catch (e) {
         if (e is! AgoraRtcException) {
-          debugPrint('[enableAudioSpectrumMonitor] error: ${e.toString()}');
+          debugPrint(
+              '[RtcEngine.enableAudioSpectrumMonitor] error: ${e.toString()}');
           rethrow;
         }
 
@@ -4573,7 +4708,7 @@ void rtcEngineSmokeTestCases() {
   );
 
   testWidgets(
-    'disableAudioSpectrumMonitor',
+    'RtcEngine.disableAudioSpectrumMonitor',
     (WidgetTester tester) async {
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
@@ -4583,12 +4718,14 @@ void rtcEngineSmokeTestCases() {
         appId: engineAppId,
         areaCode: AreaCode.areaCodeGlob.value(),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
         await rtcEngine.disableAudioSpectrumMonitor();
       } catch (e) {
         if (e is! AgoraRtcException) {
-          debugPrint('[disableAudioSpectrumMonitor] error: ${e.toString()}');
+          debugPrint(
+              '[RtcEngine.disableAudioSpectrumMonitor] error: ${e.toString()}');
           rethrow;
         }
 
@@ -4603,7 +4740,7 @@ void rtcEngineSmokeTestCases() {
   );
 
   testWidgets(
-    'registerAudioSpectrumObserver',
+    'RtcEngine.registerAudioSpectrumObserver',
     (WidgetTester tester) async {
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
@@ -4613,6 +4750,7 @@ void rtcEngineSmokeTestCases() {
         appId: engineAppId,
         areaCode: AreaCode.areaCodeGlob.value(),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
         final AudioSpectrumObserver observer = AudioSpectrumObserver(
@@ -4624,7 +4762,8 @@ void rtcEngineSmokeTestCases() {
         );
       } catch (e) {
         if (e is! AgoraRtcException) {
-          debugPrint('[registerAudioSpectrumObserver] error: ${e.toString()}');
+          debugPrint(
+              '[RtcEngine.registerAudioSpectrumObserver] error: ${e.toString()}');
           rethrow;
         }
 
@@ -4639,7 +4778,7 @@ void rtcEngineSmokeTestCases() {
   );
 
   testWidgets(
-    'unregisterAudioSpectrumObserver',
+    'RtcEngine.unregisterAudioSpectrumObserver',
     (WidgetTester tester) async {
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
@@ -4649,6 +4788,7 @@ void rtcEngineSmokeTestCases() {
         appId: engineAppId,
         areaCode: AreaCode.areaCodeGlob.value(),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
         final AudioSpectrumObserver observer = AudioSpectrumObserver(
@@ -4661,7 +4801,7 @@ void rtcEngineSmokeTestCases() {
       } catch (e) {
         if (e is! AgoraRtcException) {
           debugPrint(
-              '[unregisterAudioSpectrumObserver] error: ${e.toString()}');
+              '[RtcEngine.unregisterAudioSpectrumObserver] error: ${e.toString()}');
           rethrow;
         }
 
@@ -4676,7 +4816,7 @@ void rtcEngineSmokeTestCases() {
   );
 
   testWidgets(
-    'adjustRecordingSignalVolume',
+    'RtcEngine.adjustRecordingSignalVolume',
     (WidgetTester tester) async {
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
@@ -4686,6 +4826,7 @@ void rtcEngineSmokeTestCases() {
         appId: engineAppId,
         areaCode: AreaCode.areaCodeGlob.value(),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
         const int volume = 10;
@@ -4694,7 +4835,8 @@ void rtcEngineSmokeTestCases() {
         );
       } catch (e) {
         if (e is! AgoraRtcException) {
-          debugPrint('[adjustRecordingSignalVolume] error: ${e.toString()}');
+          debugPrint(
+              '[RtcEngine.adjustRecordingSignalVolume] error: ${e.toString()}');
           rethrow;
         }
 
@@ -4709,7 +4851,7 @@ void rtcEngineSmokeTestCases() {
   );
 
   testWidgets(
-    'muteRecordingSignal',
+    'RtcEngine.muteRecordingSignal',
     (WidgetTester tester) async {
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
@@ -4719,6 +4861,7 @@ void rtcEngineSmokeTestCases() {
         appId: engineAppId,
         areaCode: AreaCode.areaCodeGlob.value(),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
         const bool mute = true;
@@ -4727,7 +4870,7 @@ void rtcEngineSmokeTestCases() {
         );
       } catch (e) {
         if (e is! AgoraRtcException) {
-          debugPrint('[muteRecordingSignal] error: ${e.toString()}');
+          debugPrint('[RtcEngine.muteRecordingSignal] error: ${e.toString()}');
           rethrow;
         }
 
@@ -4742,7 +4885,7 @@ void rtcEngineSmokeTestCases() {
   );
 
   testWidgets(
-    'adjustPlaybackSignalVolume',
+    'RtcEngine.adjustPlaybackSignalVolume',
     (WidgetTester tester) async {
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
@@ -4752,6 +4895,7 @@ void rtcEngineSmokeTestCases() {
         appId: engineAppId,
         areaCode: AreaCode.areaCodeGlob.value(),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
         const int volume = 10;
@@ -4760,7 +4904,8 @@ void rtcEngineSmokeTestCases() {
         );
       } catch (e) {
         if (e is! AgoraRtcException) {
-          debugPrint('[adjustPlaybackSignalVolume] error: ${e.toString()}');
+          debugPrint(
+              '[RtcEngine.adjustPlaybackSignalVolume] error: ${e.toString()}');
           rethrow;
         }
 
@@ -4775,7 +4920,7 @@ void rtcEngineSmokeTestCases() {
   );
 
   testWidgets(
-    'adjustUserPlaybackSignalVolume',
+    'RtcEngine.adjustUserPlaybackSignalVolume',
     (WidgetTester tester) async {
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
@@ -4785,6 +4930,7 @@ void rtcEngineSmokeTestCases() {
         appId: engineAppId,
         areaCode: AreaCode.areaCodeGlob.value(),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
         const int uid = 10;
@@ -4795,7 +4941,8 @@ void rtcEngineSmokeTestCases() {
         );
       } catch (e) {
         if (e is! AgoraRtcException) {
-          debugPrint('[adjustUserPlaybackSignalVolume] error: ${e.toString()}');
+          debugPrint(
+              '[RtcEngine.adjustUserPlaybackSignalVolume] error: ${e.toString()}');
           rethrow;
         }
 
@@ -4810,7 +4957,7 @@ void rtcEngineSmokeTestCases() {
   );
 
   testWidgets(
-    'setLocalPublishFallbackOption',
+    'RtcEngine.setLocalPublishFallbackOption',
     (WidgetTester tester) async {
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
@@ -4820,6 +4967,7 @@ void rtcEngineSmokeTestCases() {
         appId: engineAppId,
         areaCode: AreaCode.areaCodeGlob.value(),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
         const StreamFallbackOptions option =
@@ -4829,7 +4977,8 @@ void rtcEngineSmokeTestCases() {
         );
       } catch (e) {
         if (e is! AgoraRtcException) {
-          debugPrint('[setLocalPublishFallbackOption] error: ${e.toString()}');
+          debugPrint(
+              '[RtcEngine.setLocalPublishFallbackOption] error: ${e.toString()}');
           rethrow;
         }
 
@@ -4844,7 +4993,7 @@ void rtcEngineSmokeTestCases() {
   );
 
   testWidgets(
-    'setRemoteSubscribeFallbackOption',
+    'RtcEngine.setRemoteSubscribeFallbackOption',
     (WidgetTester tester) async {
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
@@ -4854,6 +5003,7 @@ void rtcEngineSmokeTestCases() {
         appId: engineAppId,
         areaCode: AreaCode.areaCodeGlob.value(),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
         const StreamFallbackOptions option =
@@ -4864,7 +5014,7 @@ void rtcEngineSmokeTestCases() {
       } catch (e) {
         if (e is! AgoraRtcException) {
           debugPrint(
-              '[setRemoteSubscribeFallbackOption] error: ${e.toString()}');
+              '[RtcEngine.setRemoteSubscribeFallbackOption] error: ${e.toString()}');
           rethrow;
         }
 
@@ -4879,7 +5029,7 @@ void rtcEngineSmokeTestCases() {
   );
 
   testWidgets(
-    'enableLoopbackRecording',
+    'RtcEngine.enableLoopbackRecording',
     (WidgetTester tester) async {
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
@@ -4889,6 +5039,7 @@ void rtcEngineSmokeTestCases() {
         appId: engineAppId,
         areaCode: AreaCode.areaCodeGlob.value(),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
         const bool enabled = true;
@@ -4899,7 +5050,8 @@ void rtcEngineSmokeTestCases() {
         );
       } catch (e) {
         if (e is! AgoraRtcException) {
-          debugPrint('[enableLoopbackRecording] error: ${e.toString()}');
+          debugPrint(
+              '[RtcEngine.enableLoopbackRecording] error: ${e.toString()}');
           rethrow;
         }
 
@@ -4914,7 +5066,7 @@ void rtcEngineSmokeTestCases() {
   );
 
   testWidgets(
-    'adjustLoopbackSignalVolume',
+    'RtcEngine.adjustLoopbackSignalVolume',
     (WidgetTester tester) async {
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
@@ -4924,6 +5076,7 @@ void rtcEngineSmokeTestCases() {
         appId: engineAppId,
         areaCode: AreaCode.areaCodeGlob.value(),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
         const int volume = 10;
@@ -4932,7 +5085,8 @@ void rtcEngineSmokeTestCases() {
         );
       } catch (e) {
         if (e is! AgoraRtcException) {
-          debugPrint('[adjustLoopbackSignalVolume] error: ${e.toString()}');
+          debugPrint(
+              '[RtcEngine.adjustLoopbackSignalVolume] error: ${e.toString()}');
           rethrow;
         }
 
@@ -4947,7 +5101,7 @@ void rtcEngineSmokeTestCases() {
   );
 
   testWidgets(
-    'getLoopbackRecordingVolume',
+    'RtcEngine.getLoopbackRecordingVolume',
     (WidgetTester tester) async {
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
@@ -4957,12 +5111,14 @@ void rtcEngineSmokeTestCases() {
         appId: engineAppId,
         areaCode: AreaCode.areaCodeGlob.value(),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
         await rtcEngine.getLoopbackRecordingVolume();
       } catch (e) {
         if (e is! AgoraRtcException) {
-          debugPrint('[getLoopbackRecordingVolume] error: ${e.toString()}');
+          debugPrint(
+              '[RtcEngine.getLoopbackRecordingVolume] error: ${e.toString()}');
           rethrow;
         }
 
@@ -4977,7 +5133,7 @@ void rtcEngineSmokeTestCases() {
   );
 
   testWidgets(
-    'enableInEarMonitoring',
+    'RtcEngine.enableInEarMonitoring',
     (WidgetTester tester) async {
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
@@ -4987,6 +5143,7 @@ void rtcEngineSmokeTestCases() {
         appId: engineAppId,
         areaCode: AreaCode.areaCodeGlob.value(),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
         const bool enabled = true;
@@ -4998,7 +5155,8 @@ void rtcEngineSmokeTestCases() {
         );
       } catch (e) {
         if (e is! AgoraRtcException) {
-          debugPrint('[enableInEarMonitoring] error: ${e.toString()}');
+          debugPrint(
+              '[RtcEngine.enableInEarMonitoring] error: ${e.toString()}');
           rethrow;
         }
 
@@ -5013,7 +5171,7 @@ void rtcEngineSmokeTestCases() {
   );
 
   testWidgets(
-    'setInEarMonitoringVolume',
+    'RtcEngine.setInEarMonitoringVolume',
     (WidgetTester tester) async {
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
@@ -5023,6 +5181,7 @@ void rtcEngineSmokeTestCases() {
         appId: engineAppId,
         areaCode: AreaCode.areaCodeGlob.value(),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
         const int volume = 10;
@@ -5031,7 +5190,8 @@ void rtcEngineSmokeTestCases() {
         );
       } catch (e) {
         if (e is! AgoraRtcException) {
-          debugPrint('[setInEarMonitoringVolume] error: ${e.toString()}');
+          debugPrint(
+              '[RtcEngine.setInEarMonitoringVolume] error: ${e.toString()}');
           rethrow;
         }
 
@@ -5046,7 +5206,7 @@ void rtcEngineSmokeTestCases() {
   );
 
   testWidgets(
-    'loadExtensionProvider',
+    'RtcEngine.loadExtensionProvider',
     (WidgetTester tester) async {
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
@@ -5056,6 +5216,7 @@ void rtcEngineSmokeTestCases() {
         appId: engineAppId,
         areaCode: AreaCode.areaCodeGlob.value(),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
         const String path = "hello";
@@ -5066,7 +5227,8 @@ void rtcEngineSmokeTestCases() {
         );
       } catch (e) {
         if (e is! AgoraRtcException) {
-          debugPrint('[loadExtensionProvider] error: ${e.toString()}');
+          debugPrint(
+              '[RtcEngine.loadExtensionProvider] error: ${e.toString()}');
           rethrow;
         }
 
@@ -5081,7 +5243,7 @@ void rtcEngineSmokeTestCases() {
   );
 
   testWidgets(
-    'setExtensionProviderProperty',
+    'RtcEngine.setExtensionProviderProperty',
     (WidgetTester tester) async {
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
@@ -5091,6 +5253,7 @@ void rtcEngineSmokeTestCases() {
         appId: engineAppId,
         areaCode: AreaCode.areaCodeGlob.value(),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
         const String provider = "hello";
@@ -5103,7 +5266,8 @@ void rtcEngineSmokeTestCases() {
         );
       } catch (e) {
         if (e is! AgoraRtcException) {
-          debugPrint('[setExtensionProviderProperty] error: ${e.toString()}');
+          debugPrint(
+              '[RtcEngine.setExtensionProviderProperty] error: ${e.toString()}');
           rethrow;
         }
 
@@ -5118,7 +5282,7 @@ void rtcEngineSmokeTestCases() {
   );
 
   testWidgets(
-    'registerExtension',
+    'RtcEngine.registerExtension',
     (WidgetTester tester) async {
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
@@ -5128,6 +5292,7 @@ void rtcEngineSmokeTestCases() {
         appId: engineAppId,
         areaCode: AreaCode.areaCodeGlob.value(),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
         const String provider = "hello";
@@ -5140,7 +5305,7 @@ void rtcEngineSmokeTestCases() {
         );
       } catch (e) {
         if (e is! AgoraRtcException) {
-          debugPrint('[registerExtension] error: ${e.toString()}');
+          debugPrint('[RtcEngine.registerExtension] error: ${e.toString()}');
           rethrow;
         }
 
@@ -5155,7 +5320,7 @@ void rtcEngineSmokeTestCases() {
   );
 
   testWidgets(
-    'enableExtension',
+    'RtcEngine.enableExtension',
     (WidgetTester tester) async {
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
@@ -5165,6 +5330,7 @@ void rtcEngineSmokeTestCases() {
         appId: engineAppId,
         areaCode: AreaCode.areaCodeGlob.value(),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
         const String provider = "hello";
@@ -5179,7 +5345,7 @@ void rtcEngineSmokeTestCases() {
         );
       } catch (e) {
         if (e is! AgoraRtcException) {
-          debugPrint('[enableExtension] error: ${e.toString()}');
+          debugPrint('[RtcEngine.enableExtension] error: ${e.toString()}');
           rethrow;
         }
 
@@ -5194,7 +5360,7 @@ void rtcEngineSmokeTestCases() {
   );
 
   testWidgets(
-    'setExtensionProperty',
+    'RtcEngine.setExtensionProperty',
     (WidgetTester tester) async {
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
@@ -5204,6 +5370,7 @@ void rtcEngineSmokeTestCases() {
         appId: engineAppId,
         areaCode: AreaCode.areaCodeGlob.value(),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
         const String provider = "hello";
@@ -5220,7 +5387,7 @@ void rtcEngineSmokeTestCases() {
         );
       } catch (e) {
         if (e is! AgoraRtcException) {
-          debugPrint('[setExtensionProperty] error: ${e.toString()}');
+          debugPrint('[RtcEngine.setExtensionProperty] error: ${e.toString()}');
           rethrow;
         }
 
@@ -5235,7 +5402,7 @@ void rtcEngineSmokeTestCases() {
   );
 
   testWidgets(
-    'getExtensionProperty',
+    'RtcEngine.getExtensionProperty',
     (WidgetTester tester) async {
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
@@ -5245,6 +5412,7 @@ void rtcEngineSmokeTestCases() {
         appId: engineAppId,
         areaCode: AreaCode.areaCodeGlob.value(),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
         const String provider = "hello";
@@ -5261,7 +5429,7 @@ void rtcEngineSmokeTestCases() {
         );
       } catch (e) {
         if (e is! AgoraRtcException) {
-          debugPrint('[getExtensionProperty] error: ${e.toString()}');
+          debugPrint('[RtcEngine.getExtensionProperty] error: ${e.toString()}');
           rethrow;
         }
 
@@ -5276,7 +5444,7 @@ void rtcEngineSmokeTestCases() {
   );
 
   testWidgets(
-    'setCameraCapturerConfiguration',
+    'RtcEngine.setCameraCapturerConfiguration',
     (WidgetTester tester) async {
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
@@ -5286,6 +5454,7 @@ void rtcEngineSmokeTestCases() {
         appId: engineAppId,
         areaCode: AreaCode.areaCodeGlob.value(),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
         const CameraDirection configCameraDirection =
@@ -5313,7 +5482,8 @@ void rtcEngineSmokeTestCases() {
         );
       } catch (e) {
         if (e is! AgoraRtcException) {
-          debugPrint('[setCameraCapturerConfiguration] error: ${e.toString()}');
+          debugPrint(
+              '[RtcEngine.setCameraCapturerConfiguration] error: ${e.toString()}');
           rethrow;
         }
 
@@ -5328,7 +5498,7 @@ void rtcEngineSmokeTestCases() {
   );
 
   testWidgets(
-    'destroyCustomVideoTrack',
+    'RtcEngine.destroyCustomVideoTrack',
     (WidgetTester tester) async {
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
@@ -5338,6 +5508,7 @@ void rtcEngineSmokeTestCases() {
         appId: engineAppId,
         areaCode: AreaCode.areaCodeGlob.value(),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
         const int videoTrackId = 10;
@@ -5346,7 +5517,8 @@ void rtcEngineSmokeTestCases() {
         );
       } catch (e) {
         if (e is! AgoraRtcException) {
-          debugPrint('[destroyCustomVideoTrack] error: ${e.toString()}');
+          debugPrint(
+              '[RtcEngine.destroyCustomVideoTrack] error: ${e.toString()}');
           rethrow;
         }
 
@@ -5361,7 +5533,7 @@ void rtcEngineSmokeTestCases() {
   );
 
   testWidgets(
-    'destroyCustomEncodedVideoTrack',
+    'RtcEngine.destroyCustomEncodedVideoTrack',
     (WidgetTester tester) async {
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
@@ -5371,6 +5543,7 @@ void rtcEngineSmokeTestCases() {
         appId: engineAppId,
         areaCode: AreaCode.areaCodeGlob.value(),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
         const int videoTrackId = 10;
@@ -5379,7 +5552,8 @@ void rtcEngineSmokeTestCases() {
         );
       } catch (e) {
         if (e is! AgoraRtcException) {
-          debugPrint('[destroyCustomEncodedVideoTrack] error: ${e.toString()}');
+          debugPrint(
+              '[RtcEngine.destroyCustomEncodedVideoTrack] error: ${e.toString()}');
           rethrow;
         }
 
@@ -5394,7 +5568,7 @@ void rtcEngineSmokeTestCases() {
   );
 
   testWidgets(
-    'switchCamera',
+    'RtcEngine.switchCamera',
     (WidgetTester tester) async {
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
@@ -5404,12 +5578,13 @@ void rtcEngineSmokeTestCases() {
         appId: engineAppId,
         areaCode: AreaCode.areaCodeGlob.value(),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
         await rtcEngine.switchCamera();
       } catch (e) {
         if (e is! AgoraRtcException) {
-          debugPrint('[switchCamera] error: ${e.toString()}');
+          debugPrint('[RtcEngine.switchCamera] error: ${e.toString()}');
           rethrow;
         }
 
@@ -5424,7 +5599,7 @@ void rtcEngineSmokeTestCases() {
   );
 
   testWidgets(
-    'isCameraZoomSupported',
+    'RtcEngine.isCameraZoomSupported',
     (WidgetTester tester) async {
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
@@ -5434,12 +5609,14 @@ void rtcEngineSmokeTestCases() {
         appId: engineAppId,
         areaCode: AreaCode.areaCodeGlob.value(),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
         await rtcEngine.isCameraZoomSupported();
       } catch (e) {
         if (e is! AgoraRtcException) {
-          debugPrint('[isCameraZoomSupported] error: ${e.toString()}');
+          debugPrint(
+              '[RtcEngine.isCameraZoomSupported] error: ${e.toString()}');
           rethrow;
         }
 
@@ -5454,7 +5631,7 @@ void rtcEngineSmokeTestCases() {
   );
 
   testWidgets(
-    'isCameraFaceDetectSupported',
+    'RtcEngine.isCameraFaceDetectSupported',
     (WidgetTester tester) async {
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
@@ -5464,12 +5641,14 @@ void rtcEngineSmokeTestCases() {
         appId: engineAppId,
         areaCode: AreaCode.areaCodeGlob.value(),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
         await rtcEngine.isCameraFaceDetectSupported();
       } catch (e) {
         if (e is! AgoraRtcException) {
-          debugPrint('[isCameraFaceDetectSupported] error: ${e.toString()}');
+          debugPrint(
+              '[RtcEngine.isCameraFaceDetectSupported] error: ${e.toString()}');
           rethrow;
         }
 
@@ -5484,7 +5663,7 @@ void rtcEngineSmokeTestCases() {
   );
 
   testWidgets(
-    'isCameraTorchSupported',
+    'RtcEngine.isCameraTorchSupported',
     (WidgetTester tester) async {
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
@@ -5494,12 +5673,14 @@ void rtcEngineSmokeTestCases() {
         appId: engineAppId,
         areaCode: AreaCode.areaCodeGlob.value(),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
         await rtcEngine.isCameraTorchSupported();
       } catch (e) {
         if (e is! AgoraRtcException) {
-          debugPrint('[isCameraTorchSupported] error: ${e.toString()}');
+          debugPrint(
+              '[RtcEngine.isCameraTorchSupported] error: ${e.toString()}');
           rethrow;
         }
 
@@ -5514,7 +5695,7 @@ void rtcEngineSmokeTestCases() {
   );
 
   testWidgets(
-    'isCameraFocusSupported',
+    'RtcEngine.isCameraFocusSupported',
     (WidgetTester tester) async {
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
@@ -5524,12 +5705,14 @@ void rtcEngineSmokeTestCases() {
         appId: engineAppId,
         areaCode: AreaCode.areaCodeGlob.value(),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
         await rtcEngine.isCameraFocusSupported();
       } catch (e) {
         if (e is! AgoraRtcException) {
-          debugPrint('[isCameraFocusSupported] error: ${e.toString()}');
+          debugPrint(
+              '[RtcEngine.isCameraFocusSupported] error: ${e.toString()}');
           rethrow;
         }
 
@@ -5544,7 +5727,7 @@ void rtcEngineSmokeTestCases() {
   );
 
   testWidgets(
-    'isCameraAutoFocusFaceModeSupported',
+    'RtcEngine.isCameraAutoFocusFaceModeSupported',
     (WidgetTester tester) async {
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
@@ -5554,13 +5737,14 @@ void rtcEngineSmokeTestCases() {
         appId: engineAppId,
         areaCode: AreaCode.areaCodeGlob.value(),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
         await rtcEngine.isCameraAutoFocusFaceModeSupported();
       } catch (e) {
         if (e is! AgoraRtcException) {
           debugPrint(
-              '[isCameraAutoFocusFaceModeSupported] error: ${e.toString()}');
+              '[RtcEngine.isCameraAutoFocusFaceModeSupported] error: ${e.toString()}');
           rethrow;
         }
 
@@ -5575,7 +5759,7 @@ void rtcEngineSmokeTestCases() {
   );
 
   testWidgets(
-    'setCameraZoomFactor',
+    'RtcEngine.setCameraZoomFactor',
     (WidgetTester tester) async {
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
@@ -5585,6 +5769,7 @@ void rtcEngineSmokeTestCases() {
         appId: engineAppId,
         areaCode: AreaCode.areaCodeGlob.value(),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
         const double factor = 10.0;
@@ -5593,7 +5778,7 @@ void rtcEngineSmokeTestCases() {
         );
       } catch (e) {
         if (e is! AgoraRtcException) {
-          debugPrint('[setCameraZoomFactor] error: ${e.toString()}');
+          debugPrint('[RtcEngine.setCameraZoomFactor] error: ${e.toString()}');
           rethrow;
         }
 
@@ -5608,7 +5793,7 @@ void rtcEngineSmokeTestCases() {
   );
 
   testWidgets(
-    'enableFaceDetection',
+    'RtcEngine.enableFaceDetection',
     (WidgetTester tester) async {
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
@@ -5618,6 +5803,7 @@ void rtcEngineSmokeTestCases() {
         appId: engineAppId,
         areaCode: AreaCode.areaCodeGlob.value(),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
         const bool enabled = true;
@@ -5626,7 +5812,7 @@ void rtcEngineSmokeTestCases() {
         );
       } catch (e) {
         if (e is! AgoraRtcException) {
-          debugPrint('[enableFaceDetection] error: ${e.toString()}');
+          debugPrint('[RtcEngine.enableFaceDetection] error: ${e.toString()}');
           rethrow;
         }
 
@@ -5641,7 +5827,7 @@ void rtcEngineSmokeTestCases() {
   );
 
   testWidgets(
-    'getCameraMaxZoomFactor',
+    'RtcEngine.getCameraMaxZoomFactor',
     (WidgetTester tester) async {
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
@@ -5651,12 +5837,14 @@ void rtcEngineSmokeTestCases() {
         appId: engineAppId,
         areaCode: AreaCode.areaCodeGlob.value(),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
         await rtcEngine.getCameraMaxZoomFactor();
       } catch (e) {
         if (e is! AgoraRtcException) {
-          debugPrint('[getCameraMaxZoomFactor] error: ${e.toString()}');
+          debugPrint(
+              '[RtcEngine.getCameraMaxZoomFactor] error: ${e.toString()}');
           rethrow;
         }
 
@@ -5671,7 +5859,7 @@ void rtcEngineSmokeTestCases() {
   );
 
   testWidgets(
-    'setCameraFocusPositionInPreview',
+    'RtcEngine.setCameraFocusPositionInPreview',
     (WidgetTester tester) async {
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
@@ -5681,6 +5869,7 @@ void rtcEngineSmokeTestCases() {
         appId: engineAppId,
         areaCode: AreaCode.areaCodeGlob.value(),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
         const double positionX = 10.0;
@@ -5692,7 +5881,7 @@ void rtcEngineSmokeTestCases() {
       } catch (e) {
         if (e is! AgoraRtcException) {
           debugPrint(
-              '[setCameraFocusPositionInPreview] error: ${e.toString()}');
+              '[RtcEngine.setCameraFocusPositionInPreview] error: ${e.toString()}');
           rethrow;
         }
 
@@ -5707,7 +5896,7 @@ void rtcEngineSmokeTestCases() {
   );
 
   testWidgets(
-    'setCameraTorchOn',
+    'RtcEngine.setCameraTorchOn',
     (WidgetTester tester) async {
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
@@ -5717,6 +5906,7 @@ void rtcEngineSmokeTestCases() {
         appId: engineAppId,
         areaCode: AreaCode.areaCodeGlob.value(),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
         const bool isOn = true;
@@ -5725,7 +5915,7 @@ void rtcEngineSmokeTestCases() {
         );
       } catch (e) {
         if (e is! AgoraRtcException) {
-          debugPrint('[setCameraTorchOn] error: ${e.toString()}');
+          debugPrint('[RtcEngine.setCameraTorchOn] error: ${e.toString()}');
           rethrow;
         }
 
@@ -5740,7 +5930,7 @@ void rtcEngineSmokeTestCases() {
   );
 
   testWidgets(
-    'setCameraAutoFocusFaceModeEnabled',
+    'RtcEngine.setCameraAutoFocusFaceModeEnabled',
     (WidgetTester tester) async {
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
@@ -5750,6 +5940,7 @@ void rtcEngineSmokeTestCases() {
         appId: engineAppId,
         areaCode: AreaCode.areaCodeGlob.value(),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
         const bool enabled = true;
@@ -5759,7 +5950,7 @@ void rtcEngineSmokeTestCases() {
       } catch (e) {
         if (e is! AgoraRtcException) {
           debugPrint(
-              '[setCameraAutoFocusFaceModeEnabled] error: ${e.toString()}');
+              '[RtcEngine.setCameraAutoFocusFaceModeEnabled] error: ${e.toString()}');
           rethrow;
         }
 
@@ -5774,7 +5965,7 @@ void rtcEngineSmokeTestCases() {
   );
 
   testWidgets(
-    'isCameraExposurePositionSupported',
+    'RtcEngine.isCameraExposurePositionSupported',
     (WidgetTester tester) async {
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
@@ -5784,13 +5975,14 @@ void rtcEngineSmokeTestCases() {
         appId: engineAppId,
         areaCode: AreaCode.areaCodeGlob.value(),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
         await rtcEngine.isCameraExposurePositionSupported();
       } catch (e) {
         if (e is! AgoraRtcException) {
           debugPrint(
-              '[isCameraExposurePositionSupported] error: ${e.toString()}');
+              '[RtcEngine.isCameraExposurePositionSupported] error: ${e.toString()}');
           rethrow;
         }
 
@@ -5805,7 +5997,7 @@ void rtcEngineSmokeTestCases() {
   );
 
   testWidgets(
-    'setCameraExposurePosition',
+    'RtcEngine.setCameraExposurePosition',
     (WidgetTester tester) async {
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
@@ -5815,6 +6007,7 @@ void rtcEngineSmokeTestCases() {
         appId: engineAppId,
         areaCode: AreaCode.areaCodeGlob.value(),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
         const double positionXinView = 10.0;
@@ -5825,7 +6018,8 @@ void rtcEngineSmokeTestCases() {
         );
       } catch (e) {
         if (e is! AgoraRtcException) {
-          debugPrint('[setCameraExposurePosition] error: ${e.toString()}');
+          debugPrint(
+              '[RtcEngine.setCameraExposurePosition] error: ${e.toString()}');
           rethrow;
         }
 
@@ -5840,7 +6034,7 @@ void rtcEngineSmokeTestCases() {
   );
 
   testWidgets(
-    'isCameraExposureSupported',
+    'RtcEngine.isCameraExposureSupported',
     (WidgetTester tester) async {
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
@@ -5850,12 +6044,14 @@ void rtcEngineSmokeTestCases() {
         appId: engineAppId,
         areaCode: AreaCode.areaCodeGlob.value(),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
         await rtcEngine.isCameraExposureSupported();
       } catch (e) {
         if (e is! AgoraRtcException) {
-          debugPrint('[isCameraExposureSupported] error: ${e.toString()}');
+          debugPrint(
+              '[RtcEngine.isCameraExposureSupported] error: ${e.toString()}');
           rethrow;
         }
 
@@ -5870,7 +6066,7 @@ void rtcEngineSmokeTestCases() {
   );
 
   testWidgets(
-    'setCameraExposureFactor',
+    'RtcEngine.setCameraExposureFactor',
     (WidgetTester tester) async {
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
@@ -5880,6 +6076,7 @@ void rtcEngineSmokeTestCases() {
         appId: engineAppId,
         areaCode: AreaCode.areaCodeGlob.value(),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
         const double factor = 10.0;
@@ -5888,7 +6085,8 @@ void rtcEngineSmokeTestCases() {
         );
       } catch (e) {
         if (e is! AgoraRtcException) {
-          debugPrint('[setCameraExposureFactor] error: ${e.toString()}');
+          debugPrint(
+              '[RtcEngine.setCameraExposureFactor] error: ${e.toString()}');
           rethrow;
         }
 
@@ -5903,7 +6101,7 @@ void rtcEngineSmokeTestCases() {
   );
 
   testWidgets(
-    'isCameraAutoExposureFaceModeSupported',
+    'RtcEngine.isCameraAutoExposureFaceModeSupported',
     (WidgetTester tester) async {
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
@@ -5913,13 +6111,14 @@ void rtcEngineSmokeTestCases() {
         appId: engineAppId,
         areaCode: AreaCode.areaCodeGlob.value(),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
         await rtcEngine.isCameraAutoExposureFaceModeSupported();
       } catch (e) {
         if (e is! AgoraRtcException) {
           debugPrint(
-              '[isCameraAutoExposureFaceModeSupported] error: ${e.toString()}');
+              '[RtcEngine.isCameraAutoExposureFaceModeSupported] error: ${e.toString()}');
           rethrow;
         }
 
@@ -5934,7 +6133,7 @@ void rtcEngineSmokeTestCases() {
   );
 
   testWidgets(
-    'setCameraAutoExposureFaceModeEnabled',
+    'RtcEngine.setCameraAutoExposureFaceModeEnabled',
     (WidgetTester tester) async {
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
@@ -5944,6 +6143,7 @@ void rtcEngineSmokeTestCases() {
         appId: engineAppId,
         areaCode: AreaCode.areaCodeGlob.value(),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
         const bool enabled = true;
@@ -5953,7 +6153,7 @@ void rtcEngineSmokeTestCases() {
       } catch (e) {
         if (e is! AgoraRtcException) {
           debugPrint(
-              '[setCameraAutoExposureFaceModeEnabled] error: ${e.toString()}');
+              '[RtcEngine.setCameraAutoExposureFaceModeEnabled] error: ${e.toString()}');
           rethrow;
         }
 
@@ -5968,7 +6168,7 @@ void rtcEngineSmokeTestCases() {
   );
 
   testWidgets(
-    'setCameraStabilizationMode',
+    'RtcEngine.setCameraStabilizationMode',
     (WidgetTester tester) async {
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
@@ -5978,6 +6178,7 @@ void rtcEngineSmokeTestCases() {
         appId: engineAppId,
         areaCode: AreaCode.areaCodeGlob.value(),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
         const CameraStabilizationMode mode =
@@ -5987,7 +6188,8 @@ void rtcEngineSmokeTestCases() {
         );
       } catch (e) {
         if (e is! AgoraRtcException) {
-          debugPrint('[setCameraStabilizationMode] error: ${e.toString()}');
+          debugPrint(
+              '[RtcEngine.setCameraStabilizationMode] error: ${e.toString()}');
           rethrow;
         }
 
@@ -6002,7 +6204,7 @@ void rtcEngineSmokeTestCases() {
   );
 
   testWidgets(
-    'setDefaultAudioRouteToSpeakerphone',
+    'RtcEngine.setDefaultAudioRouteToSpeakerphone',
     (WidgetTester tester) async {
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
@@ -6012,6 +6214,7 @@ void rtcEngineSmokeTestCases() {
         appId: engineAppId,
         areaCode: AreaCode.areaCodeGlob.value(),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
         const bool defaultToSpeaker = true;
@@ -6021,7 +6224,7 @@ void rtcEngineSmokeTestCases() {
       } catch (e) {
         if (e is! AgoraRtcException) {
           debugPrint(
-              '[setDefaultAudioRouteToSpeakerphone] error: ${e.toString()}');
+              '[RtcEngine.setDefaultAudioRouteToSpeakerphone] error: ${e.toString()}');
           rethrow;
         }
 
@@ -6036,7 +6239,7 @@ void rtcEngineSmokeTestCases() {
   );
 
   testWidgets(
-    'setEnableSpeakerphone',
+    'RtcEngine.setEnableSpeakerphone',
     (WidgetTester tester) async {
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
@@ -6046,6 +6249,7 @@ void rtcEngineSmokeTestCases() {
         appId: engineAppId,
         areaCode: AreaCode.areaCodeGlob.value(),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
         const bool speakerOn = true;
@@ -6054,7 +6258,8 @@ void rtcEngineSmokeTestCases() {
         );
       } catch (e) {
         if (e is! AgoraRtcException) {
-          debugPrint('[setEnableSpeakerphone] error: ${e.toString()}');
+          debugPrint(
+              '[RtcEngine.setEnableSpeakerphone] error: ${e.toString()}');
           rethrow;
         }
 
@@ -6069,7 +6274,7 @@ void rtcEngineSmokeTestCases() {
   );
 
   testWidgets(
-    'isSpeakerphoneEnabled',
+    'RtcEngine.isSpeakerphoneEnabled',
     (WidgetTester tester) async {
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
@@ -6079,12 +6284,14 @@ void rtcEngineSmokeTestCases() {
         appId: engineAppId,
         areaCode: AreaCode.areaCodeGlob.value(),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
         await rtcEngine.isSpeakerphoneEnabled();
       } catch (e) {
         if (e is! AgoraRtcException) {
-          debugPrint('[isSpeakerphoneEnabled] error: ${e.toString()}');
+          debugPrint(
+              '[RtcEngine.isSpeakerphoneEnabled] error: ${e.toString()}');
           rethrow;
         }
 
@@ -6099,7 +6306,7 @@ void rtcEngineSmokeTestCases() {
   );
 
   testWidgets(
-    'setRouteInCommunicationMode',
+    'RtcEngine.setRouteInCommunicationMode',
     (WidgetTester tester) async {
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
@@ -6109,6 +6316,7 @@ void rtcEngineSmokeTestCases() {
         appId: engineAppId,
         areaCode: AreaCode.areaCodeGlob.value(),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
         const int route = 10;
@@ -6117,7 +6325,8 @@ void rtcEngineSmokeTestCases() {
         );
       } catch (e) {
         if (e is! AgoraRtcException) {
-          debugPrint('[setRouteInCommunicationMode] error: ${e.toString()}');
+          debugPrint(
+              '[RtcEngine.setRouteInCommunicationMode] error: ${e.toString()}');
           rethrow;
         }
 
@@ -6132,7 +6341,7 @@ void rtcEngineSmokeTestCases() {
   );
 
   testWidgets(
-    'isSupportPortraitCenterStage',
+    'RtcEngine.isSupportPortraitCenterStage',
     (WidgetTester tester) async {
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
@@ -6142,12 +6351,14 @@ void rtcEngineSmokeTestCases() {
         appId: engineAppId,
         areaCode: AreaCode.areaCodeGlob.value(),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
         await rtcEngine.isSupportPortraitCenterStage();
       } catch (e) {
         if (e is! AgoraRtcException) {
-          debugPrint('[isSupportPortraitCenterStage] error: ${e.toString()}');
+          debugPrint(
+              '[RtcEngine.isSupportPortraitCenterStage] error: ${e.toString()}');
           rethrow;
         }
 
@@ -6162,7 +6373,7 @@ void rtcEngineSmokeTestCases() {
   );
 
   testWidgets(
-    'enablePortraitCenterStage',
+    'RtcEngine.enablePortraitCenterStage',
     (WidgetTester tester) async {
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
@@ -6172,6 +6383,7 @@ void rtcEngineSmokeTestCases() {
         appId: engineAppId,
         areaCode: AreaCode.areaCodeGlob.value(),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
         const bool enabled = true;
@@ -6180,7 +6392,8 @@ void rtcEngineSmokeTestCases() {
         );
       } catch (e) {
         if (e is! AgoraRtcException) {
-          debugPrint('[enablePortraitCenterStage] error: ${e.toString()}');
+          debugPrint(
+              '[RtcEngine.enablePortraitCenterStage] error: ${e.toString()}');
           rethrow;
         }
 
@@ -6195,7 +6408,7 @@ void rtcEngineSmokeTestCases() {
   );
 
   testWidgets(
-    'getScreenCaptureSources',
+    'RtcEngine.getScreenCaptureSources',
     (WidgetTester tester) async {
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
@@ -6205,6 +6418,7 @@ void rtcEngineSmokeTestCases() {
         appId: engineAppId,
         areaCode: AreaCode.areaCodeGlob.value(),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
         const int thumbSizeWidth = 10;
@@ -6227,7 +6441,8 @@ void rtcEngineSmokeTestCases() {
         );
       } catch (e) {
         if (e is! AgoraRtcException) {
-          debugPrint('[getScreenCaptureSources] error: ${e.toString()}');
+          debugPrint(
+              '[RtcEngine.getScreenCaptureSources] error: ${e.toString()}');
           rethrow;
         }
 
@@ -6242,7 +6457,7 @@ void rtcEngineSmokeTestCases() {
   );
 
   testWidgets(
-    'setAudioSessionOperationRestriction',
+    'RtcEngine.setAudioSessionOperationRestriction',
     (WidgetTester tester) async {
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
@@ -6252,6 +6467,7 @@ void rtcEngineSmokeTestCases() {
         appId: engineAppId,
         areaCode: AreaCode.areaCodeGlob.value(),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
         const AudioSessionOperationRestriction restriction =
@@ -6263,7 +6479,7 @@ void rtcEngineSmokeTestCases() {
       } catch (e) {
         if (e is! AgoraRtcException) {
           debugPrint(
-              '[setAudioSessionOperationRestriction] error: ${e.toString()}');
+              '[RtcEngine.setAudioSessionOperationRestriction] error: ${e.toString()}');
           rethrow;
         }
 
@@ -6278,7 +6494,7 @@ void rtcEngineSmokeTestCases() {
   );
 
   testWidgets(
-    'startScreenCaptureByDisplayId',
+    'RtcEngine.startScreenCaptureByDisplayId',
     (WidgetTester tester) async {
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
@@ -6288,6 +6504,7 @@ void rtcEngineSmokeTestCases() {
         appId: engineAppId,
         areaCode: AreaCode.areaCodeGlob.value(),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
         const int displayId = 10;
@@ -6335,7 +6552,8 @@ void rtcEngineSmokeTestCases() {
         );
       } catch (e) {
         if (e is! AgoraRtcException) {
-          debugPrint('[startScreenCaptureByDisplayId] error: ${e.toString()}');
+          debugPrint(
+              '[RtcEngine.startScreenCaptureByDisplayId] error: ${e.toString()}');
           rethrow;
         }
 
@@ -6350,7 +6568,7 @@ void rtcEngineSmokeTestCases() {
   );
 
   testWidgets(
-    'startScreenCaptureByScreenRect',
+    'RtcEngine.startScreenCaptureByScreenRect',
     (WidgetTester tester) async {
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
@@ -6360,6 +6578,7 @@ void rtcEngineSmokeTestCases() {
         appId: engineAppId,
         areaCode: AreaCode.areaCodeGlob.value(),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
         const int screenRectX = 10;
@@ -6416,7 +6635,8 @@ void rtcEngineSmokeTestCases() {
         );
       } catch (e) {
         if (e is! AgoraRtcException) {
-          debugPrint('[startScreenCaptureByScreenRect] error: ${e.toString()}');
+          debugPrint(
+              '[RtcEngine.startScreenCaptureByScreenRect] error: ${e.toString()}');
           rethrow;
         }
 
@@ -6431,7 +6651,7 @@ void rtcEngineSmokeTestCases() {
   );
 
   testWidgets(
-    'getAudioDeviceInfo',
+    'RtcEngine.getAudioDeviceInfo',
     (WidgetTester tester) async {
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
@@ -6441,12 +6661,13 @@ void rtcEngineSmokeTestCases() {
         appId: engineAppId,
         areaCode: AreaCode.areaCodeGlob.value(),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
         await rtcEngine.getAudioDeviceInfo();
       } catch (e) {
         if (e is! AgoraRtcException) {
-          debugPrint('[getAudioDeviceInfo] error: ${e.toString()}');
+          debugPrint('[RtcEngine.getAudioDeviceInfo] error: ${e.toString()}');
           rethrow;
         }
 
@@ -6461,7 +6682,7 @@ void rtcEngineSmokeTestCases() {
   );
 
   testWidgets(
-    'startScreenCaptureByWindowId',
+    'RtcEngine.startScreenCaptureByWindowId',
     (WidgetTester tester) async {
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
@@ -6471,6 +6692,7 @@ void rtcEngineSmokeTestCases() {
         appId: engineAppId,
         areaCode: AreaCode.areaCodeGlob.value(),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
         const int windowId = 10;
@@ -6518,7 +6740,8 @@ void rtcEngineSmokeTestCases() {
         );
       } catch (e) {
         if (e is! AgoraRtcException) {
-          debugPrint('[startScreenCaptureByWindowId] error: ${e.toString()}');
+          debugPrint(
+              '[RtcEngine.startScreenCaptureByWindowId] error: ${e.toString()}');
           rethrow;
         }
 
@@ -6533,7 +6756,7 @@ void rtcEngineSmokeTestCases() {
   );
 
   testWidgets(
-    'setScreenCaptureContentHint',
+    'RtcEngine.setScreenCaptureContentHint',
     (WidgetTester tester) async {
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
@@ -6543,6 +6766,7 @@ void rtcEngineSmokeTestCases() {
         appId: engineAppId,
         areaCode: AreaCode.areaCodeGlob.value(),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
         const VideoContentHint contentHint = VideoContentHint.contentHintNone;
@@ -6551,7 +6775,8 @@ void rtcEngineSmokeTestCases() {
         );
       } catch (e) {
         if (e is! AgoraRtcException) {
-          debugPrint('[setScreenCaptureContentHint] error: ${e.toString()}');
+          debugPrint(
+              '[RtcEngine.setScreenCaptureContentHint] error: ${e.toString()}');
           rethrow;
         }
 
@@ -6566,7 +6791,7 @@ void rtcEngineSmokeTestCases() {
   );
 
   testWidgets(
-    'updateScreenCaptureRegion',
+    'RtcEngine.updateScreenCaptureRegion',
     (WidgetTester tester) async {
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
@@ -6576,6 +6801,7 @@ void rtcEngineSmokeTestCases() {
         appId: engineAppId,
         areaCode: AreaCode.areaCodeGlob.value(),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
         const int regionRectX = 10;
@@ -6593,7 +6819,8 @@ void rtcEngineSmokeTestCases() {
         );
       } catch (e) {
         if (e is! AgoraRtcException) {
-          debugPrint('[updateScreenCaptureRegion] error: ${e.toString()}');
+          debugPrint(
+              '[RtcEngine.updateScreenCaptureRegion] error: ${e.toString()}');
           rethrow;
         }
 
@@ -6608,7 +6835,7 @@ void rtcEngineSmokeTestCases() {
   );
 
   testWidgets(
-    'updateScreenCaptureParameters',
+    'RtcEngine.updateScreenCaptureParameters',
     (WidgetTester tester) async {
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
@@ -6618,6 +6845,7 @@ void rtcEngineSmokeTestCases() {
         appId: engineAppId,
         areaCode: AreaCode.areaCodeGlob.value(),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
         const int dimensionsWidth = 10;
@@ -6652,7 +6880,8 @@ void rtcEngineSmokeTestCases() {
         );
       } catch (e) {
         if (e is! AgoraRtcException) {
-          debugPrint('[updateScreenCaptureParameters] error: ${e.toString()}');
+          debugPrint(
+              '[RtcEngine.updateScreenCaptureParameters] error: ${e.toString()}');
           rethrow;
         }
 
@@ -6667,7 +6896,7 @@ void rtcEngineSmokeTestCases() {
   );
 
   testWidgets(
-    'startScreenCapture',
+    'RtcEngine.startScreenCapture',
     (WidgetTester tester) async {
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
@@ -6677,6 +6906,7 @@ void rtcEngineSmokeTestCases() {
         appId: engineAppId,
         areaCode: AreaCode.areaCodeGlob.value(),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
         const int audioParamsSampleRate = 10;
@@ -6718,7 +6948,7 @@ void rtcEngineSmokeTestCases() {
         );
       } catch (e) {
         if (e is! AgoraRtcException) {
-          debugPrint('[startScreenCapture] error: ${e.toString()}');
+          debugPrint('[RtcEngine.startScreenCapture] error: ${e.toString()}');
           rethrow;
         }
 
@@ -6733,7 +6963,7 @@ void rtcEngineSmokeTestCases() {
   );
 
   testWidgets(
-    'startScreenCaptureBySourceType',
+    'RtcEngine.updateScreenCapture',
     (WidgetTester tester) async {
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
@@ -6743,6 +6973,3372 @@ void rtcEngineSmokeTestCases() {
         appId: engineAppId,
         areaCode: AreaCode.areaCodeGlob.value(),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
+
+      try {
+        const int audioParamsSampleRate = 10;
+        const int audioParamsChannels = 10;
+        const int audioParamsCaptureSignalVolume = 10;
+        const ScreenAudioParameters captureParamsAudioParams =
+            ScreenAudioParameters(
+          sampleRate: audioParamsSampleRate,
+          channels: audioParamsChannels,
+          captureSignalVolume: audioParamsCaptureSignalVolume,
+        );
+        const int dimensionsWidth = 10;
+        const int dimensionsHeight = 10;
+        const VideoDimensions videoParamsDimensions = VideoDimensions(
+          width: dimensionsWidth,
+          height: dimensionsHeight,
+        );
+        const VideoContentHint videoParamsContentHint =
+            VideoContentHint.contentHintNone;
+        const int videoParamsFrameRate = 10;
+        const int videoParamsBitrate = 10;
+        const ScreenVideoParameters captureParamsVideoParams =
+            ScreenVideoParameters(
+          dimensions: videoParamsDimensions,
+          frameRate: videoParamsFrameRate,
+          bitrate: videoParamsBitrate,
+          contentHint: videoParamsContentHint,
+        );
+        const bool captureParamsCaptureAudio = true;
+        const bool captureParamsCaptureVideo = true;
+        const ScreenCaptureParameters2 captureParams = ScreenCaptureParameters2(
+          captureAudio: captureParamsCaptureAudio,
+          audioParams: captureParamsAudioParams,
+          captureVideo: captureParamsCaptureVideo,
+          videoParams: captureParamsVideoParams,
+        );
+        await rtcEngine.updateScreenCapture(
+          captureParams,
+        );
+      } catch (e) {
+        if (e is! AgoraRtcException) {
+          debugPrint('[RtcEngine.updateScreenCapture] error: ${e.toString()}');
+          rethrow;
+        }
+
+        if (e.code != -4) {
+          // Only not supported error supported.
+          rethrow;
+        }
+      }
+
+      await rtcEngine.release();
+    },
+  );
+
+  testWidgets(
+    'RtcEngine.queryScreenCaptureCapability',
+    (WidgetTester tester) async {
+      String engineAppId = const String.fromEnvironment('TEST_APP_ID',
+          defaultValue: '<YOUR_APP_ID>');
+
+      RtcEngine rtcEngine = createAgoraRtcEngine();
+      await rtcEngine.initialize(RtcEngineContext(
+        appId: engineAppId,
+        areaCode: AreaCode.areaCodeGlob.value(),
+      ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
+
+      try {
+        await rtcEngine.queryScreenCaptureCapability();
+      } catch (e) {
+        if (e is! AgoraRtcException) {
+          debugPrint(
+              '[RtcEngine.queryScreenCaptureCapability] error: ${e.toString()}');
+          rethrow;
+        }
+
+        if (e.code != -4) {
+          // Only not supported error supported.
+          rethrow;
+        }
+      }
+
+      await rtcEngine.release();
+    },
+  );
+
+  testWidgets(
+    'RtcEngine.setScreenCaptureScenario',
+    (WidgetTester tester) async {
+      String engineAppId = const String.fromEnvironment('TEST_APP_ID',
+          defaultValue: '<YOUR_APP_ID>');
+
+      RtcEngine rtcEngine = createAgoraRtcEngine();
+      await rtcEngine.initialize(RtcEngineContext(
+        appId: engineAppId,
+        areaCode: AreaCode.areaCodeGlob.value(),
+      ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
+
+      try {
+        const ScreenScenarioType screenScenario =
+            ScreenScenarioType.screenScenarioDocument;
+        await rtcEngine.setScreenCaptureScenario(
+          screenScenario,
+        );
+      } catch (e) {
+        if (e is! AgoraRtcException) {
+          debugPrint(
+              '[RtcEngine.setScreenCaptureScenario] error: ${e.toString()}');
+          rethrow;
+        }
+
+        if (e.code != -4) {
+          // Only not supported error supported.
+          rethrow;
+        }
+      }
+
+      await rtcEngine.release();
+    },
+  );
+
+  testWidgets(
+    'RtcEngine.stopScreenCapture',
+    (WidgetTester tester) async {
+      String engineAppId = const String.fromEnvironment('TEST_APP_ID',
+          defaultValue: '<YOUR_APP_ID>');
+
+      RtcEngine rtcEngine = createAgoraRtcEngine();
+      await rtcEngine.initialize(RtcEngineContext(
+        appId: engineAppId,
+        areaCode: AreaCode.areaCodeGlob.value(),
+      ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
+
+      try {
+        await rtcEngine.stopScreenCapture();
+      } catch (e) {
+        if (e is! AgoraRtcException) {
+          debugPrint('[RtcEngine.stopScreenCapture] error: ${e.toString()}');
+          rethrow;
+        }
+
+        if (e.code != -4) {
+          // Only not supported error supported.
+          rethrow;
+        }
+      }
+
+      await rtcEngine.release();
+    },
+  );
+
+  testWidgets(
+    'RtcEngine.getCallId',
+    (WidgetTester tester) async {
+      String engineAppId = const String.fromEnvironment('TEST_APP_ID',
+          defaultValue: '<YOUR_APP_ID>');
+
+      RtcEngine rtcEngine = createAgoraRtcEngine();
+      await rtcEngine.initialize(RtcEngineContext(
+        appId: engineAppId,
+        areaCode: AreaCode.areaCodeGlob.value(),
+      ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
+
+      try {
+        await rtcEngine.getCallId();
+      } catch (e) {
+        if (e is! AgoraRtcException) {
+          debugPrint('[RtcEngine.getCallId] error: ${e.toString()}');
+          rethrow;
+        }
+
+        if (e.code != -4) {
+          // Only not supported error supported.
+          rethrow;
+        }
+      }
+
+      await rtcEngine.release();
+    },
+  );
+
+  testWidgets(
+    'RtcEngine.rate',
+    (WidgetTester tester) async {
+      String engineAppId = const String.fromEnvironment('TEST_APP_ID',
+          defaultValue: '<YOUR_APP_ID>');
+
+      RtcEngine rtcEngine = createAgoraRtcEngine();
+      await rtcEngine.initialize(RtcEngineContext(
+        appId: engineAppId,
+        areaCode: AreaCode.areaCodeGlob.value(),
+      ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
+
+      try {
+        const String callId = "hello";
+        const int rating = 10;
+        const String description = "hello";
+        await rtcEngine.rate(
+          callId: callId,
+          rating: rating,
+          description: description,
+        );
+      } catch (e) {
+        if (e is! AgoraRtcException) {
+          debugPrint('[RtcEngine.rate] error: ${e.toString()}');
+          rethrow;
+        }
+
+        if (e.code != -4) {
+          // Only not supported error supported.
+          rethrow;
+        }
+      }
+
+      await rtcEngine.release();
+    },
+  );
+
+  testWidgets(
+    'RtcEngine.complain',
+    (WidgetTester tester) async {
+      String engineAppId = const String.fromEnvironment('TEST_APP_ID',
+          defaultValue: '<YOUR_APP_ID>');
+
+      RtcEngine rtcEngine = createAgoraRtcEngine();
+      await rtcEngine.initialize(RtcEngineContext(
+        appId: engineAppId,
+        areaCode: AreaCode.areaCodeGlob.value(),
+      ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
+
+      try {
+        const String callId = "hello";
+        const String description = "hello";
+        await rtcEngine.complain(
+          callId: callId,
+          description: description,
+        );
+      } catch (e) {
+        if (e is! AgoraRtcException) {
+          debugPrint('[RtcEngine.complain] error: ${e.toString()}');
+          rethrow;
+        }
+
+        if (e.code != -4) {
+          // Only not supported error supported.
+          rethrow;
+        }
+      }
+
+      await rtcEngine.release();
+    },
+  );
+
+  testWidgets(
+    'RtcEngine.startRtmpStreamWithoutTranscoding',
+    (WidgetTester tester) async {
+      String engineAppId = const String.fromEnvironment('TEST_APP_ID',
+          defaultValue: '<YOUR_APP_ID>');
+
+      RtcEngine rtcEngine = createAgoraRtcEngine();
+      await rtcEngine.initialize(RtcEngineContext(
+        appId: engineAppId,
+        areaCode: AreaCode.areaCodeGlob.value(),
+      ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
+
+      try {
+        const String url = "hello";
+        await rtcEngine.startRtmpStreamWithoutTranscoding(
+          url,
+        );
+      } catch (e) {
+        if (e is! AgoraRtcException) {
+          debugPrint(
+              '[RtcEngine.startRtmpStreamWithoutTranscoding] error: ${e.toString()}');
+          rethrow;
+        }
+
+        if (e.code != -4) {
+          // Only not supported error supported.
+          rethrow;
+        }
+      }
+
+      await rtcEngine.release();
+    },
+  );
+
+  testWidgets(
+    'RtcEngine.startRtmpStreamWithTranscoding',
+    (WidgetTester tester) async {
+      String engineAppId = const String.fromEnvironment('TEST_APP_ID',
+          defaultValue: '<YOUR_APP_ID>');
+
+      RtcEngine rtcEngine = createAgoraRtcEngine();
+      await rtcEngine.initialize(RtcEngineContext(
+        appId: engineAppId,
+        areaCode: AreaCode.areaCodeGlob.value(),
+      ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
+
+      try {
+        const String url = "hello";
+        const VideoCodecProfileType transcodingVideoCodecProfile =
+            VideoCodecProfileType.videoCodecProfileBaseline;
+        const VideoCodecTypeForStream transcodingVideoCodecType =
+            VideoCodecTypeForStream.videoCodecH264ForStream;
+        const AudioSampleRateType transcodingAudioSampleRate =
+            AudioSampleRateType.audioSampleRate32000;
+        const AudioCodecProfileType transcodingAudioCodecProfile =
+            AudioCodecProfileType.audioCodecProfileLcAac;
+        const int transcodingWidth = 10;
+        const int transcodingHeight = 10;
+        const int transcodingVideoBitrate = 10;
+        const int transcodingVideoFramerate = 10;
+        const bool transcodingLowLatency = true;
+        const int transcodingVideoGop = 10;
+        const int transcodingBackgroundColor = 10;
+        const int transcodingUserCount = 10;
+        const List<TranscodingUser> transcodingTranscodingUsers = [];
+        const String transcodingTranscodingExtraInfo = "hello";
+        const String transcodingMetadata = "hello";
+        const List<RtcImage> transcodingWatermark = [];
+        const int transcodingWatermarkCount = 10;
+        const List<RtcImage> transcodingBackgroundImage = [];
+        const int transcodingBackgroundImageCount = 10;
+        const int transcodingAudioBitrate = 10;
+        const int transcodingAudioChannels = 10;
+        const List<LiveStreamAdvancedFeature> transcodingAdvancedFeatures = [];
+        const int transcodingAdvancedFeatureCount = 10;
+        const LiveTranscoding transcoding = LiveTranscoding(
+          width: transcodingWidth,
+          height: transcodingHeight,
+          videoBitrate: transcodingVideoBitrate,
+          videoFramerate: transcodingVideoFramerate,
+          lowLatency: transcodingLowLatency,
+          videoGop: transcodingVideoGop,
+          videoCodecProfile: transcodingVideoCodecProfile,
+          backgroundColor: transcodingBackgroundColor,
+          videoCodecType: transcodingVideoCodecType,
+          userCount: transcodingUserCount,
+          transcodingUsers: transcodingTranscodingUsers,
+          transcodingExtraInfo: transcodingTranscodingExtraInfo,
+          metadata: transcodingMetadata,
+          watermark: transcodingWatermark,
+          watermarkCount: transcodingWatermarkCount,
+          backgroundImage: transcodingBackgroundImage,
+          backgroundImageCount: transcodingBackgroundImageCount,
+          audioSampleRate: transcodingAudioSampleRate,
+          audioBitrate: transcodingAudioBitrate,
+          audioChannels: transcodingAudioChannels,
+          audioCodecProfile: transcodingAudioCodecProfile,
+          advancedFeatures: transcodingAdvancedFeatures,
+          advancedFeatureCount: transcodingAdvancedFeatureCount,
+        );
+        await rtcEngine.startRtmpStreamWithTranscoding(
+          url: url,
+          transcoding: transcoding,
+        );
+      } catch (e) {
+        if (e is! AgoraRtcException) {
+          debugPrint(
+              '[RtcEngine.startRtmpStreamWithTranscoding] error: ${e.toString()}');
+          rethrow;
+        }
+
+        if (e.code != -4) {
+          // Only not supported error supported.
+          rethrow;
+        }
+      }
+
+      await rtcEngine.release();
+    },
+  );
+
+  testWidgets(
+    'RtcEngine.updateRtmpTranscoding',
+    (WidgetTester tester) async {
+      String engineAppId = const String.fromEnvironment('TEST_APP_ID',
+          defaultValue: '<YOUR_APP_ID>');
+
+      RtcEngine rtcEngine = createAgoraRtcEngine();
+      await rtcEngine.initialize(RtcEngineContext(
+        appId: engineAppId,
+        areaCode: AreaCode.areaCodeGlob.value(),
+      ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
+
+      try {
+        const VideoCodecProfileType transcodingVideoCodecProfile =
+            VideoCodecProfileType.videoCodecProfileBaseline;
+        const VideoCodecTypeForStream transcodingVideoCodecType =
+            VideoCodecTypeForStream.videoCodecH264ForStream;
+        const AudioSampleRateType transcodingAudioSampleRate =
+            AudioSampleRateType.audioSampleRate32000;
+        const AudioCodecProfileType transcodingAudioCodecProfile =
+            AudioCodecProfileType.audioCodecProfileLcAac;
+        const int transcodingWidth = 10;
+        const int transcodingHeight = 10;
+        const int transcodingVideoBitrate = 10;
+        const int transcodingVideoFramerate = 10;
+        const bool transcodingLowLatency = true;
+        const int transcodingVideoGop = 10;
+        const int transcodingBackgroundColor = 10;
+        const int transcodingUserCount = 10;
+        const List<TranscodingUser> transcodingTranscodingUsers = [];
+        const String transcodingTranscodingExtraInfo = "hello";
+        const String transcodingMetadata = "hello";
+        const List<RtcImage> transcodingWatermark = [];
+        const int transcodingWatermarkCount = 10;
+        const List<RtcImage> transcodingBackgroundImage = [];
+        const int transcodingBackgroundImageCount = 10;
+        const int transcodingAudioBitrate = 10;
+        const int transcodingAudioChannels = 10;
+        const List<LiveStreamAdvancedFeature> transcodingAdvancedFeatures = [];
+        const int transcodingAdvancedFeatureCount = 10;
+        const LiveTranscoding transcoding = LiveTranscoding(
+          width: transcodingWidth,
+          height: transcodingHeight,
+          videoBitrate: transcodingVideoBitrate,
+          videoFramerate: transcodingVideoFramerate,
+          lowLatency: transcodingLowLatency,
+          videoGop: transcodingVideoGop,
+          videoCodecProfile: transcodingVideoCodecProfile,
+          backgroundColor: transcodingBackgroundColor,
+          videoCodecType: transcodingVideoCodecType,
+          userCount: transcodingUserCount,
+          transcodingUsers: transcodingTranscodingUsers,
+          transcodingExtraInfo: transcodingTranscodingExtraInfo,
+          metadata: transcodingMetadata,
+          watermark: transcodingWatermark,
+          watermarkCount: transcodingWatermarkCount,
+          backgroundImage: transcodingBackgroundImage,
+          backgroundImageCount: transcodingBackgroundImageCount,
+          audioSampleRate: transcodingAudioSampleRate,
+          audioBitrate: transcodingAudioBitrate,
+          audioChannels: transcodingAudioChannels,
+          audioCodecProfile: transcodingAudioCodecProfile,
+          advancedFeatures: transcodingAdvancedFeatures,
+          advancedFeatureCount: transcodingAdvancedFeatureCount,
+        );
+        await rtcEngine.updateRtmpTranscoding(
+          transcoding,
+        );
+      } catch (e) {
+        if (e is! AgoraRtcException) {
+          debugPrint(
+              '[RtcEngine.updateRtmpTranscoding] error: ${e.toString()}');
+          rethrow;
+        }
+
+        if (e.code != -4) {
+          // Only not supported error supported.
+          rethrow;
+        }
+      }
+
+      await rtcEngine.release();
+    },
+  );
+
+  testWidgets(
+    'RtcEngine.stopRtmpStream',
+    (WidgetTester tester) async {
+      String engineAppId = const String.fromEnvironment('TEST_APP_ID',
+          defaultValue: '<YOUR_APP_ID>');
+
+      RtcEngine rtcEngine = createAgoraRtcEngine();
+      await rtcEngine.initialize(RtcEngineContext(
+        appId: engineAppId,
+        areaCode: AreaCode.areaCodeGlob.value(),
+      ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
+
+      try {
+        const String url = "hello";
+        await rtcEngine.stopRtmpStream(
+          url,
+        );
+      } catch (e) {
+        if (e is! AgoraRtcException) {
+          debugPrint('[RtcEngine.stopRtmpStream] error: ${e.toString()}');
+          rethrow;
+        }
+
+        if (e.code != -4) {
+          // Only not supported error supported.
+          rethrow;
+        }
+      }
+
+      await rtcEngine.release();
+    },
+  );
+
+  testWidgets(
+    'RtcEngine.startLocalVideoTranscoder',
+    (WidgetTester tester) async {
+      String engineAppId = const String.fromEnvironment('TEST_APP_ID',
+          defaultValue: '<YOUR_APP_ID>');
+
+      RtcEngine rtcEngine = createAgoraRtcEngine();
+      await rtcEngine.initialize(RtcEngineContext(
+        appId: engineAppId,
+        areaCode: AreaCode.areaCodeGlob.value(),
+      ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
+
+      try {
+        const VideoCodecType videoOutputConfigurationCodecType =
+            VideoCodecType.videoCodecNone;
+        const int dimensionsWidth = 10;
+        const int dimensionsHeight = 10;
+        const VideoDimensions videoOutputConfigurationDimensions =
+            VideoDimensions(
+          width: dimensionsWidth,
+          height: dimensionsHeight,
+        );
+        const OrientationMode videoOutputConfigurationOrientationMode =
+            OrientationMode.orientationModeAdaptive;
+        const DegradationPreference
+            videoOutputConfigurationDegradationPreference =
+            DegradationPreference.maintainQuality;
+        const VideoMirrorModeType videoOutputConfigurationMirrorMode =
+            VideoMirrorModeType.videoMirrorModeAuto;
+        const EncodingPreference advanceOptionsEncodingPreference =
+            EncodingPreference.preferAuto;
+        const CompressionPreference advanceOptionsCompressionPreference =
+            CompressionPreference.preferLowLatency;
+        const AdvanceOptions videoOutputConfigurationAdvanceOptions =
+            AdvanceOptions(
+          encodingPreference: advanceOptionsEncodingPreference,
+          compressionPreference: advanceOptionsCompressionPreference,
+        );
+        const int videoOutputConfigurationFrameRate = 10;
+        const int videoOutputConfigurationBitrate = 10;
+        const int videoOutputConfigurationMinBitrate = 10;
+        const VideoEncoderConfiguration configVideoOutputConfiguration =
+            VideoEncoderConfiguration(
+          codecType: videoOutputConfigurationCodecType,
+          dimensions: videoOutputConfigurationDimensions,
+          frameRate: videoOutputConfigurationFrameRate,
+          bitrate: videoOutputConfigurationBitrate,
+          minBitrate: videoOutputConfigurationMinBitrate,
+          orientationMode: videoOutputConfigurationOrientationMode,
+          degradationPreference: videoOutputConfigurationDegradationPreference,
+          mirrorMode: videoOutputConfigurationMirrorMode,
+          advanceOptions: videoOutputConfigurationAdvanceOptions,
+        );
+        const int configStreamCount = 10;
+        const List<TranscodingVideoStream> configVideoInputStreams = [];
+        const bool configSyncWithPrimaryCamera = true;
+        const LocalTranscoderConfiguration config =
+            LocalTranscoderConfiguration(
+          streamCount: configStreamCount,
+          videoInputStreams: configVideoInputStreams,
+          videoOutputConfiguration: configVideoOutputConfiguration,
+          syncWithPrimaryCamera: configSyncWithPrimaryCamera,
+        );
+        await rtcEngine.startLocalVideoTranscoder(
+          config,
+        );
+      } catch (e) {
+        if (e is! AgoraRtcException) {
+          debugPrint(
+              '[RtcEngine.startLocalVideoTranscoder] error: ${e.toString()}');
+          rethrow;
+        }
+
+        if (e.code != -4) {
+          // Only not supported error supported.
+          rethrow;
+        }
+      }
+
+      await rtcEngine.release();
+    },
+  );
+
+  testWidgets(
+    'RtcEngine.updateLocalTranscoderConfiguration',
+    (WidgetTester tester) async {
+      String engineAppId = const String.fromEnvironment('TEST_APP_ID',
+          defaultValue: '<YOUR_APP_ID>');
+
+      RtcEngine rtcEngine = createAgoraRtcEngine();
+      await rtcEngine.initialize(RtcEngineContext(
+        appId: engineAppId,
+        areaCode: AreaCode.areaCodeGlob.value(),
+      ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
+
+      try {
+        const VideoCodecType videoOutputConfigurationCodecType =
+            VideoCodecType.videoCodecNone;
+        const int dimensionsWidth = 10;
+        const int dimensionsHeight = 10;
+        const VideoDimensions videoOutputConfigurationDimensions =
+            VideoDimensions(
+          width: dimensionsWidth,
+          height: dimensionsHeight,
+        );
+        const OrientationMode videoOutputConfigurationOrientationMode =
+            OrientationMode.orientationModeAdaptive;
+        const DegradationPreference
+            videoOutputConfigurationDegradationPreference =
+            DegradationPreference.maintainQuality;
+        const VideoMirrorModeType videoOutputConfigurationMirrorMode =
+            VideoMirrorModeType.videoMirrorModeAuto;
+        const EncodingPreference advanceOptionsEncodingPreference =
+            EncodingPreference.preferAuto;
+        const CompressionPreference advanceOptionsCompressionPreference =
+            CompressionPreference.preferLowLatency;
+        const AdvanceOptions videoOutputConfigurationAdvanceOptions =
+            AdvanceOptions(
+          encodingPreference: advanceOptionsEncodingPreference,
+          compressionPreference: advanceOptionsCompressionPreference,
+        );
+        const int videoOutputConfigurationFrameRate = 10;
+        const int videoOutputConfigurationBitrate = 10;
+        const int videoOutputConfigurationMinBitrate = 10;
+        const VideoEncoderConfiguration configVideoOutputConfiguration =
+            VideoEncoderConfiguration(
+          codecType: videoOutputConfigurationCodecType,
+          dimensions: videoOutputConfigurationDimensions,
+          frameRate: videoOutputConfigurationFrameRate,
+          bitrate: videoOutputConfigurationBitrate,
+          minBitrate: videoOutputConfigurationMinBitrate,
+          orientationMode: videoOutputConfigurationOrientationMode,
+          degradationPreference: videoOutputConfigurationDegradationPreference,
+          mirrorMode: videoOutputConfigurationMirrorMode,
+          advanceOptions: videoOutputConfigurationAdvanceOptions,
+        );
+        const int configStreamCount = 10;
+        const List<TranscodingVideoStream> configVideoInputStreams = [];
+        const bool configSyncWithPrimaryCamera = true;
+        const LocalTranscoderConfiguration config =
+            LocalTranscoderConfiguration(
+          streamCount: configStreamCount,
+          videoInputStreams: configVideoInputStreams,
+          videoOutputConfiguration: configVideoOutputConfiguration,
+          syncWithPrimaryCamera: configSyncWithPrimaryCamera,
+        );
+        await rtcEngine.updateLocalTranscoderConfiguration(
+          config,
+        );
+      } catch (e) {
+        if (e is! AgoraRtcException) {
+          debugPrint(
+              '[RtcEngine.updateLocalTranscoderConfiguration] error: ${e.toString()}');
+          rethrow;
+        }
+
+        if (e.code != -4) {
+          // Only not supported error supported.
+          rethrow;
+        }
+      }
+
+      await rtcEngine.release();
+    },
+  );
+
+  testWidgets(
+    'RtcEngine.stopLocalVideoTranscoder',
+    (WidgetTester tester) async {
+      String engineAppId = const String.fromEnvironment('TEST_APP_ID',
+          defaultValue: '<YOUR_APP_ID>');
+
+      RtcEngine rtcEngine = createAgoraRtcEngine();
+      await rtcEngine.initialize(RtcEngineContext(
+        appId: engineAppId,
+        areaCode: AreaCode.areaCodeGlob.value(),
+      ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
+
+      try {
+        await rtcEngine.stopLocalVideoTranscoder();
+      } catch (e) {
+        if (e is! AgoraRtcException) {
+          debugPrint(
+              '[RtcEngine.stopLocalVideoTranscoder] error: ${e.toString()}');
+          rethrow;
+        }
+
+        if (e.code != -4) {
+          // Only not supported error supported.
+          rethrow;
+        }
+      }
+
+      await rtcEngine.release();
+    },
+  );
+
+  testWidgets(
+    'RtcEngine.startCameraCapture',
+    (WidgetTester tester) async {
+      String engineAppId = const String.fromEnvironment('TEST_APP_ID',
+          defaultValue: '<YOUR_APP_ID>');
+
+      RtcEngine rtcEngine = createAgoraRtcEngine();
+      await rtcEngine.initialize(RtcEngineContext(
+        appId: engineAppId,
+        areaCode: AreaCode.areaCodeGlob.value(),
+      ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
+
+      try {
+        const VideoSourceType sourceType =
+            VideoSourceType.videoSourceCameraPrimary;
+        const CameraDirection configCameraDirection =
+            CameraDirection.cameraRear;
+        const int formatWidth = 10;
+        const int formatHeight = 10;
+        const int formatFps = 10;
+        const VideoFormat configFormat = VideoFormat(
+          width: formatWidth,
+          height: formatHeight,
+          fps: formatFps,
+        );
+        const String configDeviceId = "hello";
+        const String configCameraId = "hello";
+        const bool configFollowEncodeDimensionRatio = true;
+        const CameraCapturerConfiguration config = CameraCapturerConfiguration(
+          cameraDirection: configCameraDirection,
+          deviceId: configDeviceId,
+          cameraId: configCameraId,
+          format: configFormat,
+          followEncodeDimensionRatio: configFollowEncodeDimensionRatio,
+        );
+        await rtcEngine.startCameraCapture(
+          sourceType: sourceType,
+          config: config,
+        );
+      } catch (e) {
+        if (e is! AgoraRtcException) {
+          debugPrint('[RtcEngine.startCameraCapture] error: ${e.toString()}');
+          rethrow;
+        }
+
+        if (e.code != -4) {
+          // Only not supported error supported.
+          rethrow;
+        }
+      }
+
+      await rtcEngine.release();
+    },
+  );
+
+  testWidgets(
+    'RtcEngine.stopCameraCapture',
+    (WidgetTester tester) async {
+      String engineAppId = const String.fromEnvironment('TEST_APP_ID',
+          defaultValue: '<YOUR_APP_ID>');
+
+      RtcEngine rtcEngine = createAgoraRtcEngine();
+      await rtcEngine.initialize(RtcEngineContext(
+        appId: engineAppId,
+        areaCode: AreaCode.areaCodeGlob.value(),
+      ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
+
+      try {
+        const VideoSourceType sourceType =
+            VideoSourceType.videoSourceCameraPrimary;
+        await rtcEngine.stopCameraCapture(
+          sourceType,
+        );
+      } catch (e) {
+        if (e is! AgoraRtcException) {
+          debugPrint('[RtcEngine.stopCameraCapture] error: ${e.toString()}');
+          rethrow;
+        }
+
+        if (e.code != -4) {
+          // Only not supported error supported.
+          rethrow;
+        }
+      }
+
+      await rtcEngine.release();
+    },
+  );
+
+  testWidgets(
+    'RtcEngine.setCameraDeviceOrientation',
+    (WidgetTester tester) async {
+      String engineAppId = const String.fromEnvironment('TEST_APP_ID',
+          defaultValue: '<YOUR_APP_ID>');
+
+      RtcEngine rtcEngine = createAgoraRtcEngine();
+      await rtcEngine.initialize(RtcEngineContext(
+        appId: engineAppId,
+        areaCode: AreaCode.areaCodeGlob.value(),
+      ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
+
+      try {
+        const VideoSourceType type = VideoSourceType.videoSourceCameraPrimary;
+        const VideoOrientation orientation = VideoOrientation.videoOrientation0;
+        await rtcEngine.setCameraDeviceOrientation(
+          type: type,
+          orientation: orientation,
+        );
+      } catch (e) {
+        if (e is! AgoraRtcException) {
+          debugPrint(
+              '[RtcEngine.setCameraDeviceOrientation] error: ${e.toString()}');
+          rethrow;
+        }
+
+        if (e.code != -4) {
+          // Only not supported error supported.
+          rethrow;
+        }
+      }
+
+      await rtcEngine.release();
+    },
+  );
+
+  testWidgets(
+    'RtcEngine.setScreenCaptureOrientation',
+    (WidgetTester tester) async {
+      String engineAppId = const String.fromEnvironment('TEST_APP_ID',
+          defaultValue: '<YOUR_APP_ID>');
+
+      RtcEngine rtcEngine = createAgoraRtcEngine();
+      await rtcEngine.initialize(RtcEngineContext(
+        appId: engineAppId,
+        areaCode: AreaCode.areaCodeGlob.value(),
+      ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
+
+      try {
+        const VideoSourceType type = VideoSourceType.videoSourceCameraPrimary;
+        const VideoOrientation orientation = VideoOrientation.videoOrientation0;
+        await rtcEngine.setScreenCaptureOrientation(
+          type: type,
+          orientation: orientation,
+        );
+      } catch (e) {
+        if (e is! AgoraRtcException) {
+          debugPrint(
+              '[RtcEngine.setScreenCaptureOrientation] error: ${e.toString()}');
+          rethrow;
+        }
+
+        if (e.code != -4) {
+          // Only not supported error supported.
+          rethrow;
+        }
+      }
+
+      await rtcEngine.release();
+    },
+  );
+
+  testWidgets(
+    'RtcEngine.getConnectionState',
+    (WidgetTester tester) async {
+      String engineAppId = const String.fromEnvironment('TEST_APP_ID',
+          defaultValue: '<YOUR_APP_ID>');
+
+      RtcEngine rtcEngine = createAgoraRtcEngine();
+      await rtcEngine.initialize(RtcEngineContext(
+        appId: engineAppId,
+        areaCode: AreaCode.areaCodeGlob.value(),
+      ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
+
+      try {
+        await rtcEngine.getConnectionState();
+      } catch (e) {
+        if (e is! AgoraRtcException) {
+          debugPrint('[RtcEngine.getConnectionState] error: ${e.toString()}');
+          rethrow;
+        }
+
+        if (e.code != -4) {
+          // Only not supported error supported.
+          rethrow;
+        }
+      }
+
+      await rtcEngine.release();
+    },
+  );
+
+  testWidgets(
+    'RtcEngine.registerEventHandler',
+    (WidgetTester tester) async {
+      String engineAppId = const String.fromEnvironment('TEST_APP_ID',
+          defaultValue: '<YOUR_APP_ID>');
+
+      RtcEngine rtcEngine = createAgoraRtcEngine();
+      await rtcEngine.initialize(RtcEngineContext(
+        appId: engineAppId,
+        areaCode: AreaCode.areaCodeGlob.value(),
+      ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
+
+      try {
+        final RtcEngineEventHandler eventHandler = RtcEngineEventHandler(
+          onJoinChannelSuccess: (RtcConnection connection, int elapsed) {},
+          onRejoinChannelSuccess: (RtcConnection connection, int elapsed) {},
+          onProxyConnected: (String channel, int uid, ProxyType proxyType,
+              String localProxyIp, int elapsed) {},
+          onError: (ErrorCodeType err, String msg) {},
+          onAudioQuality: (RtcConnection connection, int remoteUid,
+              QualityType quality, int delay, int lost) {},
+          onLastmileProbeResult: (LastmileProbeResult result) {},
+          onAudioVolumeIndication: (RtcConnection connection, List speakers,
+              int speakerNumber, int totalVolume) {},
+          onLeaveChannel: (RtcConnection connection, RtcStats stats) {},
+          onRtcStats: (RtcConnection connection, RtcStats stats) {},
+          onAudioDeviceStateChanged: (String deviceId,
+              MediaDeviceType deviceType, MediaDeviceStateType deviceState) {},
+          onAudioMixingPositionChanged: (int position) {},
+          onAudioMixingFinished: () {},
+          onAudioEffectFinished: (int soundId) {},
+          onVideoDeviceStateChanged: (String deviceId,
+              MediaDeviceType deviceType, MediaDeviceStateType deviceState) {},
+          onNetworkQuality: (RtcConnection connection, int remoteUid,
+              QualityType txQuality, QualityType rxQuality) {},
+          onIntraRequestReceived: (RtcConnection connection) {},
+          onUplinkNetworkInfoUpdated: (UplinkNetworkInfo info) {},
+          onDownlinkNetworkInfoUpdated: (DownlinkNetworkInfo info) {},
+          onLastmileQuality: (QualityType quality) {},
+          onFirstLocalVideoFrame:
+              (VideoSourceType source, int width, int height, int elapsed) {},
+          onFirstLocalVideoFramePublished:
+              (VideoSourceType source, int elapsed) {},
+          onFirstRemoteVideoDecoded: (RtcConnection connection, int remoteUid,
+              int width, int height, int elapsed) {},
+          onVideoSizeChanged: (RtcConnection connection,
+              VideoSourceType sourceType,
+              int uid,
+              int width,
+              int height,
+              int rotation) {},
+          onLocalVideoStateChanged: (VideoSourceType source,
+              LocalVideoStreamState state, LocalVideoStreamError error) {},
+          onRemoteVideoStateChanged: (RtcConnection connection,
+              int remoteUid,
+              RemoteVideoState state,
+              RemoteVideoStateReason reason,
+              int elapsed) {},
+          onFirstRemoteVideoFrame: (RtcConnection connection, int remoteUid,
+              int width, int height, int elapsed) {},
+          onUserJoined:
+              (RtcConnection connection, int remoteUid, int elapsed) {},
+          onUserOffline: (RtcConnection connection, int remoteUid,
+              UserOfflineReasonType reason) {},
+          onUserMuteAudio:
+              (RtcConnection connection, int remoteUid, bool muted) {},
+          onUserMuteVideo:
+              (RtcConnection connection, int remoteUid, bool muted) {},
+          onUserEnableVideo:
+              (RtcConnection connection, int remoteUid, bool enabled) {},
+          onUserStateChanged:
+              (RtcConnection connection, int remoteUid, int state) {},
+          onUserEnableLocalVideo:
+              (RtcConnection connection, int remoteUid, bool enabled) {},
+          onLocalAudioStats:
+              (RtcConnection connection, LocalAudioStats stats) {},
+          onRemoteAudioStats:
+              (RtcConnection connection, RemoteAudioStats stats) {},
+          onLocalVideoStats: (VideoSourceType source, LocalVideoStats stats) {},
+          onRemoteVideoStats:
+              (RtcConnection connection, RemoteVideoStats stats) {},
+          onCameraReady: () {},
+          onCameraFocusAreaChanged: (int x, int y, int width, int height) {},
+          onCameraExposureAreaChanged: (int x, int y, int width, int height) {},
+          onFacePositionChanged: (int imageWidth, int imageHeight,
+              List vecRectangle, List vecDistance, int numFaces) {},
+          onVideoStopped: () {},
+          onAudioMixingStateChanged:
+              (AudioMixingStateType state, AudioMixingReasonType reason) {},
+          onRhythmPlayerStateChanged:
+              (RhythmPlayerStateType state, RhythmPlayerErrorType errorCode) {},
+          onConnectionLost: (RtcConnection connection) {},
+          onConnectionInterrupted: (RtcConnection connection) {},
+          onConnectionBanned: (RtcConnection connection) {},
+          onStreamMessage: (RtcConnection connection, int remoteUid,
+              int streamId, Uint8List data, int length, int sentTs) {},
+          onStreamMessageError: (RtcConnection connection, int remoteUid,
+              int streamId, ErrorCodeType code, int missed, int cached) {},
+          onRequestToken: (RtcConnection connection) {},
+          onTokenPrivilegeWillExpire:
+              (RtcConnection connection, String token) {},
+          onLicenseValidationFailure:
+              (RtcConnection connection, LicenseErrorType reason) {},
+          onFirstLocalAudioFramePublished:
+              (RtcConnection connection, int elapsed) {},
+          onFirstRemoteAudioFrame:
+              (RtcConnection connection, int userId, int elapsed) {},
+          onFirstRemoteAudioDecoded:
+              (RtcConnection connection, int uid, int elapsed) {},
+          onLocalAudioStateChanged: (RtcConnection connection,
+              LocalAudioStreamState state, LocalAudioStreamError error) {},
+          onRemoteAudioStateChanged: (RtcConnection connection,
+              int remoteUid,
+              RemoteAudioState state,
+              RemoteAudioStateReason reason,
+              int elapsed) {},
+          onActiveSpeaker: (RtcConnection connection, int uid) {},
+          onContentInspectResult: (ContentInspectResult result) {},
+          onSnapshotTaken: (RtcConnection connection, int uid, String filePath,
+              int width, int height, int errCode) {},
+          onClientRoleChanged: (RtcConnection connection,
+              ClientRoleType oldRole,
+              ClientRoleType newRole,
+              ClientRoleOptions newRoleOptions) {},
+          onClientRoleChangeFailed: (RtcConnection connection,
+              ClientRoleChangeFailedReason reason,
+              ClientRoleType currentRole) {},
+          onAudioDeviceVolumeChanged:
+              (MediaDeviceType deviceType, int volume, bool muted) {},
+          onRtmpStreamingStateChanged: (String url,
+              RtmpStreamPublishState state,
+              RtmpStreamPublishErrorType errCode) {},
+          onRtmpStreamingEvent: (String url, RtmpStreamingEvent eventCode) {},
+          onTranscodingUpdated: () {},
+          onAudioRoutingChanged: (int deviceType, int routing) {},
+          onChannelMediaRelayStateChanged:
+              (ChannelMediaRelayState state, ChannelMediaRelayError code) {},
+          onChannelMediaRelayEvent: (int code) {},
+          onLocalPublishFallbackToAudioOnly: (bool isFallbackOrRecover) {},
+          onRemoteSubscribeFallbackToAudioOnly:
+              (int uid, bool isFallbackOrRecover) {},
+          onRemoteAudioTransportStats: (RtcConnection connection, int remoteUid,
+              int delay, int lost, int rxKBitRate) {},
+          onRemoteVideoTransportStats: (RtcConnection connection, int remoteUid,
+              int delay, int lost, int rxKBitRate) {},
+          onConnectionStateChanged: (RtcConnection connection,
+              ConnectionStateType state, ConnectionChangedReasonType reason) {},
+          onWlAccMessage: (RtcConnection connection, WlaccMessageReason reason,
+              WlaccSuggestAction action, String wlAccMsg) {},
+          onWlAccStats: (RtcConnection connection, WlAccStats currentStats,
+              WlAccStats averageStats) {},
+          onNetworkTypeChanged: (RtcConnection connection, NetworkType type) {},
+          onEncryptionError:
+              (RtcConnection connection, EncryptionErrorType errorType) {},
+          onPermissionError: (PermissionType permissionType) {},
+          onLocalUserRegistered: (int uid, String userAccount) {},
+          onUserInfoUpdated: (int uid, UserInfo info) {},
+          onUploadLogResult: (RtcConnection connection, String requestId,
+              bool success, UploadErrorReason reason) {},
+          onAudioSubscribeStateChanged: (String channel,
+              int uid,
+              StreamSubscribeState oldState,
+              StreamSubscribeState newState,
+              int elapseSinceLastState) {},
+          onVideoSubscribeStateChanged: (String channel,
+              int uid,
+              StreamSubscribeState oldState,
+              StreamSubscribeState newState,
+              int elapseSinceLastState) {},
+          onAudioPublishStateChanged: (String channel,
+              StreamPublishState oldState,
+              StreamPublishState newState,
+              int elapseSinceLastState) {},
+          onVideoPublishStateChanged: (VideoSourceType source,
+              String channel,
+              StreamPublishState oldState,
+              StreamPublishState newState,
+              int elapseSinceLastState) {},
+          onExtensionEvent:
+              (String provider, String extension, String key, String value) {},
+          onExtensionStarted: (String provider, String extension) {},
+          onExtensionStopped: (String provider, String extension) {},
+          onExtensionError:
+              (String provider, String extension, int error, String message) {},
+          onUserAccountUpdated:
+              (RtcConnection connection, int remoteUid, String userAccount) {},
+          onLocalVideoTranscoderError:
+              (TranscodingVideoStream stream, VideoTranscoderError error) {},
+          onVideoRenderingTracingResult: (RtcConnection connection,
+              int uid,
+              MediaTraceEvent currentEvent,
+              VideoRenderingTracingInfo tracingInfo) {},
+        );
+        rtcEngine.registerEventHandler(
+          eventHandler,
+        );
+      } catch (e) {
+        if (e is! AgoraRtcException) {
+          debugPrint('[RtcEngine.registerEventHandler] error: ${e.toString()}');
+          rethrow;
+        }
+
+        if (e.code != -4) {
+          // Only not supported error supported.
+          rethrow;
+        }
+      }
+
+      await rtcEngine.release();
+    },
+  );
+
+  testWidgets(
+    'RtcEngine.unregisterEventHandler',
+    (WidgetTester tester) async {
+      String engineAppId = const String.fromEnvironment('TEST_APP_ID',
+          defaultValue: '<YOUR_APP_ID>');
+
+      RtcEngine rtcEngine = createAgoraRtcEngine();
+      await rtcEngine.initialize(RtcEngineContext(
+        appId: engineAppId,
+        areaCode: AreaCode.areaCodeGlob.value(),
+      ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
+
+      try {
+        final RtcEngineEventHandler eventHandler = RtcEngineEventHandler(
+          onJoinChannelSuccess: (RtcConnection connection, int elapsed) {},
+          onRejoinChannelSuccess: (RtcConnection connection, int elapsed) {},
+          onProxyConnected: (String channel, int uid, ProxyType proxyType,
+              String localProxyIp, int elapsed) {},
+          onError: (ErrorCodeType err, String msg) {},
+          onAudioQuality: (RtcConnection connection, int remoteUid,
+              QualityType quality, int delay, int lost) {},
+          onLastmileProbeResult: (LastmileProbeResult result) {},
+          onAudioVolumeIndication: (RtcConnection connection, List speakers,
+              int speakerNumber, int totalVolume) {},
+          onLeaveChannel: (RtcConnection connection, RtcStats stats) {},
+          onRtcStats: (RtcConnection connection, RtcStats stats) {},
+          onAudioDeviceStateChanged: (String deviceId,
+              MediaDeviceType deviceType, MediaDeviceStateType deviceState) {},
+          onAudioMixingPositionChanged: (int position) {},
+          onAudioMixingFinished: () {},
+          onAudioEffectFinished: (int soundId) {},
+          onVideoDeviceStateChanged: (String deviceId,
+              MediaDeviceType deviceType, MediaDeviceStateType deviceState) {},
+          onNetworkQuality: (RtcConnection connection, int remoteUid,
+              QualityType txQuality, QualityType rxQuality) {},
+          onIntraRequestReceived: (RtcConnection connection) {},
+          onUplinkNetworkInfoUpdated: (UplinkNetworkInfo info) {},
+          onDownlinkNetworkInfoUpdated: (DownlinkNetworkInfo info) {},
+          onLastmileQuality: (QualityType quality) {},
+          onFirstLocalVideoFrame:
+              (VideoSourceType source, int width, int height, int elapsed) {},
+          onFirstLocalVideoFramePublished:
+              (VideoSourceType source, int elapsed) {},
+          onFirstRemoteVideoDecoded: (RtcConnection connection, int remoteUid,
+              int width, int height, int elapsed) {},
+          onVideoSizeChanged: (RtcConnection connection,
+              VideoSourceType sourceType,
+              int uid,
+              int width,
+              int height,
+              int rotation) {},
+          onLocalVideoStateChanged: (VideoSourceType source,
+              LocalVideoStreamState state, LocalVideoStreamError error) {},
+          onRemoteVideoStateChanged: (RtcConnection connection,
+              int remoteUid,
+              RemoteVideoState state,
+              RemoteVideoStateReason reason,
+              int elapsed) {},
+          onFirstRemoteVideoFrame: (RtcConnection connection, int remoteUid,
+              int width, int height, int elapsed) {},
+          onUserJoined:
+              (RtcConnection connection, int remoteUid, int elapsed) {},
+          onUserOffline: (RtcConnection connection, int remoteUid,
+              UserOfflineReasonType reason) {},
+          onUserMuteAudio:
+              (RtcConnection connection, int remoteUid, bool muted) {},
+          onUserMuteVideo:
+              (RtcConnection connection, int remoteUid, bool muted) {},
+          onUserEnableVideo:
+              (RtcConnection connection, int remoteUid, bool enabled) {},
+          onUserStateChanged:
+              (RtcConnection connection, int remoteUid, int state) {},
+          onUserEnableLocalVideo:
+              (RtcConnection connection, int remoteUid, bool enabled) {},
+          onLocalAudioStats:
+              (RtcConnection connection, LocalAudioStats stats) {},
+          onRemoteAudioStats:
+              (RtcConnection connection, RemoteAudioStats stats) {},
+          onLocalVideoStats: (VideoSourceType source, LocalVideoStats stats) {},
+          onRemoteVideoStats:
+              (RtcConnection connection, RemoteVideoStats stats) {},
+          onCameraReady: () {},
+          onCameraFocusAreaChanged: (int x, int y, int width, int height) {},
+          onCameraExposureAreaChanged: (int x, int y, int width, int height) {},
+          onFacePositionChanged: (int imageWidth, int imageHeight,
+              List vecRectangle, List vecDistance, int numFaces) {},
+          onVideoStopped: () {},
+          onAudioMixingStateChanged:
+              (AudioMixingStateType state, AudioMixingReasonType reason) {},
+          onRhythmPlayerStateChanged:
+              (RhythmPlayerStateType state, RhythmPlayerErrorType errorCode) {},
+          onConnectionLost: (RtcConnection connection) {},
+          onConnectionInterrupted: (RtcConnection connection) {},
+          onConnectionBanned: (RtcConnection connection) {},
+          onStreamMessage: (RtcConnection connection, int remoteUid,
+              int streamId, Uint8List data, int length, int sentTs) {},
+          onStreamMessageError: (RtcConnection connection, int remoteUid,
+              int streamId, ErrorCodeType code, int missed, int cached) {},
+          onRequestToken: (RtcConnection connection) {},
+          onTokenPrivilegeWillExpire:
+              (RtcConnection connection, String token) {},
+          onLicenseValidationFailure:
+              (RtcConnection connection, LicenseErrorType reason) {},
+          onFirstLocalAudioFramePublished:
+              (RtcConnection connection, int elapsed) {},
+          onFirstRemoteAudioFrame:
+              (RtcConnection connection, int userId, int elapsed) {},
+          onFirstRemoteAudioDecoded:
+              (RtcConnection connection, int uid, int elapsed) {},
+          onLocalAudioStateChanged: (RtcConnection connection,
+              LocalAudioStreamState state, LocalAudioStreamError error) {},
+          onRemoteAudioStateChanged: (RtcConnection connection,
+              int remoteUid,
+              RemoteAudioState state,
+              RemoteAudioStateReason reason,
+              int elapsed) {},
+          onActiveSpeaker: (RtcConnection connection, int uid) {},
+          onContentInspectResult: (ContentInspectResult result) {},
+          onSnapshotTaken: (RtcConnection connection, int uid, String filePath,
+              int width, int height, int errCode) {},
+          onClientRoleChanged: (RtcConnection connection,
+              ClientRoleType oldRole,
+              ClientRoleType newRole,
+              ClientRoleOptions newRoleOptions) {},
+          onClientRoleChangeFailed: (RtcConnection connection,
+              ClientRoleChangeFailedReason reason,
+              ClientRoleType currentRole) {},
+          onAudioDeviceVolumeChanged:
+              (MediaDeviceType deviceType, int volume, bool muted) {},
+          onRtmpStreamingStateChanged: (String url,
+              RtmpStreamPublishState state,
+              RtmpStreamPublishErrorType errCode) {},
+          onRtmpStreamingEvent: (String url, RtmpStreamingEvent eventCode) {},
+          onTranscodingUpdated: () {},
+          onAudioRoutingChanged: (int deviceType, int routing) {},
+          onChannelMediaRelayStateChanged:
+              (ChannelMediaRelayState state, ChannelMediaRelayError code) {},
+          onChannelMediaRelayEvent: (int code) {},
+          onLocalPublishFallbackToAudioOnly: (bool isFallbackOrRecover) {},
+          onRemoteSubscribeFallbackToAudioOnly:
+              (int uid, bool isFallbackOrRecover) {},
+          onRemoteAudioTransportStats: (RtcConnection connection, int remoteUid,
+              int delay, int lost, int rxKBitRate) {},
+          onRemoteVideoTransportStats: (RtcConnection connection, int remoteUid,
+              int delay, int lost, int rxKBitRate) {},
+          onConnectionStateChanged: (RtcConnection connection,
+              ConnectionStateType state, ConnectionChangedReasonType reason) {},
+          onWlAccMessage: (RtcConnection connection, WlaccMessageReason reason,
+              WlaccSuggestAction action, String wlAccMsg) {},
+          onWlAccStats: (RtcConnection connection, WlAccStats currentStats,
+              WlAccStats averageStats) {},
+          onNetworkTypeChanged: (RtcConnection connection, NetworkType type) {},
+          onEncryptionError:
+              (RtcConnection connection, EncryptionErrorType errorType) {},
+          onPermissionError: (PermissionType permissionType) {},
+          onLocalUserRegistered: (int uid, String userAccount) {},
+          onUserInfoUpdated: (int uid, UserInfo info) {},
+          onUploadLogResult: (RtcConnection connection, String requestId,
+              bool success, UploadErrorReason reason) {},
+          onAudioSubscribeStateChanged: (String channel,
+              int uid,
+              StreamSubscribeState oldState,
+              StreamSubscribeState newState,
+              int elapseSinceLastState) {},
+          onVideoSubscribeStateChanged: (String channel,
+              int uid,
+              StreamSubscribeState oldState,
+              StreamSubscribeState newState,
+              int elapseSinceLastState) {},
+          onAudioPublishStateChanged: (String channel,
+              StreamPublishState oldState,
+              StreamPublishState newState,
+              int elapseSinceLastState) {},
+          onVideoPublishStateChanged: (VideoSourceType source,
+              String channel,
+              StreamPublishState oldState,
+              StreamPublishState newState,
+              int elapseSinceLastState) {},
+          onExtensionEvent:
+              (String provider, String extension, String key, String value) {},
+          onExtensionStarted: (String provider, String extension) {},
+          onExtensionStopped: (String provider, String extension) {},
+          onExtensionError:
+              (String provider, String extension, int error, String message) {},
+          onUserAccountUpdated:
+              (RtcConnection connection, int remoteUid, String userAccount) {},
+          onLocalVideoTranscoderError:
+              (TranscodingVideoStream stream, VideoTranscoderError error) {},
+          onVideoRenderingTracingResult: (RtcConnection connection,
+              int uid,
+              MediaTraceEvent currentEvent,
+              VideoRenderingTracingInfo tracingInfo) {},
+        );
+        rtcEngine.unregisterEventHandler(
+          eventHandler,
+        );
+      } catch (e) {
+        if (e is! AgoraRtcException) {
+          debugPrint(
+              '[RtcEngine.unregisterEventHandler] error: ${e.toString()}');
+          rethrow;
+        }
+
+        if (e.code != -4) {
+          // Only not supported error supported.
+          rethrow;
+        }
+      }
+
+      await rtcEngine.release();
+    },
+  );
+
+  testWidgets(
+    'RtcEngine.setRemoteUserPriority',
+    (WidgetTester tester) async {
+      String engineAppId = const String.fromEnvironment('TEST_APP_ID',
+          defaultValue: '<YOUR_APP_ID>');
+
+      RtcEngine rtcEngine = createAgoraRtcEngine();
+      await rtcEngine.initialize(RtcEngineContext(
+        appId: engineAppId,
+        areaCode: AreaCode.areaCodeGlob.value(),
+      ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
+
+      try {
+        const int uid = 10;
+        const PriorityType userPriority = PriorityType.priorityHigh;
+        await rtcEngine.setRemoteUserPriority(
+          uid: uid,
+          userPriority: userPriority,
+        );
+      } catch (e) {
+        if (e is! AgoraRtcException) {
+          debugPrint(
+              '[RtcEngine.setRemoteUserPriority] error: ${e.toString()}');
+          rethrow;
+        }
+
+        if (e.code != -4) {
+          // Only not supported error supported.
+          rethrow;
+        }
+      }
+
+      await rtcEngine.release();
+    },
+  );
+
+  testWidgets(
+    'RtcEngine.setEncryptionMode',
+    (WidgetTester tester) async {
+      String engineAppId = const String.fromEnvironment('TEST_APP_ID',
+          defaultValue: '<YOUR_APP_ID>');
+
+      RtcEngine rtcEngine = createAgoraRtcEngine();
+      await rtcEngine.initialize(RtcEngineContext(
+        appId: engineAppId,
+        areaCode: AreaCode.areaCodeGlob.value(),
+      ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
+
+      try {
+        const String encryptionMode = "hello";
+        await rtcEngine.setEncryptionMode(
+          encryptionMode,
+        );
+      } catch (e) {
+        if (e is! AgoraRtcException) {
+          debugPrint('[RtcEngine.setEncryptionMode] error: ${e.toString()}');
+          rethrow;
+        }
+
+        if (e.code != -4) {
+          // Only not supported error supported.
+          rethrow;
+        }
+      }
+
+      await rtcEngine.release();
+    },
+  );
+
+  testWidgets(
+    'RtcEngine.setEncryptionSecret',
+    (WidgetTester tester) async {
+      String engineAppId = const String.fromEnvironment('TEST_APP_ID',
+          defaultValue: '<YOUR_APP_ID>');
+
+      RtcEngine rtcEngine = createAgoraRtcEngine();
+      await rtcEngine.initialize(RtcEngineContext(
+        appId: engineAppId,
+        areaCode: AreaCode.areaCodeGlob.value(),
+      ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
+
+      try {
+        const String secret = "hello";
+        await rtcEngine.setEncryptionSecret(
+          secret,
+        );
+      } catch (e) {
+        if (e is! AgoraRtcException) {
+          debugPrint('[RtcEngine.setEncryptionSecret] error: ${e.toString()}');
+          rethrow;
+        }
+
+        if (e.code != -4) {
+          // Only not supported error supported.
+          rethrow;
+        }
+      }
+
+      await rtcEngine.release();
+    },
+  );
+
+  testWidgets(
+    'RtcEngine.enableEncryption',
+    (WidgetTester tester) async {
+      String engineAppId = const String.fromEnvironment('TEST_APP_ID',
+          defaultValue: '<YOUR_APP_ID>');
+
+      RtcEngine rtcEngine = createAgoraRtcEngine();
+      await rtcEngine.initialize(RtcEngineContext(
+        appId: engineAppId,
+        areaCode: AreaCode.areaCodeGlob.value(),
+      ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
+
+      try {
+        const bool enabled = true;
+        const EncryptionMode configEncryptionMode = EncryptionMode.aes128Xts;
+        const String configEncryptionKey = "hello";
+        Uint8List configEncryptionKdfSalt = Uint8List.fromList([1, 2, 3, 4, 5]);
+        const bool configDatastreamEncryptionEnabled = true;
+        final EncryptionConfig config = EncryptionConfig(
+          encryptionMode: configEncryptionMode,
+          encryptionKey: configEncryptionKey,
+          encryptionKdfSalt: configEncryptionKdfSalt,
+          datastreamEncryptionEnabled: configDatastreamEncryptionEnabled,
+        );
+        await rtcEngine.enableEncryption(
+          enabled: enabled,
+          config: config,
+        );
+      } catch (e) {
+        if (e is! AgoraRtcException) {
+          debugPrint('[RtcEngine.enableEncryption] error: ${e.toString()}');
+          rethrow;
+        }
+
+        if (e.code != -4) {
+          // Only not supported error supported.
+          rethrow;
+        }
+      }
+
+      await rtcEngine.release();
+    },
+  );
+
+  testWidgets(
+    'RtcEngine.sendStreamMessage',
+    (WidgetTester tester) async {
+      String engineAppId = const String.fromEnvironment('TEST_APP_ID',
+          defaultValue: '<YOUR_APP_ID>');
+
+      RtcEngine rtcEngine = createAgoraRtcEngine();
+      await rtcEngine.initialize(RtcEngineContext(
+        appId: engineAppId,
+        areaCode: AreaCode.areaCodeGlob.value(),
+      ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
+
+      try {
+        const int streamId = 10;
+        Uint8List data = Uint8List.fromList([1, 2, 3, 4, 5]);
+        const int length = 10;
+        await rtcEngine.sendStreamMessage(
+          streamId: streamId,
+          data: data,
+          length: length,
+        );
+      } catch (e) {
+        if (e is! AgoraRtcException) {
+          debugPrint('[RtcEngine.sendStreamMessage] error: ${e.toString()}');
+          rethrow;
+        }
+
+        if (e.code != -4) {
+          // Only not supported error supported.
+          rethrow;
+        }
+      }
+
+      await rtcEngine.release();
+    },
+  );
+
+  testWidgets(
+    'RtcEngine.addVideoWatermark',
+    (WidgetTester tester) async {
+      String engineAppId = const String.fromEnvironment('TEST_APP_ID',
+          defaultValue: '<YOUR_APP_ID>');
+
+      RtcEngine rtcEngine = createAgoraRtcEngine();
+      await rtcEngine.initialize(RtcEngineContext(
+        appId: engineAppId,
+        areaCode: AreaCode.areaCodeGlob.value(),
+      ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
+
+      try {
+        const String watermarkUrl = "hello";
+        const int positionInLandscapeModeX = 10;
+        const int positionInLandscapeModeY = 10;
+        const int positionInLandscapeModeWidth = 10;
+        const int positionInLandscapeModeHeight = 10;
+        const Rectangle optionsPositionInLandscapeMode = Rectangle(
+          x: positionInLandscapeModeX,
+          y: positionInLandscapeModeY,
+          width: positionInLandscapeModeWidth,
+          height: positionInLandscapeModeHeight,
+        );
+        const int positionInPortraitModeX = 10;
+        const int positionInPortraitModeY = 10;
+        const int positionInPortraitModeWidth = 10;
+        const int positionInPortraitModeHeight = 10;
+        const Rectangle optionsPositionInPortraitMode = Rectangle(
+          x: positionInPortraitModeX,
+          y: positionInPortraitModeY,
+          width: positionInPortraitModeWidth,
+          height: positionInPortraitModeHeight,
+        );
+        const double watermarkRatioXRatio = 10.0;
+        const double watermarkRatioYRatio = 10.0;
+        const double watermarkRatioWidthRatio = 10.0;
+        const WatermarkRatio optionsWatermarkRatio = WatermarkRatio(
+          xRatio: watermarkRatioXRatio,
+          yRatio: watermarkRatioYRatio,
+          widthRatio: watermarkRatioWidthRatio,
+        );
+        const WatermarkFitMode optionsMode =
+            WatermarkFitMode.fitModeCoverPosition;
+        const bool optionsVisibleInPreview = true;
+        const WatermarkOptions options = WatermarkOptions(
+          visibleInPreview: optionsVisibleInPreview,
+          positionInLandscapeMode: optionsPositionInLandscapeMode,
+          positionInPortraitMode: optionsPositionInPortraitMode,
+          watermarkRatio: optionsWatermarkRatio,
+          mode: optionsMode,
+        );
+        await rtcEngine.addVideoWatermark(
+          watermarkUrl: watermarkUrl,
+          options: options,
+        );
+      } catch (e) {
+        if (e is! AgoraRtcException) {
+          debugPrint('[RtcEngine.addVideoWatermark] error: ${e.toString()}');
+          rethrow;
+        }
+
+        if (e.code != -4) {
+          // Only not supported error supported.
+          rethrow;
+        }
+      }
+
+      await rtcEngine.release();
+    },
+  );
+
+  testWidgets(
+    'RtcEngine.clearVideoWatermarks',
+    (WidgetTester tester) async {
+      String engineAppId = const String.fromEnvironment('TEST_APP_ID',
+          defaultValue: '<YOUR_APP_ID>');
+
+      RtcEngine rtcEngine = createAgoraRtcEngine();
+      await rtcEngine.initialize(RtcEngineContext(
+        appId: engineAppId,
+        areaCode: AreaCode.areaCodeGlob.value(),
+      ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
+
+      try {
+        await rtcEngine.clearVideoWatermarks();
+      } catch (e) {
+        if (e is! AgoraRtcException) {
+          debugPrint('[RtcEngine.clearVideoWatermarks] error: ${e.toString()}');
+          rethrow;
+        }
+
+        if (e.code != -4) {
+          // Only not supported error supported.
+          rethrow;
+        }
+      }
+
+      await rtcEngine.release();
+    },
+  );
+
+  testWidgets(
+    'RtcEngine.pauseAudio',
+    (WidgetTester tester) async {
+      String engineAppId = const String.fromEnvironment('TEST_APP_ID',
+          defaultValue: '<YOUR_APP_ID>');
+
+      RtcEngine rtcEngine = createAgoraRtcEngine();
+      await rtcEngine.initialize(RtcEngineContext(
+        appId: engineAppId,
+        areaCode: AreaCode.areaCodeGlob.value(),
+      ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
+
+      try {
+        await rtcEngine.pauseAudio();
+      } catch (e) {
+        if (e is! AgoraRtcException) {
+          debugPrint('[RtcEngine.pauseAudio] error: ${e.toString()}');
+          rethrow;
+        }
+
+        if (e.code != -4) {
+          // Only not supported error supported.
+          rethrow;
+        }
+      }
+
+      await rtcEngine.release();
+    },
+  );
+
+  testWidgets(
+    'RtcEngine.resumeAudio',
+    (WidgetTester tester) async {
+      String engineAppId = const String.fromEnvironment('TEST_APP_ID',
+          defaultValue: '<YOUR_APP_ID>');
+
+      RtcEngine rtcEngine = createAgoraRtcEngine();
+      await rtcEngine.initialize(RtcEngineContext(
+        appId: engineAppId,
+        areaCode: AreaCode.areaCodeGlob.value(),
+      ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
+
+      try {
+        await rtcEngine.resumeAudio();
+      } catch (e) {
+        if (e is! AgoraRtcException) {
+          debugPrint('[RtcEngine.resumeAudio] error: ${e.toString()}');
+          rethrow;
+        }
+
+        if (e.code != -4) {
+          // Only not supported error supported.
+          rethrow;
+        }
+      }
+
+      await rtcEngine.release();
+    },
+  );
+
+  testWidgets(
+    'RtcEngine.enableWebSdkInteroperability',
+    (WidgetTester tester) async {
+      String engineAppId = const String.fromEnvironment('TEST_APP_ID',
+          defaultValue: '<YOUR_APP_ID>');
+
+      RtcEngine rtcEngine = createAgoraRtcEngine();
+      await rtcEngine.initialize(RtcEngineContext(
+        appId: engineAppId,
+        areaCode: AreaCode.areaCodeGlob.value(),
+      ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
+
+      try {
+        const bool enabled = true;
+        await rtcEngine.enableWebSdkInteroperability(
+          enabled,
+        );
+      } catch (e) {
+        if (e is! AgoraRtcException) {
+          debugPrint(
+              '[RtcEngine.enableWebSdkInteroperability] error: ${e.toString()}');
+          rethrow;
+        }
+
+        if (e.code != -4) {
+          // Only not supported error supported.
+          rethrow;
+        }
+      }
+
+      await rtcEngine.release();
+    },
+  );
+
+  testWidgets(
+    'RtcEngine.sendCustomReportMessage',
+    (WidgetTester tester) async {
+      String engineAppId = const String.fromEnvironment('TEST_APP_ID',
+          defaultValue: '<YOUR_APP_ID>');
+
+      RtcEngine rtcEngine = createAgoraRtcEngine();
+      await rtcEngine.initialize(RtcEngineContext(
+        appId: engineAppId,
+        areaCode: AreaCode.areaCodeGlob.value(),
+      ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
+
+      try {
+        const String id = "hello";
+        const String category = "hello";
+        const String event = "hello";
+        const String label = "hello";
+        const int value = 10;
+        await rtcEngine.sendCustomReportMessage(
+          id: id,
+          category: category,
+          event: event,
+          label: label,
+          value: value,
+        );
+      } catch (e) {
+        if (e is! AgoraRtcException) {
+          debugPrint(
+              '[RtcEngine.sendCustomReportMessage] error: ${e.toString()}');
+          rethrow;
+        }
+
+        if (e.code != -4) {
+          // Only not supported error supported.
+          rethrow;
+        }
+      }
+
+      await rtcEngine.release();
+    },
+  );
+
+  testWidgets(
+    'RtcEngine.registerMediaMetadataObserver',
+    (WidgetTester tester) async {
+      String engineAppId = const String.fromEnvironment('TEST_APP_ID',
+          defaultValue: '<YOUR_APP_ID>');
+
+      RtcEngine rtcEngine = createAgoraRtcEngine();
+      await rtcEngine.initialize(RtcEngineContext(
+        appId: engineAppId,
+        areaCode: AreaCode.areaCodeGlob.value(),
+      ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
+
+      try {
+        final MetadataObserver observer = MetadataObserver(
+          onMetadataReceived: (Metadata metadata) {},
+        );
+        const MetadataType type = MetadataType.unknownMetadata;
+        rtcEngine.registerMediaMetadataObserver(
+          observer: observer,
+          type: type,
+        );
+      } catch (e) {
+        if (e is! AgoraRtcException) {
+          debugPrint(
+              '[RtcEngine.registerMediaMetadataObserver] error: ${e.toString()}');
+          rethrow;
+        }
+
+        if (e.code != -4) {
+          // Only not supported error supported.
+          rethrow;
+        }
+      }
+
+      await rtcEngine.release();
+    },
+  );
+
+  testWidgets(
+    'RtcEngine.unregisterMediaMetadataObserver',
+    (WidgetTester tester) async {
+      String engineAppId = const String.fromEnvironment('TEST_APP_ID',
+          defaultValue: '<YOUR_APP_ID>');
+
+      RtcEngine rtcEngine = createAgoraRtcEngine();
+      await rtcEngine.initialize(RtcEngineContext(
+        appId: engineAppId,
+        areaCode: AreaCode.areaCodeGlob.value(),
+      ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
+
+      try {
+        final MetadataObserver observer = MetadataObserver(
+          onMetadataReceived: (Metadata metadata) {},
+        );
+        const MetadataType type = MetadataType.unknownMetadata;
+        rtcEngine.unregisterMediaMetadataObserver(
+          observer: observer,
+          type: type,
+        );
+      } catch (e) {
+        if (e is! AgoraRtcException) {
+          debugPrint(
+              '[RtcEngine.unregisterMediaMetadataObserver] error: ${e.toString()}');
+          rethrow;
+        }
+
+        if (e.code != -4) {
+          // Only not supported error supported.
+          rethrow;
+        }
+      }
+
+      await rtcEngine.release();
+    },
+  );
+
+  testWidgets(
+    'RtcEngine.startAudioFrameDump',
+    (WidgetTester tester) async {
+      String engineAppId = const String.fromEnvironment('TEST_APP_ID',
+          defaultValue: '<YOUR_APP_ID>');
+
+      RtcEngine rtcEngine = createAgoraRtcEngine();
+      await rtcEngine.initialize(RtcEngineContext(
+        appId: engineAppId,
+        areaCode: AreaCode.areaCodeGlob.value(),
+      ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
+
+      try {
+        const String channelId = "hello";
+        const int userId = 10;
+        const String location = "hello";
+        const String uuid = "hello";
+        const String passwd = "hello";
+        const int durationMs = 10;
+        const bool autoUpload = true;
+        await rtcEngine.startAudioFrameDump(
+          channelId: channelId,
+          userId: userId,
+          location: location,
+          uuid: uuid,
+          passwd: passwd,
+          durationMs: durationMs,
+          autoUpload: autoUpload,
+        );
+      } catch (e) {
+        if (e is! AgoraRtcException) {
+          debugPrint('[RtcEngine.startAudioFrameDump] error: ${e.toString()}');
+          rethrow;
+        }
+
+        if (e.code != -4) {
+          // Only not supported error supported.
+          rethrow;
+        }
+      }
+
+      await rtcEngine.release();
+    },
+  );
+
+  testWidgets(
+    'RtcEngine.stopAudioFrameDump',
+    (WidgetTester tester) async {
+      String engineAppId = const String.fromEnvironment('TEST_APP_ID',
+          defaultValue: '<YOUR_APP_ID>');
+
+      RtcEngine rtcEngine = createAgoraRtcEngine();
+      await rtcEngine.initialize(RtcEngineContext(
+        appId: engineAppId,
+        areaCode: AreaCode.areaCodeGlob.value(),
+      ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
+
+      try {
+        const String channelId = "hello";
+        const int userId = 10;
+        const String location = "hello";
+        await rtcEngine.stopAudioFrameDump(
+          channelId: channelId,
+          userId: userId,
+          location: location,
+        );
+      } catch (e) {
+        if (e is! AgoraRtcException) {
+          debugPrint('[RtcEngine.stopAudioFrameDump] error: ${e.toString()}');
+          rethrow;
+        }
+
+        if (e.code != -4) {
+          // Only not supported error supported.
+          rethrow;
+        }
+      }
+
+      await rtcEngine.release();
+    },
+  );
+
+  testWidgets(
+    'RtcEngine.setAINSMode',
+    (WidgetTester tester) async {
+      String engineAppId = const String.fromEnvironment('TEST_APP_ID',
+          defaultValue: '<YOUR_APP_ID>');
+
+      RtcEngine rtcEngine = createAgoraRtcEngine();
+      await rtcEngine.initialize(RtcEngineContext(
+        appId: engineAppId,
+        areaCode: AreaCode.areaCodeGlob.value(),
+      ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
+
+      try {
+        const bool enabled = true;
+        const AudioAinsMode mode = AudioAinsMode.ainsModeBalanced;
+        await rtcEngine.setAINSMode(
+          enabled: enabled,
+          mode: mode,
+        );
+      } catch (e) {
+        if (e is! AgoraRtcException) {
+          debugPrint('[RtcEngine.setAINSMode] error: ${e.toString()}');
+          rethrow;
+        }
+
+        if (e.code != -4) {
+          // Only not supported error supported.
+          rethrow;
+        }
+      }
+
+      await rtcEngine.release();
+    },
+  );
+
+  testWidgets(
+    'RtcEngine.registerLocalUserAccount',
+    (WidgetTester tester) async {
+      String engineAppId = const String.fromEnvironment('TEST_APP_ID',
+          defaultValue: '<YOUR_APP_ID>');
+
+      RtcEngine rtcEngine = createAgoraRtcEngine();
+      await rtcEngine.initialize(RtcEngineContext(
+        appId: engineAppId,
+        areaCode: AreaCode.areaCodeGlob.value(),
+      ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
+
+      try {
+        const String appId = "hello";
+        const String userAccount = "hello";
+        await rtcEngine.registerLocalUserAccount(
+          appId: appId,
+          userAccount: userAccount,
+        );
+      } catch (e) {
+        if (e is! AgoraRtcException) {
+          debugPrint(
+              '[RtcEngine.registerLocalUserAccount] error: ${e.toString()}');
+          rethrow;
+        }
+
+        if (e.code != -4) {
+          // Only not supported error supported.
+          rethrow;
+        }
+      }
+
+      await rtcEngine.release();
+    },
+  );
+
+  testWidgets(
+    'RtcEngine.joinChannelWithUserAccount',
+    (WidgetTester tester) async {
+      String engineAppId = const String.fromEnvironment('TEST_APP_ID',
+          defaultValue: '<YOUR_APP_ID>');
+
+      RtcEngine rtcEngine = createAgoraRtcEngine();
+      await rtcEngine.initialize(RtcEngineContext(
+        appId: engineAppId,
+        areaCode: AreaCode.areaCodeGlob.value(),
+      ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
+
+      try {
+        const String token = "hello";
+        const String channelId = "hello";
+        const String userAccount = "hello";
+        const ClientRoleType optionsClientRoleType =
+            ClientRoleType.clientRoleBroadcaster;
+        const AudienceLatencyLevelType optionsAudienceLatencyLevel =
+            AudienceLatencyLevelType.audienceLatencyLevelLowLatency;
+        const VideoStreamType optionsDefaultVideoStreamType =
+            VideoStreamType.videoStreamHigh;
+        const ChannelProfileType optionsChannelProfile =
+            ChannelProfileType.channelProfileCommunication;
+        const bool optionsPublishCameraTrack = true;
+        const bool optionsPublishSecondaryCameraTrack = true;
+        const bool optionsPublishThirdCameraTrack = true;
+        const bool optionsPublishFourthCameraTrack = true;
+        const bool optionsPublishMicrophoneTrack = true;
+        const bool optionsPublishScreenCaptureVideo = true;
+        const bool optionsPublishScreenCaptureAudio = true;
+        const bool optionsPublishScreenTrack = true;
+        const bool optionsPublishSecondaryScreenTrack = true;
+        const bool optionsPublishThirdScreenTrack = true;
+        const bool optionsPublishFourthScreenTrack = true;
+        const bool optionsPublishCustomAudioTrack = true;
+        const int optionsPublishCustomAudioTrackId = 10;
+        const bool optionsPublishCustomVideoTrack = true;
+        const bool optionsPublishEncodedVideoTrack = true;
+        const bool optionsPublishMediaPlayerAudioTrack = true;
+        const bool optionsPublishMediaPlayerVideoTrack = true;
+        const bool optionsPublishTranscodedVideoTrack = true;
+        const bool optionsPublishMixedAudioTrack = true;
+        const int optionsMixPolicyForMixedTrack = 10;
+        const bool optionsPublishLipSyncTrack = true;
+        const bool optionsAutoSubscribeAudio = true;
+        const bool optionsAutoSubscribeVideo = true;
+        const bool optionsEnableAudioRecordingOrPlayout = true;
+        const int optionsPublishMediaPlayerId = 10;
+        const int optionsAudioDelayMs = 10;
+        const int optionsMediaPlayerAudioDelayMs = 10;
+        const String optionsToken = "hello";
+        const bool optionsEnableBuiltInMediaEncryption = true;
+        const bool optionsPublishRhythmPlayerTrack = true;
+        const bool optionsIsInteractiveAudience = true;
+        const int optionsCustomVideoTrackId = 10;
+        const bool optionsIsAudioFilterable = true;
+        const ChannelMediaOptions options = ChannelMediaOptions(
+          publishCameraTrack: optionsPublishCameraTrack,
+          publishSecondaryCameraTrack: optionsPublishSecondaryCameraTrack,
+          publishThirdCameraTrack: optionsPublishThirdCameraTrack,
+          publishFourthCameraTrack: optionsPublishFourthCameraTrack,
+          publishMicrophoneTrack: optionsPublishMicrophoneTrack,
+          publishScreenCaptureVideo: optionsPublishScreenCaptureVideo,
+          publishScreenCaptureAudio: optionsPublishScreenCaptureAudio,
+          publishScreenTrack: optionsPublishScreenTrack,
+          publishSecondaryScreenTrack: optionsPublishSecondaryScreenTrack,
+          publishThirdScreenTrack: optionsPublishThirdScreenTrack,
+          publishFourthScreenTrack: optionsPublishFourthScreenTrack,
+          publishCustomAudioTrack: optionsPublishCustomAudioTrack,
+          publishCustomAudioTrackId: optionsPublishCustomAudioTrackId,
+          publishCustomVideoTrack: optionsPublishCustomVideoTrack,
+          publishEncodedVideoTrack: optionsPublishEncodedVideoTrack,
+          publishMediaPlayerAudioTrack: optionsPublishMediaPlayerAudioTrack,
+          publishMediaPlayerVideoTrack: optionsPublishMediaPlayerVideoTrack,
+          publishTranscodedVideoTrack: optionsPublishTranscodedVideoTrack,
+          publishMixedAudioTrack: optionsPublishMixedAudioTrack,
+          mixPolicyForMixedTrack: optionsMixPolicyForMixedTrack,
+          publishLipSyncTrack: optionsPublishLipSyncTrack,
+          autoSubscribeAudio: optionsAutoSubscribeAudio,
+          autoSubscribeVideo: optionsAutoSubscribeVideo,
+          enableAudioRecordingOrPlayout: optionsEnableAudioRecordingOrPlayout,
+          publishMediaPlayerId: optionsPublishMediaPlayerId,
+          clientRoleType: optionsClientRoleType,
+          audienceLatencyLevel: optionsAudienceLatencyLevel,
+          defaultVideoStreamType: optionsDefaultVideoStreamType,
+          channelProfile: optionsChannelProfile,
+          audioDelayMs: optionsAudioDelayMs,
+          mediaPlayerAudioDelayMs: optionsMediaPlayerAudioDelayMs,
+          token: optionsToken,
+          enableBuiltInMediaEncryption: optionsEnableBuiltInMediaEncryption,
+          publishRhythmPlayerTrack: optionsPublishRhythmPlayerTrack,
+          isInteractiveAudience: optionsIsInteractiveAudience,
+          customVideoTrackId: optionsCustomVideoTrackId,
+          isAudioFilterable: optionsIsAudioFilterable,
+        );
+        await rtcEngine.joinChannelWithUserAccount(
+          token: token,
+          channelId: channelId,
+          userAccount: userAccount,
+          options: options,
+        );
+      } catch (e) {
+        if (e is! AgoraRtcException) {
+          debugPrint(
+              '[RtcEngine.joinChannelWithUserAccount] error: ${e.toString()}');
+          rethrow;
+        }
+
+        if (e.code != -4) {
+          // Only not supported error supported.
+          rethrow;
+        }
+      }
+
+      await rtcEngine.release();
+    },
+  );
+
+  testWidgets(
+    'RtcEngine.joinChannelWithUserAccountEx',
+    (WidgetTester tester) async {
+      String engineAppId = const String.fromEnvironment('TEST_APP_ID',
+          defaultValue: '<YOUR_APP_ID>');
+
+      RtcEngine rtcEngine = createAgoraRtcEngine();
+      await rtcEngine.initialize(RtcEngineContext(
+        appId: engineAppId,
+        areaCode: AreaCode.areaCodeGlob.value(),
+      ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
+
+      try {
+        const String token = "hello";
+        const String channelId = "hello";
+        const String userAccount = "hello";
+        const ClientRoleType optionsClientRoleType =
+            ClientRoleType.clientRoleBroadcaster;
+        const AudienceLatencyLevelType optionsAudienceLatencyLevel =
+            AudienceLatencyLevelType.audienceLatencyLevelLowLatency;
+        const VideoStreamType optionsDefaultVideoStreamType =
+            VideoStreamType.videoStreamHigh;
+        const ChannelProfileType optionsChannelProfile =
+            ChannelProfileType.channelProfileCommunication;
+        const bool optionsPublishCameraTrack = true;
+        const bool optionsPublishSecondaryCameraTrack = true;
+        const bool optionsPublishThirdCameraTrack = true;
+        const bool optionsPublishFourthCameraTrack = true;
+        const bool optionsPublishMicrophoneTrack = true;
+        const bool optionsPublishScreenCaptureVideo = true;
+        const bool optionsPublishScreenCaptureAudio = true;
+        const bool optionsPublishScreenTrack = true;
+        const bool optionsPublishSecondaryScreenTrack = true;
+        const bool optionsPublishThirdScreenTrack = true;
+        const bool optionsPublishFourthScreenTrack = true;
+        const bool optionsPublishCustomAudioTrack = true;
+        const int optionsPublishCustomAudioTrackId = 10;
+        const bool optionsPublishCustomVideoTrack = true;
+        const bool optionsPublishEncodedVideoTrack = true;
+        const bool optionsPublishMediaPlayerAudioTrack = true;
+        const bool optionsPublishMediaPlayerVideoTrack = true;
+        const bool optionsPublishTranscodedVideoTrack = true;
+        const bool optionsPublishMixedAudioTrack = true;
+        const int optionsMixPolicyForMixedTrack = 10;
+        const bool optionsPublishLipSyncTrack = true;
+        const bool optionsAutoSubscribeAudio = true;
+        const bool optionsAutoSubscribeVideo = true;
+        const bool optionsEnableAudioRecordingOrPlayout = true;
+        const int optionsPublishMediaPlayerId = 10;
+        const int optionsAudioDelayMs = 10;
+        const int optionsMediaPlayerAudioDelayMs = 10;
+        const String optionsToken = "hello";
+        const bool optionsEnableBuiltInMediaEncryption = true;
+        const bool optionsPublishRhythmPlayerTrack = true;
+        const bool optionsIsInteractiveAudience = true;
+        const int optionsCustomVideoTrackId = 10;
+        const bool optionsIsAudioFilterable = true;
+        const ChannelMediaOptions options = ChannelMediaOptions(
+          publishCameraTrack: optionsPublishCameraTrack,
+          publishSecondaryCameraTrack: optionsPublishSecondaryCameraTrack,
+          publishThirdCameraTrack: optionsPublishThirdCameraTrack,
+          publishFourthCameraTrack: optionsPublishFourthCameraTrack,
+          publishMicrophoneTrack: optionsPublishMicrophoneTrack,
+          publishScreenCaptureVideo: optionsPublishScreenCaptureVideo,
+          publishScreenCaptureAudio: optionsPublishScreenCaptureAudio,
+          publishScreenTrack: optionsPublishScreenTrack,
+          publishSecondaryScreenTrack: optionsPublishSecondaryScreenTrack,
+          publishThirdScreenTrack: optionsPublishThirdScreenTrack,
+          publishFourthScreenTrack: optionsPublishFourthScreenTrack,
+          publishCustomAudioTrack: optionsPublishCustomAudioTrack,
+          publishCustomAudioTrackId: optionsPublishCustomAudioTrackId,
+          publishCustomVideoTrack: optionsPublishCustomVideoTrack,
+          publishEncodedVideoTrack: optionsPublishEncodedVideoTrack,
+          publishMediaPlayerAudioTrack: optionsPublishMediaPlayerAudioTrack,
+          publishMediaPlayerVideoTrack: optionsPublishMediaPlayerVideoTrack,
+          publishTranscodedVideoTrack: optionsPublishTranscodedVideoTrack,
+          publishMixedAudioTrack: optionsPublishMixedAudioTrack,
+          mixPolicyForMixedTrack: optionsMixPolicyForMixedTrack,
+          publishLipSyncTrack: optionsPublishLipSyncTrack,
+          autoSubscribeAudio: optionsAutoSubscribeAudio,
+          autoSubscribeVideo: optionsAutoSubscribeVideo,
+          enableAudioRecordingOrPlayout: optionsEnableAudioRecordingOrPlayout,
+          publishMediaPlayerId: optionsPublishMediaPlayerId,
+          clientRoleType: optionsClientRoleType,
+          audienceLatencyLevel: optionsAudienceLatencyLevel,
+          defaultVideoStreamType: optionsDefaultVideoStreamType,
+          channelProfile: optionsChannelProfile,
+          audioDelayMs: optionsAudioDelayMs,
+          mediaPlayerAudioDelayMs: optionsMediaPlayerAudioDelayMs,
+          token: optionsToken,
+          enableBuiltInMediaEncryption: optionsEnableBuiltInMediaEncryption,
+          publishRhythmPlayerTrack: optionsPublishRhythmPlayerTrack,
+          isInteractiveAudience: optionsIsInteractiveAudience,
+          customVideoTrackId: optionsCustomVideoTrackId,
+          isAudioFilterable: optionsIsAudioFilterable,
+        );
+        await rtcEngine.joinChannelWithUserAccountEx(
+          token: token,
+          channelId: channelId,
+          userAccount: userAccount,
+          options: options,
+        );
+      } catch (e) {
+        if (e is! AgoraRtcException) {
+          debugPrint(
+              '[RtcEngine.joinChannelWithUserAccountEx] error: ${e.toString()}');
+          rethrow;
+        }
+
+        if (e.code != -4) {
+          // Only not supported error supported.
+          rethrow;
+        }
+      }
+
+      await rtcEngine.release();
+    },
+  );
+
+  testWidgets(
+    'RtcEngine.getUserInfoByUserAccount',
+    (WidgetTester tester) async {
+      String engineAppId = const String.fromEnvironment('TEST_APP_ID',
+          defaultValue: '<YOUR_APP_ID>');
+
+      RtcEngine rtcEngine = createAgoraRtcEngine();
+      await rtcEngine.initialize(RtcEngineContext(
+        appId: engineAppId,
+        areaCode: AreaCode.areaCodeGlob.value(),
+      ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
+
+      try {
+        const String userAccount = "hello";
+        await rtcEngine.getUserInfoByUserAccount(
+          userAccount,
+        );
+      } catch (e) {
+        if (e is! AgoraRtcException) {
+          debugPrint(
+              '[RtcEngine.getUserInfoByUserAccount] error: ${e.toString()}');
+          rethrow;
+        }
+
+        if (e.code != -4) {
+          // Only not supported error supported.
+          rethrow;
+        }
+      }
+
+      await rtcEngine.release();
+    },
+  );
+
+  testWidgets(
+    'RtcEngine.getUserInfoByUid',
+    (WidgetTester tester) async {
+      String engineAppId = const String.fromEnvironment('TEST_APP_ID',
+          defaultValue: '<YOUR_APP_ID>');
+
+      RtcEngine rtcEngine = createAgoraRtcEngine();
+      await rtcEngine.initialize(RtcEngineContext(
+        appId: engineAppId,
+        areaCode: AreaCode.areaCodeGlob.value(),
+      ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
+
+      try {
+        const int uid = 10;
+        await rtcEngine.getUserInfoByUid(
+          uid,
+        );
+      } catch (e) {
+        if (e is! AgoraRtcException) {
+          debugPrint('[RtcEngine.getUserInfoByUid] error: ${e.toString()}');
+          rethrow;
+        }
+
+        if (e.code != -4) {
+          // Only not supported error supported.
+          rethrow;
+        }
+      }
+
+      await rtcEngine.release();
+    },
+  );
+
+  testWidgets(
+    'RtcEngine.stopChannelMediaRelay',
+    (WidgetTester tester) async {
+      String engineAppId = const String.fromEnvironment('TEST_APP_ID',
+          defaultValue: '<YOUR_APP_ID>');
+
+      RtcEngine rtcEngine = createAgoraRtcEngine();
+      await rtcEngine.initialize(RtcEngineContext(
+        appId: engineAppId,
+        areaCode: AreaCode.areaCodeGlob.value(),
+      ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
+
+      try {
+        await rtcEngine.stopChannelMediaRelay();
+      } catch (e) {
+        if (e is! AgoraRtcException) {
+          debugPrint(
+              '[RtcEngine.stopChannelMediaRelay] error: ${e.toString()}');
+          rethrow;
+        }
+
+        if (e.code != -4) {
+          // Only not supported error supported.
+          rethrow;
+        }
+      }
+
+      await rtcEngine.release();
+    },
+  );
+
+  testWidgets(
+    'RtcEngine.pauseAllChannelMediaRelay',
+    (WidgetTester tester) async {
+      String engineAppId = const String.fromEnvironment('TEST_APP_ID',
+          defaultValue: '<YOUR_APP_ID>');
+
+      RtcEngine rtcEngine = createAgoraRtcEngine();
+      await rtcEngine.initialize(RtcEngineContext(
+        appId: engineAppId,
+        areaCode: AreaCode.areaCodeGlob.value(),
+      ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
+
+      try {
+        await rtcEngine.pauseAllChannelMediaRelay();
+      } catch (e) {
+        if (e is! AgoraRtcException) {
+          debugPrint(
+              '[RtcEngine.pauseAllChannelMediaRelay] error: ${e.toString()}');
+          rethrow;
+        }
+
+        if (e.code != -4) {
+          // Only not supported error supported.
+          rethrow;
+        }
+      }
+
+      await rtcEngine.release();
+    },
+  );
+
+  testWidgets(
+    'RtcEngine.resumeAllChannelMediaRelay',
+    (WidgetTester tester) async {
+      String engineAppId = const String.fromEnvironment('TEST_APP_ID',
+          defaultValue: '<YOUR_APP_ID>');
+
+      RtcEngine rtcEngine = createAgoraRtcEngine();
+      await rtcEngine.initialize(RtcEngineContext(
+        appId: engineAppId,
+        areaCode: AreaCode.areaCodeGlob.value(),
+      ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
+
+      try {
+        await rtcEngine.resumeAllChannelMediaRelay();
+      } catch (e) {
+        if (e is! AgoraRtcException) {
+          debugPrint(
+              '[RtcEngine.resumeAllChannelMediaRelay] error: ${e.toString()}');
+          rethrow;
+        }
+
+        if (e.code != -4) {
+          // Only not supported error supported.
+          rethrow;
+        }
+      }
+
+      await rtcEngine.release();
+    },
+  );
+
+  testWidgets(
+    'RtcEngine.setDirectCdnStreamingAudioConfiguration',
+    (WidgetTester tester) async {
+      String engineAppId = const String.fromEnvironment('TEST_APP_ID',
+          defaultValue: '<YOUR_APP_ID>');
+
+      RtcEngine rtcEngine = createAgoraRtcEngine();
+      await rtcEngine.initialize(RtcEngineContext(
+        appId: engineAppId,
+        areaCode: AreaCode.areaCodeGlob.value(),
+      ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
+
+      try {
+        const AudioProfileType profile = AudioProfileType.audioProfileDefault;
+        await rtcEngine.setDirectCdnStreamingAudioConfiguration(
+          profile,
+        );
+      } catch (e) {
+        if (e is! AgoraRtcException) {
+          debugPrint(
+              '[RtcEngine.setDirectCdnStreamingAudioConfiguration] error: ${e.toString()}');
+          rethrow;
+        }
+
+        if (e.code != -4) {
+          // Only not supported error supported.
+          rethrow;
+        }
+      }
+
+      await rtcEngine.release();
+    },
+  );
+
+  testWidgets(
+    'RtcEngine.setDirectCdnStreamingVideoConfiguration',
+    (WidgetTester tester) async {
+      String engineAppId = const String.fromEnvironment('TEST_APP_ID',
+          defaultValue: '<YOUR_APP_ID>');
+
+      RtcEngine rtcEngine = createAgoraRtcEngine();
+      await rtcEngine.initialize(RtcEngineContext(
+        appId: engineAppId,
+        areaCode: AreaCode.areaCodeGlob.value(),
+      ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
+
+      try {
+        const VideoCodecType configCodecType = VideoCodecType.videoCodecNone;
+        const int dimensionsWidth = 10;
+        const int dimensionsHeight = 10;
+        const VideoDimensions configDimensions = VideoDimensions(
+          width: dimensionsWidth,
+          height: dimensionsHeight,
+        );
+        const OrientationMode configOrientationMode =
+            OrientationMode.orientationModeAdaptive;
+        const DegradationPreference configDegradationPreference =
+            DegradationPreference.maintainQuality;
+        const VideoMirrorModeType configMirrorMode =
+            VideoMirrorModeType.videoMirrorModeAuto;
+        const EncodingPreference advanceOptionsEncodingPreference =
+            EncodingPreference.preferAuto;
+        const CompressionPreference advanceOptionsCompressionPreference =
+            CompressionPreference.preferLowLatency;
+        const AdvanceOptions configAdvanceOptions = AdvanceOptions(
+          encodingPreference: advanceOptionsEncodingPreference,
+          compressionPreference: advanceOptionsCompressionPreference,
+        );
+        const int configFrameRate = 10;
+        const int configBitrate = 10;
+        const int configMinBitrate = 10;
+        const VideoEncoderConfiguration config = VideoEncoderConfiguration(
+          codecType: configCodecType,
+          dimensions: configDimensions,
+          frameRate: configFrameRate,
+          bitrate: configBitrate,
+          minBitrate: configMinBitrate,
+          orientationMode: configOrientationMode,
+          degradationPreference: configDegradationPreference,
+          mirrorMode: configMirrorMode,
+          advanceOptions: configAdvanceOptions,
+        );
+        await rtcEngine.setDirectCdnStreamingVideoConfiguration(
+          config,
+        );
+      } catch (e) {
+        if (e is! AgoraRtcException) {
+          debugPrint(
+              '[RtcEngine.setDirectCdnStreamingVideoConfiguration] error: ${e.toString()}');
+          rethrow;
+        }
+
+        if (e.code != -4) {
+          // Only not supported error supported.
+          rethrow;
+        }
+      }
+
+      await rtcEngine.release();
+    },
+  );
+
+  testWidgets(
+    'RtcEngine.startDirectCdnStreaming',
+    (WidgetTester tester) async {
+      String engineAppId = const String.fromEnvironment('TEST_APP_ID',
+          defaultValue: '<YOUR_APP_ID>');
+
+      RtcEngine rtcEngine = createAgoraRtcEngine();
+      await rtcEngine.initialize(RtcEngineContext(
+        appId: engineAppId,
+        areaCode: AreaCode.areaCodeGlob.value(),
+      ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
+
+      try {
+        final DirectCdnStreamingEventHandler eventHandler =
+            DirectCdnStreamingEventHandler(
+          onDirectCdnStreamingStateChanged: (DirectCdnStreamingState state,
+              DirectCdnStreamingError error, String message) {},
+          onDirectCdnStreamingStats: (DirectCdnStreamingStats stats) {},
+        );
+        const String publishUrl = "hello";
+        const bool optionsPublishCameraTrack = true;
+        const bool optionsPublishMicrophoneTrack = true;
+        const bool optionsPublishCustomAudioTrack = true;
+        const bool optionsPublishCustomVideoTrack = true;
+        const bool optionsPublishMediaPlayerAudioTrack = true;
+        const int optionsPublishMediaPlayerId = 10;
+        const int optionsCustomVideoTrackId = 10;
+        const bool optionsPublishScreenTrack = true;
+        const bool optionsPublishSecondaryScreenTrack = true;
+        const bool optionsPublishThirdScreenTrack = true;
+        const bool optionsPublishFourthScreenTrack = true;
+        const bool optionsPublishLoopbackAudioTrack = true;
+        const String optionsPublishLoopbackDeviceName = "hello";
+        const DirectCdnStreamingMediaOptions options =
+            DirectCdnStreamingMediaOptions(
+          publishCameraTrack: optionsPublishCameraTrack,
+          publishMicrophoneTrack: optionsPublishMicrophoneTrack,
+          publishCustomAudioTrack: optionsPublishCustomAudioTrack,
+          publishCustomVideoTrack: optionsPublishCustomVideoTrack,
+          publishMediaPlayerAudioTrack: optionsPublishMediaPlayerAudioTrack,
+          publishMediaPlayerId: optionsPublishMediaPlayerId,
+          customVideoTrackId: optionsCustomVideoTrackId,
+          publishScreenTrack: optionsPublishScreenTrack,
+          publishSecondaryScreenTrack: optionsPublishSecondaryScreenTrack,
+          publishThirdScreenTrack: optionsPublishThirdScreenTrack,
+          publishFourthScreenTrack: optionsPublishFourthScreenTrack,
+          publishLoopbackAudioTrack: optionsPublishLoopbackAudioTrack,
+          publishLoopbackDeviceName: optionsPublishLoopbackDeviceName,
+        );
+        await rtcEngine.startDirectCdnStreaming(
+          eventHandler: eventHandler,
+          publishUrl: publishUrl,
+          options: options,
+        );
+      } catch (e) {
+        if (e is! AgoraRtcException) {
+          debugPrint(
+              '[RtcEngine.startDirectCdnStreaming] error: ${e.toString()}');
+          rethrow;
+        }
+
+        if (e.code != -4) {
+          // Only not supported error supported.
+          rethrow;
+        }
+      }
+
+      await rtcEngine.release();
+    },
+  );
+
+  testWidgets(
+    'RtcEngine.stopDirectCdnStreaming',
+    (WidgetTester tester) async {
+      String engineAppId = const String.fromEnvironment('TEST_APP_ID',
+          defaultValue: '<YOUR_APP_ID>');
+
+      RtcEngine rtcEngine = createAgoraRtcEngine();
+      await rtcEngine.initialize(RtcEngineContext(
+        appId: engineAppId,
+        areaCode: AreaCode.areaCodeGlob.value(),
+      ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
+
+      try {
+        await rtcEngine.stopDirectCdnStreaming();
+      } catch (e) {
+        if (e is! AgoraRtcException) {
+          debugPrint(
+              '[RtcEngine.stopDirectCdnStreaming] error: ${e.toString()}');
+          rethrow;
+        }
+
+        if (e.code != -4) {
+          // Only not supported error supported.
+          rethrow;
+        }
+      }
+
+      await rtcEngine.release();
+    },
+  );
+
+  testWidgets(
+    'RtcEngine.updateDirectCdnStreamingMediaOptions',
+    (WidgetTester tester) async {
+      String engineAppId = const String.fromEnvironment('TEST_APP_ID',
+          defaultValue: '<YOUR_APP_ID>');
+
+      RtcEngine rtcEngine = createAgoraRtcEngine();
+      await rtcEngine.initialize(RtcEngineContext(
+        appId: engineAppId,
+        areaCode: AreaCode.areaCodeGlob.value(),
+      ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
+
+      try {
+        const bool optionsPublishCameraTrack = true;
+        const bool optionsPublishMicrophoneTrack = true;
+        const bool optionsPublishCustomAudioTrack = true;
+        const bool optionsPublishCustomVideoTrack = true;
+        const bool optionsPublishMediaPlayerAudioTrack = true;
+        const int optionsPublishMediaPlayerId = 10;
+        const int optionsCustomVideoTrackId = 10;
+        const bool optionsPublishScreenTrack = true;
+        const bool optionsPublishSecondaryScreenTrack = true;
+        const bool optionsPublishThirdScreenTrack = true;
+        const bool optionsPublishFourthScreenTrack = true;
+        const bool optionsPublishLoopbackAudioTrack = true;
+        const String optionsPublishLoopbackDeviceName = "hello";
+        const DirectCdnStreamingMediaOptions options =
+            DirectCdnStreamingMediaOptions(
+          publishCameraTrack: optionsPublishCameraTrack,
+          publishMicrophoneTrack: optionsPublishMicrophoneTrack,
+          publishCustomAudioTrack: optionsPublishCustomAudioTrack,
+          publishCustomVideoTrack: optionsPublishCustomVideoTrack,
+          publishMediaPlayerAudioTrack: optionsPublishMediaPlayerAudioTrack,
+          publishMediaPlayerId: optionsPublishMediaPlayerId,
+          customVideoTrackId: optionsCustomVideoTrackId,
+          publishScreenTrack: optionsPublishScreenTrack,
+          publishSecondaryScreenTrack: optionsPublishSecondaryScreenTrack,
+          publishThirdScreenTrack: optionsPublishThirdScreenTrack,
+          publishFourthScreenTrack: optionsPublishFourthScreenTrack,
+          publishLoopbackAudioTrack: optionsPublishLoopbackAudioTrack,
+          publishLoopbackDeviceName: optionsPublishLoopbackDeviceName,
+        );
+        await rtcEngine.updateDirectCdnStreamingMediaOptions(
+          options,
+        );
+      } catch (e) {
+        if (e is! AgoraRtcException) {
+          debugPrint(
+              '[RtcEngine.updateDirectCdnStreamingMediaOptions] error: ${e.toString()}');
+          rethrow;
+        }
+
+        if (e.code != -4) {
+          // Only not supported error supported.
+          rethrow;
+        }
+      }
+
+      await rtcEngine.release();
+    },
+  );
+
+  testWidgets(
+    'RtcEngine.startRhythmPlayer',
+    (WidgetTester tester) async {
+      String engineAppId = const String.fromEnvironment('TEST_APP_ID',
+          defaultValue: '<YOUR_APP_ID>');
+
+      RtcEngine rtcEngine = createAgoraRtcEngine();
+      await rtcEngine.initialize(RtcEngineContext(
+        appId: engineAppId,
+        areaCode: AreaCode.areaCodeGlob.value(),
+      ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
+
+      try {
+        const String sound1 = "hello";
+        const String sound2 = "hello";
+        const int configBeatsPerMeasure = 10;
+        const int configBeatsPerMinute = 10;
+        const AgoraRhythmPlayerConfig config = AgoraRhythmPlayerConfig(
+          beatsPerMeasure: configBeatsPerMeasure,
+          beatsPerMinute: configBeatsPerMinute,
+        );
+        await rtcEngine.startRhythmPlayer(
+          sound1: sound1,
+          sound2: sound2,
+          config: config,
+        );
+      } catch (e) {
+        if (e is! AgoraRtcException) {
+          debugPrint('[RtcEngine.startRhythmPlayer] error: ${e.toString()}');
+          rethrow;
+        }
+
+        if (e.code != -4) {
+          // Only not supported error supported.
+          rethrow;
+        }
+      }
+
+      await rtcEngine.release();
+    },
+  );
+
+  testWidgets(
+    'RtcEngine.stopRhythmPlayer',
+    (WidgetTester tester) async {
+      String engineAppId = const String.fromEnvironment('TEST_APP_ID',
+          defaultValue: '<YOUR_APP_ID>');
+
+      RtcEngine rtcEngine = createAgoraRtcEngine();
+      await rtcEngine.initialize(RtcEngineContext(
+        appId: engineAppId,
+        areaCode: AreaCode.areaCodeGlob.value(),
+      ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
+
+      try {
+        await rtcEngine.stopRhythmPlayer();
+      } catch (e) {
+        if (e is! AgoraRtcException) {
+          debugPrint('[RtcEngine.stopRhythmPlayer] error: ${e.toString()}');
+          rethrow;
+        }
+
+        if (e.code != -4) {
+          // Only not supported error supported.
+          rethrow;
+        }
+      }
+
+      await rtcEngine.release();
+    },
+  );
+
+  testWidgets(
+    'RtcEngine.configRhythmPlayer',
+    (WidgetTester tester) async {
+      String engineAppId = const String.fromEnvironment('TEST_APP_ID',
+          defaultValue: '<YOUR_APP_ID>');
+
+      RtcEngine rtcEngine = createAgoraRtcEngine();
+      await rtcEngine.initialize(RtcEngineContext(
+        appId: engineAppId,
+        areaCode: AreaCode.areaCodeGlob.value(),
+      ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
+
+      try {
+        const int configBeatsPerMeasure = 10;
+        const int configBeatsPerMinute = 10;
+        const AgoraRhythmPlayerConfig config = AgoraRhythmPlayerConfig(
+          beatsPerMeasure: configBeatsPerMeasure,
+          beatsPerMinute: configBeatsPerMinute,
+        );
+        await rtcEngine.configRhythmPlayer(
+          config,
+        );
+      } catch (e) {
+        if (e is! AgoraRtcException) {
+          debugPrint('[RtcEngine.configRhythmPlayer] error: ${e.toString()}');
+          rethrow;
+        }
+
+        if (e.code != -4) {
+          // Only not supported error supported.
+          rethrow;
+        }
+      }
+
+      await rtcEngine.release();
+    },
+  );
+
+  testWidgets(
+    'RtcEngine.takeSnapshot',
+    (WidgetTester tester) async {
+      String engineAppId = const String.fromEnvironment('TEST_APP_ID',
+          defaultValue: '<YOUR_APP_ID>');
+
+      RtcEngine rtcEngine = createAgoraRtcEngine();
+      await rtcEngine.initialize(RtcEngineContext(
+        appId: engineAppId,
+        areaCode: AreaCode.areaCodeGlob.value(),
+      ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
+
+      try {
+        const int uid = 10;
+        const String filePath = "hello";
+        await rtcEngine.takeSnapshot(
+          uid: uid,
+          filePath: filePath,
+        );
+      } catch (e) {
+        if (e is! AgoraRtcException) {
+          debugPrint('[RtcEngine.takeSnapshot] error: ${e.toString()}');
+          rethrow;
+        }
+
+        if (e.code != -4) {
+          // Only not supported error supported.
+          rethrow;
+        }
+      }
+
+      await rtcEngine.release();
+    },
+  );
+
+  testWidgets(
+    'RtcEngine.enableContentInspect',
+    (WidgetTester tester) async {
+      String engineAppId = const String.fromEnvironment('TEST_APP_ID',
+          defaultValue: '<YOUR_APP_ID>');
+
+      RtcEngine rtcEngine = createAgoraRtcEngine();
+      await rtcEngine.initialize(RtcEngineContext(
+        appId: engineAppId,
+        areaCode: AreaCode.areaCodeGlob.value(),
+      ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
+
+      try {
+        const bool enabled = true;
+        const String configExtraInfo = "hello";
+        const String configServerConfig = "hello";
+        const List<ContentInspectModule> configModules = [];
+        const int configModuleCount = 10;
+        const ContentInspectConfig config = ContentInspectConfig(
+          extraInfo: configExtraInfo,
+          serverConfig: configServerConfig,
+          modules: configModules,
+          moduleCount: configModuleCount,
+        );
+        await rtcEngine.enableContentInspect(
+          enabled: enabled,
+          config: config,
+        );
+      } catch (e) {
+        if (e is! AgoraRtcException) {
+          debugPrint('[RtcEngine.enableContentInspect] error: ${e.toString()}');
+          rethrow;
+        }
+
+        if (e.code != -4) {
+          // Only not supported error supported.
+          rethrow;
+        }
+      }
+
+      await rtcEngine.release();
+    },
+  );
+
+  testWidgets(
+    'RtcEngine.adjustCustomAudioPublishVolume',
+    (WidgetTester tester) async {
+      String engineAppId = const String.fromEnvironment('TEST_APP_ID',
+          defaultValue: '<YOUR_APP_ID>');
+
+      RtcEngine rtcEngine = createAgoraRtcEngine();
+      await rtcEngine.initialize(RtcEngineContext(
+        appId: engineAppId,
+        areaCode: AreaCode.areaCodeGlob.value(),
+      ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
+
+      try {
+        const int trackId = 10;
+        const int volume = 10;
+        await rtcEngine.adjustCustomAudioPublishVolume(
+          trackId: trackId,
+          volume: volume,
+        );
+      } catch (e) {
+        if (e is! AgoraRtcException) {
+          debugPrint(
+              '[RtcEngine.adjustCustomAudioPublishVolume] error: ${e.toString()}');
+          rethrow;
+        }
+
+        if (e.code != -4) {
+          // Only not supported error supported.
+          rethrow;
+        }
+      }
+
+      await rtcEngine.release();
+    },
+  );
+
+  testWidgets(
+    'RtcEngine.adjustCustomAudioPlayoutVolume',
+    (WidgetTester tester) async {
+      String engineAppId = const String.fromEnvironment('TEST_APP_ID',
+          defaultValue: '<YOUR_APP_ID>');
+
+      RtcEngine rtcEngine = createAgoraRtcEngine();
+      await rtcEngine.initialize(RtcEngineContext(
+        appId: engineAppId,
+        areaCode: AreaCode.areaCodeGlob.value(),
+      ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
+
+      try {
+        const int trackId = 10;
+        const int volume = 10;
+        await rtcEngine.adjustCustomAudioPlayoutVolume(
+          trackId: trackId,
+          volume: volume,
+        );
+      } catch (e) {
+        if (e is! AgoraRtcException) {
+          debugPrint(
+              '[RtcEngine.adjustCustomAudioPlayoutVolume] error: ${e.toString()}');
+          rethrow;
+        }
+
+        if (e.code != -4) {
+          // Only not supported error supported.
+          rethrow;
+        }
+      }
+
+      await rtcEngine.release();
+    },
+  );
+
+  testWidgets(
+    'RtcEngine.setCloudProxy',
+    (WidgetTester tester) async {
+      String engineAppId = const String.fromEnvironment('TEST_APP_ID',
+          defaultValue: '<YOUR_APP_ID>');
+
+      RtcEngine rtcEngine = createAgoraRtcEngine();
+      await rtcEngine.initialize(RtcEngineContext(
+        appId: engineAppId,
+        areaCode: AreaCode.areaCodeGlob.value(),
+      ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
+
+      try {
+        const CloudProxyType proxyType = CloudProxyType.noneProxy;
+        await rtcEngine.setCloudProxy(
+          proxyType,
+        );
+      } catch (e) {
+        if (e is! AgoraRtcException) {
+          debugPrint('[RtcEngine.setCloudProxy] error: ${e.toString()}');
+          rethrow;
+        }
+
+        if (e.code != -4) {
+          // Only not supported error supported.
+          rethrow;
+        }
+      }
+
+      await rtcEngine.release();
+    },
+  );
+
+  testWidgets(
+    'RtcEngine.setAdvancedAudioOptions',
+    (WidgetTester tester) async {
+      String engineAppId = const String.fromEnvironment('TEST_APP_ID',
+          defaultValue: '<YOUR_APP_ID>');
+
+      RtcEngine rtcEngine = createAgoraRtcEngine();
+      await rtcEngine.initialize(RtcEngineContext(
+        appId: engineAppId,
+        areaCode: AreaCode.areaCodeGlob.value(),
+      ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
+
+      try {
+        const int optionsAudioProcessingChannels = 10;
+        const AdvancedAudioOptions options = AdvancedAudioOptions(
+          audioProcessingChannels: optionsAudioProcessingChannels,
+        );
+        const int sourceType = 10;
+        await rtcEngine.setAdvancedAudioOptions(
+          options: options,
+          sourceType: sourceType,
+        );
+      } catch (e) {
+        if (e is! AgoraRtcException) {
+          debugPrint(
+              '[RtcEngine.setAdvancedAudioOptions] error: ${e.toString()}');
+          rethrow;
+        }
+
+        if (e.code != -4) {
+          // Only not supported error supported.
+          rethrow;
+        }
+      }
+
+      await rtcEngine.release();
+    },
+  );
+
+  testWidgets(
+    'RtcEngine.setAVSyncSource',
+    (WidgetTester tester) async {
+      String engineAppId = const String.fromEnvironment('TEST_APP_ID',
+          defaultValue: '<YOUR_APP_ID>');
+
+      RtcEngine rtcEngine = createAgoraRtcEngine();
+      await rtcEngine.initialize(RtcEngineContext(
+        appId: engineAppId,
+        areaCode: AreaCode.areaCodeGlob.value(),
+      ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
+
+      try {
+        const String channelId = "hello";
+        const int uid = 10;
+        await rtcEngine.setAVSyncSource(
+          channelId: channelId,
+          uid: uid,
+        );
+      } catch (e) {
+        if (e is! AgoraRtcException) {
+          debugPrint('[RtcEngine.setAVSyncSource] error: ${e.toString()}');
+          rethrow;
+        }
+
+        if (e.code != -4) {
+          // Only not supported error supported.
+          rethrow;
+        }
+      }
+
+      await rtcEngine.release();
+    },
+  );
+
+  testWidgets(
+    'RtcEngine.enableVideoImageSource',
+    (WidgetTester tester) async {
+      String engineAppId = const String.fromEnvironment('TEST_APP_ID',
+          defaultValue: '<YOUR_APP_ID>');
+
+      RtcEngine rtcEngine = createAgoraRtcEngine();
+      await rtcEngine.initialize(RtcEngineContext(
+        appId: engineAppId,
+        areaCode: AreaCode.areaCodeGlob.value(),
+      ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
+
+      try {
+        const bool enable = true;
+        const VideoMirrorModeType optionsMirrorMode =
+            VideoMirrorModeType.videoMirrorModeAuto;
+        const String optionsImageUrl = "hello";
+        const int optionsFps = 10;
+        const ImageTrackOptions options = ImageTrackOptions(
+          imageUrl: optionsImageUrl,
+          fps: optionsFps,
+          mirrorMode: optionsMirrorMode,
+        );
+        await rtcEngine.enableVideoImageSource(
+          enable: enable,
+          options: options,
+        );
+      } catch (e) {
+        if (e is! AgoraRtcException) {
+          debugPrint(
+              '[RtcEngine.enableVideoImageSource] error: ${e.toString()}');
+          rethrow;
+        }
+
+        if (e.code != -4) {
+          // Only not supported error supported.
+          rethrow;
+        }
+      }
+
+      await rtcEngine.release();
+    },
+  );
+
+  testWidgets(
+    'RtcEngine.getCurrentMonotonicTimeInMs',
+    (WidgetTester tester) async {
+      String engineAppId = const String.fromEnvironment('TEST_APP_ID',
+          defaultValue: '<YOUR_APP_ID>');
+
+      RtcEngine rtcEngine = createAgoraRtcEngine();
+      await rtcEngine.initialize(RtcEngineContext(
+        appId: engineAppId,
+        areaCode: AreaCode.areaCodeGlob.value(),
+      ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
+
+      try {
+        await rtcEngine.getCurrentMonotonicTimeInMs();
+      } catch (e) {
+        if (e is! AgoraRtcException) {
+          debugPrint(
+              '[RtcEngine.getCurrentMonotonicTimeInMs] error: ${e.toString()}');
+          rethrow;
+        }
+
+        if (e.code != -4) {
+          // Only not supported error supported.
+          rethrow;
+        }
+      }
+
+      await rtcEngine.release();
+    },
+  );
+
+  testWidgets(
+    'RtcEngine.enableWirelessAccelerate',
+    (WidgetTester tester) async {
+      String engineAppId = const String.fromEnvironment('TEST_APP_ID',
+          defaultValue: '<YOUR_APP_ID>');
+
+      RtcEngine rtcEngine = createAgoraRtcEngine();
+      await rtcEngine.initialize(RtcEngineContext(
+        appId: engineAppId,
+        areaCode: AreaCode.areaCodeGlob.value(),
+      ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
+
+      try {
+        const bool enabled = true;
+        await rtcEngine.enableWirelessAccelerate(
+          enabled,
+        );
+      } catch (e) {
+        if (e is! AgoraRtcException) {
+          debugPrint(
+              '[RtcEngine.enableWirelessAccelerate] error: ${e.toString()}');
+          rethrow;
+        }
+
+        if (e.code != -4) {
+          // Only not supported error supported.
+          rethrow;
+        }
+      }
+
+      await rtcEngine.release();
+    },
+  );
+
+  testWidgets(
+    'RtcEngine.getNetworkType',
+    (WidgetTester tester) async {
+      String engineAppId = const String.fromEnvironment('TEST_APP_ID',
+          defaultValue: '<YOUR_APP_ID>');
+
+      RtcEngine rtcEngine = createAgoraRtcEngine();
+      await rtcEngine.initialize(RtcEngineContext(
+        appId: engineAppId,
+        areaCode: AreaCode.areaCodeGlob.value(),
+      ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
+
+      try {
+        await rtcEngine.getNetworkType();
+      } catch (e) {
+        if (e is! AgoraRtcException) {
+          debugPrint('[RtcEngine.getNetworkType] error: ${e.toString()}');
+          rethrow;
+        }
+
+        if (e.code != -4) {
+          // Only not supported error supported.
+          rethrow;
+        }
+      }
+
+      await rtcEngine.release();
+    },
+  );
+
+  testWidgets(
+    'RtcEngine.setParameters',
+    (WidgetTester tester) async {
+      String engineAppId = const String.fromEnvironment('TEST_APP_ID',
+          defaultValue: '<YOUR_APP_ID>');
+
+      RtcEngine rtcEngine = createAgoraRtcEngine();
+      await rtcEngine.initialize(RtcEngineContext(
+        appId: engineAppId,
+        areaCode: AreaCode.areaCodeGlob.value(),
+      ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
+
+      try {
+        const String parameters = "hello";
+        await rtcEngine.setParameters(
+          parameters,
+        );
+      } catch (e) {
+        if (e is! AgoraRtcException) {
+          debugPrint('[RtcEngine.setParameters] error: ${e.toString()}');
+          rethrow;
+        }
+
+        if (e.code != -4) {
+          // Only not supported error supported.
+          rethrow;
+        }
+      }
+
+      await rtcEngine.release();
+    },
+  );
+
+  testWidgets(
+    'RtcEngine.startMediaRenderingTracing',
+    (WidgetTester tester) async {
+      String engineAppId = const String.fromEnvironment('TEST_APP_ID',
+          defaultValue: '<YOUR_APP_ID>');
+
+      RtcEngine rtcEngine = createAgoraRtcEngine();
+      await rtcEngine.initialize(RtcEngineContext(
+        appId: engineAppId,
+        areaCode: AreaCode.areaCodeGlob.value(),
+      ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
+
+      try {
+        await rtcEngine.startMediaRenderingTracing();
+      } catch (e) {
+        if (e is! AgoraRtcException) {
+          debugPrint(
+              '[RtcEngine.startMediaRenderingTracing] error: ${e.toString()}');
+          rethrow;
+        }
+
+        if (e.code != -4) {
+          // Only not supported error supported.
+          rethrow;
+        }
+      }
+
+      await rtcEngine.release();
+    },
+  );
+
+  testWidgets(
+    'RtcEngine.enableInstantMediaRendering',
+    (WidgetTester tester) async {
+      String engineAppId = const String.fromEnvironment('TEST_APP_ID',
+          defaultValue: '<YOUR_APP_ID>');
+
+      RtcEngine rtcEngine = createAgoraRtcEngine();
+      await rtcEngine.initialize(RtcEngineContext(
+        appId: engineAppId,
+        areaCode: AreaCode.areaCodeGlob.value(),
+      ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
+
+      try {
+        await rtcEngine.enableInstantMediaRendering();
+      } catch (e) {
+        if (e is! AgoraRtcException) {
+          debugPrint(
+              '[RtcEngine.enableInstantMediaRendering] error: ${e.toString()}');
+          rethrow;
+        }
+
+        if (e.code != -4) {
+          // Only not supported error supported.
+          rethrow;
+        }
+      }
+
+      await rtcEngine.release();
+    },
+  );
+
+  testWidgets(
+    'RtcEngine.getNtpWallTimeInMs',
+    (WidgetTester tester) async {
+      String engineAppId = const String.fromEnvironment('TEST_APP_ID',
+          defaultValue: '<YOUR_APP_ID>');
+
+      RtcEngine rtcEngine = createAgoraRtcEngine();
+      await rtcEngine.initialize(RtcEngineContext(
+        appId: engineAppId,
+        areaCode: AreaCode.areaCodeGlob.value(),
+      ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
+
+      try {
+        await rtcEngine.getNtpWallTimeInMs();
+      } catch (e) {
+        if (e is! AgoraRtcException) {
+          debugPrint('[RtcEngine.getNtpWallTimeInMs] error: ${e.toString()}');
+          rethrow;
+        }
+
+        if (e.code != -4) {
+          // Only not supported error supported.
+          rethrow;
+        }
+      }
+
+      await rtcEngine.release();
+    },
+  );
+
+  testWidgets(
+    'RtcEngine.isFeatureAvailableOnDevice',
+    (WidgetTester tester) async {
+      String engineAppId = const String.fromEnvironment('TEST_APP_ID',
+          defaultValue: '<YOUR_APP_ID>');
+
+      RtcEngine rtcEngine = createAgoraRtcEngine();
+      await rtcEngine.initialize(RtcEngineContext(
+        appId: engineAppId,
+        areaCode: AreaCode.areaCodeGlob.value(),
+      ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
+
+      try {
+        const FeatureType type = FeatureType.videoVirtualBackground;
+        await rtcEngine.isFeatureAvailableOnDevice(
+          type,
+        );
+      } catch (e) {
+        if (e is! AgoraRtcException) {
+          debugPrint(
+              '[RtcEngine.isFeatureAvailableOnDevice] error: ${e.toString()}');
+          rethrow;
+        }
+
+        if (e.code != -4) {
+          // Only not supported error supported.
+          rethrow;
+        }
+      }
+
+      await rtcEngine.release();
+    },
+  );
+
+  testWidgets(
+    'RtcEngine.startScreenCaptureBySourceType',
+    (WidgetTester tester) async {
+      String engineAppId = const String.fromEnvironment('TEST_APP_ID',
+          defaultValue: '<YOUR_APP_ID>');
+
+      RtcEngine rtcEngine = createAgoraRtcEngine();
+      await rtcEngine.initialize(RtcEngineContext(
+        appId: engineAppId,
+        areaCode: AreaCode.areaCodeGlob.value(),
+      ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
         const VideoSourceType sourceType =
@@ -6811,7 +10407,8 @@ void rtcEngineSmokeTestCases() {
         );
       } catch (e) {
         if (e is! AgoraRtcException) {
-          debugPrint('[startScreenCaptureBySourceType] error: ${e.toString()}');
+          debugPrint(
+              '[RtcEngine.startScreenCaptureBySourceType] error: ${e.toString()}');
           rethrow;
         }
 
@@ -6826,7 +10423,7 @@ void rtcEngineSmokeTestCases() {
   );
 
   testWidgets(
-    'updateScreenCapture',
+    'RtcEngine.stopScreenCaptureBySourceType',
     (WidgetTester tester) async {
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
@@ -6836,166 +10433,7 @@ void rtcEngineSmokeTestCases() {
         appId: engineAppId,
         areaCode: AreaCode.areaCodeGlob.value(),
       ));
-
-      try {
-        const int audioParamsSampleRate = 10;
-        const int audioParamsChannels = 10;
-        const int audioParamsCaptureSignalVolume = 10;
-        const ScreenAudioParameters captureParamsAudioParams =
-            ScreenAudioParameters(
-          sampleRate: audioParamsSampleRate,
-          channels: audioParamsChannels,
-          captureSignalVolume: audioParamsCaptureSignalVolume,
-        );
-        const int dimensionsWidth = 10;
-        const int dimensionsHeight = 10;
-        const VideoDimensions videoParamsDimensions = VideoDimensions(
-          width: dimensionsWidth,
-          height: dimensionsHeight,
-        );
-        const VideoContentHint videoParamsContentHint =
-            VideoContentHint.contentHintNone;
-        const int videoParamsFrameRate = 10;
-        const int videoParamsBitrate = 10;
-        const ScreenVideoParameters captureParamsVideoParams =
-            ScreenVideoParameters(
-          dimensions: videoParamsDimensions,
-          frameRate: videoParamsFrameRate,
-          bitrate: videoParamsBitrate,
-          contentHint: videoParamsContentHint,
-        );
-        const bool captureParamsCaptureAudio = true;
-        const bool captureParamsCaptureVideo = true;
-        const ScreenCaptureParameters2 captureParams = ScreenCaptureParameters2(
-          captureAudio: captureParamsCaptureAudio,
-          audioParams: captureParamsAudioParams,
-          captureVideo: captureParamsCaptureVideo,
-          videoParams: captureParamsVideoParams,
-        );
-        await rtcEngine.updateScreenCapture(
-          captureParams,
-        );
-      } catch (e) {
-        if (e is! AgoraRtcException) {
-          debugPrint('[updateScreenCapture] error: ${e.toString()}');
-          rethrow;
-        }
-
-        if (e.code != -4) {
-          // Only not supported error supported.
-          rethrow;
-        }
-      }
-
-      await rtcEngine.release();
-    },
-  );
-
-  testWidgets(
-    'queryScreenCaptureCapability',
-    (WidgetTester tester) async {
-      String engineAppId = const String.fromEnvironment('TEST_APP_ID',
-          defaultValue: '<YOUR_APP_ID>');
-
-      RtcEngine rtcEngine = createAgoraRtcEngine();
-      await rtcEngine.initialize(RtcEngineContext(
-        appId: engineAppId,
-        areaCode: AreaCode.areaCodeGlob.value(),
-      ));
-
-      try {
-        await rtcEngine.queryScreenCaptureCapability();
-      } catch (e) {
-        if (e is! AgoraRtcException) {
-          debugPrint('[queryScreenCaptureCapability] error: ${e.toString()}');
-          rethrow;
-        }
-
-        if (e.code != -4) {
-          // Only not supported error supported.
-          rethrow;
-        }
-      }
-
-      await rtcEngine.release();
-    },
-  );
-
-  testWidgets(
-    'setScreenCaptureScenario',
-    (WidgetTester tester) async {
-      String engineAppId = const String.fromEnvironment('TEST_APP_ID',
-          defaultValue: '<YOUR_APP_ID>');
-
-      RtcEngine rtcEngine = createAgoraRtcEngine();
-      await rtcEngine.initialize(RtcEngineContext(
-        appId: engineAppId,
-        areaCode: AreaCode.areaCodeGlob.value(),
-      ));
-
-      try {
-        const ScreenScenarioType screenScenario =
-            ScreenScenarioType.screenScenarioDocument;
-        await rtcEngine.setScreenCaptureScenario(
-          screenScenario,
-        );
-      } catch (e) {
-        if (e is! AgoraRtcException) {
-          debugPrint('[setScreenCaptureScenario] error: ${e.toString()}');
-          rethrow;
-        }
-
-        if (e.code != -4) {
-          // Only not supported error supported.
-          rethrow;
-        }
-      }
-
-      await rtcEngine.release();
-    },
-  );
-
-  testWidgets(
-    'stopScreenCapture',
-    (WidgetTester tester) async {
-      String engineAppId = const String.fromEnvironment('TEST_APP_ID',
-          defaultValue: '<YOUR_APP_ID>');
-
-      RtcEngine rtcEngine = createAgoraRtcEngine();
-      await rtcEngine.initialize(RtcEngineContext(
-        appId: engineAppId,
-        areaCode: AreaCode.areaCodeGlob.value(),
-      ));
-
-      try {
-        await rtcEngine.stopScreenCapture();
-      } catch (e) {
-        if (e is! AgoraRtcException) {
-          debugPrint('[stopScreenCapture] error: ${e.toString()}');
-          rethrow;
-        }
-
-        if (e.code != -4) {
-          // Only not supported error supported.
-          rethrow;
-        }
-      }
-
-      await rtcEngine.release();
-    },
-  );
-
-  testWidgets(
-    'stopScreenCaptureBySourceType',
-    (WidgetTester tester) async {
-      String engineAppId = const String.fromEnvironment('TEST_APP_ID',
-          defaultValue: '<YOUR_APP_ID>');
-
-      RtcEngine rtcEngine = createAgoraRtcEngine();
-      await rtcEngine.initialize(RtcEngineContext(
-        appId: engineAppId,
-        areaCode: AreaCode.areaCodeGlob.value(),
-      ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
         const VideoSourceType sourceType =
@@ -7005,7 +10443,8 @@ void rtcEngineSmokeTestCases() {
         );
       } catch (e) {
         if (e is! AgoraRtcException) {
-          debugPrint('[stopScreenCaptureBySourceType] error: ${e.toString()}');
+          debugPrint(
+              '[RtcEngine.stopScreenCaptureBySourceType] error: ${e.toString()}');
           rethrow;
         }
 
@@ -7020,7 +10459,7 @@ void rtcEngineSmokeTestCases() {
   );
 
   testWidgets(
-    'getCallId',
+    'RtcEngine.startPreviewWithoutSourceType',
     (WidgetTester tester) async {
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
@@ -7030,118 +10469,14 @@ void rtcEngineSmokeTestCases() {
         appId: engineAppId,
         areaCode: AreaCode.areaCodeGlob.value(),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
-        await rtcEngine.getCallId();
-      } catch (e) {
-        if (e is! AgoraRtcException) {
-          debugPrint('[getCallId] error: ${e.toString()}');
-          rethrow;
-        }
-
-        if (e.code != -4) {
-          // Only not supported error supported.
-          rethrow;
-        }
-      }
-
-      await rtcEngine.release();
-    },
-  );
-
-  testWidgets(
-    'rate',
-    (WidgetTester tester) async {
-      String engineAppId = const String.fromEnvironment('TEST_APP_ID',
-          defaultValue: '<YOUR_APP_ID>');
-
-      RtcEngine rtcEngine = createAgoraRtcEngine();
-      await rtcEngine.initialize(RtcEngineContext(
-        appId: engineAppId,
-        areaCode: AreaCode.areaCodeGlob.value(),
-      ));
-
-      try {
-        const String callId = "hello";
-        const int rating = 10;
-        const String description = "hello";
-        await rtcEngine.rate(
-          callId: callId,
-          rating: rating,
-          description: description,
-        );
-      } catch (e) {
-        if (e is! AgoraRtcException) {
-          debugPrint('[rate] error: ${e.toString()}');
-          rethrow;
-        }
-
-        if (e.code != -4) {
-          // Only not supported error supported.
-          rethrow;
-        }
-      }
-
-      await rtcEngine.release();
-    },
-  );
-
-  testWidgets(
-    'complain',
-    (WidgetTester tester) async {
-      String engineAppId = const String.fromEnvironment('TEST_APP_ID',
-          defaultValue: '<YOUR_APP_ID>');
-
-      RtcEngine rtcEngine = createAgoraRtcEngine();
-      await rtcEngine.initialize(RtcEngineContext(
-        appId: engineAppId,
-        areaCode: AreaCode.areaCodeGlob.value(),
-      ));
-
-      try {
-        const String callId = "hello";
-        const String description = "hello";
-        await rtcEngine.complain(
-          callId: callId,
-          description: description,
-        );
-      } catch (e) {
-        if (e is! AgoraRtcException) {
-          debugPrint('[complain] error: ${e.toString()}');
-          rethrow;
-        }
-
-        if (e.code != -4) {
-          // Only not supported error supported.
-          rethrow;
-        }
-      }
-
-      await rtcEngine.release();
-    },
-  );
-
-  testWidgets(
-    'startRtmpStreamWithoutTranscoding',
-    (WidgetTester tester) async {
-      String engineAppId = const String.fromEnvironment('TEST_APP_ID',
-          defaultValue: '<YOUR_APP_ID>');
-
-      RtcEngine rtcEngine = createAgoraRtcEngine();
-      await rtcEngine.initialize(RtcEngineContext(
-        appId: engineAppId,
-        areaCode: AreaCode.areaCodeGlob.value(),
-      ));
-
-      try {
-        const String url = "hello";
-        await rtcEngine.startRtmpStreamWithoutTranscoding(
-          url,
-        );
+        await rtcEngine.startPreviewWithoutSourceType();
       } catch (e) {
         if (e is! AgoraRtcException) {
           debugPrint(
-              '[startRtmpStreamWithoutTranscoding] error: ${e.toString()}');
+              '[RtcEngine.startPreviewWithoutSourceType] error: ${e.toString()}');
           rethrow;
         }
 
@@ -7156,7 +10491,7 @@ void rtcEngineSmokeTestCases() {
   );
 
   testWidgets(
-    'startRtmpStreamWithTranscoding',
+    'RtcEngine.getAudioDeviceManager',
     (WidgetTester tester) async {
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
@@ -7166,2949 +10501,14 @@ void rtcEngineSmokeTestCases() {
         appId: engineAppId,
         areaCode: AreaCode.areaCodeGlob.value(),
       ));
-
-      try {
-        const String url = "hello";
-        const VideoCodecProfileType transcodingVideoCodecProfile =
-            VideoCodecProfileType.videoCodecProfileBaseline;
-        const VideoCodecTypeForStream transcodingVideoCodecType =
-            VideoCodecTypeForStream.videoCodecH264ForStream;
-        const AudioSampleRateType transcodingAudioSampleRate =
-            AudioSampleRateType.audioSampleRate32000;
-        const AudioCodecProfileType transcodingAudioCodecProfile =
-            AudioCodecProfileType.audioCodecProfileLcAac;
-        const int transcodingWidth = 10;
-        const int transcodingHeight = 10;
-        const int transcodingVideoBitrate = 10;
-        const int transcodingVideoFramerate = 10;
-        const bool transcodingLowLatency = true;
-        const int transcodingVideoGop = 10;
-        const int transcodingBackgroundColor = 10;
-        const int transcodingUserCount = 10;
-        const List<TranscodingUser> transcodingTranscodingUsers = [];
-        const String transcodingTranscodingExtraInfo = "hello";
-        const String transcodingMetadata = "hello";
-        const List<RtcImage> transcodingWatermark = [];
-        const int transcodingWatermarkCount = 10;
-        const List<RtcImage> transcodingBackgroundImage = [];
-        const int transcodingBackgroundImageCount = 10;
-        const int transcodingAudioBitrate = 10;
-        const int transcodingAudioChannels = 10;
-        const List<LiveStreamAdvancedFeature> transcodingAdvancedFeatures = [];
-        const int transcodingAdvancedFeatureCount = 10;
-        const LiveTranscoding transcoding = LiveTranscoding(
-          width: transcodingWidth,
-          height: transcodingHeight,
-          videoBitrate: transcodingVideoBitrate,
-          videoFramerate: transcodingVideoFramerate,
-          lowLatency: transcodingLowLatency,
-          videoGop: transcodingVideoGop,
-          videoCodecProfile: transcodingVideoCodecProfile,
-          backgroundColor: transcodingBackgroundColor,
-          videoCodecType: transcodingVideoCodecType,
-          userCount: transcodingUserCount,
-          transcodingUsers: transcodingTranscodingUsers,
-          transcodingExtraInfo: transcodingTranscodingExtraInfo,
-          metadata: transcodingMetadata,
-          watermark: transcodingWatermark,
-          watermarkCount: transcodingWatermarkCount,
-          backgroundImage: transcodingBackgroundImage,
-          backgroundImageCount: transcodingBackgroundImageCount,
-          audioSampleRate: transcodingAudioSampleRate,
-          audioBitrate: transcodingAudioBitrate,
-          audioChannels: transcodingAudioChannels,
-          audioCodecProfile: transcodingAudioCodecProfile,
-          advancedFeatures: transcodingAdvancedFeatures,
-          advancedFeatureCount: transcodingAdvancedFeatureCount,
-        );
-        await rtcEngine.startRtmpStreamWithTranscoding(
-          url: url,
-          transcoding: transcoding,
-        );
-      } catch (e) {
-        if (e is! AgoraRtcException) {
-          debugPrint('[startRtmpStreamWithTranscoding] error: ${e.toString()}');
-          rethrow;
-        }
-
-        if (e.code != -4) {
-          // Only not supported error supported.
-          rethrow;
-        }
-      }
-
-      await rtcEngine.release();
-    },
-  );
-
-  testWidgets(
-    'updateRtmpTranscoding',
-    (WidgetTester tester) async {
-      String engineAppId = const String.fromEnvironment('TEST_APP_ID',
-          defaultValue: '<YOUR_APP_ID>');
-
-      RtcEngine rtcEngine = createAgoraRtcEngine();
-      await rtcEngine.initialize(RtcEngineContext(
-        appId: engineAppId,
-        areaCode: AreaCode.areaCodeGlob.value(),
-      ));
-
-      try {
-        const VideoCodecProfileType transcodingVideoCodecProfile =
-            VideoCodecProfileType.videoCodecProfileBaseline;
-        const VideoCodecTypeForStream transcodingVideoCodecType =
-            VideoCodecTypeForStream.videoCodecH264ForStream;
-        const AudioSampleRateType transcodingAudioSampleRate =
-            AudioSampleRateType.audioSampleRate32000;
-        const AudioCodecProfileType transcodingAudioCodecProfile =
-            AudioCodecProfileType.audioCodecProfileLcAac;
-        const int transcodingWidth = 10;
-        const int transcodingHeight = 10;
-        const int transcodingVideoBitrate = 10;
-        const int transcodingVideoFramerate = 10;
-        const bool transcodingLowLatency = true;
-        const int transcodingVideoGop = 10;
-        const int transcodingBackgroundColor = 10;
-        const int transcodingUserCount = 10;
-        const List<TranscodingUser> transcodingTranscodingUsers = [];
-        const String transcodingTranscodingExtraInfo = "hello";
-        const String transcodingMetadata = "hello";
-        const List<RtcImage> transcodingWatermark = [];
-        const int transcodingWatermarkCount = 10;
-        const List<RtcImage> transcodingBackgroundImage = [];
-        const int transcodingBackgroundImageCount = 10;
-        const int transcodingAudioBitrate = 10;
-        const int transcodingAudioChannels = 10;
-        const List<LiveStreamAdvancedFeature> transcodingAdvancedFeatures = [];
-        const int transcodingAdvancedFeatureCount = 10;
-        const LiveTranscoding transcoding = LiveTranscoding(
-          width: transcodingWidth,
-          height: transcodingHeight,
-          videoBitrate: transcodingVideoBitrate,
-          videoFramerate: transcodingVideoFramerate,
-          lowLatency: transcodingLowLatency,
-          videoGop: transcodingVideoGop,
-          videoCodecProfile: transcodingVideoCodecProfile,
-          backgroundColor: transcodingBackgroundColor,
-          videoCodecType: transcodingVideoCodecType,
-          userCount: transcodingUserCount,
-          transcodingUsers: transcodingTranscodingUsers,
-          transcodingExtraInfo: transcodingTranscodingExtraInfo,
-          metadata: transcodingMetadata,
-          watermark: transcodingWatermark,
-          watermarkCount: transcodingWatermarkCount,
-          backgroundImage: transcodingBackgroundImage,
-          backgroundImageCount: transcodingBackgroundImageCount,
-          audioSampleRate: transcodingAudioSampleRate,
-          audioBitrate: transcodingAudioBitrate,
-          audioChannels: transcodingAudioChannels,
-          audioCodecProfile: transcodingAudioCodecProfile,
-          advancedFeatures: transcodingAdvancedFeatures,
-          advancedFeatureCount: transcodingAdvancedFeatureCount,
-        );
-        await rtcEngine.updateRtmpTranscoding(
-          transcoding,
-        );
-      } catch (e) {
-        if (e is! AgoraRtcException) {
-          debugPrint('[updateRtmpTranscoding] error: ${e.toString()}');
-          rethrow;
-        }
-
-        if (e.code != -4) {
-          // Only not supported error supported.
-          rethrow;
-        }
-      }
-
-      await rtcEngine.release();
-    },
-  );
-
-  testWidgets(
-    'stopRtmpStream',
-    (WidgetTester tester) async {
-      String engineAppId = const String.fromEnvironment('TEST_APP_ID',
-          defaultValue: '<YOUR_APP_ID>');
-
-      RtcEngine rtcEngine = createAgoraRtcEngine();
-      await rtcEngine.initialize(RtcEngineContext(
-        appId: engineAppId,
-        areaCode: AreaCode.areaCodeGlob.value(),
-      ));
-
-      try {
-        const String url = "hello";
-        await rtcEngine.stopRtmpStream(
-          url,
-        );
-      } catch (e) {
-        if (e is! AgoraRtcException) {
-          debugPrint('[stopRtmpStream] error: ${e.toString()}');
-          rethrow;
-        }
-
-        if (e.code != -4) {
-          // Only not supported error supported.
-          rethrow;
-        }
-      }
-
-      await rtcEngine.release();
-    },
-  );
-
-  testWidgets(
-    'startLocalVideoTranscoder',
-    (WidgetTester tester) async {
-      String engineAppId = const String.fromEnvironment('TEST_APP_ID',
-          defaultValue: '<YOUR_APP_ID>');
-
-      RtcEngine rtcEngine = createAgoraRtcEngine();
-      await rtcEngine.initialize(RtcEngineContext(
-        appId: engineAppId,
-        areaCode: AreaCode.areaCodeGlob.value(),
-      ));
-
-      try {
-        const VideoCodecType videoOutputConfigurationCodecType =
-            VideoCodecType.videoCodecNone;
-        const int dimensionsWidth = 10;
-        const int dimensionsHeight = 10;
-        const VideoDimensions videoOutputConfigurationDimensions =
-            VideoDimensions(
-          width: dimensionsWidth,
-          height: dimensionsHeight,
-        );
-        const OrientationMode videoOutputConfigurationOrientationMode =
-            OrientationMode.orientationModeAdaptive;
-        const DegradationPreference
-            videoOutputConfigurationDegradationPreference =
-            DegradationPreference.maintainQuality;
-        const VideoMirrorModeType videoOutputConfigurationMirrorMode =
-            VideoMirrorModeType.videoMirrorModeAuto;
-        const EncodingPreference advanceOptionsEncodingPreference =
-            EncodingPreference.preferAuto;
-        const CompressionPreference advanceOptionsCompressionPreference =
-            CompressionPreference.preferLowLatency;
-        const AdvanceOptions videoOutputConfigurationAdvanceOptions =
-            AdvanceOptions(
-          encodingPreference: advanceOptionsEncodingPreference,
-          compressionPreference: advanceOptionsCompressionPreference,
-        );
-        const int videoOutputConfigurationFrameRate = 10;
-        const int videoOutputConfigurationBitrate = 10;
-        const int videoOutputConfigurationMinBitrate = 10;
-        const VideoEncoderConfiguration configVideoOutputConfiguration =
-            VideoEncoderConfiguration(
-          codecType: videoOutputConfigurationCodecType,
-          dimensions: videoOutputConfigurationDimensions,
-          frameRate: videoOutputConfigurationFrameRate,
-          bitrate: videoOutputConfigurationBitrate,
-          minBitrate: videoOutputConfigurationMinBitrate,
-          orientationMode: videoOutputConfigurationOrientationMode,
-          degradationPreference: videoOutputConfigurationDegradationPreference,
-          mirrorMode: videoOutputConfigurationMirrorMode,
-          advanceOptions: videoOutputConfigurationAdvanceOptions,
-        );
-        const int configStreamCount = 10;
-        const List<TranscodingVideoStream> configVideoInputStreams = [];
-        const bool configSyncWithPrimaryCamera = true;
-        const LocalTranscoderConfiguration config =
-            LocalTranscoderConfiguration(
-          streamCount: configStreamCount,
-          videoInputStreams: configVideoInputStreams,
-          videoOutputConfiguration: configVideoOutputConfiguration,
-          syncWithPrimaryCamera: configSyncWithPrimaryCamera,
-        );
-        await rtcEngine.startLocalVideoTranscoder(
-          config,
-        );
-      } catch (e) {
-        if (e is! AgoraRtcException) {
-          debugPrint('[startLocalVideoTranscoder] error: ${e.toString()}');
-          rethrow;
-        }
-
-        if (e.code != -4) {
-          // Only not supported error supported.
-          rethrow;
-        }
-      }
-
-      await rtcEngine.release();
-    },
-  );
-
-  testWidgets(
-    'updateLocalTranscoderConfiguration',
-    (WidgetTester tester) async {
-      String engineAppId = const String.fromEnvironment('TEST_APP_ID',
-          defaultValue: '<YOUR_APP_ID>');
-
-      RtcEngine rtcEngine = createAgoraRtcEngine();
-      await rtcEngine.initialize(RtcEngineContext(
-        appId: engineAppId,
-        areaCode: AreaCode.areaCodeGlob.value(),
-      ));
-
-      try {
-        const VideoCodecType videoOutputConfigurationCodecType =
-            VideoCodecType.videoCodecNone;
-        const int dimensionsWidth = 10;
-        const int dimensionsHeight = 10;
-        const VideoDimensions videoOutputConfigurationDimensions =
-            VideoDimensions(
-          width: dimensionsWidth,
-          height: dimensionsHeight,
-        );
-        const OrientationMode videoOutputConfigurationOrientationMode =
-            OrientationMode.orientationModeAdaptive;
-        const DegradationPreference
-            videoOutputConfigurationDegradationPreference =
-            DegradationPreference.maintainQuality;
-        const VideoMirrorModeType videoOutputConfigurationMirrorMode =
-            VideoMirrorModeType.videoMirrorModeAuto;
-        const EncodingPreference advanceOptionsEncodingPreference =
-            EncodingPreference.preferAuto;
-        const CompressionPreference advanceOptionsCompressionPreference =
-            CompressionPreference.preferLowLatency;
-        const AdvanceOptions videoOutputConfigurationAdvanceOptions =
-            AdvanceOptions(
-          encodingPreference: advanceOptionsEncodingPreference,
-          compressionPreference: advanceOptionsCompressionPreference,
-        );
-        const int videoOutputConfigurationFrameRate = 10;
-        const int videoOutputConfigurationBitrate = 10;
-        const int videoOutputConfigurationMinBitrate = 10;
-        const VideoEncoderConfiguration configVideoOutputConfiguration =
-            VideoEncoderConfiguration(
-          codecType: videoOutputConfigurationCodecType,
-          dimensions: videoOutputConfigurationDimensions,
-          frameRate: videoOutputConfigurationFrameRate,
-          bitrate: videoOutputConfigurationBitrate,
-          minBitrate: videoOutputConfigurationMinBitrate,
-          orientationMode: videoOutputConfigurationOrientationMode,
-          degradationPreference: videoOutputConfigurationDegradationPreference,
-          mirrorMode: videoOutputConfigurationMirrorMode,
-          advanceOptions: videoOutputConfigurationAdvanceOptions,
-        );
-        const int configStreamCount = 10;
-        const List<TranscodingVideoStream> configVideoInputStreams = [];
-        const bool configSyncWithPrimaryCamera = true;
-        const LocalTranscoderConfiguration config =
-            LocalTranscoderConfiguration(
-          streamCount: configStreamCount,
-          videoInputStreams: configVideoInputStreams,
-          videoOutputConfiguration: configVideoOutputConfiguration,
-          syncWithPrimaryCamera: configSyncWithPrimaryCamera,
-        );
-        await rtcEngine.updateLocalTranscoderConfiguration(
-          config,
-        );
-      } catch (e) {
-        if (e is! AgoraRtcException) {
-          debugPrint(
-              '[updateLocalTranscoderConfiguration] error: ${e.toString()}');
-          rethrow;
-        }
-
-        if (e.code != -4) {
-          // Only not supported error supported.
-          rethrow;
-        }
-      }
-
-      await rtcEngine.release();
-    },
-  );
-
-  testWidgets(
-    'stopLocalVideoTranscoder',
-    (WidgetTester tester) async {
-      String engineAppId = const String.fromEnvironment('TEST_APP_ID',
-          defaultValue: '<YOUR_APP_ID>');
-
-      RtcEngine rtcEngine = createAgoraRtcEngine();
-      await rtcEngine.initialize(RtcEngineContext(
-        appId: engineAppId,
-        areaCode: AreaCode.areaCodeGlob.value(),
-      ));
-
-      try {
-        await rtcEngine.stopLocalVideoTranscoder();
-      } catch (e) {
-        if (e is! AgoraRtcException) {
-          debugPrint('[stopLocalVideoTranscoder] error: ${e.toString()}');
-          rethrow;
-        }
-
-        if (e.code != -4) {
-          // Only not supported error supported.
-          rethrow;
-        }
-      }
-
-      await rtcEngine.release();
-    },
-  );
-
-  testWidgets(
-    'startCameraCapture',
-    (WidgetTester tester) async {
-      String engineAppId = const String.fromEnvironment('TEST_APP_ID',
-          defaultValue: '<YOUR_APP_ID>');
-
-      RtcEngine rtcEngine = createAgoraRtcEngine();
-      await rtcEngine.initialize(RtcEngineContext(
-        appId: engineAppId,
-        areaCode: AreaCode.areaCodeGlob.value(),
-      ));
-
-      try {
-        const VideoSourceType sourceType =
-            VideoSourceType.videoSourceCameraPrimary;
-        const CameraDirection configCameraDirection =
-            CameraDirection.cameraRear;
-        const int formatWidth = 10;
-        const int formatHeight = 10;
-        const int formatFps = 10;
-        const VideoFormat configFormat = VideoFormat(
-          width: formatWidth,
-          height: formatHeight,
-          fps: formatFps,
-        );
-        const String configDeviceId = "hello";
-        const String configCameraId = "hello";
-        const bool configFollowEncodeDimensionRatio = true;
-        const CameraCapturerConfiguration config = CameraCapturerConfiguration(
-          cameraDirection: configCameraDirection,
-          deviceId: configDeviceId,
-          cameraId: configCameraId,
-          format: configFormat,
-          followEncodeDimensionRatio: configFollowEncodeDimensionRatio,
-        );
-        await rtcEngine.startCameraCapture(
-          sourceType: sourceType,
-          config: config,
-        );
-      } catch (e) {
-        if (e is! AgoraRtcException) {
-          debugPrint('[startCameraCapture] error: ${e.toString()}');
-          rethrow;
-        }
-
-        if (e.code != -4) {
-          // Only not supported error supported.
-          rethrow;
-        }
-      }
-
-      await rtcEngine.release();
-    },
-  );
-
-  testWidgets(
-    'stopCameraCapture',
-    (WidgetTester tester) async {
-      String engineAppId = const String.fromEnvironment('TEST_APP_ID',
-          defaultValue: '<YOUR_APP_ID>');
-
-      RtcEngine rtcEngine = createAgoraRtcEngine();
-      await rtcEngine.initialize(RtcEngineContext(
-        appId: engineAppId,
-        areaCode: AreaCode.areaCodeGlob.value(),
-      ));
-
-      try {
-        const VideoSourceType sourceType =
-            VideoSourceType.videoSourceCameraPrimary;
-        await rtcEngine.stopCameraCapture(
-          sourceType,
-        );
-      } catch (e) {
-        if (e is! AgoraRtcException) {
-          debugPrint('[stopCameraCapture] error: ${e.toString()}');
-          rethrow;
-        }
-
-        if (e.code != -4) {
-          // Only not supported error supported.
-          rethrow;
-        }
-      }
-
-      await rtcEngine.release();
-    },
-  );
-
-  testWidgets(
-    'setCameraDeviceOrientation',
-    (WidgetTester tester) async {
-      String engineAppId = const String.fromEnvironment('TEST_APP_ID',
-          defaultValue: '<YOUR_APP_ID>');
-
-      RtcEngine rtcEngine = createAgoraRtcEngine();
-      await rtcEngine.initialize(RtcEngineContext(
-        appId: engineAppId,
-        areaCode: AreaCode.areaCodeGlob.value(),
-      ));
-
-      try {
-        const VideoSourceType type = VideoSourceType.videoSourceCameraPrimary;
-        const VideoOrientation orientation = VideoOrientation.videoOrientation0;
-        await rtcEngine.setCameraDeviceOrientation(
-          type: type,
-          orientation: orientation,
-        );
-      } catch (e) {
-        if (e is! AgoraRtcException) {
-          debugPrint('[setCameraDeviceOrientation] error: ${e.toString()}');
-          rethrow;
-        }
-
-        if (e.code != -4) {
-          // Only not supported error supported.
-          rethrow;
-        }
-      }
-
-      await rtcEngine.release();
-    },
-  );
-
-  testWidgets(
-    'setScreenCaptureOrientation',
-    (WidgetTester tester) async {
-      String engineAppId = const String.fromEnvironment('TEST_APP_ID',
-          defaultValue: '<YOUR_APP_ID>');
-
-      RtcEngine rtcEngine = createAgoraRtcEngine();
-      await rtcEngine.initialize(RtcEngineContext(
-        appId: engineAppId,
-        areaCode: AreaCode.areaCodeGlob.value(),
-      ));
-
-      try {
-        const VideoSourceType type = VideoSourceType.videoSourceCameraPrimary;
-        const VideoOrientation orientation = VideoOrientation.videoOrientation0;
-        await rtcEngine.setScreenCaptureOrientation(
-          type: type,
-          orientation: orientation,
-        );
-      } catch (e) {
-        if (e is! AgoraRtcException) {
-          debugPrint('[setScreenCaptureOrientation] error: ${e.toString()}');
-          rethrow;
-        }
-
-        if (e.code != -4) {
-          // Only not supported error supported.
-          rethrow;
-        }
-      }
-
-      await rtcEngine.release();
-    },
-  );
-
-  testWidgets(
-    'getConnectionState',
-    (WidgetTester tester) async {
-      String engineAppId = const String.fromEnvironment('TEST_APP_ID',
-          defaultValue: '<YOUR_APP_ID>');
-
-      RtcEngine rtcEngine = createAgoraRtcEngine();
-      await rtcEngine.initialize(RtcEngineContext(
-        appId: engineAppId,
-        areaCode: AreaCode.areaCodeGlob.value(),
-      ));
-
-      try {
-        await rtcEngine.getConnectionState();
-      } catch (e) {
-        if (e is! AgoraRtcException) {
-          debugPrint('[getConnectionState] error: ${e.toString()}');
-          rethrow;
-        }
-
-        if (e.code != -4) {
-          // Only not supported error supported.
-          rethrow;
-        }
-      }
-
-      await rtcEngine.release();
-    },
-  );
-
-  testWidgets(
-    'registerEventHandler',
-    (WidgetTester tester) async {
-      String engineAppId = const String.fromEnvironment('TEST_APP_ID',
-          defaultValue: '<YOUR_APP_ID>');
-
-      RtcEngine rtcEngine = createAgoraRtcEngine();
-      await rtcEngine.initialize(RtcEngineContext(
-        appId: engineAppId,
-        areaCode: AreaCode.areaCodeGlob.value(),
-      ));
-
-      try {
-        final RtcEngineEventHandler eventHandler = RtcEngineEventHandler(
-          onJoinChannelSuccess: (RtcConnection connection, int elapsed) {},
-          onRejoinChannelSuccess: (RtcConnection connection, int elapsed) {},
-          onProxyConnected: (String channel, int uid, ProxyType proxyType,
-              String localProxyIp, int elapsed) {},
-          onError: (ErrorCodeType err, String msg) {},
-          onAudioQuality: (RtcConnection connection, int remoteUid,
-              QualityType quality, int delay, int lost) {},
-          onLastmileProbeResult: (LastmileProbeResult result) {},
-          onAudioVolumeIndication: (RtcConnection connection, List speakers,
-              int speakerNumber, int totalVolume) {},
-          onLeaveChannel: (RtcConnection connection, RtcStats stats) {},
-          onRtcStats: (RtcConnection connection, RtcStats stats) {},
-          onAudioDeviceStateChanged: (String deviceId,
-              MediaDeviceType deviceType, MediaDeviceStateType deviceState) {},
-          onAudioMixingPositionChanged: (int position) {},
-          onAudioMixingFinished: () {},
-          onAudioEffectFinished: (int soundId) {},
-          onVideoDeviceStateChanged: (String deviceId,
-              MediaDeviceType deviceType, MediaDeviceStateType deviceState) {},
-          onNetworkQuality: (RtcConnection connection, int remoteUid,
-              QualityType txQuality, QualityType rxQuality) {},
-          onIntraRequestReceived: (RtcConnection connection) {},
-          onUplinkNetworkInfoUpdated: (UplinkNetworkInfo info) {},
-          onDownlinkNetworkInfoUpdated: (DownlinkNetworkInfo info) {},
-          onLastmileQuality: (QualityType quality) {},
-          onFirstLocalVideoFrame:
-              (VideoSourceType source, int width, int height, int elapsed) {},
-          onFirstLocalVideoFramePublished:
-              (VideoSourceType source, int elapsed) {},
-          onFirstRemoteVideoDecoded: (RtcConnection connection, int remoteUid,
-              int width, int height, int elapsed) {},
-          onVideoSizeChanged: (RtcConnection connection,
-              VideoSourceType sourceType,
-              int uid,
-              int width,
-              int height,
-              int rotation) {},
-          onLocalVideoStateChanged: (VideoSourceType source,
-              LocalVideoStreamState state, LocalVideoStreamError error) {},
-          onRemoteVideoStateChanged: (RtcConnection connection,
-              int remoteUid,
-              RemoteVideoState state,
-              RemoteVideoStateReason reason,
-              int elapsed) {},
-          onFirstRemoteVideoFrame: (RtcConnection connection, int remoteUid,
-              int width, int height, int elapsed) {},
-          onUserJoined:
-              (RtcConnection connection, int remoteUid, int elapsed) {},
-          onUserOffline: (RtcConnection connection, int remoteUid,
-              UserOfflineReasonType reason) {},
-          onUserMuteAudio:
-              (RtcConnection connection, int remoteUid, bool muted) {},
-          onUserMuteVideo:
-              (RtcConnection connection, int remoteUid, bool muted) {},
-          onUserEnableVideo:
-              (RtcConnection connection, int remoteUid, bool enabled) {},
-          onUserStateChanged:
-              (RtcConnection connection, int remoteUid, int state) {},
-          onUserEnableLocalVideo:
-              (RtcConnection connection, int remoteUid, bool enabled) {},
-          onLocalAudioStats:
-              (RtcConnection connection, LocalAudioStats stats) {},
-          onRemoteAudioStats:
-              (RtcConnection connection, RemoteAudioStats stats) {},
-          onLocalVideoStats: (VideoSourceType source, LocalVideoStats stats) {},
-          onRemoteVideoStats:
-              (RtcConnection connection, RemoteVideoStats stats) {},
-          onCameraReady: () {},
-          onCameraFocusAreaChanged: (int x, int y, int width, int height) {},
-          onCameraExposureAreaChanged: (int x, int y, int width, int height) {},
-          onFacePositionChanged: (int imageWidth, int imageHeight,
-              List vecRectangle, List vecDistance, int numFaces) {},
-          onVideoStopped: () {},
-          onAudioMixingStateChanged:
-              (AudioMixingStateType state, AudioMixingReasonType reason) {},
-          onRhythmPlayerStateChanged:
-              (RhythmPlayerStateType state, RhythmPlayerErrorType errorCode) {},
-          onConnectionLost: (RtcConnection connection) {},
-          onConnectionInterrupted: (RtcConnection connection) {},
-          onConnectionBanned: (RtcConnection connection) {},
-          onStreamMessage: (RtcConnection connection, int remoteUid,
-              int streamId, Uint8List data, int length, int sentTs) {},
-          onStreamMessageError: (RtcConnection connection, int remoteUid,
-              int streamId, ErrorCodeType code, int missed, int cached) {},
-          onRequestToken: (RtcConnection connection) {},
-          onTokenPrivilegeWillExpire:
-              (RtcConnection connection, String token) {},
-          onLicenseValidationFailure:
-              (RtcConnection connection, LicenseErrorType reason) {},
-          onFirstLocalAudioFramePublished:
-              (RtcConnection connection, int elapsed) {},
-          onFirstRemoteAudioFrame:
-              (RtcConnection connection, int userId, int elapsed) {},
-          onFirstRemoteAudioDecoded:
-              (RtcConnection connection, int uid, int elapsed) {},
-          onLocalAudioStateChanged: (RtcConnection connection,
-              LocalAudioStreamState state, LocalAudioStreamError error) {},
-          onRemoteAudioStateChanged: (RtcConnection connection,
-              int remoteUid,
-              RemoteAudioState state,
-              RemoteAudioStateReason reason,
-              int elapsed) {},
-          onActiveSpeaker: (RtcConnection connection, int uid) {},
-          onContentInspectResult: (ContentInspectResult result) {},
-          onSnapshotTaken: (RtcConnection connection, int uid, String filePath,
-              int width, int height, int errCode) {},
-          onClientRoleChanged: (RtcConnection connection,
-              ClientRoleType oldRole,
-              ClientRoleType newRole,
-              ClientRoleOptions newRoleOptions) {},
-          onClientRoleChangeFailed: (RtcConnection connection,
-              ClientRoleChangeFailedReason reason,
-              ClientRoleType currentRole) {},
-          onAudioDeviceVolumeChanged:
-              (MediaDeviceType deviceType, int volume, bool muted) {},
-          onRtmpStreamingStateChanged: (String url,
-              RtmpStreamPublishState state,
-              RtmpStreamPublishErrorType errCode) {},
-          onRtmpStreamingEvent: (String url, RtmpStreamingEvent eventCode) {},
-          onTranscodingUpdated: () {},
-          onAudioRoutingChanged: (int deviceType, int routing) {},
-          onChannelMediaRelayStateChanged:
-              (ChannelMediaRelayState state, ChannelMediaRelayError code) {},
-          onChannelMediaRelayEvent: (ChannelMediaRelayEvent code) {},
-          onLocalPublishFallbackToAudioOnly: (bool isFallbackOrRecover) {},
-          onRemoteSubscribeFallbackToAudioOnly:
-              (int uid, bool isFallbackOrRecover) {},
-          onRemoteAudioTransportStats: (RtcConnection connection, int remoteUid,
-              int delay, int lost, int rxKBitRate) {},
-          onRemoteVideoTransportStats: (RtcConnection connection, int remoteUid,
-              int delay, int lost, int rxKBitRate) {},
-          onConnectionStateChanged: (RtcConnection connection,
-              ConnectionStateType state, ConnectionChangedReasonType reason) {},
-          onWlAccMessage: (RtcConnection connection, WlaccMessageReason reason,
-              WlaccSuggestAction action, String wlAccMsg) {},
-          onWlAccStats: (RtcConnection connection, WlAccStats currentStats,
-              WlAccStats averageStats) {},
-          onNetworkTypeChanged: (RtcConnection connection, NetworkType type) {},
-          onEncryptionError:
-              (RtcConnection connection, EncryptionErrorType errorType) {},
-          onPermissionError: (PermissionType permissionType) {},
-          onLocalUserRegistered: (int uid, String userAccount) {},
-          onUserInfoUpdated: (int uid, UserInfo info) {},
-          onUploadLogResult: (RtcConnection connection, String requestId,
-              bool success, UploadErrorReason reason) {},
-          onAudioSubscribeStateChanged: (String channel,
-              int uid,
-              StreamSubscribeState oldState,
-              StreamSubscribeState newState,
-              int elapseSinceLastState) {},
-          onVideoSubscribeStateChanged: (String channel,
-              int uid,
-              StreamSubscribeState oldState,
-              StreamSubscribeState newState,
-              int elapseSinceLastState) {},
-          onAudioPublishStateChanged: (String channel,
-              StreamPublishState oldState,
-              StreamPublishState newState,
-              int elapseSinceLastState) {},
-          onVideoPublishStateChanged: (VideoSourceType source,
-              String channel,
-              StreamPublishState oldState,
-              StreamPublishState newState,
-              int elapseSinceLastState) {},
-          onExtensionEvent:
-              (String provider, String extension, String key, String value) {},
-          onExtensionStarted: (String provider, String extension) {},
-          onExtensionStopped: (String provider, String extension) {},
-          onExtensionError:
-              (String provider, String extension, int error, String message) {},
-          onUserAccountUpdated:
-              (RtcConnection connection, int remoteUid, String userAccount) {},
-          onLocalVideoTranscoderError:
-              (TranscodingVideoStream stream, VideoTranscoderError error) {},
-          onVideoRenderingTracingResult: (RtcConnection connection,
-              int uid,
-              MediaTraceEvent currentEvent,
-              VideoRenderingTracingInfo tracingInfo) {},
-        );
-        rtcEngine.registerEventHandler(
-          eventHandler,
-        );
-      } catch (e) {
-        if (e is! AgoraRtcException) {
-          debugPrint('[registerEventHandler] error: ${e.toString()}');
-          rethrow;
-        }
-
-        if (e.code != -4) {
-          // Only not supported error supported.
-          rethrow;
-        }
-      }
-
-      await rtcEngine.release();
-    },
-  );
-
-  testWidgets(
-    'unregisterEventHandler',
-    (WidgetTester tester) async {
-      String engineAppId = const String.fromEnvironment('TEST_APP_ID',
-          defaultValue: '<YOUR_APP_ID>');
-
-      RtcEngine rtcEngine = createAgoraRtcEngine();
-      await rtcEngine.initialize(RtcEngineContext(
-        appId: engineAppId,
-        areaCode: AreaCode.areaCodeGlob.value(),
-      ));
-
-      try {
-        final RtcEngineEventHandler eventHandler = RtcEngineEventHandler(
-          onJoinChannelSuccess: (RtcConnection connection, int elapsed) {},
-          onRejoinChannelSuccess: (RtcConnection connection, int elapsed) {},
-          onProxyConnected: (String channel, int uid, ProxyType proxyType,
-              String localProxyIp, int elapsed) {},
-          onError: (ErrorCodeType err, String msg) {},
-          onAudioQuality: (RtcConnection connection, int remoteUid,
-              QualityType quality, int delay, int lost) {},
-          onLastmileProbeResult: (LastmileProbeResult result) {},
-          onAudioVolumeIndication: (RtcConnection connection, List speakers,
-              int speakerNumber, int totalVolume) {},
-          onLeaveChannel: (RtcConnection connection, RtcStats stats) {},
-          onRtcStats: (RtcConnection connection, RtcStats stats) {},
-          onAudioDeviceStateChanged: (String deviceId,
-              MediaDeviceType deviceType, MediaDeviceStateType deviceState) {},
-          onAudioMixingPositionChanged: (int position) {},
-          onAudioMixingFinished: () {},
-          onAudioEffectFinished: (int soundId) {},
-          onVideoDeviceStateChanged: (String deviceId,
-              MediaDeviceType deviceType, MediaDeviceStateType deviceState) {},
-          onNetworkQuality: (RtcConnection connection, int remoteUid,
-              QualityType txQuality, QualityType rxQuality) {},
-          onIntraRequestReceived: (RtcConnection connection) {},
-          onUplinkNetworkInfoUpdated: (UplinkNetworkInfo info) {},
-          onDownlinkNetworkInfoUpdated: (DownlinkNetworkInfo info) {},
-          onLastmileQuality: (QualityType quality) {},
-          onFirstLocalVideoFrame:
-              (VideoSourceType source, int width, int height, int elapsed) {},
-          onFirstLocalVideoFramePublished:
-              (VideoSourceType source, int elapsed) {},
-          onFirstRemoteVideoDecoded: (RtcConnection connection, int remoteUid,
-              int width, int height, int elapsed) {},
-          onVideoSizeChanged: (RtcConnection connection,
-              VideoSourceType sourceType,
-              int uid,
-              int width,
-              int height,
-              int rotation) {},
-          onLocalVideoStateChanged: (VideoSourceType source,
-              LocalVideoStreamState state, LocalVideoStreamError error) {},
-          onRemoteVideoStateChanged: (RtcConnection connection,
-              int remoteUid,
-              RemoteVideoState state,
-              RemoteVideoStateReason reason,
-              int elapsed) {},
-          onFirstRemoteVideoFrame: (RtcConnection connection, int remoteUid,
-              int width, int height, int elapsed) {},
-          onUserJoined:
-              (RtcConnection connection, int remoteUid, int elapsed) {},
-          onUserOffline: (RtcConnection connection, int remoteUid,
-              UserOfflineReasonType reason) {},
-          onUserMuteAudio:
-              (RtcConnection connection, int remoteUid, bool muted) {},
-          onUserMuteVideo:
-              (RtcConnection connection, int remoteUid, bool muted) {},
-          onUserEnableVideo:
-              (RtcConnection connection, int remoteUid, bool enabled) {},
-          onUserStateChanged:
-              (RtcConnection connection, int remoteUid, int state) {},
-          onUserEnableLocalVideo:
-              (RtcConnection connection, int remoteUid, bool enabled) {},
-          onLocalAudioStats:
-              (RtcConnection connection, LocalAudioStats stats) {},
-          onRemoteAudioStats:
-              (RtcConnection connection, RemoteAudioStats stats) {},
-          onLocalVideoStats: (VideoSourceType source, LocalVideoStats stats) {},
-          onRemoteVideoStats:
-              (RtcConnection connection, RemoteVideoStats stats) {},
-          onCameraReady: () {},
-          onCameraFocusAreaChanged: (int x, int y, int width, int height) {},
-          onCameraExposureAreaChanged: (int x, int y, int width, int height) {},
-          onFacePositionChanged: (int imageWidth, int imageHeight,
-              List vecRectangle, List vecDistance, int numFaces) {},
-          onVideoStopped: () {},
-          onAudioMixingStateChanged:
-              (AudioMixingStateType state, AudioMixingReasonType reason) {},
-          onRhythmPlayerStateChanged:
-              (RhythmPlayerStateType state, RhythmPlayerErrorType errorCode) {},
-          onConnectionLost: (RtcConnection connection) {},
-          onConnectionInterrupted: (RtcConnection connection) {},
-          onConnectionBanned: (RtcConnection connection) {},
-          onStreamMessage: (RtcConnection connection, int remoteUid,
-              int streamId, Uint8List data, int length, int sentTs) {},
-          onStreamMessageError: (RtcConnection connection, int remoteUid,
-              int streamId, ErrorCodeType code, int missed, int cached) {},
-          onRequestToken: (RtcConnection connection) {},
-          onTokenPrivilegeWillExpire:
-              (RtcConnection connection, String token) {},
-          onLicenseValidationFailure:
-              (RtcConnection connection, LicenseErrorType reason) {},
-          onFirstLocalAudioFramePublished:
-              (RtcConnection connection, int elapsed) {},
-          onFirstRemoteAudioFrame:
-              (RtcConnection connection, int userId, int elapsed) {},
-          onFirstRemoteAudioDecoded:
-              (RtcConnection connection, int uid, int elapsed) {},
-          onLocalAudioStateChanged: (RtcConnection connection,
-              LocalAudioStreamState state, LocalAudioStreamError error) {},
-          onRemoteAudioStateChanged: (RtcConnection connection,
-              int remoteUid,
-              RemoteAudioState state,
-              RemoteAudioStateReason reason,
-              int elapsed) {},
-          onActiveSpeaker: (RtcConnection connection, int uid) {},
-          onContentInspectResult: (ContentInspectResult result) {},
-          onSnapshotTaken: (RtcConnection connection, int uid, String filePath,
-              int width, int height, int errCode) {},
-          onClientRoleChanged: (RtcConnection connection,
-              ClientRoleType oldRole,
-              ClientRoleType newRole,
-              ClientRoleOptions newRoleOptions) {},
-          onClientRoleChangeFailed: (RtcConnection connection,
-              ClientRoleChangeFailedReason reason,
-              ClientRoleType currentRole) {},
-          onAudioDeviceVolumeChanged:
-              (MediaDeviceType deviceType, int volume, bool muted) {},
-          onRtmpStreamingStateChanged: (String url,
-              RtmpStreamPublishState state,
-              RtmpStreamPublishErrorType errCode) {},
-          onRtmpStreamingEvent: (String url, RtmpStreamingEvent eventCode) {},
-          onTranscodingUpdated: () {},
-          onAudioRoutingChanged: (int deviceType, int routing) {},
-          onChannelMediaRelayStateChanged:
-              (ChannelMediaRelayState state, ChannelMediaRelayError code) {},
-          onChannelMediaRelayEvent: (ChannelMediaRelayEvent code) {},
-          onLocalPublishFallbackToAudioOnly: (bool isFallbackOrRecover) {},
-          onRemoteSubscribeFallbackToAudioOnly:
-              (int uid, bool isFallbackOrRecover) {},
-          onRemoteAudioTransportStats: (RtcConnection connection, int remoteUid,
-              int delay, int lost, int rxKBitRate) {},
-          onRemoteVideoTransportStats: (RtcConnection connection, int remoteUid,
-              int delay, int lost, int rxKBitRate) {},
-          onConnectionStateChanged: (RtcConnection connection,
-              ConnectionStateType state, ConnectionChangedReasonType reason) {},
-          onWlAccMessage: (RtcConnection connection, WlaccMessageReason reason,
-              WlaccSuggestAction action, String wlAccMsg) {},
-          onWlAccStats: (RtcConnection connection, WlAccStats currentStats,
-              WlAccStats averageStats) {},
-          onNetworkTypeChanged: (RtcConnection connection, NetworkType type) {},
-          onEncryptionError:
-              (RtcConnection connection, EncryptionErrorType errorType) {},
-          onPermissionError: (PermissionType permissionType) {},
-          onLocalUserRegistered: (int uid, String userAccount) {},
-          onUserInfoUpdated: (int uid, UserInfo info) {},
-          onUploadLogResult: (RtcConnection connection, String requestId,
-              bool success, UploadErrorReason reason) {},
-          onAudioSubscribeStateChanged: (String channel,
-              int uid,
-              StreamSubscribeState oldState,
-              StreamSubscribeState newState,
-              int elapseSinceLastState) {},
-          onVideoSubscribeStateChanged: (String channel,
-              int uid,
-              StreamSubscribeState oldState,
-              StreamSubscribeState newState,
-              int elapseSinceLastState) {},
-          onAudioPublishStateChanged: (String channel,
-              StreamPublishState oldState,
-              StreamPublishState newState,
-              int elapseSinceLastState) {},
-          onVideoPublishStateChanged: (VideoSourceType source,
-              String channel,
-              StreamPublishState oldState,
-              StreamPublishState newState,
-              int elapseSinceLastState) {},
-          onExtensionEvent:
-              (String provider, String extension, String key, String value) {},
-          onExtensionStarted: (String provider, String extension) {},
-          onExtensionStopped: (String provider, String extension) {},
-          onExtensionError:
-              (String provider, String extension, int error, String message) {},
-          onUserAccountUpdated:
-              (RtcConnection connection, int remoteUid, String userAccount) {},
-          onLocalVideoTranscoderError:
-              (TranscodingVideoStream stream, VideoTranscoderError error) {},
-          onVideoRenderingTracingResult: (RtcConnection connection,
-              int uid,
-              MediaTraceEvent currentEvent,
-              VideoRenderingTracingInfo tracingInfo) {},
-        );
-        rtcEngine.unregisterEventHandler(
-          eventHandler,
-        );
-      } catch (e) {
-        if (e is! AgoraRtcException) {
-          debugPrint('[unregisterEventHandler] error: ${e.toString()}');
-          rethrow;
-        }
-
-        if (e.code != -4) {
-          // Only not supported error supported.
-          rethrow;
-        }
-      }
-
-      await rtcEngine.release();
-    },
-  );
-
-  testWidgets(
-    'setRemoteUserPriority',
-    (WidgetTester tester) async {
-      String engineAppId = const String.fromEnvironment('TEST_APP_ID',
-          defaultValue: '<YOUR_APP_ID>');
-
-      RtcEngine rtcEngine = createAgoraRtcEngine();
-      await rtcEngine.initialize(RtcEngineContext(
-        appId: engineAppId,
-        areaCode: AreaCode.areaCodeGlob.value(),
-      ));
-
-      try {
-        const int uid = 10;
-        const PriorityType userPriority = PriorityType.priorityHigh;
-        await rtcEngine.setRemoteUserPriority(
-          uid: uid,
-          userPriority: userPriority,
-        );
-      } catch (e) {
-        if (e is! AgoraRtcException) {
-          debugPrint('[setRemoteUserPriority] error: ${e.toString()}');
-          rethrow;
-        }
-
-        if (e.code != -4) {
-          // Only not supported error supported.
-          rethrow;
-        }
-      }
-
-      await rtcEngine.release();
-    },
-  );
-
-  testWidgets(
-    'setEncryptionMode',
-    (WidgetTester tester) async {
-      String engineAppId = const String.fromEnvironment('TEST_APP_ID',
-          defaultValue: '<YOUR_APP_ID>');
-
-      RtcEngine rtcEngine = createAgoraRtcEngine();
-      await rtcEngine.initialize(RtcEngineContext(
-        appId: engineAppId,
-        areaCode: AreaCode.areaCodeGlob.value(),
-      ));
-
-      try {
-        const String encryptionMode = "hello";
-        await rtcEngine.setEncryptionMode(
-          encryptionMode,
-        );
-      } catch (e) {
-        if (e is! AgoraRtcException) {
-          debugPrint('[setEncryptionMode] error: ${e.toString()}');
-          rethrow;
-        }
-
-        if (e.code != -4) {
-          // Only not supported error supported.
-          rethrow;
-        }
-      }
-
-      await rtcEngine.release();
-    },
-  );
-
-  testWidgets(
-    'setEncryptionSecret',
-    (WidgetTester tester) async {
-      String engineAppId = const String.fromEnvironment('TEST_APP_ID',
-          defaultValue: '<YOUR_APP_ID>');
-
-      RtcEngine rtcEngine = createAgoraRtcEngine();
-      await rtcEngine.initialize(RtcEngineContext(
-        appId: engineAppId,
-        areaCode: AreaCode.areaCodeGlob.value(),
-      ));
-
-      try {
-        const String secret = "hello";
-        await rtcEngine.setEncryptionSecret(
-          secret,
-        );
-      } catch (e) {
-        if (e is! AgoraRtcException) {
-          debugPrint('[setEncryptionSecret] error: ${e.toString()}');
-          rethrow;
-        }
-
-        if (e.code != -4) {
-          // Only not supported error supported.
-          rethrow;
-        }
-      }
-
-      await rtcEngine.release();
-    },
-  );
-
-  testWidgets(
-    'enableEncryption',
-    (WidgetTester tester) async {
-      String engineAppId = const String.fromEnvironment('TEST_APP_ID',
-          defaultValue: '<YOUR_APP_ID>');
-
-      RtcEngine rtcEngine = createAgoraRtcEngine();
-      await rtcEngine.initialize(RtcEngineContext(
-        appId: engineAppId,
-        areaCode: AreaCode.areaCodeGlob.value(),
-      ));
-
-      try {
-        const bool enabled = true;
-        const EncryptionMode configEncryptionMode = EncryptionMode.aes128Xts;
-        const String configEncryptionKey = "hello";
-        Uint8List configEncryptionKdfSalt = Uint8List.fromList([1, 2, 3, 4, 5]);
-        const bool configDatastreamEncryptionEnabled = true;
-        final EncryptionConfig config = EncryptionConfig(
-          encryptionMode: configEncryptionMode,
-          encryptionKey: configEncryptionKey,
-          encryptionKdfSalt: configEncryptionKdfSalt,
-          datastreamEncryptionEnabled: configDatastreamEncryptionEnabled,
-        );
-        await rtcEngine.enableEncryption(
-          enabled: enabled,
-          config: config,
-        );
-      } catch (e) {
-        if (e is! AgoraRtcException) {
-          debugPrint('[enableEncryption] error: ${e.toString()}');
-          rethrow;
-        }
-
-        if (e.code != -4) {
-          // Only not supported error supported.
-          rethrow;
-        }
-      }
-
-      await rtcEngine.release();
-    },
-  );
-
-  testWidgets(
-    'sendStreamMessage',
-    (WidgetTester tester) async {
-      String engineAppId = const String.fromEnvironment('TEST_APP_ID',
-          defaultValue: '<YOUR_APP_ID>');
-
-      RtcEngine rtcEngine = createAgoraRtcEngine();
-      await rtcEngine.initialize(RtcEngineContext(
-        appId: engineAppId,
-        areaCode: AreaCode.areaCodeGlob.value(),
-      ));
-
-      try {
-        const int streamId = 10;
-        Uint8List data = Uint8List.fromList([1, 2, 3, 4, 5]);
-        const int length = 10;
-        await rtcEngine.sendStreamMessage(
-          streamId: streamId,
-          data: data,
-          length: length,
-        );
-      } catch (e) {
-        if (e is! AgoraRtcException) {
-          debugPrint('[sendStreamMessage] error: ${e.toString()}');
-          rethrow;
-        }
-
-        if (e.code != -4) {
-          // Only not supported error supported.
-          rethrow;
-        }
-      }
-
-      await rtcEngine.release();
-    },
-  );
-
-  testWidgets(
-    'addVideoWatermark',
-    (WidgetTester tester) async {
-      String engineAppId = const String.fromEnvironment('TEST_APP_ID',
-          defaultValue: '<YOUR_APP_ID>');
-
-      RtcEngine rtcEngine = createAgoraRtcEngine();
-      await rtcEngine.initialize(RtcEngineContext(
-        appId: engineAppId,
-        areaCode: AreaCode.areaCodeGlob.value(),
-      ));
-
-      try {
-        const String watermarkUrl = "hello";
-        const int positionInLandscapeModeX = 10;
-        const int positionInLandscapeModeY = 10;
-        const int positionInLandscapeModeWidth = 10;
-        const int positionInLandscapeModeHeight = 10;
-        const Rectangle optionsPositionInLandscapeMode = Rectangle(
-          x: positionInLandscapeModeX,
-          y: positionInLandscapeModeY,
-          width: positionInLandscapeModeWidth,
-          height: positionInLandscapeModeHeight,
-        );
-        const int positionInPortraitModeX = 10;
-        const int positionInPortraitModeY = 10;
-        const int positionInPortraitModeWidth = 10;
-        const int positionInPortraitModeHeight = 10;
-        const Rectangle optionsPositionInPortraitMode = Rectangle(
-          x: positionInPortraitModeX,
-          y: positionInPortraitModeY,
-          width: positionInPortraitModeWidth,
-          height: positionInPortraitModeHeight,
-        );
-        const double watermarkRatioXRatio = 10.0;
-        const double watermarkRatioYRatio = 10.0;
-        const double watermarkRatioWidthRatio = 10.0;
-        const WatermarkRatio optionsWatermarkRatio = WatermarkRatio(
-          xRatio: watermarkRatioXRatio,
-          yRatio: watermarkRatioYRatio,
-          widthRatio: watermarkRatioWidthRatio,
-        );
-        const WatermarkFitMode optionsMode =
-            WatermarkFitMode.fitModeCoverPosition;
-        const bool optionsVisibleInPreview = true;
-        const WatermarkOptions options = WatermarkOptions(
-          visibleInPreview: optionsVisibleInPreview,
-          positionInLandscapeMode: optionsPositionInLandscapeMode,
-          positionInPortraitMode: optionsPositionInPortraitMode,
-          watermarkRatio: optionsWatermarkRatio,
-          mode: optionsMode,
-        );
-        await rtcEngine.addVideoWatermark(
-          watermarkUrl: watermarkUrl,
-          options: options,
-        );
-      } catch (e) {
-        if (e is! AgoraRtcException) {
-          debugPrint('[addVideoWatermark] error: ${e.toString()}');
-          rethrow;
-        }
-
-        if (e.code != -4) {
-          // Only not supported error supported.
-          rethrow;
-        }
-      }
-
-      await rtcEngine.release();
-    },
-  );
-
-  testWidgets(
-    'clearVideoWatermarks',
-    (WidgetTester tester) async {
-      String engineAppId = const String.fromEnvironment('TEST_APP_ID',
-          defaultValue: '<YOUR_APP_ID>');
-
-      RtcEngine rtcEngine = createAgoraRtcEngine();
-      await rtcEngine.initialize(RtcEngineContext(
-        appId: engineAppId,
-        areaCode: AreaCode.areaCodeGlob.value(),
-      ));
-
-      try {
-        await rtcEngine.clearVideoWatermarks();
-      } catch (e) {
-        if (e is! AgoraRtcException) {
-          debugPrint('[clearVideoWatermarks] error: ${e.toString()}');
-          rethrow;
-        }
-
-        if (e.code != -4) {
-          // Only not supported error supported.
-          rethrow;
-        }
-      }
-
-      await rtcEngine.release();
-    },
-  );
-
-  testWidgets(
-    'pauseAudio',
-    (WidgetTester tester) async {
-      String engineAppId = const String.fromEnvironment('TEST_APP_ID',
-          defaultValue: '<YOUR_APP_ID>');
-
-      RtcEngine rtcEngine = createAgoraRtcEngine();
-      await rtcEngine.initialize(RtcEngineContext(
-        appId: engineAppId,
-        areaCode: AreaCode.areaCodeGlob.value(),
-      ));
-
-      try {
-        await rtcEngine.pauseAudio();
-      } catch (e) {
-        if (e is! AgoraRtcException) {
-          debugPrint('[pauseAudio] error: ${e.toString()}');
-          rethrow;
-        }
-
-        if (e.code != -4) {
-          // Only not supported error supported.
-          rethrow;
-        }
-      }
-
-      await rtcEngine.release();
-    },
-  );
-
-  testWidgets(
-    'resumeAudio',
-    (WidgetTester tester) async {
-      String engineAppId = const String.fromEnvironment('TEST_APP_ID',
-          defaultValue: '<YOUR_APP_ID>');
-
-      RtcEngine rtcEngine = createAgoraRtcEngine();
-      await rtcEngine.initialize(RtcEngineContext(
-        appId: engineAppId,
-        areaCode: AreaCode.areaCodeGlob.value(),
-      ));
-
-      try {
-        await rtcEngine.resumeAudio();
-      } catch (e) {
-        if (e is! AgoraRtcException) {
-          debugPrint('[resumeAudio] error: ${e.toString()}');
-          rethrow;
-        }
-
-        if (e.code != -4) {
-          // Only not supported error supported.
-          rethrow;
-        }
-      }
-
-      await rtcEngine.release();
-    },
-  );
-
-  testWidgets(
-    'enableWebSdkInteroperability',
-    (WidgetTester tester) async {
-      String engineAppId = const String.fromEnvironment('TEST_APP_ID',
-          defaultValue: '<YOUR_APP_ID>');
-
-      RtcEngine rtcEngine = createAgoraRtcEngine();
-      await rtcEngine.initialize(RtcEngineContext(
-        appId: engineAppId,
-        areaCode: AreaCode.areaCodeGlob.value(),
-      ));
-
-      try {
-        const bool enabled = true;
-        await rtcEngine.enableWebSdkInteroperability(
-          enabled,
-        );
-      } catch (e) {
-        if (e is! AgoraRtcException) {
-          debugPrint('[enableWebSdkInteroperability] error: ${e.toString()}');
-          rethrow;
-        }
-
-        if (e.code != -4) {
-          // Only not supported error supported.
-          rethrow;
-        }
-      }
-
-      await rtcEngine.release();
-    },
-  );
-
-  testWidgets(
-    'sendCustomReportMessage',
-    (WidgetTester tester) async {
-      String engineAppId = const String.fromEnvironment('TEST_APP_ID',
-          defaultValue: '<YOUR_APP_ID>');
-
-      RtcEngine rtcEngine = createAgoraRtcEngine();
-      await rtcEngine.initialize(RtcEngineContext(
-        appId: engineAppId,
-        areaCode: AreaCode.areaCodeGlob.value(),
-      ));
-
-      try {
-        const String id = "hello";
-        const String category = "hello";
-        const String event = "hello";
-        const String label = "hello";
-        const int value = 10;
-        await rtcEngine.sendCustomReportMessage(
-          id: id,
-          category: category,
-          event: event,
-          label: label,
-          value: value,
-        );
-      } catch (e) {
-        if (e is! AgoraRtcException) {
-          debugPrint('[sendCustomReportMessage] error: ${e.toString()}');
-          rethrow;
-        }
-
-        if (e.code != -4) {
-          // Only not supported error supported.
-          rethrow;
-        }
-      }
-
-      await rtcEngine.release();
-    },
-  );
-
-  testWidgets(
-    'registerMediaMetadataObserver',
-    (WidgetTester tester) async {
-      String engineAppId = const String.fromEnvironment('TEST_APP_ID',
-          defaultValue: '<YOUR_APP_ID>');
-
-      RtcEngine rtcEngine = createAgoraRtcEngine();
-      await rtcEngine.initialize(RtcEngineContext(
-        appId: engineAppId,
-        areaCode: AreaCode.areaCodeGlob.value(),
-      ));
-
-      try {
-        final MetadataObserver observer = MetadataObserver(
-          onMetadataReceived: (Metadata metadata) {},
-        );
-        const MetadataType type = MetadataType.unknownMetadata;
-        rtcEngine.registerMediaMetadataObserver(
-          observer: observer,
-          type: type,
-        );
-      } catch (e) {
-        if (e is! AgoraRtcException) {
-          debugPrint('[registerMediaMetadataObserver] error: ${e.toString()}');
-          rethrow;
-        }
-
-        if (e.code != -4) {
-          // Only not supported error supported.
-          rethrow;
-        }
-      }
-
-      await rtcEngine.release();
-    },
-  );
-
-  testWidgets(
-    'unregisterMediaMetadataObserver',
-    (WidgetTester tester) async {
-      String engineAppId = const String.fromEnvironment('TEST_APP_ID',
-          defaultValue: '<YOUR_APP_ID>');
-
-      RtcEngine rtcEngine = createAgoraRtcEngine();
-      await rtcEngine.initialize(RtcEngineContext(
-        appId: engineAppId,
-        areaCode: AreaCode.areaCodeGlob.value(),
-      ));
-
-      try {
-        final MetadataObserver observer = MetadataObserver(
-          onMetadataReceived: (Metadata metadata) {},
-        );
-        const MetadataType type = MetadataType.unknownMetadata;
-        rtcEngine.unregisterMediaMetadataObserver(
-          observer: observer,
-          type: type,
-        );
-      } catch (e) {
-        if (e is! AgoraRtcException) {
-          debugPrint(
-              '[unregisterMediaMetadataObserver] error: ${e.toString()}');
-          rethrow;
-        }
-
-        if (e.code != -4) {
-          // Only not supported error supported.
-          rethrow;
-        }
-      }
-
-      await rtcEngine.release();
-    },
-  );
-
-  testWidgets(
-    'startAudioFrameDump',
-    (WidgetTester tester) async {
-      String engineAppId = const String.fromEnvironment('TEST_APP_ID',
-          defaultValue: '<YOUR_APP_ID>');
-
-      RtcEngine rtcEngine = createAgoraRtcEngine();
-      await rtcEngine.initialize(RtcEngineContext(
-        appId: engineAppId,
-        areaCode: AreaCode.areaCodeGlob.value(),
-      ));
-
-      try {
-        const String channelId = "hello";
-        const int userId = 10;
-        const String location = "hello";
-        const String uuid = "hello";
-        const String passwd = "hello";
-        const int durationMs = 10;
-        const bool autoUpload = true;
-        await rtcEngine.startAudioFrameDump(
-          channelId: channelId,
-          userId: userId,
-          location: location,
-          uuid: uuid,
-          passwd: passwd,
-          durationMs: durationMs,
-          autoUpload: autoUpload,
-        );
-      } catch (e) {
-        if (e is! AgoraRtcException) {
-          debugPrint('[startAudioFrameDump] error: ${e.toString()}');
-          rethrow;
-        }
-
-        if (e.code != -4) {
-          // Only not supported error supported.
-          rethrow;
-        }
-      }
-
-      await rtcEngine.release();
-    },
-  );
-
-  testWidgets(
-    'stopAudioFrameDump',
-    (WidgetTester tester) async {
-      String engineAppId = const String.fromEnvironment('TEST_APP_ID',
-          defaultValue: '<YOUR_APP_ID>');
-
-      RtcEngine rtcEngine = createAgoraRtcEngine();
-      await rtcEngine.initialize(RtcEngineContext(
-        appId: engineAppId,
-        areaCode: AreaCode.areaCodeGlob.value(),
-      ));
-
-      try {
-        const String channelId = "hello";
-        const int userId = 10;
-        const String location = "hello";
-        await rtcEngine.stopAudioFrameDump(
-          channelId: channelId,
-          userId: userId,
-          location: location,
-        );
-      } catch (e) {
-        if (e is! AgoraRtcException) {
-          debugPrint('[stopAudioFrameDump] error: ${e.toString()}');
-          rethrow;
-        }
-
-        if (e.code != -4) {
-          // Only not supported error supported.
-          rethrow;
-        }
-      }
-
-      await rtcEngine.release();
-    },
-  );
-
-  testWidgets(
-    'setAINSMode',
-    (WidgetTester tester) async {
-      String engineAppId = const String.fromEnvironment('TEST_APP_ID',
-          defaultValue: '<YOUR_APP_ID>');
-
-      RtcEngine rtcEngine = createAgoraRtcEngine();
-      await rtcEngine.initialize(RtcEngineContext(
-        appId: engineAppId,
-        areaCode: AreaCode.areaCodeGlob.value(),
-      ));
-
-      try {
-        const bool enabled = true;
-        const AudioAinsMode mode = AudioAinsMode.ainsModeBalanced;
-        await rtcEngine.setAINSMode(
-          enabled: enabled,
-          mode: mode,
-        );
-      } catch (e) {
-        if (e is! AgoraRtcException) {
-          debugPrint('[setAINSMode] error: ${e.toString()}');
-          rethrow;
-        }
-
-        if (e.code != -4) {
-          // Only not supported error supported.
-          rethrow;
-        }
-      }
-
-      await rtcEngine.release();
-    },
-  );
-
-  testWidgets(
-    'registerLocalUserAccount',
-    (WidgetTester tester) async {
-      String engineAppId = const String.fromEnvironment('TEST_APP_ID',
-          defaultValue: '<YOUR_APP_ID>');
-
-      RtcEngine rtcEngine = createAgoraRtcEngine();
-      await rtcEngine.initialize(RtcEngineContext(
-        appId: engineAppId,
-        areaCode: AreaCode.areaCodeGlob.value(),
-      ));
-
-      try {
-        const String appId = "hello";
-        const String userAccount = "hello";
-        await rtcEngine.registerLocalUserAccount(
-          appId: appId,
-          userAccount: userAccount,
-        );
-      } catch (e) {
-        if (e is! AgoraRtcException) {
-          debugPrint('[registerLocalUserAccount] error: ${e.toString()}');
-          rethrow;
-        }
-
-        if (e.code != -4) {
-          // Only not supported error supported.
-          rethrow;
-        }
-      }
-
-      await rtcEngine.release();
-    },
-  );
-
-  testWidgets(
-    'joinChannelWithUserAccount',
-    (WidgetTester tester) async {
-      String engineAppId = const String.fromEnvironment('TEST_APP_ID',
-          defaultValue: '<YOUR_APP_ID>');
-
-      RtcEngine rtcEngine = createAgoraRtcEngine();
-      await rtcEngine.initialize(RtcEngineContext(
-        appId: engineAppId,
-        areaCode: AreaCode.areaCodeGlob.value(),
-      ));
-
-      try {
-        const String token = "hello";
-        const String channelId = "hello";
-        const String userAccount = "hello";
-        const ClientRoleType optionsClientRoleType =
-            ClientRoleType.clientRoleBroadcaster;
-        const AudienceLatencyLevelType optionsAudienceLatencyLevel =
-            AudienceLatencyLevelType.audienceLatencyLevelLowLatency;
-        const VideoStreamType optionsDefaultVideoStreamType =
-            VideoStreamType.videoStreamHigh;
-        const ChannelProfileType optionsChannelProfile =
-            ChannelProfileType.channelProfileCommunication;
-        const bool optionsPublishCameraTrack = true;
-        const bool optionsPublishSecondaryCameraTrack = true;
-        const bool optionsPublishThirdCameraTrack = true;
-        const bool optionsPublishFourthCameraTrack = true;
-        const bool optionsPublishMicrophoneTrack = true;
-        const bool optionsPublishScreenCaptureVideo = true;
-        const bool optionsPublishScreenCaptureAudio = true;
-        const bool optionsPublishScreenTrack = true;
-        const bool optionsPublishSecondaryScreenTrack = true;
-        const bool optionsPublishThirdScreenTrack = true;
-        const bool optionsPublishFourthScreenTrack = true;
-        const bool optionsPublishCustomAudioTrack = true;
-        const int optionsPublishCustomAudioTrackId = 10;
-        const bool optionsPublishCustomVideoTrack = true;
-        const bool optionsPublishEncodedVideoTrack = true;
-        const bool optionsPublishMediaPlayerAudioTrack = true;
-        const bool optionsPublishMediaPlayerVideoTrack = true;
-        const bool optionsPublishTranscodedVideoTrack = true;
-        const bool optionsPublishMixedAudioTrack = true;
-        const bool optionsAutoSubscribeAudio = true;
-        const bool optionsAutoSubscribeVideo = true;
-        const bool optionsEnableAudioRecordingOrPlayout = true;
-        const int optionsPublishMediaPlayerId = 10;
-        const int optionsAudioDelayMs = 10;
-        const int optionsMediaPlayerAudioDelayMs = 10;
-        const String optionsToken = "hello";
-        const bool optionsEnableBuiltInMediaEncryption = true;
-        const bool optionsPublishRhythmPlayerTrack = true;
-        const bool optionsIsInteractiveAudience = true;
-        const int optionsCustomVideoTrackId = 10;
-        const bool optionsIsAudioFilterable = true;
-        const ChannelMediaOptions options = ChannelMediaOptions(
-          publishCameraTrack: optionsPublishCameraTrack,
-          publishSecondaryCameraTrack: optionsPublishSecondaryCameraTrack,
-          publishThirdCameraTrack: optionsPublishThirdCameraTrack,
-          publishFourthCameraTrack: optionsPublishFourthCameraTrack,
-          publishMicrophoneTrack: optionsPublishMicrophoneTrack,
-          publishScreenCaptureVideo: optionsPublishScreenCaptureVideo,
-          publishScreenCaptureAudio: optionsPublishScreenCaptureAudio,
-          publishScreenTrack: optionsPublishScreenTrack,
-          publishSecondaryScreenTrack: optionsPublishSecondaryScreenTrack,
-          publishThirdScreenTrack: optionsPublishThirdScreenTrack,
-          publishFourthScreenTrack: optionsPublishFourthScreenTrack,
-          publishCustomAudioTrack: optionsPublishCustomAudioTrack,
-          publishCustomAudioTrackId: optionsPublishCustomAudioTrackId,
-          publishCustomVideoTrack: optionsPublishCustomVideoTrack,
-          publishEncodedVideoTrack: optionsPublishEncodedVideoTrack,
-          publishMediaPlayerAudioTrack: optionsPublishMediaPlayerAudioTrack,
-          publishMediaPlayerVideoTrack: optionsPublishMediaPlayerVideoTrack,
-          publishTranscodedVideoTrack: optionsPublishTranscodedVideoTrack,
-          publishMixedAudioTrack: optionsPublishMixedAudioTrack,
-          autoSubscribeAudio: optionsAutoSubscribeAudio,
-          autoSubscribeVideo: optionsAutoSubscribeVideo,
-          enableAudioRecordingOrPlayout: optionsEnableAudioRecordingOrPlayout,
-          publishMediaPlayerId: optionsPublishMediaPlayerId,
-          clientRoleType: optionsClientRoleType,
-          audienceLatencyLevel: optionsAudienceLatencyLevel,
-          defaultVideoStreamType: optionsDefaultVideoStreamType,
-          channelProfile: optionsChannelProfile,
-          audioDelayMs: optionsAudioDelayMs,
-          mediaPlayerAudioDelayMs: optionsMediaPlayerAudioDelayMs,
-          token: optionsToken,
-          enableBuiltInMediaEncryption: optionsEnableBuiltInMediaEncryption,
-          publishRhythmPlayerTrack: optionsPublishRhythmPlayerTrack,
-          isInteractiveAudience: optionsIsInteractiveAudience,
-          customVideoTrackId: optionsCustomVideoTrackId,
-          isAudioFilterable: optionsIsAudioFilterable,
-        );
-        await rtcEngine.joinChannelWithUserAccount(
-          token: token,
-          channelId: channelId,
-          userAccount: userAccount,
-          options: options,
-        );
-      } catch (e) {
-        if (e is! AgoraRtcException) {
-          debugPrint('[joinChannelWithUserAccount] error: ${e.toString()}');
-          rethrow;
-        }
-
-        if (e.code != -4) {
-          // Only not supported error supported.
-          rethrow;
-        }
-      }
-
-      await rtcEngine.release();
-    },
-  );
-
-  testWidgets(
-    'joinChannelWithUserAccountEx',
-    (WidgetTester tester) async {
-      String engineAppId = const String.fromEnvironment('TEST_APP_ID',
-          defaultValue: '<YOUR_APP_ID>');
-
-      RtcEngine rtcEngine = createAgoraRtcEngine();
-      await rtcEngine.initialize(RtcEngineContext(
-        appId: engineAppId,
-        areaCode: AreaCode.areaCodeGlob.value(),
-      ));
-
-      try {
-        const String token = "hello";
-        const String channelId = "hello";
-        const String userAccount = "hello";
-        const ClientRoleType optionsClientRoleType =
-            ClientRoleType.clientRoleBroadcaster;
-        const AudienceLatencyLevelType optionsAudienceLatencyLevel =
-            AudienceLatencyLevelType.audienceLatencyLevelLowLatency;
-        const VideoStreamType optionsDefaultVideoStreamType =
-            VideoStreamType.videoStreamHigh;
-        const ChannelProfileType optionsChannelProfile =
-            ChannelProfileType.channelProfileCommunication;
-        const bool optionsPublishCameraTrack = true;
-        const bool optionsPublishSecondaryCameraTrack = true;
-        const bool optionsPublishThirdCameraTrack = true;
-        const bool optionsPublishFourthCameraTrack = true;
-        const bool optionsPublishMicrophoneTrack = true;
-        const bool optionsPublishScreenCaptureVideo = true;
-        const bool optionsPublishScreenCaptureAudio = true;
-        const bool optionsPublishScreenTrack = true;
-        const bool optionsPublishSecondaryScreenTrack = true;
-        const bool optionsPublishThirdScreenTrack = true;
-        const bool optionsPublishFourthScreenTrack = true;
-        const bool optionsPublishCustomAudioTrack = true;
-        const int optionsPublishCustomAudioTrackId = 10;
-        const bool optionsPublishCustomVideoTrack = true;
-        const bool optionsPublishEncodedVideoTrack = true;
-        const bool optionsPublishMediaPlayerAudioTrack = true;
-        const bool optionsPublishMediaPlayerVideoTrack = true;
-        const bool optionsPublishTranscodedVideoTrack = true;
-        const bool optionsPublishMixedAudioTrack = true;
-        const bool optionsAutoSubscribeAudio = true;
-        const bool optionsAutoSubscribeVideo = true;
-        const bool optionsEnableAudioRecordingOrPlayout = true;
-        const int optionsPublishMediaPlayerId = 10;
-        const int optionsAudioDelayMs = 10;
-        const int optionsMediaPlayerAudioDelayMs = 10;
-        const String optionsToken = "hello";
-        const bool optionsEnableBuiltInMediaEncryption = true;
-        const bool optionsPublishRhythmPlayerTrack = true;
-        const bool optionsIsInteractiveAudience = true;
-        const int optionsCustomVideoTrackId = 10;
-        const bool optionsIsAudioFilterable = true;
-        const ChannelMediaOptions options = ChannelMediaOptions(
-          publishCameraTrack: optionsPublishCameraTrack,
-          publishSecondaryCameraTrack: optionsPublishSecondaryCameraTrack,
-          publishThirdCameraTrack: optionsPublishThirdCameraTrack,
-          publishFourthCameraTrack: optionsPublishFourthCameraTrack,
-          publishMicrophoneTrack: optionsPublishMicrophoneTrack,
-          publishScreenCaptureVideo: optionsPublishScreenCaptureVideo,
-          publishScreenCaptureAudio: optionsPublishScreenCaptureAudio,
-          publishScreenTrack: optionsPublishScreenTrack,
-          publishSecondaryScreenTrack: optionsPublishSecondaryScreenTrack,
-          publishThirdScreenTrack: optionsPublishThirdScreenTrack,
-          publishFourthScreenTrack: optionsPublishFourthScreenTrack,
-          publishCustomAudioTrack: optionsPublishCustomAudioTrack,
-          publishCustomAudioTrackId: optionsPublishCustomAudioTrackId,
-          publishCustomVideoTrack: optionsPublishCustomVideoTrack,
-          publishEncodedVideoTrack: optionsPublishEncodedVideoTrack,
-          publishMediaPlayerAudioTrack: optionsPublishMediaPlayerAudioTrack,
-          publishMediaPlayerVideoTrack: optionsPublishMediaPlayerVideoTrack,
-          publishTranscodedVideoTrack: optionsPublishTranscodedVideoTrack,
-          publishMixedAudioTrack: optionsPublishMixedAudioTrack,
-          autoSubscribeAudio: optionsAutoSubscribeAudio,
-          autoSubscribeVideo: optionsAutoSubscribeVideo,
-          enableAudioRecordingOrPlayout: optionsEnableAudioRecordingOrPlayout,
-          publishMediaPlayerId: optionsPublishMediaPlayerId,
-          clientRoleType: optionsClientRoleType,
-          audienceLatencyLevel: optionsAudienceLatencyLevel,
-          defaultVideoStreamType: optionsDefaultVideoStreamType,
-          channelProfile: optionsChannelProfile,
-          audioDelayMs: optionsAudioDelayMs,
-          mediaPlayerAudioDelayMs: optionsMediaPlayerAudioDelayMs,
-          token: optionsToken,
-          enableBuiltInMediaEncryption: optionsEnableBuiltInMediaEncryption,
-          publishRhythmPlayerTrack: optionsPublishRhythmPlayerTrack,
-          isInteractiveAudience: optionsIsInteractiveAudience,
-          customVideoTrackId: optionsCustomVideoTrackId,
-          isAudioFilterable: optionsIsAudioFilterable,
-        );
-        await rtcEngine.joinChannelWithUserAccountEx(
-          token: token,
-          channelId: channelId,
-          userAccount: userAccount,
-          options: options,
-        );
-      } catch (e) {
-        if (e is! AgoraRtcException) {
-          debugPrint('[joinChannelWithUserAccountEx] error: ${e.toString()}');
-          rethrow;
-        }
-
-        if (e.code != -4) {
-          // Only not supported error supported.
-          rethrow;
-        }
-      }
-
-      await rtcEngine.release();
-    },
-  );
-
-  testWidgets(
-    'getUserInfoByUserAccount',
-    (WidgetTester tester) async {
-      String engineAppId = const String.fromEnvironment('TEST_APP_ID',
-          defaultValue: '<YOUR_APP_ID>');
-
-      RtcEngine rtcEngine = createAgoraRtcEngine();
-      await rtcEngine.initialize(RtcEngineContext(
-        appId: engineAppId,
-        areaCode: AreaCode.areaCodeGlob.value(),
-      ));
-
-      try {
-        const String userAccount = "hello";
-        await rtcEngine.getUserInfoByUserAccount(
-          userAccount,
-        );
-      } catch (e) {
-        if (e is! AgoraRtcException) {
-          debugPrint('[getUserInfoByUserAccount] error: ${e.toString()}');
-          rethrow;
-        }
-
-        if (e.code != -4) {
-          // Only not supported error supported.
-          rethrow;
-        }
-      }
-
-      await rtcEngine.release();
-    },
-  );
-
-  testWidgets(
-    'getUserInfoByUid',
-    (WidgetTester tester) async {
-      String engineAppId = const String.fromEnvironment('TEST_APP_ID',
-          defaultValue: '<YOUR_APP_ID>');
-
-      RtcEngine rtcEngine = createAgoraRtcEngine();
-      await rtcEngine.initialize(RtcEngineContext(
-        appId: engineAppId,
-        areaCode: AreaCode.areaCodeGlob.value(),
-      ));
-
-      try {
-        const int uid = 10;
-        await rtcEngine.getUserInfoByUid(
-          uid,
-        );
-      } catch (e) {
-        if (e is! AgoraRtcException) {
-          debugPrint('[getUserInfoByUid] error: ${e.toString()}');
-          rethrow;
-        }
-
-        if (e.code != -4) {
-          // Only not supported error supported.
-          rethrow;
-        }
-      }
-
-      await rtcEngine.release();
-    },
-  );
-
-  testWidgets(
-    'stopChannelMediaRelay',
-    (WidgetTester tester) async {
-      String engineAppId = const String.fromEnvironment('TEST_APP_ID',
-          defaultValue: '<YOUR_APP_ID>');
-
-      RtcEngine rtcEngine = createAgoraRtcEngine();
-      await rtcEngine.initialize(RtcEngineContext(
-        appId: engineAppId,
-        areaCode: AreaCode.areaCodeGlob.value(),
-      ));
-
-      try {
-        await rtcEngine.stopChannelMediaRelay();
-      } catch (e) {
-        if (e is! AgoraRtcException) {
-          debugPrint('[stopChannelMediaRelay] error: ${e.toString()}');
-          rethrow;
-        }
-
-        if (e.code != -4) {
-          // Only not supported error supported.
-          rethrow;
-        }
-      }
-
-      await rtcEngine.release();
-    },
-  );
-
-  testWidgets(
-    'pauseAllChannelMediaRelay',
-    (WidgetTester tester) async {
-      String engineAppId = const String.fromEnvironment('TEST_APP_ID',
-          defaultValue: '<YOUR_APP_ID>');
-
-      RtcEngine rtcEngine = createAgoraRtcEngine();
-      await rtcEngine.initialize(RtcEngineContext(
-        appId: engineAppId,
-        areaCode: AreaCode.areaCodeGlob.value(),
-      ));
-
-      try {
-        await rtcEngine.pauseAllChannelMediaRelay();
-      } catch (e) {
-        if (e is! AgoraRtcException) {
-          debugPrint('[pauseAllChannelMediaRelay] error: ${e.toString()}');
-          rethrow;
-        }
-
-        if (e.code != -4) {
-          // Only not supported error supported.
-          rethrow;
-        }
-      }
-
-      await rtcEngine.release();
-    },
-  );
-
-  testWidgets(
-    'resumeAllChannelMediaRelay',
-    (WidgetTester tester) async {
-      String engineAppId = const String.fromEnvironment('TEST_APP_ID',
-          defaultValue: '<YOUR_APP_ID>');
-
-      RtcEngine rtcEngine = createAgoraRtcEngine();
-      await rtcEngine.initialize(RtcEngineContext(
-        appId: engineAppId,
-        areaCode: AreaCode.areaCodeGlob.value(),
-      ));
-
-      try {
-        await rtcEngine.resumeAllChannelMediaRelay();
-      } catch (e) {
-        if (e is! AgoraRtcException) {
-          debugPrint('[resumeAllChannelMediaRelay] error: ${e.toString()}');
-          rethrow;
-        }
-
-        if (e.code != -4) {
-          // Only not supported error supported.
-          rethrow;
-        }
-      }
-
-      await rtcEngine.release();
-    },
-  );
-
-  testWidgets(
-    'setDirectCdnStreamingAudioConfiguration',
-    (WidgetTester tester) async {
-      String engineAppId = const String.fromEnvironment('TEST_APP_ID',
-          defaultValue: '<YOUR_APP_ID>');
-
-      RtcEngine rtcEngine = createAgoraRtcEngine();
-      await rtcEngine.initialize(RtcEngineContext(
-        appId: engineAppId,
-        areaCode: AreaCode.areaCodeGlob.value(),
-      ));
-
-      try {
-        const AudioProfileType profile = AudioProfileType.audioProfileDefault;
-        await rtcEngine.setDirectCdnStreamingAudioConfiguration(
-          profile,
-        );
-      } catch (e) {
-        if (e is! AgoraRtcException) {
-          debugPrint(
-              '[setDirectCdnStreamingAudioConfiguration] error: ${e.toString()}');
-          rethrow;
-        }
-
-        if (e.code != -4) {
-          // Only not supported error supported.
-          rethrow;
-        }
-      }
-
-      await rtcEngine.release();
-    },
-  );
-
-  testWidgets(
-    'setDirectCdnStreamingVideoConfiguration',
-    (WidgetTester tester) async {
-      String engineAppId = const String.fromEnvironment('TEST_APP_ID',
-          defaultValue: '<YOUR_APP_ID>');
-
-      RtcEngine rtcEngine = createAgoraRtcEngine();
-      await rtcEngine.initialize(RtcEngineContext(
-        appId: engineAppId,
-        areaCode: AreaCode.areaCodeGlob.value(),
-      ));
-
-      try {
-        const VideoCodecType configCodecType = VideoCodecType.videoCodecNone;
-        const int dimensionsWidth = 10;
-        const int dimensionsHeight = 10;
-        const VideoDimensions configDimensions = VideoDimensions(
-          width: dimensionsWidth,
-          height: dimensionsHeight,
-        );
-        const OrientationMode configOrientationMode =
-            OrientationMode.orientationModeAdaptive;
-        const DegradationPreference configDegradationPreference =
-            DegradationPreference.maintainQuality;
-        const VideoMirrorModeType configMirrorMode =
-            VideoMirrorModeType.videoMirrorModeAuto;
-        const EncodingPreference advanceOptionsEncodingPreference =
-            EncodingPreference.preferAuto;
-        const CompressionPreference advanceOptionsCompressionPreference =
-            CompressionPreference.preferLowLatency;
-        const AdvanceOptions configAdvanceOptions = AdvanceOptions(
-          encodingPreference: advanceOptionsEncodingPreference,
-          compressionPreference: advanceOptionsCompressionPreference,
-        );
-        const int configFrameRate = 10;
-        const int configBitrate = 10;
-        const int configMinBitrate = 10;
-        const VideoEncoderConfiguration config = VideoEncoderConfiguration(
-          codecType: configCodecType,
-          dimensions: configDimensions,
-          frameRate: configFrameRate,
-          bitrate: configBitrate,
-          minBitrate: configMinBitrate,
-          orientationMode: configOrientationMode,
-          degradationPreference: configDegradationPreference,
-          mirrorMode: configMirrorMode,
-          advanceOptions: configAdvanceOptions,
-        );
-        await rtcEngine.setDirectCdnStreamingVideoConfiguration(
-          config,
-        );
-      } catch (e) {
-        if (e is! AgoraRtcException) {
-          debugPrint(
-              '[setDirectCdnStreamingVideoConfiguration] error: ${e.toString()}');
-          rethrow;
-        }
-
-        if (e.code != -4) {
-          // Only not supported error supported.
-          rethrow;
-        }
-      }
-
-      await rtcEngine.release();
-    },
-  );
-
-  testWidgets(
-    'startDirectCdnStreaming',
-    (WidgetTester tester) async {
-      String engineAppId = const String.fromEnvironment('TEST_APP_ID',
-          defaultValue: '<YOUR_APP_ID>');
-
-      RtcEngine rtcEngine = createAgoraRtcEngine();
-      await rtcEngine.initialize(RtcEngineContext(
-        appId: engineAppId,
-        areaCode: AreaCode.areaCodeGlob.value(),
-      ));
-
-      try {
-        final DirectCdnStreamingEventHandler eventHandler =
-            DirectCdnStreamingEventHandler(
-          onDirectCdnStreamingStateChanged: (DirectCdnStreamingState state,
-              DirectCdnStreamingError error, String message) {},
-          onDirectCdnStreamingStats: (DirectCdnStreamingStats stats) {},
-        );
-        const String publishUrl = "hello";
-        const bool optionsPublishCameraTrack = true;
-        const bool optionsPublishMicrophoneTrack = true;
-        const bool optionsPublishCustomAudioTrack = true;
-        const bool optionsPublishCustomVideoTrack = true;
-        const bool optionsPublishMediaPlayerAudioTrack = true;
-        const int optionsPublishMediaPlayerId = 10;
-        const int optionsCustomVideoTrackId = 10;
-        const DirectCdnStreamingMediaOptions options =
-            DirectCdnStreamingMediaOptions(
-          publishCameraTrack: optionsPublishCameraTrack,
-          publishMicrophoneTrack: optionsPublishMicrophoneTrack,
-          publishCustomAudioTrack: optionsPublishCustomAudioTrack,
-          publishCustomVideoTrack: optionsPublishCustomVideoTrack,
-          publishMediaPlayerAudioTrack: optionsPublishMediaPlayerAudioTrack,
-          publishMediaPlayerId: optionsPublishMediaPlayerId,
-          customVideoTrackId: optionsCustomVideoTrackId,
-        );
-        await rtcEngine.startDirectCdnStreaming(
-          eventHandler: eventHandler,
-          publishUrl: publishUrl,
-          options: options,
-        );
-      } catch (e) {
-        if (e is! AgoraRtcException) {
-          debugPrint('[startDirectCdnStreaming] error: ${e.toString()}');
-          rethrow;
-        }
-
-        if (e.code != -4) {
-          // Only not supported error supported.
-          rethrow;
-        }
-      }
-
-      await rtcEngine.release();
-    },
-  );
-
-  testWidgets(
-    'stopDirectCdnStreaming',
-    (WidgetTester tester) async {
-      String engineAppId = const String.fromEnvironment('TEST_APP_ID',
-          defaultValue: '<YOUR_APP_ID>');
-
-      RtcEngine rtcEngine = createAgoraRtcEngine();
-      await rtcEngine.initialize(RtcEngineContext(
-        appId: engineAppId,
-        areaCode: AreaCode.areaCodeGlob.value(),
-      ));
-
-      try {
-        await rtcEngine.stopDirectCdnStreaming();
-      } catch (e) {
-        if (e is! AgoraRtcException) {
-          debugPrint('[stopDirectCdnStreaming] error: ${e.toString()}');
-          rethrow;
-        }
-
-        if (e.code != -4) {
-          // Only not supported error supported.
-          rethrow;
-        }
-      }
-
-      await rtcEngine.release();
-    },
-  );
-
-  testWidgets(
-    'updateDirectCdnStreamingMediaOptions',
-    (WidgetTester tester) async {
-      String engineAppId = const String.fromEnvironment('TEST_APP_ID',
-          defaultValue: '<YOUR_APP_ID>');
-
-      RtcEngine rtcEngine = createAgoraRtcEngine();
-      await rtcEngine.initialize(RtcEngineContext(
-        appId: engineAppId,
-        areaCode: AreaCode.areaCodeGlob.value(),
-      ));
-
-      try {
-        const bool optionsPublishCameraTrack = true;
-        const bool optionsPublishMicrophoneTrack = true;
-        const bool optionsPublishCustomAudioTrack = true;
-        const bool optionsPublishCustomVideoTrack = true;
-        const bool optionsPublishMediaPlayerAudioTrack = true;
-        const int optionsPublishMediaPlayerId = 10;
-        const int optionsCustomVideoTrackId = 10;
-        const DirectCdnStreamingMediaOptions options =
-            DirectCdnStreamingMediaOptions(
-          publishCameraTrack: optionsPublishCameraTrack,
-          publishMicrophoneTrack: optionsPublishMicrophoneTrack,
-          publishCustomAudioTrack: optionsPublishCustomAudioTrack,
-          publishCustomVideoTrack: optionsPublishCustomVideoTrack,
-          publishMediaPlayerAudioTrack: optionsPublishMediaPlayerAudioTrack,
-          publishMediaPlayerId: optionsPublishMediaPlayerId,
-          customVideoTrackId: optionsCustomVideoTrackId,
-        );
-        await rtcEngine.updateDirectCdnStreamingMediaOptions(
-          options,
-        );
-      } catch (e) {
-        if (e is! AgoraRtcException) {
-          debugPrint(
-              '[updateDirectCdnStreamingMediaOptions] error: ${e.toString()}');
-          rethrow;
-        }
-
-        if (e.code != -4) {
-          // Only not supported error supported.
-          rethrow;
-        }
-      }
-
-      await rtcEngine.release();
-    },
-  );
-
-  testWidgets(
-    'startRhythmPlayer',
-    (WidgetTester tester) async {
-      String engineAppId = const String.fromEnvironment('TEST_APP_ID',
-          defaultValue: '<YOUR_APP_ID>');
-
-      RtcEngine rtcEngine = createAgoraRtcEngine();
-      await rtcEngine.initialize(RtcEngineContext(
-        appId: engineAppId,
-        areaCode: AreaCode.areaCodeGlob.value(),
-      ));
-
-      try {
-        const String sound1 = "hello";
-        const String sound2 = "hello";
-        const int configBeatsPerMeasure = 10;
-        const int configBeatsPerMinute = 10;
-        const AgoraRhythmPlayerConfig config = AgoraRhythmPlayerConfig(
-          beatsPerMeasure: configBeatsPerMeasure,
-          beatsPerMinute: configBeatsPerMinute,
-        );
-        await rtcEngine.startRhythmPlayer(
-          sound1: sound1,
-          sound2: sound2,
-          config: config,
-        );
-      } catch (e) {
-        if (e is! AgoraRtcException) {
-          debugPrint('[startRhythmPlayer] error: ${e.toString()}');
-          rethrow;
-        }
-
-        if (e.code != -4) {
-          // Only not supported error supported.
-          rethrow;
-        }
-      }
-
-      await rtcEngine.release();
-    },
-  );
-
-  testWidgets(
-    'stopRhythmPlayer',
-    (WidgetTester tester) async {
-      String engineAppId = const String.fromEnvironment('TEST_APP_ID',
-          defaultValue: '<YOUR_APP_ID>');
-
-      RtcEngine rtcEngine = createAgoraRtcEngine();
-      await rtcEngine.initialize(RtcEngineContext(
-        appId: engineAppId,
-        areaCode: AreaCode.areaCodeGlob.value(),
-      ));
-
-      try {
-        await rtcEngine.stopRhythmPlayer();
-      } catch (e) {
-        if (e is! AgoraRtcException) {
-          debugPrint('[stopRhythmPlayer] error: ${e.toString()}');
-          rethrow;
-        }
-
-        if (e.code != -4) {
-          // Only not supported error supported.
-          rethrow;
-        }
-      }
-
-      await rtcEngine.release();
-    },
-  );
-
-  testWidgets(
-    'configRhythmPlayer',
-    (WidgetTester tester) async {
-      String engineAppId = const String.fromEnvironment('TEST_APP_ID',
-          defaultValue: '<YOUR_APP_ID>');
-
-      RtcEngine rtcEngine = createAgoraRtcEngine();
-      await rtcEngine.initialize(RtcEngineContext(
-        appId: engineAppId,
-        areaCode: AreaCode.areaCodeGlob.value(),
-      ));
-
-      try {
-        const int configBeatsPerMeasure = 10;
-        const int configBeatsPerMinute = 10;
-        const AgoraRhythmPlayerConfig config = AgoraRhythmPlayerConfig(
-          beatsPerMeasure: configBeatsPerMeasure,
-          beatsPerMinute: configBeatsPerMinute,
-        );
-        await rtcEngine.configRhythmPlayer(
-          config,
-        );
-      } catch (e) {
-        if (e is! AgoraRtcException) {
-          debugPrint('[configRhythmPlayer] error: ${e.toString()}');
-          rethrow;
-        }
-
-        if (e.code != -4) {
-          // Only not supported error supported.
-          rethrow;
-        }
-      }
-
-      await rtcEngine.release();
-    },
-  );
-
-  testWidgets(
-    'takeSnapshot',
-    (WidgetTester tester) async {
-      String engineAppId = const String.fromEnvironment('TEST_APP_ID',
-          defaultValue: '<YOUR_APP_ID>');
-
-      RtcEngine rtcEngine = createAgoraRtcEngine();
-      await rtcEngine.initialize(RtcEngineContext(
-        appId: engineAppId,
-        areaCode: AreaCode.areaCodeGlob.value(),
-      ));
-
-      try {
-        const int uid = 10;
-        const String filePath = "hello";
-        await rtcEngine.takeSnapshot(
-          uid: uid,
-          filePath: filePath,
-        );
-      } catch (e) {
-        if (e is! AgoraRtcException) {
-          debugPrint('[takeSnapshot] error: ${e.toString()}');
-          rethrow;
-        }
-
-        if (e.code != -4) {
-          // Only not supported error supported.
-          rethrow;
-        }
-      }
-
-      await rtcEngine.release();
-    },
-  );
-
-  testWidgets(
-    'enableContentInspect',
-    (WidgetTester tester) async {
-      String engineAppId = const String.fromEnvironment('TEST_APP_ID',
-          defaultValue: '<YOUR_APP_ID>');
-
-      RtcEngine rtcEngine = createAgoraRtcEngine();
-      await rtcEngine.initialize(RtcEngineContext(
-        appId: engineAppId,
-        areaCode: AreaCode.areaCodeGlob.value(),
-      ));
-
-      try {
-        const bool enabled = true;
-        const String configExtraInfo = "hello";
-        const String configServerConfig = "hello";
-        const List<ContentInspectModule> configModules = [];
-        const int configModuleCount = 10;
-        const ContentInspectConfig config = ContentInspectConfig(
-          extraInfo: configExtraInfo,
-          serverConfig: configServerConfig,
-          modules: configModules,
-          moduleCount: configModuleCount,
-        );
-        await rtcEngine.enableContentInspect(
-          enabled: enabled,
-          config: config,
-        );
-      } catch (e) {
-        if (e is! AgoraRtcException) {
-          debugPrint('[enableContentInspect] error: ${e.toString()}');
-          rethrow;
-        }
-
-        if (e.code != -4) {
-          // Only not supported error supported.
-          rethrow;
-        }
-      }
-
-      await rtcEngine.release();
-    },
-  );
-
-  testWidgets(
-    'adjustCustomAudioPublishVolume',
-    (WidgetTester tester) async {
-      String engineAppId = const String.fromEnvironment('TEST_APP_ID',
-          defaultValue: '<YOUR_APP_ID>');
-
-      RtcEngine rtcEngine = createAgoraRtcEngine();
-      await rtcEngine.initialize(RtcEngineContext(
-        appId: engineAppId,
-        areaCode: AreaCode.areaCodeGlob.value(),
-      ));
-
-      try {
-        const int trackId = 10;
-        const int volume = 10;
-        await rtcEngine.adjustCustomAudioPublishVolume(
-          trackId: trackId,
-          volume: volume,
-        );
-      } catch (e) {
-        if (e is! AgoraRtcException) {
-          debugPrint('[adjustCustomAudioPublishVolume] error: ${e.toString()}');
-          rethrow;
-        }
-
-        if (e.code != -4) {
-          // Only not supported error supported.
-          rethrow;
-        }
-      }
-
-      await rtcEngine.release();
-    },
-  );
-
-  testWidgets(
-    'adjustCustomAudioPlayoutVolume',
-    (WidgetTester tester) async {
-      String engineAppId = const String.fromEnvironment('TEST_APP_ID',
-          defaultValue: '<YOUR_APP_ID>');
-
-      RtcEngine rtcEngine = createAgoraRtcEngine();
-      await rtcEngine.initialize(RtcEngineContext(
-        appId: engineAppId,
-        areaCode: AreaCode.areaCodeGlob.value(),
-      ));
-
-      try {
-        const int trackId = 10;
-        const int volume = 10;
-        await rtcEngine.adjustCustomAudioPlayoutVolume(
-          trackId: trackId,
-          volume: volume,
-        );
-      } catch (e) {
-        if (e is! AgoraRtcException) {
-          debugPrint('[adjustCustomAudioPlayoutVolume] error: ${e.toString()}');
-          rethrow;
-        }
-
-        if (e.code != -4) {
-          // Only not supported error supported.
-          rethrow;
-        }
-      }
-
-      await rtcEngine.release();
-    },
-  );
-
-  testWidgets(
-    'setCloudProxy',
-    (WidgetTester tester) async {
-      String engineAppId = const String.fromEnvironment('TEST_APP_ID',
-          defaultValue: '<YOUR_APP_ID>');
-
-      RtcEngine rtcEngine = createAgoraRtcEngine();
-      await rtcEngine.initialize(RtcEngineContext(
-        appId: engineAppId,
-        areaCode: AreaCode.areaCodeGlob.value(),
-      ));
-
-      try {
-        const CloudProxyType proxyType = CloudProxyType.noneProxy;
-        await rtcEngine.setCloudProxy(
-          proxyType,
-        );
-      } catch (e) {
-        if (e is! AgoraRtcException) {
-          debugPrint('[setCloudProxy] error: ${e.toString()}');
-          rethrow;
-        }
-
-        if (e.code != -4) {
-          // Only not supported error supported.
-          rethrow;
-        }
-      }
-
-      await rtcEngine.release();
-    },
-  );
-
-  testWidgets(
-    'setAdvancedAudioOptions',
-    (WidgetTester tester) async {
-      String engineAppId = const String.fromEnvironment('TEST_APP_ID',
-          defaultValue: '<YOUR_APP_ID>');
-
-      RtcEngine rtcEngine = createAgoraRtcEngine();
-      await rtcEngine.initialize(RtcEngineContext(
-        appId: engineAppId,
-        areaCode: AreaCode.areaCodeGlob.value(),
-      ));
-
-      try {
-        const int optionsAudioProcessingChannels = 10;
-        const AdvancedAudioOptions options = AdvancedAudioOptions(
-          audioProcessingChannels: optionsAudioProcessingChannels,
-        );
-        const int sourceType = 10;
-        await rtcEngine.setAdvancedAudioOptions(
-          options: options,
-          sourceType: sourceType,
-        );
-      } catch (e) {
-        if (e is! AgoraRtcException) {
-          debugPrint('[setAdvancedAudioOptions] error: ${e.toString()}');
-          rethrow;
-        }
-
-        if (e.code != -4) {
-          // Only not supported error supported.
-          rethrow;
-        }
-      }
-
-      await rtcEngine.release();
-    },
-  );
-
-  testWidgets(
-    'setAVSyncSource',
-    (WidgetTester tester) async {
-      String engineAppId = const String.fromEnvironment('TEST_APP_ID',
-          defaultValue: '<YOUR_APP_ID>');
-
-      RtcEngine rtcEngine = createAgoraRtcEngine();
-      await rtcEngine.initialize(RtcEngineContext(
-        appId: engineAppId,
-        areaCode: AreaCode.areaCodeGlob.value(),
-      ));
-
-      try {
-        const String channelId = "hello";
-        const int uid = 10;
-        await rtcEngine.setAVSyncSource(
-          channelId: channelId,
-          uid: uid,
-        );
-      } catch (e) {
-        if (e is! AgoraRtcException) {
-          debugPrint('[setAVSyncSource] error: ${e.toString()}');
-          rethrow;
-        }
-
-        if (e.code != -4) {
-          // Only not supported error supported.
-          rethrow;
-        }
-      }
-
-      await rtcEngine.release();
-    },
-  );
-
-  testWidgets(
-    'enableVideoImageSource',
-    (WidgetTester tester) async {
-      String engineAppId = const String.fromEnvironment('TEST_APP_ID',
-          defaultValue: '<YOUR_APP_ID>');
-
-      RtcEngine rtcEngine = createAgoraRtcEngine();
-      await rtcEngine.initialize(RtcEngineContext(
-        appId: engineAppId,
-        areaCode: AreaCode.areaCodeGlob.value(),
-      ));
-
-      try {
-        const bool enable = true;
-        const VideoMirrorModeType optionsMirrorMode =
-            VideoMirrorModeType.videoMirrorModeAuto;
-        const String optionsImageUrl = "hello";
-        const int optionsFps = 10;
-        const ImageTrackOptions options = ImageTrackOptions(
-          imageUrl: optionsImageUrl,
-          fps: optionsFps,
-          mirrorMode: optionsMirrorMode,
-        );
-        await rtcEngine.enableVideoImageSource(
-          enable: enable,
-          options: options,
-        );
-      } catch (e) {
-        if (e is! AgoraRtcException) {
-          debugPrint('[enableVideoImageSource] error: ${e.toString()}');
-          rethrow;
-        }
-
-        if (e.code != -4) {
-          // Only not supported error supported.
-          rethrow;
-        }
-      }
-
-      await rtcEngine.release();
-    },
-  );
-
-  testWidgets(
-    'getCurrentMonotonicTimeInMs',
-    (WidgetTester tester) async {
-      String engineAppId = const String.fromEnvironment('TEST_APP_ID',
-          defaultValue: '<YOUR_APP_ID>');
-
-      RtcEngine rtcEngine = createAgoraRtcEngine();
-      await rtcEngine.initialize(RtcEngineContext(
-        appId: engineAppId,
-        areaCode: AreaCode.areaCodeGlob.value(),
-      ));
-
-      try {
-        await rtcEngine.getCurrentMonotonicTimeInMs();
-      } catch (e) {
-        if (e is! AgoraRtcException) {
-          debugPrint('[getCurrentMonotonicTimeInMs] error: ${e.toString()}');
-          rethrow;
-        }
-
-        if (e.code != -4) {
-          // Only not supported error supported.
-          rethrow;
-        }
-      }
-
-      await rtcEngine.release();
-    },
-  );
-
-  testWidgets(
-    'enableWirelessAccelerate',
-    (WidgetTester tester) async {
-      String engineAppId = const String.fromEnvironment('TEST_APP_ID',
-          defaultValue: '<YOUR_APP_ID>');
-
-      RtcEngine rtcEngine = createAgoraRtcEngine();
-      await rtcEngine.initialize(RtcEngineContext(
-        appId: engineAppId,
-        areaCode: AreaCode.areaCodeGlob.value(),
-      ));
-
-      try {
-        const bool enabled = true;
-        await rtcEngine.enableWirelessAccelerate(
-          enabled,
-        );
-      } catch (e) {
-        if (e is! AgoraRtcException) {
-          debugPrint('[enableWirelessAccelerate] error: ${e.toString()}');
-          rethrow;
-        }
-
-        if (e.code != -4) {
-          // Only not supported error supported.
-          rethrow;
-        }
-      }
-
-      await rtcEngine.release();
-    },
-  );
-
-  testWidgets(
-    'getNetworkType',
-    (WidgetTester tester) async {
-      String engineAppId = const String.fromEnvironment('TEST_APP_ID',
-          defaultValue: '<YOUR_APP_ID>');
-
-      RtcEngine rtcEngine = createAgoraRtcEngine();
-      await rtcEngine.initialize(RtcEngineContext(
-        appId: engineAppId,
-        areaCode: AreaCode.areaCodeGlob.value(),
-      ));
-
-      try {
-        await rtcEngine.getNetworkType();
-      } catch (e) {
-        if (e is! AgoraRtcException) {
-          debugPrint('[getNetworkType] error: ${e.toString()}');
-          rethrow;
-        }
-
-        if (e.code != -4) {
-          // Only not supported error supported.
-          rethrow;
-        }
-      }
-
-      await rtcEngine.release();
-    },
-  );
-
-  testWidgets(
-    'setParameters',
-    (WidgetTester tester) async {
-      String engineAppId = const String.fromEnvironment('TEST_APP_ID',
-          defaultValue: '<YOUR_APP_ID>');
-
-      RtcEngine rtcEngine = createAgoraRtcEngine();
-      await rtcEngine.initialize(RtcEngineContext(
-        appId: engineAppId,
-        areaCode: AreaCode.areaCodeGlob.value(),
-      ));
-
-      try {
-        const String parameters = "hello";
-        await rtcEngine.setParameters(
-          parameters,
-        );
-      } catch (e) {
-        if (e is! AgoraRtcException) {
-          debugPrint('[setParameters] error: ${e.toString()}');
-          rethrow;
-        }
-
-        if (e.code != -4) {
-          // Only not supported error supported.
-          rethrow;
-        }
-      }
-
-      await rtcEngine.release();
-    },
-  );
-
-  testWidgets(
-    'startMediaRenderingTracing',
-    (WidgetTester tester) async {
-      String engineAppId = const String.fromEnvironment('TEST_APP_ID',
-          defaultValue: '<YOUR_APP_ID>');
-
-      RtcEngine rtcEngine = createAgoraRtcEngine();
-      await rtcEngine.initialize(RtcEngineContext(
-        appId: engineAppId,
-        areaCode: AreaCode.areaCodeGlob.value(),
-      ));
-
-      try {
-        await rtcEngine.startMediaRenderingTracing();
-      } catch (e) {
-        if (e is! AgoraRtcException) {
-          debugPrint('[startMediaRenderingTracing] error: ${e.toString()}');
-          rethrow;
-        }
-
-        if (e.code != -4) {
-          // Only not supported error supported.
-          rethrow;
-        }
-      }
-
-      await rtcEngine.release();
-    },
-  );
-
-  testWidgets(
-    'enableInstantMediaRendering',
-    (WidgetTester tester) async {
-      String engineAppId = const String.fromEnvironment('TEST_APP_ID',
-          defaultValue: '<YOUR_APP_ID>');
-
-      RtcEngine rtcEngine = createAgoraRtcEngine();
-      await rtcEngine.initialize(RtcEngineContext(
-        appId: engineAppId,
-        areaCode: AreaCode.areaCodeGlob.value(),
-      ));
-
-      try {
-        await rtcEngine.enableInstantMediaRendering();
-      } catch (e) {
-        if (e is! AgoraRtcException) {
-          debugPrint('[enableInstantMediaRendering] error: ${e.toString()}');
-          rethrow;
-        }
-
-        if (e.code != -4) {
-          // Only not supported error supported.
-          rethrow;
-        }
-      }
-
-      await rtcEngine.release();
-    },
-  );
-
-  testWidgets(
-    'getNtpWallTimeInMs',
-    (WidgetTester tester) async {
-      String engineAppId = const String.fromEnvironment('TEST_APP_ID',
-          defaultValue: '<YOUR_APP_ID>');
-
-      RtcEngine rtcEngine = createAgoraRtcEngine();
-      await rtcEngine.initialize(RtcEngineContext(
-        appId: engineAppId,
-        areaCode: AreaCode.areaCodeGlob.value(),
-      ));
-
-      try {
-        await rtcEngine.getNtpWallTimeInMs();
-      } catch (e) {
-        if (e is! AgoraRtcException) {
-          debugPrint('[getNtpWallTimeInMs] error: ${e.toString()}');
-          rethrow;
-        }
-
-        if (e.code != -4) {
-          // Only not supported error supported.
-          rethrow;
-        }
-      }
-
-      await rtcEngine.release();
-    },
-  );
-
-  testWidgets(
-    'isFeatureAvailableOnDevice',
-    (WidgetTester tester) async {
-      String engineAppId = const String.fromEnvironment('TEST_APP_ID',
-          defaultValue: '<YOUR_APP_ID>');
-
-      RtcEngine rtcEngine = createAgoraRtcEngine();
-      await rtcEngine.initialize(RtcEngineContext(
-        appId: engineAppId,
-        areaCode: AreaCode.areaCodeGlob.value(),
-      ));
-
-      try {
-        const FeatureType type = FeatureType.videoVirtualBackground;
-        await rtcEngine.isFeatureAvailableOnDevice(
-          type,
-        );
-      } catch (e) {
-        if (e is! AgoraRtcException) {
-          debugPrint('[isFeatureAvailableOnDevice] error: ${e.toString()}');
-          rethrow;
-        }
-
-        if (e.code != -4) {
-          // Only not supported error supported.
-          rethrow;
-        }
-      }
-
-      await rtcEngine.release();
-    },
-  );
-
-  testWidgets(
-    'getAudioDeviceManager',
-    (WidgetTester tester) async {
-      String engineAppId = const String.fromEnvironment('TEST_APP_ID',
-          defaultValue: '<YOUR_APP_ID>');
-
-      RtcEngine rtcEngine = createAgoraRtcEngine();
-      await rtcEngine.initialize(RtcEngineContext(
-        appId: engineAppId,
-        areaCode: AreaCode.areaCodeGlob.value(),
-      ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
         rtcEngine.getAudioDeviceManager();
       } catch (e) {
         if (e is! AgoraRtcException) {
-          debugPrint('[getAudioDeviceManager] error: ${e.toString()}');
+          debugPrint(
+              '[RtcEngine.getAudioDeviceManager] error: ${e.toString()}');
           rethrow;
         }
 
@@ -10123,7 +10523,7 @@ void rtcEngineSmokeTestCases() {
   );
 
   testWidgets(
-    'getVideoDeviceManager',
+    'RtcEngine.getVideoDeviceManager',
     (WidgetTester tester) async {
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
@@ -10133,12 +10533,14 @@ void rtcEngineSmokeTestCases() {
         appId: engineAppId,
         areaCode: AreaCode.areaCodeGlob.value(),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
         rtcEngine.getVideoDeviceManager();
       } catch (e) {
         if (e is! AgoraRtcException) {
-          debugPrint('[getVideoDeviceManager] error: ${e.toString()}');
+          debugPrint(
+              '[RtcEngine.getVideoDeviceManager] error: ${e.toString()}');
           rethrow;
         }
 
@@ -10153,7 +10555,7 @@ void rtcEngineSmokeTestCases() {
   );
 
   testWidgets(
-    'getMusicContentCenter',
+    'RtcEngine.getMusicContentCenter',
     (WidgetTester tester) async {
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
@@ -10163,12 +10565,14 @@ void rtcEngineSmokeTestCases() {
         appId: engineAppId,
         areaCode: AreaCode.areaCodeGlob.value(),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
         rtcEngine.getMusicContentCenter();
       } catch (e) {
         if (e is! AgoraRtcException) {
-          debugPrint('[getMusicContentCenter] error: ${e.toString()}');
+          debugPrint(
+              '[RtcEngine.getMusicContentCenter] error: ${e.toString()}');
           rethrow;
         }
 
@@ -10183,7 +10587,7 @@ void rtcEngineSmokeTestCases() {
   );
 
   testWidgets(
-    'getMediaEngine',
+    'RtcEngine.getMediaEngine',
     (WidgetTester tester) async {
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
@@ -10193,12 +10597,13 @@ void rtcEngineSmokeTestCases() {
         appId: engineAppId,
         areaCode: AreaCode.areaCodeGlob.value(),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
         rtcEngine.getMediaEngine();
       } catch (e) {
         if (e is! AgoraRtcException) {
-          debugPrint('[getMediaEngine] error: ${e.toString()}');
+          debugPrint('[RtcEngine.getMediaEngine] error: ${e.toString()}');
           rethrow;
         }
 
@@ -10213,7 +10618,7 @@ void rtcEngineSmokeTestCases() {
   );
 
   testWidgets(
-    'getLocalSpatialAudioEngine',
+    'RtcEngine.getLocalSpatialAudioEngine',
     (WidgetTester tester) async {
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
@@ -10223,12 +10628,14 @@ void rtcEngineSmokeTestCases() {
         appId: engineAppId,
         areaCode: AreaCode.areaCodeGlob.value(),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
         rtcEngine.getLocalSpatialAudioEngine();
       } catch (e) {
         if (e is! AgoraRtcException) {
-          debugPrint('[getLocalSpatialAudioEngine] error: ${e.toString()}');
+          debugPrint(
+              '[RtcEngine.getLocalSpatialAudioEngine] error: ${e.toString()}');
           rethrow;
         }
 
@@ -10243,7 +10650,7 @@ void rtcEngineSmokeTestCases() {
   );
 
   testWidgets(
-    'sendMetaData',
+    'RtcEngine.sendMetaData',
     (WidgetTester tester) async {
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
@@ -10253,6 +10660,7 @@ void rtcEngineSmokeTestCases() {
         appId: engineAppId,
         areaCode: AreaCode.areaCodeGlob.value(),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
         const int metadataUid = 10;
@@ -10273,7 +10681,7 @@ void rtcEngineSmokeTestCases() {
         );
       } catch (e) {
         if (e is! AgoraRtcException) {
-          debugPrint('[sendMetaData] error: ${e.toString()}');
+          debugPrint('[RtcEngine.sendMetaData] error: ${e.toString()}');
           rethrow;
         }
 
@@ -10288,7 +10696,7 @@ void rtcEngineSmokeTestCases() {
   );
 
   testWidgets(
-    'setMaxMetadataSize',
+    'RtcEngine.setMaxMetadataSize',
     (WidgetTester tester) async {
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
@@ -10298,6 +10706,7 @@ void rtcEngineSmokeTestCases() {
         appId: engineAppId,
         areaCode: AreaCode.areaCodeGlob.value(),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
         const int size = 10;
@@ -10306,7 +10715,7 @@ void rtcEngineSmokeTestCases() {
         );
       } catch (e) {
         if (e is! AgoraRtcException) {
-          debugPrint('[setMaxMetadataSize] error: ${e.toString()}');
+          debugPrint('[RtcEngine.setMaxMetadataSize] error: ${e.toString()}');
           rethrow;
         }
 
@@ -10321,7 +10730,7 @@ void rtcEngineSmokeTestCases() {
   );
 
   testWidgets(
-    'unregisterAudioEncodedFrameObserver',
+    'RtcEngine.unregisterAudioEncodedFrameObserver',
     (WidgetTester tester) async {
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
@@ -10331,6 +10740,7 @@ void rtcEngineSmokeTestCases() {
         appId: engineAppId,
         areaCode: AreaCode.areaCodeGlob.value(),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
         final AudioEncodedFrameObserver observer = AudioEncodedFrameObserver(
@@ -10347,7 +10757,7 @@ void rtcEngineSmokeTestCases() {
       } catch (e) {
         if (e is! AgoraRtcException) {
           debugPrint(
-              '[unregisterAudioEncodedFrameObserver] error: ${e.toString()}');
+              '[RtcEngine.unregisterAudioEncodedFrameObserver] error: ${e.toString()}');
           rethrow;
         }
 
@@ -10362,7 +10772,7 @@ void rtcEngineSmokeTestCases() {
   );
 
   testWidgets(
-    'getNativeHandle',
+    'RtcEngine.getNativeHandle',
     (WidgetTester tester) async {
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
@@ -10372,12 +10782,52 @@ void rtcEngineSmokeTestCases() {
         appId: engineAppId,
         areaCode: AreaCode.areaCodeGlob.value(),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
         await rtcEngine.getNativeHandle();
       } catch (e) {
         if (e is! AgoraRtcException) {
-          debugPrint('[getNativeHandle] error: ${e.toString()}');
+          debugPrint('[RtcEngine.getNativeHandle] error: ${e.toString()}');
+          rethrow;
+        }
+
+        if (e.code != -4) {
+          // Only not supported error supported.
+          rethrow;
+        }
+      }
+
+      await rtcEngine.release();
+    },
+  );
+
+  testWidgets(
+    'RtcEngine.preloadChannelWithUserAccount',
+    (WidgetTester tester) async {
+      String engineAppId = const String.fromEnvironment('TEST_APP_ID',
+          defaultValue: '<YOUR_APP_ID>');
+
+      RtcEngine rtcEngine = createAgoraRtcEngine();
+      await rtcEngine.initialize(RtcEngineContext(
+        appId: engineAppId,
+        areaCode: AreaCode.areaCodeGlob.value(),
+      ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
+
+      try {
+        const String token = "hello";
+        const String channelId = "hello";
+        const String userAccount = "hello";
+        await rtcEngine.preloadChannelWithUserAccount(
+          token: token,
+          channelId: channelId,
+          userAccount: userAccount,
+        );
+      } catch (e) {
+        if (e is! AgoraRtcException) {
+          debugPrint(
+              '[RtcEngine.preloadChannelWithUserAccount] error: ${e.toString()}');
           rethrow;
         }
 

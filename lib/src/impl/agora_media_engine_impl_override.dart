@@ -108,6 +108,32 @@ class MediaEngineImpl extends media_engine_impl_binding.MediaEngineImpl
   }
 
   @override
+  void registerFaceInfoObserver(FaceInfoObserver observer) async {
+    final eventHandlerWrapper = FaceInfoObserverWrapper(observer);
+    final param = createParams({});
+    await irisMethodChannel.registerEventHandler(
+        ScopedEvent(
+            scopedKey: _mediaEngineScopedKey,
+            registerName: 'MediaEngine_registerFaceInfoObserver',
+            unregisterName: 'MediaEngine_unregisterFaceInfoObserver',
+            handler: eventHandlerWrapper),
+        jsonEncode(param));
+  }
+
+  @override
+  void unregisterFaceInfoObserver(FaceInfoObserver observer) async {
+    final eventHandlerWrapper = FaceInfoObserverWrapper(observer);
+    final param = createParams({});
+    await irisMethodChannel.unregisterEventHandler(
+        ScopedEvent(
+            scopedKey: _mediaEngineScopedKey,
+            registerName: 'MediaEngine_registerFaceInfoObserver',
+            unregisterName: 'MediaEngine_unregisterFaceInfoObserver',
+            handler: eventHandlerWrapper),
+        jsonEncode(param));
+  }
+
+  @override
   Future<void> pushVideoFrame(
       {required ExternalVideoFrame frame, int videoTrackId = 0}) async {
     const apiType = 'MediaEngine_pushVideoFrame';
