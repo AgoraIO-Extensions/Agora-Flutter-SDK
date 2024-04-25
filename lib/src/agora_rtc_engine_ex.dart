@@ -33,13 +33,14 @@ abstract class RtcEngineEx implements RtcEngine {
   ///  If you are already in a channel, you cannot rejoin it with the same user ID.
   ///  If you want to join the same channel from different devices, ensure that the user IDs are different for all devices.
   ///  Ensure that the App ID you use to generate the token is the same as the App ID used when creating the RtcEngine instance.
+  ///  If you choose the Testing Mode (using an App ID for authentication) for your project and call this method to join a channel, you will automatically exit the channel after 24 hours.
   ///
   /// * [token] The token generated on your server for authentication. If you need to join different channels at the same time or switch between channels, Agora recommends using a wildcard token so that you don't need to apply for a new token every time joining a channel.
   /// * [connection] The connection information. See RtcConnection.
   /// * [options] The channel media options. See ChannelMediaOptions.
   ///
   /// Returns
-  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown; and you need to catch the exception and handle it accordingly.
+  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown. You need to catch the exception and handle it accordingly.
   ///  < 0: Failure.
   ///  -2: The parameter is invalid. For example, the token is invalid, the uid parameter is not set to an integer, or the value of a member in ChannelMediaOptions is invalid. You need to pass in a valid parameter and join the channel again.
   ///  -3: Failes to initialize the RtcEngine object. You need to reinitialize the RtcEngine object.
@@ -63,8 +64,7 @@ abstract class RtcEngineEx implements RtcEngine {
   /// * [options] The options for leaving the channel. See LeaveChannelOptions. This parameter only supports the stopMicrophoneRecording member in the LeaveChannelOptions settings; setting other members does not take effect.
   ///
   /// Returns
-  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown; and you need to catch the exception and handle it accordingly.
-  ///  < 0: Failure.
+  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown. You need to catch the exception and handle it accordingly.
   Future<void> leaveChannelEx(
       {required RtcConnection connection, LeaveChannelOptions? options});
 
@@ -74,11 +74,7 @@ abstract class RtcEngineEx implements RtcEngine {
   /// * [connection] The connection information. See RtcConnection.
   ///
   /// Returns
-  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown; and you need to catch the exception and handle it accordingly.
-  ///  < 0: Failure.
-  ///  -2: The value of a member in the ChannelMediaOptions structure is invalid. For example, the token or the user ID is invalid. You need to fill in a valid parameter.
-  ///  -7: The RtcEngine object has not been initialized. You need to initialize the RtcEngine object before calling this method.
-  ///  -8: The internal state of the RtcEngine object is wrong. The possible reason is that the user is not in the channel. Agora recommends that you use the onConnectionStateChanged callback to determine whether the user exists in the channel. If you receive the connectionStateDisconnected (1) or connectionStateFailed (5) state, the user is not in the channel. You need to call joinChannel to join a channel before calling this method.
+  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown. You need to catch the exception and handle it accordingly.
   Future<void> updateChannelMediaOptionsEx(
       {required ChannelMediaOptions options,
       required RtcConnection connection});
@@ -91,8 +87,7 @@ abstract class RtcEngineEx implements RtcEngine {
   /// * [connection] The connection information. See RtcConnection.
   ///
   /// Returns
-  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown; and you need to catch the exception and handle it accordingly.
-  ///  < 0: Failure.
+  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown. You need to catch the exception and handle it accordingly.
   Future<void> setVideoEncoderConfigurationEx(
       {required VideoEncoderConfiguration config,
       required RtcConnection connection});
@@ -105,7 +100,7 @@ abstract class RtcEngineEx implements RtcEngine {
   /// * [connection] The connection information. See RtcConnection.
   ///
   /// Returns
-  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown; and you need to catch the exception and handle it accordingly.
+  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown. You need to catch the exception and handle it accordingly.
   ///  < 0: Failure.
   Future<void> setupRemoteVideoEx(
       {required VideoCanvas canvas, required RtcConnection connection});
@@ -117,8 +112,7 @@ abstract class RtcEngineEx implements RtcEngine {
   /// * [connection] The connection information. See RtcConnection.
   ///
   /// Returns
-  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown; and you need to catch the exception and handle it accordingly.
-  ///  < 0: Failure.
+  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown. You need to catch the exception and handle it accordingly.
   Future<void> muteRemoteAudioStreamEx(
       {required int uid,
       required bool mute,
@@ -133,24 +127,25 @@ abstract class RtcEngineEx implements RtcEngine {
   /// * [connection] The connection information. See RtcConnection.
   ///
   /// Returns
-  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown; and you need to catch the exception and handle it accordingly.
+  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown. You need to catch the exception and handle it accordingly.
   ///  < 0: Failure.
   Future<void> muteRemoteVideoStreamEx(
       {required int uid,
       required bool mute,
       required RtcConnection connection});
 
-  /// Sets the stream type of the remote video.
+  /// Sets the video stream type to subscribe to.
   ///
-  /// Under limited network conditions, if the publisher has not disabled the dual-stream mode using enableDualStreamModeEx (false), the receiver can choose to receive either the high-quality video stream or the low-quality video stream. The high-quality video stream has a higher resolution and bitrate, and the low-quality video stream has a lower resolution and bitrate. By default, users receive the high-quality video stream. Call this method if you want to switch to the low-quality video stream. This method allows the app to adjust the corresponding video stream type based on the size of the video window to reduce the bandwidth and resources. The aspect ratio of the low-quality video stream is the same as the high-quality video stream. Once the resolution of the high-quality video stream is set, the system automatically sets the resolution, frame rate, and bitrate of the low-quality video stream. The SDK enables the low-quality video stream auto mode on the sender by default (not actively sending low-quality video streams). The host at the receiving end can call this method to initiate a low-quality video stream stream request on the receiving end, and the sender automatically switches to the low-quality video stream mode after receiving the request.
+  /// The SDK will dynamically adjust the size of the corresponding video stream based on the size of the video window to save bandwidth and computing resources. The default aspect ratio of the low-quality video stream is the same as that of the high-quality video stream. According to the current aspect ratio of the high-quality video stream, the system will automatically allocate the resolution, frame rate, and bitrate of the low-quality video stream. The SDK defaults to enabling low-quality video stream adaptive mode (autoSimulcastStream) on the sending end, which means the sender does not actively send low-quality video stream. The receiver with the role of the host can initiate a low-quality video stream request by calling this method, and upon receiving the request, the sending end automatically starts sending the low-quality video stream.
+  ///  If the publisher has already called setDualStreamModeEx and set mode to disableSimulcastStream (never send low-quality video stream), calling this method will not take effect, you should call setDualStreamModeEx again on the sending end and adjust the settings.
+  ///  Calling this method on the receiving end of the audience role will not take effect.
   ///
   /// * [uid] The user ID.
-  /// * [streamType] The video stream type: VideoStreamType.
+  /// * [streamType] The video stream type, see VideoStreamType.
   /// * [connection] The connection information. See RtcConnection.
   ///
   /// Returns
-  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown; and you need to catch the exception and handle it accordingly.
-  ///  < 0: Failure.
+  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown. You need to catch the exception and handle it accordingly.
   Future<void> setRemoteVideoStreamTypeEx(
       {required int uid,
       required VideoStreamType streamType,
@@ -164,8 +159,7 @@ abstract class RtcEngineEx implements RtcEngine {
   /// * [connection] The connection information. See RtcConnection.
   ///
   /// Returns
-  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown; and you need to catch the exception and handle it accordingly.
-  ///  < 0: Failure.
+  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown. You need to catch the exception and handle it accordingly.
   Future<void> muteLocalAudioStreamEx(
       {required bool mute, required RtcConnection connection});
 
@@ -178,8 +172,7 @@ abstract class RtcEngineEx implements RtcEngine {
   /// * [connection] The connection information. See RtcConnection.
   ///
   /// Returns
-  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown; and you need to catch the exception and handle it accordingly.
-  ///  < 0: Failure.
+  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown. You need to catch the exception and handle it accordingly.
   Future<void> muteLocalVideoStreamEx(
       {required bool mute, required RtcConnection connection});
 
@@ -193,8 +186,7 @@ abstract class RtcEngineEx implements RtcEngine {
   /// * [connection] The connection information. See RtcConnection.
   ///
   /// Returns
-  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown; and you need to catch the exception and handle it accordingly.
-  ///  < 0: Failure.
+  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown. You need to catch the exception and handle it accordingly.
   Future<void> muteAllRemoteAudioStreamsEx(
       {required bool mute, required RtcConnection connection});
 
@@ -206,8 +198,7 @@ abstract class RtcEngineEx implements RtcEngine {
   /// * [connection] The connection information. See RtcConnection.
   ///
   /// Returns
-  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown; and you need to catch the exception and handle it accordingly.
-  ///  < 0: Failure.
+  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown. You need to catch the exception and handle it accordingly.
   Future<void> muteAllRemoteVideoStreamsEx(
       {required bool mute, required RtcConnection connection});
 
@@ -224,8 +215,7 @@ abstract class RtcEngineEx implements RtcEngine {
   /// * [connection] The connection information. See RtcConnection.
   ///
   /// Returns
-  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown; and you need to catch the exception and handle it accordingly.
-  ///  < 0: Failure.
+  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown. You need to catch the exception and handle it accordingly.
   Future<void> setSubscribeAudioBlocklistEx(
       {required List<int> uidList,
       required int uidNumber,
@@ -244,8 +234,7 @@ abstract class RtcEngineEx implements RtcEngine {
   /// * [connection] The connection information. See RtcConnection.
   ///
   /// Returns
-  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown; and you need to catch the exception and handle it accordingly.
-  ///  < 0: Failure.
+  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown. You need to catch the exception and handle it accordingly.
   Future<void> setSubscribeAudioAllowlistEx(
       {required List<int> uidList,
       required int uidNumber,
@@ -264,8 +253,7 @@ abstract class RtcEngineEx implements RtcEngine {
   /// * [connection] The connection information. See RtcConnection.
   ///
   /// Returns
-  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown; and you need to catch the exception and handle it accordingly.
-  ///  < 0: Failure.
+  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown. You need to catch the exception and handle it accordingly.
   Future<void> setSubscribeVideoBlocklistEx(
       {required List<int> uidList,
       required int uidNumber,
@@ -284,8 +272,7 @@ abstract class RtcEngineEx implements RtcEngine {
   /// * [connection] The connection information. See RtcConnection.
   ///
   /// Returns
-  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown; and you need to catch the exception and handle it accordingly.
-  ///  < 0: Failure.
+  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown. You need to catch the exception and handle it accordingly.
   Future<void> setSubscribeVideoAllowlistEx(
       {required List<int> uidList,
       required int uidNumber,
@@ -300,8 +287,7 @@ abstract class RtcEngineEx implements RtcEngine {
   /// * [connection] The connection information. See RtcConnection.
   ///
   /// Returns
-  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown; and you need to catch the exception and handle it accordingly.
-  ///  < 0: Failure.
+  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown. You need to catch the exception and handle it accordingly.
   Future<void> setRemoteVideoSubscriptionOptionsEx(
       {required int uid,
       required VideoSubscriptionOptions options,
@@ -322,8 +308,7 @@ abstract class RtcEngineEx implements RtcEngine {
   /// * [connection] The connection information. See RtcConnection.
   ///
   /// Returns
-  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown; and you need to catch the exception and handle it accordingly.
-  ///  < 0: Failure.
+  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown. You need to catch the exception and handle it accordingly.
   Future<void> setRemoteVoicePositionEx(
       {required int uid,
       required double pan,
@@ -348,7 +333,7 @@ abstract class RtcEngineEx implements RtcEngine {
   /// * [connection] The connection information. See RtcConnection.
   ///
   /// Returns
-  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown; and you need to catch the exception and handle it accordingly.
+  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown. You need to catch the exception and handle it accordingly.
   ///  < 0: Failure.
   Future<void> setRemoteRenderModeEx(
       {required int uid,
@@ -369,8 +354,7 @@ abstract class RtcEngineEx implements RtcEngine {
   ///  Windows: The device name of the sound card. The default is set to NULL, which means the SDK uses the sound card of your device for loopback audio capturing.
   ///
   /// Returns
-  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown; and you need to catch the exception and handle it accordingly.
-  ///  < 0: Failure.
+  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown. You need to catch the exception and handle it accordingly.
   Future<void> enableLoopbackRecordingEx(
       {required RtcConnection connection,
       required bool enabled,
@@ -395,8 +379,7 @@ abstract class RtcEngineEx implements RtcEngine {
   /// * [connection] The connection information. See RtcConnection.
   ///
   /// Returns
-  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown; and you need to catch the exception and handle it accordingly.
-  ///  < 0: Failure.
+  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown. You need to catch the exception and handle it accordingly.
   Future<void> adjustUserPlaybackSignalVolumeEx(
       {required int uid,
       required int volume,
@@ -412,7 +395,16 @@ abstract class RtcEngineEx implements RtcEngine {
   /// The current connection state. See ConnectionStateType.
   Future<ConnectionStateType> getConnectionStateEx(RtcConnection connection);
 
-  /// @nodoc
+  /// Enables or disables the built-in encryption.
+  ///
+  /// All users in the same channel must use the same encryption mode and encryption key. After the user leaves the channel, the SDK automatically disables the built-in encryption. To enable the built-in encryption, call this method before the user joins the channel again. In scenarios requiring high security, Agora recommends calling this method to enable the built-in encryption before joining a channel.
+  ///
+  /// * [connection] The connection information. See RtcConnection.
+  /// * [enabled] Whether to enable built-in encryption: true : Enable the built-in encryption. false : (Default) Disable the built-in encryption.
+  /// * [config] Built-in encryption configurations. See EncryptionConfig.
+  ///
+  /// Returns
+  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown. You need to catch the exception and handle it accordingly.
   Future<void> enableEncryptionEx(
       {required RtcConnection connection,
       required bool enabled,
@@ -436,8 +428,7 @@ abstract class RtcEngineEx implements RtcEngine {
   /// After calling createDataStreamEx, you can call this method to send data stream messages to all users in the channel. The SDK has the following restrictions on this method:
   ///  Up to 60 packets can be sent per second in a channel with each packet having a maximum size of 1 KB.
   ///  Each client can send up to 30 KB of data per second.
-  ///  Each user can have up to five data streams simultaneously. A successful method call triggers the onStreamMessage callback on the remote client, from which the remote user gets the stream message.
-  /// A failed method call triggers the onStreamMessageError callback on the remote client.
+  ///  Each user can have up to five data streams simultaneously. A successful method call triggers the onStreamMessage callback on the remote client, from which the remote user gets the stream message. A failed method call triggers the onStreamMessageError callback on the remote client.
   ///  Ensure that you call createDataStreamEx to create a data channel before calling this method.
   ///  This method applies only to the COMMUNICATION profile or to the hosts in the LIVE_BROADCASTING profile. If an audience in the LIVE_BROADCASTING profile calls this method, the audience may be switched to a host.
   ///
@@ -447,8 +438,7 @@ abstract class RtcEngineEx implements RtcEngine {
   /// * [connection] The connection information. See RtcConnection.
   ///
   /// Returns
-  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown; and you need to catch the exception and handle it accordingly.
-  ///  < 0: Failure.
+  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown. You need to catch the exception and handle it accordingly.
   Future<void> sendStreamMessageEx(
       {required int streamId,
       required Uint8List data,
@@ -472,8 +462,7 @@ abstract class RtcEngineEx implements RtcEngine {
   /// * [connection] The connection information. See RtcConnection.
   ///
   /// Returns
-  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown; and you need to catch the exception and handle it accordingly.
-  ///  < 0: Failure.
+  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown. You need to catch the exception and handle it accordingly.
   Future<void> addVideoWatermarkEx(
       {required String watermarkUrl,
       required WatermarkOptions options,
@@ -484,8 +473,7 @@ abstract class RtcEngineEx implements RtcEngine {
   /// * [connection] The connection information. See RtcConnection.
   ///
   /// Returns
-  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown; and you need to catch the exception and handle it accordingly.
-  ///  < 0: Failure.
+  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown. You need to catch the exception and handle it accordingly.
   Future<void> clearVideoWatermarkEx(RtcConnection connection);
 
   /// Agora supports reporting and analyzing customized messages.
@@ -505,13 +493,13 @@ abstract class RtcEngineEx implements RtcEngine {
   ///
   /// * [interval] Sets the time interval between two consecutive volume indications:
   ///  ≤ 0: Disables the volume indication.
-  ///  > 0: Time interval (ms) between two consecutive volume indications. The lowest value is 50.
+  ///  > 0: Time interval (ms) between two consecutive volume indications. Ensure this parameter is set to a value greater than 10, otherwise you will not receive the onAudioVolumeIndication callback. Agora recommends that this value is set as greater than 100.
   /// * [smooth] The smoothing factor that sets the sensitivity of the audio volume indicator. The value ranges between 0 and 10. The recommended value is 3. The greater the value, the more sensitive the indicator.
   /// * [reportVad] true : Enables the voice activity detection of the local user. Once it is enabled, the vad parameter of the onAudioVolumeIndication callback reports the voice activity status of the local user. false : (Default) Disables the voice activity detection of the local user. Once it is disabled, the vad parameter of the onAudioVolumeIndication callback does not report the voice activity status of the local user, except for the scenario where the engine automatically detects the voice activity of the local user.
   /// * [connection] The connection information. See RtcConnection.
   ///
   /// Returns
-  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown; and you need to catch the exception and handle it accordingly.
+  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown. You need to catch the exception and handle it accordingly.
   ///  < 0: Failure.
   Future<void> enableAudioVolumeIndicationEx(
       {required int interval,
@@ -529,11 +517,7 @@ abstract class RtcEngineEx implements RtcEngine {
   /// * [connection] The connection information. See RtcConnection.
   ///
   /// Returns
-  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown; and you need to catch the exception and handle it accordingly.
-  ///  < 0: Failure.
-  ///  -2: The URL is null or the string length is 0.
-  ///  -7: The SDK is not initialized before calling this method.
-  ///  -19: The Media Push URL is already in use, use another URL instead.
+  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown. You need to catch the exception and handle it accordingly.
   Future<void> startRtmpStreamWithoutTranscodingEx(
       {required String url, required RtcConnection connection});
 
@@ -550,11 +534,7 @@ abstract class RtcEngineEx implements RtcEngine {
   /// * [connection] The connection information. See RtcConnection.
   ///
   /// Returns
-  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown; and you need to catch the exception and handle it accordingly.
-  ///  < 0: Failure.
-  ///  -2: The URL is null or the string length is 0.
-  ///  -7: The SDK is not initialized before calling this method.
-  ///  -19: The Media Push URL is already in use, use another URL instead.
+  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown. You need to catch the exception and handle it accordingly.
   Future<void> startRtmpStreamWithTranscodingEx(
       {required String url,
       required LiveTranscoding transcoding,
@@ -568,8 +548,7 @@ abstract class RtcEngineEx implements RtcEngine {
   /// * [connection] The connection information. See RtcConnection.
   ///
   /// Returns
-  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown; and you need to catch the exception and handle it accordingly.
-  ///  < 0: Failure.
+  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown. You need to catch the exception and handle it accordingly.
   Future<void> updateRtmpTranscodingEx(
       {required LiveTranscoding transcoding,
       required RtcConnection connection});
@@ -581,8 +560,7 @@ abstract class RtcEngineEx implements RtcEngine {
   /// * [url] The address of Media Push. The format is RTMP or RTMPS. The character length cannot exceed 1024 bytes. Special characters such as Chinese characters are not supported.
   ///
   /// Returns
-  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown; and you need to catch the exception and handle it accordingly.
-  ///  < 0: Failure.
+  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown. You need to catch the exception and handle it accordingly.
   Future<void> stopRtmpStreamEx(
       {required String url, required RtcConnection connection});
 
@@ -600,7 +578,7 @@ abstract class RtcEngineEx implements RtcEngine {
   /// * [connection] The connection information. See RtcConnection.
   ///
   /// Returns
-  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown; and you need to catch the exception and handle it accordingly.
+  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown. You need to catch the exception and handle it accordingly.
   ///  < 0: Failure.
   ///  -1: A general error occurs (no specified reason).
   ///  -2: The parameter is invalid.
@@ -610,41 +588,12 @@ abstract class RtcEngineEx implements RtcEngine {
       {required ChannelMediaRelayConfiguration configuration,
       required RtcConnection connection});
 
-  /// Starts relaying media streams across channels. This method can be used to implement scenarios such as co-host across channels.
-  ///
-  /// Deprecated: This method is deprecated. Use startOrUpdateChannelMediaRelayEx instead. After a successful method call, the SDK triggers the onChannelMediaRelayStateChanged and onChannelMediaRelayEvent callbacks, and these callbacks return the state and events of the media stream relay.
-  ///  If the onChannelMediaRelayStateChanged callback returns relayStateRunning (2) and relayOk (0), and the onChannelMediaRelayEvent callback returns relayEventPacketSentToDestChannel (4), it means that the SDK starts relaying media streams between the source channel and the target channel.
-  ///  If the onChannelMediaRelayStateChanged callback returns relayStateFailure (3), an exception occurs during the media stream relay.
-  ///  Call this method after joining the channel.
-  ///  This method takes effect only when you are a host in a live streaming channel.
-  ///  After a successful method call, if you want to call this method again, ensure that you call the stopChannelMediaRelayEx method to quit the current relay.
-  ///  The relaying media streams across channels function needs to be enabled by contacting.
-  ///  Agora does not support string user accounts in this API.
-  ///
-  /// * [configuration] The configuration of the media stream relay. See ChannelMediaRelayConfiguration.
-  /// * [connection] The connection information. See RtcConnection.
-  ///
-  /// Returns
-  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown; and you need to catch the exception and handle it accordingly.
-  ///  < 0: Failure.
-  ///  -1: A general error occurs (no specified reason).
-  ///  -2: The parameter is invalid.
-  ///  -7: The method call was rejected. It may be because the SDK has not been initialized successfully, or the user role is not a host.
-  ///  -8: Internal state error. Probably because the user is not a broadcaster.
+  /// @nodoc
   Future<void> startChannelMediaRelayEx(
       {required ChannelMediaRelayConfiguration configuration,
       required RtcConnection connection});
 
-  /// Updates the channels for media stream relay.
-  ///
-  /// Deprecated: This method is deprecated. Use startOrUpdateChannelMediaRelayEx instead. After the media relay starts, if you want to relay the media stream to more channels, or leave the current relay channel, you can call this method. After a successful method call, the SDK triggers the onChannelMediaRelayEvent callback with the relayEventPacketUpdateDestChannel (7) state code. Call the method after successfully calling the startChannelMediaRelayEx method and receiving onChannelMediaRelayStateChanged (relayStateRunning, relayOk); otherwise, the method call fails.
-  ///
-  /// * [configuration] The configuration of the media stream relay. See ChannelMediaRelayConfiguration.
-  /// * [connection] The connection information. See RtcConnection.
-  ///
-  /// Returns
-  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown; and you need to catch the exception and handle it accordingly.
-  ///  < 0: Failure.
+  /// @nodoc
   Future<void> updateChannelMediaRelayEx(
       {required ChannelMediaRelayConfiguration configuration,
       required RtcConnection connection});
@@ -656,7 +605,7 @@ abstract class RtcEngineEx implements RtcEngine {
   /// * [connection] The connection information. See RtcConnection.
   ///
   /// Returns
-  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown; and you need to catch the exception and handle it accordingly.
+  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown. You need to catch the exception and handle it accordingly.
   ///  < 0: Failure.
   Future<void> stopChannelMediaRelayEx(RtcConnection connection);
 
@@ -667,8 +616,7 @@ abstract class RtcEngineEx implements RtcEngine {
   /// * [connection] The connection information. See RtcConnection.
   ///
   /// Returns
-  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown; and you need to catch the exception and handle it accordingly.
-  ///  < 0: Failure.
+  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown. You need to catch the exception and handle it accordingly.
   Future<void> pauseAllChannelMediaRelayEx(RtcConnection connection);
 
   /// Resumes the media stream relay to all target channels.
@@ -678,7 +626,7 @@ abstract class RtcEngineEx implements RtcEngine {
   /// * [connection] The connection information. See RtcConnection.
   ///
   /// Returns
-  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown; and you need to catch the exception and handle it accordingly.
+  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown. You need to catch the exception and handle it accordingly.
   ///  < 0: Failure.
   Future<void> resumeAllChannelMediaRelayEx(RtcConnection connection);
 
@@ -694,15 +642,14 @@ abstract class RtcEngineEx implements RtcEngine {
   ///
   /// After you enable dual-stream mode, you can call setRemoteVideoStreamType to choose to receive either the high-quality video stream or the low-quality video stream on the subscriber side. You can call this method to enable or disable the dual-stream mode on the publisher side. Dual streams are a pairing of a high-quality video stream and a low-quality video stream:
   ///  High-quality video stream: High bitrate, high resolution.
-  ///  Low-quality video stream: Low bitrate, low resolution. This method is applicable to all types of streams from the sender, including but not limited to video streams collected from cameras, screen sharing streams, and custom-collected video streams.
+  ///  Low-quality video stream: Low bitrate, low resolution. Deprecated: This method is deprecated as of v4.2.0. Use setDualStreamModeEx instead. This method is applicable to all types of streams from the sender, including but not limited to video streams collected from cameras, screen sharing streams, and custom-collected video streams.
   ///
   /// * [enabled] Whether to enable dual-stream mode: true : Enable dual-stream mode. false : (Default) Disable dual-stream mode.
-  /// * [streamConfig] The configuration of the low-quality video stream. See SimulcastStreamConfig.
+  /// * [streamConfig] The configuration of the low-quality video stream. See SimulcastStreamConfig. When setting mode to disableSimulcastStream, setting streamConfig will not take effect.
   /// * [connection] The connection information. See RtcConnection.
   ///
   /// Returns
-  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown; and you need to catch the exception and handle it accordingly.
-  ///  < 0: Failure.
+  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown. You need to catch the exception and handle it accordingly.
   Future<void> enableDualStreamModeEx(
       {required bool enabled,
       required SimulcastStreamConfig streamConfig,
@@ -710,18 +657,19 @@ abstract class RtcEngineEx implements RtcEngine {
 
   /// Sets the dual-stream mode on the sender side.
   ///
-  /// The SDK enables the low-quality video stream auto mode on the sender by default, which is equivalent to calling this method and setting the mode to autoSimulcastStream. If you want to modify this behavior, you can call this method and modify the mode to disableSimulcastStream (never send low-quality video streams) or enableSimulcastStream (always send low-quality video streams). The difference and connection between this method and enableDualStreamModeEx is as follows:
+  /// The SDK defaults to enabling low-quality video stream adaptive mode (autoSimulcastStream) on the sending end, which means the sender does not actively send low-quality video stream. The receiver with the role of the host can initiate a low-quality video stream request by calling setRemoteVideoStreamTypeEx, and upon receiving the request, the sending end automatically starts sending the low-quality video stream.
+  ///  If you want to modify this behavior, you can call this method and set mode to disableSimulcastStream (never send low-quality video streams) or enableSimulcastStream (always send low-quality video streams).
+  ///  If you want to restore the default behavior after making changes, you can call this method again with mode set to autoSimulcastStream. The difference and connection between this method and enableDualStreamModeEx is as follows:
   ///  When calling this method and setting mode to disableSimulcastStream, it has the same effect as enableDualStreamModeEx (false).
   ///  When calling this method and setting mode to enableSimulcastStream, it has the same effect as enableDualStreamModeEx (true).
   ///  Both methods can be called before and after joining a channel. If both methods are used, the settings in the method called later takes precedence.
   ///
   /// * [mode] The mode in which the video stream is sent. See SimulcastStreamMode.
-  /// * [streamConfig] The configuration of the low-quality video stream. See SimulcastStreamConfig.
+  /// * [streamConfig] The configuration of the low-quality video stream. See SimulcastStreamConfig. When setting mode to disableSimulcastStream, setting streamConfig will not take effect.
   /// * [connection] The connection information. See RtcConnection.
   ///
   /// Returns
-  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown; and you need to catch the exception and handle it accordingly.
-  ///  < 0: Failure.
+  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown. You need to catch the exception and handle it accordingly.
   Future<void> setDualStreamModeEx(
       {required SimulcastStreamMode mode,
       required SimulcastStreamConfig streamConfig,
@@ -750,8 +698,7 @@ abstract class RtcEngineEx implements RtcEngine {
   ///  Android: /storage/emulated/0/Android/data/<package name>/files/example.jpg Ensure that the path you specify exists and is writable.
   ///
   /// Returns
-  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown; and you need to catch the exception and handle it accordingly.
-  ///  < 0: Failure.
+  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown. You need to catch the exception and handle it accordingly.
   Future<void> takeSnapshotEx(
       {required RtcConnection connection,
       required int uid,
@@ -766,8 +713,7 @@ abstract class RtcEngineEx implements RtcEngine {
   /// * [connection] The connection information. See RtcConnection.
   ///
   /// Returns
-  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown; and you need to catch the exception and handle it accordingly.
-  ///  < 0: Failure.
+  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown. You need to catch the exception and handle it accordingly.
   Future<void> enableContentInspectEx(
       {required bool enabled,
       required ContentInspectConfig config,
@@ -781,10 +727,16 @@ abstract class RtcEngineEx implements RtcEngine {
   /// * [connection] The connection information. See RtcConnection.
   ///
   /// Returns
-  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown; and you need to catch the exception and handle it accordingly.
-  ///  < 0: Failure.
+  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown. You need to catch the exception and handle it accordingly.
   Future<void> startMediaRenderingTracingEx(RtcConnection connection);
 
-  /// @nodoc
+  /// Gets the call ID with the connection ID.
+  ///
+  /// Call this method after joining a channel. When a user joins a channel on a client, a callId is generated to identify the call from the client. You can call this method to get the callId parameter, and pass it in when calling methods such as rate and complain.
+  ///
+  /// * [connection] The connection information. See RtcConnection.
+  ///
+  /// Returns
+  /// The current call ID.
   Future<String> getCallIdEx(RtcConnection connection);
 }

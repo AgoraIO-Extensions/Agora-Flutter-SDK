@@ -11,7 +11,7 @@ import 'package:iris_method_channel/iris_method_channel.dart';
 
 void localSpatialAudioEngineSmokeTestCases() {
   testWidgets(
-    'initialize',
+    'LocalSpatialAudioEngine.initialize',
     (WidgetTester tester) async {
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
@@ -21,14 +21,17 @@ void localSpatialAudioEngineSmokeTestCases() {
         appId: engineAppId,
         areaCode: AreaCode.areaCodeGlob.value(),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       final localSpatialAudioEngine = rtcEngine.getLocalSpatialAudioEngine();
+      await localSpatialAudioEngine.initialize();
 
       try {
         await localSpatialAudioEngine.initialize();
       } catch (e) {
         if (e is! AgoraRtcException) {
-          debugPrint('[initialize] error: ${e.toString()}');
+          debugPrint(
+              '[LocalSpatialAudioEngine.initialize] error: ${e.toString()}');
           rethrow;
         }
 
@@ -45,7 +48,7 @@ void localSpatialAudioEngineSmokeTestCases() {
   );
 
   testWidgets(
-    'updateRemotePosition',
+    'LocalSpatialAudioEngine.updateRemotePosition',
     (WidgetTester tester) async {
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
@@ -55,8 +58,10 @@ void localSpatialAudioEngineSmokeTestCases() {
         appId: engineAppId,
         areaCode: AreaCode.areaCodeGlob.value(),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       final localSpatialAudioEngine = rtcEngine.getLocalSpatialAudioEngine();
+      await localSpatialAudioEngine.initialize();
 
       try {
         const int uid = 10;
@@ -72,7 +77,8 @@ void localSpatialAudioEngineSmokeTestCases() {
         );
       } catch (e) {
         if (e is! AgoraRtcException) {
-          debugPrint('[updateRemotePosition] error: ${e.toString()}');
+          debugPrint(
+              '[LocalSpatialAudioEngine.updateRemotePosition] error: ${e.toString()}');
           rethrow;
         }
 
@@ -89,7 +95,7 @@ void localSpatialAudioEngineSmokeTestCases() {
   );
 
   testWidgets(
-    'updateRemotePositionEx',
+    'LocalSpatialAudioEngine.updateRemotePositionEx',
     (WidgetTester tester) async {
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
@@ -99,8 +105,10 @@ void localSpatialAudioEngineSmokeTestCases() {
         appId: engineAppId,
         areaCode: AreaCode.areaCodeGlob.value(),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       final localSpatialAudioEngine = rtcEngine.getLocalSpatialAudioEngine();
+      await localSpatialAudioEngine.initialize();
 
       try {
         const int uid = 10;
@@ -123,7 +131,8 @@ void localSpatialAudioEngineSmokeTestCases() {
         );
       } catch (e) {
         if (e is! AgoraRtcException) {
-          debugPrint('[updateRemotePositionEx] error: ${e.toString()}');
+          debugPrint(
+              '[LocalSpatialAudioEngine.updateRemotePositionEx] error: ${e.toString()}');
           rethrow;
         }
 
@@ -140,7 +149,7 @@ void localSpatialAudioEngineSmokeTestCases() {
   );
 
   testWidgets(
-    'removeRemotePosition',
+    'LocalSpatialAudioEngine.removeRemotePosition',
     (WidgetTester tester) async {
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
@@ -150,8 +159,10 @@ void localSpatialAudioEngineSmokeTestCases() {
         appId: engineAppId,
         areaCode: AreaCode.areaCodeGlob.value(),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       final localSpatialAudioEngine = rtcEngine.getLocalSpatialAudioEngine();
+      await localSpatialAudioEngine.initialize();
 
       try {
         const int uid = 10;
@@ -160,7 +171,8 @@ void localSpatialAudioEngineSmokeTestCases() {
         );
       } catch (e) {
         if (e is! AgoraRtcException) {
-          debugPrint('[removeRemotePosition] error: ${e.toString()}');
+          debugPrint(
+              '[LocalSpatialAudioEngine.removeRemotePosition] error: ${e.toString()}');
           rethrow;
         }
 
@@ -177,7 +189,7 @@ void localSpatialAudioEngineSmokeTestCases() {
   );
 
   testWidgets(
-    'removeRemotePositionEx',
+    'LocalSpatialAudioEngine.removeRemotePositionEx',
     (WidgetTester tester) async {
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
@@ -187,8 +199,10 @@ void localSpatialAudioEngineSmokeTestCases() {
         appId: engineAppId,
         areaCode: AreaCode.areaCodeGlob.value(),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       final localSpatialAudioEngine = rtcEngine.getLocalSpatialAudioEngine();
+      await localSpatialAudioEngine.initialize();
 
       try {
         const int uid = 10;
@@ -204,7 +218,8 @@ void localSpatialAudioEngineSmokeTestCases() {
         );
       } catch (e) {
         if (e is! AgoraRtcException) {
-          debugPrint('[removeRemotePositionEx] error: ${e.toString()}');
+          debugPrint(
+              '[LocalSpatialAudioEngine.removeRemotePositionEx] error: ${e.toString()}');
           rethrow;
         }
 
@@ -221,7 +236,7 @@ void localSpatialAudioEngineSmokeTestCases() {
   );
 
   testWidgets(
-    'clearRemotePositions',
+    'LocalSpatialAudioEngine.clearRemotePositions',
     (WidgetTester tester) async {
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
@@ -231,14 +246,17 @@ void localSpatialAudioEngineSmokeTestCases() {
         appId: engineAppId,
         areaCode: AreaCode.areaCodeGlob.value(),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       final localSpatialAudioEngine = rtcEngine.getLocalSpatialAudioEngine();
+      await localSpatialAudioEngine.initialize();
 
       try {
         await localSpatialAudioEngine.clearRemotePositions();
       } catch (e) {
         if (e is! AgoraRtcException) {
-          debugPrint('[clearRemotePositions] error: ${e.toString()}');
+          debugPrint(
+              '[LocalSpatialAudioEngine.clearRemotePositions] error: ${e.toString()}');
           rethrow;
         }
 
@@ -255,7 +273,7 @@ void localSpatialAudioEngineSmokeTestCases() {
   );
 
   testWidgets(
-    'clearRemotePositionsEx',
+    'LocalSpatialAudioEngine.clearRemotePositionsEx',
     (WidgetTester tester) async {
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
@@ -265,8 +283,10 @@ void localSpatialAudioEngineSmokeTestCases() {
         appId: engineAppId,
         areaCode: AreaCode.areaCodeGlob.value(),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       final localSpatialAudioEngine = rtcEngine.getLocalSpatialAudioEngine();
+      await localSpatialAudioEngine.initialize();
 
       try {
         const String connectionChannelId = "hello";
@@ -280,7 +300,8 @@ void localSpatialAudioEngineSmokeTestCases() {
         );
       } catch (e) {
         if (e is! AgoraRtcException) {
-          debugPrint('[clearRemotePositionsEx] error: ${e.toString()}');
+          debugPrint(
+              '[LocalSpatialAudioEngine.clearRemotePositionsEx] error: ${e.toString()}');
           rethrow;
         }
 
@@ -297,7 +318,7 @@ void localSpatialAudioEngineSmokeTestCases() {
   );
 
   testWidgets(
-    'setRemoteAudioAttenuation',
+    'LocalSpatialAudioEngine.setRemoteAudioAttenuation',
     (WidgetTester tester) async {
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
@@ -307,8 +328,10 @@ void localSpatialAudioEngineSmokeTestCases() {
         appId: engineAppId,
         areaCode: AreaCode.areaCodeGlob.value(),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       final localSpatialAudioEngine = rtcEngine.getLocalSpatialAudioEngine();
+      await localSpatialAudioEngine.initialize();
 
       try {
         const int uid = 10;
@@ -321,7 +344,8 @@ void localSpatialAudioEngineSmokeTestCases() {
         );
       } catch (e) {
         if (e is! AgoraRtcException) {
-          debugPrint('[setRemoteAudioAttenuation] error: ${e.toString()}');
+          debugPrint(
+              '[LocalSpatialAudioEngine.setRemoteAudioAttenuation] error: ${e.toString()}');
           rethrow;
         }
 

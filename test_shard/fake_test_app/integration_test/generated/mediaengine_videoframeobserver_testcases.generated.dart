@@ -11,15 +11,18 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:iris_tester/iris_tester.dart';
 import 'package:iris_method_channel/iris_method_channel.dart';
 
-void generatedTestCases(IrisTester irisTester) {
+import '../testcases/event_ids_mapping.dart';
+
+void generatedTestCases(ValueGetter<IrisTester> irisTester) {
   testWidgets(
-    'onCaptureVideoFrame',
+    'VideoFrameObserver.onCaptureVideoFrame',
     (WidgetTester tester) async {
       RtcEngine rtcEngine = createAgoraRtcEngine();
       await rtcEngine.initialize(RtcEngineContext(
         appId: 'app_id',
         areaCode: AreaCode.areaCodeGlob.value(),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
       final mediaEngine = rtcEngine.getMediaEngine();
 
       final onCaptureVideoFrameCompleter = Completer<bool>();
@@ -88,17 +91,14 @@ void generatedTestCases(IrisTester irisTester) {
           'videoFrame': videoFrame.toJson(),
         };
 
-        if (!kIsWeb) {
-          irisTester.fireEvent('VideoFrameObserver_onCaptureVideoFrame',
-              params: eventJson);
-        } else {
-          final ret = irisTester.fireEvent(
-              'VideoFrameObserver_onCaptureVideoFrame',
-              params: eventJson);
-// Delay 200 milliseconds to ensure the callback is called.
+        final eventIds =
+            eventIdsMapping['VideoFrameObserver_onCaptureVideoFrame'] ?? [];
+        for (final event in eventIds) {
+          final ret = irisTester().fireEvent(event, params: eventJson);
+          // Delay 200 milliseconds to ensure the callback is called.
           await Future.delayed(const Duration(milliseconds: 200));
-// TODO(littlegnal): Most of callbacks on web are not implemented, we're temporarily skip these callbacks at this time.
-          if (ret) {
+          // TODO(littlegnal): Most of callbacks on web are not implemented, we're temporarily skip these callbacks at this time.
+          if (kIsWeb && ret) {
             if (!onCaptureVideoFrameCompleter.isCompleted) {
               onCaptureVideoFrameCompleter.complete(true);
             }
@@ -123,13 +123,14 @@ void generatedTestCases(IrisTester irisTester) {
   );
 
   testWidgets(
-    'onPreEncodeVideoFrame',
+    'VideoFrameObserver.onPreEncodeVideoFrame',
     (WidgetTester tester) async {
       RtcEngine rtcEngine = createAgoraRtcEngine();
       await rtcEngine.initialize(RtcEngineContext(
         appId: 'app_id',
         areaCode: AreaCode.areaCodeGlob.value(),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
       final mediaEngine = rtcEngine.getMediaEngine();
 
       final onPreEncodeVideoFrameCompleter = Completer<bool>();
@@ -198,17 +199,14 @@ void generatedTestCases(IrisTester irisTester) {
           'videoFrame': videoFrame.toJson(),
         };
 
-        if (!kIsWeb) {
-          irisTester.fireEvent('VideoFrameObserver_onPreEncodeVideoFrame',
-              params: eventJson);
-        } else {
-          final ret = irisTester.fireEvent(
-              'VideoFrameObserver_onPreEncodeVideoFrame',
-              params: eventJson);
-// Delay 200 milliseconds to ensure the callback is called.
+        final eventIds =
+            eventIdsMapping['VideoFrameObserver_onPreEncodeVideoFrame'] ?? [];
+        for (final event in eventIds) {
+          final ret = irisTester().fireEvent(event, params: eventJson);
+          // Delay 200 milliseconds to ensure the callback is called.
           await Future.delayed(const Duration(milliseconds: 200));
-// TODO(littlegnal): Most of callbacks on web are not implemented, we're temporarily skip these callbacks at this time.
-          if (ret) {
+          // TODO(littlegnal): Most of callbacks on web are not implemented, we're temporarily skip these callbacks at this time.
+          if (kIsWeb && ret) {
             if (!onPreEncodeVideoFrameCompleter.isCompleted) {
               onPreEncodeVideoFrameCompleter.complete(true);
             }
@@ -233,13 +231,14 @@ void generatedTestCases(IrisTester irisTester) {
   );
 
   testWidgets(
-    'onMediaPlayerVideoFrame',
+    'VideoFrameObserver.onMediaPlayerVideoFrame',
     (WidgetTester tester) async {
       RtcEngine rtcEngine = createAgoraRtcEngine();
       await rtcEngine.initialize(RtcEngineContext(
         appId: 'app_id',
         areaCode: AreaCode.areaCodeGlob.value(),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
       final mediaEngine = rtcEngine.getMediaEngine();
 
       final onMediaPlayerVideoFrameCompleter = Completer<bool>();
@@ -306,17 +305,14 @@ void generatedTestCases(IrisTester irisTester) {
           'mediaPlayerId': mediaPlayerId,
         };
 
-        if (!kIsWeb) {
-          irisTester.fireEvent('VideoFrameObserver_onMediaPlayerVideoFrame',
-              params: eventJson);
-        } else {
-          final ret = irisTester.fireEvent(
-              'VideoFrameObserver_onMediaPlayerVideoFrame',
-              params: eventJson);
-// Delay 200 milliseconds to ensure the callback is called.
+        final eventIds =
+            eventIdsMapping['VideoFrameObserver_onMediaPlayerVideoFrame'] ?? [];
+        for (final event in eventIds) {
+          final ret = irisTester().fireEvent(event, params: eventJson);
+          // Delay 200 milliseconds to ensure the callback is called.
           await Future.delayed(const Duration(milliseconds: 200));
-// TODO(littlegnal): Most of callbacks on web are not implemented, we're temporarily skip these callbacks at this time.
-          if (ret) {
+          // TODO(littlegnal): Most of callbacks on web are not implemented, we're temporarily skip these callbacks at this time.
+          if (kIsWeb && ret) {
             if (!onMediaPlayerVideoFrameCompleter.isCompleted) {
               onMediaPlayerVideoFrameCompleter.complete(true);
             }
@@ -341,13 +337,14 @@ void generatedTestCases(IrisTester irisTester) {
   );
 
   testWidgets(
-    'onRenderVideoFrame',
+    'VideoFrameObserver.onRenderVideoFrame',
     (WidgetTester tester) async {
       RtcEngine rtcEngine = createAgoraRtcEngine();
       await rtcEngine.initialize(RtcEngineContext(
         appId: 'app_id',
         areaCode: AreaCode.areaCodeGlob.value(),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
       final mediaEngine = rtcEngine.getMediaEngine();
 
       final onRenderVideoFrameCompleter = Completer<bool>();
@@ -417,17 +414,14 @@ void generatedTestCases(IrisTester irisTester) {
           'videoFrame': videoFrame.toJson(),
         };
 
-        if (!kIsWeb) {
-          irisTester.fireEvent('VideoFrameObserver_onRenderVideoFrame',
-              params: eventJson);
-        } else {
-          final ret = irisTester.fireEvent(
-              'VideoFrameObserver_onRenderVideoFrame',
-              params: eventJson);
-// Delay 200 milliseconds to ensure the callback is called.
+        final eventIds =
+            eventIdsMapping['VideoFrameObserver_onRenderVideoFrame'] ?? [];
+        for (final event in eventIds) {
+          final ret = irisTester().fireEvent(event, params: eventJson);
+          // Delay 200 milliseconds to ensure the callback is called.
           await Future.delayed(const Duration(milliseconds: 200));
-// TODO(littlegnal): Most of callbacks on web are not implemented, we're temporarily skip these callbacks at this time.
-          if (ret) {
+          // TODO(littlegnal): Most of callbacks on web are not implemented, we're temporarily skip these callbacks at this time.
+          if (kIsWeb && ret) {
             if (!onRenderVideoFrameCompleter.isCompleted) {
               onRenderVideoFrameCompleter.complete(true);
             }
@@ -452,13 +446,14 @@ void generatedTestCases(IrisTester irisTester) {
   );
 
   testWidgets(
-    'onTranscodedVideoFrame',
+    'VideoFrameObserver.onTranscodedVideoFrame',
     (WidgetTester tester) async {
       RtcEngine rtcEngine = createAgoraRtcEngine();
       await rtcEngine.initialize(RtcEngineContext(
         appId: 'app_id',
         areaCode: AreaCode.areaCodeGlob.value(),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
       final mediaEngine = rtcEngine.getMediaEngine();
 
       final onTranscodedVideoFrameCompleter = Completer<bool>();
@@ -523,17 +518,14 @@ void generatedTestCases(IrisTester irisTester) {
           'videoFrame': videoFrame.toJson(),
         };
 
-        if (!kIsWeb) {
-          irisTester.fireEvent('VideoFrameObserver_onTranscodedVideoFrame',
-              params: eventJson);
-        } else {
-          final ret = irisTester.fireEvent(
-              'VideoFrameObserver_onTranscodedVideoFrame',
-              params: eventJson);
-// Delay 200 milliseconds to ensure the callback is called.
+        final eventIds =
+            eventIdsMapping['VideoFrameObserver_onTranscodedVideoFrame'] ?? [];
+        for (final event in eventIds) {
+          final ret = irisTester().fireEvent(event, params: eventJson);
+          // Delay 200 milliseconds to ensure the callback is called.
           await Future.delayed(const Duration(milliseconds: 200));
-// TODO(littlegnal): Most of callbacks on web are not implemented, we're temporarily skip these callbacks at this time.
-          if (ret) {
+          // TODO(littlegnal): Most of callbacks on web are not implemented, we're temporarily skip these callbacks at this time.
+          if (kIsWeb && ret) {
             if (!onTranscodedVideoFrameCompleter.isCompleted) {
               onTranscodedVideoFrameCompleter.complete(true);
             }

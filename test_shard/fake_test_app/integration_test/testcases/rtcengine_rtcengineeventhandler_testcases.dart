@@ -13,7 +13,7 @@ import '../generated/rtcengine_rtcengineeventhandler_testcases.generated.dart'
 import 'package:path/path.dart' as path;
 import 'package:iris_method_channel/iris_method_channel.dart';
 
-void testCases(IrisTester irisTester) {
+void testCases(ValueGetter<IrisTester> irisTester) {
   generated.generatedTestCases(irisTester);
 
   testWidgets(
@@ -55,9 +55,9 @@ void testCases(IrisTester irisTester) {
           'numFaces': numFaces,
         };
 
-        irisTester.fireEvent('RtcEngineEventHandler_onFacePositionChanged',
+        irisTester().fireEvent('RtcEngineEventHandler_onFacePositionChanged',
             params: eventJson);
-        irisTester.fireEvent('RtcEngineEventHandlerEx_onFacePositionChanged',
+        irisTester().fireEvent('RtcEngineEventHandlerEx_onFacePositionChanged',
             params: eventJson);
       }
 

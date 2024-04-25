@@ -109,6 +109,23 @@ class MusicPlayerImpl extends media_player_impl.MediaPlayerImpl
       throw AgoraRtcException(code: result);
     }
   }
+
+  @override
+  Future<void> setPlayMode(MusicPlayMode mode) async {
+    final apiType =
+        '${isOverrideClassName ? className : 'MusicPlayer'}_setPlayMode';
+    final param = createParams({'mode': mode.value()});
+    final callApiResult = await irisMethodChannel.invokeMethod(
+        IrisMethodCall(apiType, jsonEncode(param), buffers: null));
+    if (callApiResult.irisReturnCode < 0) {
+      throw AgoraRtcException(code: callApiResult.irisReturnCode);
+    }
+    final rm = callApiResult.data;
+    final result = rm['result'];
+    if (result < 0) {
+      throw AgoraRtcException(code: result);
+    }
+  }
 }
 
 class MusicContentCenterImpl extends binding.MusicContentCenterImpl
@@ -153,6 +170,17 @@ class MusicContentCenterImpl extends binding.MusicContentCenterImpl
   }
 
   @override
+  Future<void> destroyMusicPlayer(MusicPlayer musicPlayer) async {
+    final apiType =
+        '${isOverrideClassName ? className : 'MusicContentCenter'}_destroyMusicPlayer';
+    final param = createParams({'music_player': musicPlayer});
+    await irisMethodChannel.invokeMethod(
+        IrisMethodCall(apiType, jsonEncode(param), buffers: null));
+
+    _removeMusicPlayerById(musicPlayer.getMediaPlayerId());
+  }
+
+  @override
   void registerEventHandler(MusicContentCenterEventHandler eventHandler) async {
     if (_musicContentCenterEventHandler != null) return;
 
@@ -185,7 +213,7 @@ class MusicContentCenterImpl extends binding.MusicContentCenterImpl
         jsonEncode({}));
   }
 
-  void removeMusicPlayerById(int musicPlayerId) {
+  void _removeMusicPlayerById(int musicPlayerId) {
     _musicPlayers.remove(musicPlayerId);
   }
 
@@ -200,7 +228,7 @@ class MusicContentCenterImpl extends binding.MusicContentCenterImpl
     }
 
     for (final player in _musicPlayers.values) {
-      await _rtcEngine.destroyMediaPlayer(player);
+      await destroyMusicPlayer(player);
     }
 
     _musicPlayers.clear();

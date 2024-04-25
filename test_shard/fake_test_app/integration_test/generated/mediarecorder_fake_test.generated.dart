@@ -11,7 +11,7 @@ import 'package:iris_method_channel/iris_method_channel.dart';
 
 void mediaRecorderSmokeTestCases() {
   testWidgets(
-    'setMediaRecorderObserver',
+    'MediaRecorder.setMediaRecorderObserver',
     (WidgetTester tester) async {
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
@@ -21,6 +21,7 @@ void mediaRecorderSmokeTestCases() {
         appId: engineAppId,
         areaCode: AreaCode.areaCodeGlob.value(),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       final mediaRecorder = (await rtcEngine.createMediaRecorder(
           RecorderStreamInfo(channelId: 'hello', uid: 0)))!;
@@ -37,7 +38,8 @@ void mediaRecorderSmokeTestCases() {
         );
       } catch (e) {
         if (e is! AgoraRtcException) {
-          debugPrint('[setMediaRecorderObserver] error: ${e.toString()}');
+          debugPrint(
+              '[MediaRecorder.setMediaRecorderObserver] error: ${e.toString()}');
           rethrow;
         }
 
@@ -54,7 +56,7 @@ void mediaRecorderSmokeTestCases() {
   );
 
   testWidgets(
-    'startRecording',
+    'MediaRecorder.startRecording',
     (WidgetTester tester) async {
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
@@ -64,6 +66,7 @@ void mediaRecorderSmokeTestCases() {
         appId: engineAppId,
         areaCode: AreaCode.areaCodeGlob.value(),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       final mediaRecorder = (await rtcEngine.createMediaRecorder(
           RecorderStreamInfo(channelId: 'hello', uid: 0)))!;
@@ -88,7 +91,7 @@ void mediaRecorderSmokeTestCases() {
         );
       } catch (e) {
         if (e is! AgoraRtcException) {
-          debugPrint('[startRecording] error: ${e.toString()}');
+          debugPrint('[MediaRecorder.startRecording] error: ${e.toString()}');
           rethrow;
         }
 
@@ -105,7 +108,7 @@ void mediaRecorderSmokeTestCases() {
   );
 
   testWidgets(
-    'stopRecording',
+    'MediaRecorder.stopRecording',
     (WidgetTester tester) async {
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
@@ -115,6 +118,7 @@ void mediaRecorderSmokeTestCases() {
         appId: engineAppId,
         areaCode: AreaCode.areaCodeGlob.value(),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       final mediaRecorder = (await rtcEngine.createMediaRecorder(
           RecorderStreamInfo(channelId: 'hello', uid: 0)))!;
@@ -123,7 +127,7 @@ void mediaRecorderSmokeTestCases() {
         await mediaRecorder.stopRecording();
       } catch (e) {
         if (e is! AgoraRtcException) {
-          debugPrint('[stopRecording] error: ${e.toString()}');
+          debugPrint('[MediaRecorder.stopRecording] error: ${e.toString()}');
           rethrow;
         }
 

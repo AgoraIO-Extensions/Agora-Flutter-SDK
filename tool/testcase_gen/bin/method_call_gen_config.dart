@@ -30,6 +30,7 @@ testWidgets('{{TEST_CASE_NAME}}', (WidgetTester tester) async {
       appId: engineAppId,
       areaCode: AreaCode.areaCodeGlob.value(),
     ));
+    await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
     final mediaPlayerCacheManager = getMediaPlayerCacheManager(rtcEngine);
     
@@ -87,6 +88,7 @@ testWidgets('{{TEST_CASE_NAME}}', (WidgetTester tester) async {
       appId: engineAppId,
       areaCode: AreaCode.areaCodeGlob.value(),
     ));
+    await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
     try {
       {{TEST_CASE_BODY}}
@@ -152,6 +154,7 @@ testWidgets('{{TEST_CASE_NAME}}', (WidgetTester tester) async {
       appId: engineAppId,
       areaCode: AreaCode.areaCodeGlob.value(),
     ));
+    await rtcEngineEx.setParameters('{"rtc.enable_debug_log": true}');
 
     try {
       {{TEST_CASE_BODY}}
@@ -213,6 +216,7 @@ testWidgets('{{TEST_CASE_NAME}}', (WidgetTester tester) async {
       appId: engineAppId,
       areaCode: AreaCode.areaCodeGlob.value(),
     ));
+    await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
     final audioDeviceManager = rtcEngine.getAudioDeviceManager();
 
@@ -266,6 +270,7 @@ testWidgets('{{TEST_CASE_NAME}}', (WidgetTester tester) async {
       appId: engineAppId,
       areaCode: AreaCode.areaCodeGlob.value(),
     ));
+    await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
     final videoDeviceManager = rtcEngine.getVideoDeviceManager();
 
@@ -321,6 +326,7 @@ testWidgets('{{TEST_CASE_NAME}}', (WidgetTester tester) async {
       appId: engineAppId,
       areaCode: AreaCode.areaCodeGlob.value(),
     ));
+    await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
     final mediaPlayerController = MediaPlayerController(
         rtcEngine: rtcEngine, canvas: const VideoCanvas(uid: 0));
@@ -378,6 +384,7 @@ testWidgets('{{TEST_CASE_NAME}}', (WidgetTester tester) async {
       appId: engineAppId,
       areaCode: AreaCode.areaCodeGlob.value(),
     ));
+    await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
     final mediaEngine = rtcEngine.getMediaEngine();
     
@@ -432,6 +439,7 @@ testWidgets('{{TEST_CASE_NAME}}', (WidgetTester tester) async {
       appId: engineAppId,
       areaCode: AreaCode.areaCodeGlob.value(),
     ));
+    await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
     final mediaRecorder = (await rtcEngine.createMediaRecorder(
       RecorderStreamInfo(channelId: 'hello', uid: 0)))!;
@@ -487,8 +495,10 @@ testWidgets('{{TEST_CASE_NAME}}', (WidgetTester tester) async {
       appId: engineAppId,
       areaCode: AreaCode.areaCodeGlob.value(),
     ));
+    await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
     final localSpatialAudioEngine = rtcEngine.getLocalSpatialAudioEngine();
+    await localSpatialAudioEngine.initialize();
     
     try {
       {{TEST_CASE_BODY}}
@@ -512,65 +522,11 @@ testWidgets('{{TEST_CASE_NAME}}', (WidgetTester tester) async {
 ''',
       methodInvokeObjectName: 'localSpatialAudioEngine',
       outputDir: outputDir,
-      skipMemberFunctions: [],
-      outputFileSuffixName: 'fake_test',
-    ),
-    // paraphrase not support find the base class of class at this time, so we define the base class here
-    MethoCallTemplatedTestCase(
-      className: 'BaseSpatialAudioEngine',
-      testCaseFileTemplate: '''
-$defaultHeader
-
-import 'package:agora_rtc_engine/agora_rtc_engine.dart';
-import 'package:flutter_test/flutter_test.dart';
-import 'package:flutter/foundation.dart';
-import 'package:iris_tester/iris_tester.dart';
-import 'package:iris_method_channel/iris_method_channel.dart';
-
-void localSpatialAudioEngineSmokeTestCases() {
-  {{TEST_CASES_CONTENT}}
-}
-''',
-      testCaseTemplate: '''
-testWidgets('{{TEST_CASE_NAME}}', (WidgetTester tester) async {
-    String engineAppId = const String.fromEnvironment('TEST_APP_ID',
-      defaultValue: '<YOUR_APP_ID>');
-
-    RtcEngine rtcEngine = createAgoraRtcEngine();
-    await rtcEngine.initialize(RtcEngineContext(
-      appId: engineAppId,
-      areaCode: AreaCode.areaCodeGlob.value(),
-    ));
-
-    final localSpatialAudioEngine = rtcEngine.getLocalSpatialAudioEngine();
-    
-    try {
-      {{TEST_CASE_BODY}}
-    } catch (e) {
-      if (e is! AgoraRtcException) {
-        debugPrint('[{{TEST_CASE_NAME}}] error: \${e.toString()}');
-        rethrow;
-      }
-
-      if (e.code != -4) {
-        // Only not supported error supported.
-        rethrow;
-      }
-    }
-
-    await localSpatialAudioEngine.release();
-    await rtcEngine.release();
-  },
-//  skip: {{TEST_CASE_SKIP}},
-);
-''',
-      methodInvokeObjectName: 'localSpatialAudioEngine',
-      outputDir: outputDir,
-      outputFileSuffixName: 'fake_test',
       skipMemberFunctions: [
         'updateSelfPosition',
         'updateSelfPositionEx',
       ],
+      outputFileSuffixName: 'fake_test',
     ),
     MethoCallTemplatedTestCase(
       className: 'MusicContentCenter',
@@ -598,6 +554,7 @@ testWidgets('{{TEST_CASE_NAME}}', (WidgetTester tester) async {
       appId: engineAppId,
       areaCode: AreaCode.areaCodeGlob.value(),
     ));
+    await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
     final musicContentCenter = rtcEngine.getMusicContentCenter();
     
@@ -623,7 +580,9 @@ testWidgets('{{TEST_CASE_NAME}}', (WidgetTester tester) async {
 ''',
       methodInvokeObjectName: 'musicContentCenter',
       outputDir: outputDir,
-      skipMemberFunctions: [],
+      skipMemberFunctions: [
+        'destroyMusicPlayer',
+      ],
       outputFileSuffixName: 'fake_test',
     ),
   ];

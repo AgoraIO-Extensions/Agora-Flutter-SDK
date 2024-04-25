@@ -11,15 +11,18 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:iris_tester/iris_tester.dart';
 import 'package:iris_method_channel/iris_method_channel.dart';
 
-void generatedTestCases(IrisTester irisTester) {
+import '../testcases/event_ids_mapping.dart';
+
+void generatedTestCases(ValueGetter<IrisTester> irisTester) {
   testWidgets(
-    'onRecordAudioEncodedFrame',
+    'AudioEncodedFrameObserver.onRecordAudioEncodedFrame',
     (WidgetTester tester) async {
       RtcEngine rtcEngine = createAgoraRtcEngine();
       await rtcEngine.initialize(RtcEngineContext(
         appId: 'app_id',
         areaCode: AreaCode.areaCodeGlob.value(),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       final onRecordAudioEncodedFrameCompleter = Completer<bool>();
       final theAudioEncodedFrameObserver = AudioEncodedFrameObserver(
@@ -81,18 +84,15 @@ void generatedTestCases(IrisTester irisTester) {
           'audioEncodedFrameInfo': audioEncodedFrameInfo.toJson(),
         };
 
-        if (!kIsWeb) {
-          irisTester.fireEvent(
-              'AudioEncodedFrameObserver_onRecordAudioEncodedFrame',
-              params: eventJson);
-        } else {
-          final ret = irisTester.fireEvent(
-              'AudioEncodedFrameObserver_onRecordAudioEncodedFrame',
-              params: eventJson);
-// Delay 200 milliseconds to ensure the callback is called.
+        final eventIds = eventIdsMapping[
+                'AudioEncodedFrameObserver_onRecordAudioEncodedFrame'] ??
+            [];
+        for (final event in eventIds) {
+          final ret = irisTester().fireEvent(event, params: eventJson);
+          // Delay 200 milliseconds to ensure the callback is called.
           await Future.delayed(const Duration(milliseconds: 200));
-// TODO(littlegnal): Most of callbacks on web are not implemented, we're temporarily skip these callbacks at this time.
-          if (ret) {
+          // TODO(littlegnal): Most of callbacks on web are not implemented, we're temporarily skip these callbacks at this time.
+          if (kIsWeb && ret) {
             if (!onRecordAudioEncodedFrameCompleter.isCompleted) {
               onRecordAudioEncodedFrameCompleter.complete(true);
             }
@@ -117,13 +117,14 @@ void generatedTestCases(IrisTester irisTester) {
   );
 
   testWidgets(
-    'onPlaybackAudioEncodedFrame',
+    'AudioEncodedFrameObserver.onPlaybackAudioEncodedFrame',
     (WidgetTester tester) async {
       RtcEngine rtcEngine = createAgoraRtcEngine();
       await rtcEngine.initialize(RtcEngineContext(
         appId: 'app_id',
         areaCode: AreaCode.areaCodeGlob.value(),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       final onPlaybackAudioEncodedFrameCompleter = Completer<bool>();
       final theAudioEncodedFrameObserver = AudioEncodedFrameObserver(
@@ -185,18 +186,15 @@ void generatedTestCases(IrisTester irisTester) {
           'audioEncodedFrameInfo': audioEncodedFrameInfo.toJson(),
         };
 
-        if (!kIsWeb) {
-          irisTester.fireEvent(
-              'AudioEncodedFrameObserver_onPlaybackAudioEncodedFrame',
-              params: eventJson);
-        } else {
-          final ret = irisTester.fireEvent(
-              'AudioEncodedFrameObserver_onPlaybackAudioEncodedFrame',
-              params: eventJson);
-// Delay 200 milliseconds to ensure the callback is called.
+        final eventIds = eventIdsMapping[
+                'AudioEncodedFrameObserver_onPlaybackAudioEncodedFrame'] ??
+            [];
+        for (final event in eventIds) {
+          final ret = irisTester().fireEvent(event, params: eventJson);
+          // Delay 200 milliseconds to ensure the callback is called.
           await Future.delayed(const Duration(milliseconds: 200));
-// TODO(littlegnal): Most of callbacks on web are not implemented, we're temporarily skip these callbacks at this time.
-          if (ret) {
+          // TODO(littlegnal): Most of callbacks on web are not implemented, we're temporarily skip these callbacks at this time.
+          if (kIsWeb && ret) {
             if (!onPlaybackAudioEncodedFrameCompleter.isCompleted) {
               onPlaybackAudioEncodedFrameCompleter.complete(true);
             }
@@ -221,13 +219,14 @@ void generatedTestCases(IrisTester irisTester) {
   );
 
   testWidgets(
-    'onMixedAudioEncodedFrame',
+    'AudioEncodedFrameObserver.onMixedAudioEncodedFrame',
     (WidgetTester tester) async {
       RtcEngine rtcEngine = createAgoraRtcEngine();
       await rtcEngine.initialize(RtcEngineContext(
         appId: 'app_id',
         areaCode: AreaCode.areaCodeGlob.value(),
       ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       final onMixedAudioEncodedFrameCompleter = Completer<bool>();
       final theAudioEncodedFrameObserver = AudioEncodedFrameObserver(
@@ -289,18 +288,15 @@ void generatedTestCases(IrisTester irisTester) {
           'audioEncodedFrameInfo': audioEncodedFrameInfo.toJson(),
         };
 
-        if (!kIsWeb) {
-          irisTester.fireEvent(
-              'AudioEncodedFrameObserver_onMixedAudioEncodedFrame',
-              params: eventJson);
-        } else {
-          final ret = irisTester.fireEvent(
-              'AudioEncodedFrameObserver_onMixedAudioEncodedFrame',
-              params: eventJson);
-// Delay 200 milliseconds to ensure the callback is called.
+        final eventIds = eventIdsMapping[
+                'AudioEncodedFrameObserver_onMixedAudioEncodedFrame'] ??
+            [];
+        for (final event in eventIds) {
+          final ret = irisTester().fireEvent(event, params: eventJson);
+          // Delay 200 milliseconds to ensure the callback is called.
           await Future.delayed(const Duration(milliseconds: 200));
-// TODO(littlegnal): Most of callbacks on web are not implemented, we're temporarily skip these callbacks at this time.
-          if (ret) {
+          // TODO(littlegnal): Most of callbacks on web are not implemented, we're temporarily skip these callbacks at this time.
+          if (kIsWeb && ret) {
             if (!onMixedAudioEncodedFrameCompleter.isCompleted) {
               onMixedAudioEncodedFrameCompleter.complete(true);
             }

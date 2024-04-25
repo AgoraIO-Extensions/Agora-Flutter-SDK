@@ -2,3 +2,5 @@ node_modules/
 package-lock.json
 .terra
 .yarn
+.yarnrc.yml
+yarn.lock

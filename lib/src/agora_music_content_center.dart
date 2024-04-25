@@ -3,6 +3,35 @@ part 'agora_music_content_center.g.dart';
 
 /// @nodoc
 @JsonEnum(alwaysCreate: true)
+enum MusicPlayMode {
+  /// @nodoc
+  @JsonValue(0)
+  kMusicPlayModeOriginal,
+
+  /// @nodoc
+  @JsonValue(1)
+  kMusicPlayModeAccompany,
+
+  /// @nodoc
+  @JsonValue(2)
+  kMusicPlayModeLeadSing,
+}
+
+/// @nodoc
+extension MusicPlayModeExt on MusicPlayMode {
+  /// @nodoc
+  static MusicPlayMode fromValue(int value) {
+    return $enumDecode(_$MusicPlayModeEnumMap, value);
+  }
+
+  /// @nodoc
+  int value() {
+    return _$MusicPlayModeEnumMap[this]!;
+  }
+}
+
+/// @nodoc
+@JsonEnum(alwaysCreate: true)
 enum PreloadStatusCode {
   /// @nodoc
   @JsonValue(0)
@@ -329,7 +358,19 @@ class MusicContentCenterEventHandler {
   final void Function(String requestId, int songCode, String lyricUrl,
       MusicContentCenterStatusCode errorCode)? onLyricResult;
 
-  /// @nodoc
+  /// 音乐资源的详细信息回调。
+  ///
+  /// 当你调用 getSongSimpleInfo 获取某一音乐资源的详细信息后，SDK 会触发该回调。
+  ///
+  /// * [reason] 音乐内容中心的请求状态码，详见 MusicContentCenterStateReason 。
+  /// * [requestId] The request ID. 本次请求的唯一标识。
+  /// * [songCode] The code of the music, which is an unique identifier of the music.
+  /// * [simpleInfo] 音乐资源的相关信息，包含下列内容：
+  ///  副歌片段的开始和结束的时间（ms）
+  ///  副歌片段的歌词下载地址
+  ///  副歌片段时长（ms）
+  ///  歌曲名称
+  ///  歌手名
   final void Function(String requestId, int songCode, String simpleInfo,
       MusicContentCenterStatusCode errorCode)? onSongSimpleInfoResult;
 
@@ -382,6 +423,9 @@ class MusicContentCenterConfiguration {
 /// @nodoc
 abstract class MusicPlayer implements MediaPlayer {
   /// @nodoc
+  Future<void> setPlayMode(MusicPlayMode mode);
+
+  /// @nodoc
   Future<void> openWithSongCode({required int songCode, int startPos = 0});
 }
 
@@ -404,6 +448,9 @@ abstract class MusicContentCenter {
 
   /// @nodoc
   Future<MusicPlayer?> createMusicPlayer();
+
+  /// @nodoc
+  Future<void> destroyMusicPlayer(MusicPlayer musicPlayer);
 
   /// @nodoc
   Future<String> getMusicCharts();

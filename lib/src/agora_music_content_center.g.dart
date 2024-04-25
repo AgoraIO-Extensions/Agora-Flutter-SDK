@@ -11,7 +11,7 @@ part of 'agora_music_content_center.dart';
 MusicChartInfo _$MusicChartInfoFromJson(Map<String, dynamic> json) =>
     MusicChartInfo(
       chartName: json['chartName'] as String?,
-      id: json['id'] as int?,
+      id: (json['id'] as num?)?.toInt(),
     );
 
 Map<String, dynamic> _$MusicChartInfoToJson(MusicChartInfo instance) {
@@ -30,7 +30,7 @@ Map<String, dynamic> _$MusicChartInfoToJson(MusicChartInfo instance) {
 
 MusicCacheInfo _$MusicCacheInfoFromJson(Map<String, dynamic> json) =>
     MusicCacheInfo(
-      songCode: json['songCode'] as int?,
+      songCode: (json['songCode'] as num?)?.toInt(),
       status:
           $enumDecodeNullable(_$MusicCacheStatusTypeEnumMap, json['status']),
     );
@@ -75,8 +75,8 @@ Map<String, dynamic> _$MvPropertyToJson(MvProperty instance) {
 
 ClimaxSegment _$ClimaxSegmentFromJson(Map<String, dynamic> json) =>
     ClimaxSegment(
-      startTimeMs: json['startTimeMs'] as int?,
-      endTimeMs: json['endTimeMs'] as int?,
+      startTimeMs: (json['startTimeMs'] as num?)?.toInt(),
+      endTimeMs: (json['endTimeMs'] as num?)?.toInt(),
     );
 
 Map<String, dynamic> _$ClimaxSegmentToJson(ClimaxSegment instance) {
@@ -94,22 +94,23 @@ Map<String, dynamic> _$ClimaxSegmentToJson(ClimaxSegment instance) {
 }
 
 Music _$MusicFromJson(Map<String, dynamic> json) => Music(
-      songCode: json['songCode'] as int?,
+      songCode: (json['songCode'] as num?)?.toInt(),
       name: json['name'] as String?,
       singer: json['singer'] as String?,
       poster: json['poster'] as String?,
       releaseTime: json['releaseTime'] as String?,
-      durationS: json['durationS'] as int?,
-      type: json['type'] as int?,
-      pitchType: json['pitchType'] as int?,
-      lyricCount: json['lyricCount'] as int?,
-      lyricList:
-          (json['lyricList'] as List<dynamic>?)?.map((e) => e as int).toList(),
-      climaxSegmentCount: json['climaxSegmentCount'] as int?,
+      durationS: (json['durationS'] as num?)?.toInt(),
+      type: (json['type'] as num?)?.toInt(),
+      pitchType: (json['pitchType'] as num?)?.toInt(),
+      lyricCount: (json['lyricCount'] as num?)?.toInt(),
+      lyricList: (json['lyricList'] as List<dynamic>?)
+          ?.map((e) => (e as num).toInt())
+          .toList(),
+      climaxSegmentCount: (json['climaxSegmentCount'] as num?)?.toInt(),
       climaxSegmentList: (json['climaxSegmentList'] as List<dynamic>?)
           ?.map((e) => ClimaxSegment.fromJson(e as Map<String, dynamic>))
           .toList(),
-      mvPropertyCount: json['mvPropertyCount'] as int?,
+      mvPropertyCount: (json['mvPropertyCount'] as num?)?.toInt(),
       mvPropertyList: (json['mvPropertyList'] as List<dynamic>?)
           ?.map((e) => MvProperty.fromJson(e as Map<String, dynamic>))
           .toList(),
@@ -148,8 +149,8 @@ MusicContentCenterConfiguration _$MusicContentCenterConfigurationFromJson(
     MusicContentCenterConfiguration(
       appId: json['appId'] as String?,
       token: json['token'] as String?,
-      mccUid: json['mccUid'] as int?,
-      maxCacheSize: json['maxCacheSize'] as int?,
+      mccUid: (json['mccUid'] as num?)?.toInt(),
+      maxCacheSize: (json['maxCacheSize'] as num?)?.toInt(),
       mccDomain: json['mccDomain'] as String?,
     );
 
@@ -170,6 +171,12 @@ Map<String, dynamic> _$MusicContentCenterConfigurationToJson(
   writeNotNull('mccDomain', instance.mccDomain);
   return val;
 }
+
+const _$MusicPlayModeEnumMap = {
+  MusicPlayMode.kMusicPlayModeOriginal: 0,
+  MusicPlayMode.kMusicPlayModeAccompany: 1,
+  MusicPlayMode.kMusicPlayModeLeadSing: 2,
+};
 
 const _$PreloadStatusCodeEnumMap = {
   PreloadStatusCode.kPreloadStatusCompleted: 0,

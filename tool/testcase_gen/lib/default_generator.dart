@@ -220,8 +220,8 @@ abstract class DefaultGenerator implements Generator {
         }
       }
 
-      String testCase =
-          testCaseTemplate.replaceAll('{{TEST_CASE_NAME}}', methodName);
+      String testCase = testCaseTemplate.replaceAll(
+          '{{TEST_CASE_NAME}}', '${clazz.name}.$methodName');
       testCase = testCase.replaceAll('{{TEST_CASE_BODY}}', pb.toString());
       testCase = testCase.replaceAll('{{TEST_CASE_SKIP}}', skipExpression);
       testCases.add(testCase);
