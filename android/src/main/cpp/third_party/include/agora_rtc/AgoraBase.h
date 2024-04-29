@@ -1201,7 +1201,7 @@ enum CAMERA_FOCAL_LENGTH_TYPE {
   /**
    * Lens with focal length of less than 24mm.
    */
-  CAMERA_FOCAL_LENGTH_URLTRA_WIDE = 2,
+  CAMERA_FOCAL_LENGTH_ULTRA_WIDE = 2,
   /**
    * Telephoto lens.
    */
