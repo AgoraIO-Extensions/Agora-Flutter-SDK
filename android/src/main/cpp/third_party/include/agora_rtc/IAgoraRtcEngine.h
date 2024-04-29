@@ -805,7 +805,7 @@ struct CameraCapturerConfiguration {
   and bigger zoom fator for telephoto len.Otherwise, it always means wide back/front camera.
 
   - CAMERA_FOCAL_LENGTH_TYPE.CAMERA_FOCAL_LENGTH_WIDE_ANGLE:wide camera
-  - CAMERA_FOCAL_LENGTH_TYPE.CAMERA_FOCAL_LENGTH_URLTRA_WIDE:ultra wide camera
+  - CAMERA_FOCAL_LENGTH_TYPE.CAMERA_FOCAL_LENGTH_ULTRA_WIDE:ultra wide camera
   - CAMERA_FOCAL_LENGTH_TYPE.CAMERA_FOCAL_LENGTH_TELEPHOTO:telephoto camera*/
   Optional<CAMERA_FOCAL_LENGTH_TYPE> cameraFocalLengthType;
 #else
