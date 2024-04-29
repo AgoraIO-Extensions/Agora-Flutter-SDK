@@ -10,10 +10,10 @@ part of 'agora_music_content_center_impl_json.dart';
 
 MusicCollectionJson _$MusicCollectionJsonFromJson(Map<String, dynamic> json) =>
     MusicCollectionJson(
-      count: json['count'] as int,
-      total: json['total'] as int,
-      page: json['page'] as int,
-      pageSize: json['pageSize'] as int,
+      count: (json['count'] as num).toInt(),
+      total: (json['total'] as num).toInt(),
+      page: (json['page'] as num).toInt(),
+      pageSize: (json['pageSize'] as num).toInt(),
       music: (json['music'] as List<dynamic>?)
           ?.map((e) => Music.fromJson(e as Map<String, dynamic>))
           .toList(),
