@@ -102,7 +102,7 @@ class LogConfig {
   /// @nodoc
   const LogConfig({this.filePath, this.fileSizeInKB, this.level});
 
-  /// The complete path of the log files. Ensure that the path for the log file exists and is writable. You can use this parameter to rename the log files.
+  /// The complete path of the log files. Agora recommends using the default log directory. If you need to modify the default directory, ensure that the directory you specify exists and is writable.
   @JsonKey(name: 'filePath')
   final String? filePath;
 
