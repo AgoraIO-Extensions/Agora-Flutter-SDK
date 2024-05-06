@@ -43,7 +43,7 @@ abstract class MediaEngine {
   /// * [observer] The observer instance. See AudioFrameObserver. Agora recommends calling this method after receiving onLeaveChannel to release the audio observer object.
   ///
   /// Returns
-  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown; and you need to catch the exception and handle it accordingly.
+  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown. You need to catch the exception and handle it accordingly.
   void registerAudioFrameObserver(AudioFrameObserver observer);
 
   /// Registers a raw video frame observer object.
@@ -63,7 +63,7 @@ abstract class MediaEngine {
   /// * [observer] The observer instance. See VideoFrameObserver.
   ///
   /// Returns
-  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown; and you need to catch the exception and handle it accordingly.
+  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown. You need to catch the exception and handle it accordingly.
   ///  < 0: Failure.
   void registerVideoFrameObserver(VideoFrameObserver observer);
 
@@ -81,16 +81,20 @@ abstract class MediaEngine {
   /// * [observer] The video frame observer object. See VideoEncodedFrameObserver.
   ///
   /// Returns
-  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown; and you need to catch the exception and handle it accordingly.
+  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown. You need to catch the exception and handle it accordingly.
   void registerVideoEncodedFrameObserver(VideoEncodedFrameObserver observer);
 
   /// Pushes the external audio frame.
+  ///
+  /// Before calling this method to push external audio data, perform the following steps:
+  ///  Call createCustomAudioTrack to create a custom audio track and get the audio track ID.
+  ///  Call joinChannel to join the channel. In ChannelMediaOptions, set publishCustomAduioTrackId to the audio track ID that you want to publish, and set publishCustomAudioTrack to true.
   ///
   /// * [frame] The external audio frame. See AudioFrame.
   /// * [trackId] The audio track ID. If you want to publish a custom external audio source, set this parameter to the ID of the corresponding custom audio track you want to publish.
   ///
   /// Returns
-  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown; and you need to catch the exception and handle it accordingly.
+  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown. You need to catch the exception and handle it accordingly.
   ///  < 0: Failure.
   Future<void> pushAudioFrame({required AudioFrame frame, int trackId = 0});
 
@@ -106,7 +110,7 @@ abstract class MediaEngine {
   /// * [frame] Pointers to AudioFrame.
   ///
   /// Returns
-  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown; and you need to catch the exception and handle it accordingly.
+  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown. You need to catch the exception and handle it accordingly.
   Future<void> pullAudioFrame(AudioFrame frame);
 
   /// Configures the external video source.
@@ -119,7 +123,7 @@ abstract class MediaEngine {
   /// * [encodedVideoOption] Video encoding options. This parameter needs to be set if sourceType is encodedVideoFrame. To set this parameter, contact.
   ///
   /// Returns
-  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown; and you need to catch the exception and handle it accordingly.
+  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown. You need to catch the exception and handle it accordingly.
   ///  < 0: Failure.
   Future<void> setExternalVideoSource(
       {required bool enabled,
@@ -138,7 +142,7 @@ abstract class MediaEngine {
   /// * [publish] Whether to publish audio to the remote users: true : (Default) Publish audio to the remote users. false : Do not publish audio to the remote users.
   ///
   /// Returns
-  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown; and you need to catch the exception and handle it accordingly.
+  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown. You need to catch the exception and handle it accordingly.
   ///  < 0: Failure.
   Future<void> setExternalAudioSource(
       {required bool enabled,
@@ -168,7 +172,7 @@ abstract class MediaEngine {
   /// * [trackId] The custom audio track ID returned in createCustomAudioTrack.
   ///
   /// Returns
-  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown; and you need to catch the exception and handle it accordingly.
+  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown. You need to catch the exception and handle it accordingly.
   Future<void> destroyCustomAudioTrack(int trackId);
 
   /// Sets the external audio sink.
@@ -182,7 +186,7 @@ abstract class MediaEngine {
   ///  2: Stereo.
   ///
   /// Returns
-  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown; and you need to catch the exception and handle it accordingly.
+  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown. You need to catch the exception and handle it accordingly.
   Future<void> setExternalAudioSink(
       {required bool enabled, required int sampleRate, required int channels});
 
@@ -203,7 +207,7 @@ abstract class MediaEngine {
   /// * [videoTrackId] The video track ID returned by calling the createCustomVideoTrack method. The default value is 0.
   ///
   /// Returns
-  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown; and you need to catch the exception and handle it accordingly.
+  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown. You need to catch the exception and handle it accordingly.
   Future<void> pushVideoFrame(
       {required ExternalVideoFrame frame, int videoTrackId = 0});
 
@@ -222,7 +226,7 @@ abstract class MediaEngine {
   /// * [observer] The audio frame observer, reporting the reception of each audio frame. See AudioFrameObserver.
   ///
   /// Returns
-  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown; and you need to catch the exception and handle it accordingly.
+  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown. You need to catch the exception and handle it accordingly.
   void unregisterAudioFrameObserver(AudioFrameObserver observer);
 
   /// Unregisters the video frame observer.
@@ -230,7 +234,7 @@ abstract class MediaEngine {
   /// * [observer] The video observer, reporting the reception of each video frame. See VideoFrameObserver.
   ///
   /// Returns
-  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown; and you need to catch the exception and handle it accordingly.
+  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown. You need to catch the exception and handle it accordingly.
   void unregisterVideoFrameObserver(VideoFrameObserver observer);
 
   /// Unregisters a receiver object for the encoded video frame.
@@ -238,6 +242,6 @@ abstract class MediaEngine {
   /// * [observer] The video observer, reporting the reception of each video frame. See VideoEncodedFrameObserver.
   ///
   /// Returns
-  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown; and you need to catch the exception and handle it accordingly.
+  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown. You need to catch the exception and handle it accordingly.
   void unregisterVideoEncodedFrameObserver(VideoEncodedFrameObserver observer);
 }
