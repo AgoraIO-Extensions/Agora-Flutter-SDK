@@ -1,0 +1,18 @@
+Iris:
+<IRIS_ANDROID_CDN>
+<IRIS_IOS_CDN>
+<IRIS_MACOS_CDN>
+<IRIS_WINDOWS_CDN>
+<IRIS_ANDROID_MAVEN>
+<IRIS_IOS_COCOAPODS>
+<IRIS_MACOS_COCOAPODS>
+
+Native:
+<NATIVE_CDN_URL_ANDROID>
+<NATIVE_CDN_URL_IOS>
+<NATIVE_CDN_URL_MACOS>
+<NATIVE_CDN_URL_WINDOWS>
+implementation 'io.agora.rtc:agora-special-full:4.1.1.29'
+implementation 'io.agora.rtc:full-screen-sharing:4.1.1.29'
+pod 'AgoraRtcEngine_Special_iOS', '4.1.1.29'
+<NATIVE_MACOS_COCOAPODS>
