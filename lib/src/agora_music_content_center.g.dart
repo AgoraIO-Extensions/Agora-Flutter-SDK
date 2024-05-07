@@ -172,12 +172,6 @@ Map<String, dynamic> _$MusicContentCenterConfigurationToJson(
   return val;
 }
 
-const _$MusicPlayModeEnumMap = {
-  MusicPlayMode.kMusicPlayModeOriginal: 0,
-  MusicPlayMode.kMusicPlayModeAccompany: 1,
-  MusicPlayMode.kMusicPlayModeLeadSing: 2,
-};
-
 const _$PreloadStatusCodeEnumMap = {
   PreloadStatusCode.kPreloadStatusCompleted: 0,
   PreloadStatusCode.kPreloadStatusFailed: 1,

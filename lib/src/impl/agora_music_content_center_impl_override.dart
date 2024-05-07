@@ -170,17 +170,6 @@ class MusicContentCenterImpl extends binding.MusicContentCenterImpl
   }
 
   @override
-  Future<void> destroyMusicPlayer(MusicPlayer musicPlayer) async {
-    final apiType =
-        '${isOverrideClassName ? className : 'MusicContentCenter'}_destroyMusicPlayer';
-    final param = createParams({'music_player': musicPlayer});
-    await irisMethodChannel.invokeMethod(
-        IrisMethodCall(apiType, jsonEncode(param), buffers: null));
-
-    _removeMusicPlayerById(musicPlayer.getMediaPlayerId());
-  }
-
-  @override
   void registerEventHandler(MusicContentCenterEventHandler eventHandler) async {
     if (_musicContentCenterEventHandler != null) return;
 
@@ -228,7 +217,7 @@ class MusicContentCenterImpl extends binding.MusicContentCenterImpl
     }
 
     for (final player in _musicPlayers.values) {
-      await destroyMusicPlayer(player);
+      await _rtcEngine.destroyMediaPlayer(player);
     }
 
     _musicPlayers.clear();
