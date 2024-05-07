@@ -1320,6 +1320,18 @@ enum AUDIO_CODEC_TYPE {
    * 12: LPCNET.
    */
   AUDIO_CODEC_LPCNET = 12,
+  /**
+   * 13: Opus codec, supporting 4-channel audio.
+   */
+  AUDIO_CODEC_OPUS4C = 13,
+  /**
+   * 14: Opus codec, supporting 6-channel audio.
+   */
+  AUDIO_CODEC_OPUS6C = 14,
+  /**
+   * 15: Opus codec, supporting 8-channel audio.
+   */
+  AUDIO_CODEC_OPUS8C = 15,
 };
 
 /**
