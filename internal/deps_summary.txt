@@ -1,6 +1,6 @@
 Iris:
-<IRIS_ANDROID_CDN>
-<IRIS_IOS_CDN>
+https://download.agora.io/sdk/release/iris_4.2.6.8-build.1_DCG_Android_Video_20240327_1207.zip
+https://download.agora.io/sdk/release/iris_4.2.6.8-build.1_DCG_iOS_Video_20240327_1207.zip
 https://download.agora.io/sdk/release/iris_4.2.6.10-sp.1_DCG_Mac_Video_20240425_1250.zip
 https://download.agora.io/sdk/release/iris_4.2.6.10-sp.1_DCG_Windows_Video_20240425_1207.zip
 implementation 'io.agora.rtc:iris-rtc:4.2.6.8-build.1'
