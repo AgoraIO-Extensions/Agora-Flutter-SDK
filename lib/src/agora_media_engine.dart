@@ -256,12 +256,4 @@ abstract class MediaEngine {
   /// Returns
   /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown. You need to catch the exception and handle it accordingly.
   void unregisterVideoEncodedFrameObserver(VideoEncodedFrameObserver observer);
-
-  /// Unregisters a facial information observer.
-  ///
-  /// * [observer] Facial information observer, see FaceInfoObserver.
-  ///
-  /// Returns
-  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown. You need to catch the exception and handle it accordingly.
-  void unregisterFaceInfoObserver(FaceInfoObserver observer);
 }
