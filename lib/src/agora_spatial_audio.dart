@@ -99,7 +99,7 @@ abstract class LocalSpatialAudioEngine {
   ///  The SDK supports creating only one LocalSpatialAudioEngine instance for an app.
   ///
   /// Returns
-  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown; and you need to catch the exception and handle it accordingly.
+  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown. You need to catch the exception and handle it accordingly.
   Future<void> initialize();
 
   /// Updates the spatial position of the specified remote user.
@@ -110,7 +110,7 @@ abstract class LocalSpatialAudioEngine {
   /// * [posInfo] The spatial position of the remote user. See RemoteVoicePositionInfo.
   ///
   /// Returns
-  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown; and you need to catch the exception and handle it accordingly.
+  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown. You need to catch the exception and handle it accordingly.
   Future<void> updateRemotePosition(
       {required int uid, required RemoteVoicePositionInfo posInfo});
 
@@ -122,12 +122,12 @@ abstract class LocalSpatialAudioEngine {
 
   /// Removes the spatial position of the specified remote user.
   ///
-  /// After successfully calling this method, the local user no longer hears the specified remote user. After leaving the channel, to avoid wasting resources, you can also call this method to delete the spatial position of the specified remote user.
+  /// After successfully calling this method, the local user no longer hears the specified remote user. After leaving the channel, to avoid wasting computing resources, call this method to delete the spatial position information of the specified remote user. Otherwise, the user's spatial position information will be saved continuously. When the number of remote users exceeds the number of audio streams that can be received as set in setMaxAudioRecvCount, the system automatically unsubscribes from the audio stream of the user who is furthest away based on relative distance.
   ///
   /// * [uid] The user ID. This parameter must be the same as the user ID passed in when the user joined the channel.
   ///
   /// Returns
-  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown; and you need to catch the exception and handle it accordingly.
+  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown. You need to catch the exception and handle it accordingly.
   Future<void> removeRemotePosition(int uid);
 
   /// @nodoc
@@ -190,7 +190,7 @@ abstract class LocalSpatialAudioEngine {
   ///  If the sound source and the listener are in the same sound insulation area or outside the same sound insulation area, the sound attenuation effect is determined by attenuation in this method. false : Do not force attenuation to set the user's sound attenuation effect, as shown in the following two cases.
   ///
   /// Returns
-  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown; and you need to catch the exception and handle it accordingly.
+  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown. You need to catch the exception and handle it accordingly.
   Future<void> setRemoteAudioAttenuation(
       {required int uid, required double attenuation, required bool forceSet});
 
@@ -209,6 +209,6 @@ abstract class LocalSpatialAudioEngine {
   /// After successfully calling this method, the local user no longer hears any remote users. After leaving the channel, to avoid wasting resources, you can also call this method to delete the spatial positions of all remote users.
   ///
   /// Returns
-  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown; and you need to catch the exception and handle it accordingly.
+  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown. You need to catch the exception and handle it accordingly.
   Future<void> clearRemotePositions();
 }
