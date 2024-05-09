@@ -1,5 +1,19 @@
 # Changelog
 
+## [6.3.1](https://github.com/AgoraIO-Extensions/Agora-Flutter-SDK/compare/6.3.0...6.3.1) (2024-05-09)
+
+
+### Features
+
+* Upgrade native sdk 4.3.1 ([#1611](https://github.com/AgoraIO-Extensions/Agora-Flutter-SDK/issues/1611)) ([18f1a56](https://github.com/AgoraIO-Extensions/Agora-Flutter-SDK/commit/18f1a56ad19f761e249656e7b680cb2e174dab48))
+
+
+### Bug Fixes
+
+* AgoraVideoView crash when dispose after RtcEngine.release ([#1585](https://github.com/AgoraIO-Extensions/Agora-Flutter-SDK/issues/1585)) ([cd33120](https://github.com/AgoraIO-Extensions/Agora-Flutter-SDK/commit/cd33120b609c9fee410482f5410657579857c984))
+* AgoraVideoView takes over the whole browser window ([#1717](https://github.com/AgoraIO-Extensions/Agora-Flutter-SDK/issues/1717)) ([0052cc7](https://github.com/AgoraIO-Extensions/Agora-Flutter-SDK/commit/0052cc78446244cfaa4cfa5fff53515256704abf)), closes [/github.com/flutter/flutter/issues/143922#issuecomment-1960133128](https://github.com/AgoraIO-Extensions//github.com/flutter/flutter/issues/143922/issues/issuecomment-1960133128)
+* Prevent multiple initializations of internal resources when `RtcEngine.initialize` is called simultaneously ([#1712](https://github.com/AgoraIO-Extensions/Agora-Flutter-SDK/issues/1712)) ([462cfc3](https://github.com/AgoraIO-Extensions/Agora-Flutter-SDK/commit/462cfc3ebddeebe83143f341eb6ec8185a9e5b25))
+
 ## [6.3.0](https://github.com/AgoraIO-Extensions/Agora-Flutter-SDK/compare/6.2.6...6.3.0) (2024-02-28)
 
 
