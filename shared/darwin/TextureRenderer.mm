@@ -104,7 +104,7 @@ public:
 }
 
 - (void)updateData:(NSNumber *)uid channelId:(NSString *)channelId videoSourceType:(NSNumber *)videoSourceType videoViewSetupMode:(NSNumber *)videoViewSetupMode {
-    IrisRtcVideoFrameConfig config;
+    IrisRtcVideoFrameConfig config = EmptyIrisRtcVideoFrameConfig;
     config.video_frame_format = agora::media::base::VIDEO_PIXEL_FORMAT::VIDEO_CVPIXEL_NV12;
     config.uid = [uid unsignedIntValue];
     config.video_source_type = [videoSourceType intValue];

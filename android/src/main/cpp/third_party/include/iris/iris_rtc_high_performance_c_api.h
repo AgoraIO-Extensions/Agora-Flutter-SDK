@@ -24,7 +24,106 @@ struct IrisSpatialAudioZone {
   float audioAttenuation;
 };
 
-EXTERN_C_ENTER
+struct IrisAudioFrame {
+  //The audio frame type: #AUDIO_FRAME_TYPE.
+  int type;
+  //The number of samples per channel in this frame.
+  int samplesPerChannel;
+  //The number of bytes per sample: #BYTES_PER_SAMPLE
+  int bytesPerSample;
+  //The number of audio channels (data is interleaved, if stereo).
+  int channels;
+  //The sample rate
+  int samplesPerSec;
+  //The data buffer of the audio frame. When the audio frame uses a stereo channel, the data buffer is interleaved.
+  void *buffer;
+  // The timestamp to render the audio data.
+  int64_t renderTimeMs;
+  // A reserved parameter.
+  int avsync_type;
+  // The pts timestamp of this audio frame.
+  int64_t presentationMs;
+  // The number of the audio track.
+  int audioTrackNumber;
+  // RTP timestamp of the first sample in the audio frame
+  uint32_t rtpTimestamp;
+};
+
+struct IrisExternalVideoFrame {
+  //The buffer type: #VIDEO_BUFFER_TYPE.
+  int type;
+  // The pixel format: #VIDEO_PIXEL_FORMAT
+  int format;
+  // The video buffer.
+  void *buffer;
+  // The line spacing of the incoming video frame (px). For texture, it is the width of the texture.
+  int stride;
+  // The height of the incoming video frame.
+  int height;
+  // [Raw data related parameter] The number of pixels trimmed from the left. The default value is 0.
+  int cropLeft;
+  // [Raw data related parameter] The number of pixels trimmed from the top. The default value is 0.
+  int cropTop;
+  //[Raw data related parameter] The number of pixels trimmed from the right. The default value is
+  int cropRight;
+  // [Raw data related parameter] The number of pixels trimmed from the bottom. The default value
+  int cropBottom;
+  // [Raw data related parameter] The clockwise rotation information of the video frame. You can set the
+  // rotation angle as 0, 90, 180, or 270. The default value is 0.
+  int rotation;
+  // The timestamp (ms) of the incoming video frame. An incorrect timestamp results in a frame loss or
+  // unsynchronized audio and video.
+  long long timestamp;
+  // [Texture-related parameter]
+  // When using the OpenGL interface (javax.microedition.khronos.egl.*) defined by Khronos, set EGLContext to this field.
+  // When using the OpenGL interface (android.opengl.*) defined by Android, set EGLContext to this field.
+  void *eglContext;
+  // [Texture related parameter] Texture ID used by the video frame.
+  int eglType;
+  // [Texture related parameter] Incoming 4 &times; 4 transformational matrix. The typical value is a unit matrix.
+  int textureId;
+  // [Texture related parameter] Incoming 4 &times; 4 transformational matrix. The typical value is a unit matrix.
+  float matrix[16];
+  // [Texture related parameter] The MetaData buffer. The default value is NULL
+  uint8_t *metadata_buffer;
+  // [Texture related parameter] The MetaData size.The default value is 0
+  int metadata_size;
+  //  Indicates the alpha channel of current frame, which is consistent with the dimension of the video frame.
+  uint8_t *alphaBuffer;
+  //  Extract alphaBuffer from bgra or rgba data. Set it true if you do not explicitly specify the alphabuffer.
+  bool fillAlphaBuffer;
+  //[For Windows only] The pointer of ID3D11Texture2D used by the video frame.
+  void *d3d11_texture_2d;
+  // [For Windows only] The index of ID3D11Texture2D array used by the video frame.
+  int texture_slice_index;
+};
+
+struct IrisEncodedVideoFrameInfo {
+  // ID of the user that pushes the the external encoded video frame..
+  unsigned int uid;
+  // The codec type of the local video stream. See #VIDEO_CODEC_TYPE. The default value is `VIDEO_CODEC_H265 (3)`.
+  int codecType;
+  // The width (px) of the video frame.
+  int width;
+  // The height (px) of the video frame.
+  int height;
+  // The number of video frames per second.
+  int framesPerSecond;
+  // The video frame type: #VIDEO_FRAME_TYPE.
+  int frameType;
+  // The rotation information of the video frame: #VIDEO_ORIENTATION.
+  int rotation;
+  // The track ID of the video frame.
+  int trackId;
+  // This is a input parameter which means the timestamp for capturing the video.
+  int64_t captureTimeMs;
+  // The timestamp for decoding the video.
+  int64_t decodeTimeMs;
+  // The stream type of video frame.
+  int streamType;
+  // @technical preview
+  int64_t presentationMs;
+};
 
 IRIS_API int IRIS_CALL ILocalSpatialAudioEngine_SetMaxAudioRecvCount(
     IrisApiEnginePtr enginePtr, int maxCount);
@@ -95,4 +194,18 @@ IRIS_API int IRIS_CALL ILocalSpatialAudioEngine_SetRemoteAudioAttenuation(
     IrisApiEnginePtr enginePtr, unsigned int uid, double attenuation,
     bool forceSet);
 
-EXTERN_C_LEAVE
+IRIS_API int IRIS_CALL IMediaEngine_PushAudioFrame(IrisApiEnginePtr enginePtr,
+                                                   IrisAudioFrame *frame,
+                                                   unsigned int trackId);
+
+IRIS_API int IRIS_CALL IMediaEngine_PullAudioFrame(IrisApiEnginePtr enginePtr,
+                                                   IrisAudioFrame *frame);
+
+IRIS_API int IRIS_CALL IMediaEngine_PushVideoFrame(
+    IrisApiEnginePtr enginePtr, IrisExternalVideoFrame *frame,
+    unsigned int videoTrackId);
+
+IRIS_API int IRIS_CALL IMediaEngine_PushEncodedVideoImage(
+    IrisApiEnginePtr enginePtr, const unsigned char *imageBuffer,
+    unsigned long long length, IrisEncodedVideoFrameInfo &videoEncodedFrameInfo,
+    unsigned int videoTrackId);

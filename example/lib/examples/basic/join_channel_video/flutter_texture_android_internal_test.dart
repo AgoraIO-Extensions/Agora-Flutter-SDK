@@ -6,28 +6,26 @@ import 'package:agora_rtc_engine_example/components/log_sink.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
-/// MultiChannel Example
-class JoinChannelVideo extends StatefulWidget {
-  /// Construct the [JoinChannelVideo]
-  const JoinChannelVideo({Key? key}) : super(key: key);
+/// A case for internal testing only
+class FlutterTextureAndroidTest extends StatefulWidget {
+  /// Construct the [FlutterTextureAndroidTest]
+  const FlutterTextureAndroidTest({Key? key}) : super(key: key);
 
   @override
   State<StatefulWidget> createState() => _State();
 }
 
-class _State extends State<JoinChannelVideo> {
+class _State extends State<FlutterTextureAndroidTest> {
   late final RtcEngine _engine;
 
-  bool isJoined = false,
-      switchCamera = true,
-      switchRender = true,
-      openCamera = true,
-      muteCamera = false,
-      muteAllRemoteVideo = false;
+  bool isJoined = false;
   Set<int> remoteUid = {};
   late TextEditingController _controller;
-  bool _isUseFlutterTexture = false;
-  bool _isUseAndroidSurfaceView = false;
+  static const bool _isUseFlutterTexture = true;
+  bool _isAndroidTextureOes = false;
+  bool _isAndroidYuv = false;
+  bool _isAndroidTexture2D = false;
+  bool _isStartedPreview = false;
   ChannelProfileType _channelProfileType =
       ChannelProfileType.channelProfileLiveBroadcasting;
   late final RtcEngineEventHandler _rtcEngineEventHandler;
@@ -91,17 +89,11 @@ class _State extends State<JoinChannelVideo> {
           remoteUid.clear();
         });
       },
-      onRemoteVideoStateChanged: (RtcConnection connection, int remoteUid,
-          RemoteVideoState state, RemoteVideoStateReason reason, int elapsed) {
-        logSink.log(
-            '[onRemoteVideoStateChanged] connection: ${connection.toJson()} remoteUid: $remoteUid state: $state reason: $reason elapsed: $elapsed');
-      },
     );
 
     _engine.registerEventHandler(_rtcEngineEventHandler);
 
     await _engine.enableVideo();
-    await _engine.startPreview();
   }
 
   Future<void> _joinChannel() async {
@@ -118,39 +110,6 @@ class _State extends State<JoinChannelVideo> {
 
   Future<void> _leaveChannel() async {
     await _engine.leaveChannel();
-    setState(() {
-      openCamera = true;
-      muteCamera = false;
-      muteAllRemoteVideo = false;
-    });
-  }
-
-  Future<void> _switchCamera() async {
-    await _engine.switchCamera();
-    setState(() {
-      switchCamera = !switchCamera;
-    });
-  }
-
-  _openCamera() async {
-    await _engine.enableLocalVideo(!openCamera);
-    setState(() {
-      openCamera = !openCamera;
-    });
-  }
-
-  _muteLocalVideoStream() async {
-    await _engine.muteLocalVideoStream(!muteCamera);
-    setState(() {
-      muteCamera = !muteCamera;
-    });
-  }
-
-  _muteAllRemoteVideoStreams() async {
-    await _engine.muteAllRemoteVideoStreams(!muteAllRemoteVideo);
-    setState(() {
-      muteAllRemoteVideo = !muteAllRemoteVideo;
-    });
   }
 
   @override
@@ -164,11 +123,7 @@ class _State extends State<JoinChannelVideo> {
                 rtcEngine: _engine,
                 canvas: const VideoCanvas(uid: 0),
                 useFlutterTexture: _isUseFlutterTexture,
-                useAndroidSurfaceView: _isUseAndroidSurfaceView,
               ),
-              onAgoraVideoViewCreated: (viewId) {
-                _engine.startPreview();
-              },
             ),
             Align(
               alignment: Alignment.topLeft,
@@ -186,7 +141,6 @@ class _State extends State<JoinChannelVideo> {
                           connection:
                               RtcConnection(channelId: _controller.text),
                           useFlutterTexture: _isUseFlutterTexture,
-                          useAndroidSurfaceView: _isUseAndroidSurfaceView,
                         ),
                       ),
                     ),
@@ -228,22 +182,65 @@ class _State extends State<JoinChannelVideo> {
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
                   Column(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        const Text('Rendered by Flutter texture: '),
-                        Switch(
-                          value: _isUseFlutterTexture,
-                          onChanged: isJoined
-                              ? null
-                              : (changed) {
-                                  setState(() {
-                                    _isUseFlutterTexture = changed;
-                                  });
-                                },
-                        )
-                      ]),
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Column(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          const Text('Video Format: textureoes'),
+                          Switch(
+                            value: _isAndroidTextureOes,
+                            onChanged: isJoined
+                                ? null
+                                : (changed) {
+                                    setState(() {
+                                      _isAndroidTextureOes = changed;
+                                    });
+
+                                    if (_isAndroidTextureOes) {
+                                      _engine.setParameters(
+                                          '{"che.video.android_texture.copy_enable":false}');
+                                    }
+                                  },
+                          ),
+                          const Text('Video Format: textureo2d'),
+                          Switch(
+                            value: _isAndroidTexture2D,
+                            onChanged: isJoined
+                                ? null
+                                : (changed) {
+                                    setState(() {
+                                      _isAndroidTexture2D = changed;
+                                    });
+                                    if (_isAndroidTexture2D) {
+                                      _engine.setParameters(
+                                          '{"che.video.android_texture.copy_enable":true}');
+                                    }
+                                  },
+                          ),
+                          const Text('Video Format: yuv'),
+                          Switch(
+                            value: _isAndroidYuv,
+                            onChanged: isJoined
+                                ? null
+                                : (changed) {
+                                    setState(() {
+                                      _isAndroidYuv = changed;
+                                    });
+                                    if (_isAndroidYuv) {
+                                      _engine.setParameters(
+                                          '{"che.video.android_camera_output_type":0}');
+                                    }
+                                  },
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
                 ],
               ),
             const SizedBox(
@@ -287,45 +284,36 @@ class _State extends State<JoinChannelVideo> {
                 Expanded(
                   flex: 1,
                   child: ElevatedButton(
+                    onPressed: () {
+                      if (_isStartedPreview) {
+                        _engine.stopPreview();
+                      } else {
+                        _engine.startPreview();
+                      }
+                      setState(() {
+                        _isStartedPreview = !_isStartedPreview;
+                      });
+                    },
+                    child:
+                        Text('${_isStartedPreview ? 'Stop' : 'Start'} Preview'),
+                  ),
+                )
+              ],
+            ),
+            Row(
+              children: [
+                Expanded(
+                  flex: 1,
+                  child: ElevatedButton(
                     onPressed: isJoined ? _leaveChannel : _joinChannel,
                     child: Text('${isJoined ? 'Leave' : 'Join'} channel'),
                   ),
                 )
               ],
             ),
-            if (!kIsWeb &&
-                (defaultTargetPlatform == TargetPlatform.android ||
-                    defaultTargetPlatform == TargetPlatform.iOS)) ...[
-              const SizedBox(
-                height: 20,
-              ),
-              ElevatedButton(
-                onPressed: _switchCamera,
-                child: Text('Camera ${switchCamera ? 'front' : 'rear'}'),
-              ),
-            ],
-            if (kIsWeb) ...[
-              const SizedBox(
-                height: 20,
-              ),
-              ElevatedButton(
-                onPressed: _muteLocalVideoStream,
-                child: Text('Camera ${muteCamera ? 'muted' : 'unmute'}'),
-              ),
-              ElevatedButton(
-                onPressed: _muteAllRemoteVideoStreams,
-                child: Text(
-                    'All Remote Camera ${muteAllRemoteVideo ? 'muted' : 'unmute'}'),
-              ),
-              ElevatedButton(
-                onPressed: _openCamera,
-                child: Text('Camera ${openCamera ? 'on' : 'off'}'),
-              ),
-            ],
           ],
         );
       },
     );
-    // if (!_isInit) return Container();
   }
 }

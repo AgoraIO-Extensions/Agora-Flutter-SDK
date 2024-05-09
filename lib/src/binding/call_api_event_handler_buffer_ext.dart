@@ -125,6 +125,18 @@ extension CodecCapInfoBufferExt on CodecCapInfo {
   }
 }
 
+extension FocalLengthInfoBufferExt on FocalLengthInfo {
+  FocalLengthInfo fillBuffers(List<Uint8List> bufferList) {
+    if (bufferList.isEmpty) return this;
+    return this;
+  }
+
+  List<Uint8List> collectBufferList() {
+    final bufferList = <Uint8List>[];
+    return bufferList;
+  }
+}
+
 extension VideoEncoderConfigurationBufferExt on VideoEncoderConfiguration {
   VideoEncoderConfiguration fillBuffers(List<Uint8List> bufferList) {
     if (bufferList.isEmpty) return this;
@@ -625,7 +637,8 @@ extension EncryptionConfigBufferExt on EncryptionConfig {
     return EncryptionConfig(
         encryptionMode: encryptionMode,
         encryptionKey: encryptionKey,
-        encryptionKdfSalt: encryptionKdfSalt);
+        encryptionKdfSalt: encryptionKdfSalt,
+        datastreamEncryptionEnabled: datastreamEncryptionEnabled);
   }
 
   List<Uint8List> collectBufferList() {
@@ -887,6 +900,7 @@ extension ExternalVideoFrameBufferExt on ExternalVideoFrame {
         metadataBuffer: metadataBuffer,
         metadataSize: metadataSize,
         alphaBuffer: alphaBuffer,
+        fillAlphaBuffer: fillAlphaBuffer,
         textureSliceIndex: textureSliceIndex);
   }
 
@@ -995,7 +1009,8 @@ extension AudioFrameBufferExt on AudioFrame {
         renderTimeMs: renderTimeMs,
         avsyncType: avsyncType,
         presentationMs: presentationMs,
-        audioTrackNumber: audioTrackNumber);
+        audioTrackNumber: audioTrackNumber,
+        rtpTimestamp: rtpTimestamp);
   }
 
   List<Uint8List> collectBufferList() {

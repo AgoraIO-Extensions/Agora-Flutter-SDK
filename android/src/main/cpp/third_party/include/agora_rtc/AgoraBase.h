@@ -636,7 +636,7 @@ enum ERROR_CODE_TYPE {
    */
   ERR_SET_CLIENT_ROLE_NOT_AUTHORIZED = 119,
   /**
-   * 120: Decryption fails. The user may have tried to join the channel with a wrong
+   * 120: MediaStream decryption fails. The user may have tried to join the channel with a wrong
    * password. Check your settings or try rejoining the channel.
    */
   ERR_DECRYPTION_FAILED = 120,
@@ -644,6 +644,11 @@ enum ERROR_CODE_TYPE {
    * 121: The user ID is invalid.
    */
   ERR_INVALID_USER_ID = 121,
+  /**
+   * 122: DataStream decryption fails. The peer may have tried to join the channel with a wrong
+   * password, or did't enable datastream encryption
+   */
+  ERR_DATASTREAM_DECRYPTION_FAILED = 122,
   /**
    * 123: The app is banned by the server.
    */
@@ -1167,8 +1172,9 @@ enum VIDEO_CODEC_TYPE {
    */
   VIDEO_CODEC_GENERIC_H264 = 7,
   /**
-    * 12: AV1.
-    */
+   * 12: AV1.
+   * @technical preview
+   */
   VIDEO_CODEC_AV1 = 12,
   /**
    * 13: VP9.
@@ -1178,6 +1184,28 @@ enum VIDEO_CODEC_TYPE {
    * 20: Generic JPEG. This type consumes minimum computing resources and applies to IoT devices.
    */
   VIDEO_CODEC_GENERIC_JPEG = 20,
+};
+
+/**
+ * Camera focal length type.
+ */
+enum CAMERA_FOCAL_LENGTH_TYPE {
+  /**
+   * By default, there are no wide-angle and ultra-wide-angle properties.
+   */
+  CAMERA_FOCAL_LENGTH_DEFAULT = 0,
+  /**
+   * Lens with focal length from 24mm to 35mm.
+   */
+  CAMERA_FOCAL_LENGTH_WIDE_ANGLE = 1,
+  /**
+   * Lens with focal length of less than 24mm.
+   */
+  CAMERA_FOCAL_LENGTH_ULTRA_WIDE = 2,
+  /**
+   * Telephoto lens.
+   */
+  CAMERA_FOCAL_LENGTH_TELEPHOTO = 3,
 };
 
 /**
@@ -1567,7 +1595,8 @@ struct EncodedVideoFrameInfo {
       trackId(0),
       captureTimeMs(0),
       decodeTimeMs(0),
-      streamType(VIDEO_STREAM_HIGH) {}
+      streamType(VIDEO_STREAM_HIGH),
+      presentationMs(-1) {}
 
   EncodedVideoFrameInfo(const EncodedVideoFrameInfo& rhs)
     : uid(rhs.uid),
@@ -1580,7 +1609,8 @@ struct EncodedVideoFrameInfo {
       trackId(rhs.trackId),
       captureTimeMs(rhs.captureTimeMs),
       decodeTimeMs(rhs.decodeTimeMs),
-      streamType(rhs.streamType) {}
+      streamType(rhs.streamType),
+      presentationMs(rhs.presentationMs) {}
 
   EncodedVideoFrameInfo& operator=(const EncodedVideoFrameInfo& rhs) {
     if (this == &rhs) return *this;
@@ -1595,6 +1625,7 @@ struct EncodedVideoFrameInfo {
     captureTimeMs = rhs.captureTimeMs;
     decodeTimeMs = rhs.decodeTimeMs;
     streamType = rhs.streamType;
+    presentationMs = rhs.presentationMs;
     return *this;
   }
 
@@ -1646,6 +1677,8 @@ struct EncodedVideoFrameInfo {
    */
   VIDEO_STREAM_TYPE streamType;
 
+  // @technical preview
+  int64_t presentationMs;
 };
 
 /**
@@ -1764,6 +1797,14 @@ struct CodecCapInfo {
   CodecCapLevels codecLevels;
 
   CodecCapInfo(): codecType(VIDEO_CODEC_NONE), codecCapMask(0) {}
+};
+
+/** FocalLengthInfo contains the IDs of the front and rear cameras, along with the wide-angle types. */
+struct FocalLengthInfo {
+  /** The camera direction. */
+  int cameraDirection;
+  /** Camera focal segment type. */
+  CAMERA_FOCAL_LENGTH_TYPE focalLengthType;
 };
 
 /**
@@ -2639,6 +2680,27 @@ enum CAPTURE_BRIGHTNESS_LEVEL_TYPE {
   CAPTURE_BRIGHTNESS_LEVEL_DARK = 2,
 };
 
+enum CAMERA_STABILIZATION_MODE {
+  /** The camera stabilization mode is disabled. 
+  */
+  CAMERA_STABILIZATION_MODE_OFF = -1,
+  /** device choose stabilization mode automatically. 
+  */
+  CAMERA_STABILIZATION_MODE_AUTO = 0,
+  /** stabilization mode level 1. 
+  */
+  CAMERA_STABILIZATION_MODE_LEVEL_1 = 1,
+  /** stabilization mode level 2. 
+  */
+  CAMERA_STABILIZATION_MODE_LEVEL_2 = 2,
+  /** stabilization mode level 3. 
+  */
+  CAMERA_STABILIZATION_MODE_LEVEL_3 = 3,
+  /** The maximum level of the camera stabilization mode.
+   */
+  CAMERA_STABILIZATION_MODE_MAX_LEVEL = CAMERA_STABILIZATION_MODE_LEVEL_3,
+};
+
 /**
  * Local audio states.
  */
@@ -2793,6 +2855,16 @@ enum LOCAL_VIDEO_STREAM_REASON {
    */
   LOCAL_VIDEO_STREAM_REASON_DEVICE_INVALID_ID = 10,
   /**
+   * 14: (Android only) Video capture was interrupted, possibly due to the camera being occupied
+   * or some policy reasons such as background termination.
+   */
+  LOCAL_VIDEO_STREAM_REASON_DEVICE_INTERRUPT = 14,
+  /**
+   * 15: (Android only) The device may need to be shut down and restarted to restore camera function, 
+   * or there may be a persistent hardware problem.
+   */
+  LOCAL_VIDEO_STREAM_REASON_DEVICE_FATAL_ERROR = 15,
+  /**
    * 101: The current video capture device is unavailable due to excessive system pressure.
    */
   LOCAL_VIDEO_STREAM_REASON_DEVICE_SYSTEM_PRESSURE = 101,
@@ -2835,7 +2907,7 @@ enum LOCAL_VIDEO_STREAM_REASON {
   LOCAL_VIDEO_STREAM_REASON_SCREEN_CAPTURE_WINDOW_HIDDEN = 25,
   /** 26: (Windows only) The local screen capture window is recovered from its hidden state. */
   LOCAL_VIDEO_STREAM_REASON_SCREEN_CAPTURE_WINDOW_RECOVER_FROM_HIDDEN = 26,
-  /** 27:(Windows only) The window is recovered from miniminzed */
+  /** 27: (Windows and macOS only) The window is recovered from miniminzed */
   LOCAL_VIDEO_STREAM_REASON_SCREEN_CAPTURE_WINDOW_RECOVER_FROM_MINIMIZED = 27,
     /** 
    * 28: The screen capture paused.
@@ -2924,6 +2996,14 @@ enum REMOTE_AUDIO_STATE_REASON
    * 7: The remote user leaves the channel.
    */
   REMOTE_AUDIO_REASON_REMOTE_OFFLINE = 7,
+  /**
+   * 8: The local user does not receive any audio packet from remote user.
+   */
+  REMOTE_AUDIO_REASON_NO_PACKET_RECEIVE = 8,
+  /**
+   * 9: The local user receives remote audio packet but fails to play.
+   */
+  REMOTE_AUDIO_REASON_LOCAL_PLAY_FAILED = 9,
 };
 
 /**
@@ -4686,6 +4766,7 @@ enum VOICE_BEAUTIFIER_PRESET {
  * - `ROOM_ACOUSTICS_PHONOGRAPH`
  * - `ROOM_ACOUSTICS_SPACIAL`
  * - `ROOM_ACOUSTICS_ETHEREAL`
+ * - `ROOM_ACOUSTICS_CHORUS`
  * - `VOICE_CHANGER_EFFECT_UNCLE`
  * - `VOICE_CHANGER_EFFECT_OLDMAN`
  * - `VOICE_CHANGER_EFFECT_BOY`
@@ -4747,6 +4828,14 @@ enum AUDIO_EFFECT_PRESET {
    * setting this enumerator.
    */
   ROOM_ACOUSTICS_VIRTUAL_SURROUND_SOUND = 0x02010900,
+  /** The voice effect for chorus.
+   * 
+   * @note: To achieve better audio effect quality, Agora recommends calling \ref
+   * IRtcEngine::setAudioProfile "setAudioProfile" and setting the `profile` parameter to
+   * `AUDIO_PROFILE_MUSIC_HIGH_QUALITY(4)` or `AUDIO_PROFILE_MUSIC_HIGH_QUALITY_STEREO(5)` before
+   * setting this enumerator.
+  */
+  ROOM_ACOUSTICS_CHORUS = 0x02010D00,
   /** A middle-aged man's voice.
    *
    * @note
@@ -5534,10 +5623,13 @@ struct EncryptionConfig {
    * In this case, ensure that this parameter is not 0.
    */
   uint8_t encryptionKdfSalt[32];
+    
+  bool datastreamEncryptionEnabled;
 
   EncryptionConfig()
     : encryptionMode(AES_128_GCM2),
-      encryptionKey(OPTIONAL_NULLPTR)
+      encryptionKey(OPTIONAL_NULLPTR),
+      datastreamEncryptionEnabled(false)
   {
     memset(encryptionKdfSalt, 0, sizeof(encryptionKdfSalt));
   }
@@ -5577,13 +5669,21 @@ enum ENCRYPTION_ERROR_TYPE {
      */
     ENCRYPTION_ERROR_INTERNAL_FAILURE = 0,
     /**
-     * 1: Decryption errors. Ensure that the receiver and the sender use the same encryption mode and key.
+     * 1: MediaStream decryption errors. Ensure that the receiver and the sender use the same encryption mode and key.
      */
     ENCRYPTION_ERROR_DECRYPTION_FAILURE = 1,
     /**
-     * 2: Encryption errors.
+     * 2: MediaStream encryption errors.
      */
     ENCRYPTION_ERROR_ENCRYPTION_FAILURE = 2,
+    /**
+     * 3: DataStream decryption errors. Ensure that the receiver and the sender use the same encryption mode and key.
+     */
+    ENCRYPTION_ERROR_DATASTREAM_DECRYPTION_FAILURE = 3,
+    /**
+     * 4: DataStream encryption errors.
+     */
+    ENCRYPTION_ERROR_DATASTREAM_ENCRYPTION_FAILURE = 4,
 };
 
 enum UPLOAD_ERROR_REASON
@@ -5717,7 +5817,12 @@ enum EAR_MONITORING_FILTER_TYPE {
   /**
    * 4: Enable noise suppression to the in-ear monitor.
    */
-  EAR_MONITORING_FILTER_NOISE_SUPPRESSION = (1<<2)
+  EAR_MONITORING_FILTER_NOISE_SUPPRESSION = (1<<2),
+  /**
+   * 32768: Enable audio filters by reuse post-processing filter to the in-ear monitor.
+   * This bit is intended to be used in exclusive mode, which means, if this bit is set, all other bits will be disregarded.
+   */
+  EAR_MONITORING_FILTER_REUSE_POST_PROCESSING_FILTER = (1<<15),
 };
 
 /**

@@ -19,10 +19,10 @@ A new flutter plugin project.
   plugin_dev_path = File.join(File.dirname(File.realpath(__FILE__)), '.plugin_dev')
   if File.exist?(plugin_dev_path)
     puts '[plugin_dev] Found .plugin_dev file, use vendored_frameworks instead.'
-    s.vendored_frameworks = 'libs/*.framework'
+    s.vendored_frameworks = 'libs/*.xcframework', 'libs/*.framework'
   else
-  s.dependency 'AgoraRtcEngine_macOS', '4.3.0'
-  s.dependency 'AgoraIrisRTC_macOS', '4.3.0-build.2'
+  s.dependency 'AgoraRtcEngine_macOS', '4.3.1'
+  s.dependency 'AgoraIrisRTC_macOS', '4.3.1-build.1'
   end
 
   s.platform = :osx, '10.11'

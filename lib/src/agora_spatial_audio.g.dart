@@ -36,7 +36,7 @@ Map<String, dynamic> _$RemoteVoicePositionInfoToJson(
 
 SpatialAudioZone _$SpatialAudioZoneFromJson(Map<String, dynamic> json) =>
     SpatialAudioZone(
-      zoneSetId: json['zoneSetId'] as int?,
+      zoneSetId: (json['zoneSetId'] as num?)?.toInt(),
       position: (json['position'] as List<dynamic>?)
           ?.map((e) => (e as num).toDouble())
           .toList(),
