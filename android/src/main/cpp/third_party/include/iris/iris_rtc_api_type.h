@@ -173,6 +173,7 @@
 #define FUNC_RTCENGINE_SETLOGLEVEL "RtcEngine_setLogLevel"
 #define FUNC_RTCENGINE_SETLOGFILESIZE "RtcEngine_setLogFileSize"
 #define FUNC_RTCENGINE_UPLOADLOGFILE "RtcEngine_uploadLogFile"
+#define FUNC_RTCENGINE_WRITELOG "RtcEngine_writeLog"
 #define FUNC_RTCENGINE_SETLOCALRENDERMODE "RtcEngine_setLocalRenderMode"
 #define FUNC_RTCENGINE_SETREMOTERENDERMODE "RtcEngine_setRemoteRenderMode"
 #define FUNC_RTCENGINE_SETLOCALRENDERMODE2 "RtcEngine_setLocalRenderMode2"
@@ -815,6 +816,10 @@
   "MediaEngine_registerVideoEncodedFrameObserver"
 #define FUNC_MEDIAENGINE_UNREGISTERVIDEOENCODEDFRAMEOBSERVER                   \
   "MediaEngine_unregisterVideoEncodedFrameObserver"
+#define FUNC_MEDIAENGINE_REGISTERFACEINFOOBSERVER                              \
+  "MediaEngine_registerFaceInfoObserver"
+#define FUNC_MEDIAENGINE_UNREGISTERFACEINFOOBSERVER                            \
+  "MediaEngine_unregisterFaceInfoObserver"
 #define FUNC_MEDIAENGINE_ADDVIDEOFRAMERENDERER                                 \
   "MediaEngine_addVideoFrameRenderer"
 #define FUNC_MEDIAENGINE_REMOVEVIDEOFRAMERENDERER                              \
@@ -948,4 +953,5 @@
 // class IMusicContentCenter end
 // class IMusicPlayer start
 #define FUNC_MUSICPLAYER_OPEN "MusicPlayer_open"
+#define FUNC_MUSICPLAYER_SETPLAYMODE "MusicPlayer_setPlayMode"
 // class IMusicPlayer end

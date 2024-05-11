@@ -94,7 +94,7 @@ class _State extends State<ScreenSharing> with KeepRemoteVideoViewsMixin {
       appId: config.appId,
       channelProfile: ChannelProfileType.channelProfileLiveBroadcasting,
     ));
-    await _engine.setLogLevel(LogLevel.logLevelError);
+    // await _engine.setLogLevel(LogLevel.logLevelError);
 
     _engine.registerEventHandler(_rtcEngineEventHandler);
 

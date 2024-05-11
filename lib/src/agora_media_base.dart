@@ -1387,12 +1387,12 @@ class AudioFrameObserver extends AudioFrameObserverBase {
           onEarMonitoringAudioFrame: onEarMonitoringAudioFrame,
         );
 
-  /// Retrieves the audio frame of a specified user before mixing.
+  /// Retrieves the audio frame before mixing of subscribed remote users.
   ///
   /// Due to framework limitations, this callback does not support sending processed audio data back to the SDK.
   ///
   /// * [channelId] The channel ID.
-  /// * [uid] The user ID of the specified user.
+  /// * [uid] The ID of subscribed remote users.
   /// * [audioFrame] The raw audio data. See AudioFrame.
   final void Function(String channelId, int uid, AudioFrame audioFrame)?
       onPlaybackAudioFrameBeforeMixing;

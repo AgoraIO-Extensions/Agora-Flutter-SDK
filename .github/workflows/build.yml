@@ -36,6 +36,18 @@ jobs:
             echo Pub Score too low.
             exit 1
           fi
+
+  flutter_ut:
+    name: Flutter unit test
+    if: ${{ !contains(github.event.pull_request.labels.*.name, 'ci:skip') }}
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: subosito/flutter-action@v2
+        with:
+          channel: 'stable'
+      - run: flutter test
+
   attach_docs:
     name: Attach dartdoc
     runs-on: ubuntu-latest
