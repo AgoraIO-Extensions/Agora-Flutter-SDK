@@ -1723,7 +1723,7 @@ extension VideoMirrorModeTypeExt on VideoMirrorModeType {
   }
 }
 
-/// The bit mask that indicates the device codec capability.
+/// The bit mask of the codec type.
 @JsonEnum(alwaysCreate: true)
 enum CodecCapMask {
   /// (0): The device does not support encoding or decoding.
@@ -1782,7 +1782,7 @@ class CodecCapLevels {
   Map<String, dynamic> toJson() => _$CodecCapLevelsToJson(this);
 }
 
-/// The codec capability of the device.
+/// The codec capability of the SDK.
 @JsonSerializable(explicitToJson: true, includeIfNull: false)
 class CodecCapInfo {
   /// @nodoc
@@ -1792,11 +1792,11 @@ class CodecCapInfo {
   @JsonKey(name: 'codecType')
   final VideoCodecType? codecType;
 
-  /// The bit mask of the codec type. See CodecCapMask.
+  /// Bit mask of the codec types in SDK. See CodecCapMask.
   @JsonKey(name: 'codecCapMask')
   final int? codecCapMask;
 
-  /// The level of the codec capability. See CodecCapLevels.
+  /// Codec capability of the SDK. See CodecCapLevels.
   @JsonKey(name: 'codecLevels')
   final CodecCapLevels? codecLevels;
 
@@ -1859,7 +1859,7 @@ class VideoEncoderConfiguration {
   @JsonKey(name: 'frameRate')
   final int? frameRate;
 
-  /// The encoding bitrate (Kbps) of the video. This parameter does not need to be set; keeping the default value standardBitrate is sufficient. The SDK automatically matches the most suitable bitrate based on the video resolution and frame rate you have set. For the correspondence between video resolution, frame rate, and bitrate, please refer to. standardBitrate (0): (Recommended) Standard bitrate mode. compatibleBitrate (-1): Adaptive bitrate mode. In general, Agora suggests that you do not use this value.
+  /// The encoding bitrate (Kbps) of the video. This parameter does not need to be set; keeping the default value standardBitrate is sufficient. The SDK automatically matches the most suitable bitrate based on the video resolution and frame rate you have set. For the correspondence between video resolution and frame rate, see. standardBitrate (0): (Recommended) Standard bitrate mode. compatibleBitrate (-1): Adaptive bitrate mode. In general, Agora suggests that you do not use this value.
   @JsonKey(name: 'bitrate')
   final int? bitrate;
 
