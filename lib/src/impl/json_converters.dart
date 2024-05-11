@@ -51,3 +51,44 @@ class _VideoFrameMetaInfoInternalJson {
   /// @nodoc
   Map<String, dynamic> toJson() => _$VideoFrameMetaInfoInternalJsonToJson(this);
 }
+
+int _intPtrStr2Int(String value) {
+  // In 64-bits system, the c++ int ptr value (unsigned long 64) can be 2^64 - 1,
+  // which may greater than the dart int max value (2^63 - 1), so we can not decode
+  // the json with big int c++ int ptr value and parse it directly.
+  //
+  // After dart sdk 2.0 support parse hexadecimal in unsigned int64 range.
+  // https://github.com/dart-lang/language/blob/ee1135e0c22391cee17bf3ee262d6a04582d25de/archive/newsletter/20170929.md#semantics
+  //
+  // So we retrive the c++ int ptr value from the json string directly, and
+  // parse an int from hexadecimal here.
+  BigInt valueBI = BigInt.parse(value);
+  return int.tryParse('0x${valueBI.toRadixString(16)}') ?? 0;
+}
+
+/// Parse a c++ int ptr value from the json key `<key>_str`
+Object? readIntPtr(Map json, String key) {
+  final newKey = '${key}_str';
+  // Default to 0.
+  int returnValue = 0;
+  if (json.containsKey(newKey)) {
+    final value = json[newKey];
+    assert(value is String);
+    returnValue = _intPtrStr2Int(value);
+  }
+
+  return returnValue;
+}
+
+/// Same as `readIntPtr`, but for list of int ptr.
+Object? readIntPtrList(Map json, String key) {
+  final newKey = '${key}_str';
+  List<Object> returnValue = [];
+  if (json.containsKey(newKey)) {
+    final value = json[newKey];
+    assert(value is List);
+    returnValue = List.from(value.map((e) => _intPtrStr2Int(e)));
+  }
+
+  return returnValue;
+}

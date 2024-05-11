@@ -1682,7 +1682,7 @@ extension VideoMirrorModeTypeExt on VideoMirrorModeType {
   }
 }
 
-/// The bit mask that indicates the device codec capability.
+/// The bit mask of the codec type.
 @JsonEnum(alwaysCreate: true)
 enum CodecCapMask {
   /// (0): The device does not support encoding or decoding.
@@ -1741,7 +1741,7 @@ class CodecCapLevels {
   Map<String, dynamic> toJson() => _$CodecCapLevelsToJson(this);
 }
 
-/// The codec capability of the device.
+/// The codec capability of the SDK.
 @JsonSerializable(explicitToJson: true, includeIfNull: false)
 class CodecCapInfo {
   /// @nodoc
@@ -1751,11 +1751,11 @@ class CodecCapInfo {
   @JsonKey(name: 'codecType')
   final VideoCodecType? codecType;
 
-  /// The bit mask of the codec type. See CodecCapMask.
+  /// Bit mask of the codec types in SDK. See CodecCapMask.
   @JsonKey(name: 'codecCapMask')
   final int? codecCapMask;
 
-  /// The level of the codec capability. See CodecCapLevels.
+  /// Codec capability of the SDK. See CodecCapLevels.
   @JsonKey(name: 'codecLevels')
   final CodecCapLevels? codecLevels;
 
@@ -1794,7 +1794,7 @@ class VideoEncoderConfiguration {
   @JsonKey(name: 'frameRate')
   final int? frameRate;
 
-  /// The encoding bitrate (Kbps) of the video. This parameter does not need to be set; keeping the default value standardBitrate is sufficient. The SDK automatically matches the most suitable bitrate based on the video resolution and frame rate you have set. For the correspondence between video resolution, frame rate, and bitrate, please refer to. standardBitrate (0): (Recommended) Standard bitrate mode. compatibleBitrate (-1): Adaptive bitrate mode. In general, Agora suggests that you do not use this value.
+  /// The encoding bitrate (Kbps) of the video. This parameter does not need to be set; keeping the default value standardBitrate is sufficient. The SDK automatically matches the most suitable bitrate based on the video resolution and frame rate you have set. For the correspondence between video resolution and frame rate, see. standardBitrate (0): (Recommended) Standard bitrate mode. compatibleBitrate (-1): Adaptive bitrate mode. In general, Agora suggests that you do not use this value.
   @JsonKey(name: 'bitrate')
   final int? bitrate;
 
@@ -4553,7 +4553,7 @@ class VideoCanvas {
       this.enableAlphaMask});
 
   /// The video display window. In one VideoCanvas, you can only choose to set either view or surfaceTexture. If both are set, only the settings in view take effect.
-  @JsonKey(name: 'view')
+  @JsonKey(name: 'view', readValue: readIntPtr)
   final int? view;
 
   /// The user ID.
@@ -5364,7 +5364,7 @@ class ScreenCaptureParameters {
   final bool? windowFocus;
 
   /// The ID list of the windows to be blocked. When calling startScreenCaptureByDisplayId to start screen sharing, you can use this parameter to block a specified window. When calling updateScreenCaptureParameters to update screen sharing configurations, you can use this parameter to dynamically block a specified window.
-  @JsonKey(name: 'excludeWindowList')
+  @JsonKey(name: 'excludeWindowList', readValue: readIntPtrList)
   final List<int>? excludeWindowList;
 
   /// The number of windows to be excluded. On the Windows platform, the maximum value of this parameter is 24; if this value is exceeded, excluding the window fails.
@@ -6325,7 +6325,7 @@ class EchoTestConfiguration {
       this.intervalInSeconds});
 
   /// The view used to render the local user's video. This parameter is only applicable to scenarios testing video devices, that is, when enableVideo is true.
-  @JsonKey(name: 'view')
+  @JsonKey(name: 'view', readValue: readIntPtr)
   final int? view;
 
   /// Whether to enable the audio device for the loop test: true : (Default) Enable the audio device. To test the audio device, set this parameter as true. false : Disable the audio device.

@@ -1210,7 +1210,7 @@ Map<String, dynamic> _$WlAccStatsToJson(WlAccStats instance) {
 }
 
 VideoCanvas _$VideoCanvasFromJson(Map<String, dynamic> json) => VideoCanvas(
-      view: (json['view'] as num?)?.toInt(),
+      view: (readIntPtr(json, 'view') as num?)?.toInt(),
       uid: (json['uid'] as num?)?.toInt(),
       backgroundColor: (json['backgroundColor'] as num?)?.toInt(),
       renderMode:
@@ -1481,9 +1481,10 @@ ScreenCaptureParameters _$ScreenCaptureParametersFromJson(
       bitrate: (json['bitrate'] as num?)?.toInt(),
       captureMouseCursor: json['captureMouseCursor'] as bool?,
       windowFocus: json['windowFocus'] as bool?,
-      excludeWindowList: (json['excludeWindowList'] as List<dynamic>?)
-          ?.map((e) => (e as num).toInt())
-          .toList(),
+      excludeWindowList:
+          (readIntPtrList(json, 'excludeWindowList') as List<dynamic>?)
+              ?.map((e) => (e as num).toInt())
+              .toList(),
       excludeWindowCount: (json['excludeWindowCount'] as num?)?.toInt(),
       highLightWidth: (json['highLightWidth'] as num?)?.toInt(),
       highLightColor: (json['highLightColor'] as num?)?.toInt(),
@@ -1787,7 +1788,7 @@ const _$EncryptionModeEnumMap = {
 EchoTestConfiguration _$EchoTestConfigurationFromJson(
         Map<String, dynamic> json) =>
     EchoTestConfiguration(
-      view: (json['view'] as num?)?.toInt(),
+      view: (readIntPtr(json, 'view') as num?)?.toInt(),
       enableAudio: json['enableAudio'] as bool?,
       enableVideo: json['enableVideo'] as bool?,
       token: json['token'] as String?,
