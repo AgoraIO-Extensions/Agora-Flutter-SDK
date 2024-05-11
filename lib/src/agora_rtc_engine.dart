@@ -1060,7 +1060,7 @@ class ScreenCaptureConfiguration {
   final Rectangle? screenRect;
 
   /// (For Windows and macOS only) Window ID. This parameter takes effect only when you want to capture the window.
-  @JsonKey(name: 'windowId')
+  @JsonKey(name: 'windowId', readValue: readIntPtr)
   final int? windowId;
 
   /// (For Windows and macOS only) The screen capture configuration. See ScreenCaptureParameters.
@@ -1188,7 +1188,7 @@ class ScreenCaptureSourceInfo {
   final ScreenCaptureSourceType? type;
 
   /// The window ID for a window or the display ID for a screen.
-  @JsonKey(name: 'sourceId')
+  @JsonKey(name: 'sourceId', readValue: readIntPtr)
   final int? sourceId;
 
   /// The name of the window or screen. UTF-8 encoding.
@@ -1228,7 +1228,7 @@ class ScreenCaptureSourceInfo {
   final bool? minimizeWindow;
 
   /// (For Windows only) Screen ID where the window is located. If the window is displayed across multiple screens, this parameter indicates the ID of the screen with which the window has the largest intersection area. If the window is located outside of the visible screens, the value of this member is -2.
-  @JsonKey(name: 'sourceDisplayId')
+  @JsonKey(name: 'sourceDisplayId', readValue: readIntPtr)
   final int? sourceDisplayId;
 
   /// @nodoc
@@ -3117,7 +3117,7 @@ abstract class RtcEngine {
   /// The specific error or warning description.
   Future<String> getErrorDescription(int code);
 
-  /// Queries the current device's supported video codec capabilities.
+  /// Queries the video codec capabilities of the SDK.
   ///
   /// * [size] The size of CodecCapInfo.
   ///
@@ -3609,7 +3609,7 @@ abstract class RtcEngine {
 
   /// Stops or resumes publishing the local audio stream.
   ///
-  /// This method does not affect any ongoing audio recording, because it does not disable the audio capture device. A successful call of this method triggers the onUserMuteAudio and onRemoteAudioStateChanged callbacks on the remote client.
+  /// This method is used to control whether to publish the locally captured audio stream. If you call this method to stop publishing locally captured audio streams, the audio capturing device will still work and won't be affected.
   ///
   /// * [mute] Whether to stop publishing the local audio stream: true : Stops publishing the local audio stream. false : (Default) Resumes publishing the local audio stream.
   ///
@@ -3619,9 +3619,7 @@ abstract class RtcEngine {
 
   /// Stops or resumes subscribing to the audio streams of all remote users.
   ///
-  /// After successfully calling this method, the local user stops or resumes subscribing to the audio streams of all remote users, including all subsequent users.
-  ///  Call this method after joining a channel.
-  ///  If you do not want to subscribe the audio streams of remote users before joining a channel, you can set autoSubscribeAudio as false when calling joinChannel.
+  /// After successfully calling this method, the local user stops or resumes subscribing to the audio streams of all remote users, including all subsequent users. By default, the SDK subscribes to the audio streams of all remote users when joining a channel. To modify this behavior, you can set autoSubscribeAudio to false when calling joinChannel to join the channel, which will cancel the subscription to the audio streams of all users upon joining the channel.
   ///
   /// * [mute] Whether to stop subscribing to the audio streams of all remote users: true : Stops subscribing to the audio streams of all remote users. false : (Default) Subscribes to the audio streams of all remote users by default.
   ///
@@ -3634,8 +3632,6 @@ abstract class RtcEngine {
 
   /// Stops or resumes subscribing to the audio stream of a specified user.
   ///
-  /// Call this method after joining a channel.
-  ///
   /// * [uid] The user ID of the specified user.
   /// * [mute] Whether to subscribe to the specified remote user's audio stream. true : Stop subscribing to the audio stream of the specified user. false : (Default) Subscribe to the audio stream of the specified user.
   ///
@@ -3645,9 +3641,7 @@ abstract class RtcEngine {
 
   /// Stops or resumes publishing the local video stream.
   ///
-  /// A successful call of this method triggers the onUserMuteVideo callback on the remote client.
-  ///  This method executes faster than the enableLocalVideo (false) method, which controls the sending of the local video stream.
-  ///  This method does not affect any ongoing video recording, because it does not disable the camera.
+  /// This method is used to control whether to publish the locally captured video stream. If you call this method to stop publishing locally captured video streams, the video capturing device will still work and won't be affected. Compared to enableLocalVideo (false), which can also cancel the publishing of local video stream by turning off the local video stream capture, this method responds faster.
   ///
   /// * [mute] Whether to stop publishing the local video stream. true : Stop publishing the local video stream. false : (Default) Publish the local video stream.
   ///
@@ -3669,9 +3663,7 @@ abstract class RtcEngine {
 
   /// Stops or resumes subscribing to the video streams of all remote users.
   ///
-  /// After successfully calling this method, the local user stops or resumes subscribing to the audio streams of all remote users, including all subsequent users.
-  ///  Call this method after joining a channel.
-  ///  If you do not want to subscribe the video streams of remote users before joining a channel, you can call joinChannel and set autoSubscribeVideo as false.
+  /// After successfully calling this method, the local user stops or resumes subscribing to the audio streams of all remote users, including all subsequent users. By default, the SDK subscribes to the video streams of all remote users when joining a channel. To modify this behavior, you can set autoSubscribeVideo to false when calling joinChannel to join the channel, which will cancel the subscription to the video streams of all users upon joining the channel.
   ///
   /// * [mute] Whether to stop subscribing to the video streams of all remote users. true : Stop subscribing to the video streams of all remote users. false : (Default) Subscribe to the audio streams of all remote users by default.
   ///
@@ -3683,8 +3675,6 @@ abstract class RtcEngine {
   Future<void> setDefaultMuteAllRemoteVideoStreams(bool mute);
 
   /// Stops or resumes subscribing to the video stream of a specified user.
-  ///
-  /// Call this method after joining a channel.
   ///
   /// * [uid] The user ID of the specified user.
   /// * [mute] Whether to subscribe to the specified remote user's video stream. true : Stop subscribing to the video streams of the specified user. false : (Default) Subscribe to the video stream of the specified user.
@@ -4299,7 +4289,9 @@ abstract class RtcEngine {
 
   /// Sets a preset voice beautifier effect.
   ///
-  /// Call this method to set a preset voice beautifier effect for the local user who sends an audio stream. After setting a voice beautifier effect, all users in the channel can hear the effect. You can set different voice beautifier effects for different scenarios. For better voice effects, Agora recommends that you call setAudioProfile and set scenario to audioScenarioGameStreaming (3) and profile to audioProfileMusicHighQuality (4) or audioProfileMusicHighQualityStereo (5) before calling this method.
+  /// Call this method to set a preset voice beautifier effect for the local user who sends an audio stream. After setting a voice beautifier effect, all users in the channel can hear the effect. You can set different voice beautifier effects for different scenarios. To achieve better vocal effects, it is recommended that you call the following APIs before calling this method:
+  ///  Call setAudioScenario to set the audio scenario to high-quality audio scenario, namely audioScenarioGameStreaming (3).
+  ///  Call setAudioProfile to set the profile parameter to audioProfileMusicHighQuality (4) or audioProfileMusicHighQualityStereo (5).
   ///  You can call this method either before or after joining a channel.
   ///  Do not set the profile parameter in setAudioProfile to audioProfileSpeechStandard (1) or audioProfileIot (6), or the method does not take effect.
   ///  This method has the best effect on human voice processing, and Agora does not recommend calling this method to process audio data containing music.
@@ -4314,10 +4306,11 @@ abstract class RtcEngine {
 
   /// Sets an SDK preset audio effect.
   ///
-  /// Call this method to set an SDK preset audio effect for the local user who sends an audio stream. This audio effect does not change the gender characteristics of the original voice. After setting an audio effect, all users in the channel can hear the effect. To get better audio effect quality, Agora recommends setting the scenario parameter of setAudioProfile as audioScenarioGameStreaming (3) before calling this method.
+  /// To achieve better vocal effects, it is recommended that you call the following APIs before calling this method:
+  ///  Call setAudioScenario to set the audio scenario to high-quality audio scenario, namely audioScenarioGameStreaming (3).
+  ///  Call setAudioProfile to set the profile parameter to audioProfileMusicHighQuality (4) or audioProfileMusicHighQualityStereo (5). Call this method to set an SDK preset audio effect for the local user who sends an audio stream. This audio effect does not change the gender characteristics of the original voice. After setting an audio effect, all users in the channel can hear the effect.
+  ///  Do not set the profile parameter in setAudioProfile to audioProfileSpeechStandard (1) or audioProfileIot (6), or the method does not take effect.
   ///  You can call this method either before or after joining a channel.
-  ///  Do not set the profile parameter in setAudioProfile to audioProfileSpeechStandard (1) audioProfileIot or (6), or the method does not take effect.
-  ///  This method has the best effect on human voice processing, and Agora does not recommend calling this method to process audio data containing music.
   ///  If you call setAudioEffectPreset and set enumerators except for roomAcoustics3dVoice or pitchCorrection, do not call setAudioEffectParameters; otherwise, setAudioEffectPreset is overridden.
   ///  After calling setAudioEffectPreset, Agora does not recommend you to call the following methods, otherwise the effect set by setAudioEffectPreset will be overwritten: setVoiceBeautifierPreset setLocalVoicePitch setLocalVoiceEqualization setLocalVoiceReverb setVoiceBeautifierParameters setVoiceConversionPreset
   ///  This method relies on the voice beautifier dynamic library libagora_audio_beauty_extension.dll. If the dynamic library is deleted, the function cannot be enabled normally.
@@ -4330,9 +4323,11 @@ abstract class RtcEngine {
 
   /// Sets a preset voice beautifier effect.
   ///
-  /// Call this method to set a preset voice beautifier effect for the local user who sends an audio stream. After setting an audio effect, all users in the channel can hear the effect. You can set different voice beautifier effects for different scenarios. To achieve better audio effect quality, Agora recommends that you call setAudioProfile and set the profile to audioProfileMusicHighQuality (4) or audioProfileMusicHighQualityStereo (5) and scenario to audioScenarioGameStreaming (3) before calling this method.
-  ///  You can call this method either before or after joining a channel.
+  /// To achieve better vocal effects, it is recommended that you call the following APIs before calling this method:
+  ///  Call setAudioScenario to set the audio scenario to high-quality audio scenario, namely audioScenarioGameStreaming (3).
+  ///  Call setAudioProfile to set the profile parameter to audioProfileMusicHighQuality (4) or audioProfileMusicHighQualityStereo (5). Call this method to set a preset voice beautifier effect for the local user who sends an audio stream. After setting an audio effect, all users in the channel can hear the effect. You can set different voice beautifier effects for different scenarios.
   ///  Do not set the profile parameter in setAudioProfile to audioProfileSpeechStandard (1) or audioProfileIot (6), or the method does not take effect.
+  ///  You can call this method either before or after joining a channel.
   ///  This method has the best effect on human voice processing, and Agora does not recommend calling this method to process audio data containing music.
   ///  After calling setVoiceConversionPreset, Agora does not recommend you to call the following methods, otherwise the effect set by setVoiceConversionPreset will be overwritten: setAudioEffectPreset setAudioEffectParameters setVoiceBeautifierPreset setVoiceBeautifierParameters setLocalVoicePitch setLocalVoiceFormant setLocalVoiceEqualization setLocalVoiceReverb
   ///  This method relies on the voice beautifier dynamic library libagora_audio_beauty_extension.dll. If the dynamic library is deleted, the function cannot be enabled normally.
@@ -4346,18 +4341,19 @@ abstract class RtcEngine {
 
   /// Sets parameters for SDK preset audio effects.
   ///
-  /// Call this method to set the following parameters for the local user who sends an audio stream:
+  /// To achieve better vocal effects, it is recommended that you call the following APIs before calling this method:
+  ///  Call setAudioScenario to set the audio scenario to high-quality audio scenario, namely audioScenarioGameStreaming (3).
+  ///  Call setAudioProfile to set the profile parameter to audioProfileMusicHighQuality (4) or audioProfileMusicHighQualityStereo (5). Call this method to set the following parameters for the local user who sends an audio stream:
   ///  3D voice effect: Sets the cycle period of the 3D voice effect.
   ///  Pitch correction effect: Sets the basic mode and tonic pitch of the pitch correction effect. Different songs have different modes and tonic pitches. Agora recommends bounding this method with interface elements to enable users to adjust the pitch correction interactively. After setting the audio parameters, all users in the channel can hear the effect.
+  ///  Do not set the profile parameter in setAudioProfile to audioProfileSpeechStandard (1) or audioProfileIot (6), or the method does not take effect.
   ///  You can call this method either before or after joining a channel.
-  ///  To get better audio effect quality, Agora recommends setting the scenario parameter of setAudioProfile as audioScenarioGameStreaming (3) before calling this method.
-  ///  Do not set the profile parameter in setAudioProfile to audioProfileSpeechStandard (1) audioProfileIot or (6), or the method does not take effect.
   ///  This method has the best effect on human voice processing, and Agora does not recommend calling this method to process audio data containing music.
   ///  After calling setAudioEffectParameters, Agora does not recommend you to call the following methods, otherwise the effect set by setAudioEffectParameters will be overwritten: setAudioEffectPreset setVoiceBeautifierPreset setLocalVoicePitch setLocalVoiceEqualization setLocalVoiceReverb setVoiceBeautifierParameters setVoiceConversionPreset
   ///
   /// * [preset] The options for SDK preset audio effects: roomAcoustics3dVoice, 3D voice effect:
-  ///  Call setAudioProfile and set the profile parameter in to audioProfileMusicStandardStereo (3) or audioProfileMusicHighQualityStereo (5) before setting this enumerator; otherwise, the enumerator setting does not take effect.
-  ///  If the 3D voice effect is enabled, users need to use stereo audio playback devices to hear the anticipated voice effect. pitchCorrection, Pitch correction effect: To achieve better audio effect quality, Agora recommends setting the profile parameter in setAudioProfile to audioProfileMusicHighQuality (4) or audioProfileMusicHighQualityStereo (5) before setting this enumerator.
+  ///  You need to set the profile parameter in setAudioProfile to audioProfileMusicStandardStereo (3) or audioProfileMusicHighQualityStereo (5) before setting this enumerator; otherwise, the enumerator setting does not take effect.
+  ///  If the 3D voice effect is enabled, users need to use stereo audio playback devices to hear the anticipated voice effect. pitchCorrection, Pitch correction effect:
   /// * [param1] If you set preset to roomAcoustics3dVoice, param1 sets the cycle period of the 3D voice effect. The value range is [1,60] and the unit is seconds. The default value is 10, indicating that the voice moves around you every 10 seconds.
   ///  If you set preset to pitchCorrection, param1 indicates the basic mode of the pitch correction effect: 1 : (Default) Natural major scale. 2 : Natural minor scale. 3 : Japanese pentatonic scale.
   /// * [param2] If you set preset to roomAcoustics3dVoice , you need to set param2 to 0.
@@ -4372,9 +4368,11 @@ abstract class RtcEngine {
 
   /// Sets parameters for the preset voice beautifier effects.
   ///
-  /// Call this method to set a gender characteristic and a reverberation effect for the singing beautifier effect. This method sets parameters for the local user who sends an audio stream. After setting the audio parameters, all users in the channel can hear the effect. For better voice effects, Agora recommends that you call setAudioProfile and set scenario to audioScenarioGameStreaming (3) and profile to audioProfileMusicHighQuality (4) or audioProfileMusicHighQualityStereo (5) before calling this method.
-  ///  You can call this method either before or after joining a channel.
+  /// To achieve better vocal effects, it is recommended that you call the following APIs before calling this method:
+  ///  Call setAudioScenario to set the audio scenario to high-quality audio scenario, namely audioScenarioGameStreaming (3).
+  ///  Call setAudioProfile to set the profile parameter to audioProfileMusicHighQuality (4) or audioProfileMusicHighQualityStereo (5). Call this method to set a gender characteristic and a reverberation effect for the singing beautifier effect. This method sets parameters for the local user who sends an audio stream. After setting the audio parameters, all users in the channel can hear the effect.
   ///  Do not set the profile parameter in setAudioProfile to audioProfileSpeechStandard (1) or audioProfileIot (6), or the method does not take effect.
+  ///  You can call this method either before or after joining a channel.
   ///  This method has the best effect on human voice processing, and Agora does not recommend calling this method to process audio data containing music.
   ///  After calling setVoiceBeautifierParameters, Agora does not recommend calling the following methods, otherwise the effect set by setVoiceBeautifierParameters will be overwritten: setAudioEffectPreset setAudioEffectParameters setVoiceBeautifierPreset setLocalVoicePitch setLocalVoiceEqualization setLocalVoiceReverb setVoiceConversionPreset
   ///
@@ -5727,7 +5725,7 @@ abstract class RtcEngine {
   ///  If the orientation mode of the encoding video (OrientationMode) is fixed portrait mode or the adaptive portrait mode, the watermark uses the portrait orientation.
   ///  When setting the watermark position, the region must be less than the dimensions set in the setVideoEncoderConfiguration method; otherwise, the watermark image will be cropped.
   ///  Ensure that calling this method after enableVideo.
-  ///  If you only want to add a watermark to the media push, you can call this method or the method.
+  ///  If you only want to add a watermark to the media push, you can call this method or the startRtmpStreamWithTranscoding method.
   ///  This method supports adding a watermark image in the PNG file format only. Supported pixel formats of the PNG image are RGBA, RGB, Palette, Gray, and Alpha_gray.
   ///  If the dimensions of the PNG image differ from your settings in this method, the image will be cropped or zoomed to conform to your settings.
   ///  If you have enabled the mirror mode for the local video, the watermark on the local video is also mirrored. To avoid mirroring the watermark, Agora recommends that you do not use the mirror and watermark functions for the local video at the same time. You can implement the watermark function in your application layer.
