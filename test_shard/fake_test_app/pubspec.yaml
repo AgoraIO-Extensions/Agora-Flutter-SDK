@@ -69,9 +69,9 @@ flutter:
   uses-material-design: true
 
   # To add assets to your application, add an assets section, like this:
-  assets:
+  # assets:
     # Add the `../../scripts/iris_web_version.js` to the assets, so we can use it in the `web/index.html` file.
-    - ../../scripts/iris_web_version.js
+    # - ../../scripts/iris_web_version.js
   #   - images/a_dot_ham.jpeg
 
   # An image asset can refer to one or more resolution-specific "variants", see
