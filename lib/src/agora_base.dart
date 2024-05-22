@@ -591,11 +591,11 @@ extension UserOfflineReasonTypeExt on UserOfflineReasonType {
 /// The interface class.
 @JsonEnum(alwaysCreate: true)
 enum InterfaceIdType {
-  /// The AudioDeviceManager interface class.
+  /// 1: The AudioDeviceManager interface class.
   @JsonValue(1)
   agoraIidAudioDeviceManager,
 
-  /// The VideoDeviceManager interface class.
+  /// 2: The VideoDeviceManager interface class.
   @JsonValue(2)
   agoraIidVideoDeviceManager,
 
@@ -603,7 +603,7 @@ enum InterfaceIdType {
   @JsonValue(3)
   agoraIidParameterEngine,
 
-  /// The MediaEngine interface class.
+  /// 4: The MediaEngine interface class.
   @JsonValue(4)
   agoraIidMediaEngine,
 
@@ -2898,6 +2898,10 @@ enum LocalVideoStreamError {
   /// @nodoc
   @JsonValue(27)
   localVideoStreamErrorScreenCaptureWindowRecoverFromMinimized,
+
+  /// @nodoc
+  @JsonValue(30)
+  localVideoStreamReasonScreenCaptureDisplayDiscnnected,
 }
 
 /// @nodoc
@@ -3863,7 +3867,7 @@ class LiveTranscoding {
   @JsonKey(name: 'height')
   final int? height;
 
-  /// Bitrate of the output video stream for Media Push in Kbps. The default value is 400 Kbps. Set this member according to the table. If you set a bitrate beyond the proper range, the SDK automatically adapts it to a value within the range.
+  /// The encoding bitrate (Kbps) of the video. This parameter does not need to be set; keeping the default value standardBitrate is sufficient. The SDK automatically matches the most suitable bitrate based on the video resolution and frame rate you have set. For the correspondence between video resolution and frame rate, see.
   @JsonKey(name: 'videoBitrate')
   final int? videoBitrate;
 
@@ -4242,11 +4246,11 @@ enum ConnectionChangedReasonType {
   @JsonValue(2)
   connectionChangedInterrupted,
 
-  /// 3: The connection between the SDK and the Agora edge server is banned by the Agora edge server. This error occurs when the user is kicked out of the channel by the server.
+  /// 3: The connection between the SDK and the Agora edge server is banned by the Agora edge server. For example, when a user is kicked out of the channel, this status will be returned.
   @JsonValue(3)
   connectionChangedBannedByServer,
 
-  /// 4: The SDK fails to join the channel. When the SDK fails to join the channel for more than 20 minutes, this error occurs and the SDK stops reconnecting to the channel.
+  /// 4: The SDK fails to join the channel. When the SDK fails to join the channel for more than 20 minutes, this code will be returned and the SDK stops reconnecting to the channel. You need to prompt the user to try to switch to another network and rejoin the channel.
   @JsonValue(4)
   connectionChangedJoinFailed,
 
@@ -4254,21 +4258,30 @@ enum ConnectionChangedReasonType {
   @JsonValue(5)
   connectionChangedLeaveChannel,
 
-  /// 6: The connection failed because the App ID is not valid. Please rejoin the channel with a valid App ID.
+  /// 6: The App ID is invalid. You need to rejoin the channel with a valid APP ID and make sure the App ID you are using is consistent with the one generated in the Agora Console.
   @JsonValue(6)
   connectionChangedInvalidAppId,
 
-  /// 7: The connection failed since channel name is not valid. Rejoin the channel with a valid channel name.
+  /// 7: Invalid channel name. Rejoin the channel with a valid channel name. A valid channel name is a string of up to 64 bytes in length. Supported characters (89 characters in total):
+  ///  All lowercase English letters: a to z.
+  ///  All uppercase English letters: A to Z.
+  ///  All numeric characters: 0 to 9.
+  ///  Space
+  ///  "!", "#", "$", "%", "&", "(", ")", "+", "-", ":", ";", "<", "=", ".", ">", "?", "@", "[", "]", "^", "_", "{", "}", "|", "~", ","
   @JsonValue(7)
   connectionChangedInvalidChannelName,
 
-  /// 8: The connection failed because the token is not valid. Possible reasons are as follows:
-  ///  The App Certificate for the project is enabled in Agora Console, but you do not use a token when joining the channel. If you enable the App Certificate, you must use a token to join the channel.
+  /// 8: Invalid token. Possible reasons are as follows:
+  ///  The App Certificate for the project is enabled in Agora Console, but you do not pass in a token when joining a channel.
   ///  The uid specified when calling joinChannel to join the channel is inconsistent with the uid passed in when generating the token.
+  ///  The generated token and the token used to join the channel are not consistent. Ensure the following:
+  ///  When your project enables App Certificate, you need to pass in a token to join a channel.
+  ///  The user ID specified when generating the token is consistent with the user ID used when joining the channel.
+  ///  The generated token is the same as the token passed in to join the channel.
   @JsonValue(8)
   connectionChangedInvalidToken,
 
-  /// 9: The connection failed since token is expired.
+  /// (9): The token currently being used has expired. You need to generate a new token on your server and rejoin the channel with the new token.
   @JsonValue(9)
   connectionChangedTokenExpired,
 
@@ -4286,7 +4299,7 @@ enum ConnectionChangedReasonType {
   @JsonValue(12)
   connectionChangedRenewToken,
 
-  /// 13: The IP address of the client has changed, possibly because the network type, IP address, or port has been changed.
+  /// (13): Client IP address changed. If you receive this code multiple times, You need to prompt the user to switch networks and try joining the channel again.
   @JsonValue(13)
   connectionChangedClientIpAddressChanged,
 
@@ -5359,7 +5372,7 @@ class ScreenCaptureParameters {
   @JsonKey(name: 'captureMouseCursor')
   final bool? captureMouseCursor;
 
-  /// Whether to bring the window to the front when calling the startScreenCaptureByWindowId method to share it: true : Bring the window to the front. false : (Default) Do not bring the window to the front.
+  /// Whether to bring the window to the front when calling the startScreenCaptureByWindowId method to share it: true : Bring the window to the front. false : (Default) Do not bring the window to the front. Due to macOS system limitations, when setting this member to bring the window to the front, if the current app has multiple windows, only the main window will be brought to the front.
   @JsonKey(name: 'windowFocus')
   final bool? windowFocus;
 
@@ -6588,41 +6601,41 @@ class VideoRenderingTracingInfo {
       this.remoteJoined2UnmuteVideo,
       this.remoteJoined2PacketReceived});
 
-  /// The time interval from calling the startMediaRenderingTracing method to SDK triggering the onVideoRenderingTracingResult callback. The unit is milliseconds. Agora recommends you call startMediaRenderingTracing before joining a channel.
+  /// The time interval (ms) from startMediaRenderingTracing to SDK triggering the onVideoRenderingTracingResult callback. Agora recommends you call startMediaRenderingTracing before joining a channel.
   @JsonKey(name: 'elapsedTime')
   final int? elapsedTime;
 
-  /// The time interval from calling startMediaRenderingTracing to calling joinChannel. The unit is milliseconds. A negative number means to call joinChannel after calling startMediaRenderingTracing.
+  /// The time interval (ms) from startMediaRenderingTracing to joinChannel. A negative number indicates that startMediaRenderingTracing is called after calling joinChannel.
   @JsonKey(name: 'start2JoinChannel')
   final int? start2JoinChannel;
 
-  /// Time interval from calling joinChannel to successfully joining the channel. The unit is milliseconds.
+  /// The time interval (ms) from or joinChannel to successfully joining the channel.
   @JsonKey(name: 'join2JoinSuccess')
   final int? join2JoinSuccess;
 
-  /// If the local user calls startMediaRenderingTracing before successfully joining the channel, this value is the time interval from the local user successfully joining the channel to the remote user joining the channel. The unit is milliseconds.
-  ///  If the local user calls startMediaRenderingTracing after successfully joining the channel, the value is the time interval from calling startMediaRenderingTracing to when the remote user joins the channel. The unit is milliseconds.
+  /// If the local user calls startMediaRenderingTracing before successfully joining the channel, this value is the time interval (ms) from the local user successfully joining the channel to the remote user joining the channel.
+  ///  If the local user calls startMediaRenderingTracing after successfully joining the channel, the value is the time interval (ms) from startMediaRenderingTracing to when the remote user joins the channel.
   ///  If the local user calls startMediaRenderingTracing after the remote user joins the channel, the value is 0 and meaningless.
   ///  In order to reduce the time of rendering the first frame for remote users, Agora recommends that the local user joins the channel when the remote user is in the channel to reduce this value.
   @JsonKey(name: 'joinSuccess2RemoteJoined')
   final int? joinSuccess2RemoteJoined;
 
-  /// If the local user calls startMediaRenderingTracing before the remote user joins the channel, this value is the time interval from when the remote user joins the channel to when the local user sets the remote view. The unit is milliseconds.
-  ///  If the local user calls startMediaRenderingTracing after the remote user joins the channel, this value is the time interval from calling startMediaRenderingTracing to setting the remote view. The unit is milliseconds.
+  /// If the local user calls startMediaRenderingTracing before the remote user joins the channel, this value is the time interval (ms) from when the remote user joins the channel to when the local user sets the remote view.
+  ///  If the local user calls startMediaRenderingTracing after the remote user joins the channel, this value is the time interval (ms) from calling startMediaRenderingTracing to setting the remote view.
   ///  If the local user calls startMediaRenderingTracing after setting the remote view, the value is 0 and has no effect.
   ///  In order to reduce the time of rendering the first frame for remote users, Agora recommends that the local user sets the remote view before the remote user joins the channel, or sets the remote view immediately after the remote user joins the channel to reduce this value.
   @JsonKey(name: 'remoteJoined2SetView')
   final int? remoteJoined2SetView;
 
-  /// If the local user calls startMediaRenderingTracing before the remote user joins the channel, this value is the time interval from the remote user joining the channel to subscribing to the remote video stream. The unit is milliseconds.
-  ///  If the local user calls startMediaRenderingTracing after the remote user joins the channel, this value is the time interval from calling startMediaRenderingTracing to subscribing to the remote video stream. The unit is milliseconds.
+  /// If the local user calls startMediaRenderingTracing before the remote user joins the channel, this value is the time interval (ms) from the remote user joining the channel to subscribing to the remote video stream.
+  ///  If the local user calls startMediaRenderingTracing after the remote user joins the channel, this value is the time interval (ms) from startMediaRenderingTracing to subscribing to the remote video stream.
   ///  If the local user calls startMediaRenderingTracing after subscribing to the remote video stream, the value is 0 and has no effect.
   ///  In order to reduce the time of rendering the first frame for remote users, Agora recommends that after the remote user joins the channel, the local user immediately subscribes to the remote video stream to reduce this value.
   @JsonKey(name: 'remoteJoined2UnmuteVideo')
   final int? remoteJoined2UnmuteVideo;
 
-  /// If the local user calls startMediaRenderingTracing before the remote user joins the channel, this value is the time interval from when the remote user joins the channel to when the local user receives the remote video stream. The unit is milliseconds.
-  ///  If the local user calls startMediaRenderingTracing after the remote user joins the channel, this value is the time interval from calling startMediaRenderingTracing to receiving the remote video stream. The unit is milliseconds.
+  /// If the local user calls startMediaRenderingTracing before the remote user joins the channel, this value is the time interval (ms) from when the remote user joins the channel to when the local user receives the remote video stream.
+  ///  If the local user calls startMediaRenderingTracing after the remote user joins the channel, this value is the time interval (ms) from startMediaRenderingTracing to receiving the remote video stream.
   ///  If the local user calls startMediaRenderingTracing after receiving the remote video stream, the value is 0 and has no effect.
   ///  In order to reduce the time of rendering the first frame for remote users, Agora recommends that the remote user publishes video streams immediately after joining the channel, and the local user immediately subscribes to remote video streams to reduce this value.
   @JsonKey(name: 'remoteJoined2PacketReceived')
