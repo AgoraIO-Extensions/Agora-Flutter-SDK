@@ -503,6 +503,8 @@ class _ScreenShareDesktopState extends State<ScreenShareDesktop>
   List<ScreenCaptureSourceInfo> _screenCaptureSourceInfos = [];
   late ScreenCaptureSourceInfo _selectedScreenCaptureSourceInfo;
 
+  late final TextEditingController _screenShareFrameRateController;
+
   @override
   bool get isScreenShared => widget.isScreenShared;
 
@@ -587,6 +589,8 @@ class _ScreenShareDesktopState extends State<ScreenShareDesktop>
   void initState() {
     super.initState();
 
+    _screenShareFrameRateController = TextEditingController(text: '30');
+
     _initScreenCaptureSourceInfos();
   }
 
@@ -597,6 +601,14 @@ class _ScreenShareDesktopState extends State<ScreenShareDesktop>
       mainAxisAlignment: MainAxisAlignment.start,
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
+        TextField(
+          controller: _screenShareFrameRateController,
+          decoration:
+              const InputDecoration(hintText: 'Screen Sharing frame rate'),
+        ),
+        const SizedBox(
+          height: 20,
+        ),
         _createDropdownButton(),
         if (_screenCaptureSourceInfos.isNotEmpty)
           Row(
@@ -627,18 +639,18 @@ class _ScreenShareDesktopState extends State<ScreenShareDesktop>
       await rtcEngine.startScreenCaptureByDisplayId(
           displayId: sourceId!,
           regionRect: const Rectangle(x: 0, y: 0, width: 0, height: 0),
-          captureParams: const ScreenCaptureParameters(
+          captureParams: ScreenCaptureParameters(
             captureMouseCursor: true,
-            frameRate: 30,
+            frameRate: int.parse(_screenShareFrameRateController.text),
           ));
     } else if (_selectedScreenCaptureSourceInfo.type ==
         ScreenCaptureSourceType.screencapturesourcetypeWindow) {
       await rtcEngine.startScreenCaptureByWindowId(
         windowId: sourceId!,
         regionRect: const Rectangle(x: 0, y: 0, width: 0, height: 0),
-        captureParams: const ScreenCaptureParameters(
+        captureParams: ScreenCaptureParameters(
           captureMouseCursor: true,
-          frameRate: 30,
+          frameRate: int.parse(_screenShareFrameRateController.text),
         ),
       );
     }
