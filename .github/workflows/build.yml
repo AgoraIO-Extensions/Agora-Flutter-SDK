@@ -155,7 +155,8 @@ jobs:
     if: ${{ !contains(github.event.pull_request.labels.*.name, 'ci:skip') }}
     strategy:
       matrix:
-        version: ["2.10.5", "3.x"]
+        # Pin Flutter SDK version to 3.19, since there's issue with 3.22.x, see https://github.com/AgoraIO-Extensions/Agora-Flutter-SDK/actions/runs/9186647960/job/25262717666
+        version: ["2.10.5", "3.19"] 
     runs-on: windows-2019
     timeout-minutes: 120
     env:
@@ -451,7 +452,8 @@ jobs:
     if: ${{ !contains(github.event.pull_request.labels.*.name, 'ci:skip') }}
     strategy:
       matrix:
-        version: ['3.x']
+        # Pin Flutter SDK version to 3.19, since there's issue with 3.22.x, see https://github.com/AgoraIO-Extensions/Agora-Flutter-SDK/actions/runs/9186647960/job/25262717666
+        version: ['3.19']
     runs-on: windows-2019
     timeout-minutes: 120
     env:
