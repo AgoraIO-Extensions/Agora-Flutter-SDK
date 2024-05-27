@@ -119,6 +119,65 @@ class FakeGlobalVideoViewController {
   }
 }
 
+class FakeMethodChannelController {
+  FakeMethodChannelController(this.rtcEngine, this.testDefaultBinaryMessenger) {
+    const videoViewControllerChannel =
+        MethodChannel('agora_rtc_ng/video_view_controller');
+    mockedMethodChannels.add(videoViewControllerChannel);
+    testDefaultBinaryMessenger
+        .setMockMethodCallHandler(videoViewControllerChannel, ((message) async {
+      methodCallQueue.add(message);
+
+      if (message.method == 'createTextureRender') {
+        final t = ++textrueId;
+        final channelId = 'agora_rtc_engine/texture_render_$t';
+        final c = MethodChannel(channelId);
+        testDefaultBinaryMessenger.setMockMethodCallHandler(c, (message) async {
+          return 0;
+        });
+
+        mockedMethodChannels.add(c);
+        // Need a delay to ensure the channel `agora_rtc_engine/texture_render_xx` is registered.
+        Future.delayed(const Duration(milliseconds: 100), () {
+          triggerPlatformMessage(channelId,
+              const MethodCall('onSizeChanged', {'width': 50, 'height': 50}));
+        });
+        return t;
+      } else if (message.method == 'destroyTextureRender') {
+        return true;
+      }
+
+      return 0;
+    }));
+  }
+
+  final RtcEngine rtcEngine;
+
+  final TestDefaultBinaryMessenger testDefaultBinaryMessenger;
+
+  final List<MethodCall> methodCallQueue = [];
+
+  final List<MethodChannel> mockedMethodChannels = [];
+
+  int textrueId = 0;
+
+  void reset() {
+    methodCallQueue.clear();
+    textrueId = 0;
+  }
+
+
+  void triggerPlatformMessage(String channelId, MethodCall methodCall) async {
+    const StandardMethodCodec codec = StandardMethodCodec();
+    final ByteData data = codec.encodeMethodCall(methodCall);
+    await testDefaultBinaryMessenger.handlePlatformMessage(
+      channelId,
+      data,
+      (ByteData? data) {},
+    );
+  }
+}
+
 void testCases() {
   group('Test with FakeIrisMethodChannel', () {
     final FakeIrisMethodChannel irisMethodChannel =
@@ -498,8 +557,17 @@ void testCases() {
     //               .where((e) => e.method == 'createTextureRender')
     //               .toList();
 
-    //           final createTextureRenderArg = Map<String, Object>.from(
-    //               createTextureRenderCalls[0].arguments);
+              int textureId = -1;
+              expect(find.byWidgetPredicate((widget) {
+                final found = widget is Texture;
+                if (found) {
+                  textureId = (widget as Texture).textureId;
+                }
+                return found;
+              }), findsOneWidget);
+              // The first textureId is 1
+              expect(textureId == 1, isTrue);
+            }
 
     //           expect(createTextureRenderArg['uid'] == 0, isTrue);
     //         }
@@ -522,8 +590,8 @@ void testCases() {
     //           final disposeTextureRenderTextureId =
     //               disposeTextureRenderCalls[0].arguments as int;
 
-    //           expect(disposeTextureRenderTextureId != 0, isTrue);
-    //         }
+          },
+        );
 
     //         fakeGlobalVideoViewController.dispose();
     //       },
@@ -570,12 +638,18 @@ void testCases() {
     //         // pumpAndSettle again to ensure the `AgoraVideoView` shown
     //         await tester.pumpAndSettle(const Duration(milliseconds: 5000));
 
-    //         // Check `GlobalVideoViewController.createTextureRender` calls
-    //         {
-    //           final createTextureRenderCalls = fakeGlobalVideoViewController
-    //               .methodCallQueue
-    //               .where((e) => e.method == 'createTextureRender')
-    //               .toList();
+            {
+              int textureId = -1;
+              expect(find.byWidgetPredicate((widget) {
+                final found = widget is Texture;
+                if (found) {
+                  textureId = (widget as Texture).textureId;
+                }
+                return found;
+              }), findsOneWidget);
+              // The first textureId is 1
+              expect(textureId == 1, isTrue);
+            }
 
     //           final createTextureRenderArg = Map<String, Object>.from(
     //               createTextureRenderCalls[0].arguments);
@@ -586,46 +660,20 @@ void testCases() {
     //         // Clear the methodCall records
     //         fakeGlobalVideoViewController.reset();
 
-    //         // This step will call `didUpdateWidget`
-    //         await tester.pumpWidget(_RenderViewWidget(
-    //           rtcEngine: rtcEngine,
-    //           builder: (context, engine) {
-    //             return Column(
-    //               children: [
-    //                 SizedBox(
-    //                   height: 100,
-    //                   width: 100,
-    //                   child: AgoraVideoView(
-    //                     controller: VideoViewController(
-    //                       rtcEngine: engine,
-    //                       canvas: const VideoCanvas(uid: 0),
-    //                       useFlutterTexture: true,
-    //                     ),
-    //                   ),
-    //                 ),
-    //                 SizedBox(
-    //                   height: 100,
-    //                   width: 100,
-    //                   child: AgoraVideoView(
-    //                     controller: VideoViewController.remote(
-    //                       rtcEngine: engine,
-    //                       canvas: const VideoCanvas(uid: 1000),
-    //                       connection: const RtcConnection(
-    //                         channelId: 'switch_video_view',
-    //                         localUid: 1000,
-    //                       ),
-    //                       useFlutterTexture: true,
-    //                     ),
-    //                   ),
-    //                 )
-    //               ],
-    //             );
-    //           },
-    //         ));
+              int textureId = -1;
+              expect(find.byWidgetPredicate((widget) {
+                final found = widget is Texture;
+                if (found) {
+                  textureId = (widget as Texture).textureId;
+                }
+                return found;
+              }), findsOneWidget);
+              // The first textureId is 1
+              expect(textureId == 1, isTrue);
+            }
 
-    //         await tester.pumpAndSettle(const Duration(milliseconds: 5000));
-    //         // pumpAndSettle again to ensure the `AgoraVideoView` shown
-    //         await tester.pumpAndSettle(const Duration(milliseconds: 5000));
+          },
+        );
 
     //         // Check `GlobalVideoViewController.createTextureRender` calls for remote `AgoraVideoView`
     //         {
@@ -688,14 +736,120 @@ void testCases() {
 
     //         fakeGlobalVideoViewController.dispose();
 
-    //         await tester.pumpWidget(Container());
-    //         await tester.pumpAndSettle(const Duration(milliseconds: 5000));
-    //         await Future.delayed(const Duration(seconds: 5));
-    //       },
-    //     );
-    //   },
-    //   skip: Platform.isAndroid,
-    // );
+            await tester.pumpAndSettle(const Duration(milliseconds: 5000));
+            // pumpAndSettle again to ensure the `AgoraVideoView` shown
+            await tester.pumpAndSettle(const Duration(milliseconds: 5000));
+
+            // Check `GlobalVideoViewController.createTextureRender` calls for remote `AgoraVideoView`
+            {
+              final createTextureRenderCalls = fakeMethodChannelController
+                  .methodCallQueue
+                  .where((e) => e.method == 'createTextureRender')
+                  .toList();
+
+              expect(createTextureRenderCalls.length == 2, isTrue);
+
+              final createTextureRenderArg = Map<String, Object>.from(
+                  createTextureRenderCalls[1].arguments);
+
+              expect(createTextureRenderArg['uid'] != 0, isTrue);
+
+              {
+                List<int> textureIds = [];
+                expect(find.byWidgetPredicate((widget) {
+                  final found = widget is Texture;
+                  if (found) {
+                    // textureId = (widget as Texture).textureId;
+                    textureIds.add((widget as Texture).textureId);
+                  }
+                  return found;
+                }), findsNWidgets(2));
+                // The first textureId is 1
+                expect(textureIds[0] == 1, isTrue);
+                // The second textureId is 1
+                expect(textureIds[1] == 2, isTrue);
+              }
+            }
+
+            await tester.pumpWidget(_RenderViewWidget(
+              rtcEngine: rtcEngine,
+              builder: (context, engine) {
+                return Column(
+                  children: [
+                    SizedBox(
+                      height: 100,
+                      width: 100,
+                      child: AgoraVideoView(
+                        controller: VideoViewController.remote(
+                          rtcEngine: engine,
+                          canvas: const VideoCanvas(uid: 1000),
+                          connection: const RtcConnection(
+                            channelId: 'switch_video_view',
+                            localUid: 1000,
+                          ),
+                          useFlutterTexture: true,
+                        ),
+                      ),
+                    ),
+                    SizedBox(
+                      height: 100,
+                      width: 100,
+                      child: AgoraVideoView(
+                        controller: VideoViewController(
+                          rtcEngine: engine,
+                          canvas: const VideoCanvas(uid: 0),
+                          useFlutterTexture: true,
+                        ),
+                      ),
+                    )
+                  ],
+                );
+              },
+            ));
+
+            await tester.pumpAndSettle(const Duration(milliseconds: 5000));
+
+            {
+              final createTextureRenderCalls = fakeMethodChannelController
+                  .methodCallQueue
+                  .where((e) => e.method == 'createTextureRender')
+                  .toList();
+
+              // After `didUpdateWidget` called, the texture renderer will be re-created,
+              // so there're another 2 times' `createTextureRender` are called.
+              // So the value of `createTextureRenderCalls.length` is 4
+              expect(createTextureRenderCalls.length == 4, isTrue);
+
+              final createTextureRenderArg = Map<String, Object>.from(
+                  createTextureRenderCalls[2].arguments);
+
+              expect(createTextureRenderArg['uid'] != 0, isTrue);
+
+              {
+                List<int> textureIds = [];
+                expect(find.byWidgetPredicate((widget) {
+                  final found = widget is Texture;
+                  if (found) {
+                    // textureId = (widget as Texture).textureId;
+                    textureIds.add((widget as Texture).textureId);
+                  }
+                  return found;
+                }), findsNWidgets(2));
+                // The third textureId is 3
+                expect(textureIds[0] == 3, isTrue);
+                // The fourth textureId is 3
+                expect(textureIds[1] == 4, isTrue);
+              }
+            }
+
+
+            await tester.pumpWidget(Container());
+            await tester.pumpAndSettle(const Duration(milliseconds: 5000));
+            await Future.delayed(const Duration(seconds: 5));
+          },
+        );
+      },
+    );
 
     testWidgets(
       'dispose AgoraVideoView not crash before setupLocalVideo/setupRemoteVideo[Ex] call is completed',
