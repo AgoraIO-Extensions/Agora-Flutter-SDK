@@ -40,3 +40,4 @@ third_party/
 .ccls-cache/
 
 test_shard/**/scripts/iris_web_version.js
+test_shard/**/web/iris_web_version.js
