@@ -3,14 +3,20 @@
 set -e
 set -x
 
-MY_PATH=$(dirname "$0")
+MY_PATH=$(realpath $(dirname "$0"))
+PROJECT_ROOT=$(realpath ${MY_PATH}/..)
 PLATFORM=$1 # android/ios/macos/windows/web
 
-pushd ${MY_PATH}/../test_shard/rendering_test
+pushd ${PROJECT_ROOT}/test_shard/rendering_test
 
 flutter packages get
 
 if [[ ${PLATFORM} == "web" ]];then
+
+    IRIS_WEB_VERSION_PATH=${PROJECT_ROOT}/scripts/iris_web_version.js
+    rm -rf web/iris_web_version.js
+    cp -RP ${IRIS_WEB_VERSION_PATH} web/
+
     echo "Run rendering test on web"
 
     flutter drive \
