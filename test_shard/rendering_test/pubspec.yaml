@@ -71,8 +71,6 @@ flutter:
   assets:
     - assets/agoravideoview_rendering_test_solid_spilt.png
     - assets/agoravideoview_rendering_test_solid_spilt_small.png
-    # Add the `../../scripts/iris_web_version.js` to the assets, so we can use it in the `web/index.html` file.
-    - ../../scripts/iris_web_version.js
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware
