@@ -70,7 +70,7 @@ void main() {
     rtcengine_debug.testCases();
   }
 
-  mediaengine.testCases();
+  mediaengine.mediaEngineSmokeTestCases();
   rtcengine.testCases();
   rtcengineex.testCases();
   videodevicemanager.videoDeviceManagerSmokeTestCases();

@@ -29,7 +29,7 @@ void testCases() {
       final musicContentCenter = rtcEngine.getMusicContentCenter();
 
       try {
-        final musicPlayer = (await _musicContentCenter.createMusicPlayer())!;
+        final musicPlayer = (await musicContentCenter.createMusicPlayer())!;
         await musicContentCenter.destroyMusicPlayer(
           musicPlayer,
         );
