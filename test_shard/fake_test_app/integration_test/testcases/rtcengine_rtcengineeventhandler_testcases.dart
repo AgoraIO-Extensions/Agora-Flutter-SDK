@@ -277,14 +277,15 @@ void testCases(ValueGetter<IrisTester> irisTester) {
         const int remoteUid = 10;
         const int streamId = 10;
         Uint8List data = Uint8List.fromList([1, 2, 3, 4, 5]);
-        const int length = 10;
+        const int length = 0;
         const int sentTs = 10;
 
         final eventJson = {
           'connection': connection.toJson(),
           'remoteUid': remoteUid,
           'streamId': streamId,
-          'data': data.toList(),
+          // DO not pass data to the event, since it is treated as intptr in iris. But we does not want to adpot this logic.
+          // 'data': data.toList(),
           'length': length,
           'sentTs': sentTs,
         };
