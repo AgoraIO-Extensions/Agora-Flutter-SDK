@@ -241,4 +241,82 @@ void testCases(ValueGetter<IrisTester> irisTester) {
     },
     timeout: const Timeout(Duration(minutes: 2)),
   );
+
+  testWidgets(
+    'RtcEngineEventHandler.onStreamMessage',
+    (WidgetTester tester) async {
+      RtcEngine rtcEngine = createAgoraRtcEngine();
+      await rtcEngine.initialize(RtcEngineContext(
+        appId: 'app_id',
+        areaCode: AreaCode.areaCodeGlob.value(),
+      ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
+
+      final onStreamMessageCompleter = Completer<bool>();
+      final theRtcEngineEventHandler = RtcEngineEventHandler(
+        onStreamMessage: (RtcConnection connection, int remoteUid, int streamId,
+            Uint8List data, int length, int sentTs) {
+          onStreamMessageCompleter.complete(true);
+        },
+      );
+
+      rtcEngine.registerEventHandler(
+        theRtcEngineEventHandler,
+      );
+
+// Delay 500 milliseconds to ensure the registerEventHandler call completed.
+      await Future.delayed(const Duration(milliseconds: 500));
+
+      {
+        const String connectionChannelId = "hello";
+        const int connectionLocalUid = 10;
+        const RtcConnection connection = RtcConnection(
+          channelId: connectionChannelId,
+          localUid: connectionLocalUid,
+        );
+        const int remoteUid = 10;
+        const int streamId = 10;
+        Uint8List data = Uint8List.fromList([1, 2, 3, 4, 5]);
+        const int length = 10;
+        const int sentTs = 10;
+
+        final eventJson = {
+          'connection': connection.toJson(),
+          'remoteUid': remoteUid,
+          'streamId': streamId,
+          'data': data.toList(),
+          'length': length,
+          'sentTs': sentTs,
+        };
+
+        final eventIds =
+            eventIdsMapping['RtcEngineEventHandler_onStreamMessage'] ?? [];
+        for (final event in eventIds) {
+          final ret = irisTester().fireEvent(event, params: eventJson);
+          // Delay 200 milliseconds to ensure the callback is called.
+          await Future.delayed(const Duration(milliseconds: 200));
+          // TODO(littlegnal): Most of callbacks on web are not implemented, we're temporarily skip these callbacks at this time.
+          if (kIsWeb && ret) {
+            if (!onStreamMessageCompleter.isCompleted) {
+              onStreamMessageCompleter.complete(true);
+            }
+          }
+        }
+      }
+
+      final eventCalled = await onStreamMessageCompleter.future;
+      expect(eventCalled, isTrue);
+
+      {
+        rtcEngine.unregisterEventHandler(
+          theRtcEngineEventHandler,
+        );
+      }
+// Delay 500 milliseconds to ensure the unregisterEventHandler call completed.
+      await Future.delayed(const Duration(milliseconds: 500));
+
+      await rtcEngine.release();
+    },
+    timeout: const Timeout(Duration(minutes: 2)),
+  );
 }

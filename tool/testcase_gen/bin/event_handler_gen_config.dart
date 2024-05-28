@@ -49,6 +49,7 @@ testWidgets('{{TEST_CASE_NAME}}', (WidgetTester tester) async {
         'onFacePositionChanged',
         'onCameraCapturerConfigurationChanged',
         'onDownlinkNetworkInfoUpdated',
+        'onStreamMessage',
       ],
     ),
     EventHandlerTemplatedTestCase(
