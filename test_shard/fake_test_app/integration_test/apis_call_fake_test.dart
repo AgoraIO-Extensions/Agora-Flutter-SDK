@@ -66,7 +66,7 @@ void main() {
     localspatialaudioengine.testCases();
     mediaplayer.mediaPlayerControllerSmokeTestCases();
     mediarecorder.mediaRecorderSmokeTestCases();
-    musiccontentcenter.musicContentCenterSmokeTestCases();
+    musiccontentcenter.testCases();
     rtcengine_debug.testCases();
   }
 
