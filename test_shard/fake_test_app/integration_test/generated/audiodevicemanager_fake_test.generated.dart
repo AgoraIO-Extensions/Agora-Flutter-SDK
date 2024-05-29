@@ -96,7 +96,7 @@ void audioDeviceManagerSmokeTestCases() {
       final audioDeviceManager = rtcEngine.getAudioDeviceManager();
 
       try {
-        const String deviceId = "hello";
+        String deviceId = "hello";
         await audioDeviceManager.setPlaybackDevice(
           deviceId,
         );
@@ -204,7 +204,7 @@ void audioDeviceManagerSmokeTestCases() {
       final audioDeviceManager = rtcEngine.getAudioDeviceManager();
 
       try {
-        const int volume = 10;
+        int volume = 5;
         await audioDeviceManager.setPlaybackDeviceVolume(
           volume,
         );
@@ -277,7 +277,7 @@ void audioDeviceManagerSmokeTestCases() {
       final audioDeviceManager = rtcEngine.getAudioDeviceManager();
 
       try {
-        const String deviceId = "hello";
+        String deviceId = "hello";
         await audioDeviceManager.setRecordingDevice(
           deviceId,
         );
@@ -385,7 +385,7 @@ void audioDeviceManagerSmokeTestCases() {
       final audioDeviceManager = rtcEngine.getAudioDeviceManager();
 
       try {
-        const int volume = 10;
+        int volume = 5;
         await audioDeviceManager.setRecordingDeviceVolume(
           volume,
         );
@@ -458,7 +458,7 @@ void audioDeviceManagerSmokeTestCases() {
       final audioDeviceManager = rtcEngine.getAudioDeviceManager();
 
       try {
-        const String deviceId = "hello";
+        String deviceId = "hello";
         await audioDeviceManager.setLoopbackDevice(
           deviceId,
         );
@@ -531,7 +531,7 @@ void audioDeviceManagerSmokeTestCases() {
       final audioDeviceManager = rtcEngine.getAudioDeviceManager();
 
       try {
-        const bool mute = true;
+        bool mute = true;
         await audioDeviceManager.setPlaybackDeviceMute(
           mute,
         );
@@ -604,7 +604,7 @@ void audioDeviceManagerSmokeTestCases() {
       final audioDeviceManager = rtcEngine.getAudioDeviceManager();
 
       try {
-        const bool mute = true;
+        bool mute = true;
         await audioDeviceManager.setRecordingDeviceMute(
           mute,
         );
@@ -677,7 +677,7 @@ void audioDeviceManagerSmokeTestCases() {
       final audioDeviceManager = rtcEngine.getAudioDeviceManager();
 
       try {
-        const String testAudioFilePath = "hello";
+        String testAudioFilePath = "hello";
         await audioDeviceManager.startPlaybackDeviceTest(
           testAudioFilePath,
         );
@@ -750,7 +750,7 @@ void audioDeviceManagerSmokeTestCases() {
       final audioDeviceManager = rtcEngine.getAudioDeviceManager();
 
       try {
-        const int indicationInterval = 10;
+        int indicationInterval = 5;
         await audioDeviceManager.startRecordingDeviceTest(
           indicationInterval,
         );
@@ -823,7 +823,7 @@ void audioDeviceManagerSmokeTestCases() {
       final audioDeviceManager = rtcEngine.getAudioDeviceManager();
 
       try {
-        const int indicationInterval = 10;
+        int indicationInterval = 5;
         await audioDeviceManager.startAudioDeviceLoopbackTest(
           indicationInterval,
         );
@@ -896,7 +896,7 @@ void audioDeviceManagerSmokeTestCases() {
       final audioDeviceManager = rtcEngine.getAudioDeviceManager();
 
       try {
-        const bool enable = true;
+        bool enable = true;
         await audioDeviceManager.followSystemPlaybackDevice(
           enable,
         );
@@ -934,7 +934,7 @@ void audioDeviceManagerSmokeTestCases() {
       final audioDeviceManager = rtcEngine.getAudioDeviceManager();
 
       try {
-        const bool enable = true;
+        bool enable = true;
         await audioDeviceManager.followSystemRecordingDevice(
           enable,
         );
@@ -972,7 +972,7 @@ void audioDeviceManagerSmokeTestCases() {
       final audioDeviceManager = rtcEngine.getAudioDeviceManager();
 
       try {
-        const bool enable = true;
+        bool enable = true;
         await audioDeviceManager.followSystemLoopbackDevice(
           enable,
         );

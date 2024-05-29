@@ -5,8 +5,7 @@ import 'package:agora_rtc_engine/agora_rtc_engine.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:iris_tester/iris_tester.dart';
-import '../generated/musiccontentcenter_fake_test.generated.dart'
-    as generated;
+import '../generated/musiccontentcenter_fake_test.generated.dart' as generated;
 
 import '../testcases/event_ids_mapping.dart';
 

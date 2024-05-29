@@ -43,8 +43,8 @@ void generatedTestCases(ValueGetter<IrisTester> irisTester) {
       await Future.delayed(const Duration(milliseconds: 500));
 
       {
-        const MediaPlayerState state = MediaPlayerState.playerStateIdle;
-        const MediaPlayerReason reason = MediaPlayerReason.playerReasonNone;
+        MediaPlayerState state = MediaPlayerState.playerStateIdle;
+        MediaPlayerReason reason = MediaPlayerReason.playerReasonNone;
 
         final eventJson = {
           'state': state.value(),
@@ -111,8 +111,8 @@ void generatedTestCases(ValueGetter<IrisTester> irisTester) {
       await Future.delayed(const Duration(milliseconds: 500));
 
       {
-        const int positionMs = 10;
-        const int timestampMs = 10;
+        int positionMs = 5;
+        int timestampMs = 5;
 
         final eventJson = {
           'positionMs': positionMs,
@@ -180,10 +180,9 @@ void generatedTestCases(ValueGetter<IrisTester> irisTester) {
       await Future.delayed(const Duration(milliseconds: 500));
 
       {
-        const MediaPlayerEvent eventCode =
-            MediaPlayerEvent.playerEventSeekBegin;
-        const int elapsedTime = 10;
-        const String message = "hello";
+        MediaPlayerEvent eventCode = MediaPlayerEvent.playerEventSeekBegin;
+        int elapsedTime = 5;
+        String message = "hello";
 
         final eventJson = {
           'eventCode': eventCode.value(),
@@ -250,8 +249,8 @@ void generatedTestCases(ValueGetter<IrisTester> irisTester) {
       await Future.delayed(const Duration(milliseconds: 500));
 
       {
-        Uint8List data = Uint8List.fromList([1, 2, 3, 4, 5]);
-        const int length = 10;
+        Uint8List data = Uint8List.fromList([1, 1, 1, 1, 1]);
+        int length = 5;
 
         final eventJson = {
           'data': data.toList(),
@@ -317,7 +316,7 @@ void generatedTestCases(ValueGetter<IrisTester> irisTester) {
       await Future.delayed(const Duration(milliseconds: 500));
 
       {
-        const int playCachedBuffer = 10;
+        int playCachedBuffer = 5;
 
         final eventJson = {
           'playCachedBuffer': playCachedBuffer,
@@ -383,9 +382,8 @@ void generatedTestCases(ValueGetter<IrisTester> irisTester) {
       await Future.delayed(const Duration(milliseconds: 500));
 
       {
-        const String src = "hello";
-        const PlayerPreloadEvent event =
-            PlayerPreloadEvent.playerPreloadEventBegin;
+        String src = "hello";
+        PlayerPreloadEvent event = PlayerPreloadEvent.playerPreloadEventBegin;
 
         final eventJson = {
           'src': src,
@@ -574,15 +572,15 @@ void generatedTestCases(ValueGetter<IrisTester> irisTester) {
       await Future.delayed(const Duration(milliseconds: 500));
 
       {
-        const int fromBitrateInKbps = 10;
-        const String fromName = "hello";
-        const SrcInfo from = SrcInfo(
+        int fromBitrateInKbps = 5;
+        String fromName = "hello";
+        SrcInfo from = SrcInfo(
           bitrateInKbps: fromBitrateInKbps,
           name: fromName,
         );
-        const int toBitrateInKbps = 10;
-        const String toName = "hello";
-        const SrcInfo to = SrcInfo(
+        int toBitrateInKbps = 5;
+        String toName = "hello";
+        SrcInfo to = SrcInfo(
           bitrateInKbps: toBitrateInKbps,
           name: toName,
         );
@@ -652,14 +650,14 @@ void generatedTestCases(ValueGetter<IrisTester> irisTester) {
       await Future.delayed(const Duration(milliseconds: 500));
 
       {
-        const String infoInternalPlayerUuid = "hello";
-        const String infoDeviceId = "hello";
-        const int infoVideoHeight = 10;
-        const int infoVideoWidth = 10;
-        const int infoAudioSampleRate = 10;
-        const int infoAudioChannels = 10;
-        const int infoAudioBitsPerSample = 10;
-        const PlayerUpdatedInfo info = PlayerUpdatedInfo(
+        String infoInternalPlayerUuid = "hello";
+        String infoDeviceId = "hello";
+        int infoVideoHeight = 5;
+        int infoVideoWidth = 5;
+        int infoAudioSampleRate = 5;
+        int infoAudioChannels = 5;
+        int infoAudioBitsPerSample = 5;
+        PlayerUpdatedInfo info = PlayerUpdatedInfo(
           internalPlayerUuid: infoInternalPlayerUuid,
           deviceId: infoDeviceId,
           videoHeight: infoVideoHeight,
@@ -733,10 +731,10 @@ void generatedTestCases(ValueGetter<IrisTester> irisTester) {
       await Future.delayed(const Duration(milliseconds: 500));
 
       {
-        const int statsFileSize = 10;
-        const int statsCacheSize = 10;
-        const int statsDownloadSize = 10;
-        const CacheStatistics stats = CacheStatistics(
+        int statsFileSize = 5;
+        int statsCacheSize = 5;
+        int statsDownloadSize = 5;
+        CacheStatistics stats = CacheStatistics(
           fileSize: statsFileSize,
           cacheSize: statsCacheSize,
           downloadSize: statsDownloadSize,
@@ -806,11 +804,11 @@ void generatedTestCases(ValueGetter<IrisTester> irisTester) {
       await Future.delayed(const Duration(milliseconds: 500));
 
       {
-        const int statsVideoFps = 10;
-        const int statsVideoBitrateInKbps = 10;
-        const int statsAudioBitrateInKbps = 10;
-        const int statsTotalBitrateInKbps = 10;
-        const PlayerPlaybackStats stats = PlayerPlaybackStats(
+        int statsVideoFps = 5;
+        int statsVideoBitrateInKbps = 5;
+        int statsAudioBitrateInKbps = 5;
+        int statsTotalBitrateInKbps = 5;
+        PlayerPlaybackStats stats = PlayerPlaybackStats(
           videoFps: statsVideoFps,
           videoBitrateInKbps: statsVideoBitrateInKbps,
           audioBitrateInKbps: statsAudioBitrateInKbps,
@@ -881,7 +879,7 @@ void generatedTestCases(ValueGetter<IrisTester> irisTester) {
       await Future.delayed(const Duration(milliseconds: 500));
 
       {
-        const int volume = 10;
+        int volume = 5;
 
         final eventJson = {
           'volume': volume,

@@ -41,21 +41,21 @@ void generatedTestCases(ValueGetter<IrisTester> irisTester) {
       await Future.delayed(const Duration(milliseconds: 500));
 
       {
-        const String channelId = "hello";
-        const int uid = 10;
-        const AudioFrameType audioFrameType = AudioFrameType.frameTypePcm16;
-        const BytesPerSample audioFrameBytesPerSample =
+        String channelId = "hello";
+        int uid = 5;
+        AudioFrameType audioFrameType = AudioFrameType.frameTypePcm16;
+        BytesPerSample audioFrameBytesPerSample =
             BytesPerSample.twoBytesPerSample;
-        const int audioFrameSamplesPerChannel = 10;
-        const int audioFrameChannels = 10;
-        const int audioFrameSamplesPerSec = 10;
-        Uint8List audioFrameBuffer = Uint8List.fromList([1, 2, 3, 4, 5]);
-        const int audioFrameRenderTimeMs = 10;
-        const int audioFrameAvsyncType = 10;
-        const int audioFramePresentationMs = 10;
-        const int audioFrameAudioTrackNumber = 10;
-        const int audioFrameRtpTimestamp = 10;
-        final AudioFrame audioFrame = AudioFrame(
+        int audioFrameSamplesPerChannel = 5;
+        int audioFrameChannels = 5;
+        int audioFrameSamplesPerSec = 5;
+        Uint8List audioFrameBuffer = Uint8List.fromList([1, 1, 1, 1, 1]);
+        int audioFrameRenderTimeMs = 5;
+        int audioFrameAvsyncType = 5;
+        int audioFramePresentationMs = 5;
+        int audioFrameAudioTrackNumber = 5;
+        int audioFrameRtpTimestamp = 5;
+        AudioFrame audioFrame = AudioFrame(
           type: audioFrameType,
           samplesPerChannel: audioFrameSamplesPerChannel,
           bytesPerSample: audioFrameBytesPerSample,

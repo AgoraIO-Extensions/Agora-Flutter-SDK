@@ -62,7 +62,7 @@ void videoDeviceManagerSmokeTestCases() {
       final videoDeviceManager = rtcEngine.getVideoDeviceManager();
 
       try {
-        const String deviceIdUTF8 = "hello";
+        String deviceIdUTF8 = "hello";
         await videoDeviceManager.setDevice(
           deviceIdUTF8,
         );
@@ -135,7 +135,7 @@ void videoDeviceManagerSmokeTestCases() {
       final videoDeviceManager = rtcEngine.getVideoDeviceManager();
 
       try {
-        const String deviceIdUTF8 = "hello";
+        String deviceIdUTF8 = "hello";
         await videoDeviceManager.numberOfCapabilities(
           deviceIdUTF8,
         );
@@ -174,8 +174,8 @@ void videoDeviceManagerSmokeTestCases() {
       final videoDeviceManager = rtcEngine.getVideoDeviceManager();
 
       try {
-        const String deviceIdUTF8 = "hello";
-        const int deviceCapabilityNumber = 10;
+        String deviceIdUTF8 = "hello";
+        int deviceCapabilityNumber = 5;
         await videoDeviceManager.getCapability(
           deviceIdUTF8: deviceIdUTF8,
           deviceCapabilityNumber: deviceCapabilityNumber,
@@ -215,7 +215,7 @@ void videoDeviceManagerSmokeTestCases() {
       final videoDeviceManager = rtcEngine.getVideoDeviceManager();
 
       try {
-        const int hwnd = 10;
+        int hwnd = 5;
         await videoDeviceManager.startDeviceTest(
           hwnd,
         );
