@@ -39,13 +39,13 @@ void generatedTestCases(ValueGetter<IrisTester> irisTester) {
       await Future.delayed(const Duration(milliseconds: 500));
 
       {
-        const String connectionChannelId = "hello";
-        const int connectionLocalUid = 10;
-        const RtcConnection connection = RtcConnection(
+        String connectionChannelId = "hello";
+        int connectionLocalUid = 5;
+        RtcConnection connection = RtcConnection(
           channelId: connectionChannelId,
           localUid: connectionLocalUid,
         );
-        const int elapsed = 10;
+        int elapsed = 5;
 
         final eventJson = {
           'connection': connection.toJson(),
@@ -108,13 +108,13 @@ void generatedTestCases(ValueGetter<IrisTester> irisTester) {
       await Future.delayed(const Duration(milliseconds: 500));
 
       {
-        const String connectionChannelId = "hello";
-        const int connectionLocalUid = 10;
-        const RtcConnection connection = RtcConnection(
+        String connectionChannelId = "hello";
+        int connectionLocalUid = 5;
+        RtcConnection connection = RtcConnection(
           channelId: connectionChannelId,
           localUid: connectionLocalUid,
         );
-        const int elapsed = 10;
+        int elapsed = 5;
 
         final eventJson = {
           'connection': connection.toJson(),
@@ -179,11 +179,11 @@ void generatedTestCases(ValueGetter<IrisTester> irisTester) {
       await Future.delayed(const Duration(milliseconds: 500));
 
       {
-        const String channel = "hello";
-        const int uid = 10;
-        const ProxyType proxyType = ProxyType.noneProxyType;
-        const String localProxyIp = "hello";
-        const int elapsed = 10;
+        String channel = "hello";
+        int uid = 5;
+        ProxyType proxyType = ProxyType.noneProxyType;
+        String localProxyIp = "hello";
+        int elapsed = 5;
 
         final eventJson = {
           'channel': channel,
@@ -249,8 +249,8 @@ void generatedTestCases(ValueGetter<IrisTester> irisTester) {
       await Future.delayed(const Duration(milliseconds: 500));
 
       {
-        const ErrorCodeType err = ErrorCodeType.errOk;
-        const String msg = "hello";
+        ErrorCodeType err = ErrorCodeType.errOk;
+        String msg = "hello";
 
         final eventJson = {
           'err': err.value(),
@@ -313,16 +313,16 @@ void generatedTestCases(ValueGetter<IrisTester> irisTester) {
       await Future.delayed(const Duration(milliseconds: 500));
 
       {
-        const String connectionChannelId = "hello";
-        const int connectionLocalUid = 10;
-        const RtcConnection connection = RtcConnection(
+        String connectionChannelId = "hello";
+        int connectionLocalUid = 5;
+        RtcConnection connection = RtcConnection(
           channelId: connectionChannelId,
           localUid: connectionLocalUid,
         );
-        const int remoteUid = 10;
-        const QualityType quality = QualityType.qualityUnknown;
-        const int delay = 10;
-        const int lost = 10;
+        int remoteUid = 5;
+        QualityType quality = QualityType.qualityUnknown;
+        int delay = 5;
+        int lost = 5;
 
         final eventJson = {
           'connection': connection.toJson(),
@@ -388,28 +388,28 @@ void generatedTestCases(ValueGetter<IrisTester> irisTester) {
       await Future.delayed(const Duration(milliseconds: 500));
 
       {
-        const LastmileProbeResultState resultState =
+        LastmileProbeResultState resultState =
             LastmileProbeResultState.lastmileProbeResultComplete;
-        const int uplinkReportPacketLossRate = 10;
-        const int uplinkReportJitter = 10;
-        const int uplinkReportAvailableBandwidth = 10;
-        const LastmileProbeOneWayResult resultUplinkReport =
+        int uplinkReportPacketLossRate = 5;
+        int uplinkReportJitter = 5;
+        int uplinkReportAvailableBandwidth = 5;
+        LastmileProbeOneWayResult resultUplinkReport =
             LastmileProbeOneWayResult(
           packetLossRate: uplinkReportPacketLossRate,
           jitter: uplinkReportJitter,
           availableBandwidth: uplinkReportAvailableBandwidth,
         );
-        const int downlinkReportPacketLossRate = 10;
-        const int downlinkReportJitter = 10;
-        const int downlinkReportAvailableBandwidth = 10;
-        const LastmileProbeOneWayResult resultDownlinkReport =
+        int downlinkReportPacketLossRate = 5;
+        int downlinkReportJitter = 5;
+        int downlinkReportAvailableBandwidth = 5;
+        LastmileProbeOneWayResult resultDownlinkReport =
             LastmileProbeOneWayResult(
           packetLossRate: downlinkReportPacketLossRate,
           jitter: downlinkReportJitter,
           availableBandwidth: downlinkReportAvailableBandwidth,
         );
-        const int resultRtt = 10;
-        const LastmileProbeResult result = LastmileProbeResult(
+        int resultRtt = 5;
+        LastmileProbeResult result = LastmileProbeResult(
           state: resultState,
           uplinkReport: resultUplinkReport,
           downlinkReport: resultDownlinkReport,
@@ -478,15 +478,29 @@ void generatedTestCases(ValueGetter<IrisTester> irisTester) {
       await Future.delayed(const Duration(milliseconds: 500));
 
       {
-        const String connectionChannelId = "hello";
-        const int connectionLocalUid = 10;
-        const RtcConnection connection = RtcConnection(
+        String connectionChannelId = "hello";
+        int connectionLocalUid = 5;
+        RtcConnection connection = RtcConnection(
           channelId: connectionChannelId,
           localUid: connectionLocalUid,
         );
-        const List<AudioVolumeInfo> speakers = [];
-        const int speakerNumber = 10;
-        const int totalVolume = 10;
+        final List<AudioVolumeInfo> speakers = () {
+          int speakersItemUid = 5;
+          int speakersItemVolume = 5;
+          int speakersItemVad = 5;
+          double speakersItemVoicePitch = 5.0;
+          AudioVolumeInfo speakersItem = AudioVolumeInfo(
+            uid: speakersItemUid,
+            volume: speakersItemVolume,
+            vad: speakersItemVad,
+            voicePitch: speakersItemVoicePitch,
+          );
+
+          return List.filled(5, speakersItem);
+        }();
+
+        int speakerNumber = 5;
+        int totalVolume = 5;
 
         final eventJson = {
           'connection': connection.toJson(),
@@ -552,46 +566,46 @@ void generatedTestCases(ValueGetter<IrisTester> irisTester) {
       await Future.delayed(const Duration(milliseconds: 500));
 
       {
-        const String connectionChannelId = "hello";
-        const int connectionLocalUid = 10;
-        const RtcConnection connection = RtcConnection(
+        String connectionChannelId = "hello";
+        int connectionLocalUid = 5;
+        RtcConnection connection = RtcConnection(
           channelId: connectionChannelId,
           localUid: connectionLocalUid,
         );
-        const int statsDuration = 10;
-        const int statsTxBytes = 10;
-        const int statsRxBytes = 10;
-        const int statsTxAudioBytes = 10;
-        const int statsTxVideoBytes = 10;
-        const int statsRxAudioBytes = 10;
-        const int statsRxVideoBytes = 10;
-        const int statsTxKBitRate = 10;
-        const int statsRxKBitRate = 10;
-        const int statsRxAudioKBitRate = 10;
-        const int statsTxAudioKBitRate = 10;
-        const int statsRxVideoKBitRate = 10;
-        const int statsTxVideoKBitRate = 10;
-        const int statsLastmileDelay = 10;
-        const int statsUserCount = 10;
-        const double statsCpuAppUsage = 10.0;
-        const double statsCpuTotalUsage = 10.0;
-        const int statsGatewayRtt = 10;
-        const double statsMemoryAppUsageRatio = 10.0;
-        const double statsMemoryTotalUsageRatio = 10.0;
-        const int statsMemoryAppUsageInKbytes = 10;
-        const int statsConnectTimeMs = 10;
-        const int statsFirstAudioPacketDuration = 10;
-        const int statsFirstVideoPacketDuration = 10;
-        const int statsFirstVideoKeyFramePacketDuration = 10;
-        const int statsPacketsBeforeFirstKeyFramePacket = 10;
-        const int statsFirstAudioPacketDurationAfterUnmute = 10;
-        const int statsFirstVideoPacketDurationAfterUnmute = 10;
-        const int statsFirstVideoKeyFramePacketDurationAfterUnmute = 10;
-        const int statsFirstVideoKeyFrameDecodedDurationAfterUnmute = 10;
-        const int statsFirstVideoKeyFrameRenderedDurationAfterUnmute = 10;
-        const int statsTxPacketLossRate = 10;
-        const int statsRxPacketLossRate = 10;
-        const RtcStats stats = RtcStats(
+        int statsDuration = 5;
+        int statsTxBytes = 5;
+        int statsRxBytes = 5;
+        int statsTxAudioBytes = 5;
+        int statsTxVideoBytes = 5;
+        int statsRxAudioBytes = 5;
+        int statsRxVideoBytes = 5;
+        int statsTxKBitRate = 5;
+        int statsRxKBitRate = 5;
+        int statsRxAudioKBitRate = 5;
+        int statsTxAudioKBitRate = 5;
+        int statsRxVideoKBitRate = 5;
+        int statsTxVideoKBitRate = 5;
+        int statsLastmileDelay = 5;
+        int statsUserCount = 5;
+        double statsCpuAppUsage = 5.0;
+        double statsCpuTotalUsage = 5.0;
+        int statsGatewayRtt = 5;
+        double statsMemoryAppUsageRatio = 5.0;
+        double statsMemoryTotalUsageRatio = 5.0;
+        int statsMemoryAppUsageInKbytes = 5;
+        int statsConnectTimeMs = 5;
+        int statsFirstAudioPacketDuration = 5;
+        int statsFirstVideoPacketDuration = 5;
+        int statsFirstVideoKeyFramePacketDuration = 5;
+        int statsPacketsBeforeFirstKeyFramePacket = 5;
+        int statsFirstAudioPacketDurationAfterUnmute = 5;
+        int statsFirstVideoPacketDurationAfterUnmute = 5;
+        int statsFirstVideoKeyFramePacketDurationAfterUnmute = 5;
+        int statsFirstVideoKeyFrameDecodedDurationAfterUnmute = 5;
+        int statsFirstVideoKeyFrameRenderedDurationAfterUnmute = 5;
+        int statsTxPacketLossRate = 5;
+        int statsRxPacketLossRate = 5;
+        RtcStats stats = RtcStats(
           duration: statsDuration,
           txBytes: statsTxBytes,
           rxBytes: statsRxBytes,
@@ -695,46 +709,46 @@ void generatedTestCases(ValueGetter<IrisTester> irisTester) {
       await Future.delayed(const Duration(milliseconds: 500));
 
       {
-        const String connectionChannelId = "hello";
-        const int connectionLocalUid = 10;
-        const RtcConnection connection = RtcConnection(
+        String connectionChannelId = "hello";
+        int connectionLocalUid = 5;
+        RtcConnection connection = RtcConnection(
           channelId: connectionChannelId,
           localUid: connectionLocalUid,
         );
-        const int statsDuration = 10;
-        const int statsTxBytes = 10;
-        const int statsRxBytes = 10;
-        const int statsTxAudioBytes = 10;
-        const int statsTxVideoBytes = 10;
-        const int statsRxAudioBytes = 10;
-        const int statsRxVideoBytes = 10;
-        const int statsTxKBitRate = 10;
-        const int statsRxKBitRate = 10;
-        const int statsRxAudioKBitRate = 10;
-        const int statsTxAudioKBitRate = 10;
-        const int statsRxVideoKBitRate = 10;
-        const int statsTxVideoKBitRate = 10;
-        const int statsLastmileDelay = 10;
-        const int statsUserCount = 10;
-        const double statsCpuAppUsage = 10.0;
-        const double statsCpuTotalUsage = 10.0;
-        const int statsGatewayRtt = 10;
-        const double statsMemoryAppUsageRatio = 10.0;
-        const double statsMemoryTotalUsageRatio = 10.0;
-        const int statsMemoryAppUsageInKbytes = 10;
-        const int statsConnectTimeMs = 10;
-        const int statsFirstAudioPacketDuration = 10;
-        const int statsFirstVideoPacketDuration = 10;
-        const int statsFirstVideoKeyFramePacketDuration = 10;
-        const int statsPacketsBeforeFirstKeyFramePacket = 10;
-        const int statsFirstAudioPacketDurationAfterUnmute = 10;
-        const int statsFirstVideoPacketDurationAfterUnmute = 10;
-        const int statsFirstVideoKeyFramePacketDurationAfterUnmute = 10;
-        const int statsFirstVideoKeyFrameDecodedDurationAfterUnmute = 10;
-        const int statsFirstVideoKeyFrameRenderedDurationAfterUnmute = 10;
-        const int statsTxPacketLossRate = 10;
-        const int statsRxPacketLossRate = 10;
-        const RtcStats stats = RtcStats(
+        int statsDuration = 5;
+        int statsTxBytes = 5;
+        int statsRxBytes = 5;
+        int statsTxAudioBytes = 5;
+        int statsTxVideoBytes = 5;
+        int statsRxAudioBytes = 5;
+        int statsRxVideoBytes = 5;
+        int statsTxKBitRate = 5;
+        int statsRxKBitRate = 5;
+        int statsRxAudioKBitRate = 5;
+        int statsTxAudioKBitRate = 5;
+        int statsRxVideoKBitRate = 5;
+        int statsTxVideoKBitRate = 5;
+        int statsLastmileDelay = 5;
+        int statsUserCount = 5;
+        double statsCpuAppUsage = 5.0;
+        double statsCpuTotalUsage = 5.0;
+        int statsGatewayRtt = 5;
+        double statsMemoryAppUsageRatio = 5.0;
+        double statsMemoryTotalUsageRatio = 5.0;
+        int statsMemoryAppUsageInKbytes = 5;
+        int statsConnectTimeMs = 5;
+        int statsFirstAudioPacketDuration = 5;
+        int statsFirstVideoPacketDuration = 5;
+        int statsFirstVideoKeyFramePacketDuration = 5;
+        int statsPacketsBeforeFirstKeyFramePacket = 5;
+        int statsFirstAudioPacketDurationAfterUnmute = 5;
+        int statsFirstVideoPacketDurationAfterUnmute = 5;
+        int statsFirstVideoKeyFramePacketDurationAfterUnmute = 5;
+        int statsFirstVideoKeyFrameDecodedDurationAfterUnmute = 5;
+        int statsFirstVideoKeyFrameRenderedDurationAfterUnmute = 5;
+        int statsTxPacketLossRate = 5;
+        int statsRxPacketLossRate = 5;
+        RtcStats stats = RtcStats(
           duration: statsDuration,
           txBytes: statsTxBytes,
           rxBytes: statsRxBytes,
@@ -839,9 +853,9 @@ void generatedTestCases(ValueGetter<IrisTester> irisTester) {
       await Future.delayed(const Duration(milliseconds: 500));
 
       {
-        const String deviceId = "hello";
-        const MediaDeviceType deviceType = MediaDeviceType.unknownAudioDevice;
-        const MediaDeviceStateType deviceState =
+        String deviceId = "hello";
+        MediaDeviceType deviceType = MediaDeviceType.unknownAudioDevice;
+        MediaDeviceStateType deviceState =
             MediaDeviceStateType.mediaDeviceStateIdle;
 
         final eventJson = {
@@ -907,7 +921,7 @@ void generatedTestCases(ValueGetter<IrisTester> irisTester) {
       await Future.delayed(const Duration(milliseconds: 500));
 
       {
-        const int position = 10;
+        int position = 5;
 
         final eventJson = {
           'position': position,
@@ -1029,7 +1043,7 @@ void generatedTestCases(ValueGetter<IrisTester> irisTester) {
       await Future.delayed(const Duration(milliseconds: 500));
 
       {
-        const int soundId = 10;
+        int soundId = 5;
 
         final eventJson = {
           'soundId': soundId,
@@ -1093,9 +1107,9 @@ void generatedTestCases(ValueGetter<IrisTester> irisTester) {
       await Future.delayed(const Duration(milliseconds: 500));
 
       {
-        const String deviceId = "hello";
-        const MediaDeviceType deviceType = MediaDeviceType.unknownAudioDevice;
-        const MediaDeviceStateType deviceState =
+        String deviceId = "hello";
+        MediaDeviceType deviceType = MediaDeviceType.unknownAudioDevice;
+        MediaDeviceStateType deviceState =
             MediaDeviceStateType.mediaDeviceStateIdle;
 
         final eventJson = {
@@ -1162,15 +1176,15 @@ void generatedTestCases(ValueGetter<IrisTester> irisTester) {
       await Future.delayed(const Duration(milliseconds: 500));
 
       {
-        const String connectionChannelId = "hello";
-        const int connectionLocalUid = 10;
-        const RtcConnection connection = RtcConnection(
+        String connectionChannelId = "hello";
+        int connectionLocalUid = 5;
+        RtcConnection connection = RtcConnection(
           channelId: connectionChannelId,
           localUid: connectionLocalUid,
         );
-        const int remoteUid = 10;
-        const QualityType txQuality = QualityType.qualityUnknown;
-        const QualityType rxQuality = QualityType.qualityUnknown;
+        int remoteUid = 5;
+        QualityType txQuality = QualityType.qualityUnknown;
+        QualityType rxQuality = QualityType.qualityUnknown;
 
         final eventJson = {
           'connection': connection.toJson(),
@@ -1235,9 +1249,9 @@ void generatedTestCases(ValueGetter<IrisTester> irisTester) {
       await Future.delayed(const Duration(milliseconds: 500));
 
       {
-        const String connectionChannelId = "hello";
-        const int connectionLocalUid = 10;
-        const RtcConnection connection = RtcConnection(
+        String connectionChannelId = "hello";
+        int connectionLocalUid = 5;
+        RtcConnection connection = RtcConnection(
           channelId: connectionChannelId,
           localUid: connectionLocalUid,
         );
@@ -1303,8 +1317,8 @@ void generatedTestCases(ValueGetter<IrisTester> irisTester) {
       await Future.delayed(const Duration(milliseconds: 500));
 
       {
-        const int infoVideoEncoderTargetBitrateBps = 10;
-        const UplinkNetworkInfo info = UplinkNetworkInfo(
+        int infoVideoEncoderTargetBitrateBps = 5;
+        UplinkNetworkInfo info = UplinkNetworkInfo(
           videoEncoderTargetBitrateBps: infoVideoEncoderTargetBitrateBps,
         );
 
@@ -1369,7 +1383,7 @@ void generatedTestCases(ValueGetter<IrisTester> irisTester) {
       await Future.delayed(const Duration(milliseconds: 500));
 
       {
-        const QualityType quality = QualityType.qualityUnknown;
+        QualityType quality = QualityType.qualityUnknown;
 
         final eventJson = {
           'quality': quality.value(),
@@ -1432,10 +1446,10 @@ void generatedTestCases(ValueGetter<IrisTester> irisTester) {
       await Future.delayed(const Duration(milliseconds: 500));
 
       {
-        const VideoSourceType source = VideoSourceType.videoSourceCameraPrimary;
-        const int width = 10;
-        const int height = 10;
-        const int elapsed = 10;
+        VideoSourceType source = VideoSourceType.videoSourceCameraPrimary;
+        int width = 5;
+        int height = 5;
+        int elapsed = 5;
 
         final eventJson = {
           'source': source.value(),
@@ -1501,8 +1515,8 @@ void generatedTestCases(ValueGetter<IrisTester> irisTester) {
       await Future.delayed(const Duration(milliseconds: 500));
 
       {
-        const VideoSourceType source = VideoSourceType.videoSourceCameraPrimary;
-        const int elapsed = 10;
+        VideoSourceType source = VideoSourceType.videoSourceCameraPrimary;
+        int elapsed = 5;
 
         final eventJson = {
           'source': source.value(),
@@ -1567,16 +1581,16 @@ void generatedTestCases(ValueGetter<IrisTester> irisTester) {
       await Future.delayed(const Duration(milliseconds: 500));
 
       {
-        const String connectionChannelId = "hello";
-        const int connectionLocalUid = 10;
-        const RtcConnection connection = RtcConnection(
+        String connectionChannelId = "hello";
+        int connectionLocalUid = 5;
+        RtcConnection connection = RtcConnection(
           channelId: connectionChannelId,
           localUid: connectionLocalUid,
         );
-        const int remoteUid = 10;
-        const int width = 10;
-        const int height = 10;
-        const int elapsed = 10;
+        int remoteUid = 5;
+        int width = 5;
+        int height = 5;
+        int elapsed = 5;
 
         final eventJson = {
           'connection': connection.toJson(),
@@ -1648,18 +1662,17 @@ void generatedTestCases(ValueGetter<IrisTester> irisTester) {
       await Future.delayed(const Duration(milliseconds: 500));
 
       {
-        const String connectionChannelId = "hello";
-        const int connectionLocalUid = 10;
-        const RtcConnection connection = RtcConnection(
+        String connectionChannelId = "hello";
+        int connectionLocalUid = 5;
+        RtcConnection connection = RtcConnection(
           channelId: connectionChannelId,
           localUid: connectionLocalUid,
         );
-        const VideoSourceType sourceType =
-            VideoSourceType.videoSourceCameraPrimary;
-        const int uid = 10;
-        const int width = 10;
-        const int height = 10;
-        const int rotation = 10;
+        VideoSourceType sourceType = VideoSourceType.videoSourceCameraPrimary;
+        int uid = 5;
+        int width = 5;
+        int height = 5;
+        int rotation = 5;
 
         final eventJson = {
           'connection': connection.toJson(),
@@ -1727,10 +1740,10 @@ void generatedTestCases(ValueGetter<IrisTester> irisTester) {
       await Future.delayed(const Duration(milliseconds: 500));
 
       {
-        const VideoSourceType source = VideoSourceType.videoSourceCameraPrimary;
-        const LocalVideoStreamState state =
+        VideoSourceType source = VideoSourceType.videoSourceCameraPrimary;
+        LocalVideoStreamState state =
             LocalVideoStreamState.localVideoStreamStateStopped;
-        const LocalVideoStreamReason reason =
+        LocalVideoStreamReason reason =
             LocalVideoStreamReason.localVideoStreamReasonOk;
 
         final eventJson = {
@@ -1800,17 +1813,17 @@ void generatedTestCases(ValueGetter<IrisTester> irisTester) {
       await Future.delayed(const Duration(milliseconds: 500));
 
       {
-        const String connectionChannelId = "hello";
-        const int connectionLocalUid = 10;
-        const RtcConnection connection = RtcConnection(
+        String connectionChannelId = "hello";
+        int connectionLocalUid = 5;
+        RtcConnection connection = RtcConnection(
           channelId: connectionChannelId,
           localUid: connectionLocalUid,
         );
-        const int remoteUid = 10;
-        const RemoteVideoState state = RemoteVideoState.remoteVideoStateStopped;
-        const RemoteVideoStateReason reason =
+        int remoteUid = 5;
+        RemoteVideoState state = RemoteVideoState.remoteVideoStateStopped;
+        RemoteVideoStateReason reason =
             RemoteVideoStateReason.remoteVideoStateReasonInternal;
-        const int elapsed = 10;
+        int elapsed = 5;
 
         final eventJson = {
           'connection': connection.toJson(),
@@ -1878,16 +1891,16 @@ void generatedTestCases(ValueGetter<IrisTester> irisTester) {
       await Future.delayed(const Duration(milliseconds: 500));
 
       {
-        const String connectionChannelId = "hello";
-        const int connectionLocalUid = 10;
-        const RtcConnection connection = RtcConnection(
+        String connectionChannelId = "hello";
+        int connectionLocalUid = 5;
+        RtcConnection connection = RtcConnection(
           channelId: connectionChannelId,
           localUid: connectionLocalUid,
         );
-        const int remoteUid = 10;
-        const int width = 10;
-        const int height = 10;
-        const int elapsed = 10;
+        int remoteUid = 5;
+        int width = 5;
+        int height = 5;
+        int elapsed = 5;
 
         final eventJson = {
           'connection': connection.toJson(),
@@ -1954,14 +1967,14 @@ void generatedTestCases(ValueGetter<IrisTester> irisTester) {
       await Future.delayed(const Duration(milliseconds: 500));
 
       {
-        const String connectionChannelId = "hello";
-        const int connectionLocalUid = 10;
-        const RtcConnection connection = RtcConnection(
+        String connectionChannelId = "hello";
+        int connectionLocalUid = 5;
+        RtcConnection connection = RtcConnection(
           channelId: connectionChannelId,
           localUid: connectionLocalUid,
         );
-        const int remoteUid = 10;
-        const int elapsed = 10;
+        int remoteUid = 5;
+        int elapsed = 5;
 
         final eventJson = {
           'connection': connection.toJson(),
@@ -2026,15 +2039,14 @@ void generatedTestCases(ValueGetter<IrisTester> irisTester) {
       await Future.delayed(const Duration(milliseconds: 500));
 
       {
-        const String connectionChannelId = "hello";
-        const int connectionLocalUid = 10;
-        const RtcConnection connection = RtcConnection(
+        String connectionChannelId = "hello";
+        int connectionLocalUid = 5;
+        RtcConnection connection = RtcConnection(
           channelId: connectionChannelId,
           localUid: connectionLocalUid,
         );
-        const int remoteUid = 10;
-        const UserOfflineReasonType reason =
-            UserOfflineReasonType.userOfflineQuit;
+        int remoteUid = 5;
+        UserOfflineReasonType reason = UserOfflineReasonType.userOfflineQuit;
 
         final eventJson = {
           'connection': connection.toJson(),
@@ -2098,14 +2110,14 @@ void generatedTestCases(ValueGetter<IrisTester> irisTester) {
       await Future.delayed(const Duration(milliseconds: 500));
 
       {
-        const String connectionChannelId = "hello";
-        const int connectionLocalUid = 10;
-        const RtcConnection connection = RtcConnection(
+        String connectionChannelId = "hello";
+        int connectionLocalUid = 5;
+        RtcConnection connection = RtcConnection(
           channelId: connectionChannelId,
           localUid: connectionLocalUid,
         );
-        const int remoteUid = 10;
-        const bool muted = true;
+        int remoteUid = 5;
+        bool muted = true;
 
         final eventJson = {
           'connection': connection.toJson(),
@@ -2169,14 +2181,14 @@ void generatedTestCases(ValueGetter<IrisTester> irisTester) {
       await Future.delayed(const Duration(milliseconds: 500));
 
       {
-        const String connectionChannelId = "hello";
-        const int connectionLocalUid = 10;
-        const RtcConnection connection = RtcConnection(
+        String connectionChannelId = "hello";
+        int connectionLocalUid = 5;
+        RtcConnection connection = RtcConnection(
           channelId: connectionChannelId,
           localUid: connectionLocalUid,
         );
-        const int remoteUid = 10;
-        const bool muted = true;
+        int remoteUid = 5;
+        bool muted = true;
 
         final eventJson = {
           'connection': connection.toJson(),
@@ -2241,14 +2253,14 @@ void generatedTestCases(ValueGetter<IrisTester> irisTester) {
       await Future.delayed(const Duration(milliseconds: 500));
 
       {
-        const String connectionChannelId = "hello";
-        const int connectionLocalUid = 10;
-        const RtcConnection connection = RtcConnection(
+        String connectionChannelId = "hello";
+        int connectionLocalUid = 5;
+        RtcConnection connection = RtcConnection(
           channelId: connectionChannelId,
           localUid: connectionLocalUid,
         );
-        const int remoteUid = 10;
-        const bool enabled = true;
+        int remoteUid = 5;
+        bool enabled = true;
 
         final eventJson = {
           'connection': connection.toJson(),
@@ -2313,14 +2325,14 @@ void generatedTestCases(ValueGetter<IrisTester> irisTester) {
       await Future.delayed(const Duration(milliseconds: 500));
 
       {
-        const String connectionChannelId = "hello";
-        const int connectionLocalUid = 10;
-        const RtcConnection connection = RtcConnection(
+        String connectionChannelId = "hello";
+        int connectionLocalUid = 5;
+        RtcConnection connection = RtcConnection(
           channelId: connectionChannelId,
           localUid: connectionLocalUid,
         );
-        const int remoteUid = 10;
-        const int state = 10;
+        int remoteUid = 5;
+        int state = 5;
 
         final eventJson = {
           'connection': connection.toJson(),
@@ -2385,14 +2397,14 @@ void generatedTestCases(ValueGetter<IrisTester> irisTester) {
       await Future.delayed(const Duration(milliseconds: 500));
 
       {
-        const String connectionChannelId = "hello";
-        const int connectionLocalUid = 10;
-        const RtcConnection connection = RtcConnection(
+        String connectionChannelId = "hello";
+        int connectionLocalUid = 5;
+        RtcConnection connection = RtcConnection(
           channelId: connectionChannelId,
           localUid: connectionLocalUid,
         );
-        const int remoteUid = 10;
-        const bool enabled = true;
+        int remoteUid = 5;
+        bool enabled = true;
 
         final eventJson = {
           'connection': connection.toJson(),
@@ -2457,32 +2469,32 @@ void generatedTestCases(ValueGetter<IrisTester> irisTester) {
       await Future.delayed(const Duration(milliseconds: 500));
 
       {
-        const String connectionChannelId = "hello";
-        const int connectionLocalUid = 10;
-        const RtcConnection connection = RtcConnection(
+        String connectionChannelId = "hello";
+        int connectionLocalUid = 5;
+        RtcConnection connection = RtcConnection(
           channelId: connectionChannelId,
           localUid: connectionLocalUid,
         );
-        const int statsUid = 10;
-        const int statsQuality = 10;
-        const int statsNetworkTransportDelay = 10;
-        const int statsJitterBufferDelay = 10;
-        const int statsAudioLossRate = 10;
-        const int statsNumChannels = 10;
-        const int statsReceivedSampleRate = 10;
-        const int statsReceivedBitrate = 10;
-        const int statsTotalFrozenTime = 10;
-        const int statsFrozenRate = 10;
-        const int statsMosValue = 10;
-        const int statsFrozenRateByCustomPlcCount = 10;
-        const int statsPlcCount = 10;
-        const int statsTotalActiveTime = 10;
-        const int statsPublishDuration = 10;
-        const int statsQoeQuality = 10;
-        const int statsQualityChangedReason = 10;
-        const int statsRxAudioBytes = 10;
-        const int statsE2eDelay = 10;
-        const RemoteAudioStats stats = RemoteAudioStats(
+        int statsUid = 5;
+        int statsQuality = 5;
+        int statsNetworkTransportDelay = 5;
+        int statsJitterBufferDelay = 5;
+        int statsAudioLossRate = 5;
+        int statsNumChannels = 5;
+        int statsReceivedSampleRate = 5;
+        int statsReceivedBitrate = 5;
+        int statsTotalFrozenTime = 5;
+        int statsFrozenRate = 5;
+        int statsMosValue = 5;
+        int statsFrozenRateByCustomPlcCount = 5;
+        int statsPlcCount = 5;
+        int statsTotalActiveTime = 5;
+        int statsPublishDuration = 5;
+        int statsQoeQuality = 5;
+        int statsQualityChangedReason = 5;
+        int statsRxAudioBytes = 5;
+        int statsE2eDelay = 5;
+        RemoteAudioStats stats = RemoteAudioStats(
           uid: statsUid,
           quality: statsQuality,
           networkTransportDelay: statsNetworkTransportDelay,
@@ -2565,22 +2577,22 @@ void generatedTestCases(ValueGetter<IrisTester> irisTester) {
       await Future.delayed(const Duration(milliseconds: 500));
 
       {
-        const String connectionChannelId = "hello";
-        const int connectionLocalUid = 10;
-        const RtcConnection connection = RtcConnection(
+        String connectionChannelId = "hello";
+        int connectionLocalUid = 5;
+        RtcConnection connection = RtcConnection(
           channelId: connectionChannelId,
           localUid: connectionLocalUid,
         );
-        const int statsNumChannels = 10;
-        const int statsSentSampleRate = 10;
-        const int statsSentBitrate = 10;
-        const int statsInternalCodec = 10;
-        const int statsTxPacketLossRate = 10;
-        const int statsAudioDeviceDelay = 10;
-        const int statsAudioPlayoutDelay = 10;
-        const int statsEarMonitorDelay = 10;
-        const int statsAecEstimatedDelay = 10;
-        const LocalAudioStats stats = LocalAudioStats(
+        int statsNumChannels = 5;
+        int statsSentSampleRate = 5;
+        int statsSentBitrate = 5;
+        int statsInternalCodec = 5;
+        int statsTxPacketLossRate = 5;
+        int statsAudioDeviceDelay = 5;
+        int statsAudioPlayoutDelay = 5;
+        int statsEarMonitorDelay = 5;
+        int statsAecEstimatedDelay = 5;
+        LocalAudioStats stats = LocalAudioStats(
           numChannels: statsNumChannels,
           sentSampleRate: statsSentSampleRate,
           sentBitrate: statsSentBitrate,
@@ -2653,33 +2665,33 @@ void generatedTestCases(ValueGetter<IrisTester> irisTester) {
       await Future.delayed(const Duration(milliseconds: 500));
 
       {
-        const VideoSourceType source = VideoSourceType.videoSourceCameraPrimary;
-        const QualityAdaptIndication statsQualityAdaptIndication =
+        VideoSourceType source = VideoSourceType.videoSourceCameraPrimary;
+        QualityAdaptIndication statsQualityAdaptIndication =
             QualityAdaptIndication.adaptNone;
-        const VideoCodecType statsCodecType = VideoCodecType.videoCodecNone;
-        const CaptureBrightnessLevelType statsCaptureBrightnessLevel =
+        VideoCodecType statsCodecType = VideoCodecType.videoCodecNone;
+        CaptureBrightnessLevelType statsCaptureBrightnessLevel =
             CaptureBrightnessLevelType.captureBrightnessLevelInvalid;
-        const int statsUid = 10;
-        const int statsSentBitrate = 10;
-        const int statsSentFrameRate = 10;
-        const int statsCaptureFrameRate = 10;
-        const int statsCaptureFrameWidth = 10;
-        const int statsCaptureFrameHeight = 10;
-        const int statsRegulatedCaptureFrameRate = 10;
-        const int statsRegulatedCaptureFrameWidth = 10;
-        const int statsRegulatedCaptureFrameHeight = 10;
-        const int statsEncoderOutputFrameRate = 10;
-        const int statsEncodedFrameWidth = 10;
-        const int statsEncodedFrameHeight = 10;
-        const int statsRendererOutputFrameRate = 10;
-        const int statsTargetBitrate = 10;
-        const int statsTargetFrameRate = 10;
-        const int statsEncodedBitrate = 10;
-        const int statsEncodedFrameCount = 10;
-        const int statsTxPacketLossRate = 10;
-        const bool statsDualStreamEnabled = true;
-        const int statsHwEncoderAccelerating = 10;
-        const LocalVideoStats stats = LocalVideoStats(
+        int statsUid = 5;
+        int statsSentBitrate = 5;
+        int statsSentFrameRate = 5;
+        int statsCaptureFrameRate = 5;
+        int statsCaptureFrameWidth = 5;
+        int statsCaptureFrameHeight = 5;
+        int statsRegulatedCaptureFrameRate = 5;
+        int statsRegulatedCaptureFrameWidth = 5;
+        int statsRegulatedCaptureFrameHeight = 5;
+        int statsEncoderOutputFrameRate = 5;
+        int statsEncodedFrameWidth = 5;
+        int statsEncodedFrameHeight = 5;
+        int statsRendererOutputFrameRate = 5;
+        int statsTargetBitrate = 5;
+        int statsTargetFrameRate = 5;
+        int statsEncodedBitrate = 5;
+        int statsEncodedFrameCount = 5;
+        int statsTxPacketLossRate = 5;
+        bool statsDualStreamEnabled = true;
+        int statsHwEncoderAccelerating = 5;
+        LocalVideoStats stats = LocalVideoStats(
           uid: statsUid,
           sentBitrate: statsSentBitrate,
           sentFrameRate: statsSentFrameRate,
@@ -2766,32 +2778,31 @@ void generatedTestCases(ValueGetter<IrisTester> irisTester) {
       await Future.delayed(const Duration(milliseconds: 500));
 
       {
-        const String connectionChannelId = "hello";
-        const int connectionLocalUid = 10;
-        const RtcConnection connection = RtcConnection(
+        String connectionChannelId = "hello";
+        int connectionLocalUid = 5;
+        RtcConnection connection = RtcConnection(
           channelId: connectionChannelId,
           localUid: connectionLocalUid,
         );
-        const VideoStreamType statsRxStreamType =
-            VideoStreamType.videoStreamHigh;
-        const int statsUid = 10;
-        const int statsDelay = 10;
-        const int statsE2eDelay = 10;
-        const int statsWidth = 10;
-        const int statsHeight = 10;
-        const int statsReceivedBitrate = 10;
-        const int statsDecoderOutputFrameRate = 10;
-        const int statsRendererOutputFrameRate = 10;
-        const int statsFrameLossRate = 10;
-        const int statsPacketLossRate = 10;
-        const int statsTotalFrozenTime = 10;
-        const int statsFrozenRate = 10;
-        const int statsAvSyncTimeMs = 10;
-        const int statsTotalActiveTime = 10;
-        const int statsPublishDuration = 10;
-        const int statsMosValue = 10;
-        const int statsRxVideoBytes = 10;
-        const RemoteVideoStats stats = RemoteVideoStats(
+        VideoStreamType statsRxStreamType = VideoStreamType.videoStreamHigh;
+        int statsUid = 5;
+        int statsDelay = 5;
+        int statsE2eDelay = 5;
+        int statsWidth = 5;
+        int statsHeight = 5;
+        int statsReceivedBitrate = 5;
+        int statsDecoderOutputFrameRate = 5;
+        int statsRendererOutputFrameRate = 5;
+        int statsFrameLossRate = 5;
+        int statsPacketLossRate = 5;
+        int statsTotalFrozenTime = 5;
+        int statsFrozenRate = 5;
+        int statsAvSyncTimeMs = 5;
+        int statsTotalActiveTime = 5;
+        int statsPublishDuration = 5;
+        int statsMosValue = 5;
+        int statsRxVideoBytes = 5;
+        RemoteVideoStats stats = RemoteVideoStats(
           uid: statsUid,
           delay: statsDelay,
           e2eDelay: statsE2eDelay,
@@ -2931,10 +2942,10 @@ void generatedTestCases(ValueGetter<IrisTester> irisTester) {
       await Future.delayed(const Duration(milliseconds: 500));
 
       {
-        const int x = 10;
-        const int y = 10;
-        const int width = 10;
-        const int height = 10;
+        int x = 5;
+        int y = 5;
+        int width = 5;
+        int height = 5;
 
         final eventJson = {
           'x': x,
@@ -3000,10 +3011,10 @@ void generatedTestCases(ValueGetter<IrisTester> irisTester) {
       await Future.delayed(const Duration(milliseconds: 500));
 
       {
-        const int x = 10;
-        const int y = 10;
-        const int width = 10;
-        const int height = 10;
+        int x = 5;
+        int y = 5;
+        int width = 5;
+        int height = 5;
 
         final eventJson = {
           'x': x,
@@ -3128,9 +3139,9 @@ void generatedTestCases(ValueGetter<IrisTester> irisTester) {
       await Future.delayed(const Duration(milliseconds: 500));
 
       {
-        const AudioMixingStateType state =
+        AudioMixingStateType state =
             AudioMixingStateType.audioMixingStatePlaying;
-        const AudioMixingReasonType reason =
+        AudioMixingReasonType reason =
             AudioMixingReasonType.audioMixingReasonCanNotOpen;
 
         final eventJson = {
@@ -3196,10 +3207,9 @@ void generatedTestCases(ValueGetter<IrisTester> irisTester) {
       await Future.delayed(const Duration(milliseconds: 500));
 
       {
-        const RhythmPlayerStateType state =
+        RhythmPlayerStateType state =
             RhythmPlayerStateType.rhythmPlayerStateIdle;
-        const RhythmPlayerReason reason =
-            RhythmPlayerReason.rhythmPlayerReasonOk;
+        RhythmPlayerReason reason = RhythmPlayerReason.rhythmPlayerReasonOk;
 
         final eventJson = {
           'state': state.value(),
@@ -3263,9 +3273,9 @@ void generatedTestCases(ValueGetter<IrisTester> irisTester) {
       await Future.delayed(const Duration(milliseconds: 500));
 
       {
-        const String connectionChannelId = "hello";
-        const int connectionLocalUid = 10;
-        const RtcConnection connection = RtcConnection(
+        String connectionChannelId = "hello";
+        int connectionLocalUid = 5;
+        RtcConnection connection = RtcConnection(
           channelId: connectionChannelId,
           localUid: connectionLocalUid,
         );
@@ -3330,9 +3340,9 @@ void generatedTestCases(ValueGetter<IrisTester> irisTester) {
       await Future.delayed(const Duration(milliseconds: 500));
 
       {
-        const String connectionChannelId = "hello";
-        const int connectionLocalUid = 10;
-        const RtcConnection connection = RtcConnection(
+        String connectionChannelId = "hello";
+        int connectionLocalUid = 5;
+        RtcConnection connection = RtcConnection(
           channelId: connectionChannelId,
           localUid: connectionLocalUid,
         );
@@ -3398,9 +3408,9 @@ void generatedTestCases(ValueGetter<IrisTester> irisTester) {
       await Future.delayed(const Duration(milliseconds: 500));
 
       {
-        const String connectionChannelId = "hello";
-        const int connectionLocalUid = 10;
-        const RtcConnection connection = RtcConnection(
+        String connectionChannelId = "hello";
+        int connectionLocalUid = 5;
+        RtcConnection connection = RtcConnection(
           channelId: connectionChannelId,
           localUid: connectionLocalUid,
         );
@@ -3466,17 +3476,17 @@ void generatedTestCases(ValueGetter<IrisTester> irisTester) {
       await Future.delayed(const Duration(milliseconds: 500));
 
       {
-        const String connectionChannelId = "hello";
-        const int connectionLocalUid = 10;
-        const RtcConnection connection = RtcConnection(
+        String connectionChannelId = "hello";
+        int connectionLocalUid = 5;
+        RtcConnection connection = RtcConnection(
           channelId: connectionChannelId,
           localUid: connectionLocalUid,
         );
-        const int remoteUid = 10;
-        const int streamId = 10;
-        const ErrorCodeType code = ErrorCodeType.errOk;
-        const int missed = 10;
-        const int cached = 10;
+        int remoteUid = 5;
+        int streamId = 5;
+        ErrorCodeType code = ErrorCodeType.errOk;
+        int missed = 5;
+        int cached = 5;
 
         final eventJson = {
           'connection': connection.toJson(),
@@ -3543,9 +3553,9 @@ void generatedTestCases(ValueGetter<IrisTester> irisTester) {
       await Future.delayed(const Duration(milliseconds: 500));
 
       {
-        const String connectionChannelId = "hello";
-        const int connectionLocalUid = 10;
-        const RtcConnection connection = RtcConnection(
+        String connectionChannelId = "hello";
+        int connectionLocalUid = 5;
+        RtcConnection connection = RtcConnection(
           channelId: connectionChannelId,
           localUid: connectionLocalUid,
         );
@@ -3610,13 +3620,13 @@ void generatedTestCases(ValueGetter<IrisTester> irisTester) {
       await Future.delayed(const Duration(milliseconds: 500));
 
       {
-        const String connectionChannelId = "hello";
-        const int connectionLocalUid = 10;
-        const RtcConnection connection = RtcConnection(
+        String connectionChannelId = "hello";
+        int connectionLocalUid = 5;
+        RtcConnection connection = RtcConnection(
           channelId: connectionChannelId,
           localUid: connectionLocalUid,
         );
-        const String token = "hello";
+        String token = "hello";
 
         final eventJson = {
           'connection': connection.toJson(),
@@ -3681,13 +3691,13 @@ void generatedTestCases(ValueGetter<IrisTester> irisTester) {
       await Future.delayed(const Duration(milliseconds: 500));
 
       {
-        const String connectionChannelId = "hello";
-        const int connectionLocalUid = 10;
-        const RtcConnection connection = RtcConnection(
+        String connectionChannelId = "hello";
+        int connectionLocalUid = 5;
+        RtcConnection connection = RtcConnection(
           channelId: connectionChannelId,
           localUid: connectionLocalUid,
         );
-        const LicenseErrorType reason = LicenseErrorType.licenseErrInvalid;
+        LicenseErrorType reason = LicenseErrorType.licenseErrInvalid;
 
         final eventJson = {
           'connection': connection.toJson(),
@@ -3752,13 +3762,13 @@ void generatedTestCases(ValueGetter<IrisTester> irisTester) {
       await Future.delayed(const Duration(milliseconds: 500));
 
       {
-        const String connectionChannelId = "hello";
-        const int connectionLocalUid = 10;
-        const RtcConnection connection = RtcConnection(
+        String connectionChannelId = "hello";
+        int connectionLocalUid = 5;
+        RtcConnection connection = RtcConnection(
           channelId: connectionChannelId,
           localUid: connectionLocalUid,
         );
-        const int elapsed = 10;
+        int elapsed = 5;
 
         final eventJson = {
           'connection': connection.toJson(),
@@ -3823,14 +3833,14 @@ void generatedTestCases(ValueGetter<IrisTester> irisTester) {
       await Future.delayed(const Duration(milliseconds: 500));
 
       {
-        const String connectionChannelId = "hello";
-        const int connectionLocalUid = 10;
-        const RtcConnection connection = RtcConnection(
+        String connectionChannelId = "hello";
+        int connectionLocalUid = 5;
+        RtcConnection connection = RtcConnection(
           channelId: connectionChannelId,
           localUid: connectionLocalUid,
         );
-        const int uid = 10;
-        const int elapsed = 10;
+        int uid = 5;
+        int elapsed = 5;
 
         final eventJson = {
           'connection': connection.toJson(),
@@ -3896,14 +3906,14 @@ void generatedTestCases(ValueGetter<IrisTester> irisTester) {
       await Future.delayed(const Duration(milliseconds: 500));
 
       {
-        const String connectionChannelId = "hello";
-        const int connectionLocalUid = 10;
-        const RtcConnection connection = RtcConnection(
+        String connectionChannelId = "hello";
+        int connectionLocalUid = 5;
+        RtcConnection connection = RtcConnection(
           channelId: connectionChannelId,
           localUid: connectionLocalUid,
         );
-        const int userId = 10;
-        const int elapsed = 10;
+        int userId = 5;
+        int elapsed = 5;
 
         final eventJson = {
           'connection': connection.toJson(),
@@ -3969,15 +3979,15 @@ void generatedTestCases(ValueGetter<IrisTester> irisTester) {
       await Future.delayed(const Duration(milliseconds: 500));
 
       {
-        const String connectionChannelId = "hello";
-        const int connectionLocalUid = 10;
-        const RtcConnection connection = RtcConnection(
+        String connectionChannelId = "hello";
+        int connectionLocalUid = 5;
+        RtcConnection connection = RtcConnection(
           channelId: connectionChannelId,
           localUid: connectionLocalUid,
         );
-        const LocalAudioStreamState state =
+        LocalAudioStreamState state =
             LocalAudioStreamState.localAudioStreamStateStopped;
-        const LocalAudioStreamReason reason =
+        LocalAudioStreamReason reason =
             LocalAudioStreamReason.localAudioStreamReasonOk;
 
         final eventJson = {
@@ -4047,17 +4057,17 @@ void generatedTestCases(ValueGetter<IrisTester> irisTester) {
       await Future.delayed(const Duration(milliseconds: 500));
 
       {
-        const String connectionChannelId = "hello";
-        const int connectionLocalUid = 10;
-        const RtcConnection connection = RtcConnection(
+        String connectionChannelId = "hello";
+        int connectionLocalUid = 5;
+        RtcConnection connection = RtcConnection(
           channelId: connectionChannelId,
           localUid: connectionLocalUid,
         );
-        const int remoteUid = 10;
-        const RemoteAudioState state = RemoteAudioState.remoteAudioStateStopped;
-        const RemoteAudioStateReason reason =
+        int remoteUid = 5;
+        RemoteAudioState state = RemoteAudioState.remoteAudioStateStopped;
+        RemoteAudioStateReason reason =
             RemoteAudioStateReason.remoteAudioReasonInternal;
-        const int elapsed = 10;
+        int elapsed = 5;
 
         final eventJson = {
           'connection': connection.toJson(),
@@ -4124,13 +4134,13 @@ void generatedTestCases(ValueGetter<IrisTester> irisTester) {
       await Future.delayed(const Duration(milliseconds: 500));
 
       {
-        const String connectionChannelId = "hello";
-        const int connectionLocalUid = 10;
-        const RtcConnection connection = RtcConnection(
+        String connectionChannelId = "hello";
+        int connectionLocalUid = 5;
+        RtcConnection connection = RtcConnection(
           channelId: connectionChannelId,
           localUid: connectionLocalUid,
         );
-        const int uid = 10;
+        int uid = 5;
 
         final eventJson = {
           'connection': connection.toJson(),
@@ -4193,7 +4203,7 @@ void generatedTestCases(ValueGetter<IrisTester> irisTester) {
       await Future.delayed(const Duration(milliseconds: 500));
 
       {
-        const ContentInspectResult result =
+        ContentInspectResult result =
             ContentInspectResult.contentInspectNeutral;
 
         final eventJson = {
@@ -4258,17 +4268,17 @@ void generatedTestCases(ValueGetter<IrisTester> irisTester) {
       await Future.delayed(const Duration(milliseconds: 500));
 
       {
-        const String connectionChannelId = "hello";
-        const int connectionLocalUid = 10;
-        const RtcConnection connection = RtcConnection(
+        String connectionChannelId = "hello";
+        int connectionLocalUid = 5;
+        RtcConnection connection = RtcConnection(
           channelId: connectionChannelId,
           localUid: connectionLocalUid,
         );
-        const int uid = 10;
-        const String filePath = "hello";
-        const int width = 10;
-        const int height = 10;
-        const int errCode = 10;
+        int uid = 5;
+        String filePath = "hello";
+        int width = 5;
+        int height = 5;
+        int errCode = 5;
 
         final eventJson = {
           'connection': connection.toJson(),
@@ -4336,17 +4346,17 @@ void generatedTestCases(ValueGetter<IrisTester> irisTester) {
       await Future.delayed(const Duration(milliseconds: 500));
 
       {
-        const String connectionChannelId = "hello";
-        const int connectionLocalUid = 10;
-        const RtcConnection connection = RtcConnection(
+        String connectionChannelId = "hello";
+        int connectionLocalUid = 5;
+        RtcConnection connection = RtcConnection(
           channelId: connectionChannelId,
           localUid: connectionLocalUid,
         );
-        const ClientRoleType oldRole = ClientRoleType.clientRoleBroadcaster;
-        const ClientRoleType newRole = ClientRoleType.clientRoleBroadcaster;
-        const AudienceLatencyLevelType newRoleOptionsAudienceLatencyLevel =
+        ClientRoleType oldRole = ClientRoleType.clientRoleBroadcaster;
+        ClientRoleType newRole = ClientRoleType.clientRoleBroadcaster;
+        AudienceLatencyLevelType newRoleOptionsAudienceLatencyLevel =
             AudienceLatencyLevelType.audienceLatencyLevelLowLatency;
-        const ClientRoleOptions newRoleOptions = ClientRoleOptions(
+        ClientRoleOptions newRoleOptions = ClientRoleOptions(
           audienceLatencyLevel: newRoleOptionsAudienceLatencyLevel,
         );
 
@@ -4414,15 +4424,15 @@ void generatedTestCases(ValueGetter<IrisTester> irisTester) {
       await Future.delayed(const Duration(milliseconds: 500));
 
       {
-        const String connectionChannelId = "hello";
-        const int connectionLocalUid = 10;
-        const RtcConnection connection = RtcConnection(
+        String connectionChannelId = "hello";
+        int connectionLocalUid = 5;
+        RtcConnection connection = RtcConnection(
           channelId: connectionChannelId,
           localUid: connectionLocalUid,
         );
-        const ClientRoleChangeFailedReason reason = ClientRoleChangeFailedReason
+        ClientRoleChangeFailedReason reason = ClientRoleChangeFailedReason
             .clientRoleChangeFailedTooManyBroadcasters;
-        const ClientRoleType currentRole = ClientRoleType.clientRoleBroadcaster;
+        ClientRoleType currentRole = ClientRoleType.clientRoleBroadcaster;
 
         final eventJson = {
           'connection': connection.toJson(),
@@ -4488,9 +4498,9 @@ void generatedTestCases(ValueGetter<IrisTester> irisTester) {
       await Future.delayed(const Duration(milliseconds: 500));
 
       {
-        const MediaDeviceType deviceType = MediaDeviceType.unknownAudioDevice;
-        const int volume = 10;
-        const bool muted = true;
+        MediaDeviceType deviceType = MediaDeviceType.unknownAudioDevice;
+        int volume = 5;
+        bool muted = true;
 
         final eventJson = {
           'deviceType': deviceType.value(),
@@ -4556,10 +4566,10 @@ void generatedTestCases(ValueGetter<IrisTester> irisTester) {
       await Future.delayed(const Duration(milliseconds: 500));
 
       {
-        const String url = "hello";
-        const RtmpStreamPublishState state =
+        String url = "hello";
+        RtmpStreamPublishState state =
             RtmpStreamPublishState.rtmpStreamPublishStateIdle;
-        const RtmpStreamPublishReason reason =
+        RtmpStreamPublishReason reason =
             RtmpStreamPublishReason.rtmpStreamPublishReasonOk;
 
         final eventJson = {
@@ -4625,8 +4635,8 @@ void generatedTestCases(ValueGetter<IrisTester> irisTester) {
       await Future.delayed(const Duration(milliseconds: 500));
 
       {
-        const String url = "hello";
-        const RtmpStreamingEvent eventCode =
+        String url = "hello";
+        RtmpStreamingEvent eventCode =
             RtmpStreamingEvent.rtmpStreamingEventFailedLoadImage;
 
         final eventJson = {
@@ -4748,7 +4758,7 @@ void generatedTestCases(ValueGetter<IrisTester> irisTester) {
       await Future.delayed(const Duration(milliseconds: 500));
 
       {
-        const int routing = 10;
+        int routing = 5;
 
         final eventJson = {
           'routing': routing,
@@ -4812,9 +4822,8 @@ void generatedTestCases(ValueGetter<IrisTester> irisTester) {
       await Future.delayed(const Duration(milliseconds: 500));
 
       {
-        const ChannelMediaRelayState state =
-            ChannelMediaRelayState.relayStateIdle;
-        const ChannelMediaRelayError code = ChannelMediaRelayError.relayOk;
+        ChannelMediaRelayState state = ChannelMediaRelayState.relayStateIdle;
+        ChannelMediaRelayError code = ChannelMediaRelayError.relayOk;
 
         final eventJson = {
           'state': state.value(),
@@ -4878,7 +4887,7 @@ void generatedTestCases(ValueGetter<IrisTester> irisTester) {
       await Future.delayed(const Duration(milliseconds: 500));
 
       {
-        const bool isFallbackOrRecover = true;
+        bool isFallbackOrRecover = true;
 
         final eventJson = {
           'isFallbackOrRecover': isFallbackOrRecover,
@@ -4943,8 +4952,8 @@ void generatedTestCases(ValueGetter<IrisTester> irisTester) {
       await Future.delayed(const Duration(milliseconds: 500));
 
       {
-        const int uid = 10;
-        const bool isFallbackOrRecover = true;
+        int uid = 5;
+        bool isFallbackOrRecover = true;
 
         final eventJson = {
           'uid': uid,
@@ -5010,16 +5019,16 @@ void generatedTestCases(ValueGetter<IrisTester> irisTester) {
       await Future.delayed(const Duration(milliseconds: 500));
 
       {
-        const String connectionChannelId = "hello";
-        const int connectionLocalUid = 10;
-        const RtcConnection connection = RtcConnection(
+        String connectionChannelId = "hello";
+        int connectionLocalUid = 5;
+        RtcConnection connection = RtcConnection(
           channelId: connectionChannelId,
           localUid: connectionLocalUid,
         );
-        const int remoteUid = 10;
-        const int delay = 10;
-        const int lost = 10;
-        const int rxKBitRate = 10;
+        int remoteUid = 5;
+        int delay = 5;
+        int lost = 5;
+        int rxKBitRate = 5;
 
         final eventJson = {
           'connection': connection.toJson(),
@@ -5087,16 +5096,16 @@ void generatedTestCases(ValueGetter<IrisTester> irisTester) {
       await Future.delayed(const Duration(milliseconds: 500));
 
       {
-        const String connectionChannelId = "hello";
-        const int connectionLocalUid = 10;
-        const RtcConnection connection = RtcConnection(
+        String connectionChannelId = "hello";
+        int connectionLocalUid = 5;
+        RtcConnection connection = RtcConnection(
           channelId: connectionChannelId,
           localUid: connectionLocalUid,
         );
-        const int remoteUid = 10;
-        const int delay = 10;
-        const int lost = 10;
-        const int rxKBitRate = 10;
+        int remoteUid = 5;
+        int delay = 5;
+        int lost = 5;
+        int rxKBitRate = 5;
 
         final eventJson = {
           'connection': connection.toJson(),
@@ -5164,15 +5173,15 @@ void generatedTestCases(ValueGetter<IrisTester> irisTester) {
       await Future.delayed(const Duration(milliseconds: 500));
 
       {
-        const String connectionChannelId = "hello";
-        const int connectionLocalUid = 10;
-        const RtcConnection connection = RtcConnection(
+        String connectionChannelId = "hello";
+        int connectionLocalUid = 5;
+        RtcConnection connection = RtcConnection(
           channelId: connectionChannelId,
           localUid: connectionLocalUid,
         );
-        const ConnectionStateType state =
+        ConnectionStateType state =
             ConnectionStateType.connectionStateDisconnected;
-        const ConnectionChangedReasonType reason =
+        ConnectionChangedReasonType reason =
             ConnectionChangedReasonType.connectionChangedConnecting;
 
         final eventJson = {
@@ -5239,17 +5248,17 @@ void generatedTestCases(ValueGetter<IrisTester> irisTester) {
       await Future.delayed(const Duration(milliseconds: 500));
 
       {
-        const String connectionChannelId = "hello";
-        const int connectionLocalUid = 10;
-        const RtcConnection connection = RtcConnection(
+        String connectionChannelId = "hello";
+        int connectionLocalUid = 5;
+        RtcConnection connection = RtcConnection(
           channelId: connectionChannelId,
           localUid: connectionLocalUid,
         );
-        const WlaccMessageReason reason =
+        WlaccMessageReason reason =
             WlaccMessageReason.wlaccMessageReasonWeakSignal;
-        const WlaccSuggestAction action =
+        WlaccSuggestAction action =
             WlaccSuggestAction.wlaccSuggestActionCloseToWifi;
-        const String wlAccMsg = "hello";
+        String wlAccMsg = "hello";
 
         final eventJson = {
           'connection': connection.toJson(),
@@ -5315,24 +5324,24 @@ void generatedTestCases(ValueGetter<IrisTester> irisTester) {
       await Future.delayed(const Duration(milliseconds: 500));
 
       {
-        const String connectionChannelId = "hello";
-        const int connectionLocalUid = 10;
-        const RtcConnection connection = RtcConnection(
+        String connectionChannelId = "hello";
+        int connectionLocalUid = 5;
+        RtcConnection connection = RtcConnection(
           channelId: connectionChannelId,
           localUid: connectionLocalUid,
         );
-        const int currentStatsE2eDelayPercent = 10;
-        const int currentStatsFrozenRatioPercent = 10;
-        const int currentStatsLossRatePercent = 10;
-        const WlAccStats currentStats = WlAccStats(
+        int currentStatsE2eDelayPercent = 5;
+        int currentStatsFrozenRatioPercent = 5;
+        int currentStatsLossRatePercent = 5;
+        WlAccStats currentStats = WlAccStats(
           e2eDelayPercent: currentStatsE2eDelayPercent,
           frozenRatioPercent: currentStatsFrozenRatioPercent,
           lossRatePercent: currentStatsLossRatePercent,
         );
-        const int averageStatsE2eDelayPercent = 10;
-        const int averageStatsFrozenRatioPercent = 10;
-        const int averageStatsLossRatePercent = 10;
-        const WlAccStats averageStats = WlAccStats(
+        int averageStatsE2eDelayPercent = 5;
+        int averageStatsFrozenRatioPercent = 5;
+        int averageStatsLossRatePercent = 5;
+        WlAccStats averageStats = WlAccStats(
           e2eDelayPercent: averageStatsE2eDelayPercent,
           frozenRatioPercent: averageStatsFrozenRatioPercent,
           lossRatePercent: averageStatsLossRatePercent,
@@ -5400,13 +5409,13 @@ void generatedTestCases(ValueGetter<IrisTester> irisTester) {
       await Future.delayed(const Duration(milliseconds: 500));
 
       {
-        const String connectionChannelId = "hello";
-        const int connectionLocalUid = 10;
-        const RtcConnection connection = RtcConnection(
+        String connectionChannelId = "hello";
+        int connectionLocalUid = 5;
+        RtcConnection connection = RtcConnection(
           channelId: connectionChannelId,
           localUid: connectionLocalUid,
         );
-        const NetworkType type = NetworkType.networkTypeUnknown;
+        NetworkType type = NetworkType.networkTypeUnknown;
 
         final eventJson = {
           'connection': connection.toJson(),
@@ -5470,13 +5479,13 @@ void generatedTestCases(ValueGetter<IrisTester> irisTester) {
       await Future.delayed(const Duration(milliseconds: 500));
 
       {
-        const String connectionChannelId = "hello";
-        const int connectionLocalUid = 10;
-        const RtcConnection connection = RtcConnection(
+        String connectionChannelId = "hello";
+        int connectionLocalUid = 5;
+        RtcConnection connection = RtcConnection(
           channelId: connectionChannelId,
           localUid: connectionLocalUid,
         );
-        const EncryptionErrorType errorType =
+        EncryptionErrorType errorType =
             EncryptionErrorType.encryptionErrorInternalFailure;
 
         final eventJson = {
@@ -5540,7 +5549,7 @@ void generatedTestCases(ValueGetter<IrisTester> irisTester) {
       await Future.delayed(const Duration(milliseconds: 500));
 
       {
-        const PermissionType permissionType = PermissionType.recordAudio;
+        PermissionType permissionType = PermissionType.recordAudio;
 
         final eventJson = {
           'permissionType': permissionType.value(),
@@ -5602,8 +5611,8 @@ void generatedTestCases(ValueGetter<IrisTester> irisTester) {
       await Future.delayed(const Duration(milliseconds: 500));
 
       {
-        const int uid = 10;
-        const String userAccount = "hello";
+        int uid = 5;
+        String userAccount = "hello";
 
         final eventJson = {
           'uid': uid,
@@ -5667,10 +5676,10 @@ void generatedTestCases(ValueGetter<IrisTester> irisTester) {
       await Future.delayed(const Duration(milliseconds: 500));
 
       {
-        const int uid = 10;
-        const int infoUid = 10;
-        const String infoUserAccount = "hello";
-        const UserInfo info = UserInfo(
+        int uid = 5;
+        int infoUid = 5;
+        String infoUserAccount = "hello";
+        UserInfo info = UserInfo(
           uid: infoUid,
           userAccount: infoUserAccount,
         );
@@ -5737,14 +5746,14 @@ void generatedTestCases(ValueGetter<IrisTester> irisTester) {
       await Future.delayed(const Duration(milliseconds: 500));
 
       {
-        const String connectionChannelId = "hello";
-        const int connectionLocalUid = 10;
-        const RtcConnection connection = RtcConnection(
+        String connectionChannelId = "hello";
+        int connectionLocalUid = 5;
+        RtcConnection connection = RtcConnection(
           channelId: connectionChannelId,
           localUid: connectionLocalUid,
         );
-        const int remoteUid = 10;
-        const String remoteUserAccount = "hello";
+        int remoteUid = 5;
+        String remoteUserAccount = "hello";
 
         final eventJson = {
           'connection': connection.toJson(),
@@ -5811,23 +5820,23 @@ void generatedTestCases(ValueGetter<IrisTester> irisTester) {
       await Future.delayed(const Duration(milliseconds: 500));
 
       {
-        const String connectionChannelId = "hello";
-        const int connectionLocalUid = 10;
-        const RtcConnection connection = RtcConnection(
+        String connectionChannelId = "hello";
+        int connectionLocalUid = 5;
+        RtcConnection connection = RtcConnection(
           channelId: connectionChannelId,
           localUid: connectionLocalUid,
         );
-        const int uid = 10;
-        const MediaTraceEvent currentEvent =
+        int uid = 5;
+        MediaTraceEvent currentEvent =
             MediaTraceEvent.mediaTraceEventVideoRendered;
-        const int tracingInfoElapsedTime = 10;
-        const int tracingInfoStart2JoinChannel = 10;
-        const int tracingInfoJoin2JoinSuccess = 10;
-        const int tracingInfoJoinSuccess2RemoteJoined = 10;
-        const int tracingInfoRemoteJoined2SetView = 10;
-        const int tracingInfoRemoteJoined2UnmuteVideo = 10;
-        const int tracingInfoRemoteJoined2PacketReceived = 10;
-        const VideoRenderingTracingInfo tracingInfo = VideoRenderingTracingInfo(
+        int tracingInfoElapsedTime = 5;
+        int tracingInfoStart2JoinChannel = 5;
+        int tracingInfoJoin2JoinSuccess = 5;
+        int tracingInfoJoinSuccess2RemoteJoined = 5;
+        int tracingInfoRemoteJoined2SetView = 5;
+        int tracingInfoRemoteJoined2UnmuteVideo = 5;
+        int tracingInfoRemoteJoined2PacketReceived = 5;
+        VideoRenderingTracingInfo tracingInfo = VideoRenderingTracingInfo(
           elapsedTime: tracingInfoElapsedTime,
           start2JoinChannel: tracingInfoStart2JoinChannel,
           join2JoinSuccess: tracingInfoJoin2JoinSuccess,
@@ -5902,19 +5911,19 @@ void generatedTestCases(ValueGetter<IrisTester> irisTester) {
       await Future.delayed(const Duration(milliseconds: 500));
 
       {
-        const VideoSourceType streamSourceType =
+        VideoSourceType streamSourceType =
             VideoSourceType.videoSourceCameraPrimary;
-        const int streamRemoteUserUid = 10;
-        const String streamImageUrl = "hello";
-        const int streamMediaPlayerId = 10;
-        const int streamX = 10;
-        const int streamY = 10;
-        const int streamWidth = 10;
-        const int streamHeight = 10;
-        const int streamZOrder = 10;
-        const double streamAlpha = 10.0;
-        const bool streamMirror = true;
-        const TranscodingVideoStream stream = TranscodingVideoStream(
+        int streamRemoteUserUid = 5;
+        String streamImageUrl = "hello";
+        int streamMediaPlayerId = 5;
+        int streamX = 5;
+        int streamY = 5;
+        int streamWidth = 5;
+        int streamHeight = 5;
+        int streamZOrder = 5;
+        double streamAlpha = 5.0;
+        bool streamMirror = true;
+        TranscodingVideoStream stream = TranscodingVideoStream(
           sourceType: streamSourceType,
           remoteUserUid: streamRemoteUserUid,
           imageUrl: streamImageUrl,
@@ -5927,7 +5936,7 @@ void generatedTestCases(ValueGetter<IrisTester> irisTester) {
           alpha: streamAlpha,
           mirror: streamMirror,
         );
-        const VideoTranscoderError error =
+        VideoTranscoderError error =
             VideoTranscoderError.vtErrVideoSourceNotReady;
 
         final eventJson = {
@@ -5993,15 +6002,15 @@ void generatedTestCases(ValueGetter<IrisTester> irisTester) {
       await Future.delayed(const Duration(milliseconds: 500));
 
       {
-        const String connectionChannelId = "hello";
-        const int connectionLocalUid = 10;
-        const RtcConnection connection = RtcConnection(
+        String connectionChannelId = "hello";
+        int connectionLocalUid = 5;
+        RtcConnection connection = RtcConnection(
           channelId: connectionChannelId,
           localUid: connectionLocalUid,
         );
-        const String requestId = "hello";
-        const bool success = true;
-        const UploadErrorReason reason = UploadErrorReason.uploadSuccess;
+        String requestId = "hello";
+        bool success = true;
+        UploadErrorReason reason = UploadErrorReason.uploadSuccess;
 
         final eventJson = {
           'connection': connection.toJson(),
@@ -6070,11 +6079,11 @@ void generatedTestCases(ValueGetter<IrisTester> irisTester) {
       await Future.delayed(const Duration(milliseconds: 500));
 
       {
-        const String channel = "hello";
-        const int uid = 10;
-        const StreamSubscribeState oldState = StreamSubscribeState.subStateIdle;
-        const StreamSubscribeState newState = StreamSubscribeState.subStateIdle;
-        const int elapseSinceLastState = 10;
+        String channel = "hello";
+        int uid = 5;
+        StreamSubscribeState oldState = StreamSubscribeState.subStateIdle;
+        StreamSubscribeState newState = StreamSubscribeState.subStateIdle;
+        int elapseSinceLastState = 5;
 
         final eventJson = {
           'channel': channel,
@@ -6145,11 +6154,11 @@ void generatedTestCases(ValueGetter<IrisTester> irisTester) {
       await Future.delayed(const Duration(milliseconds: 500));
 
       {
-        const String channel = "hello";
-        const int uid = 10;
-        const StreamSubscribeState oldState = StreamSubscribeState.subStateIdle;
-        const StreamSubscribeState newState = StreamSubscribeState.subStateIdle;
-        const int elapseSinceLastState = 10;
+        String channel = "hello";
+        int uid = 5;
+        StreamSubscribeState oldState = StreamSubscribeState.subStateIdle;
+        StreamSubscribeState newState = StreamSubscribeState.subStateIdle;
+        int elapseSinceLastState = 5;
 
         final eventJson = {
           'channel': channel,
@@ -6219,10 +6228,10 @@ void generatedTestCases(ValueGetter<IrisTester> irisTester) {
       await Future.delayed(const Duration(milliseconds: 500));
 
       {
-        const String channel = "hello";
-        const StreamPublishState oldState = StreamPublishState.pubStateIdle;
-        const StreamPublishState newState = StreamPublishState.pubStateIdle;
-        const int elapseSinceLastState = 10;
+        String channel = "hello";
+        StreamPublishState oldState = StreamPublishState.pubStateIdle;
+        StreamPublishState newState = StreamPublishState.pubStateIdle;
+        int elapseSinceLastState = 5;
 
         final eventJson = {
           'channel': channel,
@@ -6292,11 +6301,11 @@ void generatedTestCases(ValueGetter<IrisTester> irisTester) {
       await Future.delayed(const Duration(milliseconds: 500));
 
       {
-        const VideoSourceType source = VideoSourceType.videoSourceCameraPrimary;
-        const String channel = "hello";
-        const StreamPublishState oldState = StreamPublishState.pubStateIdle;
-        const StreamPublishState newState = StreamPublishState.pubStateIdle;
-        const int elapseSinceLastState = 10;
+        VideoSourceType source = VideoSourceType.videoSourceCameraPrimary;
+        String channel = "hello";
+        StreamPublishState oldState = StreamPublishState.pubStateIdle;
+        StreamPublishState newState = StreamPublishState.pubStateIdle;
+        int elapseSinceLastState = 5;
 
         final eventJson = {
           'source': source.value(),
@@ -6364,17 +6373,38 @@ void generatedTestCases(ValueGetter<IrisTester> irisTester) {
       await Future.delayed(const Duration(milliseconds: 500));
 
       {
-        const String connectionChannelId = "hello";
-        const int connectionLocalUid = 10;
-        const RtcConnection connection = RtcConnection(
+        String connectionChannelId = "hello";
+        int connectionLocalUid = 5;
+        RtcConnection connection = RtcConnection(
           channelId: connectionChannelId,
           localUid: connectionLocalUid,
         );
-        const int uid = 10;
-        const int width = 10;
-        const int height = 10;
-        const int layoutCount = 10;
-        const List<VideoLayout> layoutlist = [];
+        int uid = 5;
+        int width = 5;
+        int height = 5;
+        int layoutCount = 5;
+        final List<VideoLayout> layoutlist = () {
+          String layoutlistItemChannelId = "hello";
+          int layoutlistItemUid = 5;
+          String layoutlistItemStrUid = "hello";
+          int layoutlistItemX = 5;
+          int layoutlistItemY = 5;
+          int layoutlistItemWidth = 5;
+          int layoutlistItemHeight = 5;
+          int layoutlistItemVideoState = 5;
+          VideoLayout layoutlistItem = VideoLayout(
+            channelId: layoutlistItemChannelId,
+            uid: layoutlistItemUid,
+            strUid: layoutlistItemStrUid,
+            x: layoutlistItemX,
+            y: layoutlistItemY,
+            width: layoutlistItemWidth,
+            height: layoutlistItemHeight,
+            videoState: layoutlistItemVideoState,
+          );
+
+          return List.filled(5, layoutlistItem);
+        }();
 
         final eventJson = {
           'connection': connection.toJson(),
@@ -6443,15 +6473,15 @@ void generatedTestCases(ValueGetter<IrisTester> irisTester) {
       await Future.delayed(const Duration(milliseconds: 500));
 
       {
-        const String connectionChannelId = "hello";
-        const int connectionLocalUid = 10;
-        const RtcConnection connection = RtcConnection(
+        String connectionChannelId = "hello";
+        int connectionLocalUid = 5;
+        RtcConnection connection = RtcConnection(
           channelId: connectionChannelId,
           localUid: connectionLocalUid,
         );
-        const int uid = 10;
-        Uint8List metadata = Uint8List.fromList([1, 2, 3, 4, 5]);
-        const int length = 10;
+        int uid = 5;
+        Uint8List metadata = Uint8List.fromList([1, 1, 1, 1, 1]);
+        int length = 5;
 
         final eventJson = {
           'connection': connection.toJson(),
@@ -6518,10 +6548,10 @@ void generatedTestCases(ValueGetter<IrisTester> irisTester) {
       await Future.delayed(const Duration(milliseconds: 500));
 
       {
-        const String provider = "hello";
-        const String extension = "hello";
-        const String key = "hello";
-        const String value = "hello";
+        String provider = "hello";
+        String extension = "hello";
+        String key = "hello";
+        String value = "hello";
 
         final eventJson = {
           'provider': provider,
@@ -6586,8 +6616,8 @@ void generatedTestCases(ValueGetter<IrisTester> irisTester) {
       await Future.delayed(const Duration(milliseconds: 500));
 
       {
-        const String provider = "hello";
-        const String extension = "hello";
+        String provider = "hello";
+        String extension = "hello";
 
         final eventJson = {
           'provider': provider,
@@ -6650,8 +6680,8 @@ void generatedTestCases(ValueGetter<IrisTester> irisTester) {
       await Future.delayed(const Duration(milliseconds: 500));
 
       {
-        const String provider = "hello";
-        const String extension = "hello";
+        String provider = "hello";
+        String extension = "hello";
 
         final eventJson = {
           'provider': provider,
@@ -6715,10 +6745,10 @@ void generatedTestCases(ValueGetter<IrisTester> irisTester) {
       await Future.delayed(const Duration(milliseconds: 500));
 
       {
-        const String provider = "hello";
-        const String extension = "hello";
-        const int error = 10;
-        const String message = "hello";
+        String provider = "hello";
+        String extension = "hello";
+        int error = 5;
+        String message = "hello";
 
         final eventJson = {
           'provider': provider,
@@ -6783,13 +6813,13 @@ void generatedTestCases(ValueGetter<IrisTester> irisTester) {
       await Future.delayed(const Duration(milliseconds: 500));
 
       {
-        const String connectionChannelId = "hello";
-        const int connectionLocalUid = 10;
-        const RtcConnection connection = RtcConnection(
+        String connectionChannelId = "hello";
+        int connectionLocalUid = 5;
+        RtcConnection connection = RtcConnection(
           channelId: connectionChannelId,
           localUid: connectionLocalUid,
         );
-        const int code = 10;
+        int code = 5;
 
         final eventJson = {
           'connection': connection.toJson(),

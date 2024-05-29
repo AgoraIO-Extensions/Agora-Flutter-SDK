@@ -25,9 +25,9 @@ void generatedTestCases() {
       final h265Transcoder = rtcEngine.getH265Transcoder();
 
       try {
-        const String token = "hello";
-        const String channel = "hello";
-        const int uid = 10;
+        String token = "hello";
+        String channel = "hello";
+        int uid = 5;
         await h265Transcoder.enableTranscode(
           token: token,
           channel: channel,
@@ -66,9 +66,9 @@ void generatedTestCases() {
       final h265Transcoder = rtcEngine.getH265Transcoder();
 
       try {
-        const String token = "hello";
-        const String channel = "hello";
-        const int uid = 10;
+        String token = "hello";
+        String channel = "hello";
+        int uid = 5;
         await h265Transcoder.queryChannel(
           token: token,
           channel: channel,
@@ -107,9 +107,9 @@ void generatedTestCases() {
       final h265Transcoder = rtcEngine.getH265Transcoder();
 
       try {
-        const String token = "hello";
-        const String channel = "hello";
-        const int uid = 10;
+        String token = "hello";
+        String channel = "hello";
+        int uid = 5;
         await h265Transcoder.triggerTranscode(
           token: token,
           channel: channel,
@@ -149,7 +149,7 @@ void generatedTestCases() {
       final h265Transcoder = rtcEngine.getH265Transcoder();
 
       try {
-        final H265TranscoderObserver observer = H265TranscoderObserver(
+        H265TranscoderObserver observer = H265TranscoderObserver(
           onEnableTranscode: (H265TranscodeResult result) {},
           onQueryChannel: (H265TranscodeResult result, String originChannel,
               String transcodeChannel) {},
@@ -192,7 +192,7 @@ void generatedTestCases() {
       final h265Transcoder = rtcEngine.getH265Transcoder();
 
       try {
-        final H265TranscoderObserver observer = H265TranscoderObserver(
+        H265TranscoderObserver observer = H265TranscoderObserver(
           onEnableTranscode: (H265TranscodeResult result) {},
           onQueryChannel: (H265TranscodeResult result, String originChannel,
               String transcodeChannel) {},

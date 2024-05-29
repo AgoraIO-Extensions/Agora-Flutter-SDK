@@ -66,8 +66,8 @@ void mediaPlayerControllerSmokeTestCases() {
       await mediaPlayerController.initialize();
 
       try {
-        const String url = "hello";
-        const int startPos = 10;
+        String url = "hello";
+        int startPos = 5;
         await mediaPlayerController.open(
           url: url,
           startPos: startPos,
@@ -108,15 +108,15 @@ void mediaPlayerControllerSmokeTestCases() {
       await mediaPlayerController.initialize();
 
       try {
-        const String sourceUrl = "hello";
-        const String sourceUri = "hello";
-        const int sourceStartPos = 10;
-        const bool sourceAutoPlay = true;
-        const bool sourceEnableCache = true;
-        const bool sourceEnableMultiAudioTrack = true;
-        const bool sourceIsAgoraSource = true;
-        const bool sourceIsLiveSource = true;
-        const MediaSource source = MediaSource(
+        String sourceUrl = "hello";
+        String sourceUri = "hello";
+        int sourceStartPos = 5;
+        bool sourceAutoPlay = true;
+        bool sourceEnableCache = true;
+        bool sourceEnableMultiAudioTrack = true;
+        bool sourceIsAgoraSource = true;
+        bool sourceIsLiveSource = true;
+        MediaSource source = MediaSource(
           url: sourceUrl,
           uri: sourceUri,
           startPos: sourceStartPos,
@@ -314,7 +314,7 @@ void mediaPlayerControllerSmokeTestCases() {
       await mediaPlayerController.initialize();
 
       try {
-        const int newPos = 10;
+        int newPos = 5;
         await mediaPlayerController.seek(
           newPos,
         );
@@ -354,7 +354,7 @@ void mediaPlayerControllerSmokeTestCases() {
       await mediaPlayerController.initialize();
 
       try {
-        const int pitch = 10;
+        int pitch = 5;
         await mediaPlayerController.setAudioPitch(
           pitch,
         );
@@ -505,7 +505,7 @@ void mediaPlayerControllerSmokeTestCases() {
       await mediaPlayerController.initialize();
 
       try {
-        const int index = 10;
+        int index = 5;
         await mediaPlayerController.getStreamInfo(
           index,
         );
@@ -545,7 +545,7 @@ void mediaPlayerControllerSmokeTestCases() {
       await mediaPlayerController.initialize();
 
       try {
-        const int loopCount = 10;
+        int loopCount = 5;
         await mediaPlayerController.setLoopCount(
           loopCount,
         );
@@ -585,7 +585,7 @@ void mediaPlayerControllerSmokeTestCases() {
       await mediaPlayerController.initialize();
 
       try {
-        const int speed = 10;
+        int speed = 5;
         await mediaPlayerController.setPlaybackSpeed(
           speed,
         );
@@ -625,7 +625,7 @@ void mediaPlayerControllerSmokeTestCases() {
       await mediaPlayerController.initialize();
 
       try {
-        const int index = 10;
+        int index = 5;
         await mediaPlayerController.selectAudioTrack(
           index,
         );
@@ -665,8 +665,8 @@ void mediaPlayerControllerSmokeTestCases() {
       await mediaPlayerController.initialize();
 
       try {
-        const int playoutTrackIndex = 10;
-        const int publishTrackIndex = 10;
+        int playoutTrackIndex = 5;
+        int publishTrackIndex = 5;
         await mediaPlayerController.selectMultiAudioTrack(
           playoutTrackIndex: playoutTrackIndex,
           publishTrackIndex: publishTrackIndex,
@@ -708,7 +708,7 @@ void mediaPlayerControllerSmokeTestCases() {
       await mediaPlayerController.initialize();
 
       try {
-        const String filename = "hello";
+        String filename = "hello";
         await mediaPlayerController.takeScreenshot(
           filename,
         );
@@ -748,7 +748,7 @@ void mediaPlayerControllerSmokeTestCases() {
       await mediaPlayerController.initialize();
 
       try {
-        const int index = 10;
+        int index = 5;
         await mediaPlayerController.selectInternalSubtitle(
           index,
         );
@@ -789,7 +789,7 @@ void mediaPlayerControllerSmokeTestCases() {
       await mediaPlayerController.initialize();
 
       try {
-        const String url = "hello";
+        String url = "hello";
         await mediaPlayerController.setExternalSubtitle(
           url,
         );
@@ -867,7 +867,7 @@ void mediaPlayerControllerSmokeTestCases() {
       await mediaPlayerController.initialize();
 
       try {
-        const bool muted = true;
+        bool muted = true;
         await mediaPlayerController.mute(
           muted,
         );
@@ -944,7 +944,7 @@ void mediaPlayerControllerSmokeTestCases() {
       await mediaPlayerController.initialize();
 
       try {
-        const int volume = 10;
+        int volume = 5;
         await mediaPlayerController.adjustPlayoutVolume(
           volume,
         );
@@ -1022,7 +1022,7 @@ void mediaPlayerControllerSmokeTestCases() {
       await mediaPlayerController.initialize();
 
       try {
-        const int volume = 10;
+        int volume = 5;
         await mediaPlayerController.adjustPublishSignalVolume(
           volume,
         );
@@ -1101,7 +1101,7 @@ void mediaPlayerControllerSmokeTestCases() {
       await mediaPlayerController.initialize();
 
       try {
-        const int view = 10;
+        int view = 5;
         await mediaPlayerController.setView(
           view,
         );
@@ -1141,7 +1141,7 @@ void mediaPlayerControllerSmokeTestCases() {
       await mediaPlayerController.initialize();
 
       try {
-        const RenderModeType renderMode = RenderModeType.renderModeHidden;
+        RenderModeType renderMode = RenderModeType.renderModeHidden;
         await mediaPlayerController.setRenderMode(
           renderMode,
         );
@@ -1181,7 +1181,7 @@ void mediaPlayerControllerSmokeTestCases() {
       await mediaPlayerController.initialize();
 
       try {
-        final MediaPlayerSourceObserver observer = MediaPlayerSourceObserver(
+        MediaPlayerSourceObserver observer = MediaPlayerSourceObserver(
           onPlayerSourceStateChanged:
               (MediaPlayerState state, MediaPlayerReason reason) {},
           onPositionChanged: (int positionMs, int timestampMs) {},
@@ -1238,7 +1238,7 @@ void mediaPlayerControllerSmokeTestCases() {
       await mediaPlayerController.initialize();
 
       try {
-        final MediaPlayerSourceObserver observer = MediaPlayerSourceObserver(
+        MediaPlayerSourceObserver observer = MediaPlayerSourceObserver(
           onPlayerSourceStateChanged:
               (MediaPlayerState state, MediaPlayerReason reason) {},
           onPositionChanged: (int positionMs, int timestampMs) {},
@@ -1295,10 +1295,10 @@ void mediaPlayerControllerSmokeTestCases() {
       await mediaPlayerController.initialize();
 
       try {
-        final AudioPcmFrameSink observer = AudioPcmFrameSink(
+        AudioPcmFrameSink observer = AudioPcmFrameSink(
           onFrame: (AudioPcmFrame frame) {},
         );
-        const RawAudioFrameOpModeType mode =
+        RawAudioFrameOpModeType mode =
             RawAudioFrameOpModeType.rawAudioFrameOpModeReadOnly;
         mediaPlayerController.registerAudioFrameObserver(
           observer: observer,
@@ -1341,7 +1341,7 @@ void mediaPlayerControllerSmokeTestCases() {
       await mediaPlayerController.initialize();
 
       try {
-        final AudioPcmFrameSink observer = AudioPcmFrameSink(
+        AudioPcmFrameSink observer = AudioPcmFrameSink(
           onFrame: (AudioPcmFrame frame) {},
         );
         mediaPlayerController.unregisterAudioFrameObserver(
@@ -1384,8 +1384,7 @@ void mediaPlayerControllerSmokeTestCases() {
       await mediaPlayerController.initialize();
 
       try {
-        final MediaPlayerVideoFrameObserver observer =
-            MediaPlayerVideoFrameObserver(
+        MediaPlayerVideoFrameObserver observer = MediaPlayerVideoFrameObserver(
           onFrame: (VideoFrame frame) {},
         );
         mediaPlayerController.registerVideoFrameObserver(
@@ -1428,8 +1427,7 @@ void mediaPlayerControllerSmokeTestCases() {
       await mediaPlayerController.initialize();
 
       try {
-        final MediaPlayerVideoFrameObserver observer =
-            MediaPlayerVideoFrameObserver(
+        MediaPlayerVideoFrameObserver observer = MediaPlayerVideoFrameObserver(
           onFrame: (VideoFrame frame) {},
         );
         mediaPlayerController.unregisterVideoFrameObserver(
@@ -1472,11 +1470,11 @@ void mediaPlayerControllerSmokeTestCases() {
       await mediaPlayerController.initialize();
 
       try {
-        final AudioSpectrumObserver observer = AudioSpectrumObserver(
+        AudioSpectrumObserver observer = AudioSpectrumObserver(
           onLocalAudioSpectrum: (AudioSpectrumData data) {},
           onRemoteAudioSpectrum: (List spectrums, int spectrumNumber) {},
         );
-        const int intervalInMS = 10;
+        int intervalInMS = 5;
         mediaPlayerController.registerMediaPlayerAudioSpectrumObserver(
           observer: observer,
           intervalInMS: intervalInMS,
@@ -1518,7 +1516,7 @@ void mediaPlayerControllerSmokeTestCases() {
       await mediaPlayerController.initialize();
 
       try {
-        final AudioSpectrumObserver observer = AudioSpectrumObserver(
+        AudioSpectrumObserver observer = AudioSpectrumObserver(
           onLocalAudioSpectrum: (AudioSpectrumData data) {},
           onRemoteAudioSpectrum: (List spectrums, int spectrumNumber) {},
         );
@@ -1562,7 +1560,7 @@ void mediaPlayerControllerSmokeTestCases() {
       await mediaPlayerController.initialize();
 
       try {
-        const AudioDualMonoMode mode = AudioDualMonoMode.audioDualMonoStereo;
+        AudioDualMonoMode mode = AudioDualMonoMode.audioDualMonoStereo;
         await mediaPlayerController.setAudioDualMonoMode(
           mode,
         );
@@ -1678,8 +1676,8 @@ void mediaPlayerControllerSmokeTestCases() {
       await mediaPlayerController.initialize();
 
       try {
-        const String src = "hello";
-        const int startPos = 10;
+        String src = "hello";
+        int startPos = 5;
         await mediaPlayerController.openWithAgoraCDNSrc(
           src: src,
           startPos: startPos,
@@ -1759,7 +1757,7 @@ void mediaPlayerControllerSmokeTestCases() {
       await mediaPlayerController.initialize();
 
       try {
-        const int index = 10;
+        int index = 5;
         await mediaPlayerController.switchAgoraCDNLineByIndex(
           index,
         );
@@ -1838,7 +1836,7 @@ void mediaPlayerControllerSmokeTestCases() {
       await mediaPlayerController.initialize();
 
       try {
-        const bool enable = true;
+        bool enable = true;
         await mediaPlayerController.enableAutoSwitchAgoraCDN(
           enable,
         );
@@ -1879,8 +1877,8 @@ void mediaPlayerControllerSmokeTestCases() {
       await mediaPlayerController.initialize();
 
       try {
-        const String token = "hello";
-        const int ts = 10;
+        String token = "hello";
+        int ts = 5;
         await mediaPlayerController.renewAgoraCDNSrcToken(
           token: token,
           ts: ts,
@@ -1922,8 +1920,8 @@ void mediaPlayerControllerSmokeTestCases() {
       await mediaPlayerController.initialize();
 
       try {
-        const String src = "hello";
-        const bool syncPts = true;
+        String src = "hello";
+        bool syncPts = true;
         await mediaPlayerController.switchAgoraCDNSrc(
           src: src,
           syncPts: syncPts,
@@ -1964,8 +1962,8 @@ void mediaPlayerControllerSmokeTestCases() {
       await mediaPlayerController.initialize();
 
       try {
-        const String src = "hello";
-        const bool syncPts = true;
+        String src = "hello";
+        bool syncPts = true;
         await mediaPlayerController.switchSrc(
           src: src,
           syncPts: syncPts,
@@ -2006,8 +2004,8 @@ void mediaPlayerControllerSmokeTestCases() {
       await mediaPlayerController.initialize();
 
       try {
-        const String src = "hello";
-        const int startPos = 10;
+        String src = "hello";
+        int startPos = 5;
         await mediaPlayerController.preloadSrc(
           src: src,
           startPos: startPos,
@@ -2048,7 +2046,7 @@ void mediaPlayerControllerSmokeTestCases() {
       await mediaPlayerController.initialize();
 
       try {
-        const String src = "hello";
+        String src = "hello";
         await mediaPlayerController.playPreloadedSrc(
           src,
         );
@@ -2088,7 +2086,7 @@ void mediaPlayerControllerSmokeTestCases() {
       await mediaPlayerController.initialize();
 
       try {
-        const String src = "hello";
+        String src = "hello";
         await mediaPlayerController.unloadSrc(
           src,
         );
@@ -2128,15 +2126,15 @@ void mediaPlayerControllerSmokeTestCases() {
       await mediaPlayerController.initialize();
 
       try {
-        const double paramsSpeakerAzimuth = 10.0;
-        const double paramsSpeakerElevation = 10.0;
-        const double paramsSpeakerDistance = 10.0;
-        const int paramsSpeakerOrientation = 10;
-        const bool paramsEnableBlur = true;
-        const bool paramsEnableAirAbsorb = true;
-        const double paramsSpeakerAttenuation = 10.0;
-        const bool paramsEnableDoppler = true;
-        const SpatialAudioParams params = SpatialAudioParams(
+        double paramsSpeakerAzimuth = 5.0;
+        double paramsSpeakerElevation = 5.0;
+        double paramsSpeakerDistance = 5.0;
+        int paramsSpeakerOrientation = 5;
+        bool paramsEnableBlur = true;
+        bool paramsEnableAirAbsorb = true;
+        double paramsSpeakerAttenuation = 5.0;
+        bool paramsEnableDoppler = true;
+        SpatialAudioParams params = SpatialAudioParams(
           speakerAzimuth: paramsSpeakerAzimuth,
           speakerElevation: paramsSpeakerElevation,
           speakerDistance: paramsSpeakerDistance,
@@ -2186,8 +2184,8 @@ void mediaPlayerControllerSmokeTestCases() {
       await mediaPlayerController.initialize();
 
       try {
-        const double pan = 10.0;
-        const double gain = 10.0;
+        double pan = 5.0;
+        double gain = 5.0;
         await mediaPlayerController.setSoundPositionParams(
           pan: pan,
           gain: gain,
@@ -2229,8 +2227,8 @@ void mediaPlayerControllerSmokeTestCases() {
       await mediaPlayerController.initialize();
 
       try {
-        const String key = "hello";
-        const int value = 10;
+        String key = "hello";
+        int value = 5;
         await mediaPlayerController.setPlayerOptionInInt(
           key: key,
           value: value,
@@ -2272,8 +2270,8 @@ void mediaPlayerControllerSmokeTestCases() {
       await mediaPlayerController.initialize();
 
       try {
-        const String key = "hello";
-        const String value = "hello";
+        String key = "hello";
+        String value = "hello";
         await mediaPlayerController.setPlayerOptionInString(
           key: key,
           value: value,

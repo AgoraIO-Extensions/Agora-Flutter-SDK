@@ -368,10 +368,17 @@ await Future.delayed(const Duration(milliseconds: 500));
         final parameterType = getParamType(parameter);
         if (parameterType == 'Uint8List') {
           pb.writeln(
-              '${getParamType(parameter)} ${parameter.name} = ${parameter.primitiveDefualtValue()};');
+              '${getParamType(parameter)} ${parameter.name} = ${defualtValueOfType(parameter.type)};');
         } else {
-          pb.writeln(
-              'const ${getParamType(parameter)} ${parameter.name} = ${parameter.primitiveDefualtValue()};');
+          if (parameterType.startsWith('List') &&
+              parameter.type.typeArguments.isNotEmpty) {
+            final listBuilderBlock =
+                createListBuilderBlockForList(parseResult, parameter);
+            pb.writeln(listBuilderBlock);
+          } else {
+            pb.writeln(
+                '${getParamType(parameter)} ${parameter.name} = ${defualtValueOfType(parameter.type)};');
+          }
         }
       } else {
         createConstructorInitializerForMethodParameter(

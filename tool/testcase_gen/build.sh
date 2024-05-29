@@ -14,3 +14,5 @@ dart run ${MY_PATH}/bin/testcase_gen.dart \
 
 dart run ${MY_PATH}/bin/testcase_gen.dart \
     --gen-integration-test --output-dir=${PROJECT_ROOT}/test_shard/integration_test_app/integration_test/generated
+
+dart format .

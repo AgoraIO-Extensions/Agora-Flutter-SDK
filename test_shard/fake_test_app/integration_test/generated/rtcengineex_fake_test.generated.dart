@@ -25,54 +25,54 @@ void rtcEngineExSmokeTestCases() {
       await rtcEngineEx.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
-        const String token = "hello";
-        const String connectionChannelId = "hello";
-        const int connectionLocalUid = 10;
-        const RtcConnection connection = RtcConnection(
+        String token = "hello";
+        String connectionChannelId = "hello";
+        int connectionLocalUid = 5;
+        RtcConnection connection = RtcConnection(
           channelId: connectionChannelId,
           localUid: connectionLocalUid,
         );
-        const ClientRoleType optionsClientRoleType =
+        ClientRoleType optionsClientRoleType =
             ClientRoleType.clientRoleBroadcaster;
-        const AudienceLatencyLevelType optionsAudienceLatencyLevel =
+        AudienceLatencyLevelType optionsAudienceLatencyLevel =
             AudienceLatencyLevelType.audienceLatencyLevelLowLatency;
-        const VideoStreamType optionsDefaultVideoStreamType =
+        VideoStreamType optionsDefaultVideoStreamType =
             VideoStreamType.videoStreamHigh;
-        const ChannelProfileType optionsChannelProfile =
+        ChannelProfileType optionsChannelProfile =
             ChannelProfileType.channelProfileCommunication;
-        const bool optionsPublishCameraTrack = true;
-        const bool optionsPublishSecondaryCameraTrack = true;
-        const bool optionsPublishThirdCameraTrack = true;
-        const bool optionsPublishFourthCameraTrack = true;
-        const bool optionsPublishMicrophoneTrack = true;
-        const bool optionsPublishScreenCaptureVideo = true;
-        const bool optionsPublishScreenCaptureAudio = true;
-        const bool optionsPublishScreenTrack = true;
-        const bool optionsPublishSecondaryScreenTrack = true;
-        const bool optionsPublishThirdScreenTrack = true;
-        const bool optionsPublishFourthScreenTrack = true;
-        const bool optionsPublishCustomAudioTrack = true;
-        const int optionsPublishCustomAudioTrackId = 10;
-        const bool optionsPublishCustomVideoTrack = true;
-        const bool optionsPublishEncodedVideoTrack = true;
-        const bool optionsPublishMediaPlayerAudioTrack = true;
-        const bool optionsPublishMediaPlayerVideoTrack = true;
-        const bool optionsPublishTranscodedVideoTrack = true;
-        const bool optionsPublishMixedAudioTrack = true;
-        const bool optionsPublishLipSyncTrack = true;
-        const bool optionsAutoSubscribeAudio = true;
-        const bool optionsAutoSubscribeVideo = true;
-        const bool optionsEnableAudioRecordingOrPlayout = true;
-        const int optionsPublishMediaPlayerId = 10;
-        const int optionsAudioDelayMs = 10;
-        const int optionsMediaPlayerAudioDelayMs = 10;
-        const String optionsToken = "hello";
-        const bool optionsEnableBuiltInMediaEncryption = true;
-        const bool optionsPublishRhythmPlayerTrack = true;
-        const bool optionsIsInteractiveAudience = true;
-        const int optionsCustomVideoTrackId = 10;
-        const bool optionsIsAudioFilterable = true;
-        const ChannelMediaOptions options = ChannelMediaOptions(
+        bool optionsPublishCameraTrack = true;
+        bool optionsPublishSecondaryCameraTrack = true;
+        bool optionsPublishThirdCameraTrack = true;
+        bool optionsPublishFourthCameraTrack = true;
+        bool optionsPublishMicrophoneTrack = true;
+        bool optionsPublishScreenCaptureVideo = true;
+        bool optionsPublishScreenCaptureAudio = true;
+        bool optionsPublishScreenTrack = true;
+        bool optionsPublishSecondaryScreenTrack = true;
+        bool optionsPublishThirdScreenTrack = true;
+        bool optionsPublishFourthScreenTrack = true;
+        bool optionsPublishCustomAudioTrack = true;
+        int optionsPublishCustomAudioTrackId = 5;
+        bool optionsPublishCustomVideoTrack = true;
+        bool optionsPublishEncodedVideoTrack = true;
+        bool optionsPublishMediaPlayerAudioTrack = true;
+        bool optionsPublishMediaPlayerVideoTrack = true;
+        bool optionsPublishTranscodedVideoTrack = true;
+        bool optionsPublishMixedAudioTrack = true;
+        bool optionsPublishLipSyncTrack = true;
+        bool optionsAutoSubscribeAudio = true;
+        bool optionsAutoSubscribeVideo = true;
+        bool optionsEnableAudioRecordingOrPlayout = true;
+        int optionsPublishMediaPlayerId = 5;
+        int optionsAudioDelayMs = 5;
+        int optionsMediaPlayerAudioDelayMs = 5;
+        String optionsToken = "hello";
+        bool optionsEnableBuiltInMediaEncryption = true;
+        bool optionsPublishRhythmPlayerTrack = true;
+        bool optionsIsInteractiveAudience = true;
+        int optionsCustomVideoTrackId = 5;
+        bool optionsIsAudioFilterable = true;
+        ChannelMediaOptions options = ChannelMediaOptions(
           publishCameraTrack: optionsPublishCameraTrack,
           publishSecondaryCameraTrack: optionsPublishSecondaryCameraTrack,
           publishThirdCameraTrack: optionsPublishThirdCameraTrack,
@@ -146,16 +146,16 @@ void rtcEngineExSmokeTestCases() {
       await rtcEngineEx.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
-        const String connectionChannelId = "hello";
-        const int connectionLocalUid = 10;
-        const RtcConnection connection = RtcConnection(
+        String connectionChannelId = "hello";
+        int connectionLocalUid = 5;
+        RtcConnection connection = RtcConnection(
           channelId: connectionChannelId,
           localUid: connectionLocalUid,
         );
-        const bool optionsStopAudioMixing = true;
-        const bool optionsStopAllEffect = true;
-        const bool optionsStopMicrophoneRecording = true;
-        const LeaveChannelOptions options = LeaveChannelOptions(
+        bool optionsStopAudioMixing = true;
+        bool optionsStopAllEffect = true;
+        bool optionsStopMicrophoneRecording = true;
+        LeaveChannelOptions options = LeaveChannelOptions(
           stopAudioMixing: optionsStopAudioMixing,
           stopAllEffect: optionsStopAllEffect,
           stopMicrophoneRecording: optionsStopMicrophoneRecording,
@@ -195,47 +195,47 @@ void rtcEngineExSmokeTestCases() {
       await rtcEngineEx.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
-        const ClientRoleType optionsClientRoleType =
+        ClientRoleType optionsClientRoleType =
             ClientRoleType.clientRoleBroadcaster;
-        const AudienceLatencyLevelType optionsAudienceLatencyLevel =
+        AudienceLatencyLevelType optionsAudienceLatencyLevel =
             AudienceLatencyLevelType.audienceLatencyLevelLowLatency;
-        const VideoStreamType optionsDefaultVideoStreamType =
+        VideoStreamType optionsDefaultVideoStreamType =
             VideoStreamType.videoStreamHigh;
-        const ChannelProfileType optionsChannelProfile =
+        ChannelProfileType optionsChannelProfile =
             ChannelProfileType.channelProfileCommunication;
-        const bool optionsPublishCameraTrack = true;
-        const bool optionsPublishSecondaryCameraTrack = true;
-        const bool optionsPublishThirdCameraTrack = true;
-        const bool optionsPublishFourthCameraTrack = true;
-        const bool optionsPublishMicrophoneTrack = true;
-        const bool optionsPublishScreenCaptureVideo = true;
-        const bool optionsPublishScreenCaptureAudio = true;
-        const bool optionsPublishScreenTrack = true;
-        const bool optionsPublishSecondaryScreenTrack = true;
-        const bool optionsPublishThirdScreenTrack = true;
-        const bool optionsPublishFourthScreenTrack = true;
-        const bool optionsPublishCustomAudioTrack = true;
-        const int optionsPublishCustomAudioTrackId = 10;
-        const bool optionsPublishCustomVideoTrack = true;
-        const bool optionsPublishEncodedVideoTrack = true;
-        const bool optionsPublishMediaPlayerAudioTrack = true;
-        const bool optionsPublishMediaPlayerVideoTrack = true;
-        const bool optionsPublishTranscodedVideoTrack = true;
-        const bool optionsPublishMixedAudioTrack = true;
-        const bool optionsPublishLipSyncTrack = true;
-        const bool optionsAutoSubscribeAudio = true;
-        const bool optionsAutoSubscribeVideo = true;
-        const bool optionsEnableAudioRecordingOrPlayout = true;
-        const int optionsPublishMediaPlayerId = 10;
-        const int optionsAudioDelayMs = 10;
-        const int optionsMediaPlayerAudioDelayMs = 10;
-        const String optionsToken = "hello";
-        const bool optionsEnableBuiltInMediaEncryption = true;
-        const bool optionsPublishRhythmPlayerTrack = true;
-        const bool optionsIsInteractiveAudience = true;
-        const int optionsCustomVideoTrackId = 10;
-        const bool optionsIsAudioFilterable = true;
-        const ChannelMediaOptions options = ChannelMediaOptions(
+        bool optionsPublishCameraTrack = true;
+        bool optionsPublishSecondaryCameraTrack = true;
+        bool optionsPublishThirdCameraTrack = true;
+        bool optionsPublishFourthCameraTrack = true;
+        bool optionsPublishMicrophoneTrack = true;
+        bool optionsPublishScreenCaptureVideo = true;
+        bool optionsPublishScreenCaptureAudio = true;
+        bool optionsPublishScreenTrack = true;
+        bool optionsPublishSecondaryScreenTrack = true;
+        bool optionsPublishThirdScreenTrack = true;
+        bool optionsPublishFourthScreenTrack = true;
+        bool optionsPublishCustomAudioTrack = true;
+        int optionsPublishCustomAudioTrackId = 5;
+        bool optionsPublishCustomVideoTrack = true;
+        bool optionsPublishEncodedVideoTrack = true;
+        bool optionsPublishMediaPlayerAudioTrack = true;
+        bool optionsPublishMediaPlayerVideoTrack = true;
+        bool optionsPublishTranscodedVideoTrack = true;
+        bool optionsPublishMixedAudioTrack = true;
+        bool optionsPublishLipSyncTrack = true;
+        bool optionsAutoSubscribeAudio = true;
+        bool optionsAutoSubscribeVideo = true;
+        bool optionsEnableAudioRecordingOrPlayout = true;
+        int optionsPublishMediaPlayerId = 5;
+        int optionsAudioDelayMs = 5;
+        int optionsMediaPlayerAudioDelayMs = 5;
+        String optionsToken = "hello";
+        bool optionsEnableBuiltInMediaEncryption = true;
+        bool optionsPublishRhythmPlayerTrack = true;
+        bool optionsIsInteractiveAudience = true;
+        int optionsCustomVideoTrackId = 5;
+        bool optionsIsAudioFilterable = true;
+        ChannelMediaOptions options = ChannelMediaOptions(
           publishCameraTrack: optionsPublishCameraTrack,
           publishSecondaryCameraTrack: optionsPublishSecondaryCameraTrack,
           publishThirdCameraTrack: optionsPublishThirdCameraTrack,
@@ -273,9 +273,9 @@ void rtcEngineExSmokeTestCases() {
           customVideoTrackId: optionsCustomVideoTrackId,
           isAudioFilterable: optionsIsAudioFilterable,
         );
-        const String connectionChannelId = "hello";
-        const int connectionLocalUid = 10;
-        const RtcConnection connection = RtcConnection(
+        String connectionChannelId = "hello";
+        int connectionLocalUid = 5;
+        RtcConnection connection = RtcConnection(
           channelId: connectionChannelId,
           localUid: connectionLocalUid,
         );
@@ -315,31 +315,31 @@ void rtcEngineExSmokeTestCases() {
       await rtcEngineEx.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
-        const VideoCodecType configCodecType = VideoCodecType.videoCodecNone;
-        const int dimensionsWidth = 10;
-        const int dimensionsHeight = 10;
-        const VideoDimensions configDimensions = VideoDimensions(
+        VideoCodecType configCodecType = VideoCodecType.videoCodecNone;
+        int dimensionsWidth = 5;
+        int dimensionsHeight = 5;
+        VideoDimensions configDimensions = VideoDimensions(
           width: dimensionsWidth,
           height: dimensionsHeight,
         );
-        const OrientationMode configOrientationMode =
+        OrientationMode configOrientationMode =
             OrientationMode.orientationModeAdaptive;
-        const DegradationPreference configDegradationPreference =
+        DegradationPreference configDegradationPreference =
             DegradationPreference.maintainQuality;
-        const VideoMirrorModeType configMirrorMode =
+        VideoMirrorModeType configMirrorMode =
             VideoMirrorModeType.videoMirrorModeAuto;
-        const EncodingPreference advanceOptionsEncodingPreference =
+        EncodingPreference advanceOptionsEncodingPreference =
             EncodingPreference.preferAuto;
-        const CompressionPreference advanceOptionsCompressionPreference =
+        CompressionPreference advanceOptionsCompressionPreference =
             CompressionPreference.preferLowLatency;
-        const AdvanceOptions configAdvanceOptions = AdvanceOptions(
+        AdvanceOptions configAdvanceOptions = AdvanceOptions(
           encodingPreference: advanceOptionsEncodingPreference,
           compressionPreference: advanceOptionsCompressionPreference,
         );
-        const int configFrameRate = 10;
-        const int configBitrate = 10;
-        const int configMinBitrate = 10;
-        const VideoEncoderConfiguration config = VideoEncoderConfiguration(
+        int configFrameRate = 5;
+        int configBitrate = 5;
+        int configMinBitrate = 5;
+        VideoEncoderConfiguration config = VideoEncoderConfiguration(
           codecType: configCodecType,
           dimensions: configDimensions,
           frameRate: configFrameRate,
@@ -350,9 +350,9 @@ void rtcEngineExSmokeTestCases() {
           mirrorMode: configMirrorMode,
           advanceOptions: configAdvanceOptions,
         );
-        const String connectionChannelId = "hello";
-        const int connectionLocalUid = 10;
-        const RtcConnection connection = RtcConnection(
+        String connectionChannelId = "hello";
+        int connectionLocalUid = 5;
+        RtcConnection connection = RtcConnection(
           channelId: connectionChannelId,
           localUid: connectionLocalUid,
         );
@@ -392,32 +392,32 @@ void rtcEngineExSmokeTestCases() {
       await rtcEngineEx.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
-        const RenderModeType canvasRenderMode = RenderModeType.renderModeHidden;
-        const VideoMirrorModeType canvasMirrorMode =
+        RenderModeType canvasRenderMode = RenderModeType.renderModeHidden;
+        VideoMirrorModeType canvasMirrorMode =
             VideoMirrorModeType.videoMirrorModeAuto;
-        const VideoViewSetupMode canvasSetupMode =
+        VideoViewSetupMode canvasSetupMode =
             VideoViewSetupMode.videoViewSetupReplace;
-        const VideoSourceType canvasSourceType =
+        VideoSourceType canvasSourceType =
             VideoSourceType.videoSourceCameraPrimary;
-        const int cropAreaX = 10;
-        const int cropAreaY = 10;
-        const int cropAreaWidth = 10;
-        const int cropAreaHeight = 10;
-        const Rectangle canvasCropArea = Rectangle(
+        int cropAreaX = 5;
+        int cropAreaY = 5;
+        int cropAreaWidth = 5;
+        int cropAreaHeight = 5;
+        Rectangle canvasCropArea = Rectangle(
           x: cropAreaX,
           y: cropAreaY,
           width: cropAreaWidth,
           height: cropAreaHeight,
         );
-        const VideoModulePosition canvasPosition =
+        VideoModulePosition canvasPosition =
             VideoModulePosition.positionPostCapturer;
-        const int canvasUid = 10;
-        const int canvasSubviewUid = 10;
-        const int canvasView = 10;
-        const int canvasBackgroundColor = 10;
-        const int canvasMediaPlayerId = 10;
-        const bool canvasEnableAlphaMask = true;
-        const VideoCanvas canvas = VideoCanvas(
+        int canvasUid = 5;
+        int canvasSubviewUid = 5;
+        int canvasView = 5;
+        int canvasBackgroundColor = 5;
+        int canvasMediaPlayerId = 5;
+        bool canvasEnableAlphaMask = true;
+        VideoCanvas canvas = VideoCanvas(
           uid: canvasUid,
           subviewUid: canvasSubviewUid,
           view: canvasView,
@@ -431,9 +431,9 @@ void rtcEngineExSmokeTestCases() {
           enableAlphaMask: canvasEnableAlphaMask,
           position: canvasPosition,
         );
-        const String connectionChannelId = "hello";
-        const int connectionLocalUid = 10;
-        const RtcConnection connection = RtcConnection(
+        String connectionChannelId = "hello";
+        int connectionLocalUid = 5;
+        RtcConnection connection = RtcConnection(
           channelId: connectionChannelId,
           localUid: connectionLocalUid,
         );
@@ -472,11 +472,11 @@ void rtcEngineExSmokeTestCases() {
       await rtcEngineEx.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
-        const int uid = 10;
-        const bool mute = true;
-        const String connectionChannelId = "hello";
-        const int connectionLocalUid = 10;
-        const RtcConnection connection = RtcConnection(
+        int uid = 5;
+        bool mute = true;
+        String connectionChannelId = "hello";
+        int connectionLocalUid = 5;
+        RtcConnection connection = RtcConnection(
           channelId: connectionChannelId,
           localUid: connectionLocalUid,
         );
@@ -517,11 +517,11 @@ void rtcEngineExSmokeTestCases() {
       await rtcEngineEx.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
-        const int uid = 10;
-        const bool mute = true;
-        const String connectionChannelId = "hello";
-        const int connectionLocalUid = 10;
-        const RtcConnection connection = RtcConnection(
+        int uid = 5;
+        bool mute = true;
+        String connectionChannelId = "hello";
+        int connectionLocalUid = 5;
+        RtcConnection connection = RtcConnection(
           channelId: connectionChannelId,
           localUid: connectionLocalUid,
         );
@@ -562,11 +562,11 @@ void rtcEngineExSmokeTestCases() {
       await rtcEngineEx.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
-        const int uid = 10;
-        const VideoStreamType streamType = VideoStreamType.videoStreamHigh;
-        const String connectionChannelId = "hello";
-        const int connectionLocalUid = 10;
-        const RtcConnection connection = RtcConnection(
+        int uid = 5;
+        VideoStreamType streamType = VideoStreamType.videoStreamHigh;
+        String connectionChannelId = "hello";
+        int connectionLocalUid = 5;
+        RtcConnection connection = RtcConnection(
           channelId: connectionChannelId,
           localUid: connectionLocalUid,
         );
@@ -607,10 +607,10 @@ void rtcEngineExSmokeTestCases() {
       await rtcEngineEx.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
-        const bool mute = true;
-        const String connectionChannelId = "hello";
-        const int connectionLocalUid = 10;
-        const RtcConnection connection = RtcConnection(
+        bool mute = true;
+        String connectionChannelId = "hello";
+        int connectionLocalUid = 5;
+        RtcConnection connection = RtcConnection(
           channelId: connectionChannelId,
           localUid: connectionLocalUid,
         );
@@ -650,10 +650,10 @@ void rtcEngineExSmokeTestCases() {
       await rtcEngineEx.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
-        const bool mute = true;
-        const String connectionChannelId = "hello";
-        const int connectionLocalUid = 10;
-        const RtcConnection connection = RtcConnection(
+        bool mute = true;
+        String connectionChannelId = "hello";
+        int connectionLocalUid = 5;
+        RtcConnection connection = RtcConnection(
           channelId: connectionChannelId,
           localUid: connectionLocalUid,
         );
@@ -693,10 +693,10 @@ void rtcEngineExSmokeTestCases() {
       await rtcEngineEx.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
-        const bool mute = true;
-        const String connectionChannelId = "hello";
-        const int connectionLocalUid = 10;
-        const RtcConnection connection = RtcConnection(
+        bool mute = true;
+        String connectionChannelId = "hello";
+        int connectionLocalUid = 5;
+        RtcConnection connection = RtcConnection(
           channelId: connectionChannelId,
           localUid: connectionLocalUid,
         );
@@ -736,10 +736,10 @@ void rtcEngineExSmokeTestCases() {
       await rtcEngineEx.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
-        const bool mute = true;
-        const String connectionChannelId = "hello";
-        const int connectionLocalUid = 10;
-        const RtcConnection connection = RtcConnection(
+        bool mute = true;
+        String connectionChannelId = "hello";
+        int connectionLocalUid = 5;
+        RtcConnection connection = RtcConnection(
           channelId: connectionChannelId,
           localUid: connectionLocalUid,
         );
@@ -779,16 +779,16 @@ void rtcEngineExSmokeTestCases() {
       await rtcEngineEx.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
-        const int uid = 10;
-        const VideoStreamType optionsType = VideoStreamType.videoStreamHigh;
-        const bool optionsEncodedFrameOnly = true;
-        const VideoSubscriptionOptions options = VideoSubscriptionOptions(
+        int uid = 5;
+        VideoStreamType optionsType = VideoStreamType.videoStreamHigh;
+        bool optionsEncodedFrameOnly = true;
+        VideoSubscriptionOptions options = VideoSubscriptionOptions(
           type: optionsType,
           encodedFrameOnly: optionsEncodedFrameOnly,
         );
-        const String connectionChannelId = "hello";
-        const int connectionLocalUid = 10;
-        const RtcConnection connection = RtcConnection(
+        String connectionChannelId = "hello";
+        int connectionLocalUid = 5;
+        RtcConnection connection = RtcConnection(
           channelId: connectionChannelId,
           localUid: connectionLocalUid,
         );
@@ -829,12 +829,12 @@ void rtcEngineExSmokeTestCases() {
       await rtcEngineEx.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
-        const int uid = 10;
-        const double pan = 10.0;
-        const double gain = 10.0;
-        const String connectionChannelId = "hello";
-        const int connectionLocalUid = 10;
-        const RtcConnection connection = RtcConnection(
+        int uid = 5;
+        double pan = 5.0;
+        double gain = 5.0;
+        String connectionChannelId = "hello";
+        int connectionLocalUid = 5;
+        RtcConnection connection = RtcConnection(
           channelId: connectionChannelId,
           localUid: connectionLocalUid,
         );
@@ -876,16 +876,16 @@ void rtcEngineExSmokeTestCases() {
       await rtcEngineEx.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
-        const int uid = 10;
-        const double paramsSpeakerAzimuth = 10.0;
-        const double paramsSpeakerElevation = 10.0;
-        const double paramsSpeakerDistance = 10.0;
-        const int paramsSpeakerOrientation = 10;
-        const bool paramsEnableBlur = true;
-        const bool paramsEnableAirAbsorb = true;
-        const double paramsSpeakerAttenuation = 10.0;
-        const bool paramsEnableDoppler = true;
-        const SpatialAudioParams params = SpatialAudioParams(
+        int uid = 5;
+        double paramsSpeakerAzimuth = 5.0;
+        double paramsSpeakerElevation = 5.0;
+        double paramsSpeakerDistance = 5.0;
+        int paramsSpeakerOrientation = 5;
+        bool paramsEnableBlur = true;
+        bool paramsEnableAirAbsorb = true;
+        double paramsSpeakerAttenuation = 5.0;
+        bool paramsEnableDoppler = true;
+        SpatialAudioParams params = SpatialAudioParams(
           speakerAzimuth: paramsSpeakerAzimuth,
           speakerElevation: paramsSpeakerElevation,
           speakerDistance: paramsSpeakerDistance,
@@ -895,9 +895,9 @@ void rtcEngineExSmokeTestCases() {
           speakerAttenuation: paramsSpeakerAttenuation,
           enableDoppler: paramsEnableDoppler,
         );
-        const String connectionChannelId = "hello";
-        const int connectionLocalUid = 10;
-        const RtcConnection connection = RtcConnection(
+        String connectionChannelId = "hello";
+        int connectionLocalUid = 5;
+        RtcConnection connection = RtcConnection(
           channelId: connectionChannelId,
           localUid: connectionLocalUid,
         );
@@ -938,13 +938,13 @@ void rtcEngineExSmokeTestCases() {
       await rtcEngineEx.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
-        const int uid = 10;
-        const RenderModeType renderMode = RenderModeType.renderModeHidden;
-        const VideoMirrorModeType mirrorMode =
+        int uid = 5;
+        RenderModeType renderMode = RenderModeType.renderModeHidden;
+        VideoMirrorModeType mirrorMode =
             VideoMirrorModeType.videoMirrorModeAuto;
-        const String connectionChannelId = "hello";
-        const int connectionLocalUid = 10;
-        const RtcConnection connection = RtcConnection(
+        String connectionChannelId = "hello";
+        int connectionLocalUid = 5;
+        RtcConnection connection = RtcConnection(
           channelId: connectionChannelId,
           localUid: connectionLocalUid,
         );
@@ -986,14 +986,14 @@ void rtcEngineExSmokeTestCases() {
       await rtcEngineEx.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
-        const String connectionChannelId = "hello";
-        const int connectionLocalUid = 10;
-        const RtcConnection connection = RtcConnection(
+        String connectionChannelId = "hello";
+        int connectionLocalUid = 5;
+        RtcConnection connection = RtcConnection(
           channelId: connectionChannelId,
           localUid: connectionLocalUid,
         );
-        const bool enabled = true;
-        const String deviceName = "hello";
+        bool enabled = true;
+        String deviceName = "hello";
         await rtcEngineEx.enableLoopbackRecordingEx(
           connection: connection,
           enabled: enabled,
@@ -1031,10 +1031,10 @@ void rtcEngineExSmokeTestCases() {
       await rtcEngineEx.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
-        const int volume = 10;
-        const String connectionChannelId = "hello";
-        const int connectionLocalUid = 10;
-        const RtcConnection connection = RtcConnection(
+        int volume = 5;
+        String connectionChannelId = "hello";
+        int connectionLocalUid = 5;
+        RtcConnection connection = RtcConnection(
           channelId: connectionChannelId,
           localUid: connectionLocalUid,
         );
@@ -1074,10 +1074,10 @@ void rtcEngineExSmokeTestCases() {
       await rtcEngineEx.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
-        const bool mute = true;
-        const String connectionChannelId = "hello";
-        const int connectionLocalUid = 10;
-        const RtcConnection connection = RtcConnection(
+        bool mute = true;
+        String connectionChannelId = "hello";
+        int connectionLocalUid = 5;
+        RtcConnection connection = RtcConnection(
           channelId: connectionChannelId,
           localUid: connectionLocalUid,
         );
@@ -1117,11 +1117,11 @@ void rtcEngineExSmokeTestCases() {
       await rtcEngineEx.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
-        const int uid = 10;
-        const int volume = 10;
-        const String connectionChannelId = "hello";
-        const int connectionLocalUid = 10;
-        const RtcConnection connection = RtcConnection(
+        int uid = 5;
+        int volume = 5;
+        String connectionChannelId = "hello";
+        int connectionLocalUid = 5;
+        RtcConnection connection = RtcConnection(
           channelId: connectionChannelId,
           localUid: connectionLocalUid,
         );
@@ -1162,9 +1162,9 @@ void rtcEngineExSmokeTestCases() {
       await rtcEngineEx.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
-        const String connectionChannelId = "hello";
-        const int connectionLocalUid = 10;
-        const RtcConnection connection = RtcConnection(
+        String connectionChannelId = "hello";
+        int connectionLocalUid = 5;
+        RtcConnection connection = RtcConnection(
           channelId: connectionChannelId,
           localUid: connectionLocalUid,
         );
@@ -1203,18 +1203,18 @@ void rtcEngineExSmokeTestCases() {
       await rtcEngineEx.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
-        const String connectionChannelId = "hello";
-        const int connectionLocalUid = 10;
-        const RtcConnection connection = RtcConnection(
+        String connectionChannelId = "hello";
+        int connectionLocalUid = 5;
+        RtcConnection connection = RtcConnection(
           channelId: connectionChannelId,
           localUid: connectionLocalUid,
         );
-        const bool enabled = true;
-        const EncryptionMode configEncryptionMode = EncryptionMode.aes128Xts;
-        const String configEncryptionKey = "hello";
-        Uint8List configEncryptionKdfSalt = Uint8List.fromList([1, 2, 3, 4, 5]);
-        const bool configDatastreamEncryptionEnabled = true;
-        final EncryptionConfig config = EncryptionConfig(
+        bool enabled = true;
+        EncryptionMode configEncryptionMode = EncryptionMode.aes128Xts;
+        String configEncryptionKey = "hello";
+        Uint8List configEncryptionKdfSalt = Uint8List.fromList([1, 1, 1, 1, 1]);
+        bool configDatastreamEncryptionEnabled = true;
+        EncryptionConfig config = EncryptionConfig(
           encryptionMode: configEncryptionMode,
           encryptionKey: configEncryptionKey,
           encryptionKdfSalt: configEncryptionKdfSalt,
@@ -1256,12 +1256,12 @@ void rtcEngineExSmokeTestCases() {
       await rtcEngineEx.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
-        const int streamId = 10;
-        Uint8List data = Uint8List.fromList([1, 2, 3, 4, 5]);
-        const int length = 10;
-        const String connectionChannelId = "hello";
-        const int connectionLocalUid = 10;
-        const RtcConnection connection = RtcConnection(
+        int streamId = 5;
+        Uint8List data = Uint8List.fromList([1, 1, 1, 1, 1]);
+        int length = 5;
+        String connectionChannelId = "hello";
+        int connectionLocalUid = 5;
+        RtcConnection connection = RtcConnection(
           channelId: connectionChannelId,
           localUid: connectionLocalUid,
         );
@@ -1303,48 +1303,47 @@ void rtcEngineExSmokeTestCases() {
       await rtcEngineEx.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
-        const String watermarkUrl = "hello";
-        const int positionInLandscapeModeX = 10;
-        const int positionInLandscapeModeY = 10;
-        const int positionInLandscapeModeWidth = 10;
-        const int positionInLandscapeModeHeight = 10;
-        const Rectangle optionsPositionInLandscapeMode = Rectangle(
+        String watermarkUrl = "hello";
+        int positionInLandscapeModeX = 5;
+        int positionInLandscapeModeY = 5;
+        int positionInLandscapeModeWidth = 5;
+        int positionInLandscapeModeHeight = 5;
+        Rectangle optionsPositionInLandscapeMode = Rectangle(
           x: positionInLandscapeModeX,
           y: positionInLandscapeModeY,
           width: positionInLandscapeModeWidth,
           height: positionInLandscapeModeHeight,
         );
-        const int positionInPortraitModeX = 10;
-        const int positionInPortraitModeY = 10;
-        const int positionInPortraitModeWidth = 10;
-        const int positionInPortraitModeHeight = 10;
-        const Rectangle optionsPositionInPortraitMode = Rectangle(
+        int positionInPortraitModeX = 5;
+        int positionInPortraitModeY = 5;
+        int positionInPortraitModeWidth = 5;
+        int positionInPortraitModeHeight = 5;
+        Rectangle optionsPositionInPortraitMode = Rectangle(
           x: positionInPortraitModeX,
           y: positionInPortraitModeY,
           width: positionInPortraitModeWidth,
           height: positionInPortraitModeHeight,
         );
-        const double watermarkRatioXRatio = 10.0;
-        const double watermarkRatioYRatio = 10.0;
-        const double watermarkRatioWidthRatio = 10.0;
-        const WatermarkRatio optionsWatermarkRatio = WatermarkRatio(
+        double watermarkRatioXRatio = 5.0;
+        double watermarkRatioYRatio = 5.0;
+        double watermarkRatioWidthRatio = 5.0;
+        WatermarkRatio optionsWatermarkRatio = WatermarkRatio(
           xRatio: watermarkRatioXRatio,
           yRatio: watermarkRatioYRatio,
           widthRatio: watermarkRatioWidthRatio,
         );
-        const WatermarkFitMode optionsMode =
-            WatermarkFitMode.fitModeCoverPosition;
-        const bool optionsVisibleInPreview = true;
-        const WatermarkOptions options = WatermarkOptions(
+        WatermarkFitMode optionsMode = WatermarkFitMode.fitModeCoverPosition;
+        bool optionsVisibleInPreview = true;
+        WatermarkOptions options = WatermarkOptions(
           visibleInPreview: optionsVisibleInPreview,
           positionInLandscapeMode: optionsPositionInLandscapeMode,
           positionInPortraitMode: optionsPositionInPortraitMode,
           watermarkRatio: optionsWatermarkRatio,
           mode: optionsMode,
         );
-        const String connectionChannelId = "hello";
-        const int connectionLocalUid = 10;
-        const RtcConnection connection = RtcConnection(
+        String connectionChannelId = "hello";
+        int connectionLocalUid = 5;
+        RtcConnection connection = RtcConnection(
           channelId: connectionChannelId,
           localUid: connectionLocalUid,
         );
@@ -1385,9 +1384,9 @@ void rtcEngineExSmokeTestCases() {
       await rtcEngineEx.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
-        const String connectionChannelId = "hello";
-        const int connectionLocalUid = 10;
-        const RtcConnection connection = RtcConnection(
+        String connectionChannelId = "hello";
+        int connectionLocalUid = 5;
+        RtcConnection connection = RtcConnection(
           channelId: connectionChannelId,
           localUid: connectionLocalUid,
         );
@@ -1426,14 +1425,14 @@ void rtcEngineExSmokeTestCases() {
       await rtcEngineEx.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
-        const String id = "hello";
-        const String category = "hello";
-        const String event = "hello";
-        const String label = "hello";
-        const int value = 10;
-        const String connectionChannelId = "hello";
-        const int connectionLocalUid = 10;
-        const RtcConnection connection = RtcConnection(
+        String id = "hello";
+        String category = "hello";
+        String event = "hello";
+        String label = "hello";
+        int value = 5;
+        String connectionChannelId = "hello";
+        int connectionLocalUid = 5;
+        RtcConnection connection = RtcConnection(
           channelId: connectionChannelId,
           localUid: connectionLocalUid,
         );
@@ -1477,12 +1476,12 @@ void rtcEngineExSmokeTestCases() {
       await rtcEngineEx.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
-        const int interval = 10;
-        const int smooth = 10;
-        const bool reportVad = true;
-        const String connectionChannelId = "hello";
-        const int connectionLocalUid = 10;
-        const RtcConnection connection = RtcConnection(
+        int interval = 5;
+        int smooth = 5;
+        bool reportVad = true;
+        String connectionChannelId = "hello";
+        int connectionLocalUid = 5;
+        RtcConnection connection = RtcConnection(
           channelId: connectionChannelId,
           localUid: connectionLocalUid,
         );
@@ -1524,10 +1523,10 @@ void rtcEngineExSmokeTestCases() {
       await rtcEngineEx.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
-        const String url = "hello";
-        const String connectionChannelId = "hello";
-        const int connectionLocalUid = 10;
-        const RtcConnection connection = RtcConnection(
+        String url = "hello";
+        String connectionChannelId = "hello";
+        int connectionLocalUid = 5;
+        RtcConnection connection = RtcConnection(
           channelId: connectionChannelId,
           localUid: connectionLocalUid,
         );
@@ -1567,35 +1566,35 @@ void rtcEngineExSmokeTestCases() {
       await rtcEngineEx.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
-        const String url = "hello";
-        const VideoCodecProfileType transcodingVideoCodecProfile =
+        String url = "hello";
+        VideoCodecProfileType transcodingVideoCodecProfile =
             VideoCodecProfileType.videoCodecProfileBaseline;
-        const VideoCodecTypeForStream transcodingVideoCodecType =
+        VideoCodecTypeForStream transcodingVideoCodecType =
             VideoCodecTypeForStream.videoCodecH264ForStream;
-        const AudioSampleRateType transcodingAudioSampleRate =
+        AudioSampleRateType transcodingAudioSampleRate =
             AudioSampleRateType.audioSampleRate32000;
-        const AudioCodecProfileType transcodingAudioCodecProfile =
+        AudioCodecProfileType transcodingAudioCodecProfile =
             AudioCodecProfileType.audioCodecProfileLcAac;
-        const int transcodingWidth = 10;
-        const int transcodingHeight = 10;
-        const int transcodingVideoBitrate = 10;
-        const int transcodingVideoFramerate = 10;
-        const bool transcodingLowLatency = true;
-        const int transcodingVideoGop = 10;
-        const int transcodingBackgroundColor = 10;
-        const int transcodingUserCount = 10;
-        const List<TranscodingUser> transcodingTranscodingUsers = [];
-        const String transcodingTranscodingExtraInfo = "hello";
-        const String transcodingMetadata = "hello";
-        const List<RtcImage> transcodingWatermark = [];
-        const int transcodingWatermarkCount = 10;
-        const List<RtcImage> transcodingBackgroundImage = [];
-        const int transcodingBackgroundImageCount = 10;
-        const int transcodingAudioBitrate = 10;
-        const int transcodingAudioChannels = 10;
-        const List<LiveStreamAdvancedFeature> transcodingAdvancedFeatures = [];
-        const int transcodingAdvancedFeatureCount = 10;
-        const LiveTranscoding transcoding = LiveTranscoding(
+        int transcodingWidth = 5;
+        int transcodingHeight = 5;
+        int transcodingVideoBitrate = 5;
+        int transcodingVideoFramerate = 5;
+        bool transcodingLowLatency = true;
+        int transcodingVideoGop = 5;
+        int transcodingBackgroundColor = 5;
+        int transcodingUserCount = 5;
+        List<TranscodingUser> transcodingTranscodingUsers = [];
+        String transcodingTranscodingExtraInfo = "hello";
+        String transcodingMetadata = "hello";
+        List<RtcImage> transcodingWatermark = [];
+        int transcodingWatermarkCount = 5;
+        List<RtcImage> transcodingBackgroundImage = [];
+        int transcodingBackgroundImageCount = 5;
+        int transcodingAudioBitrate = 5;
+        int transcodingAudioChannels = 5;
+        List<LiveStreamAdvancedFeature> transcodingAdvancedFeatures = [];
+        int transcodingAdvancedFeatureCount = 5;
+        LiveTranscoding transcoding = LiveTranscoding(
           width: transcodingWidth,
           height: transcodingHeight,
           videoBitrate: transcodingVideoBitrate,
@@ -1620,9 +1619,9 @@ void rtcEngineExSmokeTestCases() {
           advancedFeatures: transcodingAdvancedFeatures,
           advancedFeatureCount: transcodingAdvancedFeatureCount,
         );
-        const String connectionChannelId = "hello";
-        const int connectionLocalUid = 10;
-        const RtcConnection connection = RtcConnection(
+        String connectionChannelId = "hello";
+        int connectionLocalUid = 5;
+        RtcConnection connection = RtcConnection(
           channelId: connectionChannelId,
           localUid: connectionLocalUid,
         );
@@ -1663,34 +1662,34 @@ void rtcEngineExSmokeTestCases() {
       await rtcEngineEx.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
-        const VideoCodecProfileType transcodingVideoCodecProfile =
+        VideoCodecProfileType transcodingVideoCodecProfile =
             VideoCodecProfileType.videoCodecProfileBaseline;
-        const VideoCodecTypeForStream transcodingVideoCodecType =
+        VideoCodecTypeForStream transcodingVideoCodecType =
             VideoCodecTypeForStream.videoCodecH264ForStream;
-        const AudioSampleRateType transcodingAudioSampleRate =
+        AudioSampleRateType transcodingAudioSampleRate =
             AudioSampleRateType.audioSampleRate32000;
-        const AudioCodecProfileType transcodingAudioCodecProfile =
+        AudioCodecProfileType transcodingAudioCodecProfile =
             AudioCodecProfileType.audioCodecProfileLcAac;
-        const int transcodingWidth = 10;
-        const int transcodingHeight = 10;
-        const int transcodingVideoBitrate = 10;
-        const int transcodingVideoFramerate = 10;
-        const bool transcodingLowLatency = true;
-        const int transcodingVideoGop = 10;
-        const int transcodingBackgroundColor = 10;
-        const int transcodingUserCount = 10;
-        const List<TranscodingUser> transcodingTranscodingUsers = [];
-        const String transcodingTranscodingExtraInfo = "hello";
-        const String transcodingMetadata = "hello";
-        const List<RtcImage> transcodingWatermark = [];
-        const int transcodingWatermarkCount = 10;
-        const List<RtcImage> transcodingBackgroundImage = [];
-        const int transcodingBackgroundImageCount = 10;
-        const int transcodingAudioBitrate = 10;
-        const int transcodingAudioChannels = 10;
-        const List<LiveStreamAdvancedFeature> transcodingAdvancedFeatures = [];
-        const int transcodingAdvancedFeatureCount = 10;
-        const LiveTranscoding transcoding = LiveTranscoding(
+        int transcodingWidth = 5;
+        int transcodingHeight = 5;
+        int transcodingVideoBitrate = 5;
+        int transcodingVideoFramerate = 5;
+        bool transcodingLowLatency = true;
+        int transcodingVideoGop = 5;
+        int transcodingBackgroundColor = 5;
+        int transcodingUserCount = 5;
+        List<TranscodingUser> transcodingTranscodingUsers = [];
+        String transcodingTranscodingExtraInfo = "hello";
+        String transcodingMetadata = "hello";
+        List<RtcImage> transcodingWatermark = [];
+        int transcodingWatermarkCount = 5;
+        List<RtcImage> transcodingBackgroundImage = [];
+        int transcodingBackgroundImageCount = 5;
+        int transcodingAudioBitrate = 5;
+        int transcodingAudioChannels = 5;
+        List<LiveStreamAdvancedFeature> transcodingAdvancedFeatures = [];
+        int transcodingAdvancedFeatureCount = 5;
+        LiveTranscoding transcoding = LiveTranscoding(
           width: transcodingWidth,
           height: transcodingHeight,
           videoBitrate: transcodingVideoBitrate,
@@ -1715,9 +1714,9 @@ void rtcEngineExSmokeTestCases() {
           advancedFeatures: transcodingAdvancedFeatures,
           advancedFeatureCount: transcodingAdvancedFeatureCount,
         );
-        const String connectionChannelId = "hello";
-        const int connectionLocalUid = 10;
-        const RtcConnection connection = RtcConnection(
+        String connectionChannelId = "hello";
+        int connectionLocalUid = 5;
+        RtcConnection connection = RtcConnection(
           channelId: connectionChannelId,
           localUid: connectionLocalUid,
         );
@@ -1757,10 +1756,10 @@ void rtcEngineExSmokeTestCases() {
       await rtcEngineEx.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
-        const String url = "hello";
-        const String connectionChannelId = "hello";
-        const int connectionLocalUid = 10;
-        const RtcConnection connection = RtcConnection(
+        String url = "hello";
+        String connectionChannelId = "hello";
+        int connectionLocalUid = 5;
+        RtcConnection connection = RtcConnection(
           channelId: connectionChannelId,
           localUid: connectionLocalUid,
         );
@@ -1799,9 +1798,9 @@ void rtcEngineExSmokeTestCases() {
       await rtcEngineEx.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
-        const String connectionChannelId = "hello";
-        const int connectionLocalUid = 10;
-        const RtcConnection connection = RtcConnection(
+        String connectionChannelId = "hello";
+        int connectionLocalUid = 5;
+        RtcConnection connection = RtcConnection(
           channelId: connectionChannelId,
           localUid: connectionLocalUid,
         );
@@ -1840,9 +1839,9 @@ void rtcEngineExSmokeTestCases() {
       await rtcEngineEx.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
-        const String connectionChannelId = "hello";
-        const int connectionLocalUid = 10;
-        const RtcConnection connection = RtcConnection(
+        String connectionChannelId = "hello";
+        int connectionLocalUid = 5;
+        RtcConnection connection = RtcConnection(
           channelId: connectionChannelId,
           localUid: connectionLocalUid,
         );
@@ -1881,9 +1880,9 @@ void rtcEngineExSmokeTestCases() {
       await rtcEngineEx.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
-        const String connectionChannelId = "hello";
-        const int connectionLocalUid = 10;
-        const RtcConnection connection = RtcConnection(
+        String connectionChannelId = "hello";
+        int connectionLocalUid = 5;
+        RtcConnection connection = RtcConnection(
           channelId: connectionChannelId,
           localUid: connectionLocalUid,
         );
@@ -1922,10 +1921,10 @@ void rtcEngineExSmokeTestCases() {
       await rtcEngineEx.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
-        const String userAccount = "hello";
-        const String connectionChannelId = "hello";
-        const int connectionLocalUid = 10;
-        const RtcConnection connection = RtcConnection(
+        String userAccount = "hello";
+        String connectionChannelId = "hello";
+        int connectionLocalUid = 5;
+        RtcConnection connection = RtcConnection(
           channelId: connectionChannelId,
           localUid: connectionLocalUid,
         );
@@ -1965,10 +1964,10 @@ void rtcEngineExSmokeTestCases() {
       await rtcEngineEx.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
-        const int uid = 10;
-        const String connectionChannelId = "hello";
-        const int connectionLocalUid = 10;
-        const RtcConnection connection = RtcConnection(
+        int uid = 5;
+        String connectionChannelId = "hello";
+        int connectionLocalUid = 5;
+        RtcConnection connection = RtcConnection(
           channelId: connectionChannelId,
           localUid: connectionLocalUid,
         );
@@ -2007,23 +2006,23 @@ void rtcEngineExSmokeTestCases() {
       await rtcEngineEx.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
-        const bool enabled = true;
-        const int dimensionsWidth = 10;
-        const int dimensionsHeight = 10;
-        const VideoDimensions streamConfigDimensions = VideoDimensions(
+        bool enabled = true;
+        int dimensionsWidth = 5;
+        int dimensionsHeight = 5;
+        VideoDimensions streamConfigDimensions = VideoDimensions(
           width: dimensionsWidth,
           height: dimensionsHeight,
         );
-        const int streamConfigKBitrate = 10;
-        const int streamConfigFramerate = 10;
-        const SimulcastStreamConfig streamConfig = SimulcastStreamConfig(
+        int streamConfigKBitrate = 5;
+        int streamConfigFramerate = 5;
+        SimulcastStreamConfig streamConfig = SimulcastStreamConfig(
           dimensions: streamConfigDimensions,
           kBitrate: streamConfigKBitrate,
           framerate: streamConfigFramerate,
         );
-        const String connectionChannelId = "hello";
-        const int connectionLocalUid = 10;
-        const RtcConnection connection = RtcConnection(
+        String connectionChannelId = "hello";
+        int connectionLocalUid = 5;
+        RtcConnection connection = RtcConnection(
           channelId: connectionChannelId,
           localUid: connectionLocalUid,
         );
@@ -2064,24 +2063,23 @@ void rtcEngineExSmokeTestCases() {
       await rtcEngineEx.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
-        const SimulcastStreamMode mode =
-            SimulcastStreamMode.autoSimulcastStream;
-        const int dimensionsWidth = 10;
-        const int dimensionsHeight = 10;
-        const VideoDimensions streamConfigDimensions = VideoDimensions(
+        SimulcastStreamMode mode = SimulcastStreamMode.autoSimulcastStream;
+        int dimensionsWidth = 5;
+        int dimensionsHeight = 5;
+        VideoDimensions streamConfigDimensions = VideoDimensions(
           width: dimensionsWidth,
           height: dimensionsHeight,
         );
-        const int streamConfigKBitrate = 10;
-        const int streamConfigFramerate = 10;
-        const SimulcastStreamConfig streamConfig = SimulcastStreamConfig(
+        int streamConfigKBitrate = 5;
+        int streamConfigFramerate = 5;
+        SimulcastStreamConfig streamConfig = SimulcastStreamConfig(
           dimensions: streamConfigDimensions,
           kBitrate: streamConfigKBitrate,
           framerate: streamConfigFramerate,
         );
-        const String connectionChannelId = "hello";
-        const int connectionLocalUid = 10;
-        const RtcConnection connection = RtcConnection(
+        String connectionChannelId = "hello";
+        int connectionLocalUid = 5;
+        RtcConnection connection = RtcConnection(
           channelId: connectionChannelId,
           localUid: connectionLocalUid,
         );
@@ -2122,14 +2120,14 @@ void rtcEngineExSmokeTestCases() {
       await rtcEngineEx.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
-        const String connectionChannelId = "hello";
-        const int connectionLocalUid = 10;
-        const RtcConnection connection = RtcConnection(
+        String connectionChannelId = "hello";
+        int connectionLocalUid = 5;
+        RtcConnection connection = RtcConnection(
           channelId: connectionChannelId,
           localUid: connectionLocalUid,
         );
-        const int uid = 10;
-        const String filePath = "hello";
+        int uid = 5;
+        String filePath = "hello";
         await rtcEngineEx.takeSnapshotEx(
           connection: connection,
           uid: uid,
@@ -2166,20 +2164,20 @@ void rtcEngineExSmokeTestCases() {
       await rtcEngineEx.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
-        const bool enabled = true;
-        const String configExtraInfo = "hello";
-        const String configServerConfig = "hello";
-        const List<ContentInspectModule> configModules = [];
-        const int configModuleCount = 10;
-        const ContentInspectConfig config = ContentInspectConfig(
+        bool enabled = true;
+        String configExtraInfo = "hello";
+        String configServerConfig = "hello";
+        List<ContentInspectModule> configModules = [];
+        int configModuleCount = 5;
+        ContentInspectConfig config = ContentInspectConfig(
           extraInfo: configExtraInfo,
           serverConfig: configServerConfig,
           modules: configModules,
           moduleCount: configModuleCount,
         );
-        const String connectionChannelId = "hello";
-        const int connectionLocalUid = 10;
-        const RtcConnection connection = RtcConnection(
+        String connectionChannelId = "hello";
+        int connectionLocalUid = 5;
+        RtcConnection connection = RtcConnection(
           channelId: connectionChannelId,
           localUid: connectionLocalUid,
         );
@@ -2220,9 +2218,9 @@ void rtcEngineExSmokeTestCases() {
       await rtcEngineEx.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
-        const String connectionChannelId = "hello";
-        const int connectionLocalUid = 10;
-        const RtcConnection connection = RtcConnection(
+        String connectionChannelId = "hello";
+        int connectionLocalUid = 5;
+        RtcConnection connection = RtcConnection(
           channelId: connectionChannelId,
           localUid: connectionLocalUid,
         );
@@ -2261,13 +2259,13 @@ void rtcEngineExSmokeTestCases() {
       await rtcEngineEx.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
-        const String connectionChannelId = "hello";
-        const int connectionLocalUid = 10;
-        const RtcConnection connection = RtcConnection(
+        String connectionChannelId = "hello";
+        int connectionLocalUid = 5;
+        RtcConnection connection = RtcConnection(
           channelId: connectionChannelId,
           localUid: connectionLocalUid,
         );
-        const String parameters = "hello";
+        String parameters = "hello";
         await rtcEngineEx.setParametersEx(
           connection: connection,
           parameters: parameters,
@@ -2303,9 +2301,9 @@ void rtcEngineExSmokeTestCases() {
       await rtcEngineEx.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
-        const String connectionChannelId = "hello";
-        const int connectionLocalUid = 10;
-        const RtcConnection connection = RtcConnection(
+        String connectionChannelId = "hello";
+        int connectionLocalUid = 5;
+        RtcConnection connection = RtcConnection(
           channelId: connectionChannelId,
           localUid: connectionLocalUid,
         );
@@ -2343,14 +2341,14 @@ void rtcEngineExSmokeTestCases() {
       await rtcEngineEx.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
-        const String connectionChannelId = "hello";
-        const int connectionLocalUid = 10;
-        const RtcConnection connection = RtcConnection(
+        String connectionChannelId = "hello";
+        int connectionLocalUid = 5;
+        RtcConnection connection = RtcConnection(
           channelId: connectionChannelId,
           localUid: connectionLocalUid,
         );
-        Uint8List metadata = Uint8List.fromList([1, 2, 3, 4, 5]);
-        const int length = 10;
+        Uint8List metadata = Uint8List.fromList([1, 1, 1, 1, 1]);
+        int length = 5;
         await rtcEngineEx.sendAudioMetadataEx(
           connection: connection,
           metadata: metadata,
