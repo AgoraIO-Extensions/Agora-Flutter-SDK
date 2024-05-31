@@ -12,7 +12,7 @@ Native:
 <NATIVE_CDN_URL_IOS>
 <NATIVE_CDN_URL_MACOS>
 <NATIVE_CDN_URL_WINDOWS>
-implementation 'io.agora.rtc:agora-full-preview:4.3.2-dev.2'
-implementation 'io.agora.rtc:full-screen-sharing-special:4.3.2-dev.2'
-pod 'AgoraRtcEngine_iOS_Preview', '4.3.2-dev.2'
-pod 'AgoraRtcEngine_macOS_Preview', '4.3.2-dev.2'
+implementation 'io.agora.rtc:agora-full-preview:4.3.2-dev.6'
+implementation 'io.agora.rtc:full-screen-sharing-special:4.3.2-dev.6'
+pod 'AgoraRtcEngine_iOS_Preview', '4.3.2-dev.6'
+pod 'AgoraRtcEngine_macOS_Preview', '4.3.2-dev.6'
