@@ -682,7 +682,7 @@ LastmileProbeResult _$LastmileProbeResultFromJson(Map<String, dynamic> json) =>
 Map<String, dynamic> _$LastmileProbeResultToJson(
         LastmileProbeResult instance) =>
     <String, dynamic>{
-      'state': _$LastmileProbeResultStateEnumMap[instance.state],
+      'state': _$LastmileProbeResultStateEnumMap[instance.state]!,
       'rtt': instance.rtt,
       'uplinkReport': instance.uplinkReport.toJson(),
       'downlinkReport': instance.downlinkReport.toJson(),
@@ -739,17 +739,17 @@ Map<String, dynamic> _$LocalVideoStatsToJson(LocalVideoStats instance) =>
       'rendererOutputFrameRate': instance.rendererOutputFrameRate,
       'targetBitrate': instance.targetBitrate,
       'targetFrameRate': instance.targetFrameRate,
-      'qualityAdaptIndication':
-          _$VideoQualityAdaptIndicationEnumMap[instance.qualityAdaptIndication],
+      'qualityAdaptIndication': _$VideoQualityAdaptIndicationEnumMap[
+          instance.qualityAdaptIndication]!,
       'encodedBitrate': instance.encodedBitrate,
       'encodedFrameWidth': instance.encodedFrameWidth,
       'encodedFrameHeight': instance.encodedFrameHeight,
       'encodedFrameCount': instance.encodedFrameCount,
-      'codecType': _$VideoCodecTypeEnumMap[instance.codecType],
+      'codecType': _$VideoCodecTypeEnumMap[instance.codecType]!,
       'txPacketLossRate': instance.txPacketLossRate,
       'captureFrameRate': instance.captureFrameRate,
       'captureBrightnessLevel':
-          _$CaptureBrightnessLevelTypeEnumMap[instance.captureBrightnessLevel],
+          _$CaptureBrightnessLevelTypeEnumMap[instance.captureBrightnessLevel]!,
     };
 
 const _$VideoQualityAdaptIndicationEnumMap = {
@@ -794,7 +794,7 @@ RemoteAudioStats _$RemoteAudioStatsFromJson(Map<String, dynamic> json) =>
 Map<String, dynamic> _$RemoteAudioStatsToJson(RemoteAudioStats instance) =>
     <String, dynamic>{
       'uid': instance.uid,
-      'quality': _$NetworkQualityEnumMap[instance.quality],
+      'quality': _$NetworkQualityEnumMap[instance.quality]!,
       'networkTransportDelay': instance.networkTransportDelay,
       'jitterBufferDelay': instance.jitterBufferDelay,
       'audioLossRate': instance.audioLossRate,
@@ -805,9 +805,9 @@ Map<String, dynamic> _$RemoteAudioStatsToJson(RemoteAudioStats instance) =>
       'frozenRate': instance.frozenRate,
       'totalActiveTime': instance.totalActiveTime,
       'publishDuration': instance.publishDuration,
-      'qoeQuality': _$ExperienceQualityTypeEnumMap[instance.qoeQuality],
+      'qoeQuality': _$ExperienceQualityTypeEnumMap[instance.qoeQuality]!,
       'qualityChangedReason':
-          _$ExperiencePoorReasonEnumMap[instance.qualityChangedReason],
+          _$ExperiencePoorReasonEnumMap[instance.qualityChangedReason]!,
       'mosValue': instance.mosValue,
     };
 
@@ -863,7 +863,7 @@ Map<String, dynamic> _$RemoteVideoStatsToJson(RemoteVideoStats instance) =>
       'decoderOutputFrameRate': instance.decoderOutputFrameRate,
       'rendererOutputFrameRate': instance.rendererOutputFrameRate,
       'packetLossRate': instance.packetLossRate,
-      'rxStreamType': _$VideoStreamTypeEnumMap[instance.rxStreamType],
+      'rxStreamType': _$VideoStreamTypeEnumMap[instance.rxStreamType]!,
       'totalFrozenTime': instance.totalFrozenTime,
       'frozenRate': instance.frozenRate,
       'totalActiveTime': instance.totalActiveTime,
@@ -1119,7 +1119,7 @@ Map<String, dynamic> _$VirtualBackgroundSourceToJson(
   writeNotNull('color', instance.color);
   writeNotNull('source', instance.source);
   val['blur_degree'] =
-      _$VirtualBackgroundBlurDegreeEnumMap[instance.blurDegree];
+      _$VirtualBackgroundBlurDegreeEnumMap[instance.blurDegree]!;
   return val;
 }
 
@@ -1250,8 +1250,8 @@ Map<String, dynamic> _$MediaRecorderConfigurationToJson(
     <String, dynamic>{
       'storagePath': instance.storagePath,
       'containerFormat':
-          _$MediaRecorderContainerFormatEnumMap[instance.containerFormat],
-      'streamType': _$MediaRecorderStreamTypeEnumMap[instance.streamType],
+          _$MediaRecorderContainerFormatEnumMap[instance.containerFormat]!,
+      'streamType': _$MediaRecorderStreamTypeEnumMap[instance.streamType]!,
       'maxDurationMs': instance.maxDurationMs,
       'recorderInfoUpdateInterval': instance.recorderInfoUpdateInterval,
     };
@@ -1299,7 +1299,7 @@ Map<String, dynamic> _$LocalAccessPointConfigurationToJson(
       'ipList': instance.ipList,
       'domainList': instance.domainList,
       'verifyDomainName': instance.verifyDomainName,
-      'mode': _$LocalProxyModeEnumMap[instance.mode],
+      'mode': _$LocalProxyModeEnumMap[instance.mode]!,
     };
 
 const _$LocalProxyModeEnumMap = {
@@ -1320,8 +1320,8 @@ LowLightEnhanceOptions _$LowLightEnhanceOptionsFromJson(
 Map<String, dynamic> _$LowLightEnhanceOptionsToJson(
         LowLightEnhanceOptions instance) =>
     <String, dynamic>{
-      'mode': _$LowLightEnhanceModeEnumMap[instance.mode],
-      'level': _$LowLightEnhanceLevelEnumMap[instance.level],
+      'mode': _$LowLightEnhanceModeEnumMap[instance.mode]!,
+      'level': _$LowLightEnhanceLevelEnumMap[instance.level]!,
     };
 
 const _$LowLightEnhanceModeEnumMap = {
@@ -1346,8 +1346,8 @@ VideoDenoiserOptions _$VideoDenoiserOptionsFromJson(
 Map<String, dynamic> _$VideoDenoiserOptionsToJson(
         VideoDenoiserOptions instance) =>
     <String, dynamic>{
-      'mode': _$VideoDenoiserModeEnumMap[instance.mode],
-      'level': _$VideoDenoiserLevelEnumMap[instance.level],
+      'mode': _$VideoDenoiserModeEnumMap[instance.mode]!,
+      'level': _$VideoDenoiserLevelEnumMap[instance.level]!,
     };
 
 const _$VideoDenoiserModeEnumMap = {
@@ -1383,7 +1383,7 @@ ScreenCaptureInfo _$ScreenCaptureInfoFromJson(Map<String, dynamic> json) =>
 Map<String, dynamic> _$ScreenCaptureInfoToJson(ScreenCaptureInfo instance) =>
     <String, dynamic>{
       'graphicsCardType': instance.graphicsCardType,
-      'errCode': _$ExcludeWindowErrorEnumMap[instance.errCode],
+      'errCode': _$ExcludeWindowErrorEnumMap[instance.errCode]!,
     };
 
 const _$ExcludeWindowErrorEnumMap = {

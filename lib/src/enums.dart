@@ -2953,6 +2953,10 @@ enum WarningCode {
   AdmPlayoutAudioLowlevel,
 
   /// @nodoc
+  @JsonValue(1035)
+  AdmIOSMismatchAudioSessionMode,
+
+  /// @nodoc
   @JsonValue(1033)
   AdmRecordIsOccupied,
 

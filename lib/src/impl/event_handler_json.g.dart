@@ -30,8 +30,8 @@ OnClientRoleChangeFailedJson _$OnClientRoleChangeFailedJsonFromJson(
 Map<String, dynamic> _$OnClientRoleChangeFailedJsonToJson(
         OnClientRoleChangeFailedJson instance) =>
     <String, dynamic>{
-      'reason': _$ClientRoleChangeFailedReasonEnumMap[instance.reason],
-      'currentRole': _$ClientRoleEnumMap[instance.currentRole],
+      'reason': _$ClientRoleChangeFailedReasonEnumMap[instance.reason]!,
+      'currentRole': _$ClientRoleEnumMap[instance.currentRole]!,
     };
 
 const _$ClientRoleChangeFailedReasonEnumMap = {
@@ -73,8 +73,8 @@ OnWlAccMessageJson _$OnWlAccMessageJsonFromJson(Map<String, dynamic> json) =>
 
 Map<String, dynamic> _$OnWlAccMessageJsonToJson(OnWlAccMessageJson instance) =>
     <String, dynamic>{
-      'reason': _$WlaccMessageReasonEnumMap[instance.reason],
-      'action': _$WlaccSuggestActionEnumMap[instance.action],
+      'reason': _$WlaccMessageReasonEnumMap[instance.reason]!,
+      'action': _$WlaccSuggestActionEnumMap[instance.action]!,
       'wlAccMsg': instance.wlAccMsg,
     };
 
@@ -117,7 +117,7 @@ Map<String, dynamic> _$OnProxyConnectedJsonToJson(
     <String, dynamic>{
       'channel': instance.channel,
       'uid': instance.uid,
-      'proxyType': _$ProxyTypeEnumMap[instance.proxyType],
+      'proxyType': _$ProxyTypeEnumMap[instance.proxyType]!,
       'localProxyIp': instance.localProxyIp,
       'elapsed': instance.elapsed,
     };
@@ -141,7 +141,7 @@ OnAudioDeviceTestVolumeIndicationJson
 Map<String, dynamic> _$OnAudioDeviceTestVolumeIndicationJsonToJson(
         OnAudioDeviceTestVolumeIndicationJson instance) =>
     <String, dynamic>{
-      'volumeType': _$AudioDeviceTestVolumeTypeEnumMap[instance.volumeType],
+      'volumeType': _$AudioDeviceTestVolumeTypeEnumMap[instance.volumeType]!,
       'volume': instance.volume,
     };
 
@@ -160,8 +160,8 @@ OnRecorderStateChangedJson _$OnRecorderStateChangedJsonFromJson(
 Map<String, dynamic> _$OnRecorderStateChangedJsonToJson(
         OnRecorderStateChangedJson instance) =>
     <String, dynamic>{
-      'state': _$RecorderStateEnumMap[instance.state],
-      'error': _$RecorderErrorCodeEnumMap[instance.error],
+      'state': _$RecorderStateEnumMap[instance.state]!,
+      'error': _$RecorderErrorCodeEnumMap[instance.error]!,
     };
 
 const _$RecorderStateEnumMap = {
@@ -200,7 +200,7 @@ OnContentInspectResultJson _$OnContentInspectResultJsonFromJson(
 Map<String, dynamic> _$OnContentInspectResultJsonToJson(
         OnContentInspectResultJson instance) =>
     <String, dynamic>{
-      'result': _$ContentInspectResultEnumMap[instance.result],
+      'result': _$ContentInspectResultEnumMap[instance.result]!,
     };
 
 const _$ContentInspectResultEnumMap = {
