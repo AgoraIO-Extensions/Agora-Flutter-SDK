@@ -7,10 +7,9 @@ import 'package:agora_rtc_engine/src/impl/video_view_controller_impl.dart';
 import 'package:agora_rtc_engine/src/render/agora_video_view.dart';
 import 'package:agora_rtc_engine/src/render/video_view_controller.dart';
 import 'package:flutter/foundation.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
-import 'package:flutter/scheduler.dart' show SchedulerBinding;
+import 'package:flutter/material.dart' show Colors;
 import 'package:flutter/services.dart';
+import 'package:flutter/widgets.dart';
 
 import 'agora_rtc_renderer.dart';
 
