@@ -132,15 +132,12 @@ class MusicPlayerImpl extends media_player_impl.MediaPlayerImpl
 class MusicContentCenterImpl extends binding.MusicContentCenterImpl
     with ScopedDisposableObjectMixin {
   MusicContentCenterImpl._(RtcEngine rtcEngine)
-      : _rtcEngine = rtcEngine,
-        super(rtcEngine.irisMethodChannel);
+      : super(rtcEngine.irisMethodChannel);
 
   factory MusicContentCenterImpl.create(RtcEngine rtcEngine) {
     return rtcEngine.objectPool.putIfAbsent(
         _musicContentCenterScopeKey, () => MusicContentCenterImpl._(rtcEngine));
   }
-
-  final RtcEngine _rtcEngine;
 
   static const _musicContentCenterScopeKey =
       TypedScopedKey(MusicContentCenterImpl);
