@@ -117,9 +117,6 @@ class GLContext {
         == EGL_TRUE;
     if (!result) { CHECK_GL_ERROR() }
 
-    glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
-    CHECK_GL_ERROR()
-
     return result;
   }
 
@@ -536,6 +533,10 @@ class YUVRendering final : public RenderingOp {
     glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
     CHECK_GL_ERROR()
     glViewport(0, 0, width, height);
+    CHECK_GL_ERROR()
+
+    // Ensure that the unpack alignment is set to 1 byte to avoid any alignment issues with YUV data.
+    glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
     CHECK_GL_ERROR()
 
     glEnableVertexAttribArray(aPositionLoc_);
