@@ -117,6 +117,9 @@ class GLContext {
         == EGL_TRUE;
     if (!result) { CHECK_GL_ERROR() }
 
+    glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
+    CHECK_GL_ERROR()
+
     return result;
   }
 
