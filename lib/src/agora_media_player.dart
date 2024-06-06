@@ -145,19 +145,6 @@ abstract class MediaPlayer {
   /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown. You need to catch the exception and handle it accordingly.
   Future<void> selectAudioTrack(int index);
 
-  /// Selects the audio tracks that you want to play on your local device and publish to the channel respectively.
-  ///
-  /// You can call this method to determine the audio track to be played on your local device and published to the channel. Before calling this method, you need to open the media file with the openWithMediaSource method and set enableMultiAudioTrack in MediaSource as true.
-  ///
-  /// * [playoutTrackIndex] The index of audio tracks for local playback. You can obtain the index through getStreamInfo.
-  /// * [publishTrackIndex] The index of audio tracks to be published in the channel. You can obtain the index through getStreamInfo.
-  ///
-  /// Returns
-  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown. You need to catch the exception and handle it accordingly.
-  ///  < 0: Failure.
-  Future<void> selectMultiAudioTrack(
-      {required int playoutTrackIndex, required int publishTrackIndex});
-
   /// @nodoc
   Future<void> takeScreenshot(String filename);
 

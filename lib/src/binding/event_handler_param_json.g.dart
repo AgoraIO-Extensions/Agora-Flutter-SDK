@@ -366,7 +366,6 @@ const _$VideoSourceTypeEnumMap = {
   VideoSourceType.videoSourceCameraFourth: 12,
   VideoSourceType.videoSourceScreenThird: 13,
   VideoSourceType.videoSourceScreenFourth: 14,
-  VideoSourceType.videoSourceSpeechDriven: 15,
   VideoSourceType.videoSourceUnknown: 100,
 };
 
@@ -468,26 +467,6 @@ Map<String, dynamic> _$VideoFrameObserverOnTranscodedVideoFrameJsonToJson(
   }
 
   writeNotNull('videoFrame', instance.videoFrame?.toJson());
-  return val;
-}
-
-FaceInfoObserverOnFaceInfoJson _$FaceInfoObserverOnFaceInfoJsonFromJson(
-        Map<String, dynamic> json) =>
-    FaceInfoObserverOnFaceInfoJson(
-      outFaceInfo: json['outFaceInfo'] as String?,
-    );
-
-Map<String, dynamic> _$FaceInfoObserverOnFaceInfoJsonToJson(
-    FaceInfoObserverOnFaceInfoJson instance) {
-  final val = <String, dynamic>{};
-
-  void writeNotNull(String key, dynamic value) {
-    if (value != null) {
-      val[key] = value;
-    }
-  }
-
-  writeNotNull('outFaceInfo', instance.outFaceInfo);
   return val;
 }
 
@@ -1196,7 +1175,6 @@ const _$ErrorCodeTypeEnumMap = {
   ErrorCodeType.errSetClientRoleNotAuthorized: 119,
   ErrorCodeType.errDecryptionFailed: 120,
   ErrorCodeType.errInvalidUserId: 121,
-  ErrorCodeType.errDatastreamDecryptionFailed: 122,
   ErrorCodeType.errClientIsBannedByServer: 123,
   ErrorCodeType.errEncryptedStreamNotAllowedPublish: 130,
   ErrorCodeType.errLicenseCredentialInvalid: 131,
@@ -1802,8 +1780,6 @@ const _$LocalVideoStreamErrorEnumMap = {
   LocalVideoStreamError.localVideoStreamErrorDeviceNotFound: 8,
   LocalVideoStreamError.localVideoStreamErrorDeviceDisconnected: 9,
   LocalVideoStreamError.localVideoStreamErrorDeviceInvalidId: 10,
-  LocalVideoStreamError.localVideoStreamErrorDeviceInterrupt: 14,
-  LocalVideoStreamError.localVideoStreamErrorDeviceFatalError: 15,
   LocalVideoStreamError.localVideoStreamErrorDeviceSystemPressure: 101,
   LocalVideoStreamError.localVideoStreamErrorScreenCaptureWindowMinimized: 11,
   LocalVideoStreamError.localVideoStreamErrorScreenCaptureWindowClosed: 12,
@@ -2826,8 +2802,6 @@ const _$RemoteAudioStateReasonEnumMap = {
   RemoteAudioStateReason.remoteAudioReasonRemoteMuted: 5,
   RemoteAudioStateReason.remoteAudioReasonRemoteUnmuted: 6,
   RemoteAudioStateReason.remoteAudioReasonRemoteOffline: 7,
-  RemoteAudioStateReason.remoteAudioReasonRemoteNoPacketReceive: 8,
-  RemoteAudioStateReason.remoteAudioReasonRemoteLocalPlayFailed: 9,
 };
 
 RtcEngineEventHandlerOnActiveSpeakerJson
@@ -3125,7 +3099,6 @@ RtcEngineEventHandlerOnAudioRoutingChangedJson
     _$RtcEngineEventHandlerOnAudioRoutingChangedJsonFromJson(
             Map<String, dynamic> json) =>
         RtcEngineEventHandlerOnAudioRoutingChangedJson(
-          deviceType: (json['deviceType'] as num?)?.toInt(),
           routing: (json['routing'] as num?)?.toInt(),
         );
 
@@ -3139,7 +3112,6 @@ Map<String, dynamic> _$RtcEngineEventHandlerOnAudioRoutingChangedJsonToJson(
     }
   }
 
-  writeNotNull('deviceType', instance.deviceType);
   writeNotNull('routing', instance.routing);
   return val;
 }
@@ -3536,8 +3508,6 @@ const _$EncryptionErrorTypeEnumMap = {
   EncryptionErrorType.encryptionErrorInternalFailure: 0,
   EncryptionErrorType.encryptionErrorDecryptionFailure: 1,
   EncryptionErrorType.encryptionErrorEncryptionFailure: 2,
-  EncryptionErrorType.encryptionErrorDatastreamDecryptionFailure: 3,
-  EncryptionErrorType.encryptionErrorDatastreamEncryptionFailure: 4,
 };
 
 RtcEngineEventHandlerOnPermissionErrorJson
@@ -3951,6 +3921,7 @@ Map<String, dynamic>
 }
 
 const _$VideoTranscoderErrorEnumMap = {
+  VideoTranscoderError.vtErrOk: 0,
   VideoTranscoderError.vtErrVideoSourceNotReady: 1,
   VideoTranscoderError.vtErrInvalidVideoSourceType: 2,
   VideoTranscoderError.vtErrInvalidImagePath: 3,

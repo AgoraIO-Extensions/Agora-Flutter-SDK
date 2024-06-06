@@ -130,7 +130,6 @@ MediaSource _$MediaSourceFromJson(Map<String, dynamic> json) => MediaSource(
       startPos: (json['startPos'] as num?)?.toInt(),
       autoPlay: json['autoPlay'] as bool?,
       enableCache: json['enableCache'] as bool?,
-      enableMultiAudioTrack: json['enableMultiAudioTrack'] as bool?,
       isAgoraSource: json['isAgoraSource'] as bool?,
       isLiveSource: json['isLiveSource'] as bool?,
     );
@@ -149,7 +148,6 @@ Map<String, dynamic> _$MediaSourceToJson(MediaSource instance) {
   writeNotNull('startPos', instance.startPos);
   writeNotNull('autoPlay', instance.autoPlay);
   writeNotNull('enableCache', instance.enableCache);
-  writeNotNull('enableMultiAudioTrack', instance.enableMultiAudioTrack);
   writeNotNull('isAgoraSource', instance.isAgoraSource);
   writeNotNull('isLiveSource', instance.isLiveSource);
   return val;

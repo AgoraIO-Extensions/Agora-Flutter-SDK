@@ -509,7 +509,6 @@ class MediaSource {
       this.startPos,
       this.autoPlay,
       this.enableCache,
-      this.enableMultiAudioTrack,
       this.isAgoraSource,
       this.isLiveSource});
 
@@ -535,10 +534,6 @@ class MediaSource {
   ///  If you enable this function, the Media Player caches part of the media file being played on your local device, and you can play the cached media file without internet connection. The statistics about the media file being cached are updated every second after the media file is played. See CacheStatistics.
   @JsonKey(name: 'enableCache')
   final bool? enableCache;
-
-  /// Whether to allow the selection of different audio tracks when playing this media file: true : Allow to select different audio tracks. false : (Default) Do not allow to select different audio tracks. If you need to set different audio tracks for local playback and publishing to the channel, you need to set this parameter to true, and then call the selectMultiAudioTrack method to select the audio track.
-  @JsonKey(name: 'enableMultiAudioTrack')
-  final bool? enableMultiAudioTrack;
 
   /// Whether the media resource to be opened is a live stream or on-demand video distributed through Media Broadcast service: true : The media resource to be played is a live or on-demand video distributed through Media Broadcast service. false : (Default) The media resource is not a live stream or on-demand video distributed through Media Broadcast service. If you need to open a live stream or on-demand video distributed through Broadcast Streaming service, pass in the URL of the media resource to url, and set isAgoraSource as true; otherwise, you don't need to set the isAgoraSource parameter.
   @JsonKey(name: 'isAgoraSource')

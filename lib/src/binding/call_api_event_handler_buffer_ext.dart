@@ -625,8 +625,7 @@ extension EncryptionConfigBufferExt on EncryptionConfig {
     return EncryptionConfig(
         encryptionMode: encryptionMode,
         encryptionKey: encryptionKey,
-        encryptionKdfSalt: encryptionKdfSalt,
-        datastreamEncryptionEnabled: datastreamEncryptionEnabled);
+        encryptionKdfSalt: encryptionKdfSalt);
   }
 
   List<Uint8List> collectBufferList() {
@@ -783,18 +782,6 @@ extension AudioParametersBufferExt on AudioParameters {
   }
 }
 
-extension AudioDeviceInfoBufferExt on AudioDeviceInfo {
-  AudioDeviceInfo fillBuffers(List<Uint8List> bufferList) {
-    if (bufferList.isEmpty) return this;
-    return this;
-  }
-
-  List<Uint8List> collectBufferList() {
-    final bufferList = <Uint8List>[];
-    return bufferList;
-  }
-}
-
 extension ContentInspectModuleBufferExt on ContentInspectModule {
   ContentInspectModule fillBuffers(List<Uint8List> bufferList) {
     if (bufferList.isEmpty) return this;
@@ -888,7 +875,6 @@ extension ExternalVideoFrameBufferExt on ExternalVideoFrame {
         metadataBuffer: metadataBuffer,
         metadataSize: metadataSize,
         alphaBuffer: alphaBuffer,
-        fillAlphaBuffer: fillAlphaBuffer,
         textureSliceIndex: textureSliceIndex);
   }
 
@@ -952,8 +938,7 @@ extension VideoFrameBufferExt on VideoFrame {
         textureId: textureId,
         matrix: matrix,
         alphaBuffer: alphaBuffer,
-        pixelBuffer: pixelBuffer,
-        metaInfo: metaInfo);
+        pixelBuffer: pixelBuffer);
   }
 
   List<Uint8List> collectBufferList() {
@@ -996,9 +981,7 @@ extension AudioFrameBufferExt on AudioFrame {
         buffer: buffer,
         renderTimeMs: renderTimeMs,
         avsyncType: avsyncType,
-        presentationMs: presentationMs,
-        audioTrackNumber: audioTrackNumber,
-        rtpTimestamp: rtpTimestamp);
+        presentationMs: presentationMs);
   }
 
   List<Uint8List> collectBufferList() {
@@ -1548,6 +1531,18 @@ extension SDKBuildInfoBufferExt on SDKBuildInfo {
 
 extension VideoDeviceInfoBufferExt on VideoDeviceInfo {
   VideoDeviceInfo fillBuffers(List<Uint8List> bufferList) {
+    if (bufferList.isEmpty) return this;
+    return this;
+  }
+
+  List<Uint8List> collectBufferList() {
+    final bufferList = <Uint8List>[];
+    return bufferList;
+  }
+}
+
+extension AudioDeviceInfoBufferExt on AudioDeviceInfo {
+  AudioDeviceInfo fillBuffers(List<Uint8List> bufferList) {
     if (bufferList.isEmpty) return this;
     return this;
   }

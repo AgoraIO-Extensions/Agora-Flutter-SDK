@@ -610,32 +610,6 @@ extension VideoFrameObserverOnTranscodedVideoFrameJsonBufferExt
 }
 
 @JsonSerializable(explicitToJson: true, includeIfNull: false)
-class FaceInfoObserverOnFaceInfoJson {
-  const FaceInfoObserverOnFaceInfoJson({this.outFaceInfo});
-
-  @JsonKey(name: 'outFaceInfo')
-  final String? outFaceInfo;
-
-  factory FaceInfoObserverOnFaceInfoJson.fromJson(Map<String, dynamic> json) =>
-      _$FaceInfoObserverOnFaceInfoJsonFromJson(json);
-
-  Map<String, dynamic> toJson() => _$FaceInfoObserverOnFaceInfoJsonToJson(this);
-}
-
-extension FaceInfoObserverOnFaceInfoJsonBufferExt
-    on FaceInfoObserverOnFaceInfoJson {
-  FaceInfoObserverOnFaceInfoJson fillBuffers(List<Uint8List> bufferList) {
-    if (bufferList.isEmpty) return this;
-    return this;
-  }
-
-  List<Uint8List> collectBufferList() {
-    final bufferList = <Uint8List>[];
-    return bufferList;
-  }
-}
-
-@JsonSerializable(explicitToJson: true, includeIfNull: false)
 class MediaRecorderObserverOnRecorderStateChangedJson {
   const MediaRecorderObserverOnRecorderStateChangedJson(
       {this.channelId, this.uid, this.state, this.error});
@@ -3614,11 +3588,7 @@ extension RtcEngineEventHandlerOnTranscodingUpdatedJsonBufferExt
 
 @JsonSerializable(explicitToJson: true, includeIfNull: false)
 class RtcEngineEventHandlerOnAudioRoutingChangedJson {
-  const RtcEngineEventHandlerOnAudioRoutingChangedJson(
-      {this.deviceType, this.routing});
-
-  @JsonKey(name: 'deviceType')
-  final int? deviceType;
+  const RtcEngineEventHandlerOnAudioRoutingChangedJson({this.routing});
 
   @JsonKey(name: 'routing')
   final int? routing;

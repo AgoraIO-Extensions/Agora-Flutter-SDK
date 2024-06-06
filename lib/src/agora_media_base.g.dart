@@ -30,48 +30,6 @@ Map<String, dynamic> _$AudioParametersToJson(AudioParameters instance) {
   return val;
 }
 
-AudioDeviceInfo _$AudioDeviceInfoFromJson(Map<String, dynamic> json) =>
-    AudioDeviceInfo(
-      deviceName: json['deviceName'] as String?,
-      deviceId: json['deviceId'] as String?,
-      isCurrentSelected: json['isCurrentSelected'] as bool?,
-      isPlayoutDevice: json['isPlayoutDevice'] as bool?,
-      routing: $enumDecodeNullable(_$AudioRouteEnumMap, json['routing']),
-    );
-
-Map<String, dynamic> _$AudioDeviceInfoToJson(AudioDeviceInfo instance) {
-  final val = <String, dynamic>{};
-
-  void writeNotNull(String key, dynamic value) {
-    if (value != null) {
-      val[key] = value;
-    }
-  }
-
-  writeNotNull('deviceName', instance.deviceName);
-  writeNotNull('deviceId', instance.deviceId);
-  writeNotNull('isCurrentSelected', instance.isCurrentSelected);
-  writeNotNull('isPlayoutDevice', instance.isPlayoutDevice);
-  writeNotNull('routing', _$AudioRouteEnumMap[instance.routing]);
-  return val;
-}
-
-const _$AudioRouteEnumMap = {
-  AudioRoute.routeDefault: -1,
-  AudioRoute.routeHeadset: 0,
-  AudioRoute.routeEarpiece: 1,
-  AudioRoute.routeHeadsetnomic: 2,
-  AudioRoute.routeSpeakerphone: 3,
-  AudioRoute.routeLoudspeaker: 4,
-  AudioRoute.routeHeadsetbluetooth: 5,
-  AudioRoute.routeUsb: 6,
-  AudioRoute.routeHdmi: 7,
-  AudioRoute.routeDisplayport: 8,
-  AudioRoute.routeAirplay: 9,
-  AudioRoute.routeVirtual: 10,
-  AudioRoute.routeContinuity: 11,
-};
-
 ContentInspectModule _$ContentInspectModuleFromJson(
         Map<String, dynamic> json) =>
     ContentInspectModule(
@@ -98,14 +56,12 @@ const _$ContentInspectTypeEnumMap = {
   ContentInspectType.contentInspectInvalid: 0,
   ContentInspectType.contentInspectModeration: 1,
   ContentInspectType.contentInspectSupervision: 2,
-  ContentInspectType.contentInspectImageModeration: 3,
 };
 
 ContentInspectConfig _$ContentInspectConfigFromJson(
         Map<String, dynamic> json) =>
     ContentInspectConfig(
       extraInfo: json['extraInfo'] as String?,
-      serverConfig: json['serverConfig'] as String?,
       modules: (json['modules'] as List<dynamic>?)
           ?.map((e) => ContentInspectModule.fromJson(e as Map<String, dynamic>))
           .toList(),
@@ -123,7 +79,6 @@ Map<String, dynamic> _$ContentInspectConfigToJson(
   }
 
   writeNotNull('extraInfo', instance.extraInfo);
-  writeNotNull('serverConfig', instance.serverConfig);
   writeNotNull('modules', instance.modules?.map((e) => e.toJson()).toList());
   writeNotNull('moduleCount', instance.moduleCount);
   return val;
@@ -225,7 +180,6 @@ ExternalVideoFrame _$ExternalVideoFrameFromJson(Map<String, dynamic> json) =>
           ?.map((e) => (e as num).toDouble())
           .toList(),
       metadataSize: (json['metadata_size'] as num?)?.toInt(),
-      fillAlphaBuffer: json['fillAlphaBuffer'] as bool?,
       textureSliceIndex: (json['texture_slice_index'] as num?)?.toInt(),
     );
 
@@ -252,7 +206,6 @@ Map<String, dynamic> _$ExternalVideoFrameToJson(ExternalVideoFrame instance) {
   writeNotNull('textureId', instance.textureId);
   writeNotNull('matrix', instance.matrix);
   writeNotNull('metadata_size', instance.metadataSize);
-  writeNotNull('fillAlphaBuffer', instance.fillAlphaBuffer);
   writeNotNull('texture_slice_index', instance.textureSliceIndex);
   return val;
 }
@@ -277,7 +230,6 @@ const _$VideoPixelFormatEnumMap = {
   VideoPixelFormat.videoCvpixelBgra: 14,
   VideoPixelFormat.videoPixelI422: 16,
   VideoPixelFormat.videoTextureId3d11texture2d: 17,
-  VideoPixelFormat.videoPixelI010: 18,
 };
 
 const _$EglContextTypeEnumMap = {
@@ -300,7 +252,6 @@ VideoFrame _$VideoFrameFromJson(Map<String, dynamic> json) => VideoFrame(
       matrix: (json['matrix'] as List<dynamic>?)
           ?.map((e) => (e as num).toDouble())
           .toList(),
-      metaInfo: const VideoFrameMetaInfoConverter().fromJson(json['metaInfo']),
     );
 
 Map<String, dynamic> _$VideoFrameToJson(VideoFrame instance) {
@@ -324,8 +275,6 @@ Map<String, dynamic> _$VideoFrameToJson(VideoFrame instance) {
   writeNotNull('metadata_size', instance.metadataSize);
   writeNotNull('textureId', instance.textureId);
   writeNotNull('matrix', instance.matrix);
-  writeNotNull('metaInfo',
-      const VideoFrameMetaInfoConverter().toJson(instance.metaInfo));
   return val;
 }
 
@@ -339,8 +288,6 @@ AudioFrame _$AudioFrameFromJson(Map<String, dynamic> json) => AudioFrame(
       renderTimeMs: (json['renderTimeMs'] as num?)?.toInt(),
       avsyncType: (json['avsync_type'] as num?)?.toInt(),
       presentationMs: (json['presentationMs'] as num?)?.toInt(),
-      audioTrackNumber: (json['audioTrackNumber'] as num?)?.toInt(),
-      rtpTimestamp: (json['rtpTimestamp'] as num?)?.toInt(),
     );
 
 Map<String, dynamic> _$AudioFrameToJson(AudioFrame instance) {
@@ -361,8 +308,6 @@ Map<String, dynamic> _$AudioFrameToJson(AudioFrame instance) {
   writeNotNull('renderTimeMs', instance.renderTimeMs);
   writeNotNull('avsync_type', instance.avsyncType);
   writeNotNull('presentationMs', instance.presentationMs);
-  writeNotNull('audioTrackNumber', instance.audioTrackNumber);
-  writeNotNull('rtpTimestamp', instance.rtpTimestamp);
   return val;
 }
 
@@ -528,13 +473,21 @@ const _$VideoSourceTypeEnumMap = {
   VideoSourceType.videoSourceCameraFourth: 12,
   VideoSourceType.videoSourceScreenThird: 13,
   VideoSourceType.videoSourceScreenFourth: 14,
-  VideoSourceType.videoSourceSpeechDriven: 15,
   VideoSourceType.videoSourceUnknown: 100,
 };
 
-const _$TrackAudioMixedPolicyTypeEnumMap = {
-  TrackAudioMixedPolicyType.trackAudioMixedLocal: 1,
-  TrackAudioMixedPolicyType.trackAudioMixedRemote: 2,
+const _$AudioRouteEnumMap = {
+  AudioRoute.routeDefault: -1,
+  AudioRoute.routeHeadset: 0,
+  AudioRoute.routeEarpiece: 1,
+  AudioRoute.routeHeadsetnomic: 2,
+  AudioRoute.routeSpeakerphone: 3,
+  AudioRoute.routeLoudspeaker: 4,
+  AudioRoute.routeHeadsetbluetooth: 5,
+  AudioRoute.routeUsb: 6,
+  AudioRoute.routeHdmi: 7,
+  AudioRoute.routeDisplayport: 8,
+  AudioRoute.routeAirplay: 9,
 };
 
 const _$MediaSourceTypeEnumMap = {
@@ -551,7 +504,6 @@ const _$MediaSourceTypeEnumMap = {
   MediaSourceType.rtcImageGifSource: 10,
   MediaSourceType.remoteVideoSource: 11,
   MediaSourceType.transcodedVideoSource: 12,
-  MediaSourceType.speechDrivenVideoSource: 13,
   MediaSourceType.unknownMediaSource: 100,
 };
 
@@ -578,10 +530,6 @@ const _$CameraVideoSourceTypeEnumMap = {
   CameraVideoSourceType.cameraSourceFront: 0,
   CameraVideoSourceType.cameraSourceBack: 1,
   CameraVideoSourceType.videoSourceUnspecified: 2,
-};
-
-const _$MetaInfoKeyEnumMap = {
-  MetaInfoKey.keyFaceCapture: 0,
 };
 
 const _$MediaPlayerSourceTypeEnumMap = {

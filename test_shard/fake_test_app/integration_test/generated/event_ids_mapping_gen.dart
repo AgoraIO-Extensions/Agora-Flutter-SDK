@@ -49,7 +49,6 @@ const eventIdsMapping = {
   "VideoFrameObserver_onTranscodedVideoFrame": [
     "VideoFrameObserver_onTranscodedVideoFrame"
   ],
-  "FaceInfoObserver_onFaceInfo": ["FaceInfoObserver_onFaceInfo"],
   "MediaRecorderObserver_onRecorderStateChanged": [
     "MediaRecorderObserver_onRecorderStateChanged"
   ],

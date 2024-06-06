@@ -379,7 +379,6 @@ CameraCapturerConfiguration _$CameraCapturerConfigurationFromJson(
       cameraDirection: $enumDecodeNullable(
           _$CameraDirectionEnumMap, json['cameraDirection']),
       deviceId: json['deviceId'] as String?,
-      cameraId: json['cameraId'] as String?,
       format: json['format'] == null
           ? null
           : VideoFormat.fromJson(json['format'] as Map<String, dynamic>),
@@ -399,7 +398,6 @@ Map<String, dynamic> _$CameraCapturerConfigurationToJson(
   writeNotNull(
       'cameraDirection', _$CameraDirectionEnumMap[instance.cameraDirection]);
   writeNotNull('deviceId', instance.deviceId);
-  writeNotNull('cameraId', instance.cameraId);
   writeNotNull('format', instance.format?.toJson());
   writeNotNull(
       'followEncodeDimensionRatio', instance.followEncodeDimensionRatio);
@@ -619,9 +617,6 @@ ChannelMediaOptions _$ChannelMediaOptionsFromJson(Map<String, dynamic> json) =>
       publishMediaPlayerVideoTrack:
           json['publishMediaPlayerVideoTrack'] as bool?,
       publishTranscodedVideoTrack: json['publishTranscodedVideoTrack'] as bool?,
-      publishMixedAudioTrack: json['publishMixedAudioTrack'] as bool?,
-      mixPolicyForMixedTrack: (json['mixPolicyForMixedTrack'] as num?)?.toInt(),
-      publishLipSyncTrack: json['publishLipSyncTrack'] as bool?,
       autoSubscribeAudio: json['autoSubscribeAudio'] as bool?,
       autoSubscribeVideo: json['autoSubscribeVideo'] as bool?,
       enableAudioRecordingOrPlayout:
@@ -679,9 +674,6 @@ Map<String, dynamic> _$ChannelMediaOptionsToJson(ChannelMediaOptions instance) {
       'publishMediaPlayerVideoTrack', instance.publishMediaPlayerVideoTrack);
   writeNotNull(
       'publishTranscodedVideoTrack', instance.publishTranscodedVideoTrack);
-  writeNotNull('publishMixedAudioTrack', instance.publishMixedAudioTrack);
-  writeNotNull('mixPolicyForMixedTrack', instance.mixPolicyForMixedTrack);
-  writeNotNull('publishLipSyncTrack', instance.publishLipSyncTrack);
   writeNotNull('autoSubscribeAudio', instance.autoSubscribeAudio);
   writeNotNull('autoSubscribeVideo', instance.autoSubscribeVideo);
   writeNotNull(
@@ -870,12 +862,6 @@ DirectCdnStreamingMediaOptions _$DirectCdnStreamingMediaOptionsFromJson(
           json['publishMediaPlayerAudioTrack'] as bool?,
       publishMediaPlayerId: (json['publishMediaPlayerId'] as num?)?.toInt(),
       customVideoTrackId: (json['customVideoTrackId'] as num?)?.toInt(),
-      publishScreenTrack: json['publishScreenTrack'] as bool?,
-      publishSecondaryScreenTrack: json['publishSecondaryScreenTrack'] as bool?,
-      publishThirdScreenTrack: json['publishThirdScreenTrack'] as bool?,
-      publishFourthScreenTrack: json['publishFourthScreenTrack'] as bool?,
-      publishLoopbackAudioTrack: json['publishLoopbackAudioTrack'] as bool?,
-      publishLoopbackDeviceName: json['publishLoopbackDeviceName'] as String?,
     );
 
 Map<String, dynamic> _$DirectCdnStreamingMediaOptionsToJson(
@@ -896,13 +882,6 @@ Map<String, dynamic> _$DirectCdnStreamingMediaOptionsToJson(
       'publishMediaPlayerAudioTrack', instance.publishMediaPlayerAudioTrack);
   writeNotNull('publishMediaPlayerId', instance.publishMediaPlayerId);
   writeNotNull('customVideoTrackId', instance.customVideoTrackId);
-  writeNotNull('publishScreenTrack', instance.publishScreenTrack);
-  writeNotNull(
-      'publishSecondaryScreenTrack', instance.publishSecondaryScreenTrack);
-  writeNotNull('publishThirdScreenTrack', instance.publishThirdScreenTrack);
-  writeNotNull('publishFourthScreenTrack', instance.publishFourthScreenTrack);
-  writeNotNull('publishLoopbackAudioTrack', instance.publishLoopbackAudioTrack);
-  writeNotNull('publishLoopbackDeviceName', instance.publishLoopbackDeviceName);
   return val;
 }
 
@@ -946,7 +925,6 @@ const _$MediaSourceTypeEnumMap = {
   MediaSourceType.rtcImageGifSource: 10,
   MediaSourceType.remoteVideoSource: 11,
   MediaSourceType.transcodedVideoSource: 12,
-  MediaSourceType.speechDrivenVideoSource: 13,
   MediaSourceType.unknownMediaSource: 100,
 };
 
@@ -976,6 +954,26 @@ VideoDeviceInfo _$VideoDeviceInfoFromJson(Map<String, dynamic> json) =>
     );
 
 Map<String, dynamic> _$VideoDeviceInfoToJson(VideoDeviceInfo instance) {
+  final val = <String, dynamic>{};
+
+  void writeNotNull(String key, dynamic value) {
+    if (value != null) {
+      val[key] = value;
+    }
+  }
+
+  writeNotNull('deviceId', instance.deviceId);
+  writeNotNull('deviceName', instance.deviceName);
+  return val;
+}
+
+AudioDeviceInfo _$AudioDeviceInfoFromJson(Map<String, dynamic> json) =>
+    AudioDeviceInfo(
+      deviceId: json['deviceId'] as String?,
+      deviceName: json['deviceName'] as String?,
+    );
+
+Map<String, dynamic> _$AudioDeviceInfoToJson(AudioDeviceInfo instance) {
   final val = <String, dynamic>{};
 
   void writeNotNull(String key, dynamic value) {

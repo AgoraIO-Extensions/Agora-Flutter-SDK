@@ -81,7 +81,7 @@ abstract class RtcEngineEx implements RtcEngine {
 
   /// Sets the video encoder configuration.
   ///
-  /// Sets the encoder configuration for the local video. Each configuration profile corresponds to a set of video parameters, including the resolution, frame rate, and bitrate. The config specified in this method is the maximum value under ideal network conditions. If the video engine cannot render the video using the specified config due to unreliable network conditions, the parameters further down the list are considered until a successful configuration is found.
+  /// Sets the encoder configuration for the local video. Each configuration profile corresponds to a set of video parameters, including the resolution, frame rate, and bitrate.
   ///
   /// * [config] Video profile. See VideoEncoderConfiguration.
   /// * [connection] The connection information. See RtcConnection.
@@ -375,7 +375,10 @@ abstract class RtcEngineEx implements RtcEngine {
   ///  The playback volume here refers to the mixed volume of a specified remote user.
   ///
   /// * [uid] The user ID of the remote user.
-  /// * [volume] Audio mixing volume. The value ranges between 0 and 100. The default value is 100, which means the original volume.
+  /// * [volume] The volume of the user. The value range is [0,400].
+  ///  0: Mute.
+  ///  100: (Default) The original volume.
+  ///  400: Four times the original volume (amplifying the audio signals by four times).
   /// * [connection] The connection information. See RtcConnection.
   ///
   /// Returns
@@ -704,21 +707,6 @@ abstract class RtcEngineEx implements RtcEngine {
       required int uid,
       required String filePath});
 
-  /// Enables or disables video screenshot and upload.
-  ///
-  /// This method can take screenshots for multiple video streams and upload them. When video screenshot and upload function is enabled, the SDK takes screenshots and uploads videos sent by local users based on the type and frequency of the module you set in ContentInspectConfig. After video screenshot and upload, the Agora server sends the callback notification to your app server in HTTPS requests and sends all screenshots to the third-party cloud storage service. Before calling this method, ensure that you have contacted to activate the video screenshot upload service.
-  ///
-  /// * [enabled] Whether to enable video screenshot and upload : true : Enables video screenshot and upload. false : Disables video screenshot and upload.
-  /// * [config] Configuration of video screenshot and upload. See ContentInspectConfig. When the video moderation module is set to video moderation via Agora self-developed extension(contentInspectSupervision), the video screenshot and upload dynamic library libagora_content_inspect_extension.dll is required. Deleting this library disables the screenshot and upload feature.
-  /// * [connection] The connection information. See RtcConnection.
-  ///
-  /// Returns
-  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown. You need to catch the exception and handle it accordingly.
-  Future<void> enableContentInspectEx(
-      {required bool enabled,
-      required ContentInspectConfig config,
-      required RtcConnection connection});
-
   /// Enables tracing the video frame rendering process.
   ///
   /// By default, the SDK starts tracing the video rendering event automatically when the local user successfully joins the channel. You can call this method at an appropriate time according to the actual application scenario to customize the tracing process.
@@ -729,14 +717,4 @@ abstract class RtcEngineEx implements RtcEngine {
   /// Returns
   /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown. You need to catch the exception and handle it accordingly.
   Future<void> startMediaRenderingTracingEx(RtcConnection connection);
-
-  /// Gets the call ID with the connection ID.
-  ///
-  /// Call this method after joining a channel. When a user joins a channel on a client, a callId is generated to identify the call from the client. You can call this method to get the callId parameter, and pass it in when calling methods such as rate and complain.
-  ///
-  /// * [connection] The connection information. See RtcConnection.
-  ///
-  /// Returns
-  /// The current call ID.
-  Future<String> getCallIdEx(RtcConnection connection);
 }

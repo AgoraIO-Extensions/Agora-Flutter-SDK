@@ -58,9 +58,6 @@ void rtcEngineExSmokeTestCases() {
         const bool optionsPublishMediaPlayerAudioTrack = true;
         const bool optionsPublishMediaPlayerVideoTrack = true;
         const bool optionsPublishTranscodedVideoTrack = true;
-        const bool optionsPublishMixedAudioTrack = true;
-        const int optionsMixPolicyForMixedTrack = 10;
-        const bool optionsPublishLipSyncTrack = true;
         const bool optionsAutoSubscribeAudio = true;
         const bool optionsAutoSubscribeVideo = true;
         const bool optionsEnableAudioRecordingOrPlayout = true;
@@ -92,9 +89,6 @@ void rtcEngineExSmokeTestCases() {
           publishMediaPlayerAudioTrack: optionsPublishMediaPlayerAudioTrack,
           publishMediaPlayerVideoTrack: optionsPublishMediaPlayerVideoTrack,
           publishTranscodedVideoTrack: optionsPublishTranscodedVideoTrack,
-          publishMixedAudioTrack: optionsPublishMixedAudioTrack,
-          mixPolicyForMixedTrack: optionsMixPolicyForMixedTrack,
-          publishLipSyncTrack: optionsPublishLipSyncTrack,
           autoSubscribeAudio: optionsAutoSubscribeAudio,
           autoSubscribeVideo: optionsAutoSubscribeVideo,
           enableAudioRecordingOrPlayout: optionsEnableAudioRecordingOrPlayout,
@@ -223,9 +217,6 @@ void rtcEngineExSmokeTestCases() {
         const bool optionsPublishMediaPlayerAudioTrack = true;
         const bool optionsPublishMediaPlayerVideoTrack = true;
         const bool optionsPublishTranscodedVideoTrack = true;
-        const bool optionsPublishMixedAudioTrack = true;
-        const int optionsMixPolicyForMixedTrack = 10;
-        const bool optionsPublishLipSyncTrack = true;
         const bool optionsAutoSubscribeAudio = true;
         const bool optionsAutoSubscribeVideo = true;
         const bool optionsEnableAudioRecordingOrPlayout = true;
@@ -257,9 +248,6 @@ void rtcEngineExSmokeTestCases() {
           publishMediaPlayerAudioTrack: optionsPublishMediaPlayerAudioTrack,
           publishMediaPlayerVideoTrack: optionsPublishMediaPlayerVideoTrack,
           publishTranscodedVideoTrack: optionsPublishTranscodedVideoTrack,
-          publishMixedAudioTrack: optionsPublishMixedAudioTrack,
-          mixPolicyForMixedTrack: optionsMixPolicyForMixedTrack,
-          publishLipSyncTrack: optionsPublishLipSyncTrack,
           autoSubscribeAudio: optionsAutoSubscribeAudio,
           autoSubscribeVideo: optionsAutoSubscribeVideo,
           enableAudioRecordingOrPlayout: optionsEnableAudioRecordingOrPlayout,
@@ -1212,12 +1200,10 @@ void rtcEngineExSmokeTestCases() {
         const EncryptionMode configEncryptionMode = EncryptionMode.aes128Xts;
         const String configEncryptionKey = "hello";
         Uint8List configEncryptionKdfSalt = Uint8List.fromList([1, 2, 3, 4, 5]);
-        const bool configDatastreamEncryptionEnabled = true;
         final EncryptionConfig config = EncryptionConfig(
           encryptionMode: configEncryptionMode,
           encryptionKey: configEncryptionKey,
           encryptionKdfSalt: configEncryptionKdfSalt,
-          datastreamEncryptionEnabled: configDatastreamEncryptionEnabled,
         );
         await rtcEngineEx.enableEncryptionEx(
           connection: connection,
@@ -2152,60 +2138,6 @@ void rtcEngineExSmokeTestCases() {
   );
 
   testWidgets(
-    'RtcEngineEx.enableContentInspectEx',
-    (WidgetTester tester) async {
-      String engineAppId = const String.fromEnvironment('TEST_APP_ID',
-          defaultValue: '<YOUR_APP_ID>');
-
-      RtcEngineEx rtcEngineEx = createAgoraRtcEngineEx();
-      await rtcEngineEx.initialize(RtcEngineContext(
-        appId: engineAppId,
-        areaCode: AreaCode.areaCodeGlob.value(),
-      ));
-      await rtcEngineEx.setParameters('{"rtc.enable_debug_log": true}');
-
-      try {
-        const bool enabled = true;
-        const String configExtraInfo = "hello";
-        const String configServerConfig = "hello";
-        const List<ContentInspectModule> configModules = [];
-        const int configModuleCount = 10;
-        const ContentInspectConfig config = ContentInspectConfig(
-          extraInfo: configExtraInfo,
-          serverConfig: configServerConfig,
-          modules: configModules,
-          moduleCount: configModuleCount,
-        );
-        const String connectionChannelId = "hello";
-        const int connectionLocalUid = 10;
-        const RtcConnection connection = RtcConnection(
-          channelId: connectionChannelId,
-          localUid: connectionLocalUid,
-        );
-        await rtcEngineEx.enableContentInspectEx(
-          enabled: enabled,
-          config: config,
-          connection: connection,
-        );
-      } catch (e) {
-        if (e is! AgoraRtcException) {
-          debugPrint(
-              '[RtcEngineEx.enableContentInspectEx] error: ${e.toString()}');
-          rethrow;
-        }
-
-        if (e.code != -4) {
-          // Only not supported error supported.
-          rethrow;
-        }
-      }
-
-      await rtcEngineEx.release();
-    },
-//  skip: !(),
-  );
-
-  testWidgets(
     'RtcEngineEx.startMediaRenderingTracingEx',
     (WidgetTester tester) async {
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
@@ -2232,46 +2164,6 @@ void rtcEngineExSmokeTestCases() {
         if (e is! AgoraRtcException) {
           debugPrint(
               '[RtcEngineEx.startMediaRenderingTracingEx] error: ${e.toString()}');
-          rethrow;
-        }
-
-        if (e.code != -4) {
-          // Only not supported error supported.
-          rethrow;
-        }
-      }
-
-      await rtcEngineEx.release();
-    },
-//  skip: !(),
-  );
-
-  testWidgets(
-    'RtcEngineEx.getCallIdEx',
-    (WidgetTester tester) async {
-      String engineAppId = const String.fromEnvironment('TEST_APP_ID',
-          defaultValue: '<YOUR_APP_ID>');
-
-      RtcEngineEx rtcEngineEx = createAgoraRtcEngineEx();
-      await rtcEngineEx.initialize(RtcEngineContext(
-        appId: engineAppId,
-        areaCode: AreaCode.areaCodeGlob.value(),
-      ));
-      await rtcEngineEx.setParameters('{"rtc.enable_debug_log": true}');
-
-      try {
-        const String connectionChannelId = "hello";
-        const int connectionLocalUid = 10;
-        const RtcConnection connection = RtcConnection(
-          channelId: connectionChannelId,
-          localUid: connectionLocalUid,
-        );
-        await rtcEngineEx.getCallIdEx(
-          connection,
-        );
-      } catch (e) {
-        if (e is! AgoraRtcException) {
-          debugPrint('[RtcEngineEx.getCallIdEx] error: ${e.toString()}');
           rethrow;
         }
 
