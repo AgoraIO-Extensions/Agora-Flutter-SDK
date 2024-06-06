@@ -3124,7 +3124,7 @@ enum REMOTE_USER_STATE {
 struct VideoTrackInfo {
   VideoTrackInfo()
   : isLocal(false), ownerUid(0), trackId(0), channelId(OPTIONAL_NULLPTR)
-  , streamType(VIDEO_STREAM_HIGH), codecType(VIDEO_CODEC_H265)
+  , codecType(VIDEO_CODEC_H265)
   , encodedFrameOnly(false), sourceType(VIDEO_SOURCE_CAMERA_PRIMARY)
   , observationPosition(agora::media::base::POSITION_POST_CAPTURER) {}
   /**
@@ -3145,10 +3145,6 @@ struct VideoTrackInfo {
    * The channel ID of the video track.
    */
   const char* channelId;
-  /**
-   * The video stream type: #VIDEO_STREAM_TYPE.
-   */
-  VIDEO_STREAM_TYPE streamType;
   /**
    * The video codec type: #VIDEO_CODEC_TYPE.
    */

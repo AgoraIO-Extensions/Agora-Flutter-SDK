@@ -726,8 +726,6 @@ VideoTrackInfo _$VideoTrackInfoFromJson(Map<String, dynamic> json) =>
       ownerUid: (json['ownerUid'] as num?)?.toInt(),
       trackId: (json['trackId'] as num?)?.toInt(),
       channelId: json['channelId'] as String?,
-      streamType:
-          $enumDecodeNullable(_$VideoStreamTypeEnumMap, json['streamType']),
       codecType:
           $enumDecodeNullable(_$VideoCodecTypeEnumMap, json['codecType']),
       encodedFrameOnly: json['encodedFrameOnly'] as bool?,
@@ -749,7 +747,6 @@ Map<String, dynamic> _$VideoTrackInfoToJson(VideoTrackInfo instance) {
   writeNotNull('ownerUid', instance.ownerUid);
   writeNotNull('trackId', instance.trackId);
   writeNotNull('channelId', instance.channelId);
-  writeNotNull('streamType', _$VideoStreamTypeEnumMap[instance.streamType]);
   writeNotNull('codecType', _$VideoCodecTypeEnumMap[instance.codecType]);
   writeNotNull('encodedFrameOnly', instance.encodedFrameOnly);
   writeNotNull('sourceType', _$VideoSourceTypeEnumMap[instance.sourceType]);

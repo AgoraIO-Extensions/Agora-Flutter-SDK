@@ -97,7 +97,7 @@ void mediaPlayerCacheManagerSmokeTestCases() {
       final mediaPlayerCacheManager = getMediaPlayerCacheManager(rtcEngine);
 
       try {
-        const String uri = "hello";
+        String uri = "hello";
         await mediaPlayerCacheManager.removeCacheByUri(
           uri,
         );
@@ -135,7 +135,7 @@ void mediaPlayerCacheManagerSmokeTestCases() {
       final mediaPlayerCacheManager = getMediaPlayerCacheManager(rtcEngine);
 
       try {
-        const String path = "hello";
+        String path = "hello";
         await mediaPlayerCacheManager.setCacheDir(
           path,
         );
@@ -173,7 +173,7 @@ void mediaPlayerCacheManagerSmokeTestCases() {
       final mediaPlayerCacheManager = getMediaPlayerCacheManager(rtcEngine);
 
       try {
-        const int count = 10;
+        int count = 5;
         await mediaPlayerCacheManager.setMaxCacheFileCount(
           count,
         );
@@ -211,7 +211,7 @@ void mediaPlayerCacheManagerSmokeTestCases() {
       final mediaPlayerCacheManager = getMediaPlayerCacheManager(rtcEngine);
 
       try {
-        const int cacheSize = 10;
+        int cacheSize = 5;
         await mediaPlayerCacheManager.setMaxCacheFileSize(
           cacheSize,
         );
@@ -249,7 +249,7 @@ void mediaPlayerCacheManagerSmokeTestCases() {
       final mediaPlayerCacheManager = getMediaPlayerCacheManager(rtcEngine);
 
       try {
-        const bool enable = true;
+        bool enable = true;
         await mediaPlayerCacheManager.enableAutoRemoveCache(
           enable,
         );
@@ -287,7 +287,7 @@ void mediaPlayerCacheManagerSmokeTestCases() {
       final mediaPlayerCacheManager = getMediaPlayerCacheManager(rtcEngine);
 
       try {
-        const int length = 10;
+        int length = 5;
         await mediaPlayerCacheManager.getCacheDir(
           length,
         );

@@ -48,6 +48,8 @@ testWidgets('{{TEST_CASE_NAME}}', (WidgetTester tester) async {
       skipMemberFunctions: [
         'onFacePositionChanged',
         'onCameraCapturerConfigurationChanged',
+        'onDownlinkNetworkInfoUpdated',
+        'onStreamMessage',
       ],
     ),
     EventHandlerTemplatedTestCase(

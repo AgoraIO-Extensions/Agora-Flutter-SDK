@@ -42,26 +42,26 @@ void generatedTestCases(ValueGetter<IrisTester> irisTester) {
       await Future.delayed(const Duration(milliseconds: 500));
 
       {
-        const VideoPixelFormat frameType = VideoPixelFormat.videoPixelDefault;
-        const VideoFrameMetaInfo? frameMetaInfo = null;
-        const int frameWidth = 10;
-        const int frameHeight = 10;
-        const int frameYStride = 10;
-        const int frameUStride = 10;
-        const int frameVStride = 10;
-        Uint8List frameYBuffer = Uint8List.fromList([1, 2, 3, 4, 5]);
-        Uint8List frameUBuffer = Uint8List.fromList([1, 2, 3, 4, 5]);
-        Uint8List frameVBuffer = Uint8List.fromList([1, 2, 3, 4, 5]);
-        const int frameRotation = 10;
-        const int frameRenderTimeMs = 10;
-        const int frameAvsyncType = 10;
-        Uint8List frameMetadataBuffer = Uint8List.fromList([1, 2, 3, 4, 5]);
-        const int frameMetadataSize = 10;
-        const int frameTextureId = 10;
-        const List<double> frameMatrix = [];
-        Uint8List frameAlphaBuffer = Uint8List.fromList([1, 2, 3, 4, 5]);
-        Uint8List framePixelBuffer = Uint8List.fromList([1, 2, 3, 4, 5]);
-        final VideoFrame frame = VideoFrame(
+        VideoPixelFormat frameType = VideoPixelFormat.videoPixelDefault;
+        VideoFrameMetaInfo? frameMetaInfo = null;
+        int frameWidth = 5;
+        int frameHeight = 5;
+        int frameYStride = 5;
+        int frameUStride = 5;
+        int frameVStride = 5;
+        Uint8List frameYBuffer = Uint8List.fromList([1, 1, 1, 1, 1]);
+        Uint8List frameUBuffer = Uint8List.fromList([1, 1, 1, 1, 1]);
+        Uint8List frameVBuffer = Uint8List.fromList([1, 1, 1, 1, 1]);
+        int frameRotation = 5;
+        int frameRenderTimeMs = 5;
+        int frameAvsyncType = 5;
+        Uint8List frameMetadataBuffer = Uint8List.fromList([1, 1, 1, 1, 1]);
+        int frameMetadataSize = 5;
+        int frameTextureId = 5;
+        List<double> frameMatrix = List.filled(5, 5.0);
+        Uint8List frameAlphaBuffer = Uint8List.fromList([1, 1, 1, 1, 1]);
+        Uint8List framePixelBuffer = Uint8List.fromList([1, 1, 1, 1, 1]);
+        VideoFrame frame = VideoFrame(
           type: frameType,
           width: frameWidth,
           height: frameHeight,
