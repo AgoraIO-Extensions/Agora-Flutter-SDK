@@ -9,7 +9,14 @@ PROJECT_ROOT=$(realpath ${MY_PATH}/../..)
 TERRA_MAIN_FILE=${PROJECT_ROOT}/tool/terra/terra_config_main.yaml
 
 if [ -n "$NEW_VERSION" ]; then
-  sed -i '' -E "s/rtc_[0-9]+\.[0-9]+\.[0-9]+/${NEW_VERSION}/g" $TERRA_MAIN_FILE
+  # Check the operating system type
+  if [[ "$OSTYPE" == "darwin"* ]]; then
+    # macOS
+    sed -i '' -E "s/rtc_[0-9]+\.[0-9]+\.[0-9]+/${NEW_VERSION}/g" $TERRA_MAIN_FILE
+  else
+    # Linux and other Unix-like systems
+    sed -i -E "s/rtc_[0-9]+\.[0-9]+\.[0-9]+/${NEW_VERSION}/g" $TERRA_MAIN_FILE
+  fi
   echo "Updated version to ${NEW_VERSION} in $TERRA_MAIN_FILE"
 fi
 
