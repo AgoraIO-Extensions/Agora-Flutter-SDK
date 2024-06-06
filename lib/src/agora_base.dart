@@ -3266,6 +3266,7 @@ class VideoTrackInfo {
       this.ownerUid,
       this.trackId,
       this.channelId,
+      this.streamType,
       this.codecType,
       this.encodedFrameOnly,
       this.sourceType,
@@ -3286,6 +3287,10 @@ class VideoTrackInfo {
   /// @nodoc
   @JsonKey(name: 'channelId')
   final String? channelId;
+
+  /// @nodoc
+  @JsonKey(name: 'streamType')
+  final VideoStreamType? streamType;
 
   /// @nodoc
   @JsonKey(name: 'codecType')

@@ -172,23 +172,6 @@ class MusicPlayerImpl extends MediaPlayerImpl implements MusicPlayer {
   String get className => 'MusicPlayer';
 
   @override
-  Future<void> setPlayMode(MusicPlayMode mode) async {
-    final apiType =
-        '${isOverrideClassName ? className : 'MusicPlayer'}_setPlayMode_748bee0';
-    final param = createParams({'mode': mode.value()});
-    final callApiResult = await irisMethodChannel.invokeMethod(
-        IrisMethodCall(apiType, jsonEncode(param), buffers: null));
-    if (callApiResult.irisReturnCode < 0) {
-      throw AgoraRtcException(code: callApiResult.irisReturnCode);
-    }
-    final rm = callApiResult.data;
-    final result = rm['result'];
-    if (result < 0) {
-      throw AgoraRtcException(code: result);
-    }
-  }
-
-  @override
   Future<void> openWithSongCode(
       {required int songCode, int startPos = 0}) async {
     final apiType =
@@ -323,23 +306,6 @@ class MusicContentCenterImpl implements MusicContentCenter {
     final rm = callApiResult.data;
     final result = rm['result'];
     return result as MusicPlayer;
-  }
-
-  @override
-  Future<void> destroyMusicPlayer(MusicPlayer musicPlayer) async {
-    final apiType =
-        '${isOverrideClassName ? className : 'MusicContentCenter'}_destroyMusicPlayer_876d086';
-    final param = createParams({'music_player': musicPlayer});
-    final callApiResult = await irisMethodChannel.invokeMethod(
-        IrisMethodCall(apiType, jsonEncode(param), buffers: null));
-    if (callApiResult.irisReturnCode < 0) {
-      throw AgoraRtcException(code: callApiResult.irisReturnCode);
-    }
-    final rm = callApiResult.data;
-    final result = rm['result'];
-    if (result < 0) {
-      throw AgoraRtcException(code: result);
-    }
   }
 
   @override
@@ -493,7 +459,7 @@ class MusicContentCenterImpl implements MusicContentCenter {
   Future<String> getLyric({required int songCode, int lyricType = 0}) async {
     final apiType =
         '${isOverrideClassName ? className : 'MusicContentCenter'}_getLyric_5ab5efd';
-    final param = createParams({'songCode': songCode, 'lyricType': lyricType});
+    final param = createParams({'songCode': songCode, 'LyricType': lyricType});
     final callApiResult = await irisMethodChannel.invokeMethod(
         IrisMethodCall(apiType, jsonEncode(param), buffers: null));
     if (callApiResult.irisReturnCode < 0) {
