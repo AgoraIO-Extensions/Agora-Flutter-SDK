@@ -69,26 +69,23 @@ int _intPtrStr2Int(String value) {
 /// Parse a c++ int ptr value from the json key `<key>_str`
 Object? readIntPtr(Map json, String key) {
   final newKey = '${key}_str';
-  // Default to 0.
-  int returnValue = 0;
   if (json.containsKey(newKey)) {
     final value = json[newKey];
     assert(value is String);
-    returnValue = _intPtrStr2Int(value);
+    return _intPtrStr2Int(value);
   }
 
-  return returnValue;
+  return json[key];
 }
 
 /// Same as `readIntPtr`, but for list of int ptr.
 Object? readIntPtrList(Map json, String key) {
   final newKey = '${key}_str';
-  List<Object> returnValue = [];
   if (json.containsKey(newKey)) {
     final value = json[newKey];
     assert(value is List);
-    returnValue = List.from(value.map((e) => _intPtrStr2Int(e)));
+    return List.from(value.map((e) => _intPtrStr2Int(e)));
   }
 
-  return returnValue;
+  return json[key];
 }

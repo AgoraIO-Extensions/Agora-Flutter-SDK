@@ -24,8 +24,8 @@ void main() {
 }
 ''';
       final res = readIntPtr(jsonDecode(json), 'key');
-      // Shoud return 0
-      expect(res, 0);
+      // 18446744073709551615 become 18446744073709552000.0 after `jsonDecode`
+      expect(res, 18446744073709552000.0);
     });
 
     test(
@@ -61,8 +61,8 @@ void main() {
 }
 ''';
       final res = readIntPtrList(jsonDecode(json), 'key');
-      // Shoud return []
-      expect(res, []);
+      // 18446744073709551615 become 18446744073709552000.0 after `jsonDecode`
+      expect(res, [18446744073709552000.0, 18446744073709552000.0]);
     });
 
     test(
