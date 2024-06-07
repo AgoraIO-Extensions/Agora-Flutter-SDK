@@ -75,6 +75,8 @@ Object? readIntPtr(Map json, String key) {
     final value = json[newKey];
     assert(value is String);
     returnValue = _intPtrStr2Int(value);
+  } else {
+    returnValue = json[key];
   }
 
   return returnValue;
@@ -88,6 +90,8 @@ Object? readIntPtrList(Map json, String key) {
     final value = json[newKey];
     assert(value is List);
     returnValue = List.from(value.map((e) => _intPtrStr2Int(e)));
+  } else {
+    returnValue = json[key];
   }
 
   return returnValue;
