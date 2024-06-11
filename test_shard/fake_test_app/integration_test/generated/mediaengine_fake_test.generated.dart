@@ -27,7 +27,7 @@ void mediaEngineSmokeTestCases() {
       final mediaEngine = rtcEngine.getMediaEngine();
 
       try {
-        final AudioFrameObserver observer = AudioFrameObserver(
+        AudioFrameObserver observer = AudioFrameObserver(
           onRecordAudioFrame: (String channelId, AudioFrame audioFrame) {},
           onPlaybackAudioFrame: (String channelId, AudioFrame audioFrame) {},
           onMixedAudioFrame: (String channelId, AudioFrame audioFrame) {},
@@ -73,7 +73,7 @@ void mediaEngineSmokeTestCases() {
       final mediaEngine = rtcEngine.getMediaEngine();
 
       try {
-        final VideoFrameObserver observer = VideoFrameObserver(
+        VideoFrameObserver observer = VideoFrameObserver(
           onCaptureVideoFrame:
               (VideoSourceType sourceType, VideoFrame videoFrame) {},
           onPreEncodeVideoFrame:
@@ -122,7 +122,7 @@ void mediaEngineSmokeTestCases() {
       final mediaEngine = rtcEngine.getMediaEngine();
 
       try {
-        final VideoEncodedFrameObserver observer = VideoEncodedFrameObserver(
+        VideoEncodedFrameObserver observer = VideoEncodedFrameObserver(
           onEncodedVideoFrameReceived: (int uid, Uint8List imageBuffer,
               int length, EncodedVideoFrameInfo videoEncodedFrameInfo) {},
         );
@@ -164,7 +164,7 @@ void mediaEngineSmokeTestCases() {
       final mediaEngine = rtcEngine.getMediaEngine();
 
       try {
-        final FaceInfoObserver observer = FaceInfoObserver(
+        FaceInfoObserver observer = FaceInfoObserver(
           onFaceInfo: (String outFaceInfo) {},
         );
         mediaEngine.registerFaceInfoObserver(
@@ -205,19 +205,18 @@ void mediaEngineSmokeTestCases() {
       final mediaEngine = rtcEngine.getMediaEngine();
 
       try {
-        const AudioFrameType frameType = AudioFrameType.frameTypePcm16;
-        const BytesPerSample frameBytesPerSample =
-            BytesPerSample.twoBytesPerSample;
-        const int frameSamplesPerChannel = 10;
-        const int frameChannels = 10;
-        const int frameSamplesPerSec = 10;
-        Uint8List frameBuffer = Uint8List.fromList([1, 2, 3, 4, 5]);
-        const int frameRenderTimeMs = 10;
-        const int frameAvsyncType = 10;
-        const int framePresentationMs = 10;
-        const int frameAudioTrackNumber = 10;
-        const int frameRtpTimestamp = 10;
-        final AudioFrame frame = AudioFrame(
+        AudioFrameType frameType = AudioFrameType.frameTypePcm16;
+        BytesPerSample frameBytesPerSample = BytesPerSample.twoBytesPerSample;
+        int frameSamplesPerChannel = 5;
+        int frameChannels = 5;
+        int frameSamplesPerSec = 5;
+        Uint8List frameBuffer = Uint8List.fromList([1, 1, 1, 1, 1]);
+        int frameRenderTimeMs = 5;
+        int frameAvsyncType = 5;
+        int framePresentationMs = 5;
+        int frameAudioTrackNumber = 5;
+        int frameRtpTimestamp = 5;
+        AudioFrame frame = AudioFrame(
           type: frameType,
           samplesPerChannel: frameSamplesPerChannel,
           bytesPerSample: frameBytesPerSample,
@@ -230,7 +229,7 @@ void mediaEngineSmokeTestCases() {
           audioTrackNumber: frameAudioTrackNumber,
           rtpTimestamp: frameRtpTimestamp,
         );
-        const int trackId = 10;
+        int trackId = 5;
         await mediaEngine.pushAudioFrame(
           frame: frame,
           trackId: trackId,
@@ -269,19 +268,18 @@ void mediaEngineSmokeTestCases() {
       final mediaEngine = rtcEngine.getMediaEngine();
 
       try {
-        const AudioFrameType frameType = AudioFrameType.frameTypePcm16;
-        const BytesPerSample frameBytesPerSample =
-            BytesPerSample.twoBytesPerSample;
-        const int frameSamplesPerChannel = 10;
-        const int frameChannels = 10;
-        const int frameSamplesPerSec = 10;
-        Uint8List frameBuffer = Uint8List.fromList([1, 2, 3, 4, 5]);
-        const int frameRenderTimeMs = 10;
-        const int frameAvsyncType = 10;
-        const int framePresentationMs = 10;
-        const int frameAudioTrackNumber = 10;
-        const int frameRtpTimestamp = 10;
-        final AudioFrame frame = AudioFrame(
+        AudioFrameType frameType = AudioFrameType.frameTypePcm16;
+        BytesPerSample frameBytesPerSample = BytesPerSample.twoBytesPerSample;
+        int frameSamplesPerChannel = 5;
+        int frameChannels = 5;
+        int frameSamplesPerSec = 5;
+        Uint8List frameBuffer = Uint8List.fromList([1, 1, 1, 1, 1]);
+        int frameRenderTimeMs = 5;
+        int frameAvsyncType = 5;
+        int framePresentationMs = 5;
+        int frameAudioTrackNumber = 5;
+        int frameRtpTimestamp = 5;
+        AudioFrame frame = AudioFrame(
           type: frameType,
           samplesPerChannel: frameSamplesPerChannel,
           bytesPerSample: frameBytesPerSample,
@@ -331,15 +329,14 @@ void mediaEngineSmokeTestCases() {
       final mediaEngine = rtcEngine.getMediaEngine();
 
       try {
-        const bool enabled = true;
-        const bool useTexture = true;
-        const ExternalVideoSourceType sourceType =
-            ExternalVideoSourceType.videoFrame;
-        const TCcMode encodedVideoOptionCcMode = TCcMode.ccEnabled;
-        const VideoCodecType encodedVideoOptionCodecType =
+        bool enabled = true;
+        bool useTexture = true;
+        ExternalVideoSourceType sourceType = ExternalVideoSourceType.videoFrame;
+        TCcMode encodedVideoOptionCcMode = TCcMode.ccEnabled;
+        VideoCodecType encodedVideoOptionCodecType =
             VideoCodecType.videoCodecNone;
-        const int encodedVideoOptionTargetBitrate = 10;
-        const SenderOptions encodedVideoOption = SenderOptions(
+        int encodedVideoOptionTargetBitrate = 5;
+        SenderOptions encodedVideoOption = SenderOptions(
           ccMode: encodedVideoOptionCcMode,
           codecType: encodedVideoOptionCodecType,
           targetBitrate: encodedVideoOptionTargetBitrate,
@@ -385,11 +382,11 @@ void mediaEngineSmokeTestCases() {
       final mediaEngine = rtcEngine.getMediaEngine();
 
       try {
-        const bool enabled = true;
-        const int sampleRate = 10;
-        const int channels = 10;
-        const bool localPlayback = true;
-        const bool publish = true;
+        bool enabled = true;
+        int sampleRate = 5;
+        int channels = 5;
+        bool localPlayback = true;
+        bool publish = true;
         await mediaEngine.setExternalAudioSource(
           enabled: enabled,
           sampleRate: sampleRate,
@@ -432,7 +429,7 @@ void mediaEngineSmokeTestCases() {
       final mediaEngine = rtcEngine.getMediaEngine();
 
       try {
-        const int trackId = 10;
+        int trackId = 5;
         await mediaEngine.destroyCustomAudioTrack(
           trackId,
         );
@@ -471,9 +468,9 @@ void mediaEngineSmokeTestCases() {
       final mediaEngine = rtcEngine.getMediaEngine();
 
       try {
-        const bool enabled = true;
-        const int sampleRate = 10;
-        const int channels = 10;
+        bool enabled = true;
+        int sampleRate = 5;
+        int channels = 5;
         await mediaEngine.setExternalAudioSink(
           enabled: enabled,
           sampleRate: sampleRate,
@@ -514,8 +511,8 @@ void mediaEngineSmokeTestCases() {
       final mediaEngine = rtcEngine.getMediaEngine();
 
       try {
-        const int trackId = 10;
-        const bool enabled = true;
+        int trackId = 5;
+        bool enabled = true;
         await mediaEngine.enableCustomAudioLocalPlayback(
           trackId: trackId,
           enabled: enabled,
@@ -555,26 +552,26 @@ void mediaEngineSmokeTestCases() {
       final mediaEngine = rtcEngine.getMediaEngine();
 
       try {
-        const VideoBufferType frameType = VideoBufferType.videoBufferRawData;
-        const VideoPixelFormat frameFormat = VideoPixelFormat.videoPixelDefault;
-        const EglContextType frameEglType = EglContextType.eglContext10;
-        Uint8List frameBuffer = Uint8List.fromList([1, 2, 3, 4, 5]);
-        const int frameStride = 10;
-        const int frameHeight = 10;
-        const int frameCropLeft = 10;
-        const int frameCropTop = 10;
-        const int frameCropRight = 10;
-        const int frameCropBottom = 10;
-        const int frameRotation = 10;
-        const int frameTimestamp = 10;
-        const int frameTextureId = 10;
-        const List<double> frameMatrix = [];
-        Uint8List frameMetadataBuffer = Uint8List.fromList([1, 2, 3, 4, 5]);
-        const int frameMetadataSize = 10;
-        Uint8List frameAlphaBuffer = Uint8List.fromList([1, 2, 3, 4, 5]);
-        const bool frameFillAlphaBuffer = true;
-        const int frameTextureSliceIndex = 10;
-        final ExternalVideoFrame frame = ExternalVideoFrame(
+        VideoBufferType frameType = VideoBufferType.videoBufferRawData;
+        VideoPixelFormat frameFormat = VideoPixelFormat.videoPixelDefault;
+        EglContextType frameEglType = EglContextType.eglContext10;
+        Uint8List frameBuffer = Uint8List.fromList([1, 1, 1, 1, 1]);
+        int frameStride = 5;
+        int frameHeight = 5;
+        int frameCropLeft = 5;
+        int frameCropTop = 5;
+        int frameCropRight = 5;
+        int frameCropBottom = 5;
+        int frameRotation = 5;
+        int frameTimestamp = 5;
+        int frameTextureId = 5;
+        List<double> frameMatrix = List.filled(5, 5.0);
+        Uint8List frameMetadataBuffer = Uint8List.fromList([1, 1, 1, 1, 1]);
+        int frameMetadataSize = 5;
+        Uint8List frameAlphaBuffer = Uint8List.fromList([1, 1, 1, 1, 1]);
+        bool frameFillAlphaBuffer = true;
+        int frameTextureSliceIndex = 5;
+        ExternalVideoFrame frame = ExternalVideoFrame(
           type: frameType,
           format: frameFormat,
           buffer: frameBuffer,
@@ -595,7 +592,7 @@ void mediaEngineSmokeTestCases() {
           fillAlphaBuffer: frameFillAlphaBuffer,
           textureSliceIndex: frameTextureSliceIndex,
         );
-        const int videoTrackId = 10;
+        int videoTrackId = 5;
         await mediaEngine.pushVideoFrame(
           frame: frame,
           videoTrackId: videoTrackId,
@@ -634,26 +631,25 @@ void mediaEngineSmokeTestCases() {
       final mediaEngine = rtcEngine.getMediaEngine();
 
       try {
-        Uint8List imageBuffer = Uint8List.fromList([1, 2, 3, 4, 5]);
-        const int length = 10;
-        const VideoCodecType videoEncodedFrameInfoCodecType =
+        Uint8List imageBuffer = Uint8List.fromList([1, 1, 1, 1, 1]);
+        int length = 5;
+        VideoCodecType videoEncodedFrameInfoCodecType =
             VideoCodecType.videoCodecNone;
-        const VideoFrameType videoEncodedFrameInfoFrameType =
+        VideoFrameType videoEncodedFrameInfoFrameType =
             VideoFrameType.videoFrameTypeBlankFrame;
-        const VideoOrientation videoEncodedFrameInfoRotation =
+        VideoOrientation videoEncodedFrameInfoRotation =
             VideoOrientation.videoOrientation0;
-        const VideoStreamType videoEncodedFrameInfoStreamType =
+        VideoStreamType videoEncodedFrameInfoStreamType =
             VideoStreamType.videoStreamHigh;
-        const int videoEncodedFrameInfoUid = 10;
-        const int videoEncodedFrameInfoWidth = 10;
-        const int videoEncodedFrameInfoHeight = 10;
-        const int videoEncodedFrameInfoFramesPerSecond = 10;
-        const int videoEncodedFrameInfoTrackId = 10;
-        const int videoEncodedFrameInfoCaptureTimeMs = 10;
-        const int videoEncodedFrameInfoDecodeTimeMs = 10;
-        const int videoEncodedFrameInfoPresentationMs = 10;
-        const EncodedVideoFrameInfo videoEncodedFrameInfo =
-            EncodedVideoFrameInfo(
+        int videoEncodedFrameInfoUid = 5;
+        int videoEncodedFrameInfoWidth = 5;
+        int videoEncodedFrameInfoHeight = 5;
+        int videoEncodedFrameInfoFramesPerSecond = 5;
+        int videoEncodedFrameInfoTrackId = 5;
+        int videoEncodedFrameInfoCaptureTimeMs = 5;
+        int videoEncodedFrameInfoDecodeTimeMs = 5;
+        int videoEncodedFrameInfoPresentationMs = 5;
+        EncodedVideoFrameInfo videoEncodedFrameInfo = EncodedVideoFrameInfo(
           uid: videoEncodedFrameInfoUid,
           codecType: videoEncodedFrameInfoCodecType,
           width: videoEncodedFrameInfoWidth,
@@ -667,7 +663,7 @@ void mediaEngineSmokeTestCases() {
           streamType: videoEncodedFrameInfoStreamType,
           presentationMs: videoEncodedFrameInfoPresentationMs,
         );
-        const int videoTrackId = 10;
+        int videoTrackId = 5;
         await mediaEngine.pushEncodedVideoImage(
           imageBuffer: imageBuffer,
           length: length,
@@ -744,7 +740,7 @@ void mediaEngineSmokeTestCases() {
       final mediaEngine = rtcEngine.getMediaEngine();
 
       try {
-        final AudioFrameObserver observer = AudioFrameObserver(
+        AudioFrameObserver observer = AudioFrameObserver(
           onRecordAudioFrame: (String channelId, AudioFrame audioFrame) {},
           onPlaybackAudioFrame: (String channelId, AudioFrame audioFrame) {},
           onMixedAudioFrame: (String channelId, AudioFrame audioFrame) {},
@@ -790,7 +786,7 @@ void mediaEngineSmokeTestCases() {
       final mediaEngine = rtcEngine.getMediaEngine();
 
       try {
-        final VideoFrameObserver observer = VideoFrameObserver(
+        VideoFrameObserver observer = VideoFrameObserver(
           onCaptureVideoFrame:
               (VideoSourceType sourceType, VideoFrame videoFrame) {},
           onPreEncodeVideoFrame:
@@ -839,7 +835,7 @@ void mediaEngineSmokeTestCases() {
       final mediaEngine = rtcEngine.getMediaEngine();
 
       try {
-        final VideoEncodedFrameObserver observer = VideoEncodedFrameObserver(
+        VideoEncodedFrameObserver observer = VideoEncodedFrameObserver(
           onEncodedVideoFrameReceived: (int uid, Uint8List imageBuffer,
               int length, EncodedVideoFrameInfo videoEncodedFrameInfo) {},
         );
@@ -881,7 +877,7 @@ void mediaEngineSmokeTestCases() {
       final mediaEngine = rtcEngine.getMediaEngine();
 
       try {
-        final FaceInfoObserver observer = FaceInfoObserver(
+        FaceInfoObserver observer = FaceInfoObserver(
           onFaceInfo: (String outFaceInfo) {},
         );
         mediaEngine.unregisterFaceInfoObserver(

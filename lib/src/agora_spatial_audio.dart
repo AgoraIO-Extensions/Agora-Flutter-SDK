@@ -104,7 +104,7 @@ abstract class LocalSpatialAudioEngine {
 
   /// Updates the spatial position of the specified remote user.
   ///
-  /// After successfully calling this method, the SDK calculates the spatial audio parameters based on the relative position of the local and remote user. Call this method after joinChannel.
+  /// After successfully calling this method, the SDK calculates the spatial audio parameters based on the relative position of the local and remote user. Call this method after the or joinChannel method.
   ///
   /// * [uid] The user ID. This parameter must be the same as the user ID passed in when the user joined the channel.
   /// * [posInfo] The spatial position of the remote user. See RemoteVoicePositionInfo.
@@ -122,7 +122,7 @@ abstract class LocalSpatialAudioEngine {
 
   /// Removes the spatial position of the specified remote user.
   ///
-  /// After successfully calling this method, the local user no longer hears the specified remote user. After leaving the channel, to avoid wasting resources, you can also call this method to delete the spatial position of the specified remote user.
+  /// After successfully calling this method, the local user no longer hears the specified remote user. After leaving the channel, to avoid wasting computing resources, call this method to delete the spatial position information of the specified remote user. Otherwise, the user's spatial position information will be saved continuously. When the number of remote users exceeds the number of audio streams that can be received as set in setMaxAudioRecvCount, the system automatically unsubscribes from the audio stream of the user who is furthest away based on relative distance.
   ///
   /// * [uid] The user ID. This parameter must be the same as the user ID passed in when the user joined the channel.
   ///

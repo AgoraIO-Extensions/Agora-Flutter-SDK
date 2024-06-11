@@ -34,7 +34,7 @@ void generatedTestCases(ValueGetter<IrisTester> irisTester) {
         },
       );
 
-      const RawAudioFrameOpModeType mode =
+      RawAudioFrameOpModeType mode =
           RawAudioFrameOpModeType.rawAudioFrameOpModeReadOnly;
 
       mediaPlayerController.registerAudioFrameObserver(
@@ -46,14 +46,13 @@ void generatedTestCases(ValueGetter<IrisTester> irisTester) {
       await Future.delayed(const Duration(milliseconds: 500));
 
       {
-        const BytesPerSample frameBytesPerSample =
-            BytesPerSample.twoBytesPerSample;
-        const int frameCaptureTimestamp = 10;
-        const int frameSamplesPerChannel = 10;
-        const int frameSampleRateHz = 10;
-        const int frameNumChannels = 10;
-        const List<int> frameData = [];
-        const AudioPcmFrame frame = AudioPcmFrame(
+        BytesPerSample frameBytesPerSample = BytesPerSample.twoBytesPerSample;
+        int frameCaptureTimestamp = 5;
+        int frameSamplesPerChannel = 5;
+        int frameSampleRateHz = 5;
+        int frameNumChannels = 5;
+        List<int> frameData = List.filled(5, 5);
+        AudioPcmFrame frame = AudioPcmFrame(
           captureTimestamp: frameCaptureTimestamp,
           samplesPerChannel: frameSamplesPerChannel,
           sampleRateHz: frameSampleRateHz,

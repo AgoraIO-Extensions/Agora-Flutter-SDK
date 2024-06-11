@@ -31,7 +31,7 @@ void generatedTestCases(ValueGetter<IrisTester> irisTester) {
         },
       );
 
-      const MetadataType type = MetadataType.unknownMetadata;
+      MetadataType type = MetadataType.unknownMetadata;
 
       rtcEngine.registerMediaMetadataObserver(
         observer: theMetadataObserver,
@@ -42,11 +42,11 @@ void generatedTestCases(ValueGetter<IrisTester> irisTester) {
       await Future.delayed(const Duration(milliseconds: 500));
 
       {
-        const int metadataUid = 10;
-        const int metadataSize = 10;
-        Uint8List metadataBuffer = Uint8List.fromList([1, 2, 3, 4, 5]);
-        const int metadataTimeStampMs = 10;
-        final Metadata metadata = Metadata(
+        int metadataUid = 5;
+        int metadataSize = 5;
+        Uint8List metadataBuffer = Uint8List.fromList([1, 1, 1, 1, 1]);
+        int metadataTimeStampMs = 5;
+        Metadata metadata = Metadata(
           uid: metadataUid,
           size: metadataSize,
           buffer: metadataBuffer,
@@ -76,7 +76,7 @@ void generatedTestCases(ValueGetter<IrisTester> irisTester) {
       expect(eventCalled, isTrue);
 
       {
-        const MetadataType type = MetadataType.unknownMetadata;
+        MetadataType type = MetadataType.unknownMetadata;
 
         rtcEngine.unregisterMediaMetadataObserver(
           observer: theMetadataObserver,

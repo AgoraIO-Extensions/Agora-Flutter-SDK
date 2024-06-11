@@ -10,8 +10,7 @@ import 'testcases/localspatialaudioengine_testcases.dart'
 import 'generated/mediaengine_fake_test.generated.dart' as mediaengine;
 import 'generated/mediaplayer_fake_test.generated.dart' as mediaplayer;
 import 'generated/mediarecorder_fake_test.generated.dart' as mediarecorder;
-import 'generated/musiccontentcenter_fake_test.generated.dart'
-    as musiccontentcenter;
+import 'testcases/musiccontentcenter_testcases.dart' as musiccontentcenter;
 import 'testcases/rtcengine_debug_testcases.dart' as rtcengine_debug;
 import 'testcases/rtcengine_testcases.dart' as rtcengine;
 import 'testcases/rtcengineex_testcases.dart' as rtcengineex;
@@ -67,7 +66,7 @@ void main() {
     localspatialaudioengine.testCases();
     mediaplayer.mediaPlayerControllerSmokeTestCases();
     mediarecorder.mediaRecorderSmokeTestCases();
-    musiccontentcenter.musicContentCenterSmokeTestCases();
+    musiccontentcenter.testCases();
     rtcengine_debug.testCases();
   }
 

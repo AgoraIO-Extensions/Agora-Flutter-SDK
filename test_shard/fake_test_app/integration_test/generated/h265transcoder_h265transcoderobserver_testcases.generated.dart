@@ -41,7 +41,7 @@ void generatedTestCases(ValueGetter<IrisTester> irisTester) {
       await Future.delayed(const Duration(milliseconds: 500));
 
       {
-        const H265TranscodeResult result =
+        H265TranscodeResult result =
             H265TranscodeResult.h265TranscodeResultUnknown;
 
         final eventJson = {
@@ -107,10 +107,10 @@ void generatedTestCases(ValueGetter<IrisTester> irisTester) {
       await Future.delayed(const Duration(milliseconds: 500));
 
       {
-        const H265TranscodeResult result =
+        H265TranscodeResult result =
             H265TranscodeResult.h265TranscodeResultUnknown;
-        const String originChannel = "hello";
-        const String transcodeChannel = "hello";
+        String originChannel = "hello";
+        String transcodeChannel = "hello";
 
         final eventJson = {
           'result': result.value(),
@@ -176,7 +176,7 @@ void generatedTestCases(ValueGetter<IrisTester> irisTester) {
       await Future.delayed(const Duration(milliseconds: 500));
 
       {
-        const H265TranscodeResult result =
+        H265TranscodeResult result =
             H265TranscodeResult.h265TranscodeResultUnknown;
 
         final eventJson = {

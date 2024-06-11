@@ -25,27 +25,26 @@ void rtcEngineSmokeTestCases() {
       await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
-        const ChannelProfileType contextChannelProfile =
+        ChannelProfileType contextChannelProfile =
             ChannelProfileType.channelProfileCommunication;
-        const AudioScenarioType contextAudioScenario =
+        AudioScenarioType contextAudioScenario =
             AudioScenarioType.audioScenarioDefault;
-        const LogLevel logConfigLevel = LogLevel.logLevelNone;
-        const String logConfigFilePath = "hello";
-        const int logConfigFileSizeInKB = 10;
-        const LogConfig contextLogConfig = LogConfig(
+        LogLevel logConfigLevel = LogLevel.logLevelNone;
+        String logConfigFilePath = "hello";
+        int logConfigFileSizeInKB = 5;
+        LogConfig contextLogConfig = LogConfig(
           filePath: logConfigFilePath,
           fileSizeInKB: logConfigFileSizeInKB,
           level: logConfigLevel,
         );
-        const ThreadPriorityType contextThreadPriority =
-            ThreadPriorityType.lowest;
-        const String contextAppId = "hello";
-        const String contextLicense = "hello";
-        const int contextAreaCode = 10;
-        const bool contextUseExternalEglContext = true;
-        const bool contextDomainLimit = true;
-        const bool contextAutoRegisterAgoraExtensions = true;
-        const RtcEngineContext context = RtcEngineContext(
+        ThreadPriorityType contextThreadPriority = ThreadPriorityType.lowest;
+        String contextAppId = "hello";
+        String contextLicense = "hello";
+        int contextAreaCode = 5;
+        bool contextUseExternalEglContext = true;
+        bool contextDomainLimit = true;
+        bool contextAutoRegisterAgoraExtensions = true;
+        RtcEngineContext context = RtcEngineContext(
           appId: contextAppId,
           channelProfile: contextChannelProfile,
           license: contextLicense,
@@ -121,7 +120,7 @@ void rtcEngineSmokeTestCases() {
       await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
-        const int code = 10;
+        int code = 5;
         await rtcEngine.getErrorDescription(
           code,
         );
@@ -186,9 +185,9 @@ void rtcEngineSmokeTestCases() {
       await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
-        const String token = "hello";
-        const String channelId = "hello";
-        const int uid = 10;
+        String token = "hello";
+        String channelId = "hello";
+        int uid = 5;
         await rtcEngine.preloadChannel(
           token: token,
           channelId: channelId,
@@ -224,9 +223,9 @@ void rtcEngineSmokeTestCases() {
       await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
-        const String token = "hello";
-        const String channelId = "hello";
-        const String userAccount = "hello";
+        String token = "hello";
+        String channelId = "hello";
+        String userAccount = "hello";
         await rtcEngine.preloadChannelWithUserAccount(
           token: token,
           channelId: channelId,
@@ -263,7 +262,7 @@ void rtcEngineSmokeTestCases() {
       await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
-        const String token = "hello";
+        String token = "hello";
         await rtcEngine.updatePreloadChannelToken(
           token,
         );
@@ -298,50 +297,50 @@ void rtcEngineSmokeTestCases() {
       await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
-        const String token = "hello";
-        const String channelId = "hello";
-        const int uid = 10;
-        const ClientRoleType optionsClientRoleType =
+        String token = "hello";
+        String channelId = "hello";
+        int uid = 5;
+        ClientRoleType optionsClientRoleType =
             ClientRoleType.clientRoleBroadcaster;
-        const AudienceLatencyLevelType optionsAudienceLatencyLevel =
+        AudienceLatencyLevelType optionsAudienceLatencyLevel =
             AudienceLatencyLevelType.audienceLatencyLevelLowLatency;
-        const VideoStreamType optionsDefaultVideoStreamType =
+        VideoStreamType optionsDefaultVideoStreamType =
             VideoStreamType.videoStreamHigh;
-        const ChannelProfileType optionsChannelProfile =
+        ChannelProfileType optionsChannelProfile =
             ChannelProfileType.channelProfileCommunication;
-        const bool optionsPublishCameraTrack = true;
-        const bool optionsPublishSecondaryCameraTrack = true;
-        const bool optionsPublishThirdCameraTrack = true;
-        const bool optionsPublishFourthCameraTrack = true;
-        const bool optionsPublishMicrophoneTrack = true;
-        const bool optionsPublishScreenCaptureVideo = true;
-        const bool optionsPublishScreenCaptureAudio = true;
-        const bool optionsPublishScreenTrack = true;
-        const bool optionsPublishSecondaryScreenTrack = true;
-        const bool optionsPublishThirdScreenTrack = true;
-        const bool optionsPublishFourthScreenTrack = true;
-        const bool optionsPublishCustomAudioTrack = true;
-        const int optionsPublishCustomAudioTrackId = 10;
-        const bool optionsPublishCustomVideoTrack = true;
-        const bool optionsPublishEncodedVideoTrack = true;
-        const bool optionsPublishMediaPlayerAudioTrack = true;
-        const bool optionsPublishMediaPlayerVideoTrack = true;
-        const bool optionsPublishTranscodedVideoTrack = true;
-        const bool optionsPublishMixedAudioTrack = true;
-        const bool optionsPublishLipSyncTrack = true;
-        const bool optionsAutoSubscribeAudio = true;
-        const bool optionsAutoSubscribeVideo = true;
-        const bool optionsEnableAudioRecordingOrPlayout = true;
-        const int optionsPublishMediaPlayerId = 10;
-        const int optionsAudioDelayMs = 10;
-        const int optionsMediaPlayerAudioDelayMs = 10;
-        const String optionsToken = "hello";
-        const bool optionsEnableBuiltInMediaEncryption = true;
-        const bool optionsPublishRhythmPlayerTrack = true;
-        const bool optionsIsInteractiveAudience = true;
-        const int optionsCustomVideoTrackId = 10;
-        const bool optionsIsAudioFilterable = true;
-        const ChannelMediaOptions options = ChannelMediaOptions(
+        bool optionsPublishCameraTrack = true;
+        bool optionsPublishSecondaryCameraTrack = true;
+        bool optionsPublishThirdCameraTrack = true;
+        bool optionsPublishFourthCameraTrack = true;
+        bool optionsPublishMicrophoneTrack = true;
+        bool optionsPublishScreenCaptureVideo = true;
+        bool optionsPublishScreenCaptureAudio = true;
+        bool optionsPublishScreenTrack = true;
+        bool optionsPublishSecondaryScreenTrack = true;
+        bool optionsPublishThirdScreenTrack = true;
+        bool optionsPublishFourthScreenTrack = true;
+        bool optionsPublishCustomAudioTrack = true;
+        int optionsPublishCustomAudioTrackId = 5;
+        bool optionsPublishCustomVideoTrack = true;
+        bool optionsPublishEncodedVideoTrack = true;
+        bool optionsPublishMediaPlayerAudioTrack = true;
+        bool optionsPublishMediaPlayerVideoTrack = true;
+        bool optionsPublishTranscodedVideoTrack = true;
+        bool optionsPublishMixedAudioTrack = true;
+        bool optionsPublishLipSyncTrack = true;
+        bool optionsAutoSubscribeAudio = true;
+        bool optionsAutoSubscribeVideo = true;
+        bool optionsEnableAudioRecordingOrPlayout = true;
+        int optionsPublishMediaPlayerId = 5;
+        int optionsAudioDelayMs = 5;
+        int optionsMediaPlayerAudioDelayMs = 5;
+        String optionsToken = "hello";
+        bool optionsEnableBuiltInMediaEncryption = true;
+        bool optionsPublishRhythmPlayerTrack = true;
+        bool optionsIsInteractiveAudience = true;
+        int optionsCustomVideoTrackId = 5;
+        bool optionsIsAudioFilterable = true;
+        ChannelMediaOptions options = ChannelMediaOptions(
           publishCameraTrack: optionsPublishCameraTrack,
           publishSecondaryCameraTrack: optionsPublishSecondaryCameraTrack,
           publishThirdCameraTrack: optionsPublishThirdCameraTrack,
@@ -415,47 +414,47 @@ void rtcEngineSmokeTestCases() {
       await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
-        const ClientRoleType optionsClientRoleType =
+        ClientRoleType optionsClientRoleType =
             ClientRoleType.clientRoleBroadcaster;
-        const AudienceLatencyLevelType optionsAudienceLatencyLevel =
+        AudienceLatencyLevelType optionsAudienceLatencyLevel =
             AudienceLatencyLevelType.audienceLatencyLevelLowLatency;
-        const VideoStreamType optionsDefaultVideoStreamType =
+        VideoStreamType optionsDefaultVideoStreamType =
             VideoStreamType.videoStreamHigh;
-        const ChannelProfileType optionsChannelProfile =
+        ChannelProfileType optionsChannelProfile =
             ChannelProfileType.channelProfileCommunication;
-        const bool optionsPublishCameraTrack = true;
-        const bool optionsPublishSecondaryCameraTrack = true;
-        const bool optionsPublishThirdCameraTrack = true;
-        const bool optionsPublishFourthCameraTrack = true;
-        const bool optionsPublishMicrophoneTrack = true;
-        const bool optionsPublishScreenCaptureVideo = true;
-        const bool optionsPublishScreenCaptureAudio = true;
-        const bool optionsPublishScreenTrack = true;
-        const bool optionsPublishSecondaryScreenTrack = true;
-        const bool optionsPublishThirdScreenTrack = true;
-        const bool optionsPublishFourthScreenTrack = true;
-        const bool optionsPublishCustomAudioTrack = true;
-        const int optionsPublishCustomAudioTrackId = 10;
-        const bool optionsPublishCustomVideoTrack = true;
-        const bool optionsPublishEncodedVideoTrack = true;
-        const bool optionsPublishMediaPlayerAudioTrack = true;
-        const bool optionsPublishMediaPlayerVideoTrack = true;
-        const bool optionsPublishTranscodedVideoTrack = true;
-        const bool optionsPublishMixedAudioTrack = true;
-        const bool optionsPublishLipSyncTrack = true;
-        const bool optionsAutoSubscribeAudio = true;
-        const bool optionsAutoSubscribeVideo = true;
-        const bool optionsEnableAudioRecordingOrPlayout = true;
-        const int optionsPublishMediaPlayerId = 10;
-        const int optionsAudioDelayMs = 10;
-        const int optionsMediaPlayerAudioDelayMs = 10;
-        const String optionsToken = "hello";
-        const bool optionsEnableBuiltInMediaEncryption = true;
-        const bool optionsPublishRhythmPlayerTrack = true;
-        const bool optionsIsInteractiveAudience = true;
-        const int optionsCustomVideoTrackId = 10;
-        const bool optionsIsAudioFilterable = true;
-        const ChannelMediaOptions options = ChannelMediaOptions(
+        bool optionsPublishCameraTrack = true;
+        bool optionsPublishSecondaryCameraTrack = true;
+        bool optionsPublishThirdCameraTrack = true;
+        bool optionsPublishFourthCameraTrack = true;
+        bool optionsPublishMicrophoneTrack = true;
+        bool optionsPublishScreenCaptureVideo = true;
+        bool optionsPublishScreenCaptureAudio = true;
+        bool optionsPublishScreenTrack = true;
+        bool optionsPublishSecondaryScreenTrack = true;
+        bool optionsPublishThirdScreenTrack = true;
+        bool optionsPublishFourthScreenTrack = true;
+        bool optionsPublishCustomAudioTrack = true;
+        int optionsPublishCustomAudioTrackId = 5;
+        bool optionsPublishCustomVideoTrack = true;
+        bool optionsPublishEncodedVideoTrack = true;
+        bool optionsPublishMediaPlayerAudioTrack = true;
+        bool optionsPublishMediaPlayerVideoTrack = true;
+        bool optionsPublishTranscodedVideoTrack = true;
+        bool optionsPublishMixedAudioTrack = true;
+        bool optionsPublishLipSyncTrack = true;
+        bool optionsAutoSubscribeAudio = true;
+        bool optionsAutoSubscribeVideo = true;
+        bool optionsEnableAudioRecordingOrPlayout = true;
+        int optionsPublishMediaPlayerId = 5;
+        int optionsAudioDelayMs = 5;
+        int optionsMediaPlayerAudioDelayMs = 5;
+        String optionsToken = "hello";
+        bool optionsEnableBuiltInMediaEncryption = true;
+        bool optionsPublishRhythmPlayerTrack = true;
+        bool optionsIsInteractiveAudience = true;
+        int optionsCustomVideoTrackId = 5;
+        bool optionsIsAudioFilterable = true;
+        ChannelMediaOptions options = ChannelMediaOptions(
           publishCameraTrack: optionsPublishCameraTrack,
           publishSecondaryCameraTrack: optionsPublishSecondaryCameraTrack,
           publishThirdCameraTrack: optionsPublishThirdCameraTrack,
@@ -527,10 +526,10 @@ void rtcEngineSmokeTestCases() {
       await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
-        const bool optionsStopAudioMixing = true;
-        const bool optionsStopAllEffect = true;
-        const bool optionsStopMicrophoneRecording = true;
-        const LeaveChannelOptions options = LeaveChannelOptions(
+        bool optionsStopAudioMixing = true;
+        bool optionsStopAllEffect = true;
+        bool optionsStopMicrophoneRecording = true;
+        LeaveChannelOptions options = LeaveChannelOptions(
           stopAudioMixing: optionsStopAudioMixing,
           stopAllEffect: optionsStopAllEffect,
           stopMicrophoneRecording: optionsStopMicrophoneRecording,
@@ -568,7 +567,7 @@ void rtcEngineSmokeTestCases() {
       await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
-        const String token = "hello";
+        String token = "hello";
         await rtcEngine.renewToken(
           token,
         );
@@ -602,7 +601,7 @@ void rtcEngineSmokeTestCases() {
       await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
-        const ChannelProfileType profile =
+        ChannelProfileType profile =
             ChannelProfileType.channelProfileCommunication;
         await rtcEngine.setChannelProfile(
           profile,
@@ -637,10 +636,10 @@ void rtcEngineSmokeTestCases() {
       await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
-        const ClientRoleType role = ClientRoleType.clientRoleBroadcaster;
-        const AudienceLatencyLevelType optionsAudienceLatencyLevel =
+        ClientRoleType role = ClientRoleType.clientRoleBroadcaster;
+        AudienceLatencyLevelType optionsAudienceLatencyLevel =
             AudienceLatencyLevelType.audienceLatencyLevelLowLatency;
-        const ClientRoleOptions options = ClientRoleOptions(
+        ClientRoleOptions options = ClientRoleOptions(
           audienceLatencyLevel: optionsAudienceLatencyLevel,
         );
         await rtcEngine.setClientRole(
@@ -677,13 +676,13 @@ void rtcEngineSmokeTestCases() {
       await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
-        const int configView = 10;
-        const bool configEnableAudio = true;
-        const bool configEnableVideo = true;
-        const String configToken = "hello";
-        const String configChannelId = "hello";
-        const int configIntervalInSeconds = 10;
-        const EchoTestConfiguration config = EchoTestConfiguration(
+        int configView = 5;
+        bool configEnableAudio = true;
+        bool configEnableVideo = true;
+        String configToken = "hello";
+        String configChannelId = "hello";
+        int configIntervalInSeconds = 5;
+        EchoTestConfiguration config = EchoTestConfiguration(
           view: configView,
           enableAudio: configEnableAudio,
           enableVideo: configEnableVideo,
@@ -755,23 +754,22 @@ void rtcEngineSmokeTestCases() {
       await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
-        const bool enabled = true;
-        const CameraDirection configCameraDirection =
-            CameraDirection.cameraRear;
-        const CameraFocalLengthType configCameraFocalLengthType =
+        bool enabled = true;
+        CameraDirection configCameraDirection = CameraDirection.cameraRear;
+        CameraFocalLengthType configCameraFocalLengthType =
             CameraFocalLengthType.cameraFocalLengthDefault;
-        const int formatWidth = 10;
-        const int formatHeight = 10;
-        const int formatFps = 10;
-        const VideoFormat configFormat = VideoFormat(
+        int formatWidth = 5;
+        int formatHeight = 5;
+        int formatFps = 5;
+        VideoFormat configFormat = VideoFormat(
           width: formatWidth,
           height: formatHeight,
           fps: formatFps,
         );
-        const String configDeviceId = "hello";
-        const String configCameraId = "hello";
-        const bool configFollowEncodeDimensionRatio = true;
-        const CameraCapturerConfiguration config = CameraCapturerConfiguration(
+        String configDeviceId = "hello";
+        String configCameraId = "hello";
+        bool configFollowEncodeDimensionRatio = true;
+        CameraCapturerConfiguration config = CameraCapturerConfiguration(
           cameraDirection: configCameraDirection,
           cameraFocalLengthType: configCameraFocalLengthType,
           deviceId: configDeviceId,
@@ -875,8 +873,7 @@ void rtcEngineSmokeTestCases() {
       await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
-        const VideoSourceType sourceType =
-            VideoSourceType.videoSourceCameraPrimary;
+        VideoSourceType sourceType = VideoSourceType.videoSourceCameraPrimary;
         await rtcEngine.startPreview(
           sourceType: sourceType,
         );
@@ -910,8 +907,7 @@ void rtcEngineSmokeTestCases() {
       await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
-        const VideoSourceType sourceType =
-            VideoSourceType.videoSourceCameraPrimary;
+        VideoSourceType sourceType = VideoSourceType.videoSourceCameraPrimary;
         await rtcEngine.stopPreview(
           sourceType: sourceType,
         );
@@ -945,11 +941,11 @@ void rtcEngineSmokeTestCases() {
       await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
-        const bool configProbeUplink = true;
-        const bool configProbeDownlink = true;
-        const int configExpectedUplinkBitrate = 10;
-        const int configExpectedDownlinkBitrate = 10;
-        const LastmileProbeConfig config = LastmileProbeConfig(
+        bool configProbeUplink = true;
+        bool configProbeDownlink = true;
+        int configExpectedUplinkBitrate = 5;
+        int configExpectedDownlinkBitrate = 5;
+        LastmileProbeConfig config = LastmileProbeConfig(
           probeUplink: configProbeUplink,
           probeDownlink: configProbeDownlink,
           expectedUplinkBitrate: configExpectedUplinkBitrate,
@@ -1021,31 +1017,31 @@ void rtcEngineSmokeTestCases() {
       await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
-        const VideoCodecType configCodecType = VideoCodecType.videoCodecNone;
-        const int dimensionsWidth = 10;
-        const int dimensionsHeight = 10;
-        const VideoDimensions configDimensions = VideoDimensions(
+        VideoCodecType configCodecType = VideoCodecType.videoCodecNone;
+        int dimensionsWidth = 5;
+        int dimensionsHeight = 5;
+        VideoDimensions configDimensions = VideoDimensions(
           width: dimensionsWidth,
           height: dimensionsHeight,
         );
-        const OrientationMode configOrientationMode =
+        OrientationMode configOrientationMode =
             OrientationMode.orientationModeAdaptive;
-        const DegradationPreference configDegradationPreference =
+        DegradationPreference configDegradationPreference =
             DegradationPreference.maintainQuality;
-        const VideoMirrorModeType configMirrorMode =
+        VideoMirrorModeType configMirrorMode =
             VideoMirrorModeType.videoMirrorModeAuto;
-        const EncodingPreference advanceOptionsEncodingPreference =
+        EncodingPreference advanceOptionsEncodingPreference =
             EncodingPreference.preferAuto;
-        const CompressionPreference advanceOptionsCompressionPreference =
+        CompressionPreference advanceOptionsCompressionPreference =
             CompressionPreference.preferLowLatency;
-        const AdvanceOptions configAdvanceOptions = AdvanceOptions(
+        AdvanceOptions configAdvanceOptions = AdvanceOptions(
           encodingPreference: advanceOptionsEncodingPreference,
           compressionPreference: advanceOptionsCompressionPreference,
         );
-        const int configFrameRate = 10;
-        const int configBitrate = 10;
-        const int configMinBitrate = 10;
-        const VideoEncoderConfiguration config = VideoEncoderConfiguration(
+        int configFrameRate = 5;
+        int configBitrate = 5;
+        int configMinBitrate = 5;
+        VideoEncoderConfiguration config = VideoEncoderConfiguration(
           codecType: configCodecType,
           dimensions: configDimensions,
           frameRate: configFrameRate,
@@ -1090,21 +1086,21 @@ void rtcEngineSmokeTestCases() {
       await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
-        const bool enabled = true;
-        const LighteningContrastLevel optionsLighteningContrastLevel =
+        bool enabled = true;
+        LighteningContrastLevel optionsLighteningContrastLevel =
             LighteningContrastLevel.lighteningContrastLow;
-        const double optionsLighteningLevel = 10.0;
-        const double optionsSmoothnessLevel = 10.0;
-        const double optionsRednessLevel = 10.0;
-        const double optionsSharpnessLevel = 10.0;
-        const BeautyOptions options = BeautyOptions(
+        double optionsLighteningLevel = 5.0;
+        double optionsSmoothnessLevel = 5.0;
+        double optionsRednessLevel = 5.0;
+        double optionsSharpnessLevel = 5.0;
+        BeautyOptions options = BeautyOptions(
           lighteningContrastLevel: optionsLighteningContrastLevel,
           lighteningLevel: optionsLighteningLevel,
           smoothnessLevel: optionsSmoothnessLevel,
           rednessLevel: optionsRednessLevel,
           sharpnessLevel: optionsSharpnessLevel,
         );
-        const MediaSourceType type = MediaSourceType.audioPlayoutSource;
+        MediaSourceType type = MediaSourceType.audioPlayoutSource;
         await rtcEngine.setBeautyEffectOptions(
           enabled: enabled,
           options: options,
@@ -1141,16 +1137,16 @@ void rtcEngineSmokeTestCases() {
       await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
-        const bool enabled = true;
-        const LowLightEnhanceMode optionsMode =
+        bool enabled = true;
+        LowLightEnhanceMode optionsMode =
             LowLightEnhanceMode.lowLightEnhanceAuto;
-        const LowLightEnhanceLevel optionsLevel =
+        LowLightEnhanceLevel optionsLevel =
             LowLightEnhanceLevel.lowLightEnhanceLevelHighQuality;
-        const LowlightEnhanceOptions options = LowlightEnhanceOptions(
+        LowlightEnhanceOptions options = LowlightEnhanceOptions(
           mode: optionsMode,
           level: optionsLevel,
         );
-        const MediaSourceType type = MediaSourceType.audioPlayoutSource;
+        MediaSourceType type = MediaSourceType.audioPlayoutSource;
         await rtcEngine.setLowlightEnhanceOptions(
           enabled: enabled,
           options: options,
@@ -1187,16 +1183,15 @@ void rtcEngineSmokeTestCases() {
       await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
-        const bool enabled = true;
-        const VideoDenoiserMode optionsMode =
-            VideoDenoiserMode.videoDenoiserAuto;
-        const VideoDenoiserLevel optionsLevel =
+        bool enabled = true;
+        VideoDenoiserMode optionsMode = VideoDenoiserMode.videoDenoiserAuto;
+        VideoDenoiserLevel optionsLevel =
             VideoDenoiserLevel.videoDenoiserLevelHighQuality;
-        const VideoDenoiserOptions options = VideoDenoiserOptions(
+        VideoDenoiserOptions options = VideoDenoiserOptions(
           mode: optionsMode,
           level: optionsLevel,
         );
-        const MediaSourceType type = MediaSourceType.audioPlayoutSource;
+        MediaSourceType type = MediaSourceType.audioPlayoutSource;
         await rtcEngine.setVideoDenoiserOptions(
           enabled: enabled,
           options: options,
@@ -1233,14 +1228,14 @@ void rtcEngineSmokeTestCases() {
       await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
-        const bool enabled = true;
-        const double optionsStrengthLevel = 10.0;
-        const double optionsSkinProtectLevel = 10.0;
-        const ColorEnhanceOptions options = ColorEnhanceOptions(
+        bool enabled = true;
+        double optionsStrengthLevel = 5.0;
+        double optionsSkinProtectLevel = 5.0;
+        ColorEnhanceOptions options = ColorEnhanceOptions(
           strengthLevel: optionsStrengthLevel,
           skinProtectLevel: optionsSkinProtectLevel,
         );
-        const MediaSourceType type = MediaSourceType.audioPlayoutSource;
+        MediaSourceType type = MediaSourceType.audioPlayoutSource;
         await rtcEngine.setColorEnhanceOptions(
           enabled: enabled,
           options: options,
@@ -1277,27 +1272,26 @@ void rtcEngineSmokeTestCases() {
       await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
-        const bool enabled = true;
-        const BackgroundSourceType backgroundSourceBackgroundSourceType =
+        bool enabled = true;
+        BackgroundSourceType backgroundSourceBackgroundSourceType =
             BackgroundSourceType.backgroundNone;
-        const BackgroundBlurDegree backgroundSourceBlurDegree =
+        BackgroundBlurDegree backgroundSourceBlurDegree =
             BackgroundBlurDegree.blurDegreeLow;
-        const int backgroundSourceColor = 10;
-        const String backgroundSourceSource = "hello";
-        const VirtualBackgroundSource backgroundSource =
-            VirtualBackgroundSource(
+        int backgroundSourceColor = 5;
+        String backgroundSourceSource = "hello";
+        VirtualBackgroundSource backgroundSource = VirtualBackgroundSource(
           backgroundSourceType: backgroundSourceBackgroundSourceType,
           color: backgroundSourceColor,
           source: backgroundSourceSource,
           blurDegree: backgroundSourceBlurDegree,
         );
-        const SegModelType segpropertyModelType = SegModelType.segModelAi;
-        const double segpropertyGreenCapacity = 10.0;
-        const SegmentationProperty segproperty = SegmentationProperty(
+        SegModelType segpropertyModelType = SegModelType.segModelAi;
+        double segpropertyGreenCapacity = 5.0;
+        SegmentationProperty segproperty = SegmentationProperty(
           modelType: segpropertyModelType,
           greenCapacity: segpropertyGreenCapacity,
         );
-        const MediaSourceType type = MediaSourceType.audioPlayoutSource;
+        MediaSourceType type = MediaSourceType.audioPlayoutSource;
         await rtcEngine.enableVirtualBackground(
           enabled: enabled,
           backgroundSource: backgroundSource,
@@ -1335,32 +1329,32 @@ void rtcEngineSmokeTestCases() {
       await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
-        const RenderModeType canvasRenderMode = RenderModeType.renderModeHidden;
-        const VideoMirrorModeType canvasMirrorMode =
+        RenderModeType canvasRenderMode = RenderModeType.renderModeHidden;
+        VideoMirrorModeType canvasMirrorMode =
             VideoMirrorModeType.videoMirrorModeAuto;
-        const VideoViewSetupMode canvasSetupMode =
+        VideoViewSetupMode canvasSetupMode =
             VideoViewSetupMode.videoViewSetupReplace;
-        const VideoSourceType canvasSourceType =
+        VideoSourceType canvasSourceType =
             VideoSourceType.videoSourceCameraPrimary;
-        const int cropAreaX = 10;
-        const int cropAreaY = 10;
-        const int cropAreaWidth = 10;
-        const int cropAreaHeight = 10;
-        const Rectangle canvasCropArea = Rectangle(
+        int cropAreaX = 5;
+        int cropAreaY = 5;
+        int cropAreaWidth = 5;
+        int cropAreaHeight = 5;
+        Rectangle canvasCropArea = Rectangle(
           x: cropAreaX,
           y: cropAreaY,
           width: cropAreaWidth,
           height: cropAreaHeight,
         );
-        const VideoModulePosition canvasPosition =
+        VideoModulePosition canvasPosition =
             VideoModulePosition.positionPostCapturer;
-        const int canvasUid = 10;
-        const int canvasSubviewUid = 10;
-        const int canvasView = 10;
-        const int canvasBackgroundColor = 10;
-        const int canvasMediaPlayerId = 10;
-        const bool canvasEnableAlphaMask = true;
-        const VideoCanvas canvas = VideoCanvas(
+        int canvasUid = 5;
+        int canvasSubviewUid = 5;
+        int canvasView = 5;
+        int canvasBackgroundColor = 5;
+        int canvasMediaPlayerId = 5;
+        bool canvasEnableAlphaMask = true;
+        VideoCanvas canvas = VideoCanvas(
           uid: canvasUid,
           subviewUid: canvasSubviewUid,
           view: canvasView,
@@ -1407,32 +1401,32 @@ void rtcEngineSmokeTestCases() {
       await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
-        const RenderModeType canvasRenderMode = RenderModeType.renderModeHidden;
-        const VideoMirrorModeType canvasMirrorMode =
+        RenderModeType canvasRenderMode = RenderModeType.renderModeHidden;
+        VideoMirrorModeType canvasMirrorMode =
             VideoMirrorModeType.videoMirrorModeAuto;
-        const VideoViewSetupMode canvasSetupMode =
+        VideoViewSetupMode canvasSetupMode =
             VideoViewSetupMode.videoViewSetupReplace;
-        const VideoSourceType canvasSourceType =
+        VideoSourceType canvasSourceType =
             VideoSourceType.videoSourceCameraPrimary;
-        const int cropAreaX = 10;
-        const int cropAreaY = 10;
-        const int cropAreaWidth = 10;
-        const int cropAreaHeight = 10;
-        const Rectangle canvasCropArea = Rectangle(
+        int cropAreaX = 5;
+        int cropAreaY = 5;
+        int cropAreaWidth = 5;
+        int cropAreaHeight = 5;
+        Rectangle canvasCropArea = Rectangle(
           x: cropAreaX,
           y: cropAreaY,
           width: cropAreaWidth,
           height: cropAreaHeight,
         );
-        const VideoModulePosition canvasPosition =
+        VideoModulePosition canvasPosition =
             VideoModulePosition.positionPostCapturer;
-        const int canvasUid = 10;
-        const int canvasSubviewUid = 10;
-        const int canvasView = 10;
-        const int canvasBackgroundColor = 10;
-        const int canvasMediaPlayerId = 10;
-        const bool canvasEnableAlphaMask = true;
-        const VideoCanvas canvas = VideoCanvas(
+        int canvasUid = 5;
+        int canvasSubviewUid = 5;
+        int canvasView = 5;
+        int canvasBackgroundColor = 5;
+        int canvasMediaPlayerId = 5;
+        bool canvasEnableAlphaMask = true;
+        VideoCanvas canvas = VideoCanvas(
           uid: canvasUid,
           subviewUid: canvasSubviewUid,
           view: canvasView,
@@ -1479,7 +1473,7 @@ void rtcEngineSmokeTestCases() {
       await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
-        const VideoApplicationScenarioType scenarioType =
+        VideoApplicationScenarioType scenarioType =
             VideoApplicationScenarioType.applicationScenarioGeneral;
         await rtcEngine.setVideoScenario(
           scenarioType,
@@ -1514,7 +1508,7 @@ void rtcEngineSmokeTestCases() {
       await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
-        const VideoQoePreferenceType qoePreference =
+        VideoQoePreferenceType qoePreference =
             VideoQoePreferenceType.videoQoePreferenceBalance;
         await rtcEngine.setVideoQoEPreference(
           qoePreference,
@@ -1612,9 +1606,8 @@ void rtcEngineSmokeTestCases() {
       await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
-        const AudioProfileType profile = AudioProfileType.audioProfileDefault;
-        const AudioScenarioType scenario =
-            AudioScenarioType.audioScenarioDefault;
+        AudioProfileType profile = AudioProfileType.audioProfileDefault;
+        AudioScenarioType scenario = AudioScenarioType.audioScenarioDefault;
         await rtcEngine.setAudioProfile(
           profile: profile,
           scenario: scenario,
@@ -1649,8 +1642,7 @@ void rtcEngineSmokeTestCases() {
       await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
-        const AudioScenarioType scenario =
-            AudioScenarioType.audioScenarioDefault;
+        AudioScenarioType scenario = AudioScenarioType.audioScenarioDefault;
         await rtcEngine.setAudioScenario(
           scenario,
         );
@@ -1684,7 +1676,7 @@ void rtcEngineSmokeTestCases() {
       await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
-        const bool enabled = true;
+        bool enabled = true;
         await rtcEngine.enableLocalAudio(
           enabled,
         );
@@ -1718,7 +1710,7 @@ void rtcEngineSmokeTestCases() {
       await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
-        const bool mute = true;
+        bool mute = true;
         await rtcEngine.muteLocalAudioStream(
           mute,
         );
@@ -1752,7 +1744,7 @@ void rtcEngineSmokeTestCases() {
       await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
-        const bool mute = true;
+        bool mute = true;
         await rtcEngine.muteAllRemoteAudioStreams(
           mute,
         );
@@ -1787,7 +1779,7 @@ void rtcEngineSmokeTestCases() {
       await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
-        const bool mute = true;
+        bool mute = true;
         await rtcEngine.setDefaultMuteAllRemoteAudioStreams(
           mute,
         );
@@ -1822,8 +1814,8 @@ void rtcEngineSmokeTestCases() {
       await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
-        const int uid = 10;
-        const bool mute = true;
+        int uid = 5;
+        bool mute = true;
         await rtcEngine.muteRemoteAudioStream(
           uid: uid,
           mute: mute,
@@ -1859,7 +1851,7 @@ void rtcEngineSmokeTestCases() {
       await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
-        const bool mute = true;
+        bool mute = true;
         await rtcEngine.muteLocalVideoStream(
           mute,
         );
@@ -1893,7 +1885,7 @@ void rtcEngineSmokeTestCases() {
       await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
-        const bool enabled = true;
+        bool enabled = true;
         await rtcEngine.enableLocalVideo(
           enabled,
         );
@@ -1927,7 +1919,7 @@ void rtcEngineSmokeTestCases() {
       await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
-        const bool mute = true;
+        bool mute = true;
         await rtcEngine.muteAllRemoteVideoStreams(
           mute,
         );
@@ -1962,7 +1954,7 @@ void rtcEngineSmokeTestCases() {
       await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
-        const bool mute = true;
+        bool mute = true;
         await rtcEngine.setDefaultMuteAllRemoteVideoStreams(
           mute,
         );
@@ -1997,7 +1989,7 @@ void rtcEngineSmokeTestCases() {
       await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
-        const VideoStreamType streamType = VideoStreamType.videoStreamHigh;
+        VideoStreamType streamType = VideoStreamType.videoStreamHigh;
         await rtcEngine.setRemoteDefaultVideoStreamType(
           streamType,
         );
@@ -2032,8 +2024,8 @@ void rtcEngineSmokeTestCases() {
       await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
-        const int uid = 10;
-        const bool mute = true;
+        int uid = 5;
+        bool mute = true;
         await rtcEngine.muteRemoteVideoStream(
           uid: uid,
           mute: mute,
@@ -2069,8 +2061,8 @@ void rtcEngineSmokeTestCases() {
       await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
-        const int uid = 10;
-        const VideoStreamType streamType = VideoStreamType.videoStreamHigh;
+        int uid = 5;
+        VideoStreamType streamType = VideoStreamType.videoStreamHigh;
         await rtcEngine.setRemoteVideoStreamType(
           uid: uid,
           streamType: streamType,
@@ -2106,10 +2098,10 @@ void rtcEngineSmokeTestCases() {
       await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
-        const int uid = 10;
-        const VideoStreamType optionsType = VideoStreamType.videoStreamHigh;
-        const bool optionsEncodedFrameOnly = true;
-        const VideoSubscriptionOptions options = VideoSubscriptionOptions(
+        int uid = 5;
+        VideoStreamType optionsType = VideoStreamType.videoStreamHigh;
+        bool optionsEncodedFrameOnly = true;
+        VideoSubscriptionOptions options = VideoSubscriptionOptions(
           type: optionsType,
           encodedFrameOnly: optionsEncodedFrameOnly,
         );
@@ -2148,9 +2140,9 @@ void rtcEngineSmokeTestCases() {
       await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
-        const int interval = 10;
-        const int smooth = 10;
-        const bool reportVad = true;
+        int interval = 5;
+        int smooth = 5;
+        bool reportVad = true;
         await rtcEngine.enableAudioVolumeIndication(
           interval: interval,
           smooth: smooth,
@@ -2187,15 +2179,15 @@ void rtcEngineSmokeTestCases() {
       await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
-        const AudioFileRecordingType configFileRecordingType =
+        AudioFileRecordingType configFileRecordingType =
             AudioFileRecordingType.audioFileRecordingMic;
-        const AudioRecordingQualityType configQuality =
+        AudioRecordingQualityType configQuality =
             AudioRecordingQualityType.audioRecordingQualityLow;
-        const String configFilePath = "hello";
-        const bool configEncode = true;
-        const int configSampleRate = 10;
-        const int configRecordingChannel = 10;
-        const AudioRecordingConfiguration config = AudioRecordingConfiguration(
+        String configFilePath = "hello";
+        bool configEncode = true;
+        int configSampleRate = 5;
+        int configRecordingChannel = 5;
+        AudioRecordingConfiguration config = AudioRecordingConfiguration(
           filePath: configFilePath,
           encode: configEncode,
           sampleRate: configSampleRate,
@@ -2236,17 +2228,17 @@ void rtcEngineSmokeTestCases() {
       await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
-        const AudioEncodedFrameObserverPosition configPostionType =
+        AudioEncodedFrameObserverPosition configPostionType =
             AudioEncodedFrameObserverPosition
                 .audioEncodedFrameObserverPositionRecord;
-        const AudioEncodingType configEncodingType =
+        AudioEncodingType configEncodingType =
             AudioEncodingType.audioEncodingTypeAac16000Low;
-        const AudioEncodedFrameObserverConfig config =
+        AudioEncodedFrameObserverConfig config =
             AudioEncodedFrameObserverConfig(
           postionType: configPostionType,
           encodingType: configEncodingType,
         );
-        final AudioEncodedFrameObserver observer = AudioEncodedFrameObserver(
+        AudioEncodedFrameObserver observer = AudioEncodedFrameObserver(
           onRecordAudioEncodedFrame: (Uint8List frameBuffer, int length,
               EncodedAudioFrameInfo audioEncodedFrameInfo) {},
           onPlaybackAudioEncodedFrame: (Uint8List frameBuffer, int length,
@@ -2320,10 +2312,10 @@ void rtcEngineSmokeTestCases() {
       await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
-        const String filePath = "hello";
-        const bool loopback = true;
-        const int cycle = 10;
-        const int startPos = 10;
+        String filePath = "hello";
+        bool loopback = true;
+        int cycle = 5;
+        int startPos = 5;
         await rtcEngine.startAudioMixing(
           filePath: filePath,
           loopback: loopback,
@@ -2453,7 +2445,7 @@ void rtcEngineSmokeTestCases() {
       await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
-        const int index = 10;
+        int index = 5;
         await rtcEngine.selectAudioTrack(
           index,
         );
@@ -2518,7 +2510,7 @@ void rtcEngineSmokeTestCases() {
       await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
-        const int volume = 10;
+        int volume = 5;
         await rtcEngine.adjustAudioMixingVolume(
           volume,
         );
@@ -2553,7 +2545,7 @@ void rtcEngineSmokeTestCases() {
       await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
-        const int volume = 10;
+        int volume = 5;
         await rtcEngine.adjustAudioMixingPublishVolume(
           volume,
         );
@@ -2620,7 +2612,7 @@ void rtcEngineSmokeTestCases() {
       await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
-        const int volume = 10;
+        int volume = 5;
         await rtcEngine.adjustAudioMixingPlayoutVolume(
           volume,
         );
@@ -2751,7 +2743,7 @@ void rtcEngineSmokeTestCases() {
       await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
-        const int pos = 10;
+        int pos = 5;
         await rtcEngine.setAudioMixingPosition(
           pos,
         );
@@ -2786,7 +2778,7 @@ void rtcEngineSmokeTestCases() {
       await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
-        const AudioMixingDualMonoMode mode =
+        AudioMixingDualMonoMode mode =
             AudioMixingDualMonoMode.audioMixingDualMonoAuto;
         await rtcEngine.setAudioMixingDualMonoMode(
           mode,
@@ -2822,7 +2814,7 @@ void rtcEngineSmokeTestCases() {
       await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
-        const int pitch = 10;
+        int pitch = 5;
         await rtcEngine.setAudioMixingPitch(
           pitch,
         );
@@ -2856,7 +2848,7 @@ void rtcEngineSmokeTestCases() {
       await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
-        const int speed = 10;
+        int speed = 5;
         await rtcEngine.setAudioMixingPlaybackSpeed(
           speed,
         );
@@ -2922,7 +2914,7 @@ void rtcEngineSmokeTestCases() {
       await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
-        const int volume = 10;
+        int volume = 5;
         await rtcEngine.setEffectsVolume(
           volume,
         );
@@ -2956,9 +2948,9 @@ void rtcEngineSmokeTestCases() {
       await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
-        const int soundId = 10;
-        const String filePath = "hello";
-        const int startPos = 10;
+        int soundId = 5;
+        String filePath = "hello";
+        int startPos = 5;
         await rtcEngine.preloadEffect(
           soundId: soundId,
           filePath: filePath,
@@ -2994,14 +2986,14 @@ void rtcEngineSmokeTestCases() {
       await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
-        const int soundId = 10;
-        const String filePath = "hello";
-        const int loopCount = 10;
-        const double pitch = 10.0;
-        const double pan = 10.0;
-        const int gain = 10;
-        const bool publish = true;
-        const int startPos = 10;
+        int soundId = 5;
+        String filePath = "hello";
+        int loopCount = 5;
+        double pitch = 5.0;
+        double pan = 5.0;
+        int gain = 5;
+        bool publish = true;
+        int startPos = 5;
         await rtcEngine.playEffect(
           soundId: soundId,
           filePath: filePath,
@@ -3042,11 +3034,11 @@ void rtcEngineSmokeTestCases() {
       await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
-        const int loopCount = 10;
-        const double pitch = 10.0;
-        const double pan = 10.0;
-        const int gain = 10;
-        const bool publish = true;
+        int loopCount = 5;
+        double pitch = 5.0;
+        double pan = 5.0;
+        int gain = 5;
+        bool publish = true;
         await rtcEngine.playAllEffects(
           loopCount: loopCount,
           pitch: pitch,
@@ -3084,7 +3076,7 @@ void rtcEngineSmokeTestCases() {
       await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
-        const int soundId = 10;
+        int soundId = 5;
         await rtcEngine.getVolumeOfEffect(
           soundId,
         );
@@ -3118,8 +3110,8 @@ void rtcEngineSmokeTestCases() {
       await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
-        const int soundId = 10;
-        const int volume = 10;
+        int soundId = 5;
+        int volume = 5;
         await rtcEngine.setVolumeOfEffect(
           soundId: soundId,
           volume: volume,
@@ -3154,7 +3146,7 @@ void rtcEngineSmokeTestCases() {
       await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
-        const int soundId = 10;
+        int soundId = 5;
         await rtcEngine.pauseEffect(
           soundId,
         );
@@ -3219,7 +3211,7 @@ void rtcEngineSmokeTestCases() {
       await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
-        const int soundId = 10;
+        int soundId = 5;
         await rtcEngine.resumeEffect(
           soundId,
         );
@@ -3284,7 +3276,7 @@ void rtcEngineSmokeTestCases() {
       await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
-        const int soundId = 10;
+        int soundId = 5;
         await rtcEngine.stopEffect(
           soundId,
         );
@@ -3349,7 +3341,7 @@ void rtcEngineSmokeTestCases() {
       await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
-        const int soundId = 10;
+        int soundId = 5;
         await rtcEngine.unloadEffect(
           soundId,
         );
@@ -3414,7 +3406,7 @@ void rtcEngineSmokeTestCases() {
       await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
-        const String filePath = "hello";
+        String filePath = "hello";
         await rtcEngine.getEffectDuration(
           filePath,
         );
@@ -3448,8 +3440,8 @@ void rtcEngineSmokeTestCases() {
       await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
-        const int soundId = 10;
-        const int pos = 10;
+        int soundId = 5;
+        int pos = 5;
         await rtcEngine.setEffectPosition(
           soundId: soundId,
           pos: pos,
@@ -3484,7 +3476,7 @@ void rtcEngineSmokeTestCases() {
       await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
-        const int soundId = 10;
+        int soundId = 5;
         await rtcEngine.getEffectCurrentPosition(
           soundId,
         );
@@ -3519,7 +3511,7 @@ void rtcEngineSmokeTestCases() {
       await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
-        const bool enabled = true;
+        bool enabled = true;
         await rtcEngine.enableSoundPositionIndication(
           enabled,
         );
@@ -3554,9 +3546,9 @@ void rtcEngineSmokeTestCases() {
       await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
-        const int uid = 10;
-        const double pan = 10.0;
-        const double gain = 10.0;
+        int uid = 5;
+        double pan = 5.0;
+        double gain = 5.0;
         await rtcEngine.setRemoteVoicePosition(
           uid: uid,
           pan: pan,
@@ -3593,7 +3585,7 @@ void rtcEngineSmokeTestCases() {
       await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
-        const bool enabled = true;
+        bool enabled = true;
         await rtcEngine.enableSpatialAudio(
           enabled,
         );
@@ -3627,16 +3619,16 @@ void rtcEngineSmokeTestCases() {
       await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
-        const int uid = 10;
-        const double paramsSpeakerAzimuth = 10.0;
-        const double paramsSpeakerElevation = 10.0;
-        const double paramsSpeakerDistance = 10.0;
-        const int paramsSpeakerOrientation = 10;
-        const bool paramsEnableBlur = true;
-        const bool paramsEnableAirAbsorb = true;
-        const double paramsSpeakerAttenuation = 10.0;
-        const bool paramsEnableDoppler = true;
-        const SpatialAudioParams params = SpatialAudioParams(
+        int uid = 5;
+        double paramsSpeakerAzimuth = 5.0;
+        double paramsSpeakerElevation = 5.0;
+        double paramsSpeakerDistance = 5.0;
+        int paramsSpeakerOrientation = 5;
+        bool paramsEnableBlur = true;
+        bool paramsEnableAirAbsorb = true;
+        double paramsSpeakerAttenuation = 5.0;
+        bool paramsEnableDoppler = true;
+        SpatialAudioParams params = SpatialAudioParams(
           speakerAzimuth: paramsSpeakerAzimuth,
           speakerElevation: paramsSpeakerElevation,
           speakerDistance: paramsSpeakerDistance,
@@ -3681,8 +3673,7 @@ void rtcEngineSmokeTestCases() {
       await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
-        const VoiceBeautifierPreset preset =
-            VoiceBeautifierPreset.voiceBeautifierOff;
+        VoiceBeautifierPreset preset = VoiceBeautifierPreset.voiceBeautifierOff;
         await rtcEngine.setVoiceBeautifierPreset(
           preset,
         );
@@ -3717,7 +3708,7 @@ void rtcEngineSmokeTestCases() {
       await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
-        const AudioEffectPreset preset = AudioEffectPreset.audioEffectOff;
+        AudioEffectPreset preset = AudioEffectPreset.audioEffectOff;
         await rtcEngine.setAudioEffectPreset(
           preset,
         );
@@ -3751,8 +3742,7 @@ void rtcEngineSmokeTestCases() {
       await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
-        const VoiceConversionPreset preset =
-            VoiceConversionPreset.voiceConversionOff;
+        VoiceConversionPreset preset = VoiceConversionPreset.voiceConversionOff;
         await rtcEngine.setVoiceConversionPreset(
           preset,
         );
@@ -3787,9 +3777,9 @@ void rtcEngineSmokeTestCases() {
       await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
-        const AudioEffectPreset preset = AudioEffectPreset.audioEffectOff;
-        const int param1 = 10;
-        const int param2 = 10;
+        AudioEffectPreset preset = AudioEffectPreset.audioEffectOff;
+        int param1 = 5;
+        int param2 = 5;
         await rtcEngine.setAudioEffectParameters(
           preset: preset,
           param1: param1,
@@ -3826,10 +3816,9 @@ void rtcEngineSmokeTestCases() {
       await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
-        const VoiceBeautifierPreset preset =
-            VoiceBeautifierPreset.voiceBeautifierOff;
-        const int param1 = 10;
-        const int param2 = 10;
+        VoiceBeautifierPreset preset = VoiceBeautifierPreset.voiceBeautifierOff;
+        int param1 = 5;
+        int param2 = 5;
         await rtcEngine.setVoiceBeautifierParameters(
           preset: preset,
           param1: param1,
@@ -3866,10 +3855,9 @@ void rtcEngineSmokeTestCases() {
       await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
-        const VoiceConversionPreset preset =
-            VoiceConversionPreset.voiceConversionOff;
-        const int param1 = 10;
-        const int param2 = 10;
+        VoiceConversionPreset preset = VoiceConversionPreset.voiceConversionOff;
+        int param1 = 5;
+        int param2 = 5;
         await rtcEngine.setVoiceConversionParameters(
           preset: preset,
           param1: param1,
@@ -3906,7 +3894,7 @@ void rtcEngineSmokeTestCases() {
       await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
-        const double pitch = 10.0;
+        double pitch = 5.0;
         await rtcEngine.setLocalVoicePitch(
           pitch,
         );
@@ -3940,7 +3928,7 @@ void rtcEngineSmokeTestCases() {
       await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
-        const double formantRatio = 10.0;
+        double formantRatio = 5.0;
         await rtcEngine.setLocalVoiceFormant(
           formantRatio,
         );
@@ -3974,9 +3962,9 @@ void rtcEngineSmokeTestCases() {
       await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
-        const AudioEqualizationBandFrequency bandFrequency =
+        AudioEqualizationBandFrequency bandFrequency =
             AudioEqualizationBandFrequency.audioEqualizationBand31;
-        const int bandGain = 10;
+        int bandGain = 5;
         await rtcEngine.setLocalVoiceEqualization(
           bandFrequency: bandFrequency,
           bandGain: bandGain,
@@ -4012,8 +4000,8 @@ void rtcEngineSmokeTestCases() {
       await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
-        const AudioReverbType reverbKey = AudioReverbType.audioReverbDryLevel;
-        const int value = 10;
+        AudioReverbType reverbKey = AudioReverbType.audioReverbDryLevel;
+        int value = 5;
         await rtcEngine.setLocalVoiceReverb(
           reverbKey: reverbKey,
           value: value,
@@ -4048,7 +4036,7 @@ void rtcEngineSmokeTestCases() {
       await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
-        const HeadphoneEqualizerPreset preset =
+        HeadphoneEqualizerPreset preset =
             HeadphoneEqualizerPreset.headphoneEqualizerOff;
         await rtcEngine.setHeadphoneEQPreset(
           preset,
@@ -4083,8 +4071,8 @@ void rtcEngineSmokeTestCases() {
       await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
-        const int lowGain = 10;
-        const int highGain = 10;
+        int lowGain = 5;
+        int highGain = 5;
         await rtcEngine.setHeadphoneEQParameters(
           lowGain: lowGain,
           highGain: highGain,
@@ -4120,7 +4108,7 @@ void rtcEngineSmokeTestCases() {
       await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
-        const String filePath = "hello";
+        String filePath = "hello";
         await rtcEngine.setLogFile(
           filePath,
         );
@@ -4154,7 +4142,7 @@ void rtcEngineSmokeTestCases() {
       await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
-        const LogFilterType filter = LogFilterType.logFilterOff;
+        LogFilterType filter = LogFilterType.logFilterOff;
         await rtcEngine.setLogFilter(
           filter,
         );
@@ -4188,7 +4176,7 @@ void rtcEngineSmokeTestCases() {
       await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
-        const LogLevel level = LogLevel.logLevelNone;
+        LogLevel level = LogLevel.logLevelNone;
         await rtcEngine.setLogLevel(
           level,
         );
@@ -4222,7 +4210,7 @@ void rtcEngineSmokeTestCases() {
       await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
-        const int fileSizeInKBytes = 10;
+        int fileSizeInKBytes = 5;
         await rtcEngine.setLogFileSize(
           fileSizeInKBytes,
         );
@@ -4287,8 +4275,8 @@ void rtcEngineSmokeTestCases() {
       await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
-        const LogLevel level = LogLevel.logLevelNone;
-        const String fmt = "hello";
+        LogLevel level = LogLevel.logLevelNone;
+        String fmt = "hello";
         await rtcEngine.writeLog(
           level: level,
           fmt: fmt,
@@ -4323,8 +4311,8 @@ void rtcEngineSmokeTestCases() {
       await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
-        const RenderModeType renderMode = RenderModeType.renderModeHidden;
-        const VideoMirrorModeType mirrorMode =
+        RenderModeType renderMode = RenderModeType.renderModeHidden;
+        VideoMirrorModeType mirrorMode =
             VideoMirrorModeType.videoMirrorModeAuto;
         await rtcEngine.setLocalRenderMode(
           renderMode: renderMode,
@@ -4360,9 +4348,9 @@ void rtcEngineSmokeTestCases() {
       await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
-        const int uid = 10;
-        const RenderModeType renderMode = RenderModeType.renderModeHidden;
-        const VideoMirrorModeType mirrorMode =
+        int uid = 5;
+        RenderModeType renderMode = RenderModeType.renderModeHidden;
+        VideoMirrorModeType mirrorMode =
             VideoMirrorModeType.videoMirrorModeAuto;
         await rtcEngine.setRemoteRenderMode(
           uid: uid,
@@ -4399,7 +4387,7 @@ void rtcEngineSmokeTestCases() {
       await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
-        const VideoMirrorModeType mirrorMode =
+        VideoMirrorModeType mirrorMode =
             VideoMirrorModeType.videoMirrorModeAuto;
         await rtcEngine.setLocalVideoMirrorMode(
           mirrorMode,
@@ -4435,16 +4423,16 @@ void rtcEngineSmokeTestCases() {
       await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
-        const bool enabled = true;
-        const int dimensionsWidth = 10;
-        const int dimensionsHeight = 10;
-        const VideoDimensions streamConfigDimensions = VideoDimensions(
+        bool enabled = true;
+        int dimensionsWidth = 5;
+        int dimensionsHeight = 5;
+        VideoDimensions streamConfigDimensions = VideoDimensions(
           width: dimensionsWidth,
           height: dimensionsHeight,
         );
-        const int streamConfigKBitrate = 10;
-        const int streamConfigFramerate = 10;
-        const SimulcastStreamConfig streamConfig = SimulcastStreamConfig(
+        int streamConfigKBitrate = 5;
+        int streamConfigFramerate = 5;
+        SimulcastStreamConfig streamConfig = SimulcastStreamConfig(
           dimensions: streamConfigDimensions,
           kBitrate: streamConfigKBitrate,
           framerate: streamConfigFramerate,
@@ -4483,17 +4471,16 @@ void rtcEngineSmokeTestCases() {
       await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
-        const SimulcastStreamMode mode =
-            SimulcastStreamMode.autoSimulcastStream;
-        const int dimensionsWidth = 10;
-        const int dimensionsHeight = 10;
-        const VideoDimensions streamConfigDimensions = VideoDimensions(
+        SimulcastStreamMode mode = SimulcastStreamMode.autoSimulcastStream;
+        int dimensionsWidth = 5;
+        int dimensionsHeight = 5;
+        VideoDimensions streamConfigDimensions = VideoDimensions(
           width: dimensionsWidth,
           height: dimensionsHeight,
         );
-        const int streamConfigKBitrate = 10;
-        const int streamConfigFramerate = 10;
-        const SimulcastStreamConfig streamConfig = SimulcastStreamConfig(
+        int streamConfigKBitrate = 5;
+        int streamConfigFramerate = 5;
+        SimulcastStreamConfig streamConfig = SimulcastStreamConfig(
           dimensions: streamConfigDimensions,
           kBitrate: streamConfigKBitrate,
           framerate: streamConfigFramerate,
@@ -4532,8 +4519,8 @@ void rtcEngineSmokeTestCases() {
       await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
-        const int trackId = 10;
-        const bool enabled = true;
+        int trackId = 5;
+        bool enabled = true;
         await rtcEngine.enableCustomAudioLocalPlayback(
           trackId: trackId,
           enabled: enabled,
@@ -4569,11 +4556,11 @@ void rtcEngineSmokeTestCases() {
       await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
-        const int sampleRate = 10;
-        const int channel = 10;
-        const RawAudioFrameOpModeType mode =
+        int sampleRate = 5;
+        int channel = 5;
+        RawAudioFrameOpModeType mode =
             RawAudioFrameOpModeType.rawAudioFrameOpModeReadOnly;
-        const int samplesPerCall = 10;
+        int samplesPerCall = 5;
         await rtcEngine.setRecordingAudioFrameParameters(
           sampleRate: sampleRate,
           channel: channel,
@@ -4611,11 +4598,11 @@ void rtcEngineSmokeTestCases() {
       await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
-        const int sampleRate = 10;
-        const int channel = 10;
-        const RawAudioFrameOpModeType mode =
+        int sampleRate = 5;
+        int channel = 5;
+        RawAudioFrameOpModeType mode =
             RawAudioFrameOpModeType.rawAudioFrameOpModeReadOnly;
-        const int samplesPerCall = 10;
+        int samplesPerCall = 5;
         await rtcEngine.setPlaybackAudioFrameParameters(
           sampleRate: sampleRate,
           channel: channel,
@@ -4653,9 +4640,9 @@ void rtcEngineSmokeTestCases() {
       await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
-        const int sampleRate = 10;
-        const int channel = 10;
-        const int samplesPerCall = 10;
+        int sampleRate = 5;
+        int channel = 5;
+        int samplesPerCall = 5;
         await rtcEngine.setMixedAudioFrameParameters(
           sampleRate: sampleRate,
           channel: channel,
@@ -4692,11 +4679,11 @@ void rtcEngineSmokeTestCases() {
       await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
-        const int sampleRate = 10;
-        const int channel = 10;
-        const RawAudioFrameOpModeType mode =
+        int sampleRate = 5;
+        int channel = 5;
+        RawAudioFrameOpModeType mode =
             RawAudioFrameOpModeType.rawAudioFrameOpModeReadOnly;
-        const int samplesPerCall = 10;
+        int samplesPerCall = 5;
         await rtcEngine.setEarMonitoringAudioFrameParameters(
           sampleRate: sampleRate,
           channel: channel,
@@ -4734,8 +4721,8 @@ void rtcEngineSmokeTestCases() {
       await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
-        const int sampleRate = 10;
-        const int channel = 10;
+        int sampleRate = 5;
+        int channel = 5;
         await rtcEngine.setPlaybackAudioFrameBeforeMixingParameters(
           sampleRate: sampleRate,
           channel: channel,
@@ -4771,7 +4758,7 @@ void rtcEngineSmokeTestCases() {
       await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
-        const int intervalInMS = 10;
+        int intervalInMS = 5;
         await rtcEngine.enableAudioSpectrumMonitor(
           intervalInMS: intervalInMS,
         );
@@ -4838,7 +4825,7 @@ void rtcEngineSmokeTestCases() {
       await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
-        final AudioSpectrumObserver observer = AudioSpectrumObserver(
+        AudioSpectrumObserver observer = AudioSpectrumObserver(
           onLocalAudioSpectrum: (AudioSpectrumData data) {},
           onRemoteAudioSpectrum: (List spectrums, int spectrumNumber) {},
         );
@@ -4876,7 +4863,7 @@ void rtcEngineSmokeTestCases() {
       await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
-        final AudioSpectrumObserver observer = AudioSpectrumObserver(
+        AudioSpectrumObserver observer = AudioSpectrumObserver(
           onLocalAudioSpectrum: (AudioSpectrumData data) {},
           onRemoteAudioSpectrum: (List spectrums, int spectrumNumber) {},
         );
@@ -4914,7 +4901,7 @@ void rtcEngineSmokeTestCases() {
       await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
-        const int volume = 10;
+        int volume = 5;
         await rtcEngine.adjustRecordingSignalVolume(
           volume,
         );
@@ -4949,7 +4936,7 @@ void rtcEngineSmokeTestCases() {
       await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
-        const bool mute = true;
+        bool mute = true;
         await rtcEngine.muteRecordingSignal(
           mute,
         );
@@ -4983,7 +4970,7 @@ void rtcEngineSmokeTestCases() {
       await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
-        const int volume = 10;
+        int volume = 5;
         await rtcEngine.adjustPlaybackSignalVolume(
           volume,
         );
@@ -5018,8 +5005,8 @@ void rtcEngineSmokeTestCases() {
       await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
-        const int uid = 10;
-        const int volume = 10;
+        int uid = 5;
+        int volume = 5;
         await rtcEngine.adjustUserPlaybackSignalVolume(
           uid: uid,
           volume: volume,
@@ -5055,7 +5042,7 @@ void rtcEngineSmokeTestCases() {
       await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
-        const StreamFallbackOptions option =
+        StreamFallbackOptions option =
             StreamFallbackOptions.streamFallbackOptionDisabled;
         await rtcEngine.setLocalPublishFallbackOption(
           option,
@@ -5091,7 +5078,7 @@ void rtcEngineSmokeTestCases() {
       await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
-        const StreamFallbackOptions option =
+        StreamFallbackOptions option =
             StreamFallbackOptions.streamFallbackOptionDisabled;
         await rtcEngine.setRemoteSubscribeFallbackOption(
           option,
@@ -5127,10 +5114,10 @@ void rtcEngineSmokeTestCases() {
       await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
-        const String provider = "hello";
-        const String extension = "hello";
-        const bool enable = true;
-        const MediaSourceType type = MediaSourceType.audioPlayoutSource;
+        String provider = "hello";
+        String extension = "hello";
+        bool enable = true;
+        MediaSourceType type = MediaSourceType.audioPlayoutSource;
         await rtcEngine.enableExtension(
           provider: provider,
           extension: extension,
@@ -5167,11 +5154,11 @@ void rtcEngineSmokeTestCases() {
       await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
-        const String provider = "hello";
-        const String extension = "hello";
-        const String key = "hello";
-        const String value = "hello";
-        const MediaSourceType type = MediaSourceType.audioPlayoutSource;
+        String provider = "hello";
+        String extension = "hello";
+        String key = "hello";
+        String value = "hello";
+        MediaSourceType type = MediaSourceType.audioPlayoutSource;
         await rtcEngine.setExtensionProperty(
           provider: provider,
           extension: extension,
@@ -5209,11 +5196,11 @@ void rtcEngineSmokeTestCases() {
       await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
-        const String provider = "hello";
-        const String extension = "hello";
-        const String key = "hello";
-        const int bufLen = 10;
-        const MediaSourceType type = MediaSourceType.audioPlayoutSource;
+        String provider = "hello";
+        String extension = "hello";
+        String key = "hello";
+        int bufLen = 5;
+        MediaSourceType type = MediaSourceType.audioPlayoutSource;
         await rtcEngine.getExtensionProperty(
           provider: provider,
           extension: extension,
@@ -5251,8 +5238,8 @@ void rtcEngineSmokeTestCases() {
       await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
-        const bool enabled = true;
-        const String deviceName = "hello";
+        bool enabled = true;
+        String deviceName = "hello";
         await rtcEngine.enableLoopbackRecording(
           enabled: enabled,
           deviceName: deviceName,
@@ -5288,7 +5275,7 @@ void rtcEngineSmokeTestCases() {
       await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
-        const int volume = 10;
+        int volume = 5;
         await rtcEngine.adjustLoopbackSignalVolume(
           volume,
         );
@@ -5355,8 +5342,8 @@ void rtcEngineSmokeTestCases() {
       await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
-        const bool enabled = true;
-        const EarMonitoringFilterType includeAudioFilters =
+        bool enabled = true;
+        EarMonitoringFilterType includeAudioFilters =
             EarMonitoringFilterType.earMonitoringFilterNone;
         await rtcEngine.enableInEarMonitoring(
           enabled: enabled,
@@ -5393,7 +5380,7 @@ void rtcEngineSmokeTestCases() {
       await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
-        const int volume = 10;
+        int volume = 5;
         await rtcEngine.setInEarMonitoringVolume(
           volume,
         );
@@ -5428,8 +5415,8 @@ void rtcEngineSmokeTestCases() {
       await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
-        const String path = "hello";
-        const bool unloadAfterUse = true;
+        String path = "hello";
+        bool unloadAfterUse = true;
         await rtcEngine.loadExtensionProvider(
           path: path,
           unloadAfterUse: unloadAfterUse,
@@ -5465,9 +5452,9 @@ void rtcEngineSmokeTestCases() {
       await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
-        const String provider = "hello";
-        const String key = "hello";
-        const String value = "hello";
+        String provider = "hello";
+        String key = "hello";
+        String value = "hello";
         await rtcEngine.setExtensionProviderProperty(
           provider: provider,
           key: key,
@@ -5504,9 +5491,9 @@ void rtcEngineSmokeTestCases() {
       await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
-        const String provider = "hello";
-        const String extension = "hello";
-        const MediaSourceType type = MediaSourceType.audioPlayoutSource;
+        String provider = "hello";
+        String extension = "hello";
+        MediaSourceType type = MediaSourceType.audioPlayoutSource;
         await rtcEngine.registerExtension(
           provider: provider,
           extension: extension,
@@ -5542,22 +5529,21 @@ void rtcEngineSmokeTestCases() {
       await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
-        const CameraDirection configCameraDirection =
-            CameraDirection.cameraRear;
-        const CameraFocalLengthType configCameraFocalLengthType =
+        CameraDirection configCameraDirection = CameraDirection.cameraRear;
+        CameraFocalLengthType configCameraFocalLengthType =
             CameraFocalLengthType.cameraFocalLengthDefault;
-        const int formatWidth = 10;
-        const int formatHeight = 10;
-        const int formatFps = 10;
-        const VideoFormat configFormat = VideoFormat(
+        int formatWidth = 5;
+        int formatHeight = 5;
+        int formatFps = 5;
+        VideoFormat configFormat = VideoFormat(
           width: formatWidth,
           height: formatHeight,
           fps: formatFps,
         );
-        const String configDeviceId = "hello";
-        const String configCameraId = "hello";
-        const bool configFollowEncodeDimensionRatio = true;
-        const CameraCapturerConfiguration config = CameraCapturerConfiguration(
+        String configDeviceId = "hello";
+        String configCameraId = "hello";
+        bool configFollowEncodeDimensionRatio = true;
+        CameraCapturerConfiguration config = CameraCapturerConfiguration(
           cameraDirection: configCameraDirection,
           cameraFocalLengthType: configCameraFocalLengthType,
           deviceId: configDeviceId,
@@ -5599,7 +5585,7 @@ void rtcEngineSmokeTestCases() {
       await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
-        const int videoTrackId = 10;
+        int videoTrackId = 5;
         await rtcEngine.destroyCustomVideoTrack(
           videoTrackId,
         );
@@ -5634,7 +5620,7 @@ void rtcEngineSmokeTestCases() {
       await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
-        const int videoTrackId = 10;
+        int videoTrackId = 5;
         await rtcEngine.destroyCustomEncodedVideoTrack(
           videoTrackId,
         );
@@ -5860,7 +5846,7 @@ void rtcEngineSmokeTestCases() {
       await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
-        const double factor = 10.0;
+        double factor = 5.0;
         await rtcEngine.setCameraZoomFactor(
           factor,
         );
@@ -5894,7 +5880,7 @@ void rtcEngineSmokeTestCases() {
       await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
-        const bool enabled = true;
+        bool enabled = true;
         await rtcEngine.enableFaceDetection(
           enabled,
         );
@@ -5960,8 +5946,8 @@ void rtcEngineSmokeTestCases() {
       await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
-        const double positionX = 10.0;
-        const double positionY = 10.0;
+        double positionX = 5.0;
+        double positionY = 5.0;
         await rtcEngine.setCameraFocusPositionInPreview(
           positionX: positionX,
           positionY: positionY,
@@ -5997,7 +5983,7 @@ void rtcEngineSmokeTestCases() {
       await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
-        const bool isOn = true;
+        bool isOn = true;
         await rtcEngine.setCameraTorchOn(
           isOn,
         );
@@ -6031,7 +6017,7 @@ void rtcEngineSmokeTestCases() {
       await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
-        const bool enabled = true;
+        bool enabled = true;
         await rtcEngine.setCameraAutoFocusFaceModeEnabled(
           enabled,
         );
@@ -6098,8 +6084,8 @@ void rtcEngineSmokeTestCases() {
       await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
-        const double positionXinView = 10.0;
-        const double positionYinView = 10.0;
+        double positionXinView = 5.0;
+        double positionYinView = 5.0;
         await rtcEngine.setCameraExposurePosition(
           positionXinView: positionXinView,
           positionYinView: positionYinView,
@@ -6167,7 +6153,7 @@ void rtcEngineSmokeTestCases() {
       await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
-        const double factor = 10.0;
+        double factor = 5.0;
         await rtcEngine.setCameraExposureFactor(
           factor,
         );
@@ -6234,7 +6220,7 @@ void rtcEngineSmokeTestCases() {
       await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
-        const bool enabled = true;
+        bool enabled = true;
         await rtcEngine.setCameraAutoExposureFaceModeEnabled(
           enabled,
         );
@@ -6269,7 +6255,7 @@ void rtcEngineSmokeTestCases() {
       await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
-        const CameraStabilizationMode mode =
+        CameraStabilizationMode mode =
             CameraStabilizationMode.cameraStabilizationModeOff;
         await rtcEngine.setCameraStabilizationMode(
           mode,
@@ -6305,7 +6291,7 @@ void rtcEngineSmokeTestCases() {
       await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
-        const bool defaultToSpeaker = true;
+        bool defaultToSpeaker = true;
         await rtcEngine.setDefaultAudioRouteToSpeakerphone(
           defaultToSpeaker,
         );
@@ -6340,7 +6326,7 @@ void rtcEngineSmokeTestCases() {
       await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
-        const bool speakerOn = true;
+        bool speakerOn = true;
         await rtcEngine.setEnableSpeakerphone(
           speakerOn,
         );
@@ -6407,7 +6393,7 @@ void rtcEngineSmokeTestCases() {
       await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
-        const int route = 10;
+        int route = 5;
         await rtcEngine.setRouteInCommunicationMode(
           route,
         );
@@ -6474,7 +6460,7 @@ void rtcEngineSmokeTestCases() {
       await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
-        const bool enabled = true;
+        bool enabled = true;
         await rtcEngine.enableCameraCenterStage(
           enabled,
         );
@@ -6509,19 +6495,19 @@ void rtcEngineSmokeTestCases() {
       await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
-        const int thumbSizeWidth = 10;
-        const int thumbSizeHeight = 10;
-        const SIZE thumbSize = SIZE(
+        int thumbSizeWidth = 5;
+        int thumbSizeHeight = 5;
+        SIZE thumbSize = SIZE(
           width: thumbSizeWidth,
           height: thumbSizeHeight,
         );
-        const int iconSizeWidth = 10;
-        const int iconSizeHeight = 10;
-        const SIZE iconSize = SIZE(
+        int iconSizeWidth = 5;
+        int iconSizeHeight = 5;
+        SIZE iconSize = SIZE(
           width: iconSizeWidth,
           height: iconSizeHeight,
         );
-        const bool includeScreen = true;
+        bool includeScreen = true;
         await rtcEngine.getScreenCaptureSources(
           thumbSize: thumbSize,
           iconSize: iconSize,
@@ -6558,7 +6544,7 @@ void rtcEngineSmokeTestCases() {
       await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
-        const AudioSessionOperationRestriction restriction =
+        AudioSessionOperationRestriction restriction =
             AudioSessionOperationRestriction
                 .audioSessionOperationRestrictionNone;
         await rtcEngine.setAudioSessionOperationRestriction(
@@ -6595,33 +6581,33 @@ void rtcEngineSmokeTestCases() {
       await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
-        const int displayId = 10;
-        const int regionRectX = 10;
-        const int regionRectY = 10;
-        const int regionRectWidth = 10;
-        const int regionRectHeight = 10;
-        const Rectangle regionRect = Rectangle(
+        int displayId = 5;
+        int regionRectX = 5;
+        int regionRectY = 5;
+        int regionRectWidth = 5;
+        int regionRectHeight = 5;
+        Rectangle regionRect = Rectangle(
           x: regionRectX,
           y: regionRectY,
           width: regionRectWidth,
           height: regionRectHeight,
         );
-        const int dimensionsWidth = 10;
-        const int dimensionsHeight = 10;
-        const VideoDimensions captureParamsDimensions = VideoDimensions(
+        int dimensionsWidth = 5;
+        int dimensionsHeight = 5;
+        VideoDimensions captureParamsDimensions = VideoDimensions(
           width: dimensionsWidth,
           height: dimensionsHeight,
         );
-        const int captureParamsFrameRate = 10;
-        const int captureParamsBitrate = 10;
-        const bool captureParamsCaptureMouseCursor = true;
-        const bool captureParamsWindowFocus = true;
-        const List<int> captureParamsExcludeWindowList = [];
-        const int captureParamsExcludeWindowCount = 10;
-        const int captureParamsHighLightWidth = 10;
-        const int captureParamsHighLightColor = 10;
-        const bool captureParamsEnableHighLight = true;
-        const ScreenCaptureParameters captureParams = ScreenCaptureParameters(
+        int captureParamsFrameRate = 5;
+        int captureParamsBitrate = 5;
+        bool captureParamsCaptureMouseCursor = true;
+        bool captureParamsWindowFocus = true;
+        List<int> captureParamsExcludeWindowList = List.filled(5, 5);
+        int captureParamsExcludeWindowCount = 5;
+        int captureParamsHighLightWidth = 5;
+        int captureParamsHighLightColor = 5;
+        bool captureParamsEnableHighLight = true;
+        ScreenCaptureParameters captureParams = ScreenCaptureParameters(
           dimensions: captureParamsDimensions,
           frameRate: captureParamsFrameRate,
           bitrate: captureParamsBitrate,
@@ -6669,42 +6655,42 @@ void rtcEngineSmokeTestCases() {
       await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
-        const int screenRectX = 10;
-        const int screenRectY = 10;
-        const int screenRectWidth = 10;
-        const int screenRectHeight = 10;
-        const Rectangle screenRect = Rectangle(
+        int screenRectX = 5;
+        int screenRectY = 5;
+        int screenRectWidth = 5;
+        int screenRectHeight = 5;
+        Rectangle screenRect = Rectangle(
           x: screenRectX,
           y: screenRectY,
           width: screenRectWidth,
           height: screenRectHeight,
         );
-        const int regionRectX = 10;
-        const int regionRectY = 10;
-        const int regionRectWidth = 10;
-        const int regionRectHeight = 10;
-        const Rectangle regionRect = Rectangle(
+        int regionRectX = 5;
+        int regionRectY = 5;
+        int regionRectWidth = 5;
+        int regionRectHeight = 5;
+        Rectangle regionRect = Rectangle(
           x: regionRectX,
           y: regionRectY,
           width: regionRectWidth,
           height: regionRectHeight,
         );
-        const int dimensionsWidth = 10;
-        const int dimensionsHeight = 10;
-        const VideoDimensions captureParamsDimensions = VideoDimensions(
+        int dimensionsWidth = 5;
+        int dimensionsHeight = 5;
+        VideoDimensions captureParamsDimensions = VideoDimensions(
           width: dimensionsWidth,
           height: dimensionsHeight,
         );
-        const int captureParamsFrameRate = 10;
-        const int captureParamsBitrate = 10;
-        const bool captureParamsCaptureMouseCursor = true;
-        const bool captureParamsWindowFocus = true;
-        const List<int> captureParamsExcludeWindowList = [];
-        const int captureParamsExcludeWindowCount = 10;
-        const int captureParamsHighLightWidth = 10;
-        const int captureParamsHighLightColor = 10;
-        const bool captureParamsEnableHighLight = true;
-        const ScreenCaptureParameters captureParams = ScreenCaptureParameters(
+        int captureParamsFrameRate = 5;
+        int captureParamsBitrate = 5;
+        bool captureParamsCaptureMouseCursor = true;
+        bool captureParamsWindowFocus = true;
+        List<int> captureParamsExcludeWindowList = List.filled(5, 5);
+        int captureParamsExcludeWindowCount = 5;
+        int captureParamsHighLightWidth = 5;
+        int captureParamsHighLightColor = 5;
+        bool captureParamsEnableHighLight = true;
+        ScreenCaptureParameters captureParams = ScreenCaptureParameters(
           dimensions: captureParamsDimensions,
           frameRate: captureParamsFrameRate,
           bitrate: captureParamsBitrate,
@@ -6783,33 +6769,33 @@ void rtcEngineSmokeTestCases() {
       await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
-        const int windowId = 10;
-        const int regionRectX = 10;
-        const int regionRectY = 10;
-        const int regionRectWidth = 10;
-        const int regionRectHeight = 10;
-        const Rectangle regionRect = Rectangle(
+        int windowId = 5;
+        int regionRectX = 5;
+        int regionRectY = 5;
+        int regionRectWidth = 5;
+        int regionRectHeight = 5;
+        Rectangle regionRect = Rectangle(
           x: regionRectX,
           y: regionRectY,
           width: regionRectWidth,
           height: regionRectHeight,
         );
-        const int dimensionsWidth = 10;
-        const int dimensionsHeight = 10;
-        const VideoDimensions captureParamsDimensions = VideoDimensions(
+        int dimensionsWidth = 5;
+        int dimensionsHeight = 5;
+        VideoDimensions captureParamsDimensions = VideoDimensions(
           width: dimensionsWidth,
           height: dimensionsHeight,
         );
-        const int captureParamsFrameRate = 10;
-        const int captureParamsBitrate = 10;
-        const bool captureParamsCaptureMouseCursor = true;
-        const bool captureParamsWindowFocus = true;
-        const List<int> captureParamsExcludeWindowList = [];
-        const int captureParamsExcludeWindowCount = 10;
-        const int captureParamsHighLightWidth = 10;
-        const int captureParamsHighLightColor = 10;
-        const bool captureParamsEnableHighLight = true;
-        const ScreenCaptureParameters captureParams = ScreenCaptureParameters(
+        int captureParamsFrameRate = 5;
+        int captureParamsBitrate = 5;
+        bool captureParamsCaptureMouseCursor = true;
+        bool captureParamsWindowFocus = true;
+        List<int> captureParamsExcludeWindowList = List.filled(5, 5);
+        int captureParamsExcludeWindowCount = 5;
+        int captureParamsHighLightWidth = 5;
+        int captureParamsHighLightColor = 5;
+        bool captureParamsEnableHighLight = true;
+        ScreenCaptureParameters captureParams = ScreenCaptureParameters(
           dimensions: captureParamsDimensions,
           frameRate: captureParamsFrameRate,
           bitrate: captureParamsBitrate,
@@ -6857,7 +6843,7 @@ void rtcEngineSmokeTestCases() {
       await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
-        const VideoContentHint contentHint = VideoContentHint.contentHintNone;
+        VideoContentHint contentHint = VideoContentHint.contentHintNone;
         await rtcEngine.setScreenCaptureContentHint(
           contentHint,
         );
@@ -6892,11 +6878,11 @@ void rtcEngineSmokeTestCases() {
       await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
-        const int regionRectX = 10;
-        const int regionRectY = 10;
-        const int regionRectWidth = 10;
-        const int regionRectHeight = 10;
-        const Rectangle regionRect = Rectangle(
+        int regionRectX = 5;
+        int regionRectY = 5;
+        int regionRectWidth = 5;
+        int regionRectHeight = 5;
+        Rectangle regionRect = Rectangle(
           x: regionRectX,
           y: regionRectY,
           width: regionRectWidth,
@@ -6936,22 +6922,22 @@ void rtcEngineSmokeTestCases() {
       await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
-        const int dimensionsWidth = 10;
-        const int dimensionsHeight = 10;
-        const VideoDimensions captureParamsDimensions = VideoDimensions(
+        int dimensionsWidth = 5;
+        int dimensionsHeight = 5;
+        VideoDimensions captureParamsDimensions = VideoDimensions(
           width: dimensionsWidth,
           height: dimensionsHeight,
         );
-        const int captureParamsFrameRate = 10;
-        const int captureParamsBitrate = 10;
-        const bool captureParamsCaptureMouseCursor = true;
-        const bool captureParamsWindowFocus = true;
-        const List<int> captureParamsExcludeWindowList = [];
-        const int captureParamsExcludeWindowCount = 10;
-        const int captureParamsHighLightWidth = 10;
-        const int captureParamsHighLightColor = 10;
-        const bool captureParamsEnableHighLight = true;
-        const ScreenCaptureParameters captureParams = ScreenCaptureParameters(
+        int captureParamsFrameRate = 5;
+        int captureParamsBitrate = 5;
+        bool captureParamsCaptureMouseCursor = true;
+        bool captureParamsWindowFocus = true;
+        List<int> captureParamsExcludeWindowList = List.filled(5, 5);
+        int captureParamsExcludeWindowCount = 5;
+        int captureParamsHighLightWidth = 5;
+        int captureParamsHighLightColor = 5;
+        bool captureParamsEnableHighLight = true;
+        ScreenCaptureParameters captureParams = ScreenCaptureParameters(
           dimensions: captureParamsDimensions,
           frameRate: captureParamsFrameRate,
           bitrate: captureParamsBitrate,
@@ -6997,35 +6983,33 @@ void rtcEngineSmokeTestCases() {
       await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
-        const int audioParamsSampleRate = 10;
-        const int audioParamsChannels = 10;
-        const int audioParamsCaptureSignalVolume = 10;
-        const ScreenAudioParameters captureParamsAudioParams =
-            ScreenAudioParameters(
+        int audioParamsSampleRate = 5;
+        int audioParamsChannels = 5;
+        int audioParamsCaptureSignalVolume = 5;
+        ScreenAudioParameters captureParamsAudioParams = ScreenAudioParameters(
           sampleRate: audioParamsSampleRate,
           channels: audioParamsChannels,
           captureSignalVolume: audioParamsCaptureSignalVolume,
         );
-        const int dimensionsWidth = 10;
-        const int dimensionsHeight = 10;
-        const VideoDimensions videoParamsDimensions = VideoDimensions(
+        int dimensionsWidth = 5;
+        int dimensionsHeight = 5;
+        VideoDimensions videoParamsDimensions = VideoDimensions(
           width: dimensionsWidth,
           height: dimensionsHeight,
         );
-        const VideoContentHint videoParamsContentHint =
+        VideoContentHint videoParamsContentHint =
             VideoContentHint.contentHintNone;
-        const int videoParamsFrameRate = 10;
-        const int videoParamsBitrate = 10;
-        const ScreenVideoParameters captureParamsVideoParams =
-            ScreenVideoParameters(
+        int videoParamsFrameRate = 5;
+        int videoParamsBitrate = 5;
+        ScreenVideoParameters captureParamsVideoParams = ScreenVideoParameters(
           dimensions: videoParamsDimensions,
           frameRate: videoParamsFrameRate,
           bitrate: videoParamsBitrate,
           contentHint: videoParamsContentHint,
         );
-        const bool captureParamsCaptureAudio = true;
-        const bool captureParamsCaptureVideo = true;
-        const ScreenCaptureParameters2 captureParams = ScreenCaptureParameters2(
+        bool captureParamsCaptureAudio = true;
+        bool captureParamsCaptureVideo = true;
+        ScreenCaptureParameters2 captureParams = ScreenCaptureParameters2(
           captureAudio: captureParamsCaptureAudio,
           audioParams: captureParamsAudioParams,
           captureVideo: captureParamsCaptureVideo,
@@ -7064,35 +7048,33 @@ void rtcEngineSmokeTestCases() {
       await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
-        const int audioParamsSampleRate = 10;
-        const int audioParamsChannels = 10;
-        const int audioParamsCaptureSignalVolume = 10;
-        const ScreenAudioParameters captureParamsAudioParams =
-            ScreenAudioParameters(
+        int audioParamsSampleRate = 5;
+        int audioParamsChannels = 5;
+        int audioParamsCaptureSignalVolume = 5;
+        ScreenAudioParameters captureParamsAudioParams = ScreenAudioParameters(
           sampleRate: audioParamsSampleRate,
           channels: audioParamsChannels,
           captureSignalVolume: audioParamsCaptureSignalVolume,
         );
-        const int dimensionsWidth = 10;
-        const int dimensionsHeight = 10;
-        const VideoDimensions videoParamsDimensions = VideoDimensions(
+        int dimensionsWidth = 5;
+        int dimensionsHeight = 5;
+        VideoDimensions videoParamsDimensions = VideoDimensions(
           width: dimensionsWidth,
           height: dimensionsHeight,
         );
-        const VideoContentHint videoParamsContentHint =
+        VideoContentHint videoParamsContentHint =
             VideoContentHint.contentHintNone;
-        const int videoParamsFrameRate = 10;
-        const int videoParamsBitrate = 10;
-        const ScreenVideoParameters captureParamsVideoParams =
-            ScreenVideoParameters(
+        int videoParamsFrameRate = 5;
+        int videoParamsBitrate = 5;
+        ScreenVideoParameters captureParamsVideoParams = ScreenVideoParameters(
           dimensions: videoParamsDimensions,
           frameRate: videoParamsFrameRate,
           bitrate: videoParamsBitrate,
           contentHint: videoParamsContentHint,
         );
-        const bool captureParamsCaptureAudio = true;
-        const bool captureParamsCaptureVideo = true;
-        const ScreenCaptureParameters2 captureParams = ScreenCaptureParameters2(
+        bool captureParamsCaptureAudio = true;
+        bool captureParamsCaptureVideo = true;
+        ScreenCaptureParameters2 captureParams = ScreenCaptureParameters2(
           captureAudio: captureParamsCaptureAudio,
           audioParams: captureParamsAudioParams,
           captureVideo: captureParamsCaptureVideo,
@@ -7195,7 +7177,7 @@ void rtcEngineSmokeTestCases() {
       await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
-        const ScreenScenarioType screenScenario =
+        ScreenScenarioType screenScenario =
             ScreenScenarioType.screenScenarioDocument;
         await rtcEngine.setScreenCaptureScenario(
           screenScenario,
@@ -7293,9 +7275,9 @@ void rtcEngineSmokeTestCases() {
       await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
-        const String callId = "hello";
-        const int rating = 10;
-        const String description = "hello";
+        String callId = "hello";
+        int rating = 5;
+        String description = "hello";
         await rtcEngine.rate(
           callId: callId,
           rating: rating,
@@ -7331,8 +7313,8 @@ void rtcEngineSmokeTestCases() {
       await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
-        const String callId = "hello";
-        const String description = "hello";
+        String callId = "hello";
+        String description = "hello";
         await rtcEngine.complain(
           callId: callId,
           description: description,
@@ -7367,7 +7349,7 @@ void rtcEngineSmokeTestCases() {
       await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
-        const String url = "hello";
+        String url = "hello";
         await rtcEngine.startRtmpStreamWithoutTranscoding(
           url,
         );
@@ -7402,35 +7384,35 @@ void rtcEngineSmokeTestCases() {
       await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
-        const String url = "hello";
-        const VideoCodecProfileType transcodingVideoCodecProfile =
+        String url = "hello";
+        VideoCodecProfileType transcodingVideoCodecProfile =
             VideoCodecProfileType.videoCodecProfileBaseline;
-        const VideoCodecTypeForStream transcodingVideoCodecType =
+        VideoCodecTypeForStream transcodingVideoCodecType =
             VideoCodecTypeForStream.videoCodecH264ForStream;
-        const AudioSampleRateType transcodingAudioSampleRate =
+        AudioSampleRateType transcodingAudioSampleRate =
             AudioSampleRateType.audioSampleRate32000;
-        const AudioCodecProfileType transcodingAudioCodecProfile =
+        AudioCodecProfileType transcodingAudioCodecProfile =
             AudioCodecProfileType.audioCodecProfileLcAac;
-        const int transcodingWidth = 10;
-        const int transcodingHeight = 10;
-        const int transcodingVideoBitrate = 10;
-        const int transcodingVideoFramerate = 10;
-        const bool transcodingLowLatency = true;
-        const int transcodingVideoGop = 10;
-        const int transcodingBackgroundColor = 10;
-        const int transcodingUserCount = 10;
-        const List<TranscodingUser> transcodingTranscodingUsers = [];
-        const String transcodingTranscodingExtraInfo = "hello";
-        const String transcodingMetadata = "hello";
-        const List<RtcImage> transcodingWatermark = [];
-        const int transcodingWatermarkCount = 10;
-        const List<RtcImage> transcodingBackgroundImage = [];
-        const int transcodingBackgroundImageCount = 10;
-        const int transcodingAudioBitrate = 10;
-        const int transcodingAudioChannels = 10;
-        const List<LiveStreamAdvancedFeature> transcodingAdvancedFeatures = [];
-        const int transcodingAdvancedFeatureCount = 10;
-        const LiveTranscoding transcoding = LiveTranscoding(
+        int transcodingWidth = 5;
+        int transcodingHeight = 5;
+        int transcodingVideoBitrate = 5;
+        int transcodingVideoFramerate = 5;
+        bool transcodingLowLatency = true;
+        int transcodingVideoGop = 5;
+        int transcodingBackgroundColor = 5;
+        int transcodingUserCount = 5;
+        List<TranscodingUser> transcodingTranscodingUsers = [];
+        String transcodingTranscodingExtraInfo = "hello";
+        String transcodingMetadata = "hello";
+        List<RtcImage> transcodingWatermark = [];
+        int transcodingWatermarkCount = 5;
+        List<RtcImage> transcodingBackgroundImage = [];
+        int transcodingBackgroundImageCount = 5;
+        int transcodingAudioBitrate = 5;
+        int transcodingAudioChannels = 5;
+        List<LiveStreamAdvancedFeature> transcodingAdvancedFeatures = [];
+        int transcodingAdvancedFeatureCount = 5;
+        LiveTranscoding transcoding = LiveTranscoding(
           width: transcodingWidth,
           height: transcodingHeight,
           videoBitrate: transcodingVideoBitrate,
@@ -7490,34 +7472,34 @@ void rtcEngineSmokeTestCases() {
       await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
-        const VideoCodecProfileType transcodingVideoCodecProfile =
+        VideoCodecProfileType transcodingVideoCodecProfile =
             VideoCodecProfileType.videoCodecProfileBaseline;
-        const VideoCodecTypeForStream transcodingVideoCodecType =
+        VideoCodecTypeForStream transcodingVideoCodecType =
             VideoCodecTypeForStream.videoCodecH264ForStream;
-        const AudioSampleRateType transcodingAudioSampleRate =
+        AudioSampleRateType transcodingAudioSampleRate =
             AudioSampleRateType.audioSampleRate32000;
-        const AudioCodecProfileType transcodingAudioCodecProfile =
+        AudioCodecProfileType transcodingAudioCodecProfile =
             AudioCodecProfileType.audioCodecProfileLcAac;
-        const int transcodingWidth = 10;
-        const int transcodingHeight = 10;
-        const int transcodingVideoBitrate = 10;
-        const int transcodingVideoFramerate = 10;
-        const bool transcodingLowLatency = true;
-        const int transcodingVideoGop = 10;
-        const int transcodingBackgroundColor = 10;
-        const int transcodingUserCount = 10;
-        const List<TranscodingUser> transcodingTranscodingUsers = [];
-        const String transcodingTranscodingExtraInfo = "hello";
-        const String transcodingMetadata = "hello";
-        const List<RtcImage> transcodingWatermark = [];
-        const int transcodingWatermarkCount = 10;
-        const List<RtcImage> transcodingBackgroundImage = [];
-        const int transcodingBackgroundImageCount = 10;
-        const int transcodingAudioBitrate = 10;
-        const int transcodingAudioChannels = 10;
-        const List<LiveStreamAdvancedFeature> transcodingAdvancedFeatures = [];
-        const int transcodingAdvancedFeatureCount = 10;
-        const LiveTranscoding transcoding = LiveTranscoding(
+        int transcodingWidth = 5;
+        int transcodingHeight = 5;
+        int transcodingVideoBitrate = 5;
+        int transcodingVideoFramerate = 5;
+        bool transcodingLowLatency = true;
+        int transcodingVideoGop = 5;
+        int transcodingBackgroundColor = 5;
+        int transcodingUserCount = 5;
+        List<TranscodingUser> transcodingTranscodingUsers = [];
+        String transcodingTranscodingExtraInfo = "hello";
+        String transcodingMetadata = "hello";
+        List<RtcImage> transcodingWatermark = [];
+        int transcodingWatermarkCount = 5;
+        List<RtcImage> transcodingBackgroundImage = [];
+        int transcodingBackgroundImageCount = 5;
+        int transcodingAudioBitrate = 5;
+        int transcodingAudioChannels = 5;
+        List<LiveStreamAdvancedFeature> transcodingAdvancedFeatures = [];
+        int transcodingAdvancedFeatureCount = 5;
+        LiveTranscoding transcoding = LiveTranscoding(
           width: transcodingWidth,
           height: transcodingHeight,
           videoBitrate: transcodingVideoBitrate,
@@ -7576,35 +7558,32 @@ void rtcEngineSmokeTestCases() {
       await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
-        const VideoCodecType videoOutputConfigurationCodecType =
+        VideoCodecType videoOutputConfigurationCodecType =
             VideoCodecType.videoCodecNone;
-        const int dimensionsWidth = 10;
-        const int dimensionsHeight = 10;
-        const VideoDimensions videoOutputConfigurationDimensions =
-            VideoDimensions(
+        int dimensionsWidth = 5;
+        int dimensionsHeight = 5;
+        VideoDimensions videoOutputConfigurationDimensions = VideoDimensions(
           width: dimensionsWidth,
           height: dimensionsHeight,
         );
-        const OrientationMode videoOutputConfigurationOrientationMode =
+        OrientationMode videoOutputConfigurationOrientationMode =
             OrientationMode.orientationModeAdaptive;
-        const DegradationPreference
-            videoOutputConfigurationDegradationPreference =
+        DegradationPreference videoOutputConfigurationDegradationPreference =
             DegradationPreference.maintainQuality;
-        const VideoMirrorModeType videoOutputConfigurationMirrorMode =
+        VideoMirrorModeType videoOutputConfigurationMirrorMode =
             VideoMirrorModeType.videoMirrorModeAuto;
-        const EncodingPreference advanceOptionsEncodingPreference =
+        EncodingPreference advanceOptionsEncodingPreference =
             EncodingPreference.preferAuto;
-        const CompressionPreference advanceOptionsCompressionPreference =
+        CompressionPreference advanceOptionsCompressionPreference =
             CompressionPreference.preferLowLatency;
-        const AdvanceOptions videoOutputConfigurationAdvanceOptions =
-            AdvanceOptions(
+        AdvanceOptions videoOutputConfigurationAdvanceOptions = AdvanceOptions(
           encodingPreference: advanceOptionsEncodingPreference,
           compressionPreference: advanceOptionsCompressionPreference,
         );
-        const int videoOutputConfigurationFrameRate = 10;
-        const int videoOutputConfigurationBitrate = 10;
-        const int videoOutputConfigurationMinBitrate = 10;
-        const VideoEncoderConfiguration configVideoOutputConfiguration =
+        int videoOutputConfigurationFrameRate = 5;
+        int videoOutputConfigurationBitrate = 5;
+        int videoOutputConfigurationMinBitrate = 5;
+        VideoEncoderConfiguration configVideoOutputConfiguration =
             VideoEncoderConfiguration(
           codecType: videoOutputConfigurationCodecType,
           dimensions: videoOutputConfigurationDimensions,
@@ -7616,11 +7595,10 @@ void rtcEngineSmokeTestCases() {
           mirrorMode: videoOutputConfigurationMirrorMode,
           advanceOptions: videoOutputConfigurationAdvanceOptions,
         );
-        const int configStreamCount = 10;
-        const List<TranscodingVideoStream> configVideoInputStreams = [];
-        const bool configSyncWithPrimaryCamera = true;
-        const LocalTranscoderConfiguration config =
-            LocalTranscoderConfiguration(
+        int configStreamCount = 5;
+        List<TranscodingVideoStream> configVideoInputStreams = [];
+        bool configSyncWithPrimaryCamera = true;
+        LocalTranscoderConfiguration config = LocalTranscoderConfiguration(
           streamCount: configStreamCount,
           videoInputStreams: configVideoInputStreams,
           videoOutputConfiguration: configVideoOutputConfiguration,
@@ -7660,35 +7638,32 @@ void rtcEngineSmokeTestCases() {
       await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
-        const VideoCodecType videoOutputConfigurationCodecType =
+        VideoCodecType videoOutputConfigurationCodecType =
             VideoCodecType.videoCodecNone;
-        const int dimensionsWidth = 10;
-        const int dimensionsHeight = 10;
-        const VideoDimensions videoOutputConfigurationDimensions =
-            VideoDimensions(
+        int dimensionsWidth = 5;
+        int dimensionsHeight = 5;
+        VideoDimensions videoOutputConfigurationDimensions = VideoDimensions(
           width: dimensionsWidth,
           height: dimensionsHeight,
         );
-        const OrientationMode videoOutputConfigurationOrientationMode =
+        OrientationMode videoOutputConfigurationOrientationMode =
             OrientationMode.orientationModeAdaptive;
-        const DegradationPreference
-            videoOutputConfigurationDegradationPreference =
+        DegradationPreference videoOutputConfigurationDegradationPreference =
             DegradationPreference.maintainQuality;
-        const VideoMirrorModeType videoOutputConfigurationMirrorMode =
+        VideoMirrorModeType videoOutputConfigurationMirrorMode =
             VideoMirrorModeType.videoMirrorModeAuto;
-        const EncodingPreference advanceOptionsEncodingPreference =
+        EncodingPreference advanceOptionsEncodingPreference =
             EncodingPreference.preferAuto;
-        const CompressionPreference advanceOptionsCompressionPreference =
+        CompressionPreference advanceOptionsCompressionPreference =
             CompressionPreference.preferLowLatency;
-        const AdvanceOptions videoOutputConfigurationAdvanceOptions =
-            AdvanceOptions(
+        AdvanceOptions videoOutputConfigurationAdvanceOptions = AdvanceOptions(
           encodingPreference: advanceOptionsEncodingPreference,
           compressionPreference: advanceOptionsCompressionPreference,
         );
-        const int videoOutputConfigurationFrameRate = 10;
-        const int videoOutputConfigurationBitrate = 10;
-        const int videoOutputConfigurationMinBitrate = 10;
-        const VideoEncoderConfiguration configVideoOutputConfiguration =
+        int videoOutputConfigurationFrameRate = 5;
+        int videoOutputConfigurationBitrate = 5;
+        int videoOutputConfigurationMinBitrate = 5;
+        VideoEncoderConfiguration configVideoOutputConfiguration =
             VideoEncoderConfiguration(
           codecType: videoOutputConfigurationCodecType,
           dimensions: videoOutputConfigurationDimensions,
@@ -7700,11 +7675,10 @@ void rtcEngineSmokeTestCases() {
           mirrorMode: videoOutputConfigurationMirrorMode,
           advanceOptions: videoOutputConfigurationAdvanceOptions,
         );
-        const int configStreamCount = 10;
-        const List<TranscodingVideoStream> configVideoInputStreams = [];
-        const bool configSyncWithPrimaryCamera = true;
-        const LocalTranscoderConfiguration config =
-            LocalTranscoderConfiguration(
+        int configStreamCount = 5;
+        List<TranscodingVideoStream> configVideoInputStreams = [];
+        bool configSyncWithPrimaryCamera = true;
+        LocalTranscoderConfiguration config = LocalTranscoderConfiguration(
           streamCount: configStreamCount,
           videoInputStreams: configVideoInputStreams,
           videoOutputConfiguration: configVideoOutputConfiguration,
@@ -7744,7 +7718,7 @@ void rtcEngineSmokeTestCases() {
       await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
-        const String url = "hello";
+        String url = "hello";
         await rtcEngine.stopRtmpStream(
           url,
         );
@@ -7810,24 +7784,22 @@ void rtcEngineSmokeTestCases() {
       await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
-        const VideoSourceType sourceType =
-            VideoSourceType.videoSourceCameraPrimary;
-        const CameraDirection configCameraDirection =
-            CameraDirection.cameraRear;
-        const CameraFocalLengthType configCameraFocalLengthType =
+        VideoSourceType sourceType = VideoSourceType.videoSourceCameraPrimary;
+        CameraDirection configCameraDirection = CameraDirection.cameraRear;
+        CameraFocalLengthType configCameraFocalLengthType =
             CameraFocalLengthType.cameraFocalLengthDefault;
-        const int formatWidth = 10;
-        const int formatHeight = 10;
-        const int formatFps = 10;
-        const VideoFormat configFormat = VideoFormat(
+        int formatWidth = 5;
+        int formatHeight = 5;
+        int formatFps = 5;
+        VideoFormat configFormat = VideoFormat(
           width: formatWidth,
           height: formatHeight,
           fps: formatFps,
         );
-        const String configDeviceId = "hello";
-        const String configCameraId = "hello";
-        const bool configFollowEncodeDimensionRatio = true;
-        const CameraCapturerConfiguration config = CameraCapturerConfiguration(
+        String configDeviceId = "hello";
+        String configCameraId = "hello";
+        bool configFollowEncodeDimensionRatio = true;
+        CameraCapturerConfiguration config = CameraCapturerConfiguration(
           cameraDirection: configCameraDirection,
           cameraFocalLengthType: configCameraFocalLengthType,
           deviceId: configDeviceId,
@@ -7869,8 +7841,7 @@ void rtcEngineSmokeTestCases() {
       await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
-        const VideoSourceType sourceType =
-            VideoSourceType.videoSourceCameraPrimary;
+        VideoSourceType sourceType = VideoSourceType.videoSourceCameraPrimary;
         await rtcEngine.stopCameraCapture(
           sourceType,
         );
@@ -7904,8 +7875,8 @@ void rtcEngineSmokeTestCases() {
       await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
-        const VideoSourceType type = VideoSourceType.videoSourceCameraPrimary;
-        const VideoOrientation orientation = VideoOrientation.videoOrientation0;
+        VideoSourceType type = VideoSourceType.videoSourceCameraPrimary;
+        VideoOrientation orientation = VideoOrientation.videoOrientation0;
         await rtcEngine.setCameraDeviceOrientation(
           type: type,
           orientation: orientation,
@@ -7941,8 +7912,8 @@ void rtcEngineSmokeTestCases() {
       await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
-        const VideoSourceType type = VideoSourceType.videoSourceCameraPrimary;
-        const VideoOrientation orientation = VideoOrientation.videoOrientation0;
+        VideoSourceType type = VideoSourceType.videoSourceCameraPrimary;
+        VideoOrientation orientation = VideoOrientation.videoOrientation0;
         await rtcEngine.setScreenCaptureOrientation(
           type: type,
           orientation: orientation,
@@ -8009,7 +7980,7 @@ void rtcEngineSmokeTestCases() {
       await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
-        final RtcEngineEventHandler eventHandler = RtcEngineEventHandler(
+        RtcEngineEventHandler eventHandler = RtcEngineEventHandler(
           onJoinChannelSuccess: (RtcConnection connection, int elapsed) {},
           onRejoinChannelSuccess: (RtcConnection connection, int elapsed) {},
           onProxyConnected: (String channel, int uid, ProxyType proxyType,
@@ -8225,7 +8196,7 @@ void rtcEngineSmokeTestCases() {
       await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
-        final RtcEngineEventHandler eventHandler = RtcEngineEventHandler(
+        RtcEngineEventHandler eventHandler = RtcEngineEventHandler(
           onJoinChannelSuccess: (RtcConnection connection, int elapsed) {},
           onRejoinChannelSuccess: (RtcConnection connection, int elapsed) {},
           onProxyConnected: (String channel, int uid, ProxyType proxyType,
@@ -8442,8 +8413,8 @@ void rtcEngineSmokeTestCases() {
       await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
-        const int uid = 10;
-        const PriorityType userPriority = PriorityType.priorityHigh;
+        int uid = 5;
+        PriorityType userPriority = PriorityType.priorityHigh;
         await rtcEngine.setRemoteUserPriority(
           uid: uid,
           userPriority: userPriority,
@@ -8479,7 +8450,7 @@ void rtcEngineSmokeTestCases() {
       await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
-        const String encryptionMode = "hello";
+        String encryptionMode = "hello";
         await rtcEngine.setEncryptionMode(
           encryptionMode,
         );
@@ -8513,7 +8484,7 @@ void rtcEngineSmokeTestCases() {
       await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
-        const String secret = "hello";
+        String secret = "hello";
         await rtcEngine.setEncryptionSecret(
           secret,
         );
@@ -8547,12 +8518,12 @@ void rtcEngineSmokeTestCases() {
       await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
-        const bool enabled = true;
-        const EncryptionMode configEncryptionMode = EncryptionMode.aes128Xts;
-        const String configEncryptionKey = "hello";
-        Uint8List configEncryptionKdfSalt = Uint8List.fromList([1, 2, 3, 4, 5]);
-        const bool configDatastreamEncryptionEnabled = true;
-        final EncryptionConfig config = EncryptionConfig(
+        bool enabled = true;
+        EncryptionMode configEncryptionMode = EncryptionMode.aes128Xts;
+        String configEncryptionKey = "hello";
+        Uint8List configEncryptionKdfSalt = Uint8List.fromList([1, 1, 1, 1, 1]);
+        bool configDatastreamEncryptionEnabled = true;
+        EncryptionConfig config = EncryptionConfig(
           encryptionMode: configEncryptionMode,
           encryptionKey: configEncryptionKey,
           encryptionKdfSalt: configEncryptionKdfSalt,
@@ -8592,9 +8563,9 @@ void rtcEngineSmokeTestCases() {
       await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
-        const int streamId = 10;
-        Uint8List data = Uint8List.fromList([1, 2, 3, 4, 5]);
-        const int length = 10;
+        int streamId = 5;
+        Uint8List data = Uint8List.fromList([1, 1, 1, 1, 1]);
+        int length = 5;
         await rtcEngine.sendStreamMessage(
           streamId: streamId,
           data: data,
@@ -8630,39 +8601,38 @@ void rtcEngineSmokeTestCases() {
       await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
-        const String watermarkUrl = "hello";
-        const int positionInLandscapeModeX = 10;
-        const int positionInLandscapeModeY = 10;
-        const int positionInLandscapeModeWidth = 10;
-        const int positionInLandscapeModeHeight = 10;
-        const Rectangle optionsPositionInLandscapeMode = Rectangle(
+        String watermarkUrl = "hello";
+        int positionInLandscapeModeX = 5;
+        int positionInLandscapeModeY = 5;
+        int positionInLandscapeModeWidth = 5;
+        int positionInLandscapeModeHeight = 5;
+        Rectangle optionsPositionInLandscapeMode = Rectangle(
           x: positionInLandscapeModeX,
           y: positionInLandscapeModeY,
           width: positionInLandscapeModeWidth,
           height: positionInLandscapeModeHeight,
         );
-        const int positionInPortraitModeX = 10;
-        const int positionInPortraitModeY = 10;
-        const int positionInPortraitModeWidth = 10;
-        const int positionInPortraitModeHeight = 10;
-        const Rectangle optionsPositionInPortraitMode = Rectangle(
+        int positionInPortraitModeX = 5;
+        int positionInPortraitModeY = 5;
+        int positionInPortraitModeWidth = 5;
+        int positionInPortraitModeHeight = 5;
+        Rectangle optionsPositionInPortraitMode = Rectangle(
           x: positionInPortraitModeX,
           y: positionInPortraitModeY,
           width: positionInPortraitModeWidth,
           height: positionInPortraitModeHeight,
         );
-        const double watermarkRatioXRatio = 10.0;
-        const double watermarkRatioYRatio = 10.0;
-        const double watermarkRatioWidthRatio = 10.0;
-        const WatermarkRatio optionsWatermarkRatio = WatermarkRatio(
+        double watermarkRatioXRatio = 5.0;
+        double watermarkRatioYRatio = 5.0;
+        double watermarkRatioWidthRatio = 5.0;
+        WatermarkRatio optionsWatermarkRatio = WatermarkRatio(
           xRatio: watermarkRatioXRatio,
           yRatio: watermarkRatioYRatio,
           widthRatio: watermarkRatioWidthRatio,
         );
-        const WatermarkFitMode optionsMode =
-            WatermarkFitMode.fitModeCoverPosition;
-        const bool optionsVisibleInPreview = true;
-        const WatermarkOptions options = WatermarkOptions(
+        WatermarkFitMode optionsMode = WatermarkFitMode.fitModeCoverPosition;
+        bool optionsVisibleInPreview = true;
+        WatermarkOptions options = WatermarkOptions(
           visibleInPreview: optionsVisibleInPreview,
           positionInLandscapeMode: optionsPositionInLandscapeMode,
           positionInPortraitMode: optionsPositionInPortraitMode,
@@ -8796,7 +8766,7 @@ void rtcEngineSmokeTestCases() {
       await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
-        const bool enabled = true;
+        bool enabled = true;
         await rtcEngine.enableWebSdkInteroperability(
           enabled,
         );
@@ -8831,11 +8801,11 @@ void rtcEngineSmokeTestCases() {
       await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
-        const String id = "hello";
-        const String category = "hello";
-        const String event = "hello";
-        const String label = "hello";
-        const int value = 10;
+        String id = "hello";
+        String category = "hello";
+        String event = "hello";
+        String label = "hello";
+        int value = 5;
         await rtcEngine.sendCustomReportMessage(
           id: id,
           category: category,
@@ -8874,10 +8844,10 @@ void rtcEngineSmokeTestCases() {
       await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
-        final MetadataObserver observer = MetadataObserver(
+        MetadataObserver observer = MetadataObserver(
           onMetadataReceived: (Metadata metadata) {},
         );
-        const MetadataType type = MetadataType.unknownMetadata;
+        MetadataType type = MetadataType.unknownMetadata;
         rtcEngine.registerMediaMetadataObserver(
           observer: observer,
           type: type,
@@ -8913,10 +8883,10 @@ void rtcEngineSmokeTestCases() {
       await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
-        final MetadataObserver observer = MetadataObserver(
+        MetadataObserver observer = MetadataObserver(
           onMetadataReceived: (Metadata metadata) {},
         );
-        const MetadataType type = MetadataType.unknownMetadata;
+        MetadataType type = MetadataType.unknownMetadata;
         rtcEngine.unregisterMediaMetadataObserver(
           observer: observer,
           type: type,
@@ -8952,13 +8922,13 @@ void rtcEngineSmokeTestCases() {
       await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
-        const String channelId = "hello";
-        const int uid = 10;
-        const String location = "hello";
-        const String uuid = "hello";
-        const String passwd = "hello";
-        const int durationMs = 10;
-        const bool autoUpload = true;
+        String channelId = "hello";
+        int uid = 5;
+        String location = "hello";
+        String uuid = "hello";
+        String passwd = "hello";
+        int durationMs = 5;
+        bool autoUpload = true;
         await rtcEngine.startAudioFrameDump(
           channelId: channelId,
           uid: uid,
@@ -8998,9 +8968,9 @@ void rtcEngineSmokeTestCases() {
       await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
-        const String channelId = "hello";
-        const int uid = 10;
-        const String location = "hello";
+        String channelId = "hello";
+        int uid = 5;
+        String location = "hello";
         await rtcEngine.stopAudioFrameDump(
           channelId: channelId,
           uid: uid,
@@ -9036,8 +9006,8 @@ void rtcEngineSmokeTestCases() {
       await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
-        const bool enabled = true;
-        const AudioAinsMode mode = AudioAinsMode.ainsModeBalanced;
+        bool enabled = true;
+        AudioAinsMode mode = AudioAinsMode.ainsModeBalanced;
         await rtcEngine.setAINSMode(
           enabled: enabled,
           mode: mode,
@@ -9072,8 +9042,8 @@ void rtcEngineSmokeTestCases() {
       await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
-        const String appId = "hello";
-        const String userAccount = "hello";
+        String appId = "hello";
+        String userAccount = "hello";
         await rtcEngine.registerLocalUserAccount(
           appId: appId,
           userAccount: userAccount,
@@ -9109,50 +9079,50 @@ void rtcEngineSmokeTestCases() {
       await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
-        const String token = "hello";
-        const String channelId = "hello";
-        const String userAccount = "hello";
-        const ClientRoleType optionsClientRoleType =
+        String token = "hello";
+        String channelId = "hello";
+        String userAccount = "hello";
+        ClientRoleType optionsClientRoleType =
             ClientRoleType.clientRoleBroadcaster;
-        const AudienceLatencyLevelType optionsAudienceLatencyLevel =
+        AudienceLatencyLevelType optionsAudienceLatencyLevel =
             AudienceLatencyLevelType.audienceLatencyLevelLowLatency;
-        const VideoStreamType optionsDefaultVideoStreamType =
+        VideoStreamType optionsDefaultVideoStreamType =
             VideoStreamType.videoStreamHigh;
-        const ChannelProfileType optionsChannelProfile =
+        ChannelProfileType optionsChannelProfile =
             ChannelProfileType.channelProfileCommunication;
-        const bool optionsPublishCameraTrack = true;
-        const bool optionsPublishSecondaryCameraTrack = true;
-        const bool optionsPublishThirdCameraTrack = true;
-        const bool optionsPublishFourthCameraTrack = true;
-        const bool optionsPublishMicrophoneTrack = true;
-        const bool optionsPublishScreenCaptureVideo = true;
-        const bool optionsPublishScreenCaptureAudio = true;
-        const bool optionsPublishScreenTrack = true;
-        const bool optionsPublishSecondaryScreenTrack = true;
-        const bool optionsPublishThirdScreenTrack = true;
-        const bool optionsPublishFourthScreenTrack = true;
-        const bool optionsPublishCustomAudioTrack = true;
-        const int optionsPublishCustomAudioTrackId = 10;
-        const bool optionsPublishCustomVideoTrack = true;
-        const bool optionsPublishEncodedVideoTrack = true;
-        const bool optionsPublishMediaPlayerAudioTrack = true;
-        const bool optionsPublishMediaPlayerVideoTrack = true;
-        const bool optionsPublishTranscodedVideoTrack = true;
-        const bool optionsPublishMixedAudioTrack = true;
-        const bool optionsPublishLipSyncTrack = true;
-        const bool optionsAutoSubscribeAudio = true;
-        const bool optionsAutoSubscribeVideo = true;
-        const bool optionsEnableAudioRecordingOrPlayout = true;
-        const int optionsPublishMediaPlayerId = 10;
-        const int optionsAudioDelayMs = 10;
-        const int optionsMediaPlayerAudioDelayMs = 10;
-        const String optionsToken = "hello";
-        const bool optionsEnableBuiltInMediaEncryption = true;
-        const bool optionsPublishRhythmPlayerTrack = true;
-        const bool optionsIsInteractiveAudience = true;
-        const int optionsCustomVideoTrackId = 10;
-        const bool optionsIsAudioFilterable = true;
-        const ChannelMediaOptions options = ChannelMediaOptions(
+        bool optionsPublishCameraTrack = true;
+        bool optionsPublishSecondaryCameraTrack = true;
+        bool optionsPublishThirdCameraTrack = true;
+        bool optionsPublishFourthCameraTrack = true;
+        bool optionsPublishMicrophoneTrack = true;
+        bool optionsPublishScreenCaptureVideo = true;
+        bool optionsPublishScreenCaptureAudio = true;
+        bool optionsPublishScreenTrack = true;
+        bool optionsPublishSecondaryScreenTrack = true;
+        bool optionsPublishThirdScreenTrack = true;
+        bool optionsPublishFourthScreenTrack = true;
+        bool optionsPublishCustomAudioTrack = true;
+        int optionsPublishCustomAudioTrackId = 5;
+        bool optionsPublishCustomVideoTrack = true;
+        bool optionsPublishEncodedVideoTrack = true;
+        bool optionsPublishMediaPlayerAudioTrack = true;
+        bool optionsPublishMediaPlayerVideoTrack = true;
+        bool optionsPublishTranscodedVideoTrack = true;
+        bool optionsPublishMixedAudioTrack = true;
+        bool optionsPublishLipSyncTrack = true;
+        bool optionsAutoSubscribeAudio = true;
+        bool optionsAutoSubscribeVideo = true;
+        bool optionsEnableAudioRecordingOrPlayout = true;
+        int optionsPublishMediaPlayerId = 5;
+        int optionsAudioDelayMs = 5;
+        int optionsMediaPlayerAudioDelayMs = 5;
+        String optionsToken = "hello";
+        bool optionsEnableBuiltInMediaEncryption = true;
+        bool optionsPublishRhythmPlayerTrack = true;
+        bool optionsIsInteractiveAudience = true;
+        int optionsCustomVideoTrackId = 5;
+        bool optionsIsAudioFilterable = true;
+        ChannelMediaOptions options = ChannelMediaOptions(
           publishCameraTrack: optionsPublishCameraTrack,
           publishSecondaryCameraTrack: optionsPublishSecondaryCameraTrack,
           publishThirdCameraTrack: optionsPublishThirdCameraTrack,
@@ -9227,50 +9197,50 @@ void rtcEngineSmokeTestCases() {
       await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
-        const String token = "hello";
-        const String channelId = "hello";
-        const String userAccount = "hello";
-        const ClientRoleType optionsClientRoleType =
+        String token = "hello";
+        String channelId = "hello";
+        String userAccount = "hello";
+        ClientRoleType optionsClientRoleType =
             ClientRoleType.clientRoleBroadcaster;
-        const AudienceLatencyLevelType optionsAudienceLatencyLevel =
+        AudienceLatencyLevelType optionsAudienceLatencyLevel =
             AudienceLatencyLevelType.audienceLatencyLevelLowLatency;
-        const VideoStreamType optionsDefaultVideoStreamType =
+        VideoStreamType optionsDefaultVideoStreamType =
             VideoStreamType.videoStreamHigh;
-        const ChannelProfileType optionsChannelProfile =
+        ChannelProfileType optionsChannelProfile =
             ChannelProfileType.channelProfileCommunication;
-        const bool optionsPublishCameraTrack = true;
-        const bool optionsPublishSecondaryCameraTrack = true;
-        const bool optionsPublishThirdCameraTrack = true;
-        const bool optionsPublishFourthCameraTrack = true;
-        const bool optionsPublishMicrophoneTrack = true;
-        const bool optionsPublishScreenCaptureVideo = true;
-        const bool optionsPublishScreenCaptureAudio = true;
-        const bool optionsPublishScreenTrack = true;
-        const bool optionsPublishSecondaryScreenTrack = true;
-        const bool optionsPublishThirdScreenTrack = true;
-        const bool optionsPublishFourthScreenTrack = true;
-        const bool optionsPublishCustomAudioTrack = true;
-        const int optionsPublishCustomAudioTrackId = 10;
-        const bool optionsPublishCustomVideoTrack = true;
-        const bool optionsPublishEncodedVideoTrack = true;
-        const bool optionsPublishMediaPlayerAudioTrack = true;
-        const bool optionsPublishMediaPlayerVideoTrack = true;
-        const bool optionsPublishTranscodedVideoTrack = true;
-        const bool optionsPublishMixedAudioTrack = true;
-        const bool optionsPublishLipSyncTrack = true;
-        const bool optionsAutoSubscribeAudio = true;
-        const bool optionsAutoSubscribeVideo = true;
-        const bool optionsEnableAudioRecordingOrPlayout = true;
-        const int optionsPublishMediaPlayerId = 10;
-        const int optionsAudioDelayMs = 10;
-        const int optionsMediaPlayerAudioDelayMs = 10;
-        const String optionsToken = "hello";
-        const bool optionsEnableBuiltInMediaEncryption = true;
-        const bool optionsPublishRhythmPlayerTrack = true;
-        const bool optionsIsInteractiveAudience = true;
-        const int optionsCustomVideoTrackId = 10;
-        const bool optionsIsAudioFilterable = true;
-        const ChannelMediaOptions options = ChannelMediaOptions(
+        bool optionsPublishCameraTrack = true;
+        bool optionsPublishSecondaryCameraTrack = true;
+        bool optionsPublishThirdCameraTrack = true;
+        bool optionsPublishFourthCameraTrack = true;
+        bool optionsPublishMicrophoneTrack = true;
+        bool optionsPublishScreenCaptureVideo = true;
+        bool optionsPublishScreenCaptureAudio = true;
+        bool optionsPublishScreenTrack = true;
+        bool optionsPublishSecondaryScreenTrack = true;
+        bool optionsPublishThirdScreenTrack = true;
+        bool optionsPublishFourthScreenTrack = true;
+        bool optionsPublishCustomAudioTrack = true;
+        int optionsPublishCustomAudioTrackId = 5;
+        bool optionsPublishCustomVideoTrack = true;
+        bool optionsPublishEncodedVideoTrack = true;
+        bool optionsPublishMediaPlayerAudioTrack = true;
+        bool optionsPublishMediaPlayerVideoTrack = true;
+        bool optionsPublishTranscodedVideoTrack = true;
+        bool optionsPublishMixedAudioTrack = true;
+        bool optionsPublishLipSyncTrack = true;
+        bool optionsAutoSubscribeAudio = true;
+        bool optionsAutoSubscribeVideo = true;
+        bool optionsEnableAudioRecordingOrPlayout = true;
+        int optionsPublishMediaPlayerId = 5;
+        int optionsAudioDelayMs = 5;
+        int optionsMediaPlayerAudioDelayMs = 5;
+        String optionsToken = "hello";
+        bool optionsEnableBuiltInMediaEncryption = true;
+        bool optionsPublishRhythmPlayerTrack = true;
+        bool optionsIsInteractiveAudience = true;
+        int optionsCustomVideoTrackId = 5;
+        bool optionsIsAudioFilterable = true;
+        ChannelMediaOptions options = ChannelMediaOptions(
           publishCameraTrack: optionsPublishCameraTrack,
           publishSecondaryCameraTrack: optionsPublishSecondaryCameraTrack,
           publishThirdCameraTrack: optionsPublishThirdCameraTrack,
@@ -9345,7 +9315,7 @@ void rtcEngineSmokeTestCases() {
       await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
-        const String userAccount = "hello";
+        String userAccount = "hello";
         await rtcEngine.getUserInfoByUserAccount(
           userAccount,
         );
@@ -9380,7 +9350,7 @@ void rtcEngineSmokeTestCases() {
       await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
-        const int uid = 10;
+        int uid = 5;
         await rtcEngine.getUserInfoByUid(
           uid,
         );
@@ -9510,7 +9480,7 @@ void rtcEngineSmokeTestCases() {
       await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
-        const AudioProfileType profile = AudioProfileType.audioProfileDefault;
+        AudioProfileType profile = AudioProfileType.audioProfileDefault;
         await rtcEngine.setDirectCdnStreamingAudioConfiguration(
           profile,
         );
@@ -9545,31 +9515,31 @@ void rtcEngineSmokeTestCases() {
       await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
-        const VideoCodecType configCodecType = VideoCodecType.videoCodecNone;
-        const int dimensionsWidth = 10;
-        const int dimensionsHeight = 10;
-        const VideoDimensions configDimensions = VideoDimensions(
+        VideoCodecType configCodecType = VideoCodecType.videoCodecNone;
+        int dimensionsWidth = 5;
+        int dimensionsHeight = 5;
+        VideoDimensions configDimensions = VideoDimensions(
           width: dimensionsWidth,
           height: dimensionsHeight,
         );
-        const OrientationMode configOrientationMode =
+        OrientationMode configOrientationMode =
             OrientationMode.orientationModeAdaptive;
-        const DegradationPreference configDegradationPreference =
+        DegradationPreference configDegradationPreference =
             DegradationPreference.maintainQuality;
-        const VideoMirrorModeType configMirrorMode =
+        VideoMirrorModeType configMirrorMode =
             VideoMirrorModeType.videoMirrorModeAuto;
-        const EncodingPreference advanceOptionsEncodingPreference =
+        EncodingPreference advanceOptionsEncodingPreference =
             EncodingPreference.preferAuto;
-        const CompressionPreference advanceOptionsCompressionPreference =
+        CompressionPreference advanceOptionsCompressionPreference =
             CompressionPreference.preferLowLatency;
-        const AdvanceOptions configAdvanceOptions = AdvanceOptions(
+        AdvanceOptions configAdvanceOptions = AdvanceOptions(
           encodingPreference: advanceOptionsEncodingPreference,
           compressionPreference: advanceOptionsCompressionPreference,
         );
-        const int configFrameRate = 10;
-        const int configBitrate = 10;
-        const int configMinBitrate = 10;
-        const VideoEncoderConfiguration config = VideoEncoderConfiguration(
+        int configFrameRate = 5;
+        int configBitrate = 5;
+        int configMinBitrate = 5;
+        VideoEncoderConfiguration config = VideoEncoderConfiguration(
           codecType: configCodecType,
           dimensions: configDimensions,
           frameRate: configFrameRate,
@@ -9614,22 +9584,21 @@ void rtcEngineSmokeTestCases() {
       await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
-        final DirectCdnStreamingEventHandler eventHandler =
+        DirectCdnStreamingEventHandler eventHandler =
             DirectCdnStreamingEventHandler(
           onDirectCdnStreamingStateChanged: (DirectCdnStreamingState state,
               DirectCdnStreamingReason reason, String message) {},
           onDirectCdnStreamingStats: (DirectCdnStreamingStats stats) {},
         );
-        const String publishUrl = "hello";
-        const bool optionsPublishCameraTrack = true;
-        const bool optionsPublishMicrophoneTrack = true;
-        const bool optionsPublishCustomAudioTrack = true;
-        const bool optionsPublishCustomVideoTrack = true;
-        const bool optionsPublishMediaPlayerAudioTrack = true;
-        const int optionsPublishMediaPlayerId = 10;
-        const int optionsCustomVideoTrackId = 10;
-        const DirectCdnStreamingMediaOptions options =
-            DirectCdnStreamingMediaOptions(
+        String publishUrl = "hello";
+        bool optionsPublishCameraTrack = true;
+        bool optionsPublishMicrophoneTrack = true;
+        bool optionsPublishCustomAudioTrack = true;
+        bool optionsPublishCustomVideoTrack = true;
+        bool optionsPublishMediaPlayerAudioTrack = true;
+        int optionsPublishMediaPlayerId = 5;
+        int optionsCustomVideoTrackId = 5;
+        DirectCdnStreamingMediaOptions options = DirectCdnStreamingMediaOptions(
           publishCameraTrack: optionsPublishCameraTrack,
           publishMicrophoneTrack: optionsPublishMicrophoneTrack,
           publishCustomAudioTrack: optionsPublishCustomAudioTrack,
@@ -9706,15 +9675,14 @@ void rtcEngineSmokeTestCases() {
       await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
-        const bool optionsPublishCameraTrack = true;
-        const bool optionsPublishMicrophoneTrack = true;
-        const bool optionsPublishCustomAudioTrack = true;
-        const bool optionsPublishCustomVideoTrack = true;
-        const bool optionsPublishMediaPlayerAudioTrack = true;
-        const int optionsPublishMediaPlayerId = 10;
-        const int optionsCustomVideoTrackId = 10;
-        const DirectCdnStreamingMediaOptions options =
-            DirectCdnStreamingMediaOptions(
+        bool optionsPublishCameraTrack = true;
+        bool optionsPublishMicrophoneTrack = true;
+        bool optionsPublishCustomAudioTrack = true;
+        bool optionsPublishCustomVideoTrack = true;
+        bool optionsPublishMediaPlayerAudioTrack = true;
+        int optionsPublishMediaPlayerId = 5;
+        int optionsCustomVideoTrackId = 5;
+        DirectCdnStreamingMediaOptions options = DirectCdnStreamingMediaOptions(
           publishCameraTrack: optionsPublishCameraTrack,
           publishMicrophoneTrack: optionsPublishMicrophoneTrack,
           publishCustomAudioTrack: optionsPublishCustomAudioTrack,
@@ -9757,11 +9725,11 @@ void rtcEngineSmokeTestCases() {
       await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
-        const String sound1 = "hello";
-        const String sound2 = "hello";
-        const int configBeatsPerMeasure = 10;
-        const int configBeatsPerMinute = 10;
-        const AgoraRhythmPlayerConfig config = AgoraRhythmPlayerConfig(
+        String sound1 = "hello";
+        String sound2 = "hello";
+        int configBeatsPerMeasure = 5;
+        int configBeatsPerMinute = 5;
+        AgoraRhythmPlayerConfig config = AgoraRhythmPlayerConfig(
           beatsPerMeasure: configBeatsPerMeasure,
           beatsPerMinute: configBeatsPerMinute,
         );
@@ -9831,9 +9799,9 @@ void rtcEngineSmokeTestCases() {
       await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
-        const int configBeatsPerMeasure = 10;
-        const int configBeatsPerMinute = 10;
-        const AgoraRhythmPlayerConfig config = AgoraRhythmPlayerConfig(
+        int configBeatsPerMeasure = 5;
+        int configBeatsPerMinute = 5;
+        AgoraRhythmPlayerConfig config = AgoraRhythmPlayerConfig(
           beatsPerMeasure: configBeatsPerMeasure,
           beatsPerMinute: configBeatsPerMinute,
         );
@@ -9870,8 +9838,8 @@ void rtcEngineSmokeTestCases() {
       await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
-        const int uid = 10;
-        const String filePath = "hello";
+        int uid = 5;
+        String filePath = "hello";
         await rtcEngine.takeSnapshot(
           uid: uid,
           filePath: filePath,
@@ -9906,12 +9874,12 @@ void rtcEngineSmokeTestCases() {
       await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
-        const bool enabled = true;
-        const String configExtraInfo = "hello";
-        const String configServerConfig = "hello";
-        const List<ContentInspectModule> configModules = [];
-        const int configModuleCount = 10;
-        const ContentInspectConfig config = ContentInspectConfig(
+        bool enabled = true;
+        String configExtraInfo = "hello";
+        String configServerConfig = "hello";
+        List<ContentInspectModule> configModules = [];
+        int configModuleCount = 5;
+        ContentInspectConfig config = ContentInspectConfig(
           extraInfo: configExtraInfo,
           serverConfig: configServerConfig,
           modules: configModules,
@@ -9951,8 +9919,8 @@ void rtcEngineSmokeTestCases() {
       await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
-        const int trackId = 10;
-        const int volume = 10;
+        int trackId = 5;
+        int volume = 5;
         await rtcEngine.adjustCustomAudioPublishVolume(
           trackId: trackId,
           volume: volume,
@@ -9988,8 +9956,8 @@ void rtcEngineSmokeTestCases() {
       await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
-        const int trackId = 10;
-        const int volume = 10;
+        int trackId = 5;
+        int volume = 5;
         await rtcEngine.adjustCustomAudioPlayoutVolume(
           trackId: trackId,
           volume: volume,
@@ -10025,7 +9993,7 @@ void rtcEngineSmokeTestCases() {
       await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
-        const CloudProxyType proxyType = CloudProxyType.noneProxy;
+        CloudProxyType proxyType = CloudProxyType.noneProxy;
         await rtcEngine.setCloudProxy(
           proxyType,
         );
@@ -10059,11 +10027,11 @@ void rtcEngineSmokeTestCases() {
       await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
-        const int optionsAudioProcessingChannels = 10;
-        const AdvancedAudioOptions options = AdvancedAudioOptions(
+        int optionsAudioProcessingChannels = 5;
+        AdvancedAudioOptions options = AdvancedAudioOptions(
           audioProcessingChannels: optionsAudioProcessingChannels,
         );
-        const int sourceType = 10;
+        int sourceType = 5;
         await rtcEngine.setAdvancedAudioOptions(
           options: options,
           sourceType: sourceType,
@@ -10099,8 +10067,8 @@ void rtcEngineSmokeTestCases() {
       await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
-        const String channelId = "hello";
-        const int uid = 10;
+        String channelId = "hello";
+        int uid = 5;
         await rtcEngine.setAVSyncSource(
           channelId: channelId,
           uid: uid,
@@ -10135,12 +10103,12 @@ void rtcEngineSmokeTestCases() {
       await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
-        const bool enable = true;
-        const VideoMirrorModeType optionsMirrorMode =
+        bool enable = true;
+        VideoMirrorModeType optionsMirrorMode =
             VideoMirrorModeType.videoMirrorModeAuto;
-        const String optionsImageUrl = "hello";
-        const int optionsFps = 10;
-        const ImageTrackOptions options = ImageTrackOptions(
+        String optionsImageUrl = "hello";
+        int optionsFps = 5;
+        ImageTrackOptions options = ImageTrackOptions(
           imageUrl: optionsImageUrl,
           fps: optionsFps,
           mirrorMode: optionsMirrorMode,
@@ -10212,7 +10180,7 @@ void rtcEngineSmokeTestCases() {
       await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
-        const bool enabled = true;
+        bool enabled = true;
         await rtcEngine.enableWirelessAccelerate(
           enabled,
         );
@@ -10278,7 +10246,7 @@ void rtcEngineSmokeTestCases() {
       await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
-        const String parameters = "hello";
+        String parameters = "hello";
         await rtcEngine.setParameters(
           parameters,
         );
@@ -10407,7 +10375,7 @@ void rtcEngineSmokeTestCases() {
       await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
-        const FeatureType type = FeatureType.videoVirtualBackground;
+        FeatureType type = FeatureType.videoVirtualBackground;
         await rtcEngine.isFeatureAvailableOnDevice(
           type,
         );
@@ -10442,8 +10410,8 @@ void rtcEngineSmokeTestCases() {
       await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
-        Uint8List metadata = Uint8List.fromList([1, 2, 3, 4, 5]);
-        const int length = 10;
+        Uint8List metadata = Uint8List.fromList([1, 1, 1, 1, 1]);
+        int length = 5;
         await rtcEngine.sendAudioMetadata(
           metadata: metadata,
           length: length,
@@ -10478,34 +10446,33 @@ void rtcEngineSmokeTestCases() {
       await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
-        const VideoSourceType sourceType =
-            VideoSourceType.videoSourceCameraPrimary;
-        const int screenRectX = 10;
-        const int screenRectY = 10;
-        const int screenRectWidth = 10;
-        const int screenRectHeight = 10;
-        const Rectangle configScreenRect = Rectangle(
+        VideoSourceType sourceType = VideoSourceType.videoSourceCameraPrimary;
+        int screenRectX = 5;
+        int screenRectY = 5;
+        int screenRectWidth = 5;
+        int screenRectHeight = 5;
+        Rectangle configScreenRect = Rectangle(
           x: screenRectX,
           y: screenRectY,
           width: screenRectWidth,
           height: screenRectHeight,
         );
-        const int dimensionsWidth = 10;
-        const int dimensionsHeight = 10;
-        const VideoDimensions paramsDimensions = VideoDimensions(
+        int dimensionsWidth = 5;
+        int dimensionsHeight = 5;
+        VideoDimensions paramsDimensions = VideoDimensions(
           width: dimensionsWidth,
           height: dimensionsHeight,
         );
-        const int paramsFrameRate = 10;
-        const int paramsBitrate = 10;
-        const bool paramsCaptureMouseCursor = true;
-        const bool paramsWindowFocus = true;
-        const List<int> paramsExcludeWindowList = [];
-        const int paramsExcludeWindowCount = 10;
-        const int paramsHighLightWidth = 10;
-        const int paramsHighLightColor = 10;
-        const bool paramsEnableHighLight = true;
-        const ScreenCaptureParameters configParams = ScreenCaptureParameters(
+        int paramsFrameRate = 5;
+        int paramsBitrate = 5;
+        bool paramsCaptureMouseCursor = true;
+        bool paramsWindowFocus = true;
+        List<int> paramsExcludeWindowList = List.filled(5, 5);
+        int paramsExcludeWindowCount = 5;
+        int paramsHighLightWidth = 5;
+        int paramsHighLightColor = 5;
+        bool paramsEnableHighLight = true;
+        ScreenCaptureParameters configParams = ScreenCaptureParameters(
           dimensions: paramsDimensions,
           frameRate: paramsFrameRate,
           bitrate: paramsBitrate,
@@ -10517,20 +10484,20 @@ void rtcEngineSmokeTestCases() {
           highLightColor: paramsHighLightColor,
           enableHighLight: paramsEnableHighLight,
         );
-        const int regionRectX = 10;
-        const int regionRectY = 10;
-        const int regionRectWidth = 10;
-        const int regionRectHeight = 10;
-        const Rectangle configRegionRect = Rectangle(
+        int regionRectX = 5;
+        int regionRectY = 5;
+        int regionRectWidth = 5;
+        int regionRectHeight = 5;
+        Rectangle configRegionRect = Rectangle(
           x: regionRectX,
           y: regionRectY,
           width: regionRectWidth,
           height: regionRectHeight,
         );
-        const bool configIsCaptureWindow = true;
-        const int configDisplayId = 10;
-        const int configWindowId = 10;
-        const ScreenCaptureConfiguration config = ScreenCaptureConfiguration(
+        bool configIsCaptureWindow = true;
+        int configDisplayId = 5;
+        int configWindowId = 5;
+        ScreenCaptureConfiguration config = ScreenCaptureConfiguration(
           isCaptureWindow: configIsCaptureWindow,
           displayId: configDisplayId,
           screenRect: configScreenRect,
@@ -10573,8 +10540,7 @@ void rtcEngineSmokeTestCases() {
       await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
-        const VideoSourceType sourceType =
-            VideoSourceType.videoSourceCameraPrimary;
+        VideoSourceType sourceType = VideoSourceType.videoSourceCameraPrimary;
         await rtcEngine.stopScreenCaptureBySourceType(
           sourceType,
         );
@@ -10609,7 +10575,7 @@ void rtcEngineSmokeTestCases() {
       await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
-        const bool sync = true;
+        bool sync = true;
         await rtcEngine.release(
           sync: sync,
         );
@@ -10865,18 +10831,17 @@ void rtcEngineSmokeTestCases() {
       await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
-        const int metadataUid = 10;
-        const int metadataSize = 10;
-        Uint8List metadataBuffer = Uint8List.fromList([1, 2, 3, 4, 5]);
-        const int metadataTimeStampMs = 10;
-        final Metadata metadata = Metadata(
+        int metadataUid = 5;
+        int metadataSize = 5;
+        Uint8List metadataBuffer = Uint8List.fromList([1, 1, 1, 1, 1]);
+        int metadataTimeStampMs = 5;
+        Metadata metadata = Metadata(
           uid: metadataUid,
           size: metadataSize,
           buffer: metadataBuffer,
           timeStampMs: metadataTimeStampMs,
         );
-        const VideoSourceType sourceType =
-            VideoSourceType.videoSourceCameraPrimary;
+        VideoSourceType sourceType = VideoSourceType.videoSourceCameraPrimary;
         await rtcEngine.sendMetaData(
           metadata: metadata,
           sourceType: sourceType,
@@ -10911,7 +10876,7 @@ void rtcEngineSmokeTestCases() {
       await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
-        const int size = 10;
+        int size = 5;
         await rtcEngine.setMaxMetadataSize(
           size,
         );
@@ -10945,7 +10910,7 @@ void rtcEngineSmokeTestCases() {
       await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
-        final AudioEncodedFrameObserver observer = AudioEncodedFrameObserver(
+        AudioEncodedFrameObserver observer = AudioEncodedFrameObserver(
           onRecordAudioEncodedFrame: (Uint8List frameBuffer, int length,
               EncodedAudioFrameInfo audioEncodedFrameInfo) {},
           onPlaybackAudioEncodedFrame: (Uint8List frameBuffer, int length,

@@ -633,7 +633,9 @@ testWidgets('{{TEST_CASE_NAME}}', (WidgetTester tester) async {
 ''',
       methodInvokeObjectName: 'musicContentCenter',
       outputDir: outputDir,
-      skipMemberFunctions: [],
+      skipMemberFunctions: [
+        'destroyMusicPlayer',
+      ],
       outputFileSuffixName: 'fake_test',
     ),
   ];

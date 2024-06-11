@@ -34,7 +34,7 @@ void generatedTestCases(ValueGetter<IrisTester> irisTester) {
         },
       );
 
-      const int intervalInMS = 10;
+      int intervalInMS = 5;
 
       mediaPlayerController.registerMediaPlayerAudioSpectrumObserver(
         observer: theAudioSpectrumObserver,
@@ -45,9 +45,9 @@ void generatedTestCases(ValueGetter<IrisTester> irisTester) {
       await Future.delayed(const Duration(milliseconds: 500));
 
       {
-        const List<double> dataAudioSpectrumData = [];
-        const int dataDataLength = 10;
-        const AudioSpectrumData data = AudioSpectrumData(
+        List<double> dataAudioSpectrumData = List.filled(5, 5.0);
+        int dataDataLength = 5;
+        AudioSpectrumData data = AudioSpectrumData(
           audioSpectrumData: dataAudioSpectrumData,
           dataLength: dataDataLength,
         );
@@ -107,7 +107,7 @@ void generatedTestCases(ValueGetter<IrisTester> irisTester) {
         },
       );
 
-      const int intervalInMS = 10;
+      int intervalInMS = 5;
 
       mediaPlayerController.registerMediaPlayerAudioSpectrumObserver(
         observer: theAudioSpectrumObserver,
@@ -118,8 +118,23 @@ void generatedTestCases(ValueGetter<IrisTester> irisTester) {
       await Future.delayed(const Duration(milliseconds: 500));
 
       {
-        const List<UserAudioSpectrumInfo> spectrums = [];
-        const int spectrumNumber = 10;
+        final List<UserAudioSpectrumInfo> spectrums = () {
+          List<double> spectrumDataAudioSpectrumData = List.filled(5, 5.0);
+          int spectrumDataDataLength = 5;
+          AudioSpectrumData spectrumsItemSpectrumData = AudioSpectrumData(
+            audioSpectrumData: spectrumDataAudioSpectrumData,
+            dataLength: spectrumDataDataLength,
+          );
+          int spectrumsItemUid = 5;
+          UserAudioSpectrumInfo spectrumsItem = UserAudioSpectrumInfo(
+            uid: spectrumsItemUid,
+            spectrumData: spectrumsItemSpectrumData,
+          );
+
+          return List.filled(5, spectrumsItem);
+        }();
+
+        int spectrumNumber = 5;
 
         final eventJson = {
           'spectrums': spectrums,

@@ -150,6 +150,20 @@ class NativeIrisTesterBinding {
               ffi.Pointer<ApiParam>)>>('TriggerEventWithFakeRtcEngine');
   late final _TriggerEventWithFakeRtcEngine = _TriggerEventWithFakeRtcEnginePtr
       .asFunction<int Function(ffi.Pointer<ffi.Void>, ffi.Pointer<ApiParam>)>();
+
+  void SetShouldReadBufferFromJson(
+    int readBufferFromJson,
+  ) {
+    return _SetShouldReadBufferFromJson(
+      readBufferFromJson,
+    );
+  }
+
+  late final _SetShouldReadBufferFromJsonPtr =
+      _lookup<ffi.NativeFunction<ffi.Void Function(ffi.Int32)>>(
+          'SetShouldReadBufferFromJson');
+  late final _SetShouldReadBufferFromJson =
+      _SetShouldReadBufferFromJsonPtr.asFunction<void Function(int)>();
 }
 
 typedef IrisApiEnginePtr = ffi.Pointer<ffi.Void>;

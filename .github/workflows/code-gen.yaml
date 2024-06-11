@@ -42,7 +42,7 @@ jobs:
           channel: 'stable'
       - name: Run code-gen
         run: |
-          bash scripts/code_gen.sh
+          bash scripts/code_gen.sh ${{ inputs.version }}
 
       - name: Get current date
         id: date

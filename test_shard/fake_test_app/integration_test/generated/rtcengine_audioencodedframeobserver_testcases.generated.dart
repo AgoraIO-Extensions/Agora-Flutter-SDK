@@ -32,13 +32,12 @@ void generatedTestCases(ValueGetter<IrisTester> irisTester) {
         },
       );
 
-      const AudioEncodedFrameObserverPosition configPostionType =
+      AudioEncodedFrameObserverPosition configPostionType =
           AudioEncodedFrameObserverPosition
               .audioEncodedFrameObserverPositionRecord;
-      const AudioEncodingType configEncodingType =
+      AudioEncodingType configEncodingType =
           AudioEncodingType.audioEncodingTypeAac16000Low;
-      const AudioEncodedFrameObserverConfig config =
-          AudioEncodedFrameObserverConfig(
+      AudioEncodedFrameObserverConfig config = AudioEncodedFrameObserverConfig(
         postionType: configPostionType,
         encodingType: configEncodingType,
       );
@@ -52,24 +51,23 @@ void generatedTestCases(ValueGetter<IrisTester> irisTester) {
       await Future.delayed(const Duration(milliseconds: 500));
 
       {
-        Uint8List frameBuffer = Uint8List.fromList([1, 2, 3, 4, 5]);
-        const int length = 10;
-        const AudioCodecType audioEncodedFrameInfoCodec =
+        Uint8List frameBuffer = Uint8List.fromList([1, 1, 1, 1, 1]);
+        int length = 5;
+        AudioCodecType audioEncodedFrameInfoCodec =
             AudioCodecType.audioCodecOpus;
-        const bool advancedSettingsSpeech = true;
-        const bool advancedSettingsSendEvenIfEmpty = true;
-        const EncodedAudioFrameAdvancedSettings
+        bool advancedSettingsSpeech = true;
+        bool advancedSettingsSendEvenIfEmpty = true;
+        EncodedAudioFrameAdvancedSettings
             audioEncodedFrameInfoAdvancedSettings =
             EncodedAudioFrameAdvancedSettings(
           speech: advancedSettingsSpeech,
           sendEvenIfEmpty: advancedSettingsSendEvenIfEmpty,
         );
-        const int audioEncodedFrameInfoSampleRateHz = 10;
-        const int audioEncodedFrameInfoSamplesPerChannel = 10;
-        const int audioEncodedFrameInfoNumberOfChannels = 10;
-        const int audioEncodedFrameInfoCaptureTimeMs = 10;
-        const EncodedAudioFrameInfo audioEncodedFrameInfo =
-            EncodedAudioFrameInfo(
+        int audioEncodedFrameInfoSampleRateHz = 5;
+        int audioEncodedFrameInfoSamplesPerChannel = 5;
+        int audioEncodedFrameInfoNumberOfChannels = 5;
+        int audioEncodedFrameInfoCaptureTimeMs = 5;
+        EncodedAudioFrameInfo audioEncodedFrameInfo = EncodedAudioFrameInfo(
           codec: audioEncodedFrameInfoCodec,
           sampleRateHz: audioEncodedFrameInfoSampleRateHz,
           samplesPerChannel: audioEncodedFrameInfoSamplesPerChannel,
@@ -134,13 +132,12 @@ void generatedTestCases(ValueGetter<IrisTester> irisTester) {
         },
       );
 
-      const AudioEncodedFrameObserverPosition configPostionType =
+      AudioEncodedFrameObserverPosition configPostionType =
           AudioEncodedFrameObserverPosition
               .audioEncodedFrameObserverPositionRecord;
-      const AudioEncodingType configEncodingType =
+      AudioEncodingType configEncodingType =
           AudioEncodingType.audioEncodingTypeAac16000Low;
-      const AudioEncodedFrameObserverConfig config =
-          AudioEncodedFrameObserverConfig(
+      AudioEncodedFrameObserverConfig config = AudioEncodedFrameObserverConfig(
         postionType: configPostionType,
         encodingType: configEncodingType,
       );
@@ -154,24 +151,23 @@ void generatedTestCases(ValueGetter<IrisTester> irisTester) {
       await Future.delayed(const Duration(milliseconds: 500));
 
       {
-        Uint8List frameBuffer = Uint8List.fromList([1, 2, 3, 4, 5]);
-        const int length = 10;
-        const AudioCodecType audioEncodedFrameInfoCodec =
+        Uint8List frameBuffer = Uint8List.fromList([1, 1, 1, 1, 1]);
+        int length = 5;
+        AudioCodecType audioEncodedFrameInfoCodec =
             AudioCodecType.audioCodecOpus;
-        const bool advancedSettingsSpeech = true;
-        const bool advancedSettingsSendEvenIfEmpty = true;
-        const EncodedAudioFrameAdvancedSettings
+        bool advancedSettingsSpeech = true;
+        bool advancedSettingsSendEvenIfEmpty = true;
+        EncodedAudioFrameAdvancedSettings
             audioEncodedFrameInfoAdvancedSettings =
             EncodedAudioFrameAdvancedSettings(
           speech: advancedSettingsSpeech,
           sendEvenIfEmpty: advancedSettingsSendEvenIfEmpty,
         );
-        const int audioEncodedFrameInfoSampleRateHz = 10;
-        const int audioEncodedFrameInfoSamplesPerChannel = 10;
-        const int audioEncodedFrameInfoNumberOfChannels = 10;
-        const int audioEncodedFrameInfoCaptureTimeMs = 10;
-        const EncodedAudioFrameInfo audioEncodedFrameInfo =
-            EncodedAudioFrameInfo(
+        int audioEncodedFrameInfoSampleRateHz = 5;
+        int audioEncodedFrameInfoSamplesPerChannel = 5;
+        int audioEncodedFrameInfoNumberOfChannels = 5;
+        int audioEncodedFrameInfoCaptureTimeMs = 5;
+        EncodedAudioFrameInfo audioEncodedFrameInfo = EncodedAudioFrameInfo(
           codec: audioEncodedFrameInfoCodec,
           sampleRateHz: audioEncodedFrameInfoSampleRateHz,
           samplesPerChannel: audioEncodedFrameInfoSamplesPerChannel,
@@ -236,13 +232,12 @@ void generatedTestCases(ValueGetter<IrisTester> irisTester) {
         },
       );
 
-      const AudioEncodedFrameObserverPosition configPostionType =
+      AudioEncodedFrameObserverPosition configPostionType =
           AudioEncodedFrameObserverPosition
               .audioEncodedFrameObserverPositionRecord;
-      const AudioEncodingType configEncodingType =
+      AudioEncodingType configEncodingType =
           AudioEncodingType.audioEncodingTypeAac16000Low;
-      const AudioEncodedFrameObserverConfig config =
-          AudioEncodedFrameObserverConfig(
+      AudioEncodedFrameObserverConfig config = AudioEncodedFrameObserverConfig(
         postionType: configPostionType,
         encodingType: configEncodingType,
       );
@@ -256,24 +251,23 @@ void generatedTestCases(ValueGetter<IrisTester> irisTester) {
       await Future.delayed(const Duration(milliseconds: 500));
 
       {
-        Uint8List frameBuffer = Uint8List.fromList([1, 2, 3, 4, 5]);
-        const int length = 10;
-        const AudioCodecType audioEncodedFrameInfoCodec =
+        Uint8List frameBuffer = Uint8List.fromList([1, 1, 1, 1, 1]);
+        int length = 5;
+        AudioCodecType audioEncodedFrameInfoCodec =
             AudioCodecType.audioCodecOpus;
-        const bool advancedSettingsSpeech = true;
-        const bool advancedSettingsSendEvenIfEmpty = true;
-        const EncodedAudioFrameAdvancedSettings
+        bool advancedSettingsSpeech = true;
+        bool advancedSettingsSendEvenIfEmpty = true;
+        EncodedAudioFrameAdvancedSettings
             audioEncodedFrameInfoAdvancedSettings =
             EncodedAudioFrameAdvancedSettings(
           speech: advancedSettingsSpeech,
           sendEvenIfEmpty: advancedSettingsSendEvenIfEmpty,
         );
-        const int audioEncodedFrameInfoSampleRateHz = 10;
-        const int audioEncodedFrameInfoSamplesPerChannel = 10;
-        const int audioEncodedFrameInfoNumberOfChannels = 10;
-        const int audioEncodedFrameInfoCaptureTimeMs = 10;
-        const EncodedAudioFrameInfo audioEncodedFrameInfo =
-            EncodedAudioFrameInfo(
+        int audioEncodedFrameInfoSampleRateHz = 5;
+        int audioEncodedFrameInfoSamplesPerChannel = 5;
+        int audioEncodedFrameInfoNumberOfChannels = 5;
+        int audioEncodedFrameInfoCaptureTimeMs = 5;
+        EncodedAudioFrameInfo audioEncodedFrameInfo = EncodedAudioFrameInfo(
           codec: audioEncodedFrameInfoCodec,
           sampleRateHz: audioEncodedFrameInfoSampleRateHz,
           samplesPerChannel: audioEncodedFrameInfoSamplesPerChannel,

@@ -43,10 +43,10 @@ void generatedTestCases(ValueGetter<IrisTester> irisTester) {
       await Future.delayed(const Duration(milliseconds: 500));
 
       {
-        const String channelId = "hello";
-        const int uid = 10;
-        const RecorderState state = RecorderState.recorderStateError;
-        const RecorderReasonCode reason = RecorderReasonCode.recorderReasonNone;
+        String channelId = "hello";
+        int uid = 5;
+        RecorderState state = RecorderState.recorderStateError;
+        RecorderReasonCode reason = RecorderReasonCode.recorderReasonNone;
 
         final eventJson = {
           'channelId': channelId,
@@ -112,12 +112,12 @@ void generatedTestCases(ValueGetter<IrisTester> irisTester) {
       await Future.delayed(const Duration(milliseconds: 500));
 
       {
-        const String channelId = "hello";
-        const int uid = 10;
-        const String infoFileName = "hello";
-        const int infoDurationMs = 10;
-        const int infoFileSize = 10;
-        const RecorderInfo info = RecorderInfo(
+        String channelId = "hello";
+        int uid = 5;
+        String infoFileName = "hello";
+        int infoDurationMs = 5;
+        int infoFileSize = 5;
+        RecorderInfo info = RecorderInfo(
           fileName: infoFileName,
           durationMs: infoDurationMs,
           fileSize: infoFileSize,

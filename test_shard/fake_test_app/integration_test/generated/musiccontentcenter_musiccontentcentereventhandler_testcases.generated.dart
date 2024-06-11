@@ -45,9 +45,19 @@ void generatedTestCases(ValueGetter<IrisTester> irisTester) {
       await Future.delayed(const Duration(milliseconds: 500));
 
       {
-        const String requestId = "hello";
-        const List<MusicChartInfo> result = [];
-        const MusicContentCenterStateReason reason =
+        String requestId = "hello";
+        final List<MusicChartInfo> result = () {
+          String resultItemChartName = "hello";
+          int resultItemId = 5;
+          MusicChartInfo resultItem = MusicChartInfo(
+            chartName: resultItemChartName,
+            id: resultItemId,
+          );
+
+          return List.filled(5, resultItem);
+        }();
+
+        MusicContentCenterStateReason reason =
             MusicContentCenterStateReason.kMusicContentCenterReasonOk;
 
         final eventJson = {
@@ -118,9 +128,9 @@ void generatedTestCases(ValueGetter<IrisTester> irisTester) {
       await Future.delayed(const Duration(milliseconds: 500));
 
       {
-        const String requestId = "hello";
-        const MusicCollection? result = null;
-        const MusicContentCenterStateReason reason =
+        String requestId = "hello";
+        MusicCollection? result = null;
+        MusicContentCenterStateReason reason =
             MusicContentCenterStateReason.kMusicContentCenterReasonOk;
 
         final eventJson = {
@@ -190,10 +200,10 @@ void generatedTestCases(ValueGetter<IrisTester> irisTester) {
       await Future.delayed(const Duration(milliseconds: 500));
 
       {
-        const String requestId = "hello";
-        const int songCode = 10;
-        const String lyricUrl = "hello";
-        const MusicContentCenterStateReason reason =
+        String requestId = "hello";
+        int songCode = 5;
+        String lyricUrl = "hello";
+        MusicContentCenterStateReason reason =
             MusicContentCenterStateReason.kMusicContentCenterReasonOk;
 
         final eventJson = {
@@ -265,10 +275,10 @@ void generatedTestCases(ValueGetter<IrisTester> irisTester) {
       await Future.delayed(const Duration(milliseconds: 500));
 
       {
-        const String requestId = "hello";
-        const int songCode = 10;
-        const String simpleInfo = "hello";
-        const MusicContentCenterStateReason reason =
+        String requestId = "hello";
+        int songCode = 5;
+        String simpleInfo = "hello";
+        MusicContentCenterStateReason reason =
             MusicContentCenterStateReason.kMusicContentCenterReasonOk;
 
         final eventJson = {
@@ -344,12 +354,12 @@ void generatedTestCases(ValueGetter<IrisTester> irisTester) {
       await Future.delayed(const Duration(milliseconds: 500));
 
       {
-        const String requestId = "hello";
-        const int songCode = 10;
-        const int percent = 10;
-        const String lyricUrl = "hello";
-        const PreloadState state = PreloadState.kPreloadStateCompleted;
-        const MusicContentCenterStateReason reason =
+        String requestId = "hello";
+        int songCode = 5;
+        int percent = 5;
+        String lyricUrl = "hello";
+        PreloadState state = PreloadState.kPreloadStateCompleted;
+        MusicContentCenterStateReason reason =
             MusicContentCenterStateReason.kMusicContentCenterReasonOk;
 
         final eventJson = {

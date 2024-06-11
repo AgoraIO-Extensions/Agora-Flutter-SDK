@@ -26,12 +26,12 @@ void musicContentCenterSmokeTestCases() {
       final musicContentCenter = rtcEngine.getMusicContentCenter();
 
       try {
-        const String configurationAppId = "hello";
-        const String configurationToken = "hello";
-        const int configurationMccUid = 10;
-        const int configurationMaxCacheSize = 10;
-        const String configurationMccDomain = "hello";
-        const MusicContentCenterConfiguration configuration =
+        String configurationAppId = "hello";
+        String configurationToken = "hello";
+        int configurationMccUid = 5;
+        int configurationMaxCacheSize = 5;
+        String configurationMccDomain = "hello";
+        MusicContentCenterConfiguration configuration =
             MusicContentCenterConfiguration(
           appId: configurationAppId,
           token: configurationToken,
@@ -76,7 +76,7 @@ void musicContentCenterSmokeTestCases() {
       final musicContentCenter = rtcEngine.getMusicContentCenter();
 
       try {
-        const String token = "hello";
+        String token = "hello";
         await musicContentCenter.renewToken(
           token,
         );
@@ -149,7 +149,7 @@ void musicContentCenterSmokeTestCases() {
       final musicContentCenter = rtcEngine.getMusicContentCenter();
 
       try {
-        final MusicContentCenterEventHandler eventHandler =
+        MusicContentCenterEventHandler eventHandler =
             MusicContentCenterEventHandler(
           onMusicChartsResult: (String requestId, List result,
               MusicContentCenterStateReason reason) {},
@@ -276,10 +276,10 @@ void musicContentCenterSmokeTestCases() {
       final musicContentCenter = rtcEngine.getMusicContentCenter();
 
       try {
-        const int musicChartId = 10;
-        const int page = 10;
-        const int pageSize = 10;
-        const String jsonOption = "hello";
+        int musicChartId = 5;
+        int page = 5;
+        int pageSize = 5;
+        String jsonOption = "hello";
         await musicContentCenter.getMusicCollectionByMusicChartId(
           musicChartId: musicChartId,
           page: page,
@@ -321,10 +321,10 @@ void musicContentCenterSmokeTestCases() {
       final musicContentCenter = rtcEngine.getMusicContentCenter();
 
       try {
-        const String keyWord = "hello";
-        const int page = 10;
-        const int pageSize = 10;
-        const String jsonOption = "hello";
+        String keyWord = "hello";
+        int page = 5;
+        int pageSize = 5;
+        String jsonOption = "hello";
         await musicContentCenter.searchMusic(
           keyWord: keyWord,
           page: page,
@@ -365,7 +365,7 @@ void musicContentCenterSmokeTestCases() {
       final musicContentCenter = rtcEngine.getMusicContentCenter();
 
       try {
-        const int songCode = 10;
+        int songCode = 5;
         await musicContentCenter.preload(
           songCode,
         );
@@ -403,7 +403,7 @@ void musicContentCenterSmokeTestCases() {
       final musicContentCenter = rtcEngine.getMusicContentCenter();
 
       try {
-        const int songCode = 10;
+        int songCode = 5;
         await musicContentCenter.removeCache(
           songCode,
         );
@@ -441,7 +441,7 @@ void musicContentCenterSmokeTestCases() {
       final musicContentCenter = rtcEngine.getMusicContentCenter();
 
       try {
-        const int cacheInfoSize = 10;
+        int cacheInfoSize = 5;
         await musicContentCenter.getCaches(
           cacheInfoSize,
         );
@@ -479,7 +479,7 @@ void musicContentCenterSmokeTestCases() {
       final musicContentCenter = rtcEngine.getMusicContentCenter();
 
       try {
-        const int songCode = 10;
+        int songCode = 5;
         await musicContentCenter.isPreloaded(
           songCode,
         );
@@ -517,8 +517,8 @@ void musicContentCenterSmokeTestCases() {
       final musicContentCenter = rtcEngine.getMusicContentCenter();
 
       try {
-        const int songCode = 10;
-        const int lyricType = 10;
+        int songCode = 5;
+        int lyricType = 5;
         await musicContentCenter.getLyric(
           songCode: songCode,
           lyricType: lyricType,
@@ -557,7 +557,7 @@ void musicContentCenterSmokeTestCases() {
       final musicContentCenter = rtcEngine.getMusicContentCenter();
 
       try {
-        const int songCode = 10;
+        int songCode = 5;
         await musicContentCenter.getSongSimpleInfo(
           songCode,
         );
@@ -596,8 +596,8 @@ void musicContentCenterSmokeTestCases() {
       final musicContentCenter = rtcEngine.getMusicContentCenter();
 
       try {
-        const int songCode = 10;
-        const String jsonOption = "hello";
+        int songCode = 5;
+        String jsonOption = "hello";
         await musicContentCenter.getInternalSongCode(
           songCode: songCode,
           jsonOption: jsonOption,

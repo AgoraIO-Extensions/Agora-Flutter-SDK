@@ -6,7 +6,7 @@ set -x
 AGORA_FLUTTER_PROJECT_PATH=$(pwd)
 IRIS_PROJECT_PATH=$1
 BUILD_TYPE=$2
-NATIVE_SDK_PATH_NAME=$3 # Agora_Native_SDK_for_Mac_rel.v3.8.201.2_39877_full_20220608_2158
+NATIVE_SDK_PATH_NAME=$3 # Agora_Native_SDK_for_Mac_rel.v3.8.201.2_39877_full_20220608_2158 Agora_Native_SDK_for_Mac_FULL
 IRIS_TYPE="dcg"
 SCRIPTS_PATH=$(dirname "$0")
 

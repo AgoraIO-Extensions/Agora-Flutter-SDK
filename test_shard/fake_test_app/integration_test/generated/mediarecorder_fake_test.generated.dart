@@ -27,7 +27,7 @@ void mediaRecorderSmokeTestCases() {
           RecorderStreamInfo(channelId: 'hello', uid: 0)))!;
 
       try {
-        final MediaRecorderObserver callback = MediaRecorderObserver(
+        MediaRecorderObserver callback = MediaRecorderObserver(
           onRecorderStateChanged: (String channelId, int uid,
               RecorderState state, RecorderReasonCode reason) {},
           onRecorderInfoUpdated:
@@ -72,14 +72,14 @@ void mediaRecorderSmokeTestCases() {
           RecorderStreamInfo(channelId: 'hello', uid: 0)))!;
 
       try {
-        const MediaRecorderContainerFormat configContainerFormat =
+        MediaRecorderContainerFormat configContainerFormat =
             MediaRecorderContainerFormat.formatMp4;
-        const MediaRecorderStreamType configStreamType =
+        MediaRecorderStreamType configStreamType =
             MediaRecorderStreamType.streamTypeAudio;
-        const String configStoragePath = "hello";
-        const int configMaxDurationMs = 10;
-        const int configRecorderInfoUpdateInterval = 10;
-        const MediaRecorderConfiguration config = MediaRecorderConfiguration(
+        String configStoragePath = "hello";
+        int configMaxDurationMs = 5;
+        int configRecorderInfoUpdateInterval = 5;
+        MediaRecorderConfiguration config = MediaRecorderConfiguration(
           storagePath: configStoragePath,
           containerFormat: configContainerFormat,
           streamType: configStreamType,

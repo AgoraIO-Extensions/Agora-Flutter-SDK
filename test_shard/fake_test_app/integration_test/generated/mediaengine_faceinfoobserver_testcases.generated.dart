@@ -40,7 +40,7 @@ void generatedTestCases(ValueGetter<IrisTester> irisTester) {
       await Future.delayed(const Duration(milliseconds: 500));
 
       {
-        const String outFaceInfo = "hello";
+        String outFaceInfo = "hello";
 
         final eventJson = {
           'outFaceInfo': outFaceInfo,

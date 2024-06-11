@@ -535,6 +535,10 @@ class YUVRendering final : public RenderingOp {
     glViewport(0, 0, width, height);
     CHECK_GL_ERROR()
 
+    // Ensure that the unpack alignment is set to 1 byte to avoid any alignment issues with YUV data.
+    glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
+    CHECK_GL_ERROR()
+
     glEnableVertexAttribArray(aPositionLoc_);
     CHECK_GL_ERROR()
 

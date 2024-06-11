@@ -101,10 +101,10 @@ void localSpatialAudioEngineSmokeTestCases() {
       await localSpatialAudioEngine.initialize();
 
       try {
-        const int uid = 10;
-        const List<double> posInfoPosition = [];
-        const List<double> posInfoForward = [];
-        const RemoteVoicePositionInfo posInfo = RemoteVoicePositionInfo(
+        int uid = 5;
+        List<double> posInfoPosition = List.filled(5, 5.0);
+        List<double> posInfoForward = List.filled(5, 5.0);
+        RemoteVoicePositionInfo posInfo = RemoteVoicePositionInfo(
           position: posInfoPosition,
           forward: posInfoForward,
         );
@@ -148,16 +148,16 @@ void localSpatialAudioEngineSmokeTestCases() {
       await localSpatialAudioEngine.initialize();
 
       try {
-        const int uid = 10;
-        const List<double> posInfoPosition = [];
-        const List<double> posInfoForward = [];
-        const RemoteVoicePositionInfo posInfo = RemoteVoicePositionInfo(
+        int uid = 5;
+        List<double> posInfoPosition = List.filled(5, 5.0);
+        List<double> posInfoForward = List.filled(5, 5.0);
+        RemoteVoicePositionInfo posInfo = RemoteVoicePositionInfo(
           position: posInfoPosition,
           forward: posInfoForward,
         );
-        const String connectionChannelId = "hello";
-        const int connectionLocalUid = 10;
-        const RtcConnection connection = RtcConnection(
+        String connectionChannelId = "hello";
+        int connectionLocalUid = 5;
+        RtcConnection connection = RtcConnection(
           channelId: connectionChannelId,
           localUid: connectionLocalUid,
         );
@@ -202,7 +202,7 @@ void localSpatialAudioEngineSmokeTestCases() {
       await localSpatialAudioEngine.initialize();
 
       try {
-        const int uid = 10;
+        int uid = 5;
         await localSpatialAudioEngine.removeRemotePosition(
           uid,
         );
@@ -242,10 +242,10 @@ void localSpatialAudioEngineSmokeTestCases() {
       await localSpatialAudioEngine.initialize();
 
       try {
-        const int uid = 10;
-        const String connectionChannelId = "hello";
-        const int connectionLocalUid = 10;
-        const RtcConnection connection = RtcConnection(
+        int uid = 5;
+        String connectionChannelId = "hello";
+        int connectionLocalUid = 5;
+        RtcConnection connection = RtcConnection(
           channelId: connectionChannelId,
           localUid: connectionLocalUid,
         );
@@ -289,9 +289,9 @@ void localSpatialAudioEngineSmokeTestCases() {
       await localSpatialAudioEngine.initialize();
 
       try {
-        const String connectionChannelId = "hello";
-        const int connectionLocalUid = 10;
-        const RtcConnection connection = RtcConnection(
+        String connectionChannelId = "hello";
+        int connectionLocalUid = 5;
+        RtcConnection connection = RtcConnection(
           channelId: connectionChannelId,
           localUid: connectionLocalUid,
         );
@@ -334,7 +334,7 @@ void localSpatialAudioEngineSmokeTestCases() {
       await localSpatialAudioEngine.initialize();
 
       try {
-        const int maxCount = 10;
+        int maxCount = 5;
         await localSpatialAudioEngine.setMaxAudioRecvCount(
           maxCount,
         );
@@ -374,7 +374,7 @@ void localSpatialAudioEngineSmokeTestCases() {
       await localSpatialAudioEngine.initialize();
 
       try {
-        const double range = 10.0;
+        double range = 5.0;
         await localSpatialAudioEngine.setAudioRecvRange(
           range,
         );
@@ -414,7 +414,7 @@ void localSpatialAudioEngineSmokeTestCases() {
       await localSpatialAudioEngine.initialize();
 
       try {
-        const double unit = 10.0;
+        double unit = 5.0;
         await localSpatialAudioEngine.setDistanceUnit(
           unit,
         );
@@ -454,10 +454,10 @@ void localSpatialAudioEngineSmokeTestCases() {
       await localSpatialAudioEngine.initialize();
 
       try {
-        const int playerId = 10;
-        const List<double> positionInfoPosition = [];
-        const List<double> positionInfoForward = [];
-        const RemoteVoicePositionInfo positionInfo = RemoteVoicePositionInfo(
+        int playerId = 5;
+        List<double> positionInfoPosition = List.filled(5, 5.0);
+        List<double> positionInfoForward = List.filled(5, 5.0);
+        RemoteVoicePositionInfo positionInfo = RemoteVoicePositionInfo(
           position: positionInfoPosition,
           forward: positionInfoForward,
         );
@@ -501,7 +501,7 @@ void localSpatialAudioEngineSmokeTestCases() {
       await localSpatialAudioEngine.initialize();
 
       try {
-        const String params = "hello";
+        String params = "hello";
         await localSpatialAudioEngine.setParameters(
           params,
         );
@@ -541,7 +541,7 @@ void localSpatialAudioEngineSmokeTestCases() {
       await localSpatialAudioEngine.initialize();
 
       try {
-        const bool mute = true;
+        bool mute = true;
         await localSpatialAudioEngine.muteLocalAudioStream(
           mute,
         );
@@ -581,7 +581,7 @@ void localSpatialAudioEngineSmokeTestCases() {
       await localSpatialAudioEngine.initialize();
 
       try {
-        const bool mute = true;
+        bool mute = true;
         await localSpatialAudioEngine.muteAllRemoteAudioStreams(
           mute,
         );
@@ -621,8 +621,8 @@ void localSpatialAudioEngineSmokeTestCases() {
       await localSpatialAudioEngine.initialize();
 
       try {
-        const int uid = 10;
-        const bool mute = true;
+        int uid = 5;
+        bool mute = true;
         await localSpatialAudioEngine.muteRemoteAudioStream(
           uid: uid,
           mute: mute,
@@ -663,9 +663,9 @@ void localSpatialAudioEngineSmokeTestCases() {
       await localSpatialAudioEngine.initialize();
 
       try {
-        const int uid = 10;
-        const double attenuation = 10.0;
-        const bool forceSet = true;
+        int uid = 5;
+        double attenuation = 5.0;
+        bool forceSet = true;
         await localSpatialAudioEngine.setRemoteAudioAttenuation(
           uid: uid,
           attenuation: attenuation,
@@ -707,8 +707,32 @@ void localSpatialAudioEngineSmokeTestCases() {
       await localSpatialAudioEngine.initialize();
 
       try {
-        const List<SpatialAudioZone> zones = [];
-        const int zoneCount = 10;
+        final List<SpatialAudioZone> zones = () {
+          int zonesItemZoneSetId = 5;
+          List<double> zonesItemPosition = List.filled(5, 5.0);
+          List<double> zonesItemForward = List.filled(5, 5.0);
+          List<double> zonesItemRight = List.filled(5, 5.0);
+          List<double> zonesItemUp = List.filled(5, 5.0);
+          double zonesItemForwardLength = 5.0;
+          double zonesItemRightLength = 5.0;
+          double zonesItemUpLength = 5.0;
+          double zonesItemAudioAttenuation = 5.0;
+          SpatialAudioZone zonesItem = SpatialAudioZone(
+            zoneSetId: zonesItemZoneSetId,
+            position: zonesItemPosition,
+            forward: zonesItemForward,
+            right: zonesItemRight,
+            up: zonesItemUp,
+            forwardLength: zonesItemForwardLength,
+            rightLength: zonesItemRightLength,
+            upLength: zonesItemUpLength,
+            audioAttenuation: zonesItemAudioAttenuation,
+          );
+
+          return List.filled(5, zonesItem);
+        }();
+
+        int zoneCount = 5;
         await localSpatialAudioEngine.setZones(
           zones: zones,
           zoneCount: zoneCount,
@@ -749,9 +773,9 @@ void localSpatialAudioEngineSmokeTestCases() {
       await localSpatialAudioEngine.initialize();
 
       try {
-        const int playerId = 10;
-        const double attenuation = 10.0;
-        const bool forceSet = true;
+        int playerId = 5;
+        double attenuation = 5.0;
+        bool forceSet = true;
         await localSpatialAudioEngine.setPlayerAttenuation(
           playerId: playerId,
           attenuation: attenuation,

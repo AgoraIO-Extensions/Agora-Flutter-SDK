@@ -41,30 +41,28 @@ void generatedTestCases(ValueGetter<IrisTester> irisTester) {
       await Future.delayed(const Duration(milliseconds: 500));
 
       {
-        const VideoSourceType sourceType =
-            VideoSourceType.videoSourceCameraPrimary;
-        const VideoPixelFormat videoFrameType =
-            VideoPixelFormat.videoPixelDefault;
-        const VideoFrameMetaInfo? videoFrameMetaInfo = null;
-        const int videoFrameWidth = 10;
-        const int videoFrameHeight = 10;
-        const int videoFrameYStride = 10;
-        const int videoFrameUStride = 10;
-        const int videoFrameVStride = 10;
-        Uint8List videoFrameYBuffer = Uint8List.fromList([1, 2, 3, 4, 5]);
-        Uint8List videoFrameUBuffer = Uint8List.fromList([1, 2, 3, 4, 5]);
-        Uint8List videoFrameVBuffer = Uint8List.fromList([1, 2, 3, 4, 5]);
-        const int videoFrameRotation = 10;
-        const int videoFrameRenderTimeMs = 10;
-        const int videoFrameAvsyncType = 10;
+        VideoSourceType sourceType = VideoSourceType.videoSourceCameraPrimary;
+        VideoPixelFormat videoFrameType = VideoPixelFormat.videoPixelDefault;
+        VideoFrameMetaInfo? videoFrameMetaInfo = null;
+        int videoFrameWidth = 5;
+        int videoFrameHeight = 5;
+        int videoFrameYStride = 5;
+        int videoFrameUStride = 5;
+        int videoFrameVStride = 5;
+        Uint8List videoFrameYBuffer = Uint8List.fromList([1, 1, 1, 1, 1]);
+        Uint8List videoFrameUBuffer = Uint8List.fromList([1, 1, 1, 1, 1]);
+        Uint8List videoFrameVBuffer = Uint8List.fromList([1, 1, 1, 1, 1]);
+        int videoFrameRotation = 5;
+        int videoFrameRenderTimeMs = 5;
+        int videoFrameAvsyncType = 5;
         Uint8List videoFrameMetadataBuffer =
-            Uint8List.fromList([1, 2, 3, 4, 5]);
-        const int videoFrameMetadataSize = 10;
-        const int videoFrameTextureId = 10;
-        const List<double> videoFrameMatrix = [];
-        Uint8List videoFrameAlphaBuffer = Uint8List.fromList([1, 2, 3, 4, 5]);
-        Uint8List videoFramePixelBuffer = Uint8List.fromList([1, 2, 3, 4, 5]);
-        final VideoFrame videoFrame = VideoFrame(
+            Uint8List.fromList([1, 1, 1, 1, 1]);
+        int videoFrameMetadataSize = 5;
+        int videoFrameTextureId = 5;
+        List<double> videoFrameMatrix = List.filled(5, 5.0);
+        Uint8List videoFrameAlphaBuffer = Uint8List.fromList([1, 1, 1, 1, 1]);
+        Uint8List videoFramePixelBuffer = Uint8List.fromList([1, 1, 1, 1, 1]);
+        VideoFrame videoFrame = VideoFrame(
           type: videoFrameType,
           width: videoFrameWidth,
           height: videoFrameHeight,
@@ -149,30 +147,28 @@ void generatedTestCases(ValueGetter<IrisTester> irisTester) {
       await Future.delayed(const Duration(milliseconds: 500));
 
       {
-        const VideoSourceType sourceType =
-            VideoSourceType.videoSourceCameraPrimary;
-        const VideoPixelFormat videoFrameType =
-            VideoPixelFormat.videoPixelDefault;
-        const VideoFrameMetaInfo? videoFrameMetaInfo = null;
-        const int videoFrameWidth = 10;
-        const int videoFrameHeight = 10;
-        const int videoFrameYStride = 10;
-        const int videoFrameUStride = 10;
-        const int videoFrameVStride = 10;
-        Uint8List videoFrameYBuffer = Uint8List.fromList([1, 2, 3, 4, 5]);
-        Uint8List videoFrameUBuffer = Uint8List.fromList([1, 2, 3, 4, 5]);
-        Uint8List videoFrameVBuffer = Uint8List.fromList([1, 2, 3, 4, 5]);
-        const int videoFrameRotation = 10;
-        const int videoFrameRenderTimeMs = 10;
-        const int videoFrameAvsyncType = 10;
+        VideoSourceType sourceType = VideoSourceType.videoSourceCameraPrimary;
+        VideoPixelFormat videoFrameType = VideoPixelFormat.videoPixelDefault;
+        VideoFrameMetaInfo? videoFrameMetaInfo = null;
+        int videoFrameWidth = 5;
+        int videoFrameHeight = 5;
+        int videoFrameYStride = 5;
+        int videoFrameUStride = 5;
+        int videoFrameVStride = 5;
+        Uint8List videoFrameYBuffer = Uint8List.fromList([1, 1, 1, 1, 1]);
+        Uint8List videoFrameUBuffer = Uint8List.fromList([1, 1, 1, 1, 1]);
+        Uint8List videoFrameVBuffer = Uint8List.fromList([1, 1, 1, 1, 1]);
+        int videoFrameRotation = 5;
+        int videoFrameRenderTimeMs = 5;
+        int videoFrameAvsyncType = 5;
         Uint8List videoFrameMetadataBuffer =
-            Uint8List.fromList([1, 2, 3, 4, 5]);
-        const int videoFrameMetadataSize = 10;
-        const int videoFrameTextureId = 10;
-        const List<double> videoFrameMatrix = [];
-        Uint8List videoFrameAlphaBuffer = Uint8List.fromList([1, 2, 3, 4, 5]);
-        Uint8List videoFramePixelBuffer = Uint8List.fromList([1, 2, 3, 4, 5]);
-        final VideoFrame videoFrame = VideoFrame(
+            Uint8List.fromList([1, 1, 1, 1, 1]);
+        int videoFrameMetadataSize = 5;
+        int videoFrameTextureId = 5;
+        List<double> videoFrameMatrix = List.filled(5, 5.0);
+        Uint8List videoFrameAlphaBuffer = Uint8List.fromList([1, 1, 1, 1, 1]);
+        Uint8List videoFramePixelBuffer = Uint8List.fromList([1, 1, 1, 1, 1]);
+        VideoFrame videoFrame = VideoFrame(
           type: videoFrameType,
           width: videoFrameWidth,
           height: videoFrameHeight,
@@ -256,28 +252,27 @@ void generatedTestCases(ValueGetter<IrisTester> irisTester) {
       await Future.delayed(const Duration(milliseconds: 500));
 
       {
-        const VideoPixelFormat videoFrameType =
-            VideoPixelFormat.videoPixelDefault;
-        const VideoFrameMetaInfo? videoFrameMetaInfo = null;
-        const int videoFrameWidth = 10;
-        const int videoFrameHeight = 10;
-        const int videoFrameYStride = 10;
-        const int videoFrameUStride = 10;
-        const int videoFrameVStride = 10;
-        Uint8List videoFrameYBuffer = Uint8List.fromList([1, 2, 3, 4, 5]);
-        Uint8List videoFrameUBuffer = Uint8List.fromList([1, 2, 3, 4, 5]);
-        Uint8List videoFrameVBuffer = Uint8List.fromList([1, 2, 3, 4, 5]);
-        const int videoFrameRotation = 10;
-        const int videoFrameRenderTimeMs = 10;
-        const int videoFrameAvsyncType = 10;
+        VideoPixelFormat videoFrameType = VideoPixelFormat.videoPixelDefault;
+        VideoFrameMetaInfo? videoFrameMetaInfo = null;
+        int videoFrameWidth = 5;
+        int videoFrameHeight = 5;
+        int videoFrameYStride = 5;
+        int videoFrameUStride = 5;
+        int videoFrameVStride = 5;
+        Uint8List videoFrameYBuffer = Uint8List.fromList([1, 1, 1, 1, 1]);
+        Uint8List videoFrameUBuffer = Uint8List.fromList([1, 1, 1, 1, 1]);
+        Uint8List videoFrameVBuffer = Uint8List.fromList([1, 1, 1, 1, 1]);
+        int videoFrameRotation = 5;
+        int videoFrameRenderTimeMs = 5;
+        int videoFrameAvsyncType = 5;
         Uint8List videoFrameMetadataBuffer =
-            Uint8List.fromList([1, 2, 3, 4, 5]);
-        const int videoFrameMetadataSize = 10;
-        const int videoFrameTextureId = 10;
-        const List<double> videoFrameMatrix = [];
-        Uint8List videoFrameAlphaBuffer = Uint8List.fromList([1, 2, 3, 4, 5]);
-        Uint8List videoFramePixelBuffer = Uint8List.fromList([1, 2, 3, 4, 5]);
-        final VideoFrame videoFrame = VideoFrame(
+            Uint8List.fromList([1, 1, 1, 1, 1]);
+        int videoFrameMetadataSize = 5;
+        int videoFrameTextureId = 5;
+        List<double> videoFrameMatrix = List.filled(5, 5.0);
+        Uint8List videoFrameAlphaBuffer = Uint8List.fromList([1, 1, 1, 1, 1]);
+        Uint8List videoFramePixelBuffer = Uint8List.fromList([1, 1, 1, 1, 1]);
+        VideoFrame videoFrame = VideoFrame(
           type: videoFrameType,
           width: videoFrameWidth,
           height: videoFrameHeight,
@@ -298,7 +293,7 @@ void generatedTestCases(ValueGetter<IrisTester> irisTester) {
           pixelBuffer: videoFramePixelBuffer,
           metaInfo: videoFrameMetaInfo,
         );
-        const int mediaPlayerId = 10;
+        int mediaPlayerId = 5;
 
         final eventJson = {
           'videoFrame': videoFrame.toJson(),
@@ -363,30 +358,29 @@ void generatedTestCases(ValueGetter<IrisTester> irisTester) {
       await Future.delayed(const Duration(milliseconds: 500));
 
       {
-        const String channelId = "hello";
-        const int remoteUid = 10;
-        const VideoPixelFormat videoFrameType =
-            VideoPixelFormat.videoPixelDefault;
-        const VideoFrameMetaInfo? videoFrameMetaInfo = null;
-        const int videoFrameWidth = 10;
-        const int videoFrameHeight = 10;
-        const int videoFrameYStride = 10;
-        const int videoFrameUStride = 10;
-        const int videoFrameVStride = 10;
-        Uint8List videoFrameYBuffer = Uint8List.fromList([1, 2, 3, 4, 5]);
-        Uint8List videoFrameUBuffer = Uint8List.fromList([1, 2, 3, 4, 5]);
-        Uint8List videoFrameVBuffer = Uint8List.fromList([1, 2, 3, 4, 5]);
-        const int videoFrameRotation = 10;
-        const int videoFrameRenderTimeMs = 10;
-        const int videoFrameAvsyncType = 10;
+        String channelId = "hello";
+        int remoteUid = 5;
+        VideoPixelFormat videoFrameType = VideoPixelFormat.videoPixelDefault;
+        VideoFrameMetaInfo? videoFrameMetaInfo = null;
+        int videoFrameWidth = 5;
+        int videoFrameHeight = 5;
+        int videoFrameYStride = 5;
+        int videoFrameUStride = 5;
+        int videoFrameVStride = 5;
+        Uint8List videoFrameYBuffer = Uint8List.fromList([1, 1, 1, 1, 1]);
+        Uint8List videoFrameUBuffer = Uint8List.fromList([1, 1, 1, 1, 1]);
+        Uint8List videoFrameVBuffer = Uint8List.fromList([1, 1, 1, 1, 1]);
+        int videoFrameRotation = 5;
+        int videoFrameRenderTimeMs = 5;
+        int videoFrameAvsyncType = 5;
         Uint8List videoFrameMetadataBuffer =
-            Uint8List.fromList([1, 2, 3, 4, 5]);
-        const int videoFrameMetadataSize = 10;
-        const int videoFrameTextureId = 10;
-        const List<double> videoFrameMatrix = [];
-        Uint8List videoFrameAlphaBuffer = Uint8List.fromList([1, 2, 3, 4, 5]);
-        Uint8List videoFramePixelBuffer = Uint8List.fromList([1, 2, 3, 4, 5]);
-        final VideoFrame videoFrame = VideoFrame(
+            Uint8List.fromList([1, 1, 1, 1, 1]);
+        int videoFrameMetadataSize = 5;
+        int videoFrameTextureId = 5;
+        List<double> videoFrameMatrix = List.filled(5, 5.0);
+        Uint8List videoFrameAlphaBuffer = Uint8List.fromList([1, 1, 1, 1, 1]);
+        Uint8List videoFramePixelBuffer = Uint8List.fromList([1, 1, 1, 1, 1]);
+        VideoFrame videoFrame = VideoFrame(
           type: videoFrameType,
           width: videoFrameWidth,
           height: videoFrameHeight,
@@ -471,28 +465,27 @@ void generatedTestCases(ValueGetter<IrisTester> irisTester) {
       await Future.delayed(const Duration(milliseconds: 500));
 
       {
-        const VideoPixelFormat videoFrameType =
-            VideoPixelFormat.videoPixelDefault;
-        const VideoFrameMetaInfo? videoFrameMetaInfo = null;
-        const int videoFrameWidth = 10;
-        const int videoFrameHeight = 10;
-        const int videoFrameYStride = 10;
-        const int videoFrameUStride = 10;
-        const int videoFrameVStride = 10;
-        Uint8List videoFrameYBuffer = Uint8List.fromList([1, 2, 3, 4, 5]);
-        Uint8List videoFrameUBuffer = Uint8List.fromList([1, 2, 3, 4, 5]);
-        Uint8List videoFrameVBuffer = Uint8List.fromList([1, 2, 3, 4, 5]);
-        const int videoFrameRotation = 10;
-        const int videoFrameRenderTimeMs = 10;
-        const int videoFrameAvsyncType = 10;
+        VideoPixelFormat videoFrameType = VideoPixelFormat.videoPixelDefault;
+        VideoFrameMetaInfo? videoFrameMetaInfo = null;
+        int videoFrameWidth = 5;
+        int videoFrameHeight = 5;
+        int videoFrameYStride = 5;
+        int videoFrameUStride = 5;
+        int videoFrameVStride = 5;
+        Uint8List videoFrameYBuffer = Uint8List.fromList([1, 1, 1, 1, 1]);
+        Uint8List videoFrameUBuffer = Uint8List.fromList([1, 1, 1, 1, 1]);
+        Uint8List videoFrameVBuffer = Uint8List.fromList([1, 1, 1, 1, 1]);
+        int videoFrameRotation = 5;
+        int videoFrameRenderTimeMs = 5;
+        int videoFrameAvsyncType = 5;
         Uint8List videoFrameMetadataBuffer =
-            Uint8List.fromList([1, 2, 3, 4, 5]);
-        const int videoFrameMetadataSize = 10;
-        const int videoFrameTextureId = 10;
-        const List<double> videoFrameMatrix = [];
-        Uint8List videoFrameAlphaBuffer = Uint8List.fromList([1, 2, 3, 4, 5]);
-        Uint8List videoFramePixelBuffer = Uint8List.fromList([1, 2, 3, 4, 5]);
-        final VideoFrame videoFrame = VideoFrame(
+            Uint8List.fromList([1, 1, 1, 1, 1]);
+        int videoFrameMetadataSize = 5;
+        int videoFrameTextureId = 5;
+        List<double> videoFrameMatrix = List.filled(5, 5.0);
+        Uint8List videoFrameAlphaBuffer = Uint8List.fromList([1, 1, 1, 1, 1]);
+        Uint8List videoFramePixelBuffer = Uint8List.fromList([1, 1, 1, 1, 1]);
+        VideoFrame videoFrame = VideoFrame(
           type: videoFrameType,
           width: videoFrameWidth,
           height: videoFrameHeight,

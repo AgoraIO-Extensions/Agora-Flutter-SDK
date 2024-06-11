@@ -41,27 +41,26 @@ void generatedTestCases(ValueGetter<IrisTester> irisTester) {
       await Future.delayed(const Duration(milliseconds: 500));
 
       {
-        const int uid = 10;
-        Uint8List imageBuffer = Uint8List.fromList([1, 2, 3, 4, 5]);
-        const int length = 10;
-        const VideoCodecType videoEncodedFrameInfoCodecType =
+        int uid = 5;
+        Uint8List imageBuffer = Uint8List.fromList([1, 1, 1, 1, 1]);
+        int length = 5;
+        VideoCodecType videoEncodedFrameInfoCodecType =
             VideoCodecType.videoCodecNone;
-        const VideoFrameType videoEncodedFrameInfoFrameType =
+        VideoFrameType videoEncodedFrameInfoFrameType =
             VideoFrameType.videoFrameTypeBlankFrame;
-        const VideoOrientation videoEncodedFrameInfoRotation =
+        VideoOrientation videoEncodedFrameInfoRotation =
             VideoOrientation.videoOrientation0;
-        const VideoStreamType videoEncodedFrameInfoStreamType =
+        VideoStreamType videoEncodedFrameInfoStreamType =
             VideoStreamType.videoStreamHigh;
-        const int videoEncodedFrameInfoUid = 10;
-        const int videoEncodedFrameInfoWidth = 10;
-        const int videoEncodedFrameInfoHeight = 10;
-        const int videoEncodedFrameInfoFramesPerSecond = 10;
-        const int videoEncodedFrameInfoTrackId = 10;
-        const int videoEncodedFrameInfoCaptureTimeMs = 10;
-        const int videoEncodedFrameInfoDecodeTimeMs = 10;
-        const int videoEncodedFrameInfoPresentationMs = 10;
-        const EncodedVideoFrameInfo videoEncodedFrameInfo =
-            EncodedVideoFrameInfo(
+        int videoEncodedFrameInfoUid = 5;
+        int videoEncodedFrameInfoWidth = 5;
+        int videoEncodedFrameInfoHeight = 5;
+        int videoEncodedFrameInfoFramesPerSecond = 5;
+        int videoEncodedFrameInfoTrackId = 5;
+        int videoEncodedFrameInfoCaptureTimeMs = 5;
+        int videoEncodedFrameInfoDecodeTimeMs = 5;
+        int videoEncodedFrameInfoPresentationMs = 5;
+        EncodedVideoFrameInfo videoEncodedFrameInfo = EncodedVideoFrameInfo(
           uid: videoEncodedFrameInfoUid,
           codecType: videoEncodedFrameInfoCodecType,
           width: videoEncodedFrameInfoWidth,

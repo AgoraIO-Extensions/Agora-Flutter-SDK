@@ -5,6 +5,7 @@ import {
   MemberFunction,
   MemberVariable,
   SimpleType,
+  SimpleTypeKind,
   Variable,
 } from "@agoraio-extensions/cxx-parser";
 import { ParseResult } from "@agoraio-extensions/terra-core";
@@ -155,6 +156,10 @@ export function renderJsonSerializable(
     ${memberVariables
       .map((it) => {
         let isIgnoreJson = isNeedIgnoreJsonInJsonObject(parseResult, it.type);
+        let isNeedReadValueWithReadIntPtr =
+          !isIgnoreJson && isUIntPtr(parseResult, it.type);
+        let isNeedReadValueWithReadIntPtrList =
+          !isIgnoreJson && isUIntPtrList(parseResult, it.type);
         let actualNode = parseResult.resolveNodeByType(it.type);
         // Campatible with the old code.
         isIgnoreJson =
@@ -166,9 +171,20 @@ export function renderJsonSerializable(
           actualNode.__TYPE == CXXTYPE.Clazz &&
           dartName(actualNode) == "VideoFrameMetaInfo";
         let nullableSurffix = forceExplicitNullableType ? "?" : "";
+        let jsonKeyAnnotations = [
+          `name: '${it.name}'`,
+          ...(isIgnoreJson ? ["ignore: true"] : []),
+          ...(isNeedReadValueWithReadIntPtr &&
+          !isNeedReadValueWithReadIntPtrList
+            ? ["readValue: readIntPtr"]
+            : []),
+          ...(isNeedReadValueWithReadIntPtr && isNeedReadValueWithReadIntPtrList
+            ? ["readValue: readIntPtrList"]
+            : []),
+        ];
         return `
       ${isClazz ? `@${dartName(actualNode)}Converter()` : ""}
-      @JsonKey(name: '${it.name}'${isIgnoreJson ? ", ignore: true" : ""})
+      @JsonKey(${jsonKeyAnnotations.join(",")})
       final ${dartName(it.type)}${nullableSurffix} ${dartName(it)};
       `.trim();
       })
@@ -218,4 +234,52 @@ export function variableToMemberVariable(it: Variable): MemberVariable {
     type: it.type,
     user_data: it.user_data,
   } as MemberVariable;
+}
+
+const stdIntTypes = [
+  "int8_t",
+  "int16_t",
+  "int32_t",
+  "int64_t",
+  "uint8_t",
+  "uint16_t",
+  "uint32_t",
+  "uint64_t",
+  "size_t",
+];
+
+// TODO(littlegnal): Move to cxx-parser
+export function isStdIntType(typeName: string): boolean {
+  return stdIntTypes.includes(typeName);
+}
+
+function isBufferPtr(type: SimpleType): boolean {
+  return (
+    type.kind == SimpleTypeKind.pointer_t &&
+    (isStdIntType(type.name) ||
+      type.source.includes("unsigned char") ||
+      type.name.toLowerCase().includes("buffer") ||
+      type.source.includes("void"))
+  );
+}
+
+export function isUIntPtr(parseResult: ParseResult, type: SimpleType): boolean {
+  let isUIntPtr = isBufferPtr(type);
+  if (!isUIntPtr) {
+    let actualNode = parseResult.resolveNodeByType(type);
+    if (actualNode.__TYPE == CXXTYPE.TypeAlias) {
+      isUIntPtr = isBufferPtr(actualNode.asTypeAlias().underlyingType);
+    }
+  }
+
+  return isUIntPtr;
+}
+
+export function isUIntPtrList(
+  parseResult: ParseResult,
+  type: SimpleType
+): boolean {
+  let isPtrList = isUIntPtr(parseResult, type);
+  isPtrList = isPtrList && type.kind == SimpleTypeKind.array_t;
+  return isPtrList;
 }
