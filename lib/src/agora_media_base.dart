@@ -1504,9 +1504,9 @@ class VideoFrameObserver {
   ///
   /// * [sourceType] Video source types, including cameras, screens, or media player. See VideoSourceType.
   /// * [videoFrame] The video frame. See VideoFrame. The default value of the video frame data format obtained through this callback is as follows:
-  ///  Android: I420 or RGB (GLES20.GL_TEXTURE_2D)
-  ///  iOS: I420 or CVPixelBufferRef
-  ///  macOS: I420 or CVPixelBufferRef
+  ///  Android: I420
+  ///  iOS: I420
+  ///  macOS: I420
   ///  Windows: YUV420
   final void Function(VideoSourceType sourceType, VideoFrame videoFrame)?
       onCaptureVideoFrame;
@@ -1518,9 +1518,9 @@ class VideoFrameObserver {
   ///  The video data that this callback gets has been preprocessed, with its content cropped and rotated, and the image enhanced.
   ///
   /// * [videoFrame] The video frame. See VideoFrame. The default value of the video frame data format obtained through this callback is as follows:
-  ///  Android: I420 or RGB (GLES20.GL_TEXTURE_2D)
-  ///  iOS: I420 or CVPixelBufferRef
-  ///  macOS: I420 or CVPixelBufferRef
+  ///  Android: I420
+  ///  iOS: I420
+  ///  macOS: I420
   ///  Windows: YUV420
   /// * [sourceType] The type of the video source. See VideoSourceType.
   final void Function(VideoSourceType sourceType, VideoFrame videoFrame)?
@@ -1537,9 +1537,9 @@ class VideoFrameObserver {
   ///  Due to framework limitations, this callback does not support sending processed video data back to the SDK.
   ///
   /// * [videoFrame] The video frame. See VideoFrame. The default value of the video frame data format obtained through this callback is as follows:
-  ///  Android: I420 or RGB (GLES20.GL_TEXTURE_2D)
-  ///  iOS: I420 or CVPixelBufferRef
-  ///  macOS: I420 or CVPixelBufferRef
+  ///  Android: I420
+  ///  iOS: I420
+  ///  macOS: I420
   ///  Windows: YUV420
   /// * [remoteUid] The user ID of the remote user who sends the current video frame.
   /// * [channelId] The channel ID.
@@ -1757,7 +1757,7 @@ class MediaRecorderConfiguration {
 
 /// Facial information observer.
 ///
-/// You can call registerFaceInfoObserver to register or unregister the FaceInfoObserver object.
+/// You can call registerFaceInfoObserver to register one FaceInfoObserver observer.
 class FaceInfoObserver {
   /// @nodoc
   const FaceInfoObserver({

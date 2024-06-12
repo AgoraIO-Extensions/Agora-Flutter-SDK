@@ -1819,6 +1819,8 @@ const _$LocalVideoStreamErrorEnumMap = {
       .localVideoStreamErrorScreenCaptureWindowRecoverFromHidden: 26,
   LocalVideoStreamError
       .localVideoStreamErrorScreenCaptureWindowRecoverFromMinimized: 27,
+  LocalVideoStreamError.localVideoStreamReasonScreenCaptureDisplayDiscnnected:
+      30,
 };
 
 RtcEngineEventHandlerOnRemoteVideoStateChangedJson
