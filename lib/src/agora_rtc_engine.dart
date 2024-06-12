@@ -2151,7 +2151,7 @@ class RtcEngineEventHandler {
 
   /// @nodoc
   final void Function(RtcConnection connection, int userId, RdtStreamType type,
-      String data, int length)? onRdtMessage;
+      Uint8List data, int length)? onRdtMessage;
 
   /// @nodoc
   final void Function(RtcConnection connection, int userId, RdtState state)?
@@ -5650,7 +5650,7 @@ abstract class RtcEngine {
   Future<void> sendRdtMessage(
       {required int uid,
       required RdtStreamType type,
-      required String data,
+      required Uint8List data,
       required int length});
 
   /// @nodoc

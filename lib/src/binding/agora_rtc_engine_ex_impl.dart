@@ -707,7 +707,7 @@ class RtcEngineExImpl extends RtcEngineImpl implements RtcEngineEx {
   Future<void> sendRdtMessageEx(
       {required int uid,
       required RdtStreamType type,
-      required String data,
+      required Uint8List data,
       required int length,
       required RtcConnection connection}) async {
     final apiType =
@@ -715,11 +715,11 @@ class RtcEngineExImpl extends RtcEngineImpl implements RtcEngineEx {
     final param = createParams({
       'uid': uid,
       'type': type.value(),
-      'data': data,
       'length': length,
       'connection': connection.toJson()
     });
     final List<Uint8List> buffers = [];
+    buffers.add(data);
     buffers.addAll(connection.collectBufferList());
     final callApiResult = await irisMethodChannel.invokeMethod(
         IrisMethodCall(apiType, jsonEncode(param), buffers: buffers));

@@ -2549,7 +2549,6 @@ RtcEngineEventHandlerOnRdtMessageJson
                   json['connection'] as Map<String, dynamic>),
           userId: (json['userId'] as num?)?.toInt(),
           type: $enumDecodeNullable(_$RdtStreamTypeEnumMap, json['type']),
-          data: json['data'] as String?,
           length: (json['length'] as num?)?.toInt(),
         );
 
@@ -2566,7 +2565,6 @@ Map<String, dynamic> _$RtcEngineEventHandlerOnRdtMessageJsonToJson(
   writeNotNull('connection', instance.connection?.toJson());
   writeNotNull('userId', instance.userId);
   writeNotNull('type', _$RdtStreamTypeEnumMap[instance.type]);
-  writeNotNull('data', instance.data);
   writeNotNull('length', instance.length);
   return val;
 }
