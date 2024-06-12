@@ -799,6 +799,29 @@ const updateNodes = [
       },
     },
   },
+  // onMediaControlMessage
+  {
+    node: {
+      __TYPE: CXXTYPE.Variable,
+      name: "data",
+      namespaces: ["agora", "rtc"],
+      parent_name: "onMediaControlMessage",
+    },
+    updated: {
+      __TYPE: CXXTYPE.Variable,
+      name: "data",
+      namespaces: ["agora", "rtc"],
+      parent_name: "onMediaControlMessage",
+      type: {
+        __TYPE: CXXTYPE.SimpleType,
+        is_builtin_type: false,
+        is_const: true,
+        kind: SimpleTypeKind.pointer_t,
+        name: "uint8_t",
+        source: "const uint8_t*",
+      },
+    },
+  },
   // VideoCompositingLayout
   {
     node: {
@@ -1204,6 +1227,29 @@ const updateNodes = [
       },
     },
   },
+  // agora::rtc::IRtcEngineEx::sendMediaControlMessageEx
+  {
+    node: {
+      __TYPE: CXXTYPE.Variable,
+      name: "data",
+      namespaces: ["agora", "rtc"],
+      parent_name: "sendMediaControlMessageEx",
+    },
+    updated: {
+      __TYPE: CXXTYPE.Variable,
+      name: "data",
+      namespaces: ["agora", "rtc"],
+      parent_name: "sendMediaControlMessageEx",
+      type: {
+        __TYPE: CXXTYPE.SimpleType,
+        is_builtin_type: false,
+        is_const: true,
+        kind: SimpleTypeKind.pointer_t,
+        name: "uint8_t",
+        source: "const uint8_t*",
+      },
+    },
+  },
   // agora::rtc::IRtcEngineEx::sendAudioMetadataEx
   {
     node: {
@@ -1436,6 +1482,29 @@ const updateNodes = [
       name: "data",
       namespaces: ["agora", "rtc"],
       parent_name: "sendRdtMessage",
+      type: {
+        __TYPE: CXXTYPE.SimpleType,
+        is_builtin_type: false,
+        is_const: true,
+        kind: SimpleTypeKind.pointer_t,
+        name: "uint8_t",
+        source: "const uint8_t*",
+      },
+    },
+  },
+  // agora::rtc::IRtcEngine::sendMediaControlMessage
+  {
+    node: {
+      __TYPE: CXXTYPE.Variable,
+      name: "data",
+      namespaces: ["agora", "rtc"],
+      parent_name: "sendMediaControlMessage",
+    },
+    updated: {
+      __TYPE: CXXTYPE.Variable,
+      name: "data",
+      namespaces: ["agora", "rtc"],
+      parent_name: "sendMediaControlMessage",
       type: {
         __TYPE: CXXTYPE.SimpleType,
         is_builtin_type: false,
