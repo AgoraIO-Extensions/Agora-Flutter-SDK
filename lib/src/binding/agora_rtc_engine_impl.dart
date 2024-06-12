@@ -4240,12 +4240,14 @@ class RtcEngineImpl implements RtcEngine {
 
   @override
   Future<void> sendMediaControlMessage(
-      {required int uid, required String data, required int length}) async {
+      {required int uid, required Uint8List data, required int length}) async {
     final apiType =
         '${isOverrideClassName ? className : 'RtcEngine'}_sendMediaControlMessage';
-    final param = createParams({'uid': uid, 'data': data, 'length': length});
+    final param = createParams({'uid': uid, 'length': length});
+    final List<Uint8List> buffers = [];
+    buffers.add(data);
     final callApiResult = await irisMethodChannel.invokeMethod(
-        IrisMethodCall(apiType, jsonEncode(param), buffers: null));
+        IrisMethodCall(apiType, jsonEncode(param), buffers: buffers));
     if (callApiResult.irisReturnCode < 0) {
       throw AgoraRtcException(code: callApiResult.irisReturnCode);
     }

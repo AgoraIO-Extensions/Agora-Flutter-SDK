@@ -3823,7 +3823,7 @@ void generatedTestCases(ValueGetter<IrisTester> irisTester) {
       final onMediaControlMessageCompleter = Completer<bool>();
       final theRtcEngineEventHandler = RtcEngineEventHandler(
         onMediaControlMessage:
-            (RtcConnection connection, int userId, String data, int length) {
+            (RtcConnection connection, int userId, Uint8List data, int length) {
           onMediaControlMessageCompleter.complete(true);
         },
       );
@@ -3843,13 +3843,13 @@ void generatedTestCases(ValueGetter<IrisTester> irisTester) {
           localUid: connectionLocalUid,
         );
         const int userId = 10;
-        const String data = "hello";
+        Uint8List data = Uint8List.fromList([1, 2, 3, 4, 5]);
         const int length = 10;
 
         final eventJson = {
           'connection': connection.toJson(),
           'userId': userId,
-          'data': data,
+          'data': data.toList(),
           'length': length,
         };
 

@@ -1343,7 +1343,7 @@ void rtcEngineExSmokeTestCases() {
 
       try {
         const int uid = 10;
-        const String data = "hello";
+        Uint8List data = Uint8List.fromList([1, 2, 3, 4, 5]);
         const int length = 10;
         const String connectionChannelId = "hello";
         const int connectionLocalUid = 10;

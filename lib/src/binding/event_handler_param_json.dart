@@ -3092,8 +3092,8 @@ class RtcEngineEventHandlerOnMediaControlMessageJson {
   @JsonKey(name: 'userId')
   final int? userId;
 
-  @JsonKey(name: 'data')
-  final String? data;
+  @JsonKey(name: 'data', ignore: true)
+  final Uint8List? data;
 
   @JsonKey(name: 'length')
   final int? length;
@@ -3111,11 +3111,19 @@ extension RtcEngineEventHandlerOnMediaControlMessageJsonBufferExt
   RtcEngineEventHandlerOnMediaControlMessageJson fillBuffers(
       List<Uint8List> bufferList) {
     if (bufferList.isEmpty) return this;
-    return this;
+    Uint8List? data;
+    if (bufferList.length > 0) {
+      data = bufferList[0];
+    }
+    return RtcEngineEventHandlerOnMediaControlMessageJson(
+        connection: connection, userId: userId, data: data, length: length);
   }
 
   List<Uint8List> collectBufferList() {
     final bufferList = <Uint8List>[];
+    if (data != null) {
+      bufferList.add(data!);
+    }
     return bufferList;
   }
 }

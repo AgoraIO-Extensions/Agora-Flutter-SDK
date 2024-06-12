@@ -736,18 +736,15 @@ class RtcEngineExImpl extends RtcEngineImpl implements RtcEngineEx {
   @override
   Future<void> sendMediaControlMessageEx(
       {required int uid,
-      required String data,
+      required Uint8List data,
       required int length,
       required RtcConnection connection}) async {
     final apiType =
         '${isOverrideClassName ? className : 'RtcEngineEx'}_sendMediaControlMessageEx';
-    final param = createParams({
-      'uid': uid,
-      'data': data,
-      'length': length,
-      'connection': connection.toJson()
-    });
+    final param = createParams(
+        {'uid': uid, 'length': length, 'connection': connection.toJson()});
     final List<Uint8List> buffers = [];
+    buffers.add(data);
     buffers.addAll(connection.collectBufferList());
     final callApiResult = await irisMethodChannel.invokeMethod(
         IrisMethodCall(apiType, jsonEncode(param), buffers: buffers));

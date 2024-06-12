@@ -459,7 +459,7 @@ abstract class RtcEngineEx implements RtcEngine {
   /// @nodoc
   Future<void> sendMediaControlMessageEx(
       {required int uid,
-      required String data,
+      required Uint8List data,
       required int length,
       required RtcConnection connection});
 
