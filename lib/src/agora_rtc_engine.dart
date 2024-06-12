@@ -1308,9 +1308,6 @@ class ChannelMediaOptions {
       this.publishMediaPlayerAudioTrack,
       this.publishMediaPlayerVideoTrack,
       this.publishTranscodedVideoTrack,
-      this.publishMixedAudioTrack,
-      this.mixPolicyForMixedTrack,
-      this.publishLipSyncTrack,
       this.autoSubscribeAudio,
       this.autoSubscribeVideo,
       this.enableAudioRecordingOrPlayout,
@@ -1326,7 +1323,8 @@ class ChannelMediaOptions {
       this.publishRhythmPlayerTrack,
       this.isInteractiveAudience,
       this.customVideoTrackId,
-      this.isAudioFilterable});
+      this.isAudioFilterable,
+      this.autoConnectRdt});
 
   /// Whether to publish the video captured by the camera: true : Publish the video captured by the camera. false : Do not publish the video captured by the camera.
   @JsonKey(name: 'publishCameraTrack')
@@ -1400,18 +1398,6 @@ class ChannelMediaOptions {
   @JsonKey(name: 'publishTranscodedVideoTrack')
   final bool? publishTranscodedVideoTrack;
 
-  /// @nodoc
-  @JsonKey(name: 'publishMixedAudioTrack')
-  final bool? publishMixedAudioTrack;
-
-  /// @nodoc
-  @JsonKey(name: 'mixPolicyForMixedTrack')
-  final int? mixPolicyForMixedTrack;
-
-  /// @nodoc
-  @JsonKey(name: 'publishLipSyncTrack')
-  final bool? publishLipSyncTrack;
-
   /// Whether to automatically subscribe to all remote audio streams when the user joins a channel: true : Subscribe to all remote audio streams. false : Do not automatically subscribe to any remote audio streams.
   @JsonKey(name: 'autoSubscribeAudio')
   final bool? autoSubscribeAudio;
@@ -1479,6 +1465,10 @@ class ChannelMediaOptions {
   /// Whether the audio stream being published is filtered according to the volume algorithm: true : The audio stream is filtered. If the audio stream filter is not enabled, this setting does not takes effect. false : The audio stream is not filtered. If you need to enable this function, contact.
   @JsonKey(name: 'isAudioFilterable')
   final bool? isAudioFilterable;
+
+  /// @nodoc
+  @JsonKey(name: 'autoConnectRdt')
+  final bool? autoConnectRdt;
 
   /// @nodoc
   factory ChannelMediaOptions.fromJson(Map<String, dynamic> json) =>
@@ -1642,6 +1632,9 @@ class RtcEngineEventHandler {
     this.onConnectionBanned,
     this.onStreamMessage,
     this.onStreamMessageError,
+    this.onRdtMessage,
+    this.onRdtStateChanged,
+    this.onMediaControlMessage,
     this.onRequestToken,
     this.onTokenPrivilegeWillExpire,
     this.onLicenseValidationFailure,
@@ -2155,6 +2148,19 @@ class RtcEngineEventHandler {
   /// * [cached] Number of incoming cached messages when the data stream is interrupted.
   final void Function(RtcConnection connection, int remoteUid, int streamId,
       ErrorCodeType code, int missed, int cached)? onStreamMessageError;
+
+  /// @nodoc
+  final void Function(RtcConnection connection, int userId, RdtStreamType type,
+      String data, int length)? onRdtMessage;
+
+  /// @nodoc
+  final void Function(RtcConnection connection, int userId, RdtState state)?
+      onRdtStateChanged;
+
+  /// @nodoc
+  final void Function(
+          RtcConnection connection, int userId, String data, int length)?
+      onMediaControlMessage;
 
   /// Occurs when the token expires.
   ///
@@ -2793,7 +2799,12 @@ extension MaxMetadataSizeTypeExt on MaxMetadataSizeType {
 @JsonSerializable(explicitToJson: true, includeIfNull: false)
 class Metadata {
   /// @nodoc
-  const Metadata({this.uid, this.size, this.buffer, this.timeStampMs});
+  const Metadata(
+      {this.channelId, this.uid, this.size, this.buffer, this.timeStampMs});
+
+  /// @nodoc
+  @JsonKey(name: 'channelId')
+  final String? channelId;
 
   /// The user ID.
   ///  For the recipient: The ID of the remote user who sent the Metadata.
@@ -2977,13 +2988,7 @@ class DirectCdnStreamingMediaOptions {
       this.publishCustomVideoTrack,
       this.publishMediaPlayerAudioTrack,
       this.publishMediaPlayerId,
-      this.customVideoTrackId,
-      this.publishScreenTrack,
-      this.publishSecondaryScreenTrack,
-      this.publishThirdScreenTrack,
-      this.publishFourthScreenTrack,
-      this.publishLoopbackAudioTrack,
-      this.publishLoopbackDeviceName});
+      this.customVideoTrackId});
 
   /// Sets whether to publish the video captured by the camera: true : Publish the video captured by the camera. false : (Default) Do not publish the video captured by the camera.
   @JsonKey(name: 'publishCameraTrack')
@@ -3012,30 +3017,6 @@ class DirectCdnStreamingMediaOptions {
   /// The video track ID returned by calling the createCustomVideoTrack method. The default value is 0.
   @JsonKey(name: 'customVideoTrackId')
   final int? customVideoTrackId;
-
-  /// @nodoc
-  @JsonKey(name: 'publishScreenTrack')
-  final bool? publishScreenTrack;
-
-  /// @nodoc
-  @JsonKey(name: 'publishSecondaryScreenTrack')
-  final bool? publishSecondaryScreenTrack;
-
-  /// @nodoc
-  @JsonKey(name: 'publishThirdScreenTrack')
-  final bool? publishThirdScreenTrack;
-
-  /// @nodoc
-  @JsonKey(name: 'publishFourthScreenTrack')
-  final bool? publishFourthScreenTrack;
-
-  /// @nodoc
-  @JsonKey(name: 'publishLoopbackAudioTrack')
-  final bool? publishLoopbackAudioTrack;
-
-  /// @nodoc
-  @JsonKey(name: 'publishLoopbackDeviceName')
-  final String? publishLoopbackDeviceName;
 
   /// @nodoc
   factory DirectCdnStreamingMediaOptions.fromJson(Map<String, dynamic> json) =>
@@ -4491,9 +4472,6 @@ abstract class RtcEngine {
   /// @nodoc
   Future<String> uploadLogFile();
 
-  /// @nodoc
-  Future<void> writeLog({required LogLevel level, required String fmt});
-
   /// Updates the display mode of the local video view.
   ///
   /// After initializing the local video view, you can call this method to update its rendering and mirror modes. It affects only the video view that the local user sees, not the published local video stream.
@@ -5667,6 +5645,17 @@ abstract class RtcEngine {
   /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown. You need to catch the exception and handle it accordingly.
   Future<void> sendStreamMessage(
       {required int streamId, required Uint8List data, required int length});
+
+  /// @nodoc
+  Future<void> sendRdtMessage(
+      {required int uid,
+      required RdtStreamType type,
+      required String data,
+      required int length});
+
+  /// @nodoc
+  Future<void> sendMediaControlMessage(
+      {required int uid, required String data, required int length});
 
   /// Adds a watermark image to the local video.
   ///
