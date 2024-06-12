@@ -452,7 +452,7 @@ abstract class RtcEngineEx implements RtcEngine {
   Future<void> sendRdtMessageEx(
       {required int uid,
       required RdtStreamType type,
-      required String data,
+      required Uint8List data,
       required int length,
       required RtcConnection connection});
 
