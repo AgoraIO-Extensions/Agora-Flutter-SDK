@@ -2620,7 +2620,6 @@ RtcEngineEventHandlerOnMediaControlMessageJson
               : RtcConnection.fromJson(
                   json['connection'] as Map<String, dynamic>),
           userId: (json['userId'] as num?)?.toInt(),
-          data: json['data'] as String?,
           length: (json['length'] as num?)?.toInt(),
         );
 
@@ -2636,7 +2635,6 @@ Map<String, dynamic> _$RtcEngineEventHandlerOnMediaControlMessageJsonToJson(
 
   writeNotNull('connection', instance.connection?.toJson());
   writeNotNull('userId', instance.userId);
-  writeNotNull('data', instance.data);
   writeNotNull('length', instance.length);
   return val;
 }

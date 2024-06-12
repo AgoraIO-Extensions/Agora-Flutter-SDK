@@ -2159,7 +2159,7 @@ class RtcEngineEventHandler {
 
   /// @nodoc
   final void Function(
-          RtcConnection connection, int userId, String data, int length)?
+          RtcConnection connection, int userId, Uint8List data, int length)?
       onMediaControlMessage;
 
   /// Occurs when the token expires.
@@ -5655,7 +5655,7 @@ abstract class RtcEngine {
 
   /// @nodoc
   Future<void> sendMediaControlMessage(
-      {required int uid, required String data, required int length});
+      {required int uid, required Uint8List data, required int length});
 
   /// Adds a watermark image to the local video.
   ///

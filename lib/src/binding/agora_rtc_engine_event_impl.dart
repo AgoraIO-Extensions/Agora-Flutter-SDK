@@ -1016,7 +1016,7 @@ class RtcEngineEventHandlerWrapper implements EventLoopEventHandler {
         paramJson = paramJson.fillBuffers(buffers);
         RtcConnection? connection = paramJson.connection;
         int? userId = paramJson.userId;
-        String? data = paramJson.data;
+        Uint8List? data = paramJson.data;
         int? length = paramJson.length;
         if (connection == null ||
             userId == null ||

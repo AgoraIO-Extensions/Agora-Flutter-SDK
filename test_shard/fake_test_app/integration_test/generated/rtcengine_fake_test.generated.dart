@@ -7932,7 +7932,7 @@ void rtcEngineSmokeTestCases() {
           onRdtStateChanged:
               (RtcConnection connection, int userId, RdtState state) {},
           onMediaControlMessage: (RtcConnection connection, int userId,
-              String data, int length) {},
+              Uint8List data, int length) {},
           onRequestToken: (RtcConnection connection) {},
           onTokenPrivilegeWillExpire:
               (RtcConnection connection, String token) {},
@@ -8151,7 +8151,7 @@ void rtcEngineSmokeTestCases() {
           onRdtStateChanged:
               (RtcConnection connection, int userId, RdtState state) {},
           onMediaControlMessage: (RtcConnection connection, int userId,
-              String data, int length) {},
+              Uint8List data, int length) {},
           onRequestToken: (RtcConnection connection) {},
           onTokenPrivilegeWillExpire:
               (RtcConnection connection, String token) {},
@@ -8510,7 +8510,7 @@ void rtcEngineSmokeTestCases() {
 
       try {
         const int uid = 10;
-        const String data = "hello";
+        Uint8List data = Uint8List.fromList([1, 2, 3, 4, 5]);
         const int length = 10;
         await rtcEngine.sendMediaControlMessage(
           uid: uid,
