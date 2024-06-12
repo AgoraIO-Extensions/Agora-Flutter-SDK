@@ -471,58 +471,6 @@ class VideoFrameObserverWrapper implements EventLoopEventHandler {
   }
 }
 
-class FaceInfoObserverWrapper implements EventLoopEventHandler {
-  const FaceInfoObserverWrapper(this.faceInfoObserver);
-
-  final FaceInfoObserver faceInfoObserver;
-
-  @override
-  bool operator ==(Object other) {
-    if (other.runtimeType != runtimeType) {
-      return false;
-    }
-    return other is FaceInfoObserverWrapper &&
-        other.faceInfoObserver == faceInfoObserver;
-  }
-
-  @override
-  int get hashCode => faceInfoObserver.hashCode;
-
-  @override
-  bool handleEventInternal(
-      String eventName, String eventData, List<Uint8List> buffers) {
-    switch (eventName) {
-      case 'onFaceInfo':
-        if (faceInfoObserver.onFaceInfo == null) {
-          return true;
-        }
-        final jsonMap = jsonDecode(eventData);
-        FaceInfoObserverOnFaceInfoJson paramJson =
-            FaceInfoObserverOnFaceInfoJson.fromJson(jsonMap);
-        paramJson = paramJson.fillBuffers(buffers);
-        String? outFaceInfo = paramJson.outFaceInfo;
-        if (outFaceInfo == null) {
-          return true;
-        }
-
-        faceInfoObserver.onFaceInfo!(outFaceInfo);
-        return true;
-    }
-    return false;
-  }
-
-  @override
-  bool handleEvent(
-      String eventName, String eventData, List<Uint8List> buffers) {
-    if (!eventName.startsWith('FaceInfoObserver')) return false;
-    final newEvent = eventName.replaceFirst('FaceInfoObserver_', '');
-    if (handleEventInternal(newEvent, eventData, buffers)) {
-      return true;
-    }
-    return false;
-  }
-}
-
 class MediaRecorderObserverWrapper implements EventLoopEventHandler {
   const MediaRecorderObserverWrapper(this.mediaRecorderObserver);
 

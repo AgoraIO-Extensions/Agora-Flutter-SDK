@@ -888,7 +888,6 @@ extension ExternalVideoFrameBufferExt on ExternalVideoFrame {
         metadataBuffer: metadataBuffer,
         metadataSize: metadataSize,
         alphaBuffer: alphaBuffer,
-        fillAlphaBuffer: fillAlphaBuffer,
         textureSliceIndex: textureSliceIndex);
   }
 
@@ -997,8 +996,7 @@ extension AudioFrameBufferExt on AudioFrame {
         renderTimeMs: renderTimeMs,
         avsyncType: avsyncType,
         presentationMs: presentationMs,
-        audioTrackNumber: audioTrackNumber,
-        rtpTimestamp: rtpTimestamp);
+        audioTrackNumber: audioTrackNumber);
   }
 
   List<Uint8List> collectBufferList() {
@@ -1485,7 +1483,11 @@ extension MetadataBufferExt on Metadata {
       buffer = bufferList[0];
     }
     return Metadata(
-        uid: uid, size: size, buffer: buffer, timeStampMs: timeStampMs);
+        channelId: channelId,
+        uid: uid,
+        size: size,
+        buffer: buffer,
+        timeStampMs: timeStampMs);
   }
 
   List<Uint8List> collectBufferList() {

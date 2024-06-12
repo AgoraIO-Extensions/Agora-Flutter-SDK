@@ -133,9 +133,6 @@ const _$AudioCodecTypeEnumMap = {
   AudioCodecType.audioCodecJc1: 10,
   AudioCodecType.audioCodecHeaac2: 11,
   AudioCodecType.audioCodecLpcnet: 12,
-  AudioCodecType.audioCodecOpus4c: 13,
-  AudioCodecType.audioCodecOpus6c: 14,
-  AudioCodecType.audioCodecOpus8c: 15,
 };
 
 AudioPcmDataInfo _$AudioPcmDataInfoFromJson(Map<String, dynamic> json) =>
@@ -747,7 +744,6 @@ const _$VideoSourceTypeEnumMap = {
   VideoSourceType.videoSourceCameraFourth: 12,
   VideoSourceType.videoSourceScreenThird: 13,
   VideoSourceType.videoSourceScreenFourth: 14,
-  VideoSourceType.videoSourceSpeechDriven: 15,
   VideoSourceType.videoSourceUnknown: 100,
 };
 
@@ -2201,6 +2197,12 @@ const _$ErrorCodeTypeEnumMap = {
   ErrorCodeType.errCertRequest: 168,
   ErrorCodeType.errPcmsendFormat: 200,
   ErrorCodeType.errPcmsendBufferoverflow: 201,
+  ErrorCodeType.errRdtUserNotExist: 250,
+  ErrorCodeType.errRdtUserNotReady: 251,
+  ErrorCodeType.errRdtDataBlocked: 252,
+  ErrorCodeType.errRdtCmdExceedLimit: 253,
+  ErrorCodeType.errRdtDataExceedLimit: 254,
+  ErrorCodeType.errRdtEncryption: 255,
   ErrorCodeType.errLoginAlreadyLogin: 428,
   ErrorCodeType.errLoadMediaEngine: 1001,
   ErrorCodeType.errAdmGeneralError: 1005,
@@ -2453,8 +2455,6 @@ const _$LocalVideoStreamErrorEnumMap = {
       .localVideoStreamErrorScreenCaptureWindowRecoverFromHidden: 26,
   LocalVideoStreamError
       .localVideoStreamErrorScreenCaptureWindowRecoverFromMinimized: 27,
-  LocalVideoStreamError.localVideoStreamReasonScreenCaptureDisplayDiscnnected:
-      30,
 };
 
 const _$RemoteAudioStateEnumMap = {
@@ -2474,8 +2474,6 @@ const _$RemoteAudioStateReasonEnumMap = {
   RemoteAudioStateReason.remoteAudioReasonRemoteMuted: 5,
   RemoteAudioStateReason.remoteAudioReasonRemoteUnmuted: 6,
   RemoteAudioStateReason.remoteAudioReasonRemoteOffline: 7,
-  RemoteAudioStateReason.remoteAudioReasonRemoteNoPacketReceive: 8,
-  RemoteAudioStateReason.remoteAudioReasonRemoteLocalPlayFailed: 9,
 };
 
 const _$RemoteVideoStateEnumMap = {
@@ -2793,7 +2791,6 @@ const _$EarMonitoringFilterTypeEnumMap = {
   EarMonitoringFilterType.earMonitoringFilterNone: 1,
   EarMonitoringFilterType.earMonitoringFilterBuiltInAudioFilters: 2,
   EarMonitoringFilterType.earMonitoringFilterNoiseSuppression: 4,
-  EarMonitoringFilterType.earMonitoringFilterReusePostProcessingFilter: 32768,
 };
 
 const _$ThreadPriorityTypeEnumMap = {
@@ -2813,4 +2810,18 @@ const _$MediaTraceEventEnumMap = {
 const _$ConfigFetchTypeEnumMap = {
   ConfigFetchType.configFetchTypeInitialize: 1,
   ConfigFetchType.configFetchTypeJoinChannel: 2,
+};
+
+const _$RdtStreamTypeEnumMap = {
+  RdtStreamType.rdtStreamCmd: 0,
+  RdtStreamType.rdtStreamData: 1,
+  RdtStreamType.rdtStreamCount: 2,
+};
+
+const _$RdtStateEnumMap = {
+  RdtState.rdtStateClosed: 0,
+  RdtState.rdtStateOpened: 1,
+  RdtState.rdtStateBlocked: 2,
+  RdtState.rdtStatePending: 3,
+  RdtState.rdtStateBroken: 4,
 };

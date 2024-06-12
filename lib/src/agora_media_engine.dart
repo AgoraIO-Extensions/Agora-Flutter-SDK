@@ -84,18 +84,6 @@ abstract class MediaEngine {
   /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown. You need to catch the exception and handle it accordingly.
   void registerVideoEncodedFrameObserver(VideoEncodedFrameObserver observer);
 
-  /// Registers a facial information observer.
-  ///
-  /// You can call this method to register the onFaceInfo callback to receive the facial information processed by Agora speech driven extension. When calling this method to register a facial information observer, you can register callbacks in the FaceInfoObserver class as needed. After successfully registering the facial information observer, the SDK triggers the callback you have registered when it captures the facial information converted by the speech driven extension.
-  ///  Ensure that you call this method before joining a channel.
-  ///  Before calling this method, you need to make sure that the speech driven extension has been enabled by calling enableExtension.
-  ///
-  /// * [observer] Facial information observer, see FaceInfoObserver.
-  ///
-  /// Returns
-  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown. You need to catch the exception and handle it accordingly.
-  void registerFaceInfoObserver(FaceInfoObserver observer);
-
   /// Pushes the external audio frame.
   ///
   /// Before calling this method to push external audio data, perform the following steps:
@@ -256,12 +244,4 @@ abstract class MediaEngine {
   /// Returns
   /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown. You need to catch the exception and handle it accordingly.
   void unregisterVideoEncodedFrameObserver(VideoEncodedFrameObserver observer);
-
-  /// Unregisters a facial information observer.
-  ///
-  /// * [observer] Facial information observer, see FaceInfoObserver.
-  ///
-  /// Returns
-  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown. You need to catch the exception and handle it accordingly.
-  void unregisterFaceInfoObserver(FaceInfoObserver observer);
 }

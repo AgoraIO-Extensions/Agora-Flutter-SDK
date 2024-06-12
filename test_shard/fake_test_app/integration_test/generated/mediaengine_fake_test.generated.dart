@@ -149,47 +149,6 @@ void mediaEngineSmokeTestCases() {
   );
 
   testWidgets(
-    'MediaEngine.registerFaceInfoObserver',
-    (WidgetTester tester) async {
-      String engineAppId = const String.fromEnvironment('TEST_APP_ID',
-          defaultValue: '<YOUR_APP_ID>');
-
-      RtcEngine rtcEngine = createAgoraRtcEngine();
-      await rtcEngine.initialize(RtcEngineContext(
-        appId: engineAppId,
-        areaCode: AreaCode.areaCodeGlob.value(),
-      ));
-      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
-
-      final mediaEngine = rtcEngine.getMediaEngine();
-
-      try {
-        final FaceInfoObserver observer = FaceInfoObserver(
-          onFaceInfo: (String outFaceInfo) {},
-        );
-        mediaEngine.registerFaceInfoObserver(
-          observer,
-        );
-      } catch (e) {
-        if (e is! AgoraRtcException) {
-          debugPrint(
-              '[MediaEngine.registerFaceInfoObserver] error: ${e.toString()}');
-          rethrow;
-        }
-
-        if (e.code != -4) {
-          // Only not supported error supported.
-          rethrow;
-        }
-      }
-
-      await mediaEngine.release();
-      await rtcEngine.release();
-    },
-//  skip: !(),
-  );
-
-  testWidgets(
     'MediaEngine.pushAudioFrame',
     (WidgetTester tester) async {
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
@@ -216,7 +175,6 @@ void mediaEngineSmokeTestCases() {
         const int frameAvsyncType = 10;
         const int framePresentationMs = 10;
         const int frameAudioTrackNumber = 10;
-        const int frameRtpTimestamp = 10;
         final AudioFrame frame = AudioFrame(
           type: frameType,
           samplesPerChannel: frameSamplesPerChannel,
@@ -228,7 +186,6 @@ void mediaEngineSmokeTestCases() {
           avsyncType: frameAvsyncType,
           presentationMs: framePresentationMs,
           audioTrackNumber: frameAudioTrackNumber,
-          rtpTimestamp: frameRtpTimestamp,
         );
         const int trackId = 10;
         await mediaEngine.pushAudioFrame(
@@ -280,7 +237,6 @@ void mediaEngineSmokeTestCases() {
         const int frameAvsyncType = 10;
         const int framePresentationMs = 10;
         const int frameAudioTrackNumber = 10;
-        const int frameRtpTimestamp = 10;
         final AudioFrame frame = AudioFrame(
           type: frameType,
           samplesPerChannel: frameSamplesPerChannel,
@@ -292,7 +248,6 @@ void mediaEngineSmokeTestCases() {
           avsyncType: frameAvsyncType,
           presentationMs: framePresentationMs,
           audioTrackNumber: frameAudioTrackNumber,
-          rtpTimestamp: frameRtpTimestamp,
         );
         await mediaEngine.pullAudioFrame(
           frame,
@@ -572,7 +527,6 @@ void mediaEngineSmokeTestCases() {
         Uint8List frameMetadataBuffer = Uint8List.fromList([1, 2, 3, 4, 5]);
         const int frameMetadataSize = 10;
         Uint8List frameAlphaBuffer = Uint8List.fromList([1, 2, 3, 4, 5]);
-        const bool frameFillAlphaBuffer = true;
         const int frameTextureSliceIndex = 10;
         final ExternalVideoFrame frame = ExternalVideoFrame(
           type: frameType,
@@ -592,7 +546,6 @@ void mediaEngineSmokeTestCases() {
           metadataBuffer: frameMetadataBuffer,
           metadataSize: frameMetadataSize,
           alphaBuffer: frameAlphaBuffer,
-          fillAlphaBuffer: frameFillAlphaBuffer,
           textureSliceIndex: frameTextureSliceIndex,
         );
         const int videoTrackId = 10;
@@ -848,47 +801,6 @@ void mediaEngineSmokeTestCases() {
         if (e is! AgoraRtcException) {
           debugPrint(
               '[MediaEngine.unregisterVideoEncodedFrameObserver] error: ${e.toString()}');
-          rethrow;
-        }
-
-        if (e.code != -4) {
-          // Only not supported error supported.
-          rethrow;
-        }
-      }
-
-      await mediaEngine.release();
-      await rtcEngine.release();
-    },
-//  skip: !(),
-  );
-
-  testWidgets(
-    'MediaEngine.unregisterFaceInfoObserver',
-    (WidgetTester tester) async {
-      String engineAppId = const String.fromEnvironment('TEST_APP_ID',
-          defaultValue: '<YOUR_APP_ID>');
-
-      RtcEngine rtcEngine = createAgoraRtcEngine();
-      await rtcEngine.initialize(RtcEngineContext(
-        appId: engineAppId,
-        areaCode: AreaCode.areaCodeGlob.value(),
-      ));
-      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
-
-      final mediaEngine = rtcEngine.getMediaEngine();
-
-      try {
-        final FaceInfoObserver observer = FaceInfoObserver(
-          onFaceInfo: (String outFaceInfo) {},
-        );
-        mediaEngine.unregisterFaceInfoObserver(
-          observer,
-        );
-      } catch (e) {
-        if (e is! AgoraRtcException) {
-          debugPrint(
-              '[MediaEngine.unregisterFaceInfoObserver] error: ${e.toString()}');
           rethrow;
         }
 

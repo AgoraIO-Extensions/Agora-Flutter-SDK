@@ -424,6 +424,30 @@ enum ErrorCodeType {
   errPcmsendBufferoverflow,
 
   /// @nodoc
+  @JsonValue(250)
+  errRdtUserNotExist,
+
+  /// @nodoc
+  @JsonValue(251)
+  errRdtUserNotReady,
+
+  /// @nodoc
+  @JsonValue(252)
+  errRdtDataBlocked,
+
+  /// @nodoc
+  @JsonValue(253)
+  errRdtCmdExceedLimit,
+
+  /// @nodoc
+  @JsonValue(254)
+  errRdtDataExceedLimit,
+
+  /// @nodoc
+  @JsonValue(255)
+  errRdtEncryption,
+
+  /// @nodoc
   @JsonValue(428)
   errLoginAlreadyLogin,
 
@@ -1214,18 +1238,6 @@ enum AudioCodecType {
   /// @nodoc
   @JsonValue(12)
   audioCodecLpcnet,
-
-  /// @nodoc
-  @JsonValue(13)
-  audioCodecOpus4c,
-
-  /// @nodoc
-  @JsonValue(14)
-  audioCodecOpus6c,
-
-  /// @nodoc
-  @JsonValue(15)
-  audioCodecOpus8c,
 }
 
 /// @nodoc
@@ -2898,10 +2910,6 @@ enum LocalVideoStreamError {
   /// @nodoc
   @JsonValue(27)
   localVideoStreamErrorScreenCaptureWindowRecoverFromMinimized,
-
-  /// @nodoc
-  @JsonValue(30)
-  localVideoStreamReasonScreenCaptureDisplayDiscnnected,
 }
 
 /// @nodoc
@@ -2988,14 +2996,6 @@ enum RemoteAudioStateReason {
   /// 7: The remote user leaves the channel.
   @JsonValue(7)
   remoteAudioReasonRemoteOffline,
-
-  /// @nodoc
-  @JsonValue(8)
-  remoteAudioReasonRemoteNoPacketReceive,
-
-  /// @nodoc
-  @JsonValue(9)
-  remoteAudioReasonRemoteLocalPlayFailed,
 }
 
 /// @nodoc
@@ -6407,10 +6407,6 @@ enum EarMonitoringFilterType {
   /// 1<<2: Add noise suppression audio filter to in-ear monitoring.
   @JsonValue((1 << 2))
   earMonitoringFilterNoiseSuppression,
-
-  /// 1<<15: Reuse the audio filter that has been processed on the sending end for in-ear monitoring. This enumerator reduces CPU usage while increasing in-ear monitoring latency, which is suitable for latency-tolerant scenarios requiring low CPU consumption.
-  @JsonValue((1 << 15))
-  earMonitoringFilterReusePostProcessingFilter,
 }
 
 /// @nodoc
@@ -6817,6 +6813,72 @@ class LocalAccessPointConfiguration {
 
   /// @nodoc
   Map<String, dynamic> toJson() => _$LocalAccessPointConfigurationToJson(this);
+}
+
+/// @nodoc
+@JsonEnum(alwaysCreate: true)
+enum RdtStreamType {
+  /// @nodoc
+  @JsonValue(0)
+  rdtStreamCmd,
+
+  /// @nodoc
+  @JsonValue(1)
+  rdtStreamData,
+
+  /// @nodoc
+  @JsonValue(2)
+  rdtStreamCount,
+}
+
+/// @nodoc
+extension RdtStreamTypeExt on RdtStreamType {
+  /// @nodoc
+  static RdtStreamType fromValue(int value) {
+    return $enumDecode(_$RdtStreamTypeEnumMap, value);
+  }
+
+  /// @nodoc
+  int value() {
+    return _$RdtStreamTypeEnumMap[this]!;
+  }
+}
+
+/// @nodoc
+@JsonEnum(alwaysCreate: true)
+enum RdtState {
+  /// @nodoc
+  @JsonValue(0)
+  rdtStateClosed,
+
+  /// @nodoc
+  @JsonValue(1)
+  rdtStateOpened,
+
+  /// @nodoc
+  @JsonValue(2)
+  rdtStateBlocked,
+
+  /// @nodoc
+  @JsonValue(3)
+  rdtStatePending,
+
+  /// @nodoc
+  @JsonValue(4)
+  rdtStateBroken,
+}
+
+/// @nodoc
+extension RdtStateExt on RdtState {
+  /// @nodoc
+  static RdtState fromValue(int value) {
+    return $enumDecode(_$RdtStateEnumMap, value);
+  }
+
+  /// @nodoc
+  int value() {
+    return _$RdtStateEnumMap[this]!;
+  }
 }
 
 /// The spatial audio parameters.

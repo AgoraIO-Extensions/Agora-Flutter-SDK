@@ -3,35 +3,6 @@ part 'agora_music_content_center.g.dart';
 
 /// @nodoc
 @JsonEnum(alwaysCreate: true)
-enum MusicPlayMode {
-  /// @nodoc
-  @JsonValue(0)
-  kMusicPlayModeOriginal,
-
-  /// @nodoc
-  @JsonValue(1)
-  kMusicPlayModeAccompany,
-
-  /// @nodoc
-  @JsonValue(2)
-  kMusicPlayModeLeadSing,
-}
-
-/// @nodoc
-extension MusicPlayModeExt on MusicPlayMode {
-  /// @nodoc
-  static MusicPlayMode fromValue(int value) {
-    return $enumDecode(_$MusicPlayModeEnumMap, value);
-  }
-
-  /// @nodoc
-  int value() {
-    return _$MusicPlayModeEnumMap[this]!;
-  }
-}
-
-/// @nodoc
-@JsonEnum(alwaysCreate: true)
 enum PreloadStatusCode {
   /// @nodoc
   @JsonValue(0)
@@ -423,9 +394,6 @@ class MusicContentCenterConfiguration {
 /// @nodoc
 abstract class MusicPlayer implements MediaPlayer {
   /// @nodoc
-  Future<void> setPlayMode(MusicPlayMode mode);
-
-  /// @nodoc
   Future<void> openWithSongCode({required int songCode, int startPos = 0});
 }
 
@@ -448,9 +416,6 @@ abstract class MusicContentCenter {
 
   /// @nodoc
   Future<MusicPlayer?> createMusicPlayer();
-
-  /// @nodoc
-  Future<void> destroyMusicPlayer(MusicPlayer musicPlayer);
 
   /// @nodoc
   Future<String> getMusicCharts();
