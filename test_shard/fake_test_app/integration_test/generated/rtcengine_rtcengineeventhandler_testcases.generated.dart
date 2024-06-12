@@ -3675,7 +3675,7 @@ void generatedTestCases(ValueGetter<IrisTester> irisTester) {
       final onRdtMessageCompleter = Completer<bool>();
       final theRtcEngineEventHandler = RtcEngineEventHandler(
         onRdtMessage: (RtcConnection connection, int userId, RdtStreamType type,
-            String data, int length) {
+            Uint8List data, int length) {
           onRdtMessageCompleter.complete(true);
         },
       );
@@ -3696,14 +3696,14 @@ void generatedTestCases(ValueGetter<IrisTester> irisTester) {
         );
         const int userId = 10;
         const RdtStreamType type = RdtStreamType.rdtStreamCmd;
-        const String data = "hello";
+        Uint8List data = Uint8List.fromList([1, 2, 3, 4, 5]);
         const int length = 10;
 
         final eventJson = {
           'connection': connection.toJson(),
           'userId': userId,
           'type': type.value(),
-          'data': data,
+          'data': data.toList(),
           'length': length,
         };
 

@@ -3005,8 +3005,8 @@ class RtcEngineEventHandlerOnRdtMessageJson {
   @JsonKey(name: 'type')
   final RdtStreamType? type;
 
-  @JsonKey(name: 'data')
-  final String? data;
+  @JsonKey(name: 'data', ignore: true)
+  final Uint8List? data;
 
   @JsonKey(name: 'length')
   final int? length;
@@ -3024,11 +3024,23 @@ extension RtcEngineEventHandlerOnRdtMessageJsonBufferExt
   RtcEngineEventHandlerOnRdtMessageJson fillBuffers(
       List<Uint8List> bufferList) {
     if (bufferList.isEmpty) return this;
-    return this;
+    Uint8List? data;
+    if (bufferList.length > 0) {
+      data = bufferList[0];
+    }
+    return RtcEngineEventHandlerOnRdtMessageJson(
+        connection: connection,
+        userId: userId,
+        type: type,
+        data: data,
+        length: length);
   }
 
   List<Uint8List> collectBufferList() {
     final bufferList = <Uint8List>[];
+    if (data != null) {
+      bufferList.add(data!);
+    }
     return bufferList;
   }
 }
