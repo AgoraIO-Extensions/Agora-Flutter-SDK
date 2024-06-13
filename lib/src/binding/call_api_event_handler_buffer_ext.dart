@@ -173,6 +173,30 @@ extension SimulcastStreamConfigBufferExt on SimulcastStreamConfig {
   }
 }
 
+extension SimulcastConfigBufferExt on SimulcastConfig {
+  SimulcastConfig fillBuffers(List<Uint8List> bufferList) {
+    if (bufferList.isEmpty) return this;
+    return this;
+  }
+
+  List<Uint8List> collectBufferList() {
+    final bufferList = <Uint8List>[];
+    return bufferList;
+  }
+}
+
+extension StreamLayerConfigBufferExt on StreamLayerConfig {
+  StreamLayerConfig fillBuffers(List<Uint8List> bufferList) {
+    if (bufferList.isEmpty) return this;
+    return this;
+  }
+
+  List<Uint8List> collectBufferList() {
+    final bufferList = <Uint8List>[];
+    return bufferList;
+  }
+}
+
 extension RectangleBufferExt on Rectangle {
   Rectangle fillBuffers(List<Uint8List> bufferList) {
     if (bufferList.isEmpty) return this;
@@ -385,6 +409,31 @@ extension LocalTranscoderConfigurationBufferExt
   }
 }
 
+extension MixedAudioStreamBufferExt on MixedAudioStream {
+  MixedAudioStream fillBuffers(List<Uint8List> bufferList) {
+    if (bufferList.isEmpty) return this;
+    return this;
+  }
+
+  List<Uint8List> collectBufferList() {
+    final bufferList = <Uint8List>[];
+    return bufferList;
+  }
+}
+
+extension LocalAudioMixerConfigurationBufferExt
+    on LocalAudioMixerConfiguration {
+  LocalAudioMixerConfiguration fillBuffers(List<Uint8List> bufferList) {
+    if (bufferList.isEmpty) return this;
+    return this;
+  }
+
+  List<Uint8List> collectBufferList() {
+    final bufferList = <Uint8List>[];
+    return bufferList;
+  }
+}
+
 extension LastmileProbeConfigBufferExt on LastmileProbeConfig {
   LastmileProbeConfig fillBuffers(List<Uint8List> bufferList) {
     if (bufferList.isEmpty) return this;
@@ -447,6 +496,42 @@ extension VideoCanvasBufferExt on VideoCanvas {
 
 extension BeautyOptionsBufferExt on BeautyOptions {
   BeautyOptions fillBuffers(List<Uint8List> bufferList) {
+    if (bufferList.isEmpty) return this;
+    return this;
+  }
+
+  List<Uint8List> collectBufferList() {
+    final bufferList = <Uint8List>[];
+    return bufferList;
+  }
+}
+
+extension FaceShapeAreaOptionsBufferExt on FaceShapeAreaOptions {
+  FaceShapeAreaOptions fillBuffers(List<Uint8List> bufferList) {
+    if (bufferList.isEmpty) return this;
+    return this;
+  }
+
+  List<Uint8List> collectBufferList() {
+    final bufferList = <Uint8List>[];
+    return bufferList;
+  }
+}
+
+extension FaceShapeBeautyOptionsBufferExt on FaceShapeBeautyOptions {
+  FaceShapeBeautyOptions fillBuffers(List<Uint8List> bufferList) {
+    if (bufferList.isEmpty) return this;
+    return this;
+  }
+
+  List<Uint8List> collectBufferList() {
+    final bufferList = <Uint8List>[];
+    return bufferList;
+  }
+}
+
+extension FilterEffectOptionsBufferExt on FilterEffectOptions {
+  FilterEffectOptions fillBuffers(List<Uint8List> bufferList) {
     if (bufferList.isEmpty) return this;
     return this;
   }
@@ -795,6 +880,18 @@ extension VideoLayoutBufferExt on VideoLayout {
   }
 }
 
+extension ExtensionContextBufferExt on ExtensionContext {
+  ExtensionContext fillBuffers(List<Uint8List> bufferList) {
+    if (bufferList.isEmpty) return this;
+    return this;
+  }
+
+  List<Uint8List> collectBufferList() {
+    final bufferList = <Uint8List>[];
+    return bufferList;
+  }
+}
+
 extension AudioParametersBufferExt on AudioParameters {
   AudioParameters fillBuffers(List<Uint8List> bufferList) {
     if (bufferList.isEmpty) return this;
@@ -867,6 +964,30 @@ extension AudioPcmFrameBufferExt on AudioPcmFrame {
   }
 }
 
+extension ColorSpaceBufferExt on ColorSpace {
+  ColorSpace fillBuffers(List<Uint8List> bufferList) {
+    if (bufferList.isEmpty) return this;
+    return this;
+  }
+
+  List<Uint8List> collectBufferList() {
+    final bufferList = <Uint8List>[];
+    return bufferList;
+  }
+}
+
+extension Hdr10MetadataInfoBufferExt on Hdr10MetadataInfo {
+  Hdr10MetadataInfo fillBuffers(List<Uint8List> bufferList) {
+    if (bufferList.isEmpty) return this;
+    return this;
+  }
+
+  List<Uint8List> collectBufferList() {
+    final bufferList = <Uint8List>[];
+    return bufferList;
+  }
+}
+
 extension ExternalVideoFrameBufferExt on ExternalVideoFrame {
   ExternalVideoFrame fillBuffers(List<Uint8List> bufferList) {
     if (bufferList.isEmpty) return this;
@@ -896,12 +1017,17 @@ extension ExternalVideoFrameBufferExt on ExternalVideoFrame {
         timestamp: timestamp,
         eglType: eglType,
         textureId: textureId,
+        fenceObject: fenceObject,
         matrix: matrix,
         metadataBuffer: metadataBuffer,
         metadataSize: metadataSize,
         alphaBuffer: alphaBuffer,
         fillAlphaBuffer: fillAlphaBuffer,
-        textureSliceIndex: textureSliceIndex);
+        alphaStitchMode: alphaStitchMode,
+        d3d11Texture2d: d3d11Texture2d,
+        textureSliceIndex: textureSliceIndex,
+        hdr10MetadataInfo: hdr10MetadataInfo,
+        colorSpace: colorSpace);
   }
 
   List<Uint8List> collectBufferList() {
@@ -964,8 +1090,11 @@ extension VideoFrameBufferExt on VideoFrame {
         textureId: textureId,
         matrix: matrix,
         alphaBuffer: alphaBuffer,
+        alphaStitchMode: alphaStitchMode,
         pixelBuffer: pixelBuffer,
-        metaInfo: metaInfo);
+        metaInfo: metaInfo,
+        hdr10MetadataInfo: hdr10MetadataInfo,
+        colorSpace: colorSpace);
   }
 
   List<Uint8List> collectBufferList() {
@@ -988,6 +1117,18 @@ extension VideoFrameBufferExt on VideoFrame {
     if (pixelBuffer != null) {
       bufferList.add(pixelBuffer!);
     }
+    return bufferList;
+  }
+}
+
+extension SnapshotConfigBufferExt on SnapshotConfig {
+  SnapshotConfig fillBuffers(List<Uint8List> bufferList) {
+    if (bufferList.isEmpty) return this;
+    return this;
+  }
+
+  List<Uint8List> collectBufferList() {
+    final bufferList = <Uint8List>[];
     return bufferList;
   }
 }
@@ -1509,7 +1650,11 @@ extension MetadataBufferExt on Metadata {
       buffer = bufferList[0];
     }
     return Metadata(
-        uid: uid, size: size, buffer: buffer, timeStampMs: timeStampMs);
+        channelId: channelId,
+        uid: uid,
+        size: size,
+        buffer: buffer,
+        timeStampMs: timeStampMs);
   }
 
   List<Uint8List> collectBufferList() {
