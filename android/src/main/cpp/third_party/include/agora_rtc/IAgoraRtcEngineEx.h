@@ -72,6 +72,9 @@ class IRtcEngineEventHandlerEx : public IRtcEngineEventHandler {
   using IRtcEngineEventHandler::onConnectionBanned;
   using IRtcEngineEventHandler::onStreamMessage;
   using IRtcEngineEventHandler::onStreamMessageError;
+  using IRtcEngineEventHandler::onRdtMessage;
+  using IRtcEngineEventHandler::onRdtStateChanged;
+  using IRtcEngineEventHandler::onMediaControlMessage;
   using IRtcEngineEventHandler::onRequestToken;
   using IRtcEngineEventHandler::onTokenPrivilegeWillExpire;
   using IRtcEngineEventHandler::onLicenseValidationFailure;
@@ -655,6 +658,51 @@ class IRtcEngineEventHandlerEx : public IRtcEngineEventHandler {
     (void)code;
     (void)missed;
     (void)cached;
+  }
+
+  /** Occurs when the local user receives the rdt data from the remote user.
+   *
+   * The SDK triggers this callback when the user receives the data stream that another user sends
+   * by calling the \ref agora::rtc::IRtcEngine::sendRdtMessage "sendRdtMessage" method.
+   *
+   * @param connection The RtcConnection object.
+   * @param userId ID of the user who sends the data.
+   * @param type The RDT stream type
+   * @param data The sending data.
+   * @param length The length (byte) of the data.
+   */
+  virtual void onRdtMessage(const RtcConnection& connection, uid_t userId, RdtStreamType type, const char *data, size_t length) {
+    (void)connection;
+    (void)userId;
+    (void)type;
+    (void)data;
+    (void)length;
+  }
+
+  /** Occurs when the RDT tunnel state changed
+   *
+   * @param connection The RtcConnection object.
+   * @param userId ID of the user who sends the data.
+   * @param state The RDT tunnel state
+   */
+  virtual void onRdtStateChanged(const RtcConnection& connection, uid_t userId, RdtState state) {
+    (void)connection;
+    (void)userId;
+    (void)state;
+  }
+
+  /** Occurs when the Media Control Message sent by others use sendMediaControlMessage
+   *
+   * @param connection The RtcConnection object.
+   * @param userId ID of the user who sends the data.
+   * @param data The sending data.
+   * @param length The length (byte) of the data.
+   */
+  virtual void onMediaControlMessage(const RtcConnection& connection, uid_t userId, const char* data, size_t length) {
+    (void)connection;
+    (void)userId;
+    (void)data;
+    (void)length;
   }
 
   /**
@@ -1594,6 +1642,30 @@ public:
      * - < 0: Failure.
      */
     virtual int sendStreamMessageEx(int streamId, const char* data, size_t length, const RtcConnection& connection) = 0;
+
+    /** Send Reliable message to remote uid in channel.
+     * @param uid Remote user id.
+     * @param type Reliable Data Transmission tunnel message type.
+     * @param data The pointer to the sent data.
+     * @param length The length of the sent data.
+     * @param connection The RtcConnection object.
+     * @return
+     * - 0: Success.
+     * - < 0: Failure.
+     */
+    virtual int sendRdtMessageEx(uid_t uid, RdtStreamType type, const char *data, size_t length, const RtcConnection& connection) = 0;
+
+    /** Send media control message
+     * @param uid Remote user id. In particular, if uid=0, the user is broadcast to the channel
+     * @param data The pointer to the sent data.
+     * @param length The length of the sent data, max 1024.
+     * @param connection The RtcConnection object.
+     * @return
+     * - 0: Success.
+     * - < 0: Failure.
+     */
+    virtual int sendMediaControlMessageEx(uid_t uid, const char *data, size_t length, const RtcConnection& connection) = 0;
+
     /** Adds a watermark image to the local video.
 
     This method adds a PNG watermark image to the local video in a live broadcast. Once the watermark image is added, all the audience in the channel (CDN audience included),
@@ -1942,25 +2014,6 @@ public:
       - -7(ERR_NOT_INITIALIZED): The SDK is not initialized. Initialize the `IRtcEngine` instance before calling this method.
      */
     virtual int startMediaRenderingTracingEx(const RtcConnection& connection) = 0;
-
-    /**
-     * Gets the current call ID.
-     *
-     * When a user joins a channel on a client, a `callId` is generated to identify
-     * the call.
-     *
-     * After a call ends, you can call `rate` or `complain` to gather feedback from the customer.
-     * These methods require a `callId` parameter. To use these feedback methods, call the this
-     * method first to retrieve the `callId` during the call, and then pass the value as an
-     * argument in the `rate` or `complain` method after the call ends.
-     *
-     * @param callId The reference to the call ID.
-     * @param connection The RtcConnection object.
-     * @return
-     * - The call ID if the method call is successful.
-     * - < 0: Failure.
-    */
-    virtual int getCallIdEx(agora::util::AString& callId, const RtcConnection& connection) = 0;
 };
 
 }  // namespace rtc

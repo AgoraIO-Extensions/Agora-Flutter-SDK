@@ -94,9 +94,6 @@ enum VIDEO_SOURCE_TYPE {
   /** Video for fourth screen sharing.
    */
   VIDEO_SOURCE_SCREEN_FOURTH = 14,
-  /** Video for voice drive.
-   */
-  VIDEO_SOURCE_SPEECH_DRIVEN = 15,
 
   VIDEO_SOURCE_UNKNOWN = 100
 };
@@ -194,19 +191,6 @@ enum RAW_AUDIO_FRAME_OP_MODE_TYPE {
    * For example, when users have their own audio-effect processing module and perform some voice pre-processing, such as a voice change.
    */
   RAW_AUDIO_FRAME_OP_MODE_READ_WRITE = 2,
-};
-
-/**
- * The mix policy of the track per connection.
- * For default, this connections mix policy is REMOTE | LOCAL(3).
- */
-enum TRACK_AUDIO_MIXED_POLICY_TYPE {
-  /** 0: All remote track that created by remote UID would be mixed.
-   */
-  TRACK_AUDIO_MIXED_LOCAL = 1 << 0,
-  /** 1: All local publish track would be mixed, microphone track, mpk track etc.
-   */
-  TRACK_AUDIO_MIXED_REMOTE = 1 << 1,
 };
 
 /**
@@ -325,10 +309,6 @@ enum MEDIA_SOURCE_TYPE {
    * 12: Video for transcoded.
    */
   TRANSCODED_VIDEO_SOURCE = 12,
-  /**
-   * 13: Video for voice drive.
-   */
-  SPEECH_DRIVEN_VIDEO_SOURCE = 13,
   /**
    * 100: Internal Usage only.
    */
@@ -597,10 +577,6 @@ enum VIDEO_PIXEL_FORMAT {
    * 17: ID3D11Texture2D, only support DXGI_FORMAT_B8G8R8A8_UNORM, DXGI_FORMAT_B8G8R8A8_TYPELESS, DXGI_FORMAT_NV12 texture format
    */
   VIDEO_TEXTURE_ID3D11TEXTURE2D = 17,
-  /**
-   * 18: I010. 10bit I420 data.
-   */
-  VIDEO_PIXEL_I010 = 18,
 };
 
 /**
@@ -678,7 +654,6 @@ struct ExternalVideoFrame {
         metadata_buffer(NULL),
         metadata_size(0),
         alphaBuffer(NULL),
-        fillAlphaBuffer(false),
         d3d11_texture_2d(NULL),
         texture_slice_index(0){}
 
@@ -797,18 +772,11 @@ struct ExternalVideoFrame {
    */
   int metadata_size;
   /**
-   *  Indicates the alpha channel of current frame, which is consistent with the dimension of the video frame.
-   *  The value range of each pixel is [0,255], where 0 represents the background; 255 represents the foreground.
-   *  The default value is NULL.
-   *  @technical preview
+   *  Indicates the output data of the portrait segmentation algorithm, which is consistent with the size of the video frame.
+   *  The value range of each pixel is [0,255], where 0 represents the background; 255 represents the foreground (portrait).
+   *  The default value is NULL
    */
   uint8_t* alphaBuffer;
-  /**
-   *  Extract alphaBuffer from bgra or rgba data. Set it true if you do not explicitly specify the alphabuffer.
-   *  The default value is false
-   *  @technical preview
-   */
-  bool fillAlphaBuffer;
 
   /**
    * [Windows Texture related parameter] The pointer of ID3D11Texture2D used by the video frame.
@@ -926,10 +894,9 @@ struct VideoFrame {
    */
   float matrix[16];
   /**
-   *  Indicates the alpha channel of current frame, which is consistent with the dimension of the video frame.
-   *  The value range of each pixel is [0,255], where 0 represents the background; 255 represents the foreground.
-   *  The default value is NULL.
-   *  @technical preview
+   *  Indicates the output data of the portrait segmentation algorithm, which is consistent with the size of the video frame.
+   *  The value range of each pixel is [0,255], where 0 represents the background; 255 represents the foreground (portrait).
+   *  The default value is NULL
    */
   uint8_t* alphaBuffer;
   /**
@@ -1077,10 +1044,6 @@ class IAudioFrameObserverBase {
      * The number of the audio track.
      */
     int audioTrackNumber;
-    /**
-     * RTP timestamp of the first sample in the AudioFrame
-     */
-    uint32_t rtpTimestamp;
 
     AudioFrame() : type(FRAME_TYPE_PCM16),
                    samplesPerChannel(0),
@@ -1091,8 +1054,7 @@ class IAudioFrameObserverBase {
                    renderTimeMs(0),
                    avsync_type(0),
                    presentationMs(0),
-                   audioTrackNumber(0),
-                   rtpTimestamp(0) {}
+                   audioTrackNumber(0) {}
   };
 
   enum AUDIO_FRAME_POSITION {
@@ -1711,21 +1673,6 @@ struct MediaRecorderConfiguration {
   MediaRecorderConfiguration() : storagePath(NULL), containerFormat(FORMAT_MP4), streamType(STREAM_TYPE_BOTH), maxDurationMs(120000), recorderInfoUpdateInterval(0) {}
   MediaRecorderConfiguration(const char* path, MediaRecorderContainerFormat format, MediaRecorderStreamType type, int duration, int interval) : storagePath(path), containerFormat(format), streamType(type), maxDurationMs(duration), recorderInfoUpdateInterval(interval) {}
 };
-
-class IFaceInfoObserver {
-public:
-   /**
-    * Occurs when the face info is received.
-    * @param outFaceInfo The output face info.
-    * @return
-    * - true: The face info is valid.
-    * - false: The face info is invalid.
-   */
-   virtual bool onFaceInfo(const char* outFaceInfo) = 0;
-  
-   virtual ~IFaceInfoObserver() {}
-};
-
 /**
  * Information for the recording file.
  *
