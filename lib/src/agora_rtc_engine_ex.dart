@@ -669,6 +669,11 @@ abstract class RtcEngineEx implements RtcEngine {
       required RtcConnection connection});
 
   /// @nodoc
+  Future<void> setSimulcastConfigEx(
+      {required SimulcastConfig simulcastConfig,
+      required RtcConnection connection});
+
+  /// @nodoc
   Future<void> setHighPriorityUserListEx(
       {required List<int> uidList,
       required int uidNum,

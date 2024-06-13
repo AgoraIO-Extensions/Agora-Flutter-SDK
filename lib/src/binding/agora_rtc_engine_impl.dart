@@ -662,6 +662,96 @@ class RtcEngineImpl implements RtcEngine {
   }
 
   @override
+  Future<void> setFaceShapeBeautyOptions(
+      {required bool enabled,
+      required FaceShapeBeautyOptions options,
+      MediaSourceType type = MediaSourceType.primaryCameraSource}) async {
+    final apiType =
+        '${isOverrideClassName ? className : 'RtcEngine'}_setFaceShapeBeautyOptions_a862ce7';
+    final param = createParams({
+      'enabled': enabled,
+      'options': options.toJson(),
+      'type': type.value()
+    });
+    final List<Uint8List> buffers = [];
+    buffers.addAll(options.collectBufferList());
+    final callApiResult = await irisMethodChannel.invokeMethod(
+        IrisMethodCall(apiType, jsonEncode(param), buffers: buffers));
+    if (callApiResult.irisReturnCode < 0) {
+      throw AgoraRtcException(code: callApiResult.irisReturnCode);
+    }
+    final rm = callApiResult.data;
+    final result = rm['result'];
+    if (result < 0) {
+      throw AgoraRtcException(code: result);
+    }
+  }
+
+  @override
+  Future<void> setFaceShapeAreaOptions(
+      {required FaceShapeAreaOptions options,
+      MediaSourceType type = MediaSourceType.primaryCameraSource}) async {
+    final apiType =
+        '${isOverrideClassName ? className : 'RtcEngine'}_setFaceShapeAreaOptions_2e242a3';
+    final param =
+        createParams({'options': options.toJson(), 'type': type.value()});
+    final List<Uint8List> buffers = [];
+    buffers.addAll(options.collectBufferList());
+    final callApiResult = await irisMethodChannel.invokeMethod(
+        IrisMethodCall(apiType, jsonEncode(param), buffers: buffers));
+    if (callApiResult.irisReturnCode < 0) {
+      throw AgoraRtcException(code: callApiResult.irisReturnCode);
+    }
+    final rm = callApiResult.data;
+    final result = rm['result'];
+    if (result < 0) {
+      throw AgoraRtcException(code: result);
+    }
+  }
+
+  @override
+  Future<FaceShapeBeautyOptions> getFaceShapeBeautyOptions(
+      {MediaSourceType type = MediaSourceType.primaryCameraSource}) async {
+    final apiType =
+        '${isOverrideClassName ? className : 'RtcEngine'}_getFaceShapeBeautyOptions_8382895';
+    final param = createParams({'type': type.value()});
+    final callApiResult = await irisMethodChannel.invokeMethod(
+        IrisMethodCall(apiType, jsonEncode(param), buffers: null));
+    if (callApiResult.irisReturnCode < 0) {
+      throw AgoraRtcException(code: callApiResult.irisReturnCode);
+    }
+    final rm = callApiResult.data;
+    final result = rm['result'];
+    if (result < 0) {
+      throw AgoraRtcException(code: result);
+    }
+    final getFaceShapeBeautyOptionsJson =
+        RtcEngineGetFaceShapeBeautyOptionsJson.fromJson(rm);
+    return getFaceShapeBeautyOptionsJson.options;
+  }
+
+  @override
+  Future<FaceShapeAreaOptions> getFaceShapeAreaOptions(
+      {MediaSourceType type = MediaSourceType.primaryCameraSource}) async {
+    final apiType =
+        '${isOverrideClassName ? className : 'RtcEngine'}_getFaceShapeAreaOptions_f7106b5';
+    final param = createParams({'type': type.value()});
+    final callApiResult = await irisMethodChannel.invokeMethod(
+        IrisMethodCall(apiType, jsonEncode(param), buffers: null));
+    if (callApiResult.irisReturnCode < 0) {
+      throw AgoraRtcException(code: callApiResult.irisReturnCode);
+    }
+    final rm = callApiResult.data;
+    final result = rm['result'];
+    if (result < 0) {
+      throw AgoraRtcException(code: result);
+    }
+    final getFaceShapeAreaOptionsJson =
+        RtcEngineGetFaceShapeAreaOptionsJson.fromJson(rm);
+    return getFaceShapeAreaOptionsJson.options;
+  }
+
+  @override
   Future<void> setLowlightEnhanceOptions(
       {required bool enabled,
       required LowlightEnhanceOptions options,
@@ -2274,6 +2364,24 @@ class RtcEngineImpl implements RtcEngine {
   }
 
   @override
+  Future<void> enableVoiceAITuner(
+      {required bool enabled, required VoiceAiTunerType type}) async {
+    final apiType =
+        '${isOverrideClassName ? className : 'RtcEngine'}_enableVoiceAITuner_28f5d5b';
+    final param = createParams({'enabled': enabled, 'type': type.value()});
+    final callApiResult = await irisMethodChannel.invokeMethod(
+        IrisMethodCall(apiType, jsonEncode(param), buffers: null));
+    if (callApiResult.irisReturnCode < 0) {
+      throw AgoraRtcException(code: callApiResult.irisReturnCode);
+    }
+    final rm = callApiResult.data;
+    final result = rm['result'];
+    if (result < 0) {
+      throw AgoraRtcException(code: result);
+    }
+  }
+
+  @override
   Future<void> setLogFile(String filePath) async {
     final apiType =
         '${isOverrideClassName ? className : 'RtcEngine'}_setLogFile_3a2037f';
@@ -2474,6 +2582,25 @@ class RtcEngineImpl implements RtcEngine {
     if (streamConfig != null) {
       buffers.addAll(streamConfig.collectBufferList());
     }
+    final callApiResult = await irisMethodChannel.invokeMethod(
+        IrisMethodCall(apiType, jsonEncode(param), buffers: buffers));
+    if (callApiResult.irisReturnCode < 0) {
+      throw AgoraRtcException(code: callApiResult.irisReturnCode);
+    }
+    final rm = callApiResult.data;
+    final result = rm['result'];
+    if (result < 0) {
+      throw AgoraRtcException(code: result);
+    }
+  }
+
+  @override
+  Future<void> setSimulcastConfig(SimulcastConfig simulcastConfig) async {
+    final apiType =
+        '${isOverrideClassName ? className : 'RtcEngine'}_setSimulcastConfig_3dcdfd7';
+    final param = createParams({'simulcastConfig': simulcastConfig.toJson()});
+    final List<Uint8List> buffers = [];
+    buffers.addAll(simulcastConfig.collectBufferList());
     final callApiResult = await irisMethodChannel.invokeMethod(
         IrisMethodCall(apiType, jsonEncode(param), buffers: buffers));
     if (callApiResult.irisReturnCode < 0) {
@@ -4184,40 +4311,6 @@ class RtcEngineImpl implements RtcEngine {
         '${isOverrideClassName ? className : 'RtcEngine'}_setRemoteUserPriority_f34115b';
     final param =
         createParams({'uid': uid, 'userPriority': userPriority.value()});
-    final callApiResult = await irisMethodChannel.invokeMethod(
-        IrisMethodCall(apiType, jsonEncode(param), buffers: null));
-    if (callApiResult.irisReturnCode < 0) {
-      throw AgoraRtcException(code: callApiResult.irisReturnCode);
-    }
-    final rm = callApiResult.data;
-    final result = rm['result'];
-    if (result < 0) {
-      throw AgoraRtcException(code: result);
-    }
-  }
-
-  @override
-  Future<void> setEncryptionMode(String encryptionMode) async {
-    final apiType =
-        '${isOverrideClassName ? className : 'RtcEngine'}_setEncryptionMode_3a2037f';
-    final param = createParams({'encryptionMode': encryptionMode});
-    final callApiResult = await irisMethodChannel.invokeMethod(
-        IrisMethodCall(apiType, jsonEncode(param), buffers: null));
-    if (callApiResult.irisReturnCode < 0) {
-      throw AgoraRtcException(code: callApiResult.irisReturnCode);
-    }
-    final rm = callApiResult.data;
-    final result = rm['result'];
-    if (result < 0) {
-      throw AgoraRtcException(code: result);
-    }
-  }
-
-  @override
-  Future<void> setEncryptionSecret(String secret) async {
-    final apiType =
-        '${isOverrideClassName ? className : 'RtcEngine'}_setEncryptionSecret_3a2037f';
-    final param = createParams({'secret': secret});
     final callApiResult = await irisMethodChannel.invokeMethod(
         IrisMethodCall(apiType, jsonEncode(param), buffers: null));
     if (callApiResult.irisReturnCode < 0) {

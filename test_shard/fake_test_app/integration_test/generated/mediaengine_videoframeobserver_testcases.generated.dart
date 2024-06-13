@@ -44,6 +44,42 @@ void generatedTestCases(ValueGetter<IrisTester> irisTester) {
         VideoSourceType sourceType = VideoSourceType.videoSourceCameraPrimary;
         VideoPixelFormat videoFrameType = VideoPixelFormat.videoPixelDefault;
         VideoFrameMetaInfo? videoFrameMetaInfo = null;
+        int hdr10MetadataInfoRedPrimaryX = 5;
+        int hdr10MetadataInfoRedPrimaryY = 5;
+        int hdr10MetadataInfoGreenPrimaryX = 5;
+        int hdr10MetadataInfoGreenPrimaryY = 5;
+        int hdr10MetadataInfoBluePrimaryX = 5;
+        int hdr10MetadataInfoBluePrimaryY = 5;
+        int hdr10MetadataInfoWhitePointX = 5;
+        int hdr10MetadataInfoWhitePointY = 5;
+        int hdr10MetadataInfoMaxMasteringLuminance = 5;
+        int hdr10MetadataInfoMinMasteringLuminance = 5;
+        int hdr10MetadataInfoMaxContentLightLevel = 5;
+        int hdr10MetadataInfoMaxFrameAverageLightLevel = 5;
+        Hdr10MetadataInfo videoFrameHdr10MetadataInfo = Hdr10MetadataInfo(
+          redPrimaryX: hdr10MetadataInfoRedPrimaryX,
+          redPrimaryY: hdr10MetadataInfoRedPrimaryY,
+          greenPrimaryX: hdr10MetadataInfoGreenPrimaryX,
+          greenPrimaryY: hdr10MetadataInfoGreenPrimaryY,
+          bluePrimaryX: hdr10MetadataInfoBluePrimaryX,
+          bluePrimaryY: hdr10MetadataInfoBluePrimaryY,
+          whitePointX: hdr10MetadataInfoWhitePointX,
+          whitePointY: hdr10MetadataInfoWhitePointY,
+          maxMasteringLuminance: hdr10MetadataInfoMaxMasteringLuminance,
+          minMasteringLuminance: hdr10MetadataInfoMinMasteringLuminance,
+          maxContentLightLevel: hdr10MetadataInfoMaxContentLightLevel,
+          maxFrameAverageLightLevel: hdr10MetadataInfoMaxFrameAverageLightLevel,
+        );
+        PrimaryID colorSpacePrimaries = PrimaryID.primaryidBt709;
+        TransferID colorSpaceTransfer = TransferID.transferidBt709;
+        MatrixID colorSpaceMatrix = MatrixID.matrixidRgb;
+        RangeID colorSpaceRange = RangeID.rangeidInvalid;
+        ColorSpace videoFrameColorSpace = ColorSpace(
+          primaries: colorSpacePrimaries,
+          transfer: colorSpaceTransfer,
+          matrix: colorSpaceMatrix,
+          range: colorSpaceRange,
+        );
         int videoFrameWidth = 5;
         int videoFrameHeight = 5;
         int videoFrameYStride = 5;
@@ -61,6 +97,7 @@ void generatedTestCases(ValueGetter<IrisTester> irisTester) {
         int videoFrameTextureId = 5;
         List<double> videoFrameMatrix = List.filled(5, 5.0);
         Uint8List videoFrameAlphaBuffer = Uint8List.fromList([1, 1, 1, 1, 1]);
+        int videoFrameAlphaStitchMode = 5;
         Uint8List videoFramePixelBuffer = Uint8List.fromList([1, 1, 1, 1, 1]);
         VideoFrame videoFrame = VideoFrame(
           type: videoFrameType,
@@ -80,8 +117,11 @@ void generatedTestCases(ValueGetter<IrisTester> irisTester) {
           textureId: videoFrameTextureId,
           matrix: videoFrameMatrix,
           alphaBuffer: videoFrameAlphaBuffer,
+          alphaStitchMode: videoFrameAlphaStitchMode,
           pixelBuffer: videoFramePixelBuffer,
           metaInfo: videoFrameMetaInfo,
+          hdr10MetadataInfo: videoFrameHdr10MetadataInfo,
+          colorSpace: videoFrameColorSpace,
         );
 
         final eventJson = {
@@ -150,6 +190,42 @@ void generatedTestCases(ValueGetter<IrisTester> irisTester) {
         VideoSourceType sourceType = VideoSourceType.videoSourceCameraPrimary;
         VideoPixelFormat videoFrameType = VideoPixelFormat.videoPixelDefault;
         VideoFrameMetaInfo? videoFrameMetaInfo = null;
+        int hdr10MetadataInfoRedPrimaryX = 5;
+        int hdr10MetadataInfoRedPrimaryY = 5;
+        int hdr10MetadataInfoGreenPrimaryX = 5;
+        int hdr10MetadataInfoGreenPrimaryY = 5;
+        int hdr10MetadataInfoBluePrimaryX = 5;
+        int hdr10MetadataInfoBluePrimaryY = 5;
+        int hdr10MetadataInfoWhitePointX = 5;
+        int hdr10MetadataInfoWhitePointY = 5;
+        int hdr10MetadataInfoMaxMasteringLuminance = 5;
+        int hdr10MetadataInfoMinMasteringLuminance = 5;
+        int hdr10MetadataInfoMaxContentLightLevel = 5;
+        int hdr10MetadataInfoMaxFrameAverageLightLevel = 5;
+        Hdr10MetadataInfo videoFrameHdr10MetadataInfo = Hdr10MetadataInfo(
+          redPrimaryX: hdr10MetadataInfoRedPrimaryX,
+          redPrimaryY: hdr10MetadataInfoRedPrimaryY,
+          greenPrimaryX: hdr10MetadataInfoGreenPrimaryX,
+          greenPrimaryY: hdr10MetadataInfoGreenPrimaryY,
+          bluePrimaryX: hdr10MetadataInfoBluePrimaryX,
+          bluePrimaryY: hdr10MetadataInfoBluePrimaryY,
+          whitePointX: hdr10MetadataInfoWhitePointX,
+          whitePointY: hdr10MetadataInfoWhitePointY,
+          maxMasteringLuminance: hdr10MetadataInfoMaxMasteringLuminance,
+          minMasteringLuminance: hdr10MetadataInfoMinMasteringLuminance,
+          maxContentLightLevel: hdr10MetadataInfoMaxContentLightLevel,
+          maxFrameAverageLightLevel: hdr10MetadataInfoMaxFrameAverageLightLevel,
+        );
+        PrimaryID colorSpacePrimaries = PrimaryID.primaryidBt709;
+        TransferID colorSpaceTransfer = TransferID.transferidBt709;
+        MatrixID colorSpaceMatrix = MatrixID.matrixidRgb;
+        RangeID colorSpaceRange = RangeID.rangeidInvalid;
+        ColorSpace videoFrameColorSpace = ColorSpace(
+          primaries: colorSpacePrimaries,
+          transfer: colorSpaceTransfer,
+          matrix: colorSpaceMatrix,
+          range: colorSpaceRange,
+        );
         int videoFrameWidth = 5;
         int videoFrameHeight = 5;
         int videoFrameYStride = 5;
@@ -167,6 +243,7 @@ void generatedTestCases(ValueGetter<IrisTester> irisTester) {
         int videoFrameTextureId = 5;
         List<double> videoFrameMatrix = List.filled(5, 5.0);
         Uint8List videoFrameAlphaBuffer = Uint8List.fromList([1, 1, 1, 1, 1]);
+        int videoFrameAlphaStitchMode = 5;
         Uint8List videoFramePixelBuffer = Uint8List.fromList([1, 1, 1, 1, 1]);
         VideoFrame videoFrame = VideoFrame(
           type: videoFrameType,
@@ -186,8 +263,11 @@ void generatedTestCases(ValueGetter<IrisTester> irisTester) {
           textureId: videoFrameTextureId,
           matrix: videoFrameMatrix,
           alphaBuffer: videoFrameAlphaBuffer,
+          alphaStitchMode: videoFrameAlphaStitchMode,
           pixelBuffer: videoFramePixelBuffer,
           metaInfo: videoFrameMetaInfo,
+          hdr10MetadataInfo: videoFrameHdr10MetadataInfo,
+          colorSpace: videoFrameColorSpace,
         );
 
         final eventJson = {
@@ -254,6 +334,42 @@ void generatedTestCases(ValueGetter<IrisTester> irisTester) {
       {
         VideoPixelFormat videoFrameType = VideoPixelFormat.videoPixelDefault;
         VideoFrameMetaInfo? videoFrameMetaInfo = null;
+        int hdr10MetadataInfoRedPrimaryX = 5;
+        int hdr10MetadataInfoRedPrimaryY = 5;
+        int hdr10MetadataInfoGreenPrimaryX = 5;
+        int hdr10MetadataInfoGreenPrimaryY = 5;
+        int hdr10MetadataInfoBluePrimaryX = 5;
+        int hdr10MetadataInfoBluePrimaryY = 5;
+        int hdr10MetadataInfoWhitePointX = 5;
+        int hdr10MetadataInfoWhitePointY = 5;
+        int hdr10MetadataInfoMaxMasteringLuminance = 5;
+        int hdr10MetadataInfoMinMasteringLuminance = 5;
+        int hdr10MetadataInfoMaxContentLightLevel = 5;
+        int hdr10MetadataInfoMaxFrameAverageLightLevel = 5;
+        Hdr10MetadataInfo videoFrameHdr10MetadataInfo = Hdr10MetadataInfo(
+          redPrimaryX: hdr10MetadataInfoRedPrimaryX,
+          redPrimaryY: hdr10MetadataInfoRedPrimaryY,
+          greenPrimaryX: hdr10MetadataInfoGreenPrimaryX,
+          greenPrimaryY: hdr10MetadataInfoGreenPrimaryY,
+          bluePrimaryX: hdr10MetadataInfoBluePrimaryX,
+          bluePrimaryY: hdr10MetadataInfoBluePrimaryY,
+          whitePointX: hdr10MetadataInfoWhitePointX,
+          whitePointY: hdr10MetadataInfoWhitePointY,
+          maxMasteringLuminance: hdr10MetadataInfoMaxMasteringLuminance,
+          minMasteringLuminance: hdr10MetadataInfoMinMasteringLuminance,
+          maxContentLightLevel: hdr10MetadataInfoMaxContentLightLevel,
+          maxFrameAverageLightLevel: hdr10MetadataInfoMaxFrameAverageLightLevel,
+        );
+        PrimaryID colorSpacePrimaries = PrimaryID.primaryidBt709;
+        TransferID colorSpaceTransfer = TransferID.transferidBt709;
+        MatrixID colorSpaceMatrix = MatrixID.matrixidRgb;
+        RangeID colorSpaceRange = RangeID.rangeidInvalid;
+        ColorSpace videoFrameColorSpace = ColorSpace(
+          primaries: colorSpacePrimaries,
+          transfer: colorSpaceTransfer,
+          matrix: colorSpaceMatrix,
+          range: colorSpaceRange,
+        );
         int videoFrameWidth = 5;
         int videoFrameHeight = 5;
         int videoFrameYStride = 5;
@@ -271,6 +387,7 @@ void generatedTestCases(ValueGetter<IrisTester> irisTester) {
         int videoFrameTextureId = 5;
         List<double> videoFrameMatrix = List.filled(5, 5.0);
         Uint8List videoFrameAlphaBuffer = Uint8List.fromList([1, 1, 1, 1, 1]);
+        int videoFrameAlphaStitchMode = 5;
         Uint8List videoFramePixelBuffer = Uint8List.fromList([1, 1, 1, 1, 1]);
         VideoFrame videoFrame = VideoFrame(
           type: videoFrameType,
@@ -290,8 +407,11 @@ void generatedTestCases(ValueGetter<IrisTester> irisTester) {
           textureId: videoFrameTextureId,
           matrix: videoFrameMatrix,
           alphaBuffer: videoFrameAlphaBuffer,
+          alphaStitchMode: videoFrameAlphaStitchMode,
           pixelBuffer: videoFramePixelBuffer,
           metaInfo: videoFrameMetaInfo,
+          hdr10MetadataInfo: videoFrameHdr10MetadataInfo,
+          colorSpace: videoFrameColorSpace,
         );
         int mediaPlayerId = 5;
 
@@ -362,6 +482,42 @@ void generatedTestCases(ValueGetter<IrisTester> irisTester) {
         int remoteUid = 5;
         VideoPixelFormat videoFrameType = VideoPixelFormat.videoPixelDefault;
         VideoFrameMetaInfo? videoFrameMetaInfo = null;
+        int hdr10MetadataInfoRedPrimaryX = 5;
+        int hdr10MetadataInfoRedPrimaryY = 5;
+        int hdr10MetadataInfoGreenPrimaryX = 5;
+        int hdr10MetadataInfoGreenPrimaryY = 5;
+        int hdr10MetadataInfoBluePrimaryX = 5;
+        int hdr10MetadataInfoBluePrimaryY = 5;
+        int hdr10MetadataInfoWhitePointX = 5;
+        int hdr10MetadataInfoWhitePointY = 5;
+        int hdr10MetadataInfoMaxMasteringLuminance = 5;
+        int hdr10MetadataInfoMinMasteringLuminance = 5;
+        int hdr10MetadataInfoMaxContentLightLevel = 5;
+        int hdr10MetadataInfoMaxFrameAverageLightLevel = 5;
+        Hdr10MetadataInfo videoFrameHdr10MetadataInfo = Hdr10MetadataInfo(
+          redPrimaryX: hdr10MetadataInfoRedPrimaryX,
+          redPrimaryY: hdr10MetadataInfoRedPrimaryY,
+          greenPrimaryX: hdr10MetadataInfoGreenPrimaryX,
+          greenPrimaryY: hdr10MetadataInfoGreenPrimaryY,
+          bluePrimaryX: hdr10MetadataInfoBluePrimaryX,
+          bluePrimaryY: hdr10MetadataInfoBluePrimaryY,
+          whitePointX: hdr10MetadataInfoWhitePointX,
+          whitePointY: hdr10MetadataInfoWhitePointY,
+          maxMasteringLuminance: hdr10MetadataInfoMaxMasteringLuminance,
+          minMasteringLuminance: hdr10MetadataInfoMinMasteringLuminance,
+          maxContentLightLevel: hdr10MetadataInfoMaxContentLightLevel,
+          maxFrameAverageLightLevel: hdr10MetadataInfoMaxFrameAverageLightLevel,
+        );
+        PrimaryID colorSpacePrimaries = PrimaryID.primaryidBt709;
+        TransferID colorSpaceTransfer = TransferID.transferidBt709;
+        MatrixID colorSpaceMatrix = MatrixID.matrixidRgb;
+        RangeID colorSpaceRange = RangeID.rangeidInvalid;
+        ColorSpace videoFrameColorSpace = ColorSpace(
+          primaries: colorSpacePrimaries,
+          transfer: colorSpaceTransfer,
+          matrix: colorSpaceMatrix,
+          range: colorSpaceRange,
+        );
         int videoFrameWidth = 5;
         int videoFrameHeight = 5;
         int videoFrameYStride = 5;
@@ -379,6 +535,7 @@ void generatedTestCases(ValueGetter<IrisTester> irisTester) {
         int videoFrameTextureId = 5;
         List<double> videoFrameMatrix = List.filled(5, 5.0);
         Uint8List videoFrameAlphaBuffer = Uint8List.fromList([1, 1, 1, 1, 1]);
+        int videoFrameAlphaStitchMode = 5;
         Uint8List videoFramePixelBuffer = Uint8List.fromList([1, 1, 1, 1, 1]);
         VideoFrame videoFrame = VideoFrame(
           type: videoFrameType,
@@ -398,8 +555,11 @@ void generatedTestCases(ValueGetter<IrisTester> irisTester) {
           textureId: videoFrameTextureId,
           matrix: videoFrameMatrix,
           alphaBuffer: videoFrameAlphaBuffer,
+          alphaStitchMode: videoFrameAlphaStitchMode,
           pixelBuffer: videoFramePixelBuffer,
           metaInfo: videoFrameMetaInfo,
+          hdr10MetadataInfo: videoFrameHdr10MetadataInfo,
+          colorSpace: videoFrameColorSpace,
         );
 
         final eventJson = {
@@ -467,6 +627,42 @@ void generatedTestCases(ValueGetter<IrisTester> irisTester) {
       {
         VideoPixelFormat videoFrameType = VideoPixelFormat.videoPixelDefault;
         VideoFrameMetaInfo? videoFrameMetaInfo = null;
+        int hdr10MetadataInfoRedPrimaryX = 5;
+        int hdr10MetadataInfoRedPrimaryY = 5;
+        int hdr10MetadataInfoGreenPrimaryX = 5;
+        int hdr10MetadataInfoGreenPrimaryY = 5;
+        int hdr10MetadataInfoBluePrimaryX = 5;
+        int hdr10MetadataInfoBluePrimaryY = 5;
+        int hdr10MetadataInfoWhitePointX = 5;
+        int hdr10MetadataInfoWhitePointY = 5;
+        int hdr10MetadataInfoMaxMasteringLuminance = 5;
+        int hdr10MetadataInfoMinMasteringLuminance = 5;
+        int hdr10MetadataInfoMaxContentLightLevel = 5;
+        int hdr10MetadataInfoMaxFrameAverageLightLevel = 5;
+        Hdr10MetadataInfo videoFrameHdr10MetadataInfo = Hdr10MetadataInfo(
+          redPrimaryX: hdr10MetadataInfoRedPrimaryX,
+          redPrimaryY: hdr10MetadataInfoRedPrimaryY,
+          greenPrimaryX: hdr10MetadataInfoGreenPrimaryX,
+          greenPrimaryY: hdr10MetadataInfoGreenPrimaryY,
+          bluePrimaryX: hdr10MetadataInfoBluePrimaryX,
+          bluePrimaryY: hdr10MetadataInfoBluePrimaryY,
+          whitePointX: hdr10MetadataInfoWhitePointX,
+          whitePointY: hdr10MetadataInfoWhitePointY,
+          maxMasteringLuminance: hdr10MetadataInfoMaxMasteringLuminance,
+          minMasteringLuminance: hdr10MetadataInfoMinMasteringLuminance,
+          maxContentLightLevel: hdr10MetadataInfoMaxContentLightLevel,
+          maxFrameAverageLightLevel: hdr10MetadataInfoMaxFrameAverageLightLevel,
+        );
+        PrimaryID colorSpacePrimaries = PrimaryID.primaryidBt709;
+        TransferID colorSpaceTransfer = TransferID.transferidBt709;
+        MatrixID colorSpaceMatrix = MatrixID.matrixidRgb;
+        RangeID colorSpaceRange = RangeID.rangeidInvalid;
+        ColorSpace videoFrameColorSpace = ColorSpace(
+          primaries: colorSpacePrimaries,
+          transfer: colorSpaceTransfer,
+          matrix: colorSpaceMatrix,
+          range: colorSpaceRange,
+        );
         int videoFrameWidth = 5;
         int videoFrameHeight = 5;
         int videoFrameYStride = 5;
@@ -484,6 +680,7 @@ void generatedTestCases(ValueGetter<IrisTester> irisTester) {
         int videoFrameTextureId = 5;
         List<double> videoFrameMatrix = List.filled(5, 5.0);
         Uint8List videoFrameAlphaBuffer = Uint8List.fromList([1, 1, 1, 1, 1]);
+        int videoFrameAlphaStitchMode = 5;
         Uint8List videoFramePixelBuffer = Uint8List.fromList([1, 1, 1, 1, 1]);
         VideoFrame videoFrame = VideoFrame(
           type: videoFrameType,
@@ -503,8 +700,11 @@ void generatedTestCases(ValueGetter<IrisTester> irisTester) {
           textureId: videoFrameTextureId,
           matrix: videoFrameMatrix,
           alphaBuffer: videoFrameAlphaBuffer,
+          alphaStitchMode: videoFrameAlphaStitchMode,
           pixelBuffer: videoFramePixelBuffer,
           metaInfo: videoFrameMetaInfo,
+          hdr10MetadataInfo: videoFrameHdr10MetadataInfo,
+          colorSpace: videoFrameColorSpace,
         );
 
         final eventJson = {
