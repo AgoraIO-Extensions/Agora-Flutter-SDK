@@ -72,6 +72,7 @@ void rtcEngineExSmokeTestCases() {
         bool optionsIsInteractiveAudience = true;
         int optionsCustomVideoTrackId = 5;
         bool optionsIsAudioFilterable = true;
+        String optionsParameters = "hello";
         ChannelMediaOptions options = ChannelMediaOptions(
           publishCameraTrack: optionsPublishCameraTrack,
           publishSecondaryCameraTrack: optionsPublishSecondaryCameraTrack,
@@ -109,6 +110,7 @@ void rtcEngineExSmokeTestCases() {
           isInteractiveAudience: optionsIsInteractiveAudience,
           customVideoTrackId: optionsCustomVideoTrackId,
           isAudioFilterable: optionsIsAudioFilterable,
+          parameters: optionsParameters,
         );
         await rtcEngineEx.joinChannelEx(
           token: token,
@@ -182,6 +184,53 @@ void rtcEngineExSmokeTestCases() {
   );
 
   testWidgets(
+    'RtcEngineEx.leaveChannelWithUserAccountEx',
+    (WidgetTester tester) async {
+      String engineAppId = const String.fromEnvironment('TEST_APP_ID',
+          defaultValue: '<YOUR_APP_ID>');
+
+      RtcEngineEx rtcEngineEx = createAgoraRtcEngineEx();
+      await rtcEngineEx.initialize(RtcEngineContext(
+        appId: engineAppId,
+        areaCode: AreaCode.areaCodeGlob.value(),
+      ));
+      await rtcEngineEx.setParameters('{"rtc.enable_debug_log": true}');
+
+      try {
+        String channelId = "hello";
+        String userAccount = "hello";
+        bool optionsStopAudioMixing = true;
+        bool optionsStopAllEffect = true;
+        bool optionsStopMicrophoneRecording = true;
+        LeaveChannelOptions options = LeaveChannelOptions(
+          stopAudioMixing: optionsStopAudioMixing,
+          stopAllEffect: optionsStopAllEffect,
+          stopMicrophoneRecording: optionsStopMicrophoneRecording,
+        );
+        await rtcEngineEx.leaveChannelWithUserAccountEx(
+          channelId: channelId,
+          userAccount: userAccount,
+          options: options,
+        );
+      } catch (e) {
+        if (e is! AgoraRtcException) {
+          debugPrint(
+              '[RtcEngineEx.leaveChannelWithUserAccountEx] error: ${e.toString()}');
+          rethrow;
+        }
+
+        if (e.code != -4) {
+          // Only not supported error supported.
+          rethrow;
+        }
+      }
+
+      await rtcEngineEx.release();
+    },
+//  skip: !(),
+  );
+
+  testWidgets(
     'RtcEngineEx.updateChannelMediaOptionsEx',
     (WidgetTester tester) async {
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
@@ -235,6 +284,7 @@ void rtcEngineExSmokeTestCases() {
         bool optionsIsInteractiveAudience = true;
         int optionsCustomVideoTrackId = 5;
         bool optionsIsAudioFilterable = true;
+        String optionsParameters = "hello";
         ChannelMediaOptions options = ChannelMediaOptions(
           publishCameraTrack: optionsPublishCameraTrack,
           publishSecondaryCameraTrack: optionsPublishSecondaryCameraTrack,
@@ -272,6 +322,7 @@ void rtcEngineExSmokeTestCases() {
           isInteractiveAudience: optionsIsInteractiveAudience,
           customVideoTrackId: optionsCustomVideoTrackId,
           isAudioFilterable: optionsIsAudioFilterable,
+          parameters: optionsParameters,
         );
         String connectionChannelId = "hello";
         int connectionLocalUid = 5;
@@ -331,10 +382,12 @@ void rtcEngineExSmokeTestCases() {
         EncodingPreference advanceOptionsEncodingPreference =
             EncodingPreference.preferAuto;
         CompressionPreference advanceOptionsCompressionPreference =
-            CompressionPreference.preferLowLatency;
+            CompressionPreference.preferCompressionAuto;
+        bool advanceOptionsEncodeAlpha = true;
         AdvanceOptions configAdvanceOptions = AdvanceOptions(
           encodingPreference: advanceOptionsEncodingPreference,
           compressionPreference: advanceOptionsCompressionPreference,
+          encodeAlpha: advanceOptionsEncodeAlpha,
         );
         int configFrameRate = 5;
         int configBitrate = 5;
@@ -2107,6 +2160,52 @@ void rtcEngineExSmokeTestCases() {
   );
 
   testWidgets(
+    'RtcEngineEx.setSimulcastConfigEx',
+    (WidgetTester tester) async {
+      String engineAppId = const String.fromEnvironment('TEST_APP_ID',
+          defaultValue: '<YOUR_APP_ID>');
+
+      RtcEngineEx rtcEngineEx = createAgoraRtcEngineEx();
+      await rtcEngineEx.initialize(RtcEngineContext(
+        appId: engineAppId,
+        areaCode: AreaCode.areaCodeGlob.value(),
+      ));
+      await rtcEngineEx.setParameters('{"rtc.enable_debug_log": true}');
+
+      try {
+        List<StreamLayerConfig> simulcastConfigConfigs = [];
+        SimulcastConfig simulcastConfig = SimulcastConfig(
+          configs: simulcastConfigConfigs,
+        );
+        String connectionChannelId = "hello";
+        int connectionLocalUid = 5;
+        RtcConnection connection = RtcConnection(
+          channelId: connectionChannelId,
+          localUid: connectionLocalUid,
+        );
+        await rtcEngineEx.setSimulcastConfigEx(
+          simulcastConfig: simulcastConfig,
+          connection: connection,
+        );
+      } catch (e) {
+        if (e is! AgoraRtcException) {
+          debugPrint(
+              '[RtcEngineEx.setSimulcastConfigEx] error: ${e.toString()}');
+          rethrow;
+        }
+
+        if (e.code != -4) {
+          // Only not supported error supported.
+          rethrow;
+        }
+      }
+
+      await rtcEngineEx.release();
+    },
+//  skip: !(),
+  );
+
+  testWidgets(
     'RtcEngineEx.takeSnapshotEx',
     (WidgetTester tester) async {
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
@@ -2358,6 +2457,57 @@ void rtcEngineExSmokeTestCases() {
         if (e is! AgoraRtcException) {
           debugPrint(
               '[RtcEngineEx.sendAudioMetadataEx] error: ${e.toString()}');
+          rethrow;
+        }
+
+        if (e.code != -4) {
+          // Only not supported error supported.
+          rethrow;
+        }
+      }
+
+      await rtcEngineEx.release();
+    },
+//  skip: !(),
+  );
+
+  testWidgets(
+    'RtcEngineEx.takeSnapshotWithConfigEx',
+    (WidgetTester tester) async {
+      String engineAppId = const String.fromEnvironment('TEST_APP_ID',
+          defaultValue: '<YOUR_APP_ID>');
+
+      RtcEngineEx rtcEngineEx = createAgoraRtcEngineEx();
+      await rtcEngineEx.initialize(RtcEngineContext(
+        appId: engineAppId,
+        areaCode: AreaCode.areaCodeGlob.value(),
+      ));
+      await rtcEngineEx.setParameters('{"rtc.enable_debug_log": true}');
+
+      try {
+        String connectionChannelId = "hello";
+        int connectionLocalUid = 5;
+        RtcConnection connection = RtcConnection(
+          channelId: connectionChannelId,
+          localUid: connectionLocalUid,
+        );
+        int uid = 5;
+        VideoModulePosition configPosition =
+            VideoModulePosition.positionPostCapturer;
+        String configFilePath = "hello";
+        SnapshotConfig config = SnapshotConfig(
+          filePath: configFilePath,
+          position: configPosition,
+        );
+        await rtcEngineEx.takeSnapshotWithConfigEx(
+          connection: connection,
+          uid: uid,
+          config: config,
+        );
+      } catch (e) {
+        if (e is! AgoraRtcException) {
+          debugPrint(
+              '[RtcEngineEx.takeSnapshotWithConfigEx] error: ${e.toString()}');
           rethrow;
         }
 

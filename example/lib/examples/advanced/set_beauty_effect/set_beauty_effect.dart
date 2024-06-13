@@ -85,23 +85,23 @@ class _State extends State<SetBeautyEffect> with KeepRemoteVideoViewsMixin {
           isJoined = false;
         });
       },
-      onExtensionError:
-          (String provider, String extName, int error, String msg) {
+      onExtensionErrorWithContext:
+          (ExtensionContext context, int error, String message) {
         logSink.log(
-            '[onExtensionErrored] provider: $provider, extName: $extName, error: $error, msg: $msg');
+            '[onExtensionErrored] provider: ${context.providerName}, extName: ${context.extensionName}, error: $error, message: $message');
       },
-      onExtensionStarted: (String provider, String extName) {
-        logSink
-            .log('[onExtensionStarted] provider: $provider, extName: $extName');
+      onExtensionStartedWithContext: (ExtensionContext context) {
+        logSink.log(
+            '[onExtensionStarted] provider: ${context.providerName}, extName: ${context.extensionName}');
       },
-      onExtensionEvent:
-          (String provider, String extName, String key, String value) {
-        logSink
-            .log('[onExtensionEvent] provider: $provider, extName: $extName');
+      onExtensionEventWithContext:
+          (ExtensionContext context, String key, String value) {
+        logSink.log(
+            '[onExtensionEvent] provider: ${context.providerName}, extName: ${context.extensionName}');
       },
-      onExtensionStopped: (String provider, String extName) {
-        logSink
-            .log('[onExtensionStopped] provider: $provider, extName: $extName');
+      onExtensionStoppedWithContext: (ExtensionContext context) {
+        logSink.log(
+            '[onExtensionStopped] provider: ${context.providerName}, extName: ${context.extensionName}');
       },
     ));
 

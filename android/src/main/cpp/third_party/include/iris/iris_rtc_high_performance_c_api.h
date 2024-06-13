@@ -49,6 +49,40 @@ struct IrisAudioFrame {
   uint32_t rtpTimestamp;
 };
 
+struct IrisHdr10MetadataInfo {
+  //The x coordinates of the red value in the CIE1931 color space. The values need to normalized to 50,000.
+  uint16_t redPrimaryX;
+  // The y coordinates of the red value in the CIE1931 color space. The values need to normalized to 50,000.
+  uint16_t redPrimaryY;
+  // The x coordinates of the green value in the CIE1931 color space. The values need to normalized to 50,000.
+  uint16_t greenPrimaryX;
+  // The y coordinates of the green value in the CIE1931 color space. The values need to normalized to 50,000.
+  uint16_t greenPrimaryY;
+  // The x coordinates of the blue value in the CIE1931 color space. The values need to normalized to 50,000.
+  uint16_t bluePrimaryX;
+  // The y coordinates of the blue value in the CIE1931 color space. The values need to normalized to 50,000.
+  uint16_t bluePrimaryY;
+  // The x coordinates of the white point in the CIE1931 color space.The values need to normalized to 50,000.
+  uint16_t whitePointX;
+  // The y coordinates of the white point in the CIE1931 color space.The values need to normalized to 50,000.
+  uint16_t whitePointY;
+  // The maximum number of nits of the display used to master the content. The values need to normalized to 10,000.
+  unsigned int maxMasteringLuminance;
+  // The minimum number of nits of the display used to master the content. The values need to normalized to 10,000.
+  unsigned int minMasteringLuminance;
+  // The maximum content light level (MaxCLL). This is the nit value corresponding to the brightest pixel used anywhere in the content.
+  uint16_t maxContentLightLevel;
+  // The maximum frame average light level (MaxFALL). This is the nit value corresponding to the average luminance of the frame which has the brightest average luminance anywhere in the content.
+  uint16_t maxFrameAverageLightLevel;
+};
+
+struct IrisColorSpace {
+  int primaries;
+  int transfer;
+  int matrix;
+  int range;
+};
+
 struct IrisExternalVideoFrame {
   //The buffer type: #VIDEO_BUFFER_TYPE.
   int type;
@@ -82,6 +116,11 @@ struct IrisExternalVideoFrame {
   int eglType;
   // [Texture related parameter] Incoming 4 &times; 4 transformational matrix. The typical value is a unit matrix.
   int textureId;
+  /**
+   * [Texture related parameter] The fence object related to the textureId parameter, indicating the synchronization status of the video data in Texture format.
+   * The default value is 0
+   */
+  long long fence_object;
   // [Texture related parameter] Incoming 4 &times; 4 transformational matrix. The typical value is a unit matrix.
   float matrix[16];
   // [Texture related parameter] The MetaData buffer. The default value is NULL
@@ -92,10 +131,24 @@ struct IrisExternalVideoFrame {
   uint8_t *alphaBuffer;
   //  Extract alphaBuffer from bgra or rgba data. Set it true if you do not explicitly specify the alphabuffer.
   bool fillAlphaBuffer;
+  /**
+   *  The relative position between alphabuffer and the frame.
+   *  0: Normal frame;
+   *  1: Alphabuffer is above the frame;
+   *  2: Alphabuffer is below the frame;
+   *  3: Alphabuffer is on the left of frame;
+   *  4: Alphabuffer is on the right of frame;
+   *  The default value is 0.
+   */
+  int alphaStitchMode;
   //[For Windows only] The pointer of ID3D11Texture2D used by the video frame.
   void *d3d11_texture_2d;
   // [For Windows only] The index of ID3D11Texture2D array used by the video frame.
   int texture_slice_index;
+  // metadata info used for hdr video data
+  IrisHdr10MetadataInfo hdr10MetadataInfo;
+  // The ColorSpace of the video frame.
+  IrisColorSpace colorSpace;
 };
 
 struct IrisEncodedVideoFrameInfo {
@@ -126,86 +179,82 @@ struct IrisEncodedVideoFrameInfo {
 };
 
 IRIS_API int IRIS_CALL ILocalSpatialAudioEngine_SetMaxAudioRecvCount(
-    IrisApiEnginePtr enginePtr, int maxCount);
+    IrisHandle enginePtr, int maxCount);
 
-IRIS_API int IRIS_CALL ILocalSpatialAudioEngine_SetAudioRecvRange(
-    IrisApiEnginePtr enginePtr, float range);
+IRIS_API int IRIS_CALL
+ILocalSpatialAudioEngine_SetAudioRecvRange(IrisHandle enginePtr, float range);
 
-IRIS_API int IRIS_CALL ILocalSpatialAudioEngine_SetDistanceUnit(
-    IrisApiEnginePtr enginePtr, float unit);
+IRIS_API int IRIS_CALL
+ILocalSpatialAudioEngine_SetDistanceUnit(IrisHandle enginePtr, float unit);
 
 IRIS_API int IRIS_CALL ILocalSpatialAudioEngine_UpdateSelfPosition(
-    IrisApiEnginePtr enginePtr, float positionX, float positionY,
-    float positionZ, float axisForwardX, float axisForwardY, float axisForwardZ,
+    IrisHandle enginePtr, float positionX, float positionY, float positionZ,
+    float axisForwardX, float axisForwardY, float axisForwardZ,
     float axisRightX, float axisRightY, float axisRightZ, float axisUpX,
     float axisUpY, float axisUpZ);
 
 IRIS_API int IRIS_CALL ILocalSpatialAudioEngine_UpdateSelfPositionEx(
-    IrisApiEnginePtr enginePtr, float positionX, float positionY,
-    float positionZ, float axisForwardX, float axisForwardY, float axisForwardZ,
+    IrisHandle enginePtr, float positionX, float positionY, float positionZ,
+    float axisForwardX, float axisForwardY, float axisForwardZ,
     float axisRightX, float axisRightY, float axisRightZ, float axisUpX,
     float axisUpY, float axisUpZ, char *channelId, unsigned int localUid);
 
 IRIS_API int IRIS_CALL ILocalSpatialAudioEngine_UpdatePlayerPositionInfo(
-    IrisApiEnginePtr enginePtr, int playerId, float positionX, float positionY,
+    IrisHandle enginePtr, int playerId, float positionX, float positionY,
     float positionZ, float forwardX, float forwardY, float forwardZ);
 
-IRIS_API int IRIS_CALL ILocalSpatialAudioEngine_MuteLocalAudioStream(
-    IrisApiEnginePtr enginePtr, bool mute);
+IRIS_API int IRIS_CALL
+ILocalSpatialAudioEngine_MuteLocalAudioStream(IrisHandle enginePtr, bool mute);
 
 IRIS_API int IRIS_CALL ILocalSpatialAudioEngine_MuteAllRemoteAudioStreams(
-    IrisApiEnginePtr enginePtr, bool mute);
+    IrisHandle enginePtr, bool mute);
 
 IRIS_API int IRIS_CALL ILocalSpatialAudioEngine_SetZones(
-    IrisApiEnginePtr enginePtr, IrisSpatialAudioZone *zones,
-    unsigned int zoneCount);
+    IrisHandle enginePtr, IrisSpatialAudioZone *zones, unsigned int zoneCount);
 
 IRIS_API int IRIS_CALL ILocalSpatialAudioEngine_SetPlayerAttenuation(
-    IrisApiEnginePtr enginePtr, int playerId, double attenuation,
-    bool forceSet);
+    IrisHandle enginePtr, int playerId, double attenuation, bool forceSet);
 
 IRIS_API int IRIS_CALL ILocalSpatialAudioEngine_MuteRemoteAudioStream(
-    IrisApiEnginePtr enginePtr, unsigned int uid, bool mute);
+    IrisHandle enginePtr, unsigned int uid, bool mute);
 
 IRIS_API int IRIS_CALL ILocalSpatialAudioEngine_UpdateRemotePosition(
-    IrisApiEnginePtr enginePtr, unsigned int uid, float positionX,
-    float positionY, float positionZ, float forwardX, float forwardY,
-    float forwardZ);
+    IrisHandle enginePtr, unsigned int uid, float positionX, float positionY,
+    float positionZ, float forwardX, float forwardY, float forwardZ);
 
 IRIS_API int IRIS_CALL ILocalSpatialAudioEngine_UpdateRemotePositionEx(
-    IrisApiEnginePtr enginePtr, unsigned int uid, float positionX,
-    float positionY, float positionZ, float forwardX, float forwardY,
-    float forwardZ, char *channelId, unsigned int localUid);
+    IrisHandle enginePtr, unsigned int uid, float positionX, float positionY,
+    float positionZ, float forwardX, float forwardY, float forwardZ,
+    char *channelId, unsigned int localUid);
 
 IRIS_API int IRIS_CALL ILocalSpatialAudioEngine_RemoveRemotePosition(
-    IrisApiEnginePtr enginePtr, unsigned int uid);
+    IrisHandle enginePtr, unsigned int uid);
 
 IRIS_API int IRIS_CALL ILocalSpatialAudioEngine_RemoveRemotePositionEx(
-    IrisApiEnginePtr enginePtr, unsigned int uid, char *channelId,
+    IrisHandle enginePtr, unsigned int uid, char *channelId,
     unsigned int localUid);
 
 IRIS_API int IRIS_CALL
-ILocalSpatialAudioEngine_ClearRemotePositions(IrisApiEnginePtr enginePtr);
+ILocalSpatialAudioEngine_ClearRemotePositions(IrisHandle enginePtr);
 
 IRIS_API int IRIS_CALL ILocalSpatialAudioEngine_ClearRemotePositionsEx(
-    IrisApiEnginePtr enginePtr, char *channelId, unsigned int localUid);
+    IrisHandle enginePtr, char *channelId, unsigned int localUid);
 
 IRIS_API int IRIS_CALL ILocalSpatialAudioEngine_SetRemoteAudioAttenuation(
-    IrisApiEnginePtr enginePtr, unsigned int uid, double attenuation,
-    bool forceSet);
+    IrisHandle enginePtr, unsigned int uid, double attenuation, bool forceSet);
 
-IRIS_API int IRIS_CALL IMediaEngine_PushAudioFrame(IrisApiEnginePtr enginePtr,
+IRIS_API int IRIS_CALL IMediaEngine_PushAudioFrame(IrisHandle enginePtr,
                                                    IrisAudioFrame *frame,
                                                    unsigned int trackId);
 
-IRIS_API int IRIS_CALL IMediaEngine_PullAudioFrame(IrisApiEnginePtr enginePtr,
+IRIS_API int IRIS_CALL IMediaEngine_PullAudioFrame(IrisHandle enginePtr,
                                                    IrisAudioFrame *frame);
 
-IRIS_API int IRIS_CALL IMediaEngine_PushVideoFrame(
-    IrisApiEnginePtr enginePtr, IrisExternalVideoFrame *frame,
-    unsigned int videoTrackId);
+IRIS_API int IRIS_CALL
+IMediaEngine_PushVideoFrame(IrisHandle enginePtr, IrisExternalVideoFrame *frame,
+                            unsigned int videoTrackId);
 
 IRIS_API int IRIS_CALL IMediaEngine_PushEncodedVideoImage(
-    IrisApiEnginePtr enginePtr, const unsigned char *imageBuffer,
+    IrisHandle enginePtr, const unsigned char *imageBuffer,
     unsigned long long length, IrisEncodedVideoFrameInfo &videoEncodedFrameInfo,
     unsigned int videoTrackId);
