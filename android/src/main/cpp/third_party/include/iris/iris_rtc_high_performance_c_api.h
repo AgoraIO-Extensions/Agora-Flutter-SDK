@@ -49,6 +49,40 @@ struct IrisAudioFrame {
   uint32_t rtpTimestamp;
 };
 
+struct IrisHdr10MetadataInfo {
+  //The x coordinates of the red value in the CIE1931 color space. The values need to normalized to 50,000.
+  uint16_t redPrimaryX;
+  // The y coordinates of the red value in the CIE1931 color space. The values need to normalized to 50,000.
+  uint16_t redPrimaryY;
+  // The x coordinates of the green value in the CIE1931 color space. The values need to normalized to 50,000.
+  uint16_t greenPrimaryX;
+  // The y coordinates of the green value in the CIE1931 color space. The values need to normalized to 50,000.
+  uint16_t greenPrimaryY;
+  // The x coordinates of the blue value in the CIE1931 color space. The values need to normalized to 50,000.
+  uint16_t bluePrimaryX;
+  // The y coordinates of the blue value in the CIE1931 color space. The values need to normalized to 50,000.
+  uint16_t bluePrimaryY;
+  // The x coordinates of the white point in the CIE1931 color space.The values need to normalized to 50,000.
+  uint16_t whitePointX;
+  // The y coordinates of the white point in the CIE1931 color space.The values need to normalized to 50,000.
+  uint16_t whitePointY;
+  // The maximum number of nits of the display used to master the content. The values need to normalized to 10,000.
+  unsigned int maxMasteringLuminance;
+  // The minimum number of nits of the display used to master the content. The values need to normalized to 10,000.
+  unsigned int minMasteringLuminance;
+  // The maximum content light level (MaxCLL). This is the nit value corresponding to the brightest pixel used anywhere in the content.
+  uint16_t maxContentLightLevel;
+  // The maximum frame average light level (MaxFALL). This is the nit value corresponding to the average luminance of the frame which has the brightest average luminance anywhere in the content.
+  uint16_t maxFrameAverageLightLevel;
+};
+
+struct IrisColorSpace {
+  int primaries;
+  int transfer;
+  int matrix;
+  int range;
+};
+
 struct IrisExternalVideoFrame {
   //The buffer type: #VIDEO_BUFFER_TYPE.
   int type;
@@ -82,6 +116,11 @@ struct IrisExternalVideoFrame {
   int eglType;
   // [Texture related parameter] Incoming 4 &times; 4 transformational matrix. The typical value is a unit matrix.
   int textureId;
+  /**
+   * [Texture related parameter] The fence object related to the textureId parameter, indicating the synchronization status of the video data in Texture format.
+   * The default value is 0
+   */
+  long long fence_object;
   // [Texture related parameter] Incoming 4 &times; 4 transformational matrix. The typical value is a unit matrix.
   float matrix[16];
   // [Texture related parameter] The MetaData buffer. The default value is NULL
@@ -92,10 +131,24 @@ struct IrisExternalVideoFrame {
   uint8_t *alphaBuffer;
   //  Extract alphaBuffer from bgra or rgba data. Set it true if you do not explicitly specify the alphabuffer.
   bool fillAlphaBuffer;
+  /**
+   *  The relative position between alphabuffer and the frame.
+   *  0: Normal frame;
+   *  1: Alphabuffer is above the frame;
+   *  2: Alphabuffer is below the frame;
+   *  3: Alphabuffer is on the left of frame;
+   *  4: Alphabuffer is on the right of frame;
+   *  The default value is 0.
+   */
+  int alphaStitchMode;
   //[For Windows only] The pointer of ID3D11Texture2D used by the video frame.
   void *d3d11_texture_2d;
   // [For Windows only] The index of ID3D11Texture2D array used by the video frame.
   int texture_slice_index;
+  // metadata info used for hdr video data
+  IrisHdr10MetadataInfo hdr10MetadataInfo;
+  // The ColorSpace of the video frame.
+  IrisColorSpace colorSpace;
 };
 
 struct IrisEncodedVideoFrameInfo {

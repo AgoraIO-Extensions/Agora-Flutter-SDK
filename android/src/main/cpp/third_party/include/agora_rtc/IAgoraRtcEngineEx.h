@@ -1879,6 +1879,24 @@ public:
     virtual int setDualStreamModeEx(SIMULCAST_STREAM_MODE mode,
                                    const SimulcastStreamConfig& streamConfig,
                                    const RtcConnection& connection) = 0;
+
+    /**
+     * Set the multi-layer video stream configuration.
+     *
+     * If multi-layer is configed, the subscriber can choose to receive the coresponding layer
+     * of video stream using {@link setRemoteVideoStreamType setRemoteVideoStreamType}.
+     *
+     * @param simulcastConfig
+     * - The configuration for multi-layer video stream. It includes seven layers, ranging from
+     *   STREAM_LAYER_1 to STREAM_LOW. A maximum of 3 layers can be enabled simultaneously.
+     * @param connection The RtcConnection object.
+     * @return
+     * - 0: Success.
+     * - < 0: Failure.
+     * @technical preview
+     */
+    virtual int setSimulcastConfigEx(const SimulcastConfig& simulcastConfig,
+                                     const RtcConnection& connection) = 0;
     
   /**
     * Set the high priority user list and their fallback level in weak network condition.

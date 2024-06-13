@@ -10,6 +10,37 @@ const defaultConnectionId = 0;
 /// @nodoc
 const dummyConnectionId = 4294967295;
 
+/// @nodoc
+@JsonSerializable(explicitToJson: true, includeIfNull: false)
+class ExtensionContext {
+  /// @nodoc
+  const ExtensionContext(
+      {this.isValid, this.uid, this.providerName, this.extensionName});
+
+  /// @nodoc
+  @JsonKey(name: 'isValid')
+  final bool? isValid;
+
+  /// @nodoc
+  @JsonKey(name: 'uid')
+  final int? uid;
+
+  /// @nodoc
+  @JsonKey(name: 'providerName')
+  final String? providerName;
+
+  /// @nodoc
+  @JsonKey(name: 'extensionName')
+  final String? extensionName;
+
+  /// @nodoc
+  factory ExtensionContext.fromJson(Map<String, dynamic> json) =>
+      _$ExtensionContextFromJson(json);
+
+  /// @nodoc
+  Map<String, dynamic> toJson() => _$ExtensionContextToJson(this);
+}
+
 /// The type of the video source.
 @JsonEnum(alwaysCreate: true)
 enum VideoSourceType {
@@ -603,6 +634,10 @@ enum VideoPixelFormat {
   @JsonValue(14)
   videoCvpixelBgra,
 
+  /// @nodoc
+  @JsonValue(15)
+  videoCvpixelP010,
+
   /// 16: The format is I422.
   @JsonValue(16)
   videoPixelI422,
@@ -714,6 +749,366 @@ extension MetaInfoKeyExt on MetaInfoKey {
   }
 }
 
+/// @nodoc
+@JsonSerializable(explicitToJson: true, includeIfNull: false)
+class ColorSpace {
+  /// @nodoc
+  const ColorSpace({this.primaries, this.transfer, this.matrix, this.range});
+
+  /// @nodoc
+  @JsonKey(name: 'primaries')
+  final PrimaryID? primaries;
+
+  /// @nodoc
+  @JsonKey(name: 'transfer')
+  final TransferID? transfer;
+
+  /// @nodoc
+  @JsonKey(name: 'matrix')
+  final MatrixID? matrix;
+
+  /// @nodoc
+  @JsonKey(name: 'range')
+  final RangeID? range;
+
+  /// @nodoc
+  factory ColorSpace.fromJson(Map<String, dynamic> json) =>
+      _$ColorSpaceFromJson(json);
+
+  /// @nodoc
+  Map<String, dynamic> toJson() => _$ColorSpaceToJson(this);
+}
+
+/// @nodoc
+@JsonEnum(alwaysCreate: true)
+enum PrimaryID {
+  /// @nodoc
+  @JsonValue(1)
+  primaryidBt709,
+
+  /// @nodoc
+  @JsonValue(2)
+  primaryidUnspecified,
+
+  /// @nodoc
+  @JsonValue(4)
+  primaryidBt470m,
+
+  /// @nodoc
+  @JsonValue(5)
+  primaryidBt470bg,
+
+  /// @nodoc
+  @JsonValue(6)
+  primaryidSmpte170m,
+
+  /// @nodoc
+  @JsonValue(7)
+  primaryidSmpte240m,
+
+  /// @nodoc
+  @JsonValue(8)
+  primaryidFilm,
+
+  /// @nodoc
+  @JsonValue(9)
+  primaryidBt2020,
+
+  /// @nodoc
+  @JsonValue(10)
+  primaryidSmptest428,
+
+  /// @nodoc
+  @JsonValue(11)
+  primaryidSmptest431,
+
+  /// @nodoc
+  @JsonValue(12)
+  primaryidSmptest432,
+
+  /// @nodoc
+  @JsonValue(22)
+  primaryidJedecp22,
+}
+
+/// @nodoc
+extension PrimaryIDExt on PrimaryID {
+  /// @nodoc
+  static PrimaryID fromValue(int value) {
+    return $enumDecode(_$PrimaryIDEnumMap, value);
+  }
+
+  /// @nodoc
+  int value() {
+    return _$PrimaryIDEnumMap[this]!;
+  }
+}
+
+/// @nodoc
+@JsonEnum(alwaysCreate: true)
+enum RangeID {
+  /// @nodoc
+  @JsonValue(0)
+  rangeidInvalid,
+
+  /// @nodoc
+  @JsonValue(1)
+  rangeidLimited,
+
+  /// @nodoc
+  @JsonValue(2)
+  rangeidFull,
+
+  /// @nodoc
+  @JsonValue(3)
+  rangeidDerived,
+}
+
+/// @nodoc
+extension RangeIDExt on RangeID {
+  /// @nodoc
+  static RangeID fromValue(int value) {
+    return $enumDecode(_$RangeIDEnumMap, value);
+  }
+
+  /// @nodoc
+  int value() {
+    return _$RangeIDEnumMap[this]!;
+  }
+}
+
+/// @nodoc
+@JsonEnum(alwaysCreate: true)
+enum MatrixID {
+  /// @nodoc
+  @JsonValue(0)
+  matrixidRgb,
+
+  /// @nodoc
+  @JsonValue(1)
+  matrixidBt709,
+
+  /// @nodoc
+  @JsonValue(2)
+  matrixidUnspecified,
+
+  /// @nodoc
+  @JsonValue(4)
+  matrixidFcc,
+
+  /// @nodoc
+  @JsonValue(5)
+  matrixidBt470bg,
+
+  /// @nodoc
+  @JsonValue(6)
+  matrixidSmpte170m,
+
+  /// @nodoc
+  @JsonValue(7)
+  matrixidSmpte240m,
+
+  /// @nodoc
+  @JsonValue(8)
+  matrixidYcocg,
+
+  /// @nodoc
+  @JsonValue(9)
+  matrixidBt2020Ncl,
+
+  /// @nodoc
+  @JsonValue(10)
+  matrixidBt2020Cl,
+
+  /// @nodoc
+  @JsonValue(11)
+  matrixidSmpte2085,
+
+  /// @nodoc
+  @JsonValue(12)
+  matrixidCdncls,
+
+  /// @nodoc
+  @JsonValue(13)
+  matrixidCdcls,
+
+  /// @nodoc
+  @JsonValue(14)
+  matrixidBt2100Ictcp,
+}
+
+/// @nodoc
+extension MatrixIDExt on MatrixID {
+  /// @nodoc
+  static MatrixID fromValue(int value) {
+    return $enumDecode(_$MatrixIDEnumMap, value);
+  }
+
+  /// @nodoc
+  int value() {
+    return _$MatrixIDEnumMap[this]!;
+  }
+}
+
+/// @nodoc
+@JsonEnum(alwaysCreate: true)
+enum TransferID {
+  /// @nodoc
+  @JsonValue(1)
+  transferidBt709,
+
+  /// @nodoc
+  @JsonValue(2)
+  transferidUnspecified,
+
+  /// @nodoc
+  @JsonValue(4)
+  transferidGamma22,
+
+  /// @nodoc
+  @JsonValue(5)
+  transferidGamma28,
+
+  /// @nodoc
+  @JsonValue(6)
+  transferidSmpte170m,
+
+  /// @nodoc
+  @JsonValue(7)
+  transferidSmpte240m,
+
+  /// @nodoc
+  @JsonValue(8)
+  transferidLinear,
+
+  /// @nodoc
+  @JsonValue(9)
+  transferidLog,
+
+  /// @nodoc
+  @JsonValue(10)
+  transferidLogSqrt,
+
+  /// @nodoc
+  @JsonValue(11)
+  transferidIec6196624,
+
+  /// @nodoc
+  @JsonValue(12)
+  transferidBt1361Ecg,
+
+  /// @nodoc
+  @JsonValue(13)
+  transferidIec6196621,
+
+  /// @nodoc
+  @JsonValue(14)
+  transferidBt202010,
+
+  /// @nodoc
+  @JsonValue(15)
+  transferidBt202012,
+
+  /// @nodoc
+  @JsonValue(16)
+  transferidSmptest2084,
+
+  /// @nodoc
+  @JsonValue(17)
+  transferidSmptest428,
+
+  /// @nodoc
+  @JsonValue(18)
+  transferidAribStdB67,
+}
+
+/// @nodoc
+extension TransferIDExt on TransferID {
+  /// @nodoc
+  static TransferID fromValue(int value) {
+    return $enumDecode(_$TransferIDEnumMap, value);
+  }
+
+  /// @nodoc
+  int value() {
+    return _$TransferIDEnumMap[this]!;
+  }
+}
+
+/// @nodoc
+@JsonSerializable(explicitToJson: true, includeIfNull: false)
+class Hdr10MetadataInfo {
+  /// @nodoc
+  const Hdr10MetadataInfo(
+      {this.redPrimaryX,
+      this.redPrimaryY,
+      this.greenPrimaryX,
+      this.greenPrimaryY,
+      this.bluePrimaryX,
+      this.bluePrimaryY,
+      this.whitePointX,
+      this.whitePointY,
+      this.maxMasteringLuminance,
+      this.minMasteringLuminance,
+      this.maxContentLightLevel,
+      this.maxFrameAverageLightLevel});
+
+  /// @nodoc
+  @JsonKey(name: 'redPrimaryX')
+  final int? redPrimaryX;
+
+  /// @nodoc
+  @JsonKey(name: 'redPrimaryY')
+  final int? redPrimaryY;
+
+  /// @nodoc
+  @JsonKey(name: 'greenPrimaryX')
+  final int? greenPrimaryX;
+
+  /// @nodoc
+  @JsonKey(name: 'greenPrimaryY')
+  final int? greenPrimaryY;
+
+  /// @nodoc
+  @JsonKey(name: 'bluePrimaryX')
+  final int? bluePrimaryX;
+
+  /// @nodoc
+  @JsonKey(name: 'bluePrimaryY')
+  final int? bluePrimaryY;
+
+  /// @nodoc
+  @JsonKey(name: 'whitePointX')
+  final int? whitePointX;
+
+  /// @nodoc
+  @JsonKey(name: 'whitePointY')
+  final int? whitePointY;
+
+  /// @nodoc
+  @JsonKey(name: 'maxMasteringLuminance')
+  final int? maxMasteringLuminance;
+
+  /// @nodoc
+  @JsonKey(name: 'minMasteringLuminance')
+  final int? minMasteringLuminance;
+
+  /// @nodoc
+  @JsonKey(name: 'maxContentLightLevel')
+  final int? maxContentLightLevel;
+
+  /// @nodoc
+  @JsonKey(name: 'maxFrameAverageLightLevel')
+  final int? maxFrameAverageLightLevel;
+
+  /// @nodoc
+  factory Hdr10MetadataInfo.fromJson(Map<String, dynamic> json) =>
+      _$Hdr10MetadataInfoFromJson(json);
+
+  /// @nodoc
+  Map<String, dynamic> toJson() => _$Hdr10MetadataInfoToJson(this);
+}
+
 /// The external video frame.
 @JsonSerializable(explicitToJson: true, includeIfNull: false)
 class ExternalVideoFrame {
@@ -732,12 +1127,16 @@ class ExternalVideoFrame {
       this.timestamp,
       this.eglType,
       this.textureId,
+      this.fenceObject,
       this.matrix,
       this.metadataBuffer,
       this.metadataSize,
       this.alphaBuffer,
       this.fillAlphaBuffer,
-      this.textureSliceIndex});
+      this.alphaStitchMode,
+      this.textureSliceIndex,
+      this.hdr10MetadataInfo,
+      this.colorSpace});
 
   /// The video type. See VideoBufferType.
   @JsonKey(name: 'type')
@@ -791,6 +1190,10 @@ class ExternalVideoFrame {
   @JsonKey(name: 'textureId')
   final int? textureId;
 
+  /// @nodoc
+  @JsonKey(name: 'fence_object')
+  final int? fenceObject;
+
   /// This parameter only applies to video data in Texture format. Incoming 4 × 4 transformational matrix. The typical value is a unit matrix.
   @JsonKey(name: 'matrix')
   final List<double>? matrix;
@@ -811,9 +1214,21 @@ class ExternalVideoFrame {
   @JsonKey(name: 'fillAlphaBuffer')
   final bool? fillAlphaBuffer;
 
+  /// @nodoc
+  @JsonKey(name: 'alphaStitchMode')
+  final int? alphaStitchMode;
+
   /// This parameter only applies to video data in Windows Texture format. It represents an index of an ID3D11Texture2D texture object used by the video frame in the ID3D11Texture2D array.
   @JsonKey(name: 'texture_slice_index')
   final int? textureSliceIndex;
+
+  /// @nodoc
+  @JsonKey(name: 'hdr10MetadataInfo')
+  final Hdr10MetadataInfo? hdr10MetadataInfo;
+
+  /// @nodoc
+  @JsonKey(name: 'colorSpace')
+  final ColorSpace? colorSpace;
 
   /// @nodoc
   factory ExternalVideoFrame.fromJson(Map<String, dynamic> json) =>
@@ -901,8 +1316,11 @@ class VideoFrame {
       this.textureId,
       this.matrix,
       this.alphaBuffer,
+      this.alphaStitchMode,
       this.pixelBuffer,
-      this.metaInfo});
+      this.metaInfo,
+      this.hdr10MetadataInfo,
+      this.colorSpace});
 
   /// The pixel format. See VideoPixelFormat.
   @JsonKey(name: 'type')
@@ -973,6 +1391,10 @@ class VideoFrame {
   final Uint8List? alphaBuffer;
 
   /// @nodoc
+  @JsonKey(name: 'alphaStitchMode')
+  final int? alphaStitchMode;
+
+  /// @nodoc
   @JsonKey(name: 'pixelBuffer', ignore: true)
   final Uint8List? pixelBuffer;
 
@@ -980,6 +1402,14 @@ class VideoFrame {
   @VideoFrameMetaInfoConverter()
   @JsonKey(name: 'metaInfo')
   final VideoFrameMetaInfo? metaInfo;
+
+  /// @nodoc
+  @JsonKey(name: 'hdr10MetadataInfo')
+  final Hdr10MetadataInfo? hdr10MetadataInfo;
+
+  /// @nodoc
+  @JsonKey(name: 'colorSpace')
+  final ColorSpace? colorSpace;
 
   /// @nodoc
   factory VideoFrame.fromJson(Map<String, dynamic> json) =>

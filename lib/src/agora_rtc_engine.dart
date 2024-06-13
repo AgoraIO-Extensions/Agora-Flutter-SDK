@@ -297,6 +297,30 @@ enum StreamFallbackOptions {
   /// 2: When the network conditions are weak, try to receive the low-quality video stream first. If the video cannot be displayed due to extremely weak network environment, then fall back to receiving audio-only stream.
   @JsonValue(2)
   streamFallbackOptionAudioOnly,
+
+  /// @nodoc
+  @JsonValue(3)
+  streamFallbackOptionVideoStreamLayer1,
+
+  /// @nodoc
+  @JsonValue(4)
+  streamFallbackOptionVideoStreamLayer2,
+
+  /// @nodoc
+  @JsonValue(5)
+  streamFallbackOptionVideoStreamLayer3,
+
+  /// @nodoc
+  @JsonValue(6)
+  streamFallbackOptionVideoStreamLayer4,
+
+  /// @nodoc
+  @JsonValue(7)
+  streamFallbackOptionVideoStreamLayer5,
+
+  /// @nodoc
+  @JsonValue(8)
+  streamFallbackOptionVideoStreamLayer6,
 }
 
 /// @nodoc
@@ -364,7 +388,8 @@ class LocalVideoStats {
       this.txPacketLossRate,
       this.captureBrightnessLevel,
       this.dualStreamEnabled,
-      this.hwEncoderAccelerating});
+      this.hwEncoderAccelerating,
+      this.simulcastDimensions});
 
   /// The ID of the local user.
   @JsonKey(name: 'uid')
@@ -459,6 +484,10 @@ class LocalVideoStats {
   ///  1: Hardware encoding is applied for acceleration.
   @JsonKey(name: 'hwEncoderAccelerating')
   final int? hwEncoderAccelerating;
+
+  /// @nodoc
+  @JsonKey(name: 'simulcastDimensions')
+  final List<VideoDimensions>? simulcastDimensions;
 
   /// @nodoc
   factory LocalVideoStats.fromJson(Map<String, dynamic> json) =>
@@ -588,6 +617,7 @@ class RemoteVideoStats {
       this.width,
       this.height,
       this.receivedBitrate,
+      this.decoderInputFrameRate,
       this.decoderOutputFrameRate,
       this.rendererOutputFrameRate,
       this.frameLossRate,
@@ -624,6 +654,10 @@ class RemoteVideoStats {
   /// The bitrate (Kbps) of the remote video received since the last count.
   @JsonKey(name: 'receivedBitrate')
   final int? receivedBitrate;
+
+  /// @nodoc
+  @JsonKey(name: 'decoderInputFrameRate')
+  final int? decoderInputFrameRate;
 
   /// The frame rate (fps) of decoding the remote video.
   @JsonKey(name: 'decoderOutputFrameRate')
@@ -1075,7 +1109,7 @@ class ScreenCaptureConfiguration {
   final Rectangle? screenRect;
 
   /// (For Windows and macOS only) Window ID. This parameter takes effect only when you want to capture the window.
-  @JsonKey(name: 'windowId')
+  @JsonKey(name: 'windowId', readValue: readIntPtr)
   final int? windowId;
 
   /// (For Windows and macOS only) The screen capture configuration. See ScreenCaptureParameters.
@@ -1203,7 +1237,7 @@ class ScreenCaptureSourceInfo {
   final ScreenCaptureSourceType? type;
 
   /// The window ID for a window or the display ID for a screen.
-  @JsonKey(name: 'sourceId')
+  @JsonKey(name: 'sourceId', readValue: readIntPtr)
   final int? sourceId;
 
   /// The name of the window or screen. UTF-8 encoding.
@@ -1243,7 +1277,7 @@ class ScreenCaptureSourceInfo {
   final bool? minimizeWindow;
 
   /// (For Windows only) Screen ID where the window is located. If the window is displayed across multiple screens, this parameter indicates the ID of the screen with which the window has the largest intersection area. If the window is located outside of the visible screens, the value of this member is -2.
-  @JsonKey(name: 'sourceDisplayId')
+  @JsonKey(name: 'sourceDisplayId', readValue: readIntPtr)
   final int? sourceDisplayId;
 
   /// @nodoc
@@ -1340,7 +1374,8 @@ class ChannelMediaOptions {
       this.publishRhythmPlayerTrack,
       this.isInteractiveAudience,
       this.customVideoTrackId,
-      this.isAudioFilterable});
+      this.isAudioFilterable,
+      this.parameters});
 
   /// Whether to publish the video captured by the camera: true : Publish the video captured by the camera. false : Do not publish the video captured by the camera.
   @JsonKey(name: 'publishCameraTrack')
@@ -1489,6 +1524,10 @@ class ChannelMediaOptions {
   /// Whether the audio stream being published is filtered according to the volume algorithm: true : The audio stream is filtered. If the audio stream filter is not enabled, this setting does not takes effect. false : The audio stream is not filtered. If you need to enable this function, contact.
   @JsonKey(name: 'isAudioFilterable')
   final bool? isAudioFilterable;
+
+  /// @nodoc
+  @JsonKey(name: 'parameters')
+  final String? parameters;
 
   /// @nodoc
   factory ChannelMediaOptions.fromJson(Map<String, dynamic> json) =>
@@ -1693,10 +1732,10 @@ class RtcEngineEventHandler {
     this.onVideoPublishStateChanged,
     this.onTranscodedStreamLayoutInfo,
     this.onAudioMetadataReceived,
-    this.onExtensionEvent,
-    this.onExtensionStarted,
-    this.onExtensionStopped,
-    this.onExtensionError,
+    this.onExtensionEventWithContext,
+    this.onExtensionStartedWithContext,
+    this.onExtensionStoppedWithContext,
+    this.onExtensionErrorWithContext,
     this.onSetRtmFlagResult,
   });
 
@@ -2569,45 +2608,19 @@ class RtcEngineEventHandler {
           RtcConnection connection, int uid, Uint8List metadata, int length)?
       onAudioMetadataReceived;
 
-  /// The event callback of the extension.
-  ///
-  /// To listen for events while the extension is running, you need to register this callback.
-  ///
-  /// * [value] The value of the extension key.
-  /// * [key] The key of the extension.
-  /// * [provider] The name of the extension provider.
-  /// * [extName] The name of the extension.
-  final void Function(
-          String provider, String extension, String key, String value)?
-      onExtensionEvent;
+  /// @nodoc
+  final void Function(ExtensionContext context, String key, String value)?
+      onExtensionEventWithContext;
 
-  /// Occurs when the extension is enabled.
-  ///
-  /// The extension triggers this callback after it is successfully enabled.
-  ///
-  /// * [provider] The name of the extension provider.
-  /// * [extName] The name of the extension.
-  final void Function(String provider, String extension)? onExtensionStarted;
+  /// @nodoc
+  final void Function(ExtensionContext context)? onExtensionStartedWithContext;
 
-  /// Occurs when the extension is disabled.
-  ///
-  /// The extension triggers this callback after it is successfully destroyed.
-  ///
-  /// * [extName] The name of the extension.
-  /// * [provider] The name of the extension provider.
-  final void Function(String provider, String extension)? onExtensionStopped;
+  /// @nodoc
+  final void Function(ExtensionContext context)? onExtensionStoppedWithContext;
 
-  /// Occurs when the extension runs incorrectly.
-  ///
-  /// In case of extension enabling failure or runtime errors, the extension triggers this callback and reports the error code along with the reasons.
-  ///
-  /// * [provider] The name of the extension provider.
-  /// * [extension] The name of the extension.
-  /// * [error] Error code. For details, see the extension documentation provided by the extension provider.
-  /// * [message] Reason. For details, see the extension documentation provided by the extension provider.
-  final void Function(
-          String provider, String extension, int error, String message)?
-      onExtensionError;
+  /// @nodoc
+  final void Function(ExtensionContext context, int error, String message)?
+      onExtensionErrorWithContext;
 
   /// @nodoc
   final void Function(RtcConnection connection, int code)? onSetRtmFlagResult;
@@ -2823,7 +2836,12 @@ extension MaxMetadataSizeTypeExt on MaxMetadataSizeType {
 @JsonSerializable(explicitToJson: true, includeIfNull: false)
 class Metadata {
   /// @nodoc
-  const Metadata({this.uid, this.size, this.buffer, this.timeStampMs});
+  const Metadata(
+      {this.channelId, this.uid, this.size, this.buffer, this.timeStampMs});
+
+  /// @nodoc
+  @JsonKey(name: 'channelId')
+  final String? channelId;
 
   /// The user ID.
   ///  For the recipient: The ID of the remote user who sent the Metadata.
@@ -3389,6 +3407,25 @@ abstract class RtcEngine {
       {required bool enabled,
       required BeautyOptions options,
       MediaSourceType type = MediaSourceType.primaryCameraSource});
+
+  /// @nodoc
+  Future<void> setFaceShapeBeautyOptions(
+      {required bool enabled,
+      required FaceShapeBeautyOptions options,
+      MediaSourceType type = MediaSourceType.primaryCameraSource});
+
+  /// @nodoc
+  Future<void> setFaceShapeAreaOptions(
+      {required FaceShapeAreaOptions options,
+      MediaSourceType type = MediaSourceType.primaryCameraSource});
+
+  /// @nodoc
+  Future<FaceShapeBeautyOptions> getFaceShapeBeautyOptions(
+      {MediaSourceType type = MediaSourceType.primaryCameraSource});
+
+  /// @nodoc
+  Future<FaceShapeAreaOptions> getFaceShapeAreaOptions(
+      {MediaSourceType type = MediaSourceType.primaryCameraSource});
 
   /// Sets low-light enhancement.
   ///
@@ -4450,6 +4487,10 @@ abstract class RtcEngine {
   Future<void> setHeadphoneEQParameters(
       {required int lowGain, required int highGain});
 
+  /// @nodoc
+  Future<void> enableVoiceAITuner(
+      {required bool enabled, required VoiceAiTunerType type});
+
   /// Sets the log file.
   ///
   /// Deprecated: Use the mLogConfig parameter in initialize method instead. Specifies an SDK output log file. The log file records all log data for the SDK’s operation. Ensure that the directory for the log file exists and is writable. Ensure that you call initialize immediately after calling the RtcEngine method, or the output log may not be complete.
@@ -4585,6 +4626,9 @@ abstract class RtcEngine {
   /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown. You need to catch the exception and handle it accordingly.
   Future<void> setDualStreamMode(
       {required SimulcastStreamMode mode, SimulcastStreamConfig? streamConfig});
+
+  /// @nodoc
+  Future<void> setSimulcastConfig(SimulcastConfig simulcastConfig);
 
   /// Sets whether to enable the local playback of external audio source.
   ///
@@ -4777,7 +4821,7 @@ abstract class RtcEngine {
 
   /// Sets the fallback option for the subscribed video stream based on the network conditions.
   ///
-  /// An unstable network affects the audio and video quality in a video call or interactive live video streaming. If option is set as streamFallbackOptionVideoStreamLow or streamFallbackOptionAudioOnly, the SDK automatically switches the video from a high-quality stream to a low-quality stream or disables the video when the downlink network conditions cannot support both audio and video to guarantee the quality of the audio. Meanwhile, the SDK continuously monitors network quality and resumes subscribing to audio and video streams when the network quality improves. When the subscribed video stream falls back to an audio-only stream, or recovers from an audio-only stream to an audio-video stream, the SDK triggers the onRemoteSubscribeFallbackToAudioOnly callback. Ensure that you call this method before joining a channel.
+  /// An unstable network affects the audio and video quality in a video call or interactive live video streaming. If option is set as streamFallbackOptionVideoStreamLow or streamFallbackOptionAudioOnly, the SDK automatically switches the video from a high-quality stream to a low-quality stream or disables the video when the downlink network conditions cannot support both audio and video to guarantee the quality of the audio. Meanwhile, the SDK continuously monitors network quality and resumes subscribing to audio and video streams when the network quality improves. When the subscribed video stream falls back to an audio-only stream, or recovers from an audio-only stream to an audio-video stream, the SDK triggers the onRemoteSubscribeFallbackToAudioOnly callback.
   ///
   /// * [option] Fallback options for the subscribed stream. See StreamFallbackOptions.
   ///
@@ -5630,35 +5674,6 @@ abstract class RtcEngine {
   /// @nodoc
   Future<void> setRemoteUserPriority(
       {required int uid, required PriorityType userPriority});
-
-  /// Sets the built-in encryption mode.
-  ///
-  /// Deprecated: Use enableEncryption instead. The SDK supports built-in encryption schemes, AES-128-GCM is supported by default. Call this method to use other encryption modes. All users in the same channel must use the same encryption mode and secret. Refer to the information related to the AES encryption algorithm on the differences between the encryption modes. Before calling this method, please call setEncryptionSecret to enable the built-in encryption function.
-  ///
-  /// * [encryptionMode] The following encryption modes:
-  ///  " aes-128-xts ": 128-bit AES encryption, XTS mode.
-  ///  " aes-128-ecb ": 128-bit AES encryption, ECB mode.
-  ///  " aes-256-xts ": 256-bit AES encryption, XTS mode.
-  ///  " sm4-128-ecb ": 128-bit SM4 encryption, ECB mode.
-  ///  " aes-128-gcm ": 128-bit AES encryption, GCM mode.
-  ///  " aes-256-gcm ": 256-bit AES encryption, GCM mode.
-  ///  "": When this parameter is set as null, the encryption mode is set as " aes-128-gcm " by default.
-  ///
-  /// Returns
-  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown. You need to catch the exception and handle it accordingly.
-  Future<void> setEncryptionMode(String encryptionMode);
-
-  /// Enables built-in encryption with an encryption password before users join a channel.
-  ///
-  /// Deprecated: Use enableEncryption instead. Before joining the channel, you need to call this method to set the secret parameter to enable the built-in encryption. All users in the same channel should use the same secret. The secret is automatically cleared once a user leaves the channel. If you do not specify the secret or secret is set as null, the built-in encryption is disabled.
-  ///  Do not use this method for Media Push.
-  ///  For optimal transmission, ensure that the encrypted data size does not exceed the original data size + 16 bytes. 16 bytes is the maximum padding size for AES encryption.
-  ///
-  /// * [secret] The encryption password.
-  ///
-  /// Returns
-  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown. You need to catch the exception and handle it accordingly.
-  Future<void> setEncryptionSecret(String secret);
 
   /// Enables or disables the built-in encryption.
   ///
