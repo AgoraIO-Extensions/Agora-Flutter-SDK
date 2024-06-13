@@ -43,7 +43,44 @@ void generatedTestCases(ValueGetter<IrisTester> irisTester) {
 
       {
         VideoPixelFormat frameType = VideoPixelFormat.videoPixelDefault;
+        AlphaStitchMode frameAlphaStitchMode = AlphaStitchMode.noAlphaStitch;
         VideoFrameMetaInfo? frameMetaInfo = null;
+        int hdr10MetadataInfoRedPrimaryX = 5;
+        int hdr10MetadataInfoRedPrimaryY = 5;
+        int hdr10MetadataInfoGreenPrimaryX = 5;
+        int hdr10MetadataInfoGreenPrimaryY = 5;
+        int hdr10MetadataInfoBluePrimaryX = 5;
+        int hdr10MetadataInfoBluePrimaryY = 5;
+        int hdr10MetadataInfoWhitePointX = 5;
+        int hdr10MetadataInfoWhitePointY = 5;
+        int hdr10MetadataInfoMaxMasteringLuminance = 5;
+        int hdr10MetadataInfoMinMasteringLuminance = 5;
+        int hdr10MetadataInfoMaxContentLightLevel = 5;
+        int hdr10MetadataInfoMaxFrameAverageLightLevel = 5;
+        Hdr10MetadataInfo frameHdr10MetadataInfo = Hdr10MetadataInfo(
+          redPrimaryX: hdr10MetadataInfoRedPrimaryX,
+          redPrimaryY: hdr10MetadataInfoRedPrimaryY,
+          greenPrimaryX: hdr10MetadataInfoGreenPrimaryX,
+          greenPrimaryY: hdr10MetadataInfoGreenPrimaryY,
+          bluePrimaryX: hdr10MetadataInfoBluePrimaryX,
+          bluePrimaryY: hdr10MetadataInfoBluePrimaryY,
+          whitePointX: hdr10MetadataInfoWhitePointX,
+          whitePointY: hdr10MetadataInfoWhitePointY,
+          maxMasteringLuminance: hdr10MetadataInfoMaxMasteringLuminance,
+          minMasteringLuminance: hdr10MetadataInfoMinMasteringLuminance,
+          maxContentLightLevel: hdr10MetadataInfoMaxContentLightLevel,
+          maxFrameAverageLightLevel: hdr10MetadataInfoMaxFrameAverageLightLevel,
+        );
+        PrimaryID colorSpacePrimaries = PrimaryID.primaryidBt709;
+        TransferID colorSpaceTransfer = TransferID.transferidBt709;
+        MatrixID colorSpaceMatrix = MatrixID.matrixidRgb;
+        RangeID colorSpaceRange = RangeID.rangeidInvalid;
+        ColorSpace frameColorSpace = ColorSpace(
+          primaries: colorSpacePrimaries,
+          transfer: colorSpaceTransfer,
+          matrix: colorSpaceMatrix,
+          range: colorSpaceRange,
+        );
         int frameWidth = 5;
         int frameHeight = 5;
         int frameYStride = 5;
@@ -79,8 +116,11 @@ void generatedTestCases(ValueGetter<IrisTester> irisTester) {
           textureId: frameTextureId,
           matrix: frameMatrix,
           alphaBuffer: frameAlphaBuffer,
+          alphaStitchMode: frameAlphaStitchMode,
           pixelBuffer: framePixelBuffer,
           metaInfo: frameMetaInfo,
+          hdr10MetadataInfo: frameHdr10MetadataInfo,
+          colorSpace: frameColorSpace,
         );
 
         final eventJson = {

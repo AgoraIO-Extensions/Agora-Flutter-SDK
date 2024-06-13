@@ -52,6 +52,7 @@ void generatedTestCases(ValueGetter<IrisTester> irisTester) {
         int frameSampleRateHz = 5;
         int frameNumChannels = 5;
         List<int> frameData = List.filled(5, 5);
+        bool frameIsStereo = true;
         AudioPcmFrame frame = AudioPcmFrame(
           captureTimestamp: frameCaptureTimestamp,
           samplesPerChannel: frameSamplesPerChannel,
@@ -59,6 +60,7 @@ void generatedTestCases(ValueGetter<IrisTester> irisTester) {
           numChannels: frameNumChannels,
           bytesPerSample: frameBytesPerSample,
           data: frameData,
+          isStereo: frameIsStereo,
         );
 
         final eventJson = {

@@ -105,8 +105,7 @@ abstract class MediaPlayer {
   /// * [index] The index of the media stream. This parameter must be less than the return value of getStreamCount.
   ///
   /// Returns
-  /// If the call succeeds, returns the detailed information of the media stream. See PlayerStreamInfo.
-  ///  If the call fails, returns NULL.
+  /// If the call succeeds, returns the detailed information of the media stream. See PlayerStreamInfo. NULL, if the method call fails.
   Future<PlayerStreamInfo> getStreamInfo(int index);
 
   /// Sets the loop playback.
@@ -125,8 +124,8 @@ abstract class MediaPlayer {
   ///
   /// Call this method after calling open.
   ///
-  /// * [speed] The playback speed. Agora recommends that you limit this value to a range between 50 and 400, which is defined as follows:
-  ///  50: Half the original speed.
+  /// * [speed] The playback speed. Agora recommends that you set this to a value between 30 and 400, defined as follows:
+  ///  30: 0.3 times the original speed.
   ///  100: The original speed.
   ///  400: 4 times the original speed.
   ///
@@ -351,7 +350,7 @@ abstract class MediaPlayer {
   ///
   /// You can call this method to switch the media resource to be played according to the current network status. For example:
   ///  When the network is poor, the media resource to be played is switched to a media resource address with a lower bitrate.
-  ///  When the network is good, the media resource to be played is switched to a media resource address with a higher bitrate. After calling this method, if you receive the playerEventSwitchComplete event in the onPlayerEvent callback, the switch is successful; If you receive the playerEventSwitchError event in the onPlayerEvent callback, the switch fails.
+  ///  When the network is good, the media resource to be played is switched to a media resource address with a higher bitrate. After calling this method, if you receive the onPlayerEvent callback report the playerEventSwitchComplete event, the switching is successful. If the switching fails, the SDK will automatically retry 3 times. If it still fails, you will receive the onPlayerEvent callback reporting the playerEventSwitchError event indicating an error occurred during media resource switching.
   ///  Ensure that you call this method after open.
   ///  To ensure normal playback, pay attention to the following when calling this method:
   ///  Do not call this method when playback is paused.
@@ -359,7 +358,7 @@ abstract class MediaPlayer {
   ///  Before switching the media resource, make sure that the playback position does not exceed the total duration of the media resource to be switched.
   ///
   /// * [src] The URL of the media resource.
-  /// * [syncPts] Whether to synchronize the playback position (ms) before and after the switch: true : Synchronize the playback position before and after the switch. false : (Default) Do not synchronize the playback position before and after the switch. Make sure to set this parameter as false if you need to play live streams, or the switch fails. If you need to play on-demand streams, you can set the value of this parameter according to your scenarios.
+  /// * [syncPts] Whether to synchronize the playback position (ms) before and after the switch: true : Synchronize the playback position before and after the switch. false : (Default) Do not synchronize the playback position before and after the switch.
   ///
   /// Returns
   /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown. You need to catch the exception and handle it accordingly.
@@ -367,7 +366,9 @@ abstract class MediaPlayer {
 
   /// Preloads a media resource.
   ///
-  /// You can call this method to preload a media resource into the playlist. If you need to preload multiple media resources, you can call this method multiple times. If the preload is successful and you want to play the media resource, call playPreloadedSrc; if you want to clear the playlist, call stop. Agora does not support preloading duplicate media resources to the playlist. However, you can preload the media resources that are being played to the playlist again.
+  /// You can call this method to preload a media resource into the playlist. If you need to preload multiple media resources, you can call this method multiple times. If the preload is successful and you want to play the media resource, call playPreloadedSrc; if you want to clear the playlist, call stop.
+  ///  Before calling this method, ensure that you have called open or openWithMediaSource to open the media resource successfully.
+  ///  Agora does not support preloading duplicate media resources to the playlist. However, you can preload the media resources that are being played to the playlist again.
   ///
   /// * [src] The URL of the media resource.
   /// * [startPos] The starting position (ms) for playing after the media resource is preloaded to the playlist. When preloading a live stream, set this parameter to 0.

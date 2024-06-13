@@ -387,17 +387,17 @@ const eventIdsMapping = {
   "RtcEngineEventHandler_onAudioMetadataReceived": [
     "RtcEngineEventHandler_onAudioMetadataReceived_0d4eb96"
   ],
-  "RtcEngineEventHandler_onExtensionEvent": [
-    "RtcEngineEventHandler_onExtensionEvent_062d13c"
+  "RtcEngineEventHandler_onExtensionEventWithContext": [
+    "RtcEngineEventHandler_onExtensionEventWithContext_a5fb27a"
   ],
-  "RtcEngineEventHandler_onExtensionStarted": [
-    "RtcEngineEventHandler_onExtensionStarted_ccad422"
+  "RtcEngineEventHandler_onExtensionStartedWithContext": [
+    "RtcEngineEventHandler_onExtensionStartedWithContext_67c38e3"
   ],
-  "RtcEngineEventHandler_onExtensionStopped": [
-    "RtcEngineEventHandler_onExtensionStopped_ccad422"
+  "RtcEngineEventHandler_onExtensionStoppedWithContext": [
+    "RtcEngineEventHandler_onExtensionStoppedWithContext_67c38e3"
   ],
-  "RtcEngineEventHandler_onExtensionError": [
-    "RtcEngineEventHandler_onExtensionError_bd3489b"
+  "RtcEngineEventHandler_onExtensionErrorWithContext": [
+    "RtcEngineEventHandler_onExtensionErrorWithContext_a452f11"
   ],
   "RtcEngineEventHandler_onSetRtmFlagResult": [
     "RtcEngineEventHandler_onSetRtmFlagResult_263e4cd"

@@ -43,6 +43,8 @@
 
 #define __deprecated
 
+#define AGORA_CPP_INTERNAL_API extern
+
 #elif defined(__APPLE__)
 
 #include <TargetConditionals.h>
@@ -51,6 +53,8 @@
 #define AGORA_CPP_API __attribute__((visibility("default")))
 #define AGORA_CALL
 
+#define AGORA_CPP_INTERNAL_API __attribute__((visibility("hidden")))
+
 #elif defined(__ANDROID__) || defined(__linux__)
 
 #define AGORA_API extern "C" __attribute__((visibility("default")))
@@ -58,6 +62,8 @@
 #define AGORA_CALL
 
 #define __deprecated
+
+#define AGORA_CPP_INTERNAL_API __attribute__((visibility("hidden")))
 
 #else  // !_WIN32 && !__APPLE__ && !(__ANDROID__ || __linux__)
 
@@ -1343,6 +1349,10 @@ enum AUDIO_CODEC_TYPE {
    * 12: LPCNET.
    */
   AUDIO_CODEC_LPCNET = 12,
+  /**
+   * 13: Opus codec, supporting 3 to 8 channels audio.
+   */
+  AUDIO_CODEC_OPUSMC = 13,
 };
 
 /**
@@ -1543,13 +1553,38 @@ enum H264PacketizeMode {
  */
 enum VIDEO_STREAM_TYPE {
   /**
-   * 0: The high-quality video stream, which has a higher resolution and bitrate.
+   * 0: The high-quality video stream, which has the highest resolution and bitrate.
    */
   VIDEO_STREAM_HIGH = 0,
   /**
-   * 1: The low-quality video stream, which has a lower resolution and bitrate.
+   * 1: The low-quality video stream, which has the lowest resolution and bitrate.
    */
   VIDEO_STREAM_LOW = 1,
+  /**
+   * 4: The video stream of layer_1, which has a lower resolution and bitrate than VIDEO_STREAM_HIGH.
+   */
+  VIDEO_STREAM_LAYER_1 = 4,
+  /**
+   * 5: The video stream of layer_2, which has a lower resolution and bitrate than VIDEO_STREAM_LAYER_1.
+   */
+  VIDEO_STREAM_LAYER_2 = 5,
+  /**
+   * 6: The video stream of layer_3, which has a lower resolution and bitrate than VIDEO_STREAM_LAYER_2.
+   */
+  VIDEO_STREAM_LAYER_3 = 6,
+  /**
+   * 7: The video stream of layer_4, which has a lower resolution and bitrate than VIDEO_STREAM_LAYER_3.
+   */
+  VIDEO_STREAM_LAYER_4 = 7,
+  /**
+   * 8: The video stream of layer_5, which has a lower resolution and bitrate than VIDEO_STREAM_LAYER_4.
+   */
+  VIDEO_STREAM_LAYER_5 = 8,
+  /**
+   * 9: The video stream of layer_6, which has a lower resolution and bitrate than VIDEO_STREAM_LAYER_5.
+   */
+  VIDEO_STREAM_LAYER_6 = 9,
+
 };
 
 struct VideoSubscriptionOptions {
@@ -1728,17 +1763,27 @@ struct AdvanceOptions {
   */
   COMPRESSION_PREFERENCE compressionPreference;
 
+  /**
+  * Whether to encode and send the alpha data to the remote when alpha data is present.
+  * The default value is false.
+  */
+  bool encodeAlpha;
+
   AdvanceOptions() : encodingPreference(PREFER_AUTO), 
-                     compressionPreference(PREFER_LOW_LATENCY) {}
+                     compressionPreference(PREFER_LOW_LATENCY),
+                     encodeAlpha(false) {}
 
   AdvanceOptions(ENCODING_PREFERENCE encoding_preference, 
-                 COMPRESSION_PREFERENCE compression_preference) : 
+                 COMPRESSION_PREFERENCE compression_preference,
+                 bool encode_alpha) : 
                  encodingPreference(encoding_preference),
-                 compressionPreference(compression_preference) {}
+                 compressionPreference(compression_preference),
+                 encodeAlpha(encode_alpha) {}
 
   bool operator==(const AdvanceOptions& rhs) const {
     return encodingPreference == rhs.encodingPreference && 
-           compressionPreference == rhs.compressionPreference;
+           compressionPreference == rhs.compressionPreference &&
+           encodeAlpha == rhs.encodeAlpha;
   }
 
 };
@@ -1761,6 +1806,17 @@ enum VIDEO_MIRROR_MODE_TYPE {
   VIDEO_MIRROR_MODE_DISABLED = 2,
 };
 
+#if defined(__APPLE__) && TARGET_OS_IOS
+/**
+ * Camera capturer configuration for format type.
+ */
+enum CAMERA_FORMAT_TYPE {
+  /** 0: (Default) NV12. */
+  CAMERA_FORMAT_NV12,
+  /** 1: BGRA. */
+  CAMERA_FORMAT_BGRA,
+};
+#endif
 
 /** Supported codec type bit mask. */
 enum CODEC_CAP_MASK {
@@ -1926,7 +1982,7 @@ struct VideoEncoderConfiguration {
       orientationMode(m),
       degradationPreference(MAINTAIN_QUALITY),
       mirrorMode(mirror),
-      advanceOptions(PREFER_AUTO, PREFER_LOW_LATENCY) {}
+      advanceOptions(PREFER_AUTO, PREFER_LOW_LATENCY, false) {}
   VideoEncoderConfiguration(int width, int height, int f, int b, ORIENTATION_MODE m, VIDEO_MIRROR_MODE_TYPE mirror = VIDEO_MIRROR_MODE_DISABLED)
     : codecType(VIDEO_CODEC_NONE),
       dimensions(width, height),
@@ -1936,7 +1992,7 @@ struct VideoEncoderConfiguration {
       orientationMode(m),
       degradationPreference(MAINTAIN_QUALITY),
       mirrorMode(mirror),
-      advanceOptions(PREFER_AUTO, PREFER_LOW_LATENCY) {}
+      advanceOptions(PREFER_AUTO, PREFER_LOW_LATENCY, false) {}
   VideoEncoderConfiguration(const VideoEncoderConfiguration& config)
     : codecType(config.codecType),
       dimensions(config.dimensions),
@@ -1956,7 +2012,7 @@ struct VideoEncoderConfiguration {
       orientationMode(ORIENTATION_MODE_ADAPTIVE),
       degradationPreference(MAINTAIN_QUALITY),
       mirrorMode(VIDEO_MIRROR_MODE_DISABLED),
-      advanceOptions(PREFER_AUTO, PREFER_LOW_LATENCY) {}
+      advanceOptions(PREFER_AUTO, PREFER_LOW_LATENCY, false) {}
 
   VideoEncoderConfiguration& operator=(const VideoEncoderConfiguration& rhs) {
     if (this == &rhs) return *this;
@@ -2030,15 +2086,78 @@ struct SimulcastStreamConfig {
    */
   int kBitrate;
   /**
-   * he capture frame rate (fps) of the local video. The default value is 5.
+   * The capture frame rate (fps) of the local video. The default value is 5.
    */
   int framerate;
   SimulcastStreamConfig() : dimensions(160, 120), kBitrate(65), framerate(5) {}
+  SimulcastStreamConfig(const SimulcastStreamConfig& other) : dimensions(other.dimensions), kBitrate(other.kBitrate), framerate(other.framerate) {}
   bool operator==(const SimulcastStreamConfig& rhs) const {
     return dimensions == rhs.dimensions && kBitrate == rhs.kBitrate && framerate == rhs.framerate;
   }
 };
 
+/**
+ * The configuration of the multi-layer video stream.
+ */
+struct SimulcastConfig {
+  /**
+   * The index of multi-layer video stream
+   */
+  enum StreamLayerIndex {
+   /**
+    * 0: video stream index of layer_1
+    */
+   STREAM_LAYER_1 = 0,
+   /**
+    * 1: video stream index of layer_2
+    */
+   STREAM_LAYER_2 = 1,
+   /**
+    * 2: video stream index of layer_3
+    */
+   STREAM_LAYER_3 = 2,
+   /**
+    * 3: video stream index of layer_4
+    */
+   STREAM_LAYER_4 = 3,
+   /**
+    * 4: video stream index of layer_5
+    */
+   STREAM_LAYER_5 = 4,
+   /**
+    * 5: video stream index of layer_6
+    */
+   STREAM_LAYER_6 = 5,
+   /**
+    * 6: video stream index of low
+    */
+   STREAM_LOW = 6,
+   /**
+    * 7: max count of video stream layers
+    */
+   STREAM_LAYER_COUNT_MAX = 7
+  };
+  struct StreamLayerConfig {
+    /**
+     * The video frame dimension. The default value is 0.
+     */
+    VideoDimensions dimensions;
+    /**
+     * The capture frame rate (fps) of the local video. The default value is 0.
+     */
+    int framerate;
+    /**
+     * Whether to enable the corresponding layer of video stream. The default value is false.
+     */
+    bool enable;
+    StreamLayerConfig() : dimensions(0, 0), framerate(0), enable(false) {}
+  };
+
+  /**
+   * The array of StreamLayerConfig, which contains STREAM_LAYER_COUNT_MAX layers of video stream at most.
+   */
+  StreamLayerConfig configs[STREAM_LAYER_COUNT_MAX];
+};
 /**
  * The location of the target area relative to the screen or window. If you do not set this parameter,
  * the SDK selects the whole screen or window.
@@ -2636,6 +2755,10 @@ enum VIDEO_APPLICATION_SCENARIO_TYPE {
    * 1: Meeting Scenario. This scenario is the best QoE practice of meeting application.
    */
   APPLICATION_SCENARIO_MEETING = 1,
+  /**
+   * 2: Video Call Scenario. This scenario is used to optimize the video experience in video application, like 1v1 video call.
+   */
+  APPLICATION_SCENARIO_1V1 = 2,
 };
 
 /**
@@ -2919,6 +3042,8 @@ enum LOCAL_VIDEO_STREAM_REASON {
   LOCAL_VIDEO_STREAM_REASON_SCREEN_CAPTURE_PAUSED = 28,
   /** 29: The screen capture is resumed. */
   LOCAL_VIDEO_STREAM_REASON_SCREEN_CAPTURE_RESUMED = 29,
+  /** 30: The shared display has been disconnected */
+  LOCAL_VIDEO_STREAM_REASON_SCREEN_CAPTURE_DISPLAY_DISCONNECTED = 30,
 
 };
 
@@ -4192,12 +4317,14 @@ enum CLIENT_ROLE_CHANGE_FAILED_REASON {
   CLIENT_ROLE_CHANGE_FAILED_NOT_AUTHORIZED = 2,
   /**
    * 3: The operation of changing role is timeout.
+   * @deprecated This reason is deprecated.
    */
-  CLIENT_ROLE_CHANGE_FAILED_REQUEST_TIME_OUT = 3,
+  CLIENT_ROLE_CHANGE_FAILED_REQUEST_TIME_OUT __deprecated = 3,
   /**
    * 4: The operation of changing role is interrupted since we lost connection with agora service.
+   * @deprecated This reason is deprecated.
    */
-  CLIENT_ROLE_CHANGE_FAILED_CONNECTION_FAILED = 4,
+  CLIENT_ROLE_CHANGE_FAILED_CONNECTION_FAILED __deprecated = 4,
 };
 
 /**
@@ -4437,6 +4564,85 @@ struct BeautyOptions {
   BeautyOptions(LIGHTENING_CONTRAST_LEVEL contrastLevel, float lightening, float smoothness, float redness, float sharpness) : lighteningContrastLevel(contrastLevel), lighteningLevel(lightening), smoothnessLevel(smoothness), rednessLevel(redness), sharpnessLevel(sharpness) {}
 
   BeautyOptions() : lighteningContrastLevel(LIGHTENING_CONTRAST_NORMAL), lighteningLevel(0), smoothnessLevel(0), rednessLevel(0), sharpnessLevel(0) {}
+};
+
+/** Face shape area options. This structure defines options for facial adjustments on different facial areas.
+ *
+ * @technical preview
+ */
+struct FaceShapeAreaOptions {
+  /** The specific facial area to be adjusted.
+    */
+  enum FACE_SHAPE_AREA {
+    /** (Default) Invalid area. */
+    FACE_SHAPE_AREA_NONE = -1,
+    /** Head Scale, reduces the size of head. */
+    FACE_SHAPE_AREA_HEADSCALE = 0,
+    /** Forehead, adjusts the size of forehead. */
+    FACE_SHAPE_AREA_FOREHEAD = 1,
+    /** Face Contour, slims the facial contour. */
+    FACE_SHAPE_AREA_FACECONTOUR = 2,
+    /** Face Length, adjusts the length of face. */
+    FACE_SHAPE_AREA_FACELENGTH = 3,
+    /** Face Width, narrows the width of face. */
+    FACE_SHAPE_AREA_FACEWIDTH = 4,
+    /** Cheekbone, adjusts the size of cheekbone. */
+    FACE_SHAPE_AREA_CHEEKBONE = 5,
+    /** Cheek, adjusts the size of cheek. */
+    FACE_SHAPE_AREA_CHEEK = 6,
+    /** Chin, adjusts the length of chin. */
+    FACE_SHAPE_AREA_CHIN = 7,
+    /** Eye Scale, adjusts the size of eyes. */
+    FACE_SHAPE_AREA_EYESCALE = 8,
+    /** Nose Length, adjusts the length of nose. */
+    FACE_SHAPE_AREA_NOSELENGTH = 9,
+    /** Nose Width, adjusts the width of nose. */
+    FACE_SHAPE_AREA_NOSEWIDTH = 10,
+    /** Mouth Scale, adjusts the size of mouth. */
+    FACE_SHAPE_AREA_MOUTHSCALE = 11,
+  };
+  
+  /** The specific facial area to be adjusted, See #FACE_SHAPE_AREA.
+    */
+  FACE_SHAPE_AREA shapeArea;
+  
+  /** The intensity of the pinching effect applied to the specified facial area.
+   * For the following area values: #FACE_SHAPE_AREA_FOREHEAD, #FACE_SHAPE_AREA_FACELENGTH, #FACE_SHAPE_AREA_CHIN, #FACE_SHAPE_AREA_NOSELENGTH, #FACE_SHAPE_AREA_NOSEWIDTH, #FACE_SHAPE_AREA_MOUTHSCALE, the value ranges from -100 to 100.
+   * The default value is 0. The greater the absolute value, the stronger the intensity applied to the specified facial area, and negative values indicate the opposite direction.
+   * For enumeration values other than the above, the value ranges from 0 to 100. The default value is 0. The greater the value, the stronger the intensity applied to the specified facial area.
+    */
+  int shapeIntensity;
+  
+  FaceShapeAreaOptions(FACE_SHAPE_AREA shapeArea, int areaIntensity) : shapeArea(shapeArea), shapeIntensity(areaIntensity) {}
+
+  FaceShapeAreaOptions() : shapeArea(FACE_SHAPE_AREA_NONE), shapeIntensity(0) {}
+};
+
+/** Face shape beauty options. This structure defines options for facial adjustments of different facial styles.
+ *
+ * @technical preview
+ */
+struct FaceShapeBeautyOptions {
+  /** The face shape style.
+    */
+  enum FACE_SHAPE_BEAUTY_STYLE {
+    /** (Default) Female face shape style. */
+    FACE_SHAPE_BEAUTY_STYLE_FEMALE = 0,
+    /** Male face shape style. */
+    FACE_SHAPE_BEAUTY_STYLE_MALE = 1,
+  };
+  
+  /** The face shape style, See #FACE_SHAPE_BEAUTY_STYLE.
+    */
+  FACE_SHAPE_BEAUTY_STYLE shapeStyle;
+  
+  /** The intensity of the pinching effect applied to the specified facial style. The value ranges from 0 (original) to 100. The default value is 0. The greater the value, the stronger the intensity applied to face pinching.
+    */
+  int styleIntensity;
+  
+  FaceShapeBeautyOptions(FACE_SHAPE_BEAUTY_STYLE shapeStyle, int styleIntensity) : shapeStyle(shapeStyle), styleIntensity(styleIntensity) {}
+
+  FaceShapeBeautyOptions() : shapeStyle(FACE_SHAPE_BEAUTY_STYLE_FEMALE), styleIntensity(50) {}
 };
 
 struct LowlightEnhanceOptions {
@@ -4964,6 +5170,41 @@ enum HEADPHONE_EQUALIZER_PRESET {
   HEADPHONE_EQUALIZER_INEAR = 0x04000002
 };
 
+/** The options for SDK voice AI tuner.
+ */
+enum VOICE_AI_TUNER_TYPE {
+  /** Uncle, deep and magnetic male voice.
+   */
+  VOICE_AI_TUNER_MATURE_MALE,
+  /** Fresh male, refreshing and sweet male voice.
+   */
+  VOICE_AI_TUNER_FRESH_MALE,
+  /** Big sister, deep and charming female voice.
+   */
+  VOICE_AI_TUNER_ELEGANT_FEMALE,
+  /** Lolita, high-pitched and cute female voice.
+   */
+  VOICE_AI_TUNER_SWEET_FEMALE,
+  /** Warm man singing, warm and melodic male voice that is suitable for male lyrical songs.
+   */
+  VOICE_AI_TUNER_WARM_MALE_SINGING,
+  /** Gentle female singing, soft and delicate female voice that is suitable for female lyrical songs.
+   */
+  VOICE_AI_TUNER_GENTLE_FEMALE_SINGING,
+  /** Smoky uncle singing, unique husky male voice that is suitable for rock or blues songs.
+   */
+  VOICE_AI_TUNER_HUSKY_MALE_SINGING,
+  /** Warm big sister singing, warm and mature female voice that is suitable for emotionally powerful songs.
+   */
+  VOICE_AI_TUNER_WARM_ELEGANT_FEMALE_SINGING,
+  /** Forceful male singing, strong and powerful male voice that is suitable for passionate songs.
+   */
+  VOICE_AI_TUNER_POWERFUL_MALE_SINGING,
+  /** Dreamy female singing, dreamlike and soft female voice that is suitable for airy and dream-like songs.
+   */
+  VOICE_AI_TUNER_DREAMY_FEMALE_SINGING,
+};
+
 /**
  * Screen sharing configurations.
  */
@@ -5276,6 +5517,10 @@ enum AREA_CODE {
     AREA_CODE_GLOB = (0xFFFFFFFF)
 };
 
+/**
+  Extra region code
+  @technical preview
+*/
 enum AREA_CODE_EX {
     /**
      * Oceania
@@ -5301,6 +5546,10 @@ enum AREA_CODE_EX {
      * United States
      */
     AREA_CODE_US = 0x00000800,
+    /**
+     * Russia
+     */
+    AREA_CODE_RU = 0x00001000,
     /**
      * The global area (except China)
      */
@@ -5721,8 +5970,8 @@ enum STREAM_SUBSCRIBE_STATE {
    *   - Calls `enableLocalAudio(false)` or `enableLocalVideo(false)` to disable the local audio or video capture.
    *   - The role of the remote user is audience.
    * - The local user calls the following methods to stop receiving remote streams:
-   *   - Calls `muteRemoteAudioStream(true)`, `muteAllRemoteAudioStreams(true)` or `setDefaultMuteAllRemoteAudioStreams(true)` to stop receiving the remote audio streams.
-   *   - Calls `muteRemoteVideoStream(true)`, `muteAllRemoteVideoStreams(true)` or `setDefaultMuteAllRemoteVideoStreams(true)` to stop receiving the remote video streams.
+   *   - Calls `muteRemoteAudioStream(true)`, `muteAllRemoteAudioStreams(true)` to stop receiving the remote audio streams.
+   *   - Calls `muteRemoteVideoStream(true)`, `muteAllRemoteVideoStreams(true)` to stop receiving the remote video streams.
    */
   SUB_STATE_NO_SUBSCRIBED = 1,
   /**
