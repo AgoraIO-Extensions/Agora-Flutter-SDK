@@ -14,6 +14,7 @@ parsers:
           - '@agoraio-extensions/terra_shared_configs:headers/rtc_4.3.2/include/AgoraRefPtr.h'
           - '@agoraio-extensions/terra_shared_configs:headers/rtc_4.3.2/include/IAgoraMediaComponentFactory.h'
           - '@agoraio-extensions/terra_shared_configs:headers/rtc_4.3.2/include/IAgoraParameter.h'
+          - '@agoraio-extensions/terra_shared_configs:headers/rtc_4.3.2/include/rte*.h'
 
   - name: IrisApiIdParser
     package: '@agoraio-extensions/terra_shared_configs'
@@ -31,6 +32,7 @@ parsers:
         exclude:
           - '@agoraio-extensions/terra_shared_configs:headers/rtc_4.3.2/include/time_utils.h'
           - '@agoraio-extensions/terra_shared_configs:headers/rtc_4.3.2/include/IAgoraMediaComponentFactory.h'
+          - '@agoraio-extensions/terra_shared_configs:headers/rtc_4.3.2/include/rte*.h'
 
   - path: parsers/cud_node_parser.ts
     args:
