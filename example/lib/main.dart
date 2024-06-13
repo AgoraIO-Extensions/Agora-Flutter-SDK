@@ -22,7 +22,7 @@ void main() {
   // `PlatformDispatcher.instance.onError` but not `runZonedGuarded` to
   // handle "Errors not caught by Flutter",
   // see: https://docs.flutter.dev/testing/errors#handling-all-types-of-errors,
-  // follow the Flutter SDK doc after we can bump the mini supported Flutter SDK (currently 2.10.x) 
+  // follow the Flutter SDK doc after we can bump the mini supported Flutter SDK (currently 2.10.x)
   // to the newer version of Flutter SDK.
   runZonedGuarded(() {
     runApp(const MyApp());
@@ -64,7 +64,8 @@ class _MyAppState extends State<MyApp> {
 
   Future<void> _requestPermissionIfNeed() async {
     if (defaultTargetPlatform == TargetPlatform.android) {
-      await [Permission.audio, Permission.microphone, Permission.camera].request();
+      await [Permission.audio, Permission.microphone, Permission.camera]
+          .request();
     }
   }
 
