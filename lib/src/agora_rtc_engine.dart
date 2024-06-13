@@ -297,6 +297,30 @@ enum StreamFallbackOptions {
   /// 2: When the network conditions are weak, try to receive the low-quality video stream first. If the video cannot be displayed due to extremely weak network environment, then fall back to receiving audio-only stream.
   @JsonValue(2)
   streamFallbackOptionAudioOnly,
+
+  /// @nodoc
+  @JsonValue(3)
+  streamFallbackOptionVideoStreamLayer1,
+
+  /// @nodoc
+  @JsonValue(4)
+  streamFallbackOptionVideoStreamLayer2,
+
+  /// @nodoc
+  @JsonValue(5)
+  streamFallbackOptionVideoStreamLayer3,
+
+  /// @nodoc
+  @JsonValue(6)
+  streamFallbackOptionVideoStreamLayer4,
+
+  /// @nodoc
+  @JsonValue(7)
+  streamFallbackOptionVideoStreamLayer5,
+
+  /// @nodoc
+  @JsonValue(8)
+  streamFallbackOptionVideoStreamLayer6,
 }
 
 /// @nodoc
@@ -364,7 +388,8 @@ class LocalVideoStats {
       this.txPacketLossRate,
       this.captureBrightnessLevel,
       this.dualStreamEnabled,
-      this.hwEncoderAccelerating});
+      this.hwEncoderAccelerating,
+      this.simulcastDimensions});
 
   /// The ID of the local user.
   @JsonKey(name: 'uid')
@@ -459,6 +484,10 @@ class LocalVideoStats {
   ///  1: Hardware encoding is applied for acceleration.
   @JsonKey(name: 'hwEncoderAccelerating')
   final int? hwEncoderAccelerating;
+
+  /// @nodoc
+  @JsonKey(name: 'simulcastDimensions')
+  final List<VideoDimensions>? simulcastDimensions;
 
   /// @nodoc
   factory LocalVideoStats.fromJson(Map<String, dynamic> json) =>
@@ -588,6 +617,7 @@ class RemoteVideoStats {
       this.width,
       this.height,
       this.receivedBitrate,
+      this.decoderInputFrameRate,
       this.decoderOutputFrameRate,
       this.rendererOutputFrameRate,
       this.frameLossRate,
@@ -624,6 +654,10 @@ class RemoteVideoStats {
   /// The bitrate (Kbps) of the remote video received since the last count.
   @JsonKey(name: 'receivedBitrate')
   final int? receivedBitrate;
+
+  /// @nodoc
+  @JsonKey(name: 'decoderInputFrameRate')
+  final int? decoderInputFrameRate;
 
   /// The frame rate (fps) of decoding the remote video.
   @JsonKey(name: 'decoderOutputFrameRate')
@@ -1340,7 +1374,8 @@ class ChannelMediaOptions {
       this.publishRhythmPlayerTrack,
       this.isInteractiveAudience,
       this.customVideoTrackId,
-      this.isAudioFilterable});
+      this.isAudioFilterable,
+      this.parameters});
 
   /// Whether to publish the video captured by the camera: true : Publish the video captured by the camera. false : Do not publish the video captured by the camera.
   @JsonKey(name: 'publishCameraTrack')
@@ -1489,6 +1524,10 @@ class ChannelMediaOptions {
   /// Whether the audio stream being published is filtered according to the volume algorithm: true : The audio stream is filtered. If the audio stream filter is not enabled, this setting does not takes effect. false : The audio stream is not filtered. If you need to enable this function, contact.
   @JsonKey(name: 'isAudioFilterable')
   final bool? isAudioFilterable;
+
+  /// @nodoc
+  @JsonKey(name: 'parameters')
+  final String? parameters;
 
   /// @nodoc
   factory ChannelMediaOptions.fromJson(Map<String, dynamic> json) =>
@@ -1693,10 +1732,10 @@ class RtcEngineEventHandler {
     this.onVideoPublishStateChanged,
     this.onTranscodedStreamLayoutInfo,
     this.onAudioMetadataReceived,
-    this.onExtensionEvent,
-    this.onExtensionStarted,
-    this.onExtensionStopped,
-    this.onExtensionError,
+    this.onExtensionEventWithContext,
+    this.onExtensionStartedWithContext,
+    this.onExtensionStoppedWithContext,
+    this.onExtensionErrorWithContext,
     this.onSetRtmFlagResult,
   });
 
@@ -2568,21 +2607,39 @@ class RtcEngineEventHandler {
           RtcConnection connection, int uid, Uint8List metadata, int length)?
       onAudioMetadataReceived;
 
-  /// @nodoc
-  final void Function(
-          String provider, String extension, String key, String value)?
-      onExtensionEvent;
+  /// The event callback of the extension.
+  ///
+  /// To listen for events while the extension is running, you need to register this callback.
+  ///
+  /// * [value] The value of the extension key.
+  /// * [key] The key of the extension.
+  /// * [context] The context information of the extension, see ExtensionContext.
+  final void Function(ExtensionContext context, String key, String value)?
+      onExtensionEventWithContext;
 
-  /// @nodoc
-  final void Function(String provider, String extension)? onExtensionStarted;
+  /// Occurrs when the extension is enabled.
+  ///
+  /// The callback is triggered after the extension is successfully enabled.
+  ///
+  /// * [context] The context information of the extension, see ExtensionContext.
+  final void Function(ExtensionContext context)? onExtensionStartedWithContext;
 
-  /// @nodoc
-  final void Function(String provider, String extension)? onExtensionStopped;
+  /// Occurs when the extension is disabled.
+  ///
+  /// The callback is triggered after the extension is successfully disabled.
+  ///
+  /// * [context] The context information of the extension, see ExtensionContext.
+  final void Function(ExtensionContext context)? onExtensionStoppedWithContext;
 
-  /// @nodoc
-  final void Function(
-          String provider, String extension, int error, String message)?
-      onExtensionError;
+  /// Occurs when the extension runs incorrectly.
+  ///
+  /// In case of extension enabling failure or runtime errors, the extension triggers this callback and reports the error code along with the reasons.
+  ///
+  /// * [context] The context information of the extension, see ExtensionContext.
+  /// * [error] Error code. For details, see the extension documentation provided by the extension provider.
+  /// * [message] Reason. For details, see the extension documentation provided by the extension provider.
+  final void Function(ExtensionContext context, int error, String message)?
+      onExtensionErrorWithContext;
 
   /// @nodoc
   final void Function(RtcConnection connection, int code)? onSetRtmFlagResult;
@@ -2798,7 +2855,12 @@ extension MaxMetadataSizeTypeExt on MaxMetadataSizeType {
 @JsonSerializable(explicitToJson: true, includeIfNull: false)
 class Metadata {
   /// @nodoc
-  const Metadata({this.uid, this.size, this.buffer, this.timeStampMs});
+  const Metadata(
+      {this.channelId, this.uid, this.size, this.buffer, this.timeStampMs});
+
+  /// The channel name.
+  @JsonKey(name: 'channelId')
+  final String? channelId;
 
   /// The user ID.
   ///  For the recipient: The ID of the remote user who sent the Metadata.
@@ -3373,6 +3435,32 @@ abstract class RtcEngine {
       required BeautyOptions options,
       MediaSourceType type = MediaSourceType.primaryCameraSource});
 
+  /// @nodoc
+  Future<void> setFaceShapeBeautyOptions(
+      {required bool enabled,
+      required FaceShapeBeautyOptions options,
+      MediaSourceType type = MediaSourceType.primaryCameraSource});
+
+  /// @nodoc
+  Future<void> setFaceShapeAreaOptions(
+      {required FaceShapeAreaOptions options,
+      MediaSourceType type = MediaSourceType.primaryCameraSource});
+
+  /// @nodoc
+  Future<FaceShapeBeautyOptions> getFaceShapeBeautyOptions(
+      {MediaSourceType type = MediaSourceType.primaryCameraSource});
+
+  /// @nodoc
+  Future<FaceShapeAreaOptions> getFaceShapeAreaOptions(
+      {required FaceShapeArea shapeArea,
+      MediaSourceType type = MediaSourceType.primaryCameraSource});
+
+  /// @nodoc
+  Future<void> setFilterEffectOptions(
+      {required bool enabled,
+      required FilterEffectOptions options,
+      MediaSourceType type = MediaSourceType.primaryCameraSource});
+
   /// Sets low-light enhancement.
   ///
   /// The low-light enhancement feature can adaptively adjust the brightness value of the video captured in situations with low or uneven lighting, such as backlit, cloudy, or dark scenes. It restores or highlights the image details and improves the overall visual effect of the video. You can call this method to enable the color enhancement feature and set the options of the color enhancement effect.
@@ -3589,9 +3677,6 @@ abstract class RtcEngine {
   /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown. You need to catch the exception and handle it accordingly.
   Future<void> muteAllRemoteAudioStreams(bool mute);
 
-  /// @nodoc
-  Future<void> setDefaultMuteAllRemoteAudioStreams(bool mute);
-
   /// Stops or resumes subscribing to the audio stream of a specified user.
   ///
   /// * [uid] The user ID of the specified user.
@@ -3632,9 +3717,6 @@ abstract class RtcEngine {
   /// Returns
   /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown. You need to catch the exception and handle it accordingly.
   Future<void> muteAllRemoteVideoStreams(bool mute);
-
-  /// @nodoc
-  Future<void> setDefaultMuteAllRemoteVideoStreams(bool mute);
 
   /// Sets the default video stream type to subscribe to.
   ///
@@ -4413,6 +4495,18 @@ abstract class RtcEngine {
   Future<void> setHeadphoneEQParameters(
       {required int lowGain, required int highGain});
 
+  /// Enables or disables the voice AI tuner.
+  ///
+  /// The voice AI tuner supports enhancing sound quality and adjusting tone style.
+  ///
+  /// * [enabled] Whether to enable the voice AI tuner: true : Enables the voice AI tuner. false : (Default) Disable the voice AI tuner.
+  /// * [type] Voice AI tuner sound types, see VoiceAiTunerType.
+  ///
+  /// Returns
+  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown. You need to catch the exception and handle it accordingly.
+  Future<void> enableVoiceAITuner(
+      {required bool enabled, required VoiceAiTunerType type});
+
   /// Sets the log file.
   ///
   /// Deprecated: This method is deprecated. Set the log file path by configuring the context parameter when calling initialize. Specifies an SDK output log file. The log file records all log data for the SDK’s operation.
@@ -4502,6 +4596,13 @@ abstract class RtcEngine {
       required RenderModeType renderMode,
       required VideoMirrorModeType mirrorMode});
 
+  /// @nodoc
+  Future<void> setLocalRenderTargetFps(
+      {required VideoSourceType sourceType, required int targetFps});
+
+  /// @nodoc
+  Future<void> setRemoteRenderTargetFps(int targetFps);
+
   /// Sets the local video mirror mode.
   ///
   /// Deprecated: This method is deprecated. Use setupLocalVideo or setLocalRenderMode instead.
@@ -4545,6 +4646,9 @@ abstract class RtcEngine {
   /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown. You need to catch the exception and handle it accordingly.
   Future<void> setDualStreamMode(
       {required SimulcastStreamMode mode, SimulcastStreamConfig? streamConfig});
+
+  /// @nodoc
+  Future<void> setSimulcastConfig(SimulcastConfig simulcastConfig);
 
   /// Sets whether to enable the local playback of external audio source.
   ///
@@ -5370,6 +5474,9 @@ abstract class RtcEngine {
   /// Returns an array of FocalLengthInfo objects, which contain the camera's orientation and focal length type.
   Future<List<FocalLengthInfo>> queryCameraFocalLengthCapability();
 
+  /// @nodoc
+  Future<int> setExternalMediaProjection();
+
   /// Sets the screen sharing scenario.
   ///
   /// When you start screen sharing or window sharing, you can call this method to set the screen sharing scenario. The SDK adjusts the video quality and experience of the sharing according to the scenario. Agora recommends that you call this method before joining a channel.
@@ -5493,6 +5600,16 @@ abstract class RtcEngine {
   /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown. You need to catch the exception and handle it accordingly.
   Future<void> stopLocalVideoTranscoder();
 
+  /// @nodoc
+  Future<void> startLocalAudioMixer(LocalAudioMixerConfiguration config);
+
+  /// @nodoc
+  Future<void> updateLocalAudioMixerConfiguration(
+      LocalAudioMixerConfiguration config);
+
+  /// @nodoc
+  Future<void> stopLocalAudioMixer();
+
   /// Starts camera capture.
   ///
   /// You can call this method to start capturing video from one or more cameras by specifying sourceType. On the iOS platform, if you want to enable multi-camera capture, you need to call enableMultiCamera and set enabled to true before calling this method.
@@ -5566,12 +5683,6 @@ abstract class RtcEngine {
   /// @nodoc
   Future<void> setRemoteUserPriority(
       {required int uid, required PriorityType userPriority});
-
-  /// @nodoc
-  Future<void> setEncryptionMode(String encryptionMode);
-
-  /// @nodoc
-  Future<void> setEncryptionSecret(String secret);
 
   /// Enables or disables the built-in encryption.
   ///
@@ -6143,6 +6254,9 @@ abstract class RtcEngine {
   Future<void> sendAudioMetadata(
       {required Uint8List metadata, required int length});
 
+  /// @nodoc
+  Future<HdrCapability> queryHDRCapability(VideoModuleType videoModule);
+
   /// Starts screen capture from the specified video source.
   ///
   /// This method applies to the macOS and Windows only.
@@ -6259,6 +6373,10 @@ abstract class RtcEngine {
   /// Returns
   /// The native handle of the SDK.
   Future<int> getNativeHandle();
+
+  /// @nodoc
+  Future<void> takeSnapshotWithConfig(
+      {required int uid, required SnapshotConfig config});
 }
 
 /// @nodoc
@@ -6300,6 +6418,10 @@ enum MediaDeviceStateType {
   /// 2: The device is disabled.
   @JsonValue(2)
   mediaDeviceStateDisabled,
+
+  /// @nodoc
+  @JsonValue(3)
+  mediaDeviceStatePluggedIn,
 
   /// 4: The device is not found.
   @JsonValue(4)
