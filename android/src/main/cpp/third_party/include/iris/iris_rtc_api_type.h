@@ -26,7 +26,6 @@
   "RtcEngine_startMediaRenderingTracing"
 #define FUNC_RTCENGINEEX_STARTMEDIARENDERINGTRACINGEX                          \
   "RtcEngineEx_startMediaRenderingTracingEx"
-#define FUNC_RTCENGINEEX_GETCALLIDEX "RtcEngineEx_getCallIdEx"
 #define FUNC_RTCENGINE_ENABLEINSTANTMEDIARENDERING                             \
   "RtcEngine_enableInstantMediaRendering"
 #define FUNC_RTCENGINE_RELEASE "RtcEngine_release"
@@ -173,7 +172,6 @@
 #define FUNC_RTCENGINE_SETLOGLEVEL "RtcEngine_setLogLevel"
 #define FUNC_RTCENGINE_SETLOGFILESIZE "RtcEngine_setLogFileSize"
 #define FUNC_RTCENGINE_UPLOADLOGFILE "RtcEngine_uploadLogFile"
-#define FUNC_RTCENGINE_WRITELOG "RtcEngine_writeLog"
 #define FUNC_RTCENGINE_SETLOCALRENDERMODE "RtcEngine_setLocalRenderMode"
 #define FUNC_RTCENGINE_SETREMOTERENDERMODE "RtcEngine_setRemoteRenderMode"
 #define FUNC_RTCENGINE_SETLOCALRENDERMODE2 "RtcEngine_setLocalRenderMode2"
@@ -331,6 +329,9 @@
 #define FUNC_RTCENGINE_CREATEDATASTREAM "RtcEngine_createDataStream"
 #define FUNC_RTCENGINE_CREATEDATASTREAM2 "RtcEngine_createDataStream2"
 #define FUNC_RTCENGINE_SENDSTREAMMESSAGE "RtcEngine_sendStreamMessage"
+#define FUNC_RTCENGINE_SENDRDTMESSAGE "RtcEngine_sendRdtMessage"
+#define FUNC_RTCENGINE_SENDMEDIACONTROLMESSAGE                                 \
+  "RtcEngine_sendMediaControlMessage"
 #define FUNC_RTCENGINE_ADDVIDEOWATERMARK "RtcEngine_addVideoWatermark"
 #define FUNC_RTCENGINE_ADDVIDEOWATERMARK2 "RtcEngine_addVideoWatermark2"
 //#define FUNC_RTCENGINE_CLEARVIDEOWATERMARK "RtcEngine_clearVideoWatermark"
@@ -816,10 +817,6 @@
   "MediaEngine_registerVideoEncodedFrameObserver"
 #define FUNC_MEDIAENGINE_UNREGISTERVIDEOENCODEDFRAMEOBSERVER                   \
   "MediaEngine_unregisterVideoEncodedFrameObserver"
-#define FUNC_MEDIAENGINE_REGISTERFACEINFOOBSERVER                              \
-  "MediaEngine_registerFaceInfoObserver"
-#define FUNC_MEDIAENGINE_UNREGISTERFACEINFOOBSERVER                            \
-  "MediaEngine_unregisterFaceInfoObserver"
 #define FUNC_MEDIAENGINE_ADDVIDEOFRAMERENDERER                                 \
   "MediaEngine_addVideoFrameRenderer"
 #define FUNC_MEDIAENGINE_REMOVEVIDEOFRAMERENDERER                              \
@@ -854,6 +851,9 @@
 #define FUNC_RTCENGINEEX_CREATEDATASTREAMEX "RtcEngineEx_createDataStreamEx"
 #define FUNC_RTCENGINEEX_CREATEDATASTREAMEX2 "RtcEngineEx_createDataStreamEx2"
 #define FUNC_RTCENGINEEX_SENDSTREAMMESSAGEEX "RtcEngineEx_sendStreamMessageEx"
+#define FUNC_RTCENGINEEX_SENDRDTMESSAGEEX "RtcEngineEx_sendRdtMessageEx"
+#define FUNC_RTCENGINEEX_SENDMEDIACONTROLMESSAGEEX                             \
+  "RtcEngineEx_sendMediaControlMessageEx"
 #define FUNC_RTCENGINEEX_ADDVIDEOWATERMARKEX "RtcEngineEx_addVideoWatermarkEx"
 #define FUNC_RTCENGINEEX_CLEARVIDEOWATERMARKEX                                 \
   "RtcEngineEx_clearVideoWatermarkEx"
@@ -953,5 +953,4 @@
 // class IMusicContentCenter end
 // class IMusicPlayer start
 #define FUNC_MUSICPLAYER_OPEN "MusicPlayer_open"
-#define FUNC_MUSICPLAYER_SETPLAYMODE "MusicPlayer_setPlayMode"
 // class IMusicPlayer end
