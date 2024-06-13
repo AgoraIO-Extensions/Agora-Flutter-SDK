@@ -44,7 +44,7 @@ abstract class RtcEngineEx implements RtcEngine {
   ///  -2: The parameter is invalid. For example, the token is invalid, the uid parameter is not set to an integer, or the value of a member in ChannelMediaOptions is invalid. You need to pass in a valid parameter and join the channel again.
   ///  -3: Fails to initialize the RtcEngine object. You need to reinitialize the RtcEngine object.
   ///  -7: The RtcEngine object has not been initialized. You need to initialize the RtcEngine object before calling this method.
-  ///  -8: The internal state of the RtcEngine object is wrong. The typical cause is that after calling startEchoTest to start a call loop test, you call this method to join the channel without calling stopEchoTest to stop the test. You need to call stopEchoTest before calling this method.
+  ///  -8: The internal state of the RtcEngine object is wrong. The typical cause is that you call this method to join the channel without calling stopEchoTest to stop the test after calling startEchoTest to start a call loop test. You need to call stopEchoTest before calling this method.
   ///  -17: The request to join the channel is rejected. The typical cause is that the user is already in the channel. Agora recommends that you use the onConnectionStateChanged callback to see whether the user is in the channel. Do not call this method to join the channel unless you receive the connectionStateDisconnected (1) state.
   ///  -102: The channel name is invalid. You need to pass in a valid channel name in channelId to rejoin the channel.
   ///  -121: The user ID is invalid. You need to pass in a valid user ID in uid to rejoin the channel.
@@ -430,7 +430,6 @@ abstract class RtcEngineEx implements RtcEngine {
   ///  Each user can have up to five data streams simultaneously.
   ///  Up to 60 packets can be sent per second in a data stream with each packet having a maximum size of 1 KB.
   ///  Up to 30 KB of data can be sent per second in a data stream. After calling createDataStreamEx, you can call this method to send data stream messages to all users in the channel.
-  ///  Call this method after joinChannelEx.
   ///  Ensure that you call createDataStreamEx to create a data channel before calling this method.
   ///  This method applies only to the COMMUNICATION profile or to the hosts in the LIVE_BROADCASTING profile. If an audience in the LIVE_BROADCASTING profile calls this method, the audience may be switched to a host.
   ///
@@ -666,6 +665,11 @@ abstract class RtcEngineEx implements RtcEngine {
   Future<void> setDualStreamModeEx(
       {required SimulcastStreamMode mode,
       required SimulcastStreamConfig streamConfig,
+      required RtcConnection connection});
+
+  /// @nodoc
+  Future<void> setSimulcastConfigEx(
+      {required SimulcastConfig simulcastConfig,
       required RtcConnection connection});
 
   /// @nodoc

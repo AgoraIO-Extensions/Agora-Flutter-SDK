@@ -27,6 +27,10 @@ enum LogLevel {
   /// @nodoc
   @JsonValue(0x0010)
   logLevelApiCall,
+
+  /// @nodoc
+  @JsonValue(0x0020)
+  logLevelDebug,
 }
 
 /// @nodoc

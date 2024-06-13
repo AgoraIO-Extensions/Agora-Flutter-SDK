@@ -1241,6 +1241,10 @@ enum AudioCodecType {
   /// @nodoc
   @JsonValue(12)
   audioCodecLpcnet,
+
+  /// @nodoc
+  @JsonValue(13)
+  audioCodecOpusmc,
 }
 
 /// @nodoc
@@ -1484,6 +1488,30 @@ enum VideoStreamType {
   /// 1: Low-quality video stream.
   @JsonValue(1)
   videoStreamLow,
+
+  /// @nodoc
+  @JsonValue(4)
+  videoStreamLayer1,
+
+  /// @nodoc
+  @JsonValue(5)
+  videoStreamLayer2,
+
+  /// @nodoc
+  @JsonValue(6)
+  videoStreamLayer3,
+
+  /// @nodoc
+  @JsonValue(7)
+  videoStreamLayer4,
+
+  /// @nodoc
+  @JsonValue(8)
+  videoStreamLayer5,
+
+  /// @nodoc
+  @JsonValue(9)
+  videoStreamLayer6,
 }
 
 /// @nodoc
@@ -1674,7 +1702,8 @@ extension EncodingPreferenceExt on EncodingPreference {
 @JsonSerializable(explicitToJson: true, includeIfNull: false)
 class AdvanceOptions {
   /// @nodoc
-  const AdvanceOptions({this.encodingPreference, this.compressionPreference});
+  const AdvanceOptions(
+      {this.encodingPreference, this.compressionPreference, this.encodeAlpha});
 
   /// Video encoder preference. See EncodingPreference.
   @JsonKey(name: 'encodingPreference')
@@ -1683,6 +1712,10 @@ class AdvanceOptions {
   /// Compression preference for video encoding. See CompressionPreference.
   @JsonKey(name: 'compressionPreference')
   final CompressionPreference? compressionPreference;
+
+  /// Whether to encode and send the Alpha data present in the video frame to the remote end: true : Encode and send Alpha data. false : (Default) Do not encode and send Alpha data.
+  @JsonKey(name: 'encodeAlpha')
+  final bool? encodeAlpha;
 
   /// @nodoc
   factory AdvanceOptions.fromJson(Map<String, dynamic> json) =>
@@ -1720,6 +1753,31 @@ extension VideoMirrorModeTypeExt on VideoMirrorModeType {
   /// @nodoc
   int value() {
     return _$VideoMirrorModeTypeEnumMap[this]!;
+  }
+}
+
+/// @nodoc
+@JsonEnum(alwaysCreate: true)
+enum CameraFormatType {
+  /// @nodoc
+  @JsonValue(0)
+  cameraFormatNv12,
+
+  /// @nodoc
+  @JsonValue(1)
+  cameraFormatBgra,
+}
+
+/// @nodoc
+extension CameraFormatTypeExt on CameraFormatType {
+  /// @nodoc
+  static CameraFormatType fromValue(int value) {
+    return $enumDecode(_$CameraFormatTypeEnumMap, value);
+  }
+
+  /// @nodoc
+  int value() {
+    return _$CameraFormatTypeEnumMap[this]!;
   }
 }
 
@@ -1968,6 +2026,99 @@ class SimulcastStreamConfig {
 
   /// @nodoc
   Map<String, dynamic> toJson() => _$SimulcastStreamConfigToJson(this);
+}
+
+/// @nodoc
+@JsonSerializable(explicitToJson: true, includeIfNull: false)
+class SimulcastConfig {
+  /// @nodoc
+  const SimulcastConfig({this.configs});
+
+  /// @nodoc
+  @JsonKey(name: 'configs')
+  final List<StreamLayerConfig>? configs;
+
+  /// @nodoc
+  factory SimulcastConfig.fromJson(Map<String, dynamic> json) =>
+      _$SimulcastConfigFromJson(json);
+
+  /// @nodoc
+  Map<String, dynamic> toJson() => _$SimulcastConfigToJson(this);
+}
+
+/// @nodoc
+@JsonEnum(alwaysCreate: true)
+enum StreamLayerIndex {
+  /// @nodoc
+  @JsonValue(0)
+  streamLayer1,
+
+  /// @nodoc
+  @JsonValue(1)
+  streamLayer2,
+
+  /// @nodoc
+  @JsonValue(2)
+  streamLayer3,
+
+  /// @nodoc
+  @JsonValue(3)
+  streamLayer4,
+
+  /// @nodoc
+  @JsonValue(4)
+  streamLayer5,
+
+  /// @nodoc
+  @JsonValue(5)
+  streamLayer6,
+
+  /// @nodoc
+  @JsonValue(6)
+  streamLow,
+
+  /// @nodoc
+  @JsonValue(7)
+  streamLayerCountMax,
+}
+
+/// @nodoc
+extension StreamLayerIndexExt on StreamLayerIndex {
+  /// @nodoc
+  static StreamLayerIndex fromValue(int value) {
+    return $enumDecode(_$StreamLayerIndexEnumMap, value);
+  }
+
+  /// @nodoc
+  int value() {
+    return _$StreamLayerIndexEnumMap[this]!;
+  }
+}
+
+/// @nodoc
+@JsonSerializable(explicitToJson: true, includeIfNull: false)
+class StreamLayerConfig {
+  /// @nodoc
+  const StreamLayerConfig({this.dimensions, this.framerate, this.enable});
+
+  /// @nodoc
+  @JsonKey(name: 'dimensions')
+  final VideoDimensions? dimensions;
+
+  /// @nodoc
+  @JsonKey(name: 'framerate')
+  final int? framerate;
+
+  /// @nodoc
+  @JsonKey(name: 'enable')
+  final bool? enable;
+
+  /// @nodoc
+  factory StreamLayerConfig.fromJson(Map<String, dynamic> json) =>
+      _$StreamLayerConfigFromJson(json);
+
+  /// @nodoc
+  Map<String, dynamic> toJson() => _$StreamLayerConfigToJson(this);
 }
 
 /// The location of the target area relative to the screen or window. If you do not set this parameter, the SDK selects the whole screen or window.
@@ -2627,7 +2778,7 @@ enum VideoApplicationScenarioType {
   @JsonValue(0)
   applicationScenarioGeneral,
 
-  /// applicationScenarioMeeting (1) is suitable for meeting scenarios. The SDK automatically enables the following strategies:
+  /// applicationScenarioMeeting (1) is suitable for meeting scenarios. If set to applicationScenarioMeeting (1), the SDK automatically enables the following strategies:
   ///  In meeting scenarios where low-quality video streams are required to have a high bitrate, the SDK automatically enables multiple technologies used to deal with network congestions, to enhance the performance of the low-quality streams and to ensure the smooth reception by subscribers.
   ///  The SDK monitors the number of subscribers to the high-quality video stream in real time and dynamically adjusts its configuration based on the number of subscribers.
   ///  If nobody subscribers to the high-quality stream, the SDK automatically reduces its bitrate and frame rate to save upstream bandwidth.
@@ -2643,6 +2794,10 @@ enum VideoApplicationScenarioType {
   ///  Bitrate: 500 Kbps 1: The meeting scenario.
   @JsonValue(1)
   applicationScenarioMeeting,
+
+  /// @nodoc
+  @JsonValue(2)
+  applicationScenario1v1,
 }
 
 /// @nodoc
@@ -3005,6 +3160,10 @@ enum LocalVideoStreamReason {
   /// 29: (Windows only) Screen capture has resumed from paused state.
   @JsonValue(29)
   localVideoStreamReasonScreenCaptureResumed,
+
+  /// @nodoc
+  @JsonValue(30)
+  localVideoStreamReasonScreenCaptureDisplayDisconnected,
 }
 
 /// @nodoc
@@ -4696,7 +4855,7 @@ class VideoCanvas {
   final int? subviewUid;
 
   /// The video display window. In one VideoCanvas, you can only choose to set either view or surfaceTexture. If both are set, only the settings in view take effect.
-  @JsonKey(name: 'view')
+  @JsonKey(name: 'view', readValue: readIntPtr)
   final int? view;
 
   /// The background color of the video canvas in RGBA format. The default value is 0x00000000, which represents completely transparent black.
@@ -4812,6 +4971,144 @@ extension LighteningContrastLevelExt on LighteningContrastLevel {
   /// @nodoc
   int value() {
     return _$LighteningContrastLevelEnumMap[this]!;
+  }
+}
+
+/// @nodoc
+@JsonSerializable(explicitToJson: true, includeIfNull: false)
+class FaceShapeAreaOptions {
+  /// @nodoc
+  const FaceShapeAreaOptions({this.shapeArea, this.shapeIntensity});
+
+  /// @nodoc
+  @JsonKey(name: 'shapeArea')
+  final FaceShapeArea? shapeArea;
+
+  /// @nodoc
+  @JsonKey(name: 'shapeIntensity')
+  final int? shapeIntensity;
+
+  /// @nodoc
+  factory FaceShapeAreaOptions.fromJson(Map<String, dynamic> json) =>
+      _$FaceShapeAreaOptionsFromJson(json);
+
+  /// @nodoc
+  Map<String, dynamic> toJson() => _$FaceShapeAreaOptionsToJson(this);
+}
+
+/// @nodoc
+@JsonEnum(alwaysCreate: true)
+enum FaceShapeArea {
+  /// @nodoc
+  @JsonValue(-1)
+  faceShapeAreaNone,
+
+  /// @nodoc
+  @JsonValue(0)
+  faceShapeAreaHeadscale,
+
+  /// @nodoc
+  @JsonValue(1)
+  faceShapeAreaForehead,
+
+  /// @nodoc
+  @JsonValue(2)
+  faceShapeAreaFacecontour,
+
+  /// @nodoc
+  @JsonValue(3)
+  faceShapeAreaFacelength,
+
+  /// @nodoc
+  @JsonValue(4)
+  faceShapeAreaFacewidth,
+
+  /// @nodoc
+  @JsonValue(5)
+  faceShapeAreaCheekbone,
+
+  /// @nodoc
+  @JsonValue(6)
+  faceShapeAreaCheek,
+
+  /// @nodoc
+  @JsonValue(7)
+  faceShapeAreaChin,
+
+  /// @nodoc
+  @JsonValue(8)
+  faceShapeAreaEyescale,
+
+  /// @nodoc
+  @JsonValue(9)
+  faceShapeAreaNoselength,
+
+  /// @nodoc
+  @JsonValue(10)
+  faceShapeAreaNosewidth,
+
+  /// @nodoc
+  @JsonValue(11)
+  faceShapeAreaMouthscale,
+}
+
+/// @nodoc
+extension FaceShapeAreaExt on FaceShapeArea {
+  /// @nodoc
+  static FaceShapeArea fromValue(int value) {
+    return $enumDecode(_$FaceShapeAreaEnumMap, value);
+  }
+
+  /// @nodoc
+  int value() {
+    return _$FaceShapeAreaEnumMap[this]!;
+  }
+}
+
+/// @nodoc
+@JsonSerializable(explicitToJson: true, includeIfNull: false)
+class FaceShapeBeautyOptions {
+  /// @nodoc
+  const FaceShapeBeautyOptions({this.shapeStyle, this.styleIntensity});
+
+  /// @nodoc
+  @JsonKey(name: 'shapeStyle')
+  final FaceShapeBeautyStyle? shapeStyle;
+
+  /// @nodoc
+  @JsonKey(name: 'styleIntensity')
+  final int? styleIntensity;
+
+  /// @nodoc
+  factory FaceShapeBeautyOptions.fromJson(Map<String, dynamic> json) =>
+      _$FaceShapeBeautyOptionsFromJson(json);
+
+  /// @nodoc
+  Map<String, dynamic> toJson() => _$FaceShapeBeautyOptionsToJson(this);
+}
+
+/// @nodoc
+@JsonEnum(alwaysCreate: true)
+enum FaceShapeBeautyStyle {
+  /// @nodoc
+  @JsonValue(0)
+  faceShapeBeautyStyleFemale,
+
+  /// @nodoc
+  @JsonValue(1)
+  faceShapeBeautyStyleMale,
+}
+
+/// @nodoc
+extension FaceShapeBeautyStyleExt on FaceShapeBeautyStyle {
+  /// @nodoc
+  static FaceShapeBeautyStyle fromValue(int value) {
+    return $enumDecode(_$FaceShapeBeautyStyleEnumMap, value);
+  }
+
+  /// @nodoc
+  int value() {
+    return _$FaceShapeBeautyStyleEnumMap[this]!;
   }
 }
 
@@ -5468,6 +5765,63 @@ extension HeadphoneEqualizerPresetExt on HeadphoneEqualizerPreset {
   }
 }
 
+/// @nodoc
+@JsonEnum(alwaysCreate: true)
+enum VoiceAiTunerType {
+  /// @nodoc
+  @JsonValue(0)
+  voiceAiTunerMatureMale,
+
+  /// @nodoc
+  @JsonValue(1)
+  voiceAiTunerFreshMale,
+
+  /// @nodoc
+  @JsonValue(2)
+  voiceAiTunerElegantFemale,
+
+  /// @nodoc
+  @JsonValue(3)
+  voiceAiTunerSweetFemale,
+
+  /// @nodoc
+  @JsonValue(4)
+  voiceAiTunerWarmMaleSinging,
+
+  /// @nodoc
+  @JsonValue(5)
+  voiceAiTunerGentleFemaleSinging,
+
+  /// @nodoc
+  @JsonValue(6)
+  voiceAiTunerHuskyMaleSinging,
+
+  /// @nodoc
+  @JsonValue(7)
+  voiceAiTunerWarmElegantFemaleSinging,
+
+  /// @nodoc
+  @JsonValue(8)
+  voiceAiTunerPowerfulMaleSinging,
+
+  /// @nodoc
+  @JsonValue(9)
+  voiceAiTunerDreamyFemaleSinging,
+}
+
+/// @nodoc
+extension VoiceAiTunerTypeExt on VoiceAiTunerType {
+  /// @nodoc
+  static VoiceAiTunerType fromValue(int value) {
+    return $enumDecode(_$VoiceAiTunerTypeEnumMap, value);
+  }
+
+  /// @nodoc
+  int value() {
+    return _$VoiceAiTunerTypeEnumMap[this]!;
+  }
+}
+
 /// Screen sharing configurations.
 @JsonSerializable(explicitToJson: true, includeIfNull: false)
 class ScreenCaptureParameters {
@@ -5511,7 +5865,7 @@ class ScreenCaptureParameters {
   final bool? windowFocus;
 
   /// The ID list of the windows to be blocked. When calling startScreenCaptureByDisplayId to start screen sharing, you can use this parameter to block a specified window. When calling updateScreenCaptureParameters to update screen sharing configurations, you can use this parameter to dynamically block a specified window.
-  @JsonKey(name: 'excludeWindowList')
+  @JsonKey(name: 'excludeWindowList', readValue: readIntPtrList)
   final List<int>? excludeWindowList;
 
   /// The number of windows to be excluded. On the Windows platform, the maximum value of this parameter is 24; if this value is exceeded, excluding the window fails.
@@ -5830,6 +6184,10 @@ enum AreaCodeEx {
   /// @nodoc
   @JsonValue(0x00000800)
   areaCodeUs,
+
+  /// @nodoc
+  @JsonValue(0x00001000)
+  areaCodeRu,
 
   /// @nodoc
   @JsonValue(0xFFFFFFFE)
@@ -6370,7 +6728,7 @@ class EchoTestConfiguration {
       this.intervalInSeconds});
 
   /// The view used to render the local user's video. This parameter is only applicable to scenarios testing video devices, that is, when enableVideo is true.
-  @JsonKey(name: 'view')
+  @JsonKey(name: 'view', readValue: readIntPtr)
   final int? view;
 
   /// Whether to enable the audio device for the loop test: true : (Default) Enable the audio device. To test the audio device, set this parameter as true. false : Disable the audio device.
