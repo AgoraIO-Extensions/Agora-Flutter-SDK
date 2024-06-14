@@ -81,7 +81,7 @@ abstract class RtcEngineEx implements RtcEngine {
 
   /// Sets the video encoder configuration.
   ///
-  /// Sets the encoder configuration for the local video. Each configuration profile corresponds to a set of video parameters, including the resolution, frame rate, and bitrate. The config specified in this method is the maximum value under ideal network conditions. If the video engine cannot render the video using the specified config due to unreliable network conditions, the parameters further down the list are considered until a successful configuration is found.
+  /// Sets the encoder configuration for the local video. Each configuration profile corresponds to a set of video parameters, including the resolution, frame rate, and bitrate.
   ///
   /// * [config] Video profile. See VideoEncoderConfiguration.
   /// * [connection] The connection information. See RtcConnection.
@@ -375,7 +375,10 @@ abstract class RtcEngineEx implements RtcEngine {
   ///  The playback volume here refers to the mixed volume of a specified remote user.
   ///
   /// * [uid] The user ID of the remote user.
-  /// * [volume] Audio mixing volume. The value ranges between 0 and 100. The default value is 100, which means the original volume.
+  /// * [volume] The volume of the user. The value range is [0,400].
+  ///  0: Mute.
+  ///  100: (Default) The original volume.
+  ///  400: Four times the original volume (amplifying the audio signals by four times).
   /// * [connection] The connection information. See RtcConnection.
   ///
   /// Returns
@@ -441,6 +444,21 @@ abstract class RtcEngineEx implements RtcEngine {
   /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown. You need to catch the exception and handle it accordingly.
   Future<void> sendStreamMessageEx(
       {required int streamId,
+      required Uint8List data,
+      required int length,
+      required RtcConnection connection});
+
+  /// @nodoc
+  Future<void> sendRdtMessageEx(
+      {required int uid,
+      required RdtStreamType type,
+      required Uint8List data,
+      required int length,
+      required RtcConnection connection});
+
+  /// @nodoc
+  Future<void> sendMediaControlMessageEx(
+      {required int uid,
       required Uint8List data,
       required int length,
       required RtcConnection connection});
@@ -729,14 +747,4 @@ abstract class RtcEngineEx implements RtcEngine {
   /// Returns
   /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown. You need to catch the exception and handle it accordingly.
   Future<void> startMediaRenderingTracingEx(RtcConnection connection);
-
-  /// Gets the call ID with the connection ID.
-  ///
-  /// Call this method after joining a channel. When a user joins a channel on a client, a callId is generated to identify the call from the client. You can call this method to get the callId parameter, and pass it in when calling methods such as rate and complain.
-  ///
-  /// * [connection] The connection information. See RtcConnection.
-  ///
-  /// Returns
-  /// The current call ID.
-  Future<String> getCallIdEx(RtcConnection connection);
 }

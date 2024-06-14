@@ -73,20 +73,6 @@ class IMediaEngine {
    * - < 0: Failure.
    */
   virtual int registerVideoEncodedFrameObserver(IVideoEncodedFrameObserver* observer) = 0;
-  
-  /**
-   * Registers a face info observer object.
-   *
-   * @note
-   * Ensure that you call this method before \ref IRtcEngine::joinChannel "joinChannel".
-   *
-   * @param observer A pointer to the face info observer object: IFaceInfoObserver.
-   *
-   * @return
-   * - 0: Success.
-   * - < 0: Failure.
-   */
-  virtual int registerFaceInfoObserver(IFaceInfoObserver* observer) = 0;
 
   /**
    * Pushes the external audio data to the app.

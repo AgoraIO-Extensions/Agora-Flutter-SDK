@@ -14,6 +14,7 @@ import 'package:agora_rtc_engine_example/examples/advanced/spatial_audio_with_me
 import 'package:agora_rtc_engine_example/examples/advanced/start_direct_cdn_streaming/start_direct_cdn_streaming.dart';
 import 'package:agora_rtc_engine_example/examples/advanced/start_local_video_transcoder/start_local_video_transcoder.dart';
 import 'package:agora_rtc_engine_example/examples/advanced/stream_message/stream_message.dart';
+import 'package:agora_rtc_engine_example/examples/advanced/stream_rdt_message/stream_rdt_message.dart';
 import 'package:agora_rtc_engine_example/examples/advanced/take_snapshot/take_snapshot.dart';
 import 'package:flutter/foundation.dart';
 
@@ -52,6 +53,7 @@ final advanced = [
       'widget': const SetVideoEncoderConfiguration()
     },
   if (!kIsWeb) {'name': 'StreamMessage', 'widget': const StreamMessage()},
+  if (!kIsWeb) {'name': 'StreamRdtMessage', 'widget': const StreamRdtMessage()},
   if (!kIsWeb) {'name': 'VoiceChanger', 'widget': const VoiceChanger()},
   if (!kIsWeb)
     {
