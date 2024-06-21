@@ -25,6 +25,7 @@ class _State extends State<JoinChannelAudio> {
       muteAllRemoteAudio = false,
       enableSpeakerphone = true,
       playEffect = false;
+  bool _isSetDefaultAudioRouteToSpeakerphone = false;
   bool _enableInEarMonitoring = false;
   double _recordingVolume = 100,
       _playbackVolume = 100,
@@ -83,6 +84,9 @@ class _State extends State<JoinChannelAudio> {
         setState(() {
           isJoined = false;
         });
+      },
+      onAudioRoutingChanged: (routing) {
+        logSink.log('[onAudioRoutingChanged] routing: $routing');
       },
     );
 
@@ -294,6 +298,18 @@ class _State extends State<JoinChannelAudio> {
                     child: Text('Microphone ${openMicrophone ? 'on' : 'off'}'),
                   ),
                   if (!kIsWeb) ...[
+                    ElevatedButton(
+                      onPressed: () {
+                        _isSetDefaultAudioRouteToSpeakerphone =
+                            !_isSetDefaultAudioRouteToSpeakerphone;
+                        _engine.setDefaultAudioRouteToSpeakerphone(
+                            _isSetDefaultAudioRouteToSpeakerphone);
+                        setState(() {});
+                      },
+                      child: Text(!_isSetDefaultAudioRouteToSpeakerphone
+                          ? 'SetDefaultAudioRouteToSpeakerphone'
+                          : 'UnsetDefaultAudioRouteToSpeakerphone'),
+                    ),
                     ElevatedButton(
                       onPressed: isJoined ? _switchSpeakerphone : null,
                       child: Text(
