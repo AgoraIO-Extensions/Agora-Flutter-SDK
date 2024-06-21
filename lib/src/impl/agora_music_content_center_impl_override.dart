@@ -8,7 +8,6 @@ import 'package:agora_rtc_engine/src/binding/agora_music_content_center_event_im
     as event_binding;
 import 'package:agora_rtc_engine/src/binding/agora_music_content_center_impl.dart'
     as binding;
-import 'package:agora_rtc_engine/src/binding/call_api_impl_params_json.dart';
 import 'package:agora_rtc_engine/src/binding/event_handler_param_json.dart';
 
 import 'package:agora_rtc_engine/src/impl/agora_music_content_center_impl_json.dart';
@@ -247,24 +246,5 @@ class MusicContentCenterImpl extends binding.MusicContentCenterImpl
     final rm = callApiResult.data;
     final result = rm['result'];
     return result == 0;
-  }
-
-  @override
-  Future<String> preload(int songCode) async {
-    final apiType =
-        '${isOverrideClassName ? className : 'MusicContentCenter'}_preload_d3baeab';
-    final param = createParams({'songCode': songCode});
-    final callApiResult = await irisMethodChannel.invokeMethod(
-        IrisMethodCall(apiType, jsonEncode(param), buffers: null));
-    if (callApiResult.irisReturnCode < 0) {
-      throw AgoraRtcException(code: callApiResult.irisReturnCode);
-    }
-    final rm = callApiResult.data;
-    final result = rm['result'];
-    if (result < 0) {
-      throw AgoraRtcException(code: result);
-    }
-    final preloadJson = MusicContentCenterPreloadJson.fromJson(rm);
-    return preloadJson.requestId;
   }
 }

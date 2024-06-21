@@ -801,31 +801,6 @@ class RtcEngineImpl extends rtc_engine_ex_binding.RtcEngineExImpl
   }
 
   @override
-  Future<void> joinChannel(
-      {required String token,
-      required String channelId,
-      required int uid,
-      required ChannelMediaOptions options}) async {
-    const apiType = 'RtcEngine_joinChannel_cdbb747';
-    final param = createParams({
-      'token': token,
-      'channelId': channelId,
-      'uid': uid,
-      'options': options.toJson()
-    });
-    final callApiResult = await irisMethodChannel
-        .invokeMethod(IrisMethodCall(apiType, jsonEncode(param)));
-    if (callApiResult.irisReturnCode < 0) {
-      throw AgoraRtcException(code: callApiResult.irisReturnCode);
-    }
-    final rm = callApiResult.data;
-    final result = rm['result'];
-    if (result < 0) {
-      throw AgoraRtcException(code: result);
-    }
-  }
-
-  @override
   Future<void> leaveChannel({LeaveChannelOptions? options}) async {
     final apiType = options == null
         ? 'RtcEngine_leaveChannel'
@@ -864,117 +839,9 @@ class RtcEngineImpl extends rtc_engine_ex_binding.RtcEngineExImpl
   }
 
   @override
-  Future<void> startEchoTest(EchoTestConfiguration config) async {
-    const apiType = 'RtcEngine_startEchoTest_16140d7';
-    final param = createParams({'config': config.toJson()});
-    final List<Uint8List> buffers = [];
-    buffers.addAll(config.collectBufferList());
-    final callApiResult = await irisMethodChannel.invokeMethod(
-        IrisMethodCall(apiType, jsonEncode(param), buffers: buffers));
-    if (callApiResult.irisReturnCode < 0) {
-      throw AgoraRtcException(code: callApiResult.irisReturnCode);
-    }
-  }
-
-  @override
-  Future<void> startPreview(
-      {VideoSourceType sourceType =
-          VideoSourceType.videoSourceCameraPrimary}) async {
-    if (_instance == null) return;
-    const apiType = 'RtcEngine_startPreview_4fd718e';
-    final param = createParams({'sourceType': sourceType.value()});
-    final callApiResult = await irisMethodChannel
-        .invokeMethod(IrisMethodCall(apiType, jsonEncode(param)));
-    if (callApiResult.irisReturnCode < 0) {
-      throw AgoraRtcException(code: callApiResult.irisReturnCode);
-    }
-    final rm = callApiResult.data;
-    final result = rm['result'];
-    if (result < 0) {
-      throw AgoraRtcException(code: result);
-    }
-  }
-
-  @override
-  Future<void> startPreviewWithoutSourceType() async {
-    final apiType =
-        '${isOverrideClassName ? className : 'RtcEngine'}_startPreview';
-    final param = createParams({});
-    final callApiResult = await irisMethodChannel.invokeMethod(
-        IrisMethodCall(apiType, jsonEncode(param), buffers: null));
-    if (callApiResult.irisReturnCode < 0) {
-      throw AgoraRtcException(code: callApiResult.irisReturnCode);
-    }
-    final rm = callApiResult.data;
-    final result = rm['result'];
-    if (result < 0) {
-      throw AgoraRtcException(code: result);
-    }
-  }
-
-  @override
   Future<void> enableVideo() async {
     if (_instance == null) return;
     super.enableVideo();
-  }
-
-  @override
-  Future<void> stopPreview(
-      {VideoSourceType sourceType =
-          VideoSourceType.videoSourceCameraPrimary}) async {
-    const apiType = 'RtcEngine_stopPreview_4fd718e';
-    final param = createParams({'sourceType': sourceType.value()});
-    final callApiResult = await irisMethodChannel
-        .invokeMethod(IrisMethodCall(apiType, jsonEncode(param)));
-    if (callApiResult.irisReturnCode < 0) {
-      throw AgoraRtcException(code: callApiResult.irisReturnCode);
-    }
-    final rm = callApiResult.data;
-    final result = rm['result'];
-    if (result < 0) {
-      throw AgoraRtcException(code: result);
-    }
-  }
-
-  @override
-  Future<void> startAudioRecording(AudioRecordingConfiguration config) async {
-    const apiType = 'RtcEngine_startAudioRecording_e32bb3b';
-    final param = createParams({'config': config.toJson()});
-    final callApiResult = await irisMethodChannel
-        .invokeMethod(IrisMethodCall(apiType, jsonEncode(param)));
-    if (callApiResult.irisReturnCode < 0) {
-      throw AgoraRtcException(code: callApiResult.irisReturnCode);
-    }
-    final rm = callApiResult.data;
-    final result = rm['result'];
-    if (result < 0) {
-      throw AgoraRtcException(code: result);
-    }
-  }
-
-  @override
-  Future<void> startAudioMixing(
-      {required String filePath,
-      required bool loopback,
-      required int cycle,
-      int startPos = 0}) async {
-    const apiType = 'RtcEngine_startAudioMixing_1ee1b1e';
-    final param = createParams({
-      'filePath': filePath,
-      'loopback': loopback,
-      'cycle': cycle,
-      'startPos': startPos
-    });
-    final callApiResult = await irisMethodChannel
-        .invokeMethod(IrisMethodCall(apiType, jsonEncode(param)));
-    if (callApiResult.irisReturnCode < 0) {
-      throw AgoraRtcException(code: callApiResult.irisReturnCode);
-    }
-    final rm = callApiResult.data;
-    final result = rm['result'];
-    if (result < 0) {
-      throw AgoraRtcException(code: result);
-    }
   }
 
   @override
@@ -990,42 +857,6 @@ class RtcEngineImpl extends rtc_engine_ex_binding.RtcEngineExImpl
       'sourceType': sourceType.value(),
       'streamConfig': streamConfig?.toJson()
     });
-    final callApiResult = await irisMethodChannel
-        .invokeMethod(IrisMethodCall(apiType, jsonEncode(param)));
-    if (callApiResult.irisReturnCode < 0) {
-      throw AgoraRtcException(code: callApiResult.irisReturnCode);
-    }
-    final rm = callApiResult.data;
-    final result = rm['result'];
-    if (result < 0) {
-      throw AgoraRtcException(code: result);
-    }
-  }
-
-  @override
-  Future<int> createDataStream(DataStreamConfig config) async {
-    const apiType = 'RtcEngine_createDataStream_5862815';
-    final param = createParams({'config': config.toJson()});
-    final callApiResult = await irisMethodChannel
-        .invokeMethod(IrisMethodCall(apiType, jsonEncode(param)));
-    if (callApiResult.irisReturnCode < 0) {
-      throw AgoraRtcException(code: callApiResult.irisReturnCode);
-    }
-    final rm = callApiResult.data;
-    final result = rm['result'];
-    if (result < 0) {
-      throw AgoraRtcException(code: result);
-    }
-    final streamIdResult = rm['streamId'];
-    return streamIdResult as int;
-  }
-
-  @override
-  Future<void> addVideoWatermark(
-      {required String watermarkUrl, required WatermarkOptions options}) async {
-    const apiType = 'RtcEngine_addVideoWatermark_7480410';
-    final param = createParams(
-        {'watermarkUrl': watermarkUrl, 'options': options.toJson()});
     final callApiResult = await irisMethodChannel
         .invokeMethod(IrisMethodCall(apiType, jsonEncode(param)));
     if (callApiResult.irisReturnCode < 0) {
@@ -1192,61 +1023,6 @@ class RtcEngineImpl extends rtc_engine_ex_binding.RtcEngineExImpl
     await irisMethodChannel.invokeMethod(
         IrisMethodCall(apiType, jsonEncode(param), buffers: null));
   }
-
-  @override
-  Future<void> startScreenCaptureBySourceType(
-      {required VideoSourceType sourceType,
-      required ScreenCaptureConfiguration config}) async {
-    final apiType =
-        '${isOverrideClassName ? className : 'RtcEngine'}_startScreenCapture_9ebb320';
-    final param = createParams(
-        {'sourceType': sourceType.value(), 'config': config.toJson()});
-    final List<Uint8List> buffers = [];
-    buffers.addAll(config.collectBufferList());
-    final callApiResult = await irisMethodChannel.invokeMethod(
-        IrisMethodCall(apiType, jsonEncode(param), buffers: buffers));
-    if (callApiResult.irisReturnCode < 0) {
-      throw AgoraRtcException(code: callApiResult.irisReturnCode);
-    }
-    final rm = callApiResult.data;
-    final result = rm['result'];
-    if (result < 0) {
-      throw AgoraRtcException(code: result);
-    }
-  }
-
-  @override
-  Future<void> stopScreenCaptureBySourceType(VideoSourceType sourceType) async {
-    final apiType =
-        '${isOverrideClassName ? className : 'RtcEngine'}_stopScreenCapture_4fd718e';
-    final param = createParams({'sourceType': sourceType.value()});
-    final callApiResult = await irisMethodChannel.invokeMethod(
-        IrisMethodCall(apiType, jsonEncode(param), buffers: null));
-    if (callApiResult.irisReturnCode < 0) {
-      throw AgoraRtcException(code: callApiResult.irisReturnCode);
-    }
-    final rm = callApiResult.data;
-    final result = rm['result'];
-    if (result < 0) {
-      throw AgoraRtcException(code: result);
-    }
-  }
-
-  // @override
-  // Future<void> preloadChannelWithUserAccount(
-  //     {required String token,
-  //     required String channelId,
-  //     required String userAccount}) async {
-  //   final apiType =
-  //       '${isOverrideClassName ? className : 'RtcEngine'}_preloadChannel2';
-  //   final param = createParams(
-  //       {'token': token, 'channelId': channelId, 'userAccount': userAccount});
-  //   final callApiResult = await irisMethodChannel.invokeMethod(
-  //       IrisMethodCall(apiType, jsonEncode(param), buffers: null));
-  //   if (callApiResult.irisReturnCode < 0) {
-  //     throw AgoraRtcException(code: callApiResult.irisReturnCode);
-  //   }
-  // }
 
   Future<String?> getAssetAbsolutePath(String assetPath) async {
     if (kIsWeb) {
