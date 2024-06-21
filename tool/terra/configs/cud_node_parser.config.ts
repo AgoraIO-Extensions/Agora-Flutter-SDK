@@ -335,20 +335,20 @@ const deleteNodes = [
     parent_name: "IMediaPlayer",
     namespaces: ["agora", "rtc"],
   },
-  // TODO(littlegnal): We should not config these custom nodes by users.
+  // TODO(littlegnal): We should not config these custom nodes.
   // agora::rtc::ext::IRtcEngine::destroyRendererByView
   {
     __TYPE: CXXTYPE.MemberFunction,
     name: "destroyRendererByView",
     parent_name: "IRtcEngine",
-    namespaces: ["agora", "rtc", "ext"],
+    namespaces: ["agora", "rtc"],
   },
   // agora::rtc::ext::IRtcEngine::destroyRendererByConfig
   {
     __TYPE: CXXTYPE.MemberFunction,
     name: "destroyRendererByConfig",
     parent_name: "IRtcEngine",
-    namespaces: ["agora", "rtc", "ext"],
+    namespaces: ["agora", "rtc"],
   },
   // agora::rtc::IRtcEngine::queryCameraFocalLengthCapability
   {

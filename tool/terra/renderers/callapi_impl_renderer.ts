@@ -29,6 +29,7 @@ import {
 import {
   getIrisApiIdValue,
   getOutVariable,
+  getOverrideNodeParserUserData,
 } from "@agoraio-extensions/terra_shared_configs";
 import {
   functionSignature,
@@ -201,9 +202,13 @@ function callApiImplBlock(
     paramJsonMapBlock.find((it) => it.addBufferExtBlock) != undefined;
   let buffersValueInJsonMap = isNeedAddBufferExtBlock ? "buffers" : "null";
 
-  let apiType = `final apiType = \'\${isOverrideClassName ? className : '${className}'}_${getIrisApiIdValue(
-    method
-  )
+  let irisApiIdValue = getIrisApiIdValue(method);
+  let overridedNode = getOverrideNodeParserUserData(method);
+  if (overridedNode && overridedNode.redirectIrisApiId) {
+    irisApiIdValue = overridedNode.redirectIrisApiId;
+  }
+
+  let apiType = `final apiType = \'\${isOverrideClassName ? className : '${className}'}_${irisApiIdValue
     .split("_")
     .slice(1)
     .join("_")}\';`;
