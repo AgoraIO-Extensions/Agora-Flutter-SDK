@@ -11,7 +11,17 @@ import 'examples/basic/index.dart';
 import 'config/agora.config.dart' as config;
 import 'components/log_sink.dart';
 
-void main() => runApp(const MyApp());
+void main() {
+  FlutterError.onError = (details) {
+    FlutterError.presentError(details);
+    logSink.log(details.toString());
+  };
+  PlatformDispatcher.instance.onError = (error, stack) {
+    logSink.log(error.toString());
+    return true;
+  };
+  runApp(const MyApp());
+}
 
 /// This widget is the root of your application.
 class MyApp extends StatefulWidget {
