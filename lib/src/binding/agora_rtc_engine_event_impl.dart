@@ -704,7 +704,7 @@ class RtcEngineEventHandlerWrapper implements EventLoopEventHandler {
         rtcEngineEventHandler.onLocalAudioStats!(connection, stats);
         return true;
 
-      case 'onLocalVideoStats_baa96c8':
+      case 'onLocalVideoStats_3ac0eb4':
         if (rtcEngineEventHandler.onLocalVideoStats == null) {
           return true;
         }
@@ -712,13 +712,14 @@ class RtcEngineEventHandlerWrapper implements EventLoopEventHandler {
         RtcEngineEventHandlerOnLocalVideoStatsJson paramJson =
             RtcEngineEventHandlerOnLocalVideoStatsJson.fromJson(jsonMap);
         paramJson = paramJson.fillBuffers(buffers);
-        VideoSourceType? source = paramJson.source;
+        RtcConnection? connection = paramJson.connection;
         LocalVideoStats? stats = paramJson.stats;
-        if (source == null || stats == null) {
+        if (connection == null || stats == null) {
           return true;
         }
+        connection = connection.fillBuffers(buffers);
         stats = stats.fillBuffers(buffers);
-        rtcEngineEventHandler.onLocalVideoStats!(source, stats);
+        rtcEngineEventHandler.onLocalVideoStats!(connection, stats);
         return true;
 
       case 'onRemoteVideoStats_2f43a70':

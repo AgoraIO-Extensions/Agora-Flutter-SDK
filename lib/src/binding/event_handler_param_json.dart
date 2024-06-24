@@ -2668,10 +2668,11 @@ extension RtcEngineEventHandlerOnLocalAudioStatsJsonBufferExt
 
 @JsonSerializable(explicitToJson: true, includeIfNull: false)
 class RtcEngineEventHandlerOnLocalVideoStatsJson {
-  const RtcEngineEventHandlerOnLocalVideoStatsJson({this.source, this.stats});
+  const RtcEngineEventHandlerOnLocalVideoStatsJson(
+      {this.connection, this.stats});
 
-  @JsonKey(name: 'source')
-  final VideoSourceType? source;
+  @JsonKey(name: 'connection')
+  final RtcConnection? connection;
 
   @JsonKey(name: 'stats')
   final LocalVideoStats? stats;

@@ -223,7 +223,7 @@ const eventIdsMapping = {
     "RtcEngineEventHandler_onLocalAudioStats_5657f05"
   ],
   "RtcEngineEventHandler_onLocalVideoStats": [
-    "RtcEngineEventHandler_onLocalVideoStats_baa96c8"
+    "RtcEngineEventHandler_onLocalVideoStats_3ac0eb4"
   ],
   "RtcEngineEventHandler_onRemoteVideoStats": [
     "RtcEngineEventHandler_onRemoteVideoStats_2f43a70"

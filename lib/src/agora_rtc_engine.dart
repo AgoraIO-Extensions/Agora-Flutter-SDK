@@ -2079,7 +2079,7 @@ class RtcEngineEventHandler {
   ///
   /// * [connection] The connection information. See RtcConnection.
   /// * [stats] The statistics of the local video stream. See LocalVideoStats.
-  final void Function(VideoSourceType source, LocalVideoStats stats)?
+  final void Function(RtcConnection connection, LocalVideoStats stats)?
       onLocalVideoStats;
 
   /// Reports the statistics of the video stream sent by each remote users.
