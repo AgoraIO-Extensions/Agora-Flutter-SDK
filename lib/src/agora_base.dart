@@ -688,7 +688,7 @@ enum QualityType {
   @JsonValue(6)
   qualityDown,
 
-  /// 7: Users cannot detect the network quality (not in use).
+  /// @nodoc
   @JsonValue(7)
   qualityUnsupported,
 
@@ -4533,7 +4533,6 @@ enum ConnectionChangedReasonType {
   ///  All lowercase English letters: a to z.
   ///  All uppercase English letters: A to Z.
   ///  All numeric characters: 0 to 9.
-  ///  Space
   ///  "!", "#", "$", "%", "&", "(", ")", "+", "-", ":", ";", "<", "=", ".", ">", "?", "@", "[", "]", "^", "_", "{", "}", "|", "~", ","
   @JsonValue(7)
   connectionChangedInvalidChannelName,
@@ -4842,7 +4841,7 @@ class VideoCanvas {
       this.enableAlphaMask,
       this.position});
 
-  /// The user ID.
+  /// User ID that publishes the video source.
   @JsonKey(name: 'uid')
   final int? uid;
 
@@ -5069,7 +5068,7 @@ class FaceShapeBeautyOptions {
 
   /// @nodoc
   @JsonKey(name: 'shapeStyle')
-  final FaceShapeStyle? shapeStyle;
+  final FaceShapeBeautyStyle? shapeStyle;
 
   /// @nodoc
   @JsonKey(name: 'styleIntensity')
@@ -5085,26 +5084,26 @@ class FaceShapeBeautyOptions {
 
 /// @nodoc
 @JsonEnum(alwaysCreate: true)
-enum FaceShapeStyle {
+enum FaceShapeBeautyStyle {
   /// @nodoc
   @JsonValue(0)
-  faceShapeStyleFemale,
+  faceShapeBeautyStyleFemale,
 
   /// @nodoc
   @JsonValue(1)
-  faceShapeStyleMale,
+  faceShapeBeautyStyleMale,
 }
 
 /// @nodoc
-extension FaceShapeStyleExt on FaceShapeStyle {
+extension FaceShapeBeautyStyleExt on FaceShapeBeautyStyle {
   /// @nodoc
-  static FaceShapeStyle fromValue(int value) {
-    return $enumDecode(_$FaceShapeStyleEnumMap, value);
+  static FaceShapeBeautyStyle fromValue(int value) {
+    return $enumDecode(_$FaceShapeBeautyStyleEnumMap, value);
   }
 
   /// @nodoc
   int value() {
-    return _$FaceShapeStyleEnumMap[this]!;
+    return _$FaceShapeBeautyStyleEnumMap[this]!;
   }
 }
 

@@ -4180,9 +4180,10 @@ class IRtcEngine : public agora::base::IEngineBase {
    *
    * @note Call this method after calling the \ref IRtcEngine::enableVideo "enableVideo" method.
    *
+   * @param shapeArea  The face area. See FaceShapeAreaOptions::FACE_SHAPE_AREA.
    * @param options Gets the face area beauty option. See FaceShapeAreaOptions.
    */
-  virtual int getFaceShapeAreaOptions(FaceShapeAreaOptions& options, agora::media::MEDIA_SOURCE_TYPE type = agora::media::PRIMARY_CAMERA_SOURCE) = 0;
+  virtual int getFaceShapeAreaOptions(agora::rtc::FaceShapeAreaOptions::FACE_SHAPE_AREA shapeArea, FaceShapeAreaOptions& options, agora::media::MEDIA_SOURCE_TYPE type = agora::media::PRIMARY_CAMERA_SOURCE) = 0;
   
   /**
    * Sets low-light enhancement.

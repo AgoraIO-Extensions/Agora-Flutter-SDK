@@ -1142,7 +1142,8 @@ void rtcEngineSmokeTestCases() {
 
       try {
         bool enabled = true;
-        FaceShapeStyle optionsShapeStyle = FaceShapeStyle.faceShapeStyleFemale;
+        FaceShapeBeautyStyle optionsShapeStyle =
+            FaceShapeBeautyStyle.faceShapeBeautyStyleFemale;
         int optionsStyleIntensity = 5;
         FaceShapeBeautyOptions options = FaceShapeBeautyOptions(
           shapeStyle: optionsShapeStyle,
@@ -1262,8 +1263,10 @@ void rtcEngineSmokeTestCases() {
       await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
+        FaceShapeArea shapeArea = FaceShapeArea.faceShapeAreaNone;
         MediaSourceType type = MediaSourceType.audioPlayoutSource;
         await rtcEngine.getFaceShapeAreaOptions(
+          shapeArea: shapeArea,
           type: type,
         );
       } catch (e) {
