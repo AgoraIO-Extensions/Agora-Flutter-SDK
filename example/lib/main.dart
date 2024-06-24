@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:io';
 
 import 'package:agora_rtc_engine_example/components/android_foreground_service_widget.dart';
@@ -16,11 +17,18 @@ void main() {
     FlutterError.presentError(details);
     logSink.log(details.toString());
   };
-  PlatformDispatcher.instance.onError = (error, stack) {
+
+  // TODO(littlegnal): The newer version of Flutter SDK doc shows use of the
+  // `PlatformDispatcher.instance.onError` but not `runZonedGuarded` to
+  // handle "Errors not caught by Flutter",
+  // see: https://docs.flutter.dev/testing/errors#handling-all-types-of-errors,
+  // follow the Flutter SDK doc after we can bump the mini supported Flutter SDK (currently 2.10.x) 
+  // to the newer version of Flutter SDK.
+  runZonedGuarded(() {
+    runApp(const MyApp());
+  }, (error, stackTrace) {
     logSink.log(error.toString());
-    return true;
-  };
-  runApp(const MyApp());
+  });
 }
 
 /// This widget is the root of your application.
