@@ -160,20 +160,16 @@ class _State extends State<JoinChannelVideo> {
       displayContentBuilder: (context, isLayoutHorizontal) {
         return Stack(
           children: [
-            StatsMonitoringWidget(
-              rtcEngine: _engine,
-              uid: 0,
-              child: AgoraVideoView(
-                controller: VideoViewController(
-                  rtcEngine: _engine,
-                  canvas: const VideoCanvas(uid: 0),
-                  useFlutterTexture: _isUseFlutterTexture,
-                  useAndroidSurfaceView: _isUseAndroidSurfaceView,
-                ),
-                onAgoraVideoViewCreated: (viewId) {
-                  _engine.startPreview();
-                },
+            AgoraVideoView(
+              controller: VideoViewController(
+                rtcEngine: _engine,
+                canvas: const VideoCanvas(uid: 0),
+                useFlutterTexture: _isUseFlutterTexture,
+                useAndroidSurfaceView: _isUseAndroidSurfaceView,
               ),
+              onAgoraVideoViewCreated: (viewId) {
+                _engine.startPreview();
+              },
             ),
             Align(
               alignment: Alignment.topLeft,
