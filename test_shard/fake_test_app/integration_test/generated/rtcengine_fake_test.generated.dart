@@ -8281,7 +8281,8 @@ void rtcEngineSmokeTestCases() {
               (RtcConnection connection, RemoteAudioStats stats) {},
           onLocalAudioStats:
               (RtcConnection connection, LocalAudioStats stats) {},
-          onLocalVideoStats: (VideoSourceType source, LocalVideoStats stats) {},
+          onLocalVideoStats:
+              (RtcConnection connection, LocalVideoStats stats) {},
           onRemoteVideoStats:
               (RtcConnection connection, RemoteVideoStats stats) {},
           onCameraReady: () {},
@@ -8497,7 +8498,8 @@ void rtcEngineSmokeTestCases() {
               (RtcConnection connection, RemoteAudioStats stats) {},
           onLocalAudioStats:
               (RtcConnection connection, LocalAudioStats stats) {},
-          onLocalVideoStats: (VideoSourceType source, LocalVideoStats stats) {},
+          onLocalVideoStats:
+              (RtcConnection connection, LocalVideoStats stats) {},
           onRemoteVideoStats:
               (RtcConnection connection, RemoteVideoStats stats) {},
           onCameraReady: () {},
