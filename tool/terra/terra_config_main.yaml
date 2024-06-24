@@ -18,7 +18,7 @@ parsers:
   - name: IrisApiIdParser
     package: '@agoraio-extensions/terra_shared_configs'
 
-  - name: AddNodeParser
+  - name: OverrideNodeParser
     package: '@agoraio-extensions/terra_shared_configs'
     args:
       customHeaderFileNamePrefix: 'Custom'
