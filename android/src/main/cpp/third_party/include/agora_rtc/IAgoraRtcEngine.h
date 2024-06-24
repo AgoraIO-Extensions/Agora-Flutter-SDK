@@ -5308,6 +5308,10 @@ class IRtcEngine : public agora::base::IEngineBase {
    * @note
    * - To ensure smooth communication, limit the size of the audio effect file.
    * - Agora recommends calling this method before joining the channel.
+   * - If preloadEffect is called before playEffect is executed, the file resource will not be closed after playEffect. 
+   * The next time playEffect is executed, it will directly seek to play at the beginning.
+   * - If preloadEffect is not called before playEffect is executed, the resource will be destroyed after playEffect. 
+   * The next time playEffect is executed, it will try to reopen the file and play it from the beginning.
    *
    * @param soundId The ID of the audio effect.
    * @param filePath The absolute path of the local audio effect file or the URL
@@ -5332,6 +5336,10 @@ class IRtcEngine : public agora::base::IEngineBase {
    * - Agora recommends playing no more than three audio effects at the same time.
    * - The ID and file path of the audio effect in this method must be the same
    * as that in the \ref IRtcEngine::preloadEffect "preloadEffect" method.
+   * - If preloadEffect is called before playEffect is executed, the file resource will not be closed after playEffect. 
+   * The next time playEffect is executed, it will directly seek to play at the beginning.
+   * - If preloadEffect is not called before playEffect is executed, the resource will be destroyed after playEffect. 
+   * The next time playEffect is executed, it will try to reopen the file and play it from the beginning.
    *
    * @param soundId The ID of the audio effect.
    * @param filePath The absolute path of the local audio effect file or the URL

@@ -2852,6 +2852,8 @@ enum LOCAL_VIDEO_STREAM_ERROR {
   LOCAL_VIDEO_STREAM_ERROR_SCREEN_CAPTURE_WINDOW_RECOVER_FROM_HIDDEN = 26,
   /** 27:(Windows only) The window is recovered from miniminzed */
   LOCAL_VIDEO_STREAM_ERROR_SCREEN_CAPTURE_WINDOW_RECOVER_FROM_MINIMIZED = 27,
+   /** 30: The shared display has been disconnected */
+  LOCAL_VIDEO_STREAM_REASON_SCREEN_CAPTURE_DISPLAY_DISCNNECTED = 30,
 };
 
 /**
@@ -5151,6 +5153,10 @@ enum AREA_CODE {
     AREA_CODE_GLOB = (0xFFFFFFFF)
 };
 
+/**
+  Extra region code
+  @technical preview
+*/
 enum AREA_CODE_EX {
     /**
      * Oceania
@@ -5176,6 +5182,10 @@ enum AREA_CODE_EX {
      * United States
      */
     AREA_CODE_US = 0x00000800,
+    /**
+     * Russia
+     */
+    AREA_CODE_RU = 0x00001000,
     /**
      * The global area (except China)
      */
