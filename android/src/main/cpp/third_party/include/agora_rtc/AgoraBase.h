@@ -4556,7 +4556,7 @@ struct BeautyOptions {
 
 /** Face shape area options. This structure defines options for facial adjustments on different facial areas.
  *
- * @since v4.4.0
+ * @technical preview
  */
 struct FaceShapeAreaOptions {
   /** The specific facial area to be adjusted.
@@ -4608,29 +4608,29 @@ struct FaceShapeAreaOptions {
 
 /** Face shape beauty options. This structure defines options for facial adjustments of different facial styles.
  *
- * @since v4.4.0
+ * @technical preview
  */
 struct FaceShapeBeautyOptions {
   /** The face shape style.
     */
-  enum FACE_SHAPE_STYLE {
+  enum FACE_SHAPE_BEAUTY_STYLE {
     /** (Default) Female face shape style. */
-    FACE_SHAPE_STYLE_FEMALE = 0,
+    FACE_SHAPE_BEAUTY_STYLE_FEMALE = 0,
     /** Male face shape style. */
-    FACE_SHAPE_STYLE_MALE = 1,
+    FACE_SHAPE_BEAUTY_STYLE_MALE = 1,
   };
   
-  /** The face shape style, See #FACE_SHAPE_STYLE.
+  /** The face shape style, See #FACE_SHAPE_BEAUTY_STYLE.
     */
-  FACE_SHAPE_STYLE shapeStyle;
+  FACE_SHAPE_BEAUTY_STYLE shapeStyle;
   
   /** The intensity of the pinching effect applied to the specified facial style. The value ranges from 0 (original) to 100. The default value is 0. The greater the value, the stronger the intensity applied to face pinching.
     */
   int styleIntensity;
   
-  FaceShapeBeautyOptions(FACE_SHAPE_STYLE shapeStyle, int styleIntensity) : shapeStyle(shapeStyle), styleIntensity(styleIntensity) {}
+  FaceShapeBeautyOptions(FACE_SHAPE_BEAUTY_STYLE shapeStyle, int styleIntensity) : shapeStyle(shapeStyle), styleIntensity(styleIntensity) {}
 
-  FaceShapeBeautyOptions() : shapeStyle(FACE_SHAPE_STYLE_FEMALE), styleIntensity(50) {}
+  FaceShapeBeautyOptions() : shapeStyle(FACE_SHAPE_BEAUTY_STYLE_FEMALE), styleIntensity(50) {}
 };
 
 struct LowlightEnhanceOptions {

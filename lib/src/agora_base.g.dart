@@ -1432,8 +1432,8 @@ const _$FaceShapeAreaEnumMap = {
 FaceShapeBeautyOptions _$FaceShapeBeautyOptionsFromJson(
         Map<String, dynamic> json) =>
     FaceShapeBeautyOptions(
-      shapeStyle:
-          $enumDecodeNullable(_$FaceShapeStyleEnumMap, json['shapeStyle']),
+      shapeStyle: $enumDecodeNullable(
+          _$FaceShapeBeautyStyleEnumMap, json['shapeStyle']),
       styleIntensity: (json['styleIntensity'] as num?)?.toInt(),
     );
 
@@ -1447,14 +1447,15 @@ Map<String, dynamic> _$FaceShapeBeautyOptionsToJson(
     }
   }
 
-  writeNotNull('shapeStyle', _$FaceShapeStyleEnumMap[instance.shapeStyle]);
+  writeNotNull(
+      'shapeStyle', _$FaceShapeBeautyStyleEnumMap[instance.shapeStyle]);
   writeNotNull('styleIntensity', instance.styleIntensity);
   return val;
 }
 
-const _$FaceShapeStyleEnumMap = {
-  FaceShapeStyle.faceShapeStyleFemale: 0,
-  FaceShapeStyle.faceShapeStyleMale: 1,
+const _$FaceShapeBeautyStyleEnumMap = {
+  FaceShapeBeautyStyle.faceShapeBeautyStyleFemale: 0,
+  FaceShapeBeautyStyle.faceShapeBeautyStyleMale: 1,
 };
 
 LowlightEnhanceOptions _$LowlightEnhanceOptionsFromJson(

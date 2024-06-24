@@ -732,10 +732,12 @@ class RtcEngineImpl implements RtcEngine {
 
   @override
   Future<FaceShapeAreaOptions> getFaceShapeAreaOptions(
-      {MediaSourceType type = MediaSourceType.primaryCameraSource}) async {
+      {required FaceShapeArea shapeArea,
+      MediaSourceType type = MediaSourceType.primaryCameraSource}) async {
     final apiType =
-        '${isOverrideClassName ? className : 'RtcEngine'}_getFaceShapeAreaOptions_f7106b5';
-    final param = createParams({'type': type.value()});
+        '${isOverrideClassName ? className : 'RtcEngine'}_getFaceShapeAreaOptions_0783e2c';
+    final param =
+        createParams({'shapeArea': shapeArea.value(), 'type': type.value()});
     final callApiResult = await irisMethodChannel.invokeMethod(
         IrisMethodCall(apiType, jsonEncode(param), buffers: null));
     if (callApiResult.irisReturnCode < 0) {
