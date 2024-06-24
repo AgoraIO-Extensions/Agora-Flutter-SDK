@@ -25,6 +25,7 @@ class _State extends State<JoinChannelAudio> {
       muteAllRemoteAudio = false,
       enableSpeakerphone = true,
       playEffect = false;
+  bool _isSetDefaultAudioRouteToSpeakerphone = false;
   bool _enableInEarMonitoring = false;
   double _recordingVolume = 100,
       _playbackVolume = 100,
@@ -83,6 +84,9 @@ class _State extends State<JoinChannelAudio> {
         setState(() {
           isJoined = false;
         });
+      },
+      onAudioRoutingChanged: (routing) {
+        logSink.log('[onAudioRoutingChanged] routing: $routing');
       },
     );
 
@@ -154,30 +158,6 @@ class _State extends State<JoinChannelAudio> {
     setState(() {
       enableSpeakerphone = !enableSpeakerphone;
     });
-  }
-
-  _switchEffect() async {
-    if (playEffect) {
-      await _engine.stopEffect(1);
-      setState(() {
-        playEffect = false;
-      });
-    } else {
-      final path =
-          (await _engine.getAssetAbsolutePath("assets/Sound_Horizon.mp3"))!;
-      await _engine.playEffect(
-          soundId: 1,
-          filePath: path,
-          loopCount: 0,
-          pitch: 1,
-          pan: 1,
-          gain: 100,
-          publish: true);
-      // .then((value) {
-      setState(() {
-        playEffect = true;
-      });
-    }
   }
 
   _onChangeInEarMonitoringVolume(double value) async {
@@ -257,7 +237,7 @@ class _State extends State<JoinChannelAudio> {
                       uid: int.tryParse(_selectedUidController.text) ?? -1,
                       mute: true);
                 },
-                child: Text('mute Remote Audio'),
+                child: const Text('mute Remote Audio'),
               ),
               ElevatedButton(
                 onPressed: () async {
@@ -265,7 +245,7 @@ class _State extends State<JoinChannelAudio> {
                       uid: int.tryParse(_selectedUidController.text) ?? -1,
                       mute: false);
                 },
-                child: Text('unmute Remote Audio'),
+                child: const Text('unmute Remote Audio'),
               ),
             ],
           ],
@@ -295,15 +275,22 @@ class _State extends State<JoinChannelAudio> {
                   ),
                   if (!kIsWeb) ...[
                     ElevatedButton(
+                      onPressed: () {
+                        _isSetDefaultAudioRouteToSpeakerphone =
+                            !_isSetDefaultAudioRouteToSpeakerphone;
+                        _engine.setDefaultAudioRouteToSpeakerphone(
+                            _isSetDefaultAudioRouteToSpeakerphone);
+                        setState(() {});
+                      },
+                      child: Text(!_isSetDefaultAudioRouteToSpeakerphone
+                          ? 'SetDefaultAudioRouteToSpeakerphone'
+                          : 'UnsetDefaultAudioRouteToSpeakerphone'),
+                    ),
+                    ElevatedButton(
                       onPressed: isJoined ? _switchSpeakerphone : null,
                       child: Text(
                           enableSpeakerphone ? 'Speakerphone' : 'Earpiece'),
                     ),
-                    if (!kIsWeb)
-                      ElevatedButton(
-                        onPressed: isJoined ? _switchEffect : null,
-                        child: Text('${playEffect ? 'Stop' : 'Play'} effect'),
-                      ),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.end,
                       children: [
