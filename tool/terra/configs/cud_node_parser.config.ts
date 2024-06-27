@@ -54,13 +54,6 @@ const deleteNodes = [
     parent_name: "IRtcEngineEventHandlerEx",
   },
   {
-    // onLocalVideoStats
-    __TYPE: CXXTYPE.MemberFunction,
-    name: "onLocalVideoStats",
-    namespaces: ["agora", "rtc"],
-    parent_name: "IRtcEngineEventHandlerEx",
-  },
-  {
     // agora::base::IEngineBase
     __TYPE: CXXTYPE.Clazz,
     name: "IEngineBase",
