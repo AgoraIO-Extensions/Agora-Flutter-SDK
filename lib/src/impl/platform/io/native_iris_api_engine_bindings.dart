@@ -386,9 +386,8 @@ class NativeIrisApiEngineBinding {
   }
 
   late final _StopDumpVideoPtr = _lookup<
-          ffi
-          .NativeFunction<ffi.Int32 Function(IrisVideoFrameBufferManagerPtr)>>(
-      'StopDumpVideo');
+      ffi.NativeFunction<
+          ffi.Int32 Function(IrisVideoFrameBufferManagerPtr)>>('StopDumpVideo');
   late final _StopDumpVideo = _StopDumpVideoPtr.asFunction<
       int Function(IrisVideoFrameBufferManagerPtr)>();
 
