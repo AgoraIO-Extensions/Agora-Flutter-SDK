@@ -11,8 +11,8 @@ part of 'agora_rhythm_player.dart';
 AgoraRhythmPlayerConfig _$AgoraRhythmPlayerConfigFromJson(
         Map<String, dynamic> json) =>
     AgoraRhythmPlayerConfig(
-      beatsPerMeasure: (json['beatsPerMeasure'] as num?)?.toInt(),
-      beatsPerMinute: (json['beatsPerMinute'] as num?)?.toInt(),
+      beatsPerMeasure: json['beatsPerMeasure'] as int?,
+      beatsPerMinute: json['beatsPerMinute'] as int?,
     );
 
 Map<String, dynamic> _$AgoraRhythmPlayerConfigToJson(

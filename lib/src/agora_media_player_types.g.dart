@@ -10,20 +10,20 @@ part of 'agora_media_player_types.dart';
 
 PlayerStreamInfo _$PlayerStreamInfoFromJson(Map<String, dynamic> json) =>
     PlayerStreamInfo(
-      streamIndex: (json['streamIndex'] as num?)?.toInt(),
+      streamIndex: json['streamIndex'] as int?,
       streamType:
           $enumDecodeNullable(_$MediaStreamTypeEnumMap, json['streamType']),
       codecName: json['codecName'] as String?,
       language: json['language'] as String?,
-      videoFrameRate: (json['videoFrameRate'] as num?)?.toInt(),
-      videoBitRate: (json['videoBitRate'] as num?)?.toInt(),
-      videoWidth: (json['videoWidth'] as num?)?.toInt(),
-      videoHeight: (json['videoHeight'] as num?)?.toInt(),
-      videoRotation: (json['videoRotation'] as num?)?.toInt(),
-      audioSampleRate: (json['audioSampleRate'] as num?)?.toInt(),
-      audioChannels: (json['audioChannels'] as num?)?.toInt(),
-      audioBitsPerSample: (json['audioBitsPerSample'] as num?)?.toInt(),
-      duration: (json['duration'] as num?)?.toInt(),
+      videoFrameRate: json['videoFrameRate'] as int?,
+      videoBitRate: json['videoBitRate'] as int?,
+      videoWidth: json['videoWidth'] as int?,
+      videoHeight: json['videoHeight'] as int?,
+      videoRotation: json['videoRotation'] as int?,
+      audioSampleRate: json['audioSampleRate'] as int?,
+      audioChannels: json['audioChannels'] as int?,
+      audioBitsPerSample: json['audioBitsPerSample'] as int?,
+      duration: json['duration'] as int?,
     );
 
 Map<String, dynamic> _$PlayerStreamInfoToJson(PlayerStreamInfo instance) {
@@ -59,7 +59,7 @@ const _$MediaStreamTypeEnumMap = {
 };
 
 SrcInfo _$SrcInfoFromJson(Map<String, dynamic> json) => SrcInfo(
-      bitrateInKbps: (json['bitrateInKbps'] as num?)?.toInt(),
+      bitrateInKbps: json['bitrateInKbps'] as int?,
       name: json['name'] as String?,
     );
 
@@ -79,9 +79,9 @@ Map<String, dynamic> _$SrcInfoToJson(SrcInfo instance) {
 
 CacheStatistics _$CacheStatisticsFromJson(Map<String, dynamic> json) =>
     CacheStatistics(
-      fileSize: (json['fileSize'] as num?)?.toInt(),
-      cacheSize: (json['cacheSize'] as num?)?.toInt(),
-      downloadSize: (json['downloadSize'] as num?)?.toInt(),
+      fileSize: json['fileSize'] as int?,
+      cacheSize: json['cacheSize'] as int?,
+      downloadSize: json['downloadSize'] as int?,
     );
 
 Map<String, dynamic> _$CacheStatisticsToJson(CacheStatistics instance) {
@@ -101,10 +101,10 @@ Map<String, dynamic> _$CacheStatisticsToJson(CacheStatistics instance) {
 
 PlayerPlaybackStats _$PlayerPlaybackStatsFromJson(Map<String, dynamic> json) =>
     PlayerPlaybackStats(
-      videoFps: (json['videoFps'] as num?)?.toInt(),
-      videoBitrateInKbps: (json['videoBitrateInKbps'] as num?)?.toInt(),
-      audioBitrateInKbps: (json['audioBitrateInKbps'] as num?)?.toInt(),
-      totalBitrateInKbps: (json['totalBitrateInKbps'] as num?)?.toInt(),
+      videoFps: json['videoFps'] as int?,
+      videoBitrateInKbps: json['videoBitrateInKbps'] as int?,
+      audioBitrateInKbps: json['audioBitrateInKbps'] as int?,
+      totalBitrateInKbps: json['totalBitrateInKbps'] as int?,
     );
 
 Map<String, dynamic> _$PlayerPlaybackStatsToJson(PlayerPlaybackStats instance) {
@@ -127,11 +127,11 @@ PlayerUpdatedInfo _$PlayerUpdatedInfoFromJson(Map<String, dynamic> json) =>
     PlayerUpdatedInfo(
       internalPlayerUuid: json['internalPlayerUuid'] as String?,
       deviceId: json['deviceId'] as String?,
-      videoHeight: (json['videoHeight'] as num?)?.toInt(),
-      videoWidth: (json['videoWidth'] as num?)?.toInt(),
-      audioSampleRate: (json['audioSampleRate'] as num?)?.toInt(),
-      audioChannels: (json['audioChannels'] as num?)?.toInt(),
-      audioBitsPerSample: (json['audioBitsPerSample'] as num?)?.toInt(),
+      videoHeight: json['videoHeight'] as int?,
+      videoWidth: json['videoWidth'] as int?,
+      audioSampleRate: json['audioSampleRate'] as int?,
+      audioChannels: json['audioChannels'] as int?,
+      audioBitsPerSample: json['audioBitsPerSample'] as int?,
     );
 
 Map<String, dynamic> _$PlayerUpdatedInfoToJson(PlayerUpdatedInfo instance) {
@@ -156,7 +156,7 @@ Map<String, dynamic> _$PlayerUpdatedInfoToJson(PlayerUpdatedInfo instance) {
 MediaSource _$MediaSourceFromJson(Map<String, dynamic> json) => MediaSource(
       url: json['url'] as String?,
       uri: json['uri'] as String?,
-      startPos: (json['startPos'] as num?)?.toInt(),
+      startPos: json['startPos'] as int?,
       autoPlay: json['autoPlay'] as bool?,
       enableCache: json['enableCache'] as bool?,
       enableMultiAudioTrack: json['enableMultiAudioTrack'] as bool?,

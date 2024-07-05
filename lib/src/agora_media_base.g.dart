@@ -10,9 +10,9 @@ part of 'agora_media_base.dart';
 
 AudioParameters _$AudioParametersFromJson(Map<String, dynamic> json) =>
     AudioParameters(
-      sampleRate: (json['sample_rate'] as num?)?.toInt(),
-      channels: (json['channels'] as num?)?.toInt(),
-      framesPerBuffer: (json['frames_per_buffer'] as num?)?.toInt(),
+      sampleRate: json['sample_rate'] as int?,
+      channels: json['channels'] as int?,
+      framesPerBuffer: json['frames_per_buffer'] as int?,
     );
 
 Map<String, dynamic> _$AudioParametersToJson(AudioParameters instance) {
@@ -34,7 +34,7 @@ ContentInspectModule _$ContentInspectModuleFromJson(
         Map<String, dynamic> json) =>
     ContentInspectModule(
       type: $enumDecodeNullable(_$ContentInspectTypeEnumMap, json['type']),
-      interval: (json['interval'] as num?)?.toInt(),
+      interval: json['interval'] as int?,
     );
 
 Map<String, dynamic> _$ContentInspectModuleToJson(
@@ -67,7 +67,7 @@ ContentInspectConfig _$ContentInspectConfigFromJson(
       modules: (json['modules'] as List<dynamic>?)
           ?.map((e) => ContentInspectModule.fromJson(e as Map<String, dynamic>))
           .toList(),
-      moduleCount: (json['moduleCount'] as num?)?.toInt(),
+      moduleCount: json['moduleCount'] as int?,
     );
 
 Map<String, dynamic> _$ContentInspectConfigToJson(
@@ -89,8 +89,8 @@ Map<String, dynamic> _$ContentInspectConfigToJson(
 
 PacketOptions _$PacketOptionsFromJson(Map<String, dynamic> json) =>
     PacketOptions(
-      timestamp: (json['timestamp'] as num?)?.toInt(),
-      audioLevelIndication: (json['audioLevelIndication'] as num?)?.toInt(),
+      timestamp: json['timestamp'] as int?,
+      audioLevelIndication: json['audioLevelIndication'] as int?,
     );
 
 Map<String, dynamic> _$PacketOptionsToJson(PacketOptions instance) {
@@ -110,8 +110,8 @@ Map<String, dynamic> _$PacketOptionsToJson(PacketOptions instance) {
 AudioEncodedFrameInfo _$AudioEncodedFrameInfoFromJson(
         Map<String, dynamic> json) =>
     AudioEncodedFrameInfo(
-      sendTs: (json['sendTs'] as num?)?.toInt(),
-      codec: (json['codec'] as num?)?.toInt(),
+      sendTs: json['sendTs'] as int?,
+      codec: json['codec'] as int?,
     );
 
 Map<String, dynamic> _$AudioEncodedFrameInfoToJson(
@@ -131,15 +131,13 @@ Map<String, dynamic> _$AudioEncodedFrameInfoToJson(
 
 AudioPcmFrame _$AudioPcmFrameFromJson(Map<String, dynamic> json) =>
     AudioPcmFrame(
-      captureTimestamp: (json['capture_timestamp'] as num?)?.toInt(),
-      samplesPerChannel: (json['samples_per_channel_'] as num?)?.toInt(),
-      sampleRateHz: (json['sample_rate_hz_'] as num?)?.toInt(),
-      numChannels: (json['num_channels_'] as num?)?.toInt(),
+      captureTimestamp: json['capture_timestamp'] as int?,
+      samplesPerChannel: json['samples_per_channel_'] as int?,
+      sampleRateHz: json['sample_rate_hz_'] as int?,
+      numChannels: json['num_channels_'] as int?,
       bytesPerSample: $enumDecodeNullable(
           _$BytesPerSampleEnumMap, json['bytes_per_sample']),
-      data: (json['data_'] as List<dynamic>?)
-          ?.map((e) => (e as num).toInt())
-          .toList(),
+      data: (json['data_'] as List<dynamic>?)?.map((e) => e as int).toList(),
     );
 
 Map<String, dynamic> _$AudioPcmFrameToJson(AudioPcmFrame instance) {
@@ -169,22 +167,22 @@ ExternalVideoFrame _$ExternalVideoFrameFromJson(Map<String, dynamic> json) =>
     ExternalVideoFrame(
       type: $enumDecodeNullable(_$VideoBufferTypeEnumMap, json['type']),
       format: $enumDecodeNullable(_$VideoPixelFormatEnumMap, json['format']),
-      stride: (json['stride'] as num?)?.toInt(),
-      height: (json['height'] as num?)?.toInt(),
-      cropLeft: (json['cropLeft'] as num?)?.toInt(),
-      cropTop: (json['cropTop'] as num?)?.toInt(),
-      cropRight: (json['cropRight'] as num?)?.toInt(),
-      cropBottom: (json['cropBottom'] as num?)?.toInt(),
-      rotation: (json['rotation'] as num?)?.toInt(),
-      timestamp: (json['timestamp'] as num?)?.toInt(),
+      stride: json['stride'] as int?,
+      height: json['height'] as int?,
+      cropLeft: json['cropLeft'] as int?,
+      cropTop: json['cropTop'] as int?,
+      cropRight: json['cropRight'] as int?,
+      cropBottom: json['cropBottom'] as int?,
+      rotation: json['rotation'] as int?,
+      timestamp: json['timestamp'] as int?,
       eglType: $enumDecodeNullable(_$EglContextTypeEnumMap, json['eglType']),
-      textureId: (json['textureId'] as num?)?.toInt(),
+      textureId: json['textureId'] as int?,
       matrix: (json['matrix'] as List<dynamic>?)
           ?.map((e) => (e as num).toDouble())
           .toList(),
-      metadataSize: (json['metadata_size'] as num?)?.toInt(),
+      metadataSize: json['metadata_size'] as int?,
       fillAlphaBuffer: json['fillAlphaBuffer'] as bool?,
-      textureSliceIndex: (json['texture_slice_index'] as num?)?.toInt(),
+      textureSliceIndex: json['texture_slice_index'] as int?,
     );
 
 Map<String, dynamic> _$ExternalVideoFrameToJson(ExternalVideoFrame instance) {
@@ -245,16 +243,16 @@ const _$EglContextTypeEnumMap = {
 
 VideoFrame _$VideoFrameFromJson(Map<String, dynamic> json) => VideoFrame(
       type: $enumDecodeNullable(_$VideoPixelFormatEnumMap, json['type']),
-      width: (json['width'] as num?)?.toInt(),
-      height: (json['height'] as num?)?.toInt(),
-      yStride: (json['yStride'] as num?)?.toInt(),
-      uStride: (json['uStride'] as num?)?.toInt(),
-      vStride: (json['vStride'] as num?)?.toInt(),
-      rotation: (json['rotation'] as num?)?.toInt(),
-      renderTimeMs: (json['renderTimeMs'] as num?)?.toInt(),
-      avsyncType: (json['avsync_type'] as num?)?.toInt(),
-      metadataSize: (json['metadata_size'] as num?)?.toInt(),
-      textureId: (json['textureId'] as num?)?.toInt(),
+      width: json['width'] as int?,
+      height: json['height'] as int?,
+      yStride: json['yStride'] as int?,
+      uStride: json['uStride'] as int?,
+      vStride: json['vStride'] as int?,
+      rotation: json['rotation'] as int?,
+      renderTimeMs: json['renderTimeMs'] as int?,
+      avsyncType: json['avsync_type'] as int?,
+      metadataSize: json['metadata_size'] as int?,
+      textureId: json['textureId'] as int?,
       matrix: (json['matrix'] as List<dynamic>?)
           ?.map((e) => (e as num).toDouble())
           .toList(),
@@ -289,16 +287,16 @@ Map<String, dynamic> _$VideoFrameToJson(VideoFrame instance) {
 
 AudioFrame _$AudioFrameFromJson(Map<String, dynamic> json) => AudioFrame(
       type: $enumDecodeNullable(_$AudioFrameTypeEnumMap, json['type']),
-      samplesPerChannel: (json['samplesPerChannel'] as num?)?.toInt(),
+      samplesPerChannel: json['samplesPerChannel'] as int?,
       bytesPerSample:
           $enumDecodeNullable(_$BytesPerSampleEnumMap, json['bytesPerSample']),
-      channels: (json['channels'] as num?)?.toInt(),
-      samplesPerSec: (json['samplesPerSec'] as num?)?.toInt(),
-      renderTimeMs: (json['renderTimeMs'] as num?)?.toInt(),
-      avsyncType: (json['avsync_type'] as num?)?.toInt(),
-      presentationMs: (json['presentationMs'] as num?)?.toInt(),
-      audioTrackNumber: (json['audioTrackNumber'] as num?)?.toInt(),
-      rtpTimestamp: (json['rtpTimestamp'] as num?)?.toInt(),
+      channels: json['channels'] as int?,
+      samplesPerSec: json['samplesPerSec'] as int?,
+      renderTimeMs: json['renderTimeMs'] as int?,
+      avsyncType: json['avsync_type'] as int?,
+      presentationMs: json['presentationMs'] as int?,
+      audioTrackNumber: json['audioTrackNumber'] as int?,
+      rtpTimestamp: json['rtpTimestamp'] as int?,
     );
 
 Map<String, dynamic> _$AudioFrameToJson(AudioFrame instance) {
@@ -329,10 +327,10 @@ const _$AudioFrameTypeEnumMap = {
 };
 
 AudioParams _$AudioParamsFromJson(Map<String, dynamic> json) => AudioParams(
-      sampleRate: (json['sample_rate'] as num?)?.toInt(),
-      channels: (json['channels'] as num?)?.toInt(),
+      sampleRate: json['sample_rate'] as int?,
+      channels: json['channels'] as int?,
       mode: $enumDecodeNullable(_$RawAudioFrameOpModeTypeEnumMap, json['mode']),
-      samplesPerCall: (json['samples_per_call'] as num?)?.toInt(),
+      samplesPerCall: json['samples_per_call'] as int?,
     );
 
 Map<String, dynamic> _$AudioParamsToJson(AudioParams instance) {
@@ -361,7 +359,7 @@ AudioSpectrumData _$AudioSpectrumDataFromJson(Map<String, dynamic> json) =>
       audioSpectrumData: (json['audioSpectrumData'] as List<dynamic>?)
           ?.map((e) => (e as num).toDouble())
           .toList(),
-      dataLength: (json['dataLength'] as num?)?.toInt(),
+      dataLength: json['dataLength'] as int?,
     );
 
 Map<String, dynamic> _$AudioSpectrumDataToJson(AudioSpectrumData instance) {
@@ -381,7 +379,7 @@ Map<String, dynamic> _$AudioSpectrumDataToJson(AudioSpectrumData instance) {
 UserAudioSpectrumInfo _$UserAudioSpectrumInfoFromJson(
         Map<String, dynamic> json) =>
     UserAudioSpectrumInfo(
-      uid: (json['uid'] as num?)?.toInt(),
+      uid: json['uid'] as int?,
       spectrumData: json['spectrumData'] == null
           ? null
           : AudioSpectrumData.fromJson(
@@ -411,9 +409,8 @@ MediaRecorderConfiguration _$MediaRecorderConfigurationFromJson(
           _$MediaRecorderContainerFormatEnumMap, json['containerFormat']),
       streamType: $enumDecodeNullable(
           _$MediaRecorderStreamTypeEnumMap, json['streamType']),
-      maxDurationMs: (json['maxDurationMs'] as num?)?.toInt(),
-      recorderInfoUpdateInterval:
-          (json['recorderInfoUpdateInterval'] as num?)?.toInt(),
+      maxDurationMs: json['maxDurationMs'] as int?,
+      recorderInfoUpdateInterval: json['recorderInfoUpdateInterval'] as int?,
     );
 
 Map<String, dynamic> _$MediaRecorderConfigurationToJson(
@@ -449,8 +446,8 @@ const _$MediaRecorderStreamTypeEnumMap = {
 
 RecorderInfo _$RecorderInfoFromJson(Map<String, dynamic> json) => RecorderInfo(
       fileName: json['fileName'] as String?,
-      durationMs: (json['durationMs'] as num?)?.toInt(),
-      fileSize: (json['fileSize'] as num?)?.toInt(),
+      durationMs: json['durationMs'] as int?,
+      fileSize: json['fileSize'] as int?,
     );
 
 Map<String, dynamic> _$RecorderInfoToJson(RecorderInfo instance) {
