@@ -444,6 +444,21 @@ abstract class RtcEngineEx implements RtcEngine {
       required int length,
       required RtcConnection connection});
 
+  /// @nodoc
+  Future<void> sendRdtMessageEx(
+      {required int uid,
+      required RdtStreamType type,
+      required Uint8List data,
+      required int length,
+      required RtcConnection connection});
+
+  /// @nodoc
+  Future<void> sendMediaControlMessageEx(
+      {required int uid,
+      required Uint8List data,
+      required int length,
+      required RtcConnection connection});
+
   /// Adds a watermark image to the local video.
   ///
   /// This method adds a PNG watermark image to the local video in the live streaming. Once the watermark image is added, all the audience in the channel (CDN audience included), and the capturing device can see and capture it. The Agora SDK supports adding only one watermark image onto a local video or CDN live stream. The newly added watermark image replaces the previous one. The watermark coordinates are dependent on the settings in the setVideoEncoderConfigurationEx method:

@@ -264,6 +264,15 @@ const eventIdsMapping = {
   "RtcEngineEventHandler_onStreamMessageError": [
     "RtcEngineEventHandler_onStreamMessageError_fe302fc"
   ],
+  "RtcEngineEventHandler_onRdtMessage": [
+    "RtcEngineEventHandler_onRdtMessage_1f6f532"
+  ],
+  "RtcEngineEventHandler_onRdtStateChanged": [
+    "RtcEngineEventHandler_onRdtStateChanged_bf4ade0"
+  ],
+  "RtcEngineEventHandler_onMediaControlMessage": [
+    "RtcEngineEventHandler_onMediaControlMessage_0d4eb96"
+  ],
   "RtcEngineEventHandler_onRequestToken": [
     "RtcEngineEventHandler_onRequestToken_c81e1a4"
   ],

@@ -704,6 +704,61 @@ class RtcEngineExImpl extends RtcEngineImpl implements RtcEngineEx {
   }
 
   @override
+  Future<void> sendRdtMessageEx(
+      {required int uid,
+      required RdtStreamType type,
+      required Uint8List data,
+      required int length,
+      required RtcConnection connection}) async {
+    final apiType =
+        '${isOverrideClassName ? className : 'RtcEngineEx'}_sendRdtMessageEx_3a2998e';
+    final param = createParams({
+      'uid': uid,
+      'type': type.value(),
+      'length': length,
+      'connection': connection.toJson()
+    });
+    final List<Uint8List> buffers = [];
+    buffers.add(data);
+    buffers.addAll(connection.collectBufferList());
+    final callApiResult = await irisMethodChannel.invokeMethod(
+        IrisMethodCall(apiType, jsonEncode(param), buffers: buffers));
+    if (callApiResult.irisReturnCode < 0) {
+      throw AgoraRtcException(code: callApiResult.irisReturnCode);
+    }
+    final rm = callApiResult.data;
+    final result = rm['result'];
+    if (result < 0) {
+      throw AgoraRtcException(code: result);
+    }
+  }
+
+  @override
+  Future<void> sendMediaControlMessageEx(
+      {required int uid,
+      required Uint8List data,
+      required int length,
+      required RtcConnection connection}) async {
+    final apiType =
+        '${isOverrideClassName ? className : 'RtcEngineEx'}_sendMediaControlMessageEx_907822a';
+    final param = createParams(
+        {'uid': uid, 'length': length, 'connection': connection.toJson()});
+    final List<Uint8List> buffers = [];
+    buffers.add(data);
+    buffers.addAll(connection.collectBufferList());
+    final callApiResult = await irisMethodChannel.invokeMethod(
+        IrisMethodCall(apiType, jsonEncode(param), buffers: buffers));
+    if (callApiResult.irisReturnCode < 0) {
+      throw AgoraRtcException(code: callApiResult.irisReturnCode);
+    }
+    final rm = callApiResult.data;
+    final result = rm['result'];
+    if (result < 0) {
+      throw AgoraRtcException(code: result);
+    }
+  }
+
+  @override
   Future<void> addVideoWatermarkEx(
       {required String watermarkUrl,
       required WatermarkOptions options,

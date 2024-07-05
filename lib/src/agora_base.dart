@@ -424,6 +424,30 @@ enum ErrorCodeType {
   errPcmsendBufferoverflow,
 
   /// @nodoc
+  @JsonValue(250)
+  errRdtUserNotExist,
+
+  /// @nodoc
+  @JsonValue(251)
+  errRdtUserNotReady,
+
+  /// @nodoc
+  @JsonValue(252)
+  errRdtDataBlocked,
+
+  /// @nodoc
+  @JsonValue(253)
+  errRdtCmdExceedLimit,
+
+  /// @nodoc
+  @JsonValue(254)
+  errRdtDataExceedLimit,
+
+  /// @nodoc
+  @JsonValue(255)
+  errRdtEncryption,
+
+  /// @nodoc
   @JsonValue(428)
   errLoginAlreadyLogin,
 
@@ -6854,6 +6878,72 @@ class RecorderStreamInfo {
 
   /// @nodoc
   Map<String, dynamic> toJson() => _$RecorderStreamInfoToJson(this);
+}
+
+/// @nodoc
+@JsonEnum(alwaysCreate: true)
+enum RdtStreamType {
+  /// @nodoc
+  @JsonValue(0)
+  rdtStreamCmd,
+
+  /// @nodoc
+  @JsonValue(1)
+  rdtStreamData,
+
+  /// @nodoc
+  @JsonValue(2)
+  rdtStreamCount,
+}
+
+/// @nodoc
+extension RdtStreamTypeExt on RdtStreamType {
+  /// @nodoc
+  static RdtStreamType fromValue(int value) {
+    return $enumDecode(_$RdtStreamTypeEnumMap, value);
+  }
+
+  /// @nodoc
+  int value() {
+    return _$RdtStreamTypeEnumMap[this]!;
+  }
+}
+
+/// @nodoc
+@JsonEnum(alwaysCreate: true)
+enum RdtState {
+  /// @nodoc
+  @JsonValue(0)
+  rdtStateClosed,
+
+  /// @nodoc
+  @JsonValue(1)
+  rdtStateOpened,
+
+  /// @nodoc
+  @JsonValue(2)
+  rdtStateBlocked,
+
+  /// @nodoc
+  @JsonValue(3)
+  rdtStatePending,
+
+  /// @nodoc
+  @JsonValue(4)
+  rdtStateBroken,
+}
+
+/// @nodoc
+extension RdtStateExt on RdtState {
+  /// @nodoc
+  static RdtState fromValue(int value) {
+    return $enumDecode(_$RdtStateEnumMap, value);
+  }
+
+  /// @nodoc
+  int value() {
+    return _$RdtStateEnumMap[this]!;
+  }
 }
 
 /// The spatial audio parameters.

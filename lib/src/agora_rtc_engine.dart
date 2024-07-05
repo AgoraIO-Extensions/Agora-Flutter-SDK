@@ -1340,7 +1340,8 @@ class ChannelMediaOptions {
       this.publishRhythmPlayerTrack,
       this.isInteractiveAudience,
       this.customVideoTrackId,
-      this.isAudioFilterable});
+      this.isAudioFilterable,
+      this.autoConnectRdt});
 
   /// Whether to publish the video captured by the camera: true : Publish the video captured by the camera. false : Do not publish the video captured by the camera.
   @JsonKey(name: 'publishCameraTrack')
@@ -1489,6 +1490,10 @@ class ChannelMediaOptions {
   /// Whether the audio stream being published is filtered according to the volume algorithm: true : The audio stream is filtered. If the audio stream filter is not enabled, this setting does not takes effect. false : The audio stream is not filtered. If you need to enable this function, contact.
   @JsonKey(name: 'isAudioFilterable')
   final bool? isAudioFilterable;
+
+  /// @nodoc
+  @JsonKey(name: 'autoConnectRdt')
+  final bool? autoConnectRdt;
 
   /// @nodoc
   factory ChannelMediaOptions.fromJson(Map<String, dynamic> json) =>
@@ -1652,6 +1657,9 @@ class RtcEngineEventHandler {
     this.onConnectionBanned,
     this.onStreamMessage,
     this.onStreamMessageError,
+    this.onRdtMessage,
+    this.onRdtStateChanged,
+    this.onMediaControlMessage,
     this.onRequestToken,
     this.onTokenPrivilegeWillExpire,
     this.onLicenseValidationFailure,
@@ -2168,6 +2176,19 @@ class RtcEngineEventHandler {
   /// * [cached] Number of incoming cached messages when the data stream is interrupted.
   final void Function(RtcConnection connection, int remoteUid, int streamId,
       ErrorCodeType code, int missed, int cached)? onStreamMessageError;
+
+  /// @nodoc
+  final void Function(RtcConnection connection, int userId, RdtStreamType type,
+      Uint8List data, int length)? onRdtMessage;
+
+  /// @nodoc
+  final void Function(RtcConnection connection, int userId, RdtState state)?
+      onRdtStateChanged;
+
+  /// @nodoc
+  final void Function(
+          RtcConnection connection, int userId, Uint8List data, int length)?
+      onMediaControlMessage;
 
   /// Occurs when the token expires.
   ///
@@ -5686,6 +5707,17 @@ abstract class RtcEngine {
   /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown. You need to catch the exception and handle it accordingly.
   Future<void> sendStreamMessage(
       {required int streamId, required Uint8List data, required int length});
+
+  /// @nodoc
+  Future<void> sendRdtMessage(
+      {required int uid,
+      required RdtStreamType type,
+      required Uint8List data,
+      required int length});
+
+  /// @nodoc
+  Future<void> sendMediaControlMessage(
+      {required int uid, required Uint8List data, required int length});
 
   /// Adds a watermark image to the local video.
   ///
