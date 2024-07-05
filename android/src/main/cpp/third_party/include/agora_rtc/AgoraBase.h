@@ -695,6 +695,14 @@ enum ERROR_CODE_TYPE {
   ERR_PCMSEND_FORMAT = 200,           // unsupport pcm format
   ERR_PCMSEND_BUFFEROVERFLOW = 201,  // buffer overflow, the pcm send rate too quickly
 
+  // 250~270 RDT error code
+  ERR_RDT_USER_NOT_EXIST = 250,
+  ERR_RDT_USER_NOT_READY = 251,
+  ERR_RDT_DATA_BLOCKED = 252,
+  ERR_RDT_CMD_EXCEED_LIMIT = 253,
+  ERR_RDT_DATA_EXCEED_LIMIT = 254,
+  ERR_RDT_ENCRYPTION = 255,
+
   /// @cond
   // signaling: 400~600
   ERR_LOGIN_ALREADY_LOGIN = 428,
@@ -6122,6 +6130,28 @@ struct RecorderStreamInfo {
     RecorderStreamInfo() : channelId(NULL), uid(0) {}
     RecorderStreamInfo(const char* channelId, uid_t uid) : channelId(channelId), uid(uid) {}
 };
+
+/** 
+ * Reliable Data Transmission Tunnel message type
+ */
+enum RdtStreamType {
+  RDT_STREAM_CMD,    // Reliable; High priority; Limit 256 bytes per packet, 100 packets per second
+  RDT_STREAM_DATA,   // Reliable; Low priority; Restricted by congestion control; Limit 128K bytes per packet
+  RDT_STREAM_COUNT,
+};
+
+/**
+ * Reliable Data Transmission tunnel state
+ */
+enum RdtState {
+  RDT_STATE_CLOSED,  // initial or closed
+  RDT_STATE_OPENED,  // opened and can send data
+  RDT_STATE_BLOCKED, // send buffer is full, can't send data, but can send cmd
+  RDT_STATE_PENDING, // reconnecting tunnel, can't send data
+  RDT_STATE_BROKEN,  // rdt tunnel broken, will auto reset and rebuild tunnel
+};
+
+
 }  // namespace rtc
 
 namespace base {
