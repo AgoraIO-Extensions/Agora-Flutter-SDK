@@ -38,10 +38,10 @@ const _$RhythmPlayerStateTypeEnumMap = {
   RhythmPlayerStateType.rhythmPlayerStateFailed: 814,
 };
 
-const _$RhythmPlayerErrorTypeEnumMap = {
-  RhythmPlayerErrorType.rhythmPlayerErrorOk: 0,
-  RhythmPlayerErrorType.rhythmPlayerErrorFailed: 1,
-  RhythmPlayerErrorType.rhythmPlayerErrorCanNotOpen: 801,
-  RhythmPlayerErrorType.rhythmPlayerErrorCanNotPlay: 802,
-  RhythmPlayerErrorType.rhythmPlayerErrorFileOverDurationLimit: 803,
+const _$RhythmPlayerReasonEnumMap = {
+  RhythmPlayerReason.rhythmPlayerReasonOk: 0,
+  RhythmPlayerReason.rhythmPlayerReasonFailed: 1,
+  RhythmPlayerReason.rhythmPlayerReasonCanNotOpen: 801,
+  RhythmPlayerReason.rhythmPlayerReasonCanNotPlay: 802,
+  RhythmPlayerReason.rhythmPlayerReasonFileOverDurationLimit: 803,
 };

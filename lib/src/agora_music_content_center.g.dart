@@ -172,21 +172,27 @@ Map<String, dynamic> _$MusicContentCenterConfigurationToJson(
   return val;
 }
 
-const _$PreloadStatusCodeEnumMap = {
-  PreloadStatusCode.kPreloadStatusCompleted: 0,
-  PreloadStatusCode.kPreloadStatusFailed: 1,
-  PreloadStatusCode.kPreloadStatusPreloading: 2,
-  PreloadStatusCode.kPreloadStatusRemoved: 3,
+const _$MusicPlayModeEnumMap = {
+  MusicPlayMode.kMusicPlayModeOriginal: 0,
+  MusicPlayMode.kMusicPlayModeAccompany: 1,
+  MusicPlayMode.kMusicPlayModeLeadSing: 2,
 };
 
-const _$MusicContentCenterStatusCodeEnumMap = {
-  MusicContentCenterStatusCode.kMusicContentCenterStatusOk: 0,
-  MusicContentCenterStatusCode.kMusicContentCenterStatusErr: 1,
-  MusicContentCenterStatusCode.kMusicContentCenterStatusErrGateway: 2,
-  MusicContentCenterStatusCode
-      .kMusicContentCenterStatusErrPermissionAndResource: 3,
-  MusicContentCenterStatusCode.kMusicContentCenterStatusErrInternalDataParse: 4,
-  MusicContentCenterStatusCode.kMusicContentCenterStatusErrMusicLoading: 5,
-  MusicContentCenterStatusCode.kMusicContentCenterStatusErrMusicDecryption: 6,
-  MusicContentCenterStatusCode.kMusicContentCenterStatusErrHttpInternalError: 7,
+const _$PreloadStateEnumMap = {
+  PreloadState.kPreloadStateCompleted: 0,
+  PreloadState.kPreloadStateFailed: 1,
+  PreloadState.kPreloadStatePreloading: 2,
+  PreloadState.kPreloadStateRemoved: 3,
+};
+
+const _$MusicContentCenterStateReasonEnumMap = {
+  MusicContentCenterStateReason.kMusicContentCenterReasonOk: 0,
+  MusicContentCenterStateReason.kMusicContentCenterReasonError: 1,
+  MusicContentCenterStateReason.kMusicContentCenterReasonGateway: 2,
+  MusicContentCenterStateReason.kMusicContentCenterReasonPermissionAndResource:
+      3,
+  MusicContentCenterStateReason.kMusicContentCenterReasonInternalDataParse: 4,
+  MusicContentCenterStateReason.kMusicContentCenterReasonMusicLoading: 5,
+  MusicContentCenterStateReason.kMusicContentCenterReasonMusicDecryption: 6,
+  MusicContentCenterStateReason.kMusicContentCenterReasonHttpInternalError: 7,
 };

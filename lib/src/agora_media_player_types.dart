@@ -85,92 +85,92 @@ extension MediaPlayerStateExt on MediaPlayerState {
   }
 }
 
-/// @nodoc
+/// Reasons for the changes in the media player status.
 @JsonEnum(alwaysCreate: true)
-enum MediaPlayerError {
-  /// @nodoc
+enum MediaPlayerReason {
+  /// 0: No error.
   @JsonValue(0)
-  playerErrorNone,
+  playerReasonNone,
 
-  /// @nodoc
+  /// -1: Invalid arguments.
   @JsonValue(-1)
-  playerErrorInvalidArguments,
+  playerReasonInvalidArguments,
 
-  /// @nodoc
+  /// -2: Internal error.
   @JsonValue(-2)
-  playerErrorInternal,
+  playerReasonInternal,
 
-  /// @nodoc
+  /// -3: No resource.
   @JsonValue(-3)
-  playerErrorNoResource,
+  playerReasonNoResource,
 
-  /// @nodoc
+  /// -4: Invalid media resource.
   @JsonValue(-4)
-  playerErrorInvalidMediaSource,
+  playerReasonInvalidMediaSource,
 
-  /// @nodoc
+  /// -5: The media stream type is unknown.
   @JsonValue(-5)
-  playerErrorUnknownStreamType,
+  playerReasonUnknownStreamType,
 
-  /// @nodoc
+  /// -6: The object is not initialized.
   @JsonValue(-6)
-  playerErrorObjNotInitialized,
+  playerReasonObjNotInitialized,
 
-  /// @nodoc
+  /// -7: The codec is not supported.
   @JsonValue(-7)
-  playerErrorCodecNotSupported,
+  playerReasonCodecNotSupported,
 
-  /// @nodoc
+  /// -8: Invalid renderer.
   @JsonValue(-8)
-  playerErrorVideoRenderFailed,
+  playerReasonVideoRenderFailed,
 
-  /// @nodoc
+  /// -9: An error with the internal state of the player occurs.
   @JsonValue(-9)
-  playerErrorInvalidState,
+  playerReasonInvalidState,
 
-  /// @nodoc
+  /// -10: The URL of the media resource cannot be found.
   @JsonValue(-10)
-  playerErrorUrlNotFound,
+  playerReasonUrlNotFound,
 
-  /// @nodoc
+  /// -11: Invalid connection between the player and the Agora Server.
   @JsonValue(-11)
-  playerErrorInvalidConnectionState,
+  playerReasonInvalidConnectionState,
 
-  /// @nodoc
+  /// -12: The playback buffer is insufficient.
   @JsonValue(-12)
-  playerErrorSrcBufferUnderflow,
+  playerReasonSrcBufferUnderflow,
 
-  /// @nodoc
+  /// -13: The playback is interrupted.
   @JsonValue(-13)
-  playerErrorInterrupted,
+  playerReasonInterrupted,
 
-  /// @nodoc
+  /// -14: The SDK does not support the method being called.
   @JsonValue(-14)
-  playerErrorNotSupported,
+  playerReasonNotSupported,
 
-  /// @nodoc
+  /// -15: The authentication information of the media resource is expired.
   @JsonValue(-15)
-  playerErrorTokenExpired,
+  playerReasonTokenExpired,
 
   /// @nodoc
   @JsonValue(-16)
-  playerErrorIpExpired,
+  playerReasonIpExpired,
 
-  /// @nodoc
+  /// -17: An unknown error.
   @JsonValue(-17)
-  playerErrorUnknown,
+  playerReasonUnknown,
 }
 
 /// @nodoc
-extension MediaPlayerErrorExt on MediaPlayerError {
+extension MediaPlayerReasonExt on MediaPlayerReason {
   /// @nodoc
-  static MediaPlayerError fromValue(int value) {
-    return $enumDecode(_$MediaPlayerErrorEnumMap, value);
+  static MediaPlayerReason fromValue(int value) {
+    return $enumDecode(_$MediaPlayerReasonEnumMap, value);
   }
 
   /// @nodoc
   int value() {
-    return _$MediaPlayerErrorEnumMap[this]!;
+    return _$MediaPlayerReasonEnumMap[this]!;
   }
 }
 
@@ -473,23 +473,80 @@ class CacheStatistics {
   Map<String, dynamic> toJson() => _$CacheStatisticsToJson(this);
 }
 
+/// The information of the media file being played.
+@JsonSerializable(explicitToJson: true, includeIfNull: false)
+class PlayerPlaybackStats {
+  /// @nodoc
+  const PlayerPlaybackStats(
+      {this.videoFps,
+      this.videoBitrateInKbps,
+      this.audioBitrateInKbps,
+      this.totalBitrateInKbps});
+
+  /// The frame rate (fps) of the video.
+  @JsonKey(name: 'videoFps')
+  final int? videoFps;
+
+  /// The bitrate (kbps) of the video.
+  @JsonKey(name: 'videoBitrateInKbps')
+  final int? videoBitrateInKbps;
+
+  /// The bitrate (kbps) of the audio.
+  @JsonKey(name: 'audioBitrateInKbps')
+  final int? audioBitrateInKbps;
+
+  /// The total bitrate (kbps) of the media stream.
+  @JsonKey(name: 'totalBitrateInKbps')
+  final int? totalBitrateInKbps;
+
+  /// @nodoc
+  factory PlayerPlaybackStats.fromJson(Map<String, dynamic> json) =>
+      _$PlayerPlaybackStatsFromJson(json);
+
+  /// @nodoc
+  Map<String, dynamic> toJson() => _$PlayerPlaybackStatsToJson(this);
+}
+
 /// Information related to the media player.
 @JsonSerializable(explicitToJson: true, includeIfNull: false)
 class PlayerUpdatedInfo {
   /// @nodoc
-  const PlayerUpdatedInfo({this.playerId, this.deviceId, this.cacheStatistics});
+  const PlayerUpdatedInfo(
+      {this.internalPlayerUuid,
+      this.deviceId,
+      this.videoHeight,
+      this.videoWidth,
+      this.audioSampleRate,
+      this.audioChannels,
+      this.audioBitsPerSample});
 
   /// @nodoc
-  @JsonKey(name: 'playerId')
-  final String? playerId;
+  @JsonKey(name: 'internalPlayerUuid')
+  final String? internalPlayerUuid;
 
   /// The ID of a deivce.
   @JsonKey(name: 'deviceId')
   final String? deviceId;
 
-  /// @nodoc
-  @JsonKey(name: 'cacheStatistics')
-  final CacheStatistics? cacheStatistics;
+  /// Height (pixel) of the video.
+  @JsonKey(name: 'videoHeight')
+  final int? videoHeight;
+
+  /// Width (pixel) of the video.
+  @JsonKey(name: 'videoWidth')
+  final int? videoWidth;
+
+  /// Audio sample rate (Hz).
+  @JsonKey(name: 'audioSampleRate')
+  final int? audioSampleRate;
+
+  /// The number of audio channels.
+  @JsonKey(name: 'audioChannels')
+  final int? audioChannels;
+
+  /// The number of bits per audio sample point.
+  @JsonKey(name: 'audioBitsPerSample')
+  final int? audioBitsPerSample;
 
   /// @nodoc
   factory PlayerUpdatedInfo.fromJson(Map<String, dynamic> json) =>

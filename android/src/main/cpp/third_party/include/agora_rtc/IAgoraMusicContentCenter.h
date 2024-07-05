@@ -13,68 +13,90 @@
 namespace agora {
 namespace rtc {
 
+/**
+ * Modes for playing songs.
+ */
+typedef enum
+{
+    /**
+     * 0: The music player is in the origin mode, which means playing the original song.
+     */
+    kMusicPlayModeOriginal = 0,
+
+    /**
+     * 1: The music player is in the accompany mode, which means playing the accompaniment only.
+     */
+    kMusicPlayModeAccompany = 1,
+    
+    /**
+     * 2: The music player is in the lead sing mode, which means playing the lead vocals.
+     */
+    kMusicPlayModeLeadSing = 2,
+
+} MusicPlayMode;
+
 typedef enum
 {
     /**
      * 0: No error occurs and preload succeeds.
      */
-    kPreloadStatusCompleted = 0,
+    kPreloadStateCompleted = 0,
 
     /**
      * 1: A general error occurs.
      */
-    kPreloadStatusFailed = 1,
+    kPreloadStateFailed = 1,
 
     /**
      * 2: The media file is preloading.
      */
-    kPreloadStatusPreloading = 2,
+    kPreloadStatePreloading = 2,
         /**
      * 3: The media file is removed.
      */
-    kPreloadStatusRemoved = 3,
-} PreloadStatusCode;
+    kPreloadStateRemoved = 3,
+} PreloadState;
 
 typedef enum
 {
     /**
      * 0: No error occurs and request succeeds.
      */
-    kMusicContentCenterStatusOk = 0,
+    kMusicContentCenterReasonOk = 0,
     /**
      * 1: A general error occurs.
      */
-    kMusicContentCenterStatusErr = 1,
+    kMusicContentCenterReasonError = 1,
     /**
      * 2: The gateway error. There are several possible reasons:
      *  - Token is expired. Check if your token is expired.
      *  - Token is invalid. Check the type of token you passed in.
      *  - Network error. Check your network.
      */
-    kMusicContentCenterStatusErrGateway = 2,
+    kMusicContentCenterReasonGateway = 2,
     /**
      * 3: Permission and resource error. There are several possible reasons:
      *  - Your appid may not have the mcc permission. Please contact technical support 
      *  - The resource may not exist. Please contact technical support
      */
-    kMusicContentCenterStatusErrPermissionAndResource = 3,
+    kMusicContentCenterReasonPermissionAndResource = 3,
     /**
      * 4: Internal data parse error. Please contact technical support
      */
-    kMusicContentCenterStatusErrInternalDataParse = 4,
+    kMusicContentCenterReasonInternalDataParse = 4,
     /**
      * 5: Music loading error. Please contact technical support
      */
-    kMusicContentCenterStatusErrMusicLoading = 5,
+    kMusicContentCenterReasonMusicLoading = 5,
     /**
      * 6: Music decryption error. Please contact technical support
      */
-    kMusicContentCenterStatusErrMusicDecryption = 6, 
+    kMusicContentCenterReasonMusicDecryption = 6, 
     /**
      * 7: Http internal error. Please retry later.
      */
-    kMusicContentCenterStatusErrHttpInternalError = 7, 
-} MusicContentCenterStatusCode;
+    kMusicContentCenterReasonHttpInternalError = 7, 
+} MusicContentCenterStateReason;
 
 typedef struct 
 {
@@ -234,18 +256,18 @@ public:
      * 
      * @param requestId The request id is same as that returned by getMusicCharts.
      * @param result The result of music chart collection
-     * @param errorCode The status of the request. See MusicContentCenterStatusCode
+     * @param reason The status of the request. See MusicContentCenterStateReason
      */
-    virtual void onMusicChartsResult(const char* requestId, agora_refptr<MusicChartCollection> result, MusicContentCenterStatusCode errorCode) = 0;
+    virtual void onMusicChartsResult(const char* requestId, agora_refptr<MusicChartCollection> result, MusicContentCenterStateReason reason) = 0;
 
     /**
      * Music collection, occurs when getMusicCollectionByMusicChartId or searchMusic method is called.
      * 
      * @param requestId The request id is same as that returned by getMusicCollectionByMusicChartId or searchMusic
      * @param result The result of music collection
-     * @param errorCode The status of the request. See MusicContentCenterStatusCode
+     * @param reason The status of the request. See MusicContentCenterStateReason
      */
-    virtual void onMusicCollectionResult(const char* requestId, agora_refptr<MusicCollection> result, MusicContentCenterStatusCode errorCode) = 0;
+    virtual void onMusicCollectionResult(const char* requestId, agora_refptr<MusicCollection> result, MusicContentCenterStateReason reason) = 0;
 
     /**
      * Lyric url callback of getLyric, occurs when getLyric is called
@@ -253,9 +275,9 @@ public:
      * @param requestId The request id is same as that returned by getLyric
      * @param songCode Song code
      * @param lyricUrl  The lyric url of this music
-     * @param errorCode The status of the request. See MusicContentCenterStatusCode
+     * @param reason The status of the request. See MusicContentCenterStateReason
      */
-    virtual void onLyricResult(const char* requestId, int64_t songCode, const char* lyricUrl, MusicContentCenterStatusCode errorCode) = 0;
+    virtual void onLyricResult(const char* requestId, int64_t songCode, const char* lyricUrl, MusicContentCenterStateReason reason) = 0;
 
     /**
      * Simple info callback of getSongSimpleInfo, occurs when getSongSimpleInfo is called
@@ -263,9 +285,9 @@ public:
      * @param requestId The request id is same as that returned by getSongSimpleInfo.
      * @param songCode Song code
      * @param simpleInfo The metadata of the music.
-     * @param errorCode The status of the request. See MusicContentCenterStatusCode
+     * @param reason The status of the request. See MusicContentCenterStateReason
      */
-    virtual void onSongSimpleInfoResult(const char* requestId, int64_t songCode, const char* simpleInfo, MusicContentCenterStatusCode errorCode) = 0;
+    virtual void onSongSimpleInfoResult(const char* requestId, int64_t songCode, const char* simpleInfo, MusicContentCenterStateReason reason) = 0;
 
     /**
      * Preload process callback, occurs when preload is called
@@ -274,10 +296,10 @@ public:
      * @param songCode Song code
      * @param percent Preload progress (0 ~ 100)
      * @param lyricUrl  The lyric url of this music
-     * @param status Preload status; see PreloadStatusCode.
-     * @param errorCode The status of the request. See MusicContentCenterStatusCode
+     * @param state Preload state; see PreloadState.
+     * @param reason The status of the request. See MusicContentCenterStateReason
      */
-    virtual void onPreLoadEvent(const char* requestId, int64_t songCode, int percent, const char* lyricUrl, PreloadStatusCode status, MusicContentCenterStatusCode errorCode) = 0;
+    virtual void onPreLoadEvent(const char* requestId, int64_t songCode, int percent, const char* lyricUrl, PreloadState state, MusicContentCenterStateReason reason) = 0;
 
     virtual ~IMusicContentCenterEventHandler() {};
 };
@@ -329,6 +351,18 @@ public:
     * - < 0: Failure.
     */
     virtual int open(int64_t songCode, int64_t startPos = 0) = 0;
+
+    /**
+    * Set the mode for playing songs.
+    * You can call this method to switch from original to accompaniment or lead vocals.
+    * If you do not call this method to set the mode, the SDK plays the accompaniment by default.
+    *
+    * @param model The playing mode.
+    * @return
+    * - 0: Success.
+    * - < 0: Failure.
+    */
+    virtual int setPlayMode(MusicPlayMode mode) = 0;
 };
 
 class IMusicContentCenter
@@ -383,6 +417,15 @@ public:
      * - The empty pointer NULL, if the method call fails.
      */
     virtual agora_refptr<IMusicPlayer> createMusicPlayer() = 0;
+
+    /**
+     * Destroy a music player source object and return result.
+     * @param music_player The pointer to \ref rtc::IMusicPlayer "IMusicPlayer".
+     * @return
+     * - 0: Success.
+     * - < 0: Failure.
+     */
+    virtual int destroyMusicPlayer(agora_refptr<IMusicPlayer> music_player) = 0;
     
     /**
      * Get music chart collection of music.
@@ -501,12 +544,12 @@ public:
      *
      * @param requestId The request id you will get of this query, format is uuid.
      * @param songCode The identifier of the media file that you want to play.
-     * @param LyricType The type of the lyric file. 0:xml or 1:lrc.
+     * @param lyricType The type of the lyric file. 0:xml or 1:lrc.
      * @return
      * - 0: Success.
      * - < 0: Failure.
      */
-    virtual int getLyric(agora::util::AString& requestId, int64_t songCode, int32_t LyricType = 0) = 0;
+    virtual int getLyric(agora::util::AString& requestId, int64_t songCode, int32_t lyricType = 0) = 0;
 
     /**
      * Gets the metadata of a specific music. Once this method is called, the SDK triggers the onSongSimpleInfoResult callback to report the metadata of the music.

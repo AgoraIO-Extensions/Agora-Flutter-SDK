@@ -30,7 +30,7 @@ void generatedTestCases(ValueGetter<IrisTester> irisTester) {
       final onRecorderStateChangedCompleter = Completer<bool>();
       final theMediaRecorderObserver = MediaRecorderObserver(
         onRecorderStateChanged: (String channelId, int uid, RecorderState state,
-            RecorderErrorCode error) {
+            RecorderReasonCode reason) {
           onRecorderStateChangedCompleter.complete(true);
         },
       );
@@ -46,13 +46,13 @@ void generatedTestCases(ValueGetter<IrisTester> irisTester) {
         const String channelId = "hello";
         const int uid = 10;
         const RecorderState state = RecorderState.recorderStateError;
-        const RecorderErrorCode error = RecorderErrorCode.recorderErrorNone;
+        const RecorderReasonCode reason = RecorderReasonCode.recorderReasonNone;
 
         final eventJson = {
           'channelId': channelId,
           'uid': uid,
           'state': state.value(),
-          'error': error.value(),
+          'reason': reason.value(),
         };
 
         final eventIds =

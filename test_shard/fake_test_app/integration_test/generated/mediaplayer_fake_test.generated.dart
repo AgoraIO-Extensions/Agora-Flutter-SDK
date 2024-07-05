@@ -1183,8 +1183,8 @@ void mediaPlayerControllerSmokeTestCases() {
       try {
         final MediaPlayerSourceObserver observer = MediaPlayerSourceObserver(
           onPlayerSourceStateChanged:
-              (MediaPlayerState state, MediaPlayerError ec) {},
-          onPositionChanged: (int positionMs) {},
+              (MediaPlayerState state, MediaPlayerReason reason) {},
+          onPositionChanged: (int positionMs, int timestampMs) {},
           onPlayerEvent:
               (MediaPlayerEvent eventCode, int elapsedTime, String message) {},
           onMetaData: (Uint8List data, int length) {},
@@ -1194,6 +1194,8 @@ void mediaPlayerControllerSmokeTestCases() {
           onAgoraCDNTokenWillExpire: () {},
           onPlayerSrcInfoChanged: (SrcInfo from, SrcInfo to) {},
           onPlayerInfoUpdated: (PlayerUpdatedInfo info) {},
+          onPlayerCacheStats: (CacheStatistics stats) {},
+          onPlayerPlaybackStats: (PlayerPlaybackStats stats) {},
           onAudioVolumeIndication: (int volume) {},
         );
         mediaPlayerController.registerPlayerSourceObserver(
@@ -1238,8 +1240,8 @@ void mediaPlayerControllerSmokeTestCases() {
       try {
         final MediaPlayerSourceObserver observer = MediaPlayerSourceObserver(
           onPlayerSourceStateChanged:
-              (MediaPlayerState state, MediaPlayerError ec) {},
-          onPositionChanged: (int positionMs) {},
+              (MediaPlayerState state, MediaPlayerReason reason) {},
+          onPositionChanged: (int positionMs, int timestampMs) {},
           onPlayerEvent:
               (MediaPlayerEvent eventCode, int elapsedTime, String message) {},
           onMetaData: (Uint8List data, int length) {},
@@ -1249,6 +1251,8 @@ void mediaPlayerControllerSmokeTestCases() {
           onAgoraCDNTokenWillExpire: () {},
           onPlayerSrcInfoChanged: (SrcInfo from, SrcInfo to) {},
           onPlayerInfoUpdated: (PlayerUpdatedInfo info) {},
+          onPlayerCacheStats: (CacheStatistics stats) {},
+          onPlayerPlaybackStats: (PlayerPlaybackStats stats) {},
           onAudioVolumeIndication: (int volume) {},
         );
         mediaPlayerController.unregisterPlayerSourceObserver(

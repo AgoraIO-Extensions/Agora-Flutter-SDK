@@ -127,6 +127,7 @@ RemoteAudioStats _$RemoteAudioStatsFromJson(Map<String, dynamic> json) =>
       qoeQuality: (json['qoeQuality'] as num?)?.toInt(),
       qualityChangedReason: (json['qualityChangedReason'] as num?)?.toInt(),
       rxAudioBytes: (json['rxAudioBytes'] as num?)?.toInt(),
+      e2eDelay: (json['e2eDelay'] as num?)?.toInt(),
     );
 
 Map<String, dynamic> _$RemoteAudioStatsToJson(RemoteAudioStats instance) {
@@ -157,6 +158,7 @@ Map<String, dynamic> _$RemoteAudioStatsToJson(RemoteAudioStats instance) {
   writeNotNull('qoeQuality', instance.qoeQuality);
   writeNotNull('qualityChangedReason', instance.qualityChangedReason);
   writeNotNull('rxAudioBytes', instance.rxAudioBytes);
+  writeNotNull('e2eDelay', instance.e2eDelay);
   return val;
 }
 
@@ -378,12 +380,14 @@ CameraCapturerConfiguration _$CameraCapturerConfigurationFromJson(
     CameraCapturerConfiguration(
       cameraDirection: $enumDecodeNullable(
           _$CameraDirectionEnumMap, json['cameraDirection']),
+      cameraFocalLengthType: $enumDecodeNullable(
+          _$CameraFocalLengthTypeEnumMap, json['cameraFocalLengthType']),
       deviceId: json['deviceId'] as String?,
       cameraId: json['cameraId'] as String?,
+      followEncodeDimensionRatio: json['followEncodeDimensionRatio'] as bool?,
       format: json['format'] == null
           ? null
           : VideoFormat.fromJson(json['format'] as Map<String, dynamic>),
-      followEncodeDimensionRatio: json['followEncodeDimensionRatio'] as bool?,
     );
 
 Map<String, dynamic> _$CameraCapturerConfigurationToJson(
@@ -398,17 +402,26 @@ Map<String, dynamic> _$CameraCapturerConfigurationToJson(
 
   writeNotNull(
       'cameraDirection', _$CameraDirectionEnumMap[instance.cameraDirection]);
+  writeNotNull('cameraFocalLengthType',
+      _$CameraFocalLengthTypeEnumMap[instance.cameraFocalLengthType]);
   writeNotNull('deviceId', instance.deviceId);
   writeNotNull('cameraId', instance.cameraId);
-  writeNotNull('format', instance.format?.toJson());
   writeNotNull(
       'followEncodeDimensionRatio', instance.followEncodeDimensionRatio);
+  writeNotNull('format', instance.format?.toJson());
   return val;
 }
 
 const _$CameraDirectionEnumMap = {
   CameraDirection.cameraRear: 0,
   CameraDirection.cameraFront: 1,
+};
+
+const _$CameraFocalLengthTypeEnumMap = {
+  CameraFocalLengthType.cameraFocalLengthDefault: 0,
+  CameraFocalLengthType.cameraFocalLengthWideAngle: 1,
+  CameraFocalLengthType.cameraFocalLengthUltraWide: 2,
+  CameraFocalLengthType.cameraFocalLengthTelephoto: 3,
 };
 
 ScreenCaptureConfiguration _$ScreenCaptureConfigurationFromJson(
@@ -619,6 +632,8 @@ ChannelMediaOptions _$ChannelMediaOptionsFromJson(Map<String, dynamic> json) =>
       publishMediaPlayerVideoTrack:
           json['publishMediaPlayerVideoTrack'] as bool?,
       publishTranscodedVideoTrack: json['publishTranscodedVideoTrack'] as bool?,
+      publishMixedAudioTrack: json['publishMixedAudioTrack'] as bool?,
+      publishLipSyncTrack: json['publishLipSyncTrack'] as bool?,
       autoSubscribeAudio: json['autoSubscribeAudio'] as bool?,
       autoSubscribeVideo: json['autoSubscribeVideo'] as bool?,
       enableAudioRecordingOrPlayout:
@@ -677,6 +692,8 @@ Map<String, dynamic> _$ChannelMediaOptionsToJson(ChannelMediaOptions instance) {
       'publishMediaPlayerVideoTrack', instance.publishMediaPlayerVideoTrack);
   writeNotNull(
       'publishTranscodedVideoTrack', instance.publishTranscodedVideoTrack);
+  writeNotNull('publishMixedAudioTrack', instance.publishMixedAudioTrack);
+  writeNotNull('publishLipSyncTrack', instance.publishLipSyncTrack);
   writeNotNull('autoSubscribeAudio', instance.autoSubscribeAudio);
   writeNotNull('autoSubscribeVideo', instance.autoSubscribeVideo);
   writeNotNull(
@@ -807,7 +824,6 @@ const _$ThreadPriorityTypeEnumMap = {
 };
 
 Metadata _$MetadataFromJson(Map<String, dynamic> json) => Metadata(
-      channelId: json['channelId'] as String?,
       uid: (json['uid'] as num?)?.toInt(),
       size: (json['size'] as num?)?.toInt(),
       timeStampMs: (json['timeStampMs'] as num?)?.toInt(),
@@ -822,7 +838,6 @@ Map<String, dynamic> _$MetadataToJson(Metadata instance) {
     }
   }
 
-  writeNotNull('channelId', instance.channelId);
   writeNotNull('uid', instance.uid);
   writeNotNull('size', instance.size);
   writeNotNull('timeStampMs', instance.timeStampMs);
@@ -931,6 +946,7 @@ const _$MediaSourceTypeEnumMap = {
   MediaSourceType.rtcImageGifSource: 10,
   MediaSourceType.remoteVideoSource: 11,
   MediaSourceType.transcodedVideoSource: 12,
+  MediaSourceType.speechDrivenVideoSource: 13,
   MediaSourceType.unknownMediaSource: 100,
 };
 
@@ -969,6 +985,28 @@ Map<String, dynamic> _$VideoDeviceInfoToJson(VideoDeviceInfo instance) {
   }
 
   writeNotNull('deviceId', instance.deviceId);
+  writeNotNull('deviceName', instance.deviceName);
+  return val;
+}
+
+AudioDeviceInfo _$AudioDeviceInfoFromJson(Map<String, dynamic> json) =>
+    AudioDeviceInfo(
+      deviceId: json['deviceId'] as String?,
+      deviceTypeName: json['deviceTypeName'] as String?,
+      deviceName: json['deviceName'] as String?,
+    );
+
+Map<String, dynamic> _$AudioDeviceInfoToJson(AudioDeviceInfo instance) {
+  final val = <String, dynamic>{};
+
+  void writeNotNull(String key, dynamic value) {
+    if (value != null) {
+      val[key] = value;
+    }
+  }
+
+  writeNotNull('deviceId', instance.deviceId);
+  writeNotNull('deviceTypeName', instance.deviceTypeName);
   writeNotNull('deviceName', instance.deviceName);
   return val;
 }
@@ -1084,13 +1122,13 @@ const _$MaxMetadataSizeTypeEnumMap = {
   MaxMetadataSizeType.maxMetadataSizeInByte: 1024,
 };
 
-const _$DirectCdnStreamingErrorEnumMap = {
-  DirectCdnStreamingError.directCdnStreamingErrorOk: 0,
-  DirectCdnStreamingError.directCdnStreamingErrorFailed: 1,
-  DirectCdnStreamingError.directCdnStreamingErrorAudioPublication: 2,
-  DirectCdnStreamingError.directCdnStreamingErrorVideoPublication: 3,
-  DirectCdnStreamingError.directCdnStreamingErrorNetConnect: 4,
-  DirectCdnStreamingError.directCdnStreamingErrorBadName: 5,
+const _$DirectCdnStreamingReasonEnumMap = {
+  DirectCdnStreamingReason.directCdnStreamingReasonOk: 0,
+  DirectCdnStreamingReason.directCdnStreamingReasonFailed: 1,
+  DirectCdnStreamingReason.directCdnStreamingReasonAudioPublication: 2,
+  DirectCdnStreamingReason.directCdnStreamingReasonVideoPublication: 3,
+  DirectCdnStreamingReason.directCdnStreamingReasonNetConnect: 4,
+  DirectCdnStreamingReason.directCdnStreamingReasonBadName: 5,
 };
 
 const _$DirectCdnStreamingStateEnumMap = {

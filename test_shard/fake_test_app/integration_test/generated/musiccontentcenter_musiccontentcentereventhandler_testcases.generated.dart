@@ -32,7 +32,7 @@ void generatedTestCases(ValueGetter<IrisTester> irisTester) {
       final onMusicChartsResultCompleter = Completer<bool>();
       final theMusicContentCenterEventHandler = MusicContentCenterEventHandler(
         onMusicChartsResult: (String requestId, List result,
-            MusicContentCenterStatusCode errorCode) {
+            MusicContentCenterStateReason reason) {
           onMusicChartsResultCompleter.complete(true);
         },
       );
@@ -47,13 +47,13 @@ void generatedTestCases(ValueGetter<IrisTester> irisTester) {
       {
         const String requestId = "hello";
         const List<MusicChartInfo> result = [];
-        const MusicContentCenterStatusCode errorCode =
-            MusicContentCenterStatusCode.kMusicContentCenterStatusOk;
+        const MusicContentCenterStateReason reason =
+            MusicContentCenterStateReason.kMusicContentCenterReasonOk;
 
         final eventJson = {
           'requestId': requestId,
           'result': result,
-          'errorCode': errorCode.value(),
+          'reason': reason.value(),
         };
 
         final eventIds = eventIdsMapping[
@@ -105,7 +105,7 @@ void generatedTestCases(ValueGetter<IrisTester> irisTester) {
       final onMusicCollectionResultCompleter = Completer<bool>();
       final theMusicContentCenterEventHandler = MusicContentCenterEventHandler(
         onMusicCollectionResult: (String requestId, MusicCollection result,
-            MusicContentCenterStatusCode errorCode) {
+            MusicContentCenterStateReason reason) {
           onMusicCollectionResultCompleter.complete(true);
         },
       );
@@ -120,12 +120,12 @@ void generatedTestCases(ValueGetter<IrisTester> irisTester) {
       {
         const String requestId = "hello";
         const MusicCollection? result = null;
-        const MusicContentCenterStatusCode errorCode =
-            MusicContentCenterStatusCode.kMusicContentCenterStatusOk;
+        const MusicContentCenterStateReason reason =
+            MusicContentCenterStateReason.kMusicContentCenterReasonOk;
 
         final eventJson = {
           'requestId': requestId,
-          'errorCode': errorCode.value(),
+          'reason': reason.value(),
         };
 
         final eventIds = eventIdsMapping[
@@ -177,7 +177,7 @@ void generatedTestCases(ValueGetter<IrisTester> irisTester) {
       final onLyricResultCompleter = Completer<bool>();
       final theMusicContentCenterEventHandler = MusicContentCenterEventHandler(
         onLyricResult: (String requestId, int songCode, String lyricUrl,
-            MusicContentCenterStatusCode errorCode) {
+            MusicContentCenterStateReason reason) {
           onLyricResultCompleter.complete(true);
         },
       );
@@ -193,14 +193,14 @@ void generatedTestCases(ValueGetter<IrisTester> irisTester) {
         const String requestId = "hello";
         const int songCode = 10;
         const String lyricUrl = "hello";
-        const MusicContentCenterStatusCode errorCode =
-            MusicContentCenterStatusCode.kMusicContentCenterStatusOk;
+        const MusicContentCenterStateReason reason =
+            MusicContentCenterStateReason.kMusicContentCenterReasonOk;
 
         final eventJson = {
           'requestId': requestId,
           'songCode': songCode,
           'lyricUrl': lyricUrl,
-          'errorCode': errorCode.value(),
+          'reason': reason.value(),
         };
 
         final eventIds =
@@ -252,7 +252,7 @@ void generatedTestCases(ValueGetter<IrisTester> irisTester) {
       final onSongSimpleInfoResultCompleter = Completer<bool>();
       final theMusicContentCenterEventHandler = MusicContentCenterEventHandler(
         onSongSimpleInfoResult: (String requestId, int songCode,
-            String simpleInfo, MusicContentCenterStatusCode errorCode) {
+            String simpleInfo, MusicContentCenterStateReason reason) {
           onSongSimpleInfoResultCompleter.complete(true);
         },
       );
@@ -268,14 +268,14 @@ void generatedTestCases(ValueGetter<IrisTester> irisTester) {
         const String requestId = "hello";
         const int songCode = 10;
         const String simpleInfo = "hello";
-        const MusicContentCenterStatusCode errorCode =
-            MusicContentCenterStatusCode.kMusicContentCenterStatusOk;
+        const MusicContentCenterStateReason reason =
+            MusicContentCenterStateReason.kMusicContentCenterReasonOk;
 
         final eventJson = {
           'requestId': requestId,
           'songCode': songCode,
           'simpleInfo': simpleInfo,
-          'errorCode': errorCode.value(),
+          'reason': reason.value(),
         };
 
         final eventIds = eventIdsMapping[
@@ -330,8 +330,8 @@ void generatedTestCases(ValueGetter<IrisTester> irisTester) {
             int songCode,
             int percent,
             String lyricUrl,
-            PreloadStatusCode status,
-            MusicContentCenterStatusCode errorCode) {
+            PreloadState state,
+            MusicContentCenterStateReason reason) {
           onPreLoadEventCompleter.complete(true);
         },
       );
@@ -348,18 +348,17 @@ void generatedTestCases(ValueGetter<IrisTester> irisTester) {
         const int songCode = 10;
         const int percent = 10;
         const String lyricUrl = "hello";
-        const PreloadStatusCode status =
-            PreloadStatusCode.kPreloadStatusCompleted;
-        const MusicContentCenterStatusCode errorCode =
-            MusicContentCenterStatusCode.kMusicContentCenterStatusOk;
+        const PreloadState state = PreloadState.kPreloadStateCompleted;
+        const MusicContentCenterStateReason reason =
+            MusicContentCenterStateReason.kMusicContentCenterReasonOk;
 
         final eventJson = {
           'requestId': requestId,
           'songCode': songCode,
           'percent': percent,
           'lyricUrl': lyricUrl,
-          'status': status.value(),
-          'errorCode': errorCode.value(),
+          'state': state.value(),
+          'reason': reason.value(),
         };
 
         final eventIds =

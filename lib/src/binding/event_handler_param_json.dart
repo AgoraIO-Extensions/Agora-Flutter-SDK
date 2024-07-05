@@ -610,9 +610,35 @@ extension VideoFrameObserverOnTranscodedVideoFrameJsonBufferExt
 }
 
 @JsonSerializable(explicitToJson: true, includeIfNull: false)
+class FaceInfoObserverOnFaceInfoJson {
+  const FaceInfoObserverOnFaceInfoJson({this.outFaceInfo});
+
+  @JsonKey(name: 'outFaceInfo')
+  final String? outFaceInfo;
+
+  factory FaceInfoObserverOnFaceInfoJson.fromJson(Map<String, dynamic> json) =>
+      _$FaceInfoObserverOnFaceInfoJsonFromJson(json);
+
+  Map<String, dynamic> toJson() => _$FaceInfoObserverOnFaceInfoJsonToJson(this);
+}
+
+extension FaceInfoObserverOnFaceInfoJsonBufferExt
+    on FaceInfoObserverOnFaceInfoJson {
+  FaceInfoObserverOnFaceInfoJson fillBuffers(List<Uint8List> bufferList) {
+    if (bufferList.isEmpty) return this;
+    return this;
+  }
+
+  List<Uint8List> collectBufferList() {
+    final bufferList = <Uint8List>[];
+    return bufferList;
+  }
+}
+
+@JsonSerializable(explicitToJson: true, includeIfNull: false)
 class MediaRecorderObserverOnRecorderStateChangedJson {
   const MediaRecorderObserverOnRecorderStateChangedJson(
-      {this.channelId, this.uid, this.state, this.error});
+      {this.channelId, this.uid, this.state, this.reason});
 
   @JsonKey(name: 'channelId')
   final String? channelId;
@@ -623,8 +649,8 @@ class MediaRecorderObserverOnRecorderStateChangedJson {
   @JsonKey(name: 'state')
   final RecorderState? state;
 
-  @JsonKey(name: 'error')
-  final RecorderErrorCode? error;
+  @JsonKey(name: 'reason')
+  final RecorderReasonCode? reason;
 
   factory MediaRecorderObserverOnRecorderStateChangedJson.fromJson(
           Map<String, dynamic> json) =>
@@ -716,13 +742,13 @@ extension MediaPlayerVideoFrameObserverOnFrameJsonBufferExt
 @JsonSerializable(explicitToJson: true, includeIfNull: false)
 class MediaPlayerSourceObserverOnPlayerSourceStateChangedJson {
   const MediaPlayerSourceObserverOnPlayerSourceStateChangedJson(
-      {this.state, this.ec});
+      {this.state, this.reason});
 
   @JsonKey(name: 'state')
   final MediaPlayerState? state;
 
-  @JsonKey(name: 'ec')
-  final MediaPlayerError? ec;
+  @JsonKey(name: 'reason')
+  final MediaPlayerReason? reason;
 
   factory MediaPlayerSourceObserverOnPlayerSourceStateChangedJson.fromJson(
           Map<String, dynamic> json) =>
@@ -748,10 +774,14 @@ extension MediaPlayerSourceObserverOnPlayerSourceStateChangedJsonBufferExt
 
 @JsonSerializable(explicitToJson: true, includeIfNull: false)
 class MediaPlayerSourceObserverOnPositionChangedJson {
-  const MediaPlayerSourceObserverOnPositionChangedJson({this.positionMs});
+  const MediaPlayerSourceObserverOnPositionChangedJson(
+      {this.positionMs, this.timestampMs});
 
-  @JsonKey(name: 'position_ms')
+  @JsonKey(name: 'positionMs')
   final int? positionMs;
+
+  @JsonKey(name: 'timestampMs')
+  final int? timestampMs;
 
   factory MediaPlayerSourceObserverOnPositionChangedJson.fromJson(
           Map<String, dynamic> json) =>
@@ -1027,6 +1057,64 @@ extension MediaPlayerSourceObserverOnPlayerInfoUpdatedJsonBufferExt
 }
 
 @JsonSerializable(explicitToJson: true, includeIfNull: false)
+class MediaPlayerSourceObserverOnPlayerCacheStatsJson {
+  const MediaPlayerSourceObserverOnPlayerCacheStatsJson({this.stats});
+
+  @JsonKey(name: 'stats')
+  final CacheStatistics? stats;
+
+  factory MediaPlayerSourceObserverOnPlayerCacheStatsJson.fromJson(
+          Map<String, dynamic> json) =>
+      _$MediaPlayerSourceObserverOnPlayerCacheStatsJsonFromJson(json);
+
+  Map<String, dynamic> toJson() =>
+      _$MediaPlayerSourceObserverOnPlayerCacheStatsJsonToJson(this);
+}
+
+extension MediaPlayerSourceObserverOnPlayerCacheStatsJsonBufferExt
+    on MediaPlayerSourceObserverOnPlayerCacheStatsJson {
+  MediaPlayerSourceObserverOnPlayerCacheStatsJson fillBuffers(
+      List<Uint8List> bufferList) {
+    if (bufferList.isEmpty) return this;
+    return this;
+  }
+
+  List<Uint8List> collectBufferList() {
+    final bufferList = <Uint8List>[];
+    return bufferList;
+  }
+}
+
+@JsonSerializable(explicitToJson: true, includeIfNull: false)
+class MediaPlayerSourceObserverOnPlayerPlaybackStatsJson {
+  const MediaPlayerSourceObserverOnPlayerPlaybackStatsJson({this.stats});
+
+  @JsonKey(name: 'stats')
+  final PlayerPlaybackStats? stats;
+
+  factory MediaPlayerSourceObserverOnPlayerPlaybackStatsJson.fromJson(
+          Map<String, dynamic> json) =>
+      _$MediaPlayerSourceObserverOnPlayerPlaybackStatsJsonFromJson(json);
+
+  Map<String, dynamic> toJson() =>
+      _$MediaPlayerSourceObserverOnPlayerPlaybackStatsJsonToJson(this);
+}
+
+extension MediaPlayerSourceObserverOnPlayerPlaybackStatsJsonBufferExt
+    on MediaPlayerSourceObserverOnPlayerPlaybackStatsJson {
+  MediaPlayerSourceObserverOnPlayerPlaybackStatsJson fillBuffers(
+      List<Uint8List> bufferList) {
+    if (bufferList.isEmpty) return this;
+    return this;
+  }
+
+  List<Uint8List> collectBufferList() {
+    final bufferList = <Uint8List>[];
+    return bufferList;
+  }
+}
+
+@JsonSerializable(explicitToJson: true, includeIfNull: false)
 class MediaPlayerSourceObserverOnAudioVolumeIndicationJson {
   const MediaPlayerSourceObserverOnAudioVolumeIndicationJson({this.volume});
 
@@ -1058,7 +1146,7 @@ extension MediaPlayerSourceObserverOnAudioVolumeIndicationJsonBufferExt
 @JsonSerializable(explicitToJson: true, includeIfNull: false)
 class MusicContentCenterEventHandlerOnMusicChartsResultJson {
   const MusicContentCenterEventHandlerOnMusicChartsResultJson(
-      {this.requestId, this.result, this.errorCode});
+      {this.requestId, this.result, this.reason});
 
   @JsonKey(name: 'requestId')
   final String? requestId;
@@ -1066,8 +1154,8 @@ class MusicContentCenterEventHandlerOnMusicChartsResultJson {
   @JsonKey(name: 'result')
   final List<MusicChartInfo>? result;
 
-  @JsonKey(name: 'errorCode')
-  final MusicContentCenterStatusCode? errorCode;
+  @JsonKey(name: 'reason')
+  final MusicContentCenterStateReason? reason;
 
   factory MusicContentCenterEventHandlerOnMusicChartsResultJson.fromJson(
           Map<String, dynamic> json) =>
@@ -1094,7 +1182,7 @@ extension MusicContentCenterEventHandlerOnMusicChartsResultJsonBufferExt
 @JsonSerializable(explicitToJson: true, includeIfNull: false)
 class MusicContentCenterEventHandlerOnMusicCollectionResultJson {
   const MusicContentCenterEventHandlerOnMusicCollectionResultJson(
-      {this.requestId, this.result, this.errorCode});
+      {this.requestId, this.result, this.reason});
 
   @JsonKey(name: 'requestId')
   final String? requestId;
@@ -1102,8 +1190,8 @@ class MusicContentCenterEventHandlerOnMusicCollectionResultJson {
   @JsonKey(name: 'result', ignore: true)
   final MusicCollection? result;
 
-  @JsonKey(name: 'errorCode')
-  final MusicContentCenterStatusCode? errorCode;
+  @JsonKey(name: 'reason')
+  final MusicContentCenterStateReason? reason;
 
   factory MusicContentCenterEventHandlerOnMusicCollectionResultJson.fromJson(
           Map<String, dynamic> json) =>
@@ -1130,7 +1218,7 @@ extension MusicContentCenterEventHandlerOnMusicCollectionResultJsonBufferExt
 @JsonSerializable(explicitToJson: true, includeIfNull: false)
 class MusicContentCenterEventHandlerOnLyricResultJson {
   const MusicContentCenterEventHandlerOnLyricResultJson(
-      {this.requestId, this.songCode, this.lyricUrl, this.errorCode});
+      {this.requestId, this.songCode, this.lyricUrl, this.reason});
 
   @JsonKey(name: 'requestId')
   final String? requestId;
@@ -1141,8 +1229,8 @@ class MusicContentCenterEventHandlerOnLyricResultJson {
   @JsonKey(name: 'lyricUrl')
   final String? lyricUrl;
 
-  @JsonKey(name: 'errorCode')
-  final MusicContentCenterStatusCode? errorCode;
+  @JsonKey(name: 'reason')
+  final MusicContentCenterStateReason? reason;
 
   factory MusicContentCenterEventHandlerOnLyricResultJson.fromJson(
           Map<String, dynamic> json) =>
@@ -1169,7 +1257,7 @@ extension MusicContentCenterEventHandlerOnLyricResultJsonBufferExt
 @JsonSerializable(explicitToJson: true, includeIfNull: false)
 class MusicContentCenterEventHandlerOnSongSimpleInfoResultJson {
   const MusicContentCenterEventHandlerOnSongSimpleInfoResultJson(
-      {this.requestId, this.songCode, this.simpleInfo, this.errorCode});
+      {this.requestId, this.songCode, this.simpleInfo, this.reason});
 
   @JsonKey(name: 'requestId')
   final String? requestId;
@@ -1180,8 +1268,8 @@ class MusicContentCenterEventHandlerOnSongSimpleInfoResultJson {
   @JsonKey(name: 'simpleInfo')
   final String? simpleInfo;
 
-  @JsonKey(name: 'errorCode')
-  final MusicContentCenterStatusCode? errorCode;
+  @JsonKey(name: 'reason')
+  final MusicContentCenterStateReason? reason;
 
   factory MusicContentCenterEventHandlerOnSongSimpleInfoResultJson.fromJson(
           Map<String, dynamic> json) =>
@@ -1212,8 +1300,8 @@ class MusicContentCenterEventHandlerOnPreLoadEventJson {
       this.songCode,
       this.percent,
       this.lyricUrl,
-      this.status,
-      this.errorCode});
+      this.state,
+      this.reason});
 
   @JsonKey(name: 'requestId')
   final String? requestId;
@@ -1227,11 +1315,11 @@ class MusicContentCenterEventHandlerOnPreLoadEventJson {
   @JsonKey(name: 'lyricUrl')
   final String? lyricUrl;
 
-  @JsonKey(name: 'status')
-  final PreloadStatusCode? status;
+  @JsonKey(name: 'state')
+  final PreloadState? state;
 
-  @JsonKey(name: 'errorCode')
-  final MusicContentCenterStatusCode? errorCode;
+  @JsonKey(name: 'reason')
+  final MusicContentCenterStateReason? reason;
 
   factory MusicContentCenterEventHandlerOnPreLoadEventJson.fromJson(
           Map<String, dynamic> json) =>
@@ -2049,7 +2137,7 @@ extension RtcEngineEventHandlerOnVideoSizeChangedJsonBufferExt
 @JsonSerializable(explicitToJson: true, includeIfNull: false)
 class RtcEngineEventHandlerOnLocalVideoStateChangedJson {
   const RtcEngineEventHandlerOnLocalVideoStateChangedJson(
-      {this.source, this.state, this.error});
+      {this.source, this.state, this.reason});
 
   @JsonKey(name: 'source')
   final VideoSourceType? source;
@@ -2057,8 +2145,8 @@ class RtcEngineEventHandlerOnLocalVideoStateChangedJson {
   @JsonKey(name: 'state')
   final LocalVideoStreamState? state;
 
-  @JsonKey(name: 'error')
-  final LocalVideoStreamError? error;
+  @JsonKey(name: 'reason')
+  final LocalVideoStreamReason? reason;
 
   factory RtcEngineEventHandlerOnLocalVideoStateChangedJson.fromJson(
           Map<String, dynamic> json) =>
@@ -2419,39 +2507,6 @@ extension RtcEngineEventHandlerOnUserEnableLocalVideoJsonBufferExt
 }
 
 @JsonSerializable(explicitToJson: true, includeIfNull: false)
-class RtcEngineEventHandlerOnLocalAudioStatsJson {
-  const RtcEngineEventHandlerOnLocalAudioStatsJson(
-      {this.connection, this.stats});
-
-  @JsonKey(name: 'connection')
-  final RtcConnection? connection;
-
-  @JsonKey(name: 'stats')
-  final LocalAudioStats? stats;
-
-  factory RtcEngineEventHandlerOnLocalAudioStatsJson.fromJson(
-          Map<String, dynamic> json) =>
-      _$RtcEngineEventHandlerOnLocalAudioStatsJsonFromJson(json);
-
-  Map<String, dynamic> toJson() =>
-      _$RtcEngineEventHandlerOnLocalAudioStatsJsonToJson(this);
-}
-
-extension RtcEngineEventHandlerOnLocalAudioStatsJsonBufferExt
-    on RtcEngineEventHandlerOnLocalAudioStatsJson {
-  RtcEngineEventHandlerOnLocalAudioStatsJson fillBuffers(
-      List<Uint8List> bufferList) {
-    if (bufferList.isEmpty) return this;
-    return this;
-  }
-
-  List<Uint8List> collectBufferList() {
-    final bufferList = <Uint8List>[];
-    return bufferList;
-  }
-}
-
-@JsonSerializable(explicitToJson: true, includeIfNull: false)
 class RtcEngineEventHandlerOnRemoteAudioStatsJson {
   const RtcEngineEventHandlerOnRemoteAudioStatsJson(
       {this.connection, this.stats});
@@ -2473,6 +2528,39 @@ class RtcEngineEventHandlerOnRemoteAudioStatsJson {
 extension RtcEngineEventHandlerOnRemoteAudioStatsJsonBufferExt
     on RtcEngineEventHandlerOnRemoteAudioStatsJson {
   RtcEngineEventHandlerOnRemoteAudioStatsJson fillBuffers(
+      List<Uint8List> bufferList) {
+    if (bufferList.isEmpty) return this;
+    return this;
+  }
+
+  List<Uint8List> collectBufferList() {
+    final bufferList = <Uint8List>[];
+    return bufferList;
+  }
+}
+
+@JsonSerializable(explicitToJson: true, includeIfNull: false)
+class RtcEngineEventHandlerOnLocalAudioStatsJson {
+  const RtcEngineEventHandlerOnLocalAudioStatsJson(
+      {this.connection, this.stats});
+
+  @JsonKey(name: 'connection')
+  final RtcConnection? connection;
+
+  @JsonKey(name: 'stats')
+  final LocalAudioStats? stats;
+
+  factory RtcEngineEventHandlerOnLocalAudioStatsJson.fromJson(
+          Map<String, dynamic> json) =>
+      _$RtcEngineEventHandlerOnLocalAudioStatsJsonFromJson(json);
+
+  Map<String, dynamic> toJson() =>
+      _$RtcEngineEventHandlerOnLocalAudioStatsJsonToJson(this);
+}
+
+extension RtcEngineEventHandlerOnLocalAudioStatsJsonBufferExt
+    on RtcEngineEventHandlerOnLocalAudioStatsJson {
+  RtcEngineEventHandlerOnLocalAudioStatsJson fillBuffers(
       List<Uint8List> bufferList) {
     if (bufferList.isEmpty) return this;
     return this;
@@ -2761,13 +2849,13 @@ extension RtcEngineEventHandlerOnAudioMixingStateChangedJsonBufferExt
 @JsonSerializable(explicitToJson: true, includeIfNull: false)
 class RtcEngineEventHandlerOnRhythmPlayerStateChangedJson {
   const RtcEngineEventHandlerOnRhythmPlayerStateChangedJson(
-      {this.state, this.errorCode});
+      {this.state, this.reason});
 
   @JsonKey(name: 'state')
   final RhythmPlayerStateType? state;
 
-  @JsonKey(name: 'errorCode')
-  final RhythmPlayerErrorType? errorCode;
+  @JsonKey(name: 'reason')
+  final RhythmPlayerReason? reason;
 
   factory RtcEngineEventHandlerOnRhythmPlayerStateChangedJson.fromJson(
           Map<String, dynamic> json) =>
@@ -3257,42 +3345,6 @@ extension RtcEngineEventHandlerOnFirstLocalAudioFramePublishedJsonBufferExt
 }
 
 @JsonSerializable(explicitToJson: true, includeIfNull: false)
-class RtcEngineEventHandlerOnFirstRemoteAudioFrameJson {
-  const RtcEngineEventHandlerOnFirstRemoteAudioFrameJson(
-      {this.connection, this.userId, this.elapsed});
-
-  @JsonKey(name: 'connection')
-  final RtcConnection? connection;
-
-  @JsonKey(name: 'userId')
-  final int? userId;
-
-  @JsonKey(name: 'elapsed')
-  final int? elapsed;
-
-  factory RtcEngineEventHandlerOnFirstRemoteAudioFrameJson.fromJson(
-          Map<String, dynamic> json) =>
-      _$RtcEngineEventHandlerOnFirstRemoteAudioFrameJsonFromJson(json);
-
-  Map<String, dynamic> toJson() =>
-      _$RtcEngineEventHandlerOnFirstRemoteAudioFrameJsonToJson(this);
-}
-
-extension RtcEngineEventHandlerOnFirstRemoteAudioFrameJsonBufferExt
-    on RtcEngineEventHandlerOnFirstRemoteAudioFrameJson {
-  RtcEngineEventHandlerOnFirstRemoteAudioFrameJson fillBuffers(
-      List<Uint8List> bufferList) {
-    if (bufferList.isEmpty) return this;
-    return this;
-  }
-
-  List<Uint8List> collectBufferList() {
-    final bufferList = <Uint8List>[];
-    return bufferList;
-  }
-}
-
-@JsonSerializable(explicitToJson: true, includeIfNull: false)
 class RtcEngineEventHandlerOnFirstRemoteAudioDecodedJson {
   const RtcEngineEventHandlerOnFirstRemoteAudioDecodedJson(
       {this.connection, this.uid, this.elapsed});
@@ -3329,9 +3381,45 @@ extension RtcEngineEventHandlerOnFirstRemoteAudioDecodedJsonBufferExt
 }
 
 @JsonSerializable(explicitToJson: true, includeIfNull: false)
+class RtcEngineEventHandlerOnFirstRemoteAudioFrameJson {
+  const RtcEngineEventHandlerOnFirstRemoteAudioFrameJson(
+      {this.connection, this.userId, this.elapsed});
+
+  @JsonKey(name: 'connection')
+  final RtcConnection? connection;
+
+  @JsonKey(name: 'userId')
+  final int? userId;
+
+  @JsonKey(name: 'elapsed')
+  final int? elapsed;
+
+  factory RtcEngineEventHandlerOnFirstRemoteAudioFrameJson.fromJson(
+          Map<String, dynamic> json) =>
+      _$RtcEngineEventHandlerOnFirstRemoteAudioFrameJsonFromJson(json);
+
+  Map<String, dynamic> toJson() =>
+      _$RtcEngineEventHandlerOnFirstRemoteAudioFrameJsonToJson(this);
+}
+
+extension RtcEngineEventHandlerOnFirstRemoteAudioFrameJsonBufferExt
+    on RtcEngineEventHandlerOnFirstRemoteAudioFrameJson {
+  RtcEngineEventHandlerOnFirstRemoteAudioFrameJson fillBuffers(
+      List<Uint8List> bufferList) {
+    if (bufferList.isEmpty) return this;
+    return this;
+  }
+
+  List<Uint8List> collectBufferList() {
+    final bufferList = <Uint8List>[];
+    return bufferList;
+  }
+}
+
+@JsonSerializable(explicitToJson: true, includeIfNull: false)
 class RtcEngineEventHandlerOnLocalAudioStateChangedJson {
   const RtcEngineEventHandlerOnLocalAudioStateChangedJson(
-      {this.connection, this.state, this.error});
+      {this.connection, this.state, this.reason});
 
   @JsonKey(name: 'connection')
   final RtcConnection? connection;
@@ -3339,8 +3427,8 @@ class RtcEngineEventHandlerOnLocalAudioStateChangedJson {
   @JsonKey(name: 'state')
   final LocalAudioStreamState? state;
 
-  @JsonKey(name: 'error')
-  final LocalAudioStreamError? error;
+  @JsonKey(name: 'reason')
+  final LocalAudioStreamReason? reason;
 
   factory RtcEngineEventHandlerOnLocalAudioStateChangedJson.fromJson(
           Map<String, dynamic> json) =>
@@ -3631,7 +3719,7 @@ extension RtcEngineEventHandlerOnAudioDeviceVolumeChangedJsonBufferExt
 @JsonSerializable(explicitToJson: true, includeIfNull: false)
 class RtcEngineEventHandlerOnRtmpStreamingStateChangedJson {
   const RtcEngineEventHandlerOnRtmpStreamingStateChangedJson(
-      {this.url, this.state, this.errCode});
+      {this.url, this.state, this.reason});
 
   @JsonKey(name: 'url')
   final String? url;
@@ -3639,8 +3727,8 @@ class RtcEngineEventHandlerOnRtmpStreamingStateChangedJson {
   @JsonKey(name: 'state')
   final RtmpStreamPublishState? state;
 
-  @JsonKey(name: 'errCode')
-  final RtmpStreamPublishErrorType? errCode;
+  @JsonKey(name: 'reason')
+  final RtmpStreamPublishReason? reason;
 
   factory RtcEngineEventHandlerOnRtmpStreamingStateChangedJson.fromJson(
           Map<String, dynamic> json) =>
@@ -3725,11 +3813,7 @@ extension RtcEngineEventHandlerOnTranscodingUpdatedJsonBufferExt
 
 @JsonSerializable(explicitToJson: true, includeIfNull: false)
 class RtcEngineEventHandlerOnAudioRoutingChangedJson {
-  const RtcEngineEventHandlerOnAudioRoutingChangedJson(
-      {this.deviceType, this.routing});
-
-  @JsonKey(name: 'deviceType')
-  final int? deviceType;
+  const RtcEngineEventHandlerOnAudioRoutingChangedJson({this.routing});
 
   @JsonKey(name: 'routing')
   final int? routing;
@@ -3778,35 +3862,6 @@ class RtcEngineEventHandlerOnChannelMediaRelayStateChangedJson {
 extension RtcEngineEventHandlerOnChannelMediaRelayStateChangedJsonBufferExt
     on RtcEngineEventHandlerOnChannelMediaRelayStateChangedJson {
   RtcEngineEventHandlerOnChannelMediaRelayStateChangedJson fillBuffers(
-      List<Uint8List> bufferList) {
-    if (bufferList.isEmpty) return this;
-    return this;
-  }
-
-  List<Uint8List> collectBufferList() {
-    final bufferList = <Uint8List>[];
-    return bufferList;
-  }
-}
-
-@JsonSerializable(explicitToJson: true, includeIfNull: false)
-class RtcEngineEventHandlerOnChannelMediaRelayEventJson {
-  const RtcEngineEventHandlerOnChannelMediaRelayEventJson({this.code});
-
-  @JsonKey(name: 'code')
-  final int? code;
-
-  factory RtcEngineEventHandlerOnChannelMediaRelayEventJson.fromJson(
-          Map<String, dynamic> json) =>
-      _$RtcEngineEventHandlerOnChannelMediaRelayEventJsonFromJson(json);
-
-  Map<String, dynamic> toJson() =>
-      _$RtcEngineEventHandlerOnChannelMediaRelayEventJsonToJson(this);
-}
-
-extension RtcEngineEventHandlerOnChannelMediaRelayEventJsonBufferExt
-    on RtcEngineEventHandlerOnChannelMediaRelayEventJson {
-  RtcEngineEventHandlerOnChannelMediaRelayEventJson fillBuffers(
       List<Uint8List> bufferList) {
     if (bufferList.isEmpty) return this;
     return this;
@@ -4248,6 +4303,114 @@ extension RtcEngineEventHandlerOnUserInfoUpdatedJsonBufferExt
 }
 
 @JsonSerializable(explicitToJson: true, includeIfNull: false)
+class RtcEngineEventHandlerOnUserAccountUpdatedJson {
+  const RtcEngineEventHandlerOnUserAccountUpdatedJson(
+      {this.connection, this.remoteUid, this.remoteUserAccount});
+
+  @JsonKey(name: 'connection')
+  final RtcConnection? connection;
+
+  @JsonKey(name: 'remoteUid')
+  final int? remoteUid;
+
+  @JsonKey(name: 'remoteUserAccount')
+  final String? remoteUserAccount;
+
+  factory RtcEngineEventHandlerOnUserAccountUpdatedJson.fromJson(
+          Map<String, dynamic> json) =>
+      _$RtcEngineEventHandlerOnUserAccountUpdatedJsonFromJson(json);
+
+  Map<String, dynamic> toJson() =>
+      _$RtcEngineEventHandlerOnUserAccountUpdatedJsonToJson(this);
+}
+
+extension RtcEngineEventHandlerOnUserAccountUpdatedJsonBufferExt
+    on RtcEngineEventHandlerOnUserAccountUpdatedJson {
+  RtcEngineEventHandlerOnUserAccountUpdatedJson fillBuffers(
+      List<Uint8List> bufferList) {
+    if (bufferList.isEmpty) return this;
+    return this;
+  }
+
+  List<Uint8List> collectBufferList() {
+    final bufferList = <Uint8List>[];
+    return bufferList;
+  }
+}
+
+@JsonSerializable(explicitToJson: true, includeIfNull: false)
+class RtcEngineEventHandlerOnVideoRenderingTracingResultJson {
+  const RtcEngineEventHandlerOnVideoRenderingTracingResultJson(
+      {this.connection, this.uid, this.currentEvent, this.tracingInfo});
+
+  @JsonKey(name: 'connection')
+  final RtcConnection? connection;
+
+  @JsonKey(name: 'uid')
+  final int? uid;
+
+  @JsonKey(name: 'currentEvent')
+  final MediaTraceEvent? currentEvent;
+
+  @JsonKey(name: 'tracingInfo')
+  final VideoRenderingTracingInfo? tracingInfo;
+
+  factory RtcEngineEventHandlerOnVideoRenderingTracingResultJson.fromJson(
+          Map<String, dynamic> json) =>
+      _$RtcEngineEventHandlerOnVideoRenderingTracingResultJsonFromJson(json);
+
+  Map<String, dynamic> toJson() =>
+      _$RtcEngineEventHandlerOnVideoRenderingTracingResultJsonToJson(this);
+}
+
+extension RtcEngineEventHandlerOnVideoRenderingTracingResultJsonBufferExt
+    on RtcEngineEventHandlerOnVideoRenderingTracingResultJson {
+  RtcEngineEventHandlerOnVideoRenderingTracingResultJson fillBuffers(
+      List<Uint8List> bufferList) {
+    if (bufferList.isEmpty) return this;
+    return this;
+  }
+
+  List<Uint8List> collectBufferList() {
+    final bufferList = <Uint8List>[];
+    return bufferList;
+  }
+}
+
+@JsonSerializable(explicitToJson: true, includeIfNull: false)
+class RtcEngineEventHandlerOnLocalVideoTranscoderErrorJson {
+  const RtcEngineEventHandlerOnLocalVideoTranscoderErrorJson(
+      {this.stream, this.error});
+
+  @JsonKey(name: 'stream')
+  final TranscodingVideoStream? stream;
+
+  @JsonKey(name: 'error')
+  final VideoTranscoderError? error;
+
+  factory RtcEngineEventHandlerOnLocalVideoTranscoderErrorJson.fromJson(
+          Map<String, dynamic> json) =>
+      _$RtcEngineEventHandlerOnLocalVideoTranscoderErrorJsonFromJson(json);
+
+  Map<String, dynamic> toJson() =>
+      _$RtcEngineEventHandlerOnLocalVideoTranscoderErrorJsonToJson(this);
+}
+
+extension RtcEngineEventHandlerOnLocalVideoTranscoderErrorJsonBufferExt
+    on RtcEngineEventHandlerOnLocalVideoTranscoderErrorJson {
+  RtcEngineEventHandlerOnLocalVideoTranscoderErrorJson fillBuffers(
+      List<Uint8List> bufferList) {
+    if (bufferList.isEmpty) return this;
+    return this;
+  }
+
+  List<Uint8List> collectBufferList() {
+    final bufferList = <Uint8List>[];
+    return bufferList;
+  }
+}
+
+@JsonSerializable(explicitToJson: true, includeIfNull: false)
 class RtcEngineEventHandlerOnUploadLogResultJson {
   const RtcEngineEventHandlerOnUploadLogResultJson(
       {this.connection, this.requestId, this.success, this.reason});
@@ -4464,6 +4627,103 @@ extension RtcEngineEventHandlerOnVideoPublishStateChangedJsonBufferExt
 }
 
 @JsonSerializable(explicitToJson: true, includeIfNull: false)
+class RtcEngineEventHandlerOnTranscodedStreamLayoutInfoJson {
+  const RtcEngineEventHandlerOnTranscodedStreamLayoutInfoJson(
+      {this.connection,
+      this.uid,
+      this.width,
+      this.height,
+      this.layoutCount,
+      this.layoutlist});
+
+  @JsonKey(name: 'connection')
+  final RtcConnection? connection;
+
+  @JsonKey(name: 'uid')
+  final int? uid;
+
+  @JsonKey(name: 'width')
+  final int? width;
+
+  @JsonKey(name: 'height')
+  final int? height;
+
+  @JsonKey(name: 'layoutCount')
+  final int? layoutCount;
+
+  @JsonKey(name: 'layoutlist')
+  final List<VideoLayout>? layoutlist;
+
+  factory RtcEngineEventHandlerOnTranscodedStreamLayoutInfoJson.fromJson(
+          Map<String, dynamic> json) =>
+      _$RtcEngineEventHandlerOnTranscodedStreamLayoutInfoJsonFromJson(json);
+
+  Map<String, dynamic> toJson() =>
+      _$RtcEngineEventHandlerOnTranscodedStreamLayoutInfoJsonToJson(this);
+}
+
+extension RtcEngineEventHandlerOnTranscodedStreamLayoutInfoJsonBufferExt
+    on RtcEngineEventHandlerOnTranscodedStreamLayoutInfoJson {
+  RtcEngineEventHandlerOnTranscodedStreamLayoutInfoJson fillBuffers(
+      List<Uint8List> bufferList) {
+    if (bufferList.isEmpty) return this;
+    return this;
+  }
+
+  List<Uint8List> collectBufferList() {
+    final bufferList = <Uint8List>[];
+    return bufferList;
+  }
+}
+
+@JsonSerializable(explicitToJson: true, includeIfNull: false)
+class RtcEngineEventHandlerOnAudioMetadataReceivedJson {
+  const RtcEngineEventHandlerOnAudioMetadataReceivedJson(
+      {this.connection, this.uid, this.metadata, this.length});
+
+  @JsonKey(name: 'connection')
+  final RtcConnection? connection;
+
+  @JsonKey(name: 'uid')
+  final int? uid;
+
+  @JsonKey(name: 'metadata', ignore: true)
+  final Uint8List? metadata;
+
+  @JsonKey(name: 'length')
+  final int? length;
+
+  factory RtcEngineEventHandlerOnAudioMetadataReceivedJson.fromJson(
+          Map<String, dynamic> json) =>
+      _$RtcEngineEventHandlerOnAudioMetadataReceivedJsonFromJson(json);
+
+  Map<String, dynamic> toJson() =>
+      _$RtcEngineEventHandlerOnAudioMetadataReceivedJsonToJson(this);
+}
+
+extension RtcEngineEventHandlerOnAudioMetadataReceivedJsonBufferExt
+    on RtcEngineEventHandlerOnAudioMetadataReceivedJson {
+  RtcEngineEventHandlerOnAudioMetadataReceivedJson fillBuffers(
+      List<Uint8List> bufferList) {
+    if (bufferList.isEmpty) return this;
+    Uint8List? metadata;
+    if (bufferList.length > 0) {
+      metadata = bufferList[0];
+    }
+    return RtcEngineEventHandlerOnAudioMetadataReceivedJson(
+        connection: connection, uid: uid, metadata: metadata, length: length);
+  }
+
+  List<Uint8List> collectBufferList() {
+    final bufferList = <Uint8List>[];
+    if (metadata != null) {
+      bufferList.add(metadata!);
+    }
+    return bufferList;
+  }
+}
+
+@JsonSerializable(explicitToJson: true, includeIfNull: false)
 class RtcEngineEventHandlerOnExtensionEventJson {
   const RtcEngineEventHandlerOnExtensionEventJson(
       {this.provider, this.extension, this.key, this.value});
@@ -4608,102 +4868,27 @@ extension RtcEngineEventHandlerOnExtensionErrorJsonBufferExt
 }
 
 @JsonSerializable(explicitToJson: true, includeIfNull: false)
-class RtcEngineEventHandlerOnUserAccountUpdatedJson {
-  const RtcEngineEventHandlerOnUserAccountUpdatedJson(
-      {this.connection, this.remoteUid, this.userAccount});
+class RtcEngineEventHandlerOnSetRtmFlagResultJson {
+  const RtcEngineEventHandlerOnSetRtmFlagResultJson(
+      {this.connection, this.code});
 
   @JsonKey(name: 'connection')
   final RtcConnection? connection;
 
-  @JsonKey(name: 'remoteUid')
-  final int? remoteUid;
+  @JsonKey(name: 'code')
+  final int? code;
 
-  @JsonKey(name: 'userAccount')
-  final String? userAccount;
-
-  factory RtcEngineEventHandlerOnUserAccountUpdatedJson.fromJson(
+  factory RtcEngineEventHandlerOnSetRtmFlagResultJson.fromJson(
           Map<String, dynamic> json) =>
-      _$RtcEngineEventHandlerOnUserAccountUpdatedJsonFromJson(json);
+      _$RtcEngineEventHandlerOnSetRtmFlagResultJsonFromJson(json);
 
   Map<String, dynamic> toJson() =>
-      _$RtcEngineEventHandlerOnUserAccountUpdatedJsonToJson(this);
+      _$RtcEngineEventHandlerOnSetRtmFlagResultJsonToJson(this);
 }
 
-extension RtcEngineEventHandlerOnUserAccountUpdatedJsonBufferExt
-    on RtcEngineEventHandlerOnUserAccountUpdatedJson {
-  RtcEngineEventHandlerOnUserAccountUpdatedJson fillBuffers(
-      List<Uint8List> bufferList) {
-    if (bufferList.isEmpty) return this;
-    return this;
-  }
-
-  List<Uint8List> collectBufferList() {
-    final bufferList = <Uint8List>[];
-    return bufferList;
-  }
-}
-
-@JsonSerializable(explicitToJson: true, includeIfNull: false)
-class RtcEngineEventHandlerOnLocalVideoTranscoderErrorJson {
-  const RtcEngineEventHandlerOnLocalVideoTranscoderErrorJson(
-      {this.stream, this.error});
-
-  @JsonKey(name: 'stream')
-  final TranscodingVideoStream? stream;
-
-  @JsonKey(name: 'error')
-  final VideoTranscoderError? error;
-
-  factory RtcEngineEventHandlerOnLocalVideoTranscoderErrorJson.fromJson(
-          Map<String, dynamic> json) =>
-      _$RtcEngineEventHandlerOnLocalVideoTranscoderErrorJsonFromJson(json);
-
-  Map<String, dynamic> toJson() =>
-      _$RtcEngineEventHandlerOnLocalVideoTranscoderErrorJsonToJson(this);
-}
-
-extension RtcEngineEventHandlerOnLocalVideoTranscoderErrorJsonBufferExt
-    on RtcEngineEventHandlerOnLocalVideoTranscoderErrorJson {
-  RtcEngineEventHandlerOnLocalVideoTranscoderErrorJson fillBuffers(
-      List<Uint8List> bufferList) {
-    if (bufferList.isEmpty) return this;
-    return this;
-  }
-
-  List<Uint8List> collectBufferList() {
-    final bufferList = <Uint8List>[];
-    return bufferList;
-  }
-}
-
-@JsonSerializable(explicitToJson: true, includeIfNull: false)
-class RtcEngineEventHandlerOnVideoRenderingTracingResultJson {
-  const RtcEngineEventHandlerOnVideoRenderingTracingResultJson(
-      {this.connection, this.uid, this.currentEvent, this.tracingInfo});
-
-  @JsonKey(name: 'connection')
-  final RtcConnection? connection;
-
-  @JsonKey(name: 'uid')
-  final int? uid;
-
-  @JsonKey(name: 'currentEvent')
-  final MediaTraceEvent? currentEvent;
-
-  @JsonKey(name: 'tracingInfo')
-  final VideoRenderingTracingInfo? tracingInfo;
-
-  factory RtcEngineEventHandlerOnVideoRenderingTracingResultJson.fromJson(
-          Map<String, dynamic> json) =>
-      _$RtcEngineEventHandlerOnVideoRenderingTracingResultJsonFromJson(json);
-
-  Map<String, dynamic> toJson() =>
-      _$RtcEngineEventHandlerOnVideoRenderingTracingResultJsonToJson(this);
-}
-
-extension RtcEngineEventHandlerOnVideoRenderingTracingResultJsonBufferExt
-    on RtcEngineEventHandlerOnVideoRenderingTracingResultJson {
-  RtcEngineEventHandlerOnVideoRenderingTracingResultJson fillBuffers(
+extension RtcEngineEventHandlerOnSetRtmFlagResultJsonBufferExt
+    on RtcEngineEventHandlerOnSetRtmFlagResultJson {
+  RtcEngineEventHandlerOnSetRtmFlagResultJson fillBuffers(
       List<Uint8List> bufferList) {
     if (bufferList.isEmpty) return this;
     return this;
@@ -4747,13 +4932,13 @@ extension MetadataObserverOnMetadataReceivedJsonBufferExt
 @JsonSerializable(explicitToJson: true, includeIfNull: false)
 class DirectCdnStreamingEventHandlerOnDirectCdnStreamingStateChangedJson {
   const DirectCdnStreamingEventHandlerOnDirectCdnStreamingStateChangedJson(
-      {this.state, this.error, this.message});
+      {this.state, this.reason, this.message});
 
   @JsonKey(name: 'state')
   final DirectCdnStreamingState? state;
 
-  @JsonKey(name: 'error')
-  final DirectCdnStreamingError? error;
+  @JsonKey(name: 'reason')
+  final DirectCdnStreamingReason? reason;
 
   @JsonKey(name: 'message')
   final String? message;

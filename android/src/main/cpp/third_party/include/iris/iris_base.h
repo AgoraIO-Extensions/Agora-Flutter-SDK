@@ -44,13 +44,17 @@ typedef enum IrisError {
   ERR_OK = 0,
   ERR_FAILED = 1,
   ERR_INVALID_ARGUMENT = 2,
+  ERR_NOT_SUPPORTED = 4,
   ERR_NOT_INITIALIZED = 7,
 
   /*base from IRIS_VIDEO_PROCESS_ERR::ERR_NULL_POINTER=1*/
   ERR_NULL_POINTER = 1001,
   ERR_SIZE_NOT_MATCHING = 1002,
   ERR_BUFFER_EMPTY = 1005,
-  ERR_FRAM_TYPE_NOT_MATCHING = 10006
+  ERR_FRAM_TYPE_NOT_MATCHING = 1006,
+  ERR_ALREADY_REGISTERED = 1007,
+  ERR_ALREADY_UNREGISTERED = 1008,
+  ERR_API_NOT_REGISTERED = 1009,
 } IrisError;
 
 IRIS_API void enableUseJsonArray(bool enable);
@@ -81,8 +85,6 @@ typedef struct IrisCEventHandler {
 
 typedef void *IrisHandle;
 typedef IrisHandle IrisEventHandlerHandle;
-typedef IrisHandle IrisVideoFrameBufferDelegateHandle;
-typedef IrisHandle IrisVideoFrameBufferManagerPtr;
 typedef IrisHandle IrisApiEnginePtr;
 
 EXTERN_C_LEAVE

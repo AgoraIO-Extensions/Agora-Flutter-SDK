@@ -3,7 +3,7 @@
 
 #include "iris_base.h"
 
-typedef void *IrisRtcRenderingHandle;
+typedef IrisHandle IrisRtcRenderingHandle;
 
 /// The agora::media::base::VideoFrame C projection but remove some unsupported property in C,
 /// e.g., agora::media::base::VideoFrame.sharedContext, agora::media::base::VideoFrame.textureId, etc.
@@ -44,6 +44,11 @@ typedef struct IrisRtcVideoFrameConfig {
 
   /// int value of agora::rtc::VIDEO_VIEW_SETUP_MODE.
   int video_view_setup_mode;
+
+  /// int value of agora::media::base::VIDEO_MODULE_POSITION.
+  /// Default value is
+  /// `agora::media::base::VIDEO_MODULE_POSITION::POSITION_PRE_ENCODER | agora::media::base::VIDEO_MODULE_POSITION::POSITION_PRE_RENDERER`
+  uint32_t observed_frame_position;
 } IrisRtcVideoFrameConfig;
 
 /// Export an empty `IrisRtcVideoFrameConfig` with initialized value.
@@ -56,7 +61,7 @@ typedef enum GET_VIDEO_FRAME_CACHE_RETURN_TYPE {
 } GET_VIDEO_FRAME_CACHE_RETURN_TYPE;
 
 IRIS_API IrisRtcRenderingHandle
-CreateIrisRtcRendering(void *iris_api_engine_handle);
+CreateIrisRtcRendering(IrisApiEnginePtr iris_api_engine_handle);
 
 IRIS_API void FreeIrisRtcRendering(IrisRtcRenderingHandle handle);
 

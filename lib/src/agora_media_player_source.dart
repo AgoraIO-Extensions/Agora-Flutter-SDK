@@ -14,6 +14,8 @@ class MediaPlayerSourceObserver {
     this.onAgoraCDNTokenWillExpire,
     this.onPlayerSrcInfoChanged,
     this.onPlayerInfoUpdated,
+    this.onPlayerCacheStats,
+    this.onPlayerPlaybackStats,
     this.onAudioVolumeIndication,
   });
 
@@ -23,7 +25,7 @@ class MediaPlayerSourceObserver {
   ///
   /// * [state] The playback state. See MediaPlayerState.
   /// * [reason] The reason for the changes in the media player status. See MediaPlayerReason.
-  final void Function(MediaPlayerState state, MediaPlayerError ec)?
+  final void Function(MediaPlayerState state, MediaPlayerReason reason)?
       onPlayerSourceStateChanged;
 
   /// Reports the playback progress of the media file.
@@ -32,7 +34,7 @@ class MediaPlayerSourceObserver {
   ///
   /// * [positionMs] The playback position (ms) of media files.
   /// * [timeStampMs] The NTP timestamp (ms) of the current playback progress.
-  final void Function(int positionMs)? onPositionChanged;
+  final void Function(int positionMs, int timestampMs)? onPositionChanged;
 
   /// Reports the player events.
   ///
@@ -86,6 +88,20 @@ class MediaPlayerSourceObserver {
   ///
   /// * [info] Information related to the media player. See PlayerUpdatedInfo.
   final void Function(PlayerUpdatedInfo info)? onPlayerInfoUpdated;
+
+  /// Reports the statistics of the media file being cached.
+  ///
+  /// After you call the openWithMediaSource method and set enableCache as true, the SDK triggers this callback once per second to report the statistics of the media file being cached.
+  ///
+  /// * [stats] The statistics of the media file being cached. See CacheStatistics.
+  final void Function(CacheStatistics stats)? onPlayerCacheStats;
+
+  /// The statistics of the media file being played.
+  ///
+  /// The SDK triggers this callback once per second to report the statistics of the media file being played.
+  ///
+  /// * [stats] The statistics of the media file. See PlayerPlaybackStats.
+  final void Function(PlayerPlaybackStats stats)? onPlayerPlaybackStats;
 
   /// Reports the volume of the media player.
   ///

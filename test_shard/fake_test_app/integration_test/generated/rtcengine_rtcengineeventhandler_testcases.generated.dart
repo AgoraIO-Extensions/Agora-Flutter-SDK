@@ -1788,7 +1788,7 @@ void generatedTestCases(ValueGetter<IrisTester> irisTester) {
       final onLocalVideoStateChangedCompleter = Completer<bool>();
       final theRtcEngineEventHandler = RtcEngineEventHandler(
         onLocalVideoStateChanged: (VideoSourceType source,
-            LocalVideoStreamState state, LocalVideoStreamError error) {
+            LocalVideoStreamState state, LocalVideoStreamReason reason) {
           onLocalVideoStateChangedCompleter.complete(true);
         },
       );
@@ -1804,13 +1804,13 @@ void generatedTestCases(ValueGetter<IrisTester> irisTester) {
         const VideoSourceType source = VideoSourceType.videoSourceCameraPrimary;
         const LocalVideoStreamState state =
             LocalVideoStreamState.localVideoStreamStateStopped;
-        const LocalVideoStreamError error =
-            LocalVideoStreamError.localVideoStreamErrorOk;
+        const LocalVideoStreamReason reason =
+            LocalVideoStreamReason.localVideoStreamReasonOk;
 
         final eventJson = {
           'source': source.value(),
           'state': state.value(),
-          'error': error.value(),
+          'reason': reason.value(),
         };
 
         final eventIds =
@@ -2507,88 +2507,6 @@ void generatedTestCases(ValueGetter<IrisTester> irisTester) {
   );
 
   testWidgets(
-    'RtcEngineEventHandler.onLocalAudioStats',
-    (WidgetTester tester) async {
-      RtcEngine rtcEngine = createAgoraRtcEngine();
-      await rtcEngine.initialize(RtcEngineContext(
-        appId: 'app_id',
-        areaCode: AreaCode.areaCodeGlob.value(),
-      ));
-      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
-
-      final onLocalAudioStatsCompleter = Completer<bool>();
-      final theRtcEngineEventHandler = RtcEngineEventHandler(
-        onLocalAudioStats: (RtcConnection connection, LocalAudioStats stats) {
-          onLocalAudioStatsCompleter.complete(true);
-        },
-      );
-
-      rtcEngine.registerEventHandler(
-        theRtcEngineEventHandler,
-      );
-
-// Delay 500 milliseconds to ensure the registerEventHandler call completed.
-      await Future.delayed(const Duration(milliseconds: 500));
-
-      {
-        const String connectionChannelId = "hello";
-        const int connectionLocalUid = 10;
-        const RtcConnection connection = RtcConnection(
-          channelId: connectionChannelId,
-          localUid: connectionLocalUid,
-        );
-        const int statsNumChannels = 10;
-        const int statsSentSampleRate = 10;
-        const int statsSentBitrate = 10;
-        const int statsInternalCodec = 10;
-        const int statsTxPacketLossRate = 10;
-        const int statsAudioDeviceDelay = 10;
-        const LocalAudioStats stats = LocalAudioStats(
-          numChannels: statsNumChannels,
-          sentSampleRate: statsSentSampleRate,
-          sentBitrate: statsSentBitrate,
-          internalCodec: statsInternalCodec,
-          txPacketLossRate: statsTxPacketLossRate,
-          audioDeviceDelay: statsAudioDeviceDelay,
-        );
-
-        final eventJson = {
-          'connection': connection.toJson(),
-          'stats': stats.toJson(),
-        };
-
-        final eventIds =
-            eventIdsMapping['RtcEngineEventHandler_onLocalAudioStats'] ?? [];
-        for (final event in eventIds) {
-          final ret = irisTester().fireEvent(event, params: eventJson);
-          // Delay 200 milliseconds to ensure the callback is called.
-          await Future.delayed(const Duration(milliseconds: 200));
-          // TODO(littlegnal): Most of callbacks on web are not implemented, we're temporarily skip these callbacks at this time.
-          if (kIsWeb && ret) {
-            if (!onLocalAudioStatsCompleter.isCompleted) {
-              onLocalAudioStatsCompleter.complete(true);
-            }
-          }
-        }
-      }
-
-      final eventCalled = await onLocalAudioStatsCompleter.future;
-      expect(eventCalled, isTrue);
-
-      {
-        rtcEngine.unregisterEventHandler(
-          theRtcEngineEventHandler,
-        );
-      }
-// Delay 500 milliseconds to ensure the unregisterEventHandler call completed.
-      await Future.delayed(const Duration(milliseconds: 500));
-
-      await rtcEngine.release();
-    },
-    timeout: const Timeout(Duration(minutes: 2)),
-  );
-
-  testWidgets(
     'RtcEngineEventHandler.onRemoteAudioStats',
     (WidgetTester tester) async {
       RtcEngine rtcEngine = createAgoraRtcEngine();
@@ -2637,6 +2555,7 @@ void generatedTestCases(ValueGetter<IrisTester> irisTester) {
         const int statsQoeQuality = 10;
         const int statsQualityChangedReason = 10;
         const int statsRxAudioBytes = 10;
+        const int statsE2eDelay = 10;
         const RemoteAudioStats stats = RemoteAudioStats(
           uid: statsUid,
           quality: statsQuality,
@@ -2656,6 +2575,7 @@ void generatedTestCases(ValueGetter<IrisTester> irisTester) {
           qoeQuality: statsQoeQuality,
           qualityChangedReason: statsQualityChangedReason,
           rxAudioBytes: statsRxAudioBytes,
+          e2eDelay: statsE2eDelay,
         );
 
         final eventJson = {
@@ -2679,6 +2599,94 @@ void generatedTestCases(ValueGetter<IrisTester> irisTester) {
       }
 
       final eventCalled = await onRemoteAudioStatsCompleter.future;
+      expect(eventCalled, isTrue);
+
+      {
+        rtcEngine.unregisterEventHandler(
+          theRtcEngineEventHandler,
+        );
+      }
+// Delay 500 milliseconds to ensure the unregisterEventHandler call completed.
+      await Future.delayed(const Duration(milliseconds: 500));
+
+      await rtcEngine.release();
+    },
+    timeout: const Timeout(Duration(minutes: 2)),
+  );
+
+  testWidgets(
+    'RtcEngineEventHandler.onLocalAudioStats',
+    (WidgetTester tester) async {
+      RtcEngine rtcEngine = createAgoraRtcEngine();
+      await rtcEngine.initialize(RtcEngineContext(
+        appId: 'app_id',
+        areaCode: AreaCode.areaCodeGlob.value(),
+      ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
+
+      final onLocalAudioStatsCompleter = Completer<bool>();
+      final theRtcEngineEventHandler = RtcEngineEventHandler(
+        onLocalAudioStats: (RtcConnection connection, LocalAudioStats stats) {
+          onLocalAudioStatsCompleter.complete(true);
+        },
+      );
+
+      rtcEngine.registerEventHandler(
+        theRtcEngineEventHandler,
+      );
+
+// Delay 500 milliseconds to ensure the registerEventHandler call completed.
+      await Future.delayed(const Duration(milliseconds: 500));
+
+      {
+        const String connectionChannelId = "hello";
+        const int connectionLocalUid = 10;
+        const RtcConnection connection = RtcConnection(
+          channelId: connectionChannelId,
+          localUid: connectionLocalUid,
+        );
+        const int statsNumChannels = 10;
+        const int statsSentSampleRate = 10;
+        const int statsSentBitrate = 10;
+        const int statsInternalCodec = 10;
+        const int statsTxPacketLossRate = 10;
+        const int statsAudioDeviceDelay = 10;
+        const int statsAudioPlayoutDelay = 10;
+        const int statsEarMonitorDelay = 10;
+        const int statsAecEstimatedDelay = 10;
+        const LocalAudioStats stats = LocalAudioStats(
+          numChannels: statsNumChannels,
+          sentSampleRate: statsSentSampleRate,
+          sentBitrate: statsSentBitrate,
+          internalCodec: statsInternalCodec,
+          txPacketLossRate: statsTxPacketLossRate,
+          audioDeviceDelay: statsAudioDeviceDelay,
+          audioPlayoutDelay: statsAudioPlayoutDelay,
+          earMonitorDelay: statsEarMonitorDelay,
+          aecEstimatedDelay: statsAecEstimatedDelay,
+        );
+
+        final eventJson = {
+          'connection': connection.toJson(),
+          'stats': stats.toJson(),
+        };
+
+        final eventIds =
+            eventIdsMapping['RtcEngineEventHandler_onLocalAudioStats'] ?? [];
+        for (final event in eventIds) {
+          final ret = irisTester().fireEvent(event, params: eventJson);
+          // Delay 200 milliseconds to ensure the callback is called.
+          await Future.delayed(const Duration(milliseconds: 200));
+          // TODO(littlegnal): Most of callbacks on web are not implemented, we're temporarily skip these callbacks at this time.
+          if (kIsWeb && ret) {
+            if (!onLocalAudioStatsCompleter.isCompleted) {
+              onLocalAudioStatsCompleter.complete(true);
+            }
+          }
+        }
+      }
+
+      final eventCalled = await onLocalAudioStatsCompleter.future;
       expect(eventCalled, isTrue);
 
       {
@@ -3249,7 +3257,7 @@ void generatedTestCases(ValueGetter<IrisTester> irisTester) {
       final onRhythmPlayerStateChangedCompleter = Completer<bool>();
       final theRtcEngineEventHandler = RtcEngineEventHandler(
         onRhythmPlayerStateChanged:
-            (RhythmPlayerStateType state, RhythmPlayerErrorType errorCode) {
+            (RhythmPlayerStateType state, RhythmPlayerReason reason) {
           onRhythmPlayerStateChangedCompleter.complete(true);
         },
       );
@@ -3264,12 +3272,12 @@ void generatedTestCases(ValueGetter<IrisTester> irisTester) {
       {
         const RhythmPlayerStateType state =
             RhythmPlayerStateType.rhythmPlayerStateIdle;
-        const RhythmPlayerErrorType errorCode =
-            RhythmPlayerErrorType.rhythmPlayerErrorOk;
+        const RhythmPlayerReason reason =
+            RhythmPlayerReason.rhythmPlayerReasonOk;
 
         final eventJson = {
           'state': state.value(),
-          'errorCode': errorCode.value(),
+          'reason': reason.value(),
         };
 
         final eventIds = eventIdsMapping[
@@ -4165,79 +4173,6 @@ void generatedTestCases(ValueGetter<IrisTester> irisTester) {
   );
 
   testWidgets(
-    'RtcEngineEventHandler.onFirstRemoteAudioFrame',
-    (WidgetTester tester) async {
-      RtcEngine rtcEngine = createAgoraRtcEngine();
-      await rtcEngine.initialize(RtcEngineContext(
-        appId: 'app_id',
-        areaCode: AreaCode.areaCodeGlob.value(),
-      ));
-      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
-
-      final onFirstRemoteAudioFrameCompleter = Completer<bool>();
-      final theRtcEngineEventHandler = RtcEngineEventHandler(
-        onFirstRemoteAudioFrame:
-            (RtcConnection connection, int userId, int elapsed) {
-          onFirstRemoteAudioFrameCompleter.complete(true);
-        },
-      );
-
-      rtcEngine.registerEventHandler(
-        theRtcEngineEventHandler,
-      );
-
-// Delay 500 milliseconds to ensure the registerEventHandler call completed.
-      await Future.delayed(const Duration(milliseconds: 500));
-
-      {
-        const String connectionChannelId = "hello";
-        const int connectionLocalUid = 10;
-        const RtcConnection connection = RtcConnection(
-          channelId: connectionChannelId,
-          localUid: connectionLocalUid,
-        );
-        const int userId = 10;
-        const int elapsed = 10;
-
-        final eventJson = {
-          'connection': connection.toJson(),
-          'userId': userId,
-          'elapsed': elapsed,
-        };
-
-        final eventIds =
-            eventIdsMapping['RtcEngineEventHandler_onFirstRemoteAudioFrame'] ??
-                [];
-        for (final event in eventIds) {
-          final ret = irisTester().fireEvent(event, params: eventJson);
-          // Delay 200 milliseconds to ensure the callback is called.
-          await Future.delayed(const Duration(milliseconds: 200));
-          // TODO(littlegnal): Most of callbacks on web are not implemented, we're temporarily skip these callbacks at this time.
-          if (kIsWeb && ret) {
-            if (!onFirstRemoteAudioFrameCompleter.isCompleted) {
-              onFirstRemoteAudioFrameCompleter.complete(true);
-            }
-          }
-        }
-      }
-
-      final eventCalled = await onFirstRemoteAudioFrameCompleter.future;
-      expect(eventCalled, isTrue);
-
-      {
-        rtcEngine.unregisterEventHandler(
-          theRtcEngineEventHandler,
-        );
-      }
-// Delay 500 milliseconds to ensure the unregisterEventHandler call completed.
-      await Future.delayed(const Duration(milliseconds: 500));
-
-      await rtcEngine.release();
-    },
-    timeout: const Timeout(Duration(minutes: 2)),
-  );
-
-  testWidgets(
     'RtcEngineEventHandler.onFirstRemoteAudioDecoded',
     (WidgetTester tester) async {
       RtcEngine rtcEngine = createAgoraRtcEngine();
@@ -4311,6 +4246,79 @@ void generatedTestCases(ValueGetter<IrisTester> irisTester) {
   );
 
   testWidgets(
+    'RtcEngineEventHandler.onFirstRemoteAudioFrame',
+    (WidgetTester tester) async {
+      RtcEngine rtcEngine = createAgoraRtcEngine();
+      await rtcEngine.initialize(RtcEngineContext(
+        appId: 'app_id',
+        areaCode: AreaCode.areaCodeGlob.value(),
+      ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
+
+      final onFirstRemoteAudioFrameCompleter = Completer<bool>();
+      final theRtcEngineEventHandler = RtcEngineEventHandler(
+        onFirstRemoteAudioFrame:
+            (RtcConnection connection, int userId, int elapsed) {
+          onFirstRemoteAudioFrameCompleter.complete(true);
+        },
+      );
+
+      rtcEngine.registerEventHandler(
+        theRtcEngineEventHandler,
+      );
+
+// Delay 500 milliseconds to ensure the registerEventHandler call completed.
+      await Future.delayed(const Duration(milliseconds: 500));
+
+      {
+        const String connectionChannelId = "hello";
+        const int connectionLocalUid = 10;
+        const RtcConnection connection = RtcConnection(
+          channelId: connectionChannelId,
+          localUid: connectionLocalUid,
+        );
+        const int userId = 10;
+        const int elapsed = 10;
+
+        final eventJson = {
+          'connection': connection.toJson(),
+          'userId': userId,
+          'elapsed': elapsed,
+        };
+
+        final eventIds =
+            eventIdsMapping['RtcEngineEventHandler_onFirstRemoteAudioFrame'] ??
+                [];
+        for (final event in eventIds) {
+          final ret = irisTester().fireEvent(event, params: eventJson);
+          // Delay 200 milliseconds to ensure the callback is called.
+          await Future.delayed(const Duration(milliseconds: 200));
+          // TODO(littlegnal): Most of callbacks on web are not implemented, we're temporarily skip these callbacks at this time.
+          if (kIsWeb && ret) {
+            if (!onFirstRemoteAudioFrameCompleter.isCompleted) {
+              onFirstRemoteAudioFrameCompleter.complete(true);
+            }
+          }
+        }
+      }
+
+      final eventCalled = await onFirstRemoteAudioFrameCompleter.future;
+      expect(eventCalled, isTrue);
+
+      {
+        rtcEngine.unregisterEventHandler(
+          theRtcEngineEventHandler,
+        );
+      }
+// Delay 500 milliseconds to ensure the unregisterEventHandler call completed.
+      await Future.delayed(const Duration(milliseconds: 500));
+
+      await rtcEngine.release();
+    },
+    timeout: const Timeout(Duration(minutes: 2)),
+  );
+
+  testWidgets(
     'RtcEngineEventHandler.onLocalAudioStateChanged',
     (WidgetTester tester) async {
       RtcEngine rtcEngine = createAgoraRtcEngine();
@@ -4323,7 +4331,7 @@ void generatedTestCases(ValueGetter<IrisTester> irisTester) {
       final onLocalAudioStateChangedCompleter = Completer<bool>();
       final theRtcEngineEventHandler = RtcEngineEventHandler(
         onLocalAudioStateChanged: (RtcConnection connection,
-            LocalAudioStreamState state, LocalAudioStreamError error) {
+            LocalAudioStreamState state, LocalAudioStreamReason reason) {
           onLocalAudioStateChangedCompleter.complete(true);
         },
       );
@@ -4344,13 +4352,13 @@ void generatedTestCases(ValueGetter<IrisTester> irisTester) {
         );
         const LocalAudioStreamState state =
             LocalAudioStreamState.localAudioStreamStateStopped;
-        const LocalAudioStreamError error =
-            LocalAudioStreamError.localAudioStreamErrorOk;
+        const LocalAudioStreamReason reason =
+            LocalAudioStreamReason.localAudioStreamReasonOk;
 
         final eventJson = {
           'connection': connection.toJson(),
           'state': state.value(),
-          'error': error.value(),
+          'reason': reason.value(),
         };
 
         final eventIds =
@@ -4910,7 +4918,7 @@ void generatedTestCases(ValueGetter<IrisTester> irisTester) {
       final onRtmpStreamingStateChangedCompleter = Completer<bool>();
       final theRtcEngineEventHandler = RtcEngineEventHandler(
         onRtmpStreamingStateChanged: (String url, RtmpStreamPublishState state,
-            RtmpStreamPublishErrorType errCode) {
+            RtmpStreamPublishReason reason) {
           onRtmpStreamingStateChangedCompleter.complete(true);
         },
       );
@@ -4926,13 +4934,13 @@ void generatedTestCases(ValueGetter<IrisTester> irisTester) {
         const String url = "hello";
         const RtmpStreamPublishState state =
             RtmpStreamPublishState.rtmpStreamPublishStateIdle;
-        const RtmpStreamPublishErrorType errCode =
-            RtmpStreamPublishErrorType.rtmpStreamPublishErrorOk;
+        const RtmpStreamPublishReason reason =
+            RtmpStreamPublishReason.rtmpStreamPublishReasonOk;
 
         final eventJson = {
           'url': url,
           'state': state.value(),
-          'errCode': errCode.value(),
+          'reason': reason.value(),
         };
 
         final eventIds = eventIdsMapping[
@@ -5102,7 +5110,7 @@ void generatedTestCases(ValueGetter<IrisTester> irisTester) {
 
       final onAudioRoutingChangedCompleter = Completer<bool>();
       final theRtcEngineEventHandler = RtcEngineEventHandler(
-        onAudioRoutingChanged: (int deviceType, int routing) {
+        onAudioRoutingChanged: (int routing) {
           onAudioRoutingChangedCompleter.complete(true);
         },
       );
@@ -5115,11 +5123,9 @@ void generatedTestCases(ValueGetter<IrisTester> irisTester) {
       await Future.delayed(const Duration(milliseconds: 500));
 
       {
-        const int deviceType = 10;
         const int routing = 10;
 
         final eventJson = {
-          'deviceType': deviceType,
           'routing': routing,
         };
 
@@ -5207,69 +5213,6 @@ void generatedTestCases(ValueGetter<IrisTester> irisTester) {
       }
 
       final eventCalled = await onChannelMediaRelayStateChangedCompleter.future;
-      expect(eventCalled, isTrue);
-
-      {
-        rtcEngine.unregisterEventHandler(
-          theRtcEngineEventHandler,
-        );
-      }
-// Delay 500 milliseconds to ensure the unregisterEventHandler call completed.
-      await Future.delayed(const Duration(milliseconds: 500));
-
-      await rtcEngine.release();
-    },
-    timeout: const Timeout(Duration(minutes: 2)),
-  );
-
-  testWidgets(
-    'RtcEngineEventHandler.onChannelMediaRelayEvent',
-    (WidgetTester tester) async {
-      RtcEngine rtcEngine = createAgoraRtcEngine();
-      await rtcEngine.initialize(RtcEngineContext(
-        appId: 'app_id',
-        areaCode: AreaCode.areaCodeGlob.value(),
-      ));
-      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
-
-      final onChannelMediaRelayEventCompleter = Completer<bool>();
-      final theRtcEngineEventHandler = RtcEngineEventHandler(
-        onChannelMediaRelayEvent: (int code) {
-          onChannelMediaRelayEventCompleter.complete(true);
-        },
-      );
-
-      rtcEngine.registerEventHandler(
-        theRtcEngineEventHandler,
-      );
-
-// Delay 500 milliseconds to ensure the registerEventHandler call completed.
-      await Future.delayed(const Duration(milliseconds: 500));
-
-      {
-        const int code = 10;
-
-        final eventJson = {
-          'code': code,
-        };
-
-        final eventIds =
-            eventIdsMapping['RtcEngineEventHandler_onChannelMediaRelayEvent'] ??
-                [];
-        for (final event in eventIds) {
-          final ret = irisTester().fireEvent(event, params: eventJson);
-          // Delay 200 milliseconds to ensure the callback is called.
-          await Future.delayed(const Duration(milliseconds: 200));
-          // TODO(littlegnal): Most of callbacks on web are not implemented, we're temporarily skip these callbacks at this time.
-          if (kIsWeb && ret) {
-            if (!onChannelMediaRelayEventCompleter.isCompleted) {
-              onChannelMediaRelayEventCompleter.complete(true);
-            }
-          }
-        }
-      }
-
-      final eventCalled = await onChannelMediaRelayEventCompleter.future;
       expect(eventCalled, isTrue);
 
       {
@@ -6144,6 +6087,262 @@ void generatedTestCases(ValueGetter<IrisTester> irisTester) {
   );
 
   testWidgets(
+    'RtcEngineEventHandler.onUserAccountUpdated',
+    (WidgetTester tester) async {
+      RtcEngine rtcEngine = createAgoraRtcEngine();
+      await rtcEngine.initialize(RtcEngineContext(
+        appId: 'app_id',
+        areaCode: AreaCode.areaCodeGlob.value(),
+      ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
+
+      final onUserAccountUpdatedCompleter = Completer<bool>();
+      final theRtcEngineEventHandler = RtcEngineEventHandler(
+        onUserAccountUpdated: (RtcConnection connection, int remoteUid,
+            String remoteUserAccount) {
+          onUserAccountUpdatedCompleter.complete(true);
+        },
+      );
+
+      rtcEngine.registerEventHandler(
+        theRtcEngineEventHandler,
+      );
+
+// Delay 500 milliseconds to ensure the registerEventHandler call completed.
+      await Future.delayed(const Duration(milliseconds: 500));
+
+      {
+        const String connectionChannelId = "hello";
+        const int connectionLocalUid = 10;
+        const RtcConnection connection = RtcConnection(
+          channelId: connectionChannelId,
+          localUid: connectionLocalUid,
+        );
+        const int remoteUid = 10;
+        const String remoteUserAccount = "hello";
+
+        final eventJson = {
+          'connection': connection.toJson(),
+          'remoteUid': remoteUid,
+          'remoteUserAccount': remoteUserAccount,
+        };
+
+        final eventIds =
+            eventIdsMapping['RtcEngineEventHandler_onUserAccountUpdated'] ?? [];
+        for (final event in eventIds) {
+          final ret = irisTester().fireEvent(event, params: eventJson);
+          // Delay 200 milliseconds to ensure the callback is called.
+          await Future.delayed(const Duration(milliseconds: 200));
+          // TODO(littlegnal): Most of callbacks on web are not implemented, we're temporarily skip these callbacks at this time.
+          if (kIsWeb && ret) {
+            if (!onUserAccountUpdatedCompleter.isCompleted) {
+              onUserAccountUpdatedCompleter.complete(true);
+            }
+          }
+        }
+      }
+
+      final eventCalled = await onUserAccountUpdatedCompleter.future;
+      expect(eventCalled, isTrue);
+
+      {
+        rtcEngine.unregisterEventHandler(
+          theRtcEngineEventHandler,
+        );
+      }
+// Delay 500 milliseconds to ensure the unregisterEventHandler call completed.
+      await Future.delayed(const Duration(milliseconds: 500));
+
+      await rtcEngine.release();
+    },
+    timeout: const Timeout(Duration(minutes: 2)),
+  );
+
+  testWidgets(
+    'RtcEngineEventHandler.onVideoRenderingTracingResult',
+    (WidgetTester tester) async {
+      RtcEngine rtcEngine = createAgoraRtcEngine();
+      await rtcEngine.initialize(RtcEngineContext(
+        appId: 'app_id',
+        areaCode: AreaCode.areaCodeGlob.value(),
+      ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
+
+      final onVideoRenderingTracingResultCompleter = Completer<bool>();
+      final theRtcEngineEventHandler = RtcEngineEventHandler(
+        onVideoRenderingTracingResult: (RtcConnection connection,
+            int uid,
+            MediaTraceEvent currentEvent,
+            VideoRenderingTracingInfo tracingInfo) {
+          onVideoRenderingTracingResultCompleter.complete(true);
+        },
+      );
+
+      rtcEngine.registerEventHandler(
+        theRtcEngineEventHandler,
+      );
+
+// Delay 500 milliseconds to ensure the registerEventHandler call completed.
+      await Future.delayed(const Duration(milliseconds: 500));
+
+      {
+        const String connectionChannelId = "hello";
+        const int connectionLocalUid = 10;
+        const RtcConnection connection = RtcConnection(
+          channelId: connectionChannelId,
+          localUid: connectionLocalUid,
+        );
+        const int uid = 10;
+        const MediaTraceEvent currentEvent =
+            MediaTraceEvent.mediaTraceEventVideoRendered;
+        const int tracingInfoElapsedTime = 10;
+        const int tracingInfoStart2JoinChannel = 10;
+        const int tracingInfoJoin2JoinSuccess = 10;
+        const int tracingInfoJoinSuccess2RemoteJoined = 10;
+        const int tracingInfoRemoteJoined2SetView = 10;
+        const int tracingInfoRemoteJoined2UnmuteVideo = 10;
+        const int tracingInfoRemoteJoined2PacketReceived = 10;
+        const VideoRenderingTracingInfo tracingInfo = VideoRenderingTracingInfo(
+          elapsedTime: tracingInfoElapsedTime,
+          start2JoinChannel: tracingInfoStart2JoinChannel,
+          join2JoinSuccess: tracingInfoJoin2JoinSuccess,
+          joinSuccess2RemoteJoined: tracingInfoJoinSuccess2RemoteJoined,
+          remoteJoined2SetView: tracingInfoRemoteJoined2SetView,
+          remoteJoined2UnmuteVideo: tracingInfoRemoteJoined2UnmuteVideo,
+          remoteJoined2PacketReceived: tracingInfoRemoteJoined2PacketReceived,
+        );
+
+        final eventJson = {
+          'connection': connection.toJson(),
+          'uid': uid,
+          'currentEvent': currentEvent.value(),
+          'tracingInfo': tracingInfo.toJson(),
+        };
+
+        final eventIds = eventIdsMapping[
+                'RtcEngineEventHandler_onVideoRenderingTracingResult'] ??
+            [];
+        for (final event in eventIds) {
+          final ret = irisTester().fireEvent(event, params: eventJson);
+          // Delay 200 milliseconds to ensure the callback is called.
+          await Future.delayed(const Duration(milliseconds: 200));
+          // TODO(littlegnal): Most of callbacks on web are not implemented, we're temporarily skip these callbacks at this time.
+          if (kIsWeb && ret) {
+            if (!onVideoRenderingTracingResultCompleter.isCompleted) {
+              onVideoRenderingTracingResultCompleter.complete(true);
+            }
+          }
+        }
+      }
+
+      final eventCalled = await onVideoRenderingTracingResultCompleter.future;
+      expect(eventCalled, isTrue);
+
+      {
+        rtcEngine.unregisterEventHandler(
+          theRtcEngineEventHandler,
+        );
+      }
+// Delay 500 milliseconds to ensure the unregisterEventHandler call completed.
+      await Future.delayed(const Duration(milliseconds: 500));
+
+      await rtcEngine.release();
+    },
+    timeout: const Timeout(Duration(minutes: 2)),
+  );
+
+  testWidgets(
+    'RtcEngineEventHandler.onLocalVideoTranscoderError',
+    (WidgetTester tester) async {
+      RtcEngine rtcEngine = createAgoraRtcEngine();
+      await rtcEngine.initialize(RtcEngineContext(
+        appId: 'app_id',
+        areaCode: AreaCode.areaCodeGlob.value(),
+      ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
+
+      final onLocalVideoTranscoderErrorCompleter = Completer<bool>();
+      final theRtcEngineEventHandler = RtcEngineEventHandler(
+        onLocalVideoTranscoderError:
+            (TranscodingVideoStream stream, VideoTranscoderError error) {
+          onLocalVideoTranscoderErrorCompleter.complete(true);
+        },
+      );
+
+      rtcEngine.registerEventHandler(
+        theRtcEngineEventHandler,
+      );
+
+// Delay 500 milliseconds to ensure the registerEventHandler call completed.
+      await Future.delayed(const Duration(milliseconds: 500));
+
+      {
+        const VideoSourceType streamSourceType =
+            VideoSourceType.videoSourceCameraPrimary;
+        const int streamRemoteUserUid = 10;
+        const String streamImageUrl = "hello";
+        const int streamMediaPlayerId = 10;
+        const int streamX = 10;
+        const int streamY = 10;
+        const int streamWidth = 10;
+        const int streamHeight = 10;
+        const int streamZOrder = 10;
+        const double streamAlpha = 10.0;
+        const bool streamMirror = true;
+        const TranscodingVideoStream stream = TranscodingVideoStream(
+          sourceType: streamSourceType,
+          remoteUserUid: streamRemoteUserUid,
+          imageUrl: streamImageUrl,
+          mediaPlayerId: streamMediaPlayerId,
+          x: streamX,
+          y: streamY,
+          width: streamWidth,
+          height: streamHeight,
+          zOrder: streamZOrder,
+          alpha: streamAlpha,
+          mirror: streamMirror,
+        );
+        const VideoTranscoderError error =
+            VideoTranscoderError.vtErrVideoSourceNotReady;
+
+        final eventJson = {
+          'stream': stream.toJson(),
+          'error': error.value(),
+        };
+
+        final eventIds = eventIdsMapping[
+                'RtcEngineEventHandler_onLocalVideoTranscoderError'] ??
+            [];
+        for (final event in eventIds) {
+          final ret = irisTester().fireEvent(event, params: eventJson);
+          // Delay 200 milliseconds to ensure the callback is called.
+          await Future.delayed(const Duration(milliseconds: 200));
+          // TODO(littlegnal): Most of callbacks on web are not implemented, we're temporarily skip these callbacks at this time.
+          if (kIsWeb && ret) {
+            if (!onLocalVideoTranscoderErrorCompleter.isCompleted) {
+              onLocalVideoTranscoderErrorCompleter.complete(true);
+            }
+          }
+        }
+      }
+
+      final eventCalled = await onLocalVideoTranscoderErrorCompleter.future;
+      expect(eventCalled, isTrue);
+
+      {
+        rtcEngine.unregisterEventHandler(
+          theRtcEngineEventHandler,
+        );
+      }
+// Delay 500 milliseconds to ensure the unregisterEventHandler call completed.
+      await Future.delayed(const Duration(milliseconds: 500));
+
+      await rtcEngine.release();
+    },
+    timeout: const Timeout(Duration(minutes: 2)),
+  );
+
+  testWidgets(
     'RtcEngineEventHandler.onUploadLogResult',
     (WidgetTester tester) async {
       RtcEngine rtcEngine = createAgoraRtcEngine();
@@ -6515,6 +6714,160 @@ void generatedTestCases(ValueGetter<IrisTester> irisTester) {
   );
 
   testWidgets(
+    'RtcEngineEventHandler.onTranscodedStreamLayoutInfo',
+    (WidgetTester tester) async {
+      RtcEngine rtcEngine = createAgoraRtcEngine();
+      await rtcEngine.initialize(RtcEngineContext(
+        appId: 'app_id',
+        areaCode: AreaCode.areaCodeGlob.value(),
+      ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
+
+      final onTranscodedStreamLayoutInfoCompleter = Completer<bool>();
+      final theRtcEngineEventHandler = RtcEngineEventHandler(
+        onTranscodedStreamLayoutInfo: (RtcConnection connection, int uid,
+            int width, int height, int layoutCount, List layoutlist) {
+          onTranscodedStreamLayoutInfoCompleter.complete(true);
+        },
+      );
+
+      rtcEngine.registerEventHandler(
+        theRtcEngineEventHandler,
+      );
+
+// Delay 500 milliseconds to ensure the registerEventHandler call completed.
+      await Future.delayed(const Duration(milliseconds: 500));
+
+      {
+        const String connectionChannelId = "hello";
+        const int connectionLocalUid = 10;
+        const RtcConnection connection = RtcConnection(
+          channelId: connectionChannelId,
+          localUid: connectionLocalUid,
+        );
+        const int uid = 10;
+        const int width = 10;
+        const int height = 10;
+        const int layoutCount = 10;
+        const List<VideoLayout> layoutlist = [];
+
+        final eventJson = {
+          'connection': connection.toJson(),
+          'uid': uid,
+          'width': width,
+          'height': height,
+          'layoutCount': layoutCount,
+          'layoutlist': layoutlist,
+        };
+
+        final eventIds = eventIdsMapping[
+                'RtcEngineEventHandler_onTranscodedStreamLayoutInfo'] ??
+            [];
+        for (final event in eventIds) {
+          final ret = irisTester().fireEvent(event, params: eventJson);
+          // Delay 200 milliseconds to ensure the callback is called.
+          await Future.delayed(const Duration(milliseconds: 200));
+          // TODO(littlegnal): Most of callbacks on web are not implemented, we're temporarily skip these callbacks at this time.
+          if (kIsWeb && ret) {
+            if (!onTranscodedStreamLayoutInfoCompleter.isCompleted) {
+              onTranscodedStreamLayoutInfoCompleter.complete(true);
+            }
+          }
+        }
+      }
+
+      final eventCalled = await onTranscodedStreamLayoutInfoCompleter.future;
+      expect(eventCalled, isTrue);
+
+      {
+        rtcEngine.unregisterEventHandler(
+          theRtcEngineEventHandler,
+        );
+      }
+// Delay 500 milliseconds to ensure the unregisterEventHandler call completed.
+      await Future.delayed(const Duration(milliseconds: 500));
+
+      await rtcEngine.release();
+    },
+    timeout: const Timeout(Duration(minutes: 2)),
+  );
+
+  testWidgets(
+    'RtcEngineEventHandler.onAudioMetadataReceived',
+    (WidgetTester tester) async {
+      RtcEngine rtcEngine = createAgoraRtcEngine();
+      await rtcEngine.initialize(RtcEngineContext(
+        appId: 'app_id',
+        areaCode: AreaCode.areaCodeGlob.value(),
+      ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
+
+      final onAudioMetadataReceivedCompleter = Completer<bool>();
+      final theRtcEngineEventHandler = RtcEngineEventHandler(
+        onAudioMetadataReceived: (RtcConnection connection, int uid,
+            Uint8List metadata, int length) {
+          onAudioMetadataReceivedCompleter.complete(true);
+        },
+      );
+
+      rtcEngine.registerEventHandler(
+        theRtcEngineEventHandler,
+      );
+
+// Delay 500 milliseconds to ensure the registerEventHandler call completed.
+      await Future.delayed(const Duration(milliseconds: 500));
+
+      {
+        const String connectionChannelId = "hello";
+        const int connectionLocalUid = 10;
+        const RtcConnection connection = RtcConnection(
+          channelId: connectionChannelId,
+          localUid: connectionLocalUid,
+        );
+        const int uid = 10;
+        Uint8List metadata = Uint8List.fromList([1, 2, 3, 4, 5]);
+        const int length = 10;
+
+        final eventJson = {
+          'connection': connection.toJson(),
+          'uid': uid,
+          'metadata': metadata.toList(),
+          'length': length,
+        };
+
+        final eventIds =
+            eventIdsMapping['RtcEngineEventHandler_onAudioMetadataReceived'] ??
+                [];
+        for (final event in eventIds) {
+          final ret = irisTester().fireEvent(event, params: eventJson);
+          // Delay 200 milliseconds to ensure the callback is called.
+          await Future.delayed(const Duration(milliseconds: 200));
+          // TODO(littlegnal): Most of callbacks on web are not implemented, we're temporarily skip these callbacks at this time.
+          if (kIsWeb && ret) {
+            if (!onAudioMetadataReceivedCompleter.isCompleted) {
+              onAudioMetadataReceivedCompleter.complete(true);
+            }
+          }
+        }
+      }
+
+      final eventCalled = await onAudioMetadataReceivedCompleter.future;
+      expect(eventCalled, isTrue);
+
+      {
+        rtcEngine.unregisterEventHandler(
+          theRtcEngineEventHandler,
+        );
+      }
+// Delay 500 milliseconds to ensure the unregisterEventHandler call completed.
+      await Future.delayed(const Duration(milliseconds: 500));
+
+      await rtcEngine.release();
+    },
+    timeout: const Timeout(Duration(minutes: 2)),
+  );
+
+  testWidgets(
     'RtcEngineEventHandler.onExtensionEvent',
     (WidgetTester tester) async {
       RtcEngine rtcEngine = createAgoraRtcEngine();
@@ -6781,7 +7134,7 @@ void generatedTestCases(ValueGetter<IrisTester> irisTester) {
   );
 
   testWidgets(
-    'RtcEngineEventHandler.onUserAccountUpdated',
+    'RtcEngineEventHandler.onSetRtmFlagResult',
     (WidgetTester tester) async {
       RtcEngine rtcEngine = createAgoraRtcEngine();
       await rtcEngine.initialize(RtcEngineContext(
@@ -6790,11 +7143,10 @@ void generatedTestCases(ValueGetter<IrisTester> irisTester) {
       ));
       await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
-      final onUserAccountUpdatedCompleter = Completer<bool>();
+      final onSetRtmFlagResultCompleter = Completer<bool>();
       final theRtcEngineEventHandler = RtcEngineEventHandler(
-        onUserAccountUpdated:
-            (RtcConnection connection, int remoteUid, String userAccount) {
-          onUserAccountUpdatedCompleter.complete(true);
+        onSetRtmFlagResult: (RtcConnection connection, int code) {
+          onSetRtmFlagResultCompleter.complete(true);
         },
       );
 
@@ -6812,215 +7164,29 @@ void generatedTestCases(ValueGetter<IrisTester> irisTester) {
           channelId: connectionChannelId,
           localUid: connectionLocalUid,
         );
-        const int remoteUid = 10;
-        const String userAccount = "hello";
+        const int code = 10;
 
         final eventJson = {
           'connection': connection.toJson(),
-          'remoteUid': remoteUid,
-          'userAccount': userAccount,
+          'code': code,
         };
 
         final eventIds =
-            eventIdsMapping['RtcEngineEventHandler_onUserAccountUpdated'] ?? [];
+            eventIdsMapping['RtcEngineEventHandler_onSetRtmFlagResult'] ?? [];
         for (final event in eventIds) {
           final ret = irisTester().fireEvent(event, params: eventJson);
           // Delay 200 milliseconds to ensure the callback is called.
           await Future.delayed(const Duration(milliseconds: 200));
           // TODO(littlegnal): Most of callbacks on web are not implemented, we're temporarily skip these callbacks at this time.
           if (kIsWeb && ret) {
-            if (!onUserAccountUpdatedCompleter.isCompleted) {
-              onUserAccountUpdatedCompleter.complete(true);
+            if (!onSetRtmFlagResultCompleter.isCompleted) {
+              onSetRtmFlagResultCompleter.complete(true);
             }
           }
         }
       }
 
-      final eventCalled = await onUserAccountUpdatedCompleter.future;
-      expect(eventCalled, isTrue);
-
-      {
-        rtcEngine.unregisterEventHandler(
-          theRtcEngineEventHandler,
-        );
-      }
-// Delay 500 milliseconds to ensure the unregisterEventHandler call completed.
-      await Future.delayed(const Duration(milliseconds: 500));
-
-      await rtcEngine.release();
-    },
-    timeout: const Timeout(Duration(minutes: 2)),
-  );
-
-  testWidgets(
-    'RtcEngineEventHandler.onLocalVideoTranscoderError',
-    (WidgetTester tester) async {
-      RtcEngine rtcEngine = createAgoraRtcEngine();
-      await rtcEngine.initialize(RtcEngineContext(
-        appId: 'app_id',
-        areaCode: AreaCode.areaCodeGlob.value(),
-      ));
-      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
-
-      final onLocalVideoTranscoderErrorCompleter = Completer<bool>();
-      final theRtcEngineEventHandler = RtcEngineEventHandler(
-        onLocalVideoTranscoderError:
-            (TranscodingVideoStream stream, VideoTranscoderError error) {
-          onLocalVideoTranscoderErrorCompleter.complete(true);
-        },
-      );
-
-      rtcEngine.registerEventHandler(
-        theRtcEngineEventHandler,
-      );
-
-// Delay 500 milliseconds to ensure the registerEventHandler call completed.
-      await Future.delayed(const Duration(milliseconds: 500));
-
-      {
-        const VideoSourceType streamSourceType =
-            VideoSourceType.videoSourceCameraPrimary;
-        const int streamRemoteUserUid = 10;
-        const String streamImageUrl = "hello";
-        const int streamMediaPlayerId = 10;
-        const int streamX = 10;
-        const int streamY = 10;
-        const int streamWidth = 10;
-        const int streamHeight = 10;
-        const int streamZOrder = 10;
-        const double streamAlpha = 10.0;
-        const bool streamMirror = true;
-        const TranscodingVideoStream stream = TranscodingVideoStream(
-          sourceType: streamSourceType,
-          remoteUserUid: streamRemoteUserUid,
-          imageUrl: streamImageUrl,
-          mediaPlayerId: streamMediaPlayerId,
-          x: streamX,
-          y: streamY,
-          width: streamWidth,
-          height: streamHeight,
-          zOrder: streamZOrder,
-          alpha: streamAlpha,
-          mirror: streamMirror,
-        );
-        const VideoTranscoderError error =
-            VideoTranscoderError.vtErrVideoSourceNotReady;
-
-        final eventJson = {
-          'stream': stream.toJson(),
-          'error': error.value(),
-        };
-
-        final eventIds = eventIdsMapping[
-                'RtcEngineEventHandler_onLocalVideoTranscoderError'] ??
-            [];
-        for (final event in eventIds) {
-          final ret = irisTester().fireEvent(event, params: eventJson);
-          // Delay 200 milliseconds to ensure the callback is called.
-          await Future.delayed(const Duration(milliseconds: 200));
-          // TODO(littlegnal): Most of callbacks on web are not implemented, we're temporarily skip these callbacks at this time.
-          if (kIsWeb && ret) {
-            if (!onLocalVideoTranscoderErrorCompleter.isCompleted) {
-              onLocalVideoTranscoderErrorCompleter.complete(true);
-            }
-          }
-        }
-      }
-
-      final eventCalled = await onLocalVideoTranscoderErrorCompleter.future;
-      expect(eventCalled, isTrue);
-
-      {
-        rtcEngine.unregisterEventHandler(
-          theRtcEngineEventHandler,
-        );
-      }
-// Delay 500 milliseconds to ensure the unregisterEventHandler call completed.
-      await Future.delayed(const Duration(milliseconds: 500));
-
-      await rtcEngine.release();
-    },
-    timeout: const Timeout(Duration(minutes: 2)),
-  );
-
-  testWidgets(
-    'RtcEngineEventHandler.onVideoRenderingTracingResult',
-    (WidgetTester tester) async {
-      RtcEngine rtcEngine = createAgoraRtcEngine();
-      await rtcEngine.initialize(RtcEngineContext(
-        appId: 'app_id',
-        areaCode: AreaCode.areaCodeGlob.value(),
-      ));
-      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
-
-      final onVideoRenderingTracingResultCompleter = Completer<bool>();
-      final theRtcEngineEventHandler = RtcEngineEventHandler(
-        onVideoRenderingTracingResult: (RtcConnection connection,
-            int uid,
-            MediaTraceEvent currentEvent,
-            VideoRenderingTracingInfo tracingInfo) {
-          onVideoRenderingTracingResultCompleter.complete(true);
-        },
-      );
-
-      rtcEngine.registerEventHandler(
-        theRtcEngineEventHandler,
-      );
-
-// Delay 500 milliseconds to ensure the registerEventHandler call completed.
-      await Future.delayed(const Duration(milliseconds: 500));
-
-      {
-        const String connectionChannelId = "hello";
-        const int connectionLocalUid = 10;
-        const RtcConnection connection = RtcConnection(
-          channelId: connectionChannelId,
-          localUid: connectionLocalUid,
-        );
-        const int uid = 10;
-        const MediaTraceEvent currentEvent =
-            MediaTraceEvent.mediaTraceEventVideoRendered;
-        const int tracingInfoElapsedTime = 10;
-        const int tracingInfoStart2JoinChannel = 10;
-        const int tracingInfoJoin2JoinSuccess = 10;
-        const int tracingInfoJoinSuccess2RemoteJoined = 10;
-        const int tracingInfoRemoteJoined2SetView = 10;
-        const int tracingInfoRemoteJoined2UnmuteVideo = 10;
-        const int tracingInfoRemoteJoined2PacketReceived = 10;
-        const VideoRenderingTracingInfo tracingInfo = VideoRenderingTracingInfo(
-          elapsedTime: tracingInfoElapsedTime,
-          start2JoinChannel: tracingInfoStart2JoinChannel,
-          join2JoinSuccess: tracingInfoJoin2JoinSuccess,
-          joinSuccess2RemoteJoined: tracingInfoJoinSuccess2RemoteJoined,
-          remoteJoined2SetView: tracingInfoRemoteJoined2SetView,
-          remoteJoined2UnmuteVideo: tracingInfoRemoteJoined2UnmuteVideo,
-          remoteJoined2PacketReceived: tracingInfoRemoteJoined2PacketReceived,
-        );
-
-        final eventJson = {
-          'connection': connection.toJson(),
-          'uid': uid,
-          'currentEvent': currentEvent.value(),
-          'tracingInfo': tracingInfo.toJson(),
-        };
-
-        final eventIds = eventIdsMapping[
-                'RtcEngineEventHandler_onVideoRenderingTracingResult'] ??
-            [];
-        for (final event in eventIds) {
-          final ret = irisTester().fireEvent(event, params: eventJson);
-          // Delay 200 milliseconds to ensure the callback is called.
-          await Future.delayed(const Duration(milliseconds: 200));
-          // TODO(littlegnal): Most of callbacks on web are not implemented, we're temporarily skip these callbacks at this time.
-          if (kIsWeb && ret) {
-            if (!onVideoRenderingTracingResultCompleter.isCompleted) {
-              onVideoRenderingTracingResultCompleter.complete(true);
-            }
-          }
-        }
-      }
-
-      final eventCalled = await onVideoRenderingTracingResultCompleter.future;
+      final eventCalled = await onSetRtmFlagResultCompleter.future;
       expect(eventCalled, isTrue);
 
       {

@@ -4,10 +4,6 @@
 #include "iris_base.h"
 #include "iris_rtc_rendering_c.h"
 
-//////// operators for IrisRtcVideoFrameConfig ///////////
-IRIS_CPP_API bool operator<(const IrisRtcVideoFrameConfig &lhs,
-                            const IrisRtcVideoFrameConfig &rhs);
-
 namespace agora {
 namespace iris {
 
@@ -33,7 +29,7 @@ class IRIS_CPP_API IrisRtcRendering {
  public:
   virtual ~IrisRtcRendering() {}
 
-  static IrisRtcRendering *Create(void *iris_api_engine_handle);
+  static IrisRtcRendering *Create(IrisApiEnginePtr iris_api_engine_handle);
 
   /// Add `VideoFrameObserverDelegate` with `config`, return a delegate id that save inside
   /// `IrisRtcRendering`, you should save the id and pass it to `RemoveVideoFrameObserverDelegate`.

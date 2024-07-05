@@ -176,7 +176,7 @@ public:
    *
    * @return
    * - 0: Success.
-   * - < 0: Failure. See {@link media::base::MEDIA_PLAYER_ERROR MEDIA_PLAYER_ERROR}.
+   * - < 0: Failure. See {@link media::base::MEDIA_PLAYER_REASON MEDIA_PLAYER_REASON}.
    * - -2: Invalid argument. Argument must be greater than or equal to zero.
    * - -8: Invalid State.You must open the media file with openWithMediaSource and set enableMultiAudioTrack to true
    */
@@ -234,7 +234,7 @@ public:
    * @brief Turn mute on or off
    *
    * @param muted Whether to mute on
-   * @return int < 0 on behalf of an error, the value corresponds to one of MEDIA_PLAYER_ERROR
+   * @return int < 0 on behalf of an error, the value corresponds to one of MEDIA_PLAYER_REASON
    */
   virtual int mute(bool muted) = 0;
 
@@ -242,7 +242,7 @@ public:
    * @brief Get mute state
    *
    * @param[out] muted Whether is mute on
-   * @return int < 0 on behalf of an error, the value corresponds to one of MEDIA_PLAYER_ERROR
+   * @return int < 0 on behalf of an error, the value corresponds to one of MEDIA_PLAYER_REASON
    */
   virtual int getMute(bool& muted) = 0;
 
@@ -254,7 +254,7 @@ public:
    * 0: mute;
    * 100: original volume;
    * 400: Up to 4 times the original volume (with built-in overflow protection).
-   * @return int < 0 on behalf of an error, the value corresponds to one of MEDIA_PLAYER_ERROR
+   * @return int < 0 on behalf of an error, the value corresponds to one of MEDIA_PLAYER_REASON
    */
   virtual int adjustPlayoutVolume(int volume) = 0;
 
@@ -262,21 +262,21 @@ public:
    * @brief Get the current playback volume
    *
    * @param[out] volume
-   * @return int < 0 on behalf of an error, the value corresponds to one of MEDIA_PLAYER_ERROR
+   * @return int < 0 on behalf of an error, the value corresponds to one of MEDIA_PLAYER_REASON
    */
   virtual int getPlayoutVolume(int& volume) = 0;
 
   /**
    * @brief adjust publish signal volume
    *
-   * @return int < 0 on behalf of an error, the value corresponds to one of MEDIA_PLAYER_ERROR
+   * @return int < 0 on behalf of an error, the value corresponds to one of MEDIA_PLAYER_REASON
    */
   virtual int adjustPublishSignalVolume(int volume) = 0;
 
   /**
    * @brief get publish signal volume
    *
-   * @return int < 0 on behalf of an error, the value corresponds to one of MEDIA_PLAYER_ERROR
+   * @return int < 0 on behalf of an error, the value corresponds to one of MEDIA_PLAYER_REASON
    */
   virtual int getPublishSignalVolume(int& volume) = 0;
 
@@ -284,7 +284,7 @@ public:
    * @brief Set video rendering view
    *
    * @param view view object, windows platform is HWND
-   * @return int < 0 on behalf of an error, the value corresponds to one of MEDIA_PLAYER_ERROR
+   * @return int < 0 on behalf of an error, the value corresponds to one of MEDIA_PLAYER_REASON
    */
   virtual int setView(media::base::view_t view) = 0;
 
@@ -292,7 +292,7 @@ public:
    * @brief Set video display mode
    *
    * @param renderMode Video display mode
-   * @return int < 0 on behalf of an error, the value corresponds to one of MEDIA_PLAYER_ERROR
+   * @return int < 0 on behalf of an error, the value corresponds to one of MEDIA_PLAYER_REASON
    */
   virtual int setRenderMode(media::base::RENDER_MODE_TYPE renderMode) = 0;
 
@@ -354,7 +354,7 @@ public:
    * @brief Register the player video observer
    *
    * @param observer observer object
-   * @return int < 0 on behalf of an error, the value corresponds to one of MEDIA_PLAYER_ERROR
+   * @return int < 0 on behalf of an error, the value corresponds to one of MEDIA_PLAYER_REASON
    */
   virtual int registerVideoFrameObserver(media::base::IVideoFrameObserver* observer) = 0;
 
@@ -362,7 +362,7 @@ public:
    * @brief UnRegister the player video observer
    *
    * @param observer observer object
-   * @return int < 0 on behalf of an error, the value corresponds to one of MEDIA_PLAYER_ERROR
+   * @return int < 0 on behalf of an error, the value corresponds to one of MEDIA_PLAYER_REASON
    */
   virtual int unregisterVideoFrameObserver(agora::media::base::IVideoFrameObserver* observer) = 0;
 

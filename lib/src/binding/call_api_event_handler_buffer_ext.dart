@@ -125,6 +125,18 @@ extension CodecCapInfoBufferExt on CodecCapInfo {
   }
 }
 
+extension FocalLengthInfoBufferExt on FocalLengthInfo {
+  FocalLengthInfo fillBuffers(List<Uint8List> bufferList) {
+    if (bufferList.isEmpty) return this;
+    return this;
+  }
+
+  List<Uint8List> collectBufferList() {
+    final bufferList = <Uint8List>[];
+    return bufferList;
+  }
+}
+
 extension VideoEncoderConfigurationBufferExt on VideoEncoderConfiguration {
   VideoEncoderConfiguration fillBuffers(List<Uint8List> bufferList) {
     if (bufferList.isEmpty) return this;
@@ -710,18 +722,6 @@ extension VideoRenderingTracingInfoBufferExt on VideoRenderingTracingInfo {
   }
 }
 
-extension RecorderStreamInfoBufferExt on RecorderStreamInfo {
-  RecorderStreamInfo fillBuffers(List<Uint8List> bufferList) {
-    if (bufferList.isEmpty) return this;
-    return this;
-  }
-
-  List<Uint8List> collectBufferList() {
-    final bufferList = <Uint8List>[];
-    return bufferList;
-  }
-}
-
 extension LogUploadServerInfoBufferExt on LogUploadServerInfo {
   LogUploadServerInfo fillBuffers(List<Uint8List> bufferList) {
     if (bufferList.isEmpty) return this;
@@ -759,6 +759,18 @@ extension LocalAccessPointConfigurationBufferExt
   }
 }
 
+extension RecorderStreamInfoBufferExt on RecorderStreamInfo {
+  RecorderStreamInfo fillBuffers(List<Uint8List> bufferList) {
+    if (bufferList.isEmpty) return this;
+    return this;
+  }
+
+  List<Uint8List> collectBufferList() {
+    final bufferList = <Uint8List>[];
+    return bufferList;
+  }
+}
+
 extension SpatialAudioParamsBufferExt on SpatialAudioParams {
   SpatialAudioParams fillBuffers(List<Uint8List> bufferList) {
     if (bufferList.isEmpty) return this;
@@ -771,8 +783,8 @@ extension SpatialAudioParamsBufferExt on SpatialAudioParams {
   }
 }
 
-extension AudioParametersBufferExt on AudioParameters {
-  AudioParameters fillBuffers(List<Uint8List> bufferList) {
+extension VideoLayoutBufferExt on VideoLayout {
+  VideoLayout fillBuffers(List<Uint8List> bufferList) {
     if (bufferList.isEmpty) return this;
     return this;
   }
@@ -783,8 +795,8 @@ extension AudioParametersBufferExt on AudioParameters {
   }
 }
 
-extension AudioDeviceInfoBufferExt on AudioDeviceInfo {
-  AudioDeviceInfo fillBuffers(List<Uint8List> bufferList) {
+extension AudioParametersBufferExt on AudioParameters {
+  AudioParameters fillBuffers(List<Uint8List> bufferList) {
     if (bufferList.isEmpty) return this;
     return this;
   }
@@ -888,6 +900,7 @@ extension ExternalVideoFrameBufferExt on ExternalVideoFrame {
         metadataBuffer: metadataBuffer,
         metadataSize: metadataSize,
         alphaBuffer: alphaBuffer,
+        fillAlphaBuffer: fillAlphaBuffer,
         textureSliceIndex: textureSliceIndex);
   }
 
@@ -996,7 +1009,8 @@ extension AudioFrameBufferExt on AudioFrame {
         renderTimeMs: renderTimeMs,
         avsyncType: avsyncType,
         presentationMs: presentationMs,
-        audioTrackNumber: audioTrackNumber);
+        audioTrackNumber: audioTrackNumber,
+        rtpTimestamp: rtpTimestamp);
   }
 
   List<Uint8List> collectBufferList() {
@@ -1094,6 +1108,18 @@ extension SrcInfoBufferExt on SrcInfo {
 
 extension CacheStatisticsBufferExt on CacheStatistics {
   CacheStatistics fillBuffers(List<Uint8List> bufferList) {
+    if (bufferList.isEmpty) return this;
+    return this;
+  }
+
+  List<Uint8List> collectBufferList() {
+    final bufferList = <Uint8List>[];
+    return bufferList;
+  }
+}
+
+extension PlayerPlaybackStatsBufferExt on PlayerPlaybackStats {
+  PlayerPlaybackStats fillBuffers(List<Uint8List> bufferList) {
     if (bufferList.isEmpty) return this;
     return this;
   }
@@ -1483,11 +1509,7 @@ extension MetadataBufferExt on Metadata {
       buffer = bufferList[0];
     }
     return Metadata(
-        channelId: channelId,
-        uid: uid,
-        size: size,
-        buffer: buffer,
-        timeStampMs: timeStampMs);
+        uid: uid, size: size, buffer: buffer, timeStampMs: timeStampMs);
   }
 
   List<Uint8List> collectBufferList() {
@@ -1550,6 +1572,18 @@ extension SDKBuildInfoBufferExt on SDKBuildInfo {
 
 extension VideoDeviceInfoBufferExt on VideoDeviceInfo {
   VideoDeviceInfo fillBuffers(List<Uint8List> bufferList) {
+    if (bufferList.isEmpty) return this;
+    return this;
+  }
+
+  List<Uint8List> collectBufferList() {
+    final bufferList = <Uint8List>[];
+    return bufferList;
+  }
+}
+
+extension AudioDeviceInfoBufferExt on AudioDeviceInfo {
+  AudioDeviceInfo fillBuffers(List<Uint8List> bufferList) {
     if (bufferList.isEmpty) return this;
     return this;
   }

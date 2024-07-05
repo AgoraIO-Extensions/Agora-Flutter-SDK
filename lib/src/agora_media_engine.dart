@@ -84,11 +84,23 @@ abstract class MediaEngine {
   /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown. You need to catch the exception and handle it accordingly.
   void registerVideoEncodedFrameObserver(VideoEncodedFrameObserver observer);
 
+  /// Registers a facial information observer.
+  ///
+  /// You can call this method to register the onFaceInfo callback to receive the facial information processed by Agora speech driven extension. When calling this method to register a facial information observer, you can register callbacks in the FaceInfoObserver class as needed. After successfully registering the facial information observer, the SDK triggers the callback you have registered when it captures the facial information converted by the speech driven extension.
+  ///  Ensure that you call this method before joining a channel.
+  ///  Before calling this method, you need to make sure that the speech driven extension has been enabled by calling enableExtension.
+  ///
+  /// * [observer] Facial information observer, see FaceInfoObserver.
+  ///
+  /// Returns
+  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown. You need to catch the exception and handle it accordingly.
+  void registerFaceInfoObserver(FaceInfoObserver observer);
+
   /// Pushes the external audio frame.
   ///
   /// Before calling this method to push external audio data, perform the following steps:
   ///  Call createCustomAudioTrack to create a custom audio track and get the audio track ID.
-  ///  Call joinChannel to join the channel. In ChannelMediaOptions, set publishCustomAduioTrackId to the audio track ID that you want to publish, and set publishCustomAudioTrack to true.
+  ///  Call joinChannel to join the channel. In ChannelMediaOptions, set publishCustomAudioTrackId to the audio track ID that you want to publish, and set publishCustomAudioTrack to true.
   ///
   /// * [frame] The external audio frame. See AudioFrame.
   /// * [trackId] The audio track ID. If you want to publish a custom external audio source, set this parameter to the ID of the corresponding custom audio track you want to publish.
@@ -155,7 +167,7 @@ abstract class MediaEngine {
   ///
   /// Ensure that you call this method before joining a channel. To publish a custom audio source, see the following steps:
   ///  Call this method to create a custom audio track and get the audio track ID.
-  ///  Call joinChannel to join the channel. In ChannelMediaOptions, set publishCustomAduioTrackId to the audio track ID that you want to publish, and set publishCustomAudioTrack to true.
+  ///  Call joinChannel to join the channel. In ChannelMediaOptions, set publishCustomAudioTrackId to the audio track ID that you want to publish, and set publishCustomAudioTrack to true.
   ///  Call pushAudioFrame and specify trackId as the audio track ID set in step 2. You can then publish the corresponding custom audio source in the channel.
   ///
   /// * [trackType] The type of the custom audio track. See AudioTrackType. If audioTrackDirect is specified for this parameter, you must set publishMicrophoneTrack to false in ChannelMediaOptions when calling joinChannel to join the channel; otherwise, joining the channel fails and returns the error code -2.
@@ -163,7 +175,7 @@ abstract class MediaEngine {
   ///
   /// Returns
   /// If the method call is successful, the audio track ID is returned as the unique identifier of the audio track.
-  ///  If the method call fails, a negative value is returned.
+  ///  If the method call fails, 0xffffffff is returned.
   Future<int> createCustomAudioTrack(
       {required AudioTrackType trackType, required AudioTrackConfig config});
 
@@ -244,4 +256,12 @@ abstract class MediaEngine {
   /// Returns
   /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown. You need to catch the exception and handle it accordingly.
   void unregisterVideoEncodedFrameObserver(VideoEncodedFrameObserver observer);
+
+  /// Unregisters a facial information observer.
+  ///
+  /// * [observer] Facial information observer, see FaceInfoObserver.
+  ///
+  /// Returns
+  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown. You need to catch the exception and handle it accordingly.
+  void unregisterFaceInfoObserver(FaceInfoObserver observer);
 }

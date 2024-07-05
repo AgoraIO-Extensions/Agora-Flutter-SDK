@@ -172,10 +172,27 @@ class MusicPlayerImpl extends MediaPlayerImpl implements MusicPlayer {
   String get className => 'MusicPlayer';
 
   @override
+  Future<void> setPlayMode(MusicPlayMode mode) async {
+    final apiType =
+        '${isOverrideClassName ? className : 'MusicPlayer'}_setPlayMode';
+    final param = createParams({'mode': mode.value()});
+    final callApiResult = await irisMethodChannel.invokeMethod(
+        IrisMethodCall(apiType, jsonEncode(param), buffers: null));
+    if (callApiResult.irisReturnCode < 0) {
+      throw AgoraRtcException(code: callApiResult.irisReturnCode);
+    }
+    final rm = callApiResult.data;
+    final result = rm['result'];
+    if (result < 0) {
+      throw AgoraRtcException(code: result);
+    }
+  }
+
+  @override
   Future<void> openWithSongCode(
       {required int songCode, int startPos = 0}) async {
     final apiType =
-        '${isOverrideClassName ? className : 'MusicPlayer'}_openWithSongCode';
+        '${isOverrideClassName ? className : 'MusicPlayer'}_open_303b92e';
     final param = createParams({'songCode': songCode, 'startPos': startPos});
     final callApiResult = await irisMethodChannel.invokeMethod(
         IrisMethodCall(apiType, jsonEncode(param), buffers: null));
@@ -309,6 +326,23 @@ class MusicContentCenterImpl implements MusicContentCenter {
   }
 
   @override
+  Future<void> destroyMusicPlayer(MusicPlayer musicPlayer) async {
+    final apiType =
+        '${isOverrideClassName ? className : 'MusicContentCenter'}_destroyMusicPlayer';
+    final param = createParams({'music_player': musicPlayer});
+    final callApiResult = await irisMethodChannel.invokeMethod(
+        IrisMethodCall(apiType, jsonEncode(param), buffers: null));
+    if (callApiResult.irisReturnCode < 0) {
+      throw AgoraRtcException(code: callApiResult.irisReturnCode);
+    }
+    final rm = callApiResult.data;
+    final result = rm['result'];
+    if (result < 0) {
+      throw AgoraRtcException(code: result);
+    }
+  }
+
+  @override
   Future<String> getMusicCharts() async {
     final apiType =
         '${isOverrideClassName ? className : 'MusicContentCenter'}_getMusicCharts';
@@ -388,7 +422,7 @@ class MusicContentCenterImpl implements MusicContentCenter {
   @override
   Future<String> preload(int songCode) async {
     final apiType =
-        '${isOverrideClassName ? className : 'MusicContentCenter'}_preload';
+        '${isOverrideClassName ? className : 'MusicContentCenter'}_preload_d3baeab';
     final param = createParams({'songCode': songCode});
     final callApiResult = await irisMethodChannel.invokeMethod(
         IrisMethodCall(apiType, jsonEncode(param), buffers: null));
@@ -459,7 +493,7 @@ class MusicContentCenterImpl implements MusicContentCenter {
   Future<String> getLyric({required int songCode, int lyricType = 0}) async {
     final apiType =
         '${isOverrideClassName ? className : 'MusicContentCenter'}_getLyric';
-    final param = createParams({'songCode': songCode, 'LyricType': lyricType});
+    final param = createParams({'songCode': songCode, 'lyricType': lyricType});
     final callApiResult = await irisMethodChannel.invokeMethod(
         IrisMethodCall(apiType, jsonEncode(param), buffers: null));
     if (callApiResult.irisReturnCode < 0) {

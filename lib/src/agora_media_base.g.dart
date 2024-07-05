@@ -30,48 +30,6 @@ Map<String, dynamic> _$AudioParametersToJson(AudioParameters instance) {
   return val;
 }
 
-AudioDeviceInfo _$AudioDeviceInfoFromJson(Map<String, dynamic> json) =>
-    AudioDeviceInfo(
-      deviceName: json['deviceName'] as String?,
-      deviceId: json['deviceId'] as String?,
-      isCurrentSelected: json['isCurrentSelected'] as bool?,
-      isPlayoutDevice: json['isPlayoutDevice'] as bool?,
-      routing: $enumDecodeNullable(_$AudioRouteEnumMap, json['routing']),
-    );
-
-Map<String, dynamic> _$AudioDeviceInfoToJson(AudioDeviceInfo instance) {
-  final val = <String, dynamic>{};
-
-  void writeNotNull(String key, dynamic value) {
-    if (value != null) {
-      val[key] = value;
-    }
-  }
-
-  writeNotNull('deviceName', instance.deviceName);
-  writeNotNull('deviceId', instance.deviceId);
-  writeNotNull('isCurrentSelected', instance.isCurrentSelected);
-  writeNotNull('isPlayoutDevice', instance.isPlayoutDevice);
-  writeNotNull('routing', _$AudioRouteEnumMap[instance.routing]);
-  return val;
-}
-
-const _$AudioRouteEnumMap = {
-  AudioRoute.routeDefault: -1,
-  AudioRoute.routeHeadset: 0,
-  AudioRoute.routeEarpiece: 1,
-  AudioRoute.routeHeadsetnomic: 2,
-  AudioRoute.routeSpeakerphone: 3,
-  AudioRoute.routeLoudspeaker: 4,
-  AudioRoute.routeHeadsetbluetooth: 5,
-  AudioRoute.routeUsb: 6,
-  AudioRoute.routeHdmi: 7,
-  AudioRoute.routeDisplayport: 8,
-  AudioRoute.routeAirplay: 9,
-  AudioRoute.routeVirtual: 10,
-  AudioRoute.routeContinuity: 11,
-};
-
 ContentInspectModule _$ContentInspectModuleFromJson(
         Map<String, dynamic> json) =>
     ContentInspectModule(
@@ -225,6 +183,7 @@ ExternalVideoFrame _$ExternalVideoFrameFromJson(Map<String, dynamic> json) =>
           ?.map((e) => (e as num).toDouble())
           .toList(),
       metadataSize: (json['metadata_size'] as num?)?.toInt(),
+      fillAlphaBuffer: json['fillAlphaBuffer'] as bool?,
       textureSliceIndex: (json['texture_slice_index'] as num?)?.toInt(),
     );
 
@@ -251,6 +210,7 @@ Map<String, dynamic> _$ExternalVideoFrameToJson(ExternalVideoFrame instance) {
   writeNotNull('textureId', instance.textureId);
   writeNotNull('matrix', instance.matrix);
   writeNotNull('metadata_size', instance.metadataSize);
+  writeNotNull('fillAlphaBuffer', instance.fillAlphaBuffer);
   writeNotNull('texture_slice_index', instance.textureSliceIndex);
   return val;
 }
@@ -275,6 +235,7 @@ const _$VideoPixelFormatEnumMap = {
   VideoPixelFormat.videoCvpixelBgra: 14,
   VideoPixelFormat.videoPixelI422: 16,
   VideoPixelFormat.videoTextureId3d11texture2d: 17,
+  VideoPixelFormat.videoPixelI010: 18,
 };
 
 const _$EglContextTypeEnumMap = {
@@ -337,6 +298,7 @@ AudioFrame _$AudioFrameFromJson(Map<String, dynamic> json) => AudioFrame(
       avsyncType: (json['avsync_type'] as num?)?.toInt(),
       presentationMs: (json['presentationMs'] as num?)?.toInt(),
       audioTrackNumber: (json['audioTrackNumber'] as num?)?.toInt(),
+      rtpTimestamp: (json['rtpTimestamp'] as num?)?.toInt(),
     );
 
 Map<String, dynamic> _$AudioFrameToJson(AudioFrame instance) {
@@ -358,6 +320,7 @@ Map<String, dynamic> _$AudioFrameToJson(AudioFrame instance) {
   writeNotNull('avsync_type', instance.avsyncType);
   writeNotNull('presentationMs', instance.presentationMs);
   writeNotNull('audioTrackNumber', instance.audioTrackNumber);
+  writeNotNull('rtpTimestamp', instance.rtpTimestamp);
   return val;
 }
 
@@ -523,7 +486,23 @@ const _$VideoSourceTypeEnumMap = {
   VideoSourceType.videoSourceCameraFourth: 12,
   VideoSourceType.videoSourceScreenThird: 13,
   VideoSourceType.videoSourceScreenFourth: 14,
+  VideoSourceType.videoSourceSpeechDriven: 15,
   VideoSourceType.videoSourceUnknown: 100,
+};
+
+const _$AudioRouteEnumMap = {
+  AudioRoute.routeDefault: -1,
+  AudioRoute.routeHeadset: 0,
+  AudioRoute.routeEarpiece: 1,
+  AudioRoute.routeHeadsetnomic: 2,
+  AudioRoute.routeSpeakerphone: 3,
+  AudioRoute.routeLoudspeaker: 4,
+  AudioRoute.routeBluetoothDeviceHfp: 5,
+  AudioRoute.routeUsb: 6,
+  AudioRoute.routeHdmi: 7,
+  AudioRoute.routeDisplayport: 8,
+  AudioRoute.routeAirplay: 9,
+  AudioRoute.routeBluetoothDeviceA2dp: 10,
 };
 
 const _$MediaSourceTypeEnumMap = {
@@ -540,6 +519,7 @@ const _$MediaSourceTypeEnumMap = {
   MediaSourceType.rtcImageGifSource: 10,
   MediaSourceType.remoteVideoSource: 11,
   MediaSourceType.transcodedVideoSource: 12,
+  MediaSourceType.speechDrivenVideoSource: 13,
   MediaSourceType.unknownMediaSource: 100,
 };
 
@@ -582,6 +562,7 @@ const _$VideoModulePositionEnumMap = {
   VideoModulePosition.positionPostCapturer: 1,
   VideoModulePosition.positionPreRenderer: 2,
   VideoModulePosition.positionPreEncoder: 4,
+  VideoModulePosition.positionPostCapturerOrigin: 8,
 };
 
 const _$AudioFramePositionEnumMap = {
@@ -609,10 +590,10 @@ const _$RecorderStateEnumMap = {
   RecorderState.recorderStateStop: 3,
 };
 
-const _$RecorderErrorCodeEnumMap = {
-  RecorderErrorCode.recorderErrorNone: 0,
-  RecorderErrorCode.recorderErrorWriteFailed: 1,
-  RecorderErrorCode.recorderErrorNoStream: 2,
-  RecorderErrorCode.recorderErrorOverMaxDuration: 3,
-  RecorderErrorCode.recorderErrorConfigChanged: 4,
+const _$RecorderReasonCodeEnumMap = {
+  RecorderReasonCode.recorderReasonNone: 0,
+  RecorderReasonCode.recorderReasonWriteFailed: 1,
+  RecorderReasonCode.recorderReasonNoStream: 2,
+  RecorderReasonCode.recorderReasonOverMaxDuration: 3,
+  RecorderReasonCode.recorderReasonConfigChanged: 4,
 };
