@@ -4294,6 +4294,50 @@ class RtcEngineImpl implements RtcEngine {
   }
 
   @override
+  Future<void> sendRdtMessage(
+      {required int uid,
+      required RdtStreamType type,
+      required Uint8List data,
+      required int length}) async {
+    final apiType =
+        '${isOverrideClassName ? className : 'RtcEngine'}_sendRdtMessage_ea5e5d7';
+    final param =
+        createParams({'uid': uid, 'type': type.value(), 'length': length});
+    final List<Uint8List> buffers = [];
+    buffers.add(data);
+    final callApiResult = await irisMethodChannel.invokeMethod(
+        IrisMethodCall(apiType, jsonEncode(param), buffers: buffers));
+    if (callApiResult.irisReturnCode < 0) {
+      throw AgoraRtcException(code: callApiResult.irisReturnCode);
+    }
+    final rm = callApiResult.data;
+    final result = rm['result'];
+    if (result < 0) {
+      throw AgoraRtcException(code: result);
+    }
+  }
+
+  @override
+  Future<void> sendMediaControlMessage(
+      {required int uid, required Uint8List data, required int length}) async {
+    final apiType =
+        '${isOverrideClassName ? className : 'RtcEngine'}_sendMediaControlMessage_77edd82';
+    final param = createParams({'uid': uid, 'length': length});
+    final List<Uint8List> buffers = [];
+    buffers.add(data);
+    final callApiResult = await irisMethodChannel.invokeMethod(
+        IrisMethodCall(apiType, jsonEncode(param), buffers: buffers));
+    if (callApiResult.irisReturnCode < 0) {
+      throw AgoraRtcException(code: callApiResult.irisReturnCode);
+    }
+    final rm = callApiResult.data;
+    final result = rm['result'];
+    if (result < 0) {
+      throw AgoraRtcException(code: result);
+    }
+  }
+
+  @override
   Future<void> addVideoWatermark(
       {required String watermarkUrl, required WatermarkOptions options}) async {
     final apiType =
@@ -5255,7 +5299,7 @@ class RtcEngineImpl implements RtcEngine {
   @override
   AudioDeviceManager getAudioDeviceManager() {
     // Implementation template
-// final apiType = '${isOverrideClassName ? className : 'RtcEngine'}_queryInterface_257d192';
+// final apiType = '${isOverrideClassName ? className : 'RtcEngine'}_getAudioDeviceManager';
 // final param = createParams({
 // });
 // final callApiResult = await irisMethodChannel.invokeMethod(IrisMethodCall(apiType, jsonEncode(param), buffers:null));
@@ -5271,7 +5315,7 @@ class RtcEngineImpl implements RtcEngine {
   @override
   VideoDeviceManager getVideoDeviceManager() {
     // Implementation template
-// final apiType = '${isOverrideClassName ? className : 'RtcEngine'}_queryInterface_257d192';
+// final apiType = '${isOverrideClassName ? className : 'RtcEngine'}_getVideoDeviceManager';
 // final param = createParams({
 // });
 // final callApiResult = await irisMethodChannel.invokeMethod(IrisMethodCall(apiType, jsonEncode(param), buffers:null));
@@ -5287,7 +5331,7 @@ class RtcEngineImpl implements RtcEngine {
   @override
   MusicContentCenter getMusicContentCenter() {
     // Implementation template
-// final apiType = '${isOverrideClassName ? className : 'RtcEngine'}_queryInterface_257d192';
+// final apiType = '${isOverrideClassName ? className : 'RtcEngine'}_getMusicContentCenter';
 // final param = createParams({
 // });
 // final callApiResult = await irisMethodChannel.invokeMethod(IrisMethodCall(apiType, jsonEncode(param), buffers:null));
@@ -5303,7 +5347,7 @@ class RtcEngineImpl implements RtcEngine {
   @override
   MediaEngine getMediaEngine() {
     // Implementation template
-// final apiType = '${isOverrideClassName ? className : 'RtcEngine'}_queryInterface_257d192';
+// final apiType = '${isOverrideClassName ? className : 'RtcEngine'}_getMediaEngine';
 // final param = createParams({
 // });
 // final callApiResult = await irisMethodChannel.invokeMethod(IrisMethodCall(apiType, jsonEncode(param), buffers:null));
@@ -5319,7 +5363,7 @@ class RtcEngineImpl implements RtcEngine {
   @override
   LocalSpatialAudioEngine getLocalSpatialAudioEngine() {
     // Implementation template
-// final apiType = '${isOverrideClassName ? className : 'RtcEngine'}_queryInterface_257d192';
+// final apiType = '${isOverrideClassName ? className : 'RtcEngine'}_getLocalSpatialAudioEngine';
 // final param = createParams({
 // });
 // final callApiResult = await irisMethodChannel.invokeMethod(IrisMethodCall(apiType, jsonEncode(param), buffers:null));
@@ -5335,7 +5379,7 @@ class RtcEngineImpl implements RtcEngine {
   @override
   H265Transcoder getH265Transcoder() {
     // Implementation template
-// final apiType = '${isOverrideClassName ? className : 'RtcEngine'}_queryInterface_257d192';
+// final apiType = '${isOverrideClassName ? className : 'RtcEngine'}_getH265Transcoder';
 // final param = createParams({
 // });
 // final callApiResult = await irisMethodChannel.invokeMethod(IrisMethodCall(apiType, jsonEncode(param), buffers:null));

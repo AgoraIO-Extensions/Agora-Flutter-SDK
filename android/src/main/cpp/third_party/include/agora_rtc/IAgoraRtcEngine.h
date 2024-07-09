@@ -1256,6 +1256,8 @@ struct ChannelMediaOptions {
    */
   Optional<bool> isAudioFilterable;
 
+  Optional<bool> autoConnectRdt;
+
   ChannelMediaOptions() {}
   ~ChannelMediaOptions() {}
 
@@ -1301,6 +1303,7 @@ struct ChannelMediaOptions {
       SET_FROM(customVideoTrackId);
       SET_FROM(isAudioFilterable);
       SET_FROM(isInteractiveAudience);
+      SET_FROM(autoConnectRdt);
 #undef SET_FROM
   }
 
@@ -1349,6 +1352,7 @@ struct ChannelMediaOptions {
       ADD_COMPARE(customVideoTrackId);
       ADD_COMPARE(isAudioFilterable);
       ADD_COMPARE(isInteractiveAudience);
+      ADD_COMPARE(autoConnectRdt);
       END_COMPARE();
 
 #undef BEGIN_COMPARE
@@ -1400,6 +1404,7 @@ struct ChannelMediaOptions {
         REPLACE_BY(customVideoTrackId);
         REPLACE_BY(isAudioFilterable);
         REPLACE_BY(isInteractiveAudience);
+        REPLACE_BY(autoConnectRdt);
 #undef REPLACE_BY
     }
     return *this;
@@ -2234,6 +2239,45 @@ class IRtcEngineEventHandler {
     (void)code;
     (void)missed;
     (void)cached;
+  }
+
+  /** Occurs when the local user receives the rdt data from the remote user.
+   *
+   * The SDK triggers this callback when the user receives the data stream that another user sends
+   * by calling the \ref agora::rtc::IRtcEngine::sendRdtMessage "sendRdtMessage" method.
+   *
+   * @param userId ID of the user who sends the data.
+   * @param type The RDT stream type
+   * @param data The sending data.
+   * @param length The length (byte) of the data.
+   */
+  virtual void onRdtMessage(uid_t userId, RdtStreamType type, const char *data, size_t length) {
+    (void)userId;
+    (void)type;
+    (void)data;
+    (void)length;
+  };
+
+  /** Occurs when the RDT tunnel state changed
+   *
+   * @param userId ID of the user who sends the data.
+   * @param state The RDT tunnel state
+   */
+  virtual void onRdtStateChanged(uid_t userId, RdtState state) {
+    (void)userId;
+    (void)state;
+  }
+
+  /** Occurs when the Media Control Message sent by others use sendMediaControlMessage
+   *
+   * @param userId ID of the user who sends the data.
+   * @param data The sending data.
+   * @param length The length (byte) of the data.
+   */
+  virtual void onMediaControlMessage(uid_t userId, const char* data, size_t length) {
+    (void)userId;
+    (void)data;
+    (void)length;
   }
 
   /**
@@ -7577,6 +7621,27 @@ class IRtcEngine : public agora::base::IEngineBase {
    * - < 0: Failure.
    */
   virtual int sendStreamMessage(int streamId, const char* data, size_t length) = 0;
+
+  /** Send Reliable message to remote uid in channel.
+   * @param uid remote user id.
+   * @param type Reliable Data Transmission tunnel message type.
+   * @param data The pointer to the sent data.
+   * @param length The length of the sent data.
+   * @return
+   * - 0: Success.
+   * - < 0: Failure.
+   */
+  virtual int sendRdtMessage(uid_t uid, RdtStreamType type, const char *data, size_t length) = 0;
+
+  /** Send media control message
+   * @param uid Remote user id. In particular, if uid=0, the user is broadcast to the channel
+   * @param data The pointer to the sent data.
+   * @param length The length of the sent data, max 1024.
+   * @return
+   * - 0: Success.
+   * - < 0: Failure.
+   */
+  virtual int sendMediaControlMessage(uid_t uid, const char* data, size_t length) = 0;
 
   /** **DEPRECATED** Adds a watermark image to the local video or CDN live stream.
 

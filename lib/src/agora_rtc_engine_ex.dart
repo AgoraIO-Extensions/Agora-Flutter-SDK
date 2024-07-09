@@ -56,9 +56,9 @@ abstract class RtcEngineEx implements RtcEngine {
 
   /// Sets channel options and leaves the channel.
   ///
-  /// This method lets the user leave the channel, for example, by hanging up or exiting the call. After calling joinChannelEx to join the channel, this method must be called to end the call before starting the next call. This method can be called whether or not a call is currently in progress. This method releases all resources related to the session. This method call is asynchronous. When this method returns, it does not necessarily mean that the user has left the channel. After you leave the channel, the SDK triggers the onLeaveChannel callback. After actually leaving the channel, the local user triggers the onLeaveChannel callback; after the user in the communication scenario and the host in the live streaming scenario leave the channel, the remote user triggers the onUserOffline callback.
-  ///  If you call release immediately after calling this method, the SDK does not trigger the onLeaveChannel callback.
-  ///  If you want to leave the channels that you joined by calling joinChannel and joinChannelEx, call the leaveChannel method.
+  /// After calling this method, the SDK terminates the audio and video interaction, leaves the current channel, and releases all resources related to the session. After calling joinChannelEx to join a channel, you must call this method to end the call, otherwise, the next call cannot be started.
+  ///  This method call is asynchronous. When this method returns, it does not necessarily mean that the user has left the channel.
+  ///  If you call leaveChannel, you will leave all the channels you have joined by calling joinChannel or joinChannelEx.
   ///
   /// * [connection] The connection information. See RtcConnection.
   /// * [options] The options for leaving the channel. See LeaveChannelOptions. This parameter only supports the stopMicrophoneRecording member in the LeaveChannelOptions settings; setting other members does not take effect.
@@ -192,9 +192,9 @@ abstract class RtcEngineEx implements RtcEngine {
 
   /// Stops or resumes subscribing to the video streams of all remote users.
   ///
-  /// After successfully calling this method, the local user stops or resumes subscribing to the audio streams of all remote users, including all subsequent users.
+  /// After successfully calling this method, the local user stops or resumes subscribing to the video streams of all remote users, including all subsequent users.
   ///
-  /// * [mute] Whether to stop subscribing to the video streams of all remote users. true : Stop subscribing to the video streams of all remote users. false : (Default) Subscribe to the audio streams of all remote users by default.
+  /// * [mute] Whether to stop subscribing to the video streams of all remote users. true : Stop subscribing to the video streams of all remote users. false : (Default) Subscribe to the video streams of all remote users by default.
   /// * [connection] The connection information. See RtcConnection.
   ///
   /// Returns
@@ -390,8 +390,6 @@ abstract class RtcEngineEx implements RtcEngine {
 
   /// Gets the current connection state of the SDK.
   ///
-  /// You can call this method either before or after joining a channel.
-  ///
   /// * [connection] The connection information. See RtcConnection.
   ///
   /// Returns
@@ -414,8 +412,6 @@ abstract class RtcEngineEx implements RtcEngine {
       required EncryptionConfig config});
 
   /// Creates a data stream.
-  ///
-  /// Creates a data stream. Each user can create up to five data streams in a single channel.
   ///
   /// * [config] The configurations for the data stream. See DataStreamConfig.
   /// * [connection] The connection information. See RtcConnection.
@@ -444,6 +440,21 @@ abstract class RtcEngineEx implements RtcEngine {
   /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown. You need to catch the exception and handle it accordingly.
   Future<void> sendStreamMessageEx(
       {required int streamId,
+      required Uint8List data,
+      required int length,
+      required RtcConnection connection});
+
+  /// @nodoc
+  Future<void> sendRdtMessageEx(
+      {required int uid,
+      required RdtStreamType type,
+      required Uint8List data,
+      required int length,
+      required RtcConnection connection});
+
+  /// @nodoc
+  Future<void> sendMediaControlMessageEx(
+      {required int uid,
       required Uint8List data,
       required int length,
       required RtcConnection connection});

@@ -11,7 +11,7 @@ part of 'call_api_impl_params_json.dart';
 MediaPlayerGetDurationJson _$MediaPlayerGetDurationJsonFromJson(
         Map<String, dynamic> json) =>
     MediaPlayerGetDurationJson(
-      (json['duration'] as num).toInt(),
+      json['duration'] as int,
     );
 
 Map<String, dynamic> _$MediaPlayerGetDurationJsonToJson(
@@ -23,7 +23,7 @@ Map<String, dynamic> _$MediaPlayerGetDurationJsonToJson(
 MediaPlayerGetPlayPositionJson _$MediaPlayerGetPlayPositionJsonFromJson(
         Map<String, dynamic> json) =>
     MediaPlayerGetPlayPositionJson(
-      (json['pos'] as num).toInt(),
+      json['pos'] as int,
     );
 
 Map<String, dynamic> _$MediaPlayerGetPlayPositionJsonToJson(
@@ -35,7 +35,7 @@ Map<String, dynamic> _$MediaPlayerGetPlayPositionJsonToJson(
 MediaPlayerGetStreamCountJson _$MediaPlayerGetStreamCountJsonFromJson(
         Map<String, dynamic> json) =>
     MediaPlayerGetStreamCountJson(
-      (json['count'] as num).toInt(),
+      json['count'] as int,
     );
 
 Map<String, dynamic> _$MediaPlayerGetStreamCountJsonToJson(
@@ -71,7 +71,7 @@ Map<String, dynamic> _$MediaPlayerGetMuteJsonToJson(
 MediaPlayerGetPlayoutVolumeJson _$MediaPlayerGetPlayoutVolumeJsonFromJson(
         Map<String, dynamic> json) =>
     MediaPlayerGetPlayoutVolumeJson(
-      (json['volume'] as num).toInt(),
+      json['volume'] as int,
     );
 
 Map<String, dynamic> _$MediaPlayerGetPlayoutVolumeJsonToJson(
@@ -84,7 +84,7 @@ MediaPlayerGetPublishSignalVolumeJson
     _$MediaPlayerGetPublishSignalVolumeJsonFromJson(
             Map<String, dynamic> json) =>
         MediaPlayerGetPublishSignalVolumeJson(
-          (json['volume'] as num).toInt(),
+          json['volume'] as int,
         );
 
 Map<String, dynamic> _$MediaPlayerGetPublishSignalVolumeJsonToJson(
@@ -199,7 +199,7 @@ MusicContentCenterGetInternalSongCodeJson
     _$MusicContentCenterGetInternalSongCodeJsonFromJson(
             Map<String, dynamic> json) =>
         MusicContentCenterGetInternalSongCodeJson(
-          (json['internalSongCode'] as num).toInt(),
+          json['internalSongCode'] as int,
         );
 
 Map<String, dynamic> _$MusicContentCenterGetInternalSongCodeJsonToJson(
@@ -313,7 +313,7 @@ Map<String, dynamic> _$RtcEngineGetCallIdJsonToJson(
 RtcEngineCreateDataStreamJson _$RtcEngineCreateDataStreamJsonFromJson(
         Map<String, dynamic> json) =>
     RtcEngineCreateDataStreamJson(
-      (json['streamId'] as num).toInt(),
+      json['streamId'] as int,
     );
 
 Map<String, dynamic> _$RtcEngineCreateDataStreamJsonToJson(
@@ -350,7 +350,7 @@ Map<String, dynamic> _$RtcEngineGetUserInfoByUidJsonToJson(
 RtcEngineExCreateDataStreamExJson _$RtcEngineExCreateDataStreamExJsonFromJson(
         Map<String, dynamic> json) =>
     RtcEngineExCreateDataStreamExJson(
-      (json['streamId'] as num).toInt(),
+      json['streamId'] as int,
     );
 
 Map<String, dynamic> _$RtcEngineExCreateDataStreamExJsonToJson(
@@ -413,7 +413,7 @@ AudioDeviceManagerGetPlaybackDeviceVolumeJson
     _$AudioDeviceManagerGetPlaybackDeviceVolumeJsonFromJson(
             Map<String, dynamic> json) =>
         AudioDeviceManagerGetPlaybackDeviceVolumeJson(
-          (json['volume'] as num).toInt(),
+          json['volume'] as int,
         );
 
 Map<String, dynamic> _$AudioDeviceManagerGetPlaybackDeviceVolumeJsonToJson(
@@ -439,7 +439,7 @@ AudioDeviceManagerGetRecordingDeviceVolumeJson
     _$AudioDeviceManagerGetRecordingDeviceVolumeJsonFromJson(
             Map<String, dynamic> json) =>
         AudioDeviceManagerGetRecordingDeviceVolumeJson(
-          (json['volume'] as num).toInt(),
+          json['volume'] as int,
         );
 
 Map<String, dynamic> _$AudioDeviceManagerGetRecordingDeviceVolumeJsonToJson(
