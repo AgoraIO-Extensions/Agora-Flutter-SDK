@@ -2733,6 +2733,14 @@ class IRtcEngineEventHandler {
     (void)permissionType;
   }
 
+#if defined(__ANDROID__)
+  /**
+    * Reports the permission granted.
+    * @param permission {@link PERMISSION}
+    */
+  virtual void onPermissionGranted(agora::rtc::PERMISSION_TYPE permissionType) {}
+#endif
+
   /** Occurs when the local user registers a user account.
    *
    * After the local user successfully calls `registerLocalUserAccount` to register the user account
@@ -7111,6 +7119,7 @@ class IRtcEngine : public agora::base::IEngineBase {
                                              const Rectangle& regionRect,
                                              const ScreenCaptureParameters& captureParams) __deprecated = 0;
 
+
 #endif  // _WIN32
 
 #if defined(__ANDROID__)
@@ -7121,8 +7130,22 @@ class IRtcEngine : public agora::base::IEngineBase {
    * - < 0: Failure..
    */
   virtual int getAudioDeviceInfo(DeviceInfo& deviceInfo) = 0;
-
 #endif  // __ANDROID__
+
+ /**
+  * Sets the rotation of remote render.
+  * 
+  * @note
+  * For example, the sending end is a screen sharing scene. 
+  * When the screen of the sending end changes horizontally or vertically, 
+  * the rendered screen of the receiving end also wants to change synchronously with that of the peer end. 
+  * In this case, you can set the Angle of the receiving end.
+  * 
+  * @return
+  * - 0: Success.
+  * - < 0: Failure.
+  */
+ virtual int setRemoteRenderRotation(uid_t uid, VIDEO_ORIENTATION rotation) = 0;
 
 #if defined(_WIN32) || (defined(__APPLE__) && TARGET_OS_MAC && !TARGET_OS_IPHONE)
 

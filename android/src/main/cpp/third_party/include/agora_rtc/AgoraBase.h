@@ -2853,7 +2853,7 @@ enum LOCAL_VIDEO_STREAM_ERROR {
   /** 27:(Windows only) The window is recovered from miniminzed */
   LOCAL_VIDEO_STREAM_ERROR_SCREEN_CAPTURE_WINDOW_RECOVER_FROM_MINIMIZED = 27,
    /** 30: The shared display has been disconnected */
-  LOCAL_VIDEO_STREAM_REASON_SCREEN_CAPTURE_DISPLAY_DISCNNECTED = 30,
+  LOCAL_VIDEO_STREAM_REASON_SCREEN_CAPTURE_DISPLAY_DISCONNECTED = 30,
 };
 
 /**
@@ -4270,21 +4270,26 @@ struct VideoCanvas {
   * false: (Default) Do not apply alpha mask to video frame.
   */
   bool enableAlphaMask;
-  
+
+  /**
+   * The clockwise rotation information. You can set it as 0, 90, 180 or 270.
+   */
+  VIDEO_ORIENTATION rotation;
+
   VideoCanvas()
     : view(NULL), uid(0), backgroundColor(0x00000000), renderMode(media::base::RENDER_MODE_HIDDEN), mirrorMode(VIDEO_MIRROR_MODE_AUTO),
       setupMode(VIDEO_VIEW_SETUP_REPLACE), sourceType(VIDEO_SOURCE_CAMERA_PRIMARY), mediaPlayerId(-ERR_NOT_READY),
-      cropArea(0, 0, 0, 0), enableAlphaMask(false) {}
+      cropArea(0, 0, 0, 0), enableAlphaMask(false), rotation(VIDEO_ORIENTATION_0) {}
 
   VideoCanvas(view_t v, media::base::RENDER_MODE_TYPE m, VIDEO_MIRROR_MODE_TYPE mt, uid_t u)
     : view(v), uid(u), backgroundColor(0x00000000), renderMode(m), mirrorMode(mt), setupMode(VIDEO_VIEW_SETUP_REPLACE),
       sourceType(VIDEO_SOURCE_CAMERA_PRIMARY), mediaPlayerId(-ERR_NOT_READY),
-      cropArea(0, 0, 0, 0), enableAlphaMask(false) {}
+      cropArea(0, 0, 0, 0), enableAlphaMask(false), rotation(VIDEO_ORIENTATION_0) {}
 
   VideoCanvas(view_t v, media::base::RENDER_MODE_TYPE m, VIDEO_MIRROR_MODE_TYPE mt, user_id_t)
     : view(v), uid(0), backgroundColor(0x00000000), renderMode(m), mirrorMode(mt), setupMode(VIDEO_VIEW_SETUP_REPLACE),
       sourceType(VIDEO_SOURCE_CAMERA_PRIMARY), mediaPlayerId(-ERR_NOT_READY),
-      cropArea(0, 0, 0, 0), enableAlphaMask(false) {}
+      cropArea(0, 0, 0, 0), enableAlphaMask(false), rotation(VIDEO_ORIENTATION_0) {}
 };
 
 /** Image enhancement options.
