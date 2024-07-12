@@ -58,7 +58,7 @@ dependencies {
     implementation fileTree(dir: "libs", include: ["*.jar"])
   } else {
     api 'io.agora.rtc:iris-rtc:4.2.6.15-lite.1'
-    api 'io.agora.rtc:agora-special-full:4.2.6.15.Lite'
+    api 'io.agora.rtc:agora-special-full:4.2.6.15.MINI.BASIC'
   }
 }
 
