@@ -910,6 +910,30 @@ enum VIDEO_MODULE_POSITION {
 
 }  // namespace base
 
+/** Definition of SnapshotConfig.
+ */
+struct SnapshotConfig {
+  /** 
+   * The local path (including filename extensions) of the snapshot. For example:
+   * - Windows: `C:\Users\<user_name>\AppData\Local\Agora\<process_name>\example.jpg`
+   * - iOS: `/App Sandbox/Library/Caches/example.jpg`
+   * - macOS: `～/Library/Logs/example.jpg`
+   * - Android: `/storage/emulated/0/Android/data/<package name>/files/example.jpg`
+   */
+  const char* filePath;
+
+  /** 
+   * The position of the video observation. See VIDEO_MODULE_POSITION.
+   * 
+   * Allowed values vary depending on the `uid` parameter passed in `takeSnapshot` or `takeSnapshotEx`:
+   * - uid = 0: Position 2, 4 and 8 are allowed.
+   * - uid != 0: Only position 2 is allowed.
+   * 
+   */
+  media::base::VIDEO_MODULE_POSITION position;
+  SnapshotConfig() :filePath(NULL), position(media::base::POSITION_PRE_ENCODER) {}
+};
+
 /**
  * The audio frame observer.
  */
