@@ -9,7 +9,7 @@ import {
   TypeAlias,
 } from "@agoraio-extensions/cxx-parser";
 import { ParseResult, TerraContext } from "@agoraio-extensions/terra-core";
-import { setUserdata } from "../renderers/utils";
+import { isUIntPtr, setUserdata } from "../renderers/utils";
 
 import path from "path";
 import { getOutVariable } from "@agoraio-extensions/terra_shared_configs";
@@ -130,7 +130,7 @@ const _cppTypedefToDartTypeMappping: Map<string, string> = new Map([
   ["user_id_t", "String"],
 ]);
 
-const _cppStdTypeToDartTypeMappping: Map<string, string> = new Map([
+const _cppTypeToDartTypeMappping: Map<string, string> = new Map([
   ["char", "String"],
   ["char *", "String"],
   ["const char *", "String"],
@@ -150,7 +150,25 @@ const _cppStdTypeToDartTypeMappping: Map<string, string> = new Map([
   ["uint16_t", "int"],
   ["long long", "int"],
   ["intptr_t", "int"],
+  ["void(\\s*)\\*", "int"],
 ]);
+
+function _mapping(
+  mappping: Map<string, string>,
+  dartType: string
+): string | undefined {
+  if (mappping.has(dartType)) {
+    return mappping.get(dartType)!;
+  }
+
+  for (let [key, value] of mappping) {
+    if (new RegExp(key).test(dartType)) {
+      return value;
+    }
+  }
+
+  return undefined;
+}
 
 function _dartTypeName(parseResult: ParseResult, type: SimpleType): string {
   let typeNode = parseResult.resolveNodeByType(type);
@@ -178,14 +196,27 @@ function _dartTypeName(parseResult: ParseResult, type: SimpleType): string {
   ) {
     dartType = "Uint8List";
   } else {
-    if (_cppStdTypeToDartTypeMappping.has(dartType)) {
-      dartType = _cppStdTypeToDartTypeMappping.get(dartType)!;
+    let cppTypeToDartTypeMappping = _mapping(
+      _cppTypeToDartTypeMappping,
+      dartType
+    );
+    if (cppTypeToDartTypeMappping) {
+      dartType = cppTypeToDartTypeMappping;
     }
-    if (_cppTypedefToDartTypeMappping.has(dartType)) {
-      dartType = _cppTypedefToDartTypeMappping.get(dartType)!;
+
+    let cppTypedefToDartTypeMappping = _mapping(
+      _cppTypedefToDartTypeMappping,
+      dartType
+    );
+    if (cppTypedefToDartTypeMappping) {
+      dartType = cppTypedefToDartTypeMappping;
     }
     if (dartType.includes("_")) {
       dartType = nameWithUnderscoresToCamelCase(dartType, true);
+    }
+
+    if (isUIntPtr(parseResult, type)) {
+      dartType = "int";
     }
 
     // String type
