@@ -1417,6 +1417,23 @@ public:
      */
     virtual int setRemoteRenderModeEx(uid_t uid, media::base::RENDER_MODE_TYPE renderMode,
                                       VIDEO_MIRROR_MODE_TYPE mirrorMode, const RtcConnection& connection) = 0;
+
+
+    /**
+     * Sets the rotation of remote render.
+     * 
+     * @note
+     * For example, the sending end is a screen sharing scene. 
+     * When the screen of the sending end changes horizontally or vertically, 
+     * the rendered screen of the receiving end also wants to change synchronously with that of the peer end. 
+     * In this case, you can set the Angle of the receiving end.
+     * 
+     * @return
+     * - 0: Success.
+     * - < 0: Failure.
+     */
+    virtual int setRemoteRenderRotationEx(uid_t uid, VIDEO_ORIENTATION rotation, const RtcConnection& connection) = 0;
+
     /** Enables loopback recording.
      *
      * If you enable loopback recording, the output of the default sound card is mixed into

@@ -285,6 +285,8 @@
   "RtcEngine_startScreenCaptureByScreenRect"
 #define FUNC_RTCENGINE_STARTSCREENCAPTURE "RtcEngine_startScreenCapture"
 #define FUNC_RTCENGINE_GETAUDIODEVICEINFO "RtcEngine_getAudioDeviceInfo"
+#define FUNC_RTCENGINE_SETREMOTERENDERROTATION                                 \
+  "RtcEngine_setRemoteRenderRotation"
 #define FUNC_RTCENGINE_STARTSCREENCAPTUREBYWINDOWID                            \
   "RtcEngine_startScreenCaptureByWindowId"
 #define FUNC_RTCENGINE_SETSCREENCAPTURECONTENTHINT                             \
@@ -847,6 +849,8 @@
   "RtcEngineEx_setRemoteUserSpatialAudioParamsEx"
 #define FUNC_RTCENGINEEX_SETREMOTERENDERMODEEX                                 \
   "RtcEngineEx_setRemoteRenderModeEx"
+#define FUNC_RTCENGINEEX_SETREMOTERENDERROTATIONEX                             \
+  "RtcEngineEx_setRemoteRenderRotationEx"
 #define FUNC_RTCENGINEEX_ENABLELOOPBACKRECORDINGEX                             \
   "RtcEngineEx_enableLoopbackRecordingEx"
 #define FUNC_RTCENGINEEX_GETCONNECTIONSTATEEX "RtcEngineEx_getConnectionStateEx"
