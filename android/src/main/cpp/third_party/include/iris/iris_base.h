@@ -59,6 +59,8 @@ typedef enum IrisError {
 
 IRIS_API void enableUseJsonArray(bool enable);
 
+bool getEnableUseJsonArray();
+
 void saveAppType(IrisAppType type);
 
 IrisAppType getAppType();

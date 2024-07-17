@@ -2652,7 +2652,7 @@ void generatedTestCases(ValueGetter<IrisTester> irisTester) {
 
       final onLocalVideoStatsCompleter = Completer<bool>();
       final theRtcEngineEventHandler = RtcEngineEventHandler(
-        onLocalVideoStats: (VideoSourceType source, LocalVideoStats stats) {
+        onLocalVideoStats: (RtcConnection connection, LocalVideoStats stats) {
           onLocalVideoStatsCompleter.complete(true);
         },
       );
@@ -2665,7 +2665,12 @@ void generatedTestCases(ValueGetter<IrisTester> irisTester) {
       await Future.delayed(const Duration(milliseconds: 500));
 
       {
-        VideoSourceType source = VideoSourceType.videoSourceCameraPrimary;
+        String connectionChannelId = "hello";
+        int connectionLocalUid = 5;
+        RtcConnection connection = RtcConnection(
+          channelId: connectionChannelId,
+          localUid: connectionLocalUid,
+        );
         QualityAdaptIndication statsQualityAdaptIndication =
             QualityAdaptIndication.adaptNone;
         VideoCodecType statsCodecType = VideoCodecType.videoCodecNone;
@@ -2691,6 +2696,7 @@ void generatedTestCases(ValueGetter<IrisTester> irisTester) {
         int statsTxPacketLossRate = 5;
         bool statsDualStreamEnabled = true;
         int statsHwEncoderAccelerating = 5;
+        List<VideoDimensions> statsSimulcastDimensions = [];
         LocalVideoStats stats = LocalVideoStats(
           uid: statsUid,
           sentBitrate: statsSentBitrate,
@@ -2715,10 +2721,11 @@ void generatedTestCases(ValueGetter<IrisTester> irisTester) {
           captureBrightnessLevel: statsCaptureBrightnessLevel,
           dualStreamEnabled: statsDualStreamEnabled,
           hwEncoderAccelerating: statsHwEncoderAccelerating,
+          simulcastDimensions: statsSimulcastDimensions,
         );
 
         final eventJson = {
-          'source': source.value(),
+          'connection': connection.toJson(),
           'stats': stats.toJson(),
         };
 
@@ -2791,6 +2798,7 @@ void generatedTestCases(ValueGetter<IrisTester> irisTester) {
         int statsWidth = 5;
         int statsHeight = 5;
         int statsReceivedBitrate = 5;
+        int statsDecoderInputFrameRate = 5;
         int statsDecoderOutputFrameRate = 5;
         int statsRendererOutputFrameRate = 5;
         int statsFrameLossRate = 5;
@@ -2809,6 +2817,7 @@ void generatedTestCases(ValueGetter<IrisTester> irisTester) {
           width: statsWidth,
           height: statsHeight,
           receivedBitrate: statsReceivedBitrate,
+          decoderInputFrameRate: statsDecoderInputFrameRate,
           decoderOutputFrameRate: statsDecoderOutputFrameRate,
           rendererOutputFrameRate: statsRendererOutputFrameRate,
           frameLossRate: statsFrameLossRate,
@@ -6523,7 +6532,7 @@ void generatedTestCases(ValueGetter<IrisTester> irisTester) {
   );
 
   testWidgets(
-    'RtcEngineEventHandler.onExtensionEvent',
+    'RtcEngineEventHandler.onExtensionEventWithContext',
     (WidgetTester tester) async {
       RtcEngine rtcEngine = createAgoraRtcEngine();
       await rtcEngine.initialize(RtcEngineContext(
@@ -6532,11 +6541,11 @@ void generatedTestCases(ValueGetter<IrisTester> irisTester) {
       ));
       await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
-      final onExtensionEventCompleter = Completer<bool>();
+      final onExtensionEventWithContextCompleter = Completer<bool>();
       final theRtcEngineEventHandler = RtcEngineEventHandler(
-        onExtensionEvent:
-            (String provider, String extension, String key, String value) {
-          onExtensionEventCompleter.complete(true);
+        onExtensionEventWithContext:
+            (ExtensionContext context, String key, String value) {
+          onExtensionEventWithContextCompleter.complete(true);
         },
       );
 
@@ -6548,34 +6557,42 @@ void generatedTestCases(ValueGetter<IrisTester> irisTester) {
       await Future.delayed(const Duration(milliseconds: 500));
 
       {
-        String provider = "hello";
-        String extension = "hello";
+        bool contextIsValid = true;
+        int contextUid = 5;
+        String contextProviderName = "hello";
+        String contextExtensionName = "hello";
+        ExtensionContext context = ExtensionContext(
+          isValid: contextIsValid,
+          uid: contextUid,
+          providerName: contextProviderName,
+          extensionName: contextExtensionName,
+        );
         String key = "hello";
         String value = "hello";
 
         final eventJson = {
-          'provider': provider,
-          'extension': extension,
+          'context': context.toJson(),
           'key': key,
           'value': value,
         };
 
-        final eventIds =
-            eventIdsMapping['RtcEngineEventHandler_onExtensionEvent'] ?? [];
+        final eventIds = eventIdsMapping[
+                'RtcEngineEventHandler_onExtensionEventWithContext'] ??
+            [];
         for (final event in eventIds) {
           final ret = irisTester().fireEvent(event, params: eventJson);
           // Delay 200 milliseconds to ensure the callback is called.
           await Future.delayed(const Duration(milliseconds: 200));
           // TODO(littlegnal): Most of callbacks on web are not implemented, we're temporarily skip these callbacks at this time.
           if (kIsWeb && ret) {
-            if (!onExtensionEventCompleter.isCompleted) {
-              onExtensionEventCompleter.complete(true);
+            if (!onExtensionEventWithContextCompleter.isCompleted) {
+              onExtensionEventWithContextCompleter.complete(true);
             }
           }
         }
       }
 
-      final eventCalled = await onExtensionEventCompleter.future;
+      final eventCalled = await onExtensionEventWithContextCompleter.future;
       expect(eventCalled, isTrue);
 
       {
@@ -6592,7 +6609,7 @@ void generatedTestCases(ValueGetter<IrisTester> irisTester) {
   );
 
   testWidgets(
-    'RtcEngineEventHandler.onExtensionStarted',
+    'RtcEngineEventHandler.onExtensionStartedWithContext',
     (WidgetTester tester) async {
       RtcEngine rtcEngine = createAgoraRtcEngine();
       await rtcEngine.initialize(RtcEngineContext(
@@ -6601,10 +6618,10 @@ void generatedTestCases(ValueGetter<IrisTester> irisTester) {
       ));
       await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
-      final onExtensionStartedCompleter = Completer<bool>();
+      final onExtensionStartedWithContextCompleter = Completer<bool>();
       final theRtcEngineEventHandler = RtcEngineEventHandler(
-        onExtensionStarted: (String provider, String extension) {
-          onExtensionStartedCompleter.complete(true);
+        onExtensionStartedWithContext: (ExtensionContext context) {
+          onExtensionStartedWithContextCompleter.complete(true);
         },
       );
 
@@ -6616,30 +6633,38 @@ void generatedTestCases(ValueGetter<IrisTester> irisTester) {
       await Future.delayed(const Duration(milliseconds: 500));
 
       {
-        String provider = "hello";
-        String extension = "hello";
+        bool contextIsValid = true;
+        int contextUid = 5;
+        String contextProviderName = "hello";
+        String contextExtensionName = "hello";
+        ExtensionContext context = ExtensionContext(
+          isValid: contextIsValid,
+          uid: contextUid,
+          providerName: contextProviderName,
+          extensionName: contextExtensionName,
+        );
 
         final eventJson = {
-          'provider': provider,
-          'extension': extension,
+          'context': context.toJson(),
         };
 
-        final eventIds =
-            eventIdsMapping['RtcEngineEventHandler_onExtensionStarted'] ?? [];
+        final eventIds = eventIdsMapping[
+                'RtcEngineEventHandler_onExtensionStartedWithContext'] ??
+            [];
         for (final event in eventIds) {
           final ret = irisTester().fireEvent(event, params: eventJson);
           // Delay 200 milliseconds to ensure the callback is called.
           await Future.delayed(const Duration(milliseconds: 200));
           // TODO(littlegnal): Most of callbacks on web are not implemented, we're temporarily skip these callbacks at this time.
           if (kIsWeb && ret) {
-            if (!onExtensionStartedCompleter.isCompleted) {
-              onExtensionStartedCompleter.complete(true);
+            if (!onExtensionStartedWithContextCompleter.isCompleted) {
+              onExtensionStartedWithContextCompleter.complete(true);
             }
           }
         }
       }
 
-      final eventCalled = await onExtensionStartedCompleter.future;
+      final eventCalled = await onExtensionStartedWithContextCompleter.future;
       expect(eventCalled, isTrue);
 
       {
@@ -6656,7 +6681,7 @@ void generatedTestCases(ValueGetter<IrisTester> irisTester) {
   );
 
   testWidgets(
-    'RtcEngineEventHandler.onExtensionStopped',
+    'RtcEngineEventHandler.onExtensionStoppedWithContext',
     (WidgetTester tester) async {
       RtcEngine rtcEngine = createAgoraRtcEngine();
       await rtcEngine.initialize(RtcEngineContext(
@@ -6665,10 +6690,10 @@ void generatedTestCases(ValueGetter<IrisTester> irisTester) {
       ));
       await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
-      final onExtensionStoppedCompleter = Completer<bool>();
+      final onExtensionStoppedWithContextCompleter = Completer<bool>();
       final theRtcEngineEventHandler = RtcEngineEventHandler(
-        onExtensionStopped: (String provider, String extension) {
-          onExtensionStoppedCompleter.complete(true);
+        onExtensionStoppedWithContext: (ExtensionContext context) {
+          onExtensionStoppedWithContextCompleter.complete(true);
         },
       );
 
@@ -6680,30 +6705,38 @@ void generatedTestCases(ValueGetter<IrisTester> irisTester) {
       await Future.delayed(const Duration(milliseconds: 500));
 
       {
-        String provider = "hello";
-        String extension = "hello";
+        bool contextIsValid = true;
+        int contextUid = 5;
+        String contextProviderName = "hello";
+        String contextExtensionName = "hello";
+        ExtensionContext context = ExtensionContext(
+          isValid: contextIsValid,
+          uid: contextUid,
+          providerName: contextProviderName,
+          extensionName: contextExtensionName,
+        );
 
         final eventJson = {
-          'provider': provider,
-          'extension': extension,
+          'context': context.toJson(),
         };
 
-        final eventIds =
-            eventIdsMapping['RtcEngineEventHandler_onExtensionStopped'] ?? [];
+        final eventIds = eventIdsMapping[
+                'RtcEngineEventHandler_onExtensionStoppedWithContext'] ??
+            [];
         for (final event in eventIds) {
           final ret = irisTester().fireEvent(event, params: eventJson);
           // Delay 200 milliseconds to ensure the callback is called.
           await Future.delayed(const Duration(milliseconds: 200));
           // TODO(littlegnal): Most of callbacks on web are not implemented, we're temporarily skip these callbacks at this time.
           if (kIsWeb && ret) {
-            if (!onExtensionStoppedCompleter.isCompleted) {
-              onExtensionStoppedCompleter.complete(true);
+            if (!onExtensionStoppedWithContextCompleter.isCompleted) {
+              onExtensionStoppedWithContextCompleter.complete(true);
             }
           }
         }
       }
 
-      final eventCalled = await onExtensionStoppedCompleter.future;
+      final eventCalled = await onExtensionStoppedWithContextCompleter.future;
       expect(eventCalled, isTrue);
 
       {
@@ -6720,7 +6753,7 @@ void generatedTestCases(ValueGetter<IrisTester> irisTester) {
   );
 
   testWidgets(
-    'RtcEngineEventHandler.onExtensionError',
+    'RtcEngineEventHandler.onExtensionErrorWithContext',
     (WidgetTester tester) async {
       RtcEngine rtcEngine = createAgoraRtcEngine();
       await rtcEngine.initialize(RtcEngineContext(
@@ -6729,11 +6762,11 @@ void generatedTestCases(ValueGetter<IrisTester> irisTester) {
       ));
       await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
-      final onExtensionErrorCompleter = Completer<bool>();
+      final onExtensionErrorWithContextCompleter = Completer<bool>();
       final theRtcEngineEventHandler = RtcEngineEventHandler(
-        onExtensionError:
-            (String provider, String extension, int error, String message) {
-          onExtensionErrorCompleter.complete(true);
+        onExtensionErrorWithContext:
+            (ExtensionContext context, int error, String message) {
+          onExtensionErrorWithContextCompleter.complete(true);
         },
       );
 
@@ -6745,34 +6778,42 @@ void generatedTestCases(ValueGetter<IrisTester> irisTester) {
       await Future.delayed(const Duration(milliseconds: 500));
 
       {
-        String provider = "hello";
-        String extension = "hello";
+        bool contextIsValid = true;
+        int contextUid = 5;
+        String contextProviderName = "hello";
+        String contextExtensionName = "hello";
+        ExtensionContext context = ExtensionContext(
+          isValid: contextIsValid,
+          uid: contextUid,
+          providerName: contextProviderName,
+          extensionName: contextExtensionName,
+        );
         int error = 5;
         String message = "hello";
 
         final eventJson = {
-          'provider': provider,
-          'extension': extension,
+          'context': context.toJson(),
           'error': error,
           'message': message,
         };
 
-        final eventIds =
-            eventIdsMapping['RtcEngineEventHandler_onExtensionError'] ?? [];
+        final eventIds = eventIdsMapping[
+                'RtcEngineEventHandler_onExtensionErrorWithContext'] ??
+            [];
         for (final event in eventIds) {
           final ret = irisTester().fireEvent(event, params: eventJson);
           // Delay 200 milliseconds to ensure the callback is called.
           await Future.delayed(const Duration(milliseconds: 200));
           // TODO(littlegnal): Most of callbacks on web are not implemented, we're temporarily skip these callbacks at this time.
           if (kIsWeb && ret) {
-            if (!onExtensionErrorCompleter.isCompleted) {
-              onExtensionErrorCompleter.complete(true);
+            if (!onExtensionErrorWithContextCompleter.isCompleted) {
+              onExtensionErrorWithContextCompleter.complete(true);
             }
           }
         }
       }
 
-      final eventCalled = await onExtensionErrorCompleter.future;
+      final eventCalled = await onExtensionErrorWithContextCompleter.future;
       expect(eventCalled, isTrue);
 
       {

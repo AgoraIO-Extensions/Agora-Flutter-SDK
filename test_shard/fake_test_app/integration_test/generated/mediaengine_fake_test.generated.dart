@@ -555,6 +555,42 @@ void mediaEngineSmokeTestCases() {
         VideoBufferType frameType = VideoBufferType.videoBufferRawData;
         VideoPixelFormat frameFormat = VideoPixelFormat.videoPixelDefault;
         EglContextType frameEglType = EglContextType.eglContext10;
+        int hdr10MetadataInfoRedPrimaryX = 5;
+        int hdr10MetadataInfoRedPrimaryY = 5;
+        int hdr10MetadataInfoGreenPrimaryX = 5;
+        int hdr10MetadataInfoGreenPrimaryY = 5;
+        int hdr10MetadataInfoBluePrimaryX = 5;
+        int hdr10MetadataInfoBluePrimaryY = 5;
+        int hdr10MetadataInfoWhitePointX = 5;
+        int hdr10MetadataInfoWhitePointY = 5;
+        int hdr10MetadataInfoMaxMasteringLuminance = 5;
+        int hdr10MetadataInfoMinMasteringLuminance = 5;
+        int hdr10MetadataInfoMaxContentLightLevel = 5;
+        int hdr10MetadataInfoMaxFrameAverageLightLevel = 5;
+        Hdr10MetadataInfo frameHdr10MetadataInfo = Hdr10MetadataInfo(
+          redPrimaryX: hdr10MetadataInfoRedPrimaryX,
+          redPrimaryY: hdr10MetadataInfoRedPrimaryY,
+          greenPrimaryX: hdr10MetadataInfoGreenPrimaryX,
+          greenPrimaryY: hdr10MetadataInfoGreenPrimaryY,
+          bluePrimaryX: hdr10MetadataInfoBluePrimaryX,
+          bluePrimaryY: hdr10MetadataInfoBluePrimaryY,
+          whitePointX: hdr10MetadataInfoWhitePointX,
+          whitePointY: hdr10MetadataInfoWhitePointY,
+          maxMasteringLuminance: hdr10MetadataInfoMaxMasteringLuminance,
+          minMasteringLuminance: hdr10MetadataInfoMinMasteringLuminance,
+          maxContentLightLevel: hdr10MetadataInfoMaxContentLightLevel,
+          maxFrameAverageLightLevel: hdr10MetadataInfoMaxFrameAverageLightLevel,
+        );
+        PrimaryID colorSpacePrimaries = PrimaryID.primaryidBt709;
+        TransferID colorSpaceTransfer = TransferID.transferidBt709;
+        MatrixID colorSpaceMatrix = MatrixID.matrixidRgb;
+        RangeID colorSpaceRange = RangeID.rangeidInvalid;
+        ColorSpace frameColorSpace = ColorSpace(
+          primaries: colorSpacePrimaries,
+          transfer: colorSpaceTransfer,
+          matrix: colorSpaceMatrix,
+          range: colorSpaceRange,
+        );
         Uint8List frameBuffer = Uint8List.fromList([1, 1, 1, 1, 1]);
         int frameStride = 5;
         int frameHeight = 5;
@@ -565,11 +601,13 @@ void mediaEngineSmokeTestCases() {
         int frameRotation = 5;
         int frameTimestamp = 5;
         int frameTextureId = 5;
+        int frameFenceObject = 5;
         List<double> frameMatrix = List.filled(5, 5.0);
         Uint8List frameMetadataBuffer = Uint8List.fromList([1, 1, 1, 1, 1]);
         int frameMetadataSize = 5;
         Uint8List frameAlphaBuffer = Uint8List.fromList([1, 1, 1, 1, 1]);
         bool frameFillAlphaBuffer = true;
+        int frameAlphaStitchMode = 5;
         int frameTextureSliceIndex = 5;
         ExternalVideoFrame frame = ExternalVideoFrame(
           type: frameType,
@@ -585,12 +623,16 @@ void mediaEngineSmokeTestCases() {
           timestamp: frameTimestamp,
           eglType: frameEglType,
           textureId: frameTextureId,
+          fenceObject: frameFenceObject,
           matrix: frameMatrix,
           metadataBuffer: frameMetadataBuffer,
           metadataSize: frameMetadataSize,
           alphaBuffer: frameAlphaBuffer,
           fillAlphaBuffer: frameFillAlphaBuffer,
+          alphaStitchMode: frameAlphaStitchMode,
           textureSliceIndex: frameTextureSliceIndex,
+          hdr10MetadataInfo: frameHdr10MetadataInfo,
+          colorSpace: frameColorSpace,
         );
         int videoTrackId = 5;
         await mediaEngine.pushVideoFrame(

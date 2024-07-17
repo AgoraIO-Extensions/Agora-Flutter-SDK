@@ -42,17 +42,6 @@ public:
    * - < 0: Failure.
    */
   virtual int open(const char* url, int64_t startPos) = 0;
-    
-  /**
-   * @deprecated
-   * @brief Open media file or stream with custom soucrce.
-   * @param startPos Set the starting position for playback, in seconds
-   * @param observer dataProvider object
-   * @return
-   * - 0: Success.
-   * - < 0: Failure.
-   */
-  virtual int openWithCustomSource(int64_t startPos, media::base::IMediaPlayerCustomDataProvider* provider) __deprecated = 0;
 
   /**
    * Opens a media file with a media file source.

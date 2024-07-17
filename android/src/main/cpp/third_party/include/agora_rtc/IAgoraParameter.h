@@ -39,8 +39,7 @@
   * set the video encoder mode (hardware or software)
   */
 #define KEY_RTC_VIDEO_ENABLED_HW_ENCODER             "engine.video.enable_hw_encoder"
-#define KEY_RTC_VIDEO_HARDWARE_ENCODEING             "che.hardware_encoding"
-#define KEY_RTC_VIDEO_H264_HWENC                     "che.video.h264.hwenc"
+#define KEY_RTC_VIDEO_HARDWARE_ENCODEING             "che.hardware_encoding" // deprecated, please use engine.video.enable_hw_encoder
  /**
   * set the hardware video encoder provider (nv for nvidia or qsv for intel)
   */
@@ -50,7 +49,7 @@
   * set the video decoder mode (hardware or software)
   */
 #define KEY_RTC_VIDEO_ENABLED_HW_DECODER             "engine.video.enable_hw_decoder"
-#define KEY_RTC_VIDEO_HARDWARE_DECODING              "che.hardware_decoding"
+#define KEY_RTC_VIDEO_HARDWARE_DECODING              "che.hardware_decoding"  // deprecated, please use engine.video.enable_hw_decoder
 
  /**
   * set the hardware video decoder provider (h264_cuvid(default) or h264_qsv)
