@@ -110,7 +110,7 @@ class MusicPlayerImpl extends media_player_impl.MediaPlayerImpl
     }
   }
 
-    @override
+  @override
   Future<void> openWithSongCode(
       {required int songCode, int startPos = 0}) async {
     final apiType =
