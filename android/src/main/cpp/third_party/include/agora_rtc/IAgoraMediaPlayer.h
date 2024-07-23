@@ -540,6 +540,25 @@ public:
    */
   virtual int setSoundPositionParams(float pan, float gain) = 0;
 
+  /**
+   * Get player option by key value
+   * @param [in] key the key of the option param
+   * @param [out] value the value of option param
+   * @return
+   * - 0: Success.
+   * - < 0: Failure.
+   */
+  virtual int getPlayerOption(const char* key, int& value) = 0;
+
+  /**
+   * Get player option by key value
+   * @param [in] key the key of the option param
+   * @param [out] value the value of option param
+   * @return
+   * - 0: Success.
+   * - < 0: Failure.
+   */
+  virtual int getPlayerOption(const char* key, agora::util::AString& value) = 0;
 };
 
 /**
