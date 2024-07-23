@@ -76,15 +76,28 @@ void mediaRecorderSmokeTestCases() {
             MediaRecorderContainerFormat.formatMp4;
         const MediaRecorderStreamType configStreamType =
             MediaRecorderStreamType.streamTypeAudio;
+        const VideoSourceType configVideoSourceType =
+            VideoSourceType.videoSourceCameraPrimary;
         const String configStoragePath = "hello";
         const int configMaxDurationMs = 10;
         const int configRecorderInfoUpdateInterval = 10;
+        const int configWidth = 10;
+        const int configHeight = 10;
+        const int configFps = 10;
+        const int configSampleRate = 10;
+        const int configChannelNum = 10;
         const MediaRecorderConfiguration config = MediaRecorderConfiguration(
           storagePath: configStoragePath,
           containerFormat: configContainerFormat,
           streamType: configStreamType,
           maxDurationMs: configMaxDurationMs,
           recorderInfoUpdateInterval: configRecorderInfoUpdateInterval,
+          width: configWidth,
+          height: configHeight,
+          fps: configFps,
+          sampleRate: configSampleRate,
+          channelNum: configChannelNum,
+          videoSourceType: configVideoSourceType,
         );
         await mediaRecorder.startRecording(
           config,

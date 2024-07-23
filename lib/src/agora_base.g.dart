@@ -726,8 +726,6 @@ VideoTrackInfo _$VideoTrackInfoFromJson(Map<String, dynamic> json) =>
       ownerUid: (json['ownerUid'] as num?)?.toInt(),
       trackId: (json['trackId'] as num?)?.toInt(),
       channelId: json['channelId'] as String?,
-      streamType:
-          $enumDecodeNullable(_$VideoStreamTypeEnumMap, json['streamType']),
       codecType:
           $enumDecodeNullable(_$VideoCodecTypeEnumMap, json['codecType']),
       encodedFrameOnly: json['encodedFrameOnly'] as bool?,
@@ -749,7 +747,6 @@ Map<String, dynamic> _$VideoTrackInfoToJson(VideoTrackInfo instance) {
   writeNotNull('ownerUid', instance.ownerUid);
   writeNotNull('trackId', instance.trackId);
   writeNotNull('channelId', instance.channelId);
-  writeNotNull('streamType', _$VideoStreamTypeEnumMap[instance.streamType]);
   writeNotNull('codecType', _$VideoCodecTypeEnumMap[instance.codecType]);
   writeNotNull('encodedFrameOnly', instance.encodedFrameOnly);
   writeNotNull('sourceType', _$VideoSourceTypeEnumMap[instance.sourceType]);
@@ -2101,6 +2098,7 @@ RecorderStreamInfo _$RecorderStreamInfoFromJson(Map<String, dynamic> json) =>
     RecorderStreamInfo(
       channelId: json['channelId'] as String?,
       uid: (json['uid'] as num?)?.toInt(),
+      type: $enumDecodeNullable(_$RecorderStreamTypeEnumMap, json['type']),
     );
 
 Map<String, dynamic> _$RecorderStreamInfoToJson(RecorderStreamInfo instance) {
@@ -2114,8 +2112,14 @@ Map<String, dynamic> _$RecorderStreamInfoToJson(RecorderStreamInfo instance) {
 
   writeNotNull('channelId', instance.channelId);
   writeNotNull('uid', instance.uid);
+  writeNotNull('type', _$RecorderStreamTypeEnumMap[instance.type]);
   return val;
 }
+
+const _$RecorderStreamTypeEnumMap = {
+  RecorderStreamType.rtc: 0,
+  RecorderStreamType.preview: 1,
+};
 
 SpatialAudioParams _$SpatialAudioParamsFromJson(Map<String, dynamic> json) =>
     SpatialAudioParams(
@@ -2382,6 +2386,11 @@ const _$H264PacketizeModeEnumMap = {
 
 const _$MaxUserAccountLengthTypeEnumMap = {
   MaxUserAccountLengthType.maxUserAccountLength: 256,
+};
+
+const _$CameraFormatTypeEnumMap = {
+  CameraFormatType.cameraFormatNv12: 0,
+  CameraFormatType.cameraFormatBgra: 1,
 };
 
 const _$CodecCapMaskEnumMap = {
