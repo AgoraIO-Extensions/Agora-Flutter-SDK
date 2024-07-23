@@ -209,6 +209,26 @@ public:
   virtual int setPlayerOption(const char* key, const char* value) = 0;
 
   /**
+   * Get player option by key value
+   * @param [in] key the key of the option param
+   * @param [out] value the value of option param
+   * @return
+   * - 0: Success.
+   * - < 0: Failure.
+   */
+  virtual int getPlayerOption(const char* key, int& value) = 0;
+
+  /**
+   * Get player option by key value
+   * @param [in] key the key of the option param
+   * @param [out] value the value of option param
+   * @return
+   * - 0: Success.
+   * - < 0: Failure.
+   */
+  virtual int getPlayerOption(const char* key, agora::util::AString& value) = 0;
+
+  /**
    * Takes a screenshot when playing a video file.
    * @param filename The filename of the screenshot file.
    * @return

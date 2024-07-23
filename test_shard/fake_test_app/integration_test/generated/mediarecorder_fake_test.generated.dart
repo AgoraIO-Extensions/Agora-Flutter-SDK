@@ -76,15 +76,28 @@ void mediaRecorderSmokeTestCases() {
             MediaRecorderContainerFormat.formatMp4;
         MediaRecorderStreamType configStreamType =
             MediaRecorderStreamType.streamTypeAudio;
+        VideoSourceType configVideoSourceType =
+            VideoSourceType.videoSourceCameraPrimary;
         String configStoragePath = "hello";
         int configMaxDurationMs = 5;
         int configRecorderInfoUpdateInterval = 5;
+        int configWidth = 5;
+        int configHeight = 5;
+        int configFps = 5;
+        int configSampleRate = 5;
+        int configChannelNum = 5;
         MediaRecorderConfiguration config = MediaRecorderConfiguration(
           storagePath: configStoragePath,
           containerFormat: configContainerFormat,
           streamType: configStreamType,
           maxDurationMs: configMaxDurationMs,
           recorderInfoUpdateInterval: configRecorderInfoUpdateInterval,
+          width: configWidth,
+          height: configHeight,
+          fps: configFps,
+          sampleRate: configSampleRate,
+          channelNum: configChannelNum,
+          videoSourceType: configVideoSourceType,
         );
         await mediaRecorder.startRecording(
           config,

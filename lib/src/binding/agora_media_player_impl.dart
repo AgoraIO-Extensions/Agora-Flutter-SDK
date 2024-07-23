@@ -978,6 +978,46 @@ class MediaPlayerImpl implements MediaPlayer {
       throw AgoraRtcException(code: result);
     }
   }
+
+  @override
+  Future<int> getPlayerOptionInInt(String key) async {
+    final apiType =
+        '${isOverrideClassName ? className : 'MediaPlayer'}_getPlayerOption_ae3d0cf';
+    final param = createParams({'key': key});
+    final callApiResult = await irisMethodChannel.invokeMethod(
+        IrisMethodCall(apiType, jsonEncode(param), buffers: null));
+    if (callApiResult.irisReturnCode < 0) {
+      throw AgoraRtcException(code: callApiResult.irisReturnCode);
+    }
+    final rm = callApiResult.data;
+    final result = rm['result'];
+    if (result < 0) {
+      throw AgoraRtcException(code: result);
+    }
+    final getPlayerOptionInIntJson =
+        MediaPlayerGetPlayerOptionInIntJson.fromJson(rm);
+    return getPlayerOptionInIntJson.value;
+  }
+
+  @override
+  Future<String> getPlayerOptionInString(String key) async {
+    final apiType =
+        '${isOverrideClassName ? className : 'MediaPlayer'}_getPlayerOption_f15226a';
+    final param = createParams({'key': key});
+    final callApiResult = await irisMethodChannel.invokeMethod(
+        IrisMethodCall(apiType, jsonEncode(param), buffers: null));
+    if (callApiResult.irisReturnCode < 0) {
+      throw AgoraRtcException(code: callApiResult.irisReturnCode);
+    }
+    final rm = callApiResult.data;
+    final result = rm['result'];
+    if (result < 0) {
+      throw AgoraRtcException(code: result);
+    }
+    final getPlayerOptionInStringJson =
+        MediaPlayerGetPlayerOptionInStringJson.fromJson(rm);
+    return getPlayerOptionInStringJson.value;
+  }
 }
 
 class MediaPlayerCacheManagerImpl implements MediaPlayerCacheManager {
