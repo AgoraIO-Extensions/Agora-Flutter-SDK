@@ -1723,6 +1723,31 @@ extension VideoMirrorModeTypeExt on VideoMirrorModeType {
   }
 }
 
+/// @nodoc
+@JsonEnum(alwaysCreate: true)
+enum CameraFormatType {
+  /// @nodoc
+  @JsonValue(0)
+  cameraFormatNv12,
+
+  /// @nodoc
+  @JsonValue(1)
+  cameraFormatBgra,
+}
+
+/// @nodoc
+extension CameraFormatTypeExt on CameraFormatType {
+  /// @nodoc
+  static CameraFormatType fromValue(int value) {
+    return $enumDecode(_$CameraFormatTypeEnumMap, value);
+  }
+
+  /// @nodoc
+  int value() {
+    return _$CameraFormatTypeEnumMap[this]!;
+  }
+}
+
 /// The bit mask of the codec type.
 @JsonEnum(alwaysCreate: true)
 enum CodecCapMask {
@@ -6835,10 +6860,35 @@ class LocalAccessPointConfiguration {
 }
 
 /// @nodoc
+@JsonEnum(alwaysCreate: true)
+enum RecorderStreamType {
+  /// @nodoc
+  @JsonValue(0)
+  rtc,
+
+  /// @nodoc
+  @JsonValue(1)
+  preview,
+}
+
+/// @nodoc
+extension RecorderStreamTypeExt on RecorderStreamType {
+  /// @nodoc
+  static RecorderStreamType fromValue(int value) {
+    return $enumDecode(_$RecorderStreamTypeEnumMap, value);
+  }
+
+  /// @nodoc
+  int value() {
+    return _$RecorderStreamTypeEnumMap[this]!;
+  }
+}
+
+/// @nodoc
 @JsonSerializable(explicitToJson: true, includeIfNull: false)
 class RecorderStreamInfo {
   /// @nodoc
-  const RecorderStreamInfo({this.channelId, this.uid});
+  const RecorderStreamInfo({this.channelId, this.uid, this.type});
 
   /// @nodoc
   @JsonKey(name: 'channelId')
@@ -6847,6 +6897,10 @@ class RecorderStreamInfo {
   /// @nodoc
   @JsonKey(name: 'uid')
   final int? uid;
+
+  /// @nodoc
+  @JsonKey(name: 'type')
+  final RecorderStreamType? type;
 
   /// @nodoc
   factory RecorderStreamInfo.fromJson(Map<String, dynamic> json) =>

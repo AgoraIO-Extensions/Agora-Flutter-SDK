@@ -100,6 +100,62 @@ class MediaPlayerGetPublishSignalVolumeJson {
 }
 
 @JsonSerializable(explicitToJson: true, includeIfNull: false)
+class MediaPlayerGetPlayerOptionJson {
+  const MediaPlayerGetPlayerOptionJson(this.value);
+
+  @JsonKey(name: 'value')
+  final int value;
+
+  factory MediaPlayerGetPlayerOptionJson.fromJson(Map<String, dynamic> json) =>
+      _$MediaPlayerGetPlayerOptionJsonFromJson(json);
+
+  Map<String, dynamic> toJson() => _$MediaPlayerGetPlayerOptionJsonToJson(this);
+}
+
+@JsonSerializable(explicitToJson: true, includeIfNull: false)
+class MediaPlayerGetPlayerOptionJson {
+  const MediaPlayerGetPlayerOptionJson(this.value);
+
+  @JsonKey(name: 'value')
+  final String value;
+
+  factory MediaPlayerGetPlayerOptionJson.fromJson(Map<String, dynamic> json) =>
+      _$MediaPlayerGetPlayerOptionJsonFromJson(json);
+
+  Map<String, dynamic> toJson() => _$MediaPlayerGetPlayerOptionJsonToJson(this);
+}
+
+@JsonSerializable(explicitToJson: true, includeIfNull: false)
+class MediaPlayerGetPlayerOptionInIntJson {
+  const MediaPlayerGetPlayerOptionInIntJson(this.value);
+
+  @JsonKey(name: 'value')
+  final int value;
+
+  factory MediaPlayerGetPlayerOptionInIntJson.fromJson(
+          Map<String, dynamic> json) =>
+      _$MediaPlayerGetPlayerOptionInIntJsonFromJson(json);
+
+  Map<String, dynamic> toJson() =>
+      _$MediaPlayerGetPlayerOptionInIntJsonToJson(this);
+}
+
+@JsonSerializable(explicitToJson: true, includeIfNull: false)
+class MediaPlayerGetPlayerOptionInStringJson {
+  const MediaPlayerGetPlayerOptionInStringJson(this.value);
+
+  @JsonKey(name: 'value')
+  final String value;
+
+  factory MediaPlayerGetPlayerOptionInStringJson.fromJson(
+          Map<String, dynamic> json) =>
+      _$MediaPlayerGetPlayerOptionInStringJsonFromJson(json);
+
+  Map<String, dynamic> toJson() =>
+      _$MediaPlayerGetPlayerOptionInStringJsonToJson(this);
+}
+
+@JsonSerializable(explicitToJson: true, includeIfNull: false)
 class MediaPlayerCacheManagerGetCacheDirJson {
   const MediaPlayerCacheManagerGetCacheDirJson(this.path);
 
@@ -382,6 +438,64 @@ class RtcEngineGetUserInfoByUidJson {
       _$RtcEngineGetUserInfoByUidJsonFromJson(json);
 
   Map<String, dynamic> toJson() => _$RtcEngineGetUserInfoByUidJsonToJson(this);
+}
+
+@JsonSerializable(explicitToJson: true, includeIfNull: false)
+class RtcEngineGetUserInfoByUserAccountJson {
+  const RtcEngineGetUserInfoByUserAccountJson(this.userInfo);
+
+  @JsonKey(name: 'userInfo')
+  final UserInfo userInfo;
+
+  factory RtcEngineGetUserInfoByUserAccountJson.fromJson(
+          Map<String, dynamic> json) =>
+      _$RtcEngineGetUserInfoByUserAccountJsonFromJson(json);
+
+  Map<String, dynamic> toJson() =>
+      _$RtcEngineGetUserInfoByUserAccountJsonToJson(this);
+}
+
+@JsonSerializable(explicitToJson: true, includeIfNull: false)
+class RtcEngineGetUserInfoByUidJson {
+  const RtcEngineGetUserInfoByUidJson(this.userInfo);
+
+  @JsonKey(name: 'userInfo')
+  final UserInfo userInfo;
+
+  factory RtcEngineGetUserInfoByUidJson.fromJson(Map<String, dynamic> json) =>
+      _$RtcEngineGetUserInfoByUidJsonFromJson(json);
+
+  Map<String, dynamic> toJson() => _$RtcEngineGetUserInfoByUidJsonToJson(this);
+}
+
+@JsonSerializable(explicitToJson: true, includeIfNull: false)
+class RtcEngineGetUserInfoByUidWithChannelIdJson {
+  const RtcEngineGetUserInfoByUidWithChannelIdJson(this.userInfo);
+
+  @JsonKey(name: 'userInfo')
+  final UserInfo userInfo;
+
+  factory RtcEngineGetUserInfoByUidWithChannelIdJson.fromJson(
+          Map<String, dynamic> json) =>
+      _$RtcEngineGetUserInfoByUidWithChannelIdJsonFromJson(json);
+
+  Map<String, dynamic> toJson() =>
+      _$RtcEngineGetUserInfoByUidWithChannelIdJsonToJson(this);
+}
+
+@JsonSerializable(explicitToJson: true, includeIfNull: false)
+class RtcEngineGetUserInfoByUserAccountWithChannelIdJson {
+  const RtcEngineGetUserInfoByUserAccountWithChannelIdJson(this.userInfo);
+
+  @JsonKey(name: 'userInfo')
+  final UserInfo userInfo;
+
+  factory RtcEngineGetUserInfoByUserAccountWithChannelIdJson.fromJson(
+          Map<String, dynamic> json) =>
+      _$RtcEngineGetUserInfoByUserAccountWithChannelIdJsonFromJson(json);
+
+  Map<String, dynamic> toJson() =>
+      _$RtcEngineGetUserInfoByUserAccountWithChannelIdJsonToJson(this);
 }
 
 @JsonSerializable(explicitToJson: true, includeIfNull: false)

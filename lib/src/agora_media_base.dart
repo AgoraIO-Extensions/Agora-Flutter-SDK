@@ -1657,7 +1657,13 @@ class MediaRecorderConfiguration {
       this.containerFormat,
       this.streamType,
       this.maxDurationMs,
-      this.recorderInfoUpdateInterval});
+      this.recorderInfoUpdateInterval,
+      this.width,
+      this.height,
+      this.fps,
+      this.sampleRate,
+      this.channelNum,
+      this.videoSourceType});
 
   /// @nodoc
   @JsonKey(name: 'storagePath')
@@ -1678,6 +1684,30 @@ class MediaRecorderConfiguration {
   /// @nodoc
   @JsonKey(name: 'recorderInfoUpdateInterval')
   final int? recorderInfoUpdateInterval;
+
+  /// @nodoc
+  @JsonKey(name: 'width')
+  final int? width;
+
+  /// @nodoc
+  @JsonKey(name: 'height')
+  final int? height;
+
+  /// @nodoc
+  @JsonKey(name: 'fps')
+  final int? fps;
+
+  /// @nodoc
+  @JsonKey(name: 'sample_rate')
+  final int? sampleRate;
+
+  /// @nodoc
+  @JsonKey(name: 'channel_num')
+  final int? channelNum;
+
+  /// @nodoc
+  @JsonKey(name: 'videoSourceType')
+  final VideoSourceType? videoSourceType;
 
   /// @nodoc
   factory MediaRecorderConfiguration.fromJson(Map<String, dynamic> json) =>
