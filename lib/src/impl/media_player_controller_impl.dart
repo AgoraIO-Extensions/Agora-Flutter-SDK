@@ -260,6 +260,16 @@ class MediaPlayerControllerImpl
   }
 
   @override
+  Future<int> getPlayerOptionInInt(String key) {
+    return _mediaPlayer!.getPlayerOptionInInt(key);
+  }
+
+  @override
+  Future<String> getPlayerOptionInString(String key) {
+    return _mediaPlayer!.getPlayerOptionInString(key);
+  }
+
+  @override
   Future<void> setRenderMode(RenderModeType renderMode) {
     return _mediaPlayer!.setRenderMode(renderMode);
   }
