@@ -7925,6 +7925,46 @@ class IRtcEngine : public agora::base::IEngineBase {
    */
   virtual int getUserInfoByUid(uid_t uid, rtc::UserInfo* userInfo) = 0;
 
+  /** Gets the user information by passing in the user account.
+   *
+   * After a remote user joins the channel, the SDK gets the user ID and user account of the remote user, caches them
+   * in a mapping table object (`userInfo`), and triggers the \ref agora::rtc::IRtcEngineEventHandler::onUserInfoUpdated "onUserInfoUpdated" callback on the local client.
+   *
+   * After receiving the o\ref agora::rtc::IRtcEngineEventHandler::onUserInfoUpdated "onUserInfoUpdated" callback, you can call this method to get the user ID of the
+   * remote user from the `userInfo` object by passing in the user account.
+   *
+   * @param channelId The channel id.
+   * @param userAccount The user account of the user. Ensure that you set this parameter.
+   * @param [in,out] userInfo  A userInfo object that identifies the user:
+   * - Input: A userInfo object.
+   * - Output: A userInfo object that contains the user account and user ID of the user.
+   *
+   * @return
+   * - 0: Success.
+   * - < 0: Failure.
+   */
+  virtual int getUserInfoByUserAccount(const char* channelId, const char* userAccount, rtc::UserInfo* userInfo) = 0;
+
+  /** Gets the user information by passing in the user ID.
+   *
+   * After a remote user joins the channel, the SDK gets the user ID and user account of the remote user,
+   * caches them in a mapping table object (`userInfo`), and triggers the \ref agora::rtc::IRtcEngineEventHandler::onUserInfoUpdated "onUserInfoUpdated" callback on the local client.
+   *
+   * After receiving the \ref agora::rtc::IRtcEngineEventHandler::onUserInfoUpdated "onUserInfoUpdated" callback, you can call this method to get the user account of the remote user
+   * from the `userInfo` object by passing in the user ID.
+   *
+   * @param channelId The channel id.
+   * @param uid The user ID of the remote user. Ensure that you set this parameter.
+   * @param[in,out] userInfo A userInfo object that identifies the user:
+   * - Input: A userInfo object.
+   * - Output: A userInfo object that contains the user account and user ID of the user.
+   *
+   * @return
+   * - 0: Success.
+   * - < 0: Failure.
+   */
+  virtual int getUserInfoByUid(const char* channelId, uid_t uid, rtc::UserInfo* userInfo) = 0;
+
   /** Starts relaying media streams across channels or updates the channels for media relay.
     *
     * After a successful method call, the SDK triggers the

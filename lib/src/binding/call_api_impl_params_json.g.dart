@@ -93,6 +93,49 @@ Map<String, dynamic> _$MediaPlayerGetPublishSignalVolumeJsonToJson(
       'volume': instance.volume,
     };
 
+MediaPlayerGetPlayerOptionJson _$MediaPlayerGetPlayerOptionJsonFromJson(
+        Map<String, dynamic> json) =>
+    MediaPlayerGetPlayerOptionJson(
+      (json['value'] as num).toInt(),
+    );
+
+Map<String, dynamic> _$MediaPlayerGetPlayerOptionJsonToJson(
+        MediaPlayerGetPlayerOptionJson instance) =>
+    <String, dynamic>{
+      'value': instance.value,
+    };
+
+MediaPlayerGetPlayerOptionJson _$MediaPlayerGetPlayerOptionJsonFromJson(
+        Map<String, dynamic> json) =>
+    MediaPlayerGetPlayerOptionJson(
+      json['value'] as String,
+    );
+
+MediaPlayerGetPlayerOptionInIntJson
+    _$MediaPlayerGetPlayerOptionInIntJsonFromJson(Map<String, dynamic> json) =>
+        MediaPlayerGetPlayerOptionInIntJson(
+          (json['value'] as num).toInt(),
+        );
+
+Map<String, dynamic> _$MediaPlayerGetPlayerOptionInIntJsonToJson(
+        MediaPlayerGetPlayerOptionInIntJson instance) =>
+    <String, dynamic>{
+      'value': instance.value,
+    };
+
+MediaPlayerGetPlayerOptionInStringJson
+    _$MediaPlayerGetPlayerOptionInStringJsonFromJson(
+            Map<String, dynamic> json) =>
+        MediaPlayerGetPlayerOptionInStringJson(
+          json['value'] as String,
+        );
+
+Map<String, dynamic> _$MediaPlayerGetPlayerOptionInStringJsonToJson(
+        MediaPlayerGetPlayerOptionInStringJson instance) =>
+    <String, dynamic>{
+      'value': instance.value,
+    };
+
 MediaPlayerCacheManagerGetCacheDirJson
     _$MediaPlayerCacheManagerGetCacheDirJsonFromJson(
             Map<String, dynamic> json) =>
@@ -343,6 +386,32 @@ RtcEngineGetUserInfoByUidJson _$RtcEngineGetUserInfoByUidJsonFromJson(
 
 Map<String, dynamic> _$RtcEngineGetUserInfoByUidJsonToJson(
         RtcEngineGetUserInfoByUidJson instance) =>
+    <String, dynamic>{
+      'userInfo': instance.userInfo.toJson(),
+    };
+
+RtcEngineGetUserInfoByUidWithChannelIdJson
+    _$RtcEngineGetUserInfoByUidWithChannelIdJsonFromJson(
+            Map<String, dynamic> json) =>
+        RtcEngineGetUserInfoByUidWithChannelIdJson(
+          UserInfo.fromJson(json['userInfo'] as Map<String, dynamic>),
+        );
+
+Map<String, dynamic> _$RtcEngineGetUserInfoByUidWithChannelIdJsonToJson(
+        RtcEngineGetUserInfoByUidWithChannelIdJson instance) =>
+    <String, dynamic>{
+      'userInfo': instance.userInfo.toJson(),
+    };
+
+RtcEngineGetUserInfoByUserAccountWithChannelIdJson
+    _$RtcEngineGetUserInfoByUserAccountWithChannelIdJsonFromJson(
+            Map<String, dynamic> json) =>
+        RtcEngineGetUserInfoByUserAccountWithChannelIdJson(
+          UserInfo.fromJson(json['userInfo'] as Map<String, dynamic>),
+        );
+
+Map<String, dynamic> _$RtcEngineGetUserInfoByUserAccountWithChannelIdJsonToJson(
+        RtcEngineGetUserInfoByUserAccountWithChannelIdJson instance) =>
     <String, dynamic>{
       'userInfo': instance.userInfo.toJson(),
     };

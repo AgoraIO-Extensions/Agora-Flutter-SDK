@@ -227,6 +227,10 @@ abstract class MediaPlayer {
 
   /// Sets the view.
   ///
+  /// In Flutter, you don't need to call this method. Use AgoraVideoView instead to render local and remote views.
+  ///
+  /// * [view] The render view. On Windows, this parameter sets the window handle (HWND).
+  ///
   /// Returns
   /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown. You need to catch the exception and handle it accordingly.
   Future<void> setView(int view);
@@ -407,6 +411,12 @@ abstract class MediaPlayer {
   Future<void> setSoundPositionParams(
       {required double pan, required double gain});
 
+  /// @nodoc
+  Future<int> getPlayerOption(String key);
+
+  /// @nodoc
+  Future<String> getPlayerOption(String key);
+
   /// Set media player options for providing technical previews or special customization features.
   ///
   /// The media player supports setting options through key and value. In general, you don't need to know about the option settings. You can use the default option settings of the media player. The difference between this method and setPlayerOptionInString is that the value parameter of this method is of type Int, while the value of setPlayerOptionInString is of type String. These two methods cannot be used together. Ensure that you call this method before open or openWithMediaSource.
@@ -429,6 +439,12 @@ abstract class MediaPlayer {
   /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown. You need to catch the exception and handle it accordingly.
   Future<void> setPlayerOptionInString(
       {required String key, required String value});
+
+  /// @nodoc
+  Future<int> getPlayerOptionInInt(String key);
+
+  /// @nodoc
+  Future<String> getPlayerOptionInString(String key);
 }
 
 /// This class provides methods to manage cached media files.

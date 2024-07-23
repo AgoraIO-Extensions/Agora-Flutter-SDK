@@ -4633,6 +4633,48 @@ class RtcEngineImpl implements RtcEngine {
   }
 
   @override
+  Future<UserInfo> getUserInfoByUserAccount(
+      {required String channelId, required String userAccount}) async {
+    final apiType =
+        '${isOverrideClassName ? className : 'RtcEngine'}_getUserInfoByUserAccount_86c855f';
+    final param =
+        createParams({'channelId': channelId, 'userAccount': userAccount});
+    final callApiResult = await irisMethodChannel.invokeMethod(
+        IrisMethodCall(apiType, jsonEncode(param), buffers: null));
+    if (callApiResult.irisReturnCode < 0) {
+      throw AgoraRtcException(code: callApiResult.irisReturnCode);
+    }
+    final rm = callApiResult.data;
+    final result = rm['result'];
+    if (result < 0) {
+      throw AgoraRtcException(code: result);
+    }
+    final getUserInfoByUserAccountJson =
+        RtcEngineGetUserInfoByUserAccountJson.fromJson(rm);
+    return getUserInfoByUserAccountJson.userInfo;
+  }
+
+  @override
+  Future<UserInfo> getUserInfoByUid(
+      {required String channelId, required int uid}) async {
+    final apiType =
+        '${isOverrideClassName ? className : 'RtcEngine'}_getUserInfoByUid_0a0b913';
+    final param = createParams({'channelId': channelId, 'uid': uid});
+    final callApiResult = await irisMethodChannel.invokeMethod(
+        IrisMethodCall(apiType, jsonEncode(param), buffers: null));
+    if (callApiResult.irisReturnCode < 0) {
+      throw AgoraRtcException(code: callApiResult.irisReturnCode);
+    }
+    final rm = callApiResult.data;
+    final result = rm['result'];
+    if (result < 0) {
+      throw AgoraRtcException(code: result);
+    }
+    final getUserInfoByUidJson = RtcEngineGetUserInfoByUidJson.fromJson(rm);
+    return getUserInfoByUidJson.userInfo;
+  }
+
+  @override
   Future<void> startOrUpdateChannelMediaRelay(
       ChannelMediaRelayConfiguration configuration) async {
     final apiType =
@@ -5236,6 +5278,49 @@ class RtcEngineImpl implements RtcEngine {
   }
 
   @override
+  Future<UserInfo> getUserInfoByUidWithChannelId(
+      {required String channelId, required int uid}) async {
+    final apiType =
+        '${isOverrideClassName ? className : 'RtcEngine'}_getUserInfoByUid_0a0b913';
+    final param = createParams({'channelId': channelId, 'uid': uid});
+    final callApiResult = await irisMethodChannel.invokeMethod(
+        IrisMethodCall(apiType, jsonEncode(param), buffers: null));
+    if (callApiResult.irisReturnCode < 0) {
+      throw AgoraRtcException(code: callApiResult.irisReturnCode);
+    }
+    final rm = callApiResult.data;
+    final result = rm['result'];
+    if (result < 0) {
+      throw AgoraRtcException(code: result);
+    }
+    final getUserInfoByUidWithChannelIdJson =
+        RtcEngineGetUserInfoByUidWithChannelIdJson.fromJson(rm);
+    return getUserInfoByUidWithChannelIdJson.userInfo;
+  }
+
+  @override
+  Future<UserInfo> getUserInfoByUserAccountWithChannelId(
+      {required String channelId, required String userAccount}) async {
+    final apiType =
+        '${isOverrideClassName ? className : 'RtcEngine'}_getUserInfoByUserAccount_86c855f';
+    final param =
+        createParams({'channelId': channelId, 'userAccount': userAccount});
+    final callApiResult = await irisMethodChannel.invokeMethod(
+        IrisMethodCall(apiType, jsonEncode(param), buffers: null));
+    if (callApiResult.irisReturnCode < 0) {
+      throw AgoraRtcException(code: callApiResult.irisReturnCode);
+    }
+    final rm = callApiResult.data;
+    final result = rm['result'];
+    if (result < 0) {
+      throw AgoraRtcException(code: result);
+    }
+    final getUserInfoByUserAccountWithChannelIdJson =
+        RtcEngineGetUserInfoByUserAccountWithChannelIdJson.fromJson(rm);
+    return getUserInfoByUserAccountWithChannelIdJson.userInfo;
+  }
+
+  @override
   Future<void> startPreviewWithoutSourceType() async {
     final apiType =
         '${isOverrideClassName ? className : 'RtcEngine'}_startPreview';
@@ -5255,7 +5340,7 @@ class RtcEngineImpl implements RtcEngine {
   @override
   AudioDeviceManager getAudioDeviceManager() {
     // Implementation template
-// final apiType = '${isOverrideClassName ? className : 'RtcEngine'}_getAudioDeviceManager';
+// final apiType = '${isOverrideClassName ? className : 'RtcEngine'}_queryInterface_257d192';
 // final param = createParams({
 // });
 // final callApiResult = await irisMethodChannel.invokeMethod(IrisMethodCall(apiType, jsonEncode(param), buffers:null));
@@ -5271,7 +5356,7 @@ class RtcEngineImpl implements RtcEngine {
   @override
   VideoDeviceManager getVideoDeviceManager() {
     // Implementation template
-// final apiType = '${isOverrideClassName ? className : 'RtcEngine'}_getVideoDeviceManager';
+// final apiType = '${isOverrideClassName ? className : 'RtcEngine'}_queryInterface_257d192';
 // final param = createParams({
 // });
 // final callApiResult = await irisMethodChannel.invokeMethod(IrisMethodCall(apiType, jsonEncode(param), buffers:null));
@@ -5287,7 +5372,7 @@ class RtcEngineImpl implements RtcEngine {
   @override
   MusicContentCenter getMusicContentCenter() {
     // Implementation template
-// final apiType = '${isOverrideClassName ? className : 'RtcEngine'}_getMusicContentCenter';
+// final apiType = '${isOverrideClassName ? className : 'RtcEngine'}_queryInterface_257d192';
 // final param = createParams({
 // });
 // final callApiResult = await irisMethodChannel.invokeMethod(IrisMethodCall(apiType, jsonEncode(param), buffers:null));
@@ -5303,7 +5388,7 @@ class RtcEngineImpl implements RtcEngine {
   @override
   MediaEngine getMediaEngine() {
     // Implementation template
-// final apiType = '${isOverrideClassName ? className : 'RtcEngine'}_getMediaEngine';
+// final apiType = '${isOverrideClassName ? className : 'RtcEngine'}_queryInterface_257d192';
 // final param = createParams({
 // });
 // final callApiResult = await irisMethodChannel.invokeMethod(IrisMethodCall(apiType, jsonEncode(param), buffers:null));
@@ -5319,7 +5404,7 @@ class RtcEngineImpl implements RtcEngine {
   @override
   LocalSpatialAudioEngine getLocalSpatialAudioEngine() {
     // Implementation template
-// final apiType = '${isOverrideClassName ? className : 'RtcEngine'}_getLocalSpatialAudioEngine';
+// final apiType = '${isOverrideClassName ? className : 'RtcEngine'}_queryInterface_257d192';
 // final param = createParams({
 // });
 // final callApiResult = await irisMethodChannel.invokeMethod(IrisMethodCall(apiType, jsonEncode(param), buffers:null));
@@ -5335,7 +5420,7 @@ class RtcEngineImpl implements RtcEngine {
   @override
   H265Transcoder getH265Transcoder() {
     // Implementation template
-// final apiType = '${isOverrideClassName ? className : 'RtcEngine'}_getH265Transcoder';
+// final apiType = '${isOverrideClassName ? className : 'RtcEngine'}_queryInterface_257d192';
 // final param = createParams({
 // });
 // final callApiResult = await irisMethodChannel.invokeMethod(IrisMethodCall(apiType, jsonEncode(param), buffers:null));
