@@ -9315,9 +9315,11 @@ void rtcEngineSmokeTestCases() {
       await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
+        String channelId = "hello";
         String userAccount = "hello";
         await rtcEngine.getUserInfoByUserAccount(
-          userAccount,
+          channelId: channelId,
+          userAccount: userAccount,
         );
       } catch (e) {
         if (e is! AgoraRtcException) {
@@ -9350,9 +9352,11 @@ void rtcEngineSmokeTestCases() {
       await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
+        String channelId = "hello";
         int uid = 5;
         await rtcEngine.getUserInfoByUid(
-          uid,
+          channelId: channelId,
+          uid: uid,
         );
       } catch (e) {
         if (e is! AgoraRtcException) {
@@ -10582,6 +10586,80 @@ void rtcEngineSmokeTestCases() {
       } catch (e) {
         if (e is! AgoraRtcException) {
           debugPrint('[RtcEngine.release] error: ${e.toString()}');
+          rethrow;
+        }
+
+        if (e.code != -4) {
+          // Only not supported error supported.
+          rethrow;
+        }
+      }
+
+      await rtcEngine.release();
+    },
+  );
+
+  testWidgets(
+    'RtcEngine.getUserInfoByUidWithChannelId',
+    (WidgetTester tester) async {
+      String engineAppId = const String.fromEnvironment('TEST_APP_ID',
+          defaultValue: '<YOUR_APP_ID>');
+
+      RtcEngine rtcEngine = createAgoraRtcEngine();
+      await rtcEngine.initialize(RtcEngineContext(
+        appId: engineAppId,
+        areaCode: AreaCode.areaCodeGlob.value(),
+      ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
+
+      try {
+        String channelId = "hello";
+        int uid = 5;
+        await rtcEngine.getUserInfoByUidWithChannelId(
+          channelId: channelId,
+          uid: uid,
+        );
+      } catch (e) {
+        if (e is! AgoraRtcException) {
+          debugPrint(
+              '[RtcEngine.getUserInfoByUidWithChannelId] error: ${e.toString()}');
+          rethrow;
+        }
+
+        if (e.code != -4) {
+          // Only not supported error supported.
+          rethrow;
+        }
+      }
+
+      await rtcEngine.release();
+    },
+  );
+
+  testWidgets(
+    'RtcEngine.getUserInfoByUserAccountWithChannelId',
+    (WidgetTester tester) async {
+      String engineAppId = const String.fromEnvironment('TEST_APP_ID',
+          defaultValue: '<YOUR_APP_ID>');
+
+      RtcEngine rtcEngine = createAgoraRtcEngine();
+      await rtcEngine.initialize(RtcEngineContext(
+        appId: engineAppId,
+        areaCode: AreaCode.areaCodeGlob.value(),
+      ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
+
+      try {
+        String channelId = "hello";
+        String userAccount = "hello";
+        await rtcEngine.getUserInfoByUserAccountWithChannelId(
+          channelId: channelId,
+          userAccount: userAccount,
+        );
+      } catch (e) {
+        if (e is! AgoraRtcException) {
+          debugPrint(
+              '[RtcEngine.getUserInfoByUserAccountWithChannelId] error: ${e.toString()}');
           rethrow;
         }
 

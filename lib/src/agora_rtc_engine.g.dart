@@ -432,7 +432,7 @@ ScreenCaptureConfiguration _$ScreenCaptureConfigurationFromJson(
       screenRect: json['screenRect'] == null
           ? null
           : Rectangle.fromJson(json['screenRect'] as Map<String, dynamic>),
-      windowId: (json['windowId'] as num?)?.toInt(),
+      windowId: (readIntPtr(json, 'windowId') as num?)?.toInt(),
       params: json['params'] == null
           ? null
           : ScreenCaptureParameters.fromJson(
@@ -506,7 +506,7 @@ ScreenCaptureSourceInfo _$ScreenCaptureSourceInfoFromJson(
         Map<String, dynamic> json) =>
     ScreenCaptureSourceInfo(
       type: $enumDecodeNullable(_$ScreenCaptureSourceTypeEnumMap, json['type']),
-      sourceId: (json['sourceId'] as num?)?.toInt(),
+      sourceId: (readIntPtr(json, 'sourceId') as num?)?.toInt(),
       sourceName: json['sourceName'] as String?,
       thumbImage: json['thumbImage'] == null
           ? null
@@ -524,7 +524,7 @@ ScreenCaptureSourceInfo _$ScreenCaptureSourceInfoFromJson(
           ? null
           : Rectangle.fromJson(json['position'] as Map<String, dynamic>),
       minimizeWindow: json['minimizeWindow'] as bool?,
-      sourceDisplayId: (json['sourceDisplayId'] as num?)?.toInt(),
+      sourceDisplayId: (readIntPtr(json, 'sourceDisplayId') as num?)?.toInt(),
     );
 
 Map<String, dynamic> _$ScreenCaptureSourceInfoToJson(
