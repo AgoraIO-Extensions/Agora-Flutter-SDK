@@ -249,6 +249,16 @@ class MediaPlayerControllerImpl
   }
 
   @override
+  Future<int> getPlayerOptionInInt(String key) {
+    return _mediaPlayer!.getPlayerOptionInInt(key);
+  }
+
+  @override
+  Future<String> getPlayerOptionInString(String key) {
+    return _mediaPlayer!.getPlayerOptionInString(key);
+  }
+
+  @override
   Future<void> setPlayerOptionInInt({required String key, required int value}) {
     return _mediaPlayer!.setPlayerOptionInInt(key: key, value: value);
   }
