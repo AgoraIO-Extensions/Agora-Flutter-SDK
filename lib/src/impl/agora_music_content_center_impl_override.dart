@@ -94,6 +94,23 @@ class MusicPlayerImpl extends media_player_impl.MediaPlayerImpl
       : super.create(mediaPlayerId, irisMethodChannel);
 
   @override
+  Future<void> setPlayMode(MusicPlayMode mode) async {
+    final apiType =
+        '${isOverrideClassName ? className : 'MusicPlayer'}_setPlayMode_748bee0';
+    final param = createParams({'mode': mode});
+    final callApiResult = await irisMethodChannel
+        .invokeMethod(IrisMethodCall(apiType, jsonEncode(param)));
+    if (callApiResult.irisReturnCode < 0) {
+      throw AgoraRtcException(code: callApiResult.irisReturnCode);
+    }
+    final rm = callApiResult.data;
+    final result = rm['result'];
+    if (result < 0) {
+      throw AgoraRtcException(code: result);
+    }
+  }
+
+    @override
   Future<void> openWithSongCode(
       {required int songCode, int startPos = 0}) async {
     final apiType =
