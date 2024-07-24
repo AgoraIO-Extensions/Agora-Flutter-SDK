@@ -225,11 +225,9 @@ class _State extends State<MediaRecorderExample> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 ElevatedButton(
-                  onPressed: isJoined
-                      ? _isStartedMediaRecording
+                  onPressed: _isStartedMediaRecording
                           ? _stopMediaRecording
-                          : _startMediaRecording
-                      : null,
+                          : _startMediaRecording,
                   child: Text(
                       '${_isStartedMediaRecording ? 'Stop' : 'Start'} media recording'),
                 ),

@@ -13,6 +13,28 @@
 namespace agora {
 namespace rtc {
 
+/**
+ * Modes for playing songs.
+ */
+typedef enum
+{
+    /**
+     * 0: The music player is in the origin mode, which means playing the original song.
+     */
+    kMusicPlayModeOriginal = 0,
+
+    /**
+     * 1: The music player is in the accompany mode, which means playing the accompaniment only.
+     */
+    kMusicPlayModeAccompany = 1,
+    
+    /**
+     * 2: The music player is in the lead sing mode, which means playing the lead vocals.
+     */
+    kMusicPlayModeLeadSing = 2,
+
+} MusicPlayMode;
+
 typedef enum
 {
     /**
@@ -329,6 +351,18 @@ public:
     * - < 0: Failure.
     */
     virtual int open(int64_t songCode, int64_t startPos = 0) = 0;
+
+    /**
+    * Set the mode for playing songs.
+    * You can call this method to switch from original to accompaniment or lead vocals.
+    * If you do not call this method to set the mode, the SDK plays the accompaniment by default.
+    *
+    * @param model The playing mode.
+    * @return
+    * - 0: Success.
+    * - < 0: Failure.
+    */
+    virtual int setPlayMode(MusicPlayMode mode) = 0;
 };
 
 class IMusicContentCenter
@@ -383,6 +417,15 @@ public:
      * - The empty pointer NULL, if the method call fails.
      */
     virtual agora_refptr<IMusicPlayer> createMusicPlayer() = 0;
+
+    /**
+     * Destroy a music player source object and return result.
+     * @param music_player The pointer to \ref rtc::IMusicPlayer "IMusicPlayer".
+     * @return
+     * - 0: Success.
+     * - < 0: Failure.
+     */
+    virtual int destroyMusicPlayer(agora_refptr<IMusicPlayer> music_player) = 0;
     
     /**
      * Get music chart collection of music.
@@ -501,12 +544,12 @@ public:
      *
      * @param requestId The request id you will get of this query, format is uuid.
      * @param songCode The identifier of the media file that you want to play.
-     * @param LyricType The type of the lyric file. 0:xml or 1:lrc.
+     * @param lyricType The type of the lyric file. 0:xml or 1:lrc.
      * @return
      * - 0: Success.
      * - < 0: Failure.
      */
-    virtual int getLyric(agora::util::AString& requestId, int64_t songCode, int32_t LyricType = 0) = 0;
+    virtual int getLyric(agora::util::AString& requestId, int64_t songCode, int32_t lyricType = 0) = 0;
 
     /**
      * Gets the metadata of a specific music. Once this method is called, the SDK triggers the onSongSimpleInfoResult callback to report the metadata of the music.

@@ -43,11 +43,11 @@ abstract class RtcEngineEx implements RtcEngine {
   /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown. You need to catch the exception and handle it accordingly.
   ///  < 0: Failure.
   ///  -2: The parameter is invalid. For example, the token is invalid, the uid parameter is not set to an integer, or the value of a member in ChannelMediaOptions is invalid. You need to pass in a valid parameter and join the channel again.
-  ///  -3: Failes to initialize the RtcEngine object. You need to reinitialize the RtcEngine object.
+  ///  -3: Fails to initialize the RtcEngine object. You need to reinitialize the RtcEngine object.
   ///  -7: The RtcEngine object has not been initialized. You need to initialize the RtcEngine object before calling this method.
-  ///  -8: The internal state of the RtcEngine object is wrong. The typical cause is that you call this method to join the channel without calling startEchoTest to stop the test after calling stopEchoTest to start a call loop test. You need to call stopEchoTest before calling this method.
-  ///  -17: The request to join the channel is rejected. The typical cause is that the user is in the channel. Agora recommends that you use the onConnectionStateChanged callback to determine whether the user exists in the channel. Do not call this method to join the channel unless you receive the connectionStateDisconnected (1) state.
-  ///  -102: The channel name is invalid. You need to pass in a valid channelname in channelId to rejoin the channel.
+  ///  -8: The internal state of the RtcEngine object is wrong. The typical cause is that you call this method to join the channel without calling stopEchoTest to stop the test after calling startEchoTest to start a call loop test. You need to call stopEchoTest before calling this method.
+  ///  -17: The request to join the channel is rejected. The typical cause is that the user is already in the channel. Agora recommends that you use the onConnectionStateChanged callback to see whether the user is in the channel. Do not call this method to join the channel unless you receive the connectionStateDisconnected (1) state.
+  ///  -102: The channel name is invalid. You need to pass in a valid channel name in channelId to rejoin the channel.
   ///  -121: The user ID is invalid. You need to pass in a valid user ID in uid to rejoin the channel.
   Future<void> joinChannelEx(
       {required String token,
@@ -56,9 +56,9 @@ abstract class RtcEngineEx implements RtcEngine {
 
   /// Sets channel options and leaves the channel.
   ///
-  /// This method lets the user leave the channel, for example, by hanging up or exiting the call. After calling joinChannelEx to join the channel, this method must be called to end the call before starting the next call. This method can be called whether or not a call is currently in progress. This method releases all resources related to the session. This method call is asynchronous. When this method returns, it does not necessarily mean that the user has left the channel. After you leave the channel, the SDK triggers the onLeaveChannel callback. After actually leaving the channel, the local user triggers the onLeaveChannel callback; after the user in the communication scenario and the host in the live streaming scenario leave the channel, the remote user triggers the onUserOffline callback.
-  ///  If you call release immediately after calling this method, the SDK does not trigger the onLeaveChannel callback.
-  ///  If you want to leave the channels that you joined by calling joinChannel and joinChannelEx, call the leaveChannel method.
+  /// After calling this method, the SDK terminates the audio and video interaction, leaves the current channel, and releases all resources related to the session. After calling joinChannelEx to join a channel, you must call this method to end the call, otherwise, the next call cannot be started.
+  ///  This method call is asynchronous. When this method returns, it does not necessarily mean that the user has left the channel.
+  ///  If you call leaveChannel, you will leave all the channels you have joined by calling joinChannel or joinChannelEx.
   ///
   /// * [connection] The connection information. See RtcConnection.
   /// * [options] The options for leaving the channel. See LeaveChannelOptions. This parameter only supports the stopMicrophoneRecording member in the LeaveChannelOptions settings; setting other members does not take effect.
@@ -81,7 +81,7 @@ abstract class RtcEngineEx implements RtcEngine {
 
   /// Sets the video encoder configuration.
   ///
-  /// Sets the encoder configuration for the local video. Each configuration profile corresponds to a set of video parameters, including the resolution, frame rate, and bitrate. The config specified in this method is the maximum value under ideal network conditions. If the video engine cannot render the video using the specified config due to unreliable network conditions, the parameters further down the list are considered until a successful configuration is found.
+  /// Sets the encoder configuration for the local video. Each configuration profile corresponds to a set of video parameters, including the resolution, frame rate, and bitrate.
   ///
   /// * [config] Video profile. See VideoEncoderConfiguration.
   /// * [connection] The connection information. See RtcConnection.
@@ -94,7 +94,9 @@ abstract class RtcEngineEx implements RtcEngine {
 
   /// Initializes the video view of a remote user.
   ///
-  /// This method initializes the video view of a remote stream on the local device. It affects only the video view that the local user sees. Call this method to bind the remote video stream to a video view and to set the rendering and mirror modes of the video view. The application specifies the uid of the remote video in the VideoCanvas method before the remote user joins the channel. If the remote uid is unknown to the application, set it after the application receives the onUserJoined callback. If the Video Recording function is enabled, the Video Recording Service joins the channel as a dummy client, causing other clients to also receive the onUserJoined callback. Do not bind the dummy client to the application view because the dummy client does not send any video streams. To unbind the remote user from the view, set the view parameter to NULL. Once the remote user leaves the channel, the SDK unbinds the remote user. To update the rendering or mirror mode of the remote video view during a call, use the setRemoteRenderModeEx method.
+  /// This method initializes the video view of a remote stream on the local device. It affects only the video view that the local user sees. Call this method to bind the remote video stream to a video view and to set the rendering and mirror modes of the video view. The application specifies the uid of the remote video in the VideoCanvas method before the remote user joins the channel. If the remote uid is unknown to the application, set it after the application receives the onUserJoined callback. If the Video Recording function is enabled, the Video Recording Service joins the channel as a dummy client, causing other clients to also receive the onUserJoined callback. Do not bind the dummy client to the application view because the dummy client does not send any video streams. To unbind the remote user from the view, set the view parameter to NULL. Once the remote user leaves the channel, the SDK unbinds the remote user.
+  ///  In Flutter, you don't need to call this method. Use AgoraVideoView instead to render local and remote views.
+  ///  To update the rendering or mirror mode of the remote video view during a call, use the setRemoteRenderModeEx method.
   ///
   /// * [canvas] The remote video view settings. See VideoCanvas.
   /// * [connection] The connection information. See RtcConnection.
@@ -192,9 +194,9 @@ abstract class RtcEngineEx implements RtcEngine {
 
   /// Stops or resumes subscribing to the video streams of all remote users.
   ///
-  /// After successfully calling this method, the local user stops or resumes subscribing to the audio streams of all remote users, including all subsequent users.
+  /// After successfully calling this method, the local user stops or resumes subscribing to the video streams of all remote users, including all subsequent users.
   ///
-  /// * [mute] Whether to stop subscribing to the video streams of all remote users. true : Stop subscribing to the video streams of all remote users. false : (Default) Subscribe to the audio streams of all remote users by default.
+  /// * [mute] Whether to stop subscribing to the video streams of all remote users. true : Stop subscribing to the video streams of all remote users. false : (Default) Subscribe to the video streams of all remote users by default.
   /// * [connection] The connection information. See RtcConnection.
   ///
   /// Returns
@@ -375,7 +377,10 @@ abstract class RtcEngineEx implements RtcEngine {
   ///  The playback volume here refers to the mixed volume of a specified remote user.
   ///
   /// * [uid] The user ID of the remote user.
-  /// * [volume] Audio mixing volume. The value ranges between 0 and 100. The default value is 100, which means the original volume.
+  /// * [volume] The volume of the user. The value range is [0,400].
+  ///  0: Mute.
+  ///  100: (Default) The original volume.
+  ///  400: Four times the original volume (amplifying the audio signals by four times).
   /// * [connection] The connection information. See RtcConnection.
   ///
   /// Returns
@@ -387,8 +392,6 @@ abstract class RtcEngineEx implements RtcEngine {
 
   /// Gets the current connection state of the SDK.
   ///
-  /// You can call this method either before or after joining a channel.
-  ///
   /// * [connection] The connection information. See RtcConnection.
   ///
   /// Returns
@@ -397,7 +400,7 @@ abstract class RtcEngineEx implements RtcEngine {
 
   /// Enables or disables the built-in encryption.
   ///
-  /// All users in the same channel must use the same encryption mode and encryption key. After the user leaves the channel, the SDK automatically disables the built-in encryption. To enable the built-in encryption, call this method before the user joins the channel again. In scenarios requiring high security, Agora recommends calling this method to enable the built-in encryption before joining a channel.
+  /// After the user leaves the channel, the SDK automatically disables the built-in encryption. To enable the built-in encryption, call this method before the user joins the channel again.
   ///
   /// * [connection] The connection information. See RtcConnection.
   /// * [enabled] Whether to enable built-in encryption: true : Enable the built-in encryption. false : (Default) Disable the built-in encryption.
@@ -412,8 +415,6 @@ abstract class RtcEngineEx implements RtcEngine {
 
   /// Creates a data stream.
   ///
-  /// Creates a data stream. Each user can create up to five data streams in a single channel.
-  ///
   /// * [config] The configurations for the data stream. See DataStreamConfig.
   /// * [connection] The connection information. See RtcConnection.
   ///
@@ -425,10 +426,10 @@ abstract class RtcEngineEx implements RtcEngine {
 
   /// Sends data stream messages.
   ///
-  /// After calling createDataStreamEx, you can call this method to send data stream messages to all users in the channel. The SDK has the following restrictions on this method:
-  ///  Up to 60 packets can be sent per second in a channel with each packet having a maximum size of 1 KB.
-  ///  Each client can send up to 30 KB of data per second.
-  ///  Each user can have up to five data streams simultaneously. A successful method call triggers the onStreamMessage callback on the remote client, from which the remote user gets the stream message. A failed method call triggers the onStreamMessageError callback on the remote client.
+  /// A successful method call triggers the onStreamMessage callback on the remote client, from which the remote user gets the stream message. A failed method call triggers the onStreamMessageError callback on the remote client. The SDK has the following restrictions on this method:
+  ///  Each user can have up to five data streams simultaneously.
+  ///  Up to 60 packets can be sent per second in a data stream with each packet having a maximum size of 1 KB.
+  ///  Up to 30 KB of data can be sent per second in a data stream. After calling createDataStreamEx, you can call this method to send data stream messages to all users in the channel.
   ///  Ensure that you call createDataStreamEx to create a data channel before calling this method.
   ///  This method applies only to the COMMUNICATION profile or to the hosts in the LIVE_BROADCASTING profile. If an audience in the LIVE_BROADCASTING profile calls this method, the audience may be switched to a host.
   ///
@@ -582,7 +583,6 @@ abstract class RtcEngineEx implements RtcEngine {
   ///  < 0: Failure.
   ///  -1: A general error occurs (no specified reason).
   ///  -2: The parameter is invalid.
-  ///  -7: The method call was rejected. It may be because the SDK has not been initialized successfully, or the user role is not a host.
   ///  -8: Internal state error. Probably because the user is not a broadcaster.
   Future<void> startOrUpdateChannelMediaRelayEx(
       {required ChannelMediaRelayConfiguration configuration,
@@ -597,6 +597,7 @@ abstract class RtcEngineEx implements RtcEngine {
   /// Returns
   /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown. You need to catch the exception and handle it accordingly.
   ///  < 0: Failure.
+  ///  -5: The method call was rejected. There is no ongoing channel media relay.
   Future<void> stopChannelMediaRelayEx(RtcConnection connection);
 
   /// Pauses the media stream relay to all target channels.
@@ -618,6 +619,7 @@ abstract class RtcEngineEx implements RtcEngine {
   /// Returns
   /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown. You need to catch the exception and handle it accordingly.
   ///  < 0: Failure.
+  ///  -5: The method call was rejected. There is no paused channel media relay.
   Future<void> resumeAllChannelMediaRelayEx(RtcConnection connection);
 
   /// @nodoc
@@ -696,10 +698,10 @@ abstract class RtcEngineEx implements RtcEngine {
 
   /// Enables or disables video screenshot and upload.
   ///
-  /// This method can take screenshots for multiple video streams and upload them. When video screenshot and upload function is enabled, the SDK takes screenshots and uploads videos sent by local users based on the type and frequency of the module you set in ContentInspectConfig. After video screenshot and upload, the Agora server sends the callback notification to your app server in HTTPS requests and sends all screenshots to the third-party cloud storage service. Before calling this method, ensure that you have contacted to activate the video screenshot upload service.
+  /// This method can take screenshots for multiple video streams and upload them. When video screenshot and upload function is enabled, the SDK takes screenshots and uploads videos sent by local users based on the type and frequency of the module you set in ContentInspectConfig. After video screenshot and upload, the Agora server sends the callback notification to your app server in HTTPS requests and sends all screenshots to the third-party cloud storage service.
   ///
-  /// * [enabled] Whether to enable video screenshot and upload : true : Enables video screenshot and upload. false : Disables video screenshot and upload.
-  /// * [config] Configuration of video screenshot and upload. See ContentInspectConfig. When the video moderation module is set to video moderation via Agora self-developed extension(contentInspectSupervision), the video screenshot and upload dynamic library libagora_content_inspect_extension.dll is required. Deleting this library disables the screenshot and upload feature.
+  /// * [enabled] Whether to enalbe video screenshot and upload: true : Enables video screenshot and upload. false : Disables video screenshot and upload.
+  /// * [config] Screenshot and upload configuration. See ContentInspectConfig. When the video moderation module is set to video moderation via Agora self-developed extension(contentInspectSupervision), the video screenshot and upload dynamic library libagora_content_inspect_extension.dll is required. Deleting this library disables the screenshot and upload feature.
   /// * [connection] The connection information. See RtcConnection.
   ///
   /// Returns
@@ -726,7 +728,7 @@ abstract class RtcEngineEx implements RtcEngine {
 
   /// Gets the call ID with the connection ID.
   ///
-  /// Call this method after joining a channel. When a user joins a channel on a client, a callId is generated to identify the call from the client. You can call this method to get the callId parameter, and pass it in when calling methods such as rate and complain.
+  /// When a user joins a channel on a client, a callId is generated to identify the call from the client. You can call this method to get the callId parameter, and pass it in when calling methods such as rate and complain.
   ///
   /// * [connection] The connection information. See RtcConnection.
   ///
