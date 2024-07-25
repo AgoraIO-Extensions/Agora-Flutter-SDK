@@ -254,7 +254,7 @@ enum ErrorCodeType {
   errNetDown,
 
   /// 17: The request to join the channel is rejected. Possible reasons include the following:
-  ///  The user is already in the channel. Agora recommends that you use the onConnectionStateChanged callback to determine whether the user exists in the channel. Do not call this method to join the channel unless you receive the connectionStateDisconnected (1) state.
+  ///  The user is already in the channel. Agora recommends that you use the onConnectionStateChanged callback to see whether the user is in the channel. Do not call this method to join the channel unless you receive the connectionStateDisconnected (1) state.
   ///  After calling startEchoTest for the call test, the user tries to join the channel without calling stopEchoTest to end the current test. To join a channel, the call test must be ended by calling stopEchoTest.
   @JsonValue(17)
   errJoinChannelRejected,
@@ -688,7 +688,7 @@ enum QualityType {
   @JsonValue(6)
   qualityDown,
 
-  /// 7: Users cannot detect the network quality (not in use).
+  /// @nodoc
   @JsonValue(7)
   qualityUnsupported,
 
@@ -1871,7 +1871,7 @@ class VideoEncoderConfiguration {
   @JsonKey(name: 'orientationMode')
   final OrientationMode? orientationMode;
 
-  /// Video degradation preference under limited bandwidth. See DegradationPreference.
+  /// Video degradation preference under limited bandwidth. See DegradationPreference. When this parameter is set to maintainFramerate (1) or maintainBalanced (2), orientationMode needs to be set to orientationModeAdaptive (0) at the same time, otherwise the setting will not take effect.
   @JsonKey(name: 'degradationPreference')
   final DegradationPreference? degradationPreference;
 
@@ -2502,7 +2502,7 @@ enum AudioScenarioType {
   @JsonValue(3)
   audioScenarioGameStreaming,
 
-  /// 5: Chatroom scenario, where users need to frequently switch the user role or mute and unmute the microphone. For example, education scenarios. In this scenario, audience members receive a pop-up window to request permission of using microphones.
+  /// 5: Chatroom scenario, where users need to frequently switch the user role or mute and unmute the microphone. For example, education scenarios.
   @JsonValue(5)
   audioScenarioChatroom,
 
@@ -4379,7 +4379,6 @@ enum ConnectionChangedReasonType {
   ///  All lowercase English letters: a to z.
   ///  All uppercase English letters: A to Z.
   ///  All numeric characters: 0 to 9.
-  ///  Space
   ///  "!", "#", "$", "%", "&", "(", ")", "+", "-", ":", ";", "<", "=", ".", ">", "?", "@", "[", "]", "^", "_", "{", "}", "|", "~", ","
   @JsonValue(7)
   connectionChangedInvalidChannelName,
@@ -4477,7 +4476,7 @@ extension ConnectionChangedReasonTypeExt on ConnectionChangedReasonType {
 /// The reason for a user role switch failure.
 @JsonEnum(alwaysCreate: true)
 enum ClientRoleChangeFailedReason {
-  /// 1: The number of hosts in the channel is already at the upper limit. This enumerator is reported only when the support for 128 users is enabled. The maximum number of hosts is based on the actual number of hosts configured when you enable the 128-user feature.
+  /// 1: The number of hosts in the channel exceeds the limit. This enumerator is reported only when the support for 128 users is enabled. The maximum number of hosts is based on the actual number of hosts configured when you enable the 128-user feature.
   @JsonValue(1)
   clientRoleChangeFailedTooManyBroadcasters,
 
@@ -4485,11 +4484,11 @@ enum ClientRoleChangeFailedReason {
   @JsonValue(2)
   clientRoleChangeFailedNotAuthorized,
 
-  /// 3: The request is timed out. Agora recommends you prompt the user to check the network connection and try to switch their user role again.
+  /// 3: The request is timed out. Agora recommends you prompt the user to check the network connection and try to switch their user role again. Deprecated: This enumerator is deprecated since v4.4.0 and is not recommended for use.
   @JsonValue(3)
   clientRoleChangeFailedRequestTimeOut,
 
-  /// 4: The SDK connection fails. You can use reason reported in the onConnectionStateChanged callback to troubleshoot the failure.
+  /// 4: The SDK is disconnected from the Agora edge server. You can troubleshoot the failure through the reason reported by onConnectionStateChanged. Deprecated: This enumerator is deprecated since v4.4.0 and is not recommended for use.
   @JsonValue(4)
   clientRoleChangeFailedConnectionFailed,
 }
@@ -4688,7 +4687,7 @@ class VideoCanvas {
       this.enableAlphaMask,
       this.position});
 
-  /// The user ID.
+  /// User ID that publishes the video source.
   @JsonKey(name: 'uid')
   final int? uid;
 
@@ -4730,7 +4729,7 @@ class VideoCanvas {
   @JsonKey(name: 'cropArea')
   final Rectangle? cropArea;
 
-  /// (Optional) Whether the receiver enables alpha mask rendering: true : The receiver enables alpha mask rendering. false : (Default) The receiver disables alpha mask rendering. Alpha mask rendering can create images with transparent effects and extract portraits from videos. When used in combination with other methods, you can implement effects such as portrait-in-picture and watermarking.
+  /// (Optional) Whether to enable alpha mask rendering: true : Enable alpha mask rendering. false : (Default) Disable alpha mask rendering. Alpha mask rendering can create images with transparent effects and extract portraits from videos. When used in combination with other methods, you can implement effects such as portrait-in-picture and watermarking.
   ///  The receiver can render alpha channel information only when the sender enables alpha transmission.
   ///  To enable alpha transmission,.
   @JsonKey(name: 'enableAlphaMask')
@@ -5022,7 +5021,7 @@ class VirtualBackgroundSource {
 /// The custom background.
 @JsonEnum(alwaysCreate: true)
 enum BackgroundSourceType {
-  /// 0: Process the background as alpha information without replacement, only separating the portrait and the background. After setting this value, you can call startLocalVideoTranscoder to implement the picture-in-picture effect.
+  /// 0: Process the background as alpha data without replacement, only separating the portrait and the background. After setting this value, you can call startLocalVideoTranscoder to implement the picture-in-picture effect.
   @JsonValue(0)
   backgroundNone,
 
