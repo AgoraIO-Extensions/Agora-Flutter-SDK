@@ -56,7 +56,7 @@ RtcEngineEx createAgoraRtcEngineEx({Object? sharedNativeHandle}) {
 
 /// Gets one MediaPlayerCacheManager instance.
 ///
-/// When you successfully call this method, the SDK returns a media player cache manager instance. The cache manager is a singleton pattern. Therefore, multiple calls to this method returns the same instance. Make sure the RtcEngine is initialized before you call this method.
+/// Before calling any APIs in the MediaPlayerCacheManager class, you need to call this method to get a cache manager instance of a media player.
 ///
 /// Returns
 /// The MediaPlayerCacheManager instance.
