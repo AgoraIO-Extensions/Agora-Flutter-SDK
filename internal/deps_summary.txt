@@ -13,5 +13,6 @@ https://download.agora.io/sdk/release/Agora_Native_SDK_for_iOS_rel.v4.3.1.138_44
 <NATIVE_CDN_URL_MACOS>
 <NATIVE_CDN_URL_WINDOWS>
 implementation 'io.agora.rtc:agora-special-full:4.3.1.138'
+implementation 'io.agora.rtc:full-screen-sharing:4.3.1.136'
 pod 'AgoraRtcEngine_Special_iOS', '4.3.1.138'
 pod 'AgoraRtcEngine_macOS', '4.3.1'
