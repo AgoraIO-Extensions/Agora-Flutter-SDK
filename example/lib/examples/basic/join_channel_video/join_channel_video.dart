@@ -24,6 +24,7 @@ class _State extends State<JoinChannelVideo> {
       switchRender = true,
       openCamera = true,
       muteCamera = false,
+      muteRemoteCamera = true,
       muteAllRemoteVideo = false;
   Set<int> remoteUid = {};
   late TextEditingController _controller;
@@ -55,6 +56,7 @@ class _State extends State<JoinChannelVideo> {
 
   Future<void> _initEngine() async {
     _engine = createAgoraRtcEngine();
+    await _engine.setLogLevel(LogLevel.logLevelApiCall);
     await _engine.initialize(RtcEngineContext(
       appId: config.appId,
     ));
@@ -144,6 +146,13 @@ class _State extends State<JoinChannelVideo> {
     await _engine.muteLocalVideoStream(!muteCamera);
     setState(() {
       muteCamera = !muteCamera;
+    });
+  }
+
+  _muteRemoteVideoStream() async {
+    await _engine.muteRemoteVideoStream(uid: 123, mute: !muteRemoteCamera);
+    setState(() {
+      muteRemoteCamera = !muteRemoteCamera;
     });
   }
 
@@ -321,6 +330,10 @@ class _State extends State<JoinChannelVideo> {
               ElevatedButton(
                 onPressed: _muteLocalVideoStream,
                 child: Text('Camera ${muteCamera ? 'muted' : 'unmute'}'),
+              ),
+              ElevatedButton(
+                onPressed: _muteRemoteVideoStream,
+                child: Text('Remote ${muteRemoteCamera ? 'muted' : 'unmute'}'),
               ),
               ElevatedButton(
                 onPressed: _muteAllRemoteVideoStreams,

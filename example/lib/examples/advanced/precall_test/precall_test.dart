@@ -4,6 +4,7 @@ import 'package:agora_rtc_engine/agora_rtc_engine.dart';
 import 'package:agora_rtc_engine_example/config/agora.config.dart' as config;
 import 'package:agora_rtc_engine_example/components/example_actions_widget.dart';
 import 'package:agora_rtc_engine_example/components/log_sink.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:path/path.dart' as path;
@@ -239,9 +240,11 @@ class _State extends State<PreCallTest> {
                 )
               ],
             ),
+            if(!kIsWeb)
             const SizedBox(
               height: 20,
             ),
+            if(!kIsWeb)
             ElevatedButton(
               onPressed: isJoined
                   ? null
@@ -280,9 +283,11 @@ class _State extends State<PreCallTest> {
                   : null,
               child: const Text('Set recording device'),
             ),
+            if(!kIsWeb)
             const SizedBox(
               height: 20,
             ),
+            if(!kIsWeb)
             ElevatedButton(
               onPressed: isJoined
                   ? null
@@ -333,9 +338,11 @@ class _State extends State<PreCallTest> {
                   : null,
               child: const Text('Set playback device'),
             ),
+            if(!kIsWeb)
             const SizedBox(
               height: 20,
             ),
+            if(!kIsWeb)
             ElevatedButton(
               onPressed: isJoined
                   ? null
@@ -368,9 +375,11 @@ class _State extends State<PreCallTest> {
               child: Text(
                   '${_isStartPlaybackDeviceTest ? 'Stop' : 'Start'} playback device test'),
             ),
+            if(!kIsWeb)
             const SizedBox(
               height: 20,
             ),
+            if(!kIsWeb)
             ElevatedButton(
               onPressed: isJoined
                   ? null
@@ -390,9 +399,11 @@ class _State extends State<PreCallTest> {
               child: Text(
                   '${_isStartAudioDeviceLoopbackTest ? 'Stop' : 'Start'} audio device loopback test'),
             ),
+            if(!kIsWeb)
             const SizedBox(
               height: 20,
             ),
+            if(!kIsWeb)
             ElevatedButton(
               onPressed: isJoined
                   ? null

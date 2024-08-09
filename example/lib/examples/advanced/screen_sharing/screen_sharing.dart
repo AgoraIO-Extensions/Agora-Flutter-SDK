@@ -29,6 +29,7 @@ class _State extends State<ScreenSharing> with KeepRemoteVideoViewsMixin {
   late final TextEditingController _screenShareUidController;
 
   bool _isScreenShared = false;
+  bool isPublishScreenShare = false;
   late final RtcEngineEventHandler _rtcEngineEventHandler;
 
   @override
@@ -54,15 +55,41 @@ class _State extends State<ScreenSharing> with KeepRemoteVideoViewsMixin {
     }, onJoinChannelSuccess: (RtcConnection connection, int elapsed) {
       logSink.log(
           '[onJoinChannelSuccess] connection: ${connection.toJson()} elapsed: $elapsed');
-      setState(() {
-        isJoined = true;
-      });
+      if (kIsWeb) {
+        if (connection.localUid == int.tryParse(_localUidController.text)) {
+          setState(() {
+            isJoined = true;
+          });
+        }
+         if (connection.localUid == int.tryParse(_screenShareUidController.text)) {
+          setState(() {
+            isPublishScreenShare = true;
+          });
+        }
+      } else {
+        setState(() {
+          isJoined = true;
+        });
+      }
     }, onLeaveChannel: (RtcConnection connection, RtcStats stats) {
       logSink.log(
           '[onLeaveChannel] connection: ${connection.toJson()} stats: ${stats.toJson()}');
-      setState(() {
-        isJoined = false;
-      });
+       if (kIsWeb) {
+        if (connection.localUid == int.tryParse(_localUidController.text)) {
+          setState(() {
+            isJoined = false;
+          });
+        }
+         if (connection.localUid == int.tryParse(_screenShareUidController.text)) {
+          setState(() {
+            isPublishScreenShare = false;
+          });
+        }
+      } else {
+        setState(() {
+          isJoined = false;
+        });
+      }
     }, onLocalVideoStateChanged: (VideoSourceType source,
             LocalVideoStreamState state, LocalVideoStreamReason error) {
       logSink.log(
@@ -123,6 +150,12 @@ class _State extends State<ScreenSharing> with KeepRemoteVideoViewsMixin {
           ));
     }
 
+    if (!kIsWeb) {
+      await _publishScreenShare();
+    }
+  }
+
+  Future<void> _publishScreenShare() async {
     final shareShareUid = int.tryParse(_screenShareUidController.text);
     if (shareShareUid != null) {
       await _engine.joinChannelEx(
@@ -141,6 +174,14 @@ class _State extends State<ScreenSharing> with KeepRemoteVideoViewsMixin {
             clientRoleType: ClientRoleType.clientRoleBroadcaster,
           ));
     }
+  }
+
+  Future<void> _unpublishScreenShare() async {
+    final shareShareUid = int.tryParse(_screenShareUidController.text);
+    if (shareShareUid == null) return;
+    await _engine.leaveChannelEx(
+        connection: RtcConnection(
+            channelId: _controller.text, localUid: shareShareUid));
   }
 
   Future<void> _updateScreenShareChannelMediaOptions() async {
@@ -297,6 +338,20 @@ class _State extends State<ScreenSharing> with KeepRemoteVideoViewsMixin {
                     }
                   },
                   onStopScreenShare: () {}),
+            if (kIsWeb)
+              Row(
+                children: [
+                  Expanded(
+                    child: ElevatedButton(
+                      onPressed: isPublishScreenShare
+                          ? _unpublishScreenShare
+                          : _publishScreenShare,
+                      child: Text(
+                          '${isPublishScreenShare ? 'un' : ''}publish screen share'),
+                    ),
+                  )
+                ],
+              ),
             if (!kIsWeb &&
                 (defaultTargetPlatform == TargetPlatform.android ||
                     defaultTargetPlatform == TargetPlatform.iOS))

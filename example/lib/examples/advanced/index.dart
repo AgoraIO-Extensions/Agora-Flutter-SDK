@@ -96,7 +96,7 @@ final advanced = [
       'name': 'SpatialAudioWithMediaPlayer',
       'widget': const SpatialAudioWithMediaPlayer()
     },
-  if (!kIsWeb && !(Platform.isAndroid || Platform.isIOS))
+  if (kIsWeb || !(Platform.isAndroid || Platform.isIOS))
     {'name': 'PreCallTest', 'widget': const PreCallTest()},
   if (!kIsWeb && (Platform.isAndroid || Platform.isIOS))
     {'name': 'MusicPlayer', 'widget': const MusicPlayerExample()},
