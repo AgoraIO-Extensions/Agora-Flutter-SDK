@@ -2,7 +2,8 @@ group 'com.example.iris_tester'
 version '1.0-SNAPSHOT'
 
 buildscript {
-    ext.kotlin_version = '1.6.10'
+    // Min kotlin version for Flutter SDK 3.24
+    ext.kotlin_version = '1.7.0'
     repositories {
         google()
         mavenCentral()
