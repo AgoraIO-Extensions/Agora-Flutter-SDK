@@ -43,6 +43,7 @@ void generatedTestCases(ValueGetter<IrisTester> irisTester) {
 
       {
         VideoPixelFormat frameType = VideoPixelFormat.videoPixelDefault;
+        AlphaStitchMode frameAlphaStitchMode = AlphaStitchMode.noAlphaStitch;
         VideoFrameMetaInfo? frameMetaInfo = null;
         int hdr10MetadataInfoRedPrimaryX = 5;
         int hdr10MetadataInfoRedPrimaryY = 5;
@@ -96,7 +97,6 @@ void generatedTestCases(ValueGetter<IrisTester> irisTester) {
         int frameTextureId = 5;
         List<double> frameMatrix = List.filled(5, 5.0);
         Uint8List frameAlphaBuffer = Uint8List.fromList([1, 1, 1, 1, 1]);
-        int frameAlphaStitchMode = 5;
         Uint8List framePixelBuffer = Uint8List.fromList([1, 1, 1, 1, 1]);
         VideoFrame frame = VideoFrame(
           type: frameType,
