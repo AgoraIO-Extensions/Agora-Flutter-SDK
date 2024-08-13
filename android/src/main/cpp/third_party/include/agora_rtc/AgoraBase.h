@@ -1763,17 +1763,27 @@ struct AdvanceOptions {
   */
   COMPRESSION_PREFERENCE compressionPreference;
 
+  /**
+  * Whether to encode and send the alpha data to the remote when alpha data is present.
+  * The default value is false.
+  */
+  bool encodeAlpha;
+
   AdvanceOptions() : encodingPreference(PREFER_AUTO), 
-                     compressionPreference(PREFER_LOW_LATENCY) {}
+                     compressionPreference(PREFER_LOW_LATENCY),
+                     encodeAlpha(false) {}
 
   AdvanceOptions(ENCODING_PREFERENCE encoding_preference, 
-                 COMPRESSION_PREFERENCE compression_preference) : 
+                 COMPRESSION_PREFERENCE compression_preference,
+                 bool encode_alpha) : 
                  encodingPreference(encoding_preference),
-                 compressionPreference(compression_preference) {}
+                 compressionPreference(compression_preference),
+                 encodeAlpha(encode_alpha) {}
 
   bool operator==(const AdvanceOptions& rhs) const {
     return encodingPreference == rhs.encodingPreference && 
-           compressionPreference == rhs.compressionPreference;
+           compressionPreference == rhs.compressionPreference &&
+           encodeAlpha == rhs.encodeAlpha;
   }
 
 };
@@ -1972,7 +1982,7 @@ struct VideoEncoderConfiguration {
       orientationMode(m),
       degradationPreference(MAINTAIN_QUALITY),
       mirrorMode(mirror),
-      advanceOptions(PREFER_AUTO, PREFER_LOW_LATENCY) {}
+      advanceOptions(PREFER_AUTO, PREFER_LOW_LATENCY, false) {}
   VideoEncoderConfiguration(int width, int height, int f, int b, ORIENTATION_MODE m, VIDEO_MIRROR_MODE_TYPE mirror = VIDEO_MIRROR_MODE_DISABLED)
     : codecType(VIDEO_CODEC_NONE),
       dimensions(width, height),
@@ -1982,7 +1992,7 @@ struct VideoEncoderConfiguration {
       orientationMode(m),
       degradationPreference(MAINTAIN_QUALITY),
       mirrorMode(mirror),
-      advanceOptions(PREFER_AUTO, PREFER_LOW_LATENCY) {}
+      advanceOptions(PREFER_AUTO, PREFER_LOW_LATENCY, false) {}
   VideoEncoderConfiguration(const VideoEncoderConfiguration& config)
     : codecType(config.codecType),
       dimensions(config.dimensions),
@@ -2002,7 +2012,7 @@ struct VideoEncoderConfiguration {
       orientationMode(ORIENTATION_MODE_ADAPTIVE),
       degradationPreference(MAINTAIN_QUALITY),
       mirrorMode(VIDEO_MIRROR_MODE_DISABLED),
-      advanceOptions(PREFER_AUTO, PREFER_LOW_LATENCY) {}
+      advanceOptions(PREFER_AUTO, PREFER_LOW_LATENCY, false) {}
 
   VideoEncoderConfiguration& operator=(const VideoEncoderConfiguration& rhs) {
     if (this == &rhs) return *this;
@@ -4307,12 +4317,14 @@ enum CLIENT_ROLE_CHANGE_FAILED_REASON {
   CLIENT_ROLE_CHANGE_FAILED_NOT_AUTHORIZED = 2,
   /**
    * 3: The operation of changing role is timeout.
+   * @deprecated This reason is deprecated.
    */
-  CLIENT_ROLE_CHANGE_FAILED_REQUEST_TIME_OUT = 3,
+  CLIENT_ROLE_CHANGE_FAILED_REQUEST_TIME_OUT __deprecated = 3,
   /**
    * 4: The operation of changing role is interrupted since we lost connection with agora service.
+   * @deprecated This reason is deprecated.
    */
-  CLIENT_ROLE_CHANGE_FAILED_CONNECTION_FAILED = 4,
+  CLIENT_ROLE_CHANGE_FAILED_CONNECTION_FAILED __deprecated = 4,
 };
 
 /**
@@ -5958,8 +5970,8 @@ enum STREAM_SUBSCRIBE_STATE {
    *   - Calls `enableLocalAudio(false)` or `enableLocalVideo(false)` to disable the local audio or video capture.
    *   - The role of the remote user is audience.
    * - The local user calls the following methods to stop receiving remote streams:
-   *   - Calls `muteRemoteAudioStream(true)`, `muteAllRemoteAudioStreams(true)` or `setDefaultMuteAllRemoteAudioStreams(true)` to stop receiving the remote audio streams.
-   *   - Calls `muteRemoteVideoStream(true)`, `muteAllRemoteVideoStreams(true)` or `setDefaultMuteAllRemoteVideoStreams(true)` to stop receiving the remote video streams.
+   *   - Calls `muteRemoteAudioStream(true)`, `muteAllRemoteAudioStreams(true)` to stop receiving the remote audio streams.
+   *   - Calls `muteRemoteVideoStream(true)`, `muteAllRemoteVideoStreams(true)` to stop receiving the remote video streams.
    */
   SUB_STATE_NO_SUBSCRIBED = 1,
   /**
