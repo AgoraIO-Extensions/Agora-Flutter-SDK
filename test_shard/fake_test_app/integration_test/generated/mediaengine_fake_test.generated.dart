@@ -555,6 +555,7 @@ void mediaEngineSmokeTestCases() {
         VideoBufferType frameType = VideoBufferType.videoBufferRawData;
         VideoPixelFormat frameFormat = VideoPixelFormat.videoPixelDefault;
         EglContextType frameEglType = EglContextType.eglContext10;
+        AlphaStitchMode frameAlphaStitchMode = AlphaStitchMode.noAlphaStitch;
         int hdr10MetadataInfoRedPrimaryX = 5;
         int hdr10MetadataInfoRedPrimaryY = 5;
         int hdr10MetadataInfoGreenPrimaryX = 5;
@@ -607,7 +608,7 @@ void mediaEngineSmokeTestCases() {
         int frameMetadataSize = 5;
         Uint8List frameAlphaBuffer = Uint8List.fromList([1, 1, 1, 1, 1]);
         bool frameFillAlphaBuffer = true;
-        int frameAlphaStitchMode = 5;
+        int frameD3d11Texture2d = 5;
         int frameTextureSliceIndex = 5;
         ExternalVideoFrame frame = ExternalVideoFrame(
           type: frameType,
@@ -630,6 +631,7 @@ void mediaEngineSmokeTestCases() {
           alphaBuffer: frameAlphaBuffer,
           fillAlphaBuffer: frameFillAlphaBuffer,
           alphaStitchMode: frameAlphaStitchMode,
+          d3d11Texture2d: frameD3d11Texture2d,
           textureSliceIndex: frameTextureSliceIndex,
           hdr10MetadataInfo: frameHdr10MetadataInfo,
           colorSpace: frameColorSpace,

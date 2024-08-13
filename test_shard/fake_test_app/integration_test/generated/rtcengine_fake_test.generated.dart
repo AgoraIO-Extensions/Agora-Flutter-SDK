@@ -1038,9 +1038,11 @@ void rtcEngineSmokeTestCases() {
             EncodingPreference.preferAuto;
         CompressionPreference advanceOptionsCompressionPreference =
             CompressionPreference.preferLowLatency;
+        bool advanceOptionsEncodeAlpha = true;
         AdvanceOptions configAdvanceOptions = AdvanceOptions(
           encodingPreference: advanceOptionsEncodingPreference,
           compressionPreference: advanceOptionsCompressionPreference,
+          encodeAlpha: advanceOptionsEncodeAlpha,
         );
         int configFrameRate = 5;
         int configBitrate = 5;
@@ -1929,41 +1931,6 @@ void rtcEngineSmokeTestCases() {
   );
 
   testWidgets(
-    'RtcEngine.setDefaultMuteAllRemoteAudioStreams',
-    (WidgetTester tester) async {
-      String engineAppId = const String.fromEnvironment('TEST_APP_ID',
-          defaultValue: '<YOUR_APP_ID>');
-
-      RtcEngine rtcEngine = createAgoraRtcEngine();
-      await rtcEngine.initialize(RtcEngineContext(
-        appId: engineAppId,
-        areaCode: AreaCode.areaCodeGlob.value(),
-      ));
-      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
-
-      try {
-        bool mute = true;
-        await rtcEngine.setDefaultMuteAllRemoteAudioStreams(
-          mute,
-        );
-      } catch (e) {
-        if (e is! AgoraRtcException) {
-          debugPrint(
-              '[RtcEngine.setDefaultMuteAllRemoteAudioStreams] error: ${e.toString()}');
-          rethrow;
-        }
-
-        if (e.code != -4) {
-          // Only not supported error supported.
-          rethrow;
-        }
-      }
-
-      await rtcEngine.release();
-    },
-  );
-
-  testWidgets(
     'RtcEngine.muteRemoteAudioStream',
     (WidgetTester tester) async {
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
@@ -2090,41 +2057,6 @@ void rtcEngineSmokeTestCases() {
         if (e is! AgoraRtcException) {
           debugPrint(
               '[RtcEngine.muteAllRemoteVideoStreams] error: ${e.toString()}');
-          rethrow;
-        }
-
-        if (e.code != -4) {
-          // Only not supported error supported.
-          rethrow;
-        }
-      }
-
-      await rtcEngine.release();
-    },
-  );
-
-  testWidgets(
-    'RtcEngine.setDefaultMuteAllRemoteVideoStreams',
-    (WidgetTester tester) async {
-      String engineAppId = const String.fromEnvironment('TEST_APP_ID',
-          defaultValue: '<YOUR_APP_ID>');
-
-      RtcEngine rtcEngine = createAgoraRtcEngine();
-      await rtcEngine.initialize(RtcEngineContext(
-        appId: engineAppId,
-        areaCode: AreaCode.areaCodeGlob.value(),
-      ));
-      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
-
-      try {
-        bool mute = true;
-        await rtcEngine.setDefaultMuteAllRemoteVideoStreams(
-          mute,
-        );
-      } catch (e) {
-        if (e is! AgoraRtcException) {
-          debugPrint(
-              '[RtcEngine.setDefaultMuteAllRemoteVideoStreams] error: ${e.toString()}');
           rethrow;
         }
 
@@ -7812,9 +7744,11 @@ void rtcEngineSmokeTestCases() {
             EncodingPreference.preferAuto;
         CompressionPreference advanceOptionsCompressionPreference =
             CompressionPreference.preferLowLatency;
+        bool advanceOptionsEncodeAlpha = true;
         AdvanceOptions videoOutputConfigurationAdvanceOptions = AdvanceOptions(
           encodingPreference: advanceOptionsEncodingPreference,
           compressionPreference: advanceOptionsCompressionPreference,
+          encodeAlpha: advanceOptionsEncodeAlpha,
         );
         int videoOutputConfigurationFrameRate = 5;
         int videoOutputConfigurationBitrate = 5;
@@ -7892,9 +7826,11 @@ void rtcEngineSmokeTestCases() {
             EncodingPreference.preferAuto;
         CompressionPreference advanceOptionsCompressionPreference =
             CompressionPreference.preferLowLatency;
+        bool advanceOptionsEncodeAlpha = true;
         AdvanceOptions videoOutputConfigurationAdvanceOptions = AdvanceOptions(
           encodingPreference: advanceOptionsEncodingPreference,
           compressionPreference: advanceOptionsCompressionPreference,
+          encodeAlpha: advanceOptionsEncodeAlpha,
         );
         int videoOutputConfigurationFrameRate = 5;
         int videoOutputConfigurationBitrate = 5;
@@ -9706,9 +9642,11 @@ void rtcEngineSmokeTestCases() {
             EncodingPreference.preferAuto;
         CompressionPreference advanceOptionsCompressionPreference =
             CompressionPreference.preferLowLatency;
+        bool advanceOptionsEncodeAlpha = true;
         AdvanceOptions configAdvanceOptions = AdvanceOptions(
           encodingPreference: advanceOptionsEncodingPreference,
           compressionPreference: advanceOptionsCompressionPreference,
+          encodeAlpha: advanceOptionsEncodeAlpha,
         );
         int configFrameRate = 5;
         int configBitrate = 5;

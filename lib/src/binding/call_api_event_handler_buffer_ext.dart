@@ -987,6 +987,7 @@ extension ExternalVideoFrameBufferExt on ExternalVideoFrame {
         alphaBuffer: alphaBuffer,
         fillAlphaBuffer: fillAlphaBuffer,
         alphaStitchMode: alphaStitchMode,
+        d3d11Texture2d: d3d11Texture2d,
         textureSliceIndex: textureSliceIndex,
         hdr10MetadataInfo: hdr10MetadataInfo,
         colorSpace: colorSpace);

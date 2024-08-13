@@ -428,24 +428,31 @@ struct AudioPcmFrame {
   rtc::BYTES_PER_SAMPLE bytes_per_sample;
   /** The audio frame data. */
   int16_t data_[kMaxDataSizeSamples];
+  
+  /** 
+   *  @technical preview
+   *  data_[kMaxDataSizeSamples] is real stereo data 
+   */
+  bool is_stereo_;
 
   AudioPcmFrame& operator=(const AudioPcmFrame& src) {
-    if(this == &src) {
+    if (this == &src) {
       return *this;
     }
 
-    this->capture_timestamp = src.capture_timestamp;
-    this->samples_per_channel_ = src.samples_per_channel_;
-    this->sample_rate_hz_ = src.sample_rate_hz_;
-    this->bytes_per_sample = src.bytes_per_sample;
-    this->num_channels_ = src.num_channels_;
+    capture_timestamp = src.capture_timestamp;
+    samples_per_channel_ = src.samples_per_channel_;
+    sample_rate_hz_ = src.sample_rate_hz_;
+    bytes_per_sample = src.bytes_per_sample;
+    num_channels_ = src.num_channels_;
+    is_stereo_ = src.is_stereo_;
 
     size_t length = src.samples_per_channel_ * src.num_channels_;
     if (length > kMaxDataSizeSamples) {
       length = kMaxDataSizeSamples;
     }
 
-    memcpy(this->data_, src.data_, length * sizeof(int16_t));
+    memcpy(data_, src.data_, length * sizeof(int16_t));
 
     return *this;
   }
@@ -455,7 +462,8 @@ struct AudioPcmFrame {
         samples_per_channel_(0),
         sample_rate_hz_(0),
         num_channels_(0),
-        bytes_per_sample(rtc::TWO_BYTES_PER_SAMPLE) {
+        bytes_per_sample(rtc::TWO_BYTES_PER_SAMPLE),
+        is_stereo_(false) {
     memset(data_, 0, sizeof(data_));
   }
 
@@ -464,7 +472,8 @@ struct AudioPcmFrame {
         samples_per_channel_(src.samples_per_channel_),
         sample_rate_hz_(src.sample_rate_hz_),
         num_channels_(src.num_channels_),
-        bytes_per_sample(src.bytes_per_sample) {
+        bytes_per_sample(src.bytes_per_sample),
+        is_stereo_(src.is_stereo_) {
     size_t length = src.samples_per_channel_ * src.num_channels_;
     if (length > kMaxDataSizeSamples) {
       length = kMaxDataSizeSamples;
@@ -765,6 +774,32 @@ struct Hdr10MetadataInfo {
   }
 };
 
+/**
+ *  The relative position between alphabuffer and the frame.
+ */
+enum ALPHA_STITCH_MODE {
+  /**
+   * 0: Normal frame without alphabuffer stitched
+   */
+  NO_ALPHA_STITCH = 0,
+  /**
+   * 1: Alphabuffer is above the frame
+   */
+  ALPHA_STITCH_UP = 1,
+  /**
+   * 2: Alphabuffer is below the frame
+   */
+  ALPHA_STITCH_BELOW = 2,
+  /**
+   * 3: Alphabuffer is on the left of frame
+   */
+  ALPHA_STITCH_LEFT = 3,
+  /**
+   * 4: Alphabuffer is on the right of frame
+   */
+  ALPHA_STITCH_RIGHT = 4,
+};
+
 
 /**
  * The definition of the ExternalVideoFrame struct.
@@ -785,14 +820,14 @@ struct ExternalVideoFrame {
         eglContext(NULL),
         eglType(EGL_CONTEXT10),
         textureId(0),
-        fence_object(0),
-        metadata_buffer(NULL),
-        metadata_size(0),
+        fenceObject(0),
+        metadataBuffer(NULL),
+        metadataSize(0),
         alphaBuffer(NULL),
         fillAlphaBuffer(false),
-        alphaStitchMode(0),
-        d3d11_texture_2d(NULL),
-        texture_slice_index(0){}
+        alphaStitchMode(NO_ALPHA_STITCH),
+        d3d11Texture2d(NULL),
+        textureSliceIndex(0){}
 
    /**
    * The EGL context type.
@@ -898,7 +933,7 @@ struct ExternalVideoFrame {
    * [Texture related parameter] The fence object related to the textureId parameter, indicating the synchronization status of the video data in Texture format.
    * The default value is 0
    */
-  long long fence_object; 
+  long long fenceObject; 
   /**
    * [Texture related parameter] Incoming 4 &times; 4 transformational matrix. The typical value is a unit matrix.
    */
@@ -907,12 +942,12 @@ struct ExternalVideoFrame {
    * [Texture related parameter] The MetaData buffer.
    *  The default value is NULL
    */
-  uint8_t* metadata_buffer;
+  uint8_t* metadataBuffer;
   /**
    * [Texture related parameter] The MetaData size.
    *  The default value is 0
    */
-  int metadata_size;
+  int metadataSize;
   /**
    *  Indicates the alpha channel of current frame, which is consistent with the dimension of the video frame.
    *  The value range of each pixel is [0,255], where 0 represents the background; 255 represents the foreground.
@@ -933,17 +968,17 @@ struct ExternalVideoFrame {
    *  4: Alphabuffer is on the right of frame;
    *  The default value is 0.
    */
-  int alphaStitchMode;
+  ALPHA_STITCH_MODE alphaStitchMode;
 
   /**
    * [For Windows only] The pointer of ID3D11Texture2D used by the video frame.
    */
-  void *d3d11_texture_2d;
+  void *d3d11Texture2d;
 
   /**
    * [For Windows only] The index of ID3D11Texture2D array used by the video frame.
    */
-  int texture_slice_index;
+  int textureSliceIndex;
 
   /**
    * metadata info used for hdr video data
@@ -979,7 +1014,7 @@ struct VideoFrame {
   textureId(0),
   d3d11Texture2d(NULL),
   alphaBuffer(NULL),
-  alphaStitchMode(0),
+  alphaStitchMode(NO_ALPHA_STITCH),
   pixelBuffer(NULL),
   metaInfo(NULL){
     memset(matrix, 0, sizeof(matrix));
@@ -1076,7 +1111,7 @@ struct VideoFrame {
    *  4: Alphabuffer is on the right of frame;
    *  The default value is 0.
    */
-  int alphaStitchMode;
+  ALPHA_STITCH_MODE alphaStitchMode;
   /**
    *The type of CVPixelBufferRef, for iOS and macOS only.
    */

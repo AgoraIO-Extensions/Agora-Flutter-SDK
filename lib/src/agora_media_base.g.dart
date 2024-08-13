@@ -164,6 +164,7 @@ AudioPcmFrame _$AudioPcmFrameFromJson(Map<String, dynamic> json) =>
       data: (json['data_'] as List<dynamic>?)
           ?.map((e) => (e as num).toInt())
           .toList(),
+      isStereo: json['is_stereo_'] as bool?,
     );
 
 Map<String, dynamic> _$AudioPcmFrameToJson(AudioPcmFrame instance) {
@@ -182,6 +183,7 @@ Map<String, dynamic> _$AudioPcmFrameToJson(AudioPcmFrame instance) {
   writeNotNull(
       'bytes_per_sample', _$BytesPerSampleEnumMap[instance.bytesPerSample]);
   writeNotNull('data_', instance.data);
+  writeNotNull('is_stereo_', instance.isStereo);
   return val;
 }
 
@@ -326,14 +328,16 @@ ExternalVideoFrame _$ExternalVideoFrameFromJson(Map<String, dynamic> json) =>
       timestamp: (json['timestamp'] as num?)?.toInt(),
       eglType: $enumDecodeNullable(_$EglContextTypeEnumMap, json['eglType']),
       textureId: (json['textureId'] as num?)?.toInt(),
-      fenceObject: (json['fence_object'] as num?)?.toInt(),
+      fenceObject: (json['fenceObject'] as num?)?.toInt(),
       matrix: (json['matrix'] as List<dynamic>?)
           ?.map((e) => (e as num).toDouble())
           .toList(),
-      metadataSize: (json['metadata_size'] as num?)?.toInt(),
+      metadataSize: (json['metadataSize'] as num?)?.toInt(),
       fillAlphaBuffer: json['fillAlphaBuffer'] as bool?,
-      alphaStitchMode: (json['alphaStitchMode'] as num?)?.toInt(),
-      textureSliceIndex: (json['texture_slice_index'] as num?)?.toInt(),
+      alphaStitchMode: $enumDecodeNullable(
+          _$AlphaStitchModeEnumMap, json['alphaStitchMode']),
+      d3d11Texture2d: (readIntPtr(json, 'd3d11Texture2d') as num?)?.toInt(),
+      textureSliceIndex: (json['textureSliceIndex'] as num?)?.toInt(),
       hdr10MetadataInfo: json['hdr10MetadataInfo'] == null
           ? null
           : Hdr10MetadataInfo.fromJson(
@@ -364,12 +368,14 @@ Map<String, dynamic> _$ExternalVideoFrameToJson(ExternalVideoFrame instance) {
   writeNotNull('timestamp', instance.timestamp);
   writeNotNull('eglType', _$EglContextTypeEnumMap[instance.eglType]);
   writeNotNull('textureId', instance.textureId);
-  writeNotNull('fence_object', instance.fenceObject);
+  writeNotNull('fenceObject', instance.fenceObject);
   writeNotNull('matrix', instance.matrix);
-  writeNotNull('metadata_size', instance.metadataSize);
+  writeNotNull('metadataSize', instance.metadataSize);
   writeNotNull('fillAlphaBuffer', instance.fillAlphaBuffer);
-  writeNotNull('alphaStitchMode', instance.alphaStitchMode);
-  writeNotNull('texture_slice_index', instance.textureSliceIndex);
+  writeNotNull(
+      'alphaStitchMode', _$AlphaStitchModeEnumMap[instance.alphaStitchMode]);
+  writeNotNull('d3d11Texture2d', instance.d3d11Texture2d);
+  writeNotNull('textureSliceIndex', instance.textureSliceIndex);
   writeNotNull('hdr10MetadataInfo', instance.hdr10MetadataInfo?.toJson());
   writeNotNull('colorSpace', instance.colorSpace?.toJson());
   return val;
@@ -404,6 +410,14 @@ const _$EglContextTypeEnumMap = {
   EglContextType.eglContext14: 1,
 };
 
+const _$AlphaStitchModeEnumMap = {
+  AlphaStitchMode.noAlphaStitch: 0,
+  AlphaStitchMode.alphaStitchUp: 1,
+  AlphaStitchMode.alphaStitchBelow: 2,
+  AlphaStitchMode.alphaStitchLeft: 3,
+  AlphaStitchMode.alphaStitchRight: 4,
+};
+
 VideoFrame _$VideoFrameFromJson(Map<String, dynamic> json) => VideoFrame(
       type: $enumDecodeNullable(_$VideoPixelFormatEnumMap, json['type']),
       width: (json['width'] as num?)?.toInt(),
@@ -419,7 +433,8 @@ VideoFrame _$VideoFrameFromJson(Map<String, dynamic> json) => VideoFrame(
       matrix: (json['matrix'] as List<dynamic>?)
           ?.map((e) => (e as num).toDouble())
           .toList(),
-      alphaStitchMode: (json['alphaStitchMode'] as num?)?.toInt(),
+      alphaStitchMode: $enumDecodeNullable(
+          _$AlphaStitchModeEnumMap, json['alphaStitchMode']),
       metaInfo: const VideoFrameMetaInfoConverter().fromJson(json['metaInfo']),
       hdr10MetadataInfo: json['hdr10MetadataInfo'] == null
           ? null
@@ -451,7 +466,8 @@ Map<String, dynamic> _$VideoFrameToJson(VideoFrame instance) {
   writeNotNull('metadata_size', instance.metadataSize);
   writeNotNull('textureId', instance.textureId);
   writeNotNull('matrix', instance.matrix);
-  writeNotNull('alphaStitchMode', instance.alphaStitchMode);
+  writeNotNull(
+      'alphaStitchMode', _$AlphaStitchModeEnumMap[instance.alphaStitchMode]);
   writeNotNull('metaInfo',
       const VideoFrameMetaInfoConverter().toJson(instance.metaInfo));
   writeNotNull('hdr10MetadataInfo', instance.hdr10MetadataInfo?.toJson());

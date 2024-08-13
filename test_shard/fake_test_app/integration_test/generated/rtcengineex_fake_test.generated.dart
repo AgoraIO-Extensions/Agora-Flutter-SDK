@@ -336,9 +336,11 @@ void rtcEngineExSmokeTestCases() {
             EncodingPreference.preferAuto;
         CompressionPreference advanceOptionsCompressionPreference =
             CompressionPreference.preferLowLatency;
+        bool advanceOptionsEncodeAlpha = true;
         AdvanceOptions configAdvanceOptions = AdvanceOptions(
           encodingPreference: advanceOptionsEncodingPreference,
           compressionPreference: advanceOptionsCompressionPreference,
+          encodeAlpha: advanceOptionsEncodeAlpha,
         );
         int configFrameRate = 5;
         int configBitrate = 5;

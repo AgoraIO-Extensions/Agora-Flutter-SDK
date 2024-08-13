@@ -263,6 +263,7 @@ AdvanceOptions _$AdvanceOptionsFromJson(Map<String, dynamic> json) =>
           _$EncodingPreferenceEnumMap, json['encodingPreference']),
       compressionPreference: $enumDecodeNullable(
           _$CompressionPreferenceEnumMap, json['compressionPreference']),
+      encodeAlpha: json['encodeAlpha'] as bool?,
     );
 
 Map<String, dynamic> _$AdvanceOptionsToJson(AdvanceOptions instance) {
@@ -278,6 +279,7 @@ Map<String, dynamic> _$AdvanceOptionsToJson(AdvanceOptions instance) {
       _$EncodingPreferenceEnumMap[instance.encodingPreference]);
   writeNotNull('compressionPreference',
       _$CompressionPreferenceEnumMap[instance.compressionPreference]);
+  writeNotNull('encodeAlpha', instance.encodeAlpha);
   return val;
 }
 

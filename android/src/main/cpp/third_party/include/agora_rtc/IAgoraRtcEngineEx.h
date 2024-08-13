@@ -318,40 +318,6 @@ class IRtcEngineEventHandlerEx : public IRtcEngineEventHandler {
     (void)rotation;
   }
 
-  /** Occurs when the local video stream state changes.
-   *
-   * When the state of the local video stream changes (including the state of the video capture and
-   * encoding), the SDK triggers this callback to report the current state. This callback indicates
-   * the state of the local video stream, including camera capturing and video encoding, and allows
-   * you to troubleshoot issues when exceptions occur.
-   *
-   * The SDK triggers the onLocalVideoStateChanged callback with the state code of `LOCAL_VIDEO_STREAM_STATE_FAILED`
-   * and error code of `LOCAL_VIDEO_STREAM_REASON_CAPTURE_FAILURE` in the following situations:
-   * - The app switches to the background, and the system gets the camera resource.
-   * - The camera starts normally, but does not output video for four consecutive seconds.
-   *
-   * When the camera outputs the captured video frames, if the video frames are the same for 15
-   * consecutive frames, the SDK triggers the `onLocalVideoStateChanged` callback with the state code
-   * of `LOCAL_VIDEO_STREAM_STATE_CAPTURING` and error code of `LOCAL_VIDEO_STREAM_REASON_CAPTURE_FAILURE`.
-   * Note that the video frame duplication detection is only available for video frames with a resolution
-   * greater than 200 × 200, a frame rate greater than or equal to 10 fps, and a bitrate less than 20 Kbps.
-   *
-   * @note For some device models, the SDK does not trigger this callback when the state of the local
-   * video changes while the local video capturing device is in use, so you have to make your own
-   * timeout judgment.
-   *
-   * @param connection The RtcConnection object.
-   * @param state The state of the local video. See #LOCAL_VIDEO_STREAM_STATE.
-   * @param reason The detailed error information. See #LOCAL_VIDEO_STREAM_REASON.
-   */
-  virtual void onLocalVideoStateChanged(const RtcConnection& connection,
-                                        LOCAL_VIDEO_STREAM_STATE state,
-                                        LOCAL_VIDEO_STREAM_REASON reason) {
-    (void)connection;
-    (void)state;
-    (void)reason;
-  }
-
   /**
    * Occurs when the remote video state changes.
    *
