@@ -2562,7 +2562,7 @@ enum VideoApplicationScenarioType {
   @JsonValue(0)
   applicationScenarioGeneral,
 
-  /// If set to applicationScenarioMeeting (1), the SDK automatically enables the following strategies:
+  /// applicationScenarioMeeting (1) is suitable for meeting scenarios. If set to applicationScenarioMeeting (1), the SDK automatically enables the following strategies:
   ///  In meeting scenarios where low-quality video streams are required to have a high bitrate, the SDK automatically enables multiple technologies used to deal with network congestions, to enhance the performance of the low-quality streams and to ensure the smooth reception by subscribers.
   ///  The SDK monitors the number of subscribers to the high-quality video stream in real time and dynamically adjusts its configuration based on the number of subscribers.
   ///  If nobody subscribers to the high-quality stream, the SDK automatically reduces its bitrate and frame rate to save upstream bandwidth.
@@ -4890,7 +4890,7 @@ class VirtualBackgroundSource {
 /// The custom background.
 @JsonEnum(alwaysCreate: true)
 enum BackgroundSourceType {
-  /// 0: Process the background as alpha information without replacement, only separating the portrait and the background. After setting this value, you can call startLocalVideoTranscoder to implement the picture-in-picture effect.
+  /// 0: Process the background as alpha data without replacement, only separating the portrait and the background. After setting this value, you can call startLocalVideoTranscoder to implement the picture-in-picture effect.
   @JsonValue(0)
   backgroundNone,
 
