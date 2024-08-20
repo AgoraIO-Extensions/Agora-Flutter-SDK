@@ -1,9 +1,9 @@
 package io.agora.agora_rtc_ng_example
 
-import io.flutter.app.FlutterApplication
+import android.app.Application
 import io.flutter.embedding.engine.FlutterEngine
 
-class MyApplication : FlutterApplication() {
+class MyApplication : Application() {
     private var flutterEngine: FlutterEngine? = null
 
     fun getFlutterEngine(): FlutterEngine {
