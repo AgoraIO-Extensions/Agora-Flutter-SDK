@@ -65,7 +65,13 @@ void saveAppType(IrisAppType type);
 
 IrisAppType getAppType();
 
-IRIS_API void InitIrisLogger(const char *path, int maxSize, IrisLogLevel level);
+IRIS_API void IRIS_CALL InitIrisLogger(const char *path, int maxSize,
+                                       IrisLogLevel level);
+
+IRIS_API void IRIS_CALL WriteIrisLogInternal(IrisLogLevel level,
+                                             const char *fmt, ...);
+
+IRIS_API void IRIS_CALL WriteIrisLog(IrisLogLevel level, const char *content);
 
 typedef struct EventParam {
   const char *event;
