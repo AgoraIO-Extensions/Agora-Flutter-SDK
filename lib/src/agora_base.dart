@@ -2778,7 +2778,7 @@ enum VideoApplicationScenarioType {
   @JsonValue(0)
   applicationScenarioGeneral,
 
-  /// applicationScenarioMeeting (1) is suitable for meeting scenarios. If set to applicationScenarioMeeting (1), the SDK automatically enables the following strategies:
+  /// applicationScenarioMeeting (1) is suitable for meeting scenarios. The SDK automatically enables the following strategies:
   ///  In meeting scenarios where low-quality video streams are required to have a high bitrate, the SDK automatically enables multiple technologies used to deal with network congestions, to enhance the performance of the low-quality streams and to ensure the smooth reception by subscribers.
   ///  The SDK monitors the number of subscribers to the high-quality video stream in real time and dynamically adjusts its configuration based on the number of subscribers.
   ///  If nobody subscribers to the high-quality stream, the SDK automatically reduces its bitrate and frame rate to save upstream bandwidth.
@@ -2795,7 +2795,7 @@ enum VideoApplicationScenarioType {
   @JsonValue(1)
   applicationScenarioMeeting,
 
-  /// @nodoc
+  /// applicationScenario1v1 (2) is suitable for 1v1 video call scenarios. To meet the requirements for low latency and high-quality video in this scenario, the SDK optimizes its strategies, improving performance in terms of video quality, first frame rendering, latency on mid-to-low-end devices, and smoothness under weak network conditions. 2: 1v1 video call scenario.
   @JsonValue(2)
   applicationScenario1v1,
 }
@@ -3129,7 +3129,7 @@ enum LocalVideoStreamReason {
   @JsonValue(20)
   localVideoStreamReasonScreenCaptureWindowNotSupported,
 
-  /// @nodoc
+  /// 21: (Windows only) The screen has not captured any data available for window sharing.
   @JsonValue(21)
   localVideoStreamReasonScreenCaptureFailure,
 
@@ -3161,7 +3161,7 @@ enum LocalVideoStreamReason {
   @JsonValue(29)
   localVideoStreamReasonScreenCaptureResumed,
 
-  /// @nodoc
+  /// 30: (Windows and macOS only) The displayer used for screen capture is disconnected.
   @JsonValue(30)
   localVideoStreamReasonScreenCaptureDisplayDisconnected,
 }
@@ -4802,7 +4802,7 @@ extension NetworkTypeExt on NetworkType {
 /// Setting mode of the view.
 @JsonEnum(alwaysCreate: true)
 enum VideoViewSetupMode {
-  /// 0: (Default) Replaces a view.
+  /// 0: (Default) Clear all added views and replace with a new view.
   @JsonValue(0)
   videoViewSetupReplace,
 
@@ -5765,46 +5765,46 @@ extension HeadphoneEqualizerPresetExt on HeadphoneEqualizerPreset {
   }
 }
 
-/// @nodoc
+/// Voice AI tuner sound types.
 @JsonEnum(alwaysCreate: true)
 enum VoiceAiTunerType {
-  /// @nodoc
+  /// 0: Mature male voice. A deep and magnetic male voice.
   @JsonValue(0)
   voiceAiTunerMatureMale,
 
-  /// @nodoc
+  /// 1: Fresh male voice. A fresh and slightly sweet male voice.
   @JsonValue(1)
   voiceAiTunerFreshMale,
 
-  /// @nodoc
+  /// 2: Elegant female voice. A deep and charming female voice.
   @JsonValue(2)
   voiceAiTunerElegantFemale,
 
-  /// @nodoc
+  /// 3: Sweet female voice. A high-pitched and cute female voice.
   @JsonValue(3)
   voiceAiTunerSweetFemale,
 
-  /// @nodoc
+  /// 4: Warm male singing. A warm and melodious male voice.
   @JsonValue(4)
   voiceAiTunerWarmMaleSinging,
 
-  /// @nodoc
+  /// 5: Gentle female singing. A soft and delicate female voice.
   @JsonValue(5)
   voiceAiTunerGentleFemaleSinging,
 
-  /// @nodoc
+  /// 6: Husky male singing. A unique husky male voice.
   @JsonValue(6)
   voiceAiTunerHuskyMaleSinging,
 
-  /// @nodoc
+  /// 7: Warm elegant female singing. A warm and mature female voice.
   @JsonValue(7)
   voiceAiTunerWarmElegantFemaleSinging,
 
-  /// @nodoc
+  /// 8: Powerful male singing. A strong and powerful male voice.
   @JsonValue(8)
   voiceAiTunerPowerfulMaleSinging,
 
-  /// @nodoc
+  /// 9: Dreamy female singing. A dreamy and soft female voice.
   @JsonValue(9)
   voiceAiTunerDreamyFemaleSinging,
 }
@@ -6017,7 +6017,7 @@ class AudioRecordingConfiguration {
   @JsonKey(name: 'fileRecordingType')
   final AudioFileRecordingType? fileRecordingType;
 
-  /// Recording quality. See audiorecordingqualitytype. Note: This parameter applies to AAC files only.
+  /// Recording quality. See audiorecordingqualitytype. This parameter applies to AAC files only.
   @JsonKey(name: 'quality')
   final AudioRecordingQualityType? quality;
 
