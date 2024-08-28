@@ -11,7 +11,7 @@ abstract class MediaPlayer {
 
   /// Opens the media resource.
   ///
-  /// This method is called asynchronously. If you need to play a media file, make sure you receive the onPlayerSourceStateChanged callback reporting playerStateOpenCompleted before calling the play method to play the file.
+  /// This method is called asynchronously.
   ///
   /// * [url] The path of the media file. Both local path and online path are supported.
   /// * [startPos] The starting position (ms) for playback. Default value is 0.
@@ -33,8 +33,6 @@ abstract class MediaPlayer {
 
   /// Plays the media file.
   ///
-  /// After calling open or seek, you can call this method to play the media file.
-  ///
   /// Returns
   /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown. You need to catch the exception and handle it accordingly.
   Future<void> play();
@@ -46,6 +44,8 @@ abstract class MediaPlayer {
   Future<void> pause();
 
   /// Stops playing the media track.
+  ///
+  /// After calling this method to stop playback, if you want to play again, you need to call open or openWithMediaSource to open the media resource.
   ///
   /// Returns
   /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown. You need to catch the exception and handle it accordingly.
@@ -59,9 +59,8 @@ abstract class MediaPlayer {
 
   /// Seeks to a new playback position.
   ///
-  /// After successfully calling this method, you will receive the onPlayerEvent callback, reporting the result of the seek operation to the new playback position. To play the media file from a specific position, do the following:
-  ///  Call this method to seek to the position you want to begin playback.
-  ///  Call the play method to play the media file.
+  /// If you call seek after the playback has completed (upon receiving callback onPlayerSourceStateChanged reporting playback status as playerStatePlaybackCompleted or playerStatePlaybackAllLoopsCompleted), the SDK will play the media file from the specified position. At this point, you will receive callback onPlayerSourceStateChanged reporting playback status as playerStatePlaying.
+  ///  If you call seek while the playback is paused, upon successful call of this method, the SDK will seek to the specified position. To resume playback, call resume or play .
   ///
   /// * [newPos] The new playback position (ms).
   ///
@@ -103,8 +102,6 @@ abstract class MediaPlayer {
 
   /// Gets the detailed information of the media stream.
   ///
-  /// Call this method after calling getStreamCount.
-  ///
   /// * [index] The index of the media stream. This parameter must be less than the return value of getStreamCount.
   ///
   /// Returns
@@ -117,6 +114,8 @@ abstract class MediaPlayer {
   /// If you want to loop, call this method and set the number of the loops. When the loop finishes, the SDK triggers onPlayerSourceStateChanged and reports the playback state as playerStatePlaybackAllLoopsCompleted.
   ///
   /// * [loopCount] The number of times the audio effect loops:
+  ///  ≥0: Number of times for playing. For example, setting it to 0 means no loop playback, playing only once; setting it to 1 means loop playback once, playing a total of twice.
+  ///  -1: Play the audio file in an infinite loop.
   ///
   /// Returns
   /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown. You need to catch the exception and handle it accordingly.
@@ -226,6 +225,10 @@ abstract class MediaPlayer {
   Future<int> getPublishSignalVolume();
 
   /// Sets the view.
+  ///
+  /// In Flutter, you don't need to call this method. Use AgoraVideoView instead to render local and remote views.
+  ///
+  /// * [view] The render view. On Windows, this parameter sets the window handle (HWND).
   ///
   /// Returns
   /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown. You need to catch the exception and handle it accordingly.
@@ -407,9 +410,9 @@ abstract class MediaPlayer {
   Future<void> setSoundPositionParams(
       {required double pan, required double gain});
 
-  /// Set media player options for providing technical previews or special customization features.
+  /// Sets media player options.
   ///
-  /// The media player supports setting options through key and value. In general, you don't need to know about the option settings. You can use the default option settings of the media player. The difference between this method and setPlayerOptionInString is that the value parameter of this method is of type Int, while the value of setPlayerOptionInString is of type String. These two methods cannot be used together. Ensure that you call this method before open or openWithMediaSource.
+  /// The media player supports setting options through key and value. The difference between this method and setPlayerOptionInString is that the value parameter of this method is of type Int, while the value of setPlayerOptionInString is of type String. These two methods cannot be used together.
   ///
   /// * [key] The key of the option.
   /// * [value] The value of the key.
@@ -418,9 +421,9 @@ abstract class MediaPlayer {
   /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown. You need to catch the exception and handle it accordingly.
   Future<void> setPlayerOptionInInt({required String key, required int value});
 
-  /// Set media player options for providing technical previews or special customization features.
+  /// Sets media player options.
   ///
-  /// Ensure that you call this method before open or openWithMediaSource. The media player supports setting options through key and value. In general, you don't need to know about the option settings. You can use the default option settings of the media player. The difference between this method and setPlayerOptionInInt is that the value parameter of this method is of type String, while the value of setPlayerOptionInInt is of type String. These two methods cannot be used together.
+  /// The media player supports setting options through key and value. The difference between this method and setPlayerOptionInInt is that the value parameter of this method is of type String, while the value of setPlayerOptionInInt is of type String. These two methods cannot be used together.
   ///
   /// * [key] The key of the option.
   /// * [value] The value of the key.
