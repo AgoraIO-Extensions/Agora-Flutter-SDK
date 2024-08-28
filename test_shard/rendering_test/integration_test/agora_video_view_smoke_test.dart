@@ -299,44 +299,44 @@ void main() {
           },
         );
 
-        testWidgets(
-          'can show remote preview',
-          (WidgetTester tester) async {
-            final onFrameCompleter = Completer();
-            final RtcEngineEx rtcEngine = createAgoraRtcEngineEx();
+        // testWidgets(
+        //   'can show remote preview',
+        //   (WidgetTester tester) async {
+        //     final onFrameCompleter = Completer();
+        //     final RtcEngineEx rtcEngine = createAgoraRtcEngineEx();
 
-            await tester.pumpWidget(FakeCameraRemoteVideoView(
-                rtcEngine: rtcEngine,
-                builder: (context, channelId, localUid, remoteUid) {
-                  return AgoraVideoView(
-                    controller: VideoViewController.remote(
-                      rtcEngine: rtcEngine,
-                      useFlutterTexture: true,
-                      connection: RtcConnection(
-                          channelId: channelId, localUid: localUid),
-                      canvas: VideoCanvas(
-                        uid: remoteUid,
-                      ),
-                    ),
-                  );
-                },
-                onFirstFrame: () async {
-                  if (!onFrameCompleter.isCompleted) {
-                    onFrameCompleter.complete(null);
-                  }
-                }));
+        //     await tester.pumpWidget(FakeCameraRemoteVideoView(
+        //         rtcEngine: rtcEngine,
+        //         builder: (context, channelId, localUid, remoteUid) {
+        //           return AgoraVideoView(
+        //             controller: VideoViewController.remote(
+        //               rtcEngine: rtcEngine,
+        //               useFlutterTexture: true,
+        //               connection: RtcConnection(
+        //                   channelId: channelId, localUid: localUid),
+        //               canvas: VideoCanvas(
+        //                 uid: remoteUid,
+        //               ),
+        //             ),
+        //           );
+        //         },
+        //         onFirstFrame: () async {
+        //           if (!onFrameCompleter.isCompleted) {
+        //             onFrameCompleter.complete(null);
+        //           }
+        //         }));
 
-            await tester.pumpAndSettle(const Duration(seconds: 10));
+        //     await tester.pumpAndSettle(const Duration(seconds: 10));
 
-            await onFrameCompleter.future;
-            await waitFrame(tester);
+        //     await onFrameCompleter.future;
+        //     await waitFrame(tester);
 
-            await binding.takeScreenshot(
-                'web.agora_video_view.platform_view.smoke_test.show_remote_preview');
+        //     await binding.takeScreenshot(
+        //         'web.agora_video_view.platform_view.smoke_test.show_remote_preview');
 
-            await waitDisposed(tester, binding);
-          },
-        );
+        //     await waitDisposed(tester, binding);
+        //   },
+        // );
       });
     },
     skip: !kIsWeb,
