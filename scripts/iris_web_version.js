@@ -1,9 +1,9 @@
 // Share the iris web url to all the tests
 
 // This url should be same as the url inside the `example/web/index.html`
-const irisWebUrl = 'https://github.com/AgoraIO-Extensions/iris_web/releases/download/v0.8.0-pre/iris-web-rtc_n440_w4220_0.8.0-pre11.js';
+const irisWebUrl = 'https://github.com/AgoraIO-Extensions/iris_web/releases/download/v0.8.0-pre/iris-web-rtc_n440_w4220_0.8.0-pre.js';
 // const irisWebUrl = 'https://127.0.0.1:5500/packages/rtc/dist/iris-web-rtc_n440_w4220_0.8.0-pre.js';
-const irisWebFakeUrl = 'https://github.com/AgoraIO-Extensions/iris_web/releases/download/v0.8.0-pre/iris-web-rtc-fake_n440_w4220_0.8.0-pre11.js';
+const irisWebFakeUrl = 'https://github.com/AgoraIO-Extensions/iris_web/releases/download/v0.8.0-pre/iris-web-rtc-fake_n440_w4220_0.8.0-pre.js';
 
 
 // const irisWebUrl = 'https://download.agora.io/sdk/release/iris-web-rtc_n430_w4200_0.7.0.js';
