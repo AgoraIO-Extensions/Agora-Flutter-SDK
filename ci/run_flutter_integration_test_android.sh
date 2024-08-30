@@ -19,9 +19,6 @@ flutter packages get
 
 flutter test integration_test --verbose
 
-# Remove the build directory to save disk space
-rm -rf build/
-
 popd
 
 pushd ${MY_PATH}/../test_shard/integration_test_app

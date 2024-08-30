@@ -2,8 +2,7 @@ group 'com.example.iris_tester'
 version '1.0-SNAPSHOT'
 
 buildscript {
-    // Min kotlin version for Flutter SDK 3.24
-    ext.kotlin_version = '1.7.0'
+    ext.kotlin_version = '1.6.10'
     repositories {
         google()
         mavenCentral()
@@ -26,7 +25,7 @@ apply plugin: 'com.android.library'
 apply plugin: 'kotlin-android'
 
 android {
-    compileSdkVersion 34
+    compileSdkVersion 31
 
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
