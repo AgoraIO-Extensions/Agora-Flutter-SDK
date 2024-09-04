@@ -120,7 +120,7 @@ jobs:
     strategy:
       matrix:
         version: ["2.10.5", "3.16"]
-    runs-on: macos-14
+    runs-on: macos-13
     timeout-minutes: 120
     env:
       TEST_APP_ID: ${{ secrets.MY_APP_ID }}
