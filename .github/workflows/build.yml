@@ -120,7 +120,7 @@ jobs:
     strategy:
       matrix:
         version: ["2.10.5", "3.16"]
-    runs-on: macos-12
+    runs-on: macos-13
     timeout-minutes: 120
     env:
       TEST_APP_ID: ${{ secrets.MY_APP_ID }}
@@ -161,7 +161,7 @@ jobs:
     strategy:
       matrix:
         version: ["2.10.5", "3.x"]
-    runs-on: macos-12
+    runs-on: macos-13
     timeout-minutes: 120
     env:
       TEST_APP_ID: ${{ secrets.MY_APP_ID }}
@@ -301,7 +301,7 @@ jobs:
     strategy:
       matrix:
         version: ["2.10.5", "3.x"]
-    runs-on: macos-12
+    runs-on: macos-13
     timeout-minutes: 120
     steps:
       - uses: actions/checkout@v3
@@ -476,7 +476,7 @@ jobs:
     strategy:
       matrix:
         version: ['3.x']
-    runs-on: macos-12
+    runs-on: macos-13
     timeout-minutes: 120
     env:
       TEST_APP_ID: ${{ secrets.MY_APP_ID }}
