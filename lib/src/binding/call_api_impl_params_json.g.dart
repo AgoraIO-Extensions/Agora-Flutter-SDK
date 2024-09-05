@@ -246,6 +246,33 @@ Map<String, dynamic> _$RtcEngineQueryCodecCapabilityJsonToJson(
       'codecInfo': instance.codecInfo.map((e) => e.toJson()).toList(),
     };
 
+RtcEngineGetFaceShapeBeautyOptionsJson
+    _$RtcEngineGetFaceShapeBeautyOptionsJsonFromJson(
+            Map<String, dynamic> json) =>
+        RtcEngineGetFaceShapeBeautyOptionsJson(
+          FaceShapeBeautyOptions.fromJson(
+              json['options'] as Map<String, dynamic>),
+        );
+
+Map<String, dynamic> _$RtcEngineGetFaceShapeBeautyOptionsJsonToJson(
+        RtcEngineGetFaceShapeBeautyOptionsJson instance) =>
+    <String, dynamic>{
+      'options': instance.options.toJson(),
+    };
+
+RtcEngineGetFaceShapeAreaOptionsJson
+    _$RtcEngineGetFaceShapeAreaOptionsJsonFromJson(Map<String, dynamic> json) =>
+        RtcEngineGetFaceShapeAreaOptionsJson(
+          FaceShapeAreaOptions.fromJson(
+              json['options'] as Map<String, dynamic>),
+        );
+
+Map<String, dynamic> _$RtcEngineGetFaceShapeAreaOptionsJsonToJson(
+        RtcEngineGetFaceShapeAreaOptionsJson instance) =>
+    <String, dynamic>{
+      'options': instance.options.toJson(),
+    };
+
 RtcEngineUploadLogFileJson _$RtcEngineUploadLogFileJsonFromJson(
         Map<String, dynamic> json) =>
     RtcEngineUploadLogFileJson(
