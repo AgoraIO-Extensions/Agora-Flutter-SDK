@@ -12,7 +12,7 @@ dependencies:
   paraphrase: 
     git:
       url: https://github.com/littleGnAl/paraphrase.git
-      ref: main
+      ref: 0.1.0
 
   args: ^2.3.1
 
