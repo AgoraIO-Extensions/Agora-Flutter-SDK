@@ -41,11 +41,7 @@ VideoViewController::VideoViewController(
 
 VideoViewController::~VideoViewController()
 {
-
-  for (auto itr = renderers_.begin(); itr != renderers_.end(); itr++)
-  {
-    itr->second->Dispose();
-  }
+  Dispose();
 }
 
 void VideoViewController::HandleMethodCall(
