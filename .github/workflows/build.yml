@@ -259,7 +259,7 @@ jobs:
     if: ${{ !contains(github.event.pull_request.labels.*.name, 'ci:skip') }}
     strategy:
       matrix:
-        version: ["3.0.0", "3.x"]
+        version: ["3.7.0", "3.x"]
     runs-on: windows-2019
     steps:
       - uses: actions/checkout@v3
