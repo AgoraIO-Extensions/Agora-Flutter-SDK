@@ -33,7 +33,6 @@ TextureRender::TextureRender(flutter::BinaryMessenger *messenger,
 
 TextureRender::~TextureRender()
 {
-    Dispose();
 }
 
 int64_t TextureRender::texture_id() { return texture_id_; }
@@ -150,7 +149,9 @@ void TextureRender::Dispose()
 
     if (registrar_ && texture_id_ != -1)
     {
-        registrar_->UnregisterTexture(texture_id_);
+        auto self = this;
+        registrar_->UnregisterTexture(texture_id_, [self]()
+                                      { delete self; });
 
         registrar_ = nullptr;
         texture_id_ = -1;
