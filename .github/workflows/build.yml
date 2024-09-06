@@ -85,8 +85,8 @@ jobs:
     if: ${{ !contains(github.event.pull_request.labels.*.name, 'ci:skip') }}
     strategy:
       matrix:
-        version: ["2.10.5", "3.x"]
-    runs-on: macos-12
+        version: ["3.7.0", "3.x"]
+    runs-on: ubuntu-latest
     timeout-minutes: 120
     env:
       TEST_APP_ID: ${{ secrets.MY_APP_ID }}
@@ -115,7 +115,7 @@ jobs:
     if: ${{ !contains(github.event.pull_request.labels.*.name, 'ci:skip') }}
     strategy:
       matrix:
-        version: ["2.10.5", "3.x"]
+        version: ["3.7.0", "3.16"]
     runs-on: macos-12
     timeout-minutes: 120
     env:
@@ -136,7 +136,7 @@ jobs:
     if: ${{ !contains(github.event.pull_request.labels.*.name, 'ci:skip') }}
     strategy:
       matrix:
-        version: ["2.10.5", "3.x"]
+        version: ["3.7.0", "3.x"]
     runs-on: macos-12
     timeout-minutes: 120
     env:
@@ -155,8 +155,7 @@ jobs:
     if: ${{ !contains(github.event.pull_request.labels.*.name, 'ci:skip') }}
     strategy:
       matrix:
-        # Pin Flutter SDK version to 3.19, since there's issue with 3.22.x, see https://github.com/AgoraIO-Extensions/Agora-Flutter-SDK/actions/runs/9186647960/job/25262717666
-        version: ["2.10.5", "3.19"] 
+        version: ["3.7.0", "3.x"]
     runs-on: windows-2019
     timeout-minutes: 120
     env:
@@ -201,7 +200,7 @@ jobs:
     needs: flutter_codestyle_check
     strategy:
       matrix:
-        version: ["2.10.5", "3.x"]
+        version: ["3.7.0", "3.x"]
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
@@ -221,7 +220,7 @@ jobs:
     if: ${{ !contains(github.event.pull_request.labels.*.name, 'ci:skip') }}
     strategy:
       matrix:
-        version: ["2.10.5", "3.x"]
+        version: ["3.7.0", "3.x"]
     runs-on: windows-2019
     steps:
       - uses: actions/checkout@v3
@@ -242,7 +241,7 @@ jobs:
     if: ${{ !contains(github.event.pull_request.labels.*.name, 'ci:skip') }}
     strategy:
       matrix:
-        version: ["2.10.5", "3.x"]
+        version: ["3.7.0", "3.x"]
     runs-on: macos-12
     timeout-minutes: 120
     steps:
@@ -287,7 +286,7 @@ jobs:
     if: ${{ !contains(github.event.pull_request.labels.*.name, 'ci:skip') }}
     strategy:
       matrix:
-        version: ["2.10.5", "3.x"]
+        version: ["3.7.0", "3.x"]
     runs-on: ubuntu-latest
     timeout-minutes: 120
     steps:
