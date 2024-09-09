@@ -196,6 +196,7 @@ class _State extends State<ScreenSharing> with KeepRemoteVideoViewsMixin {
                       canvas: const VideoCanvas(
                         uid: 0,
                         sourceType: VideoSourceType.videoSourceScreen,
+                        renderMode: RenderModeType.renderModeFit,
                       ),
                     ))
                   : Container(
