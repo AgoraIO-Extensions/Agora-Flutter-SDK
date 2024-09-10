@@ -288,6 +288,22 @@ class RtcEngineEventHandlerWrapper implements EventLoopEventHandler {
             deviceId, deviceType, deviceState);
         return true;
 
+      case 'onPipStateChanged_941b366':
+        if (rtcEngineEventHandler.onPipStateChanged == null) {
+          return true;
+        }
+        final jsonMap = jsonDecode(eventData);
+        RtcEngineEventHandlerOnPipStateChangedJson paramJson =
+            RtcEngineEventHandlerOnPipStateChangedJson.fromJson(jsonMap);
+        paramJson = paramJson.fillBuffers(buffers);
+        PipState? state = paramJson.state;
+        if (state == null) {
+          return true;
+        }
+
+        rtcEngineEventHandler.onPipStateChanged!(state);
+        return true;
+
       case 'onNetworkQuality_34d8b3c':
         if (rtcEngineEventHandler.onNetworkQuality == null) {
           return true;
@@ -704,7 +720,7 @@ class RtcEngineEventHandlerWrapper implements EventLoopEventHandler {
         rtcEngineEventHandler.onLocalAudioStats!(connection, stats);
         return true;
 
-      case 'onLocalVideoStats_baa96c8':
+      case 'onLocalVideoStats_3ac0eb4':
         if (rtcEngineEventHandler.onLocalVideoStats == null) {
           return true;
         }
@@ -712,13 +728,14 @@ class RtcEngineEventHandlerWrapper implements EventLoopEventHandler {
         RtcEngineEventHandlerOnLocalVideoStatsJson paramJson =
             RtcEngineEventHandlerOnLocalVideoStatsJson.fromJson(jsonMap);
         paramJson = paramJson.fillBuffers(buffers);
-        VideoSourceType? source = paramJson.source;
+        RtcConnection? connection = paramJson.connection;
         LocalVideoStats? stats = paramJson.stats;
-        if (source == null || stats == null) {
+        if (connection == null || stats == null) {
           return true;
         }
+        connection = connection.fillBuffers(buffers);
         stats = stats.fillBuffers(buffers);
-        rtcEngineEventHandler.onLocalVideoStats!(source, stats);
+        rtcEngineEventHandler.onLocalVideoStats!(connection, stats);
         return true;
 
       case 'onRemoteVideoStats_2f43a70':

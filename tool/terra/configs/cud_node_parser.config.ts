@@ -54,13 +54,6 @@ const deleteNodes = [
     parent_name: "IRtcEngineEventHandlerEx",
   },
   {
-    // onLocalVideoStats
-    __TYPE: CXXTYPE.MemberFunction,
-    name: "onLocalVideoStats",
-    namespaces: ["agora", "rtc"],
-    parent_name: "IRtcEngineEventHandlerEx",
-  },
-  {
     // agora::base::IEngineBase
     __TYPE: CXXTYPE.Clazz,
     name: "IEngineBase",
@@ -1443,6 +1436,26 @@ const updateNodes = [
         kind: SimpleTypeKind.array_t,
         name: "agora::rtc::SpatialAudioZone",
         source: "const agora::rtc::SpatialAudioZone*",
+      },
+    },
+  },
+  // agora::rtc::IRtcEngine::setExternalMediaProjection
+  {
+    node: {
+      __TYPE: CXXTYPE.Variable,
+      name: "mediaProjection",
+      namespaces: ["agora", "rtc"],
+      parent_name: "setExternalMediaProjection",
+    },
+    updated: {
+      __TYPE: CXXTYPE.Variable,
+      name: "mediaProjection",
+      namespaces: ["agora", "rtc"],
+      parent_name: "setExternalMediaProjection",
+      type: {
+        __TYPE: CXXTYPE.SimpleType,
+        is_builtin_type: false,
+        is_const: true,
       },
     },
   },

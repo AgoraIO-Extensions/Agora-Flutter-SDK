@@ -1910,6 +1910,35 @@ extension RtcEngineEventHandlerOnVideoDeviceStateChangedJsonBufferExt
 }
 
 @JsonSerializable(explicitToJson: true, includeIfNull: false)
+class RtcEngineEventHandlerOnPipStateChangedJson {
+  const RtcEngineEventHandlerOnPipStateChangedJson({this.state});
+
+  @JsonKey(name: 'state')
+  final PipState? state;
+
+  factory RtcEngineEventHandlerOnPipStateChangedJson.fromJson(
+          Map<String, dynamic> json) =>
+      _$RtcEngineEventHandlerOnPipStateChangedJsonFromJson(json);
+
+  Map<String, dynamic> toJson() =>
+      _$RtcEngineEventHandlerOnPipStateChangedJsonToJson(this);
+}
+
+extension RtcEngineEventHandlerOnPipStateChangedJsonBufferExt
+    on RtcEngineEventHandlerOnPipStateChangedJson {
+  RtcEngineEventHandlerOnPipStateChangedJson fillBuffers(
+      List<Uint8List> bufferList) {
+    if (bufferList.isEmpty) return this;
+    return this;
+  }
+
+  List<Uint8List> collectBufferList() {
+    final bufferList = <Uint8List>[];
+    return bufferList;
+  }
+}
+
+@JsonSerializable(explicitToJson: true, includeIfNull: false)
 class RtcEngineEventHandlerOnNetworkQualityJson {
   const RtcEngineEventHandlerOnNetworkQualityJson(
       {this.connection, this.remoteUid, this.txQuality, this.rxQuality});
@@ -2668,10 +2697,11 @@ extension RtcEngineEventHandlerOnLocalAudioStatsJsonBufferExt
 
 @JsonSerializable(explicitToJson: true, includeIfNull: false)
 class RtcEngineEventHandlerOnLocalVideoStatsJson {
-  const RtcEngineEventHandlerOnLocalVideoStatsJson({this.source, this.stats});
+  const RtcEngineEventHandlerOnLocalVideoStatsJson(
+      {this.connection, this.stats});
 
-  @JsonKey(name: 'source')
-  final VideoSourceType? source;
+  @JsonKey(name: 'connection')
+  final RtcConnection? connection;
 
   @JsonKey(name: 'stats')
   final LocalVideoStats? stats;

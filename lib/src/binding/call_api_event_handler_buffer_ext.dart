@@ -173,6 +173,30 @@ extension SimulcastStreamConfigBufferExt on SimulcastStreamConfig {
   }
 }
 
+extension SimulcastConfigBufferExt on SimulcastConfig {
+  SimulcastConfig fillBuffers(List<Uint8List> bufferList) {
+    if (bufferList.isEmpty) return this;
+    return this;
+  }
+
+  List<Uint8List> collectBufferList() {
+    final bufferList = <Uint8List>[];
+    return bufferList;
+  }
+}
+
+extension StreamLayerConfigBufferExt on StreamLayerConfig {
+  StreamLayerConfig fillBuffers(List<Uint8List> bufferList) {
+    if (bufferList.isEmpty) return this;
+    return this;
+  }
+
+  List<Uint8List> collectBufferList() {
+    final bufferList = <Uint8List>[];
+    return bufferList;
+  }
+}
+
 extension RectangleBufferExt on Rectangle {
   Rectangle fillBuffers(List<Uint8List> bufferList) {
     if (bufferList.isEmpty) return this;
@@ -435,6 +459,18 @@ extension WlAccStatsBufferExt on WlAccStats {
 
 extension VideoCanvasBufferExt on VideoCanvas {
   VideoCanvas fillBuffers(List<Uint8List> bufferList) {
+    if (bufferList.isEmpty) return this;
+    return this;
+  }
+
+  List<Uint8List> collectBufferList() {
+    final bufferList = <Uint8List>[];
+    return bufferList;
+  }
+}
+
+extension PipOptionsBufferExt on PipOptions {
+  PipOptions fillBuffers(List<Uint8List> bufferList) {
     if (bufferList.isEmpty) return this;
     return this;
   }
@@ -988,6 +1024,18 @@ extension VideoFrameBufferExt on VideoFrame {
     if (pixelBuffer != null) {
       bufferList.add(pixelBuffer!);
     }
+    return bufferList;
+  }
+}
+
+extension SnapshotConfigBufferExt on SnapshotConfig {
+  SnapshotConfig fillBuffers(List<Uint8List> bufferList) {
+    if (bufferList.isEmpty) return this;
+    return this;
+  }
+
+  List<Uint8List> collectBufferList() {
+    final bufferList = <Uint8List>[];
     return bufferList;
   }
 }

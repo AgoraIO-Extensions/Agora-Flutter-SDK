@@ -254,7 +254,7 @@ enum ErrorCodeType {
   errNetDown,
 
   /// 17: The request to join the channel is rejected. Possible reasons include the following:
-  ///  The user is already in the channel. Agora recommends that you use the onConnectionStateChanged callback to determine whether the user exists in the channel. Do not call this method to join the channel unless you receive the connectionStateDisconnected (1) state.
+  ///  The user is already in the channel. Agora recommends that you use the onConnectionStateChanged callback to see whether the user is in the channel. Do not call this method to join the channel unless you receive the connectionStateDisconnected (1) state.
   ///  After calling startEchoTest for the call test, the user tries to join the channel without calling stopEchoTest to end the current test. To join a channel, the call test must be ended by calling stopEchoTest.
   @JsonValue(17)
   errJoinChannelRejected,
@@ -688,7 +688,7 @@ enum QualityType {
   @JsonValue(6)
   qualityDown,
 
-  /// 7: Users cannot detect the network quality (not in use).
+  /// @nodoc
   @JsonValue(7)
   qualityUnsupported,
 
@@ -1484,6 +1484,30 @@ enum VideoStreamType {
   /// 1: Low-quality video stream.
   @JsonValue(1)
   videoStreamLow,
+
+  /// @nodoc
+  @JsonValue(4)
+  videoStreamLayer1,
+
+  /// @nodoc
+  @JsonValue(5)
+  videoStreamLayer2,
+
+  /// @nodoc
+  @JsonValue(6)
+  videoStreamLayer3,
+
+  /// @nodoc
+  @JsonValue(7)
+  videoStreamLayer4,
+
+  /// @nodoc
+  @JsonValue(8)
+  videoStreamLayer5,
+
+  /// @nodoc
+  @JsonValue(9)
+  videoStreamLayer6,
 }
 
 /// @nodoc
@@ -1723,6 +1747,31 @@ extension VideoMirrorModeTypeExt on VideoMirrorModeType {
   }
 }
 
+/// @nodoc
+@JsonEnum(alwaysCreate: true)
+enum CameraFormatType {
+  /// @nodoc
+  @JsonValue(0)
+  cameraFormatNv12,
+
+  /// @nodoc
+  @JsonValue(1)
+  cameraFormatBgra,
+}
+
+/// @nodoc
+extension CameraFormatTypeExt on CameraFormatType {
+  /// @nodoc
+  static CameraFormatType fromValue(int value) {
+    return $enumDecode(_$CameraFormatTypeEnumMap, value);
+  }
+
+  /// @nodoc
+  int value() {
+    return _$CameraFormatTypeEnumMap[this]!;
+  }
+}
+
 /// The bit mask of the codec type.
 @JsonEnum(alwaysCreate: true)
 enum CodecCapMask {
@@ -1871,7 +1920,7 @@ class VideoEncoderConfiguration {
   @JsonKey(name: 'orientationMode')
   final OrientationMode? orientationMode;
 
-  /// Video degradation preference under limited bandwidth. See DegradationPreference.
+  /// Video degradation preference under limited bandwidth. See DegradationPreference. When this parameter is set to maintainFramerate (1) or maintainBalanced (2), orientationMode needs to be set to orientationModeAdaptive (0) at the same time, otherwise the setting will not take effect.
   @JsonKey(name: 'degradationPreference')
   final DegradationPreference? degradationPreference;
 
@@ -1968,6 +2017,99 @@ class SimulcastStreamConfig {
 
   /// @nodoc
   Map<String, dynamic> toJson() => _$SimulcastStreamConfigToJson(this);
+}
+
+/// @nodoc
+@JsonSerializable(explicitToJson: true, includeIfNull: false)
+class SimulcastConfig {
+  /// @nodoc
+  const SimulcastConfig({this.configs});
+
+  /// @nodoc
+  @JsonKey(name: 'configs')
+  final List<StreamLayerConfig>? configs;
+
+  /// @nodoc
+  factory SimulcastConfig.fromJson(Map<String, dynamic> json) =>
+      _$SimulcastConfigFromJson(json);
+
+  /// @nodoc
+  Map<String, dynamic> toJson() => _$SimulcastConfigToJson(this);
+}
+
+/// @nodoc
+@JsonEnum(alwaysCreate: true)
+enum StreamLayerIndex {
+  /// @nodoc
+  @JsonValue(0)
+  streamLayer1,
+
+  /// @nodoc
+  @JsonValue(1)
+  streamLayer2,
+
+  /// @nodoc
+  @JsonValue(2)
+  streamLayer3,
+
+  /// @nodoc
+  @JsonValue(3)
+  streamLayer4,
+
+  /// @nodoc
+  @JsonValue(4)
+  streamLayer5,
+
+  /// @nodoc
+  @JsonValue(5)
+  streamLayer6,
+
+  /// @nodoc
+  @JsonValue(6)
+  streamLow,
+
+  /// @nodoc
+  @JsonValue(7)
+  streamLayerCountMax,
+}
+
+/// @nodoc
+extension StreamLayerIndexExt on StreamLayerIndex {
+  /// @nodoc
+  static StreamLayerIndex fromValue(int value) {
+    return $enumDecode(_$StreamLayerIndexEnumMap, value);
+  }
+
+  /// @nodoc
+  int value() {
+    return _$StreamLayerIndexEnumMap[this]!;
+  }
+}
+
+/// @nodoc
+@JsonSerializable(explicitToJson: true, includeIfNull: false)
+class StreamLayerConfig {
+  /// @nodoc
+  const StreamLayerConfig({this.dimensions, this.framerate, this.enable});
+
+  /// @nodoc
+  @JsonKey(name: 'dimensions')
+  final VideoDimensions? dimensions;
+
+  /// @nodoc
+  @JsonKey(name: 'framerate')
+  final int? framerate;
+
+  /// @nodoc
+  @JsonKey(name: 'enable')
+  final bool? enable;
+
+  /// @nodoc
+  factory StreamLayerConfig.fromJson(Map<String, dynamic> json) =>
+      _$StreamLayerConfigFromJson(json);
+
+  /// @nodoc
+  Map<String, dynamic> toJson() => _$StreamLayerConfigToJson(this);
 }
 
 /// The location of the target area relative to the screen or window. If you do not set this parameter, the SDK selects the whole screen or window.
@@ -2502,7 +2644,7 @@ enum AudioScenarioType {
   @JsonValue(3)
   audioScenarioGameStreaming,
 
-  /// 5: Chatroom scenario, where users need to frequently switch the user role or mute and unmute the microphone. For example, education scenarios. In this scenario, audience members receive a pop-up window to request permission of using microphones.
+  /// 5: Chatroom scenario, where users need to frequently switch the user role or mute and unmute the microphone. For example, education scenarios.
   @JsonValue(5)
   audioScenarioChatroom,
 
@@ -2627,7 +2769,7 @@ enum VideoApplicationScenarioType {
   @JsonValue(0)
   applicationScenarioGeneral,
 
-  /// If set to applicationScenarioMeeting (1), the SDK automatically enables the following strategies:
+  /// applicationScenarioMeeting (1) is suitable for meeting scenarios. The SDK automatically enables the following strategies:
   ///  In meeting scenarios where low-quality video streams are required to have a high bitrate, the SDK automatically enables multiple technologies used to deal with network congestions, to enhance the performance of the low-quality streams and to ensure the smooth reception by subscribers.
   ///  The SDK monitors the number of subscribers to the high-quality video stream in real time and dynamically adjusts its configuration based on the number of subscribers.
   ///  If nobody subscribers to the high-quality stream, the SDK automatically reduces its bitrate and frame rate to save upstream bandwidth.
@@ -2974,7 +3116,7 @@ enum LocalVideoStreamReason {
   @JsonValue(20)
   localVideoStreamReasonScreenCaptureWindowNotSupported,
 
-  /// @nodoc
+  /// 21: (Windows only) The screen has not captured any data available for window sharing.
   @JsonValue(21)
   localVideoStreamReasonScreenCaptureFailure,
 
@@ -3005,6 +3147,10 @@ enum LocalVideoStreamReason {
   /// 29: (Windows only) Screen capture has resumed from paused state.
   @JsonValue(29)
   localVideoStreamReasonScreenCaptureResumed,
+
+  /// 30: (Windows and macOS only) The displayer used for screen capture is disconnected.
+  @JsonValue(30)
+  localVideoStreamReasonScreenCaptureDisplayDisconnected,
 }
 
 /// @nodoc
@@ -4379,7 +4525,6 @@ enum ConnectionChangedReasonType {
   ///  All lowercase English letters: a to z.
   ///  All uppercase English letters: A to Z.
   ///  All numeric characters: 0 to 9.
-  ///  Space
   ///  "!", "#", "$", "%", "&", "(", ")", "+", "-", ":", ";", "<", "=", ".", ">", "?", "@", "[", "]", "^", "_", "{", "}", "|", "~", ","
   @JsonValue(7)
   connectionChangedInvalidChannelName,
@@ -4477,7 +4622,7 @@ extension ConnectionChangedReasonTypeExt on ConnectionChangedReasonType {
 /// The reason for a user role switch failure.
 @JsonEnum(alwaysCreate: true)
 enum ClientRoleChangeFailedReason {
-  /// 1: The number of hosts in the channel is already at the upper limit. This enumerator is reported only when the support for 128 users is enabled. The maximum number of hosts is based on the actual number of hosts configured when you enable the 128-user feature.
+  /// 1: The number of hosts in the channel exceeds the limit. This enumerator is reported only when the support for 128 users is enabled. The maximum number of hosts is based on the actual number of hosts configured when you enable the 128-user feature.
   @JsonValue(1)
   clientRoleChangeFailedTooManyBroadcasters,
 
@@ -4485,11 +4630,11 @@ enum ClientRoleChangeFailedReason {
   @JsonValue(2)
   clientRoleChangeFailedNotAuthorized,
 
-  /// 3: The request is timed out. Agora recommends you prompt the user to check the network connection and try to switch their user role again.
+  /// 3: The request is timed out. Agora recommends you prompt the user to check the network connection and try to switch their user role again. Deprecated: This enumerator is deprecated since v4.4.0 and is not recommended for use.
   @JsonValue(3)
   clientRoleChangeFailedRequestTimeOut,
 
-  /// 4: The SDK connection fails. You can use reason reported in the onConnectionStateChanged callback to troubleshoot the failure.
+  /// 4: The SDK is disconnected from the Agora edge server. You can troubleshoot the failure through the reason reported by onConnectionStateChanged. Deprecated: This enumerator is deprecated since v4.4.0 and is not recommended for use.
   @JsonValue(4)
   clientRoleChangeFailedConnectionFailed,
 }
@@ -4644,7 +4789,7 @@ extension NetworkTypeExt on NetworkType {
 /// Setting mode of the view.
 @JsonEnum(alwaysCreate: true)
 enum VideoViewSetupMode {
-  /// 0: (Default) Replaces a view.
+  /// 0: (Default) Clear all added views and replace with a new view.
   @JsonValue(0)
   videoViewSetupReplace,
 
@@ -4688,7 +4833,7 @@ class VideoCanvas {
       this.enableAlphaMask,
       this.position});
 
-  /// The user ID.
+  /// User ID that publishes the video source.
   @JsonKey(name: 'uid')
   final int? uid;
 
@@ -4697,7 +4842,7 @@ class VideoCanvas {
   final int? subviewUid;
 
   /// The video display window. In one VideoCanvas, you can only choose to set either view or surfaceTexture. If both are set, only the settings in view take effect.
-  @JsonKey(name: 'view')
+  @JsonKey(name: 'view', readValue: readIntPtr)
   final int? view;
 
   /// The background color of the video canvas in RGBA format. The default value is 0x00000000, which represents completely transparent black.
@@ -4730,7 +4875,7 @@ class VideoCanvas {
   @JsonKey(name: 'cropArea')
   final Rectangle? cropArea;
 
-  /// (Optional) Whether the receiver enables alpha mask rendering: true : The receiver enables alpha mask rendering. false : (Default) The receiver disables alpha mask rendering. Alpha mask rendering can create images with transparent effects and extract portraits from videos. When used in combination with other methods, you can implement effects such as portrait-in-picture and watermarking.
+  /// (Optional) Whether to enable alpha mask rendering: true : Enable alpha mask rendering. false : (Default) Disable alpha mask rendering. Alpha mask rendering can create images with transparent effects and extract portraits from videos. When used in combination with other methods, you can implement effects such as portrait-in-picture and watermarking.
   ///  The receiver can render alpha channel information only when the sender enables alpha transmission.
   ///  To enable alpha transmission,.
   @JsonKey(name: 'enableAlphaMask')
@@ -4746,6 +4891,74 @@ class VideoCanvas {
 
   /// @nodoc
   Map<String, dynamic> toJson() => _$VideoCanvasToJson(this);
+}
+
+/// @nodoc
+@JsonEnum(alwaysCreate: true)
+enum PipState {
+  /// @nodoc
+  @JsonValue(0)
+  pipStateStarted,
+
+  /// @nodoc
+  @JsonValue(1)
+  pipStateStopped,
+
+  /// @nodoc
+  @JsonValue(2)
+  pipStateFailed,
+}
+
+/// @nodoc
+extension PipStateExt on PipState {
+  /// @nodoc
+  static PipState fromValue(int value) {
+    return $enumDecode(_$PipStateEnumMap, value);
+  }
+
+  /// @nodoc
+  int value() {
+    return _$PipStateEnumMap[this]!;
+  }
+}
+
+/// @nodoc
+@JsonSerializable(explicitToJson: true, includeIfNull: false)
+class PipOptions {
+  /// @nodoc
+  const PipOptions(
+      {this.contentSource,
+      this.contentWidth,
+      this.contentHeight,
+      this.autoEnterPip,
+      this.canvas});
+
+  /// @nodoc
+  @JsonKey(name: 'contentSource', readValue: readIntPtr)
+  final int? contentSource;
+
+  /// @nodoc
+  @JsonKey(name: 'contentWidth')
+  final int? contentWidth;
+
+  /// @nodoc
+  @JsonKey(name: 'contentHeight')
+  final int? contentHeight;
+
+  /// @nodoc
+  @JsonKey(name: 'autoEnterPip')
+  final bool? autoEnterPip;
+
+  /// @nodoc
+  @JsonKey(name: 'canvas')
+  final VideoCanvas? canvas;
+
+  /// @nodoc
+  factory PipOptions.fromJson(Map<String, dynamic> json) =>
+      _$PipOptionsFromJson(json);
+
+  /// @nodoc
+  Map<String, dynamic> toJson() => _$PipOptionsToJson(this);
 }
 
 /// Image enhancement options.
@@ -5022,7 +5235,7 @@ class VirtualBackgroundSource {
 /// The custom background.
 @JsonEnum(alwaysCreate: true)
 enum BackgroundSourceType {
-  /// 0: Process the background as alpha information without replacement, only separating the portrait and the background. After setting this value, you can call startLocalVideoTranscoder to implement the picture-in-picture effect.
+  /// 0: Process the background as alpha data without replacement, only separating the portrait and the background. After setting this value, you can call startLocalVideoTranscoder to implement the picture-in-picture effect.
   @JsonValue(0)
   backgroundNone,
 
@@ -5512,7 +5725,7 @@ class ScreenCaptureParameters {
   final bool? windowFocus;
 
   /// The ID list of the windows to be blocked. When calling startScreenCaptureByDisplayId to start screen sharing, you can use this parameter to block a specified window. When calling updateScreenCaptureParameters to update screen sharing configurations, you can use this parameter to dynamically block a specified window.
-  @JsonKey(name: 'excludeWindowList')
+  @JsonKey(name: 'excludeWindowList', readValue: readIntPtrList)
   final List<int>? excludeWindowList;
 
   /// The number of windows to be excluded. On the Windows platform, the maximum value of this parameter is 24; if this value is exceeded, excluding the window fails.
@@ -5664,7 +5877,7 @@ class AudioRecordingConfiguration {
   @JsonKey(name: 'fileRecordingType')
   final AudioFileRecordingType? fileRecordingType;
 
-  /// Recording quality. See audiorecordingqualitytype. Note: This parameter applies to AAC files only.
+  /// Recording quality. See audiorecordingqualitytype. This parameter applies to AAC files only.
   @JsonKey(name: 'quality')
   final AudioRecordingQualityType? quality;
 
@@ -5831,6 +6044,10 @@ enum AreaCodeEx {
   /// @nodoc
   @JsonValue(0x00000800)
   areaCodeUs,
+
+  /// @nodoc
+  @JsonValue(0x00001000)
+  areaCodeRu,
 
   /// @nodoc
   @JsonValue(0xFFFFFFFE)
@@ -6371,7 +6588,7 @@ class EchoTestConfiguration {
       this.intervalInSeconds});
 
   /// The view used to render the local user's video. This parameter is only applicable to scenarios testing video devices, that is, when enableVideo is true.
-  @JsonKey(name: 'view')
+  @JsonKey(name: 'view', readValue: readIntPtr)
   final int? view;
 
   /// Whether to enable the audio device for the loop test: true : (Default) Enable the audio device. To test the audio device, set this parameter as true. false : Disable the audio device.
