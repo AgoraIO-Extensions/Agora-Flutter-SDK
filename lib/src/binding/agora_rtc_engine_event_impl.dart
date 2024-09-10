@@ -288,6 +288,22 @@ class RtcEngineEventHandlerWrapper implements EventLoopEventHandler {
             deviceId, deviceType, deviceState);
         return true;
 
+      case 'onPipStateChanged_941b366':
+        if (rtcEngineEventHandler.onPipStateChanged == null) {
+          return true;
+        }
+        final jsonMap = jsonDecode(eventData);
+        RtcEngineEventHandlerOnPipStateChangedJson paramJson =
+            RtcEngineEventHandlerOnPipStateChangedJson.fromJson(jsonMap);
+        paramJson = paramJson.fillBuffers(buffers);
+        PipState? state = paramJson.state;
+        if (state == null) {
+          return true;
+        }
+
+        rtcEngineEventHandler.onPipStateChanged!(state);
+        return true;
+
       case 'onNetworkQuality_34d8b3c':
         if (rtcEngineEventHandler.onNetworkQuality == null) {
           return true;

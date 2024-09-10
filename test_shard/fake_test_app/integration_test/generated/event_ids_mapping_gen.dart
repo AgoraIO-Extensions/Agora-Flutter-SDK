@@ -159,6 +159,9 @@ const eventIdsMapping = {
   "RtcEngineEventHandler_onVideoDeviceStateChanged": [
     "RtcEngineEventHandler_onVideoDeviceStateChanged_976d8c3"
   ],
+  "RtcEngineEventHandler_onPipStateChanged": [
+    "RtcEngineEventHandler_onPipStateChanged_941b366"
+  ],
   "RtcEngineEventHandler_onNetworkQuality": [
     "RtcEngineEventHandler_onNetworkQuality_34d8b3c"
   ],

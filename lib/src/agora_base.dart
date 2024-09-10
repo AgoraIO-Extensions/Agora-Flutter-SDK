@@ -1484,6 +1484,30 @@ enum VideoStreamType {
   /// 1: Low-quality video stream.
   @JsonValue(1)
   videoStreamLow,
+
+  /// @nodoc
+  @JsonValue(4)
+  videoStreamLayer1,
+
+  /// @nodoc
+  @JsonValue(5)
+  videoStreamLayer2,
+
+  /// @nodoc
+  @JsonValue(6)
+  videoStreamLayer3,
+
+  /// @nodoc
+  @JsonValue(7)
+  videoStreamLayer4,
+
+  /// @nodoc
+  @JsonValue(8)
+  videoStreamLayer5,
+
+  /// @nodoc
+  @JsonValue(9)
+  videoStreamLayer6,
 }
 
 /// @nodoc
@@ -1720,6 +1744,31 @@ extension VideoMirrorModeTypeExt on VideoMirrorModeType {
   /// @nodoc
   int value() {
     return _$VideoMirrorModeTypeEnumMap[this]!;
+  }
+}
+
+/// @nodoc
+@JsonEnum(alwaysCreate: true)
+enum CameraFormatType {
+  /// @nodoc
+  @JsonValue(0)
+  cameraFormatNv12,
+
+  /// @nodoc
+  @JsonValue(1)
+  cameraFormatBgra,
+}
+
+/// @nodoc
+extension CameraFormatTypeExt on CameraFormatType {
+  /// @nodoc
+  static CameraFormatType fromValue(int value) {
+    return $enumDecode(_$CameraFormatTypeEnumMap, value);
+  }
+
+  /// @nodoc
+  int value() {
+    return _$CameraFormatTypeEnumMap[this]!;
   }
 }
 
@@ -1968,6 +2017,99 @@ class SimulcastStreamConfig {
 
   /// @nodoc
   Map<String, dynamic> toJson() => _$SimulcastStreamConfigToJson(this);
+}
+
+/// @nodoc
+@JsonSerializable(explicitToJson: true, includeIfNull: false)
+class SimulcastConfig {
+  /// @nodoc
+  const SimulcastConfig({this.configs});
+
+  /// @nodoc
+  @JsonKey(name: 'configs')
+  final List<StreamLayerConfig>? configs;
+
+  /// @nodoc
+  factory SimulcastConfig.fromJson(Map<String, dynamic> json) =>
+      _$SimulcastConfigFromJson(json);
+
+  /// @nodoc
+  Map<String, dynamic> toJson() => _$SimulcastConfigToJson(this);
+}
+
+/// @nodoc
+@JsonEnum(alwaysCreate: true)
+enum StreamLayerIndex {
+  /// @nodoc
+  @JsonValue(0)
+  streamLayer1,
+
+  /// @nodoc
+  @JsonValue(1)
+  streamLayer2,
+
+  /// @nodoc
+  @JsonValue(2)
+  streamLayer3,
+
+  /// @nodoc
+  @JsonValue(3)
+  streamLayer4,
+
+  /// @nodoc
+  @JsonValue(4)
+  streamLayer5,
+
+  /// @nodoc
+  @JsonValue(5)
+  streamLayer6,
+
+  /// @nodoc
+  @JsonValue(6)
+  streamLow,
+
+  /// @nodoc
+  @JsonValue(7)
+  streamLayerCountMax,
+}
+
+/// @nodoc
+extension StreamLayerIndexExt on StreamLayerIndex {
+  /// @nodoc
+  static StreamLayerIndex fromValue(int value) {
+    return $enumDecode(_$StreamLayerIndexEnumMap, value);
+  }
+
+  /// @nodoc
+  int value() {
+    return _$StreamLayerIndexEnumMap[this]!;
+  }
+}
+
+/// @nodoc
+@JsonSerializable(explicitToJson: true, includeIfNull: false)
+class StreamLayerConfig {
+  /// @nodoc
+  const StreamLayerConfig({this.dimensions, this.framerate, this.enable});
+
+  /// @nodoc
+  @JsonKey(name: 'dimensions')
+  final VideoDimensions? dimensions;
+
+  /// @nodoc
+  @JsonKey(name: 'framerate')
+  final int? framerate;
+
+  /// @nodoc
+  @JsonKey(name: 'enable')
+  final bool? enable;
+
+  /// @nodoc
+  factory StreamLayerConfig.fromJson(Map<String, dynamic> json) =>
+      _$StreamLayerConfigFromJson(json);
+
+  /// @nodoc
+  Map<String, dynamic> toJson() => _$StreamLayerConfigToJson(this);
 }
 
 /// The location of the target area relative to the screen or window. If you do not set this parameter, the SDK selects the whole screen or window.
@@ -3005,6 +3147,10 @@ enum LocalVideoStreamReason {
   /// 29: (Windows only) Screen capture has resumed from paused state.
   @JsonValue(29)
   localVideoStreamReasonScreenCaptureResumed,
+
+  /// 30: (Windows and macOS only) The displayer used for screen capture is disconnected.
+  @JsonValue(30)
+  localVideoStreamReasonScreenCaptureDisplayDisconnected,
 }
 
 /// @nodoc
@@ -4696,7 +4842,7 @@ class VideoCanvas {
   final int? subviewUid;
 
   /// The video display window. In one VideoCanvas, you can only choose to set either view or surfaceTexture. If both are set, only the settings in view take effect.
-  @JsonKey(name: 'view')
+  @JsonKey(name: 'view', readValue: readIntPtr)
   final int? view;
 
   /// The background color of the video canvas in RGBA format. The default value is 0x00000000, which represents completely transparent black.
@@ -4745,6 +4891,74 @@ class VideoCanvas {
 
   /// @nodoc
   Map<String, dynamic> toJson() => _$VideoCanvasToJson(this);
+}
+
+/// @nodoc
+@JsonEnum(alwaysCreate: true)
+enum PipState {
+  /// @nodoc
+  @JsonValue(0)
+  pipStateStarted,
+
+  /// @nodoc
+  @JsonValue(1)
+  pipStateStopped,
+
+  /// @nodoc
+  @JsonValue(2)
+  pipStateFailed,
+}
+
+/// @nodoc
+extension PipStateExt on PipState {
+  /// @nodoc
+  static PipState fromValue(int value) {
+    return $enumDecode(_$PipStateEnumMap, value);
+  }
+
+  /// @nodoc
+  int value() {
+    return _$PipStateEnumMap[this]!;
+  }
+}
+
+/// @nodoc
+@JsonSerializable(explicitToJson: true, includeIfNull: false)
+class PipOptions {
+  /// @nodoc
+  const PipOptions(
+      {this.contentSource,
+      this.contentWidth,
+      this.contentHeight,
+      this.autoEnterPip,
+      this.canvas});
+
+  /// @nodoc
+  @JsonKey(name: 'contentSource', readValue: readIntPtr)
+  final int? contentSource;
+
+  /// @nodoc
+  @JsonKey(name: 'contentWidth')
+  final int? contentWidth;
+
+  /// @nodoc
+  @JsonKey(name: 'contentHeight')
+  final int? contentHeight;
+
+  /// @nodoc
+  @JsonKey(name: 'autoEnterPip')
+  final bool? autoEnterPip;
+
+  /// @nodoc
+  @JsonKey(name: 'canvas')
+  final VideoCanvas? canvas;
+
+  /// @nodoc
+  factory PipOptions.fromJson(Map<String, dynamic> json) =>
+      _$PipOptionsFromJson(json);
+
+  /// @nodoc
+  Map<String, dynamic> toJson() => _$PipOptionsToJson(this);
 }
 
 /// Image enhancement options.
@@ -5511,7 +5725,7 @@ class ScreenCaptureParameters {
   final bool? windowFocus;
 
   /// The ID list of the windows to be blocked. When calling startScreenCaptureByDisplayId to start screen sharing, you can use this parameter to block a specified window. When calling updateScreenCaptureParameters to update screen sharing configurations, you can use this parameter to dynamically block a specified window.
-  @JsonKey(name: 'excludeWindowList')
+  @JsonKey(name: 'excludeWindowList', readValue: readIntPtrList)
   final List<int>? excludeWindowList;
 
   /// The number of windows to be excluded. On the Windows platform, the maximum value of this parameter is 24; if this value is exceeded, excluding the window fails.
@@ -5830,6 +6044,10 @@ enum AreaCodeEx {
   /// @nodoc
   @JsonValue(0x00000800)
   areaCodeUs,
+
+  /// @nodoc
+  @JsonValue(0x00001000)
+  areaCodeRu,
 
   /// @nodoc
   @JsonValue(0xFFFFFFFE)
@@ -6370,7 +6588,7 @@ class EchoTestConfiguration {
       this.intervalInSeconds});
 
   /// The view used to render the local user's video. This parameter is only applicable to scenarios testing video devices, that is, when enableVideo is true.
-  @JsonKey(name: 'view')
+  @JsonKey(name: 'view', readValue: readIntPtr)
   final int? view;
 
   /// Whether to enable the audio device for the loop test: true : (Default) Enable the audio device. To test the audio device, set this parameter as true. false : Disable the audio device.

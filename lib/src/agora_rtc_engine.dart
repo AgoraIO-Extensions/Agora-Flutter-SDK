@@ -297,6 +297,30 @@ enum StreamFallbackOptions {
   /// 2: When the network conditions are weak, try to receive the low-quality video stream first. If the video cannot be displayed due to extremely weak network environment, then fall back to receiving audio-only stream.
   @JsonValue(2)
   streamFallbackOptionAudioOnly,
+
+  /// @nodoc
+  @JsonValue(3)
+  streamFallbackOptionVideoStreamLayer1,
+
+  /// @nodoc
+  @JsonValue(4)
+  streamFallbackOptionVideoStreamLayer2,
+
+  /// @nodoc
+  @JsonValue(5)
+  streamFallbackOptionVideoStreamLayer3,
+
+  /// @nodoc
+  @JsonValue(6)
+  streamFallbackOptionVideoStreamLayer4,
+
+  /// @nodoc
+  @JsonValue(7)
+  streamFallbackOptionVideoStreamLayer5,
+
+  /// @nodoc
+  @JsonValue(8)
+  streamFallbackOptionVideoStreamLayer6,
 }
 
 /// @nodoc
@@ -364,7 +388,8 @@ class LocalVideoStats {
       this.txPacketLossRate,
       this.captureBrightnessLevel,
       this.dualStreamEnabled,
-      this.hwEncoderAccelerating});
+      this.hwEncoderAccelerating,
+      this.simulcastDimensions});
 
   /// The ID of the local user.
   @JsonKey(name: 'uid')
@@ -459,6 +484,10 @@ class LocalVideoStats {
   ///  1: Hardware encoding is applied for acceleration.
   @JsonKey(name: 'hwEncoderAccelerating')
   final int? hwEncoderAccelerating;
+
+  /// @nodoc
+  @JsonKey(name: 'simulcastDimensions')
+  final List<VideoDimensions>? simulcastDimensions;
 
   /// @nodoc
   factory LocalVideoStats.fromJson(Map<String, dynamic> json) =>
@@ -588,6 +617,7 @@ class RemoteVideoStats {
       this.width,
       this.height,
       this.receivedBitrate,
+      this.decoderInputFrameRate,
       this.decoderOutputFrameRate,
       this.rendererOutputFrameRate,
       this.frameLossRate,
@@ -624,6 +654,10 @@ class RemoteVideoStats {
   /// The bitrate (Kbps) of the remote video received since the last count.
   @JsonKey(name: 'receivedBitrate')
   final int? receivedBitrate;
+
+  /// @nodoc
+  @JsonKey(name: 'decoderInputFrameRate')
+  final int? decoderInputFrameRate;
 
   /// The frame rate (fps) of decoding the remote video.
   @JsonKey(name: 'decoderOutputFrameRate')
@@ -1075,7 +1109,7 @@ class ScreenCaptureConfiguration {
   final Rectangle? screenRect;
 
   /// (For Windows and macOS only) Window ID. This parameter takes effect only when you want to capture the window.
-  @JsonKey(name: 'windowId')
+  @JsonKey(name: 'windowId', readValue: readIntPtr)
   final int? windowId;
 
   /// (For Windows and macOS only) The screen capture configuration. See ScreenCaptureParameters.
@@ -1203,7 +1237,7 @@ class ScreenCaptureSourceInfo {
   final ScreenCaptureSourceType? type;
 
   /// The window ID for a window or the display ID for a screen.
-  @JsonKey(name: 'sourceId')
+  @JsonKey(name: 'sourceId', readValue: readIntPtr)
   final int? sourceId;
 
   /// The name of the window or screen. UTF-8 encoding.
@@ -1243,7 +1277,7 @@ class ScreenCaptureSourceInfo {
   final bool? minimizeWindow;
 
   /// (For Windows only) Screen ID where the window is located. If the window is displayed across multiple screens, this parameter indicates the ID of the screen with which the window has the largest intersection area. If the window is located outside of the visible screens, the value of this member is -2.
-  @JsonKey(name: 'sourceDisplayId')
+  @JsonKey(name: 'sourceDisplayId', readValue: readIntPtr)
   final int? sourceDisplayId;
 
   /// @nodoc
@@ -1340,7 +1374,8 @@ class ChannelMediaOptions {
       this.publishRhythmPlayerTrack,
       this.isInteractiveAudience,
       this.customVideoTrackId,
-      this.isAudioFilterable});
+      this.isAudioFilterable,
+      this.parameters});
 
   /// Whether to publish the video captured by the camera: true : Publish the video captured by the camera. false : Do not publish the video captured by the camera.
   @JsonKey(name: 'publishCameraTrack')
@@ -1491,6 +1526,10 @@ class ChannelMediaOptions {
   final bool? isAudioFilterable;
 
   /// @nodoc
+  @JsonKey(name: 'parameters')
+  final String? parameters;
+
+  /// @nodoc
   factory ChannelMediaOptions.fromJson(Map<String, dynamic> json) =>
       _$ChannelMediaOptionsFromJson(json);
 
@@ -1617,6 +1656,7 @@ class RtcEngineEventHandler {
     this.onAudioMixingFinished,
     this.onAudioEffectFinished,
     this.onVideoDeviceStateChanged,
+    this.onPipStateChanged,
     this.onNetworkQuality,
     this.onIntraRequestReceived,
     this.onUplinkNetworkInfoUpdated,
@@ -1822,6 +1862,9 @@ class RtcEngineEventHandler {
   /// * [deviceState] Media device states. See MediaDeviceStateType.
   final void Function(String deviceId, MediaDeviceType deviceType,
       MediaDeviceStateType deviceState)? onVideoDeviceStateChanged;
+
+  /// @nodoc
+  final void Function(PipState state)? onPipStateChanged;
 
   /// Reports the last mile network quality of each user in the channel.
   ///
@@ -3332,6 +3375,18 @@ abstract class RtcEngine {
   Future<void> stopPreview(
       {VideoSourceType sourceType = VideoSourceType.videoSourceCameraPrimary});
 
+  /// @nodoc
+  Future<bool> isPipSupported();
+
+  /// @nodoc
+  Future<void> setupPip(PipOptions options);
+
+  /// @nodoc
+  Future<void> startPip();
+
+  /// @nodoc
+  Future<void> stopPip();
+
   /// Starts the last mile network probe test.
   ///
   /// This method starts the last-mile network probe test before joining a channel to get the uplink and downlink last mile network statistics, including the bandwidth, packet loss, jitter, and round-trip time (RTT).
@@ -4546,6 +4601,9 @@ abstract class RtcEngine {
   Future<void> setDualStreamMode(
       {required SimulcastStreamMode mode, SimulcastStreamConfig? streamConfig});
 
+  /// @nodoc
+  Future<void> setSimulcastConfig(SimulcastConfig simulcastConfig);
+
   /// Sets whether to enable the local playback of external audio source.
   ///
   /// Ensure you have called the createCustomAudioTrack method to create a custom audio track before calling this method. After calling this method to enable the local playback of external audio source, if you need to stop local playback, you can call this method again and set enabled to false. You can call adjustCustomAudioPlayoutVolume to adjust the local playback volume of the custom audio track.
@@ -5369,6 +5427,9 @@ abstract class RtcEngine {
   /// Returns
   /// Returns an array of FocalLengthInfo objects, which contain the camera's orientation and focal length type.
   Future<List<FocalLengthInfo>> queryCameraFocalLengthCapability();
+
+  /// @nodoc
+  Future<void> setExternalMediaProjection(int mediaProjection);
 
   /// Sets the screen sharing scenario.
   ///
@@ -6259,6 +6320,10 @@ abstract class RtcEngine {
   /// Returns
   /// The native handle of the SDK.
   Future<int> getNativeHandle();
+
+  /// @nodoc
+  Future<void> takeSnapshotWithConfig(
+      {required int uid, required SnapshotConfig config});
 }
 
 /// @nodoc

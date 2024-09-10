@@ -1432,6 +1432,26 @@ const updateNodes = [
       },
     },
   },
+  // agora::rtc::IRtcEngine::setExternalMediaProjection
+  {
+    node: {
+      __TYPE: CXXTYPE.Variable,
+      name: "mediaProjection",
+      namespaces: ["agora", "rtc"],
+      parent_name: "setExternalMediaProjection",
+    },
+    updated: {
+      __TYPE: CXXTYPE.Variable,
+      name: "mediaProjection",
+      namespaces: ["agora", "rtc"],
+      parent_name: "setExternalMediaProjection",
+      type: {
+        __TYPE: CXXTYPE.SimpleType,
+        is_builtin_type: false,
+        is_const: true,
+      },
+    },
+  },
   // agora::rtc::IRtcEngine::sendAudioMetadata
   {
     node: {

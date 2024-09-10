@@ -76,6 +76,34 @@ class RtcEngineExImpl extends RtcEngineImpl implements RtcEngineEx {
   }
 
   @override
+  Future<void> leaveChannelWithUserAccountEx(
+      {required String channelId,
+      required String userAccount,
+      LeaveChannelOptions? options}) async {
+    final apiType =
+        '${isOverrideClassName ? className : 'RtcEngineEx'}_leaveChannelWithUserAccountEx_8bbe372';
+    final param = createParams({
+      'channelId': channelId,
+      'userAccount': userAccount,
+      'options': options?.toJson()
+    });
+    final List<Uint8List> buffers = [];
+    if (options != null) {
+      buffers.addAll(options.collectBufferList());
+    }
+    final callApiResult = await irisMethodChannel.invokeMethod(
+        IrisMethodCall(apiType, jsonEncode(param), buffers: buffers));
+    if (callApiResult.irisReturnCode < 0) {
+      throw AgoraRtcException(code: callApiResult.irisReturnCode);
+    }
+    final rm = callApiResult.data;
+    final result = rm['result'];
+    if (result < 0) {
+      throw AgoraRtcException(code: result);
+    }
+  }
+
+  @override
   Future<void> updateChannelMediaOptionsEx(
       {required ChannelMediaOptions options,
       required RtcConnection connection}) async {
@@ -1085,6 +1113,31 @@ class RtcEngineExImpl extends RtcEngineImpl implements RtcEngineEx {
   }
 
   @override
+  Future<void> setSimulcastConfigEx(
+      {required SimulcastConfig simulcastConfig,
+      required RtcConnection connection}) async {
+    final apiType =
+        '${isOverrideClassName ? className : 'RtcEngineEx'}_setSimulcastConfigEx_bd8d7d0';
+    final param = createParams({
+      'simulcastConfig': simulcastConfig.toJson(),
+      'connection': connection.toJson()
+    });
+    final List<Uint8List> buffers = [];
+    buffers.addAll(simulcastConfig.collectBufferList());
+    buffers.addAll(connection.collectBufferList());
+    final callApiResult = await irisMethodChannel.invokeMethod(
+        IrisMethodCall(apiType, jsonEncode(param), buffers: buffers));
+    if (callApiResult.irisReturnCode < 0) {
+      throw AgoraRtcException(code: callApiResult.irisReturnCode);
+    }
+    final rm = callApiResult.data;
+    final result = rm['result'];
+    if (result < 0) {
+      throw AgoraRtcException(code: result);
+    }
+  }
+
+  @override
   Future<void> setHighPriorityUserListEx(
       {required List<int> uidList,
       required int uidNum,
@@ -1235,6 +1288,33 @@ class RtcEngineExImpl extends RtcEngineImpl implements RtcEngineEx {
     final List<Uint8List> buffers = [];
     buffers.addAll(connection.collectBufferList());
     buffers.add(metadata);
+    final callApiResult = await irisMethodChannel.invokeMethod(
+        IrisMethodCall(apiType, jsonEncode(param), buffers: buffers));
+    if (callApiResult.irisReturnCode < 0) {
+      throw AgoraRtcException(code: callApiResult.irisReturnCode);
+    }
+    final rm = callApiResult.data;
+    final result = rm['result'];
+    if (result < 0) {
+      throw AgoraRtcException(code: result);
+    }
+  }
+
+  @override
+  Future<void> takeSnapshotWithConfigEx(
+      {required RtcConnection connection,
+      required int uid,
+      required SnapshotConfig config}) async {
+    final apiType =
+        '${isOverrideClassName ? className : 'RtcEngineEx'}_takeSnapshotEx_b856417';
+    final param = createParams({
+      'connection': connection.toJson(),
+      'uid': uid,
+      'config': config.toJson()
+    });
+    final List<Uint8List> buffers = [];
+    buffers.addAll(connection.collectBufferList());
+    buffers.addAll(config.collectBufferList());
     final callApiResult = await irisMethodChannel.invokeMethod(
         IrisMethodCall(apiType, jsonEncode(param), buffers: buffers));
     if (callApiResult.irisReturnCode < 0) {

@@ -488,6 +488,7 @@ class AudioPcmFrame {
       this.samplesPerChannel,
       this.sampleRateHz,
       this.numChannels,
+      this.audioTrackNumber,
       this.bytesPerSample,
       this.data});
 
@@ -506,6 +507,10 @@ class AudioPcmFrame {
   /// The number of audio channels.
   @JsonKey(name: 'num_channels_')
   final int? numChannels;
+
+  /// @nodoc
+  @JsonKey(name: 'audio_track_number_')
+  final int? audioTrackNumber;
 
   /// The number of bytes per sample.
   @JsonKey(name: 'bytes_per_sample')
@@ -1053,6 +1058,28 @@ extension VideoModulePositionExt on VideoModulePosition {
   int value() {
     return _$VideoModulePositionEnumMap[this]!;
   }
+}
+
+/// @nodoc
+@JsonSerializable(explicitToJson: true, includeIfNull: false)
+class SnapshotConfig {
+  /// @nodoc
+  const SnapshotConfig({this.filePath, this.position});
+
+  /// @nodoc
+  @JsonKey(name: 'filePath')
+  final String? filePath;
+
+  /// @nodoc
+  @JsonKey(name: 'position')
+  final VideoModulePosition? position;
+
+  /// @nodoc
+  factory SnapshotConfig.fromJson(Map<String, dynamic> json) =>
+      _$SnapshotConfigFromJson(json);
+
+  /// @nodoc
+  Map<String, dynamic> toJson() => _$SnapshotConfigToJson(this);
 }
 
 /// This class is used to get raw PCM audio.
