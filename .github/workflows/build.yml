@@ -84,6 +84,7 @@ jobs:
     name: Run Flutter Android Integration Tests
     if: ${{ !contains(github.event.pull_request.labels.*.name, 'ci:skip') }}
     strategy:
+      fail-fast: false
       matrix:
         version: ["3.7.0", "3.x"]
     runs-on: ubuntu-latest
@@ -118,6 +119,7 @@ jobs:
     name: Run Flutter iOS Integration Tests
     if: ${{ !contains(github.event.pull_request.labels.*.name, 'ci:skip') }}
     strategy:
+      fail-fast: false
       matrix:
         version: ["3.7.0", "3.16"]
     runs-on: macos-12
@@ -139,6 +141,7 @@ jobs:
     name: Run Flutter macOS Integration Tests
     if: ${{ !contains(github.event.pull_request.labels.*.name, 'ci:skip') }}
     strategy:
+      fail-fast: false
       matrix:
         version: ["3.7.0", "3.x"]
     runs-on: macos-12
@@ -184,6 +187,7 @@ jobs:
     name: Run Flutter Windows Integration Tests
     if: ${{ !contains(github.event.pull_request.labels.*.name, 'ci:skip') }}
     strategy:
+      fail-fast: false
       matrix:
         version: ["3.7.0", "3.x"]
     runs-on: windows-2019
@@ -238,6 +242,7 @@ jobs:
     name: Build Android on Ubuntu
     if: ${{ !contains(github.event.pull_request.labels.*.name, 'ci:skip') }}
     strategy:
+      fail-fast: false
       matrix:
         version: ["3.7.0", "3.x"]
     runs-on: ubuntu-latest
@@ -258,6 +263,7 @@ jobs:
     name: Build Android on Windows
     if: ${{ !contains(github.event.pull_request.labels.*.name, 'ci:skip') }}
     strategy:
+      fail-fast: false
       matrix:
         version: ["3.7.0", "3.x"]
     runs-on: windows-2019
@@ -279,6 +285,7 @@ jobs:
     name: Build iOS
     if: ${{ !contains(github.event.pull_request.labels.*.name, 'ci:skip') }}
     strategy:
+      fail-fast: false
       matrix:
         version: ["3.7.0", "3.x"]
     runs-on: macos-12
@@ -324,6 +331,7 @@ jobs:
     name: Build Web
     if: ${{ !contains(github.event.pull_request.labels.*.name, 'ci:skip') }}
     strategy:
+      fail-fast: false
       matrix:
         version: ["3.7.0", "3.x"]
     runs-on: ubuntu-latest
