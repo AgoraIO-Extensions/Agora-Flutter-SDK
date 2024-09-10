@@ -159,6 +159,9 @@ const eventIdsMapping = {
   "RtcEngineEventHandler_onVideoDeviceStateChanged": [
     "RtcEngineEventHandler_onVideoDeviceStateChanged_976d8c3"
   ],
+  "RtcEngineEventHandler_onPipStateChanged": [
+    "RtcEngineEventHandler_onPipStateChanged_941b366"
+  ],
   "RtcEngineEventHandler_onNetworkQuality": [
     "RtcEngineEventHandler_onNetworkQuality_34d8b3c"
   ],
@@ -223,7 +226,7 @@ const eventIdsMapping = {
     "RtcEngineEventHandler_onLocalAudioStats_5657f05"
   ],
   "RtcEngineEventHandler_onLocalVideoStats": [
-    "RtcEngineEventHandler_onLocalVideoStats_baa96c8"
+    "RtcEngineEventHandler_onLocalVideoStats_3ac0eb4"
   ],
   "RtcEngineEventHandler_onRemoteVideoStats": [
     "RtcEngineEventHandler_onRemoteVideoStats_2f43a70"

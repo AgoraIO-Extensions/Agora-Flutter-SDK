@@ -1645,6 +1645,33 @@ Map<String, dynamic> _$RtcEngineEventHandlerOnVideoDeviceStateChangedJsonToJson(
   return val;
 }
 
+RtcEngineEventHandlerOnPipStateChangedJson
+    _$RtcEngineEventHandlerOnPipStateChangedJsonFromJson(
+            Map<String, dynamic> json) =>
+        RtcEngineEventHandlerOnPipStateChangedJson(
+          state: $enumDecodeNullable(_$PipStateEnumMap, json['state']),
+        );
+
+Map<String, dynamic> _$RtcEngineEventHandlerOnPipStateChangedJsonToJson(
+    RtcEngineEventHandlerOnPipStateChangedJson instance) {
+  final val = <String, dynamic>{};
+
+  void writeNotNull(String key, dynamic value) {
+    if (value != null) {
+      val[key] = value;
+    }
+  }
+
+  writeNotNull('state', _$PipStateEnumMap[instance.state]);
+  return val;
+}
+
+const _$PipStateEnumMap = {
+  PipState.pipStateStarted: 0,
+  PipState.pipStateStopped: 1,
+  PipState.pipStateFailed: 2,
+};
+
 RtcEngineEventHandlerOnNetworkQualityJson
     _$RtcEngineEventHandlerOnNetworkQualityJsonFromJson(
             Map<String, dynamic> json) =>
@@ -1954,6 +1981,8 @@ const _$LocalVideoStreamReasonEnumMap = {
       .localVideoStreamReasonScreenCaptureWindowRecoverFromMinimized: 27,
   LocalVideoStreamReason.localVideoStreamReasonScreenCapturePaused: 28,
   LocalVideoStreamReason.localVideoStreamReasonScreenCaptureResumed: 29,
+  LocalVideoStreamReason.localVideoStreamReasonScreenCaptureDisplayDisconnected:
+      30,
 };
 
 RtcEngineEventHandlerOnRemoteVideoStateChangedJson
@@ -2310,7 +2339,10 @@ RtcEngineEventHandlerOnLocalVideoStatsJson
     _$RtcEngineEventHandlerOnLocalVideoStatsJsonFromJson(
             Map<String, dynamic> json) =>
         RtcEngineEventHandlerOnLocalVideoStatsJson(
-          source: $enumDecodeNullable(_$VideoSourceTypeEnumMap, json['source']),
+          connection: json['connection'] == null
+              ? null
+              : RtcConnection.fromJson(
+                  json['connection'] as Map<String, dynamic>),
           stats: json['stats'] == null
               ? null
               : LocalVideoStats.fromJson(json['stats'] as Map<String, dynamic>),
@@ -2326,7 +2358,7 @@ Map<String, dynamic> _$RtcEngineEventHandlerOnLocalVideoStatsJsonToJson(
     }
   }
 
-  writeNotNull('source', _$VideoSourceTypeEnumMap[instance.source]);
+  writeNotNull('connection', instance.connection?.toJson());
   writeNotNull('stats', instance.stats?.toJson());
   return val;
 }

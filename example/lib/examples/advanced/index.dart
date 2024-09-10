@@ -36,7 +36,8 @@ import 'voice_changer/voice_changer.dart';
 /// Data source for advanced examples
 final advanced = [
   {'name': 'Advanced'},
-  if (!kIsWeb) {'name': 'AudioEffectMixing', 'widget': const AudioEffectMixing()},
+  if (!kIsWeb)
+    {'name': 'AudioEffectMixing', 'widget': const AudioEffectMixing()},
   if (!kIsWeb)
     {'name': 'ChannelMediaRelay', 'widget': const ChannelMediaRelay()},
   if (kIsWeb || !(Platform.isAndroid || Platform.isIOS))
