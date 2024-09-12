@@ -101,6 +101,8 @@ class _State extends State<ScreenSharing> with KeepRemoteVideoViewsMixin {
 
     await _engine.enableVideo();
     await _engine.setClientRole(role: ClientRoleType.clientRoleBroadcaster);
+    await _engine
+        .setScreenCaptureScenario(ScreenScenarioType.screenScenarioGaming);
 
     setState(() {
       _isReadyPreview = true;
