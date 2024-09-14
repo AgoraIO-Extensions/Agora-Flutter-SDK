@@ -104,7 +104,7 @@ public:
 }
 
 - (void)updateData:(NSNumber *)uid channelId:(NSString *)channelId videoSourceType:(NSNumber *)videoSourceType videoViewSetupMode:(NSNumber *)videoViewSetupMode {
-    IrisRtcVideoFrameConfig config = EmptyIrisRtcVideoFrameConfig;
+    IrisRtcVideoFrameConfig config;
     config.video_frame_format = agora::media::base::VIDEO_PIXEL_FORMAT::VIDEO_CVPIXEL_NV12;
     config.uid = [uid unsignedIntValue];
     config.video_source_type = [videoSourceType intValue];
@@ -114,6 +114,7 @@ public:
       strcpy(config.channelId, "");
     }
     config.video_view_setup_mode = [videoViewSetupMode intValue];
+        config.observed_frame_position = agora::media::base::VIDEO_MODULE_POSITION::POSITION_POST_CAPTURER | agora::media::base::VIDEO_MODULE_POSITION::POSITION_PRE_RENDERER;
     
     self.delegateId = self.irisRtcRendering->AddVideoFrameObserverDelegate(config, self.delegate);
 }
