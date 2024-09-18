@@ -48,4 +48,6 @@ abstract class GlobalVideoViewControllerPlatfrom {
       connection: connection,
     );
   }
+
+  Future<int> getCurrentActivityHandle() => SynchronousFuture(0);
 }
