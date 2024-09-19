@@ -105,3 +105,62 @@ class VideoViewController
         : VideoSourceType.videoSourceRemote.value();
   }
 }
+
+/// A [VideoViewControllerBase] for managing picture-in-picture (PIP) features.
+/// Use this controller to handle the picture-in-picture functionality.
+///
+/// Note that the behavior differs between Android and iOS:
+///
+/// - On Android:
+///   The PIP feature controls the entire `Activity`, not a single [AgoraVideoView].
+///   For more details on PIP on Android, see:
+///   https://developer.android.com/develop/ui/views/picture-in-picture.
+///   We recommend using a local [PIPVideoViewController] (uid = 0) to manage the PIP feature on Android.
+///
+/// - On iOS:
+///   The PIP feature controls a single [AgoraVideoView].
+///   For more details on PIP on iOS, see:
+///   https://developer.apple.com/documentation/avkit/adopting-picture-in-picture-for-video-calls?language=objc.
+///
+/// Note that only one picture-in-picture instance can be active at a time.
+abstract class PIPVideoViewController extends VideoViewControllerBase {
+  /// Creates a [PIPVideoViewController] for the local user (uid = 0).
+  factory PIPVideoViewController(
+          {required RtcEngine rtcEngine,
+          required VideoCanvas canvas,
+          bool useFlutterTexture = false,
+          bool useAndroidSurfaceView = false}) =>
+      PIPVideoViewControllerImpl(
+        rtcEngine: rtcEngine,
+        canvas: canvas,
+        useFlutterTexture: useFlutterTexture,
+        useAndroidSurfaceView: useAndroidSurfaceView,
+      );
+
+  /// Creates a [PIPVideoViewController] for remote users.
+  factory PIPVideoViewController.remote(
+          {required RtcEngine rtcEngine,
+          required VideoCanvas canvas,
+          required RtcConnection connection,
+          bool useFlutterTexture = false,
+          bool useAndroidSurfaceView = false}) =>
+      PIPVideoViewControllerImpl.remote(
+        rtcEngine: rtcEngine,
+        canvas: canvas,
+        connection: connection,
+        useFlutterTexture: useFlutterTexture,
+        useAndroidSurfaceView: useAndroidSurfaceView,
+      );
+
+  /// Checks if picture-in-picture is supported.
+  Future<bool> isPipSupported();
+
+  /// Starts picture-in-picture mode with the specified [PipOptions].
+  Future<void> startPictureInPicture(PipOptions options);
+
+  /// Stops picture-in-picture mode.
+  Future<void> stopPictureInPicture();
+
+  /// Checks if the current mode is picture-in-picture.
+  bool get isInPictureInPictureMode;
+}

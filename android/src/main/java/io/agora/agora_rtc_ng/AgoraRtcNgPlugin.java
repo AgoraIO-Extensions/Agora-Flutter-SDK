@@ -1,5 +1,6 @@
 package io.agora.agora_rtc_ng;
 
+import android.app.Activity;
 import android.content.Context;
 
 import androidx.annotation.NonNull;
@@ -10,10 +11,12 @@ import java.lang.ref.WeakReference;
 import java.util.HashMap;
 
 import io.flutter.embedding.engine.plugins.FlutterPlugin;
+import io.flutter.embedding.engine.plugins.activity.ActivityAware;
+import io.flutter.embedding.engine.plugins.activity.ActivityPluginBinding;
 import io.flutter.plugin.common.MethodCall;
 import io.flutter.plugin.common.MethodChannel;
 
-public class AgoraRtcNgPlugin implements FlutterPlugin, MethodChannel.MethodCallHandler {
+public class AgoraRtcNgPlugin implements FlutterPlugin, MethodChannel.MethodCallHandler, ActivityAware {
 
     private MethodChannel channel;
     private WeakReference<FlutterPluginBinding> flutterPluginBindingRef;
@@ -101,5 +104,33 @@ public class AgoraRtcNgPlugin implements FlutterPlugin, MethodChannel.MethodCall
             }
         }
         result.error("IllegalArgumentException", "The parameter should not be null", null);
+    }
+
+    @Override
+    public void onAttachedToActivity(@NonNull ActivityPluginBinding binding) {
+        if (videoViewController != null) {
+            videoViewController.onAttachedToActivity(binding);
+        }
+    }
+
+    @Override
+    public void onDetachedFromActivityForConfigChanges() {
+        if (videoViewController != null) {
+            videoViewController.onDetachedFromActivityForConfigChanges();
+        }
+    }
+
+    @Override
+    public void onReattachedToActivityForConfigChanges(@NonNull ActivityPluginBinding binding) {
+        if (videoViewController != null) {
+            videoViewController.onReattachedToActivityForConfigChanges(binding);
+        }
+    }
+
+    @Override
+    public void onDetachedFromActivity() {
+        if (videoViewController != null) {
+            videoViewController.onDetachedFromActivity();
+        }
     }
 }
