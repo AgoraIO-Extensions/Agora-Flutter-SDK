@@ -1161,6 +1161,55 @@ public:
      */
     virtual int leaveChannelEx(const RtcConnection& connection, const LeaveChannelOptions& options) = 0;
 
+  /**
+    * Leaves a channel with the channel ID and user account.
+    *
+    * This method allows a user to leave the channel, for example, by hanging up or exiting a call.
+    *
+    * This method is an asynchronous call, which means that the result of this method returns even before
+    * the user has not actually left the channel. Once the user successfully leaves the channel, the
+    * SDK triggers the \ref IRtcEngineEventHandler::onLeaveChannel "onLeaveChannel" callback.
+    *
+    * @param channelId The channel name. The maximum length of this parameter is 64 bytes. Supported character scopes are:
+    * - All lowercase English letters: a to z.
+    * - All uppercase English letters: A to Z.
+    * - All numeric characters: 0 to 9.
+    * - The space character.
+    * - Punctuation characters and other symbols, including: "!", "#", "$", "%", "&", "(", ")", "+", "-", ":", ";", "<", "=", ".", ">", "?", "@", "[", "]", "^", "_", " {", "}", "|", "~", ",".
+    * @param userAccount The user account. The maximum length of this parameter is 255 bytes. Ensure that you set this parameter and do not set it as null. Supported character scopes are:
+    * - All lowercase English letters: a to z.
+    * - All uppercase English letters: A to Z.
+    * - All numeric characters: 0 to 9.
+    * - The space character.
+    * - Punctuation characters and other symbols, including: "!", "#", "$", "%", "&", "(", ")", "+", "-", ":", ";", "<", "=", ".", ">", "?", "@", "[", "]", "^", "_", " {", "}", "|", "~", ",".
+    * @return
+    * - 0: Success.
+    * - < 0: Failure.
+    */
+    virtual int leaveChannelWithUserAccountEx(const char* channelId, const char* userAccount) = 0;
+
+  /**
+    * Leaves a channel with the channel ID and user account and sets the options for leaving.
+    *
+    * @param channelId The channel name. The maximum length of this parameter is 64 bytes. Supported character scopes are:
+    * - All lowercase English letters: a to z.
+    * - All uppercase English letters: A to Z.
+    * - All numeric characters: 0 to 9.
+    * - The space character.
+    * - Punctuation characters and other symbols, including: "!", "#", "$", "%", "&", "(", ")", "+", "-", ":", ";", "<", "=", ".", ">", "?", "@", "[", "]", "^", "_", " {", "}", "|", "~", ",".
+    * @param userAccount The user account. The maximum length of this parameter is 255 bytes. Ensure that you set this parameter and do not set it as null. Supported character scopes are:
+    * - All lowercase English letters: a to z.
+    * - All uppercase English letters: A to Z.
+    * - All numeric characters: 0 to 9.
+    * - The space character.
+    * - Punctuation characters and other symbols, including: "!", "#", "$", "%", "&", "(", ")", "+", "-", ":", ";", "<", "=", ".", ">", "?", "@", "[", "]", "^", "_", " {", "}", "|", "~", ",".
+    * @param options The options for leaving the channel. See #LeaveChannelOptions.
+    * @return int
+    * - 0: Success.
+    * - < 0: Failure.
+    */
+    virtual int leaveChannelWithUserAccountEx(const char* channelId, const char* userAccount, const LeaveChannelOptions& options) = 0;
+
     /**
      *  Updates the channel media options after joining the channel.
      *
@@ -1879,6 +1928,24 @@ public:
     virtual int setDualStreamModeEx(SIMULCAST_STREAM_MODE mode,
                                    const SimulcastStreamConfig& streamConfig,
                                    const RtcConnection& connection) = 0;
+
+    /**
+     * Set the multi-layer video stream configuration.
+     *
+     * If multi-layer is configed, the subscriber can choose to receive the coresponding layer
+     * of video stream using {@link setRemoteVideoStreamType setRemoteVideoStreamType}.
+     *
+     * @param simulcastConfig
+     * - The configuration for multi-layer video stream. It includes seven layers, ranging from
+     *   STREAM_LAYER_1 to STREAM_LOW. A maximum of 3 layers can be enabled simultaneously.
+     * @param connection The RtcConnection object.
+     * @return
+     * - 0: Success.
+     * - < 0: Failure.
+     * @technical preview
+     */
+    virtual int setSimulcastConfigEx(const SimulcastConfig& simulcastConfig,
+                                     const RtcConnection& connection) = 0;
     
   /**
     * Set the high priority user list and their fallback level in weak network condition.
@@ -1931,6 +1998,33 @@ public:
    */
     virtual int takeSnapshotEx(const RtcConnection& connection, uid_t uid, const char* filePath)  = 0;
 
+  /**
+   * Takes a snapshot of a video stream.
+   *
+   * This method takes a snapshot of a video stream from the specified user, generates a JPG
+   * image, and saves it to the specified path.
+   *
+   * The method is asynchronous, and the SDK has not taken the snapshot when the method call
+   * returns. After a successful method call, the SDK triggers the `onSnapshotTaken` callback
+   * to report whether the snapshot is successfully taken, as well as the details for that
+   * snapshot.
+   *
+   * @note
+   * - Call this method after joining a channel.
+   * - This method takes a snapshot of the published video stream specified in `ChannelMediaOptions`.
+   *
+   * @param connection The RtcConnection object.
+   * @param uid The user ID. Set uid as 0 if you want to take a snapshot of the local user's video.
+   * @param config The configuration for the take snapshot. See SnapshotConfig.
+   *
+   * Ensure that the path you specify exists and is writable.
+   * @return
+   * - 0 : Success.
+   * - &lt; 0: Failure.
+   *   - -4: Incorrect observation position. Modify the input observation position according to the reqiurements specified in SnapshotConfig.
+   */
+    virtual int takeSnapshotEx(const RtcConnection& connection, uid_t uid, const media::SnapshotConfig& config)  = 0;
+    
     /** Enables video screenshot and upload with the connection ID.
     @param enabled Whether to enable video screenshot and upload:
     - `true`: Yes.
