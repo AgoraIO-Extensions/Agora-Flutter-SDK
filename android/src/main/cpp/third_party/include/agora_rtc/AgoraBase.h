@@ -1543,13 +1543,38 @@ enum H264PacketizeMode {
  */
 enum VIDEO_STREAM_TYPE {
   /**
-   * 0: The high-quality video stream, which has a higher resolution and bitrate.
+   * 0: The high-quality video stream, which has the highest resolution and bitrate.
    */
   VIDEO_STREAM_HIGH = 0,
   /**
-   * 1: The low-quality video stream, which has a lower resolution and bitrate.
+   * 1: The low-quality video stream, which has the lowest resolution and bitrate.
    */
   VIDEO_STREAM_LOW = 1,
+  /**
+   * 4: The video stream of layer_1, which has a lower resolution and bitrate than VIDEO_STREAM_HIGH.
+   */
+  VIDEO_STREAM_LAYER_1 = 4,
+  /**
+   * 5: The video stream of layer_2, which has a lower resolution and bitrate than VIDEO_STREAM_LAYER_1.
+   */
+  VIDEO_STREAM_LAYER_2 = 5,
+  /**
+   * 6: The video stream of layer_3, which has a lower resolution and bitrate than VIDEO_STREAM_LAYER_2.
+   */
+  VIDEO_STREAM_LAYER_3 = 6,
+  /**
+   * 7: The video stream of layer_4, which has a lower resolution and bitrate than VIDEO_STREAM_LAYER_3.
+   */
+  VIDEO_STREAM_LAYER_4 = 7,
+  /**
+   * 8: The video stream of layer_5, which has a lower resolution and bitrate than VIDEO_STREAM_LAYER_4.
+   */
+  VIDEO_STREAM_LAYER_5 = 8,
+  /**
+   * 9: The video stream of layer_6, which has a lower resolution and bitrate than VIDEO_STREAM_LAYER_5.
+   */
+  VIDEO_STREAM_LAYER_6 = 9,
+
 };
 
 struct VideoSubscriptionOptions {
@@ -1761,6 +1786,17 @@ enum VIDEO_MIRROR_MODE_TYPE {
   VIDEO_MIRROR_MODE_DISABLED = 2,
 };
 
+#if defined(__APPLE__) && TARGET_OS_IOS
+/**
+ * Camera capturer configuration for format type.
+ */
+enum CAMERA_FORMAT_TYPE {
+  /** 0: (Default) NV12. */
+  CAMERA_FORMAT_NV12,
+  /** 1: BGRA. */
+  CAMERA_FORMAT_BGRA,
+};
+#endif
 
 /** Supported codec type bit mask. */
 enum CODEC_CAP_MASK {
@@ -2030,15 +2066,78 @@ struct SimulcastStreamConfig {
    */
   int kBitrate;
   /**
-   * he capture frame rate (fps) of the local video. The default value is 5.
+   * The capture frame rate (fps) of the local video. The default value is 5.
    */
   int framerate;
   SimulcastStreamConfig() : dimensions(160, 120), kBitrate(65), framerate(5) {}
+  SimulcastStreamConfig(const SimulcastStreamConfig& other) : dimensions(other.dimensions), kBitrate(other.kBitrate), framerate(other.framerate) {}
   bool operator==(const SimulcastStreamConfig& rhs) const {
     return dimensions == rhs.dimensions && kBitrate == rhs.kBitrate && framerate == rhs.framerate;
   }
 };
 
+/**
+ * The configuration of the multi-layer video stream.
+ */
+struct SimulcastConfig {
+  /**
+   * The index of multi-layer video stream
+   */
+  enum StreamLayerIndex {
+   /**
+    * 0: video stream index of layer_1
+    */
+   STREAM_LAYER_1 = 0,
+   /**
+    * 1: video stream index of layer_2
+    */
+   STREAM_LAYER_2 = 1,
+   /**
+    * 2: video stream index of layer_3
+    */
+   STREAM_LAYER_3 = 2,
+   /**
+    * 3: video stream index of layer_4
+    */
+   STREAM_LAYER_4 = 3,
+   /**
+    * 4: video stream index of layer_5
+    */
+   STREAM_LAYER_5 = 4,
+   /**
+    * 5: video stream index of layer_6
+    */
+   STREAM_LAYER_6 = 5,
+   /**
+    * 6: video stream index of low
+    */
+   STREAM_LOW = 6,
+   /**
+    * 7: max count of video stream layers
+    */
+   STREAM_LAYER_COUNT_MAX = 7
+  };
+  struct StreamLayerConfig {
+    /**
+     * The video frame dimension. The default value is 0.
+     */
+    VideoDimensions dimensions;
+    /**
+     * The capture frame rate (fps) of the local video. The default value is 0.
+     */
+    int framerate;
+    /**
+     * Whether to enable the corresponding layer of video stream. The default value is false.
+     */
+    bool enable;
+    StreamLayerConfig() : dimensions(0, 0), framerate(0), enable(false) {}
+  };
+
+  /**
+   * The array of StreamLayerConfig, which contains STREAM_LAYER_COUNT_MAX layers of video stream at most.
+   */
+  StreamLayerConfig configs[STREAM_LAYER_COUNT_MAX];
+};
 /**
  * The location of the target area relative to the screen or window. If you do not set this parameter,
  * the SDK selects the whole screen or window.
@@ -2919,6 +3018,8 @@ enum LOCAL_VIDEO_STREAM_REASON {
   LOCAL_VIDEO_STREAM_REASON_SCREEN_CAPTURE_PAUSED = 28,
   /** 29: The screen capture is resumed. */
   LOCAL_VIDEO_STREAM_REASON_SCREEN_CAPTURE_RESUMED = 29,
+  /** 30: The shared display has been disconnected */
+  LOCAL_VIDEO_STREAM_REASON_SCREEN_CAPTURE_DISPLAY_DISCONNECTED = 30,
 
 };
 
@@ -4401,6 +4502,23 @@ struct VideoCanvas {
       cropArea(0, 0, 0, 0), enableAlphaMask(false), position(media::base::POSITION_POST_CAPTURER) {}
 };
 
+enum PIP_STATE {
+  PIP_STATE_STARTED = 0,
+  PIP_STATE_STOPPED = 1,
+  PIP_STATE_FAILED = 2,
+};
+
+struct PipOptions {
+  void* contentSource;
+  int contentWidth;
+  int contentHeight;
+#if defined(__APPLE__) && TARGET_OS_IOS
+  bool autoEnterPip = false;
+  VideoCanvas canvas = VideoCanvas();
+#endif
+  PipOptions(): contentSource(NULL), contentWidth(0), contentHeight(0) {}
+};
+
 /** Image enhancement options.
  */
 struct BeautyOptions {
@@ -5276,6 +5394,10 @@ enum AREA_CODE {
     AREA_CODE_GLOB = (0xFFFFFFFF)
 };
 
+/**
+  Extra region code
+  @technical preview
+*/
 enum AREA_CODE_EX {
     /**
      * Oceania
@@ -5301,6 +5423,10 @@ enum AREA_CODE_EX {
      * United States
      */
     AREA_CODE_US = 0x00000800,
+    /**
+     * Russia
+     */
+    AREA_CODE_RU = 0x00001000,
     /**
      * The global area (except China)
      */
