@@ -230,19 +230,30 @@ enum AUDIO_REVERB_TYPE {
 };
 
 enum STREAM_FALLBACK_OPTIONS {
-  /** 0: No fallback operation for the stream when the network
-     condition is poor. The stream quality cannot be guaranteed. */
-
+  /** 0: No fallback operation to a lower resolution stream when the network
+     condition is poor. Fallback to Scalable Video Coding (e.g. SVC)
+     is still possible, but the resolution remains in high stream.
+     The stream quality cannot be guaranteed. */
   STREAM_FALLBACK_OPTION_DISABLED = 0,
-  /** 1: (Default) Under poor network conditions, the SDK will send or receive
+  /** 1: (Default) Under poor network conditions, the receiver SDK will receive
      agora::rtc::VIDEO_STREAM_LOW. You can only set this option in
      RtcEngineParameters::setRemoteSubscribeFallbackOption. Nothing happens when
      you set this in RtcEngineParameters::setLocalPublishFallbackOption. */
   STREAM_FALLBACK_OPTION_VIDEO_STREAM_LOW = 1,
-  /** 2: Under poor network conditions, the SDK may receive
-     agora::rtc::VIDEO_STREAM_LOW first, but if the network still does
-     not allow displaying the video, the SDK will send or receive audio only. */
+  /** 2: Under poor network conditions, the SDK may receive agora::rtc::VIDEO_STREAM_LOW first,
+     then agora::rtc::VIDEO_STREAM_LAYER_1 to agora::rtc::VIDEO_STREAM_LAYER_6 if the related layer exists.
+     If the network still does not allow displaying the video, the SDK will receive audio only. */
   STREAM_FALLBACK_OPTION_AUDIO_ONLY = 2,
+  /** 3~8: If the receiver SDK uses RtcEngineParameters::setRemoteSubscribeFallbackOption，it will receive
+     one of the streams from agora::rtc::VIDEO_STREAM_LAYER_1 to agora::rtc::VIDEO_STREAM_LAYER_6
+     if the related layer exists when the network condition is poor. The lower bound of fallback depends on
+     the STREAM_FALLBACK_OPTION_VIDEO_STREAM_LAYER_X. */
+  STREAM_FALLBACK_OPTION_VIDEO_STREAM_LAYER_1 = 3,
+  STREAM_FALLBACK_OPTION_VIDEO_STREAM_LAYER_2 = 4,
+  STREAM_FALLBACK_OPTION_VIDEO_STREAM_LAYER_3 = 5,
+  STREAM_FALLBACK_OPTION_VIDEO_STREAM_LAYER_4 = 6,
+  STREAM_FALLBACK_OPTION_VIDEO_STREAM_LAYER_5 = 7,
+  STREAM_FALLBACK_OPTION_VIDEO_STREAM_LAYER_6 = 8,
 };
 
 enum PRIORITY_TYPE {
@@ -341,6 +352,9 @@ struct LocalVideoStats
     * - hardware = 1.
     */
   int hwEncoderAccelerating;
+  /** The dimensions of the simulcast streams's encoding frame.
+    */
+  VideoDimensions simulcastDimensions[SimulcastConfig::STREAM_LAYER_COUNT_MAX];
 };
 
 /**
@@ -502,6 +516,9 @@ struct RemoteVideoStats {
    * Bitrate (Kbps) received since the last count.
    */
   int receivedBitrate;
+  /** The decoder input frame rate (fps) of the remote video.
+   */
+  int decoderInputFrameRate;
   /** The decoder output frame rate (fps) of the remote video.
    */
   int decoderOutputFrameRate;
@@ -1256,6 +1273,12 @@ struct ChannelMediaOptions {
    */
   Optional<bool> isAudioFilterable;
 
+  /** Provides the technical preview functionalities or special customizations by configuring the SDK with JSON options.
+      Pointer to the set parameters in a JSON string.
+    * @technical preview
+   */
+  Optional<const char*> parameters;
+
   ChannelMediaOptions() {}
   ~ChannelMediaOptions() {}
 
@@ -1301,6 +1324,7 @@ struct ChannelMediaOptions {
       SET_FROM(customVideoTrackId);
       SET_FROM(isAudioFilterable);
       SET_FROM(isInteractiveAudience);
+      SET_FROM(parameters);
 #undef SET_FROM
   }
 
@@ -1349,6 +1373,7 @@ struct ChannelMediaOptions {
       ADD_COMPARE(customVideoTrackId);
       ADD_COMPARE(isAudioFilterable);
       ADD_COMPARE(isInteractiveAudience);
+      ADD_COMPARE(parameters);
       END_COMPARE();
 
 #undef BEGIN_COMPARE
@@ -1400,6 +1425,7 @@ struct ChannelMediaOptions {
         REPLACE_BY(customVideoTrackId);
         REPLACE_BY(isAudioFilterable);
         REPLACE_BY(isInteractiveAudience);
+        REPLACE_BY(parameters);
 #undef REPLACE_BY
     }
     return *this;
@@ -1674,6 +1700,12 @@ class IRtcEngineEventHandler {
     (void)deviceType;
     (void)deviceState;
   }
+
+#if defined(__ANDROID__) || (defined(__APPLE__) && TARGET_OS_IOS)
+  virtual void onPipStateChanged(PIP_STATE state) {
+    (void)state;
+  };
+#endif
 
   /**
    * Reports the last mile network quality of each user in the channel.
@@ -4102,6 +4134,15 @@ class IRtcEngine : public agora::base::IEngineBase {
    */
   virtual int stopPreview(VIDEO_SOURCE_TYPE sourceType) = 0;
 
+#if defined(__ANDROID__) || (defined(__APPLE__) && TARGET_OS_IOS)
+  virtual bool isPipSupported() = 0;
+  virtual int setupPip(const PipOptions& options) = 0;
+  virtual int startPip() = 0;
+#if defined(__APPLE__) && TARGET_OS_IOS
+  virtual int stopPip() = 0;
+#endif
+#endif
+
   /** Starts the last-mile network probe test.
 
   This method starts the last-mile network probe test before joining a channel
@@ -6100,6 +6141,23 @@ class IRtcEngine : public agora::base::IEngineBase {
   virtual int setDualStreamMode(SIMULCAST_STREAM_MODE mode) = 0;
 
   /**
+   * Sets the multi-layer video stream configuration.
+   *
+   * If multi-layer is configured, the subscriber can choose to receive the coresponding layer
+   * of video stream using {@link setRemoteVideoStreamType setRemoteVideoStreamType}.
+   *
+   * @param simulcastConfig
+   * - The configuration for multi-layer video stream. It includes seven layers, ranging from
+   *   STREAM_LAYER_1 to STREAM_LOW. A maximum of 3 layers can be enabled simultaneously.
+   *
+   * @return
+   * - 0: Success.
+   * - < 0: Failure.
+   * @technical preview
+   */
+  virtual int setSimulcastConfig(const SimulcastConfig& simulcastConfig) = 0;
+
+  /**
    * Enables, disables or auto enable the dual video stream mode.
    *
    * If dual-stream mode is enabled, the subscriber can choose to receive the high-stream
@@ -7183,6 +7241,25 @@ class IRtcEngine : public agora::base::IEngineBase {
    * - < 0: Failure..
    */
   virtual int queryCameraFocalLengthCapability(agora::rtc::FocalLengthInfo* focalLengthInfos, int& size) = 0;
+
+#if defined(__ANDROID__)
+  /**
+   * Set screen sharing MediaProjection.
+   *
+   * When screen capture stopped, the SDK will automatically release the MediaProjection internally.
+   *
+   * @param mediaProjection MediaProjection is an Android class that provides access to screen capture and recording capabiliies.
+   *
+   * @note
+   * It is mainly used in some specific scenarios, such as iot custom devices, or child process screen sharing. 
+   * MediaProjection is not easily obtained or for other reasons.
+   *
+   * @return
+   * - 0: Success.
+   * - < 0: Failure.
+   */
+  virtual int setExternalMediaProjection(void* mediaProjection) = 0;
+#endif
 #endif
 
 #if defined(_WIN32) || defined(__APPLE__) || defined(__ANDROID__)
@@ -8143,6 +8220,32 @@ class IRtcEngine : public agora::base::IEngineBase {
    * - < 0 : Failure.
    */
   virtual int takeSnapshot(uid_t uid, const char* filePath)  = 0;
+
+  /**
+   * Takes a snapshot of a video stream.
+   *
+   * This method takes a snapshot of a video stream from the specified user, generates a JPG
+   * image, and saves it to the specified path.
+   *
+   * The method is asynchronous, and the SDK has not taken the snapshot when the method call
+   * returns. After a successful method call, the SDK triggers the `onSnapshotTaken` callback
+   * to report whether the snapshot is successfully taken, as well as the details for that
+   * snapshot.
+   *
+   * @note
+   * - Call this method after joining a channel.
+   * - This method takes a snapshot of the published video stream specified in `ChannelMediaOptions`.
+   *
+   * @param uid The user ID. Set uid as 0 if you want to take a snapshot of the local user's video.
+   * @param config The configuration for the take snapshot. See SnapshotConfig.
+   *
+   * Ensure that the path you specify exists and is writable.
+   * @return
+   * - 0 : Success.
+   * - &lt; 0: Failure.
+   *   - -4: Incorrect observation position. Modify the input observation position according to the reqiurements specified in SnapshotConfig.
+   */
+  virtual int takeSnapshot(uid_t uid, const media::SnapshotConfig& config)  = 0;
 
     /** Enables the content inspect.
     @param enabled Whether to enable content inspect:
