@@ -197,6 +197,7 @@ class PIPVideoViewControllerImpl extends VideoViewController
   Future<void> setupView(int nativeViewPtr) async {
     await super.setupView(nativeViewPtr);
 
+    _isDisposedRender = false;
     _nativeViewPtr = nativeViewPtr;
     _attachNativeViewCompleter.complete();
   }
@@ -264,7 +265,10 @@ class PIPVideoViewControllerImpl extends VideoViewController
     }
 
     _isStartPictureInPicture = false;
-    return rtcEngine.stopPip();
+    // On android, there's no stop pip function
+    if (defaultTargetPlatform == TargetPlatform.iOS) {
+      await rtcEngine.stopPip();
+    }
   }
 
   @override

@@ -25,6 +25,9 @@ class _State extends State<PictureInPicture> {
   bool muteAllRemoteVideo = false;
   Set<int> remoteUid = {};
   late TextEditingController _controller;
+  late TextEditingController _contentWidthController;
+  late TextEditingController _contentHeightController;
+
   late final RtcEngineEventHandler _rtcEngineEventHandler;
 
   late final PIPVideoViewController _localVideoViewPipController;
@@ -36,6 +39,8 @@ class _State extends State<PictureInPicture> {
   void initState() {
     super.initState();
     _controller = TextEditingController(text: config.channelId);
+    _contentWidthController = TextEditingController(text: '150');
+    _contentHeightController = TextEditingController(text: '300');
 
     _initEngine();
   }
@@ -47,6 +52,10 @@ class _State extends State<PictureInPicture> {
   }
 
   Future<void> _dispose() async {
+    _controller.dispose();
+    _contentWidthController.dispose();
+    _contentHeightController.dispose();
+
     _engine.unregisterEventHandler(_rtcEngineEventHandler);
     await _engine.leaveChannel();
     await _engine.release();
@@ -186,13 +195,18 @@ class _State extends State<PictureInPicture> {
                 bottom: 0,
                 child: ElevatedButton(
                   onPressed: () {
-                    _localVideoViewPipController.startPictureInPicture(const PipOptions(
+                    int contentWidth =
+                        int.tryParse(_contentWidthController.text) ?? 0;
+                    int contentHeight =
+                        int.tryParse(_contentHeightController.text) ?? 0;
+
+                    _localVideoViewPipController.startPictureInPicture(PipOptions(
                         // On Android, the `contentWidth` and `contentHeight` are used to calculate the aspect ratio,
                         // not the actual dimensions of the Picture-in-Picture window.
                         // For more details, see:
                         // https://developer.android.com/reference/android/app/PictureInPictureParams.Builder#setAspectRatio(android.util.Rational)
-                        contentWidth: 150,
-                        contentHeight: 300,
+                        contentWidth: contentWidth,
+                        contentHeight: contentHeight,
                         autoEnterPip: true));
                   },
                   child: const Text('Enter PIP'),
@@ -278,6 +292,54 @@ class _State extends State<PictureInPicture> {
           crossAxisAlignment: CrossAxisAlignment.start,
           mainAxisSize: MainAxisSize.min,
           children: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.start,
+              mainAxisSize: MainAxisSize.max,
+              children: [
+                Expanded(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    mainAxisSize: MainAxisSize.min,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      const Text('contentWidth: '),
+                      TextField(
+                        controller: _contentWidthController,
+                        decoration: const InputDecoration(
+                          hintText: 'contentWidth',
+                          border: OutlineInputBorder(gapPadding: 0.0),
+                          isDense: true,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                const SizedBox(
+                  width: 10,
+                ),
+                Expanded(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    mainAxisSize: MainAxisSize.min,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      const Text('contentHeigth: '),
+                      TextField(
+                        controller: _contentHeightController,
+                        decoration: const InputDecoration(
+                          hintText: 'contentHeigth',
+                          border: OutlineInputBorder(),
+                          isDense: true,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+            const SizedBox(
+              height: 20,
+            ),
             TextField(
               controller: _controller,
               decoration: const InputDecoration(hintText: 'Channel ID'),
