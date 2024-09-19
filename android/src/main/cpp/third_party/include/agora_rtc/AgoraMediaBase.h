@@ -397,6 +397,9 @@ struct AudioPcmFrame {
   /** The channel number.
    */
   size_t num_channels_;
+  /**  The audio track number. if mpk enableMultiAudioTrack, audio frame will have audio track number, eg 0 or 1.
+   */
+  int audio_track_number_;
   /** The number of bytes per sample.
    */
   rtc::BYTES_PER_SAMPLE bytes_per_sample;
@@ -413,6 +416,7 @@ struct AudioPcmFrame {
     this->sample_rate_hz_ = src.sample_rate_hz_;
     this->bytes_per_sample = src.bytes_per_sample;
     this->num_channels_ = src.num_channels_;
+    this->audio_track_number_ = src.audio_track_number_;
 
     size_t length = src.samples_per_channel_ * src.num_channels_;
     if (length > kMaxDataSizeSamples) {
@@ -429,6 +433,7 @@ struct AudioPcmFrame {
         samples_per_channel_(0),
         sample_rate_hz_(0),
         num_channels_(0),
+        audio_track_number_(0),
         bytes_per_sample(rtc::TWO_BYTES_PER_SAMPLE) {
     memset(data_, 0, sizeof(data_));
   }
@@ -438,6 +443,7 @@ struct AudioPcmFrame {
         samples_per_channel_(src.samples_per_channel_),
         sample_rate_hz_(src.sample_rate_hz_),
         num_channels_(src.num_channels_),
+        audio_track_number_(src.audio_track_number_),
         bytes_per_sample(src.bytes_per_sample) {
     size_t length = src.samples_per_channel_ * src.num_channels_;
     if (length > kMaxDataSizeSamples) {
@@ -909,6 +915,30 @@ enum VIDEO_MODULE_POSITION {
 };
 
 }  // namespace base
+
+/** Definition of SnapshotConfig.
+ */
+struct SnapshotConfig {
+  /** 
+   * The local path (including filename extensions) of the snapshot. For example:
+   * - Windows: `C:\Users\<user_name>\AppData\Local\Agora\<process_name>\example.jpg`
+   * - iOS: `/App Sandbox/Library/Caches/example.jpg`
+   * - macOS: `～/Library/Logs/example.jpg`
+   * - Android: `/storage/emulated/0/Android/data/<package name>/files/example.jpg`
+   */
+  const char* filePath;
+
+  /** 
+   * The position of the video observation. See VIDEO_MODULE_POSITION.
+   * 
+   * Allowed values vary depending on the `uid` parameter passed in `takeSnapshot` or `takeSnapshotEx`:
+   * - uid = 0: Position 2, 4 and 8 are allowed.
+   * - uid != 0: Only position 2 is allowed.
+   * 
+   */
+  media::base::VIDEO_MODULE_POSITION position;
+  SnapshotConfig() :filePath(NULL), position(media::base::POSITION_PRE_ENCODER) {}
+};
 
 /**
  * The audio frame observer.
