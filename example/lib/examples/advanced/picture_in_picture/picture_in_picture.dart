@@ -47,14 +47,19 @@ class _State extends State<PictureInPicture> {
 
   @override
   void dispose() {
-    super.dispose();
     _dispose();
+    super.dispose();
   }
 
   Future<void> _dispose() async {
     _controller.dispose();
     _contentWidthController.dispose();
     _contentHeightController.dispose();
+
+    _localVideoViewPipController.dispose();
+    _remotePipControllers.forEach((_, controller) {
+      controller.dispose();
+    });
 
     _engine.unregisterEventHandler(_rtcEngineEventHandler);
     await _engine.leaveChannel();
