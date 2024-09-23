@@ -128,12 +128,10 @@ abstract class PIPVideoViewController extends VideoViewControllerBase {
   factory PIPVideoViewController(
           {required RtcEngine rtcEngine,
           required VideoCanvas canvas,
-          bool useFlutterTexture = false,
           bool useAndroidSurfaceView = false}) =>
       PIPVideoViewControllerImpl(
         rtcEngine: rtcEngine,
         canvas: canvas,
-        useFlutterTexture: useFlutterTexture,
         useAndroidSurfaceView: useAndroidSurfaceView,
       );
 
@@ -142,13 +140,11 @@ abstract class PIPVideoViewController extends VideoViewControllerBase {
           {required RtcEngine rtcEngine,
           required VideoCanvas canvas,
           required RtcConnection connection,
-          bool useFlutterTexture = false,
           bool useAndroidSurfaceView = false}) =>
       PIPVideoViewControllerImpl.remote(
         rtcEngine: rtcEngine,
         canvas: canvas,
         connection: connection,
-        useFlutterTexture: useFlutterTexture,
         useAndroidSurfaceView: useAndroidSurfaceView,
       );
 
