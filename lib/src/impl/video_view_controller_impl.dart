@@ -163,12 +163,11 @@ class PIPVideoViewControllerImpl extends VideoViewController
   PIPVideoViewControllerImpl(
       {required RtcEngine rtcEngine,
       required VideoCanvas canvas,
-      bool useFlutterTexture = false,
       bool useAndroidSurfaceView = false})
       : super(
           rtcEngine: rtcEngine,
           canvas: canvas,
-          useFlutterTexture: useFlutterTexture,
+          useFlutterTexture: false,
           useAndroidSurfaceView: useAndroidSurfaceView,
         );
 
@@ -178,13 +177,12 @@ class PIPVideoViewControllerImpl extends VideoViewController
       {required RtcEngine rtcEngine,
       required VideoCanvas canvas,
       required RtcConnection connection,
-      bool useFlutterTexture = false,
       bool useAndroidSurfaceView = false})
       : super.remote(
           rtcEngine: rtcEngine,
           canvas: canvas,
           connection: connection,
-          useFlutterTexture: useFlutterTexture,
+          useFlutterTexture: false,
           useAndroidSurfaceView: useAndroidSurfaceView,
         );
 
@@ -207,8 +205,12 @@ class PIPVideoViewControllerImpl extends VideoViewController
     _isDisposedRender = true;
     _nativeViewPtr = 0;
     _attachNativeViewCompleter = Completer<void>();
-    await stopPictureInPicture();
     return super.disposeRender();
+  }
+
+  @override
+  Future<void> dispose() async {
+    return stopPictureInPicture();
   }
 
   @override
