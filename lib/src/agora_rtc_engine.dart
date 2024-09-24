@@ -1877,7 +1877,7 @@ class RtcEngineEventHandler {
   ///
   /// * [connection] The connection information. See RtcConnection.
   /// * [elapsed] Time elapsed (ms) from the local user calling joinChannel until this callback is triggered.
-  final void Function(VideoSourceType source, int elapsed)?
+  final void Function(RtcConnection connection, int elapsed)?
       onFirstLocalVideoFramePublished;
 
   /// Occurs when the first remote video frame is received and decoded.
@@ -2038,7 +2038,7 @@ class RtcEngineEventHandler {
   ///
   /// * [connection] The connection information. See RtcConnection.
   /// * [stats] The statistics of the local video stream. See LocalVideoStats.
-  final void Function(VideoSourceType source, LocalVideoStats stats)?
+  final void Function(RtcConnection connection, LocalVideoStats stats)?
       onLocalVideoStats;
 
   /// Reports the statistics of the video stream sent by each remote users.

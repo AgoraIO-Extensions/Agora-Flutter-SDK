@@ -40,23 +40,9 @@ const deleteNodes = [
     parent_name: "IRtcEngineEventHandlerEx",
   },
   {
-    // onFirstLocalVideoFramePublished
-    __TYPE: CXXTYPE.MemberFunction,
-    name: "onFirstLocalVideoFramePublished",
-    namespaces: ["agora", "rtc"],
-    parent_name: "IRtcEngineEventHandlerEx",
-  },
-  {
     // onLocalVideoStateChanged
     __TYPE: CXXTYPE.MemberFunction,
     name: "onLocalVideoStateChanged",
-    namespaces: ["agora", "rtc"],
-    parent_name: "IRtcEngineEventHandlerEx",
-  },
-  {
-    // onLocalVideoStats
-    __TYPE: CXXTYPE.MemberFunction,
-    name: "onLocalVideoStats",
     namespaces: ["agora", "rtc"],
     parent_name: "IRtcEngineEventHandlerEx",
   },

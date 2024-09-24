@@ -8009,7 +8009,7 @@ void rtcEngineSmokeTestCases() {
           onFirstLocalVideoFrame:
               (VideoSourceType source, int width, int height, int elapsed) {},
           onFirstLocalVideoFramePublished:
-              (VideoSourceType source, int elapsed) {},
+              (RtcConnection connection, int elapsed) {},
           onFirstRemoteVideoDecoded: (RtcConnection connection, int remoteUid,
               int width, int height, int elapsed) {},
           onVideoSizeChanged: (RtcConnection connection,
@@ -8045,7 +8045,8 @@ void rtcEngineSmokeTestCases() {
               (RtcConnection connection, RemoteAudioStats stats) {},
           onLocalAudioStats:
               (RtcConnection connection, LocalAudioStats stats) {},
-          onLocalVideoStats: (VideoSourceType source, LocalVideoStats stats) {},
+          onLocalVideoStats:
+              (RtcConnection connection, LocalVideoStats stats) {},
           onRemoteVideoStats:
               (RtcConnection connection, RemoteVideoStats stats) {},
           onCameraReady: () {},
@@ -8225,7 +8226,7 @@ void rtcEngineSmokeTestCases() {
           onFirstLocalVideoFrame:
               (VideoSourceType source, int width, int height, int elapsed) {},
           onFirstLocalVideoFramePublished:
-              (VideoSourceType source, int elapsed) {},
+              (RtcConnection connection, int elapsed) {},
           onFirstRemoteVideoDecoded: (RtcConnection connection, int remoteUid,
               int width, int height, int elapsed) {},
           onVideoSizeChanged: (RtcConnection connection,
@@ -8261,7 +8262,8 @@ void rtcEngineSmokeTestCases() {
               (RtcConnection connection, RemoteAudioStats stats) {},
           onLocalAudioStats:
               (RtcConnection connection, LocalAudioStats stats) {},
-          onLocalVideoStats: (VideoSourceType source, LocalVideoStats stats) {},
+          onLocalVideoStats:
+              (RtcConnection connection, LocalVideoStats stats) {},
           onRemoteVideoStats:
               (RtcConnection connection, RemoteVideoStats stats) {},
           onCameraReady: () {},
