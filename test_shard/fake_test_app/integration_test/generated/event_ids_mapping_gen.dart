@@ -178,7 +178,7 @@ const eventIdsMapping = {
     "RtcEngineEventHandler_onFirstLocalVideoFrame_ebdfd19"
   ],
   "RtcEngineEventHandler_onFirstLocalVideoFramePublished": [
-    "RtcEngineEventHandler_onFirstLocalVideoFramePublished_2ad83d8"
+    "RtcEngineEventHandler_onFirstLocalVideoFramePublished_263e4cd"
   ],
   "RtcEngineEventHandler_onFirstRemoteVideoDecoded": [
     "RtcEngineEventHandler_onFirstRemoteVideoDecoded_a68170a"
@@ -223,7 +223,7 @@ const eventIdsMapping = {
     "RtcEngineEventHandler_onLocalAudioStats_5657f05"
   ],
   "RtcEngineEventHandler_onLocalVideoStats": [
-    "RtcEngineEventHandler_onLocalVideoStats_baa96c8"
+    "RtcEngineEventHandler_onLocalVideoStats_3ac0eb4"
   ],
   "RtcEngineEventHandler_onRemoteVideoStats": [
     "RtcEngineEventHandler_onRemoteVideoStats_2f43a70"

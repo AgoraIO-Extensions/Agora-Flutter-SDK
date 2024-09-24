@@ -2106,10 +2106,10 @@ extension RtcEngineEventHandlerOnFirstLocalVideoFrameJsonBufferExt
 @JsonSerializable(explicitToJson: true, includeIfNull: false)
 class RtcEngineEventHandlerOnFirstLocalVideoFramePublishedJson {
   const RtcEngineEventHandlerOnFirstLocalVideoFramePublishedJson(
-      {this.source, this.elapsed});
+      {this.connection, this.elapsed});
 
-  @JsonKey(name: 'source')
-  final VideoSourceType? source;
+  @JsonKey(name: 'connection')
+  final RtcConnection? connection;
 
   @JsonKey(name: 'elapsed')
   final int? elapsed;
@@ -2668,10 +2668,11 @@ extension RtcEngineEventHandlerOnLocalAudioStatsJsonBufferExt
 
 @JsonSerializable(explicitToJson: true, includeIfNull: false)
 class RtcEngineEventHandlerOnLocalVideoStatsJson {
-  const RtcEngineEventHandlerOnLocalVideoStatsJson({this.source, this.stats});
+  const RtcEngineEventHandlerOnLocalVideoStatsJson(
+      {this.connection, this.stats});
 
-  @JsonKey(name: 'source')
-  final VideoSourceType? source;
+  @JsonKey(name: 'connection')
+  final RtcConnection? connection;
 
   @JsonKey(name: 'stats')
   final LocalVideoStats? stats;
