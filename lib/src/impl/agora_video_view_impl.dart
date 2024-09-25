@@ -186,9 +186,11 @@ class _AgoraRtcRenderPlatformViewState extends State<AgoraRtcRenderPlatformView>
     if (!mounted) return;
     if (!_controller(widget.controller).isInitialzed) {
       _listener ??= () {
-        _controller(widget.controller)
-            .removeInitializedCompletedListener(_listener!);
-        _listener = null;
+        if (_listener != null) {
+          _controller(widget.controller)
+              .removeInitializedCompletedListener(_listener!);
+          _listener = null;
+        }
 
         _setupNativeView();
       };
@@ -314,8 +316,10 @@ class _AgoraRtcRenderTextureState extends State<AgoraRtcRenderTexture>
 
     if (!_controllerInternal!.isInitialzed) {
       _listener ??= () {
-        _controllerInternal!.removeInitializedCompletedListener(_listener!);
-        _listener = null;
+        if (_listener != null) {
+          _controllerInternal?.removeInitializedCompletedListener(_listener!);
+          _listener = null;
+        }
 
         _initializeTexture();
       };
@@ -326,6 +330,10 @@ class _AgoraRtcRenderTextureState extends State<AgoraRtcRenderTexture>
   }
 
   Future<void> _initializeTexture() async {
+    if (_controllerInternal == null) {
+      return;
+    }
+
     final oldTextureId = _controllerInternal!.getTextureId();
     await _controllerInternal!.initializeRender();
     final textureId = _controllerInternal!.getTextureId();
