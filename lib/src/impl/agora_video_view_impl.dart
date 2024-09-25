@@ -314,7 +314,7 @@ class _AgoraRtcRenderTextureState extends State<AgoraRtcRenderTexture>
 
     if (!_controllerInternal!.isInitialzed) {
       _listener ??= () {
-        _controllerInternal!.removeInitializedCompletedListener(_listener!);
+        _controllerInternal?.removeInitializedCompletedListener(_listener!);
         _listener = null;
 
         _initializeTexture();
@@ -326,6 +326,10 @@ class _AgoraRtcRenderTextureState extends State<AgoraRtcRenderTexture>
   }
 
   Future<void> _initializeTexture() async {
+    if (_controllerInternal == null) {
+      return;
+    }
+
     final oldTextureId = _controllerInternal!.getTextureId();
     await _controllerInternal!.initializeRender();
     final textureId = _controllerInternal!.getTextureId();
