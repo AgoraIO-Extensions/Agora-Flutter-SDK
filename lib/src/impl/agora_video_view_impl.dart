@@ -186,11 +186,9 @@ class _AgoraRtcRenderPlatformViewState extends State<AgoraRtcRenderPlatformView>
     if (!mounted) return;
     if (!_controller(widget.controller).isInitialzed) {
       _listener ??= () {
-        if (_listener != null) {
-          _controller(widget.controller)
-              .removeInitializedCompletedListener(_listener!);
-          _listener = null;
-        }
+        _controller(widget.controller)
+            .removeInitializedCompletedListener(_listener!);
+        _listener = null;
 
         _setupNativeView();
       };
@@ -316,10 +314,8 @@ class _AgoraRtcRenderTextureState extends State<AgoraRtcRenderTexture>
 
     if (!_controllerInternal!.isInitialzed) {
       _listener ??= () {
-        if (_listener != null) {
-          _controllerInternal?.removeInitializedCompletedListener(_listener!);
-          _listener = null;
-        }
+        _controllerInternal?.removeInitializedCompletedListener(_listener!);
+        _listener = null;
 
         _initializeTexture();
       };
