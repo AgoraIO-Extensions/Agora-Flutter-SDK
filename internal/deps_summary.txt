@@ -1,10 +1,10 @@
 Iris:
 https://download.agora.io/sdk/release/iris_4.5.0-dev.4_DCG_Android_Video_16K_20240927_0549_660.zip
-https://download.agora.io/sdk/release/iris_4.5.0-dev.4_DCG_iOS_Video_20240927_0552_535.zip
+https://download.agora.io/sdk/release/iris_4.5.0-dev.5_DCG_iOS_Video_20240929_0602_538.zip
 https://download.agora.io/sdk/release/iris_4.5.0-dev.4_DCG_Mac_Video_20240927_0549_505.zip
 https://download.agora.io/sdk/release/iris_4.5.0-dev.4_DCG_Windows_Video_20240927_0549_544.zip
 implementation 'io.agora.rtc:iris-rtc:4.5.0-dev.4'
-pod 'AgoraIrisRTC_iOS', '4.5.0-dev.4'
+pod 'AgoraIrisRTC_iOS', '4.5.0-dev.5'
 pod 'AgoraIrisRTC_macOS', '4.5.0-dev.4'
 
 Native:
