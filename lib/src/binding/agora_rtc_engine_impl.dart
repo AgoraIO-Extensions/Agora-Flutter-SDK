@@ -3983,10 +3983,10 @@ class RtcEngineImpl implements RtcEngine {
   }
 
   @override
-  Future<int> setExternalMediaProjection() async {
+  Future<void> setExternalMediaProjection(int mediaProjection) async {
     final apiType =
         '${isOverrideClassName ? className : 'RtcEngine'}_setExternalMediaProjection_f337cbf';
-    final param = createParams({});
+    final param = createParams({'mediaProjection': mediaProjection});
     final callApiResult = await irisMethodChannel.invokeMethod(
         IrisMethodCall(apiType, jsonEncode(param), buffers: null));
     if (callApiResult.irisReturnCode < 0) {
@@ -3997,9 +3997,6 @@ class RtcEngineImpl implements RtcEngine {
     if (result < 0) {
       throw AgoraRtcException(code: result);
     }
-    final setExternalMediaProjectionJson =
-        RtcEngineSetExternalMediaProjectionJson.fromJson(rm);
-    return setExternalMediaProjectionJson.mediaProjection;
   }
 
   @override
