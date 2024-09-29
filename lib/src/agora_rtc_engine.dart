@@ -110,6 +110,10 @@ enum AudioMixingReasonType {
   @JsonValue(724)
   audioMixingReasonStoppedByUser,
 
+  /// @nodoc
+  @JsonValue(726)
+  audioMixingReasonResumedByUser,
+
   /// 0: The SDK opens music file successfully.
   @JsonValue(0)
   audioMixingReasonOk,
@@ -5475,7 +5479,7 @@ abstract class RtcEngine {
   Future<List<FocalLengthInfo>> queryCameraFocalLengthCapability();
 
   /// @nodoc
-  Future<int> setExternalMediaProjection();
+  Future<void> setExternalMediaProjection(int mediaProjection);
 
   /// Sets the screen sharing scenario.
   ///

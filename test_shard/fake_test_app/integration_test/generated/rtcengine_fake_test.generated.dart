@@ -1031,7 +1031,7 @@ void rtcEngineSmokeTestCases() {
         OrientationMode configOrientationMode =
             OrientationMode.orientationModeAdaptive;
         DegradationPreference configDegradationPreference =
-            DegradationPreference.maintainQuality;
+            DegradationPreference.maintainAuto;
         VideoMirrorModeType configMirrorMode =
             VideoMirrorModeType.videoMirrorModeAuto;
         EncodingPreference advanceOptionsEncodingPreference =
@@ -7461,7 +7461,10 @@ void rtcEngineSmokeTestCases() {
       await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
-        await rtcEngine.setExternalMediaProjection();
+        int mediaProjection = 5;
+        await rtcEngine.setExternalMediaProjection(
+          mediaProjection,
+        );
       } catch (e) {
         if (e is! AgoraRtcException) {
           debugPrint(
@@ -7885,7 +7888,7 @@ void rtcEngineSmokeTestCases() {
         OrientationMode videoOutputConfigurationOrientationMode =
             OrientationMode.orientationModeAdaptive;
         DegradationPreference videoOutputConfigurationDegradationPreference =
-            DegradationPreference.maintainQuality;
+            DegradationPreference.maintainAuto;
         VideoMirrorModeType videoOutputConfigurationMirrorMode =
             VideoMirrorModeType.videoMirrorModeAuto;
         EncodingPreference advanceOptionsEncodingPreference =
@@ -7967,7 +7970,7 @@ void rtcEngineSmokeTestCases() {
         OrientationMode videoOutputConfigurationOrientationMode =
             OrientationMode.orientationModeAdaptive;
         DegradationPreference videoOutputConfigurationDegradationPreference =
-            DegradationPreference.maintainQuality;
+            DegradationPreference.maintainAuto;
         VideoMirrorModeType videoOutputConfigurationMirrorMode =
             VideoMirrorModeType.videoMirrorModeAuto;
         EncodingPreference advanceOptionsEncodingPreference =
@@ -9897,7 +9900,7 @@ void rtcEngineSmokeTestCases() {
         OrientationMode configOrientationMode =
             OrientationMode.orientationModeAdaptive;
         DegradationPreference configDegradationPreference =
-            DegradationPreference.maintainQuality;
+            DegradationPreference.maintainAuto;
         VideoMirrorModeType configMirrorMode =
             VideoMirrorModeType.videoMirrorModeAuto;
         EncodingPreference advanceOptionsEncodingPreference =
