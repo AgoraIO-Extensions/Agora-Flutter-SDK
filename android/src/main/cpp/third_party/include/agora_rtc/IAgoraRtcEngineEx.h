@@ -318,40 +318,6 @@ class IRtcEngineEventHandlerEx : public IRtcEngineEventHandler {
     (void)rotation;
   }
 
-  /** Occurs when the local video stream state changes.
-   *
-   * When the state of the local video stream changes (including the state of the video capture and
-   * encoding), the SDK triggers this callback to report the current state. This callback indicates
-   * the state of the local video stream, including camera capturing and video encoding, and allows
-   * you to troubleshoot issues when exceptions occur.
-   *
-   * The SDK triggers the onLocalVideoStateChanged callback with the state code of `LOCAL_VIDEO_STREAM_STATE_FAILED`
-   * and error code of `LOCAL_VIDEO_STREAM_REASON_CAPTURE_FAILURE` in the following situations:
-   * - The app switches to the background, and the system gets the camera resource.
-   * - The camera starts normally, but does not output video for four consecutive seconds.
-   *
-   * When the camera outputs the captured video frames, if the video frames are the same for 15
-   * consecutive frames, the SDK triggers the `onLocalVideoStateChanged` callback with the state code
-   * of `LOCAL_VIDEO_STREAM_STATE_CAPTURING` and error code of `LOCAL_VIDEO_STREAM_REASON_CAPTURE_FAILURE`.
-   * Note that the video frame duplication detection is only available for video frames with a resolution
-   * greater than 200 × 200, a frame rate greater than or equal to 10 fps, and a bitrate less than 20 Kbps.
-   *
-   * @note For some device models, the SDK does not trigger this callback when the state of the local
-   * video changes while the local video capturing device is in use, so you have to make your own
-   * timeout judgment.
-   *
-   * @param connection The RtcConnection object.
-   * @param state The state of the local video. See #LOCAL_VIDEO_STREAM_STATE.
-   * @param reason The detailed error information. See #LOCAL_VIDEO_STREAM_REASON.
-   */
-  virtual void onLocalVideoStateChanged(const RtcConnection& connection,
-                                        LOCAL_VIDEO_STREAM_STATE state,
-                                        LOCAL_VIDEO_STREAM_REASON reason) {
-    (void)connection;
-    (void)state;
-    (void)reason;
-  }
-
   /**
    * Occurs when the remote video state changes.
    *
@@ -1161,6 +1127,55 @@ public:
      */
     virtual int leaveChannelEx(const RtcConnection& connection, const LeaveChannelOptions& options) = 0;
 
+  /**
+    * Leaves a channel with the channel ID and user account.
+    *
+    * This method allows a user to leave the channel, for example, by hanging up or exiting a call.
+    *
+    * This method is an asynchronous call, which means that the result of this method returns even before
+    * the user has not actually left the channel. Once the user successfully leaves the channel, the
+    * SDK triggers the \ref IRtcEngineEventHandler::onLeaveChannel "onLeaveChannel" callback.
+    *
+    * @param channelId The channel name. The maximum length of this parameter is 64 bytes. Supported character scopes are:
+    * - All lowercase English letters: a to z.
+    * - All uppercase English letters: A to Z.
+    * - All numeric characters: 0 to 9.
+    * - The space character.
+    * - Punctuation characters and other symbols, including: "!", "#", "$", "%", "&", "(", ")", "+", "-", ":", ";", "<", "=", ".", ">", "?", "@", "[", "]", "^", "_", " {", "}", "|", "~", ",".
+    * @param userAccount The user account. The maximum length of this parameter is 255 bytes. Ensure that you set this parameter and do not set it as null. Supported character scopes are:
+    * - All lowercase English letters: a to z.
+    * - All uppercase English letters: A to Z.
+    * - All numeric characters: 0 to 9.
+    * - The space character.
+    * - Punctuation characters and other symbols, including: "!", "#", "$", "%", "&", "(", ")", "+", "-", ":", ";", "<", "=", ".", ">", "?", "@", "[", "]", "^", "_", " {", "}", "|", "~", ",".
+    * @return
+    * - 0: Success.
+    * - < 0: Failure.
+    */
+    virtual int leaveChannelWithUserAccountEx(const char* channelId, const char* userAccount) = 0;
+
+  /**
+    * Leaves a channel with the channel ID and user account and sets the options for leaving.
+    *
+    * @param channelId The channel name. The maximum length of this parameter is 64 bytes. Supported character scopes are:
+    * - All lowercase English letters: a to z.
+    * - All uppercase English letters: A to Z.
+    * - All numeric characters: 0 to 9.
+    * - The space character.
+    * - Punctuation characters and other symbols, including: "!", "#", "$", "%", "&", "(", ")", "+", "-", ":", ";", "<", "=", ".", ">", "?", "@", "[", "]", "^", "_", " {", "}", "|", "~", ",".
+    * @param userAccount The user account. The maximum length of this parameter is 255 bytes. Ensure that you set this parameter and do not set it as null. Supported character scopes are:
+    * - All lowercase English letters: a to z.
+    * - All uppercase English letters: A to Z.
+    * - All numeric characters: 0 to 9.
+    * - The space character.
+    * - Punctuation characters and other symbols, including: "!", "#", "$", "%", "&", "(", ")", "+", "-", ":", ";", "<", "=", ".", ">", "?", "@", "[", "]", "^", "_", " {", "}", "|", "~", ",".
+    * @param options The options for leaving the channel. See #LeaveChannelOptions.
+    * @return int
+    * - 0: Success.
+    * - < 0: Failure.
+    */
+    virtual int leaveChannelWithUserAccountEx(const char* channelId, const char* userAccount, const LeaveChannelOptions& options) = 0;
+
     /**
      *  Updates the channel media options after joining the channel.
      *
@@ -1949,6 +1964,33 @@ public:
    */
     virtual int takeSnapshotEx(const RtcConnection& connection, uid_t uid, const char* filePath)  = 0;
 
+  /**
+   * Takes a snapshot of a video stream.
+   *
+   * This method takes a snapshot of a video stream from the specified user, generates a JPG
+   * image, and saves it to the specified path.
+   *
+   * The method is asynchronous, and the SDK has not taken the snapshot when the method call
+   * returns. After a successful method call, the SDK triggers the `onSnapshotTaken` callback
+   * to report whether the snapshot is successfully taken, as well as the details for that
+   * snapshot.
+   *
+   * @note
+   * - Call this method after joining a channel.
+   * - This method takes a snapshot of the published video stream specified in `ChannelMediaOptions`.
+   *
+   * @param connection The RtcConnection object.
+   * @param uid The user ID. Set uid as 0 if you want to take a snapshot of the local user's video.
+   * @param config The configuration for the take snapshot. See SnapshotConfig.
+   *
+   * Ensure that the path you specify exists and is writable.
+   * @return
+   * - 0 : Success.
+   * - &lt; 0: Failure.
+   *   - -4: Incorrect observation position. Modify the input observation position according to the reqiurements specified in SnapshotConfig.
+   */
+    virtual int takeSnapshotEx(const RtcConnection& connection, uid_t uid, const media::SnapshotConfig& config)  = 0;
+    
     /** Enables video screenshot and upload with the connection ID.
     @param enabled Whether to enable video screenshot and upload:
     - `true`: Yes.
