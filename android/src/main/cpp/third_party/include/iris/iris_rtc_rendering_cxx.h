@@ -4,10 +4,6 @@
 #include "iris_base.h"
 #include "iris_rtc_rendering_c.h"
 
-//////// operators for IrisRtcVideoFrameConfig ///////////
-IRIS_CPP_API bool operator<(const IrisRtcVideoFrameConfig &lhs,
-                            const IrisRtcVideoFrameConfig &rhs);
-
 namespace agora {
 namespace iris {
 
