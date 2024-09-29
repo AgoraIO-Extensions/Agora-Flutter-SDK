@@ -325,19 +325,6 @@ Map<String, dynamic> _$RtcEngineQueryCameraFocalLengthCapabilityJsonToJson(
           instance.focalLengthInfos.map((e) => e.toJson()).toList(),
     };
 
-RtcEngineSetExternalMediaProjectionJson
-    _$RtcEngineSetExternalMediaProjectionJsonFromJson(
-            Map<String, dynamic> json) =>
-        RtcEngineSetExternalMediaProjectionJson(
-          (readIntPtr(json, 'mediaProjection') as num).toInt(),
-        );
-
-Map<String, dynamic> _$RtcEngineSetExternalMediaProjectionJsonToJson(
-        RtcEngineSetExternalMediaProjectionJson instance) =>
-    <String, dynamic>{
-      'mediaProjection': instance.mediaProjection,
-    };
-
 RtcEngineGetCallIdJson _$RtcEngineGetCallIdJsonFromJson(
         Map<String, dynamic> json) =>
     RtcEngineGetCallIdJson(

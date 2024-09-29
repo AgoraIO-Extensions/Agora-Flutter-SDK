@@ -436,6 +436,7 @@ const _$OrientationModeEnumMap = {
 };
 
 const _$DegradationPreferenceEnumMap = {
+  DegradationPreference.maintainAuto: -1,
   DegradationPreference.maintainQuality: 0,
   DegradationPreference.maintainFramerate: 1,
   DegradationPreference.maintainBalanced: 2,

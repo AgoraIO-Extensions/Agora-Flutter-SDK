@@ -930,6 +930,10 @@ extension OrientationModeExt on OrientationMode {
 /// Video degradation preferences when the bandwidth is a constraint.
 @JsonEnum(alwaysCreate: true)
 enum DegradationPreference {
+  /// @nodoc
+  @JsonValue(-1)
+  maintainAuto,
+
   /// 0: (Default) Prefers to reduce the video frame rate while maintaining video resolution during video encoding under limited bandwidth. This degradation preference is suitable for scenarios where video quality is prioritized.
   @JsonValue(0)
   maintainQuality,
