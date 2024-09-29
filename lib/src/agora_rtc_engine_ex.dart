@@ -67,6 +67,12 @@ abstract class RtcEngineEx implements RtcEngine {
   Future<void> leaveChannelEx(
       {required RtcConnection connection, LeaveChannelOptions? options});
 
+  /// @nodoc
+  Future<void> leaveChannelWithUserAccountEx(
+      {required String channelId,
+      required String userAccount,
+      LeaveChannelOptions? options});
+
   /// Updates the channel media options after joining the channel.
   ///
   /// * [options] The channel media options. See ChannelMediaOptions.
@@ -669,6 +675,11 @@ abstract class RtcEngineEx implements RtcEngine {
       required RtcConnection connection});
 
   /// @nodoc
+  Future<void> setSimulcastConfigEx(
+      {required SimulcastConfig simulcastConfig,
+      required RtcConnection connection});
+
+  /// @nodoc
   Future<void> setHighPriorityUserListEx(
       {required List<int> uidList,
       required int uidNum,
@@ -739,4 +750,10 @@ abstract class RtcEngineEx implements RtcEngine {
       {required RtcConnection connection,
       required Uint8List metadata,
       required int length});
+
+  /// @nodoc
+  Future<void> takeSnapshotWithConfigEx(
+      {required RtcConnection connection,
+      required int uid,
+      required SnapshotConfig config});
 }

@@ -7,7 +7,6 @@
 
 #include "AgoraBase.h"
 #include "AgoraMediaBase.h"
-#include "IAgoraRtcEngineEx.h"
 
 namespace agora {
 namespace rtc {
