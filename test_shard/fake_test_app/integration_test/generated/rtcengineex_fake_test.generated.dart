@@ -376,7 +376,7 @@ void rtcEngineExSmokeTestCases() {
         OrientationMode configOrientationMode =
             OrientationMode.orientationModeAdaptive;
         DegradationPreference configDegradationPreference =
-            DegradationPreference.maintainQuality;
+            DegradationPreference.maintainAuto;
         VideoMirrorModeType configMirrorMode =
             VideoMirrorModeType.videoMirrorModeAuto;
         EncodingPreference advanceOptionsEncodingPreference =
