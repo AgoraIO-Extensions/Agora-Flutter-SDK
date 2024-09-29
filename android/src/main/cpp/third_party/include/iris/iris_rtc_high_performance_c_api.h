@@ -120,13 +120,13 @@ struct IrisExternalVideoFrame {
    * [Texture related parameter] The fence object related to the textureId parameter, indicating the synchronization status of the video data in Texture format.
    * The default value is 0
    */
-  long long fence_object;
+  long long fenceObject;
   // [Texture related parameter] Incoming 4 &times; 4 transformational matrix. The typical value is a unit matrix.
   float matrix[16];
   // [Texture related parameter] The MetaData buffer. The default value is NULL
-  uint8_t *metadata_buffer;
+  uint8_t *metadataBuffer;
   // [Texture related parameter] The MetaData size.The default value is 0
-  int metadata_size;
+  int metadataSize;
   //  Indicates the alpha channel of current frame, which is consistent with the dimension of the video frame.
   uint8_t *alphaBuffer;
   //  Extract alphaBuffer from bgra or rgba data. Set it true if you do not explicitly specify the alphabuffer.
@@ -142,9 +142,9 @@ struct IrisExternalVideoFrame {
    */
   int alphaStitchMode;
   //[For Windows only] The pointer of ID3D11Texture2D used by the video frame.
-  void *d3d11_texture_2d;
+  void *d3d11Texture2d;
   // [For Windows only] The index of ID3D11Texture2D array used by the video frame.
-  int texture_slice_index;
+  int textureSliceIndex;
   // metadata info used for hdr video data
   IrisHdr10MetadataInfo hdr10MetadataInfo;
   // The ColorSpace of the video frame.
@@ -197,7 +197,7 @@ IRIS_API int IRIS_CALL ILocalSpatialAudioEngine_UpdateSelfPositionEx(
     IrisHandle enginePtr, float positionX, float positionY, float positionZ,
     float axisForwardX, float axisForwardY, float axisForwardZ,
     float axisRightX, float axisRightY, float axisRightZ, float axisUpX,
-    float axisUpY, float axisUpZ, char *channelId, unsigned int localUid);
+    float axisUpY, float axisUpZ, const char *channelId, unsigned int localUid);
 
 IRIS_API int IRIS_CALL ILocalSpatialAudioEngine_UpdatePlayerPositionInfo(
     IrisHandle enginePtr, int playerId, float positionX, float positionY,
@@ -225,20 +225,20 @@ IRIS_API int IRIS_CALL ILocalSpatialAudioEngine_UpdateRemotePosition(
 IRIS_API int IRIS_CALL ILocalSpatialAudioEngine_UpdateRemotePositionEx(
     IrisHandle enginePtr, unsigned int uid, float positionX, float positionY,
     float positionZ, float forwardX, float forwardY, float forwardZ,
-    char *channelId, unsigned int localUid);
+    const char *channelId, unsigned int localUid);
 
 IRIS_API int IRIS_CALL ILocalSpatialAudioEngine_RemoveRemotePosition(
     IrisHandle enginePtr, unsigned int uid);
 
 IRIS_API int IRIS_CALL ILocalSpatialAudioEngine_RemoveRemotePositionEx(
-    IrisHandle enginePtr, unsigned int uid, char *channelId,
+    IrisHandle enginePtr, unsigned int uid, const char *channelId,
     unsigned int localUid);
 
 IRIS_API int IRIS_CALL
 ILocalSpatialAudioEngine_ClearRemotePositions(IrisHandle enginePtr);
 
 IRIS_API int IRIS_CALL ILocalSpatialAudioEngine_ClearRemotePositionsEx(
-    IrisHandle enginePtr, char *channelId, unsigned int localUid);
+    IrisHandle enginePtr, const char *channelId, unsigned int localUid);
 
 IRIS_API int IRIS_CALL ILocalSpatialAudioEngine_SetRemoteAudioAttenuation(
     IrisHandle enginePtr, unsigned int uid, double attenuation, bool forceSet);
