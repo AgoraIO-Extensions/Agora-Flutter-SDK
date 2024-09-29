@@ -361,21 +361,6 @@ class RtcEngineQueryCameraFocalLengthCapabilityJson {
 }
 
 @JsonSerializable(explicitToJson: true, includeIfNull: false)
-class RtcEngineSetExternalMediaProjectionJson {
-  const RtcEngineSetExternalMediaProjectionJson(this.mediaProjection);
-
-  @JsonKey(name: 'mediaProjection', readValue: readIntPtr)
-  final int mediaProjection;
-
-  factory RtcEngineSetExternalMediaProjectionJson.fromJson(
-          Map<String, dynamic> json) =>
-      _$RtcEngineSetExternalMediaProjectionJsonFromJson(json);
-
-  Map<String, dynamic> toJson() =>
-      _$RtcEngineSetExternalMediaProjectionJsonToJson(this);
-}
-
-@JsonSerializable(explicitToJson: true, includeIfNull: false)
 class RtcEngineGetCallIdJson {
   const RtcEngineGetCallIdJson(this.callId);
 
