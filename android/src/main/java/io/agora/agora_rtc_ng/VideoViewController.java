@@ -186,8 +186,8 @@ public class VideoViewController implements MethodChannel.MethodCallHandler {
                 @SuppressWarnings("ConstantConditions") final long irisRtcRenderingHandle = getLong(args.get("irisRtcRenderingHandle"));
                 @SuppressWarnings("ConstantConditions") final long uid = getLong(args.get("uid"));
                 final String channelId = (String) args.get("channelId");
-                final int videoSourceType = (int) args.get("videoSourceType");
-                final int videoViewSetupMode = (int) args.get("videoViewSetupMode");
+                final int videoSourceType = getInt(args.get("videoSourceType"));
+                final int videoViewSetupMode = getInt(args.get("videoViewSetupMode"));
 
                 final long textureId = createTextureRender(
                         irisRtcRenderingHandle,
@@ -229,7 +229,12 @@ public class VideoViewController implements MethodChannel.MethodCallHandler {
     private long getLong(Object value) {
         return Long.parseLong(value.toString());
     }
-
+    /**
+     * Handle incompatible type error in Flutter projects using more recent versions of Gradle
+     */
+    private int getInt(Object value) {
+        return Integer.parseInt(value.toString());
+    }
     public void dispose() {
         methodChannel.setMethodCallHandler(null);
     }
