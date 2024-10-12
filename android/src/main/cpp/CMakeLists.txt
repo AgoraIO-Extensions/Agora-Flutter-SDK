@@ -28,6 +28,9 @@ target_link_libraries(${LIBRARY_NAME}
         EGL
         )
 
+# Support Android 15 16k page size
+target_link_options(${LIBRARY_NAME} PRIVATE "-Wl,-z,max-page-size=16384")
+
 set(THIRD_PARTY_INCLUDE_DIRS
   "${CMAKE_CURRENT_SOURCE_DIR}/third_party/include/iris"
   "${CMAKE_CURRENT_SOURCE_DIR}/third_party/include/agora_rtc"
