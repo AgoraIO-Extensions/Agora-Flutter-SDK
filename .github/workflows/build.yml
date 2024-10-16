@@ -246,7 +246,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        version: ["3.7.0", "3.x"]
+        version: ["3.7.12", "3.x"] # Need 3.7.12 to build with Gradle 8.x https://github.com/flutter/flutter/issues/124838
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
@@ -269,7 +269,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        version: ["3.7.0", "3.x"]
+        version: ["3.7.12", "3.x"] # Need 3.7.12 to build with Gradle 8.x https://github.com/flutter/flutter/issues/124838
     runs-on: windows-2019
     steps:
       - uses: actions/checkout@v3
