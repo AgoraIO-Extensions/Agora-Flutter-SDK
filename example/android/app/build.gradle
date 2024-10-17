@@ -26,6 +26,8 @@ apply plugin: 'kotlin-android'
 apply from: "$flutterRoot/packages/flutter_tools/gradle/flutter.gradle"
 
 android {
+    namespace "io.agora.agora_rtc_ng_example"
+
     compileSdkVersion 34
 
     compileOptions {
