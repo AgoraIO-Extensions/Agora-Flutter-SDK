@@ -42,11 +42,13 @@ void generatedTestCases(ValueGetter<IrisTester> irisTester) {
       await Future.delayed(const Duration(milliseconds: 500));
 
       {
+        String metadataChannelId = "hello";
         int metadataUid = 5;
         int metadataSize = 5;
         Uint8List metadataBuffer = Uint8List.fromList([1, 1, 1, 1, 1]);
         int metadataTimeStampMs = 5;
         Metadata metadata = Metadata(
+          channelId: metadataChannelId,
           uid: metadataUid,
           size: metadataSize,
           buffer: metadataBuffer,

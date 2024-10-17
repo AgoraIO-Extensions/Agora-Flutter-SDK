@@ -4682,15 +4682,12 @@ extension RtcEngineEventHandlerOnAudioMetadataReceivedJsonBufferExt
 }
 
 @JsonSerializable(explicitToJson: true, includeIfNull: false)
-class RtcEngineEventHandlerOnExtensionEventJson {
-  const RtcEngineEventHandlerOnExtensionEventJson(
-      {this.provider, this.extension, this.key, this.value});
+class RtcEngineEventHandlerOnExtensionEventWithContextJson {
+  const RtcEngineEventHandlerOnExtensionEventWithContextJson(
+      {this.context, this.key, this.value});
 
-  @JsonKey(name: 'provider')
-  final String? provider;
-
-  @JsonKey(name: 'extension')
-  final String? extension;
+  @JsonKey(name: 'context')
+  final ExtensionContext? context;
 
   @JsonKey(name: 'key')
   final String? key;
@@ -4698,17 +4695,17 @@ class RtcEngineEventHandlerOnExtensionEventJson {
   @JsonKey(name: 'value')
   final String? value;
 
-  factory RtcEngineEventHandlerOnExtensionEventJson.fromJson(
+  factory RtcEngineEventHandlerOnExtensionEventWithContextJson.fromJson(
           Map<String, dynamic> json) =>
-      _$RtcEngineEventHandlerOnExtensionEventJsonFromJson(json);
+      _$RtcEngineEventHandlerOnExtensionEventWithContextJsonFromJson(json);
 
   Map<String, dynamic> toJson() =>
-      _$RtcEngineEventHandlerOnExtensionEventJsonToJson(this);
+      _$RtcEngineEventHandlerOnExtensionEventWithContextJsonToJson(this);
 }
 
-extension RtcEngineEventHandlerOnExtensionEventJsonBufferExt
-    on RtcEngineEventHandlerOnExtensionEventJson {
-  RtcEngineEventHandlerOnExtensionEventJson fillBuffers(
+extension RtcEngineEventHandlerOnExtensionEventWithContextJsonBufferExt
+    on RtcEngineEventHandlerOnExtensionEventWithContextJson {
+  RtcEngineEventHandlerOnExtensionEventWithContextJson fillBuffers(
       List<Uint8List> bufferList) {
     if (bufferList.isEmpty) return this;
     return this;
@@ -4721,27 +4718,23 @@ extension RtcEngineEventHandlerOnExtensionEventJsonBufferExt
 }
 
 @JsonSerializable(explicitToJson: true, includeIfNull: false)
-class RtcEngineEventHandlerOnExtensionStartedJson {
-  const RtcEngineEventHandlerOnExtensionStartedJson(
-      {this.provider, this.extension});
+class RtcEngineEventHandlerOnExtensionStartedWithContextJson {
+  const RtcEngineEventHandlerOnExtensionStartedWithContextJson({this.context});
 
-  @JsonKey(name: 'provider')
-  final String? provider;
+  @JsonKey(name: 'context')
+  final ExtensionContext? context;
 
-  @JsonKey(name: 'extension')
-  final String? extension;
-
-  factory RtcEngineEventHandlerOnExtensionStartedJson.fromJson(
+  factory RtcEngineEventHandlerOnExtensionStartedWithContextJson.fromJson(
           Map<String, dynamic> json) =>
-      _$RtcEngineEventHandlerOnExtensionStartedJsonFromJson(json);
+      _$RtcEngineEventHandlerOnExtensionStartedWithContextJsonFromJson(json);
 
   Map<String, dynamic> toJson() =>
-      _$RtcEngineEventHandlerOnExtensionStartedJsonToJson(this);
+      _$RtcEngineEventHandlerOnExtensionStartedWithContextJsonToJson(this);
 }
 
-extension RtcEngineEventHandlerOnExtensionStartedJsonBufferExt
-    on RtcEngineEventHandlerOnExtensionStartedJson {
-  RtcEngineEventHandlerOnExtensionStartedJson fillBuffers(
+extension RtcEngineEventHandlerOnExtensionStartedWithContextJsonBufferExt
+    on RtcEngineEventHandlerOnExtensionStartedWithContextJson {
+  RtcEngineEventHandlerOnExtensionStartedWithContextJson fillBuffers(
       List<Uint8List> bufferList) {
     if (bufferList.isEmpty) return this;
     return this;
@@ -4754,27 +4747,23 @@ extension RtcEngineEventHandlerOnExtensionStartedJsonBufferExt
 }
 
 @JsonSerializable(explicitToJson: true, includeIfNull: false)
-class RtcEngineEventHandlerOnExtensionStoppedJson {
-  const RtcEngineEventHandlerOnExtensionStoppedJson(
-      {this.provider, this.extension});
+class RtcEngineEventHandlerOnExtensionStoppedWithContextJson {
+  const RtcEngineEventHandlerOnExtensionStoppedWithContextJson({this.context});
 
-  @JsonKey(name: 'provider')
-  final String? provider;
+  @JsonKey(name: 'context')
+  final ExtensionContext? context;
 
-  @JsonKey(name: 'extension')
-  final String? extension;
-
-  factory RtcEngineEventHandlerOnExtensionStoppedJson.fromJson(
+  factory RtcEngineEventHandlerOnExtensionStoppedWithContextJson.fromJson(
           Map<String, dynamic> json) =>
-      _$RtcEngineEventHandlerOnExtensionStoppedJsonFromJson(json);
+      _$RtcEngineEventHandlerOnExtensionStoppedWithContextJsonFromJson(json);
 
   Map<String, dynamic> toJson() =>
-      _$RtcEngineEventHandlerOnExtensionStoppedJsonToJson(this);
+      _$RtcEngineEventHandlerOnExtensionStoppedWithContextJsonToJson(this);
 }
 
-extension RtcEngineEventHandlerOnExtensionStoppedJsonBufferExt
-    on RtcEngineEventHandlerOnExtensionStoppedJson {
-  RtcEngineEventHandlerOnExtensionStoppedJson fillBuffers(
+extension RtcEngineEventHandlerOnExtensionStoppedWithContextJsonBufferExt
+    on RtcEngineEventHandlerOnExtensionStoppedWithContextJson {
+  RtcEngineEventHandlerOnExtensionStoppedWithContextJson fillBuffers(
       List<Uint8List> bufferList) {
     if (bufferList.isEmpty) return this;
     return this;
@@ -4787,15 +4776,12 @@ extension RtcEngineEventHandlerOnExtensionStoppedJsonBufferExt
 }
 
 @JsonSerializable(explicitToJson: true, includeIfNull: false)
-class RtcEngineEventHandlerOnExtensionErrorJson {
-  const RtcEngineEventHandlerOnExtensionErrorJson(
-      {this.provider, this.extension, this.error, this.message});
+class RtcEngineEventHandlerOnExtensionErrorWithContextJson {
+  const RtcEngineEventHandlerOnExtensionErrorWithContextJson(
+      {this.context, this.error, this.message});
 
-  @JsonKey(name: 'provider')
-  final String? provider;
-
-  @JsonKey(name: 'extension')
-  final String? extension;
+  @JsonKey(name: 'context')
+  final ExtensionContext? context;
 
   @JsonKey(name: 'error')
   final int? error;
@@ -4803,17 +4789,17 @@ class RtcEngineEventHandlerOnExtensionErrorJson {
   @JsonKey(name: 'message')
   final String? message;
 
-  factory RtcEngineEventHandlerOnExtensionErrorJson.fromJson(
+  factory RtcEngineEventHandlerOnExtensionErrorWithContextJson.fromJson(
           Map<String, dynamic> json) =>
-      _$RtcEngineEventHandlerOnExtensionErrorJsonFromJson(json);
+      _$RtcEngineEventHandlerOnExtensionErrorWithContextJsonFromJson(json);
 
   Map<String, dynamic> toJson() =>
-      _$RtcEngineEventHandlerOnExtensionErrorJsonToJson(this);
+      _$RtcEngineEventHandlerOnExtensionErrorWithContextJsonToJson(this);
 }
 
-extension RtcEngineEventHandlerOnExtensionErrorJsonBufferExt
-    on RtcEngineEventHandlerOnExtensionErrorJson {
-  RtcEngineEventHandlerOnExtensionErrorJson fillBuffers(
+extension RtcEngineEventHandlerOnExtensionErrorWithContextJsonBufferExt
+    on RtcEngineEventHandlerOnExtensionErrorWithContextJson {
+  RtcEngineEventHandlerOnExtensionErrorWithContextJson fillBuffers(
       List<Uint8List> bufferList) {
     if (bufferList.isEmpty) return this;
     return this;

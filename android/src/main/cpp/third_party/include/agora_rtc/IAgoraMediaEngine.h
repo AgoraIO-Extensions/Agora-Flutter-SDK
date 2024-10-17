@@ -141,6 +141,24 @@ class IMediaEngine {
       bool enabled, bool useTexture, EXTERNAL_VIDEO_SOURCE_TYPE sourceType = VIDEO_FRAME,
       rtc::SenderOptions encodedVideoOption = rtc::SenderOptions()) = 0;
 
+#if defined(__ANDROID__)
+  /**
+   * Sets the remote eglContext.
+   *
+   * When the engine is destroyed, the SDK will automatically release the eglContext.
+   *
+   * @param eglContext.
+   *
+   * @note
+   * setExternalRemoteEglContext needs to be called before joining the channel.
+   *
+   * @return
+   * - 0: Success.
+   * - < 0: Failure.
+   */
+  virtual int setExternalRemoteEglContext(void* eglContext) = 0;
+#endif
+
   /**
    * Sets the external audio source.
    *

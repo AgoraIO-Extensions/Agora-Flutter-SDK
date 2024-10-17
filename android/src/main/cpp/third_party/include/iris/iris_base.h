@@ -45,6 +45,7 @@ typedef enum IrisError {
   ERR_FAILED = 1,
   ERR_INVALID_ARGUMENT = 2,
   ERR_NOT_SUPPORTED = 4,
+  ERR_BUFFER_TOO_SMALL = 6,
   ERR_NOT_INITIALIZED = 7,
 
   /*base from IRIS_VIDEO_PROCESS_ERR::ERR_NULL_POINTER=1*/
@@ -59,11 +60,19 @@ typedef enum IrisError {
 
 IRIS_API void enableUseJsonArray(bool enable);
 
+bool getEnableUseJsonArray();
+
 void saveAppType(IrisAppType type);
 
 IrisAppType getAppType();
 
-IRIS_API void InitIrisLogger(const char *path, int maxSize, IrisLogLevel level);
+IRIS_API void IRIS_CALL InitIrisLogger(const char *path, int maxSize,
+                                       IrisLogLevel level);
+
+IRIS_API void IRIS_CALL WriteIrisLogInternal(IrisLogLevel level,
+                                             const char *fmt, ...);
+
+IRIS_API void IRIS_CALL WriteIrisLog(IrisLogLevel level, const char *content);
 
 typedef struct EventParam {
   const char *event;
