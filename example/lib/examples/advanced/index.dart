@@ -1,7 +1,6 @@
 import 'dart:io';
 
 import 'package:agora_rtc_engine_example/examples/advanced/music_player/music_player.dart';
-import 'package:agora_rtc_engine_example/examples/advanced/push_encoded_video_frame/push_encoded_video_frame.dart';
 import 'package:agora_rtc_engine_example/examples/advanced/push_video_frame/push_video_frame.dart';
 import 'package:agora_rtc_engine_example/examples/advanced/rtmp_streaming/rtmp_streaming.dart';
 import 'package:agora_rtc_engine_example/examples/advanced/screen_sharing/screen_sharing.dart';
@@ -36,7 +35,8 @@ import 'voice_changer/voice_changer.dart';
 /// Data source for advanced examples
 final advanced = [
   {'name': 'Advanced'},
-  if (!kIsWeb) {'name': 'AudioEffectMixing', 'widget': const AudioEffectMixing()},
+  if (!kIsWeb)
+    {'name': 'AudioEffectMixing', 'widget': const AudioEffectMixing()},
   if (!kIsWeb)
     {'name': 'ChannelMediaRelay', 'widget': const ChannelMediaRelay()},
   if (kIsWeb || !(Platform.isAndroid || Platform.isIOS))
@@ -88,9 +88,6 @@ final advanced = [
   if (!kIsWeb)
     {'name': 'MediaRecorder', 'widget': const MediaRecorderExample()},
   if (!kIsWeb) {'name': 'PushVideoFrame', 'widget': const PushVideoFrame()},
-  // {'name': 'PushAudioFrame', 'widget': const PushAudioFrame()},
-  if (!kIsWeb)
-    {'name': 'PushEncodedVideoFrame', 'widget': const PushEncodedVideoFrame()},
   if (!kIsWeb)
     {
       'name': 'SpatialAudioWithMediaPlayer',
