@@ -36,7 +36,8 @@ import 'voice_changer/voice_changer.dart';
 /// Data source for advanced examples
 final advanced = [
   {'name': 'Advanced'},
-  if (!kIsWeb) {'name': 'AudioEffectMixing', 'widget': const AudioEffectMixing()},
+  if (!kIsWeb)
+    {'name': 'AudioEffectMixing', 'widget': const AudioEffectMixing()},
   if (!kIsWeb)
     {'name': 'ChannelMediaRelay', 'widget': const ChannelMediaRelay()},
   if (kIsWeb || !(Platform.isAndroid || Platform.isIOS))
@@ -88,9 +89,6 @@ final advanced = [
   if (!kIsWeb)
     {'name': 'MediaRecorder', 'widget': const MediaRecorderExample()},
   if (!kIsWeb) {'name': 'PushVideoFrame', 'widget': const PushVideoFrame()},
-  // {'name': 'PushAudioFrame', 'widget': const PushAudioFrame()},
-  if (!kIsWeb)
-    {'name': 'PushEncodedVideoFrame', 'widget': const PushEncodedVideoFrame()},
   if (!kIsWeb)
     {
       'name': 'SpatialAudioWithMediaPlayer',
