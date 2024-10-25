@@ -64,7 +64,7 @@ public:
             }
             dispatch_semaphore_signal(renderer.lock);
             
-            if (renderer.isDirtyBuffer) {
+            if (renderer.textureRegistry && renderer.isDirtyBuffer) {
                 [renderer.textureRegistry textureFrameAvailable:renderer.textureId];
             }
         }
@@ -126,13 +126,19 @@ public:
 }
 
 - (void)dispose {
-    self.irisRtcRendering->RemoveVideoFrameObserverDelegate(self.delegateId);
+    if (self.irisRtcRendering) {
+        self.irisRtcRendering->RemoveVideoFrameObserverDelegate(self.delegateId);
+        self.irisRtcRendering = NULL;
+    }
     if (self.delegate) {
         delete self.delegate;
         self.delegate = NULL;
     }
-    [self.textureRegistry unregisterTexture:self.textureId];
-    if (self.isDirtyBuffer) {
+    if (self.textureRegistry) {
+        [self.textureRegistry unregisterTexture:self.textureId];
+        self.textureRegistry = NULL;
+    }
+    if (self.buffer_cache && self.isDirtyBuffer) {
       CVPixelBufferRelease(self.buffer_cache);
       self.buffer_cache = NULL;
     }
