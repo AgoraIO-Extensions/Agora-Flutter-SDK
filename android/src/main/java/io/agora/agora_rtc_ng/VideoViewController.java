@@ -247,6 +247,7 @@ public class VideoViewController implements MethodChannel.MethodCallHandler, Act
     public void dispose() {
         methodChannel.setMethodCallHandler(null);
         currentActivityRef = null;
+        disposeAllRenderers();
     }
 
     @Override
