@@ -28,6 +28,8 @@
 
 - (BOOL)destroyTextureRender:(int64_t)textureId;
 
+- (void)dispose;
+
 @end
 
 

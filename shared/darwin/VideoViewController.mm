@@ -132,8 +132,6 @@
 @property(nonatomic) PlatformRenderPool* platformRenderPool;
 
 @property(nonatomic, strong) FlutterMethodChannel *methodChannel;
-
-- (void)dispose;
 @end
 
 @implementation VideoViewController
