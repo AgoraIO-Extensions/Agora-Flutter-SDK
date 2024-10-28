@@ -13,8 +13,6 @@
 #include <stdio.h>
 #include <string.h>
 #include <cassert>
-#include <string>
-#include <vector>
 
 #include "IAgoraParameter.h"
 #include "AgoraMediaBase.h"
@@ -4251,7 +4249,7 @@ struct MixedAudioStream {
    * The channel ID of the remote user.
    * @note Use this parameter only when the source type is `AUDIO_SOURCE_REMOTE`.
    */
-  const char* channelName;
+  const char* channelId;
   /**
    * The track ID of the local track.
    * @note Use this parameter only when the source type is `AUDIO_SOURCE_REMOTE`.
@@ -4261,7 +4259,7 @@ struct MixedAudioStream {
   MixedAudioStream(AUDIO_SOURCE_TYPE source)
     : sourceType(source),
       remoteUserUid(0),
-      channelName(NULL),
+      channelId(NULL),
       trackId(-1) {}
 
   MixedAudioStream(AUDIO_SOURCE_TYPE source, track_id_t track)
@@ -4271,12 +4269,12 @@ struct MixedAudioStream {
   MixedAudioStream(AUDIO_SOURCE_TYPE source, uid_t uid, const char* channel)
     : sourceType(source),
       remoteUserUid(uid),
-      channelName(channel) {}
+      channelId(channel) {}
 
   MixedAudioStream(AUDIO_SOURCE_TYPE source, uid_t uid, const char* channel, track_id_t track)
     : sourceType(source),
       remoteUserUid(uid),
-      channelName(channel),
+      channelId(channel),
       trackId(track) {}
 
 };
@@ -4292,7 +4290,7 @@ struct LocalAudioMixerConfiguration {
   /**
    * The source of the streams to mixed;
    */  
-  MixedAudioStream* sourceStreams;
+  MixedAudioStream* audioInputStreams;
 
   /**
    * Whether to use the timestamp follow the local mic's audio frame.
@@ -5193,8 +5191,14 @@ struct AudioTrackConfig {
    * false: Do not enable local playback
    */
   bool enableLocalPlayback;
+  /**
+   * Whether to enable APM (AEC/ANS/AGC) processing when the trackType is AUDIO_TRACK_DIRECT.
+   * false: (Default) Do not enable APM processing.
+   * true: Enable APM processing.
+   */
+  bool enableAudioProcessing;
 
-  AudioTrackConfig() : enableLocalPlayback(true) {}
+  AudioTrackConfig() : enableLocalPlayback(true),enableAudioProcessing(false) {}
 };
 
 /**
@@ -6809,8 +6813,8 @@ struct RecorderStreamInfo {
   RecorderStreamInfo() : channelId(NULL), uid(0), type(RTC) {}
   RecorderStreamInfo(const char* channelId, uid_t uid)
       : channelId(channelId), uid(uid), type(RTC) {}
-  RecorderStreamInfo(const char* channelId, uid_t uid, RecorderStreamType)
-      : channelId(channelId), uid(uid), type(RTC) {}
+  RecorderStreamInfo(const char* channelId, uid_t uid, RecorderStreamType type)
+      : channelId(channelId), uid(uid), type(type) {}
 };
 }  // namespace rtc
 

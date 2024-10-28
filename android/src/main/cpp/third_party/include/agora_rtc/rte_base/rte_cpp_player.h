@@ -699,8 +699,8 @@ class Player {
    * @return bool
    * @technical preview
    */
-  bool PreloadWithUrl(const char* url, Error *err = nullptr)  {
-    return RtePlayerPreloadWithUrl(&c_player, url, err != nullptr ? err->get_underlying_impl() : nullptr);
+  static bool PreloadWithUrl(const char* url, Error *err = nullptr)  {
+    return RtePlayerPreloadWithUrl(nullptr, url, err != nullptr ? err->get_underlying_impl() : nullptr);
   };
 
   /**

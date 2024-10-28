@@ -1194,7 +1194,7 @@ MixedAudioStream _$MixedAudioStreamFromJson(Map<String, dynamic> json) =>
       sourceType:
           $enumDecodeNullable(_$AudioSourceTypeEnumMap, json['sourceType']),
       remoteUserUid: (json['remoteUserUid'] as num?)?.toInt(),
-      channelName: json['channelName'] as String?,
+      channelId: json['channelId'] as String?,
       trackId: (json['trackId'] as num?)?.toInt(),
     );
 
@@ -1209,7 +1209,7 @@ Map<String, dynamic> _$MixedAudioStreamToJson(MixedAudioStream instance) {
 
   writeNotNull('sourceType', _$AudioSourceTypeEnumMap[instance.sourceType]);
   writeNotNull('remoteUserUid', instance.remoteUserUid);
-  writeNotNull('channelName', instance.channelName);
+  writeNotNull('channelId', instance.channelId);
   writeNotNull('trackId', instance.trackId);
   return val;
 }
@@ -1229,7 +1229,7 @@ LocalAudioMixerConfiguration _$LocalAudioMixerConfigurationFromJson(
         Map<String, dynamic> json) =>
     LocalAudioMixerConfiguration(
       streamCount: (json['streamCount'] as num?)?.toInt(),
-      sourceStreams: (json['sourceStreams'] as List<dynamic>?)
+      audioInputStreams: (json['audioInputStreams'] as List<dynamic>?)
           ?.map((e) => MixedAudioStream.fromJson(e as Map<String, dynamic>))
           .toList(),
       syncWithLocalMic: json['syncWithLocalMic'] as bool?,
@@ -1246,8 +1246,8 @@ Map<String, dynamic> _$LocalAudioMixerConfigurationToJson(
   }
 
   writeNotNull('streamCount', instance.streamCount);
-  writeNotNull(
-      'sourceStreams', instance.sourceStreams?.map((e) => e.toJson()).toList());
+  writeNotNull('audioInputStreams',
+      instance.audioInputStreams?.map((e) => e.toJson()).toList());
   writeNotNull('syncWithLocalMic', instance.syncWithLocalMic);
   return val;
 }
@@ -1703,6 +1703,7 @@ const _$SegModelTypeEnumMap = {
 AudioTrackConfig _$AudioTrackConfigFromJson(Map<String, dynamic> json) =>
     AudioTrackConfig(
       enableLocalPlayback: json['enableLocalPlayback'] as bool?,
+      enableAudioProcessing: json['enableAudioProcessing'] as bool?,
     );
 
 Map<String, dynamic> _$AudioTrackConfigToJson(AudioTrackConfig instance) {
@@ -1715,6 +1716,7 @@ Map<String, dynamic> _$AudioTrackConfigToJson(AudioTrackConfig instance) {
   }
 
   writeNotNull('enableLocalPlayback', instance.enableLocalPlayback);
+  writeNotNull('enableAudioProcessing', instance.enableAudioProcessing);
   return val;
 }
 

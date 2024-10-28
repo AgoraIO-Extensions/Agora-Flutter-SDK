@@ -692,7 +692,7 @@ enum QualityType {
   @JsonValue(7)
   qualityUnsupported,
 
-  /// 8: Detecting the network quality.
+  /// 8: The last-mile network probe test is in progress.
   @JsonValue(8)
   qualityDetecting,
 }
@@ -4469,7 +4469,7 @@ extension VideoTranscoderErrorExt on VideoTranscoderError {
 class MixedAudioStream {
   /// @nodoc
   const MixedAudioStream(
-      {this.sourceType, this.remoteUserUid, this.channelName, this.trackId});
+      {this.sourceType, this.remoteUserUid, this.channelId, this.trackId});
 
   /// @nodoc
   @JsonKey(name: 'sourceType')
@@ -4480,8 +4480,8 @@ class MixedAudioStream {
   final int? remoteUserUid;
 
   /// @nodoc
-  @JsonKey(name: 'channelName')
-  final String? channelName;
+  @JsonKey(name: 'channelId')
+  final String? channelId;
 
   /// @nodoc
   @JsonKey(name: 'trackId')
@@ -4500,15 +4500,15 @@ class MixedAudioStream {
 class LocalAudioMixerConfiguration {
   /// @nodoc
   const LocalAudioMixerConfiguration(
-      {this.streamCount, this.sourceStreams, this.syncWithLocalMic});
+      {this.streamCount, this.audioInputStreams, this.syncWithLocalMic});
 
   /// @nodoc
   @JsonKey(name: 'streamCount')
   final int? streamCount;
 
   /// @nodoc
-  @JsonKey(name: 'sourceStreams')
-  final List<MixedAudioStream>? sourceStreams;
+  @JsonKey(name: 'audioInputStreams')
+  final List<MixedAudioStream>? audioInputStreams;
 
   /// @nodoc
   @JsonKey(name: 'syncWithLocalMic')
@@ -5619,11 +5619,16 @@ extension AudioTrackTypeExt on AudioTrackType {
 @JsonSerializable(explicitToJson: true, includeIfNull: false)
 class AudioTrackConfig {
   /// @nodoc
-  const AudioTrackConfig({this.enableLocalPlayback});
+  const AudioTrackConfig(
+      {this.enableLocalPlayback, this.enableAudioProcessing});
 
   /// Whether to enable the local audio-playback device: true : (Default) Enable the local audio-playback device. false : Do not enable the local audio-playback device.
   @JsonKey(name: 'enableLocalPlayback')
   final bool? enableLocalPlayback;
+
+  /// @nodoc
+  @JsonKey(name: 'enableAudioProcessing')
+  final bool? enableAudioProcessing;
 
   /// @nodoc
   factory AudioTrackConfig.fromJson(Map<String, dynamic> json) =>
