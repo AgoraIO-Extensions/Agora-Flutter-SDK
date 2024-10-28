@@ -8108,11 +8108,11 @@ void rtcEngineSmokeTestCases() {
 
       try {
         int configStreamCount = 5;
-        List<MixedAudioStream> configSourceStreams = [];
+        List<MixedAudioStream> configAudioInputStreams = [];
         bool configSyncWithLocalMic = true;
         LocalAudioMixerConfiguration config = LocalAudioMixerConfiguration(
           streamCount: configStreamCount,
-          sourceStreams: configSourceStreams,
+          audioInputStreams: configAudioInputStreams,
           syncWithLocalMic: configSyncWithLocalMic,
         );
         await rtcEngine.startLocalAudioMixer(
@@ -8149,11 +8149,11 @@ void rtcEngineSmokeTestCases() {
 
       try {
         int configStreamCount = 5;
-        List<MixedAudioStream> configSourceStreams = [];
+        List<MixedAudioStream> configAudioInputStreams = [];
         bool configSyncWithLocalMic = true;
         LocalAudioMixerConfiguration config = LocalAudioMixerConfiguration(
           streamCount: configStreamCount,
-          sourceStreams: configSourceStreams,
+          audioInputStreams: configAudioInputStreams,
           syncWithLocalMic: configSyncWithLocalMic,
         );
         await rtcEngine.updateLocalAudioMixerConfiguration(

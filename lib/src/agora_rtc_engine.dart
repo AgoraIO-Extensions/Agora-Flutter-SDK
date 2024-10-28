@@ -1429,7 +1429,7 @@ class ChannelMediaOptions {
   @JsonKey(name: 'publishCustomAudioTrack')
   final bool? publishCustomAudioTrack;
 
-  /// The ID of the custom audio source to publish. The default value is 0. If you have set sourceNumber in setExternalAudioSource to a value greater than 1, the SDK creates the corresponding number of custom audio tracks and assigns an ID to each audio track, starting from 0.
+  /// The ID of the custom audio track to be published. The default value is 0. You can obtain the custom audio track ID through the createCustomAudioTrack method.
   @JsonKey(name: 'publishCustomAudioTrackId')
   final int? publishCustomAudioTrackId;
 
@@ -1894,7 +1894,7 @@ class RtcEngineEventHandler {
   ///
   /// This callback reports the last-mile network conditions of the local user before the user joins the channel. Last mile refers to the connection between the local device and Agora's edge server. Before the user joins the channel, this callback is triggered by the SDK once startLastmileProbeTest is called and reports the last-mile network conditions of the local user.
   ///
-  /// * [quality] The last-mile network quality. qualityUnknown (0): The quality is unknown. qualityExcellent (1): The quality is excellent. qualityGood (2): The network quality seems excellent, but the bitrate can be slightly lower than excellent. qualityPoor (3): Users can feel the communication is slightly impaired. qualityBad (4): Users cannot communicate smoothly. qualityVbad (5): The quality is so bad that users can barely communicate. qualityDown (6): The network is down, and users cannot communicate at all. See QualityType.
+  /// * [quality] The last-mile network quality. qualityUnknown (0): The quality is unknown. qualityExcellent (1): The quality is excellent. qualityGood (2): The network quality seems excellent, but the bitrate can be slightly lower than excellent. qualityPoor (3): Users can feel the communication is slightly impaired. qualityBad (4): Users cannot communicate smoothly. qualityVbad (5): The quality is so bad that users can barely communicate. qualityDown (6): The network is down, and users cannot communicate at all. qualityDetecting (8): The last-mile probe test is in progress. See QualityType.
   final void Function(QualityType quality)? onLastmileQuality;
 
   /// Occurs when the first local video frame is displayed on the local video view.
@@ -2186,7 +2186,7 @@ class RtcEngineEventHandler {
   /// The SDK triggers this callback when the local user receives the stream message that the remote user sends by calling the sendStreamMessage method.
   ///
   /// * [connection] The connection information. See RtcConnection.
-  /// * [uid] The ID of the remote user sending the message.
+  /// * [remoteUid] The ID of the remote user sending the message.
   /// * [streamId] The stream ID of the received message.
   /// * [data] The data received.
   /// * [length] The data length (byte).
@@ -2201,7 +2201,7 @@ class RtcEngineEventHandler {
   /// * [connection] The connection information. See RtcConnection.
   /// * [remoteUid] The ID of the remote user sending the message.
   /// * [streamId] The stream ID of the received message.
-  /// * [code] The error code. See ErrorCodeType.
+  /// * [code] Error code. See ErrorCodeType.
   /// * [missed] The number of lost messages.
   /// * [cached] Number of incoming cached messages when the data stream is interrupted.
   final void Function(RtcConnection connection, int remoteUid, int streamId,
@@ -3145,10 +3145,10 @@ abstract class RtcEngine {
 
   /// Gets the warning or error description.
   ///
-  /// * [code] The error code or warning code reported by the SDK.
+  /// * [code] The error code reported by the SDK.
   ///
   /// Returns
-  /// The specific error or warning description.
+  /// The specific error description.
   Future<String> getErrorDescription(int code);
 
   /// Queries the video codec capabilities of the SDK.
@@ -3764,14 +3764,10 @@ abstract class RtcEngine {
 
   /// Options for subscribing to remote video streams.
   ///
-  /// When a remote user has enabled dual-stream mode, you can call this method to choose the option for subscribing to the video streams sent by the remote user.
-  ///  If you only register one VideoFrameObserver object, the SDK subscribes to the raw video data and encoded video data by default (the effect is equivalent to setting encodedFrameOnly to false).
-  ///  If you only register one VideoEncodedFrameObserver object, the SDK only subscribes to the encoded video data by default (the effect is equivalent to setting encodedFrameOnly to true).
-  ///  If you register one VideoFrameObserver object and one VideoEncodedFrameObserver object successively, the SDK subscribes to the encoded video data by default (the effect is equivalent to setting encodedFrameOnly to false).
-  ///  If you call this method first with the options parameter set, and then register one VideoFrameObserver or VideoEncodedFrameObserver object, you need to call this method again and set the options parameter as described in the above two items to get the desired results. Agora recommends the following steps:
-  ///  Set autoSubscribeVideo to false when calling joinChannel to join a channel.
-  ///  Call this method after receiving the onUserJoined callback to set the subscription options for the specified remote user's video stream.
-  ///  Call the muteRemoteVideoStream method to resume subscribing to the video stream of the specified remote user. If you set encodedFrameOnly to true in the previous step, the SDK triggers the onEncodedVideoFrameReceived callback locally to report the received encoded video frame information.
+  /// When a remote user has enabled dual-stream mode, you can call this method to choose the option for subscribing to the video streams sent by the remote user. The default subscription behavior of the SDK for remote video streams depends on the type of registered video observer:
+  ///  If the VideoFrameObserver observer is registered, the default is to subscribe to both raw data and encoded data.
+  ///  If the VideoEncodedFrameObserver observer is registered, the default is to subscribe only to the encoded data.
+  ///  If both types of observers are registered, the default behavior follows the last registered video observer. For example, if the last registered observer is the VideoFrameObserver observer, the default is to subscribe to both raw data and encoded data. If you want to modify the default behavior, or set different subscription options for different uids, you can call this method to set it.
   ///
   /// * [uid] The user ID of the remote user.
   /// * [options] The video subscription options. See VideoSubscriptionOptions.
@@ -3983,7 +3979,7 @@ abstract class RtcEngine {
 
   /// Adjusts the volume during audio mixing.
   ///
-  /// This method adjusts the audio mixing volume on both the local client and remote clients.
+  /// This method adjusts the audio mixing volume on both the local client and remote clients. This method does not affect the volume of the audio file set in the playEffect method.
   ///
   /// * [volume] Audio mixing volume. The value ranges between 0 and 100. The default value is 100, which means the original volume.
   ///
@@ -5712,9 +5708,8 @@ abstract class RtcEngine {
   /// Sends data stream messages.
   ///
   /// After calling createDataStream, you can call this method to send data stream messages to all users in the channel. The SDK has the following restrictions on this method:
-  ///  Each user can have up to five data streams simultaneously.
-  ///  Up to 60 packets can be sent per second in a data stream with each packet having a maximum size of 1 KB.
-  ///  Up to 30 KB of data can be sent per second in a data stream. A successful method call triggers the onStreamMessage callback on the remote client, from which the remote user gets the stream message. A failed method call triggers the onStreamMessageError callback on the remote client.
+  ///  Each client within the channel can have up to 5 data channels simultaneously, with a total shared packet bitrate limit of 30 KB/s for all data channels.
+  ///  Each data channel can send up to 60 packets per second, with each packet being a maximum of 1 KB. A successful method call triggers the onStreamMessage callback on the remote client, from which the remote user gets the stream message. A failed method call triggers the onStreamMessageError callback on the remote client.
   ///  This method needs to be called after createDataStream and joining the channel.
   ///  In live streaming scenarios, this method only applies to hosts.
   ///
@@ -6105,7 +6100,7 @@ abstract class RtcEngine {
   /// When video screenshot and upload function is enabled, the SDK takes screenshots and uploads videos sent by local users based on the type and frequency of the module you set in ContentInspectConfig. After video screenshot and upload, the Agora server sends the callback notification to your app server in HTTPS requests and sends all screenshots to the third-party cloud storage service.
   ///
   /// * [enabled] Whether to enalbe video screenshot and upload: true : Enables video screenshot and upload. false : Disables video screenshot and upload.
-  /// * [config] Screenshot and upload configuration. See ContentInspectConfig. When the video moderation module is set to video moderation via Agora self-developed extension(contentInspectSupervision), the video screenshot and upload dynamic library libagora_content_inspect_extension.dll is required. Deleting this library disables the screenshot and upload feature.
+  /// * [config] Screenshot and upload configuration. See ContentInspectConfig.
   ///
   /// Returns
   /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown. You need to catch the exception and handle it accordingly.
@@ -6141,7 +6136,7 @@ abstract class RtcEngine {
   /// Sets up cloud proxy service.
   ///
   /// When users' network access is restricted by a firewall, configure the firewall to allow specific IP addresses and ports provided by Agora; then, call this method to enable the cloud proxyType and set the cloud proxy type with the proxyType parameter. After successfully connecting to the cloud proxy, the SDK triggers the onConnectionStateChanged (connectionStateConnecting, connectionChangedSettingProxyServer) callback. To disable the cloud proxy that has been set, call the setCloudProxy (noneProxy). To change the cloud proxy type that has been set, call the setCloudProxy (noneProxy) first, and then call the setCloudProxy to set the proxyType you want.
-  ///  Agora recommends that you call this method after joining a channel.
+  ///  Agora recommends that you call this method before joining a channel.
   ///  When a user is behind a firewall and uses the Force UDP cloud proxy, the services for Media Push and cohosting across channels are not available.
   ///  When you use the Force TCP cloud proxy, note that an error would occur when calling the startAudioMixing method to play online music files in the HTTP protocol. The services for Media Push and cohosting across channels use the cloud proxy with the TCP protocol.
   ///
