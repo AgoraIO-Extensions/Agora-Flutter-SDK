@@ -58,8 +58,8 @@ class MediaPlayerSourceObserver {
   /// Reports the playback duration that the buffered data can support.
   ///
   /// When playing online media resources, the SDK triggers this callback every two seconds to report the playback duration that the currently buffered data can support.
-  ///  When the playback duration supported by the buffered data is less than the threshold (0 by default), the SDK returns playerEventBufferLow.
-  ///  When the playback duration supported by the buffered data is greater than the threshold (0 by default), the SDK returns playerEventBufferRecover.
+  ///  When the playback duration supported by the buffered data is less than the threshold (0 by default), the SDK returns playerEventBufferLow (6).
+  ///  When the playback duration supported by the buffered data is greater than the threshold (0 by default), the SDK returns playerEventBufferRecover (7).
   ///
   /// * [playCachedBuffer] The playback duration (ms) that the buffered data can support.
   final void Function(int playCachedBuffer)? onPlayBufferUpdated;
