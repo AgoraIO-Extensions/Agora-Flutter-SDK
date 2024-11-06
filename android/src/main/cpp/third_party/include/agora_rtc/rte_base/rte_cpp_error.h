@@ -25,9 +25,8 @@ class CanvasConfig;
 using ErrorCode = ::RteErrorCode;
 
 /**
- * The Error class is used to manage the error.
+ * Error class. Used to record the execution result of an interface call.
  * @since v4.4.0
- * @technical preview
  */
 class Error {
  public:
@@ -54,8 +53,18 @@ class Error {
     }
   }
 
+  /**
+   * This interface is used to get the specific error code.
+   * @since v4.4.0
+   * @return ErrorCode Error code,Refer to the ErrorCode type for details.
+   */
   ErrorCode Code() const { return c_error != nullptr ? c_error->code : kRteErrorDefault; }
 
+  /**
+   * This interface is used to get the specific error description.
+   * @since v4.4.0
+   * @return const char* Error description
+   */
   const char *Message() const { 
     if(c_error != nullptr && c_error->message != nullptr){
       return RteStringCStr(c_error->message, nullptr);

@@ -4,7 +4,6 @@
 #include "rte_base/c/handle.h"
 
 /**
- *  
  * @technical preview
  */
 namespace rte {

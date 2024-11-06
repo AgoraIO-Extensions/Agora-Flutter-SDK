@@ -1,18 +1,18 @@
 Iris:
-https://download.agora.io/sdk/release/iris_4.5.0-dev.10_DCG_Android_Video_16K_20241028_0432_676.zip
-https://download.agora.io/sdk/release/iris_4.5.0-dev.10_DCG_iOS_Video_20241028_0434_552.zip
-https://download.agora.io/sdk/release/iris_4.5.0-dev.10_DCG_Mac_Video_20241028_0432_518.zip
-https://download.agora.io/sdk/release/iris_4.5.0-dev.10_DCG_Windows_Video_20241028_0432_557.zip
-implementation 'io.agora.rtc:iris-rtc:4.5.0-dev.10'
-pod 'AgoraIrisRTC_iOS', '4.5.0-dev.10'
-pod 'AgoraIrisRTC_macOS', '4.5.0-dev.10'
+https://download.agora.io/sdk/release/iris_4.5.0-dev.12_DCG_Android_Video_16K_20241106_1153_680.zip
+https://download.agora.io/sdk/release/iris_4.5.0-dev.12_DCG_iOS_Video_20241106_1156_555.zip
+https://download.agora.io/sdk/release/iris_4.5.0-dev.12_DCG_Mac_Video_20241106_1153_521.zip
+https://download.agora.io/sdk/release/iris_4.5.0-dev.12_DCG_Windows_Video_20241106_1153_560.zip
+implementation 'io.agora.rtc:iris-rtc:4.5.0-dev.12'
+pod 'AgoraIrisRTC_iOS', '4.5.0-dev.12'
+pod 'AgoraIrisRTC_macOS', '4.5.0-dev.12'
 
 Native:
 <NATIVE_CDN_URL_ANDROID>
 <NATIVE_CDN_URL_IOS>
 <NATIVE_CDN_URL_MACOS>
 <NATIVE_CDN_URL_WINDOWS>
-implementation 'io.agora.rtc:agora-full-preview:4.5.0-dev.10'
-implementation 'io.agora.rtc:full-screen-sharing-special:4.5.0-dev.10'
-pod 'AgoraRtcEngine_iOS_Preview', '4.5.0-dev.10'
-pod 'AgoraRtcEngine_macOS_Preview', '4.5.0-dev.10'
+implementation 'io.agora.rtc:agora-full-preview:4.5.0-dev.12'
+implementation 'io.agora.rtc:full-screen-sharing-special:4.5.0-dev.12'
+pod 'AgoraRtcEngine_iOS_Preview', '4.5.0-dev.12'
+pod 'AgoraRtcEngine_macOS_Preview', '4.5.0-dev.12'

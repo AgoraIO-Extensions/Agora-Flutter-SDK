@@ -20,46 +20,166 @@ typedef struct Rte Rte;
 typedef struct RteStream RteStream;
 typedef struct RtePlayerInternal RtePlayerInternal;
 
+/**
+ * Player states.
+ * When the player state changes, the state will be notified through the PlayerObserver::onStateChanged callback interface.
+ * @since v4.4.0
+ */
 typedef enum RtePlayerState {
+  /**
+   * 0: Idle state.
+   */
   kRtePlayerStateIdle,
+  /**
+   * 1: Opening state. This state is notified after calling rte::Player::OpenWithUrl().
+   */
   kRtePlayerStateOpening,
+  /**
+   * 2: Open completed state. This state is notified after successfully calling rte::Player::OpenWithUrl().
+   */
   kRtePlayerStateOpenCompleted,
+  /**
+   * 3: Playing state. This state is notified when audience members successfully subscribe to the broadcaster after opening an RTE URL.
+   */
   kRtePlayerStatePlaying,
+  /**
+   * 4: Paused state. This state is notified when playback is paused.
+   */
   kRtePlayerStatePaused,
+  /**
+   * 5: Playback completed state. This state is notified when the broadcaster stops streaming and leaves the live streaming room after playing the rte URL.
+   */
   kRtePlayerStatePlaybackCompleted,
+  /**
+   * 6: Stopped state. This state is entered after the user calls Player::stop.
+   */
   kRtePlayerStateStopped,
+  /**
+   * 7: Failed state. This state is entered when an internal error occurs.
+   */
   kRtePlayerStateFailed
 } RtePlayerState;
 
+/**
+ * Player events.
+ * When an event occurs, it will be notified through the PlayerObserver::onEvent callback interface.
+ * @since v4.4.0
+ */
 typedef enum RtePlayerEvent {
+  /**
+   * 0: Start seeking to a specified position for playback.
+   */
   kRtePlayerEventSeekBegin,
+  /**
+   * 1: Seeking completes.
+   */
   kRtePlayerEventSeekComplete,
+  /**
+   * 2: An error occurs when seeking to a new playback position.
+   */
   kRtePlayerEventSeekError,
+  /**
+   * 3: The currently buffered data is not enough to support playback.
+   */
   kRtePlayerEventBufferLow,
+  /**
+   * 4: The currently buffered data is just enough to support playback.
+   */
   kRtePlayerEventBufferRecover,
+  /**
+   * 5: Audio or video playback starts freezing.
+   */
   kRtePlayerEventFreezeStart,
+  /**
+   * 6: The audio or video playback resumes without freezing.
+   */
   kRtePlayerEventFreezeStop,
+  /**
+   * 7: One loop playback completed.
+   */
   kRtePlayerEventOneLoopPlaybackCompleted,
+  /**
+   * 8: URL authentication will expire.
+   */
   kRtePlayerEventAuthenticationWillExpire,
+  /**
+   * 9: When the fallback option is enabled, ABR revert to the audio-only layer due to poor network.
+   */
   kRtePlayerEventAbrFallbackToAudioOnlyLayer,
+  /**
+   * 10: ABR recovers from audio-only layer to video layer when fallback option is enabled.
+   */
   kRtePlayerEventAbrRecoverFromAudioOnlyLayer
 } RtePlayerEvent;
 
+/**
+ * ABR subscription layer.
+ * This enumeration can be used to set the value of the abr_subscription_layer query parameter in the rte URL. 
+ * It can also be used in the PlayerConfig::SetAbrSubscriptionLayer setting interface.
+ * @since v4.4.0
+ */
 typedef enum RteAbrSubscriptionLayer {
+  /**
+   * 0: High-quality video stream, this layer has the highest resolution and bitrate.
+   */
   kRteAbrSubscriptionHigh = 0,
+  /**
+   * 1: Low-quality video stream, this layer has the lowest resolution and bitrate.
+   */
   kRteAbrSubscriptionLow = 1,
+  /**
+   * 2: Layer1 video stream, this layer has lower resolution and bitrate than that of the high-quality video stream.
+   */
   kRteAbrSubscriptionLayer1 = 2,
+  /**
+   * 3: Layer2 video stream, this layer has lower resolution and bitrate than layer1.
+   */
   kRteAbrSubscriptionLayer2 = 3,
+  /**
+   * 4: Layer3 video stream, this layer has lower resolution and bitrate than layer2.
+   */
   kRteAbrSubscriptionLayer3 = 4,
+  /**
+   * 5: Layer4 video stream, this layer has lower resolution and bitrate than layer3.
+   */
   kRteAbrSubscriptionLayer4 = 5,
+  /**
+   * 6: Layer5 video stream, this layer has lower resolution and bitrate than layer4.
+   */
   kRteAbrSubscriptionLayer5 = 6,
+  /**
+   * 7: Layer6 video stream, this layer has lower resolution and bitrate than layer5.
+   */
   kRteAbrSubscriptionLayer6 = 7,
 } RteAbrSubscriptionLayer;
 
+
+/**
+ * ABR fallback layer.
+ * This enumeration can be used to set the value of the abr_fallback_layer query parameter in the rte URL. 
+ * It can also be used in the PlayerConfig::SetAbrFallbackLayer setting interface.
+ * @since v4.4.0
+ */
 typedef enum RteAbrFallbackLayer {
+  /**
+   * 0: When the network quality is poor, it will not revert to a lower resolution stream. 
+   * It may still revert to scalable video coding but will maintain the high-quality video resolution.
+   */
   kRteAbrFallbackDisabled = 0,
+  /**
+   * 1: (Default) In a poor network environment, the receiver's SDK will receive the kRteAbrSubscriptionLow layer video stream.
+   */
   kRteAbrFallbackLow = 1,
+  /**
+   * 2: In a poor network environment, the SDK may first receive the kRteAbrSubscriptionLow layer, 
+   * and if the relevant layer exists, it will revert to kRteAbrSubscriptionLayer1 to kRteAbrSubscriptionLayer6. 
+   * If the network environment is too poor to play video, the SDK will only receive audio.
+   */
   kRteAbrFallbackAudioOnly = 2,
+  /**
+   * 3~8: If the receiving end sets the fallback option, the SDK will receive one of the layers from kRteAbrSubscriptionLayer1 to kRteAbrSubscriptionLayer6. 
+   * The lower boundary of the fallback video stream is determined by the configured fallback option.
+   */
   kRteAbrFallbackLayer1 = 3,
   kRteAbrFallbackLayer2 = 4,
   kRteAbrFallbackLayer3 = 5,
@@ -68,32 +188,90 @@ typedef enum RteAbrFallbackLayer {
   kRteAbrFallbackLayer6 = 8,
 } RteAbrFallbackLayer;
 
+/**
+ * Player information.
+ * When playerInfo changes, it will be notified through the PlayerObserver::onPlayerInfoUpdated callback interface. 
+ * It can also be actively obtained through the Player::GetInfo interface.
+ * @since v4.4.0
+ */
 typedef struct RtePlayerInfo {
+  /** 
+   * Current player state
+   */
   RtePlayerState state;
+  /** 
+   * Reserved parameter.
+   */
   size_t duration;
+  /** 
+   * Reserved parameter.
+   */
   size_t stream_count;
+  /** 
+   * Whether there is an audio stream. When opening an rte URL, it indicates whether the broadcaster has pushed audio.
+   */
   bool has_audio;
+  /** 
+   * Whether there is a video stream. When opening an rte URL, it indicates whether the broadcaster has pushed video.
+   */
   bool has_video;
+  /** 
+   * Whether the audio is muted. Indicates whether the audience has subscribed to the audio stream.
+   */
   bool is_audio_muted;
+  /** 
+   * Whether the video is muted. Indicates whether the audience has subscribed to the video stream.
+   */
   bool is_video_muted;
+  /** 
+   * Video resolution height
+   */
   int video_height;
+  /** 
+   * Video resolution width
+   */
   int video_width;
+  /** 
+   * The currently subscribed video layer
+   */
   RteAbrSubscriptionLayer abr_subscription_layer;
-
+  /** 
+   * Audio sample rate
+   */
   int audio_sample_rate;
+  /** 
+   * Number of audio channels
+   */
   int audio_channels;
+  /** 
+   * Reserved parameter.
+   */
   int audio_bits_per_sample;
 } RtePlayerInfo;
 
-
-
-
+/**
+ * Player statistics.
+ * Can be actively obtained through the Player::GetStats interface.
+ * @since v4.4.0
+ */
 typedef struct RtePlayerStats {
-    int video_decode_frame_rate;
-    int video_render_frame_rate;
-    int video_bitrate;
+  /**
+   * Decoding frame rate
+   */
+  int video_decode_frame_rate;
+  /**
+   * Rendering frame rate
+   */
+  int video_render_frame_rate;
+  /**
+   * Video bitrate
+   */
+  int video_bitrate;
 
-    int audio_bitrate;
+  /**
+   * Audio bitrate
+   */
+  int audio_bitrate;
 } RtePlayerStats;
 
 typedef struct RteMediaTrackInfo {
