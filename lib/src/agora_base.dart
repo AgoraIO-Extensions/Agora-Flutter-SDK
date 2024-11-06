@@ -692,7 +692,7 @@ enum QualityType {
   @JsonValue(7)
   qualityUnsupported,
 
-  /// 8: Detecting the network quality.
+  /// 8: The last-mile network probe test is in progress.
   @JsonValue(8)
   qualityDetecting,
 }
