@@ -1,6 +1,6 @@
 set -e
 
-export IRIS_CDN_URL_ANDROID="https://download.agora.io/sdk/release/iris_4.2.6.248-build.1_DCG_Android_Video_20240830_1045.zip"
-export IRIS_CDN_URL_IOS="https://download.agora.io/sdk/release/iris_4.2.6.248-build.1_DCG_iOS_Video_20240830_1047.zip"
+export IRIS_CDN_URL_ANDROID="https://download.agora.io/sdk/release/iris_4.2.6.248-build.3_DCG_Android_Video_20241111_0825.zip"
+export IRIS_CDN_URL_IOS="https://download.agora.io/sdk/release/iris_4.2.6.248-build.3_DCG_iOS_Video_20241111_0825.zip"
 export IRIS_CDN_URL_MACOS="https://download.agora.io/sdk/release/iris_4.2.6.10-build.1_DCG_Mac_Video_20240509_1139.zip"
 export IRIS_CDN_URL_WINDOWS="https://download.agora.io/sdk/release/iris_4.2.6.10-build.1_DCG_Windows_Video_20240509_1139.zip"
