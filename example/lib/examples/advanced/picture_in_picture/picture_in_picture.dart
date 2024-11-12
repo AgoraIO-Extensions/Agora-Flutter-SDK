@@ -14,7 +14,7 @@ class PictureInPicture extends StatefulWidget {
   State<StatefulWidget> createState() => _State();
 }
 
-class _State extends State<PictureInPicture> {
+class _State extends State<PictureInPicture> with WidgetsBindingObserver{
   late final RtcEngine _engine;
 
   bool isJoined = false;
@@ -38,6 +38,7 @@ class _State extends State<PictureInPicture> {
   @override
   void initState() {
     super.initState();
+    WidgetsBinding.instance.addObserver(this);
     _controller = TextEditingController(text: config.channelId);
     _contentWidthController = TextEditingController(text: '150');
     _contentHeightController = TextEditingController(text: '300');
@@ -46,7 +47,25 @@ class _State extends State<PictureInPicture> {
   }
 
   @override
+  Future<void> didChangeAppLifecycleState(AppLifecycleState state) async {
+    super.didChangeAppLifecycleState(state);
+        if (state == AppLifecycleState.paused) {
+      print("应用进入后台");
+    } else if (state == AppLifecycleState.resumed) {
+      print("应用从后台返回前台");
+        await _remotePipControllers.entries.first.value.stopPictureInPicture();
+            await Future.delayed(const Duration(milliseconds: 500));
+        await _remotePipControllers.entries.first.value.startPictureInPicture(
+                                    const PipOptions(
+                                        contentWidth: 150,
+                                        contentHeight: 300,
+                                        autoEnterPip: true));
+    }
+  }
+
+  @override
   void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
     _dispose();
     super.dispose();
   }
@@ -88,7 +107,7 @@ class _State extends State<PictureInPicture> {
           isJoined = true;
         });
       },
-      onUserJoined: (RtcConnection connection, int rUid, int elapsed) {
+      onUserJoined: (RtcConnection connection, int rUid, int elapsed) async {
         logSink.log(
             '[onUserJoined] connection: ${connection.toJson()} remoteUid: $rUid elapsed: $elapsed');
         setState(() {
@@ -100,7 +119,15 @@ class _State extends State<PictureInPicture> {
                     canvas: VideoCanvas(uid: rUid),
                     connection: RtcConnection(channelId: _controller.text),
                   ));
+
+                
         });
+            await Future.delayed(const Duration(milliseconds: 500));
+           await _remotePipControllers.entries.first.value.startPictureInPicture(
+                                    const PipOptions(
+                                        contentWidth: 150,
+                                        contentHeight: 300,
+                                        autoEnterPip: true));
       },
       onUserOffline:
           (RtcConnection connection, int rUid, UserOfflineReasonType reason) {
