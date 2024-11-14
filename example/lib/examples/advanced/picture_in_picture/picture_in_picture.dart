@@ -51,6 +51,11 @@ class _State extends State<PictureInPicture> with WidgetsBindingObserver{
     super.didChangeAppLifecycleState(state);
         if (state == AppLifecycleState.paused) {
       print("应用进入后台");
+      await _remotePipControllers.entries.first.value.startPictureInPicture(
+                                    const PipOptions(
+                                        contentWidth: 150,
+                                        contentHeight: 300,
+                                        autoEnterPip: true));
     } else if (state == AppLifecycleState.resumed) {
       print("应用从后台返回前台");
         await _remotePipControllers.entries.first.value.stopPictureInPicture();
@@ -64,7 +69,8 @@ class _State extends State<PictureInPicture> with WidgetsBindingObserver{
   }
 
   @override
-  void dispose() {
+  Future<void> dispose() async {
+    await _engine.stopPip();
     WidgetsBinding.instance.removeObserver(this);
     _dispose();
     super.dispose();
@@ -202,6 +208,7 @@ class _State extends State<PictureInPicture> with WidgetsBindingObserver{
   }
 
   Future<void> _leaveChannel() async {
+    await _engine.stopPip();
     await _engine.leaveChannel();
     setState(() {
       openCamera = true;
