@@ -427,9 +427,8 @@ abstract class RtcEngineEx implements RtcEngine {
   /// Sends data stream messages.
   ///
   /// A successful method call triggers the onStreamMessage callback on the remote client, from which the remote user gets the stream message. A failed method call triggers the onStreamMessageError callback on the remote client. The SDK has the following restrictions on this method:
-  ///  Each user can have up to five data streams simultaneously.
-  ///  Up to 60 packets can be sent per second in a data stream with each packet having a maximum size of 1 KB.
-  ///  Up to 30 KB of data can be sent per second in a data stream. After calling createDataStreamEx, you can call this method to send data stream messages to all users in the channel.
+  ///  Each client within the channel can have up to 5 data channels simultaneously, with a total shared packet bitrate limit of 30 KB/s for all data channels.
+  ///  Each data channel can send up to 60 packets per second, with each packet being a maximum of 1 KB. After calling createDataStreamEx, you can call this method to send data stream messages to all users in the channel.
   ///  Call this method after joinChannelEx.
   ///  Ensure that you call createDataStreamEx to create a data channel before calling this method.
   ///  This method applies only to the COMMUNICATION profile or to the hosts in the LIVE_BROADCASTING profile. If an audience in the LIVE_BROADCASTING profile calls this method, the audience may be switched to a host.
@@ -699,7 +698,7 @@ abstract class RtcEngineEx implements RtcEngine {
   /// This method can take screenshots for multiple video streams and upload them. When video screenshot and upload function is enabled, the SDK takes screenshots and uploads videos sent by local users based on the type and frequency of the module you set in ContentInspectConfig. After video screenshot and upload, the Agora server sends the callback notification to your app server in HTTPS requests and sends all screenshots to the third-party cloud storage service.
   ///
   /// * [enabled] Whether to enalbe video screenshot and upload: true : Enables video screenshot and upload. false : Disables video screenshot and upload.
-  /// * [config] Screenshot and upload configuration. See ContentInspectConfig. When the video moderation module is set to video moderation via Agora self-developed extension(contentInspectSupervision), the video screenshot and upload dynamic library libagora_content_inspect_extension.dll is required. Deleting this library disables the screenshot and upload feature.
+  /// * [config] Screenshot and upload configuration. See ContentInspectConfig.
   /// * [connection] The connection information. See RtcConnection.
   ///
   /// Returns
@@ -726,7 +725,7 @@ abstract class RtcEngineEx implements RtcEngine {
 
   /// Gets the call ID with the connection ID.
   ///
-  /// When a user joins a channel on a client, a callId is generated to identify the call from the client. You can call this method to get the callId parameter, and pass it in when calling methods such as rate and complain.
+  /// When a user joins a channel on a client, a callId is generated to identify the call from the client. You can call this method to get callId, and pass it in when calling methods such as rate and complain.
   ///
   /// * [connection] The connection information. See RtcConnection.
   ///
