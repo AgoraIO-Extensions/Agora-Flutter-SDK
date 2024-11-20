@@ -27,7 +27,7 @@ parsers:
       parseFiles:
         include:
           - '@agoraio-extensions/terra_shared_configs:headers/rtc_4.3.1.201/include/*.h'
-          - '@agoraio-extensions/terra_shared_configs:headers/custom_headers/*.h'
+          - '@agoraio-extensions/terra_shared_configs:headers/rtc_4.3.1.201/custom_headers/*.h'
         exclude:
           - '@agoraio-extensions/terra_shared_configs:headers/rtc_4.3.1.201/include/time_utils.h'
           - '@agoraio-extensions/terra_shared_configs:headers/rtc_4.3.1.201/include/IAgoraMediaComponentFactory.h'
