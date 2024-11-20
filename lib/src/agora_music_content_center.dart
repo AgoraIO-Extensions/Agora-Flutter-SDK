@@ -424,6 +424,9 @@ class MusicContentCenterConfiguration {
 abstract class MusicPlayer implements MediaPlayer {
   /// @nodoc
   Future<void> setPlayMode(MusicPlayMode mode);
+
+  /// @nodoc
+  Future<void> openWithSongCode({required int songCode, int startPos = 0});
 }
 
 /// @nodoc
@@ -465,9 +468,6 @@ abstract class MusicContentCenter {
       required int page,
       required int pageSize,
       String? jsonOption});
-
-  /// @nodoc
-  Future<void> preload({required int songCode, required String jsonOption});
 
   /// @nodoc
   Future<String> preload(int songCode);

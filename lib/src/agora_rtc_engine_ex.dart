@@ -64,22 +64,8 @@ abstract class RtcEngineEx implements RtcEngine {
   ///
   /// Returns
   /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown. You need to catch the exception and handle it accordingly.
-  Future<void> leaveChannelEx(RtcConnection connection);
-
-  /// Sets channel options and leaves the channel.
-  ///
-  /// After calling this method, the SDK terminates the audio and video interaction, leaves the current channel, and releases all resources related to the session. After calling joinChannelEx to join a channel, you must call this method to end the call, otherwise, the next call cannot be started.
-  ///  This method call is asynchronous. When this method returns, it does not necessarily mean that the user has left the channel.
-  ///  If you call leaveChannel, you will leave all the channels you have joined by calling joinChannel or joinChannelEx.
-  ///
-  /// * [connection] The connection information. See RtcConnection.
-  /// * [options] The options for leaving the channel. See LeaveChannelOptions. This parameter only supports the stopMicrophoneRecording member in the LeaveChannelOptions settings; setting other members does not take effect.
-  ///
-  /// Returns
-  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown. You need to catch the exception and handle it accordingly.
   Future<void> leaveChannelEx(
-      {required RtcConnection connection,
-      required LeaveChannelOptions options});
+      {required RtcConnection connection, LeaveChannelOptions? options});
 
   /// Updates the channel media options after joining the channel.
   ///
@@ -426,19 +412,6 @@ abstract class RtcEngineEx implements RtcEngine {
       {required RtcConnection connection,
       required bool enabled,
       required EncryptionConfig config});
-
-  /// Creates a data stream.
-  ///
-  /// * [connection] The connection information. See RtcConnection.
-  /// * [config] The configurations for the data stream. See DataStreamConfig.
-  ///
-  /// Returns
-  /// ID of the created data stream, if the method call succeeds.
-  ///  < 0: Failure.
-  Future<int> createDataStreamEx(
-      {required bool reliable,
-      required bool ordered,
-      required RtcConnection connection});
 
   /// Creates a data stream.
   ///

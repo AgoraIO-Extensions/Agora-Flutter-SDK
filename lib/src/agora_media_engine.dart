@@ -206,4 +206,36 @@ abstract class MediaEngine {
 
   /// @nodoc
   Future<void> release();
+
+  /// Unregisters an audio frame observer.
+  ///
+  /// * [observer] The audio frame observer, reporting the reception of each audio frame. See AudioFrameObserver.
+  ///
+  /// Returns
+  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown. You need to catch the exception and handle it accordingly.
+  void unregisterAudioFrameObserver(AudioFrameObserver observer);
+
+  /// Unregisters the video frame observer.
+  ///
+  /// * [observer] The video observer, reporting the reception of each video frame. See VideoFrameObserver.
+  ///
+  /// Returns
+  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown. You need to catch the exception and handle it accordingly.
+  void unregisterVideoFrameObserver(VideoFrameObserver observer);
+
+  /// Unregisters a receiver object for the encoded video frame.
+  ///
+  /// * [observer] The video observer, reporting the reception of each video frame. See VideoEncodedFrameObserver.
+  ///
+  /// Returns
+  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown. You need to catch the exception and handle it accordingly.
+  void unregisterVideoEncodedFrameObserver(VideoEncodedFrameObserver observer);
+
+  /// Unregisters a facial information observer.
+  ///
+  /// * [observer] Facial information observer, see FaceInfoObserver.
+  ///
+  /// Returns
+  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown. You need to catch the exception and handle it accordingly.
+  void unregisterFaceInfoObserver(FaceInfoObserver observer);
 }

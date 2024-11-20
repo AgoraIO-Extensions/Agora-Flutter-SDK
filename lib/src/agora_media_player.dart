@@ -264,18 +264,10 @@ abstract class MediaPlayer {
   ///
   /// Returns
   /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown. You need to catch the exception and handle it accordingly.
-  void registerAudioFrameObserver(AudioPcmFrameSink observer);
-
-  /// Registers an audio frame observer object.
-  ///
-  /// * [observer] The audio frame observer, reporting the reception of each audio frame. See AudioPcmFrameSink.
-  /// * [mode] The use mode of the audio frame. See RawAudioFrameOpModeType.
-  ///
-  /// Returns
-  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown. You need to catch the exception and handle it accordingly.
   void registerAudioFrameObserver(
       {required AudioPcmFrameSink observer,
-      required RawAudioFrameOpModeType mode});
+      RawAudioFrameOpModeType mode =
+          RawAudioFrameOpModeType.rawAudioFrameOpModeReadOnly});
 
   /// Unregisters an audio frame observer.
   ///
@@ -293,7 +285,7 @@ abstract class MediaPlayer {
   ///
   /// Returns
   /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown. You need to catch the exception and handle it accordingly.
-  void registerVideoFrameObserver(IVideoFrameObserver observer);
+  void registerVideoFrameObserver(MediaPlayerVideoFrameObserver observer);
 
   /// Unregisters the video frame observer.
   ///
@@ -301,7 +293,7 @@ abstract class MediaPlayer {
   ///
   /// Returns
   /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown. You need to catch the exception and handle it accordingly.
-  void unregisterVideoFrameObserver(IVideoFrameObserver observer);
+  void unregisterVideoFrameObserver(MediaPlayerVideoFrameObserver observer);
 
   /// @nodoc
   void registerMediaPlayerAudioSpectrumObserver(
@@ -418,6 +410,35 @@ abstract class MediaPlayer {
   /// @nodoc
   Future<void> setSoundPositionParams(
       {required double pan, required double gain});
+
+  /// Sets media player options.
+  ///
+  /// The media player supports setting options through key and value. The difference between this method and setPlayerOptionInString is that the value parameter of this method is of type Int, while the value of setPlayerOptionInString is of type String. These two methods cannot be used together.
+  ///
+  /// * [key] The key of the option.
+  /// * [value] The value of the key.
+  ///
+  /// Returns
+  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown. You need to catch the exception and handle it accordingly.
+  Future<void> setPlayerOptionInInt({required String key, required int value});
+
+  /// Sets media player options.
+  ///
+  /// The media player supports setting options through key and value. The difference between this method and setPlayerOptionInInt is that the value parameter of this method is of type String, while the value of setPlayerOptionInInt is of type String. These two methods cannot be used together.
+  ///
+  /// * [key] The key of the option.
+  /// * [value] The value of the key.
+  ///
+  /// Returns
+  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown. You need to catch the exception and handle it accordingly.
+  Future<void> setPlayerOptionInString(
+      {required String key, required String value});
+
+  /// @nodoc
+  Future<int> getPlayerOptionInInt(String key);
+
+  /// @nodoc
+  Future<String> getPlayerOptionInString(String key);
 }
 
 /// This class provides methods to manage cached media files.
@@ -526,4 +547,19 @@ abstract class MediaPlayerCacheManager {
   /// ≥ 0: The call succeeds and returns the number of media files that are cached.
   ///  < 0: Failure. See MediaPlayerReason.
   Future<int> getCacheFileCount();
+}
+
+/// The video frame observer for the media player.
+class MediaPlayerVideoFrameObserver {
+  /// @nodoc
+  const MediaPlayerVideoFrameObserver({
+    this.onFrame,
+  });
+
+  /// Occurs each time the player receives a video frame.
+  ///
+  /// After registering the video frame observer, the callback occurs every time the player receives a video frame, reporting the detailed information of the video frame.
+  ///
+  /// * [frame] Video frame information. See VideoFrame.
+  final void Function(VideoFrame frame)? onFrame;
 }

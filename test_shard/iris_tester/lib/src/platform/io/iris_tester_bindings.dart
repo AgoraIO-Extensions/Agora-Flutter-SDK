@@ -83,9 +83,9 @@ class NativeIrisTesterBinding {
   }
 
   late final _MockApiReturnCodePtr = _lookup<
-      ffi.NativeFunction<
-          ffi.Void Function(
-              ffi.Pointer<ffi.Int8>, ffi.Int32)>>('MockApiReturnCode');
+          ffi
+          .NativeFunction<ffi.Void Function(ffi.Pointer<ffi.Int8>, ffi.Int32)>>(
+      'MockApiReturnCode');
   late final _MockApiReturnCode = _MockApiReturnCodePtr.asFunction<
       void Function(ffi.Pointer<ffi.Int8>, int)>();
 

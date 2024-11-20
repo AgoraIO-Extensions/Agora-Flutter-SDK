@@ -1594,6 +1594,42 @@ extension ExtensionInfoBufferExt on ExtensionInfo {
   }
 }
 
+extension SDKBuildInfoBufferExt on SDKBuildInfo {
+  SDKBuildInfo fillBuffers(List<Uint8List> bufferList) {
+    if (bufferList.isEmpty) return this;
+    return this;
+  }
+
+  List<Uint8List> collectBufferList() {
+    final bufferList = <Uint8List>[];
+    return bufferList;
+  }
+}
+
+extension VideoDeviceInfoBufferExt on VideoDeviceInfo {
+  VideoDeviceInfo fillBuffers(List<Uint8List> bufferList) {
+    if (bufferList.isEmpty) return this;
+    return this;
+  }
+
+  List<Uint8List> collectBufferList() {
+    final bufferList = <Uint8List>[];
+    return bufferList;
+  }
+}
+
+extension AudioDeviceInfoBufferExt on AudioDeviceInfo {
+  AudioDeviceInfo fillBuffers(List<Uint8List> bufferList) {
+    if (bufferList.isEmpty) return this;
+    return this;
+  }
+
+  List<Uint8List> collectBufferList() {
+    final bufferList = <Uint8List>[];
+    return bufferList;
+  }
+}
+
 extension RtcConnectionBufferExt on RtcConnection {
   RtcConnection fillBuffers(List<Uint8List> bufferList) {
     if (bufferList.isEmpty) return this;

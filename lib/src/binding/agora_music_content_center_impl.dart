@@ -187,6 +187,24 @@ class MusicPlayerImpl extends MediaPlayerImpl implements MusicPlayer {
       throw AgoraRtcException(code: result);
     }
   }
+
+  @override
+  Future<void> openWithSongCode(
+      {required int songCode, int startPos = 0}) async {
+    final apiType =
+        '${isOverrideClassName ? className : 'MusicPlayer'}_open_303b92e';
+    final param = createParams({'songCode': songCode, 'startPos': startPos});
+    final callApiResult = await irisMethodChannel.invokeMethod(
+        IrisMethodCall(apiType, jsonEncode(param), buffers: null));
+    if (callApiResult.irisReturnCode < 0) {
+      throw AgoraRtcException(code: callApiResult.irisReturnCode);
+    }
+    final rm = callApiResult.data;
+    final result = rm['result'];
+    if (result < 0) {
+      throw AgoraRtcException(code: result);
+    }
+  }
 }
 
 class MusicContentCenterImpl implements MusicContentCenter {
@@ -399,25 +417,6 @@ class MusicContentCenterImpl implements MusicContentCenter {
     }
     final searchMusicJson = MusicContentCenterSearchMusicJson.fromJson(rm);
     return searchMusicJson.requestId;
-  }
-
-  @override
-  Future<void> preload(
-      {required int songCode, required String jsonOption}) async {
-    final apiType =
-        '${isOverrideClassName ? className : 'MusicContentCenter'}_preload_bd5a5a3';
-    final param =
-        createParams({'songCode': songCode, 'jsonOption': jsonOption});
-    final callApiResult = await irisMethodChannel.invokeMethod(
-        IrisMethodCall(apiType, jsonEncode(param), buffers: null));
-    if (callApiResult.irisReturnCode < 0) {
-      throw AgoraRtcException(code: callApiResult.irisReturnCode);
-    }
-    final rm = callApiResult.data;
-    final result = rm['result'];
-    if (result < 0) {
-      throw AgoraRtcException(code: result);
-    }
   }
 
   @override
