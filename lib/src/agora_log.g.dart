@@ -10,7 +10,7 @@ part of 'agora_log.dart';
 
 LogConfig _$LogConfigFromJson(Map<String, dynamic> json) => LogConfig(
       filePath: json['filePath'] as String?,
-      fileSizeInKB: json['fileSizeInKB'] as int?,
+      fileSizeInKB: (json['fileSizeInKB'] as num?)?.toInt(),
       level: $enumDecodeNullable(_$LogLevelEnumMap, json['level']),
     );
 

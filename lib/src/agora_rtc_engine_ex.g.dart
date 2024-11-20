@@ -11,7 +11,7 @@ part of 'agora_rtc_engine_ex.dart';
 RtcConnection _$RtcConnectionFromJson(Map<String, dynamic> json) =>
     RtcConnection(
       channelId: json['channelId'] as String?,
-      localUid: json['localUid'] as int?,
+      localUid: (json['localUid'] as num?)?.toInt(),
     );
 
 Map<String, dynamic> _$RtcConnectionToJson(RtcConnection instance) {
