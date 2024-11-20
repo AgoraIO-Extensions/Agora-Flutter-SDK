@@ -19,20 +19,13 @@ MusicCollectionJson _$MusicCollectionJsonFromJson(Map<String, dynamic> json) =>
           .toList(),
     );
 
-Map<String, dynamic> _$MusicCollectionJsonToJson(MusicCollectionJson instance) {
-  final val = <String, dynamic>{
-    'count': instance.count,
-    'total': instance.total,
-    'page': instance.page,
-    'pageSize': instance.pageSize,
-  };
-
-  void writeNotNull(String key, dynamic value) {
-    if (value != null) {
-      val[key] = value;
-    }
-  }
-
-  writeNotNull('music', instance.music?.map((e) => e.toJson()).toList());
-  return val;
-}
+Map<String, dynamic> _$MusicCollectionJsonToJson(
+        MusicCollectionJson instance) =>
+    <String, dynamic>{
+      'count': instance.count,
+      'total': instance.total,
+      'page': instance.page,
+      'pageSize': instance.pageSize,
+      if (instance.music?.map((e) => e.toJson()).toList() case final value?)
+        'music': value,
+    };

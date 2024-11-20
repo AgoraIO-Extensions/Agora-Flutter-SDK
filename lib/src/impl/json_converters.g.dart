@@ -15,15 +15,8 @@ _VideoFrameMetaInfoInternalJson _$VideoFrameMetaInfoInternalJsonFromJson(
     );
 
 Map<String, dynamic> _$VideoFrameMetaInfoInternalJsonToJson(
-    _VideoFrameMetaInfoInternalJson instance) {
-  final val = <String, dynamic>{};
-
-  void writeNotNull(String key, dynamic value) {
-    if (value != null) {
-      val[key] = value;
-    }
-  }
-
-  writeNotNull('KEY_FACE_CAPTURE', instance.KEY_FACE_CAPTURE);
-  return val;
-}
+        _VideoFrameMetaInfoInternalJson instance) =>
+    <String, dynamic>{
+      if (instance.KEY_FACE_CAPTURE case final value?)
+        'KEY_FACE_CAPTURE': value,
+    };

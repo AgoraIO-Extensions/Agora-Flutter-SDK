@@ -5418,4 +5418,39 @@ class RtcEngineImpl implements RtcEngine {
     final result = rm['result'];
     return result as int;
   }
+
+  @override
+  Future<void> takeSnapshotWithConfig(
+      {required int uid, required int config}) async {
+    final apiType =
+        '${isOverrideClassName ? className : 'RtcEngine'}_takeSnapshot_5669ea6';
+    final param = createParams({'uid': uid, 'config': config});
+    final callApiResult = await irisMethodChannel.invokeMethod(
+        IrisMethodCall(apiType, jsonEncode(param), buffers: null));
+    if (callApiResult.irisReturnCode < 0) {
+      throw AgoraRtcException(code: callApiResult.irisReturnCode);
+    }
+    final rm = callApiResult.data;
+    final result = rm['result'];
+    if (result < 0) {
+      throw AgoraRtcException(code: result);
+    }
+  }
+
+  @override
+  Future<void> setExternalMediaProjection(int mediaProjection) async {
+    final apiType =
+        '${isOverrideClassName ? className : 'RtcEngine'}_setExternalMediaProjection_f337cbf';
+    final param = createParams({'mediaProjection': mediaProjection});
+    final callApiResult = await irisMethodChannel.invokeMethod(
+        IrisMethodCall(apiType, jsonEncode(param), buffers: null));
+    if (callApiResult.irisReturnCode < 0) {
+      throw AgoraRtcException(code: callApiResult.irisReturnCode);
+    }
+    final rm = callApiResult.data;
+    final result = rm['result'];
+    if (result < 0) {
+      throw AgoraRtcException(code: result);
+    }
+  }
 }

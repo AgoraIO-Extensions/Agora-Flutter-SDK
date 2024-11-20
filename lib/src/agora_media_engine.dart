@@ -48,13 +48,7 @@ abstract class MediaEngine {
 
   /// Registers a raw video frame observer object.
   ///
-  /// If you want to obtain the original video data of some remote users (referred to as group A) and the encoded video data of other remote users (referred to as group B), you can refer to the following steps:
-  ///  Call registerVideoFrameObserver to register the raw video frame observer before joining the channel.
-  ///  Call registerVideoEncodedFrameObserver to register the encoded video frame observer before joining the channel.
-  ///  After joining the channel, get the user IDs of group B users through onUserJoined, and then call setRemoteVideoSubscriptionOptions to set the encodedFrameOnly of this group of users to true.
-  ///  Call muteAllRemoteVideoStreams (false) to start receiving the video streams of all remote users. Then:
-  ///  The raw video data of group A users can be obtained through the callback in VideoFrameObserver, and the SDK renders the data by default.
-  ///  The encoded video data of group B users can be obtained through the callback in VideoEncodedFrameObserver. If you want to observe raw video frames (such as YUV or RGBA format), Agora recommends that you implement one VideoFrameObserver class with this method. When calling this method to register a video observer, you can register callbacks in the VideoFrameObserver class as needed. After you successfully register the video frame observer, the SDK triggers the registered callbacks each time a video frame is received.
+  /// If you want to observe raw video frames (such as YUV or RGBA format), Agora recommends that you implement one VideoFrameObserver class with this method. When calling this method to register a video observer, you can register callbacks in the VideoFrameObserver class as needed. After you successfully register the video frame observer, the SDK triggers the registered callbacks each time a video frame is received.
   ///
   /// * [observer] The observer instance. See VideoFrameObserver.
   ///
@@ -65,14 +59,7 @@ abstract class MediaEngine {
 
   /// Registers a receiver object for the encoded video image.
   ///
-  /// If you only want to observe encoded video frames (such as h.264 format) without decoding and rendering the video, Agora recommends that you implement one VideoEncodedFrameObserver class through this method. If you want to obtain the original video data of some remote users (referred to as group A) and the encoded video data of other remote users (referred to as group B), you can refer to the following steps:
-  ///  Call registerVideoFrameObserver to register the raw video frame observer before joining the channel.
-  ///  Call registerVideoEncodedFrameObserver to register the encoded video frame observer before joining the channel.
-  ///  After joining the channel, get the user IDs of group B users through onUserJoined, and then call setRemoteVideoSubscriptionOptions to set the encodedFrameOnly of this group of users to true.
-  ///  Call muteAllRemoteVideoStreams (false) to start receiving the video streams of all remote users. Then:
-  ///  The raw video data of group A users can be obtained through the callback in VideoFrameObserver, and the SDK renders the data by default.
-  ///  The encoded video data of group B users can be obtained through the callback in VideoEncodedFrameObserver.
-  ///  Call this method before joining a channel.
+  /// If you only want to observe encoded video frames (such as H.264 format) without decoding and rendering the video, Agora recommends that you implement one VideoEncodedFrameObserver class through this method. Call this method before joining a channel.
   ///
   /// * [observer] The video frame observer object. See VideoEncodedFrameObserver.
   ///
@@ -251,4 +238,7 @@ abstract class MediaEngine {
   /// Returns
   /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown. You need to catch the exception and handle it accordingly.
   void unregisterFaceInfoObserver(FaceInfoObserver observer);
+
+  /// @nodoc
+  Future<void> setExternalRemoteEglContext(int eglContext);
 }

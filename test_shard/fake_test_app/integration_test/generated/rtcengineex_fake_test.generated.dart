@@ -2371,4 +2371,96 @@ void rtcEngineExSmokeTestCases() {
     },
 //  skip: !(),
   );
+
+  testWidgets(
+    'RtcEngineEx.leaveChannelWithUserAccountEx',
+    (WidgetTester tester) async {
+      String engineAppId = const String.fromEnvironment('TEST_APP_ID',
+          defaultValue: '<YOUR_APP_ID>');
+
+      RtcEngineEx rtcEngineEx = createAgoraRtcEngineEx();
+      await rtcEngineEx.initialize(RtcEngineContext(
+        appId: engineAppId,
+        areaCode: AreaCode.areaCodeGlob.value(),
+      ));
+      await rtcEngineEx.setParameters('{"rtc.enable_debug_log": true}');
+
+      try {
+        String channelId = "hello";
+        String userAccount = "hello";
+        bool optionsStopAudioMixing = true;
+        bool optionsStopAllEffect = true;
+        bool optionsStopMicrophoneRecording = true;
+        LeaveChannelOptions options = LeaveChannelOptions(
+          stopAudioMixing: optionsStopAudioMixing,
+          stopAllEffect: optionsStopAllEffect,
+          stopMicrophoneRecording: optionsStopMicrophoneRecording,
+        );
+        await rtcEngineEx.leaveChannelWithUserAccountEx(
+          channelId: channelId,
+          userAccount: userAccount,
+          options: options,
+        );
+      } catch (e) {
+        if (e is! AgoraRtcException) {
+          debugPrint(
+              '[RtcEngineEx.leaveChannelWithUserAccountEx] error: ${e.toString()}');
+          rethrow;
+        }
+
+        if (e.code != -4) {
+          // Only not supported error supported.
+          rethrow;
+        }
+      }
+
+      await rtcEngineEx.release();
+    },
+//  skip: !(),
+  );
+
+  testWidgets(
+    'RtcEngineEx.takeSnapshotWithConfigEx',
+    (WidgetTester tester) async {
+      String engineAppId = const String.fromEnvironment('TEST_APP_ID',
+          defaultValue: '<YOUR_APP_ID>');
+
+      RtcEngineEx rtcEngineEx = createAgoraRtcEngineEx();
+      await rtcEngineEx.initialize(RtcEngineContext(
+        appId: engineAppId,
+        areaCode: AreaCode.areaCodeGlob.value(),
+      ));
+      await rtcEngineEx.setParameters('{"rtc.enable_debug_log": true}');
+
+      try {
+        String connectionChannelId = "hello";
+        int connectionLocalUid = 5;
+        RtcConnection connection = RtcConnection(
+          channelId: connectionChannelId,
+          localUid: connectionLocalUid,
+        );
+        int uid = 5;
+        int config = 5;
+        await rtcEngineEx.takeSnapshotWithConfigEx(
+          connection: connection,
+          uid: uid,
+          config: config,
+        );
+      } catch (e) {
+        if (e is! AgoraRtcException) {
+          debugPrint(
+              '[RtcEngineEx.takeSnapshotWithConfigEx] error: ${e.toString()}');
+          rethrow;
+        }
+
+        if (e.code != -4) {
+          // Only not supported error supported.
+          rethrow;
+        }
+      }
+
+      await rtcEngineEx.release();
+    },
+//  skip: !(),
+  );
 }
