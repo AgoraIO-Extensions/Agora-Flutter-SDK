@@ -22,7 +22,7 @@ A new flutter plugin project.
     s.vendored_frameworks = 'libs/*.xcframework', 'libs/*.framework'
   else
   s.dependency 'AgoraRtcEngine_macOS', '4.3.1'
-  s.dependency 'AgoraIrisRTC_macOS', '4.3.1-build.1'
+  s.dependency 'AgoraIrisRTC_macOS', '4.3.1.201-build.1'
   end
 
   s.platform = :osx, '10.11'
