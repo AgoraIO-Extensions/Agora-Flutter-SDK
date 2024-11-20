@@ -38,7 +38,7 @@ extension AudioMixingDualMonoModeExt on AudioMixingDualMonoMode {
 abstract class MediaEngine {
   /// Registers an audio frame observer object.
   ///
-  /// Call this method to register an audio frame observer object (register a callback). When you need the SDK to trigger onMixedAudioFrame, onRecordAudioFrame, onPlaybackAudioFrame or onEarMonitoringAudioFrame callback, you need to use this method to register the callbacks. Ensure that you call this method before joining a channel.
+  /// Call this method to register an audio frame observer object (register a callback). When you need the SDK to trigger the onMixedAudioFrame, onRecordAudioFrame, onPlaybackAudioFrame, onPlaybackAudioFrameBeforeMixing or onEarMonitoringAudioFrame callback, you need to use this method to register the callbacks.
   ///
   /// * [observer] The observer instance. See AudioFrameObserver. Agora recommends calling this method after receiving onLeaveChannel to release the audio observer object.
   ///
@@ -48,17 +48,7 @@ abstract class MediaEngine {
 
   /// Registers a raw video frame observer object.
   ///
-  /// If you want to obtain the original video data of some remote users (referred to as group A) and the encoded video data of other remote users (referred to as group B), you can refer to the following steps:
-  ///  Call registerVideoFrameObserver to register the raw video frame observer before joining the channel.
-  ///  Call registerVideoEncodedFrameObserver to register the encoded video frame observer before joining the channel.
-  ///  After joining the channel, get the user IDs of group B users through onUserJoined, and then call setRemoteVideoSubscriptionOptions to set the encodedFrameOnly of this group of users to true.
-  ///  Call muteAllRemoteVideoStreams (false) to start receiving the video streams of all remote users. Then:
-  ///  The raw video data of group A users can be obtained through the callback in VideoFrameObserver, and the SDK renders the data by default.
-  ///  The encoded video data of group B users can be obtained through the callback in VideoEncodedFrameObserver. If you want to observe raw video frames (such as YUV or RGBA format), Agora recommends that you implement one VideoFrameObserver class with this method. When calling this method to register a video observer, you can register callbacks in the VideoFrameObserver class as needed. After you successfully register the video frame observer, the SDK triggers the registered callbacks each time a video frame is received.
-  ///  Ensure that you call this method before joining a channel.
-  ///  When handling the video data returned in the callbacks, pay attention to the changes in the width and height parameters, which may be adapted under the following circumstances:
-  ///  When network conditions deteriorate, the video resolution decreases incrementally.
-  ///  If the user adjusts the video profile, the resolution of the video returned in the callbacks also changes.
+  /// If you want to observe raw video frames (such as YUV or RGBA format), Agora recommends that you implement one VideoFrameObserver class with this method. When calling this method to register a video observer, you can register callbacks in the VideoFrameObserver class as needed. After you successfully register the video frame observer, the SDK triggers the registered callbacks each time a video frame is received.
   ///
   /// * [observer] The observer instance. See VideoFrameObserver.
   ///
@@ -69,14 +59,7 @@ abstract class MediaEngine {
 
   /// Registers a receiver object for the encoded video image.
   ///
-  /// If you only want to observe encoded video frames (such as h.264 format) without decoding and rendering the video, Agora recommends that you implement one VideoEncodedFrameObserver class through this method. If you want to obtain the original video data of some remote users (referred to as group A) and the encoded video data of other remote users (referred to as group B), you can refer to the following steps:
-  ///  Call registerVideoFrameObserver to register the raw video frame observer before joining the channel.
-  ///  Call registerVideoEncodedFrameObserver to register the encoded video frame observer before joining the channel.
-  ///  After joining the channel, get the user IDs of group B users through onUserJoined, and then call setRemoteVideoSubscriptionOptions to set the encodedFrameOnly of this group of users to true.
-  ///  Call muteAllRemoteVideoStreams (false) to start receiving the video streams of all remote users. Then:
-  ///  The raw video data of group A users can be obtained through the callback in VideoFrameObserver, and the SDK renders the data by default.
-  ///  The encoded video data of group B users can be obtained through the callback in VideoEncodedFrameObserver.
-  ///  Call this method before joining a channel.
+  /// If you only want to observe encoded video frames (such as H.264 format) without decoding and rendering the video, Agora recommends that you implement one VideoEncodedFrameObserver class through this method. Call this method before joining a channel.
   ///
   /// * [observer] The video frame observer object. See VideoEncodedFrameObserver.
   ///
@@ -87,7 +70,7 @@ abstract class MediaEngine {
   /// Registers a facial information observer.
   ///
   /// You can call this method to register the onFaceInfo callback to receive the facial information processed by Agora speech driven extension. When calling this method to register a facial information observer, you can register callbacks in the FaceInfoObserver class as needed. After successfully registering the facial information observer, the SDK triggers the callback you have registered when it captures the facial information converted by the speech driven extension.
-  ///  Ensure that you call this method before joining a channel.
+  ///  Call this method before joining a channel.
   ///  Before calling this method, you need to make sure that the speech driven extension has been enabled by calling enableExtension.
   ///
   /// * [observer] Facial information observer, see FaceInfoObserver.
@@ -98,26 +81,18 @@ abstract class MediaEngine {
 
   /// Pushes the external audio frame.
   ///
-  /// Before calling this method to push external audio data, perform the following steps:
-  ///  Call createCustomAudioTrack to create a custom audio track and get the audio track ID.
-  ///  Call joinChannel to join the channel. In ChannelMediaOptions, set publishCustomAduioTrackId to the audio track ID that you want to publish, and set publishCustomAudioTrack to true.
+  /// Call this method to push external audio frames through the audio track.
   ///
   /// * [frame] The external audio frame. See AudioFrame.
   /// * [trackId] The audio track ID. If you want to publish a custom external audio source, set this parameter to the ID of the corresponding custom audio track you want to publish.
   ///
   /// Returns
   /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown. You need to catch the exception and handle it accordingly.
-  ///  < 0: Failure.
   Future<void> pushAudioFrame({required AudioFrame frame, int trackId = 0});
 
   /// Pulls the remote audio data.
   ///
-  /// Before calling this method, call setExternalAudioSink (enabled : true) to notify the app to enable and set the external audio rendering. After a successful call of this method, the app pulls the decoded and mixed audio data for playback.
-  ///  Call this method after joining a channel.
-  ///  Both this method and onPlaybackAudioFrame callback can be used to get audio data after remote mixing. Note that after calling setExternalAudioSink to enable external audio rendering, the app no longer receives data from the onPlaybackAudioFrame callback. Therefore, you should choose between this method and the onPlaybackAudioFrame callback based on your actual business requirements. The specific distinctions between them are as follows:
-  ///  After calling this method, the app automatically pulls the audio data from the SDK. By setting the audio data parameters, the SDK adjusts the frame buffer to help the app handle latency, effectively avoiding audio playback jitter.
-  ///  The SDK sends the audio data to the app through the onPlaybackAudioFrame callback. Any delay in processing the audio frames may result in audio jitter.
-  ///  This method is only used for retrieving audio data after remote mixing. If you need to get audio data from different audio processing stages such as capture and playback, you can register the corresponding callbacks by calling registerAudioFrameObserver.
+  /// After a successful call of this method, the app pulls the decoded and mixed audio data for playback.
   ///
   /// * [frame] Pointers to AudioFrame.
   ///
@@ -127,7 +102,7 @@ abstract class MediaEngine {
 
   /// Configures the external video source.
   ///
-  /// Call this method before joining a channel.
+  /// After calling this method to enable an external video source, you can call pushVideoFrame to push external video data to the SDK.
   ///
   /// * [enabled] Whether to use the external video source: true : Use the external video source. The SDK prepares to accept the external video frame. false : (Default) Do not use the external video source.
   /// * [useTexture] Whether to use the external video frame in the Texture format. true : Use the external video frame in the Texture format. false : (Default) Do not use the external video frame in the Texture format.
@@ -136,7 +111,6 @@ abstract class MediaEngine {
   ///
   /// Returns
   /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown. You need to catch the exception and handle it accordingly.
-  ///  < 0: Failure.
   Future<void> setExternalVideoSource(
       {required bool enabled,
       required bool useTexture,
@@ -145,7 +119,7 @@ abstract class MediaEngine {
 
   /// Sets the external audio source parameters.
   ///
-  /// Deprecated: This method is deprecated, use createCustomAudioTrack instead. Call this method before joining a channel.
+  /// Deprecated: This method is deprecated, use createCustomAudioTrack instead.
   ///
   /// * [enabled] Whether to enable the external audio source: true : Enable the external audio source. false : (Default) Disable the external audio source.
   /// * [sampleRate] The sample rate (Hz) of the external audio source which can be set as 8000, 16000, 32000, 44100, or 48000.
@@ -165,9 +139,9 @@ abstract class MediaEngine {
 
   /// Creates a custom audio track.
   ///
-  /// Ensure that you call this method before joining a channel. To publish a custom audio source, see the following steps:
+  /// Call this method before joining a channel. To publish a custom audio source, see the following steps:
   ///  Call this method to create a custom audio track and get the audio track ID.
-  ///  Call joinChannel to join the channel. In ChannelMediaOptions, set publishCustomAduioTrackId to the audio track ID that you want to publish, and set publishCustomAudioTrack to true.
+  ///  Call joinChannel to join the channel. In ChannelMediaOptions, set publishCustomAudioTrackId to the audio track ID that you want to publish, and set publishCustomAudioTrack to true.
   ///  Call pushAudioFrame and specify trackId as the audio track ID set in step 2. You can then publish the corresponding custom audio source in the channel.
   ///
   /// * [trackType] The type of the custom audio track. See AudioTrackType. If audioTrackDirect is specified for this parameter, you must set publishMicrophoneTrack to false in ChannelMediaOptions when calling joinChannel to join the channel; otherwise, joining the channel fails and returns the error code -2.
@@ -175,7 +149,7 @@ abstract class MediaEngine {
   ///
   /// Returns
   /// If the method call is successful, the audio track ID is returned as the unique identifier of the audio track.
-  ///  If the method call fails, a negative value is returned.
+  ///  If the method call fails, 0xffffffff is returned.
   Future<int> createCustomAudioTrack(
       {required AudioTrackType trackType, required AudioTrackConfig config});
 
@@ -189,7 +163,7 @@ abstract class MediaEngine {
 
   /// Sets the external audio sink.
   ///
-  /// This method applies to scenarios where you want to use external audio data for playback. After you set the external audio sink, you can call pullAudioFrame to pull remote audio frames. The app can process the remote audio and play it with the audio effects that you want.
+  /// After enabling the external audio sink, you can call pullAudioFrame to pull remote audio frames. The app can process the remote audio and play it with the audio effects that you want.
   ///
   /// * [enabled] Whether to enable or disable the external audio sink: true : Enables the external audio sink. false : (Default) Disables the external audio sink.
   /// * [sampleRate] The sample rate (Hz) of the external audio sink, which can be set as 16000, 32000, 44100, or 48000.
@@ -232,36 +206,4 @@ abstract class MediaEngine {
 
   /// @nodoc
   Future<void> release();
-
-  /// Unregisters an audio frame observer.
-  ///
-  /// * [observer] The audio frame observer, reporting the reception of each audio frame. See AudioFrameObserver.
-  ///
-  /// Returns
-  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown. You need to catch the exception and handle it accordingly.
-  void unregisterAudioFrameObserver(AudioFrameObserver observer);
-
-  /// Unregisters the video frame observer.
-  ///
-  /// * [observer] The video observer, reporting the reception of each video frame. See VideoFrameObserver.
-  ///
-  /// Returns
-  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown. You need to catch the exception and handle it accordingly.
-  void unregisterVideoFrameObserver(VideoFrameObserver observer);
-
-  /// Unregisters a receiver object for the encoded video frame.
-  ///
-  /// * [observer] The video observer, reporting the reception of each video frame. See VideoEncodedFrameObserver.
-  ///
-  /// Returns
-  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown. You need to catch the exception and handle it accordingly.
-  void unregisterVideoEncodedFrameObserver(VideoEncodedFrameObserver observer);
-
-  /// Unregisters a facial information observer.
-  ///
-  /// * [observer] Facial information observer, see FaceInfoObserver.
-  ///
-  /// Returns
-  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown. You need to catch the exception and handle it accordingly.
-  void unregisterFaceInfoObserver(FaceInfoObserver observer);
 }

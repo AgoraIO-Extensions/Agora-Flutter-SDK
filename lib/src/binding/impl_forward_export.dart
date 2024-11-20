@@ -5,7 +5,6 @@ export 'agora_h265_transcoder_impl.dart';
 export 'agora_h265_transcoder_event_impl.dart';
 export 'agora_media_engine_impl.dart';
 export 'agora_media_player_impl.dart';
-export 'agora_media_player_event_impl.dart';
 export 'agora_media_player_source_event_impl.dart';
 export 'agora_media_recorder_impl.dart';
 export 'agora_music_content_center_impl.dart';

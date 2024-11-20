@@ -10,8 +10,8 @@ part of 'agora_base.dart';
 
 VideoDimensions _$VideoDimensionsFromJson(Map<String, dynamic> json) =>
     VideoDimensions(
-      width: (json['width'] as num?)?.toInt(),
-      height: (json['height'] as num?)?.toInt(),
+      width: json['width'] as int?,
+      height: json['height'] as int?,
     );
 
 Map<String, dynamic> _$VideoDimensionsToJson(VideoDimensions instance) {
@@ -33,7 +33,7 @@ SenderOptions _$SenderOptionsFromJson(Map<String, dynamic> json) =>
       ccMode: $enumDecodeNullable(_$TCcModeEnumMap, json['ccMode']),
       codecType:
           $enumDecodeNullable(_$VideoCodecTypeEnumMap, json['codecType']),
-      targetBitrate: (json['targetBitrate'] as num?)?.toInt(),
+      targetBitrate: json['targetBitrate'] as int?,
     );
 
 Map<String, dynamic> _$SenderOptionsToJson(SenderOptions instance) {
@@ -94,14 +94,14 @@ EncodedAudioFrameInfo _$EncodedAudioFrameInfoFromJson(
         Map<String, dynamic> json) =>
     EncodedAudioFrameInfo(
       codec: $enumDecodeNullable(_$AudioCodecTypeEnumMap, json['codec']),
-      sampleRateHz: (json['sampleRateHz'] as num?)?.toInt(),
-      samplesPerChannel: (json['samplesPerChannel'] as num?)?.toInt(),
-      numberOfChannels: (json['numberOfChannels'] as num?)?.toInt(),
+      sampleRateHz: json['sampleRateHz'] as int?,
+      samplesPerChannel: json['samplesPerChannel'] as int?,
+      numberOfChannels: json['numberOfChannels'] as int?,
       advancedSettings: json['advancedSettings'] == null
           ? null
           : EncodedAudioFrameAdvancedSettings.fromJson(
               json['advancedSettings'] as Map<String, dynamic>),
-      captureTimeMs: (json['captureTimeMs'] as num?)?.toInt(),
+      captureTimeMs: json['captureTimeMs'] as int?,
     );
 
 Map<String, dynamic> _$EncodedAudioFrameInfoToJson(
@@ -137,11 +137,11 @@ const _$AudioCodecTypeEnumMap = {
 
 AudioPcmDataInfo _$AudioPcmDataInfoFromJson(Map<String, dynamic> json) =>
     AudioPcmDataInfo(
-      samplesPerChannel: (json['samplesPerChannel'] as num?)?.toInt(),
-      channelNum: (json['channelNum'] as num?)?.toInt(),
-      samplesOut: (json['samplesOut'] as num?)?.toInt(),
-      elapsedTimeMs: (json['elapsedTimeMs'] as num?)?.toInt(),
-      ntpTimeMs: (json['ntpTimeMs'] as num?)?.toInt(),
+      samplesPerChannel: json['samplesPerChannel'] as int?,
+      channelNum: json['channelNum'] as int?,
+      samplesOut: json['samplesOut'] as int?,
+      elapsedTimeMs: json['elapsedTimeMs'] as int?,
+      ntpTimeMs: json['ntpTimeMs'] as int?,
     );
 
 Map<String, dynamic> _$AudioPcmDataInfoToJson(AudioPcmDataInfo instance) {
@@ -191,22 +191,22 @@ const _$VideoStreamTypeEnumMap = {
 EncodedVideoFrameInfo _$EncodedVideoFrameInfoFromJson(
         Map<String, dynamic> json) =>
     EncodedVideoFrameInfo(
-      uid: (json['uid'] as num?)?.toInt(),
+      uid: json['uid'] as int?,
       codecType:
           $enumDecodeNullable(_$VideoCodecTypeEnumMap, json['codecType']),
-      width: (json['width'] as num?)?.toInt(),
-      height: (json['height'] as num?)?.toInt(),
-      framesPerSecond: (json['framesPerSecond'] as num?)?.toInt(),
+      width: json['width'] as int?,
+      height: json['height'] as int?,
+      framesPerSecond: json['framesPerSecond'] as int?,
       frameType:
           $enumDecodeNullable(_$VideoFrameTypeEnumMap, json['frameType']),
       rotation:
           $enumDecodeNullable(_$VideoOrientationEnumMap, json['rotation']),
-      trackId: (json['trackId'] as num?)?.toInt(),
-      captureTimeMs: (json['captureTimeMs'] as num?)?.toInt(),
-      decodeTimeMs: (json['decodeTimeMs'] as num?)?.toInt(),
+      trackId: json['trackId'] as int?,
+      captureTimeMs: json['captureTimeMs'] as int?,
+      decodeTimeMs: json['decodeTimeMs'] as int?,
       streamType:
           $enumDecodeNullable(_$VideoStreamTypeEnumMap, json['streamType']),
-      presentationMs: (json['presentationMs'] as num?)?.toInt(),
+      presentationMs: json['presentationMs'] as int?,
     );
 
 Map<String, dynamic> _$EncodedVideoFrameInfoToJson(
@@ -320,7 +320,7 @@ const _$VideoCodecCapabilityLevelEnumMap = {
 CodecCapInfo _$CodecCapInfoFromJson(Map<String, dynamic> json) => CodecCapInfo(
       codecType:
           $enumDecodeNullable(_$VideoCodecTypeEnumMap, json['codecType']),
-      codecCapMask: (json['codecCapMask'] as num?)?.toInt(),
+      codecCapMask: json['codecCapMask'] as int?,
       codecLevels: json['codecLevels'] == null
           ? null
           : CodecCapLevels.fromJson(
@@ -344,7 +344,7 @@ Map<String, dynamic> _$CodecCapInfoToJson(CodecCapInfo instance) {
 
 FocalLengthInfo _$FocalLengthInfoFromJson(Map<String, dynamic> json) =>
     FocalLengthInfo(
-      cameraDirection: (json['cameraDirection'] as num?)?.toInt(),
+      cameraDirection: json['cameraDirection'] as int?,
       focalLengthType: $enumDecodeNullable(
           _$CameraFocalLengthTypeEnumMap, json['focalLengthType']),
     );
@@ -380,9 +380,9 @@ VideoEncoderConfiguration _$VideoEncoderConfigurationFromJson(
           ? null
           : VideoDimensions.fromJson(
               json['dimensions'] as Map<String, dynamic>),
-      frameRate: (json['frameRate'] as num?)?.toInt(),
-      bitrate: (json['bitrate'] as num?)?.toInt(),
-      minBitrate: (json['minBitrate'] as num?)?.toInt(),
+      frameRate: json['frameRate'] as int?,
+      bitrate: json['bitrate'] as int?,
+      minBitrate: json['minBitrate'] as int?,
       orientationMode: $enumDecodeNullable(
           _$OrientationModeEnumMap, json['orientationMode']),
       degradationPreference: $enumDecodeNullable(
@@ -466,8 +466,8 @@ SimulcastStreamConfig _$SimulcastStreamConfigFromJson(
           ? null
           : VideoDimensions.fromJson(
               json['dimensions'] as Map<String, dynamic>),
-      kBitrate: (json['kBitrate'] as num?)?.toInt(),
-      framerate: (json['framerate'] as num?)?.toInt(),
+      kBitrate: json['kBitrate'] as int?,
+      framerate: json['framerate'] as int?,
     );
 
 Map<String, dynamic> _$SimulcastStreamConfigToJson(
@@ -487,10 +487,10 @@ Map<String, dynamic> _$SimulcastStreamConfigToJson(
 }
 
 Rectangle _$RectangleFromJson(Map<String, dynamic> json) => Rectangle(
-      x: (json['x'] as num?)?.toInt(),
-      y: (json['y'] as num?)?.toInt(),
-      width: (json['width'] as num?)?.toInt(),
-      height: (json['height'] as num?)?.toInt(),
+      x: json['x'] as int?,
+      y: json['y'] as int?,
+      width: json['width'] as int?,
+      height: json['height'] as int?,
     );
 
 Map<String, dynamic> _$RectangleToJson(Rectangle instance) {
@@ -574,52 +574,47 @@ const _$WatermarkFitModeEnumMap = {
 };
 
 RtcStats _$RtcStatsFromJson(Map<String, dynamic> json) => RtcStats(
-      duration: (json['duration'] as num?)?.toInt(),
-      txBytes: (json['txBytes'] as num?)?.toInt(),
-      rxBytes: (json['rxBytes'] as num?)?.toInt(),
-      txAudioBytes: (json['txAudioBytes'] as num?)?.toInt(),
-      txVideoBytes: (json['txVideoBytes'] as num?)?.toInt(),
-      rxAudioBytes: (json['rxAudioBytes'] as num?)?.toInt(),
-      rxVideoBytes: (json['rxVideoBytes'] as num?)?.toInt(),
-      txKBitRate: (json['txKBitRate'] as num?)?.toInt(),
-      rxKBitRate: (json['rxKBitRate'] as num?)?.toInt(),
-      rxAudioKBitRate: (json['rxAudioKBitRate'] as num?)?.toInt(),
-      txAudioKBitRate: (json['txAudioKBitRate'] as num?)?.toInt(),
-      rxVideoKBitRate: (json['rxVideoKBitRate'] as num?)?.toInt(),
-      txVideoKBitRate: (json['txVideoKBitRate'] as num?)?.toInt(),
-      lastmileDelay: (json['lastmileDelay'] as num?)?.toInt(),
-      userCount: (json['userCount'] as num?)?.toInt(),
+      duration: json['duration'] as int?,
+      txBytes: json['txBytes'] as int?,
+      rxBytes: json['rxBytes'] as int?,
+      txAudioBytes: json['txAudioBytes'] as int?,
+      txVideoBytes: json['txVideoBytes'] as int?,
+      rxAudioBytes: json['rxAudioBytes'] as int?,
+      rxVideoBytes: json['rxVideoBytes'] as int?,
+      txKBitRate: json['txKBitRate'] as int?,
+      rxKBitRate: json['rxKBitRate'] as int?,
+      rxAudioKBitRate: json['rxAudioKBitRate'] as int?,
+      txAudioKBitRate: json['txAudioKBitRate'] as int?,
+      rxVideoKBitRate: json['rxVideoKBitRate'] as int?,
+      txVideoKBitRate: json['txVideoKBitRate'] as int?,
+      lastmileDelay: json['lastmileDelay'] as int?,
+      userCount: json['userCount'] as int?,
       cpuAppUsage: (json['cpuAppUsage'] as num?)?.toDouble(),
       cpuTotalUsage: (json['cpuTotalUsage'] as num?)?.toDouble(),
-      gatewayRtt: (json['gatewayRtt'] as num?)?.toInt(),
+      gatewayRtt: json['gatewayRtt'] as int?,
       memoryAppUsageRatio: (json['memoryAppUsageRatio'] as num?)?.toDouble(),
       memoryTotalUsageRatio:
           (json['memoryTotalUsageRatio'] as num?)?.toDouble(),
-      memoryAppUsageInKbytes: (json['memoryAppUsageInKbytes'] as num?)?.toInt(),
-      connectTimeMs: (json['connectTimeMs'] as num?)?.toInt(),
-      firstAudioPacketDuration:
-          (json['firstAudioPacketDuration'] as num?)?.toInt(),
-      firstVideoPacketDuration:
-          (json['firstVideoPacketDuration'] as num?)?.toInt(),
+      memoryAppUsageInKbytes: json['memoryAppUsageInKbytes'] as int?,
+      connectTimeMs: json['connectTimeMs'] as int?,
+      firstAudioPacketDuration: json['firstAudioPacketDuration'] as int?,
+      firstVideoPacketDuration: json['firstVideoPacketDuration'] as int?,
       firstVideoKeyFramePacketDuration:
-          (json['firstVideoKeyFramePacketDuration'] as num?)?.toInt(),
+          json['firstVideoKeyFramePacketDuration'] as int?,
       packetsBeforeFirstKeyFramePacket:
-          (json['packetsBeforeFirstKeyFramePacket'] as num?)?.toInt(),
+          json['packetsBeforeFirstKeyFramePacket'] as int?,
       firstAudioPacketDurationAfterUnmute:
-          (json['firstAudioPacketDurationAfterUnmute'] as num?)?.toInt(),
+          json['firstAudioPacketDurationAfterUnmute'] as int?,
       firstVideoPacketDurationAfterUnmute:
-          (json['firstVideoPacketDurationAfterUnmute'] as num?)?.toInt(),
+          json['firstVideoPacketDurationAfterUnmute'] as int?,
       firstVideoKeyFramePacketDurationAfterUnmute:
-          (json['firstVideoKeyFramePacketDurationAfterUnmute'] as num?)
-              ?.toInt(),
+          json['firstVideoKeyFramePacketDurationAfterUnmute'] as int?,
       firstVideoKeyFrameDecodedDurationAfterUnmute:
-          (json['firstVideoKeyFrameDecodedDurationAfterUnmute'] as num?)
-              ?.toInt(),
+          json['firstVideoKeyFrameDecodedDurationAfterUnmute'] as int?,
       firstVideoKeyFrameRenderedDurationAfterUnmute:
-          (json['firstVideoKeyFrameRenderedDurationAfterUnmute'] as num?)
-              ?.toInt(),
-      txPacketLossRate: (json['txPacketLossRate'] as num?)?.toInt(),
-      rxPacketLossRate: (json['rxPacketLossRate'] as num?)?.toInt(),
+          json['firstVideoKeyFrameRenderedDurationAfterUnmute'] as int?,
+      txPacketLossRate: json['txPacketLossRate'] as int?,
+      rxPacketLossRate: json['rxPacketLossRate'] as int?,
     );
 
 Map<String, dynamic> _$RtcStatsToJson(RtcStats instance) {
@@ -700,9 +695,9 @@ const _$AudienceLatencyLevelTypeEnumMap = {
 };
 
 VideoFormat _$VideoFormatFromJson(Map<String, dynamic> json) => VideoFormat(
-      width: (json['width'] as num?)?.toInt(),
-      height: (json['height'] as num?)?.toInt(),
-      fps: (json['fps'] as num?)?.toInt(),
+      width: json['width'] as int?,
+      height: json['height'] as int?,
+      fps: json['fps'] as int?,
     );
 
 Map<String, dynamic> _$VideoFormatToJson(VideoFormat instance) {
@@ -723,15 +718,15 @@ Map<String, dynamic> _$VideoFormatToJson(VideoFormat instance) {
 VideoTrackInfo _$VideoTrackInfoFromJson(Map<String, dynamic> json) =>
     VideoTrackInfo(
       isLocal: json['isLocal'] as bool?,
-      ownerUid: (json['ownerUid'] as num?)?.toInt(),
-      trackId: (json['trackId'] as num?)?.toInt(),
+      ownerUid: json['ownerUid'] as int?,
+      trackId: json['trackId'] as int?,
       channelId: json['channelId'] as String?,
       codecType:
           $enumDecodeNullable(_$VideoCodecTypeEnumMap, json['codecType']),
       encodedFrameOnly: json['encodedFrameOnly'] as bool?,
       sourceType:
           $enumDecodeNullable(_$VideoSourceTypeEnumMap, json['sourceType']),
-      observationPosition: (json['observationPosition'] as num?)?.toInt(),
+      observationPosition: json['observationPosition'] as int?,
     );
 
 Map<String, dynamic> _$VideoTrackInfoToJson(VideoTrackInfo instance) {
@@ -778,9 +773,9 @@ const _$VideoSourceTypeEnumMap = {
 
 AudioVolumeInfo _$AudioVolumeInfoFromJson(Map<String, dynamic> json) =>
     AudioVolumeInfo(
-      uid: (json['uid'] as num?)?.toInt(),
-      volume: (json['volume'] as num?)?.toInt(),
-      vad: (json['vad'] as num?)?.toInt(),
+      uid: json['uid'] as int?,
+      volume: json['volume'] as int?,
+      vad: json['vad'] as int?,
       voicePitch: (json['voicePitch'] as num?)?.toDouble(),
     );
 
@@ -819,7 +814,7 @@ Map<String, dynamic> _$DeviceInfoToJson(DeviceInfo instance) {
 }
 
 Packet _$PacketFromJson(Map<String, dynamic> json) => Packet(
-      size: (json['size'] as num?)?.toInt(),
+      size: json['size'] as int?,
     );
 
 Map<String, dynamic> _$PacketToJson(Packet instance) {
@@ -837,15 +832,15 @@ Map<String, dynamic> _$PacketToJson(Packet instance) {
 
 LocalAudioStats _$LocalAudioStatsFromJson(Map<String, dynamic> json) =>
     LocalAudioStats(
-      numChannels: (json['numChannels'] as num?)?.toInt(),
-      sentSampleRate: (json['sentSampleRate'] as num?)?.toInt(),
-      sentBitrate: (json['sentBitrate'] as num?)?.toInt(),
-      internalCodec: (json['internalCodec'] as num?)?.toInt(),
-      txPacketLossRate: (json['txPacketLossRate'] as num?)?.toInt(),
-      audioDeviceDelay: (json['audioDeviceDelay'] as num?)?.toInt(),
-      audioPlayoutDelay: (json['audioPlayoutDelay'] as num?)?.toInt(),
-      earMonitorDelay: (json['earMonitorDelay'] as num?)?.toInt(),
-      aecEstimatedDelay: (json['aecEstimatedDelay'] as num?)?.toInt(),
+      numChannels: json['numChannels'] as int?,
+      sentSampleRate: json['sentSampleRate'] as int?,
+      sentBitrate: json['sentBitrate'] as int?,
+      internalCodec: json['internalCodec'] as int?,
+      txPacketLossRate: json['txPacketLossRate'] as int?,
+      audioDeviceDelay: json['audioDeviceDelay'] as int?,
+      audioPlayoutDelay: json['audioPlayoutDelay'] as int?,
+      earMonitorDelay: json['earMonitorDelay'] as int?,
+      aecEstimatedDelay: json['aecEstimatedDelay'] as int?,
     );
 
 Map<String, dynamic> _$LocalAudioStatsToJson(LocalAudioStats instance) {
@@ -871,11 +866,11 @@ Map<String, dynamic> _$LocalAudioStatsToJson(LocalAudioStats instance) {
 
 RtcImage _$RtcImageFromJson(Map<String, dynamic> json) => RtcImage(
       url: json['url'] as String?,
-      x: (json['x'] as num?)?.toInt(),
-      y: (json['y'] as num?)?.toInt(),
-      width: (json['width'] as num?)?.toInt(),
-      height: (json['height'] as num?)?.toInt(),
-      zOrder: (json['zOrder'] as num?)?.toInt(),
+      x: json['x'] as int?,
+      y: json['y'] as int?,
+      width: json['width'] as int?,
+      height: json['height'] as int?,
+      zOrder: json['zOrder'] as int?,
       alpha: (json['alpha'] as num?)?.toDouble(),
     );
 
@@ -922,14 +917,14 @@ Map<String, dynamic> _$LiveStreamAdvancedFeatureToJson(
 
 TranscodingUser _$TranscodingUserFromJson(Map<String, dynamic> json) =>
     TranscodingUser(
-      uid: (json['uid'] as num?)?.toInt(),
-      x: (json['x'] as num?)?.toInt(),
-      y: (json['y'] as num?)?.toInt(),
-      width: (json['width'] as num?)?.toInt(),
-      height: (json['height'] as num?)?.toInt(),
-      zOrder: (json['zOrder'] as num?)?.toInt(),
+      uid: json['uid'] as int?,
+      x: json['x'] as int?,
+      y: json['y'] as int?,
+      width: json['width'] as int?,
+      height: json['height'] as int?,
+      zOrder: json['zOrder'] as int?,
       alpha: (json['alpha'] as num?)?.toDouble(),
-      audioChannel: (json['audioChannel'] as num?)?.toInt(),
+      audioChannel: json['audioChannel'] as int?,
     );
 
 Map<String, dynamic> _$TranscodingUserToJson(TranscodingUser instance) {
@@ -954,18 +949,18 @@ Map<String, dynamic> _$TranscodingUserToJson(TranscodingUser instance) {
 
 LiveTranscoding _$LiveTranscodingFromJson(Map<String, dynamic> json) =>
     LiveTranscoding(
-      width: (json['width'] as num?)?.toInt(),
-      height: (json['height'] as num?)?.toInt(),
-      videoBitrate: (json['videoBitrate'] as num?)?.toInt(),
-      videoFramerate: (json['videoFramerate'] as num?)?.toInt(),
+      width: json['width'] as int?,
+      height: json['height'] as int?,
+      videoBitrate: json['videoBitrate'] as int?,
+      videoFramerate: json['videoFramerate'] as int?,
       lowLatency: json['lowLatency'] as bool?,
-      videoGop: (json['videoGop'] as num?)?.toInt(),
+      videoGop: json['videoGop'] as int?,
       videoCodecProfile: $enumDecodeNullable(
           _$VideoCodecProfileTypeEnumMap, json['videoCodecProfile']),
-      backgroundColor: (json['backgroundColor'] as num?)?.toInt(),
+      backgroundColor: json['backgroundColor'] as int?,
       videoCodecType: $enumDecodeNullable(
           _$VideoCodecTypeForStreamEnumMap, json['videoCodecType']),
-      userCount: (json['userCount'] as num?)?.toInt(),
+      userCount: json['userCount'] as int?,
       transcodingUsers: (json['transcodingUsers'] as List<dynamic>?)
           ?.map((e) => TranscodingUser.fromJson(e as Map<String, dynamic>))
           .toList(),
@@ -974,22 +969,22 @@ LiveTranscoding _$LiveTranscodingFromJson(Map<String, dynamic> json) =>
       watermark: (json['watermark'] as List<dynamic>?)
           ?.map((e) => RtcImage.fromJson(e as Map<String, dynamic>))
           .toList(),
-      watermarkCount: (json['watermarkCount'] as num?)?.toInt(),
+      watermarkCount: json['watermarkCount'] as int?,
       backgroundImage: (json['backgroundImage'] as List<dynamic>?)
           ?.map((e) => RtcImage.fromJson(e as Map<String, dynamic>))
           .toList(),
-      backgroundImageCount: (json['backgroundImageCount'] as num?)?.toInt(),
+      backgroundImageCount: json['backgroundImageCount'] as int?,
       audioSampleRate: $enumDecodeNullable(
           _$AudioSampleRateTypeEnumMap, json['audioSampleRate']),
-      audioBitrate: (json['audioBitrate'] as num?)?.toInt(),
-      audioChannels: (json['audioChannels'] as num?)?.toInt(),
+      audioBitrate: json['audioBitrate'] as int?,
+      audioChannels: json['audioChannels'] as int?,
       audioCodecProfile: $enumDecodeNullable(
           _$AudioCodecProfileTypeEnumMap, json['audioCodecProfile']),
       advancedFeatures: (json['advancedFeatures'] as List<dynamic>?)
           ?.map((e) =>
               LiveStreamAdvancedFeature.fromJson(e as Map<String, dynamic>))
           .toList(),
-      advancedFeatureCount: (json['advancedFeatureCount'] as num?)?.toInt(),
+      advancedFeatureCount: json['advancedFeatureCount'] as int?,
     );
 
 Map<String, dynamic> _$LiveTranscodingToJson(LiveTranscoding instance) {
@@ -1063,14 +1058,14 @@ TranscodingVideoStream _$TranscodingVideoStreamFromJson(
     TranscodingVideoStream(
       sourceType:
           $enumDecodeNullable(_$VideoSourceTypeEnumMap, json['sourceType']),
-      remoteUserUid: (json['remoteUserUid'] as num?)?.toInt(),
+      remoteUserUid: json['remoteUserUid'] as int?,
       imageUrl: json['imageUrl'] as String?,
-      mediaPlayerId: (json['mediaPlayerId'] as num?)?.toInt(),
-      x: (json['x'] as num?)?.toInt(),
-      y: (json['y'] as num?)?.toInt(),
-      width: (json['width'] as num?)?.toInt(),
-      height: (json['height'] as num?)?.toInt(),
-      zOrder: (json['zOrder'] as num?)?.toInt(),
+      mediaPlayerId: json['mediaPlayerId'] as int?,
+      x: json['x'] as int?,
+      y: json['y'] as int?,
+      width: json['width'] as int?,
+      height: json['height'] as int?,
+      zOrder: json['zOrder'] as int?,
       alpha: (json['alpha'] as num?)?.toDouble(),
       mirror: json['mirror'] as bool?,
     );
@@ -1102,7 +1097,7 @@ Map<String, dynamic> _$TranscodingVideoStreamToJson(
 LocalTranscoderConfiguration _$LocalTranscoderConfigurationFromJson(
         Map<String, dynamic> json) =>
     LocalTranscoderConfiguration(
-      streamCount: (json['streamCount'] as num?)?.toInt(),
+      streamCount: json['streamCount'] as int?,
       videoInputStreams: (json['videoInputStreams'] as List<dynamic>?)
           ?.map(
               (e) => TranscodingVideoStream.fromJson(e as Map<String, dynamic>))
@@ -1137,9 +1132,8 @@ LastmileProbeConfig _$LastmileProbeConfigFromJson(Map<String, dynamic> json) =>
     LastmileProbeConfig(
       probeUplink: json['probeUplink'] as bool?,
       probeDownlink: json['probeDownlink'] as bool?,
-      expectedUplinkBitrate: (json['expectedUplinkBitrate'] as num?)?.toInt(),
-      expectedDownlinkBitrate:
-          (json['expectedDownlinkBitrate'] as num?)?.toInt(),
+      expectedUplinkBitrate: json['expectedUplinkBitrate'] as int?,
+      expectedDownlinkBitrate: json['expectedDownlinkBitrate'] as int?,
     );
 
 Map<String, dynamic> _$LastmileProbeConfigToJson(LastmileProbeConfig instance) {
@@ -1161,9 +1155,9 @@ Map<String, dynamic> _$LastmileProbeConfigToJson(LastmileProbeConfig instance) {
 LastmileProbeOneWayResult _$LastmileProbeOneWayResultFromJson(
         Map<String, dynamic> json) =>
     LastmileProbeOneWayResult(
-      packetLossRate: (json['packetLossRate'] as num?)?.toInt(),
-      jitter: (json['jitter'] as num?)?.toInt(),
-      availableBandwidth: (json['availableBandwidth'] as num?)?.toInt(),
+      packetLossRate: json['packetLossRate'] as int?,
+      jitter: json['jitter'] as int?,
+      availableBandwidth: json['availableBandwidth'] as int?,
     );
 
 Map<String, dynamic> _$LastmileProbeOneWayResultToJson(
@@ -1194,7 +1188,7 @@ LastmileProbeResult _$LastmileProbeResultFromJson(Map<String, dynamic> json) =>
           ? null
           : LastmileProbeOneWayResult.fromJson(
               json['downlinkReport'] as Map<String, dynamic>),
-      rtt: (json['rtt'] as num?)?.toInt(),
+      rtt: json['rtt'] as int?,
     );
 
 Map<String, dynamic> _$LastmileProbeResultToJson(LastmileProbeResult instance) {
@@ -1220,9 +1214,9 @@ const _$LastmileProbeResultStateEnumMap = {
 };
 
 WlAccStats _$WlAccStatsFromJson(Map<String, dynamic> json) => WlAccStats(
-      e2eDelayPercent: (json['e2eDelayPercent'] as num?)?.toInt(),
-      frozenRatioPercent: (json['frozenRatioPercent'] as num?)?.toInt(),
-      lossRatePercent: (json['lossRatePercent'] as num?)?.toInt(),
+      e2eDelayPercent: json['e2eDelayPercent'] as int?,
+      frozenRatioPercent: json['frozenRatioPercent'] as int?,
+      lossRatePercent: json['lossRatePercent'] as int?,
     );
 
 Map<String, dynamic> _$WlAccStatsToJson(WlAccStats instance) {
@@ -1241,10 +1235,10 @@ Map<String, dynamic> _$WlAccStatsToJson(WlAccStats instance) {
 }
 
 VideoCanvas _$VideoCanvasFromJson(Map<String, dynamic> json) => VideoCanvas(
-      uid: (json['uid'] as num?)?.toInt(),
-      subviewUid: (json['subviewUid'] as num?)?.toInt(),
-      view: (json['view'] as num?)?.toInt(),
-      backgroundColor: (json['backgroundColor'] as num?)?.toInt(),
+      uid: json['uid'] as int?,
+      subviewUid: json['subviewUid'] as int?,
+      view: json['view'] as int?,
+      backgroundColor: json['backgroundColor'] as int?,
       renderMode:
           $enumDecodeNullable(_$RenderModeTypeEnumMap, json['renderMode']),
       mirrorMode:
@@ -1253,7 +1247,7 @@ VideoCanvas _$VideoCanvasFromJson(Map<String, dynamic> json) => VideoCanvas(
           $enumDecodeNullable(_$VideoViewSetupModeEnumMap, json['setupMode']),
       sourceType:
           $enumDecodeNullable(_$VideoSourceTypeEnumMap, json['sourceType']),
-      mediaPlayerId: (json['mediaPlayerId'] as num?)?.toInt(),
+      mediaPlayerId: json['mediaPlayerId'] as int?,
       cropArea: json['cropArea'] == null
           ? null
           : Rectangle.fromJson(json['cropArea'] as Map<String, dynamic>),
@@ -1338,6 +1332,93 @@ const _$LighteningContrastLevelEnumMap = {
   LighteningContrastLevel.lighteningContrastNormal: 1,
   LighteningContrastLevel.lighteningContrastHigh: 2,
 };
+
+FaceShapeAreaOptions _$FaceShapeAreaOptionsFromJson(
+        Map<String, dynamic> json) =>
+    FaceShapeAreaOptions(
+      shapeArea: $enumDecodeNullable(_$FaceShapeAreaEnumMap, json['shapeArea']),
+      shapeIntensity: json['shapeIntensity'] as int?,
+    );
+
+Map<String, dynamic> _$FaceShapeAreaOptionsToJson(
+    FaceShapeAreaOptions instance) {
+  final val = <String, dynamic>{};
+
+  void writeNotNull(String key, dynamic value) {
+    if (value != null) {
+      val[key] = value;
+    }
+  }
+
+  writeNotNull('shapeArea', _$FaceShapeAreaEnumMap[instance.shapeArea]);
+  writeNotNull('shapeIntensity', instance.shapeIntensity);
+  return val;
+}
+
+const _$FaceShapeAreaEnumMap = {
+  FaceShapeArea.faceShapeAreaNone: -1,
+  FaceShapeArea.faceShapeAreaHeadscale: 0,
+  FaceShapeArea.faceShapeAreaForehead: 1,
+  FaceShapeArea.faceShapeAreaFacecontour: 2,
+  FaceShapeArea.faceShapeAreaFacelength: 3,
+  FaceShapeArea.faceShapeAreaFacewidth: 4,
+  FaceShapeArea.faceShapeAreaCheekbone: 5,
+  FaceShapeArea.faceShapeAreaCheek: 6,
+  FaceShapeArea.faceShapeAreaChin: 7,
+  FaceShapeArea.faceShapeAreaEyescale: 8,
+  FaceShapeArea.faceShapeAreaNoselength: 9,
+  FaceShapeArea.faceShapeAreaNosewidth: 10,
+  FaceShapeArea.faceShapeAreaMouthscale: 11,
+};
+
+FaceShapeBeautyOptions _$FaceShapeBeautyOptionsFromJson(
+        Map<String, dynamic> json) =>
+    FaceShapeBeautyOptions(
+      shapeStyle: $enumDecodeNullable(
+          _$FaceShapeBeautyStyleEnumMap, json['shapeStyle']),
+      styleIntensity: json['styleIntensity'] as int?,
+    );
+
+Map<String, dynamic> _$FaceShapeBeautyOptionsToJson(
+    FaceShapeBeautyOptions instance) {
+  final val = <String, dynamic>{};
+
+  void writeNotNull(String key, dynamic value) {
+    if (value != null) {
+      val[key] = value;
+    }
+  }
+
+  writeNotNull(
+      'shapeStyle', _$FaceShapeBeautyStyleEnumMap[instance.shapeStyle]);
+  writeNotNull('styleIntensity', instance.styleIntensity);
+  return val;
+}
+
+const _$FaceShapeBeautyStyleEnumMap = {
+  FaceShapeBeautyStyle.faceShapeBeautyStyleFemale: 0,
+  FaceShapeBeautyStyle.faceShapeBeautyStyleMale: 1,
+};
+
+FilterEffectOptions _$FilterEffectOptionsFromJson(Map<String, dynamic> json) =>
+    FilterEffectOptions(
+      path: json['path'] as String?,
+      strength: (json['strength'] as num?)?.toDouble(),
+    );
+
+Map<String, dynamic> _$FilterEffectOptionsToJson(FilterEffectOptions instance) {
+  final val = <String, dynamic>{};
+
+  void writeNotNull(String key, dynamic value) {
+    if (value != null) {
+      val[key] = value;
+    }
+  }
+
+  writeNotNull('path', instance.path);
+  writeNotNull('strength', instance.strength);
+  return val;
+}
 
 LowlightEnhanceOptions _$LowlightEnhanceOptionsFromJson(
         Map<String, dynamic> json) =>
@@ -1429,7 +1510,7 @@ VirtualBackgroundSource _$VirtualBackgroundSourceFromJson(
     VirtualBackgroundSource(
       backgroundSourceType: $enumDecodeNullable(
           _$BackgroundSourceTypeEnumMap, json['background_source_type']),
-      color: (json['color'] as num?)?.toInt(),
+      color: json['color'] as int?,
       source: json['source'] as String?,
       blurDegree: $enumDecodeNullable(
           _$BackgroundBlurDegreeEnumMap, json['blur_degree']),
@@ -1520,16 +1601,16 @@ ScreenCaptureParameters _$ScreenCaptureParametersFromJson(
           ? null
           : VideoDimensions.fromJson(
               json['dimensions'] as Map<String, dynamic>),
-      frameRate: (json['frameRate'] as num?)?.toInt(),
-      bitrate: (json['bitrate'] as num?)?.toInt(),
+      frameRate: json['frameRate'] as int?,
+      bitrate: json['bitrate'] as int?,
       captureMouseCursor: json['captureMouseCursor'] as bool?,
       windowFocus: json['windowFocus'] as bool?,
       excludeWindowList: (json['excludeWindowList'] as List<dynamic>?)
-          ?.map((e) => (e as num).toInt())
+          ?.map((e) => e as int)
           .toList(),
-      excludeWindowCount: (json['excludeWindowCount'] as num?)?.toInt(),
-      highLightWidth: (json['highLightWidth'] as num?)?.toInt(),
-      highLightColor: (json['highLightColor'] as num?)?.toInt(),
+      excludeWindowCount: json['excludeWindowCount'] as int?,
+      highLightWidth: json['highLightWidth'] as int?,
+      highLightColor: json['highLightColor'] as int?,
       enableHighLight: json['enableHighLight'] as bool?,
     );
 
@@ -1561,12 +1642,12 @@ AudioRecordingConfiguration _$AudioRecordingConfigurationFromJson(
     AudioRecordingConfiguration(
       filePath: json['filePath'] as String?,
       encode: json['encode'] as bool?,
-      sampleRate: (json['sampleRate'] as num?)?.toInt(),
+      sampleRate: json['sampleRate'] as int?,
       fileRecordingType: $enumDecodeNullable(
           _$AudioFileRecordingTypeEnumMap, json['fileRecordingType']),
       quality: $enumDecodeNullable(
           _$AudioRecordingQualityTypeEnumMap, json['quality']),
-      recordingChannel: (json['recordingChannel'] as num?)?.toInt(),
+      recordingChannel: json['recordingChannel'] as int?,
     );
 
 Map<String, dynamic> _$AudioRecordingConfigurationToJson(
@@ -1651,7 +1732,7 @@ const _$AudioEncodingTypeEnumMap = {
 
 ChannelMediaInfo _$ChannelMediaInfoFromJson(Map<String, dynamic> json) =>
     ChannelMediaInfo(
-      uid: (json['uid'] as num?)?.toInt(),
+      uid: json['uid'] as int?,
       channelName: json['channelName'] as String?,
       token: json['token'] as String?,
     );
@@ -1680,7 +1761,7 @@ ChannelMediaRelayConfiguration _$ChannelMediaRelayConfigurationFromJson(
       destInfos: (json['destInfos'] as List<dynamic>?)
           ?.map((e) => ChannelMediaInfo.fromJson(e as Map<String, dynamic>))
           .toList(),
-      destCount: (json['destCount'] as num?)?.toInt(),
+      destCount: json['destCount'] as int?,
     );
 
 Map<String, dynamic> _$ChannelMediaRelayConfigurationToJson(
@@ -1703,7 +1784,7 @@ Map<String, dynamic> _$ChannelMediaRelayConfigurationToJson(
 UplinkNetworkInfo _$UplinkNetworkInfoFromJson(Map<String, dynamic> json) =>
     UplinkNetworkInfo(
       videoEncoderTargetBitrateBps:
-          (json['video_encoder_target_bitrate_bps'] as num?)?.toInt(),
+          json['video_encoder_target_bitrate_bps'] as int?,
     );
 
 Map<String, dynamic> _$UplinkNetworkInfoToJson(UplinkNetworkInfo instance) {
@@ -1722,17 +1803,13 @@ Map<String, dynamic> _$UplinkNetworkInfoToJson(UplinkNetworkInfo instance) {
 
 DownlinkNetworkInfo _$DownlinkNetworkInfoFromJson(Map<String, dynamic> json) =>
     DownlinkNetworkInfo(
-      lastmileBufferDelayTimeMs:
-          (json['lastmile_buffer_delay_time_ms'] as num?)?.toInt(),
-      bandwidthEstimationBps:
-          (json['bandwidth_estimation_bps'] as num?)?.toInt(),
-      totalDownscaleLevelCount:
-          (json['total_downscale_level_count'] as num?)?.toInt(),
+      lastmileBufferDelayTimeMs: json['lastmile_buffer_delay_time_ms'] as int?,
+      bandwidthEstimationBps: json['bandwidth_estimation_bps'] as int?,
+      totalDownscaleLevelCount: json['total_downscale_level_count'] as int?,
       peerDownlinkInfo: (json['peer_downlink_info'] as List<dynamic>?)
           ?.map((e) => PeerDownlinkInfo.fromJson(e as Map<String, dynamic>))
           .toList(),
-      totalReceivedVideoCount:
-          (json['total_received_video_count'] as num?)?.toInt(),
+      totalReceivedVideoCount: json['total_received_video_count'] as int?,
     );
 
 Map<String, dynamic> _$DownlinkNetworkInfoToJson(DownlinkNetworkInfo instance) {
@@ -1762,7 +1839,7 @@ PeerDownlinkInfo _$PeerDownlinkInfoFromJson(Map<String, dynamic> json) =>
           $enumDecodeNullable(_$VideoStreamTypeEnumMap, json['stream_type']),
       currentDownscaleLevel: $enumDecodeNullable(
           _$RemoteVideoDownscaleLevelEnumMap, json['current_downscale_level']),
-      expectedBitrateBps: (json['expected_bitrate_bps'] as num?)?.toInt(),
+      expectedBitrateBps: json['expected_bitrate_bps'] as int?,
     );
 
 Map<String, dynamic> _$PeerDownlinkInfoToJson(PeerDownlinkInfo instance) {
@@ -1830,12 +1907,12 @@ const _$EncryptionModeEnumMap = {
 EchoTestConfiguration _$EchoTestConfigurationFromJson(
         Map<String, dynamic> json) =>
     EchoTestConfiguration(
-      view: (json['view'] as num?)?.toInt(),
+      view: json['view'] as int?,
       enableAudio: json['enableAudio'] as bool?,
       enableVideo: json['enableVideo'] as bool?,
       token: json['token'] as String?,
       channelId: json['channelId'] as String?,
-      intervalInSeconds: (json['intervalInSeconds'] as num?)?.toInt(),
+      intervalInSeconds: json['intervalInSeconds'] as int?,
     );
 
 Map<String, dynamic> _$EchoTestConfigurationToJson(
@@ -1858,7 +1935,7 @@ Map<String, dynamic> _$EchoTestConfigurationToJson(
 }
 
 UserInfo _$UserInfoFromJson(Map<String, dynamic> json) => UserInfo(
-      uid: (json['uid'] as num?)?.toInt(),
+      uid: json['uid'] as int?,
       userAccount: json['userAccount'] as String?,
     );
 
@@ -1883,8 +1960,8 @@ ScreenVideoParameters _$ScreenVideoParametersFromJson(
           ? null
           : VideoDimensions.fromJson(
               json['dimensions'] as Map<String, dynamic>),
-      frameRate: (json['frameRate'] as num?)?.toInt(),
-      bitrate: (json['bitrate'] as num?)?.toInt(),
+      frameRate: json['frameRate'] as int?,
+      bitrate: json['bitrate'] as int?,
       contentHint:
           $enumDecodeNullable(_$VideoContentHintEnumMap, json['contentHint']),
     );
@@ -1915,9 +1992,9 @@ const _$VideoContentHintEnumMap = {
 ScreenAudioParameters _$ScreenAudioParametersFromJson(
         Map<String, dynamic> json) =>
     ScreenAudioParameters(
-      sampleRate: (json['sampleRate'] as num?)?.toInt(),
-      channels: (json['channels'] as num?)?.toInt(),
-      captureSignalVolume: (json['captureSignalVolume'] as num?)?.toInt(),
+      sampleRate: json['sampleRate'] as int?,
+      channels: json['channels'] as int?,
+      captureSignalVolume: json['captureSignalVolume'] as int?,
     );
 
 Map<String, dynamic> _$ScreenAudioParametersToJson(
@@ -1971,16 +2048,13 @@ Map<String, dynamic> _$ScreenCaptureParameters2ToJson(
 VideoRenderingTracingInfo _$VideoRenderingTracingInfoFromJson(
         Map<String, dynamic> json) =>
     VideoRenderingTracingInfo(
-      elapsedTime: (json['elapsedTime'] as num?)?.toInt(),
-      start2JoinChannel: (json['start2JoinChannel'] as num?)?.toInt(),
-      join2JoinSuccess: (json['join2JoinSuccess'] as num?)?.toInt(),
-      joinSuccess2RemoteJoined:
-          (json['joinSuccess2RemoteJoined'] as num?)?.toInt(),
-      remoteJoined2SetView: (json['remoteJoined2SetView'] as num?)?.toInt(),
-      remoteJoined2UnmuteVideo:
-          (json['remoteJoined2UnmuteVideo'] as num?)?.toInt(),
-      remoteJoined2PacketReceived:
-          (json['remoteJoined2PacketReceived'] as num?)?.toInt(),
+      elapsedTime: json['elapsedTime'] as int?,
+      start2JoinChannel: json['start2JoinChannel'] as int?,
+      join2JoinSuccess: json['join2JoinSuccess'] as int?,
+      joinSuccess2RemoteJoined: json['joinSuccess2RemoteJoined'] as int?,
+      remoteJoined2SetView: json['remoteJoined2SetView'] as int?,
+      remoteJoined2UnmuteVideo: json['remoteJoined2UnmuteVideo'] as int?,
+      remoteJoined2PacketReceived: json['remoteJoined2PacketReceived'] as int?,
     );
 
 Map<String, dynamic> _$VideoRenderingTracingInfoToJson(
@@ -2008,7 +2082,7 @@ LogUploadServerInfo _$LogUploadServerInfoFromJson(Map<String, dynamic> json) =>
     LogUploadServerInfo(
       serverDomain: json['serverDomain'] as String?,
       serverPath: json['serverPath'] as String?,
-      serverPort: (json['serverPort'] as num?)?.toInt(),
+      serverPort: json['serverPort'] as int?,
       serverHttps: json['serverHttps'] as bool?,
     );
 
@@ -2054,11 +2128,11 @@ LocalAccessPointConfiguration _$LocalAccessPointConfigurationFromJson(
     LocalAccessPointConfiguration(
       ipList:
           (json['ipList'] as List<dynamic>?)?.map((e) => e as String).toList(),
-      ipListSize: (json['ipListSize'] as num?)?.toInt(),
+      ipListSize: json['ipListSize'] as int?,
       domainList: (json['domainList'] as List<dynamic>?)
           ?.map((e) => e as String)
           .toList(),
-      domainListSize: (json['domainListSize'] as num?)?.toInt(),
+      domainListSize: json['domainListSize'] as int?,
       verifyDomainName: json['verifyDomainName'] as String?,
       mode: $enumDecodeNullable(_$LocalProxyModeEnumMap, json['mode']),
       advancedConfig: json['advancedConfig'] == null
@@ -2097,7 +2171,8 @@ const _$LocalProxyModeEnumMap = {
 RecorderStreamInfo _$RecorderStreamInfoFromJson(Map<String, dynamic> json) =>
     RecorderStreamInfo(
       channelId: json['channelId'] as String?,
-      uid: (json['uid'] as num?)?.toInt(),
+      uid: json['uid'] as int?,
+      type: $enumDecodeNullable(_$RecorderStreamTypeEnumMap, json['type']),
     );
 
 Map<String, dynamic> _$RecorderStreamInfoToJson(RecorderStreamInfo instance) {
@@ -2111,15 +2186,21 @@ Map<String, dynamic> _$RecorderStreamInfoToJson(RecorderStreamInfo instance) {
 
   writeNotNull('channelId', instance.channelId);
   writeNotNull('uid', instance.uid);
+  writeNotNull('type', _$RecorderStreamTypeEnumMap[instance.type]);
   return val;
 }
+
+const _$RecorderStreamTypeEnumMap = {
+  RecorderStreamType.rtc: 0,
+  RecorderStreamType.preview: 1,
+};
 
 SpatialAudioParams _$SpatialAudioParamsFromJson(Map<String, dynamic> json) =>
     SpatialAudioParams(
       speakerAzimuth: (json['speaker_azimuth'] as num?)?.toDouble(),
       speakerElevation: (json['speaker_elevation'] as num?)?.toDouble(),
       speakerDistance: (json['speaker_distance'] as num?)?.toDouble(),
-      speakerOrientation: (json['speaker_orientation'] as num?)?.toInt(),
+      speakerOrientation: json['speaker_orientation'] as int?,
       enableBlur: json['enable_blur'] as bool?,
       enableAirAbsorb: json['enable_air_absorb'] as bool?,
       speakerAttenuation: (json['speaker_attenuation'] as num?)?.toDouble(),
@@ -2148,13 +2229,13 @@ Map<String, dynamic> _$SpatialAudioParamsToJson(SpatialAudioParams instance) {
 
 VideoLayout _$VideoLayoutFromJson(Map<String, dynamic> json) => VideoLayout(
       channelId: json['channelId'] as String?,
-      uid: (json['uid'] as num?)?.toInt(),
+      uid: json['uid'] as int?,
       strUid: json['strUid'] as String?,
-      x: (json['x'] as num?)?.toInt(),
-      y: (json['y'] as num?)?.toInt(),
-      width: (json['width'] as num?)?.toInt(),
-      height: (json['height'] as num?)?.toInt(),
-      videoState: (json['videoState'] as num?)?.toInt(),
+      x: json['x'] as int?,
+      y: json['y'] as int?,
+      width: json['width'] as int?,
+      height: json['height'] as int?,
+      videoState: json['videoState'] as int?,
     );
 
 Map<String, dynamic> _$VideoLayoutToJson(VideoLayout instance) {
@@ -2379,6 +2460,11 @@ const _$H264PacketizeModeEnumMap = {
 
 const _$MaxUserAccountLengthTypeEnumMap = {
   MaxUserAccountLengthType.maxUserAccountLength: 256,
+};
+
+const _$CameraFormatTypeEnumMap = {
+  CameraFormatType.cameraFormatNv12: 0,
+  CameraFormatType.cameraFormatBgra: 1,
 };
 
 const _$CodecCapMaskEnumMap = {
