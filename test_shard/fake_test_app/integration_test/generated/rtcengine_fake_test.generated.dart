@@ -1128,6 +1128,209 @@ void rtcEngineSmokeTestCases() {
   );
 
   testWidgets(
+    'RtcEngine.setFaceShapeBeautyOptions',
+    (WidgetTester tester) async {
+      String engineAppId = const String.fromEnvironment('TEST_APP_ID',
+          defaultValue: '<YOUR_APP_ID>');
+
+      RtcEngine rtcEngine = createAgoraRtcEngine();
+      await rtcEngine.initialize(RtcEngineContext(
+        appId: engineAppId,
+        areaCode: AreaCode.areaCodeGlob.value(),
+      ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
+
+      try {
+        const bool enabled = true;
+        const FaceShapeBeautyStyle optionsShapeStyle =
+            FaceShapeBeautyStyle.faceShapeBeautyStyleFemale;
+        const int optionsStyleIntensity = 10;
+        const FaceShapeBeautyOptions options = FaceShapeBeautyOptions(
+          shapeStyle: optionsShapeStyle,
+          styleIntensity: optionsStyleIntensity,
+        );
+        const MediaSourceType type = MediaSourceType.audioPlayoutSource;
+        await rtcEngine.setFaceShapeBeautyOptions(
+          enabled: enabled,
+          options: options,
+          type: type,
+        );
+      } catch (e) {
+        if (e is! AgoraRtcException) {
+          debugPrint(
+              '[RtcEngine.setFaceShapeBeautyOptions] error: ${e.toString()}');
+          rethrow;
+        }
+
+        if (e.code != -4) {
+          // Only not supported error supported.
+          rethrow;
+        }
+      }
+
+      await rtcEngine.release();
+    },
+  );
+
+  testWidgets(
+    'RtcEngine.setFaceShapeAreaOptions',
+    (WidgetTester tester) async {
+      String engineAppId = const String.fromEnvironment('TEST_APP_ID',
+          defaultValue: '<YOUR_APP_ID>');
+
+      RtcEngine rtcEngine = createAgoraRtcEngine();
+      await rtcEngine.initialize(RtcEngineContext(
+        appId: engineAppId,
+        areaCode: AreaCode.areaCodeGlob.value(),
+      ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
+
+      try {
+        const FaceShapeArea optionsShapeArea = FaceShapeArea.faceShapeAreaNone;
+        const int optionsShapeIntensity = 10;
+        const FaceShapeAreaOptions options = FaceShapeAreaOptions(
+          shapeArea: optionsShapeArea,
+          shapeIntensity: optionsShapeIntensity,
+        );
+        const MediaSourceType type = MediaSourceType.audioPlayoutSource;
+        await rtcEngine.setFaceShapeAreaOptions(
+          options: options,
+          type: type,
+        );
+      } catch (e) {
+        if (e is! AgoraRtcException) {
+          debugPrint(
+              '[RtcEngine.setFaceShapeAreaOptions] error: ${e.toString()}');
+          rethrow;
+        }
+
+        if (e.code != -4) {
+          // Only not supported error supported.
+          rethrow;
+        }
+      }
+
+      await rtcEngine.release();
+    },
+  );
+
+  testWidgets(
+    'RtcEngine.getFaceShapeBeautyOptions',
+    (WidgetTester tester) async {
+      String engineAppId = const String.fromEnvironment('TEST_APP_ID',
+          defaultValue: '<YOUR_APP_ID>');
+
+      RtcEngine rtcEngine = createAgoraRtcEngine();
+      await rtcEngine.initialize(RtcEngineContext(
+        appId: engineAppId,
+        areaCode: AreaCode.areaCodeGlob.value(),
+      ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
+
+      try {
+        const MediaSourceType type = MediaSourceType.audioPlayoutSource;
+        await rtcEngine.getFaceShapeBeautyOptions(
+          type: type,
+        );
+      } catch (e) {
+        if (e is! AgoraRtcException) {
+          debugPrint(
+              '[RtcEngine.getFaceShapeBeautyOptions] error: ${e.toString()}');
+          rethrow;
+        }
+
+        if (e.code != -4) {
+          // Only not supported error supported.
+          rethrow;
+        }
+      }
+
+      await rtcEngine.release();
+    },
+  );
+
+  testWidgets(
+    'RtcEngine.getFaceShapeAreaOptions',
+    (WidgetTester tester) async {
+      String engineAppId = const String.fromEnvironment('TEST_APP_ID',
+          defaultValue: '<YOUR_APP_ID>');
+
+      RtcEngine rtcEngine = createAgoraRtcEngine();
+      await rtcEngine.initialize(RtcEngineContext(
+        appId: engineAppId,
+        areaCode: AreaCode.areaCodeGlob.value(),
+      ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
+
+      try {
+        const FaceShapeArea shapeArea = FaceShapeArea.faceShapeAreaNone;
+        const MediaSourceType type = MediaSourceType.audioPlayoutSource;
+        await rtcEngine.getFaceShapeAreaOptions(
+          shapeArea: shapeArea,
+          type: type,
+        );
+      } catch (e) {
+        if (e is! AgoraRtcException) {
+          debugPrint(
+              '[RtcEngine.getFaceShapeAreaOptions] error: ${e.toString()}');
+          rethrow;
+        }
+
+        if (e.code != -4) {
+          // Only not supported error supported.
+          rethrow;
+        }
+      }
+
+      await rtcEngine.release();
+    },
+  );
+
+  testWidgets(
+    'RtcEngine.setFilterEffectOptions',
+    (WidgetTester tester) async {
+      String engineAppId = const String.fromEnvironment('TEST_APP_ID',
+          defaultValue: '<YOUR_APP_ID>');
+
+      RtcEngine rtcEngine = createAgoraRtcEngine();
+      await rtcEngine.initialize(RtcEngineContext(
+        appId: engineAppId,
+        areaCode: AreaCode.areaCodeGlob.value(),
+      ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
+
+      try {
+        const bool enabled = true;
+        const String optionsPath = "hello";
+        const double optionsStrength = 10.0;
+        const FilterEffectOptions options = FilterEffectOptions(
+          path: optionsPath,
+          strength: optionsStrength,
+        );
+        const MediaSourceType type = MediaSourceType.audioPlayoutSource;
+        await rtcEngine.setFilterEffectOptions(
+          enabled: enabled,
+          options: options,
+          type: type,
+        );
+      } catch (e) {
+        if (e is! AgoraRtcException) {
+          debugPrint(
+              '[RtcEngine.setFilterEffectOptions] error: ${e.toString()}');
+          rethrow;
+        }
+
+        if (e.code != -4) {
+          // Only not supported error supported.
+          rethrow;
+        }
+      }
+
+      await rtcEngine.release();
+    },
+  );
+
+  testWidgets(
     'RtcEngine.setLowlightEnhanceOptions',
     (WidgetTester tester) async {
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
