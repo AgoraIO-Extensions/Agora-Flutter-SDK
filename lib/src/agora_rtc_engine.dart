@@ -5852,30 +5852,6 @@ abstract class RtcEngine {
   ///  If the call fails, returns NULL.
   Future<UserInfo> getUserInfoByUid(int uid);
 
-  /// Gets the user information by passing in the user account.
-  ///
-  /// After a remote user joins the channel, the SDK gets the UID and user account of the remote user, caches them in a mapping table object, and triggers the onUserInfoUpdated callback on the local client. After receiving the callback, you can call this method and pass in the user account to get the UID of the remote user from the UserInfo object.
-  ///
-  /// * [userAccount] The user account.
-  ///
-  /// Returns
-  /// A pointer to the UserInfo instance, if the method call succeeds.
-  ///  If the call fails, returns NULL.
-  Future<UserInfo> getUserInfoByUserAccount(
-      {required String channelId, required String userAccount});
-
-  /// Gets the user information by passing in the user ID.
-  ///
-  /// After a remote user joins the channel, the SDK gets the UID and user account of the remote user, caches them in a mapping table object, and triggers the onUserInfoUpdated callback on the local client. After receiving the callback, you can call this method and passi in the UID.to get the user account of the specified user from the UserInfo object.
-  ///
-  /// * [uid] The user ID.
-  ///
-  /// Returns
-  /// A pointer to the UserInfo instance, if the method call succeeds.
-  ///  If the call fails, returns NULL.
-  Future<UserInfo> getUserInfoByUid(
-      {required String channelId, required int uid});
-
   /// Starts relaying media streams across channels or updates channels for media relay.
   ///
   /// The first successful call to this method starts relaying media streams from the source channel to the destination channels. To relay the media stream to other channels, or exit one of the current media relays, you can call this method again to update the destination channels. This feature supports relaying media streams to a maximum of six destination channels. After a successful method call, the SDK triggers the onChannelMediaRelayStateChanged callback, and this callback returns the state of the media stream relay. Common states are as follows:
@@ -6213,6 +6189,14 @@ abstract class RtcEngine {
   /// * [sync] Whether the method is called synchronously: true : Synchronous call. false : Asynchronous call. Currently this method only supports synchronous calls. Do not set this parameter to this value.
   Future<void> release({bool sync = false});
 
+  /// @nodoc
+  Future<UserInfo> getUserInfoByUidWithChannelId(
+      {required String channelId, required int uid});
+
+  /// @nodoc
+  Future<UserInfo> getUserInfoByUserAccountWithChannelId(
+      {required String channelId, required String userAccount});
+
   /// Enables the local video preview.
   ///
   /// You can call this method to enable local video preview.
@@ -6297,12 +6281,6 @@ abstract class RtcEngine {
   /// Returns
   /// The native handle of the SDK.
   Future<int> getNativeHandle();
-
-  /// @nodoc
-  Future<void> takeSnapshotWithConfig({required int uid, required int config});
-
-  /// @nodoc
-  Future<void> setExternalMediaProjection(int mediaProjection);
 }
 
 /// @nodoc

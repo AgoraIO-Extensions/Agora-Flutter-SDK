@@ -738,16 +738,4 @@ abstract class RtcEngineEx implements RtcEngine {
       {required RtcConnection connection,
       required Uint8List metadata,
       required int length});
-
-  /// @nodoc
-  Future<void> leaveChannelWithUserAccountEx(
-      {required String channelId,
-      required String userAccount,
-      LeaveChannelOptions? options});
-
-  /// @nodoc
-  Future<void> takeSnapshotWithConfigEx(
-      {required RtcConnection connection,
-      required int uid,
-      required int config});
 }

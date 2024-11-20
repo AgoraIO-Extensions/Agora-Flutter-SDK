@@ -238,7 +238,4 @@ abstract class MediaEngine {
   /// Returns
   /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown. You need to catch the exception and handle it accordingly.
   void unregisterFaceInfoObserver(FaceInfoObserver observer);
-
-  /// @nodoc
-  Future<void> setExternalRemoteEglContext(int eglContext);
 }

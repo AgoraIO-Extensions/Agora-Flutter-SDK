@@ -397,21 +397,4 @@ class MediaEngineImpl implements MediaEngine {
 // if (result < 0) { throw AgoraRtcException(code: result); }
     throw UnimplementedError('Unimplement for unregisterFaceInfoObserver');
   }
-
-  @override
-  Future<void> setExternalRemoteEglContext(int eglContext) async {
-    final apiType =
-        '${isOverrideClassName ? className : 'MediaEngine'}_setExternalRemoteEglContext_f337cbf';
-    final param = createParams({'eglContext': eglContext});
-    final callApiResult = await irisMethodChannel.invokeMethod(
-        IrisMethodCall(apiType, jsonEncode(param), buffers: null));
-    if (callApiResult.irisReturnCode < 0) {
-      throw AgoraRtcException(code: callApiResult.irisReturnCode);
-    }
-    final rm = callApiResult.data;
-    final result = rm['result'];
-    if (result < 0) {
-      throw AgoraRtcException(code: result);
-    }
-  }
 }
