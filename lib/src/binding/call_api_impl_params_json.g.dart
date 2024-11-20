@@ -11,7 +11,7 @@ part of 'call_api_impl_params_json.dart';
 MediaPlayerGetDurationJson _$MediaPlayerGetDurationJsonFromJson(
         Map<String, dynamic> json) =>
     MediaPlayerGetDurationJson(
-      (json['duration'] as num).toInt(),
+      json['duration'] as int,
     );
 
 Map<String, dynamic> _$MediaPlayerGetDurationJsonToJson(
@@ -23,7 +23,7 @@ Map<String, dynamic> _$MediaPlayerGetDurationJsonToJson(
 MediaPlayerGetPlayPositionJson _$MediaPlayerGetPlayPositionJsonFromJson(
         Map<String, dynamic> json) =>
     MediaPlayerGetPlayPositionJson(
-      (json['pos'] as num).toInt(),
+      json['pos'] as int,
     );
 
 Map<String, dynamic> _$MediaPlayerGetPlayPositionJsonToJson(
@@ -35,7 +35,7 @@ Map<String, dynamic> _$MediaPlayerGetPlayPositionJsonToJson(
 MediaPlayerGetStreamCountJson _$MediaPlayerGetStreamCountJsonFromJson(
         Map<String, dynamic> json) =>
     MediaPlayerGetStreamCountJson(
-      (json['count'] as num).toInt(),
+      json['count'] as int,
     );
 
 Map<String, dynamic> _$MediaPlayerGetStreamCountJsonToJson(
@@ -71,7 +71,7 @@ Map<String, dynamic> _$MediaPlayerGetMuteJsonToJson(
 MediaPlayerGetPlayoutVolumeJson _$MediaPlayerGetPlayoutVolumeJsonFromJson(
         Map<String, dynamic> json) =>
     MediaPlayerGetPlayoutVolumeJson(
-      (json['volume'] as num).toInt(),
+      json['volume'] as int,
     );
 
 Map<String, dynamic> _$MediaPlayerGetPlayoutVolumeJsonToJson(
@@ -84,38 +84,13 @@ MediaPlayerGetPublishSignalVolumeJson
     _$MediaPlayerGetPublishSignalVolumeJsonFromJson(
             Map<String, dynamic> json) =>
         MediaPlayerGetPublishSignalVolumeJson(
-          (json['volume'] as num).toInt(),
+          json['volume'] as int,
         );
 
 Map<String, dynamic> _$MediaPlayerGetPublishSignalVolumeJsonToJson(
         MediaPlayerGetPublishSignalVolumeJson instance) =>
     <String, dynamic>{
       'volume': instance.volume,
-    };
-
-MediaPlayerGetPlayerOptionInIntJson
-    _$MediaPlayerGetPlayerOptionInIntJsonFromJson(Map<String, dynamic> json) =>
-        MediaPlayerGetPlayerOptionInIntJson(
-          (json['value'] as num).toInt(),
-        );
-
-Map<String, dynamic> _$MediaPlayerGetPlayerOptionInIntJsonToJson(
-        MediaPlayerGetPlayerOptionInIntJson instance) =>
-    <String, dynamic>{
-      'value': instance.value,
-    };
-
-MediaPlayerGetPlayerOptionInStringJson
-    _$MediaPlayerGetPlayerOptionInStringJsonFromJson(
-            Map<String, dynamic> json) =>
-        MediaPlayerGetPlayerOptionInStringJson(
-          json['value'] as String,
-        );
-
-Map<String, dynamic> _$MediaPlayerGetPlayerOptionInStringJsonToJson(
-        MediaPlayerGetPlayerOptionInStringJson instance) =>
-    <String, dynamic>{
-      'value': instance.value,
     };
 
 MediaPlayerCacheManagerGetCacheDirJson
@@ -224,7 +199,7 @@ MusicContentCenterGetInternalSongCodeJson
     _$MusicContentCenterGetInternalSongCodeJsonFromJson(
             Map<String, dynamic> json) =>
         MusicContentCenterGetInternalSongCodeJson(
-          (json['internalSongCode'] as num).toInt(),
+          json['internalSongCode'] as int,
         );
 
 Map<String, dynamic> _$MusicContentCenterGetInternalSongCodeJsonToJson(
@@ -269,6 +244,33 @@ Map<String, dynamic> _$RtcEngineQueryCodecCapabilityJsonToJson(
         RtcEngineQueryCodecCapabilityJson instance) =>
     <String, dynamic>{
       'codecInfo': instance.codecInfo.map((e) => e.toJson()).toList(),
+    };
+
+RtcEngineGetFaceShapeBeautyOptionsJson
+    _$RtcEngineGetFaceShapeBeautyOptionsJsonFromJson(
+            Map<String, dynamic> json) =>
+        RtcEngineGetFaceShapeBeautyOptionsJson(
+          FaceShapeBeautyOptions.fromJson(
+              json['options'] as Map<String, dynamic>),
+        );
+
+Map<String, dynamic> _$RtcEngineGetFaceShapeBeautyOptionsJsonToJson(
+        RtcEngineGetFaceShapeBeautyOptionsJson instance) =>
+    <String, dynamic>{
+      'options': instance.options.toJson(),
+    };
+
+RtcEngineGetFaceShapeAreaOptionsJson
+    _$RtcEngineGetFaceShapeAreaOptionsJsonFromJson(Map<String, dynamic> json) =>
+        RtcEngineGetFaceShapeAreaOptionsJson(
+          FaceShapeAreaOptions.fromJson(
+              json['options'] as Map<String, dynamic>),
+        );
+
+Map<String, dynamic> _$RtcEngineGetFaceShapeAreaOptionsJsonToJson(
+        RtcEngineGetFaceShapeAreaOptionsJson instance) =>
+    <String, dynamic>{
+      'options': instance.options.toJson(),
     };
 
 RtcEngineUploadLogFileJson _$RtcEngineUploadLogFileJsonFromJson(
@@ -338,7 +340,7 @@ Map<String, dynamic> _$RtcEngineGetCallIdJsonToJson(
 RtcEngineCreateDataStreamJson _$RtcEngineCreateDataStreamJsonFromJson(
         Map<String, dynamic> json) =>
     RtcEngineCreateDataStreamJson(
-      (json['streamId'] as num).toInt(),
+      json['streamId'] as int,
     );
 
 Map<String, dynamic> _$RtcEngineCreateDataStreamJsonToJson(
@@ -372,36 +374,10 @@ Map<String, dynamic> _$RtcEngineGetUserInfoByUidJsonToJson(
       'userInfo': instance.userInfo.toJson(),
     };
 
-RtcEngineGetUserInfoByUidWithChannelIdJson
-    _$RtcEngineGetUserInfoByUidWithChannelIdJsonFromJson(
-            Map<String, dynamic> json) =>
-        RtcEngineGetUserInfoByUidWithChannelIdJson(
-          UserInfo.fromJson(json['userInfo'] as Map<String, dynamic>),
-        );
-
-Map<String, dynamic> _$RtcEngineGetUserInfoByUidWithChannelIdJsonToJson(
-        RtcEngineGetUserInfoByUidWithChannelIdJson instance) =>
-    <String, dynamic>{
-      'userInfo': instance.userInfo.toJson(),
-    };
-
-RtcEngineGetUserInfoByUserAccountWithChannelIdJson
-    _$RtcEngineGetUserInfoByUserAccountWithChannelIdJsonFromJson(
-            Map<String, dynamic> json) =>
-        RtcEngineGetUserInfoByUserAccountWithChannelIdJson(
-          UserInfo.fromJson(json['userInfo'] as Map<String, dynamic>),
-        );
-
-Map<String, dynamic> _$RtcEngineGetUserInfoByUserAccountWithChannelIdJsonToJson(
-        RtcEngineGetUserInfoByUserAccountWithChannelIdJson instance) =>
-    <String, dynamic>{
-      'userInfo': instance.userInfo.toJson(),
-    };
-
 RtcEngineExCreateDataStreamExJson _$RtcEngineExCreateDataStreamExJsonFromJson(
         Map<String, dynamic> json) =>
     RtcEngineExCreateDataStreamExJson(
-      (json['streamId'] as num).toInt(),
+      json['streamId'] as int,
     );
 
 Map<String, dynamic> _$RtcEngineExCreateDataStreamExJsonToJson(
@@ -464,7 +440,7 @@ AudioDeviceManagerGetPlaybackDeviceVolumeJson
     _$AudioDeviceManagerGetPlaybackDeviceVolumeJsonFromJson(
             Map<String, dynamic> json) =>
         AudioDeviceManagerGetPlaybackDeviceVolumeJson(
-          (json['volume'] as num).toInt(),
+          json['volume'] as int,
         );
 
 Map<String, dynamic> _$AudioDeviceManagerGetPlaybackDeviceVolumeJsonToJson(
@@ -490,7 +466,7 @@ AudioDeviceManagerGetRecordingDeviceVolumeJson
     _$AudioDeviceManagerGetRecordingDeviceVolumeJsonFromJson(
             Map<String, dynamic> json) =>
         AudioDeviceManagerGetRecordingDeviceVolumeJson(
-          (json['volume'] as num).toInt(),
+          json['volume'] as int,
         );
 
 Map<String, dynamic> _$AudioDeviceManagerGetRecordingDeviceVolumeJsonToJson(

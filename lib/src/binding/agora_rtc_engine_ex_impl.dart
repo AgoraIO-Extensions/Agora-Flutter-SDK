@@ -52,17 +52,35 @@ class RtcEngineExImpl extends RtcEngineImpl implements RtcEngineEx {
   }
 
   @override
+  Future<void> leaveChannelEx(RtcConnection connection) async {
+    final apiType =
+        '${isOverrideClassName ? className : 'RtcEngineEx'}_leaveChannelEx_c81e1a4';
+    final param = createParams({'connection': connection.toJson()});
+    final List<Uint8List> buffers = [];
+    buffers.addAll(connection.collectBufferList());
+    final callApiResult = await irisMethodChannel.invokeMethod(
+        IrisMethodCall(apiType, jsonEncode(param), buffers: buffers));
+    if (callApiResult.irisReturnCode < 0) {
+      throw AgoraRtcException(code: callApiResult.irisReturnCode);
+    }
+    final rm = callApiResult.data;
+    final result = rm['result'];
+    if (result < 0) {
+      throw AgoraRtcException(code: result);
+    }
+  }
+
+  @override
   Future<void> leaveChannelEx(
-      {required RtcConnection connection, LeaveChannelOptions? options}) async {
+      {required RtcConnection connection,
+      required LeaveChannelOptions options}) async {
     final apiType =
         '${isOverrideClassName ? className : 'RtcEngineEx'}_leaveChannelEx_b03ee9a';
     final param = createParams(
-        {'connection': connection.toJson(), 'options': options?.toJson()});
+        {'connection': connection.toJson(), 'options': options.toJson()});
     final List<Uint8List> buffers = [];
     buffers.addAll(connection.collectBufferList());
-    if (options != null) {
-      buffers.addAll(options.collectBufferList());
-    }
+    buffers.addAll(options.collectBufferList());
     final callApiResult = await irisMethodChannel.invokeMethod(
         IrisMethodCall(apiType, jsonEncode(param), buffers: buffers));
     if (callApiResult.irisReturnCode < 0) {
@@ -647,6 +665,35 @@ class RtcEngineExImpl extends RtcEngineImpl implements RtcEngineEx {
     if (result < 0) {
       throw AgoraRtcException(code: result);
     }
+  }
+
+  @override
+  Future<int> createDataStreamEx(
+      {required bool reliable,
+      required bool ordered,
+      required RtcConnection connection}) async {
+    final apiType =
+        '${isOverrideClassName ? className : 'RtcEngineEx'}_createDataStreamEx_1767167';
+    final param = createParams({
+      'reliable': reliable,
+      'ordered': ordered,
+      'connection': connection.toJson()
+    });
+    final List<Uint8List> buffers = [];
+    buffers.addAll(connection.collectBufferList());
+    final callApiResult = await irisMethodChannel.invokeMethod(
+        IrisMethodCall(apiType, jsonEncode(param), buffers: buffers));
+    if (callApiResult.irisReturnCode < 0) {
+      throw AgoraRtcException(code: callApiResult.irisReturnCode);
+    }
+    final rm = callApiResult.data;
+    final result = rm['result'];
+    if (result < 0) {
+      throw AgoraRtcException(code: result);
+    }
+    final createDataStreamExJson =
+        RtcEngineExCreateDataStreamExJson.fromJson(rm);
+    return createDataStreamExJson.streamId;
   }
 
   @override

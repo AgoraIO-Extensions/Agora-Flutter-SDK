@@ -692,7 +692,7 @@ enum QualityType {
   @JsonValue(7)
   qualityUnsupported,
 
-  /// 8: Detecting the network quality.
+  /// 8: The last-mile network probe test is in progress.
   @JsonValue(8)
   qualityDetecting,
 }
@@ -930,7 +930,7 @@ extension OrientationModeExt on OrientationMode {
 /// Video degradation preferences when the bandwidth is a constraint.
 @JsonEnum(alwaysCreate: true)
 enum DegradationPreference {
-  /// 0: (Default) Prefers to reduce the video frame rate while maintaining video resolution during video encoding under limited bandwidth. This degradation preference is suitable for scenarios where video quality is prioritized.
+  /// 0: Prefers to reduce the video frame rate while maintaining video resolution during video encoding under limited bandwidth. This degradation preference is suitable for scenarios where video quality is prioritized. Deprecated: This enumerator is deprecated. Use other enumerations instead.
   @JsonValue(0)
   maintainQuality,
 
@@ -1623,7 +1623,7 @@ enum CompressionPreference {
   @JsonValue(0)
   preferLowLatency,
 
-  /// 1: (Default) High quality preference. The SDK compresses video frames while maintaining video quality. This preference is suitable for scenarios where video quality is prioritized.
+  /// 1: High quality preference. The SDK compresses video frames while maintaining video quality. This preference is suitable for scenarios where video quality is prioritized.
   @JsonValue(1)
   preferQuality,
 }
@@ -1884,7 +1884,7 @@ class VideoEncoderConfiguration {
   @JsonKey(name: 'frameRate')
   final int? frameRate;
 
-  /// The encoding bitrate (Kbps) of the video. This parameter does not need to be set; keeping the default value standardBitrate is sufficient. The SDK automatically matches the most suitable bitrate based on the video resolution and frame rate you have set. For the correspondence between video resolution and frame rate, see. standardBitrate (0): (Recommended) Standard bitrate mode. compatibleBitrate (-1): Adaptive bitrate mode. In general, Agora suggests that you do not use this value.
+  /// The encoding bitrate (Kbps) of the video.. This parameter does not need to be set; keeping the default value standardBitrate is sufficient. The SDK automatically matches the most suitable bitrate based on the video resolution and frame rate you have set. For the correspondence between video resolution and frame rate, see. standardBitrate (0): (Recommended) Standard bitrate mode. compatibleBitrate (-1): Adaptive bitrate mode. In general, Agora suggests that you do not use this value.
   @JsonKey(name: 'bitrate')
   final int? bitrate;
 
@@ -2652,7 +2652,7 @@ enum VideoApplicationScenarioType {
   @JsonValue(0)
   applicationScenarioGeneral,
 
-  /// If set to applicationScenarioMeeting (1), the SDK automatically enables the following strategies:
+  /// applicationScenarioMeeting (1) is suitable for meeting scenarios. The SDK automatically enables the following strategies:
   ///  In meeting scenarios where low-quality video streams are required to have a high bitrate, the SDK automatically enables multiple technologies used to deal with network congestions, to enhance the performance of the low-quality streams and to ensure the smooth reception by subscribers.
   ///  The SDK monitors the number of subscribers to the high-quality video stream in real time and dynamically adjusts its configuration based on the number of subscribers.
   ///  If nobody subscribers to the high-quality stream, the SDK automatically reduces its bitrate and frame rate to save upstream bandwidth.
@@ -2958,7 +2958,7 @@ enum LocalVideoStreamReason {
   @JsonValue(8)
   localVideoStreamReasonDeviceNotFound,
 
-  /// 9: (macOS only) The video capture device currently in use is disconnected (such as being unplugged).
+  /// 9: (macOS and Windows only) The video capture device currently in use is disconnected (such as being unplugged).
   @JsonValue(9)
   localVideoStreamReasonDeviceDisconnected,
 
@@ -2999,7 +2999,7 @@ enum LocalVideoStreamReason {
   @JsonValue(20)
   localVideoStreamReasonScreenCaptureWindowNotSupported,
 
-  /// @nodoc
+  /// 21: (Windows and Android only) The currently captured window has no data.
   @JsonValue(21)
   localVideoStreamReasonScreenCaptureFailure,
 
@@ -4005,7 +4005,7 @@ class LiveTranscoding {
   @JsonKey(name: 'height')
   final int? height;
 
-  /// The encoding bitrate (Kbps) of the video. This parameter does not need to be set; keeping the default value standardBitrate is sufficient. The SDK automatically matches the most suitable bitrate based on the video resolution and frame rate you have set. For the correspondence between video resolution and frame rate, see.
+  /// The encoding bitrate (Kbps) of the video.. This parameter does not need to be set; keeping the default value standardBitrate is sufficient. The SDK automatically matches the most suitable bitrate based on the video resolution and frame rate you have set. For the correspondence between video resolution and frame rate, see.
   @JsonKey(name: 'videoBitrate')
   final int? videoBitrate;
 
@@ -4668,7 +4668,7 @@ extension NetworkTypeExt on NetworkType {
 /// Setting mode of the view.
 @JsonEnum(alwaysCreate: true)
 enum VideoViewSetupMode {
-  /// 0: (Default) Replaces a view.
+  /// 0: (Default) Clear all added views and replace with a new view.
   @JsonValue(0)
   videoViewSetupReplace,
 
@@ -4840,6 +4840,166 @@ extension LighteningContrastLevelExt on LighteningContrastLevel {
   }
 }
 
+/// @nodoc
+@JsonSerializable(explicitToJson: true, includeIfNull: false)
+class FaceShapeAreaOptions {
+  /// @nodoc
+  const FaceShapeAreaOptions({this.shapeArea, this.shapeIntensity});
+
+  /// @nodoc
+  @JsonKey(name: 'shapeArea')
+  final FaceShapeArea? shapeArea;
+
+  /// @nodoc
+  @JsonKey(name: 'shapeIntensity')
+  final int? shapeIntensity;
+
+  /// @nodoc
+  factory FaceShapeAreaOptions.fromJson(Map<String, dynamic> json) =>
+      _$FaceShapeAreaOptionsFromJson(json);
+
+  /// @nodoc
+  Map<String, dynamic> toJson() => _$FaceShapeAreaOptionsToJson(this);
+}
+
+/// @nodoc
+@JsonEnum(alwaysCreate: true)
+enum FaceShapeArea {
+  /// @nodoc
+  @JsonValue(-1)
+  faceShapeAreaNone,
+
+  /// @nodoc
+  @JsonValue(0)
+  faceShapeAreaHeadscale,
+
+  /// @nodoc
+  @JsonValue(1)
+  faceShapeAreaForehead,
+
+  /// @nodoc
+  @JsonValue(2)
+  faceShapeAreaFacecontour,
+
+  /// @nodoc
+  @JsonValue(3)
+  faceShapeAreaFacelength,
+
+  /// @nodoc
+  @JsonValue(4)
+  faceShapeAreaFacewidth,
+
+  /// @nodoc
+  @JsonValue(5)
+  faceShapeAreaCheekbone,
+
+  /// @nodoc
+  @JsonValue(6)
+  faceShapeAreaCheek,
+
+  /// @nodoc
+  @JsonValue(7)
+  faceShapeAreaChin,
+
+  /// @nodoc
+  @JsonValue(8)
+  faceShapeAreaEyescale,
+
+  /// @nodoc
+  @JsonValue(9)
+  faceShapeAreaNoselength,
+
+  /// @nodoc
+  @JsonValue(10)
+  faceShapeAreaNosewidth,
+
+  /// @nodoc
+  @JsonValue(11)
+  faceShapeAreaMouthscale,
+}
+
+/// @nodoc
+extension FaceShapeAreaExt on FaceShapeArea {
+  /// @nodoc
+  static FaceShapeArea fromValue(int value) {
+    return $enumDecode(_$FaceShapeAreaEnumMap, value);
+  }
+
+  /// @nodoc
+  int value() {
+    return _$FaceShapeAreaEnumMap[this]!;
+  }
+}
+
+/// @nodoc
+@JsonSerializable(explicitToJson: true, includeIfNull: false)
+class FaceShapeBeautyOptions {
+  /// @nodoc
+  const FaceShapeBeautyOptions({this.shapeStyle, this.styleIntensity});
+
+  /// @nodoc
+  @JsonKey(name: 'shapeStyle')
+  final FaceShapeBeautyStyle? shapeStyle;
+
+  /// @nodoc
+  @JsonKey(name: 'styleIntensity')
+  final int? styleIntensity;
+
+  /// @nodoc
+  factory FaceShapeBeautyOptions.fromJson(Map<String, dynamic> json) =>
+      _$FaceShapeBeautyOptionsFromJson(json);
+
+  /// @nodoc
+  Map<String, dynamic> toJson() => _$FaceShapeBeautyOptionsToJson(this);
+}
+
+/// @nodoc
+@JsonEnum(alwaysCreate: true)
+enum FaceShapeBeautyStyle {
+  /// @nodoc
+  @JsonValue(0)
+  faceShapeBeautyStyleFemale,
+
+  /// @nodoc
+  @JsonValue(1)
+  faceShapeBeautyStyleMale,
+}
+
+/// @nodoc
+extension FaceShapeBeautyStyleExt on FaceShapeBeautyStyle {
+  /// @nodoc
+  static FaceShapeBeautyStyle fromValue(int value) {
+    return $enumDecode(_$FaceShapeBeautyStyleEnumMap, value);
+  }
+
+  /// @nodoc
+  int value() {
+    return _$FaceShapeBeautyStyleEnumMap[this]!;
+  }
+}
+
+/// @nodoc
+@JsonSerializable(explicitToJson: true, includeIfNull: false)
+class FilterEffectOptions {
+  /// @nodoc
+  const FilterEffectOptions({this.path, this.strength});
+
+  /// @nodoc
+  @JsonKey(name: 'path')
+  final String? path;
+
+  /// @nodoc
+  @JsonKey(name: 'strength')
+  final double? strength;
+
+  /// @nodoc
+  factory FilterEffectOptions.fromJson(Map<String, dynamic> json) =>
+      _$FilterEffectOptionsFromJson(json);
+
+  /// @nodoc
+  Map<String, dynamic> toJson() => _$FilterEffectOptionsToJson(this);
+}
+
 /// The low-light enhancement options.
 @JsonSerializable(explicitToJson: true, includeIfNull: false)
 class LowlightEnhanceOptions {
@@ -4918,11 +5078,11 @@ class VideoDenoiserOptions {
   /// @nodoc
   const VideoDenoiserOptions({this.mode, this.level});
 
-  /// Video noise reduction mode.
+  /// Video noise reduction mode..
   @JsonKey(name: 'mode')
   final VideoDenoiserMode? mode;
 
-  /// Video noise reduction level.
+  /// Video noise reduction level..
   @JsonKey(name: 'level')
   final VideoDenoiserLevel? level;
 
@@ -4959,18 +5119,18 @@ extension VideoDenoiserModeExt on VideoDenoiserMode {
   }
 }
 
-/// The video noise reduction level.
+/// Video noise reduction level.
 @JsonEnum(alwaysCreate: true)
 enum VideoDenoiserLevel {
   /// 0: (Default) Promotes video quality during video noise reduction. balances performance consumption and video noise reduction quality. The performance consumption is moderate, the video noise reduction speed is moderate, and the overall video quality is optimal.
   @JsonValue(0)
   videoDenoiserLevelHighQuality,
 
-  /// 1: Promotes reducing performance consumption during video noise reduction. prioritizes reducing performance consumption over video noise reduction quality. The performance consumption is lower, and the video noise reduction speed is faster. To avoid a noticeable shadowing effect (shadows trailing behind moving objects) in the processed video, Agora recommends that you use this settinging when the camera is fixed.
+  /// 1: Promotes reducing performance consumption during video noise reduction. It prioritizes reducing performance consumption over video noise reduction quality. The performance consumption is lower, and the video noise reduction speed is faster. To avoid a noticeable shadowing effect (shadows trailing behind moving objects) in the processed video, Agora recommends that you use this setting when the camera is fixed.
   @JsonValue(1)
   videoDenoiserLevelFast,
 
-  /// 2: Enhanced video noise reduction. prioritizes video noise reduction quality over reducing performance consumption. The performance consumption is higher, the video noise reduction speed is slower, and the video noise reduction quality is better. If videoDenoiserLevelHighQuality is not enough for your video noise reduction needs, you can use this enumerator.
+  /// @nodoc
   @JsonValue(2)
   videoDenoiserLevelStrength,
 }
@@ -5031,7 +5191,7 @@ class VirtualBackgroundSource {
   @JsonKey(name: 'source')
   final String? source;
 
-  /// The degree of blurring applied to the custom background image. This parameter takes effect only when the type of the custom background image is backgroundBlur.
+  /// The degree of blurring applied to the custom background image.. This parameter takes effect only when the type of the custom background image is backgroundBlur.
   @JsonKey(name: 'blur_degree')
   final BackgroundBlurDegree? blurDegree;
 
@@ -5688,7 +5848,7 @@ class AudioRecordingConfiguration {
   @JsonKey(name: 'fileRecordingType')
   final AudioFileRecordingType? fileRecordingType;
 
-  /// Recording quality. See audiorecordingqualitytype. Note: This parameter applies to AAC files only.
+  /// Recording quality. See audiorecordingqualitytype. This parameter applies to AAC files only.
   @JsonKey(name: 'quality')
   final AudioRecordingQualityType? quality;
 
@@ -6013,7 +6173,7 @@ class ChannelMediaRelayConfiguration {
 
   /// The information of the target channel ChannelMediaInfo. It contains the following members: channelName : The name of the target channel. token : The token for joining the target channel. It is generated with the channelName and uid you set in destInfos.
   ///  If you have not enabled the App Certificate, set this parameter as the default value NULL, which means the SDK applies the App ID.
-  ///  If you have enabled the App Certificate, you must use the token generated with the channelName and uid. If the token of any target channel expires, the whole media relay stops; hence Agora recommends that you specify the same expiration time for the tokens of all the target channels. uid : The unique user ID to identify the relay stream in the target channel. The value ranges from 0 to (2 32 -1). To avoid user ID conflicts, this user ID must be different from any other user ID in the target channel. The default value is 0, which means the SDK generates a random user ID.
+  ///  If you have enabled the App Certificate, you must use the token generated with the channelName and uid. If the token of any target channel expires, the whole media relay stops; hence Agora recommends that you specify the same expiration time for the tokens of all the target channels. uid : The unique user ID to identify the relay stream in the target channel. The value ranges from 0 to (2 32 -1). To avoid user ID conflicts, this user ID must be different from any other user ID in the target channel. The default value is 0, which means the SDK generates a random UID.
   @JsonKey(name: 'destInfos')
   final List<ChannelMediaInfo>? destInfos;
 
@@ -6543,7 +6703,7 @@ class ScreenVideoParameters {
   @JsonKey(name: 'bitrate')
   final int? bitrate;
 
-  /// The content hint for screen sharing.
+  /// The content hint for screen sharing..
   @JsonKey(name: 'contentHint')
   final VideoContentHint? contentHint;
 

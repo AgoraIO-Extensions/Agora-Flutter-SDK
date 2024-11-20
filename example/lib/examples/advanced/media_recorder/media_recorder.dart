@@ -226,8 +226,8 @@ class _State extends State<MediaRecorderExample> {
               children: [
                 ElevatedButton(
                   onPressed: _isStartedMediaRecording
-                          ? _stopMediaRecording
-                          : _startMediaRecording,
+                      ? _stopMediaRecording
+                      : _startMediaRecording,
                   child: Text(
                       '${_isStartedMediaRecording ? 'Stop' : 'Start'} media recording'),
                 ),

@@ -9,10 +9,10 @@ part of 'agora_media_streaming_source.dart';
 // **************************************************************************
 
 InputSeiData _$InputSeiDataFromJson(Map<String, dynamic> json) => InputSeiData(
-      type: (json['type'] as num?)?.toInt(),
-      timestamp: (json['timestamp'] as num?)?.toInt(),
-      frameIndex: (json['frame_index'] as num?)?.toInt(),
-      dataSize: (json['data_size'] as num?)?.toInt(),
+      type: json['type'] as int?,
+      timestamp: json['timestamp'] as int?,
+      frameIndex: json['frame_index'] as int?,
+      dataSize: json['data_size'] as int?,
     );
 
 Map<String, dynamic> _$InputSeiDataToJson(InputSeiData instance) {
