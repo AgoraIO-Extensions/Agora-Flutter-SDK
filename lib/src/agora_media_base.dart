@@ -632,11 +632,11 @@ extension VideoPixelFormatExt on VideoPixelFormat {
 /// Video display modes.
 @JsonEnum(alwaysCreate: true)
 enum RenderModeType {
-  /// 1: Hidden mode. Uniformly scale the video until one of its dimension fits the boundary (zoomed to fit). One dimension of the video may have clipped contents.
+  /// 1: Hidden mode. The priority is to fill the window. Any excess video that does not match the window size will be cropped.
   @JsonValue(1)
   renderModeHidden,
 
-  /// 2: Fit mode. Uniformly scale the video until one of its dimension fits the boundary (zoomed to fit). Areas that are not filled due to disparity in the aspect ratio are filled with black.
+  /// 2: Fit mode. The priority is to ensure that all video content is displayed. Any areas of the window that are not filled due to the mismatch between video size and window size will be filled with black.
   @JsonValue(2)
   renderModeFit,
 
@@ -970,7 +970,9 @@ class VideoFrame {
   @JsonKey(name: 'matrix')
   final List<double>? matrix;
 
-  /// The alpha channel data output by using portrait segmentation algorithm. This data matches the size of the video frame, with each pixel value ranging from [0,255], where 0 represents the background and 255 represents the foreground (portrait). By setting this parameter, you can render the video background into various effects, such as transparent, solid color, image, video, etc. In custom video rendering scenarios, ensure that both the video frame and alphaBuffer are of the Full Range type; other types may cause abnormal alpha data rendering.
+  /// The alpha channel data output by using portrait segmentation algorithm. This data matches the size of the video frame, with each pixel value ranging from [0,255], where 0 represents the background and 255 represents the foreground (portrait). By setting this parameter, you can render the video background into various effects, such as transparent, solid color, image, video, etc.
+  ///  In custom video rendering scenarios, ensure that both the video frame and alphaBuffer are of the Full Range type; other types may cause abnormal alpha data rendering.
+  ///  Make sure that alphaBuffer is exactly the same size as the video frame (width × height), otherwise it may cause the app to crash.
   @JsonKey(name: 'alphaBuffer', ignore: true)
   final Uint8List? alphaBuffer;
 
@@ -978,7 +980,7 @@ class VideoFrame {
   @JsonKey(name: 'pixelBuffer', ignore: true)
   final Uint8List? pixelBuffer;
 
-  /// The meta information in the video frame. To use this parameter, please contact.
+  /// The meta information in the video frame. To use this parameter, contact.
   @VideoFrameMetaInfoConverter()
   @JsonKey(name: 'metaInfo')
   final VideoFrameMetaInfo? metaInfo;
@@ -1068,7 +1070,7 @@ class AudioPcmFrameSink {
   ///
   /// After registering the audio frame observer, the callback occurs every time the player receives an audio frame, reporting the detailed information of the audio frame.
   ///
-  /// * [frame] The audio frame information. See AudioPcmFrame.
+  /// * [frame] The audio frame information.. See AudioPcmFrame.
   final void Function(AudioPcmFrame frame)? onFrame;
 }
 
@@ -1393,7 +1395,7 @@ class AudioSpectrumObserver {
   ///
   /// After successfully calling registerAudioSpectrumObserver to implement the onRemoteAudioSpectrum callback in the AudioSpectrumObserver and calling enableAudioSpectrumMonitor to enable audio spectrum monitoring, the SDK will trigger the callback as the time interval you set to report the received remote audio data spectrum.
   ///
-  /// * [spectrums] The audio spectrum information of the remote user, see UserAudioSpectrumInfo. The number of arrays is the number of remote users monitored by the SDK. If the array is null, it means that no audio spectrum of remote users is detected.
+  /// * [spectrums] The audio spectrum information of the remote user. See UserAudioSpectrumInfo. The number of arrays is the number of remote users monitored by the SDK. If the array is null, it means that no audio spectrum of remote users is detected.
   /// * [spectrumNumber] The number of remote users.
   final void Function(
           List<UserAudioSpectrumInfo> spectrums, int spectrumNumber)?
@@ -1659,7 +1661,13 @@ class MediaRecorderConfiguration {
       this.containerFormat,
       this.streamType,
       this.maxDurationMs,
-      this.recorderInfoUpdateInterval});
+      this.recorderInfoUpdateInterval,
+      this.width,
+      this.height,
+      this.fps,
+      this.sampleRate,
+      this.channelNum,
+      this.videoSourceType});
 
   /// @nodoc
   @JsonKey(name: 'storagePath')
@@ -1680,6 +1688,30 @@ class MediaRecorderConfiguration {
   /// @nodoc
   @JsonKey(name: 'recorderInfoUpdateInterval')
   final int? recorderInfoUpdateInterval;
+
+  /// @nodoc
+  @JsonKey(name: 'width')
+  final int? width;
+
+  /// @nodoc
+  @JsonKey(name: 'height')
+  final int? height;
+
+  /// @nodoc
+  @JsonKey(name: 'fps')
+  final int? fps;
+
+  /// @nodoc
+  @JsonKey(name: 'sample_rate')
+  final int? sampleRate;
+
+  /// @nodoc
+  @JsonKey(name: 'channel_num')
+  final int? channelNum;
+
+  /// @nodoc
+  @JsonKey(name: 'videoSourceType')
+  final VideoSourceType? videoSourceType;
 
   /// @nodoc
   factory MediaRecorderConfiguration.fromJson(Map<String, dynamic> json) =>

@@ -274,6 +274,36 @@ class RtcEngineQueryCodecCapabilityJson {
 }
 
 @JsonSerializable(explicitToJson: true, includeIfNull: false)
+class RtcEngineGetFaceShapeBeautyOptionsJson {
+  const RtcEngineGetFaceShapeBeautyOptionsJson(this.options);
+
+  @JsonKey(name: 'options')
+  final FaceShapeBeautyOptions options;
+
+  factory RtcEngineGetFaceShapeBeautyOptionsJson.fromJson(
+          Map<String, dynamic> json) =>
+      _$RtcEngineGetFaceShapeBeautyOptionsJsonFromJson(json);
+
+  Map<String, dynamic> toJson() =>
+      _$RtcEngineGetFaceShapeBeautyOptionsJsonToJson(this);
+}
+
+@JsonSerializable(explicitToJson: true, includeIfNull: false)
+class RtcEngineGetFaceShapeAreaOptionsJson {
+  const RtcEngineGetFaceShapeAreaOptionsJson(this.options);
+
+  @JsonKey(name: 'options')
+  final FaceShapeAreaOptions options;
+
+  factory RtcEngineGetFaceShapeAreaOptionsJson.fromJson(
+          Map<String, dynamic> json) =>
+      _$RtcEngineGetFaceShapeAreaOptionsJsonFromJson(json);
+
+  Map<String, dynamic> toJson() =>
+      _$RtcEngineGetFaceShapeAreaOptionsJsonToJson(this);
+}
+
+@JsonSerializable(explicitToJson: true, includeIfNull: false)
 class RtcEngineUploadLogFileJson {
   const RtcEngineUploadLogFileJson(this.requestId);
 
@@ -354,6 +384,34 @@ class RtcEngineCreateDataStreamJson {
       _$RtcEngineCreateDataStreamJsonFromJson(json);
 
   Map<String, dynamic> toJson() => _$RtcEngineCreateDataStreamJsonToJson(this);
+}
+
+@JsonSerializable(explicitToJson: true, includeIfNull: false)
+class RtcEngineGetUserInfoByUserAccountJson {
+  const RtcEngineGetUserInfoByUserAccountJson(this.userInfo);
+
+  @JsonKey(name: 'userInfo')
+  final UserInfo userInfo;
+
+  factory RtcEngineGetUserInfoByUserAccountJson.fromJson(
+          Map<String, dynamic> json) =>
+      _$RtcEngineGetUserInfoByUserAccountJsonFromJson(json);
+
+  Map<String, dynamic> toJson() =>
+      _$RtcEngineGetUserInfoByUserAccountJsonToJson(this);
+}
+
+@JsonSerializable(explicitToJson: true, includeIfNull: false)
+class RtcEngineGetUserInfoByUidJson {
+  const RtcEngineGetUserInfoByUidJson(this.userInfo);
+
+  @JsonKey(name: 'userInfo')
+  final UserInfo userInfo;
+
+  factory RtcEngineGetUserInfoByUidJson.fromJson(Map<String, dynamic> json) =>
+      _$RtcEngineGetUserInfoByUidJsonFromJson(json);
+
+  Map<String, dynamic> toJson() => _$RtcEngineGetUserInfoByUidJsonToJson(this);
 }
 
 @JsonSerializable(explicitToJson: true, includeIfNull: false)
