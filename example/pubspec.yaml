@@ -67,6 +67,9 @@ flutter:
     - assets/ding.mp3
     - assets/gif.gif
     - assets/jpg.jpg
+    - assets/lengbai32
+    - assets/nenbai32
+    - assets/yuansheng32
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.
