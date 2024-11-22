@@ -1,4 +1,6 @@
 // ignore_for_file: unnecessary_brace_in_string_interps
+import 'dart:async';
+import 'dart:io';
 
 import 'package:agora_rtc_engine/agora_rtc_engine.dart';
 import 'package:agora_rtc_engine_example/config/agora.config.dart' as config;
@@ -6,6 +8,9 @@ import 'package:agora_rtc_engine_example/components/example_actions_widget.dart'
 import 'package:agora_rtc_engine_example/components/log_sink.dart';
 import 'package:agora_rtc_engine_example/components/remote_video_views_widget.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart' show ByteData, rootBundle;
+import 'package:path_provider/path_provider.dart';
+import 'package:path/path.dart' as path;
 
 /// SetBeautyEffect Example
 class SetBeautyEffect extends StatefulWidget {
@@ -33,6 +38,54 @@ class _State extends State<SetBeautyEffect> with KeepRemoteVideoViewsMixin {
     LighteningContrastLevel.lighteningContrastNormal,
     LighteningContrastLevel.lighteningContrastHigh,
   ];
+
+  final List<FaceShapeBeautyStyle> _faceShapeBeautyStyles = [
+    FaceShapeBeautyStyle.faceShapeBeautyStyleFemale,
+    FaceShapeBeautyStyle.faceShapeBeautyStyleMale,
+  ];
+  FaceShapeBeautyStyle _selecctedFaceShapeBeautyStyle =
+      FaceShapeBeautyStyle.faceShapeBeautyStyleFemale;
+  bool _isFaceShapeBeautyEnabled = false;
+  int _faceShapeBeautyStyleIntensity = 0; // 0 - 100
+
+  final List<FaceShapeArea> _faceShapeAreas = [
+    FaceShapeArea.faceShapeAreaHeadscale,
+    /* 0 - 100 */
+    FaceShapeArea.faceShapeAreaForehead,
+    /* -100 - 100 */
+    FaceShapeArea.faceShapeAreaFacecontour,
+    /* 0 - 100 */
+    FaceShapeArea.faceShapeAreaFacelength,
+    /* -100 - 100 */
+    FaceShapeArea.faceShapeAreaFacewidth,
+    /* 0 - 100 */
+    FaceShapeArea.faceShapeAreaCheekbone,
+    /* 0 - 100 */
+    FaceShapeArea.faceShapeAreaCheek,
+    /* 0 - 100 */
+    FaceShapeArea.faceShapeAreaChin,
+    /* -100 - 100 */
+    FaceShapeArea.faceShapeAreaEyescale,
+    FaceShapeArea.faceShapeAreaNoselength,
+    /* -100 - 100 */
+    FaceShapeArea.faceShapeAreaNosewidth,
+    /* -100 - 100 */
+    FaceShapeArea.faceShapeAreaMouthscale, /* -100 - 100 */
+  ];
+
+  FaceShapeArea _selectedFaceShapeArea = FaceShapeArea.faceShapeAreaHeadscale;
+  int _faceShapeAreaIntensity = 0; // 0 - 100 or -100 -
+
+  static const String UNSET_FILTER_ASSET = "assets/none";
+  final List<String> _filterAssets = [
+    UNSET_FILTER_ASSET,
+    "assets/lengbai32",
+    "assets/nenbai32",
+    "assets/yuansheng32",
+  ];
+
+  String _selectedFilterAsset = UNSET_FILTER_ASSET;
+  double _filterStrength = 0.5; /* 0.0-1.0 */
 
   @override
   void initState() {
@@ -129,6 +182,11 @@ class _State extends State<SetBeautyEffect> with KeepRemoteVideoViewsMixin {
   }
 
   _leaveChannel() async {
+    await _engine.setFaceShapeBeautyOptions(
+        enabled: false,
+        options: const FaceShapeBeautyOptions(
+            shapeStyle: FaceShapeBeautyStyle.faceShapeBeautyStyleFemale,
+            styleIntensity: 0));
     await _engine.setBeautyEffectOptions(
       enabled: false,
       options: BeautyOptions(
@@ -149,18 +207,52 @@ class _State extends State<SetBeautyEffect> with KeepRemoteVideoViewsMixin {
       _sharpnessLevel = 0.0;
       _selectedLighteningContrastLevel =
           LighteningContrastLevel.lighteningContrastHigh;
+
+      _isFaceShapeBeautyEnabled = false;
+      _faceShapeBeautyStyleIntensity = 0;
+      _faceShapeAreaIntensity = 0;
     });
   }
 
-  Widget _buildSpatialAudioOptions() {
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.start,
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Column(
-          mainAxisAlignment: MainAxisAlignment.start,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
+  Future<String> _loadAssetsIntoDocumentDirectory(String assetPath) async {
+    print('load asset file path: $assetPath');
+
+    try {
+      final ByteData data = await rootBundle.load(assetPath);
+
+      print('load asset result: ${data.lengthInBytes}');
+      List<int> bytes =
+          data.buffer.asUint8List(data.offsetInBytes, data.lengthInBytes);
+
+      Directory appDocDir = Platform.isAndroid
+          ? (await getExternalStorageDirectory())!
+          : await getApplicationDocumentsDirectory();
+
+      String appDocPath = path.join(appDocDir.path, path.basename(assetPath)+'.cube');
+
+      print("target filter asset file path: $appDocPath");
+
+      final file = File(appDocPath);
+      if (!(await file.exists())) {
+        await file.create(recursive: true);
+        await file.writeAsBytes(bytes);
+      }
+
+      return appDocPath;
+    } catch (e) {
+      print('load asset error: $e');
+      return "";
+    }
+  }
+
+  Widget _buildBeautyEffectOptions() {
+    return SingleChildScrollView(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          // Beauty Options
+          Row(children: [
             const Text('LighteningContrastLevels: '),
             DropdownButton<LighteningContrastLevel>(
                 items: _lighteningContrastLevels.map((v) {
@@ -189,126 +281,309 @@ class _State extends State<SetBeautyEffect> with KeepRemoteVideoViewsMixin {
 
                   setState(() {});
                 }),
-          ],
-        ),
-        Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          mainAxisAlignment: MainAxisAlignment.start,
-          children: [
-            const Text('Lightening Level:'),
+          ]),
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: [
+              const Text('Lightening Level:'),
+              Slider(
+                value: _lighteningLevel,
+                min: 0,
+                max: 1,
+                divisions: 10,
+                label: 'Lightening Level',
+                onChanged: (double value) async {
+                  _lighteningLevel = value;
+
+                  await _engine.setBeautyEffectOptions(
+                    enabled: true,
+                    options: BeautyOptions(
+                      lighteningContrastLevel: _selectedLighteningContrastLevel,
+                      lighteningLevel: _lighteningLevel,
+                      smoothnessLevel: _smoothnessLevel,
+                      rednessLevel: _rednessLevel,
+                      sharpnessLevel: _sharpnessLevel,
+                    ),
+                  );
+
+                  setState(() {});
+                },
+              )
+            ],
+          ),
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: [
+              const Text('Smoothness Level:'),
+              Slider(
+                value: _smoothnessLevel,
+                min: 0,
+                max: 1,
+                divisions: 10,
+                label: 'Smoothness Level',
+                onChanged: (double value) async {
+                  _smoothnessLevel = value;
+
+                  await _engine.setBeautyEffectOptions(
+                    enabled: true,
+                    options: BeautyOptions(
+                      lighteningContrastLevel: _selectedLighteningContrastLevel,
+                      lighteningLevel: _lighteningLevel,
+                      smoothnessLevel: _smoothnessLevel,
+                      rednessLevel: _rednessLevel,
+                      sharpnessLevel: _sharpnessLevel,
+                    ),
+                  );
+
+                  setState(() {});
+                },
+              )
+            ],
+          ),
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: [
+              const Text('Redness Level:'),
+              Slider(
+                value: _rednessLevel,
+                min: 0,
+                max: 1,
+                divisions: 10,
+                label: 'Redness Level',
+                onChanged: (double value) async {
+                  _rednessLevel = value;
+                  await _engine.setBeautyEffectOptions(
+                    enabled: true,
+                    options: BeautyOptions(
+                      lighteningContrastLevel: _selectedLighteningContrastLevel,
+                      lighteningLevel: _lighteningLevel,
+                      smoothnessLevel: _smoothnessLevel,
+                      rednessLevel: _rednessLevel,
+                      sharpnessLevel: _sharpnessLevel,
+                    ),
+                  );
+
+                  setState(() {});
+                },
+              )
+            ],
+          ),
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: [
+              const Text('Sharpness Level:'),
+              Slider(
+                value: _sharpnessLevel,
+                min: 0,
+                max: 1,
+                divisions: 10,
+                label: 'Sharpness Level',
+                onChanged: (double value) async {
+                  _sharpnessLevel = value;
+                  await _engine.setBeautyEffectOptions(
+                    enabled: true,
+                    options: BeautyOptions(
+                      lighteningContrastLevel: _selectedLighteningContrastLevel,
+                      lighteningLevel: _lighteningLevel,
+                      smoothnessLevel: _smoothnessLevel,
+                      rednessLevel: _rednessLevel,
+                      sharpnessLevel: _sharpnessLevel,
+                    ),
+                  );
+                  setState(() {});
+                },
+              )
+            ],
+          ),
+          SizedBox(height: 20),
+
+          // Filter Options
+          Row(
+            children: [
+              const Text('FilterOptions: '),
+              DropdownButton<String>(
+                value: _selectedFilterAsset,
+                items: _filterAssets.map((v) {
+                  return DropdownMenuItem(
+                    value: v,
+                    child: Text(
+                      path.basename(v), 
+                      style: const TextStyle(fontSize: 13),
+                    ),
+                  );
+                }).toList(),
+                onChanged: (v) async {
+                  print('selected filter asset: $v');
+                  // return if the same filter asset is selected
+                  if (v == _selectedFilterAsset) return;
+
+                  bool isFilterEnabled = v != UNSET_FILTER_ASSET;
+                  String path = isFilterEnabled
+                      ? await _loadAssetsIntoDocumentDirectory(v!)
+                      : "";
+                  print('selected filter asset: $path');
+                  await _engine.setFilterEffectOptions(
+                      enabled: isFilterEnabled,
+                      options: FilterEffectOptions(
+                          path: path, strength: _filterStrength));
+                  print('selected filter asset: $path');
+
+                  _selectedFilterAsset = v!;
+                  setState(() {});
+                },
+              ),
+            ],
+          ),
+          if (_selectedFilterAsset != UNSET_FILTER_ASSET) ...[
+            const Text('FilterStrength: '),
             Slider(
-              value: _lighteningLevel,
+              value: _filterStrength,
               min: 0,
               max: 1,
               divisions: 10,
-              label: 'Lightening Level',
+              label: 'FilterStrength',
               onChanged: (double value) async {
-                _lighteningLevel = value;
+                if (_filterStrength == value) return;
 
-                await _engine.setBeautyEffectOptions(
-                  enabled: true,
-                  options: BeautyOptions(
-                    lighteningContrastLevel: _selectedLighteningContrastLevel,
-                    lighteningLevel: _lighteningLevel,
-                    smoothnessLevel: _smoothnessLevel,
-                    rednessLevel: _rednessLevel,
-                    sharpnessLevel: _sharpnessLevel,
-                  ),
-                );
+                _filterStrength = value;
+
+                await _engine.setFilterEffectOptions(
+                    enabled: _selectedFilterAsset != UNSET_FILTER_ASSET,
+                    options: FilterEffectOptions(
+                        path: _selectedFilterAsset == UNSET_FILTER_ASSET
+                            ? ""
+                            : await _loadAssetsIntoDocumentDirectory(
+                                _selectedFilterAsset),
+                        strength: _filterStrength));
 
                 setState(() {});
               },
-            )
+            ),
           ],
-        ),
-        Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          mainAxisAlignment: MainAxisAlignment.start,
-          children: [
-            const Text('Smoothness Level:'),
+          SizedBox(height: 20),
+
+          // FaceShapeBeautyOptions
+          Row(
+            children: [
+              const Text('FaceShapeBeautyOptions: '),
+              Checkbox(
+                  value: _isFaceShapeBeautyEnabled,
+                  onChanged: (v) async {
+                    _isFaceShapeBeautyEnabled = v!;
+
+                    await _engine.setFaceShapeBeautyOptions(
+                      enabled: v,
+                      options: FaceShapeBeautyOptions(
+                        shapeStyle: _selecctedFaceShapeBeautyStyle,
+                        styleIntensity: _faceShapeBeautyStyleIntensity,
+                      ),
+                    );
+
+                    setState(() {});
+                  }),
+            ],
+          ),
+          if (_isFaceShapeBeautyEnabled) ...[
+            SizedBox(height: 20),
+            Row(
+              children: [
+                const Text('Style: '),
+                DropdownButton<FaceShapeBeautyStyle>(
+                  items: _faceShapeBeautyStyles.map((v) {
+                    return DropdownMenuItem(
+                      value: v,
+                      child: Text(
+                        v.toString().split('faceShapeBeautyStyle')[1],
+                        style: const TextStyle(fontSize: 13),
+                      ),
+                    );
+                  }).toList(),
+                  value: _selecctedFaceShapeBeautyStyle,
+                  onChanged: (v) async {
+                    await _engine.setFaceShapeBeautyOptions(
+                      enabled: _isFaceShapeBeautyEnabled,
+                      options: FaceShapeBeautyOptions(
+                        shapeStyle: v!,
+                        styleIntensity: _faceShapeBeautyStyleIntensity,
+                      ),
+                    );
+                    setState(() {
+                      _selecctedFaceShapeBeautyStyle = v;
+                    });
+                  },
+                ),
+              ],
+            ),
             Slider(
-              value: _smoothnessLevel,
+              value: _faceShapeBeautyStyleIntensity.toDouble(),
               min: 0,
-              max: 1,
+              max: 100,
               divisions: 10,
-              label: 'Smoothness Level',
+              label: _faceShapeBeautyStyleIntensity.toString(),
               onChanged: (double value) async {
-                _smoothnessLevel = value;
-
-                await _engine.setBeautyEffectOptions(
-                  enabled: true,
-                  options: BeautyOptions(
-                    lighteningContrastLevel: _selectedLighteningContrastLevel,
-                    lighteningLevel: _lighteningLevel,
-                    smoothnessLevel: _smoothnessLevel,
-                    rednessLevel: _rednessLevel,
-                    sharpnessLevel: _sharpnessLevel,
+                await _engine.setFaceShapeBeautyOptions(
+                  enabled: _isFaceShapeBeautyEnabled,
+                  options: FaceShapeBeautyOptions(
+                    shapeStyle: _selecctedFaceShapeBeautyStyle,
+                    styleIntensity: value.toInt(),
                   ),
                 );
 
-                setState(() {});
+                setState(() {
+                  _faceShapeBeautyStyleIntensity = value.toInt();
+                });
               },
-            )
-          ],
-        ),
-        Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          mainAxisAlignment: MainAxisAlignment.start,
-          children: [
-            const Text('Redness Level:'),
+            ),
+            Row(children: [
+              const Text('Area: '),
+              DropdownButton<FaceShapeArea>(
+                items: _faceShapeAreas.map((v) {
+                  return DropdownMenuItem(
+                    value: v,
+                    child: Text(
+                      v.toString().split('faceShapeArea')[1],
+                      style: const TextStyle(fontSize: 13),
+                    ),
+                  );
+                }).toList(),
+                value: _selectedFaceShapeArea,
+                onChanged: (v) async {
+                  await _engine.setFaceShapeAreaOptions(
+                      options: FaceShapeAreaOptions(
+                    shapeArea: v!,
+                    shapeIntensity: _faceShapeAreaIntensity,
+                  ));
+                  setState(() {
+                    _selectedFaceShapeArea = v;
+                  });
+                },
+              ),
+            ]),
             Slider(
-              value: _rednessLevel,
+              value: _faceShapeAreaIntensity.toDouble(),
               min: 0,
-              max: 1,
+              max: 100,
               divisions: 10,
-              label: 'Redness Level',
+              label: _faceShapeAreaIntensity.toString(),
               onChanged: (double value) async {
-                _rednessLevel = value;
-                await _engine.setBeautyEffectOptions(
-                  enabled: true,
-                  options: BeautyOptions(
-                    lighteningContrastLevel: _selectedLighteningContrastLevel,
-                    lighteningLevel: _lighteningLevel,
-                    smoothnessLevel: _smoothnessLevel,
-                    rednessLevel: _rednessLevel,
-                    sharpnessLevel: _sharpnessLevel,
-                  ),
-                );
+                await _engine.setFaceShapeAreaOptions(
+                    options: FaceShapeAreaOptions(
+                  shapeArea: _selectedFaceShapeArea,
+                  shapeIntensity: value.toInt(),
+                ));
 
-                setState(() {});
+                setState(() {
+                  _faceShapeAreaIntensity = value.toInt();
+                });
               },
             )
           ],
-        ),
-        Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          mainAxisAlignment: MainAxisAlignment.start,
-          children: [
-            const Text('Sharpness Level:'),
-            Slider(
-              value: _sharpnessLevel,
-              min: 0,
-              max: 1,
-              divisions: 10,
-              label: 'Sharpness Level',
-              onChanged: (double value) async {
-                _sharpnessLevel = value;
-                await _engine.setBeautyEffectOptions(
-                  enabled: true,
-                  options: BeautyOptions(
-                    lighteningContrastLevel: _selectedLighteningContrastLevel,
-                    lighteningLevel: _lighteningLevel,
-                    smoothnessLevel: _smoothnessLevel,
-                    rednessLevel: _rednessLevel,
-                    sharpnessLevel: _sharpnessLevel,
-                  ),
-                );
-                setState(() {});
-              },
-            )
-          ],
-        ),
-      ],
+        ],
+      ),
     );
   }
 
@@ -330,7 +605,7 @@ class _State extends State<SetBeautyEffect> with KeepRemoteVideoViewsMixin {
             )
           ],
         ),
-        if (isJoined) _buildSpatialAudioOptions(),
+        if (isJoined) _buildBeautyEffectOptions(),
       ],
     );
   }

@@ -414,6 +414,13 @@ MediaRecorderConfiguration _$MediaRecorderConfigurationFromJson(
       maxDurationMs: (json['maxDurationMs'] as num?)?.toInt(),
       recorderInfoUpdateInterval:
           (json['recorderInfoUpdateInterval'] as num?)?.toInt(),
+      width: (json['width'] as num?)?.toInt(),
+      height: (json['height'] as num?)?.toInt(),
+      fps: (json['fps'] as num?)?.toInt(),
+      sampleRate: (json['sample_rate'] as num?)?.toInt(),
+      channelNum: (json['channel_num'] as num?)?.toInt(),
+      videoSourceType: $enumDecodeNullable(
+          _$VideoSourceTypeEnumMap, json['videoSourceType']),
     );
 
 Map<String, dynamic> _$MediaRecorderConfigurationToJson(
@@ -434,6 +441,13 @@ Map<String, dynamic> _$MediaRecorderConfigurationToJson(
   writeNotNull('maxDurationMs', instance.maxDurationMs);
   writeNotNull(
       'recorderInfoUpdateInterval', instance.recorderInfoUpdateInterval);
+  writeNotNull('width', instance.width);
+  writeNotNull('height', instance.height);
+  writeNotNull('fps', instance.fps);
+  writeNotNull('sample_rate', instance.sampleRate);
+  writeNotNull('channel_num', instance.channelNum);
+  writeNotNull(
+      'videoSourceType', _$VideoSourceTypeEnumMap[instance.videoSourceType]);
   return val;
 }
 
@@ -446,27 +460,6 @@ const _$MediaRecorderStreamTypeEnumMap = {
   MediaRecorderStreamType.streamTypeVideo: 2,
   MediaRecorderStreamType.streamTypeBoth: 3,
 };
-
-RecorderInfo _$RecorderInfoFromJson(Map<String, dynamic> json) => RecorderInfo(
-      fileName: json['fileName'] as String?,
-      durationMs: (json['durationMs'] as num?)?.toInt(),
-      fileSize: (json['fileSize'] as num?)?.toInt(),
-    );
-
-Map<String, dynamic> _$RecorderInfoToJson(RecorderInfo instance) {
-  final val = <String, dynamic>{};
-
-  void writeNotNull(String key, dynamic value) {
-    if (value != null) {
-      val[key] = value;
-    }
-  }
-
-  writeNotNull('fileName', instance.fileName);
-  writeNotNull('durationMs', instance.durationMs);
-  writeNotNull('fileSize', instance.fileSize);
-  return val;
-}
 
 const _$VideoSourceTypeEnumMap = {
   VideoSourceType.videoSourceCameraPrimary: 0,
@@ -489,6 +482,27 @@ const _$VideoSourceTypeEnumMap = {
   VideoSourceType.videoSourceSpeechDriven: 15,
   VideoSourceType.videoSourceUnknown: 100,
 };
+
+RecorderInfo _$RecorderInfoFromJson(Map<String, dynamic> json) => RecorderInfo(
+      fileName: json['fileName'] as String?,
+      durationMs: (json['durationMs'] as num?)?.toInt(),
+      fileSize: (json['fileSize'] as num?)?.toInt(),
+    );
+
+Map<String, dynamic> _$RecorderInfoToJson(RecorderInfo instance) {
+  final val = <String, dynamic>{};
+
+  void writeNotNull(String key, dynamic value) {
+    if (value != null) {
+      val[key] = value;
+    }
+  }
+
+  writeNotNull('fileName', instance.fileName);
+  writeNotNull('durationMs', instance.durationMs);
+  writeNotNull('fileSize', instance.fileSize);
+  return val;
+}
 
 const _$AudioRouteEnumMap = {
   AudioRoute.routeDefault: -1,

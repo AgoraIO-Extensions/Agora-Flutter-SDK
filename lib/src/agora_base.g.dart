@@ -1243,7 +1243,7 @@ Map<String, dynamic> _$WlAccStatsToJson(WlAccStats instance) {
 VideoCanvas _$VideoCanvasFromJson(Map<String, dynamic> json) => VideoCanvas(
       uid: (json['uid'] as num?)?.toInt(),
       subviewUid: (json['subviewUid'] as num?)?.toInt(),
-      view: (json['view'] as num?)?.toInt(),
+      view: (readIntPtr(json, 'view') as num?)?.toInt(),
       backgroundColor: (json['backgroundColor'] as num?)?.toInt(),
       renderMode:
           $enumDecodeNullable(_$RenderModeTypeEnumMap, json['renderMode']),
@@ -1338,6 +1338,93 @@ const _$LighteningContrastLevelEnumMap = {
   LighteningContrastLevel.lighteningContrastNormal: 1,
   LighteningContrastLevel.lighteningContrastHigh: 2,
 };
+
+FaceShapeAreaOptions _$FaceShapeAreaOptionsFromJson(
+        Map<String, dynamic> json) =>
+    FaceShapeAreaOptions(
+      shapeArea: $enumDecodeNullable(_$FaceShapeAreaEnumMap, json['shapeArea']),
+      shapeIntensity: (json['shapeIntensity'] as num?)?.toInt(),
+    );
+
+Map<String, dynamic> _$FaceShapeAreaOptionsToJson(
+    FaceShapeAreaOptions instance) {
+  final val = <String, dynamic>{};
+
+  void writeNotNull(String key, dynamic value) {
+    if (value != null) {
+      val[key] = value;
+    }
+  }
+
+  writeNotNull('shapeArea', _$FaceShapeAreaEnumMap[instance.shapeArea]);
+  writeNotNull('shapeIntensity', instance.shapeIntensity);
+  return val;
+}
+
+const _$FaceShapeAreaEnumMap = {
+  FaceShapeArea.faceShapeAreaNone: -1,
+  FaceShapeArea.faceShapeAreaHeadscale: 0,
+  FaceShapeArea.faceShapeAreaForehead: 1,
+  FaceShapeArea.faceShapeAreaFacecontour: 2,
+  FaceShapeArea.faceShapeAreaFacelength: 3,
+  FaceShapeArea.faceShapeAreaFacewidth: 4,
+  FaceShapeArea.faceShapeAreaCheekbone: 5,
+  FaceShapeArea.faceShapeAreaCheek: 6,
+  FaceShapeArea.faceShapeAreaChin: 7,
+  FaceShapeArea.faceShapeAreaEyescale: 8,
+  FaceShapeArea.faceShapeAreaNoselength: 9,
+  FaceShapeArea.faceShapeAreaNosewidth: 10,
+  FaceShapeArea.faceShapeAreaMouthscale: 11,
+};
+
+FaceShapeBeautyOptions _$FaceShapeBeautyOptionsFromJson(
+        Map<String, dynamic> json) =>
+    FaceShapeBeautyOptions(
+      shapeStyle: $enumDecodeNullable(
+          _$FaceShapeBeautyStyleEnumMap, json['shapeStyle']),
+      styleIntensity: (json['styleIntensity'] as num?)?.toInt(),
+    );
+
+Map<String, dynamic> _$FaceShapeBeautyOptionsToJson(
+    FaceShapeBeautyOptions instance) {
+  final val = <String, dynamic>{};
+
+  void writeNotNull(String key, dynamic value) {
+    if (value != null) {
+      val[key] = value;
+    }
+  }
+
+  writeNotNull(
+      'shapeStyle', _$FaceShapeBeautyStyleEnumMap[instance.shapeStyle]);
+  writeNotNull('styleIntensity', instance.styleIntensity);
+  return val;
+}
+
+const _$FaceShapeBeautyStyleEnumMap = {
+  FaceShapeBeautyStyle.faceShapeBeautyStyleFemale: 0,
+  FaceShapeBeautyStyle.faceShapeBeautyStyleMale: 1,
+};
+
+FilterEffectOptions _$FilterEffectOptionsFromJson(Map<String, dynamic> json) =>
+    FilterEffectOptions(
+      path: json['path'] as String?,
+      strength: (json['strength'] as num?)?.toDouble(),
+    );
+
+Map<String, dynamic> _$FilterEffectOptionsToJson(FilterEffectOptions instance) {
+  final val = <String, dynamic>{};
+
+  void writeNotNull(String key, dynamic value) {
+    if (value != null) {
+      val[key] = value;
+    }
+  }
+
+  writeNotNull('path', instance.path);
+  writeNotNull('strength', instance.strength);
+  return val;
+}
 
 LowlightEnhanceOptions _$LowlightEnhanceOptionsFromJson(
         Map<String, dynamic> json) =>
@@ -1524,9 +1611,10 @@ ScreenCaptureParameters _$ScreenCaptureParametersFromJson(
       bitrate: (json['bitrate'] as num?)?.toInt(),
       captureMouseCursor: json['captureMouseCursor'] as bool?,
       windowFocus: json['windowFocus'] as bool?,
-      excludeWindowList: (json['excludeWindowList'] as List<dynamic>?)
-          ?.map((e) => (e as num).toInt())
-          .toList(),
+      excludeWindowList:
+          (readIntPtrList(json, 'excludeWindowList') as List<dynamic>?)
+              ?.map((e) => (e as num).toInt())
+              .toList(),
       excludeWindowCount: (json['excludeWindowCount'] as num?)?.toInt(),
       highLightWidth: (json['highLightWidth'] as num?)?.toInt(),
       highLightColor: (json['highLightColor'] as num?)?.toInt(),
@@ -1830,7 +1918,7 @@ const _$EncryptionModeEnumMap = {
 EchoTestConfiguration _$EchoTestConfigurationFromJson(
         Map<String, dynamic> json) =>
     EchoTestConfiguration(
-      view: (json['view'] as num?)?.toInt(),
+      view: (readIntPtr(json, 'view') as num?)?.toInt(),
       enableAudio: json['enableAudio'] as bool?,
       enableVideo: json['enableVideo'] as bool?,
       token: json['token'] as String?,
@@ -2098,6 +2186,7 @@ RecorderStreamInfo _$RecorderStreamInfoFromJson(Map<String, dynamic> json) =>
     RecorderStreamInfo(
       channelId: json['channelId'] as String?,
       uid: (json['uid'] as num?)?.toInt(),
+      type: $enumDecodeNullable(_$RecorderStreamTypeEnumMap, json['type']),
     );
 
 Map<String, dynamic> _$RecorderStreamInfoToJson(RecorderStreamInfo instance) {
@@ -2111,8 +2200,14 @@ Map<String, dynamic> _$RecorderStreamInfoToJson(RecorderStreamInfo instance) {
 
   writeNotNull('channelId', instance.channelId);
   writeNotNull('uid', instance.uid);
+  writeNotNull('type', _$RecorderStreamTypeEnumMap[instance.type]);
   return val;
 }
+
+const _$RecorderStreamTypeEnumMap = {
+  RecorderStreamType.rtc: 0,
+  RecorderStreamType.preview: 1,
+};
 
 SpatialAudioParams _$SpatialAudioParamsFromJson(Map<String, dynamic> json) =>
     SpatialAudioParams(
@@ -2379,6 +2474,11 @@ const _$H264PacketizeModeEnumMap = {
 
 const _$MaxUserAccountLengthTypeEnumMap = {
   MaxUserAccountLengthType.maxUserAccountLength: 256,
+};
+
+const _$CameraFormatTypeEnumMap = {
+  CameraFormatType.cameraFormatNv12: 0,
+  CameraFormatType.cameraFormatBgra: 1,
 };
 
 const _$CodecCapMaskEnumMap = {

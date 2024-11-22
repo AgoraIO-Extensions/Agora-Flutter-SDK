@@ -457,6 +457,42 @@ extension BeautyOptionsBufferExt on BeautyOptions {
   }
 }
 
+extension FaceShapeAreaOptionsBufferExt on FaceShapeAreaOptions {
+  FaceShapeAreaOptions fillBuffers(List<Uint8List> bufferList) {
+    if (bufferList.isEmpty) return this;
+    return this;
+  }
+
+  List<Uint8List> collectBufferList() {
+    final bufferList = <Uint8List>[];
+    return bufferList;
+  }
+}
+
+extension FaceShapeBeautyOptionsBufferExt on FaceShapeBeautyOptions {
+  FaceShapeBeautyOptions fillBuffers(List<Uint8List> bufferList) {
+    if (bufferList.isEmpty) return this;
+    return this;
+  }
+
+  List<Uint8List> collectBufferList() {
+    final bufferList = <Uint8List>[];
+    return bufferList;
+  }
+}
+
+extension FilterEffectOptionsBufferExt on FilterEffectOptions {
+  FilterEffectOptions fillBuffers(List<Uint8List> bufferList) {
+    if (bufferList.isEmpty) return this;
+    return this;
+  }
+
+  List<Uint8List> collectBufferList() {
+    final bufferList = <Uint8List>[];
+    return bufferList;
+  }
+}
+
 extension LowlightEnhanceOptionsBufferExt on LowlightEnhanceOptions {
   LowlightEnhanceOptions fillBuffers(List<Uint8List> bufferList) {
     if (bufferList.isEmpty) return this;
