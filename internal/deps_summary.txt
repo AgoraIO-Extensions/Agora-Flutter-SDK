@@ -15,4 +15,4 @@ Native:
 implementation 'io.agora.rtc:agora-special-full:4.3.1.201'
 implementation 'io.agora.rtc:full-screen-sharing:4.3.1.201'
 pod 'AgoraRtcEngine_Special_iOS', '4.3.1.201'
-pod 'AgoraRtcEngine_macOS', '4.3.1'
+pod 'AgoraRtcEngine_Special_macOS', '4.3.1.201'
