@@ -471,7 +471,6 @@ class _State extends State<SetBeautyEffect> with KeepRemoteVideoViewsMixin {
             children: [
               const Text('FaceShapeBeautyOptions: '),
               Checkbox(
-                  semanticLabel: "Enable",
                   value: _isFaceShapeBeautyEnabled,
                   onChanged: (v) async {
                     _isFaceShapeBeautyEnabled = v!;
