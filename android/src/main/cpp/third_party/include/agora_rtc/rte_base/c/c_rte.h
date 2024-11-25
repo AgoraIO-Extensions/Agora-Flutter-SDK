@@ -93,7 +93,7 @@ AGORA_RTE_API_C void RteConfigGetJsonParameter(RteConfig *config,
                                               RteError *err);
 
 AGORA_RTE_API_C Rte RteCreate(RteInitialConfig *config, RteError *err);
-AGORA_RTE_API_C void RteDestroy(Rte *self, RteError *err);
+AGORA_RTE_API_C bool RteDestroy(Rte *self, RteError *err);
 
 AGORA_RTE_API_C bool RteInitMediaEngine(Rte *self,
                                        void (*cb)(Rte *self, void *cb_data,

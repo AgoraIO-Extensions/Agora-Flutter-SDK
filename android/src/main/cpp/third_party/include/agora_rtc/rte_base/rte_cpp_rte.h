@@ -269,7 +269,7 @@ class Rte {
    * @param config Rte object initialization configuration object.
    */
   explicit Rte(InitialConfig *config = nullptr): c_rte(::RteCreate(config != nullptr ? &config->c_rte_init_cfg : nullptr, nullptr)) {}
-  ~Rte(){RteDestroy(&c_rte, nullptr);};
+  ~Rte(){Destroy();};
 
   /**
    * Construct a new Rte object.
@@ -373,6 +373,20 @@ class Rte {
    */
   bool SetConfigs(Config *config, Error *err = nullptr){
     return RteSetConfigs(&c_rte, config != nullptr ? config->get_underlying_impl(): nullptr, err != nullptr ? err->get_underlying_impl() : nullptr);
+  }
+
+  /**
+   * Destroy the Rte object. The operation will release all resources used by the Rte object.
+   * @since v4.4.0
+   * @param err Possible return values for ErrorCode:
+   *  - kRteOk: Success
+   *  - kRteErrorInvalidOperation: The corresponding internal Rte object has been destroyed or is invalid.
+   * @return bool Returns the result of destroying the Rte object.
+   *  - true: Successfully destroyed.
+   *  - false: Failed to destroy.
+   */
+  bool Destroy(Error *err = nullptr){
+    return RteDestroy(&c_rte, err != nullptr ? err->get_underlying_impl() : nullptr);
   }
 
  private:
