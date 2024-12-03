@@ -40,7 +40,7 @@ class MediaPlayerSourceObserver {
   ///
   /// After calling the seek method, the SDK triggers the callback to report the results of the seek operation.
   ///
-  /// * [eventCode] The player events. See MediaPlayerEvent.
+  /// * [eventCode] The player event. See MediaPlayerEvent.
   /// * [elapsedTime] The time (ms) when the event occurs.
   /// * [message] Information about the event.
   final void Function(

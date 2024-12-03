@@ -134,22 +134,22 @@ extension VideoSourceTypeExt on VideoSourceType {
   }
 }
 
-/// @nodoc
+/// The audio source type.
 @JsonEnum(alwaysCreate: true)
 enum AudioSourceType {
-  /// @nodoc
+  /// 0: (Default) Microphone.
   @JsonValue(0)
   audioSourceMicrophone,
 
-  /// @nodoc
+  /// 1: Custom audio stream.
   @JsonValue(1)
   audioSourceCustom,
 
-  /// @nodoc
+  /// 2: Media player.
   @JsonValue(2)
   audioSourceMediaPlayer,
 
-  /// @nodoc
+  /// 3: System audio stream captured during screen sharing.
   @JsonValue(3)
   audioSourceLoopbackRecording,
 
@@ -157,15 +157,15 @@ enum AudioSourceType {
   @JsonValue(4)
   audioSourceMixedStream,
 
-  /// @nodoc
+  /// 5: Audio stream from a specified remote user.
   @JsonValue(5)
   audioSourceRemoteUser,
 
-  /// @nodoc
+  /// 6: Mixed audio streams from all users in the current channel.
   @JsonValue(6)
   audioSourceRemoteChannel,
 
-  /// @nodoc
+  /// 100: An unknown audio source.
   @JsonValue(100)
   audioSourceUnknown,
 }
@@ -721,11 +721,11 @@ extension VideoPixelFormatExt on VideoPixelFormat {
 /// Video display modes.
 @JsonEnum(alwaysCreate: true)
 enum RenderModeType {
-  /// 1: Hidden mode. Uniformly scale the video until one of its dimension fits the boundary (zoomed to fit). One dimension of the video may have clipped contents.
+  /// 1: Hidden mode. The priority is to fill the window. Any excess video that does not match the window size will be cropped.
   @JsonValue(1)
   renderModeHidden,
 
-  /// 2: Fit mode. Uniformly scale the video until one of its dimension fits the boundary (zoomed to fit). Areas that are not filled due to disparity in the aspect ratio are filled with black.
+  /// 2: Fit mode. The priority is to ensure that all video content is displayed. Any areas of the window that are not filled due to the mismatch between video size and window size will be filled with black.
   @JsonValue(2)
   renderModeFit,
 
@@ -1163,26 +1163,26 @@ class Hdr10MetadataInfo {
   Map<String, dynamic> toJson() => _$Hdr10MetadataInfoToJson(this);
 }
 
-/// @nodoc
+/// The relative position of alphaBuffer and video frames.
 @JsonEnum(alwaysCreate: true)
 enum AlphaStitchMode {
-  /// @nodoc
+  /// 0: (Default) Only video frame, that is, alphaBuffer is not stitched with the video frame.
   @JsonValue(0)
   noAlphaStitch,
 
-  /// @nodoc
+  /// 1: alphaBuffer is above the video frame.
   @JsonValue(1)
   alphaStitchUp,
 
-  /// @nodoc
+  /// 2: alphaBuffer is below the video frame.
   @JsonValue(2)
   alphaStitchBelow,
 
-  /// @nodoc
+  /// 3: alphaBuffer is to the left of the video frame.
   @JsonValue(3)
   alphaStitchLeft,
 
-  /// @nodoc
+  /// 4: alphaBuffer is to the right of the video frame.
   @JsonValue(4)
   alphaStitchRight,
 }
@@ -1324,7 +1324,7 @@ class ExternalVideoFrame {
   @JsonKey(name: 'hdr10MetadataInfo')
   final Hdr10MetadataInfo? hdr10MetadataInfo;
 
-  /// @nodoc
+  /// By default, the color space properties of video frames will apply the Full Range and BT.709 standard configurations. You can configure the settings according your needs for custom video capturing and rendering.
   @JsonKey(name: 'colorSpace')
   final ColorSpace? colorSpace;
 
@@ -1507,7 +1507,7 @@ class VideoFrame {
   @JsonKey(name: 'hdr10MetadataInfo')
   final Hdr10MetadataInfo? hdr10MetadataInfo;
 
-  /// @nodoc
+  /// By default, the color space properties of video frames will apply the Full Range and BT.709 standard configurations. You can configure the settings according your needs for custom video capturing and rendering.
   @JsonKey(name: 'colorSpace')
   final ColorSpace? colorSpace;
 
@@ -1583,17 +1583,21 @@ extension VideoModulePositionExt on VideoModulePosition {
   }
 }
 
-/// @nodoc
+/// The snapshot configuration.
 @JsonSerializable(explicitToJson: true, includeIfNull: false)
 class SnapshotConfig {
   /// @nodoc
   const SnapshotConfig({this.filePath, this.position});
 
-  /// @nodoc
+  /// The local path (including filename extensions) of the snapshot. For example:
+  ///  Windows: C:\Users\<user_name>\AppData\Local\Agora\<process_name>\example.jpg
+  ///  iOS: /App Sandbox/Library/Caches/example.jpg
+  ///  macOS: ～/Library/Logs/example.jpg
+  ///  Android: /storage/emulated/0/Android/data/<package name>/files/example.jpg Ensure that the path you specify exists and is writable.
   @JsonKey(name: 'filePath')
   final String? filePath;
 
-  /// @nodoc
+  /// The position of the snapshot video frame in the video pipeline. See VideoModulePosition.
   @JsonKey(name: 'position')
   final VideoModulePosition? position;
 
