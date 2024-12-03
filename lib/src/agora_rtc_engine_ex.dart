@@ -750,7 +750,16 @@ abstract class RtcEngineEx implements RtcEngine {
       required Uint8List metadata,
       required int length});
 
-  /// @nodoc
+  /// Gets a video screenshot of the specified observation point using the connection ID.
+  ///
+  /// This method takes a snapshot of a video stream from the specified user, generates a JPG image, and saves it to the specified path.
+  ///
+  /// * [connection] The connection information. See RtcConnection.
+  /// * [uid] The user ID. Set uid as 0 if you want to take a snapshot of the local user's video.
+  /// * [config] The configuration of the snaptshot. See SnapshotConfig.
+  ///
+  /// Returns
+  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown. You need to catch the exception and handle it accordingly.
   Future<void> takeSnapshotWithConfigEx(
       {required RtcConnection connection,
       required int uid,
