@@ -136,7 +136,7 @@ jobs:
           cache: true
       - uses: futureware-tech/simulator-action@v3
         with:
-          model: 'iPhone 14 Pro Max'
+          model: 'iPhone 15'
       - run: bash ci/run_flutter_integration_test_ios.sh
 
   integration_test_macos:
@@ -457,7 +457,7 @@ jobs:
             --iris-ios-cdn-url=${IRIS_CDN_URL_IOS}
       - uses: futureware-tech/simulator-action@v3
         with:
-          model: 'iPhone 14 Pro Max'
+          model: 'iPhone 15'
       - run: bash ci/rendering_test_ios.sh
 
       - uses: actions/upload-artifact@v3
