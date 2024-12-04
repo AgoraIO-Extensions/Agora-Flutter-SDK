@@ -39,5 +39,11 @@ third_party/
 
 .ccls-cache/
 
-test_shard/**/scripts/iris_web_version.js
-test_shard/**/web/iris_web_version.js
+test_apps/**/scripts/iris_web_version.js
+test_apps/**/web/iris_web_version.js
+
+# FVM Version Cache
+.fvm/
+.fvmrc
+
+artifacts

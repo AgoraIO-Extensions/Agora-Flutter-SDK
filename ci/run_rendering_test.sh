@@ -7,7 +7,7 @@ MY_PATH=$(realpath $(dirname "$0"))
 PROJECT_ROOT=$(realpath ${MY_PATH}/..)
 PLATFORM=$1 # android/ios/macos/windows/web
 
-pushd ${PROJECT_ROOT}/test_shard/rendering_test
+pushd ${PROJECT_ROOT}/test_apps/rendering_test
 
 flutter packages get
 

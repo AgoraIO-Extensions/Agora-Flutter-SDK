@@ -66,7 +66,7 @@ const eventIdsMapping = {
   return [
     {
       file_name:
-        "test_shard/fake_test_app/integration_test/generated/event_ids_mapping_gen.dart",
+        "test_apps/fake_test_app/integration_test/generated/event_ids_mapping_gen.dart",
       file_content: output,
     },
   ];

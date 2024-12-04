@@ -11,7 +11,7 @@ MY_PATH=$(dirname "$0")
 ARTIFACTS_PATH="${MY_PATH}/../artifacts"
 mkdir -p ${ARTIFACTS_PATH}
 
-IRIS_TESTER_PATH=${MY_PATH}/../test_shard/iris_tester
+IRIS_TESTER_PATH=${MY_PATH}/../test_apps/iris_tester
 
 DOWNLOAD_NAME=${CDN_URL##*/}
 

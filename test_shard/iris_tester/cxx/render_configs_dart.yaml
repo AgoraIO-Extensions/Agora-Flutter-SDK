@@ -1,6 +1,0 @@
-include: shared:rtc_4.1.0/shared_configs.yaml
-
-language: dart
-
-lecacy_flags:
-  - gen-fake-rtcengine

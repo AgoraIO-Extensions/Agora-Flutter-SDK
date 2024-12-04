@@ -436,7 +436,7 @@ jobs:
         if: always()
         with:
           name: android-debug-golden-files
-          path: test_shard/rendering_test/screenshot/*.debug.png
+          path: test_apps/rendering_test/screenshot/*.debug.png
 
   rendering_test_ios:
     name: Run Flutter iOS Rendering Tests
@@ -484,7 +484,7 @@ jobs:
         if: always()
         with:
           name: ios-debug-golden-files
-          path: test_shard/rendering_test/screenshot/*.debug.png
+          path: test_apps/rendering_test/screenshot/*.debug.png
 
   rendering_test_macos:
     name: Run Flutter macOS Rendering Tests
@@ -539,7 +539,7 @@ jobs:
         if: always()
         with:
           name: macos-debug-golden-files
-          path: test_shard/rendering_test/screenshot/*.debug.png
+          path: test_apps/rendering_test/screenshot/*.debug.png
 
   rendering_test_windows:
     name: Run Flutter Windows Rendering Tests
@@ -593,7 +593,7 @@ jobs:
         if: always()
         with:
           name: windows-debug-golden-files
-          path: test_shard/rendering_test/screenshot/*.debug.png
+          path: test_apps/rendering_test/screenshot/*.debug.png
 
   rendering_test_web:
     name: Run Flutter Web Rendering Tests
@@ -623,7 +623,7 @@ jobs:
         if: always()
         with:
           name: web-debug-golden-files
-          path: test_shard/rendering_test/screenshot/*.debug.png
+          path: test_apps/rendering_test/screenshot/*.debug.png
 
   check_android15_16k_page_alignment:
     name: Check android15 16k page size alignment

@@ -7,7 +7,7 @@ analyzer:
     # Ignore generated files
     - "**/*.g.dart"
     - lib/src/impl/native_iris_api_engine_bindings.dart
-    - test_shard/**
+    - test_apps/**
     
 linter:
   rules:

@@ -30,7 +30,7 @@ mkdir -p "${AGORA_FLUTTER_PROJECT_PATH}/macos/libs"
 # /Users/fenglang/codes/aw/iris/build/mac/MAC/output/dcg/Debug/AgoraRtcWrapper.framework
 echo "Copying ${IRIS_OUTPUT}/AgoraRtcWrapper.framework $AGORA_FLUTTER_PROJECT_PATH/macos/AgoraRtcWrapper.framework"
 cp -RP "${IRIS_OUTPUT}/AgoraRtcWrapper.framework" "$AGORA_FLUTTER_PROJECT_PATH/macos/libs"
-cp -RP "${IRIS_OUTPUT}/$BUILD_TYPE/IrisDebugger.framework" "$AGORA_FLUTTER_PROJECT_PATH/test_shard/iris_tester/macos/"
+cp -RP "${IRIS_OUTPUT}/$BUILD_TYPE/IrisDebugger.framework" "$AGORA_FLUTTER_PROJECT_PATH/test_apps/iris_tester/macos/"
 
 rm -rf $AGORA_FLUTTER_PROJECT_PATH/third_party/include
 mkdir -p $AGORA_FLUTTER_PROJECT_PATH/third_party/include

@@ -7,7 +7,7 @@ MY_PATH=$(dirname "$0")
 
 export SAVE_DEBUG_GOLDEN="true"
 
-pushd ${MY_PATH}/../test_shard/rendering_test
+pushd ${MY_PATH}/../test_apps/rendering_test
 
 flutter packages get
 

@@ -27,8 +27,8 @@ do
           "$AGORA_FLUTTER_PROJECT_PATH/android/libs/$ABI/libAgoraRtcWrapper.so" 
 
     if [ -f "${IRIS_OUTPUT}/${ABI}/libIrisDebugger.so" ]; then
-        mkdir -p ${AGORA_FLUTTER_PROJECT_PATH}/test_shard/iris_tester/android/libs/${ABI}
-        cp -RP "${IRIS_OUTPUT}/$ABI/libIrisDebugger.so" "${AGORA_FLUTTER_PROJECT_PATH}/test_shard/iris_tester/android/libs/${ABI}/libIrisDebugger.so"
+        mkdir -p ${AGORA_FLUTTER_PROJECT_PATH}/test_apps/iris_tester/android/libs/${ABI}
+        cp -RP "${IRIS_OUTPUT}/$ABI/libIrisDebugger.so" "${AGORA_FLUTTER_PROJECT_PATH}/test_apps/iris_tester/android/libs/${ABI}/libIrisDebugger.so"
     fi
 done;
 
