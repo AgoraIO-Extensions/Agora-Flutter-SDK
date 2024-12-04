@@ -93,6 +93,10 @@ jobs:
       TEST_APP_ID: ${{ secrets.MY_APP_ID }}
     steps:
       - uses: actions/checkout@v3
+      - name: Set up swap space
+        uses: pierotofy/set-swap-space@v1.0
+        with:
+          swap-size-gb: 10
       - name: Install JDK
         uses: actions/setup-java@v4
         with:
@@ -130,6 +134,10 @@ jobs:
       TEST_APP_ID: ${{ secrets.MY_APP_ID }}
     steps:
       - uses: actions/checkout@v3
+      - name: Set up swap space
+        uses: pierotofy/set-swap-space@v1.0
+        with:
+          swap-size-gb: 10
       - uses: subosito/flutter-action@v2
         with:
           flutter-version: ${{ matrix.version }}
@@ -172,6 +180,10 @@ jobs:
       TEST_APP_ID: ${{ secrets.MY_APP_ID }}
     steps:
       - uses: actions/checkout@v3
+      - name: Set up swap space
+        uses: pierotofy/set-swap-space@v1.0
+        with:
+          swap-size-gb: 10
       - uses: subosito/flutter-action@v2
         with:
           flutter-version: ${{ matrix.version }}
@@ -217,6 +229,12 @@ jobs:
     env:
       TEST_APP_ID: ${{ secrets.MY_APP_ID }}
     steps:
+      - name: Configure pagefile
+        uses: al-cheb/configure-pagefile-action@v1.2
+
+      - name: Set up pagefile
+        run: |
+          (Get-CimInstance Win32_PageFileUsage).AllocatedBaseSize
       - uses: actions/checkout@v3
       - uses: subosito/flutter-action@v2
         with:
