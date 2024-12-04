@@ -85,9 +85,9 @@ jobs:
         with:
           flutter-version: ${{ matrix.version }}
           cache: true
-      - uses: futureware-tech/simulator-action@v1
+      - uses: futureware-tech/simulator-action@v3
         with:
-          model: 'iPhone 13 Pro Max'
+          model: 'iPhone 15'
       - name: Checkout hoe
         uses: actions/checkout@v3
         with:
