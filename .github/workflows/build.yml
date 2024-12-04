@@ -124,7 +124,7 @@ jobs:
       fail-fast: false
       matrix:
         version: ["3.7.0", "3.16"]
-    runs-on: macos-12
+    runs-on: macos-latest
     timeout-minutes: 120
     env:
       TEST_APP_ID: ${{ secrets.MY_APP_ID }}
@@ -165,8 +165,8 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        version: ["3.7.0", "3.x"]
-    runs-on: macos-12
+        version: ["3.7.0"]
+    runs-on: macos-latest
     timeout-minutes: 120
     env:
       TEST_APP_ID: ${{ secrets.MY_APP_ID }}
@@ -313,8 +313,8 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        version: ["3.7.0", "3.x"]
-    runs-on: macos-12
+        version: ["3.7.0"]
+    runs-on: macos-latest
     timeout-minutes: 120
     steps:
       - uses: actions/checkout@v3
@@ -492,7 +492,7 @@ jobs:
     strategy:
       matrix:
         version: ['3.x']
-    runs-on: macos-12
+    runs-on: macos-latest
     timeout-minutes: 120
     env:
       TEST_APP_ID: ${{ secrets.MY_APP_ID }}
