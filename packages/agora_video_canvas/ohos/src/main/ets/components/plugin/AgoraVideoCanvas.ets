@@ -60,7 +60,7 @@ export class AgoraVideoCanvas extends PlatformView implements MethodCallHandler 
 
     const mapArgs: Map<string, number> = args;
     this.uid = mapArgs.get('uid') || 0;
-    Log.e('AgoraVideoCanvas', 'constructor with viewId: ' + viewId + ' with uid: ' + this.uid);
+    Log.i('AgoraVideoCanvas', 'constructor with viewId: ' + viewId + ' with uid: ' + this.uid);
   }
 
   onMethodCall(call: MethodCall, result: MethodResult): void {

@@ -438,6 +438,12 @@ class RtcEngineImpl extends rtc_engine_ex_binding.RtcEngineExImpl
         await engineMethodChannel.invokeMethod('androidInit');
       }
 
+      if (defaultTargetPlatform == TargetPlatform.ohos) {
+        final nativeHandle = await engineMethodChannel.invokeMethod(
+            'ohosInit', jsonEncode(context.toJson())) as String;
+        _sharedNativeHandle = _string2IntPtr(nativeHandle);
+      }
+
       List<InitilizationArgProvider> args = [
         if (_sharedNativeHandle != null)
           SharedNativeHandleInitilizationArgProvider(_sharedNativeHandle!)
@@ -508,6 +514,10 @@ class RtcEngineImpl extends rtc_engine_ex_binding.RtcEngineExImpl
     await irisMethodChannel.unregisterEventHandlers(_rtcEngineImplScopedKey);
 
     await super.release(sync: sync);
+
+    if (defaultTargetPlatform == TargetPlatform.ohos) {
+      await engineMethodChannel.invokeMethod('ohosDestroy');
+    }
 
     await irisMethodChannel.dispose();
     _isReleased = true;
