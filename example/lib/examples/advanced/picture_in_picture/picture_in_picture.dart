@@ -14,7 +14,7 @@ class PictureInPicture extends StatefulWidget {
   State<StatefulWidget> createState() => _State();
 }
 
-class _State extends State<PictureInPicture> with WidgetsBindingObserver{
+class _State extends State<PictureInPicture> with WidgetsBindingObserver {
   late final RtcEngine _engine;
 
   bool isJoined = false;
@@ -49,22 +49,18 @@ class _State extends State<PictureInPicture> with WidgetsBindingObserver{
   @override
   Future<void> didChangeAppLifecycleState(AppLifecycleState state) async {
     super.didChangeAppLifecycleState(state);
-        if (state == AppLifecycleState.paused) {
+    if (state == AppLifecycleState.paused) {
       print("应用进入后台");
       await _remotePipControllers.entries.first.value.startPictureInPicture(
-                                    const PipOptions(
-                                        contentWidth: 150,
-                                        contentHeight: 300,
-                                        autoEnterPip: true));
+          const PipOptions(
+              contentWidth: 150, contentHeight: 300, autoEnterPip: true));
     } else if (state == AppLifecycleState.resumed) {
       print("应用从后台返回前台");
-        await _remotePipControllers.entries.first.value.stopPictureInPicture();
-            await Future.delayed(const Duration(milliseconds: 500));
-        await _remotePipControllers.entries.first.value.startPictureInPicture(
-                                    const PipOptions(
-                                        contentWidth: 150,
-                                        contentHeight: 300,
-                                        autoEnterPip: true));
+      await _remotePipControllers.entries.first.value.stopPictureInPicture();
+      await Future.delayed(const Duration(milliseconds: 500));
+      await _remotePipControllers.entries.first.value.startPictureInPicture(
+          const PipOptions(
+              contentWidth: 150, contentHeight: 300, autoEnterPip: true));
     }
   }
 
@@ -125,15 +121,11 @@ class _State extends State<PictureInPicture> with WidgetsBindingObserver{
                     canvas: VideoCanvas(uid: rUid),
                     connection: RtcConnection(channelId: _controller.text),
                   ));
-
-                
         });
-            await Future.delayed(const Duration(milliseconds: 500));
-           await _remotePipControllers.entries.first.value.startPictureInPicture(
-                                    const PipOptions(
-                                        contentWidth: 150,
-                                        contentHeight: 300,
-                                        autoEnterPip: true));
+        await Future.delayed(const Duration(milliseconds: 500));
+        await _remotePipControllers.entries.first.value.startPictureInPicture(
+            const PipOptions(
+                contentWidth: 150, contentHeight: 300, autoEnterPip: true));
       },
       onUserOffline:
           (RtcConnection connection, int rUid, UserOfflineReasonType reason) {

@@ -2556,6 +2556,8 @@ void generatedTestCases(ValueGetter<IrisTester> irisTester) {
         int statsMosValue = 5;
         int statsFrozenRateByCustomPlcCount = 5;
         int statsPlcCount = 5;
+        int statsFrozenCntByCustom = 5;
+        int statsFrozenTimeByCustom = 5;
         int statsTotalActiveTime = 5;
         int statsPublishDuration = 5;
         int statsQoeQuality = 5;
@@ -2576,6 +2578,8 @@ void generatedTestCases(ValueGetter<IrisTester> irisTester) {
           mosValue: statsMosValue,
           frozenRateByCustomPlcCount: statsFrozenRateByCustomPlcCount,
           plcCount: statsPlcCount,
+          frozenCntByCustom: statsFrozenCntByCustom,
+          frozenTimeByCustom: statsFrozenTimeByCustom,
           totalActiveTime: statsTotalActiveTime,
           publishDuration: statsPublishDuration,
           qoeQuality: statsQoeQuality,

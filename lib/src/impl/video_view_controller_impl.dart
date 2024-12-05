@@ -257,7 +257,7 @@ class PIPVideoViewControllerImpl extends VideoViewController
     );
 
     await rtcEngine.setupPip(newOptions);
-    if(defaultTargetPlatform == TargetPlatform.android) {
+    if (defaultTargetPlatform == TargetPlatform.android) {
       await rtcEngine.startPip();
     }
   }

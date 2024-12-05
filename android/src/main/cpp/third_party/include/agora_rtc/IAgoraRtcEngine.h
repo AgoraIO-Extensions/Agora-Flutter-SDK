@@ -97,12 +97,14 @@ enum AUDIO_MIXING_REASON_TYPE {
   AUDIO_MIXING_REASON_TOO_FREQUENT_CALL = 702,
   /** 703: The audio mixing file playback is interrupted. */
   AUDIO_MIXING_REASON_INTERRUPTED_EOF = 703,
-  /** 715: The audio mixing file is played once. */
+  /** 721: The audio mixing file is played once. */
   AUDIO_MIXING_REASON_ONE_LOOP_COMPLETED = 721,
-  /** 716: The audio mixing file is all played out. */
+  /** 723: The audio mixing file is all played out. */
   AUDIO_MIXING_REASON_ALL_LOOPS_COMPLETED = 723,
-  /** 716: The audio mixing file stopped by user */
+  /** 724: The audio mixing file stopped by user */
   AUDIO_MIXING_REASON_STOPPED_BY_USER = 724,
+  /** 726: The audio mixing playback has resumed by user */
+  AUDIO_MIXING_REASON_RESUMED_BY_USER = 726,
   /** 0: The SDK can open the audio mixing file. */
   AUDIO_MIXING_REASON_OK = 0,
 };
@@ -437,6 +439,16 @@ struct RemoteAudioStats
   uint32_t plcCount;
 
   /**
+   * The number of times the remote audio stream has experienced freezing.
+   */
+  uint32_t frozenCntByCustom;
+
+  /**
+   * The total duration (ms) that the remote audio stream has been in a frozen state.
+   */
+  uint32_t frozenTimeByCustom;
+
+  /**
    * The total time (ms) when the remote user neither stops sending the audio
    * stream nor disables the audio module after joining the channel.
    */
@@ -476,6 +488,8 @@ struct RemoteAudioStats
         mosValue(0),
         frozenRateByCustomPlcCount(0),
         plcCount(0),
+        frozenCntByCustom(0),
+        frozenTimeByCustom(0),
         totalActiveTime(0),
         publishDuration(0),
         qoeQuality(0),

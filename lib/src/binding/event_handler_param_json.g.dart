@@ -2541,6 +2541,7 @@ const _$AudioMixingReasonTypeEnumMap = {
   AudioMixingReasonType.audioMixingReasonOneLoopCompleted: 721,
   AudioMixingReasonType.audioMixingReasonAllLoopsCompleted: 723,
   AudioMixingReasonType.audioMixingReasonStoppedByUser: 724,
+  AudioMixingReasonType.audioMixingReasonResumedByUser: 726,
   AudioMixingReasonType.audioMixingReasonOk: 0,
 };
 

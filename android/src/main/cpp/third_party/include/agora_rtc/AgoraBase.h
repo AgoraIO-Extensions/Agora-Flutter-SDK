@@ -4767,6 +4767,12 @@ enum AUDIO_TRACK_TYPE {
    * Compare to mixable stream, you can have lower lantency using direct audio track.
    */
   AUDIO_TRACK_DIRECT = 1,
+  /**
+   * 2: Extenal AEC reference audio track
+   * When all playback audio is handled outside SDK, but AEC is expected working.
+   * Used this track to push audio frame for AEC reference.
+   */
+  AUDIO_TRACK_EXTERNAL_AEC_REFERENCE = 3,
 };
 
 /** The configuration of custom audio track
@@ -4778,9 +4784,21 @@ struct AudioTrackConfig {
    * false: Do not enable local playback
    */
   bool enableLocalPlayback;
-
+  /**
+   * Enable APM processing
+   * false: AUDIO_TRACK_DIRECT is default false
+   * true: AUDIO_TRACK_DIRECT would process by APM(AEC/ANS/AGC)
+   */
+  bool enableAudioProcessing;
+  /**
+   * Only for direct audio track
+   * Send to encoder directly without any pipeline processing.
+   * false: default value, use default process and callback etc. 
+   * true: ultra simple mode, neither APM or pipeline using.
+   */
+  bool enableDirectPublish;
   AudioTrackConfig()
-    : enableLocalPlayback(true) {}
+    : enableLocalPlayback(true),enableAudioProcessing(false),enableDirectPublish(false)  {}
 };
 
 /**

@@ -318,121 +318,6 @@ extension MediaSourceTypeExt on MediaSourceType {
 }
 
 /// @nodoc
-@JsonEnum(alwaysCreate: true)
-enum ContentInspectResult {
-  /// @nodoc
-  @JsonValue(1)
-  contentInspectNeutral,
-
-  /// @nodoc
-  @JsonValue(2)
-  contentInspectSexy,
-
-  /// @nodoc
-  @JsonValue(3)
-  contentInspectPorn,
-}
-
-/// @nodoc
-extension ContentInspectResultExt on ContentInspectResult {
-  /// @nodoc
-  static ContentInspectResult fromValue(int value) {
-    return $enumDecode(_$ContentInspectResultEnumMap, value);
-  }
-
-  /// @nodoc
-  int value() {
-    return _$ContentInspectResultEnumMap[this]!;
-  }
-}
-
-/// The type of video content moderation module.
-@JsonEnum(alwaysCreate: true)
-enum ContentInspectType {
-  /// 0: (Default) This module has no actual function. Do not set type to this value.
-  @JsonValue(0)
-  contentInspectInvalid,
-
-  /// @nodoc
-  @JsonValue(1)
-  contentInspectModeration,
-
-  /// 2: Video screenshot and upload via Agora self-developed extension. SDK takes screenshots of the video stream in the channel and uploads them.
-  @JsonValue(2)
-  contentInspectSupervision,
-
-  /// 3: Video screenshot and upload via extensions from Agora Extensions Marketplace. SDK uses video moderation extensions from Agora Extensions Marketplace to take screenshots of the video stream in the channel and uploads them.
-  @JsonValue(3)
-  contentInspectImageModeration,
-}
-
-/// @nodoc
-extension ContentInspectTypeExt on ContentInspectType {
-  /// @nodoc
-  static ContentInspectType fromValue(int value) {
-    return $enumDecode(_$ContentInspectTypeEnumMap, value);
-  }
-
-  /// @nodoc
-  int value() {
-    return _$ContentInspectTypeEnumMap[this]!;
-  }
-}
-
-/// ContentInspectModule A structure used to configure the frequency of video screenshot and upload.
-@JsonSerializable(explicitToJson: true, includeIfNull: false)
-class ContentInspectModule {
-  /// @nodoc
-  const ContentInspectModule({this.type, this.interval});
-
-  /// Types of functional module. See ContentInspectType.
-  @JsonKey(name: 'type')
-  final ContentInspectType? type;
-
-  /// The frequency (s) of video screenshot and upload. The value should be set as larger than 0. The default value is 0, the SDK does not take screenshots. Agora recommends that you set the value as 10; you can also adjust it according to your business needs.
-  @JsonKey(name: 'interval')
-  final int? interval;
-
-  /// @nodoc
-  factory ContentInspectModule.fromJson(Map<String, dynamic> json) =>
-      _$ContentInspectModuleFromJson(json);
-
-  /// @nodoc
-  Map<String, dynamic> toJson() => _$ContentInspectModuleToJson(this);
-}
-
-/// Screenshot and upload configuration.
-@JsonSerializable(explicitToJson: true, includeIfNull: false)
-class ContentInspectConfig {
-  /// @nodoc
-  const ContentInspectConfig(
-      {this.extraInfo, this.serverConfig, this.modules, this.moduleCount});
-
-  /// Additional information on the video content (maximum length: 1024 Bytes). The SDK sends the screenshots and additional information on the video content to the Agora server. Once the video screenshot and upload process is completed, the Agora server sends the additional information and the callback notification to your server.
-  @JsonKey(name: 'extraInfo')
-  final String? extraInfo;
-
-  /// (Optional) Server configuration related to uploading video screenshots via extensions from Agora Extensions Marketplace. This parameter only takes effect when type in ContentInspectModule is set to contentInspectImageModeration. If you want to use it, contact.
-  @JsonKey(name: 'serverConfig')
-  final String? serverConfig;
-
-  /// Functional module. See ContentInspectModule. A maximum of 32 ContentInspectModule instances can be configured, and the value range of MAX_CONTENT_INSPECT_MODULE_COUNT is an integer in [1,32]. A function module can only be configured with one instance at most. Currently only the video screenshot and upload function is supported.
-  @JsonKey(name: 'modules')
-  final List<ContentInspectModule>? modules;
-
-  /// The number of functional modules, that is,the number of configured ContentInspectModule instances, must be the same as the number of instances configured in modules. The maximum number is 32.
-  @JsonKey(name: 'moduleCount')
-  final int? moduleCount;
-
-  /// @nodoc
-  factory ContentInspectConfig.fromJson(Map<String, dynamic> json) =>
-      _$ContentInspectConfigFromJson(json);
-
-  /// @nodoc
-  Map<String, dynamic> toJson() => _$ContentInspectConfigToJson(this);
-}
-
-/// @nodoc
 const kMaxCodecNameLength = 50;
 
 /// @nodoc
@@ -637,11 +522,11 @@ extension VideoPixelFormatExt on VideoPixelFormat {
 /// Video display modes.
 @JsonEnum(alwaysCreate: true)
 enum RenderModeType {
-  /// 1: Hidden mode. Uniformly scale the video until one of its dimension fits the boundary (zoomed to fit). One dimension of the video may have clipped contents.
+  /// 1: Hidden mode. The priority is to fill the window. Any excess video that does not match the window size will be cropped.
   @JsonValue(1)
   renderModeHidden,
 
-  /// 2: Fit mode. Uniformly scale the video until one of its dimension fits the boundary (zoomed to fit). Areas that are not filled due to disparity in the aspect ratio are filled with black.
+  /// 2: Fit mode. The priority is to ensure that all video content is displayed. Any areas of the window that are not filled due to the mismatch between video size and window size will be filled with black.
   @JsonValue(2)
   renderModeFit,
 
@@ -975,7 +860,9 @@ class VideoFrame {
   @JsonKey(name: 'matrix')
   final List<double>? matrix;
 
-  /// The alpha channel data output by using portrait segmentation algorithm. This data matches the size of the video frame, with each pixel value ranging from [0,255], where 0 represents the background and 255 represents the foreground (portrait). By setting this parameter, you can render the video background into various effects, such as transparent, solid color, image, video, etc. In custom video rendering scenarios, ensure that both the video frame and alphaBuffer are of the Full Range type; other types may cause abnormal alpha data rendering.
+  /// The alpha channel data output by using portrait segmentation algorithm. This data matches the size of the video frame, with each pixel value ranging from [0,255], where 0 represents the background and 255 represents the foreground (portrait). By setting this parameter, you can render the video background into various effects, such as transparent, solid color, image, video, etc.
+  ///  In custom video rendering scenarios, ensure that both the video frame and alphaBuffer are of the Full Range type; other types may cause abnormal alpha data rendering.
+  ///  Make sure that alphaBuffer is exactly the same size as the video frame (width × height), otherwise it may cause the app to crash.
   @JsonKey(name: 'alphaBuffer', ignore: true)
   final Uint8List? alphaBuffer;
 
@@ -983,7 +870,7 @@ class VideoFrame {
   @JsonKey(name: 'pixelBuffer', ignore: true)
   final Uint8List? pixelBuffer;
 
-  /// The meta information in the video frame. To use this parameter, please contact.
+  /// The meta information in the video frame. To use this parameter, contact.
   @VideoFrameMetaInfoConverter()
   @JsonKey(name: 'metaInfo')
   final VideoFrameMetaInfo? metaInfo;
@@ -1061,16 +948,139 @@ extension VideoModulePositionExt on VideoModulePosition {
 }
 
 /// @nodoc
+@JsonEnum(alwaysCreate: true)
+enum ContentInspectResult {
+  /// @nodoc
+  @JsonValue(1)
+  contentInspectNeutral,
+
+  /// @nodoc
+  @JsonValue(2)
+  contentInspectSexy,
+
+  /// @nodoc
+  @JsonValue(3)
+  contentInspectPorn,
+}
+
+/// @nodoc
+extension ContentInspectResultExt on ContentInspectResult {
+  /// @nodoc
+  static ContentInspectResult fromValue(int value) {
+    return $enumDecode(_$ContentInspectResultEnumMap, value);
+  }
+
+  /// @nodoc
+  int value() {
+    return _$ContentInspectResultEnumMap[this]!;
+  }
+}
+
+/// The type of video content moderation module.
+@JsonEnum(alwaysCreate: true)
+enum ContentInspectType {
+  /// 0: (Default) This module has no actual function. Do not set type to this value.
+  @JsonValue(0)
+  contentInspectInvalid,
+
+  /// @nodoc
+  @JsonValue(1)
+  contentInspectModeration,
+
+  /// 2: Video screenshot and upload via Agora self-developed extension. SDK takes screenshots of the video stream in the channel and uploads them.
+  @JsonValue(2)
+  contentInspectSupervision,
+
+  /// 3: Video screenshot and upload via extensions from Agora Extensions Marketplace. SDK uses video moderation extensions from Agora Extensions Marketplace to take screenshots of the video stream in the channel and uploads them.
+  @JsonValue(3)
+  contentInspectImageModeration,
+}
+
+/// @nodoc
+extension ContentInspectTypeExt on ContentInspectType {
+  /// @nodoc
+  static ContentInspectType fromValue(int value) {
+    return $enumDecode(_$ContentInspectTypeEnumMap, value);
+  }
+
+  /// @nodoc
+  int value() {
+    return _$ContentInspectTypeEnumMap[this]!;
+  }
+}
+
+/// ContentInspectModule A structure used to configure the frequency of video screenshot and upload.
+@JsonSerializable(explicitToJson: true, includeIfNull: false)
+class ContentInspectModule {
+  /// @nodoc
+  const ContentInspectModule({this.type, this.interval, this.position});
+
+  /// Types of functional module. See ContentInspectType.
+  @JsonKey(name: 'type')
+  final ContentInspectType? type;
+
+  /// The frequency (s) of video screenshot and upload. The value should be set as larger than 0. The default value is 0, the SDK does not take screenshots. Agora recommends that you set the value as 10; you can also adjust it according to your business needs.
+  @JsonKey(name: 'interval')
+  final int? interval;
+
+  /// @nodoc
+  @JsonKey(name: 'position')
+  final VideoModulePosition? position;
+
+  /// @nodoc
+  factory ContentInspectModule.fromJson(Map<String, dynamic> json) =>
+      _$ContentInspectModuleFromJson(json);
+
+  /// @nodoc
+  Map<String, dynamic> toJson() => _$ContentInspectModuleToJson(this);
+}
+
+/// Screenshot and upload configuration.
+@JsonSerializable(explicitToJson: true, includeIfNull: false)
+class ContentInspectConfig {
+  /// @nodoc
+  const ContentInspectConfig(
+      {this.extraInfo, this.serverConfig, this.modules, this.moduleCount});
+
+  /// Additional information on the video content (maximum length: 1024 Bytes). The SDK sends the screenshots and additional information on the video content to the Agora server. Once the video screenshot and upload process is completed, the Agora server sends the additional information and the callback notification to your server.
+  @JsonKey(name: 'extraInfo')
+  final String? extraInfo;
+
+  /// (Optional) Server configuration related to uploading video screenshots via extensions from Agora Extensions Marketplace. This parameter only takes effect when type in ContentInspectModule is set to contentInspectImageModeration. If you want to use it, contact.
+  @JsonKey(name: 'serverConfig')
+  final String? serverConfig;
+
+  /// Functional module. See ContentInspectModule. A maximum of 32 ContentInspectModule instances can be configured, and the value range of MAX_CONTENT_INSPECT_MODULE_COUNT is an integer in [1,32]. A function module can only be configured with one instance at most. Currently only the video screenshot and upload function is supported.
+  @JsonKey(name: 'modules')
+  final List<ContentInspectModule>? modules;
+
+  /// The number of functional modules, that is,the number of configured ContentInspectModule instances, must be the same as the number of instances configured in modules. The maximum number is 32.
+  @JsonKey(name: 'moduleCount')
+  final int? moduleCount;
+
+  /// @nodoc
+  factory ContentInspectConfig.fromJson(Map<String, dynamic> json) =>
+      _$ContentInspectConfigFromJson(json);
+
+  /// @nodoc
+  Map<String, dynamic> toJson() => _$ContentInspectConfigToJson(this);
+}
+
+/// The snapshot configuration.
 @JsonSerializable(explicitToJson: true, includeIfNull: false)
 class SnapshotConfig {
   /// @nodoc
   const SnapshotConfig({this.filePath, this.position});
 
-  /// @nodoc
+  /// The local path (including filename extensions) of the snapshot. For example:
+  ///  Windows: C:\Users\<user_name>\AppData\Local\Agora\<process_name>\example.jpg
+  ///  iOS: /App Sandbox/Library/Caches/example.jpg
+  ///  macOS: ～/Library/Logs/example.jpg
+  ///  Android: /storage/emulated/0/Android/data/<package name>/files/example.jpg Ensure that the path you specify exists and is writable.
   @JsonKey(name: 'filePath')
   final String? filePath;
 
-  /// @nodoc
+  /// The position of the snapshot video frame in the video pipeline. See VideoModulePosition.
   @JsonKey(name: 'position')
   final VideoModulePosition? position;
 
@@ -1420,7 +1430,7 @@ class AudioSpectrumObserver {
   ///
   /// After successfully calling registerAudioSpectrumObserver to implement the onRemoteAudioSpectrum callback in the AudioSpectrumObserver and calling enableAudioSpectrumMonitor to enable audio spectrum monitoring, the SDK will trigger the callback as the time interval you set to report the received remote audio data spectrum.
   ///
-  /// * [spectrums] The audio spectrum information of the remote user, see UserAudioSpectrumInfo. The number of arrays is the number of remote users monitored by the SDK. If the array is null, it means that no audio spectrum of remote users is detected.
+  /// * [spectrums] The audio spectrum information of the remote user. See UserAudioSpectrumInfo. The number of arrays is the number of remote users monitored by the SDK. If the array is null, it means that no audio spectrum of remote users is detected.
   /// * [spectrumNumber] The number of remote users.
   final void Function(
           List<UserAudioSpectrumInfo> spectrums, int spectrumNumber)?

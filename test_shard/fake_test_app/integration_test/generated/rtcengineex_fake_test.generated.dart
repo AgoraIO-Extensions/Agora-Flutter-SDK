@@ -2470,6 +2470,108 @@ void rtcEngineExSmokeTestCases() {
   );
 
   testWidgets(
+    'RtcEngineEx.preloadEffectEx',
+    (WidgetTester tester) async {
+      String engineAppId = const String.fromEnvironment('TEST_APP_ID',
+          defaultValue: '<YOUR_APP_ID>');
+
+      RtcEngineEx rtcEngineEx = createAgoraRtcEngineEx();
+      await rtcEngineEx.initialize(RtcEngineContext(
+        appId: engineAppId,
+        areaCode: AreaCode.areaCodeGlob.value(),
+      ));
+      await rtcEngineEx.setParameters('{"rtc.enable_debug_log": true}');
+
+      try {
+        String connectionChannelId = "hello";
+        int connectionLocalUid = 5;
+        RtcConnection connection = RtcConnection(
+          channelId: connectionChannelId,
+          localUid: connectionLocalUid,
+        );
+        int soundId = 5;
+        String filePath = "hello";
+        int startPos = 5;
+        await rtcEngineEx.preloadEffectEx(
+          connection: connection,
+          soundId: soundId,
+          filePath: filePath,
+          startPos: startPos,
+        );
+      } catch (e) {
+        if (e is! AgoraRtcException) {
+          debugPrint('[RtcEngineEx.preloadEffectEx] error: ${e.toString()}');
+          rethrow;
+        }
+
+        if (e.code != -4) {
+          // Only not supported error supported.
+          rethrow;
+        }
+      }
+
+      await rtcEngineEx.release();
+    },
+//  skip: !(),
+  );
+
+  testWidgets(
+    'RtcEngineEx.playEffectEx',
+    (WidgetTester tester) async {
+      String engineAppId = const String.fromEnvironment('TEST_APP_ID',
+          defaultValue: '<YOUR_APP_ID>');
+
+      RtcEngineEx rtcEngineEx = createAgoraRtcEngineEx();
+      await rtcEngineEx.initialize(RtcEngineContext(
+        appId: engineAppId,
+        areaCode: AreaCode.areaCodeGlob.value(),
+      ));
+      await rtcEngineEx.setParameters('{"rtc.enable_debug_log": true}');
+
+      try {
+        String connectionChannelId = "hello";
+        int connectionLocalUid = 5;
+        RtcConnection connection = RtcConnection(
+          channelId: connectionChannelId,
+          localUid: connectionLocalUid,
+        );
+        int soundId = 5;
+        String filePath = "hello";
+        int loopCount = 5;
+        double pitch = 5.0;
+        double pan = 5.0;
+        int gain = 5;
+        bool publish = true;
+        int startPos = 5;
+        await rtcEngineEx.playEffectEx(
+          connection: connection,
+          soundId: soundId,
+          filePath: filePath,
+          loopCount: loopCount,
+          pitch: pitch,
+          pan: pan,
+          gain: gain,
+          publish: publish,
+          startPos: startPos,
+        );
+      } catch (e) {
+        if (e is! AgoraRtcException) {
+          debugPrint('[RtcEngineEx.playEffectEx] error: ${e.toString()}');
+          rethrow;
+        }
+
+        if (e.code != -4) {
+          // Only not supported error supported.
+          rethrow;
+        }
+      }
+
+      await rtcEngineEx.release();
+    },
+//  skip: !(),
+  );
+
+  testWidgets(
     'RtcEngineEx.takeSnapshotWithConfigEx',
     (WidgetTester tester) async {
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
