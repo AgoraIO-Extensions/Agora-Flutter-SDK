@@ -10,26 +10,26 @@ const defaultConnectionId = 0;
 /// @nodoc
 const dummyConnectionId = 4294967295;
 
-/// @nodoc
+/// The context information of the extension.
 @JsonSerializable(explicitToJson: true, includeIfNull: false)
 class ExtensionContext {
   /// @nodoc
   const ExtensionContext(
       {this.isValid, this.uid, this.providerName, this.extensionName});
 
-  /// @nodoc
+  /// Whether the uid in ExtensionContext is valid: true : The uid is valid. false : The uid is invalid.
   @JsonKey(name: 'isValid')
   final bool? isValid;
 
-  /// @nodoc
+  /// The user ID. 0 represents a local user, while greater than 0 represents a remote user.
   @JsonKey(name: 'uid')
   final int? uid;
 
-  /// @nodoc
+  /// The name of the extension provider.
   @JsonKey(name: 'providerName')
   final String? providerName;
 
-  /// @nodoc
+  /// The name of the extension.
   @JsonKey(name: 'extensionName')
   final String? extensionName;
 
@@ -672,11 +672,11 @@ extension VideoPixelFormatExt on VideoPixelFormat {
 /// Video display modes.
 @JsonEnum(alwaysCreate: true)
 enum RenderModeType {
-  /// 1: Hidden mode. Uniformly scale the video until one of its dimension fits the boundary (zoomed to fit). One dimension of the video may have clipped contents.
+  /// 1: Hidden mode. The priority is to fill the window. Any excess video that does not match the window size will be cropped.
   @JsonValue(1)
   renderModeHidden,
 
-  /// 2: Fit mode. Uniformly scale the video until one of its dimension fits the boundary (zoomed to fit). Areas that are not filled due to disparity in the aspect ratio are filled with black.
+  /// 2: Fit mode. The priority is to ensure that all video content is displayed. Any areas of the window that are not filled due to the mismatch between video size and window size will be filled with black.
   @JsonValue(2)
   renderModeFit,
 
@@ -1114,26 +1114,26 @@ class Hdr10MetadataInfo {
   Map<String, dynamic> toJson() => _$Hdr10MetadataInfoToJson(this);
 }
 
-/// @nodoc
+/// The relative position of alphaBuffer and video frames.
 @JsonEnum(alwaysCreate: true)
 enum AlphaStitchMode {
-  /// @nodoc
+  /// 0: (Default) Only video frame, that is, alphaBuffer is not stitched with the video frame.
   @JsonValue(0)
   noAlphaStitch,
 
-  /// @nodoc
+  /// 1: alphaBuffer is above the video frame.
   @JsonValue(1)
   alphaStitchUp,
 
-  /// @nodoc
+  /// 2: alphaBuffer is below the video frame.
   @JsonValue(2)
   alphaStitchBelow,
 
-  /// @nodoc
+  /// 3: alphaBuffer is to the left of the video frame.
   @JsonValue(3)
   alphaStitchLeft,
 
-  /// @nodoc
+  /// 4: alphaBuffer is to the right of the video frame.
   @JsonValue(4)
   alphaStitchRight,
 }
@@ -1245,7 +1245,7 @@ class ExternalVideoFrame {
   @JsonKey(name: 'metadataBuffer', ignore: true)
   final Uint8List? metadataBuffer;
 
-  /// @nodoc
+  /// This parameter only applies to video data in Texture format. The MetaData size. The default value is 0.
   @JsonKey(name: 'metadataSize')
   final int? metadataSize;
 
@@ -1259,11 +1259,11 @@ class ExternalVideoFrame {
   @JsonKey(name: 'fillAlphaBuffer')
   final bool? fillAlphaBuffer;
 
-  /// When the video frame contains alpha channel data, it represents the relative position of alphaBuffer and the video frame.
+  /// When the video frame contains alpha channel data, it represents the relative position of alphaBuffer and the video frame. See AlphaStitchMode.
   @JsonKey(name: 'alphaStitchMode')
   final AlphaStitchMode? alphaStitchMode;
 
-  /// @nodoc
+  /// This parameter only applies to video data in Windows Texture format. It represents a pointer to an object of type ID3D11Texture2D, which is used by a video frame.
   @JsonKey(name: 'd3d11Texture2d', readValue: readIntPtr)
   final int? d3d11Texture2d;
 
@@ -1275,7 +1275,7 @@ class ExternalVideoFrame {
   @JsonKey(name: 'hdr10MetadataInfo')
   final Hdr10MetadataInfo? hdr10MetadataInfo;
 
-  /// @nodoc
+  /// By default, the color space properties of video frames will apply the Full Range and BT.709 standard configurations. You can configure the settings according your needs for custom video capturing and rendering.
   @JsonKey(name: 'colorSpace')
   final ColorSpace? colorSpace;
 
@@ -1431,15 +1431,17 @@ class VideoFrame {
   @JsonKey(name: 'textureId')
   final int? textureId;
 
-  /// @nodoc
+  /// This parameter only applies to video data in Texture format. Incoming 4 × 4 transformational matrix. The typical value is a unit matrix.
   @JsonKey(name: 'matrix')
   final List<double>? matrix;
 
-  /// The alpha channel data output by using portrait segmentation algorithm. This data matches the size of the video frame, with each pixel value ranging from [0,255], where 0 represents the background and 255 represents the foreground (portrait). By setting this parameter, you can render the video background into various effects, such as transparent, solid color, image, video, etc. In custom video rendering scenarios, ensure that both the video frame and alphaBuffer are of the Full Range type; other types may cause abnormal alpha data rendering.
+  /// The alpha channel data output by using portrait segmentation algorithm. This data matches the size of the video frame, with each pixel value ranging from [0,255], where 0 represents the background and 255 represents the foreground (portrait). By setting this parameter, you can render the video background into various effects, such as transparent, solid color, image, video, etc.
+  ///  In custom video rendering scenarios, ensure that both the video frame and alphaBuffer are of the Full Range type; other types may cause abnormal alpha data rendering.
+  ///  Make sure that alphaBuffer is exactly the same size as the video frame (width × height), otherwise it may cause the app to crash.
   @JsonKey(name: 'alphaBuffer', ignore: true)
   final Uint8List? alphaBuffer;
 
-  /// When the video frame contains alpha channel data, it represents the relative position of alphaBuffer and the video frame.
+  /// When the video frame contains alpha channel data, it represents the relative position of alphaBuffer and the video frame. See AlphaStitchMode.
   @JsonKey(name: 'alphaStitchMode')
   final AlphaStitchMode? alphaStitchMode;
 
@@ -1447,7 +1449,7 @@ class VideoFrame {
   @JsonKey(name: 'pixelBuffer', ignore: true)
   final Uint8List? pixelBuffer;
 
-  /// The meta information in the video frame. To use this parameter, please contact.
+  /// The meta information in the video frame. To use this parameter, contact.
   @VideoFrameMetaInfoConverter()
   @JsonKey(name: 'metaInfo')
   final VideoFrameMetaInfo? metaInfo;
@@ -1456,7 +1458,7 @@ class VideoFrame {
   @JsonKey(name: 'hdr10MetadataInfo')
   final Hdr10MetadataInfo? hdr10MetadataInfo;
 
-  /// @nodoc
+  /// By default, the color space properties of video frames will apply the Full Range and BT.709 standard configurations. You can configure the settings according your needs for custom video capturing and rendering.
   @JsonKey(name: 'colorSpace')
   final ColorSpace? colorSpace;
 
@@ -1870,7 +1872,7 @@ class AudioSpectrumObserver {
   ///
   /// After successfully calling registerAudioSpectrumObserver to implement the onRemoteAudioSpectrum callback in the AudioSpectrumObserver and calling enableAudioSpectrumMonitor to enable audio spectrum monitoring, the SDK will trigger the callback as the time interval you set to report the received remote audio data spectrum.
   ///
-  /// * [spectrums] The audio spectrum information of the remote user, see UserAudioSpectrumInfo. The number of arrays is the number of remote users monitored by the SDK. If the array is null, it means that no audio spectrum of remote users is detected.
+  /// * [spectrums] The audio spectrum information of the remote user. See UserAudioSpectrumInfo. The number of arrays is the number of remote users monitored by the SDK. If the array is null, it means that no audio spectrum of remote users is detected.
   /// * [spectrumNumber] The number of remote users.
   final void Function(
           List<UserAudioSpectrumInfo> spectrums, int spectrumNumber)?
@@ -2184,7 +2186,9 @@ class FaceInfoObserver {
   ///  pitch: Head pitch angle. A positve value means looking down, while a negative value means looking up.
   ///  yaw: Head yaw angle. A positve value means turning left, while a negative value means turning right.
   ///  roll: Head roll angle. A positve value means tilting to the right, while a negative value means tilting to the left.
-  ///  timestamp: String. The timestamp of the output result, in milliseconds. Here is an example of JSON: { "faces":[{ "blendshapes":{ "eyeBlinkLeft":0.9, "eyeLookDownLeft":0.0, "eyeLookInLeft":0.0, "eyeLookOutLeft":0.0, "eyeLookUpLeft":0.0, "eyeSquintLeft":0.0, "eyeWideLeft":0.0, "eyeBlinkRight":0.0, "eyeLookDownRight":0.0, "eyeLookInRight":0.0, "eyeLookOutRight":0.0, "eyeLookUpRight":0.0, "eyeSquintRight":0.0, "eyeWideRight":0.0, "jawForward":0.0, "jawLeft":0.0, "jawRight":0.0, "jawOpen":0.0, "mouthClose":0.0, "mouthFunnel":0.0, "mouthPucker":0.0, "mouthLeft":0.0, "mouthRight":0.0, "mouthSmileLeft":0.0, "mouthSmileRight":0.0, "mouthFrownLeft":0.0, "mouthFrownRight":0.0, "mouthDimpleLeft":0.0, "mouthDimpleRight":0.0, "mouthStretchLeft":0.0, "mouthStretchRight":0.0, "mouthRollLower":0.0, "mouthRollUpper":0.0, "mouthShrugLower":0.0, "mouthShrugUpper":0.0, "mouthPressLeft":0.0, "mouthPressRight":0.0, "mouthLowerDownLeft":0.0, "mouthLowerDownRight":0.0, "mouthUpperUpLeft":0.0, "mouthUpperUpRight":0.0, "browDownLeft":0.0, "browDownRight":0.0, "browInnerUp":0.0, "browOuterUpLeft":0.0, "browOuterUpRight":0.0, "cheekPuff":0.0, "cheekSquintLeft":0.0, "cheekSquintRight":0.0, "noseSneerLeft":0.0, "noseSneerRight":0.0, "tongueOut":0.0 }, "rotation":{"pitch":30.0, "yaw":25.5, "roll":-15.5}, }], "timestamp":"654879876546" }
+  ///  timestamp: String. The timestamp of the output result, in milliseconds. Here is an example of JSON:
+  /// { "faces":[{ "blendshapes":{ "eyeBlinkLeft":0.9, "eyeLookDownLeft":0.0, "eyeLookInLeft":0.0, "eyeLookOutLeft":0.0, "eyeLookUpLeft":0.0, "eyeSquintLeft":0.0, "eyeWideLeft":0.0, "eyeBlinkRight":0.0, "eyeLookDownRight":0.0, "eyeLookInRight":0.0, "eyeLookOutRight":0.0, "eyeLookUpRight":0.0, "eyeSquintRight":0.0, "eyeWideRight":0.0, "jawForward":0.0, "jawLeft":0.0, "jawRight":0.0, "jawOpen":0.0, "mouthClose":0.0, "mouthFunnel":0.0, "mouthPucker":0.0, "mouthLeft":0.0, "mouthRight":0.0, "mouthSmileLeft":0.0, "mouthSmileRight":0.0, "mouthFrownLeft":0.0, "mouthFrownRight":0.0, "mouthDimpleLeft":0.0, "mouthDimpleRight":0.0, "mouthStretchLeft":0.0, "mouthStretchRight":0.0, "mouthRollLower":0.0, "mouthRollUpper":0.0, "mouthShrugLower":0.0, "mouthShrugUpper":0.0, "mouthPressLeft":0.0, "mouthPressRight":0.0, "mouthLowerDownLeft":0.0, "mouthLowerDownRight":0.0, "mouthUpperUpLeft":0.0, "mouthUpperUpRight":0.0, "browDownLeft":0.0, "browDownRight":0.0, "browInnerUp":0.0, "browOuterUpLeft":0.0, "browOuterUpRight":0.0, "cheekPuff":0.0, "cheekSquintLeft":0.0, "cheekSquintRight":0.0, "noseSneerLeft":0.0, "noseSneerRight":0.0, "tongueOut":0.0 }, "rotation":{"pitch":30.0, "yaw":25.5, "roll":-15.5},
+  ///  }], "timestamp":"654879876546" }
   ///
   /// Returns
   /// true : Facial information JSON parsing successful. false : Facial information JSON parsing failed.

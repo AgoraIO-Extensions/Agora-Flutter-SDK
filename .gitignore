@@ -41,3 +41,6 @@ third_party/
 
 test_shard/**/scripts/iris_web_version.js
 test_shard/**/web/iris_web_version.js
+
+# FVM Version Cache
+.fvm/
