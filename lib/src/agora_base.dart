@@ -692,7 +692,7 @@ enum QualityType {
   @JsonValue(7)
   qualityUnsupported,
 
-  /// 8: Detecting the network quality.
+  /// 8: The last-mile network probe test is in progress.
   @JsonValue(8)
   qualityDetecting,
 }
@@ -930,7 +930,7 @@ extension OrientationModeExt on OrientationMode {
 /// Video degradation preferences when the bandwidth is a constraint.
 @JsonEnum(alwaysCreate: true)
 enum DegradationPreference {
-  /// 0: (Default) Prefers to reduce the video frame rate while maintaining video resolution during video encoding under limited bandwidth. This degradation preference is suitable for scenarios where video quality is prioritized.
+  /// 0: Prefers to reduce the video frame rate while maintaining video resolution during video encoding under limited bandwidth. This degradation preference is suitable for scenarios where video quality is prioritized. Deprecated: This enumerator is deprecated. Use other enumerations instead.
   @JsonValue(0)
   maintainQuality,
 
@@ -1647,7 +1647,7 @@ enum CompressionPreference {
   @JsonValue(0)
   preferLowLatency,
 
-  /// 1: (Default) High quality preference. The SDK compresses video frames while maintaining video quality. This preference is suitable for scenarios where video quality is prioritized.
+  /// 1: High quality preference. The SDK compresses video frames while maintaining video quality. This preference is suitable for scenarios where video quality is prioritized.
   @JsonValue(1)
   preferQuality,
 }
@@ -3075,7 +3075,7 @@ enum LocalVideoStreamReason {
   @JsonValue(8)
   localVideoStreamReasonDeviceNotFound,
 
-  /// 9: (macOS only) The video capture device currently in use is disconnected (such as being unplugged).
+  /// 9: (macOS and Windows only) The video capture device currently in use is disconnected (such as being unplugged).
   @JsonValue(9)
   localVideoStreamReasonDeviceDisconnected,
 
@@ -3116,7 +3116,7 @@ enum LocalVideoStreamReason {
   @JsonValue(20)
   localVideoStreamReasonScreenCaptureWindowNotSupported,
 
-  /// 21: (Windows only) The screen has not captured any data available for window sharing.
+  /// 21: (Windows and Android only) The currently captured window has no data.
   @JsonValue(21)
   localVideoStreamReasonScreenCaptureFailure,
 
@@ -5148,18 +5148,18 @@ extension VideoDenoiserModeExt on VideoDenoiserMode {
   }
 }
 
-/// The video noise reduction level.
+/// Video noise reduction level.
 @JsonEnum(alwaysCreate: true)
 enum VideoDenoiserLevel {
   /// 0: (Default) Promotes video quality during video noise reduction. balances performance consumption and video noise reduction quality. The performance consumption is moderate, the video noise reduction speed is moderate, and the overall video quality is optimal.
   @JsonValue(0)
   videoDenoiserLevelHighQuality,
 
-  /// 1: Promotes reducing performance consumption during video noise reduction. prioritizes reducing performance consumption over video noise reduction quality. The performance consumption is lower, and the video noise reduction speed is faster. To avoid a noticeable shadowing effect (shadows trailing behind moving objects) in the processed video, Agora recommends that you use this settinging when the camera is fixed.
+  /// 1: Promotes reducing performance consumption during video noise reduction. It prioritizes reducing performance consumption over video noise reduction quality. The performance consumption is lower, and the video noise reduction speed is faster. To avoid a noticeable shadowing effect (shadows trailing behind moving objects) in the processed video, Agora recommends that you use this setting when the camera is fixed.
   @JsonValue(1)
   videoDenoiserLevelFast,
 
-  /// 2: Enhanced video noise reduction. prioritizes video noise reduction quality over reducing performance consumption. The performance consumption is higher, the video noise reduction speed is slower, and the video noise reduction quality is better. If videoDenoiserLevelHighQuality is not enough for your video noise reduction needs, you can use this enumerator.
+  /// @nodoc
   @JsonValue(2)
   videoDenoiserLevelStrength,
 }
@@ -5359,6 +5359,10 @@ enum AudioTrackType {
   /// 1: Direct audio tracks. This type of audio track will replace the audio streams captured by the microphone and does not support mixing with other audio streams. The latency of direct audio tracks is lower than that of mixable audio tracks. If audioTrackDirect is specified for this parameter, you must set publishMicrophoneTrack to false in ChannelMediaOptions when calling joinChannel to join the channel; otherwise, joining the channel fails and returns the error code -2.
   @JsonValue(1)
   audioTrackDirect,
+
+  /// @nodoc
+  @JsonValue(3)
+  audioTrackExternalAecReference,
 }
 
 /// @nodoc
@@ -5378,11 +5382,22 @@ extension AudioTrackTypeExt on AudioTrackType {
 @JsonSerializable(explicitToJson: true, includeIfNull: false)
 class AudioTrackConfig {
   /// @nodoc
-  const AudioTrackConfig({this.enableLocalPlayback});
+  const AudioTrackConfig(
+      {this.enableLocalPlayback,
+      this.enableAudioProcessing,
+      this.enableDirectPublish});
 
   /// Whether to enable the local audio-playback device: true : (Default) Enable the local audio-playback device. false : Do not enable the local audio-playback device.
   @JsonKey(name: 'enableLocalPlayback')
   final bool? enableLocalPlayback;
+
+  /// Whether to enable audio processing module: true Enable the audio processing module to apply the Automatic Echo Cancellation (AEC), Automatic Noise Suppression (ANS), and Automatic Gain Control (AGC) effects. false : (Default) Do not enable the audio processing module. This parameter only takes effect on audioTrackDirect in custom audio capturing.
+  @JsonKey(name: 'enableAudioProcessing')
+  final bool? enableAudioProcessing;
+
+  /// @nodoc
+  @JsonKey(name: 'enableDirectPublish')
+  final bool? enableDirectPublish;
 
   /// @nodoc
   factory AudioTrackConfig.fromJson(Map<String, dynamic> json) =>
@@ -6206,7 +6221,7 @@ class ChannelMediaRelayConfiguration {
 
   /// The information of the target channel ChannelMediaInfo. It contains the following members: channelName : The name of the target channel. token : The token for joining the target channel. It is generated with the channelName and uid you set in destInfos.
   ///  If you have not enabled the App Certificate, set this parameter as the default value NULL, which means the SDK applies the App ID.
-  ///  If you have enabled the App Certificate, you must use the token generated with the channelName and uid. If the token of any target channel expires, the whole media relay stops; hence Agora recommends that you specify the same expiration time for the tokens of all the target channels. uid : The unique user ID to identify the relay stream in the target channel. The value ranges from 0 to (2 32 -1). To avoid user ID conflicts, this user ID must be different from any other user ID in the target channel. The default value is 0, which means the SDK generates a random user ID.
+  ///  If you have enabled the App Certificate, you must use the token generated with the channelName and uid. If the token of any target channel expires, the whole media relay stops; hence Agora recommends that you specify the same expiration time for the tokens of all the target channels. uid : The unique user ID to identify the relay stream in the target channel. The value ranges from 0 to (2 32 -1). To avoid user ID conflicts, this user ID must be different from any other user ID in the target channel. The default value is 0, which means the SDK generates a random UID.
   @JsonKey(name: 'destInfos')
   final List<ChannelMediaInfo>? destInfos;
 

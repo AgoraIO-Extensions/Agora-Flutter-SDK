@@ -127,6 +127,8 @@ RemoteAudioStats _$RemoteAudioStatsFromJson(Map<String, dynamic> json) =>
       frozenRateByCustomPlcCount:
           (json['frozenRateByCustomPlcCount'] as num?)?.toInt(),
       plcCount: (json['plcCount'] as num?)?.toInt(),
+      frozenCntByCustom: (json['frozenCntByCustom'] as num?)?.toInt(),
+      frozenTimeByCustom: (json['frozenTimeByCustom'] as num?)?.toInt(),
       totalActiveTime: (json['totalActiveTime'] as num?)?.toInt(),
       publishDuration: (json['publishDuration'] as num?)?.toInt(),
       qoeQuality: (json['qoeQuality'] as num?)?.toInt(),
@@ -158,6 +160,8 @@ Map<String, dynamic> _$RemoteAudioStatsToJson(RemoteAudioStats instance) {
   writeNotNull(
       'frozenRateByCustomPlcCount', instance.frozenRateByCustomPlcCount);
   writeNotNull('plcCount', instance.plcCount);
+  writeNotNull('frozenCntByCustom', instance.frozenCntByCustom);
+  writeNotNull('frozenTimeByCustom', instance.frozenTimeByCustom);
   writeNotNull('totalActiveTime', instance.totalActiveTime);
   writeNotNull('publishDuration', instance.publishDuration);
   writeNotNull('qoeQuality', instance.qoeQuality);
@@ -1049,6 +1053,7 @@ const _$AudioMixingReasonTypeEnumMap = {
   AudioMixingReasonType.audioMixingReasonOneLoopCompleted: 721,
   AudioMixingReasonType.audioMixingReasonAllLoopsCompleted: 723,
   AudioMixingReasonType.audioMixingReasonStoppedByUser: 724,
+  AudioMixingReasonType.audioMixingReasonResumedByUser: 726,
   AudioMixingReasonType.audioMixingReasonOk: 0,
 };
 

@@ -843,30 +843,6 @@ extension AudioParametersBufferExt on AudioParameters {
   }
 }
 
-extension ContentInspectModuleBufferExt on ContentInspectModule {
-  ContentInspectModule fillBuffers(List<Uint8List> bufferList) {
-    if (bufferList.isEmpty) return this;
-    return this;
-  }
-
-  List<Uint8List> collectBufferList() {
-    final bufferList = <Uint8List>[];
-    return bufferList;
-  }
-}
-
-extension ContentInspectConfigBufferExt on ContentInspectConfig {
-  ContentInspectConfig fillBuffers(List<Uint8List> bufferList) {
-    if (bufferList.isEmpty) return this;
-    return this;
-  }
-
-  List<Uint8List> collectBufferList() {
-    final bufferList = <Uint8List>[];
-    return bufferList;
-  }
-}
-
 extension PacketOptionsBufferExt on PacketOptions {
   PacketOptions fillBuffers(List<Uint8List> bufferList) {
     if (bufferList.isEmpty) return this;
@@ -1024,6 +1000,30 @@ extension VideoFrameBufferExt on VideoFrame {
     if (pixelBuffer != null) {
       bufferList.add(pixelBuffer!);
     }
+    return bufferList;
+  }
+}
+
+extension ContentInspectModuleBufferExt on ContentInspectModule {
+  ContentInspectModule fillBuffers(List<Uint8List> bufferList) {
+    if (bufferList.isEmpty) return this;
+    return this;
+  }
+
+  List<Uint8List> collectBufferList() {
+    final bufferList = <Uint8List>[];
+    return bufferList;
+  }
+}
+
+extension ContentInspectConfigBufferExt on ContentInspectConfig {
+  ContentInspectConfig fillBuffers(List<Uint8List> bufferList) {
+    if (bufferList.isEmpty) return this;
+    return this;
+  }
+
+  List<Uint8List> collectBufferList() {
+    final bufferList = <Uint8List>[];
     return bufferList;
   }
 }
