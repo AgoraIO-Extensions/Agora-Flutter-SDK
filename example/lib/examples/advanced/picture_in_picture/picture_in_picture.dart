@@ -70,7 +70,9 @@ class _State extends State<PictureInPicture> with WidgetsBindingObserver {
 
   @override
   Future<void> dispose() async {
-    await _engine.stopPip();
+    if(Platform.isIOS){
+      await _engine.stopPip();
+    }
     WidgetsBinding.instance.removeObserver(this);
     _dispose();
     super.dispose();
