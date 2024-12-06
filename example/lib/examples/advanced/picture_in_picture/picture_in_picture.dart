@@ -1,3 +1,4 @@
+import 'dart:io';
 import 'package:agora_rtc_engine/agora_rtc_engine.dart';
 import 'package:agora_rtc_engine_example/config/agora.config.dart' as config;
 import 'package:agora_rtc_engine_example/components/example_actions_widget.dart';
@@ -49,6 +50,9 @@ class _State extends State<PictureInPicture> with WidgetsBindingObserver {
   @override
   Future<void> didChangeAppLifecycleState(AppLifecycleState state) async {
     super.didChangeAppLifecycleState(state);
+    if(Platform.isAndroid){
+      return;
+    }
     if (state == AppLifecycleState.paused) {
       print("应用进入后台");
       await _remotePipControllers.entries.first.value.startPictureInPicture(
