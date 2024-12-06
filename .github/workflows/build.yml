@@ -138,6 +138,23 @@ jobs:
         with:
           model: 'iPhone 15'
       - run: bash ci/run_flutter_integration_test_ios.sh
+      - name: Get ios crash logs
+        if: always()
+        run: |
+          sleep 30
+          mkdir logs-ios
+          CRASH_DIR="${HOME}/Library/Logs/DiagnosticReports/"
+          OUTPUT_CRASH_DIR=./logs-ios/crash
+          mkdir -p ${OUTPUT_CRASH_DIR}
+          # Copy all files
+          cp -RP $CRASH_DIR* $OUTPUT_CRASH_DIR
+        
+      - name: Upload ios logs
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: logs-ios-${{ matrix.version }}
+          path: logs-ios/*
 
   integration_test_macos:
     name: Run Flutter macOS Integration Tests
