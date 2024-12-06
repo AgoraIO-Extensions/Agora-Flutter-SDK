@@ -17,12 +17,15 @@ DOWNLOAD_NAME=${CDN_URL##*/}
 
 DOWNLOAD_BASE_NAME=${DOWNLOAD_NAME/.zip/""}
 
-curl -L "${CDN_URL}" > ${ARTIFACTS_PATH}/${DOWNLOAD_NAME}
+# if not exist, download the artifacts
+if [[ ! -f "${ARTIFACTS_PATH}/${DOWNLOAD_NAME}" ]]; then
+    curl -L --ssl-no-revoke "${CDN_URL}" > ${ARTIFACTS_PATH}/${DOWNLOAD_NAME}
+fi
 
 VERSION="$(cut -d'_' -f2 <<<"${DOWNLOAD_NAME}")"
 
 pushd ${ARTIFACTS_PATH}
-    unzip ${DOWNLOAD_NAME} -d ${DOWNLOAD_BASE_NAME}
+    unzip -o ${DOWNLOAD_NAME} -d ${DOWNLOAD_BASE_NAME}
 popd
 
 UNZIP_PATH="${ARTIFACTS_PATH}/${DOWNLOAD_BASE_NAME}/iris_${VERSION}_DCG_${PLATFORM}"
