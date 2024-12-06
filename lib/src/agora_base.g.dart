@@ -1576,6 +1576,8 @@ const _$SegModelTypeEnumMap = {
 AudioTrackConfig _$AudioTrackConfigFromJson(Map<String, dynamic> json) =>
     AudioTrackConfig(
       enableLocalPlayback: json['enableLocalPlayback'] as bool?,
+      enableAudioProcessing: json['enableAudioProcessing'] as bool?,
+      enableDirectPublish: json['enableDirectPublish'] as bool?,
     );
 
 Map<String, dynamic> _$AudioTrackConfigToJson(AudioTrackConfig instance) {
@@ -1588,6 +1590,8 @@ Map<String, dynamic> _$AudioTrackConfigToJson(AudioTrackConfig instance) {
   }
 
   writeNotNull('enableLocalPlayback', instance.enableLocalPlayback);
+  writeNotNull('enableAudioProcessing', instance.enableAudioProcessing);
+  writeNotNull('enableDirectPublish', instance.enableDirectPublish);
   return val;
 }
 
@@ -2811,6 +2815,7 @@ const _$AudioTrackTypeEnumMap = {
   AudioTrackType.audioTrackInvalid: -1,
   AudioTrackType.audioTrackMixable: 0,
   AudioTrackType.audioTrackDirect: 1,
+  AudioTrackType.audioTrackExternalAecReference: 3,
 };
 
 const _$VoiceBeautifierPresetEnumMap = {

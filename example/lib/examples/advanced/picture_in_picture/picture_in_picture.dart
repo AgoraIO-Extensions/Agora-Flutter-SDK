@@ -1,3 +1,4 @@
+import 'dart:io';
 import 'package:agora_rtc_engine/agora_rtc_engine.dart';
 import 'package:agora_rtc_engine_example/config/agora.config.dart' as config;
 import 'package:agora_rtc_engine_example/components/example_actions_widget.dart';
@@ -14,7 +15,7 @@ class PictureInPicture extends StatefulWidget {
   State<StatefulWidget> createState() => _State();
 }
 
-class _State extends State<PictureInPicture> with WidgetsBindingObserver{
+class _State extends State<PictureInPicture> with WidgetsBindingObserver {
   late final RtcEngine _engine;
 
   bool isJoined = false;
@@ -49,28 +50,29 @@ class _State extends State<PictureInPicture> with WidgetsBindingObserver{
   @override
   Future<void> didChangeAppLifecycleState(AppLifecycleState state) async {
     super.didChangeAppLifecycleState(state);
-        if (state == AppLifecycleState.paused) {
+    if(Platform.isAndroid){
+      return;
+    }
+    if (state == AppLifecycleState.paused) {
       print("应用进入后台");
       await _remotePipControllers.entries.first.value.startPictureInPicture(
-                                    const PipOptions(
-                                        contentWidth: 150,
-                                        contentHeight: 300,
-                                        autoEnterPip: true));
+          const PipOptions(
+              contentWidth: 150, contentHeight: 300, autoEnterPip: true));
     } else if (state == AppLifecycleState.resumed) {
       print("应用从后台返回前台");
-        await _remotePipControllers.entries.first.value.stopPictureInPicture();
-            await Future.delayed(const Duration(milliseconds: 500));
-        await _remotePipControllers.entries.first.value.startPictureInPicture(
-                                    const PipOptions(
-                                        contentWidth: 150,
-                                        contentHeight: 300,
-                                        autoEnterPip: true));
+      await _remotePipControllers.entries.first.value.stopPictureInPicture();
+      await Future.delayed(const Duration(milliseconds: 500));
+      await _remotePipControllers.entries.first.value.startPictureInPicture(
+          const PipOptions(
+              contentWidth: 150, contentHeight: 300, autoEnterPip: true));
     }
   }
 
   @override
   Future<void> dispose() async {
-    await _engine.stopPip();
+    if(Platform.isIOS){
+      await _engine.stopPip();
+    }
     WidgetsBinding.instance.removeObserver(this);
     _dispose();
     super.dispose();
@@ -125,15 +127,11 @@ class _State extends State<PictureInPicture> with WidgetsBindingObserver{
                     canvas: VideoCanvas(uid: rUid),
                     connection: RtcConnection(channelId: _controller.text),
                   ));
-
-                
         });
-            await Future.delayed(const Duration(milliseconds: 500));
-           await _remotePipControllers.entries.first.value.startPictureInPicture(
-                                    const PipOptions(
-                                        contentWidth: 150,
-                                        contentHeight: 300,
-                                        autoEnterPip: true));
+        await Future.delayed(const Duration(milliseconds: 500));
+        await _remotePipControllers.entries.first.value.startPictureInPicture(
+            const PipOptions(
+                contentWidth: 150, contentHeight: 300, autoEnterPip: true));
       },
       onUserOffline:
           (RtcConnection connection, int rUid, UserOfflineReasonType reason) {
@@ -208,7 +206,9 @@ class _State extends State<PictureInPicture> with WidgetsBindingObserver{
   }
 
   Future<void> _leaveChannel() async {
-    await _engine.stopPip();
+    if(Platform.isIOS){
+      await _engine.stopPip();
+    }
     await _engine.leaveChannel();
     setState(() {
       openCamera = true;

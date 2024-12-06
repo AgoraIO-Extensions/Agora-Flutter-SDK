@@ -22,6 +22,7 @@ class RtcEngineEventHandlerSomkeTestGenerator implements Generator {
 
   static const Map<String, List<GeneratorConfigPlatform>> _restrictPlatforms = {
     'onFacePositionChanged': mobilePlatforms,
+    'onPipStateChanged': mobilePlatforms,
     'onScreenCaptureInfoUpdated': [GeneratorConfigPlatform.windows],
   };
 

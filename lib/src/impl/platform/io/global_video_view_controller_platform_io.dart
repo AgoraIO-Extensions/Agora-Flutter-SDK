@@ -115,7 +115,8 @@ class GlobalVideoViewControllerIO extends GlobalVideoViewControllerPlatfrom {
 
   @override
   Future<int> getCurrentActivityHandle() async {
-    final int ptr = await methodChannel.invokeMethod('getCurrentActivityHandle');
+    final int ptr =
+        await methodChannel.invokeMethod('getCurrentActivityHandle');
     return ptr;
   }
 }
