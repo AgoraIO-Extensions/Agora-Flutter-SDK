@@ -204,7 +204,9 @@ class _State extends State<PictureInPicture> with WidgetsBindingObserver {
   }
 
   Future<void> _leaveChannel() async {
-    await _engine.stopPip();
+    if(Platform.isIOS){
+      await _engine.stopPip();
+    }
     await _engine.leaveChannel();
     setState(() {
       openCamera = true;
