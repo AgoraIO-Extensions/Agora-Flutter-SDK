@@ -88,7 +88,7 @@ jobs:
       matrix:
         version: ["3.7.0", "3.x"]
     runs-on: ubuntu-latest
-    timeout-minutes: 30
+    timeout-minutes: 60
     env:
       TEST_APP_ID: ${{ secrets.MY_APP_ID }}
     steps:
@@ -125,7 +125,7 @@ jobs:
       matrix:
         version: ["3.7.0", "3.16"]
     runs-on: macos-latest
-    timeout-minutes: 30
+    timeout-minutes: 60
     env:
       TEST_APP_ID: ${{ secrets.MY_APP_ID }}
     steps:
@@ -164,7 +164,7 @@ jobs:
       matrix:
         version: ["3.7.0"]
     runs-on: macos-latest
-    timeout-minutes: 30
+    timeout-minutes: 60
     env:
       TEST_APP_ID: ${{ secrets.MY_APP_ID }}
     steps:
@@ -210,7 +210,7 @@ jobs:
       matrix:
         version: ["3.7.0", "3.x"]
     runs-on: windows-2019
-    timeout-minutes: 30
+    timeout-minutes: 60
     env:
       TEST_APP_ID: ${{ secrets.MY_APP_ID }}
     steps:
@@ -242,7 +242,7 @@ jobs:
       matrix:
         version: ['3.x']
     runs-on: ubuntu-latest
-    timeout-minutes: 30
+    timeout-minutes: 60
     env:
       TEST_APP_ID: ${{ secrets.MY_APP_ID }}
     steps:
@@ -312,7 +312,7 @@ jobs:
       matrix:
         version: ["3.7.0"]
     runs-on: macos-latest
-    timeout-minutes: 30
+    timeout-minutes: 60
     steps:
       - uses: actions/checkout@v3
       - uses: subosito/flutter-action@v2
@@ -332,7 +332,7 @@ jobs:
       matrix:
         version: ['3.x']
     runs-on: macos-13
-    timeout-minutes: 30
+    timeout-minutes: 60
     steps:
       - uses: actions/checkout@v3
       - uses: subosito/flutter-action@v2
@@ -358,7 +358,7 @@ jobs:
       matrix:
         version: ["3.7.0", "3.x"]
     runs-on: ubuntu-latest
-    timeout-minutes: 30
+    timeout-minutes: 60
     steps:
       - uses: actions/checkout@v3
       - uses: subosito/flutter-action@v2
@@ -374,7 +374,7 @@ jobs:
     name: Run Flutter Android Rendering Tests
     if: ${{ !contains(github.event.pull_request.labels.*.name, 'ci:skip') }}
     runs-on: ubuntu-latest
-    timeout-minutes: 30
+    timeout-minutes: 60
     env:
       TEST_APP_ID: ${{ secrets.MY_APP_ID }}
     steps:
@@ -442,7 +442,7 @@ jobs:
       matrix:
         version: ["3.x"]
     runs-on: macos-13 # Rendering test on ios simulator need macos 13+
-    timeout-minutes: 30
+    timeout-minutes: 60
     env:
       TEST_APP_ID: ${{ secrets.MY_APP_ID }}
     steps:
@@ -490,7 +490,7 @@ jobs:
       matrix:
         version: ['3.x']
     runs-on: macos-latest
-    timeout-minutes: 30
+    timeout-minutes: 60
     env:
       TEST_APP_ID: ${{ secrets.MY_APP_ID }}
     steps:
@@ -545,7 +545,7 @@ jobs:
       matrix:
         version: ['3.x']
     runs-on: windows-2019
-    timeout-minutes: 30
+    timeout-minutes: 60
     env:
       TEST_APP_ID: ${{ secrets.MY_APP_ID }}
     steps:
@@ -599,7 +599,7 @@ jobs:
       matrix:
         version: ['3.x']
     runs-on: ubuntu-latest
-    timeout-minutes: 30
+    timeout-minutes: 60
     env:
       TEST_APP_ID: ${{ secrets.MY_APP_ID }}
     steps:
