@@ -1,5 +1,7 @@
 # Changelog
 
+* [ci] Fix CI failed caused by using an unsupported NodeJS version (#2070) (cf0e95f)
+
 ## [6.5.0](https://github.com/AgoraIO-Extensions/Agora-Flutter-SDK/compare/6.3.2...6.5.0) (2024-12-10)
 
 ### Features
