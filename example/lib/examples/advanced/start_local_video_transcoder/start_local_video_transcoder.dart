@@ -48,8 +48,7 @@ class _State extends State<StartLocalVideoTranscoder> {
     super.initState();
     _controller = TextEditingController(text: config.channelId);
     _mediaPlayerUrlController = TextEditingController(
-        text:
-            'https://agoracdn.s3.us-west-1.amazonaws.com/videos/Agora.io-Interactions.mp4');
+        text: 'https://download.agora.io/demo/test/Agora.io-Interactions.mp4');
 
     _initEngine();
     _initImageFiles();

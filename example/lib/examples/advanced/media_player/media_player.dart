@@ -41,8 +41,7 @@ class _State extends State<MediaPlayer> {
     super.initState();
     _channelIdController = TextEditingController(text: config.channelId);
     _textEditingController = TextEditingController(
-        text:
-            'https://agoracdn.s3.us-west-1.amazonaws.com/videos/Agora.io-Interactions.mp4');
+        text: 'https://download.agora.io/demo/test/Agora.io-Interactions.mp4');
     _loopCountController = TextEditingController(text: '1');
     _streamInfoIndexController = TextEditingController(text: '1');
     _initEngine();
