@@ -1,5 +1,23 @@
 # Changelog
 
+## [6.5.0](https://github.com/AgoraIO-Extensions/Agora-Flutter-SDK/compare/6.3.2...6.5.0) (2024-12-10)
+
+### Features
+
+* Bump minimum supported Flutter SDK >= 3.7.0 ([#2001](https://github.com/AgoraIO-Extensions/Agora-Flutter-SDK/issues/2001)) ([3cc945b](https://github.com/AgoraIO-Extensions/Agora-Flutter-SDK/commit/3cc945b69197616deb6fc56fc2ab1ac8db0dd7d5))
+* Upgrade native sdk 4.5.0 ([#2087](https://github.com/AgoraIO-Extensions/Agora-Flutter-SDK/issues/2087)) ([cc4ef40](https://github.com/AgoraIO-Extensions/Agora-Flutter-SDK/commit/cc4ef40573bf4599c6986afeeb89c4db32cb1790))
+
+### Bug Fixes
+
+* [windows] Fix TextureRender crash ([#1999](https://github.com/AgoraIO-Extensions/Agora-Flutter-SDK/issues/1999)) ([0edbfe5](https://github.com/AgoraIO-Extensions/Agora-Flutter-SDK/commit/0edbfe5e71863fc34f2d2de00254776cf59a3be9))
+* Fix a potential crash in AgoraVideoView when the app is force quit ([#2055](https://github.com/AgoraIO-Extensions/Agora-Flutter-SDK/issues/2055)) ([98e12d7](https://github.com/AgoraIO-Extensions/Agora-Flutter-SDK/commit/98e12d7afe0ab0c58363d996d3af43cfbd700410))
+* Fix black screen issue in AgoraVideoView caused by incorrect resize handling ([#2052](https://github.com/AgoraIO-Extensions/Agora-Flutter-SDK/issues/2052)) ([e9d6bcf](https://github.com/AgoraIO-Extensions/Agora-Flutter-SDK/commit/e9d6bcf5e9d63e555b8adaa6bea486e55c8d24d4))
+* Fix potentially NPE in AgoraVideoView ([#2035](https://github.com/AgoraIO-Extensions/Agora-Flutter-SDK/issues/2035)) ([2ad4cff](https://github.com/AgoraIO-Extensions/Agora-Flutter-SDK/commit/2ad4cff195386577a2058c3b6051cc33439be47a))
+* Fix some callbacks not fired ([#2033](https://github.com/AgoraIO-Extensions/Agora-Flutter-SDK/issues/2033)) ([47ac794](https://github.com/AgoraIO-Extensions/Agora-Flutter-SDK/commit/47ac7944df8c96017a9e9ec289c0e33a36064e5d))
+* support android 15 16k page size ([#2043](https://github.com/AgoraIO-Extensions/Agora-Flutter-SDK/issues/2043)) ([3f585c4](https://github.com/AgoraIO-Extensions/Agora-Flutter-SDK/commit/3f585c4e9052a8edd43c91e85ae921bbf2640e57))
+* Suppress R8 missing class com.google.devtools.*.ThrowableExtension for AGP 8.x ([#2050](https://github.com/AgoraIO-Extensions/Agora-Flutter-SDK/issues/2050)) ([783c7ef](https://github.com/AgoraIO-Extensions/Agora-Flutter-SDK/commit/783c7ef58d382b298f401dac3e76193b2205d650))
+* Update minSdkVersion to 21 to Fix NDK Compatibility Issue ([#1832](https://github.com/AgoraIO-Extensions/Agora-Flutter-SDK/issues/1832)) ([0024b0a](https://github.com/AgoraIO-Extensions/Agora-Flutter-SDK/commit/0024b0ac7539574e620a42362f98820e1d5c9a37))
+
 ## [6.3.2](https://github.com/AgoraIO-Extensions/Agora-Flutter-SDK/compare/6.3.1...6.3.2) (2024-06-06)
 
 
