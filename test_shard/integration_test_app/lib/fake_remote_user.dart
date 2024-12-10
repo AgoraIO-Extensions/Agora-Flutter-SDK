@@ -45,8 +45,7 @@ class FakeRemoteUser {
         .registerPlayerSourceObserver(mediaPlayerSourceObserver);
 
     await mediaPlayerController.open(
-        url:
-            'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerJoyrides.mp4',
+        url: 'https://download.agora.io/demo/test/Agora.io-Interactions.mp4',
         startPos: 0);
 
     await mediaPlayerControllerPlayed.future;

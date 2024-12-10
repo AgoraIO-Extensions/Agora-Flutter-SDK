@@ -48,8 +48,7 @@ class _State extends State<StartLocalVideoTranscoder> {
     super.initState();
     _controller = TextEditingController(text: config.channelId);
     _mediaPlayerUrlController = TextEditingController(
-        text:
-            'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerJoyrides.mp4');
+        text: 'https://download.agora.io/demo/test/Agora.io-Interactions.mp4');
 
     _initEngine();
     _initImageFiles();
