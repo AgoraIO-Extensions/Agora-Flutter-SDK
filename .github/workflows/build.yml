@@ -86,7 +86,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        version: ["3.7.0", "3.x"]
+        version: ["3.7.0"]
     runs-on: ubuntu-latest
     timeout-minutes: 120
     env:
@@ -124,7 +124,7 @@ jobs:
       fail-fast: false
       matrix:
         version: ["3.7.0", "3.16"]
-    runs-on: macos-12
+    runs-on: macos-latest
     timeout-minutes: 120
     env:
       TEST_APP_ID: ${{ secrets.MY_APP_ID }}
@@ -136,8 +136,28 @@ jobs:
           cache: true
       - uses: futureware-tech/simulator-action@v3
         with:
-          model: 'iPhone 14 Pro Max'
+          model: 'iPhone 15'
       - run: bash ci/run_flutter_integration_test_ios.sh
+      - name: Get ios crash logs
+        if: always()
+        run: |
+          sleep 30
+
+          mkdir logs-ios
+
+          CRASH_DIR="${HOME}/Library/Logs/DiagnosticReports/"
+          OUTPUT_CRASH_DIR=./logs-ios/crash
+          mkdir -p ${OUTPUT_CRASH_DIR}
+
+          # Copy all files
+          cp -RP $CRASH_DIR* $OUTPUT_CRASH_DIR
+        
+      - name: Upload ios logs
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: logs-ios-${{ matrix.version }}
+          path: logs-ios/*
 
   integration_test_macos:
     name: Run Flutter macOS Integration Tests
@@ -145,8 +165,8 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        version: ["3.7.0", "3.x"]
-    runs-on: macos-12
+        version: ["3.7.0"]
+    runs-on: macos-latest
     timeout-minutes: 120
     env:
       TEST_APP_ID: ${{ secrets.MY_APP_ID }}
@@ -191,7 +211,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        version: ["3.7.0", "3.x"]
+        version: ["3.7.0"]
     runs-on: windows-2019
     timeout-minutes: 120
     env:
@@ -246,7 +266,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        version: ["3.7.12", "3.x"] # Need 3.7.12 to build with Gradle 8.x https://github.com/flutter/flutter/issues/124838
+        version: ["3.7.12"] # Need 3.7.12 to build with Gradle 8.x https://github.com/flutter/flutter/issues/124838
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
@@ -269,7 +289,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        version: ["3.7.12", "3.x"] # Need 3.7.12 to build with Gradle 8.x https://github.com/flutter/flutter/issues/124838
+        version: ["3.7.12"] # Need 3.7.12 to build with Gradle 8.x https://github.com/flutter/flutter/issues/124838
     runs-on: windows-2019
     steps:
       - uses: actions/checkout@v3
@@ -293,8 +313,8 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        version: ["3.7.0", "3.x"]
-    runs-on: macos-12
+        version: ["3.7.0"]
+    runs-on: macos-latest
     timeout-minutes: 120
     steps:
       - uses: actions/checkout@v3
@@ -339,7 +359,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        version: ["3.7.0", "3.x"]
+        version: ["3.7.0"]
     runs-on: ubuntu-latest
     timeout-minutes: 120
     steps:
@@ -457,7 +477,7 @@ jobs:
             --iris-ios-cdn-url=${IRIS_CDN_URL_IOS}
       - uses: futureware-tech/simulator-action@v3
         with:
-          model: 'iPhone 14 Pro Max'
+          model: 'iPhone 15'
       - run: bash ci/rendering_test_ios.sh
 
       - uses: actions/upload-artifact@v3
@@ -472,7 +492,7 @@ jobs:
     strategy:
       matrix:
         version: ['3.x']
-    runs-on: macos-12
+    runs-on: macos-latest
     timeout-minutes: 120
     env:
       TEST_APP_ID: ${{ secrets.MY_APP_ID }}

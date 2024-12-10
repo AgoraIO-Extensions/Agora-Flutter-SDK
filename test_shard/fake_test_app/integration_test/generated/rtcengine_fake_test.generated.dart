@@ -340,6 +340,7 @@ void rtcEngineSmokeTestCases() {
         bool optionsIsInteractiveAudience = true;
         int optionsCustomVideoTrackId = 5;
         bool optionsIsAudioFilterable = true;
+        String optionsParameters = "hello";
         ChannelMediaOptions options = ChannelMediaOptions(
           publishCameraTrack: optionsPublishCameraTrack,
           publishSecondaryCameraTrack: optionsPublishSecondaryCameraTrack,
@@ -377,6 +378,7 @@ void rtcEngineSmokeTestCases() {
           isInteractiveAudience: optionsIsInteractiveAudience,
           customVideoTrackId: optionsCustomVideoTrackId,
           isAudioFilterable: optionsIsAudioFilterable,
+          parameters: optionsParameters,
         );
         await rtcEngine.joinChannel(
           token: token,
@@ -454,6 +456,7 @@ void rtcEngineSmokeTestCases() {
         bool optionsIsInteractiveAudience = true;
         int optionsCustomVideoTrackId = 5;
         bool optionsIsAudioFilterable = true;
+        String optionsParameters = "hello";
         ChannelMediaOptions options = ChannelMediaOptions(
           publishCameraTrack: optionsPublishCameraTrack,
           publishSecondaryCameraTrack: optionsPublishSecondaryCameraTrack,
@@ -491,6 +494,7 @@ void rtcEngineSmokeTestCases() {
           isInteractiveAudience: optionsIsInteractiveAudience,
           customVideoTrackId: optionsCustomVideoTrackId,
           isAudioFilterable: optionsIsAudioFilterable,
+          parameters: optionsParameters,
         );
         await rtcEngine.updateChannelMediaOptions(
           options,
@@ -1027,16 +1031,18 @@ void rtcEngineSmokeTestCases() {
         OrientationMode configOrientationMode =
             OrientationMode.orientationModeAdaptive;
         DegradationPreference configDegradationPreference =
-            DegradationPreference.maintainQuality;
+            DegradationPreference.maintainAuto;
         VideoMirrorModeType configMirrorMode =
             VideoMirrorModeType.videoMirrorModeAuto;
         EncodingPreference advanceOptionsEncodingPreference =
             EncodingPreference.preferAuto;
         CompressionPreference advanceOptionsCompressionPreference =
-            CompressionPreference.preferLowLatency;
+            CompressionPreference.preferCompressionAuto;
+        bool advanceOptionsEncodeAlpha = true;
         AdvanceOptions configAdvanceOptions = AdvanceOptions(
           encodingPreference: advanceOptionsEncodingPreference,
           compressionPreference: advanceOptionsCompressionPreference,
+          encodeAlpha: advanceOptionsEncodeAlpha,
         );
         int configFrameRate = 5;
         int configBitrate = 5;
@@ -1110,6 +1116,209 @@ void rtcEngineSmokeTestCases() {
         if (e is! AgoraRtcException) {
           debugPrint(
               '[RtcEngine.setBeautyEffectOptions] error: ${e.toString()}');
+          rethrow;
+        }
+
+        if (e.code != -4) {
+          // Only not supported error supported.
+          rethrow;
+        }
+      }
+
+      await rtcEngine.release();
+    },
+  );
+
+  testWidgets(
+    'RtcEngine.setFaceShapeBeautyOptions',
+    (WidgetTester tester) async {
+      String engineAppId = const String.fromEnvironment('TEST_APP_ID',
+          defaultValue: '<YOUR_APP_ID>');
+
+      RtcEngine rtcEngine = createAgoraRtcEngine();
+      await rtcEngine.initialize(RtcEngineContext(
+        appId: engineAppId,
+        areaCode: AreaCode.areaCodeGlob.value(),
+      ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
+
+      try {
+        bool enabled = true;
+        FaceShapeBeautyStyle optionsShapeStyle =
+            FaceShapeBeautyStyle.faceShapeBeautyStyleFemale;
+        int optionsStyleIntensity = 5;
+        FaceShapeBeautyOptions options = FaceShapeBeautyOptions(
+          shapeStyle: optionsShapeStyle,
+          styleIntensity: optionsStyleIntensity,
+        );
+        MediaSourceType type = MediaSourceType.audioPlayoutSource;
+        await rtcEngine.setFaceShapeBeautyOptions(
+          enabled: enabled,
+          options: options,
+          type: type,
+        );
+      } catch (e) {
+        if (e is! AgoraRtcException) {
+          debugPrint(
+              '[RtcEngine.setFaceShapeBeautyOptions] error: ${e.toString()}');
+          rethrow;
+        }
+
+        if (e.code != -4) {
+          // Only not supported error supported.
+          rethrow;
+        }
+      }
+
+      await rtcEngine.release();
+    },
+  );
+
+  testWidgets(
+    'RtcEngine.setFaceShapeAreaOptions',
+    (WidgetTester tester) async {
+      String engineAppId = const String.fromEnvironment('TEST_APP_ID',
+          defaultValue: '<YOUR_APP_ID>');
+
+      RtcEngine rtcEngine = createAgoraRtcEngine();
+      await rtcEngine.initialize(RtcEngineContext(
+        appId: engineAppId,
+        areaCode: AreaCode.areaCodeGlob.value(),
+      ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
+
+      try {
+        FaceShapeArea optionsShapeArea = FaceShapeArea.faceShapeAreaNone;
+        int optionsShapeIntensity = 5;
+        FaceShapeAreaOptions options = FaceShapeAreaOptions(
+          shapeArea: optionsShapeArea,
+          shapeIntensity: optionsShapeIntensity,
+        );
+        MediaSourceType type = MediaSourceType.audioPlayoutSource;
+        await rtcEngine.setFaceShapeAreaOptions(
+          options: options,
+          type: type,
+        );
+      } catch (e) {
+        if (e is! AgoraRtcException) {
+          debugPrint(
+              '[RtcEngine.setFaceShapeAreaOptions] error: ${e.toString()}');
+          rethrow;
+        }
+
+        if (e.code != -4) {
+          // Only not supported error supported.
+          rethrow;
+        }
+      }
+
+      await rtcEngine.release();
+    },
+  );
+
+  testWidgets(
+    'RtcEngine.getFaceShapeBeautyOptions',
+    (WidgetTester tester) async {
+      String engineAppId = const String.fromEnvironment('TEST_APP_ID',
+          defaultValue: '<YOUR_APP_ID>');
+
+      RtcEngine rtcEngine = createAgoraRtcEngine();
+      await rtcEngine.initialize(RtcEngineContext(
+        appId: engineAppId,
+        areaCode: AreaCode.areaCodeGlob.value(),
+      ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
+
+      try {
+        MediaSourceType type = MediaSourceType.audioPlayoutSource;
+        await rtcEngine.getFaceShapeBeautyOptions(
+          type: type,
+        );
+      } catch (e) {
+        if (e is! AgoraRtcException) {
+          debugPrint(
+              '[RtcEngine.getFaceShapeBeautyOptions] error: ${e.toString()}');
+          rethrow;
+        }
+
+        if (e.code != -4) {
+          // Only not supported error supported.
+          rethrow;
+        }
+      }
+
+      await rtcEngine.release();
+    },
+  );
+
+  testWidgets(
+    'RtcEngine.getFaceShapeAreaOptions',
+    (WidgetTester tester) async {
+      String engineAppId = const String.fromEnvironment('TEST_APP_ID',
+          defaultValue: '<YOUR_APP_ID>');
+
+      RtcEngine rtcEngine = createAgoraRtcEngine();
+      await rtcEngine.initialize(RtcEngineContext(
+        appId: engineAppId,
+        areaCode: AreaCode.areaCodeGlob.value(),
+      ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
+
+      try {
+        FaceShapeArea shapeArea = FaceShapeArea.faceShapeAreaNone;
+        MediaSourceType type = MediaSourceType.audioPlayoutSource;
+        await rtcEngine.getFaceShapeAreaOptions(
+          shapeArea: shapeArea,
+          type: type,
+        );
+      } catch (e) {
+        if (e is! AgoraRtcException) {
+          debugPrint(
+              '[RtcEngine.getFaceShapeAreaOptions] error: ${e.toString()}');
+          rethrow;
+        }
+
+        if (e.code != -4) {
+          // Only not supported error supported.
+          rethrow;
+        }
+      }
+
+      await rtcEngine.release();
+    },
+  );
+
+  testWidgets(
+    'RtcEngine.setFilterEffectOptions',
+    (WidgetTester tester) async {
+      String engineAppId = const String.fromEnvironment('TEST_APP_ID',
+          defaultValue: '<YOUR_APP_ID>');
+
+      RtcEngine rtcEngine = createAgoraRtcEngine();
+      await rtcEngine.initialize(RtcEngineContext(
+        appId: engineAppId,
+        areaCode: AreaCode.areaCodeGlob.value(),
+      ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
+
+      try {
+        bool enabled = true;
+        String optionsPath = "hello";
+        double optionsStrength = 5.0;
+        FilterEffectOptions options = FilterEffectOptions(
+          path: optionsPath,
+          strength: optionsStrength,
+        );
+        MediaSourceType type = MediaSourceType.audioPlayoutSource;
+        await rtcEngine.setFilterEffectOptions(
+          enabled: enabled,
+          options: options,
+          type: type,
+        );
+      } catch (e) {
+        if (e is! AgoraRtcException) {
+          debugPrint(
+              '[RtcEngine.setFilterEffectOptions] error: ${e.toString()}');
           rethrow;
         }
 
@@ -1766,41 +1975,6 @@ void rtcEngineSmokeTestCases() {
   );
 
   testWidgets(
-    'RtcEngine.setDefaultMuteAllRemoteAudioStreams',
-    (WidgetTester tester) async {
-      String engineAppId = const String.fromEnvironment('TEST_APP_ID',
-          defaultValue: '<YOUR_APP_ID>');
-
-      RtcEngine rtcEngine = createAgoraRtcEngine();
-      await rtcEngine.initialize(RtcEngineContext(
-        appId: engineAppId,
-        areaCode: AreaCode.areaCodeGlob.value(),
-      ));
-      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
-
-      try {
-        bool mute = true;
-        await rtcEngine.setDefaultMuteAllRemoteAudioStreams(
-          mute,
-        );
-      } catch (e) {
-        if (e is! AgoraRtcException) {
-          debugPrint(
-              '[RtcEngine.setDefaultMuteAllRemoteAudioStreams] error: ${e.toString()}');
-          rethrow;
-        }
-
-        if (e.code != -4) {
-          // Only not supported error supported.
-          rethrow;
-        }
-      }
-
-      await rtcEngine.release();
-    },
-  );
-
-  testWidgets(
     'RtcEngine.muteRemoteAudioStream',
     (WidgetTester tester) async {
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
@@ -1927,41 +2101,6 @@ void rtcEngineSmokeTestCases() {
         if (e is! AgoraRtcException) {
           debugPrint(
               '[RtcEngine.muteAllRemoteVideoStreams] error: ${e.toString()}');
-          rethrow;
-        }
-
-        if (e.code != -4) {
-          // Only not supported error supported.
-          rethrow;
-        }
-      }
-
-      await rtcEngine.release();
-    },
-  );
-
-  testWidgets(
-    'RtcEngine.setDefaultMuteAllRemoteVideoStreams',
-    (WidgetTester tester) async {
-      String engineAppId = const String.fromEnvironment('TEST_APP_ID',
-          defaultValue: '<YOUR_APP_ID>');
-
-      RtcEngine rtcEngine = createAgoraRtcEngine();
-      await rtcEngine.initialize(RtcEngineContext(
-        appId: engineAppId,
-        areaCode: AreaCode.areaCodeGlob.value(),
-      ));
-      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
-
-      try {
-        bool mute = true;
-        await rtcEngine.setDefaultMuteAllRemoteVideoStreams(
-          mute,
-        );
-      } catch (e) {
-        if (e is! AgoraRtcException) {
-          debugPrint(
-              '[RtcEngine.setDefaultMuteAllRemoteVideoStreams] error: ${e.toString()}');
           rethrow;
         }
 
@@ -4095,6 +4234,42 @@ void rtcEngineSmokeTestCases() {
   );
 
   testWidgets(
+    'RtcEngine.enableVoiceAITuner',
+    (WidgetTester tester) async {
+      String engineAppId = const String.fromEnvironment('TEST_APP_ID',
+          defaultValue: '<YOUR_APP_ID>');
+
+      RtcEngine rtcEngine = createAgoraRtcEngine();
+      await rtcEngine.initialize(RtcEngineContext(
+        appId: engineAppId,
+        areaCode: AreaCode.areaCodeGlob.value(),
+      ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
+
+      try {
+        bool enabled = true;
+        VoiceAiTunerType type = VoiceAiTunerType.voiceAiTunerMatureMale;
+        await rtcEngine.enableVoiceAITuner(
+          enabled: enabled,
+          type: type,
+        );
+      } catch (e) {
+        if (e is! AgoraRtcException) {
+          debugPrint('[RtcEngine.enableVoiceAITuner] error: ${e.toString()}');
+          rethrow;
+        }
+
+        if (e.code != -4) {
+          // Only not supported error supported.
+          rethrow;
+        }
+      }
+
+      await rtcEngine.release();
+    },
+  );
+
+  testWidgets(
     'RtcEngine.setLogFile',
     (WidgetTester tester) async {
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
@@ -4374,6 +4549,78 @@ void rtcEngineSmokeTestCases() {
   );
 
   testWidgets(
+    'RtcEngine.setLocalRenderTargetFps',
+    (WidgetTester tester) async {
+      String engineAppId = const String.fromEnvironment('TEST_APP_ID',
+          defaultValue: '<YOUR_APP_ID>');
+
+      RtcEngine rtcEngine = createAgoraRtcEngine();
+      await rtcEngine.initialize(RtcEngineContext(
+        appId: engineAppId,
+        areaCode: AreaCode.areaCodeGlob.value(),
+      ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
+
+      try {
+        VideoSourceType sourceType = VideoSourceType.videoSourceCameraPrimary;
+        int targetFps = 5;
+        await rtcEngine.setLocalRenderTargetFps(
+          sourceType: sourceType,
+          targetFps: targetFps,
+        );
+      } catch (e) {
+        if (e is! AgoraRtcException) {
+          debugPrint(
+              '[RtcEngine.setLocalRenderTargetFps] error: ${e.toString()}');
+          rethrow;
+        }
+
+        if (e.code != -4) {
+          // Only not supported error supported.
+          rethrow;
+        }
+      }
+
+      await rtcEngine.release();
+    },
+  );
+
+  testWidgets(
+    'RtcEngine.setRemoteRenderTargetFps',
+    (WidgetTester tester) async {
+      String engineAppId = const String.fromEnvironment('TEST_APP_ID',
+          defaultValue: '<YOUR_APP_ID>');
+
+      RtcEngine rtcEngine = createAgoraRtcEngine();
+      await rtcEngine.initialize(RtcEngineContext(
+        appId: engineAppId,
+        areaCode: AreaCode.areaCodeGlob.value(),
+      ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
+
+      try {
+        int targetFps = 5;
+        await rtcEngine.setRemoteRenderTargetFps(
+          targetFps,
+        );
+      } catch (e) {
+        if (e is! AgoraRtcException) {
+          debugPrint(
+              '[RtcEngine.setRemoteRenderTargetFps] error: ${e.toString()}');
+          rethrow;
+        }
+
+        if (e.code != -4) {
+          // Only not supported error supported.
+          rethrow;
+        }
+      }
+
+      await rtcEngine.release();
+    },
+  );
+
+  testWidgets(
     'RtcEngine.setLocalVideoMirrorMode',
     (WidgetTester tester) async {
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
@@ -4492,6 +4739,43 @@ void rtcEngineSmokeTestCases() {
       } catch (e) {
         if (e is! AgoraRtcException) {
           debugPrint('[RtcEngine.setDualStreamMode] error: ${e.toString()}');
+          rethrow;
+        }
+
+        if (e.code != -4) {
+          // Only not supported error supported.
+          rethrow;
+        }
+      }
+
+      await rtcEngine.release();
+    },
+  );
+
+  testWidgets(
+    'RtcEngine.setSimulcastConfig',
+    (WidgetTester tester) async {
+      String engineAppId = const String.fromEnvironment('TEST_APP_ID',
+          defaultValue: '<YOUR_APP_ID>');
+
+      RtcEngine rtcEngine = createAgoraRtcEngine();
+      await rtcEngine.initialize(RtcEngineContext(
+        appId: engineAppId,
+        areaCode: AreaCode.areaCodeGlob.value(),
+      ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
+
+      try {
+        List<StreamLayerConfig> simulcastConfigConfigs = [];
+        SimulcastConfig simulcastConfig = SimulcastConfig(
+          configs: simulcastConfigConfigs,
+        );
+        await rtcEngine.setSimulcastConfig(
+          simulcastConfig,
+        );
+      } catch (e) {
+        if (e is! AgoraRtcException) {
+          debugPrint('[RtcEngine.setSimulcastConfig] error: ${e.toString()}');
           rethrow;
         }
 
@@ -7164,6 +7448,41 @@ void rtcEngineSmokeTestCases() {
   );
 
   testWidgets(
+    'RtcEngine.setExternalMediaProjection',
+    (WidgetTester tester) async {
+      String engineAppId = const String.fromEnvironment('TEST_APP_ID',
+          defaultValue: '<YOUR_APP_ID>');
+
+      RtcEngine rtcEngine = createAgoraRtcEngine();
+      await rtcEngine.initialize(RtcEngineContext(
+        appId: engineAppId,
+        areaCode: AreaCode.areaCodeGlob.value(),
+      ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
+
+      try {
+        int mediaProjection = 5;
+        await rtcEngine.setExternalMediaProjection(
+          mediaProjection,
+        );
+      } catch (e) {
+        if (e is! AgoraRtcException) {
+          debugPrint(
+              '[RtcEngine.setExternalMediaProjection] error: ${e.toString()}');
+          rethrow;
+        }
+
+        if (e.code != -4) {
+          // Only not supported error supported.
+          rethrow;
+        }
+      }
+
+      await rtcEngine.release();
+    },
+  );
+
+  testWidgets(
     'RtcEngine.setScreenCaptureScenario',
     (WidgetTester tester) async {
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
@@ -7569,16 +7888,18 @@ void rtcEngineSmokeTestCases() {
         OrientationMode videoOutputConfigurationOrientationMode =
             OrientationMode.orientationModeAdaptive;
         DegradationPreference videoOutputConfigurationDegradationPreference =
-            DegradationPreference.maintainQuality;
+            DegradationPreference.maintainAuto;
         VideoMirrorModeType videoOutputConfigurationMirrorMode =
             VideoMirrorModeType.videoMirrorModeAuto;
         EncodingPreference advanceOptionsEncodingPreference =
             EncodingPreference.preferAuto;
         CompressionPreference advanceOptionsCompressionPreference =
-            CompressionPreference.preferLowLatency;
+            CompressionPreference.preferCompressionAuto;
+        bool advanceOptionsEncodeAlpha = true;
         AdvanceOptions videoOutputConfigurationAdvanceOptions = AdvanceOptions(
           encodingPreference: advanceOptionsEncodingPreference,
           compressionPreference: advanceOptionsCompressionPreference,
+          encodeAlpha: advanceOptionsEncodeAlpha,
         );
         int videoOutputConfigurationFrameRate = 5;
         int videoOutputConfigurationBitrate = 5;
@@ -7649,16 +7970,18 @@ void rtcEngineSmokeTestCases() {
         OrientationMode videoOutputConfigurationOrientationMode =
             OrientationMode.orientationModeAdaptive;
         DegradationPreference videoOutputConfigurationDegradationPreference =
-            DegradationPreference.maintainQuality;
+            DegradationPreference.maintainAuto;
         VideoMirrorModeType videoOutputConfigurationMirrorMode =
             VideoMirrorModeType.videoMirrorModeAuto;
         EncodingPreference advanceOptionsEncodingPreference =
             EncodingPreference.preferAuto;
         CompressionPreference advanceOptionsCompressionPreference =
-            CompressionPreference.preferLowLatency;
+            CompressionPreference.preferCompressionAuto;
+        bool advanceOptionsEncodeAlpha = true;
         AdvanceOptions videoOutputConfigurationAdvanceOptions = AdvanceOptions(
           encodingPreference: advanceOptionsEncodingPreference,
           compressionPreference: advanceOptionsCompressionPreference,
+          encodeAlpha: advanceOptionsEncodeAlpha,
         );
         int videoOutputConfigurationFrameRate = 5;
         int videoOutputConfigurationBitrate = 5;
@@ -7757,6 +8080,120 @@ void rtcEngineSmokeTestCases() {
         if (e is! AgoraRtcException) {
           debugPrint(
               '[RtcEngine.stopLocalVideoTranscoder] error: ${e.toString()}');
+          rethrow;
+        }
+
+        if (e.code != -4) {
+          // Only not supported error supported.
+          rethrow;
+        }
+      }
+
+      await rtcEngine.release();
+    },
+  );
+
+  testWidgets(
+    'RtcEngine.startLocalAudioMixer',
+    (WidgetTester tester) async {
+      String engineAppId = const String.fromEnvironment('TEST_APP_ID',
+          defaultValue: '<YOUR_APP_ID>');
+
+      RtcEngine rtcEngine = createAgoraRtcEngine();
+      await rtcEngine.initialize(RtcEngineContext(
+        appId: engineAppId,
+        areaCode: AreaCode.areaCodeGlob.value(),
+      ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
+
+      try {
+        int configStreamCount = 5;
+        List<MixedAudioStream> configAudioInputStreams = [];
+        bool configSyncWithLocalMic = true;
+        LocalAudioMixerConfiguration config = LocalAudioMixerConfiguration(
+          streamCount: configStreamCount,
+          audioInputStreams: configAudioInputStreams,
+          syncWithLocalMic: configSyncWithLocalMic,
+        );
+        await rtcEngine.startLocalAudioMixer(
+          config,
+        );
+      } catch (e) {
+        if (e is! AgoraRtcException) {
+          debugPrint('[RtcEngine.startLocalAudioMixer] error: ${e.toString()}');
+          rethrow;
+        }
+
+        if (e.code != -4) {
+          // Only not supported error supported.
+          rethrow;
+        }
+      }
+
+      await rtcEngine.release();
+    },
+  );
+
+  testWidgets(
+    'RtcEngine.updateLocalAudioMixerConfiguration',
+    (WidgetTester tester) async {
+      String engineAppId = const String.fromEnvironment('TEST_APP_ID',
+          defaultValue: '<YOUR_APP_ID>');
+
+      RtcEngine rtcEngine = createAgoraRtcEngine();
+      await rtcEngine.initialize(RtcEngineContext(
+        appId: engineAppId,
+        areaCode: AreaCode.areaCodeGlob.value(),
+      ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
+
+      try {
+        int configStreamCount = 5;
+        List<MixedAudioStream> configAudioInputStreams = [];
+        bool configSyncWithLocalMic = true;
+        LocalAudioMixerConfiguration config = LocalAudioMixerConfiguration(
+          streamCount: configStreamCount,
+          audioInputStreams: configAudioInputStreams,
+          syncWithLocalMic: configSyncWithLocalMic,
+        );
+        await rtcEngine.updateLocalAudioMixerConfiguration(
+          config,
+        );
+      } catch (e) {
+        if (e is! AgoraRtcException) {
+          debugPrint(
+              '[RtcEngine.updateLocalAudioMixerConfiguration] error: ${e.toString()}');
+          rethrow;
+        }
+
+        if (e.code != -4) {
+          // Only not supported error supported.
+          rethrow;
+        }
+      }
+
+      await rtcEngine.release();
+    },
+  );
+
+  testWidgets(
+    'RtcEngine.stopLocalAudioMixer',
+    (WidgetTester tester) async {
+      String engineAppId = const String.fromEnvironment('TEST_APP_ID',
+          defaultValue: '<YOUR_APP_ID>');
+
+      RtcEngine rtcEngine = createAgoraRtcEngine();
+      await rtcEngine.initialize(RtcEngineContext(
+        appId: engineAppId,
+        areaCode: AreaCode.areaCodeGlob.value(),
+      ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
+
+      try {
+        await rtcEngine.stopLocalAudioMixer();
+      } catch (e) {
+        if (e is! AgoraRtcException) {
+          debugPrint('[RtcEngine.stopLocalAudioMixer] error: ${e.toString()}');
           rethrow;
         }
 
@@ -8156,12 +8593,12 @@ void rtcEngineSmokeTestCases() {
               int width, int height, int layoutCount, List layoutlist) {},
           onAudioMetadataReceived: (RtcConnection connection, int uid,
               Uint8List metadata, int length) {},
-          onExtensionEvent:
-              (String provider, String extension, String key, String value) {},
-          onExtensionStarted: (String provider, String extension) {},
-          onExtensionStopped: (String provider, String extension) {},
-          onExtensionError:
-              (String provider, String extension, int error, String message) {},
+          onExtensionEventWithContext:
+              (ExtensionContext context, String key, String value) {},
+          onExtensionStartedWithContext: (ExtensionContext context) {},
+          onExtensionStoppedWithContext: (ExtensionContext context) {},
+          onExtensionErrorWithContext:
+              (ExtensionContext context, int error, String message) {},
           onSetRtmFlagResult: (RtcConnection connection, int code) {},
         );
         rtcEngine.registerEventHandler(
@@ -8373,12 +8810,12 @@ void rtcEngineSmokeTestCases() {
               int width, int height, int layoutCount, List layoutlist) {},
           onAudioMetadataReceived: (RtcConnection connection, int uid,
               Uint8List metadata, int length) {},
-          onExtensionEvent:
-              (String provider, String extension, String key, String value) {},
-          onExtensionStarted: (String provider, String extension) {},
-          onExtensionStopped: (String provider, String extension) {},
-          onExtensionError:
-              (String provider, String extension, int error, String message) {},
+          onExtensionEventWithContext:
+              (ExtensionContext context, String key, String value) {},
+          onExtensionStartedWithContext: (ExtensionContext context) {},
+          onExtensionStoppedWithContext: (ExtensionContext context) {},
+          onExtensionErrorWithContext:
+              (ExtensionContext context, int error, String message) {},
           onSetRtmFlagResult: (RtcConnection connection, int code) {},
         );
         rtcEngine.unregisterEventHandler(
@@ -8425,74 +8862,6 @@ void rtcEngineSmokeTestCases() {
         if (e is! AgoraRtcException) {
           debugPrint(
               '[RtcEngine.setRemoteUserPriority] error: ${e.toString()}');
-          rethrow;
-        }
-
-        if (e.code != -4) {
-          // Only not supported error supported.
-          rethrow;
-        }
-      }
-
-      await rtcEngine.release();
-    },
-  );
-
-  testWidgets(
-    'RtcEngine.setEncryptionMode',
-    (WidgetTester tester) async {
-      String engineAppId = const String.fromEnvironment('TEST_APP_ID',
-          defaultValue: '<YOUR_APP_ID>');
-
-      RtcEngine rtcEngine = createAgoraRtcEngine();
-      await rtcEngine.initialize(RtcEngineContext(
-        appId: engineAppId,
-        areaCode: AreaCode.areaCodeGlob.value(),
-      ));
-      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
-
-      try {
-        String encryptionMode = "hello";
-        await rtcEngine.setEncryptionMode(
-          encryptionMode,
-        );
-      } catch (e) {
-        if (e is! AgoraRtcException) {
-          debugPrint('[RtcEngine.setEncryptionMode] error: ${e.toString()}');
-          rethrow;
-        }
-
-        if (e.code != -4) {
-          // Only not supported error supported.
-          rethrow;
-        }
-      }
-
-      await rtcEngine.release();
-    },
-  );
-
-  testWidgets(
-    'RtcEngine.setEncryptionSecret',
-    (WidgetTester tester) async {
-      String engineAppId = const String.fromEnvironment('TEST_APP_ID',
-          defaultValue: '<YOUR_APP_ID>');
-
-      RtcEngine rtcEngine = createAgoraRtcEngine();
-      await rtcEngine.initialize(RtcEngineContext(
-        appId: engineAppId,
-        areaCode: AreaCode.areaCodeGlob.value(),
-      ));
-      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
-
-      try {
-        String secret = "hello";
-        await rtcEngine.setEncryptionSecret(
-          secret,
-        );
-      } catch (e) {
-        if (e is! AgoraRtcException) {
-          debugPrint('[RtcEngine.setEncryptionSecret] error: ${e.toString()}');
           rethrow;
         }
 
@@ -9124,6 +9493,7 @@ void rtcEngineSmokeTestCases() {
         bool optionsIsInteractiveAudience = true;
         int optionsCustomVideoTrackId = 5;
         bool optionsIsAudioFilterable = true;
+        String optionsParameters = "hello";
         ChannelMediaOptions options = ChannelMediaOptions(
           publishCameraTrack: optionsPublishCameraTrack,
           publishSecondaryCameraTrack: optionsPublishSecondaryCameraTrack,
@@ -9161,6 +9531,7 @@ void rtcEngineSmokeTestCases() {
           isInteractiveAudience: optionsIsInteractiveAudience,
           customVideoTrackId: optionsCustomVideoTrackId,
           isAudioFilterable: optionsIsAudioFilterable,
+          parameters: optionsParameters,
         );
         await rtcEngine.joinChannelWithUserAccount(
           token: token,
@@ -9242,6 +9613,7 @@ void rtcEngineSmokeTestCases() {
         bool optionsIsInteractiveAudience = true;
         int optionsCustomVideoTrackId = 5;
         bool optionsIsAudioFilterable = true;
+        String optionsParameters = "hello";
         ChannelMediaOptions options = ChannelMediaOptions(
           publishCameraTrack: optionsPublishCameraTrack,
           publishSecondaryCameraTrack: optionsPublishSecondaryCameraTrack,
@@ -9279,6 +9651,7 @@ void rtcEngineSmokeTestCases() {
           isInteractiveAudience: optionsIsInteractiveAudience,
           customVideoTrackId: optionsCustomVideoTrackId,
           isAudioFilterable: optionsIsAudioFilterable,
+          parameters: optionsParameters,
         );
         await rtcEngine.joinChannelWithUserAccountEx(
           token: token,
@@ -9527,16 +9900,18 @@ void rtcEngineSmokeTestCases() {
         OrientationMode configOrientationMode =
             OrientationMode.orientationModeAdaptive;
         DegradationPreference configDegradationPreference =
-            DegradationPreference.maintainQuality;
+            DegradationPreference.maintainAuto;
         VideoMirrorModeType configMirrorMode =
             VideoMirrorModeType.videoMirrorModeAuto;
         EncodingPreference advanceOptionsEncodingPreference =
             EncodingPreference.preferAuto;
         CompressionPreference advanceOptionsCompressionPreference =
-            CompressionPreference.preferLowLatency;
+            CompressionPreference.preferCompressionAuto;
+        bool advanceOptionsEncodeAlpha = true;
         AdvanceOptions configAdvanceOptions = AdvanceOptions(
           encodingPreference: advanceOptionsEncodingPreference,
           compressionPreference: advanceOptionsCompressionPreference,
+          encodeAlpha: advanceOptionsEncodeAlpha,
         );
         int configFrameRate = 5;
         int configBitrate = 5;
@@ -10435,6 +10810,40 @@ void rtcEngineSmokeTestCases() {
   );
 
   testWidgets(
+    'RtcEngine.queryHDRCapability',
+    (WidgetTester tester) async {
+      String engineAppId = const String.fromEnvironment('TEST_APP_ID',
+          defaultValue: '<YOUR_APP_ID>');
+
+      RtcEngine rtcEngine = createAgoraRtcEngine();
+      await rtcEngine.initialize(RtcEngineContext(
+        appId: engineAppId,
+        areaCode: AreaCode.areaCodeGlob.value(),
+      ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
+
+      try {
+        VideoModuleType videoModule = VideoModuleType.videoModuleCapturer;
+        await rtcEngine.queryHDRCapability(
+          videoModule,
+        );
+      } catch (e) {
+        if (e is! AgoraRtcException) {
+          debugPrint('[RtcEngine.queryHDRCapability] error: ${e.toString()}');
+          rethrow;
+        }
+
+        if (e.code != -4) {
+          // Only not supported error supported.
+          rethrow;
+        }
+      }
+
+      await rtcEngine.release();
+    },
+  );
+
+  testWidgets(
     'RtcEngine.startScreenCaptureBySourceType',
     (WidgetTester tester) async {
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
@@ -10833,11 +11242,13 @@ void rtcEngineSmokeTestCases() {
       await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
+        String metadataChannelId = "hello";
         int metadataUid = 5;
         int metadataSize = 5;
         Uint8List metadataBuffer = Uint8List.fromList([1, 1, 1, 1, 1]);
         int metadataTimeStampMs = 5;
         Metadata metadata = Metadata(
+          channelId: metadataChannelId,
           uid: metadataUid,
           size: metadataSize,
           buffer: metadataBuffer,
@@ -10958,6 +11369,49 @@ void rtcEngineSmokeTestCases() {
       } catch (e) {
         if (e is! AgoraRtcException) {
           debugPrint('[RtcEngine.getNativeHandle] error: ${e.toString()}');
+          rethrow;
+        }
+
+        if (e.code != -4) {
+          // Only not supported error supported.
+          rethrow;
+        }
+      }
+
+      await rtcEngine.release();
+    },
+  );
+
+  testWidgets(
+    'RtcEngine.takeSnapshotWithConfig',
+    (WidgetTester tester) async {
+      String engineAppId = const String.fromEnvironment('TEST_APP_ID',
+          defaultValue: '<YOUR_APP_ID>');
+
+      RtcEngine rtcEngine = createAgoraRtcEngine();
+      await rtcEngine.initialize(RtcEngineContext(
+        appId: engineAppId,
+        areaCode: AreaCode.areaCodeGlob.value(),
+      ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
+
+      try {
+        int uid = 5;
+        VideoModulePosition configPosition =
+            VideoModulePosition.positionPostCapturer;
+        String configFilePath = "hello";
+        SnapshotConfig config = SnapshotConfig(
+          filePath: configFilePath,
+          position: configPosition,
+        );
+        await rtcEngine.takeSnapshotWithConfig(
+          uid: uid,
+          config: config,
+        );
+      } catch (e) {
+        if (e is! AgoraRtcException) {
+          debugPrint(
+              '[RtcEngine.takeSnapshotWithConfig] error: ${e.toString()}');
           rethrow;
         }
 
