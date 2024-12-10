@@ -34,8 +34,7 @@ class _State extends State<SpatialAudioWithMediaPlayer> {
     super.initState();
     _channelIdController = TextEditingController(text: config.channelId);
     _textEditingController = TextEditingController(
-        text:
-            'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerJoyrides.mp4');
+        text: 'https://download.agora.io/demo/test/Agora.io-Interactions.mp4');
     _initEngine();
   }
 
