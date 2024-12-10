@@ -51,8 +51,7 @@ void testCases() {
       await rtcEngine.enableVideo();
 
       await mediaPlayerController.open(
-          url:
-              'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerJoyrides.mp4',
+          url: 'https://download.agora.io/demo/test/Agora.io-Interactions.mp4',
           startPos: 0);
 
       final eventCalled = await eventCalledCompleter.future;
@@ -117,8 +116,7 @@ void testCases() {
       await rtcEngine.enableVideo();
 
       await mediaPlayerController.open(
-          url:
-              'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerJoyrides.mp4',
+          url: 'https://download.agora.io/demo/test/Agora.io-Interactions.mp4',
           startPos: 0);
 
       final eventCalled = await eventCalledCompleter.future;
@@ -181,8 +179,7 @@ void testCases() {
       await rtcEngine.enableVideo();
 
       await mediaPlayerController.open(
-          url:
-              'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerJoyrides.mp4',
+          url: 'https://download.agora.io/demo/test/Agora.io-Interactions.mp4',
           startPos: 0);
 
       final eventCalled = await eventCalledCompleter.future;
