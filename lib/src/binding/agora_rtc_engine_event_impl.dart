@@ -2,8 +2,8 @@
 
 // ignore_for_file: public_member_api_docs, unused_local_variable, unused_import
 
-import 'package:agora_rtc_engine/src/binding_forward_export.dart';
-import 'package:agora_rtc_engine/src/binding/impl_forward_export.dart';
+import '/src/binding_forward_export.dart';
+import '/src/binding/impl_forward_export.dart';
 import 'package:iris_method_channel/iris_method_channel.dart';
 
 class RtcEngineEventHandlerWrapper implements EventLoopEventHandler {

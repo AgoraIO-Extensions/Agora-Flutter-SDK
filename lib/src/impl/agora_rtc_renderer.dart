@@ -1,7 +1,7 @@
 import 'dart:convert';
 
-import 'package:agora_rtc_engine/src/agora_base.dart';
-import 'package:agora_rtc_engine/src/agora_rtc_engine_ex.dart';
+import '/src/agora_base.dart';
+import '/src/agora_rtc_engine_ex.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/rendering.dart';

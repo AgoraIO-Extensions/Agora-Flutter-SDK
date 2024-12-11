@@ -1,4 +1,4 @@
-import 'package:agora_rtc_engine/src/binding_forward_export.dart';
+import '/src/binding_forward_export.dart';
 
 /// This class provides media player functions and supports multiple instances.
 abstract class MediaPlayer {

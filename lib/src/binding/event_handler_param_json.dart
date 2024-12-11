@@ -2,7 +2,7 @@
 
 // ignore_for_file: public_member_api_docs, unused_local_variable, unused_import, prefer_is_empty
 
-import 'package:agora_rtc_engine/src/binding_forward_export.dart';
+import '/src/binding_forward_export.dart';
 part 'event_handler_param_json.g.dart';
 
 @JsonSerializable(explicitToJson: true, includeIfNull: false)

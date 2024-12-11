@@ -8,6 +8,11 @@
 .buildlog/
 .history
 .svn/
+/artifacts
+
+# FVM Version Cache
+.fvm/
+.fvmrc
 
 # IntelliJ related
 *.iml

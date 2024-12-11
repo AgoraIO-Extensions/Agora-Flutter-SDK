@@ -2,7 +2,7 @@
 
 // ignore_for_file: public_member_api_docs, unused_local_variable, unused_import, prefer_is_empty
 
-import 'package:agora_rtc_engine/src/binding_forward_export.dart';
+import '/src/binding_forward_export.dart';
 
 extension VideoDimensionsBufferExt on VideoDimensions {
   VideoDimensions fillBuffers(List<Uint8List> bufferList) {

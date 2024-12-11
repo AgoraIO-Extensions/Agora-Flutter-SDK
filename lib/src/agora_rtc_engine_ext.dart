@@ -1,9 +1,9 @@
-import 'package:agora_rtc_engine/src/agora_media_player.dart';
-import 'package:agora_rtc_engine/src/agora_rtc_engine.dart';
-import 'package:agora_rtc_engine/src/agora_rtc_engine_ex.dart';
-import 'package:agora_rtc_engine/src/impl/agora_rtc_engine_impl.dart';
-import 'impl/agora_rtc_engine_impl.dart' as impl;
-import 'impl/media_player_impl.dart';
+import '/src/agora_media_player.dart';
+import '/src/agora_rtc_engine.dart';
+import '/src/agora_rtc_engine_ex.dart';
+import '/src/impl/agora_rtc_engine_impl.dart';
+import '/src/impl/agora_rtc_engine_impl.dart' as impl;
+import '/src/impl/media_player_impl.dart';
 
 /// @nodoc
 extension RtcEngineExt on RtcEngine {

@@ -1,8 +1,8 @@
 import 'dart:async';
 
-import 'package:agora_rtc_engine/agora_rtc_engine.dart';
-import 'package:agora_rtc_engine/src/impl/agora_rtc_engine_impl.dart';
-import 'package:agora_rtc_engine/src/impl/video_view_controller_impl.dart';
+import '/agora_rtc_engine.dart';
+import '/src/impl/agora_rtc_engine_impl.dart';
+import '/src/impl/video_view_controller_impl.dart';
 import 'package:flutter/foundation.dart';
 import 'package:iris_method_channel/iris_method_channel.dart';
 
