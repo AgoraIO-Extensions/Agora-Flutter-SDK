@@ -692,7 +692,7 @@ enum QualityType {
   @JsonValue(7)
   qualityUnsupported,
 
-  /// 8: Detecting the network quality.
+  /// 8: The last-mile network probe test is in progress.
   @JsonValue(8)
   qualityDetecting,
 }
@@ -930,7 +930,7 @@ extension OrientationModeExt on OrientationMode {
 /// Video degradation preferences when the bandwidth is a constraint.
 @JsonEnum(alwaysCreate: true)
 enum DegradationPreference {
-  /// 0: (Default) Prefers to reduce the video frame rate while maintaining video resolution during video encoding under limited bandwidth. This degradation preference is suitable for scenarios where video quality is prioritized.
+  /// 0: Prefers to reduce the video frame rate while maintaining video resolution during video encoding under limited bandwidth. This degradation preference is suitable for scenarios where video quality is prioritized. Deprecated: This enumerator is deprecated. Use other enumerations instead.
   @JsonValue(0)
   maintainQuality,
 
@@ -1241,6 +1241,10 @@ enum AudioCodecType {
   /// @nodoc
   @JsonValue(12)
   audioCodecLpcnet,
+
+  /// @nodoc
+  @JsonValue(13)
+  audioCodecOpusmc,
 }
 
 /// @nodoc
@@ -1484,6 +1488,30 @@ enum VideoStreamType {
   /// 1: Low-quality video stream.
   @JsonValue(1)
   videoStreamLow,
+
+  /// @nodoc
+  @JsonValue(4)
+  videoStreamLayer1,
+
+  /// @nodoc
+  @JsonValue(5)
+  videoStreamLayer2,
+
+  /// @nodoc
+  @JsonValue(6)
+  videoStreamLayer3,
+
+  /// @nodoc
+  @JsonValue(7)
+  videoStreamLayer4,
+
+  /// @nodoc
+  @JsonValue(8)
+  videoStreamLayer5,
+
+  /// @nodoc
+  @JsonValue(9)
+  videoStreamLayer6,
 }
 
 /// @nodoc
@@ -1623,7 +1651,7 @@ enum CompressionPreference {
   @JsonValue(0)
   preferLowLatency,
 
-  /// 1: (Default) High quality preference. The SDK compresses video frames while maintaining video quality. This preference is suitable for scenarios where video quality is prioritized.
+  /// 1: High quality preference. The SDK compresses video frames while maintaining video quality. This preference is suitable for scenarios where video quality is prioritized.
   @JsonValue(1)
   preferQuality,
 }
@@ -1674,7 +1702,8 @@ extension EncodingPreferenceExt on EncodingPreference {
 @JsonSerializable(explicitToJson: true, includeIfNull: false)
 class AdvanceOptions {
   /// @nodoc
-  const AdvanceOptions({this.encodingPreference, this.compressionPreference});
+  const AdvanceOptions(
+      {this.encodingPreference, this.compressionPreference, this.encodeAlpha});
 
   /// Video encoder preference. See EncodingPreference.
   @JsonKey(name: 'encodingPreference')
@@ -1683,6 +1712,10 @@ class AdvanceOptions {
   /// Compression preference for video encoding. See CompressionPreference.
   @JsonKey(name: 'compressionPreference')
   final CompressionPreference? compressionPreference;
+
+  /// Whether to encode and send the Alpha data present in the video frame to the remote end: true : Encode and send Alpha data. false : (Default) Do not encode and send Alpha data.
+  @JsonKey(name: 'encodeAlpha')
+  final bool? encodeAlpha;
 
   /// @nodoc
   factory AdvanceOptions.fromJson(Map<String, dynamic> json) =>
@@ -1720,6 +1753,31 @@ extension VideoMirrorModeTypeExt on VideoMirrorModeType {
   /// @nodoc
   int value() {
     return _$VideoMirrorModeTypeEnumMap[this]!;
+  }
+}
+
+/// @nodoc
+@JsonEnum(alwaysCreate: true)
+enum CameraFormatType {
+  /// @nodoc
+  @JsonValue(0)
+  cameraFormatNv12,
+
+  /// @nodoc
+  @JsonValue(1)
+  cameraFormatBgra,
+}
+
+/// @nodoc
+extension CameraFormatTypeExt on CameraFormatType {
+  /// @nodoc
+  static CameraFormatType fromValue(int value) {
+    return $enumDecode(_$CameraFormatTypeEnumMap, value);
+  }
+
+  /// @nodoc
+  int value() {
+    return _$CameraFormatTypeEnumMap[this]!;
   }
 }
 
@@ -1968,6 +2026,99 @@ class SimulcastStreamConfig {
 
   /// @nodoc
   Map<String, dynamic> toJson() => _$SimulcastStreamConfigToJson(this);
+}
+
+/// @nodoc
+@JsonSerializable(explicitToJson: true, includeIfNull: false)
+class SimulcastConfig {
+  /// @nodoc
+  const SimulcastConfig({this.configs});
+
+  /// @nodoc
+  @JsonKey(name: 'configs')
+  final List<StreamLayerConfig>? configs;
+
+  /// @nodoc
+  factory SimulcastConfig.fromJson(Map<String, dynamic> json) =>
+      _$SimulcastConfigFromJson(json);
+
+  /// @nodoc
+  Map<String, dynamic> toJson() => _$SimulcastConfigToJson(this);
+}
+
+/// @nodoc
+@JsonEnum(alwaysCreate: true)
+enum StreamLayerIndex {
+  /// @nodoc
+  @JsonValue(0)
+  streamLayer1,
+
+  /// @nodoc
+  @JsonValue(1)
+  streamLayer2,
+
+  /// @nodoc
+  @JsonValue(2)
+  streamLayer3,
+
+  /// @nodoc
+  @JsonValue(3)
+  streamLayer4,
+
+  /// @nodoc
+  @JsonValue(4)
+  streamLayer5,
+
+  /// @nodoc
+  @JsonValue(5)
+  streamLayer6,
+
+  /// @nodoc
+  @JsonValue(6)
+  streamLow,
+
+  /// @nodoc
+  @JsonValue(7)
+  streamLayerCountMax,
+}
+
+/// @nodoc
+extension StreamLayerIndexExt on StreamLayerIndex {
+  /// @nodoc
+  static StreamLayerIndex fromValue(int value) {
+    return $enumDecode(_$StreamLayerIndexEnumMap, value);
+  }
+
+  /// @nodoc
+  int value() {
+    return _$StreamLayerIndexEnumMap[this]!;
+  }
+}
+
+/// @nodoc
+@JsonSerializable(explicitToJson: true, includeIfNull: false)
+class StreamLayerConfig {
+  /// @nodoc
+  const StreamLayerConfig({this.dimensions, this.framerate, this.enable});
+
+  /// @nodoc
+  @JsonKey(name: 'dimensions')
+  final VideoDimensions? dimensions;
+
+  /// @nodoc
+  @JsonKey(name: 'framerate')
+  final int? framerate;
+
+  /// @nodoc
+  @JsonKey(name: 'enable')
+  final bool? enable;
+
+  /// @nodoc
+  factory StreamLayerConfig.fromJson(Map<String, dynamic> json) =>
+      _$StreamLayerConfigFromJson(json);
+
+  /// @nodoc
+  Map<String, dynamic> toJson() => _$StreamLayerConfigToJson(this);
 }
 
 /// The location of the target area relative to the screen or window. If you do not set this parameter, the SDK selects the whole screen or window.
@@ -2643,6 +2794,10 @@ enum VideoApplicationScenarioType {
   ///  Bitrate: 500 Kbps 1: The meeting scenario.
   @JsonValue(1)
   applicationScenarioMeeting,
+
+  /// applicationScenario1v1 (2) This is applicable to the scenario. To meet the requirements for low latency and high-quality video in this scenario, the SDK optimizes its strategies, improving performance in terms of video quality, first frame rendering, latency on mid-to-low-end devices, and smoothness under weak network conditions. 2: 1v1 video call scenario.
+  @JsonValue(2)
+  applicationScenario1v1,
 }
 
 /// @nodoc
@@ -2933,7 +3088,7 @@ enum LocalVideoStreamReason {
   @JsonValue(8)
   localVideoStreamReasonDeviceNotFound,
 
-  /// 9: (macOS only) The video capture device currently in use is disconnected (such as being unplugged).
+  /// 9: (macOS and Windows only) The video capture device currently in use is disconnected (such as being unplugged).
   @JsonValue(9)
   localVideoStreamReasonDeviceDisconnected,
 
@@ -2974,7 +3129,7 @@ enum LocalVideoStreamReason {
   @JsonValue(20)
   localVideoStreamReasonScreenCaptureWindowNotSupported,
 
-  /// 21: (Windows only) The screen has not captured any data available for window sharing.
+  /// 21: (Windows and Android only) The currently captured window has no data.
   @JsonValue(21)
   localVideoStreamReasonScreenCaptureFailure,
 
@@ -3005,6 +3160,10 @@ enum LocalVideoStreamReason {
   /// 29: (Windows only) Screen capture has resumed from paused state.
   @JsonValue(29)
   localVideoStreamReasonScreenCaptureResumed,
+
+  /// 30: (Windows and macOS only) The displayer used for screen capture is disconnected.
+  @JsonValue(30)
+  localVideoStreamReasonScreenCaptureDisplayDisconnected,
 }
 
 /// @nodoc
@@ -4696,7 +4855,7 @@ class VideoCanvas {
   final int? subviewUid;
 
   /// The video display window. In one VideoCanvas, you can only choose to set either view or surfaceTexture. If both are set, only the settings in view take effect.
-  @JsonKey(name: 'view')
+  @JsonKey(name: 'view', readValue: readIntPtr)
   final int? view;
 
   /// The background color of the video canvas in RGBA format. The default value is 0x00000000, which represents completely transparent black.
@@ -4812,6 +4971,144 @@ extension LighteningContrastLevelExt on LighteningContrastLevel {
   /// @nodoc
   int value() {
     return _$LighteningContrastLevelEnumMap[this]!;
+  }
+}
+
+/// @nodoc
+@JsonSerializable(explicitToJson: true, includeIfNull: false)
+class FaceShapeAreaOptions {
+  /// @nodoc
+  const FaceShapeAreaOptions({this.shapeArea, this.shapeIntensity});
+
+  /// @nodoc
+  @JsonKey(name: 'shapeArea')
+  final FaceShapeArea? shapeArea;
+
+  /// @nodoc
+  @JsonKey(name: 'shapeIntensity')
+  final int? shapeIntensity;
+
+  /// @nodoc
+  factory FaceShapeAreaOptions.fromJson(Map<String, dynamic> json) =>
+      _$FaceShapeAreaOptionsFromJson(json);
+
+  /// @nodoc
+  Map<String, dynamic> toJson() => _$FaceShapeAreaOptionsToJson(this);
+}
+
+/// @nodoc
+@JsonEnum(alwaysCreate: true)
+enum FaceShapeArea {
+  /// @nodoc
+  @JsonValue(-1)
+  faceShapeAreaNone,
+
+  /// @nodoc
+  @JsonValue(0)
+  faceShapeAreaHeadscale,
+
+  /// @nodoc
+  @JsonValue(1)
+  faceShapeAreaForehead,
+
+  /// @nodoc
+  @JsonValue(2)
+  faceShapeAreaFacecontour,
+
+  /// @nodoc
+  @JsonValue(3)
+  faceShapeAreaFacelength,
+
+  /// @nodoc
+  @JsonValue(4)
+  faceShapeAreaFacewidth,
+
+  /// @nodoc
+  @JsonValue(5)
+  faceShapeAreaCheekbone,
+
+  /// @nodoc
+  @JsonValue(6)
+  faceShapeAreaCheek,
+
+  /// @nodoc
+  @JsonValue(7)
+  faceShapeAreaChin,
+
+  /// @nodoc
+  @JsonValue(8)
+  faceShapeAreaEyescale,
+
+  /// @nodoc
+  @JsonValue(9)
+  faceShapeAreaNoselength,
+
+  /// @nodoc
+  @JsonValue(10)
+  faceShapeAreaNosewidth,
+
+  /// @nodoc
+  @JsonValue(11)
+  faceShapeAreaMouthscale,
+}
+
+/// @nodoc
+extension FaceShapeAreaExt on FaceShapeArea {
+  /// @nodoc
+  static FaceShapeArea fromValue(int value) {
+    return $enumDecode(_$FaceShapeAreaEnumMap, value);
+  }
+
+  /// @nodoc
+  int value() {
+    return _$FaceShapeAreaEnumMap[this]!;
+  }
+}
+
+/// @nodoc
+@JsonSerializable(explicitToJson: true, includeIfNull: false)
+class FaceShapeBeautyOptions {
+  /// @nodoc
+  const FaceShapeBeautyOptions({this.shapeStyle, this.styleIntensity});
+
+  /// @nodoc
+  @JsonKey(name: 'shapeStyle')
+  final FaceShapeBeautyStyle? shapeStyle;
+
+  /// @nodoc
+  @JsonKey(name: 'styleIntensity')
+  final int? styleIntensity;
+
+  /// @nodoc
+  factory FaceShapeBeautyOptions.fromJson(Map<String, dynamic> json) =>
+      _$FaceShapeBeautyOptionsFromJson(json);
+
+  /// @nodoc
+  Map<String, dynamic> toJson() => _$FaceShapeBeautyOptionsToJson(this);
+}
+
+/// @nodoc
+@JsonEnum(alwaysCreate: true)
+enum FaceShapeBeautyStyle {
+  /// @nodoc
+  @JsonValue(0)
+  faceShapeBeautyStyleFemale,
+
+  /// @nodoc
+  @JsonValue(1)
+  faceShapeBeautyStyleMale,
+}
+
+/// @nodoc
+extension FaceShapeBeautyStyleExt on FaceShapeBeautyStyle {
+  /// @nodoc
+  static FaceShapeBeautyStyle fromValue(int value) {
+    return $enumDecode(_$FaceShapeBeautyStyleEnumMap, value);
+  }
+
+  /// @nodoc
+  int value() {
+    return _$FaceShapeBeautyStyleEnumMap[this]!;
   }
 }
 
@@ -4934,18 +5231,18 @@ extension VideoDenoiserModeExt on VideoDenoiserMode {
   }
 }
 
-/// The video noise reduction level.
+/// Video noise reduction level.
 @JsonEnum(alwaysCreate: true)
 enum VideoDenoiserLevel {
   /// 0: (Default) Promotes video quality during video noise reduction. balances performance consumption and video noise reduction quality. The performance consumption is moderate, the video noise reduction speed is moderate, and the overall video quality is optimal.
   @JsonValue(0)
   videoDenoiserLevelHighQuality,
 
-  /// 1: Promotes reducing performance consumption during video noise reduction. prioritizes reducing performance consumption over video noise reduction quality. The performance consumption is lower, and the video noise reduction speed is faster. To avoid a noticeable shadowing effect (shadows trailing behind moving objects) in the processed video, Agora recommends that you use this settinging when the camera is fixed.
+  /// 1: Promotes reducing performance consumption during video noise reduction. It prioritizes reducing performance consumption over video noise reduction quality. The performance consumption is lower, and the video noise reduction speed is faster. To avoid a noticeable shadowing effect (shadows trailing behind moving objects) in the processed video, Agora recommends that you use this setting when the camera is fixed.
   @JsonValue(1)
   videoDenoiserLevelFast,
 
-  /// 2: Enhanced video noise reduction. prioritizes video noise reduction quality over reducing performance consumption. The performance consumption is higher, the video noise reduction speed is slower, and the video noise reduction quality is better. If videoDenoiserLevelHighQuality is not enough for your video noise reduction needs, you can use this enumerator.
+  /// @nodoc
   @JsonValue(2)
   videoDenoiserLevelStrength,
 }
@@ -5468,6 +5765,63 @@ extension HeadphoneEqualizerPresetExt on HeadphoneEqualizerPreset {
   }
 }
 
+/// Voice AI tuner sound types.
+@JsonEnum(alwaysCreate: true)
+enum VoiceAiTunerType {
+  /// 0: Mature male voice. A deep and magnetic male voice.
+  @JsonValue(0)
+  voiceAiTunerMatureMale,
+
+  /// 1: Fresh male voice. A fresh and slightly sweet male voice.
+  @JsonValue(1)
+  voiceAiTunerFreshMale,
+
+  /// 2: Elegant female voice. A deep and charming female voice.
+  @JsonValue(2)
+  voiceAiTunerElegantFemale,
+
+  /// 3: Sweet female voice. A high-pitched and cute female voice.
+  @JsonValue(3)
+  voiceAiTunerSweetFemale,
+
+  /// 4: Warm male singing. A warm and melodious male voice.
+  @JsonValue(4)
+  voiceAiTunerWarmMaleSinging,
+
+  /// 5: Gentle female singing. A soft and delicate female voice.
+  @JsonValue(5)
+  voiceAiTunerGentleFemaleSinging,
+
+  /// 6: Husky male singing. A unique husky male voice.
+  @JsonValue(6)
+  voiceAiTunerHuskyMaleSinging,
+
+  /// 7: Warm elegant female singing. A warm and mature female voice.
+  @JsonValue(7)
+  voiceAiTunerWarmElegantFemaleSinging,
+
+  /// 8: Powerful male singing. A strong and powerful male voice.
+  @JsonValue(8)
+  voiceAiTunerPowerfulMaleSinging,
+
+  /// 9: Dreamy female singing. A dreamy and soft female voice.
+  @JsonValue(9)
+  voiceAiTunerDreamyFemaleSinging,
+}
+
+/// @nodoc
+extension VoiceAiTunerTypeExt on VoiceAiTunerType {
+  /// @nodoc
+  static VoiceAiTunerType fromValue(int value) {
+    return $enumDecode(_$VoiceAiTunerTypeEnumMap, value);
+  }
+
+  /// @nodoc
+  int value() {
+    return _$VoiceAiTunerTypeEnumMap[this]!;
+  }
+}
+
 /// Screen sharing configurations.
 @JsonSerializable(explicitToJson: true, includeIfNull: false)
 class ScreenCaptureParameters {
@@ -5511,7 +5865,7 @@ class ScreenCaptureParameters {
   final bool? windowFocus;
 
   /// The ID list of the windows to be blocked. When calling startScreenCaptureByDisplayId to start screen sharing, you can use this parameter to block a specified window. When calling updateScreenCaptureParameters to update screen sharing configurations, you can use this parameter to dynamically block a specified window.
-  @JsonKey(name: 'excludeWindowList')
+  @JsonKey(name: 'excludeWindowList', readValue: readIntPtrList)
   final List<int>? excludeWindowList;
 
   /// The number of windows to be excluded. On the Windows platform, the maximum value of this parameter is 24; if this value is exceeded, excluding the window fails.
@@ -5832,6 +6186,10 @@ enum AreaCodeEx {
   areaCodeUs,
 
   /// @nodoc
+  @JsonValue(0x00001000)
+  areaCodeRu,
+
+  /// @nodoc
   @JsonValue(0xFFFFFFFE)
   areaCodeOvs,
 }
@@ -5988,7 +6346,7 @@ class ChannelMediaRelayConfiguration {
 
   /// The information of the target channel ChannelMediaInfo. It contains the following members: channelName : The name of the target channel. token : The token for joining the target channel. It is generated with the channelName and uid you set in destInfos.
   ///  If you have not enabled the App Certificate, set this parameter as the default value NULL, which means the SDK applies the App ID.
-  ///  If you have enabled the App Certificate, you must use the token generated with the channelName and uid. If the token of any target channel expires, the whole media relay stops; hence Agora recommends that you specify the same expiration time for the tokens of all the target channels. uid : The unique user ID to identify the relay stream in the target channel. The value ranges from 0 to (2 32 -1). To avoid user ID conflicts, this user ID must be different from any other user ID in the target channel. The default value is 0, which means the SDK generates a random user ID.
+  ///  If you have enabled the App Certificate, you must use the token generated with the channelName and uid. If the token of any target channel expires, the whole media relay stops; hence Agora recommends that you specify the same expiration time for the tokens of all the target channels. uid : The unique user ID to identify the relay stream in the target channel. The value ranges from 0 to (2 32 -1). To avoid user ID conflicts, this user ID must be different from any other user ID in the target channel. The default value is 0, which means the SDK generates a random UID.
   @JsonKey(name: 'destInfos')
   final List<ChannelMediaInfo>? destInfos;
 
@@ -6370,7 +6728,7 @@ class EchoTestConfiguration {
       this.intervalInSeconds});
 
   /// The view used to render the local user's video. This parameter is only applicable to scenarios testing video devices, that is, when enableVideo is true.
-  @JsonKey(name: 'view')
+  @JsonKey(name: 'view', readValue: readIntPtr)
   final int? view;
 
   /// Whether to enable the audio device for the loop test: true : (Default) Enable the audio device. To test the audio device, set this parameter as true. false : Disable the audio device.

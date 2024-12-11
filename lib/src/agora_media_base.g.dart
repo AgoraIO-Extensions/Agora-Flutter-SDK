@@ -8,6 +8,30 @@ part of 'agora_media_base.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
+ExtensionContext _$ExtensionContextFromJson(Map<String, dynamic> json) =>
+    ExtensionContext(
+      isValid: json['isValid'] as bool?,
+      uid: (json['uid'] as num?)?.toInt(),
+      providerName: json['providerName'] as String?,
+      extensionName: json['extensionName'] as String?,
+    );
+
+Map<String, dynamic> _$ExtensionContextToJson(ExtensionContext instance) {
+  final val = <String, dynamic>{};
+
+  void writeNotNull(String key, dynamic value) {
+    if (value != null) {
+      val[key] = value;
+    }
+  }
+
+  writeNotNull('isValid', instance.isValid);
+  writeNotNull('uid', instance.uid);
+  writeNotNull('providerName', instance.providerName);
+  writeNotNull('extensionName', instance.extensionName);
+  return val;
+}
+
 AudioParameters _$AudioParametersFromJson(Map<String, dynamic> json) =>
     AudioParameters(
       sampleRate: (json['sample_rate'] as num?)?.toInt(),
@@ -140,6 +164,7 @@ AudioPcmFrame _$AudioPcmFrameFromJson(Map<String, dynamic> json) =>
       data: (json['data_'] as List<dynamic>?)
           ?.map((e) => (e as num).toInt())
           .toList(),
+      isStereo: json['is_stereo_'] as bool?,
     );
 
 Map<String, dynamic> _$AudioPcmFrameToJson(AudioPcmFrame instance) {
@@ -158,12 +183,136 @@ Map<String, dynamic> _$AudioPcmFrameToJson(AudioPcmFrame instance) {
   writeNotNull(
       'bytes_per_sample', _$BytesPerSampleEnumMap[instance.bytesPerSample]);
   writeNotNull('data_', instance.data);
+  writeNotNull('is_stereo_', instance.isStereo);
   return val;
 }
 
 const _$BytesPerSampleEnumMap = {
   BytesPerSample.twoBytesPerSample: 2,
 };
+
+ColorSpace _$ColorSpaceFromJson(Map<String, dynamic> json) => ColorSpace(
+      primaries: $enumDecodeNullable(_$PrimaryIDEnumMap, json['primaries']),
+      transfer: $enumDecodeNullable(_$TransferIDEnumMap, json['transfer']),
+      matrix: $enumDecodeNullable(_$MatrixIDEnumMap, json['matrix']),
+      range: $enumDecodeNullable(_$RangeIDEnumMap, json['range']),
+    );
+
+Map<String, dynamic> _$ColorSpaceToJson(ColorSpace instance) {
+  final val = <String, dynamic>{};
+
+  void writeNotNull(String key, dynamic value) {
+    if (value != null) {
+      val[key] = value;
+    }
+  }
+
+  writeNotNull('primaries', _$PrimaryIDEnumMap[instance.primaries]);
+  writeNotNull('transfer', _$TransferIDEnumMap[instance.transfer]);
+  writeNotNull('matrix', _$MatrixIDEnumMap[instance.matrix]);
+  writeNotNull('range', _$RangeIDEnumMap[instance.range]);
+  return val;
+}
+
+const _$PrimaryIDEnumMap = {
+  PrimaryID.primaryidBt709: 1,
+  PrimaryID.primaryidUnspecified: 2,
+  PrimaryID.primaryidBt470m: 4,
+  PrimaryID.primaryidBt470bg: 5,
+  PrimaryID.primaryidSmpte170m: 6,
+  PrimaryID.primaryidSmpte240m: 7,
+  PrimaryID.primaryidFilm: 8,
+  PrimaryID.primaryidBt2020: 9,
+  PrimaryID.primaryidSmptest428: 10,
+  PrimaryID.primaryidSmptest431: 11,
+  PrimaryID.primaryidSmptest432: 12,
+  PrimaryID.primaryidJedecp22: 22,
+};
+
+const _$TransferIDEnumMap = {
+  TransferID.transferidBt709: 1,
+  TransferID.transferidUnspecified: 2,
+  TransferID.transferidGamma22: 4,
+  TransferID.transferidGamma28: 5,
+  TransferID.transferidSmpte170m: 6,
+  TransferID.transferidSmpte240m: 7,
+  TransferID.transferidLinear: 8,
+  TransferID.transferidLog: 9,
+  TransferID.transferidLogSqrt: 10,
+  TransferID.transferidIec6196624: 11,
+  TransferID.transferidBt1361Ecg: 12,
+  TransferID.transferidIec6196621: 13,
+  TransferID.transferidBt202010: 14,
+  TransferID.transferidBt202012: 15,
+  TransferID.transferidSmptest2084: 16,
+  TransferID.transferidSmptest428: 17,
+  TransferID.transferidAribStdB67: 18,
+};
+
+const _$MatrixIDEnumMap = {
+  MatrixID.matrixidRgb: 0,
+  MatrixID.matrixidBt709: 1,
+  MatrixID.matrixidUnspecified: 2,
+  MatrixID.matrixidFcc: 4,
+  MatrixID.matrixidBt470bg: 5,
+  MatrixID.matrixidSmpte170m: 6,
+  MatrixID.matrixidSmpte240m: 7,
+  MatrixID.matrixidYcocg: 8,
+  MatrixID.matrixidBt2020Ncl: 9,
+  MatrixID.matrixidBt2020Cl: 10,
+  MatrixID.matrixidSmpte2085: 11,
+  MatrixID.matrixidCdncls: 12,
+  MatrixID.matrixidCdcls: 13,
+  MatrixID.matrixidBt2100Ictcp: 14,
+};
+
+const _$RangeIDEnumMap = {
+  RangeID.rangeidInvalid: 0,
+  RangeID.rangeidLimited: 1,
+  RangeID.rangeidFull: 2,
+  RangeID.rangeidDerived: 3,
+};
+
+Hdr10MetadataInfo _$Hdr10MetadataInfoFromJson(Map<String, dynamic> json) =>
+    Hdr10MetadataInfo(
+      redPrimaryX: (json['redPrimaryX'] as num?)?.toInt(),
+      redPrimaryY: (json['redPrimaryY'] as num?)?.toInt(),
+      greenPrimaryX: (json['greenPrimaryX'] as num?)?.toInt(),
+      greenPrimaryY: (json['greenPrimaryY'] as num?)?.toInt(),
+      bluePrimaryX: (json['bluePrimaryX'] as num?)?.toInt(),
+      bluePrimaryY: (json['bluePrimaryY'] as num?)?.toInt(),
+      whitePointX: (json['whitePointX'] as num?)?.toInt(),
+      whitePointY: (json['whitePointY'] as num?)?.toInt(),
+      maxMasteringLuminance: (json['maxMasteringLuminance'] as num?)?.toInt(),
+      minMasteringLuminance: (json['minMasteringLuminance'] as num?)?.toInt(),
+      maxContentLightLevel: (json['maxContentLightLevel'] as num?)?.toInt(),
+      maxFrameAverageLightLevel:
+          (json['maxFrameAverageLightLevel'] as num?)?.toInt(),
+    );
+
+Map<String, dynamic> _$Hdr10MetadataInfoToJson(Hdr10MetadataInfo instance) {
+  final val = <String, dynamic>{};
+
+  void writeNotNull(String key, dynamic value) {
+    if (value != null) {
+      val[key] = value;
+    }
+  }
+
+  writeNotNull('redPrimaryX', instance.redPrimaryX);
+  writeNotNull('redPrimaryY', instance.redPrimaryY);
+  writeNotNull('greenPrimaryX', instance.greenPrimaryX);
+  writeNotNull('greenPrimaryY', instance.greenPrimaryY);
+  writeNotNull('bluePrimaryX', instance.bluePrimaryX);
+  writeNotNull('bluePrimaryY', instance.bluePrimaryY);
+  writeNotNull('whitePointX', instance.whitePointX);
+  writeNotNull('whitePointY', instance.whitePointY);
+  writeNotNull('maxMasteringLuminance', instance.maxMasteringLuminance);
+  writeNotNull('minMasteringLuminance', instance.minMasteringLuminance);
+  writeNotNull('maxContentLightLevel', instance.maxContentLightLevel);
+  writeNotNull('maxFrameAverageLightLevel', instance.maxFrameAverageLightLevel);
+  return val;
+}
 
 ExternalVideoFrame _$ExternalVideoFrameFromJson(Map<String, dynamic> json) =>
     ExternalVideoFrame(
@@ -179,12 +328,23 @@ ExternalVideoFrame _$ExternalVideoFrameFromJson(Map<String, dynamic> json) =>
       timestamp: (json['timestamp'] as num?)?.toInt(),
       eglType: $enumDecodeNullable(_$EglContextTypeEnumMap, json['eglType']),
       textureId: (json['textureId'] as num?)?.toInt(),
+      fenceObject: (json['fenceObject'] as num?)?.toInt(),
       matrix: (json['matrix'] as List<dynamic>?)
           ?.map((e) => (e as num).toDouble())
           .toList(),
-      metadataSize: (json['metadata_size'] as num?)?.toInt(),
+      metadataSize: (json['metadataSize'] as num?)?.toInt(),
       fillAlphaBuffer: json['fillAlphaBuffer'] as bool?,
-      textureSliceIndex: (json['texture_slice_index'] as num?)?.toInt(),
+      alphaStitchMode: $enumDecodeNullable(
+          _$AlphaStitchModeEnumMap, json['alphaStitchMode']),
+      d3d11Texture2d: (readIntPtr(json, 'd3d11Texture2d') as num?)?.toInt(),
+      textureSliceIndex: (json['textureSliceIndex'] as num?)?.toInt(),
+      hdr10MetadataInfo: json['hdr10MetadataInfo'] == null
+          ? null
+          : Hdr10MetadataInfo.fromJson(
+              json['hdr10MetadataInfo'] as Map<String, dynamic>),
+      colorSpace: json['colorSpace'] == null
+          ? null
+          : ColorSpace.fromJson(json['colorSpace'] as Map<String, dynamic>),
     );
 
 Map<String, dynamic> _$ExternalVideoFrameToJson(ExternalVideoFrame instance) {
@@ -208,10 +368,16 @@ Map<String, dynamic> _$ExternalVideoFrameToJson(ExternalVideoFrame instance) {
   writeNotNull('timestamp', instance.timestamp);
   writeNotNull('eglType', _$EglContextTypeEnumMap[instance.eglType]);
   writeNotNull('textureId', instance.textureId);
+  writeNotNull('fenceObject', instance.fenceObject);
   writeNotNull('matrix', instance.matrix);
-  writeNotNull('metadata_size', instance.metadataSize);
+  writeNotNull('metadataSize', instance.metadataSize);
   writeNotNull('fillAlphaBuffer', instance.fillAlphaBuffer);
-  writeNotNull('texture_slice_index', instance.textureSliceIndex);
+  writeNotNull(
+      'alphaStitchMode', _$AlphaStitchModeEnumMap[instance.alphaStitchMode]);
+  writeNotNull('d3d11Texture2d', instance.d3d11Texture2d);
+  writeNotNull('textureSliceIndex', instance.textureSliceIndex);
+  writeNotNull('hdr10MetadataInfo', instance.hdr10MetadataInfo?.toJson());
+  writeNotNull('colorSpace', instance.colorSpace?.toJson());
   return val;
 }
 
@@ -233,6 +399,7 @@ const _$VideoPixelFormatEnumMap = {
   VideoPixelFormat.videoCvpixelNv12: 12,
   VideoPixelFormat.videoCvpixelI420: 13,
   VideoPixelFormat.videoCvpixelBgra: 14,
+  VideoPixelFormat.videoCvpixelP010: 15,
   VideoPixelFormat.videoPixelI422: 16,
   VideoPixelFormat.videoTextureId3d11texture2d: 17,
   VideoPixelFormat.videoPixelI010: 18,
@@ -241,6 +408,14 @@ const _$VideoPixelFormatEnumMap = {
 const _$EglContextTypeEnumMap = {
   EglContextType.eglContext10: 0,
   EglContextType.eglContext14: 1,
+};
+
+const _$AlphaStitchModeEnumMap = {
+  AlphaStitchMode.noAlphaStitch: 0,
+  AlphaStitchMode.alphaStitchUp: 1,
+  AlphaStitchMode.alphaStitchBelow: 2,
+  AlphaStitchMode.alphaStitchLeft: 3,
+  AlphaStitchMode.alphaStitchRight: 4,
 };
 
 VideoFrame _$VideoFrameFromJson(Map<String, dynamic> json) => VideoFrame(
@@ -258,7 +433,16 @@ VideoFrame _$VideoFrameFromJson(Map<String, dynamic> json) => VideoFrame(
       matrix: (json['matrix'] as List<dynamic>?)
           ?.map((e) => (e as num).toDouble())
           .toList(),
+      alphaStitchMode: $enumDecodeNullable(
+          _$AlphaStitchModeEnumMap, json['alphaStitchMode']),
       metaInfo: const VideoFrameMetaInfoConverter().fromJson(json['metaInfo']),
+      hdr10MetadataInfo: json['hdr10MetadataInfo'] == null
+          ? null
+          : Hdr10MetadataInfo.fromJson(
+              json['hdr10MetadataInfo'] as Map<String, dynamic>),
+      colorSpace: json['colorSpace'] == null
+          ? null
+          : ColorSpace.fromJson(json['colorSpace'] as Map<String, dynamic>),
     );
 
 Map<String, dynamic> _$VideoFrameToJson(VideoFrame instance) {
@@ -282,8 +466,12 @@ Map<String, dynamic> _$VideoFrameToJson(VideoFrame instance) {
   writeNotNull('metadata_size', instance.metadataSize);
   writeNotNull('textureId', instance.textureId);
   writeNotNull('matrix', instance.matrix);
+  writeNotNull(
+      'alphaStitchMode', _$AlphaStitchModeEnumMap[instance.alphaStitchMode]);
   writeNotNull('metaInfo',
       const VideoFrameMetaInfoConverter().toJson(instance.metaInfo));
+  writeNotNull('hdr10MetadataInfo', instance.hdr10MetadataInfo?.toJson());
+  writeNotNull('colorSpace', instance.colorSpace?.toJson());
   return val;
 }
 

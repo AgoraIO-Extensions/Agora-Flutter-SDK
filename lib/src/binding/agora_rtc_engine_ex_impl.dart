@@ -1085,6 +1085,31 @@ class RtcEngineExImpl extends RtcEngineImpl implements RtcEngineEx {
   }
 
   @override
+  Future<void> setSimulcastConfigEx(
+      {required SimulcastConfig simulcastConfig,
+      required RtcConnection connection}) async {
+    final apiType =
+        '${isOverrideClassName ? className : 'RtcEngineEx'}_setSimulcastConfigEx_bd8d7d0';
+    final param = createParams({
+      'simulcastConfig': simulcastConfig.toJson(),
+      'connection': connection.toJson()
+    });
+    final List<Uint8List> buffers = [];
+    buffers.addAll(simulcastConfig.collectBufferList());
+    buffers.addAll(connection.collectBufferList());
+    final callApiResult = await irisMethodChannel.invokeMethod(
+        IrisMethodCall(apiType, jsonEncode(param), buffers: buffers));
+    if (callApiResult.irisReturnCode < 0) {
+      throw AgoraRtcException(code: callApiResult.irisReturnCode);
+    }
+    final rm = callApiResult.data;
+    final result = rm['result'];
+    if (result < 0) {
+      throw AgoraRtcException(code: result);
+    }
+  }
+
+  @override
   Future<void> setHighPriorityUserListEx(
       {required List<int> uidList,
       required int uidNum,

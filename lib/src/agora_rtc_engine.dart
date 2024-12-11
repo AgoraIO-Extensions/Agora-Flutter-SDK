@@ -297,6 +297,30 @@ enum StreamFallbackOptions {
   /// 2: When the network conditions are weak, try to receive the low-quality video stream first. If the video cannot be displayed due to extremely weak network environment, then fall back to receiving audio-only stream.
   @JsonValue(2)
   streamFallbackOptionAudioOnly,
+
+  /// @nodoc
+  @JsonValue(3)
+  streamFallbackOptionVideoStreamLayer1,
+
+  /// @nodoc
+  @JsonValue(4)
+  streamFallbackOptionVideoStreamLayer2,
+
+  /// @nodoc
+  @JsonValue(5)
+  streamFallbackOptionVideoStreamLayer3,
+
+  /// @nodoc
+  @JsonValue(6)
+  streamFallbackOptionVideoStreamLayer4,
+
+  /// @nodoc
+  @JsonValue(7)
+  streamFallbackOptionVideoStreamLayer5,
+
+  /// @nodoc
+  @JsonValue(8)
+  streamFallbackOptionVideoStreamLayer6,
 }
 
 /// @nodoc
@@ -364,7 +388,8 @@ class LocalVideoStats {
       this.txPacketLossRate,
       this.captureBrightnessLevel,
       this.dualStreamEnabled,
-      this.hwEncoderAccelerating});
+      this.hwEncoderAccelerating,
+      this.simulcastDimensions});
 
   /// The ID of the local user.
   @JsonKey(name: 'uid')
@@ -459,6 +484,10 @@ class LocalVideoStats {
   ///  1: Hardware encoding is applied for acceleration.
   @JsonKey(name: 'hwEncoderAccelerating')
   final int? hwEncoderAccelerating;
+
+  /// @nodoc
+  @JsonKey(name: 'simulcastDimensions')
+  final List<VideoDimensions>? simulcastDimensions;
 
   /// @nodoc
   factory LocalVideoStats.fromJson(Map<String, dynamic> json) =>
@@ -588,6 +617,7 @@ class RemoteVideoStats {
       this.width,
       this.height,
       this.receivedBitrate,
+      this.decoderInputFrameRate,
       this.decoderOutputFrameRate,
       this.rendererOutputFrameRate,
       this.frameLossRate,
@@ -624,6 +654,10 @@ class RemoteVideoStats {
   /// The bitrate (Kbps) of the remote video received since the last count.
   @JsonKey(name: 'receivedBitrate')
   final int? receivedBitrate;
+
+  /// @nodoc
+  @JsonKey(name: 'decoderInputFrameRate')
+  final int? decoderInputFrameRate;
 
   /// The frame rate (fps) of decoding the remote video.
   @JsonKey(name: 'decoderOutputFrameRate')
@@ -1075,7 +1109,7 @@ class ScreenCaptureConfiguration {
   final Rectangle? screenRect;
 
   /// (For Windows and macOS only) Window ID. This parameter takes effect only when you want to capture the window.
-  @JsonKey(name: 'windowId')
+  @JsonKey(name: 'windowId', readValue: readIntPtr)
   final int? windowId;
 
   /// (For Windows and macOS only) The screen capture configuration. See ScreenCaptureParameters.
@@ -1203,7 +1237,7 @@ class ScreenCaptureSourceInfo {
   final ScreenCaptureSourceType? type;
 
   /// The window ID for a window or the display ID for a screen.
-  @JsonKey(name: 'sourceId')
+  @JsonKey(name: 'sourceId', readValue: readIntPtr)
   final int? sourceId;
 
   /// The name of the window or screen. UTF-8 encoding.
@@ -1243,7 +1277,7 @@ class ScreenCaptureSourceInfo {
   final bool? minimizeWindow;
 
   /// (For Windows only) Screen ID where the window is located. If the window is displayed across multiple screens, this parameter indicates the ID of the screen with which the window has the largest intersection area. If the window is located outside of the visible screens, the value of this member is -2.
-  @JsonKey(name: 'sourceDisplayId')
+  @JsonKey(name: 'sourceDisplayId', readValue: readIntPtr)
   final int? sourceDisplayId;
 
   /// @nodoc
@@ -1340,7 +1374,8 @@ class ChannelMediaOptions {
       this.publishRhythmPlayerTrack,
       this.isInteractiveAudience,
       this.customVideoTrackId,
-      this.isAudioFilterable});
+      this.isAudioFilterable,
+      this.parameters});
 
   /// Whether to publish the video captured by the camera: true : Publish the video captured by the camera. false : Do not publish the video captured by the camera.
   @JsonKey(name: 'publishCameraTrack')
@@ -1390,7 +1425,7 @@ class ChannelMediaOptions {
   @JsonKey(name: 'publishCustomAudioTrack')
   final bool? publishCustomAudioTrack;
 
-  /// The ID of the custom audio source to publish. The default value is 0. If you have set sourceNumber in setExternalAudioSource to a value greater than 1, the SDK creates the corresponding number of custom audio tracks and assigns an ID to each audio track, starting from 0.
+  /// The ID of the custom audio track to be published. The default value is 0. You can obtain the custom audio track ID through the createCustomAudioTrack method.
   @JsonKey(name: 'publishCustomAudioTrackId')
   final int? publishCustomAudioTrackId;
 
@@ -1414,7 +1449,7 @@ class ChannelMediaOptions {
   @JsonKey(name: 'publishTranscodedVideoTrack')
   final bool? publishTranscodedVideoTrack;
 
-  /// @nodoc
+  /// Whether to publish the mixed audio track: true : Publish the mixed audio track. false : Do not publish the mixed audio track.
   @JsonKey(name: 'publishMixedAudioTrack')
   final bool? publishMixedAudioTrack;
 
@@ -1489,6 +1524,10 @@ class ChannelMediaOptions {
   /// Whether the audio stream being published is filtered according to the volume algorithm: true : The audio stream is filtered. If the audio stream filter is not enabled, this setting does not takes effect. false : The audio stream is not filtered. If you need to enable this function, contact.
   @JsonKey(name: 'isAudioFilterable')
   final bool? isAudioFilterable;
+
+  /// @nodoc
+  @JsonKey(name: 'parameters')
+  final String? parameters;
 
   /// @nodoc
   factory ChannelMediaOptions.fromJson(Map<String, dynamic> json) =>
@@ -1693,10 +1732,10 @@ class RtcEngineEventHandler {
     this.onVideoPublishStateChanged,
     this.onTranscodedStreamLayoutInfo,
     this.onAudioMetadataReceived,
-    this.onExtensionEvent,
-    this.onExtensionStarted,
-    this.onExtensionStopped,
-    this.onExtensionError,
+    this.onExtensionEventWithContext,
+    this.onExtensionStartedWithContext,
+    this.onExtensionStoppedWithContext,
+    this.onExtensionErrorWithContext,
     this.onSetRtmFlagResult,
   });
 
@@ -1825,7 +1864,7 @@ class RtcEngineEventHandler {
 
   /// Reports the last mile network quality of each user in the channel.
   ///
-  /// This callback reports the last mile network conditions of each user in the channel. Last mile refers to the connection between the local device and Agora's edge server. The SDK triggers this callback once every two seconds. If a channel includes multiple users, the SDK triggers this callback as many times. This callback provides feedback on network quality through sending and receiving broadcast packets within the channel. Excessive broadcast packets can lead to broadcast storms. To prevent broadcast storms from causing a large amount of data transmission within the channel, this callback supports feedback on the network quality of up to 4 remote hosts simultaneously by default. txQuality is when the user is not sending a stream; rxQuality is when the user is not receiving a stream.
+  /// This callback reports the last mile network conditions of each user in the channel. Last mile refers to the connection between the local device and Agora's edge server. The SDK triggers this callback once every two seconds. If a channel includes multiple users, the SDK triggers this callback as many times. This callback provides feedback on network quality through sending and receiving broadcast packets within the channel. Excessive broadcast packets can lead to broadcast storms. To prevent broadcast storms from causing a large amount of data transmission within the channel, this callback supports feedback on the network quality of up to 4 remote hosts simultaneously by default. txQuality is Unknown when the user is not sending a stream; rxQuality is Unknown when the user is not receiving a stream.
   ///
   /// * [connection] The connection information. See RtcConnection.
   /// * [remoteUid] The user ID. The network quality of the user with this user ID is reported. If the uid is 0, the local network quality is reported.
@@ -1851,7 +1890,7 @@ class RtcEngineEventHandler {
   ///
   /// This callback reports the last-mile network conditions of the local user before the user joins the channel. Last mile refers to the connection between the local device and Agora's edge server. Before the user joins the channel, this callback is triggered by the SDK once startLastmileProbeTest is called and reports the last-mile network conditions of the local user.
   ///
-  /// * [quality] The last-mile network quality. qualityUnknown (0): The quality is unknown. qualityExcellent (1): The quality is excellent. qualityGood (2): The network quality seems excellent, but the bitrate can be slightly lower than excellent. qualityPoor (3): Users can feel the communication is slightly impaired. qualityBad (4): Users cannot communicate smoothly. qualityVbad (5): The quality is so bad that users can barely communicate. qualityDown (6): The network is down, and users cannot communicate at all. See QualityType.
+  /// * [quality] The last-mile network quality. qualityUnknown (0): The quality is unknown. qualityExcellent (1): The quality is excellent. qualityGood (2): The network quality seems excellent, but the bitrate can be slightly lower than excellent. qualityPoor (3): Users can feel the communication is slightly impaired. qualityBad (4): Users cannot communicate smoothly. qualityVbad (5): The quality is so bad that users can barely communicate. qualityDown (6): The network is down, and users cannot communicate at all. qualityDetecting (8): The last-mile probe test is in progress. See QualityType.
   final void Function(QualityType quality)? onLastmileQuality;
 
   /// Occurs when the first local video frame is displayed on the local video view.
@@ -2143,7 +2182,7 @@ class RtcEngineEventHandler {
   /// The SDK triggers this callback when the local user receives the stream message that the remote user sends by calling the sendStreamMessage method.
   ///
   /// * [connection] The connection information. See RtcConnection.
-  /// * [uid] The ID of the remote user sending the message.
+  /// * [remoteUid] The ID of the remote user sending the message.
   /// * [streamId] The stream ID of the received message.
   /// * [data] The data received.
   /// * [length] The data length (byte).
@@ -2158,7 +2197,7 @@ class RtcEngineEventHandler {
   /// * [connection] The connection information. See RtcConnection.
   /// * [remoteUid] The ID of the remote user sending the message.
   /// * [streamId] The stream ID of the received message.
-  /// * [code] The error code. See ErrorCodeType.
+  /// * [code] Error code. See ErrorCodeType.
   /// * [missed] The number of lost messages.
   /// * [cached] Number of incoming cached messages when the data stream is interrupted.
   final void Function(RtcConnection connection, int remoteUid, int streamId,
@@ -2465,7 +2504,7 @@ class RtcEngineEventHandler {
 
   /// Video frame rendering event callback.
   ///
-  /// After calling the startMediaRenderingTracing method or joining the channel, the SDK triggers this callback to report the events of video frame rendering and the indicators during the rendering process. Developers can optimize the indicators to improve the efficiency of the first video frame rendering.
+  /// After calling the startMediaRenderingTracing method or joining a channel, the SDK triggers this callback to report the events of video frame rendering and the indicators during the rendering process. Developers can optimize the indicators to improve the efficiency of the first video frame rendering.
   ///
   /// * [connection] The connection information. See RtcConnection.
   /// * [uid] The user ID.
@@ -2568,21 +2607,39 @@ class RtcEngineEventHandler {
           RtcConnection connection, int uid, Uint8List metadata, int length)?
       onAudioMetadataReceived;
 
-  /// @nodoc
-  final void Function(
-          String provider, String extension, String key, String value)?
-      onExtensionEvent;
+  /// The event callback of the extension.
+  ///
+  /// To listen for events while the extension is running, you need to register this callback.
+  ///
+  /// * [value] The value of the extension key.
+  /// * [key] The key of the extension.
+  /// * [context] The context information of the extension, see ExtensionContext.
+  final void Function(ExtensionContext context, String key, String value)?
+      onExtensionEventWithContext;
 
-  /// @nodoc
-  final void Function(String provider, String extension)? onExtensionStarted;
+  /// Occurrs when the extension is enabled.
+  ///
+  /// The callback is triggered after the extension is successfully enabled.
+  ///
+  /// * [context] The context information of the extension, see ExtensionContext.
+  final void Function(ExtensionContext context)? onExtensionStartedWithContext;
 
-  /// @nodoc
-  final void Function(String provider, String extension)? onExtensionStopped;
+  /// Occurs when the extension is disabled.
+  ///
+  /// The callback is triggered after the extension is successfully disabled.
+  ///
+  /// * [context] The context information of the extension, see ExtensionContext.
+  final void Function(ExtensionContext context)? onExtensionStoppedWithContext;
 
-  /// @nodoc
-  final void Function(
-          String provider, String extension, int error, String message)?
-      onExtensionError;
+  /// Occurs when the extension runs incorrectly.
+  ///
+  /// In case of extension enabling failure or runtime errors, the extension triggers this callback and reports the error code along with the reasons.
+  ///
+  /// * [context] The context information of the extension, see ExtensionContext.
+  /// * [error] Error code. For details, see the extension documentation provided by the extension provider.
+  /// * [message] Reason. For details, see the extension documentation provided by the extension provider.
+  final void Function(ExtensionContext context, int error, String message)?
+      onExtensionErrorWithContext;
 
   /// @nodoc
   final void Function(RtcConnection connection, int code)? onSetRtmFlagResult;
@@ -2798,7 +2855,12 @@ extension MaxMetadataSizeTypeExt on MaxMetadataSizeType {
 @JsonSerializable(explicitToJson: true, includeIfNull: false)
 class Metadata {
   /// @nodoc
-  const Metadata({this.uid, this.size, this.buffer, this.timeStampMs});
+  const Metadata(
+      {this.channelId, this.uid, this.size, this.buffer, this.timeStampMs});
+
+  /// The channel name.
+  @JsonKey(name: 'channelId')
+  final String? channelId;
 
   /// The user ID.
   ///  For the recipient: The ID of the remote user who sent the Metadata.
@@ -3079,10 +3141,10 @@ abstract class RtcEngine {
 
   /// Gets the warning or error description.
   ///
-  /// * [code] The error code or warning code reported by the SDK.
+  /// * [code] The error code reported by the SDK.
   ///
   /// Returns
-  /// The specific error or warning description.
+  /// The specific error description.
   Future<String> getErrorDescription(int code);
 
   /// Queries the video codec capabilities of the SDK.
@@ -3364,7 +3426,9 @@ abstract class RtcEngine {
   ///
   /// * [enabled] Whether to enable the image enhancement function: true : Enable the image enhancement function. false : (Default) Disable the image enhancement function.
   /// * [options] The image enhancement options. See BeautyOptions.
-  /// * [type] Source type of the extension. See MediaSourceType.
+  /// * [type] The type of the media source to which the filter effect is applied. See MediaSourceType. In this method, this parameter supports only the following two settings:
+  ///  Use the default value primaryCameraSource if you use camera to capture local video.
+  ///  Set this parameter to customVideoSource if you use custom video source.
   ///
   /// Returns
   /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown. You need to catch the exception and handle it accordingly.
@@ -3373,19 +3437,35 @@ abstract class RtcEngine {
       required BeautyOptions options,
       MediaSourceType type = MediaSourceType.primaryCameraSource});
 
+  /// @nodoc
+  Future<void> setFaceShapeBeautyOptions(
+      {required bool enabled,
+      required FaceShapeBeautyOptions options,
+      MediaSourceType type = MediaSourceType.primaryCameraSource});
+
+  /// @nodoc
+  Future<void> setFaceShapeAreaOptions(
+      {required FaceShapeAreaOptions options,
+      MediaSourceType type = MediaSourceType.primaryCameraSource});
+
+  /// @nodoc
+  Future<FaceShapeBeautyOptions> getFaceShapeBeautyOptions(
+      {MediaSourceType type = MediaSourceType.primaryCameraSource});
+
+  /// @nodoc
+  Future<FaceShapeAreaOptions> getFaceShapeAreaOptions(
+      {required FaceShapeArea shapeArea,
+      MediaSourceType type = MediaSourceType.primaryCameraSource});
+
   /// Sets low-light enhancement.
   ///
-  /// The low-light enhancement feature can adaptively adjust the brightness value of the video captured in situations with low or uneven lighting, such as backlit, cloudy, or dark scenes. It restores or highlights the image details and improves the overall visual effect of the video. You can call this method to enable the color enhancement feature and set the options of the color enhancement effect.
-  ///  Call this method after calling enableVideo.
-  ///  Dark light enhancement has certain requirements for equipment performance. The low-light enhancement feature has certain performance requirements on devices. If your device overheats after you enable low-light enhancement, Agora recommends modifying the low-light enhancement options to a less performance-consuming level or disabling low-light enhancement entirely.
-  ///  Both this method and setExtensionProperty can turn on low-light enhancement:
-  ///  When you use the SDK to capture video, Agora recommends this method (this method only works for video captured by the SDK).
-  ///  When you use an external video source to implement custom video capture, or send an external video source to the SDK, Agora recommends using setExtensionProperty.
-  ///  This method relies on the image enhancement dynamic library libagora_clear_vision_extension.dll. If the dynamic library is deleted, the function cannot be enabled normally.
+  /// You can call this method to enable the color enhancement feature and set the options of the color enhancement effect.
   ///
   /// * [enabled] Whether to enable low-light enhancement: true : Enable low-light enhancement. false : (Default) Disable low-light enhancement.
   /// * [options] The low-light enhancement options. See LowlightEnhanceOptions.
-  /// * [type] The type of the video source. See MediaSourceType.
+  /// * [type] The type of the media source to which the filter effect is applied. See MediaSourceType. In this method, this parameter supports only the following two settings:
+  ///  Use the default value primaryCameraSource if you use camera to capture local video.
+  ///  Set this parameter to customVideoSource if you use custom video source.
   ///
   /// Returns
   /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown. You need to catch the exception and handle it accordingly.
@@ -3396,17 +3476,13 @@ abstract class RtcEngine {
 
   /// Sets video noise reduction.
   ///
-  /// Underlit environments and low-end video capture devices can cause video images to contain significant noise, which affects video quality. In real-time interactive scenarios, video noise also consumes bitstream resources and reduces encoding efficiency during encoding. You can call this method to enable the video noise reduction feature and set the options of the video noise reduction effect.
-  ///  Call this method after calling enableVideo.
-  ///  Video noise reduction has certain requirements for equipment performance. If your device overheats after you enable video noise reduction, Agora recommends modifying the video noise reduction options to a less performance-consuming level or disabling video noise reduction entirely.
-  ///  Both this method and setExtensionProperty can turn on video noise reduction function:
-  ///  When you use the SDK to capture video, Agora recommends this method (this method only works for video captured by the SDK).
-  ///  When you use an external video source to implement custom video capture, or send an external video source to the SDK, Agora recommends using setExtensionProperty.
-  ///  This method relies on the image enhancement dynamic library libagora_clear_vision_extension.dll. If the dynamic library is deleted, the function cannot be enabled normally.
+  /// You can call this method to enable the video noise reduction feature and set the options of the video noise reduction effect. If the noise reduction implemented by this method does not meet your needs, Agora recommends that you call the setBeautyEffectOptions method to enable the beauty and skin smoothing function to achieve better video noise reduction effects. The recommended BeautyOptions settings for intense noise reduction effect are as follows: lighteningContrastLevel lighteningContrastNormal lighteningLevel : 0.0 smoothnessLevel : 0.5 rednessLevel : 0.0 sharpnessLevel : 0.1
   ///
   /// * [enabled] Whether to enable video noise reduction: true : Enable video noise reduction. false : (Default) Disable video noise reduction.
   /// * [options] The video noise reduction options. See VideoDenoiserOptions.
-  /// * [type] The type of the video source. See MediaSourceType.
+  /// * [type] The type of the media source to which the filter effect is applied. See MediaSourceType. In this method, this parameter supports only the following two settings:
+  ///  Use the default value primaryCameraSource if you use camera to capture local video.
+  ///  Set this parameter to customVideoSource if you use custom video source.
   ///
   /// Returns
   /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown. You need to catch the exception and handle it accordingly.
@@ -3420,14 +3496,13 @@ abstract class RtcEngine {
   /// The video images captured by the camera can have color distortion. The color enhancement feature intelligently adjusts video characteristics such as saturation and contrast to enhance the video color richness and color reproduction, making the video more vivid. You can call this method to enable the color enhancement feature and set the options of the color enhancement effect.
   ///  Call this method after calling enableVideo.
   ///  The color enhancement feature has certain performance requirements on devices. With color enhancement turned on, Agora recommends that you change the color enhancement level to one that consumes less performance or turn off color enhancement if your device is experiencing severe heat problems.
-  ///  Both this method and setExtensionProperty can enable color enhancement:
-  ///  When you use the SDK to capture video, Agora recommends this method (this method only works for video captured by the SDK).
-  ///  When you use an external video source to implement custom video capture, or send an external video source to the SDK, Agora recommends using setExtensionProperty.
   ///  This method relies on the image enhancement dynamic library libagora_clear_vision_extension.dll. If the dynamic library is deleted, the function cannot be enabled normally.
   ///
   /// * [enabled] Whether to enable color enhancement: true Enable color enhancement. false : (Default) Disable color enhancement.
   /// * [options] The color enhancement options. See ColorEnhanceOptions.
-  /// * [type] The type of the video source. See MediaSourceType.
+  /// * [type] The type of the media source to which the filter effect is applied. See MediaSourceType. In this method, this parameter supports only the following two settings:
+  ///  Use the default value primaryCameraSource if you use camera to capture local video.
+  ///  Set this parameter to customVideoSource if you use custom video source.
   ///
   /// Returns
   /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown. You need to catch the exception and handle it accordingly.
@@ -3459,9 +3534,9 @@ abstract class RtcEngine {
   /// * [enabled] Whether to enable virtual background: true : Enable virtual background. false : Disable virtual background.
   /// * [backgroundSource] The custom background. See VirtualBackgroundSource. To adapt the resolution of the custom background image to that of the video captured by the SDK, the SDK scales and crops the custom background image while ensuring that the content of the custom background image is not distorted.
   /// * [segproperty] Processing properties for background images. See SegmentationProperty.
-  /// * [type] The type of the video source. See MediaSourceType. In this method, this parameter supports only the following two settings:
-  ///  The default value is primaryCameraSource.
-  ///  If you want to use the second camera to capture video, set this parameter to secondaryCameraSource.
+  /// * [type] The type of the media source to which the filter effect is applied. See MediaSourceType. In this method, this parameter supports only the following two settings:
+  ///  Use the default value primaryCameraSource if you use camera to capture local video.
+  ///  Set this parameter to customVideoSource if you use custom video source.
   ///
   /// Returns
   /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown. You need to catch the exception and handle it accordingly.
@@ -3515,7 +3590,7 @@ abstract class RtcEngine {
   ///  If someone subscribes to the low-quality stream, the SDK enables the low-quality stream and resets it to the SimulcastStreamConfig configuration used in the most recent calling of setDualStreamMode. If no configuration has been set by the user previously, the following values are used:
   ///  Resolution: 480 × 272
   ///  Frame rate: 15 fps
-  ///  Bitrate: 500 Kbps applicationScenario1v1 (2) is suitable for 1v1 video call scenarios. To meet the requirements for low latency and high-quality video in this scenario, the SDK optimizes its strategies, improving performance in terms of video quality, first frame rendering, latency on mid-to-low-end devices, and smoothness under weak network conditions.
+  ///  Bitrate: 500 Kbps applicationScenario1v1 (2) This is applicable to the scenario. To meet the requirements for low latency and high-quality video in this scenario, the SDK optimizes its strategies, improving performance in terms of video quality, first frame rendering, latency on mid-to-low-end devices, and smoothness under weak network conditions. applicationScenarioLiveshow (3) This is applicable to the scenario. In this scenario, fast video rendering and high image quality are crucial. The SDK implements several performance optimizations, including automatically enabling accelerated audio and video frame rendering to minimize first-frame latency (no need to call enableInstantMediaRendering), and B-frame encoding to achieve better image quality and bandwidth efficiency. The SDK also provides enhanced video quality and smooth playback, even in poor network conditions or on lower-end devices.
   ///
   /// Returns
   /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown. You need to catch the exception and handle it accordingly.
@@ -3589,9 +3664,6 @@ abstract class RtcEngine {
   /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown. You need to catch the exception and handle it accordingly.
   Future<void> muteAllRemoteAudioStreams(bool mute);
 
-  /// @nodoc
-  Future<void> setDefaultMuteAllRemoteAudioStreams(bool mute);
-
   /// Stops or resumes subscribing to the audio stream of a specified user.
   ///
   /// * [uid] The user ID of the specified user.
@@ -3632,9 +3704,6 @@ abstract class RtcEngine {
   /// Returns
   /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown. You need to catch the exception and handle it accordingly.
   Future<void> muteAllRemoteVideoStreams(bool mute);
-
-  /// @nodoc
-  Future<void> setDefaultMuteAllRemoteVideoStreams(bool mute);
 
   /// Sets the default video stream type to subscribe to.
   ///
@@ -3678,14 +3747,10 @@ abstract class RtcEngine {
 
   /// Options for subscribing to remote video streams.
   ///
-  /// When a remote user has enabled dual-stream mode, you can call this method to choose the option for subscribing to the video streams sent by the remote user.
-  ///  If you only register one VideoFrameObserver object, the SDK subscribes to the raw video data and encoded video data by default (the effect is equivalent to setting encodedFrameOnly to false).
-  ///  If you only register one VideoEncodedFrameObserver object, the SDK only subscribes to the encoded video data by default (the effect is equivalent to setting encodedFrameOnly to true).
-  ///  If you register one VideoFrameObserver object and one VideoEncodedFrameObserver object successively, the SDK subscribes to the encoded video data by default (the effect is equivalent to setting encodedFrameOnly to false).
-  ///  If you call this method first with the options parameter set, and then register one VideoFrameObserver or VideoEncodedFrameObserver object, you need to call this method again and set the options parameter as described in the above two items to get the desired results. Agora recommends the following steps:
-  ///  Set autoSubscribeVideo to false when calling joinChannel to join a channel.
-  ///  Call this method after receiving the onUserJoined callback to set the subscription options for the specified remote user's video stream.
-  ///  Call the muteRemoteVideoStream method to resume subscribing to the video stream of the specified remote user. If you set encodedFrameOnly to true in the previous step, the SDK triggers the onEncodedVideoFrameReceived callback locally to report the received encoded video frame information.
+  /// When a remote user has enabled dual-stream mode, you can call this method to choose the option for subscribing to the video streams sent by the remote user. The default subscription behavior of the SDK for remote video streams depends on the type of registered video observer:
+  ///  If the VideoFrameObserver observer is registered, the default is to subscribe to both raw data and encoded data.
+  ///  If the VideoEncodedFrameObserver observer is registered, the default is to subscribe only to the encoded data.
+  ///  If both types of observers are registered, the default behavior follows the last registered video observer. For example, if the last registered observer is the VideoFrameObserver observer, the default is to subscribe to both raw data and encoded data. If you want to modify the default behavior, or set different subscription options for different uids, you can call this method to set it.
   ///
   /// * [uid] The user ID of the remote user.
   /// * [options] The video subscription options. See VideoSubscriptionOptions.
@@ -3897,7 +3962,7 @@ abstract class RtcEngine {
 
   /// Adjusts the volume during audio mixing.
   ///
-  /// This method adjusts the audio mixing volume on both the local client and remote clients.
+  /// This method adjusts the audio mixing volume on both the local client and remote clients. This method does not affect the volume of the audio file set in the playEffect method.
   ///
   /// * [volume] Audio mixing volume. The value ranges between 0 and 100. The default value is 100, which means the original volume.
   ///
@@ -4413,6 +4478,18 @@ abstract class RtcEngine {
   Future<void> setHeadphoneEQParameters(
       {required int lowGain, required int highGain});
 
+  /// Enables or disables the voice AI tuner.
+  ///
+  /// The voice AI tuner supports enhancing sound quality and adjusting tone style.
+  ///
+  /// * [enabled] Whether to enable the voice AI tuner: true : Enables the voice AI tuner. false : (Default) Disable the voice AI tuner.
+  /// * [type] Voice AI tuner sound types, see VoiceAiTunerType.
+  ///
+  /// Returns
+  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown. You need to catch the exception and handle it accordingly.
+  Future<void> enableVoiceAITuner(
+      {required bool enabled, required VoiceAiTunerType type});
+
   /// Sets the log file.
   ///
   /// Deprecated: This method is deprecated. Set the log file path by configuring the context parameter when calling initialize. Specifies an SDK output log file. The log file records all log data for the SDK’s operation.
@@ -4545,6 +4622,9 @@ abstract class RtcEngine {
   /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown. You need to catch the exception and handle it accordingly.
   Future<void> setDualStreamMode(
       {required SimulcastStreamMode mode, SimulcastStreamConfig? streamConfig});
+
+  /// @nodoc
+  Future<void> setSimulcastConfig(SimulcastConfig simulcastConfig);
 
   /// Sets whether to enable the local playback of external audio source.
   ///
@@ -4815,11 +4895,11 @@ abstract class RtcEngine {
   ///
   /// If you enable loopback audio capturing, the output of the sound card is mixed into the audio stream sent to the other end.
   ///  This method applies to the macOS and Windows only.
-  ///  macOS does not support loopback audio capture of the default sound card. If you need to use this function, use a virtual sound card and pass its name to the deviceName parameter. Agora recommends using AgoraALD as the virtual sound card for audio capturing.
+  ///  The macOS system's default sound card does not support recording functionality. As of v4.5.0, when you call this method for the first time, the SDK will automatically install the built-in AgoraALD virtual sound card developed by Agora. After successful installation, the audio routing will automatically switch to the virtual sound card and use it for audio capturing.
   ///  You can call this method either before or after joining a channel.
   ///  If you call the disableAudio method to disable the audio module, audio capturing will be disabled as well. If you need to enable audio capturing, call the enableAudio method to enable the audio module and then call the enableLoopbackRecording method.
   ///
-  /// * [enabled] Sets whether to enable loopback audio capturing. true : Enable loopback audio capturing. false : (Default) Disable loopback audio capturing.
+  /// * [enabled] Sets whether to enable loopback audio capturing. true : Enable sound card capturing. You can find the name of the virtual sound card in your system's Audio Devices > Output. false : Disable sound card capturing. The name of the virtual sound card will not be shown in your system's Audio Devices > Output.
   /// * [deviceName] macOS: The device name of the virtual sound card. The default value is set to NULL, which means using AgoraALD for loopback audio capturing.
   ///  Windows: The device name of the sound card. The default is set to NULL, which means the SDK uses the sound card of your device for loopback audio capturing.
   ///
@@ -4960,7 +5040,7 @@ abstract class RtcEngine {
 
   /// Checks whether the device camera supports face detection.
   ///
-  /// This method must be called after the SDK triggers the onLocalVideoStateChanged callback and returns the local video state as localVideoStreamStateEncoding (2).
+  /// This method must be called after the SDK triggers the onLocalVideoStateChanged callback and returns the local video state as localVideoStreamStateCapturing (1).
   ///  This method is for Android and iOS only.
   ///
   /// Returns
@@ -4969,7 +5049,7 @@ abstract class RtcEngine {
 
   /// Checks whether the device supports camera flash.
   ///
-  /// This method must be called after the SDK triggers the onLocalVideoStateChanged callback and returns the local video state as localVideoStreamStateEncoding (2).
+  /// This method must be called after the SDK triggers the onLocalVideoStateChanged callback and returns the local video state as localVideoStreamStateCapturing (1).
   ///  This method is for Android and iOS only.
   ///  The app enables the front camera by default. If your front camera does not support flash, this method returns false. If you want to check whether the rear camera supports the flash function, call switchCamera before this method.
   ///  On iPads with system version 15, even if isCameraTorchSupported returns true, you might fail to successfully enable the flash by calling setCameraTorchOn due to system issues.
@@ -4980,7 +5060,7 @@ abstract class RtcEngine {
 
   /// Check whether the device supports the manual focus function.
   ///
-  /// This method must be called after the SDK triggers the onLocalVideoStateChanged callback and returns the local video state as localVideoStreamStateEncoding (2).
+  /// This method must be called after the SDK triggers the onLocalVideoStateChanged callback and returns the local video state as localVideoStreamStateCapturing (1).
   ///  This method is for Android and iOS only.
   ///
   /// Returns
@@ -4989,7 +5069,7 @@ abstract class RtcEngine {
 
   /// Checks whether the device supports the face auto-focus function.
   ///
-  /// This method must be called after the SDK triggers the onLocalVideoStateChanged callback and returns the local video state as localVideoStreamStateEncoding (2).
+  /// This method must be called after the SDK triggers the onLocalVideoStateChanged callback and returns the local video state as localVideoStreamStateCapturing (1).
   ///  This method is for Android and iOS only.
   ///
   /// Returns
@@ -5021,7 +5101,7 @@ abstract class RtcEngine {
 
   /// Gets the maximum zoom ratio supported by the camera.
   ///
-  /// This method must be called after the SDK triggers the onLocalVideoStateChanged callback and returns the local video state as localVideoStreamStateEncoding (2).
+  /// This method must be called after the SDK triggers the onLocalVideoStateChanged callback and returns the local video state as localVideoStreamStateCapturing (1).
   ///  This method is for Android and iOS only.
   ///
   /// Returns
@@ -5065,7 +5145,7 @@ abstract class RtcEngine {
 
   /// Checks whether the device supports manual exposure.
   ///
-  /// This method must be called after the SDK triggers the onLocalVideoStateChanged callback and returns the local video state as localVideoStreamStateEncoding (2).
+  /// This method must be called after the SDK triggers the onLocalVideoStateChanged callback and returns the local video state as localVideoStreamStateCapturing (1).
   ///  This method is for Android and iOS only.
   ///
   /// Returns
@@ -5089,7 +5169,7 @@ abstract class RtcEngine {
   /// Queries whether the current camera supports adjusting exposure value.
   ///
   /// This method is for Android and iOS only.
-  ///  This method must be called after the SDK triggers the onLocalVideoStateChanged callback and returns the local video state as localVideoStreamStateEncoding (2).
+  ///  This method must be called after the SDK triggers the onLocalVideoStateChanged callback and returns the local video state as localVideoStreamStateCapturing (1).
   ///  Before calling setCameraExposureFactor, Agora recoomends that you call this method to query whether the current camera supports adjusting the exposure value.
   ///  By calling this method, you adjust the exposure value of the currently active camera, that is, the camera specified when calling setCameraCapturerConfiguration.
   ///
@@ -5113,7 +5193,7 @@ abstract class RtcEngine {
 
   /// Checks whether the device supports auto exposure.
   ///
-  /// This method must be called after the SDK triggers the onLocalVideoStateChanged callback and returns the local video state as localVideoStreamStateEncoding (2).
+  /// This method must be called after the SDK triggers the onLocalVideoStateChanged callback and returns the local video state as localVideoStreamStateCapturing (1).
   ///  This method applies to iOS only.
   ///
   /// Returns
@@ -5321,7 +5401,7 @@ abstract class RtcEngine {
   /// This method is for Windows and macOS only.
   ///  Call this method after starting screen sharing or window sharing.
   ///
-  /// * [captureParams] The screen sharing encoding parameters. The default video resolution is 1920 × 1080, that is, 2,073,600 pixels. Agora uses the value of this parameter to calculate the charges. See ScreenCaptureParameters. The video properties of the screen sharing stream only need to be set through this parameter, and are unrelated to setVideoEncoderConfiguration.
+  /// * [captureParams] The screen sharing encoding parameters. See ScreenCaptureParameters. The video properties of the screen sharing stream only need to be set through this parameter, and are unrelated to setVideoEncoderConfiguration.
   ///
   /// Returns
   /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown. You need to catch the exception and handle it accordingly.
@@ -5335,7 +5415,7 @@ abstract class RtcEngine {
   ///  When you do not pass in a value, Agora bills you at 1280 × 720.
   ///  When you pass in a value, Agora bills you at that value.
   ///
-  /// * [captureParams] The screen sharing encoding parameters. The default video dimension is 1920 x 1080, that is, 2,073,600 pixels. Agora uses the value of this parameter to calculate the charges. See ScreenCaptureParameters2.
+  /// * [captureParams] The screen sharing encoding parameters. See ScreenCaptureParameters2.
   ///
   /// Returns
   /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown. You need to catch the exception and handle it accordingly.
@@ -5349,7 +5429,7 @@ abstract class RtcEngine {
   ///  This method is for Android and iOS only.
   ///  On the iOS platform, screen sharing is only available on iOS 12.0 and later.
   ///
-  /// * [captureParams] The screen sharing encoding parameters. The default video resolution is 1920 × 1080, that is, 2,073,600 pixels. Agora uses the value of this parameter to calculate the charges. See ScreenCaptureParameters2.
+  /// * [captureParams] The screen sharing encoding parameters. See ScreenCaptureParameters2.
   ///
   /// Returns
   /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown. You need to catch the exception and handle it accordingly.
@@ -5567,12 +5647,6 @@ abstract class RtcEngine {
   Future<void> setRemoteUserPriority(
       {required int uid, required PriorityType userPriority});
 
-  /// @nodoc
-  Future<void> setEncryptionMode(String encryptionMode);
-
-  /// @nodoc
-  Future<void> setEncryptionSecret(String secret);
-
   /// Enables or disables the built-in encryption.
   ///
   /// After the user leaves the channel, the SDK automatically disables the built-in encryption. To enable the built-in encryption, call this method before the user joins the channel again.
@@ -5597,9 +5671,8 @@ abstract class RtcEngine {
   /// Sends data stream messages.
   ///
   /// After calling createDataStream, you can call this method to send data stream messages to all users in the channel. The SDK has the following restrictions on this method:
-  ///  Each user can have up to five data streams simultaneously.
-  ///  Up to 60 packets can be sent per second in a data stream with each packet having a maximum size of 1 KB.
-  ///  Up to 30 KB of data can be sent per second in a data stream. A successful method call triggers the onStreamMessage callback on the remote client, from which the remote user gets the stream message. A failed method call triggers the onStreamMessageError callback on the remote client.
+  ///  Each client within the channel can have up to 5 data channels simultaneously, with a total shared packet bitrate limit of 30 KB/s for all data channels.
+  ///  Each data channel can send up to 60 packets per second, with each packet being a maximum of 1 KB. A successful method call triggers the onStreamMessage callback on the remote client, from which the remote user gets the stream message. A failed method call triggers the onStreamMessageError callback on the remote client.
   ///  This method needs to be called after createDataStream and joining the channel.
   ///  In live streaming scenarios, this method only applies to hosts.
   ///
@@ -5990,7 +6063,7 @@ abstract class RtcEngine {
   /// When video screenshot and upload function is enabled, the SDK takes screenshots and uploads videos sent by local users based on the type and frequency of the module you set in ContentInspectConfig. After video screenshot and upload, the Agora server sends the callback notification to your app server in HTTPS requests and sends all screenshots to the third-party cloud storage service.
   ///
   /// * [enabled] Whether to enalbe video screenshot and upload: true : Enables video screenshot and upload. false : Disables video screenshot and upload.
-  /// * [config] Screenshot and upload configuration. See ContentInspectConfig. When the video moderation module is set to video moderation via Agora self-developed extension(contentInspectSupervision), the video screenshot and upload dynamic library libagora_content_inspect_extension.dll is required. Deleting this library disables the screenshot and upload feature.
+  /// * [config] Screenshot and upload configuration. See ContentInspectConfig.
   ///
   /// Returns
   /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown. You need to catch the exception and handle it accordingly.
@@ -6026,7 +6099,7 @@ abstract class RtcEngine {
   /// Sets up cloud proxy service.
   ///
   /// When users' network access is restricted by a firewall, configure the firewall to allow specific IP addresses and ports provided by Agora; then, call this method to enable the cloud proxyType and set the cloud proxy type with the proxyType parameter. After successfully connecting to the cloud proxy, the SDK triggers the onConnectionStateChanged (connectionStateConnecting, connectionChangedSettingProxyServer) callback. To disable the cloud proxy that has been set, call the setCloudProxy (noneProxy). To change the cloud proxy type that has been set, call the setCloudProxy (noneProxy) first, and then call the setCloudProxy to set the proxyType you want.
-  ///  Agora recommends that you call this method after joining a channel.
+  ///  Agora recommends that you call this method before joining a channel.
   ///  When a user is behind a firewall and uses the Force UDP cloud proxy, the services for Media Push and cohosting across channels are not available.
   ///  When you use the Force TCP cloud proxy, note that an error would occur when calling the startAudioMixing method to play online music files in the HTTP protocol. The services for Media Push and cohosting across channels use the cloud proxy with the TCP protocol.
   ///
