@@ -1,10 +1,10 @@
 import 'dart:convert';
 
-import 'package:agora_rtc_engine/src/agora_rtc_engine.dart';
-import 'package:agora_rtc_engine/src/agora_rtc_engine_ext.dart';
-import 'package:agora_rtc_engine/src/impl/agora_rtc_engine_impl.dart';
-import 'package:agora_rtc_engine/src/audio_device_manager.dart';
-import 'package:agora_rtc_engine/src/binding/audio_device_manager_impl.dart'
+import '/src/agora_rtc_engine.dart';
+import '/src/agora_rtc_engine_ext.dart';
+import '/src/impl/agora_rtc_engine_impl.dart';
+import '/src/audio_device_manager.dart';
+import '/src/binding/audio_device_manager_impl.dart'
     as audio_device_manager_impl_binding;
 import 'package:iris_method_channel/iris_method_channel.dart';
 

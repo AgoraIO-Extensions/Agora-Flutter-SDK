@@ -1,7 +1,7 @@
-import 'package:agora_rtc_engine/src/render/video_view_controller.dart';
-import 'package:flutter/material.dart';
+import '/src/render/video_view_controller.dart';
+import '/src/impl/agora_video_view_impl.dart';
 
-import '../impl/agora_video_view_impl.dart';
+import 'package:flutter/material.dart';
 
 /// The AgoraVideoView Class for rendering local and remote video.
 class AgoraVideoView extends StatefulWidget {
