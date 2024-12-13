@@ -28,7 +28,7 @@ require File.expand_path(File.join('packages', 'flutter_tools', 'bin', 'podhelpe
 flutter_ios_podfile_setup
 
 target 'Runner' do
-  use_frameworks!
+  use_frameworks! :linkage => :static
   use_modular_headers!
   
   flutter_install_all_ios_pods File.dirname(File.realpath(__FILE__))
@@ -37,6 +37,19 @@ target 'Runner' do
     use_frameworks!
     use_modular_headers!
     inherit! :search_paths
+  end
+end
+
+dynamic_frameworks = ['agora_rtc_engine', 'iris_method_channel']
+pre_install do |installer|
+  Pod::Installer::Xcode::TargetValidator.send(:define_method, :verify_no_static_framework_transitive_dependencies) {}
+  installer.pod_targets.each do |target|
+    if dynamic_frameworks.include? target.name
+      puts "install dynamic framework : #{target.name}"
+      def target.build_type
+        Pod::BuildType.dynamic_framework
+      end
+    end
   end
 end
 
