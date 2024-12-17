@@ -86,7 +86,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        version: ["3.7.0", "3.x"]
+        version: ["3.7.0", "3.24.5"]
     runs-on: ubuntu-latest
     timeout-minutes: 60
     env:
@@ -182,7 +182,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        version: ["3.7.0", "3.x"]
+        version: ["3.7.0", "3.24.5"]
     runs-on: windows-2019
     timeout-minutes: 60
     env:
@@ -204,7 +204,7 @@ jobs:
     if: ${{ !contains(github.event.pull_request.labels.*.name, 'ci:skip') }}
     strategy:
       matrix:
-        version: ['3.x']
+        version: ["3.24.5"]
     runs-on: ubuntu-latest
     timeout-minutes: 60
     env:
@@ -227,7 +227,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        version: ["3.7.12", "3.x"] # Need 3.7.12 to build with Gradle 8.x https://github.com/flutter/flutter/issues/124838
+        version: ["3.7.12", "3.24.5"] # Need 3.7.12 to build with Gradle 8.x https://github.com/flutter/flutter/issues/124838
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
@@ -250,7 +250,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        version: ["3.7.12", "3.x"] # Need 3.7.12 to build with Gradle 8.x https://github.com/flutter/flutter/issues/124838
+        version: ["3.7.12", "3.24.5"] # Need 3.7.12 to build with Gradle 8.x https://github.com/flutter/flutter/issues/124838
     runs-on: windows-2019
     steps:
       - uses: actions/checkout@v3
@@ -294,7 +294,7 @@ jobs:
     if: ${{ !contains(github.event.pull_request.labels.*.name, 'ci:skip') }}
     strategy:
       matrix:
-        version: ['3.x']
+        version: ["3.24.5"]
     runs-on: macos-13
     timeout-minutes: 60
     steps:
@@ -320,7 +320,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        version: ["3.7.0", "3.x"]
+        version: ["3.7.0", "3.24.5"]
     runs-on: ubuntu-latest
     timeout-minutes: 60
     steps:
@@ -350,7 +350,7 @@ jobs:
           java-version: '17'
       - uses: subosito/flutter-action@v2
         with:
-          flutter-version: '3.x'
+          flutter-version: "3.24.5"
           cache: true
       - name: Checkout hoe
         uses: actions/checkout@v3
@@ -404,7 +404,7 @@ jobs:
     if: ${{ !contains(github.event.pull_request.labels.*.name, 'ci:skip') }}
     strategy:
       matrix:
-        version: ["3.x"]
+        version: ["3.24.5"]
     runs-on: macos-13 # Rendering test on ios simulator need macos 13+
     timeout-minutes: 60
     env:
@@ -452,7 +452,7 @@ jobs:
     if: ${{ !contains(github.event.pull_request.labels.*.name, 'ci:skip') }}
     strategy:
       matrix:
-        version: ['3.x']
+        version: ["3.24.5"]
     runs-on: macos-latest
     timeout-minutes: 60
     env:
@@ -507,8 +507,7 @@ jobs:
     if: ${{ !contains(github.event.pull_request.labels.*.name, 'ci:skip') }}
     strategy:
       matrix:
-        # Pin Flutter SDK version to 3.19, since there's issue with 3.22.x, see https://github.com/AgoraIO-Extensions/Agora-Flutter-SDK/actions/runs/9186647960/job/25262717666
-        version: ['3.19']
+        version: ["3.24.5"]
     runs-on: windows-2019
     timeout-minutes: 60
     env:
@@ -560,7 +559,7 @@ jobs:
     if: ${{ !contains(github.event.pull_request.labels.*.name, 'ci:skip') }}
     strategy:
       matrix:
-        version: ['3.x']
+        version: ["3.24.5"]
     runs-on: ubuntu-latest
     timeout-minutes: 60
     env:
@@ -590,7 +589,7 @@ jobs:
     if: ${{ !contains(github.event.pull_request.labels.*.name, 'ci:skip') }}
     strategy:
       matrix:
-        version: ['3.x']
+        version: ["3.24.5"]
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
