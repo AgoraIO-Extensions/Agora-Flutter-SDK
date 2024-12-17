@@ -136,11 +136,14 @@ abstract class PIPVideoViewController extends VideoViewControllerBase {
   Future<bool> isPipSupported();
 
   /// @nodoc
-  Future<void> startPictureInPicture(PipOptions options);
+  Future<void> setupPictureInPicture(PipOptions options);
+
+  /// @nodoc
+  Future<void> destroyPictureInPicture();
+
+  /// @nodoc
+  Future<void> startPictureInPicture();
 
   /// @nodoc
   Future<void> stopPictureInPicture();
-
-  /// @nodoc
-  bool get isInPictureInPictureMode;
 }

@@ -188,7 +188,6 @@ class PIPVideoViewControllerImpl extends VideoViewController
 
   int _nativeViewPtr = 0;
   Completer _attachNativeViewCompleter = Completer<void>();
-  bool _isStartPictureInPicture = false;
   bool _isDisposedRender = false;
 
   @override
@@ -210,7 +209,9 @@ class PIPVideoViewControllerImpl extends VideoViewController
 
   @override
   Future<void> dispose() async {
-    return stopPictureInPicture();
+    // await stopPictureInPicture();
+    await destroyPictureInPicture();
+    // await disposeRender();
   }
 
   @override
@@ -219,17 +220,26 @@ class PIPVideoViewControllerImpl extends VideoViewController
   }
 
   @override
-  Future<void> startPictureInPicture(PipOptions options) async {
+  Future<void> destroyPictureInPicture() async {
+    print("destroyPip");
+    await rtcEngine.setupPip(const PipOptions(
+        contentSource: 0,
+        contentWidth: 0,
+        contentHeight: 0,
+        autoEnterPip: false,
+        canvas: null));
+  }
+
+  @override
+  Future<void> setupPictureInPicture(PipOptions options) async {
     assert(!kIsWeb, 'PIP feature is not supported on web.');
     assert(
         defaultTargetPlatform == TargetPlatform.iOS ||
             defaultTargetPlatform == TargetPlatform.android,
         'PIP feature is not supported on this platform.');
-    if (_isStartPictureInPicture || _isDisposedRender) {
+    if (_isDisposedRender) {
       return;
     }
-
-    _isStartPictureInPicture = true;
 
     late int contentSource = 0;
     if (defaultTargetPlatform == TargetPlatform.iOS) {
@@ -256,25 +266,26 @@ class PIPVideoViewControllerImpl extends VideoViewController
       canvas: newVideoCanvas,
     );
 
+    print("setupPip");
     await rtcEngine.setupPip(newOptions);
-    if (defaultTargetPlatform == TargetPlatform.android) {
-      await rtcEngine.startPip();
+  }
+
+  @override
+  Future<void> startPictureInPicture() async {
+    if (_isDisposedRender) {
+      return;
     }
+
+    print("startPip");
+    await rtcEngine.startPip();
   }
 
   @override
   Future<void> stopPictureInPicture() async {
-    if (!_isStartPictureInPicture) {
-      return;
-    }
-
-    _isStartPictureInPicture = false;
     // On android, there's no stop pip function
     if (defaultTargetPlatform == TargetPlatform.iOS) {
+      print("stopPip");
       await rtcEngine.stopPip();
     }
   }
-
-  @override
-  bool get isInPictureInPictureMode => _isStartPictureInPicture;
 }
