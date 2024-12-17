@@ -18,6 +18,9 @@ import 'agora_rtc_renderer.dart';
 /// Callback when [AgoraVideoView] created.
 typedef AgoraVideoViewCreatedCallback = void Function(int viewId);
 
+/// Callback when [AgoraVideoView] disposed.
+typedef AgoraVideoViewDisposedCallback = void Function(int viewId);
+
 VideoViewControllerBaseMixin _controller(VideoViewControllerBase controller) {
   return controller as VideoViewControllerBaseMixin;
 }
@@ -30,6 +33,7 @@ class AgoraVideoViewState extends State<AgoraVideoView> {
         key: widget.key,
         controller: widget.controller,
         onAgoraVideoViewCreated: widget.onAgoraVideoViewCreated,
+        onAgoraVideoViewDisposing: widget.onAgoraVideoViewDisposing,
       );
     }
 
@@ -39,6 +43,7 @@ class AgoraVideoViewState extends State<AgoraVideoView> {
         key: widget.key,
         controller: widget.controller,
         onAgoraVideoViewCreated: widget.onAgoraVideoViewCreated,
+        onAgoraVideoViewDisposing: widget.onAgoraVideoViewDisposing,
       );
     }
 
@@ -47,6 +52,7 @@ class AgoraVideoViewState extends State<AgoraVideoView> {
         key: widget.key,
         controller: widget.controller,
         onAgoraVideoViewCreated: widget.onAgoraVideoViewCreated,
+        onAgoraVideoViewDisposing: widget.onAgoraVideoViewDisposing,
       );
     }
 
@@ -54,6 +60,7 @@ class AgoraVideoViewState extends State<AgoraVideoView> {
       key: widget.key,
       controller: widget.controller,
       onAgoraVideoViewCreated: widget.onAgoraVideoViewCreated,
+      onAgoraVideoViewDisposing: widget.onAgoraVideoViewDisposing,
     );
   }
 }
@@ -63,11 +70,14 @@ class AgoraRtcRenderPlatformView extends StatefulWidget {
     Key? key,
     required this.controller,
     this.onAgoraVideoViewCreated,
+    this.onAgoraVideoViewDisposing,
   }) : super(key: key);
 
   final VideoViewControllerBase controller;
 
   final AgoraVideoViewCreatedCallback? onAgoraVideoViewCreated;
+
+  final AgoraVideoViewDisposedCallback? onAgoraVideoViewDisposing;
 
   @override
   State<AgoraRtcRenderPlatformView> createState() =>
@@ -200,6 +210,8 @@ class _AgoraRtcRenderPlatformViewState extends State<AgoraRtcRenderPlatformView>
   }
 
   Future<void> _disposeRender() async {
+    widget.onAgoraVideoViewDisposing?.call(_nativeViewIntPtr);
+
     _isDisposed = true;
     _nativeViewIntPtr = 0;
 
@@ -282,11 +294,12 @@ class AgoraRtcRenderTexture extends StatefulWidget {
     Key? key,
     required this.controller,
     this.onAgoraVideoViewCreated,
+    this.onAgoraVideoViewDisposing,
   }) : super(key: key);
 
   final VideoViewControllerBase controller;
   final AgoraVideoViewCreatedCallback? onAgoraVideoViewCreated;
-
+  final AgoraVideoViewDisposedCallback? onAgoraVideoViewDisposing;
   @override
   State<AgoraRtcRenderTexture> createState() => _AgoraRtcRenderTextureState();
 }
@@ -374,8 +387,12 @@ class _AgoraRtcRenderTextureState extends State<AgoraRtcRenderTexture>
 
   @override
   void dispose() {
+    final textureId = _controllerInternal!.getTextureId();
+
     _controllerInternal?.disposeRender();
     _controllerInternal = null;
+
+    widget.onAgoraVideoViewDisposing?.call(textureId);
 
     super.dispose();
   }

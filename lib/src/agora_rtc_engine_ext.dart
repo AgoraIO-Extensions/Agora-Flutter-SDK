@@ -17,6 +17,15 @@ extension RtcEngineExt on RtcEngine {
     final impl = this as RtcEngineImpl;
     return impl.getAssetAbsolutePath(assetPath);
   }
+
+  /// Obtains the current activity handle.
+  ///
+  /// Returns
+  /// The current activity handle.
+  Future<int> getCurrentActivityHandle() async {
+    final impl = this as RtcEngineImpl;
+    return impl.getCurrentActivityHandle();
+  }
 }
 
 /// Error codes and error messages.

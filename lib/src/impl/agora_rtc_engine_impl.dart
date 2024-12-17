@@ -1035,6 +1035,14 @@ class RtcEngineImpl extends rtc_engine_ex_binding.RtcEngineExImpl
     return p;
   }
 
+  Future<int> getCurrentActivityHandle() async {
+    if (!kIsWeb && defaultTargetPlatform == TargetPlatform.android) {
+      return await engineMethodChannel.invokeMethod<int>('getCurrentActivityHandle') ?? 0;
+    }
+
+    return 0;
+  }
+
   /////////// debug ////////
 
   /// [type] see [VideoSourceType], only [VideoSourceType.videoSourceCamera], [VideoSourceType.videoSourceRemote] supported

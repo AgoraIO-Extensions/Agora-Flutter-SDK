@@ -1,6 +1,5 @@
 package io.agora.agora_rtc_ng;
 
-import android.app.Activity;
 import android.content.Context;
 import android.view.View;
 
@@ -10,8 +9,6 @@ import java.util.HashMap;
 import java.util.Map;
 
 import io.agora.iris.IrisApiEngine;
-import io.flutter.embedding.engine.plugins.activity.ActivityAware;
-import io.flutter.embedding.engine.plugins.activity.ActivityPluginBinding;
 import io.flutter.plugin.common.BinaryMessenger;
 import io.flutter.plugin.common.MethodCall;
 import io.flutter.plugin.common.MethodChannel;
@@ -101,7 +98,7 @@ class PlatformRenderPool {
     }
 }
 
-public class VideoViewController implements MethodChannel.MethodCallHandler, ActivityAware {
+public class VideoViewController implements MethodChannel.MethodCallHandler {
 
     private final TextureRegistry textureRegistry;
     private final BinaryMessenger binaryMessenger;
@@ -110,8 +107,6 @@ public class VideoViewController implements MethodChannel.MethodCallHandler, Act
     private final PlatformRenderPool pool;
 
     private final Map<Long, TextureRenderer> textureRendererMap = new HashMap<>();
-
-    private SimpleRef currentActivityRef;
 
     VideoViewController(TextureRegistry textureRegistry, BinaryMessenger binaryMessenger) {
         this.textureRegistry = textureRegistry;
@@ -214,15 +209,6 @@ public class VideoViewController implements MethodChannel.MethodCallHandler, Act
                 result.success(true);
                 break;
             }
-            case "getCurrentActivityHandle": {
-                if (currentActivityRef != null) {
-                    result.success(currentActivityRef.getNativeHandle());
-                } else {
-                    result.success(0);
-                }
-
-                break;
-            }
             case "updateTextureRenderData":
             default:
                 result.notImplemented();
@@ -246,29 +232,6 @@ public class VideoViewController implements MethodChannel.MethodCallHandler, Act
 
     public void dispose() {
         methodChannel.setMethodCallHandler(null);
-        currentActivityRef = null;
         disposeAllRenderers();
-    }
-
-    @Override
-    public void onAttachedToActivity(@NonNull ActivityPluginBinding binding) {
-        currentActivityRef = new SimpleRef(binding.getActivity());
-    }
-
-    @Override
-    public void onDetachedFromActivityForConfigChanges() {
-        currentActivityRef.releaseRef();
-        currentActivityRef = null;
-    }
-
-    @Override
-    public void onReattachedToActivityForConfigChanges(@NonNull ActivityPluginBinding binding) {
-        currentActivityRef = new SimpleRef(binding.getActivity());
-    }
-
-    @Override
-    public void onDetachedFromActivity() {
-        currentActivityRef.releaseRef();
-        currentActivityRef = null;
     }
 }

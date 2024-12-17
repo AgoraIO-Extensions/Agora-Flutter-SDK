@@ -23,6 +23,8 @@ public class AgoraRtcNgPlugin implements FlutterPlugin, MethodChannel.MethodCall
     private VideoViewController videoViewController;
     @Nullable
     private Context applicationContext;
+    @Nullable
+    private SimpleRef currentActivityRef;
 
     @Override
     public void onAttachedToEngine(@NonNull FlutterPluginBinding flutterPluginBinding) {
@@ -54,6 +56,7 @@ public class AgoraRtcNgPlugin implements FlutterPlugin, MethodChannel.MethodCall
     @Override
     public void onDetachedFromEngine(@NonNull FlutterPluginBinding binding) {
         applicationContext = null;
+        currentActivityRef = null;
         channel.setMethodCallHandler(null);
         videoViewController.dispose();
     }
@@ -76,6 +79,12 @@ public class AgoraRtcNgPlugin implements FlutterPlugin, MethodChannel.MethodCall
             result.success(new HashMap<String, String>() {{
                 put("externalFilesDir", externalFilesDir);
             }});
+        } else if ("getCurrentActivityHandle".equals(call.method)) {
+            if (currentActivityRef != null) {
+                result.success(currentActivityRef.getNativeHandle());
+            } else {
+                result.success(0);
+            }
         } else {
             result.notImplemented();
         }
@@ -108,29 +117,23 @@ public class AgoraRtcNgPlugin implements FlutterPlugin, MethodChannel.MethodCall
 
     @Override
     public void onAttachedToActivity(@NonNull ActivityPluginBinding binding) {
-        if (videoViewController != null) {
-            videoViewController.onAttachedToActivity(binding);
-        }
+        currentActivityRef = new SimpleRef(binding.getActivity());
     }
 
     @Override
     public void onDetachedFromActivityForConfigChanges() {
-        if (videoViewController != null) {
-            videoViewController.onDetachedFromActivityForConfigChanges();
-        }
+        currentActivityRef.releaseRef();
+        currentActivityRef = null;
     }
 
     @Override
     public void onReattachedToActivityForConfigChanges(@NonNull ActivityPluginBinding binding) {
-        if (videoViewController != null) {
-            videoViewController.onReattachedToActivityForConfigChanges(binding);
-        }
+        currentActivityRef = new SimpleRef(binding.getActivity());
     }
 
     @Override
     public void onDetachedFromActivity() {
-        if (videoViewController != null) {
-            videoViewController.onDetachedFromActivity();
-        }
+        currentActivityRef.releaseRef();
+        currentActivityRef = null;
     }
 }

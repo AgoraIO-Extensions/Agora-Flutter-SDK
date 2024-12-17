@@ -112,11 +112,4 @@ class GlobalVideoViewControllerIO extends GlobalVideoViewControllerPlatfrom {
   Future<void> dePlatformRenderRef(int platformViewId) async {
     await methodChannel.invokeMethod('dePlatfromViewRef', platformViewId);
   }
-
-  @override
-  Future<int> getCurrentActivityHandle() async {
-    final int ptr =
-        await methodChannel.invokeMethod('getCurrentActivityHandle');
-    return ptr;
-  }
 }

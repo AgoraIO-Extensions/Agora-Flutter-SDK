@@ -10,6 +10,7 @@ class AgoraVideoView extends StatefulWidget {
     Key? key,
     required this.controller,
     this.onAgoraVideoViewCreated,
+    this.onAgoraVideoViewDisposing,
   }) : super(key: key);
 
   /// Controls the type of video to render:
@@ -19,6 +20,9 @@ class AgoraVideoView extends StatefulWidget {
 
   /// @nodoc
   final void Function(int viewId)? onAgoraVideoViewCreated;
+
+  /// @nodoc
+  final void Function(int viewId)? onAgoraVideoViewDisposing;
 
   @override
   State<AgoraVideoView> createState() => AgoraVideoViewState();
