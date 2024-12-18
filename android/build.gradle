@@ -57,9 +57,8 @@ dependencies {
   if (isDev(project)) {
     api fileTree(dir: "libs", include: ["*.jar"])
   } else {
-    api 'io.agora.rtc:iris-rtc:4.3.2.11-build.1'
-    api 'io.agora.rtc:agora-special-full:4.3.2.11'
-    api 'io.agora.rtc:full-screen-sharing:4.3.2.11'
+    api 'io.agora.rtc:iris-rtc-audio:4.3.2.235-audio.1'
+    api 'io.agora.rtc:agora-special-full:4.3.2.235.HY'
   }
 }
 
