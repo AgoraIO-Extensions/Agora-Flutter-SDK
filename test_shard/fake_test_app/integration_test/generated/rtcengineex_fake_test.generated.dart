@@ -1341,6 +1341,101 @@ void rtcEngineExSmokeTestCases() {
   );
 
   testWidgets(
+    'RtcEngineEx.sendRdtMessageEx',
+    (WidgetTester tester) async {
+      String engineAppId = const String.fromEnvironment('TEST_APP_ID',
+          defaultValue: '<YOUR_APP_ID>');
+
+      RtcEngineEx rtcEngineEx = createAgoraRtcEngineEx();
+      await rtcEngineEx.initialize(RtcEngineContext(
+        appId: engineAppId,
+        areaCode: AreaCode.areaCodeGlob.value(),
+      ));
+      await rtcEngineEx.setParameters('{"rtc.enable_debug_log": true}');
+
+      try {
+        int uid = 5;
+        RdtStreamType type = RdtStreamType.rdtStreamCmd;
+        Uint8List data = Uint8List.fromList([1, 1, 1, 1, 1]);
+        int length = 5;
+        String connectionChannelId = "hello";
+        int connectionLocalUid = 5;
+        RtcConnection connection = RtcConnection(
+          channelId: connectionChannelId,
+          localUid: connectionLocalUid,
+        );
+        await rtcEngineEx.sendRdtMessageEx(
+          uid: uid,
+          type: type,
+          data: data,
+          length: length,
+          connection: connection,
+        );
+      } catch (e) {
+        if (e is! AgoraRtcException) {
+          debugPrint('[RtcEngineEx.sendRdtMessageEx] error: ${e.toString()}');
+          rethrow;
+        }
+
+        if (e.code != -4) {
+          // Only not supported error supported.
+          rethrow;
+        }
+      }
+
+      await rtcEngineEx.release();
+    },
+//  skip: !(),
+  );
+
+  testWidgets(
+    'RtcEngineEx.sendMediaControlMessageEx',
+    (WidgetTester tester) async {
+      String engineAppId = const String.fromEnvironment('TEST_APP_ID',
+          defaultValue: '<YOUR_APP_ID>');
+
+      RtcEngineEx rtcEngineEx = createAgoraRtcEngineEx();
+      await rtcEngineEx.initialize(RtcEngineContext(
+        appId: engineAppId,
+        areaCode: AreaCode.areaCodeGlob.value(),
+      ));
+      await rtcEngineEx.setParameters('{"rtc.enable_debug_log": true}');
+
+      try {
+        int uid = 5;
+        Uint8List data = Uint8List.fromList([1, 1, 1, 1, 1]);
+        int length = 5;
+        String connectionChannelId = "hello";
+        int connectionLocalUid = 5;
+        RtcConnection connection = RtcConnection(
+          channelId: connectionChannelId,
+          localUid: connectionLocalUid,
+        );
+        await rtcEngineEx.sendMediaControlMessageEx(
+          uid: uid,
+          data: data,
+          length: length,
+          connection: connection,
+        );
+      } catch (e) {
+        if (e is! AgoraRtcException) {
+          debugPrint(
+              '[RtcEngineEx.sendMediaControlMessageEx] error: ${e.toString()}');
+          rethrow;
+        }
+
+        if (e.code != -4) {
+          // Only not supported error supported.
+          rethrow;
+        }
+      }
+
+      await rtcEngineEx.release();
+    },
+//  skip: !(),
+  );
+
+  testWidgets(
     'RtcEngineEx.addVideoWatermarkEx',
     (WidgetTester tester) async {
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',

@@ -8319,6 +8319,12 @@ void rtcEngineSmokeTestCases() {
               int streamId, Uint8List data, int length, int sentTs) {},
           onStreamMessageError: (RtcConnection connection, int remoteUid,
               int streamId, ErrorCodeType code, int missed, int cached) {},
+          onRdtMessage: (RtcConnection connection, int userId,
+              RdtStreamType type, Uint8List data, int length) {},
+          onRdtStateChanged:
+              (RtcConnection connection, int userId, RdtState state) {},
+          onMediaControlMessage: (RtcConnection connection, int userId,
+              Uint8List data, int length) {},
           onRequestToken: (RtcConnection connection) {},
           onTokenPrivilegeWillExpire:
               (RtcConnection connection, String token) {},
@@ -8537,6 +8543,12 @@ void rtcEngineSmokeTestCases() {
               int streamId, Uint8List data, int length, int sentTs) {},
           onStreamMessageError: (RtcConnection connection, int remoteUid,
               int streamId, ErrorCodeType code, int missed, int cached) {},
+          onRdtMessage: (RtcConnection connection, int userId,
+              RdtStreamType type, Uint8List data, int length) {},
+          onRdtStateChanged:
+              (RtcConnection connection, int userId, RdtState state) {},
+          onMediaControlMessage: (RtcConnection connection, int userId,
+              Uint8List data, int length) {},
           onRequestToken: (RtcConnection connection) {},
           onTokenPrivilegeWillExpire:
               (RtcConnection connection, String token) {},
@@ -8830,6 +8842,85 @@ void rtcEngineSmokeTestCases() {
       } catch (e) {
         if (e is! AgoraRtcException) {
           debugPrint('[RtcEngine.sendStreamMessage] error: ${e.toString()}');
+          rethrow;
+        }
+
+        if (e.code != -4) {
+          // Only not supported error supported.
+          rethrow;
+        }
+      }
+
+      await rtcEngine.release();
+    },
+  );
+
+  testWidgets(
+    'RtcEngine.sendRdtMessage',
+    (WidgetTester tester) async {
+      String engineAppId = const String.fromEnvironment('TEST_APP_ID',
+          defaultValue: '<YOUR_APP_ID>');
+
+      RtcEngine rtcEngine = createAgoraRtcEngine();
+      await rtcEngine.initialize(RtcEngineContext(
+        appId: engineAppId,
+        areaCode: AreaCode.areaCodeGlob.value(),
+      ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
+
+      try {
+        int uid = 5;
+        RdtStreamType type = RdtStreamType.rdtStreamCmd;
+        Uint8List data = Uint8List.fromList([1, 1, 1, 1, 1]);
+        int length = 5;
+        await rtcEngine.sendRdtMessage(
+          uid: uid,
+          type: type,
+          data: data,
+          length: length,
+        );
+      } catch (e) {
+        if (e is! AgoraRtcException) {
+          debugPrint('[RtcEngine.sendRdtMessage] error: ${e.toString()}');
+          rethrow;
+        }
+
+        if (e.code != -4) {
+          // Only not supported error supported.
+          rethrow;
+        }
+      }
+
+      await rtcEngine.release();
+    },
+  );
+
+  testWidgets(
+    'RtcEngine.sendMediaControlMessage',
+    (WidgetTester tester) async {
+      String engineAppId = const String.fromEnvironment('TEST_APP_ID',
+          defaultValue: '<YOUR_APP_ID>');
+
+      RtcEngine rtcEngine = createAgoraRtcEngine();
+      await rtcEngine.initialize(RtcEngineContext(
+        appId: engineAppId,
+        areaCode: AreaCode.areaCodeGlob.value(),
+      ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
+
+      try {
+        int uid = 5;
+        Uint8List data = Uint8List.fromList([1, 1, 1, 1, 1]);
+        int length = 5;
+        await rtcEngine.sendMediaControlMessage(
+          uid: uid,
+          data: data,
+          length: length,
+        );
+      } catch (e) {
+        if (e is! AgoraRtcException) {
+          debugPrint(
+              '[RtcEngine.sendMediaControlMessage] error: ${e.toString()}');
           rethrow;
         }
 

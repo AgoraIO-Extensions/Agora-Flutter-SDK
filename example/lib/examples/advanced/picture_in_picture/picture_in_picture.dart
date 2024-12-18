@@ -50,7 +50,7 @@ class _State extends State<PictureInPicture> with WidgetsBindingObserver {
   @override
   Future<void> didChangeAppLifecycleState(AppLifecycleState state) async {
     super.didChangeAppLifecycleState(state);
-    if(Platform.isAndroid){
+    if (Platform.isAndroid) {
       return;
     }
     if (state == AppLifecycleState.paused) {
@@ -70,7 +70,7 @@ class _State extends State<PictureInPicture> with WidgetsBindingObserver {
 
   @override
   Future<void> dispose() async {
-    if(Platform.isIOS){
+    if (Platform.isIOS) {
       await _engine.stopPip();
     }
     WidgetsBinding.instance.removeObserver(this);
@@ -206,7 +206,7 @@ class _State extends State<PictureInPicture> with WidgetsBindingObserver {
   }
 
   Future<void> _leaveChannel() async {
-    if(Platform.isIOS){
+    if (Platform.isIOS) {
       await _engine.stopPip();
     }
     await _engine.leaveChannel();
