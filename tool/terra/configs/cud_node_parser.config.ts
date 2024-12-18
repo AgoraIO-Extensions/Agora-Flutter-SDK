@@ -598,6 +598,52 @@ const updateNodes = [
       },
     },
   },
+  // agora::rtc::IRtcEngineEventHandler::onRdtMessage
+  {
+    node: {
+      __TYPE: CXXTYPE.Variable,
+      name: "data",
+      namespaces: ["agora", "rtc"],
+      parent_name: "onRdtMessage",
+    },
+    updated: {
+      __TYPE: CXXTYPE.Variable,
+      name: "data",
+      namespaces: ["agora", "rtc"],
+      parent_name: "onRdtMessage",
+      type: {
+        __TYPE: CXXTYPE.SimpleType,
+        is_builtin_type: false,
+        is_const: true,
+        kind: SimpleTypeKind.pointer_t,
+        name: "uint8_t",
+        source: "const uint8_t*",
+      },
+    },
+  },
+  // agora::rtc::IRtcEngineEventHandler::onMediaControlMessage
+  {
+    node: {
+      __TYPE: CXXTYPE.Variable,
+      name: "data",
+      namespaces: ["agora", "rtc"],
+      parent_name: "onMediaControlMessage",
+    },
+    updated: {
+      __TYPE: CXXTYPE.Variable,
+      name: "data",
+      namespaces: ["agora", "rtc"],
+      parent_name: "onMediaControlMessage",
+      type: {
+        __TYPE: CXXTYPE.SimpleType,
+        is_builtin_type: false,
+        is_const: true,
+        kind: SimpleTypeKind.pointer_t,
+        name: "uint8_t",
+        source: "const uint8_t*",
+      },
+    },
+  },
 
   //
   // agora::rtc::IRtcEngineEventHandlerEx
@@ -736,6 +782,52 @@ const updateNodes = [
         kind: SimpleTypeKind.value_t,
         name: "agora::ERROR_CODE_TYPE",
         source: "agora::ERROR_CODE_TYPE",
+      },
+    },
+  },
+  // onRdtMessage
+  {
+    node: {
+      __TYPE: CXXTYPE.Variable,
+      name: "data",
+      namespaces: ["agora", "rtc"],
+      parent_name: "onRdtMessage",
+    },
+    updated: {
+      __TYPE: CXXTYPE.Variable,
+      name: "data",
+      namespaces: ["agora", "rtc"],
+      parent_name: "onRdtMessage",
+      type: {
+        __TYPE: CXXTYPE.SimpleType,
+        is_builtin_type: false,
+        is_const: true,
+        kind: SimpleTypeKind.pointer_t,
+        name: "uint8_t",
+        source: "const uint8_t*",
+      },
+    },
+  },
+  // onMediaControlMessage
+  {
+    node: {
+      __TYPE: CXXTYPE.Variable,
+      name: "data",
+      namespaces: ["agora", "rtc"],
+      parent_name: "onMediaControlMessage",
+    },
+    updated: {
+      __TYPE: CXXTYPE.Variable,
+      name: "data",
+      namespaces: ["agora", "rtc"],
+      parent_name: "onMediaControlMessage",
+      type: {
+        __TYPE: CXXTYPE.SimpleType,
+        is_builtin_type: false,
+        is_const: true,
+        kind: SimpleTypeKind.pointer_t,
+        name: "uint8_t",
+        source: "const uint8_t*",
       },
     },
   },
@@ -1144,6 +1236,52 @@ const updateNodes = [
       },
     },
   },
+  // agora::rtc::IRtcEngineEx::sendRdtMessageEx
+  {
+    node: {
+      __TYPE: CXXTYPE.Variable,
+      name: "data",
+      namespaces: ["agora", "rtc"],
+      parent_name: "sendRdtMessageEx",
+    },
+    updated: {
+      __TYPE: CXXTYPE.Variable,
+      name: "data",
+      namespaces: ["agora", "rtc"],
+      parent_name: "sendRdtMessageEx",
+      type: {
+        __TYPE: CXXTYPE.SimpleType,
+        is_builtin_type: false,
+        is_const: true,
+        kind: SimpleTypeKind.pointer_t,
+        name: "uint8_t",
+        source: "const uint8_t*",
+      },
+    },
+  },
+  // agora::rtc::IRtcEngineEx::sendMediaControlMessageEx
+  {
+    node: {
+      __TYPE: CXXTYPE.Variable,
+      name: "data",
+      namespaces: ["agora", "rtc"],
+      parent_name: "sendMediaControlMessageEx",
+    },
+    updated: {
+      __TYPE: CXXTYPE.Variable,
+      name: "data",
+      namespaces: ["agora", "rtc"],
+      parent_name: "sendMediaControlMessageEx",
+      type: {
+        __TYPE: CXXTYPE.SimpleType,
+        is_builtin_type: false,
+        is_const: true,
+        kind: SimpleTypeKind.pointer_t,
+        name: "uint8_t",
+        source: "const uint8_t*",
+      },
+    },
+  },
   // agora::rtc::IRtcEngine
   // agora::rtc::IRtcEngine::queryCodecCapability
   {
@@ -1330,6 +1468,52 @@ const updateNodes = [
       name: "data",
       namespaces: ["agora", "rtc"],
       parent_name: "sendStreamMessage",
+      type: {
+        __TYPE: CXXTYPE.SimpleType,
+        is_builtin_type: false,
+        is_const: true,
+        kind: SimpleTypeKind.pointer_t,
+        name: "uint8_t",
+        source: "const uint8_t*",
+      },
+    },
+  },
+  // agora::rtc::IRtcEngine::sendRdtMessage
+  {
+    node: {
+      __TYPE: CXXTYPE.Variable,
+      name: "data",
+      namespaces: ["agora", "rtc"],
+      parent_name: "sendRdtMessage",
+    },
+    updated: {
+      __TYPE: CXXTYPE.Variable,
+      name: "data",
+      namespaces: ["agora", "rtc"],
+      parent_name: "sendRdtMessage",
+      type: {
+        __TYPE: CXXTYPE.SimpleType,
+        is_builtin_type: false,
+        is_const: true,
+        kind: SimpleTypeKind.pointer_t,
+        name: "uint8_t",
+        source: "const uint8_t*",
+      },
+    },
+  },
+  // agora::rtc::IRtcEngine::sendMediaControlMessage
+  {
+    node: {
+      __TYPE: CXXTYPE.Variable,
+      name: "data",
+      namespaces: ["agora", "rtc"],
+      parent_name: "sendMediaControlMessage",
+    },
+    updated: {
+      __TYPE: CXXTYPE.Variable,
+      name: "data",
+      namespaces: ["agora", "rtc"],
+      parent_name: "sendMediaControlMessage",
       type: {
         __TYPE: CXXTYPE.SimpleType,
         is_builtin_type: false,
