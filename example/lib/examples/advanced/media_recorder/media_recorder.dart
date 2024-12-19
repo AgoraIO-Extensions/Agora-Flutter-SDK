@@ -120,9 +120,9 @@ class _State extends State<MediaRecorderExample> {
 
     await _mediaRecorder?.setMediaRecorderObserver(MediaRecorderObserver(
       onRecorderStateChanged: (String channelId, int uid, RecorderState state,
-          RecorderReasonCode error) {
+          RecorderReasonCode reason) {
         logSink.log(
-            'onRecorderStateChanged channelId: $channelId, uid: $uid state: $state, error: $error');
+            'onRecorderStateChanged channelId: $channelId, uid: $uid state: $state, error: $reason');
       },
       onRecorderInfoUpdated: (String channelId, int uid, RecorderInfo info) {
         logSink.log(
