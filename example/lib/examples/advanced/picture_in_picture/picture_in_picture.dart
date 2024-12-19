@@ -8,8 +8,8 @@ import 'package:flutter/material.dart';
 class RTCModel {
   static final shard = RTCModel._();
   late final RtcEngine engine;
-  late final RtcEngineEventHandler? _handler;
-  late final RtcEngineEventHandler _internal_handler;
+  late RtcEngineEventHandler? _handler;
+  late RtcEngineEventHandler _internal_handler;
 
   RTCModel._() {
     engine = createAgoraRtcEngine();
@@ -38,6 +38,8 @@ class RTCModel {
       },
       onUserOffline:
           (RtcConnection connection, int rUid, UserOfflineReasonType reason) {
+        print(
+            '[onUserOffline] connection: ${connection.toJson()}  rUid: $rUid reason: $reason');
         logSink.log(
             '[onUserOffline] connection: ${connection.toJson()}  rUid: $rUid reason: $reason');
 
@@ -83,14 +85,13 @@ class PictureInPicture extends StatefulWidget {
 }
 
 class _State extends State<PictureInPicture> with WidgetsBindingObserver {
-  bool isJoined = false;
-
   late final RtcEngineEventHandler _rtcEngineEventHandler;
 
-  PIPVideoViewController? _pipVideoViewController = null;
+  PIPVideoViewController? _pipVideoViewController;
 
   bool _isInPipMode = false;
-  bool? _isPipSupported;
+  bool _isPipSupported = false;
+  bool _hasVideo = false;
 
   @override
   void initState() {
@@ -127,71 +128,70 @@ class _State extends State<PictureInPicture> with WidgetsBindingObserver {
       appId: config.appId,
     ));
     _rtcEngineEventHandler = RtcEngineEventHandler(
-      onJoinChannelSuccess: (RtcConnection connection, int elapsed) {
-        setState(() {
-          isJoined = true;
-        });
-      },
+      onJoinChannelSuccess: (RtcConnection connection, int elapsed) {},
       onUserJoined: (RtcConnection connection, int rUid, int elapsed) {
-        setState(() {
-          if (_pipVideoViewController?.canvas.uid == rUid) {
-            return;
-          }
+        if (_pipVideoViewController?.canvas.uid == rUid) {
+          // flutter会进行状态合并，view可能会被复用，就无法触发onAgoraVideoViewCreated, 但是之前可能在后台已经触发了destroyPip,
+          // 所以需要手动调用setupPictureInPicture
+          _pipVideoViewController?.setupPictureInPicture(const PipOptions(
+              contentWidth: 150, contentHeight: 300, autoEnterPip: true));
+          return;
+        }
 
-          _pipVideoViewController = PIPVideoViewController.remote(
-            rtcEngine: RTCModel.shard.engine,
-            canvas: VideoCanvas(uid: rUid),
-            connection: RtcConnection(channelId: config.channelId),
-          );
+        var newPipVideoViewController = PIPVideoViewController.remote(
+          rtcEngine: RTCModel.shard.engine,
+          canvas: VideoCanvas(uid: rUid),
+          connection: RtcConnection(channelId: config.channelId),
+        );
+
+        setState(() {
+          _pipVideoViewController = newPipVideoViewController;
         });
       },
       onUserOffline:
           (RtcConnection connection, int rUid, UserOfflineReasonType reason) {
-        setState(() {
-          if (_pipVideoViewController?.canvas.uid == rUid) {
-            _pipVideoViewController = null;
-          }
-        });
-      },
-      onLeaveChannel: (RtcConnection connection, RtcStats stats) {
-        setState(() async {
-          isJoined = false;
-        });
-      },
-      onRemoteVideoStateChanged:
-          (connection, remoteUid, state, reason, elapsed) {
-        if (state == RemoteVideoState.remoteVideoStateStopped) {
+        if (_hasVideo) {
+          _pipVideoViewController?.destroyPictureInPicture();
           setState(() {
-            if (_pipVideoViewController?.canvas.uid == remoteUid) {
-              _pipVideoViewController?.dispose();
-              _pipVideoViewController = null;
-            }
-          });
-        } else if (state == RemoteVideoState.remoteVideoStateStarting) {
-          setState(() {
-            if (_pipVideoViewController != null) {
-              return;
-            }
-
-            _pipVideoViewController = PIPVideoViewController.remote(
-              rtcEngine: RTCModel.shard.engine,
-              canvas: VideoCanvas(uid: remoteUid),
-              connection: RtcConnection(channelId: config.channelId),
-            );
+            _hasVideo = false;
           });
         }
       },
+      onLeaveChannel: (RtcConnection connection, RtcStats stats) {},
+      onRemoteVideoStateChanged:
+          (connection, remoteUid, state, reason, elapsed) {
+        var hasVideo = state == RemoteVideoState.remoteVideoStateStarting ||
+            state == RemoteVideoState.remoteVideoStateDecoding;
+        var hasVideoStateChanged = _hasVideo != hasVideo;
+
+        if (hasVideoStateChanged && !hasVideo) {
+          // call stopPictureInPicture to stop pip mode in background will not hide the pip view
+          // _pipVideoViewController?.stopPictureInPicture();
+          _pipVideoViewController?.destroyPictureInPicture();
+        }
+
+        if (hasVideoStateChanged && hasVideo) {
+          // call setupPictureInPicture to setup pip view in background will not show the pip view
+          // we just want to reset the internal binding of the pip view and the video stream, coz
+          // the sdk will not rebind the video stream to the pip view when the internal binding is broken
+          // flutter会进行状态合并，view可能会被复用，就无法触发onAgoraVideoViewCreated, 所以需要手动调用setupPictureInPicture
+          _pipVideoViewController?.setupPictureInPicture(const PipOptions(
+              contentWidth: 150, contentHeight: 300, autoEnterPip: true));
+        }
+
+        setState(() {
+          _hasVideo = hasVideo;
+        });
+      },
       onPipStateChanged: (state) {
-        setState(() async {
-          _isInPipMode = state == PipState.pipStateStarted;
-          if (state == PipState.pipStateFailed) {
-            // destroy the pip state
-            await _pipVideoViewController?.destroyPictureInPicture();
-            // reset the pip state
-            await _pipVideoViewController?.setupPictureInPicture(
-                const PipOptions(
-                    contentWidth: 150, contentHeight: 300, autoEnterPip: true));
-          }
+        var isInPipMode = state == PipState.pipStateStarted;
+        if (state == PipState.pipStateFailed) {
+          // call setup again will reset the pip state, even you have the same options
+          _pipVideoViewController?.setupPictureInPicture(const PipOptions(
+              contentWidth: 150, contentHeight: 300, autoEnterPip: true));
+        }
+        setState(() {
+          _isInPipMode = isInPipMode;
         });
       },
     );
@@ -199,8 +199,10 @@ class _State extends State<PictureInPicture> with WidgetsBindingObserver {
     RTCModel.shard.setHandler(_rtcEngineEventHandler);
 
     await RTCModel.shard.engine.enableVideo();
-    _isPipSupported = await RTCModel.shard.engine.isPipSupported();
-    setState(() {});
+    var isPipSupported = await RTCModel.shard.engine.isPipSupported();
+    setState(() {
+      _isPipSupported = isPipSupported;
+    });
   }
 
   Future<void> _joinChannel() async {
@@ -215,23 +217,18 @@ class _State extends State<PictureInPicture> with WidgetsBindingObserver {
   }
 
   Future<void> _leaveChannel() async {
-    setState(() {
-      _pipVideoViewController?.dispose();
-      _pipVideoViewController = null;
-    });
+    await _pipVideoViewController?.stopPictureInPicture();
 
     await RTCModel.shard.engine.leaveChannel();
-
-    RTCModel.shard.unsetHandler();
-
-    Navigator.maybePop(context);
   }
 
   Widget _videoViewStack(Size size) {
     return Stack(
       alignment: Alignment.center,
       children: [
-        if (_pipVideoViewController != null)
+        // 因为无法控制AgoraVideoView的创建时机，以及因为中间状态的合并
+        // 要尽可能早的创建AgoraVideoView获取native view实例，并且尽可能的复用
+        if (_hasVideo && _pipVideoViewController != null)
           SizedBox(
             width: size.width,
             height: size.height,
@@ -257,10 +254,6 @@ class _State extends State<PictureInPicture> with WidgetsBindingObserver {
 
   @override
   Widget build(BuildContext context) {
-    if (_isPipSupported == null) {
-      return Container();
-    }
-
     if (_isPipSupported == false) {
       return const Center(
         child: Text('The picture-in-picture is not supported on this device.'),

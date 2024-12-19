@@ -209,9 +209,8 @@ class PIPVideoViewControllerImpl extends VideoViewController
 
   @override
   Future<void> dispose() async {
-    // await stopPictureInPicture();
+    await stopPictureInPicture();
     await destroyPictureInPicture();
-    // await disposeRender();
   }
 
   @override
@@ -243,7 +242,9 @@ class PIPVideoViewControllerImpl extends VideoViewController
 
     late int contentSource = 0;
     if (defaultTargetPlatform == TargetPlatform.iOS) {
-      await _attachNativeViewCompleter.future;
+      if(_nativeViewPtr == 0) {
+        await _attachNativeViewCompleter.future;
+      }
       contentSource = _nativeViewPtr;
     } else {
       assert(defaultTargetPlatform == TargetPlatform.android);
