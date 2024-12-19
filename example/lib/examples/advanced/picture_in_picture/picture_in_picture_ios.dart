@@ -1,8 +1,8 @@
+// ignore_for_file: avoid_print
+
 import 'package:agora_rtc_engine/agora_rtc_engine.dart';
 import 'package:agora_rtc_engine_example/config/agora.config.dart' as config;
 import 'package:agora_rtc_engine_example/components/example_actions_widget.dart';
-import 'package:agora_rtc_engine_example/components/log_sink.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 class RTCModel {
@@ -21,48 +21,36 @@ class RTCModel {
     _internal_handler = RtcEngineEventHandler(
       onError: (ErrorCodeType err, String msg) {
         print('[onError] err: $err, msg: $msg');
-        logSink.log('[onError] err: $err, msg: $msg');
       },
       onJoinChannelSuccess: (RtcConnection connection, int elapsed) {
         print('[onJoinChannelSuccess] connection: ${connection.toJson()}');
-        logSink.log(
-            '[onJoinChannelSuccess] connection: ${connection.toJson()} elapsed: $elapsed');
         _handler?.onJoinChannelSuccess!(connection, elapsed);
       },
       onUserJoined: (RtcConnection connection, int rUid, int elapsed) {
         print(
             '[onUserJoined] connection: ${connection.toJson()} remoteUid: $rUid');
-        logSink.log(
-            '[onUserJoined] connection: ${connection.toJson()} remoteUid: $rUid elapsed: $elapsed');
         _handler?.onUserJoined!(connection, rUid, elapsed);
       },
       onUserOffline:
           (RtcConnection connection, int rUid, UserOfflineReasonType reason) {
         print(
             '[onUserOffline] connection: ${connection.toJson()}  rUid: $rUid reason: $reason');
-        logSink.log(
-            '[onUserOffline] connection: ${connection.toJson()}  rUid: $rUid reason: $reason');
 
         _handler?.onUserOffline!(connection, rUid, reason);
       },
       onLeaveChannel: (RtcConnection connection, RtcStats stats) {
         print('[onLeaveChannel] connection: ${connection.toJson()}');
-        logSink.log(
-            '[onLeaveChannel] connection: ${connection.toJson()} stats: ${stats.toJson()}');
         _handler?.onLeaveChannel!(connection, stats);
       },
       onRemoteVideoStateChanged: (RtcConnection connection, int remoteUid,
           RemoteVideoState state, RemoteVideoStateReason reason, int elapsed) {
         print(
             '[onRemoteVideoStateChanged] connection: ${connection.toJson()} remoteUid: $remoteUid state: $state reason: $reason');
-        logSink.log(
-            '[onRemoteVideoStateChanged] connection: ${connection.toJson()} remoteUid: $remoteUid state: $state reason: $reason elapsed: $elapsed');
         _handler?.onRemoteVideoStateChanged!(
             connection, remoteUid, state, reason, elapsed);
       },
       onPipStateChanged: (state) {
         print('[onPipStateChanged] state: $state');
-        logSink.log('[onPipStateChanged] state: $state');
         _handler?.onPipStateChanged!(state);
       },
     );
@@ -89,7 +77,6 @@ class _State extends State<PictureInPicture> with WidgetsBindingObserver {
 
   PIPVideoViewController? _pipVideoViewController;
 
-  bool _isInPipMode = false;
   bool _isPipSupported = false;
   bool _hasVideo = false;
 
@@ -104,12 +91,16 @@ class _State extends State<PictureInPicture> with WidgetsBindingObserver {
   @override
   Future<void> didChangeAppLifecycleState(AppLifecycleState state) async {
     super.didChangeAppLifecycleState(state);
-    if (state == AppLifecycleState.paused) {
+    if (state == AppLifecycleState.inactive) {
+      print("应用进入非活动状态");
+      // 查看inactive定义，android和ios都会触发inactive，但场景不一样，ios
+      // 这里不是全部的场景都允许调用startPictureInPicture，android可以
+      // android现在设置autoEnter无效，底层实现没有去设置，所以需要这里主动调用
+    } else if (state == AppLifecycleState.paused) {
       print("应用进入后台");
 
-      // 重要, 这里不要调用，
-      // 系统不允许在后台开启pip，不能调用，可能会出触发相关的错误导致pip被reset
-      // 应该尽可能的保证pip view创建的足够早，这样在切换到后台时，pip view已经创建好，系统会自动开启pip
+      // 重要, 这里不要调用startPictureInPicture, ios和android系统不允许在后台开启pip, android可以在 inactive 状态下调用
+      // 尤其ios不能调用，可能会出触发相关的错误导致pip被reset 应该尽可能的保证pip view创建的足够早，这样在切换到后台时，pip view已经创建好，系统会自动开启pip
       // await _pipVideoViewController?.startPictureInPicture();
     } else if (state == AppLifecycleState.resumed) {
       print("应用从后台返回前台");
@@ -152,6 +143,7 @@ class _State extends State<PictureInPicture> with WidgetsBindingObserver {
           (RtcConnection connection, int rUid, UserOfflineReasonType reason) {
         if (_hasVideo) {
           _pipVideoViewController?.destroyPictureInPicture();
+
           setState(() {
             _hasVideo = false;
           });
@@ -184,15 +176,11 @@ class _State extends State<PictureInPicture> with WidgetsBindingObserver {
         });
       },
       onPipStateChanged: (state) {
-        var isInPipMode = state == PipState.pipStateStarted;
         if (state == PipState.pipStateFailed) {
           // call setup again will reset the pip state, even you have the same options
           _pipVideoViewController?.setupPictureInPicture(const PipOptions(
               contentWidth: 150, contentHeight: 300, autoEnterPip: true));
         }
-        setState(() {
-          _isInPipMode = isInPipMode;
-        });
       },
     );
 
@@ -217,7 +205,7 @@ class _State extends State<PictureInPicture> with WidgetsBindingObserver {
   }
 
   Future<void> _leaveChannel() async {
-    await _pipVideoViewController?.stopPictureInPicture();
+    await _pipVideoViewController?.dispose();
 
     await RTCModel.shard.engine.leaveChannel();
   }
@@ -260,12 +248,6 @@ class _State extends State<PictureInPicture> with WidgetsBindingObserver {
       );
     }
     final size = MediaQuery.sizeOf(context);
-
-    // We only need to adjust the UI on Android in pip mode.
-    if (_isInPipMode &&
-        (!kIsWeb && defaultTargetPlatform == TargetPlatform.android)) {
-      return _videoViewStack(size);
-    }
 
     return ExampleActionsWidget(
       displayContentBuilder: (context, isLayoutHorizontal) {
