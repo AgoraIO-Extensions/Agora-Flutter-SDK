@@ -76,6 +76,7 @@ class PictureInPicture extends StatefulWidget {
 class _State extends State<PictureInPicture> with WidgetsBindingObserver {
   late final RtcEngineEventHandler _rtcEngineEventHandler;
 
+  late TextEditingController _channelIdController;
   PIPVideoViewController? _pipVideoViewController;
 
   bool _isInPipMode = false;
@@ -86,6 +87,7 @@ class _State extends State<PictureInPicture> with WidgetsBindingObserver {
   void initState() {
     super.initState();
     WidgetsBinding.instance.addObserver(this);
+    _channelIdController = TextEditingController(text: config.channelId);
 
     _initEngine();
   }
@@ -106,6 +108,7 @@ class _State extends State<PictureInPicture> with WidgetsBindingObserver {
 
   @override
   Future<void> dispose() async {
+    _channelIdController.dispose();
     WidgetsBinding.instance.removeObserver(this);
     super.dispose();
   }
@@ -120,13 +123,13 @@ class _State extends State<PictureInPicture> with WidgetsBindingObserver {
         var newPipVideoViewController = PIPVideoViewController.remote(
           rtcEngine: RTCModel.shard.engine,
           canvas: VideoCanvas(uid: rUid),
-          connection: RtcConnection(channelId: config.channelId),
+          connection: RtcConnection(channelId: _channelIdController.text),
         );
 
         setState(() {
           _pipVideoViewController = newPipVideoViewController;
           _pipVideoViewController?.setupPictureInPicture(const PipOptions(
-            contentWidth: 150, contentHeight: 300, autoEnterPip: true));
+              contentWidth: 150, contentHeight: 300, autoEnterPip: true));
         });
       },
       onUserOffline:
@@ -172,7 +175,7 @@ class _State extends State<PictureInPicture> with WidgetsBindingObserver {
   Future<void> _joinChannel() async {
     await RTCModel.shard.engine.joinChannel(
       token: config.token,
-      channelId: config.channelId,
+      channelId: _channelIdController.text,
       uid: config.uid,
       options: const ChannelMediaOptions(
         clientRoleType: ClientRoleType.clientRoleAudience,
@@ -251,6 +254,13 @@ class _State extends State<PictureInPicture> with WidgetsBindingObserver {
                   ),
                 ),
               ],
+            ),
+            const SizedBox(
+              height: 20,
+            ),
+            TextField(
+              controller: _channelIdController,
+              decoration: const InputDecoration(hintText: 'Channel ID'),
             ),
           ],
         );
