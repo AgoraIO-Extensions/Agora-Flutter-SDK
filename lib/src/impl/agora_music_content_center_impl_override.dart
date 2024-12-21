@@ -1,19 +1,17 @@
 import 'dart:convert';
 import 'dart:typed_data';
 
-import 'package:agora_rtc_engine/src/agora_music_content_center.dart';
-import 'package:agora_rtc_engine/src/agora_rtc_engine.dart';
-import 'package:agora_rtc_engine/src/agora_rtc_engine_ext.dart';
-import 'package:agora_rtc_engine/src/binding/agora_music_content_center_event_impl.dart'
+import '/src/agora_music_content_center.dart';
+import '/src/agora_rtc_engine.dart';
+import '/src/agora_rtc_engine_ext.dart';
+import '/src/binding/agora_music_content_center_event_impl.dart'
     as event_binding;
-import 'package:agora_rtc_engine/src/binding/agora_music_content_center_impl.dart'
-    as binding;
-import 'package:agora_rtc_engine/src/binding/event_handler_param_json.dart';
+import '/src/binding/agora_music_content_center_impl.dart' as binding;
+import '/src/binding/event_handler_param_json.dart';
 
-import 'package:agora_rtc_engine/src/impl/agora_music_content_center_impl_json.dart';
-import 'package:agora_rtc_engine/src/impl/agora_rtc_engine_impl.dart';
-import 'package:agora_rtc_engine/src/impl/media_player_impl.dart'
-    as media_player_impl;
+import '/src/impl/agora_music_content_center_impl_json.dart';
+import '/src/impl/agora_rtc_engine_impl.dart';
+import '/src/impl/media_player_impl.dart' as media_player_impl;
 import 'package:iris_method_channel/iris_method_channel.dart';
 
 class MusicCollectionImpl extends MusicCollection {
