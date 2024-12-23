@@ -1,3 +1,5 @@
+// ignore_for_file: avoid_print
+
 import 'dart:io';
 import 'package:agora_rtc_engine/agora_rtc_engine.dart';
 import 'package:agora_rtc_engine_example/config/agora.config.dart' as config;
@@ -50,39 +52,51 @@ class _State extends State<PictureInPicture> with WidgetsBindingObserver {
   @override
   Future<void> didChangeAppLifecycleState(AppLifecycleState state) async {
     super.didChangeAppLifecycleState(state);
-    if(Platform.isAndroid){
-      return;
-    }
-    if (state == AppLifecycleState.paused) {
-      print("应用进入后台");
-      await _remotePipControllers.entries.first.value.startPictureInPicture(
-          const PipOptions(
-              contentWidth: 150, contentHeight: 300, autoEnterPip: true));
+    if (state == AppLifecycleState.inactive) {
+      print("enter inactive");
+
+      /// Check the definition of `inactive`. Both Android and iOS will trigger `inactive`,
+      /// but the scenarios are different. Not all scenarios on iOS allow calling
+      /// `startPictureInPicture`, while Android does.
+      ///
+      /// Currently, setting `autoEnter` on Android is ineffective because the underlying
+      /// implementation does not set it. Therefore, it needs to be called manually here.
+      
+      if (Platform.isAndroid) {
+        await _remotePipControllers.entries.first.value.startPictureInPicture();
+      }
+      
+    } else if (state == AppLifecycleState.paused) {
+      print("enter background");
+
+      /// Important: Do not call `startPictureInPicture` here.
+      /// Both iOS and Android systems do not allow starting PiP (Picture-in-Picture) mode in the background.
+      /// On Android, it can be called in the inactive state.
+      /// Especially on iOS, calling it may trigger related errors causing PiP to reset.
+      /// Ensure that the PiP view is created early enough so that when switching to the background,
+      /// the PiP view is already created and the system will automatically start PiP.
     } else if (state == AppLifecycleState.resumed) {
-      print("应用从后台返回前台");
+      print("enter foreground");
+
+      // Only works on iOS
       await _remotePipControllers.entries.first.value.stopPictureInPicture();
-      await Future.delayed(const Duration(milliseconds: 500));
-      await _remotePipControllers.entries.first.value.startPictureInPicture(
-          const PipOptions(
-              contentWidth: 150, contentHeight: 300, autoEnterPip: true));
     }
   }
 
   @override
   Future<void> dispose() async {
-    if(Platform.isIOS){
-      await _engine.stopPip();
-    }
     WidgetsBinding.instance.removeObserver(this);
-    _dispose();
-    super.dispose();
-  }
 
-  Future<void> _dispose() async {
     _controller.dispose();
     _contentWidthController.dispose();
     _contentHeightController.dispose();
 
+    _dispose();
+
+    super.dispose();
+  }
+
+  Future<void> _dispose() async {
     _localVideoViewPipController.dispose();
     _remotePipControllers.forEach((_, controller) {
       controller.dispose();
@@ -129,7 +143,7 @@ class _State extends State<PictureInPicture> with WidgetsBindingObserver {
                   ));
         });
         await Future.delayed(const Duration(milliseconds: 500));
-        await _remotePipControllers.entries.first.value.startPictureInPicture(
+        await _remotePipControllers.entries.first.value.setupPictureInPicture(
             const PipOptions(
                 contentWidth: 150, contentHeight: 300, autoEnterPip: true));
       },
@@ -141,8 +155,8 @@ class _State extends State<PictureInPicture> with WidgetsBindingObserver {
         setState(() {
           remoteUid.removeWhere((element) => element == rUid);
           final remotePipController = _remotePipControllers.remove(rUid);
-          if (remotePipController?.isInPictureInPictureMode == true) {
-            remotePipController!.stopPictureInPicture();
+          if (_isInPipMode && remotePipController?.isInPictureInPictureMode == true) {
+            remotePipController!.destroyPictureInPicture();
           }
         });
       },
@@ -154,7 +168,7 @@ class _State extends State<PictureInPicture> with WidgetsBindingObserver {
           remoteUid.clear();
           _remotePipControllers.forEach((key, value) {
             if (value.isInPictureInPictureMode) {
-              value.stopPictureInPicture();
+              value.destroyPictureInPicture();
             }
           });
           _remotePipControllers.clear();
@@ -167,18 +181,7 @@ class _State extends State<PictureInPicture> with WidgetsBindingObserver {
       },
       onPipStateChanged: (state) {
         logSink.log('[onPipStateChanged] state: $state');
-        if (state == PipState.pipStateStopped) {
-          if (_localVideoViewPipController.isInPictureInPictureMode) {
-            _localVideoViewPipController.stopPictureInPicture();
-          }
-
-          _remotePipControllers.forEach((key, value) {
-            if (value.isInPictureInPictureMode) {
-              value.stopPictureInPicture();
-            }
-          });
-        }
-
+        
         setState(() {
           _isInPipMode = state == PipState.pipStateStarted;
         });
@@ -206,7 +209,7 @@ class _State extends State<PictureInPicture> with WidgetsBindingObserver {
   }
 
   Future<void> _leaveChannel() async {
-    if(Platform.isIOS){
+    if (Platform.isIOS) {
       await _engine.stopPip();
     }
     await _engine.leaveChannel();
@@ -239,7 +242,7 @@ class _State extends State<PictureInPicture> with WidgetsBindingObserver {
                     int contentHeight =
                         int.tryParse(_contentHeightController.text) ?? 0;
 
-                    _localVideoViewPipController.startPictureInPicture(PipOptions(
+                    _localVideoViewPipController.setupPictureInPicture(PipOptions(
                         // On Android, the `contentWidth` and `contentHeight` are used to calculate the aspect ratio,
                         // not the actual dimensions of the Picture-in-Picture window.
                         // For more details, see:
@@ -247,6 +250,7 @@ class _State extends State<PictureInPicture> with WidgetsBindingObserver {
                         contentWidth: contentWidth,
                         contentHeight: contentHeight,
                         autoEnterPip: true));
+                    _localVideoViewPipController.startPictureInPicture();
                   },
                   child: const Text('Enter PIP'),
                 ),
@@ -274,11 +278,12 @@ class _State extends State<PictureInPicture> with WidgetsBindingObserver {
                             bottom: 0,
                             child: ElevatedButton(
                               onPressed: () {
-                                entry.value.startPictureInPicture(
+                                entry.value.setupPictureInPicture(
                                     const PipOptions(
                                         contentWidth: 150,
                                         contentHeight: 300,
                                         autoEnterPip: true));
+                                entry.value.startPictureInPicture();
                               },
                               child: const Text('Enter PIP'),
                             )),
