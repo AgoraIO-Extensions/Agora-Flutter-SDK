@@ -1,7 +1,12 @@
 import 'dart:io';
 
 import 'package:agora_rtc_engine_example/examples/advanced/music_player/music_player.dart';
-import 'package:agora_rtc_engine_example/examples/advanced/picture_in_picture/picture_in_picture.dart';
+import 'package:agora_rtc_engine_example/examples/advanced/picture_in_picture/picture_in_picture.dart'
+    as Pip;
+import 'package:agora_rtc_engine_example/examples/advanced/picture_in_picture/picture_in_picture_ios.dart'
+    as PipIOS;
+import 'package:agora_rtc_engine_example/examples/advanced/picture_in_picture/picture_in_picture_android.dart'
+    as PIPAndroid;
 import 'package:agora_rtc_engine_example/examples/advanced/push_video_frame/push_video_frame.dart';
 import 'package:agora_rtc_engine_example/examples/advanced/rtmp_streaming/rtmp_streaming.dart';
 import 'package:agora_rtc_engine_example/examples/advanced/screen_sharing/screen_sharing.dart';
@@ -99,5 +104,12 @@ final advanced = [
   if (!kIsWeb && (Platform.isAndroid || Platform.isIOS))
     {'name': 'MusicPlayer', 'widget': const MusicPlayerExample()},
   if (!kIsWeb && (Platform.isAndroid || Platform.isIOS))
-    {'name': 'PictureInPicture', 'widget': const PictureInPicture()},
+    {'name': 'PictureInPicture', 'widget': const Pip.PictureInPicture()},
+  if (!kIsWeb && (Platform.isAndroid || Platform.isIOS))
+    {
+      'name': 'SimplePictureInPicture',
+      'widget': Platform.isIOS
+          ? const PipIOS.PictureInPicture()
+          : const PIPAndroid.PictureInPicture()
+    },
 ];
