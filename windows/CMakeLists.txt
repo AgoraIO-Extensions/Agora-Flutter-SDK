@@ -12,8 +12,8 @@ project(${PROJECT_NAME} LANGUAGES CXX)
 # not be changed
 set(PLUGIN_NAME "agora_rtc_engine_plugin")
 
-set(IRIS_SDK_DOWNLOAD_URL "https://download.agora.io/sdk/release/iris_4.2.6.147-build.1_DCG_Windows_Video_20241122_1154.zip")
-set(IRIS_SDK_DOWNLOAD_NAME "iris_4.2.6.147-build.1_DCG_Windows")
+set(IRIS_SDK_DOWNLOAD_URL "https://download.agora.io/sdk/release/iris_4.2.6.20-build.1_DCG_Windows_Video_20241217_0416.zip")
+set(IRIS_SDK_DOWNLOAD_NAME "iris_4.2.6.20-build.1_DCG_Windows")
 set(RTC_SDK_DOWNLOAD_NAME "Agora_Native_SDK_for_Windows_FULL")
 set(IRIS_SDK_VERSION "v3_6_2_fix.1")
 

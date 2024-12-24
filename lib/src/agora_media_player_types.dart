@@ -525,7 +525,7 @@ class MediaSource {
   @JsonKey(name: 'startPos')
   final int? startPos;
 
-  /// Whether to enable autoplay once the media file is opened: true : (Default) Enables autoplay. false : Disables autoplay. If autoplay is disabled, you need to call the play method to play a media file after it is opened.
+  /// Whether to enable autoplay once the media file is opened: true : (Default) Yes. false : No. If autoplay is disabled, you need to call the play method to play a media file after it is opened.
   @JsonKey(name: 'autoPlay')
   final bool? autoPlay;
 
