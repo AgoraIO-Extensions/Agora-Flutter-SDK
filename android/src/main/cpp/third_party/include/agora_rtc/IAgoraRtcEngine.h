@@ -6069,6 +6069,27 @@ class IRtcEngine : public agora::base::IEngineBase {
    */
   virtual int setRemoteRenderMode(uid_t uid, media::base::RENDER_MODE_TYPE renderMode,
                                   VIDEO_MIRROR_MODE_TYPE mirrorMode) = 0;
+  
+    /**
+     * Sets the target frames per second (FPS) for the local render target.
+     *
+     * @param sourceType The type of video source.
+     * @param targetFps The target frames per second to be set.
+     *
+     * @return
+     * - 0: Success.
+     * - < 0: Failure.
+     */
+    virtual int setLocalRenderTargetFps(VIDEO_SOURCE_TYPE sourceType, int targetFps) = 0;
+    /**
+     * Sets the target frames per second (FPS) for the remote render target.
+     *
+     * @param targetFps The target frames per second to be set for the remote render target.
+     * @return
+     * - 0: Success.
+     * - < 0: Failure.
+     */
+    virtual int setRemoteRenderTargetFps(int targetFps) = 0;
 
   // The following APIs are either deprecated and going to deleted.
 
