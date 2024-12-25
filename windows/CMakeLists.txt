@@ -75,6 +75,8 @@ target_link_libraries(${PLUGIN_NAME} PRIVATE
   flutter_wrapper_plugin
   ${IRIS_SDK_BIN_PATH}/AgoraRtcWrapper.lib)
 
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /wd4819")
+
 set(BUNDLED_LIBRARIES
   "${IRIS_SDK_BIN_PATH}/AgoraRtcWrapper.dll"
   )
