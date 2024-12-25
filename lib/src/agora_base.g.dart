@@ -1226,6 +1226,8 @@ VideoCanvas _$VideoCanvasFromJson(Map<String, dynamic> json) => VideoCanvas(
           ? null
           : Rectangle.fromJson(json['cropArea'] as Map<String, dynamic>),
       enableAlphaMask: json['enableAlphaMask'] as bool?,
+      rotation:
+          $enumDecodeNullable(_$VideoOrientationEnumMap, json['rotation']),
     );
 
 Map<String, dynamic> _$VideoCanvasToJson(VideoCanvas instance) {
@@ -1247,6 +1249,7 @@ Map<String, dynamic> _$VideoCanvasToJson(VideoCanvas instance) {
   writeNotNull('mediaPlayerId', instance.mediaPlayerId);
   writeNotNull('cropArea', instance.cropArea?.toJson());
   writeNotNull('enableAlphaMask', instance.enableAlphaMask);
+  writeNotNull('rotation', _$VideoOrientationEnumMap[instance.rotation]);
   return val;
 }
 
@@ -2453,7 +2456,7 @@ const _$LocalVideoStreamErrorEnumMap = {
       .localVideoStreamErrorScreenCaptureWindowRecoverFromHidden: 26,
   LocalVideoStreamError
       .localVideoStreamErrorScreenCaptureWindowRecoverFromMinimized: 27,
-  LocalVideoStreamError.localVideoStreamReasonScreenCaptureDisplayDiscnnected:
+  LocalVideoStreamError.localVideoStreamReasonScreenCaptureDisplayDisconnected:
       30,
 };
 
@@ -2707,6 +2710,7 @@ const _$AreaCodeExEnumMap = {
   AreaCodeEx.areaCodeKr: 512,
   AreaCodeEx.areaCodeHkmc: 1024,
   AreaCodeEx.areaCodeUs: 2048,
+  AreaCodeEx.areaCodeRu: 4096,
   AreaCodeEx.areaCodeOvs: 4294967294,
 };
 

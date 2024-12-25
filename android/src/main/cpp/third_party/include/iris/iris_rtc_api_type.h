@@ -174,6 +174,10 @@
 #define FUNC_RTCENGINE_SETLOGFILESIZE "RtcEngine_setLogFileSize"
 #define FUNC_RTCENGINE_UPLOADLOGFILE "RtcEngine_uploadLogFile"
 #define FUNC_RTCENGINE_WRITELOG "RtcEngine_writeLog"
+#define FUNC_RTCENGINE_SETLOCALRENDERTARGETFPS                                 \
+  "RtcEngine_setLocalRenderTargetFps"
+#define FUNC_RTCENGINE_SETREMOTERENDERTARGETFPS                                \
+  "RtcEngine_setRemoteRenderTargetFps"
 #define FUNC_RTCENGINE_SETLOCALRENDERMODE "RtcEngine_setLocalRenderMode"
 #define FUNC_RTCENGINE_SETREMOTERENDERMODE "RtcEngine_setRemoteRenderMode"
 #define FUNC_RTCENGINE_SETLOCALRENDERMODE2 "RtcEngine_setLocalRenderMode2"
@@ -925,7 +929,8 @@
   "RtcEngineEx_startOrUpdateChannelMediaRelayEx"
 #define FUNC_RTCENGINEEX_SETHIGHPRIORITYUSERLISTEX                             \
   "RtcEngineEx_setHighPriorityUserListEx"
-
+#define FUNC_RTCENGINEEX_PRELOADEFFECTEX "RtcEngineEx_preloadEffectEx"
+#define FUNC_RTCENGINEEX_PLAYEFFECTEX "RtcEngineEx_playEffectEx"
 // class IRtcEngineEx end
 
 // class IMusicContentCenter start

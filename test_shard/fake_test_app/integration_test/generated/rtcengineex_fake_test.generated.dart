@@ -413,6 +413,8 @@ void rtcEngineExSmokeTestCases() {
           width: cropAreaWidth,
           height: cropAreaHeight,
         );
+        const VideoOrientation canvasRotation =
+            VideoOrientation.videoOrientation0;
         const int canvasView = 10;
         const int canvasUid = 10;
         const int canvasBackgroundColor = 10;
@@ -429,6 +431,7 @@ void rtcEngineExSmokeTestCases() {
           mediaPlayerId: canvasMediaPlayerId,
           cropArea: canvasCropArea,
           enableAlphaMask: canvasEnableAlphaMask,
+          rotation: canvasRotation,
         );
         const String connectionChannelId = "hello";
         const int connectionLocalUid = 10;
@@ -957,6 +960,51 @@ void rtcEngineExSmokeTestCases() {
         if (e is! AgoraRtcException) {
           debugPrint(
               '[RtcEngineEx.setRemoteRenderModeEx] error: ${e.toString()}');
+          rethrow;
+        }
+
+        if (e.code != -4) {
+          // Only not supported error supported.
+          rethrow;
+        }
+      }
+
+      await rtcEngineEx.release();
+    },
+//  skip: !(),
+  );
+
+  testWidgets(
+    'RtcEngineEx.setRemoteRenderRotationEx',
+    (WidgetTester tester) async {
+      String engineAppId = const String.fromEnvironment('TEST_APP_ID',
+          defaultValue: '<YOUR_APP_ID>');
+
+      RtcEngineEx rtcEngineEx = createAgoraRtcEngineEx();
+      await rtcEngineEx.initialize(RtcEngineContext(
+        appId: engineAppId,
+        areaCode: AreaCode.areaCodeGlob.value(),
+      ));
+      await rtcEngineEx.setParameters('{"rtc.enable_debug_log": true}');
+
+      try {
+        const int uid = 10;
+        const VideoOrientation rotation = VideoOrientation.videoOrientation0;
+        const String connectionChannelId = "hello";
+        const int connectionLocalUid = 10;
+        const RtcConnection connection = RtcConnection(
+          channelId: connectionChannelId,
+          localUid: connectionLocalUid,
+        );
+        await rtcEngineEx.setRemoteRenderRotationEx(
+          uid: uid,
+          rotation: rotation,
+          connection: connection,
+        );
+      } catch (e) {
+        if (e is! AgoraRtcException) {
+          debugPrint(
+              '[RtcEngineEx.setRemoteRenderRotationEx] error: ${e.toString()}');
           rethrow;
         }
 
@@ -2272,6 +2320,108 @@ void rtcEngineExSmokeTestCases() {
       } catch (e) {
         if (e is! AgoraRtcException) {
           debugPrint('[RtcEngineEx.getCallIdEx] error: ${e.toString()}');
+          rethrow;
+        }
+
+        if (e.code != -4) {
+          // Only not supported error supported.
+          rethrow;
+        }
+      }
+
+      await rtcEngineEx.release();
+    },
+//  skip: !(),
+  );
+
+  testWidgets(
+    'RtcEngineEx.preloadEffectEx',
+    (WidgetTester tester) async {
+      String engineAppId = const String.fromEnvironment('TEST_APP_ID',
+          defaultValue: '<YOUR_APP_ID>');
+
+      RtcEngineEx rtcEngineEx = createAgoraRtcEngineEx();
+      await rtcEngineEx.initialize(RtcEngineContext(
+        appId: engineAppId,
+        areaCode: AreaCode.areaCodeGlob.value(),
+      ));
+      await rtcEngineEx.setParameters('{"rtc.enable_debug_log": true}');
+
+      try {
+        const String connectionChannelId = "hello";
+        const int connectionLocalUid = 10;
+        const RtcConnection connection = RtcConnection(
+          channelId: connectionChannelId,
+          localUid: connectionLocalUid,
+        );
+        const int soundId = 10;
+        const String filePath = "hello";
+        const int startPos = 10;
+        await rtcEngineEx.preloadEffectEx(
+          connection: connection,
+          soundId: soundId,
+          filePath: filePath,
+          startPos: startPos,
+        );
+      } catch (e) {
+        if (e is! AgoraRtcException) {
+          debugPrint('[RtcEngineEx.preloadEffectEx] error: ${e.toString()}');
+          rethrow;
+        }
+
+        if (e.code != -4) {
+          // Only not supported error supported.
+          rethrow;
+        }
+      }
+
+      await rtcEngineEx.release();
+    },
+//  skip: !(),
+  );
+
+  testWidgets(
+    'RtcEngineEx.playEffectEx',
+    (WidgetTester tester) async {
+      String engineAppId = const String.fromEnvironment('TEST_APP_ID',
+          defaultValue: '<YOUR_APP_ID>');
+
+      RtcEngineEx rtcEngineEx = createAgoraRtcEngineEx();
+      await rtcEngineEx.initialize(RtcEngineContext(
+        appId: engineAppId,
+        areaCode: AreaCode.areaCodeGlob.value(),
+      ));
+      await rtcEngineEx.setParameters('{"rtc.enable_debug_log": true}');
+
+      try {
+        const String connectionChannelId = "hello";
+        const int connectionLocalUid = 10;
+        const RtcConnection connection = RtcConnection(
+          channelId: connectionChannelId,
+          localUid: connectionLocalUid,
+        );
+        const int soundId = 10;
+        const String filePath = "hello";
+        const int loopCount = 10;
+        const double pitch = 10.0;
+        const double pan = 10.0;
+        const int gain = 10;
+        const bool publish = true;
+        const int startPos = 10;
+        await rtcEngineEx.playEffectEx(
+          connection: connection,
+          soundId: soundId,
+          filePath: filePath,
+          loopCount: loopCount,
+          pitch: pitch,
+          pan: pan,
+          gain: gain,
+          publish: publish,
+          startPos: startPos,
+        );
+      } catch (e) {
+        if (e is! AgoraRtcException) {
+          debugPrint('[RtcEngineEx.playEffectEx] error: ${e.toString()}');
           rethrow;
         }
 

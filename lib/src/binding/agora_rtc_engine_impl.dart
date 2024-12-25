@@ -2382,6 +2382,42 @@ class RtcEngineImpl implements RtcEngine {
   }
 
   @override
+  Future<void> setLocalRenderTargetFps(
+      {required VideoSourceType sourceType, required int targetFps}) async {
+    final apiType =
+        '${isOverrideClassName ? className : 'RtcEngine'}_setLocalRenderTargetFps';
+    final param = createParams(
+        {'sourceType': sourceType.value(), 'targetFps': targetFps});
+    final callApiResult = await irisMethodChannel.invokeMethod(
+        IrisMethodCall(apiType, jsonEncode(param), buffers: null));
+    if (callApiResult.irisReturnCode < 0) {
+      throw AgoraRtcException(code: callApiResult.irisReturnCode);
+    }
+    final rm = callApiResult.data;
+    final result = rm['result'];
+    if (result < 0) {
+      throw AgoraRtcException(code: result);
+    }
+  }
+
+  @override
+  Future<void> setRemoteRenderTargetFps(int targetFps) async {
+    final apiType =
+        '${isOverrideClassName ? className : 'RtcEngine'}_setRemoteRenderTargetFps';
+    final param = createParams({'targetFps': targetFps});
+    final callApiResult = await irisMethodChannel.invokeMethod(
+        IrisMethodCall(apiType, jsonEncode(param), buffers: null));
+    if (callApiResult.irisReturnCode < 0) {
+      throw AgoraRtcException(code: callApiResult.irisReturnCode);
+    }
+    final rm = callApiResult.data;
+    final result = rm['result'];
+    if (result < 0) {
+      throw AgoraRtcException(code: result);
+    }
+  }
+
+  @override
   Future<void> setLocalVideoMirrorMode(VideoMirrorModeType mirrorMode) async {
     final apiType =
         '${isOverrideClassName ? className : 'RtcEngine'}_setLocalVideoMirrorMode';
@@ -3624,6 +3660,24 @@ class RtcEngineImpl implements RtcEngine {
     }
     final getAudioDeviceInfoJson = RtcEngineGetAudioDeviceInfoJson.fromJson(rm);
     return getAudioDeviceInfoJson.deviceInfo;
+  }
+
+  @override
+  Future<void> setRemoteRenderRotation(
+      {required int uid, required VideoOrientation rotation}) async {
+    final apiType =
+        '${isOverrideClassName ? className : 'RtcEngine'}_setRemoteRenderRotation';
+    final param = createParams({'uid': uid, 'rotation': rotation.value()});
+    final callApiResult = await irisMethodChannel.invokeMethod(
+        IrisMethodCall(apiType, jsonEncode(param), buffers: null));
+    if (callApiResult.irisReturnCode < 0) {
+      throw AgoraRtcException(code: callApiResult.irisReturnCode);
+    }
+    final rm = callApiResult.data;
+    final result = rm['result'];
+    if (result < 0) {
+      throw AgoraRtcException(code: result);
+    }
   }
 
   @override

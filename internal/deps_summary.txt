@@ -1,17 +1,18 @@
 Iris:
-https://download.agora.io/sdk/release/iris_4.2.6.142-build.1_DCG_Android_Video_20240815_0148.zip
-https://download.agora.io/sdk/release/iris_4.2.6.142-build.1_DCG_iOS_Video_20240815_0148.zip
-https://download.agora.io/sdk/release/iris_4.2.6.142-build.1_DCG_Mac_Video_20240815_0148.zip
-https://download.agora.io/sdk/release/iris_4.2.6.147-build.1_DCG_Windows_Video_20241122_1154.zip
-implementation 'io.agora.rtc:iris-rtc:4.2.6.147-build.1'
-pod 'AgoraIrisRTC_iOS', '4.2.6.147-build.1'
-pod 'AgoraIrisRTC_macOS', '4.2.6.147-build.1'
+https://download.agora.io/sdk/release/iris_4.2.6.20-build.1_DCG_Android_Video_20241217_0416.zip
+https://download.agora.io/sdk/release/iris_4.2.6.20-build.1_DCG_iOS_Video_20241217_0419.zip
+https://download.agora.io/sdk/release/iris_4.2.6.20-build.1_DCG_Mac_Video_20241217_0416.zip
+https://download.agora.io/sdk/release/iris_4.2.6.20-build.1_DCG_Windows_Video_20241217_0416.zip
+implementation 'io.agora.rtc:iris-rtc:4.2.6.20-build.1'
+pod 'AgoraIrisRTC_iOS', '4.2.6.20-build.1'
+pod 'AgoraIrisRTC_macOS', '4.2.6.20-build.1'
 
 Native:
-https://download.agora.io/sdk/release/Agora_Native_SDK_for_Android_rel.v4.2.6.10_59623_FULL_20240423_1956_300131.zip
-https://download.agora.io/sdk/release/Agora_Native_SDK_for_iOS_rel.v4.2.6.10_41553_FULL_20240424_1218_300208.zip
-https://download.agora.io/sdk/release/Agora_Native_SDK_for_Mac_rel.v4.2.6.15_21056_FULL_20240710_1438_318435.zip
-https://download.agora.io/sdk/release/Agora_Native_SDK_for_Windows_rel.v4.2.6.15_25607_FULL_20240709_1059_318143.zip
-implementation 'io.agora.rtc:agora-special-full:4.2.6.147.BASIC'
-pod 'AgoraRtcEngine_Special_iOS', '4.2.6.147.BASIC'
-pod 'AgoraRtcEngine_Special_macOS', '4.2.6.147.BASIC'
+https://download.agora.io/sdk/release/Agora_Native_SDK_for_Android_rel.v4.2.6.20_67657_FULL_20241214_1641_478400.zip
+https://download.agora.io/sdk/release/Agora_Native_SDK_for_iOS_rel.v4.2.6.20_48107_FULL_20241214_1716_478436.zip
+https://download.agora.io/sdk/release/Agora_Native_SDK_for_Mac_rel.v4.2.6.20_23040_FULL_20241214_1645_478405.zip
+https://download.agora.io/sdk/release/Agora_Native_SDK_for_Windows_rel.v4.2.6.20_27477_FULL_20241214_1658_478403.zip
+implementation 'io.agora.rtc:agora-special-full:4.2.6.20'
+implementation 'io.agora.rtc:full-screen-sharing:4.2.6.20'
+pod 'AgoraRtcEngine_Special_iOS', '4.2.6.20'
+pod 'AgoraRtcEngine_Special_macOS', '4.2.6.20'

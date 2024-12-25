@@ -1348,6 +1348,8 @@ void rtcEngineSmokeTestCases() {
           width: cropAreaWidth,
           height: cropAreaHeight,
         );
+        const VideoOrientation canvasRotation =
+            VideoOrientation.videoOrientation0;
         const int canvasView = 10;
         const int canvasUid = 10;
         const int canvasBackgroundColor = 10;
@@ -1364,6 +1366,7 @@ void rtcEngineSmokeTestCases() {
           mediaPlayerId: canvasMediaPlayerId,
           cropArea: canvasCropArea,
           enableAlphaMask: canvasEnableAlphaMask,
+          rotation: canvasRotation,
         );
         await rtcEngine.setupRemoteVideo(
           canvas,
@@ -1415,6 +1418,8 @@ void rtcEngineSmokeTestCases() {
           width: cropAreaWidth,
           height: cropAreaHeight,
         );
+        const VideoOrientation canvasRotation =
+            VideoOrientation.videoOrientation0;
         const int canvasView = 10;
         const int canvasUid = 10;
         const int canvasBackgroundColor = 10;
@@ -1431,6 +1436,7 @@ void rtcEngineSmokeTestCases() {
           mediaPlayerId: canvasMediaPlayerId,
           cropArea: canvasCropArea,
           enableAlphaMask: canvasEnableAlphaMask,
+          rotation: canvasRotation,
         );
         await rtcEngine.setupLocalVideo(
           canvas,
@@ -4301,6 +4307,79 @@ void rtcEngineSmokeTestCases() {
   );
 
   testWidgets(
+    'RtcEngine.setLocalRenderTargetFps',
+    (WidgetTester tester) async {
+      String engineAppId = const String.fromEnvironment('TEST_APP_ID',
+          defaultValue: '<YOUR_APP_ID>');
+
+      RtcEngine rtcEngine = createAgoraRtcEngine();
+      await rtcEngine.initialize(RtcEngineContext(
+        appId: engineAppId,
+        areaCode: AreaCode.areaCodeGlob.value(),
+      ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
+
+      try {
+        const VideoSourceType sourceType =
+            VideoSourceType.videoSourceCameraPrimary;
+        const int targetFps = 10;
+        await rtcEngine.setLocalRenderTargetFps(
+          sourceType: sourceType,
+          targetFps: targetFps,
+        );
+      } catch (e) {
+        if (e is! AgoraRtcException) {
+          debugPrint(
+              '[RtcEngine.setLocalRenderTargetFps] error: ${e.toString()}');
+          rethrow;
+        }
+
+        if (e.code != -4) {
+          // Only not supported error supported.
+          rethrow;
+        }
+      }
+
+      await rtcEngine.release();
+    },
+  );
+
+  testWidgets(
+    'RtcEngine.setRemoteRenderTargetFps',
+    (WidgetTester tester) async {
+      String engineAppId = const String.fromEnvironment('TEST_APP_ID',
+          defaultValue: '<YOUR_APP_ID>');
+
+      RtcEngine rtcEngine = createAgoraRtcEngine();
+      await rtcEngine.initialize(RtcEngineContext(
+        appId: engineAppId,
+        areaCode: AreaCode.areaCodeGlob.value(),
+      ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
+
+      try {
+        const int targetFps = 10;
+        await rtcEngine.setRemoteRenderTargetFps(
+          targetFps,
+        );
+      } catch (e) {
+        if (e is! AgoraRtcException) {
+          debugPrint(
+              '[RtcEngine.setRemoteRenderTargetFps] error: ${e.toString()}');
+          rethrow;
+        }
+
+        if (e.code != -4) {
+          // Only not supported error supported.
+          rethrow;
+        }
+      }
+
+      await rtcEngine.release();
+    },
+  );
+
+  testWidgets(
     'RtcEngine.setLocalVideoMirrorMode',
     (WidgetTester tester) async {
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
@@ -6682,6 +6761,43 @@ void rtcEngineSmokeTestCases() {
   );
 
   testWidgets(
+    'RtcEngine.setRemoteRenderRotation',
+    (WidgetTester tester) async {
+      String engineAppId = const String.fromEnvironment('TEST_APP_ID',
+          defaultValue: '<YOUR_APP_ID>');
+
+      RtcEngine rtcEngine = createAgoraRtcEngine();
+      await rtcEngine.initialize(RtcEngineContext(
+        appId: engineAppId,
+        areaCode: AreaCode.areaCodeGlob.value(),
+      ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
+
+      try {
+        const int uid = 10;
+        const VideoOrientation rotation = VideoOrientation.videoOrientation0;
+        await rtcEngine.setRemoteRenderRotation(
+          uid: uid,
+          rotation: rotation,
+        );
+      } catch (e) {
+        if (e is! AgoraRtcException) {
+          debugPrint(
+              '[RtcEngine.setRemoteRenderRotation] error: ${e.toString()}');
+          rethrow;
+        }
+
+        if (e.code != -4) {
+          // Only not supported error supported.
+          rethrow;
+        }
+      }
+
+      await rtcEngine.release();
+    },
+  );
+
+  testWidgets(
     'RtcEngine.startScreenCaptureByWindowId',
     (WidgetTester tester) async {
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
@@ -8028,6 +8144,7 @@ void rtcEngineSmokeTestCases() {
           onEncryptionError:
               (RtcConnection connection, EncryptionErrorType errorType) {},
           onPermissionError: (PermissionType permissionType) {},
+          onPermissionGranted: (PermissionType permissionType) {},
           onLocalUserRegistered: (int uid, String userAccount) {},
           onUserInfoUpdated: (int uid, UserInfo info) {},
           onUploadLogResult: (RtcConnection connection, String requestId,
@@ -8241,6 +8358,7 @@ void rtcEngineSmokeTestCases() {
           onEncryptionError:
               (RtcConnection connection, EncryptionErrorType errorType) {},
           onPermissionError: (PermissionType permissionType) {},
+          onPermissionGranted: (PermissionType permissionType) {},
           onLocalUserRegistered: (int uid, String userAccount) {},
           onUserInfoUpdated: (int uid, UserInfo info) {},
           onUploadLogResult: (RtcConnection connection, String requestId,

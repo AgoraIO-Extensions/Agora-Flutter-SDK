@@ -862,46 +862,5 @@ void mediaEngineSmokeTestCases() {
     },
 //  skip: !(),
   );
-
-  testWidgets(
-    'MediaEngine.unregisterFaceInfoObserver',
-    (WidgetTester tester) async {
-      String engineAppId = const String.fromEnvironment('TEST_APP_ID',
-          defaultValue: '<YOUR_APP_ID>');
-
-      RtcEngine rtcEngine = createAgoraRtcEngine();
-      await rtcEngine.initialize(RtcEngineContext(
-        appId: engineAppId,
-        areaCode: AreaCode.areaCodeGlob.value(),
-      ));
-      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
-
-      final mediaEngine = rtcEngine.getMediaEngine();
-
-      try {
-        final FaceInfoObserver observer = FaceInfoObserver(
-          onFaceInfo: (String outFaceInfo) {},
-        );
-        mediaEngine.unregisterFaceInfoObserver(
-          observer,
-        );
-      } catch (e) {
-        if (e is! AgoraRtcException) {
-          debugPrint(
-              '[MediaEngine.unregisterFaceInfoObserver] error: ${e.toString()}');
-          rethrow;
-        }
-
-        if (e.code != -4) {
-          // Only not supported error supported.
-          rethrow;
-        }
-      }
-
-      await mediaEngine.release();
-      await rtcEngine.release();
-    },
-//  skip: !(),
-  );
 }
 

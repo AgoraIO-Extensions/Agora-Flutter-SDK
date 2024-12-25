@@ -1978,6 +1978,74 @@ public:
      * - < 0: Failure.
     */
     virtual int getCallIdEx(agora::util::AString& callId, const RtcConnection& connection) = 0;
+
+    /** Preloads a specified audio effect.
+     *
+     * This method preloads only one specified audio effect into the memory each time
+     * it is called. To preload multiple audio effects, call this method multiple times.
+     *
+     * After preloading, you can call \ref IRtcEngine::playEffect "playEffect"
+     * to play the preloaded audio effect or call
+     * \ref IRtcEngine::playAllEffects "playAllEffects" to play all the preloaded
+     * audio effects.
+     *
+     * @note
+     * - To ensure smooth communication, limit the size of the audio effect file.
+     * - Agora recommends calling this method before joining the channel.
+     *
+     * @param connection The RtcConnection object.
+     * @param soundId The ID of the audio effect.
+     * @param filePath The absolute path of the local audio effect file or the URL
+     * of the online audio effect file. Supported audio formats: mp3, mp4, m4a, aac,
+     * 3gp, mkv, and wav.
+     *
+     * @return
+     * - 0: Success.
+     * - < 0: Failure.
+    */
+    virtual int preloadEffectEx(const RtcConnection& connection, int soundId, const char* filePath, int startPos = 0) = 0;
+
+    /** Plays a specified audio effect.
+     *
+     *
+     * This method plays only one specified audio effect each time it is called.
+     * To play multiple audio effects, call this method multiple times.
+     *
+     * @note
+     * - Agora recommends playing no more than three audio effects at the same time.
+     * - The ID and file path of the audio effect in this method must be the same
+     * as that in the \ref IRtcEngine::preloadEffect "preloadEffect" method.
+     *
+     * @param connection The RtcConnection object.
+     * @param soundId The ID of the audio effect.
+     * @param filePath The absolute path of the local audio effect file or the URL
+     * of the online audio effect file. Supported audio formats: mp3, mp4, m4a, aac,
+     * 3gp, mkv, and wav.
+     * @param loopCount The number of times the audio effect loops:
+     * - `-1`: Play the audio effect in an indefinite loop until
+     * \ref IRtcEngine::stopEffect "stopEffect" or
+     * \ref IRtcEngine::stopAllEffects "stopAllEffects"
+     * - `0`: Play the audio effect once.
+     * - `1`: Play the audio effect twice.
+     * @param pitch The pitch of the audio effect. The value ranges between 0.5 and 2.0.
+     * The default value is `1.0` (original pitch). The lower the value, the lower the pitch.
+     * @param pan The spatial position of the audio effect. The value ranges between -1.0 and 1.0:
+     * - `-1.0`: The audio effect displays to the left.
+     * - `0.0`: The audio effect displays ahead.
+     * - `1.0`: The audio effect displays to the right.
+     * @param gain The volume of the audio effect. The value ranges between 0 and 100.
+     * The default value is `100` (original volume). The lower the value, the lower
+     * the volume of the audio effect.
+     * @param publish Sets whether to publish the audio effect to the remote:
+     * - true: Publish the audio effect to the remote.
+     * - false: (Default) Do not publish the audio effect to the remote.
+     *
+     * @return
+     * - 0: Success.
+     * - < 0: Failure.
+    */
+    virtual int playEffectEx(const RtcConnection& connection, int soundId, const char* filePath, int loopCount, double pitch, double pan, int gain, bool publish = false, int startPos = 0) = 0;
+    
 };
 
 }  // namespace rtc
