@@ -589,7 +589,6 @@ void testCases() {
 
               expect(disposeTextureRenderTextureId != -1, isTrue);
             }
-
           },
         );
 
@@ -689,7 +688,6 @@ void testCases() {
               // The first textureId is 1
               expect(textureId == 1, isTrue);
             }
-
           },
         );
 
@@ -886,7 +884,6 @@ void testCases() {
                 expect(textureIds[1] == 4, isTrue);
               }
             }
-
 
             await tester.pumpWidget(Container());
             await tester.pumpAndSettle(const Duration(milliseconds: 5000));
