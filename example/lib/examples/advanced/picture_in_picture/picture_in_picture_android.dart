@@ -20,11 +20,12 @@ class _State extends State<PictureInPicture> with WidgetsBindingObserver {
   late final RtcEngineEventHandler _rtcEngineEventHandler;
 
   late TextEditingController _channelIdController;
-  PIPVideoViewController? _pipVideoViewController;
+  VideoViewController? _videoViewController;
 
   bool _isInPipMode = false;
   bool _isPipSupported = false;
-  bool _hasVideo = false;
+  bool _isPipAutoEnterSupported = false;
+  AppLifecycleState? _lastAppLifecycleState;
 
   @override
   void initState() {
@@ -38,21 +39,25 @@ class _State extends State<PictureInPicture> with WidgetsBindingObserver {
   @override
   Future<void> didChangeAppLifecycleState(AppLifecycleState state) async {
     super.didChangeAppLifecycleState(state);
+    print("pip: didChangeAppLifecycleState: $state");
+    
     if (state == AppLifecycleState.inactive) {
       print("enter inactive");
 
       /// Check the definition of `inactive`. Both Android and iOS will trigger `inactive`,
       /// but the scenarios are different. Not all scenarios on iOS allow calling
-      /// `startPictureInPicture`, while Android does.
+      /// `pipStart`, while Android does.
       ///
       /// Currently, setting `autoEnter` on Android is ineffective because the underlying
       /// implementation does not set it. Therefore, it needs to be called manually here.
-
-      await _pipVideoViewController?.startPictureInPicture();
+      /// 
+      if(_lastAppLifecycleState != AppLifecycleState.paused && !_isPipAutoEnterSupported) {
+        await _engine.pipStart();
+      }
     } else if (state == AppLifecycleState.paused) {
       print("enter background");
 
-      /// Important: Do not call `startPictureInPicture` here.
+      /// Important: Do not call `pipStart` here.
       /// Both iOS and Android systems do not allow starting PiP (Picture-in-Picture) mode in the background.
       /// On Android, it can be called in the inactive state.
       /// Especially on iOS, calling it may trigger related errors causing PiP to reset.
@@ -60,6 +65,14 @@ class _State extends State<PictureInPicture> with WidgetsBindingObserver {
       /// the PiP view is already created and the system will automatically start PiP.
     } else if (state == AppLifecycleState.resumed) {
       print("enter foreground");
+    }
+
+    // do not auto enter pip when app recovered from paused state, adn the hidden state always
+    // triggers before the next state.
+    if(state != AppLifecycleState.hidden && _lastAppLifecycleState != state) {
+      setState(() {
+        _lastAppLifecycleState = state;
+      });
     }
   }
 
@@ -75,6 +88,8 @@ class _State extends State<PictureInPicture> with WidgetsBindingObserver {
 
   Future<void> _dispose() async {
     _engine.unregisterEventHandler(_rtcEngineEventHandler);
+    await _engine.unregisterPipStateChangedObserver();
+    await _engine.pipDispose();
     await _engine.leaveChannel();
     await _engine.release();
   }
@@ -88,57 +103,58 @@ class _State extends State<PictureInPicture> with WidgetsBindingObserver {
       onJoinChannelSuccess: (RtcConnection connection, int elapsed) {},
       onUserJoined: (RtcConnection connection, int rUid, int elapsed) {
         print('userJoined: $rUid');
-        var newPipVideoViewController = PIPVideoViewController.remote(
+        var newVideoViewController = VideoViewController.remote(
           rtcEngine: _engine,
           canvas: VideoCanvas(uid: rUid),
           connection: RtcConnection(channelId: _channelIdController.text),
         );
 
         setState(() {
-          _pipVideoViewController = newPipVideoViewController;
-          _pipVideoViewController?.setupPictureInPicture(const PipOptions(
-              contentWidth: 150, contentHeight: 300, autoEnterPip: true));
+          _videoViewController = newVideoViewController;
         });
       },
       onUserOffline:
           (RtcConnection connection, int rUid, UserOfflineReasonType reason) {
         print('userOffline: $rUid');
-        if (_hasVideo) {
-          setState(() {
-            _hasVideo = false;
-          });
-        }
+
+        _engine.pipStop();
       },
       onLeaveChannel: (RtcConnection connection, RtcStats stats) {},
       onRemoteVideoStateChanged:
           (connection, remoteUid, state, reason, elapsed) {
         print('remoteVideoStateChanged: $remoteUid, $state $reason');
-        var hasVideo = state == RemoteVideoState.remoteVideoStateStarting ||
-            state == RemoteVideoState.remoteVideoStateDecoding;
-
-        setState(() {
-          _hasVideo = hasVideo;
-        });
-      },
-      onPipStateChanged: (state) {
-        print('onPipStateChanged: $state');
-        var isInPipMode = state == PipState.pipStateStarted;
-        if (state == PipState.pipStateFailed) {
-          _pipVideoViewController?.setupPictureInPicture(const PipOptions(
-              contentWidth: 150, contentHeight: 300, autoEnterPip: true));
-        }
-        setState(() {
-          _isInPipMode = isInPipMode;
-        });
       },
     );
 
     _engine.registerEventHandler(_rtcEngineEventHandler);
+    _engine.registerPipStateChangedObserver(AgoraPipStateChangedObserver(
+      onPipStateChanged: (state, error) {
+        print('pip: onPipStateChanged: $state, $error');
+        setState(() {
+          _isInPipMode = state == AgoraPipState.pipStateStarted;
+        });
+      },
+    ));
 
     await _engine.enableVideo();
     var isPipSupported = await _engine.isPipSupported();
+    var isPipAutoEnterSupported = await _engine.isPipAutoEnterSupported();
+
+    if(isPipSupported) {
+      await _engine.pipSetup(AgoraPipOptions(
+        autoEnterEnabled: isPipAutoEnterSupported,
+        aspectRatioX: 16,
+        aspectRatioY: 9,
+        sourceRectHintLeft: 0,
+        sourceRectHintTop: 0,
+        sourceRectHintRight: 100,
+        sourceRectHintBottom: 100,
+      ));
+    }
+
     setState(() {
       _isPipSupported = isPipSupported;
+      _isPipAutoEnterSupported = isPipAutoEnterSupported;
     });
   }
 
@@ -154,7 +170,7 @@ class _State extends State<PictureInPicture> with WidgetsBindingObserver {
   }
 
   Future<void> _leaveChannel() async {
-    await _pipVideoViewController?.dispose();
+    await _videoViewController?.dispose();
 
     await _engine.leaveChannel();
   }
@@ -163,12 +179,9 @@ class _State extends State<PictureInPicture> with WidgetsBindingObserver {
     return Stack(
       alignment: Alignment.center,
       children: [
-        if (_hasVideo && _pipVideoViewController != null)
+        if(_videoViewController != null)
           AgoraVideoView(
-            controller: _pipVideoViewController!,
-            onAgoraVideoViewCreated: (viewId) async {
-              // do nothing for android
-            },
+            controller: _videoViewController!,
           ),
       ],
     );
@@ -213,14 +226,14 @@ class _State extends State<PictureInPicture> with WidgetsBindingObserver {
                   flex: 1,
                   child: ElevatedButton(
                     onPressed: _joinChannel,
-                    child: Text('Join channel'),
+                    child: const Text('Join channel'),
                   ),
                 ),
                 Expanded(
                   flex: 1,
                   child: ElevatedButton(
                     onPressed: _leaveChannel,
-                    child: Text('Leave channel'),
+                    child: const Text('Leave channel'),
                   ),
                 ),
               ],

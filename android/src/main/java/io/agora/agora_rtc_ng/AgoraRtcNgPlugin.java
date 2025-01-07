@@ -1,7 +1,8 @@
 package io.agora.agora_rtc_ng;
 
-import android.app.Activity;
 import android.content.Context;
+import android.graphics.Rect;
+import android.util.Rational;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -9,6 +10,7 @@ import androidx.annotation.Nullable;
 import java.io.IOException;
 import java.lang.ref.WeakReference;
 import java.util.HashMap;
+import java.util.Map;
 
 import io.flutter.embedding.engine.plugins.FlutterPlugin;
 import io.flutter.embedding.engine.plugins.activity.ActivityAware;
@@ -21,6 +23,7 @@ public class AgoraRtcNgPlugin implements FlutterPlugin, MethodChannel.MethodCall
     private MethodChannel channel;
     private WeakReference<FlutterPluginBinding> flutterPluginBindingRef;
     private VideoViewController videoViewController;
+    private AgoraPipController pipController;
     @Nullable
     private Context applicationContext;
 
@@ -56,6 +59,7 @@ public class AgoraRtcNgPlugin implements FlutterPlugin, MethodChannel.MethodCall
         applicationContext = null;
         channel.setMethodCallHandler(null);
         videoViewController.dispose();
+        pipController.dispose();
     }
 
     @Override
@@ -76,6 +80,8 @@ public class AgoraRtcNgPlugin implements FlutterPlugin, MethodChannel.MethodCall
             result.success(new HashMap<String, String>() {{
                 put("externalFilesDir", externalFilesDir);
             }});
+        } else if (call.method.startsWith("pip")) {
+            handlePipMethodCall(call, result);
         } else {
             result.notImplemented();
         }
@@ -106,11 +112,82 @@ public class AgoraRtcNgPlugin implements FlutterPlugin, MethodChannel.MethodCall
         result.error("IllegalArgumentException", "The parameter should not be null", null);
     }
 
+    private void initPipController(@NonNull ActivityPluginBinding binding) {
+        if (pipController == null) {
+            pipController = new AgoraPipController(binding.getActivity(), new AgoraPipController.PipStateChangedListener() {
+                @Override
+                public void onPipStateChangedListener(AgoraPipController.PipState state) {
+                    // put state into a json object
+                    channel.invokeMethod("pipStateChanged", new HashMap<String, Object>() {{
+                        put("state", state.getValue());
+                    }});
+                }
+            });
+        } else {
+            pipController.attachToActivity(binding.getActivity());
+        }
+    }
+
+    private void handlePipMethodCall(@NonNull MethodCall call, @NonNull MethodChannel.Result result) {
+        if (pipController != null) {
+            switch (call.method) {
+                case "pipIsSupported":
+                    result.success(pipController.isSupported());
+                    break;
+                case "pipIsAutoEnterSupported":
+                    result.success(pipController.isAutoEnterSupported());
+                    break;
+                case "pipIsActived":
+                    result.success(pipController.isActived());
+                    break;
+                case "pipSetup":
+                    final Map<?, ?> args = (Map<?, ?>) call.arguments;
+                    Rational aspectRatio = null;
+                    if (args.get("aspectRatioX") != null && args.get("aspectRatioY") != null) {
+                        aspectRatio = new Rational((int) args.get("aspectRatioX"), (int) args.get("aspectRatioY"));
+                    }
+                    Boolean autoEnterEnabled = null;
+                    if (args.get("autoEnterEnabled") != null) {
+                        autoEnterEnabled = (boolean) args.get("autoEnterEnabled");
+                    }
+                    Rect sourceRectHint = null;
+                    if (args.get("sourceRectHintLeft") != null &&
+                            args.get("sourceRectHintTop") != null &&
+                            args.get("sourceRectHintRight") != null &&
+                            args.get("sourceRectHintBottom") != null) {
+                        sourceRectHint = new Rect((int) args.get("sourceRectHintLeft"),
+                                (int) args.get("sourceRectHintTop"),
+                                (int) args.get("sourceRectHintRight"),
+                                (int) args.get("sourceRectHintBottom"));
+                    }
+                    result.success(pipController.setup(aspectRatio, autoEnterEnabled, sourceRectHint));
+                    break;
+                case "pipStart":
+                    result.success(pipController.start());
+                    break;
+                case "pipStop":
+                    pipController.stop();
+                    result.success(true);
+                    break;
+                case "pipDispose":
+                    pipController.dispose();
+                    result.success(true);
+                    break;
+                default:
+                    result.notImplemented();
+            }
+        } else {
+            result.notImplemented();
+        }
+    }
+
     @Override
     public void onAttachedToActivity(@NonNull ActivityPluginBinding binding) {
         if (videoViewController != null) {
             videoViewController.onAttachedToActivity(binding);
         }
+
+        initPipController(binding);
     }
 
     @Override
@@ -125,6 +202,8 @@ public class AgoraRtcNgPlugin implements FlutterPlugin, MethodChannel.MethodCall
         if (videoViewController != null) {
             videoViewController.onReattachedToActivityForConfigChanges(binding);
         }
+
+        initPipController(binding);
     }
 
     @Override
