@@ -2,6 +2,8 @@ import 'package:agora_rtc_engine/src/agora_media_player.dart';
 import 'package:agora_rtc_engine/src/agora_rtc_engine.dart';
 import 'package:agora_rtc_engine/src/agora_rtc_engine_ex.dart';
 import 'package:agora_rtc_engine/src/impl/agora_rtc_engine_impl.dart';
+import 'package:flutter/foundation.dart';
+import 'agora_base.dart';
 import 'impl/agora_rtc_engine_impl.dart' as impl;
 import 'impl/media_player_impl.dart';
 
@@ -12,27 +14,29 @@ export 'package:json_annotation/json_annotation.dart';
 /// @nodoc
 class AgoraPipOptions {
   /// @nodoc
-  const AgoraPipOptions(
-      {this.autoEnterEnabled,
-      this.aspectRatioX,
-      this.aspectRatioY,
-      this.sourceView,
-      this.sourceRectHintLeft,
-      this.sourceRectHintTop,
-      this.sourceRectHintRight,
-      this.sourceRectHintBottom});
+  const AgoraPipOptions({
+    this.autoEnterEnabled,
+    this.aspectRatioX,
+    this.aspectRatioY,
+    this.sourceRectHintLeft,
+    this.sourceRectHintTop,
+    this.sourceRectHintRight,
+    this.sourceRectHintBottom,
+    this.connection,
+    this.videoCanvas,
+    this.preferredContentWidth,
+    this.preferredContentHeight,
+  });
 
   /// @nodoc
   final bool? autoEnterEnabled;
 
+  /// android only
   /// @nodoc
   final int? aspectRatioX;
 
   /// @nodoc
   final int? aspectRatioY;
-
-  /// @nodoc
-  final int? sourceView;
 
   /// @nodoc
   final int? sourceRectHintLeft;
@@ -47,7 +51,28 @@ class AgoraPipOptions {
   final int? sourceRectHintBottom;
 
   /// @nodoc
-  Map<String, dynamic> toJson() {
+  final RtcConnection? connection;
+
+  /// @see VideoCanvas
+  /// @note the view in videoCanvas is the sourceView of pip view, zero means to use the root view of the app.
+  /// @note only some properties of VideoCanvas are supported:
+  /// - uid (optional) 
+  /// - view (optional)
+  /// - backgroundColor (optional)
+  /// - mirrorMode (optional)
+  /// - renderMode (optional)
+  /// - sourceType (optional)
+  /// - mediaPlayerId (optional) not supported
+  final VideoCanvas? videoCanvas;
+
+  /// @nodoc
+  final int? preferredContentWidth;
+
+  /// @nodoc
+  final int? preferredContentHeight;
+
+  /// @nodoc
+  Map<String, dynamic> toDictionary() {
     final val = <String, dynamic>{};
 
     void writeNotNull(String key, dynamic value) {
@@ -57,13 +82,24 @@ class AgoraPipOptions {
     }
 
     writeNotNull('autoEnterEnabled', autoEnterEnabled);
-    writeNotNull('aspectRatioX', aspectRatioX);
-    writeNotNull('aspectRatioY', aspectRatioY);
-    writeNotNull('sourceView', sourceView);
-    writeNotNull('sourceRectHintLeft', sourceRectHintLeft);
-    writeNotNull('sourceRectHintTop', sourceRectHintTop);
-    writeNotNull('sourceRectHintRight', sourceRectHintRight);
-    writeNotNull('sourceRectHintBottom', sourceRectHintBottom);
+
+    // only for android
+    if (defaultTargetPlatform == TargetPlatform.android) {
+      writeNotNull('aspectRatioX', aspectRatioX);
+      writeNotNull('aspectRatioY', aspectRatioY);
+      writeNotNull('sourceRectHintLeft', sourceRectHintLeft);
+      writeNotNull('sourceRectHintTop', sourceRectHintTop);
+      writeNotNull('sourceRectHintRight', sourceRectHintRight);
+      writeNotNull('sourceRectHintBottom', sourceRectHintBottom);
+    }
+
+    // only for ios
+    if (defaultTargetPlatform == TargetPlatform.iOS) {
+      writeNotNull('connection', connection?.toJson());
+      writeNotNull('videoCanvas', videoCanvas?.toJson());
+      writeNotNull('preferredContentWidth', preferredContentWidth);
+      writeNotNull('preferredContentHeight', preferredContentHeight);
+    }
     return val;
   }
 }
@@ -166,19 +202,13 @@ extension RtcEngineExt on RtcEngine {
   }
 
   /// Stop Picture in Picture.
-  ///
-  /// Returns
-  /// Whether Picture in Picture is stopped successfully.
-  Future<bool> pipStop() async {
+  Future<void> pipStop() async {
     final impl = this as RtcEngineImpl;
     return impl.pipStop();
   }
 
   /// Dispose Picture in Picture.
-  ///
-  /// Returns
-  /// Whether Picture in Picture is disposed successfully.
-  Future<bool> pipDispose() async {
+  Future<void> pipDispose() async {
     final impl = this as RtcEngineImpl;
     return impl.pipDispose();
   }

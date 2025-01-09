@@ -17,6 +17,8 @@ Pod::Spec.new do |s|
   s.source           = { :path => '.' }
   s.source_files = 'Classes/**/*.{h,mm,m,swift}'
   s.dependency 'Flutter'
+  s.frameworks = ['AVFoundation', 'AVKit']
+  s.xcconfig = { 'OTHER_LDFLAGS' => '-framework AVFoundation -framework AVKit' }
 
   plugin_dev_path = File.join(File.dirname(File.realpath(__FILE__)), '.plugin_dev')
   if File.exist?(plugin_dev_path)
