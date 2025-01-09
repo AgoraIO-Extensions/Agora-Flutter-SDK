@@ -167,11 +167,11 @@ public class AgoraRtcNgPlugin implements FlutterPlugin, MethodChannel.MethodCall
                     break;
                 case "pipStop":
                     pipController.stop();
-                    result.success(true);
+                    result.success(null);
                     break;
                 case "pipDispose":
                     pipController.dispose();
-                    result.success(true);
+                    result.success(null);
                     break;
                 default:
                     result.notImplemented();

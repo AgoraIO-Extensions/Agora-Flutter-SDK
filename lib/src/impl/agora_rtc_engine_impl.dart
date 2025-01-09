@@ -440,8 +440,8 @@ class RtcEngineImpl extends rtc_engine_ex_binding.RtcEngineExImpl
             final jsonMap = Map<String, dynamic>.from(call.arguments as Map);
             final state = jsonMap['state'] as int;
             final error = jsonMap['error'] as String?;
-            _pipStateChangedObserver
-              ?.onPipStateChanged(AgoraPipState.values[state], error);
+            _pipStateChangedObserver?.onPipStateChanged(
+                AgoraPipState.values[state], error);
           }
         } catch (e) {
           assert(false, 'pipStateChanged error: $e');
@@ -1080,8 +1080,13 @@ class RtcEngineImpl extends rtc_engine_ex_binding.RtcEngineExImpl
   }
 
   Future<bool> pipSetup(AgoraPipOptions options) async {
-    final result = await engineMethodChannel.invokeMethod<bool>(
-        'pipSetup', options.toJson());
+    // append globalVideoViewController.irisRtcRenderingHandle to json
+    final dicOptions = options.toDictionary();
+    dicOptions['renderingHandle'] =
+        _globalVideoViewController!.irisRtcRenderingHandle;
+
+    final result =
+        await engineMethodChannel.invokeMethod<bool>('pipSetup', dicOptions);
     return result ?? false;
   }
 
@@ -1091,16 +1096,12 @@ class RtcEngineImpl extends rtc_engine_ex_binding.RtcEngineExImpl
     return result ?? false;
   }
 
-  Future<bool> pipStop() async {
-    final result =
-        await engineMethodChannel.invokeMethod<bool>('pipStop', null);
-    return result ?? false;
+  Future<void> pipStop() async {
+    await engineMethodChannel.invokeMethod<bool>('pipStop', null);
   }
 
-  Future<bool> pipDispose() async {
-    final result =
-        await engineMethodChannel.invokeMethod<bool>('pipDispose', null);
-    return result ?? false;
+  Future<void> pipDispose() async {
+    await engineMethodChannel.invokeMethod<bool>('pipDispose', null);
   }
 
   /////////// debug ////////
