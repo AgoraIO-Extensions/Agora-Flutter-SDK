@@ -62,7 +62,7 @@ ${defaultDartHeader}
 
 ${defaultIgnoreForFile}, prefer_is_empty
 
-import 'package:agora_rtc_engine/src/binding_forward_export.dart';
+import '/src/binding_forward_export.dart';
 part 'event_handler_param_json.g.dart';
 
 ${subContents}

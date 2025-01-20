@@ -1,9 +1,8 @@
 import 'dart:convert';
 import 'dart:typed_data';
 
-import 'package:agora_rtc_engine/src/agora_rtc_engine_ext.dart';
-import 'package:agora_rtc_engine/src/binding/agora_spatial_audio_impl.dart'
-    as spatial_audio_binding;
+import '/src/agora_rtc_engine_ext.dart';
+import '/src/binding/agora_spatial_audio_impl.dart' as spatial_audio_binding;
 import 'package:iris_method_channel/iris_method_channel.dart';
 
 // ignore_for_file: public_member_api_docs, unused_local_variable

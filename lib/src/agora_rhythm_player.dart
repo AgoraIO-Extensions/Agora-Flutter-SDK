@@ -1,4 +1,4 @@
-import 'package:agora_rtc_engine/src/binding_forward_export.dart';
+import '/src/binding_forward_export.dart';
 part 'agora_rhythm_player.g.dart';
 
 /// Virtual metronome state.

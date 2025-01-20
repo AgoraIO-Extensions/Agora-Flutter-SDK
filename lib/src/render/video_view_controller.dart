@@ -1,8 +1,8 @@
-import 'package:agora_rtc_engine/src/agora_base.dart';
-import 'package:agora_rtc_engine/src/agora_media_base.dart';
-import 'package:agora_rtc_engine/src/agora_rtc_engine.dart';
-import 'package:agora_rtc_engine/src/agora_rtc_engine_ex.dart';
-import 'package:agora_rtc_engine/src/impl/video_view_controller_impl.dart';
+import '/src/agora_base.dart';
+import '/src/agora_media_base.dart';
+import '/src/agora_rtc_engine.dart';
+import '/src/agora_rtc_engine_ex.dart';
+import '/src/impl/video_view_controller_impl.dart';
 import 'package:meta/meta.dart';
 
 /// A AgoraVideoView controller for rendering local and remote video.
