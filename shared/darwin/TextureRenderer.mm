@@ -53,11 +53,16 @@ public:
       if (pre_width_ != vf->width || pre_height_ != vf->height) {
         pre_width_ = vf->width;
         pre_height_ = vf->height;
+
+        // notify size changed on main thread, to avoid data race, we need to
+        // copy the width and height to local variables.
+        int temp_width = vf->width;
+        int temp_height = vf->height;
         dispatch_async(dispatch_get_main_queue(), ^{
           [renderer.channel invokeMethod:@"onSizeChanged"
                                arguments:@{
-                                 @"width" : @(vf->width),
-                                 @"height" : @(vf->height)
+                                 @"width" : @(temp_width),
+                                 @"height" : @(temp_height)
                                }];
         });
       }
