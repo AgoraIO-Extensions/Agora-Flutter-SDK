@@ -65,7 +65,7 @@ jobs:
           # Create a zip file of the DartDoc output
           zip -r agora_rtc_engine_docs.zip doc
       - name: Upload DartDoc Artifact ⬆️
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: agora_rtc_engine_docs.zip
           path: agora_rtc_engine_docs.zip
@@ -394,7 +394,7 @@ jobs:
           disk-size: 8192M
           script: bash ci/rendering_test_android.sh
 
-      - uses: actions/upload-artifact@v3
+      - uses: actions/upload-artifact@v4
         if: always()
         with:
           name: android-debug-golden-files
@@ -442,7 +442,7 @@ jobs:
           model: 'iPhone 15'
       - run: bash ci/rendering_test_ios.sh
 
-      - uses: actions/upload-artifact@v3
+      - uses: actions/upload-artifact@v4
         if: always()
         with:
           name: ios-debug-golden-files
@@ -497,7 +497,7 @@ jobs:
         run: |
           export SAVE_DEBUG_GOLDEN="true"
           bash ci/rendering_test_macos.sh
-      - uses: actions/upload-artifact@v3
+      - uses: actions/upload-artifact@v4
         if: always()
         with:
           name: macos-debug-golden-files
@@ -549,7 +549,7 @@ jobs:
         shell: bash
         run: |
           bash ci/rendering_test_windows.sh
-      - uses: actions/upload-artifact@v3
+      - uses: actions/upload-artifact@v4
         if: always()
         with:
           name: windows-debug-golden-files
@@ -579,7 +579,7 @@ jobs:
           chromedriver --port=4444 --trace-buffer-size=100000 &
           bash ci/run_rendering_test.sh web
 
-      - uses: actions/upload-artifact@v3
+      - uses: actions/upload-artifact@v4
         if: always()
         with:
           name: web-debug-golden-files
