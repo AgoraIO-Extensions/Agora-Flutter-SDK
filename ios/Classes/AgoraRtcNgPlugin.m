@@ -8,8 +8,6 @@
 
 @property(nonatomic) NSObject<FlutterPluginRegistrar> *registrar;
 
-- (void) dispose;
-
 @end
 
 @implementation AgoraRtcNgPlugin
@@ -57,22 +55,6 @@
         } else {
     result(FlutterMethodNotImplemented);
   }
-}
-
-- (void)detachFromEngineForRegistrar:(NSObject<FlutterPluginRegistrar> *)registrar {
-    [self dispose];
-}
-
-- (void) dispose {
-    if (self.videoViewController) {
-        [self.videoViewController dispose];
-        self.videoViewController = NULL;
-    }
-}
-
-- (void)dealloc
-{
-    [self dispose];
 }
 
 @end
