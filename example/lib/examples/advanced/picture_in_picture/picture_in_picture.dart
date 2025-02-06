@@ -25,6 +25,9 @@ class _State extends State<PictureInPicture> with WidgetsBindingObserver {
   late TextEditingController _contentWidthController;
   late TextEditingController _contentHeightController;
 
+  int _contextWidth = 0;
+  int _contextHeight = 0;
+
   bool _isJoined = false;
   bool _isUseFlutterTexture = false;
 
@@ -105,14 +108,15 @@ class _State extends State<PictureInPicture> with WidgetsBindingObserver {
 
   Future<void> _disposePip() async {
     await _engine.pipDispose();
+
     setState(() {
       _isInPipMode = false;
       _currentPipUid = null;
     });
   }
 
-  Future<void> _setupPip(
-      RtcConnection? connection, int? uid, int? viewId) async {
+  Future<void> _setupPip(RtcConnection? connection, int? uid, int? viewId,
+      Rect? sourceRectHint) async {
     if (_currentPipUid != uid) {
       // When using Flutter texture, the pip controller uses the root view as its source view,
       // so we only need to update the video stream when the uid changes. However, when
@@ -124,20 +128,23 @@ class _State extends State<PictureInPicture> with WidgetsBindingObserver {
 
       bool isLocal = uid == config.uid;
 
-      int contentWidth = int.tryParse(_contentWidthController.text) ?? 960;
-      int contentHeight = int.tryParse(_contentHeightController.text) ?? 540;
       AgoraPipOptions options = AgoraPipOptions(
         autoEnterEnabled: _isPipAutoEnterSupported,
         // android only
-        aspectRatioX: contentWidth,
-        aspectRatioY: contentHeight,
-        sourceRectHintLeft: 0,
-        sourceRectHintTop: 0,
-        sourceRectHintRight: 100,
-        sourceRectHintBottom: 100,
+        // For optimal PiP display on Android:
+        // 1. Set sourceRectHint to match the dimensions of the target video view
+        // 2. Set aspectRatio to match the video view's aspect ratio
+        // This ensures smooth transitions and proper video positioning in PiP mode
+        // See: https://developer.android.com/reference/android/app/PictureInPictureParams.Builder#setSourceRectHint(android.graphics.Rect)
+        aspectRatioX: sourceRectHint?.width.toInt() ?? _contextWidth,
+        aspectRatioY: sourceRectHint?.height.toInt() ?? _contextHeight,
+        sourceRectHintLeft: sourceRectHint?.left.toInt() ?? 0,
+        sourceRectHintTop: sourceRectHint?.top.toInt() ?? 0,
+        sourceRectHintRight: sourceRectHint?.right.toInt() ?? _contextWidth,
+        sourceRectHintBottom: sourceRectHint?.bottom.toInt() ?? _contextHeight,
         // ios only
-        preferredContentWidth: contentWidth,
-        preferredContentHeight: contentHeight,
+        preferredContentWidth: int.tryParse(_contentWidthController.text) ?? 960,
+        preferredContentHeight: int.tryParse(_contentHeightController.text) ?? 540,
 
         connection: connection,
         videoCanvas: (uid != null && viewId != null)
@@ -255,12 +262,6 @@ class _State extends State<PictureInPicture> with WidgetsBindingObserver {
     var isPipSupported = await _engine.isPipSupported();
     var isPipAutoEnterSupported = await _engine.isPipAutoEnterSupported();
 
-    // There is no need to set connection and videoCanvas for pipSetup on Android,
-    // because the pipSetup will use the root view as the source view.
-    if (Platform.isAndroid && isPipSupported) {
-      _setupPip(null, null, null);
-    }
-
     setState(() {
       _isPipSupported = isPipSupported;
       _isPipAutoEnterSupported = isPipAutoEnterSupported;
@@ -285,42 +286,44 @@ class _State extends State<PictureInPicture> with WidgetsBindingObserver {
   Widget _videoViewStack() {
     return Stack(
       children: [
-        Stack(
-          children: [
-            AgoraVideoView(
-              controller: VideoViewController(
-                rtcEngine: _engine,
-                useFlutterTexture: _isUseFlutterTexture,
-                canvas: VideoCanvas(
-                    uid: 0,
-                    // Must set setupMode to videoViewSetupAdd when using Flutter texture, otherwise the video will not be displayed.
-                    // This is because:
-                    // 1. The default setupMode is videoViewSetupReplace in video_view_controller_impl.dart
-                    //    when createTextureRender is called
-                    // 2. The textureRender will recreate when the app is switched to background
-                    // TODO: This behavior may need optimization in the future
-                    setupMode: _isUseFlutterTexture
-                        ? VideoViewSetupMode.videoViewSetupAdd
-                        : null),
-              ),
-              onAgoraVideoViewCreated: (viewId) {
-                _localViewId = viewId;
-                _engine.startPreview();
-              },
-            ),
-            if (!_isInPipMode ||
-                _lastAppLifecycleState == AppLifecycleState.resumed)
-              Positioned(
-                right: 0,
-                bottom: 0,
-                child: ElevatedButton(
-                  onPressed: () {
-                    _setupPip(null, config.uid, _localViewId);
-                  },
-                  child: const Text('Enter PIP'),
+        LayoutBuilder(
+          builder: (context, constraints) => Stack(
+            children: [
+              AgoraVideoView(
+                controller: VideoViewController(
+                  rtcEngine: _engine,
+                  useFlutterTexture: _isUseFlutterTexture,
+                  canvas: VideoCanvas(
+                      uid: 0,
+                      // Must set setupMode to videoViewSetupAdd when using Flutter texture, otherwise the video will not be displayed.
+                      // This is because:
+                      // 1. The default setupMode is videoViewSetupReplace in video_view_controller_impl.dart
+                      //    when createTextureRender is called
+                      // 2. The textureRender will recreate when the app is switched to background
+                      // TODO: This behavior may need optimization in the future
+                      setupMode: _isUseFlutterTexture
+                          ? VideoViewSetupMode.videoViewSetupAdd
+                          : null),
                 ),
-              )
-          ],
+                onAgoraVideoViewCreated: (viewId) {
+                  _localViewId = viewId;
+                  _engine.startPreview();
+                },
+              ),
+              if (!_isInPipMode ||
+                  _lastAppLifecycleState == AppLifecycleState.resumed)
+                Positioned(
+                  right: 0,
+                  bottom: 0,
+                  child: ElevatedButton(
+                    onPressed: () {
+                      _setupPip(null, config.uid, _localViewId, context.findRenderObject()?.paintBounds);
+                    },
+                    child: const Text('Enter PIP'),
+                  ),
+                )
+            ],
+          ),
         ),
         Align(
           alignment: Alignment.topLeft,
@@ -328,47 +331,50 @@ class _State extends State<PictureInPicture> with WidgetsBindingObserver {
             scrollDirection: Axis.horizontal,
             child: Row(
               children: List.of(_remoteViewIds.entries.map(
-                (entry) => SizedBox(
-                  width: 100,
-                  height: 100,
-                  child: Stack(
-                    children: [
-                      AgoraVideoView(
-                        controller: VideoViewController.remote(
-                          rtcEngine: _engine,
-                          useFlutterTexture: _isUseFlutterTexture,
-                          canvas: VideoCanvas(
-                              uid: entry.key,
-                              // Must set setupMode to videoViewSetupAdd when using Flutter texture, otherwise the video will not be displayed.
-                              // This has the same reason as the local view above.
-                              setupMode: _isUseFlutterTexture
-                                  ? VideoViewSetupMode.videoViewSetupAdd
-                                  : null),
-                          connection: RtcConnection(
-                              channelId: _channelIdController.text,
-                              localUid: config.uid),
+                (entry) => LayoutBuilder(
+                  builder: (context, constraints) => SizedBox(
+                    width: 100,
+                    height: 100,
+                    child: Stack(
+                      children: [
+                        AgoraVideoView(
+                          controller: VideoViewController.remote(
+                            rtcEngine: _engine,
+                            useFlutterTexture: _isUseFlutterTexture,
+                            canvas: VideoCanvas(
+                                uid: entry.key,
+                                // Must set setupMode to videoViewSetupAdd when using Flutter texture, otherwise the video will not be displayed.
+                                // This has the same reason as the local view above.
+                                setupMode: _isUseFlutterTexture
+                                    ? VideoViewSetupMode.videoViewSetupAdd
+                                    : null),
+                            connection: RtcConnection(
+                                channelId: _channelIdController.text,
+                                localUid: config.uid),
+                          ),
+                          onAgoraVideoViewCreated: (viewId) {
+                            _remoteViewIds[entry.key] = viewId;
+                          },
                         ),
-                        onAgoraVideoViewCreated: (viewId) {
-                          _remoteViewIds[entry.key] = viewId;
-                        },
-                      ),
-                      if (!_isInPipMode ||
-                          _lastAppLifecycleState == AppLifecycleState.resumed)
-                        Positioned(
-                            right: 0,
-                            bottom: 0,
-                            child: ElevatedButton(
-                              onPressed: () {
-                                _setupPip(
-                                    RtcConnection(
-                                        channelId: _channelIdController.text,
-                                        localUid: config.uid),
-                                    entry.key,
-                                    _remoteViewIds[entry.key]);
-                              },
-                              child: const Text('Enter PIP'),
-                            )),
-                    ],
+                        if (!_isInPipMode ||
+                            _lastAppLifecycleState == AppLifecycleState.resumed)
+                          Positioned(
+                              right: 0,
+                              bottom: 0,
+                              child: ElevatedButton(
+                                onPressed: () {
+                                  _setupPip(
+                                      RtcConnection(
+                                          channelId: _channelIdController.text,
+                                          localUid: config.uid),
+                                      entry.key,
+                                      _remoteViewIds[entry.key],
+                                      context.findRenderObject()?.paintBounds);
+                                },
+                                child: const Text('Enter PIP'),
+                              )),
+                      ],
+                    ),
                   ),
                 ),
               )),
@@ -381,6 +387,9 @@ class _State extends State<PictureInPicture> with WidgetsBindingObserver {
 
   @override
   Widget build(BuildContext context) {
+    _contextWidth = MediaQuery.of(context).size.width.toInt();
+    _contextHeight = MediaQuery.of(context).size.height.toInt();
+
     if (_isPipSupported == null) {
       return Container();
     }
@@ -391,7 +400,10 @@ class _State extends State<PictureInPicture> with WidgetsBindingObserver {
       );
     }
 
-    // We only need to adjust the UI on Android in pip mode.
+    // On Android, we need to adjust the UI layout when in PiP mode.
+    // Note: Layout changes during PiP exit may cause visual flickering on Android.
+    // This happens because we monitor PiP state using a delayed task(100ms) rather than
+    // native state handlers, since Flutter's main activity doesn't forward PiP events.
     if (_isInPipMode &&
         (!kIsWeb && defaultTargetPlatform == TargetPlatform.android)) {
       return _videoViewStack();

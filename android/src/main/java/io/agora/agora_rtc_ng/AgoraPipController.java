@@ -31,6 +31,7 @@ public class AgoraPipController {
             return value;
         }
     }
+
     public interface PipStateChangedListener {
         void onPipStateChangedListener(PipState state);
     }
@@ -56,12 +57,16 @@ public class AgoraPipController {
     private PictureInPictureParams.Builder mParamsBuilder;
     private WeakReference<Activity> mActivity;
     private final PipStateChangedListener mListener;
-    private static final long CHECK_INTERVAL_MS = 500; // Check every 500ms
+    // Note: The interval is set to 100ms to reduce the flickering effect.
+    // This is necessary because Flutter's activity lifecycle events don't include
+    // PiP state transitions, so we rely on polling to detect changes.
+    private static final long CHECK_INTERVAL_MS = 100;
     private Handler mHandler;
     private Runnable mCheckStateTask;
     private boolean mLastPipState = false;
 
-    public AgoraPipController(@NonNull Activity activity, @Nullable PipStateChangedListener listener) {
+    public AgoraPipController(@NonNull Activity activity,
+                              @Nullable PipStateChangedListener listener) {
         mActivity = new WeakReference<>(activity);
         mListener = listener;
         mHandler = new Handler(Looper.getMainLooper());
@@ -154,7 +159,12 @@ public class AgoraPipController {
                 mParamsBuilder = new PictureInPictureParams.Builder();
             }
 
-            if (mPipParams == null) {
+            if (mPipParams == null ||
+                    (aspectRatio != null && mPipParams.aspectRatio != aspectRatio) ||
+                    (autoEnterEnabled != null &&
+                            mPipParams.autoEnterEnabled != autoEnterEnabled) ||
+                    (sourceRectHint != null &&
+                            mPipParams.sourceRectHint != sourceRectHint)) {
                 mPipParams =
                         new PipParams(aspectRatio, autoEnterEnabled, sourceRectHint);
             }
@@ -179,6 +189,11 @@ public class AgoraPipController {
             if (mPipParams.sourceRectHint != null) {
                 mParamsBuilder.setSourceRectHint(mPipParams.sourceRectHint);
             }
+
+            // Disables the seamless resize. The seamless resize works great for videos where the
+            // content can be arbitrarily scaled, but you can disable this for non-video content so
+            // that the picture-in-picture mode is resized with a cross fade animation.
+            mParamsBuilder.setSeamlessResizeEnabled(false);
 
             activity.setPictureInPictureParams(mParamsBuilder.build());
         }
@@ -212,7 +227,7 @@ public class AgoraPipController {
         } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
             activity.enterPictureInPictureMode();
         }
-        
+
         return true;
     }
 
@@ -226,16 +241,17 @@ public class AgoraPipController {
             return;
         }
 
-        // this will not stop the pip, it will just move the activity to the background
-        // and the pip will still be active when the activity is resumed
+        // this will not stop the pip, it will just move the activity to the
+        // background and the pip will still be active when the activity is resumed
         activity.moveTaskToBack(false);
     }
 
     public void dispose() {
         stopStateMonitoring();
-        
-        // do not call stop() here, coz there is no truly stop in android, the implement
-        // of stop() is just moveTaskToBack(false), which is not what we want.
+
+        // do not call stop() here, coz there is no truly stop in android, the
+        // implement of stop() is just moveTaskToBack(false), which is not what we
+        // want.
         //
         // stop();
 
@@ -288,8 +304,8 @@ public class AgoraPipController {
     //         return;
     //     }
 
-    //     // only call start when !isAutoEnterSupported() and autoEnterEnabled is set to
-    //     true if (Boolean.TRUE.equals(mPipParams.autoEnterEnabled) &&
+    //     // only call start when !isAutoEnterSupported() and autoEnterEnabled is
+    //     set to true if (Boolean.TRUE.equals(mPipParams.autoEnterEnabled) &&
     //     !isAutoEnterSupported() && !isActived()) {
     //         start();
     //     }
