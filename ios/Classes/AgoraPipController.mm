@@ -8,6 +8,12 @@
 #import <UIKit/UIKit.h>
 
 #ifdef DEBUG
+#define ENABLE_LOG 1
+#else
+#define ENABLE_LOG 0
+#endif
+
+#if ENABLE_LOG
 #define AGORA_PIP_LOG(fmt, ...) NSLog((@"[AgoraPIP] " fmt), ##__VA_ARGS__)
 #else
 #define AGORA_PIP_LOG(fmt, ...)
@@ -140,7 +146,7 @@ struct AgoraPipFrameMeta {
   if ([[self sampleBufferDisplayLayer] status] ==
       AVQueuedSampleBufferRenderingStatusFailed) {
     AGORA_PIP_LOG(@"sampleBufferDisplayLayer status failed, current error: %@",
-          [[self sampleBufferDisplayLayer] error]);
+                  [[self sampleBufferDisplayLayer] error]);
     [[self sampleBufferDisplayLayer] flush];
   }
 
@@ -172,18 +178,26 @@ struct AgoraPipFrameMeta {
 
   int rotation = frame->rotation;
 
+  __weak typeof(self) weakSelf = self;
   dispatch_async(dispatch_get_main_queue(), ^{
-    AgoraPipFrameMeta frameMeta{.rotation_ = rotation,
-                                .mirrorMode_ = self->_frameMeta.mirrorMode_,
-                                .renderMode_ = self->_frameMeta.renderMode_};
-    if (frameMeta != self->_frameMeta) {
-      self->_frameMeta = frameMeta;
-      [[self sampleBufferDisplayLayer]
-          setAffineTransform:self->_frameMeta.getTransform()];
+    __strong typeof(weakSelf) strongSelf = weakSelf;
+    if (!strongSelf) {
+      AGORA_PIP_LOG(@"reference of AgoraPipView is nil, skip rendering");
+      return;
+    }
+
+    AgoraPipFrameMeta frameMeta{
+        .rotation_ = rotation,
+        .mirrorMode_ = strongSelf->_frameMeta.mirrorMode_,
+        .renderMode_ = strongSelf->_frameMeta.renderMode_};
+    if (frameMeta != strongSelf->_frameMeta) {
+      strongSelf->_frameMeta = frameMeta;
+      [[strongSelf sampleBufferDisplayLayer]
+          setAffineTransform:strongSelf->_frameMeta.getTransform()];
     }
 
     // notify new frame available on main thread
-    [self renderCVPixelBuffer];
+    [strongSelf renderCVPixelBuffer];
   });
 }
 
@@ -208,12 +222,14 @@ public:
                           agora::iris::IrisRtcRendering *irisRendering,
                           const IrisRtcVideoFrameConfig &config)
       : view_(view), irisRendering_(irisRendering) {
+    AGORA_PIP_LOG(@"AgoraVideoFrameDelegate constructor");
     memcpy(&config_, &config, sizeof(IrisRtcVideoFrameConfig));
     videoFrameDelegateId_ =
         irisRendering->AddVideoFrameObserverDelegate(config_, this);
   }
 
   ~AgoraVideoFrameDelegate() {
+    AGORA_PIP_LOG(@"AgoraVideoFrameDelegate destructor");
     if (videoFrameDelegateId_ >= 0) {
       irisRendering_->RemoveVideoFrameObserverDelegate(videoFrameDelegateId_);
     }
@@ -238,21 +254,16 @@ public:
       return;
     }
 
-    // can not use dispatch_sync here, since it will block the main thread
-    // and cause the UI to freeze.
-    // 1. renderer thread call dispatch_sync, which will block the renderer
-    // thread.
-    // 2. dispose dispatched a async block on main thread, will call
-    // destroyVideoFrameDelegate and wait the lock of renderer, and the lock
-    // will never be released coz renderer thread is blocked.
+    // Using dispatch_sync here would cause a deadlock:
+    // 1. The renderer thread would be blocked waiting for the main thread
+    // 2. When dispose() is called on the main thread, it needs to acquire the
+    // renderer lock
+    //    to destroy the video frame delegate, but can't because the renderer is
+    //    blocked
     //
-    // so we need a new queue to avoid the deadlock.
-    //
-    // There is no need to dispatch here, we can directly call functions of
-    // view_, coz AgoraPipController will make sure that the lifetime of
-    // AgoraPipView is longer than the AgoraVideoFrameDelegate.
-    // So we can hold the new queue in AgoraPipView.
-    //
+    // We can safely call view_ methods directly since AgoraPipController
+    // guarantees that AgoraPipView's lifetime exceeds AgoraVideoFrameDelegate's
+    // lifetime. The view handles its own dispatch queue internally.
     // dispatch_async(dispatch_get_main_queue(), ^{
     [view_ renderFrame:frame];
     // });
@@ -322,6 +333,15 @@ private:
 }
 
 - (BOOL)setup:(AgoraPipOptions *)options {
+  AGORA_PIP_LOG(@"AgoraPipController setup with preferredContentSize: %@, "
+                @"autoEnterEnabled: %d, mirrorMode: %lu, renderMode: %lu, "
+                @"renderingHandle: %p, uid: %lu",
+                NSStringFromCGSize(options.preferredContentSize),
+                options.autoEnterEnabled,
+                static_cast<unsigned long>(options.videoCanvas.mirrorMode),
+                static_cast<unsigned long>(options.videoCanvas.renderMode),
+                reinterpret_cast<void *>(options.renderingHandle),
+                static_cast<unsigned long>(options.videoCanvas.uid));
   if (![self isSupported]) {
     [_pipStateDelegate pipStateChanged:AgoraPipStateFailed
                                  error:@"Pip is not supported"];
@@ -329,7 +349,32 @@ private:
   }
 
   if (__builtin_available(iOS 15.0, *)) {
-    if (_pipController == nil) {
+    // we allow the videoCanvas to be nil, which means to use the root view
+    // of the app as the source view and do not render the video for now.
+    UIView *currentVideoSourceView =
+        (options.videoCanvas != nil && options.videoCanvas.view != nil)
+            ? options.videoCanvas.view
+            : [UIApplication.sharedApplication.keyWindow rootViewController]
+                  .view;
+
+    // We need to setup or re-setup the pip controller if:
+    // 1. The pip controller hasn't been initialized yet (_pipController == nil)
+    // 2. The content source is missing (_pipController.contentSource == nil)
+    // 3. The active video call source view has changed to a different
+    // view(which
+    //    may caused by function dispose or call setup with different video
+    //    source view)
+    //    (_pipController.contentSource.activeVideoCallSourceView !=
+    //    currentVideoSourceView)
+    // This ensures the pip controller is properly configured with the current
+    // video source with a good user experience.
+    if (_pipController == nil || _pipController.contentSource == nil ||
+        _pipController.contentSource.activeVideoCallSourceView !=
+            currentVideoSourceView) {
+
+      // destroy the previous video frame delegate if exists first.
+      [self destroyVideoFrameDelegate];
+
       // create pip view
       _pipView = [[AgoraPipView alloc] init];
       _pipView.autoresizingMask =
@@ -352,16 +397,9 @@ private:
       [pipViewController.view addSubview:_pipView];
 
       // create pip controller
-      // we allow the videoCanvas to be nil, which means to use the root view
-      // of the app as the source view and do not render the video for now.
-      UIView *sourceView =
-          (options.videoCanvas != nil && options.videoCanvas.view != nil)
-              ? options.videoCanvas.view
-              : [UIApplication.sharedApplication.keyWindow rootViewController]
-                    .view;
       AVPictureInPictureControllerContentSource *contentSource =
           [[AVPictureInPictureControllerContentSource alloc]
-              initWithActiveVideoCallSourceView:sourceView
+              initWithActiveVideoCallSourceView:currentVideoSourceView
                           contentViewController:pipViewController];
 
       _pipController = [[AVPictureInPictureController alloc]
@@ -389,68 +427,88 @@ private:
 }
 
 - (BOOL)start {
+  AGORA_PIP_LOG(@"AgoraPipController start");
+
   if (![self isSupported]) {
     [_pipStateDelegate pipStateChanged:AgoraPipStateFailed
                                  error:@"Pip is not supported"];
     return NO;
   }
 
-  dispatch_async(dispatch_get_main_queue(), ^{
-    if (self->_pipController == nil) {
-      [self->_pipStateDelegate
-          pipStateChanged:AgoraPipStateFailed
-                    error:@"Pip controller is not initialized"];
-      return;
-    }
+  // call startPictureInPicture too fast will make no effect.
+  dispatch_after(
+      dispatch_time(DISPATCH_TIME_NOW, NSEC_PER_SEC * 0.1),
+      dispatch_get_main_queue(), ^{
+        if (self->_pipController == nil) {
+          [self->_pipStateDelegate
+              pipStateChanged:AgoraPipStateFailed
+                        error:@"Pip controller is not initialized"];
+          return;
+        }
 
-    if (![self->_pipController isPictureInPicturePossible]) {
-      [self->_pipStateDelegate pipStateChanged:AgoraPipStateFailed
-                                         error:@"Pip is not possible"];
-    } else if (![self->_pipController isPictureInPictureActive]) {
-      [self->_pipController startPictureInPicture];
-    }
-  });
+        if (![self->_pipController isPictureInPicturePossible]) {
+          [self->_pipStateDelegate pipStateChanged:AgoraPipStateFailed
+                                             error:@"Pip is not possible"];
+        } else if (![self->_pipController isPictureInPictureActive]) {
+          [self->_pipController startPictureInPicture];
+        }
+      });
 
   return YES;
 }
 
 - (void)stop {
+  AGORA_PIP_LOG(@"AgoraPipController stop");
+
   if (![self isSupported]) {
     [_pipStateDelegate pipStateChanged:AgoraPipStateFailed
                                  error:@"Pip is not supported"];
     return;
   }
 
-  dispatch_async(dispatch_get_main_queue(), ^{
-    if (self->_pipController == nil ||
-        ![self->_pipController isPictureInPictureActive]) {
-      // no need to call pipStateChanged since the pip controller is not
-      // initialized.
-      return;
-    }
+  if (self->_pipController == nil ||
+      ![self->_pipController isPictureInPictureActive]) {
+    // no need to call pipStateChanged since the pip controller is not
+    // initialized.
+    return;
+  }
 
-    [self->_pipController stopPictureInPicture];
-  });
+  [self->_pipController stopPictureInPicture];
 }
 
 - (void)dispose {
-  dispatch_async(dispatch_get_main_queue(), ^{
-    if (self->_pipController == nil) {
-      return;
-    }
+  AGORA_PIP_LOG(@"AgoraPipController dispose");
 
-    if ([self->_pipController isPictureInPictureActive]) {
-      [self->_pipController stopPictureInPicture];
+  if (self->_pipController != nil) {
+    // if ([self->_pipController isPictureInPictureActive]) {
+    //   [self->_pipController stopPictureInPicture];
+    // }
+    //
+    // set contentSource to nil will make pip stop immediately without any
+    // animation, which is more adaptive to the function of dispose, so we
+    // use this method to stop pip not to call stopPictureInPicture.
+    //
+    // Below is the official document of contentSource property:
+    // https://developer.apple.com/documentation/avkit/avpictureinpicturecontroller/contentsource-swift.property?language=objc
+
+    if (__builtin_available(iOS 15.0, *)) {
+      self->_pipController.contentSource = nil;
     }
 
     [self destroyVideoFrameDelegate];
 
-    self->_pipController = nil;
-    self->_pipView = nil;
+    // Note: do not set self->_pipController and self->_pipView to nil,
+    // coz this will make the pip view do not disappear immediately with
+    // unknown reason, which is not expected.
+    //
+    // self->_pipController = nil;
+    // self->_pipView = nil;
+  }
 
+  if (self->_isPipActived) {
     self->_isPipActived = NO;
     [self->_pipStateDelegate pipStateChanged:AgoraPipStateStopped error:nil];
-  });
+  }
 }
 
 - (void)pictureInPictureControllerWillStartPictureInPicture:
@@ -469,8 +527,9 @@ private:
 - (void)pictureInPictureController:
             (AVPictureInPictureController *)pictureInPictureController
     failedToStartPictureInPictureWithError:(NSError *)error {
-  AGORA_PIP_LOG(@"pictureInPictureController failedToStartPictureInPictureWithError: %@",
-        error);
+  AGORA_PIP_LOG(
+      @"pictureInPictureController failedToStartPictureInPictureWithError: %@",
+      error);
   [_pipStateDelegate pipStateChanged:AgoraPipStateFailed
                                error:error.description];
 }

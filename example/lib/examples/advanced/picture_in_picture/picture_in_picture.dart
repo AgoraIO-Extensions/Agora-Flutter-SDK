@@ -115,16 +115,13 @@ class _State extends State<PictureInPicture> with WidgetsBindingObserver {
     });
   }
 
-  Future<void> _setupPip(RtcConnection? connection, int? uid, int? viewId,
+  Future<void> _setupAndStartPip(RtcConnection? connection, int? uid, int? viewId,
       Rect? sourceRectHint) async {
     if (_currentPipUid != uid) {
-      // When using Flutter texture, the pip controller uses the root view as its source view,
-      // so we only need to update the video stream when the uid changes. However, when
-      // not using Flutter texture, we must dispose and re-setup the pip controller on
-      // uid changes, since it's bound directly to the platform view.
-      if (!_isUseFlutterTexture && _isInPipMode) {
-        await _disposePip();
-      }
+      // Note: no need to call dispose before setup or re-setup no matter you are using
+      // Flutter texture or not, the implementation of pip controller in native side will
+      // handle it.
+      // await _disposePip();
 
       bool isLocal = uid == config.uid;
 
@@ -180,9 +177,8 @@ class _State extends State<PictureInPicture> with WidgetsBindingObserver {
       setState(() {});
     }
 
-    if (!_isInPipMode) {
-      await _engine.pipStart();
-    }
+    // Note: always call pipStart even the autoEnterEnabled is true.
+    await _engine.pipStart();
   }
 
   Future<void> _initEngine() async {
@@ -283,99 +279,102 @@ class _State extends State<PictureInPicture> with WidgetsBindingObserver {
     await _engine.leaveChannel();
   }
 
+  Widget _videoViewCard({
+    required bool isLocal,
+    int? remoteUid,
+    RtcConnection? connection,
+    int? viewId,
+    double? width,
+    double? height,
+  }) {
+    return LayoutBuilder(
+      builder: (context, constraints) => SizedBox(
+        width: width,
+        height: height,
+        child: Stack(
+          children: [
+            AgoraVideoView(
+              controller: isLocal
+                  ? VideoViewController(
+                      rtcEngine: _engine,
+                      useFlutterTexture: _isUseFlutterTexture,
+                      canvas: VideoCanvas(
+                        uid: 0,
+                        setupMode: _isUseFlutterTexture
+                            ? VideoViewSetupMode.videoViewSetupAdd
+                            : null,
+                      ),
+                    )
+                  : VideoViewController.remote(
+                      rtcEngine: _engine,
+                      useFlutterTexture: _isUseFlutterTexture,
+                      canvas: VideoCanvas(
+                        uid: remoteUid,
+                        setupMode: _isUseFlutterTexture
+                            ? VideoViewSetupMode.videoViewSetupAdd
+                            : null,
+                      ),
+                      connection: connection!,
+                    ),
+              onAgoraVideoViewCreated: (createdViewId) {
+                if (isLocal) {
+                  _localViewId = createdViewId;
+                  _engine.startPreview();
+                } else {
+                  _remoteViewIds[remoteUid!] = createdViewId;
+                }
+              },
+            ),
+            // No additional overlay needed for Android
+            // For iOS, we need to add an overlay on the original video area
+            // Ideally we should destroy the VideoViewController, but this is not currently supported
+            // Testing shows that a PiP view has minimal performance impact, especially when app is in background
+            // So we temporarily use an overlay to indicate this video is in PiP mode
+            if (!Platform.isAndroid && _isInPipMode && (isLocal ? 0 : remoteUid) == _currentPipUid)
+              Container(
+                color: Colors.black,
+              ),
+            if (!(Platform.isAndroid && _isInPipMode))
+              Positioned(
+                right: 0,
+                bottom: 0,
+                child: ElevatedButton(
+                  onPressed: () {
+                    _setupAndStartPip(
+                      connection,
+                      isLocal ? 0 : remoteUid,
+                      isLocal ? _localViewId : _remoteViewIds[remoteUid],
+                      context.findRenderObject()?.paintBounds,
+                    );
+                  },
+                  child: const Text('Enter PIP'),
+                ),
+              ),
+          ],
+        ),
+      ),
+    );
+  }
+
   Widget _videoViewStack() {
     return Stack(
       children: [
-        LayoutBuilder(
-          builder: (context, constraints) => Stack(
-            children: [
-              AgoraVideoView(
-                controller: VideoViewController(
-                  rtcEngine: _engine,
-                  useFlutterTexture: _isUseFlutterTexture,
-                  canvas: VideoCanvas(
-                      uid: 0,
-                      // Must set setupMode to videoViewSetupAdd when using Flutter texture, otherwise the video will not be displayed.
-                      // This is because:
-                      // 1. The default setupMode is videoViewSetupReplace in video_view_controller_impl.dart
-                      //    when createTextureRender is called
-                      // 2. The textureRender will recreate when the app is switched to background
-                      // TODO: This behavior may need optimization in the future
-                      setupMode: _isUseFlutterTexture
-                          ? VideoViewSetupMode.videoViewSetupAdd
-                          : null),
-                ),
-                onAgoraVideoViewCreated: (viewId) {
-                  _localViewId = viewId;
-                  _engine.startPreview();
-                },
-              ),
-              if (!_isInPipMode ||
-                  _lastAppLifecycleState == AppLifecycleState.resumed)
-                Positioned(
-                  right: 0,
-                  bottom: 0,
-                  child: ElevatedButton(
-                    onPressed: () {
-                      _setupPip(null, config.uid, _localViewId, context.findRenderObject()?.paintBounds);
-                    },
-                    child: const Text('Enter PIP'),
-                  ),
-                )
-            ],
-          ),
-        ),
+        _videoViewCard(isLocal: true),
         Align(
           alignment: Alignment.topLeft,
           child: SingleChildScrollView(
             scrollDirection: Axis.horizontal,
             child: Row(
               children: List.of(_remoteViewIds.entries.map(
-                (entry) => LayoutBuilder(
-                  builder: (context, constraints) => SizedBox(
-                    width: 100,
-                    height: 100,
-                    child: Stack(
-                      children: [
-                        AgoraVideoView(
-                          controller: VideoViewController.remote(
-                            rtcEngine: _engine,
-                            useFlutterTexture: _isUseFlutterTexture,
-                            canvas: VideoCanvas(
-                                uid: entry.key,
-                                // Must set setupMode to videoViewSetupAdd when using Flutter texture, otherwise the video will not be displayed.
-                                // This has the same reason as the local view above.
-                                setupMode: _isUseFlutterTexture
-                                    ? VideoViewSetupMode.videoViewSetupAdd
-                                    : null),
-                            connection: RtcConnection(
-                                channelId: _channelIdController.text,
-                                localUid: config.uid),
-                          ),
-                          onAgoraVideoViewCreated: (viewId) {
-                            _remoteViewIds[entry.key] = viewId;
-                          },
-                        ),
-                        if (!_isInPipMode ||
-                            _lastAppLifecycleState == AppLifecycleState.resumed)
-                          Positioned(
-                              right: 0,
-                              bottom: 0,
-                              child: ElevatedButton(
-                                onPressed: () {
-                                  _setupPip(
-                                      RtcConnection(
-                                          channelId: _channelIdController.text,
-                                          localUid: config.uid),
-                                      entry.key,
-                                      _remoteViewIds[entry.key],
-                                      context.findRenderObject()?.paintBounds);
-                                },
-                                child: const Text('Enter PIP'),
-                              )),
-                      ],
-                    ),
+                (entry) => _videoViewCard(
+                  isLocal: false,
+                  remoteUid: entry.key,
+                  connection: RtcConnection(
+                    channelId: _channelIdController.text,
+                    localUid: config.uid,
                   ),
+                  width: 100,
+                  height: 100,
                 ),
               )),
             ),
