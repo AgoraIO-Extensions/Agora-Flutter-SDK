@@ -107,8 +107,10 @@ class VideoViewController
 }
 
 /// @nodoc
+@Deprecated('This class is deprecated')
 abstract class PIPVideoViewController extends VideoViewControllerBase {
   /// @nodoc
+  @Deprecated('This factory is deprecated')
   factory PIPVideoViewController(
           {required RtcEngine rtcEngine,
           required VideoCanvas canvas,
@@ -120,6 +122,7 @@ abstract class PIPVideoViewController extends VideoViewControllerBase {
       );
 
   /// @nodoc
+  @Deprecated('This factory is deprecated')
   factory PIPVideoViewController.remote(
           {required RtcEngine rtcEngine,
           required VideoCanvas canvas,
@@ -133,20 +136,26 @@ abstract class PIPVideoViewController extends VideoViewControllerBase {
       );
 
   /// @nodoc
+  @Deprecated('This method is deprecated')
   Future<bool> isPipSupported();
 
   /// @nodoc
+  @Deprecated('This method is deprecated')
   Future<void> setupPictureInPicture(PipOptions options);
 
   /// @nodoc
+  @Deprecated('This method is deprecated')
   Future<void> destroyPictureInPicture();
 
   /// @nodoc
+  @Deprecated('This method is deprecated')
   Future<void> startPictureInPicture();
 
   /// @nodoc
+  @Deprecated('This method is deprecated')
   Future<void> stopPictureInPicture();
 
   /// @nodoc
+  @Deprecated('This getter is deprecated')
   bool get isInPictureInPictureMode;
 }
