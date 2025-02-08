@@ -2,14 +2,10 @@ import 'package:agora_rtc_engine/src/agora_media_player.dart';
 import 'package:agora_rtc_engine/src/agora_rtc_engine.dart';
 import 'package:agora_rtc_engine/src/agora_rtc_engine_ex.dart';
 import 'package:agora_rtc_engine/src/impl/agora_rtc_engine_impl.dart';
+import 'package:agora_rtc_engine/src/agora_base.dart';
 import 'package:flutter/foundation.dart';
-import 'agora_base.dart';
 import 'impl/agora_rtc_engine_impl.dart' as impl;
 import 'impl/media_player_impl.dart';
-
-export 'dart:convert';
-export 'dart:typed_data';
-export 'package:json_annotation/json_annotation.dart';
 
 /// @nodoc
 class AgoraPipOptions {
@@ -158,18 +154,18 @@ extension RtcEngineExt on RtcEngine {
   ///
   /// Returns
   /// Whether Picture in Picture is supported.
-  Future<bool> isPipSupported() async {
+  Future<bool> pipIsSupported() async {
     final impl = this as RtcEngineImpl;
-    return impl.isPipSupported();
+    return impl.pipIsSupported();
   }
 
   /// Check if Picture in Picture can auto enter.
   ///
   /// Returns
   /// Whether Picture in Picture can auto enter.
-  Future<bool> isPipAutoEnterSupported() async {
+  Future<bool> pipIsAutoEnterSupported() async {
     final impl = this as RtcEngineImpl;
-    return impl.isPipAutoEnterSupported();
+    return impl.pipIsAutoEnterSupported();
   }
 
   /// Check if Picture in Picture is active.

@@ -156,9 +156,11 @@ mixin VideoViewControllerBaseMixin implements VideoViewControllerBase {
 }
 
 /// Implementation of [PIPVideoViewController]
+@Deprecated('This class is deprecated')
 class PIPVideoViewControllerImpl extends VideoViewController
     implements PIPVideoViewController {
   /// @nodoc
+  @Deprecated('This constructor is deprecated')
   // ignore: use_super_parameters
   PIPVideoViewControllerImpl(
       {required RtcEngine rtcEngine,
@@ -172,6 +174,7 @@ class PIPVideoViewControllerImpl extends VideoViewController
         );
 
   /// @nodoc
+  @Deprecated('This constructor is deprecated')
   // ignore: use_super_parameters
   PIPVideoViewControllerImpl.remote(
       {required RtcEngine rtcEngine,
@@ -192,6 +195,7 @@ class PIPVideoViewControllerImpl extends VideoViewController
   bool _isDisposedRender = false;
 
   @override
+  @Deprecated('This method is deprecated')
   Future<void> setupView(int nativeViewPtr) async {
     await super.setupView(nativeViewPtr);
 
@@ -201,6 +205,7 @@ class PIPVideoViewControllerImpl extends VideoViewController
   }
 
   @override
+  @Deprecated('This method is deprecated')
   Future<void> disposeRender() async {
     _isDisposedRender = true;
     _nativeViewPtr = 0;
@@ -209,17 +214,20 @@ class PIPVideoViewControllerImpl extends VideoViewController
   }
 
   @override
+  @Deprecated('This method is deprecated')
   Future<void> dispose() async {
     await stopPictureInPicture();
     await destroyPictureInPicture();
   }
 
   @override
+  @Deprecated('This method is deprecated')
   Future<bool> isPipSupported() {
     return rtcEngine.isPipSupported();
   }
 
   @override
+  @Deprecated('This method is deprecated')
   Future<void> destroyPictureInPicture() async {
     // On android, there's no stop pip function
     if (defaultTargetPlatform == TargetPlatform.iOS) {
@@ -235,6 +243,7 @@ class PIPVideoViewControllerImpl extends VideoViewController
   }
 
   @override
+  @Deprecated('This method is deprecated')
   Future<void> setupPictureInPicture(PipOptions options) async {
     assert(!kIsWeb, 'PIP feature is not supported on web.');
     assert(
@@ -278,6 +287,7 @@ class PIPVideoViewControllerImpl extends VideoViewController
   }
 
   @override
+  @Deprecated('This method is deprecated')
   Future<void> startPictureInPicture() async {
     if (_isDisposedRender) {
       return;
@@ -287,6 +297,7 @@ class PIPVideoViewControllerImpl extends VideoViewController
   }
 
   @override
+  @Deprecated('This method is deprecated')
   Future<void> stopPictureInPicture() async {
     // On android, there's no stop pip function
     if (defaultTargetPlatform == TargetPlatform.iOS) {
@@ -295,5 +306,6 @@ class PIPVideoViewControllerImpl extends VideoViewController
   }
 
   @override
+  @Deprecated('This getter is deprecated')
   bool get isInPictureInPictureMode => _isPipSetuped;
 }
