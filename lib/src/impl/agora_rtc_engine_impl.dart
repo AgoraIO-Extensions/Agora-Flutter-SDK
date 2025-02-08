@@ -1,4 +1,6 @@
 import 'dart:async';
+import 'dart:convert';
+import 'dart:typed_data';
 
 import 'package:agora_rtc_engine/src/agora_base.dart';
 import 'package:agora_rtc_engine/src/agora_h265_transcoder.dart';
@@ -1060,14 +1062,13 @@ class RtcEngineImpl extends rtc_engine_ex_binding.RtcEngineExImpl
     _pipStateChangedObserver = null;
   }
 
-  @override
-  Future<bool> isPipSupported() async {
+  Future<bool> pipIsSupported() async {
     final result =
         await engineMethodChannel.invokeMethod<bool>('pipIsSupported', null);
     return result ?? false;
   }
 
-  Future<bool> isPipAutoEnterSupported() async {
+  Future<bool> pipIsAutoEnterSupported() async {
     final result = await engineMethodChannel.invokeMethod<bool>(
         'pipIsAutoEnterSupported', null);
     return result ?? false;

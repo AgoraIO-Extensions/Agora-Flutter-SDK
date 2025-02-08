@@ -1,6 +1,5 @@
 // ignore_for_file: avoid_print
 
-import 'dart:ffi';
 import 'dart:io';
 import 'package:agora_rtc_engine/agora_rtc_engine.dart';
 import 'package:agora_rtc_engine_example/config/agora.config.dart' as config;
@@ -75,12 +74,26 @@ class _State extends State<PictureInPicture> with WidgetsBindingObserver {
       }
     }
 
-    // do not auto enter pip when app recovered from paused state, and the hidden state always
-    // triggers before change to the next state on both Android and iOS.
-    if (state != AppLifecycleState.hidden && _lastAppLifecycleState != state) {
-      setState(() {
-        _lastAppLifecycleState = state;
-      });
+    // The AppLifecycleState.hidden state was introduced in Flutter 3.13.0 to handle when
+    // the app is temporarily hidden but not paused (e.g. during app switching on iOS).
+    // Since this code needs to support Flutter 3.7.0+ for Agora SDK compatibility, we use
+    // a switch statement that only handles lifecycle states available in all supported versions.
+    // This allows us to safely ignore the hidden state and avoid unintentionally entering PiP
+    // mode when the app recovers from being paused.
+    // See: https://docs.flutter.dev/release/breaking-changes/add-applifecyclestate-hidden
+    switch (state) {
+      case AppLifecycleState.resumed:
+      case AppLifecycleState.inactive:
+      case AppLifecycleState.paused:
+      case AppLifecycleState.detached:
+        if (_lastAppLifecycleState != state) {
+          setState(() {
+            _lastAppLifecycleState = state;
+          });
+        }
+        break;
+      default:
+        break;
     }
   }
 
@@ -115,8 +128,8 @@ class _State extends State<PictureInPicture> with WidgetsBindingObserver {
     });
   }
 
-  Future<void> _setupAndStartPip(RtcConnection? connection, int? uid, int? viewId,
-      Rect? sourceRectHint) async {
+  Future<void> _setupAndStartPip(RtcConnection? connection, int? uid,
+      int? viewId, Rect? sourceRectHint) async {
     if (_currentPipUid != uid) {
       // Note: no need to call dispose before setup or re-setup no matter you are using
       // Flutter texture or not, the implementation of pip controller in native side will
@@ -140,18 +153,20 @@ class _State extends State<PictureInPicture> with WidgetsBindingObserver {
         sourceRectHintRight: sourceRectHint?.right.toInt() ?? _contextWidth,
         sourceRectHintBottom: sourceRectHint?.bottom.toInt() ?? _contextHeight,
         // ios only
-        preferredContentWidth: int.tryParse(_contentWidthController.text) ?? 960,
-        preferredContentHeight: int.tryParse(_contentHeightController.text) ?? 540,
+        preferredContentWidth:
+            int.tryParse(_contentWidthController.text) ?? 960,
+        preferredContentHeight:
+            int.tryParse(_contentHeightController.text) ?? 540,
 
         connection: connection,
         videoCanvas: (uid != null && viewId != null)
             ? VideoCanvas(
                 // Must set uid to 0 for the local view, otherwise the video will not be displayed.
-                uid: isLocal ? 0 : uid!,
+                uid: isLocal ? 0 : uid,
                 // The view represents the handle of the video view, which is the
                 // native view id. Setting it to 0 will use the root view as the
                 // source view.
-                view: _isUseFlutterTexture ? 0 : viewId!,
+                view: _isUseFlutterTexture ? 0 : viewId,
                 mirrorMode: isLocal
                     ? VideoMirrorModeType.videoMirrorModeEnabled
                     : VideoMirrorModeType.videoMirrorModeDisabled,
@@ -255,8 +270,8 @@ class _State extends State<PictureInPicture> with WidgetsBindingObserver {
     await _engine.enableVideo();
     await _engine.startPreview();
 
-    var isPipSupported = await _engine.isPipSupported();
-    var isPipAutoEnterSupported = await _engine.isPipAutoEnterSupported();
+    var isPipSupported = await _engine.pipIsSupported();
+    var isPipAutoEnterSupported = await _engine.pipIsAutoEnterSupported();
 
     setState(() {
       _isPipSupported = isPipSupported;
@@ -330,7 +345,9 @@ class _State extends State<PictureInPicture> with WidgetsBindingObserver {
             // Ideally we should destroy the VideoViewController, but this is not currently supported
             // Testing shows that a PiP view has minimal performance impact, especially when app is in background
             // So we temporarily use an overlay to indicate this video is in PiP mode
-            if (!Platform.isAndroid && _isInPipMode && (isLocal ? 0 : remoteUid) == _currentPipUid)
+            if (!Platform.isAndroid &&
+                _isInPipMode &&
+                (isLocal ? 0 : remoteUid) == _currentPipUid)
               Container(
                 color: Colors.black,
               ),
