@@ -29,66 +29,76 @@ namespace {
 class RendererDelegate : public agora::iris::VideoFrameObserverDelegate {
 public:
   RendererDelegate(void *renderer)
-      : renderer_(renderer), pre_width_(0), pre_height_(0) {}
+      : renderer_(((__bridge TextureRender *)renderer)), pre_width_(0),
+        pre_height_(0) {}
 
   void OnVideoFrameReceived(const void *videoFrame,
                             const IrisRtcVideoFrameConfig &config,
                             bool resize) override {
-    @autoreleasepool {
-      TextureRender *renderer = (__bridge TextureRender *)renderer_;
+    agora::media::base::VideoFrame *vf =
+        (agora::media::base::VideoFrame *)videoFrame;
 
-      agora::media::base::VideoFrame *vf =
-          (agora::media::base::VideoFrame *)videoFrame;
+    if (vf->width == 0 || vf->height == 0) {
+      return;
+    }
 
-      if (vf->width == 0 || vf->height == 0) {
-        return;
-      }
+    CVPixelBufferRef _Nullable pixelBuffer =
+        reinterpret_cast<CVPixelBufferRef>(vf->pixelBuffer);
+    if (!pixelBuffer) {
+      return;
+    }
 
-      CVPixelBufferRef _Nullable pixelBuffer =
-          reinterpret_cast<CVPixelBufferRef>(vf->pixelBuffer);
-      if (!pixelBuffer) {
-        return;
-      }
+    if (pre_width_ != vf->width || pre_height_ != vf->height) {
+      pre_width_ = vf->width;
+      pre_height_ = vf->height;
 
-      if (pre_width_ != vf->width || pre_height_ != vf->height) {
-        pre_width_ = vf->width;
-        pre_height_ = vf->height;
-
-        // notify size changed on main thread, to avoid data race, we need to
-        // copy the width and height to local variables.
-        int temp_width = vf->width;
-        int temp_height = vf->height;
-        dispatch_async(dispatch_get_main_queue(), ^{
-          [renderer.channel invokeMethod:@"onSizeChanged"
-                               arguments:@{
-                                 @"width" : @(temp_width),
-                                 @"height" : @(temp_height)
-                               }];
-        });
-      }
-
-      __block CVPixelBufferRef previousPixelBuffer = nil;
-      // Use `dispatch_sync` to avoid unnecessary context switch under common
-      // non-contest scenarios;
-      // Under rare contest scenarios, it will not block for too long since
-      // the critical section is quite lightweight.
-      dispatch_sync(renderer.pixelBufferSynchronizationQueue, ^{
-        previousPixelBuffer = renderer.latestPixelBuffer;
-        renderer.latestPixelBuffer = CVPixelBufferRetain(pixelBuffer);
-      });
-      if (previousPixelBuffer) {
-        CFRelease(previousPixelBuffer);
-      }
-
-      // notify new frame available on main thread
+      // notify size changed on main thread, to avoid data race, we need to
+      // copy the width and height to local variables.
+      int temp_width = vf->width;
+      int temp_height = vf->height;
       dispatch_async(dispatch_get_main_queue(), ^{
-        [renderer.textureRegistry textureFrameAvailable:renderer.textureId];
+        TextureRender *strongRenderer = renderer_;
+        if (!strongRenderer) {
+          return;
+        }
+        [strongRenderer.channel invokeMethod:@"onSizeChanged"
+                                   arguments:@{
+                                     @"width" : @(temp_width),
+                                     @"height" : @(temp_height)
+                                   }];
       });
     }
+
+    __block CVPixelBufferRef previousPixelBuffer = nil;
+    // Use `dispatch_sync` to avoid unnecessary context switch under common
+    // non-contest scenarios;
+    // Under rare contest scenarios, it will not block for too long since
+    // the critical section is quite lightweight.
+    //
+    // Note: `dispatch_sync` will block the current thread, so we don't need
+    // to check if the renderer is still valid before accessing its
+    // properties.
+    dispatch_sync(renderer_.pixelBufferSynchronizationQueue, ^{
+      previousPixelBuffer = renderer_.latestPixelBuffer;
+      renderer_.latestPixelBuffer = CVPixelBufferRetain(pixelBuffer);
+    });
+    if (previousPixelBuffer) {
+      CFRelease(previousPixelBuffer);
+    }
+
+    // notify new frame available on main thread
+    dispatch_async(dispatch_get_main_queue(), ^{
+      TextureRender *strongRenderer = renderer_;
+      if (!strongRenderer) {
+        return;
+      }
+      [strongRenderer.textureRegistry
+          textureFrameAvailable:strongRenderer.textureId];
+    });
   }
 
 public:
-  void *renderer_;
+  __weak TextureRender *renderer_;
   int pre_width_;
   int pre_height_;
 };
@@ -164,18 +174,18 @@ public:
 }
 
 - (void)dispose {
-    if (self.irisRtcRendering) {
-      self.irisRtcRendering->RemoveVideoFrameObserverDelegate(self.delegateId);
-      self.irisRtcRendering = nil;
-    }
-    if (self.delegate) {
-      delete self.delegate;
-      self.delegate = nil;
-    }
-    if (self.textureRegistry) {
-      [self.textureRegistry unregisterTexture:self.textureId];
-      self.textureRegistry = nil;
-    }
+  if (self.irisRtcRendering) {
+    self.irisRtcRendering->RemoveVideoFrameObserverDelegate(self.delegateId);
+    self.irisRtcRendering = nil;
+  }
+  if (self.delegate) {
+    delete self.delegate;
+    self.delegate = nil;
+  }
+  if (self.textureRegistry) {
+    [self.textureRegistry unregisterTexture:self.textureId];
+    self.textureRegistry = nil;
+  }
 }
 
 - (void)dealloc {
