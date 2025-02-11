@@ -391,12 +391,12 @@ jobs:
         with:
           flutter-version: "3.24.5"
           cache: true
-      - name: Checkout hoe
+      - name: Checkout agora_flutter_sdks_build
         uses: actions/checkout@v3
         with:
-          repository: littleGnAl/hoe
-          ref: littlegnal/update
-          path: hoe
+          repository: AgoraIO-Extensions/agora_flutter_sdks_build
+          ref: main
+          path: agora_flutter_sdks_build
       - name: Download iris artifacts
         if: ${{ contains(github.event.pull_request.labels.*.name, 'integration_test:iris_artifacts') }}
         run: |
@@ -405,7 +405,7 @@ jobs:
           PROJECT_DIR=$(pwd)
 
           mkdir -p output
-          cd hoe
+          cd agora_flutter_sdks_build
           dart pub get
           dart run bin/hoe.dart build-agora-flutter-example \
             --setup-local-dev \
@@ -453,19 +453,19 @@ jobs:
       - uses: subosito/flutter-action@v2
         with:
           flutter-version: ${{ matrix.version }}
-      - name: Checkout hoe
+      - name: Checkout agora_flutter_sdks_build
         uses: actions/checkout@v3
         with:
-          repository: littleGnAl/hoe
-          ref: littlegnal/update
-          path: hoe
+          repository: AgoraIO-Extensions/agora_flutter_sdks_build
+          ref: main
+          path: agora_flutter_sdks_build
       - name: Download iris artifacts
         if: ${{ contains(github.event.pull_request.labels.*.name, 'integration_test:iris_artifacts') }}
         run: |
           source scripts/artifacts_version.sh
           PROJECT_DIR=$(pwd)
           mkdir -p output
-          cd hoe
+          cd agora_flutter_sdks_build
           dart pub get
           dart run bin/hoe.dart build-agora-flutter-example \
             --setup-local-dev \
@@ -502,12 +502,12 @@ jobs:
         with:
           flutter-version: ${{ matrix.version }}
           cache: true
-      - name: Checkout hoe
+      - name: Checkout agora_flutter_sdks_build
         uses: actions/checkout@v3
         with:
-          repository: littleGnAl/hoe
-          ref: littlegnal/update
-          path: hoe
+          repository: AgoraIO-Extensions/agora_flutter_sdks_build
+          ref: main
+          path: agora_flutter_sdks_build
       - name: Download iris artifacts
         if: ${{ contains(github.event.pull_request.labels.*.name, 'integration_test:iris_artifacts') }}
         run: |
@@ -520,7 +520,7 @@ jobs:
           ls ${PROJECT_DIR}
 
           mkdir -p output
-          cd hoe
+          cd agora_flutter_sdks_build
           dart pub get
           dart run bin/hoe.dart build-agora-flutter-example \
             --setup-local-dev \
@@ -557,12 +557,12 @@ jobs:
         with:
           flutter-version: ${{ matrix.version }}
           cache: true
-      - name: Checkout hoe
+      - name: Checkout agora_flutter_sdks_build
         uses: actions/checkout@v3
         with:
-          repository: littleGnAl/hoe
-          ref: littlegnal/update
-          path: hoe
+          repository: AgoraIO-Extensions/agora_flutter_sdks_build
+          ref: main
+          path: agora_flutter_sdks_build
       - name: Download iris artifacts
         if: ${{ contains(github.event.pull_request.labels.*.name, 'integration_test:iris_artifacts') }}
         shell: bash
@@ -572,7 +572,7 @@ jobs:
           PROJECT_DIR=$(pwd)
 
           mkdir -p output
-          cd hoe
+          cd agora_flutter_sdks_build
           dart pub get
           dart run bin/hoe.dart build-agora-flutter-example \
             --setup-local-dev \
