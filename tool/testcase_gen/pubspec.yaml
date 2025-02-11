@@ -9,13 +9,7 @@ environment:
 publish_to: none
 
 dependencies:
-  paraphrase: 
-    git:
-      url: https://github.com/littleGnAl/paraphrase.git
-      ref: 0.1.0
-
   args: ^2.3.1
-
   dart_style: ^2.2.1
 
 dev_dependencies:
