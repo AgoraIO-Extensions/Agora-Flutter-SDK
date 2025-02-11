@@ -1,5 +1,5 @@
 import 'package:dart_style/dart_style.dart';
-import 'package:paraphrase/paraphrase.dart';
+import 'package:testcase_gen/core/paraphrase.dart';
 import 'dart:io';
 
 import 'package:testcase_gen/default_generator.dart';

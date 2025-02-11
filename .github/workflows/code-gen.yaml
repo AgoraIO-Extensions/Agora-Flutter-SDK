@@ -67,5 +67,3 @@ jobs:
             *This pull request is opened by bot*
           labels: |
             ci:skip
-          reviewers: |
-            littleGnAl
