@@ -78,4 +78,4 @@ jobs:
             ci:skip
             ci:prepare_release
           reviewers: |
-            littleGnAl
+            peilinok
