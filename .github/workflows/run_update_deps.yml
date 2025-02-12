@@ -1,0 +1,11 @@
+name: Update internal dependencies
+
+on:
+  workflow_dispatch:
+
+jobs:
+  update_deps:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
