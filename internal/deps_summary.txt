@@ -1,10 +1,10 @@
 Iris:
-https://download.agora.io/sdk/release/iris_4.5.0-build.4_DCG_Android_Audio_16K_20250210_0211_730.zip
-https://download.agora.io/sdk/release/iris_4.5.0-build.3_DCG_iOS_Audio_20250210_1043_608.zip
+https://download.agora.io/sdk/release/iris_4.5.0.2-build.1_DCG_Android_Audio_16K_20250212_0235_734.zip
+https://download.agora.io/sdk/release/iris_4.5.0.2-build.1_DCG_iOS_Audio_20250212_0234_612.zip
 https://download.agora.io/sdk/release/iris_4.5.0-build.1_DCG_Mac_Video_20241203_0322_534.zip
 https://download.agora.io/sdk/release/iris_4.5.0-build.1_DCG_Windows_Video_20241203_0322_577.zip
-implementation 'io.agora.rtc:iris-rtc-audio:4.5.0-build.4'
-pod 'AgoraIrisRTCAudio_iOS', '4.5.0-build.3' 
+implementation 'io.agora.rtc:iris-rtc-audio:4.5.0.2-build.1'
+pod 'AgoraIrisRTCAudio_iOS', '4.5.0.2-build.1'
 pod 'AgoraIrisRTC_macOS', '4.5.0-build.1'
 
 Native:
@@ -12,6 +12,6 @@ Native:
 <NATIVE_CDN_URL_IOS>
 <NATIVE_CDN_URL_MACOS>
 <NATIVE_CDN_URL_WINDOWS>
-implementation 'io.agora.rtc:agora-special-voice:4.5.0.1'
-pod 'AgoraAudio_iOS', '4.5.0'
+implementation 'io.agora.rtc:agora-special-voice:4.5.0.2'
+pod 'AgoraAudio_Special_iOS', '4.5.0.2'
 pod 'AgoraRtcEngine_macOS', '4.5.0'
