@@ -1,4 +1,4 @@
-name: Run build example
+name: Run publish
 
 on:
   workflow_dispatch:
