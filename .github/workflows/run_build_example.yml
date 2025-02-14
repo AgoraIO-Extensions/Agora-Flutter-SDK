@@ -2,10 +2,371 @@ name: Run build example
 
 on:
   workflow_dispatch:
+    inputs:
+      target_platforms:
+        description: 'Target platforms, e.g. android, ios, macos, windows, web, etc; separated by comma, default is all platforms'
+        type: string
+        required: true
+        default: 'android, ios, macos, windows, web'
+      target_branch:
+        description: 'Target branch, leave empty will use the same as the workflow trigger branch'
+        type: string
+      issue_number:
+        description: 'The number of the issue or pull request to comment build results on, leave empty will not comment on any PR'
+        type: number
+        required: false
+      extra_build_options:
+        description: 'Extra build options when running `flutter build`, e.g. --verbose, --device-id'
+        type: string
+        required: false
+        default: ''
+      extra_build_arguments:
+        description: 'Extra build arguments when running `flutter build apk/ipa/other sub-commands`, e.g. --debug, --dart-define=APP_ID=1234567890, --dart-define-from-file=path/to/file.dart'
+        type: string
+        required: false
+        default: ''
+      flutter_channel:
+        description: 'Target Flutter channel, e.g. stable(default), beta, dev, master (or main), or any other channel name'
+        type: string
+        required: false
+        default: 'stable'
+      flutter_version:
+        description: 'Target Flutter version, e.g. 3.24.5, 3.24.x, commit hash, or leave empty to use the latest release version of specified channel by flutter_version(default)'
+        type: string
+        required: false
+        # we should use the latest stable version for building example later, however, the android build will fail with the latest stable version, so we fixed use the 3.24.5 version here for now
+        # Here is the error log:
+        # Caused by: org.gradle.api.GradleException: You are applying Flutter's app_plugin_loader Gradle plugin imperatively using the apply script method, which is not possible anymore. Migrate to applying Gradle plugins with the declarative plugins block: https://flutter.dev/to/flutter-gradle-plugin-apply
+        default: '3.24.5'
+  workflow_call:
+    inputs:
+      target_platforms:
+        description: 'Target platforms, e.g. android, ios, macos, windows, web, etc; separated by comma, default is all platforms'
+        type: string
+        required: true
+        default: 'android, ios, macos, windows, web'
+      target_branch:
+        description: 'Target branch, leave empty will use the same as the workflow trigger branch'
+        type: string
+      issue_number:
+        description: 'The number of the issue or pull request to comment build results on, leave empty will not comment on any PR'
+        type: number
+        required: false
+      extra_build_options:
+        description: 'Extra build options when running `flutter build`, e.g. --verbose, --device-id'
+        type: string
+        required: false
+        default: ''
+      extra_build_arguments:
+        description: 'Extra build arguments when running `flutter build apk/ipa/other sub-commands`, e.g. --debug, --dart-define=APP_ID=1234567890, --dart-define-from-file=path/to/file.dart'
+        type: string
+        required: false
+        default: ''
+      flutter_channel:
+        description: 'Target Flutter channel, e.g. stable(default), beta, dev, master (or main), or any other channel name'
+        type: string
+        required: false
+        default: 'stable'
+      flutter_version:
+        description: 'Target Flutter version, e.g. 3.24.5, 3.24.x, commit hash, or leave empty to use the latest release version of specified channel by flutter_version(default)'
+        type: string
+        required: false
+        # we should use the latest stable version for building example later, however, the android build will fail with the latest stable version, so we fixed use the 3.24.5 version here for now
+        # Here is the error log:
+        # Caused by: org.gradle.api.GradleException: You are applying Flutter's app_plugin_loader Gradle plugin imperatively using the apply script method, which is not possible anymore. Migrate to applying Gradle plugins with the declarative plugins block: https://flutter.dev/to/flutter-gradle-plugin-apply
+        default: '3.24.5'
 
 jobs:
-  build_example:
+  split-platforms:
     runs-on: ubuntu-latest
+    outputs:
+      platforms: ${{ steps.split-platforms.outputs.platforms }}
+    steps:
+      - id: split-platforms
+        env:
+          target_platforms: ${{ inputs.target_platforms }}
+        run: |
+          platforms=$(echo "$target_platforms" | sed 's/ //g' | tr ',' '\n' | sort -u | sed '/^$/d' | jq -R -s -c 'split("\n")[:-1]')
+          echo "splited platforms: $platforms"
+          # remove not supported platforms, only keep supported platforms: android, ios, macos, windows, web
+          platforms=$(echo "$platforms" | jq -e 'map(select(. == "android" or . == "ios" or . == "macos" or . == "windows" or . == "web"))')
+          # make platforms in oneline, and keep json format
+          platforms=$(echo "$platforms" | jq -c .)
+          echo "final jsonlized platforms: $platforms"
+          echo "platforms=$platforms" >> $GITHUB_OUTPUT
+
+  build:
+    runs-on: ${{ matrix.os }}
+    needs: split-platforms
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, macos-latest, windows-latest]
+        platform: ${{ fromJson(needs.split-platforms.outputs.platforms) }}
+        exclude:
+          - os: ubuntu-latest
+            platform: android
+          - os: ubuntu-latest
+            platform: ios
+          - os: ubuntu-latest
+            platform: macos
+          - os: ubuntu-latest
+            platform: windows
+          - os: macos-latest
+            platform: windows
+          - os: macos-latest
+            platform: web
+          - os: windows-latest
+            platform: android
+          - os: windows-latest
+            platform: ios
+          - os: windows-latest
+            platform: macos
+          - os: windows-latest
+            platform: web
+    env:
+        platform: ${{ matrix.platform }}
+        extra_build_options: ${{ inputs.extra_build_options }}
+        extra_build_arguments: ${{ inputs.extra_build_arguments }}
+        DEFAULT_BUILD_APP_ID: ${{ matrix.platform == 'web' && '' || secrets.TEST_APP_ID }}
+        DEFAULT_BUILD_MUSIC_CENTER_APPID: ${{ matrix.platform == 'web' && '' || secrets.MUSIC_CENTER_APPID }}
     steps:
       - name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ inputs.target_branch }}
+          fetch-depth: '1'
+          lfs: 'true'
+          submodules: 'true'
+
+      - name: Setup JDK for Android
+        if: ${{ matrix.platform == 'android' }}
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'zulu'
+          java-version: '17'
+
+      - name: Setup signing key for iOS
+        if: ${{ matrix.platform == 'ios' }}
+        env:
+          DEFAULT_BUILD_PROVISION_PROFILE_NAME: ${{ secrets.BUILD_PROVISION_PROFILE_NAME }}
+          DEFAULT_BUILD_PROVISION_PROFILE_TEAMID: ${{ secrets.BUILD_PROVISION_PROFILE_TEAMID }}
+          DEFAULT_BUILD_PROVISION_PROFILE_IDENTITY: ${{ secrets.BUILD_PROVISION_PROFILE_IDENTITY }}
+          DEFAULT_BUILD_CERTIFICATE_BASE64: ${{ secrets.BUILD_CERTIFICATE_BASE64 }}
+          DEFAULT_BUILD_P12_PASSWORD: ${{ secrets.P12_PASSWORD }}
+          DEFAULT_BUILD_PROVISION_PROFILE_BASE64: ${{ secrets.BUILD_PROVISION_PROFILE_BASE64 }}
+          DEFAULT_BUILD_KEYCHAIN_PASSWORD: ${{ secrets.KEYCHAIN_PASSWORD }}
+        run: |
+          # create variables
+          CERTIFICATE_PATH=$RUNNER_TEMP/build_certificate.p12
+          PP_PATH=$RUNNER_TEMP/${{ secrets.BUILD_PROVISION_PROFILE_UUID }}.mobileprovision
+          KEYCHAIN_PATH=$RUNNER_TEMP/app-signing.keychain-db
+
+          # import certificate and provisioning profile from secrets
+          echo -n "$DEFAULT_BUILD_CERTIFICATE_BASE64" | base64 --decode --output $CERTIFICATE_PATH
+          echo -n "$DEFAULT_BUILD_PROVISION_PROFILE_BASE64" | base64 --decode --output $PP_PATH
+
+          # create temporary keychain
+          security create-keychain -p "$DEFAULT_BUILD_KEYCHAIN_PASSWORD" $KEYCHAIN_PATH
+          security set-keychain-settings -lut 21600 $KEYCHAIN_PATH
+          security unlock-keychain -p "$DEFAULT_BUILD_KEYCHAIN_PASSWORD" $KEYCHAIN_PATH
+
+          # import certificate to keychain
+          security import $CERTIFICATE_PATH -P "$DEFAULT_BUILD_P12_PASSWORD" -A -t cert -f pkcs12 -k $KEYCHAIN_PATH
+          security list-keychain -d user -s $KEYCHAIN_PATH
+
+          # apply provisioning profile
+          mkdir -p ~/Library/MobileDevice/Provisioning\ Profiles
+          cp $PP_PATH ~/Library/MobileDevice/Provisioning\ Profiles
+
+          # update project settings for Runner target
+          bundle exec fastlane run update_code_signing_settings use_automatic_signing:false path:example/ios/Runner.xcodeproj bundle_identifier:io.agora.agoraRtcEngineExample team_id:$DEFAULT_BUILD_PROVISION_PROFILE_TEAMID profile_name:$DEFAULT_BUILD_PROVISION_PROFILE_NAME code_sign_identity:$DEFAULT_BUILD_PROVISION_PROFILE_IDENTITY targets:Runner
+
+          # update project settings for ScreenSharing target
+          bundle exec fastlane run update_code_signing_settings use_automatic_signing:false path:example/ios/Runner.xcodeproj bundle_identifier:io.agora.agoraRtcEngineExample.ScreenSharing team_id:$DEFAULT_BUILD_PROVISION_PROFILE_TEAMID profile_name:$DEFAULT_BUILD_PROVISION_PROFILE_NAME code_sign_identity:$DEFAULT_BUILD_PROVISION_PROFILE_IDENTITY targets:ScreenSharing
+
+          # replace all DEFAULT_BUILD_PROVISION_PROFILE_NAME in example/ios/export.plist with $DEFAULT_BUILD_PROVISION_PROFILE_NAME
+          sed -i '' "s/DEFAULT_BUILD_PROVISION_PROFILE_NAME/$DEFAULT_BUILD_PROVISION_PROFILE_NAME/g" example/ios/export.plist
+
+      - name: Update pod repo
+        if: ${{ matrix.platform == 'ios' || matrix.platform == 'macos' }}
+        run: pod repo update
+
+      - name: Setup Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          channel: ${{ inputs.flutter_channel }}
+          flutter-version: ${{ inputs.flutter_version }}
+
+      - name: Build
+        shell: bash
+        working-directory: example
+        run: |
+          # show flutter version
+          flutter --version && which flutter
+
+          # install dependencies
+          flutter pub get
+
+          # prepare build command, android: apk, ios: ipa, macos: macos, windows: (empty), web: web
+          build_command=""
+          if [ "$platform" == "android" ]; then
+            build_command="flutter build apk"
+          elif [ "$platform" == "ios" ]; then
+            build_command="flutter build ipa"
+          elif [ "$platform" == "macos" ]; then
+            build_command="flutter build macos"
+          elif [ "$platform" == "windows" ]; then
+            build_command="flutter build windows"
+          elif [ "$platform" == "web" ]; then
+            build_command="flutter build web"
+          fi
+
+          # prepare build options
+          build_options=""
+
+          # append extra build options
+          if [ -n "$extra_build_options" ]; then
+            build_options="$build_options $extra_build_options"
+          fi
+
+          # prepare default build arguments
+          build_arguments="--dart-define=TEST_APP_ID=$DEFAULT_BUILD_APP_ID --dart-define=MUSIC_CENTER_APPID=$DEFAULT_BUILD_MUSIC_CENTER_APPID --dart-define=INTERNAL_TESTING=true"
+
+          # append extra build arguments
+          if [ -n "$extra_build_arguments" ]; then
+            build_arguments="$build_arguments $extra_build_arguments"
+          fi
+
+          # append build arguments for ios
+          if [ "$platform" == "ios" ]; then
+            build_arguments="--export-options-plist example/ios/export.plist $build_arguments"
+          fi
+
+          # run build command
+          $build_command $build_options $build_arguments
+
+          # create output directory if it doesn't exist
+          if [ ! -d "../output" ]; then
+            mkdir -p ../output
+          fi
+
+          # copy build result to output directory by different platforms
+          if [ "$platform" == "android" ]; then
+            # copy files in build/app/outputs/flutter-apk directory to ../output directory
+            cp build/app/outputs/flutter-apk/* ../output
+
+            # copy whole symbol directory to ../output directory
+            cp -r build/app/outputs/native-debug-symbols ../output
+          elif [ "$platform" == "ios" ]; then
+            # copy build/ios/ipa/agora_rtc_engine_example.ipa to ../output directory
+            cp build/ios/ipa/agora_rtc_engine_example.ipa ../output
+
+            # copy dSYMs in build/ios/archive/Runner.xcarchive/dSYMs directory to ../output directory
+            cp -RP build/ios/archive/Runner.xcarchive/dSYMs ../output
+          elif [ "$platform" == "macos" ]; then
+            # cp example/build/macos/Build/Products/*/agora_rtc_engine_example.app to ../output directory
+            cp -RP build/macos/Build/Products/*/agora_rtc_engine_example.app ../output
+
+            # mkdir dSYM directory in ../output directory if it doesn't exist
+            if [ ! -d "../output/dSYM" ]; then
+              mkdir -p ../output/dSYM
+            fi
+
+            # copy all dSYM files from example/build/macos/Build/Products/* to ../output/dSYM directory
+            cp -RP build/macos/Build/Products/**/*.dSYM ../output/dSYM
+          elif [ "$platform" == "windows" ]; then
+            # since flutter have no plain to support to build to run on 32-bit windows, we only need concern about the 64-bit windows
+            
+            # copy whole build/windows/x64/runner/Release directory to ../output if the directory exists
+            if [ -d "build/windows/x64/runner/Release" ]; then
+              cp -r build/windows/x64/runner/Release ../output
+
+              # copy all pdb files in build/windows/x64/plugins/**/Release/ to ../output/Release
+              cp -r build/windows/x64/plugins/**/Release/*.pdb ../output/Release
+            fi
+
+            # copy whole build/windows/x64/runner/Debug directory to ../output if the directory exists
+            if [ -d "build/windows/x64/runner/Debug" ]; then
+              cp -r build/windows/x64/runner/Debug ../output
+
+              # copy all pdb files in build/windows/x64/plugins/**/Debug/ to ../output/Debug
+              cp -r build/windows/x64/plugins/**/Debug/*.pdb ../output/Debug
+            fi
+          elif [ "$platform" == "web" ]; then
+            # copy all files and files in subdirectories to ../output directory
+            cp -r build/web/* ../output
+          fi
+
+      - name: Generate artifact name
+        id: generate_artifact_name
+        shell: bash
+        run: |
+          # get pub_version from pubspec.yaml
+          pub_version=$(grep 'version: ' pubspec.yaml | sed -e 's,.*: \(.*\),\1,')
+          
+          # get build_timestamp
+          build_timestamp=$(date +%Y%m%d%H%M%S)
+
+          # generate artifact_name
+          artifact_name="agora_rtc_engine_example_${{ matrix.platform }}_${pub_version}_${build_timestamp}_${{ github.run_id }}.zip"
+          echo "artifact_name=$artifact_name" >> $GITHUB_OUTPUT
+
+          # since flutter action do not support to access outputs of matrix, we need a workaround to get the artifact_name in next job to do some record
+          # generate an empty record file with the same name as artifact_name, but with .txt extension
+          touch $artifact_name.txt
+
+      - name: Upload build artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ steps.generate_artifact_name.outputs.artifact_name }}
+          path: output
+          if-no-files-found: error
+          retention-days: 30
+
+      - name: Upload record file
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ steps.generate_artifact_name.outputs.artifact_name }}.txt
+          path: ${{ steps.generate_artifact_name.outputs.artifact_name }}.txt
+          if-no-files-found: error
+          retention-days: 30
+        
+  comment:
+    if: ${{ inputs.issue_number != null }}
+    runs-on: ubuntu-latest
+    needs: build
+    steps:
+      - name: Download record file
+        uses: actions/download-artifact@v4
+        with:
+          pattern: agora_rtc_engine_example_*.txt
+          path: artifacts
+        
+      - name: Generate artifact download links
+        id: generate_artifact_download_links
+        shell: bash
+        run: |
+          # get all file names with .txt extension in artifacts directory, add prefix with "https://nightly.link/AgoraIO-Extensions/Agora-Flutter-SDK/actions/runs/${{ github.run_id }}", and save to a variable
+          artifact_names=$(ls artifacts/*.txt)
+          artifact_names=$(for artifact_name in $artifact_names; do echo "https://nightly.link/AgoraIO-Extensions/Agora-Flutter-SDK/actions/runs/${{ github.run_id }}/$artifact_name"; done)
+          
+          # put all artifact_names in a variable with fixed format, each artifact_name should be in a new line, separated with empty line, and add prefix with "- "
+          artifact_names=$(for artifact_name in $artifact_names; do echo "- $artifact_name \n"; done)
+          echo "artifact_names=$artifact_names" >> $GITHUB_OUTPUT
+
+      - name: Comment on target issue or pull request
+        uses: peter-evans/create-or-update-comment@v2
+        with:
+          token: ${{ secrets.ACTION_PAT }}
+          issue-number: ${{ inputs.issue_number }}
+          body: |
+            Build completed successfully:
+
+            ${{ steps.generate_artifact_download_links.outputs.artifact_names }}
+
+            > This comment is commented by bot, do not edit it directly
+          
+        
+        
+        
