@@ -1,4 +1,4 @@
-name: Update internal dependencies
+name: Run update dependencies
 
 on:
   workflow_dispatch:
