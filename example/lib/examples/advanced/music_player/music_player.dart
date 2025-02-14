@@ -19,6 +19,7 @@ class _MusicPlayerExampleState extends State<MusicPlayerExample> {
   late final RtcEngine _engine;
   late TextEditingController _controller;
   late TextEditingController _rtmTokenController;
+  late TextEditingController _musicCenterAppIdController;
   late final TextEditingController _searchMusicController;
   late final MusicContentCenter _musicContentCenter;
   late final MusicPlayer _musicPlayer;
@@ -42,6 +43,7 @@ class _MusicPlayerExampleState extends State<MusicPlayerExample> {
     super.initState();
     _controller = TextEditingController(text: config.channelId);
     _rtmTokenController = TextEditingController();
+    _musicCenterAppIdController = TextEditingController();
     _searchMusicController = TextEditingController();
 
     _initEngine();
@@ -275,7 +277,7 @@ class _MusicPlayerExampleState extends State<MusicPlayerExample> {
 
   Future<void> _initMusicCenter() async {
     await _musicContentCenter.initialize(MusicContentCenterConfiguration(
-      appId: config.musicCenterAppId,
+      appId: _musicCenterAppIdController.text,
       token: _rtmTokenController.text,
       mccUid: 123,
     ));
@@ -398,6 +400,10 @@ class _MusicPlayerExampleState extends State<MusicPlayerExample> {
           crossAxisAlignment: CrossAxisAlignment.start,
           mainAxisSize: MainAxisSize.min,
           children: [
+            TextField(
+              controller: _musicCenterAppIdController,
+              decoration: const InputDecoration(hintText: 'App ID'),
+            ),
             TextField(
               controller: _rtmTokenController,
               decoration: const InputDecoration(hintText: 'Rtm token'),

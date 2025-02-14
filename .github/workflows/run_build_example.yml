@@ -128,8 +128,6 @@ jobs:
         platform: ${{ matrix.platform }}
         extra_build_options: ${{ inputs.extra_build_options }}
         extra_build_arguments: ${{ inputs.extra_build_arguments }}
-        DEFAULT_BUILD_APP_ID: ${{ matrix.platform == 'web' && '' || secrets.TEST_APP_ID }}
-        DEFAULT_BUILD_MUSIC_CENTER_APPID: ${{ matrix.platform == 'web' && '' || secrets.MUSIC_CENTER_APPID }}
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -148,6 +146,7 @@ jobs:
 
       - name: Setup signing key for iOS
         if: ${{ matrix.platform == 'ios' }}
+        working-directory: example/ios
         env:
           DEFAULT_BUILD_PROVISION_PROFILE_NAME: ${{ secrets.BUILD_PROVISION_PROFILE_NAME }}
           DEFAULT_BUILD_PROVISION_PROFILE_TEAMID: ${{ secrets.BUILD_PROVISION_PROFILE_TEAMID }}
@@ -180,13 +179,13 @@ jobs:
           cp $PP_PATH ~/Library/MobileDevice/Provisioning\ Profiles
 
           # update project settings for Runner target
-          bundle exec fastlane run update_code_signing_settings use_automatic_signing:false path:example/ios/Runner.xcodeproj bundle_identifier:io.agora.agoraRtcEngineExample team_id:$DEFAULT_BUILD_PROVISION_PROFILE_TEAMID profile_name:$DEFAULT_BUILD_PROVISION_PROFILE_NAME code_sign_identity:$DEFAULT_BUILD_PROVISION_PROFILE_IDENTITY targets:Runner
+          bundle exec fastlane run update_code_signing_settings use_automatic_signing:false path:Runner.xcodeproj bundle_identifier:io.agora.agoraRtcEngineExample team_id:$DEFAULT_BUILD_PROVISION_PROFILE_TEAMID profile_name:$DEFAULT_BUILD_PROVISION_PROFILE_NAME code_sign_identity:$DEFAULT_BUILD_PROVISION_PROFILE_IDENTITY targets:Runner
 
           # update project settings for ScreenSharing target
-          bundle exec fastlane run update_code_signing_settings use_automatic_signing:false path:example/ios/Runner.xcodeproj bundle_identifier:io.agora.agoraRtcEngineExample.ScreenSharing team_id:$DEFAULT_BUILD_PROVISION_PROFILE_TEAMID profile_name:$DEFAULT_BUILD_PROVISION_PROFILE_NAME code_sign_identity:$DEFAULT_BUILD_PROVISION_PROFILE_IDENTITY targets:ScreenSharing
+          bundle exec fastlane run update_code_signing_settings use_automatic_signing:false path:Runner.xcodeproj bundle_identifier:io.agora.agoraRtcEngineExample.ScreenSharing team_id:$DEFAULT_BUILD_PROVISION_PROFILE_TEAMID profile_name:$DEFAULT_BUILD_PROVISION_PROFILE_NAME code_sign_identity:$DEFAULT_BUILD_PROVISION_PROFILE_IDENTITY targets:ScreenSharing
 
-          # replace all DEFAULT_BUILD_PROVISION_PROFILE_NAME in example/ios/export.plist with $DEFAULT_BUILD_PROVISION_PROFILE_NAME
-          sed -i '' "s/DEFAULT_BUILD_PROVISION_PROFILE_NAME/$DEFAULT_BUILD_PROVISION_PROFILE_NAME/g" example/ios/export.plist
+          # replace all DEFAULT_BUILD_PROVISION_PROFILE_NAME in export.plist with $DEFAULT_BUILD_PROVISION_PROFILE_NAME
+          sed -i '' "s/DEFAULT_BUILD_PROVISION_PROFILE_NAME/$DEFAULT_BUILD_PROVISION_PROFILE_NAME/g" export.plist
 
       - name: Update pod repo
         if: ${{ matrix.platform == 'ios' || matrix.platform == 'macos' }}
@@ -199,6 +198,8 @@ jobs:
           flutter-version: ${{ inputs.flutter_version }}
 
       - name: Build
+        env:
+          DEFAULT_BUILD_APP_ID: ${{ secrets.APP_ID }}
         shell: bash
         working-directory: example
         run: |
@@ -230,8 +231,12 @@ jobs:
             build_options="$build_options $extra_build_options"
           fi
 
-          # prepare default build arguments
-          build_arguments="--dart-define=TEST_APP_ID=$DEFAULT_BUILD_APP_ID --dart-define=MUSIC_CENTER_APPID=$DEFAULT_BUILD_MUSIC_CENTER_APPID --dart-define=INTERNAL_TESTING=true"
+          # prepare default build arguments, if current platform is web, set DEFAULT_BUILD_APP_ID to empty string
+          if [ "$platform" == "web" ]; then
+            DEFAULT_BUILD_APP_ID=""
+          fi
+
+          build_arguments="--dart-define=TEST_APP_ID=$DEFAULT_BUILD_APP_ID --dart-define=INTERNAL_TESTING=true"
 
           # append extra build arguments
           if [ -n "$extra_build_arguments" ]; then
@@ -240,7 +245,7 @@ jobs:
 
           # append build arguments for ios
           if [ "$platform" == "ios" ]; then
-            build_arguments="--export-options-plist example/ios/export.plist $build_arguments"
+            build_arguments="--export-options-plist ios/export.plist $build_arguments"
           fi
 
           # run build command
@@ -333,7 +338,7 @@ jobs:
           retention-days: 30
         
   comment:
-    if: ${{ inputs.issue_number != null }}
+    if: ${{ inputs.issue_number != null }} && !cancelled()
     runs-on: ubuntu-latest
     needs: build
     steps:
@@ -347,23 +352,37 @@ jobs:
         id: generate_artifact_download_links
         shell: bash
         run: |
-          # get all file names with .txt extension in artifacts directory, add prefix with "https://nightly.link/AgoraIO-Extensions/Agora-Flutter-SDK/actions/runs/${{ github.run_id }}", and save to a variable
-          artifact_names=$(ls artifacts/*.txt)
+          # get all file names with .txt extension in artifacts directory, remove the .txt extension, add prefix with "https://nightly.link/AgoraIO-Extensions/Agora-Flutter-SDK/actions/runs/${{ github.run_id }}", and save to a variable
+          artifact_names=$(ls artifacts/*.txt | sed 's/.txt$//')
           artifact_names=$(for artifact_name in $artifact_names; do echo "https://nightly.link/AgoraIO-Extensions/Agora-Flutter-SDK/actions/runs/${{ github.run_id }}/$artifact_name"; done)
           
-          # put all artifact_names in a variable with fixed format, each artifact_name should be in a new line, separated with empty line, and add prefix with "- "
-          artifact_names=$(for artifact_name in $artifact_names; do echo "- $artifact_name \n"; done)
+          # put all artifact_names in a variable with fixed format, each artifact_name should be in a new line
+          artifact_names=$(for artifact_name in $artifact_names; do echo " $artifact_name"; done)
           echo "artifact_names=$artifact_names" >> $GITHUB_OUTPUT
 
-      - name: Comment on target issue or pull request
+      - name: Comment on target issue or pull request if build is successful
         uses: peter-evans/create-or-update-comment@v2
+        if: success()
         with:
-          token: ${{ secrets.ACTION_PAT }}
+          token: ${{ secrets.GITHUB_TOKEN }}
           issue-number: ${{ inputs.issue_number }}
           body: |
             Build completed successfully:
 
             ${{ steps.generate_artifact_download_links.outputs.artifact_names }}
+
+            > This comment is commented by bot, do not edit it directly
+
+      - name: Comment on target issue or pull request if build is failed
+        uses: peter-evans/create-or-update-comment@v2
+        if: failure()
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          issue-number: ${{ inputs.issue_number }}
+          body: |
+            Build failed: 
+
+            https://github.com/AgoraIO-Extensions/Agora-Flutter-SDK/actions/runs/${{ github.run_id }}
 
             > This comment is commented by bot, do not edit it directly
           

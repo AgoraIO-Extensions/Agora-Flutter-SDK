@@ -26,9 +26,3 @@ const int screenSharingUid = 10;
 
 /// Your string user ID
 const String stringUid = '0';
-
-String get musicCenterAppId {
-  // Allow pass a `token` as an environment variable with name `TEST_TOKEN` by using --dart-define
-  return const String.fromEnvironment('MUSIC_CENTER_APPID',
-      defaultValue: '<MUSIC_CENTER_APPID>');
-}
