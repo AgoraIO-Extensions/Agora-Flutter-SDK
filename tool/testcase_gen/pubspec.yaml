@@ -14,3 +14,6 @@ dependencies:
 
 dev_dependencies:
   lints: ^1.0.0
+  # lock the version of analyzer to avoid non-consistent generated code and errors like:
+  # lib/core/paraphrase.dart:352:53: Error: The getter 'name' isn't defined for the class 'Token'.
+  analyzer: 4.7.0
