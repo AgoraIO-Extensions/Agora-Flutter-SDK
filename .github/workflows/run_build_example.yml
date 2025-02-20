@@ -242,7 +242,7 @@ jobs:
             DEFAULT_BUILD_APP_ID=""
           fi
 
-          build_arguments="--dart-define=TEST_APP_ID=$DEFAULT_BUILD_APP_ID --dart-define=INTERNAL_TESTING=true"
+          build_arguments="--dart-define=TEST_APP_ID=$DEFAULT_BUILD_APP_ID --dart-define=TEST_TOKEN="" --dart-define=TEST_CHANNEL_ID="testapi" --dart-define=INTERNAL_TESTING=true"
 
           # append extra build arguments
           if [ -n "$extra_build_arguments" ]; then
@@ -279,13 +279,13 @@ jobs:
             # cp example/build/macos/Build/Products/*/agora_rtc_engine_example.app to ../output directory
             cp -RP build/macos/Build/Products/*/agora_rtc_engine_example.app ../output
 
-            # mkdir dSYM directory in ../output directory if it doesn't exist
-            if [ ! -d "../output/dSYM" ]; then
-              mkdir -p ../output/dSYM
+            # mkdir dSYMs directory in ../output directory if it doesn't exist
+            if [ ! -d "../output/dSYMs" ]; then
+              mkdir -p ../output/dSYMs
             fi
 
-            # copy all dSYM files from example/build/macos/Build/Products/* to ../output/dSYM directory
-            cp -RP build/macos/Build/Products/**/*.dSYM ../output/dSYM
+            # copy all dSYM files from example/build/macos/Build/Products and subdirectories to ../output/dSYMs directory
+            cp -RP build/macos/Build/Products/**/*.dSYM ../output/dSYMs
           elif [ "$platform" == "windows" ]; then
             # since flutter have no plain to support to build to run on 32-bit windows, we only need concern about the 64-bit windows
             
@@ -336,7 +336,7 @@ jobs:
         run: |
           # see https://docs.github.com/en/actions/writing-workflows/choosing-what-your-workflow-does/passing-information-between-jobs
           current_platform="${{ matrix.platform }}"
-          echo "artifact_nightly_link_${current_platform}=https://nightly.link/AgoraIO-Extensions/Agora-Flutter-SDK/actions/runs/${{ github.run_id }}/${{ steps.generate_artifact_name.outputs.artifact_name }}.zip" >> $GITHUB_OUTPUT
+          echo "artifact_nightly_link_${current_platform}=https://nightly.link/${{ github.repository }}/actions/runs/${{ github.run_id }}/${{ steps.generate_artifact_name.outputs.artifact_name }}.zip" >> $GITHUB_OUTPUT
 
   comment:
     runs-on: ubuntu-latest
@@ -349,7 +349,7 @@ jobs:
           issue-number: ${{ inputs.issue_number }}
           body: |
             Build Job: 
-              https://github.com/AgoraIO-Extensions/Agora-Flutter-SDK/actions/runs/${{ github.run_id }}
+              https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}
 
             Build Results:
               - ${{ needs.build.outputs.artifact_nightly_link_android }}

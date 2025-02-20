@@ -1,82 +1,131 @@
-function(DownloadSDK platform version download_dir)
-  # Specify the binary distribution type and download directory.
-  set(SDK_DISTRIBUTION "Agora_Native_SDK_for_${platform}_${version}_IRIS")
-  set(SDK_DOWNLOAD_DIR "${download_dir}")
+# iris dependencies start
+set(NATIVE_SDK_DOWNLOAD_URL "https://download.agora.io/sdk/release/Agora_Native_SDK_for_Windows_v4.5.0_FULL.zip")
+# iris dependencies end
 
-  # The location where we expect the extracted binary distribution.
-  set(SDK_ROOT "${SDK_DOWNLOAD_DIR}/Agora_Native_SDK_for_${platform}_IRIS" CACHE INTERNAL "SDK_ROOT")
+# native dependencies start
+set(IRIS_SDK_DOWNLOAD_URL "https://download.agora.io/sdk/release/iris_4.5.0-build.1_DCG_Windows_Video_Standalone_20241203_0322_577.zip")
+# native dependencies end
 
-  # Download and/or extract the binary distribution if necessary.
-  if(NOT IS_DIRECTORY "${SDK_ROOT}")
-    set(SDK_DOWNLOAD_FILENAME "${SDK_DISTRIBUTION}.zip")
-    set(SDK_DOWNLOAD_PATH "${SDK_DOWNLOAD_DIR}/${SDK_DOWNLOAD_FILENAME}")
-    if(NOT EXISTS "${SDK_DOWNLOAD_PATH}")
-      set(SDK_DOWNLOAD_URL "https://download.agora.io/sdk/release/${SDK_DOWNLOAD_FILENAME}")
-      string(REPLACE "+" "%2B" SDK_DOWNLOAD_URL_ESCAPED ${SDK_DOWNLOAD_URL})
+function(download_and_extract URL TARGET_DIR EXTRACTED_DIR)
+    message(STATUS "Downloading ${URL} to ${TARGET_DIR}")
 
-      # Download the binary distribution and verify the hash.
-      message(STATUS "Downloading ${SDK_DOWNLOAD_PATH}...")
-      file(
-        DOWNLOAD "${SDK_DOWNLOAD_URL_ESCAPED}" "${SDK_DOWNLOAD_PATH}"
-        SHOW_PROGRESS
-        )
+    # Escape the URL for the command line
+    string(REPLACE "+" "%2B" URL_ESCAPED ${URL})
+
+    # Extract the file name from the URL
+    STRING(REGEX REPLACE ".+/(.+)\\..*" "\\1" SOURCE_FILE_NAME ${URL_ESCAPED})
+    message(STATUS "Source file name: ${SOURCE_FILE_NAME}")
+
+    # Set the target file path
+    set(TARGET_FILE "${TARGET_DIR}/${SOURCE_FILE_NAME}.zip")
+    message(STATUS "Target file: ${TARGET_FILE}")
+
+    # Download the file if it doesn't exist
+    if(NOT EXISTS "${TARGET_FILE}")
+        file(DOWNLOAD ${URL_ESCAPED} ${TARGET_FILE} SHOW_PROGRESS STATUS status)
+        list(GET status 0 status_code)
+        list(GET status 1 status_string)
+        if(NOT status_code EQUAL 0)
+          # Remove the file if it exists when the download fails
+          if(EXISTS "${TARGET_FILE}")
+            file(REMOVE "${TARGET_FILE}")
+          endif()
+          message(FATAL_ERROR "Download failed: ${STATUS_STRING}")
+        endif()
     endif()
 
-    # Extract the binary distribution.
-    message(STATUS "Extracting ${SDK_DOWNLOAD_PATH}...")
+    # Remove the extracted directory if it exists
+    if(EXISTS "${EXTRACTED_DIR}")
+      file(REMOVE_RECURSE "${EXTRACTED_DIR}")
+    endif()
+
+    # Create the extracted directory if it doesn't exist
+    file(MAKE_DIRECTORY "${EXTRACTED_DIR}")
+
+    # Extract the file
     execute_process(
-      COMMAND ${CMAKE_COMMAND} -E tar xzf "${SDK_DOWNLOAD_DIR}/${SDK_DOWNLOAD_FILENAME}"
-      WORKING_DIRECTORY ${SDK_DOWNLOAD_DIR}
-      )
+        COMMAND ${CMAKE_COMMAND} -E tar xzf "${TARGET_FILE}"
+        WORKING_DIRECTORY ${EXTRACTED_DIR}
+    )
+endfunction()
+
+set(CONST_EXTRACTED_DIR_NAME "lib")
+
+# Download and extract the Iris SDK
+set(IRIS_DOWNLOAD_PATH "${CMAKE_CURRENT_SOURCE_DIR}/third_party/iris")
+set(IRIS_EXTRACTED_DIR "${IRIS_DOWNLOAD_PATH}/${CONST_EXTRACTED_DIR_NAME}")
+
+# Download and extract the Iris SDK if the plugin is not in development mode
+if(NOT EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/.plugin_dev")
+    download_and_extract("${IRIS_SDK_DOWNLOAD_URL}" "${IRIS_DOWNLOAD_PATH}" "${IRIS_EXTRACTED_DIR}")
+endif()
+
+# Fixed the include directory and library directory names of Iris SDK by current build architecture
+if(CMAKE_SIZEOF_VOID_P EQUAL 8)
+    set(IRIS_ARCH "x64")
+else()
+    set(IRIS_ARCH "Win32")
+endif()
+set(IRIS_INCLUDE_DIR_REGEX "${IRIS_ARCH}/include")
+set(IRIS_LIB_DIR_REGEX "${IRIS_ARCH}/Release")
+
+# Find include directory and library directory of Iris SDK from the extracted directory by regex
+set(IRIS_INCLUDE_DIR "")
+set(IRIS_LIB_DIR "")
+
+file(GLOB_RECURSE IRIS_DIRECTORIES LIST_DIRECTORIES true "${IRIS_EXTRACTED_DIR}/*")
+foreach(SUBDIR ${IRIS_DIRECTORIES})
+  STRING(REGEX MATCH "${IRIS_INCLUDE_DIR_REGEX}$" FIND_INCLUDE_DIR "${SUBDIR}")
+  STRING(REGEX MATCH "${IRIS_LIB_DIR_REGEX}$" FIND_LIB_DIR "${SUBDIR}")
+  if(FIND_INCLUDE_DIR)
+    set(IRIS_INCLUDE_DIR "${SUBDIR}")
   endif()
-endfunction()
+  if(FIND_LIB_DIR)
+    set(IRIS_LIB_DIR "${SUBDIR}")
+  endif()
+  if(IRIS_INCLUDE_DIR AND IRIS_LIB_DIR) 
+    break()
+  endif()
+endforeach()
 
-function(DOWNLOAD_SDK_BY_URL download_url download_dir)
-    # Specify the binary distribution type and download directory.
-    STRING(REGEX REPLACE ".+/(.+)\\..*" "\\1" SDK_DISTRIBUTION ${download_url})
-    message(STATUS "SDK_DISTRIBUTION ${SDK_DISTRIBUTION}")
-    set(SDK_DOWNLOAD_DIR "${download_dir}")
+# Print and verify the include directory and library directory of Iris SDK
+if(IRIS_INCLUDE_DIR STREQUAL "" OR IRIS_LIB_DIR STREQUAL "")
+  message(WARNING "IRIS_INCLUDE_DIR: ${IRIS_INCLUDE_DIR}")
+  message(WARNING "IRIS_LIB_DIR: ${IRIS_LIB_DIR}")
+  message(FATAL_ERROR "Failed to find include directory and library directory of Iris SDK")
+endif()
 
-    # The location where we expect the extracted binary distribution.
-    set(SDK_ROOT "${SDK_DOWNLOAD_DIR}/${SDK_DISTRIBUTION}" CACHE INTERNAL "SDK_ROOT")
 
-    # Download and/or extract the binary distribution if necessary.
-    if (NOT IS_DIRECTORY "${SDK_ROOT}")
-        set(SDK_DOWNLOAD_FILENAME "${SDK_DISTRIBUTION}.zip")
-        set(SDK_DOWNLOAD_PATH "${SDK_DOWNLOAD_DIR}/${SDK_DOWNLOAD_FILENAME}")
-        if (NOT EXISTS "${SDK_DOWNLOAD_PATH}")
-            set(SDK_DOWNLOAD_URL "${download_url}")
-            string(REPLACE "+" "%2B" SDK_DOWNLOAD_URL_ESCAPED ${SDK_DOWNLOAD_URL})
+# Download and extract the Native SDK
+set(NATIVE_DOWNLOAD_PATH "${CMAKE_CURRENT_SOURCE_DIR}/third_party/native")
+set(NATIVE_EXTRACTED_DIR "${NATIVE_DOWNLOAD_PATH}/${CONST_EXTRACTED_DIR_NAME}")
 
-            # Download the binary distribution and verify the hash.
-            message(STATUS "Downloading ${SDK_DOWNLOAD_PATH}...")
-            file(
-                    DOWNLOAD "${SDK_DOWNLOAD_URL_ESCAPED}" "${SDK_DOWNLOAD_PATH}"
-                    SHOW_PROGRESS
-            )
-        endif ()
+# Download and extract the Native SDK if the plugin is not in development mode
+if(NOT EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/.plugin_dev")
+    download_and_extract("${NATIVE_SDK_DOWNLOAD_URL}" "${NATIVE_DOWNLOAD_PATH}" "${NATIVE_EXTRACTED_DIR}")
+endif()
 
-        # Extract the binary distribution.
-        message(STATUS "Extracting ${SDK_DOWNLOAD_PATH}...")
-        execute_process(
-                COMMAND ${CMAKE_COMMAND} -E tar xzf "${SDK_DOWNLOAD_DIR}/${SDK_DOWNLOAD_FILENAME}"
-                WORKING_DIRECTORY ${SDK_DOWNLOAD_DIR}
-        )
+# Fixed the root directory of Native SDK to */sdk coz sdk has a fixed directory structure
+set(NATIVE_SDK_ROOT "")
+set(NATIVE_SDK_ROOT_REGEX "sdk")
+file(GLOB_RECURSE NATIVE_DIRECTORIES LIST_DIRECTORIES true "${NATIVE_EXTRACTED_DIR}/*")
+foreach(SUBDIR ${NATIVE_DIRECTORIES})
+  STRING(REGEX MATCH "${NATIVE_SDK_ROOT_REGEX}$" FIND_SDK_ROOT "${SUBDIR}")
+  if(FIND_SDK_ROOT)
+    set(NATIVE_SDK_ROOT "${SUBDIR}")
+    break()
+  endif()
+endforeach()
 
-        STRING(REGEX REPLACE "(_Video_[0-9_]+)$" "" IRIS_EXTRACTED_DIR_NAME ${SDK_DISTRIBUTION})
+# Print and verify the root directory of Native SDK
+if(NATIVE_SDK_ROOT STREQUAL "")
+  message(WARNING "NATIVE_SDK_ROOT: ${NATIVE_SDK_ROOT}")
+  message(FATAL_ERROR "Failed to find root directory of Native SDK")
+endif()
 
-        set(THIRD_PARTY_INCLUDE_DIR "${SDK_DOWNLOAD_DIR}/${IRIS_EXTRACTED_DIR_NAME}/include")
-        file(MAKE_DIRECTORY ${THIRD_PARTY_INCLUDE_DIR})
-
-        # Copy all third-party headers to a single include dir to avoid file hierarchy so deep
-        message(STATUS "Copy iris headers to ${THIRD_PARTY_INCLUDE_DIR}")
-        file(GLOB IRIS_PUBLIC_HEADERS ${SDK_DOWNLOAD_DIR}/${IRIS_EXTRACTED_DIR_NAME}/x64/include/*.h)
-        file(COPY ${IRIS_PUBLIC_HEADERS}
-             DESTINATION ${THIRD_PARTY_INCLUDE_DIR})
-
-        message(STATUS "Copy native sdk headers to ${THIRD_PARTY_INCLUDE_DIR}")
-        file(GLOB NATIVE_SDK_PUBLIC_HEADERS ${SDK_DOWNLOAD_DIR}/${IRIS_EXTRACTED_DIR_NAME}/DCG/Agora_Native_SDK_for_Windows_FULL/sdk/high_level_api/include/*.h)
-        file(COPY ${NATIVE_SDK_PUBLIC_HEADERS}
-            DESTINATION ${THIRD_PARTY_INCLUDE_DIR})
-    endif ()
-endfunction()
+set(NATIVE_INCLUDE_DIR "${NATIVE_SDK_ROOT}/high_level_api/include")
+if(CMAKE_SIZEOF_VOID_P EQUAL 8)
+    set(NATIVE_LIB_DIR "${NATIVE_SDK_ROOT}/x86_64")
+else()
+    set(NATIVE_LIB_DIR "${NATIVE_SDK_ROOT}/x86")
+endif()

@@ -7,7 +7,7 @@ concurrency:
 on:
   workflow_call:
     secrets:
-      MY_APP_ID:
+      APP_ID:
         required: true
 
 jobs:
@@ -90,7 +90,7 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 120
     env:
-      TEST_APP_ID: ${{ secrets.MY_APP_ID }}
+      TEST_APP_ID: ${{ secrets.APP_ID }}
     steps:
       - uses: actions/checkout@v3
       - name: Install JDK
@@ -127,7 +127,7 @@ jobs:
     runs-on: macos-latest
     timeout-minutes: 120
     env:
-      TEST_APP_ID: ${{ secrets.MY_APP_ID }}
+      TEST_APP_ID: ${{ secrets.APP_ID }}
     steps:
       - uses: actions/checkout@v3
       - uses: subosito/flutter-action@v2
@@ -169,7 +169,7 @@ jobs:
     runs-on: macos-latest
     timeout-minutes: 120
     env:
-      TEST_APP_ID: ${{ secrets.MY_APP_ID }}
+      TEST_APP_ID: ${{ secrets.APP_ID }}
     steps:
       - uses: actions/checkout@v3
       - uses: subosito/flutter-action@v2
@@ -215,7 +215,7 @@ jobs:
     runs-on: windows-2019
     timeout-minutes: 120
     env:
-      TEST_APP_ID: ${{ secrets.MY_APP_ID }}
+      TEST_APP_ID: ${{ secrets.APP_ID }}
     steps:
       - uses: actions/checkout@v3
       - uses: subosito/flutter-action@v2
@@ -247,7 +247,7 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 60
     env:
-      TEST_APP_ID: ${{ secrets.MY_APP_ID }}
+      TEST_APP_ID: ${{ secrets.APP_ID }}
     steps:
       - uses: actions/checkout@v3
       - uses: subosito/flutter-action@v2
@@ -258,7 +258,7 @@ jobs:
         shell: bash
         run: |
           chromedriver --port=4444 --trace-buffer-size=100000 &
-          bash ci/run_flutter_integration_test.sh web
+          bash ci/run_flutter_integration_test_web.sh
 
   build_android_ubuntu:
     name: Build Android on Ubuntu
@@ -379,7 +379,7 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 120
     env:
-      TEST_APP_ID: ${{ secrets.MY_APP_ID }}
+      TEST_APP_ID: ${{ secrets.APP_ID }}
     steps:
       - uses: actions/checkout@v3
       - name: Install JDK
@@ -391,31 +391,6 @@ jobs:
         with:
           flutter-version: "3.24.5"
           cache: true
-      - name: Checkout agora_flutter_sdks_build
-        uses: actions/checkout@v3
-        with:
-          repository: AgoraIO-Extensions/agora_flutter_sdks_build
-          ref: main
-          path: agora_flutter_sdks_build
-      - name: Download iris artifacts
-        if: ${{ contains(github.event.pull_request.labels.*.name, 'integration_test:iris_artifacts') }}
-        run: |
-          source scripts/artifacts_version.sh
-
-          PROJECT_DIR=$(pwd)
-
-          mkdir -p output
-          cd agora_flutter_sdks_build
-          dart pub get
-          dart run bin/hoe.dart build-agora-flutter-example \
-            --setup-local-dev \
-            --project-dir=${PROJECT_DIR} \
-            --artifacts-output-dir=${PROJECT_DIR}/output \
-            --platforms=android,macos \
-            --apple-package-name=io.agora.agoraRtcEngineExample \
-            --flutter-package-name=agora_rtc_engine \
-            --iris-android-cdn-url=${IRIS_CDN_URL_ANDROID} \
-            --iris-macos-cdn-url=${IRIS_CDN_URL_MACOS}
       - name: Enable KVM
         run: |
           echo 'KERNEL=="kvm", GROUP="kvm", MODE="0666", OPTIONS+="static_node=kvm"' | sudo tee /etc/udev/rules.d/99-kvm4all.rules
@@ -447,34 +422,13 @@ jobs:
     runs-on: macos-13 # Rendering test on ios simulator need macos 13+
     timeout-minutes: 60
     env:
-      TEST_APP_ID: ${{ secrets.MY_APP_ID }}
+      TEST_APP_ID: ${{ secrets.APP_ID }}
     steps:
       - uses: actions/checkout@v1
       - uses: subosito/flutter-action@v2
         with:
           flutter-version: ${{ matrix.version }}
-      - name: Checkout agora_flutter_sdks_build
-        uses: actions/checkout@v3
-        with:
-          repository: AgoraIO-Extensions/agora_flutter_sdks_build
-          ref: main
-          path: agora_flutter_sdks_build
-      - name: Download iris artifacts
-        if: ${{ contains(github.event.pull_request.labels.*.name, 'integration_test:iris_artifacts') }}
-        run: |
-          source scripts/artifacts_version.sh
-          PROJECT_DIR=$(pwd)
-          mkdir -p output
-          cd agora_flutter_sdks_build
-          dart pub get
-          dart run bin/hoe.dart build-agora-flutter-example \
-            --setup-local-dev \
-            --project-dir=${PROJECT_DIR} \
-            --artifacts-output-dir=${PROJECT_DIR}/output \
-            --platforms=ios \
-            --apple-package-name=io.agora.agoraRtcEngineExample \
-            --flutter-package-name=agora_rtc_engine \
-            --iris-ios-cdn-url=${IRIS_CDN_URL_IOS}
+
       - uses: futureware-tech/simulator-action@v3
         with:
           model: 'iPhone 15'
@@ -495,41 +449,13 @@ jobs:
     runs-on: macos-latest
     timeout-minutes: 120
     env:
-      TEST_APP_ID: ${{ secrets.MY_APP_ID }}
+      TEST_APP_ID: ${{ secrets.APP_ID }}
     steps:
       - uses: actions/checkout@v3
       - uses: subosito/flutter-action@v2
         with:
           flutter-version: ${{ matrix.version }}
           cache: true
-      - name: Checkout agora_flutter_sdks_build
-        uses: actions/checkout@v3
-        with:
-          repository: AgoraIO-Extensions/agora_flutter_sdks_build
-          ref: main
-          path: agora_flutter_sdks_build
-      - name: Download iris artifacts
-        if: ${{ contains(github.event.pull_request.labels.*.name, 'integration_test:iris_artifacts') }}
-        run: |
-          source scripts/artifacts_version.sh
-
-          PROJECT_DIR=$(pwd)
-
-          echo "project dir: ${PROJECT_DIR}"
-
-          ls ${PROJECT_DIR}
-
-          mkdir -p output
-          cd agora_flutter_sdks_build
-          dart pub get
-          dart run bin/hoe.dart build-agora-flutter-example \
-            --setup-local-dev \
-            --project-dir=${PROJECT_DIR} \
-            --artifacts-output-dir=${PROJECT_DIR}/output \
-            --platforms=macos \
-            --apple-package-name=io.agora.agoraRtcEngineExample \
-            --flutter-package-name=agora_rtc_engine \
-            --iris-macos-cdn-url=${IRIS_CDN_URL_MACOS}
       - run: flutter config --enable-macos-desktop
       - name: Run macos rendering test
         run: |
@@ -550,38 +476,13 @@ jobs:
     runs-on: windows-2019
     timeout-minutes: 120
     env:
-      TEST_APP_ID: ${{ secrets.MY_APP_ID }}
+      TEST_APP_ID: ${{ secrets.APP_ID }}
     steps:
       - uses: actions/checkout@v3
       - uses: subosito/flutter-action@v2
         with:
           flutter-version: ${{ matrix.version }}
           cache: true
-      - name: Checkout agora_flutter_sdks_build
-        uses: actions/checkout@v3
-        with:
-          repository: AgoraIO-Extensions/agora_flutter_sdks_build
-          ref: main
-          path: agora_flutter_sdks_build
-      - name: Download iris artifacts
-        if: ${{ contains(github.event.pull_request.labels.*.name, 'integration_test:iris_artifacts') }}
-        shell: bash
-        run: |
-          source scripts/artifacts_version.sh
-
-          PROJECT_DIR=$(pwd)
-
-          mkdir -p output
-          cd agora_flutter_sdks_build
-          dart pub get
-          dart run bin/hoe.dart build-agora-flutter-example \
-            --setup-local-dev \
-            --project-dir=${PROJECT_DIR} \
-            --artifacts-output-dir=${PROJECT_DIR}/output \
-            --platforms=windows \
-            --apple-package-name=io.agora.agoraRtcEngineExample \
-            --flutter-package-name=agora_rtc_engine \
-            --iris-windows-cdn-url=${IRIS_CDN_URL_WINDOWS}
       - run: flutter config --enable-windows-desktop
       - name: Run windows integration test
         shell: bash
@@ -604,7 +505,7 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 60
     env:
-      TEST_APP_ID: ${{ secrets.MY_APP_ID }}
+      TEST_APP_ID: ${{ secrets.APP_ID }}
     steps:
       - uses: actions/checkout@v3
       - uses: subosito/flutter-action@v2

@@ -76,5 +76,5 @@ jobs:
     if: ${{ contains(github.event.pull_request.labels.*.name, 'ci:schedule_run_ci') }}
     uses: ./.github/workflows/build.yml
     secrets:
-      MY_APP_ID: ${{ secrets.MY_APP_ID }}
+      APP_ID: ${{ secrets.APP_ID }}
             
