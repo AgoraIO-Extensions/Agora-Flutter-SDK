@@ -72,12 +72,10 @@ renderers:
   - path: renderers/callapi_impl_renderer.ts
   - path: renderers/api_interface_renderer.ts
   # Put it to last step
-  ## DISABLE THIS FOR NOW, since the IrisDocRenderer is always update the newest version of the IrisDoc,
-  ## e.g. the IrisDocRenderer will update the IrisDoc to the 4.5.1 version even if you are generating the 4.3.0 version.
-  # - name: IrisDocRenderer
-  #   package: '@agoraio-extensions/terra_shared_configs'
-  #   args:
-  #     language: dart
-  #     fmtConfig: fmt_dart.yaml
-  #     exportFilePath: ../../lib/agora_rtc_engine.dart
-  #     templateUrl: https://github.com/AgoraIO/agora_doc_source/releases/download/master-build/flutter_ng_json_template_en.json
+  - name: IrisDocRenderer
+    package: '@agoraio-extensions/terra_shared_configs'
+    args:
+      language: dart
+      fmtConfig: fmt_dart.yaml
+      exportFilePath: ../../lib/agora_rtc_engine.dart
+      templateUrl: https://github.com/AgoraIO/agora_doc_source/releases/download/master-build/flutter_ng_json_template_en.json
