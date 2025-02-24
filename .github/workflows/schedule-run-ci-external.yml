@@ -1,7 +1,7 @@
 # This workflow is aim to let external contributors to run the integration tests.
 # * Check if the user is a external or internal contributor or not (who is in the org or not).
 # * If the user is a external contributor, remove the label "ci:schedule_run_ci" for each push.
-# * The PR with label "ci:schedule_run_ci" can trigger the `workflows/build.yml`.
+# * The PR with label "ci:schedule_run_ci" can trigger the `workflows/run_test.yml`.
 # 
 # If the user is a external contributor, the repo owener or the users with write access should response for add the 
 # label "ci:schedule_run_ci" to allow the external contributor to run the CI.
@@ -74,7 +74,7 @@ jobs:
     name: Schedule run ci for external contributors
     needs: check_permission
     if: ${{ contains(github.event.pull_request.labels.*.name, 'ci:schedule_run_ci') }}
-    uses: ./.github/workflows/build.yml
+    uses: ./.github/workflows/run_test.yml
     secrets:
-      MY_APP_ID: ${{ secrets.MY_APP_ID }}
+      APP_ID: ${{ secrets.APP_ID }}
             
