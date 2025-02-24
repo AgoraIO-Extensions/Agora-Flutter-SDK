@@ -1957,7 +1957,7 @@ class RtcEngineEventHandler {
 
   /// Occurs when the remote video stream state changes.
   ///
-  /// This callback does not work properly when the number of users (in the communication profile) or hosts (in the live streaming channel) in a channel exceeds 17.
+  /// This callback does not work properly when the number of users (in the communication profile) or hosts (in the live streaming channel) in a channel exceeds 32.
   ///
   /// * [connection] The connection information. See RtcConnection.
   /// * [remoteUid] The ID of the remote user whose video state changes.
@@ -1986,7 +1986,7 @@ class RtcEngineEventHandler {
   /// Occurs when a remote user (in the communication profile)/ host (in the live streaming profile) joins the channel.
   ///
   /// In a communication channel, this callback indicates that a remote user joins the channel. The SDK also triggers this callback to report the existing users in the channel when a user joins the channel.
-  ///  In a live-broadcast channel, this callback indicates that a host joins the channel. The SDK also triggers this callback to report the existing hosts in the channel when a host joins the channel. Agora recommends limiting the number of hosts to 17.
+  ///  In a live-broadcast channel, this callback indicates that a host joins the channel. The SDK also triggers this callback to report the existing hosts in the channel when a host joins the channel. Agora recommends limiting the number of co-hosts to 32, with a maximum of 17 video hosts.
   ///
   /// * [connection] The connection information. See RtcConnection.
   /// * [remoteUid] The ID of the user or host who joins the channel.
@@ -2008,7 +2008,7 @@ class RtcEngineEventHandler {
 
   /// Occurs when a remote user (in the communication profile) or a host (in the live streaming profile) stops/resumes sending the audio stream.
   ///
-  /// The SDK triggers this callback when the remote user stops or resumes sending the audio stream by calling the muteLocalAudioStream method. This callback does not work properly when the number of users (in the communication profile) or hosts (in the live streaming channel) in a channel exceeds 17.
+  /// The SDK triggers this callback when the remote user stops or resumes sending the audio stream by calling the muteLocalAudioStream method. This callback does not work properly when the number of users (in the communication profile) or hosts (in the live streaming channel) in a channel exceeds 32.
   ///
   /// * [connection] The connection information. See RtcConnection.
   /// * [remoteUid] The user ID.
@@ -2018,7 +2018,7 @@ class RtcEngineEventHandler {
 
   /// Occurs when a remote user stops or resumes publishing the video stream.
   ///
-  /// When a remote user calls muteLocalVideoStream to stop or resume publishing the video stream, the SDK triggers this callback to report to the local user the state of the streams published by the remote user. This callback can be inaccurate when the number of users (in the communication profile) or hosts (in the live streaming profile) in a channel exceeds 17.
+  /// When a remote user calls muteLocalVideoStream to stop or resume publishing the video stream, the SDK triggers this callback to report to the local user the state of the streams published by the remote user. This callback can be inaccurate when the number of users (in the communication profile) or hosts (in the live streaming profile) in a channel exceeds 32.
   ///
   /// * [connection] The connection information. See RtcConnection.
   /// * [remoteUid] The user ID of the remote user.
@@ -2281,7 +2281,7 @@ class RtcEngineEventHandler {
 
   /// Occurs when the remote audio state changes.
   ///
-  /// When the audio state of a remote user (in a voice/video call channel) or host (in a live streaming channel) changes, the SDK triggers this callback to report the current state of the remote audio stream. This callback does not work properly when the number of users (in the communication profile) or hosts (in the live streaming channel) in a channel exceeds 17.
+  /// When the audio state of a remote user (in a voice/video call channel) or host (in a live streaming channel) changes, the SDK triggers this callback to report the current state of the remote audio stream. This callback does not work properly when the number of users (in the communication profile) or hosts (in the live streaming channel) in a channel exceeds 32.
   ///
   /// * [connection] The connection information. See RtcConnection.
   /// * [remoteUid] The ID of the remote user whose audio state changes.
@@ -4895,7 +4895,6 @@ abstract class RtcEngine {
   ///
   /// If you enable loopback audio capturing, the output of the sound card is mixed into the audio stream sent to the other end.
   ///  This method applies to the macOS and Windows only.
-  ///  The macOS system's default sound card does not support recording functionality. As of v4.5.0, when you call this method for the first time, the SDK will automatically install the built-in AgoraALD virtual sound card developed by Agora. After successful installation, the audio routing will automatically switch to the virtual sound card and use it for audio capturing.
   ///  You can call this method either before or after joining a channel.
   ///  If you call the disableAudio method to disable the audio module, audio capturing will be disabled as well. If you need to enable audio capturing, call the enableAudio method to enable the audio module and then call the enableLoopbackRecording method.
   ///

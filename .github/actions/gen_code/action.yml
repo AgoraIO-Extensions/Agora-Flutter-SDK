@@ -1,0 +1,46 @@
+name: Gen code
+description: 'Generate code for the given public headers'
+
+inputs:
+  code_gen_public_headers:
+    description: 'The public headers to generate, e.g. rtc_4.5.0, leave empty will use the same as the target branch'
+    required: false
+    default: ''
+
+  flutter_channel:
+    description: 'Target Flutter channel, e.g. stable(default), beta, dev, master (or main), or any other channel name'
+    required: false
+    default: 'stable'
+
+  flutter_version:
+    description: 'Target Flutter version, e.g. 3.24.5, 3.24.x, commit hash, or leave empty to use the latest release version of specified channel by flutter_version(default)'
+    required: false
+    # we should use the latest stable version for build and gen code, but the 3.19.6 is the latest version which will gen compatible code for our flutter project,
+    # so we fixed use the 3.19.6 version here for now
+    default: '3.19.6'
+
+  working_directory:
+    description: 'The working directory of the action'
+    required: false
+    default: './'
+
+runs:
+  using: composite
+  steps:
+    - name: Setup Flutter
+      uses: subosito/flutter-action@v2
+      with:
+        channel: ${{ inputs.flutter_channel }}
+        flutter-version: ${{ inputs.flutter_version }}
+
+    - name: Gen
+      uses: AgoraIO-Extensions/actions/.github/actions/generate@main
+      with:
+        generate-code: true
+        generate-comment: false
+        working-directory: ${{ inputs.working_directory }}
+        generate-code-command: |
+          corepack enable && bash scripts/code_gen.sh ${{ inputs.code_gen_public_headers }}
+        generate-comment-command: ""
+        github-token: ""
+
