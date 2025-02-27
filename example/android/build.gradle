@@ -1,17 +1,3 @@
-buildscript {
-    // Min kotlin version for Flutter SDK 3.24
-    ext.kotlin_version = '1.9.10'
-    repositories {
-        google()
-        mavenCentral()
-    }
-
-    dependencies {
-        classpath 'com.android.tools.build:gradle:8.7.0'
-        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
-    }
-}
-
 allprojects {
     repositories {
         google()
@@ -26,6 +12,14 @@ subprojects {
 subprojects {
     project.evaluationDependsOn(':app')
 }
+
+// Uncomment the ext block below to override the default values for compileSdkVersion, ndkVersion, and minSdkVersion.
+// This allows you to customize these Android build settings for your specific needs.
+// ext {
+//     compileSdkVersion = 35
+//     ndkVersion = "27.0.12077973"
+//     minSdkVersion = 21
+// }
 
 tasks.register("clean", Delete) {
     delete rootProject.buildDir
