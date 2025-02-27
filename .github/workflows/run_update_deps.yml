@@ -34,7 +34,7 @@ on:
         required: false
         default: 'stable'
       flutter_version:
-        description: 'Target Flutter version, e.g. 3.24.5, 3.24.x, commit hash, or leave empty to use the latest release version of specified channel by flutter_version(default)'
+        description: 'Target Flutter version, e.g. 3.29.0, 3.29.x, commit hash, or leave empty to use the latest release version of specified channel by flutter_version(default)'
         type: string
         required: false
         # we should use the latest stable version for build and gen code, but the 3.19.6 is the latest version which will gen compatible code for our flutter project,

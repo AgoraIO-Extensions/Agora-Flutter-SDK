@@ -6,7 +6,11 @@ description: Demonstrates how to use the agora_rtc_engine plugin.
 publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 
 environment:
-  sdk: ">=2.19.0 <4.0.0"
+  # https://docs.flutter.dev/release/archive
+  # flutter 3.24.5 -> dart 3.5.0
+  # we support flutter 3.24.0 ~ latest stable
+  sdk: ^3.5.0
+  flutter: ^3.24.0
 
 # Dependencies specify other packages that your package needs in order to work.
 # To automatically upgrade your package dependencies to the latest versions
@@ -32,6 +36,7 @@ dependencies:
 
   # use at least 11.4.0 to support Flutter 3.29.0
   # https://github.com/Baseflow/flutter-permission-handler/commit/1dd6dc265a8f7b8b8dd0dd04f7202b8c17e4aa59
+  # This also requires Flutter ^3.24.0 dart ^3.5.0
   permission_handler: ^11.4.0
   
   path_provider: ^2.0.8
