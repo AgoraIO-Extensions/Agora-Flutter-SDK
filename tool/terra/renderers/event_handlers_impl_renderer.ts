@@ -213,17 +213,24 @@ bool handleEventInternal(String eventName, String eventData, List<Uint8List> buf
 
 @override
 bool handleEvent(String eventName, String eventData, List<Uint8List> buffers) {
-    if (!eventName.startsWith('${className}')) return false;
-    final newEvent = eventName.replaceFirst('${className}_', '');
-    if (handleEventInternal(newEvent, eventData, buffers)) { return true; }
-    ${(function () {
-      // handle return block
-      if (hasBaseClass) {
-        return "return super.handleEventInternal(newEvent, eventData, buffers);";
-      }
+    try {
+      if (!eventName.startsWith('${className}')) return false;
+      final newEvent = eventName.replaceFirst('${className}_', '');
+      if (handleEventInternal(newEvent, eventData, buffers)) { return true; }
+      ${(function () {
+        // handle return block
+        if (hasBaseClass) {
+          return "return super.handleEventInternal(newEvent, eventData, buffers);";
+        }
 
-      return "return false;";
-    })()}
+        return "return false;";
+      })()}
+    } catch (e) {
+      // in normal case, the handleEventInternal will not throw exception if the event is not handled,
+      // so we need to return true here to break the event loop.
+      // we also need to log the error here to help developer to find the problem later.
+      return true;
+    }
 }
 }
 `.trim();
