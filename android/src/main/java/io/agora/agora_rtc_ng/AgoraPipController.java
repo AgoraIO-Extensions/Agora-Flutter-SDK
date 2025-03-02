@@ -2,20 +2,25 @@ package io.agora.agora_rtc_ng;
 
 import android.app.Activity;
 import android.app.PictureInPictureParams;
+import android.app.PictureInPictureUiState;
 import android.content.pm.PackageManager;
+import android.content.res.Configuration;
 import android.graphics.Rect;
 import android.os.Build;
 import android.os.Handler;
 import android.os.Looper;
 import android.util.Rational;
 
-import androidx.annotation.ChecksSdkIntAtLeast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.annotation.RequiresApi;
 
 import java.lang.ref.WeakReference;
+import java.util.Objects;
 
-public class AgoraPipController {
+@RequiresApi(Build.VERSION_CODES.O)
+public class AgoraPipController
+        implements AgoraPipActivity.AgoraPipActivityListener {
     public enum PipState {
         Started(0),
         Stopped(1),
@@ -53,6 +58,8 @@ public class AgoraPipController {
         }
     }
 
+    private boolean mIsSupported = false;
+    private boolean mIsAutoEnterSupported = false;
     private PipParams mPipParams;
     private PictureInPictureParams.Builder mParamsBuilder;
     private WeakReference<Activity> mActivity;
@@ -67,13 +74,14 @@ public class AgoraPipController {
 
     public AgoraPipController(@NonNull Activity activity,
                               @Nullable PipStateChangedListener listener) {
-        mActivity = new WeakReference<>(activity);
+        setActivity(activity);
+
         mListener = listener;
         mHandler = new Handler(Looper.getMainLooper());
     }
 
     private void checkPipState() {
-        boolean currentState = isActived();
+        boolean currentState = isActivated();
         if (currentState != mLastPipState) {
             mLastPipState = currentState;
             notifyPipStateChanged(currentState ? PipState.Started : PipState.Stopped);
@@ -90,20 +98,13 @@ public class AgoraPipController {
         }
     }
 
-    public void attachToActivity(@NonNull Activity activity) {
-        if (mActivity != null && mActivity.get() != null &&
-                mActivity.get() != activity) {
-            mActivity = new WeakReference<>(activity);
-        }
-    }
-
-    public boolean isSupported() {
+    private boolean checkPipSupport() {
         Activity activity = mActivity.get();
         if (activity == null) {
             return false;
         }
 
-        // for android 8
+        // only support android 8 and above
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.O) {
             return false;
         }
@@ -117,18 +118,42 @@ public class AgoraPipController {
         return pm.hasSystemFeature(PackageManager.FEATURE_PICTURE_IN_PICTURE);
     }
 
-    @ChecksSdkIntAtLeast(api = Build.VERSION_CODES.S)
-    public boolean isAutoEnterSupported() {
-        // // for android 12
-        // // whether support setAutoEnterEnabled or not
-        // return Build.VERSION.SDK_INT >= Build.VERSION_CODES.S;
+    private boolean checkAutoEnterSupport() {
+        // Android 12 and above support to set auto enter enabled directly
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+            return true;
+        }
 
-        // since flutter do not delegate onPause and onPiPModeChanged and
-        // onPipStateChanged, we do not support auto enter pip on android for now
-        return false;
+        // For android 11 and below, we need to check if the activity is kind of
+        // AgoraPipActivity since we can enter pip mode when the onUserLeaveHint is
+        // called to enter pip mode as a workaround
+        Activity activity = mActivity.get();
+        return activity instanceof AgoraPipActivity;
     }
 
-    public boolean isActived() {
+    private void setActivity(Activity activity) {
+        mActivity = new WeakReference<>(activity);
+        if (activity instanceof AgoraPipActivity) {
+            ((AgoraPipActivity) activity).setAgoraPipActivityListener(this);
+        }
+
+        mIsSupported = checkPipSupport();
+        mIsAutoEnterSupported = checkAutoEnterSupport();
+    }
+
+    public void attachToActivity(@NonNull Activity activity) {
+        setActivity(activity);
+    }
+
+    public boolean isSupported() {
+        return mIsSupported;
+    }
+
+    public boolean isAutoEnterSupported() {
+        return mIsAutoEnterSupported;
+    }
+
+    public boolean isActivated() {
         Activity activity = mActivity.get();
         if (activity == null) {
             return false;
@@ -160,7 +185,7 @@ public class AgoraPipController {
             }
 
             if (mPipParams == null ||
-                    (aspectRatio != null && mPipParams.aspectRatio != aspectRatio) ||
+                    (aspectRatio != null && !Objects.equals(mPipParams.aspectRatio, aspectRatio)) ||
                     (autoEnterEnabled != null &&
                             mPipParams.autoEnterEnabled != autoEnterEnabled) ||
                     (sourceRectHint != null &&
@@ -176,24 +201,21 @@ public class AgoraPipController {
             // Note: setAutoEnterEnabled will not work if the target Android version
             // is 11 or lower
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
-                // mParamsBuilder.setAutoEnterEnabled(
-                //         Boolean.TRUE.equals(mPipParams.autoEnterEnabled));
-                // since flutter do not delegate onPause and onPiPModeChanged and
-                // onPipStateChanged, we do not support auto enter pip on android for
-                // now
-                //
-                // so we always set autoEnterEnabled to false for now
-                mParamsBuilder.setAutoEnterEnabled(false);
+                mParamsBuilder.setAutoEnterEnabled(
+                        Boolean.TRUE.equals(mPipParams.autoEnterEnabled));
             }
 
             if (mPipParams.sourceRectHint != null) {
                 mParamsBuilder.setSourceRectHint(mPipParams.sourceRectHint);
             }
 
-            // Disables the seamless resize. The seamless resize works great for videos where the
-            // content can be arbitrarily scaled, but you can disable this for non-video content so
-            // that the picture-in-picture mode is resized with a cross fade animation.
-            mParamsBuilder.setSeamlessResizeEnabled(false);
+            // Disables the seamless resize. The seamless resize works great for
+            // videos where the content can be arbitrarily scaled, but you can disable
+            // this for non-video content so that the picture-in-picture mode is
+            // resized with a cross fade animation.
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+                mParamsBuilder.setSeamlessResizeEnabled(false);
+            }
 
             activity.setPictureInPictureParams(mParamsBuilder.build());
         }
@@ -209,7 +231,7 @@ public class AgoraPipController {
             return false;
         }
 
-        if (isActived()) {
+        if (isActivated()) {
             return true;
         }
 
@@ -222,17 +244,18 @@ public class AgoraPipController {
             return false;
         }
 
+        boolean bRes = true;
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            activity.enterPictureInPictureMode(mParamsBuilder.build());
+            bRes = activity.enterPictureInPictureMode(mParamsBuilder.build());
         } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
             activity.enterPictureInPictureMode();
         }
 
-        return true;
+        return bRes;
     }
 
     public void stop() {
-        if (!isSupported() || !isActived()) {
+        if (!isSupported() || !isActivated()) {
             return;
         }
 
@@ -252,7 +275,6 @@ public class AgoraPipController {
         // do not call stop() here, coz there is no truly stop in android, the
         // implement of stop() is just moveTaskToBack(false), which is not what we
         // want.
-        //
         // stop();
 
         Activity activity = mActivity.get();
@@ -274,6 +296,12 @@ public class AgoraPipController {
     }
 
     private void startStateMonitoring() {
+        // Only need to monitor the pip state when the activity is not kind of AgoraPipActivity,
+        // since AgoraPipActivity can pass the pip state by onPictureInPictureModeChanged
+        if (mActivity.get() instanceof AgoraPipActivity) {
+            return;
+        }
+
         if (mHandler == null) {
             mHandler = new Handler(Looper.getMainLooper());
         }
@@ -297,17 +325,33 @@ public class AgoraPipController {
         mHandler.removeCallbacks(mCheckStateTask);
     }
 
-    // since flutter do not delegate onPause and onPiPModeChanged and
-    // onPipStateChanged, we do not support auto enter pip on android for now
-    // private void onUserLeaveHint() {
-    //     if (!isSupported() || mPipParams == null) {
-    //         return;
-    //     }
+    @Override
+    public void onPictureInPictureModeChanged(boolean isInPictureInPictureMode,
+                                              Configuration newConfig) {
+        if (isInPictureInPictureMode) {
+            notifyPipStateChanged(PipState.Started);
+        } else {
+            notifyPipStateChanged(PipState.Stopped);
+        }
+    }
 
-    //     // only call start when !isAutoEnterSupported() and autoEnterEnabled is
-    //     set to true if (Boolean.TRUE.equals(mPipParams.autoEnterEnabled) &&
-    //     !isAutoEnterSupported() && !isActived()) {
-    //         start();
-    //     }
-    // }
+    @Override
+    public boolean onPictureInPictureRequested() {
+        return false;
+    }
+
+    @Override
+    public void onPictureInPictureUiStateChanged(PictureInPictureUiState state) {
+        // do nothing for now
+    }
+
+    @Override
+    public void onUserLeaveHint() {
+        // Only need to handle auto enter pip for android version below 12
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.S) {
+            if (Boolean.TRUE.equals(mPipParams.autoEnterEnabled)) {
+                start();
+            }
+        }
+    }
 }

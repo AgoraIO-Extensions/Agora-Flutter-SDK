@@ -1074,9 +1074,9 @@ class RtcEngineImpl extends rtc_engine_ex_binding.RtcEngineExImpl
     return result ?? false;
   }
 
-  Future<bool> isPipActived() async {
+  Future<bool> isPipActivated() async {
     final result =
-        await engineMethodChannel.invokeMethod<bool>('pipIsActived', null);
+        await engineMethodChannel.invokeMethod<bool>('pipIsActivated', null);
     return result ?? false;
   }
 

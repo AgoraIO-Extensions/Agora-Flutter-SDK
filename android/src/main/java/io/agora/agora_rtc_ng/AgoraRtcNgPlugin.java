@@ -2,6 +2,7 @@ package io.agora.agora_rtc_ng;
 
 import android.content.Context;
 import android.graphics.Rect;
+import android.os.Build;
 import android.util.Rational;
 
 import androidx.annotation.NonNull;
@@ -59,7 +60,6 @@ public class AgoraRtcNgPlugin implements FlutterPlugin, MethodChannel.MethodCall
         applicationContext = null;
         channel.setMethodCallHandler(null);
         videoViewController.dispose();
-        pipController.dispose();
     }
 
     @Override
@@ -113,23 +113,26 @@ public class AgoraRtcNgPlugin implements FlutterPlugin, MethodChannel.MethodCall
     }
 
     private void initPipController(@NonNull ActivityPluginBinding binding) {
-        if (pipController == null) {
-            pipController = new AgoraPipController(binding.getActivity(), new AgoraPipController.PipStateChangedListener() {
-                @Override
-                public void onPipStateChangedListener(AgoraPipController.PipState state) {
-                    // put state into a json object
-                    channel.invokeMethod("pipStateChanged", new HashMap<String, Object>() {{
-                        put("state", state.getValue());
-                    }});
-                }
-            });
-        } else {
-            pipController.attachToActivity(binding.getActivity());
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            if (pipController == null) {
+
+                pipController = new AgoraPipController(binding.getActivity(), new AgoraPipController.PipStateChangedListener() {
+                    @Override
+                    public void onPipStateChangedListener(AgoraPipController.PipState state) {
+                        // put state into a json object
+                        channel.invokeMethod("pipStateChanged", new HashMap<String, Object>() {{
+                            put("state", state.getValue());
+                        }});
+                    }
+                });
+            } else {
+                pipController.attachToActivity(binding.getActivity());
+            }
         }
     }
 
     private void handlePipMethodCall(@NonNull MethodCall call, @NonNull MethodChannel.Result result) {
-        if (pipController != null) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O && pipController != null) {
             switch (call.method) {
                 case "pipIsSupported":
                     result.success(pipController.isSupported());
@@ -137,8 +140,8 @@ public class AgoraRtcNgPlugin implements FlutterPlugin, MethodChannel.MethodCall
                 case "pipIsAutoEnterSupported":
                     result.success(pipController.isAutoEnterSupported());
                     break;
-                case "pipIsActived":
-                    result.success(pipController.isActived());
+                case "pipIsActivated":
+                    result.success(pipController.isActivated());
                     break;
                 case "pipSetup":
                     final Map<?, ?> args = (Map<?, ?>) call.arguments;

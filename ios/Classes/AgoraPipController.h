@@ -102,11 +102,11 @@ typedef NS_ENUM(NSInteger, AgoraPipState) {
 - (BOOL)isAutoEnterSupported;
 
 /**
- * @method isActived
- * @abstract Check if pip is actived.
- * @return Whether pip is actived.
+ * @method isActivated
+ * @abstract Check if pip is activated.
+ * @return Whether pip is activated.
  */
-- (BOOL)isActived;
+- (BOOL)isActivated;
 
 /**
  * @method setup

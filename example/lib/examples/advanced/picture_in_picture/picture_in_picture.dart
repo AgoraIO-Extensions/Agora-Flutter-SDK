@@ -58,6 +58,26 @@ class _State extends State<PictureInPicture> with WidgetsBindingObserver {
     super.didChangeAppLifecycleState(state);
     logSink.log("[didChangeAppLifecycleState]: $state");
 
+    // Known limitations of Picture-in-Picture (PiP) mode on Android:
+    //
+    // 1. Cannot differentiate between Recent Apps vs Quick Settings Bar triggers:
+    //    Both generate the same window focus change event (false), preventing selective 
+    //    PiP activation for Recent Apps only.
+    //
+    // 2. Recent Apps interaction:
+    //    When entering PiP from Recent Apps, the app is removed from recent apps list.
+    //    Users must exit PiP before they can force close the app from Recent Apps.
+    //
+    // 3. PiP activation constraints:
+    //    - pipStart() calls are not guaranteed to enter PiP mode
+    //    - Most reliable when called during inactive state
+    //    - autoEnterEnabled flag alone may not trigger PiP
+    //    - Even implementing onUserLeaveHint callback per documentation may not ensure activation
+    // 
+    // Based on extensive testing, we recommend using the overlay (floating) window when available,
+    // as it provides optimal user experience. Picture-in-Picture mode should be used as a fallback
+    // option on Android devices where overlay windows are not supported or permitted.
+
     if (state == AppLifecycleState.inactive) {
       // if you set the root view as the source view, you can call pipStart to enter pip mode on iOS.
       // however, if you call pipSetup after PlatformView is created, it may not work very well, coz
@@ -351,7 +371,7 @@ class _State extends State<PictureInPicture> with WidgetsBindingObserver {
               Container(
                 color: Colors.black,
               ),
-            if (!(Platform.isAndroid && _isInPipMode))
+            if (!(_isInPipMode))
               Positioned(
                 right: 0,
                 bottom: 0,

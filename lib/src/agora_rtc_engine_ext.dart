@@ -52,7 +52,7 @@ class AgoraPipOptions {
   /// @see VideoCanvas
   /// @note the view in videoCanvas is the sourceView of pip view, zero means to use the root view of the app.
   /// @note only some properties of VideoCanvas are supported:
-  /// - uid (optional) 
+  /// - uid (optional)
   /// - view (optional)
   /// - backgroundColor (optional)
   /// - mirrorMode (optional)
@@ -168,13 +168,13 @@ extension RtcEngineExt on RtcEngine {
     return impl.pipIsAutoEnterSupported();
   }
 
-  /// Check if Picture in Picture is active.
+  /// Check if Picture in Picture is activated.
   ///
   /// Returns
-  /// Whether Picture in Picture is active.
-  Future<bool> isPipActived() async {
+  /// Whether Picture in Picture is activated.
+  Future<bool> isPipActivated() async {
     final impl = this as RtcEngineImpl;
-    return impl.isPipActived();
+    return impl.isPipActivated();
   }
 
   /// Setup or update Picture in Picture.

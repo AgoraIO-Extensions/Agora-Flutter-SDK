@@ -282,8 +282,8 @@ private:
 // delegate
 @property(nonatomic, weak) id<AgoraPipStateChangedDelegate> pipStateDelegate;
 
-// is actived
-@property(atomic, assign) BOOL isPipActived;
+// is activated
+@property(atomic, assign) BOOL isPipActivated;
 
 // pip view
 @property(nonatomic, strong) AgoraPipView *pipView;
@@ -328,8 +328,8 @@ private:
   return [self isSupported];
 }
 
-- (BOOL)isActived {
-  return _isPipActived;
+- (BOOL)isActivated {
+  return _isPipActivated;
 }
 
 - (BOOL)setup:(AgoraPipOptions *)options {
@@ -505,8 +505,8 @@ private:
     // self->_pipView = nil;
   }
 
-  if (self->_isPipActived) {
-    self->_isPipActived = NO;
+  if (self->_isPipActivated) {
+    self->_isPipActivated = NO;
     [self->_pipStateDelegate pipStateChanged:AgoraPipStateStopped error:nil];
   }
 }
@@ -520,7 +520,7 @@ private:
     (AVPictureInPictureController *)pictureInPictureController {
   AGORA_PIP_LOG(@"pictureInPictureControllerDidStartPictureInPicture");
 
-  _isPipActived = YES;
+  _isPipActivated = YES;
   [_pipStateDelegate pipStateChanged:AgoraPipStateStarted error:nil];
 }
 
@@ -543,7 +543,7 @@ private:
     (AVPictureInPictureController *)pictureInPictureController {
   AGORA_PIP_LOG(@"pictureInPictureControllerDidStopPictureInPicture");
 
-  _isPipActived = NO;
+  _isPipActivated = NO;
   [_pipStateDelegate pipStateChanged:AgoraPipStateStopped error:nil];
 }
 

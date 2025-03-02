@@ -79,8 +79,8 @@
     result([NSNumber numberWithBool:[self.pipController isSupported]]);
   } else if ([@"pipIsAutoEnterSupported" isEqualToString:call.method]) {
     result([NSNumber numberWithBool:[self.pipController isAutoEnterSupported]]);
-  } else if ([@"pipIsActived" isEqualToString:call.method]) {
-    result([NSNumber numberWithBool:[self.pipController isActived]]);
+  } else if ([@"pipIsActivated" isEqualToString:call.method]) {
+    result([NSNumber numberWithBool:[self.pipController isActivated]]);
   } else if ([@"pipSetup" isEqualToString:call.method]) {
     @autoreleasepool {
       // new options
