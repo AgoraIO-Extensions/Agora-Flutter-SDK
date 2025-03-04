@@ -2,8 +2,125 @@ import 'package:agora_rtc_engine/src/agora_media_player.dart';
 import 'package:agora_rtc_engine/src/agora_rtc_engine.dart';
 import 'package:agora_rtc_engine/src/agora_rtc_engine_ex.dart';
 import 'package:agora_rtc_engine/src/impl/agora_rtc_engine_impl.dart';
+import 'package:agora_rtc_engine/src/agora_base.dart';
+import 'package:flutter/foundation.dart';
 import 'impl/agora_rtc_engine_impl.dart' as impl;
 import 'impl/media_player_impl.dart';
+
+/// @nodoc
+class AgoraPipOptions {
+  /// @nodoc
+  const AgoraPipOptions({
+    this.autoEnterEnabled,
+    this.aspectRatioX,
+    this.aspectRatioY,
+    this.sourceRectHintLeft,
+    this.sourceRectHintTop,
+    this.sourceRectHintRight,
+    this.sourceRectHintBottom,
+    this.connection,
+    this.videoCanvas,
+    this.preferredContentWidth,
+    this.preferredContentHeight,
+  });
+
+  /// @nodoc
+  final bool? autoEnterEnabled;
+
+  /// android only
+  /// @nodoc
+  final int? aspectRatioX;
+
+  /// @nodoc
+  final int? aspectRatioY;
+
+  /// @nodoc
+  final int? sourceRectHintLeft;
+
+  /// @nodoc
+  final int? sourceRectHintTop;
+
+  /// @nodoc
+  final int? sourceRectHintRight;
+
+  /// @nodoc
+  final int? sourceRectHintBottom;
+
+  /// @nodoc
+  final RtcConnection? connection;
+
+  /// @see VideoCanvas
+  /// @note the view in videoCanvas is the sourceView of pip view, zero means to use the root view of the app.
+  /// @note only some properties of VideoCanvas are supported:
+  /// - uid (optional)
+  /// - view (optional)
+  /// - backgroundColor (optional)
+  /// - mirrorMode (optional)
+  /// - renderMode (optional)
+  /// - sourceType (optional)
+  /// - mediaPlayerId (optional) not supported
+  final VideoCanvas? videoCanvas;
+
+  /// @nodoc
+  final int? preferredContentWidth;
+
+  /// @nodoc
+  final int? preferredContentHeight;
+
+  /// @nodoc
+  Map<String, dynamic> toDictionary() {
+    final val = <String, dynamic>{};
+
+    void writeNotNull(String key, dynamic value) {
+      if (value != null) {
+        val[key] = value;
+      }
+    }
+
+    writeNotNull('autoEnterEnabled', autoEnterEnabled);
+
+    // only for android
+    if (defaultTargetPlatform == TargetPlatform.android) {
+      writeNotNull('aspectRatioX', aspectRatioX);
+      writeNotNull('aspectRatioY', aspectRatioY);
+      writeNotNull('sourceRectHintLeft', sourceRectHintLeft);
+      writeNotNull('sourceRectHintTop', sourceRectHintTop);
+      writeNotNull('sourceRectHintRight', sourceRectHintRight);
+      writeNotNull('sourceRectHintBottom', sourceRectHintBottom);
+    }
+
+    // only for ios
+    if (defaultTargetPlatform == TargetPlatform.iOS) {
+      writeNotNull('connection', connection?.toJson());
+      writeNotNull('videoCanvas', videoCanvas?.toJson());
+      writeNotNull('preferredContentWidth', preferredContentWidth);
+      writeNotNull('preferredContentHeight', preferredContentHeight);
+    }
+    return val;
+  }
+}
+
+/// @nodoc
+enum AgoraPipState {
+  /// @nodoc
+  pipStateStarted,
+
+  /// @nodoc
+  pipStateStopped,
+
+  /// @nodoc
+  pipStateFailed,
+}
+
+class AgoraPipStateChangedObserver {
+  /// @nodoc
+  const AgoraPipStateChangedObserver({
+    required this.onPipStateChanged,
+  });
+
+  /// @nodoc
+  final void Function(AgoraPipState state, String? error) onPipStateChanged;
+}
 
 /// @nodoc
 extension RtcEngineExt on RtcEngine {
@@ -16,6 +133,80 @@ extension RtcEngineExt on RtcEngine {
   Future<String?> getAssetAbsolutePath(String assetPath) async {
     final impl = this as RtcEngineImpl;
     return impl.getAssetAbsolutePath(assetPath);
+  }
+
+  /// Registers a Picture in Picture state change observer.
+  ///
+  /// [observer] The Picture in Picture state change observer.
+  Future<void> registerPipStateChangedObserver(
+      AgoraPipStateChangedObserver observer) async {
+    final impl = this as RtcEngineImpl;
+    return impl.registerPipStateChangedObserver(observer);
+  }
+
+  /// Unregisters a Picture in Picture state change observer.
+  Future<void> unregisterPipStateChangedObserver() async {
+    final impl = this as RtcEngineImpl;
+    return impl.unregisterPipStateChangedObserver();
+  }
+
+  /// Check if Picture in Picture is supported.
+  ///
+  /// Returns
+  /// Whether Picture in Picture is supported.
+  Future<bool> pipIsSupported() async {
+    final impl = this as RtcEngineImpl;
+    return impl.pipIsSupported();
+  }
+
+  /// Check if Picture in Picture can auto enter.
+  ///
+  /// Returns
+  /// Whether Picture in Picture can auto enter.
+  Future<bool> pipIsAutoEnterSupported() async {
+    final impl = this as RtcEngineImpl;
+    return impl.pipIsAutoEnterSupported();
+  }
+
+  /// Check if Picture in Picture is activated.
+  ///
+  /// Returns
+  /// Whether Picture in Picture is activated.
+  Future<bool> isPipActivated() async {
+    final impl = this as RtcEngineImpl;
+    return impl.isPipActivated();
+  }
+
+  /// Setup or update Picture in Picture.
+  ///
+  /// [options] The options of the Picture in Picture.
+  ///
+  /// Returns
+  /// Whether Picture in Picture is setup successfully.
+  Future<bool> pipSetup(AgoraPipOptions options) async {
+    final impl = this as RtcEngineImpl;
+    return impl.pipSetup(options);
+  }
+
+  /// Start Picture in Picture.
+  ///
+  /// Returns
+  /// Whether Picture in Picture is started successfully.
+  Future<bool> pipStart() async {
+    final impl = this as RtcEngineImpl;
+    return impl.pipStart();
+  }
+
+  /// Stop Picture in Picture.
+  Future<void> pipStop() async {
+    final impl = this as RtcEngineImpl;
+    return impl.pipStop();
+  }
+
+  /// Dispose Picture in Picture.
+  Future<void> pipDispose() async {
+    final impl = this as RtcEngineImpl;
+    return impl.pipDispose();
   }
 }
 

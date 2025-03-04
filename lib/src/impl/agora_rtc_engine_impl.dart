@@ -369,6 +369,8 @@ class RtcEngineImpl extends rtc_engine_ex_binding.RtcEngineExImpl
 
   AsyncMemoizer? _initializeCallOnce;
 
+  AgoraPipStateChangedObserver? _pipStateChangedObserver;
+
   static RtcEngineEx create({
     Object? sharedNativeHandle,
     IrisMethodChannel? irisMethodChannel,
@@ -433,6 +435,20 @@ class RtcEngineImpl extends rtc_engine_ex_binding.RtcEngineExImpl
     _initializeCallOnce ??= AsyncMemoizer();
     await _initializeCallOnce!.runOnce(() async {
       engineMethodChannel = const MethodChannel('agora_rtc_ng');
+
+      engineMethodChannel.setMethodCallHandler((call) async {
+        try {
+          if (call.method == 'pipStateChanged') {
+            final jsonMap = Map<String, dynamic>.from(call.arguments as Map);
+            final state = jsonMap['state'] as int;
+            final error = jsonMap['error'] as String?;
+            _pipStateChangedObserver?.onPipStateChanged(
+                AgoraPipState.values[state], error);
+          }
+        } catch (e) {
+          assert(false, 'pipStateChanged error: $e');
+        }
+      });
 
       if (!kIsWeb && defaultTargetPlatform == TargetPlatform.android) {
         await engineMethodChannel.invokeMethod('androidInit');
@@ -1033,6 +1049,60 @@ class RtcEngineImpl extends rtc_engine_ex_binding.RtcEngineExImpl
     final p = await engineMethodChannel.invokeMethod<String>(
         'getAssetAbsolutePath', assetPath);
     return p;
+  }
+
+  //////////// pip ////////////
+
+  Future<void> registerPipStateChangedObserver(
+      AgoraPipStateChangedObserver observer) async {
+    _pipStateChangedObserver = observer;
+  }
+
+  Future<void> unregisterPipStateChangedObserver() async {
+    _pipStateChangedObserver = null;
+  }
+
+  Future<bool> pipIsSupported() async {
+    final result =
+        await engineMethodChannel.invokeMethod<bool>('pipIsSupported', null);
+    return result ?? false;
+  }
+
+  Future<bool> pipIsAutoEnterSupported() async {
+    final result = await engineMethodChannel.invokeMethod<bool>(
+        'pipIsAutoEnterSupported', null);
+    return result ?? false;
+  }
+
+  Future<bool> isPipActivated() async {
+    final result =
+        await engineMethodChannel.invokeMethod<bool>('pipIsActivated', null);
+    return result ?? false;
+  }
+
+  Future<bool> pipSetup(AgoraPipOptions options) async {
+    // append globalVideoViewController.irisRtcRenderingHandle to json
+    final dicOptions = options.toDictionary();
+    dicOptions['renderingHandle'] =
+        _globalVideoViewController!.irisRtcRenderingHandle;
+
+    final result =
+        await engineMethodChannel.invokeMethod<bool>('pipSetup', dicOptions);
+    return result ?? false;
+  }
+
+  Future<bool> pipStart() async {
+    final result =
+        await engineMethodChannel.invokeMethod<bool>('pipStart', null);
+    return result ?? false;
+  }
+
+  Future<void> pipStop() async {
+    await engineMethodChannel.invokeMethod<bool>('pipStop', null);
+  }
+
+  Future<void> pipDispose() async {
+    await engineMethodChannel.invokeMethod<bool>('pipDispose', null);
   }
 
   /////////// debug ////////

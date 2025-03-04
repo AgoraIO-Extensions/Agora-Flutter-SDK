@@ -7,8 +7,9 @@ import io.agora.agora_rtc_flutter_example.VideoRawDataController
 import io.flutter.embedding.android.FlutterActivity
 import io.flutter.embedding.engine.FlutterEngine
 import io.flutter.plugin.common.MethodChannel
+import io.agora.agora_rtc_ng.AgoraPipActivity
 
-class MainActivity: FlutterActivity() {
+class MainActivity: AgoraPipActivity() {
     private lateinit var methodChannel: MethodChannel
     private lateinit var sharedNativeHandleMethodChannel: MethodChannel
     private var videoRawDataController: VideoRawDataController? = null
