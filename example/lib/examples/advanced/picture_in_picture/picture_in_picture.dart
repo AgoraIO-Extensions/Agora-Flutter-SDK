@@ -159,19 +159,32 @@ class _State extends State<PictureInPicture> with WidgetsBindingObserver {
       bool isLocal = uid == config.uid;
 
       AgoraPipOptions options = AgoraPipOptions(
+        // According to https://developer.android.com/develop/ui/views/picture-in-picture#setautoenterenabled and Apple documentation
+        // Both platforms recommend setting autoEnterEnabled to true for the best user experience.
         autoEnterEnabled: _isPipAutoEnterSupported,
+
         // android only
-        // For optimal PiP display on Android:
-        // 1. Set sourceRectHint to match the dimensions of the target video view
-        // 2. Set aspectRatio to match the video view's aspect ratio
-        // This ensures smooth transitions and proper video positioning in PiP mode
-        // See: https://developer.android.com/reference/android/app/PictureInPictureParams.Builder#setSourceRectHint(android.graphics.Rect)
+
+        // Keep the aspect ratio same as the video view.
         aspectRatioX: sourceRectHint?.width.toInt() ?? _contextWidth,
         aspectRatioY: sourceRectHint?.height.toInt() ?? _contextHeight,
+        // According to https://developer.android.com/develop/ui/views/picture-in-picture#set-sourcerecthint
+        // If your app doesn't provide a proper sourceRectHint, the system tries to apply a content overlay 
+        // during the PiP entering animation, which makes for a poor user experience.
         sourceRectHintLeft: sourceRectHint?.left.toInt() ?? 0,
         sourceRectHintTop: sourceRectHint?.top.toInt() ?? 0,
         sourceRectHintRight: sourceRectHint?.right.toInt() ?? _contextWidth,
         sourceRectHintBottom: sourceRectHint?.bottom.toInt() ?? _contextHeight,
+        // According to https://developer.android.com/develop/ui/views/picture-in-picture#seamless-resizing
+        // The setSeamlessResizeEnabled flag is set to true by default for backward compatibility. 
+        // Leave this set to true for video content, and change it to false for non-video content.
+        seamlessResizeEnabled: true,
+        // The external state monitor checks the PiP view state at the interval specified by externalStateMonitorInterval (100ms).
+        // This is necessary because FlutterActivity does not forward PiP state change events to the Flutter side.
+        // Even if your Activity is a subclass of AgoraPipActivity, you can still use the external state monitor to track PiP state changes.
+        useExternalStateMonitor: false,
+        externalStateMonitorInterval: 100,
+
         // ios only
         preferredContentWidth:
             int.tryParse(_contentWidthController.text) ?? 960,

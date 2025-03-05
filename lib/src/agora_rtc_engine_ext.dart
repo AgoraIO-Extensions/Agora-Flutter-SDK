@@ -7,9 +7,8 @@ import 'package:flutter/foundation.dart';
 import 'impl/agora_rtc_engine_impl.dart' as impl;
 import 'impl/media_player_impl.dart';
 
-/// @nodoc
+/// Agora Picture in Picture options.
 class AgoraPipOptions {
-  /// @nodoc
   const AgoraPipOptions({
     this.autoEnterEnabled,
     this.aspectRatioX,
@@ -18,35 +17,60 @@ class AgoraPipOptions {
     this.sourceRectHintTop,
     this.sourceRectHintRight,
     this.sourceRectHintBottom,
+    this.seamlessResizeEnabled,
+    this.useExternalStateMonitor,
+    this.externalStateMonitorInterval,
     this.connection,
     this.videoCanvas,
     this.preferredContentWidth,
     this.preferredContentHeight,
   });
 
-  /// @nodoc
+  /// Whether to enable auto enter.
+  /// @note only for android
   final bool? autoEnterEnabled;
 
-  /// android only
-  /// @nodoc
+  /// The aspect ratio of the video view.
+  /// @note only for android
   final int? aspectRatioX;
 
-  /// @nodoc
+  /// The aspect ratio of the video view.
+  /// @note only for android
   final int? aspectRatioY;
 
-  /// @nodoc
+  /// The left position of the source rect hint.
+  /// @note only for android
   final int? sourceRectHintLeft;
 
-  /// @nodoc
+  /// The top position of the source rect hint.
+  /// @note only for android
   final int? sourceRectHintTop;
 
-  /// @nodoc
+  /// The right position of the source rect hint.
+  /// @note only for android
   final int? sourceRectHintRight;
 
-  /// @nodoc
+  /// The bottom position of the source rect hint.
+  /// @note only for android
   final int? sourceRectHintBottom;
 
-  /// @nodoc
+  /// Whether to enable seamless resize.
+  /// Default is false. Set to true to enable seamless resize.
+  /// @note only for android
+  final bool? seamlessResizeEnabled;
+
+  /// Whether to use external state monitor.
+  /// Default is false. Set to true to use external state monitor, which will create a new thread to monitor the state of the pip view and
+  /// check the pip state with the interval set in [externalStateMonitorInterval].
+  /// @note only for android
+  final bool? useExternalStateMonitor;
+
+  /// The interval of the external state monitor, in milliseconds. Default is 100ms.
+  /// @note only for android
+  final int? externalStateMonitorInterval;
+
+  /// The rtc connection.
+  /// @note only for ios
   final RtcConnection? connection;
 
   /// @see VideoCanvas
@@ -59,12 +83,15 @@ class AgoraPipOptions {
   /// - renderMode (optional)
   /// - sourceType (optional)
   /// - mediaPlayerId (optional) not supported
+  /// @note only for ios
   final VideoCanvas? videoCanvas;
 
-  /// @nodoc
+  /// The preferred content width.
+  /// @note only for ios
   final int? preferredContentWidth;
 
-  /// @nodoc
+  /// The preferred content height.
+  /// @note only for ios
   final int? preferredContentHeight;
 
   /// @nodoc
@@ -87,6 +114,9 @@ class AgoraPipOptions {
       writeNotNull('sourceRectHintTop', sourceRectHintTop);
       writeNotNull('sourceRectHintRight', sourceRectHintRight);
       writeNotNull('sourceRectHintBottom', sourceRectHintBottom);
+      writeNotNull('seamlessResizeEnabled', seamlessResizeEnabled);
+      writeNotNull('useExternalStateMonitor', useExternalStateMonitor);
+      writeNotNull('externalStateMonitorInterval', externalStateMonitorInterval);
     }
 
     // only for ios
@@ -100,25 +130,25 @@ class AgoraPipOptions {
   }
 }
 
-/// @nodoc
+/// The state of the Picture in Picture.
 enum AgoraPipState {
-  /// @nodoc
+  /// The Picture in Picture is started.
   pipStateStarted,
 
-  /// @nodoc
+  /// The Picture in Picture is stopped.
   pipStateStopped,
 
-  /// @nodoc
+  /// The Picture in Picture is failed.
   pipStateFailed,
 }
 
+/// The observer of the Picture in Picture state changed.
 class AgoraPipStateChangedObserver {
-  /// @nodoc
   const AgoraPipStateChangedObserver({
     required this.onPipStateChanged,
   });
 
-  /// @nodoc
+  /// The callback of the Picture in Picture state changed.
   final void Function(AgoraPipState state, String? error) onPipStateChanged;
 }
 
