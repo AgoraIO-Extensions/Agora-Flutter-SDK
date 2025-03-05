@@ -31,6 +31,9 @@ abstract class VideoViewControllerBase {
   int getTextureId();
 
   @internal
+  int getViewHandle();
+
+  @internal
   int getVideoSourceType();
 
   @internal

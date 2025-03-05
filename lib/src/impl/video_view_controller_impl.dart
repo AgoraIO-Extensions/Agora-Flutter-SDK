@@ -49,7 +49,7 @@ extension VideoViewControllerBaseExt on VideoViewControllerBase {
 
 mixin VideoViewControllerBaseMixin implements VideoViewControllerBase {
   int _textureId = kTextureNotInit;
-
+  int _viewHandle = kNullViewHandle;
   @internal
   bool get isInitialzed => (rtcEngine as RtcEngineImpl).isInitialzed;
 
@@ -68,11 +68,15 @@ mixin VideoViewControllerBaseMixin implements VideoViewControllerBase {
   @override
   int getTextureId() => _textureId;
 
+  @override
+  int getViewHandle() => _viewHandle;
+
   @internal
   void updateController(VideoViewControllerBase oldController) {
     assert(oldController is VideoViewControllerBaseMixin);
     final oldControllerMixin = oldController as VideoViewControllerBaseMixin;
     _textureId = oldControllerMixin.getTextureId();
+    _viewHandle = oldControllerMixin.getViewHandle();
   }
 
   @override
@@ -87,8 +91,27 @@ mixin VideoViewControllerBaseMixin implements VideoViewControllerBase {
       return;
     }
 
+    // Pass view handle with kNullViewHandle will clear all setup renderers,
+    // since we decide to use VideoViewSetupMode.videoViewSetupRemove to remove 
+    // the renderers, we should return directly here.
+    if (_viewHandle == kNullViewHandle) {
+      return;
+    }
+
+    VideoCanvas newCanvas = VideoCanvas(
+      view: _viewHandle,
+      renderMode: canvas.renderMode,
+      mirrorMode: canvas.mirrorMode,
+      uid: canvas.uid,
+      sourceType: canvas.sourceType,
+      cropArea: canvas.cropArea,
+      setupMode: VideoViewSetupMode.videoViewSetupRemove,
+      mediaPlayerId: canvas.mediaPlayerId,
+    );
+
     await rtcEngine.globalVideoViewController
-        ?.setupVideoView(kNullViewHandle, canvas, connection: connection);
+        ?.setupVideoView(_viewHandle, newCanvas, connection: connection);
+    _viewHandle = kNullViewHandle;
   }
 
   @internal
@@ -142,6 +165,7 @@ mixin VideoViewControllerBaseMixin implements VideoViewControllerBase {
 
   @override
   Future<void> setupView(int nativeViewPtr) async {
+    _viewHandle = nativeViewPtr;
     await rtcEngine.globalVideoViewController
         ?.setupVideoView(nativeViewPtr, canvas, connection: connection);
   }
