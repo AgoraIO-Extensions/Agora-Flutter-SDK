@@ -321,4 +321,56 @@ void testCases(ValueGetter<IrisTester> irisTester) {
     },
     timeout: const Timeout(Duration(minutes: 2)),
   );
+
+  testWidgets(
+    'RtcEngineEventHandler.onErrorWithUnkownError',
+    (WidgetTester tester) async {
+      RtcEngine rtcEngine = createAgoraRtcEngine();
+      await rtcEngine.initialize(RtcEngineContext(
+        appId: 'app_id',
+        areaCode: AreaCode.areaCodeGlob.value(),
+      ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
+
+      final theRtcEngineEventHandler = RtcEngineEventHandler(
+        onError: (ErrorCodeType err, String msg) {
+          // do nothing, we just to make sure no exception thrown.
+        },
+      );
+
+      rtcEngine.registerEventHandler(
+        theRtcEngineEventHandler,
+      );
+
+      // Delay 500 milliseconds to ensure the registerEventHandler call completed.
+      await Future.delayed(const Duration(milliseconds: 500));
+
+      {
+        String msg = "hello";
+
+        final eventJson = {
+          'err': 9999999, // un existing error code.
+          'msg': msg,
+        };
+
+        final eventIds = eventIdsMapping['RtcEngineEventHandler_onError'] ?? [];
+        for (final event in eventIds) {
+          final ret = irisTester().fireEvent(event, params: eventJson);
+          // Delay 1000 milliseconds to ensure the callback is called.
+          await Future.delayed(const Duration(milliseconds: 1000));
+        }
+      }
+
+      {
+        rtcEngine.unregisterEventHandler(
+          theRtcEngineEventHandler,
+        );
+      }
+      // Delay 500 milliseconds to ensure the unregisterEventHandler call completed.
+      await Future.delayed(const Duration(milliseconds: 500));
+
+      await rtcEngine.release();
+    },
+    timeout: const Timeout(Duration(minutes: 2)),
+  );
 }
