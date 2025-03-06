@@ -10,7 +10,7 @@ pushd ${PROJECT_ROOT}
 
 flutter --version
 
-flutter packages get
+dart pub get --no-example
 
 bash ${PROJECT_ROOT}/tool/terra/build.sh ${RTC_VERSION}
 

@@ -1,6 +1,31 @@
 group 'io.agora.agora_rtc_ng'
 version '1.0-SNAPSHOT'
 
+// This plugin uses Gradle's Extra Properties Extension to allow flexible configuration
+// of key Android properties. See: https://docs.gradle.org/current/dsl/org.gradle.api.plugins.ExtraPropertiesExtension.html
+//
+// You can override the default values by defining an ext block in your app's android/build.gradle:
+//
+// ext {
+//     compileSdkVersion = 35      // Android SDK version to compile against
+//     ndkVersion = "27.0.12077973" // Native Development Kit version
+//     minSdkVersion = 21         // Minimum Android version supported
+// }
+//
+// Property details:
+// ----------------
+// compileSdkVersion: Defaults to 35. We align with Flutter's recommended version.
+// See: https://docs.flutter.dev/reference/supported-platforms
+//
+// ndkVersion: If not specified, uses the default from your Android Gradle Plugin.
+// See: https://developer.android.com/build/releases/past-releases
+//
+// minSdkVersion: Defaults to 21 if not specified.
+//
+// Unless you have specific requirements, we recommend using the default values
+// to maintain compatibility with Flutter. The default values can be found in the Flutter SDK at:
+// $FLUTTER_ROOT/packages/flutter_tools/gradle/src/main/groovy/flutter.groovy
+//
 def safeExtGet(prop, fallback) {
     rootProject.ext.has(prop) ? rootProject.ext.get(prop) : fallback
 }
@@ -10,7 +35,6 @@ buildscript {
         google()
         mavenCentral()
     }
-
 }
 
 rootProject.allprojects {
@@ -24,20 +48,58 @@ apply plugin: 'com.android.library'
 
 android {
     // Conditional for compatibility with AGP <4.2.
+    // https://github.com/flutter/flutter/commit/aa230140e76e7eedaced6e91661a16475db205db
     if (project.android.hasProperty("namespace")) {
         namespace 'io.agora.agora_rtc_ng'
     }
-    compileSdkVersion safeExtGet('compileSdkVersion', 31)
 
-    defaultConfig {
-        minSdkVersion safeExtGet('minSdkVersion', 21)
+    // Bumping the plugin compileSdk version requires all clients of this plugin
+    // to bump the version in their app.
+    compileSdkVersion safeExtGet('compileSdkVersion', 35)
 
-        consumerProguardFiles 'consumer-rules.pro'
+    // Use the NDK version
+    // declared in /android/app/build.gradle file of the Flutter project.
+    // Replace it with a version number if this plugin requires a specific NDK version.
+    // (e.g. ndkVersion "23.1.7779620")
+    // ndkVersion = android.ndkVersion
+
+    //
+    // According to the documentation, when ndkVersion is not specified, AGP's ndkVersion will be used for compilation. 
+    // This may print warning messages when integrating with Flutter projects because Flutter projects have built-in ndkVersion, 
+    // which is not always consistent with AGP's ndkVersion. Additionally, this plugin does not strictly require a specific ndkVersion, 
+    // so we use AGP's default ndkVersion for compilation.
+    // 
+    // For AGP's corresponding ndkVersion, see:
+    // https://developer.android.com/build/releases/past-releases
+    //
+    // Flutter's corresponding ndkVersion can be found in Flutter SDK at:
+    // $FLUTTER_ROOT/packages/flutter_tools/gradle/src/main/groovy/flutter.groovy
+    // 
+    // For the warning message, there is a corresponding issue:
+    // https://github.com/flutter/flutter/issues/139427
+    //
+    // Therefore, the final ndkVersion used for compilation depends on the AGP version of the integrated Flutter project.
+    // There are three ways to turn off the warning message:
+    // 1. Specify ndkVersion in the Flutter project to match AGP's ndkVersion(Recommended).
+    // 2. Downgrade AGP until its default ndkVersion matches Flutter's default ndkVersion.
+    // 3. Use Gradle's Extra Properties Extension we talked above to specify ndkVersion.
+    if (rootProject.ext.has('ndkVersion')) {
+        ndkVersion rootProject.ext.ndkVersion
     }
 
-    compileOptions {
-        sourceCompatibility JavaVersion.VERSION_1_8
-        targetCompatibility JavaVersion.VERSION_1_8
+    // Invoke the shared CMake build with the Android Gradle Plugin.
+    externalNativeBuild {
+        cmake {
+            path 'src/main/cpp/CMakeLists.txt'
+
+            // The default CMake version for the Android Gradle Plugin is 3.10.2.
+            // https://developer.android.com/studio/projects/install-ndk#vanilla_cmake
+            //
+            // The Flutter tooling requires that developers have CMake 3.10 or later
+            // installed. You should not increase this version, as doing so will cause
+            // the plugin to fail to compile for some customers of the plugin.
+            // version "3.10.2"
+        }
     }
 
     sourceSets {
@@ -46,10 +108,18 @@ android {
         }
     }
 
-    externalNativeBuild {
-        cmake {
-            path 'src/main/cpp/CMakeLists.txt'
-        }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+    
+    defaultConfig {
+        // https://github.com/AgoraIO-Extensions/Agora-Flutter-SDK/pull/1832
+        minSdkVersion safeExtGet('minSdkVersion', 21)
+
+        // https://docs.flutter.dev/deployment/android#shrink-your-code-with-r8
+        // https://github.com/AgoraIO-Extensions/Agora-Flutter-SDK/pull/2050
+        consumerProguardFiles 'consumer-rules.pro'
     }
 }
 

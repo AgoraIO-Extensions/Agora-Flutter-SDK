@@ -18,8 +18,11 @@ publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 version: 1.0.0+1
 
 environment:
-  sdk: '>=2.19.0 <4.0.0'
-  flutter: '>=3.7.0'
+  # https://docs.flutter.dev/release/archive
+  # flutter 3.24.5 -> dart 3.5.0
+  # we support flutter 3.24.0 ~ latest stable
+  sdk: ^3.5.0
+  flutter: ^3.24.0
 
 # Dependencies specify other packages that your package needs in order to work.
 # To automatically upgrade your package dependencies to the latest versions

@@ -6,7 +6,7 @@ MY_PATH=$(realpath $(dirname "$0"))
 PROJECT_ROOT=$(realpath ${MY_PATH}/../../)
 
 pushd ${MY_PATH}
-dart pub get
+dart pub get --no-example
 popd
 
 # dart run ${MY_PATH}/bin/testcase_gen.dart \
