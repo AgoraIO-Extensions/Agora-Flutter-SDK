@@ -48,13 +48,25 @@ public class AgoraPipController
         private final Boolean autoEnterEnabled;
         @Nullable
         private final Rect sourceRectHint;
+        @Nullable
+        private final Boolean seamlessResizeEnabled;
+        @Nullable
+        private final Boolean useExternalStateMonitor;
+        @Nullable
+        private final Integer externalStateMonitorInterval;
 
         public PipParams(@Nullable Rational aspectRatio,
                          @Nullable Boolean autoEnterEnabled,
-                         @Nullable Rect sourceRectHint) {
+                         @Nullable Rect sourceRectHint,
+                         @Nullable Boolean seamlessResizeEnabled,
+                         @Nullable Boolean useExternalStateMonitor,
+                         @Nullable Integer externalStateMonitorInterval) {
             this.aspectRatio = aspectRatio;
             this.autoEnterEnabled = autoEnterEnabled;
             this.sourceRectHint = sourceRectHint;
+            this.seamlessResizeEnabled = seamlessResizeEnabled;
+            this.useExternalStateMonitor = useExternalStateMonitor;
+            this.externalStateMonitorInterval = externalStateMonitorInterval;
         }
     }
 
@@ -169,7 +181,10 @@ public class AgoraPipController
 
     public boolean setup(@Nullable Rational aspectRatio,
                          @Nullable Boolean autoEnterEnabled,
-                         @Nullable Rect sourceRectHint) {
+                         @Nullable Rect sourceRectHint,
+                         @Nullable Boolean seamlessResizeEnabled,
+                         @Nullable Boolean useExternalStateMonitor,
+                         @Nullable Integer externalStateMonitorInterval) {
         if (!isSupported()) {
             return false;
         }
@@ -185,13 +200,16 @@ public class AgoraPipController
             }
 
             if (mPipParams == null ||
-                    (aspectRatio != null && !Objects.equals(mPipParams.aspectRatio, aspectRatio)) ||
-                    (autoEnterEnabled != null &&
-                            mPipParams.autoEnterEnabled != autoEnterEnabled) ||
-                    (sourceRectHint != null &&
-                            mPipParams.sourceRectHint != sourceRectHint)) {
+                    !Objects.equals(mPipParams.aspectRatio, aspectRatio) ||
+                    !Objects.equals(mPipParams.autoEnterEnabled, autoEnterEnabled) ||
+                    !Objects.equals(mPipParams.sourceRectHint, sourceRectHint) ||
+                    !Objects.equals(mPipParams.seamlessResizeEnabled, seamlessResizeEnabled) ||
+                    !Objects.equals(mPipParams.useExternalStateMonitor, useExternalStateMonitor) ||
+                    !Objects.equals(mPipParams.externalStateMonitorInterval, externalStateMonitorInterval)) {
                 mPipParams =
-                        new PipParams(aspectRatio, autoEnterEnabled, sourceRectHint);
+                        new PipParams(aspectRatio, autoEnterEnabled, sourceRectHint,
+                                seamlessResizeEnabled, useExternalStateMonitor,
+                                externalStateMonitorInterval);
             }
 
             if (mPipParams.aspectRatio != null) {
@@ -213,8 +231,9 @@ public class AgoraPipController
             // videos where the content can be arbitrarily scaled, but you can disable
             // this for non-video content so that the picture-in-picture mode is
             // resized with a cross fade animation.
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
-                mParamsBuilder.setSeamlessResizeEnabled(false);
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S && mPipParams.seamlessResizeEnabled != null) {
+                mParamsBuilder.setSeamlessResizeEnabled(
+                        Boolean.TRUE.equals(mPipParams.seamlessResizeEnabled));
             }
 
             activity.setPictureInPictureParams(mParamsBuilder.build());
@@ -296,9 +315,11 @@ public class AgoraPipController
     }
 
     private void startStateMonitoring() {
-        // Only need to monitor the pip state when the activity is not kind of AgoraPipActivity,
-        // since AgoraPipActivity can pass the pip state by onPictureInPictureModeChanged
-        if (mActivity.get() instanceof AgoraPipActivity) {
+        // Do not need to monitor the pip state with external thread when the
+        // activity is kind of AgoraPipActivity and the external state monitor is
+        // not enabled
+        if (mActivity.get() instanceof AgoraPipActivity &&
+                !Boolean.TRUE.equals(mPipParams.useExternalStateMonitor)) {
             return;
         }
 
@@ -315,7 +336,10 @@ public class AgoraPipController
             @Override
             public void run() {
                 checkPipState();
-                mHandler.postDelayed(this, CHECK_INTERVAL_MS);
+                mHandler.postDelayed(
+                        this, mPipParams.externalStateMonitorInterval != null
+                                ? mPipParams.externalStateMonitorInterval.longValue()
+                                : CHECK_INTERVAL_MS);
             }
         };
         mHandler.post(mCheckStateTask);
@@ -328,6 +352,10 @@ public class AgoraPipController
     @Override
     public void onPictureInPictureModeChanged(boolean isInPictureInPictureMode,
                                               Configuration newConfig) {
+        if (Boolean.TRUE.equals(mPipParams.useExternalStateMonitor)) {
+            return;
+        }
+
         if (isInPictureInPictureMode) {
             notifyPipStateChanged(PipState.Started);
         } else {
