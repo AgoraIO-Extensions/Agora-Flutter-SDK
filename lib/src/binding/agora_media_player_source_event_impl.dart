@@ -245,11 +245,18 @@ class MediaPlayerSourceObserverWrapper implements EventLoopEventHandler {
   @override
   bool handleEvent(
       String eventName, String eventData, List<Uint8List> buffers) {
-    if (!eventName.startsWith('MediaPlayerSourceObserver')) return false;
-    final newEvent = eventName.replaceFirst('MediaPlayerSourceObserver_', '');
-    if (handleEventInternal(newEvent, eventData, buffers)) {
+    try {
+      if (!eventName.startsWith('MediaPlayerSourceObserver')) return false;
+      final newEvent = eventName.replaceFirst('MediaPlayerSourceObserver_', '');
+      if (handleEventInternal(newEvent, eventData, buffers)) {
+        return true;
+      }
+      return false;
+    } catch (e) {
+      // in normal case, the handleEventInternal will not throw exception if the event is not handled,
+      // so we need to return true here to break the event loop.
+      // we also need to log the error here to help developer to find the problem later.
       return true;
     }
-    return false;
   }
 }
