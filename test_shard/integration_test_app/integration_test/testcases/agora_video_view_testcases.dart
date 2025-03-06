@@ -266,32 +266,33 @@ void testCases() {
     },
   );
 
-  testWidgets(
-    'Show multiple and then dispose AgoraVideoViews with no error',
-    (WidgetTester tester) async {
-      final readyRender = Completer<void>();
-      await tester
-          .pumpWidget(MultipleVideoViewWithFlutterTexture(onRendered: (engine) {
-        if (!readyRender.isCompleted) {
-          readyRender.complete(null);
-        }
-      }));
+  // for known issue, do not support render with platform view on iOS simulators for now
+  // testWidgets(
+  //   'Show multiple and then dispose AgoraVideoViews with no error',
+  //   (WidgetTester tester) async {
+  //     final readyRender = Completer<void>();
+  //     await tester
+  //         .pumpWidget(MultipleVideoViewWithFlutterTexture(onRendered: (engine) {
+  //       if (!readyRender.isCompleted) {
+  //         readyRender.complete(null);
+  //       }
+  //     }));
 
-      await tester.pumpAndSettle(const Duration(seconds: 10));
+  //     await tester.pumpAndSettle(const Duration(seconds: 10));
 
-      await readyRender.future.timeout(const Duration(seconds: 10));
+  //     await readyRender.future.timeout(const Duration(seconds: 10));
 
-      await tester.pumpAndSettle(const Duration(seconds: 10));
-      // pumpAndSettle again to ensure the `AgoraVideoView` shown
-      await tester.pumpAndSettle(const Duration(seconds: 10));
+  //     await tester.pumpAndSettle(const Duration(seconds: 10));
+  //     // pumpAndSettle again to ensure the `AgoraVideoView` shown
+  //     await tester.pumpAndSettle(const Duration(seconds: 10));
 
-      await tester.pumpWidget(Container());
-      // pumpAndSettle to ensure the dispose is called.
-      await tester.pumpAndSettle(const Duration(seconds: 10));
-      await Future.delayed(const Duration(seconds: 5));
-    },
-    skip: Platform.isAndroid,
-  );
+  //     await tester.pumpWidget(Container());
+  //     // pumpAndSettle to ensure the dispose is called.
+  //     await tester.pumpAndSettle(const Duration(seconds: 10));
+  //     await Future.delayed(const Duration(seconds: 5));
+  //   },
+  //   skip: Platform.isAndroid,
+  // );
 
   testWidgets('Show Local AgoraVideoView pressure test',
       (WidgetTester tester) async {
