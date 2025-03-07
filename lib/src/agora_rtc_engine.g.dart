@@ -824,7 +824,9 @@ const _$AudioScenarioTypeEnumMap = {
   AudioScenarioType.audioScenarioChatroom: 5,
   AudioScenarioType.audioScenarioChorus: 7,
   AudioScenarioType.audioScenarioMeeting: 8,
-  AudioScenarioType.audioScenarioNum: 9,
+  AudioScenarioType.audioScenarioAiServer: 9,
+  AudioScenarioType.audioScenarioAiClient: 10,
+  AudioScenarioType.audioScenarioNum: 11,
 };
 
 const _$ThreadPriorityTypeEnumMap = {

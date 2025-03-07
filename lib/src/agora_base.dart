@@ -154,6 +154,10 @@ enum WarnCodeType {
   warnAdmImproperSettings,
 
   /// @nodoc
+  @JsonValue(1055)
+  warnAdmPopState,
+
+  /// @nodoc
   @JsonValue(1322)
   warnAdmWinCoreNoRecordingDevice,
 
@@ -2743,8 +2747,16 @@ enum AudioScenarioType {
   @JsonValue(8)
   audioScenarioMeeting,
 
-  /// The number of enumerations.
+  /// @nodoc
   @JsonValue(9)
+  audioScenarioAiServer,
+
+  /// @nodoc
+  @JsonValue(10)
+  audioScenarioAiClient,
+
+  /// The number of enumerations.
+  @JsonValue(11)
   audioScenarioNum,
 }
 
