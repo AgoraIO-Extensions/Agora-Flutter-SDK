@@ -72,7 +72,8 @@ void generatedTestCases(ValueGetter<IrisTester> irisTester) {
         }
       }
 
-      final eventCalled = await onMetadataReceivedCompleter.future;
+      final eventCalled = await onMetadataReceivedCompleter.future
+          .timeout(const Duration(seconds: 10));
       expect(eventCalled, isTrue);
 
       {

@@ -168,7 +168,7 @@ class _MultipleVideoViewWithFlutterTextureState
     await mediaPlayerController2.open(url: widget.url, startPos: 0);
     await mediaPlayerController3.open(url: widget.url, startPos: 0);
 
-    await mediaPlayerControllerPlayed.future;
+    await mediaPlayerControllerPlayed.future.timeout(const Duration(seconds: 10));
   }
 
   @override
@@ -255,7 +255,7 @@ void testCases() {
       // pumpAndSettle again to ensure the `AgoraVideoView` shown
       await tester.pumpAndSettle(const Duration(milliseconds: 5000));
 
-      final videoViewCreatedCalled = await videoViewCreatedCompleter.future;
+      final videoViewCreatedCalled = await videoViewCreatedCompleter.future.timeout(const Duration(seconds: 10));
       expect(videoViewCreatedCalled, isTrue);
 
       await tester.pumpWidget(Container());
@@ -279,7 +279,7 @@ void testCases() {
 
       await tester.pumpAndSettle(const Duration(seconds: 10));
 
-      await readyRender.future;
+      await readyRender.future.timeout(const Duration(seconds: 10));
 
       await tester.pumpAndSettle(const Duration(seconds: 10));
       // pumpAndSettle again to ensure the `AgoraVideoView` shown
@@ -354,7 +354,7 @@ void testCases() {
     // pumpAndSettle again to ensure the `AgoraVideoView` shown
     await tester.pumpAndSettle(const Duration(milliseconds: 5000));
 
-    await videoViewCreatedCompleter.future;
+    await videoViewCreatedCompleter.future.timeout(const Duration(seconds: 10));
 
     // Call `RtcEngine.release` before `AgoraVideoView` dispose
     await key.currentState?._dispose();

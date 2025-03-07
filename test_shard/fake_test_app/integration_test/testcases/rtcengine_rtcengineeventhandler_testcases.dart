@@ -69,7 +69,7 @@ void testCases(ValueGetter<IrisTester> irisTester) {
         }
       }
 
-      final eventCalled = await onFacePositionChangedCompleter.future;
+      final eventCalled = await onFacePositionChangedCompleter.future.timeout(const Duration(seconds: 10));
       expect(eventCalled, isTrue);
 
       {
@@ -144,7 +144,7 @@ void testCases(ValueGetter<IrisTester> irisTester) {
 //       }
 
 //       final eventCalled =
-//           await onCameraCapturerConfigurationChangedCompleter.future;
+//           await onCameraCapturerConfigurationChangedCompleter.future.timeout(const Duration(seconds: 10));
 //       expect(eventCalled, isTrue);
 
 //       {
@@ -227,7 +227,7 @@ void testCases(ValueGetter<IrisTester> irisTester) {
         }
       }
 
-      final eventCalled = await onDownlinkNetworkInfoUpdatedCompleter.future;
+      final eventCalled = await onDownlinkNetworkInfoUpdatedCompleter.future.timeout(const Duration(seconds: 10));
       expect(eventCalled, isTrue);
 
       {
@@ -306,7 +306,7 @@ void testCases(ValueGetter<IrisTester> irisTester) {
         }
       }
 
-      final eventCalled = await onStreamMessageCompleter.future;
+      final eventCalled = await onStreamMessageCompleter.future.timeout(const Duration(seconds: 10));
       expect(eventCalled, isTrue);
 
       {

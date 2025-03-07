@@ -67,7 +67,8 @@ void generatedTestCases(ValueGetter<IrisTester> irisTester) {
         }
       }
 
-      final eventCalled = await onPlayerSourceStateChangedCompleter.future;
+      final eventCalled = await onPlayerSourceStateChangedCompleter.future
+          .timeout(const Duration(seconds: 10));
       expect(eventCalled, isTrue);
 
       {
@@ -135,7 +136,8 @@ void generatedTestCases(ValueGetter<IrisTester> irisTester) {
         }
       }
 
-      final eventCalled = await onPositionChangedCompleter.future;
+      final eventCalled = await onPositionChangedCompleter.future
+          .timeout(const Duration(seconds: 10));
       expect(eventCalled, isTrue);
 
       {
@@ -205,7 +207,8 @@ void generatedTestCases(ValueGetter<IrisTester> irisTester) {
         }
       }
 
-      final eventCalled = await onPlayerEventCompleter.future;
+      final eventCalled = await onPlayerEventCompleter.future
+          .timeout(const Duration(seconds: 10));
       expect(eventCalled, isTrue);
 
       {
@@ -272,7 +275,8 @@ void generatedTestCases(ValueGetter<IrisTester> irisTester) {
         }
       }
 
-      final eventCalled = await onMetaDataCompleter.future;
+      final eventCalled =
+          await onMetaDataCompleter.future.timeout(const Duration(seconds: 10));
       expect(eventCalled, isTrue);
 
       {
@@ -338,7 +342,8 @@ void generatedTestCases(ValueGetter<IrisTester> irisTester) {
         }
       }
 
-      final eventCalled = await onPlayBufferUpdatedCompleter.future;
+      final eventCalled = await onPlayBufferUpdatedCompleter.future
+          .timeout(const Duration(seconds: 10));
       expect(eventCalled, isTrue);
 
       {
@@ -405,7 +410,8 @@ void generatedTestCases(ValueGetter<IrisTester> irisTester) {
         }
       }
 
-      final eventCalled = await onPreloadEventCompleter.future;
+      final eventCalled = await onPreloadEventCompleter.future
+          .timeout(const Duration(seconds: 10));
       expect(eventCalled, isTrue);
 
       {
@@ -466,7 +472,8 @@ void generatedTestCases(ValueGetter<IrisTester> irisTester) {
         }
       }
 
-      final eventCalled = await onCompletedCompleter.future;
+      final eventCalled = await onCompletedCompleter.future
+          .timeout(const Duration(seconds: 10));
       expect(eventCalled, isTrue);
 
       {
@@ -528,7 +535,8 @@ void generatedTestCases(ValueGetter<IrisTester> irisTester) {
         }
       }
 
-      final eventCalled = await onAgoraCDNTokenWillExpireCompleter.future;
+      final eventCalled = await onAgoraCDNTokenWillExpireCompleter.future
+          .timeout(const Duration(seconds: 10));
       expect(eventCalled, isTrue);
 
       {
@@ -606,7 +614,8 @@ void generatedTestCases(ValueGetter<IrisTester> irisTester) {
         }
       }
 
-      final eventCalled = await onPlayerSrcInfoChangedCompleter.future;
+      final eventCalled = await onPlayerSrcInfoChangedCompleter.future
+          .timeout(const Duration(seconds: 10));
       expect(eventCalled, isTrue);
 
       {
@@ -687,7 +696,8 @@ void generatedTestCases(ValueGetter<IrisTester> irisTester) {
         }
       }
 
-      final eventCalled = await onPlayerInfoUpdatedCompleter.future;
+      final eventCalled = await onPlayerInfoUpdatedCompleter.future
+          .timeout(const Duration(seconds: 10));
       expect(eventCalled, isTrue);
 
       {
@@ -760,7 +770,8 @@ void generatedTestCases(ValueGetter<IrisTester> irisTester) {
         }
       }
 
-      final eventCalled = await onPlayerCacheStatsCompleter.future;
+      final eventCalled = await onPlayerCacheStatsCompleter.future
+          .timeout(const Duration(seconds: 10));
       expect(eventCalled, isTrue);
 
       {
@@ -835,7 +846,8 @@ void generatedTestCases(ValueGetter<IrisTester> irisTester) {
         }
       }
 
-      final eventCalled = await onPlayerPlaybackStatsCompleter.future;
+      final eventCalled = await onPlayerPlaybackStatsCompleter.future
+          .timeout(const Duration(seconds: 10));
       expect(eventCalled, isTrue);
 
       {
@@ -901,7 +913,8 @@ void generatedTestCases(ValueGetter<IrisTester> irisTester) {
         }
       }
 
-      final eventCalled = await onAudioVolumeIndicationCompleter.future;
+      final eventCalled = await onAudioVolumeIndicationCompleter.future
+          .timeout(const Duration(seconds: 10));
       expect(eventCalled, isTrue);
 
       {

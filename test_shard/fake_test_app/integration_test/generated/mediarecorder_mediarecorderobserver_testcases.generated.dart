@@ -71,7 +71,8 @@ void generatedTestCases(ValueGetter<IrisTester> irisTester) {
         }
       }
 
-      final eventCalled = await onRecorderStateChangedCompleter.future;
+      final eventCalled = await onRecorderStateChangedCompleter.future
+          .timeout(const Duration(seconds: 10));
       expect(eventCalled, isTrue);
 
       {}
@@ -145,7 +146,8 @@ void generatedTestCases(ValueGetter<IrisTester> irisTester) {
         }
       }
 
-      final eventCalled = await onRecorderInfoUpdatedCompleter.future;
+      final eventCalled = await onRecorderInfoUpdatedCompleter.future
+          .timeout(const Duration(seconds: 10));
       expect(eventCalled, isTrue);
 
       {}
