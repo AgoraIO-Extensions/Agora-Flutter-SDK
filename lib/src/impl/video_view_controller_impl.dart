@@ -13,6 +13,7 @@ import 'package:meta/meta.dart';
 // ignore_for_file: public_member_api_docs
 
 const int kTextureNotInit = -1;
+const int kInvalidPlatformViewId = -1;
 
 extension VideoViewControllerBaseExt on VideoViewControllerBase {
   bool isSame(VideoViewControllerBase other) {
@@ -49,6 +50,8 @@ extension VideoViewControllerBaseExt on VideoViewControllerBase {
 
 mixin VideoViewControllerBaseMixin implements VideoViewControllerBase {
   int _textureId = kTextureNotInit;
+  int _viewHandle = kNullViewHandle;
+  int _platformViewId = kInvalidPlatformViewId;
 
   @internal
   bool get isInitialzed => (rtcEngine as RtcEngineImpl).isInitialzed;
@@ -68,11 +71,19 @@ mixin VideoViewControllerBaseMixin implements VideoViewControllerBase {
   @override
   int getTextureId() => _textureId;
 
+  @override
+  int getViewHandle() => _viewHandle;
+
+  @override
+  int getPlatformViewId() => _platformViewId;
+
   @internal
   void updateController(VideoViewControllerBase oldController) {
     assert(oldController is VideoViewControllerBaseMixin);
     final oldControllerMixin = oldController as VideoViewControllerBaseMixin;
     _textureId = oldControllerMixin.getTextureId();
+    _viewHandle = oldControllerMixin.getViewHandle();
+    _platformViewId = oldControllerMixin.getPlatformViewId();
   }
 
   @override
@@ -87,8 +98,34 @@ mixin VideoViewControllerBaseMixin implements VideoViewControllerBase {
       return;
     }
 
-    await rtcEngine.globalVideoViewController
-        ?.setupVideoView(kNullViewHandle, canvas, connection: connection);
+    // Pass view handle with kNullViewHandle will clear all setup renderers,
+    // since we decide to use VideoViewSetupMode.videoViewSetupRemove to remove
+    // the renderers, we should return directly here.
+    if (_viewHandle != kNullViewHandle) {
+      VideoCanvas newCanvas = VideoCanvas(
+        view: _viewHandle,
+        renderMode: canvas.renderMode,
+        mirrorMode: canvas.mirrorMode,
+        uid: canvas.uid,
+        sourceType: canvas.sourceType,
+        cropArea: canvas.cropArea,
+        setupMode: VideoViewSetupMode.videoViewSetupRemove,
+        mediaPlayerId: canvas.mediaPlayerId,
+      );
+
+      await rtcEngine.globalVideoViewController
+          ?.setupVideoView(_viewHandle, newCanvas, connection: connection);
+
+      _viewHandle = kNullViewHandle;
+    }
+
+    // We need to ensure the platform view is valid before calling setupVideoView since
+    // we use VideoViewSetupMode.videoViewSetupRemove to remove renderers. This is important
+    // because the platform view is shared between the app and native side via a GlobalRef address.
+    if (_platformViewId != kInvalidPlatformViewId) {
+      await dePlatformRenderRef(_platformViewId);
+      _platformViewId = kInvalidPlatformViewId;
+    }
   }
 
   @internal
@@ -141,9 +178,21 @@ mixin VideoViewControllerBaseMixin implements VideoViewControllerBase {
   }
 
   @override
-  Future<void> setupView(int nativeViewPtr) async {
+  Future<void> setupView(int platformViewId, int nativeViewPtr) async {
+    _platformViewId = platformViewId;
+    _viewHandle = nativeViewPtr;
+
+    if (_platformViewId != kInvalidPlatformViewId) {
+      await addPlatformRenderRef(_platformViewId);
+    }
+
     await rtcEngine.globalVideoViewController
         ?.setupVideoView(nativeViewPtr, canvas, connection: connection);
+  }
+
+  Future<void> addPlatformRenderRef(int platformViewId) async {
+    await rtcEngine.globalVideoViewController
+        ?.addPlatformRenderRef(platformViewId);
   }
 
   Future<void> dePlatformRenderRef(int platformViewId) async {
@@ -196,8 +245,8 @@ class PIPVideoViewControllerImpl extends VideoViewController
 
   @override
   @Deprecated('This method is deprecated')
-  Future<void> setupView(int nativeViewPtr) async {
-    await super.setupView(nativeViewPtr);
+  Future<void> setupView(int platformViewId, int nativeViewPtr) async {
+    await super.setupView(platformViewId, nativeViewPtr);
 
     _isDisposedRender = false;
     _nativeViewPtr = nativeViewPtr;
