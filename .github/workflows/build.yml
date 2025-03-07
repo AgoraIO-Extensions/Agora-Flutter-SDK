@@ -147,7 +147,7 @@ jobs:
           OUTPUT_CRASH_DIR=./logs-ios/crash
           mkdir -p ${OUTPUT_CRASH_DIR}
           # Copy all files
-          cp -RP $CRASH_DIR* $OUTPUT_CRASH_DIR
+          cp -RP $CRASH_DIR* $OUTPUT_CRASH_DIR || true
         
       - name: Upload ios logs
         uses: actions/upload-artifact@v4
