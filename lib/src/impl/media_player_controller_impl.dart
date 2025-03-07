@@ -358,7 +358,7 @@ class MediaPlayerControllerImpl
   }
 
   @override
-  Future<void> setupView(int nativeViewPtr) async {
+  Future<void> setupView(int platformViewId, int nativeViewPtr) async {
     return setView(nativeViewPtr);
   }
 
