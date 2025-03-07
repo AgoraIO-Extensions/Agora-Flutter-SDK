@@ -79,7 +79,7 @@ void testCases() {
 
     await remoteUser.joinChannel();
 
-    final eventCalled = await eventCalledCompleter.future;
+    final eventCalled = await eventCalledCompleter.future.timeout(const Duration(seconds: 10));
     expect(eventCalled, isTrue);
 
     mediaEngine.unregisterAudioFrameObserver(observer);

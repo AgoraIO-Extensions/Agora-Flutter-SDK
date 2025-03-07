@@ -82,7 +82,8 @@ void generatedTestCases(ValueGetter<IrisTester> irisTester) {
         }
       }
 
-      final eventCalled = await onMusicChartsResultCompleter.future;
+      final eventCalled = await onMusicChartsResultCompleter.future
+          .timeout(const Duration(seconds: 10));
       expect(eventCalled, isTrue);
 
       {
@@ -154,7 +155,8 @@ void generatedTestCases(ValueGetter<IrisTester> irisTester) {
         }
       }
 
-      final eventCalled = await onMusicCollectionResultCompleter.future;
+      final eventCalled = await onMusicCollectionResultCompleter.future
+          .timeout(const Duration(seconds: 10));
       expect(eventCalled, isTrue);
 
       {
@@ -229,7 +231,8 @@ void generatedTestCases(ValueGetter<IrisTester> irisTester) {
         }
       }
 
-      final eventCalled = await onLyricResultCompleter.future;
+      final eventCalled = await onLyricResultCompleter.future
+          .timeout(const Duration(seconds: 10));
       expect(eventCalled, isTrue);
 
       {
@@ -304,7 +307,8 @@ void generatedTestCases(ValueGetter<IrisTester> irisTester) {
         }
       }
 
-      final eventCalled = await onSongSimpleInfoResultCompleter.future;
+      final eventCalled = await onSongSimpleInfoResultCompleter.future
+          .timeout(const Duration(seconds: 10));
       expect(eventCalled, isTrue);
 
       {
@@ -387,7 +391,8 @@ void generatedTestCases(ValueGetter<IrisTester> irisTester) {
         }
       }
 
-      final eventCalled = await onPreLoadEventCompleter.future;
+      final eventCalled = await onPreLoadEventCompleter.future
+          .timeout(const Duration(seconds: 10));
       expect(eventCalled, isTrue);
 
       {

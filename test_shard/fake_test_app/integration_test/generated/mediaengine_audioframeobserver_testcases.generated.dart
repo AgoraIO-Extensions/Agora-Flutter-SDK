@@ -91,8 +91,8 @@ void generatedTestCases(ValueGetter<IrisTester> irisTester) {
         }
       }
 
-      final eventCalled =
-          await onPlaybackAudioFrameBeforeMixingCompleter.future;
+      final eventCalled = await onPlaybackAudioFrameBeforeMixingCompleter.future
+          .timeout(const Duration(seconds: 10));
       expect(eventCalled, isTrue);
 
       {

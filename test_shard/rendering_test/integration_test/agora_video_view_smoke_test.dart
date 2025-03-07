@@ -47,7 +47,7 @@ void main() {
 
             await tester.pumpAndSettle(const Duration(seconds: 10));
 
-            await onFrameCompleter.future;
+            await onFrameCompleter.future.timeout(const Duration(seconds: 10));
             await waitFrame(tester);
 
             await binding.takeScreenshot(
@@ -91,7 +91,7 @@ void main() {
 
               await tester.pumpAndSettle(const Duration(seconds: 10));
 
-              await onFrameCompleter.future;
+              await onFrameCompleter.future.timeout(const Duration(seconds: 10));
               await waitFrame(tester);
 
               await binding.takeScreenshot(
@@ -141,7 +141,7 @@ void main() {
 
             await tester.pumpAndSettle(const Duration(seconds: 10));
 
-            await onFrameCompleter.future;
+            await onFrameCompleter.future.timeout(const Duration(seconds: 10));
             await waitFrame(tester);
 
             // This is required prior to taking the screenshot (Android only).
@@ -189,7 +189,7 @@ void main() {
 
               await tester.pumpAndSettle(const Duration(seconds: 10));
 
-              await onFrameCompleter.future;
+              await onFrameCompleter.future.timeout(const Duration(seconds: 10));
               await waitFrame(tester);
 
               // This is required prior to taking the screenshot (Android only).
@@ -241,7 +241,7 @@ void main() {
 
             await tester.pumpAndSettle(const Duration(seconds: 10));
 
-            await onFrameCompleter.future;
+            await onFrameCompleter.future.timeout(const Duration(seconds: 10));
             await waitFrame(tester);
 
             await matchScreenShotDesktop(rtcEngine,
@@ -289,7 +289,7 @@ void main() {
 
             await tester.pumpAndSettle(const Duration(seconds: 10));
 
-            await onFrameCompleter.future;
+            await onFrameCompleter.future.timeout(const Duration(seconds: 10));
             await waitFrame(tester);
 
             await binding.takeScreenshot(
@@ -328,7 +328,7 @@ void main() {
 
             await tester.pumpAndSettle(const Duration(seconds: 10));
 
-            await onFrameCompleter.future;
+            await onFrameCompleter.future.timeout(const Duration(seconds: 10));
             await waitFrame(tester);
 
             await binding.takeScreenshot(

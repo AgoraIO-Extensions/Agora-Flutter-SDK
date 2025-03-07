@@ -104,7 +104,8 @@ void generatedTestCases(ValueGetter<IrisTester> irisTester) {
         }
       }
 
-      final eventCalled = await onCaptureVideoFrameCompleter.future;
+      final eventCalled = await onCaptureVideoFrameCompleter.future
+          .timeout(const Duration(seconds: 10));
       expect(eventCalled, isTrue);
 
       {
@@ -210,7 +211,8 @@ void generatedTestCases(ValueGetter<IrisTester> irisTester) {
         }
       }
 
-      final eventCalled = await onPreEncodeVideoFrameCompleter.future;
+      final eventCalled = await onPreEncodeVideoFrameCompleter.future
+          .timeout(const Duration(seconds: 10));
       expect(eventCalled, isTrue);
 
       {
@@ -315,7 +317,8 @@ void generatedTestCases(ValueGetter<IrisTester> irisTester) {
         }
       }
 
-      final eventCalled = await onMediaPlayerVideoFrameCompleter.future;
+      final eventCalled = await onMediaPlayerVideoFrameCompleter.future
+          .timeout(const Duration(seconds: 10));
       expect(eventCalled, isTrue);
 
       {
@@ -423,7 +426,8 @@ void generatedTestCases(ValueGetter<IrisTester> irisTester) {
         }
       }
 
-      final eventCalled = await onRenderVideoFrameCompleter.future;
+      final eventCalled = await onRenderVideoFrameCompleter.future
+          .timeout(const Duration(seconds: 10));
       expect(eventCalled, isTrue);
 
       {
@@ -526,7 +530,8 @@ void generatedTestCases(ValueGetter<IrisTester> irisTester) {
         }
       }
 
-      final eventCalled = await onTranscodedVideoFrameCompleter.future;
+      final eventCalled = await onTranscodedVideoFrameCompleter.future
+          .timeout(const Duration(seconds: 10));
       expect(eventCalled, isTrue);
 
       {

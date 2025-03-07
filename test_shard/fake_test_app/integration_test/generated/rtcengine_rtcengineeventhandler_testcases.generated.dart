@@ -67,7 +67,8 @@ void generatedTestCases(ValueGetter<IrisTester> irisTester) {
         }
       }
 
-      final eventCalled = await onJoinChannelSuccessCompleter.future;
+      final eventCalled = await onJoinChannelSuccessCompleter.future
+          .timeout(const Duration(seconds: 10));
       expect(eventCalled, isTrue);
 
       {
@@ -137,7 +138,8 @@ void generatedTestCases(ValueGetter<IrisTester> irisTester) {
         }
       }
 
-      final eventCalled = await onRejoinChannelSuccessCompleter.future;
+      final eventCalled = await onRejoinChannelSuccessCompleter.future
+          .timeout(const Duration(seconds: 10));
       expect(eventCalled, isTrue);
 
       {
@@ -208,7 +210,8 @@ void generatedTestCases(ValueGetter<IrisTester> irisTester) {
         }
       }
 
-      final eventCalled = await onProxyConnectedCompleter.future;
+      final eventCalled = await onProxyConnectedCompleter.future
+          .timeout(const Duration(seconds: 10));
       expect(eventCalled, isTrue);
 
       {
@@ -271,7 +274,8 @@ void generatedTestCases(ValueGetter<IrisTester> irisTester) {
         }
       }
 
-      final eventCalled = await onErrorCompleter.future;
+      final eventCalled =
+          await onErrorCompleter.future.timeout(const Duration(seconds: 10));
       expect(eventCalled, isTrue);
 
       {
@@ -347,7 +351,8 @@ void generatedTestCases(ValueGetter<IrisTester> irisTester) {
         }
       }
 
-      final eventCalled = await onAudioQualityCompleter.future;
+      final eventCalled = await onAudioQualityCompleter.future
+          .timeout(const Duration(seconds: 10));
       expect(eventCalled, isTrue);
 
       {
@@ -436,7 +441,8 @@ void generatedTestCases(ValueGetter<IrisTester> irisTester) {
         }
       }
 
-      final eventCalled = await onLastmileProbeResultCompleter.future;
+      final eventCalled = await onLastmileProbeResultCompleter.future
+          .timeout(const Duration(seconds: 10));
       expect(eventCalled, isTrue);
 
       {
@@ -525,7 +531,8 @@ void generatedTestCases(ValueGetter<IrisTester> irisTester) {
         }
       }
 
-      final eventCalled = await onAudioVolumeIndicationCompleter.future;
+      final eventCalled = await onAudioVolumeIndicationCompleter.future
+          .timeout(const Duration(seconds: 10));
       expect(eventCalled, isTrue);
 
       {
@@ -668,7 +675,8 @@ void generatedTestCases(ValueGetter<IrisTester> irisTester) {
         }
       }
 
-      final eventCalled = await onLeaveChannelCompleter.future;
+      final eventCalled = await onLeaveChannelCompleter.future
+          .timeout(const Duration(seconds: 10));
       expect(eventCalled, isTrue);
 
       {
@@ -811,7 +819,8 @@ void generatedTestCases(ValueGetter<IrisTester> irisTester) {
         }
       }
 
-      final eventCalled = await onRtcStatsCompleter.future;
+      final eventCalled =
+          await onRtcStatsCompleter.future.timeout(const Duration(seconds: 10));
       expect(eventCalled, isTrue);
 
       {
@@ -880,7 +889,8 @@ void generatedTestCases(ValueGetter<IrisTester> irisTester) {
         }
       }
 
-      final eventCalled = await onAudioDeviceStateChangedCompleter.future;
+      final eventCalled = await onAudioDeviceStateChangedCompleter.future
+          .timeout(const Duration(seconds: 10));
       expect(eventCalled, isTrue);
 
       {
@@ -943,7 +953,8 @@ void generatedTestCases(ValueGetter<IrisTester> irisTester) {
         }
       }
 
-      final eventCalled = await onAudioMixingPositionChangedCompleter.future;
+      final eventCalled = await onAudioMixingPositionChangedCompleter.future
+          .timeout(const Duration(seconds: 10));
       expect(eventCalled, isTrue);
 
       {
@@ -1002,7 +1013,8 @@ void generatedTestCases(ValueGetter<IrisTester> irisTester) {
         }
       }
 
-      final eventCalled = await onAudioMixingFinishedCompleter.future;
+      final eventCalled = await onAudioMixingFinishedCompleter.future
+          .timeout(const Duration(seconds: 10));
       expect(eventCalled, isTrue);
 
       {
@@ -1065,7 +1077,8 @@ void generatedTestCases(ValueGetter<IrisTester> irisTester) {
         }
       }
 
-      final eventCalled = await onAudioEffectFinishedCompleter.future;
+      final eventCalled = await onAudioEffectFinishedCompleter.future
+          .timeout(const Duration(seconds: 10));
       expect(eventCalled, isTrue);
 
       {
@@ -1134,7 +1147,8 @@ void generatedTestCases(ValueGetter<IrisTester> irisTester) {
         }
       }
 
-      final eventCalled = await onVideoDeviceStateChangedCompleter.future;
+      final eventCalled = await onVideoDeviceStateChangedCompleter.future
+          .timeout(const Duration(seconds: 10));
       expect(eventCalled, isTrue);
 
       {
@@ -1208,7 +1222,8 @@ void generatedTestCases(ValueGetter<IrisTester> irisTester) {
         }
       }
 
-      final eventCalled = await onNetworkQualityCompleter.future;
+      final eventCalled = await onNetworkQualityCompleter.future
+          .timeout(const Duration(seconds: 10));
       expect(eventCalled, isTrue);
 
       {
@@ -1276,7 +1291,8 @@ void generatedTestCases(ValueGetter<IrisTester> irisTester) {
         }
       }
 
-      final eventCalled = await onIntraRequestReceivedCompleter.future;
+      final eventCalled = await onIntraRequestReceivedCompleter.future
+          .timeout(const Duration(seconds: 10));
       expect(eventCalled, isTrue);
 
       {
@@ -1342,7 +1358,8 @@ void generatedTestCases(ValueGetter<IrisTester> irisTester) {
         }
       }
 
-      final eventCalled = await onUplinkNetworkInfoUpdatedCompleter.future;
+      final eventCalled = await onUplinkNetworkInfoUpdatedCompleter.future
+          .timeout(const Duration(seconds: 10));
       expect(eventCalled, isTrue);
 
       {
@@ -1404,7 +1421,8 @@ void generatedTestCases(ValueGetter<IrisTester> irisTester) {
         }
       }
 
-      final eventCalled = await onLastmileQualityCompleter.future;
+      final eventCalled = await onLastmileQualityCompleter.future
+          .timeout(const Duration(seconds: 10));
       expect(eventCalled, isTrue);
 
       {
@@ -1474,7 +1492,8 @@ void generatedTestCases(ValueGetter<IrisTester> irisTester) {
         }
       }
 
-      final eventCalled = await onFirstLocalVideoFrameCompleter.future;
+      final eventCalled = await onFirstLocalVideoFrameCompleter.future
+          .timeout(const Duration(seconds: 10));
       expect(eventCalled, isTrue);
 
       {
@@ -1545,7 +1564,8 @@ void generatedTestCases(ValueGetter<IrisTester> irisTester) {
         }
       }
 
-      final eventCalled = await onFirstLocalVideoFramePublishedCompleter.future;
+      final eventCalled = await onFirstLocalVideoFramePublishedCompleter.future
+          .timeout(const Duration(seconds: 10));
       expect(eventCalled, isTrue);
 
       {
@@ -1622,7 +1642,8 @@ void generatedTestCases(ValueGetter<IrisTester> irisTester) {
         }
       }
 
-      final eventCalled = await onFirstRemoteVideoDecodedCompleter.future;
+      final eventCalled = await onFirstRemoteVideoDecodedCompleter.future
+          .timeout(const Duration(seconds: 10));
       expect(eventCalled, isTrue);
 
       {
@@ -1704,7 +1725,8 @@ void generatedTestCases(ValueGetter<IrisTester> irisTester) {
         }
       }
 
-      final eventCalled = await onVideoSizeChangedCompleter.future;
+      final eventCalled = await onVideoSizeChangedCompleter.future
+          .timeout(const Duration(seconds: 10));
       expect(eventCalled, isTrue);
 
       {
@@ -1774,7 +1796,8 @@ void generatedTestCases(ValueGetter<IrisTester> irisTester) {
         }
       }
 
-      final eventCalled = await onLocalVideoStateChangedCompleter.future;
+      final eventCalled = await onLocalVideoStateChangedCompleter.future
+          .timeout(const Duration(seconds: 10));
       expect(eventCalled, isTrue);
 
       {
@@ -1855,7 +1878,8 @@ void generatedTestCases(ValueGetter<IrisTester> irisTester) {
         }
       }
 
-      final eventCalled = await onRemoteVideoStateChangedCompleter.future;
+      final eventCalled = await onRemoteVideoStateChangedCompleter.future
+          .timeout(const Duration(seconds: 10));
       expect(eventCalled, isTrue);
 
       {
@@ -1932,7 +1956,8 @@ void generatedTestCases(ValueGetter<IrisTester> irisTester) {
         }
       }
 
-      final eventCalled = await onFirstRemoteVideoFrameCompleter.future;
+      final eventCalled = await onFirstRemoteVideoFrameCompleter.future
+          .timeout(const Duration(seconds: 10));
       expect(eventCalled, isTrue);
 
       {
@@ -2003,7 +2028,8 @@ void generatedTestCases(ValueGetter<IrisTester> irisTester) {
         }
       }
 
-      final eventCalled = await onUserJoinedCompleter.future;
+      final eventCalled = await onUserJoinedCompleter.future
+          .timeout(const Duration(seconds: 10));
       expect(eventCalled, isTrue);
 
       {
@@ -2075,7 +2101,8 @@ void generatedTestCases(ValueGetter<IrisTester> irisTester) {
         }
       }
 
-      final eventCalled = await onUserOfflineCompleter.future;
+      final eventCalled = await onUserOfflineCompleter.future
+          .timeout(const Duration(seconds: 10));
       expect(eventCalled, isTrue);
 
       {
@@ -2146,7 +2173,8 @@ void generatedTestCases(ValueGetter<IrisTester> irisTester) {
         }
       }
 
-      final eventCalled = await onUserMuteAudioCompleter.future;
+      final eventCalled = await onUserMuteAudioCompleter.future
+          .timeout(const Duration(seconds: 10));
       expect(eventCalled, isTrue);
 
       {
@@ -2217,7 +2245,8 @@ void generatedTestCases(ValueGetter<IrisTester> irisTester) {
         }
       }
 
-      final eventCalled = await onUserMuteVideoCompleter.future;
+      final eventCalled = await onUserMuteVideoCompleter.future
+          .timeout(const Duration(seconds: 10));
       expect(eventCalled, isTrue);
 
       {
@@ -2289,7 +2318,8 @@ void generatedTestCases(ValueGetter<IrisTester> irisTester) {
         }
       }
 
-      final eventCalled = await onUserEnableVideoCompleter.future;
+      final eventCalled = await onUserEnableVideoCompleter.future
+          .timeout(const Duration(seconds: 10));
       expect(eventCalled, isTrue);
 
       {
@@ -2361,7 +2391,8 @@ void generatedTestCases(ValueGetter<IrisTester> irisTester) {
         }
       }
 
-      final eventCalled = await onUserStateChangedCompleter.future;
+      final eventCalled = await onUserStateChangedCompleter.future
+          .timeout(const Duration(seconds: 10));
       expect(eventCalled, isTrue);
 
       {
@@ -2434,7 +2465,8 @@ void generatedTestCases(ValueGetter<IrisTester> irisTester) {
         }
       }
 
-      final eventCalled = await onUserEnableLocalVideoCompleter.future;
+      final eventCalled = await onUserEnableLocalVideoCompleter.future
+          .timeout(const Duration(seconds: 10));
       expect(eventCalled, isTrue);
 
       {
@@ -2546,7 +2578,8 @@ void generatedTestCases(ValueGetter<IrisTester> irisTester) {
         }
       }
 
-      final eventCalled = await onRemoteAudioStatsCompleter.future;
+      final eventCalled = await onRemoteAudioStatsCompleter.future
+          .timeout(const Duration(seconds: 10));
       expect(eventCalled, isTrue);
 
       {
@@ -2634,7 +2667,8 @@ void generatedTestCases(ValueGetter<IrisTester> irisTester) {
         }
       }
 
-      final eventCalled = await onLocalAudioStatsCompleter.future;
+      final eventCalled = await onLocalAudioStatsCompleter.future
+          .timeout(const Duration(seconds: 10));
       expect(eventCalled, isTrue);
 
       {
@@ -2754,7 +2788,8 @@ void generatedTestCases(ValueGetter<IrisTester> irisTester) {
         }
       }
 
-      final eventCalled = await onLocalVideoStatsCompleter.future;
+      final eventCalled = await onLocalVideoStatsCompleter.future
+          .timeout(const Duration(seconds: 10));
       expect(eventCalled, isTrue);
 
       {
@@ -2862,7 +2897,8 @@ void generatedTestCases(ValueGetter<IrisTester> irisTester) {
         }
       }
 
-      final eventCalled = await onRemoteVideoStatsCompleter.future;
+      final eventCalled = await onRemoteVideoStatsCompleter.future
+          .timeout(const Duration(seconds: 10));
       expect(eventCalled, isTrue);
 
       {
@@ -2920,7 +2956,8 @@ void generatedTestCases(ValueGetter<IrisTester> irisTester) {
         }
       }
 
-      final eventCalled = await onCameraReadyCompleter.future;
+      final eventCalled = await onCameraReadyCompleter.future
+          .timeout(const Duration(seconds: 10));
       expect(eventCalled, isTrue);
 
       {
@@ -2989,7 +3026,8 @@ void generatedTestCases(ValueGetter<IrisTester> irisTester) {
         }
       }
 
-      final eventCalled = await onCameraFocusAreaChangedCompleter.future;
+      final eventCalled = await onCameraFocusAreaChangedCompleter.future
+          .timeout(const Duration(seconds: 10));
       expect(eventCalled, isTrue);
 
       {
@@ -3058,7 +3096,8 @@ void generatedTestCases(ValueGetter<IrisTester> irisTester) {
         }
       }
 
-      final eventCalled = await onCameraExposureAreaChangedCompleter.future;
+      final eventCalled = await onCameraExposureAreaChangedCompleter.future
+          .timeout(const Duration(seconds: 10));
       expect(eventCalled, isTrue);
 
       {
@@ -3116,7 +3155,8 @@ void generatedTestCases(ValueGetter<IrisTester> irisTester) {
         }
       }
 
-      final eventCalled = await onVideoStoppedCompleter.future;
+      final eventCalled = await onVideoStoppedCompleter.future
+          .timeout(const Duration(seconds: 10));
       expect(eventCalled, isTrue);
 
       {
@@ -3184,7 +3224,8 @@ void generatedTestCases(ValueGetter<IrisTester> irisTester) {
         }
       }
 
-      final eventCalled = await onAudioMixingStateChangedCompleter.future;
+      final eventCalled = await onAudioMixingStateChangedCompleter.future
+          .timeout(const Duration(seconds: 10));
       expect(eventCalled, isTrue);
 
       {
@@ -3251,7 +3292,8 @@ void generatedTestCases(ValueGetter<IrisTester> irisTester) {
         }
       }
 
-      final eventCalled = await onRhythmPlayerStateChangedCompleter.future;
+      final eventCalled = await onRhythmPlayerStateChangedCompleter.future
+          .timeout(const Duration(seconds: 10));
       expect(eventCalled, isTrue);
 
       {
@@ -3318,7 +3360,8 @@ void generatedTestCases(ValueGetter<IrisTester> irisTester) {
         }
       }
 
-      final eventCalled = await onConnectionLostCompleter.future;
+      final eventCalled = await onConnectionLostCompleter.future
+          .timeout(const Duration(seconds: 10));
       expect(eventCalled, isTrue);
 
       {
@@ -3386,7 +3429,8 @@ void generatedTestCases(ValueGetter<IrisTester> irisTester) {
         }
       }
 
-      final eventCalled = await onConnectionInterruptedCompleter.future;
+      final eventCalled = await onConnectionInterruptedCompleter.future
+          .timeout(const Duration(seconds: 10));
       expect(eventCalled, isTrue);
 
       {
@@ -3453,7 +3497,8 @@ void generatedTestCases(ValueGetter<IrisTester> irisTester) {
         }
       }
 
-      final eventCalled = await onConnectionBannedCompleter.future;
+      final eventCalled = await onConnectionBannedCompleter.future
+          .timeout(const Duration(seconds: 10));
       expect(eventCalled, isTrue);
 
       {
@@ -3531,7 +3576,8 @@ void generatedTestCases(ValueGetter<IrisTester> irisTester) {
         }
       }
 
-      final eventCalled = await onStreamMessageErrorCompleter.future;
+      final eventCalled = await onStreamMessageErrorCompleter.future
+          .timeout(const Duration(seconds: 10));
       expect(eventCalled, isTrue);
 
       {
@@ -3598,7 +3644,8 @@ void generatedTestCases(ValueGetter<IrisTester> irisTester) {
         }
       }
 
-      final eventCalled = await onRequestTokenCompleter.future;
+      final eventCalled = await onRequestTokenCompleter.future
+          .timeout(const Duration(seconds: 10));
       expect(eventCalled, isTrue);
 
       {
@@ -3668,7 +3715,8 @@ void generatedTestCases(ValueGetter<IrisTester> irisTester) {
         }
       }
 
-      final eventCalled = await onTokenPrivilegeWillExpireCompleter.future;
+      final eventCalled = await onTokenPrivilegeWillExpireCompleter.future
+          .timeout(const Duration(seconds: 10));
       expect(eventCalled, isTrue);
 
       {
@@ -3739,7 +3787,8 @@ void generatedTestCases(ValueGetter<IrisTester> irisTester) {
         }
       }
 
-      final eventCalled = await onLicenseValidationFailureCompleter.future;
+      final eventCalled = await onLicenseValidationFailureCompleter.future
+          .timeout(const Duration(seconds: 10));
       expect(eventCalled, isTrue);
 
       {
@@ -3810,7 +3859,8 @@ void generatedTestCases(ValueGetter<IrisTester> irisTester) {
         }
       }
 
-      final eventCalled = await onFirstLocalAudioFramePublishedCompleter.future;
+      final eventCalled = await onFirstLocalAudioFramePublishedCompleter.future
+          .timeout(const Duration(seconds: 10));
       expect(eventCalled, isTrue);
 
       {
@@ -3883,7 +3933,8 @@ void generatedTestCases(ValueGetter<IrisTester> irisTester) {
         }
       }
 
-      final eventCalled = await onFirstRemoteAudioDecodedCompleter.future;
+      final eventCalled = await onFirstRemoteAudioDecodedCompleter.future
+          .timeout(const Duration(seconds: 10));
       expect(eventCalled, isTrue);
 
       {
@@ -3956,7 +4007,8 @@ void generatedTestCases(ValueGetter<IrisTester> irisTester) {
         }
       }
 
-      final eventCalled = await onFirstRemoteAudioFrameCompleter.future;
+      final eventCalled = await onFirstRemoteAudioFrameCompleter.future
+          .timeout(const Duration(seconds: 10));
       expect(eventCalled, isTrue);
 
       {
@@ -4031,7 +4083,8 @@ void generatedTestCases(ValueGetter<IrisTester> irisTester) {
         }
       }
 
-      final eventCalled = await onLocalAudioStateChangedCompleter.future;
+      final eventCalled = await onLocalAudioStateChangedCompleter.future
+          .timeout(const Duration(seconds: 10));
       expect(eventCalled, isTrue);
 
       {
@@ -4112,7 +4165,8 @@ void generatedTestCases(ValueGetter<IrisTester> irisTester) {
         }
       }
 
-      final eventCalled = await onRemoteAudioStateChangedCompleter.future;
+      final eventCalled = await onRemoteAudioStateChangedCompleter.future
+          .timeout(const Duration(seconds: 10));
       expect(eventCalled, isTrue);
 
       {
@@ -4181,7 +4235,8 @@ void generatedTestCases(ValueGetter<IrisTester> irisTester) {
         }
       }
 
-      final eventCalled = await onActiveSpeakerCompleter.future;
+      final eventCalled = await onActiveSpeakerCompleter.future
+          .timeout(const Duration(seconds: 10));
       expect(eventCalled, isTrue);
 
       {
@@ -4245,7 +4300,8 @@ void generatedTestCases(ValueGetter<IrisTester> irisTester) {
         }
       }
 
-      final eventCalled = await onContentInspectResultCompleter.future;
+      final eventCalled = await onContentInspectResultCompleter.future
+          .timeout(const Duration(seconds: 10));
       expect(eventCalled, isTrue);
 
       {
@@ -4323,7 +4379,8 @@ void generatedTestCases(ValueGetter<IrisTester> irisTester) {
         }
       }
 
-      final eventCalled = await onSnapshotTakenCompleter.future;
+      final eventCalled = await onSnapshotTakenCompleter.future
+          .timeout(const Duration(seconds: 10));
       expect(eventCalled, isTrue);
 
       {
@@ -4401,7 +4458,8 @@ void generatedTestCases(ValueGetter<IrisTester> irisTester) {
         }
       }
 
-      final eventCalled = await onClientRoleChangedCompleter.future;
+      final eventCalled = await onClientRoleChangedCompleter.future
+          .timeout(const Duration(seconds: 10));
       expect(eventCalled, isTrue);
 
       {
@@ -4475,7 +4533,8 @@ void generatedTestCases(ValueGetter<IrisTester> irisTester) {
         }
       }
 
-      final eventCalled = await onClientRoleChangeFailedCompleter.future;
+      final eventCalled = await onClientRoleChangeFailedCompleter.future
+          .timeout(const Duration(seconds: 10));
       expect(eventCalled, isTrue);
 
       {
@@ -4543,7 +4602,8 @@ void generatedTestCases(ValueGetter<IrisTester> irisTester) {
         }
       }
 
-      final eventCalled = await onAudioDeviceVolumeChangedCompleter.future;
+      final eventCalled = await onAudioDeviceVolumeChangedCompleter.future
+          .timeout(const Duration(seconds: 10));
       expect(eventCalled, isTrue);
 
       {
@@ -4613,7 +4673,8 @@ void generatedTestCases(ValueGetter<IrisTester> irisTester) {
         }
       }
 
-      final eventCalled = await onRtmpStreamingStateChangedCompleter.future;
+      final eventCalled = await onRtmpStreamingStateChangedCompleter.future
+          .timeout(const Duration(seconds: 10));
       expect(eventCalled, isTrue);
 
       {
@@ -4678,7 +4739,8 @@ void generatedTestCases(ValueGetter<IrisTester> irisTester) {
         }
       }
 
-      final eventCalled = await onRtmpStreamingEventCompleter.future;
+      final eventCalled = await onRtmpStreamingEventCompleter.future
+          .timeout(const Duration(seconds: 10));
       expect(eventCalled, isTrue);
 
       {
@@ -4736,7 +4798,8 @@ void generatedTestCases(ValueGetter<IrisTester> irisTester) {
         }
       }
 
-      final eventCalled = await onTranscodingUpdatedCompleter.future;
+      final eventCalled = await onTranscodingUpdatedCompleter.future
+          .timeout(const Duration(seconds: 10));
       expect(eventCalled, isTrue);
 
       {
@@ -4799,7 +4862,8 @@ void generatedTestCases(ValueGetter<IrisTester> irisTester) {
         }
       }
 
-      final eventCalled = await onAudioRoutingChangedCompleter.future;
+      final eventCalled = await onAudioRoutingChangedCompleter.future
+          .timeout(const Duration(seconds: 10));
       expect(eventCalled, isTrue);
 
       {
@@ -4865,7 +4929,8 @@ void generatedTestCases(ValueGetter<IrisTester> irisTester) {
         }
       }
 
-      final eventCalled = await onChannelMediaRelayStateChangedCompleter.future;
+      final eventCalled = await onChannelMediaRelayStateChangedCompleter.future
+          .timeout(const Duration(seconds: 10));
       expect(eventCalled, isTrue);
 
       {
@@ -4928,8 +4993,9 @@ void generatedTestCases(ValueGetter<IrisTester> irisTester) {
         }
       }
 
-      final eventCalled =
-          await onLocalPublishFallbackToAudioOnlyCompleter.future;
+      final eventCalled = await onLocalPublishFallbackToAudioOnlyCompleter
+          .future
+          .timeout(const Duration(seconds: 10));
       expect(eventCalled, isTrue);
 
       {
@@ -4995,8 +5061,9 @@ void generatedTestCases(ValueGetter<IrisTester> irisTester) {
         }
       }
 
-      final eventCalled =
-          await onRemoteSubscribeFallbackToAudioOnlyCompleter.future;
+      final eventCalled = await onRemoteSubscribeFallbackToAudioOnlyCompleter
+          .future
+          .timeout(const Duration(seconds: 10));
       expect(eventCalled, isTrue);
 
       {
@@ -5073,7 +5140,8 @@ void generatedTestCases(ValueGetter<IrisTester> irisTester) {
         }
       }
 
-      final eventCalled = await onRemoteAudioTransportStatsCompleter.future;
+      final eventCalled = await onRemoteAudioTransportStatsCompleter.future
+          .timeout(const Duration(seconds: 10));
       expect(eventCalled, isTrue);
 
       {
@@ -5150,7 +5218,8 @@ void generatedTestCases(ValueGetter<IrisTester> irisTester) {
         }
       }
 
-      final eventCalled = await onRemoteVideoTransportStatsCompleter.future;
+      final eventCalled = await onRemoteVideoTransportStatsCompleter.future
+          .timeout(const Duration(seconds: 10));
       expect(eventCalled, isTrue);
 
       {
@@ -5225,7 +5294,8 @@ void generatedTestCases(ValueGetter<IrisTester> irisTester) {
         }
       }
 
-      final eventCalled = await onConnectionStateChangedCompleter.future;
+      final eventCalled = await onConnectionStateChangedCompleter.future
+          .timeout(const Duration(seconds: 10));
       expect(eventCalled, isTrue);
 
       {
@@ -5301,7 +5371,8 @@ void generatedTestCases(ValueGetter<IrisTester> irisTester) {
         }
       }
 
-      final eventCalled = await onWlAccMessageCompleter.future;
+      final eventCalled = await onWlAccMessageCompleter.future
+          .timeout(const Duration(seconds: 10));
       expect(eventCalled, isTrue);
 
       {
@@ -5387,7 +5458,8 @@ void generatedTestCases(ValueGetter<IrisTester> irisTester) {
         }
       }
 
-      final eventCalled = await onWlAccStatsCompleter.future;
+      final eventCalled = await onWlAccStatsCompleter.future
+          .timeout(const Duration(seconds: 10));
       expect(eventCalled, isTrue);
 
       {
@@ -5456,7 +5528,8 @@ void generatedTestCases(ValueGetter<IrisTester> irisTester) {
         }
       }
 
-      final eventCalled = await onNetworkTypeChangedCompleter.future;
+      final eventCalled = await onNetworkTypeChangedCompleter.future
+          .timeout(const Duration(seconds: 10));
       expect(eventCalled, isTrue);
 
       {
@@ -5527,7 +5600,8 @@ void generatedTestCases(ValueGetter<IrisTester> irisTester) {
         }
       }
 
-      final eventCalled = await onEncryptionErrorCompleter.future;
+      final eventCalled = await onEncryptionErrorCompleter.future
+          .timeout(const Duration(seconds: 10));
       expect(eventCalled, isTrue);
 
       {
@@ -5589,7 +5663,8 @@ void generatedTestCases(ValueGetter<IrisTester> irisTester) {
         }
       }
 
-      final eventCalled = await onPermissionErrorCompleter.future;
+      final eventCalled = await onPermissionErrorCompleter.future
+          .timeout(const Duration(seconds: 10));
       expect(eventCalled, isTrue);
 
       {
@@ -5654,7 +5729,8 @@ void generatedTestCases(ValueGetter<IrisTester> irisTester) {
         }
       }
 
-      final eventCalled = await onLocalUserRegisteredCompleter.future;
+      final eventCalled = await onLocalUserRegisteredCompleter.future
+          .timeout(const Duration(seconds: 10));
       expect(eventCalled, isTrue);
 
       {
@@ -5723,7 +5799,8 @@ void generatedTestCases(ValueGetter<IrisTester> irisTester) {
         }
       }
 
-      final eventCalled = await onUserInfoUpdatedCompleter.future;
+      final eventCalled = await onUserInfoUpdatedCompleter.future
+          .timeout(const Duration(seconds: 10));
       expect(eventCalled, isTrue);
 
       {
@@ -5795,7 +5872,8 @@ void generatedTestCases(ValueGetter<IrisTester> irisTester) {
         }
       }
 
-      final eventCalled = await onUserAccountUpdatedCompleter.future;
+      final eventCalled = await onUserAccountUpdatedCompleter.future
+          .timeout(const Duration(seconds: 10));
       expect(eventCalled, isTrue);
 
       {
@@ -5888,7 +5966,8 @@ void generatedTestCases(ValueGetter<IrisTester> irisTester) {
         }
       }
 
-      final eventCalled = await onVideoRenderingTracingResultCompleter.future;
+      final eventCalled = await onVideoRenderingTracingResultCompleter.future
+          .timeout(const Duration(seconds: 10));
       expect(eventCalled, isTrue);
 
       {
@@ -5979,7 +6058,8 @@ void generatedTestCases(ValueGetter<IrisTester> irisTester) {
         }
       }
 
-      final eventCalled = await onLocalVideoTranscoderErrorCompleter.future;
+      final eventCalled = await onLocalVideoTranscoderErrorCompleter.future
+          .timeout(const Duration(seconds: 10));
       expect(eventCalled, isTrue);
 
       {
@@ -6053,7 +6133,8 @@ void generatedTestCases(ValueGetter<IrisTester> irisTester) {
         }
       }
 
-      final eventCalled = await onUploadLogResultCompleter.future;
+      final eventCalled = await onUploadLogResultCompleter.future
+          .timeout(const Duration(seconds: 10));
       expect(eventCalled, isTrue);
 
       {
@@ -6128,7 +6209,8 @@ void generatedTestCases(ValueGetter<IrisTester> irisTester) {
         }
       }
 
-      final eventCalled = await onAudioSubscribeStateChangedCompleter.future;
+      final eventCalled = await onAudioSubscribeStateChangedCompleter.future
+          .timeout(const Duration(seconds: 10));
       expect(eventCalled, isTrue);
 
       {
@@ -6203,7 +6285,8 @@ void generatedTestCases(ValueGetter<IrisTester> irisTester) {
         }
       }
 
-      final eventCalled = await onVideoSubscribeStateChangedCompleter.future;
+      final eventCalled = await onVideoSubscribeStateChangedCompleter.future
+          .timeout(const Duration(seconds: 10));
       expect(eventCalled, isTrue);
 
       {
@@ -6275,7 +6358,8 @@ void generatedTestCases(ValueGetter<IrisTester> irisTester) {
         }
       }
 
-      final eventCalled = await onAudioPublishStateChangedCompleter.future;
+      final eventCalled = await onAudioPublishStateChangedCompleter.future
+          .timeout(const Duration(seconds: 10));
       expect(eventCalled, isTrue);
 
       {
@@ -6350,7 +6434,8 @@ void generatedTestCases(ValueGetter<IrisTester> irisTester) {
         }
       }
 
-      final eventCalled = await onVideoPublishStateChangedCompleter.future;
+      final eventCalled = await onVideoPublishStateChangedCompleter.future
+          .timeout(const Duration(seconds: 10));
       expect(eventCalled, isTrue);
 
       {
@@ -6450,7 +6535,8 @@ void generatedTestCases(ValueGetter<IrisTester> irisTester) {
         }
       }
 
-      final eventCalled = await onTranscodedStreamLayoutInfoCompleter.future;
+      final eventCalled = await onTranscodedStreamLayoutInfoCompleter.future
+          .timeout(const Duration(seconds: 10));
       expect(eventCalled, isTrue);
 
       {
@@ -6525,7 +6611,8 @@ void generatedTestCases(ValueGetter<IrisTester> irisTester) {
         }
       }
 
-      final eventCalled = await onAudioMetadataReceivedCompleter.future;
+      final eventCalled = await onAudioMetadataReceivedCompleter.future
+          .timeout(const Duration(seconds: 10));
       expect(eventCalled, isTrue);
 
       {
@@ -6594,7 +6681,8 @@ void generatedTestCases(ValueGetter<IrisTester> irisTester) {
         }
       }
 
-      final eventCalled = await onExtensionEventCompleter.future;
+      final eventCalled = await onExtensionEventCompleter.future
+          .timeout(const Duration(seconds: 10));
       expect(eventCalled, isTrue);
 
       {
@@ -6658,7 +6746,8 @@ void generatedTestCases(ValueGetter<IrisTester> irisTester) {
         }
       }
 
-      final eventCalled = await onExtensionStartedCompleter.future;
+      final eventCalled = await onExtensionStartedCompleter.future
+          .timeout(const Duration(seconds: 10));
       expect(eventCalled, isTrue);
 
       {
@@ -6722,7 +6811,8 @@ void generatedTestCases(ValueGetter<IrisTester> irisTester) {
         }
       }
 
-      final eventCalled = await onExtensionStoppedCompleter.future;
+      final eventCalled = await onExtensionStoppedCompleter.future
+          .timeout(const Duration(seconds: 10));
       expect(eventCalled, isTrue);
 
       {
@@ -6791,7 +6881,8 @@ void generatedTestCases(ValueGetter<IrisTester> irisTester) {
         }
       }
 
-      final eventCalled = await onExtensionErrorCompleter.future;
+      final eventCalled = await onExtensionErrorCompleter.future
+          .timeout(const Duration(seconds: 10));
       expect(eventCalled, isTrue);
 
       {
@@ -6860,7 +6951,8 @@ void generatedTestCases(ValueGetter<IrisTester> irisTester) {
         }
       }
 
-      final eventCalled = await onSetRtmFlagResultCompleter.future;
+      final eventCalled = await onSetRtmFlagResultCompleter.future
+          .timeout(const Duration(seconds: 10));
       expect(eventCalled, isTrue);
 
       {

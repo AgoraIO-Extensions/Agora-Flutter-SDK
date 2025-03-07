@@ -98,7 +98,8 @@ void generatedTestCases(ValueGetter<IrisTester> irisTester) {
         }
       }
 
-      final eventCalled = await onEncodedVideoFrameReceivedCompleter.future;
+      final eventCalled = await onEncodedVideoFrameReceivedCompleter.future
+          .timeout(const Duration(seconds: 10));
       expect(eventCalled, isTrue);
 
       {

@@ -282,7 +282,7 @@ await Future.delayed(const Duration(milliseconds: 500));
 
 ${fireEventImplBuffer.toString()}
 
-final eventCalled = await $eventCompleterName.future;
+final eventCalled = await $eventCompleterName.future.timeout(const Duration(seconds: 10));
 expect(eventCalled, isTrue);
 
 {

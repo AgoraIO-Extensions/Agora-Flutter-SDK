@@ -98,7 +98,8 @@ void generatedTestCases(ValueGetter<IrisTester> irisTester) {
         }
       }
 
-      final eventCalled = await onRecordAudioEncodedFrameCompleter.future;
+      final eventCalled = await onRecordAudioEncodedFrameCompleter.future
+          .timeout(const Duration(seconds: 10));
       expect(eventCalled, isTrue);
 
       {
@@ -198,7 +199,8 @@ void generatedTestCases(ValueGetter<IrisTester> irisTester) {
         }
       }
 
-      final eventCalled = await onPlaybackAudioEncodedFrameCompleter.future;
+      final eventCalled = await onPlaybackAudioEncodedFrameCompleter.future
+          .timeout(const Duration(seconds: 10));
       expect(eventCalled, isTrue);
 
       {
@@ -298,7 +300,8 @@ void generatedTestCases(ValueGetter<IrisTester> irisTester) {
         }
       }
 
-      final eventCalled = await onMixedAudioEncodedFrameCompleter.future;
+      final eventCalled = await onMixedAudioEncodedFrameCompleter.future
+          .timeout(const Duration(seconds: 10));
       expect(eventCalled, isTrue);
 
       {

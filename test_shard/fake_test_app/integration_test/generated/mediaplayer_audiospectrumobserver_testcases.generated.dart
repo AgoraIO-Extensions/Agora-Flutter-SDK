@@ -71,7 +71,8 @@ void generatedTestCases(ValueGetter<IrisTester> irisTester) {
         }
       }
 
-      final eventCalled = await onLocalAudioSpectrumCompleter.future;
+      final eventCalled = await onLocalAudioSpectrumCompleter.future
+          .timeout(const Duration(seconds: 10));
       expect(eventCalled, isTrue);
 
       {
@@ -157,7 +158,8 @@ void generatedTestCases(ValueGetter<IrisTester> irisTester) {
         }
       }
 
-      final eventCalled = await onRemoteAudioSpectrumCompleter.future;
+      final eventCalled = await onRemoteAudioSpectrumCompleter.future
+          .timeout(const Duration(seconds: 10));
       expect(eventCalled, isTrue);
 
       {

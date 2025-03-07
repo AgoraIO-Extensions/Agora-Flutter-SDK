@@ -60,7 +60,8 @@ void generatedTestCases(ValueGetter<IrisTester> irisTester) {
         }
       }
 
-      final eventCalled = await onFaceInfoCompleter.future;
+      final eventCalled =
+          await onFaceInfoCompleter.future.timeout(const Duration(seconds: 10));
       expect(eventCalled, isTrue);
 
       {

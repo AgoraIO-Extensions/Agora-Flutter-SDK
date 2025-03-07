@@ -227,7 +227,7 @@ void testCases() {
             // pumpAndSettle again to ensure the `AgoraVideoView` shown
             await tester.pumpAndSettle(const Duration(milliseconds: 5000));
 
-            await videoViewCreatedCompleter.future;
+            await videoViewCreatedCompleter.future.timeout(const Duration(seconds: 10));
 
             final setupLocalVideoCalls = irisMethodChannel.methodCallQueue
                 .where((e) => e.funcName == 'RtcEngine_setupLocalVideo_acc9c38')
@@ -292,7 +292,7 @@ void testCases() {
               // pumpAndSettle again to ensure the `AgoraVideoView` shown
               await tester.pumpAndSettle(const Duration(milliseconds: 5000));
 
-              await videoViewCreatedCompleter.future;
+              await videoViewCreatedCompleter.future.timeout(const Duration(seconds: 10));
 
               final setupLocalVideoCalls = irisMethodChannel.methodCallQueue
                   .where(
@@ -550,7 +550,7 @@ void testCases() {
             // pumpAndSettle again to ensure the `AgoraVideoView` shown
             await tester.pumpAndSettle(const Duration(milliseconds: 5000));
 
-            await videoViewCreatedCompleter.future;
+            await videoViewCreatedCompleter.future.timeout(const Duration(seconds: 10));
 
             {
               final createTextureRenderCalls = fakeMethodChannelController
@@ -634,7 +634,7 @@ void testCases() {
             // pumpAndSettle again to ensure the `AgoraVideoView` shown
             await tester.pumpAndSettle(const Duration(milliseconds: 5000));
 
-            await videoViewCreatedCompleter.future;
+            await videoViewCreatedCompleter.future.timeout(const Duration(seconds: 10));
 
             {
               int textureId = -1;

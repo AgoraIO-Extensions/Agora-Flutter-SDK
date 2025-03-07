@@ -86,7 +86,7 @@ class _MyHomePageState extends State<MyHomePage> {
 
 //       irisTester.fireEvent('');
 
-//       final calledEvent = await calledEventCompleter.future;
+//       final calledEvent = await calledEventCompleter.future.timeout(const Duration(seconds: 10));
 
 // print('calledEvent: $calledEvent');
 //       // expect(calledEvent, isTrue);
