@@ -180,6 +180,11 @@
       NSNumber *textureIdValue = call.arguments;
       BOOL success = [self destroyTextureRender: [textureIdValue longLongValue]];
       result(@(success));
+  } else if ([@"addPlatformRenderRef" isEqualToString:call.method]) {
+      NSNumber *platformViewIdValue = call.arguments;
+      int64_t platformViewId = [platformViewIdValue longLongValue];
+      [self addPlatformRenderRef:platformViewId];
+      result(@(YES));
   } else if ([@"dePlatfromViewRef" isEqualToString:call.method]) {
       NSNumber *platformViewIdValue = call.arguments;
       int64_t platformViewId = [platformViewIdValue longLongValue];

@@ -252,7 +252,11 @@ void testCases() {
             final disposeLocalVideoCallsJsonMap =
                 jsonDecode(disposeLocalVideoCalls[1].params);
             expect(
-                disposeLocalVideoCallsJsonMap['canvas']['view'] == 0, isTrue);
+                disposeLocalVideoCallsJsonMap['canvas']['view'] != 0, isTrue);
+            expect(
+                disposeLocalVideoCallsJsonMap['canvas']['setupMode'] ==
+                    VideoViewSetupMode.videoViewSetupRemove.value(),
+                isTrue);
           },
         );
 
@@ -319,7 +323,11 @@ void testCases() {
               final disposeLocalVideoCallsJsonMap =
                   jsonDecode(disposeLocalVideoCalls[1].params);
               expect(
-                  disposeLocalVideoCallsJsonMap['canvas']['view'] == 0, isTrue);
+                  disposeLocalVideoCallsJsonMap['canvas']['view'] != 0, isTrue);
+              expect(
+                  disposeLocalVideoCallsJsonMap['canvas']['setupMode'] ==
+                      VideoViewSetupMode.videoViewSetupRemove.value(),
+                  isTrue);
             }
           },
         );
@@ -481,7 +489,11 @@ void testCases() {
                   .toList();
 
               final jsonMap1 = jsonDecode(setupLocalVideoCalls[0].params);
-              expect(jsonMap1['canvas']['view'] == 0, isTrue);
+              expect(jsonMap1['canvas']['view'] != 0, isTrue);
+              expect(
+                  jsonMap1['canvas']['setupMode'] ==
+                      VideoViewSetupMode.videoViewSetupRemove.value(),
+                  isTrue);
 
               final jsonMap2 = jsonDecode(setupLocalVideoCalls[1].params);
               expect(jsonMap2['canvas']['view'] != 0, isTrue);
@@ -495,7 +507,11 @@ void testCases() {
                   .toList();
 
               final jsonMap1 = jsonDecode(setupRemoteVideoExCalls[0].params);
-              expect(jsonMap1['canvas']['view'] == 0, isTrue);
+              expect(jsonMap1['canvas']['view'] != 0, isTrue);
+              expect(
+                  jsonMap1['canvas']['setupMode'] ==
+                      VideoViewSetupMode.videoViewSetupRemove.value(),
+                  isTrue);
 
               final jsonMap2 = jsonDecode(setupRemoteVideoExCalls[1].params);
               expect(jsonMap2['canvas']['view'] != 0, isTrue);
