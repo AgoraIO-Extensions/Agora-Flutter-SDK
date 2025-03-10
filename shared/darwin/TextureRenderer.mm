@@ -35,6 +35,11 @@ public:
   void OnVideoFrameReceived(const void *videoFrame,
                             const IrisRtcVideoFrameConfig &config,
                             bool resize) override {
+    TextureRender *strongRenderer = renderer_;
+    if (!strongRenderer) {
+      return;
+    }
+
     agora::media::base::VideoFrame *vf =
         (agora::media::base::VideoFrame *)videoFrame;
 
@@ -78,9 +83,9 @@ public:
     // Note: `dispatch_sync` will block the current thread, so we don't need
     // to check if the renderer is still valid before accessing its
     // properties.
-    dispatch_sync(renderer_.pixelBufferSynchronizationQueue, ^{
-      previousPixelBuffer = renderer_.latestPixelBuffer;
-      renderer_.latestPixelBuffer = CVPixelBufferRetain(pixelBuffer);
+    dispatch_sync(strongRenderer.pixelBufferSynchronizationQueue, ^{
+      previousPixelBuffer = strongRenderer.latestPixelBuffer;
+      strongRenderer.latestPixelBuffer = CVPixelBufferRetain(pixelBuffer);
     });
     if (previousPixelBuffer) {
       CFRelease(previousPixelBuffer);
@@ -189,10 +194,12 @@ public:
 }
 
 - (void)dealloc {
-  if (self.latestPixelBuffer) {
-    CVPixelBufferRelease(self.latestPixelBuffer);
-    self.latestPixelBuffer = nil;
-  }
+  dispatch_sync(self.pixelBufferSynchronizationQueue, ^{
+    if (self.latestPixelBuffer) {
+      CVPixelBufferRelease(self.latestPixelBuffer);
+      self.latestPixelBuffer = nil;
+    }
+  });
 }
 
 @end
