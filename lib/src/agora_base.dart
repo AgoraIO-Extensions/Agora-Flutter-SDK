@@ -2702,7 +2702,7 @@ enum AudioProfileType {
   @JsonValue(5)
   audioProfileMusicHighQualityStereo,
 
-  /// 6: A sample rate of 16 kHz, audio encoding, mono, and Acoustic Echo Cancellation (AES) enabled.
+  /// 6: A sample rate of 16 kHz, audio encoding, mono, and Acoustic Echo Cancellation (AEC) enabled.
   @JsonValue(6)
   audioProfileIot,
 
@@ -2751,7 +2751,7 @@ enum AudioScenarioType {
   @JsonValue(9)
   audioScenarioAiServer,
 
-  /// @nodoc
+  /// 10: AI conversation scenario, which is only applicable to scenarios where the user interacts with the conversational AI agent created by.
   @JsonValue(10)
   audioScenarioAiClient,
 
@@ -3255,7 +3255,7 @@ enum LocalVideoStreamReason {
   @JsonValue(29)
   localVideoStreamReasonScreenCaptureResumed,
 
-  /// 30: (Windows and macOS only) The displayer used for screen capture is disconnected.
+  /// 30: (Windows and macOS only) The displayer used for screen capture is disconnected. The current screen sharing has been paused. Prompt the user to restart the screen sharing.
   @JsonValue(30)
   localVideoStreamReasonScreenCaptureDisplayDisconnected,
 }
@@ -4355,7 +4355,11 @@ class TranscodingVideoStream {
   @JsonKey(name: 'remoteUserUid')
   final int? remoteUserUid;
 
-  /// The URL of the image. Use this parameter only when the source type is the image for local video mixing.
+  /// The file path of local images. Use this parameter only when the source type is the image for local video mixing. Examples:
+  ///  Android: /storage/emulated/0/Pictures/image.png
+  ///  iOS: /var/mobile/Containers/Data/Application/<APP-UUID>/Documents/image.png
+  ///  macOS: ~/Pictures/image.png
+  ///  Windows: C:\\Users\\{username}\\Pictures\\image.png
   @JsonKey(name: 'imageUrl')
   final String? imageUrl;
 
