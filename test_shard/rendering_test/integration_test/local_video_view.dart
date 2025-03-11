@@ -108,7 +108,8 @@ class _LocalVideoViewState extends State<LocalVideoView> {
 
     await mediaPlayerController.open(url: widget.url, startPos: 0);
 
-    await mediaPlayerControllerPlayed.future.timeout(const Duration(seconds: 10));
+    await mediaPlayerControllerPlayed.future
+        .timeout(const Duration(seconds: 10));
   }
 
   @override

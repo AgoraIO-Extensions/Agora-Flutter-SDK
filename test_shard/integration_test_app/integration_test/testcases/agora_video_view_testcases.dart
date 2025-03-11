@@ -168,7 +168,8 @@ class _MultipleVideoViewWithFlutterTextureState
     await mediaPlayerController2.open(url: widget.url, startPos: 0);
     await mediaPlayerController3.open(url: widget.url, startPos: 0);
 
-    await mediaPlayerControllerPlayed.future.timeout(const Duration(seconds: 10));
+    await mediaPlayerControllerPlayed.future
+        .timeout(const Duration(seconds: 10));
   }
 
   @override
@@ -255,7 +256,8 @@ void testCases() {
       // pumpAndSettle again to ensure the `AgoraVideoView` shown
       await tester.pumpAndSettle(const Duration(milliseconds: 5000));
 
-      final videoViewCreatedCalled = await videoViewCreatedCompleter.future.timeout(const Duration(seconds: 10));
+      final videoViewCreatedCalled = await videoViewCreatedCompleter.future
+          .timeout(const Duration(seconds: 10));
       expect(videoViewCreatedCalled, isTrue);
 
       await tester.pumpWidget(Container());

@@ -144,7 +144,8 @@ class _RemoteVideoViewState extends State<RemoteVideoView> {
       ),
     );
 
-    await mediaPlayerControllerPlayed.future.timeout(const Duration(seconds: 10));
+    await mediaPlayerControllerPlayed.future
+        .timeout(const Duration(seconds: 10));
 
     // Simulate a remote user join
     await rtcEngine.joinChannelEx(

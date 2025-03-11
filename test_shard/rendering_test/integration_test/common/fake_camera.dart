@@ -12,7 +12,8 @@ class FakeCamera {
   final RtcEngine _rtcEngine;
 
   late final Completer<void> _onFirstFrame;
-  Future<void> get onFirstFrame => _onFirstFrame.future.timeout(const Duration(seconds: 10));
+  Future<void> get onFirstFrame =>
+      _onFirstFrame.future.timeout(const Duration(seconds: 10));
 
   late final Timer _pushVideoFrameTimer;
 

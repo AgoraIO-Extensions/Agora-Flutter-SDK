@@ -7,8 +7,9 @@ import 'package:flutter/foundation.dart';
 import 'impl/agora_rtc_engine_impl.dart' as impl;
 import 'impl/media_player_impl.dart';
 
-/// Agora Picture in Picture options.
+/// @nodoc
 class AgoraPipOptions {
+  /// @nodoc
   const AgoraPipOptions({
     this.autoEnterEnabled,
     this.aspectRatioX,
@@ -26,72 +27,46 @@ class AgoraPipOptions {
     this.preferredContentHeight,
   });
 
-  /// Whether to enable auto enter.
-  /// @note only for android
+  /// @nodoc
   final bool? autoEnterEnabled;
 
-  /// The aspect ratio of the video view.
-  /// @note only for android
+  /// @nodoc
   final int? aspectRatioX;
 
-  /// The aspect ratio of the video view.
-  /// @note only for android
+  /// @nodoc
   final int? aspectRatioY;
 
-  /// The left position of the source rect hint.
-  /// @note only for android
+  /// @nodoc
   final int? sourceRectHintLeft;
 
-  /// The top position of the source rect hint.
-  /// @note only for android
+  /// @nodoc
   final int? sourceRectHintTop;
 
-  /// The right position of the source rect hint.
-  /// @note only for android
+  /// @nodoc
   final int? sourceRectHintRight;
 
-  /// The bottom position of the source rect hint.
-  /// @note only for android
+  /// @nodoc
   final int? sourceRectHintBottom;
 
-  /// Whether to enable seamless resize.
-  /// Default is false. Set to true to enable seamless resize.
-  /// @note only for android
+  /// @nodoc
   final bool? seamlessResizeEnabled;
 
-  /// Whether to use external state monitor.
-  /// Default is false. Set to true to use external state monitor, which will create a new thread to monitor the state of the pip view and
-  /// check the pip state with the interval set in [externalStateMonitorInterval].
-  /// @note only for android
+  /// @nodoc
   final bool? useExternalStateMonitor;
 
-  /// The interval of the external state monitor, in milliseconds. Default is 100ms.
-  /// @note only for android
+  /// @nodoc
   final int? externalStateMonitorInterval;
 
-  /// The rtc connection.
-  /// @note only for ios
+  /// @nodoc
   final RtcConnection? connection;
 
-  /// @see VideoCanvas
-  /// @note the view in videoCanvas is the sourceView of pip view, zero means to use the root view of the app.
-  /// @note only some properties of VideoCanvas are supported:
-  /// - uid (optional)
-  /// - view (optional)
-  /// - backgroundColor (optional)
-  /// - mirrorMode (optional)
-  /// - renderMode (optional)
-  /// - sourceType (optional)
-  /// - mediaPlayerId (optional) not supported
-  /// @note only for ios
+  /// @nodoc
   final VideoCanvas? videoCanvas;
 
-  /// The preferred content width.
-  /// @note only for ios
+  /// @nodoc
   final int? preferredContentWidth;
 
-  /// The preferred content height.
-  /// @note only for ios
+  /// @nodoc
   final int? preferredContentHeight;
 
   /// @nodoc
@@ -116,7 +91,8 @@ class AgoraPipOptions {
       writeNotNull('sourceRectHintBottom', sourceRectHintBottom);
       writeNotNull('seamlessResizeEnabled', seamlessResizeEnabled);
       writeNotNull('useExternalStateMonitor', useExternalStateMonitor);
-      writeNotNull('externalStateMonitorInterval', externalStateMonitorInterval);
+      writeNotNull(
+          'externalStateMonitorInterval', externalStateMonitorInterval);
     }
 
     // only for ios
@@ -130,25 +106,26 @@ class AgoraPipOptions {
   }
 }
 
-/// The state of the Picture in Picture.
+/// @nodoc
 enum AgoraPipState {
-  /// The Picture in Picture is started.
+  /// @nodoc
   pipStateStarted,
 
-  /// The Picture in Picture is stopped.
+  /// @nodoc
   pipStateStopped,
 
-  /// The Picture in Picture is failed.
+  /// @nodoc
   pipStateFailed,
 }
 
-/// The observer of the Picture in Picture state changed.
+/// @nodoc
 class AgoraPipStateChangedObserver {
+  /// @nodoc
   const AgoraPipStateChangedObserver({
     required this.onPipStateChanged,
   });
 
-  /// The callback of the Picture in Picture state changed.
+  /// @nodoc
   final void Function(AgoraPipState state, String? error) onPipStateChanged;
 }
 
@@ -165,75 +142,56 @@ extension RtcEngineExt on RtcEngine {
     return impl.getAssetAbsolutePath(assetPath);
   }
 
-  /// Registers a Picture in Picture state change observer.
-  ///
-  /// [observer] The Picture in Picture state change observer.
+  /// @nodoc
   Future<void> registerPipStateChangedObserver(
       AgoraPipStateChangedObserver observer) async {
     final impl = this as RtcEngineImpl;
     return impl.registerPipStateChangedObserver(observer);
   }
 
-  /// Unregisters a Picture in Picture state change observer.
+  /// @nodoc
   Future<void> unregisterPipStateChangedObserver() async {
     final impl = this as RtcEngineImpl;
     return impl.unregisterPipStateChangedObserver();
   }
 
-  /// Check if Picture in Picture is supported.
-  ///
-  /// Returns
-  /// Whether Picture in Picture is supported.
+  /// @nodoc
   Future<bool> pipIsSupported() async {
     final impl = this as RtcEngineImpl;
     return impl.pipIsSupported();
   }
 
-  /// Check if Picture in Picture can auto enter.
-  ///
-  /// Returns
-  /// Whether Picture in Picture can auto enter.
+  /// @nodoc
   Future<bool> pipIsAutoEnterSupported() async {
     final impl = this as RtcEngineImpl;
     return impl.pipIsAutoEnterSupported();
   }
 
-  /// Check if Picture in Picture is activated.
-  ///
-  /// Returns
-  /// Whether Picture in Picture is activated.
+  /// @nodoc
   Future<bool> isPipActivated() async {
     final impl = this as RtcEngineImpl;
     return impl.isPipActivated();
   }
 
-  /// Setup or update Picture in Picture.
-  ///
-  /// [options] The options of the Picture in Picture.
-  ///
-  /// Returns
-  /// Whether Picture in Picture is setup successfully.
+  /// @nodoc
   Future<bool> pipSetup(AgoraPipOptions options) async {
     final impl = this as RtcEngineImpl;
     return impl.pipSetup(options);
   }
 
-  /// Start Picture in Picture.
-  ///
-  /// Returns
-  /// Whether Picture in Picture is started successfully.
+  /// @nodoc
   Future<bool> pipStart() async {
     final impl = this as RtcEngineImpl;
     return impl.pipStart();
   }
 
-  /// Stop Picture in Picture.
+  /// @nodoc
   Future<void> pipStop() async {
     final impl = this as RtcEngineImpl;
     return impl.pipStop();
   }
 
-  /// Dispose Picture in Picture.
+  /// @nodoc
   Future<void> pipDispose() async {
     final impl = this as RtcEngineImpl;
     return impl.pipDispose();
