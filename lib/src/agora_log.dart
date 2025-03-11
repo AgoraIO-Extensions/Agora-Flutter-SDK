@@ -1,3 +1,4 @@
+import '/src/_serializable.dart';
 import '/src/binding_forward_export.dart';
 part 'agora_log.g.dart';
 
@@ -102,7 +103,7 @@ const defaultLogSizeInKb = 2048;
 
 /// Configuration of Agora SDK log files.
 @JsonSerializable(explicitToJson: true, includeIfNull: false)
-class LogConfig {
+class LogConfig implements AgoraSerializable {
   /// @nodoc
   const LogConfig({this.filePath, this.fileSizeInKB, this.level});
 
@@ -123,5 +124,6 @@ class LogConfig {
       _$LogConfigFromJson(json);
 
   /// @nodoc
+  @override
   Map<String, dynamic> toJson() => _$LogConfigToJson(this);
 }

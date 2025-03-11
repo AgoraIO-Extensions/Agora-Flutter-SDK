@@ -1,9 +1,10 @@
+import '/src/_serializable.dart';
 import '/src/binding_forward_export.dart';
 part 'agora_rtc_engine_ex.g.dart';
 
 /// Contains connection information.
 @JsonSerializable(explicitToJson: true, includeIfNull: false)
-class RtcConnection {
+class RtcConnection implements AgoraSerializable {
   /// @nodoc
   const RtcConnection({this.channelId, this.localUid});
 
@@ -20,6 +21,7 @@ class RtcConnection {
       _$RtcConnectionFromJson(json);
 
   /// @nodoc
+  @override
   Map<String, dynamic> toJson() => _$RtcConnectionToJson(this);
 }
 

@@ -2,11 +2,14 @@
 
 // ignore_for_file: public_member_api_docs, unused_local_variable, unused_import, prefer_is_empty
 
+import '/src/_serializable.dart';
 import '/src/binding_forward_export.dart';
+
 part 'event_handler_param_json.g.dart';
 
 @JsonSerializable(explicitToJson: true, includeIfNull: false)
-class AudioEncodedFrameObserverOnRecordAudioEncodedFrameJson {
+class AudioEncodedFrameObserverOnRecordAudioEncodedFrameJson
+    implements AgoraSerializable {
   const AudioEncodedFrameObserverOnRecordAudioEncodedFrameJson(
       {this.frameBuffer, this.length, this.audioEncodedFrameInfo});
 
@@ -23,6 +26,7 @@ class AudioEncodedFrameObserverOnRecordAudioEncodedFrameJson {
           Map<String, dynamic> json) =>
       _$AudioEncodedFrameObserverOnRecordAudioEncodedFrameJsonFromJson(json);
 
+  @override
   Map<String, dynamic> toJson() =>
       _$AudioEncodedFrameObserverOnRecordAudioEncodedFrameJsonToJson(this);
 }
@@ -52,7 +56,8 @@ extension AudioEncodedFrameObserverOnRecordAudioEncodedFrameJsonBufferExt
 }
 
 @JsonSerializable(explicitToJson: true, includeIfNull: false)
-class AudioEncodedFrameObserverOnPlaybackAudioEncodedFrameJson {
+class AudioEncodedFrameObserverOnPlaybackAudioEncodedFrameJson
+    implements AgoraSerializable {
   const AudioEncodedFrameObserverOnPlaybackAudioEncodedFrameJson(
       {this.frameBuffer, this.length, this.audioEncodedFrameInfo});
 
@@ -69,6 +74,7 @@ class AudioEncodedFrameObserverOnPlaybackAudioEncodedFrameJson {
           Map<String, dynamic> json) =>
       _$AudioEncodedFrameObserverOnPlaybackAudioEncodedFrameJsonFromJson(json);
 
+  @override
   Map<String, dynamic> toJson() =>
       _$AudioEncodedFrameObserverOnPlaybackAudioEncodedFrameJsonToJson(this);
 }
@@ -98,7 +104,8 @@ extension AudioEncodedFrameObserverOnPlaybackAudioEncodedFrameJsonBufferExt
 }
 
 @JsonSerializable(explicitToJson: true, includeIfNull: false)
-class AudioEncodedFrameObserverOnMixedAudioEncodedFrameJson {
+class AudioEncodedFrameObserverOnMixedAudioEncodedFrameJson
+    implements AgoraSerializable {
   const AudioEncodedFrameObserverOnMixedAudioEncodedFrameJson(
       {this.frameBuffer, this.length, this.audioEncodedFrameInfo});
 
@@ -115,6 +122,7 @@ class AudioEncodedFrameObserverOnMixedAudioEncodedFrameJson {
           Map<String, dynamic> json) =>
       _$AudioEncodedFrameObserverOnMixedAudioEncodedFrameJsonFromJson(json);
 
+  @override
   Map<String, dynamic> toJson() =>
       _$AudioEncodedFrameObserverOnMixedAudioEncodedFrameJsonToJson(this);
 }
@@ -144,7 +152,7 @@ extension AudioEncodedFrameObserverOnMixedAudioEncodedFrameJsonBufferExt
 }
 
 @JsonSerializable(explicitToJson: true, includeIfNull: false)
-class AudioPcmFrameSinkOnFrameJson {
+class AudioPcmFrameSinkOnFrameJson implements AgoraSerializable {
   const AudioPcmFrameSinkOnFrameJson({this.frame});
 
   @JsonKey(name: 'frame')
@@ -153,6 +161,7 @@ class AudioPcmFrameSinkOnFrameJson {
   factory AudioPcmFrameSinkOnFrameJson.fromJson(Map<String, dynamic> json) =>
       _$AudioPcmFrameSinkOnFrameJsonFromJson(json);
 
+  @override
   Map<String, dynamic> toJson() => _$AudioPcmFrameSinkOnFrameJsonToJson(this);
 }
 
@@ -170,7 +179,8 @@ extension AudioPcmFrameSinkOnFrameJsonBufferExt
 }
 
 @JsonSerializable(explicitToJson: true, includeIfNull: false)
-class AudioFrameObserverBaseOnRecordAudioFrameJson {
+class AudioFrameObserverBaseOnRecordAudioFrameJson
+    implements AgoraSerializable {
   const AudioFrameObserverBaseOnRecordAudioFrameJson(
       {this.channelId, this.audioFrame});
 
@@ -184,6 +194,7 @@ class AudioFrameObserverBaseOnRecordAudioFrameJson {
           Map<String, dynamic> json) =>
       _$AudioFrameObserverBaseOnRecordAudioFrameJsonFromJson(json);
 
+  @override
   Map<String, dynamic> toJson() =>
       _$AudioFrameObserverBaseOnRecordAudioFrameJsonToJson(this);
 }
@@ -203,7 +214,8 @@ extension AudioFrameObserverBaseOnRecordAudioFrameJsonBufferExt
 }
 
 @JsonSerializable(explicitToJson: true, includeIfNull: false)
-class AudioFrameObserverBaseOnPlaybackAudioFrameJson {
+class AudioFrameObserverBaseOnPlaybackAudioFrameJson
+    implements AgoraSerializable {
   const AudioFrameObserverBaseOnPlaybackAudioFrameJson(
       {this.channelId, this.audioFrame});
 
@@ -217,6 +229,7 @@ class AudioFrameObserverBaseOnPlaybackAudioFrameJson {
           Map<String, dynamic> json) =>
       _$AudioFrameObserverBaseOnPlaybackAudioFrameJsonFromJson(json);
 
+  @override
   Map<String, dynamic> toJson() =>
       _$AudioFrameObserverBaseOnPlaybackAudioFrameJsonToJson(this);
 }
@@ -236,7 +249,7 @@ extension AudioFrameObserverBaseOnPlaybackAudioFrameJsonBufferExt
 }
 
 @JsonSerializable(explicitToJson: true, includeIfNull: false)
-class AudioFrameObserverBaseOnMixedAudioFrameJson {
+class AudioFrameObserverBaseOnMixedAudioFrameJson implements AgoraSerializable {
   const AudioFrameObserverBaseOnMixedAudioFrameJson(
       {this.channelId, this.audioFrame});
 
@@ -250,6 +263,7 @@ class AudioFrameObserverBaseOnMixedAudioFrameJson {
           Map<String, dynamic> json) =>
       _$AudioFrameObserverBaseOnMixedAudioFrameJsonFromJson(json);
 
+  @override
   Map<String, dynamic> toJson() =>
       _$AudioFrameObserverBaseOnMixedAudioFrameJsonToJson(this);
 }
@@ -269,7 +283,8 @@ extension AudioFrameObserverBaseOnMixedAudioFrameJsonBufferExt
 }
 
 @JsonSerializable(explicitToJson: true, includeIfNull: false)
-class AudioFrameObserverBaseOnEarMonitoringAudioFrameJson {
+class AudioFrameObserverBaseOnEarMonitoringAudioFrameJson
+    implements AgoraSerializable {
   const AudioFrameObserverBaseOnEarMonitoringAudioFrameJson({this.audioFrame});
 
   @JsonKey(name: 'audioFrame')
@@ -279,6 +294,7 @@ class AudioFrameObserverBaseOnEarMonitoringAudioFrameJson {
           Map<String, dynamic> json) =>
       _$AudioFrameObserverBaseOnEarMonitoringAudioFrameJsonFromJson(json);
 
+  @override
   Map<String, dynamic> toJson() =>
       _$AudioFrameObserverBaseOnEarMonitoringAudioFrameJsonToJson(this);
 }
@@ -298,7 +314,8 @@ extension AudioFrameObserverBaseOnEarMonitoringAudioFrameJsonBufferExt
 }
 
 @JsonSerializable(explicitToJson: true, includeIfNull: false)
-class AudioFrameObserverOnPlaybackAudioFrameBeforeMixingJson {
+class AudioFrameObserverOnPlaybackAudioFrameBeforeMixingJson
+    implements AgoraSerializable {
   const AudioFrameObserverOnPlaybackAudioFrameBeforeMixingJson(
       {this.channelId, this.uid, this.audioFrame});
 
@@ -315,6 +332,7 @@ class AudioFrameObserverOnPlaybackAudioFrameBeforeMixingJson {
           Map<String, dynamic> json) =>
       _$AudioFrameObserverOnPlaybackAudioFrameBeforeMixingJsonFromJson(json);
 
+  @override
   Map<String, dynamic> toJson() =>
       _$AudioFrameObserverOnPlaybackAudioFrameBeforeMixingJsonToJson(this);
 }
@@ -334,7 +352,8 @@ extension AudioFrameObserverOnPlaybackAudioFrameBeforeMixingJsonBufferExt
 }
 
 @JsonSerializable(explicitToJson: true, includeIfNull: false)
-class AudioSpectrumObserverOnLocalAudioSpectrumJson {
+class AudioSpectrumObserverOnLocalAudioSpectrumJson
+    implements AgoraSerializable {
   const AudioSpectrumObserverOnLocalAudioSpectrumJson({this.data});
 
   @JsonKey(name: 'data')
@@ -344,6 +363,7 @@ class AudioSpectrumObserverOnLocalAudioSpectrumJson {
           Map<String, dynamic> json) =>
       _$AudioSpectrumObserverOnLocalAudioSpectrumJsonFromJson(json);
 
+  @override
   Map<String, dynamic> toJson() =>
       _$AudioSpectrumObserverOnLocalAudioSpectrumJsonToJson(this);
 }
@@ -363,7 +383,8 @@ extension AudioSpectrumObserverOnLocalAudioSpectrumJsonBufferExt
 }
 
 @JsonSerializable(explicitToJson: true, includeIfNull: false)
-class AudioSpectrumObserverOnRemoteAudioSpectrumJson {
+class AudioSpectrumObserverOnRemoteAudioSpectrumJson
+    implements AgoraSerializable {
   const AudioSpectrumObserverOnRemoteAudioSpectrumJson(
       {this.spectrums, this.spectrumNumber});
 
@@ -377,6 +398,7 @@ class AudioSpectrumObserverOnRemoteAudioSpectrumJson {
           Map<String, dynamic> json) =>
       _$AudioSpectrumObserverOnRemoteAudioSpectrumJsonFromJson(json);
 
+  @override
   Map<String, dynamic> toJson() =>
       _$AudioSpectrumObserverOnRemoteAudioSpectrumJsonToJson(this);
 }
@@ -396,7 +418,8 @@ extension AudioSpectrumObserverOnRemoteAudioSpectrumJsonBufferExt
 }
 
 @JsonSerializable(explicitToJson: true, includeIfNull: false)
-class VideoEncodedFrameObserverOnEncodedVideoFrameReceivedJson {
+class VideoEncodedFrameObserverOnEncodedVideoFrameReceivedJson
+    implements AgoraSerializable {
   const VideoEncodedFrameObserverOnEncodedVideoFrameReceivedJson(
       {this.uid, this.imageBuffer, this.length, this.videoEncodedFrameInfo});
 
@@ -416,6 +439,7 @@ class VideoEncodedFrameObserverOnEncodedVideoFrameReceivedJson {
           Map<String, dynamic> json) =>
       _$VideoEncodedFrameObserverOnEncodedVideoFrameReceivedJsonFromJson(json);
 
+  @override
   Map<String, dynamic> toJson() =>
       _$VideoEncodedFrameObserverOnEncodedVideoFrameReceivedJsonToJson(this);
 }
@@ -446,7 +470,7 @@ extension VideoEncodedFrameObserverOnEncodedVideoFrameReceivedJsonBufferExt
 }
 
 @JsonSerializable(explicitToJson: true, includeIfNull: false)
-class VideoFrameObserverOnCaptureVideoFrameJson {
+class VideoFrameObserverOnCaptureVideoFrameJson implements AgoraSerializable {
   const VideoFrameObserverOnCaptureVideoFrameJson(
       {this.sourceType, this.videoFrame});
 
@@ -460,6 +484,7 @@ class VideoFrameObserverOnCaptureVideoFrameJson {
           Map<String, dynamic> json) =>
       _$VideoFrameObserverOnCaptureVideoFrameJsonFromJson(json);
 
+  @override
   Map<String, dynamic> toJson() =>
       _$VideoFrameObserverOnCaptureVideoFrameJsonToJson(this);
 }
@@ -479,7 +504,7 @@ extension VideoFrameObserverOnCaptureVideoFrameJsonBufferExt
 }
 
 @JsonSerializable(explicitToJson: true, includeIfNull: false)
-class VideoFrameObserverOnPreEncodeVideoFrameJson {
+class VideoFrameObserverOnPreEncodeVideoFrameJson implements AgoraSerializable {
   const VideoFrameObserverOnPreEncodeVideoFrameJson(
       {this.sourceType, this.videoFrame});
 
@@ -493,6 +518,7 @@ class VideoFrameObserverOnPreEncodeVideoFrameJson {
           Map<String, dynamic> json) =>
       _$VideoFrameObserverOnPreEncodeVideoFrameJsonFromJson(json);
 
+  @override
   Map<String, dynamic> toJson() =>
       _$VideoFrameObserverOnPreEncodeVideoFrameJsonToJson(this);
 }
@@ -512,7 +538,8 @@ extension VideoFrameObserverOnPreEncodeVideoFrameJsonBufferExt
 }
 
 @JsonSerializable(explicitToJson: true, includeIfNull: false)
-class VideoFrameObserverOnMediaPlayerVideoFrameJson {
+class VideoFrameObserverOnMediaPlayerVideoFrameJson
+    implements AgoraSerializable {
   const VideoFrameObserverOnMediaPlayerVideoFrameJson(
       {this.videoFrame, this.mediaPlayerId});
 
@@ -526,6 +553,7 @@ class VideoFrameObserverOnMediaPlayerVideoFrameJson {
           Map<String, dynamic> json) =>
       _$VideoFrameObserverOnMediaPlayerVideoFrameJsonFromJson(json);
 
+  @override
   Map<String, dynamic> toJson() =>
       _$VideoFrameObserverOnMediaPlayerVideoFrameJsonToJson(this);
 }
@@ -545,7 +573,7 @@ extension VideoFrameObserverOnMediaPlayerVideoFrameJsonBufferExt
 }
 
 @JsonSerializable(explicitToJson: true, includeIfNull: false)
-class VideoFrameObserverOnRenderVideoFrameJson {
+class VideoFrameObserverOnRenderVideoFrameJson implements AgoraSerializable {
   const VideoFrameObserverOnRenderVideoFrameJson(
       {this.channelId, this.remoteUid, this.videoFrame});
 
@@ -562,6 +590,7 @@ class VideoFrameObserverOnRenderVideoFrameJson {
           Map<String, dynamic> json) =>
       _$VideoFrameObserverOnRenderVideoFrameJsonFromJson(json);
 
+  @override
   Map<String, dynamic> toJson() =>
       _$VideoFrameObserverOnRenderVideoFrameJsonToJson(this);
 }
@@ -581,7 +610,8 @@ extension VideoFrameObserverOnRenderVideoFrameJsonBufferExt
 }
 
 @JsonSerializable(explicitToJson: true, includeIfNull: false)
-class VideoFrameObserverOnTranscodedVideoFrameJson {
+class VideoFrameObserverOnTranscodedVideoFrameJson
+    implements AgoraSerializable {
   const VideoFrameObserverOnTranscodedVideoFrameJson({this.videoFrame});
 
   @JsonKey(name: 'videoFrame')
@@ -591,6 +621,7 @@ class VideoFrameObserverOnTranscodedVideoFrameJson {
           Map<String, dynamic> json) =>
       _$VideoFrameObserverOnTranscodedVideoFrameJsonFromJson(json);
 
+  @override
   Map<String, dynamic> toJson() =>
       _$VideoFrameObserverOnTranscodedVideoFrameJsonToJson(this);
 }
@@ -610,7 +641,7 @@ extension VideoFrameObserverOnTranscodedVideoFrameJsonBufferExt
 }
 
 @JsonSerializable(explicitToJson: true, includeIfNull: false)
-class FaceInfoObserverOnFaceInfoJson {
+class FaceInfoObserverOnFaceInfoJson implements AgoraSerializable {
   const FaceInfoObserverOnFaceInfoJson({this.outFaceInfo});
 
   @JsonKey(name: 'outFaceInfo')
@@ -619,6 +650,7 @@ class FaceInfoObserverOnFaceInfoJson {
   factory FaceInfoObserverOnFaceInfoJson.fromJson(Map<String, dynamic> json) =>
       _$FaceInfoObserverOnFaceInfoJsonFromJson(json);
 
+  @override
   Map<String, dynamic> toJson() => _$FaceInfoObserverOnFaceInfoJsonToJson(this);
 }
 
@@ -636,7 +668,8 @@ extension FaceInfoObserverOnFaceInfoJsonBufferExt
 }
 
 @JsonSerializable(explicitToJson: true, includeIfNull: false)
-class MediaRecorderObserverOnRecorderStateChangedJson {
+class MediaRecorderObserverOnRecorderStateChangedJson
+    implements AgoraSerializable {
   const MediaRecorderObserverOnRecorderStateChangedJson(
       {this.channelId, this.uid, this.state, this.reason});
 
@@ -656,6 +689,7 @@ class MediaRecorderObserverOnRecorderStateChangedJson {
           Map<String, dynamic> json) =>
       _$MediaRecorderObserverOnRecorderStateChangedJsonFromJson(json);
 
+  @override
   Map<String, dynamic> toJson() =>
       _$MediaRecorderObserverOnRecorderStateChangedJsonToJson(this);
 }
@@ -675,7 +709,8 @@ extension MediaRecorderObserverOnRecorderStateChangedJsonBufferExt
 }
 
 @JsonSerializable(explicitToJson: true, includeIfNull: false)
-class MediaRecorderObserverOnRecorderInfoUpdatedJson {
+class MediaRecorderObserverOnRecorderInfoUpdatedJson
+    implements AgoraSerializable {
   const MediaRecorderObserverOnRecorderInfoUpdatedJson(
       {this.channelId, this.uid, this.info});
 
@@ -692,6 +727,7 @@ class MediaRecorderObserverOnRecorderInfoUpdatedJson {
           Map<String, dynamic> json) =>
       _$MediaRecorderObserverOnRecorderInfoUpdatedJsonFromJson(json);
 
+  @override
   Map<String, dynamic> toJson() =>
       _$MediaRecorderObserverOnRecorderInfoUpdatedJsonToJson(this);
 }
@@ -711,7 +747,7 @@ extension MediaRecorderObserverOnRecorderInfoUpdatedJsonBufferExt
 }
 
 @JsonSerializable(explicitToJson: true, includeIfNull: false)
-class H265TranscoderObserverOnEnableTranscodeJson {
+class H265TranscoderObserverOnEnableTranscodeJson implements AgoraSerializable {
   const H265TranscoderObserverOnEnableTranscodeJson({this.result});
 
   @JsonKey(name: 'result')
@@ -721,6 +757,7 @@ class H265TranscoderObserverOnEnableTranscodeJson {
           Map<String, dynamic> json) =>
       _$H265TranscoderObserverOnEnableTranscodeJsonFromJson(json);
 
+  @override
   Map<String, dynamic> toJson() =>
       _$H265TranscoderObserverOnEnableTranscodeJsonToJson(this);
 }
@@ -740,7 +777,7 @@ extension H265TranscoderObserverOnEnableTranscodeJsonBufferExt
 }
 
 @JsonSerializable(explicitToJson: true, includeIfNull: false)
-class H265TranscoderObserverOnQueryChannelJson {
+class H265TranscoderObserverOnQueryChannelJson implements AgoraSerializable {
   const H265TranscoderObserverOnQueryChannelJson(
       {this.result, this.originChannel, this.transcodeChannel});
 
@@ -757,6 +794,7 @@ class H265TranscoderObserverOnQueryChannelJson {
           Map<String, dynamic> json) =>
       _$H265TranscoderObserverOnQueryChannelJsonFromJson(json);
 
+  @override
   Map<String, dynamic> toJson() =>
       _$H265TranscoderObserverOnQueryChannelJsonToJson(this);
 }
@@ -776,7 +814,8 @@ extension H265TranscoderObserverOnQueryChannelJsonBufferExt
 }
 
 @JsonSerializable(explicitToJson: true, includeIfNull: false)
-class H265TranscoderObserverOnTriggerTranscodeJson {
+class H265TranscoderObserverOnTriggerTranscodeJson
+    implements AgoraSerializable {
   const H265TranscoderObserverOnTriggerTranscodeJson({this.result});
 
   @JsonKey(name: 'result')
@@ -786,6 +825,7 @@ class H265TranscoderObserverOnTriggerTranscodeJson {
           Map<String, dynamic> json) =>
       _$H265TranscoderObserverOnTriggerTranscodeJsonFromJson(json);
 
+  @override
   Map<String, dynamic> toJson() =>
       _$H265TranscoderObserverOnTriggerTranscodeJsonToJson(this);
 }
@@ -805,7 +845,7 @@ extension H265TranscoderObserverOnTriggerTranscodeJsonBufferExt
 }
 
 @JsonSerializable(explicitToJson: true, includeIfNull: false)
-class MediaPlayerVideoFrameObserverOnFrameJson {
+class MediaPlayerVideoFrameObserverOnFrameJson implements AgoraSerializable {
   const MediaPlayerVideoFrameObserverOnFrameJson({this.frame});
 
   @JsonKey(name: 'frame')
@@ -815,6 +855,7 @@ class MediaPlayerVideoFrameObserverOnFrameJson {
           Map<String, dynamic> json) =>
       _$MediaPlayerVideoFrameObserverOnFrameJsonFromJson(json);
 
+  @override
   Map<String, dynamic> toJson() =>
       _$MediaPlayerVideoFrameObserverOnFrameJsonToJson(this);
 }
@@ -834,7 +875,8 @@ extension MediaPlayerVideoFrameObserverOnFrameJsonBufferExt
 }
 
 @JsonSerializable(explicitToJson: true, includeIfNull: false)
-class MediaPlayerSourceObserverOnPlayerSourceStateChangedJson {
+class MediaPlayerSourceObserverOnPlayerSourceStateChangedJson
+    implements AgoraSerializable {
   const MediaPlayerSourceObserverOnPlayerSourceStateChangedJson(
       {this.state, this.reason});
 
@@ -848,6 +890,7 @@ class MediaPlayerSourceObserverOnPlayerSourceStateChangedJson {
           Map<String, dynamic> json) =>
       _$MediaPlayerSourceObserverOnPlayerSourceStateChangedJsonFromJson(json);
 
+  @override
   Map<String, dynamic> toJson() =>
       _$MediaPlayerSourceObserverOnPlayerSourceStateChangedJsonToJson(this);
 }
@@ -867,7 +910,8 @@ extension MediaPlayerSourceObserverOnPlayerSourceStateChangedJsonBufferExt
 }
 
 @JsonSerializable(explicitToJson: true, includeIfNull: false)
-class MediaPlayerSourceObserverOnPositionChangedJson {
+class MediaPlayerSourceObserverOnPositionChangedJson
+    implements AgoraSerializable {
   const MediaPlayerSourceObserverOnPositionChangedJson(
       {this.positionMs, this.timestampMs});
 
@@ -881,6 +925,7 @@ class MediaPlayerSourceObserverOnPositionChangedJson {
           Map<String, dynamic> json) =>
       _$MediaPlayerSourceObserverOnPositionChangedJsonFromJson(json);
 
+  @override
   Map<String, dynamic> toJson() =>
       _$MediaPlayerSourceObserverOnPositionChangedJsonToJson(this);
 }
@@ -900,7 +945,7 @@ extension MediaPlayerSourceObserverOnPositionChangedJsonBufferExt
 }
 
 @JsonSerializable(explicitToJson: true, includeIfNull: false)
-class MediaPlayerSourceObserverOnPlayerEventJson {
+class MediaPlayerSourceObserverOnPlayerEventJson implements AgoraSerializable {
   const MediaPlayerSourceObserverOnPlayerEventJson(
       {this.eventCode, this.elapsedTime, this.message});
 
@@ -917,6 +962,7 @@ class MediaPlayerSourceObserverOnPlayerEventJson {
           Map<String, dynamic> json) =>
       _$MediaPlayerSourceObserverOnPlayerEventJsonFromJson(json);
 
+  @override
   Map<String, dynamic> toJson() =>
       _$MediaPlayerSourceObserverOnPlayerEventJsonToJson(this);
 }
@@ -936,7 +982,7 @@ extension MediaPlayerSourceObserverOnPlayerEventJsonBufferExt
 }
 
 @JsonSerializable(explicitToJson: true, includeIfNull: false)
-class MediaPlayerSourceObserverOnMetaDataJson {
+class MediaPlayerSourceObserverOnMetaDataJson implements AgoraSerializable {
   const MediaPlayerSourceObserverOnMetaDataJson({this.data, this.length});
 
   @JsonKey(name: 'data', ignore: true)
@@ -949,6 +995,7 @@ class MediaPlayerSourceObserverOnMetaDataJson {
           Map<String, dynamic> json) =>
       _$MediaPlayerSourceObserverOnMetaDataJsonFromJson(json);
 
+  @override
   Map<String, dynamic> toJson() =>
       _$MediaPlayerSourceObserverOnMetaDataJsonToJson(this);
 }
@@ -975,7 +1022,8 @@ extension MediaPlayerSourceObserverOnMetaDataJsonBufferExt
 }
 
 @JsonSerializable(explicitToJson: true, includeIfNull: false)
-class MediaPlayerSourceObserverOnPlayBufferUpdatedJson {
+class MediaPlayerSourceObserverOnPlayBufferUpdatedJson
+    implements AgoraSerializable {
   const MediaPlayerSourceObserverOnPlayBufferUpdatedJson(
       {this.playCachedBuffer});
 
@@ -986,6 +1034,7 @@ class MediaPlayerSourceObserverOnPlayBufferUpdatedJson {
           Map<String, dynamic> json) =>
       _$MediaPlayerSourceObserverOnPlayBufferUpdatedJsonFromJson(json);
 
+  @override
   Map<String, dynamic> toJson() =>
       _$MediaPlayerSourceObserverOnPlayBufferUpdatedJsonToJson(this);
 }
@@ -1005,7 +1054,7 @@ extension MediaPlayerSourceObserverOnPlayBufferUpdatedJsonBufferExt
 }
 
 @JsonSerializable(explicitToJson: true, includeIfNull: false)
-class MediaPlayerSourceObserverOnPreloadEventJson {
+class MediaPlayerSourceObserverOnPreloadEventJson implements AgoraSerializable {
   const MediaPlayerSourceObserverOnPreloadEventJson({this.src, this.event});
 
   @JsonKey(name: 'src')
@@ -1018,6 +1067,7 @@ class MediaPlayerSourceObserverOnPreloadEventJson {
           Map<String, dynamic> json) =>
       _$MediaPlayerSourceObserverOnPreloadEventJsonFromJson(json);
 
+  @override
   Map<String, dynamic> toJson() =>
       _$MediaPlayerSourceObserverOnPreloadEventJsonToJson(this);
 }
@@ -1037,13 +1087,14 @@ extension MediaPlayerSourceObserverOnPreloadEventJsonBufferExt
 }
 
 @JsonSerializable(explicitToJson: true, includeIfNull: false)
-class MediaPlayerSourceObserverOnCompletedJson {
+class MediaPlayerSourceObserverOnCompletedJson implements AgoraSerializable {
   const MediaPlayerSourceObserverOnCompletedJson();
 
   factory MediaPlayerSourceObserverOnCompletedJson.fromJson(
           Map<String, dynamic> json) =>
       _$MediaPlayerSourceObserverOnCompletedJsonFromJson(json);
 
+  @override
   Map<String, dynamic> toJson() =>
       _$MediaPlayerSourceObserverOnCompletedJsonToJson(this);
 }
@@ -1063,13 +1114,15 @@ extension MediaPlayerSourceObserverOnCompletedJsonBufferExt
 }
 
 @JsonSerializable(explicitToJson: true, includeIfNull: false)
-class MediaPlayerSourceObserverOnAgoraCDNTokenWillExpireJson {
+class MediaPlayerSourceObserverOnAgoraCDNTokenWillExpireJson
+    implements AgoraSerializable {
   const MediaPlayerSourceObserverOnAgoraCDNTokenWillExpireJson();
 
   factory MediaPlayerSourceObserverOnAgoraCDNTokenWillExpireJson.fromJson(
           Map<String, dynamic> json) =>
       _$MediaPlayerSourceObserverOnAgoraCDNTokenWillExpireJsonFromJson(json);
 
+  @override
   Map<String, dynamic> toJson() =>
       _$MediaPlayerSourceObserverOnAgoraCDNTokenWillExpireJsonToJson(this);
 }
@@ -1089,7 +1142,8 @@ extension MediaPlayerSourceObserverOnAgoraCDNTokenWillExpireJsonBufferExt
 }
 
 @JsonSerializable(explicitToJson: true, includeIfNull: false)
-class MediaPlayerSourceObserverOnPlayerSrcInfoChangedJson {
+class MediaPlayerSourceObserverOnPlayerSrcInfoChangedJson
+    implements AgoraSerializable {
   const MediaPlayerSourceObserverOnPlayerSrcInfoChangedJson(
       {this.from, this.to});
 
@@ -1103,6 +1157,7 @@ class MediaPlayerSourceObserverOnPlayerSrcInfoChangedJson {
           Map<String, dynamic> json) =>
       _$MediaPlayerSourceObserverOnPlayerSrcInfoChangedJsonFromJson(json);
 
+  @override
   Map<String, dynamic> toJson() =>
       _$MediaPlayerSourceObserverOnPlayerSrcInfoChangedJsonToJson(this);
 }
@@ -1122,7 +1177,8 @@ extension MediaPlayerSourceObserverOnPlayerSrcInfoChangedJsonBufferExt
 }
 
 @JsonSerializable(explicitToJson: true, includeIfNull: false)
-class MediaPlayerSourceObserverOnPlayerInfoUpdatedJson {
+class MediaPlayerSourceObserverOnPlayerInfoUpdatedJson
+    implements AgoraSerializable {
   const MediaPlayerSourceObserverOnPlayerInfoUpdatedJson({this.info});
 
   @JsonKey(name: 'info')
@@ -1132,6 +1188,7 @@ class MediaPlayerSourceObserverOnPlayerInfoUpdatedJson {
           Map<String, dynamic> json) =>
       _$MediaPlayerSourceObserverOnPlayerInfoUpdatedJsonFromJson(json);
 
+  @override
   Map<String, dynamic> toJson() =>
       _$MediaPlayerSourceObserverOnPlayerInfoUpdatedJsonToJson(this);
 }
@@ -1151,7 +1208,8 @@ extension MediaPlayerSourceObserverOnPlayerInfoUpdatedJsonBufferExt
 }
 
 @JsonSerializable(explicitToJson: true, includeIfNull: false)
-class MediaPlayerSourceObserverOnPlayerCacheStatsJson {
+class MediaPlayerSourceObserverOnPlayerCacheStatsJson
+    implements AgoraSerializable {
   const MediaPlayerSourceObserverOnPlayerCacheStatsJson({this.stats});
 
   @JsonKey(name: 'stats')
@@ -1161,6 +1219,7 @@ class MediaPlayerSourceObserverOnPlayerCacheStatsJson {
           Map<String, dynamic> json) =>
       _$MediaPlayerSourceObserverOnPlayerCacheStatsJsonFromJson(json);
 
+  @override
   Map<String, dynamic> toJson() =>
       _$MediaPlayerSourceObserverOnPlayerCacheStatsJsonToJson(this);
 }
@@ -1180,7 +1239,8 @@ extension MediaPlayerSourceObserverOnPlayerCacheStatsJsonBufferExt
 }
 
 @JsonSerializable(explicitToJson: true, includeIfNull: false)
-class MediaPlayerSourceObserverOnPlayerPlaybackStatsJson {
+class MediaPlayerSourceObserverOnPlayerPlaybackStatsJson
+    implements AgoraSerializable {
   const MediaPlayerSourceObserverOnPlayerPlaybackStatsJson({this.stats});
 
   @JsonKey(name: 'stats')
@@ -1190,6 +1250,7 @@ class MediaPlayerSourceObserverOnPlayerPlaybackStatsJson {
           Map<String, dynamic> json) =>
       _$MediaPlayerSourceObserverOnPlayerPlaybackStatsJsonFromJson(json);
 
+  @override
   Map<String, dynamic> toJson() =>
       _$MediaPlayerSourceObserverOnPlayerPlaybackStatsJsonToJson(this);
 }
@@ -1209,7 +1270,8 @@ extension MediaPlayerSourceObserverOnPlayerPlaybackStatsJsonBufferExt
 }
 
 @JsonSerializable(explicitToJson: true, includeIfNull: false)
-class MediaPlayerSourceObserverOnAudioVolumeIndicationJson {
+class MediaPlayerSourceObserverOnAudioVolumeIndicationJson
+    implements AgoraSerializable {
   const MediaPlayerSourceObserverOnAudioVolumeIndicationJson({this.volume});
 
   @JsonKey(name: 'volume')
@@ -1219,6 +1281,7 @@ class MediaPlayerSourceObserverOnAudioVolumeIndicationJson {
           Map<String, dynamic> json) =>
       _$MediaPlayerSourceObserverOnAudioVolumeIndicationJsonFromJson(json);
 
+  @override
   Map<String, dynamic> toJson() =>
       _$MediaPlayerSourceObserverOnAudioVolumeIndicationJsonToJson(this);
 }
@@ -1238,7 +1301,8 @@ extension MediaPlayerSourceObserverOnAudioVolumeIndicationJsonBufferExt
 }
 
 @JsonSerializable(explicitToJson: true, includeIfNull: false)
-class MusicContentCenterEventHandlerOnMusicChartsResultJson {
+class MusicContentCenterEventHandlerOnMusicChartsResultJson
+    implements AgoraSerializable {
   const MusicContentCenterEventHandlerOnMusicChartsResultJson(
       {this.requestId, this.result, this.reason});
 
@@ -1255,6 +1319,7 @@ class MusicContentCenterEventHandlerOnMusicChartsResultJson {
           Map<String, dynamic> json) =>
       _$MusicContentCenterEventHandlerOnMusicChartsResultJsonFromJson(json);
 
+  @override
   Map<String, dynamic> toJson() =>
       _$MusicContentCenterEventHandlerOnMusicChartsResultJsonToJson(this);
 }
@@ -1274,7 +1339,8 @@ extension MusicContentCenterEventHandlerOnMusicChartsResultJsonBufferExt
 }
 
 @JsonSerializable(explicitToJson: true, includeIfNull: false)
-class MusicContentCenterEventHandlerOnMusicCollectionResultJson {
+class MusicContentCenterEventHandlerOnMusicCollectionResultJson
+    implements AgoraSerializable {
   const MusicContentCenterEventHandlerOnMusicCollectionResultJson(
       {this.requestId, this.result, this.reason});
 
@@ -1291,6 +1357,7 @@ class MusicContentCenterEventHandlerOnMusicCollectionResultJson {
           Map<String, dynamic> json) =>
       _$MusicContentCenterEventHandlerOnMusicCollectionResultJsonFromJson(json);
 
+  @override
   Map<String, dynamic> toJson() =>
       _$MusicContentCenterEventHandlerOnMusicCollectionResultJsonToJson(this);
 }
@@ -1310,7 +1377,8 @@ extension MusicContentCenterEventHandlerOnMusicCollectionResultJsonBufferExt
 }
 
 @JsonSerializable(explicitToJson: true, includeIfNull: false)
-class MusicContentCenterEventHandlerOnLyricResultJson {
+class MusicContentCenterEventHandlerOnLyricResultJson
+    implements AgoraSerializable {
   const MusicContentCenterEventHandlerOnLyricResultJson(
       {this.requestId, this.songCode, this.lyricUrl, this.reason});
 
@@ -1330,6 +1398,7 @@ class MusicContentCenterEventHandlerOnLyricResultJson {
           Map<String, dynamic> json) =>
       _$MusicContentCenterEventHandlerOnLyricResultJsonFromJson(json);
 
+  @override
   Map<String, dynamic> toJson() =>
       _$MusicContentCenterEventHandlerOnLyricResultJsonToJson(this);
 }
@@ -1349,7 +1418,8 @@ extension MusicContentCenterEventHandlerOnLyricResultJsonBufferExt
 }
 
 @JsonSerializable(explicitToJson: true, includeIfNull: false)
-class MusicContentCenterEventHandlerOnSongSimpleInfoResultJson {
+class MusicContentCenterEventHandlerOnSongSimpleInfoResultJson
+    implements AgoraSerializable {
   const MusicContentCenterEventHandlerOnSongSimpleInfoResultJson(
       {this.requestId, this.songCode, this.simpleInfo, this.reason});
 
@@ -1369,6 +1439,7 @@ class MusicContentCenterEventHandlerOnSongSimpleInfoResultJson {
           Map<String, dynamic> json) =>
       _$MusicContentCenterEventHandlerOnSongSimpleInfoResultJsonFromJson(json);
 
+  @override
   Map<String, dynamic> toJson() =>
       _$MusicContentCenterEventHandlerOnSongSimpleInfoResultJsonToJson(this);
 }
@@ -1388,7 +1459,8 @@ extension MusicContentCenterEventHandlerOnSongSimpleInfoResultJsonBufferExt
 }
 
 @JsonSerializable(explicitToJson: true, includeIfNull: false)
-class MusicContentCenterEventHandlerOnPreLoadEventJson {
+class MusicContentCenterEventHandlerOnPreLoadEventJson
+    implements AgoraSerializable {
   const MusicContentCenterEventHandlerOnPreLoadEventJson(
       {this.requestId,
       this.songCode,
@@ -1419,6 +1491,7 @@ class MusicContentCenterEventHandlerOnPreLoadEventJson {
           Map<String, dynamic> json) =>
       _$MusicContentCenterEventHandlerOnPreLoadEventJsonFromJson(json);
 
+  @override
   Map<String, dynamic> toJson() =>
       _$MusicContentCenterEventHandlerOnPreLoadEventJsonToJson(this);
 }
@@ -1438,7 +1511,8 @@ extension MusicContentCenterEventHandlerOnPreLoadEventJsonBufferExt
 }
 
 @JsonSerializable(explicitToJson: true, includeIfNull: false)
-class RtcEngineEventHandlerOnJoinChannelSuccessJson {
+class RtcEngineEventHandlerOnJoinChannelSuccessJson
+    implements AgoraSerializable {
   const RtcEngineEventHandlerOnJoinChannelSuccessJson(
       {this.connection, this.elapsed});
 
@@ -1452,6 +1526,7 @@ class RtcEngineEventHandlerOnJoinChannelSuccessJson {
           Map<String, dynamic> json) =>
       _$RtcEngineEventHandlerOnJoinChannelSuccessJsonFromJson(json);
 
+  @override
   Map<String, dynamic> toJson() =>
       _$RtcEngineEventHandlerOnJoinChannelSuccessJsonToJson(this);
 }
@@ -1471,7 +1546,8 @@ extension RtcEngineEventHandlerOnJoinChannelSuccessJsonBufferExt
 }
 
 @JsonSerializable(explicitToJson: true, includeIfNull: false)
-class RtcEngineEventHandlerOnRejoinChannelSuccessJson {
+class RtcEngineEventHandlerOnRejoinChannelSuccessJson
+    implements AgoraSerializable {
   const RtcEngineEventHandlerOnRejoinChannelSuccessJson(
       {this.connection, this.elapsed});
 
@@ -1485,6 +1561,7 @@ class RtcEngineEventHandlerOnRejoinChannelSuccessJson {
           Map<String, dynamic> json) =>
       _$RtcEngineEventHandlerOnRejoinChannelSuccessJsonFromJson(json);
 
+  @override
   Map<String, dynamic> toJson() =>
       _$RtcEngineEventHandlerOnRejoinChannelSuccessJsonToJson(this);
 }
@@ -1504,7 +1581,7 @@ extension RtcEngineEventHandlerOnRejoinChannelSuccessJsonBufferExt
 }
 
 @JsonSerializable(explicitToJson: true, includeIfNull: false)
-class RtcEngineEventHandlerOnProxyConnectedJson {
+class RtcEngineEventHandlerOnProxyConnectedJson implements AgoraSerializable {
   const RtcEngineEventHandlerOnProxyConnectedJson(
       {this.channel,
       this.uid,
@@ -1531,6 +1608,7 @@ class RtcEngineEventHandlerOnProxyConnectedJson {
           Map<String, dynamic> json) =>
       _$RtcEngineEventHandlerOnProxyConnectedJsonFromJson(json);
 
+  @override
   Map<String, dynamic> toJson() =>
       _$RtcEngineEventHandlerOnProxyConnectedJsonToJson(this);
 }
@@ -1550,7 +1628,7 @@ extension RtcEngineEventHandlerOnProxyConnectedJsonBufferExt
 }
 
 @JsonSerializable(explicitToJson: true, includeIfNull: false)
-class RtcEngineEventHandlerOnErrorJson {
+class RtcEngineEventHandlerOnErrorJson implements AgoraSerializable {
   const RtcEngineEventHandlerOnErrorJson({this.err, this.msg});
 
   @JsonKey(name: 'err')
@@ -1563,6 +1641,7 @@ class RtcEngineEventHandlerOnErrorJson {
           Map<String, dynamic> json) =>
       _$RtcEngineEventHandlerOnErrorJsonFromJson(json);
 
+  @override
   Map<String, dynamic> toJson() =>
       _$RtcEngineEventHandlerOnErrorJsonToJson(this);
 }
@@ -1581,7 +1660,7 @@ extension RtcEngineEventHandlerOnErrorJsonBufferExt
 }
 
 @JsonSerializable(explicitToJson: true, includeIfNull: false)
-class RtcEngineEventHandlerOnAudioQualityJson {
+class RtcEngineEventHandlerOnAudioQualityJson implements AgoraSerializable {
   const RtcEngineEventHandlerOnAudioQualityJson(
       {this.connection, this.remoteUid, this.quality, this.delay, this.lost});
 
@@ -1604,6 +1683,7 @@ class RtcEngineEventHandlerOnAudioQualityJson {
           Map<String, dynamic> json) =>
       _$RtcEngineEventHandlerOnAudioQualityJsonFromJson(json);
 
+  @override
   Map<String, dynamic> toJson() =>
       _$RtcEngineEventHandlerOnAudioQualityJsonToJson(this);
 }
@@ -1623,7 +1703,8 @@ extension RtcEngineEventHandlerOnAudioQualityJsonBufferExt
 }
 
 @JsonSerializable(explicitToJson: true, includeIfNull: false)
-class RtcEngineEventHandlerOnLastmileProbeResultJson {
+class RtcEngineEventHandlerOnLastmileProbeResultJson
+    implements AgoraSerializable {
   const RtcEngineEventHandlerOnLastmileProbeResultJson({this.result});
 
   @JsonKey(name: 'result')
@@ -1633,6 +1714,7 @@ class RtcEngineEventHandlerOnLastmileProbeResultJson {
           Map<String, dynamic> json) =>
       _$RtcEngineEventHandlerOnLastmileProbeResultJsonFromJson(json);
 
+  @override
   Map<String, dynamic> toJson() =>
       _$RtcEngineEventHandlerOnLastmileProbeResultJsonToJson(this);
 }
@@ -1652,7 +1734,8 @@ extension RtcEngineEventHandlerOnLastmileProbeResultJsonBufferExt
 }
 
 @JsonSerializable(explicitToJson: true, includeIfNull: false)
-class RtcEngineEventHandlerOnAudioVolumeIndicationJson {
+class RtcEngineEventHandlerOnAudioVolumeIndicationJson
+    implements AgoraSerializable {
   const RtcEngineEventHandlerOnAudioVolumeIndicationJson(
       {this.connection, this.speakers, this.speakerNumber, this.totalVolume});
 
@@ -1672,6 +1755,7 @@ class RtcEngineEventHandlerOnAudioVolumeIndicationJson {
           Map<String, dynamic> json) =>
       _$RtcEngineEventHandlerOnAudioVolumeIndicationJsonFromJson(json);
 
+  @override
   Map<String, dynamic> toJson() =>
       _$RtcEngineEventHandlerOnAudioVolumeIndicationJsonToJson(this);
 }
@@ -1691,7 +1775,7 @@ extension RtcEngineEventHandlerOnAudioVolumeIndicationJsonBufferExt
 }
 
 @JsonSerializable(explicitToJson: true, includeIfNull: false)
-class RtcEngineEventHandlerOnLeaveChannelJson {
+class RtcEngineEventHandlerOnLeaveChannelJson implements AgoraSerializable {
   const RtcEngineEventHandlerOnLeaveChannelJson({this.connection, this.stats});
 
   @JsonKey(name: 'connection')
@@ -1704,6 +1788,7 @@ class RtcEngineEventHandlerOnLeaveChannelJson {
           Map<String, dynamic> json) =>
       _$RtcEngineEventHandlerOnLeaveChannelJsonFromJson(json);
 
+  @override
   Map<String, dynamic> toJson() =>
       _$RtcEngineEventHandlerOnLeaveChannelJsonToJson(this);
 }
@@ -1723,7 +1808,7 @@ extension RtcEngineEventHandlerOnLeaveChannelJsonBufferExt
 }
 
 @JsonSerializable(explicitToJson: true, includeIfNull: false)
-class RtcEngineEventHandlerOnRtcStatsJson {
+class RtcEngineEventHandlerOnRtcStatsJson implements AgoraSerializable {
   const RtcEngineEventHandlerOnRtcStatsJson({this.connection, this.stats});
 
   @JsonKey(name: 'connection')
@@ -1736,6 +1821,7 @@ class RtcEngineEventHandlerOnRtcStatsJson {
           Map<String, dynamic> json) =>
       _$RtcEngineEventHandlerOnRtcStatsJsonFromJson(json);
 
+  @override
   Map<String, dynamic> toJson() =>
       _$RtcEngineEventHandlerOnRtcStatsJsonToJson(this);
 }
@@ -1754,7 +1840,8 @@ extension RtcEngineEventHandlerOnRtcStatsJsonBufferExt
 }
 
 @JsonSerializable(explicitToJson: true, includeIfNull: false)
-class RtcEngineEventHandlerOnAudioDeviceStateChangedJson {
+class RtcEngineEventHandlerOnAudioDeviceStateChangedJson
+    implements AgoraSerializable {
   const RtcEngineEventHandlerOnAudioDeviceStateChangedJson(
       {this.deviceId, this.deviceType, this.deviceState});
 
@@ -1771,6 +1858,7 @@ class RtcEngineEventHandlerOnAudioDeviceStateChangedJson {
           Map<String, dynamic> json) =>
       _$RtcEngineEventHandlerOnAudioDeviceStateChangedJsonFromJson(json);
 
+  @override
   Map<String, dynamic> toJson() =>
       _$RtcEngineEventHandlerOnAudioDeviceStateChangedJsonToJson(this);
 }
@@ -1790,7 +1878,8 @@ extension RtcEngineEventHandlerOnAudioDeviceStateChangedJsonBufferExt
 }
 
 @JsonSerializable(explicitToJson: true, includeIfNull: false)
-class RtcEngineEventHandlerOnAudioMixingPositionChangedJson {
+class RtcEngineEventHandlerOnAudioMixingPositionChangedJson
+    implements AgoraSerializable {
   const RtcEngineEventHandlerOnAudioMixingPositionChangedJson({this.position});
 
   @JsonKey(name: 'position')
@@ -1800,6 +1889,7 @@ class RtcEngineEventHandlerOnAudioMixingPositionChangedJson {
           Map<String, dynamic> json) =>
       _$RtcEngineEventHandlerOnAudioMixingPositionChangedJsonFromJson(json);
 
+  @override
   Map<String, dynamic> toJson() =>
       _$RtcEngineEventHandlerOnAudioMixingPositionChangedJsonToJson(this);
 }
@@ -1819,13 +1909,15 @@ extension RtcEngineEventHandlerOnAudioMixingPositionChangedJsonBufferExt
 }
 
 @JsonSerializable(explicitToJson: true, includeIfNull: false)
-class RtcEngineEventHandlerOnAudioMixingFinishedJson {
+class RtcEngineEventHandlerOnAudioMixingFinishedJson
+    implements AgoraSerializable {
   const RtcEngineEventHandlerOnAudioMixingFinishedJson();
 
   factory RtcEngineEventHandlerOnAudioMixingFinishedJson.fromJson(
           Map<String, dynamic> json) =>
       _$RtcEngineEventHandlerOnAudioMixingFinishedJsonFromJson(json);
 
+  @override
   Map<String, dynamic> toJson() =>
       _$RtcEngineEventHandlerOnAudioMixingFinishedJsonToJson(this);
 }
@@ -1845,7 +1937,8 @@ extension RtcEngineEventHandlerOnAudioMixingFinishedJsonBufferExt
 }
 
 @JsonSerializable(explicitToJson: true, includeIfNull: false)
-class RtcEngineEventHandlerOnAudioEffectFinishedJson {
+class RtcEngineEventHandlerOnAudioEffectFinishedJson
+    implements AgoraSerializable {
   const RtcEngineEventHandlerOnAudioEffectFinishedJson({this.soundId});
 
   @JsonKey(name: 'soundId')
@@ -1855,6 +1948,7 @@ class RtcEngineEventHandlerOnAudioEffectFinishedJson {
           Map<String, dynamic> json) =>
       _$RtcEngineEventHandlerOnAudioEffectFinishedJsonFromJson(json);
 
+  @override
   Map<String, dynamic> toJson() =>
       _$RtcEngineEventHandlerOnAudioEffectFinishedJsonToJson(this);
 }
@@ -1874,7 +1968,8 @@ extension RtcEngineEventHandlerOnAudioEffectFinishedJsonBufferExt
 }
 
 @JsonSerializable(explicitToJson: true, includeIfNull: false)
-class RtcEngineEventHandlerOnVideoDeviceStateChangedJson {
+class RtcEngineEventHandlerOnVideoDeviceStateChangedJson
+    implements AgoraSerializable {
   const RtcEngineEventHandlerOnVideoDeviceStateChangedJson(
       {this.deviceId, this.deviceType, this.deviceState});
 
@@ -1891,6 +1986,7 @@ class RtcEngineEventHandlerOnVideoDeviceStateChangedJson {
           Map<String, dynamic> json) =>
       _$RtcEngineEventHandlerOnVideoDeviceStateChangedJsonFromJson(json);
 
+  @override
   Map<String, dynamic> toJson() =>
       _$RtcEngineEventHandlerOnVideoDeviceStateChangedJsonToJson(this);
 }
@@ -1910,7 +2006,7 @@ extension RtcEngineEventHandlerOnVideoDeviceStateChangedJsonBufferExt
 }
 
 @JsonSerializable(explicitToJson: true, includeIfNull: false)
-class RtcEngineEventHandlerOnNetworkQualityJson {
+class RtcEngineEventHandlerOnNetworkQualityJson implements AgoraSerializable {
   const RtcEngineEventHandlerOnNetworkQualityJson(
       {this.connection, this.remoteUid, this.txQuality, this.rxQuality});
 
@@ -1930,6 +2026,7 @@ class RtcEngineEventHandlerOnNetworkQualityJson {
           Map<String, dynamic> json) =>
       _$RtcEngineEventHandlerOnNetworkQualityJsonFromJson(json);
 
+  @override
   Map<String, dynamic> toJson() =>
       _$RtcEngineEventHandlerOnNetworkQualityJsonToJson(this);
 }
@@ -1949,7 +2046,8 @@ extension RtcEngineEventHandlerOnNetworkQualityJsonBufferExt
 }
 
 @JsonSerializable(explicitToJson: true, includeIfNull: false)
-class RtcEngineEventHandlerOnIntraRequestReceivedJson {
+class RtcEngineEventHandlerOnIntraRequestReceivedJson
+    implements AgoraSerializable {
   const RtcEngineEventHandlerOnIntraRequestReceivedJson({this.connection});
 
   @JsonKey(name: 'connection')
@@ -1959,6 +2057,7 @@ class RtcEngineEventHandlerOnIntraRequestReceivedJson {
           Map<String, dynamic> json) =>
       _$RtcEngineEventHandlerOnIntraRequestReceivedJsonFromJson(json);
 
+  @override
   Map<String, dynamic> toJson() =>
       _$RtcEngineEventHandlerOnIntraRequestReceivedJsonToJson(this);
 }
@@ -1978,7 +2077,8 @@ extension RtcEngineEventHandlerOnIntraRequestReceivedJsonBufferExt
 }
 
 @JsonSerializable(explicitToJson: true, includeIfNull: false)
-class RtcEngineEventHandlerOnUplinkNetworkInfoUpdatedJson {
+class RtcEngineEventHandlerOnUplinkNetworkInfoUpdatedJson
+    implements AgoraSerializable {
   const RtcEngineEventHandlerOnUplinkNetworkInfoUpdatedJson({this.info});
 
   @JsonKey(name: 'info')
@@ -1988,6 +2088,7 @@ class RtcEngineEventHandlerOnUplinkNetworkInfoUpdatedJson {
           Map<String, dynamic> json) =>
       _$RtcEngineEventHandlerOnUplinkNetworkInfoUpdatedJsonFromJson(json);
 
+  @override
   Map<String, dynamic> toJson() =>
       _$RtcEngineEventHandlerOnUplinkNetworkInfoUpdatedJsonToJson(this);
 }
@@ -2007,7 +2108,8 @@ extension RtcEngineEventHandlerOnUplinkNetworkInfoUpdatedJsonBufferExt
 }
 
 @JsonSerializable(explicitToJson: true, includeIfNull: false)
-class RtcEngineEventHandlerOnDownlinkNetworkInfoUpdatedJson {
+class RtcEngineEventHandlerOnDownlinkNetworkInfoUpdatedJson
+    implements AgoraSerializable {
   const RtcEngineEventHandlerOnDownlinkNetworkInfoUpdatedJson({this.info});
 
   @JsonKey(name: 'info')
@@ -2017,6 +2119,7 @@ class RtcEngineEventHandlerOnDownlinkNetworkInfoUpdatedJson {
           Map<String, dynamic> json) =>
       _$RtcEngineEventHandlerOnDownlinkNetworkInfoUpdatedJsonFromJson(json);
 
+  @override
   Map<String, dynamic> toJson() =>
       _$RtcEngineEventHandlerOnDownlinkNetworkInfoUpdatedJsonToJson(this);
 }
@@ -2036,7 +2139,7 @@ extension RtcEngineEventHandlerOnDownlinkNetworkInfoUpdatedJsonBufferExt
 }
 
 @JsonSerializable(explicitToJson: true, includeIfNull: false)
-class RtcEngineEventHandlerOnLastmileQualityJson {
+class RtcEngineEventHandlerOnLastmileQualityJson implements AgoraSerializable {
   const RtcEngineEventHandlerOnLastmileQualityJson({this.quality});
 
   @JsonKey(name: 'quality')
@@ -2046,6 +2149,7 @@ class RtcEngineEventHandlerOnLastmileQualityJson {
           Map<String, dynamic> json) =>
       _$RtcEngineEventHandlerOnLastmileQualityJsonFromJson(json);
 
+  @override
   Map<String, dynamic> toJson() =>
       _$RtcEngineEventHandlerOnLastmileQualityJsonToJson(this);
 }
@@ -2065,7 +2169,8 @@ extension RtcEngineEventHandlerOnLastmileQualityJsonBufferExt
 }
 
 @JsonSerializable(explicitToJson: true, includeIfNull: false)
-class RtcEngineEventHandlerOnFirstLocalVideoFrameJson {
+class RtcEngineEventHandlerOnFirstLocalVideoFrameJson
+    implements AgoraSerializable {
   const RtcEngineEventHandlerOnFirstLocalVideoFrameJson(
       {this.source, this.width, this.height, this.elapsed});
 
@@ -2085,6 +2190,7 @@ class RtcEngineEventHandlerOnFirstLocalVideoFrameJson {
           Map<String, dynamic> json) =>
       _$RtcEngineEventHandlerOnFirstLocalVideoFrameJsonFromJson(json);
 
+  @override
   Map<String, dynamic> toJson() =>
       _$RtcEngineEventHandlerOnFirstLocalVideoFrameJsonToJson(this);
 }
@@ -2104,7 +2210,8 @@ extension RtcEngineEventHandlerOnFirstLocalVideoFrameJsonBufferExt
 }
 
 @JsonSerializable(explicitToJson: true, includeIfNull: false)
-class RtcEngineEventHandlerOnFirstLocalVideoFramePublishedJson {
+class RtcEngineEventHandlerOnFirstLocalVideoFramePublishedJson
+    implements AgoraSerializable {
   const RtcEngineEventHandlerOnFirstLocalVideoFramePublishedJson(
       {this.connection, this.elapsed});
 
@@ -2118,6 +2225,7 @@ class RtcEngineEventHandlerOnFirstLocalVideoFramePublishedJson {
           Map<String, dynamic> json) =>
       _$RtcEngineEventHandlerOnFirstLocalVideoFramePublishedJsonFromJson(json);
 
+  @override
   Map<String, dynamic> toJson() =>
       _$RtcEngineEventHandlerOnFirstLocalVideoFramePublishedJsonToJson(this);
 }
@@ -2137,7 +2245,8 @@ extension RtcEngineEventHandlerOnFirstLocalVideoFramePublishedJsonBufferExt
 }
 
 @JsonSerializable(explicitToJson: true, includeIfNull: false)
-class RtcEngineEventHandlerOnFirstRemoteVideoDecodedJson {
+class RtcEngineEventHandlerOnFirstRemoteVideoDecodedJson
+    implements AgoraSerializable {
   const RtcEngineEventHandlerOnFirstRemoteVideoDecodedJson(
       {this.connection, this.remoteUid, this.width, this.height, this.elapsed});
 
@@ -2160,6 +2269,7 @@ class RtcEngineEventHandlerOnFirstRemoteVideoDecodedJson {
           Map<String, dynamic> json) =>
       _$RtcEngineEventHandlerOnFirstRemoteVideoDecodedJsonFromJson(json);
 
+  @override
   Map<String, dynamic> toJson() =>
       _$RtcEngineEventHandlerOnFirstRemoteVideoDecodedJsonToJson(this);
 }
@@ -2179,7 +2289,7 @@ extension RtcEngineEventHandlerOnFirstRemoteVideoDecodedJsonBufferExt
 }
 
 @JsonSerializable(explicitToJson: true, includeIfNull: false)
-class RtcEngineEventHandlerOnVideoSizeChangedJson {
+class RtcEngineEventHandlerOnVideoSizeChangedJson implements AgoraSerializable {
   const RtcEngineEventHandlerOnVideoSizeChangedJson(
       {this.connection,
       this.sourceType,
@@ -2210,6 +2320,7 @@ class RtcEngineEventHandlerOnVideoSizeChangedJson {
           Map<String, dynamic> json) =>
       _$RtcEngineEventHandlerOnVideoSizeChangedJsonFromJson(json);
 
+  @override
   Map<String, dynamic> toJson() =>
       _$RtcEngineEventHandlerOnVideoSizeChangedJsonToJson(this);
 }
@@ -2229,7 +2340,8 @@ extension RtcEngineEventHandlerOnVideoSizeChangedJsonBufferExt
 }
 
 @JsonSerializable(explicitToJson: true, includeIfNull: false)
-class RtcEngineEventHandlerOnLocalVideoStateChangedJson {
+class RtcEngineEventHandlerOnLocalVideoStateChangedJson
+    implements AgoraSerializable {
   const RtcEngineEventHandlerOnLocalVideoStateChangedJson(
       {this.source, this.state, this.reason});
 
@@ -2246,6 +2358,7 @@ class RtcEngineEventHandlerOnLocalVideoStateChangedJson {
           Map<String, dynamic> json) =>
       _$RtcEngineEventHandlerOnLocalVideoStateChangedJsonFromJson(json);
 
+  @override
   Map<String, dynamic> toJson() =>
       _$RtcEngineEventHandlerOnLocalVideoStateChangedJsonToJson(this);
 }
@@ -2265,7 +2378,8 @@ extension RtcEngineEventHandlerOnLocalVideoStateChangedJsonBufferExt
 }
 
 @JsonSerializable(explicitToJson: true, includeIfNull: false)
-class RtcEngineEventHandlerOnRemoteVideoStateChangedJson {
+class RtcEngineEventHandlerOnRemoteVideoStateChangedJson
+    implements AgoraSerializable {
   const RtcEngineEventHandlerOnRemoteVideoStateChangedJson(
       {this.connection, this.remoteUid, this.state, this.reason, this.elapsed});
 
@@ -2288,6 +2402,7 @@ class RtcEngineEventHandlerOnRemoteVideoStateChangedJson {
           Map<String, dynamic> json) =>
       _$RtcEngineEventHandlerOnRemoteVideoStateChangedJsonFromJson(json);
 
+  @override
   Map<String, dynamic> toJson() =>
       _$RtcEngineEventHandlerOnRemoteVideoStateChangedJsonToJson(this);
 }
@@ -2307,7 +2422,8 @@ extension RtcEngineEventHandlerOnRemoteVideoStateChangedJsonBufferExt
 }
 
 @JsonSerializable(explicitToJson: true, includeIfNull: false)
-class RtcEngineEventHandlerOnFirstRemoteVideoFrameJson {
+class RtcEngineEventHandlerOnFirstRemoteVideoFrameJson
+    implements AgoraSerializable {
   const RtcEngineEventHandlerOnFirstRemoteVideoFrameJson(
       {this.connection, this.remoteUid, this.width, this.height, this.elapsed});
 
@@ -2330,6 +2446,7 @@ class RtcEngineEventHandlerOnFirstRemoteVideoFrameJson {
           Map<String, dynamic> json) =>
       _$RtcEngineEventHandlerOnFirstRemoteVideoFrameJsonFromJson(json);
 
+  @override
   Map<String, dynamic> toJson() =>
       _$RtcEngineEventHandlerOnFirstRemoteVideoFrameJsonToJson(this);
 }
@@ -2349,7 +2466,7 @@ extension RtcEngineEventHandlerOnFirstRemoteVideoFrameJsonBufferExt
 }
 
 @JsonSerializable(explicitToJson: true, includeIfNull: false)
-class RtcEngineEventHandlerOnUserJoinedJson {
+class RtcEngineEventHandlerOnUserJoinedJson implements AgoraSerializable {
   const RtcEngineEventHandlerOnUserJoinedJson(
       {this.connection, this.remoteUid, this.elapsed});
 
@@ -2366,6 +2483,7 @@ class RtcEngineEventHandlerOnUserJoinedJson {
           Map<String, dynamic> json) =>
       _$RtcEngineEventHandlerOnUserJoinedJsonFromJson(json);
 
+  @override
   Map<String, dynamic> toJson() =>
       _$RtcEngineEventHandlerOnUserJoinedJsonToJson(this);
 }
@@ -2385,7 +2503,7 @@ extension RtcEngineEventHandlerOnUserJoinedJsonBufferExt
 }
 
 @JsonSerializable(explicitToJson: true, includeIfNull: false)
-class RtcEngineEventHandlerOnUserOfflineJson {
+class RtcEngineEventHandlerOnUserOfflineJson implements AgoraSerializable {
   const RtcEngineEventHandlerOnUserOfflineJson(
       {this.connection, this.remoteUid, this.reason});
 
@@ -2402,6 +2520,7 @@ class RtcEngineEventHandlerOnUserOfflineJson {
           Map<String, dynamic> json) =>
       _$RtcEngineEventHandlerOnUserOfflineJsonFromJson(json);
 
+  @override
   Map<String, dynamic> toJson() =>
       _$RtcEngineEventHandlerOnUserOfflineJsonToJson(this);
 }
@@ -2421,7 +2540,7 @@ extension RtcEngineEventHandlerOnUserOfflineJsonBufferExt
 }
 
 @JsonSerializable(explicitToJson: true, includeIfNull: false)
-class RtcEngineEventHandlerOnUserMuteAudioJson {
+class RtcEngineEventHandlerOnUserMuteAudioJson implements AgoraSerializable {
   const RtcEngineEventHandlerOnUserMuteAudioJson(
       {this.connection, this.remoteUid, this.muted});
 
@@ -2438,6 +2557,7 @@ class RtcEngineEventHandlerOnUserMuteAudioJson {
           Map<String, dynamic> json) =>
       _$RtcEngineEventHandlerOnUserMuteAudioJsonFromJson(json);
 
+  @override
   Map<String, dynamic> toJson() =>
       _$RtcEngineEventHandlerOnUserMuteAudioJsonToJson(this);
 }
@@ -2457,7 +2577,7 @@ extension RtcEngineEventHandlerOnUserMuteAudioJsonBufferExt
 }
 
 @JsonSerializable(explicitToJson: true, includeIfNull: false)
-class RtcEngineEventHandlerOnUserMuteVideoJson {
+class RtcEngineEventHandlerOnUserMuteVideoJson implements AgoraSerializable {
   const RtcEngineEventHandlerOnUserMuteVideoJson(
       {this.connection, this.remoteUid, this.muted});
 
@@ -2474,6 +2594,7 @@ class RtcEngineEventHandlerOnUserMuteVideoJson {
           Map<String, dynamic> json) =>
       _$RtcEngineEventHandlerOnUserMuteVideoJsonFromJson(json);
 
+  @override
   Map<String, dynamic> toJson() =>
       _$RtcEngineEventHandlerOnUserMuteVideoJsonToJson(this);
 }
@@ -2493,7 +2614,7 @@ extension RtcEngineEventHandlerOnUserMuteVideoJsonBufferExt
 }
 
 @JsonSerializable(explicitToJson: true, includeIfNull: false)
-class RtcEngineEventHandlerOnUserEnableVideoJson {
+class RtcEngineEventHandlerOnUserEnableVideoJson implements AgoraSerializable {
   const RtcEngineEventHandlerOnUserEnableVideoJson(
       {this.connection, this.remoteUid, this.enabled});
 
@@ -2510,6 +2631,7 @@ class RtcEngineEventHandlerOnUserEnableVideoJson {
           Map<String, dynamic> json) =>
       _$RtcEngineEventHandlerOnUserEnableVideoJsonFromJson(json);
 
+  @override
   Map<String, dynamic> toJson() =>
       _$RtcEngineEventHandlerOnUserEnableVideoJsonToJson(this);
 }
@@ -2529,7 +2651,7 @@ extension RtcEngineEventHandlerOnUserEnableVideoJsonBufferExt
 }
 
 @JsonSerializable(explicitToJson: true, includeIfNull: false)
-class RtcEngineEventHandlerOnUserStateChangedJson {
+class RtcEngineEventHandlerOnUserStateChangedJson implements AgoraSerializable {
   const RtcEngineEventHandlerOnUserStateChangedJson(
       {this.connection, this.remoteUid, this.state});
 
@@ -2546,6 +2668,7 @@ class RtcEngineEventHandlerOnUserStateChangedJson {
           Map<String, dynamic> json) =>
       _$RtcEngineEventHandlerOnUserStateChangedJsonFromJson(json);
 
+  @override
   Map<String, dynamic> toJson() =>
       _$RtcEngineEventHandlerOnUserStateChangedJsonToJson(this);
 }
@@ -2565,7 +2688,8 @@ extension RtcEngineEventHandlerOnUserStateChangedJsonBufferExt
 }
 
 @JsonSerializable(explicitToJson: true, includeIfNull: false)
-class RtcEngineEventHandlerOnUserEnableLocalVideoJson {
+class RtcEngineEventHandlerOnUserEnableLocalVideoJson
+    implements AgoraSerializable {
   const RtcEngineEventHandlerOnUserEnableLocalVideoJson(
       {this.connection, this.remoteUid, this.enabled});
 
@@ -2582,6 +2706,7 @@ class RtcEngineEventHandlerOnUserEnableLocalVideoJson {
           Map<String, dynamic> json) =>
       _$RtcEngineEventHandlerOnUserEnableLocalVideoJsonFromJson(json);
 
+  @override
   Map<String, dynamic> toJson() =>
       _$RtcEngineEventHandlerOnUserEnableLocalVideoJsonToJson(this);
 }
@@ -2601,7 +2726,7 @@ extension RtcEngineEventHandlerOnUserEnableLocalVideoJsonBufferExt
 }
 
 @JsonSerializable(explicitToJson: true, includeIfNull: false)
-class RtcEngineEventHandlerOnRemoteAudioStatsJson {
+class RtcEngineEventHandlerOnRemoteAudioStatsJson implements AgoraSerializable {
   const RtcEngineEventHandlerOnRemoteAudioStatsJson(
       {this.connection, this.stats});
 
@@ -2615,6 +2740,7 @@ class RtcEngineEventHandlerOnRemoteAudioStatsJson {
           Map<String, dynamic> json) =>
       _$RtcEngineEventHandlerOnRemoteAudioStatsJsonFromJson(json);
 
+  @override
   Map<String, dynamic> toJson() =>
       _$RtcEngineEventHandlerOnRemoteAudioStatsJsonToJson(this);
 }
@@ -2634,7 +2760,7 @@ extension RtcEngineEventHandlerOnRemoteAudioStatsJsonBufferExt
 }
 
 @JsonSerializable(explicitToJson: true, includeIfNull: false)
-class RtcEngineEventHandlerOnLocalAudioStatsJson {
+class RtcEngineEventHandlerOnLocalAudioStatsJson implements AgoraSerializable {
   const RtcEngineEventHandlerOnLocalAudioStatsJson(
       {this.connection, this.stats});
 
@@ -2648,6 +2774,7 @@ class RtcEngineEventHandlerOnLocalAudioStatsJson {
           Map<String, dynamic> json) =>
       _$RtcEngineEventHandlerOnLocalAudioStatsJsonFromJson(json);
 
+  @override
   Map<String, dynamic> toJson() =>
       _$RtcEngineEventHandlerOnLocalAudioStatsJsonToJson(this);
 }
@@ -2667,7 +2794,7 @@ extension RtcEngineEventHandlerOnLocalAudioStatsJsonBufferExt
 }
 
 @JsonSerializable(explicitToJson: true, includeIfNull: false)
-class RtcEngineEventHandlerOnLocalVideoStatsJson {
+class RtcEngineEventHandlerOnLocalVideoStatsJson implements AgoraSerializable {
   const RtcEngineEventHandlerOnLocalVideoStatsJson(
       {this.connection, this.stats});
 
@@ -2681,6 +2808,7 @@ class RtcEngineEventHandlerOnLocalVideoStatsJson {
           Map<String, dynamic> json) =>
       _$RtcEngineEventHandlerOnLocalVideoStatsJsonFromJson(json);
 
+  @override
   Map<String, dynamic> toJson() =>
       _$RtcEngineEventHandlerOnLocalVideoStatsJsonToJson(this);
 }
@@ -2700,7 +2828,7 @@ extension RtcEngineEventHandlerOnLocalVideoStatsJsonBufferExt
 }
 
 @JsonSerializable(explicitToJson: true, includeIfNull: false)
-class RtcEngineEventHandlerOnRemoteVideoStatsJson {
+class RtcEngineEventHandlerOnRemoteVideoStatsJson implements AgoraSerializable {
   const RtcEngineEventHandlerOnRemoteVideoStatsJson(
       {this.connection, this.stats});
 
@@ -2714,6 +2842,7 @@ class RtcEngineEventHandlerOnRemoteVideoStatsJson {
           Map<String, dynamic> json) =>
       _$RtcEngineEventHandlerOnRemoteVideoStatsJsonFromJson(json);
 
+  @override
   Map<String, dynamic> toJson() =>
       _$RtcEngineEventHandlerOnRemoteVideoStatsJsonToJson(this);
 }
@@ -2733,13 +2862,14 @@ extension RtcEngineEventHandlerOnRemoteVideoStatsJsonBufferExt
 }
 
 @JsonSerializable(explicitToJson: true, includeIfNull: false)
-class RtcEngineEventHandlerOnCameraReadyJson {
+class RtcEngineEventHandlerOnCameraReadyJson implements AgoraSerializable {
   const RtcEngineEventHandlerOnCameraReadyJson();
 
   factory RtcEngineEventHandlerOnCameraReadyJson.fromJson(
           Map<String, dynamic> json) =>
       _$RtcEngineEventHandlerOnCameraReadyJsonFromJson(json);
 
+  @override
   Map<String, dynamic> toJson() =>
       _$RtcEngineEventHandlerOnCameraReadyJsonToJson(this);
 }
@@ -2759,7 +2889,8 @@ extension RtcEngineEventHandlerOnCameraReadyJsonBufferExt
 }
 
 @JsonSerializable(explicitToJson: true, includeIfNull: false)
-class RtcEngineEventHandlerOnCameraFocusAreaChangedJson {
+class RtcEngineEventHandlerOnCameraFocusAreaChangedJson
+    implements AgoraSerializable {
   const RtcEngineEventHandlerOnCameraFocusAreaChangedJson(
       {this.x, this.y, this.width, this.height});
 
@@ -2779,6 +2910,7 @@ class RtcEngineEventHandlerOnCameraFocusAreaChangedJson {
           Map<String, dynamic> json) =>
       _$RtcEngineEventHandlerOnCameraFocusAreaChangedJsonFromJson(json);
 
+  @override
   Map<String, dynamic> toJson() =>
       _$RtcEngineEventHandlerOnCameraFocusAreaChangedJsonToJson(this);
 }
@@ -2798,7 +2930,8 @@ extension RtcEngineEventHandlerOnCameraFocusAreaChangedJsonBufferExt
 }
 
 @JsonSerializable(explicitToJson: true, includeIfNull: false)
-class RtcEngineEventHandlerOnCameraExposureAreaChangedJson {
+class RtcEngineEventHandlerOnCameraExposureAreaChangedJson
+    implements AgoraSerializable {
   const RtcEngineEventHandlerOnCameraExposureAreaChangedJson(
       {this.x, this.y, this.width, this.height});
 
@@ -2818,6 +2951,7 @@ class RtcEngineEventHandlerOnCameraExposureAreaChangedJson {
           Map<String, dynamic> json) =>
       _$RtcEngineEventHandlerOnCameraExposureAreaChangedJsonFromJson(json);
 
+  @override
   Map<String, dynamic> toJson() =>
       _$RtcEngineEventHandlerOnCameraExposureAreaChangedJsonToJson(this);
 }
@@ -2837,7 +2971,8 @@ extension RtcEngineEventHandlerOnCameraExposureAreaChangedJsonBufferExt
 }
 
 @JsonSerializable(explicitToJson: true, includeIfNull: false)
-class RtcEngineEventHandlerOnFacePositionChangedJson {
+class RtcEngineEventHandlerOnFacePositionChangedJson
+    implements AgoraSerializable {
   const RtcEngineEventHandlerOnFacePositionChangedJson(
       {this.imageWidth,
       this.imageHeight,
@@ -2864,6 +2999,7 @@ class RtcEngineEventHandlerOnFacePositionChangedJson {
           Map<String, dynamic> json) =>
       _$RtcEngineEventHandlerOnFacePositionChangedJsonFromJson(json);
 
+  @override
   Map<String, dynamic> toJson() =>
       _$RtcEngineEventHandlerOnFacePositionChangedJsonToJson(this);
 }
@@ -2883,13 +3019,14 @@ extension RtcEngineEventHandlerOnFacePositionChangedJsonBufferExt
 }
 
 @JsonSerializable(explicitToJson: true, includeIfNull: false)
-class RtcEngineEventHandlerOnVideoStoppedJson {
+class RtcEngineEventHandlerOnVideoStoppedJson implements AgoraSerializable {
   const RtcEngineEventHandlerOnVideoStoppedJson();
 
   factory RtcEngineEventHandlerOnVideoStoppedJson.fromJson(
           Map<String, dynamic> json) =>
       _$RtcEngineEventHandlerOnVideoStoppedJsonFromJson(json);
 
+  @override
   Map<String, dynamic> toJson() =>
       _$RtcEngineEventHandlerOnVideoStoppedJsonToJson(this);
 }
@@ -2909,7 +3046,8 @@ extension RtcEngineEventHandlerOnVideoStoppedJsonBufferExt
 }
 
 @JsonSerializable(explicitToJson: true, includeIfNull: false)
-class RtcEngineEventHandlerOnAudioMixingStateChangedJson {
+class RtcEngineEventHandlerOnAudioMixingStateChangedJson
+    implements AgoraSerializable {
   const RtcEngineEventHandlerOnAudioMixingStateChangedJson(
       {this.state, this.reason});
 
@@ -2923,6 +3061,7 @@ class RtcEngineEventHandlerOnAudioMixingStateChangedJson {
           Map<String, dynamic> json) =>
       _$RtcEngineEventHandlerOnAudioMixingStateChangedJsonFromJson(json);
 
+  @override
   Map<String, dynamic> toJson() =>
       _$RtcEngineEventHandlerOnAudioMixingStateChangedJsonToJson(this);
 }
@@ -2942,7 +3081,8 @@ extension RtcEngineEventHandlerOnAudioMixingStateChangedJsonBufferExt
 }
 
 @JsonSerializable(explicitToJson: true, includeIfNull: false)
-class RtcEngineEventHandlerOnRhythmPlayerStateChangedJson {
+class RtcEngineEventHandlerOnRhythmPlayerStateChangedJson
+    implements AgoraSerializable {
   const RtcEngineEventHandlerOnRhythmPlayerStateChangedJson(
       {this.state, this.reason});
 
@@ -2956,6 +3096,7 @@ class RtcEngineEventHandlerOnRhythmPlayerStateChangedJson {
           Map<String, dynamic> json) =>
       _$RtcEngineEventHandlerOnRhythmPlayerStateChangedJsonFromJson(json);
 
+  @override
   Map<String, dynamic> toJson() =>
       _$RtcEngineEventHandlerOnRhythmPlayerStateChangedJsonToJson(this);
 }
@@ -2975,7 +3116,7 @@ extension RtcEngineEventHandlerOnRhythmPlayerStateChangedJsonBufferExt
 }
 
 @JsonSerializable(explicitToJson: true, includeIfNull: false)
-class RtcEngineEventHandlerOnConnectionLostJson {
+class RtcEngineEventHandlerOnConnectionLostJson implements AgoraSerializable {
   const RtcEngineEventHandlerOnConnectionLostJson({this.connection});
 
   @JsonKey(name: 'connection')
@@ -2985,6 +3126,7 @@ class RtcEngineEventHandlerOnConnectionLostJson {
           Map<String, dynamic> json) =>
       _$RtcEngineEventHandlerOnConnectionLostJsonFromJson(json);
 
+  @override
   Map<String, dynamic> toJson() =>
       _$RtcEngineEventHandlerOnConnectionLostJsonToJson(this);
 }
@@ -3004,7 +3146,8 @@ extension RtcEngineEventHandlerOnConnectionLostJsonBufferExt
 }
 
 @JsonSerializable(explicitToJson: true, includeIfNull: false)
-class RtcEngineEventHandlerOnConnectionInterruptedJson {
+class RtcEngineEventHandlerOnConnectionInterruptedJson
+    implements AgoraSerializable {
   const RtcEngineEventHandlerOnConnectionInterruptedJson({this.connection});
 
   @JsonKey(name: 'connection')
@@ -3014,6 +3157,7 @@ class RtcEngineEventHandlerOnConnectionInterruptedJson {
           Map<String, dynamic> json) =>
       _$RtcEngineEventHandlerOnConnectionInterruptedJsonFromJson(json);
 
+  @override
   Map<String, dynamic> toJson() =>
       _$RtcEngineEventHandlerOnConnectionInterruptedJsonToJson(this);
 }
@@ -3033,7 +3177,7 @@ extension RtcEngineEventHandlerOnConnectionInterruptedJsonBufferExt
 }
 
 @JsonSerializable(explicitToJson: true, includeIfNull: false)
-class RtcEngineEventHandlerOnConnectionBannedJson {
+class RtcEngineEventHandlerOnConnectionBannedJson implements AgoraSerializable {
   const RtcEngineEventHandlerOnConnectionBannedJson({this.connection});
 
   @JsonKey(name: 'connection')
@@ -3043,6 +3187,7 @@ class RtcEngineEventHandlerOnConnectionBannedJson {
           Map<String, dynamic> json) =>
       _$RtcEngineEventHandlerOnConnectionBannedJsonFromJson(json);
 
+  @override
   Map<String, dynamic> toJson() =>
       _$RtcEngineEventHandlerOnConnectionBannedJsonToJson(this);
 }
@@ -3062,7 +3207,7 @@ extension RtcEngineEventHandlerOnConnectionBannedJsonBufferExt
 }
 
 @JsonSerializable(explicitToJson: true, includeIfNull: false)
-class RtcEngineEventHandlerOnStreamMessageJson {
+class RtcEngineEventHandlerOnStreamMessageJson implements AgoraSerializable {
   const RtcEngineEventHandlerOnStreamMessageJson(
       {this.connection,
       this.remoteUid,
@@ -3093,6 +3238,7 @@ class RtcEngineEventHandlerOnStreamMessageJson {
           Map<String, dynamic> json) =>
       _$RtcEngineEventHandlerOnStreamMessageJsonFromJson(json);
 
+  @override
   Map<String, dynamic> toJson() =>
       _$RtcEngineEventHandlerOnStreamMessageJsonToJson(this);
 }
@@ -3125,7 +3271,8 @@ extension RtcEngineEventHandlerOnStreamMessageJsonBufferExt
 }
 
 @JsonSerializable(explicitToJson: true, includeIfNull: false)
-class RtcEngineEventHandlerOnStreamMessageErrorJson {
+class RtcEngineEventHandlerOnStreamMessageErrorJson
+    implements AgoraSerializable {
   const RtcEngineEventHandlerOnStreamMessageErrorJson(
       {this.connection,
       this.remoteUid,
@@ -3156,6 +3303,7 @@ class RtcEngineEventHandlerOnStreamMessageErrorJson {
           Map<String, dynamic> json) =>
       _$RtcEngineEventHandlerOnStreamMessageErrorJsonFromJson(json);
 
+  @override
   Map<String, dynamic> toJson() =>
       _$RtcEngineEventHandlerOnStreamMessageErrorJsonToJson(this);
 }
@@ -3175,7 +3323,7 @@ extension RtcEngineEventHandlerOnStreamMessageErrorJsonBufferExt
 }
 
 @JsonSerializable(explicitToJson: true, includeIfNull: false)
-class RtcEngineEventHandlerOnRequestTokenJson {
+class RtcEngineEventHandlerOnRequestTokenJson implements AgoraSerializable {
   const RtcEngineEventHandlerOnRequestTokenJson({this.connection});
 
   @JsonKey(name: 'connection')
@@ -3185,6 +3333,7 @@ class RtcEngineEventHandlerOnRequestTokenJson {
           Map<String, dynamic> json) =>
       _$RtcEngineEventHandlerOnRequestTokenJsonFromJson(json);
 
+  @override
   Map<String, dynamic> toJson() =>
       _$RtcEngineEventHandlerOnRequestTokenJsonToJson(this);
 }
@@ -3204,7 +3353,8 @@ extension RtcEngineEventHandlerOnRequestTokenJsonBufferExt
 }
 
 @JsonSerializable(explicitToJson: true, includeIfNull: false)
-class RtcEngineEventHandlerOnTokenPrivilegeWillExpireJson {
+class RtcEngineEventHandlerOnTokenPrivilegeWillExpireJson
+    implements AgoraSerializable {
   const RtcEngineEventHandlerOnTokenPrivilegeWillExpireJson(
       {this.connection, this.token});
 
@@ -3218,6 +3368,7 @@ class RtcEngineEventHandlerOnTokenPrivilegeWillExpireJson {
           Map<String, dynamic> json) =>
       _$RtcEngineEventHandlerOnTokenPrivilegeWillExpireJsonFromJson(json);
 
+  @override
   Map<String, dynamic> toJson() =>
       _$RtcEngineEventHandlerOnTokenPrivilegeWillExpireJsonToJson(this);
 }
@@ -3237,7 +3388,8 @@ extension RtcEngineEventHandlerOnTokenPrivilegeWillExpireJsonBufferExt
 }
 
 @JsonSerializable(explicitToJson: true, includeIfNull: false)
-class RtcEngineEventHandlerOnLicenseValidationFailureJson {
+class RtcEngineEventHandlerOnLicenseValidationFailureJson
+    implements AgoraSerializable {
   const RtcEngineEventHandlerOnLicenseValidationFailureJson(
       {this.connection, this.reason});
 
@@ -3251,6 +3403,7 @@ class RtcEngineEventHandlerOnLicenseValidationFailureJson {
           Map<String, dynamic> json) =>
       _$RtcEngineEventHandlerOnLicenseValidationFailureJsonFromJson(json);
 
+  @override
   Map<String, dynamic> toJson() =>
       _$RtcEngineEventHandlerOnLicenseValidationFailureJsonToJson(this);
 }
@@ -3270,7 +3423,8 @@ extension RtcEngineEventHandlerOnLicenseValidationFailureJsonBufferExt
 }
 
 @JsonSerializable(explicitToJson: true, includeIfNull: false)
-class RtcEngineEventHandlerOnFirstLocalAudioFramePublishedJson {
+class RtcEngineEventHandlerOnFirstLocalAudioFramePublishedJson
+    implements AgoraSerializable {
   const RtcEngineEventHandlerOnFirstLocalAudioFramePublishedJson(
       {this.connection, this.elapsed});
 
@@ -3284,6 +3438,7 @@ class RtcEngineEventHandlerOnFirstLocalAudioFramePublishedJson {
           Map<String, dynamic> json) =>
       _$RtcEngineEventHandlerOnFirstLocalAudioFramePublishedJsonFromJson(json);
 
+  @override
   Map<String, dynamic> toJson() =>
       _$RtcEngineEventHandlerOnFirstLocalAudioFramePublishedJsonToJson(this);
 }
@@ -3303,7 +3458,8 @@ extension RtcEngineEventHandlerOnFirstLocalAudioFramePublishedJsonBufferExt
 }
 
 @JsonSerializable(explicitToJson: true, includeIfNull: false)
-class RtcEngineEventHandlerOnFirstRemoteAudioDecodedJson {
+class RtcEngineEventHandlerOnFirstRemoteAudioDecodedJson
+    implements AgoraSerializable {
   const RtcEngineEventHandlerOnFirstRemoteAudioDecodedJson(
       {this.connection, this.uid, this.elapsed});
 
@@ -3320,6 +3476,7 @@ class RtcEngineEventHandlerOnFirstRemoteAudioDecodedJson {
           Map<String, dynamic> json) =>
       _$RtcEngineEventHandlerOnFirstRemoteAudioDecodedJsonFromJson(json);
 
+  @override
   Map<String, dynamic> toJson() =>
       _$RtcEngineEventHandlerOnFirstRemoteAudioDecodedJsonToJson(this);
 }
@@ -3339,7 +3496,8 @@ extension RtcEngineEventHandlerOnFirstRemoteAudioDecodedJsonBufferExt
 }
 
 @JsonSerializable(explicitToJson: true, includeIfNull: false)
-class RtcEngineEventHandlerOnFirstRemoteAudioFrameJson {
+class RtcEngineEventHandlerOnFirstRemoteAudioFrameJson
+    implements AgoraSerializable {
   const RtcEngineEventHandlerOnFirstRemoteAudioFrameJson(
       {this.connection, this.userId, this.elapsed});
 
@@ -3356,6 +3514,7 @@ class RtcEngineEventHandlerOnFirstRemoteAudioFrameJson {
           Map<String, dynamic> json) =>
       _$RtcEngineEventHandlerOnFirstRemoteAudioFrameJsonFromJson(json);
 
+  @override
   Map<String, dynamic> toJson() =>
       _$RtcEngineEventHandlerOnFirstRemoteAudioFrameJsonToJson(this);
 }
@@ -3375,7 +3534,8 @@ extension RtcEngineEventHandlerOnFirstRemoteAudioFrameJsonBufferExt
 }
 
 @JsonSerializable(explicitToJson: true, includeIfNull: false)
-class RtcEngineEventHandlerOnLocalAudioStateChangedJson {
+class RtcEngineEventHandlerOnLocalAudioStateChangedJson
+    implements AgoraSerializable {
   const RtcEngineEventHandlerOnLocalAudioStateChangedJson(
       {this.connection, this.state, this.reason});
 
@@ -3392,6 +3552,7 @@ class RtcEngineEventHandlerOnLocalAudioStateChangedJson {
           Map<String, dynamic> json) =>
       _$RtcEngineEventHandlerOnLocalAudioStateChangedJsonFromJson(json);
 
+  @override
   Map<String, dynamic> toJson() =>
       _$RtcEngineEventHandlerOnLocalAudioStateChangedJsonToJson(this);
 }
@@ -3411,7 +3572,8 @@ extension RtcEngineEventHandlerOnLocalAudioStateChangedJsonBufferExt
 }
 
 @JsonSerializable(explicitToJson: true, includeIfNull: false)
-class RtcEngineEventHandlerOnRemoteAudioStateChangedJson {
+class RtcEngineEventHandlerOnRemoteAudioStateChangedJson
+    implements AgoraSerializable {
   const RtcEngineEventHandlerOnRemoteAudioStateChangedJson(
       {this.connection, this.remoteUid, this.state, this.reason, this.elapsed});
 
@@ -3434,6 +3596,7 @@ class RtcEngineEventHandlerOnRemoteAudioStateChangedJson {
           Map<String, dynamic> json) =>
       _$RtcEngineEventHandlerOnRemoteAudioStateChangedJsonFromJson(json);
 
+  @override
   Map<String, dynamic> toJson() =>
       _$RtcEngineEventHandlerOnRemoteAudioStateChangedJsonToJson(this);
 }
@@ -3453,7 +3616,7 @@ extension RtcEngineEventHandlerOnRemoteAudioStateChangedJsonBufferExt
 }
 
 @JsonSerializable(explicitToJson: true, includeIfNull: false)
-class RtcEngineEventHandlerOnActiveSpeakerJson {
+class RtcEngineEventHandlerOnActiveSpeakerJson implements AgoraSerializable {
   const RtcEngineEventHandlerOnActiveSpeakerJson({this.connection, this.uid});
 
   @JsonKey(name: 'connection')
@@ -3466,6 +3629,7 @@ class RtcEngineEventHandlerOnActiveSpeakerJson {
           Map<String, dynamic> json) =>
       _$RtcEngineEventHandlerOnActiveSpeakerJsonFromJson(json);
 
+  @override
   Map<String, dynamic> toJson() =>
       _$RtcEngineEventHandlerOnActiveSpeakerJsonToJson(this);
 }
@@ -3485,7 +3649,8 @@ extension RtcEngineEventHandlerOnActiveSpeakerJsonBufferExt
 }
 
 @JsonSerializable(explicitToJson: true, includeIfNull: false)
-class RtcEngineEventHandlerOnContentInspectResultJson {
+class RtcEngineEventHandlerOnContentInspectResultJson
+    implements AgoraSerializable {
   const RtcEngineEventHandlerOnContentInspectResultJson({this.result});
 
   @JsonKey(name: 'result')
@@ -3495,6 +3660,7 @@ class RtcEngineEventHandlerOnContentInspectResultJson {
           Map<String, dynamic> json) =>
       _$RtcEngineEventHandlerOnContentInspectResultJsonFromJson(json);
 
+  @override
   Map<String, dynamic> toJson() =>
       _$RtcEngineEventHandlerOnContentInspectResultJsonToJson(this);
 }
@@ -3514,7 +3680,7 @@ extension RtcEngineEventHandlerOnContentInspectResultJsonBufferExt
 }
 
 @JsonSerializable(explicitToJson: true, includeIfNull: false)
-class RtcEngineEventHandlerOnSnapshotTakenJson {
+class RtcEngineEventHandlerOnSnapshotTakenJson implements AgoraSerializable {
   const RtcEngineEventHandlerOnSnapshotTakenJson(
       {this.connection,
       this.uid,
@@ -3545,6 +3711,7 @@ class RtcEngineEventHandlerOnSnapshotTakenJson {
           Map<String, dynamic> json) =>
       _$RtcEngineEventHandlerOnSnapshotTakenJsonFromJson(json);
 
+  @override
   Map<String, dynamic> toJson() =>
       _$RtcEngineEventHandlerOnSnapshotTakenJsonToJson(this);
 }
@@ -3564,7 +3731,8 @@ extension RtcEngineEventHandlerOnSnapshotTakenJsonBufferExt
 }
 
 @JsonSerializable(explicitToJson: true, includeIfNull: false)
-class RtcEngineEventHandlerOnClientRoleChangedJson {
+class RtcEngineEventHandlerOnClientRoleChangedJson
+    implements AgoraSerializable {
   const RtcEngineEventHandlerOnClientRoleChangedJson(
       {this.connection, this.oldRole, this.newRole, this.newRoleOptions});
 
@@ -3584,6 +3752,7 @@ class RtcEngineEventHandlerOnClientRoleChangedJson {
           Map<String, dynamic> json) =>
       _$RtcEngineEventHandlerOnClientRoleChangedJsonFromJson(json);
 
+  @override
   Map<String, dynamic> toJson() =>
       _$RtcEngineEventHandlerOnClientRoleChangedJsonToJson(this);
 }
@@ -3603,7 +3772,8 @@ extension RtcEngineEventHandlerOnClientRoleChangedJsonBufferExt
 }
 
 @JsonSerializable(explicitToJson: true, includeIfNull: false)
-class RtcEngineEventHandlerOnClientRoleChangeFailedJson {
+class RtcEngineEventHandlerOnClientRoleChangeFailedJson
+    implements AgoraSerializable {
   const RtcEngineEventHandlerOnClientRoleChangeFailedJson(
       {this.connection, this.reason, this.currentRole});
 
@@ -3620,6 +3790,7 @@ class RtcEngineEventHandlerOnClientRoleChangeFailedJson {
           Map<String, dynamic> json) =>
       _$RtcEngineEventHandlerOnClientRoleChangeFailedJsonFromJson(json);
 
+  @override
   Map<String, dynamic> toJson() =>
       _$RtcEngineEventHandlerOnClientRoleChangeFailedJsonToJson(this);
 }
@@ -3639,7 +3810,8 @@ extension RtcEngineEventHandlerOnClientRoleChangeFailedJsonBufferExt
 }
 
 @JsonSerializable(explicitToJson: true, includeIfNull: false)
-class RtcEngineEventHandlerOnAudioDeviceVolumeChangedJson {
+class RtcEngineEventHandlerOnAudioDeviceVolumeChangedJson
+    implements AgoraSerializable {
   const RtcEngineEventHandlerOnAudioDeviceVolumeChangedJson(
       {this.deviceType, this.volume, this.muted});
 
@@ -3656,6 +3828,7 @@ class RtcEngineEventHandlerOnAudioDeviceVolumeChangedJson {
           Map<String, dynamic> json) =>
       _$RtcEngineEventHandlerOnAudioDeviceVolumeChangedJsonFromJson(json);
 
+  @override
   Map<String, dynamic> toJson() =>
       _$RtcEngineEventHandlerOnAudioDeviceVolumeChangedJsonToJson(this);
 }
@@ -3675,7 +3848,8 @@ extension RtcEngineEventHandlerOnAudioDeviceVolumeChangedJsonBufferExt
 }
 
 @JsonSerializable(explicitToJson: true, includeIfNull: false)
-class RtcEngineEventHandlerOnRtmpStreamingStateChangedJson {
+class RtcEngineEventHandlerOnRtmpStreamingStateChangedJson
+    implements AgoraSerializable {
   const RtcEngineEventHandlerOnRtmpStreamingStateChangedJson(
       {this.url, this.state, this.reason});
 
@@ -3692,6 +3866,7 @@ class RtcEngineEventHandlerOnRtmpStreamingStateChangedJson {
           Map<String, dynamic> json) =>
       _$RtcEngineEventHandlerOnRtmpStreamingStateChangedJsonFromJson(json);
 
+  @override
   Map<String, dynamic> toJson() =>
       _$RtcEngineEventHandlerOnRtmpStreamingStateChangedJsonToJson(this);
 }
@@ -3711,7 +3886,8 @@ extension RtcEngineEventHandlerOnRtmpStreamingStateChangedJsonBufferExt
 }
 
 @JsonSerializable(explicitToJson: true, includeIfNull: false)
-class RtcEngineEventHandlerOnRtmpStreamingEventJson {
+class RtcEngineEventHandlerOnRtmpStreamingEventJson
+    implements AgoraSerializable {
   const RtcEngineEventHandlerOnRtmpStreamingEventJson(
       {this.url, this.eventCode});
 
@@ -3725,6 +3901,7 @@ class RtcEngineEventHandlerOnRtmpStreamingEventJson {
           Map<String, dynamic> json) =>
       _$RtcEngineEventHandlerOnRtmpStreamingEventJsonFromJson(json);
 
+  @override
   Map<String, dynamic> toJson() =>
       _$RtcEngineEventHandlerOnRtmpStreamingEventJsonToJson(this);
 }
@@ -3744,13 +3921,15 @@ extension RtcEngineEventHandlerOnRtmpStreamingEventJsonBufferExt
 }
 
 @JsonSerializable(explicitToJson: true, includeIfNull: false)
-class RtcEngineEventHandlerOnTranscodingUpdatedJson {
+class RtcEngineEventHandlerOnTranscodingUpdatedJson
+    implements AgoraSerializable {
   const RtcEngineEventHandlerOnTranscodingUpdatedJson();
 
   factory RtcEngineEventHandlerOnTranscodingUpdatedJson.fromJson(
           Map<String, dynamic> json) =>
       _$RtcEngineEventHandlerOnTranscodingUpdatedJsonFromJson(json);
 
+  @override
   Map<String, dynamic> toJson() =>
       _$RtcEngineEventHandlerOnTranscodingUpdatedJsonToJson(this);
 }
@@ -3770,7 +3949,8 @@ extension RtcEngineEventHandlerOnTranscodingUpdatedJsonBufferExt
 }
 
 @JsonSerializable(explicitToJson: true, includeIfNull: false)
-class RtcEngineEventHandlerOnAudioRoutingChangedJson {
+class RtcEngineEventHandlerOnAudioRoutingChangedJson
+    implements AgoraSerializable {
   const RtcEngineEventHandlerOnAudioRoutingChangedJson({this.routing});
 
   @JsonKey(name: 'routing')
@@ -3780,6 +3960,7 @@ class RtcEngineEventHandlerOnAudioRoutingChangedJson {
           Map<String, dynamic> json) =>
       _$RtcEngineEventHandlerOnAudioRoutingChangedJsonFromJson(json);
 
+  @override
   Map<String, dynamic> toJson() =>
       _$RtcEngineEventHandlerOnAudioRoutingChangedJsonToJson(this);
 }
@@ -3799,7 +3980,8 @@ extension RtcEngineEventHandlerOnAudioRoutingChangedJsonBufferExt
 }
 
 @JsonSerializable(explicitToJson: true, includeIfNull: false)
-class RtcEngineEventHandlerOnChannelMediaRelayStateChangedJson {
+class RtcEngineEventHandlerOnChannelMediaRelayStateChangedJson
+    implements AgoraSerializable {
   const RtcEngineEventHandlerOnChannelMediaRelayStateChangedJson(
       {this.state, this.code});
 
@@ -3813,6 +3995,7 @@ class RtcEngineEventHandlerOnChannelMediaRelayStateChangedJson {
           Map<String, dynamic> json) =>
       _$RtcEngineEventHandlerOnChannelMediaRelayStateChangedJsonFromJson(json);
 
+  @override
   Map<String, dynamic> toJson() =>
       _$RtcEngineEventHandlerOnChannelMediaRelayStateChangedJsonToJson(this);
 }
@@ -3832,7 +4015,8 @@ extension RtcEngineEventHandlerOnChannelMediaRelayStateChangedJsonBufferExt
 }
 
 @JsonSerializable(explicitToJson: true, includeIfNull: false)
-class RtcEngineEventHandlerOnLocalPublishFallbackToAudioOnlyJson {
+class RtcEngineEventHandlerOnLocalPublishFallbackToAudioOnlyJson
+    implements AgoraSerializable {
   const RtcEngineEventHandlerOnLocalPublishFallbackToAudioOnlyJson(
       {this.isFallbackOrRecover});
 
@@ -3844,6 +4028,7 @@ class RtcEngineEventHandlerOnLocalPublishFallbackToAudioOnlyJson {
       _$RtcEngineEventHandlerOnLocalPublishFallbackToAudioOnlyJsonFromJson(
           json);
 
+  @override
   Map<String, dynamic> toJson() =>
       _$RtcEngineEventHandlerOnLocalPublishFallbackToAudioOnlyJsonToJson(this);
 }
@@ -3863,7 +4048,8 @@ extension RtcEngineEventHandlerOnLocalPublishFallbackToAudioOnlyJsonBufferExt
 }
 
 @JsonSerializable(explicitToJson: true, includeIfNull: false)
-class RtcEngineEventHandlerOnRemoteSubscribeFallbackToAudioOnlyJson {
+class RtcEngineEventHandlerOnRemoteSubscribeFallbackToAudioOnlyJson
+    implements AgoraSerializable {
   const RtcEngineEventHandlerOnRemoteSubscribeFallbackToAudioOnlyJson(
       {this.uid, this.isFallbackOrRecover});
 
@@ -3878,6 +4064,7 @@ class RtcEngineEventHandlerOnRemoteSubscribeFallbackToAudioOnlyJson {
       _$RtcEngineEventHandlerOnRemoteSubscribeFallbackToAudioOnlyJsonFromJson(
           json);
 
+  @override
   Map<String, dynamic> toJson() =>
       _$RtcEngineEventHandlerOnRemoteSubscribeFallbackToAudioOnlyJsonToJson(
           this);
@@ -3898,7 +4085,8 @@ extension RtcEngineEventHandlerOnRemoteSubscribeFallbackToAudioOnlyJsonBufferExt
 }
 
 @JsonSerializable(explicitToJson: true, includeIfNull: false)
-class RtcEngineEventHandlerOnRemoteAudioTransportStatsJson {
+class RtcEngineEventHandlerOnRemoteAudioTransportStatsJson
+    implements AgoraSerializable {
   const RtcEngineEventHandlerOnRemoteAudioTransportStatsJson(
       {this.connection,
       this.remoteUid,
@@ -3925,6 +4113,7 @@ class RtcEngineEventHandlerOnRemoteAudioTransportStatsJson {
           Map<String, dynamic> json) =>
       _$RtcEngineEventHandlerOnRemoteAudioTransportStatsJsonFromJson(json);
 
+  @override
   Map<String, dynamic> toJson() =>
       _$RtcEngineEventHandlerOnRemoteAudioTransportStatsJsonToJson(this);
 }
@@ -3944,7 +4133,8 @@ extension RtcEngineEventHandlerOnRemoteAudioTransportStatsJsonBufferExt
 }
 
 @JsonSerializable(explicitToJson: true, includeIfNull: false)
-class RtcEngineEventHandlerOnRemoteVideoTransportStatsJson {
+class RtcEngineEventHandlerOnRemoteVideoTransportStatsJson
+    implements AgoraSerializable {
   const RtcEngineEventHandlerOnRemoteVideoTransportStatsJson(
       {this.connection,
       this.remoteUid,
@@ -3971,6 +4161,7 @@ class RtcEngineEventHandlerOnRemoteVideoTransportStatsJson {
           Map<String, dynamic> json) =>
       _$RtcEngineEventHandlerOnRemoteVideoTransportStatsJsonFromJson(json);
 
+  @override
   Map<String, dynamic> toJson() =>
       _$RtcEngineEventHandlerOnRemoteVideoTransportStatsJsonToJson(this);
 }
@@ -3990,7 +4181,8 @@ extension RtcEngineEventHandlerOnRemoteVideoTransportStatsJsonBufferExt
 }
 
 @JsonSerializable(explicitToJson: true, includeIfNull: false)
-class RtcEngineEventHandlerOnConnectionStateChangedJson {
+class RtcEngineEventHandlerOnConnectionStateChangedJson
+    implements AgoraSerializable {
   const RtcEngineEventHandlerOnConnectionStateChangedJson(
       {this.connection, this.state, this.reason});
 
@@ -4007,6 +4199,7 @@ class RtcEngineEventHandlerOnConnectionStateChangedJson {
           Map<String, dynamic> json) =>
       _$RtcEngineEventHandlerOnConnectionStateChangedJsonFromJson(json);
 
+  @override
   Map<String, dynamic> toJson() =>
       _$RtcEngineEventHandlerOnConnectionStateChangedJsonToJson(this);
 }
@@ -4026,7 +4219,7 @@ extension RtcEngineEventHandlerOnConnectionStateChangedJsonBufferExt
 }
 
 @JsonSerializable(explicitToJson: true, includeIfNull: false)
-class RtcEngineEventHandlerOnWlAccMessageJson {
+class RtcEngineEventHandlerOnWlAccMessageJson implements AgoraSerializable {
   const RtcEngineEventHandlerOnWlAccMessageJson(
       {this.connection, this.reason, this.action, this.wlAccMsg});
 
@@ -4046,6 +4239,7 @@ class RtcEngineEventHandlerOnWlAccMessageJson {
           Map<String, dynamic> json) =>
       _$RtcEngineEventHandlerOnWlAccMessageJsonFromJson(json);
 
+  @override
   Map<String, dynamic> toJson() =>
       _$RtcEngineEventHandlerOnWlAccMessageJsonToJson(this);
 }
@@ -4065,7 +4259,7 @@ extension RtcEngineEventHandlerOnWlAccMessageJsonBufferExt
 }
 
 @JsonSerializable(explicitToJson: true, includeIfNull: false)
-class RtcEngineEventHandlerOnWlAccStatsJson {
+class RtcEngineEventHandlerOnWlAccStatsJson implements AgoraSerializable {
   const RtcEngineEventHandlerOnWlAccStatsJson(
       {this.connection, this.currentStats, this.averageStats});
 
@@ -4082,6 +4276,7 @@ class RtcEngineEventHandlerOnWlAccStatsJson {
           Map<String, dynamic> json) =>
       _$RtcEngineEventHandlerOnWlAccStatsJsonFromJson(json);
 
+  @override
   Map<String, dynamic> toJson() =>
       _$RtcEngineEventHandlerOnWlAccStatsJsonToJson(this);
 }
@@ -4101,7 +4296,8 @@ extension RtcEngineEventHandlerOnWlAccStatsJsonBufferExt
 }
 
 @JsonSerializable(explicitToJson: true, includeIfNull: false)
-class RtcEngineEventHandlerOnNetworkTypeChangedJson {
+class RtcEngineEventHandlerOnNetworkTypeChangedJson
+    implements AgoraSerializable {
   const RtcEngineEventHandlerOnNetworkTypeChangedJson(
       {this.connection, this.type});
 
@@ -4115,6 +4311,7 @@ class RtcEngineEventHandlerOnNetworkTypeChangedJson {
           Map<String, dynamic> json) =>
       _$RtcEngineEventHandlerOnNetworkTypeChangedJsonFromJson(json);
 
+  @override
   Map<String, dynamic> toJson() =>
       _$RtcEngineEventHandlerOnNetworkTypeChangedJsonToJson(this);
 }
@@ -4134,7 +4331,7 @@ extension RtcEngineEventHandlerOnNetworkTypeChangedJsonBufferExt
 }
 
 @JsonSerializable(explicitToJson: true, includeIfNull: false)
-class RtcEngineEventHandlerOnEncryptionErrorJson {
+class RtcEngineEventHandlerOnEncryptionErrorJson implements AgoraSerializable {
   const RtcEngineEventHandlerOnEncryptionErrorJson(
       {this.connection, this.errorType});
 
@@ -4148,6 +4345,7 @@ class RtcEngineEventHandlerOnEncryptionErrorJson {
           Map<String, dynamic> json) =>
       _$RtcEngineEventHandlerOnEncryptionErrorJsonFromJson(json);
 
+  @override
   Map<String, dynamic> toJson() =>
       _$RtcEngineEventHandlerOnEncryptionErrorJsonToJson(this);
 }
@@ -4167,7 +4365,7 @@ extension RtcEngineEventHandlerOnEncryptionErrorJsonBufferExt
 }
 
 @JsonSerializable(explicitToJson: true, includeIfNull: false)
-class RtcEngineEventHandlerOnPermissionErrorJson {
+class RtcEngineEventHandlerOnPermissionErrorJson implements AgoraSerializable {
   const RtcEngineEventHandlerOnPermissionErrorJson({this.permissionType});
 
   @JsonKey(name: 'permissionType')
@@ -4177,6 +4375,7 @@ class RtcEngineEventHandlerOnPermissionErrorJson {
           Map<String, dynamic> json) =>
       _$RtcEngineEventHandlerOnPermissionErrorJsonFromJson(json);
 
+  @override
   Map<String, dynamic> toJson() =>
       _$RtcEngineEventHandlerOnPermissionErrorJsonToJson(this);
 }
@@ -4196,7 +4395,8 @@ extension RtcEngineEventHandlerOnPermissionErrorJsonBufferExt
 }
 
 @JsonSerializable(explicitToJson: true, includeIfNull: false)
-class RtcEngineEventHandlerOnLocalUserRegisteredJson {
+class RtcEngineEventHandlerOnLocalUserRegisteredJson
+    implements AgoraSerializable {
   const RtcEngineEventHandlerOnLocalUserRegisteredJson(
       {this.uid, this.userAccount});
 
@@ -4210,6 +4410,7 @@ class RtcEngineEventHandlerOnLocalUserRegisteredJson {
           Map<String, dynamic> json) =>
       _$RtcEngineEventHandlerOnLocalUserRegisteredJsonFromJson(json);
 
+  @override
   Map<String, dynamic> toJson() =>
       _$RtcEngineEventHandlerOnLocalUserRegisteredJsonToJson(this);
 }
@@ -4229,7 +4430,7 @@ extension RtcEngineEventHandlerOnLocalUserRegisteredJsonBufferExt
 }
 
 @JsonSerializable(explicitToJson: true, includeIfNull: false)
-class RtcEngineEventHandlerOnUserInfoUpdatedJson {
+class RtcEngineEventHandlerOnUserInfoUpdatedJson implements AgoraSerializable {
   const RtcEngineEventHandlerOnUserInfoUpdatedJson({this.uid, this.info});
 
   @JsonKey(name: 'uid')
@@ -4242,6 +4443,7 @@ class RtcEngineEventHandlerOnUserInfoUpdatedJson {
           Map<String, dynamic> json) =>
       _$RtcEngineEventHandlerOnUserInfoUpdatedJsonFromJson(json);
 
+  @override
   Map<String, dynamic> toJson() =>
       _$RtcEngineEventHandlerOnUserInfoUpdatedJsonToJson(this);
 }
@@ -4261,7 +4463,8 @@ extension RtcEngineEventHandlerOnUserInfoUpdatedJsonBufferExt
 }
 
 @JsonSerializable(explicitToJson: true, includeIfNull: false)
-class RtcEngineEventHandlerOnUserAccountUpdatedJson {
+class RtcEngineEventHandlerOnUserAccountUpdatedJson
+    implements AgoraSerializable {
   const RtcEngineEventHandlerOnUserAccountUpdatedJson(
       {this.connection, this.remoteUid, this.remoteUserAccount});
 
@@ -4278,6 +4481,7 @@ class RtcEngineEventHandlerOnUserAccountUpdatedJson {
           Map<String, dynamic> json) =>
       _$RtcEngineEventHandlerOnUserAccountUpdatedJsonFromJson(json);
 
+  @override
   Map<String, dynamic> toJson() =>
       _$RtcEngineEventHandlerOnUserAccountUpdatedJsonToJson(this);
 }
@@ -4297,7 +4501,8 @@ extension RtcEngineEventHandlerOnUserAccountUpdatedJsonBufferExt
 }
 
 @JsonSerializable(explicitToJson: true, includeIfNull: false)
-class RtcEngineEventHandlerOnVideoRenderingTracingResultJson {
+class RtcEngineEventHandlerOnVideoRenderingTracingResultJson
+    implements AgoraSerializable {
   const RtcEngineEventHandlerOnVideoRenderingTracingResultJson(
       {this.connection, this.uid, this.currentEvent, this.tracingInfo});
 
@@ -4317,6 +4522,7 @@ class RtcEngineEventHandlerOnVideoRenderingTracingResultJson {
           Map<String, dynamic> json) =>
       _$RtcEngineEventHandlerOnVideoRenderingTracingResultJsonFromJson(json);
 
+  @override
   Map<String, dynamic> toJson() =>
       _$RtcEngineEventHandlerOnVideoRenderingTracingResultJsonToJson(this);
 }
@@ -4336,7 +4542,8 @@ extension RtcEngineEventHandlerOnVideoRenderingTracingResultJsonBufferExt
 }
 
 @JsonSerializable(explicitToJson: true, includeIfNull: false)
-class RtcEngineEventHandlerOnLocalVideoTranscoderErrorJson {
+class RtcEngineEventHandlerOnLocalVideoTranscoderErrorJson
+    implements AgoraSerializable {
   const RtcEngineEventHandlerOnLocalVideoTranscoderErrorJson(
       {this.stream, this.error});
 
@@ -4350,6 +4557,7 @@ class RtcEngineEventHandlerOnLocalVideoTranscoderErrorJson {
           Map<String, dynamic> json) =>
       _$RtcEngineEventHandlerOnLocalVideoTranscoderErrorJsonFromJson(json);
 
+  @override
   Map<String, dynamic> toJson() =>
       _$RtcEngineEventHandlerOnLocalVideoTranscoderErrorJsonToJson(this);
 }
@@ -4369,7 +4577,7 @@ extension RtcEngineEventHandlerOnLocalVideoTranscoderErrorJsonBufferExt
 }
 
 @JsonSerializable(explicitToJson: true, includeIfNull: false)
-class RtcEngineEventHandlerOnUploadLogResultJson {
+class RtcEngineEventHandlerOnUploadLogResultJson implements AgoraSerializable {
   const RtcEngineEventHandlerOnUploadLogResultJson(
       {this.connection, this.requestId, this.success, this.reason});
 
@@ -4389,6 +4597,7 @@ class RtcEngineEventHandlerOnUploadLogResultJson {
           Map<String, dynamic> json) =>
       _$RtcEngineEventHandlerOnUploadLogResultJsonFromJson(json);
 
+  @override
   Map<String, dynamic> toJson() =>
       _$RtcEngineEventHandlerOnUploadLogResultJsonToJson(this);
 }
@@ -4408,7 +4617,8 @@ extension RtcEngineEventHandlerOnUploadLogResultJsonBufferExt
 }
 
 @JsonSerializable(explicitToJson: true, includeIfNull: false)
-class RtcEngineEventHandlerOnAudioSubscribeStateChangedJson {
+class RtcEngineEventHandlerOnAudioSubscribeStateChangedJson
+    implements AgoraSerializable {
   const RtcEngineEventHandlerOnAudioSubscribeStateChangedJson(
       {this.channel,
       this.uid,
@@ -4435,6 +4645,7 @@ class RtcEngineEventHandlerOnAudioSubscribeStateChangedJson {
           Map<String, dynamic> json) =>
       _$RtcEngineEventHandlerOnAudioSubscribeStateChangedJsonFromJson(json);
 
+  @override
   Map<String, dynamic> toJson() =>
       _$RtcEngineEventHandlerOnAudioSubscribeStateChangedJsonToJson(this);
 }
@@ -4454,7 +4665,8 @@ extension RtcEngineEventHandlerOnAudioSubscribeStateChangedJsonBufferExt
 }
 
 @JsonSerializable(explicitToJson: true, includeIfNull: false)
-class RtcEngineEventHandlerOnVideoSubscribeStateChangedJson {
+class RtcEngineEventHandlerOnVideoSubscribeStateChangedJson
+    implements AgoraSerializable {
   const RtcEngineEventHandlerOnVideoSubscribeStateChangedJson(
       {this.channel,
       this.uid,
@@ -4481,6 +4693,7 @@ class RtcEngineEventHandlerOnVideoSubscribeStateChangedJson {
           Map<String, dynamic> json) =>
       _$RtcEngineEventHandlerOnVideoSubscribeStateChangedJsonFromJson(json);
 
+  @override
   Map<String, dynamic> toJson() =>
       _$RtcEngineEventHandlerOnVideoSubscribeStateChangedJsonToJson(this);
 }
@@ -4500,7 +4713,8 @@ extension RtcEngineEventHandlerOnVideoSubscribeStateChangedJsonBufferExt
 }
 
 @JsonSerializable(explicitToJson: true, includeIfNull: false)
-class RtcEngineEventHandlerOnAudioPublishStateChangedJson {
+class RtcEngineEventHandlerOnAudioPublishStateChangedJson
+    implements AgoraSerializable {
   const RtcEngineEventHandlerOnAudioPublishStateChangedJson(
       {this.channel, this.oldState, this.newState, this.elapseSinceLastState});
 
@@ -4520,6 +4734,7 @@ class RtcEngineEventHandlerOnAudioPublishStateChangedJson {
           Map<String, dynamic> json) =>
       _$RtcEngineEventHandlerOnAudioPublishStateChangedJsonFromJson(json);
 
+  @override
   Map<String, dynamic> toJson() =>
       _$RtcEngineEventHandlerOnAudioPublishStateChangedJsonToJson(this);
 }
@@ -4539,7 +4754,8 @@ extension RtcEngineEventHandlerOnAudioPublishStateChangedJsonBufferExt
 }
 
 @JsonSerializable(explicitToJson: true, includeIfNull: false)
-class RtcEngineEventHandlerOnVideoPublishStateChangedJson {
+class RtcEngineEventHandlerOnVideoPublishStateChangedJson
+    implements AgoraSerializable {
   const RtcEngineEventHandlerOnVideoPublishStateChangedJson(
       {this.source,
       this.channel,
@@ -4566,6 +4782,7 @@ class RtcEngineEventHandlerOnVideoPublishStateChangedJson {
           Map<String, dynamic> json) =>
       _$RtcEngineEventHandlerOnVideoPublishStateChangedJsonFromJson(json);
 
+  @override
   Map<String, dynamic> toJson() =>
       _$RtcEngineEventHandlerOnVideoPublishStateChangedJsonToJson(this);
 }
@@ -4585,7 +4802,8 @@ extension RtcEngineEventHandlerOnVideoPublishStateChangedJsonBufferExt
 }
 
 @JsonSerializable(explicitToJson: true, includeIfNull: false)
-class RtcEngineEventHandlerOnTranscodedStreamLayoutInfoJson {
+class RtcEngineEventHandlerOnTranscodedStreamLayoutInfoJson
+    implements AgoraSerializable {
   const RtcEngineEventHandlerOnTranscodedStreamLayoutInfoJson(
       {this.connection,
       this.uid,
@@ -4616,6 +4834,7 @@ class RtcEngineEventHandlerOnTranscodedStreamLayoutInfoJson {
           Map<String, dynamic> json) =>
       _$RtcEngineEventHandlerOnTranscodedStreamLayoutInfoJsonFromJson(json);
 
+  @override
   Map<String, dynamic> toJson() =>
       _$RtcEngineEventHandlerOnTranscodedStreamLayoutInfoJsonToJson(this);
 }
@@ -4635,7 +4854,8 @@ extension RtcEngineEventHandlerOnTranscodedStreamLayoutInfoJsonBufferExt
 }
 
 @JsonSerializable(explicitToJson: true, includeIfNull: false)
-class RtcEngineEventHandlerOnAudioMetadataReceivedJson {
+class RtcEngineEventHandlerOnAudioMetadataReceivedJson
+    implements AgoraSerializable {
   const RtcEngineEventHandlerOnAudioMetadataReceivedJson(
       {this.connection, this.uid, this.metadata, this.length});
 
@@ -4655,6 +4875,7 @@ class RtcEngineEventHandlerOnAudioMetadataReceivedJson {
           Map<String, dynamic> json) =>
       _$RtcEngineEventHandlerOnAudioMetadataReceivedJsonFromJson(json);
 
+  @override
   Map<String, dynamic> toJson() =>
       _$RtcEngineEventHandlerOnAudioMetadataReceivedJsonToJson(this);
 }
@@ -4682,7 +4903,8 @@ extension RtcEngineEventHandlerOnAudioMetadataReceivedJsonBufferExt
 }
 
 @JsonSerializable(explicitToJson: true, includeIfNull: false)
-class RtcEngineEventHandlerOnExtensionEventWithContextJson {
+class RtcEngineEventHandlerOnExtensionEventWithContextJson
+    implements AgoraSerializable {
   const RtcEngineEventHandlerOnExtensionEventWithContextJson(
       {this.context, this.key, this.value});
 
@@ -4699,6 +4921,7 @@ class RtcEngineEventHandlerOnExtensionEventWithContextJson {
           Map<String, dynamic> json) =>
       _$RtcEngineEventHandlerOnExtensionEventWithContextJsonFromJson(json);
 
+  @override
   Map<String, dynamic> toJson() =>
       _$RtcEngineEventHandlerOnExtensionEventWithContextJsonToJson(this);
 }
@@ -4718,7 +4941,8 @@ extension RtcEngineEventHandlerOnExtensionEventWithContextJsonBufferExt
 }
 
 @JsonSerializable(explicitToJson: true, includeIfNull: false)
-class RtcEngineEventHandlerOnExtensionStartedWithContextJson {
+class RtcEngineEventHandlerOnExtensionStartedWithContextJson
+    implements AgoraSerializable {
   const RtcEngineEventHandlerOnExtensionStartedWithContextJson({this.context});
 
   @JsonKey(name: 'context')
@@ -4728,6 +4952,7 @@ class RtcEngineEventHandlerOnExtensionStartedWithContextJson {
           Map<String, dynamic> json) =>
       _$RtcEngineEventHandlerOnExtensionStartedWithContextJsonFromJson(json);
 
+  @override
   Map<String, dynamic> toJson() =>
       _$RtcEngineEventHandlerOnExtensionStartedWithContextJsonToJson(this);
 }
@@ -4747,7 +4972,8 @@ extension RtcEngineEventHandlerOnExtensionStartedWithContextJsonBufferExt
 }
 
 @JsonSerializable(explicitToJson: true, includeIfNull: false)
-class RtcEngineEventHandlerOnExtensionStoppedWithContextJson {
+class RtcEngineEventHandlerOnExtensionStoppedWithContextJson
+    implements AgoraSerializable {
   const RtcEngineEventHandlerOnExtensionStoppedWithContextJson({this.context});
 
   @JsonKey(name: 'context')
@@ -4757,6 +4983,7 @@ class RtcEngineEventHandlerOnExtensionStoppedWithContextJson {
           Map<String, dynamic> json) =>
       _$RtcEngineEventHandlerOnExtensionStoppedWithContextJsonFromJson(json);
 
+  @override
   Map<String, dynamic> toJson() =>
       _$RtcEngineEventHandlerOnExtensionStoppedWithContextJsonToJson(this);
 }
@@ -4776,7 +5003,8 @@ extension RtcEngineEventHandlerOnExtensionStoppedWithContextJsonBufferExt
 }
 
 @JsonSerializable(explicitToJson: true, includeIfNull: false)
-class RtcEngineEventHandlerOnExtensionErrorWithContextJson {
+class RtcEngineEventHandlerOnExtensionErrorWithContextJson
+    implements AgoraSerializable {
   const RtcEngineEventHandlerOnExtensionErrorWithContextJson(
       {this.context, this.error, this.message});
 
@@ -4793,6 +5021,7 @@ class RtcEngineEventHandlerOnExtensionErrorWithContextJson {
           Map<String, dynamic> json) =>
       _$RtcEngineEventHandlerOnExtensionErrorWithContextJsonFromJson(json);
 
+  @override
   Map<String, dynamic> toJson() =>
       _$RtcEngineEventHandlerOnExtensionErrorWithContextJsonToJson(this);
 }
@@ -4812,7 +5041,7 @@ extension RtcEngineEventHandlerOnExtensionErrorWithContextJsonBufferExt
 }
 
 @JsonSerializable(explicitToJson: true, includeIfNull: false)
-class RtcEngineEventHandlerOnSetRtmFlagResultJson {
+class RtcEngineEventHandlerOnSetRtmFlagResultJson implements AgoraSerializable {
   const RtcEngineEventHandlerOnSetRtmFlagResultJson(
       {this.connection, this.code});
 
@@ -4826,6 +5055,7 @@ class RtcEngineEventHandlerOnSetRtmFlagResultJson {
           Map<String, dynamic> json) =>
       _$RtcEngineEventHandlerOnSetRtmFlagResultJsonFromJson(json);
 
+  @override
   Map<String, dynamic> toJson() =>
       _$RtcEngineEventHandlerOnSetRtmFlagResultJsonToJson(this);
 }
@@ -4845,7 +5075,7 @@ extension RtcEngineEventHandlerOnSetRtmFlagResultJsonBufferExt
 }
 
 @JsonSerializable(explicitToJson: true, includeIfNull: false)
-class MetadataObserverOnMetadataReceivedJson {
+class MetadataObserverOnMetadataReceivedJson implements AgoraSerializable {
   const MetadataObserverOnMetadataReceivedJson({this.metadata});
 
   @JsonKey(name: 'metadata')
@@ -4855,6 +5085,7 @@ class MetadataObserverOnMetadataReceivedJson {
           Map<String, dynamic> json) =>
       _$MetadataObserverOnMetadataReceivedJsonFromJson(json);
 
+  @override
   Map<String, dynamic> toJson() =>
       _$MetadataObserverOnMetadataReceivedJsonToJson(this);
 }
@@ -4874,7 +5105,8 @@ extension MetadataObserverOnMetadataReceivedJsonBufferExt
 }
 
 @JsonSerializable(explicitToJson: true, includeIfNull: false)
-class DirectCdnStreamingEventHandlerOnDirectCdnStreamingStateChangedJson {
+class DirectCdnStreamingEventHandlerOnDirectCdnStreamingStateChangedJson
+    implements AgoraSerializable {
   const DirectCdnStreamingEventHandlerOnDirectCdnStreamingStateChangedJson(
       {this.state, this.reason, this.message});
 
@@ -4892,6 +5124,7 @@ class DirectCdnStreamingEventHandlerOnDirectCdnStreamingStateChangedJson {
       _$DirectCdnStreamingEventHandlerOnDirectCdnStreamingStateChangedJsonFromJson(
           json);
 
+  @override
   Map<String, dynamic> toJson() =>
       _$DirectCdnStreamingEventHandlerOnDirectCdnStreamingStateChangedJsonToJson(
           this);
@@ -4912,7 +5145,8 @@ extension DirectCdnStreamingEventHandlerOnDirectCdnStreamingStateChangedJsonBuff
 }
 
 @JsonSerializable(explicitToJson: true, includeIfNull: false)
-class DirectCdnStreamingEventHandlerOnDirectCdnStreamingStatsJson {
+class DirectCdnStreamingEventHandlerOnDirectCdnStreamingStatsJson
+    implements AgoraSerializable {
   const DirectCdnStreamingEventHandlerOnDirectCdnStreamingStatsJson(
       {this.stats});
 
@@ -4924,6 +5158,7 @@ class DirectCdnStreamingEventHandlerOnDirectCdnStreamingStatsJson {
       _$DirectCdnStreamingEventHandlerOnDirectCdnStreamingStatsJsonFromJson(
           json);
 
+  @override
   Map<String, dynamic> toJson() =>
       _$DirectCdnStreamingEventHandlerOnDirectCdnStreamingStatsJsonToJson(this);
 }

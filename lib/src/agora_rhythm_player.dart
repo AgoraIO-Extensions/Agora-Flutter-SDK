@@ -1,3 +1,4 @@
+import '/src/_serializable.dart';
 import '/src/binding_forward_export.dart';
 part 'agora_rhythm_player.g.dart';
 
@@ -77,7 +78,7 @@ extension RhythmPlayerReasonExt on RhythmPlayerReason {
 
 /// The metronome configuration.
 @JsonSerializable(explicitToJson: true, includeIfNull: false)
-class AgoraRhythmPlayerConfig {
+class AgoraRhythmPlayerConfig implements AgoraSerializable {
   /// @nodoc
   const AgoraRhythmPlayerConfig({this.beatsPerMeasure, this.beatsPerMinute});
 
@@ -94,5 +95,6 @@ class AgoraRhythmPlayerConfig {
       _$AgoraRhythmPlayerConfigFromJson(json);
 
   /// @nodoc
+  @override
   Map<String, dynamic> toJson() => _$AgoraRhythmPlayerConfigToJson(this);
 }
