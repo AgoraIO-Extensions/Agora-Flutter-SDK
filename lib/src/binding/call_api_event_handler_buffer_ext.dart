@@ -908,6 +908,7 @@ extension ExternalVideoFrameBufferExt on ExternalVideoFrame {
         timestamp: timestamp,
         eglType: eglType,
         textureId: textureId,
+        fenceObject: fenceObject,
         matrix: matrix,
         metadataBuffer: metadataBuffer,
         metadataSize: metadataSize,

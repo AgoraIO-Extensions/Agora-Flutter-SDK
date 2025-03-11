@@ -622,6 +622,7 @@ class ExternalVideoFrame {
       this.timestamp,
       this.eglType,
       this.textureId,
+      this.fenceObject,
       this.matrix,
       this.metadataBuffer,
       this.metadataSize,
@@ -680,6 +681,10 @@ class ExternalVideoFrame {
   /// This parameter only applies to video data in Texture format. Incoming 4 × 4 transformational matrix. The typical value is a unit matrix.
   @JsonKey(name: 'textureId')
   final int? textureId;
+
+  /// @nodoc
+  @JsonKey(name: 'fence_object')
+  final int? fenceObject;
 
   /// This parameter only applies to video data in Texture format. Incoming 4 × 4 transformational matrix. The typical value is a unit matrix.
   @JsonKey(name: 'matrix')
