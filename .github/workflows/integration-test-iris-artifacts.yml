@@ -33,12 +33,12 @@ jobs:
         with:
           flutter-version: ${{ matrix.version }}
           cache: true
-      - name: Checkout hoe
+      - name: Checkout agora_flutter_sdks_build
         uses: actions/checkout@v3
         with:
-          repository: littleGnAl/hoe
-          ref: littlegnal/update
-          path: hoe
+          repository: AgoraIO-Extensions/agora_flutter_sdks_build
+          ref: main
+          path: agora_flutter_sdks_build
       - name: Download iris artifacts
         run: |
           source scripts/artifacts_version.sh
@@ -46,7 +46,7 @@ jobs:
           PROJECT_DIR=$(pwd)
 
           mkdir -p output
-          cd hoe
+          cd agora_flutter_sdks_build
           dart pub get
           dart run bin/hoe.dart build-agora-flutter-example \
             --setup-local-dev \
@@ -88,12 +88,12 @@ jobs:
       - uses: futureware-tech/simulator-action@v3
         with:
           model: 'iPhone 15'
-      - name: Checkout hoe
+      - name: Checkout agora_flutter_sdks_build
         uses: actions/checkout@v3
         with:
-          repository: littleGnAl/hoe
-          ref: littlegnal/update
-          path: hoe
+          repository: AgoraIO-Extensions/agora_flutter_sdks_build
+          ref: main
+          path: agora_flutter_sdks_build
       - name: Download iris artifacts
         run: |
           source scripts/artifacts_version.sh
@@ -101,7 +101,7 @@ jobs:
           PROJECT_DIR=$(pwd)
 
           mkdir -p output
-          cd hoe
+          cd agora_flutter_sdks_build
           dart pub get
           dart run bin/hoe.dart build-agora-flutter-example \
             --setup-local-dev \
@@ -129,12 +129,12 @@ jobs:
         with:
           flutter-version: ${{ matrix.version }}
           cache: true
-      - name: Checkout hoe
+      - name: Checkout agora_flutter_sdks_build
         uses: actions/checkout@v3
         with:
-          repository: littleGnAl/hoe
-          ref: littlegnal/update
-          path: hoe
+          repository: AgoraIO-Extensions/agora_flutter_sdks_build
+          ref: main
+          path: agora_flutter_sdks_build
       - name: Download iris artifacts
         run: |
           source scripts/artifacts_version.sh
@@ -146,7 +146,7 @@ jobs:
           ls ${PROJECT_DIR}
 
           mkdir -p output
-          cd hoe
+          cd agora_flutter_sdks_build
           dart pub get
           dart run bin/hoe.dart build-agora-flutter-example \
             --setup-local-dev \
@@ -175,12 +175,12 @@ jobs:
         with:
           flutter-version: ${{ matrix.version }}
           cache: true
-      - name: Checkout hoe
+      - name: Checkout agora_flutter_sdks_build
         uses: actions/checkout@v3
         with:
-          repository: littleGnAl/hoe
-          ref: littlegnal/update
-          path: hoe
+          repository: AgoraIO-Extensions/agora_flutter_sdks_build
+          ref: main
+          path: agora_flutter_sdks_build
       - name: Download iris artifacts
         shell: bash
         run: |
@@ -189,7 +189,7 @@ jobs:
           PROJECT_DIR=$(pwd)
 
           mkdir -p output
-          cd hoe
+          cd agora_flutter_sdks_build
           dart pub get
           dart run bin/hoe.dart build-agora-flutter-example \
             --setup-local-dev \
