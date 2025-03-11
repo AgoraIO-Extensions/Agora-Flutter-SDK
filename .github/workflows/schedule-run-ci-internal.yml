@@ -17,21 +17,21 @@ jobs:
         # perform secret check & put boolean result as an output
         shell: bash
         run: |
-          APP_ID="${{ secrets.MY_APP_ID }}"
+          APP_ID="${{ secrets.APP_ID }}"
           if [ ! -z "${APP_ID}" ]; then
             echo "is_schedule_run_ci=1" >> $GITHUB_OUTPUT;
-            echo "secrets.MY_APP_ID is not empty, PR opened by the internal contributors"
+            echo "secrets.APP_ID is not empty, PR opened by the internal contributors"
           else
             echo "is_schedule_run_ci=-1" >> $GITHUB_OUTPUT;
-            echo "secrets.MY_APP_ID is empty, PR opened by the external contributors"
+            echo "secrets.APP_ID is empty, PR opened by the external contributors"
           fi
 
   schedule_ci:
     name: Schedule run ci
     needs: check_permission
-    # If the PR requested by a external contributor, the secrets.MY_APP_ID should be empty, and skip this workflow
+    # If the PR requested by a external contributor, the secrets.APP_ID should be empty, and skip this workflow
     if: ${{ needs.check_permission.outputs.is_schedule_run_ci == 1 }}
-    uses: ./.github/workflows/build.yml
+    uses: ./.github/workflows/run_test.yml
     secrets:
-      MY_APP_ID: ${{ secrets.MY_APP_ID }}
+      APP_ID: ${{ secrets.APP_ID }}
             

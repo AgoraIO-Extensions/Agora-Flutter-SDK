@@ -8,9 +8,14 @@ PROJECT_ROOT=$(realpath ${MY_PATH}/..)
 
 pushd ${PROJECT_ROOT}
 
+flutter --version
+
 flutter packages get
+
 bash ${PROJECT_ROOT}/tool/terra/build.sh ${RTC_VERSION}
+
 bash ${MY_PATH}/flutter-build-runner.sh
+
 bash ${PROJECT_ROOT}/tool/testcase_gen/build.sh
 
 dart format .
