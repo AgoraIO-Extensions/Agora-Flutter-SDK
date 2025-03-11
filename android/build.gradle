@@ -58,12 +58,12 @@ dependencies {
     api fileTree(dir: "libs", include: ["*.jar"])
   } else {
     // iris dependencies start
-    api 'io.agora.rtc:iris-rtc:4.3.2.11-build.1'
+    api 'io.agora.rtc:iris-rtc:4.3.2.14-build.2'
     // iris dependencies end
 
     // native dependencies start
-    api 'io.agora.rtc:agora-special-full:4.3.2.11'
-    api 'io.agora.rtc:full-screen-sharing:4.3.2.11'
+    api 'io.agora.rtc:agora-special-full:4.3.2.14'
+    api 'io.agora.rtc:full-screen-sharing:4.3.2.14'
     // native dependencies end
   }
 }
