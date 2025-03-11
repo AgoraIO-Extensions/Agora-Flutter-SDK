@@ -1,4 +1,4 @@
-name: Run build example
+name: Run sync
 
 on:
   workflow_dispatch:

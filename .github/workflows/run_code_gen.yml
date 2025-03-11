@@ -1,4 +1,4 @@
-name: Run build example
+name: Run code gen
 
 on:
   workflow_dispatch:

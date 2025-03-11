@@ -1,4 +1,4 @@
-name: Run build example
+name: On PR internal
 
 on:
   workflow_dispatch:
