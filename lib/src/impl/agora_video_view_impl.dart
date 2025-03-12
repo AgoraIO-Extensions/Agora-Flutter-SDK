@@ -162,7 +162,7 @@ class _AgoraRtcRenderPlatformViewState extends State<AgoraRtcRenderPlatformView>
       return;
     }
     try {
-      await widget.controller.setupView(_nativeViewIntPtr);
+      await widget.controller.setupView(_platformViewId, _nativeViewIntPtr);
     } catch (e) {
       debugPrint(
           '[AgoraVideoView] error when widget.controller.setupView: ${e.toString()}');
@@ -272,8 +272,8 @@ class _VideoViewControllerInternal with VideoViewControllerBaseMixin {
   }
 
   @override
-  Future<void> setupView(int nativeViewPtr) =>
-      _controller.setupView(nativeViewPtr);
+  Future<void> setupView(int platformViewId, int nativeViewPtr) =>
+      _controller.setupView(platformViewId, nativeViewPtr);
 }
 
 class AgoraRtcRenderTexture extends StatefulWidget {

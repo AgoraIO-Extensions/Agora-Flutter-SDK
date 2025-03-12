@@ -104,7 +104,13 @@ class GlobalVideoViewControllerIO extends GlobalVideoViewControllerPlatfrom {
     await methodChannel.invokeMethod('destroyTextureRender', textureId);
   }
 
-  /// Decrease the ref count of the native view(`UIView` in iOS) of the `platformViewId`.
+  /// Increase the ref count of the native view(`UIView` in iOS, `SurfaceView` or `TextureView` in Android) of the `platformViewId`.
+  @override
+  Future<void> addPlatformRenderRef(int platformViewId) async {
+    await methodChannel.invokeMethod('addPlatformRenderRef', platformViewId);
+  }
+
+  /// Decrease the ref count of the native view(`UIView` in iOS, `SurfaceView` or `TextureView` in Android) of the `platformViewId`.
   /// Put this function here since the the `MethodChannel` in the `AgoraVideoView` is released
   /// after `AgoraVideoView.dispose`, so the `MethodChannel.invokeMethod` will never return
   /// after `AgoraVideoView.dispose`.
