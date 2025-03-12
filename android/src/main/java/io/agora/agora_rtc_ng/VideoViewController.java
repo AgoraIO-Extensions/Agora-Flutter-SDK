@@ -175,11 +175,18 @@ public class VideoViewController implements MethodChannel.MethodCallHandler {
             case "detachVideoFrameBufferManager":
                 result.success(true);
                 break;
-            case "dePlatfromViewRef":
+            case "addPlatformRenderRef": {
+                int platformViewId = (int) call.arguments;
+                this.addPlatformRenderRef(platformViewId);
+                result.success(true);
+                break;
+            }
+            case "dePlatfromViewRef": {
                 int platformViewId = (int) call.arguments;
                 this.dePlatformRenderRef(platformViewId);
                 result.success(true);
                 break;
+            }
             case "createTextureRender": {
                 final Map<?, ?> args = (Map<?, ?>) call.arguments;
 
