@@ -1,5 +1,22 @@
 # Changelog
 
+## [6.5.1](https://github.com/AgoraIO-Extensions/Agora-Flutter-SDK/compare/6.5.0...6.5.1) (2025-03-12)
+
+### Features
+
+* optimize internal dependencies ([#2146](https://github.com/AgoraIO-Extensions/Agora-Flutter-SDK/issues/2146)) ([4afc2ba](https://github.com/AgoraIO-Extensions/Agora-Flutter-SDK/commit/4afc2ba8c503b7897f80e0704d9299794e7f78bf))
+* replace urls of test media files with agora cdn links ([#2144](https://github.com/AgoraIO-Extensions/Agora-Flutter-SDK/issues/2144)) ([2fc4715](https://github.com/AgoraIO-Extensions/Agora-Flutter-SDK/commit/2fc471538d8102e54a3849beca9f0e1f1b3af714))
+* update dependencies ([#2209](https://github.com/AgoraIO-Extensions/Agora-Flutter-SDK/issues/2209)) ([f149b40](https://github.com/AgoraIO-Extensions/Agora-Flutter-SDK/commit/f149b40bdcc7883c702fdf469218a2c22be9c9ea))
+
+### Bug Fixes
+
+* add missed extra link flags to support to enable 16K page size f… ([#2143](https://github.com/AgoraIO-Extensions/Agora-Flutter-SDK/issues/2143)) ([2146142](https://github.com/AgoraIO-Extensions/Agora-Flutter-SDK/commit/214614282efb1e9f0c2bdb519449581481a54e6e))
+* catch exception of eventHandler when some unknown error code or … ([#2215](https://github.com/AgoraIO-Extensions/Agora-Flutter-SDK/issues/2215)) ([fdfc43b](https://github.com/AgoraIO-Extensions/Agora-Flutter-SDK/commit/fdfc43ba2f25e0345dcb82f40ad534be826eb70f)), closes [#2210](https://github.com/AgoraIO-Extensions/Agora-Flutter-SDK/issues/2210)
+* crash in texture renderer for ios (pick 06896207 4d484b4d from release/6.3) ([#2190](https://github.com/AgoraIO-Extensions/Agora-Flutter-SDK/issues/2190)) ([89cdb5d](https://github.com/AgoraIO-Extensions/Agora-Flutter-SDK/commit/89cdb5d0ba47f56b461ed3d358dac0a552718340))
+* demo typo in media recorder case ([9c36c25](https://github.com/AgoraIO-Extensions/Agora-Flutter-SDK/commit/9c36c2571055642c77a6ab27502e9b6a05cb3566))
+* disable warning 4819 when build windows ([5b9d15e](https://github.com/AgoraIO-Extensions/Agora-Flutter-SDK/commit/5b9d15e76cb7d9a72d8ea7555a102eeef937f95a))
+* use internal custom_headers ([#2145](https://github.com/AgoraIO-Extensions/Agora-Flutter-SDK/issues/2145)) ([fb3ea26](https://github.com/AgoraIO-Extensions/Agora-Flutter-SDK/commit/fb3ea26e644fe6c627f1dc38be66bfe5c45f5a8c))
+
 ## [6.5.0](https://github.com/AgoraIO-Extensions/Agora-Flutter-SDK/compare/6.3.2...6.5.0) (2024-12-10)
 
 ### Features
