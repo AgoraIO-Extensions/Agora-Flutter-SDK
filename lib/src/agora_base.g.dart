@@ -2429,6 +2429,7 @@ const _$WarnCodeTypeEnumMap = {
   WarnCodeType.warnApmHowling: 1051,
   WarnCodeType.warnAdmGlitchState: 1052,
   WarnCodeType.warnAdmImproperSettings: 1053,
+  WarnCodeType.warnAdmPopState: 1055,
   WarnCodeType.warnAdmWinCoreNoRecordingDevice: 1322,
   WarnCodeType.warnAdmWinCoreNoPlayoutDevice: 1323,
   WarnCodeType.warnAdmWinCoreImproperCaptureRelease: 1324,
@@ -2688,7 +2689,9 @@ const _$AudioScenarioTypeEnumMap = {
   AudioScenarioType.audioScenarioChatroom: 5,
   AudioScenarioType.audioScenarioChorus: 7,
   AudioScenarioType.audioScenarioMeeting: 8,
-  AudioScenarioType.audioScenarioNum: 9,
+  AudioScenarioType.audioScenarioAiServer: 9,
+  AudioScenarioType.audioScenarioAiClient: 10,
+  AudioScenarioType.audioScenarioNum: 11,
 };
 
 const _$ScreenScenarioTypeEnumMap = {
