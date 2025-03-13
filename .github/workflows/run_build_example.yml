@@ -1,4 +1,4 @@
-name: Run build example
+name: 'run: build example'
 
 on:
   workflow_dispatch:
@@ -43,7 +43,6 @@ on:
       target_platforms:
         description: 'Target platforms, e.g. android, ios, macos, windows, web, etc; separated by comma, default is all platforms'
         type: string
-        required: true
         default: 'android, ios, macos, windows, web'
       target_branch:
         description: 'Target branch, leave empty will use the same as the workflow trigger branch'
@@ -75,8 +74,41 @@ on:
         # Here is the error log:
         # Caused by: org.gradle.api.GradleException: You are applying Flutter's app_plugin_loader Gradle plugin imperatively using the apply script method, which is not possible anymore. Migrate to applying Gradle plugins with the declarative plugins block: https://flutter.dev/to/flutter-gradle-plugin-apply
         default: '3.24.5'
+    secrets:
+      APP_ID:
+        required: true
+      BUILD_PROVISION_PROFILE_UUID:
+        required: true
+      BUILD_PROVISION_PROFILE_NAME:
+        required: true
+      BUILD_PROVISION_PROFILE_TEAMID:
+        required: true
+      BUILD_PROVISION_PROFILE_IDENTITY:
+        required: true
+      BUILD_CERTIFICATE_BASE64:
+        required: true
+      P12_PASSWORD:
+        required: true
+      BUILD_PROVISION_PROFILE_BASE64:
+        required: true
+      KEYCHAIN_PASSWORD:
+        required: true
+        
 
 jobs:
+  # remove label ci:build_example if the issue_number is not null and the workflow is run by workflow_call not workflow_dispatch
+  remove-label:
+    if: ${{ inputs.issue_number != null}}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Remove label
+        uses: actions-ecosystem/action-remove-labels@v1
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          number: ${{ inputs.issue_number }}
+          labels: ci:build_example
+          fail_on_error: false
+
   split-platforms:
     runs-on: ubuntu-latest
     outputs:
@@ -202,6 +234,7 @@ jobs:
         with:
           channel: ${{ inputs.flutter_channel }}
           flutter-version: ${{ inputs.flutter_version }}
+          cache: true
 
       - name: Build
         env:
