@@ -1,3 +1,4 @@
+import '/src/_serializable.dart';
 import '/src/agora_media_base.dart';
 import 'package:json_annotation/json_annotation.dart';
 
@@ -36,7 +37,7 @@ class _VideoFrameMetaInfoInternal implements VideoFrameMetaInfo {
 }
 
 @JsonSerializable(explicitToJson: true, includeIfNull: false)
-class _VideoFrameMetaInfoInternalJson {
+class _VideoFrameMetaInfoInternalJson implements AgoraSerializable {
   // ignore: non_constant_identifier_names
   const _VideoFrameMetaInfoInternalJson({this.KEY_FACE_CAPTURE});
   @JsonKey(name: 'KEY_FACE_CAPTURE')
@@ -49,6 +50,7 @@ class _VideoFrameMetaInfoInternalJson {
       _$VideoFrameMetaInfoInternalJsonFromJson(json);
 
   /// @nodoc
+  @override
   Map<String, dynamic> toJson() => _$VideoFrameMetaInfoInternalJsonToJson(this);
 }
 

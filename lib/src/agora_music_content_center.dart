@@ -1,3 +1,4 @@
+import '/src/_serializable.dart';
 import '/src/binding_forward_export.dart';
 part 'agora_music_content_center.g.dart';
 
@@ -114,7 +115,7 @@ extension MusicContentCenterStateReasonExt on MusicContentCenterStateReason {
 
 /// @nodoc
 @JsonSerializable(explicitToJson: true, includeIfNull: false)
-class MusicChartInfo {
+class MusicChartInfo implements AgoraSerializable {
   /// @nodoc
   const MusicChartInfo({this.chartName, this.id});
 
@@ -131,6 +132,7 @@ class MusicChartInfo {
       _$MusicChartInfoFromJson(json);
 
   /// @nodoc
+  @override
   Map<String, dynamic> toJson() => _$MusicChartInfoToJson(this);
 }
 
@@ -161,7 +163,7 @@ extension MusicCacheStatusTypeExt on MusicCacheStatusType {
 
 /// @nodoc
 @JsonSerializable(explicitToJson: true, includeIfNull: false)
-class MusicCacheInfo {
+class MusicCacheInfo implements AgoraSerializable {
   /// @nodoc
   const MusicCacheInfo({this.songCode, this.status});
 
@@ -178,6 +180,7 @@ class MusicCacheInfo {
       _$MusicCacheInfoFromJson(json);
 
   /// @nodoc
+  @override
   Map<String, dynamic> toJson() => _$MusicCacheInfoToJson(this);
 }
 
@@ -192,7 +195,7 @@ abstract class MusicChartCollection {
 
 /// @nodoc
 @JsonSerializable(explicitToJson: true, includeIfNull: false)
-class MvProperty {
+class MvProperty implements AgoraSerializable {
   /// @nodoc
   const MvProperty({this.resolution, this.bandwidth});
 
@@ -209,12 +212,13 @@ class MvProperty {
       _$MvPropertyFromJson(json);
 
   /// @nodoc
+  @override
   Map<String, dynamic> toJson() => _$MvPropertyToJson(this);
 }
 
 /// @nodoc
 @JsonSerializable(explicitToJson: true, includeIfNull: false)
-class ClimaxSegment {
+class ClimaxSegment implements AgoraSerializable {
   /// @nodoc
   const ClimaxSegment({this.startTimeMs, this.endTimeMs});
 
@@ -231,12 +235,13 @@ class ClimaxSegment {
       _$ClimaxSegmentFromJson(json);
 
   /// @nodoc
+  @override
   Map<String, dynamic> toJson() => _$ClimaxSegmentToJson(this);
 }
 
 /// @nodoc
 @JsonSerializable(explicitToJson: true, includeIfNull: false)
-class Music {
+class Music implements AgoraSerializable {
   /// @nodoc
   const Music(
       {this.songCode,
@@ -314,6 +319,7 @@ class Music {
   factory Music.fromJson(Map<String, dynamic> json) => _$MusicFromJson(json);
 
   /// @nodoc
+  @override
   Map<String, dynamic> toJson() => _$MusicToJson(this);
 }
 
@@ -386,7 +392,7 @@ class MusicContentCenterEventHandler {
 
 /// @nodoc
 @JsonSerializable(explicitToJson: true, includeIfNull: false)
-class MusicContentCenterConfiguration {
+class MusicContentCenterConfiguration implements AgoraSerializable {
   /// @nodoc
   const MusicContentCenterConfiguration(
       {this.appId, this.token, this.mccUid, this.maxCacheSize, this.mccDomain});
@@ -416,6 +422,7 @@ class MusicContentCenterConfiguration {
       _$MusicContentCenterConfigurationFromJson(json);
 
   /// @nodoc
+  @override
   Map<String, dynamic> toJson() =>
       _$MusicContentCenterConfigurationToJson(this);
 }

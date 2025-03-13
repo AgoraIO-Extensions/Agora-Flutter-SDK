@@ -1,3 +1,4 @@
+import '/src/_serializable.dart';
 import '/src/binding_forward_export.dart';
 part 'agora_rtc_engine.g.dart';
 
@@ -367,7 +368,7 @@ extension PriorityTypeExt on PriorityType {
 
 /// The statistics of the local video stream.
 @JsonSerializable(explicitToJson: true, includeIfNull: false)
-class LocalVideoStats {
+class LocalVideoStats implements AgoraSerializable {
   /// @nodoc
   const LocalVideoStats(
       {this.uid,
@@ -498,12 +499,13 @@ class LocalVideoStats {
       _$LocalVideoStatsFromJson(json);
 
   /// @nodoc
+  @override
   Map<String, dynamic> toJson() => _$LocalVideoStatsToJson(this);
 }
 
 /// Audio statistics of the remote user.
 @JsonSerializable(explicitToJson: true, includeIfNull: false)
-class RemoteAudioStats {
+class RemoteAudioStats implements AgoraSerializable {
   /// @nodoc
   const RemoteAudioStats(
       {this.uid,
@@ -607,12 +609,13 @@ class RemoteAudioStats {
       _$RemoteAudioStatsFromJson(json);
 
   /// @nodoc
+  @override
   Map<String, dynamic> toJson() => _$RemoteAudioStatsToJson(this);
 }
 
 /// Statistics of the remote video stream.
 @JsonSerializable(explicitToJson: true, includeIfNull: false)
-class RemoteVideoStats {
+class RemoteVideoStats implements AgoraSerializable {
   /// @nodoc
   const RemoteVideoStats(
       {this.uid,
@@ -716,12 +719,13 @@ class RemoteVideoStats {
       _$RemoteVideoStatsFromJson(json);
 
   /// @nodoc
+  @override
   Map<String, dynamic> toJson() => _$RemoteVideoStatsToJson(this);
 }
 
 /// @nodoc
 @JsonSerializable(explicitToJson: true, includeIfNull: false)
-class VideoCompositingLayout {
+class VideoCompositingLayout implements AgoraSerializable {
   /// @nodoc
   const VideoCompositingLayout(
       {this.canvasWidth,
@@ -765,12 +769,13 @@ class VideoCompositingLayout {
       _$VideoCompositingLayoutFromJson(json);
 
   /// @nodoc
+  @override
   Map<String, dynamic> toJson() => _$VideoCompositingLayoutToJson(this);
 }
 
 /// @nodoc
 @JsonSerializable(explicitToJson: true, includeIfNull: false)
-class Region {
+class Region implements AgoraSerializable {
   /// @nodoc
   const Region(
       {this.uid,
@@ -818,12 +823,13 @@ class Region {
   factory Region.fromJson(Map<String, dynamic> json) => _$RegionFromJson(json);
 
   /// @nodoc
+  @override
   Map<String, dynamic> toJson() => _$RegionToJson(this);
 }
 
 /// @nodoc
 @JsonSerializable(explicitToJson: true, includeIfNull: false)
-class InjectStreamConfig {
+class InjectStreamConfig implements AgoraSerializable {
   /// @nodoc
   const InjectStreamConfig(
       {this.width,
@@ -872,6 +878,7 @@ class InjectStreamConfig {
       _$InjectStreamConfigFromJson(json);
 
   /// @nodoc
+  @override
   Map<String, dynamic> toJson() => _$InjectStreamConfigToJson(this);
 }
 
@@ -904,7 +911,7 @@ extension RtmpStreamLifeCycleTypeExt on RtmpStreamLifeCycleType {
 
 /// @nodoc
 @JsonSerializable(explicitToJson: true, includeIfNull: false)
-class PublisherConfiguration {
+class PublisherConfiguration implements AgoraSerializable {
   /// @nodoc
   const PublisherConfiguration(
       {this.width,
@@ -978,6 +985,7 @@ class PublisherConfiguration {
       _$PublisherConfigurationFromJson(json);
 
   /// @nodoc
+  @override
   Map<String, dynamic> toJson() => _$PublisherConfigurationToJson(this);
 }
 
@@ -1037,7 +1045,7 @@ extension CloudProxyTypeExt on CloudProxyType {
 
 /// The camera capturer preference.
 @JsonSerializable(explicitToJson: true, includeIfNull: false)
-class CameraCapturerConfiguration {
+class CameraCapturerConfiguration implements AgoraSerializable {
   /// @nodoc
   const CameraCapturerConfiguration(
       {this.cameraDirection,
@@ -1085,12 +1093,13 @@ class CameraCapturerConfiguration {
       _$CameraCapturerConfigurationFromJson(json);
 
   /// @nodoc
+  @override
   Map<String, dynamic> toJson() => _$CameraCapturerConfigurationToJson(this);
 }
 
 /// The configuration of the captured screen.
 @JsonSerializable(explicitToJson: true, includeIfNull: false)
-class ScreenCaptureConfiguration {
+class ScreenCaptureConfiguration implements AgoraSerializable {
   /// @nodoc
   const ScreenCaptureConfiguration(
       {this.isCaptureWindow,
@@ -1129,12 +1138,13 @@ class ScreenCaptureConfiguration {
       _$ScreenCaptureConfigurationFromJson(json);
 
   /// @nodoc
+  @override
   Map<String, dynamic> toJson() => _$ScreenCaptureConfigurationToJson(this);
 }
 
 /// @nodoc
 @JsonSerializable(explicitToJson: true, includeIfNull: false)
-class SIZE {
+class SIZE implements AgoraSerializable {
   /// @nodoc
   const SIZE({this.width, this.height});
 
@@ -1150,6 +1160,7 @@ class SIZE {
   factory SIZE.fromJson(Map<String, dynamic> json) => _$SIZEFromJson(json);
 
   /// @nodoc
+  @override
   Map<String, dynamic> toJson() => _$SIZEToJson(this);
 }
 
@@ -1157,7 +1168,7 @@ class SIZE {
 ///
 /// The default image is in the ARGB format. If you need to use another format, you need to convert the image on your own.
 @JsonSerializable(explicitToJson: true, includeIfNull: false)
-class ThumbImageBuffer {
+class ThumbImageBuffer implements AgoraSerializable {
   /// @nodoc
   const ThumbImageBuffer({this.buffer, this.length, this.width, this.height});
 
@@ -1182,6 +1193,7 @@ class ThumbImageBuffer {
       _$ThumbImageBufferFromJson(json);
 
   /// @nodoc
+  @override
   Map<String, dynamic> toJson() => _$ThumbImageBufferToJson(this);
 }
 
@@ -1220,7 +1232,7 @@ extension ScreenCaptureSourceTypeExt on ScreenCaptureSourceType {
 
 /// The information about the specified shareable window or screen.
 @JsonSerializable(explicitToJson: true, includeIfNull: false)
-class ScreenCaptureSourceInfo {
+class ScreenCaptureSourceInfo implements AgoraSerializable {
   /// @nodoc
   const ScreenCaptureSourceInfo(
       {this.type,
@@ -1289,12 +1301,13 @@ class ScreenCaptureSourceInfo {
       _$ScreenCaptureSourceInfoFromJson(json);
 
   /// @nodoc
+  @override
   Map<String, dynamic> toJson() => _$ScreenCaptureSourceInfoToJson(this);
 }
 
 /// The advanced options for audio.
 @JsonSerializable(explicitToJson: true, includeIfNull: false)
-class AdvancedAudioOptions {
+class AdvancedAudioOptions implements AgoraSerializable {
   /// @nodoc
   const AdvancedAudioOptions({this.audioProcessingChannels});
 
@@ -1307,12 +1320,13 @@ class AdvancedAudioOptions {
       _$AdvancedAudioOptionsFromJson(json);
 
   /// @nodoc
+  @override
   Map<String, dynamic> toJson() => _$AdvancedAudioOptionsToJson(this);
 }
 
 /// Image configurations.
 @JsonSerializable(explicitToJson: true, includeIfNull: false)
-class ImageTrackOptions {
+class ImageTrackOptions implements AgoraSerializable {
   /// @nodoc
   const ImageTrackOptions({this.imageUrl, this.fps, this.mirrorMode});
 
@@ -1333,6 +1347,7 @@ class ImageTrackOptions {
       _$ImageTrackOptionsFromJson(json);
 
   /// @nodoc
+  @override
   Map<String, dynamic> toJson() => _$ImageTrackOptionsToJson(this);
 }
 
@@ -1340,7 +1355,7 @@ class ImageTrackOptions {
 ///
 /// Agora supports publishing multiple audio streams and one video stream at the same time and in the same RtcConnection. For example, publishMicrophoneTrack, publishCustomAudioTrack, and publishMediaPlayerAudioTrack can be set as true at the same time, but only one of publishCameraTrack, publishScreenCaptureVideo, publishScreenTrack, publishCustomVideoTrack, or publishEncodedVideoTrack can be set as true. Agora recommends that you set member parameter values yourself according to your business scenario, otherwise the SDK will automatically assign values to member parameters.
 @JsonSerializable(explicitToJson: true, includeIfNull: false)
-class ChannelMediaOptions {
+class ChannelMediaOptions implements AgoraSerializable {
   /// @nodoc
   const ChannelMediaOptions(
       {this.publishCameraTrack,
@@ -1538,6 +1553,7 @@ class ChannelMediaOptions {
       _$ChannelMediaOptionsFromJson(json);
 
   /// @nodoc
+  @override
   Map<String, dynamic> toJson() => _$ChannelMediaOptionsToJson(this);
 }
 
@@ -1613,7 +1629,7 @@ extension FeatureTypeExt on FeatureType {
 
 /// The options for leaving a channel.
 @JsonSerializable(explicitToJson: true, includeIfNull: false)
-class LeaveChannelOptions {
+class LeaveChannelOptions implements AgoraSerializable {
   /// @nodoc
   const LeaveChannelOptions(
       {this.stopAudioMixing, this.stopAllEffect, this.stopMicrophoneRecording});
@@ -1635,6 +1651,7 @@ class LeaveChannelOptions {
       _$LeaveChannelOptionsFromJson(json);
 
   /// @nodoc
+  @override
   Map<String, dynamic> toJson() => _$LeaveChannelOptionsToJson(this);
 }
 
@@ -2716,7 +2733,7 @@ abstract class VideoDeviceManager {
 
 /// Configurations for the RtcEngineContext instance.
 @JsonSerializable(explicitToJson: true, includeIfNull: false)
-class RtcEngineContext {
+class RtcEngineContext implements AgoraSerializable {
   /// @nodoc
   const RtcEngineContext(
       {this.appId,
@@ -2785,6 +2802,7 @@ class RtcEngineContext {
       _$RtcEngineContextFromJson(json);
 
   /// @nodoc
+  @override
   Map<String, dynamic> toJson() => _$RtcEngineContextToJson(this);
 }
 
@@ -2857,7 +2875,7 @@ extension MaxMetadataSizeTypeExt on MaxMetadataSizeType {
 
 /// Media metadata.
 @JsonSerializable(explicitToJson: true, includeIfNull: false)
-class Metadata {
+class Metadata implements AgoraSerializable {
   /// @nodoc
   const Metadata(
       {this.channelId, this.uid, this.size, this.buffer, this.timeStampMs});
@@ -2889,6 +2907,7 @@ class Metadata {
       _$MetadataFromJson(json);
 
   /// @nodoc
+  @override
   Map<String, dynamic> toJson() => _$MetadataToJson(this);
 }
 
@@ -2972,7 +2991,7 @@ extension DirectCdnStreamingStateExt on DirectCdnStreamingState {
 
 /// The statistics of the current CDN streaming.
 @JsonSerializable(explicitToJson: true, includeIfNull: false)
-class DirectCdnStreamingStats {
+class DirectCdnStreamingStats implements AgoraSerializable {
   /// @nodoc
   const DirectCdnStreamingStats(
       {this.videoWidth,
@@ -3006,6 +3025,7 @@ class DirectCdnStreamingStats {
       _$DirectCdnStreamingStatsFromJson(json);
 
   /// @nodoc
+  @override
   Map<String, dynamic> toJson() => _$DirectCdnStreamingStatsToJson(this);
 }
 
@@ -3039,7 +3059,7 @@ class DirectCdnStreamingEventHandler {
 
 /// The media setting options for the host.
 @JsonSerializable(explicitToJson: true, includeIfNull: false)
-class DirectCdnStreamingMediaOptions {
+class DirectCdnStreamingMediaOptions implements AgoraSerializable {
   /// @nodoc
   const DirectCdnStreamingMediaOptions(
       {this.publishCameraTrack,
@@ -3083,12 +3103,13 @@ class DirectCdnStreamingMediaOptions {
       _$DirectCdnStreamingMediaOptionsFromJson(json);
 
   /// @nodoc
+  @override
   Map<String, dynamic> toJson() => _$DirectCdnStreamingMediaOptionsToJson(this);
 }
 
 /// @nodoc
 @JsonSerializable(explicitToJson: true, includeIfNull: false)
-class ExtensionInfo {
+class ExtensionInfo implements AgoraSerializable {
   /// @nodoc
   const ExtensionInfo(
       {this.mediaSourceType, this.remoteUid, this.channelId, this.localUid});
@@ -3114,6 +3135,7 @@ class ExtensionInfo {
       _$ExtensionInfoFromJson(json);
 
   /// @nodoc
+  @override
   Map<String, dynamic> toJson() => _$ExtensionInfoToJson(this);
 }
 
@@ -6797,7 +6819,7 @@ extension VideoProfileTypeExt on VideoProfileType {
 
 /// SDK version information.
 @JsonSerializable(explicitToJson: true, includeIfNull: false)
-class SDKBuildInfo {
+class SDKBuildInfo implements AgoraSerializable {
   /// @nodoc
   const SDKBuildInfo({this.build, this.version});
 
@@ -6814,12 +6836,13 @@ class SDKBuildInfo {
       _$SDKBuildInfoFromJson(json);
 
   /// @nodoc
+  @override
   Map<String, dynamic> toJson() => _$SDKBuildInfoToJson(this);
 }
 
 /// The VideoDeviceInfo class that contains the ID and device name of the video devices.
 @JsonSerializable(explicitToJson: true, includeIfNull: false)
-class VideoDeviceInfo {
+class VideoDeviceInfo implements AgoraSerializable {
   /// @nodoc
   const VideoDeviceInfo({this.deviceId, this.deviceName});
 
@@ -6836,12 +6859,13 @@ class VideoDeviceInfo {
       _$VideoDeviceInfoFromJson(json);
 
   /// @nodoc
+  @override
   Map<String, dynamic> toJson() => _$VideoDeviceInfoToJson(this);
 }
 
 /// The AudioDeviceInfo class that contains the ID, name and type of the audio devices.
 @JsonSerializable(explicitToJson: true, includeIfNull: false)
-class AudioDeviceInfo {
+class AudioDeviceInfo implements AgoraSerializable {
   /// @nodoc
   const AudioDeviceInfo({this.deviceId, this.deviceTypeName, this.deviceName});
 
@@ -6862,5 +6886,6 @@ class AudioDeviceInfo {
       _$AudioDeviceInfoFromJson(json);
 
   /// @nodoc
+  @override
   Map<String, dynamic> toJson() => _$AudioDeviceInfoToJson(this);
 }
