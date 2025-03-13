@@ -1,9 +1,10 @@
+import '/src/_serializable.dart';
 import '/src/agora_music_content_center.dart';
 import 'package:json_annotation/json_annotation.dart';
 part 'agora_music_content_center_impl_json.g.dart';
 
 @JsonSerializable(explicitToJson: true, includeIfNull: false)
-class MusicCollectionJson {
+class MusicCollectionJson implements AgoraSerializable {
   /// @nodoc
   MusicCollectionJson(
       {required this.count,
@@ -32,5 +33,6 @@ class MusicCollectionJson {
       _$MusicCollectionJsonFromJson(json);
 
   /// @nodoc
+  @override
   Map<String, dynamic> toJson() => _$MusicCollectionJsonToJson(this);
 }

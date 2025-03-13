@@ -1,3 +1,4 @@
+import '/src/_serializable.dart';
 import '/src/binding_forward_export.dart';
 part 'agora_media_player_types.g.dart';
 
@@ -323,7 +324,7 @@ extension PlayerPreloadEventExt on PlayerPreloadEvent {
 
 /// The detailed information of the media stream.
 @JsonSerializable(explicitToJson: true, includeIfNull: false)
-class PlayerStreamInfo {
+class PlayerStreamInfo implements AgoraSerializable {
   /// @nodoc
   const PlayerStreamInfo(
       {this.streamIndex,
@@ -397,12 +398,13 @@ class PlayerStreamInfo {
       _$PlayerStreamInfoFromJson(json);
 
   /// @nodoc
+  @override
   Map<String, dynamic> toJson() => _$PlayerStreamInfoToJson(this);
 }
 
 /// Information about the video bitrate of the media resource being played.
 @JsonSerializable(explicitToJson: true, includeIfNull: false)
-class SrcInfo {
+class SrcInfo implements AgoraSerializable {
   /// @nodoc
   const SrcInfo({this.bitrateInKbps, this.name});
 
@@ -419,6 +421,7 @@ class SrcInfo {
       _$SrcInfoFromJson(json);
 
   /// @nodoc
+  @override
   Map<String, dynamic> toJson() => _$SrcInfoToJson(this);
 }
 
@@ -449,7 +452,7 @@ extension MediaPlayerMetadataTypeExt on MediaPlayerMetadataType {
 
 /// Statistics about the media files being cached.
 @JsonSerializable(explicitToJson: true, includeIfNull: false)
-class CacheStatistics {
+class CacheStatistics implements AgoraSerializable {
   /// @nodoc
   const CacheStatistics({this.fileSize, this.cacheSize, this.downloadSize});
 
@@ -470,12 +473,13 @@ class CacheStatistics {
       _$CacheStatisticsFromJson(json);
 
   /// @nodoc
+  @override
   Map<String, dynamic> toJson() => _$CacheStatisticsToJson(this);
 }
 
 /// The information of the media file being played.
 @JsonSerializable(explicitToJson: true, includeIfNull: false)
-class PlayerPlaybackStats {
+class PlayerPlaybackStats implements AgoraSerializable {
   /// @nodoc
   const PlayerPlaybackStats(
       {this.videoFps,
@@ -504,12 +508,13 @@ class PlayerPlaybackStats {
       _$PlayerPlaybackStatsFromJson(json);
 
   /// @nodoc
+  @override
   Map<String, dynamic> toJson() => _$PlayerPlaybackStatsToJson(this);
 }
 
 /// Information related to the media player.
 @JsonSerializable(explicitToJson: true, includeIfNull: false)
-class PlayerUpdatedInfo {
+class PlayerUpdatedInfo implements AgoraSerializable {
   /// @nodoc
   const PlayerUpdatedInfo(
       {this.internalPlayerUuid,
@@ -553,12 +558,13 @@ class PlayerUpdatedInfo {
       _$PlayerUpdatedInfoFromJson(json);
 
   /// @nodoc
+  @override
   Map<String, dynamic> toJson() => _$PlayerUpdatedInfoToJson(this);
 }
 
 /// Information related to the media file to be played and the playback scenario configurations.
 @JsonSerializable(explicitToJson: true, includeIfNull: false)
-class MediaSource {
+class MediaSource implements AgoraSerializable {
   /// @nodoc
   const MediaSource(
       {this.url,
@@ -610,5 +616,6 @@ class MediaSource {
       _$MediaSourceFromJson(json);
 
   /// @nodoc
+  @override
   Map<String, dynamic> toJson() => _$MediaSourceToJson(this);
 }

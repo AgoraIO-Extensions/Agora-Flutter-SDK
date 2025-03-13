@@ -148,7 +148,7 @@ export function renderJsonSerializable(
 
   let output = `
   @JsonSerializable(explicitToJson: true, includeIfNull: false)
-  class ${jsonClassName} {
+  class ${jsonClassName} implements AgoraSerializable {
     const ${jsonClassName}(
       ${initializeBlock}
     );
@@ -192,6 +192,7 @@ export function renderJsonSerializable(
 
     factory ${jsonClassName}.fromJson(Map<String, dynamic> json) => _$${jsonClassName}FromJson(json);
 
+    @override
     Map<String, dynamic> toJson() => _$${jsonClassName}ToJson(this);
   }
   `;

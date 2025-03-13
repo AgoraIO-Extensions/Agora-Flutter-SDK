@@ -2,11 +2,12 @@
 
 // ignore_for_file: public_member_api_docs, unused_local_variable, unused_import
 
+import '/src/_serializable.dart';
 import '/src/binding_forward_export.dart';
 part 'call_api_impl_params_json.g.dart';
 
 @JsonSerializable(explicitToJson: true, includeIfNull: false)
-class MediaPlayerGetDurationJson {
+class MediaPlayerGetDurationJson implements AgoraSerializable {
   const MediaPlayerGetDurationJson(this.duration);
 
   @JsonKey(name: 'duration')
@@ -15,11 +16,12 @@ class MediaPlayerGetDurationJson {
   factory MediaPlayerGetDurationJson.fromJson(Map<String, dynamic> json) =>
       _$MediaPlayerGetDurationJsonFromJson(json);
 
+  @override
   Map<String, dynamic> toJson() => _$MediaPlayerGetDurationJsonToJson(this);
 }
 
 @JsonSerializable(explicitToJson: true, includeIfNull: false)
-class MediaPlayerGetPlayPositionJson {
+class MediaPlayerGetPlayPositionJson implements AgoraSerializable {
   const MediaPlayerGetPlayPositionJson(this.pos);
 
   @JsonKey(name: 'pos')
@@ -28,11 +30,12 @@ class MediaPlayerGetPlayPositionJson {
   factory MediaPlayerGetPlayPositionJson.fromJson(Map<String, dynamic> json) =>
       _$MediaPlayerGetPlayPositionJsonFromJson(json);
 
+  @override
   Map<String, dynamic> toJson() => _$MediaPlayerGetPlayPositionJsonToJson(this);
 }
 
 @JsonSerializable(explicitToJson: true, includeIfNull: false)
-class MediaPlayerGetStreamCountJson {
+class MediaPlayerGetStreamCountJson implements AgoraSerializable {
   const MediaPlayerGetStreamCountJson(this.count);
 
   @JsonKey(name: 'count')
@@ -41,11 +44,12 @@ class MediaPlayerGetStreamCountJson {
   factory MediaPlayerGetStreamCountJson.fromJson(Map<String, dynamic> json) =>
       _$MediaPlayerGetStreamCountJsonFromJson(json);
 
+  @override
   Map<String, dynamic> toJson() => _$MediaPlayerGetStreamCountJsonToJson(this);
 }
 
 @JsonSerializable(explicitToJson: true, includeIfNull: false)
-class MediaPlayerGetStreamInfoJson {
+class MediaPlayerGetStreamInfoJson implements AgoraSerializable {
   const MediaPlayerGetStreamInfoJson(this.info);
 
   @JsonKey(name: 'info')
@@ -54,11 +58,12 @@ class MediaPlayerGetStreamInfoJson {
   factory MediaPlayerGetStreamInfoJson.fromJson(Map<String, dynamic> json) =>
       _$MediaPlayerGetStreamInfoJsonFromJson(json);
 
+  @override
   Map<String, dynamic> toJson() => _$MediaPlayerGetStreamInfoJsonToJson(this);
 }
 
 @JsonSerializable(explicitToJson: true, includeIfNull: false)
-class MediaPlayerGetMuteJson {
+class MediaPlayerGetMuteJson implements AgoraSerializable {
   const MediaPlayerGetMuteJson(this.muted);
 
   @JsonKey(name: 'muted')
@@ -67,11 +72,12 @@ class MediaPlayerGetMuteJson {
   factory MediaPlayerGetMuteJson.fromJson(Map<String, dynamic> json) =>
       _$MediaPlayerGetMuteJsonFromJson(json);
 
+  @override
   Map<String, dynamic> toJson() => _$MediaPlayerGetMuteJsonToJson(this);
 }
 
 @JsonSerializable(explicitToJson: true, includeIfNull: false)
-class MediaPlayerGetPlayoutVolumeJson {
+class MediaPlayerGetPlayoutVolumeJson implements AgoraSerializable {
   const MediaPlayerGetPlayoutVolumeJson(this.volume);
 
   @JsonKey(name: 'volume')
@@ -80,12 +86,13 @@ class MediaPlayerGetPlayoutVolumeJson {
   factory MediaPlayerGetPlayoutVolumeJson.fromJson(Map<String, dynamic> json) =>
       _$MediaPlayerGetPlayoutVolumeJsonFromJson(json);
 
+  @override
   Map<String, dynamic> toJson() =>
       _$MediaPlayerGetPlayoutVolumeJsonToJson(this);
 }
 
 @JsonSerializable(explicitToJson: true, includeIfNull: false)
-class MediaPlayerGetPublishSignalVolumeJson {
+class MediaPlayerGetPublishSignalVolumeJson implements AgoraSerializable {
   const MediaPlayerGetPublishSignalVolumeJson(this.volume);
 
   @JsonKey(name: 'volume')
@@ -95,12 +102,13 @@ class MediaPlayerGetPublishSignalVolumeJson {
           Map<String, dynamic> json) =>
       _$MediaPlayerGetPublishSignalVolumeJsonFromJson(json);
 
+  @override
   Map<String, dynamic> toJson() =>
       _$MediaPlayerGetPublishSignalVolumeJsonToJson(this);
 }
 
 @JsonSerializable(explicitToJson: true, includeIfNull: false)
-class MediaPlayerCacheManagerGetCacheDirJson {
+class MediaPlayerCacheManagerGetCacheDirJson implements AgoraSerializable {
   const MediaPlayerCacheManagerGetCacheDirJson(this.path);
 
   @JsonKey(name: 'path')
@@ -110,12 +118,13 @@ class MediaPlayerCacheManagerGetCacheDirJson {
           Map<String, dynamic> json) =>
       _$MediaPlayerCacheManagerGetCacheDirJsonFromJson(json);
 
+  @override
   Map<String, dynamic> toJson() =>
       _$MediaPlayerCacheManagerGetCacheDirJsonToJson(this);
 }
 
 @JsonSerializable(explicitToJson: true, includeIfNull: false)
-class MusicContentCenterGetMusicChartsJson {
+class MusicContentCenterGetMusicChartsJson implements AgoraSerializable {
   const MusicContentCenterGetMusicChartsJson(this.requestId);
 
   @JsonKey(name: 'requestId')
@@ -125,12 +134,14 @@ class MusicContentCenterGetMusicChartsJson {
           Map<String, dynamic> json) =>
       _$MusicContentCenterGetMusicChartsJsonFromJson(json);
 
+  @override
   Map<String, dynamic> toJson() =>
       _$MusicContentCenterGetMusicChartsJsonToJson(this);
 }
 
 @JsonSerializable(explicitToJson: true, includeIfNull: false)
-class MusicContentCenterGetMusicCollectionByMusicChartIdJson {
+class MusicContentCenterGetMusicCollectionByMusicChartIdJson
+    implements AgoraSerializable {
   const MusicContentCenterGetMusicCollectionByMusicChartIdJson(this.requestId);
 
   @JsonKey(name: 'requestId')
@@ -140,12 +151,13 @@ class MusicContentCenterGetMusicCollectionByMusicChartIdJson {
           Map<String, dynamic> json) =>
       _$MusicContentCenterGetMusicCollectionByMusicChartIdJsonFromJson(json);
 
+  @override
   Map<String, dynamic> toJson() =>
       _$MusicContentCenterGetMusicCollectionByMusicChartIdJsonToJson(this);
 }
 
 @JsonSerializable(explicitToJson: true, includeIfNull: false)
-class MusicContentCenterSearchMusicJson {
+class MusicContentCenterSearchMusicJson implements AgoraSerializable {
   const MusicContentCenterSearchMusicJson(this.requestId);
 
   @JsonKey(name: 'requestId')
@@ -155,12 +167,13 @@ class MusicContentCenterSearchMusicJson {
           Map<String, dynamic> json) =>
       _$MusicContentCenterSearchMusicJsonFromJson(json);
 
+  @override
   Map<String, dynamic> toJson() =>
       _$MusicContentCenterSearchMusicJsonToJson(this);
 }
 
 @JsonSerializable(explicitToJson: true, includeIfNull: false)
-class MusicContentCenterPreloadJson {
+class MusicContentCenterPreloadJson implements AgoraSerializable {
   const MusicContentCenterPreloadJson(this.requestId);
 
   @JsonKey(name: 'requestId')
@@ -169,11 +182,12 @@ class MusicContentCenterPreloadJson {
   factory MusicContentCenterPreloadJson.fromJson(Map<String, dynamic> json) =>
       _$MusicContentCenterPreloadJsonFromJson(json);
 
+  @override
   Map<String, dynamic> toJson() => _$MusicContentCenterPreloadJsonToJson(this);
 }
 
 @JsonSerializable(explicitToJson: true, includeIfNull: false)
-class MusicContentCenterGetCachesJson {
+class MusicContentCenterGetCachesJson implements AgoraSerializable {
   const MusicContentCenterGetCachesJson(this.cacheInfo);
 
   @JsonKey(name: 'cacheInfo')
@@ -182,12 +196,13 @@ class MusicContentCenterGetCachesJson {
   factory MusicContentCenterGetCachesJson.fromJson(Map<String, dynamic> json) =>
       _$MusicContentCenterGetCachesJsonFromJson(json);
 
+  @override
   Map<String, dynamic> toJson() =>
       _$MusicContentCenterGetCachesJsonToJson(this);
 }
 
 @JsonSerializable(explicitToJson: true, includeIfNull: false)
-class MusicContentCenterGetLyricJson {
+class MusicContentCenterGetLyricJson implements AgoraSerializable {
   const MusicContentCenterGetLyricJson(this.requestId);
 
   @JsonKey(name: 'requestId')
@@ -196,11 +211,12 @@ class MusicContentCenterGetLyricJson {
   factory MusicContentCenterGetLyricJson.fromJson(Map<String, dynamic> json) =>
       _$MusicContentCenterGetLyricJsonFromJson(json);
 
+  @override
   Map<String, dynamic> toJson() => _$MusicContentCenterGetLyricJsonToJson(this);
 }
 
 @JsonSerializable(explicitToJson: true, includeIfNull: false)
-class MusicContentCenterGetSongSimpleInfoJson {
+class MusicContentCenterGetSongSimpleInfoJson implements AgoraSerializable {
   const MusicContentCenterGetSongSimpleInfoJson(this.requestId);
 
   @JsonKey(name: 'requestId')
@@ -210,12 +226,13 @@ class MusicContentCenterGetSongSimpleInfoJson {
           Map<String, dynamic> json) =>
       _$MusicContentCenterGetSongSimpleInfoJsonFromJson(json);
 
+  @override
   Map<String, dynamic> toJson() =>
       _$MusicContentCenterGetSongSimpleInfoJsonToJson(this);
 }
 
 @JsonSerializable(explicitToJson: true, includeIfNull: false)
-class MusicContentCenterGetInternalSongCodeJson {
+class MusicContentCenterGetInternalSongCodeJson implements AgoraSerializable {
   const MusicContentCenterGetInternalSongCodeJson(this.internalSongCode);
 
   @JsonKey(name: 'internalSongCode')
@@ -225,12 +242,13 @@ class MusicContentCenterGetInternalSongCodeJson {
           Map<String, dynamic> json) =>
       _$MusicContentCenterGetInternalSongCodeJsonFromJson(json);
 
+  @override
   Map<String, dynamic> toJson() =>
       _$MusicContentCenterGetInternalSongCodeJsonToJson(this);
 }
 
 @JsonSerializable(explicitToJson: true, includeIfNull: false)
-class VideoDeviceManagerGetDeviceJson {
+class VideoDeviceManagerGetDeviceJson implements AgoraSerializable {
   const VideoDeviceManagerGetDeviceJson(this.deviceIdUTF8);
 
   @JsonKey(name: 'deviceIdUTF8')
@@ -239,12 +257,13 @@ class VideoDeviceManagerGetDeviceJson {
   factory VideoDeviceManagerGetDeviceJson.fromJson(Map<String, dynamic> json) =>
       _$VideoDeviceManagerGetDeviceJsonFromJson(json);
 
+  @override
   Map<String, dynamic> toJson() =>
       _$VideoDeviceManagerGetDeviceJsonToJson(this);
 }
 
 @JsonSerializable(explicitToJson: true, includeIfNull: false)
-class VideoDeviceManagerGetCapabilityJson {
+class VideoDeviceManagerGetCapabilityJson implements AgoraSerializable {
   const VideoDeviceManagerGetCapabilityJson(this.capability);
 
   @JsonKey(name: 'capability')
@@ -254,12 +273,13 @@ class VideoDeviceManagerGetCapabilityJson {
           Map<String, dynamic> json) =>
       _$VideoDeviceManagerGetCapabilityJsonFromJson(json);
 
+  @override
   Map<String, dynamic> toJson() =>
       _$VideoDeviceManagerGetCapabilityJsonToJson(this);
 }
 
 @JsonSerializable(explicitToJson: true, includeIfNull: false)
-class RtcEngineQueryCodecCapabilityJson {
+class RtcEngineQueryCodecCapabilityJson implements AgoraSerializable {
   const RtcEngineQueryCodecCapabilityJson(this.codecInfo);
 
   @JsonKey(name: 'codecInfo')
@@ -269,12 +289,13 @@ class RtcEngineQueryCodecCapabilityJson {
           Map<String, dynamic> json) =>
       _$RtcEngineQueryCodecCapabilityJsonFromJson(json);
 
+  @override
   Map<String, dynamic> toJson() =>
       _$RtcEngineQueryCodecCapabilityJsonToJson(this);
 }
 
 @JsonSerializable(explicitToJson: true, includeIfNull: false)
-class RtcEngineUploadLogFileJson {
+class RtcEngineUploadLogFileJson implements AgoraSerializable {
   const RtcEngineUploadLogFileJson(this.requestId);
 
   @JsonKey(name: 'requestId')
@@ -283,11 +304,12 @@ class RtcEngineUploadLogFileJson {
   factory RtcEngineUploadLogFileJson.fromJson(Map<String, dynamic> json) =>
       _$RtcEngineUploadLogFileJsonFromJson(json);
 
+  @override
   Map<String, dynamic> toJson() => _$RtcEngineUploadLogFileJsonToJson(this);
 }
 
 @JsonSerializable(explicitToJson: true, includeIfNull: false)
-class RtcEngineGetExtensionPropertyJson {
+class RtcEngineGetExtensionPropertyJson implements AgoraSerializable {
   const RtcEngineGetExtensionPropertyJson(this.value);
 
   @JsonKey(name: 'value')
@@ -297,12 +319,13 @@ class RtcEngineGetExtensionPropertyJson {
           Map<String, dynamic> json) =>
       _$RtcEngineGetExtensionPropertyJsonFromJson(json);
 
+  @override
   Map<String, dynamic> toJson() =>
       _$RtcEngineGetExtensionPropertyJsonToJson(this);
 }
 
 @JsonSerializable(explicitToJson: true, includeIfNull: false)
-class RtcEngineGetAudioDeviceInfoJson {
+class RtcEngineGetAudioDeviceInfoJson implements AgoraSerializable {
   const RtcEngineGetAudioDeviceInfoJson(this.deviceInfo);
 
   @JsonKey(name: 'deviceInfo')
@@ -311,12 +334,14 @@ class RtcEngineGetAudioDeviceInfoJson {
   factory RtcEngineGetAudioDeviceInfoJson.fromJson(Map<String, dynamic> json) =>
       _$RtcEngineGetAudioDeviceInfoJsonFromJson(json);
 
+  @override
   Map<String, dynamic> toJson() =>
       _$RtcEngineGetAudioDeviceInfoJsonToJson(this);
 }
 
 @JsonSerializable(explicitToJson: true, includeIfNull: false)
-class RtcEngineQueryCameraFocalLengthCapabilityJson {
+class RtcEngineQueryCameraFocalLengthCapabilityJson
+    implements AgoraSerializable {
   const RtcEngineQueryCameraFocalLengthCapabilityJson(this.focalLengthInfos);
 
   @JsonKey(name: 'focalLengthInfos')
@@ -326,12 +351,13 @@ class RtcEngineQueryCameraFocalLengthCapabilityJson {
           Map<String, dynamic> json) =>
       _$RtcEngineQueryCameraFocalLengthCapabilityJsonFromJson(json);
 
+  @override
   Map<String, dynamic> toJson() =>
       _$RtcEngineQueryCameraFocalLengthCapabilityJsonToJson(this);
 }
 
 @JsonSerializable(explicitToJson: true, includeIfNull: false)
-class RtcEngineGetCallIdJson {
+class RtcEngineGetCallIdJson implements AgoraSerializable {
   const RtcEngineGetCallIdJson(this.callId);
 
   @JsonKey(name: 'callId')
@@ -340,11 +366,12 @@ class RtcEngineGetCallIdJson {
   factory RtcEngineGetCallIdJson.fromJson(Map<String, dynamic> json) =>
       _$RtcEngineGetCallIdJsonFromJson(json);
 
+  @override
   Map<String, dynamic> toJson() => _$RtcEngineGetCallIdJsonToJson(this);
 }
 
 @JsonSerializable(explicitToJson: true, includeIfNull: false)
-class RtcEngineCreateDataStreamJson {
+class RtcEngineCreateDataStreamJson implements AgoraSerializable {
   const RtcEngineCreateDataStreamJson(this.streamId);
 
   @JsonKey(name: 'streamId')
@@ -353,11 +380,12 @@ class RtcEngineCreateDataStreamJson {
   factory RtcEngineCreateDataStreamJson.fromJson(Map<String, dynamic> json) =>
       _$RtcEngineCreateDataStreamJsonFromJson(json);
 
+  @override
   Map<String, dynamic> toJson() => _$RtcEngineCreateDataStreamJsonToJson(this);
 }
 
 @JsonSerializable(explicitToJson: true, includeIfNull: false)
-class RtcEngineGetUserInfoByUserAccountJson {
+class RtcEngineGetUserInfoByUserAccountJson implements AgoraSerializable {
   const RtcEngineGetUserInfoByUserAccountJson(this.userInfo);
 
   @JsonKey(name: 'userInfo')
@@ -367,12 +395,13 @@ class RtcEngineGetUserInfoByUserAccountJson {
           Map<String, dynamic> json) =>
       _$RtcEngineGetUserInfoByUserAccountJsonFromJson(json);
 
+  @override
   Map<String, dynamic> toJson() =>
       _$RtcEngineGetUserInfoByUserAccountJsonToJson(this);
 }
 
 @JsonSerializable(explicitToJson: true, includeIfNull: false)
-class RtcEngineGetUserInfoByUidJson {
+class RtcEngineGetUserInfoByUidJson implements AgoraSerializable {
   const RtcEngineGetUserInfoByUidJson(this.userInfo);
 
   @JsonKey(name: 'userInfo')
@@ -381,11 +410,12 @@ class RtcEngineGetUserInfoByUidJson {
   factory RtcEngineGetUserInfoByUidJson.fromJson(Map<String, dynamic> json) =>
       _$RtcEngineGetUserInfoByUidJsonFromJson(json);
 
+  @override
   Map<String, dynamic> toJson() => _$RtcEngineGetUserInfoByUidJsonToJson(this);
 }
 
 @JsonSerializable(explicitToJson: true, includeIfNull: false)
-class RtcEngineExCreateDataStreamExJson {
+class RtcEngineExCreateDataStreamExJson implements AgoraSerializable {
   const RtcEngineExCreateDataStreamExJson(this.streamId);
 
   @JsonKey(name: 'streamId')
@@ -395,12 +425,13 @@ class RtcEngineExCreateDataStreamExJson {
           Map<String, dynamic> json) =>
       _$RtcEngineExCreateDataStreamExJsonFromJson(json);
 
+  @override
   Map<String, dynamic> toJson() =>
       _$RtcEngineExCreateDataStreamExJsonToJson(this);
 }
 
 @JsonSerializable(explicitToJson: true, includeIfNull: false)
-class RtcEngineExGetUserInfoByUserAccountExJson {
+class RtcEngineExGetUserInfoByUserAccountExJson implements AgoraSerializable {
   const RtcEngineExGetUserInfoByUserAccountExJson(this.userInfo);
 
   @JsonKey(name: 'userInfo')
@@ -410,12 +441,13 @@ class RtcEngineExGetUserInfoByUserAccountExJson {
           Map<String, dynamic> json) =>
       _$RtcEngineExGetUserInfoByUserAccountExJsonFromJson(json);
 
+  @override
   Map<String, dynamic> toJson() =>
       _$RtcEngineExGetUserInfoByUserAccountExJsonToJson(this);
 }
 
 @JsonSerializable(explicitToJson: true, includeIfNull: false)
-class RtcEngineExGetUserInfoByUidExJson {
+class RtcEngineExGetUserInfoByUidExJson implements AgoraSerializable {
   const RtcEngineExGetUserInfoByUidExJson(this.userInfo);
 
   @JsonKey(name: 'userInfo')
@@ -425,12 +457,13 @@ class RtcEngineExGetUserInfoByUidExJson {
           Map<String, dynamic> json) =>
       _$RtcEngineExGetUserInfoByUidExJsonFromJson(json);
 
+  @override
   Map<String, dynamic> toJson() =>
       _$RtcEngineExGetUserInfoByUidExJsonToJson(this);
 }
 
 @JsonSerializable(explicitToJson: true, includeIfNull: false)
-class RtcEngineExGetCallIdExJson {
+class RtcEngineExGetCallIdExJson implements AgoraSerializable {
   const RtcEngineExGetCallIdExJson(this.callId);
 
   @JsonKey(name: 'callId')
@@ -439,11 +472,12 @@ class RtcEngineExGetCallIdExJson {
   factory RtcEngineExGetCallIdExJson.fromJson(Map<String, dynamic> json) =>
       _$RtcEngineExGetCallIdExJsonFromJson(json);
 
+  @override
   Map<String, dynamic> toJson() => _$RtcEngineExGetCallIdExJsonToJson(this);
 }
 
 @JsonSerializable(explicitToJson: true, includeIfNull: false)
-class AudioDeviceManagerGetPlaybackDeviceJson {
+class AudioDeviceManagerGetPlaybackDeviceJson implements AgoraSerializable {
   const AudioDeviceManagerGetPlaybackDeviceJson(this.deviceId);
 
   @JsonKey(name: 'deviceId')
@@ -453,12 +487,14 @@ class AudioDeviceManagerGetPlaybackDeviceJson {
           Map<String, dynamic> json) =>
       _$AudioDeviceManagerGetPlaybackDeviceJsonFromJson(json);
 
+  @override
   Map<String, dynamic> toJson() =>
       _$AudioDeviceManagerGetPlaybackDeviceJsonToJson(this);
 }
 
 @JsonSerializable(explicitToJson: true, includeIfNull: false)
-class AudioDeviceManagerGetPlaybackDeviceVolumeJson {
+class AudioDeviceManagerGetPlaybackDeviceVolumeJson
+    implements AgoraSerializable {
   const AudioDeviceManagerGetPlaybackDeviceVolumeJson(this.volume);
 
   @JsonKey(name: 'volume')
@@ -468,12 +504,13 @@ class AudioDeviceManagerGetPlaybackDeviceVolumeJson {
           Map<String, dynamic> json) =>
       _$AudioDeviceManagerGetPlaybackDeviceVolumeJsonFromJson(json);
 
+  @override
   Map<String, dynamic> toJson() =>
       _$AudioDeviceManagerGetPlaybackDeviceVolumeJsonToJson(this);
 }
 
 @JsonSerializable(explicitToJson: true, includeIfNull: false)
-class AudioDeviceManagerGetRecordingDeviceJson {
+class AudioDeviceManagerGetRecordingDeviceJson implements AgoraSerializable {
   const AudioDeviceManagerGetRecordingDeviceJson(this.deviceId);
 
   @JsonKey(name: 'deviceId')
@@ -483,12 +520,14 @@ class AudioDeviceManagerGetRecordingDeviceJson {
           Map<String, dynamic> json) =>
       _$AudioDeviceManagerGetRecordingDeviceJsonFromJson(json);
 
+  @override
   Map<String, dynamic> toJson() =>
       _$AudioDeviceManagerGetRecordingDeviceJsonToJson(this);
 }
 
 @JsonSerializable(explicitToJson: true, includeIfNull: false)
-class AudioDeviceManagerGetRecordingDeviceVolumeJson {
+class AudioDeviceManagerGetRecordingDeviceVolumeJson
+    implements AgoraSerializable {
   const AudioDeviceManagerGetRecordingDeviceVolumeJson(this.volume);
 
   @JsonKey(name: 'volume')
@@ -498,12 +537,13 @@ class AudioDeviceManagerGetRecordingDeviceVolumeJson {
           Map<String, dynamic> json) =>
       _$AudioDeviceManagerGetRecordingDeviceVolumeJsonFromJson(json);
 
+  @override
   Map<String, dynamic> toJson() =>
       _$AudioDeviceManagerGetRecordingDeviceVolumeJsonToJson(this);
 }
 
 @JsonSerializable(explicitToJson: true, includeIfNull: false)
-class AudioDeviceManagerGetLoopbackDeviceJson {
+class AudioDeviceManagerGetLoopbackDeviceJson implements AgoraSerializable {
   const AudioDeviceManagerGetLoopbackDeviceJson(this.deviceId);
 
   @JsonKey(name: 'deviceId')
@@ -513,12 +553,13 @@ class AudioDeviceManagerGetLoopbackDeviceJson {
           Map<String, dynamic> json) =>
       _$AudioDeviceManagerGetLoopbackDeviceJsonFromJson(json);
 
+  @override
   Map<String, dynamic> toJson() =>
       _$AudioDeviceManagerGetLoopbackDeviceJsonToJson(this);
 }
 
 @JsonSerializable(explicitToJson: true, includeIfNull: false)
-class AudioDeviceManagerGetPlaybackDeviceMuteJson {
+class AudioDeviceManagerGetPlaybackDeviceMuteJson implements AgoraSerializable {
   const AudioDeviceManagerGetPlaybackDeviceMuteJson(this.mute);
 
   @JsonKey(name: 'mute')
@@ -528,12 +569,14 @@ class AudioDeviceManagerGetPlaybackDeviceMuteJson {
           Map<String, dynamic> json) =>
       _$AudioDeviceManagerGetPlaybackDeviceMuteJsonFromJson(json);
 
+  @override
   Map<String, dynamic> toJson() =>
       _$AudioDeviceManagerGetPlaybackDeviceMuteJsonToJson(this);
 }
 
 @JsonSerializable(explicitToJson: true, includeIfNull: false)
-class AudioDeviceManagerGetRecordingDeviceMuteJson {
+class AudioDeviceManagerGetRecordingDeviceMuteJson
+    implements AgoraSerializable {
   const AudioDeviceManagerGetRecordingDeviceMuteJson(this.mute);
 
   @JsonKey(name: 'mute')
@@ -543,6 +586,7 @@ class AudioDeviceManagerGetRecordingDeviceMuteJson {
           Map<String, dynamic> json) =>
       _$AudioDeviceManagerGetRecordingDeviceMuteJsonFromJson(json);
 
+  @override
   Map<String, dynamic> toJson() =>
       _$AudioDeviceManagerGetRecordingDeviceMuteJsonToJson(this);
 }
