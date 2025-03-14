@@ -1,6 +1,6 @@
 # This action will create a change logs via release-it and open a pull request, 
 # after the PR is merged, the action release.yml will be trigger.
-name: Prepare release
+name: 'run: prepare release official'
 
 on:
   workflow_dispatch:

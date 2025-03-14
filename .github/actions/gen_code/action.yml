@@ -32,6 +32,7 @@ runs:
       with:
         channel: ${{ inputs.flutter_channel }}
         flutter-version: ${{ inputs.flutter_version }}
+        cache: true
 
     - name: Gen
       uses: AgoraIO-Extensions/actions/.github/actions/generate@main

@@ -1,4 +1,4 @@
-name: Run update dependencies
+name: 'run: update dependencies'
 
 on:
   workflow_dispatch:

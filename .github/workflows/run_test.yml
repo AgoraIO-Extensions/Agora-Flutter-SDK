@@ -1,4 +1,4 @@
-name: Run test
+name: 'run: test'
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
@@ -20,6 +20,7 @@ jobs:
       - uses: subosito/flutter-action@v2
         with:
           channel: 'stable'
+          cache: true
       - name: Check Dart Format
         run: bash ci/dart_pub_publish_check.sh
       - uses: axel-op/dart-package-analyzer@v3
@@ -46,6 +47,7 @@ jobs:
       - uses: subosito/flutter-action@v2
         with:
           channel: 'stable'
+          cache: true
       - run: flutter test
 
   attach_docs:
@@ -56,6 +58,7 @@ jobs:
       - uses: subosito/flutter-action@v2
         with:
           channel: 'stable'
+          cache: true
       - name: Build DartDoc 📖
         run: |
           dart pub get
@@ -101,6 +104,7 @@ jobs:
       - uses: subosito/flutter-action@v2
         with:
           flutter-version: ${{ matrix.version }}
+          cache: true
       - name: Enable KVM
         run: |
           echo 'KERNEL=="kvm", GROUP="kvm", MODE="0666", OPTIONS+="static_node=kvm"' | sudo tee /etc/udev/rules.d/99-kvm4all.rules
@@ -278,6 +282,7 @@ jobs:
       - uses: subosito/flutter-action@v2
         with:
           flutter-version: ${{ matrix.version }}
+          cache: true
       - run: flutter pub get
       - name: Run flutter build apk
         run: flutter build apk
@@ -428,7 +433,7 @@ jobs:
       - uses: subosito/flutter-action@v2
         with:
           flutter-version: ${{ matrix.version }}
-
+          cache: true
       - uses: futureware-tech/simulator-action@v3
         with:
           model: 'iPhone 15'

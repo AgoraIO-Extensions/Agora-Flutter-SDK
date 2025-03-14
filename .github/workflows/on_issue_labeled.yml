@@ -1,0 +1,41 @@
+name: 'on: issue labeled'
+
+on:
+  issues:
+    types: [labeled]
+
+jobs:
+
+  # Triage to Agora Support
+  # 
+  # This job will be triggered when the issue is labeled with `triage agora support` label.
+  # It will add a comment to the issue to ask the user to provide more details about the issue.
+  triage-to-agora-support:
+    if: ${{ github.event.type == 'labeled' && github.event.label.name == 'triage agora support' }}
+    runs-on: ubuntu-latest
+    permissions:
+      issues: write
+    steps:
+      - name: Add comment
+        uses: peter-evans/create-or-update-comment@v3
+        with:
+          issue-number: ${{ github.event.issue.number }}
+          body: |
+            Please follow the [issue template](https://github.com/AgoraIO-Extensions/Agora-Flutter-SDK/blob/main/.github/ISSUE_TEMPLATE/bug_report.yml) to fill in more details about this issue so that we can investigate this issue more easily, thanks!
+
+  # Ask the user for more detail of the issue
+  # 
+  # This job will be triggered when the issue is labeled with `more detail wanted` label.
+  # It will add a comment to the issue to ask the user to provide more details about the issue.
+  ask-for-more-detail:
+    if: ${{ github.event.type == 'labeled' && github.event.label.name == 'more detail wanted' }}
+    runs-on: ubuntu-latest
+    permissions:
+      issues: write
+    steps:
+      - name: Add comment
+        uses: peter-evans/create-or-update-comment@v3
+        with:
+          issue-number: ${{ github.event.issue.number }}
+          body: |
+            Please follow the [issue template](https://github.com/AgoraIO-Extensions/Agora-Flutter-SDK/blob/main/.github/ISSUE_TEMPLATE/bug_report.yml) to fill in more details about this issue so that we can investigate this issue more easily, thanks!

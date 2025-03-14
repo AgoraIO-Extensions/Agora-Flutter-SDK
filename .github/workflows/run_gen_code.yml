@@ -1,4 +1,4 @@
-name: Run gen code
+name: 'run: gen code'
 
 on:
   workflow_dispatch:
