@@ -1,9 +1,8 @@
 import 'dart:convert';
 
-import 'package:agora_rtc_engine/src/agora_h265_transcoder.dart';
-import 'package:agora_rtc_engine/src/binding/agora_h265_transcoder_impl.dart'
-    as impl_binding;
-import 'package:agora_rtc_engine/src/binding/agora_h265_transcoder_event_impl.dart';
+import '/src/agora_h265_transcoder.dart';
+import '/src/binding/agora_h265_transcoder_impl.dart' as impl_binding;
+import '/src/binding/agora_h265_transcoder_event_impl.dart';
 import 'package:iris_method_channel/iris_method_channel.dart';
 
 class H265TranscoderImplOverride extends impl_binding.H265TranscoderImpl {

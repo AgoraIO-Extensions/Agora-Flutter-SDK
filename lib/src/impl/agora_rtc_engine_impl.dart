@@ -2,44 +2,38 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:typed_data';
 
-import 'package:agora_rtc_engine/src/agora_base.dart';
-import 'package:agora_rtc_engine/src/agora_h265_transcoder.dart';
-import 'package:agora_rtc_engine/src/agora_media_base.dart';
-import 'package:agora_rtc_engine/src/agora_media_engine.dart';
-import 'package:agora_rtc_engine/src/agora_media_player.dart';
-import 'package:agora_rtc_engine/src/agora_media_recorder.dart';
-import 'package:agora_rtc_engine/src/agora_music_content_center.dart';
-import 'package:agora_rtc_engine/src/agora_rtc_engine.dart';
-import 'package:agora_rtc_engine/src/agora_rtc_engine_ex.dart';
-import 'package:agora_rtc_engine/src/agora_rtc_engine_ext.dart';
-import 'package:agora_rtc_engine/src/agora_spatial_audio.dart';
-import 'package:agora_rtc_engine/src/audio_device_manager.dart';
-import 'package:agora_rtc_engine/src/binding/agora_base_event_impl.dart';
-import 'package:agora_rtc_engine/src/binding/agora_media_base_event_impl.dart';
-import 'package:agora_rtc_engine/src/binding/agora_media_engine_impl.dart';
-import 'package:agora_rtc_engine/src/binding/agora_rtc_engine_event_impl.dart';
-import 'package:agora_rtc_engine/src/binding/agora_rtc_engine_ex_impl.dart'
-    as rtc_engine_ex_binding;
-import 'package:agora_rtc_engine/src/binding/agora_rtc_engine_impl.dart'
-    as rtc_engine_binding;
-import 'package:agora_rtc_engine/src/binding/agora_spatial_audio_impl.dart';
-import 'package:agora_rtc_engine/src/binding/call_api_event_handler_buffer_ext.dart';
-import 'package:agora_rtc_engine/src/binding/event_handler_param_json.dart';
-import 'package:agora_rtc_engine/src/impl/agora_h265_transcoder_impl_override.dart';
-import 'package:agora_rtc_engine/src/impl/agora_media_engine_impl_override.dart'
-    as media_engine_impl;
-import 'package:agora_rtc_engine/src/impl/agora_media_recorder_impl_override.dart'
+import '/src/agora_base.dart';
+import '/src/agora_h265_transcoder.dart';
+import '/src/agora_media_base.dart';
+import '/src/agora_media_engine.dart';
+import '/src/agora_media_player.dart';
+import '/src/agora_media_recorder.dart';
+import '/src/agora_music_content_center.dart';
+import '/src/agora_rtc_engine.dart';
+import '/src/agora_rtc_engine_ex.dart';
+import '/src/agora_rtc_engine_ext.dart';
+import '/src/agora_spatial_audio.dart';
+import '/src/audio_device_manager.dart';
+import '/src/binding/agora_base_event_impl.dart';
+import '/src/binding/agora_media_base_event_impl.dart';
+import '/src/binding/agora_media_engine_impl.dart';
+import '/src/binding/agora_rtc_engine_event_impl.dart';
+import '/src/binding/agora_rtc_engine_ex_impl.dart' as rtc_engine_ex_binding;
+import '/src/binding/agora_rtc_engine_impl.dart' as rtc_engine_binding;
+import '/src/binding/agora_spatial_audio_impl.dart';
+import '/src/binding/call_api_event_handler_buffer_ext.dart';
+import '/src/binding/event_handler_param_json.dart';
+import '/src/impl/agora_h265_transcoder_impl_override.dart';
+import '/src/impl/agora_media_engine_impl_override.dart' as media_engine_impl;
+import '/src/impl/agora_media_recorder_impl_override.dart'
     as media_recorder_impl;
-import 'package:agora_rtc_engine/src/impl/agora_music_content_center_impl_override.dart'
-    as mcci;
-import 'package:agora_rtc_engine/src/impl/agora_spatial_audio_impl_override.dart'
+import '/src/impl/agora_music_content_center_impl_override.dart' as mcci;
+import '/src/impl/agora_spatial_audio_impl_override.dart'
     as agora_spatial_audio_impl;
-import 'package:agora_rtc_engine/src/impl/audio_device_manager_impl.dart'
-    as audio_device_manager_impl;
-import 'package:agora_rtc_engine/src/impl/media_player_impl.dart'
-    as media_player_impl;
+import '/src/impl/audio_device_manager_impl.dart' as audio_device_manager_impl;
+import '/src/impl/media_player_impl.dart' as media_player_impl;
 
-import 'package:agora_rtc_engine/src/impl/platform/platform_bindings_provider.dart';
+import '/src/impl/platform/platform_bindings_provider.dart';
 import 'package:async/async.dart' show AsyncMemoizer;
 import 'package:flutter/foundation.dart'
     show

@@ -1,11 +1,11 @@
-import 'package:agora_rtc_engine/src/agora_base.dart';
-import 'package:agora_rtc_engine/src/agora_media_base.dart';
-import 'package:agora_rtc_engine/src/agora_rtc_engine.dart';
-import 'package:agora_rtc_engine/src/agora_rtc_engine_ex.dart';
+import '/src/agora_base.dart';
+import '/src/agora_media_base.dart';
+import '/src/agora_rtc_engine.dart';
+import '/src/agora_rtc_engine_ex.dart';
 
-import 'package:agora_rtc_engine/src/impl/video_view_controller_impl.dart';
-import 'package:agora_rtc_engine/src/render/agora_video_view.dart';
-import 'package:agora_rtc_engine/src/render/video_view_controller.dart';
+import '/src/impl/video_view_controller_impl.dart';
+import '/src/render/agora_video_view.dart';
+import '/src/render/video_view_controller.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart' show Colors;
 import 'package:flutter/services.dart';

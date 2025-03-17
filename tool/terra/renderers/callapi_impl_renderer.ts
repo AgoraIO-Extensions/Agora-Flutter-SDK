@@ -108,8 +108,8 @@ export default function CallApiImplRenderer(
       
       ${defaultIgnoreForFile}, annotate_overrides
       
-      import 'package:agora_rtc_engine/src/binding_forward_export.dart';
-      import 'package:agora_rtc_engine/src/binding/impl_forward_export.dart';
+      import '/src/binding_forward_export.dart';
+      import '/src/binding/impl_forward_export.dart';
       import 'package:iris_method_channel/iris_method_channel.dart';
       
       ${subContents}
@@ -335,7 +335,7 @@ ${defaultDartHeader}
 
 ${defaultIgnoreForFile}
 
-import 'package:agora_rtc_engine/src/binding_forward_export.dart';
+import '/src/binding_forward_export.dart';
 part 'call_api_impl_params_json.g.dart';
 
 ${jsonClassContents}`),

@@ -2,8 +2,8 @@ import 'dart:async';
 import 'dart:html' as html;
 import 'dart:ui' as ui;
 
-import 'package:agora_rtc_engine/agora_rtc_engine.dart';
-import 'package:agora_rtc_engine/src/impl/platform/global_video_view_controller_platform.dart';
+import '/agora_rtc_engine.dart';
+import '/src/impl/platform/global_video_view_controller_platform.dart';
 import 'package:iris_method_channel/iris_method_channel.dart';
 
 // ignore_for_file: public_member_api_docs
