@@ -1,11 +1,10 @@
 import 'dart:convert';
 import 'dart:typed_data';
 
-import 'package:agora_rtc_engine/src/agora_media_base.dart';
-import 'package:agora_rtc_engine/src/binding/agora_media_recorder_impl.dart'
+import '/src/agora_media_base.dart';
+import '/src/binding/agora_media_recorder_impl.dart'
     as media_recorder_impl_binding;
-import 'package:agora_rtc_engine/src/binding/agora_media_base_event_impl.dart'
-    as media_base_event_b;
+import '/src/binding/agora_media_base_event_impl.dart' as media_base_event_b;
 
 import 'package:iris_method_channel/iris_method_channel.dart';
 

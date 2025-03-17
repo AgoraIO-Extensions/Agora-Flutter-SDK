@@ -1,4 +1,4 @@
-import 'package:agora_rtc_engine/src/render/video_view_controller.dart';
+import '/src/render/video_view_controller.dart';
 import 'package:flutter/material.dart';
 
 import '../impl/agora_video_view_impl.dart';
