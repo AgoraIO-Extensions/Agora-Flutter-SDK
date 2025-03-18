@@ -62,6 +62,7 @@ ${defaultDartHeader}
 
 ${defaultIgnoreForFile}, prefer_is_empty
 
+import '/src/_serializable.dart';
 import '/src/binding_forward_export.dart';
 part 'event_handler_param_json.g.dart';
 

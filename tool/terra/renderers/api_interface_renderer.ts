@@ -77,6 +77,7 @@ export default function ApiInterfaceRenderer(
       }) != undefined;
 
     let content = _trim(`
+        import '/src/_serializable.dart';
         import '/src/binding_forward_export.dart';
         ${
           isNeedImportGDartFile ? `part '${dartFileName(cxxFile)}.g.dart';` : ""
