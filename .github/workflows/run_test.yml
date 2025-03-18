@@ -154,7 +154,7 @@ jobs:
           mkdir -p ${OUTPUT_CRASH_DIR}
 
           # Copy all files
-          cp -RP $CRASH_DIR* $OUTPUT_CRASH_DIR
+          cp -RP $CRASH_DIR* $OUTPUT_CRASH_DIR || true
         
       - name: Upload ios logs
         uses: actions/upload-artifact@v4
@@ -189,10 +189,10 @@ jobs:
 
           mkdir iris-logs-macos
           if [ -f "${HOME}/Library/Containers/com.example.fakeTestApp/Data/Library/agora-iris.log" ]; then
-            cp -RP ${HOME}/Library/Containers/com.example.fakeTestApp/Data/Library/agora-iris.log ./iris-logs-macos/agora-iris-fake-test.log
+            cp -RP ${HOME}/Library/Containers/com.example.fakeTestApp/Data/Library/agora-iris.log ./iris-logs-macos/agora-iris-fake-test.log || true
           fi
           if [ -f "${HOME}/Library/Containers/com.example.integrationTestApp/Data/Library/agora-iris.log" ]; then
-            cp -RP ${HOME}/Library/Containers/com.example.integrationTestApp/Data/Library/agora-iris.log ./iris-logs-macos/agora-iris-integration-test.log
+            cp -RP ${HOME}/Library/Containers/com.example.integrationTestApp/Data/Library/agora-iris.log ./iris-logs-macos/agora-iris-integration-test.log || true
           fi
 
           CRASH_DIR="${HOME}/Library/Logs/DiagnosticReports/"
@@ -200,7 +200,7 @@ jobs:
           mkdir -p ${OUTPUT_CRASH_DIR}
 
           # Copy all files
-          cp -RP $CRASH_DIR* $OUTPUT_CRASH_DIR
+          cp -RP $CRASH_DIR* $OUTPUT_CRASH_DIR || true
           
       - name: Upload iris logs macos
         uses: actions/upload-artifact@v4
