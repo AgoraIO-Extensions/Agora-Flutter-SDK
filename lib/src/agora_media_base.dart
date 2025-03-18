@@ -1,4 +1,6 @@
+import '/src/_serializable.dart';
 import '/src/binding_forward_export.dart';
+
 part 'agora_media_base.g.dart';
 
 /// @nodoc
@@ -191,7 +193,7 @@ extension BytesPerSampleExt on BytesPerSample {
 
 /// @nodoc
 @JsonSerializable(explicitToJson: true, includeIfNull: false)
-class AudioParameters {
+class AudioParameters implements AgoraSerializable {
   /// @nodoc
   const AudioParameters({this.sampleRate, this.channels, this.framesPerBuffer});
 
@@ -212,6 +214,7 @@ class AudioParameters {
       _$AudioParametersFromJson(json);
 
   /// @nodoc
+  @override
   Map<String, dynamic> toJson() => _$AudioParametersToJson(this);
 }
 
@@ -322,7 +325,7 @@ const kMaxCodecNameLength = 50;
 
 /// @nodoc
 @JsonSerializable(explicitToJson: true, includeIfNull: false)
-class PacketOptions {
+class PacketOptions implements AgoraSerializable {
   /// @nodoc
   const PacketOptions({this.timestamp, this.audioLevelIndication});
 
@@ -339,12 +342,13 @@ class PacketOptions {
       _$PacketOptionsFromJson(json);
 
   /// @nodoc
+  @override
   Map<String, dynamic> toJson() => _$PacketOptionsToJson(this);
 }
 
 /// @nodoc
 @JsonSerializable(explicitToJson: true, includeIfNull: false)
-class AudioEncodedFrameInfo {
+class AudioEncodedFrameInfo implements AgoraSerializable {
   /// @nodoc
   const AudioEncodedFrameInfo({this.sendTs, this.codec});
 
@@ -361,12 +365,13 @@ class AudioEncodedFrameInfo {
       _$AudioEncodedFrameInfoFromJson(json);
 
   /// @nodoc
+  @override
   Map<String, dynamic> toJson() => _$AudioEncodedFrameInfoToJson(this);
 }
 
 /// The parameters of the audio frame in PCM format.
 @JsonSerializable(explicitToJson: true, includeIfNull: false)
-class AudioPcmFrame {
+class AudioPcmFrame implements AgoraSerializable {
   /// @nodoc
   const AudioPcmFrame(
       {this.captureTimestamp,
@@ -410,6 +415,7 @@ class AudioPcmFrame {
       _$AudioPcmFrameFromJson(json);
 
   /// @nodoc
+  @override
   Map<String, dynamic> toJson() => _$AudioPcmFrameToJson(this);
 }
 
@@ -606,7 +612,7 @@ extension MetaInfoKeyExt on MetaInfoKey {
 
 /// The external video frame.
 @JsonSerializable(explicitToJson: true, includeIfNull: false)
-class ExternalVideoFrame {
+class ExternalVideoFrame implements AgoraSerializable {
   /// @nodoc
   const ExternalVideoFrame(
       {this.type,
@@ -712,6 +718,7 @@ class ExternalVideoFrame {
       _$ExternalVideoFrameFromJson(json);
 
   /// @nodoc
+  @override
   Map<String, dynamic> toJson() => _$ExternalVideoFrameToJson(this);
 }
 
@@ -773,7 +780,7 @@ extension VideoBufferTypeExt on VideoBufferType {
 ///
 /// Note that the buffer provides a pointer to a pointer. This interface cannot modify the pointer of the buffer, but it can modify the content of the buffer.
 @JsonSerializable(explicitToJson: true, includeIfNull: false)
-class VideoFrame {
+class VideoFrame implements AgoraSerializable {
   /// @nodoc
   const VideoFrame(
       {this.type,
@@ -880,6 +887,7 @@ class VideoFrame {
       _$VideoFrameFromJson(json);
 
   /// @nodoc
+  @override
   Map<String, dynamic> toJson() => _$VideoFrameToJson(this);
 }
 
@@ -1011,7 +1019,7 @@ extension ContentInspectTypeExt on ContentInspectType {
 
 /// ContentInspectModule A structure used to configure the frequency of video screenshot and upload.
 @JsonSerializable(explicitToJson: true, includeIfNull: false)
-class ContentInspectModule {
+class ContentInspectModule implements AgoraSerializable {
   /// @nodoc
   const ContentInspectModule({this.type, this.interval, this.position});
 
@@ -1032,12 +1040,13 @@ class ContentInspectModule {
       _$ContentInspectModuleFromJson(json);
 
   /// @nodoc
+  @override
   Map<String, dynamic> toJson() => _$ContentInspectModuleToJson(this);
 }
 
 /// Screenshot and upload configuration.
 @JsonSerializable(explicitToJson: true, includeIfNull: false)
-class ContentInspectConfig {
+class ContentInspectConfig implements AgoraSerializable {
   /// @nodoc
   const ContentInspectConfig(
       {this.extraInfo, this.serverConfig, this.modules, this.moduleCount});
@@ -1063,12 +1072,13 @@ class ContentInspectConfig {
       _$ContentInspectConfigFromJson(json);
 
   /// @nodoc
+  @override
   Map<String, dynamic> toJson() => _$ContentInspectConfigToJson(this);
 }
 
 /// The snapshot configuration.
 @JsonSerializable(explicitToJson: true, includeIfNull: false)
-class SnapshotConfig {
+class SnapshotConfig implements AgoraSerializable {
   /// @nodoc
   const SnapshotConfig({this.filePath, this.position});
 
@@ -1089,6 +1099,7 @@ class SnapshotConfig {
       _$SnapshotConfigFromJson(json);
 
   /// @nodoc
+  @override
   Map<String, dynamic> toJson() => _$SnapshotConfigToJson(this);
 }
 
@@ -1181,7 +1192,7 @@ extension AudioFrameTypeExt on AudioFrameType {
 
 /// Raw audio data.
 @JsonSerializable(explicitToJson: true, includeIfNull: false)
-class AudioFrame {
+class AudioFrame implements AgoraSerializable {
   /// @nodoc
   const AudioFrame(
       {this.type,
@@ -1247,6 +1258,7 @@ class AudioFrame {
       _$AudioFrameFromJson(json);
 
   /// @nodoc
+  @override
   Map<String, dynamic> toJson() => _$AudioFrameToJson(this);
 }
 
@@ -1296,7 +1308,7 @@ extension AudioFramePositionExt on AudioFramePosition {
 /// The SDK calculates the sampling interval through the samplesPerCall, sampleRate, and channel parameters in AudioParams, and triggers the onRecordAudioFrame, onPlaybackAudioFrame, onMixedAudioFrame, and onEarMonitoringAudioFrame callbacks according to the sampling interval. Sample interval (sec) = samplePerCall /(sampleRate × channel).
 ///  Ensure that the sample interval ≥ 0.01 (s).
 @JsonSerializable(explicitToJson: true, includeIfNull: false)
-class AudioParams {
+class AudioParams implements AgoraSerializable {
   /// @nodoc
   const AudioParams(
       {this.sampleRate, this.channels, this.mode, this.samplesPerCall});
@@ -1329,6 +1341,7 @@ class AudioParams {
       _$AudioParamsFromJson(json);
 
   /// @nodoc
+  @override
   Map<String, dynamic> toJson() => _$AudioParamsToJson(this);
 }
 
@@ -1369,7 +1382,7 @@ class AudioFrameObserver extends AudioFrameObserverBase {
 
 /// The audio spectrum data.
 @JsonSerializable(explicitToJson: true, includeIfNull: false)
-class AudioSpectrumData {
+class AudioSpectrumData implements AgoraSerializable {
   /// @nodoc
   const AudioSpectrumData({this.audioSpectrumData, this.dataLength});
 
@@ -1386,12 +1399,13 @@ class AudioSpectrumData {
       _$AudioSpectrumDataFromJson(json);
 
   /// @nodoc
+  @override
   Map<String, dynamic> toJson() => _$AudioSpectrumDataToJson(this);
 }
 
 /// Audio spectrum information of the remote user.
 @JsonSerializable(explicitToJson: true, includeIfNull: false)
-class UserAudioSpectrumInfo {
+class UserAudioSpectrumInfo implements AgoraSerializable {
   /// @nodoc
   const UserAudioSpectrumInfo({this.uid, this.spectrumData});
 
@@ -1408,6 +1422,7 @@ class UserAudioSpectrumInfo {
       _$UserAudioSpectrumInfoFromJson(json);
 
   /// @nodoc
+  @override
   Map<String, dynamic> toJson() => _$UserAudioSpectrumInfoToJson(this);
 }
 
@@ -1689,7 +1704,7 @@ extension RecorderReasonCodeExt on RecorderReasonCode {
 
 /// @nodoc
 @JsonSerializable(explicitToJson: true, includeIfNull: false)
-class MediaRecorderConfiguration {
+class MediaRecorderConfiguration implements AgoraSerializable {
   /// @nodoc
   const MediaRecorderConfiguration(
       {this.storagePath,
@@ -1723,6 +1738,7 @@ class MediaRecorderConfiguration {
       _$MediaRecorderConfigurationFromJson(json);
 
   /// @nodoc
+  @override
   Map<String, dynamic> toJson() => _$MediaRecorderConfigurationToJson(this);
 }
 
@@ -1755,7 +1771,7 @@ class FaceInfoObserver {
 
 /// @nodoc
 @JsonSerializable(explicitToJson: true, includeIfNull: false)
-class RecorderInfo {
+class RecorderInfo implements AgoraSerializable {
   /// @nodoc
   const RecorderInfo({this.fileName, this.durationMs, this.fileSize});
 
@@ -1776,6 +1792,7 @@ class RecorderInfo {
       _$RecorderInfoFromJson(json);
 
   /// @nodoc
+  @override
   Map<String, dynamic> toJson() => _$RecorderInfoToJson(this);
 }
 

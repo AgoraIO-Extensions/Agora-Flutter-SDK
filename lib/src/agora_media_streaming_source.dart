@@ -1,3 +1,4 @@
+import '/src/_serializable.dart';
 import '/src/binding_forward_export.dart';
 part 'agora_media_streaming_source.g.dart';
 
@@ -153,7 +154,7 @@ extension StreamingSrcStateExt on StreamingSrcState {
 
 /// @nodoc
 @JsonSerializable(explicitToJson: true, includeIfNull: false)
-class InputSeiData {
+class InputSeiData implements AgoraSerializable {
   /// @nodoc
   const InputSeiData(
       {this.type,
@@ -187,5 +188,6 @@ class InputSeiData {
       _$InputSeiDataFromJson(json);
 
   /// @nodoc
+  @override
   Map<String, dynamic> toJson() => _$InputSeiDataToJson(this);
 }
