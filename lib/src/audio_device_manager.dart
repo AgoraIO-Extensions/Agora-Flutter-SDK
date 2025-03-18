@@ -1,3 +1,4 @@
+import '/src/_serializable.dart';
 import '/src/binding_forward_export.dart';
 part 'audio_device_manager.g.dart';
 
