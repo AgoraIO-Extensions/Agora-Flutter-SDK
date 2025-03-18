@@ -54,7 +54,8 @@ void testCases() {
           url: 'https://download.agora.io/demo/test/Agora.io-Interactions.mp4',
           startPos: 0);
 
-      final eventCalled = await eventCalledCompleter.future.timeout(const Duration(seconds: 10));
+      final eventCalled = await eventCalledCompleter.future
+          .timeout(const Duration(seconds: 10));
       expect(eventCalled, isTrue);
       eventCalledCompleter = null;
 
@@ -119,7 +120,8 @@ void testCases() {
           url: 'https://download.agora.io/demo/test/Agora.io-Interactions.mp4',
           startPos: 0);
 
-      final eventCalled = await eventCalledCompleter.future.timeout(const Duration(seconds: 10));
+      final eventCalled = await eventCalledCompleter.future
+          .timeout(const Duration(seconds: 10));
       expect(eventCalled, isTrue);
       eventCalledCompleter = null;
 
@@ -182,7 +184,8 @@ void testCases() {
           url: 'https://download.agora.io/demo/test/Agora.io-Interactions.mp4',
           startPos: 0);
 
-      final eventCalled = await eventCalledCompleter.future.timeout(const Duration(seconds: 10));
+      final eventCalled = await eventCalledCompleter.future
+          .timeout(const Duration(seconds: 10));
       expect(eventCalled, isTrue);
       eventCalledCompleter = null;
 

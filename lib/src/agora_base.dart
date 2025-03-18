@@ -983,7 +983,6 @@ class VideoDimensions implements AgoraSerializable {
   factory VideoDimensions.fromJson(Map<String, dynamic> json) =>
       _$VideoDimensionsFromJson(json);
 
-  /// @nodoc
   @override
   Map<String, dynamic> toJson() => _$VideoDimensionsToJson(this);
 }
@@ -1201,7 +1200,6 @@ class SenderOptions implements AgoraSerializable {
   factory SenderOptions.fromJson(Map<String, dynamic> json) =>
       _$SenderOptionsFromJson(json);
 
-  /// @nodoc
   @override
   Map<String, dynamic> toJson() => _$SenderOptionsToJson(this);
 }
@@ -1364,7 +1362,6 @@ class EncodedAudioFrameAdvancedSettings implements AgoraSerializable {
           Map<String, dynamic> json) =>
       _$EncodedAudioFrameAdvancedSettingsFromJson(json);
 
-  /// @nodoc
   @override
   Map<String, dynamic> toJson() =>
       _$EncodedAudioFrameAdvancedSettingsToJson(this);
@@ -1410,7 +1407,6 @@ class EncodedAudioFrameInfo implements AgoraSerializable {
   factory EncodedAudioFrameInfo.fromJson(Map<String, dynamic> json) =>
       _$EncodedAudioFrameInfoFromJson(json);
 
-  /// @nodoc
   @override
   Map<String, dynamic> toJson() => _$EncodedAudioFrameInfoToJson(this);
 }
@@ -1450,7 +1446,6 @@ class AudioPcmDataInfo implements AgoraSerializable {
   factory AudioPcmDataInfo.fromJson(Map<String, dynamic> json) =>
       _$AudioPcmDataInfoFromJson(json);
 
-  /// @nodoc
   @override
   Map<String, dynamic> toJson() => _$AudioPcmDataInfoToJson(this);
 }
@@ -1547,7 +1542,6 @@ class VideoSubscriptionOptions implements AgoraSerializable {
   factory VideoSubscriptionOptions.fromJson(Map<String, dynamic> json) =>
       _$VideoSubscriptionOptionsFromJson(json);
 
-  /// @nodoc
   @override
   Map<String, dynamic> toJson() => _$VideoSubscriptionOptionsToJson(this);
 }
@@ -1643,7 +1637,6 @@ class EncodedVideoFrameInfo implements AgoraSerializable {
   factory EncodedVideoFrameInfo.fromJson(Map<String, dynamic> json) =>
       _$EncodedVideoFrameInfoFromJson(json);
 
-  /// @nodoc
   @override
   Map<String, dynamic> toJson() => _$EncodedVideoFrameInfoToJson(this);
 }
@@ -1720,7 +1713,6 @@ class AdvanceOptions implements AgoraSerializable {
   factory AdvanceOptions.fromJson(Map<String, dynamic> json) =>
       _$AdvanceOptionsFromJson(json);
 
-  /// @nodoc
   @override
   Map<String, dynamic> toJson() => _$AdvanceOptionsToJson(this);
 }
@@ -1836,7 +1828,6 @@ class CodecCapLevels implements AgoraSerializable {
   factory CodecCapLevels.fromJson(Map<String, dynamic> json) =>
       _$CodecCapLevelsFromJson(json);
 
-  /// @nodoc
   @override
   Map<String, dynamic> toJson() => _$CodecCapLevelsToJson(this);
 }
@@ -1863,7 +1854,6 @@ class CodecCapInfo implements AgoraSerializable {
   factory CodecCapInfo.fromJson(Map<String, dynamic> json) =>
       _$CodecCapInfoFromJson(json);
 
-  /// @nodoc
   @override
   Map<String, dynamic> toJson() => _$CodecCapInfoToJson(this);
 }
@@ -1888,7 +1878,6 @@ class FocalLengthInfo implements AgoraSerializable {
   factory FocalLengthInfo.fromJson(Map<String, dynamic> json) =>
       _$FocalLengthInfoFromJson(json);
 
-  /// @nodoc
   @override
   Map<String, dynamic> toJson() => _$FocalLengthInfoToJson(this);
 }
@@ -1948,7 +1937,6 @@ class VideoEncoderConfiguration implements AgoraSerializable {
   factory VideoEncoderConfiguration.fromJson(Map<String, dynamic> json) =>
       _$VideoEncoderConfigurationFromJson(json);
 
-  /// @nodoc
   @override
   Map<String, dynamic> toJson() => _$VideoEncoderConfigurationToJson(this);
 }
@@ -1973,7 +1961,6 @@ class DataStreamConfig implements AgoraSerializable {
   factory DataStreamConfig.fromJson(Map<String, dynamic> json) =>
       _$DataStreamConfigFromJson(json);
 
-  /// @nodoc
   @override
   Map<String, dynamic> toJson() => _$DataStreamConfigToJson(this);
 }
@@ -2029,7 +2016,6 @@ class SimulcastStreamConfig implements AgoraSerializable {
   factory SimulcastStreamConfig.fromJson(Map<String, dynamic> json) =>
       _$SimulcastStreamConfigFromJson(json);
 
-  /// @nodoc
   @override
   Map<String, dynamic> toJson() => _$SimulcastStreamConfigToJson(this);
 }
@@ -2048,7 +2034,6 @@ class SimulcastConfig implements AgoraSerializable {
   factory SimulcastConfig.fromJson(Map<String, dynamic> json) =>
       _$SimulcastConfigFromJson(json);
 
-  /// @nodoc
   @override
   Map<String, dynamic> toJson() => _$SimulcastConfigToJson(this);
 }
@@ -2124,7 +2109,6 @@ class StreamLayerConfig implements AgoraSerializable {
   factory StreamLayerConfig.fromJson(Map<String, dynamic> json) =>
       _$StreamLayerConfigFromJson(json);
 
-  /// @nodoc
   @override
   Map<String, dynamic> toJson() => _$StreamLayerConfigToJson(this);
 }
@@ -2155,7 +2139,6 @@ class Rectangle implements AgoraSerializable {
   factory Rectangle.fromJson(Map<String, dynamic> json) =>
       _$RectangleFromJson(json);
 
-  /// @nodoc
   @override
   Map<String, dynamic> toJson() => _$RectangleToJson(this);
 }
@@ -2186,7 +2169,6 @@ class WatermarkRatio implements AgoraSerializable {
   factory WatermarkRatio.fromJson(Map<String, dynamic> json) =>
       _$WatermarkRatioFromJson(json);
 
-  /// @nodoc
   @override
   Map<String, dynamic> toJson() => _$WatermarkRatioToJson(this);
 }
@@ -2226,7 +2208,6 @@ class WatermarkOptions implements AgoraSerializable {
   factory WatermarkOptions.fromJson(Map<String, dynamic> json) =>
       _$WatermarkOptionsFromJson(json);
 
-  /// @nodoc
   @override
   Map<String, dynamic> toJson() => _$WatermarkOptionsToJson(this);
 }
@@ -2409,7 +2390,6 @@ class RtcStats implements AgoraSerializable {
   factory RtcStats.fromJson(Map<String, dynamic> json) =>
       _$RtcStatsFromJson(json);
 
-  /// @nodoc
   @override
   Map<String, dynamic> toJson() => _$RtcStatsToJson(this);
 }
@@ -2507,7 +2487,6 @@ class ClientRoleOptions implements AgoraSerializable {
   factory ClientRoleOptions.fromJson(Map<String, dynamic> json) =>
       _$ClientRoleOptionsFromJson(json);
 
-  /// @nodoc
   @override
   Map<String, dynamic> toJson() => _$ClientRoleOptionsToJson(this);
 }
@@ -2633,7 +2612,7 @@ enum AudioProfileType {
   @JsonValue(5)
   audioProfileMusicHighQualityStereo,
 
-  /// 6: A sample rate of 16 kHz, audio encoding, mono, and Acoustic Echo Cancellation (AES) enabled.
+  /// 6: A sample rate of 16 kHz, audio encoding, mono, and Acoustic Echo Cancellation (AEC) enabled.
   @JsonValue(6)
   audioProfileIot,
 
@@ -2718,7 +2697,6 @@ class VideoFormat implements AgoraSerializable {
   factory VideoFormat.fromJson(Map<String, dynamic> json) =>
       _$VideoFormatFromJson(json);
 
-  /// @nodoc
   @override
   Map<String, dynamic> toJson() => _$VideoFormatToJson(this);
 }
@@ -3171,7 +3149,7 @@ enum LocalVideoStreamReason {
   @JsonValue(29)
   localVideoStreamReasonScreenCaptureResumed,
 
-  /// 30: (Windows and macOS only) The displayer used for screen capture is disconnected.
+  /// 30: (Windows and macOS only) The displayer used for screen capture is disconnected. The current screen sharing has been paused. Prompt the user to restart the screen sharing.
   @JsonValue(30)
   localVideoStreamReasonScreenCaptureDisplayDisconnected,
 }
@@ -3476,7 +3454,6 @@ class VideoTrackInfo implements AgoraSerializable {
   factory VideoTrackInfo.fromJson(Map<String, dynamic> json) =>
       _$VideoTrackInfoFromJson(json);
 
-  /// @nodoc
   @override
   Map<String, dynamic> toJson() => _$VideoTrackInfoToJson(this);
 }
@@ -3550,7 +3527,6 @@ class AudioVolumeInfo implements AgoraSerializable {
   factory AudioVolumeInfo.fromJson(Map<String, dynamic> json) =>
       _$AudioVolumeInfoFromJson(json);
 
-  /// @nodoc
   @override
   Map<String, dynamic> toJson() => _$AudioVolumeInfoToJson(this);
 }
@@ -3571,7 +3547,6 @@ class DeviceInfo implements AgoraSerializable {
   factory DeviceInfo.fromJson(Map<String, dynamic> json) =>
       _$DeviceInfoFromJson(json);
 
-  /// @nodoc
   @override
   Map<String, dynamic> toJson() => _$DeviceInfoToJson(this);
 }
@@ -3593,7 +3568,6 @@ class Packet implements AgoraSerializable {
   /// @nodoc
   factory Packet.fromJson(Map<String, dynamic> json) => _$PacketFromJson(json);
 
-  /// @nodoc
   @override
   Map<String, dynamic> toJson() => _$PacketToJson(this);
 }
@@ -3765,7 +3739,6 @@ class LocalAudioStats implements AgoraSerializable {
   factory LocalAudioStats.fromJson(Map<String, dynamic> json) =>
       _$LocalAudioStatsFromJson(json);
 
-  /// @nodoc
   @override
   Map<String, dynamic> toJson() => _$LocalAudioStatsToJson(this);
 }
@@ -3980,7 +3953,6 @@ class RtcImage implements AgoraSerializable {
   factory RtcImage.fromJson(Map<String, dynamic> json) =>
       _$RtcImageFromJson(json);
 
-  /// @nodoc
   @override
   Map<String, dynamic> toJson() => _$RtcImageToJson(this);
 }
@@ -4005,7 +3977,6 @@ class LiveStreamAdvancedFeature implements AgoraSerializable {
   factory LiveStreamAdvancedFeature.fromJson(Map<String, dynamic> json) =>
       _$LiveStreamAdvancedFeatureFromJson(json);
 
-  /// @nodoc
   @override
   Map<String, dynamic> toJson() => _$LiveStreamAdvancedFeatureToJson(this);
 }
@@ -4111,7 +4082,6 @@ class TranscodingUser implements AgoraSerializable {
   factory TranscodingUser.fromJson(Map<String, dynamic> json) =>
       _$TranscodingUserFromJson(json);
 
-  /// @nodoc
   @override
   Map<String, dynamic> toJson() => _$TranscodingUserToJson(this);
 }
@@ -4250,7 +4220,6 @@ class LiveTranscoding implements AgoraSerializable {
   factory LiveTranscoding.fromJson(Map<String, dynamic> json) =>
       _$LiveTranscodingFromJson(json);
 
-  /// @nodoc
   @override
   Map<String, dynamic> toJson() => _$LiveTranscodingToJson(this);
 }
@@ -4280,7 +4249,11 @@ class TranscodingVideoStream implements AgoraSerializable {
   @JsonKey(name: 'remoteUserUid')
   final int? remoteUserUid;
 
-  /// The URL of the image. Use this parameter only when the source type is the image for local video mixing.
+  /// The file path of local images. Use this parameter only when the source type is the image for local video mixing. Examples:
+  ///  Android: /storage/emulated/0/Pictures/image.png
+  ///  iOS: /var/mobile/Containers/Data/Application/<APP-UUID>/Documents/image.png
+  ///  macOS: ~/Pictures/image.png
+  ///  Windows: C:\\Users\\{username}\\Pictures\\image.png
   @JsonKey(name: 'imageUrl')
   final String? imageUrl;
 
@@ -4322,7 +4295,6 @@ class TranscodingVideoStream implements AgoraSerializable {
   factory TranscodingVideoStream.fromJson(Map<String, dynamic> json) =>
       _$TranscodingVideoStreamFromJson(json);
 
-  /// @nodoc
   @override
   Map<String, dynamic> toJson() => _$TranscodingVideoStreamToJson(this);
 }
@@ -4357,7 +4329,6 @@ class LocalTranscoderConfiguration implements AgoraSerializable {
   factory LocalTranscoderConfiguration.fromJson(Map<String, dynamic> json) =>
       _$LocalTranscoderConfigurationFromJson(json);
 
-  /// @nodoc
   @override
   Map<String, dynamic> toJson() => _$LocalTranscoderConfigurationToJson(this);
 }
@@ -4433,7 +4404,6 @@ class LastmileProbeConfig implements AgoraSerializable {
   factory LastmileProbeConfig.fromJson(Map<String, dynamic> json) =>
       _$LastmileProbeConfigFromJson(json);
 
-  /// @nodoc
   @override
   Map<String, dynamic> toJson() => _$LastmileProbeConfigToJson(this);
 }
@@ -4490,7 +4460,6 @@ class LastmileProbeOneWayResult implements AgoraSerializable {
   factory LastmileProbeOneWayResult.fromJson(Map<String, dynamic> json) =>
       _$LastmileProbeOneWayResultFromJson(json);
 
-  /// @nodoc
   @override
   Map<String, dynamic> toJson() => _$LastmileProbeOneWayResultToJson(this);
 }
@@ -4522,7 +4491,6 @@ class LastmileProbeResult implements AgoraSerializable {
   factory LastmileProbeResult.fromJson(Map<String, dynamic> json) =>
       _$LastmileProbeResultFromJson(json);
 
-  /// @nodoc
   @override
   Map<String, dynamic> toJson() => _$LastmileProbeResultToJson(this);
 }
@@ -4770,7 +4738,6 @@ class WlAccStats implements AgoraSerializable {
   factory WlAccStats.fromJson(Map<String, dynamic> json) =>
       _$WlAccStatsFromJson(json);
 
-  /// @nodoc
   @override
   Map<String, dynamic> toJson() => _$WlAccStatsToJson(this);
 }
@@ -4927,7 +4894,6 @@ class VideoCanvas implements AgoraSerializable {
   factory VideoCanvas.fromJson(Map<String, dynamic> json) =>
       _$VideoCanvasFromJson(json);
 
-  /// @nodoc
   @override
   Map<String, dynamic> toJson() => _$VideoCanvasToJson(this);
 }
@@ -4996,7 +4962,6 @@ class PipOptions implements AgoraSerializable {
   factory PipOptions.fromJson(Map<String, dynamic> json) =>
       _$PipOptionsFromJson(json);
 
-  /// @nodoc
   @override
   Map<String, dynamic> toJson() => _$PipOptionsToJson(this);
 }
@@ -5036,7 +5001,6 @@ class BeautyOptions implements AgoraSerializable {
   factory BeautyOptions.fromJson(Map<String, dynamic> json) =>
       _$BeautyOptionsFromJson(json);
 
-  /// @nodoc
   @override
   Map<String, dynamic> toJson() => _$BeautyOptionsToJson(this);
 }
@@ -5088,7 +5052,6 @@ class LowlightEnhanceOptions implements AgoraSerializable {
   factory LowlightEnhanceOptions.fromJson(Map<String, dynamic> json) =>
       _$LowlightEnhanceOptionsFromJson(json);
 
-  /// @nodoc
   @override
   Map<String, dynamic> toJson() => _$LowlightEnhanceOptionsToJson(this);
 }
@@ -5161,7 +5124,6 @@ class VideoDenoiserOptions implements AgoraSerializable {
   factory VideoDenoiserOptions.fromJson(Map<String, dynamic> json) =>
       _$VideoDenoiserOptionsFromJson(json);
 
-  /// @nodoc
   @override
   Map<String, dynamic> toJson() => _$VideoDenoiserOptionsToJson(this);
 }
@@ -5240,7 +5202,6 @@ class ColorEnhanceOptions implements AgoraSerializable {
   factory ColorEnhanceOptions.fromJson(Map<String, dynamic> json) =>
       _$ColorEnhanceOptionsFromJson(json);
 
-  /// @nodoc
   @override
   Map<String, dynamic> toJson() => _$ColorEnhanceOptionsToJson(this);
 }
@@ -5272,7 +5233,6 @@ class VirtualBackgroundSource implements AgoraSerializable {
   factory VirtualBackgroundSource.fromJson(Map<String, dynamic> json) =>
       _$VirtualBackgroundSourceFromJson(json);
 
-  /// @nodoc
   @override
   Map<String, dynamic> toJson() => _$VirtualBackgroundSourceToJson(this);
 }
@@ -5361,7 +5321,6 @@ class SegmentationProperty implements AgoraSerializable {
   factory SegmentationProperty.fromJson(Map<String, dynamic> json) =>
       _$SegmentationPropertyFromJson(json);
 
-  /// @nodoc
   @override
   Map<String, dynamic> toJson() => _$SegmentationPropertyToJson(this);
 }
@@ -5449,7 +5408,6 @@ class AudioTrackConfig implements AgoraSerializable {
   factory AudioTrackConfig.fromJson(Map<String, dynamic> json) =>
       _$AudioTrackConfigFromJson(json);
 
-  /// @nodoc
   @override
   Map<String, dynamic> toJson() => _$AudioTrackConfigToJson(this);
 }
@@ -5812,7 +5770,6 @@ class ScreenCaptureParameters implements AgoraSerializable {
   factory ScreenCaptureParameters.fromJson(Map<String, dynamic> json) =>
       _$ScreenCaptureParametersFromJson(json);
 
-  /// @nodoc
   @override
   Map<String, dynamic> toJson() => _$ScreenCaptureParametersToJson(this);
 }
@@ -5956,7 +5913,6 @@ class AudioRecordingConfiguration implements AgoraSerializable {
   factory AudioRecordingConfiguration.fromJson(Map<String, dynamic> json) =>
       _$AudioRecordingConfigurationFromJson(json);
 
-  /// @nodoc
   @override
   Map<String, dynamic> toJson() => _$AudioRecordingConfigurationToJson(this);
 }
@@ -5979,7 +5935,6 @@ class AudioEncodedFrameObserverConfig implements AgoraSerializable {
   factory AudioEncodedFrameObserverConfig.fromJson(Map<String, dynamic> json) =>
       _$AudioEncodedFrameObserverConfigFromJson(json);
 
-  /// @nodoc
   @override
   Map<String, dynamic> toJson() =>
       _$AudioEncodedFrameObserverConfigToJson(this);
@@ -6252,7 +6207,6 @@ class ChannelMediaInfo implements AgoraSerializable {
   factory ChannelMediaInfo.fromJson(Map<String, dynamic> json) =>
       _$ChannelMediaInfoFromJson(json);
 
-  /// @nodoc
   @override
   Map<String, dynamic> toJson() => _$ChannelMediaInfoToJson(this);
 }
@@ -6284,7 +6238,6 @@ class ChannelMediaRelayConfiguration implements AgoraSerializable {
   factory ChannelMediaRelayConfiguration.fromJson(Map<String, dynamic> json) =>
       _$ChannelMediaRelayConfigurationFromJson(json);
 
-  /// @nodoc
   @override
   Map<String, dynamic> toJson() => _$ChannelMediaRelayConfigurationToJson(this);
 }
@@ -6303,7 +6256,6 @@ class UplinkNetworkInfo implements AgoraSerializable {
   factory UplinkNetworkInfo.fromJson(Map<String, dynamic> json) =>
       _$UplinkNetworkInfoFromJson(json);
 
-  /// @nodoc
   @override
   Map<String, dynamic> toJson() => _$UplinkNetworkInfoToJson(this);
 }
@@ -6343,7 +6295,6 @@ class DownlinkNetworkInfo implements AgoraSerializable {
   factory DownlinkNetworkInfo.fromJson(Map<String, dynamic> json) =>
       _$DownlinkNetworkInfoFromJson(json);
 
-  /// @nodoc
   @override
   Map<String, dynamic> toJson() => _$DownlinkNetworkInfoToJson(this);
 }
@@ -6378,7 +6329,6 @@ class PeerDownlinkInfo implements AgoraSerializable {
   factory PeerDownlinkInfo.fromJson(Map<String, dynamic> json) =>
       _$PeerDownlinkInfoFromJson(json);
 
-  /// @nodoc
   @override
   Map<String, dynamic> toJson() => _$PeerDownlinkInfoToJson(this);
 }
@@ -6468,7 +6418,6 @@ class EncryptionConfig implements AgoraSerializable {
   factory EncryptionConfig.fromJson(Map<String, dynamic> json) =>
       _$EncryptionConfigFromJson(json);
 
-  /// @nodoc
   @override
   Map<String, dynamic> toJson() => _$EncryptionConfigToJson(this);
 }
@@ -6688,7 +6637,6 @@ class EchoTestConfiguration implements AgoraSerializable {
   factory EchoTestConfiguration.fromJson(Map<String, dynamic> json) =>
       _$EchoTestConfigurationFromJson(json);
 
-  /// @nodoc
   @override
   Map<String, dynamic> toJson() => _$EchoTestConfigurationToJson(this);
 }
@@ -6711,7 +6659,6 @@ class UserInfo implements AgoraSerializable {
   factory UserInfo.fromJson(Map<String, dynamic> json) =>
       _$UserInfoFromJson(json);
 
-  /// @nodoc
   @override
   Map<String, dynamic> toJson() => _$UserInfoToJson(this);
 }
@@ -6817,7 +6764,6 @@ class ScreenVideoParameters implements AgoraSerializable {
   factory ScreenVideoParameters.fromJson(Map<String, dynamic> json) =>
       _$ScreenVideoParametersFromJson(json);
 
-  /// @nodoc
   @override
   Map<String, dynamic> toJson() => _$ScreenVideoParametersToJson(this);
 }
@@ -6847,7 +6793,6 @@ class ScreenAudioParameters implements AgoraSerializable {
   factory ScreenAudioParameters.fromJson(Map<String, dynamic> json) =>
       _$ScreenAudioParametersFromJson(json);
 
-  /// @nodoc
   @override
   Map<String, dynamic> toJson() => _$ScreenAudioParametersToJson(this);
 }
@@ -6884,7 +6829,6 @@ class ScreenCaptureParameters2 implements AgoraSerializable {
   factory ScreenCaptureParameters2.fromJson(Map<String, dynamic> json) =>
       _$ScreenCaptureParameters2FromJson(json);
 
-  /// @nodoc
   @override
   Map<String, dynamic> toJson() => _$ScreenCaptureParameters2ToJson(this);
 }
@@ -6971,7 +6915,6 @@ class VideoRenderingTracingInfo implements AgoraSerializable {
   factory VideoRenderingTracingInfo.fromJson(Map<String, dynamic> json) =>
       _$VideoRenderingTracingInfoFromJson(json);
 
-  /// @nodoc
   @override
   Map<String, dynamic> toJson() => _$VideoRenderingTracingInfoToJson(this);
 }
@@ -7053,7 +6996,6 @@ class LogUploadServerInfo implements AgoraSerializable {
   factory LogUploadServerInfo.fromJson(Map<String, dynamic> json) =>
       _$LogUploadServerInfoFromJson(json);
 
-  /// @nodoc
   @override
   Map<String, dynamic> toJson() => _$LogUploadServerInfoToJson(this);
 }
@@ -7072,7 +7014,6 @@ class AdvancedConfigInfo implements AgoraSerializable {
   factory AdvancedConfigInfo.fromJson(Map<String, dynamic> json) =>
       _$AdvancedConfigInfoFromJson(json);
 
-  /// @nodoc
   @override
   Map<String, dynamic> toJson() => _$AdvancedConfigInfoToJson(this);
 }
@@ -7127,7 +7068,6 @@ class LocalAccessPointConfiguration implements AgoraSerializable {
   factory LocalAccessPointConfiguration.fromJson(Map<String, dynamic> json) =>
       _$LocalAccessPointConfigurationFromJson(json);
 
-  /// @nodoc
   @override
   Map<String, dynamic> toJson() => _$LocalAccessPointConfigurationToJson(this);
 }
@@ -7150,7 +7090,6 @@ class RecorderStreamInfo implements AgoraSerializable {
   factory RecorderStreamInfo.fromJson(Map<String, dynamic> json) =>
       _$RecorderStreamInfoFromJson(json);
 
-  /// @nodoc
   @override
   Map<String, dynamic> toJson() => _$RecorderStreamInfoToJson(this);
 }
@@ -7205,7 +7144,6 @@ class SpatialAudioParams implements AgoraSerializable {
   factory SpatialAudioParams.fromJson(Map<String, dynamic> json) =>
       _$SpatialAudioParamsFromJson(json);
 
-  /// @nodoc
   @override
   Map<String, dynamic> toJson() => _$SpatialAudioParamsToJson(this);
 }
@@ -7263,7 +7201,6 @@ class VideoLayout implements AgoraSerializable {
   factory VideoLayout.fromJson(Map<String, dynamic> json) =>
       _$VideoLayoutFromJson(json);
 
-  /// @nodoc
   @override
   Map<String, dynamic> toJson() => _$VideoLayoutToJson(this);
 }

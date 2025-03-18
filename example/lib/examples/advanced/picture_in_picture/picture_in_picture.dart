@@ -61,7 +61,7 @@ class _State extends State<PictureInPicture> with WidgetsBindingObserver {
     // Known limitations of Picture-in-Picture (PiP) mode on Android:
     //
     // 1. Cannot differentiate between Recent Apps vs Quick Settings Bar triggers:
-    //    Both generate the same window focus change event (false), preventing selective 
+    //    Both generate the same window focus change event (false), preventing selective
     //    PiP activation for Recent Apps only.
     //
     // 2. Recent Apps interaction:
@@ -73,7 +73,7 @@ class _State extends State<PictureInPicture> with WidgetsBindingObserver {
     //    - Most reliable when called during inactive state
     //    - autoEnterEnabled flag alone may not trigger PiP
     //    - Even implementing onUserLeaveHint callback per documentation may not ensure activation
-    // 
+    //
     // Based on extensive testing, we recommend using the overlay (floating) window when available,
     // as it provides optimal user experience. Picture-in-Picture mode should be used as a fallback
     // option on Android devices where overlay windows are not supported or permitted.
@@ -169,14 +169,14 @@ class _State extends State<PictureInPicture> with WidgetsBindingObserver {
         aspectRatioX: sourceRectHint?.width.toInt() ?? _contextWidth,
         aspectRatioY: sourceRectHint?.height.toInt() ?? _contextHeight,
         // According to https://developer.android.com/develop/ui/views/picture-in-picture#set-sourcerecthint
-        // If your app doesn't provide a proper sourceRectHint, the system tries to apply a content overlay 
+        // If your app doesn't provide a proper sourceRectHint, the system tries to apply a content overlay
         // during the PiP entering animation, which makes for a poor user experience.
         sourceRectHintLeft: sourceRectHint?.left.toInt() ?? 0,
         sourceRectHintTop: sourceRectHint?.top.toInt() ?? 0,
         sourceRectHintRight: sourceRectHint?.right.toInt() ?? _contextWidth,
         sourceRectHintBottom: sourceRectHint?.bottom.toInt() ?? _contextHeight,
         // According to https://developer.android.com/develop/ui/views/picture-in-picture#seamless-resizing
-        // The setSeamlessResizeEnabled flag is set to true by default for backward compatibility. 
+        // The setSeamlessResizeEnabled flag is set to true by default for backward compatibility.
         // Leave this set to true for video content, and change it to false for non-video content.
         seamlessResizeEnabled: true,
         // The external state monitor checks the PiP view state at the interval specified by externalStateMonitorInterval (100ms).
