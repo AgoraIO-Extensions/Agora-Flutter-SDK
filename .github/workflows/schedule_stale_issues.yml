@@ -15,7 +15,7 @@ on:
   workflow_dispatch:
     
   schedule:
-    - cron: '30 * * * *' # This workflow will run every hour at half past the hour
+    - cron: '30 8 * * *' # This workflow will run every day at 8:30 AM
 
 permissions:
   issues: write
