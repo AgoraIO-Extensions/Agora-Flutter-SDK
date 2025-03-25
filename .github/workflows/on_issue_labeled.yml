@@ -21,7 +21,7 @@ jobs:
         with:
           issue-number: ${{ github.event.issue.number }}
           body: |
-            Please follow the [issue template](https://github.com/AgoraIO-Extensions/Agora-Flutter-SDK/blob/main/.github/ISSUE_TEMPLATE/bug_report.yml) to fill in more details about this issue so that we can investigate this issue more easily, thanks!
+            Please submit a ticket to [Agora Support](https://www.agora.io/en/customer-support/) for further investigation of this issue. If you have any conclusions, you can share them here which may help other developers. Thanks!
 
   # Ask the user for more detail of the issue
   # 
