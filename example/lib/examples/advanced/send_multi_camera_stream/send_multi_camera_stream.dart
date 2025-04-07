@@ -4,16 +4,16 @@ import 'package:agora_rtc_engine_example/components/example_actions_widget.dart'
 import 'package:agora_rtc_engine_example/components/log_sink.dart';
 import 'package:flutter/material.dart';
 
-/// SendMultiCameraStream Example
-class SendMultiCameraStream extends StatefulWidget {
+/// SendMultiCameraStreamDesktop Example
+class SendMultiCameraStreamDesktop extends StatefulWidget {
   /// Construct the [JoinChannelVideo]
-  const SendMultiCameraStream({Key? key}) : super(key: key);
+  const SendMultiCameraStreamDesktop({Key? key}) : super(key: key);
 
   @override
   State<StatefulWidget> createState() => _State();
 }
 
-class _State extends State<SendMultiCameraStream> {
+class _State extends State<SendMultiCameraStreamDesktop> {
   late final RtcEngineEx _engine;
   bool _isReadyPreview = false;
   late final VideoDeviceManager _videoDeviceManager;
