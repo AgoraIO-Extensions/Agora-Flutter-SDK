@@ -5,6 +5,7 @@ import 'package:agora_rtc_engine_example/examples/advanced/push_video_frame/push
 import 'package:agora_rtc_engine_example/examples/advanced/rtmp_streaming/rtmp_streaming.dart';
 import 'package:agora_rtc_engine_example/examples/advanced/screen_sharing/screen_sharing.dart';
 import 'package:agora_rtc_engine_example/examples/advanced/send_multi_camera_stream/send_multi_camera_stream.dart';
+import 'package:agora_rtc_engine_example/examples/advanced/send_multi_camera_stream/send_multi_camera_stream_mobile.dart';
 import 'package:agora_rtc_engine_example/examples/advanced/send_multi_video_stream/send_multi_video_stream.dart';
 import 'package:agora_rtc_engine_example/examples/advanced/set_beauty_effect/set_beauty_effect.dart';
 import 'package:agora_rtc_engine_example/examples/advanced/set_encryption/set_encryption.dart';
@@ -72,7 +73,15 @@ final advanced = [
   if (!kIsWeb)
     {'name': 'SetContentInspect', 'widget': const SetContentInspect()},
   if (!kIsWeb && !(Platform.isAndroid || Platform.isIOS))
-    {'name': 'SendMultiCameraStream', 'widget': const SendMultiCameraStream()},
+    {
+      'name': 'SendMultiCameraStream',
+      'widget': const SendMultiCameraStreamDesktop()
+    },
+  if (!kIsWeb && (/*Platform.isAndroid || */ Platform.isIOS))
+    {
+      'name': 'SendMultiCameraStream',
+      'widget': const SendMultiCameraStreamMobile()
+    },
   if (!kIsWeb)
     {'name': 'StartRhythmPlayer', 'widget': const StartRhythmPlayer()},
   if (!kIsWeb)
