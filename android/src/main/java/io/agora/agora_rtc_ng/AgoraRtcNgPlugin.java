@@ -71,15 +71,7 @@ public class AgoraRtcNgPlugin implements FlutterPlugin, MethodChannel.MethodCall
             // System.loadLibrary here to trigger the JNI_OnLoad explicitly.
             System.loadLibrary("AgoraRtcWrapper");
 
-            String externalFilesDir;
-            if (applicationContext != null) {
-                externalFilesDir = applicationContext.getExternalFilesDir(null).getAbsolutePath();
-            } else {
-                externalFilesDir = "";
-            }
-            result.success(new HashMap<String, String>() {{
-                put("externalFilesDir", externalFilesDir);
-            }});
+            result.success(true);
         } else if (call.method.startsWith("pip")) {
             handlePipMethodCall(call, result);
         } else {
