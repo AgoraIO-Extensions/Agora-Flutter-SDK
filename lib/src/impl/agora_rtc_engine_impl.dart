@@ -870,6 +870,27 @@ class RtcEngineImpl extends rtc_engine_ex_binding.RtcEngineExImpl
   }
 
   @override
+  Future<void> setDualStreamMode(
+      {required SimulcastStreamMode mode,
+      SimulcastStreamConfig? streamConfig}) async {
+    final apiType = streamConfig == null
+        ? 'RtcEngine_setDualStreamMode_3a7f662'
+        : 'RtcEngine_setDualStreamMode_b3a4f6c';
+    final param = createParams(
+        {'mode': mode.value(), 'streamConfig': streamConfig?.toJson()});
+    final callApiResult = await irisMethodChannel
+        .invokeMethod(IrisMethodCall(apiType, jsonEncode(param)));
+    if (callApiResult.irisReturnCode < 0) {
+      throw AgoraRtcException(code: callApiResult.irisReturnCode);
+    }
+    final rm = callApiResult.data;
+    final result = rm['result'];
+    if (result < 0) {
+      throw AgoraRtcException(code: result);
+    }
+  }
+
+  @override
   Future<void> joinChannelWithUserAccount(
       {required String token,
       required String channelId,
