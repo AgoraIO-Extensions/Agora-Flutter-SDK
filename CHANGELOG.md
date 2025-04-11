@@ -1,5 +1,17 @@
 # Changelog
 
+## [6.5.1-rc.1](https://github.com/AgoraIO-Extensions/Agora-Flutter-SDK/compare/6.5.1...6.5.1-rc.1) (2025-04-11)
+
+### Features
+
+* make data classes serializable ([#2223](https://github.com/AgoraIO-Extensions/Agora-Flutter-SDK/issues/2223)) ([0ff7d49](https://github.com/AgoraIO-Extensions/Agora-Flutter-SDK/commit/0ff7d4935b7c4b0fd50c1b01961b6f728df526bd))
+* modify gen functions to make data classes serializable ([#2223](https://github.com/AgoraIO-Extensions/Agora-Flutter-SDK/issues/2223)) ([#2244](https://github.com/AgoraIO-Extensions/Agora-Flutter-SDK/issues/2244)) ([242472c](https://github.com/AgoraIO-Extensions/Agora-Flutter-SDK/commit/242472c4c9740483f98bac24bfb88e06f2d79d7d))
+* support to pub multi camera streams for iOS ([#2256](https://github.com/AgoraIO-Extensions/Agora-Flutter-SDK/issues/2256)) ([e1e990d](https://github.com/AgoraIO-Extensions/Agora-Flutter-SDK/commit/e1e990deab7d25369347e3939041b7cc25221016))
+
+### Bug Fixes
+
+* do not clear all platform view renders when dispose render ([#2214](https://github.com/AgoraIO-Extensions/Agora-Flutter-SDK/issues/2214)) ([#2235](https://github.com/AgoraIO-Extensions/Agora-Flutter-SDK/issues/2235)) ([3fac8fa](https://github.com/AgoraIO-Extensions/Agora-Flutter-SDK/commit/3fac8fa8eb87fad5beef562ee8c5fd7482a7fbea))
+
 ## [6.5.1](https://github.com/AgoraIO-Extensions/Agora-Flutter-SDK/compare/6.5.0...6.5.1) (2025-03-12)
 
 ### Features
