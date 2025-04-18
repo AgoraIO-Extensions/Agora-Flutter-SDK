@@ -65,7 +65,7 @@ get_local_package_version() {
     GET_OUTPUT=`dart pub get`
     DEPS_OUTPUT=`dart pub deps`
   fi
-  PACKAGE_INFO=`echo "$DEPS_OUTPUT" | perl -0777 -pe 's/(└|│|(?<![\d])-)(?!rc\.1).+//s' | head -n 3`
+  PACKAGE_INFO=`echo "$DEPS_OUTPUT" | perl -0777 -pe 's/(└|│|(?<![\d])-|├).+//s' | head -n 3`
   trace "$PACKAGE_INFO"
   DART_VERSION=`echo "$PACKAGE_INFO" | perl -n -e'/^Dart SDK (.*)$/ && print $1'`
   FLUTTER_VERSION=`echo "$PACKAGE_INFO" | perl -n -e'/^Flutter SDK (.*)$/ && print $1'`

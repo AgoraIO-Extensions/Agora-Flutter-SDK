@@ -32,7 +32,7 @@ jobs:
           fi
       - name: Publish Dart Package 🚢
         id: publish
-        uses: ./.github/actions/pub
+        uses: k-paxian/dart-package-publisher@master
         with:
           accessToken: ${{ secrets.OAUTH_ACCESS_TOKEN }}
           refreshToken: ${{ secrets.OAUTH_REFRESH_TOKEN }}
