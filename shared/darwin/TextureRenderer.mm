@@ -5,6 +5,7 @@
 #import <AgoraRtcWrapper/iris_rtc_rendering_cxx.h>
 #import <Foundation/Foundation.h>
 
+#import <memory.h>
 #import <stdio.h>
 
 using namespace agora::iris;
@@ -26,7 +27,8 @@ using namespace agora::iris;
 @end
 
 namespace {
-class RendererDelegate : public agora::iris::VideoFrameObserverDelegate {
+class RendererDelegate : public std::enable_shared_from_this<RendererDelegate>,
+                         public agora::iris::VideoFrameObserverDelegate {
 public:
   RendererDelegate(void *renderer)
       : renderer_(((__bridge TextureRender *)renderer)), pre_width_(0),
@@ -39,6 +41,8 @@ public:
     if (!strongRenderer) {
       return;
     }
+
+    std::weak_ptr<RendererDelegate> self_weak = shared_from_this();
 
     agora::media::base::VideoFrame *vf =
         (agora::media::base::VideoFrame *)videoFrame;
@@ -61,8 +65,14 @@ public:
       // copy the width and height to local variables.
       int temp_width = vf->width;
       int temp_height = vf->height;
+
       dispatch_async(dispatch_get_main_queue(), ^{
-        TextureRender *strongRenderer = renderer_;
+        std::shared_ptr<RendererDelegate> self_strong = self_weak.lock();
+        if (!self_strong) {
+          return;
+        }
+
+        TextureRender *strongRenderer = self_strong->renderer_;
         if (!strongRenderer) {
           return;
         }
@@ -93,7 +103,12 @@ public:
 
     // notify new frame available on main thread
     dispatch_async(dispatch_get_main_queue(), ^{
-      TextureRender *strongRenderer = renderer_;
+      std::shared_ptr<RendererDelegate> self_strong = self_weak.lock();
+      if (!self_strong) {
+        return;
+      }
+
+      TextureRender *strongRenderer = self_strong->renderer_;
       if (!strongRenderer) {
         return;
       }
@@ -111,7 +126,7 @@ public:
 
 @interface TextureRender ()
 
-@property(nonatomic) RendererDelegate *delegate;
+@property(nonatomic) std::shared_ptr<RendererDelegate> delegate;
 
 @end
 
@@ -133,7 +148,7 @@ public:
                                        self.textureId]
               binaryMessenger:messenger];
 
-    self.delegate = new ::RendererDelegate((__bridge void *)self);
+    self.delegate = std::make_shared<::RendererDelegate>((__bridge void *)self);
     self.latestPixelBuffer = nil;
     self.pixelBufferSynchronizationQueue = dispatch_queue_create(
         [[NSString stringWithFormat:@"io.agora.flutter.render_%lld", _textureId]
@@ -163,7 +178,7 @@ public:
       agora::media::base::VIDEO_MODULE_POSITION::POSITION_PRE_RENDERER;
 
   self.delegateId = self.irisRtcRendering->AddVideoFrameObserverDelegate(
-      config, self.delegate);
+      config, self.delegate.get());
 }
 
 - (CVPixelBufferRef _Nullable)copyPixelBuffer {
@@ -184,8 +199,7 @@ public:
     self.irisRtcRendering = nil;
   }
   if (self.delegate) {
-    delete self.delegate;
-    self.delegate = nil;
+    self.delegate.reset();
   }
   if (self.textureRegistry) {
     [self.textureRegistry unregisterTexture:self.textureId];
