@@ -278,6 +278,10 @@ enum MediaPlayerEvent {
   /// @nodoc
   @JsonValue(18)
   playerEventTryOpenFailed,
+
+  /// @nodoc
+  @JsonValue(19)
+  playerEventHttpRedirect,
 }
 
 /// @nodoc
@@ -397,7 +401,6 @@ class PlayerStreamInfo implements AgoraSerializable {
   factory PlayerStreamInfo.fromJson(Map<String, dynamic> json) =>
       _$PlayerStreamInfoFromJson(json);
 
-  /// @nodoc
   @override
   Map<String, dynamic> toJson() => _$PlayerStreamInfoToJson(this);
 }
@@ -420,7 +423,6 @@ class SrcInfo implements AgoraSerializable {
   factory SrcInfo.fromJson(Map<String, dynamic> json) =>
       _$SrcInfoFromJson(json);
 
-  /// @nodoc
   @override
   Map<String, dynamic> toJson() => _$SrcInfoToJson(this);
 }
@@ -472,7 +474,6 @@ class CacheStatistics implements AgoraSerializable {
   factory CacheStatistics.fromJson(Map<String, dynamic> json) =>
       _$CacheStatisticsFromJson(json);
 
-  /// @nodoc
   @override
   Map<String, dynamic> toJson() => _$CacheStatisticsToJson(this);
 }
@@ -507,7 +508,6 @@ class PlayerPlaybackStats implements AgoraSerializable {
   factory PlayerPlaybackStats.fromJson(Map<String, dynamic> json) =>
       _$PlayerPlaybackStatsFromJson(json);
 
-  /// @nodoc
   @override
   Map<String, dynamic> toJson() => _$PlayerPlaybackStatsToJson(this);
 }
@@ -557,7 +557,6 @@ class PlayerUpdatedInfo implements AgoraSerializable {
   factory PlayerUpdatedInfo.fromJson(Map<String, dynamic> json) =>
       _$PlayerUpdatedInfoFromJson(json);
 
-  /// @nodoc
   @override
   Map<String, dynamic> toJson() => _$PlayerUpdatedInfoToJson(this);
 }
@@ -615,7 +614,6 @@ class MediaSource implements AgoraSerializable {
   factory MediaSource.fromJson(Map<String, dynamic> json) =>
       _$MediaSourceFromJson(json);
 
-  /// @nodoc
   @override
   Map<String, dynamic> toJson() => _$MediaSourceToJson(this);
 }

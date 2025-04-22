@@ -159,6 +159,7 @@ AudioPcmFrame _$AudioPcmFrameFromJson(Map<String, dynamic> json) =>
       samplesPerChannel: (json['samples_per_channel_'] as num?)?.toInt(),
       sampleRateHz: (json['sample_rate_hz_'] as num?)?.toInt(),
       numChannels: (json['num_channels_'] as num?)?.toInt(),
+      audioTrackNumber: (json['audio_track_number_'] as num?)?.toInt(),
       bytesPerSample: $enumDecodeNullable(
           _$BytesPerSampleEnumMap, json['bytes_per_sample']),
       data: (json['data_'] as List<dynamic>?)
@@ -180,6 +181,7 @@ Map<String, dynamic> _$AudioPcmFrameToJson(AudioPcmFrame instance) {
   writeNotNull('samples_per_channel_', instance.samplesPerChannel);
   writeNotNull('sample_rate_hz_', instance.sampleRateHz);
   writeNotNull('num_channels_', instance.numChannels);
+  writeNotNull('audio_track_number_', instance.audioTrackNumber);
   writeNotNull(
       'bytes_per_sample', _$BytesPerSampleEnumMap[instance.bytesPerSample]);
   writeNotNull('data_', instance.data);

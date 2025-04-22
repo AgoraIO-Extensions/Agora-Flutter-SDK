@@ -242,6 +242,7 @@ const _$MediaPlayerEventEnumMap = {
   MediaPlayerEvent.playerEventTryOpenStart: 16,
   MediaPlayerEvent.playerEventTryOpenSucceed: 17,
   MediaPlayerEvent.playerEventTryOpenFailed: 18,
+  MediaPlayerEvent.playerEventHttpRedirect: 19,
 };
 
 const _$PlayerPreloadEventEnumMap = {

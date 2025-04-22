@@ -4,7 +4,6 @@
 
 import '/src/_serializable.dart';
 import '/src/binding_forward_export.dart';
-
 part 'call_api_impl_params_json.g.dart';
 
 @JsonSerializable(explicitToJson: true, includeIfNull: false)
