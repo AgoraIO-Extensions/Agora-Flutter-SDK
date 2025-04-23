@@ -1,5 +1,16 @@
 # Changelog
 
+## [6.5.2](https://github.com/AgoraIO-Extensions/Agora-Flutter-SDK/compare/6.5.1-rc.2...6.5.2) (2025-04-23)
+
+### Features
+
+* update dependencies ([#2272](https://github.com/AgoraIO-Extensions/Agora-Flutter-SDK/issues/2272)) ([a97726d](https://github.com/AgoraIO-Extensions/Agora-Flutter-SDK/commit/a97726d1c4d57e79811ac71eaeb8320ed3c7481b))
+
+### Bug Fixes
+
+* hold weak ref of RendererDelegate in async task ([#2265](https://github.com/AgoraIO-Extensions/Agora-Flutter-SDK/issues/2265)) ([#2271](https://github.com/AgoraIO-Extensions/Agora-Flutter-SDK/issues/2271)) ([3a5a91e](https://github.com/AgoraIO-Extensions/Agora-Flutter-SDK/commit/3a5a91e937c61122ed53dae5299c9df9f0ad180a))
+* Undefined name 'platformViewRegistry'. ([#2273](https://github.com/AgoraIO-Extensions/Agora-Flutter-SDK/issues/2273)) ([227bc28](https://github.com/AgoraIO-Extensions/Agora-Flutter-SDK/commit/227bc28ecd0a7f0494b39c8dc54457affddf80db))
+
 ## [6.5.1-rc.1](https://github.com/AgoraIO-Extensions/Agora-Flutter-SDK/compare/6.5.1...6.5.1-rc.1) (2025-04-11)
 
 ### Features
