@@ -346,7 +346,9 @@ public class AgoraPipController
     }
 
     private void stopStateMonitoring() {
-        mHandler.removeCallbacks(mCheckStateTask);
+        if (mHandler != null && mCheckStateTask != null) {
+            mHandler.removeCallbacks(mCheckStateTask);
+        }
     }
 
     @Override
