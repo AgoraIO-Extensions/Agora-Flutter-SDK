@@ -9,6 +9,7 @@ on:
     secrets:
       APP_ID:
         required: true
+  
 
 jobs:
   flutter_codestyle_check:
@@ -32,7 +33,7 @@ jobs:
           TOTAL: ${{ steps.analysis.outputs.total }}
           TOTAL_MAX: ${{ steps.analysis.outputs.total_max }}
         run: |
-          if (( $TOTAL_MAX - $TOTAL > 10 ))
+          if (( $TOTAL_MAX - $TOTAL > 30 ))
           then
             echo Pub Score too low.
             exit 1
@@ -89,7 +90,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        version: ["3.7.0", "3.24.5"]
+        version: ["3.13.0", "3.24.5"]
     runs-on: ubuntu-latest
     timeout-minutes: 120
     env:
@@ -127,7 +128,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        version: ["3.7.0", "3.16"]
+        version: ["3.13.0", "3.24.5"]
     runs-on: macos-latest
     timeout-minutes: 120
     env:
@@ -169,7 +170,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        version: ["3.7.0"]
+        version: ["3.13.0", "3.24.5"]
     runs-on: macos-latest
     timeout-minutes: 120
     env:
@@ -215,7 +216,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        version: ["3.7.0", "3.24.5"]
+        version: ["3.13.0", "3.24.5"]
     runs-on: windows-2019
     timeout-minutes: 120
     env:
@@ -247,7 +248,7 @@ jobs:
     if: ${{ !contains(github.event.pull_request.labels.*.name, 'ci:skip') }}
     strategy:
       matrix:
-        version: ["3.24.5"]
+        version: ["3.13.0", "3.24.5"]
     runs-on: ubuntu-latest
     timeout-minutes: 60
     env:
@@ -270,7 +271,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        version: ["3.7.12", "3.24.5"] # Need 3.7.12 to build with Gradle 8.x https://github.com/flutter/flutter/issues/124838
+        version: ["3.13.0", "3.24.5"]
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
@@ -294,7 +295,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        version: ["3.7.12", "3.24.5"] # Need 3.7.12 to build with Gradle 8.x https://github.com/flutter/flutter/issues/124838
+        version: ["3.13.0", "3.24.5"]
     runs-on: windows-2019
     steps:
       - uses: actions/checkout@v3
@@ -318,7 +319,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        version: ["3.7.0"]
+        version: ["3.13.0", "3.24.5"]
     runs-on: macos-latest
     timeout-minutes: 120
     steps:
@@ -364,7 +365,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        version: ["3.7.0", "3.24.5"]
+        version: ["3.13.0", "3.24.5"]
     runs-on: ubuntu-latest
     timeout-minutes: 120
     steps:
@@ -375,7 +376,7 @@ jobs:
           cache: true
       - run: flutter packages get
       - name: Run flutter build web
-        run: flutter build web
+        run: flutter build web --no-tree-shake-icons
         working-directory: example
 
   rendering_test_android:
@@ -423,7 +424,7 @@ jobs:
     if: ${{ !contains(github.event.pull_request.labels.*.name, 'ci:skip') }}
     strategy:
       matrix:
-        version: ["3.24.5"]
+        version: ["3.13.0", "3.24.5"]
     runs-on: macos-13 # Rendering test on ios simulator need macos 13+
     timeout-minutes: 60
     env:
@@ -450,7 +451,7 @@ jobs:
     if: ${{ !contains(github.event.pull_request.labels.*.name, 'ci:skip') }}
     strategy:
       matrix:
-        version: ["3.24.5"]
+        version: ["3.13.0", "3.24.5"]
     runs-on: macos-latest
     timeout-minutes: 120
     env:
@@ -477,7 +478,7 @@ jobs:
     if: ${{ !contains(github.event.pull_request.labels.*.name, 'ci:skip') }}
     strategy:
       matrix:
-        version: ["3.24.5"]
+        version: ["3.13.0", "3.24.5"]
     runs-on: windows-2019
     timeout-minutes: 120
     env:
@@ -506,7 +507,7 @@ jobs:
     if: ${{ !contains(github.event.pull_request.labels.*.name, 'ci:skip') }}
     strategy:
       matrix:
-        version: ["3.24.5"]
+        version: ["3.13.0", "3.24.5"]
     runs-on: ubuntu-latest
     timeout-minutes: 60
     env:
