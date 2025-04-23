@@ -20,7 +20,6 @@ class RtcConnection implements AgoraSerializable {
   factory RtcConnection.fromJson(Map<String, dynamic> json) =>
       _$RtcConnectionFromJson(json);
 
-  /// @nodoc
   @override
   Map<String, dynamic> toJson() => _$RtcConnectionToJson(this);
 }
@@ -443,7 +442,6 @@ abstract class RtcEngineEx implements RtcEngine {
   ///  If you need a more comprehensive solution for low-latency, high-concurrency, and scalable real-time messaging and status synchronization, it is recommended to use.
   ///  Call this method after joinChannelEx.
   ///  Ensure that you call createDataStreamEx to create a data channel before calling this method.
-  ///  This method applies only to the COMMUNICATION profile or to the hosts in the LIVE_BROADCASTING profile. If an audience in the LIVE_BROADCASTING profile calls this method, the audience may be switched to a host.
   ///
   /// * [streamId] The data stream ID. You can get the data stream ID by calling createDataStreamEx.
   /// * [data] The message to be sent.

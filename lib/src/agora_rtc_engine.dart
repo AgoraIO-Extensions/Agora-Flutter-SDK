@@ -498,7 +498,6 @@ class LocalVideoStats implements AgoraSerializable {
   factory LocalVideoStats.fromJson(Map<String, dynamic> json) =>
       _$LocalVideoStatsFromJson(json);
 
-  /// @nodoc
   @override
   Map<String, dynamic> toJson() => _$LocalVideoStatsToJson(this);
 }
@@ -608,7 +607,6 @@ class RemoteAudioStats implements AgoraSerializable {
   factory RemoteAudioStats.fromJson(Map<String, dynamic> json) =>
       _$RemoteAudioStatsFromJson(json);
 
-  /// @nodoc
   @override
   Map<String, dynamic> toJson() => _$RemoteAudioStatsToJson(this);
 }
@@ -718,7 +716,6 @@ class RemoteVideoStats implements AgoraSerializable {
   factory RemoteVideoStats.fromJson(Map<String, dynamic> json) =>
       _$RemoteVideoStatsFromJson(json);
 
-  /// @nodoc
   @override
   Map<String, dynamic> toJson() => _$RemoteVideoStatsToJson(this);
 }
@@ -768,7 +765,6 @@ class VideoCompositingLayout implements AgoraSerializable {
   factory VideoCompositingLayout.fromJson(Map<String, dynamic> json) =>
       _$VideoCompositingLayoutFromJson(json);
 
-  /// @nodoc
   @override
   Map<String, dynamic> toJson() => _$VideoCompositingLayoutToJson(this);
 }
@@ -822,7 +818,6 @@ class Region implements AgoraSerializable {
   /// @nodoc
   factory Region.fromJson(Map<String, dynamic> json) => _$RegionFromJson(json);
 
-  /// @nodoc
   @override
   Map<String, dynamic> toJson() => _$RegionToJson(this);
 }
@@ -877,7 +872,6 @@ class InjectStreamConfig implements AgoraSerializable {
   factory InjectStreamConfig.fromJson(Map<String, dynamic> json) =>
       _$InjectStreamConfigFromJson(json);
 
-  /// @nodoc
   @override
   Map<String, dynamic> toJson() => _$InjectStreamConfigToJson(this);
 }
@@ -984,7 +978,6 @@ class PublisherConfiguration implements AgoraSerializable {
   factory PublisherConfiguration.fromJson(Map<String, dynamic> json) =>
       _$PublisherConfigurationFromJson(json);
 
-  /// @nodoc
   @override
   Map<String, dynamic> toJson() => _$PublisherConfigurationToJson(this);
 }
@@ -1092,7 +1085,6 @@ class CameraCapturerConfiguration implements AgoraSerializable {
   factory CameraCapturerConfiguration.fromJson(Map<String, dynamic> json) =>
       _$CameraCapturerConfigurationFromJson(json);
 
-  /// @nodoc
   @override
   Map<String, dynamic> toJson() => _$CameraCapturerConfigurationToJson(this);
 }
@@ -1137,7 +1129,6 @@ class ScreenCaptureConfiguration implements AgoraSerializable {
   factory ScreenCaptureConfiguration.fromJson(Map<String, dynamic> json) =>
       _$ScreenCaptureConfigurationFromJson(json);
 
-  /// @nodoc
   @override
   Map<String, dynamic> toJson() => _$ScreenCaptureConfigurationToJson(this);
 }
@@ -1159,7 +1150,6 @@ class SIZE implements AgoraSerializable {
   /// @nodoc
   factory SIZE.fromJson(Map<String, dynamic> json) => _$SIZEFromJson(json);
 
-  /// @nodoc
   @override
   Map<String, dynamic> toJson() => _$SIZEToJson(this);
 }
@@ -1192,7 +1182,6 @@ class ThumbImageBuffer implements AgoraSerializable {
   factory ThumbImageBuffer.fromJson(Map<String, dynamic> json) =>
       _$ThumbImageBufferFromJson(json);
 
-  /// @nodoc
   @override
   Map<String, dynamic> toJson() => _$ThumbImageBufferToJson(this);
 }
@@ -1300,7 +1289,6 @@ class ScreenCaptureSourceInfo implements AgoraSerializable {
   factory ScreenCaptureSourceInfo.fromJson(Map<String, dynamic> json) =>
       _$ScreenCaptureSourceInfoFromJson(json);
 
-  /// @nodoc
   @override
   Map<String, dynamic> toJson() => _$ScreenCaptureSourceInfoToJson(this);
 }
@@ -1319,7 +1307,6 @@ class AdvancedAudioOptions implements AgoraSerializable {
   factory AdvancedAudioOptions.fromJson(Map<String, dynamic> json) =>
       _$AdvancedAudioOptionsFromJson(json);
 
-  /// @nodoc
   @override
   Map<String, dynamic> toJson() => _$AdvancedAudioOptionsToJson(this);
 }
@@ -1346,7 +1333,6 @@ class ImageTrackOptions implements AgoraSerializable {
   factory ImageTrackOptions.fromJson(Map<String, dynamic> json) =>
       _$ImageTrackOptionsFromJson(json);
 
-  /// @nodoc
   @override
   Map<String, dynamic> toJson() => _$ImageTrackOptionsToJson(this);
 }
@@ -1552,7 +1538,6 @@ class ChannelMediaOptions implements AgoraSerializable {
   factory ChannelMediaOptions.fromJson(Map<String, dynamic> json) =>
       _$ChannelMediaOptionsFromJson(json);
 
-  /// @nodoc
   @override
   Map<String, dynamic> toJson() => _$ChannelMediaOptionsToJson(this);
 }
@@ -1650,7 +1635,6 @@ class LeaveChannelOptions implements AgoraSerializable {
   factory LeaveChannelOptions.fromJson(Map<String, dynamic> json) =>
       _$LeaveChannelOptionsFromJson(json);
 
-  /// @nodoc
   @override
   Map<String, dynamic> toJson() => _$LeaveChannelOptionsToJson(this);
 }
@@ -2801,7 +2785,6 @@ class RtcEngineContext implements AgoraSerializable {
   factory RtcEngineContext.fromJson(Map<String, dynamic> json) =>
       _$RtcEngineContextFromJson(json);
 
-  /// @nodoc
   @override
   Map<String, dynamic> toJson() => _$RtcEngineContextToJson(this);
 }
@@ -2906,7 +2889,6 @@ class Metadata implements AgoraSerializable {
   factory Metadata.fromJson(Map<String, dynamic> json) =>
       _$MetadataFromJson(json);
 
-  /// @nodoc
   @override
   Map<String, dynamic> toJson() => _$MetadataToJson(this);
 }
@@ -3024,7 +3006,6 @@ class DirectCdnStreamingStats implements AgoraSerializable {
   factory DirectCdnStreamingStats.fromJson(Map<String, dynamic> json) =>
       _$DirectCdnStreamingStatsFromJson(json);
 
-  /// @nodoc
   @override
   Map<String, dynamic> toJson() => _$DirectCdnStreamingStatsToJson(this);
 }
@@ -3102,7 +3083,6 @@ class DirectCdnStreamingMediaOptions implements AgoraSerializable {
   factory DirectCdnStreamingMediaOptions.fromJson(Map<String, dynamic> json) =>
       _$DirectCdnStreamingMediaOptionsFromJson(json);
 
-  /// @nodoc
   @override
   Map<String, dynamic> toJson() => _$DirectCdnStreamingMediaOptionsToJson(this);
 }
@@ -3134,7 +3114,6 @@ class ExtensionInfo implements AgoraSerializable {
   factory ExtensionInfo.fromJson(Map<String, dynamic> json) =>
       _$ExtensionInfoFromJson(json);
 
-  /// @nodoc
   @override
   Map<String, dynamic> toJson() => _$ExtensionInfoToJson(this);
 }
@@ -3555,6 +3534,7 @@ abstract class RtcEngine {
   /// Enables/Disables the virtual background.
   ///
   /// The virtual background feature enables the local user to replace their original background with a static image, dynamic video, blurred background, or portrait-background segmentation to achieve picture-in-picture effect. Once the virtual background feature is enabled, all users in the channel can see the custom background. Call this method after calling enableVideo or startPreview.
+  ///  Using a video as a your virtual background will lead to continuous increase in memory usage, which may cause issues such as app crashes. Therefore,it is recommended to reduce the resolution and frame rate of the video when using it.
   ///  This feature has high requirements on device performance. When calling this method, the SDK automatically checks the capabilities of the current device. Agora recommends you use virtual background on devices with the following processors:
   ///  Snapdragon 700 series 750G and later
   ///  Snapdragon 800 series 835 and later
@@ -3631,7 +3611,7 @@ abstract class RtcEngine {
   ///  If someone subscribes to the low-quality stream, the SDK enables the low-quality stream and resets it to the SimulcastStreamConfig configuration used in the most recent calling of setDualStreamMode. If no configuration has been set by the user previously, the following values are used:
   ///  Resolution: 480 × 272
   ///  Frame rate: 15 fps
-  ///  Bitrate: 500 Kbps applicationScenario1v1 (2) This is applicable to the scenario. To meet the requirements for low latency and high-quality video in this scenario, the SDK optimizes its strategies, improving performance in terms of video quality, first frame rendering, latency on mid-to-low-end devices, and smoothness under weak network conditions. applicationScenarioLiveshow (3) This is applicable to the scenario. In this scenario, fast video rendering and high image quality are crucial. The SDK implements several performance optimizations, including automatically enabling accelerated audio and video frame rendering to minimize first-frame latency (no need to call enableInstantMediaRendering), and B-frame encoding to achieve better image quality and bandwidth efficiency. The SDK also provides enhanced video quality and smooth playback, even in poor network conditions or on lower-end devices.
+  ///  Bitrate: 500 Kbps applicationScenario1v1 (2) This is applicable to the scenario. To meet the requirements for low latency and high-quality video in this scenario, the SDK optimizes its strategies, improving performance in terms of video quality, first frame rendering, latency on mid-to-low-end devices, and smoothness under weak network conditions. This enumeration value is only applicable to the broadcaster vs. broadcaster scenario. applicationScenarioLiveshow (3) This is applicable to the scenario. In this scenario, fast video rendering and high image quality are crucial. The SDK implements several performance optimizations, including automatically enabling accelerated audio and video frame rendering to minimize first-frame latency (no need to call enableInstantMediaRendering), and B-frame encoding to achieve better image quality and bandwidth efficiency. The SDK also provides enhanced video quality and smooth playback, even in poor network conditions or on lower-end devices.
   ///
   /// Returns
   /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown. You need to catch the exception and handle it accordingly.
@@ -5775,7 +5755,7 @@ abstract class RtcEngine {
   ///  Each client within the channel can have up to 5 data channels simultaneously, with a total shared packet bitrate limit of 30 KB/s for all data channels.
   ///  Each data channel can send up to 60 packets per second, with each packet being a maximum of 1 KB. A successful method call triggers the onStreamMessage callback on the remote client, from which the remote user gets the stream message. A failed method call triggers the onStreamMessageError callback on the remote client.
   ///  This method needs to be called after createDataStream and joining the channel.
-  ///  In live streaming scenarios, this method only applies to hosts.
+  ///  This method applies to broadcasters only.
   ///
   /// * [streamId] The data stream ID. You can get the data stream ID by calling createDataStream.
   /// * [data] The message to be sent.
@@ -6835,7 +6815,6 @@ class SDKBuildInfo implements AgoraSerializable {
   factory SDKBuildInfo.fromJson(Map<String, dynamic> json) =>
       _$SDKBuildInfoFromJson(json);
 
-  /// @nodoc
   @override
   Map<String, dynamic> toJson() => _$SDKBuildInfoToJson(this);
 }
@@ -6858,7 +6837,6 @@ class VideoDeviceInfo implements AgoraSerializable {
   factory VideoDeviceInfo.fromJson(Map<String, dynamic> json) =>
       _$VideoDeviceInfoFromJson(json);
 
-  /// @nodoc
   @override
   Map<String, dynamic> toJson() => _$VideoDeviceInfoToJson(this);
 }
@@ -6885,7 +6863,6 @@ class AudioDeviceInfo implements AgoraSerializable {
   factory AudioDeviceInfo.fromJson(Map<String, dynamic> json) =>
       _$AudioDeviceInfoFromJson(json);
 
-  /// @nodoc
   @override
   Map<String, dynamic> toJson() => _$AudioDeviceInfoToJson(this);
 }
