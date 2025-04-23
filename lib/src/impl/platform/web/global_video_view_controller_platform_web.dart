@@ -1,6 +1,6 @@
 import 'dart:async';
 import 'dart:html' as html;
-import 'dart:ui' as ui;
+import 'dart:ui_web' as ui;
 
 import '/agora_rtc_engine.dart';
 import '/src/impl/platform/global_video_view_controller_platform.dart';
@@ -49,7 +49,6 @@ class GlobalVideoViewControllerWeb extends GlobalVideoViewControllerPlatfrom {
   GlobalVideoViewControllerWeb(
       IrisMethodChannel irisMethodChannel, RtcEngine rtcEngine)
       : super(irisMethodChannel, rtcEngine) {
-    // ignore: undefined_prefixed_name
     ui.platformViewRegistry.registerViewFactory(_platformRendererViewType,
         (int viewId) {
       final view = _View(viewId);
