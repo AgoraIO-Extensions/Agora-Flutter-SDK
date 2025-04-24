@@ -61,7 +61,7 @@ jobs:
           author: ${{ github.actor }} <${{ github.actor }}@users.noreply.github.com>
           signoff: false
           branch: prepare-release-${{ inputs.version }}
-          base: main
+          base: ${{ inputs.release_branch }}
           delete-branch: true
           title: "chore: release ${{ inputs.version }}"
           body: |
