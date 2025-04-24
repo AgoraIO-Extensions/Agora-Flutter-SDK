@@ -1,5 +1,20 @@
 # Changelog
 
+## [6.3.2-sp.43211.b.7](https://github.com/AgoraIO-Extensions/Agora-Flutter-SDK/compare/6.3.2-sp.43211.b.6...6.3.2-sp.43211.b.7) (2025-04-24)
+
+### Features
+
+* make data classes serializable ([#2223](https://github.com/AgoraIO-Extensions/Agora-Flutter-SDK/issues/2223)) ([#2241](https://github.com/AgoraIO-Extensions/Agora-Flutter-SDK/issues/2241)) ([5d0ce6a](https://github.com/AgoraIO-Extensions/Agora-Flutter-SDK/commit/5d0ce6a210fdc9521c85a33759992bd1436bc413))
+* optimize internal dependencies ([#2146](https://github.com/AgoraIO-Extensions/Agora-Flutter-SDK/issues/2146)) ([#2239](https://github.com/AgoraIO-Extensions/Agora-Flutter-SDK/issues/2239)) ([ca7cf4e](https://github.com/AgoraIO-Extensions/Agora-Flutter-SDK/commit/ca7cf4eb4ea9febf61ba39a0f8293d2306b8bafa))
+
+### Bug Fixes
+
+* catch exception of eventHandler when some unknown error code or … ([#2234](https://github.com/AgoraIO-Extensions/Agora-Flutter-SDK/issues/2234)) ([8e00896](https://github.com/AgoraIO-Extensions/Agora-Flutter-SDK/commit/8e00896abf30cbd1cb342e449df75253eda18fb2)), closes [#2215](https://github.com/AgoraIO-Extensions/Agora-Flutter-SDK/issues/2215) [#2210](https://github.com/AgoraIO-Extensions/Agora-Flutter-SDK/issues/2210)
+* check the renderer in OnVideoFrameReceived before use it ([#2222](https://github.com/AgoraIO-Extensions/Agora-Flutter-SDK/issues/2222)) ([c050289](https://github.com/AgoraIO-Extensions/Agora-Flutter-SDK/commit/c0502892747a470db59f4562995d6b070140930b))
+* crash when call pipController.dispose on android ([#2276](https://github.com/AgoraIO-Extensions/Agora-Flutter-SDK/issues/2276)) ([#2277](https://github.com/AgoraIO-Extensions/Agora-Flutter-SDK/issues/2277)) ([760caaa](https://github.com/AgoraIO-Extensions/Agora-Flutter-SDK/commit/760caaa3e2834fd1b401ed22a77d3cf89bec3f87))
+* disable warning 4819 when build windows ([#2228](https://github.com/AgoraIO-Extensions/Agora-Flutter-SDK/issues/2228)) ([5d9e213](https://github.com/AgoraIO-Extensions/Agora-Flutter-SDK/commit/5d9e213cc68df4e80aebcbd59495e8a80094280a))
+* hold weak ref of RendererDelegate in async task ([#2265](https://github.com/AgoraIO-Extensions/Agora-Flutter-SDK/issues/2265)) ([#2271](https://github.com/AgoraIO-Extensions/Agora-Flutter-SDK/issues/2271)) ([#2278](https://github.com/AgoraIO-Extensions/Agora-Flutter-SDK/issues/2278)) ([3303d63](https://github.com/AgoraIO-Extensions/Agora-Flutter-SDK/commit/3303d6382ce7bdc88228a6757b0b6a626206aed2))
+
 ## [6.3.2](https://github.com/AgoraIO-Extensions/Agora-Flutter-SDK/compare/6.3.1...6.3.2) (2024-06-06)
 
 
