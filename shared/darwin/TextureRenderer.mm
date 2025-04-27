@@ -208,6 +208,14 @@ public:
 }
 
 - (void)dealloc {
+  if (self.irisRtcRendering) {
+    // the delegateId is garenteed to be auto incremented, so we can just remove
+    // the delegate by the id, no need to check if the delegate is still valid
+    // or is belong to this TextureRender
+    self.irisRtcRendering->RemoveVideoFrameObserverDelegate(self.delegateId);
+    self.irisRtcRendering = nil;
+  }
+
   dispatch_sync(self.pixelBufferSynchronizationQueue, ^{
     if (self.latestPixelBuffer) {
       CVPixelBufferRelease(self.latestPixelBuffer);

@@ -246,4 +246,11 @@
     [self.textureRenders removeAllObjects];
 }
 
+// - (void)dealloc {
+//   // do not do this, coz TextureRender::TextureRender will call
+//   // [textureRegistry unregisterTexture] which may already been dealloced by
+//   // flutter and will bring crash
+//   // [self dispose];
+// }
+
 @end
