@@ -1,4 +1,5 @@
 #import "TextureRenderer.h"
+#import "AgoraCVPixelBufferUtils.h"
 
 #import <AgoraRtcKit/AgoraMediaBase.h>
 #import <AgoraRtcKit/IAgoraMediaEngine.h>
@@ -95,10 +96,18 @@ public:
     // properties.
     dispatch_sync(strongRenderer.pixelBufferSynchronizationQueue, ^{
       previousPixelBuffer = strongRenderer.latestPixelBuffer;
+      // iOS can use retain/release to manage pixel buffer references directly.
+      // However, since RTC 4.4.0, macOS requires an explicit copy of the pixel buffer,
+      // so we handle each platform differently using conditional compilation.
+#if TARGET_OS_IOS
       strongRenderer.latestPixelBuffer = CVPixelBufferRetain(pixelBuffer);
+#else
+      strongRenderer.latestPixelBuffer =
+          [AgoraCVPixelBufferUtils copyCVPixelBuffer:pixelBuffer];
+#endif
     });
     if (previousPixelBuffer) {
-      CFRelease(previousPixelBuffer);
+      CVPixelBufferRelease(previousPixelBuffer);
     }
 
     // notify new frame available on main thread
