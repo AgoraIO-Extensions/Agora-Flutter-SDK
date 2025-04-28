@@ -1,7 +1,132 @@
 #import "AgoraCVPixelBufferUtils.h"
+
+#include <mutex>
+#include <tuple>
+#include <unordered_map>
+
 #include <CoreVideo/CoreVideo.h>
+#import <Foundation/Foundation.h>
+
+#pragma mark - AgoraCVPixelBufferPool
+
+struct AgoraCVPixelBufferPoolKey {
+  OSType type;
+  size_t width;
+  size_t height;
+
+  bool operator==(const AgoraCVPixelBufferPoolKey &other) const {
+    return type == other.type && width == other.width && height == other.height;
+  }
+
+  bool operator<(const AgoraCVPixelBufferPoolKey &other) const {
+    return std::tie(type, width, height) <
+           std::tie(other.type, other.width, other.height);
+  }
+};
+
+struct AgoraCVPixelBufferPoolKeyHash {
+  std::size_t operator()(const AgoraCVPixelBufferPoolKey &key) const {
+    return std::hash<OSType>()(key.type) ^ std::hash<size_t>()(key.width) ^
+           std::hash<size_t>()(key.height);
+  }
+};
+
+@interface AgoraCVPixelBufferPool : NSObject
+
++ (instancetype)sharedInstance;
+
+- (CVPixelBufferRef)createPixelBuffer:(OSType)type
+                                width:(size_t)width
+                               height:(size_t)height;
+
+- (void)freeAllCVPixelBufferPools;
+
+@end
+
+@implementation AgoraCVPixelBufferPool {
+  std::mutex _mutex;
+  std::unordered_map<AgoraCVPixelBufferPoolKey, CVPixelBufferPoolRef,
+                     AgoraCVPixelBufferPoolKeyHash>
+      _pools;
+}
+
++ (instancetype)sharedInstance {
+  static AgoraCVPixelBufferPool *instance = nil;
+
+  // should we use this or just use a static global variable?
+  static dispatch_once_t onceToken;
+  dispatch_once(&onceToken, ^{
+    instance = [[AgoraCVPixelBufferPool alloc] init];
+  });
+
+  return instance;
+}
+
+- (CVPixelBufferRef)createPixelBuffer:(OSType)type
+                                width:(size_t)width
+                               height:(size_t)height {
+  @autoreleasepool {
+    CVPixelBufferPoolRef pool = nil;
+    AgoraCVPixelBufferPoolKey key = {type, width, height};
+
+    std::lock_guard<std::mutex> lock(_mutex);
+    auto it = _pools.find(key);
+    if (it == _pools.end()) {
+      NSMutableDictionary *attributes =
+          [NSMutableDictionary dictionaryWithDictionary:@{
+            (id)kCVPixelBufferIOSurfacePropertiesKey : @{},
+#if (TARGET_OS_IOS)
+            (id)kCVPixelBufferOpenGLESCompatibilityKey : @YES,
+#elif (TARGET_OS_OSX)
+            (id)kCVPixelBufferOpenGLCompatibilityKey : @YES,
+#endif
+            (id)kCVPixelBufferCGImageCompatibilityKey : @YES,
+            (id)kCVPixelBufferCGBitmapContextCompatibilityKey : @YES,
+            (id)kCVPixelBufferPixelFormatTypeKey : @(key.type),
+            (id)kCVPixelBufferWidthKey : @(key.width),
+            (id)kCVPixelBufferHeightKey : @(key.height)
+          }];
+
+      if (@available(macOS 10.11, *)) {
+        [attributes setObject:@YES
+                       forKey:(id)kCVPixelBufferMetalCompatibilityKey];
+      }
+      CVReturn status = CVPixelBufferPoolCreate(
+          nil, nil, (__bridge CFDictionaryRef)attributes, &pool);
+      if (status != kCVReturnSuccess || !pool) {
+        return nil;
+      }
+
+      _pools[key] = pool;
+    } else {
+      pool = it->second;
+    }
+
+    CVPixelBufferRef pixelBuffer = nil;
+    CVPixelBufferPoolCreatePixelBuffer(kCFAllocatorDefault, pool, &pixelBuffer);
+
+    return pixelBuffer;
+  }
+}
+
+- (void)freeAllCVPixelBufferPools {
+  std::lock_guard<std::mutex> lock(_mutex);
+  for (auto &pool : _pools) {
+    CVPixelBufferPoolFlush(pool.second, kCVPixelBufferPoolFlushExcessBuffers);
+    CVPixelBufferPoolRelease(pool.second);
+  }
+  _pools.clear();
+}
+
+@end
+
+#pragma mark - AgoraCVPixelBufferUtils
 
 @implementation AgoraCVPixelBufferUtils
+
++ (void)freeAllCVPixelBufferPools {
+  [[AgoraCVPixelBufferPool sharedInstance] freeAllCVPixelBufferPools];
+}
 
 + (BOOL)copyNV12CVPixelBuffer:(CVPixelBufferRef _Nonnull)sourcePixelBuffer
               destPixelBuffer:(CVPixelBufferRef _Nonnull)destPixelBuffer {
@@ -116,6 +241,8 @@
   size_t sourceHeight = CVPixelBufferGetHeight(sourcePixelBuffer);
   OSType sourceFormat = CVPixelBufferGetPixelFormatType(sourcePixelBuffer);
 
+// create pixel buffer directly
+#if defined(TARGET_OS_OSX) && TARGET_OS_OSX
   // Create new buffer with Metal compatibility
   NSDictionary *pixelBufferAttributes = @{
     // This key is required to generate SKPicture with CVPixelBufferRef in
@@ -130,6 +257,16 @@
   if (status != kCVReturnSuccess || !destPixelBuffer) {
     return nil;
   }
+#else
+  // create pixel buffer from pool
+  CVPixelBufferRef destPixelBuffer =
+      [[AgoraCVPixelBufferPool sharedInstance] createPixelBuffer:sourceFormat
+                                                           width:sourceWidth
+                                                          height:sourceHeight];
+  if (!destPixelBuffer) {
+    return nil;
+  }
+#endif
 
   // Copy data based on format
   BOOL success = NO;
@@ -151,6 +288,7 @@
   return destPixelBuffer;
 }
 
+#if defined(TARGET_OS_OSX) && TARGET_OS_OSX
 + (BOOL)saveCVPixelBufferToFile:(CVPixelBufferRef)pixelBuffer
                            name:(NSString *)name {
   // Validate input parameters
@@ -218,5 +356,6 @@
 
   return writeSuccess;
 }
+#endif
 
 @end

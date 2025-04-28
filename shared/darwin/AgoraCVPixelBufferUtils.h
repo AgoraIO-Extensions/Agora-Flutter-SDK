@@ -3,6 +3,15 @@
 @interface AgoraCVPixelBufferUtils : NSObject
 
 /**
+ * Frees all CVPixelBuffer pools.
+ *
+ * We use a pool of CVPixelBuffers to avoid allocating and freeing them
+ * frequently. This method allows us to free all the CVPixelBuffers in the
+ * pool when needed.
+ */
++ (void)freeAllCVPixelBufferPools;
+
+/**
  * Creates a copy of a CVPixelBuffer.
  *
  * Always returns a new CVPixelBuffer with the same properties as the source
@@ -14,6 +23,8 @@
 + (CVPixelBufferRef _Nullable)copyCVPixelBuffer:
     (CVPixelBufferRef _Nonnull)sourcePixelBuffer;
 
+
+#if defined(TARGET_OS_OSX) && TARGET_OS_OSX
 /**
  * Saves a CVPixelBuffer to a PNG file in the documents directory.
  *
@@ -23,5 +34,6 @@
  */
 + (BOOL)saveCVPixelBufferToFile:(CVPixelBufferRef _Nonnull)pixelBuffer
                            name:(NSString *_Nonnull)name;
+#endif
 
 @end
