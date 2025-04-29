@@ -243,12 +243,26 @@ struct AgoraCVPixelBufferPoolKeyHash {
 
 // create pixel buffer directly
 #if defined(TARGET_OS_OSX) && TARGET_OS_OSX
-  // Create new buffer with Metal compatibility
-  NSDictionary *pixelBufferAttributes = @{
+  NSMutableDictionary *pixelBufferAttributes =
+      [NSMutableDictionary dictionaryWithDictionary:@{
+        (id)kCVPixelBufferIOSurfacePropertiesKey : @{},
+#if (TARGET_OS_IOS)
+        (id)kCVPixelBufferOpenGLESCompatibilityKey : @YES,
+#elif (TARGET_OS_OSX)
+        (id)kCVPixelBufferOpenGLCompatibilityKey : @YES,
+#endif
+        (id)kCVPixelBufferCGImageCompatibilityKey : @YES,
+        (id)kCVPixelBufferCGBitmapContextCompatibilityKey : @YES,
+        (id)kCVPixelBufferPixelFormatTypeKey : @(sourceFormat),
+        (id)kCVPixelBufferWidthKey : @(sourceWidth),
+        (id)kCVPixelBufferHeightKey : @(sourceHeight)
+      }];
+
+  if (@available(macOS 10.11, *)) {
     // This key is required to generate SKPicture with CVPixelBufferRef in
     // metal.
-    (NSString *)kCVPixelBufferMetalCompatibilityKey : @YES,
-  };
+    [pixelBufferAttributes setObject:@YES forKey:(id)kCVPixelBufferMetalCompatibilityKey];
+  }
 
   CVPixelBufferRef destPixelBuffer = nil;
   CVReturn status = CVPixelBufferCreate(
