@@ -701,7 +701,6 @@ class NativeTextureRenderer final
     env->DeleteLocalRef(j_caller_class);
 
     native_windows_ = ANativeWindow_fromSurface(env, surface_jni);
-    gl_context_ = std::make_shared<GLContext>(native_windows_);
 
     IrisRtcVideoFrameConfig config;
     config.uid = uid;
@@ -739,6 +738,13 @@ class NativeTextureRenderer final
       NotifySizeChangeCallback(video_frame->width, video_frame->height);
       width_ = video_frame->width;
       height_ = video_frame->height;
+
+      rendering_op_.reset();
+      gl_context_.reset();
+    }
+
+    if (!gl_context_) {
+      gl_context_ = std::make_shared<GLContext>(native_windows_);
     }
 
     if (!gl_context_->SetupSurface(native_windows_)) {
