@@ -1,5 +1,16 @@
 # Changelog
 
+## [6.3.2-sp.432236.b.2](https://github.com/AgoraIO-Extensions/Agora-Flutter-SDK/compare/6.3.2-sp.432236.b.1...6.3.2-sp.432236.b.2) (2025-05-08)
+
+### Bug Fixes
+
+* add temp variables to avoid data race from commit: 06896207 ([#2188](https://github.com/AgoraIO-Extensions/Agora-Flutter-SDK/issues/2188)) ([0af4751](https://github.com/AgoraIO-Extensions/Agora-Flutter-SDK/commit/0af4751e3e70e65fdaa3d5a204d22d3b9a57f44d))
+* check the renderer in OnVideoFrameReceived before use it ([#2222](https://github.com/AgoraIO-Extensions/Agora-Flutter-SDK/issues/2222)) ([d9b76c4](https://github.com/AgoraIO-Extensions/Agora-Flutter-SDK/commit/d9b76c4cce7775c8cd6e476bf4c0881542019ae6))
+* do not clear all platform view renders when dispose render ([#2214](https://github.com/AgoraIO-Extensions/Agora-Flutter-SDK/issues/2214)) ([7f18eca](https://github.com/AgoraIO-Extensions/Agora-Flutter-SDK/commit/7f18ecaec0b14d0a8a87f5b6edc0495a295549ba))
+* hold weak ref of RendererDelegate in async task ([#2265](https://github.com/AgoraIO-Extensions/Agora-Flutter-SDK/issues/2265)) ([#2271](https://github.com/AgoraIO-Extensions/Agora-Flutter-SDK/issues/2271)) ([#2278](https://github.com/AgoraIO-Extensions/Agora-Flutter-SDK/issues/2278)) ([2c9545b](https://github.com/AgoraIO-Extensions/Agora-Flutter-SDK/commit/2c9545b8892f5f0304381c2f9955fe9cbd3e3041))
+* unregister video frame delegate in dealloc of TextureRender to a… ([#2297](https://github.com/AgoraIO-Extensions/Agora-Flutter-SDK/issues/2297)) ([9a15415](https://github.com/AgoraIO-Extensions/Agora-Flutter-SDK/commit/9a15415981f089f27ede059ae323f5cd846e5318)), closes [#2296](https://github.com/AgoraIO-Extensions/Agora-Flutter-SDK/issues/2296)
+* use weak ref of renderer to avoid crash in async task ([#2194](https://github.com/AgoraIO-Extensions/Agora-Flutter-SDK/issues/2194)) ([dc54474](https://github.com/AgoraIO-Extensions/Agora-Flutter-SDK/commit/dc544747cebc939f3782e7a4dfe4e4bd40e16f7a))
+
 ## [6.3.2](https://github.com/AgoraIO-Extensions/Agora-Flutter-SDK/compare/6.3.1...6.3.2) (2024-06-06)
 
 
