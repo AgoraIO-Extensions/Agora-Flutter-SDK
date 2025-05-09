@@ -1,5 +1,19 @@
 # Changelog
 
+## [6.5.2](https://github.com/AgoraIO-Extensions/Agora-Flutter-SDK/compare/6.5.1-rc.2...6.5.2) (2025-04-29)
+
+### Features
+
+* update dependencies ([#2272](https://github.com/AgoraIO-Extensions/Agora-Flutter-SDK/issues/2272)) ([a97726d](https://github.com/AgoraIO-Extensions/Agora-Flutter-SDK/commit/a97726d1c4d57e79811ac71eaeb8320ed3c7481b))
+* update dependencies ([#2280](https://github.com/AgoraIO-Extensions/Agora-Flutter-SDK/issues/2280)) ([14540c3](https://github.com/AgoraIO-Extensions/Agora-Flutter-SDK/commit/14540c30c8973f4921e54525d8b6b58162c5b839))
+
+### Bug Fixes
+
+* copy CVPixelBuffer for macOS ([#2298](https://github.com/AgoraIO-Extensions/Agora-Flutter-SDK/issues/2298)) ([e17b4f6](https://github.com/AgoraIO-Extensions/Agora-Flutter-SDK/commit/e17b4f696291ce5f62e59276a7417ef52829cfef))
+* hold weak ref of RendererDelegate in async task ([#2265](https://github.com/AgoraIO-Extensions/Agora-Flutter-SDK/issues/2265)) ([#2271](https://github.com/AgoraIO-Extensions/Agora-Flutter-SDK/issues/2271)) ([3a5a91e](https://github.com/AgoraIO-Extensions/Agora-Flutter-SDK/commit/3a5a91e937c61122ed53dae5299c9df9f0ad180a))
+* refine demo with send multi video stream ([#2295](https://github.com/AgoraIO-Extensions/Agora-Flutter-SDK/issues/2295)) ([e7053aa](https://github.com/AgoraIO-Extensions/Agora-Flutter-SDK/commit/e7053aa33e3e2a2f6e3ed0001745409f9336e85a))
+* unregister video frame delegate in dealloc of TextureRender to a… ([#2296](https://github.com/AgoraIO-Extensions/Agora-Flutter-SDK/issues/2296)) ([92c4dbd](https://github.com/AgoraIO-Extensions/Agora-Flutter-SDK/commit/92c4dbd88f067a4f7ac5596e761b03ddb383e9a5))
+
 ## [6.5.1-rc.1](https://github.com/AgoraIO-Extensions/Agora-Flutter-SDK/compare/6.5.1...6.5.1-rc.1) (2025-04-11)
 
 ### Features
