@@ -1,4 +1,3 @@
-import '/src/_serializable.dart';
 import '/src/binding_forward_export.dart';
 
 /// This class provides media player functions and supports multiple instances.
