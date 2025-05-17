@@ -1,5 +1,6 @@
 package io.agora.agora_rtc_ng;
 
+import android.app.Activity;
 import android.content.Context;
 import android.graphics.Rect;
 import android.os.Build;
@@ -13,18 +14,21 @@ import java.lang.ref.WeakReference;
 import java.util.HashMap;
 import java.util.Map;
 
+import io.agora.pip.AgoraPIPActivityProxy;
 import io.flutter.embedding.engine.plugins.FlutterPlugin;
 import io.flutter.embedding.engine.plugins.activity.ActivityAware;
 import io.flutter.embedding.engine.plugins.activity.ActivityPluginBinding;
 import io.flutter.plugin.common.MethodCall;
 import io.flutter.plugin.common.MethodChannel;
 
+import io.agora.pip.AgoraPIPController;
+
 public class AgoraRtcNgPlugin implements FlutterPlugin, MethodChannel.MethodCallHandler, ActivityAware {
 
     private MethodChannel channel;
     private WeakReference<FlutterPluginBinding> flutterPluginBindingRef;
     private VideoViewController videoViewController;
-    private AgoraPipController pipController;
+    private AgoraPIPController pipController;
     @Nullable
     private Context applicationContext;
 
@@ -106,20 +110,25 @@ public class AgoraRtcNgPlugin implements FlutterPlugin, MethodChannel.MethodCall
 
     private void initPipController(@NonNull ActivityPluginBinding binding) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            if (pipController == null) {
 
-                pipController = new AgoraPipController(binding.getActivity(), new AgoraPipController.PipStateChangedListener() {
-                    @Override
-                    public void onPipStateChangedListener(AgoraPipController.PipState state) {
-                        // put state into a json object
-                        channel.invokeMethod("pipStateChanged", new HashMap<String, Object>() {{
-                            put("state", state.getValue());
-                        }});
-                    }
-                });
-            } else {
-                pipController.attachToActivity(binding.getActivity());
+            Activity activity = binding.getActivity();
+            if (!(activity instanceof AgoraPIPActivityProxy)) {
+                return;
             }
+
+            if (pipController != null) {
+                pipController.dispose();
+            }
+
+            pipController = new AgoraPIPController((AgoraPIPActivityProxy) activity, new AgoraPIPController.PIPStateChangedListener() {
+                @Override
+                public void onPIPStateChangedListener(AgoraPIPController.PIPState state) {
+                    // put state into a json object
+                    channel.invokeMethod("pipStateChanged", new HashMap<String, Object>() {{
+                        put("state", state.getValue());
+                    }});
+                }
+            });
         }
     }
 
