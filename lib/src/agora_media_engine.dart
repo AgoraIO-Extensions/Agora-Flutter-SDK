@@ -1,4 +1,3 @@
-import '/src/_serializable.dart';
 import '/src/binding_forward_export.dart';
 part 'agora_media_engine.g.dart';
 
