@@ -30,6 +30,8 @@ Pod::Spec.new do |s|
     # native dependencies start
     s.dependency 'AgoraRtcEngine_iOS', '4.5.2'
     # native dependencies end
+
+    s.dependency 'AgoraPIP_iOS', '0.0.2-rc.1'
   end
   
   s.platform = :ios, '9.0'
