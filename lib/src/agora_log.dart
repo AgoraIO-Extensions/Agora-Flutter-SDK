@@ -123,7 +123,6 @@ class LogConfig implements AgoraSerializable {
   factory LogConfig.fromJson(Map<String, dynamic> json) =>
       _$LogConfigFromJson(json);
 
-  /// @nodoc
   @override
   Map<String, dynamic> toJson() => _$LogConfigToJson(this);
 }

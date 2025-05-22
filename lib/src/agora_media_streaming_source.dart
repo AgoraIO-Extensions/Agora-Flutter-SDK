@@ -187,7 +187,6 @@ class InputSeiData implements AgoraSerializable {
   factory InputSeiData.fromJson(Map<String, dynamic> json) =>
       _$InputSeiDataFromJson(json);
 
-  /// @nodoc
   @override
   Map<String, dynamic> toJson() => _$InputSeiDataToJson(this);
 }

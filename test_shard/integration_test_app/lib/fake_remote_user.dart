@@ -48,7 +48,8 @@ class FakeRemoteUser {
         url: 'https://download.agora.io/demo/test/Agora.io-Interactions.mp4',
         startPos: 0);
 
-    await mediaPlayerControllerPlayed.future.timeout(const Duration(seconds: 10));
+    await mediaPlayerControllerPlayed.future
+        .timeout(const Duration(seconds: 10));
 
     await rtcEngine.joinChannelEx(
       token: '',

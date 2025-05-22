@@ -20,7 +20,6 @@ class RemoteVoicePositionInfo implements AgoraSerializable {
   factory RemoteVoicePositionInfo.fromJson(Map<String, dynamic> json) =>
       _$RemoteVoicePositionInfoFromJson(json);
 
-  /// @nodoc
   @override
   Map<String, dynamic> toJson() => _$RemoteVoicePositionInfoToJson(this);
 }
@@ -84,7 +83,6 @@ class SpatialAudioZone implements AgoraSerializable {
   factory SpatialAudioZone.fromJson(Map<String, dynamic> json) =>
       _$SpatialAudioZoneFromJson(json);
 
-  /// @nodoc
   @override
   Map<String, dynamic> toJson() => _$SpatialAudioZoneToJson(this);
 }

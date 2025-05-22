@@ -124,6 +124,7 @@ ExternalVideoFrame _$ExternalVideoFrameFromJson(Map<String, dynamic> json) =>
       timestamp: (json['timestamp'] as num?)?.toInt(),
       eglType: $enumDecodeNullable(_$EglContextTypeEnumMap, json['eglType']),
       textureId: (json['textureId'] as num?)?.toInt(),
+      fenceObject: (json['fence_object'] as num?)?.toInt(),
       matrix: (json['matrix'] as List<dynamic>?)
           ?.map((e) => (e as num).toDouble())
           .toList(),
@@ -153,6 +154,7 @@ Map<String, dynamic> _$ExternalVideoFrameToJson(ExternalVideoFrame instance) {
   writeNotNull('timestamp', instance.timestamp);
   writeNotNull('eglType', _$EglContextTypeEnumMap[instance.eglType]);
   writeNotNull('textureId', instance.textureId);
+  writeNotNull('fence_object', instance.fenceObject);
   writeNotNull('matrix', instance.matrix);
   writeNotNull('metadata_size', instance.metadataSize);
   writeNotNull('fillAlphaBuffer', instance.fillAlphaBuffer);
