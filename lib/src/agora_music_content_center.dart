@@ -131,7 +131,6 @@ class MusicChartInfo implements AgoraSerializable {
   factory MusicChartInfo.fromJson(Map<String, dynamic> json) =>
       _$MusicChartInfoFromJson(json);
 
-  /// @nodoc
   @override
   Map<String, dynamic> toJson() => _$MusicChartInfoToJson(this);
 }
@@ -179,7 +178,6 @@ class MusicCacheInfo implements AgoraSerializable {
   factory MusicCacheInfo.fromJson(Map<String, dynamic> json) =>
       _$MusicCacheInfoFromJson(json);
 
-  /// @nodoc
   @override
   Map<String, dynamic> toJson() => _$MusicCacheInfoToJson(this);
 }
@@ -211,7 +209,6 @@ class MvProperty implements AgoraSerializable {
   factory MvProperty.fromJson(Map<String, dynamic> json) =>
       _$MvPropertyFromJson(json);
 
-  /// @nodoc
   @override
   Map<String, dynamic> toJson() => _$MvPropertyToJson(this);
 }
@@ -234,7 +231,6 @@ class ClimaxSegment implements AgoraSerializable {
   factory ClimaxSegment.fromJson(Map<String, dynamic> json) =>
       _$ClimaxSegmentFromJson(json);
 
-  /// @nodoc
   @override
   Map<String, dynamic> toJson() => _$ClimaxSegmentToJson(this);
 }
@@ -318,7 +314,6 @@ class Music implements AgoraSerializable {
   /// @nodoc
   factory Music.fromJson(Map<String, dynamic> json) => _$MusicFromJson(json);
 
-  /// @nodoc
   @override
   Map<String, dynamic> toJson() => _$MusicToJson(this);
 }
@@ -421,7 +416,6 @@ class MusicContentCenterConfiguration implements AgoraSerializable {
   factory MusicContentCenterConfiguration.fromJson(Map<String, dynamic> json) =>
       _$MusicContentCenterConfigurationFromJson(json);
 
-  /// @nodoc
   @override
   Map<String, dynamic> toJson() =>
       _$MusicContentCenterConfigurationToJson(this);

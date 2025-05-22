@@ -63,7 +63,8 @@ void testCases() {
       final remoteUser = FakeRemoteUser(rtcEngine);
       await remoteUser.joinChannel();
 
-      final eventCalled = await eventCalledCompleter.future.timeout(const Duration(seconds: 10));
+      final eventCalled = await eventCalledCompleter.future
+          .timeout(const Duration(seconds: 10));
       expect(eventCalled, isTrue);
       rtcEngine.unregisterAudioEncodedFrameObserver(
         observer,

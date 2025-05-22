@@ -94,7 +94,6 @@ class AgoraRhythmPlayerConfig implements AgoraSerializable {
   factory AgoraRhythmPlayerConfig.fromJson(Map<String, dynamic> json) =>
       _$AgoraRhythmPlayerConfigFromJson(json);
 
-  /// @nodoc
   @override
   Map<String, dynamic> toJson() => _$AgoraRhythmPlayerConfigToJson(this);
 }
