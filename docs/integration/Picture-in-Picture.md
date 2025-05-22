@@ -39,12 +39,22 @@ The Picture-in-Picture (PiP) feature allows you to display video content in a sm
 
 2. **Configure Main Activity**
 
-   > According to the [Switch your activity to PiP](https://developer.android.com/develop/ui/views/picture-in-picture#pip_button), the auto enter PiP mode when app go to background is supported on Android 12 and above, so we need to explicitly call `enterPictureInPictureMode()` in `onUserLeaveHint()` to enter PiP mode on earlier Android versions. Which has been done in `AgoraPIPFlutterActivity`, so you don't need to do this in your main activity by yourself.
+   > According to the [Switch your activity to PiP](https://developer.android.com/develop/ui/views/picture-in-picture#pip_button), automatic PiP mode entry when the app goes to background is only supported on Android 12 and above. For earlier Android versions, you need to explicitly call `enterPictureInPictureMode()` in `onUserLeaveHint()`. This functionality is already implemented in `AgoraPIPFlutterActivity` and `AgoraPIPFlutterFragmentActivity`, so you don't need to implement it yourself. However, if you want to customize the behavior, you can implement `AgoraPIPActivityProxy` interface and override its methods in your own activity.
 
    ```kotlin
    import io.agora.agora_rtc_ng.AgoraPIPFlutterActivity
 
    class MainActivity: AgoraPIPFlutterActivity() {
+       ...
+   }
+   ```
+
+   or
+
+   ```kotlin
+   import io.agora.agora_rtc_ng.AgoraPIPFlutterFragmentActivity
+
+   class MainActivity: AgoraPIPFlutterFragmentActivity() {
        ...
    }
    ```
@@ -70,6 +80,7 @@ The Picture-in-Picture (PiP) feature allows you to display video content in a sm
    - [Adding Capabilities](https://developer.apple.com/documentation/xcode/adding-capabilities-to-your-app#Add-a-capability)
 
 2. **Camera Access in Multitasking Mode (Optional)**
+   > Note: You can skip this step if your app doesn't require camera access during multitasking (for example, if you don't need to show the local video stream in the PiP window).
 
    > When your app enters a multitasking mode, you should have [com.apple.developer.avfoundation.multitasking-camera-access](https://developer.apple.com/documentation/BundleResources/Entitlements/com.apple.developer.avfoundation.multitasking-camera-access?language=objc) entitlement or set `multitaskingCameraAccessEnabled` to `true` of the capture session. Multitasking modes include Slide Over, Split View, and Picture in Picture (PiP).
 
