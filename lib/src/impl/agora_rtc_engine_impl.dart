@@ -42,7 +42,7 @@ import 'package:flutter/foundation.dart'
         defaultTargetPlatform,
         kIsWeb,
         visibleForTesting;
-import 'package:flutter/services.dart' show MethodChannel;
+import 'package:flutter/services.dart' show MethodCall, MethodChannel;
 import 'package:flutter/widgets.dart' show VoidCallback, TargetPlatform;
 import 'package:iris_method_channel/iris_method_channel.dart';
 import 'package:meta/meta.dart';
@@ -361,6 +361,10 @@ class RtcEngineImpl extends rtc_engine_ex_binding.RtcEngineExImpl
   @internal
   late MethodChannel engineMethodChannel;
 
+  @internal
+  Map<String, List<Future<dynamic> Function(MethodCall call)>>
+      methodChannelHandlers = {};
+
   AsyncMemoizer? _initializeCallOnce;
 
   static RtcEngineEx create({
@@ -431,6 +435,16 @@ class RtcEngineImpl extends rtc_engine_ex_binding.RtcEngineExImpl
       if (!kIsWeb && defaultTargetPlatform == TargetPlatform.android) {
         await engineMethodChannel.invokeMethod('androidInit');
       }
+
+      engineMethodChannel.setMethodCallHandler((call) async {
+        try {
+          methodChannelHandlers[call.method]?.forEach((handler) async {
+            await handler(call);
+          });
+        } catch (e) {
+          assert(false, 'methodChannel error: $e');
+        }
+      });
 
       List<InitilizationArgProvider> args = [
         if (_sharedNativeHandle != null)
@@ -1048,6 +1062,37 @@ class RtcEngineImpl extends rtc_engine_ex_binding.RtcEngineExImpl
     final p = await engineMethodChannel.invokeMethod<String>(
         'getAssetAbsolutePath', assetPath);
     return p;
+  }
+
+  @optionalTypeArgs
+  Future<T?> invokeAgoraMethod<T>(String method, [dynamic arguments]) {
+    return engineMethodChannel.invokeMethod<T>(method, arguments);
+  }
+
+  Future<void> registerMethodChannelHandler(
+    String method,
+    Future<dynamic> Function(MethodCall call) handler,
+  ) {
+    methodChannelHandlers[method] ??= [];
+    methodChannelHandlers[method]!.add(handler);
+
+    return Future.value();
+  }
+
+  Future<void> unregisterMethodChannelHandler(
+    String method,
+    Future<dynamic> Function(MethodCall call)? handler,
+  ) {
+    if (handler == null) {
+      methodChannelHandlers.remove(method);
+    } else {
+      methodChannelHandlers[method]?.remove(handler);
+      if (methodChannelHandlers[method]?.isEmpty == true) {
+        methodChannelHandlers.remove(method);
+      }
+    }
+
+    return Future.value();
   }
 
   /////////// debug ////////
