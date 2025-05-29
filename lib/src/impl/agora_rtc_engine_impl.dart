@@ -971,6 +971,55 @@ class RtcEngineImpl extends rtc_engine_ex_binding.RtcEngineExImpl
   }
 
   @override
+  Future<int> createDataStreamEx(
+      {required DataStreamConfig config,
+      required RtcConnection connection}) async {
+    final apiType = 'RtcEngineEx_createDataStreamEx2';
+    final param = createParams(
+        {'config': config.toJson(), 'connection': connection.toJson()});
+    final List<Uint8List> buffers = [];
+    buffers.addAll(config.collectBufferList());
+    buffers.addAll(connection.collectBufferList());
+    final callApiResult = await irisMethodChannel.invokeMethod(
+        IrisMethodCall(apiType, jsonEncode(param), buffers: buffers));
+    if (callApiResult.irisReturnCode < 0) {
+      throw AgoraRtcException(code: callApiResult.irisReturnCode);
+    }
+    final rm = callApiResult.data;
+    final result = rm['result'];
+    if (result < 0) {
+      throw AgoraRtcException(code: result);
+    }
+    final streamIdResult = rm['streamId'];
+    return streamIdResult as int;
+  }
+
+  @override
+  Future<void> leaveChannelEx(
+      {required RtcConnection connection, LeaveChannelOptions? options}) async {
+    final apiType = options == null
+        ? 'RtcEngineEx_leaveChannelEx'
+        : 'RtcEngineEx_leaveChannelEx2';
+    final param = createParams(
+        {'connection': connection.toJson(), 'options': options?.toJson()});
+    final List<Uint8List> buffers = [];
+    buffers.addAll(connection.collectBufferList());
+    if (options != null) {
+      buffers.addAll(options.collectBufferList());
+    }
+    final callApiResult = await irisMethodChannel.invokeMethod(
+        IrisMethodCall(apiType, jsonEncode(param), buffers: buffers));
+    if (callApiResult.irisReturnCode < 0) {
+      throw AgoraRtcException(code: callApiResult.irisReturnCode);
+    }
+    final rm = callApiResult.data;
+    final result = rm['result'];
+    if (result < 0) {
+      throw AgoraRtcException(code: result);
+    }
+  }
+
+  @override
   Future<void> addVideoWatermark(
       {required String watermarkUrl, required WatermarkOptions options}) async {
     const apiType = 'RtcEngine_addVideoWatermark2';
