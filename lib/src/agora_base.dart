@@ -5047,6 +5047,62 @@ class AudioTrackConfig {
   Map<String, dynamic> toJson() => _$AudioTrackConfigToJson(this);
 }
 
+/// The type of loopback audio source mode
+@JsonEnum(alwaysCreate: true)
+enum LoopbackAudioTrackType {
+  /// 0: loopback the whole system
+  @JsonValue(0)
+  lookbackSystem,
+
+  /// 1: loopback the whole system exclude self
+  @JsonValue(1)
+  lookbackSystemExcludeSelf,
+
+  /// 2: loopback the specific application
+  @JsonValue(2)
+  lookbackApplication,
+}
+
+/// @nodoc
+extension LoopbackAudioTrackTypeExt on LoopbackAudioTrackType {
+  /// @nodoc
+  static LoopbackAudioTrackType fromValue(int value) {
+    return $enumDecode(_$LoopbackAudioTrackTypeEnumMap, value);
+  }
+
+  /// @nodoc
+  int value() {
+    return _$LoopbackAudioTrackTypeEnumMap[this]!;
+  }
+}
+
+///The configuration of custom audio track
+@JsonSerializable(explicitToJson: true, includeIfNull: false)
+class LoopbackAudioTrackConfig {
+  /// @nodoc
+  const LoopbackAudioTrackConfig(
+      {this.appName, this.volume, this.loopbackType});
+
+  /// The target app name of the loopback audio track
+  @JsonKey(name: 'appName')
+  final String? appName;
+
+  /// The volume of the loopback audio track
+  @JsonKey(name: 'volume')
+  final int? volume;
+
+  /// The loopback type refer to LOOPBACK_AUDIO_TRACK_TYPE
+  @JsonKey(name: 'loopbackType')
+  final LoopbackAudioTrackType? loopbackType;
+
+  /// @nodoc
+  factory LoopbackAudioTrackConfig.fromJson(Map<String, dynamic> json) =>
+      _$LoopbackAudioTrackConfigFromJson(json);
+
+  /// @nodoc
+  Map<String, dynamic> toJson() => _$LoopbackAudioTrackConfigToJson(this);
+}
+
 /// The options for SDK preset voice beautifier effects.
 @JsonEnum(alwaysCreate: true)
 enum VoiceBeautifierPreset {
