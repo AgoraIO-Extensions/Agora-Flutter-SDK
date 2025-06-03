@@ -1,4 +1,4 @@
-#import "AgoraSurfaceViewFactory.h"
+#import "./include/agora_rtc_engine/AgoraSurfaceViewFactory.h"
 
 @interface AgoraSurfaceView : NSObject <FlutterPlatformView>
 
