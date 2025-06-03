@@ -1470,6 +1470,32 @@ Map<String, dynamic> _$AudioTrackConfigToJson(AudioTrackConfig instance) {
   return val;
 }
 
+LoopbackAudioTrackConfig _$LoopbackAudioTrackConfigFromJson(
+        Map<String, dynamic> json) =>
+    LoopbackAudioTrackConfig(
+      appName: json['appName'] as String?,
+      volume: (json['volume'] as num?)?.toInt(),
+      loopbackType: $enumDecodeNullable(
+          _$LoopbackAudioTrackTypeEnumMap, json['loopbackType']),
+    );
+
+Map<String, dynamic> _$LoopbackAudioTrackConfigToJson(
+    LoopbackAudioTrackConfig instance) {
+  final val = <String, dynamic>{};
+
+  void writeNotNull(String key, dynamic value) {
+    if (value != null) {
+      val[key] = value;
+    }
+  }
+
+  writeNotNull('appName', instance.appName);
+  writeNotNull('volume', instance.volume);
+  writeNotNull(
+      'loopbackType', _$LoopbackAudioTrackTypeEnumMap[instance.loopbackType]);
+  return val;
+}
+
 ScreenCaptureParameters _$ScreenCaptureParametersFromJson(
         Map<String, dynamic> json) =>
     ScreenCaptureParameters(
@@ -2623,6 +2649,12 @@ const _$AudioTrackTypeEnumMap = {
   AudioTrackType.audioTrackInvalid: -1,
   AudioTrackType.audioTrackMixable: 0,
   AudioTrackType.audioTrackDirect: 1,
+};
+
+const _$LoopbackAudioTrackTypeEnumMap = {
+  LoopbackAudioTrackType.lookbackSystem: 0,
+  LoopbackAudioTrackType.lookbackSystemExcludeSelf: 1,
+  LoopbackAudioTrackType.lookbackApplication: 2,
 };
 
 const _$VoiceBeautifierPresetEnumMap = {

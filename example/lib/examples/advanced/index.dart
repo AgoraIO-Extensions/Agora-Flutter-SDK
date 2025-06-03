@@ -15,6 +15,7 @@ import 'package:agora_rtc_engine_example/examples/advanced/start_direct_cdn_stre
 import 'package:agora_rtc_engine_example/examples/advanced/start_local_video_transcoder/start_local_video_transcoder.dart';
 import 'package:agora_rtc_engine_example/examples/advanced/stream_message/stream_message.dart';
 import 'package:agora_rtc_engine_example/examples/advanced/take_snapshot/take_snapshot.dart';
+import 'package:agora_rtc_engine_example/examples/advanced/loopback_audio/loopback_audio.dart';
 import 'package:flutter/foundation.dart';
 
 import 'audio_mixing/audio_mixing.dart';
@@ -99,4 +100,6 @@ final advanced = [
   if (!kIsWeb && !(Platform.isAndroid || Platform.isIOS))
     {'name': 'PreCallTest', 'widget': const PreCallTest()},
   {'name': 'MusicPlayer', 'widget': const MusicPlayerExample()},
+  if (Platform.isWindows || Platform.isMacOS)
+    {'name': 'LoopbackAudio', 'widget': const LoopbackAudio()},
 ];

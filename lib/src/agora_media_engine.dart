@@ -251,4 +251,33 @@ abstract class MediaEngine {
   /// Returns
   /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown. You need to catch the exception and handle it accordingly.
   void unregisterFaceInfoObserver(FaceInfoObserver observer);
+
+  /// Create a loopback audio track and get the audio track id.
+  ///
+  /// * [config] The config of loopback audio track. See LoopbackAudioTrackConfig.
+  ///
+  /// Returns
+  /// If the call is successful, SDK returns audio track id.
+  /// If the call fails, SDK returns 0xffffffff.
+  Future<int> createLoopbackAudioTrack(LoopbackAudioTrackConfig config);
+
+  /// Destroy loopback audio track by trackId
+  ///
+  /// * [trackId] The loopback audio track id.
+  ///
+  /// Returns
+  /// 0: Success.
+  /// < 0: Failure.
+  Future<int> destroyLoopbackAudioTrack(int trackId);
+
+  /// Adjust the volume of the loopback audio track
+  ///
+  /// * [trackId] The loopback audio track id.
+  /// * [config] The config of the loopback audio track. See LoopbackAudioTrackConfig.
+  ///
+  /// Returns
+  /// 0: Success.
+  /// < 0: Failure.
+  Future<int> updateLoopbackAudioTrackConfig(
+      int trackId, LoopbackAudioTrackConfig config);
 }
