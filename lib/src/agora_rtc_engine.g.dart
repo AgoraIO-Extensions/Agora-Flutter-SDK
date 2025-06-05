@@ -645,6 +645,7 @@ ChannelMediaOptions _$ChannelMediaOptionsFromJson(Map<String, dynamic> json) =>
       isInteractiveAudience: json['isInteractiveAudience'] as bool?,
       customVideoTrackId: (json['customVideoTrackId'] as num?)?.toInt(),
       isAudioFilterable: json['isAudioFilterable'] as bool?,
+      parameters: json['parameters'] as String?,
     );
 
 Map<String, dynamic> _$ChannelMediaOptionsToJson(ChannelMediaOptions instance) {
@@ -704,6 +705,7 @@ Map<String, dynamic> _$ChannelMediaOptionsToJson(ChannelMediaOptions instance) {
   writeNotNull('isInteractiveAudience', instance.isInteractiveAudience);
   writeNotNull('customVideoTrackId', instance.customVideoTrackId);
   writeNotNull('isAudioFilterable', instance.isAudioFilterable);
+  writeNotNull('parameters', instance.parameters);
   return val;
 }
 
