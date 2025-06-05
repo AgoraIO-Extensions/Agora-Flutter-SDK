@@ -1,5 +1,7 @@
 # Changelog
 
+## [6.2.6-sp.426163](https://github.com/AgoraIO-Extensions/Agora-Flutter-SDK/compare/6.2.6-sp.426160...6.2.6-sp.426163) (2025-06-05)
+
 ## [6.2.6](https://github.com/AgoraIO-Extensions/Agora-Flutter-SDK/compare/6.2.4...6.2.6) (2023-11-21)
 
 
