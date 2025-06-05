@@ -18,7 +18,9 @@ dependencies:
   async: '>=2.8.2'
   meta: ^1.7.0
   iris_method_channel:
-    path: ../flutter-sdk-methodchannel
+    git:
+      url: https://github.com/AgoraIO-Extensions/iris_method_channel_flutter.git
+      ref: dev/ohos
   agora_video_canvas:
     path: ./packages/agora_video_canvas
   js: '>=0.6.3'

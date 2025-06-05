@@ -34,7 +34,7 @@ dependencies:
   # Import the native implementation of `permission_handler` for HarmonyOS
   permission_handler_ohos:
     git:
-      url: https://gitee.com/openharmony-sig/flutter_permission_handler.git
+      url: https://gitcode.com/openharmony-sig/flutter_permission_handler.git
       ref: master
       path: permission_handler_ohos
 
@@ -42,7 +42,7 @@ dependencies:
   # Import the native implementation of `path_provider` for HarmonyOS
   path_provider_ohos:
     git:
-      url: https://gitee.com/openharmony-sig/flutter_packages.git
+      url: https://gitcode.com/openharmony-tpc/flutter_packages.git
       ref: master
       path: packages/path_provider/path_provider_ohos 
 

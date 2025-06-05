@@ -7,7 +7,7 @@
   "license": "Apache-2.0",
   "dependencies": {
     "@ohos/flutter_ohos": "file:./har/flutter.har",
-    "@shengwang/rtc-full": "file:./har/AgoraRtcSdk-4.4.1-FULL.har",
+    "@shengwang/rtc-full": "file:./har/AgoraRtcSdk-4.4.2-0.26.har",
     "@shengwang/rtc-wrapper": "file:./har/AgoraRtcWrapper.har"
   }
 }
