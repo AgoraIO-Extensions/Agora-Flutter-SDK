@@ -5,7 +5,9 @@ import {
   MethodCallHandler,
   MethodChannel,
   MethodResult,
+  StandardMessageCodec
 } from '@ohos/flutter_ohos';
+
 import { common } from '@kit.AbilityKit';
 import { JSON } from '@kit.ArkTS';
 import Log from '@ohos/flutter_ohos/src/main/ets/util/Log';
@@ -22,6 +24,8 @@ import {
   ChannelMediaOptions,
   RtcEngine
 } from '@shengwang/rtc-full';
+
+import { AgoraVideoCanvasFactory, AgoraVideoCanvas } from './AgoraVideoCanvas';
 
 class DartRtcEngineLogConfig {
   public filePath?: string = undefined;
@@ -51,9 +55,16 @@ export default class AgoraRtcEnginePlugin implements FlutterPlugin, MethodCallHa
   }
 
   onAttachedToEngine(binding: FlutterPluginBinding): void {
-    Log.i(TAG, 'attached');
+    Log.i(TAG, 'attach to engine');
+
+    binding.getPlatformViewRegistry()?.
+    registerViewFactory(AgoraVideoCanvas.VIEW_TYPE,
+      new AgoraVideoCanvasFactory(binding.getBinaryMessenger(), StandardMessageCodec.INSTANCE));
+
     this.channel = new MethodChannel(binding.getBinaryMessenger(), METHOD_CHANNEL);
     this.channel.setMethodCallHandler(this);
+
+    Log.i(TAG, 'attached to engine');
   }
 
   onDetachedFromEngine(binding: FlutterPluginBinding): void {
@@ -61,7 +72,7 @@ export default class AgoraRtcEnginePlugin implements FlutterPlugin, MethodCallHa
       this.channel.setMethodCallHandler(null);
     }
 
-    Log.i(TAG, 'detached');
+    Log.i(TAG, 'detached from engine');
   }
 
   onOhosInit(call: MethodCall) {

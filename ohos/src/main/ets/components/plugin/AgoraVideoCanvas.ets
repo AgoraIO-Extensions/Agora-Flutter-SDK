@@ -18,14 +18,30 @@ import MethodChannel, {
   MethodResult
 } from '@ohos/flutter_ohos/src/main/ets/plugin/common/MethodChannel';
 import PlatformView, { Params } from '@ohos/flutter_ohos/src/main/ets/plugin/platform/PlatformView';
-import common from '@ohos.app.ability.common';
+import PlatformViewFactory from '@ohos/flutter_ohos/src/main/ets/plugin/platform/PlatformViewFactory';
 import { BinaryMessenger } from '@ohos/flutter_ohos/src/main/ets/plugin/common/BinaryMessenger';
 import StandardMethodCodec from '@ohos/flutter_ohos/src/main/ets/plugin/common/StandardMethodCodec';
+import MessageCodec from '@ohos/flutter_ohos/src/main/ets/plugin/common/MessageCodec';
 import MethodCall from '@ohos/flutter_ohos/src/main/ets/plugin/common/MethodCall';
+
+import common from '@ohos.app.ability.common';
 
 import Log from '@ohos/flutter_ohos/src/main/ets/util/Log';
 
 const AGORA_LIB_NAME: string = 'agora_rtc_sdk'
+
+export class AgoraVideoCanvasFactory extends PlatformViewFactory {
+  message: BinaryMessenger;
+
+  constructor(message: BinaryMessenger, createArgsCodes: MessageCodec<Object>) {
+    super(createArgsCodes);
+    this.message = message;
+  }
+
+  public create(context: common.Context, viewId: number, args: Object): PlatformView {
+    return new AgoraVideoCanvas(context, viewId, args, this.message);
+  }
+}
 
 @Component
 struct InternalComponent {
