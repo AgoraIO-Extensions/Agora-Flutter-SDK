@@ -89,6 +89,9 @@ extension RtcEngineExt on RtcEngine {
   IrisMethodChannel get irisMethodChannel =>
       (this as RtcEngineImpl)._getIrisMethodChannel();
 
+  MethodChannel get engineMethodChannel =>
+      (this as RtcEngineImpl)._getEngineMethodChannel();
+
   Future<void> setupVideoView(Object viewHandle, VideoCanvas videoCanvas,
       {RtcConnection? connection}) async {
     Object view = viewHandle;
@@ -127,6 +130,9 @@ extension RtcEngineExt on RtcEngine {
     if (kIsWeb) {
       return _setupRemoteVideoExWeb(viewHandle, canvas, connection);
     }
+    if (defaultTargetPlatform == TargetPlatform.ohos) {
+      return _setupRemoteVideoExOhos(viewHandle, canvas, connection);
+    }
     return (this as RtcEngineImpl)
         .setupRemoteVideoEx(canvas: canvas, connection: connection);
   }
@@ -136,6 +142,9 @@ extension RtcEngineExt on RtcEngine {
     if (kIsWeb) {
       return _setupRemoteVideoWeb(viewHandle, canvas);
     }
+    if (defaultTargetPlatform == TargetPlatform.ohos) {
+      return _setupRemoteVideoOhos(viewHandle, canvas);
+    }
     return setupRemoteVideo(canvas);
   }
 
@@ -143,6 +152,9 @@ extension RtcEngineExt on RtcEngine {
       Object viewHandle, VideoCanvas canvas) async {
     if (kIsWeb) {
       return _setupLocalVideoWeb(canvas, viewHandle);
+    }
+    if (defaultTargetPlatform == TargetPlatform.ohos) {
+      return _setupLocalVideoOhos(canvas, viewHandle);
     }
     return setupLocalVideo(canvas);
   }
@@ -152,6 +164,15 @@ extension RtcEngineExt on RtcEngine {
     // The type of the `VideoCanvas.view` is `String` on web
     final param = {
       'canvas': canvas.toJson()..['view'] = (viewHandle as String),
+      if (connection != null) 'connection': connection.toJson(),
+    };
+    return param;
+  }
+
+  Map<String, dynamic> _createParamsOhos(VideoCanvas canvas,
+      {RtcConnection? connection}) {
+    final param = {
+      'canvas': canvas.toJson(),
       if (connection != null) 'connection': connection.toJson(),
     };
     return param;
@@ -210,6 +231,39 @@ extension RtcEngineExt on RtcEngine {
       throw AgoraRtcException(code: callApiResult.irisReturnCode);
     }
     return;
+  }
+
+  Future<void> _setupRemoteVideoExOhos(
+      Object viewHandle, VideoCanvas canvas, RtcConnection connection) async {
+    const apiType = 'setupRemoteVideoEx';
+    final param = _createParamsOhos(canvas, connection: connection);
+    final result =
+        await engineMethodChannel.invokeMethod(apiType, jsonEncode(param));
+    if (result < 0) {
+      throw AgoraRtcException(code: result);
+    }
+  }
+
+  Future<void> _setupRemoteVideoOhos(
+      Object viewHandle, VideoCanvas canvas) async {
+    const apiType = 'setupRemoteVideo';
+    final param = _createParamsOhos(canvas);
+    final result =
+        await engineMethodChannel.invokeMethod(apiType, jsonEncode(param));
+    if (result < 0) {
+      throw AgoraRtcException(code: result);
+    }
+  }
+
+  Future<void> _setupLocalVideoOhos(
+      VideoCanvas canvas, Object viewHandle) async {
+    const apiType = 'setupLocalVideo';
+    final param = _createParamsOhos(canvas);
+    final result =
+        await engineMethodChannel.invokeMethod(apiType, jsonEncode(param));
+    if (result < 0) {
+      throw AgoraRtcException(code: result);
+    }
   }
 }
 
@@ -406,6 +460,10 @@ class RtcEngineImpl extends rtc_engine_ex_binding.RtcEngineExImpl
 
   IrisMethodChannel _getIrisMethodChannel() {
     return irisMethodChannel;
+  }
+
+  MethodChannel _getEngineMethodChannel() {
+    return engineMethodChannel;
   }
 
   Future<void> _initializeInternal(RtcEngineContext context) async {
@@ -851,7 +909,14 @@ class RtcEngineImpl extends rtc_engine_ex_binding.RtcEngineExImpl
   @override
   Future<void> enableVideo() async {
     if (_instance == null) return;
-    super.enableVideo();
+    if (defaultTargetPlatform == TargetPlatform.ohos) {
+      final result = await engineMethodChannel.invokeMethod('enableVideo');
+      if (result < 0) {
+        throw AgoraRtcException(code: result);
+      }
+    } else {
+      super.enableVideo();
+    }
   }
 
   @override

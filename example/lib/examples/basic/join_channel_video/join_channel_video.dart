@@ -1,11 +1,13 @@
+import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
+
 import 'package:agora_rtc_engine/agora_rtc_engine.dart';
 import 'package:agora_rtc_engine_example/components/basic_video_configuration_widget.dart';
 import 'package:agora_rtc_engine_example/components/stats_monitoring_widget.dart';
 import 'package:agora_rtc_engine_example/config/agora.config.dart' as config;
 import 'package:agora_rtc_engine_example/components/example_actions_widget.dart';
 import 'package:agora_rtc_engine_example/components/log_sink.dart';
-import 'package:flutter/foundation.dart';
-import 'package:flutter/material.dart';
+import 'package:permission_handler/permission_handler.dart';
 
 /// MultiChannel Example
 class JoinChannelVideo extends StatefulWidget {
@@ -97,6 +99,11 @@ class _State extends State<JoinChannelVideo> {
         logSink.log(
             '[onRemoteVideoStateChanged] connection: ${connection.toJson()} remoteUid: $remoteUid state: $state reason: $reason elapsed: $elapsed');
       },
+      onLocalVideoStateChanged: (VideoSourceType source,
+            LocalVideoStreamState state, LocalVideoStreamReason error) {
+        logSink.log(
+            '[onLocalVideoStateChanged] source: $source, state: $state, error: $error');
+      },
     );
 
     _engine.registerEventHandler(_rtcEngineEventHandler);
@@ -106,6 +113,9 @@ class _State extends State<JoinChannelVideo> {
   }
 
   Future<void> _joinChannel() async {
+    if (defaultTargetPlatform == TargetPlatform.ohos) {
+      await [Permission.microphone, Permission.camera].request();
+    }
     await _engine.joinChannel(
       token: config.token,
       channelId: _controller.text,
@@ -171,6 +181,7 @@ class _State extends State<JoinChannelVideo> {
                   useAndroidSurfaceView: _isUseAndroidSurfaceView,
                 ),
                 onAgoraVideoViewCreated: (viewId) {
+                  logSink.log('[onAgoraVideoViewCreated] viewId: $viewId');
                   _engine.startPreview();
                 },
               ),
@@ -197,6 +208,9 @@ class _State extends State<JoinChannelVideo> {
                             useFlutterTexture: _isUseFlutterTexture,
                             useAndroidSurfaceView: _isUseAndroidSurfaceView,
                           ),
+                          onAgoraVideoViewCreated: (viewId) {
+                            logSink.log('[onAgoraVideoViewCreated] viewId: $viewId');
+                          },
                         ),
                       ),
                     ),

@@ -28,7 +28,7 @@ import common from '@ohos.app.ability.common';
 
 import Log from '@ohos/flutter_ohos/src/main/ets/util/Log';
 
-const AGORA_LIB_NAME: string = 'agora_rtc_sdk'
+import { Constants, } from '@shengwang/rtc-full';
 
 export class AgoraVideoCanvasFactory extends PlatformViewFactory {
   message: BinaryMessenger;
@@ -49,7 +49,11 @@ struct InternalComponent {
   canvas: AgoraVideoCanvas = this.params.platformView as AgoraVideoCanvas
 
   build() {
-    XComponent({ id: this.canvas.getUid().toString(), type: XComponentType.SURFACE, libraryname: AGORA_LIB_NAME })
+    XComponent({
+      id: AgoraVideoCanvas.getXComponentIdByViewId(this.canvas.getViewId()),
+      type: XComponentType.SURFACE,
+      libraryname: Constants.AGORA_LIB_NAME
+    })
       .backgroundColor(Color.Black)
       .direction(Direction.Ltr)
       .width('100%')
@@ -59,14 +63,19 @@ struct InternalComponent {
 
 @Builder
 function CanvasBuilder(params: Params) {
-  InternalComponent({ params: params})
+  InternalComponent({ params: params })
 }
 
 @Observed
 export class AgoraVideoCanvas extends PlatformView implements MethodCallHandler {
   public static VIEW_TYPE: string = 'AgoraOhosView';
   private methodChannel: MethodChannel;
-  private uid:number = 0;
+  private uid: number = -1;
+  private viewId: number = -1;
+
+  public static getXComponentIdByViewId(viewId: number): string {
+    return `${AgoraVideoCanvas.VIEW_TYPE}_${viewId.toString()}`;
+  }
 
   constructor(context: common.Context, viewId: number, args: ESObject, message: BinaryMessenger) {
     super();
@@ -76,14 +85,19 @@ export class AgoraVideoCanvas extends PlatformView implements MethodCallHandler 
 
     const mapArgs: Map<string, number> = args;
     this.uid = mapArgs.get('uid') || 0;
+    this.viewId = viewId;
     Log.i('AgoraVideoCanvas', 'constructor with viewId: ' + viewId + ' with uid: ' + this.uid);
   }
 
   onMethodCall(call: MethodCall, result: MethodResult): void {
   }
 
-  public getUid() :number {
+  public getUid(): number {
     return this.uid;
+  }
+
+  public getViewId(): number {
+    return this.viewId;
   }
 
   public sendMessage = () => {

@@ -151,13 +151,12 @@ class _AgoraRtcRenderPlatformViewState extends State<AgoraRtcRenderPlatformView>
   @override
   Widget build(BuildContext context) {
     return buildPlatformView(
-      viewType: _viewType,
-      creationParams: <String, dynamic>{'uid': widget.controller.canvas.uid},
-      onPlatformViewCreated: (int id) {
-        _platformViewId = id;
-        _setupVideo();
-      }
-    );
+        viewType: _viewType,
+        creationParams: <String, dynamic>{'uid': widget.controller.canvas.uid},
+        onPlatformViewCreated: (int id) {
+          _platformViewId = id;
+          _setupVideo();
+        });
   }
 
   Future<void> _setupNativeView() async {
@@ -167,9 +166,13 @@ class _AgoraRtcRenderPlatformViewState extends State<AgoraRtcRenderPlatformView>
 
     // On web, the `_nativeViewIntPtr` is assigned with the platform view id, so
     // the initialize value is 0, only check the 0(null value) on non-web.
-    if (!kIsWeb && _nativeViewIntPtr == 0) {
+    // On ohos, the `_nativeViewIntPtr` is begin with 0, so we don't need to check the 0(null value).
+    if (!kIsWeb &&
+        defaultTargetPlatform != TargetPlatform.ohos &&
+        _nativeViewIntPtr == 0) {
       return;
     }
+
     try {
       await widget.controller.setupView(_nativeViewIntPtr);
     } catch (e) {
@@ -185,6 +188,8 @@ class _AgoraRtcRenderPlatformViewState extends State<AgoraRtcRenderPlatformView>
   Future<void> _setupVideo() async {
     if (kIsWeb) {
       // On web, we maintain the platform view id and `HtmlElement` mapping internally
+      _nativeViewIntPtr = _platformViewId;
+    } else if (defaultTargetPlatform == TargetPlatform.ohos) {
       _nativeViewIntPtr = _platformViewId;
     } else {
       _nativeViewIntPtr =

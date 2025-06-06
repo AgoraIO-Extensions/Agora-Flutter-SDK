@@ -14,18 +14,16 @@ import Log from '@ohos/flutter_ohos/src/main/ets/util/Log';
 
 import {
   Constants,
-  RtcConnection,
+  VideoCanvas,
+  LogConfig,
+  RtcEngine,
   RtcEngineEx,
   RtcEngineConfig,
-  LogConfig,
-  ScreenCaptureParameters,
-  LeaveChannelOptions,
-  VideoCanvas,
-  ChannelMediaOptions,
-  RtcEngine
+  RtcConnection
 } from '@shengwang/rtc-full';
 
 import { AgoraVideoCanvasFactory, AgoraVideoCanvas } from './AgoraVideoCanvas';
+import { AgoraRtcVideoViewController } from './AgoraRtcVideoViewController';
 
 class DartRtcEngineLogConfig {
   public filePath?: string = undefined;
@@ -37,6 +35,24 @@ class DartRtcEngineInitContext {
   public appId?: string = undefined;
   public areaCode?: Constants.AreaCode = undefined;
   public logConfig?: DartRtcEngineLogConfig = undefined;
+}
+
+class DartRtcEngineCanvas {
+  public uid?: number = undefined;
+  public view?: number = undefined;
+  public renderMode?: number = undefined;
+  public mirrorMode?: number = undefined;
+  public sourceType?: number = undefined;
+}
+
+class DartRtcEngineConnection {
+  public channelId?: string = undefined;
+  public localUid?: number = undefined;
+}
+
+class DartRtcEngineSetupVideoViewContext {
+  public canvas?: DartRtcEngineCanvas = undefined;
+  public connection?: DartRtcEngineConnection = undefined;
 }
 
 const TAG: string = "AgoraRtcEnginePlugin";
@@ -60,6 +76,8 @@ export default class AgoraRtcEnginePlugin implements FlutterPlugin, MethodCallHa
     binding.getPlatformViewRegistry()?.
     registerViewFactory(AgoraVideoCanvas.VIEW_TYPE,
       new AgoraVideoCanvasFactory(binding.getBinaryMessenger(), StandardMessageCodec.INSTANCE));
+
+    binding.getFlutterEngine()?.getPlugins()?.add(new AgoraRtcVideoViewController());
 
     this.channel = new MethodChannel(binding.getBinaryMessenger(), METHOD_CHANNEL);
     this.channel.setMethodCallHandler(this);
@@ -136,6 +154,74 @@ export default class AgoraRtcEnginePlugin implements FlutterPlugin, MethodCallHa
     return 0;
   }
 
+  onEnableVideo(call: MethodCall) {
+    Log.i(TAG, 'onEnableVideo');
+
+    if (this._engine === null) {
+      return Constants.ErrorCode.ERR_NOT_INITIALIZED;
+    }
+
+    return this._engine!.enableVideo();
+  }
+
+  _createVideoCanvas(param: DartRtcEngineSetupVideoViewContext): VideoCanvas {
+    let rtcCanvas: VideoCanvas = new VideoCanvas(AgoraVideoCanvas.getXComponentIdByViewId(param.canvas!.view!), false);
+    rtcCanvas.uid = param.canvas!.uid!;
+    if (param.canvas!.renderMode !== undefined) {
+      rtcCanvas.renderMode = param.canvas!.renderMode;
+    }
+
+    if (param.canvas!.mirrorMode !== undefined) {
+      rtcCanvas.mirrorMode = param.canvas!.mirrorMode;
+    }
+
+    if (param.canvas!.sourceType !== undefined) {
+      rtcCanvas.sourceType = param.canvas!.sourceType;
+    }
+
+    return rtcCanvas;
+  }
+
+  onSetupRemoteVideoEx(call: MethodCall) {
+    Log.i(TAG, 'onSetupRemoteVideoEx');
+
+    if (this._engine === null) {
+      return Constants.ErrorCode.ERR_NOT_INITIALIZED;
+    }
+
+    const setupVideoViewContext = JSON.parse(call.args) as DartRtcEngineSetupVideoViewContext;
+    let rtcCanvas: VideoCanvas = this._createVideoCanvas(setupVideoViewContext);
+
+    return this._engine!.setupRemoteVideoEx(rtcCanvas,
+      new RtcConnection(setupVideoViewContext.connection?.channelId, setupVideoViewContext.connection?.localUid));
+  }
+
+  onSetupRemoteVideo(call: MethodCall) {
+    Log.i(TAG, 'onSetupRemoteVideo');
+
+    if (this._engine === null) {
+      return Constants.ErrorCode.ERR_NOT_INITIALIZED;
+    }
+
+    const setupVideoViewContext = JSON.parse(call.args) as DartRtcEngineSetupVideoViewContext;
+    let rtcCanvas: VideoCanvas = this._createVideoCanvas(setupVideoViewContext);
+
+    return this._engine!.setupRemoteVideo(rtcCanvas);
+  }
+
+  onSetupLocalVideo(call: MethodCall) {
+    Log.i(TAG, 'onSetupLocalVideo');
+
+    if (this._engine === null) {
+      return Constants.ErrorCode.ERR_NOT_INITIALIZED;
+    }
+
+    const setupVideoViewContext = JSON.parse(call.args) as DartRtcEngineSetupVideoViewContext;
+    let rtcCanvas: VideoCanvas = this._createVideoCanvas(setupVideoViewContext);
+
+    return this._engine!.setupLocalVideo(rtcCanvas);
+  }
+
   onMethodCall(call: MethodCall, result: MethodResult): void {
     Log.d(TAG, 'onMethodCall: ' + call.method + ' width: ' + call.args);
     try {
@@ -145,6 +231,14 @@ export default class AgoraRtcEnginePlugin implements FlutterPlugin, MethodCallHa
         result.success(this.onOhosInit(call));
       } else if (call.method == "ohosDestroy") {
         result.success(this.onOhosDestroy(call));
+      } else if (call.method == "enableVideo") {
+        result.success(this.onEnableVideo(call));
+      } else if (call.method == "setupRemoteVideoEx") {
+        result.success(this.onSetupRemoteVideoEx(call));
+      } else if (call.method == "setupRemoteVideo") {
+        result.success(this.onSetupRemoteVideo(call));
+      } else if (call.method == "setupLocalVideo") {
+        result.success(this.onSetupLocalVideo(call));
       } else {
         result.notImplemented();
       }
