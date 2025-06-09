@@ -21,6 +21,21 @@
       {
         "name": "release"
       }
+    ],
+    "signingConfigs": [
+      {
+        "name": "default",
+        "type": "HarmonyOS",
+        "material": {
+          "storeFile": "OHOS_SIGNING_P12",
+          "storePassword": "OHOS_SIGNING_P12_PWD",
+          "keyAlias": "OHOS_SIGNING_KEY_ALIAS",
+          "keyPassword": "OHOS_SIGNING_KEY_PWD",
+          "signAlg": "OHOS_SIGNING_SIGN_ALG",
+          "profile": "OHOS_SIGNING_PROFILE",
+          "certpath": "OHOS_SIGNING_CER"
+        }
+      }
     ]
   },
   "modules": [
