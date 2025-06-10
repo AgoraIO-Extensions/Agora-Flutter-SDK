@@ -150,7 +150,7 @@
                                   @"agora_rtc_ng/video_view_controller"
                   binaryMessenger:messenger];
         
-      __weak typeof(self) weakSelf = self;
+      __weak VideoViewController *weakSelf = self;
       [self.methodChannel setMethodCallHandler:^(FlutterMethodCall *_Nonnull call,
                                                    FlutterResult _Nonnull result) {
         if (weakSelf != nil) {

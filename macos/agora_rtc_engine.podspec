@@ -13,7 +13,7 @@ A new flutter plugin project.
   s.license          = { :file => '../LICENSE' }
   s.author           = { 'Your Company' => 'email@example.com' }
   s.source           = { :path => '.' }
-  s.source_files = 'Classes/**/*.{h,mm}', 'Classes/File.swift'
+  s.source_files = 'agora_rtc_engine/Sources/**/*.{h,mm}'
   s.dependency 'FlutterMacOS'
 
   plugin_dev_path = File.join(File.dirname(File.realpath(__FILE__)), '.plugin_dev')
@@ -22,7 +22,7 @@ A new flutter plugin project.
     s.vendored_frameworks = 'libs/*.xcframework', 'libs/*.framework'
   else
     # iris dependencies start
-    s.dependency 'AgoraIrisRTC_macOS', '4.5.2-build.1'
+    s.dependency 'AgoraIrisRTC_macOS', '4.5.2-build.2'
     # iris dependencies end
 
     # native dependencies start
