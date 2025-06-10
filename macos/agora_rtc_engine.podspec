@@ -13,7 +13,7 @@ A new flutter plugin project.
   s.license          = { :file => '../LICENSE' }
   s.author           = { 'Your Company' => 'email@example.com' }
   s.source           = { :path => '.' }
-  s.source_files = 'agora_rtc_engine/Sources/**/*.{h,mm}'
+  s.source_files = 'agora_rtc_engine/Sources/**/*.{h,mm,swift}'
   s.dependency 'FlutterMacOS'
 
   plugin_dev_path = File.join(File.dirname(File.realpath(__FILE__)), '.plugin_dev')

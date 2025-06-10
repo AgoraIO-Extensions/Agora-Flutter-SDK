@@ -23,6 +23,9 @@ let package = Package(
             ],
             cSettings: [
                 .headerSearchPath("include/agora_rtc_engine")
+            ],
+            cxxSettings: [
+                .unsafeFlags(["-std=c++14"])
             ]
         ),
         .binaryTarget(
