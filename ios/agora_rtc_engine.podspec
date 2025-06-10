@@ -15,7 +15,7 @@ Pod::Spec.new do |s|
   s.license          = { :file => '../LICENSE' }
   s.author           = { 'Agora' => 'developer@agora.io' }
   s.source           = { :path => '.' }
-  s.source_files = 'Classes/**/*.{h,mm,m,swift}'
+  s.source_files = 'agora_rtc_engine/Sources/**/*.{h,mm,m,swift}'
   s.dependency 'Flutter'
 
   plugin_dev_path = File.join(File.dirname(File.realpath(__FILE__)), '.plugin_dev')

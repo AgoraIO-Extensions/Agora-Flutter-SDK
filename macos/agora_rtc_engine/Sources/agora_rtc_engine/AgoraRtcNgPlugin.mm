@@ -1,12 +1,9 @@
-#import "AgoraRtcNgPlugin.h"
-#import "AgoraSurfaceViewFactory.h"
-#import "VideoViewController.h"
+#import "./include/agora_rtc_engine/AgoraRtcNgPlugin.h"
+#import "./include/agora_rtc_engine/VideoViewController.h"
 
 @interface AgoraRtcNgPlugin ()
 
 @property(nonatomic) VideoViewController *videoViewController;
-
-@property(nonatomic) NSObject<FlutterPluginRegistrar> *registrar;
 
 @end
 
@@ -16,27 +13,25 @@
       methodChannelWithName:@"agora_rtc_ng"
             binaryMessenger:[registrar messenger]];
   AgoraRtcNgPlugin* instance = [[AgoraRtcNgPlugin alloc] init];
-  instance.registrar = registrar;
   [registrar addMethodCallDelegate:instance channel:channel];
     
-  instance.videoViewController = [[VideoViewController alloc] initWith:registrar.textures messenger:registrar.messenger];
-    
-  [registrar registerViewFactory:[[AgoraSurfaceViewFactory alloc]
-                        initWith:[registrar messenger]
-                      controller:instance.videoViewController]
-                          withId:@"AgoraSurfaceView"];
+    instance.videoViewController = [[VideoViewController alloc] initWith:registrar.textures messenger:registrar.messenger];
 }
 
 - (void)getAssetAbsolutePath:(FlutterMethodCall *)call
                       result:(FlutterResult)result {
     NSString *assetPath = (NSString *)[call arguments];
     if (assetPath) {
-        NSString *assetKey = [[self registrar] lookupKeyForAsset:assetPath];
-        if (assetKey) {
-            NSString *realPath = [[NSBundle mainBundle] pathForResource:assetKey ofType:nil];
+        NSString *bundlePath = [[NSBundle mainBundle] bundlePath];
+        // Temporary workaround for loop up flutter asset in macOS
+        // https://github.com/flutter/flutter/issues/47681#issuecomment-958111474
+        NSString *realPath =  [NSString stringWithFormat:@"%@%@%@", bundlePath, @"/Contents/Frameworks/App.framework/Resources/flutter_assets/", assetPath];
+        
+        if (realPath) {
             result(realPath);
             return;
         }
+        
         result([FlutterError
             errorWithCode:@"FileNotFoundException"
                   message:nil
@@ -51,10 +46,10 @@
 
 - (void)handleMethodCall:(FlutterMethodCall*)call result:(FlutterResult)result {
     if ([@"getAssetAbsolutePath" isEqualToString:call.method]) {
-            [self getAssetAbsolutePath:call result:result];
-        } else {
-    result(FlutterMethodNotImplemented);
-  }
+        [self getAssetAbsolutePath:call result:result];
+    } else {
+        result(FlutterMethodNotImplemented);
+    }
 }
 
 @end
