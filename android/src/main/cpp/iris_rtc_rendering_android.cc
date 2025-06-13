@@ -621,15 +621,19 @@ class YUVRendering final : public RenderingOp {
     glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
     CHECK_GL_ERROR()
 
-    gl_context_->Swap();
-
-    // Clean up
-    glDisableVertexAttribArray(aPositionLoc_);
-    CHECK_GL_ERROR()
-    glDisableVertexAttribArray(texCoordLoc_);
-    CHECK_GL_ERROR()
+    // Unbind textures explicitly
+    glActiveTexture(GL_TEXTURE0);
+    glBindTexture(GL_TEXTURE_2D, 0);
+    glActiveTexture(GL_TEXTURE1); 
+    glBindTexture(GL_TEXTURE_2D, 0);
+    glActiveTexture(GL_TEXTURE2);
     glBindTexture(GL_TEXTURE_2D, 0);
     CHECK_GL_ERROR()
+
+    gl_context_->Swap();
+
+    glFinish(); // Add sync point
+    gl_context_->GLContextClearCurrent();
   }
 
   agora::media::base::VIDEO_PIXEL_FORMAT Format() override {
@@ -777,8 +781,16 @@ class NativeTextureRenderer final
       }
     }
 
+    // Check framebuffer status
+    GLenum status = glCheckFramebufferStatus(GL_FRAMEBUFFER);
+    if (status != GL_FRAMEBUFFER_COMPLETE) {
+      LOGCATE("Framebuffer is not complete: %d", status);
+      return;
+    }
+
     rendering_op_->Rendering(video_frame);
 
+    glFinish(); // Add sync point
     gl_context_->GLContextClearCurrent();
   }
 
