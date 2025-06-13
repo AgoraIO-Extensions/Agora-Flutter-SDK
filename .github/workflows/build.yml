@@ -64,7 +64,7 @@ jobs:
           # Create a zip file of the DartDoc output
           zip -r agora_rtc_engine_docs.zip doc
       - name: Upload DartDoc Artifact ⬆️
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: agora_rtc_engine_docs.zip
           path: agora_rtc_engine_docs.zip
@@ -85,20 +85,25 @@ jobs:
     if: ${{ !contains(github.event.pull_request.labels.*.name, 'ci:skip') }}
     strategy:
       matrix:
-        version: ["3.7.0", "3.x"]
+        version: ["3.7.0", "3.24.5"]
     runs-on: ubuntu-latest
     timeout-minutes: 120
     env:
       TEST_APP_ID: ${{ secrets.MY_APP_ID }}
     steps:
-      - uses: actions/checkout@v1
-      - uses: actions/setup-java@v1
+      - uses: actions/checkout@v3
+      - uses: actions/setup-java@v4
         with:
-          java-version: "11"
+          distribution: 'zulu'
+          java-version: '17'
       - uses: subosito/flutter-action@v2
         with:
           flutter-version: ${{ matrix.version }}
-      - run: flutter config --enable-macos-desktop
+      - name: Enable KVM
+        run: |
+          echo 'KERNEL=="kvm", GROUP="kvm", MODE="0666", OPTIONS+="static_node=kvm"' | sudo tee /etc/udev/rules.d/99-kvm4all.rules
+          sudo udevadm control --reload-rules
+          sudo udevadm trigger --name-match=kvm
       - name: run flutter android integration tests
         uses: reactivecircus/android-emulator-runner@v2
         with:
@@ -115,8 +120,8 @@ jobs:
     if: ${{ !contains(github.event.pull_request.labels.*.name, 'ci:skip') }}
     strategy:
       matrix:
-        version: ["3.7.0", "3.16"]
-    runs-on: macos-12
+        version: ["3.7.0", "3.24.5"]
+    runs-on: macos-latest
     timeout-minutes: 120
     env:
       TEST_APP_ID: ${{ secrets.MY_APP_ID }}
@@ -126,9 +131,9 @@ jobs:
         with:
           flutter-version: ${{ matrix.version }}
           cache: true
-      - uses: futureware-tech/simulator-action@v1
+      - uses: futureware-tech/simulator-action@v3
         with:
-          model: 'iPhone 13 Pro Max'
+          model: 'iPhone 15'
       - run: bash ci/run_flutter_integration_test_ios.sh
 
   integration_test_macos:
@@ -136,8 +141,8 @@ jobs:
     if: ${{ !contains(github.event.pull_request.labels.*.name, 'ci:skip') }}
     strategy:
       matrix:
-        version: ["3.7.0", "3.x"]
-    runs-on: macos-12
+        version: ["3.7.0", "3.24.5"]
+    runs-on: macos-latest
     timeout-minutes: 120
     env:
       TEST_APP_ID: ${{ secrets.MY_APP_ID }}
@@ -155,7 +160,7 @@ jobs:
     if: ${{ !contains(github.event.pull_request.labels.*.name, 'ci:skip') }}
     strategy:
       matrix:
-        version: ["3.7.0", "3.x"]
+        version: ["3.7.0", "3.24.5"]
     runs-on: windows-2019
     timeout-minutes: 120
     env:
@@ -177,7 +182,7 @@ jobs:
     if: ${{ !contains(github.event.pull_request.labels.*.name, 'ci:skip') }}
     strategy:
       matrix:
-        version: ['3.x']
+        version: ['3.24.5']
     runs-on: ubuntu-latest
     timeout-minutes: 60
     env:
@@ -200,13 +205,14 @@ jobs:
     needs: flutter_codestyle_check
     strategy:
       matrix:
-        version: ["3.7.0", "3.x"]
+        version: ["3.7.12", "3.24.5"]
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
-      - uses: actions/setup-java@v1
+      - uses: actions/setup-java@v4
         with:
-          java-version: "11"
+          distribution: 'zulu'
+          java-version: '17'
       - uses: subosito/flutter-action@v2
         with:
           flutter-version: ${{ matrix.version }}
@@ -220,13 +226,14 @@ jobs:
     if: ${{ !contains(github.event.pull_request.labels.*.name, 'ci:skip') }}
     strategy:
       matrix:
-        version: ["3.7.0", "3.x"]
+        version: ["3.7.12", "3.24.5"]
     runs-on: windows-2019
     steps:
       - uses: actions/checkout@v3
-      - uses: actions/setup-java@v1
+      - uses: actions/setup-java@v4
         with:
-          java-version: '11'
+          distribution: 'zulu'
+          java-version: '17'
       - uses: subosito/flutter-action@v2
         with:
           flutter-version: ${{ matrix.version }}
@@ -241,8 +248,8 @@ jobs:
     if: ${{ !contains(github.event.pull_request.labels.*.name, 'ci:skip') }}
     strategy:
       matrix:
-        version: ["3.7.0", "3.x"]
-    runs-on: macos-12
+        version: ["3.7.0", "3.24.5"]
+    runs-on: macos-latest
     timeout-minutes: 120
     steps:
       - uses: actions/checkout@v3
@@ -261,7 +268,7 @@ jobs:
     if: ${{ !contains(github.event.pull_request.labels.*.name, 'ci:skip') }}
     strategy:
       matrix:
-        version: ['3.x']
+        version: ['3.24.5']
     runs-on: macos-13
     timeout-minutes: 120
     steps:
@@ -286,7 +293,7 @@ jobs:
     if: ${{ !contains(github.event.pull_request.labels.*.name, 'ci:skip') }}
     strategy:
       matrix:
-        version: ["3.7.0", "3.x"]
+        version: ["3.7.0", "3.24.5"]
     runs-on: ubuntu-latest
     timeout-minutes: 120
     steps:
@@ -304,18 +311,19 @@ jobs:
   rendering_test_android:
     name: Run Flutter Android Rendering Tests
     if: ${{ !contains(github.event.pull_request.labels.*.name, 'ci:skip') }}
-    runs-on: macos-12
+    runs-on: ubuntu-latest
     timeout-minutes: 120
     env:
       TEST_APP_ID: ${{ secrets.MY_APP_ID }}
     steps:
       - uses: actions/checkout@v3
-      - uses: actions/setup-java@v1
+      - uses: actions/setup-java@v4
         with:
-          java-version: '11'
+          distribution: 'zulu'
+          java-version: '17'
       - uses: subosito/flutter-action@v2
         with:
-          flutter-version: '3.x'
+          flutter-version: '3.24.5'
           cache: true
       - name: Checkout hoe
         uses: actions/checkout@v3
@@ -342,7 +350,11 @@ jobs:
             --flutter-package-name=agora_rtc_engine \
             --iris-android-cdn-url=${IRIS_CDN_URL_ANDROID} \
             --iris-macos-cdn-url=${IRIS_CDN_URL_MACOS}
-      - run: flutter config --enable-macos-desktop
+      - name: Enable KVM
+        run: |
+          echo 'KERNEL=="kvm", GROUP="kvm", MODE="0666", OPTIONS+="static_node=kvm"' | sudo tee /etc/udev/rules.d/99-kvm4all.rules
+          sudo udevadm control --reload-rules
+          sudo udevadm trigger --name-match=kvm
       - name: run flutter android integration tests
         uses: reactivecircus/android-emulator-runner@v2
         with:
@@ -359,13 +371,13 @@ jobs:
     if: ${{ !contains(github.event.pull_request.labels.*.name, 'ci:skip') }}
     strategy:
       matrix:
-        version: ["3.x"]
+        version: ["3.24.5"]
     runs-on: macos-13 # Rendering test on ios simulator need macos 13+
     timeout-minutes: 60
     env:
       TEST_APP_ID: ${{ secrets.MY_APP_ID }}
     steps:
-      - uses: actions/checkout@v1
+      - uses: actions/checkout@v3
       - uses: subosito/flutter-action@v2
         with:
           flutter-version: ${{ matrix.version }}
@@ -391,12 +403,9 @@ jobs:
             --apple-package-name=io.agora.agoraRtcEngineExample \
             --flutter-package-name=agora_rtc_engine \
             --iris-ios-cdn-url=${IRIS_CDN_URL_IOS}
-      - name: Create ios simulator
-        run: |
-          xcrun simctl list
-          # We generate the screenshots base on the simulator "iPhone 13 Pro Max", so we set the SimDeviceType to iPhone 13 Pro Max.
-          # If you need to change the SimDeviceType, you may need to re-generate the screenshots first.
-          xcrun simctl create Flutter-iPhone com.apple.CoreSimulator.SimDeviceType.iPhone-13-Pro-Max com.apple.CoreSimulator.SimRuntime.iOS-16-4 | xargs xcrun simctl boot
+      - uses: futureware-tech/simulator-action@v3
+        with:
+          model: 'iPhone 15'
       - run: bash ci/rendering_test_ios.sh
 
   rendering_test_macos:
@@ -404,8 +413,8 @@ jobs:
     if: ${{ !contains(github.event.pull_request.labels.*.name, 'ci:skip') }}
     strategy:
       matrix:
-        version: ['3.x']
-    runs-on: macos-12
+        version: ['3.24.5']
+    runs-on: macos-latest
     timeout-minutes: 120
     env:
       TEST_APP_ID: ${{ secrets.MY_APP_ID }}
@@ -499,7 +508,7 @@ jobs:
     if: ${{ !contains(github.event.pull_request.labels.*.name, 'ci:skip') }}
     strategy:
       matrix:
-        version: ['3.x']
+        version: ['3.24.5']
     runs-on: ubuntu-latest
     timeout-minutes: 60
     env:
@@ -518,7 +527,7 @@ jobs:
           chromedriver --port=4444 --trace-buffer-size=100000 &
           bash ci/run_rendering_test.sh web
 
-      - uses: actions/upload-artifact@v3
+      - uses: actions/upload-artifact@v4
         if: failure()
         with:
           name: debug-golden-files
