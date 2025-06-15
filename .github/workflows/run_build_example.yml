@@ -336,6 +336,13 @@ jobs:
           # replace OHOS_SIGNING_CER in ./build-profile.json5 with $DEFAULT_OHOS_SIGNING_CER_PATH
           sed -i '' "s|OHOS_SIGNING_CER|$DEFAULT_OHOS_SIGNING_CER_PATH|g" $CURRENT_DIR/build-profile.json5
 
+      - name: Upload build-profile.json5
+        uses: actions/upload-artifact@v4
+        with:
+          name: build-profile.json5
+          path: example/ohos/build-profile.json5
+          if-no-files-found: error
+
       - name: Build
         env:
           DEFAULT_BUILD_APP_ID: ${{ secrets.APP_ID }}
