@@ -1,3 +1,5 @@
+#import <Foundation/Foundation.h>
+
 #ifndef TextureRenderer_h
 #define TextureRenderer_h
 
