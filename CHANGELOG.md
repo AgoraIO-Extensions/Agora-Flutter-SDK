@@ -1,5 +1,11 @@
 # Changelog
 
+## [6.3.2-sp.43216.b.2](https://github.com/AgoraIO-Extensions/Agora-Flutter-SDK/compare/6.3.2-sp.43216...6.3.2-sp.43216.b.2) (2025-06-16)
+
+### Features
+
+* support 16K for android ([#2340](https://github.com/AgoraIO-Extensions/Agora-Flutter-SDK/issues/2340)) ([24f0de5](https://github.com/AgoraIO-Extensions/Agora-Flutter-SDK/commit/24f0de5a753b706646fe06021b37eacefac7400f))
+
 ## [6.3.2-sp.43211.b.7](https://github.com/AgoraIO-Extensions/Agora-Flutter-SDK/compare/6.3.2-sp.43211.b.6...6.3.2-sp.43211.b.7) (2025-04-24)
 
 ### Features
