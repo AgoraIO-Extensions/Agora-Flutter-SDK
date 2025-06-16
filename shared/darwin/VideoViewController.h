@@ -1,3 +1,5 @@
+#import <Foundation/Foundation.h>
+
 #ifndef VideoViewController_h
 #define VideoViewController_h
 

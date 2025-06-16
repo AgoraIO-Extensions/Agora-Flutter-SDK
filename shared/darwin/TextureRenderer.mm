@@ -160,7 +160,7 @@ public:
                                        self.textureId]
               binaryMessenger:messenger];
 
-    self.delegate = std::make_shared<::RendererDelegate>((__bridge void *)self);
+    self.delegate = std::make_shared< ::RendererDelegate>((__bridge void *)self);
     self.latestPixelBuffer = nil;
     self.pixelBufferSynchronizationQueue = dispatch_queue_create(
         [[NSString stringWithFormat:@"io.agora.flutter.render_%lld", _textureId]
