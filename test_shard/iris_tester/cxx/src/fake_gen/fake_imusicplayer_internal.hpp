@@ -64,6 +64,8 @@ class FakeIMusicPlayerInternal : public agora::rtc::IMusicPlayer {
 
   virtual int takeScreenshot(char const *filename) override { return 0; }
 
+  virtual int takeSnapshot(int64_t requestId) override { return 0; }
+
   virtual int selectInternalSubtitle(int index) override { return 0; }
 
   virtual int setExternalSubtitle(char const *url) override { return 0; }

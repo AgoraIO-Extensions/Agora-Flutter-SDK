@@ -98,6 +98,24 @@ class MediaPlayerSourceObserverWrapper implements EventLoopEventHandler {
         mediaPlayerSourceObserver.onMetaData!(data, length);
         return true;
 
+      case 'onSnapshot_d437ae6':
+        if (mediaPlayerSourceObserver.onSnapshot == null) {
+          return true;
+        }
+        final jsonMap = jsonDecode(eventData);
+        MediaPlayerSourceObserverOnSnapshotJson paramJson =
+            MediaPlayerSourceObserverOnSnapshotJson.fromJson(jsonMap);
+        paramJson = paramJson.fillBuffers(buffers);
+        int? requestId = paramJson.requestId;
+        VideoFrame? videoFrame = paramJson.videoFrame;
+        if (requestId == null || videoFrame == null) {
+          return true;
+        }
+
+        videoFrame = videoFrame.fillBuffers(buffers);
+        mediaPlayerSourceObserver.onSnapshot!(requestId, videoFrame);
+        return true;
+
       case 'onPlayBufferUpdated_f631116':
         if (mediaPlayerSourceObserver.onPlayBufferUpdated == null) {
           return true;

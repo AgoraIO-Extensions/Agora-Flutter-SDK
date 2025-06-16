@@ -3309,23 +3309,26 @@ public:
      */
     struct Metadata
     {
-      /** The User ID that sent the metadata.
-        * - For the receiver: The user ID of the user who sent the `metadata`.
-        * - For the sender: Ignore this value.
-        */
-      unsigned int uid;
-      /** The buffer size of the sent or received `metadata`.
-        */
-      unsigned int size;
-      /** The buffer address of the sent or received `metadata`.
-        */
-      unsigned char* buffer;
-      /** The timestamp (ms) of the `metadata`.
-        *
-        */
-      long long timeStampMs;
+        /** The channel ID of the `metadata`.
+         */
+        const char* channelId;
+        /** The User ID that sent the metadata.
+         * - For the receiver: The user ID of the user who sent the `metadata`.
+         * - For the sender: Ignore this value.
+         */
+        unsigned int uid;
+        /** The buffer size of the sent or received `metadata`.
+         */
+        unsigned int size;
+        /** The buffer address of the sent or received `metadata`.
+         */
+        unsigned char *buffer;
+        /** The NTP timestamp (ms) when the metadata is sent.
+         *  @note If the receiver is audience, the receiver cannot get the NTP timestamp (ms).
+         */
+        long long timeStampMs;
 
-      Metadata() : uid(0), size(0), buffer(NULL), timeStampMs(0) {}
+         Metadata() : channelId(NULL), uid(0), size(0), buffer(NULL), timeStampMs(0) {}
     };
 
    /** Occurs when the SDK requests the maximum size of the metadata.

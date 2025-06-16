@@ -17,6 +17,7 @@ class MediaPlayerSourceObserver {
     this.onPlayerCacheStats,
     this.onPlayerPlaybackStats,
     this.onAudioVolumeIndication,
+    this.onSnapshot,
   });
 
   /// Reports the changes of playback state.
@@ -109,4 +110,10 @@ class MediaPlayerSourceObserver {
   ///
   /// * [volume] The volume of the media player. The value ranges from 0 to 255.
   final void Function(int volume)? onAudioVolumeIndication;
+
+  /// After executing IMediaPlaye::takeSnapshot, this callback is returned to the user.
+  ///
+  /// * [requestId] The requestId when executing takeSnapshot.
+  /// * [frame] The detailed information of the video frame. See VideoFrame.
+  final void Function(int requestId, VideoFrame frame)? onSnapshot;
 }

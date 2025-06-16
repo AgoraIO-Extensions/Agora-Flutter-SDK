@@ -306,6 +306,11 @@ class MediaPlayerControllerImpl
   }
 
   @override
+  Future<void> takeSnapshot(int requestId) {
+    return _mediaPlayer!.takeSnapshot(requestId);
+  }
+
+  @override
   Future<void> unloadSrc(String src) {
     return _mediaPlayer!.unloadSrc(src);
   }

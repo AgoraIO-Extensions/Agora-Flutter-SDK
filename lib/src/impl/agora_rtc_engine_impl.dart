@@ -259,8 +259,13 @@ extension RtcEngineEventHandlerExExt on RtcEngineEventHandler {
 
 extension MetadataExt on Metadata {
   Metadata copyWith(
-      {int? uid, int? size, Uint8List? buffer, int? timeStampMs}) {
+      {String? channelId,
+      int? uid,
+      int? size,
+      Uint8List? buffer,
+      int? timeStampMs}) {
     return Metadata(
+      channelId: channelId ?? this.channelId,
       uid: uid ?? this.uid,
       size: size ?? this.size,
       buffer: buffer ?? this.buffer,
@@ -284,6 +289,7 @@ extension MetadataObserverExt on MetadataObserver {
         }
 
         metadata = Metadata(
+          channelId: metadata.channelId,
           uid: metadata.uid,
           size: metadata.size,
           buffer: buffers[0],

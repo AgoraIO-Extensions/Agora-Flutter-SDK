@@ -498,6 +498,17 @@ class IMediaPlayerSourceObserver {
    * @param volume volume of current player.
    */
   virtual void onAudioVolumeIndication(int volume) = 0;
+
+  /**
+   * @brief After executing IMediaplayer::takeSnapshot, this callback is returned to the user.
+   *
+   * @param requestId The requestId when executing takeSnapshot.
+   * @param frame The detailed information of the video frame. See {@link VideoFrame}.
+   */
+  virtual void onSnapshot(int64_t requestId, const media::base::VideoFrame* frame) {
+    (void)requestId;
+    (void)frame;
+  }
 };
 
 } //namespace rtc
