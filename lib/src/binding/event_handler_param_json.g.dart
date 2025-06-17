@@ -823,6 +823,31 @@ Map<String, dynamic> _$MediaPlayerSourceObserverOnMetaDataJsonToJson(
   return val;
 }
 
+MediaPlayerSourceObserverOnSnapshotJson
+    _$MediaPlayerSourceObserverOnSnapshotJsonFromJson(
+            Map<String, dynamic> json) =>
+        MediaPlayerSourceObserverOnSnapshotJson(
+          requestId: (json['requestId'] as num?)?.toInt(),
+          videoFrame: json['videoFrame'] == null
+              ? null
+              : VideoFrame.fromJson(json['videoFrame'] as Map<String, dynamic>),
+        );
+
+Map<String, dynamic> _$MediaPlayerSourceObserverOnSnapshotJsonToJson(
+    MediaPlayerSourceObserverOnSnapshotJson instance) {
+  final val = <String, dynamic>{};
+
+  void writeNotNull(String key, dynamic value) {
+    if (value != null) {
+      val[key] = value;
+    }
+  }
+
+  writeNotNull('requestId', instance.requestId);
+  writeNotNull('videoFrame', instance.videoFrame?.toJson());
+  return val;
+}
+
 MediaPlayerSourceObserverOnPlayBufferUpdatedJson
     _$MediaPlayerSourceObserverOnPlayBufferUpdatedJsonFromJson(
             Map<String, dynamic> json) =>

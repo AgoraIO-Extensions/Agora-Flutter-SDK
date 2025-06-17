@@ -160,6 +160,9 @@ abstract class MediaPlayer {
   Future<void> takeScreenshot(String filename);
 
   /// @nodoc
+  Future<void> takeSnapshot(int requestId);
+
+  /// @nodoc
   Future<void> selectInternalSubtitle(int index);
 
   /// @nodoc

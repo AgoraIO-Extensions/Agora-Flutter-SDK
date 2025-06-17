@@ -841,6 +841,7 @@ const _$ThreadPriorityTypeEnumMap = {
 };
 
 Metadata _$MetadataFromJson(Map<String, dynamic> json) => Metadata(
+      channelId: json['channelId'] as String?,
       uid: (json['uid'] as num?)?.toInt(),
       size: (json['size'] as num?)?.toInt(),
       timeStampMs: (json['timeStampMs'] as num?)?.toInt(),
@@ -855,6 +856,7 @@ Map<String, dynamic> _$MetadataToJson(Metadata instance) {
     }
   }
 
+  writeNotNull('channelId', instance.channelId);
   writeNotNull('uid', instance.uid);
   writeNotNull('size', instance.size);
   writeNotNull('timeStampMs', instance.timeStampMs);

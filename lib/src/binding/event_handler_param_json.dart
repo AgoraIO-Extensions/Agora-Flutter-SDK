@@ -975,6 +975,39 @@ extension MediaPlayerSourceObserverOnMetaDataJsonBufferExt
 }
 
 @JsonSerializable(explicitToJson: true, includeIfNull: false)
+class MediaPlayerSourceObserverOnSnapshotJson {
+  const MediaPlayerSourceObserverOnSnapshotJson(
+      {this.requestId, this.videoFrame});
+
+  @JsonKey(name: 'requestId')
+  final int? requestId;
+
+  @JsonKey(name: 'videoFrame')
+  final VideoFrame? videoFrame;
+
+  factory MediaPlayerSourceObserverOnSnapshotJson.fromJson(
+          Map<String, dynamic> json) =>
+      _$MediaPlayerSourceObserverOnSnapshotJsonFromJson(json);
+
+  Map<String, dynamic> toJson() =>
+      _$MediaPlayerSourceObserverOnSnapshotJsonToJson(this);
+}
+
+extension MediaPlayerSourceObserverOnSnapshotJsonBufferExt
+    on MediaPlayerSourceObserverOnSnapshotJson {
+  MediaPlayerSourceObserverOnSnapshotJson fillBuffers(
+      List<Uint8List> bufferList) {
+    if (bufferList.isEmpty) return this;
+    return this;
+  }
+
+  List<Uint8List> collectBufferList() {
+    final bufferList = <Uint8List>[];
+    return bufferList;
+  }
+}
+
+@JsonSerializable(explicitToJson: true, includeIfNull: false)
 class MediaPlayerSourceObserverOnPlayBufferUpdatedJson {
   const MediaPlayerSourceObserverOnPlayBufferUpdatedJson(
       {this.playCachedBuffer});

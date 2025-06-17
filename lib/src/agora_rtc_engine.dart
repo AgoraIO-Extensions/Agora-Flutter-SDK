@@ -2871,7 +2871,12 @@ extension MaxMetadataSizeTypeExt on MaxMetadataSizeType {
 @JsonSerializable(explicitToJson: true, includeIfNull: false)
 class Metadata {
   /// @nodoc
-  const Metadata({this.uid, this.size, this.buffer, this.timeStampMs});
+  const Metadata(
+      {this.channelId, this.uid, this.size, this.buffer, this.timeStampMs});
+
+  /// The channel ID of the `metadata`.
+  @JsonKey(name: 'channelId')
+  final String? channelId;
 
   /// The user ID.
   ///  For the recipient: The ID of the remote user who sent the Metadata.

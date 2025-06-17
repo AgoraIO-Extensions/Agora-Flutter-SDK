@@ -211,6 +211,15 @@ public:
   virtual int takeScreenshot(const char* filename) = 0;
 
   /**
+   * take screenshot while playing  video
+   * @param requestId An ID that identifies a screenshot request
+   * @return
+   * - 0: Success.
+   * - < 0: Failure.
+   */
+  virtual int takeSnapshot(int64_t requestId) = 0;
+
+  /**
    * select internal subtitles in video
    * @param index the index of the internal subtitles
    * @return

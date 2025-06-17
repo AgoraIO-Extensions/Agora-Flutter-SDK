@@ -1557,7 +1557,11 @@ extension MetadataBufferExt on Metadata {
       buffer = bufferList[0];
     }
     return Metadata(
-        uid: uid, size: size, buffer: buffer, timeStampMs: timeStampMs);
+        channelId: channelId,
+        uid: uid,
+        size: size,
+        buffer: buffer,
+        timeStampMs: timeStampMs);
   }
 
   List<Uint8List> collectBufferList() {

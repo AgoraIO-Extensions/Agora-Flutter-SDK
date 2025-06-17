@@ -339,6 +339,23 @@ class MediaPlayerImpl implements MediaPlayer {
   }
 
   @override
+  Future<void> takeSnapshot(int requestId) async {
+    final apiType =
+        '${isOverrideClassName ? className : 'MediaPlayer'}_takeSnapshot_f631116';
+    final param = createParams({'requestId': requestId});
+    final callApiResult = await irisMethodChannel.invokeMethod(
+        IrisMethodCall(apiType, jsonEncode(param), buffers: null));
+    if (callApiResult.irisReturnCode < 0) {
+      throw AgoraRtcException(code: callApiResult.irisReturnCode);
+    }
+    final rm = callApiResult.data;
+    final result = rm['result'];
+    if (result < 0) {
+      throw AgoraRtcException(code: result);
+    }
+  }
+
+  @override
   Future<void> selectInternalSubtitle(int index) async {
     final apiType =
         '${isOverrideClassName ? className : 'MediaPlayer'}_selectInternalSubtitle_46f8ab7';

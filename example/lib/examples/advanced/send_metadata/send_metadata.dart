@@ -95,7 +95,7 @@ class _State extends State<SendMetadata> {
           debugPrint(
               '[onMetadataReceived] metadata: ${metadata.toJson()}, String.fromCharCodes(metadata.buffer!): ${String.fromCharCodes(metadata.buffer!)}');
 
-          _showMyDialog(metadata.uid!,
+          _showMyDialog(metadata.channelId ?? '', metadata.uid!,
               utf8.decode(metadata.buffer!, allowMalformed: true));
         },
       ),
@@ -125,13 +125,13 @@ class _State extends State<SendMetadata> {
     await _engine.leaveChannel();
   }
 
-  Future<void> _showMyDialog(int uid, String data) async {
+  Future<void> _showMyDialog(String channelId, int uid, String data) async {
     return showDialog(
       context: context,
       barrierDismissible: false, // user must tap button!
       builder: (BuildContext context) {
         return AlertDialog(
-          title: Text('Receive from uid:$uid'),
+          title: Text('Receive from channel: $channelId, uid:$uid'),
           content: SingleChildScrollView(
             child: ListBody(
               children: <Widget>[Text('data: $data')],
@@ -159,7 +159,10 @@ class _State extends State<SendMetadata> {
       final data = Uint8List.fromList(utf8.encode(_controller.text));
 
       await _engine.sendMetaData(
-          metadata: Metadata(buffer: data, size: data.length),
+          metadata: Metadata(
+              channelId: _channelIdController.text,
+              buffer: data,
+              size: data.length),
           sourceType: VideoSourceType.videoSourceCamera);
 
       _controller.clear();
