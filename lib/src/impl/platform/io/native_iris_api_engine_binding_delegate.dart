@@ -1,7 +1,7 @@
-import 'dart:convert';
 import 'dart:io';
 import 'dart:ffi' as ffi;
 
+import 'package:agora_rtc_engine/src/binding_forward_export.dart';
 import 'package:ffi/ffi.dart';
 
 import 'native_iris_api_engine_bindings.dart' as bindings;
@@ -20,7 +20,7 @@ ffi.DynamicLibrary _loadLib() {
     return ffi.DynamicLibrary.open('$_libName.dll');
   }
 
-  if (Platform.isAndroid) {
+  if (Platform.isAndroid || defaultTargetPlatform == TargetPlatform.ohos) {
     return ffi.DynamicLibrary.open("lib$_libName.so");
   }
 
