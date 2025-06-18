@@ -130,12 +130,13 @@ public class AgoraRtcNgPlugin
                     new AgoraPIPController.PIPStateChangedListener() {
                         @Override
                         public void onPIPStateChangedListener(
-                                AgoraPIPController.PIPState state) {
+                                AgoraPIPController.PIPState state, String error) {
                             // put state into a json object
                             channel.invokeMethod("pipStateChanged",
                                     new HashMap<String, Object>() {
                                         {
                                             put("state", state.getValue());
+                                            put("error", error != null ? error : "");
                                         }
                                     });
                         }
