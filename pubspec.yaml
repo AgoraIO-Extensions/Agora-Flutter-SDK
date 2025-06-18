@@ -17,7 +17,11 @@ dependencies:
   ffi: '>=1.1.2'
   async: '>=2.8.2'
   meta: ^1.7.0
-  iris_method_channel: '>=2.2.0'
+  iris_method_channel:
+    # path: ../rtc-method-channel-ohos
+    git:
+      url: https://github.com/AgoraIO-Extensions/iris_method_channel_flutter.git
+      ref: dev/ohos
   js: '>=0.6.3'
 dev_dependencies:
   flutter_test:
@@ -41,3 +45,6 @@ flutter:
       web:
         pluginClass: AgoraRtcEngineWeb
         fileName: agora_rtc_engine_web.dart
+      ohos:
+        package: io.agora.agora_rtc_ng
+        pluginClass: AgoraRtcEnginePlugin

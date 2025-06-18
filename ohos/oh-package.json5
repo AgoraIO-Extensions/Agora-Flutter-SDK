@@ -1,0 +1,16 @@
+{
+  "name": "agora_rtc_engine",
+  "version": "1.0.0",
+  "description": "Please describe the basic information.",
+  "main": "index.ets",
+  "author": "",
+  "license": "Apache-2.0",
+  "dependencies": {
+    "@ohos/flutter_ohos": "file:./har/flutter.har",
+    "@shengwang/rtc-full": "file:./har/AgoraRtcSdk.har",
+    "@shengwang/rtc-wrapper": "file:./har/AgoraRtcWrapper.har"
+  },
+  "hooks": {
+    "preInstall": "sh ./preInstall.sh"
+  }
+}

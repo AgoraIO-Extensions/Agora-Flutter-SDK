@@ -46,3 +46,8 @@ artifacts
 
 # FVM Version Cache
 .fvm/
+
+# OHOS
+pub-cache
+har
+DerivedData

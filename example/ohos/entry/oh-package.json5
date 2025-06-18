@@ -1,0 +1,14 @@
+{
+  "name": "entry",
+  "version": "1.0.0",
+  "description": "Please describe the basic information.",
+  "main": "",
+  "author": "",
+  "license": "",
+  "dependencies": {
+    "iris_method_channel": "file:../har/iris_method_channel.har",
+    "agora_rtc_engine": "file:../har/agora_rtc_engine.har",
+    "path_provider_ohos": "file:../har/path_provider_ohos.har",
+    "permission_handler_ohos": "file:../har/permission_handler_ohos.har"
+  }
+}
