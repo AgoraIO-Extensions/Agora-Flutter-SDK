@@ -1,5 +1,11 @@
 # Changelog
 
+## [6.3.2-sp.43216.b.3](https://github.com/AgoraIO-Extensions/Agora-Flutter-SDK/compare/6.3.2-sp.43216.b.2...6.3.2-sp.43216.b.3) (2025-06-18)
+
+### Bug Fixes
+
+* upgrade pip version to 0.0.3 to avoid crash when enter backgroun… ([#2346](https://github.com/AgoraIO-Extensions/Agora-Flutter-SDK/issues/2346)) ([f3ea0ec](https://github.com/AgoraIO-Extensions/Agora-Flutter-SDK/commit/f3ea0ecb01271eab04d0e884dbd90c399d7401e0))
+
 ## [6.3.2-sp.43216.b.2](https://github.com/AgoraIO-Extensions/Agora-Flutter-SDK/compare/6.3.2-sp.43216...6.3.2-sp.43216.b.2) (2025-06-16)
 
 ### Features
