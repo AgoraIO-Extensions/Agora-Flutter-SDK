@@ -346,7 +346,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        version: ["3.7.0"]
+        version: ["3.7.12"]
     runs-on: macos-latest
     timeout-minutes: 120
     steps:
