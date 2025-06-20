@@ -1,11 +1,13 @@
+import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
+
 import 'package:agora_rtc_engine/agora_rtc_engine.dart';
 import 'package:agora_rtc_engine_example/components/basic_video_configuration_widget.dart';
 import 'package:agora_rtc_engine_example/components/stats_monitoring_widget.dart';
 import 'package:agora_rtc_engine_example/config/agora.config.dart' as config;
 import 'package:agora_rtc_engine_example/components/example_actions_widget.dart';
 import 'package:agora_rtc_engine_example/components/log_sink.dart';
-import 'package:flutter/foundation.dart';
-import 'package:flutter/material.dart';
+import 'package:permission_handler/permission_handler.dart';
 
 /// MultiChannel Example
 class JoinChannelVideo extends StatefulWidget {
@@ -24,7 +26,10 @@ class _State extends State<JoinChannelVideo> {
       switchRender = true,
       openCamera = true,
       muteCamera = false,
-      muteAllRemoteVideo = false;
+      muteAllRemoteVideo = false,
+      openMicrophone = true,
+      muteMicrophone = false,
+      muteAllRemoteAudio = false;
   Set<int> remoteUid = {};
   late TextEditingController _controller;
   bool _isUseFlutterTexture = false;
@@ -55,6 +60,11 @@ class _State extends State<JoinChannelVideo> {
 
   Future<void> _initEngine() async {
     _engine = createAgoraRtcEngine();
+
+    if (defaultTargetPlatform == TargetPlatform.ohos) {
+      await [Permission.microphone, Permission.camera].request();
+    }
+
     await _engine.initialize(RtcEngineContext(
       appId: config.appId,
     ));
@@ -97,12 +107,34 @@ class _State extends State<JoinChannelVideo> {
         logSink.log(
             '[onRemoteVideoStateChanged] connection: ${connection.toJson()} remoteUid: $remoteUid state: $state reason: $reason elapsed: $elapsed');
       },
+      onLocalVideoStateChanged: (VideoSourceType source,
+          LocalVideoStreamState state, LocalVideoStreamReason error) {
+        logSink.log(
+            '[onLocalVideoStateChanged] source: $source, state: $state, error: $error');
+      },
+      onFirstRemoteVideoDecoded: (RtcConnection connection, int remoteUid,
+          int width, int height, int elapsed) {
+        logSink.log(
+            '[onFirstRemoteVideoDecoded] connection: ${connection.toJson()} remoteUid: $remoteUid width: $width height: $height elapsed: $elapsed');
+      },
+      onRemoteAudioStateChanged: (RtcConnection connection, int remoteUid,
+          RemoteAudioState state, RemoteAudioStateReason reason, int elapsed) {
+        logSink.log(
+            '[onRemoteAudioStateChanged] connection: ${connection.toJson()} remoteUid: $remoteUid state: $state reason: $reason elapsed: $elapsed');
+      },
+      onAudioPublishStateChanged: (String channel, StreamPublishState oldState,
+          StreamPublishState newState, int elapsed) {
+        logSink.log(
+            '[onAudioPublishStateChanged] channel: $channel oldState: $oldState newState: $newState elapsed: $elapsed');
+      },
     );
 
     _engine.registerEventHandler(_rtcEngineEventHandler);
 
     await _engine.enableVideo();
     await _engine.startPreview();
+
+    await _engine.setParameters('{"rtc.enable_debug_log": true}');
   }
 
   Future<void> _joinChannel() async {
@@ -123,6 +155,8 @@ class _State extends State<JoinChannelVideo> {
       openCamera = true;
       muteCamera = false;
       muteAllRemoteVideo = false;
+      openMicrophone = true;
+      muteMicrophone = false;
     });
   }
 
@@ -154,6 +188,27 @@ class _State extends State<JoinChannelVideo> {
     });
   }
 
+  _openMicrophone() async {
+    await _engine.enableLocalAudio(!openMicrophone);
+    setState(() {
+      openMicrophone = !openMicrophone;
+    });
+  }
+
+  _muteMicrophoneStream() async {
+    await _engine.muteLocalAudioStream(!muteMicrophone);
+    setState(() {
+      muteMicrophone = !muteMicrophone;
+    });
+  }
+
+  _muteAllRemoteAudioStreams() async {
+    await _engine.muteAllRemoteAudioStreams(!muteAllRemoteAudio);
+    setState(() {
+      muteAllRemoteAudio = !muteAllRemoteAudio;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return ExampleActionsWidget(
@@ -171,6 +226,7 @@ class _State extends State<JoinChannelVideo> {
                   useAndroidSurfaceView: _isUseAndroidSurfaceView,
                 ),
                 onAgoraVideoViewCreated: (viewId) {
+                  logSink.log('[onAgoraVideoViewCreated] viewId: $viewId');
                   _engine.startPreview();
                 },
               ),
@@ -197,6 +253,10 @@ class _State extends State<JoinChannelVideo> {
                             useFlutterTexture: _isUseFlutterTexture,
                             useAndroidSurfaceView: _isUseAndroidSurfaceView,
                           ),
+                          onAgoraVideoViewCreated: (viewId) {
+                            logSink.log(
+                                '[onAgoraVideoViewCreated] viewId: $viewId');
+                          },
                         ),
                       ),
                     ),
@@ -305,7 +365,8 @@ class _State extends State<JoinChannelVideo> {
             ),
             if (!kIsWeb &&
                 (defaultTargetPlatform == TargetPlatform.android ||
-                    defaultTargetPlatform == TargetPlatform.iOS)) ...[
+                    defaultTargetPlatform == TargetPlatform.iOS ||
+                    defaultTargetPlatform == TargetPlatform.ohos)) ...[
               const SizedBox(
                 height: 20,
               ),
@@ -314,7 +375,7 @@ class _State extends State<JoinChannelVideo> {
                 child: Text('Camera ${switchCamera ? 'front' : 'rear'}'),
               ),
             ],
-            if (kIsWeb) ...[
+            if (kIsWeb || defaultTargetPlatform == TargetPlatform.ohos) ...[
               const SizedBox(
                 height: 20,
               ),
@@ -330,6 +391,31 @@ class _State extends State<JoinChannelVideo> {
               ElevatedButton(
                 onPressed: _openCamera,
                 child: Text('Camera ${openCamera ? 'on' : 'off'}'),
+              ),
+              const SizedBox(
+                height: 20,
+              ),
+              ElevatedButton(
+                onPressed: _muteAllRemoteAudioStreams,
+                child: Text(
+                    'All Remote Audio ${muteAllRemoteAudio ? 'muted' : 'unmute'}'),
+              ),
+            ],
+            if (!kIsWeb && defaultTargetPlatform == TargetPlatform.ohos) ...[
+              const SizedBox(
+                height: 20,
+              ),
+              ElevatedButton(
+                onPressed: _openMicrophone,
+                child: Text('Microphone ${openMicrophone ? 'on' : 'off'}'),
+              ),
+              const SizedBox(
+                height: 20,
+              ),
+              ElevatedButton(
+                onPressed: _muteMicrophoneStream,
+                child:
+                    Text('Microphone ${muteMicrophone ? 'muted' : 'unmute'}'),
               ),
             ],
           ],

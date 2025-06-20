@@ -140,6 +140,17 @@ mixin RtcRenderMixin<T extends StatefulWidget> on State<T> {
           },
         ),
       );
+    } else if (defaultTargetPlatform == TargetPlatform.ohos) {
+      return OhosView(
+        viewType: viewType,
+        onPlatformViewCreated: _onPlatformViewCreated(
+          viewType,
+          onPlatformViewCreated,
+        ),
+        hitTestBehavior: PlatformViewHitTestBehavior.translucent,
+        creationParams: creationParams,
+        creationParamsCodec: const StandardMessageCodec(),
+      );
     }
     return Text('$defaultTargetPlatform is not yet supported by the plugin');
   }
