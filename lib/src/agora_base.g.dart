@@ -1720,9 +1720,41 @@ Map<String, dynamic> _$AudioTrackConfigToJson(AudioTrackConfig instance) {
   return val;
 }
 
+ScreenAudioParameters _$ScreenAudioParametersFromJson(
+        Map<String, dynamic> json) =>
+    ScreenAudioParameters(
+      sampleRate: (json['sampleRate'] as num?)?.toInt(),
+      channels: (json['channels'] as num?)?.toInt(),
+      captureSignalVolume: (json['captureSignalVolume'] as num?)?.toInt(),
+      excludeCurrentProcessAudio: json['excludeCurrentProcessAudio'] as bool?,
+    );
+
+Map<String, dynamic> _$ScreenAudioParametersToJson(
+    ScreenAudioParameters instance) {
+  final val = <String, dynamic>{};
+
+  void writeNotNull(String key, dynamic value) {
+    if (value != null) {
+      val[key] = value;
+    }
+  }
+
+  writeNotNull('sampleRate', instance.sampleRate);
+  writeNotNull('channels', instance.channels);
+  writeNotNull('captureSignalVolume', instance.captureSignalVolume);
+  writeNotNull(
+      'excludeCurrentProcessAudio', instance.excludeCurrentProcessAudio);
+  return val;
+}
+
 ScreenCaptureParameters _$ScreenCaptureParametersFromJson(
         Map<String, dynamic> json) =>
     ScreenCaptureParameters(
+      captureAudio: json['captureAudio'] as bool?,
+      audioParams: json['audioParams'] == null
+          ? null
+          : ScreenAudioParameters.fromJson(
+              json['audioParams'] as Map<String, dynamic>),
       dimensions: json['dimensions'] == null
           ? null
           : VideoDimensions.fromJson(
@@ -1751,6 +1783,8 @@ Map<String, dynamic> _$ScreenCaptureParametersToJson(
     }
   }
 
+  writeNotNull('captureAudio', instance.captureAudio);
+  writeNotNull('audioParams', instance.audioParams?.toJson());
   writeNotNull('dimensions', instance.dimensions?.toJson());
   writeNotNull('frameRate', instance.frameRate);
   writeNotNull('bitrate', instance.bitrate);
@@ -2068,6 +2102,7 @@ Map<String, dynamic> _$EchoTestConfigurationToJson(
 UserInfo _$UserInfoFromJson(Map<String, dynamic> json) => UserInfo(
       uid: (json['uid'] as num?)?.toInt(),
       userAccount: json['userAccount'] as String?,
+      customUserInfo: json['customUserInfo'] as String?,
     );
 
 Map<String, dynamic> _$UserInfoToJson(UserInfo instance) {
@@ -2081,6 +2116,7 @@ Map<String, dynamic> _$UserInfoToJson(UserInfo instance) {
 
   writeNotNull('uid', instance.uid);
   writeNotNull('userAccount', instance.userAccount);
+  writeNotNull('customUserInfo', instance.customUserInfo);
   return val;
 }
 
@@ -2119,30 +2155,6 @@ const _$VideoContentHintEnumMap = {
   VideoContentHint.contentHintMotion: 1,
   VideoContentHint.contentHintDetails: 2,
 };
-
-ScreenAudioParameters _$ScreenAudioParametersFromJson(
-        Map<String, dynamic> json) =>
-    ScreenAudioParameters(
-      sampleRate: (json['sampleRate'] as num?)?.toInt(),
-      channels: (json['channels'] as num?)?.toInt(),
-      captureSignalVolume: (json['captureSignalVolume'] as num?)?.toInt(),
-    );
-
-Map<String, dynamic> _$ScreenAudioParametersToJson(
-    ScreenAudioParameters instance) {
-  final val = <String, dynamic>{};
-
-  void writeNotNull(String key, dynamic value) {
-    if (value != null) {
-      val[key] = value;
-    }
-  }
-
-  writeNotNull('sampleRate', instance.sampleRate);
-  writeNotNull('channels', instance.channels);
-  writeNotNull('captureSignalVolume', instance.captureSignalVolume);
-  return val;
-}
 
 ScreenCaptureParameters2 _$ScreenCaptureParameters2FromJson(
         Map<String, dynamic> json) =>
@@ -2595,6 +2607,10 @@ const _$H264PacketizeModeEnumMap = {
 
 const _$MaxUserAccountLengthTypeEnumMap = {
   MaxUserAccountLengthType.maxUserAccountLength: 256,
+};
+
+const _$MaxCustomUserInfoLengthTypeEnumMap = {
+  MaxCustomUserInfoLengthType.maxCustomUserInfoLength: 1024,
 };
 
 const _$CameraFormatTypeEnumMap = {
