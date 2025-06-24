@@ -216,7 +216,7 @@ jobs:
       fail-fast: false
       matrix:
         version: ["3.7.0", "3.24.5"]
-    runs-on: windows-2019
+    runs-on: windows-2022
     timeout-minutes: 120
     env:
       TEST_APP_ID: ${{ secrets.APP_ID }}
@@ -295,7 +295,7 @@ jobs:
       fail-fast: false
       matrix:
         version: ["3.7.12", "3.24.5"] # Need 3.7.12 to build with Gradle 8.x https://github.com/flutter/flutter/issues/124838
-    runs-on: windows-2019
+    runs-on: windows-2022
     steps:
       - uses: actions/checkout@v3
       - name: Install JDK
@@ -478,7 +478,7 @@ jobs:
     strategy:
       matrix:
         version: ["3.24.5"]
-    runs-on: windows-2019
+    runs-on: windows-2022
     timeout-minutes: 120
     env:
       TEST_APP_ID: ${{ secrets.APP_ID }}
