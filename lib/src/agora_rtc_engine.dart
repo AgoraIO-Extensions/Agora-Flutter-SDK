@@ -1349,8 +1349,8 @@ class ChannelMediaOptions implements AgoraSerializable {
       this.publishThirdCameraTrack,
       this.publishFourthCameraTrack,
       this.publishMicrophoneTrack,
-      this.publishScreenCaptureVideo,
       this.publishScreenCaptureAudio,
+      this.publishScreenCaptureVideo,
       this.publishScreenTrack,
       this.publishSecondaryScreenTrack,
       this.publishThirdScreenTrack,
@@ -1380,7 +1380,8 @@ class ChannelMediaOptions implements AgoraSerializable {
       this.isInteractiveAudience,
       this.customVideoTrackId,
       this.isAudioFilterable,
-      this.parameters});
+      this.parameters,
+      this.customUserInfo});
 
   /// Whether to publish the video captured by the camera: true : Publish the video captured by the camera. false : Do not publish the video captured by the camera.
   @JsonKey(name: 'publishCameraTrack')
@@ -1402,13 +1403,13 @@ class ChannelMediaOptions implements AgoraSerializable {
   @JsonKey(name: 'publishMicrophoneTrack')
   final bool? publishMicrophoneTrack;
 
-  /// Whether to publish the video captured from the screen: true : Publish the video captured from the screen. false : Do not publish the video captured from the screen. This parameter is for Android and iOS only.
-  @JsonKey(name: 'publishScreenCaptureVideo')
-  final bool? publishScreenCaptureVideo;
-
   /// Whether to publish the audio captured from the screen: true : Publish the audio captured from the screen. false : Publish the audio captured from the screen. This parameter is for Android and iOS only.
   @JsonKey(name: 'publishScreenCaptureAudio')
   final bool? publishScreenCaptureAudio;
+
+  /// Whether to publish the video captured from the screen: true : Publish the video captured from the screen. false : Do not publish the video captured from the screen. This parameter is for Android and iOS only.
+  @JsonKey(name: 'publishScreenCaptureVideo')
+  final bool? publishScreenCaptureVideo;
 
   /// Whether to publish the video captured from the screen: true : Publish the video captured from the screen. false : Do not publish the video captured from the screen. This is for Windows and macOS only.
   @JsonKey(name: 'publishScreenTrack')
@@ -1533,6 +1534,10 @@ class ChannelMediaOptions implements AgoraSerializable {
   /// @nodoc
   @JsonKey(name: 'parameters')
   final String? parameters;
+
+  /// @nodoc
+  @JsonKey(name: 'customUserInfo')
+  final String? customUserInfo;
 
   /// @nodoc
   factory ChannelMediaOptions.fromJson(Map<String, dynamic> json) =>
@@ -6260,8 +6265,8 @@ abstract class RtcEngine {
   /// Enables tracing the video frame rendering process.
   ///
   /// The SDK starts tracing the rendering status of the video frames in the channel from the moment this method is successfully called and reports information about the event through the onVideoRenderingTracingResult callback.
-  ///  The SDK automatically starts tracking the rendering events of the video from the moment that you call joinChannel to join the channel. You can call this method at an appropriate time according to the actual application scenario to customize the tracing process.
-  ///  After the local user leaves the current channel, the SDK automatically resets the time point to the next time when the user successfully joins the channel.
+  ///  If you have not called this method, the SDK tracks the rendering events of the video frames from the moment you call joinChannel to join the channel. You can call this method at an appropriate time according to the actual application scenario to set the starting position for tracking video rendering events.
+  ///  After the local user leaves the current channel, the SDK automatically tracks the video rendering events from the moment you join a channel.
   ///
   /// Returns
   /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown. You need to catch the exception and handle it accordingly.
