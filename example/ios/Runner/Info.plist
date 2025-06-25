@@ -35,7 +35,6 @@
 		<string>fetch</string>
 		<string>audio</string>
 		<string>processing</string>
-		<string>voip</string>
 	</array>
 	<key>UIFileSharingEnabled</key>
 	<true/>
