@@ -209,6 +209,34 @@ jobs:
           name: iris-logs-macos-${{ matrix.version }}
           path: iris-logs-macos/*
 
+  integration_test_swiftpm:
+    name: Run Flutter SwiftPM Integration Tests
+    if: ${{ !contains(github.event.pull_request.labels.*.name, 'ci:skip') }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: ["macos", "ios"]
+    runs-on: macos-latest
+    timeout-minutes: 120
+    steps:
+      - uses: actions/checkout@v3
+      - uses: subosito/flutter-action@v2
+        with:
+          channel: 'stable'
+          cache: true
+      - name: Run flutter integration test swiftpm for ${{ matrix.os }}
+        if: ${{ matrix.os == 'macos' }}
+        run: |
+          flutter pub get
+          flutter build ${{ matrix.os }}
+        working-directory: test_shard/integration_test_swiftpm
+      - name: Run flutter integration test swiftpm for ${{ matrix.os }}
+        if: ${{ matrix.os == 'ios' }}
+        run: |
+          flutter pub get
+          flutter build ${{ matrix.os }} --no-codesign
+        working-directory: test_shard/integration_test_swiftpm
+
   integration_test_windows:
     name: Run Flutter Windows Integration Tests
     if: ${{ !contains(github.event.pull_request.labels.*.name, 'ci:skip') }}
