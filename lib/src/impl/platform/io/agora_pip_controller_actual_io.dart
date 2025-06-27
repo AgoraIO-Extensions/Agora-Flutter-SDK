@@ -250,7 +250,9 @@ class AgoraPipControllerImpl extends AgoraPipController {
 
   @override
   Future<void> pipDispose() async {
-    await _disposeNativeViews();
     await _rtcEngine.invokeAgoraMethod<void>('pipDispose');
+
+    // dispose native views after pip dispose is called to avoid race condition
+    await _disposeNativeViews();
   }
 }
