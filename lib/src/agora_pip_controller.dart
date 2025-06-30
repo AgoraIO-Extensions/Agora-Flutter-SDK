@@ -19,6 +19,20 @@ class AgoraPipVideoStream {
   /// Both [connection] and [canvas] parameters are required to properly
   /// configure the video stream in PiP mode.
   const AgoraPipVideoStream({required this.connection, required this.canvas});
+
+  Map<String, dynamic> toDictionary() {
+    final val = <String, dynamic>{};
+
+    void writeNotNull(String key, dynamic value) {
+      if (value != null) {
+        val[key] = value;
+      }
+    }
+
+    writeNotNull('connection', connection.toJson());
+    writeNotNull('canvas', canvas.toJson());
+    return val;
+  }
 }
 
 /// Layout configuration for Picture-in-Picture (PiP) video streams.
@@ -267,6 +281,8 @@ class AgoraPipOptions {
     if (defaultTargetPlatform == TargetPlatform.iOS) {
       writeNotNull('sourceContentView', sourceContentView);
       writeNotNull('contentView', contentView);
+      writeNotNull(
+          'videoStreams', videoStreams?.map((e) => e.toDictionary()).toList());
       writeNotNull('contentViewLayout', contentViewLayout?.toDictionary());
       writeNotNull('preferredContentWidth', preferredContentWidth);
       writeNotNull('preferredContentHeight', preferredContentHeight);

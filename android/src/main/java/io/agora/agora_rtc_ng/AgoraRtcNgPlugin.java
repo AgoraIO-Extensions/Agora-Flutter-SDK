@@ -9,8 +9,8 @@ import android.util.Rational;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
-import io.agora.pip.AgoraPIPActivityProxy;
-import io.agora.pip.AgoraPIPController;
+import io.agora.iris.pip.AgoraPIPActivityProxy;
+import io.agora.iris.pip.AgoraPIPController;
 import io.flutter.embedding.engine.plugins.FlutterPlugin;
 import io.flutter.embedding.engine.plugins.activity.ActivityAware;
 import io.flutter.embedding.engine.plugins.activity.ActivityPluginBinding;
