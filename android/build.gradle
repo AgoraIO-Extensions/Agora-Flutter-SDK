@@ -65,8 +65,6 @@ dependencies {
     api 'io.agora.rtc:full-sdk:4.5.2'
     api 'io.agora.rtc:full-screen-sharing:4.5.2'
     // native dependencies end
-
-    api 'io.agora.rtc:pip:0.0.3'
   }
 }
 

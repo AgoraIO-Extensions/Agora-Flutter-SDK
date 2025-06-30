@@ -9,8 +9,8 @@ import android.content.res.Configuration;
 
 import java.lang.ref.WeakReference;
 
-import io.agora.pip.AgoraPIPActivityProxy;
-import io.agora.pip.AgoraPIPActivityListener;
+import io.agora.iris.pip.AgoraPIPActivityProxy;
+import io.agora.iris.pip.AgoraPIPActivityListener;
 
 public class AgoraPIPFlutterFragmentActivity extends FlutterFragmentActivity implements AgoraPIPActivityProxy {
     private WeakReference<AgoraPIPActivityListener> mListener;

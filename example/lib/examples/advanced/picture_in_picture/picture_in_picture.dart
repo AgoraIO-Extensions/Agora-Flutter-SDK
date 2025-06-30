@@ -37,6 +37,7 @@ class _State extends State<PictureInPicture> with WidgetsBindingObserver {
 
   double _pipContentRow = 1;
   double _pipContentCol = 0;
+  ClientRoleType _clientRoleType = ClientRoleType.clientRoleBroadcaster;
 
   final Map<int, RtcConnection> _remoteUsers = {};
 
@@ -280,18 +281,24 @@ class _State extends State<PictureInPicture> with WidgetsBindingObserver {
         // - The view property in VideoCanvas will be replaced by the SDK-managed native view.
         // - You can customize the rendering of each stream using properties like renderMode and mirrorMode.
         videoStreams: [
-          AgoraPipVideoStream(
-            connection: RtcConnection(
-              channelId: _channelIdController.text,
-              localUid: config.uid,
+          // Only add local video stream if client role is broadcaster
+          if (_clientRoleType == ClientRoleType.clientRoleBroadcaster)
+            AgoraPipVideoStream(
+              connection: RtcConnection(
+                channelId: _channelIdController.text,
+                localUid: config.uid,
+              ),
+              canvas: const VideoCanvas(
+                uid: 0,
+                sourceType: VideoSourceType.videoSourceCamera,
+                setupMode: VideoViewSetupMode.videoViewSetupAdd,
+                renderMode: RenderModeType.renderModeHidden,
+                // you should determine the mirror mode based on your use case, like if you are using the front camera,
+                // you should set the mirror mode to enabled otherwise disabled to get better user experience.
+                mirrorMode: VideoMirrorModeType.videoMirrorModeEnabled,
+              ),
             ),
-            canvas: const VideoCanvas(
-              uid: 0,
-              sourceType: VideoSourceType.videoSourceCamera,
-              setupMode: VideoViewSetupMode.videoViewSetupAdd,
-              renderMode: RenderModeType.renderModeHidden,
-            ),
-          ),
+          // Add all remote video streams
           ..._remoteUsers.entries.map((entry) => AgoraPipVideoStream(
                 connection: entry.value,
                 canvas: VideoCanvas(
@@ -336,11 +343,6 @@ class _State extends State<PictureInPicture> with WidgetsBindingObserver {
     await _engine.initialize(RtcEngineContext(
       appId: config.appId,
     ));
-
-    if (Platform.isIOS) {
-      // to render video in pip window with sdk, must call this to set the render type
-      await _engine.setParameters("{\"che.video.render.mode\":22}");
-    }
 
     _rtcEngineEventHandler = RtcEngineEventHandler(
         onError: (ErrorCodeType err, String msg) {
@@ -427,8 +429,8 @@ class _State extends State<PictureInPicture> with WidgetsBindingObserver {
       token: config.token,
       channelId: _channelIdController.text,
       uid: config.uid,
-      options: const ChannelMediaOptions(
-        clientRoleType: ClientRoleType.clientRoleBroadcaster,
+      options: ChannelMediaOptions(
+        clientRoleType: _clientRoleType,
       ),
     );
   }
@@ -601,7 +603,48 @@ class _State extends State<PictureInPicture> with WidgetsBindingObserver {
                         ),
                       ],
                     ),
-                    // Second row: Content size and layout
+                    // Second row: Client Role Type
+                    const SizedBox(height: 4),
+                    Row(
+                      children: [
+                        const Text(
+                          'Client Role: ',
+                          style: TextStyle(color: Colors.white),
+                        ),
+                        Expanded(
+                          child: Container(
+                            padding: const EdgeInsets.symmetric(horizontal: 8),
+                            decoration: BoxDecoration(
+                              color: Colors.white,
+                              borderRadius: BorderRadius.circular(4),
+                            ),
+                            child: DropdownButton<ClientRoleType>(
+                              value: _clientRoleType,
+                              isExpanded: true,
+                              underline: Container(),
+                              items: [
+                                ClientRoleType.clientRoleBroadcaster,
+                                ClientRoleType.clientRoleAudience,
+                              ].map((role) => DropdownMenuItem(
+                                value: role,
+                                child: Text(
+                                  role.toString().split('.')[1],
+                                  style: const TextStyle(fontSize: 12),
+                                ),
+                              )).toList(),
+                              onChanged: _isJoined ? null : (value) {
+                                if (value != null) {
+                                  setState(() {
+                                    _clientRoleType = value;
+                                  });
+                                }
+                              },
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                    // Third row: Content size and layout
                     const SizedBox(height: 4),
                     Row(
                       children: [
@@ -641,7 +684,7 @@ class _State extends State<PictureInPicture> with WidgetsBindingObserver {
                         ]
                       ],
                     ),
-                    // Third row: Row and Column
+                    // Fourth row: Row and Column (iOS only)
                     if (Platform.isIOS) ...[
                       const SizedBox(width: 4),
                       Row(
@@ -685,8 +728,8 @@ class _State extends State<PictureInPicture> with WidgetsBindingObserver {
                         ],
                       ),
                     ],
-                    // Fourth row: Setup PIP + Start PIP + Stop PIP + Dispose PIP
-                    const SizedBox(width: 4),
+                    // Fifth row: Setup PIP + Start PIP + Stop PIP + Dispose PIP
+                    const SizedBox(height: 4),
                     Row(
                       children: [
                         ElevatedButton(
