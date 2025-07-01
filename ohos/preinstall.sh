@@ -1,6 +1,6 @@
 #!/bin/bash
 
-IRIS_SDK_URL="https://download.agora.io/sdk/release/iris_4.4.2.0.28-build.2_DCG_OHOS_Video_20250625_0204_53.zip"
+IRIS_SDK_URL="https://download.agora.io/sdk/release/iris_4.4.2.0.29-build.1_DCG_OHOS_Video_20250701_0235_54.zip"
 
 # The internal folder structure is:
 # iris_x.x.x-ohos.x.x_DCG_OHOS
@@ -18,12 +18,18 @@ IRIS_SDK_URL="https://download.agora.io/sdk/release/iris_4.4.2.0.28-build.2_DCG_
 
 TMP_FOLDER="./tmp"
 
+# remove tmp folder if exists
+rm -rf $TMP_FOLDER
+
 # create tmp folder if not exists
 mkdir -p $TMP_FOLDER
 
+# get iris file name from $IRIS_SDK_URL
+IRIS_FILE_NAME=$(echo $IRIS_SDK_URL | sed 's/.*\///')
+
 # download the iris zip file if not exists
-if [ ! -f $TMP_FOLDER/iris.zip ]; then
-    curl -o $TMP_FOLDER/iris.zip $IRIS_SDK_URL
+if [ ! -f $TMP_FOLDER/$IRIS_FILE_NAME ]; then
+    curl -o $TMP_FOLDER/$IRIS_FILE_NAME $IRIS_SDK_URL
     if [ $? -ne 0 ]; then
         echo "Failed to download iris zip file from $IRIS_SDK_URL"
         exit 1
@@ -31,7 +37,7 @@ if [ ! -f $TMP_FOLDER/iris.zip ]; then
 fi
 
 # unzip the iris zip file if not exists
-unzip -o -d $TMP_FOLDER $TMP_FOLDER/iris.zip
+unzip -o -d $TMP_FOLDER $TMP_FOLDER/$IRIS_FILE_NAME
 if [ $? -ne 0 ]; then
     echo "Failed to unzip iris zip file"
     exit 1

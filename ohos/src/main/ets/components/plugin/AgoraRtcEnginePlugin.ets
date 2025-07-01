@@ -46,6 +46,7 @@ class DartRtcEngineCanvas {
   public renderMode?: number = undefined;
   public mirrorMode?: number = undefined;
   public sourceType?: number = undefined;
+  public setupMode?: number = undefined;
 }
 
 class DartRtcEngineConnection {
@@ -183,7 +184,10 @@ export default class AgoraRtcEnginePlugin implements FlutterPlugin, MethodCallHa
   }
 
   _createVideoCanvas(param: DartRtcEngineSetupVideoViewContext): VideoCanvas {
-    let rtcCanvas: VideoCanvas = new VideoCanvas(AgoraPlatformView.getXComponentIdByViewId(param.canvas!.view!), false);
+    // Replace 0, Add 1, Remove 2
+    let xcomponentId: string = param.canvas!.setupMode === 2 ? "" : AgoraPlatformView.getXComponentIdByViewId(param.canvas!.view!);
+
+    let rtcCanvas: VideoCanvas = new VideoCanvas(xcomponentId, false);
     rtcCanvas.uid = param.canvas!.uid!;
     if (param.canvas!.renderMode !== undefined) {
       rtcCanvas.renderMode = param.canvas!.renderMode;

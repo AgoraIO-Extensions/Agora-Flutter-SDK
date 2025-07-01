@@ -249,7 +249,9 @@ class _State extends State<JoinChannelVideo> {
                             rtcEngine: _engine,
                             canvas: VideoCanvas(uid: e),
                             connection:
-                                RtcConnection(channelId: _controller.text),
+                                RtcConnection(
+                                    channelId: _controller.text,
+                                    localUid: config.uid),
                             useFlutterTexture: _isUseFlutterTexture,
                             useAndroidSurfaceView: _isUseAndroidSurfaceView,
                           ),
