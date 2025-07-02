@@ -2,14 +2,7 @@
 #import "./include/agora_rtc_engine/AgoraSurfaceViewFactory.h"
 #import "./include/agora_rtc_engine/AgoraUtils.h"
 #import "./include/agora_rtc_engine/VideoViewController.h"
-
-@interface AgoraNativeView : UIView
-
-@end
-
-@implementation AgoraNativeView
-
-@end
+#include <Foundation/Foundation.h>
 
 @interface AgoraRtcNgPlugin ()
 
@@ -21,17 +14,12 @@
 
 @property(nonatomic) AgoraPIPController *pipController;
 
-@property(nonatomic, strong) NSMutableArray *_Nonnull nativeViews;
-
 @end
 
 @implementation AgoraRtcNgPlugin
 + (void)registerWithRegistrar:(NSObject<FlutterPluginRegistrar> *)registrar {
   AgoraRtcNgPlugin *instance = [[AgoraRtcNgPlugin alloc] init];
   instance.registrar = registrar;
-
-  // Initialize nativeViews array
-  instance.nativeViews = [[NSMutableArray alloc] init];
 
   // create method channel
   FlutterMethodChannel *channel =
@@ -64,8 +52,6 @@
     [self getAssetAbsolutePath:call result:result];
   } else if ([call.method hasPrefix:@"pip"]) {
     [self handlePipMethodCall:call result:result];
-  } else if ([call.method hasPrefix:@"nativeView"]) {
-    [self handleNativeViewMethodCall:call result:result];
   } else {
     result(FlutterMethodNotImplemented);
   }
@@ -111,34 +97,145 @@
             [[call.arguments objectForKey:@"autoEnterEnabled"] boolValue];
       }
 
-      // contentView
-      if ([call.arguments objectForKey:@"contentView"]) {
-        options.contentView = (__bridge UIView *)[[call.arguments
-            objectForKey:@"contentView"] pointerValue];
-      } else {
-        // MUST set contentView
-        return result([NSNumber numberWithBool:NO]);
-      }
-
       // sourceContentView
       if ([call.arguments objectForKey:@"sourceContentView"]) {
         options.sourceContentView = (__bridge UIView *)[[call.arguments
             objectForKey:@"sourceContentView"] pointerValue];
       }
 
+      // contentView
+      if ([call.arguments objectForKey:@"contentView"]) {
+        options.contentView = (__bridge UIView *)[[call.arguments
+            objectForKey:@"contentView"] pointerValue];
+      }
+
+      // videoStreams
+      NSArray *videoStreams = [call.arguments objectForKey:@"videoStreams"];
+      if (videoStreams) {
+        NSMutableArray *tempVideoStreamArray = [[NSMutableArray alloc] init];
+        for (NSDictionary *videoStream in videoStreams) {
+          NSDictionary *connectionObj =
+              [videoStream objectForKey:@"connection"];
+          NSDictionary *canvasObj = [videoStream objectForKey:@"canvas"];
+
+          if (!connectionObj || !canvasObj) {
+            continue;
+          }
+
+          AgoraPIPVideoStream *videoStreamObj =
+              [[AgoraPIPVideoStream alloc] init];
+
+          // connection
+          id channelIdObj = [connectionObj objectForKey:@"channelId"];
+          videoStreamObj.channelId =
+              [channelIdObj isKindOfClass:[NSString class]] ? channelIdObj
+                                                            : @"";
+
+          id localUidObj = [connectionObj objectForKey:@"localUid"];
+          videoStreamObj.localUid = [localUidObj isKindOfClass:[NSNumber class]]
+                                        ? [localUidObj intValue]
+                                        : 0;
+
+          // canvas
+          id uidObj = [canvasObj objectForKey:@"uid"];
+          videoStreamObj.uid =
+              [uidObj isKindOfClass:[NSNumber class]] ? [uidObj intValue] : 0;
+
+          id backgroundColorObj = [canvasObj objectForKey:@"backgroundColor"];
+          videoStreamObj.backgroundColor =
+              [backgroundColorObj isKindOfClass:[NSNumber class]]
+                  ? [backgroundColorObj intValue]
+                  : 0;
+
+          id renderModeObj = [canvasObj objectForKey:@"renderMode"];
+          videoStreamObj.renderMode =
+              [renderModeObj isKindOfClass:[NSNumber class]]
+                  ? [renderModeObj intValue]
+                  : 0;
+
+          id mirrorModeObj = [canvasObj objectForKey:@"mirrorMode"];
+          videoStreamObj.mirrorMode =
+              [mirrorModeObj isKindOfClass:[NSNumber class]]
+                  ? [mirrorModeObj intValue]
+                  : 0;
+
+          id setupModeObj = [canvasObj objectForKey:@"setupMode"];
+          videoStreamObj.setupMode =
+              [setupModeObj isKindOfClass:[NSNumber class]]
+                  ? [setupModeObj intValue]
+                  : 0;
+
+          id sourceTypeObj = [canvasObj objectForKey:@"sourceType"];
+          videoStreamObj.sourceType =
+              [sourceTypeObj isKindOfClass:[NSNumber class]]
+                  ? [sourceTypeObj intValue]
+                  : 0;
+
+          id enableAlphaMaskObj = [canvasObj objectForKey:@"enableAlphaMask"];
+          videoStreamObj.enableAlphaMask =
+              [enableAlphaMaskObj isKindOfClass:[NSNumber class]]
+                  ? [enableAlphaMaskObj boolValue]
+                  : NO;
+
+          id positionObj = [canvasObj objectForKey:@"position"];
+          videoStreamObj.position = [positionObj isKindOfClass:[NSNumber class]]
+                                        ? [positionObj intValue]
+                                        : 0;
+
+          [tempVideoStreamArray addObject:videoStreamObj];
+        }
+        options.videoStreamArray = tempVideoStreamArray;
+      }
+
+      // contentViewLayout
+      NSDictionary *contentViewLayout =
+          [call.arguments objectForKey:@"contentViewLayout"];
+      if (contentViewLayout) {
+        options.contentViewLayout = [[AgoraPipContentViewLayout alloc] init];
+
+        id paddingObj = [contentViewLayout objectForKey:@"padding"];
+        options.contentViewLayout.padding =
+            [paddingObj isKindOfClass:[NSNumber class]] ? [paddingObj intValue]
+                                                        : 0;
+
+        id spacingObj = [contentViewLayout objectForKey:@"spacing"];
+        options.contentViewLayout.spacing =
+            [spacingObj isKindOfClass:[NSNumber class]] ? [spacingObj intValue]
+                                                        : 0;
+
+        id rowObj = [contentViewLayout objectForKey:@"row"];
+        options.contentViewLayout.row =
+            [rowObj isKindOfClass:[NSNumber class]] ? [rowObj intValue] : 0;
+
+        id columnObj = [contentViewLayout objectForKey:@"column"];
+        options.contentViewLayout.column =
+            [columnObj isKindOfClass:[NSNumber class]] ? [columnObj intValue]
+                                                       : 0;
+      }
+
+      // apiEngine
+      if ([call.arguments objectForKey:@"apiEngine"]) {
+        options.apiEngine =
+            (void *)[[call.arguments objectForKey:@"apiEngine"] pointerValue];
+      }
+
       // preferred content size
-      if ([call.arguments objectForKey:@"preferredContentWidth"] &&
-          [call.arguments objectForKey:@"preferredContentHeight"]) {
-        options.preferredContentSize = CGSizeMake(
-            [[call.arguments objectForKey:@"preferredContentWidth"] floatValue],
-            [[call.arguments objectForKey:@"preferredContentHeight"]
-                floatValue]);
+      id preferredContentWidthObj =
+          [call.arguments objectForKey:@"preferredContentWidth"];
+      id preferredContentHeightObj =
+          [call.arguments objectForKey:@"preferredContentHeight"];
+      if (preferredContentWidthObj && preferredContentHeightObj &&
+          [preferredContentWidthObj isKindOfClass:[NSNumber class]] &&
+          [preferredContentHeightObj isKindOfClass:[NSNumber class]]) {
+        options.preferredContentSize =
+            CGSizeMake([preferredContentWidthObj floatValue],
+                       [preferredContentHeightObj floatValue]);
       }
 
       // control style
-      if ([call.arguments objectForKey:@"controlStyle"]) {
-        options.controlStyle =
-            [[call.arguments objectForKey:@"controlStyle"] intValue];
+      id controlStyleObj = [call.arguments objectForKey:@"controlStyle"];
+      if (controlStyleObj && [controlStyleObj isKindOfClass:[NSNumber class]]) {
+        options.controlStyle = [controlStyleObj intValue];
       }
 
       result([NSNumber numberWithBool:[self.pipController setup:options]]);
@@ -156,146 +253,6 @@
   }
 }
 
-/**
- * Handles native view related method calls from Flutter.
- * @param call The method call from Flutter
- * @param result The result callback
- */
-- (void)handleNativeViewMethodCall:(FlutterMethodCall *)call
-                            result:(FlutterResult)result {
-  @autoreleasepool {
-    if ([@"nativeViewCreate" isEqualToString:call.method]) {
-      // Create a new native UIView and store it with its pointer as the ID
-      UIView *view = [[AgoraNativeView alloc] init];
-      if (!view) {
-        result(nil);
-        return;
-      }
-
-      [self.nativeViews addObject:view];
-
-      view.translatesAutoresizingMaskIntoConstraints = NO;
-
-      result(@((uint64_t)view));
-    } else if ([@"nativeViewDestroy" isEqualToString:call.method]) {
-      // Validate arguments
-      if (![call.arguments isKindOfClass:[NSNumber class]]) {
-        result(nil);
-        return;
-      }
-
-      uint64_t viewId = [call.arguments unsignedLongLongValue];
-      UIView *view = [self findNativeView:viewId];
-
-      if (view) {
-        [view removeFromSuperview]; // Remove from parent view hierarchy
-        [self.nativeViews removeObject:view]; // Remove from our array
-        view = nil;                           // Clear the reference
-      }
-
-      result(nil);
-
-    } else if ([@"nativeViewSetParent" isEqualToString:call.method]) {
-      // Validate arguments
-      if (![call.arguments isKindOfClass:[NSDictionary class]]) {
-        result(@NO);
-        return;
-      }
-
-      NSDictionary *params = call.arguments;
-      NSNumber *viewIdNum = params[@"nativeViewId"];
-
-      if (!viewIdNum || ![viewIdNum isKindOfClass:[NSNumber class]]) {
-        result(@NO);
-        return;
-      }
-
-      UIView *view = [self findNativeView:[viewIdNum unsignedLongLongValue]];
-      if (!view) {
-        result(@NO);
-        return;
-      }
-
-      UIView *parentView = nil;
-      NSNumber *parentViewIdNum = params[@"parentNativeViewId"];
-      if (parentViewIdNum && [parentViewIdNum isKindOfClass:[NSNumber class]]) {
-        parentView =
-            [self findNativeView:[parentViewIdNum unsignedLongLongValue]];
-      }
-
-      // remove from previous parent view only it has a parent view and is not
-      // the same as the new parent view, even if the new parent view is nil
-      if (view.superview && view.superview != parentView) {
-        [view removeFromSuperview];
-      }
-
-      // if parent view is nil, return true, which means the caller only want to
-      // remove the view from its parent view
-      if (!parentView) {
-        result(@YES);
-        return;
-      }
-
-      NSNumber *indexOfParentView = params[@"indexOfParentView"];
-
-      // if view is not in parent view, insert to new parent view at index if
-      // specified
-      if (view.superview != parentView) {
-        // insert to new parent view at index if specified
-        if (indexOfParentView &&
-            [indexOfParentView isKindOfClass:[NSNumber class]]) {
-          [parentView insertSubview:view atIndex:[indexOfParentView intValue]];
-        } else {
-          [parentView addSubview:view];
-        }
-      } else if (indexOfParentView &&
-                 [indexOfParentView isKindOfClass:[NSNumber class]]) {
-        // remove and reinsert to new index if it is not the same with the
-        // specified index
-        if ([indexOfParentView intValue] !=
-            [parentView.subviews indexOfObject:view]) {
-          [view removeFromSuperview];
-          [parentView insertSubview:view atIndex:[indexOfParentView intValue]];
-        }
-      }
-
-      result(@YES);
-    } else if ([@"nativeViewSetLayout" isEqualToString:call.method]) {
-      // Validate arguments
-      if (![call.arguments isKindOfClass:[NSDictionary class]]) {
-        result(@NO);
-        return;
-      }
-
-      NSDictionary *params = call.arguments;
-      NSNumber *viewIdNum = params[@"nativeViewId"];
-
-      if (!viewIdNum || ![viewIdNum isKindOfClass:[NSNumber class]]) {
-        result(@NO);
-        return;
-      }
-
-      UIView *view = [self findNativeView:[viewIdNum unsignedLongLongValue]];
-      if (!view) {
-        result(@NO);
-        return;
-      }
-
-      // Handle layout properties
-      id contentViewLayoutObj = params[@"contentViewLayout"];
-      if (contentViewLayoutObj &&
-          [contentViewLayoutObj isKindOfClass:[NSDictionary class]]) {
-        [self applyContentViewLayout:(NSDictionary *)contentViewLayoutObj
-                              toView:view];
-      }
-
-      result(@YES);
-    } else {
-      result(FlutterMethodNotImplemented);
-    }
-  }
-}
-
 - (void)pipStateChanged:(AgoraPIPState)state error:(NSString *)error {
   AGORA_LOG(@"pipStateChanged: %ld, error: %@", (long)state, error);
 
@@ -303,207 +260,6 @@
       initWithObjectsAndKeys:[NSNumber numberWithLong:(long)state], @"state",
                              error, @"error", nil];
   [self.channel invokeMethod:@"pipStateChanged" arguments:arguments];
-}
-
-- (UIView *)findNativeView:(uint64_t)viewId {
-  __block UIView *view;
-  [self.nativeViews
-      enumerateObjectsUsingBlock:^(UIView *obj, NSUInteger idx, BOOL *stop) {
-        if ((uint64_t)obj == viewId) {
-          view = obj;
-          *stop = YES;
-        }
-      }];
-  return view;
-}
-
-- (void)applyContentViewLayout:(NSDictionary *)contentViewLayout
-                        toView:(UIView *)view {
-  if (!contentViewLayout || !view) {
-    return;
-  }
-
-  // Get actual subview count
-  NSArray *subviews = view.subviews;
-  NSInteger subviewCount = subviews.count;
-  if (subviewCount == 0) {
-    return;
-  }
-
-  NSNumber *padding = contentViewLayout[@"padding"];
-  NSNumber *spacing = contentViewLayout[@"spacing"];
-  NSNumber *row = contentViewLayout[@"row"];
-  NSNumber *column = contentViewLayout[@"column"];
-
-  // Validate row and column values
-  NSInteger actualRow = row ? [row integerValue] : 0;
-  NSInteger actualColumn = column ? [column integerValue] : 0;
-
-  // Rule 3: Ignore negative values
-  if (actualRow < 0)
-    actualRow = 0;
-  if (actualColumn < 0)
-    actualColumn = 0;
-
-  // Rule 1: If row is not set or 0, calculate based on column and subview count
-  if (actualRow == 0) {
-    if (actualColumn > 0) {
-      actualRow = (subviewCount + actualColumn - 1) / actualColumn;
-    } else {
-      // If both row and column are not set, use a default layout
-      actualRow = 1;
-      actualColumn = subviewCount;
-    }
-  }
-
-  // Rule 2: Column is just a reference, adjust if needed
-  if (actualColumn == 0) {
-    if (actualRow > subviewCount) {
-      actualColumn = 1;
-    } else {
-      actualColumn = (subviewCount + actualRow - 1) / actualRow;
-    }
-  }
-
-  // Rule 4: If actualRow * actualColumn is less than subviewCount, adjust
-  // actualRow and actualColumn
-  if (actualRow * actualColumn < subviewCount) {
-    actualColumn = (subviewCount + actualRow - 1) / actualRow;
-  }
-
-  // Remove existing constraints
-  [view removeConstraints:view.constraints];
-  for (UIView *subview in subviews) {
-    // Only remove constraints between subview and parent view
-    NSArray *subviewConstraints = [subview.constraints copy];
-    for (NSLayoutConstraint *constraint in subviewConstraints) {
-      if ((constraint.firstItem == subview && constraint.secondItem == view) ||
-          (constraint.firstItem == view && constraint.secondItem == subview)) {
-        [subview removeConstraint:constraint];
-      }
-    }
-    subview.translatesAutoresizingMaskIntoConstraints = NO;
-  }
-
-  // Apply padding
-  CGFloat paddingValue = padding ? [padding doubleValue] : 0;
-  CGFloat spacingValue = spacing ? [spacing doubleValue] : 0;
-
-  // Create constraints for each subview
-  for (NSInteger i = 0; i < subviewCount; i++) {
-    UIView *subview = subviews[i];
-    NSInteger currentRow = i / actualColumn;
-    NSInteger currentColumn = i % actualColumn;
-
-    // Width constraint - equal width for all subviews in the same column
-    if (currentColumn == 0) {
-      // First column - set width based on container width
-      [view addConstraint:[NSLayoutConstraint
-                              constraintWithItem:subview
-                                       attribute:NSLayoutAttributeWidth
-                                       relatedBy:NSLayoutRelationEqual
-                                          toItem:view
-                                       attribute:NSLayoutAttributeWidth
-                                      multiplier:1.0 / actualColumn
-                                        constant:-(spacingValue *
-                                                       (actualColumn - 1) +
-                                                   paddingValue * 2) /
-                                                 actualColumn]];
-    } else {
-      // Other columns - equal to first column
-      [view addConstraint:[NSLayoutConstraint
-                              constraintWithItem:subview
-                                       attribute:NSLayoutAttributeWidth
-                                       relatedBy:NSLayoutRelationEqual
-                                          toItem:subviews[i - currentColumn]
-                                       attribute:NSLayoutAttributeWidth
-                                      multiplier:1.0
-                                        constant:0.0]];
-    }
-
-    // Height constraint - equal height for all rows, regardless of whether they
-    // have subviews
-    [view
-        addConstraint:[NSLayoutConstraint
-                          constraintWithItem:subview
-                                   attribute:NSLayoutAttributeHeight
-                                   relatedBy:NSLayoutRelationEqual
-                                      toItem:view
-                                   attribute:NSLayoutAttributeHeight
-                                  multiplier:1.0 / actualRow
-                                    constant:-(spacingValue * (actualRow - 1) +
-                                               paddingValue * 2) /
-                                             actualRow]];
-
-    // Position constraints
-    if (currentColumn == 0) {
-      // First column - leading edge
-      [view addConstraint:[NSLayoutConstraint
-                              constraintWithItem:subview
-                                       attribute:NSLayoutAttributeLeading
-                                       relatedBy:NSLayoutRelationEqual
-                                          toItem:view
-                                       attribute:NSLayoutAttributeLeading
-                                      multiplier:1.0
-                                        constant:paddingValue]];
-    } else {
-      // Other columns - spacing from previous view
-      [view addConstraint:[NSLayoutConstraint
-                              constraintWithItem:subview
-                                       attribute:NSLayoutAttributeLeading
-                                       relatedBy:NSLayoutRelationEqual
-                                          toItem:subviews[i - 1]
-                                       attribute:NSLayoutAttributeTrailing
-                                      multiplier:1.0
-                                        constant:spacingValue]];
-    }
-
-    if (currentRow == 0) {
-      // First row - top edge
-      [view addConstraint:[NSLayoutConstraint
-                              constraintWithItem:subview
-                                       attribute:NSLayoutAttributeTop
-                                       relatedBy:NSLayoutRelationEqual
-                                          toItem:view
-                                       attribute:NSLayoutAttributeTop
-                                      multiplier:1.0
-                                        constant:paddingValue]];
-    } else {
-      // Other rows - spacing from row above
-      [view addConstraint:[NSLayoutConstraint
-                              constraintWithItem:subview
-                                       attribute:NSLayoutAttributeTop
-                                       relatedBy:NSLayoutRelationEqual
-                                          toItem:subviews[i - actualColumn]
-                                       attribute:NSLayoutAttributeBottom
-                                      multiplier:1.0
-                                        constant:spacingValue]];
-    }
-
-    // Last column - trailing edge
-    if (currentColumn == actualColumn - 1) {
-      [view addConstraint:[NSLayoutConstraint
-                              constraintWithItem:subview
-                                       attribute:NSLayoutAttributeTrailing
-                                       relatedBy:NSLayoutRelationEqual
-                                          toItem:view
-                                       attribute:NSLayoutAttributeTrailing
-                                      multiplier:1.0
-                                        constant:-paddingValue]];
-    }
-
-    // Last row - bottom edge
-    if (currentRow == actualRow - 1) {
-      [view addConstraint:[NSLayoutConstraint
-                              constraintWithItem:subview
-                                       attribute:NSLayoutAttributeBottom
-                                       relatedBy:NSLayoutRelationEqual
-                                          toItem:view
-                                       attribute:NSLayoutAttributeBottom
-                                      multiplier:1.0
-                                        constant:-paddingValue]];
-    }
-  }
 }
 
 @end
