@@ -1,5 +1,13 @@
 # Changelog
 
+## [6.2.6-sp.426163.b.4](https://github.com/AgoraIO-Extensions/Agora-Flutter-SDK/compare/6.3.2-sp.43216.b.3...6.2.6-sp.426163.b.4) (2025-07-02)
+
+### Bug Fixes
+
+* upgrade AgoraPIP_iOS to 0.0.5 ([#2357](https://github.com/AgoraIO-Extensions/Agora-Flutter-SDK/issues/2357)) ([a8b5425](https://github.com/AgoraIO-Extensions/Agora-Flutter-SDK/commit/a8b5425ef8fd2697cb1546a7ad4a0bc1215f88cc))
+* use pip from iris to fix renderer issue ([#2361](https://github.com/AgoraIO-Extensions/Agora-Flutter-SDK/issues/2361)) ([832ee8d](https://github.com/AgoraIO-Extensions/Agora-Flutter-SDK/commit/832ee8d977906072dace3bdc970ed75653efc565))
+* windows-2019 is deprecated ([#2352](https://github.com/AgoraIO-Extensions/Agora-Flutter-SDK/issues/2352)) ([24fd114](https://github.com/AgoraIO-Extensions/Agora-Flutter-SDK/commit/24fd114ce03e23fc40c3a191fd98deaac81aee85))
+
 ## [6.3.2-sp.43216.b.3](https://github.com/AgoraIO-Extensions/Agora-Flutter-SDK/compare/6.3.2-sp.43216.b.2...6.3.2-sp.43216.b.3) (2025-06-18)
 
 ### Bug Fixes
