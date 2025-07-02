@@ -1579,6 +1579,27 @@ extension MaxUserAccountLengthTypeExt on MaxUserAccountLengthType {
   }
 }
 
+/// @nodoc
+@JsonEnum(alwaysCreate: true)
+enum MaxCustomUserInfoLengthType {
+  /// @nodoc
+  @JsonValue(1024)
+  maxCustomUserInfoLength,
+}
+
+/// @nodoc
+extension MaxCustomUserInfoLengthTypeExt on MaxCustomUserInfoLengthType {
+  /// @nodoc
+  static MaxCustomUserInfoLengthType fromValue(int value) {
+    return $enumDecode(_$MaxCustomUserInfoLengthTypeEnumMap, value);
+  }
+
+  /// @nodoc
+  int value() {
+    return _$MaxCustomUserInfoLengthTypeEnumMap[this]!;
+  }
+}
+
 /// Information about externally encoded video frames.
 @JsonSerializable(explicitToJson: true, includeIfNull: false)
 class EncodedVideoFrameInfo implements AgoraSerializable {
@@ -2095,7 +2116,7 @@ class SimulcastStreamConfig implements AgoraSerializable {
   @JsonKey(name: 'dimensions')
   final VideoDimensions? dimensions;
 
-  /// Video receive bitrate (Kbps), represented by an instantaneous value. This parameter does not need to be set. The SDK automatically matches the most suitable bitrate based on the video resolution and frame rate you set.
+  /// Video bitrate (Kbps). The default value is -1. This parameter does not need to be set. The SDK automatically matches the most suitable bitrate based on the video resolution and frame rate you set.
   @JsonKey(name: 'kBitrate')
   final int? kBitrate;
 
@@ -6956,7 +6977,7 @@ class EchoTestConfiguration implements AgoraSerializable {
 @JsonSerializable(explicitToJson: true, includeIfNull: false)
 class UserInfo implements AgoraSerializable {
   /// @nodoc
-  const UserInfo({this.uid, this.userAccount});
+  const UserInfo({this.uid, this.userAccount, this.customUserInfo});
 
   /// The user ID.
   @JsonKey(name: 'uid')
@@ -6965,6 +6986,10 @@ class UserInfo implements AgoraSerializable {
   /// User account. The maximum data length is MaxUserAccountLengthType.
   @JsonKey(name: 'userAccount')
   final String? userAccount;
+
+  /// @nodoc
+  @JsonKey(name: 'customUserInfo')
+  final String? customUserInfo;
 
   /// @nodoc
   factory UserInfo.fromJson(Map<String, dynamic> json) =>
