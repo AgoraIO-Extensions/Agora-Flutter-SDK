@@ -1380,7 +1380,8 @@ class ChannelMediaOptions implements AgoraSerializable {
       this.isInteractiveAudience,
       this.customVideoTrackId,
       this.isAudioFilterable,
-      this.parameters});
+      this.parameters,
+      this.customUserInfo});
 
   /// Whether to publish the video captured by the camera: true : Publish the video captured by the camera. false : Do not publish the video captured by the camera.
   @JsonKey(name: 'publishCameraTrack')
@@ -1533,6 +1534,10 @@ class ChannelMediaOptions implements AgoraSerializable {
   /// @nodoc
   @JsonKey(name: 'parameters')
   final String? parameters;
+
+  /// @nodoc
+  @JsonKey(name: 'customUserInfo')
+  final String? customUserInfo;
 
   /// @nodoc
   factory ChannelMediaOptions.fromJson(Map<String, dynamic> json) =>
@@ -3707,7 +3712,7 @@ abstract class RtcEngine {
   /// Enables/Disables the local video capture.
   ///
   /// This method disables or re-enables the local video capture, and does not affect receiving the remote video stream. After calling enableVideo, the local video capture is enabled by default. If you call enableLocalVideo (false) to disable local video capture within the channel, it also simultaneously stops publishing the video stream within the channel. If you want to restart video catpure, you can call enableLocalVideo (true) and then call updateChannelMediaOptions to set the options parameter to publish the locally captured video stream in the channel. After the local video capturer is successfully disabled or re-enabled, the SDK triggers the onRemoteVideoStateChanged callback on the remote client.
-  ///  You can call this method either before or after joining a channel.
+  ///  You can call this method either before or after joining a channel. However, if you call it before joining, the settings will only take effect once you have joined the channel.
   ///  This method enables the internal engine and is valid after leaving the channel.
   ///
   /// * [enabled] Whether to enable the local video capture. true : (Default) Enable the local video capture. false : Disable the local video capture. Once the local video is disabled, the remote users cannot receive the video stream of the local user, while the local user can still receive the video streams of remote users. When set to false, this method does not require a local camera.
@@ -6260,8 +6265,8 @@ abstract class RtcEngine {
   /// Enables tracing the video frame rendering process.
   ///
   /// The SDK starts tracing the rendering status of the video frames in the channel from the moment this method is successfully called and reports information about the event through the onVideoRenderingTracingResult callback.
-  ///  The SDK automatically starts tracking the rendering events of the video from the moment that you call joinChannel to join the channel. You can call this method at an appropriate time according to the actual application scenario to customize the tracing process.
-  ///  After the local user leaves the current channel, the SDK automatically resets the time point to the next time when the user successfully joins the channel.
+  ///  If you have not called this method, the SDK tracks the rendering events of the video frames from the moment you call joinChannel to join the channel. You can call this method at an appropriate time according to the actual application scenario to set the starting position for tracking video rendering events.
+  ///  After the local user leaves the current channel, the SDK automatically tracks the video rendering events from the moment you join a channel.
   ///
   /// Returns
   /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown. You need to catch the exception and handle it accordingly.

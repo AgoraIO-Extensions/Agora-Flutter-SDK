@@ -11,8 +11,8 @@ final basic = [
   {'name': 'Basic'},
   {'name': 'JoinChannelAudio', 'widget': const JoinChannelAudio()},
   {'name': 'JoinChannelVideo', 'widget': const JoinChannelVideo()},
-  if (defaultTargetPlatform == TargetPlatform.android &&
-      ExampleConfigOverride().isInternalTesting)
+  if (defaultTargetPlatform == TargetPlatform.android ||
+      defaultTargetPlatform == TargetPlatform.iOS)
     {
       'name': 'FlutterTextureAndroidTest',
       'widget': const FlutterTextureAndroidTest()

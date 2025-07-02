@@ -19,7 +19,7 @@ class StringUid extends StatefulWidget {
 class _State extends State<StringUid> {
   late final RtcEngine _engine;
   bool isJoined = false;
-  late TextEditingController _controller0, _controller1;
+  late TextEditingController _controller0, _controller1, _controller2;
   late final RtcEngineEventHandler _rtcEngineEventHandler;
 
   @override
@@ -27,6 +27,7 @@ class _State extends State<StringUid> {
     super.initState();
     _controller0 = TextEditingController(text: config.channelId);
     _controller1 = TextEditingController(text: config.stringUid);
+    _controller2 = TextEditingController(text: 'customUserInfo');
     _initEngine();
   }
 
@@ -85,7 +86,10 @@ class _State extends State<StringUid> {
     await _engine.joinChannelWithUserAccount(
         token: config.token,
         channelId: _controller0.text,
-        userAccount: _controller1.text);
+        userAccount: _controller1.text,
+        options: ChannelMediaOptions(
+          customUserInfo: _controller2.text,
+        ));
   }
 
   _leaveChannel() async {
@@ -117,6 +121,10 @@ class _State extends State<StringUid> {
             TextField(
               controller: _controller1,
               decoration: const InputDecoration(hintText: 'String User ID'),
+            ),
+            TextField(
+              controller: _controller2,
+              decoration: const InputDecoration(hintText: 'Custom User Info'),
             ),
             Row(
               children: [
