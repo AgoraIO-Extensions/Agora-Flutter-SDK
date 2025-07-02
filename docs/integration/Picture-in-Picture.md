@@ -111,14 +111,6 @@ The Picture-in-Picture (PiP) feature allows you to display video content in a sm
      // ... configuration
    ));
 
-   // iOS-specific render type configuration
-   if (Platform.isIOS) {
-     // According to [Adopting Picture in Picture in a Custom Player](https://developer.apple.com/documentation/avkit/adopting_picture_in_picture_in_a_custom_player),
-     // the PiP window only supports `AVPlayerLayer` or `AVSampleBufferDisplayLayer` for rendering video content.
-     // Therefore, we need to change the internal render type for iOS to use a compatible layer type.
-     await _engine.setParameters("{\"che.video.render.mode\":22}");
-   }
-
    // Create PiP controller
    _pipController = _engine.createPipController();
    ```

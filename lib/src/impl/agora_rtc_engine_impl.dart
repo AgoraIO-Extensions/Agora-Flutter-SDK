@@ -1173,6 +1173,10 @@ class RtcEngineImpl extends rtc_engine_ex_binding.RtcEngineExImpl
     return p;
   }
 
+  int getApiEngineHandle() {
+    return irisMethodChannel.getApiEngineHandle();
+  }
+
   @optionalTypeArgs
   Future<T?> invokeAgoraMethod<T>(String method, [dynamic arguments]) {
     if (engineMethodChannel == null) {
