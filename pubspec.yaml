@@ -2,7 +2,7 @@ name: agora_rtc_engine
 description: >-
   Flutter plugin of Agora RTC SDK, allow you to simply integrate Agora Video
   Calling or Live Video Streaming to your app with just a few lines of code.
-version: 6.4.0
+version: 6.4.2-ohos.442029
 homepage: https://www.agora.io
 repository: https://github.com/AgoraIO-Extensions/Agora-Flutter-SDK/tree/main
 environment:
@@ -18,10 +18,9 @@ dependencies:
   async: '>=2.8.2'
   meta: ^1.7.0
   iris_method_channel:
-    # path: ../rtc-method-channel-ohos
     git:
       url: https://github.com/AgoraIO-Extensions/iris_method_channel_flutter.git
-      ref: dev/ohos
+      ref: 2.2.3-ohos.223
   js: '>=0.6.3'
 dev_dependencies:
   flutter_test:
