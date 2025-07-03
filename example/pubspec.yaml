@@ -31,7 +31,20 @@ dependencies:
   cupertino_icons: ^1.0.2
 
   permission_handler: ^10.2.0
+  # Import the native implementation of `permission_handler` for HarmonyOS
+  permission_handler_ohos:
+    git:
+      url: https://gitcode.com/openharmony-sig/flutter_permission_handler.git
+      ref: master
+      path: permission_handler_ohos
+
   path_provider: ^2.0.8
+  # Import the native implementation of `path_provider` for HarmonyOS
+  path_provider_ohos:
+    git:
+      url: https://gitcode.com/openharmony-tpc/flutter_packages.git
+      ref: master
+      path: packages/path_provider/path_provider_ohos 
 
 dev_dependencies:
   flutter_test:

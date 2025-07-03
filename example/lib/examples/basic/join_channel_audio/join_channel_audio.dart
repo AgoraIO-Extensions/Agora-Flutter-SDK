@@ -34,6 +34,8 @@ class _State extends State<JoinChannelAudio> {
   late final TextEditingController _selectedUidController;
   ChannelProfileType _channelProfileType =
       ChannelProfileType.channelProfileLiveBroadcasting;
+  AudioProfileType _audioProfileType = AudioProfileType.audioProfileDefault;
+  AudioScenarioType _audioScenarioType = AudioScenarioType.audioScenarioGameStreaming;
   late final RtcEngineEventHandler _rtcEngineEventHandler;
 
   @override
@@ -95,8 +97,8 @@ class _State extends State<JoinChannelAudio> {
     await _engine.enableAudio();
     await _engine.setClientRole(role: ClientRoleType.clientRoleBroadcaster);
     await _engine.setAudioProfile(
-      profile: AudioProfileType.audioProfileDefault,
-      scenario: AudioScenarioType.audioScenarioGameStreaming,
+      profile: _audioProfileType,
+      scenario: _audioScenarioType,
     );
   }
 
@@ -128,6 +130,8 @@ class _State extends State<JoinChannelAudio> {
       _recordingVolume = 100;
       _playbackVolume = 100;
       _inEarMonitoringVolume = 100;
+      _audioProfileType = AudioProfileType.audioProfileDefault;
+      _audioScenarioType = AudioScenarioType.audioScenarioGameStreaming;
     });
   }
 
@@ -213,6 +217,64 @@ class _State extends State<JoinChannelAudio> {
                         setState(() {
                           _channelProfileType = v!;
                         });
+                      }),
+            const Text('Audio Profile: '),
+            DropdownButton<AudioProfileType>(
+                items: [
+                  AudioProfileType.audioProfileDefault,
+                  AudioProfileType.audioProfileSpeechStandard,
+                  AudioProfileType.audioProfileMusicStandard,
+                  AudioProfileType.audioProfileMusicStandardStereo,
+                  AudioProfileType.audioProfileMusicHighQuality,
+                  AudioProfileType.audioProfileMusicHighQualityStereo,
+                  AudioProfileType.audioProfileIot,
+                ]
+                    .map((e) => DropdownMenuItem(
+                          child: Text(
+                            e.toString().split('.')[1],
+                          ),
+                          value: e,
+                        ))
+                    .toList(),
+                value: _audioProfileType,
+                onChanged: isJoined
+                    ? null
+                    : (v) async {
+                        setState(() {
+                          _audioProfileType = v!;
+                        });
+                        await _engine.setAudioProfile(
+                          profile: _audioProfileType,
+                          scenario: _audioScenarioType,
+                        );
+                      }),
+            const Text('Audio Scenario: '),
+            DropdownButton<AudioScenarioType>(
+                items: [
+                  AudioScenarioType.audioScenarioDefault,
+                  AudioScenarioType.audioScenarioGameStreaming,
+                  AudioScenarioType.audioScenarioChatroom,
+                  AudioScenarioType.audioScenarioChorus,
+                  AudioScenarioType.audioScenarioMeeting,
+                ]
+                    .map((e) => DropdownMenuItem(
+                          child: Text(
+                            e.toString().split('.')[1],
+                          ),
+                          value: e,
+                        ))
+                    .toList(),
+                value: _audioScenarioType,
+                onChanged: isJoined
+                    ? null
+                    : (v) async {
+                        setState(() {
+                          _audioScenarioType = v!;
+                        });
+                        await _engine.setAudioProfile(
+                          profile: _audioProfileType,
+                          scenario: _audioScenarioType,
+                        );
                       }),
             Row(
               children: [

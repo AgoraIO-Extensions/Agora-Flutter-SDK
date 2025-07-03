@@ -7,7 +7,7 @@ on:
         description: 'Target platforms, e.g. android, ios, macos, windows, web, etc; separated by comma, default is all platforms'
         type: string
         required: true
-        default: 'android, ios, macos, windows, web'
+        default: 'android, ios, macos, windows, web, ohos'
       target_branch:
         description: 'Target branch, leave empty will use the same as the workflow trigger branch'
         type: string
@@ -93,7 +93,28 @@ on:
         required: true
       KEYCHAIN_PASSWORD:
         required: true
-        
+      FLUTTER_3_22_OHOS_1_0_1:
+        required: true
+      FLUTTER_3_7_12_OHOS_1_1_1:
+        required: true
+      OHOS_CMDLINE_TOOLS_5_0_13_200:
+        required: true
+      OHOS_SIGNING_MATERIAL_FILE:
+        required: true
+      OHOS_SIGNING_P12:
+        required: true
+      OHOS_SIGNING_P12_PWD:
+        required: true
+      OHOS_SIGNING_KEY_ALIAS:
+        required: true
+      OHOS_SIGNING_KEY_PWD:
+        required: true
+      OHOS_SIGNING_SIGN_ALG:
+        required: true
+      OHOS_SIGNING_PROFILE:
+        required: true
+      OHOS_SIGNING_CER:
+        required: true
 
 jobs:
   # remove label ci:build_example if the issue_number is not null and the workflow is run by workflow_call not workflow_dispatch
@@ -121,7 +142,7 @@ jobs:
           platforms=$(echo "$target_platforms" | sed 's/ //g' | tr ',' '\n' | sort -u | sed '/^$/d' | jq -R -s -c 'split("\n")[:-1]')
           echo "splited platforms: $platforms"
           # remove not supported platforms, only keep supported platforms: android, ios, macos, windows, web
-          platforms=$(echo "$platforms" | jq -e 'map(select(. == "android" or . == "ios" or . == "macos" or . == "windows" or . == "web"))')
+          platforms=$(echo "$platforms" | jq -e 'map(select(. == "android" or . == "ios" or . == "macos" or . == "windows" or . == "web" or . == "ohos"))')
           # make platforms in oneline, and keep json format
           platforms=$(echo "$platforms" | jq -c .)
           echo "final jsonlized platforms: $platforms"
@@ -144,6 +165,8 @@ jobs:
             platform: macos
           - os: ubuntu-latest
             platform: windows
+          - os: ubuntu-latest
+            platform: ohos
           - os: macos-latest
             platform: windows
           - os: macos-latest
@@ -156,6 +179,8 @@ jobs:
             platform: macos
           - os: windows-latest
             platform: web
+          - os: windows-latest
+            platform: ohos
     env:
         platform: ${{ matrix.platform }}
         extra_build_options: ${{ inputs.extra_build_options }}
@@ -166,6 +191,7 @@ jobs:
       artifact_nightly_link_macos: ${{ steps.setup_output.outputs.artifact_nightly_link_macos }}
       artifact_nightly_link_windows: ${{ steps.setup_output.outputs.artifact_nightly_link_windows }}
       artifact_nightly_link_web: ${{ steps.setup_output.outputs.artifact_nightly_link_web }}
+      artifact_nightly_link_ohos: ${{ steps.setup_output.outputs.artifact_nightly_link_ohos }}
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -176,7 +202,7 @@ jobs:
           submodules: 'true'
 
       - name: Setup JDK for Android
-        if: ${{ matrix.platform == 'android' }}
+        if: ${{ matrix.platform == 'android' || matrix.platform == 'ohos' }}
         uses: actions/setup-java@v4
         with:
           distribution: 'zulu'
@@ -230,11 +256,83 @@ jobs:
         run: pod repo update
 
       - name: Setup Flutter
+        if: ${{ matrix.platform != 'ohos' }}
         uses: subosito/flutter-action@v2
         with:
           channel: ${{ inputs.flutter_channel }}
           flutter-version: ${{ inputs.flutter_version }}
           cache: true
+
+      - name: Setup OHOS Flutter
+        if: ${{ matrix.platform == 'ohos' }}
+        uses: AgoraIO-Extensions/actions/.github/actions/setup-ohos-flutter@main
+        with:
+          flutter_version: '3.7.12-ohos-1.1.1'
+          flutter_download_url: ${{ secrets.FLUTTER_3_7_12_OHOS_1_1_1 }}
+          cache: true
+
+      - name: Setup OHOS SDK
+        if: ${{ matrix.platform == 'ohos' }}
+        uses: AgoraIO-Extensions/actions/.github/actions/setup-ohos@main
+        with:
+          ohos_version: '5.0.13.200'
+          ohos_download_url: ${{ secrets.OHOS_CMDLINE_TOOLS_5_0_13_200 }}
+          cache: true
+
+      - name: Setup signing key for OHOS
+        if: ${{ matrix.platform == 'ohos' }}
+        working-directory: example/ohos
+        shell: bash
+        env:
+          DEFAULT_OHOS_SIGNING_MATERIAL_FILE: ${{ secrets.OHOS_SIGNING_MATERIAL_FILE }}
+          DEFAULT_OHOS_SIGNING_P12_FILE: ${{ secrets.OHOS_SIGNING_P12 }}
+          DEFAULT_OHOS_SIGNING_P12_PWD: ${{ secrets.OHOS_SIGNING_P12_PWD }}
+          DEFAULT_OHOS_SIGNING_KEY_ALIAS: ${{ secrets.OHOS_SIGNING_KEY_ALIAS }}
+          DEFAULT_OHOS_SIGNING_KEY_PWD: ${{ secrets.OHOS_SIGNING_KEY_PWD }}
+          DEFAULT_OHOS_SIGNING_SIGN_ALG: ${{ secrets.OHOS_SIGNING_SIGN_ALG }}
+          DEFAULT_OHOS_SIGNING_PROFILE: ${{ secrets.OHOS_SIGNING_PROFILE }}
+          DEFAULT_OHOS_SIGNING_CER: ${{ secrets.OHOS_SIGNING_CER }}
+        run: |
+          # get current directory
+          CURRENT_DIR=$(pwd)
+          
+          # create signing directory if not exists
+          mkdir -p $RUNNER_TEMP/signing
+
+          DEFAULT_OHOS_SIGNING_MATERIAL_FILE_PATH=$RUNNER_TEMP/signing/material.zip
+          DEFAULT_OHOS_SIGNING_P12_FILE_PATH=$RUNNER_TEMP/signing/agora_rtc_engine_example.p12
+          DEFAULT_OHOS_SIGNING_PROFILE_PATH=$RUNNER_TEMP/signing/agora_rtc_engine_example.p7b
+          DEFAULT_OHOS_SIGNING_CER_PATH=$RUNNER_TEMP/signing/agora_rtc_engine_example.cer
+
+          # decode secrets to files
+          echo -n "$DEFAULT_OHOS_SIGNING_MATERIAL_FILE" | base64 --decode --output $DEFAULT_OHOS_SIGNING_MATERIAL_FILE_PATH
+          echo -n "$DEFAULT_OHOS_SIGNING_P12_FILE" | base64 --decode --output $DEFAULT_OHOS_SIGNING_P12_FILE_PATH
+          echo -n "$DEFAULT_OHOS_SIGNING_PROFILE" | base64 --decode --output $DEFAULT_OHOS_SIGNING_PROFILE_PATH
+          echo -n "$DEFAULT_OHOS_SIGNING_CER" | base64 --decode --output $DEFAULT_OHOS_SIGNING_CER_PATH
+
+          # unzip material file
+          unzip $DEFAULT_OHOS_SIGNING_MATERIAL_FILE_PATH -d $RUNNER_TEMP/signing
+
+          # replace OHOS_SIGNING_P12_FILE in ./build-profile.json5 with $DEFAULT_OHOS_SIGNING_P12_FILE_PATH
+          sed -i '' "s|OHOS_SIGNING_P12_FILE|$DEFAULT_OHOS_SIGNING_P12_FILE_PATH|g" $CURRENT_DIR/build-profile.json5
+
+          # replace OHOS_SIGNING_P12_PWD in ./build-profile.json5 with $DEFAULT_OHOS_SIGNING_P12_PWD
+          sed -i '' "s|OHOS_SIGNING_P12_PWD|$DEFAULT_OHOS_SIGNING_P12_PWD|g" $CURRENT_DIR/build-profile.json5
+
+          # replace OHOS_SIGNING_KEY_ALIAS in ./build-profile.json5 with $DEFAULT_OHOS_SIGNING_KEY_ALIAS
+          sed -i '' "s|OHOS_SIGNING_KEY_ALIAS|$DEFAULT_OHOS_SIGNING_KEY_ALIAS|g" $CURRENT_DIR/build-profile.json5
+
+          # replace OHOS_SIGNING_KEY_PWD in ./build-profile.json5 with $DEFAULT_OHOS_SIGNING_KEY_PWD
+          sed -i '' "s|OHOS_SIGNING_KEY_PWD|$DEFAULT_OHOS_SIGNING_KEY_PWD|g" $CURRENT_DIR/build-profile.json5
+
+          # replace OHOS_SIGNING_SIGN_ALG in ./build-profile.json5 with $DEFAULT_OHOS_SIGNING_SIGN_ALG
+          sed -i '' "s|OHOS_SIGNING_SIGN_ALG|$DEFAULT_OHOS_SIGNING_SIGN_ALG|g" $CURRENT_DIR/build-profile.json5
+
+          # replace OHOS_SIGNING_PROFILE in ./build-profile.json5 with $DEFAULT_OHOS_SIGNING_PROFILE_PATH
+          sed -i '' "s|OHOS_SIGNING_PROFILE|$DEFAULT_OHOS_SIGNING_PROFILE_PATH|g" $CURRENT_DIR/build-profile.json5
+
+          # replace OHOS_SIGNING_CER in ./build-profile.json5 with $DEFAULT_OHOS_SIGNING_CER_PATH
+          sed -i '' "s|OHOS_SIGNING_CER|$DEFAULT_OHOS_SIGNING_CER_PATH|g" $CURRENT_DIR/build-profile.json5
 
       - name: Build
         env:
@@ -243,7 +341,7 @@ jobs:
         working-directory: example
         run: |
           # show flutter version
-          flutter --version && which flutter
+          # which flutter && flutter --version
 
           # install dependencies
           flutter pub get
@@ -260,6 +358,8 @@ jobs:
             build_command="flutter build windows"
           elif [ "$platform" == "web" ]; then
             build_command="flutter build web"
+          elif [ "$platform" == "ohos" ]; then
+            build_command="flutter build hap"
           fi
 
           # prepare build options
@@ -340,6 +440,9 @@ jobs:
           elif [ "$platform" == "web" ]; then
             # copy all files and files in subdirectories to ../output directory
             cp -r build/web/* ../output
+          elif [ "$platform" == "ohos" ]; then
+            # copy all files and files in subdirectories to ../output directory
+            cp -r ohos/entry/build/default/outputs/default/*.hap ../output
           fi
 
       - name: Generate artifact name
@@ -390,5 +493,6 @@ jobs:
               - ${{ needs.build.outputs.artifact_nightly_link_macos }}
               - ${{ needs.build.outputs.artifact_nightly_link_windows }}
               - ${{ needs.build.outputs.artifact_nightly_link_web }}
+              - ${{ needs.build.outputs.artifact_nightly_link_ohos }}
 
             > This comment is commented by bot, do not edit it directly

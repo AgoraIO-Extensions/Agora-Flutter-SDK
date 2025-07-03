@@ -1,0 +1,23 @@
+{
+  "modelVersion": "5.0.0",
+  "name": "agora_rtc_engine_example",
+  "version": "1.0.0",
+  "description": "Please describe the basic information.",
+  "main": "",
+  "author": "",
+  "license": "",
+  "dependencies": {
+    "@ohos/flutter_ohos": "file:./har/flutter.har"
+  },
+  "devDependencies": {
+    "@ohos/hypium": "1.0.6"
+  },
+  "overrides": {
+    "@ohos/flutter_ohos": "file:./har/flutter.har",
+    "@ohos/flutter_module": "file:./entry",
+    "path_provider_ohos": "file:./har/path_provider_ohos.har",
+    "permission_handler_ohos": "file:./har/permission_handler_ohos.har",
+    "iris_method_channel": "file:./har/iris_method_channel.har",
+    "agora_rtc_engine": "file:./har/agora_rtc_engine.har"
+  }
+}

@@ -21,7 +21,8 @@ class ExampleActionsWidget extends StatelessWidget {
     final bool isLayoutHorizontal = mediaData.size.aspectRatio >= 1.5 ||
         (kIsWeb ||
             !(defaultTargetPlatform == TargetPlatform.android ||
-                defaultTargetPlatform == TargetPlatform.iOS));
+                defaultTargetPlatform == TargetPlatform.iOS ||
+                defaultTargetPlatform == TargetPlatform.ohos));
 
     if (actionsBuilder == null) {
       return displayContentBuilder(context, isLayoutHorizontal);
