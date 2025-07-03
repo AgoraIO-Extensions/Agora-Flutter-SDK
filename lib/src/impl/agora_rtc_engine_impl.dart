@@ -573,10 +573,15 @@ class RtcEngineImpl extends rtc_engine_ex_binding.RtcEngineExImpl
 
     await super.release(sync: sync);
 
+    await irisMethodChannel.dispose();
+
+    // dispose irisMethodChannel will destruct the native api engine handle,
+    // if we call ohosDestroy before irisMethodChannel.dispose() will cause
+    // the native api engine handle is not valid, and the native api will crash.
     if (defaultTargetPlatform == TargetPlatform.ohos) {
       await engineMethodChannel.invokeMethod('ohosDestroy');
     }
-    await irisMethodChannel.dispose();
+
     _isReleased = true;
     _releasingCompleter?.complete(null);
     _releasingCompleter = null;

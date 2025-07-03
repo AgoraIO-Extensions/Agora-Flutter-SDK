@@ -32,6 +32,7 @@ class _State extends State<JoinChannelVideo> {
       muteAllRemoteAudio = false;
   Set<int> remoteUid = {};
   late TextEditingController _controller;
+  late TextEditingController _tokenController;
   bool _isUseFlutterTexture = false;
   bool _isUseAndroidSurfaceView = false;
   ChannelProfileType _channelProfileType =
@@ -42,6 +43,7 @@ class _State extends State<JoinChannelVideo> {
   void initState() {
     super.initState();
     _controller = TextEditingController(text: config.channelId);
+    _tokenController = TextEditingController(text: '');
 
     _initEngine();
   }
@@ -49,6 +51,8 @@ class _State extends State<JoinChannelVideo> {
   @override
   void dispose() {
     super.dispose();
+    _controller.dispose();
+    _tokenController.dispose();
     _dispose();
   }
 
@@ -139,7 +143,7 @@ class _State extends State<JoinChannelVideo> {
 
   Future<void> _joinChannel() async {
     await _engine.joinChannel(
-      token: config.token,
+      token: _tokenController.text.isEmpty ? config.token : _tokenController.text,
       channelId: _controller.text,
       uid: config.uid,
       options: ChannelMediaOptions(
@@ -291,6 +295,11 @@ class _State extends State<JoinChannelVideo> {
             TextField(
               controller: _controller,
               decoration: const InputDecoration(hintText: 'Channel ID'),
+            ),
+            const SizedBox(height: 10),
+            TextField(
+              controller: _tokenController,
+              decoration: const InputDecoration(hintText: 'Token (optional)'),
             ),
             if (!kIsWeb &&
                 (defaultTargetPlatform == TargetPlatform.android ||

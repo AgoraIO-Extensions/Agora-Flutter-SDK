@@ -279,16 +279,6 @@ jobs:
           ohos_download_url: ${{ secrets.OHOS_CMDLINE_TOOLS_5_0_13_200 }}
           cache: true
 
-      # The ohpm center requires the package size to be less than 10MB which is stupid, and we 
-      # can not find a way to override the ohpm to download the package directly from CDN, so we 
-      # need to preinstall the OHOS SDK manually.
-      # - name: Preinstall RTC OHOS SDK
-      #   if: ${{ matrix.platform == 'ohos' }}
-      #   shell: bash
-      #   working-directory: ohos
-      #   run: |
-      #     bash ./preinstall.sh
-
       - name: Setup signing key for OHOS
         if: ${{ matrix.platform == 'ohos' }}
         working-directory: example/ohos

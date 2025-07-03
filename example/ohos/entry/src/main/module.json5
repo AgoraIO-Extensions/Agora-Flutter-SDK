@@ -34,6 +34,7 @@
         "startWindowIcon": "$media:icon",
         "startWindowBackground": "$color:start_window_background",
         "exported": true,
+        "orientation": "auto_rotation",
         "skills": [
           {
             "entities": [
@@ -47,6 +48,16 @@
       }
     ],
     "requestPermissions": [
+      {
+        "name": "ohos.permission.KEEP_BACKGROUND_RUNNING",
+        "reason": "$string:reason",
+        "usedScene": {
+          "abilities": [
+            "EntryAbility"
+          ],
+          "when": "always"
+        }
+      },
       {
         "name" :  "ohos.permission.INTERNET",
         "reason": "$string:reason",

@@ -205,7 +205,7 @@ export default class AgoraRtcEnginePlugin implements FlutterPlugin, MethodCallHa
   }
 
   onSetupRemoteVideoEx(call: MethodCall) {
-    AgoraLog.i(TAG, 'onSetupRemoteVideoEx');
+    AgoraLog.i(TAG, 'onSetupRemoteVideoEx ' + call.args);
 
     if (this._engine === null) {
       return Constants.ErrorCode.ERR_NOT_INITIALIZED;
@@ -223,7 +223,7 @@ export default class AgoraRtcEnginePlugin implements FlutterPlugin, MethodCallHa
   }
 
   onSetupRemoteVideo(call: MethodCall) {
-    AgoraLog.i(TAG, 'onSetupRemoteVideo');
+    AgoraLog.i(TAG, 'onSetupRemoteVideo ' + call.args);
 
     if (this._engine === null) {
       return Constants.ErrorCode.ERR_NOT_INITIALIZED;
@@ -240,7 +240,7 @@ export default class AgoraRtcEnginePlugin implements FlutterPlugin, MethodCallHa
   }
 
   onSetupLocalVideo(call: MethodCall) {
-    AgoraLog.i(TAG, 'onSetupLocalVideo');
+    AgoraLog.i(TAG, 'onSetupLocalVideo ' + call.args);
 
     if (this._engine === null) {
       return Constants.ErrorCode.ERR_NOT_INITIALIZED;
