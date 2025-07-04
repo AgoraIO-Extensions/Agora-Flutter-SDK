@@ -1,7 +1,7 @@
 import 'dart:io';
 
 import 'package:dart_style/dart_style.dart';
-import 'package:paraphrase/paraphrase.dart';
+import 'package:testcase_gen/core/paraphrase.dart';
 import 'package:path/path.dart' as path;
 import 'package:testcase_gen/generator.dart';
 

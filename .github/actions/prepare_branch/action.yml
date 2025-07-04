@@ -1,0 +1,69 @@
+name: Prepare branch
+description: 'Prepare a branch for the given pub version'
+
+inputs:
+  target_branch:
+    description: 'The target branch to prepare the branch for'
+    required: true
+
+  pub_version:
+    description: 'The pub version to prepare the branch for'
+    required: true
+
+  branch_group:
+    description: 'The group of the branch name, e.g. special or dev, default is special'
+    required: false
+    default: 'special'
+
+  working_directory:
+    description: 'The working directory of the action'
+    required: false
+    default: './'
+
+outputs:
+  final_target_branch:
+    description: 'The final target branch'
+    value: ${{ steps.prepare.outputs.final_target_branch }}
+
+runs:
+  using: composite
+  steps:
+    - name: Prepare branch
+      id: prepare
+      shell: bash
+      working-directory: ${{ inputs.working_directory }}
+      run: |
+        # Fetch all remote refs
+        git fetch --all
+
+        # Function to check if branch exists remotely
+        check_remote_branch() {
+          git ls-remote --heads origin "refs/heads/$1" | grep -q "refs/heads/$1$"
+          return $?
+        }
+
+        # Check if target_branch exists as a remote branch
+        check_remote_branch "${{ inputs.target_branch }}"
+        if [ $? -ne 0 ]; then
+          echo "Target branch does not exist as a remote branch, treating as a commit/tag reference"
+
+          # get pub_version from pubspec.yaml if inputs.pub_version is empty
+          pub_version=${{ inputs.pub_version }}
+          if [ -z "${pub_version}" ]; then
+            pub_version=$(grep 'version: ' pubspec.yaml | sed -e 's,.*: \(.*\),\1,')
+          fi
+
+          final_target_branch=${{ inputs.branch_group }}/${pub_version}
+
+          # create a new branch named "${{ inputs.branch_group }}/${pub_version}" from the reference
+          git checkout -B ${final_target_branch}
+
+          # push the new branch to the remote repository, set the result always as success even if the push failed
+          git push -u origin HEAD:${final_target_branch} || true
+        else
+          echo "Target branch exists as a remote branch"
+          final_target_branch="${{ inputs.target_branch }}"
+          
+        fi
+
+        echo "final_target_branch=${final_target_branch}" >> $GITHUB_OUTPUT
