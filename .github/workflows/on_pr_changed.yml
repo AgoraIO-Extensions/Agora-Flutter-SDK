@@ -1,0 +1,33 @@
+name: 'on: pr changed'
+
+on:
+  pull_request:
+  pull_request_target:
+
+jobs:
+  build_example:
+    name: Build example
+    if: ${{ contains(github.event.pull_request.labels.*.name, 'ci:build_example') }}
+    uses: ./.github/workflows/run_build_example.yml
+    with:
+      target_branch: ${{ github.event.pull_request.head.ref }}
+      issue_number: ${{ github.event.pull_request.number }}
+    secrets:
+      APP_ID: ${{ secrets.APP_ID }}
+      BUILD_PROVISION_PROFILE_UUID: ${{ secrets.BUILD_PROVISION_PROFILE_UUID }}
+      BUILD_PROVISION_PROFILE_NAME: ${{ secrets.BUILD_PROVISION_PROFILE_NAME }}
+      BUILD_PROVISION_PROFILE_TEAMID: ${{ secrets.BUILD_PROVISION_PROFILE_TEAMID }}
+      BUILD_PROVISION_PROFILE_IDENTITY: ${{ secrets.BUILD_PROVISION_PROFILE_IDENTITY }}
+      BUILD_CERTIFICATE_BASE64: ${{ secrets.BUILD_CERTIFICATE_BASE64 }}
+      P12_PASSWORD: ${{ secrets.P12_PASSWORD }}
+      BUILD_PROVISION_PROFILE_BASE64: ${{ secrets.BUILD_PROVISION_PROFILE_BASE64 }}
+      KEYCHAIN_PASSWORD: ${{ secrets.KEYCHAIN_PASSWORD }}
+
+
+  run_test:
+    name: Run test
+    if: ${{ !contains(github.event.pull_request.labels.*.name, 'ci:skip') }}
+    uses: ./.github/workflows/run_test.yml
+    secrets:
+      APP_ID: ${{ secrets.APP_ID }}
+            
