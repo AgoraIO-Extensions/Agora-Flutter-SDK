@@ -60,7 +60,6 @@ parsers:
     package: '@agoraio-extensions/terra_shared_configs'
     args:
       configFilePath: configs/merge_node_list.ts
-      ignoreDefaultConfig: true
 
 renderers:
   - path: renderers/event_handlers_impl_renderer.ts

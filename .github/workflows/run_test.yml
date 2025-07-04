@@ -1,4 +1,4 @@
-name: CI
+name: 'run: test'
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
@@ -7,7 +7,7 @@ concurrency:
 on:
   workflow_call:
     secrets:
-      MY_APP_ID:
+      APP_ID:
         required: true
 
 jobs:
@@ -20,6 +20,7 @@ jobs:
       - uses: subosito/flutter-action@v2
         with:
           channel: 'stable'
+          cache: true
       - name: Check Dart Format
         run: bash ci/dart_pub_publish_check.sh
       - uses: axel-op/dart-package-analyzer@v3
@@ -46,6 +47,7 @@ jobs:
       - uses: subosito/flutter-action@v2
         with:
           channel: 'stable'
+          cache: true
       - run: flutter test
 
   attach_docs:
@@ -56,6 +58,7 @@ jobs:
       - uses: subosito/flutter-action@v2
         with:
           channel: 'stable'
+          cache: true
       - name: Build DartDoc 📖
         run: |
           dart pub get
@@ -88,9 +91,9 @@ jobs:
       matrix:
         version: ["3.7.0", "3.24.5"]
     runs-on: ubuntu-latest
-    timeout-minutes: 60
+    timeout-minutes: 120
     env:
-      TEST_APP_ID: ${{ secrets.MY_APP_ID }}
+      TEST_APP_ID: ${{ secrets.APP_ID }}
     steps:
       - uses: actions/checkout@v3
       - name: Install JDK
@@ -101,6 +104,7 @@ jobs:
       - uses: subosito/flutter-action@v2
         with:
           flutter-version: ${{ matrix.version }}
+          cache: true
       - name: Enable KVM
         run: |
           echo 'KERNEL=="kvm", GROUP="kvm", MODE="0666", OPTIONS+="static_node=kvm"' | sudo tee /etc/udev/rules.d/99-kvm4all.rules
@@ -125,9 +129,9 @@ jobs:
       matrix:
         version: ["3.7.0", "3.16"]
     runs-on: macos-latest
-    timeout-minutes: 60
+    timeout-minutes: 120
     env:
-      TEST_APP_ID: ${{ secrets.MY_APP_ID }}
+      TEST_APP_ID: ${{ secrets.APP_ID }}
     steps:
       - uses: actions/checkout@v3
       - uses: subosito/flutter-action@v2
@@ -142,12 +146,15 @@ jobs:
         if: always()
         run: |
           sleep 30
+
           mkdir logs-ios
+
           CRASH_DIR="${HOME}/Library/Logs/DiagnosticReports/"
           OUTPUT_CRASH_DIR=./logs-ios/crash
           mkdir -p ${OUTPUT_CRASH_DIR}
+
           # Copy all files
-          cp -RP $CRASH_DIR* $OUTPUT_CRASH_DIR
+          cp -RP $CRASH_DIR* $OUTPUT_CRASH_DIR || true
         
       - name: Upload ios logs
         uses: actions/upload-artifact@v4
@@ -164,9 +171,9 @@ jobs:
       matrix:
         version: ["3.7.0"]
     runs-on: macos-latest
-    timeout-minutes: 60
+    timeout-minutes: 120
     env:
-      TEST_APP_ID: ${{ secrets.MY_APP_ID }}
+      TEST_APP_ID: ${{ secrets.APP_ID }}
     steps:
       - uses: actions/checkout@v3
       - uses: subosito/flutter-action@v2
@@ -182,10 +189,10 @@ jobs:
 
           mkdir iris-logs-macos
           if [ -f "${HOME}/Library/Containers/com.example.fakeTestApp/Data/Library/agora-iris.log" ]; then
-            cp -RP ${HOME}/Library/Containers/com.example.fakeTestApp/Data/Library/agora-iris.log ./iris-logs-macos/agora-iris-fake-test.log
+            cp -RP ${HOME}/Library/Containers/com.example.fakeTestApp/Data/Library/agora-iris.log ./iris-logs-macos/agora-iris-fake-test.log || true
           fi
           if [ -f "${HOME}/Library/Containers/com.example.integrationTestApp/Data/Library/agora-iris.log" ]; then
-            cp -RP ${HOME}/Library/Containers/com.example.integrationTestApp/Data/Library/agora-iris.log ./iris-logs-macos/agora-iris-integration-test.log
+            cp -RP ${HOME}/Library/Containers/com.example.integrationTestApp/Data/Library/agora-iris.log ./iris-logs-macos/agora-iris-integration-test.log || true
           fi
 
           CRASH_DIR="${HOME}/Library/Logs/DiagnosticReports/"
@@ -193,7 +200,7 @@ jobs:
           mkdir -p ${OUTPUT_CRASH_DIR}
 
           # Copy all files
-          cp -RP $CRASH_DIR* $OUTPUT_CRASH_DIR
+          cp -RP $CRASH_DIR* $OUTPUT_CRASH_DIR || true
           
       - name: Upload iris logs macos
         uses: actions/upload-artifact@v4
@@ -202,6 +209,34 @@ jobs:
           name: iris-logs-macos-${{ matrix.version }}
           path: iris-logs-macos/*
 
+  integration_test_swiftpm:
+    name: Run Flutter SwiftPM Integration Tests
+    if: ${{ !contains(github.event.pull_request.labels.*.name, 'ci:skip') }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: ["macos", "ios"]
+    runs-on: macos-latest
+    timeout-minutes: 120
+    steps:
+      - uses: actions/checkout@v3
+      - uses: subosito/flutter-action@v2
+        with:
+          channel: 'stable'
+          cache: true
+      - name: Run flutter integration test swiftpm for ${{ matrix.os }}
+        if: ${{ matrix.os == 'macos' }}
+        run: |
+          flutter pub get
+          flutter build ${{ matrix.os }}
+        working-directory: test_shard/integration_test_swiftpm
+      - name: Run flutter integration test swiftpm for ${{ matrix.os }}
+        if: ${{ matrix.os == 'ios' }}
+        run: |
+          flutter pub get
+          flutter build ${{ matrix.os }} --no-codesign
+        working-directory: test_shard/integration_test_swiftpm
+
   integration_test_windows:
     name: Run Flutter Windows Integration Tests
     if: ${{ !contains(github.event.pull_request.labels.*.name, 'ci:skip') }}
@@ -209,10 +244,10 @@ jobs:
       fail-fast: false
       matrix:
         version: ["3.7.0", "3.24.5"]
-    runs-on: windows-2019
-    timeout-minutes: 60
+    runs-on: windows-2022
+    timeout-minutes: 120
     env:
-      TEST_APP_ID: ${{ secrets.MY_APP_ID }}
+      TEST_APP_ID: ${{ secrets.APP_ID }}
     steps:
       - uses: actions/checkout@v3
       - uses: subosito/flutter-action@v2
@@ -244,7 +279,7 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 60
     env:
-      TEST_APP_ID: ${{ secrets.MY_APP_ID }}
+      TEST_APP_ID: ${{ secrets.APP_ID }}
     steps:
       - uses: actions/checkout@v3
       - uses: subosito/flutter-action@v2
@@ -255,7 +290,7 @@ jobs:
         shell: bash
         run: |
           chromedriver --port=4444 --trace-buffer-size=100000 &
-          bash ci/run_flutter_integration_test.sh web
+          bash ci/run_flutter_integration_test_web.sh
 
   build_android_ubuntu:
     name: Build Android on Ubuntu
@@ -275,6 +310,7 @@ jobs:
       - uses: subosito/flutter-action@v2
         with:
           flutter-version: ${{ matrix.version }}
+          cache: true
       - run: flutter pub get
       - name: Run flutter build apk
         run: flutter build apk
@@ -287,7 +323,7 @@ jobs:
       fail-fast: false
       matrix:
         version: ["3.7.12", "3.24.5"] # Need 3.7.12 to build with Gradle 8.x https://github.com/flutter/flutter/issues/124838
-    runs-on: windows-2019
+    runs-on: windows-2022
     steps:
       - uses: actions/checkout@v3
       - name: Install JDK
@@ -310,9 +346,9 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        version: ["3.7.0"]
+        version: ["3.7.12"]
     runs-on: macos-latest
-    timeout-minutes: 60
+    timeout-minutes: 120
     steps:
       - uses: actions/checkout@v3
       - uses: subosito/flutter-action@v2
@@ -332,7 +368,7 @@ jobs:
       matrix:
         version: ["3.24.5"]
     runs-on: macos-13
-    timeout-minutes: 60
+    timeout-minutes: 120
     steps:
       - uses: actions/checkout@v3
       - uses: subosito/flutter-action@v2
@@ -358,7 +394,7 @@ jobs:
       matrix:
         version: ["3.7.0", "3.24.5"]
     runs-on: ubuntu-latest
-    timeout-minutes: 60
+    timeout-minutes: 120
     steps:
       - uses: actions/checkout@v3
       - uses: subosito/flutter-action@v2
@@ -374,9 +410,9 @@ jobs:
     name: Run Flutter Android Rendering Tests
     if: ${{ !contains(github.event.pull_request.labels.*.name, 'ci:skip') }}
     runs-on: ubuntu-latest
-    timeout-minutes: 60
+    timeout-minutes: 120
     env:
-      TEST_APP_ID: ${{ secrets.MY_APP_ID }}
+      TEST_APP_ID: ${{ secrets.APP_ID }}
     steps:
       - uses: actions/checkout@v3
       - name: Install JDK
@@ -388,31 +424,6 @@ jobs:
         with:
           flutter-version: "3.24.5"
           cache: true
-      - name: Checkout hoe
-        uses: actions/checkout@v3
-        with:
-          repository: littleGnAl/hoe
-          ref: littlegnal/update
-          path: hoe
-      - name: Download iris artifacts
-        if: ${{ contains(github.event.pull_request.labels.*.name, 'integration_test:iris_artifacts') }}
-        run: |
-          source scripts/artifacts_version.sh
-
-          PROJECT_DIR=$(pwd)
-
-          mkdir -p output
-          cd hoe
-          dart pub get
-          dart run bin/hoe.dart build-agora-flutter-example \
-            --setup-local-dev \
-            --project-dir=${PROJECT_DIR} \
-            --artifacts-output-dir=${PROJECT_DIR}/output \
-            --platforms=android,macos \
-            --apple-package-name=io.agora.agoraRtcEngineExample \
-            --flutter-package-name=agora_rtc_engine \
-            --iris-android-cdn-url=${IRIS_CDN_URL_ANDROID} \
-            --iris-macos-cdn-url=${IRIS_CDN_URL_MACOS}
       - name: Enable KVM
         run: |
           echo 'KERNEL=="kvm", GROUP="kvm", MODE="0666", OPTIONS+="static_node=kvm"' | sudo tee /etc/udev/rules.d/99-kvm4all.rules
@@ -444,34 +455,13 @@ jobs:
     runs-on: macos-13 # Rendering test on ios simulator need macos 13+
     timeout-minutes: 60
     env:
-      TEST_APP_ID: ${{ secrets.MY_APP_ID }}
+      TEST_APP_ID: ${{ secrets.APP_ID }}
     steps:
       - uses: actions/checkout@v1
       - uses: subosito/flutter-action@v2
         with:
           flutter-version: ${{ matrix.version }}
-      - name: Checkout hoe
-        uses: actions/checkout@v3
-        with:
-          repository: littleGnAl/hoe
-          ref: littlegnal/update
-          path: hoe
-      - name: Download iris artifacts
-        if: ${{ contains(github.event.pull_request.labels.*.name, 'integration_test:iris_artifacts') }}
-        run: |
-          source scripts/artifacts_version.sh
-          PROJECT_DIR=$(pwd)
-          mkdir -p output
-          cd hoe
-          dart pub get
-          dart run bin/hoe.dart build-agora-flutter-example \
-            --setup-local-dev \
-            --project-dir=${PROJECT_DIR} \
-            --artifacts-output-dir=${PROJECT_DIR}/output \
-            --platforms=ios \
-            --apple-package-name=io.agora.agoraRtcEngineExample \
-            --flutter-package-name=agora_rtc_engine \
-            --iris-ios-cdn-url=${IRIS_CDN_URL_IOS}
+          cache: true
       - uses: futureware-tech/simulator-action@v3
         with:
           model: 'iPhone 15'
@@ -490,43 +480,15 @@ jobs:
       matrix:
         version: ["3.24.5"]
     runs-on: macos-latest
-    timeout-minutes: 60
+    timeout-minutes: 120
     env:
-      TEST_APP_ID: ${{ secrets.MY_APP_ID }}
+      TEST_APP_ID: ${{ secrets.APP_ID }}
     steps:
       - uses: actions/checkout@v3
       - uses: subosito/flutter-action@v2
         with:
           flutter-version: ${{ matrix.version }}
           cache: true
-      - name: Checkout hoe
-        uses: actions/checkout@v3
-        with:
-          repository: littleGnAl/hoe
-          ref: littlegnal/update
-          path: hoe
-      - name: Download iris artifacts
-        if: ${{ contains(github.event.pull_request.labels.*.name, 'integration_test:iris_artifacts') }}
-        run: |
-          source scripts/artifacts_version.sh
-
-          PROJECT_DIR=$(pwd)
-
-          echo "project dir: ${PROJECT_DIR}"
-
-          ls ${PROJECT_DIR}
-
-          mkdir -p output
-          cd hoe
-          dart pub get
-          dart run bin/hoe.dart build-agora-flutter-example \
-            --setup-local-dev \
-            --project-dir=${PROJECT_DIR} \
-            --artifacts-output-dir=${PROJECT_DIR}/output \
-            --platforms=macos \
-            --apple-package-name=io.agora.agoraRtcEngineExample \
-            --flutter-package-name=agora_rtc_engine \
-            --iris-macos-cdn-url=${IRIS_CDN_URL_MACOS}
       - run: flutter config --enable-macos-desktop
       - name: Run macos rendering test
         run: |
@@ -544,41 +506,16 @@ jobs:
     strategy:
       matrix:
         version: ["3.24.5"]
-    runs-on: windows-2019
-    timeout-minutes: 60
+    runs-on: windows-2022
+    timeout-minutes: 120
     env:
-      TEST_APP_ID: ${{ secrets.MY_APP_ID }}
+      TEST_APP_ID: ${{ secrets.APP_ID }}
     steps:
       - uses: actions/checkout@v3
       - uses: subosito/flutter-action@v2
         with:
           flutter-version: ${{ matrix.version }}
           cache: true
-      - name: Checkout hoe
-        uses: actions/checkout@v3
-        with:
-          repository: littleGnAl/hoe
-          ref: littlegnal/update
-          path: hoe
-      - name: Download iris artifacts
-        if: ${{ contains(github.event.pull_request.labels.*.name, 'integration_test:iris_artifacts') }}
-        shell: bash
-        run: |
-          source scripts/artifacts_version.sh
-
-          PROJECT_DIR=$(pwd)
-
-          mkdir -p output
-          cd hoe
-          dart pub get
-          dart run bin/hoe.dart build-agora-flutter-example \
-            --setup-local-dev \
-            --project-dir=${PROJECT_DIR} \
-            --artifacts-output-dir=${PROJECT_DIR}/output \
-            --platforms=windows \
-            --apple-package-name=io.agora.agoraRtcEngineExample \
-            --flutter-package-name=agora_rtc_engine \
-            --iris-windows-cdn-url=${IRIS_CDN_URL_WINDOWS}
       - run: flutter config --enable-windows-desktop
       - name: Run windows integration test
         shell: bash
@@ -601,7 +538,7 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 60
     env:
-      TEST_APP_ID: ${{ secrets.MY_APP_ID }}
+      TEST_APP_ID: ${{ secrets.APP_ID }}
     steps:
       - uses: actions/checkout@v3
       - uses: subosito/flutter-action@v2

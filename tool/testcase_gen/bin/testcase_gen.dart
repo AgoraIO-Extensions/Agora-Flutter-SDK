@@ -1,7 +1,7 @@
 import 'dart:io';
 
 import 'package:args/args.dart';
-import 'package:paraphrase/paraphrase.dart';
+import 'package:testcase_gen/core/paraphrase.dart';
 import 'package:testcase_gen/generator.dart';
 import 'package:testcase_gen/media_recorder_observer_somke_test_generator.dart';
 import 'package:testcase_gen/rtc_channel_event_handler_smoke_test_generator.dart';
