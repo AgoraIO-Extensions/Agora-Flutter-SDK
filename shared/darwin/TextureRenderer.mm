@@ -1,4 +1,5 @@
 #import "TextureRenderer.h"
+#import "AgoraCVPixelBufferUtils.h"
 
 #import <AgoraRtcKit/AgoraMediaBase.h>
 #import <AgoraRtcKit/IAgoraMediaEngine.h>
@@ -95,10 +96,16 @@ public:
     // properties.
     dispatch_sync(strongRenderer.pixelBufferSynchronizationQueue, ^{
       previousPixelBuffer = strongRenderer.latestPixelBuffer;
-      strongRenderer.latestPixelBuffer = CVPixelBufferRetain(pixelBuffer);
+      // There has been a bug since RTC 4.4.0 that the pixel buffer ref count is
+      // not updated correctly, which will cause the flutter engine copy the
+      // wrong pixel buffer to the skia texture. So we need to copy the pixel
+      // buffer directly to work around this issue for now, after the issue is
+      // fixed, we can revert to the original code.
+      strongRenderer.latestPixelBuffer =
+          [AgoraCVPixelBufferUtils copyCVPixelBuffer:pixelBuffer];
     });
     if (previousPixelBuffer) {
-      CFRelease(previousPixelBuffer);
+      CVPixelBufferRelease(previousPixelBuffer);
     }
 
     // notify new frame available on main thread
