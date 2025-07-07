@@ -696,7 +696,7 @@ class NativeTextureRenderer final
       agora::iris::IrisRtcRendering *iris_rtc_rendering, unsigned int uid,
       const char *channel_id, int video_source_type, int video_view_setup_mode)
       : jvm_(nullptr), iris_rtc_rendering_(iris_rtc_rendering), width_(0),
-        height_(0) {
+        height_(0), last_frame_time_ms_(0) {
     env->GetJavaVM(&jvm_);
     j_iris_renderer_obj_ = env->NewGlobalRef(j_iris_renderer_obj);
     jclass j_caller_class = env->GetObjectClass(j_iris_renderer_obj_);
@@ -737,6 +737,14 @@ class NativeTextureRenderer final
         static_cast<const agora::media::base::VideoFrame *>(videoFrame);
 
     if (video_frame->width == 0 || video_frame->height == 0) { return; }
+
+    if (video_frame->renderTimeMs < last_frame_time_ms_) {
+      LOGCATE("Frame dropped: current time %lld ms, last frame time %lld ms",
+              video_frame->renderTimeMs, last_frame_time_ms_);
+      return;
+    }
+
+    last_frame_time_ms_ = video_frame->renderTimeMs;
 
     if (width_ != video_frame->width || height_ != video_frame->height) {
       NotifySizeChangeCallback(video_frame->width, video_frame->height);
@@ -833,6 +841,8 @@ class NativeTextureRenderer final
   int height_;
 
   int delegate_id_;
+
+  int64_t last_frame_time_ms_;
 
   std::shared_ptr<GLContext> gl_context_;
   std::unique_ptr<RenderingOp> rendering_op_;
