@@ -33,7 +33,7 @@ class RendererDelegate : public std::enable_shared_from_this<RendererDelegate>,
 public:
   RendererDelegate(void *renderer)
       : renderer_(((__bridge TextureRender *)renderer)), pre_width_(0),
-        pre_height_(0) {}
+        pre_height_(0), last_frame_time_ms_(0) {}
 
   void OnVideoFrameReceived(const void *videoFrame,
                             const IrisRtcVideoFrameConfig &config,
@@ -51,6 +51,14 @@ public:
     if (vf->width == 0 || vf->height == 0) {
       return;
     }
+
+    if (vf->renderTimeMs < last_frame_time_ms_) {
+      NSLog(@"Frame dropped: current time %@ ms, last frame time %@ ms",
+            @(vf->renderTimeMs), @(last_frame_time_ms_));
+      return;
+    }
+
+    last_frame_time_ms_ = vf->renderTimeMs;
 
     CVPixelBufferRef _Nullable pixelBuffer =
         reinterpret_cast<CVPixelBufferRef>(vf->pixelBuffer);
@@ -128,6 +136,7 @@ public:
   __weak TextureRender *renderer_;
   int pre_width_;
   int pre_height_;
+  int64_t last_frame_time_ms_;
 };
 } // namespace
 
