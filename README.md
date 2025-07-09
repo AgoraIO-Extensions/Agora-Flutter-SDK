@@ -1,3 +1,5 @@
+> ⚠️ **Important Notice**: To better serve our developer community with high-quality technical support, we have transitioned our support system from GitHub issues to our official support channels. For technical assistance, please submit a ticket through [Agora Support](https://www.agora.io/en/customer-support/). Our dedicated technical support team will provide prompt and professional help to resolve your issues.
+
 # agora_rtc_engine
 
 <p align="center">
