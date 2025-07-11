@@ -6,13 +6,15 @@ concurrency:
 
 on:
   workflow_call:
+    inputs:
+      flutter-versions:
+        description: 'Flutter versions to test (JSON array)'
+        required: false
+        default: '["3.32.5"]'
+        type: string
     secrets:
       APP_ID:
         required: true
-
-env:
-  PRIMARY_FLUTTER_VERSIONS: '["3.32.5"]'  # 主要测试版本
-  LATEST_FLUTTER_VERSION: "3.32.6"                  # 最新版本
 
 jobs:
   flutter_codestyle_check:
@@ -94,7 +96,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        version: ${{ fromJSON(env.PRIMARY_FLUTTER_VERSIONS) }}
+        version: ${{ fromJSON(inputs.flutter-versions) }}
     runs-on: ubuntu-latest
     timeout-minutes: 120
     env:
@@ -132,7 +134,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        version: ${{ fromJSON(env.PRIMARY_FLUTTER_VERSIONS) }}
+        version: ${{ fromJSON(inputs.flutter-versions) }}
     runs-on: macos-latest
     timeout-minutes: 120
     env:
@@ -174,7 +176,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        version: ${{ fromJSON(env.PRIMARY_FLUTTER_VERSIONS) }}
+        version: ${{ fromJSON(inputs.flutter-versions) }}
     runs-on: macos-latest
     timeout-minutes: 120
     env:
@@ -248,7 +250,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        version: ${{ fromJSON(env.PRIMARY_FLUTTER_VERSIONS) }}
+        version: ${{ fromJSON(inputs.flutter-versions) }}
     runs-on: windows-2022
     timeout-minutes: 120
     env:
@@ -281,7 +283,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        version: ${{ fromJSON(env.PRIMARY_FLUTTER_VERSIONS) }}
+        version: ${{ fromJSON(inputs.flutter-versions) }}
     runs-on: ubuntu-latest
     timeout-minutes: 60
     env:
@@ -304,7 +306,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        version: ${{ fromJSON(env.PRIMARY_FLUTTER_VERSIONS) }}
+        version: ${{ fromJSON(inputs.flutter-versions) }}
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
@@ -328,7 +330,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        version: ${{ fromJSON(env.PRIMARY_FLUTTER_VERSIONS) }}
+        version: ${{ fromJSON(inputs.flutter-versions) }}
     runs-on: windows-2022
     steps:
       - uses: actions/checkout@v3
@@ -352,7 +354,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        version: ${{ fromJSON(env.PRIMARY_FLUTTER_VERSIONS) }}
+        version: ${{ fromJSON(inputs.flutter-versions) }}
     runs-on: macos-latest
     timeout-minutes: 120
     steps:
@@ -373,7 +375,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        version: ${{ fromJSON(env.PRIMARY_FLUTTER_VERSIONS) }}
+        version: ${{ fromJSON(inputs.flutter-versions) }}
     runs-on: macos-13
     timeout-minutes: 120
     steps:
@@ -399,7 +401,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        version: ${{ fromJSON(env.PRIMARY_FLUTTER_VERSIONS) }}
+        version: ${{ fromJSON(inputs.flutter-versions) }}
     runs-on: ubuntu-latest
     timeout-minutes: 120
     steps:
@@ -419,7 +421,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        version: ${{ fromJSON(env.PRIMARY_FLUTTER_VERSIONS) }}
+        version: ${{ fromJSON(inputs.flutter-versions) }}
     runs-on: ubuntu-latest
     timeout-minutes: 120
     env:
@@ -463,7 +465,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        version: ${{ fromJSON(env.PRIMARY_FLUTTER_VERSIONS) }}
+        version: ${{ fromJSON(inputs.flutter-versions) }}
     runs-on: macos-13 # Rendering test on ios simulator need macos 13+
     timeout-minutes: 60
     env:
@@ -491,7 +493,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        version: ${{ fromJSON(env.PRIMARY_FLUTTER_VERSIONS) }}
+        version: ${{ fromJSON(inputs.flutter-versions) }}
     runs-on: macos-latest
     timeout-minutes: 120
     env:
@@ -519,7 +521,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        version: ${{ fromJSON(env.PRIMARY_FLUTTER_VERSIONS) }}
+        version: ${{ fromJSON(inputs.flutter-versions) }}
     runs-on: windows-2022
     timeout-minutes: 120
     env:
@@ -549,7 +551,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        version: ${{ fromJSON(env.PRIMARY_FLUTTER_VERSIONS) }}
+        version: ${{ fromJSON(inputs.flutter-versions) }}
     runs-on: ubuntu-latest
     timeout-minutes: 60
     env:
@@ -580,7 +582,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        version: ${{ fromJSON(env.PRIMARY_FLUTTER_VERSIONS) }}
+        version: ${{ fromJSON(inputs.flutter-versions) }}
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
