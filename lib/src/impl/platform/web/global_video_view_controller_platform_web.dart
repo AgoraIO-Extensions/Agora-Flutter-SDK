@@ -1,10 +1,9 @@
 import 'dart:async';
 import 'dart:html' as html;
-import 'dart:ui' as ui;
+import 'dart:ui_web' as ui;
 
 import '/agora_rtc_engine.dart';
 import '/src/impl/platform/global_video_view_controller_platform.dart';
-import 'package:iris_method_channel/iris_method_channel.dart';
 
 // ignore_for_file: public_member_api_docs
 
@@ -47,8 +46,7 @@ final Map<int, _View> _viewMap = {};
 
 class GlobalVideoViewControllerWeb extends GlobalVideoViewControllerPlatfrom {
   GlobalVideoViewControllerWeb(
-      IrisMethodChannel irisMethodChannel, RtcEngine rtcEngine)
-      : super(irisMethodChannel, rtcEngine) {
+      super.irisMethodChannel, super.rtcEngine) {
     // ignore: undefined_prefixed_name
     ui.platformViewRegistry.registerViewFactory(_platformRendererViewType,
         (int viewId) {
