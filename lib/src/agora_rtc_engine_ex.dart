@@ -148,9 +148,7 @@ abstract class RtcEngineEx implements RtcEngine {
   /// The SDK will dynamically adjust the size of the corresponding video stream based on the size of the video window to save bandwidth and computing resources. The default aspect ratio of the low-quality video stream is the same as that of the high-quality video stream. According to the current aspect ratio of the high-quality video stream, the system will automatically allocate the resolution, frame rate, and bitrate of the low-quality video stream. Depending on the default behavior of the sender and the specific settings when calling setDualStreamMode, the scenarios for the receiver calling this method are as follows:
   ///  The SDK enables low-quality video stream adaptive mode (autoSimulcastStream) on the sender side by default, meaning only the high-quality video stream is transmitted. Only the receiver with the role of the host can call this method to initiate a low-quality video stream request. Once the sender receives the request, it starts automatically sending the low-quality video stream. At this point, all users in the channel can call this method to switch to low-quality video stream subscription mode.
   ///  If the sender calls setDualStreamMode and sets mode to disableSimulcastStream (never send low-quality video stream), then calling this method will have no effect.
-  ///  If the sender calls setDualStreamMode and sets mode to enableSimulcastStream (always send low-quality video stream), both the host and audience receivers can call this method to switch to low-quality video stream subscription mode.
-  ///  If the publisher has already called setDualStreamModeEx and set mode to disableSimulcastStream (never send low-quality video stream), calling this method will not take effect, you should call setDualStreamModeEx again on the sending end and adjust the settings.
-  ///  Calling this method on the receiving end of the audience role will not take effect.
+  ///  If the sender calls setDualStreamMode and sets mode to enableSimulcastStream (always send low-quality video stream), both the host and audience receivers can call this method to switch to low-quality video stream subscription mode. If the publisher has already called setDualStreamModeEx and set mode to disableSimulcastStream (never send low-quality video stream), calling this method will not take effect, you should call setDualStreamModeEx again on the sending end and adjust the settings.
   ///
   /// * [uid] The user ID.
   /// * [streamType] The video stream type, see VideoStreamType.
@@ -725,8 +723,8 @@ abstract class RtcEngineEx implements RtcEngine {
 
   /// Enables tracing the video frame rendering process.
   ///
-  /// The SDK automatically starts tracking the rendering events of the video from the moment that you call joinChannel to join the channel. You can call this method at an appropriate time according to the actual application scenario to customize the tracing process.
-  ///  After the local user leaves the current channel, the SDK automatically resets the time point to the next time when the user successfully joins the channel. The SDK starts tracing the rendering status of the video frames in the channel from the moment this method is successfully called and reports information about the event through the onVideoRenderingTracingResult callback.
+  /// If you have not called this method, the SDK tracks the rendering events of the video frames from the moment you call joinChannel to join the channel. You can call this method at an appropriate time according to the actual application scenario to set the starting position for tracking video rendering events.
+  ///  After the local user leaves the current channel, the SDK automatically tracks the video rendering events from the moment you join a channel. The SDK starts tracing the rendering status of the video frames in the channel from the moment this method is successfully called and reports information about the event through the onVideoRenderingTracingResult callback.
   ///
   /// * [connection] The connection information. See RtcConnection.
   ///
