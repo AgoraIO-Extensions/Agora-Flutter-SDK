@@ -6,7 +6,7 @@ import FlutterMacOS
 import Foundation
 
 import agora_rtc_engine
-import path_provider_macos
+import path_provider_foundation
 
 func RegisterGeneratedPlugins(registry: FlutterPluginRegistry) {
   AgoraRtcEnginePlugin.register(with: registry.registrar(forPlugin: "AgoraRtcEnginePlugin"))
