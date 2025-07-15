@@ -16,6 +16,12 @@ allprojects {
         google()
         jcenter()
     }
+
+    // 移除所有子项目的-Werror参数
+    tasks.withType(JavaCompile).configureEach {
+        options.compilerArgs.removeAll { it == "-Werror" }
+        options.compilerArgs << "-Xlint:-options"
+    }
 }
 
 rootProject.buildDir = '../build'
