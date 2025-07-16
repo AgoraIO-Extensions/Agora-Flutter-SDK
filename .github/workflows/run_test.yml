@@ -91,7 +91,7 @@ jobs:
       - run: bash ci/dart_pub_publish_check.sh
 
   integration_test_android:
-    name: Run Flutter Android Integration Tests (Flutter ${{ matrix.version }})
+    name: Run Flutter Android Integration Tests ( ${{ matrix.version }})
     if: ${{ !contains(github.event.pull_request.labels.*.name, 'ci:skip') }}
     strategy:
       fail-fast: false
@@ -129,7 +129,7 @@ jobs:
           script: bash ci/run_flutter_integration_test_android.sh
 
   integration_test_ios:
-    name: Run Flutter iOS Integration Tests (Flutter ${{ matrix.version }})
+    name: Run Flutter iOS Integration Tests ( ${{ matrix.version }})
     if: ${{ !contains(github.event.pull_request.labels.*.name, 'ci:skip') }}
     strategy:
       fail-fast: false
@@ -171,7 +171,7 @@ jobs:
           path: logs-ios/*
 
   integration_test_macos:
-    name: Run Flutter macOS Integration Tests (Flutter ${{ matrix.version }})
+    name: Run Flutter macOS Integration Tests ( ${{ matrix.version }})
     if: ${{ !contains(github.event.pull_request.labels.*.name, 'ci:skip') }}
     strategy:
       fail-fast: false
@@ -245,7 +245,7 @@ jobs:
         working-directory: test_shard/integration_test_swiftpm
 
   integration_test_windows:
-    name: Run Flutter Windows Integration Tests (Flutter ${{ matrix.version }})
+    name: Run Flutter Windows Integration Tests ( ${{ matrix.version }})
     if: ${{ !contains(github.event.pull_request.labels.*.name, 'ci:skip') }}
     strategy:
       fail-fast: false
@@ -278,7 +278,7 @@ jobs:
           path: ./CrashDumps/*
 
   integration_test_web:
-    name: Run Flutter Web Integration Tests (Flutter ${{ matrix.version }})
+    name: Run Flutter Web Integration Tests ( ${{ matrix.version }})
     if: ${{ !contains(github.event.pull_request.labels.*.name, 'ci:skip') }}
     strategy:
       fail-fast: false
@@ -301,7 +301,7 @@ jobs:
           bash ci/run_flutter_integration_test_web.sh
 
   build_android_ubuntu:
-    name: Build Android on Ubuntu (Flutter ${{ matrix.version }})
+    name: Build Android on Ubuntu ( ${{ matrix.version }})
     if: ${{ !contains(github.event.pull_request.labels.*.name, 'ci:skip') }}
     strategy:
       fail-fast: false
@@ -325,7 +325,7 @@ jobs:
         working-directory: example
 
   build_android_windows:
-    name: Build Android on Windows (Flutter ${{ matrix.version }})
+    name: Build Android on Windows ( ${{ matrix.version }})
     if: ${{ !contains(github.event.pull_request.labels.*.name, 'ci:skip') }}
     strategy:
       fail-fast: false
@@ -349,7 +349,7 @@ jobs:
         working-directory: example
 
   build_ios:
-    name: Build iOS (Flutter ${{ matrix.version }})
+    name: Build iOS ( ${{ matrix.version }})
     if: ${{ !contains(github.event.pull_request.labels.*.name, 'ci:skip') }}
     strategy:
       fail-fast: false
@@ -370,7 +370,7 @@ jobs:
 
   # This job aim to cover https://github.com/flutter/flutter/issues/135739
   build_ios_xcode_15:
-    name: Build iOS with xcode 15.x (Flutter ${{ matrix.version }})
+    name: Build iOS with xcode 15.x ( ${{ matrix.version }})
     if: ${{ !contains(github.event.pull_request.labels.*.name, 'ci:skip') }}
     strategy:
       fail-fast: false
@@ -396,7 +396,7 @@ jobs:
         working-directory: example
 
   build_web:
-    name: Build Web (Flutter ${{ matrix.version }})
+    name: Build Web ( ${{ matrix.version }})
     if: ${{ !contains(github.event.pull_request.labels.*.name, 'ci:skip') }}
     strategy:
       fail-fast: false
@@ -426,6 +426,8 @@ jobs:
     timeout-minutes: 120
     env:
       TEST_APP_ID: ${{ secrets.APP_ID }}
+      GRADLE_OPTS: "-Xmx4096M -XX:+HeapDumpOnOutOfMemoryError -Dfile.encoding=UTF-8"
+      ORG_GRADLE_PROJECT_GRADLE_OPTS: "-Xmx4096M -XX:+HeapDumpOnOutOfMemoryError -Dfile.encoding=UTF-8"
     steps:
       - uses: actions/checkout@v3
       - name: Install JDK
@@ -460,7 +462,7 @@ jobs:
           path: test_shard/rendering_test/screenshot/*.debug.png
 
   rendering_test_ios:
-    name: Run Flutter iOS Rendering Tests (Flutter ${{ matrix.version }})
+    name: Run Flutter iOS Rendering Tests ( ${{ matrix.version }})
     if: ${{ !contains(github.event.pull_request.labels.*.name, 'ci:skip') }}
     strategy:
       fail-fast: false
@@ -488,7 +490,7 @@ jobs:
           path: test_shard/rendering_test/screenshot/*.debug.png
 
   rendering_test_macos:
-    name: Run Flutter macOS Rendering Tests (Flutter ${{ matrix.version }})
+    name: Run Flutter macOS Rendering Tests ( ${{ matrix.version }})
     if: ${{ !contains(github.event.pull_request.labels.*.name, 'ci:skip') }}
     strategy:
       fail-fast: false
@@ -516,7 +518,7 @@ jobs:
           path: test_shard/rendering_test/screenshot/*.debug.png
 
   rendering_test_windows:
-    name: Run Flutter Windows Rendering Tests (Flutter ${{ matrix.version }})
+    name: Run Flutter Windows Rendering Tests ( ${{ matrix.version }})
     if: ${{ !contains(github.event.pull_request.labels.*.name, 'ci:skip') }}
     strategy:
       fail-fast: false
@@ -546,7 +548,7 @@ jobs:
           path: test_shard/rendering_test/screenshot/*.debug.png
 
   rendering_test_web:
-    name: Run Flutter Web Rendering Tests (Flutter ${{ matrix.version }})
+    name: Run Flutter Web Rendering Tests ( ${{ matrix.version }})
     if: ${{ !contains(github.event.pull_request.labels.*.name, 'ci:skip') }}
     strategy:
       fail-fast: false
@@ -577,7 +579,7 @@ jobs:
           path: test_shard/rendering_test/screenshot/*.debug.png
 
   check_android15_16k_page_alignment:
-    name: Check android15 16k page size alignment (Flutter ${{ matrix.version }})
+    name: Check android15 16k page size alignment ( ${{ matrix.version }})
     if: ${{ !contains(github.event.pull_request.labels.*.name, 'ci:skip') }}
     strategy:
       fail-fast: false
