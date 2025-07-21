@@ -3,6 +3,7 @@ import 'dart:io';
 
 import 'package:agora_rtc_engine/agora_rtc_engine.dart';
 import 'package:agora_rtc_engine/src/impl/media_player_controller_impl.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:integration_test/integration_test.dart';
 
@@ -26,7 +27,23 @@ class TestMediaPlayerController extends MediaPlayerControllerImpl {
   @override
   bool get shouldHandlerRenderMode => true;
 }
+/// 辅助函数：执行截图操作并延迟dispose
+Future<String> takeScreenshotAndDelayDispose(
+  IntegrationTestWidgetsFlutterBinding binding,
+  WidgetTester tester,
+  String screenshotName,
+) async {
+  await binding.takeScreenshot(screenshotName);
+  
+  // 构建截图文件路径
+  final screenshotPath = 'screenshot/$screenshotName.png';
+  debugPrint('Screenshot saved to: $screenshotPath');
 
+  // 延迟一段时间再执行dispose，确保截图操作完成
+  await Future.delayed(const Duration(seconds: 2));
+
+  return screenshotPath;
+}
 void main() {
   final binding = IntegrationTestWidgetsFlutterBinding.ensureInitialized();
 
@@ -38,6 +55,10 @@ void main() {
           testWidgets(
             'render mode default',
             (WidgetTester tester) async {
+          debugPrint(
+            'Test started: Android flutter texture local rendering with default render mode',
+          ); // 新增：测试开始日志
+
               final onFrameCompleter = Completer();
               final RtcEngineEx rtcEngine = createAgoraRtcEngineEx();
 
@@ -56,6 +77,9 @@ void main() {
                     );
                   },
                   onFirstFrame: () async {
+                debugPrint(
+                  'onFirstFrame triggered at ${DateTime.now()}',
+                ); // 新增：onFirstFrame 回调触发日志
                     if (!onFrameCompleter.isCompleted) {
                       await rtcEngine.startPreview(
                           sourceType: VideoSourceType.videoSourceCustom);
@@ -73,10 +97,23 @@ void main() {
               // Trigger a frame.
               await tester.pumpAndSettle();
 
-              await binding.takeScreenshot(
-                  'android.agora_video_view_render.texture.local.with_default_rendermode');
+          debugPrint(
+            'Taking screenshot: android.agora_video_view_render.texture.local.with_default_rendermode',
+          ); // 新增：截图前日志
 
+          final screenshotPath = await takeScreenshotAndDelayDispose(
+            binding,
+            tester,
+            'android.agora_video_view_render.texture.local.with_default_rendermode',
+          );
+          debugPrint('Screenshot saved to: $screenshotPath');
+          debugPrint('waitDisposed start');
               await waitDisposed(tester, binding);
+          debugPrint('waitDisposed end');
+
+          debugPrint(
+            'Test ended: Android flutter texture local rendering with default render mode',
+          ); // 新增：测试结束日志
             },
           );
 
@@ -119,8 +156,11 @@ void main() {
               // Trigger a frame.
               await tester.pumpAndSettle();
 
-              await binding.takeScreenshot(
-                  'android.agora_video_view_render.texture.local.with_rendermodehidden');
+          final screenshotPath = await takeScreenshotAndDelayDispose(
+            binding,
+            tester,
+            'android.agora_video_view_render.texture.local.with_rendermodehidden',
+          );
 
               await waitDisposed(tester, binding);
             },
@@ -165,8 +205,11 @@ void main() {
               // Trigger a frame.
               await tester.pumpAndSettle();
 
-              await binding.takeScreenshot(
-                  'android.agora_video_view_render.texture.local.with_rendermodefit');
+          final screenshotPath = await takeScreenshotAndDelayDispose(
+            binding,
+            tester,
+            'android.agora_video_view_render.texture.local.with_rendermodefit',
+          );
 
               await waitDisposed(tester, binding);
             },
@@ -211,8 +254,11 @@ void main() {
               // Trigger a frame.
               await tester.pumpAndSettle();
 
-              await binding.takeScreenshot(
-                  'android.agora_video_view_render.texture.local.with_rendermodeadaptive');
+          final screenshotPath = await takeScreenshotAndDelayDispose(
+            binding,
+            tester,
+            'android.agora_video_view_render.texture.local.with_rendermodeadaptive',
+          );
 
               await waitDisposed(tester, binding);
             },
@@ -257,8 +303,11 @@ void main() {
               // Trigger a frame.
               await tester.pumpAndSettle();
 
-              await binding.takeScreenshot(
-                  'android.agora_video_view_render.texture.local.with_default_rendermode.with_videomirrormodedisabled');
+          final screenshotPath = await takeScreenshotAndDelayDispose(
+            binding,
+            tester,
+            'android.agora_video_view_render.texture.local.with_default_rendermode.with_videomirrormodedisabled',
+          );
 
               await waitDisposed(tester, binding);
             },
@@ -303,8 +352,11 @@ void main() {
               // Trigger a frame.
               await tester.pumpAndSettle();
 
-              await binding.takeScreenshot(
-                  'android.agora_video_view_render.texture.remote.with_default_rendermode');
+          final screenshotPath = await takeScreenshotAndDelayDispose(
+            binding,
+            tester,
+            'android.agora_video_view_render.texture.remote.with_default_rendermode',
+          );
 
               await waitDisposed(tester, binding);
             },
@@ -348,8 +400,11 @@ void main() {
               // Trigger a frame.
               await tester.pumpAndSettle();
 
-              await binding.takeScreenshot(
-                  'android.agora_video_view_render.texture.remote.with_rendermodehidden');
+          final screenshotPath = await takeScreenshotAndDelayDispose(
+            binding,
+            tester,
+            'android.agora_video_view_render.texture.remote.with_rendermodehidden',
+          );
 
               await waitDisposed(tester, binding);
             },
@@ -393,8 +448,11 @@ void main() {
               // Trigger a frame.
               await tester.pumpAndSettle();
 
-              await binding.takeScreenshot(
-                  'android.agora_video_view_render.texture.remote.with_rendermodefit');
+          final screenshotPath = await takeScreenshotAndDelayDispose(
+            binding,
+            tester,
+            'android.agora_video_view_render.texture.remote.with_rendermodefit',
+          );
 
               await waitDisposed(tester, binding);
             },
@@ -438,8 +496,11 @@ void main() {
               // Trigger a frame.
               await tester.pumpAndSettle();
 
-              await binding.takeScreenshot(
-                  'android.agora_video_view_render.texture.remote.with_rendermodeadaptive');
+          final screenshotPath = await takeScreenshotAndDelayDispose(
+            binding,
+            tester,
+            'android.agora_video_view_render.texture.remote.with_rendermodeadaptive',
+          );
 
               await waitDisposed(tester, binding);
             },
@@ -484,8 +545,11 @@ void main() {
               // Trigger a frame.
               await tester.pumpAndSettle();
 
-              await binding.takeScreenshot(
-                  'android.agora_video_view_render.texture.remote.with_default_rendermodede.with_videoMirrorModeEnabled');
+          final screenshotPath = await takeScreenshotAndDelayDispose(
+            binding,
+            tester,
+            'android.agora_video_view_render.texture.remote.with_default_rendermodede.with_videoMirrorModeEnabled',
+          );
 
               await waitDisposed(tester, binding);
             },
