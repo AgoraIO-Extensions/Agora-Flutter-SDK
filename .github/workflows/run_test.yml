@@ -426,8 +426,8 @@ jobs:
     timeout-minutes: 120
     env:
       TEST_APP_ID: ${{ secrets.APP_ID }}
-      GRADLE_OPTS: "-Xmx4096M -XX:+HeapDumpOnOutOfMemoryError -Dfile.encoding=UTF-8"
-      ORG_GRADLE_PROJECT_GRADLE_OPTS: "-Xmx4096M -XX:+HeapDumpOnOutOfMemoryError -Dfile.encoding=UTF-8"
+      GRADLE_OPTS: "-Xmx16384M -XX:+HeapDumpOnOutOfMemoryError -Dfile.encoding=UTF-8"
+      ORG_GRADLE_PROJECT_GRADLE_OPTS: "-Xmx8192M -XX:+HeapDumpOnOutOfMemoryError -Dfile.encoding=UTF-8"
     steps:
       - uses: actions/checkout@v3
       - name: Install JDK
@@ -450,9 +450,9 @@ jobs:
           api-level: 31
           arch: x86_64
           profile: pixel_5
-          ram-size: 2048M
-          heap-size: 4096M
-          disk-size: 8192M
+          ram-size: 4096M
+          heap-size: 8192M
+          disk-size: 16384M
           script: bash ci/rendering_test_android.sh
 
       - uses: actions/upload-artifact@v4
