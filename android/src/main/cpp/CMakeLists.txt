@@ -30,7 +30,9 @@ target_link_libraries(${LIBRARY_NAME}
 
 # Support Android 15 16k page size
 if (${ANDROID_ABI} STREQUAL "arm64-v8a" OR ${ANDROID_ABI} STREQUAL "x86_64")
-  target_link_libraries(${LIBRARY_NAME} PRIVATE "-Wl,-z,max-page-size=16384")
+  set_target_properties(${LIBRARY_NAME} PROPERTIES 
+         LINK_FLAGS "-Wl,-z,max-page-size=16384"
+  )
 
   # https://github.com/llvm/llvm-project/pull/66042
   # the default linker is llvm lld since ndk r22, and gnu ld is used before ndk r22
