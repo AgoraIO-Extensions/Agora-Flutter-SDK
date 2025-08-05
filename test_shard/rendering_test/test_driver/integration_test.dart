@@ -63,6 +63,7 @@ Future<void> main() async {
       //
       // see if we can reduce the result later
       return result < 0.01;
+      return result < 0.05;
     },
   );
 }

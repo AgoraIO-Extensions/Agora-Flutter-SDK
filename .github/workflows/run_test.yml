@@ -6,6 +6,12 @@ concurrency:
 
 on:
   workflow_call:
+    inputs:
+      flutter-versions:
+        description: 'Flutter versions to test (JSON array)'
+        required: false
+        default: '["3.32.5"]'
+        type: string
     secrets:
       APP_ID:
         required: true
@@ -71,6 +77,7 @@ jobs:
         with:
           name: agora_rtc_engine_docs.zip
           path: agora_rtc_engine_docs.zip
+
   pub_publish_check:
     name: pub publish check
     if: ${{ !contains(github.event.pull_request.labels.*.name, 'ci:skip') }}
@@ -84,12 +91,12 @@ jobs:
       - run: bash ci/dart_pub_publish_check.sh
 
   integration_test_android:
-    name: Run Flutter Android Integration Tests
+    name: Run Flutter Android Integration Tests ( ${{ matrix.version }})
     if: ${{ !contains(github.event.pull_request.labels.*.name, 'ci:skip') }}
     strategy:
       fail-fast: false
       matrix:
-        version: ["3.7.0", "3.24.5"]
+        version: ${{ fromJSON(inputs.flutter-versions) }}
     runs-on: ubuntu-latest
     timeout-minutes: 120
     env:
@@ -122,12 +129,12 @@ jobs:
           script: bash ci/run_flutter_integration_test_android.sh
 
   integration_test_ios:
-    name: Run Flutter iOS Integration Tests
+    name: Run Flutter iOS Integration Tests ( ${{ matrix.version }})
     if: ${{ !contains(github.event.pull_request.labels.*.name, 'ci:skip') }}
     strategy:
       fail-fast: false
       matrix:
-        version: ["3.7.0", "3.16"]
+        version: ${{ fromJSON(inputs.flutter-versions) }}
     runs-on: macos-latest
     timeout-minutes: 120
     env:
@@ -164,12 +171,12 @@ jobs:
           path: logs-ios/*
 
   integration_test_macos:
-    name: Run Flutter macOS Integration Tests
+    name: Run Flutter macOS Integration Tests ( ${{ matrix.version }})
     if: ${{ !contains(github.event.pull_request.labels.*.name, 'ci:skip') }}
     strategy:
       fail-fast: false
       matrix:
-        version: ["3.7.0"]
+        version: ${{ fromJSON(inputs.flutter-versions) }}
     runs-on: macos-latest
     timeout-minutes: 120
     env:
@@ -210,7 +217,7 @@ jobs:
           path: iris-logs-macos/*
 
   integration_test_swiftpm:
-    name: Run Flutter SwiftPM Integration Tests
+    name: Run Flutter SwiftPM Integration Tests (${{ matrix.os }})
     if: ${{ !contains(github.event.pull_request.labels.*.name, 'ci:skip') }}
     strategy:
       fail-fast: false
@@ -238,12 +245,12 @@ jobs:
         working-directory: test_shard/integration_test_swiftpm
 
   integration_test_windows:
-    name: Run Flutter Windows Integration Tests
+    name: Run Flutter Windows Integration Tests ( ${{ matrix.version }})
     if: ${{ !contains(github.event.pull_request.labels.*.name, 'ci:skip') }}
     strategy:
       fail-fast: false
       matrix:
-        version: ["3.7.0", "3.24.5"]
+        version: ${{ fromJSON(inputs.flutter-versions) }}
     runs-on: windows-2022
     timeout-minutes: 120
     env:
@@ -271,11 +278,12 @@ jobs:
           path: ./CrashDumps/*
 
   integration_test_web:
-    name: Run Flutter Web Integration Tests
+    name: Run Flutter Web Integration Tests ( ${{ matrix.version }})
     if: ${{ !contains(github.event.pull_request.labels.*.name, 'ci:skip') }}
     strategy:
+      fail-fast: false
       matrix:
-        version: ["3.24.5"]
+        version: ${{ fromJSON(inputs.flutter-versions) }}
     runs-on: ubuntu-latest
     timeout-minutes: 60
     env:
@@ -293,12 +301,12 @@ jobs:
           bash ci/run_flutter_integration_test_web.sh
 
   build_android_ubuntu:
-    name: Build Android on Ubuntu
+    name: Build Android on Ubuntu ( ${{ matrix.version }})
     if: ${{ !contains(github.event.pull_request.labels.*.name, 'ci:skip') }}
     strategy:
       fail-fast: false
       matrix:
-        version: ["3.7.12", "3.24.5"] # Need 3.7.12 to build with Gradle 8.x https://github.com/flutter/flutter/issues/124838
+        version: ${{ fromJSON(inputs.flutter-versions) }}
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
@@ -317,12 +325,12 @@ jobs:
         working-directory: example
 
   build_android_windows:
-    name: Build Android on Windows
+    name: Build Android on Windows ( ${{ matrix.version }})
     if: ${{ !contains(github.event.pull_request.labels.*.name, 'ci:skip') }}
     strategy:
       fail-fast: false
       matrix:
-        version: ["3.7.12", "3.24.5"] # Need 3.7.12 to build with Gradle 8.x https://github.com/flutter/flutter/issues/124838
+        version: ${{ fromJSON(inputs.flutter-versions) }}
     runs-on: windows-2022
     steps:
       - uses: actions/checkout@v3
@@ -341,12 +349,12 @@ jobs:
         working-directory: example
 
   build_ios:
-    name: Build iOS
+    name: Build iOS ( ${{ matrix.version }})
     if: ${{ !contains(github.event.pull_request.labels.*.name, 'ci:skip') }}
     strategy:
       fail-fast: false
       matrix:
-        version: ["3.7.12"]
+        version: ${{ fromJSON(inputs.flutter-versions) }}
     runs-on: macos-latest
     timeout-minutes: 120
     steps:
@@ -362,11 +370,12 @@ jobs:
 
   # This job aim to cover https://github.com/flutter/flutter/issues/135739
   build_ios_xcode_15:
-    name: Build iOS with xcode 15.x
+    name: Build iOS with xcode 15.x ( ${{ matrix.version }})
     if: ${{ !contains(github.event.pull_request.labels.*.name, 'ci:skip') }}
     strategy:
+      fail-fast: false
       matrix:
-        version: ["3.24.5"]
+        version: ${{ fromJSON(inputs.flutter-versions) }}
     runs-on: macos-13
     timeout-minutes: 120
     steps:
@@ -387,12 +396,12 @@ jobs:
         working-directory: example
 
   build_web:
-    name: Build Web
+    name: Build Web ( ${{ matrix.version }})
     if: ${{ !contains(github.event.pull_request.labels.*.name, 'ci:skip') }}
     strategy:
       fail-fast: false
       matrix:
-        version: ["3.7.0", "3.24.5"]
+        version: ${{ fromJSON(inputs.flutter-versions) }}
     runs-on: ubuntu-latest
     timeout-minutes: 120
     steps:
@@ -409,10 +418,16 @@ jobs:
   rendering_test_android:
     name: Run Flutter Android Rendering Tests
     if: ${{ !contains(github.event.pull_request.labels.*.name, 'ci:skip') }}
+    strategy:
+      fail-fast: false
+      matrix:
+        version: ${{ fromJSON(inputs.flutter-versions) }}
     runs-on: ubuntu-latest
     timeout-minutes: 120
     env:
       TEST_APP_ID: ${{ secrets.APP_ID }}
+      GRADLE_OPTS: "-Xmx16384M -XX:+HeapDumpOnOutOfMemoryError -Dfile.encoding=UTF-8"
+      ORG_GRADLE_PROJECT_GRADLE_OPTS: "-Xmx8192M -XX:+HeapDumpOnOutOfMemoryError -Dfile.encoding=UTF-8"
     steps:
       - uses: actions/checkout@v3
       - name: Install JDK
@@ -422,7 +437,7 @@ jobs:
           java-version: '17'
       - uses: subosito/flutter-action@v2
         with:
-          flutter-version: "3.24.5"
+          flutter-version: ${{ matrix.version }}
           cache: true
       - name: Enable KVM
         run: |
@@ -435,9 +450,9 @@ jobs:
           api-level: 31
           arch: x86_64
           profile: pixel_5
-          ram-size: 2048M
-          heap-size: 4096M
-          disk-size: 8192M
+          ram-size: 4096M
+          heap-size: 8192M
+          disk-size: 16384M
           script: bash ci/rendering_test_android.sh
 
       - uses: actions/upload-artifact@v4
@@ -447,11 +462,12 @@ jobs:
           path: test_shard/rendering_test/screenshot/*.debug.png
 
   rendering_test_ios:
-    name: Run Flutter iOS Rendering Tests
+    name: Run Flutter iOS Rendering Tests ( ${{ matrix.version }})
     if: ${{ !contains(github.event.pull_request.labels.*.name, 'ci:skip') }}
     strategy:
+      fail-fast: false
       matrix:
-        version: ["3.24.5"]
+        version: ${{ fromJSON(inputs.flutter-versions) }}
     runs-on: macos-13 # Rendering test on ios simulator need macos 13+
     timeout-minutes: 60
     env:
@@ -474,11 +490,12 @@ jobs:
           path: test_shard/rendering_test/screenshot/*.debug.png
 
   rendering_test_macos:
-    name: Run Flutter macOS Rendering Tests
+    name: Run Flutter macOS Rendering Tests ( ${{ matrix.version }})
     if: ${{ !contains(github.event.pull_request.labels.*.name, 'ci:skip') }}
     strategy:
+      fail-fast: false
       matrix:
-        version: ["3.24.5"]
+        version: ${{ fromJSON(inputs.flutter-versions) }}
     runs-on: macos-latest
     timeout-minutes: 120
     env:
@@ -501,11 +518,12 @@ jobs:
           path: test_shard/rendering_test/screenshot/*.debug.png
 
   rendering_test_windows:
-    name: Run Flutter Windows Rendering Tests
+    name: Run Flutter Windows Rendering Tests ( ${{ matrix.version }})
     if: ${{ !contains(github.event.pull_request.labels.*.name, 'ci:skip') }}
     strategy:
+      fail-fast: false
       matrix:
-        version: ["3.24.5"]
+        version: ${{ fromJSON(inputs.flutter-versions) }}
     runs-on: windows-2022
     timeout-minutes: 120
     env:
@@ -530,11 +548,12 @@ jobs:
           path: test_shard/rendering_test/screenshot/*.debug.png
 
   rendering_test_web:
-    name: Run Flutter Web Rendering Tests
+    name: Run Flutter Web Rendering Tests ( ${{ matrix.version }})
     if: ${{ !contains(github.event.pull_request.labels.*.name, 'ci:skip') }}
     strategy:
+      fail-fast: false
       matrix:
-        version: ["3.24.5"]
+        version: ${{ fromJSON(inputs.flutter-versions) }}
     runs-on: ubuntu-latest
     timeout-minutes: 60
     env:
@@ -560,11 +579,12 @@ jobs:
           path: test_shard/rendering_test/screenshot/*.debug.png
 
   check_android15_16k_page_alignment:
-    name: Check android15 16k page size alignment
+    name: Check android15 16k page size alignment ( ${{ matrix.version }})
     if: ${{ !contains(github.event.pull_request.labels.*.name, 'ci:skip') }}
     strategy:
+      fail-fast: false
       matrix:
-        version: ["3.24.5"]
+        version: ${{ fromJSON(inputs.flutter-versions) }}
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
