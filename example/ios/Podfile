@@ -45,7 +45,7 @@ target 'ScreenSharing' do
   use_frameworks!
   use_modular_headers!
 
-  pod 'AgoraRtcEngine_Special_iOS', '3.7.3.5'
+  pod 'AgoraAudio_Special_iOS', '3.7.3.5'
 end
 
 post_install do |installer|
