@@ -1501,11 +1501,11 @@ extension H264PacketizeModeExt on H264PacketizeMode {
 /// The type of video streams.
 @JsonEnum(alwaysCreate: true)
 enum VideoStreamType {
-  /// 0: High-quality video stream.
+  /// 0: High-quality video stream, that is, a video stream with the highest resolution and bitrate.
   @JsonValue(0)
   videoStreamHigh,
 
-  /// 1: Low-quality video stream.
+  /// 1: Low-quality video stream, that is, a video stream with the lowest resolution and bitrate.
   @JsonValue(1)
   videoStreamLow,
 
@@ -2027,7 +2027,7 @@ class SimulcastStreamConfig {
   @JsonKey(name: 'dimensions')
   final VideoDimensions? dimensions;
 
-  /// Video receive bitrate (Kbps), represented by an instantaneous value. This parameter does not need to be set. The SDK automatically matches the most suitable bitrate based on the video resolution and frame rate you set.
+  /// Video bitrate (Kbps). The default value is -1. This parameter does not need to be set. The SDK automatically matches the most suitable bitrate based on the video resolution and frame rate you set.
   @JsonKey(name: 'kBitrate')
   final int? kBitrate;
 
@@ -2196,7 +2196,9 @@ class WatermarkRatio {
   Map<String, dynamic> toJson() => _$WatermarkRatioToJson(this);
 }
 
-/// Configurations of the watermark image.
+/// Watermark image configurations.
+///
+/// Configuration options for setting the watermark image to be added.
 @JsonSerializable(explicitToJson: true, includeIfNull: false)
 class WatermarkOptions {
   /// @nodoc
@@ -2635,7 +2637,7 @@ enum AudioProfileType {
   @JsonValue(5)
   audioProfileMusicHighQualityStereo,
 
-  /// 6: A sample rate of 16 kHz, audio encoding, mono, and Acoustic Echo Cancellation (AES) enabled.
+  /// 6: A sample rate of 16 kHz, audio encoding, mono, and Acoustic Echo Cancellation (AEC) enabled.
   @JsonValue(6)
   audioProfileIot,
 
@@ -3148,7 +3150,7 @@ enum LocalVideoStreamReason {
   @JsonValue(22)
   localVideoStreamReasonScreenCaptureNoPermission,
 
-  /// 24: (Windows only) An unexpected error occurred during screen sharing (possibly due to window blocking failure), resulting in decreased performance, but the screen sharing process itself was not affected.
+  /// 24: (Windows only) An unexpected error occurred during screen sharing (possibly due to window blocking failure), resulting in decreased performance, but the screen sharing process itself was not affected. During screen sharing, if blocking a specific window fails due to device driver issues, the SDK will report this event and automatically fall back to sharing the entire screen. If your use case requires masking specific windows to protect privacy, we recommend listening for this event and implementing additional privacy protection mechanisms when it is triggered.
   @JsonValue(24)
   localVideoStreamReasonScreenCaptureAutoFallback,
 
@@ -3172,7 +3174,7 @@ enum LocalVideoStreamReason {
   @JsonValue(29)
   localVideoStreamReasonScreenCaptureResumed,
 
-  /// 30: (Windows and macOS only) The displayer used for screen capture is disconnected.
+  /// 30: (Windows and macOS only) The displayer used for screen capture is disconnected. The current screen sharing has been paused. Prompt the user to restart the screen sharing.
   @JsonValue(30)
   localVideoStreamReasonScreenCaptureDisplayDisconnected,
 }
@@ -4272,7 +4274,11 @@ class TranscodingVideoStream {
   @JsonKey(name: 'remoteUserUid')
   final int? remoteUserUid;
 
-  /// The URL of the image. Use this parameter only when the source type is the image for local video mixing.
+  /// The file path of local images. Use this parameter only when the source type is the image for local video mixing. Examples:
+  ///  Android: /storage/emulated/0/Pictures/image.png
+  ///  iOS: /var/mobile/Containers/Data/Application/<APP-UUID>/Documents/image.png
+  ///  macOS: ~/Pictures/image.png
+  ///  Windows: C:\\Users\\{username}\\Pictures\\image.png
   @JsonKey(name: 'imageUrl')
   final String? imageUrl;
 
@@ -4821,7 +4827,7 @@ enum VideoViewSetupMode {
   @JsonValue(1)
   videoViewSetupAdd,
 
-  /// 2: Deletes a view.
+  /// 2: Deletes a view. When you no longer need to use a certain view, it is recommended to delete the view by setting setupMode to videoViewSetupRemove, otherwise it may lead to leak of rendering resources.
   @JsonValue(2)
   videoViewSetupRemove,
 }
@@ -4869,7 +4875,7 @@ class VideoCanvas {
   @JsonKey(name: 'view', readValue: readIntPtr)
   final int? view;
 
-  /// The background color of the video canvas in RGBA format. The default value is 0x00000000, which represents completely transparent black.
+  /// The background color of the video canvas in RGBA format. The default value is 0x00000000, which represents black.
   @JsonKey(name: 'backgroundColor')
   final int? backgroundColor;
 

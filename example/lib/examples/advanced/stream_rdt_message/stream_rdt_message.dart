@@ -91,8 +91,7 @@ class _State extends State<StreamRdtMessage> with KeepRemoteVideoViewsMixin {
       },
     ));
 
-    await _engine
-        .setParameters('{"rtc.rdt_auto_connect":true}');
+    await _engine.setParameters('{"rtc.rdt_auto_connect":true}');
 
     // enable video module and set up video encoding configs
     await _engine.enableVideo();
