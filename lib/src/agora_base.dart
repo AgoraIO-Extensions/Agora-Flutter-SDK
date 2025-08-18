@@ -1490,11 +1490,11 @@ extension H264PacketizeModeExt on H264PacketizeMode {
 /// The type of video streams.
 @JsonEnum(alwaysCreate: true)
 enum VideoStreamType {
-  /// 0: High-quality video stream.
+  /// 0: High-quality video stream, that is, a video stream with the highest resolution and bitrate.
   @JsonValue(0)
   videoStreamHigh,
 
-  /// 1: Low-quality video stream.
+  /// 1: Low-quality video stream, that is, a video stream with the lowest resolution and bitrate.
   @JsonValue(1)
   videoStreamLow,
 
@@ -2264,7 +2264,9 @@ class WatermarkRatio implements AgoraSerializable {
   Map<String, dynamic> toJson() => _$WatermarkRatioToJson(this);
 }
 
-/// Configurations of the watermark image.
+/// Watermark image configurations.
+///
+/// Configuration options for setting the watermark image to be added.
 @JsonSerializable(explicitToJson: true, includeIfNull: false)
 class WatermarkOptions implements AgoraSerializable {
   /// @nodoc
@@ -3232,7 +3234,7 @@ enum LocalVideoStreamReason {
   @JsonValue(22)
   localVideoStreamReasonScreenCaptureNoPermission,
 
-  /// 24: (Windows only) An unexpected error occurred during screen sharing (possibly due to window blocking failure), resulting in decreased performance, but the screen sharing process itself was not affected. During screen sharing, if blocking a specific window fails due to device driver issues, the SDK will report this event and automatically fall back to sharing the entire screen. If your use case requires masking specific windows to protect privacy, we recommend listening for this event and implementing additional privacy protection mechanisms when it is triggered."
+  /// 24: (Windows only) An unexpected error occurred during screen sharing (possibly due to window blocking failure), resulting in decreased performance, but the screen sharing process itself was not affected. During screen sharing, if blocking a specific window fails due to device driver issues, the SDK will report this event and automatically fall back to sharing the entire screen. If your use case requires masking specific windows to protect privacy, we recommend listening for this event and implementing additional privacy protection mechanisms when it is triggered.
   @JsonValue(24)
   localVideoStreamReasonScreenCaptureAutoFallback,
 

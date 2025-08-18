@@ -3286,7 +3286,7 @@ abstract class RtcEngine {
 
   /// Renews the token.
   ///
-  /// You can call this method to pass a new token to the SDK. A token will expire after a certain period of time, at which point the SDK will be unable to establish a connection with the server.
+  /// This method is used to update the token. After successfully calling this method, the SDK will trigger the callback. A token will expire after a certain period of time, at which point the SDK will be unable to establish a connection with the server.
   ///
   /// * [token] The new token.
   ///
@@ -5120,7 +5120,7 @@ abstract class RtcEngine {
   ///  You must call this method after enableVideo. The setting result will take effect after the camera is successfully turned on, that is, after the SDK triggers the onLocalVideoStateChanged callback and returns the local video state as localVideoStreamStateCapturing (1).
   ///  This method is for Android and iOS only.
   ///
-  /// * [factor] The camera zoom factor. For devices that do not support ultra-wide-angle, the value ranges from 1.0 to the maximum zoom factor; for devices that support ultra-wide-angle, the value ranges from 0.5 to the maximum zoom factor. You can get the maximum zoom factor supported by the device by calling the getCameraMaxZoomFactor method.
+  /// * [factor] Camera zoom factor. For devices that do not support ultra-wide-angle, the value ranges from 1.0 to the maximum zoom factor; for devices that support ultra-wide-angle, the value ranges from 0.5 to the maximum zoom factor. You can get the maximum zoom factor supported by the device by calling the getCameraMaxZoomFactor method.
   ///
   /// Returns
   /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown. You need to catch the exception and handle it accordingly.
@@ -5137,13 +5137,13 @@ abstract class RtcEngine {
   /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown. You need to catch the exception and handle it accordingly.
   Future<void> enableFaceDetection(bool enabled);
 
-  /// Gets the maximum zoom ratio supported by the camera.
+  /// Get the maximum zoom ratio supported by the camera.
   ///
   /// This method must be called after the SDK triggers the onLocalVideoStateChanged callback and returns the local video state as localVideoStreamStateCapturing (1).
   ///  This method is for Android and iOS only.
   ///
   /// Returns
-  /// The maximum zoom factor.
+  /// The maximum zoom ratio supported by the camera.
   Future<double> getCameraMaxZoomFactor();
 
   /// Sets the camera manual focus position.
@@ -5768,7 +5768,7 @@ abstract class RtcEngine {
 
   /// Adds a watermark image to the local video.
   ///
-  /// This method adds a PNG watermark image to the local video in the live streaming. Once the watermark image is added, all the audience in the channel (CDN audience included), and the capturing device can see and capture it. The Agora SDK supports adding only one watermark image onto a local video or CDN live stream. The newly added watermark image replaces the previous one. The watermark coordinates are dependent on the settings in the setVideoEncoderConfiguration method:
+  /// This method adds a PNG watermark image to the local video in the live streaming. Once the watermark image is added, all the audience in the channel (CDN audience included), and the capturing device can see and capture it. The Agora SDK supports adding only one watermark image onto a live video stream. The newly added watermark image replaces the previous one. The watermark coordinates are dependent on the settings in the setVideoEncoderConfiguration method:
   ///  If the orientation mode of the encoding video (OrientationMode) is fixed landscape mode or the adaptive landscape mode, the watermark uses the landscape orientation.
   ///  If the orientation mode of the encoding video (OrientationMode) is fixed portrait mode or the adaptive portrait mode, the watermark uses the portrait orientation.
   ///  When setting the watermark position, the region must be less than the dimensions set in the setVideoEncoderConfiguration method; otherwise, the watermark image will be cropped.
@@ -5880,6 +5880,7 @@ abstract class RtcEngine {
   /// Once registered, the user account can be used to identify the local user when the user joins the channel. After the registration is successful, the user account can identify the identity of the local user, and the user can use it to join the channel. This method is optional. If you want to join a channel using a user account, you can choose one of the following methods:
   ///  Call the registerLocalUserAccount method to register a user account, and then call the joinChannelWithUserAccount method to join a channel, which can shorten the time it takes to enter the channel.
   ///  Call the joinChannelWithUserAccount method to join a channel.
+  ///  Starting from v4.6.0, the SDK will no longer automatically map Int UID to the String userAccount used when registering a User Account. If you want to join a channel with the original String userAccount used during registration, call the joinChannelWithUserAccount method to join the channel, instead of calling joinChannel and pass in the Int UID obtained through this method
   ///  Ensure that the userAccount is unique in the channel.
   ///  To ensure smooth communication, use the same parameter type to identify the user. For example, if a user joins the channel with a UID, then ensure all the other users use the UID too. The same applies to the user account. If a user joins the channel with the Agora Web SDK, ensure that the ID of the user is set to the same parameter type.
   ///
