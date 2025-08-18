@@ -10,7 +10,6 @@ buildscript {
         google()
         mavenCentral()
     }
-
 }
 
 rootProject.allprojects {
@@ -62,8 +61,10 @@ dependencies {
     // iris dependencies end
 
     // native dependencies start
-    api 'io.agora.rtc:full-sdk:4.5.2'
-    api 'io.agora.rtc:full-screen-sharing:4.5.2'
+    // Replace full SDK with Lite SDK
+    api 'io.agora.rtc:lite-sdk:4.5.2'
+    // Remove full-screen-sharing (not needed in Lite)
+    // api 'io.agora.rtc:full-screen-sharing:4.5.2'
     // native dependencies end
   }
 }

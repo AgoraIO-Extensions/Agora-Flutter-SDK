@@ -15,7 +15,7 @@ Pod::Spec.new do |s|
   s.license          = { :file => '../LICENSE' }
   s.author           = { 'Agora' => 'developer@agora.io' }
   s.source           = { :path => '.' }
-  s.source_files = 'agora_rtc_engine/Sources/**/*.{h,mm,m,swift}'
+  s.source_files     = 'agora_rtc_engine/Sources/**/*.{h,mm,m,swift}'
   s.dependency 'Flutter'
 
   plugin_dev_path = File.join(File.dirname(File.realpath(__FILE__)), '.plugin_dev')
@@ -27,8 +27,8 @@ Pod::Spec.new do |s|
     s.dependency 'AgoraIrisRTC_iOS', '4.5.2-build.1'
     # iris dependencies end
 
-    # native dependencies start
-    s.dependency 'AgoraRtcEngine_iOS', '4.5.2'
+    # native dependencies start (REPLACED with Lite SDK)
+    s.dependency 'AgoraRtcEngine_iOS_Lite', '4.5.2'
     # native dependencies end
   end
   
@@ -37,5 +37,8 @@ Pod::Spec.new do |s|
   s.libraries = 'stdc++'
 
   # Flutter.framework does not contain a i386 slice.
-  s.pod_target_xcconfig = { 'DEFINES_MODULE' => 'YES', 'EXCLUDED_ARCHS[sdk=iphonesimulator*]' => 'i386' }
+  s.pod_target_xcconfig = { 
+    'DEFINES_MODULE' => 'YES', 
+    'EXCLUDED_ARCHS[sdk=iphonesimulator*]' => 'i386' 
+  }
 end
