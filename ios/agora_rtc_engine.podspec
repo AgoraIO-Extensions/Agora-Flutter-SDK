@@ -1,7 +1,7 @@
 #
 # To learn more about a Podspec see http://guides.cocoapods.org/syntax/podspec.html.
 # Run `pod lib lint agora_rtc_engine.podspec` to validate before publishing.
-#
+
 require "yaml"
 require "ostruct"
 project = OpenStruct.new YAML.load_file("../pubspec.yaml")
