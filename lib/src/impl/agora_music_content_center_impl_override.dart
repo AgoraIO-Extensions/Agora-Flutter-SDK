@@ -111,7 +111,7 @@ class MusicPlayerImpl extends media_player_impl.MediaPlayerImpl
   @override
   Future<void> setPlayMode(MusicPlayMode mode) async {
     final apiType =
-        '${isOverrideClassName ? className : 'MusicPlayer'}_setPlayMode';
+        '${isOverrideClassName ? className : 'MusicPlayer'}_setPlayMode_748bee0';
     final param = createParams({'mode': mode.value()});
     final callApiResult = await irisMethodChannel.invokeMethod(
         IrisMethodCall(apiType, jsonEncode(param), buffers: null));
