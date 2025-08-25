@@ -1,6 +1,10 @@
 name: agora_rtc_engine_example
 description: Demonstrates how to use the agora_rtc_engine plugin.
 
+# The version associated with this example app.
+# It is used to generate the CFBundleShortVersionString and CFBundleVersion.
+version: 1.0.0+1
+
 # The following line prevents the package from being accidentally published to
 # pub.dev using `flutter pub publish`. This is preferred for private packages.
 publish_to: 'none' # Remove this line if you wish to publish to pub.dev

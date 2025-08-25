@@ -133,7 +133,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        os: [ubuntu-latest, macos-latest, windows-latest]
+        os: [ubuntu-latest, macos-15, windows-latest]
         platform: ${{ fromJson(needs.split-platforms.outputs.platforms) }}
         exclude:
           - os: ubuntu-latest
@@ -144,9 +144,9 @@ jobs:
             platform: macos
           - os: ubuntu-latest
             platform: windows
-          - os: macos-latest
+          - os: macos-15
             platform: windows
-          - os: macos-latest
+          - os: macos-15
             platform: web
           - os: windows-latest
             platform: android
@@ -229,6 +229,26 @@ jobs:
         if: ${{ matrix.platform == 'ios' || matrix.platform == 'macos' }}
         run: pod repo update
 
+      - name: Configure iOS Build Environment
+        if: ${{ matrix.platform == 'ios' }}
+        run: |
+          # 显示可用的 Xcode 版本
+          echo "Available Xcode versions:"
+          ls /Applications/ | grep -E "Xcode.*\.app" || true
+          
+          # 显示当前 Xcode 版本和可用的 iOS SDK
+          echo "Current Xcode version:"
+          xcodebuild -version
+          
+          echo "Available iOS SDKs:"
+          xcodebuild -showsdks | grep iphoneos || true
+          
+          # 强制设置 iOS 部署目标为较低版本
+          echo "IPHONEOS_DEPLOYMENT_TARGET=12.0" >> $GITHUB_ENV
+          
+          # 设置 Flutter 环境变量，强制使用较低的 iOS 版本
+          echo "FLUTTER_BUILD_MODE=release" >> $GITHUB_ENV
+
       - name: Setup Flutter
         uses: subosito/flutter-action@v2
         with:
@@ -285,6 +305,19 @@ jobs:
           # append build arguments for ios
           if [ "$platform" == "ios" ]; then
             build_arguments="--export-options-plist ios/export.plist $build_arguments"
+            
+            # 设置 iOS 构建环境变量，强制使用较低版本的 iOS SDK
+            export IPHONEOS_DEPLOYMENT_TARGET=12.0
+            export FLUTTER_BUILD_MODE=release
+            
+            # 获取可用的非 18.0 版本的 iOS SDK
+            AVAILABLE_SDK=$(xcodebuild -showsdks | grep iphoneos | grep -v "18.0" | head -1 | sed 's/.*iphoneos//' | tr -d ' ')
+            if [ -n "$AVAILABLE_SDK" ]; then
+              echo "Using iOS SDK: $AVAILABLE_SDK"
+              # 不使用 --ios-destination，而是通过环境变量控制
+            else
+              echo "No suitable iOS SDK found, will use default"
+            fi
           fi
 
           # run build command
