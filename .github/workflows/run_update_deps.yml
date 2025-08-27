@@ -43,7 +43,7 @@ on:
 
 jobs:
   update_deps:
-    runs-on: macos-14
+    runs-on: ubuntu-latest
     steps:
       - name: Checkout target branch
         uses: actions/checkout@v4
@@ -108,7 +108,7 @@ jobs:
         shell: bash
         run: |
           # Update pub version into pubspec.yaml
-          sed -i '' "s/version: .*/version: ${{ inputs.pub_version }}/" pubspec.yaml
+          sed -i 's/version: .*/version: ${{ inputs.pub_version }}/' pubspec.yaml
 
       - name: Run gen code
         if: ${{ inputs.run_gen_code == true }}
