@@ -1490,11 +1490,11 @@ extension H264PacketizeModeExt on H264PacketizeMode {
 /// The type of video streams.
 @JsonEnum(alwaysCreate: true)
 enum VideoStreamType {
-  /// 0: High-quality video stream.
+  /// 0: High-quality video stream, that is, a video stream with the highest resolution and bitrate.
   @JsonValue(0)
   videoStreamHigh,
 
-  /// 1: Low-quality video stream.
+  /// 1: Low-quality video stream, that is, a video stream with the lowest resolution and bitrate.
   @JsonValue(1)
   videoStreamLow,
 
@@ -2095,7 +2095,7 @@ class SimulcastStreamConfig implements AgoraSerializable {
   @JsonKey(name: 'dimensions')
   final VideoDimensions? dimensions;
 
-  /// Video receive bitrate (Kbps), represented by an instantaneous value. This parameter does not need to be set. The SDK automatically matches the most suitable bitrate based on the video resolution and frame rate you set.
+  /// Video bitrate (Kbps). The default value is -1. This parameter does not need to be set. The SDK automatically matches the most suitable bitrate based on the video resolution and frame rate you set.
   @JsonKey(name: 'kBitrate')
   final int? kBitrate;
 
@@ -2264,7 +2264,9 @@ class WatermarkRatio implements AgoraSerializable {
   Map<String, dynamic> toJson() => _$WatermarkRatioToJson(this);
 }
 
-/// Configurations of the watermark image.
+/// Watermark image configurations.
+///
+/// Configuration options for setting the watermark image to be added.
 @JsonSerializable(explicitToJson: true, includeIfNull: false)
 class WatermarkOptions implements AgoraSerializable {
   /// @nodoc
@@ -3232,7 +3234,7 @@ enum LocalVideoStreamReason {
   @JsonValue(22)
   localVideoStreamReasonScreenCaptureNoPermission,
 
-  /// 24: (Windows only) An unexpected error occurred during screen sharing (possibly due to window blocking failure), resulting in decreased performance, but the screen sharing process itself was not affected. During screen sharing, if blocking a specific window fails due to device driver issues, the SDK will report this event and automatically fall back to sharing the entire screen. If your use case requires masking specific windows to protect privacy, we recommend listening for this event and implementing additional privacy protection mechanisms when it is triggered."
+  /// 24: (Windows only) An unexpected error occurred during screen sharing (possibly due to window blocking failure), resulting in decreased performance, but the screen sharing process itself was not affected. During screen sharing, if blocking a specific window fails due to device driver issues, the SDK will report this event and automatically fall back to sharing the entire screen. If your use case requires masking specific windows to protect privacy, we recommend listening for this event and implementing additional privacy protection mechanisms when it is triggered.
   @JsonValue(24)
   localVideoStreamReasonScreenCaptureAutoFallback,
 
@@ -6013,12 +6015,50 @@ extension VoiceAiTunerTypeExt on VoiceAiTunerType {
   }
 }
 
+/// The audio configuration for the shared screen stream.
+///
+/// Only available where captureAudio is true.
+@JsonSerializable(explicitToJson: true, includeIfNull: false)
+class ScreenAudioParameters implements AgoraSerializable {
+  /// @nodoc
+  const ScreenAudioParameters(
+      {this.sampleRate,
+      this.channels,
+      this.captureSignalVolume,
+      this.excludeCurrentProcessAudio});
+
+  /// Audio sample rate (Hz). The default value is 16000.
+  @JsonKey(name: 'sampleRate')
+  final int? sampleRate;
+
+  /// The number of audio channels. The default value is 2, which means stereo.
+  @JsonKey(name: 'channels')
+  final int? channels;
+
+  /// The volume of the captured system audio. The value range is [0, 100]. The default value is 100.
+  @JsonKey(name: 'captureSignalVolume')
+  final int? captureSignalVolume;
+
+  /// @nodoc
+  @JsonKey(name: 'excludeCurrentProcessAudio')
+  final bool? excludeCurrentProcessAudio;
+
+  /// @nodoc
+  factory ScreenAudioParameters.fromJson(Map<String, dynamic> json) =>
+      _$ScreenAudioParametersFromJson(json);
+
+  @override
+  Map<String, dynamic> toJson() => _$ScreenAudioParametersToJson(this);
+}
+
 /// Screen sharing configurations.
 @JsonSerializable(explicitToJson: true, includeIfNull: false)
 class ScreenCaptureParameters implements AgoraSerializable {
   /// @nodoc
   const ScreenCaptureParameters(
-      {this.dimensions,
+      {this.captureAudio,
+      this.audioParams,
+      this.dimensions,
       this.frameRate,
       this.bitrate,
       this.captureMouseCursor,
@@ -6028,6 +6068,14 @@ class ScreenCaptureParameters implements AgoraSerializable {
       this.highLightWidth,
       this.highLightColor,
       this.enableHighLight});
+
+  /// @nodoc
+  @JsonKey(name: 'captureAudio')
+  final bool? captureAudio;
+
+  /// @nodoc
+  @JsonKey(name: 'audioParams')
+  final ScreenAudioParameters? audioParams;
 
   /// The video encoding resolution of the screen sharing stream. See VideoDimensions. The default value is 1920 × 1080, that is, 2,073,600 pixels. Agora uses the value of this parameter to calculate the charges. If the screen dimensions are different from the value of this parameter, Agora applies the following strategies for encoding. Suppose dimensions is set to 1920 × 1080:
   ///  If the value of the screen dimensions is lower than that of dimensions, for example, 1000 × 1000 pixels, the SDK uses the screen dimensions, that is, 1000 × 1000 pixels, for encoding.
@@ -7077,35 +7125,6 @@ class ScreenVideoParameters implements AgoraSerializable {
 
   @override
   Map<String, dynamic> toJson() => _$ScreenVideoParametersToJson(this);
-}
-
-/// The audio configuration for the shared screen stream.
-///
-/// Only available where captureAudio is true.
-@JsonSerializable(explicitToJson: true, includeIfNull: false)
-class ScreenAudioParameters implements AgoraSerializable {
-  /// @nodoc
-  const ScreenAudioParameters(
-      {this.sampleRate, this.channels, this.captureSignalVolume});
-
-  /// Audio sample rate (Hz). The default value is 16000.
-  @JsonKey(name: 'sampleRate')
-  final int? sampleRate;
-
-  /// The number of audio channels. The default value is 2, which means stereo.
-  @JsonKey(name: 'channels')
-  final int? channels;
-
-  /// The volume of the captured system audio. The value range is [0, 100]. The default value is 100.
-  @JsonKey(name: 'captureSignalVolume')
-  final int? captureSignalVolume;
-
-  /// @nodoc
-  factory ScreenAudioParameters.fromJson(Map<String, dynamic> json) =>
-      _$ScreenAudioParametersFromJson(json);
-
-  @override
-  Map<String, dynamic> toJson() => _$ScreenAudioParametersToJson(this);
 }
 
 /// Screen sharing configurations.
