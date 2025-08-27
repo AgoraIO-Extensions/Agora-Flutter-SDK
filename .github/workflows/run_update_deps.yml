@@ -43,7 +43,7 @@ on:
 
 jobs:
   update_deps:
-    runs-on: macos-latest
+    runs-on: macos-14
     steps:
       - name: Checkout target branch
         uses: actions/checkout@v4
