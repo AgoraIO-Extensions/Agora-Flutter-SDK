@@ -23,37 +23,25 @@ extension RtcEngineExt on RtcEngine {
     return impl.getAssetAbsolutePath(assetPath);
   }
 
+  /// @nodoc
   int getApiEngineHandle() {
     final impl = this as RtcEngineImpl;
     return impl.getApiEngineHandle();
   }
 
-  /// Creates a [AgoraPipController] instance for managing Picture-in-Picture (PiP) mode.
-  ///
-  /// Returns
-  /// A [AgoraPipController] instance.
+  /// @nodoc
   AgoraPipController createPipController() {
     return AgoraPipControllerImpl(this);
   }
 
-  /// Invokes a method on the native platform through the Agora method channel.
-  ///
-  /// * [method] The name of the method to invoke
-  /// * [arguments] Optional arguments to pass to the method
-  ///
-  /// Returns a Future that completes with the result of type T, or null if no result
+  /// @nodoc
   @optionalTypeArgs
   Future<T?> invokeAgoraMethod<T>(String method, [dynamic arguments]) {
     final impl = this as RtcEngineImpl;
     return impl.invokeAgoraMethod<T>(method, arguments);
   }
 
-  /// Registers a handler for a specific method channel.
-  ///
-  /// * [method] The name of the method to handle
-  /// * [handler] The function that will handle calls to this method
-  ///
-  /// The handler will be called when the native platform invokes the specified method.
+  /// @nodoc
   Future<void> registerMethodChannelHandler(
     String method,
     Future<dynamic> Function(MethodCall call) handler,
@@ -62,14 +50,7 @@ extension RtcEngineExt on RtcEngine {
     return impl.registerMethodChannelHandler(method, handler);
   }
 
-  /// Unregisters a previously registered method channel handler.
-  ///
-  /// * [method] The name of the method whose handler should be removed
-  /// * [handler] The handler function to unregister. If null, all handlers for the
-  ///            specified method will be removed
-  ///
-  /// After unregistering, the handler will no longer be called when the method is invoked
-  /// from the native platform.
+  /// @nodoc
   Future<void> unregisterMethodChannelHandler(
     String method,
     Future<dynamic> Function(MethodCall call)? handler,
@@ -99,7 +80,7 @@ class AgoraRtcException implements Exception {
 /// Currently, the Agora RTC SDK v6.x supports creating only one RtcEngine object for each app.
 ///
 /// Returns
-/// One RtcEngine object.
+/// RtcEngine object.
 RtcEngine createAgoraRtcEngine({Object? sharedNativeHandle}) {
   return impl.RtcEngineImpl.create(sharedNativeHandle: sharedNativeHandle);
 }
@@ -109,7 +90,7 @@ RtcEngine createAgoraRtcEngine({Object? sharedNativeHandle}) {
 /// Currently, the Agora RTC v6.x SDK supports creating only one RtcEngineEx object for each app.
 ///
 /// Returns
-/// One RtcEngineEx object.
+/// RtcEngineEx object.
 RtcEngineEx createAgoraRtcEngineEx({Object? sharedNativeHandle}) {
   return impl.RtcEngineImpl.create(sharedNativeHandle: sharedNativeHandle);
 }
