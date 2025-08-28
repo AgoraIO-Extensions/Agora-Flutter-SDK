@@ -138,9 +138,19 @@ jobs:
         with:
           flutter-version: ${{ matrix.version }}
           cache: true
+      - name: Switch to Xcode 16.4
+        run: |
+          sudo xcode-select --switch /Applications/Xcode_16.4.app
+          xcode-select --print-path
+          xcodebuild -version
+          echo "Available iOS SDKs:"
+          xcodebuild -showsdks | grep iphoneos
+          echo "Available iOS Simulator SDKs:"
+          xcodebuild -showsdks | grep iphonesimulator
       - uses: futureware-tech/simulator-action@v3
         with:
-          model: 'iPhone 15'
+          model: 'iPhone 16'
+          os: 'iOS 18.5'
       - run: bash ci/run_flutter_integration_test_ios.sh
       - name: Get ios crash logs
         if: always()
@@ -236,6 +246,8 @@ jobs:
           flutter pub get
           flutter build ${{ matrix.os }} --no-codesign
         working-directory: test_shard/integration_test_swiftpm
+        env:
+          IOS_SIMULATOR_SDK_VERSION: 18.4
 
   integration_test_windows:
     name: Run Flutter Windows Integration Tests
@@ -356,9 +368,11 @@ jobs:
           flutter-version: ${{ matrix.version }}
           cache: true
       - run: flutter pub get
-      - name: Run flutter build ios --no-codesign
-        run: flutter build ios --no-codesign
+      - name: Run flutter build ios --no-codesign --simulator
+        run: flutter build ios --no-codesign --simulator
         working-directory: example
+        env:
+          IOS_SIMULATOR_SDK_VERSION: 18.4
 
   # This job aim to cover https://github.com/flutter/flutter/issues/135739
   build_ios_xcode_15:
@@ -583,3 +597,21 @@ jobs:
         working-directory: example
       - name: Check android15 16k page size alignment
         run: bash scripts/check_android15_16k_page_alignment.sh example/build/app/intermediates/merged_native_libs/release/mergeReleaseNativeLibs/out/lib/arm64-v8a/libiris_rendering_android.so
+
+  Debug_Simulator_Setup:
+    name: Debug Simulator Setup
+    runs-on: macos-latest
+    steps:
+      - name: Debug Simulator Setup
+        run: |
+          echo "=== All Simulator Runtimes ==="
+          xcrun simctl list runtimes
+          echo ""
+          echo "=== Available Simulator Runtimes ==="  
+          xcrun simctl list runtimes available
+          echo ""
+          echo "=== iPhone 16 Compatible Runtimes ==="
+          xcrun simctl list devicetypes | grep iPhone
+          echo ""
+          echo "=== Created Simulator Details ==="
+          xcrun simctl list devices | grep "F925091F-C3FC-4D51-B786-8597A1A2A8F2" -A2 -B2
