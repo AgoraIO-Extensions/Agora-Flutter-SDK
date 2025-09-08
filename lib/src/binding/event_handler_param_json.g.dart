@@ -1429,6 +1429,7 @@ const _$MediaDeviceStateTypeEnumMap = {
   MediaDeviceStateType.mediaDeviceStateDisabled: 2,
   MediaDeviceStateType.mediaDeviceStateNotPresent: 4,
   MediaDeviceStateType.mediaDeviceStateUnplugged: 8,
+  MediaDeviceStateType.mediaDeviceStateDefaultDeviceChangedReady: 9,
 };
 
 RtcEngineEventHandlerOnAudioMixingPositionChangedJson
