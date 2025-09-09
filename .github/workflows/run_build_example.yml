@@ -6,11 +6,11 @@ on:
       target_platforms:
         description: 'Target platforms, e.g. android, ios, macos, windows, web, etc; separated by comma, default is all platforms'
         type: string
-        required: true
+        required: false
         default: 'android, ios, macos, windows, web'
-      target_branch:
-        description: 'Target branch, leave empty will use the same as the workflow trigger branch'
-        type: string
+      # target_branch:
+      #   description: 'Target branch, leave empty will use the same as the workflow trigger branch'
+      #   type: string
       issue_number:
         description: 'The number of the issue or pull request to comment build results on, leave empty will not comment on any PR'
         type: number
@@ -44,9 +44,9 @@ on:
         description: 'Target platforms, e.g. android, ios, macos, windows, web, etc; separated by comma, default is all platforms'
         type: string
         default: 'android, ios, macos, windows, web'
-      target_branch:
-        description: 'Target branch, leave empty will use the same as the workflow trigger branch'
-        type: string
+      # target_branch:
+      #   description: 'Target branch, leave empty will use the same as the workflow trigger branch'
+      #   type: string
       issue_number:
         description: 'The number of the issue or pull request to comment build results on, leave empty will not comment on any PR'
         type: number
@@ -169,11 +169,11 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
-        with:
-          ref: ${{ inputs.target_branch }}
-          fetch-depth: '1'
-          lfs: 'true'
-          submodules: 'true'
+        # with:
+        #   ref: ${{ inputs.target_branch }}
+        #   fetch-depth: '1'
+        #   lfs: 'true'
+        #   submodules: 'true'
 
       - name: Setup JDK for Android
         if: ${{ matrix.platform == 'android' }}

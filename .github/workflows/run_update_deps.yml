@@ -3,11 +3,11 @@ name: 'run: update dependencies'
 on:
   workflow_dispatch:
     inputs:
-      target_branch:
-        description: 'Target branch to compare against. If a branch name, will compare directly against it. If a commit hash or tag, a new branch named "special/<pub_version>" will be created from that ref. The pub_version will be either the input pub_version or latest version from target branch pubspec.yaml. Defaults to "main".'
-        type: string
-        required: true
-        default: 'main'
+      # target_branch:
+      #   description: 'Target branch to compare against. If a branch name, will compare directly against it. If a commit hash or tag, a new branch named "special/<pub_version>" will be created from that ref. The pub_version will be either the input pub_version or latest version from target branch pubspec.yaml. Defaults to "main".'
+      #   type: string
+      #   required: true
+      #   default: 'main'
       pub_version:
         description: 'Target pub version to update dependencies to. If empty, will use the latest version from target branch pubspec.yaml.'
         type: string
@@ -48,7 +48,7 @@ jobs:
       - name: Checkout target branch
         uses: actions/checkout@v4
         with:
-          ref: ${{ inputs.target_branch }}
+          ref: ${{ github.ref }}
           fetch-depth: '1'
           lfs: 'true'
           submodules: 'true'
@@ -91,7 +91,7 @@ jobs:
         id: prepare_target_branch
         uses: ./.github/actions/prepare_branch
         with:
-          target_branch: ${{ inputs.target_branch }}
+          target_branch: ${{ github.ref }}
           pub_version: ${{ inputs.pub_version }}
           branch_group: "special"
           working_directory: ./
