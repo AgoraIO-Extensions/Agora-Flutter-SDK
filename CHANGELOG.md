@@ -1,5 +1,16 @@
 # Changelog
 
+## [6.5.3](https://github.com/AgoraIO-Extensions/Agora-Flutter-SDK/compare/6.5.2...6.5.3) (2025-09-16)
+
+### Bug Fixes
+
+* compile issue of example with lower version of flutter ([#2351](https://github.com/AgoraIO-Extensions/Agora-Flutter-SDK/issues/2351)) ([36821c5](https://github.com/AgoraIO-Extensions/Agora-Flutter-SDK/commit/36821c596a979501d3d0944c7c873148e9e01166))
+* eliminate video playback flicker during resolution changes ([#2306](https://github.com/AgoraIO-Extensions/Agora-Flutter-SDK/issues/2306)) ([7a917da](https://github.com/AgoraIO-Extensions/Agora-Flutter-SDK/commit/7a917da15054768e403d245d311e979eded0a50f))
+* the compatibility of the construction configuration of CMakeLists.txt with lower versions of Flutter SDK ([#2401](https://github.com/AgoraIO-Extensions/Agora-Flutter-SDK/issues/2401)) ([50657fd](https://github.com/AgoraIO-Extensions/Agora-Flutter-SDK/commit/50657fdebd783b927296a47fb27a367615396f33))
+* ui.platformViewRegistry.registerViewFactory fixed ([#2399](https://github.com/AgoraIO-Extensions/Agora-Flutter-SDK/issues/2399)) ([bb258fc](https://github.com/AgoraIO-Extensions/Agora-Flutter-SDK/commit/bb258fcfc031cd56e0285e27827297e01c12e15d)), closes [#2360](https://github.com/AgoraIO-Extensions/Agora-Flutter-SDK/issues/2360) [#2360](https://github.com/AgoraIO-Extensions/Agora-Flutter-SDK/issues/2360)
+* update run_update_deps.yml to use macos-14 ([#2415](https://github.com/AgoraIO-Extensions/Agora-Flutter-SDK/issues/2415)) ([56e92db](https://github.com/AgoraIO-Extensions/Agora-Flutter-SDK/commit/56e92db6c67b0a6e059be857ecacdf2adf848216))
+* windows-2019 is deprecated ([#2352](https://github.com/AgoraIO-Extensions/Agora-Flutter-SDK/issues/2352)) ([9950395](https://github.com/AgoraIO-Extensions/Agora-Flutter-SDK/commit/9950395d49942d86d3102f3167894de9ce738e74))
+
 ## [6.5.2](https://github.com/AgoraIO-Extensions/Agora-Flutter-SDK/compare/6.5.1-rc.2...6.5.2) (2025-04-29)
 
 ### Features
