@@ -44,9 +44,9 @@ import 'global_video_view_controller.dart';
 
 // ignore_for_file: public_member_api_docs
 
-int? _mockRtcEngineNativeHandle;
+InitilizationArgProvider? _mockRtcEngineNativeHandle;
 @visibleForTesting
-void setMockRtcEngineNativeHandle(int? mockRtcEngineNativeHandle) {
+void setMockRtcEngineNativeHandle(InitilizationArgProvider? mockRtcEngineNativeHandle) {
   assert(() {
     _mockRtcEngineNativeHandle = mockRtcEngineNativeHandle;
     return true;
@@ -226,7 +226,7 @@ class RtcEngineImpl extends rtc_engine_ex_binding.RtcEngineExImpl
   Future<void> _initializeInternal(RtcEngineContext context) async {
     _globalVideoViewController ??= GlobalVideoViewController(irisMethodChannel);
     await _globalVideoViewController!
-        .attachVideoFrameBufferManager(irisMethodChannel.getNativeHandle());
+        .attachVideoFrameBufferManager(irisMethodChannel.getApiEngineHandle());
 
     irisMethodChannel.addHotRestartListener(_hotRestartListener);
   }
@@ -266,7 +266,7 @@ class RtcEngineImpl extends rtc_engine_ex_binding.RtcEngineExImpl
       externalFilesDir = androidInitResult['externalFilesDir'] ?? '';
     }
 
-    List<int> args = [];
+    List<InitilizationArgProvider> args = [];
     assert(() {
       if (_mockRtcEngineNativeHandle != null) {
         args.add(_mockRtcEngineNativeHandle!);
@@ -331,7 +331,7 @@ class RtcEngineImpl extends rtc_engine_ex_binding.RtcEngineExImpl
     await _objectPool.clear();
 
     await _globalVideoViewController
-        ?.detachVideoFrameBufferManager(irisMethodChannel.getNativeHandle());
+        ?.detachVideoFrameBufferManager(irisMethodChannel.getApiEngineHandle());
     _globalVideoViewController = null;
 
     await irisMethodChannel.unregisterEventHandlers(_rtcEngineImplScopedKey);
@@ -417,18 +417,18 @@ class RtcEngineImpl extends rtc_engine_ex_binding.RtcEngineExImpl
       required Uint8List data,
       required int length}) async {
     const apiType = 'RtcEngine_sendStreamMessage';
-    final dataPtr = uint8ListToPtr(data);
-    final param = createParams(
-        {'streamId': streamId, 'data': dataPtr.address, 'length': length});
 
+    final param = createParams(
+        {'streamId': streamId, 'length': length});
+    final List<Uint8List> buffers = [];
+    buffers.add(data);
     final callApiResult = await irisMethodChannel.invokeMethod(
-        IrisMethodCall(apiType, jsonEncode(param), buffers: [data]));
+        IrisMethodCall(apiType, jsonEncode(param), buffers: buffers));
     if (callApiResult.irisReturnCode < 0) {
       throw AgoraRtcException(code: callApiResult.irisReturnCode);
     }
     final rm = callApiResult.data;
 
-    freePointer(dataPtr);
     final result = rm['result'];
 
     if (result < 0) {
@@ -541,18 +541,16 @@ class RtcEngineImpl extends rtc_engine_ex_binding.RtcEngineExImpl
       {required Metadata metadata, required VideoSourceType sourceType}) async {
     assert(metadata.buffer != null);
     const apiType = 'RtcEngine_sendMetaData';
-    final dataPtr = uint8ListToPtr(metadata.buffer!);
-    final metadataMap = metadata.toJson();
-    metadataMap['buffer'] = dataPtr.address;
     final param = createParams(
-        {'metadata': metadataMap, 'source_type': sourceType.value()});
+        {'metadata': metadata.toJson(), 'source_type': sourceType.value()});
+    final List<Uint8List> buffers = [];
+    buffers.addAll(metadata.collectBufferList());
     final callApiResult = await irisMethodChannel
-        .invokeMethod(IrisMethodCall(apiType, jsonEncode(param)));
+        .invokeMethod(IrisMethodCall(apiType, jsonEncode(param), buffers: buffers));
     if (callApiResult.irisReturnCode < 0) {
       throw AgoraRtcException(code: callApiResult.irisReturnCode);
     }
     final rm = callApiResult.data;
-    freePointer(dataPtr);
     final result = rm['result'];
 
     if (result < 0) {
