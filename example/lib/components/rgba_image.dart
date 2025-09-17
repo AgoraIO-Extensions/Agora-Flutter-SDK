@@ -19,7 +19,7 @@ class RgbaImage extends ImageProvider<RgbaImage> {
 
   Future<ui.Codec> _loadAsync(
     RgbaImage key,
-    DecoderCallback decode,
+    ImageDecoderCallback decode,
   ) async {
     assert(key == this);
 
@@ -52,7 +52,7 @@ class RgbaImage extends ImageProvider<RgbaImage> {
       '${objectRuntimeType(this, 'RgbaImage')}(${describeIdentity(bytes)}, scale: $scale)';
 
   @override
-  ImageStreamCompleter load(RgbaImage key, DecoderCallback decode) {
+  ImageStreamCompleter loadImage(RgbaImage key, ImageDecoderCallback decode) {
     return MultiFrameImageStreamCompleter(
       codec: _loadAsync(key, decode),
       scale: key.scale,
