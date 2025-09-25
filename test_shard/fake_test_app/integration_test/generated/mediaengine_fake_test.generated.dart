@@ -565,6 +565,7 @@ void mediaEngineSmokeTestCases() {
         int frameRotation = 5;
         int frameTimestamp = 5;
         int frameTextureId = 5;
+        int frameFenceObject = 5;
         List<double> frameMatrix = List.filled(5, 5.0);
         Uint8List frameMetadataBuffer = Uint8List.fromList([1, 1, 1, 1, 1]);
         int frameMetadataSize = 5;
@@ -585,6 +586,7 @@ void mediaEngineSmokeTestCases() {
           timestamp: frameTimestamp,
           eglType: frameEglType,
           textureId: frameTextureId,
+          fenceObject: frameFenceObject,
           matrix: frameMatrix,
           metadataBuffer: frameMetadataBuffer,
           metadataSize: frameMetadataSize,

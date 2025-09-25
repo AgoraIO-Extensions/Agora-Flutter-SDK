@@ -897,6 +897,8 @@ LocalAudioStats _$LocalAudioStatsFromJson(Map<String, dynamic> json) =>
       audioPlayoutDelay: (json['audioPlayoutDelay'] as num?)?.toInt(),
       earMonitorDelay: (json['earMonitorDelay'] as num?)?.toInt(),
       aecEstimatedDelay: (json['aecEstimatedDelay'] as num?)?.toInt(),
+      aedVoiceRes: (json['aedVoiceRes'] as num?)?.toInt(),
+      aedMusicRes: (json['aedMusicRes'] as num?)?.toInt(),
     );
 
 Map<String, dynamic> _$LocalAudioStatsToJson(LocalAudioStats instance) {
@@ -917,6 +919,8 @@ Map<String, dynamic> _$LocalAudioStatsToJson(LocalAudioStats instance) {
   writeNotNull('audioPlayoutDelay', instance.audioPlayoutDelay);
   writeNotNull('earMonitorDelay', instance.earMonitorDelay);
   writeNotNull('aecEstimatedDelay', instance.aecEstimatedDelay);
+  writeNotNull('aedVoiceRes', instance.aedVoiceRes);
+  writeNotNull('aedMusicRes', instance.aedMusicRes);
   return val;
 }
 
