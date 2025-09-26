@@ -1547,6 +1547,22 @@ class RtcEngineEventHandlerWrapper implements EventLoopEventHandler {
         rtcEngineEventHandler.onPermissionError!(permissionType);
         return true;
 
+      case 'onPermissionGranted_f37c62b':
+        if (rtcEngineEventHandler.onPermissionGranted == null) {
+          return true;
+        }
+        final jsonMap = jsonDecode(eventData);
+        RtcEngineEventHandlerOnPermissionGrantedJson paramJson =
+            RtcEngineEventHandlerOnPermissionGrantedJson.fromJson(jsonMap);
+        paramJson = paramJson.fillBuffers(buffers);
+        PermissionType? permissionType = paramJson.permissionType;
+        if (permissionType == null) {
+          return true;
+        }
+
+        rtcEngineEventHandler.onPermissionGranted!(permissionType);
+        return true;
+
       case 'onLocalUserRegistered_1922dd1':
         if (rtcEngineEventHandler.onLocalUserRegistered == null) {
           return true;

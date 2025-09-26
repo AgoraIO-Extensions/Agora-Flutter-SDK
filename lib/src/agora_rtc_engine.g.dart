@@ -1172,6 +1172,7 @@ const _$MediaDeviceStateTypeEnumMap = {
   MediaDeviceStateType.mediaDeviceStateIdle: 0,
   MediaDeviceStateType.mediaDeviceStateActive: 1,
   MediaDeviceStateType.mediaDeviceStateDisabled: 2,
+  MediaDeviceStateType.mediaDeviceStatePluggedIn: 3,
   MediaDeviceStateType.mediaDeviceStateNotPresent: 4,
   MediaDeviceStateType.mediaDeviceStateUnplugged: 8,
 };

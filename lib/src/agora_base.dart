@@ -1478,11 +1478,11 @@ extension H264PacketizeModeExt on H264PacketizeMode {
 /// The type of video streams.
 @JsonEnum(alwaysCreate: true)
 enum VideoStreamType {
-  /// 0: High-quality video stream.
+  /// 0: High-quality video stream, that is, a video stream with the highest resolution and bitrate.
   @JsonValue(0)
   videoStreamHigh,
 
-  /// 1: Low-quality video stream.
+  /// 1: Low-quality video stream, that is, a video stream with the lowest resolution and bitrate.
   @JsonValue(1)
   videoStreamLow,
 
@@ -2004,7 +2004,7 @@ class SimulcastStreamConfig implements AgoraSerializable {
   @JsonKey(name: 'dimensions')
   final VideoDimensions? dimensions;
 
-  /// Video receive bitrate (Kbps), represented by an instantaneous value. This parameter does not need to be set. The SDK automatically matches the most suitable bitrate based on the video resolution and frame rate you set.
+  /// Video bitrate (Kbps). The default value is -1. This parameter does not need to be set. The SDK automatically matches the most suitable bitrate based on the video resolution and frame rate you set.
   @JsonKey(name: 'kBitrate')
   final int? kBitrate;
 
@@ -2173,7 +2173,9 @@ class WatermarkRatio implements AgoraSerializable {
   Map<String, dynamic> toJson() => _$WatermarkRatioToJson(this);
 }
 
-/// Configurations of the watermark image.
+/// Watermark image configurations.
+///
+/// Configuration options for setting the watermark image to be added.
 @JsonSerializable(explicitToJson: true, includeIfNull: false)
 class WatermarkOptions implements AgoraSerializable {
   /// @nodoc
@@ -3125,7 +3127,7 @@ enum LocalVideoStreamReason {
   @JsonValue(22)
   localVideoStreamReasonScreenCaptureNoPermission,
 
-  /// 24: (Windows only) An unexpected error occurred during screen sharing (possibly due to window blocking failure), resulting in decreased performance, but the screen sharing process itself was not affected. During screen sharing, if blocking a specific window fails due to device driver issues, the SDK will report this event and automatically fall back to sharing the entire screen. If your use case requires masking specific windows to protect privacy, we recommend listening for this event and implementing additional privacy protection mechanisms when it is triggered."
+  /// 24: (Windows only) An unexpected error occurred during screen sharing (possibly due to window blocking failure), resulting in decreased performance, but the screen sharing process itself was not affected. During screen sharing, if blocking a specific window fails due to device driver issues, the SDK will report this event and automatically fall back to sharing the entire screen. If your use case requires masking specific windows to protect privacy, we recommend listening for this event and implementing additional privacy protection mechanisms when it is triggered.
   @JsonValue(24)
   localVideoStreamReasonScreenCaptureAutoFallback,
 
@@ -3697,7 +3699,9 @@ class LocalAudioStats implements AgoraSerializable {
       this.audioDeviceDelay,
       this.audioPlayoutDelay,
       this.earMonitorDelay,
-      this.aecEstimatedDelay});
+      this.aecEstimatedDelay,
+      this.aedVoiceRes,
+      this.aedMusicRes});
 
   /// The number of audio channels.
   @JsonKey(name: 'numChannels')
@@ -3734,6 +3738,14 @@ class LocalAudioStats implements AgoraSerializable {
   /// Acoustic echo cancellation (AEC) module estimated delay (ms), which is the signal delay between when audio is played locally before being locally captured.
   @JsonKey(name: 'aecEstimatedDelay')
   final int? aecEstimatedDelay;
+
+  /// @nodoc
+  @JsonKey(name: 'aedVoiceRes')
+  final int? aedVoiceRes;
+
+  /// @nodoc
+  @JsonKey(name: 'aedMusicRes')
+  final int? aedMusicRes;
 
   /// @nodoc
   factory LocalAudioStats.fromJson(Map<String, dynamic> json) =>

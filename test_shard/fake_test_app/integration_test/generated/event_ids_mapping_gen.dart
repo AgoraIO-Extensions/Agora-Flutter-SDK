@@ -354,6 +354,9 @@ const eventIdsMapping = {
   "RtcEngineEventHandler_onPermissionError": [
     "RtcEngineEventHandler_onPermissionError_f37c62b"
   ],
+  "RtcEngineEventHandler_onPermissionGranted": [
+    "RtcEngineEventHandler_onPermissionGranted_f37c62b"
+  ],
   "RtcEngineEventHandler_onLocalUserRegistered": [
     "RtcEngineEventHandler_onLocalUserRegistered_1922dd1"
   ],

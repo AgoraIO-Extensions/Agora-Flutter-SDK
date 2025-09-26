@@ -1736,6 +1736,7 @@ class RtcEngineEventHandler {
     this.onNetworkTypeChanged,
     this.onEncryptionError,
     this.onPermissionError,
+    this.onPermissionGranted,
     this.onLocalUserRegistered,
     this.onUserInfoUpdated,
     this.onUserAccountUpdated,
@@ -1865,7 +1866,7 @@ class RtcEngineEventHandler {
   ///
   /// This callback occurs when the local audio effect file finishes playing.
   ///
-  /// * [soundId] The ID of the audio effect. The ID of each audio effect file is unique.
+  /// * [soundId] The ID of the audio effect. The unique ID of each audio effect file.
   final void Function(int soundId)? onAudioEffectFinished;
 
   /// Occurs when the video device state changes.
@@ -2500,6 +2501,9 @@ class RtcEngineEventHandler {
   /// * [permissionType] The type of the device permission. See PermissionType.
   final void Function(PermissionType permissionType)? onPermissionError;
 
+  /// @nodoc
+  final void Function(PermissionType permissionType)? onPermissionGranted;
+
   /// Occurs when the local user registers a user account.
   ///
   /// After the local user successfully calls registerLocalUserAccount to register the user account or calls joinChannelWithUserAccount to join a channel, the SDK triggers the callback and informs the local user's UID and User Account.
@@ -3132,7 +3136,7 @@ abstract class RtcEngine {
   /// Gets the SDK version.
   ///
   /// Returns
-  /// One SDKBuildInfo object.
+  /// SDKBuildInfo object.
   Future<SDKBuildInfo> getVersion();
 
   /// Gets the warning or error description.
@@ -3277,7 +3281,7 @@ abstract class RtcEngine {
 
   /// Renews the token.
   ///
-  /// You can call this method to pass a new token to the SDK. A token will expire after a certain period of time, at which point the SDK will be unable to establish a connection with the server.
+  /// This method is used to update the token. After successfully calling this method, the SDK will trigger the callback. A token will expire after a certain period of time, at which point the SDK will be unable to establish a connection with the server.
   ///
   /// * [token] The new token.
   ///
@@ -3678,7 +3682,7 @@ abstract class RtcEngine {
   /// Enables/Disables the local video capture.
   ///
   /// This method disables or re-enables the local video capture, and does not affect receiving the remote video stream. After calling enableVideo, the local video capture is enabled by default. If you call enableLocalVideo (false) to disable local video capture within the channel, it also simultaneously stops publishing the video stream within the channel. If you want to restart video catpure, you can call enableLocalVideo (true) and then call updateChannelMediaOptions to set the options parameter to publish the locally captured video stream in the channel. After the local video capturer is successfully disabled or re-enabled, the SDK triggers the onRemoteVideoStateChanged callback on the remote client.
-  ///  You can call this method either before or after joining a channel.
+  ///  You can call this method either before or after joining a channel. However, if you call it before joining, the settings will only take effect once you have joined the channel.
   ///  This method enables the internal engine and is valid after leaving the channel.
   ///
   /// * [enabled] Whether to enable the local video capture. true : (Default) Enable the local video capture. false : Disable the local video capture. Once the local video is disabled, the remote users cannot receive the video stream of the local user, while the local user can still receive the video streams of remote users. When set to false, this method does not require a local camera.
@@ -4163,7 +4167,7 @@ abstract class RtcEngine {
 
   /// Gets the volume of a specified audio effect file.
   ///
-  /// * [soundId] The ID of the audio effect. The ID of each audio effect file is unique.
+  /// * [soundId] The ID of the audio effect. The unique ID of each audio effect file.
   /// * [volume] The playback volume. The value range is [0, 100]. The default value is 100, which represents the original volume.
   ///
   /// Returns
@@ -5064,7 +5068,7 @@ abstract class RtcEngine {
   ///  You must call this method after enableVideo. The setting result will take effect after the camera is successfully turned on, that is, after the SDK triggers the onLocalVideoStateChanged callback and returns the local video state as localVideoStreamStateCapturing (1).
   ///  This method is for Android and iOS only.
   ///
-  /// * [factor] The camera zoom factor. For devices that do not support ultra-wide-angle, the value ranges from 1.0 to the maximum zoom factor; for devices that support ultra-wide-angle, the value ranges from 0.5 to the maximum zoom factor. You can get the maximum zoom factor supported by the device by calling the getCameraMaxZoomFactor method.
+  /// * [factor] Camera zoom factor. For devices that do not support ultra-wide-angle, the value ranges from 1.0 to the maximum zoom factor; for devices that support ultra-wide-angle, the value ranges from 0.5 to the maximum zoom factor. You can get the maximum zoom factor supported by the device by calling the getCameraMaxZoomFactor method.
   ///
   /// Returns
   /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown. You need to catch the exception and handle it accordingly.
@@ -5081,13 +5085,13 @@ abstract class RtcEngine {
   /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown. You need to catch the exception and handle it accordingly.
   Future<void> enableFaceDetection(bool enabled);
 
-  /// Gets the maximum zoom ratio supported by the camera.
+  /// Get the maximum zoom ratio supported by the camera.
   ///
   /// This method must be called after the SDK triggers the onLocalVideoStateChanged callback and returns the local video state as localVideoStreamStateCapturing (1).
   ///  This method is for Android and iOS only.
   ///
   /// Returns
-  /// The maximum zoom factor.
+  /// The maximum zoom ratio supported by the camera.
   Future<double> getCameraMaxZoomFactor();
 
   /// Sets the camera manual focus position.
@@ -5687,7 +5691,7 @@ abstract class RtcEngine {
 
   /// Adds a watermark image to the local video.
   ///
-  /// This method adds a PNG watermark image to the local video in the live streaming. Once the watermark image is added, all the audience in the channel (CDN audience included), and the capturing device can see and capture it. The Agora SDK supports adding only one watermark image onto a local video or CDN live stream. The newly added watermark image replaces the previous one. The watermark coordinates are dependent on the settings in the setVideoEncoderConfiguration method:
+  /// This method adds a PNG watermark image to the local video in the live streaming. Once the watermark image is added, all the audience in the channel (CDN audience included), and the capturing device can see and capture it. The Agora SDK supports adding only one watermark image onto a live video stream. The newly added watermark image replaces the previous one. The watermark coordinates are dependent on the settings in the setVideoEncoderConfiguration method:
   ///  If the orientation mode of the encoding video (OrientationMode) is fixed landscape mode or the adaptive landscape mode, the watermark uses the landscape orientation.
   ///  If the orientation mode of the encoding video (OrientationMode) is fixed portrait mode or the adaptive portrait mode, the watermark uses the portrait orientation.
   ///  When setting the watermark position, the region must be less than the dimensions set in the setVideoEncoderConfiguration method; otherwise, the watermark image will be cropped.
@@ -5799,6 +5803,7 @@ abstract class RtcEngine {
   /// Once registered, the user account can be used to identify the local user when the user joins the channel. After the registration is successful, the user account can identify the identity of the local user, and the user can use it to join the channel. This method is optional. If you want to join a channel using a user account, you can choose one of the following methods:
   ///  Call the registerLocalUserAccount method to register a user account, and then call the joinChannelWithUserAccount method to join a channel, which can shorten the time it takes to enter the channel.
   ///  Call the joinChannelWithUserAccount method to join a channel.
+  ///  Starting from v4.6.0, the SDK will no longer automatically map Int UID to the String userAccount used when registering a User Account. If you want to join a channel with the original String userAccount used during registration, call the joinChannelWithUserAccount method to join the channel, instead of calling joinChannel and pass in the Int UID obtained through this method
   ///  Ensure that the userAccount is unique in the channel.
   ///  To ensure smooth communication, use the same parameter type to identify the user. For example, if a user joins the channel with a UID, then ensure all the other users use the UID too. The same applies to the user account. If a user joins the channel with the Agora Web SDK, ensure that the ID of the user is set to the same parameter type.
   ///
@@ -6179,8 +6184,8 @@ abstract class RtcEngine {
   /// Enables tracing the video frame rendering process.
   ///
   /// The SDK starts tracing the rendering status of the video frames in the channel from the moment this method is successfully called and reports information about the event through the onVideoRenderingTracingResult callback.
-  ///  The SDK automatically starts tracking the rendering events of the video from the moment that you call joinChannel to join the channel. You can call this method at an appropriate time according to the actual application scenario to customize the tracing process.
-  ///  After the local user leaves the current channel, the SDK automatically resets the time point to the next time when the user successfully joins the channel.
+  ///  If you have not called this method, the SDK tracks the rendering events of the video frames from the moment you call joinChannel to join the channel. You can call this method at an appropriate time according to the actual application scenario to set the starting position for tracking video rendering events.
+  ///  After the local user leaves the current channel, the SDK automatically tracks the video rendering events from the moment you join a channel.
   ///
   /// Returns
   /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown. You need to catch the exception and handle it accordingly.
@@ -6385,6 +6390,10 @@ enum MediaDeviceStateType {
   /// 2: The device is disabled.
   @JsonValue(2)
   mediaDeviceStateDisabled,
+
+  /// 3: The device is plugged in.
+  @JsonValue(3)
+  mediaDeviceStatePluggedIn,
 
   /// 4: The device is not found.
   @JsonValue(4)
