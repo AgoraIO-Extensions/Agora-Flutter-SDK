@@ -12,6 +12,7 @@
 #include <jni.h>
 #include <memory>
 #include <vector>
+#include <cstring>
 
 namespace agora {
 namespace iris {
@@ -508,6 +509,10 @@ class YUVRendering final : public RenderingOp {
     uTextureLoc_ = glGetUniformLocation(program, "uTexture");
     vTextureLoc_ = glGetUniformLocation(program, "vTexture");
 
+    // Get locations for ColorSpace uniforms
+    colorMatrixLoc_ = glGetUniformLocation(program, "uColorMatrix");
+    rangeLoc_ = glGetUniformLocation(program, "uRange");
+
     glGenTextures(3, texs_);
     CHECK_GL_ERROR()
   }
@@ -618,12 +623,88 @@ class YUVRendering final : public RenderingOp {
                  GL_LUMINANCE, GL_UNSIGNED_BYTE, vBuffer);
     CHECK_GL_ERROR()
 
+    if (colorMatrixLoc_ != -1) {
+      // BT.601 Full Range 
+      float bt601_full[9] = {
+          1.0f, 1.0f, 1.0f,
+          0.0f, -0.344136f, 1.772f,
+          1.402f, -0.714136f, 0.0f
+      };
+      
+      // BT.601 Limited Range 
+      float bt601_limit[9] = {
+          1.164384f, 1.164384f, 1.164384f,
+          0.0f, -0.391762f, 2.017232f,
+          1.596027f, -0.812968f, 0.0f
+      };
+      
+      // BT.709 Full Range 
+      float bt709_full[9] = {
+          1.0f, 1.0f, 1.0f,
+          0.0f, -0.187324f, 1.8556f,
+          1.5748f, -0.468124f, 0.0f
+      };
+      
+      // BT.709 Limited Range 
+      float bt709_limit[9] = {
+          1.164384f, 1.164384f, 1.164384f,
+          0.0f, -0.213249f, 2.112402f,
+          1.792741f, -0.532909f, 0.0f
+      };
+      
+      // BT.2020 Full Range 
+      float bt2020_full[9] = {
+          1.0f, 1.0f, 1.0f,
+          0.0f, -0.164553f, 1.8814f,
+          1.4746f, -0.571353f, 0.0f
+      };
+      
+      // BT.2020 Limited Range 
+      float bt2020_limit[9] = {
+          1.167808f, 1.167808f, 1.167808f,
+          0.0f, -0.187877f, 2.148072f,
+          1.683611f, -0.652337f, 0.0f
+      };
+
+      float mat[9];
+      int matrixId = (int)video_frame->colorSpace.matrix;
+      int rangeId = (int)video_frame->colorSpace.range;
+      
+      bool isFullRange = (rangeId == agora::media::base::ColorSpace::RANGEID_FULL);
+      
+      // Select matrix based on colorSpace.matrix and range 
+      switch (matrixId) {
+        case agora::media::base::ColorSpace::MATRIXID_SMPTE170M:
+        case agora::media::base::ColorSpace::MATRIXID_BT470BG:
+          memcpy(mat, isFullRange ? bt601_full : bt601_limit, sizeof(mat));
+          break;
+        case agora::media::base::ColorSpace::MATRIXID_BT709:
+          memcpy(mat, isFullRange ? bt709_full : bt709_limit, sizeof(mat));
+          break;
+        case agora::media::base::ColorSpace::MATRIXID_BT2020_NCL:
+        case agora::media::base::ColorSpace::MATRIXID_BT2020_CL:
+          memcpy(mat, bt2020_full, sizeof(mat));
+          break;
+        default:
+          memcpy(mat, isFullRange ? bt709_full : bt709_limit, sizeof(mat));
+          break;
+      }
+      glUniformMatrix3fv(colorMatrixLoc_, 1, GL_FALSE, mat);
+    }
+
+    if (rangeLoc_ != -1) {
+      int rangeId = (int)video_frame->colorSpace.range;
+      bool isFullRange = (rangeId == agora::media::base::ColorSpace::RANGEID_FULL);
+      int rangeVal = isFullRange ? 1 : 0;
+      glUniform1i(rangeLoc_, rangeVal);
+      
+    }
+
     glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
     CHECK_GL_ERROR()
 
     gl_context_->Swap();
 
-    // Clean up
     glDisableVertexAttribArray(aPositionLoc_);
     CHECK_GL_ERROR()
     glDisableVertexAttribArray(texCoordLoc_);
@@ -642,8 +723,8 @@ class YUVRendering final : public RenderingOp {
       "attribute vec2 aTextCoord;\n"
       "varying vec2 vTextCoord;\n"
       "void main() {\n"
-      "    vTextCoord = vec2(aTextCoord.x, 1.0 - aTextCoord.y);\n"
-      "    gl_Position = aPosition;\n"
+      "  gl_Position = aPosition;\n"
+      "  vTextCoord = aTextCoord;\n"
       "}\n";
 
   const char *frag_shader_yuv_ =
@@ -652,15 +733,26 @@ class YUVRendering final : public RenderingOp {
       "uniform sampler2D yTexture;\n"
       "uniform sampler2D uTexture;\n"
       "uniform sampler2D vTexture;\n"
+      "uniform mat3 uColorMatrix;\n"
+      "uniform int uRange;\n"
+      "\n"
       "void main() {\n"
-      "    vec3 yuv;\n"
-      "    vec3 rgb;\n"
-      "    yuv.r = texture2D(yTexture, vTextCoord).r;\n"
-      "    yuv.g = texture2D(uTexture, vTextCoord).r - 0.5;\n"
-      "    yuv.b = texture2D(vTexture, vTextCoord).r - 0.5;\n"
-      "    rgb = mat3(1.0, 1.0, 1.0, 0.0, -0.39465, 2.03211, 1.13983, "
-      "-0.58060, 0.0) * yuv;\n"
-      "    gl_FragColor = vec4(rgb, 1.0);\n"
+      "  float y = texture2D(yTexture, vTextCoord).r;\n"
+      "  float u = texture2D(uTexture, vTextCoord).r;\n"
+      "  float v = texture2D(vTexture, vTextCoord).r;\n"
+      "\n"
+      "  vec3 yuv;\n"
+      "  if (uRange == 0) { // LIMITED: apply 0.0627 offset\n"
+      "    yuv[0] = clamp(y, 0.0, 1.0) - 0.0627;\n"
+      "  } else { // FULL: no offset\n"
+      "    yuv[0] = clamp(y, 0.0, 1.0);\n"
+      "  }\n"
+      "  yuv[1] = clamp(u - 0.5, -0.5, 0.5);\n"
+      "  yuv[2] = clamp(v - 0.5, -0.5, 0.5);\n"
+      "\n"
+      "  vec3 rgb = uColorMatrix * yuv;\n"
+      "\n"
+      "  gl_FragColor = vec4(clamp(rgb, 0.0, 1.0), 1.0);\n"
       "}\n";
 
   // clang-format off
@@ -680,6 +772,8 @@ class YUVRendering final : public RenderingOp {
   GLint yTextureLoc_;
   GLint uTextureLoc_;
   GLint vTextureLoc_;
+  GLint colorMatrixLoc_ = -1;
+  GLint rangeLoc_ = -1;
 
   std::unique_ptr<ScopedShader> shader_;
 };
