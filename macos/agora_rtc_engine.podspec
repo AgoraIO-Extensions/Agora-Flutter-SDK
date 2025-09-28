@@ -20,6 +20,7 @@ A new flutter plugin project.
   if File.exist?(plugin_dev_path)
     puts '[plugin_dev] Found .plugin_dev file, use vendored_frameworks instead.'
     s.vendored_frameworks = 'libs/*.xcframework', 'libs/*.framework'
+    s.dependency 'AgoraRtcEngine_macOS', '4.6.0'
   else
     # iris dependencies start
     s.dependency 'AgoraIrisRTC_macOS', '4.5.2.6-build.1'
