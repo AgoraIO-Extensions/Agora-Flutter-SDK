@@ -1,0 +1,350 @@
+name: 'Release to pub.dev and GitHub'
+
+on:
+  # Manual trigger - users can manually trigger this workflow
+  workflow_dispatch:
+    inputs:
+      release_version:
+        description: 'The version to be released (e.g., 6.5.3 for standard, 6.5.2-sp.452143 for special)'
+        required: true
+        type: string
+
+  # Callable workflow - can be called by other workflows
+  workflow_call:
+    inputs:
+      release_version:
+        description: 'The version to be released (e.g., 6.5.3 for standard, 6.5.2-sp.452143 for special)'
+        required: false
+        type: string
+    outputs:
+      release_version:
+        description: 'The version that was released'
+        value: ${{ jobs.release.outputs.release_version }}
+      release_type:
+        description: 'The type of release (standard or special)'
+        value: ${{ jobs.release.outputs.release_type }}
+      release_success:
+        description: 'Whether the release was successful'
+        value: ${{ jobs.release.result == 'success' }}
+      documentation_generated:
+        description: 'Whether documentation was generated'
+        value: ${{ jobs.attach_documentation.result == 'success' }}
+      documentation_version:
+        description: 'The documentation version'
+        value: ${{ jobs.attach_documentation.outputs.doc_version }}
+
+  # Also allow automatic trigger from PR merge with specific labels
+  pull_request:
+    types:
+      - closed
+
+jobs:
+  # Main release job - handles manual, callable, and automatic releases
+  release:
+    if: ${{ github.event_name == 'workflow_dispatch' ||
+            github.event_name == 'workflow_call' ||
+            (github.event_name == 'pull_request' &&
+             github.event.pull_request.merged == true &&
+             ((github.event.pull_request.base.ref == 'main' && contains(github.event.pull_request.labels.*.name, 'ci:prepare_release')) ||
+              contains(github.event.pull_request.labels.*.name, 'ci:ready_release_special'))) }}
+    outputs:
+      release_version: ${{ steps.version_check.outputs.version }}
+      release_type: ${{ steps.version_check.outputs.release_type }}
+      is_prerelease: ${{ steps.version_check.outputs.is_prerelease }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository 🛎️
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.ref }}
+          fetch-depth: 0
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Get tags
+        run: git fetch --tags origin
+
+      - name: Get version information ℹ️
+        id: version_check
+        run: |
+          set -eo pipefail
+
+          # Get version from inputs (for workflow_dispatch and workflow_call) or pubspec.yaml (for PR)
+          if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
+            RELEASE_VERSION="${{ github.event.inputs.release_version }}"
+          elif [ "${{ github.event_name }}" = "workflow_call" ]; then
+            RELEASE_VERSION="${{ inputs.release_version }}"
+          else
+            RELEASE_VERSION=$(grep 'version: ' pubspec.yaml | sed -e 's,.*: \(.*\),\1,')
+          fi
+
+          # Determine release type based on PR labels or version format
+          if [ "${{ github.event_name }}" = "pull_request" ]; then
+            if [ "${{ contains(github.event.pull_request.labels.*.name, 'ci:prepare_release') }}" = "true" ]; then
+              RELEASE_TYPE="standard"
+              IS_PRERELEASE="false"
+              echo "🚀 PR triggered standard release: $RELEASE_VERSION"
+            elif [ "${{ contains(github.event.pull_request.labels.*.name, 'ci:ready_release_special') }}" = "true" ]; then
+              RELEASE_TYPE="special"
+              IS_PRERELEASE="true"
+              echo "🔧 PR triggered special release: $RELEASE_VERSION"
+            fi
+          else
+            # Auto-detect release type based on version format for manual/callable triggers
+            # Only clean semantic versions (MAJOR.MINOR.PATCH) are considered standard
+            # Any version with suffix (pre-release, build metadata, etc.) is special
+            if [[ $RELEASE_VERSION =~ ^[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
+              # Clean semantic version: 6.5.0 (no suffix)
+              RELEASE_TYPE="standard"
+              IS_PRERELEASE="false"
+              echo "🚀 Detected standard release version: $RELEASE_VERSION"
+            else
+              # Special version: any version with suffix
+              # Examples: 6.5.0-beta.1, 6.5.0-rc.2, 6.5.2-sp.452143, 6.5.0+build.123
+              RELEASE_TYPE="special"
+              IS_PRERELEASE="true"
+              echo "🔧 Detected special release version: $RELEASE_VERSION"
+            fi
+          fi
+
+          echo "Release version: $RELEASE_VERSION"
+          echo "Release type: $RELEASE_TYPE" 
+          echo "Is prerelease: $IS_PRERELEASE"
+
+          echo "version=$RELEASE_VERSION" >> $GITHUB_OUTPUT
+          echo "release_type=$RELEASE_TYPE" >> $GITHUB_OUTPUT
+          echo "is_prerelease=$IS_PRERELEASE" >> $GITHUB_OUTPUT
+
+      - name: Update pubspec.yaml version
+        if: ${{ github.event_name == 'workflow_dispatch' || github.event_name == 'workflow_call' }}
+        run: |
+          set -eo pipefail
+
+          RELEASE_VERSION="${{ steps.version_check.outputs.version }}"
+          RELEASE_TYPE="${{ steps.version_check.outputs.release_type }}"
+          
+          echo "📝 Updating pubspec.yaml version to $RELEASE_VERSION (type: $RELEASE_TYPE)"
+
+          # Update version in pubspec.yaml for both standard and special versions
+          sed -i.bak "s/^version: .*/version: $RELEASE_VERSION/" pubspec.yaml
+
+          # Verify the change
+          UPDATED_VERSION=$(grep 'version: ' pubspec.yaml | sed -e 's,.*: \(.*\),\1,')
+          echo "✅ Updated pubspec.yaml version: $UPDATED_VERSION"
+
+          if [ "$UPDATED_VERSION" != "$RELEASE_VERSION" ]; then
+            echo "❌ Error: Version update failed!"
+            exit 1
+          fi
+
+          # Show the change
+          echo "📋 Changes made:"
+          git diff pubspec.yaml
+
+      - name: Install release tools
+        run: |
+          npm install -g release-it
+          npm install -g release-it/bumper
+          npm install -g release-it/conventional-changelog
+
+      - name: Configure git
+        run: |
+          git config user.name "${GITHUB_ACTOR}"
+          git config user.email "${GITHUB_ACTOR}@users.noreply.github.com"
+
+      - name: Create release commit and tag (manual/callable triggers)
+        if: ${{ github.event_name == 'workflow_dispatch' || github.event_name == 'workflow_call' }}
+        run: |
+          git checkout -b "release-${{ steps.version_check.outputs.version }}"
+
+          # Use auto-detected release type
+          RELEASE_TYPE="${{ steps.version_check.outputs.release_type }}"
+          IS_PRERELEASE="${{ steps.version_check.outputs.is_prerelease }}"
+
+          if [ "$RELEASE_TYPE" = "special" ]; then
+            echo "🔧 Creating special release (only Git tag, no GitHub release)..."
+            release-it ${{ steps.version_check.outputs.version }} \
+              --no-git.commit \
+              --'git.commitMessage="chore: release ${{ steps.version_check.outputs.version }}"' \
+              --git.tag \
+              --'git.tagName="${{ steps.version_check.outputs.version }}"' \
+              --'git.tagAnnotation="Release ${{ steps.version_check.outputs.version }}"' \
+              --git.push \
+              --no-github.release \
+              --no-github.web \
+              --ci
+          else
+            echo "🚀 Creating standard release (with GitHub release)..."
+            if [ "$IS_PRERELEASE" = "true" ]; then
+              echo "🔖 This is a pre-release version"
+            fi
+            release-it ${{ steps.version_check.outputs.version }} \
+              --no-git.commit \
+              --'git.commitMessage="chore: release ${{ steps.version_check.outputs.version }}"' \
+              --git.tag \
+              --'git.tagName="${{ steps.version_check.outputs.version }}"' \
+              --'git.tagAnnotation="Release ${{ steps.version_check.outputs.version }}"' \
+              --git.push \
+              --github.release \
+              --no-github.web \
+              --ci
+          fi
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Create release commit and tag (PR triggers)
+        if: github.event_name == 'pull_request'
+        run: |
+          RELEASE_TYPE="${{ steps.version_check.outputs.release_type }}"
+          RELEASE_VERSION="${{ steps.version_check.outputs.version }}"
+
+          if [ "$RELEASE_TYPE" = "special" ]; then
+            echo "🔧 Creating special release from PR (only Git tag, no GitHub release)..."
+            release-it $RELEASE_VERSION \
+              --no-git.commit \
+              --'git.commitMessage="chore: release ${version}"' \
+              --git.tag \
+              --'git.tagName="${version}"' \
+              --'git.tagAnnotation="Release ${version}"' \
+              --git.push \
+              --no-github.release \
+              --no-github.web \
+              --ci
+          else
+            echo "🚀 Creating standard release from PR (with GitHub release)..."
+            release-it $RELEASE_VERSION \
+              --no-git.commit \
+              --'git.commitMessage="chore: release ${version}"' \
+              --git.tag \
+              --'git.tagName="${version}"' \
+              --'git.tagAnnotation="Release ${version}"' \
+              --git.push \
+              --github.release \
+              --no-github.web \
+              --ci
+          fi
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Publish to pub.dev 🚀
+        if: ${{ steps.version_check.outputs.release_type == 'standard' }}
+        id: publish
+        uses: k-paxian/dart-package-publisher@master
+        with:
+          accessToken: ${{ secrets.OAUTH_ACCESS_TOKEN }}
+          refreshToken: ${{ secrets.OAUTH_REFRESH_TOKEN }}
+          force: false
+          skipTests: true
+
+  # Generate and attach documentation (only for standard releases)
+  attach_documentation:
+    name: 'Generate and Attach Documentation'
+    runs-on: ubuntu-latest
+    needs: release
+    if: ${{ needs.release.result == 'success' &&
+            needs.release.outputs.release_type == 'standard' }}
+    outputs:
+      doc_version: ${{ steps.doc_version.outputs.version }}
+    steps:
+      - name: Checkout repository 🛎️
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.ref }}
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      # Get version information from release job output
+      - name: Get version for documentation
+        id: doc_version
+        run: |
+          set -eo pipefail
+
+          # Get version from release job output
+          VERSION="${{ needs.release.outputs.release_version }}"
+          echo "Documentation version: $VERSION"
+          echo "version=$VERSION" >> $GITHUB_OUTPUT
+
+      - name: Setup Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          channel: 'stable'
+          cache: true
+
+      - name: Install dependencies
+        run: |
+          dart pub get
+
+      - name: Generate DartDoc 📖
+        run: |
+          # Generate DartDoc
+          dart doc
+          # Create a zip file of the DartDoc output
+          zip -r agora_rtc_engine_docs.zip doc
+
+      - name: Upload DartDoc Artifact ⬆️
+        uses: actions/upload-artifact@v4
+        with:
+          name: agora_rtc_engine_docs.zip
+          path: agora_rtc_engine_docs.zip
+
+      - name: Upload DartDoc Archive to GitHub release ⬆️
+        uses: svenstaro/upload-release-action@v2
+        with:
+          repo_token: ${{ secrets.GITHUB_TOKEN }}
+          file: agora_rtc_engine_docs.zip
+          asset_name: agora_rtc_engine_docs.zip
+          tag: ${{ steps.doc_version.outputs.version }}
+          overwrite: true
+
+  # Post-release verification
+  verify_release:
+    name: 'Verify Release'
+    runs-on: ubuntu-latest
+    needs: [release, attach_documentation]
+    if: always() && (needs.release.result == 'success' || needs.attach_documentation.result == 'success')
+    steps:
+      - name: Checkout repository 🛎️
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.ref }}
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Verify release details
+        run: |
+          set -eo pipefail
+
+          RELEASE_VERSION="${{ needs.release.outputs.release_version }}"
+          RELEASE_TYPE="${{ needs.release.outputs.release_type }}"
+          IS_PRERELEASE="${{ needs.release.outputs.is_prerelease }}"
+
+          echo "🔍 Verifying release: $RELEASE_VERSION"
+          echo "📋 Release Summary:"
+          echo "  • Version: $RELEASE_VERSION"
+          echo "  • Type: $RELEASE_TYPE"
+          echo "  • Pre-release: $IS_PRERELEASE"
+          echo "  • Branch: ${{ github.ref_name || 'main' }}"
+          echo "  • Triggered by: ${{ (github.event_name == 'workflow_dispatch' && 'Manual trigger') || (github.event_name == 'workflow_call' && 'Workflow call') || 'PR merge' }}"
+
+          if [ "$RELEASE_TYPE" = "standard" ]; then
+            if [ "$IS_PRERELEASE" = "true" ]; then
+              echo "  • Status: Pre-release version published"
+            else
+              echo "  • Status: Standard version published"
+            fi
+            echo "  • GitHub Release: ✅ Created"
+            echo "  • Pub.dev: ✅ Published"
+            echo "  • Documentation: ✅ Generated and attached"
+          else
+            echo "  • Status: Special version (internal use only)"
+            echo "  • GitHub Release: ❌ Not created (internal version)"
+            echo "  • Pub.dev: ❌ Not published (internal version)"
+            echo "  • Documentation: ❌ Not generated (internal version)"
+          fi
+
+          echo ""
+          echo "🎉 Release workflow completed successfully!"
+
+      - name: Notify on failure
+        if: needs.release.result == 'failure'
+        run: |
+          echo "❌ Release failed!"
+          echo "Please check the logs and try again."
+          exit 1
