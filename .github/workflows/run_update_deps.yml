@@ -48,7 +48,7 @@ jobs:
       - name: Checkout target branch
         uses: actions/checkout@v4
         with:
-          ref: ${{ github.ref }}
+          ref: ${{ github.ref_name }}
           fetch-depth: '1'
           lfs: 'true'
           submodules: 'true'
@@ -91,7 +91,7 @@ jobs:
         id: prepare_target_branch
         uses: ./.github/actions/prepare_branch
         with:
-          target_branch: ${{ github.ref }}
+          target_branch: ${{ github.ref_name }}
           pub_version: ${{ inputs.pub_version }}
           branch_group: "special"
           working_directory: ./

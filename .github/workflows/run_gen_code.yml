@@ -42,7 +42,7 @@ jobs:
         id: prepare_target_branch
         uses: ./.github/actions/prepare_branch
         with:
-          target_branch: ${{ github.ref }}
+          target_branch: ${{ github.ref_name }}
           pub_version: ""
           branch_group: "special"
           working_directory: ./
