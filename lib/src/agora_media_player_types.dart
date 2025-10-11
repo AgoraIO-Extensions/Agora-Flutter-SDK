@@ -278,10 +278,6 @@ enum MediaPlayerEvent {
   /// @nodoc
   @JsonValue(18)
   playerEventTryOpenFailed,
-
-  /// @nodoc
-  @JsonValue(19)
-  playerEventHttpRedirect,
 }
 
 /// @nodoc

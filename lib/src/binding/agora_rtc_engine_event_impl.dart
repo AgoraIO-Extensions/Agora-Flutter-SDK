@@ -288,6 +288,22 @@ class RtcEngineEventHandlerWrapper implements EventLoopEventHandler {
             deviceId, deviceType, deviceState);
         return true;
 
+      case 'onPipStateChanged_941b366':
+        if (rtcEngineEventHandler.onPipStateChanged == null) {
+          return true;
+        }
+        final jsonMap = jsonDecode(eventData);
+        RtcEngineEventHandlerOnPipStateChangedJson paramJson =
+            RtcEngineEventHandlerOnPipStateChangedJson.fromJson(jsonMap);
+        paramJson = paramJson.fillBuffers(buffers);
+        PipState? state = paramJson.state;
+        if (state == null) {
+          return true;
+        }
+
+        rtcEngineEventHandler.onPipStateChanged!(state);
+        return true;
+
       case 'onNetworkQuality_34d8b3c':
         if (rtcEngineEventHandler.onNetworkQuality == null) {
           return true;
@@ -1531,6 +1547,22 @@ class RtcEngineEventHandlerWrapper implements EventLoopEventHandler {
         rtcEngineEventHandler.onPermissionError!(permissionType);
         return true;
 
+      case 'onPermissionGranted_f37c62b':
+        if (rtcEngineEventHandler.onPermissionGranted == null) {
+          return true;
+        }
+        final jsonMap = jsonDecode(eventData);
+        RtcEngineEventHandlerOnPermissionGrantedJson paramJson =
+            RtcEngineEventHandlerOnPermissionGrantedJson.fromJson(jsonMap);
+        paramJson = paramJson.fillBuffers(buffers);
+        PermissionType? permissionType = paramJson.permissionType;
+        if (permissionType == null) {
+          return true;
+        }
+
+        rtcEngineEventHandler.onPermissionGranted!(permissionType);
+        return true;
+
       case 'onLocalUserRegistered_1922dd1':
         if (rtcEngineEventHandler.onLocalUserRegistered == null) {
           return true;
@@ -1808,77 +1840,84 @@ class RtcEngineEventHandlerWrapper implements EventLoopEventHandler {
             connection, uid, metadata, length);
         return true;
 
-      case 'onExtensionEventWithContext_a5fb27a':
-        if (rtcEngineEventHandler.onExtensionEventWithContext == null) {
+      case 'onExtensionEvent_062d13c':
+        if (rtcEngineEventHandler.onExtensionEvent == null) {
           return true;
         }
         final jsonMap = jsonDecode(eventData);
-        RtcEngineEventHandlerOnExtensionEventWithContextJson paramJson =
-            RtcEngineEventHandlerOnExtensionEventWithContextJson.fromJson(
-                jsonMap);
+        RtcEngineEventHandlerOnExtensionEventJson paramJson =
+            RtcEngineEventHandlerOnExtensionEventJson.fromJson(jsonMap);
         paramJson = paramJson.fillBuffers(buffers);
-        ExtensionContext? context = paramJson.context;
+        String? provider = paramJson.provider;
+        String? extension = paramJson.extension;
         String? key = paramJson.key;
         String? value = paramJson.value;
-        if (context == null || key == null || value == null) {
+        if (provider == null ||
+            extension == null ||
+            key == null ||
+            value == null) {
           return true;
         }
-        context = context.fillBuffers(buffers);
-        rtcEngineEventHandler.onExtensionEventWithContext!(context, key, value);
+
+        rtcEngineEventHandler.onExtensionEvent!(
+            provider, extension, key, value);
         return true;
 
-      case 'onExtensionStartedWithContext_67c38e3':
-        if (rtcEngineEventHandler.onExtensionStartedWithContext == null) {
+      case 'onExtensionStarted_ccad422':
+        if (rtcEngineEventHandler.onExtensionStarted == null) {
           return true;
         }
         final jsonMap = jsonDecode(eventData);
-        RtcEngineEventHandlerOnExtensionStartedWithContextJson paramJson =
-            RtcEngineEventHandlerOnExtensionStartedWithContextJson.fromJson(
-                jsonMap);
+        RtcEngineEventHandlerOnExtensionStartedJson paramJson =
+            RtcEngineEventHandlerOnExtensionStartedJson.fromJson(jsonMap);
         paramJson = paramJson.fillBuffers(buffers);
-        ExtensionContext? context = paramJson.context;
-        if (context == null) {
+        String? provider = paramJson.provider;
+        String? extension = paramJson.extension;
+        if (provider == null || extension == null) {
           return true;
         }
-        context = context.fillBuffers(buffers);
-        rtcEngineEventHandler.onExtensionStartedWithContext!(context);
+
+        rtcEngineEventHandler.onExtensionStarted!(provider, extension);
         return true;
 
-      case 'onExtensionStoppedWithContext_67c38e3':
-        if (rtcEngineEventHandler.onExtensionStoppedWithContext == null) {
+      case 'onExtensionStopped_ccad422':
+        if (rtcEngineEventHandler.onExtensionStopped == null) {
           return true;
         }
         final jsonMap = jsonDecode(eventData);
-        RtcEngineEventHandlerOnExtensionStoppedWithContextJson paramJson =
-            RtcEngineEventHandlerOnExtensionStoppedWithContextJson.fromJson(
-                jsonMap);
+        RtcEngineEventHandlerOnExtensionStoppedJson paramJson =
+            RtcEngineEventHandlerOnExtensionStoppedJson.fromJson(jsonMap);
         paramJson = paramJson.fillBuffers(buffers);
-        ExtensionContext? context = paramJson.context;
-        if (context == null) {
+        String? provider = paramJson.provider;
+        String? extension = paramJson.extension;
+        if (provider == null || extension == null) {
           return true;
         }
-        context = context.fillBuffers(buffers);
-        rtcEngineEventHandler.onExtensionStoppedWithContext!(context);
+
+        rtcEngineEventHandler.onExtensionStopped!(provider, extension);
         return true;
 
-      case 'onExtensionErrorWithContext_a452f11':
-        if (rtcEngineEventHandler.onExtensionErrorWithContext == null) {
+      case 'onExtensionError_bd3489b':
+        if (rtcEngineEventHandler.onExtensionError == null) {
           return true;
         }
         final jsonMap = jsonDecode(eventData);
-        RtcEngineEventHandlerOnExtensionErrorWithContextJson paramJson =
-            RtcEngineEventHandlerOnExtensionErrorWithContextJson.fromJson(
-                jsonMap);
+        RtcEngineEventHandlerOnExtensionErrorJson paramJson =
+            RtcEngineEventHandlerOnExtensionErrorJson.fromJson(jsonMap);
         paramJson = paramJson.fillBuffers(buffers);
-        ExtensionContext? context = paramJson.context;
+        String? provider = paramJson.provider;
+        String? extension = paramJson.extension;
         int? error = paramJson.error;
         String? message = paramJson.message;
-        if (context == null || error == null || message == null) {
+        if (provider == null ||
+            extension == null ||
+            error == null ||
+            message == null) {
           return true;
         }
-        context = context.fillBuffers(buffers);
-        rtcEngineEventHandler.onExtensionErrorWithContext!(
-            context, error, message);
+
+        rtcEngineEventHandler.onExtensionError!(
+            provider, extension, error, message);
         return true;
 
       case 'onSetRtmFlagResult_263e4cd':

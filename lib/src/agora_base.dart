@@ -155,10 +155,6 @@ enum WarnCodeType {
   warnAdmImproperSettings,
 
   /// @nodoc
-  @JsonValue(1055)
-  warnAdmPopState,
-
-  /// @nodoc
   @JsonValue(1322)
   warnAdmWinCoreNoRecordingDevice,
 
@@ -935,10 +931,6 @@ extension OrientationModeExt on OrientationMode {
 /// Video degradation preferences when the bandwidth is a constraint.
 @JsonEnum(alwaysCreate: true)
 enum DegradationPreference {
-  /// 0: (Default) Automatic mode. The SDK will automatically select maintainFramerate, maintainBalanced or maintainResolution based on the video scenario you set, in order to achieve the best overall quality of experience (QoE).
-  @JsonValue(-1)
-  maintainAuto,
-
   /// 0: Prefers to reduce the video frame rate while maintaining video resolution during video encoding under limited bandwidth. This degradation preference is suitable for scenarios where video quality is prioritized. Deprecated: This enumerator is deprecated. Use other enumerations instead.
   @JsonValue(0)
   maintainQuality,
@@ -1250,10 +1242,6 @@ enum AudioCodecType {
   /// @nodoc
   @JsonValue(12)
   audioCodecLpcnet,
-
-  /// @nodoc
-  @JsonValue(13)
-  audioCodecOpusmc,
 }
 
 /// @nodoc
@@ -1656,10 +1644,6 @@ class EncodedVideoFrameInfo implements AgoraSerializable {
 /// Compression preference for video encoding.
 @JsonEnum(alwaysCreate: true)
 enum CompressionPreference {
-  /// -1: (Default) Automatic mode. The SDK will automatically select preferLowLatency or preferQuality based on the video scenario you set to achieve the best user experience.
-  @JsonValue(-1)
-  preferCompressionAuto,
-
   /// 0: Low latency preference. The SDK compresses video frames to reduce latency. This preference is suitable for scenarios where smoothness is prioritized and reduced video quality is acceptable.
   @JsonValue(0)
   preferLowLatency,
@@ -1715,8 +1699,7 @@ extension EncodingPreferenceExt on EncodingPreference {
 @JsonSerializable(explicitToJson: true, includeIfNull: false)
 class AdvanceOptions implements AgoraSerializable {
   /// @nodoc
-  const AdvanceOptions(
-      {this.encodingPreference, this.compressionPreference, this.encodeAlpha});
+  const AdvanceOptions({this.encodingPreference, this.compressionPreference});
 
   /// Video encoder preference. See EncodingPreference.
   @JsonKey(name: 'encodingPreference')
@@ -1725,10 +1708,6 @@ class AdvanceOptions implements AgoraSerializable {
   /// Compression preference for video encoding. See CompressionPreference.
   @JsonKey(name: 'compressionPreference')
   final CompressionPreference? compressionPreference;
-
-  /// Whether to encode and send the Alpha data present in the video frame to the remote end: true : Encode and send Alpha data. false : (Default) Do not encode and send Alpha data.
-  @JsonKey(name: 'encodeAlpha')
-  final bool? encodeAlpha;
 
   /// @nodoc
   factory AdvanceOptions.fromJson(Map<String, dynamic> json) =>
@@ -1791,76 +1770,6 @@ extension CameraFormatTypeExt on CameraFormatType {
   /// @nodoc
   int value() {
     return _$CameraFormatTypeEnumMap[this]!;
-  }
-}
-
-/// @nodoc
-@JsonEnum(alwaysCreate: true)
-enum VideoModuleType {
-  /// @nodoc
-  @JsonValue(0)
-  videoModuleCapturer,
-
-  /// @nodoc
-  @JsonValue(1)
-  videoModuleSoftwareEncoder,
-
-  /// @nodoc
-  @JsonValue(2)
-  videoModuleHardwareEncoder,
-
-  /// @nodoc
-  @JsonValue(3)
-  videoModuleSoftwareDecoder,
-
-  /// @nodoc
-  @JsonValue(4)
-  videoModuleHardwareDecoder,
-
-  /// @nodoc
-  @JsonValue(5)
-  videoModuleRenderer,
-}
-
-/// @nodoc
-extension VideoModuleTypeExt on VideoModuleType {
-  /// @nodoc
-  static VideoModuleType fromValue(int value) {
-    return $enumDecode(_$VideoModuleTypeEnumMap, value);
-  }
-
-  /// @nodoc
-  int value() {
-    return _$VideoModuleTypeEnumMap[this]!;
-  }
-}
-
-/// @nodoc
-@JsonEnum(alwaysCreate: true)
-enum HdrCapability {
-  /// @nodoc
-  @JsonValue(-1)
-  hdrCapabilityUnknown,
-
-  /// @nodoc
-  @JsonValue(0)
-  hdrCapabilityUnsupported,
-
-  /// @nodoc
-  @JsonValue(1)
-  hdrCapabilitySupported,
-}
-
-/// @nodoc
-extension HdrCapabilityExt on HdrCapability {
-  /// @nodoc
-  static HdrCapability fromValue(int value) {
-    return $enumDecode(_$HdrCapabilityEnumMap, value);
-  }
-
-  /// @nodoc
-  int value() {
-    return _$HdrCapabilityEnumMap[this]!;
   }
 }
 
@@ -2750,16 +2659,8 @@ enum AudioScenarioType {
   @JsonValue(8)
   audioScenarioMeeting,
 
-  /// @nodoc
-  @JsonValue(9)
-  audioScenarioAiServer,
-
-  /// 10: AI conversation scenario, which is only applicable to scenarios where the user interacts with the conversational AI agent created by.
-  @JsonValue(10)
-  audioScenarioAiClient,
-
   /// The number of enumerations.
-  @JsonValue(11)
+  @JsonValue(9)
   audioScenarioNum,
 }
 
@@ -2887,14 +2788,6 @@ enum VideoApplicationScenarioType {
   ///  Bitrate: 500 Kbps 1: The meeting scenario.
   @JsonValue(1)
   applicationScenarioMeeting,
-
-  /// applicationScenario1v1 (2) This is applicable to the scenario. To meet the requirements for low latency and high-quality video in this scenario, the SDK optimizes its strategies, improving performance in terms of video quality, first frame rendering, latency on mid-to-low-end devices, and smoothness under weak network conditions. This enumeration value is only applicable to the broadcaster vs. broadcaster scenario. 2: 1v1 video call scenario.
-  @JsonValue(2)
-  applicationScenario1v1,
-
-  /// applicationScenarioLiveshow (3) This is applicable to the scenario. In this scenario, fast video rendering and high image quality are crucial. The SDK implements several performance optimizations, including automatically enabling accelerated audio and video frame rendering to minimize first-frame latency (no need to call enableInstantMediaRendering), and B-frame encoding to achieve better image quality and bandwidth efficiency. The SDK also provides enhanced video quality and smooth playback, even in poor network conditions or on lower-end devices. 3. Live show scenario.
-  @JsonValue(3)
-  applicationScenarioLiveshow,
 }
 
 /// @nodoc
@@ -3806,7 +3699,9 @@ class LocalAudioStats implements AgoraSerializable {
       this.audioDeviceDelay,
       this.audioPlayoutDelay,
       this.earMonitorDelay,
-      this.aecEstimatedDelay});
+      this.aecEstimatedDelay,
+      this.aedVoiceRes,
+      this.aedMusicRes});
 
   /// The number of audio channels.
   @JsonKey(name: 'numChannels')
@@ -3843,6 +3738,14 @@ class LocalAudioStats implements AgoraSerializable {
   /// Acoustic echo cancellation (AEC) module estimated delay (ms), which is the signal delay between when audio is played locally before being locally captured.
   @JsonKey(name: 'aecEstimatedDelay')
   final int? aecEstimatedDelay;
+
+  /// @nodoc
+  @JsonKey(name: 'aedVoiceRes')
+  final int? aedVoiceRes;
+
+  /// @nodoc
+  @JsonKey(name: 'aedMusicRes')
+  final int? aedMusicRes;
 
   /// @nodoc
   factory LocalAudioStats.fromJson(Map<String, dynamic> json) =>
@@ -4483,68 +4386,6 @@ extension VideoTranscoderErrorExt on VideoTranscoderError {
   }
 }
 
-/// The source of the audio streams that are mixed locally.
-@JsonSerializable(explicitToJson: true, includeIfNull: false)
-class MixedAudioStream implements AgoraSerializable {
-  /// @nodoc
-  const MixedAudioStream(
-      {this.sourceType, this.remoteUserUid, this.channelId, this.trackId});
-
-  /// The type of the audio source. See AudioSourceType.
-  @JsonKey(name: 'sourceType')
-  final AudioSourceType? sourceType;
-
-  /// The user ID of the remote user. Set this parameter if the source type of the locally mixed audio steams is audioSourceRemoteUser.
-  @JsonKey(name: 'remoteUserUid')
-  final int? remoteUserUid;
-
-  /// The channel name. This parameter signifies the channel in which users engage in real-time audio and video interaction. Under the premise of the same App ID, users who fill in the same channel ID enter the same channel for audio and video interaction. The string length must be less than 64 bytes. Supported characters (89 characters in total):
-  ///  All lowercase English letters: a to z.
-  ///  All uppercase English letters: A to Z.
-  ///  All numeric characters: 0 to 9.
-  ///  "!", "#", "$", "%", "&", "(", ")", "+", "-", ":", ";", "<", "=", ".", ">", "?", "@", "[", "]", "^", "_", "{", "}", "|", "~", "," Set this parameter if the source type of the locally mixed audio streams is audioSourceRemoteChannel or audioSourceRemoteUser.
-  @JsonKey(name: 'channelId')
-  final String? channelId;
-
-  /// The audio track ID. Set this parameter to the custom audio track ID returned in createCustomAudioTrack. Set this parameter if the source type of the locally mixed audio steams is audioSourceCustom.
-  @JsonKey(name: 'trackId')
-  final int? trackId;
-
-  /// @nodoc
-  factory MixedAudioStream.fromJson(Map<String, dynamic> json) =>
-      _$MixedAudioStreamFromJson(json);
-
-  @override
-  Map<String, dynamic> toJson() => _$MixedAudioStreamToJson(this);
-}
-
-/// The configurations for mixing the lcoal audio.
-@JsonSerializable(explicitToJson: true, includeIfNull: false)
-class LocalAudioMixerConfiguration implements AgoraSerializable {
-  /// @nodoc
-  const LocalAudioMixerConfiguration(
-      {this.streamCount, this.audioInputStreams, this.syncWithLocalMic});
-
-  /// The number of the audio streams that are mixed locally.
-  @JsonKey(name: 'streamCount')
-  final int? streamCount;
-
-  /// The source of the audio streams that are mixed locally. See MixedAudioStream.
-  @JsonKey(name: 'audioInputStreams')
-  final List<MixedAudioStream>? audioInputStreams;
-
-  /// Whether the mxied audio stream uses the timestamp of the audio frames captured by the local microphone. true : (Default) Yes. Set to this value if you want all locally captured audio streams synchronized. false : No. The SDK uses the timestamp of the audio frames at the time when they are mixed.
-  @JsonKey(name: 'syncWithLocalMic')
-  final bool? syncWithLocalMic;
-
-  /// @nodoc
-  factory LocalAudioMixerConfiguration.fromJson(Map<String, dynamic> json) =>
-      _$LocalAudioMixerConfigurationFromJson(json);
-
-  @override
-  Map<String, dynamic> toJson() => _$LocalAudioMixerConfigurationToJson(this);
-}
-
 /// Configurations of the last-mile network test.
 @JsonSerializable(explicitToJson: true, includeIfNull: false)
 class LastmileProbeConfig implements AgoraSerializable {
@@ -5069,6 +4910,74 @@ class VideoCanvas implements AgoraSerializable {
   Map<String, dynamic> toJson() => _$VideoCanvasToJson(this);
 }
 
+/// @nodoc
+@JsonEnum(alwaysCreate: true)
+enum PipState {
+  /// @nodoc
+  @JsonValue(0)
+  pipStateStarted,
+
+  /// @nodoc
+  @JsonValue(1)
+  pipStateStopped,
+
+  /// @nodoc
+  @JsonValue(2)
+  pipStateFailed,
+}
+
+/// @nodoc
+extension PipStateExt on PipState {
+  /// @nodoc
+  static PipState fromValue(int value) {
+    return $enumDecode(_$PipStateEnumMap, value);
+  }
+
+  /// @nodoc
+  int value() {
+    return _$PipStateEnumMap[this]!;
+  }
+}
+
+/// @nodoc
+@JsonSerializable(explicitToJson: true, includeIfNull: false)
+class PipOptions implements AgoraSerializable {
+  /// @nodoc
+  const PipOptions(
+      {this.contentSource,
+      this.contentWidth,
+      this.contentHeight,
+      this.autoEnterPip,
+      this.canvas});
+
+  /// @nodoc
+  @JsonKey(name: 'contentSource', readValue: readIntPtr)
+  final int? contentSource;
+
+  /// @nodoc
+  @JsonKey(name: 'contentWidth')
+  final int? contentWidth;
+
+  /// @nodoc
+  @JsonKey(name: 'contentHeight')
+  final int? contentHeight;
+
+  /// @nodoc
+  @JsonKey(name: 'autoEnterPip')
+  final bool? autoEnterPip;
+
+  /// @nodoc
+  @JsonKey(name: 'canvas')
+  final VideoCanvas? canvas;
+
+  /// @nodoc
+  factory PipOptions.fromJson(Map<String, dynamic> json) =>
+      _$PipOptionsFromJson(json);
+
+  @override
+  Map<String, dynamic> toJson() => _$PipOptionsToJson(this);
+}
+
 /// Image enhancement options.
 @JsonSerializable(explicitToJson: true, includeIfNull: false)
 class BeautyOptions implements AgoraSerializable {
@@ -5135,173 +5044,6 @@ extension LighteningContrastLevelExt on LighteningContrastLevel {
   int value() {
     return _$LighteningContrastLevelEnumMap[this]!;
   }
-}
-
-/// @nodoc
-@JsonSerializable(explicitToJson: true, includeIfNull: false)
-class FaceShapeAreaOptions implements AgoraSerializable {
-  /// @nodoc
-  const FaceShapeAreaOptions({this.shapeArea, this.shapeIntensity});
-
-  /// @nodoc
-  @JsonKey(name: 'shapeArea')
-  final FaceShapeArea? shapeArea;
-
-  /// @nodoc
-  @JsonKey(name: 'shapeIntensity')
-  final int? shapeIntensity;
-
-  /// @nodoc
-  factory FaceShapeAreaOptions.fromJson(Map<String, dynamic> json) =>
-      _$FaceShapeAreaOptionsFromJson(json);
-
-  @override
-  Map<String, dynamic> toJson() => _$FaceShapeAreaOptionsToJson(this);
-}
-
-/// @nodoc
-@JsonEnum(alwaysCreate: true)
-enum FaceShapeArea {
-  /// @nodoc
-  @JsonValue(-1)
-  faceShapeAreaNone,
-
-  /// @nodoc
-  @JsonValue(0)
-  faceShapeAreaHeadscale,
-
-  /// @nodoc
-  @JsonValue(1)
-  faceShapeAreaForehead,
-
-  /// @nodoc
-  @JsonValue(2)
-  faceShapeAreaFacecontour,
-
-  /// @nodoc
-  @JsonValue(3)
-  faceShapeAreaFacelength,
-
-  /// @nodoc
-  @JsonValue(4)
-  faceShapeAreaFacewidth,
-
-  /// @nodoc
-  @JsonValue(5)
-  faceShapeAreaCheekbone,
-
-  /// @nodoc
-  @JsonValue(6)
-  faceShapeAreaCheek,
-
-  /// @nodoc
-  @JsonValue(7)
-  faceShapeAreaChin,
-
-  /// @nodoc
-  @JsonValue(8)
-  faceShapeAreaEyescale,
-
-  /// @nodoc
-  @JsonValue(9)
-  faceShapeAreaNoselength,
-
-  /// @nodoc
-  @JsonValue(10)
-  faceShapeAreaNosewidth,
-
-  /// @nodoc
-  @JsonValue(11)
-  faceShapeAreaMouthscale,
-}
-
-/// @nodoc
-extension FaceShapeAreaExt on FaceShapeArea {
-  /// @nodoc
-  static FaceShapeArea fromValue(int value) {
-    return $enumDecode(_$FaceShapeAreaEnumMap, value);
-  }
-
-  /// @nodoc
-  int value() {
-    return _$FaceShapeAreaEnumMap[this]!;
-  }
-}
-
-/// @nodoc
-@JsonSerializable(explicitToJson: true, includeIfNull: false)
-class FaceShapeBeautyOptions implements AgoraSerializable {
-  /// @nodoc
-  const FaceShapeBeautyOptions({this.shapeStyle, this.styleIntensity});
-
-  /// @nodoc
-  @JsonKey(name: 'shapeStyle')
-  final FaceShapeBeautyStyle? shapeStyle;
-
-  /// @nodoc
-  @JsonKey(name: 'styleIntensity')
-  final int? styleIntensity;
-
-  /// @nodoc
-  factory FaceShapeBeautyOptions.fromJson(Map<String, dynamic> json) =>
-      _$FaceShapeBeautyOptionsFromJson(json);
-
-  @override
-  Map<String, dynamic> toJson() => _$FaceShapeBeautyOptionsToJson(this);
-}
-
-/// @nodoc
-@JsonEnum(alwaysCreate: true)
-enum FaceShapeBeautyStyle {
-  /// @nodoc
-  @JsonValue(0)
-  faceShapeBeautyStyleFemale,
-
-  /// @nodoc
-  @JsonValue(1)
-  faceShapeBeautyStyleMale,
-}
-
-/// @nodoc
-extension FaceShapeBeautyStyleExt on FaceShapeBeautyStyle {
-  /// @nodoc
-  static FaceShapeBeautyStyle fromValue(int value) {
-    return $enumDecode(_$FaceShapeBeautyStyleEnumMap, value);
-  }
-
-  /// @nodoc
-  int value() {
-    return _$FaceShapeBeautyStyleEnumMap[this]!;
-  }
-}
-
-/// Filter effect options.
-@JsonSerializable(explicitToJson: true, includeIfNull: false)
-class FilterEffectOptions implements AgoraSerializable {
-  /// @nodoc
-  const FilterEffectOptions({this.path, this.strength});
-
-  /// The absolute path to the local cube map texture file, which can be used to customize the filter effect. The specified .cude file should strictly follow the Cube LUT Format Specification; otherwise, the filter options do not take effect. The following is a sample of the .cude file:
-  /// LUT_3D_SIZE 32
-  /// 0.0039215689 0 0.0039215682
-  /// 0.0086021447 0.0037950677 0
-  /// ...
-  /// 0.0728652592 0.0039215689 0
-  ///  The identifier LUT_3D_SIZE on the first line of the cube map file represents the size of the three-dimensional lookup table. The LUT size for filter effect can only be set to 32.
-  ///  The SDK provides a built-in built_in_whiten_filter.cube file. You can pass the absolute path of this file to get the whitening filter effect.
-  @JsonKey(name: 'path')
-  final String? path;
-
-  /// The intensity of the filter effect, with a range value of [0.0,1.0], in which 0.0 represents no filter effect. The default value is 0.5. The higher the value, the stronger the filter effect.
-  @JsonKey(name: 'strength')
-  final double? strength;
-
-  /// @nodoc
-  factory FilterEffectOptions.fromJson(Map<String, dynamic> json) =>
-      _$FilterEffectOptionsFromJson(json);
-
-  @override
-  Map<String, dynamic> toJson() => _$FilterEffectOptionsToJson(this);
 }
 
 /// The low-light enhancement options.
@@ -5433,6 +5175,10 @@ enum VideoDenoiserLevel {
   /// 1: Promotes reducing performance consumption during video noise reduction. It prioritizes reducing performance consumption over video noise reduction quality. The performance consumption is lower, and the video noise reduction speed is faster. To avoid a noticeable shadowing effect (shadows trailing behind moving objects) in the processed video, Agora recommends that you use this setting when the camera is fixed.
   @JsonValue(1)
   videoDenoiserLevelFast,
+
+  /// @nodoc
+  @JsonValue(2)
+  videoDenoiserLevelStrength,
 }
 
 /// @nodoc
@@ -5630,6 +5376,10 @@ enum AudioTrackType {
   /// 1: Direct audio tracks. This type of audio track will replace the audio streams captured by the microphone and does not support mixing with other audio streams. The latency of direct audio tracks is lower than that of mixable audio tracks. If audioTrackDirect is specified for this parameter, you must set publishMicrophoneTrack to false in ChannelMediaOptions when calling joinChannel to join the channel; otherwise, joining the channel fails and returns the error code -2.
   @JsonValue(1)
   audioTrackDirect,
+
+  /// @nodoc
+  @JsonValue(3)
+  audioTrackExternalAecReference,
 }
 
 /// @nodoc
@@ -5650,7 +5400,9 @@ extension AudioTrackTypeExt on AudioTrackType {
 class AudioTrackConfig implements AgoraSerializable {
   /// @nodoc
   const AudioTrackConfig(
-      {this.enableLocalPlayback, this.enableAudioProcessing});
+      {this.enableLocalPlayback,
+      this.enableAudioProcessing,
+      this.enableDirectPublish});
 
   /// Whether to enable the local audio-playback device: true : (Default) Enable the local audio-playback device. false : Do not enable the local audio-playback device.
   @JsonKey(name: 'enableLocalPlayback')
@@ -5659,6 +5411,10 @@ class AudioTrackConfig implements AgoraSerializable {
   /// Whether to enable audio processing module: true Enable the audio processing module to apply the Automatic Echo Cancellation (AEC), Automatic Noise Suppression (ANS), and Automatic Gain Control (AGC) effects. false : (Default) Do not enable the audio processing module. This parameter only takes effect on audioTrackDirect in custom audio capturing.
   @JsonKey(name: 'enableAudioProcessing')
   final bool? enableAudioProcessing;
+
+  /// @nodoc
+  @JsonKey(name: 'enableDirectPublish')
+  final bool? enableDirectPublish;
 
   /// @nodoc
   factory AudioTrackConfig.fromJson(Map<String, dynamic> json) =>
@@ -5958,107 +5714,12 @@ extension HeadphoneEqualizerPresetExt on HeadphoneEqualizerPreset {
   }
 }
 
-/// Voice AI tuner sound types.
-@JsonEnum(alwaysCreate: true)
-enum VoiceAiTunerType {
-  /// 0: Mature male voice. A deep and magnetic male voice.
-  @JsonValue(0)
-  voiceAiTunerMatureMale,
-
-  /// 1: Fresh male voice. A fresh and slightly sweet male voice.
-  @JsonValue(1)
-  voiceAiTunerFreshMale,
-
-  /// 2: Elegant female voice. A deep and charming female voice.
-  @JsonValue(2)
-  voiceAiTunerElegantFemale,
-
-  /// 3: Sweet female voice. A high-pitched and cute female voice.
-  @JsonValue(3)
-  voiceAiTunerSweetFemale,
-
-  /// 4: Warm male singing. A warm and melodious male voice.
-  @JsonValue(4)
-  voiceAiTunerWarmMaleSinging,
-
-  /// 5: Gentle female singing. A soft and delicate female voice.
-  @JsonValue(5)
-  voiceAiTunerGentleFemaleSinging,
-
-  /// 6: Husky male singing. A unique husky male voice.
-  @JsonValue(6)
-  voiceAiTunerHuskyMaleSinging,
-
-  /// 7: Warm elegant female singing. A warm and mature female voice.
-  @JsonValue(7)
-  voiceAiTunerWarmElegantFemaleSinging,
-
-  /// 8: Powerful male singing. A strong and powerful male voice.
-  @JsonValue(8)
-  voiceAiTunerPowerfulMaleSinging,
-
-  /// 9: Dreamy female singing. A dreamy and soft female voice.
-  @JsonValue(9)
-  voiceAiTunerDreamyFemaleSinging,
-}
-
-/// @nodoc
-extension VoiceAiTunerTypeExt on VoiceAiTunerType {
-  /// @nodoc
-  static VoiceAiTunerType fromValue(int value) {
-    return $enumDecode(_$VoiceAiTunerTypeEnumMap, value);
-  }
-
-  /// @nodoc
-  int value() {
-    return _$VoiceAiTunerTypeEnumMap[this]!;
-  }
-}
-
-/// The audio configuration for the shared screen stream.
-///
-/// Only available where captureAudio is true.
-@JsonSerializable(explicitToJson: true, includeIfNull: false)
-class ScreenAudioParameters implements AgoraSerializable {
-  /// @nodoc
-  const ScreenAudioParameters(
-      {this.sampleRate,
-      this.channels,
-      this.captureSignalVolume,
-      this.excludeCurrentProcessAudio});
-
-  /// Audio sample rate (Hz). The default value is 16000.
-  @JsonKey(name: 'sampleRate')
-  final int? sampleRate;
-
-  /// The number of audio channels. The default value is 2, which means stereo.
-  @JsonKey(name: 'channels')
-  final int? channels;
-
-  /// The volume of the captured system audio. The value range is [0, 100]. The default value is 100.
-  @JsonKey(name: 'captureSignalVolume')
-  final int? captureSignalVolume;
-
-  /// @nodoc
-  @JsonKey(name: 'excludeCurrentProcessAudio')
-  final bool? excludeCurrentProcessAudio;
-
-  /// @nodoc
-  factory ScreenAudioParameters.fromJson(Map<String, dynamic> json) =>
-      _$ScreenAudioParametersFromJson(json);
-
-  @override
-  Map<String, dynamic> toJson() => _$ScreenAudioParametersToJson(this);
-}
-
 /// Screen sharing configurations.
 @JsonSerializable(explicitToJson: true, includeIfNull: false)
 class ScreenCaptureParameters implements AgoraSerializable {
   /// @nodoc
   const ScreenCaptureParameters(
-      {this.captureAudio,
-      this.audioParams,
-      this.dimensions,
+      {this.dimensions,
       this.frameRate,
       this.bitrate,
       this.captureMouseCursor,
@@ -6068,14 +5729,6 @@ class ScreenCaptureParameters implements AgoraSerializable {
       this.highLightWidth,
       this.highLightColor,
       this.enableHighLight});
-
-  /// @nodoc
-  @JsonKey(name: 'captureAudio')
-  final bool? captureAudio;
-
-  /// @nodoc
-  @JsonKey(name: 'audioParams')
-  final ScreenAudioParameters? audioParams;
 
   /// The video encoding resolution of the screen sharing stream. See VideoDimensions. The default value is 1920 × 1080, that is, 2,073,600 pixels. Agora uses the value of this parameter to calculate the charges. If the screen dimensions are different from the value of this parameter, Agora applies the following strategies for encoding. Suppose dimensions is set to 1920 × 1080:
   ///  If the value of the screen dimensions is lower than that of dimensions, for example, 1000 × 1000 pixels, the SDK uses the screen dimensions, that is, 1000 × 1000 pixels, for encoding.
@@ -7127,6 +6780,35 @@ class ScreenVideoParameters implements AgoraSerializable {
   Map<String, dynamic> toJson() => _$ScreenVideoParametersToJson(this);
 }
 
+/// The audio configuration for the shared screen stream.
+///
+/// Only available where captureAudio is true.
+@JsonSerializable(explicitToJson: true, includeIfNull: false)
+class ScreenAudioParameters implements AgoraSerializable {
+  /// @nodoc
+  const ScreenAudioParameters(
+      {this.sampleRate, this.channels, this.captureSignalVolume});
+
+  /// Audio sample rate (Hz). The default value is 16000.
+  @JsonKey(name: 'sampleRate')
+  final int? sampleRate;
+
+  /// The number of audio channels. The default value is 2, which means stereo.
+  @JsonKey(name: 'channels')
+  final int? channels;
+
+  /// The volume of the captured system audio. The value range is [0, 100]. The default value is 100.
+  @JsonKey(name: 'captureSignalVolume')
+  final int? captureSignalVolume;
+
+  /// @nodoc
+  factory ScreenAudioParameters.fromJson(Map<String, dynamic> json) =>
+      _$ScreenAudioParametersFromJson(json);
+
+  @override
+  Map<String, dynamic> toJson() => _$ScreenAudioParametersToJson(this);
+}
+
 /// Screen sharing configurations.
 @JsonSerializable(explicitToJson: true, includeIfNull: false)
 class ScreenCaptureParameters2 implements AgoraSerializable {
@@ -7403,35 +7085,10 @@ class LocalAccessPointConfiguration implements AgoraSerializable {
 }
 
 /// @nodoc
-@JsonEnum(alwaysCreate: true)
-enum RecorderStreamType {
-  /// @nodoc
-  @JsonValue(0)
-  rtc,
-
-  /// @nodoc
-  @JsonValue(1)
-  preview,
-}
-
-/// @nodoc
-extension RecorderStreamTypeExt on RecorderStreamType {
-  /// @nodoc
-  static RecorderStreamType fromValue(int value) {
-    return $enumDecode(_$RecorderStreamTypeEnumMap, value);
-  }
-
-  /// @nodoc
-  int value() {
-    return _$RecorderStreamTypeEnumMap[this]!;
-  }
-}
-
-/// @nodoc
 @JsonSerializable(explicitToJson: true, includeIfNull: false)
 class RecorderStreamInfo implements AgoraSerializable {
   /// @nodoc
-  const RecorderStreamInfo({this.channelId, this.uid, this.type});
+  const RecorderStreamInfo({this.channelId, this.uid});
 
   /// @nodoc
   @JsonKey(name: 'channelId')
@@ -7440,10 +7097,6 @@ class RecorderStreamInfo implements AgoraSerializable {
   /// @nodoc
   @JsonKey(name: 'uid')
   final int? uid;
-
-  /// @nodoc
-  @JsonKey(name: 'type')
-  final RecorderStreamType? type;
 
   /// @nodoc
   factory RecorderStreamInfo.fromJson(Map<String, dynamic> json) =>

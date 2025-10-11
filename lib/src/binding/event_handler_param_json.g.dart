@@ -800,7 +800,6 @@ const _$MediaPlayerEventEnumMap = {
   MediaPlayerEvent.playerEventTryOpenStart: 16,
   MediaPlayerEvent.playerEventTryOpenSucceed: 17,
   MediaPlayerEvent.playerEventTryOpenFailed: 18,
-  MediaPlayerEvent.playerEventHttpRedirect: 19,
 };
 
 MediaPlayerSourceObserverOnMetaDataJson
@@ -1646,6 +1645,33 @@ Map<String, dynamic> _$RtcEngineEventHandlerOnVideoDeviceStateChangedJsonToJson(
       'deviceState', _$MediaDeviceStateTypeEnumMap[instance.deviceState]);
   return val;
 }
+
+RtcEngineEventHandlerOnPipStateChangedJson
+    _$RtcEngineEventHandlerOnPipStateChangedJsonFromJson(
+            Map<String, dynamic> json) =>
+        RtcEngineEventHandlerOnPipStateChangedJson(
+          state: $enumDecodeNullable(_$PipStateEnumMap, json['state']),
+        );
+
+Map<String, dynamic> _$RtcEngineEventHandlerOnPipStateChangedJsonToJson(
+    RtcEngineEventHandlerOnPipStateChangedJson instance) {
+  final val = <String, dynamic>{};
+
+  void writeNotNull(String key, dynamic value) {
+    if (value != null) {
+      val[key] = value;
+    }
+  }
+
+  writeNotNull('state', _$PipStateEnumMap[instance.state]);
+  return val;
+}
+
+const _$PipStateEnumMap = {
+  PipState.pipStateStarted: 0,
+  PipState.pipStateStopped: 1,
+  PipState.pipStateFailed: 2,
+};
 
 RtcEngineEventHandlerOnNetworkQualityJson
     _$RtcEngineEventHandlerOnNetworkQualityJsonFromJson(
@@ -3693,6 +3719,29 @@ const _$PermissionTypeEnumMap = {
   PermissionType.screenCapture: 2,
 };
 
+RtcEngineEventHandlerOnPermissionGrantedJson
+    _$RtcEngineEventHandlerOnPermissionGrantedJsonFromJson(
+            Map<String, dynamic> json) =>
+        RtcEngineEventHandlerOnPermissionGrantedJson(
+          permissionType: $enumDecodeNullable(
+              _$PermissionTypeEnumMap, json['permissionType']),
+        );
+
+Map<String, dynamic> _$RtcEngineEventHandlerOnPermissionGrantedJsonToJson(
+    RtcEngineEventHandlerOnPermissionGrantedJson instance) {
+  final val = <String, dynamic>{};
+
+  void writeNotNull(String key, dynamic value) {
+    if (value != null) {
+      val[key] = value;
+    }
+  }
+
+  writeNotNull(
+      'permissionType', _$PermissionTypeEnumMap[instance.permissionType]);
+  return val;
+}
+
 RtcEngineEventHandlerOnLocalUserRegisteredJson
     _$RtcEngineEventHandlerOnLocalUserRegisteredJsonFromJson(
             Map<String, dynamic> json) =>
@@ -4089,21 +4138,18 @@ Map<String, dynamic> _$RtcEngineEventHandlerOnAudioMetadataReceivedJsonToJson(
   return val;
 }
 
-RtcEngineEventHandlerOnExtensionEventWithContextJson
-    _$RtcEngineEventHandlerOnExtensionEventWithContextJsonFromJson(
+RtcEngineEventHandlerOnExtensionEventJson
+    _$RtcEngineEventHandlerOnExtensionEventJsonFromJson(
             Map<String, dynamic> json) =>
-        RtcEngineEventHandlerOnExtensionEventWithContextJson(
-          context: json['context'] == null
-              ? null
-              : ExtensionContext.fromJson(
-                  json['context'] as Map<String, dynamic>),
+        RtcEngineEventHandlerOnExtensionEventJson(
+          provider: json['provider'] as String?,
+          extension: json['extension'] as String?,
           key: json['key'] as String?,
           value: json['value'] as String?,
         );
 
-Map<String, dynamic>
-    _$RtcEngineEventHandlerOnExtensionEventWithContextJsonToJson(
-        RtcEngineEventHandlerOnExtensionEventWithContextJson instance) {
+Map<String, dynamic> _$RtcEngineEventHandlerOnExtensionEventJsonToJson(
+    RtcEngineEventHandlerOnExtensionEventJson instance) {
   final val = <String, dynamic>{};
 
   void writeNotNull(String key, dynamic value) {
@@ -4112,25 +4158,23 @@ Map<String, dynamic>
     }
   }
 
-  writeNotNull('context', instance.context?.toJson());
+  writeNotNull('provider', instance.provider);
+  writeNotNull('extension', instance.extension);
   writeNotNull('key', instance.key);
   writeNotNull('value', instance.value);
   return val;
 }
 
-RtcEngineEventHandlerOnExtensionStartedWithContextJson
-    _$RtcEngineEventHandlerOnExtensionStartedWithContextJsonFromJson(
+RtcEngineEventHandlerOnExtensionStartedJson
+    _$RtcEngineEventHandlerOnExtensionStartedJsonFromJson(
             Map<String, dynamic> json) =>
-        RtcEngineEventHandlerOnExtensionStartedWithContextJson(
-          context: json['context'] == null
-              ? null
-              : ExtensionContext.fromJson(
-                  json['context'] as Map<String, dynamic>),
+        RtcEngineEventHandlerOnExtensionStartedJson(
+          provider: json['provider'] as String?,
+          extension: json['extension'] as String?,
         );
 
-Map<String, dynamic>
-    _$RtcEngineEventHandlerOnExtensionStartedWithContextJsonToJson(
-        RtcEngineEventHandlerOnExtensionStartedWithContextJson instance) {
+Map<String, dynamic> _$RtcEngineEventHandlerOnExtensionStartedJsonToJson(
+    RtcEngineEventHandlerOnExtensionStartedJson instance) {
   final val = <String, dynamic>{};
 
   void writeNotNull(String key, dynamic value) {
@@ -4139,23 +4183,21 @@ Map<String, dynamic>
     }
   }
 
-  writeNotNull('context', instance.context?.toJson());
+  writeNotNull('provider', instance.provider);
+  writeNotNull('extension', instance.extension);
   return val;
 }
 
-RtcEngineEventHandlerOnExtensionStoppedWithContextJson
-    _$RtcEngineEventHandlerOnExtensionStoppedWithContextJsonFromJson(
+RtcEngineEventHandlerOnExtensionStoppedJson
+    _$RtcEngineEventHandlerOnExtensionStoppedJsonFromJson(
             Map<String, dynamic> json) =>
-        RtcEngineEventHandlerOnExtensionStoppedWithContextJson(
-          context: json['context'] == null
-              ? null
-              : ExtensionContext.fromJson(
-                  json['context'] as Map<String, dynamic>),
+        RtcEngineEventHandlerOnExtensionStoppedJson(
+          provider: json['provider'] as String?,
+          extension: json['extension'] as String?,
         );
 
-Map<String, dynamic>
-    _$RtcEngineEventHandlerOnExtensionStoppedWithContextJsonToJson(
-        RtcEngineEventHandlerOnExtensionStoppedWithContextJson instance) {
+Map<String, dynamic> _$RtcEngineEventHandlerOnExtensionStoppedJsonToJson(
+    RtcEngineEventHandlerOnExtensionStoppedJson instance) {
   final val = <String, dynamic>{};
 
   void writeNotNull(String key, dynamic value) {
@@ -4164,25 +4206,23 @@ Map<String, dynamic>
     }
   }
 
-  writeNotNull('context', instance.context?.toJson());
+  writeNotNull('provider', instance.provider);
+  writeNotNull('extension', instance.extension);
   return val;
 }
 
-RtcEngineEventHandlerOnExtensionErrorWithContextJson
-    _$RtcEngineEventHandlerOnExtensionErrorWithContextJsonFromJson(
+RtcEngineEventHandlerOnExtensionErrorJson
+    _$RtcEngineEventHandlerOnExtensionErrorJsonFromJson(
             Map<String, dynamic> json) =>
-        RtcEngineEventHandlerOnExtensionErrorWithContextJson(
-          context: json['context'] == null
-              ? null
-              : ExtensionContext.fromJson(
-                  json['context'] as Map<String, dynamic>),
+        RtcEngineEventHandlerOnExtensionErrorJson(
+          provider: json['provider'] as String?,
+          extension: json['extension'] as String?,
           error: (json['error'] as num?)?.toInt(),
           message: json['message'] as String?,
         );
 
-Map<String, dynamic>
-    _$RtcEngineEventHandlerOnExtensionErrorWithContextJsonToJson(
-        RtcEngineEventHandlerOnExtensionErrorWithContextJson instance) {
+Map<String, dynamic> _$RtcEngineEventHandlerOnExtensionErrorJsonToJson(
+    RtcEngineEventHandlerOnExtensionErrorJson instance) {
   final val = <String, dynamic>{};
 
   void writeNotNull(String key, dynamic value) {
@@ -4191,7 +4231,8 @@ Map<String, dynamic>
     }
   }
 
-  writeNotNull('context', instance.context?.toJson());
+  writeNotNull('provider', instance.provider);
+  writeNotNull('extension', instance.extension);
   writeNotNull('error', instance.error);
   writeNotNull('message', instance.message);
   return val;

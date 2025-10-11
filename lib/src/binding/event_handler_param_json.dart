@@ -2005,6 +2005,36 @@ extension RtcEngineEventHandlerOnVideoDeviceStateChangedJsonBufferExt
 }
 
 @JsonSerializable(explicitToJson: true, includeIfNull: false)
+class RtcEngineEventHandlerOnPipStateChangedJson implements AgoraSerializable {
+  const RtcEngineEventHandlerOnPipStateChangedJson({this.state});
+
+  @JsonKey(name: 'state')
+  final PipState? state;
+
+  factory RtcEngineEventHandlerOnPipStateChangedJson.fromJson(
+          Map<String, dynamic> json) =>
+      _$RtcEngineEventHandlerOnPipStateChangedJsonFromJson(json);
+
+  @override
+  Map<String, dynamic> toJson() =>
+      _$RtcEngineEventHandlerOnPipStateChangedJsonToJson(this);
+}
+
+extension RtcEngineEventHandlerOnPipStateChangedJsonBufferExt
+    on RtcEngineEventHandlerOnPipStateChangedJson {
+  RtcEngineEventHandlerOnPipStateChangedJson fillBuffers(
+      List<Uint8List> bufferList) {
+    if (bufferList.isEmpty) return this;
+    return this;
+  }
+
+  List<Uint8List> collectBufferList() {
+    final bufferList = <Uint8List>[];
+    return bufferList;
+  }
+}
+
+@JsonSerializable(explicitToJson: true, includeIfNull: false)
 class RtcEngineEventHandlerOnNetworkQualityJson implements AgoraSerializable {
   const RtcEngineEventHandlerOnNetworkQualityJson(
       {this.connection, this.remoteUid, this.txQuality, this.rxQuality});
@@ -4394,6 +4424,37 @@ extension RtcEngineEventHandlerOnPermissionErrorJsonBufferExt
 }
 
 @JsonSerializable(explicitToJson: true, includeIfNull: false)
+class RtcEngineEventHandlerOnPermissionGrantedJson
+    implements AgoraSerializable {
+  const RtcEngineEventHandlerOnPermissionGrantedJson({this.permissionType});
+
+  @JsonKey(name: 'permissionType')
+  final PermissionType? permissionType;
+
+  factory RtcEngineEventHandlerOnPermissionGrantedJson.fromJson(
+          Map<String, dynamic> json) =>
+      _$RtcEngineEventHandlerOnPermissionGrantedJsonFromJson(json);
+
+  @override
+  Map<String, dynamic> toJson() =>
+      _$RtcEngineEventHandlerOnPermissionGrantedJsonToJson(this);
+}
+
+extension RtcEngineEventHandlerOnPermissionGrantedJsonBufferExt
+    on RtcEngineEventHandlerOnPermissionGrantedJson {
+  RtcEngineEventHandlerOnPermissionGrantedJson fillBuffers(
+      List<Uint8List> bufferList) {
+    if (bufferList.isEmpty) return this;
+    return this;
+  }
+
+  List<Uint8List> collectBufferList() {
+    final bufferList = <Uint8List>[];
+    return bufferList;
+  }
+}
+
+@JsonSerializable(explicitToJson: true, includeIfNull: false)
 class RtcEngineEventHandlerOnLocalUserRegisteredJson
     implements AgoraSerializable {
   const RtcEngineEventHandlerOnLocalUserRegisteredJson(
@@ -4902,13 +4963,15 @@ extension RtcEngineEventHandlerOnAudioMetadataReceivedJsonBufferExt
 }
 
 @JsonSerializable(explicitToJson: true, includeIfNull: false)
-class RtcEngineEventHandlerOnExtensionEventWithContextJson
-    implements AgoraSerializable {
-  const RtcEngineEventHandlerOnExtensionEventWithContextJson(
-      {this.context, this.key, this.value});
+class RtcEngineEventHandlerOnExtensionEventJson implements AgoraSerializable {
+  const RtcEngineEventHandlerOnExtensionEventJson(
+      {this.provider, this.extension, this.key, this.value});
 
-  @JsonKey(name: 'context')
-  final ExtensionContext? context;
+  @JsonKey(name: 'provider')
+  final String? provider;
+
+  @JsonKey(name: 'extension')
+  final String? extension;
 
   @JsonKey(name: 'key')
   final String? key;
@@ -4916,18 +4979,18 @@ class RtcEngineEventHandlerOnExtensionEventWithContextJson
   @JsonKey(name: 'value')
   final String? value;
 
-  factory RtcEngineEventHandlerOnExtensionEventWithContextJson.fromJson(
+  factory RtcEngineEventHandlerOnExtensionEventJson.fromJson(
           Map<String, dynamic> json) =>
-      _$RtcEngineEventHandlerOnExtensionEventWithContextJsonFromJson(json);
+      _$RtcEngineEventHandlerOnExtensionEventJsonFromJson(json);
 
   @override
   Map<String, dynamic> toJson() =>
-      _$RtcEngineEventHandlerOnExtensionEventWithContextJsonToJson(this);
+      _$RtcEngineEventHandlerOnExtensionEventJsonToJson(this);
 }
 
-extension RtcEngineEventHandlerOnExtensionEventWithContextJsonBufferExt
-    on RtcEngineEventHandlerOnExtensionEventWithContextJson {
-  RtcEngineEventHandlerOnExtensionEventWithContextJson fillBuffers(
+extension RtcEngineEventHandlerOnExtensionEventJsonBufferExt
+    on RtcEngineEventHandlerOnExtensionEventJson {
+  RtcEngineEventHandlerOnExtensionEventJson fillBuffers(
       List<Uint8List> bufferList) {
     if (bufferList.isEmpty) return this;
     return this;
@@ -4940,25 +5003,28 @@ extension RtcEngineEventHandlerOnExtensionEventWithContextJsonBufferExt
 }
 
 @JsonSerializable(explicitToJson: true, includeIfNull: false)
-class RtcEngineEventHandlerOnExtensionStartedWithContextJson
-    implements AgoraSerializable {
-  const RtcEngineEventHandlerOnExtensionStartedWithContextJson({this.context});
+class RtcEngineEventHandlerOnExtensionStartedJson implements AgoraSerializable {
+  const RtcEngineEventHandlerOnExtensionStartedJson(
+      {this.provider, this.extension});
 
-  @JsonKey(name: 'context')
-  final ExtensionContext? context;
+  @JsonKey(name: 'provider')
+  final String? provider;
 
-  factory RtcEngineEventHandlerOnExtensionStartedWithContextJson.fromJson(
+  @JsonKey(name: 'extension')
+  final String? extension;
+
+  factory RtcEngineEventHandlerOnExtensionStartedJson.fromJson(
           Map<String, dynamic> json) =>
-      _$RtcEngineEventHandlerOnExtensionStartedWithContextJsonFromJson(json);
+      _$RtcEngineEventHandlerOnExtensionStartedJsonFromJson(json);
 
   @override
   Map<String, dynamic> toJson() =>
-      _$RtcEngineEventHandlerOnExtensionStartedWithContextJsonToJson(this);
+      _$RtcEngineEventHandlerOnExtensionStartedJsonToJson(this);
 }
 
-extension RtcEngineEventHandlerOnExtensionStartedWithContextJsonBufferExt
-    on RtcEngineEventHandlerOnExtensionStartedWithContextJson {
-  RtcEngineEventHandlerOnExtensionStartedWithContextJson fillBuffers(
+extension RtcEngineEventHandlerOnExtensionStartedJsonBufferExt
+    on RtcEngineEventHandlerOnExtensionStartedJson {
+  RtcEngineEventHandlerOnExtensionStartedJson fillBuffers(
       List<Uint8List> bufferList) {
     if (bufferList.isEmpty) return this;
     return this;
@@ -4971,25 +5037,28 @@ extension RtcEngineEventHandlerOnExtensionStartedWithContextJsonBufferExt
 }
 
 @JsonSerializable(explicitToJson: true, includeIfNull: false)
-class RtcEngineEventHandlerOnExtensionStoppedWithContextJson
-    implements AgoraSerializable {
-  const RtcEngineEventHandlerOnExtensionStoppedWithContextJson({this.context});
+class RtcEngineEventHandlerOnExtensionStoppedJson implements AgoraSerializable {
+  const RtcEngineEventHandlerOnExtensionStoppedJson(
+      {this.provider, this.extension});
 
-  @JsonKey(name: 'context')
-  final ExtensionContext? context;
+  @JsonKey(name: 'provider')
+  final String? provider;
 
-  factory RtcEngineEventHandlerOnExtensionStoppedWithContextJson.fromJson(
+  @JsonKey(name: 'extension')
+  final String? extension;
+
+  factory RtcEngineEventHandlerOnExtensionStoppedJson.fromJson(
           Map<String, dynamic> json) =>
-      _$RtcEngineEventHandlerOnExtensionStoppedWithContextJsonFromJson(json);
+      _$RtcEngineEventHandlerOnExtensionStoppedJsonFromJson(json);
 
   @override
   Map<String, dynamic> toJson() =>
-      _$RtcEngineEventHandlerOnExtensionStoppedWithContextJsonToJson(this);
+      _$RtcEngineEventHandlerOnExtensionStoppedJsonToJson(this);
 }
 
-extension RtcEngineEventHandlerOnExtensionStoppedWithContextJsonBufferExt
-    on RtcEngineEventHandlerOnExtensionStoppedWithContextJson {
-  RtcEngineEventHandlerOnExtensionStoppedWithContextJson fillBuffers(
+extension RtcEngineEventHandlerOnExtensionStoppedJsonBufferExt
+    on RtcEngineEventHandlerOnExtensionStoppedJson {
+  RtcEngineEventHandlerOnExtensionStoppedJson fillBuffers(
       List<Uint8List> bufferList) {
     if (bufferList.isEmpty) return this;
     return this;
@@ -5002,13 +5071,15 @@ extension RtcEngineEventHandlerOnExtensionStoppedWithContextJsonBufferExt
 }
 
 @JsonSerializable(explicitToJson: true, includeIfNull: false)
-class RtcEngineEventHandlerOnExtensionErrorWithContextJson
-    implements AgoraSerializable {
-  const RtcEngineEventHandlerOnExtensionErrorWithContextJson(
-      {this.context, this.error, this.message});
+class RtcEngineEventHandlerOnExtensionErrorJson implements AgoraSerializable {
+  const RtcEngineEventHandlerOnExtensionErrorJson(
+      {this.provider, this.extension, this.error, this.message});
 
-  @JsonKey(name: 'context')
-  final ExtensionContext? context;
+  @JsonKey(name: 'provider')
+  final String? provider;
+
+  @JsonKey(name: 'extension')
+  final String? extension;
 
   @JsonKey(name: 'error')
   final int? error;
@@ -5016,18 +5087,18 @@ class RtcEngineEventHandlerOnExtensionErrorWithContextJson
   @JsonKey(name: 'message')
   final String? message;
 
-  factory RtcEngineEventHandlerOnExtensionErrorWithContextJson.fromJson(
+  factory RtcEngineEventHandlerOnExtensionErrorJson.fromJson(
           Map<String, dynamic> json) =>
-      _$RtcEngineEventHandlerOnExtensionErrorWithContextJsonFromJson(json);
+      _$RtcEngineEventHandlerOnExtensionErrorJsonFromJson(json);
 
   @override
   Map<String, dynamic> toJson() =>
-      _$RtcEngineEventHandlerOnExtensionErrorWithContextJsonToJson(this);
+      _$RtcEngineEventHandlerOnExtensionErrorJsonToJson(this);
 }
 
-extension RtcEngineEventHandlerOnExtensionErrorWithContextJsonBufferExt
-    on RtcEngineEventHandlerOnExtensionErrorWithContextJson {
-  RtcEngineEventHandlerOnExtensionErrorWithContextJson fillBuffers(
+extension RtcEngineEventHandlerOnExtensionErrorJsonBufferExt
+    on RtcEngineEventHandlerOnExtensionErrorJson {
+  RtcEngineEventHandlerOnExtensionErrorJson fillBuffers(
       List<Uint8List> bufferList) {
     if (bufferList.isEmpty) return this;
     return this;

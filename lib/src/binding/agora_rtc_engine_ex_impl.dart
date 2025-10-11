@@ -1301,19 +1301,58 @@ class RtcEngineExImpl extends RtcEngineImpl implements RtcEngineEx {
   }
 
   @override
-  Future<void> enableVideoImageSourceEx(
-      {required bool enable,
-      required ImageTrackOptions options,
-      required RtcConnection connection}) async {
+  Future<void> preloadEffectEx(
+      {required RtcConnection connection,
+      required int soundId,
+      required String filePath,
+      int startPos = 0}) async {
     final apiType =
-        '${isOverrideClassName ? className : 'RtcEngineEx'}_enableVideoImageSourceEx_b63f346';
+        '${isOverrideClassName ? className : 'RtcEngineEx'}_preloadEffectEx_c9fae88';
     final param = createParams({
-      'enable': enable,
-      'options': options.toJson(),
-      'connection': connection.toJson()
+      'connection': connection.toJson(),
+      'soundId': soundId,
+      'filePath': filePath,
+      'startPos': startPos
     });
     final List<Uint8List> buffers = [];
-    buffers.addAll(options.collectBufferList());
+    buffers.addAll(connection.collectBufferList());
+    final callApiResult = await irisMethodChannel.invokeMethod(
+        IrisMethodCall(apiType, jsonEncode(param), buffers: buffers));
+    if (callApiResult.irisReturnCode < 0) {
+      throw AgoraRtcException(code: callApiResult.irisReturnCode);
+    }
+    final rm = callApiResult.data;
+    final result = rm['result'];
+    if (result < 0) {
+      throw AgoraRtcException(code: result);
+    }
+  }
+
+  @override
+  Future<void> playEffectEx(
+      {required RtcConnection connection,
+      required int soundId,
+      required String filePath,
+      required int loopCount,
+      required double pitch,
+      required double pan,
+      required int gain,
+      bool publish = false,
+      int startPos = 0}) async {
+    final apiType =
+        '${isOverrideClassName ? className : 'RtcEngineEx'}_playEffectEx_ae5345c';
+    final param = createParams({
+      'connection': connection.toJson(),
+      'soundId': soundId,
+      'filePath': filePath,
+      'loopCount': loopCount,
+      'pitch': pitch,
+      'pan': pan,
+      'gain': gain,
+      'publish': publish,
+      'startPos': startPos
+    });
+    final List<Uint8List> buffers = [];
     buffers.addAll(connection.collectBufferList());
     final callApiResult = await irisMethodChannel.invokeMethod(
         IrisMethodCall(apiType, jsonEncode(param), buffers: buffers));

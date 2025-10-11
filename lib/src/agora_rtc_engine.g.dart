@@ -127,6 +127,8 @@ RemoteAudioStats _$RemoteAudioStatsFromJson(Map<String, dynamic> json) =>
       frozenRateByCustomPlcCount:
           (json['frozenRateByCustomPlcCount'] as num?)?.toInt(),
       plcCount: (json['plcCount'] as num?)?.toInt(),
+      frozenCntByCustom: (json['frozenCntByCustom'] as num?)?.toInt(),
+      frozenTimeByCustom: (json['frozenTimeByCustom'] as num?)?.toInt(),
       totalActiveTime: (json['totalActiveTime'] as num?)?.toInt(),
       publishDuration: (json['publishDuration'] as num?)?.toInt(),
       qoeQuality: (json['qoeQuality'] as num?)?.toInt(),
@@ -158,6 +160,8 @@ Map<String, dynamic> _$RemoteAudioStatsToJson(RemoteAudioStats instance) {
   writeNotNull(
       'frozenRateByCustomPlcCount', instance.frozenRateByCustomPlcCount);
   writeNotNull('plcCount', instance.plcCount);
+  writeNotNull('frozenCntByCustom', instance.frozenCntByCustom);
+  writeNotNull('frozenTimeByCustom', instance.frozenTimeByCustom);
   writeNotNull('totalActiveTime', instance.totalActiveTime);
   writeNotNull('publishDuration', instance.publishDuration);
   writeNotNull('qoeQuality', instance.qoeQuality);
@@ -445,7 +449,7 @@ ScreenCaptureConfiguration _$ScreenCaptureConfigurationFromJson(
       screenRect: json['screenRect'] == null
           ? null
           : Rectangle.fromJson(json['screenRect'] as Map<String, dynamic>),
-      windowId: (json['windowId'] as num?)?.toInt(),
+      windowId: (readIntPtr(json, 'windowId') as num?)?.toInt(),
       params: json['params'] == null
           ? null
           : ScreenCaptureParameters.fromJson(
@@ -519,7 +523,7 @@ ScreenCaptureSourceInfo _$ScreenCaptureSourceInfoFromJson(
         Map<String, dynamic> json) =>
     ScreenCaptureSourceInfo(
       type: $enumDecodeNullable(_$ScreenCaptureSourceTypeEnumMap, json['type']),
-      sourceId: (json['sourceId'] as num?)?.toInt(),
+      sourceId: (readIntPtr(json, 'sourceId') as num?)?.toInt(),
       sourceName: json['sourceName'] as String?,
       thumbImage: json['thumbImage'] == null
           ? null
@@ -537,7 +541,7 @@ ScreenCaptureSourceInfo _$ScreenCaptureSourceInfoFromJson(
           ? null
           : Rectangle.fromJson(json['position'] as Map<String, dynamic>),
       minimizeWindow: json['minimizeWindow'] as bool?,
-      sourceDisplayId: (json['sourceDisplayId'] as num?)?.toInt(),
+      sourceDisplayId: (readIntPtr(json, 'sourceDisplayId') as num?)?.toInt(),
     );
 
 Map<String, dynamic> _$ScreenCaptureSourceInfoToJson(
@@ -629,8 +633,8 @@ ChannelMediaOptions _$ChannelMediaOptionsFromJson(Map<String, dynamic> json) =>
       publishThirdCameraTrack: json['publishThirdCameraTrack'] as bool?,
       publishFourthCameraTrack: json['publishFourthCameraTrack'] as bool?,
       publishMicrophoneTrack: json['publishMicrophoneTrack'] as bool?,
-      publishScreenCaptureAudio: json['publishScreenCaptureAudio'] as bool?,
       publishScreenCaptureVideo: json['publishScreenCaptureVideo'] as bool?,
+      publishScreenCaptureAudio: json['publishScreenCaptureAudio'] as bool?,
       publishScreenTrack: json['publishScreenTrack'] as bool?,
       publishSecondaryScreenTrack: json['publishSecondaryScreenTrack'] as bool?,
       publishThirdScreenTrack: json['publishThirdScreenTrack'] as bool?,
@@ -688,8 +692,8 @@ Map<String, dynamic> _$ChannelMediaOptionsToJson(ChannelMediaOptions instance) {
   writeNotNull('publishThirdCameraTrack', instance.publishThirdCameraTrack);
   writeNotNull('publishFourthCameraTrack', instance.publishFourthCameraTrack);
   writeNotNull('publishMicrophoneTrack', instance.publishMicrophoneTrack);
-  writeNotNull('publishScreenCaptureAudio', instance.publishScreenCaptureAudio);
   writeNotNull('publishScreenCaptureVideo', instance.publishScreenCaptureVideo);
+  writeNotNull('publishScreenCaptureAudio', instance.publishScreenCaptureAudio);
   writeNotNull('publishScreenTrack', instance.publishScreenTrack);
   writeNotNull(
       'publishSecondaryScreenTrack', instance.publishSecondaryScreenTrack);
@@ -824,9 +828,7 @@ const _$AudioScenarioTypeEnumMap = {
   AudioScenarioType.audioScenarioChatroom: 5,
   AudioScenarioType.audioScenarioChorus: 7,
   AudioScenarioType.audioScenarioMeeting: 8,
-  AudioScenarioType.audioScenarioAiServer: 9,
-  AudioScenarioType.audioScenarioAiClient: 10,
-  AudioScenarioType.audioScenarioNum: 11,
+  AudioScenarioType.audioScenarioNum: 9,
 };
 
 const _$ThreadPriorityTypeEnumMap = {
@@ -839,7 +841,6 @@ const _$ThreadPriorityTypeEnumMap = {
 };
 
 Metadata _$MetadataFromJson(Map<String, dynamic> json) => Metadata(
-      channelId: json['channelId'] as String?,
       uid: (json['uid'] as num?)?.toInt(),
       size: (json['size'] as num?)?.toInt(),
       timeStampMs: (json['timeStampMs'] as num?)?.toInt(),
@@ -854,7 +855,6 @@ Map<String, dynamic> _$MetadataToJson(Metadata instance) {
     }
   }
 
-  writeNotNull('channelId', instance.channelId);
   writeNotNull('uid', instance.uid);
   writeNotNull('size', instance.size);
   writeNotNull('timeStampMs', instance.timeStampMs);

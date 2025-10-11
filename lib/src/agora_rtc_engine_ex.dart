@@ -753,10 +753,23 @@ abstract class RtcEngineEx implements RtcEngine {
       required int length});
 
   /// @nodoc
-  Future<void> enableVideoImageSourceEx(
-      {required bool enable,
-      required ImageTrackOptions options,
-      required RtcConnection connection});
+  Future<void> preloadEffectEx(
+      {required RtcConnection connection,
+      required int soundId,
+      required String filePath,
+      int startPos = 0});
+
+  /// @nodoc
+  Future<void> playEffectEx(
+      {required RtcConnection connection,
+      required int soundId,
+      required String filePath,
+      required int loopCount,
+      required double pitch,
+      required double pan,
+      required int gain,
+      bool publish = false,
+      int startPos = 0});
 
   /// Gets a video screenshot of the specified observation point using the connection ID.
   ///

@@ -159,6 +159,9 @@ const eventIdsMapping = {
   "RtcEngineEventHandler_onVideoDeviceStateChanged": [
     "RtcEngineEventHandler_onVideoDeviceStateChanged_976d8c3"
   ],
+  "RtcEngineEventHandler_onPipStateChanged": [
+    "RtcEngineEventHandler_onPipStateChanged_941b366"
+  ],
   "RtcEngineEventHandler_onNetworkQuality": [
     "RtcEngineEventHandler_onNetworkQuality_34d8b3c"
   ],
@@ -351,6 +354,9 @@ const eventIdsMapping = {
   "RtcEngineEventHandler_onPermissionError": [
     "RtcEngineEventHandler_onPermissionError_f37c62b"
   ],
+  "RtcEngineEventHandler_onPermissionGranted": [
+    "RtcEngineEventHandler_onPermissionGranted_f37c62b"
+  ],
   "RtcEngineEventHandler_onLocalUserRegistered": [
     "RtcEngineEventHandler_onLocalUserRegistered_1922dd1"
   ],
@@ -387,17 +393,17 @@ const eventIdsMapping = {
   "RtcEngineEventHandler_onAudioMetadataReceived": [
     "RtcEngineEventHandler_onAudioMetadataReceived_0d4eb96"
   ],
-  "RtcEngineEventHandler_onExtensionEventWithContext": [
-    "RtcEngineEventHandler_onExtensionEventWithContext_a5fb27a"
+  "RtcEngineEventHandler_onExtensionEvent": [
+    "RtcEngineEventHandler_onExtensionEvent_062d13c"
   ],
-  "RtcEngineEventHandler_onExtensionStartedWithContext": [
-    "RtcEngineEventHandler_onExtensionStartedWithContext_67c38e3"
+  "RtcEngineEventHandler_onExtensionStarted": [
+    "RtcEngineEventHandler_onExtensionStarted_ccad422"
   ],
-  "RtcEngineEventHandler_onExtensionStoppedWithContext": [
-    "RtcEngineEventHandler_onExtensionStoppedWithContext_67c38e3"
+  "RtcEngineEventHandler_onExtensionStopped": [
+    "RtcEngineEventHandler_onExtensionStopped_ccad422"
   ],
-  "RtcEngineEventHandler_onExtensionErrorWithContext": [
-    "RtcEngineEventHandler_onExtensionErrorWithContext_a452f11"
+  "RtcEngineEventHandler_onExtensionError": [
+    "RtcEngineEventHandler_onExtensionError_bd3489b"
   ],
   "RtcEngineEventHandler_onSetRtmFlagResult": [
     "RtcEngineEventHandler_onSetRtmFlagResult_263e4cd"

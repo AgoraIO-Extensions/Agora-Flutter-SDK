@@ -520,6 +520,8 @@ class RemoteAudioStats implements AgoraSerializable {
       this.mosValue,
       this.frozenRateByCustomPlcCount,
       this.plcCount,
+      this.frozenCntByCustom,
+      this.frozenTimeByCustom,
       this.totalActiveTime,
       this.publishDuration,
       this.qoeQuality,
@@ -578,6 +580,14 @@ class RemoteAudioStats implements AgoraSerializable {
   /// @nodoc
   @JsonKey(name: 'plcCount')
   final int? plcCount;
+
+  /// @nodoc
+  @JsonKey(name: 'frozenCntByCustom')
+  final int? frozenCntByCustom;
+
+  /// @nodoc
+  @JsonKey(name: 'frozenTimeByCustom')
+  final int? frozenTimeByCustom;
 
   /// The total active time (ms) between the start of the audio call and the callback of the remote user. The active time refers to the total duration of the remote user without the mute state.
   @JsonKey(name: 'totalActiveTime')
@@ -1114,7 +1124,7 @@ class ScreenCaptureConfiguration implements AgoraSerializable {
   final Rectangle? screenRect;
 
   /// (For Windows and macOS only) Window ID. This parameter takes effect only when you want to capture the window.
-  @JsonKey(name: 'windowId')
+  @JsonKey(name: 'windowId', readValue: readIntPtr)
   final int? windowId;
 
   /// (For Windows and macOS only) The screen capture configuration. See ScreenCaptureParameters.
@@ -1242,7 +1252,7 @@ class ScreenCaptureSourceInfo implements AgoraSerializable {
   final ScreenCaptureSourceType? type;
 
   /// The window ID for a window or the display ID for a screen.
-  @JsonKey(name: 'sourceId')
+  @JsonKey(name: 'sourceId', readValue: readIntPtr)
   final int? sourceId;
 
   /// The name of the window or screen. UTF-8 encoding.
@@ -1282,7 +1292,7 @@ class ScreenCaptureSourceInfo implements AgoraSerializable {
   final bool? minimizeWindow;
 
   /// (For Windows only) Screen ID where the window is located. If the window is displayed across multiple screens, this parameter indicates the ID of the screen with which the window has the largest intersection area. If the window is located outside of the visible screens, the value of this member is -2.
-  @JsonKey(name: 'sourceDisplayId')
+  @JsonKey(name: 'sourceDisplayId', readValue: readIntPtr)
   final int? sourceDisplayId;
 
   /// @nodoc
@@ -1349,8 +1359,8 @@ class ChannelMediaOptions implements AgoraSerializable {
       this.publishThirdCameraTrack,
       this.publishFourthCameraTrack,
       this.publishMicrophoneTrack,
-      this.publishScreenCaptureAudio,
       this.publishScreenCaptureVideo,
+      this.publishScreenCaptureAudio,
       this.publishScreenTrack,
       this.publishSecondaryScreenTrack,
       this.publishThirdScreenTrack,
@@ -1402,13 +1412,13 @@ class ChannelMediaOptions implements AgoraSerializable {
   @JsonKey(name: 'publishMicrophoneTrack')
   final bool? publishMicrophoneTrack;
 
-  /// Whether to publish the audio captured from the screen: true : Publish the audio captured from the screen. false : Publish the audio captured from the screen. This parameter is for Android and iOS only.
-  @JsonKey(name: 'publishScreenCaptureAudio')
-  final bool? publishScreenCaptureAudio;
-
   /// Whether to publish the video captured from the screen: true : Publish the video captured from the screen. false : Do not publish the video captured from the screen. This parameter is for Android and iOS only.
   @JsonKey(name: 'publishScreenCaptureVideo')
   final bool? publishScreenCaptureVideo;
+
+  /// Whether to publish the audio captured from the screen: true : Publish the audio captured from the screen. false : Publish the audio captured from the screen. This parameter is for Android and iOS only.
+  @JsonKey(name: 'publishScreenCaptureAudio')
+  final bool? publishScreenCaptureAudio;
 
   /// Whether to publish the video captured from the screen: true : Publish the video captured from the screen. false : Do not publish the video captured from the screen. This is for Windows and macOS only.
   @JsonKey(name: 'publishScreenTrack')
@@ -1661,6 +1671,7 @@ class RtcEngineEventHandler {
     this.onAudioMixingFinished,
     this.onAudioEffectFinished,
     this.onVideoDeviceStateChanged,
+    this.onPipStateChanged,
     this.onNetworkQuality,
     this.onIntraRequestReceived,
     this.onUplinkNetworkInfoUpdated,
@@ -1725,6 +1736,7 @@ class RtcEngineEventHandler {
     this.onNetworkTypeChanged,
     this.onEncryptionError,
     this.onPermissionError,
+    this.onPermissionGranted,
     this.onLocalUserRegistered,
     this.onUserInfoUpdated,
     this.onUserAccountUpdated,
@@ -1737,10 +1749,10 @@ class RtcEngineEventHandler {
     this.onVideoPublishStateChanged,
     this.onTranscodedStreamLayoutInfo,
     this.onAudioMetadataReceived,
-    this.onExtensionEventWithContext,
-    this.onExtensionStartedWithContext,
-    this.onExtensionStoppedWithContext,
-    this.onExtensionErrorWithContext,
+    this.onExtensionEvent,
+    this.onExtensionStarted,
+    this.onExtensionStopped,
+    this.onExtensionError,
     this.onSetRtmFlagResult,
   });
 
@@ -1866,6 +1878,9 @@ class RtcEngineEventHandler {
   /// * [deviceState] Media device states. See MediaDeviceStateType.
   final void Function(String deviceId, MediaDeviceType deviceType,
       MediaDeviceStateType deviceState)? onVideoDeviceStateChanged;
+
+  /// @nodoc
+  final void Function(PipState state)? onPipStateChanged;
 
   /// Reports the last mile network quality of each user in the channel.
   ///
@@ -2486,6 +2501,9 @@ class RtcEngineEventHandler {
   /// * [permissionType] The type of the device permission. See PermissionType.
   final void Function(PermissionType permissionType)? onPermissionError;
 
+  /// @nodoc
+  final void Function(PermissionType permissionType)? onPermissionGranted;
+
   /// Occurs when the local user registers a user account.
   ///
   /// After the local user successfully calls registerLocalUserAccount to register the user account or calls joinChannelWithUserAccount to join a channel, the SDK triggers the callback and informs the local user's UID and User Account.
@@ -2612,39 +2630,21 @@ class RtcEngineEventHandler {
           RtcConnection connection, int uid, Uint8List metadata, int length)?
       onAudioMetadataReceived;
 
-  /// The event callback of the extension.
-  ///
-  /// To listen for events while the extension is running, you need to register this callback.
-  ///
-  /// * [value] The value of the extension key.
-  /// * [key] The key of the extension.
-  /// * [context] The context information of the extension, see ExtensionContext.
-  final void Function(ExtensionContext context, String key, String value)?
-      onExtensionEventWithContext;
+  /// @nodoc
+  final void Function(
+          String provider, String extension, String key, String value)?
+      onExtensionEvent;
 
-  /// Occurrs when the extension is enabled.
-  ///
-  /// The callback is triggered after the extension is successfully enabled.
-  ///
-  /// * [context] The context information of the extension, see ExtensionContext.
-  final void Function(ExtensionContext context)? onExtensionStartedWithContext;
+  /// @nodoc
+  final void Function(String provider, String extension)? onExtensionStarted;
 
-  /// Occurs when the extension is disabled.
-  ///
-  /// The callback is triggered after the extension is successfully disabled.
-  ///
-  /// * [context] The context information of the extension, see ExtensionContext.
-  final void Function(ExtensionContext context)? onExtensionStoppedWithContext;
+  /// @nodoc
+  final void Function(String provider, String extension)? onExtensionStopped;
 
-  /// Occurs when the extension runs incorrectly.
-  ///
-  /// In case of extension enabling failure or runtime errors, the extension triggers this callback and reports the error code along with the reasons.
-  ///
-  /// * [context] The context information of the extension, see ExtensionContext.
-  /// * [error] Error code. For details, see the extension documentation provided by the extension provider.
-  /// * [message] Reason. For details, see the extension documentation provided by the extension provider.
-  final void Function(ExtensionContext context, int error, String message)?
-      onExtensionErrorWithContext;
+  /// @nodoc
+  final void Function(
+          String provider, String extension, int error, String message)?
+      onExtensionError;
 
   /// @nodoc
   final void Function(RtcConnection connection, int code)? onSetRtmFlagResult;
@@ -2860,12 +2860,7 @@ extension MaxMetadataSizeTypeExt on MaxMetadataSizeType {
 @JsonSerializable(explicitToJson: true, includeIfNull: false)
 class Metadata implements AgoraSerializable {
   /// @nodoc
-  const Metadata(
-      {this.channelId, this.uid, this.size, this.buffer, this.timeStampMs});
-
-  /// The channel name.
-  @JsonKey(name: 'channelId')
-  final String? channelId;
+  const Metadata({this.uid, this.size, this.buffer, this.timeStampMs});
 
   /// The user ID.
   ///  For the recipient: The ID of the remote user who sent the Metadata.
@@ -3399,6 +3394,18 @@ abstract class RtcEngine {
   Future<void> stopPreview(
       {VideoSourceType sourceType = VideoSourceType.videoSourceCameraPrimary});
 
+  /// @nodoc
+  Future<bool> isPipSupported();
+
+  /// @nodoc
+  Future<void> setupPip(PipOptions options);
+
+  /// @nodoc
+  Future<void> startPip();
+
+  /// @nodoc
+  Future<void> stopPip();
+
   /// Starts the last mile network probe test.
   ///
   /// This method starts the last-mile network probe test before joining a channel to get the uplink and downlink last mile network statistics, including the bandwidth, packet loss, jitter, and round-trip time (RTT).
@@ -3440,41 +3447,6 @@ abstract class RtcEngine {
   Future<void> setBeautyEffectOptions(
       {required bool enabled,
       required BeautyOptions options,
-      MediaSourceType type = MediaSourceType.primaryCameraSource});
-
-  /// @nodoc
-  Future<void> setFaceShapeBeautyOptions(
-      {required bool enabled,
-      required FaceShapeBeautyOptions options,
-      MediaSourceType type = MediaSourceType.primaryCameraSource});
-
-  /// @nodoc
-  Future<void> setFaceShapeAreaOptions(
-      {required FaceShapeAreaOptions options,
-      MediaSourceType type = MediaSourceType.primaryCameraSource});
-
-  /// @nodoc
-  Future<FaceShapeBeautyOptions> getFaceShapeBeautyOptions(
-      {MediaSourceType type = MediaSourceType.primaryCameraSource});
-
-  /// @nodoc
-  Future<FaceShapeAreaOptions> getFaceShapeAreaOptions(
-      {required FaceShapeArea shapeArea,
-      MediaSourceType type = MediaSourceType.primaryCameraSource});
-
-  /// Sets the filter effect options and specifies the media source.
-  ///
-  /// * [enabled] Whether to enable the filter effect: true : Yes. false : (Default) No.
-  /// * [options] The filter effect options. See FilterEffectOptions.
-  /// * [type] The type of the media source to which the filter effect is applied. See MediaSourceType. In this method, this parameter supports only the following two settings:
-  ///  Use the default value primaryCameraSource if you use camera to capture local video.
-  ///  Set this parameter to customVideoSource if you use custom video source.
-  ///
-  /// Returns
-  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown. You need to catch the exception and handle it accordingly.
-  Future<void> setFilterEffectOptions(
-      {required bool enabled,
-      required FilterEffectOptions options,
       MediaSourceType type = MediaSourceType.primaryCameraSource});
 
   /// Sets low-light enhancement.
@@ -3685,6 +3657,9 @@ abstract class RtcEngine {
   /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown. You need to catch the exception and handle it accordingly.
   Future<void> muteAllRemoteAudioStreams(bool mute);
 
+  /// @nodoc
+  Future<void> setDefaultMuteAllRemoteAudioStreams(bool mute);
+
   /// Stops or resumes subscribing to the audio stream of a specified user.
   ///
   /// * [uid] The user ID of the specified user.
@@ -3725,6 +3700,9 @@ abstract class RtcEngine {
   /// Returns
   /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown. You need to catch the exception and handle it accordingly.
   Future<void> muteAllRemoteVideoStreams(bool mute);
+
+  /// @nodoc
+  Future<void> setDefaultMuteAllRemoteVideoStreams(bool mute);
 
   /// Sets the default video stream type to subscribe to.
   ///
@@ -4499,18 +4477,6 @@ abstract class RtcEngine {
   Future<void> setHeadphoneEQParameters(
       {required int lowGain, required int highGain});
 
-  /// Enables or disables the voice AI tuner.
-  ///
-  /// The voice AI tuner supports enhancing sound quality and adjusting tone style.
-  ///
-  /// * [enabled] Whether to enable the voice AI tuner: true : Enables the voice AI tuner. false : (Default) Disable the voice AI tuner.
-  /// * [type] Voice AI tuner sound types, see VoiceAiTunerType.
-  ///
-  /// Returns
-  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown. You need to catch the exception and handle it accordingly.
-  Future<void> enableVoiceAITuner(
-      {required bool enabled, required VoiceAiTunerType type});
-
   /// Sets the log file.
   ///
   /// Deprecated: This method is deprecated. Set the log file path by configuring the context parameter when calling initialize. Specifies an SDK output log file. The log file records all log data for the SDK’s operation.
@@ -4599,24 +4565,6 @@ abstract class RtcEngine {
       {required int uid,
       required RenderModeType renderMode,
       required VideoMirrorModeType mirrorMode});
-
-  /// Sets the maximum frame rate for rendering local video.
-  ///
-  /// * [sourceType] The type of the video source. See VideoSourceType.
-  /// * [targetFps] The capture frame rate (fps) of the local video. Sopported values are: 1, 7, 10, 15, 24, 30, 60. Set this parameter to a value lower than the actual video frame rate; otherwise, the settings do not take effect.
-  ///
-  /// Returns
-  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown. You need to catch the exception and handle it accordingly.
-  Future<void> setLocalRenderTargetFps(
-      {required VideoSourceType sourceType, required int targetFps});
-
-  /// Sets the maximum frame rate for rendering remote video.
-  ///
-  /// * [targetFps] The capture frame rate (fps) of the local video. Sopported values are: 1, 7, 10, 15, 24, 30, 60. Set this parameter to a value lower than the actual video frame rate; otherwise, the settings do not take effect.
-  ///
-  /// Returns
-  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown. You need to catch the exception and handle it accordingly.
-  Future<void> setRemoteRenderTargetFps(int targetFps);
 
   /// Sets the local video mirror mode.
   ///
@@ -5621,37 +5569,6 @@ abstract class RtcEngine {
   /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown. You need to catch the exception and handle it accordingly.
   Future<void> stopLocalVideoTranscoder();
 
-  /// Starts local audio mixing.
-  ///
-  /// This method supports merging multiple audio streams into one audio stream locally. For example, merging the audio streams captured from the local microphone, and that from the media player, the sound card, and the remote users into one audio stream, and then publish the merged audio stream to the channel.
-  ///  If you want to mix the locally captured audio streams, you can set publishMixedAudioTrack in ChannelMediaOptions to true, and then publish the mixed audio stream to the channel.
-  ///  If you want to mix the remote audio stream, ensure that the remote audio stream has been published in the channel and you have subcribed to the audio stream that you need to mix.
-  ///
-  /// * [config] The configurations for mixing the lcoal audio. See LocalAudioMixerConfiguration.
-  ///
-  /// Returns
-  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown. You need to catch the exception and handle it accordingly.
-  Future<void> startLocalAudioMixer(LocalAudioMixerConfiguration config);
-
-  /// Updates the configurations for mixing audio streams locally.
-  ///
-  /// After calling startLocalAudioMixer, call this method if you want to update the local audio mixing configuration.
-  ///
-  /// * [config] The configurations for mixing the lcoal audio. See LocalAudioMixerConfiguration.
-  ///
-  /// Returns
-  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown. You need to catch the exception and handle it accordingly.
-  Future<void> updateLocalAudioMixerConfiguration(
-      LocalAudioMixerConfiguration config);
-
-  /// Stops the local audio mixing.
-  ///
-  /// After calling startLocalAudioMixer, call this method if you want to stop the local audio mixing.
-  ///
-  /// Returns
-  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown. You need to catch the exception and handle it accordingly.
-  Future<void> stopLocalAudioMixer();
-
   /// Starts camera capture.
   ///
   /// You can call this method to start capturing video from one or more cameras by specifying sourceType. On the iOS platform, if you want to enable multi-camera capture, you need to call enableMultiCamera and set enabled to true before calling this method.
@@ -5725,6 +5642,12 @@ abstract class RtcEngine {
   /// @nodoc
   Future<void> setRemoteUserPriority(
       {required int uid, required PriorityType userPriority});
+
+  /// @nodoc
+  Future<void> setEncryptionMode(String encryptionMode);
+
+  /// @nodoc
+  Future<void> setEncryptionSecret(String secret);
 
   /// Enables or disables the built-in encryption.
   ///
@@ -6297,9 +6220,6 @@ abstract class RtcEngine {
   /// @nodoc
   Future<void> sendAudioMetadata(
       {required Uint8List metadata, required int length});
-
-  /// @nodoc
-  Future<HdrCapability> queryHDRCapability(VideoModuleType videoModule);
 
   /// Starts screen capture from the specified video source.
   ///

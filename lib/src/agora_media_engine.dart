@@ -118,9 +118,6 @@ abstract class MediaEngine {
       ExternalVideoSourceType sourceType = ExternalVideoSourceType.videoFrame,
       SenderOptions encodedVideoOption = const SenderOptions()});
 
-  /// @nodoc
-  Future<void> setExternalRemoteEglContext(int eglContext);
-
   /// Sets the external audio source parameters.
   ///
   /// Deprecated: This method is deprecated, use createCustomAudioTrack instead.
