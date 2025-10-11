@@ -44,6 +44,8 @@ on:
 jobs:
   update_deps:
     runs-on: macos-latest
+    outputs:
+      branch_name: ${{ steps.output_branch.outputs.branch_name }}
     steps:
       - name: Checkout target branch
         uses: actions/checkout@v4
@@ -121,6 +123,7 @@ jobs:
 
 
       - name: Commit and create pull request
+        id: create_pr
         uses: peter-evans/create-pull-request@v4
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
@@ -141,13 +144,11 @@ jobs:
             > This pull request is trigger by bot, you can checkout this branch and update it.
           labels: |
             ci:ready_release_special
-          
-          
-          
-          
-          
-          
-          
-          
-          
 
+      - name: Output branch and PR information
+        id: output_branch
+        shell: bash
+        run: |
+          BRANCH_NAME="dev/${{ steps.prepare_target_branch.outputs.final_target_branch }}"
+          echo "branch_name=${BRANCH_NAME}" >> $GITHUB_OUTPUT
+          echo "[AUTO]create branch name: ${BRANCH_NAME}"
