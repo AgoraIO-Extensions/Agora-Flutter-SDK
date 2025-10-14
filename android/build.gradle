@@ -27,7 +27,7 @@ android {
     if (project.android.hasProperty("namespace")) {
         namespace 'io.agora.agora_rtc_ng'
     }
-    compileSdkVersion safeExtGet('compileSdkVersion', 31)
+    compileSdkVersion safeExtGet('compileSdkVersion', 35)
 
     defaultConfig {
         minSdkVersion safeExtGet('minSdkVersion', 21)
@@ -36,14 +36,21 @@ android {
     }
 
     compileOptions {
-        sourceCompatibility JavaVersion.VERSION_1_8
-        targetCompatibility JavaVersion.VERSION_1_8
+        sourceCompatibility JavaVersion.VERSION_11
+        targetCompatibility JavaVersion.VERSION_11
     }
 
     sourceSets {
         if (isDev(project)) {
            main.jniLibs.srcDirs += 'libs'
         }
+    }
+
+    packagingOptions {
+        jniLibs {
+            useLegacyPackaging = false
+        }
+        
     }
 
     externalNativeBuild {
