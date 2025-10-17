@@ -496,7 +496,7 @@ class YUVRendering final : public RenderingOp {
 
  public:
   explicit YUVRendering(std::shared_ptr<GLContext> &gl_context)
-      : RenderingOp(gl_context) {
+      : RenderingOp(gl_context), frame_count_(0) {
     LOGCATD("Rendering with YUVRendering");
     shader_ =
         std::make_unique<ScopedShader>(vertex_shader_yuv_, frag_shader_yuv_);
@@ -507,6 +507,9 @@ class YUVRendering final : public RenderingOp {
     yTextureLoc_ = glGetUniformLocation(program, "yTexture");
     uTextureLoc_ = glGetUniformLocation(program, "uTexture");
     vTextureLoc_ = glGetUniformLocation(program, "vTexture");
+    colorRangeLoc_ = glGetUniformLocation(program, "u_colorRange");
+
+    LOGCATD("YUVRendering initialized - colorRangeLoc_: %d", colorRangeLoc_);
 
     glGenTextures(3, texs_);
     CHECK_GL_ERROR()
@@ -560,6 +563,19 @@ class YUVRendering final : public RenderingOp {
     glVertexAttribPointer(texCoordLoc_, 2, GL_FLOAT, GL_FALSE,
                           2 * sizeof(float), fragment);
     CHECK_GL_ERROR()
+
+    // Set color range: 0 = limited range (default), 1 = full range
+    // TODO: Read from video_frame->metaInfo if available in the future
+    int colorRange = 1; // ⚡ TESTING: Use full range
+    glUniform1i(colorRangeLoc_, colorRange);
+    CHECK_GL_ERROR()
+
+    // Log color range info every 30 frames for debugging
+    frame_count_++;
+    if (frame_count_ % 30 == 0) {
+      LOGCATD("YUV Rendering [Frame %d]: ColorRange=%d (0=Limited, 1=Full)", 
+              frame_count_, colorRange);
+    }
 
     // y buffer texture
     glActiveTexture(GL_TEXTURE0);
@@ -656,14 +672,30 @@ class YUVRendering final : public RenderingOp {
       "uniform sampler2D yTexture;\n"
       "uniform sampler2D uTexture;\n"
       "uniform sampler2D vTexture;\n"
+      "uniform int u_colorRange;\n"
       "void main() {\n"
-      "    vec3 yuv;\n"
+      "    float y = texture2D(yTexture, vTextCoord).r;\n"
+      "    float u = texture2D(uTexture, vTextCoord).r;\n"
+      "    float v = texture2D(vTexture, vTextCoord).r;\n"
+      "    \n"
+      "    // Apply color range conversion\n"
+      "    if (u_colorRange == 0) {\n"
+      "        // Limited range (16-235 for Y, 16-240 for UV)\n"
+      "        y = (y - 0.0625) * 1.164;\n"
+      "        u = u - 0.5;\n"
+      "        v = v - 0.5;\n"
+      "    } else {\n"
+      "        // Full range (0-255)\n"
+      "        u = u - 0.5;\n"
+      "        v = v - 0.5;\n"
+      "    }\n"
+      "    \n"
+      "    // BT.601 conversion matrix\n"
       "    vec3 rgb;\n"
-      "    yuv.r = texture2D(yTexture, vTextCoord).r;\n"
-      "    yuv.g = texture2D(uTexture, vTextCoord).r - 0.5;\n"
-      "    yuv.b = texture2D(vTexture, vTextCoord).r - 0.5;\n"
-      "    rgb = mat3(1.0, 1.0, 1.0, 0.0, -0.39465, 2.03211, 1.13983, "
-      "-0.58060, 0.0) * yuv;\n"
+      "    rgb.r = y + 1.402 * v;\n"
+      "    rgb.g = y - 0.344136 * u - 0.714136 * v;\n"
+      "    rgb.b = y + 1.772 * u;\n"
+      "    \n"
       "    gl_FragColor = vec4(rgb, 1.0);\n"
       "}\n";
 
@@ -684,6 +716,9 @@ class YUVRendering final : public RenderingOp {
   GLint yTextureLoc_;
   GLint uTextureLoc_;
   GLint vTextureLoc_;
+  GLint colorRangeLoc_;
+
+  int frame_count_;
 
   std::unique_ptr<ScopedShader> shader_;
 };
@@ -737,6 +772,30 @@ class NativeTextureRenderer final
         static_cast<const agora::media::base::VideoFrame *>(videoFrame);
 
     if (video_frame->width == 0 || video_frame->height == 0) { return; }
+
+    // Log video frame type for debugging
+    static int frame_count_for_type = 0;
+    frame_count_for_type++;
+    if (frame_count_for_type % 30 == 1) {
+      const char* type_name = "UNKNOWN";
+      switch(video_frame->type) {
+        case agora::media::base::VIDEO_PIXEL_FORMAT::VIDEO_TEXTURE_2D:
+          type_name = "VIDEO_TEXTURE_2D";
+          break;
+        case agora::media::base::VIDEO_PIXEL_FORMAT::VIDEO_TEXTURE_OES:
+          type_name = "VIDEO_TEXTURE_OES";
+          break;
+        case agora::media::base::VIDEO_PIXEL_FORMAT::VIDEO_PIXEL_I420:
+          type_name = "VIDEO_PIXEL_I420 (YUV)";
+          break;
+        default:
+          type_name = "UNKNOWN";
+          break;
+      }
+      LOGCATD("Video Frame [%d] - Type: %s (%d), Size: %dx%d, UID: %u",
+              frame_count_for_type, type_name, video_frame->type,
+              video_frame->width, video_frame->height, config.uid);
+    }
 
     if (video_frame->renderTimeMs < last_frame_time_ms_) {
       LOGCATE("Frame dropped: current time %lld ms, last frame time %lld ms",
