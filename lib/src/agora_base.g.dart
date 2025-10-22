@@ -1226,6 +1226,8 @@ VideoCanvas _$VideoCanvasFromJson(Map<String, dynamic> json) => VideoCanvas(
           ? null
           : Rectangle.fromJson(json['cropArea'] as Map<String, dynamic>),
       enableAlphaMask: json['enableAlphaMask'] as bool?,
+      rotation:
+          $enumDecodeNullable(_$VideoOrientationEnumMap, json['rotation']),
     );
 
 Map<String, dynamic> _$VideoCanvasToJson(VideoCanvas instance) {
@@ -1247,6 +1249,7 @@ Map<String, dynamic> _$VideoCanvasToJson(VideoCanvas instance) {
   writeNotNull('mediaPlayerId', instance.mediaPlayerId);
   writeNotNull('cropArea', instance.cropArea?.toJson());
   writeNotNull('enableAlphaMask', instance.enableAlphaMask);
+  writeNotNull('rotation', _$VideoOrientationEnumMap[instance.rotation]);
   return val;
 }
 
@@ -1495,6 +1498,12 @@ Map<String, dynamic> _$LoopbackAudioTrackConfigToJson(
       'loopbackType', _$LoopbackAudioTrackTypeEnumMap[instance.loopbackType]);
   return val;
 }
+
+const _$LoopbackAudioTrackTypeEnumMap = {
+  LoopbackAudioTrackType.loopbackSystem: 0,
+  LoopbackAudioTrackType.loopbackSystemExcludeSelf: 1,
+  LoopbackAudioTrackType.loopbackApplication: 2,
+};
 
 ScreenCaptureParameters _$ScreenCaptureParametersFromJson(
         Map<String, dynamic> json) =>
@@ -2479,7 +2488,7 @@ const _$LocalVideoStreamErrorEnumMap = {
       .localVideoStreamErrorScreenCaptureWindowRecoverFromHidden: 26,
   LocalVideoStreamError
       .localVideoStreamErrorScreenCaptureWindowRecoverFromMinimized: 27,
-  LocalVideoStreamError.localVideoStreamReasonScreenCaptureDisplayDiscnnected:
+  LocalVideoStreamError.localVideoStreamReasonScreenCaptureDisplayDisconnected:
       30,
 };
 
@@ -2651,12 +2660,6 @@ const _$AudioTrackTypeEnumMap = {
   AudioTrackType.audioTrackDirect: 1,
 };
 
-const _$LoopbackAudioTrackTypeEnumMap = {
-  LoopbackAudioTrackType.lookbackSystem: 0,
-  LoopbackAudioTrackType.lookbackSystemExcludeSelf: 1,
-  LoopbackAudioTrackType.lookbackApplication: 2,
-};
-
 const _$VoiceBeautifierPresetEnumMap = {
   VoiceBeautifierPreset.voiceBeautifierOff: 0,
   VoiceBeautifierPreset.chatBeautifierMagnetic: 16843008,
@@ -2739,6 +2742,7 @@ const _$AreaCodeExEnumMap = {
   AreaCodeEx.areaCodeKr: 512,
   AreaCodeEx.areaCodeHkmc: 1024,
   AreaCodeEx.areaCodeUs: 2048,
+  AreaCodeEx.areaCodeRu: 4096,
   AreaCodeEx.areaCodeOvs: 4294967294,
 };
 

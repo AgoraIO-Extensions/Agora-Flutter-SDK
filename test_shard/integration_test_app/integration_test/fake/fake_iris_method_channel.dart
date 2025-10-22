@@ -22,16 +22,15 @@ class FakeIrisMethodChannelConfig {
   final Map<String, int> delayInvokeMethod;
   final Map<String, CallApiResult> fakeInvokeMethods;
 
-  FakeIrisMethodChannelConfig copyWith({
-    bool? isFakeInitilize,
-    bool? isFakeInvokeMethod,
-    bool? isFakeGetNativeHandle,
-    bool? isFakeAddHotRestartListener,
-    bool? isFakeRemoveHotRestartListener,
-    bool? isFakeDispose,
-    Map<String, int>? delayInvokeMethod,
-    Map<String, CallApiResult>? fakeInvokeMethods
-  }) {
+  FakeIrisMethodChannelConfig copyWith(
+      {bool? isFakeInitilize,
+      bool? isFakeInvokeMethod,
+      bool? isFakeGetNativeHandle,
+      bool? isFakeAddHotRestartListener,
+      bool? isFakeRemoveHotRestartListener,
+      bool? isFakeDispose,
+      Map<String, int>? delayInvokeMethod,
+      Map<String, CallApiResult>? fakeInvokeMethods}) {
     return FakeIrisMethodChannelConfig(
       isFakeInitilize: isFakeInitilize ?? this.isFakeInitilize,
       isFakeInvokeMethod: isFakeInvokeMethod ?? this.isFakeInvokeMethod,
