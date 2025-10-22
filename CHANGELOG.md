@@ -1,5 +1,13 @@
 # Changelog
 
+## [6.5.2-sp.452143.test](https://github.com/AgoraIO-Extensions/Agora-Flutter-SDK/compare/6.2.6-sp.426167...6.5.2-sp.452143.test) (2025-10-22)
+
+### Bug Fixes
+
+* delete additional version number changes operation ([59ac23b](https://github.com/AgoraIO-Extensions/Agora-Flutter-SDK/commit/59ac23bb5de9377d57f0f5becaa71559b80d0a68))
+* replace bash variable DRY-RUN with DRY_RUN ([66777ae](https://github.com/AgoraIO-Extensions/Agora-Flutter-SDK/commit/66777ae84f89cb1720b02997da1575fd00b5a448))
+* upgrade node-version ([7933ce0](https://github.com/AgoraIO-Extensions/Agora-Flutter-SDK/commit/7933ce06dda63d3db4f938e86c9762f378703790))
+
 ## [6.2.6-sp.426163.b.3](https://github.com/AgoraIO-Extensions/Agora-Flutter-SDK/compare/6.2.6-sp.426163.b.1...6.2.6-sp.426163.b.3) (2025-06-20)
 
 ## [6.2.6](https://github.com/AgoraIO-Extensions/Agora-Flutter-SDK/compare/6.2.4...6.2.6) (2023-11-21)
