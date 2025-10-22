@@ -39,7 +39,7 @@ class AgoraRtcException implements Exception {
 /// Currently, the Agora RTC SDK v6.x supports creating only one RtcEngine object for each app.
 ///
 /// Returns
-/// One RtcEngine object.
+/// RtcEngine object.
 RtcEngine createAgoraRtcEngine() {
   return impl.RtcEngineImpl.create();
 }
@@ -49,14 +49,14 @@ RtcEngine createAgoraRtcEngine() {
 /// Currently, the Agora RTC v6.x SDK supports creating only one RtcEngineEx object for each app.
 ///
 /// Returns
-/// One RtcEngineEx object.
+/// RtcEngineEx object.
 RtcEngineEx createAgoraRtcEngineEx() {
   return impl.RtcEngineImpl.create();
 }
 
 /// Gets one MediaPlayerCacheManager instance.
 ///
-/// When you successfully call this method, the SDK returns a media player cache manager instance. The cache manager is a singleton pattern. Therefore, multiple calls to this method returns the same instance. Make sure the RtcEngine is initialized before you call this method.
+/// Before calling any APIs in the MediaPlayerCacheManager class, you need to call this method to get a cache manager instance of a media player.
 ///
 /// Returns
 /// The MediaPlayerCacheManager instance.

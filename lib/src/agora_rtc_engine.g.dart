@@ -612,6 +612,9 @@ ChannelMediaOptions _$ChannelMediaOptionsFromJson(Map<String, dynamic> json) =>
       publishCustomAudioTrack: json['publishCustomAudioTrack'] as bool?,
       publishCustomAudioTrackId:
           (json['publishCustomAudioTrackId'] as num?)?.toInt(),
+      publishLoopbackAudioTrack: json['publishLoopbackAudioTrack'] as bool?,
+      publishLoopbackAudioTrackId:
+          (json['publishLoopbackAudioTrackId'] as num?)?.toInt(),
       publishCustomVideoTrack: json['publishCustomVideoTrack'] as bool?,
       publishEncodedVideoTrack: json['publishEncodedVideoTrack'] as bool?,
       publishMediaPlayerAudioTrack:
@@ -619,6 +622,9 @@ ChannelMediaOptions _$ChannelMediaOptionsFromJson(Map<String, dynamic> json) =>
       publishMediaPlayerVideoTrack:
           json['publishMediaPlayerVideoTrack'] as bool?,
       publishTranscodedVideoTrack: json['publishTranscodedVideoTrack'] as bool?,
+      publishMixedAudioTrack: json['publishMixedAudioTrack'] as bool?,
+      mixPolicyForMixedTrack: (json['mixPolicyForMixedTrack'] as num?)?.toInt(),
+      publishLipSyncTrack: json['publishLipSyncTrack'] as bool?,
       autoSubscribeAudio: json['autoSubscribeAudio'] as bool?,
       autoSubscribeVideo: json['autoSubscribeVideo'] as bool?,
       enableAudioRecordingOrPlayout:
@@ -642,7 +648,7 @@ ChannelMediaOptions _$ChannelMediaOptionsFromJson(Map<String, dynamic> json) =>
       isInteractiveAudience: json['isInteractiveAudience'] as bool?,
       customVideoTrackId: (json['customVideoTrackId'] as num?)?.toInt(),
       isAudioFilterable: json['isAudioFilterable'] as bool?,
-      autoConnectRdt: json['autoConnectRdt'] as bool?,
+      parameters: json['parameters'] as String?,
     );
 
 Map<String, dynamic> _$ChannelMediaOptionsToJson(ChannelMediaOptions instance) {
@@ -669,6 +675,9 @@ Map<String, dynamic> _$ChannelMediaOptionsToJson(ChannelMediaOptions instance) {
   writeNotNull('publishFourthScreenTrack', instance.publishFourthScreenTrack);
   writeNotNull('publishCustomAudioTrack', instance.publishCustomAudioTrack);
   writeNotNull('publishCustomAudioTrackId', instance.publishCustomAudioTrackId);
+  writeNotNull('publishLoopbackAudioTrack', instance.publishLoopbackAudioTrack);
+  writeNotNull(
+      'publishLoopbackAudioTrackId', instance.publishLoopbackAudioTrackId);
   writeNotNull('publishCustomVideoTrack', instance.publishCustomVideoTrack);
   writeNotNull('publishEncodedVideoTrack', instance.publishEncodedVideoTrack);
   writeNotNull(
@@ -677,6 +686,9 @@ Map<String, dynamic> _$ChannelMediaOptionsToJson(ChannelMediaOptions instance) {
       'publishMediaPlayerVideoTrack', instance.publishMediaPlayerVideoTrack);
   writeNotNull(
       'publishTranscodedVideoTrack', instance.publishTranscodedVideoTrack);
+  writeNotNull('publishMixedAudioTrack', instance.publishMixedAudioTrack);
+  writeNotNull('mixPolicyForMixedTrack', instance.mixPolicyForMixedTrack);
+  writeNotNull('publishLipSyncTrack', instance.publishLipSyncTrack);
   writeNotNull('autoSubscribeAudio', instance.autoSubscribeAudio);
   writeNotNull('autoSubscribeVideo', instance.autoSubscribeVideo);
   writeNotNull(
@@ -699,7 +711,7 @@ Map<String, dynamic> _$ChannelMediaOptionsToJson(ChannelMediaOptions instance) {
   writeNotNull('isInteractiveAudience', instance.isInteractiveAudience);
   writeNotNull('customVideoTrackId', instance.customVideoTrackId);
   writeNotNull('isAudioFilterable', instance.isAudioFilterable);
-  writeNotNull('autoConnectRdt', instance.autoConnectRdt);
+  writeNotNull('parameters', instance.parameters);
   return val;
 }
 
@@ -807,7 +819,6 @@ const _$ThreadPriorityTypeEnumMap = {
 };
 
 Metadata _$MetadataFromJson(Map<String, dynamic> json) => Metadata(
-      channelId: json['channelId'] as String?,
       uid: (json['uid'] as num?)?.toInt(),
       size: (json['size'] as num?)?.toInt(),
       timeStampMs: (json['timeStampMs'] as num?)?.toInt(),
@@ -822,7 +833,6 @@ Map<String, dynamic> _$MetadataToJson(Metadata instance) {
     }
   }
 
-  writeNotNull('channelId', instance.channelId);
   writeNotNull('uid', instance.uid);
   writeNotNull('size', instance.size);
   writeNotNull('timeStampMs', instance.timeStampMs);
@@ -868,6 +878,12 @@ DirectCdnStreamingMediaOptions _$DirectCdnStreamingMediaOptionsFromJson(
           json['publishMediaPlayerAudioTrack'] as bool?,
       publishMediaPlayerId: (json['publishMediaPlayerId'] as num?)?.toInt(),
       customVideoTrackId: (json['customVideoTrackId'] as num?)?.toInt(),
+      publishScreenTrack: json['publishScreenTrack'] as bool?,
+      publishSecondaryScreenTrack: json['publishSecondaryScreenTrack'] as bool?,
+      publishThirdScreenTrack: json['publishThirdScreenTrack'] as bool?,
+      publishFourthScreenTrack: json['publishFourthScreenTrack'] as bool?,
+      publishLoopbackAudioTrack: json['publishLoopbackAudioTrack'] as bool?,
+      publishLoopbackDeviceName: json['publishLoopbackDeviceName'] as String?,
     );
 
 Map<String, dynamic> _$DirectCdnStreamingMediaOptionsToJson(
@@ -888,6 +904,13 @@ Map<String, dynamic> _$DirectCdnStreamingMediaOptionsToJson(
       'publishMediaPlayerAudioTrack', instance.publishMediaPlayerAudioTrack);
   writeNotNull('publishMediaPlayerId', instance.publishMediaPlayerId);
   writeNotNull('customVideoTrackId', instance.customVideoTrackId);
+  writeNotNull('publishScreenTrack', instance.publishScreenTrack);
+  writeNotNull(
+      'publishSecondaryScreenTrack', instance.publishSecondaryScreenTrack);
+  writeNotNull('publishThirdScreenTrack', instance.publishThirdScreenTrack);
+  writeNotNull('publishFourthScreenTrack', instance.publishFourthScreenTrack);
+  writeNotNull('publishLoopbackAudioTrack', instance.publishLoopbackAudioTrack);
+  writeNotNull('publishLoopbackDeviceName', instance.publishLoopbackDeviceName);
   return val;
 }
 
@@ -931,6 +954,7 @@ const _$MediaSourceTypeEnumMap = {
   MediaSourceType.rtcImageGifSource: 10,
   MediaSourceType.remoteVideoSource: 11,
   MediaSourceType.transcodedVideoSource: 12,
+  MediaSourceType.speechDrivenVideoSource: 13,
   MediaSourceType.unknownMediaSource: 100,
 };
 
@@ -1112,6 +1136,7 @@ const _$MediaDeviceStateTypeEnumMap = {
   MediaDeviceStateType.mediaDeviceStateDisabled: 2,
   MediaDeviceStateType.mediaDeviceStateNotPresent: 4,
   MediaDeviceStateType.mediaDeviceStateUnplugged: 8,
+  MediaDeviceStateType.mediaDeviceStateDefaultDeviceChangedReady: 9,
 };
 
 const _$VideoProfileTypeEnumMap = {

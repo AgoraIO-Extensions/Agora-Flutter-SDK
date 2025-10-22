@@ -49,6 +49,7 @@ const eventIdsMapping = {
   "VideoFrameObserver_onTranscodedVideoFrame": [
     "VideoFrameObserver_onTranscodedVideoFrame"
   ],
+  "FaceInfoObserver_onFaceInfo": ["FaceInfoObserver_onFaceInfo"],
   "MediaRecorderObserver_onRecorderStateChanged": [
     "MediaRecorderObserver_onRecorderStateChanged"
   ],
@@ -302,21 +303,6 @@ const eventIdsMapping = {
     "RtcEngineEventHandlerEx_onStreamMessageError",
     "RtcEngineEventHandler_onStreamMessageErrorEx"
   ],
-  "RtcEngineEventHandler_onRdtMessage": [
-    "RtcEngineEventHandler_onRdtMessage",
-    "RtcEngineEventHandlerEx_onRdtMessage",
-    "RtcEngineEventHandler_onRdtMessageEx"
-  ],
-  "RtcEngineEventHandler_onRdtStateChanged": [
-    "RtcEngineEventHandler_onRdtStateChanged",
-    "RtcEngineEventHandlerEx_onRdtStateChanged",
-    "RtcEngineEventHandler_onRdtStateChangedEx"
-  ],
-  "RtcEngineEventHandler_onMediaControlMessage": [
-    "RtcEngineEventHandler_onMediaControlMessage",
-    "RtcEngineEventHandlerEx_onMediaControlMessage",
-    "RtcEngineEventHandler_onMediaControlMessageEx"
-  ],
   "RtcEngineEventHandler_onRequestToken": [
     "RtcEngineEventHandler_onRequestToken",
     "RtcEngineEventHandlerEx_onRequestToken",
@@ -444,6 +430,9 @@ const eventIdsMapping = {
   ],
   "RtcEngineEventHandler_onPermissionError": [
     "RtcEngineEventHandler_onPermissionError"
+  ],
+  "RtcEngineEventHandler_onPermissionGranted": [
+    "RtcEngineEventHandler_onPermissionGranted"
   ],
   "RtcEngineEventHandler_onLocalUserRegistered": [
     "RtcEngineEventHandler_onLocalUserRegistered"

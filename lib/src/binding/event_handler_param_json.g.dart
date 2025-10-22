@@ -366,6 +366,7 @@ const _$VideoSourceTypeEnumMap = {
   VideoSourceType.videoSourceCameraFourth: 12,
   VideoSourceType.videoSourceScreenThird: 13,
   VideoSourceType.videoSourceScreenFourth: 14,
+  VideoSourceType.videoSourceSpeechDriven: 15,
   VideoSourceType.videoSourceUnknown: 100,
 };
 
@@ -467,6 +468,26 @@ Map<String, dynamic> _$VideoFrameObserverOnTranscodedVideoFrameJsonToJson(
   }
 
   writeNotNull('videoFrame', instance.videoFrame?.toJson());
+  return val;
+}
+
+FaceInfoObserverOnFaceInfoJson _$FaceInfoObserverOnFaceInfoJsonFromJson(
+        Map<String, dynamic> json) =>
+    FaceInfoObserverOnFaceInfoJson(
+      outFaceInfo: json['outFaceInfo'] as String?,
+    );
+
+Map<String, dynamic> _$FaceInfoObserverOnFaceInfoJsonToJson(
+    FaceInfoObserverOnFaceInfoJson instance) {
+  final val = <String, dynamic>{};
+
+  void writeNotNull(String key, dynamic value) {
+    if (value != null) {
+      val[key] = value;
+    }
+  }
+
+  writeNotNull('outFaceInfo', instance.outFaceInfo);
   return val;
 }
 
@@ -1195,12 +1216,6 @@ const _$ErrorCodeTypeEnumMap = {
   ErrorCodeType.errCertRequest: 168,
   ErrorCodeType.errPcmsendFormat: 200,
   ErrorCodeType.errPcmsendBufferoverflow: 201,
-  ErrorCodeType.errRdtUserNotExist: 250,
-  ErrorCodeType.errRdtUserNotReady: 251,
-  ErrorCodeType.errRdtDataBlocked: 252,
-  ErrorCodeType.errRdtCmdExceedLimit: 253,
-  ErrorCodeType.errRdtDataExceedLimit: 254,
-  ErrorCodeType.errRdtEncryption: 255,
   ErrorCodeType.errLoginAlreadyLogin: 428,
   ErrorCodeType.errLoadMediaEngine: 1001,
   ErrorCodeType.errAdmGeneralError: 1005,
@@ -1414,6 +1429,7 @@ const _$MediaDeviceStateTypeEnumMap = {
   MediaDeviceStateType.mediaDeviceStateDisabled: 2,
   MediaDeviceStateType.mediaDeviceStateNotPresent: 4,
   MediaDeviceStateType.mediaDeviceStateUnplugged: 8,
+  MediaDeviceStateType.mediaDeviceStateDefaultDeviceChangedReady: 9,
 };
 
 RtcEngineEventHandlerOnAudioMixingPositionChangedJson
@@ -1804,6 +1820,8 @@ const _$LocalVideoStreamErrorEnumMap = {
       .localVideoStreamErrorScreenCaptureWindowRecoverFromHidden: 26,
   LocalVideoStreamError
       .localVideoStreamErrorScreenCaptureWindowRecoverFromMinimized: 27,
+  LocalVideoStreamError.localVideoStreamReasonScreenCaptureDisplayDisconnected:
+      30,
 };
 
 RtcEngineEventHandlerOnRemoteVideoStateChangedJson
@@ -2539,106 +2557,6 @@ Map<String, dynamic> _$RtcEngineEventHandlerOnStreamMessageErrorJsonToJson(
   return val;
 }
 
-RtcEngineEventHandlerOnRdtMessageJson
-    _$RtcEngineEventHandlerOnRdtMessageJsonFromJson(
-            Map<String, dynamic> json) =>
-        RtcEngineEventHandlerOnRdtMessageJson(
-          connection: json['connection'] == null
-              ? null
-              : RtcConnection.fromJson(
-                  json['connection'] as Map<String, dynamic>),
-          userId: (json['userId'] as num?)?.toInt(),
-          type: $enumDecodeNullable(_$RdtStreamTypeEnumMap, json['type']),
-          length: (json['length'] as num?)?.toInt(),
-        );
-
-Map<String, dynamic> _$RtcEngineEventHandlerOnRdtMessageJsonToJson(
-    RtcEngineEventHandlerOnRdtMessageJson instance) {
-  final val = <String, dynamic>{};
-
-  void writeNotNull(String key, dynamic value) {
-    if (value != null) {
-      val[key] = value;
-    }
-  }
-
-  writeNotNull('connection', instance.connection?.toJson());
-  writeNotNull('userId', instance.userId);
-  writeNotNull('type', _$RdtStreamTypeEnumMap[instance.type]);
-  writeNotNull('length', instance.length);
-  return val;
-}
-
-const _$RdtStreamTypeEnumMap = {
-  RdtStreamType.rdtStreamCmd: 0,
-  RdtStreamType.rdtStreamData: 1,
-  RdtStreamType.rdtStreamCount: 2,
-};
-
-RtcEngineEventHandlerOnRdtStateChangedJson
-    _$RtcEngineEventHandlerOnRdtStateChangedJsonFromJson(
-            Map<String, dynamic> json) =>
-        RtcEngineEventHandlerOnRdtStateChangedJson(
-          connection: json['connection'] == null
-              ? null
-              : RtcConnection.fromJson(
-                  json['connection'] as Map<String, dynamic>),
-          userId: (json['userId'] as num?)?.toInt(),
-          state: $enumDecodeNullable(_$RdtStateEnumMap, json['state']),
-        );
-
-Map<String, dynamic> _$RtcEngineEventHandlerOnRdtStateChangedJsonToJson(
-    RtcEngineEventHandlerOnRdtStateChangedJson instance) {
-  final val = <String, dynamic>{};
-
-  void writeNotNull(String key, dynamic value) {
-    if (value != null) {
-      val[key] = value;
-    }
-  }
-
-  writeNotNull('connection', instance.connection?.toJson());
-  writeNotNull('userId', instance.userId);
-  writeNotNull('state', _$RdtStateEnumMap[instance.state]);
-  return val;
-}
-
-const _$RdtStateEnumMap = {
-  RdtState.rdtStateClosed: 0,
-  RdtState.rdtStateOpened: 1,
-  RdtState.rdtStateBlocked: 2,
-  RdtState.rdtStatePending: 3,
-  RdtState.rdtStateBroken: 4,
-};
-
-RtcEngineEventHandlerOnMediaControlMessageJson
-    _$RtcEngineEventHandlerOnMediaControlMessageJsonFromJson(
-            Map<String, dynamic> json) =>
-        RtcEngineEventHandlerOnMediaControlMessageJson(
-          connection: json['connection'] == null
-              ? null
-              : RtcConnection.fromJson(
-                  json['connection'] as Map<String, dynamic>),
-          userId: (json['userId'] as num?)?.toInt(),
-          length: (json['length'] as num?)?.toInt(),
-        );
-
-Map<String, dynamic> _$RtcEngineEventHandlerOnMediaControlMessageJsonToJson(
-    RtcEngineEventHandlerOnMediaControlMessageJson instance) {
-  final val = <String, dynamic>{};
-
-  void writeNotNull(String key, dynamic value) {
-    if (value != null) {
-      val[key] = value;
-    }
-  }
-
-  writeNotNull('connection', instance.connection?.toJson());
-  writeNotNull('userId', instance.userId);
-  writeNotNull('length', instance.length);
-  return val;
-}
-
 RtcEngineEventHandlerOnRequestTokenJson
     _$RtcEngineEventHandlerOnRequestTokenJsonFromJson(
             Map<String, dynamic> json) =>
@@ -2911,6 +2829,8 @@ const _$RemoteAudioStateReasonEnumMap = {
   RemoteAudioStateReason.remoteAudioReasonRemoteMuted: 5,
   RemoteAudioStateReason.remoteAudioReasonRemoteUnmuted: 6,
   RemoteAudioStateReason.remoteAudioReasonRemoteOffline: 7,
+  RemoteAudioStateReason.remoteAudioReasonRemoteNoPacketReceive: 8,
+  RemoteAudioStateReason.remoteAudioReasonRemoteLocalPlayFailed: 9,
 };
 
 RtcEngineEventHandlerOnActiveSpeakerJson
@@ -3651,6 +3571,29 @@ const _$PermissionTypeEnumMap = {
   PermissionType.camera: 1,
   PermissionType.screenCapture: 2,
 };
+
+RtcEngineEventHandlerOnPermissionGrantedJson
+    _$RtcEngineEventHandlerOnPermissionGrantedJsonFromJson(
+            Map<String, dynamic> json) =>
+        RtcEngineEventHandlerOnPermissionGrantedJson(
+          permissionType: $enumDecodeNullable(
+              _$PermissionTypeEnumMap, json['permissionType']),
+        );
+
+Map<String, dynamic> _$RtcEngineEventHandlerOnPermissionGrantedJsonToJson(
+    RtcEngineEventHandlerOnPermissionGrantedJson instance) {
+  final val = <String, dynamic>{};
+
+  void writeNotNull(String key, dynamic value) {
+    if (value != null) {
+      val[key] = value;
+    }
+  }
+
+  writeNotNull(
+      'permissionType', _$PermissionTypeEnumMap[instance.permissionType]);
+  return val;
+}
 
 RtcEngineEventHandlerOnLocalUserRegisteredJson
     _$RtcEngineEventHandlerOnLocalUserRegisteredJsonFromJson(
