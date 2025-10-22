@@ -1,6 +1,6 @@
 # This action will create a change logs via release-it and open a pull request, 
 # after the PR is merged, the action release.yml will be trigger.
-name: Prepare release
+name: 'run: prepare release official'
 
 on:
   workflow_dispatch:
@@ -64,7 +64,7 @@ jobs:
           author: ${{ github.actor }} <${{ github.actor }}@users.noreply.github.com>
           signoff: false
           branch: prepare-release-${{ inputs.version }}
-          base: main
+          base: ${{ inputs.release_branch }}
           delete-branch: true
           title: "chore: release ${{ inputs.version }}"
           body: |
@@ -80,5 +80,3 @@ jobs:
           labels: |
             ci:skip
             ci:prepare_release
-          reviewers: |
-            littleGnAl
