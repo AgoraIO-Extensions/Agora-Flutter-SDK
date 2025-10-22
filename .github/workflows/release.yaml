@@ -81,15 +81,15 @@ jobs:
 
           # Get dry-run mode
           if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
-            DRY-RUN="${{ github.event.inputs.dry-run }}"
+            DRY_RUN="${{ github.event.inputs.dry-run }}"
           elif [ "${{ github.event_name }}" = "workflow_call" ]; then
-            DRY-RUN="${{ inputs.dry-run }}"
+            DRY_RUN="${{ inputs.dry-run }}"
           else
-            DRY-RUN="false" # PR triggers are always production mode
+            DRY_RUN="false" # PR triggers are always production mode
           fi
 
-          echo "Dry-run mode: $DRY-RUN"
-          echo "dry-run=$DRY-RUN" >> $GITHUB_OUTPUT
+          echo "Dry-run mode: $DRY_RUN"
+          echo "dry-run=$DRY_RUN" >> $GITHUB_OUTPUT
 
           # Get version from inputs (for workflow_dispatch and workflow_call) or pubspec.yaml (for PR)
           if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
@@ -180,12 +180,12 @@ jobs:
           # Use auto-detected release type
           RELEASE_TYPE="${{ steps.version_check.outputs.release_type }}"
           IS_PRERELEASE="${{ steps.version_check.outputs.is_prerelease }}"
-          DRY-RUN="${{ steps.version_check.outputs.dry-run }}"
+          DRY_RUN="${{ steps.version_check.outputs.dry-run }}"
 
           # Build release-it command
           RELEASE_IT_CMD="release-it ${{ steps.version_check.outputs.version }}"
           
-          if [ "$DRY-RUN" = "true" ]; then
+          if [ "$DRY_RUN" = "true" ]; then
             echo "[DRY-RUN MODE] No commits/tags/releases will be created"
             RELEASE_IT_CMD="$RELEASE_IT_CMD --dry-run"
           fi
@@ -228,10 +228,10 @@ jobs:
         run: |
           RELEASE_TYPE="${{ steps.version_check.outputs.release_type }}"
           RELEASE_VERSION="${{ steps.version_check.outputs.version }}"
-          DRY-RUN="${{ steps.version_check.outputs.dry-run }}"
+          DRY_RUN="${{ steps.version_check.outputs.dry-run }}"
 
           # PR triggers always run in production mode (dry-run=false)
-          if [ "$DRY-RUN" = "true" ]; then
+          if [ "$DRY_RUN" = "true" ]; then
             echo "Warning: PR triggers ignore dry-run mode"
           fi
 
