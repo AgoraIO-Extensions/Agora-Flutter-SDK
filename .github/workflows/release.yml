@@ -137,32 +137,6 @@ jobs:
           echo "release_type=$RELEASE_TYPE" >> $GITHUB_OUTPUT
           echo "is_prerelease=$IS_PRERELEASE" >> $GITHUB_OUTPUT
 
-      - name: Update pubspec.yaml version
-        if: ${{ github.event_name == 'workflow_dispatch' || github.event_name == 'workflow_call' }}
-        run: |
-          set -eo pipefail
-
-          RELEASE_VERSION="${{ steps.version_check.outputs.version }}"
-          RELEASE_TYPE="${{ steps.version_check.outputs.release_type }}"
-          
-          echo "📝 Updating pubspec.yaml version to $RELEASE_VERSION (type: $RELEASE_TYPE)"
-
-          # Update version in pubspec.yaml for both standard and special versions
-          sed -i.bak "s/^version: .*/version: $RELEASE_VERSION/" pubspec.yaml
-
-          # Verify the change
-          UPDATED_VERSION=$(grep 'version: ' pubspec.yaml | sed -e 's,.*: \(.*\),\1,')
-          echo "✅ Updated pubspec.yaml version: $UPDATED_VERSION"
-
-          if [ "$UPDATED_VERSION" != "$RELEASE_VERSION" ]; then
-            echo "❌ Error: Version update failed!"
-            exit 1
-          fi
-
-          # Show the change
-          echo "📋 Changes made:"
-          git diff pubspec.yaml
-
       - name: Install release tools
         run: |
           npm install -g release-it
