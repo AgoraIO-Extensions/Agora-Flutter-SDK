@@ -48,13 +48,7 @@ abstract class MediaEngine {
 
   /// Registers a raw video frame observer object.
   ///
-  /// If you want to obtain the original video data of some remote users (referred to as group A) and the encoded video data of other remote users (referred to as group B), you can refer to the following steps:
-  ///  Call registerVideoFrameObserver to register the raw video frame observer before joining the channel.
-  ///  Call registerVideoEncodedFrameObserver to register the encoded video frame observer before joining the channel.
-  ///  After joining the channel, get the user IDs of group B users through onUserJoined, and then call setRemoteVideoSubscriptionOptions to set the encodedFrameOnly of this group of users to true.
-  ///  Call muteAllRemoteVideoStreams (false) to start receiving the video streams of all remote users. Then:
-  ///  The raw video data of group A users can be obtained through the callback in VideoFrameObserver, and the SDK renders the data by default.
-  ///  The encoded video data of group B users can be obtained through the callback in VideoEncodedFrameObserver. If you want to observe raw video frames (such as YUV or RGBA format), Agora recommends that you implement one VideoFrameObserver class with this method. When calling this method to register a video observer, you can register callbacks in the VideoFrameObserver class as needed. After you successfully register the video frame observer, the SDK triggers the registered callbacks each time a video frame is received.
+  /// If you want to observe raw video frames (such as YUV or RGBA format), Agora recommends that you implement one VideoFrameObserver class with this method. When calling this method to register a video observer, you can register callbacks in the VideoFrameObserver class as needed. After you successfully register the video frame observer, the SDK triggers the registered callbacks each time a video frame is received.
   ///
   /// * [observer] The observer instance. See VideoFrameObserver.
   ///
@@ -65,14 +59,7 @@ abstract class MediaEngine {
 
   /// Registers a receiver object for the encoded video image.
   ///
-  /// If you only want to observe encoded video frames (such as h.264 format) without decoding and rendering the video, Agora recommends that you implement one VideoEncodedFrameObserver class through this method. If you want to obtain the original video data of some remote users (referred to as group A) and the encoded video data of other remote users (referred to as group B), you can refer to the following steps:
-  ///  Call registerVideoFrameObserver to register the raw video frame observer before joining the channel.
-  ///  Call registerVideoEncodedFrameObserver to register the encoded video frame observer before joining the channel.
-  ///  After joining the channel, get the user IDs of group B users through onUserJoined, and then call setRemoteVideoSubscriptionOptions to set the encodedFrameOnly of this group of users to true.
-  ///  Call muteAllRemoteVideoStreams (false) to start receiving the video streams of all remote users. Then:
-  ///  The raw video data of group A users can be obtained through the callback in VideoFrameObserver, and the SDK renders the data by default.
-  ///  The encoded video data of group B users can be obtained through the callback in VideoEncodedFrameObserver.
-  ///  Call this method before joining a channel.
+  /// If you only want to observe encoded video frames (such as H.264 format) without decoding and rendering the video, Agora recommends that you implement one VideoEncodedFrameObserver class through this method. Call this method before joining a channel.
   ///
   /// * [observer] The video frame observer object. See VideoEncodedFrameObserver.
   ///
@@ -196,14 +183,14 @@ abstract class MediaEngine {
   /// Pushes the external raw video frame to the SDK through video tracks.
   ///
   /// To publish a custom video source, see the following steps:
-  ///  Call createCustomVideoTrack to create a video track and get the video track ID.
+  ///  Call createCustomVideoTrack to create a video track and get the video track ID. If you only need to push one custom video source to the channel, you can directly call the setExternalVideoSource method and the SDK will automatically create a video track with the videoTrackId set to 0.
   ///  Call joinChannel to join the channel. In ChannelMediaOptions, set customVideoTrackId to the video track ID that you want to publish, and set publishCustomVideoTrack to true.
   ///  Call this method and specify videoTrackId as the video track ID set in step 2. You can then publish the corresponding custom video source in the channel. After calling this method, even if you stop pushing external video frames to the SDK, the custom video stream will still be counted as the video duration usage and incur charges. Agora recommends that you take appropriate measures based on the actual situation to avoid such video billing.
   ///  If you no longer need to capture external video data, you can call destroyCustomVideoTrack to destroy the custom video track.
   ///  If you only want to use the external video data for local preview and not publish it in the channel, you can call muteLocalVideoStream to cancel sending video stream or call updateChannelMediaOptions to set publishCustomVideoTrack to false.
   ///
   /// * [frame] The external raw video frame to be pushed. See ExternalVideoFrame.
-  /// * [videoTrackId] The video track ID returned by calling the createCustomVideoTrack method. The default value is 0.
+  /// * [videoTrackId] The video track ID returned by calling the createCustomVideoTrack method. If you only need to push one custom video source, set videoTrackId to 0.
   ///
   /// Returns
   /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown. You need to catch the exception and handle it accordingly.
@@ -216,6 +203,16 @@ abstract class MediaEngine {
       required int length,
       required EncodedVideoFrameInfo videoEncodedFrameInfo,
       int videoTrackId = 0});
+
+  /// @nodoc
+  Future<int> createLoopbackAudioTrack(LoopbackAudioTrackConfig config);
+
+  /// @nodoc
+  Future<void> destroyLoopbackAudioTrack(int trackId);
+
+  /// @nodoc
+  Future<void> updateLoopbackAudioTrackConfig(
+      {required int trackId, required LoopbackAudioTrackConfig config});
 
   /// @nodoc
   Future<void> release();
@@ -243,41 +240,4 @@ abstract class MediaEngine {
   /// Returns
   /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown. You need to catch the exception and handle it accordingly.
   void unregisterVideoEncodedFrameObserver(VideoEncodedFrameObserver observer);
-
-  /// Unregisters a facial information observer.
-  ///
-  /// * [observer] Facial information observer, see FaceInfoObserver.
-  ///
-  /// Returns
-  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown. You need to catch the exception and handle it accordingly.
-  void unregisterFaceInfoObserver(FaceInfoObserver observer);
-
-  /// Create a loopback audio track and get the audio track id.
-  ///
-  /// * [config] The config of loopback audio track. See LoopbackAudioTrackConfig.
-  ///
-  /// Returns
-  /// If the call is successful, SDK returns audio track id.
-  /// If the call fails, SDK returns 0xffffffff.
-  Future<int> createLoopbackAudioTrack(LoopbackAudioTrackConfig config);
-
-  /// Destroy loopback audio track by trackId
-  ///
-  /// * [trackId] The loopback audio track id.
-  ///
-  /// Returns
-  /// 0: Success.
-  /// < 0: Failure.
-  Future<int> destroyLoopbackAudioTrack(int trackId);
-
-  /// Adjust the volume of the loopback audio track
-  ///
-  /// * [trackId] The loopback audio track id.
-  /// * [config] The config of the loopback audio track. See LoopbackAudioTrackConfig.
-  ///
-  /// Returns
-  /// 0: Success.
-  /// < 0: Failure.
-  Future<int> updateLoopbackAudioTrackConfig(
-      int trackId, LoopbackAudioTrackConfig config);
 }
