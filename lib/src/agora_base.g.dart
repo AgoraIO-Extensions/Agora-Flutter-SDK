@@ -133,6 +133,9 @@ const _$AudioCodecTypeEnumMap = {
   AudioCodecType.audioCodecJc1: 10,
   AudioCodecType.audioCodecHeaac2: 11,
   AudioCodecType.audioCodecLpcnet: 12,
+  AudioCodecType.audioCodecOpus4c: 13,
+  AudioCodecType.audioCodecOpus6c: 14,
+  AudioCodecType.audioCodecOpus8c: 15,
 };
 
 AudioPcmDataInfo _$AudioPcmDataInfoFromJson(Map<String, dynamic> json) =>
@@ -744,6 +747,7 @@ const _$VideoSourceTypeEnumMap = {
   VideoSourceType.videoSourceCameraFourth: 12,
   VideoSourceType.videoSourceScreenThird: 13,
   VideoSourceType.videoSourceScreenFourth: 14,
+  VideoSourceType.videoSourceSpeechDriven: 15,
   VideoSourceType.videoSourceUnknown: 100,
 };
 
@@ -1222,6 +1226,8 @@ VideoCanvas _$VideoCanvasFromJson(Map<String, dynamic> json) => VideoCanvas(
           ? null
           : Rectangle.fromJson(json['cropArea'] as Map<String, dynamic>),
       enableAlphaMask: json['enableAlphaMask'] as bool?,
+      rotation:
+          $enumDecodeNullable(_$VideoOrientationEnumMap, json['rotation']),
     );
 
 Map<String, dynamic> _$VideoCanvasToJson(VideoCanvas instance) {
@@ -1243,6 +1249,7 @@ Map<String, dynamic> _$VideoCanvasToJson(VideoCanvas instance) {
   writeNotNull('mediaPlayerId', instance.mediaPlayerId);
   writeNotNull('cropArea', instance.cropArea?.toJson());
   writeNotNull('enableAlphaMask', instance.enableAlphaMask);
+  writeNotNull('rotation', _$VideoOrientationEnumMap[instance.rotation]);
   return val;
 }
 
@@ -1465,6 +1472,38 @@ Map<String, dynamic> _$AudioTrackConfigToJson(AudioTrackConfig instance) {
   writeNotNull('enableLocalPlayback', instance.enableLocalPlayback);
   return val;
 }
+
+LoopbackAudioTrackConfig _$LoopbackAudioTrackConfigFromJson(
+        Map<String, dynamic> json) =>
+    LoopbackAudioTrackConfig(
+      appName: json['appName'] as String?,
+      volume: (json['volume'] as num?)?.toInt(),
+      loopbackType: $enumDecodeNullable(
+          _$LoopbackAudioTrackTypeEnumMap, json['loopbackType']),
+    );
+
+Map<String, dynamic> _$LoopbackAudioTrackConfigToJson(
+    LoopbackAudioTrackConfig instance) {
+  final val = <String, dynamic>{};
+
+  void writeNotNull(String key, dynamic value) {
+    if (value != null) {
+      val[key] = value;
+    }
+  }
+
+  writeNotNull('appName', instance.appName);
+  writeNotNull('volume', instance.volume);
+  writeNotNull(
+      'loopbackType', _$LoopbackAudioTrackTypeEnumMap[instance.loopbackType]);
+  return val;
+}
+
+const _$LoopbackAudioTrackTypeEnumMap = {
+  LoopbackAudioTrackType.loopbackSystem: 0,
+  LoopbackAudioTrackType.loopbackSystemExcludeSelf: 1,
+  LoopbackAudioTrackType.loopbackApplication: 2,
+};
 
 ScreenCaptureParameters _$ScreenCaptureParametersFromJson(
         Map<String, dynamic> json) =>
@@ -2197,12 +2236,6 @@ const _$ErrorCodeTypeEnumMap = {
   ErrorCodeType.errCertRequest: 168,
   ErrorCodeType.errPcmsendFormat: 200,
   ErrorCodeType.errPcmsendBufferoverflow: 201,
-  ErrorCodeType.errRdtUserNotExist: 250,
-  ErrorCodeType.errRdtUserNotReady: 251,
-  ErrorCodeType.errRdtDataBlocked: 252,
-  ErrorCodeType.errRdtCmdExceedLimit: 253,
-  ErrorCodeType.errRdtDataExceedLimit: 254,
-  ErrorCodeType.errRdtEncryption: 255,
   ErrorCodeType.errLoginAlreadyLogin: 428,
   ErrorCodeType.errLoadMediaEngine: 1001,
   ErrorCodeType.errAdmGeneralError: 1005,
@@ -2455,6 +2488,8 @@ const _$LocalVideoStreamErrorEnumMap = {
       .localVideoStreamErrorScreenCaptureWindowRecoverFromHidden: 26,
   LocalVideoStreamError
       .localVideoStreamErrorScreenCaptureWindowRecoverFromMinimized: 27,
+  LocalVideoStreamError.localVideoStreamReasonScreenCaptureDisplayDisconnected:
+      30,
 };
 
 const _$RemoteAudioStateEnumMap = {
@@ -2474,6 +2509,8 @@ const _$RemoteAudioStateReasonEnumMap = {
   RemoteAudioStateReason.remoteAudioReasonRemoteMuted: 5,
   RemoteAudioStateReason.remoteAudioReasonRemoteUnmuted: 6,
   RemoteAudioStateReason.remoteAudioReasonRemoteOffline: 7,
+  RemoteAudioStateReason.remoteAudioReasonRemoteNoPacketReceive: 8,
+  RemoteAudioStateReason.remoteAudioReasonRemoteLocalPlayFailed: 9,
 };
 
 const _$RemoteVideoStateEnumMap = {
@@ -2705,6 +2742,7 @@ const _$AreaCodeExEnumMap = {
   AreaCodeEx.areaCodeKr: 512,
   AreaCodeEx.areaCodeHkmc: 1024,
   AreaCodeEx.areaCodeUs: 2048,
+  AreaCodeEx.areaCodeRu: 4096,
   AreaCodeEx.areaCodeOvs: 4294967294,
 };
 
@@ -2791,6 +2829,7 @@ const _$EarMonitoringFilterTypeEnumMap = {
   EarMonitoringFilterType.earMonitoringFilterNone: 1,
   EarMonitoringFilterType.earMonitoringFilterBuiltInAudioFilters: 2,
   EarMonitoringFilterType.earMonitoringFilterNoiseSuppression: 4,
+  EarMonitoringFilterType.earMonitoringFilterReusePostProcessingFilter: 32768,
 };
 
 const _$ThreadPriorityTypeEnumMap = {
@@ -2810,18 +2849,4 @@ const _$MediaTraceEventEnumMap = {
 const _$ConfigFetchTypeEnumMap = {
   ConfigFetchType.configFetchTypeInitialize: 1,
   ConfigFetchType.configFetchTypeJoinChannel: 2,
-};
-
-const _$RdtStreamTypeEnumMap = {
-  RdtStreamType.rdtStreamCmd: 0,
-  RdtStreamType.rdtStreamData: 1,
-  RdtStreamType.rdtStreamCount: 2,
-};
-
-const _$RdtStateEnumMap = {
-  RdtState.rdtStateClosed: 0,
-  RdtState.rdtStateOpened: 1,
-  RdtState.rdtStateBlocked: 2,
-  RdtState.rdtStatePending: 3,
-  RdtState.rdtStateBroken: 4,
 };

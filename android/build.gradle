@@ -58,7 +58,7 @@ dependencies {
     implementation fileTree(dir: "libs", include: ["*.jar"])
   } else {
     // iris dependencies start
-    api 'io.agora.rtc:iris-rtc:4.2.7.125-build.3'
+    api 'io.agora.rtc:iris-rtc:4.2.6.165-build.1'
     // iris dependencies end
 
     // native dependencies start

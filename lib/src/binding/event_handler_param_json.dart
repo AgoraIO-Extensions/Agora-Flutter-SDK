@@ -610,6 +610,32 @@ extension VideoFrameObserverOnTranscodedVideoFrameJsonBufferExt
 }
 
 @JsonSerializable(explicitToJson: true, includeIfNull: false)
+class FaceInfoObserverOnFaceInfoJson {
+  const FaceInfoObserverOnFaceInfoJson({this.outFaceInfo});
+
+  @JsonKey(name: 'outFaceInfo')
+  final String? outFaceInfo;
+
+  factory FaceInfoObserverOnFaceInfoJson.fromJson(Map<String, dynamic> json) =>
+      _$FaceInfoObserverOnFaceInfoJsonFromJson(json);
+
+  Map<String, dynamic> toJson() => _$FaceInfoObserverOnFaceInfoJsonToJson(this);
+}
+
+extension FaceInfoObserverOnFaceInfoJsonBufferExt
+    on FaceInfoObserverOnFaceInfoJson {
+  FaceInfoObserverOnFaceInfoJson fillBuffers(List<Uint8List> bufferList) {
+    if (bufferList.isEmpty) return this;
+    return this;
+  }
+
+  List<Uint8List> collectBufferList() {
+    final bufferList = <Uint8List>[];
+    return bufferList;
+  }
+}
+
+@JsonSerializable(explicitToJson: true, includeIfNull: false)
 class MediaRecorderObserverOnRecorderStateChangedJson {
   const MediaRecorderObserverOnRecorderStateChangedJson(
       {this.channelId, this.uid, this.state, this.error});
@@ -2992,143 +3018,6 @@ extension RtcEngineEventHandlerOnStreamMessageErrorJsonBufferExt
 }
 
 @JsonSerializable(explicitToJson: true, includeIfNull: false)
-class RtcEngineEventHandlerOnRdtMessageJson {
-  const RtcEngineEventHandlerOnRdtMessageJson(
-      {this.connection, this.userId, this.type, this.data, this.length});
-
-  @JsonKey(name: 'connection')
-  final RtcConnection? connection;
-
-  @JsonKey(name: 'userId')
-  final int? userId;
-
-  @JsonKey(name: 'type')
-  final RdtStreamType? type;
-
-  @JsonKey(name: 'data', ignore: true)
-  final Uint8List? data;
-
-  @JsonKey(name: 'length')
-  final int? length;
-
-  factory RtcEngineEventHandlerOnRdtMessageJson.fromJson(
-          Map<String, dynamic> json) =>
-      _$RtcEngineEventHandlerOnRdtMessageJsonFromJson(json);
-
-  Map<String, dynamic> toJson() =>
-      _$RtcEngineEventHandlerOnRdtMessageJsonToJson(this);
-}
-
-extension RtcEngineEventHandlerOnRdtMessageJsonBufferExt
-    on RtcEngineEventHandlerOnRdtMessageJson {
-  RtcEngineEventHandlerOnRdtMessageJson fillBuffers(
-      List<Uint8List> bufferList) {
-    if (bufferList.isEmpty) return this;
-    Uint8List? data;
-    if (bufferList.length > 0) {
-      data = bufferList[0];
-    }
-    return RtcEngineEventHandlerOnRdtMessageJson(
-        connection: connection,
-        userId: userId,
-        type: type,
-        data: data,
-        length: length);
-  }
-
-  List<Uint8List> collectBufferList() {
-    final bufferList = <Uint8List>[];
-    if (data != null) {
-      bufferList.add(data!);
-    }
-    return bufferList;
-  }
-}
-
-@JsonSerializable(explicitToJson: true, includeIfNull: false)
-class RtcEngineEventHandlerOnRdtStateChangedJson {
-  const RtcEngineEventHandlerOnRdtStateChangedJson(
-      {this.connection, this.userId, this.state});
-
-  @JsonKey(name: 'connection')
-  final RtcConnection? connection;
-
-  @JsonKey(name: 'userId')
-  final int? userId;
-
-  @JsonKey(name: 'state')
-  final RdtState? state;
-
-  factory RtcEngineEventHandlerOnRdtStateChangedJson.fromJson(
-          Map<String, dynamic> json) =>
-      _$RtcEngineEventHandlerOnRdtStateChangedJsonFromJson(json);
-
-  Map<String, dynamic> toJson() =>
-      _$RtcEngineEventHandlerOnRdtStateChangedJsonToJson(this);
-}
-
-extension RtcEngineEventHandlerOnRdtStateChangedJsonBufferExt
-    on RtcEngineEventHandlerOnRdtStateChangedJson {
-  RtcEngineEventHandlerOnRdtStateChangedJson fillBuffers(
-      List<Uint8List> bufferList) {
-    if (bufferList.isEmpty) return this;
-    return this;
-  }
-
-  List<Uint8List> collectBufferList() {
-    final bufferList = <Uint8List>[];
-    return bufferList;
-  }
-}
-
-@JsonSerializable(explicitToJson: true, includeIfNull: false)
-class RtcEngineEventHandlerOnMediaControlMessageJson {
-  const RtcEngineEventHandlerOnMediaControlMessageJson(
-      {this.connection, this.userId, this.data, this.length});
-
-  @JsonKey(name: 'connection')
-  final RtcConnection? connection;
-
-  @JsonKey(name: 'userId')
-  final int? userId;
-
-  @JsonKey(name: 'data', ignore: true)
-  final Uint8List? data;
-
-  @JsonKey(name: 'length')
-  final int? length;
-
-  factory RtcEngineEventHandlerOnMediaControlMessageJson.fromJson(
-          Map<String, dynamic> json) =>
-      _$RtcEngineEventHandlerOnMediaControlMessageJsonFromJson(json);
-
-  Map<String, dynamic> toJson() =>
-      _$RtcEngineEventHandlerOnMediaControlMessageJsonToJson(this);
-}
-
-extension RtcEngineEventHandlerOnMediaControlMessageJsonBufferExt
-    on RtcEngineEventHandlerOnMediaControlMessageJson {
-  RtcEngineEventHandlerOnMediaControlMessageJson fillBuffers(
-      List<Uint8List> bufferList) {
-    if (bufferList.isEmpty) return this;
-    Uint8List? data;
-    if (bufferList.length > 0) {
-      data = bufferList[0];
-    }
-    return RtcEngineEventHandlerOnMediaControlMessageJson(
-        connection: connection, userId: userId, data: data, length: length);
-  }
-
-  List<Uint8List> collectBufferList() {
-    final bufferList = <Uint8List>[];
-    if (data != null) {
-      bufferList.add(data!);
-    }
-    return bufferList;
-  }
-}
-
-@JsonSerializable(explicitToJson: true, includeIfNull: false)
 class RtcEngineEventHandlerOnRequestTokenJson {
   const RtcEngineEventHandlerOnRequestTokenJson({this.connection});
 
@@ -4171,6 +4060,35 @@ class RtcEngineEventHandlerOnPermissionErrorJson {
 extension RtcEngineEventHandlerOnPermissionErrorJsonBufferExt
     on RtcEngineEventHandlerOnPermissionErrorJson {
   RtcEngineEventHandlerOnPermissionErrorJson fillBuffers(
+      List<Uint8List> bufferList) {
+    if (bufferList.isEmpty) return this;
+    return this;
+  }
+
+  List<Uint8List> collectBufferList() {
+    final bufferList = <Uint8List>[];
+    return bufferList;
+  }
+}
+
+@JsonSerializable(explicitToJson: true, includeIfNull: false)
+class RtcEngineEventHandlerOnPermissionGrantedJson {
+  const RtcEngineEventHandlerOnPermissionGrantedJson({this.permissionType});
+
+  @JsonKey(name: 'permissionType')
+  final PermissionType? permissionType;
+
+  factory RtcEngineEventHandlerOnPermissionGrantedJson.fromJson(
+          Map<String, dynamic> json) =>
+      _$RtcEngineEventHandlerOnPermissionGrantedJsonFromJson(json);
+
+  Map<String, dynamic> toJson() =>
+      _$RtcEngineEventHandlerOnPermissionGrantedJsonToJson(this);
+}
+
+extension RtcEngineEventHandlerOnPermissionGrantedJsonBufferExt
+    on RtcEngineEventHandlerOnPermissionGrantedJson {
+  RtcEngineEventHandlerOnPermissionGrantedJson fillBuffers(
       List<Uint8List> bufferList) {
     if (bufferList.isEmpty) return this;
     return this;

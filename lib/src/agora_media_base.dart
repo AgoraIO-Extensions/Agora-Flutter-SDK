@@ -87,6 +87,10 @@ enum VideoSourceType {
   @JsonValue(14)
   videoSourceScreenFourth,
 
+  /// @nodoc
+  @JsonValue(15)
+  videoSourceSpeechDriven,
+
   /// 100: An unknown video source.
   @JsonValue(100)
   videoSourceUnknown,
@@ -246,6 +250,31 @@ extension RawAudioFrameOpModeTypeExt on RawAudioFrameOpModeType {
   }
 }
 
+/// @nodoc
+@JsonEnum(alwaysCreate: true)
+enum TrackAudioMixedPolicyType {
+  /// @nodoc
+  @JsonValue(1 << 0)
+  trackAudioMixedLocal,
+
+  /// @nodoc
+  @JsonValue(1 << 1)
+  trackAudioMixedRemote,
+}
+
+/// @nodoc
+extension TrackAudioMixedPolicyTypeExt on TrackAudioMixedPolicyType {
+  /// @nodoc
+  static TrackAudioMixedPolicyType fromValue(int value) {
+    return $enumDecode(_$TrackAudioMixedPolicyTypeEnumMap, value);
+  }
+
+  /// @nodoc
+  int value() {
+    return _$TrackAudioMixedPolicyTypeEnumMap[this]!;
+  }
+}
+
 /// The AudioDeviceInfo class that contains the ID, name and type of the audio devices.
 @JsonSerializable(explicitToJson: true, includeIfNull: false)
 class AudioDeviceInfo {
@@ -340,6 +369,10 @@ enum MediaSourceType {
   @JsonValue(12)
   transcodedVideoSource,
 
+  /// @nodoc
+  @JsonValue(13)
+  speechDrivenVideoSource,
+
   /// 100: Unknown media source.
   @JsonValue(100)
   unknownMediaSource,
@@ -420,7 +453,7 @@ extension ContentInspectTypeExt on ContentInspectType {
   }
 }
 
-/// A ContentInspectModule structure used to configure the frequency of video screenshot and upload.
+/// ContentInspectModule class, a structure used to configure the frequency of video screenshot and upload.
 @JsonSerializable(explicitToJson: true, includeIfNull: false)
 class ContentInspectModule {
   /// @nodoc
@@ -442,7 +475,7 @@ class ContentInspectModule {
   Map<String, dynamic> toJson() => _$ContentInspectModuleToJson(this);
 }
 
-/// Configuration of video screenshot and upload.
+/// Screenshot and upload configuration.
 @JsonSerializable(explicitToJson: true, includeIfNull: false)
 class ContentInspectConfig {
   /// @nodoc
@@ -651,6 +684,10 @@ enum VideoPixelFormat {
   /// 17: The ID3D11TEXTURE2D format. Currently supported types are DXGI_FORMAT_B8G8R8A8_UNORM, DXGI_FORMAT_B8G8R8A8_TYPELESS and DXGI_FORMAT_NV12.
   @JsonValue(17)
   videoTextureId3d11texture2d,
+
+  /// @nodoc
+  @JsonValue(18)
+  videoPixelI010,
 }
 
 /// @nodoc
@@ -669,15 +706,15 @@ extension VideoPixelFormatExt on VideoPixelFormat {
 /// Video display modes.
 @JsonEnum(alwaysCreate: true)
 enum RenderModeType {
-  /// 1: Hidden mode. Uniformly scale the video until one of its dimension fits the boundary (zoomed to fit). One dimension of the video may have clipped contents.
+  /// 1: Hidden mode. The priority is to fill the window. Any excess video that does not match the window size will be cropped.
   @JsonValue(1)
   renderModeHidden,
 
-  /// 2: Fit mode. Uniformly scale the video until one of its dimension fits the boundary (zoomed to fit). Areas that are not filled due to disparity in the aspect ratio are filled with black.
+  /// 2: Fit mode. The priority is to ensure that all video content is displayed. Any areas of the window that are not filled due to the mismatch between video size and window size will be filled with black.
   @JsonValue(2)
   renderModeFit,
 
-  /// Deprecated: 3: This mode is deprecated.
+  /// 3: Adaptive mode. Deprecated: This enumerator is deprecated and not recommended for use.
   @JsonValue(3)
   renderModeAdaptive,
 }
@@ -773,6 +810,7 @@ class ExternalVideoFrame {
       this.metadataBuffer,
       this.metadataSize,
       this.alphaBuffer,
+      this.fillAlphaBuffer,
       this.textureSliceIndex});
 
   /// The video type. See VideoBufferType.
@@ -839,9 +877,15 @@ class ExternalVideoFrame {
   @JsonKey(name: 'metadata_size')
   final int? metadataSize;
 
-  /// @nodoc
+  /// The alpha channel data output by using portrait segmentation algorithm. This data matches the size of the video frame, with each pixel value ranging from [0,255], where 0 represents the background and 255 represents the foreground (portrait). By setting this parameter, you can render the video background into various effects, such as transparent, solid color, image, video, etc. In custom video rendering scenarios, ensure that both the video frame and alphaBuffer are of the Full Range type; other types may cause abnormal alpha data rendering.
   @JsonKey(name: 'alphaBuffer', ignore: true)
   final Uint8List? alphaBuffer;
+
+  /// This parameter only applies to video data in BGRA or RGBA format. Whether to extract the alpha channel data from the video frame and automatically fill it into alphaBuffer : true ：Extract and fill the alpha channel data. false : (Default) Do not extract and fill the Alpha channel data. For video data in BGRA or RGBA format, you can set the Alpha channel data in either of the following ways:
+  ///  Automatically by setting this parameter to true.
+  ///  Manually through the alphaBuffer parameter.
+  @JsonKey(name: 'fillAlphaBuffer')
+  final bool? fillAlphaBuffer;
 
   /// This parameter only applies to video data in Windows Texture format. It represents an index of an ID3D11Texture2D texture object used by the video frame in the ID3D11Texture2D array.
   @JsonKey(name: 'texture_slice_index')
@@ -1000,7 +1044,9 @@ class VideoFrame {
   @JsonKey(name: 'matrix')
   final List<double>? matrix;
 
-  /// @nodoc
+  /// The alpha channel data output by using portrait segmentation algorithm. This data matches the size of the video frame, with each pixel value ranging from [0,255], where 0 represents the background and 255 represents the foreground (portrait). By setting this parameter, you can render the video background into various effects, such as transparent, solid color, image, video, etc.
+  ///  In custom video rendering scenarios, ensure that both the video frame and alphaBuffer are of the Full Range type; other types may cause abnormal alpha data rendering.
+  ///  Make sure that alphaBuffer is exactly the same size as the video frame (width × height), otherwise it may cause the app to crash.
   @JsonKey(name: 'alphaBuffer', ignore: true)
   final Uint8List? alphaBuffer;
 
@@ -1008,7 +1054,7 @@ class VideoFrame {
   @JsonKey(name: 'pixelBuffer', ignore: true)
   final Uint8List? pixelBuffer;
 
-  /// The meta information in the video frame. To use this parameter, please.
+  /// The meta information in the video frame. To use this parameter, contact.
   @VideoFrameMetaInfoConverter()
   @JsonKey(name: 'metaInfo')
   final VideoFrameMetaInfo? metaInfo;
@@ -1182,7 +1228,8 @@ class AudioFrame {
       this.renderTimeMs,
       this.avsyncType,
       this.presentationMs,
-      this.audioTrackNumber});
+      this.audioTrackNumber,
+      this.rtpTimestamp});
 
   /// The type of the audio frame. See AudioFrameType.
   @JsonKey(name: 'type')
@@ -1225,6 +1272,10 @@ class AudioFrame {
   /// @nodoc
   @JsonKey(name: 'audioTrackNumber')
   final int? audioTrackNumber;
+
+  /// @nodoc
+  @JsonKey(name: 'rtpTimestamp')
+  final int? rtpTimestamp;
 
   /// @nodoc
   factory AudioFrame.fromJson(Map<String, dynamic> json) =>
@@ -1405,7 +1456,7 @@ class AudioSpectrumObserver {
 
   /// Gets the statistics of a local audio spectrum.
   ///
-  /// After successfully calling registerAudioSpectrumObserver to implement the onLocalAudioSpectrum callback in AudioSpectrumObserver and calling enableAudioSpectrumMonitor to enable audio spectrum monitoring, the SDK will trigger the callback as the time interval you set to report the received remote audio data spectrum.
+  /// After successfully calling registerAudioSpectrumObserver to implement the onLocalAudioSpectrum callback in AudioSpectrumObserver and calling enableAudioSpectrumMonitor to enable audio spectrum monitoring, the SDK triggers this callback as the time interval you set to report the received remote audio data spectrum before encoding.
   ///
   /// * [data] The audio spectrum data of the local user. See AudioSpectrumData.
   final void Function(AudioSpectrumData data)? onLocalAudioSpectrum;
@@ -1414,7 +1465,7 @@ class AudioSpectrumObserver {
   ///
   /// After successfully calling registerAudioSpectrumObserver to implement the onRemoteAudioSpectrum callback in the AudioSpectrumObserver and calling enableAudioSpectrumMonitor to enable audio spectrum monitoring, the SDK will trigger the callback as the time interval you set to report the received remote audio data spectrum.
   ///
-  /// * [spectrums] The audio spectrum information of the remote user, see UserAudioSpectrumInfo. The number of arrays is the number of remote users monitored by the SDK. If the array is null, it means that no audio spectrum of remote users is detected.
+  /// * [spectrums] The audio spectrum information of the remote user. See UserAudioSpectrumInfo. The number of arrays is the number of remote users monitored by the SDK. If the array is null, it means that no audio spectrum of remote users is detected.
   /// * [spectrumNumber] The number of remote users.
   final void Function(
           List<UserAudioSpectrumInfo> spectrums, int spectrumNumber)?
@@ -1467,6 +1518,7 @@ class VideoFrameObserver {
   /// Occurs each time the SDK receives a video frame before encoding.
   ///
   /// After you successfully register the video frame observer, the SDK triggers this callback each time it receives a video frame. In this callback, you can get the video data before encoding and then process the data according to your particular scenarios.
+  ///  It is recommended that you ensure the modified parameters in videoFrame are consistent with the actual situation of the video frames in the video frame buffer. Otherwise, it may cause unexpected rotation, distortion, and other issues in the local preview and remote video display.
   ///  Due to framework limitations, this callback does not support sending processed video data back to the SDK.
   ///  The video data that this callback gets has been preprocessed, with its content cropped and rotated, and the image enhanced.
   ///
@@ -1486,6 +1538,7 @@ class VideoFrameObserver {
   /// Occurs each time the SDK receives a video frame sent by the remote user.
   ///
   /// After you successfully register the video frame observer, the SDK triggers this callback each time it receives a video frame. In this callback, you can get the video data sent from the remote end before rendering, and then process it according to the particular scenarios.
+  ///  It is recommended that you ensure the modified parameters in videoFrame are consistent with the actual situation of the video frames in the video frame buffer. Otherwise, it may cause unexpected rotation, distortion, and other issues in the local preview and remote video display.
   ///  If the video data type you get is RGBA, the SDK does not support processing the data of the alpha channel.
   ///  Due to framework limitations, this callback does not support sending processed video data back to the SDK.
   ///
@@ -1577,15 +1630,15 @@ extension MediaRecorderContainerFormatExt on MediaRecorderContainerFormat {
 /// The recording content.
 @JsonEnum(alwaysCreate: true)
 enum MediaRecorderStreamType {
-  /// Only audio.
+  /// 1: Only audio.
   @JsonValue(0x01)
   streamTypeAudio,
 
-  /// Only video.
+  /// 2: Only video.
   @JsonValue(0x02)
   streamTypeVideo,
 
-  /// (Default) Audio and video.
+  /// 3: (Default) Audio and video.
   @JsonValue(0x01 | 0x02)
   streamTypeBoth,
 }
@@ -1706,6 +1759,33 @@ class MediaRecorderConfiguration {
 
   /// @nodoc
   Map<String, dynamic> toJson() => _$MediaRecorderConfigurationToJson(this);
+}
+
+/// Facial information observer.
+///
+/// You can call registerFaceInfoObserver to register one FaceInfoObserver observer.
+class FaceInfoObserver {
+  /// @nodoc
+  const FaceInfoObserver({
+    this.onFaceInfo,
+  });
+
+  /// Occurs when the facial information processed by speech driven extension is received.
+  ///
+  /// * [outFaceInfo] Output parameter, the JSON string of the facial information processed by the voice driver plugin, including the following fields:
+  ///  faces: Object sequence. The collection of facial information, with each face corresponding to an object.
+  ///  blendshapes: Object. The collection of face capture coefficients, named according to ARkit standards, with each key-value pair representing a blendshape coefficient. The blendshape coefficient is a floating point number with a range of [0.0, 1.0].
+  ///  rotation: Object sequence. The rotation of the head, which includes the following three key-value pairs, with values as floating point numbers ranging from -180.0 to 180.0:
+  ///  pitch: Head pitch angle. A positve value means looking down, while a negative value means looking up.
+  ///  yaw: Head yaw angle. A positve value means turning left, while a negative value means turning right.
+  ///  roll: Head roll angle. A positve value means tilting to the right, while a negative value means tilting to the left.
+  ///  timestamp: String. The timestamp of the output result, in milliseconds. Here is an example of JSON:
+  /// { "faces":[{ "blendshapes":{ "eyeBlinkLeft":0.9, "eyeLookDownLeft":0.0, "eyeLookInLeft":0.0, "eyeLookOutLeft":0.0, "eyeLookUpLeft":0.0, "eyeSquintLeft":0.0, "eyeWideLeft":0.0, "eyeBlinkRight":0.0, "eyeLookDownRight":0.0, "eyeLookInRight":0.0, "eyeLookOutRight":0.0, "eyeLookUpRight":0.0, "eyeSquintRight":0.0, "eyeWideRight":0.0, "jawForward":0.0, "jawLeft":0.0, "jawRight":0.0, "jawOpen":0.0, "mouthClose":0.0, "mouthFunnel":0.0, "mouthPucker":0.0, "mouthLeft":0.0, "mouthRight":0.0, "mouthSmileLeft":0.0, "mouthSmileRight":0.0, "mouthFrownLeft":0.0, "mouthFrownRight":0.0, "mouthDimpleLeft":0.0, "mouthDimpleRight":0.0, "mouthStretchLeft":0.0, "mouthStretchRight":0.0, "mouthRollLower":0.0, "mouthRollUpper":0.0, "mouthShrugLower":0.0, "mouthShrugUpper":0.0, "mouthPressLeft":0.0, "mouthPressRight":0.0, "mouthLowerDownLeft":0.0, "mouthLowerDownRight":0.0, "mouthUpperUpLeft":0.0, "mouthUpperUpRight":0.0, "browDownLeft":0.0, "browDownRight":0.0, "browInnerUp":0.0, "browOuterUpLeft":0.0, "browOuterUpRight":0.0, "cheekPuff":0.0, "cheekSquintLeft":0.0, "cheekSquintRight":0.0, "noseSneerLeft":0.0, "noseSneerRight":0.0, "tongueOut":0.0 }, "rotation":{"pitch":30.0, "yaw":25.5, "roll":-15.5},
+  ///  }], "timestamp":"654879876546" }
+  ///
+  /// Returns
+  /// true : Facial information JSON parsing successful. false : Facial information JSON parsing failed.
+  final void Function(String outFaceInfo)? onFaceInfo;
 }
 
 /// @nodoc

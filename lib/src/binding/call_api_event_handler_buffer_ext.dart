@@ -517,6 +517,18 @@ extension AudioTrackConfigBufferExt on AudioTrackConfig {
   }
 }
 
+extension LoopbackAudioTrackConfigBufferExt on LoopbackAudioTrackConfig {
+  LoopbackAudioTrackConfig fillBuffers(List<Uint8List> bufferList) {
+    if (bufferList.isEmpty) return this;
+    return this;
+  }
+
+  List<Uint8List> collectBufferList() {
+    final bufferList = <Uint8List>[];
+    return bufferList;
+  }
+}
+
 extension ScreenCaptureParametersBufferExt on ScreenCaptureParameters {
   ScreenCaptureParameters fillBuffers(List<Uint8List> bufferList) {
     if (bufferList.isEmpty) return this;
@@ -888,6 +900,7 @@ extension ExternalVideoFrameBufferExt on ExternalVideoFrame {
         metadataBuffer: metadataBuffer,
         metadataSize: metadataSize,
         alphaBuffer: alphaBuffer,
+        fillAlphaBuffer: fillAlphaBuffer,
         textureSliceIndex: textureSliceIndex);
   }
 
@@ -996,7 +1009,8 @@ extension AudioFrameBufferExt on AudioFrame {
         renderTimeMs: renderTimeMs,
         avsyncType: avsyncType,
         presentationMs: presentationMs,
-        audioTrackNumber: audioTrackNumber);
+        audioTrackNumber: audioTrackNumber,
+        rtpTimestamp: rtpTimestamp);
   }
 
   List<Uint8List> collectBufferList() {
@@ -1483,11 +1497,7 @@ extension MetadataBufferExt on Metadata {
       buffer = bufferList[0];
     }
     return Metadata(
-        channelId: channelId,
-        uid: uid,
-        size: size,
-        buffer: buffer,
-        timeStampMs: timeStampMs);
+        uid: uid, size: size, buffer: buffer, timeStampMs: timeStampMs);
   }
 
   List<Uint8List> collectBufferList() {

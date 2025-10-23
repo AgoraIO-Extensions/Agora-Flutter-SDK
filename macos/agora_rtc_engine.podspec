@@ -22,8 +22,8 @@ A new flutter plugin project.
     s.vendored_frameworks = 'libs/*.framework'
   else
   # iris dependencies start
-  s.dependency 'AgoraIrisRTC_macOS', '4.2.6.10-build.1'
-  # iris dependencies end
+    s.dependency 'AgoraIrisRTC_macOS', '4.2.6.165-build.1'
+    # iris dependencies end
 
   # native dependencies start
   s.dependency 'AgoraRtcEngine_Special_macOS', '4.2.6.10'
