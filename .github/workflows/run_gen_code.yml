@@ -1,0 +1,80 @@
+name: 'run: gen code'
+
+on:
+  workflow_dispatch:
+    inputs:
+      target_branch:
+        description: 'Target branch to compare against. If a branch name, will compare directly against it. If a commit hash or tag, a new branch named "special/<pub_version>" will be created from that ref. The pub_version will be either the input pub_version or latest version from target branch pubspec.yaml. Leave empty will use the workflow trigger branch.'
+        type: string
+        required: false
+        default: ''
+      code_gen_public_headers:
+          description: 'The public headers to generate, e.g. rtc_4.5.0, leave empty will use the same as the target branch'
+          type: string
+          required: false
+          default: ''
+      flutter_channel:
+        description: 'Target Flutter channel, e.g. stable(default), beta, dev, master (or main), or any other channel name'
+        type: string
+        required: false
+        default: 'stable'
+      flutter_version:
+        description: 'Target Flutter version, e.g. 3.24.5, 3.24.x, commit hash, or leave empty to use the latest release version of specified channel by flutter_version(default)'
+        type: string
+        required: false
+        # we should use the latest stable version for build and gen code, but the 3.19.6 is the latest version which will gen compatible code for our flutter project,
+        # so we fixed use the 3.19.6 version here for now
+        default: '3.19.6'
+
+jobs:
+  gen_code:
+    runs-on: macos-latest
+    steps:
+      - name: Checkout target branch
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ inputs.target_branch || github.ref_name }}
+          fetch-depth: '1'
+          lfs: 'true'
+          submodules: 'true'
+
+      - name: Prepare target branch
+        id: prepare_target_branch
+        uses: ./.github/actions/prepare_branch
+        with:
+          target_branch: ${{ inputs.target_branch || github.ref_name}}
+          pub_version: ""
+          branch_group: "special"
+          working_directory: ./
+
+      - name: Run gen code
+        uses: ./.github/actions/gen_code
+        with:
+          code_gen_public_headers: ${{ inputs.code_gen_public_headers }}
+          flutter_channel: ${{ inputs.flutter_channel }}
+          flutter_version: ${{ inputs.flutter_version }}
+          working_directory: ./
+
+      - name: Commit and create pull request
+        uses: peter-evans/create-pull-request@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          commit-message: "feat: generate code"
+          committer: GitHub <noreply@github.com>
+          author: ${{ github.actor }} <${{ github.actor }}@users.noreply.github.com>
+          signoff: false
+          branch: gen/${{ steps.prepare_target_branch.outputs.final_target_branch }}
+          base: ${{ steps.prepare_target_branch.outputs.final_target_branch }}
+          delete-branch: true
+          draft: false
+          title: "feat: generate code"
+          body: |
+            Generate code with the following content:
+
+            base branch: ${{ steps.prepare_target_branch.outputs.final_target_branch }}
+
+            public headers: ${{ inputs.code_gen_public_headers }}
+
+            > This pull request is trigger by bot, you can checkout this branch and update it.
+          labels: |
+            ci:skip
