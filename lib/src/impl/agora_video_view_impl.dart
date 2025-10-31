@@ -6,6 +6,7 @@ import '/src/impl/video_view_controller_impl.dart';
 import '/src/impl/agora_rtc_renderer.dart';
 import '/src/render/agora_video_view.dart';
 import '/src/render/video_view_controller.dart';
+import '/src/render/video_rendering_performance_monitor.dart';
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart' show Colors;
@@ -394,6 +395,14 @@ class _AgoraRtcRenderTextureState extends State<AgoraRtcRenderTexture>
         setState(() {});
         return true;
       }
+      
+      // Handle video rendering performance data
+      if (call.method == 'onVideoRenderingPerformance') {
+        VideoRenderingPerformanceMonitor.instance
+            .handlePerformanceStatsFromNative(call.arguments);
+        return true;
+      }
+      
       return false;
     });
   }

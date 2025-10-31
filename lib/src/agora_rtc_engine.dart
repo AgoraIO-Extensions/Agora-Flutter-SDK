@@ -720,6 +720,87 @@ class RemoteVideoStats implements AgoraSerializable {
   Map<String, dynamic> toJson() => _$RemoteVideoStatsToJson(this);
 }
 
+/// Video rendering performance statistics for Flutter Texture rendering mode.
+///
+/// This class provides detailed performance metrics for monitoring the video rendering pipeline
+/// in Flutter Texture mode. These metrics help diagnose rendering performance issues and optimize
+/// the video display experience.
+@JsonSerializable(explicitToJson: true, includeIfNull: false)
+class VideoRenderingPerformanceStats implements AgoraSerializable {
+  /// @nodoc
+  const VideoRenderingPerformanceStats({
+    this.textureId,
+    this.uid,
+    this.renderInputFps,
+    this.renderOutputFps,
+    this.renderIntervalVariance,
+    this.renderDrawCostMs,
+    this.totalFramesReceived,
+    this.totalFramesRendered,
+  });
+
+  /// The texture ID of the video view.
+  @JsonKey(name: 'textureId')
+  final int? textureId;
+
+  /// The user ID of the video stream.
+  ///
+  /// * 0: Local user (local video stream)
+  /// * Non-zero: Remote user (remote video stream)
+  ///
+  /// Use this field to distinguish between local and remote video streams.
+  @JsonKey(name: 'uid')
+  final int? uid;
+
+  /// The frame rate (FPS) of video frames arriving at the renderer (Input FPS).
+  ///
+  /// This indicates how many frames per second are being delivered from the Native SDK
+  /// to the Flutter rendering layer. If this value is significantly lower than expected,
+  /// it may indicate issues with network, decoding, or the Native SDK pipeline.
+  @JsonKey(name: 'renderInputFps')
+  final double? renderInputFps;
+
+  /// The frame rate (FPS) of video frames actually rendered to the screen (Output FPS).
+  ///
+  /// This indicates how many frames per second are successfully rendered by Flutter Engine.
+  /// If this value is lower than renderInputFps, it suggests rendering performance issues
+  /// or frame drops in the Flutter layer.
+  @JsonKey(name: 'renderOutputFps')
+  final double? renderOutputFps;
+
+  /// The variance of rendering intervals, indicating rendering smoothness.
+  ///
+  /// Lower values indicate more uniform frame intervals and smoother playback.
+  /// Higher values suggest inconsistent frame timing, which can cause perceived jank or stuttering.
+  /// Unit: milliseconds squared (ms²)
+  @JsonKey(name: 'renderIntervalVariance')
+  final double? renderIntervalVariance;
+
+  /// The average rendering draw cost per frame.
+  ///
+  /// This measures the time spent processing each frame, including texture copying and
+  /// Flutter notification. For smooth 60fps playback, this should be well below 16.67ms.
+  /// For 30fps, it should be below 33.33ms.
+  /// Unit: milliseconds (ms)
+  @JsonKey(name: 'renderDrawCostMs')
+  final double? renderDrawCostMs;
+
+  /// The total number of video frames received from Native SDK.
+  @JsonKey(name: 'totalFramesReceived')
+  final int? totalFramesReceived;
+
+  /// The total number of video frames successfully rendered to the screen.
+  @JsonKey(name: 'totalFramesRendered')
+  final int? totalFramesRendered;
+
+  /// @nodoc
+  factory VideoRenderingPerformanceStats.fromJson(Map<String, dynamic> json) =>
+      _$VideoRenderingPerformanceStatsFromJson(json);
+
+  @override
+  Map<String, dynamic> toJson() => _$VideoRenderingPerformanceStatsToJson(this);
+}
+
 /// @nodoc
 @JsonSerializable(explicitToJson: true, includeIfNull: false)
 class VideoCompositingLayout implements AgoraSerializable {

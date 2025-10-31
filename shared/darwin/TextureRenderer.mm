@@ -1,4 +1,5 @@
 #import "TextureRenderer.h"
+#import "AgoraRenderPerformanceMonitor.h"
 #if defined(TARGET_OS_OSX) && TARGET_OS_OSX
 #import "AgoraCVPixelBufferUtils.h"
 #endif
@@ -13,12 +14,13 @@
 
 using namespace agora::iris;
 
-@interface TextureRender ()
+@interface TextureRender () <AgoraRenderPerformanceDelegate>
 
 @property(nonatomic, weak) NSObject<FlutterTextureRegistry> *textureRegistry;
 @property(nonatomic, strong) FlutterMethodChannel *channel;
 @property(nonatomic) agora::iris::IrisRtcRendering *irisRtcRendering;
 @property(nonatomic, assign) int delegateId;
+@property(nonatomic, assign) unsigned int uid;  // Store uid for performance reporting
 
 /// Tracks the latest pixel buffer sent from AVFoundation's sample buffer
 /// delegate callback. Used to deliver the latest pixel buffer to the flutter
@@ -26,6 +28,9 @@ using namespace agora::iris;
 @property(readwrite, nonatomic) CVPixelBufferRef latestPixelBuffer;
 /// The queue on which `latestPixelBuffer` property is accessed.
 @property(strong, nonatomic) dispatch_queue_t pixelBufferSynchronizationQueue;
+
+/// Performance monitor (optional, created only when enabled)
+@property(nonatomic, strong) AgoraRenderPerformanceMonitor *performanceMonitor;
 
 @end
 
@@ -44,6 +49,10 @@ public:
     if (!strongRenderer) {
       return;
     }
+
+    // Record frame received timestamp for performance monitoring
+    int64_t receiveTimestamp = (int64_t)([[NSDate date] timeIntervalSince1970] * 1000);
+    [strongRenderer.performanceMonitor recordFrameReceived:receiveTimestamp];
 
     std::weak_ptr<RendererDelegate> self_weak = shared_from_this();
 
@@ -87,6 +96,9 @@ public:
       });
     }
 
+    // Record processing start time for draw cost measurement (microseconds for higher precision)
+    int64_t processStartTime = (int64_t)([[NSDate date] timeIntervalSince1970] * 1000000);
+    
     __block CVPixelBufferRef previousPixelBuffer = nil;
     // Use `dispatch_sync` to avoid unnecessary context switch under common
     // non-contest scenarios;
@@ -113,6 +125,11 @@ public:
       CVPixelBufferRelease(previousPixelBuffer);
     }
 
+    // Record processing end time and calculate draw cost (in microseconds, then convert to milliseconds)
+    int64_t processEndTimeMicros = (int64_t)([[NSDate date] timeIntervalSince1970] * 1000000);
+    int64_t drawCostMicros = processEndTimeMicros - processStartTime;
+    double drawCostMs = drawCostMicros / 1000.0;  // Convert to milliseconds with decimal precision
+
     // notify new frame available on main thread
     dispatch_async(dispatch_get_main_queue(), ^{
       std::shared_ptr<RendererDelegate> self_strong = self_weak.lock();
@@ -124,6 +141,10 @@ public:
       if (!strongRenderer) {
         return;
       }
+      
+      int64_t renderTimestamp = (int64_t)([[NSDate date] timeIntervalSince1970] * 1000);
+      [strongRenderer.performanceMonitor recordFrameRendered:renderTimestamp drawCost:drawCostMs];
+      
       [strongRenderer.textureRegistry
           textureFrameAvailable:strongRenderer.textureId];
     });
@@ -166,18 +187,26 @@ public:
         [[NSString stringWithFormat:@"io.agora.flutter.render_%lld", _textureId]
             UTF8String],
         nil);
+    
+    // Initialize performance monitor
+    self.performanceMonitor = [[AgoraRenderPerformanceMonitor alloc] init];
+    self.performanceMonitor.delegate = self;
   }
   return self;
 }
 
 - (void)updateData:(NSNumber *)uid
-             channelId:(NSString *)channelId
-       videoSourceType:(NSNumber *)videoSourceType
-    videoViewSetupMode:(NSNumber *)videoViewSetupMode {
+            channelId:(NSString *)channelId
+      videoSourceType:(NSNumber *)videoSourceType
+   videoViewSetupMode:(NSNumber *)videoViewSetupMode {
+  
+  // Store uid for performance reporting
+  self.uid = [uid unsignedIntValue];
+  
   IrisRtcVideoFrameConfig config;
   config.video_frame_format =
       agora::media::base::VIDEO_PIXEL_FORMAT::VIDEO_CVPIXEL_NV12;
-  config.uid = [uid unsignedIntValue];
+  config.uid = self.uid;
   config.video_source_type = [videoSourceType intValue];
   if (channelId && (NSNull *)channelId != [NSNull null]) {
     strcpy(config.channelId, [channelId UTF8String]);
@@ -217,6 +246,25 @@ public:
     [self.textureRegistry unregisterTexture:self.textureId];
     self.textureRegistry = nil;
   }
+  
+  // Clean up performance monitor
+  self.performanceMonitor.delegate = nil;
+  self.performanceMonitor = nil;
+}
+
+#pragma mark - AgoraRenderPerformanceDelegate
+
+- (void)onPerformanceStatsUpdated:(AgoraRenderPerformanceStats *)stats {
+  if (!self.channel) {
+    return;
+  }
+  
+  // Send performance stats to Flutter layer via shared channel
+  NSMutableDictionary *statsDict = [[stats toDictionary] mutableCopy];
+  statsDict[@"textureId"] = @(self.textureId);
+  statsDict[@"uid"] = @(self.uid);  // Add uid to distinguish local/remote
+  [self.channel invokeMethod:@"onVideoRenderingPerformance"
+                         arguments:statsDict];
 }
 
 - (void)dealloc {

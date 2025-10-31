@@ -3,6 +3,7 @@ import '/src/agora_media_base.dart';
 import '/src/impl/agora_rtc_engine_impl.dart';
 import '/src/impl/platform/global_video_view_controller.dart';
 import '/src/render/video_view_controller.dart';
+import '/src/render/video_rendering_performance_monitor.dart';
 import 'package:flutter/foundation.dart';
 import 'package:meta/meta.dart';
 
@@ -88,6 +89,11 @@ mixin VideoViewControllerBaseMixin implements VideoViewControllerBase {
   @protected
   Future<void> disposeRenderInternal() async {
     if (shouldUseFlutterTexture) {
+      // Stop performance monitoring for this texture
+      if (_textureId != kTextureNotInit) {
+        VideoRenderingPerformanceMonitor.instance.stopMonitoring(_textureId);
+      }
+      
       await rtcEngine.globalVideoViewController
           ?.destroyTextureRender(getTextureId());
       _textureId = kTextureNotInit;
@@ -164,6 +170,11 @@ mixin VideoViewControllerBaseMixin implements VideoViewControllerBase {
           canvas.setupMode?.value() ??
               VideoViewSetupMode.videoViewSetupReplace.value(),
         );
+        
+        // Start performance monitoring for this texture
+        if (_textureId != kTextureNotInit) {
+          VideoRenderingPerformanceMonitor.instance.startMonitoring(_textureId);
+        }
       }
     } else {
       if (kIsWeb) {

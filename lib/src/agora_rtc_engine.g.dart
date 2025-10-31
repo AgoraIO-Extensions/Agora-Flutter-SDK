@@ -234,6 +234,41 @@ const _$VideoStreamTypeEnumMap = {
   VideoStreamType.videoStreamLayer6: 9,
 };
 
+VideoRenderingPerformanceStats _$VideoRenderingPerformanceStatsFromJson(
+        Map<String, dynamic> json) =>
+    VideoRenderingPerformanceStats(
+      textureId: (json['textureId'] as num?)?.toInt(),
+      uid: (json['uid'] as num?)?.toInt(),
+      renderInputFps: (json['renderInputFps'] as num?)?.toDouble(),
+      renderOutputFps: (json['renderOutputFps'] as num?)?.toDouble(),
+      renderIntervalVariance:
+          (json['renderIntervalVariance'] as num?)?.toDouble(),
+      renderDrawCostMs: (json['renderDrawCostMs'] as num?)?.toDouble(),
+      totalFramesReceived: (json['totalFramesReceived'] as num?)?.toInt(),
+      totalFramesRendered: (json['totalFramesRendered'] as num?)?.toInt(),
+    );
+
+Map<String, dynamic> _$VideoRenderingPerformanceStatsToJson(
+    VideoRenderingPerformanceStats instance) {
+  final val = <String, dynamic>{};
+
+  void writeNotNull(String key, dynamic value) {
+    if (value != null) {
+      val[key] = value;
+    }
+  }
+
+  writeNotNull('textureId', instance.textureId);
+  writeNotNull('uid', instance.uid);
+  writeNotNull('renderInputFps', instance.renderInputFps);
+  writeNotNull('renderOutputFps', instance.renderOutputFps);
+  writeNotNull('renderIntervalVariance', instance.renderIntervalVariance);
+  writeNotNull('renderDrawCostMs', instance.renderDrawCostMs);
+  writeNotNull('totalFramesReceived', instance.totalFramesReceived);
+  writeNotNull('totalFramesRendered', instance.totalFramesRendered);
+  return val;
+}
+
 VideoCompositingLayout _$VideoCompositingLayoutFromJson(
         Map<String, dynamic> json) =>
     VideoCompositingLayout(
