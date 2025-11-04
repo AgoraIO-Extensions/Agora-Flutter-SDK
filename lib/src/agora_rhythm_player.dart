@@ -5,7 +5,7 @@ part 'agora_rhythm_player.g.dart';
 /// Virtual metronome state.
 @JsonEnum(alwaysCreate: true)
 enum RhythmPlayerStateType {
-  /// (810): The virtual metronome is not enabled or disabled already.
+  /// 810: The virtual metronome is not enabled or disabled already.
   @JsonValue(810)
   rhythmPlayerStateIdle,
 
@@ -42,7 +42,7 @@ extension RhythmPlayerStateTypeExt on RhythmPlayerStateType {
 /// Virtual Metronome error message.
 @JsonEnum(alwaysCreate: true)
 enum RhythmPlayerReason {
-  /// (0): The beat files are played normally without errors.
+  /// 0: The beat files are played normally without errors.
   @JsonValue(0)
   rhythmPlayerReasonOk,
 
@@ -58,7 +58,7 @@ enum RhythmPlayerReason {
   @JsonValue(802)
   rhythmPlayerReasonCanNotPlay,
 
-  /// (803): The duration of the beat file exceeds the limit. The maximum duration is 1.2 seconds.
+  /// 803: The duration of the beat file exceeds the limit. The maximum duration is 1.2 seconds.
   @JsonValue(803)
   rhythmPlayerReasonFileOverDurationLimit,
 }
