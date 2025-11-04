@@ -24,7 +24,7 @@ on:
         required: false
         default: true
       code_gen_public_headers:
-        description: 'The public headers to generate, e.g. rtm_2.2.5. If empty, will automatically extract from dependencies_content (recommended). If dependencies_content is also empty, will use the same as the target branch.'
+        description: 'The public headers to generate, e.g. rtc_6.5.3. If empty, will automatically extract from dependencies_content (recommended). If dependencies_content is also empty, will use the same as the target branch.'
         type: string
         required: false
         default: ''
@@ -110,8 +110,8 @@ jobs:
           # Update pub version into pubspec.yaml
           sed -i '' "s/version: .*/version: ${{ inputs.pub_version }}/" pubspec.yaml
 
-      - name: Extract RTM version from dependencies
-        id: extract_rtm_version
+      - name: Extract RTC version from dependencies
+        id: extract_rtc_version
         if: ${{ inputs.run_gen_code == true }}
         shell: bash
         run: |
@@ -121,8 +121,8 @@ jobs:
           # 3. If both empty, leave empty to use current branch version
           
           if [ -n "${{ inputs.code_gen_public_headers }}" ]; then
-            rtm_version="${{ inputs.code_gen_public_headers }}"
-            echo "Using explicitly provided version: ${rtm_version}"
+            rtc_version="${{ inputs.code_gen_public_headers }}"
+            echo "Using explicitly provided version: ${rtc_version}"
           else
             dependencies_json='${{ steps.parse_dependencies_content.outputs.matches }}'
             
@@ -133,29 +133,29 @@ jobs:
               [ -z "$version" ] && version=$(echo "$dependencies_json" | jq -r '.[] | select(.platform == "macOS") | .version' | head -n1)
               [ -z "$version" ] && version=$(echo "$dependencies_json" | jq -r '.[] | select(.platform == "Android") | .version' | head -n1)
               
-              # Remove -build.X suffix and format as rtm_X.X.X
+              # Remove -build.X suffix and format as rtc_X.X.X
               if [ -n "$version" ] && [ "$version" != "null" ]; then
                 version=$(echo "$version" | sed 's/-build\.[0-9]*$//')
-                rtm_version="rtm_${version}"
-                echo "Extracted version from dependencies: ${rtm_version}"
+                rtc_version="rtc_${version}"
+                echo "Extracted version from dependencies: ${rtc_version}"
               else
-                rtm_version=""
+                rtc_version=""
                 echo "No version found in dependencies"
               fi
             else
-              rtm_version=""
+              rtc_version=""
               echo "No dependencies_content provided"
             fi
           fi
           
-          echo "rtm_version=${rtm_version}" >> $GITHUB_OUTPUT
-          [ -n "$rtm_version" ] && echo "Final version: ${rtm_version}" || echo "No version specified, will use current branch"
+          echo "rtc_version=${rtc_version}" >> $GITHUB_OUTPUT
+          [ -n "$rtc_version" ] && echo "Final version: ${rtc_version}" || echo "No version specified, will use current branch"
 
       - name: Run gen code
         if: ${{ inputs.run_gen_code == true }}
         uses: ./.github/actions/gen_code
         with:
-          code_gen_public_headers: ${{ steps.extract_rtm_version.outputs.rtm_version }}
+          code_gen_public_headers: ${{ steps.extract_rtc_version.outputs.rtc_version }}
           flutter_channel: ${{ inputs.flutter_channel }}
           flutter_version: ${{ inputs.flutter_version }}
           working_directory: ./
