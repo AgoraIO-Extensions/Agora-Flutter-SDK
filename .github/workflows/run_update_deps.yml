@@ -7,7 +7,7 @@ on:
         description: 'Target branch to compare against. If a branch name, will compare directly against it. If a commit hash or tag, a new branch named "special/<pub_version>" will be created from that ref. The pub_version will be either the input pub_version or latest version from target branch pubspec.yaml. Defaults to "main".'
         type: string
         required: false
-        default: 'main'
+        default: ''
       pub_version:
         description: 'Target pub version to update dependencies to. If empty, will use the latest version from target branch pubspec.yaml.'
         type: string
@@ -124,9 +124,12 @@ jobs:
             rtc_version="${{ inputs.code_gen_public_headers }}"
             echo "Using explicitly provided version: ${rtc_version}"
           else
-            dependencies_json='${{ steps.parse_dependencies_content.outputs.matches }}'
+            # The output is a stringified JSON, we need to parse it first
+            dependencies_raw='${{ steps.parse_dependencies_content.outputs.matches }}'
+            # Remove outer quotes and unescape inner quotes
+            dependencies_json=$(echo "$dependencies_raw" | sed 's/^"//;s/"$//' | sed 's/\\"/"/g')
             
-            if [ -n "$dependencies_json" ] && [ "$dependencies_json" != "null" ]; then
+            if [ -n "$dependencies_json" ] && [ "$dependencies_json" != "null" ] && [ "$dependencies_json" != "" ]; then
               # Extract version from platform objects (priority: Windows > iOS > macOS > Android)
               version=$(echo "$dependencies_json" | jq -r '.[] | select(.platform == "Windows") | .version' | head -n1)
               [ -z "$version" ] && version=$(echo "$dependencies_json" | jq -r '.[] | select(.platform == "iOS") | .version' | head -n1)
