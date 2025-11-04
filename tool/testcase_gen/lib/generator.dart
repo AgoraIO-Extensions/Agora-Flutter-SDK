@@ -1,6 +1,6 @@
 import 'dart:io';
 
-import 'package:paraphrase/paraphrase.dart';
+import 'package:testcase_gen/core/paraphrase.dart';
 
 enum GeneratorConfigPlatform {
   android,

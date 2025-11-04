@@ -1,11 +1,11 @@
 # This workflow is aim to let external contributors to run the integration tests.
 # * Check if the user is a external or internal contributor or not (who is in the org or not).
 # * If the user is a external contributor, remove the label "ci:schedule_run_ci" for each push.
-# * The PR with label "ci:schedule_run_ci" can trigger the `workflows/build.yml`.
+# * The PR with label "ci:schedule_run_ci" can trigger the `workflows/run_test.yml`.
 # 
 # If the user is a external contributor, the repo owener or the users with write access should response for add the 
 # label "ci:schedule_run_ci" to allow the external contributor to run the CI.
-name: Schedule run ci external
+name: 'on: pr external'
 
 on:
   pull_request_target:
@@ -22,7 +22,7 @@ jobs:
         id: check-contributors-result
         uses: actions/github-script@v6
         with:
-          github-token: ${{ secrets.LABEL_ACTION_PAT }}
+          github-token: ${{ secrets.GITHUB_TOKEN }}
           debug: true
           script: |
             const org = "AgoraIO-Extensions"
@@ -65,16 +65,16 @@ jobs:
         if: ${{ github.event.action == 'synchronize' && steps.check-contributors-result.outputs.result > 0 }}
         uses: actions-ecosystem/action-remove-labels@v1
         with:
-          github_token: ${{ secrets.LABEL_ACTION_PAT }}
-          repo: 'AgoraIO-Extensions'
-          number: 'Agora-Flutter-SDK'
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          number: ${{ github.event.pull_request.number }}
           labels: ci:schedule_run_ci
+          fail_on_error: false
 
-  schedule_ci:
-    name: Schedule run ci for external contributors
+  run_test:
+    name: Run test
     needs: check_permission
     if: ${{ contains(github.event.pull_request.labels.*.name, 'ci:schedule_run_ci') }}
-    uses: ./.github/workflows/build.yml
+    uses: ./.github/workflows/run_test.yml
     secrets:
-      MY_APP_ID: ${{ secrets.MY_APP_ID }}
+      APP_ID: ${{ secrets.APP_ID }}
             

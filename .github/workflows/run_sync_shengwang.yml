@@ -1,0 +1,22 @@
+name: 'run: sync to shengwang'
+
+on:
+  workflow_dispatch:
+
+jobs:
+  move-to-shengwang:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Sync to shengwang
+        uses: AgoraIO-Extensions/actions/.github/actions/shengwang-sync@main
+        with:
+          target-repo: 'Shengwang-Flutter-SDK'
+          source-repo: 'Agora-Flutter-SDK'
+          github-token: ${{ secrets.GH_TOKEN }}
+          target-branch: ${{ github.ref_name }}
+          github-email: ${{ secrets.GIT_EMAIL }}
+          github-private-key: ${{ secrets.GH_PRIVATE_KEY }}
+          github-username: ${{ secrets.GIT_USERNAME }}
+          pre-command: |
+            bash scripts/change_publisher.sh
+          create-pr: true

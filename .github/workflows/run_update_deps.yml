@@ -1,0 +1,199 @@
+name: 'run: update dependencies'
+
+on:
+  workflow_dispatch:
+    inputs:
+      target_branch:
+        description: 'Target branch to compare against. If a branch name, will compare directly against it. If a commit hash or tag, a new branch named "special/<pub_version>" will be created from that ref. The pub_version will be either the input pub_version or latest version from target branch pubspec.yaml. Defaults to "main".'
+        type: string
+        required: false
+        default: 'main'
+      pub_version:
+        description: 'Target pub version to update dependencies to. If empty, will use the latest version from target branch pubspec.yaml.'
+        type: string
+        required: false
+        default: ''
+      dependencies_content:
+        description: 'The dependencies content to update, including native SDKs and Iris dependencies across Maven, CocoaPods, and CDN links'
+        type: string
+        required: true
+        default: ''
+      run_gen_code:
+        description: 'Whether to run gen code, default is true'
+        type: boolean
+        required: false
+        default: true
+      code_gen_public_headers:
+        description: 'The public headers to generate, e.g. rtm_2.2.5. If empty, will automatically extract from dependencies_content (recommended). If dependencies_content is also empty, will use the same as the target branch.'
+        type: string
+        required: false
+        default: ''
+      flutter_channel:
+        description: 'Target Flutter channel, e.g. stable(default), beta, dev, master (or main), or any other channel name'
+        type: string
+        required: false
+        default: 'stable'
+      flutter_version:
+        description: 'Target Flutter version, e.g. 3.24.5, 3.24.x, commit hash, or leave empty to use the latest release version of specified channel by flutter_version(default)'
+        type: string
+        required: false
+        # we should use the latest stable version for build and gen code, but the 3.19.6 is the latest version which will gen compatible code for our flutter project,
+        # so we fixed use the 3.19.6 version here for now
+        default: '3.19.6'
+
+jobs:
+  update_deps:
+    runs-on: macos-latest
+    steps:
+      - name: Checkout target branch
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ inputs.target_branch || github.ref_name }}
+          fetch-depth: '1'
+          lfs: 'true'
+          submodules: 'true'
+
+      - name: Parse dependencies content
+        id: parse_dependencies_content
+        if: ${{ inputs.dependencies_content != '' }}
+        uses: AgoraIO-Extensions/actions/.github/actions/dep@main
+        with:
+          dependencies-content: ${{ inputs.dependencies_content }}
+        # Output: {steps.parse_dependencies_content.outputs.matches}, the parsed dependencies content in json format, the format is as follows:
+        # [
+        #     {
+        #         "iris_cdn": [
+        #             "https://download.agora.io/sdk/release/iris_4.5.0-gxz.119_DCG_Mac_Video_Unity_20250217_0847_579.zip", 
+        #             "https://download.agora.io/sdk/release/iris_4.5.0-gxz.119_DCG_Mac_Video_Standalone_20250217_0847_579.zip", 
+        #             "https://download.agora.io/sdk/release/iris_4.5.0-gxz.119_DCG_Mac_Video_20250217_0847_579.zip"
+        #         ], 
+        #         "cdn": [
+        #             "https://download.agora.io/sdk/release/AgoraRtcEngine_macOS_Preview_4.5.0-gxz.119.zip"
+        #         ], 
+        #         "iris_cocoapods": [
+        #             "pod 'AgoraIrisRTC_macOS', '4.5.0-gxz.119'"
+        #         ], 
+        #         "iris_maven": [
+        #             "implementation 'io.agora.rtc:iris-rtc:4.5.0-gxz.119'"
+        #         ], 
+        #         "maven": [
+        #             "implementation 'io.agora.rtc:agora-full-preview:4.5.0-gxz.119'", 
+        #             "implementation 'io.agora.rtc:full-screen-sharing-special:4.5.0-gxz.119'"
+        #         ], 
+        #         "platform": "macOS", // iOS, macOS, Android, Windows, Web
+        #         "cocoapods": [
+        #             "pod 'AgoraRtcEngine_macOS_Preview', '4.5.0-gxz.119'"
+        #         ]
+        #     },
+        # ]
+
+      - name: Prepare target branch
+        id: prepare_target_branch
+        uses: ./.github/actions/prepare_branch
+        with:
+          target_branch: ${{ inputs.target_branch || github.ref_name }}
+          pub_version: ${{ inputs.pub_version }}
+          branch_group: "special"
+          working_directory: ./
+
+      - name: Update dependencies with parsed dependencies content
+        if: ${{ inputs.dependencies_content != '' }}
+        shell: bash
+        run: |
+          # call ci/run_update_deps.sh with output of steps.parse_dependencies_content.outputs.matches
+          bash ci/run_update_deps.sh ${{ steps.parse_dependencies_content.outputs.matches }}
+
+      - name: Update pub version into pubspec.yaml
+        if: ${{ inputs.pub_version != '' }}
+        shell: bash
+        run: |
+          # Update pub version into pubspec.yaml
+          sed -i '' "s/version: .*/version: ${{ inputs.pub_version }}/" pubspec.yaml
+
+      - name: Extract RTM version from dependencies
+        id: extract_rtm_version
+        if: ${{ inputs.run_gen_code == true }}
+        shell: bash
+        run: |
+          # Priority: 
+          # 1. If code_gen_public_headers is explicitly provided, use it directly
+          # 2. Extract from dependencies_content (priority: Windows > iOS > macOS > Android)
+          # 3. If both empty, leave empty to use current branch version
+          
+          if [ -n "${{ inputs.code_gen_public_headers }}" ]; then
+            rtm_version="${{ inputs.code_gen_public_headers }}"
+            echo "Using explicitly provided version: ${rtm_version}"
+          else
+            dependencies_json='${{ steps.parse_dependencies_content.outputs.matches }}'
+            
+            if [ -n "$dependencies_json" ] && [ "$dependencies_json" != "null" ]; then
+              # Extract version from platform objects (priority: Windows > iOS > macOS > Android)
+              version=$(echo "$dependencies_json" | jq -r '.[] | select(.platform == "Windows") | .version' | head -n1)
+              [ -z "$version" ] && version=$(echo "$dependencies_json" | jq -r '.[] | select(.platform == "iOS") | .version' | head -n1)
+              [ -z "$version" ] && version=$(echo "$dependencies_json" | jq -r '.[] | select(.platform == "macOS") | .version' | head -n1)
+              [ -z "$version" ] && version=$(echo "$dependencies_json" | jq -r '.[] | select(.platform == "Android") | .version' | head -n1)
+              
+              # Remove -build.X suffix and format as rtm_X.X.X
+              if [ -n "$version" ] && [ "$version" != "null" ]; then
+                version=$(echo "$version" | sed 's/-build\.[0-9]*$//')
+                rtm_version="rtm_${version}"
+                echo "Extracted version from dependencies: ${rtm_version}"
+              else
+                rtm_version=""
+                echo "No version found in dependencies"
+              fi
+            else
+              rtm_version=""
+              echo "No dependencies_content provided"
+            fi
+          fi
+          
+          echo "rtm_version=${rtm_version}" >> $GITHUB_OUTPUT
+          [ -n "$rtm_version" ] && echo "Final version: ${rtm_version}" || echo "No version specified, will use current branch"
+
+      - name: Run gen code
+        if: ${{ inputs.run_gen_code == true }}
+        uses: ./.github/actions/gen_code
+        with:
+          code_gen_public_headers: ${{ steps.extract_rtm_version.outputs.rtm_version }}
+          flutter_channel: ${{ inputs.flutter_channel }}
+          flutter_version: ${{ inputs.flutter_version }}
+          working_directory: ./
+
+
+      - name: Commit and create pull request
+        id: create_pr
+        uses: peter-evans/create-pull-request@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          commit-message: "feat: update dependencies"
+          committer: GitHub <noreply@github.com>
+          author: ${{ github.actor }} <${{ github.actor }}@users.noreply.github.com>
+          signoff: false
+          branch: dev/${{ steps.prepare_target_branch.outputs.final_target_branch }}
+          base: ${{ steps.prepare_target_branch.outputs.final_target_branch }}
+          delete-branch: true
+          draft: false
+          title: "feat: update dependencies"
+          body: |
+            Update dependencies with the following content:
+
+            ${{ inputs.dependencies_content }}
+
+            > This pull request is trigger by bot, you can checkout this branch and update it.
+          labels: |
+            ci:ready_release_special
+
+      - name: Output PR URL
+        if: steps.create_pr.outputs.pull-request-operation != 'none'
+        run: |
+          echo "::notice title=Pull Request Created::${{ steps.create_pr.outputs.pull-request-url }}"
+          echo ""
+          echo "✅ Pull Request: ${{ steps.create_pr.outputs.pull-request-url }}"
+          echo ""
+
+      - name: No changes detected
+        if: steps.create_pr.outputs.pull-request-operation == 'none'
+        run: |
+          echo "::warning title=No Changes::No changes detected, PR was not created"
+          echo "⚠️ No changes detected in the repository"
