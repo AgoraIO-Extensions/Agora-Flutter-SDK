@@ -453,7 +453,7 @@ extension ContentInspectTypeExt on ContentInspectType {
   }
 }
 
-/// ContentInspectModule A structure used to configure the frequency of video screenshot and upload.
+/// ContentInspectModule class, a structure used to configure the frequency of video screenshot and upload.
 @JsonSerializable(explicitToJson: true, includeIfNull: false)
 class ContentInspectModule {
   /// @nodoc
@@ -1630,15 +1630,15 @@ extension MediaRecorderContainerFormatExt on MediaRecorderContainerFormat {
 /// The recording content.
 @JsonEnum(alwaysCreate: true)
 enum MediaRecorderStreamType {
-  /// Only audio.
+  /// 1: Only audio.
   @JsonValue(0x01)
   streamTypeAudio,
 
-  /// Only video.
+  /// 2: Only video.
   @JsonValue(0x02)
   streamTypeVideo,
 
-  /// (Default) Audio and video.
+  /// 3: (Default) Audio and video.
   @JsonValue(0x01 | 0x02)
   streamTypeBoth,
 }

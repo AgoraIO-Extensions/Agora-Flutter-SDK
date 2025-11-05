@@ -183,14 +183,14 @@ abstract class MediaEngine {
   /// Pushes the external raw video frame to the SDK through video tracks.
   ///
   /// To publish a custom video source, see the following steps:
-  ///  Call createCustomVideoTrack to create a video track and get the video track ID.
+  ///  Call createCustomVideoTrack to create a video track and get the video track ID. If you only need to push one custom video source to the channel, you can directly call the setExternalVideoSource method and the SDK will automatically create a video track with the videoTrackId set to 0.
   ///  Call joinChannel to join the channel. In ChannelMediaOptions, set customVideoTrackId to the video track ID that you want to publish, and set publishCustomVideoTrack to true.
   ///  Call this method and specify videoTrackId as the video track ID set in step 2. You can then publish the corresponding custom video source in the channel. After calling this method, even if you stop pushing external video frames to the SDK, the custom video stream will still be counted as the video duration usage and incur charges. Agora recommends that you take appropriate measures based on the actual situation to avoid such video billing.
   ///  If you no longer need to capture external video data, you can call destroyCustomVideoTrack to destroy the custom video track.
   ///  If you only want to use the external video data for local preview and not publish it in the channel, you can call muteLocalVideoStream to cancel sending video stream or call updateChannelMediaOptions to set publishCustomVideoTrack to false.
   ///
   /// * [frame] The external raw video frame to be pushed. See ExternalVideoFrame.
-  /// * [videoTrackId] The video track ID returned by calling the createCustomVideoTrack method. The default value is 0.
+  /// * [videoTrackId] The video track ID returned by calling the createCustomVideoTrack method. If you only need to push one custom video source, set videoTrackId to 0.
   ///
   /// Returns
   /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown. You need to catch the exception and handle it accordingly.
