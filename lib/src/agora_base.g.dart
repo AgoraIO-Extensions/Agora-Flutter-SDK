@@ -2458,6 +2458,7 @@ const _$LocalVideoStreamErrorEnumMap = {
       .localVideoStreamErrorScreenCaptureWindowRecoverFromMinimized: 27,
   LocalVideoStreamError.localVideoStreamReasonScreenCaptureDisplayDisconnected:
       30,
+  LocalVideoStreamError.localVideoStreamErrorScreenCaptureAutoFallback: 31,
 };
 
 const _$RemoteAudioStateEnumMap = {

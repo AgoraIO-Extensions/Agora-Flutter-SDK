@@ -8,11 +8,11 @@ enum ChannelProfileType {
   @JsonValue(0)
   channelProfileCommunication,
 
-  /// 1: Live streaming. Live streaming. Use this profile when there are more than two users in the channel.
+  /// 1: Live streaming. Use this profile when there are more than two users in the channel.
   @JsonValue(1)
   channelProfileLiveBroadcasting,
 
-  /// 2: Gaming. This profile is deprecated.
+  /// 2: Gaming.
   @JsonValue(2)
   channelProfileGame,
 
@@ -525,23 +525,23 @@ extension LicenseErrorTypeExt on LicenseErrorType {
 /// The operation permissions of the SDK on the audio session.
 @JsonEnum(alwaysCreate: true)
 enum AudioSessionOperationRestriction {
-  /// No restriction, the SDK can change the audio session.
+  /// 0: No restriction, the SDK can change the audio session.
   @JsonValue(0)
   audioSessionOperationRestrictionNone,
 
-  /// The SDK cannot change the audio session category.
+  /// 1: The SDK cannot change the audio session category.
   @JsonValue(1)
   audioSessionOperationRestrictionSetCategory,
 
-  /// The SDK cannot change the audio session category, mode, or categoryOptions.
+  /// 2: The SDK cannot change the audio session category, mode, or categoryOptions.
   @JsonValue(1 << 1)
   audioSessionOperationRestrictionConfigureSession,
 
-  /// The SDK keeps the audio session active when the user leaves the channel, for example, to play an audio file in the background.
+  /// 4: The SDK keeps the audio session active when the user leaves the channel, for example, to play an audio file in the background.
   @JsonValue(1 << 2)
   audioSessionOperationRestrictionDeactivateSession,
 
-  /// Completely restricts the operation permissions of the SDK on the audio session; the SDK cannot change the audio session.
+  /// 128: Completely restricts the operation permissions of the SDK on the audio session; the SDK cannot change the audio session.
   @JsonValue(1 << 7)
   audioSessionOperationRestrictionAll,
 }
@@ -779,31 +779,31 @@ extension VideoOrientationExt on VideoOrientation {
 /// The video frame rate.
 @JsonEnum(alwaysCreate: true)
 enum FrameRate {
-  /// 1: 1 fps
+  /// 1: 1 fps.
   @JsonValue(1)
   frameRateFps1,
 
-  /// 7: 7 fps
+  /// 7: 7 fps.
   @JsonValue(7)
   frameRateFps7,
 
-  /// 10: 10 fps
+  /// 10: 10 fps.
   @JsonValue(10)
   frameRateFps10,
 
-  /// 15: 15 fps
+  /// 15: 15 fps.
   @JsonValue(15)
   frameRateFps15,
 
-  /// 24: 24 fps
+  /// 24: 24 fps.
   @JsonValue(24)
   frameRateFps24,
 
-  /// 30: 30 fps
+  /// 30: 30 fps.
   @JsonValue(30)
   frameRateFps30,
 
-  /// 60: 60 fps For Windows and macOS only.
+  /// 60: 60 fps. For Windows and macOS only.
   @JsonValue(60)
   frameRateFps60,
 }
@@ -1244,47 +1244,47 @@ extension AudioCodecTypeExt on AudioCodecType {
 /// Audio encoding type.
 @JsonEnum(alwaysCreate: true)
 enum AudioEncodingType {
-  /// AAC encoding format, 16000 Hz sampling rate, bass quality. A file with an audio duration of 10 minutes is approximately 1.2 MB after encoding.
+  /// 0x010101: AAC encoding format, 16000 Hz sampling rate, bass quality. A file with an audio duration of 10 minutes is approximately 1.2 MB after encoding.
   @JsonValue(0x010101)
   audioEncodingTypeAac16000Low,
 
-  /// AAC encoding format, 16000 Hz sampling rate, medium sound quality. A file with an audio duration of 10 minutes is approximately 2 MB after encoding.
+  /// 0x010102: AAC encoding format, 16000 Hz sampling rate, medium sound quality. A file with an audio duration of 10 minutes is approximately 2 MB after encoding.
   @JsonValue(0x010102)
   audioEncodingTypeAac16000Medium,
 
-  /// AAC encoding format, 32000 Hz sampling rate, bass quality. A file with an audio duration of 10 minutes is approximately 1.2 MB after encoding.
+  /// 0x010201: AAC encoding format, 32000 Hz sampling rate, bass quality. A file with an audio duration of 10 minutes is approximately 1.2 MB after encoding.
   @JsonValue(0x010201)
   audioEncodingTypeAac32000Low,
 
-  /// AAC encoding format, 32000 Hz sampling rate, medium sound quality. A file with an audio duration of 10 minutes is approximately 2 MB after encoding.
+  /// 0x010202: AAC encoding format, 32000 Hz sampling rate, medium sound quality. A file with an audio duration of 10 minutes is approximately 2 MB after encoding.
   @JsonValue(0x010202)
   audioEncodingTypeAac32000Medium,
 
-  /// AAC encoding format, 32000 Hz sampling rate, high sound quality. A file with an audio duration of 10 minutes is approximately 3.5 MB after encoding.
+  /// 0x010203: AAC encoding format, 32000 Hz sampling rate, high sound quality. A file with an audio duration of 10 minutes is approximately 3.5 MB after encoding.
   @JsonValue(0x010203)
   audioEncodingTypeAac32000High,
 
-  /// AAC encoding format, 48000 Hz sampling rate, medium sound quality. A file with an audio duration of 10 minutes is approximately 2 MB after encoding.
+  /// 0x010302: AAC encoding format, 48000 Hz sampling rate, medium sound quality. A file with an audio duration of 10 minutes is approximately 2 MB after encoding.
   @JsonValue(0x010302)
   audioEncodingTypeAac48000Medium,
 
-  /// AAC encoding format, 48000 Hz sampling rate, high sound quality. A file with an audio duration of 10 minutes is approximately 3.5 MB after encoding.
+  /// 0x010303: AAC encoding format, 48000 Hz sampling rate, high sound quality. A file with an audio duration of 10 minutes is approximately 3.5 MB after encoding.
   @JsonValue(0x010303)
   audioEncodingTypeAac48000High,
 
-  /// OPUS encoding format, 16000 Hz sampling rate, bass quality. A file with an audio duration of 10 minutes is approximately 2 MB after encoding.
+  /// 0x020101: OPUS encoding format, 16000 Hz sampling rate, bass quality. A file with an audio duration of 10 minutes is approximately 2 MB after encoding.
   @JsonValue(0x020101)
   audioEncodingTypeOpus16000Low,
 
-  /// OPUS encoding format, 16000 Hz sampling rate, medium sound quality. A file with an audio duration of 10 minutes is approximately 2 MB after encoding.
+  /// 0x020102: OPUS encoding format, 16000 Hz sampling rate, medium sound quality. A file with an audio duration of 10 minutes is approximately 2 MB after encoding.
   @JsonValue(0x020102)
   audioEncodingTypeOpus16000Medium,
 
-  /// OPUS encoding format, 48000 Hz sampling rate, medium sound quality. A file with an audio duration of 10 minutes is approximately 2 MB after encoding.
+  /// 0x020302: OPUS encoding format, 48000 Hz sampling rate, medium sound quality. A file with an audio duration of 10 minutes is approximately 2 MB after encoding.
   @JsonValue(0x020302)
   audioEncodingTypeOpus48000Medium,
 
-  /// OPUS encoding format, 48000 Hz sampling rate, high sound quality. A file with an audio duration of 10 minutes is approximately 3.5 MB after encoding.
+  /// 0x020303: OPUS encoding format, 48000 Hz sampling rate, high sound quality. A file with an audio duration of 10 minutes is approximately 3.5 MB after encoding.
   @JsonValue(0x020303)
   audioEncodingTypeOpus48000High,
 }
@@ -1305,11 +1305,11 @@ extension AudioEncodingTypeExt on AudioEncodingType {
 /// The adaptation mode of the watermark.
 @JsonEnum(alwaysCreate: true)
 enum WatermarkFitMode {
-  /// Use the positionInLandscapeMode and positionInPortraitMode values you set in WatermarkOptions. The settings in WatermarkRatio are invalid.
+  /// 0: Use the positionInLandscapeMode and positionInPortraitMode values you set in WatermarkOptions. The settings in WatermarkRatio are invalid.
   @JsonValue(0)
   fitModeCoverPosition,
 
-  /// Use the value you set in WatermarkRatio. The settings in positionInLandscapeMode and positionInPortraitMode in WatermarkOptions are invalid.
+  /// 1: Use the value you set in WatermarkRatio. The settings in positionInLandscapeMode and positionInPortraitMode in WatermarkOptions are invalid.
   @JsonValue(1)
   fitModeUseImageRatio,
 }
@@ -1462,11 +1462,11 @@ extension H264PacketizeModeExt on H264PacketizeMode {
 /// The type of video streams.
 @JsonEnum(alwaysCreate: true)
 enum VideoStreamType {
-  /// 0: High-quality video stream.
+  /// 0: High-quality video stream, that is, a video stream with the highest resolution and bitrate.
   @JsonValue(0)
   videoStreamHigh,
 
-  /// 1: Low-quality video stream.
+  /// 1: Low-quality video stream, that is, a video stream with the lowest resolution and bitrate.
   @JsonValue(1)
   videoStreamLow,
 }
@@ -1889,7 +1889,7 @@ class SimulcastStreamConfig {
   @JsonKey(name: 'dimensions')
   final VideoDimensions? dimensions;
 
-  /// Video receive bitrate (Kbps), represented by an instantaneous value. This parameter does not need to be set. The SDK automatically matches the most suitable bitrate based on the video resolution and frame rate you set.
+  /// Video bitrate (Kbps). The default value is -1. This parameter does not need to be set. The SDK automatically matches the most suitable bitrate based on the video resolution and frame rate you set.
   @JsonKey(name: 'kBitrate')
   final int? kBitrate;
 
@@ -1965,7 +1965,9 @@ class WatermarkRatio {
   Map<String, dynamic> toJson() => _$WatermarkRatioToJson(this);
 }
 
-/// Configurations of the watermark image.
+/// Watermark image configurations.
+///
+/// Configuration options for setting the watermark image to be added.
 @JsonSerializable(explicitToJson: true, includeIfNull: false)
 class WatermarkOptions {
   /// @nodoc
@@ -2404,7 +2406,7 @@ enum AudioProfileType {
   @JsonValue(5)
   audioProfileMusicHighQualityStereo,
 
-  /// 6: A sample rate of 16 kHz, audio encoding, mono, and Acoustic Echo Cancellation (AES) enabled.
+  /// 6: A sample rate of 16 kHz, audio encoding, mono, and Acoustic Echo Cancellation (AEC) enabled.
   @JsonValue(6)
   audioProfileIot,
 
@@ -2902,6 +2904,10 @@ enum LocalVideoStreamError {
   /// @nodoc
   @JsonValue(30)
   localVideoStreamReasonScreenCaptureDisplayDisconnected,
+
+  /// @nodoc
+  @JsonValue(31)
+  localVideoStreamErrorScreenCaptureAutoFallback,
 }
 
 /// @nodoc
@@ -3936,7 +3942,7 @@ class LiveTranscoding {
   final int? audioBitrate;
 
   /// The number of audio channels for Media Push. Agora recommends choosing 1 (mono), or 2 (stereo) audio channels. Special players are required if you choose 3, 4, or 5.
-  ///  1: (Default) Mono
+  ///  1: (Default) Mono.
   ///  2: Stereo.
   ///  3: Three audio channels.
   ///  4: Four audio channels.
@@ -3989,7 +3995,11 @@ class TranscodingVideoStream {
   @JsonKey(name: 'remoteUserUid')
   final int? remoteUserUid;
 
-  /// The URL of the image. Use this parameter only when the source type is the image for local video mixing.
+  /// The file path of local images. Use this parameter only when the source type is the image for local video mixing. Examples:
+  ///  Android: /storage/emulated/0/Pictures/image.png
+  ///  iOS: /var/mobile/Containers/Data/Application/<APP-UUID>/Documents/image.png
+  ///  macOS: ~/Pictures/image.png
+  ///  Windows: C:\\Users\\{username}\\Pictures\\image.png
   @JsonKey(name: 'imageUrl')
   final String? imageUrl;
 
@@ -4280,7 +4290,7 @@ enum ConnectionChangedReasonType {
   @JsonValue(8)
   connectionChangedInvalidToken,
 
-  /// (9): The token currently being used has expired. You need to generate a new token on your server and rejoin the channel with the new token.
+  /// 9: The token currently being used has expired. You need to generate a new token on your server and rejoin the channel with the new token.
   @JsonValue(9)
   connectionChangedTokenExpired,
 
@@ -4298,7 +4308,7 @@ enum ConnectionChangedReasonType {
   @JsonValue(12)
   connectionChangedRenewToken,
 
-  /// (13): Client IP address changed. If you receive this code multiple times, You need to prompt the user to switch networks and try joining the channel again.
+  /// 13: Client IP address changed. If you receive this code multiple times, You need to prompt the user to switch networks and try joining the channel again.
   @JsonValue(13)
   connectionChangedClientIpAddressChanged,
 
@@ -4530,7 +4540,7 @@ enum VideoViewSetupMode {
   @JsonValue(1)
   videoViewSetupAdd,
 
-  /// 2: Deletes a view.
+  /// 2: Deletes a view. When you no longer need to use a certain view, it is recommended to delete the view by setting setupMode to videoViewSetupRemove, otherwise it may lead to leak of rendering resources.
   @JsonValue(2)
   videoViewSetupRemove,
 }
@@ -4573,7 +4583,7 @@ class VideoCanvas {
   @JsonKey(name: 'uid')
   final int? uid;
 
-  /// The background color of the video canvas in RGBA format. The default value is 0x00000000, which represents completely transparent black.
+  /// The background color of the video canvas in RGBA format. The default value is 0x00000000, which represents black.
   @JsonKey(name: 'backgroundColor')
   final int? backgroundColor;
 
@@ -5559,7 +5569,7 @@ class AudioEncodedFrameObserverConfig {
   /// @nodoc
   const AudioEncodedFrameObserverConfig({this.postionType, this.encodingType});
 
-  /// Audio profile. See AudioEncodedFrameObserverPosition.
+  /// Audio observer position. See AudioEncodedFrameObserverPosition.
   @JsonKey(name: 'postionType')
   final AudioEncodedFrameObserverPosition? postionType;
 

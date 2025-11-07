@@ -1343,4 +1343,31 @@ class RtcEngineExImpl extends RtcEngineImpl implements RtcEngineEx {
       throw AgoraRtcException(code: result);
     }
   }
+
+  @override
+  Future<void> enableVideoImageSourceEx(
+      {required bool enable,
+      required ImageTrackOptions options,
+      required RtcConnection connection}) async {
+    final apiType =
+        '${isOverrideClassName ? className : 'RtcEngineEx'}_enableVideoImageSourceEx';
+    final param = createParams({
+      'enable': enable,
+      'options': options.toJson(),
+      'connection': connection.toJson()
+    });
+    final List<Uint8List> buffers = [];
+    buffers.addAll(options.collectBufferList());
+    buffers.addAll(connection.collectBufferList());
+    final callApiResult = await irisMethodChannel.invokeMethod(
+        IrisMethodCall(apiType, jsonEncode(param), buffers: buffers));
+    if (callApiResult.irisReturnCode < 0) {
+      throw AgoraRtcException(code: callApiResult.irisReturnCode);
+    }
+    final rm = callApiResult.data;
+    final result = rm['result'];
+    if (result < 0) {
+      throw AgoraRtcException(code: result);
+    }
+  }
 }
