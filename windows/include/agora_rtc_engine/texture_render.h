@@ -9,8 +9,10 @@
 #include <mutex>
 
 #include "iris_rtc_rendering_cxx.h"
+#include "agora_render_performance_monitor.h"
 
-class TextureRender : public agora::iris::VideoFrameObserverDelegate
+class TextureRender : public agora::iris::VideoFrameObserverDelegate,
+                      public agora::rtc::flutter::AgoraRenderPerformanceDelegate
 {
 public:
     TextureRender(flutter::BinaryMessenger *messenger,
@@ -33,6 +35,9 @@ public:
     }
 
     void Dispose();
+
+    // AgoraRenderPerformanceDelegate implementation
+    void onPerformanceStatsUpdated(const agora::rtc::flutter::AgoraRenderPerformanceStats& stats) override;
 
 private:
     const FlutterDesktopPixelBuffer *CopyPixelBuffer(size_t width, size_t height);
@@ -58,6 +63,10 @@ public:
     int delegate_id_;
 
     bool is_dirty_;
+
+    // Performance monitoring
+    unsigned int uid_ = 0;
+    std::unique_ptr<agora::rtc::flutter::AgoraRenderPerformanceMonitor> performance_monitor_;
 };
 
 #endif // TEXTURE_RENDER_H_

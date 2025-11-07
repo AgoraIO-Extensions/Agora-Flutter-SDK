@@ -98,6 +98,12 @@ class _VideoPerformanceMonitorExampleState
 
   @override
   void onVideoRenderingPerformance(VideoRenderingPerformanceStats stats) {
+    print('${DateTime.now().toString().split(' ').last.substring(0, 8)} - '
+          'Texture #${stats.textureId ?? 'N/A'}: UID=${stats.uid ?? 'N/A'}, '
+          'InFPS=${stats.renderInputFps?.toStringAsFixed(1)}, '
+          'OutFPS=${stats.renderOutputFps?.toStringAsFixed(1)}, '
+          'DrawCost=${stats.renderDrawCostMs?.toStringAsFixed(2)}ms, '
+          'Variance=${stats.renderIntervalVariance?.toStringAsFixed(2)}ms²');
     if (mounted) {
       setState(() {
         _performanceLog.add(
