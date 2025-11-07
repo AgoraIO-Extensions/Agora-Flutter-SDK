@@ -377,11 +377,11 @@ jobs:
           
           if [ "$RELEASE_TYPE" = "standard" ]; then
             echo "[publish info]  dependencies:"
-            echo "[publish info]    agora_rtm: ^$RELEASE_VERSION"
+            echo "[publish info]    agora_rtc_engine: ^$RELEASE_VERSION"
           else
             echo "[publish info]  dependencies:"
-            echo "[publish info]    agora_rtm:"
+            echo "[publish info]    agora_rtc_engine:"
             echo "[publish info]     git:"
-            echo "[publish info]      url: https://github.com/AgoraIO-Extensions/Agora-Flutter-RTM-SDK.git"
+            echo "[publish info]      url: https://github.com/AgoraIO-Extensions/Agora-Flutter-SDK.git"
             echo "[publish info]      ref: $RELEASE_VERSION"
           fi
