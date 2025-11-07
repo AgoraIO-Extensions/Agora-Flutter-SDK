@@ -16,6 +16,11 @@ public class IrisRenderer {
     void onSizeChanged(int width, int height);
   }
 
+  public interface PerformanceCallback {
+    void onFrameReceived(long timestamp);
+    void onFrameRendered(long timestamp, double drawCost);
+  }
+
   private final long videoFrameManagerNativeHandle;
   private final long uid;
   private final String channelId;
@@ -24,6 +29,7 @@ public class IrisRenderer {
   private long nativeRendererHandle;
 
   private Callback callback;
+  private PerformanceCallback performanceCallback;
 
   public IrisRenderer(long videoFrameManagerNativeHandle, long uid,
                       String channelId, int videoSourceType,
@@ -37,12 +43,36 @@ public class IrisRenderer {
 
   public void setCallback(Callback callback) { this.callback = callback; }
 
+  public void setPerformanceCallback(PerformanceCallback callback) { 
+    this.performanceCallback = callback; 
+  }
+
   /**
    * Call from native
    */
   @Keep
   private void onSizeChanged(int width, int height) {
     if (callback != null) { callback.onSizeChanged(width, height); }
+  }
+
+  /**
+   * Call from native - record frame received for performance monitoring
+   */
+  @Keep
+  private void recordFrameReceived(long timestamp) {
+    if (performanceCallback != null) { 
+      performanceCallback.onFrameReceived(timestamp); 
+    }
+  }
+
+  /**
+   * Call from native - record frame rendered for performance monitoring
+   */
+  @Keep
+  private void recordFrameRendered(long timestamp, double drawCost) {
+    if (performanceCallback != null) { 
+      performanceCallback.onFrameRendered(timestamp, drawCost); 
+    }
   }
 
   public void startRenderingToSurface(Surface surface) {

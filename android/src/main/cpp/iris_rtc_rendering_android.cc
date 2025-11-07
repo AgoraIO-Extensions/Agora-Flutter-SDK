@@ -12,6 +12,7 @@
 #include <jni.h>
 #include <memory>
 #include <vector>
+#include <chrono>
 
 namespace agora {
 namespace iris {
@@ -691,13 +692,17 @@ class NativeTextureRenderer final
       JNIEnv *env, jobject j_iris_renderer_obj, jobject surface_jni,
       agora::iris::IrisRtcRendering *iris_rtc_rendering, unsigned int uid,
       const char *channel_id, int video_source_type, int video_view_setup_mode)
-      : jvm_(nullptr), iris_rtc_rendering_(iris_rtc_rendering), width_(0),
+      : jvm_(nullptr), iris_rtc_rendering_(iris_rtc_rendering), uid_(uid), width_(0),
         height_(0) {
     env->GetJavaVM(&jvm_);
     j_iris_renderer_obj_ = env->NewGlobalRef(j_iris_renderer_obj);
     jclass j_caller_class = env->GetObjectClass(j_iris_renderer_obj_);
     j_on_size_changed_method_ =
         env->GetMethodID(j_caller_class, "onSizeChanged", "(II)V");
+    j_record_frame_received_method_ =
+        env->GetMethodID(j_caller_class, "recordFrameReceived", "(J)V");
+    j_record_frame_rendered_method_ =
+        env->GetMethodID(j_caller_class, "recordFrameRendered", "(JD)V");
     env->DeleteLocalRef(j_caller_class);
 
     native_windows_ = ANativeWindow_fromSurface(env, surface_jni);
@@ -733,6 +738,11 @@ class NativeTextureRenderer final
         static_cast<const agora::media::base::VideoFrame *>(videoFrame);
 
     if (video_frame->width == 0 || video_frame->height == 0) { return; }
+
+    // Record frame received timestamp for performance monitoring
+    int64_t receive_timestamp = std::chrono::duration_cast<std::chrono::milliseconds>(
+        std::chrono::system_clock::now().time_since_epoch()).count();
+    RecordFrameReceived(receive_timestamp);
 
     if (width_ != video_frame->width || height_ != video_frame->height) {
       NotifySizeChangeCallback(video_frame->width, video_frame->height);
@@ -777,7 +787,25 @@ class NativeTextureRenderer final
       }
     }
 
+    // Record render timestamp before actual rendering to measure frame interval more accurately
+    // This approach is consistent with iOS implementation and reduces variance caused by GL operations
+    int64_t render_timestamp = std::chrono::duration_cast<std::chrono::milliseconds>(
+        std::chrono::system_clock::now().time_since_epoch()).count();
+    
+    // Record processing start time for draw cost measurement (microseconds for higher precision)
+    int64_t process_start_time = std::chrono::duration_cast<std::chrono::microseconds>(
+        std::chrono::system_clock::now().time_since_epoch()).count();
+
     rendering_op_->Rendering(video_frame);
+
+    // Record processing end time and calculate draw cost (in microseconds, then convert to milliseconds)
+    int64_t process_end_time = std::chrono::duration_cast<std::chrono::microseconds>(
+        std::chrono::system_clock::now().time_since_epoch()).count();
+    int64_t draw_cost_micros = process_end_time - process_start_time;
+    double draw_cost_ms = draw_cost_micros / 1000.0;  // Convert to milliseconds with decimal precision
+
+    // Record frame rendered event with pre-rendering timestamp and actual draw cost
+    RecordFrameRendered(render_timestamp, draw_cost_ms);
 
     gl_context_->GLContextClearCurrent();
   }
@@ -811,14 +839,29 @@ class NativeTextureRenderer final
   }
 
  private:
+  void RecordFrameReceived(int64_t timestamp) {
+    if (!j_iris_renderer_obj_) { return; }
+    ::iris::AttachThreadScoped ats(jvm_);
+    ats.env()->CallVoidMethod(j_iris_renderer_obj_, j_record_frame_received_method_, timestamp);
+  }
+
+  void RecordFrameRendered(int64_t timestamp, double draw_cost) {
+    if (!j_iris_renderer_obj_) { return; }
+    ::iris::AttachThreadScoped ats(jvm_);
+    ats.env()->CallVoidMethod(j_iris_renderer_obj_, j_record_frame_rendered_method_, timestamp, draw_cost);
+  }
+
   JavaVM *jvm_;
   jobject j_iris_renderer_obj_;
   jmethodID j_on_size_changed_method_;
+  jmethodID j_record_frame_received_method_;
+  jmethodID j_record_frame_rendered_method_;
 
   agora::iris::IrisRtcRendering *iris_rtc_rendering_;
   ANativeWindow *native_windows_;
   int width_;
   int height_;
+  unsigned int uid_;
 
   int delegate_id_;
 
