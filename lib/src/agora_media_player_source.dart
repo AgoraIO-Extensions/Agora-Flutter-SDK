@@ -97,7 +97,7 @@ class MediaPlayerSourceObserver {
   /// * [stats] The statistics of the media file being cached. See CacheStatistics.
   final void Function(CacheStatistics stats)? onPlayerCacheStats;
 
-  /// The statistics of the media file being played.
+  /// Reports the statistics of the media file being played.
   ///
   /// The SDK triggers this callback once per second to report the statistics of the media file being played.
   ///
