@@ -235,16 +235,19 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Setup Dart for pub publish
+      - name: Setup Flutter for pub publish
         if: ${{ steps.version_check.outputs.release_type == 'standard' }}
-        uses: dart-lang/setup-dart@v1
+        uses: subosito/flutter-action@v2
+        with:
+          channel: 'stable'
+          cache: true
 
       - name: Publish to pub.dev (dry-run check)
         if: ${{ steps.version_check.outputs.release_type == 'standard' && steps.version_check.outputs.dry-run == 'true' }}
         run: |
           echo "[DRY-RUN MODE] Running pub publish dry-run"
-          dart pub get
-          dart pub publish --dry-run
+          flutter pub get
+          flutter pub publish --dry-run
       
       - name: Publish to pub.dev (real)
         if: ${{ steps.version_check.outputs.release_type == 'standard' && steps.version_check.outputs.dry-run == 'false' }}
