@@ -24,6 +24,9 @@ jobs:
         with:
           ref: ${{ inputs.release_branch }}
           fetch-depth: 0
+      - uses: actions/setup-node@v3
+        with:
+          node-version: 20
       - name: Install release-it
         run: |
           npm install -g release-it
