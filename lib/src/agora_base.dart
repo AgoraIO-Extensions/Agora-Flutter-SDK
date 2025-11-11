@@ -9,11 +9,11 @@ enum ChannelProfileType {
   @JsonValue(0)
   channelProfileCommunication,
 
-  /// 1: Live streaming. Live streaming. Use this profile when there are more than two users in the channel.
+  /// 1: Live streaming. Use this profile when there are more than two users in the channel.
   @JsonValue(1)
   channelProfileLiveBroadcasting,
 
-  /// 2: Gaming. This profile is deprecated.
+  /// 2: Gaming.
   @JsonValue(2)
   channelProfileGame,
 
@@ -526,23 +526,23 @@ extension LicenseErrorTypeExt on LicenseErrorType {
 /// The operation permissions of the SDK on the audio session.
 @JsonEnum(alwaysCreate: true)
 enum AudioSessionOperationRestriction {
-  /// No restriction, the SDK can change the audio session.
+  /// 0: No restriction, the SDK can change the audio session.
   @JsonValue(0)
   audioSessionOperationRestrictionNone,
 
-  /// The SDK cannot change the audio session category.
+  /// 1: The SDK cannot change the audio session category.
   @JsonValue(1)
   audioSessionOperationRestrictionSetCategory,
 
-  /// The SDK cannot change the audio session category, mode, or categoryOptions.
+  /// 2: The SDK cannot change the audio session category, mode, or categoryOptions.
   @JsonValue(1 << 1)
   audioSessionOperationRestrictionConfigureSession,
 
-  /// The SDK keeps the audio session active when the user leaves the channel, for example, to play an audio file in the background.
+  /// 4: The SDK keeps the audio session active when the user leaves the channel, for example, to play an audio file in the background.
   @JsonValue(1 << 2)
   audioSessionOperationRestrictionDeactivateSession,
 
-  /// Completely restricts the operation permissions of the SDK on the audio session; the SDK cannot change the audio session.
+  /// 128: Completely restricts the operation permissions of the SDK on the audio session; the SDK cannot change the audio session.
   @JsonValue(1 << 7)
   audioSessionOperationRestrictionAll,
 }
@@ -776,31 +776,31 @@ extension VideoOrientationExt on VideoOrientation {
 /// The video frame rate.
 @JsonEnum(alwaysCreate: true)
 enum FrameRate {
-  /// 1: 1 fps
+  /// 1: 1 fps.
   @JsonValue(1)
   frameRateFps1,
 
-  /// 7: 7 fps
+  /// 7: 7 fps.
   @JsonValue(7)
   frameRateFps7,
 
-  /// 10: 10 fps
+  /// 10: 10 fps.
   @JsonValue(10)
   frameRateFps10,
 
-  /// 15: 15 fps
+  /// 15: 15 fps.
   @JsonValue(15)
   frameRateFps15,
 
-  /// 24: 24 fps
+  /// 24: 24 fps.
   @JsonValue(24)
   frameRateFps24,
 
-  /// 30: 30 fps
+  /// 30: 30 fps.
   @JsonValue(30)
   frameRateFps30,
 
-  /// 60: 60 fps For Windows and macOS only.
+  /// 60: 60 fps. For Windows and macOS only.
   @JsonValue(60)
   frameRateFps60,
 }
@@ -935,7 +935,7 @@ extension OrientationModeExt on OrientationMode {
 /// Video degradation preferences when the bandwidth is a constraint.
 @JsonEnum(alwaysCreate: true)
 enum DegradationPreference {
-  /// 0: (Default) Automatic mode. The SDK will automatically select maintainFramerate, maintainBalanced or maintainResolution based on the video scenario you set, in order to achieve the best overall quality of experience (QoE).
+  /// -1: (Default) Automatic mode. The SDK will automatically select maintainFramerate, maintainBalanced or maintainResolution based on the video scenario you set, in order to achieve the best overall quality of experience (QoE).
   @JsonValue(-1)
   maintainAuto,
 
@@ -1272,47 +1272,47 @@ extension AudioCodecTypeExt on AudioCodecType {
 /// Audio encoding type.
 @JsonEnum(alwaysCreate: true)
 enum AudioEncodingType {
-  /// AAC encoding format, 16000 Hz sampling rate, bass quality. A file with an audio duration of 10 minutes is approximately 1.2 MB after encoding.
+  /// 0x010101: AAC encoding format, 16000 Hz sampling rate, bass quality. A file with an audio duration of 10 minutes is approximately 1.2 MB after encoding.
   @JsonValue(0x010101)
   audioEncodingTypeAac16000Low,
 
-  /// AAC encoding format, 16000 Hz sampling rate, medium sound quality. A file with an audio duration of 10 minutes is approximately 2 MB after encoding.
+  /// 0x010102: AAC encoding format, 16000 Hz sampling rate, medium sound quality. A file with an audio duration of 10 minutes is approximately 2 MB after encoding.
   @JsonValue(0x010102)
   audioEncodingTypeAac16000Medium,
 
-  /// AAC encoding format, 32000 Hz sampling rate, bass quality. A file with an audio duration of 10 minutes is approximately 1.2 MB after encoding.
+  /// 0x010201: AAC encoding format, 32000 Hz sampling rate, bass quality. A file with an audio duration of 10 minutes is approximately 1.2 MB after encoding.
   @JsonValue(0x010201)
   audioEncodingTypeAac32000Low,
 
-  /// AAC encoding format, 32000 Hz sampling rate, medium sound quality. A file with an audio duration of 10 minutes is approximately 2 MB after encoding.
+  /// 0x010202: AAC encoding format, 32000 Hz sampling rate, medium sound quality. A file with an audio duration of 10 minutes is approximately 2 MB after encoding.
   @JsonValue(0x010202)
   audioEncodingTypeAac32000Medium,
 
-  /// AAC encoding format, 32000 Hz sampling rate, high sound quality. A file with an audio duration of 10 minutes is approximately 3.5 MB after encoding.
+  /// 0x010203: AAC encoding format, 32000 Hz sampling rate, high sound quality. A file with an audio duration of 10 minutes is approximately 3.5 MB after encoding.
   @JsonValue(0x010203)
   audioEncodingTypeAac32000High,
 
-  /// AAC encoding format, 48000 Hz sampling rate, medium sound quality. A file with an audio duration of 10 minutes is approximately 2 MB after encoding.
+  /// 0x010302: AAC encoding format, 48000 Hz sampling rate, medium sound quality. A file with an audio duration of 10 minutes is approximately 2 MB after encoding.
   @JsonValue(0x010302)
   audioEncodingTypeAac48000Medium,
 
-  /// AAC encoding format, 48000 Hz sampling rate, high sound quality. A file with an audio duration of 10 minutes is approximately 3.5 MB after encoding.
+  /// 0x010303: AAC encoding format, 48000 Hz sampling rate, high sound quality. A file with an audio duration of 10 minutes is approximately 3.5 MB after encoding.
   @JsonValue(0x010303)
   audioEncodingTypeAac48000High,
 
-  /// OPUS encoding format, 16000 Hz sampling rate, bass quality. A file with an audio duration of 10 minutes is approximately 2 MB after encoding.
+  /// 0x020101: OPUS encoding format, 16000 Hz sampling rate, bass quality. A file with an audio duration of 10 minutes is approximately 2 MB after encoding.
   @JsonValue(0x020101)
   audioEncodingTypeOpus16000Low,
 
-  /// OPUS encoding format, 16000 Hz sampling rate, medium sound quality. A file with an audio duration of 10 minutes is approximately 2 MB after encoding.
+  /// 0x020102: OPUS encoding format, 16000 Hz sampling rate, medium sound quality. A file with an audio duration of 10 minutes is approximately 2 MB after encoding.
   @JsonValue(0x020102)
   audioEncodingTypeOpus16000Medium,
 
-  /// OPUS encoding format, 48000 Hz sampling rate, medium sound quality. A file with an audio duration of 10 minutes is approximately 2 MB after encoding.
+  /// 0x020302: OPUS encoding format, 48000 Hz sampling rate, medium sound quality. A file with an audio duration of 10 minutes is approximately 2 MB after encoding.
   @JsonValue(0x020302)
   audioEncodingTypeOpus48000Medium,
 
-  /// OPUS encoding format, 48000 Hz sampling rate, high sound quality. A file with an audio duration of 10 minutes is approximately 3.5 MB after encoding.
+  /// 0x020303: OPUS encoding format, 48000 Hz sampling rate, high sound quality. A file with an audio duration of 10 minutes is approximately 3.5 MB after encoding.
   @JsonValue(0x020303)
   audioEncodingTypeOpus48000High,
 }
@@ -1333,11 +1333,11 @@ extension AudioEncodingTypeExt on AudioEncodingType {
 /// The adaptation mode of the watermark.
 @JsonEnum(alwaysCreate: true)
 enum WatermarkFitMode {
-  /// Use the positionInLandscapeMode and positionInPortraitMode values you set in WatermarkOptions. The settings in WatermarkRatio are invalid.
+  /// 0: Use the positionInLandscapeMode and positionInPortraitMode values you set in WatermarkOptions. The settings in WatermarkRatio are invalid.
   @JsonValue(0)
   fitModeCoverPosition,
 
-  /// Use the value you set in WatermarkRatio. The settings in positionInLandscapeMode and positionInPortraitMode in WatermarkOptions are invalid.
+  /// 1: Use the value you set in WatermarkRatio. The settings in positionInLandscapeMode and positionInPortraitMode in WatermarkOptions are invalid.
   @JsonValue(1)
   fitModeUseImageRatio,
 }
@@ -4305,7 +4305,7 @@ class LiveTranscoding implements AgoraSerializable {
   final int? audioBitrate;
 
   /// The number of audio channels for Media Push. Agora recommends choosing 1 (mono), or 2 (stereo) audio channels. Special players are required if you choose 3, 4, or 5.
-  ///  1: (Default) Mono
+  ///  1: (Default) Mono.
   ///  2: Stereo.
   ///  3: Three audio channels.
   ///  4: Four audio channels.
@@ -4518,7 +4518,7 @@ class MixedAudioStream implements AgoraSerializable {
   Map<String, dynamic> toJson() => _$MixedAudioStreamToJson(this);
 }
 
-/// The configurations for mixing the lcoal audio.
+/// The configurations for mixing the local audio.
 @JsonSerializable(explicitToJson: true, includeIfNull: false)
 class LocalAudioMixerConfiguration implements AgoraSerializable {
   /// @nodoc
@@ -4715,7 +4715,7 @@ enum ConnectionChangedReasonType {
   @JsonValue(8)
   connectionChangedInvalidToken,
 
-  /// (9): The token currently being used has expired. You need to generate a new token on your server and rejoin the channel with the new token.
+  /// 9: The token currently being used has expired. You need to generate a new token on your server and rejoin the channel with the new token.
   @JsonValue(9)
   connectionChangedTokenExpired,
 
@@ -4733,7 +4733,7 @@ enum ConnectionChangedReasonType {
   @JsonValue(12)
   connectionChangedRenewToken,
 
-  /// (13): Client IP address changed. If you receive this code multiple times, You need to prompt the user to switch networks and try joining the channel again.
+  /// 13: Client IP address changed. If you receive this code multiple times, You need to prompt the user to switch networks and try joining the channel again.
   @JsonValue(13)
   connectionChangedClientIpAddressChanged,
 
@@ -5656,7 +5656,7 @@ class AudioTrackConfig implements AgoraSerializable {
   @JsonKey(name: 'enableLocalPlayback')
   final bool? enableLocalPlayback;
 
-  /// Whether to enable audio processing module: true Enable the audio processing module to apply the Automatic Echo Cancellation (AEC), Automatic Noise Suppression (ANS), and Automatic Gain Control (AGC) effects. false : (Default) Do not enable the audio processing module. This parameter only takes effect on audioTrackDirect in custom audio capturing.
+  /// Whether to enable audio processing module: true : Enable the audio processing module to apply the Automatic Echo Cancellation (AEC), Automatic Noise Suppression (ANS), and Automatic Gain Control (AGC) effects. false : (Default) Do not enable the audio processing module. This parameter only takes effect on audioTrackDirect in custom audio capturing.
   @JsonKey(name: 'enableAudioProcessing')
   final bool? enableAudioProcessing;
 
@@ -6015,50 +6015,12 @@ extension VoiceAiTunerTypeExt on VoiceAiTunerType {
   }
 }
 
-/// The audio configuration for the shared screen stream.
-///
-/// Only available where captureAudio is true.
-@JsonSerializable(explicitToJson: true, includeIfNull: false)
-class ScreenAudioParameters implements AgoraSerializable {
-  /// @nodoc
-  const ScreenAudioParameters(
-      {this.sampleRate,
-      this.channels,
-      this.captureSignalVolume,
-      this.excludeCurrentProcessAudio});
-
-  /// Audio sample rate (Hz). The default value is 16000.
-  @JsonKey(name: 'sampleRate')
-  final int? sampleRate;
-
-  /// The number of audio channels. The default value is 2, which means stereo.
-  @JsonKey(name: 'channels')
-  final int? channels;
-
-  /// The volume of the captured system audio. The value range is [0, 100]. The default value is 100.
-  @JsonKey(name: 'captureSignalVolume')
-  final int? captureSignalVolume;
-
-  /// @nodoc
-  @JsonKey(name: 'excludeCurrentProcessAudio')
-  final bool? excludeCurrentProcessAudio;
-
-  /// @nodoc
-  factory ScreenAudioParameters.fromJson(Map<String, dynamic> json) =>
-      _$ScreenAudioParametersFromJson(json);
-
-  @override
-  Map<String, dynamic> toJson() => _$ScreenAudioParametersToJson(this);
-}
-
 /// Screen sharing configurations.
 @JsonSerializable(explicitToJson: true, includeIfNull: false)
 class ScreenCaptureParameters implements AgoraSerializable {
   /// @nodoc
   const ScreenCaptureParameters(
-      {this.captureAudio,
-      this.audioParams,
-      this.dimensions,
+      {this.dimensions,
       this.frameRate,
       this.bitrate,
       this.captureMouseCursor,
@@ -6068,14 +6030,6 @@ class ScreenCaptureParameters implements AgoraSerializable {
       this.highLightWidth,
       this.highLightColor,
       this.enableHighLight});
-
-  /// @nodoc
-  @JsonKey(name: 'captureAudio')
-  final bool? captureAudio;
-
-  /// @nodoc
-  @JsonKey(name: 'audioParams')
-  final ScreenAudioParameters? audioParams;
 
   /// The video encoding resolution of the screen sharing stream. See VideoDimensions. The default value is 1920 × 1080, that is, 2,073,600 pixels. Agora uses the value of this parameter to calculate the charges. If the screen dimensions are different from the value of this parameter, Agora applies the following strategies for encoding. Suppose dimensions is set to 1920 × 1080:
   ///  If the value of the screen dimensions is lower than that of dimensions, for example, 1000 × 1000 pixels, the SDK uses the screen dimensions, that is, 1000 × 1000 pixels, for encoding.
@@ -6282,7 +6236,7 @@ class AudioEncodedFrameObserverConfig implements AgoraSerializable {
   /// @nodoc
   const AudioEncodedFrameObserverConfig({this.postionType, this.encodingType});
 
-  /// Audio profile. See AudioEncodedFrameObserverPosition.
+  /// Audio observer position. See AudioEncodedFrameObserverPosition.
   @JsonKey(name: 'postionType')
   final AudioEncodedFrameObserverPosition? postionType;
 
@@ -7125,6 +7079,35 @@ class ScreenVideoParameters implements AgoraSerializable {
 
   @override
   Map<String, dynamic> toJson() => _$ScreenVideoParametersToJson(this);
+}
+
+/// The audio configuration for the shared screen stream.
+///
+/// Only available where captureAudio is true.
+@JsonSerializable(explicitToJson: true, includeIfNull: false)
+class ScreenAudioParameters implements AgoraSerializable {
+  /// @nodoc
+  const ScreenAudioParameters(
+      {this.sampleRate, this.channels, this.captureSignalVolume});
+
+  /// Audio sample rate (Hz). The default value is 16000.
+  @JsonKey(name: 'sampleRate')
+  final int? sampleRate;
+
+  /// The number of audio channels. The default value is 2, which means stereo.
+  @JsonKey(name: 'channels')
+  final int? channels;
+
+  /// The volume of the captured system audio. The value range is [0, 100]. The default value is 100.
+  @JsonKey(name: 'captureSignalVolume')
+  final int? captureSignalVolume;
+
+  /// @nodoc
+  factory ScreenAudioParameters.fromJson(Map<String, dynamic> json) =>
+      _$ScreenAudioParametersFromJson(json);
+
+  @override
+  Map<String, dynamic> toJson() => _$ScreenAudioParametersToJson(this);
 }
 
 /// Screen sharing configurations.

@@ -629,8 +629,8 @@ ChannelMediaOptions _$ChannelMediaOptionsFromJson(Map<String, dynamic> json) =>
       publishThirdCameraTrack: json['publishThirdCameraTrack'] as bool?,
       publishFourthCameraTrack: json['publishFourthCameraTrack'] as bool?,
       publishMicrophoneTrack: json['publishMicrophoneTrack'] as bool?,
-      publishScreenCaptureAudio: json['publishScreenCaptureAudio'] as bool?,
       publishScreenCaptureVideo: json['publishScreenCaptureVideo'] as bool?,
+      publishScreenCaptureAudio: json['publishScreenCaptureAudio'] as bool?,
       publishScreenTrack: json['publishScreenTrack'] as bool?,
       publishSecondaryScreenTrack: json['publishSecondaryScreenTrack'] as bool?,
       publishThirdScreenTrack: json['publishThirdScreenTrack'] as bool?,
@@ -688,8 +688,8 @@ Map<String, dynamic> _$ChannelMediaOptionsToJson(ChannelMediaOptions instance) {
   writeNotNull('publishThirdCameraTrack', instance.publishThirdCameraTrack);
   writeNotNull('publishFourthCameraTrack', instance.publishFourthCameraTrack);
   writeNotNull('publishMicrophoneTrack', instance.publishMicrophoneTrack);
-  writeNotNull('publishScreenCaptureAudio', instance.publishScreenCaptureAudio);
   writeNotNull('publishScreenCaptureVideo', instance.publishScreenCaptureVideo);
+  writeNotNull('publishScreenCaptureAudio', instance.publishScreenCaptureAudio);
   writeNotNull('publishScreenTrack', instance.publishScreenTrack);
   writeNotNull(
       'publishSecondaryScreenTrack', instance.publishSecondaryScreenTrack);

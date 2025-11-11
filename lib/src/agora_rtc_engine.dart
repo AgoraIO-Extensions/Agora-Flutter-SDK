@@ -197,43 +197,43 @@ extension InjectStreamStatusExt on InjectStreamStatus {
 /// The midrange frequency for audio equalization.
 @JsonEnum(alwaysCreate: true)
 enum AudioEqualizationBandFrequency {
-  /// 0: 31 Hz
+  /// 0: 31 Hz.
   @JsonValue(0)
   audioEqualizationBand31,
 
-  /// 1: 62 Hz
+  /// 1: 62 Hz.
   @JsonValue(1)
   audioEqualizationBand62,
 
-  /// 2: 125 Hz
+  /// 2: 125 Hz.
   @JsonValue(2)
   audioEqualizationBand125,
 
-  /// 3: 250 Hz
+  /// 3: 250 Hz.
   @JsonValue(3)
   audioEqualizationBand250,
 
-  /// 4: 500 Hz
+  /// 4: 500 Hz.
   @JsonValue(4)
   audioEqualizationBand500,
 
-  /// 5: 1 kHz
+  /// 5: 1 kHz.
   @JsonValue(5)
   audioEqualizationBand1k,
 
-  /// 6: 2 kHz
+  /// 6: 2 kHz.
   @JsonValue(6)
   audioEqualizationBand2k,
 
-  /// 7: 4 kHz
+  /// 7: 4 kHz.
   @JsonValue(7)
   audioEqualizationBand4k,
 
-  /// 8: 8 kHz
+  /// 8: 8 kHz.
   @JsonValue(8)
   audioEqualizationBand8k,
 
-  /// 9: 16 kHz
+  /// 9: 16 kHz.
   @JsonValue(9)
   audioEqualizationBand16k,
 }
@@ -1201,7 +1201,7 @@ enum ScreenCaptureSourceType {
   @JsonValue(1)
   screencapturesourcetypeScreen,
 
-  /// 2: Reserved parameter
+  /// 2: Reserved parameter.
   @JsonValue(2)
   screencapturesourcetypeCustom,
 }
@@ -1349,8 +1349,8 @@ class ChannelMediaOptions implements AgoraSerializable {
       this.publishThirdCameraTrack,
       this.publishFourthCameraTrack,
       this.publishMicrophoneTrack,
-      this.publishScreenCaptureAudio,
       this.publishScreenCaptureVideo,
+      this.publishScreenCaptureAudio,
       this.publishScreenTrack,
       this.publishSecondaryScreenTrack,
       this.publishThirdScreenTrack,
@@ -1402,13 +1402,13 @@ class ChannelMediaOptions implements AgoraSerializable {
   @JsonKey(name: 'publishMicrophoneTrack')
   final bool? publishMicrophoneTrack;
 
-  /// Whether to publish the audio captured from the screen: true : Publish the audio captured from the screen. false : Publish the audio captured from the screen. This parameter is for Android and iOS only.
-  @JsonKey(name: 'publishScreenCaptureAudio')
-  final bool? publishScreenCaptureAudio;
-
   /// Whether to publish the video captured from the screen: true : Publish the video captured from the screen. false : Do not publish the video captured from the screen. This parameter is for Android and iOS only.
   @JsonKey(name: 'publishScreenCaptureVideo')
   final bool? publishScreenCaptureVideo;
+
+  /// Whether to publish the audio captured from the screen: true : Publish the audio captured from the screen. false : Publish the audio captured from the screen. This parameter is for Android and iOS only.
+  @JsonKey(name: 'publishScreenCaptureAudio')
+  final bool? publishScreenCaptureAudio;
 
   /// Whether to publish the video captured from the screen: true : Publish the video captured from the screen. false : Do not publish the video captured from the screen. This is for Windows and macOS only.
   @JsonKey(name: 'publishScreenTrack')
@@ -2155,7 +2155,7 @@ class RtcEngineEventHandler {
   /// When the state of the virtual metronome changes, the SDK triggers this callback to report the current state of the virtual metronome. This callback indicates the state of the local audio stream and enables you to troubleshoot issues when audio exceptions occur. This callback is for Android and iOS only.
   ///
   /// * [state] For the current virtual metronome status, see RhythmPlayerStateType.
-  /// * [errorCode] For the error codes and error messages related to virtual metronome errors, see RhythmPlayerReason.
+  /// * [reason] For the error codes and error messages related to virtual metronome errors, see RhythmPlayerReason.
   final void Function(RhythmPlayerStateType state, RhythmPlayerReason reason)?
       onRhythmPlayerStateChanged;
 
@@ -2202,7 +2202,7 @@ class RtcEngineEventHandler {
   /// * [connection] The connection information. See RtcConnection.
   /// * [remoteUid] The ID of the remote user sending the message.
   /// * [streamId] The stream ID of the received message.
-  /// * [code] Error code. See ErrorCodeType.
+  /// * [code] Error code.
   /// * [missed] The number of lost messages.
   /// * [cached] Number of incoming cached messages when the data stream is interrupted.
   final void Function(RtcConnection connection, int remoteUid, int streamId,
@@ -2622,7 +2622,7 @@ class RtcEngineEventHandler {
   final void Function(ExtensionContext context, String key, String value)?
       onExtensionEventWithContext;
 
-  /// Occurrs when the extension is enabled.
+  /// Occurs when the extension is enabled.
   ///
   /// The callback is triggered after the extension is successfully enabled.
   ///
@@ -2805,11 +2805,11 @@ class MetadataObserver {
 /// Metadata type of the observer. We only support video metadata for now.
 @JsonEnum(alwaysCreate: true)
 enum MetadataType {
-  /// The type of metadata is unknown.
+  /// -1: The type of metadata is unknown.
   @JsonValue(-1)
   unknownMetadata,
 
-  /// The type of metadata is video.
+  /// 0: The type of metadata is video.
   @JsonValue(0)
   videoMetadata,
 }
@@ -3307,7 +3307,7 @@ abstract class RtcEngine {
   ///  -7: The SDK is not initialized.
   Future<void> setChannelProfile(ChannelProfileType profile);
 
-  /// Set the user role and the audience latency level in a live streaming scenario.
+  /// Sets the user role and the audience latency level in a live streaming scenario.
   ///
   /// By default,the SDK sets the user role as audience. You can call this method to set the user role as host. The user role (roles) determines the users' permissions at the SDK level, including whether they can publish audio and video streams in a channel.
   ///
@@ -3647,7 +3647,7 @@ abstract class RtcEngine {
       {required AudioProfileType profile,
       AudioScenarioType scenario = AudioScenarioType.audioScenarioDefault});
 
-  /// Sets audio scenarios.
+  /// Sets the audio scenario.
   ///
   /// * [scenario] The audio scenarios. Under different audio scenarios, the device uses different volume types. See AudioScenarioType.
   ///
@@ -3781,7 +3781,7 @@ abstract class RtcEngine {
   Future<void> setRemoteVideoSubscriptionOptions(
       {required int uid, required VideoSubscriptionOptions options});
 
-  /// Set the blocklist of subscriptions for audio streams.
+  /// Sets the blocklist of subscriptions for audio streams.
   ///
   /// You can call this method to specify the audio streams of a user that you do not want to subscribe to.
   ///  You can call this method either before or after joining a channel.
@@ -3813,7 +3813,7 @@ abstract class RtcEngine {
   Future<void> setSubscribeAudioAllowlist(
       {required List<int> uidList, required int uidNumber});
 
-  /// Set the blocklist of subscriptions for video streams.
+  /// Sets the blocklist of subscriptions for video streams.
   ///
   /// You can call this method to specify the video streams of a user that you do not want to subscribe to.
   ///  If a user is added in the allowlist and blocklist at the same time, only the blocklist takes effect.
@@ -3829,7 +3829,7 @@ abstract class RtcEngine {
   Future<void> setSubscribeVideoBlocklist(
       {required List<int> uidList, required int uidNumber});
 
-  /// Set the allowlist of subscriptions for video streams.
+  /// Sets the allowlist of subscriptions for video streams.
   ///
   /// You can call this method to specify the video streams of a user that you want to subscribe to.
   ///  If a user is added in the allowlist and blocklist at the same time, only the blocklist takes effect.
@@ -3919,12 +3919,12 @@ abstract class RtcEngine {
   /// For the audio file formats supported by this method, see What formats of audio files does the Agora RTC SDK support. If the local music file does not exist, the SDK does not support the file format, or the the SDK cannot access the music file URL, the SDK reports audioMixingReasonCanNotOpen.
   ///
   /// * [filePath] File path:
-  ///  Android: The file path, which needs to be accurate to the file name and suffix. Agora supports URL addresses, absolute paths, or file paths that start with /assets/. You might encounter permission issues if you use an absolute path to access a local file, so Agora recommends using a URI address instead. For example : content://com.android.providers.media.documents/document/audio%3A14441
-  ///  Windows: The absolute path or URL address (including the suffixes of the filename) of the audio effect file. For example : C:\music\audio.mp4.
+  ///  Android: The file path, which needs to be accurate to the file name and suffix. Agora supports URL addresses, absolute paths, or file paths that start with /assets/. You might encounter permission issues if you use an absolute path to access a local file, so Agora recommends using a URI address instead. For example: content://com.android.providers.media.documents/document/audio%3A14441
+  ///  Windows: The absolute path or URL address (including the suffixes of the filename) of the audio effect file. For example: C:\music\audio.mp4.
   ///  iOS or macOS: The absolute path or URL address (including the suffixes of the filename) of the audio effect file. For example: /var/mobile/Containers/Data/audio.mp4.
   /// * [loopback] Whether to only play music files on the local client: true : Only play music files on the local client so that only the local user can hear the music. false : Publish music files to remote clients so that both the local user and remote users can hear the music.
   /// * [cycle] The number of times the music file plays.
-  ///  >0: The number of times for playback. For example, 1 represents playing 1 time.
+  ///  > 0: The number of times for playback. For example, 1 represents playing 1 time.
   ///  -1: Play the audio file in an infinite loop.
   /// * [startPos] The playback position (ms) of the music file.
   ///
@@ -4112,8 +4112,8 @@ abstract class RtcEngine {
   ///
   /// * [soundId] The audio effect ID. The ID of each audio effect file is unique.
   /// * [filePath] File path:
-  ///  Android: The file path, which needs to be accurate to the file name and suffix. Agora supports URL addresses, absolute paths, or file paths that start with /assets/. You might encounter permission issues if you use an absolute path to access a local file, so Agora recommends using a URI address instead. For example : content://com.android.providers.media.documents/document/audio%3A14441
-  ///  Windows: The absolute path or URL address (including the suffixes of the filename) of the audio effect file. For example : C:\music\audio.mp4.
+  ///  Android: The file path, which needs to be accurate to the file name and suffix. Agora supports URL addresses, absolute paths, or file paths that start with /assets/. You might encounter permission issues if you use an absolute path to access a local file, so Agora recommends using a URI address instead. For example: content://com.android.providers.media.documents/document/audio%3A14441
+  ///  Windows: The absolute path or URL address (including the suffixes of the filename) of the audio effect file. For example: C:\music\audio.mp4.
   ///  iOS or macOS: The absolute path or URL address (including the suffixes of the filename) of the audio effect file. For example: /var/mobile/Containers/Data/audio.mp4.
   /// * [startPos] The playback position (ms) of the audio effect file.
   ///
@@ -4265,8 +4265,8 @@ abstract class RtcEngine {
   /// Call this method after joining a channel.
   ///
   /// * [filePath] File path:
-  ///  Android: The file path, which needs to be accurate to the file name and suffix. Agora supports URL addresses, absolute paths, or file paths that start with /assets/. You might encounter permission issues if you use an absolute path to access a local file, so Agora recommends using a URI address instead. For example : content://com.android.providers.media.documents/document/audio%3A14441
-  ///  Windows: The absolute path or URL address (including the suffixes of the filename) of the audio effect file. For example : C:\music\audio.mp4.
+  ///  Android: The file path, which needs to be accurate to the file name and suffix. Agora supports URL addresses, absolute paths, or file paths that start with /assets/. You might encounter permission issues if you use an absolute path to access a local file, so Agora recommends using a URI address instead. For example: content://com.android.providers.media.documents/document/audio%3A14441
+  ///  Windows: The absolute path or URL address (including the suffixes of the filename) of the audio effect file. For example: C:\music\audio.mp4.
   ///  iOS or macOS: The absolute path or URL address (including the suffixes of the filename) of the audio effect file. For example: /var/mobile/Containers/Data/audio.mp4.
   ///
   /// Returns
@@ -4444,7 +4444,7 @@ abstract class RtcEngine {
   /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown. You need to catch the exception and handle it accordingly.
   Future<void> setLocalVoicePitch(double pitch);
 
-  /// Set the formant ratio to change the timbre of human voice.
+  /// Sets the formant ratio to change the timbre of human voice.
   ///
   /// Formant ratio affects the timbre of voice. The smaller the value, the deeper the sound will be, and the larger, the sharper. After you set the formant ratio, all users in the channel can hear the changed voice. If you want to change the timbre and pitch of voice at the same time, Agora recommends using this method together with setLocalVoicePitch.
   ///
@@ -4717,7 +4717,7 @@ abstract class RtcEngine {
       required RawAudioFrameOpModeType mode,
       required int samplesPerCall});
 
-  /// Set the format of the raw audio data after mixing for audio capture and playback.
+  /// Sets the format of the raw audio data after mixing for audio capture and playback.
   ///
   /// The SDK calculates the sampling interval based on the samplesPerCall, sampleRate and channel parameters set in this method. Sample interval (sec) = samplePerCall /(sampleRate × channel). Ensure that the sample interval ≥ 0.01 (s). The SDK triggers the onMixedAudioFrame callback according to the sampling interval.
   ///
@@ -4788,7 +4788,7 @@ abstract class RtcEngine {
   /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown. You need to catch the exception and handle it accordingly.
   Future<void> disableAudioSpectrumMonitor();
 
-  /// Register an audio spectrum observer.
+  /// Registers an audio spectrum observer.
   ///
   /// After successfully registering the audio spectrum observer and calling enableAudioSpectrumMonitor to enable the audio spectrum monitoring, the SDK reports the callback that you implement in the AudioSpectrumObserver class according to the time interval you set. You can call this method either before or after joining a channel.
   ///
@@ -5137,7 +5137,7 @@ abstract class RtcEngine {
   /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown. You need to catch the exception and handle it accordingly.
   Future<void> enableFaceDetection(bool enabled);
 
-  /// Get the maximum zoom ratio supported by the camera.
+  /// Gets the maximum zoom ratio supported by the camera.
   ///
   /// This method must be called after the SDK triggers the onLocalVideoStateChanged callback and returns the local video state as localVideoStreamStateCapturing (1).
   ///  This method is for Android and iOS only.
@@ -5175,7 +5175,7 @@ abstract class RtcEngine {
   ///
   /// By default, the SDK disables face autofocus on Android and enables face autofocus on iOS. To set face autofocus, call this method. This method is for Android and iOS only.
   ///
-  /// * [enabled] Whether to enable face autofocus: true : Enable the camera auto-face focus function. false : Disable face autofocus.
+  /// * [enabled] Whether to enable face autofocus: true : Enable the camera auto-face focus function. false : Disable face auto-focus.
   ///
   /// Returns
   /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown. You need to catch the exception and handle it accordingly.
@@ -5249,7 +5249,7 @@ abstract class RtcEngine {
   /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown. You need to catch the exception and handle it accordingly.
   Future<void> setCameraAutoExposureFaceModeEnabled(bool enabled);
 
-  /// Set the camera stabilization mode.
+  /// Sets the camera stabilization mode.
   ///
   /// This method applies to iOS only. The camera stabilization mode is off by default. You need to call this method to turn it on and set the appropriate stabilization mode.
   ///
@@ -5275,7 +5275,7 @@ abstract class RtcEngine {
 
   /// Enables/Disables the audio route to the speakerphone.
   ///
-  /// For the default audio route in different scenarios, see. This method is for Android and iOS only.
+  /// This method is for Android and iOS only.
   ///
   /// * [speakerOn] Sets whether to enable the speakerphone or earpiece: true : Enable device state monitoring. The audio route is the speakerphone. false : Disable device state monitoring. The audio route is the earpiece.
   ///
@@ -5309,7 +5309,7 @@ abstract class RtcEngine {
   /// Without practical meaning.
   Future<void> setRouteInCommunicationMode(int route);
 
-  /// Check if the camera supports portrait center stage.
+  /// Checks if the camera supports portrait center stage.
   ///
   /// This method is for iOS and macOS only. Before calling enableCameraCenterStage to enable portrait center stage, it is recommended to call this method to check if the current device supports the feature.
   ///
@@ -5345,7 +5345,7 @@ abstract class RtcEngine {
   /// Sets the operational permission of the SDK on the audio session.
   ///
   /// The SDK and the app can both configure the audio session by default. If you need to only use the app to configure the audio session, this method restricts the operational permission of the SDK on the audio session. You can call this method either before or after joining a channel. Once you call this method to restrict the operational permission of the SDK on the audio session, the restriction takes effect when the SDK needs to change the audio session.
-  ///  This method is only available for iOS platforms.
+  ///  This method is only available for iOS.
   ///  This method does not restrict the operational permission of the app on the audio session.
   ///
   /// * [restriction] The operational permission of the SDK on the audio session. See AudioSessionOperationRestriction. This parameter is in bit mask format, and each bit corresponds to a permission.
@@ -5514,7 +5514,12 @@ abstract class RtcEngine {
   /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown. You need to catch the exception and handle it accordingly.
   Future<void> stopScreenCapture();
 
-  /// @nodoc
+  /// Retrieves the call ID.
+  ///
+  /// When a user joins a channel on a client, a callId is generated to identify the call from the client. You can call this method to get callId, and pass it in when calling methods such as rate and complain.
+  ///
+  /// Returns
+  /// The current call ID.
   Future<String> getCallId();
 
   /// Allows a user to rate a call after the call ends.
@@ -5702,7 +5707,7 @@ abstract class RtcEngine {
   /// The current connection state. See ConnectionStateType.
   Future<ConnectionStateType> getConnectionState();
 
-  /// Adds event handlers
+  /// Adds event handlers.
   ///
   /// The SDK uses the RtcEngineEventHandler class to send callbacks to the app. The app inherits the methods of this class to receive these callbacks. All methods in this class have default (empty) implementations. Therefore, apps only need to inherits callbacks according to the scenarios. In the callbacks, avoid time-consuming tasks or calling APIs that can block the thread, such as the sendStreamMessage method. Otherwise, the SDK may not work properly.
   ///
@@ -5984,7 +5989,7 @@ abstract class RtcEngine {
 
   /// Gets the user information by passing in the user ID.
   ///
-  /// After a remote user joins the channel, the SDK gets the UID and user account of the remote user, caches them in a mapping table object, and triggers the onUserInfoUpdated callback on the local client. After receiving the callback, you can call this method and passi in the UID.to get the user account of the specified user from the UserInfo object.
+  /// After a remote user joins the channel, the SDK gets the UID and user account of the remote user, caches them in a mapping table object, and triggers the onUserInfoUpdated callback on the local client. After receiving the callback, you can call this method and pass in the UID to get the user account of the specified user from the UserInfo object.
   ///
   /// * [uid] The user ID.
   ///
@@ -6226,7 +6231,7 @@ abstract class RtcEngine {
   /// Monotonic Time refers to a monotonically increasing time series whose value increases over time. The unit is milliseconds. In custom video capture and custom audio capture scenarios, in order to ensure audio and video synchronization, Agora recommends that you call this method to obtain the current Monotonic Time of the SDK, and then pass this value into the timestamp parameter in the captured video frame (VideoFrame) and audio frame (AudioFrame).
   ///
   /// Returns
-  /// ≥0: The method call is successful, and returns the current Monotonic Time of the SDK (in milliseconds).
+  /// ≥ 0: The method call is successful, and returns the current Monotonic Time of the SDK (in milliseconds).
   ///  < 0: Failure.
   Future<int> getCurrentMonotonicTimeInMs();
 
@@ -6328,7 +6333,7 @@ abstract class RtcEngine {
   ///
   /// This method releases all resources used by the Agora SDK. Use this method for apps in which users occasionally make voice or video calls. When users do not make calls, you can free up resources for other operations. After a successful method call, you can no longer use any method or callback in the SDK anymore. If you want to use the real-time communication functions again, you must call createAgoraRtcEngine and initialize to create a new RtcEngine instance.
   ///  This method can be called synchronously. You need to wait for the resource of RtcEngine to be released before performing other operations (for example, create a new RtcEngine object). Therefore, Agora recommends calling this method in the child thread to avoid blocking the main thread.
-  ///  Besides, Agora does not recommend you calling release in any callback of the SDK. Otherwise, the SDK cannot release the resources until the callbacks return results, which may result in a deadlock.
+  ///  Agora does not recommend you calling release in any callback of the SDK. Otherwise, the SDK cannot release the resources until the callbacks return results, which may result in a deadlock.
   ///
   /// * [sync] Whether the method is called synchronously: true : Synchronous call. false : Asynchronous call. Currently this method only supports synchronous calls. Do not set this parameter to this value.
   Future<void> release({bool sync = false});
