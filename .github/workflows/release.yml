@@ -5,7 +5,7 @@ on:
   workflow_dispatch:
     inputs:
       increment:
-        description: 'The version to be released (e.g., 2.2.6 for standard, 2.2.6-sp.2262 for special)'
+        description: 'The version to be released (e.g., 6.5.3 for standard, 6.5.3-sp.453163 for special)'
         required: true
         type: string
       dry-run:
@@ -18,7 +18,7 @@ on:
   workflow_call:
     inputs:
       increment:
-        description: 'The version to be released (e.g., 2.2.6 for standard, 2.2.6-sp.2262 for special)'
+        description: 'The version to be released (e.g., 6.5.3 for standard, 6.5.3-sp.453163 for special)'
         required: false
         type: string
       dry-run:
@@ -122,7 +122,7 @@ jobs:
               echo "🚀 Detected standard release version: $RELEASE_VERSION"
             else
               # Special version: any version with suffix
-              # Examples: 2.2.6-beta.1, 2.2.6-rc.2, 2.2.6-sp.2262, 2.2.6+build.123
+              # Examples: 6.5.3-beta.1, 6.5.3-rc.2, 6.5.3-sp.452163, 6.5.3+build.123
               RELEASE_TYPE="special"
               IS_PRERELEASE="true"
               echo "🔧 Detected special release version: $RELEASE_VERSION"
