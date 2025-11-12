@@ -243,7 +243,7 @@ function callApiImplBlock(
     `
 ${apiType}
 ${paramJsonMapBlock.map((it) => it.preInitBlock).join("\n")}
-final param = createParams({
+final requestParam = createParams({
   ${paramJsonMapBlock
     .filter((it) => it.jsonKey && it.jsonValue)
     .map((it) => `${it.nullCheckBlock}'${it.jsonKey}': ${it.jsonValue}`)
@@ -251,7 +251,7 @@ final param = createParams({
 });
 ${isNeedAddBufferExtBlock ? "final List<Uint8List> buffers = [];" : ""}
 ${paramJsonMapBlock.map((it) => it.addBufferExtBlock).join("\n")}
-final callApiResult = await irisMethodChannel.invokeMethod(IrisMethodCall(apiType, jsonEncode(param), buffers:${buffersValueInJsonMap}));
+final callApiResult = await irisMethodChannel.invokeMethod(IrisMethodCall(apiType, jsonEncode(requestParam), buffers:${buffersValueInJsonMap}));
 if (callApiResult.irisReturnCode < 0) {
   throw AgoraRtcException(code: callApiResult.irisReturnCode);
 }
