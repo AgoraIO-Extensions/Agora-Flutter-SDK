@@ -629,8 +629,8 @@ ChannelMediaOptions _$ChannelMediaOptionsFromJson(Map<String, dynamic> json) =>
       publishThirdCameraTrack: json['publishThirdCameraTrack'] as bool?,
       publishFourthCameraTrack: json['publishFourthCameraTrack'] as bool?,
       publishMicrophoneTrack: json['publishMicrophoneTrack'] as bool?,
-      publishScreenCaptureVideo: json['publishScreenCaptureVideo'] as bool?,
       publishScreenCaptureAudio: json['publishScreenCaptureAudio'] as bool?,
+      publishScreenCaptureVideo: json['publishScreenCaptureVideo'] as bool?,
       publishScreenTrack: json['publishScreenTrack'] as bool?,
       publishSecondaryScreenTrack: json['publishSecondaryScreenTrack'] as bool?,
       publishThirdScreenTrack: json['publishThirdScreenTrack'] as bool?,
@@ -688,8 +688,8 @@ Map<String, dynamic> _$ChannelMediaOptionsToJson(ChannelMediaOptions instance) {
   writeNotNull('publishThirdCameraTrack', instance.publishThirdCameraTrack);
   writeNotNull('publishFourthCameraTrack', instance.publishFourthCameraTrack);
   writeNotNull('publishMicrophoneTrack', instance.publishMicrophoneTrack);
-  writeNotNull('publishScreenCaptureVideo', instance.publishScreenCaptureVideo);
   writeNotNull('publishScreenCaptureAudio', instance.publishScreenCaptureAudio);
+  writeNotNull('publishScreenCaptureVideo', instance.publishScreenCaptureVideo);
   writeNotNull('publishScreenTrack', instance.publishScreenTrack);
   writeNotNull(
       'publishSecondaryScreenTrack', instance.publishSecondaryScreenTrack);
@@ -755,6 +755,7 @@ LeaveChannelOptions _$LeaveChannelOptionsFromJson(Map<String, dynamic> json) =>
     LeaveChannelOptions(
       stopAudioMixing: json['stopAudioMixing'] as bool?,
       stopAllEffect: json['stopAllEffect'] as bool?,
+      unloadAllEffect: json['unloadAllEffect'] as bool?,
       stopMicrophoneRecording: json['stopMicrophoneRecording'] as bool?,
     );
 
@@ -769,6 +770,7 @@ Map<String, dynamic> _$LeaveChannelOptionsToJson(LeaveChannelOptions instance) {
 
   writeNotNull('stopAudioMixing', instance.stopAudioMixing);
   writeNotNull('stopAllEffect', instance.stopAllEffect);
+  writeNotNull('unloadAllEffect', instance.unloadAllEffect);
   writeNotNull('stopMicrophoneRecording', instance.stopMicrophoneRecording);
   return val;
 }
@@ -1133,6 +1135,18 @@ const _$ProxyTypeEnumMap = {
 const _$FeatureTypeEnumMap = {
   FeatureType.videoVirtualBackground: 1,
   FeatureType.videoBeautyEffect: 2,
+};
+
+const _$VideoEffectNodeIdEnumMap = {
+  VideoEffectNodeId.beauty: 1,
+  VideoEffectNodeId.styleMakeup: 2,
+  VideoEffectNodeId.filter: 4,
+  VideoEffectNodeId.sticker: 8,
+};
+
+const _$VideoEffectActionEnumMap = {
+  VideoEffectAction.save: 1,
+  VideoEffectAction.reset: 2,
 };
 
 const _$MetadataTypeEnumMap = {

@@ -412,6 +412,9 @@ abstract class MediaPlayer {
   Future<void> setSoundPositionParams(
       {required double pan, required double gain});
 
+  /// @nodoc
+  Future<int> getAudioBufferDelay();
+
   /// Sets media player options.
   ///
   /// The media player supports setting options through key and value. The difference between this method and setPlayerOptionInString is that the value parameter of this method is of type Int, while the value of setPlayerOptionInString is of type String. These two methods cannot be used together.

@@ -45,8 +45,8 @@ void rtcEngineExSmokeTestCases() {
         bool optionsPublishThirdCameraTrack = true;
         bool optionsPublishFourthCameraTrack = true;
         bool optionsPublishMicrophoneTrack = true;
-        bool optionsPublishScreenCaptureVideo = true;
         bool optionsPublishScreenCaptureAudio = true;
+        bool optionsPublishScreenCaptureVideo = true;
         bool optionsPublishScreenTrack = true;
         bool optionsPublishSecondaryScreenTrack = true;
         bool optionsPublishThirdScreenTrack = true;
@@ -79,8 +79,8 @@ void rtcEngineExSmokeTestCases() {
           publishThirdCameraTrack: optionsPublishThirdCameraTrack,
           publishFourthCameraTrack: optionsPublishFourthCameraTrack,
           publishMicrophoneTrack: optionsPublishMicrophoneTrack,
-          publishScreenCaptureVideo: optionsPublishScreenCaptureVideo,
           publishScreenCaptureAudio: optionsPublishScreenCaptureAudio,
+          publishScreenCaptureVideo: optionsPublishScreenCaptureVideo,
           publishScreenTrack: optionsPublishScreenTrack,
           publishSecondaryScreenTrack: optionsPublishSecondaryScreenTrack,
           publishThirdScreenTrack: optionsPublishThirdScreenTrack,
@@ -156,10 +156,12 @@ void rtcEngineExSmokeTestCases() {
         );
         bool optionsStopAudioMixing = true;
         bool optionsStopAllEffect = true;
+        bool optionsUnloadAllEffect = true;
         bool optionsStopMicrophoneRecording = true;
         LeaveChannelOptions options = LeaveChannelOptions(
           stopAudioMixing: optionsStopAudioMixing,
           stopAllEffect: optionsStopAllEffect,
+          unloadAllEffect: optionsUnloadAllEffect,
           stopMicrophoneRecording: optionsStopMicrophoneRecording,
         );
         await rtcEngineEx.leaveChannelEx(
@@ -201,10 +203,12 @@ void rtcEngineExSmokeTestCases() {
         String userAccount = "hello";
         bool optionsStopAudioMixing = true;
         bool optionsStopAllEffect = true;
+        bool optionsUnloadAllEffect = true;
         bool optionsStopMicrophoneRecording = true;
         LeaveChannelOptions options = LeaveChannelOptions(
           stopAudioMixing: optionsStopAudioMixing,
           stopAllEffect: optionsStopAllEffect,
+          unloadAllEffect: optionsUnloadAllEffect,
           stopMicrophoneRecording: optionsStopMicrophoneRecording,
         );
         await rtcEngineEx.leaveChannelWithUserAccountEx(
@@ -257,8 +261,8 @@ void rtcEngineExSmokeTestCases() {
         bool optionsPublishThirdCameraTrack = true;
         bool optionsPublishFourthCameraTrack = true;
         bool optionsPublishMicrophoneTrack = true;
-        bool optionsPublishScreenCaptureVideo = true;
         bool optionsPublishScreenCaptureAudio = true;
+        bool optionsPublishScreenCaptureVideo = true;
         bool optionsPublishScreenTrack = true;
         bool optionsPublishSecondaryScreenTrack = true;
         bool optionsPublishThirdScreenTrack = true;
@@ -291,8 +295,8 @@ void rtcEngineExSmokeTestCases() {
           publishThirdCameraTrack: optionsPublishThirdCameraTrack,
           publishFourthCameraTrack: optionsPublishFourthCameraTrack,
           publishMicrophoneTrack: optionsPublishMicrophoneTrack,
-          publishScreenCaptureVideo: optionsPublishScreenCaptureVideo,
           publishScreenCaptureAudio: optionsPublishScreenCaptureAudio,
+          publishScreenCaptureVideo: optionsPublishScreenCaptureVideo,
           publishScreenTrack: optionsPublishScreenTrack,
           publishSecondaryScreenTrack: optionsPublishSecondaryScreenTrack,
           publishThirdScreenTrack: optionsPublishThirdScreenTrack,
@@ -2457,6 +2461,161 @@ void rtcEngineExSmokeTestCases() {
         if (e is! AgoraRtcException) {
           debugPrint(
               '[RtcEngineEx.sendAudioMetadataEx] error: ${e.toString()}');
+          rethrow;
+        }
+
+        if (e.code != -4) {
+          // Only not supported error supported.
+          rethrow;
+        }
+      }
+
+      await rtcEngineEx.release();
+    },
+//  skip: !(),
+  );
+
+  testWidgets(
+    'RtcEngineEx.enableVideoImageSourceEx',
+    (WidgetTester tester) async {
+      String engineAppId = const String.fromEnvironment('TEST_APP_ID',
+          defaultValue: '<YOUR_APP_ID>');
+
+      RtcEngineEx rtcEngineEx = createAgoraRtcEngineEx();
+      await rtcEngineEx.initialize(RtcEngineContext(
+        appId: engineAppId,
+        areaCode: AreaCode.areaCodeGlob.value(),
+      ));
+      await rtcEngineEx.setParameters('{"rtc.enable_debug_log": true}');
+
+      try {
+        bool enable = true;
+        VideoMirrorModeType optionsMirrorMode =
+            VideoMirrorModeType.videoMirrorModeAuto;
+        String optionsImageUrl = "hello";
+        int optionsFps = 5;
+        ImageTrackOptions options = ImageTrackOptions(
+          imageUrl: optionsImageUrl,
+          fps: optionsFps,
+          mirrorMode: optionsMirrorMode,
+        );
+        String connectionChannelId = "hello";
+        int connectionLocalUid = 5;
+        RtcConnection connection = RtcConnection(
+          channelId: connectionChannelId,
+          localUid: connectionLocalUid,
+        );
+        await rtcEngineEx.enableVideoImageSourceEx(
+          enable: enable,
+          options: options,
+          connection: connection,
+        );
+      } catch (e) {
+        if (e is! AgoraRtcException) {
+          debugPrint(
+              '[RtcEngineEx.enableVideoImageSourceEx] error: ${e.toString()}');
+          rethrow;
+        }
+
+        if (e.code != -4) {
+          // Only not supported error supported.
+          rethrow;
+        }
+      }
+
+      await rtcEngineEx.release();
+    },
+//  skip: !(),
+  );
+
+  testWidgets(
+    'RtcEngineEx.preloadEffectEx',
+    (WidgetTester tester) async {
+      String engineAppId = const String.fromEnvironment('TEST_APP_ID',
+          defaultValue: '<YOUR_APP_ID>');
+
+      RtcEngineEx rtcEngineEx = createAgoraRtcEngineEx();
+      await rtcEngineEx.initialize(RtcEngineContext(
+        appId: engineAppId,
+        areaCode: AreaCode.areaCodeGlob.value(),
+      ));
+      await rtcEngineEx.setParameters('{"rtc.enable_debug_log": true}');
+
+      try {
+        String connectionChannelId = "hello";
+        int connectionLocalUid = 5;
+        RtcConnection connection = RtcConnection(
+          channelId: connectionChannelId,
+          localUid: connectionLocalUid,
+        );
+        int soundId = 5;
+        String filePath = "hello";
+        int startPos = 5;
+        await rtcEngineEx.preloadEffectEx(
+          connection: connection,
+          soundId: soundId,
+          filePath: filePath,
+          startPos: startPos,
+        );
+      } catch (e) {
+        if (e is! AgoraRtcException) {
+          debugPrint('[RtcEngineEx.preloadEffectEx] error: ${e.toString()}');
+          rethrow;
+        }
+
+        if (e.code != -4) {
+          // Only not supported error supported.
+          rethrow;
+        }
+      }
+
+      await rtcEngineEx.release();
+    },
+//  skip: !(),
+  );
+
+  testWidgets(
+    'RtcEngineEx.playEffectEx',
+    (WidgetTester tester) async {
+      String engineAppId = const String.fromEnvironment('TEST_APP_ID',
+          defaultValue: '<YOUR_APP_ID>');
+
+      RtcEngineEx rtcEngineEx = createAgoraRtcEngineEx();
+      await rtcEngineEx.initialize(RtcEngineContext(
+        appId: engineAppId,
+        areaCode: AreaCode.areaCodeGlob.value(),
+      ));
+      await rtcEngineEx.setParameters('{"rtc.enable_debug_log": true}');
+
+      try {
+        String connectionChannelId = "hello";
+        int connectionLocalUid = 5;
+        RtcConnection connection = RtcConnection(
+          channelId: connectionChannelId,
+          localUid: connectionLocalUid,
+        );
+        int soundId = 5;
+        String filePath = "hello";
+        int loopCount = 5;
+        double pitch = 5.0;
+        double pan = 5.0;
+        int gain = 5;
+        bool publish = true;
+        int startPos = 5;
+        await rtcEngineEx.playEffectEx(
+          connection: connection,
+          soundId: soundId,
+          filePath: filePath,
+          loopCount: loopCount,
+          pitch: pitch,
+          pan: pan,
+          gain: gain,
+          publish: publish,
+          startPos: startPos,
+        );
+      } catch (e) {
+        if (e is! AgoraRtcException) {
+          debugPrint('[RtcEngineEx.playEffectEx] error: ${e.toString()}');
           rethrow;
         }
 

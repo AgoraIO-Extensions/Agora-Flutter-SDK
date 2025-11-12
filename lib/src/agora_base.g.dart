@@ -1482,18 +1482,35 @@ Map<String, dynamic> _$FaceShapeAreaOptionsToJson(
 
 const _$FaceShapeAreaEnumMap = {
   FaceShapeArea.faceShapeAreaNone: -1,
-  FaceShapeArea.faceShapeAreaHeadscale: 0,
-  FaceShapeArea.faceShapeAreaForehead: 1,
-  FaceShapeArea.faceShapeAreaFacecontour: 2,
-  FaceShapeArea.faceShapeAreaFacelength: 3,
-  FaceShapeArea.faceShapeAreaFacewidth: 4,
-  FaceShapeArea.faceShapeAreaCheekbone: 5,
-  FaceShapeArea.faceShapeAreaCheek: 6,
-  FaceShapeArea.faceShapeAreaChin: 7,
-  FaceShapeArea.faceShapeAreaEyescale: 8,
-  FaceShapeArea.faceShapeAreaNoselength: 9,
-  FaceShapeArea.faceShapeAreaNosewidth: 10,
-  FaceShapeArea.faceShapeAreaMouthscale: 11,
+  FaceShapeArea.faceShapeAreaHeadscale: 100,
+  FaceShapeArea.faceShapeAreaForehead: 101,
+  FaceShapeArea.faceShapeAreaFacecontour: 102,
+  FaceShapeArea.faceShapeAreaFacelength: 103,
+  FaceShapeArea.faceShapeAreaFacewidth: 104,
+  FaceShapeArea.faceShapeAreaCheekbone: 105,
+  FaceShapeArea.faceShapeAreaCheek: 106,
+  FaceShapeArea.faceShapeAreaMandible: 107,
+  FaceShapeArea.faceShapeAreaChin: 108,
+  FaceShapeArea.faceShapeAreaEyescale: 200,
+  FaceShapeArea.faceShapeAreaEyedistance: 201,
+  FaceShapeArea.faceShapeAreaEyeposition: 202,
+  FaceShapeArea.faceShapeAreaLowereyelid: 203,
+  FaceShapeArea.faceShapeAreaEyepupils: 204,
+  FaceShapeArea.faceShapeAreaEyeinnercorner: 205,
+  FaceShapeArea.faceShapeAreaEyeoutercorner: 206,
+  FaceShapeArea.faceShapeAreaNoselength: 300,
+  FaceShapeArea.faceShapeAreaNosewidth: 301,
+  FaceShapeArea.faceShapeAreaNosewing: 302,
+  FaceShapeArea.faceShapeAreaNoseroot: 303,
+  FaceShapeArea.faceShapeAreaNosebridge: 304,
+  FaceShapeArea.faceShapeAreaNosetip: 305,
+  FaceShapeArea.faceShapeAreaNosegeneral: 306,
+  FaceShapeArea.faceShapeAreaMouthscale: 400,
+  FaceShapeArea.faceShapeAreaMouthposition: 401,
+  FaceShapeArea.faceShapeAreaMouthsmile: 402,
+  FaceShapeArea.faceShapeAreaMouthlip: 403,
+  FaceShapeArea.faceShapeAreaEyebrowposition: 500,
+  FaceShapeArea.faceShapeAreaEyebrowthickness: 501,
 };
 
 FaceShapeBeautyOptions _$FaceShapeBeautyOptionsFromJson(
@@ -1523,6 +1540,7 @@ Map<String, dynamic> _$FaceShapeBeautyOptionsToJson(
 const _$FaceShapeBeautyStyleEnumMap = {
   FaceShapeBeautyStyle.faceShapeBeautyStyleFemale: 0,
   FaceShapeBeautyStyle.faceShapeBeautyStyleMale: 1,
+  FaceShapeBeautyStyle.faceShapeBeautyStyleNatural: 2,
 };
 
 FilterEffectOptions _$FilterEffectOptionsFromJson(Map<String, dynamic> json) =>
@@ -1720,9 +1738,41 @@ Map<String, dynamic> _$AudioTrackConfigToJson(AudioTrackConfig instance) {
   return val;
 }
 
+ScreenAudioParameters _$ScreenAudioParametersFromJson(
+        Map<String, dynamic> json) =>
+    ScreenAudioParameters(
+      sampleRate: (json['sampleRate'] as num?)?.toInt(),
+      channels: (json['channels'] as num?)?.toInt(),
+      captureSignalVolume: (json['captureSignalVolume'] as num?)?.toInt(),
+      excludeCurrentProcessAudio: json['excludeCurrentProcessAudio'] as bool?,
+    );
+
+Map<String, dynamic> _$ScreenAudioParametersToJson(
+    ScreenAudioParameters instance) {
+  final val = <String, dynamic>{};
+
+  void writeNotNull(String key, dynamic value) {
+    if (value != null) {
+      val[key] = value;
+    }
+  }
+
+  writeNotNull('sampleRate', instance.sampleRate);
+  writeNotNull('channels', instance.channels);
+  writeNotNull('captureSignalVolume', instance.captureSignalVolume);
+  writeNotNull(
+      'excludeCurrentProcessAudio', instance.excludeCurrentProcessAudio);
+  return val;
+}
+
 ScreenCaptureParameters _$ScreenCaptureParametersFromJson(
         Map<String, dynamic> json) =>
     ScreenCaptureParameters(
+      captureAudio: json['captureAudio'] as bool?,
+      audioParams: json['audioParams'] == null
+          ? null
+          : ScreenAudioParameters.fromJson(
+              json['audioParams'] as Map<String, dynamic>),
       dimensions: json['dimensions'] == null
           ? null
           : VideoDimensions.fromJson(
@@ -1751,6 +1801,8 @@ Map<String, dynamic> _$ScreenCaptureParametersToJson(
     }
   }
 
+  writeNotNull('captureAudio', instance.captureAudio);
+  writeNotNull('audioParams', instance.audioParams?.toJson());
   writeNotNull('dimensions', instance.dimensions?.toJson());
   writeNotNull('frameRate', instance.frameRate);
   writeNotNull('bitrate', instance.bitrate);
@@ -2119,30 +2171,6 @@ const _$VideoContentHintEnumMap = {
   VideoContentHint.contentHintMotion: 1,
   VideoContentHint.contentHintDetails: 2,
 };
-
-ScreenAudioParameters _$ScreenAudioParametersFromJson(
-        Map<String, dynamic> json) =>
-    ScreenAudioParameters(
-      sampleRate: (json['sampleRate'] as num?)?.toInt(),
-      channels: (json['channels'] as num?)?.toInt(),
-      captureSignalVolume: (json['captureSignalVolume'] as num?)?.toInt(),
-    );
-
-Map<String, dynamic> _$ScreenAudioParametersToJson(
-    ScreenAudioParameters instance) {
-  final val = <String, dynamic>{};
-
-  void writeNotNull(String key, dynamic value) {
-    if (value != null) {
-      val[key] = value;
-    }
-  }
-
-  writeNotNull('sampleRate', instance.sampleRate);
-  writeNotNull('channels', instance.channels);
-  writeNotNull('captureSignalVolume', instance.captureSignalVolume);
-  return val;
-}
 
 ScreenCaptureParameters2 _$ScreenCaptureParameters2FromJson(
         Map<String, dynamic> json) =>

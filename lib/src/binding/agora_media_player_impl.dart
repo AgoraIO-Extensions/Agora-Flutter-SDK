@@ -27,9 +27,9 @@ class MediaPlayerImpl implements MediaPlayer {
   int getMediaPlayerId() {
     // Implementation template
 // final apiType = '${isOverrideClassName ? className : 'MediaPlayer'}_getMediaPlayerId';
-// final param = createParams({
+// final requestParam = createParams({
 // });
-// final callApiResult = await irisMethodChannel.invokeMethod(IrisMethodCall(apiType, jsonEncode(param), buffers:null));
+// final callApiResult = await irisMethodChannel.invokeMethod(IrisMethodCall(apiType, jsonEncode(requestParam), buffers:null));
 // if (callApiResult.irisReturnCode < 0) {
 //   throw AgoraRtcException(code: callApiResult.irisReturnCode);
 // }
@@ -43,9 +43,9 @@ class MediaPlayerImpl implements MediaPlayer {
   Future<void> open({required String url, required int startPos}) async {
     final apiType =
         '${isOverrideClassName ? className : 'MediaPlayer'}_open_e43f201';
-    final param = createParams({'url': url, 'startPos': startPos});
+    final requestParam = createParams({'url': url, 'startPos': startPos});
     final callApiResult = await irisMethodChannel.invokeMethod(
-        IrisMethodCall(apiType, jsonEncode(param), buffers: null));
+        IrisMethodCall(apiType, jsonEncode(requestParam), buffers: null));
     if (callApiResult.irisReturnCode < 0) {
       throw AgoraRtcException(code: callApiResult.irisReturnCode);
     }
@@ -60,11 +60,11 @@ class MediaPlayerImpl implements MediaPlayer {
   Future<void> openWithMediaSource(MediaSource source) async {
     final apiType =
         '${isOverrideClassName ? className : 'MediaPlayer'}_openWithMediaSource_3c11499';
-    final param = createParams({'source': source.toJson()});
+    final requestParam = createParams({'source': source.toJson()});
     final List<Uint8List> buffers = [];
     buffers.addAll(source.collectBufferList());
     final callApiResult = await irisMethodChannel.invokeMethod(
-        IrisMethodCall(apiType, jsonEncode(param), buffers: buffers));
+        IrisMethodCall(apiType, jsonEncode(requestParam), buffers: buffers));
     if (callApiResult.irisReturnCode < 0) {
       throw AgoraRtcException(code: callApiResult.irisReturnCode);
     }
@@ -78,9 +78,9 @@ class MediaPlayerImpl implements MediaPlayer {
   @override
   Future<void> play() async {
     final apiType = '${isOverrideClassName ? className : 'MediaPlayer'}_play';
-    final param = createParams({});
+    final requestParam = createParams({});
     final callApiResult = await irisMethodChannel.invokeMethod(
-        IrisMethodCall(apiType, jsonEncode(param), buffers: null));
+        IrisMethodCall(apiType, jsonEncode(requestParam), buffers: null));
     if (callApiResult.irisReturnCode < 0) {
       throw AgoraRtcException(code: callApiResult.irisReturnCode);
     }
@@ -94,9 +94,9 @@ class MediaPlayerImpl implements MediaPlayer {
   @override
   Future<void> pause() async {
     final apiType = '${isOverrideClassName ? className : 'MediaPlayer'}_pause';
-    final param = createParams({});
+    final requestParam = createParams({});
     final callApiResult = await irisMethodChannel.invokeMethod(
-        IrisMethodCall(apiType, jsonEncode(param), buffers: null));
+        IrisMethodCall(apiType, jsonEncode(requestParam), buffers: null));
     if (callApiResult.irisReturnCode < 0) {
       throw AgoraRtcException(code: callApiResult.irisReturnCode);
     }
@@ -110,9 +110,9 @@ class MediaPlayerImpl implements MediaPlayer {
   @override
   Future<void> stop() async {
     final apiType = '${isOverrideClassName ? className : 'MediaPlayer'}_stop';
-    final param = createParams({});
+    final requestParam = createParams({});
     final callApiResult = await irisMethodChannel.invokeMethod(
-        IrisMethodCall(apiType, jsonEncode(param), buffers: null));
+        IrisMethodCall(apiType, jsonEncode(requestParam), buffers: null));
     if (callApiResult.irisReturnCode < 0) {
       throw AgoraRtcException(code: callApiResult.irisReturnCode);
     }
@@ -126,9 +126,9 @@ class MediaPlayerImpl implements MediaPlayer {
   @override
   Future<void> resume() async {
     final apiType = '${isOverrideClassName ? className : 'MediaPlayer'}_resume';
-    final param = createParams({});
+    final requestParam = createParams({});
     final callApiResult = await irisMethodChannel.invokeMethod(
-        IrisMethodCall(apiType, jsonEncode(param), buffers: null));
+        IrisMethodCall(apiType, jsonEncode(requestParam), buffers: null));
     if (callApiResult.irisReturnCode < 0) {
       throw AgoraRtcException(code: callApiResult.irisReturnCode);
     }
@@ -143,9 +143,9 @@ class MediaPlayerImpl implements MediaPlayer {
   Future<void> seek(int newPos) async {
     final apiType =
         '${isOverrideClassName ? className : 'MediaPlayer'}_seek_f631116';
-    final param = createParams({'newPos': newPos});
+    final requestParam = createParams({'newPos': newPos});
     final callApiResult = await irisMethodChannel.invokeMethod(
-        IrisMethodCall(apiType, jsonEncode(param), buffers: null));
+        IrisMethodCall(apiType, jsonEncode(requestParam), buffers: null));
     if (callApiResult.irisReturnCode < 0) {
       throw AgoraRtcException(code: callApiResult.irisReturnCode);
     }
@@ -160,9 +160,9 @@ class MediaPlayerImpl implements MediaPlayer {
   Future<void> setAudioPitch(int pitch) async {
     final apiType =
         '${isOverrideClassName ? className : 'MediaPlayer'}_setAudioPitch_46f8ab7';
-    final param = createParams({'pitch': pitch});
+    final requestParam = createParams({'pitch': pitch});
     final callApiResult = await irisMethodChannel.invokeMethod(
-        IrisMethodCall(apiType, jsonEncode(param), buffers: null));
+        IrisMethodCall(apiType, jsonEncode(requestParam), buffers: null));
     if (callApiResult.irisReturnCode < 0) {
       throw AgoraRtcException(code: callApiResult.irisReturnCode);
     }
@@ -177,9 +177,9 @@ class MediaPlayerImpl implements MediaPlayer {
   Future<int> getDuration() async {
     final apiType =
         '${isOverrideClassName ? className : 'MediaPlayer'}_getDuration_b12f121';
-    final param = createParams({});
+    final requestParam = createParams({});
     final callApiResult = await irisMethodChannel.invokeMethod(
-        IrisMethodCall(apiType, jsonEncode(param), buffers: null));
+        IrisMethodCall(apiType, jsonEncode(requestParam), buffers: null));
     if (callApiResult.irisReturnCode < 0) {
       throw AgoraRtcException(code: callApiResult.irisReturnCode);
     }
@@ -196,9 +196,9 @@ class MediaPlayerImpl implements MediaPlayer {
   Future<int> getPlayPosition() async {
     final apiType =
         '${isOverrideClassName ? className : 'MediaPlayer'}_getPlayPosition_b12f121';
-    final param = createParams({});
+    final requestParam = createParams({});
     final callApiResult = await irisMethodChannel.invokeMethod(
-        IrisMethodCall(apiType, jsonEncode(param), buffers: null));
+        IrisMethodCall(apiType, jsonEncode(requestParam), buffers: null));
     if (callApiResult.irisReturnCode < 0) {
       throw AgoraRtcException(code: callApiResult.irisReturnCode);
     }
@@ -215,9 +215,9 @@ class MediaPlayerImpl implements MediaPlayer {
   Future<int> getStreamCount() async {
     final apiType =
         '${isOverrideClassName ? className : 'MediaPlayer'}_getStreamCount_b12f121';
-    final param = createParams({});
+    final requestParam = createParams({});
     final callApiResult = await irisMethodChannel.invokeMethod(
-        IrisMethodCall(apiType, jsonEncode(param), buffers: null));
+        IrisMethodCall(apiType, jsonEncode(requestParam), buffers: null));
     if (callApiResult.irisReturnCode < 0) {
       throw AgoraRtcException(code: callApiResult.irisReturnCode);
     }
@@ -234,9 +234,9 @@ class MediaPlayerImpl implements MediaPlayer {
   Future<PlayerStreamInfo> getStreamInfo(int index) async {
     final apiType =
         '${isOverrideClassName ? className : 'MediaPlayer'}_getStreamInfo_0fa63fa';
-    final param = createParams({'index': index});
+    final requestParam = createParams({'index': index});
     final callApiResult = await irisMethodChannel.invokeMethod(
-        IrisMethodCall(apiType, jsonEncode(param), buffers: null));
+        IrisMethodCall(apiType, jsonEncode(requestParam), buffers: null));
     if (callApiResult.irisReturnCode < 0) {
       throw AgoraRtcException(code: callApiResult.irisReturnCode);
     }
@@ -253,9 +253,9 @@ class MediaPlayerImpl implements MediaPlayer {
   Future<void> setLoopCount(int loopCount) async {
     final apiType =
         '${isOverrideClassName ? className : 'MediaPlayer'}_setLoopCount_46f8ab7';
-    final param = createParams({'loopCount': loopCount});
+    final requestParam = createParams({'loopCount': loopCount});
     final callApiResult = await irisMethodChannel.invokeMethod(
-        IrisMethodCall(apiType, jsonEncode(param), buffers: null));
+        IrisMethodCall(apiType, jsonEncode(requestParam), buffers: null));
     if (callApiResult.irisReturnCode < 0) {
       throw AgoraRtcException(code: callApiResult.irisReturnCode);
     }
@@ -270,9 +270,9 @@ class MediaPlayerImpl implements MediaPlayer {
   Future<void> setPlaybackSpeed(int speed) async {
     final apiType =
         '${isOverrideClassName ? className : 'MediaPlayer'}_setPlaybackSpeed_46f8ab7';
-    final param = createParams({'speed': speed});
+    final requestParam = createParams({'speed': speed});
     final callApiResult = await irisMethodChannel.invokeMethod(
-        IrisMethodCall(apiType, jsonEncode(param), buffers: null));
+        IrisMethodCall(apiType, jsonEncode(requestParam), buffers: null));
     if (callApiResult.irisReturnCode < 0) {
       throw AgoraRtcException(code: callApiResult.irisReturnCode);
     }
@@ -287,9 +287,9 @@ class MediaPlayerImpl implements MediaPlayer {
   Future<void> selectAudioTrack(int index) async {
     final apiType =
         '${isOverrideClassName ? className : 'MediaPlayer'}_selectAudioTrack_46f8ab7';
-    final param = createParams({'index': index});
+    final requestParam = createParams({'index': index});
     final callApiResult = await irisMethodChannel.invokeMethod(
-        IrisMethodCall(apiType, jsonEncode(param), buffers: null));
+        IrisMethodCall(apiType, jsonEncode(requestParam), buffers: null));
     if (callApiResult.irisReturnCode < 0) {
       throw AgoraRtcException(code: callApiResult.irisReturnCode);
     }
@@ -305,12 +305,12 @@ class MediaPlayerImpl implements MediaPlayer {
       {required int playoutTrackIndex, required int publishTrackIndex}) async {
     final apiType =
         '${isOverrideClassName ? className : 'MediaPlayer'}_selectMultiAudioTrack_4e92b3c';
-    final param = createParams({
+    final requestParam = createParams({
       'playoutTrackIndex': playoutTrackIndex,
       'publishTrackIndex': publishTrackIndex
     });
     final callApiResult = await irisMethodChannel.invokeMethod(
-        IrisMethodCall(apiType, jsonEncode(param), buffers: null));
+        IrisMethodCall(apiType, jsonEncode(requestParam), buffers: null));
     if (callApiResult.irisReturnCode < 0) {
       throw AgoraRtcException(code: callApiResult.irisReturnCode);
     }
@@ -325,9 +325,9 @@ class MediaPlayerImpl implements MediaPlayer {
   Future<void> takeScreenshot(String filename) async {
     final apiType =
         '${isOverrideClassName ? className : 'MediaPlayer'}_takeScreenshot_3a2037f';
-    final param = createParams({'filename': filename});
+    final requestParam = createParams({'filename': filename});
     final callApiResult = await irisMethodChannel.invokeMethod(
-        IrisMethodCall(apiType, jsonEncode(param), buffers: null));
+        IrisMethodCall(apiType, jsonEncode(requestParam), buffers: null));
     if (callApiResult.irisReturnCode < 0) {
       throw AgoraRtcException(code: callApiResult.irisReturnCode);
     }
@@ -342,9 +342,9 @@ class MediaPlayerImpl implements MediaPlayer {
   Future<void> selectInternalSubtitle(int index) async {
     final apiType =
         '${isOverrideClassName ? className : 'MediaPlayer'}_selectInternalSubtitle_46f8ab7';
-    final param = createParams({'index': index});
+    final requestParam = createParams({'index': index});
     final callApiResult = await irisMethodChannel.invokeMethod(
-        IrisMethodCall(apiType, jsonEncode(param), buffers: null));
+        IrisMethodCall(apiType, jsonEncode(requestParam), buffers: null));
     if (callApiResult.irisReturnCode < 0) {
       throw AgoraRtcException(code: callApiResult.irisReturnCode);
     }
@@ -359,9 +359,9 @@ class MediaPlayerImpl implements MediaPlayer {
   Future<void> setExternalSubtitle(String url) async {
     final apiType =
         '${isOverrideClassName ? className : 'MediaPlayer'}_setExternalSubtitle_3a2037f';
-    final param = createParams({'url': url});
+    final requestParam = createParams({'url': url});
     final callApiResult = await irisMethodChannel.invokeMethod(
-        IrisMethodCall(apiType, jsonEncode(param), buffers: null));
+        IrisMethodCall(apiType, jsonEncode(requestParam), buffers: null));
     if (callApiResult.irisReturnCode < 0) {
       throw AgoraRtcException(code: callApiResult.irisReturnCode);
     }
@@ -376,9 +376,9 @@ class MediaPlayerImpl implements MediaPlayer {
   Future<MediaPlayerState> getState() async {
     final apiType =
         '${isOverrideClassName ? className : 'MediaPlayer'}_getState';
-    final param = createParams({});
+    final requestParam = createParams({});
     final callApiResult = await irisMethodChannel.invokeMethod(
-        IrisMethodCall(apiType, jsonEncode(param), buffers: null));
+        IrisMethodCall(apiType, jsonEncode(requestParam), buffers: null));
     if (callApiResult.irisReturnCode < 0) {
       throw AgoraRtcException(code: callApiResult.irisReturnCode);
     }
@@ -391,9 +391,9 @@ class MediaPlayerImpl implements MediaPlayer {
   Future<void> mute(bool muted) async {
     final apiType =
         '${isOverrideClassName ? className : 'MediaPlayer'}_mute_5039d15';
-    final param = createParams({'muted': muted});
+    final requestParam = createParams({'muted': muted});
     final callApiResult = await irisMethodChannel.invokeMethod(
-        IrisMethodCall(apiType, jsonEncode(param), buffers: null));
+        IrisMethodCall(apiType, jsonEncode(requestParam), buffers: null));
     if (callApiResult.irisReturnCode < 0) {
       throw AgoraRtcException(code: callApiResult.irisReturnCode);
     }
@@ -408,9 +408,9 @@ class MediaPlayerImpl implements MediaPlayer {
   Future<bool> getMute() async {
     final apiType =
         '${isOverrideClassName ? className : 'MediaPlayer'}_getMute_c93e9d4';
-    final param = createParams({});
+    final requestParam = createParams({});
     final callApiResult = await irisMethodChannel.invokeMethod(
-        IrisMethodCall(apiType, jsonEncode(param), buffers: null));
+        IrisMethodCall(apiType, jsonEncode(requestParam), buffers: null));
     if (callApiResult.irisReturnCode < 0) {
       throw AgoraRtcException(code: callApiResult.irisReturnCode);
     }
@@ -427,9 +427,9 @@ class MediaPlayerImpl implements MediaPlayer {
   Future<void> adjustPlayoutVolume(int volume) async {
     final apiType =
         '${isOverrideClassName ? className : 'MediaPlayer'}_adjustPlayoutVolume_46f8ab7';
-    final param = createParams({'volume': volume});
+    final requestParam = createParams({'volume': volume});
     final callApiResult = await irisMethodChannel.invokeMethod(
-        IrisMethodCall(apiType, jsonEncode(param), buffers: null));
+        IrisMethodCall(apiType, jsonEncode(requestParam), buffers: null));
     if (callApiResult.irisReturnCode < 0) {
       throw AgoraRtcException(code: callApiResult.irisReturnCode);
     }
@@ -444,9 +444,9 @@ class MediaPlayerImpl implements MediaPlayer {
   Future<int> getPlayoutVolume() async {
     final apiType =
         '${isOverrideClassName ? className : 'MediaPlayer'}_getPlayoutVolume_9cfaa7e';
-    final param = createParams({});
+    final requestParam = createParams({});
     final callApiResult = await irisMethodChannel.invokeMethod(
-        IrisMethodCall(apiType, jsonEncode(param), buffers: null));
+        IrisMethodCall(apiType, jsonEncode(requestParam), buffers: null));
     if (callApiResult.irisReturnCode < 0) {
       throw AgoraRtcException(code: callApiResult.irisReturnCode);
     }
@@ -463,9 +463,9 @@ class MediaPlayerImpl implements MediaPlayer {
   Future<void> adjustPublishSignalVolume(int volume) async {
     final apiType =
         '${isOverrideClassName ? className : 'MediaPlayer'}_adjustPublishSignalVolume_46f8ab7';
-    final param = createParams({'volume': volume});
+    final requestParam = createParams({'volume': volume});
     final callApiResult = await irisMethodChannel.invokeMethod(
-        IrisMethodCall(apiType, jsonEncode(param), buffers: null));
+        IrisMethodCall(apiType, jsonEncode(requestParam), buffers: null));
     if (callApiResult.irisReturnCode < 0) {
       throw AgoraRtcException(code: callApiResult.irisReturnCode);
     }
@@ -480,9 +480,9 @@ class MediaPlayerImpl implements MediaPlayer {
   Future<int> getPublishSignalVolume() async {
     final apiType =
         '${isOverrideClassName ? className : 'MediaPlayer'}_getPublishSignalVolume_9cfaa7e';
-    final param = createParams({});
+    final requestParam = createParams({});
     final callApiResult = await irisMethodChannel.invokeMethod(
-        IrisMethodCall(apiType, jsonEncode(param), buffers: null));
+        IrisMethodCall(apiType, jsonEncode(requestParam), buffers: null));
     if (callApiResult.irisReturnCode < 0) {
       throw AgoraRtcException(code: callApiResult.irisReturnCode);
     }
@@ -500,9 +500,9 @@ class MediaPlayerImpl implements MediaPlayer {
   Future<void> setView(int view) async {
     final apiType =
         '${isOverrideClassName ? className : 'MediaPlayer'}_setView_cb1a81f';
-    final param = createParams({'view': view});
+    final requestParam = createParams({'view': view});
     final callApiResult = await irisMethodChannel.invokeMethod(
-        IrisMethodCall(apiType, jsonEncode(param), buffers: null));
+        IrisMethodCall(apiType, jsonEncode(requestParam), buffers: null));
     if (callApiResult.irisReturnCode < 0) {
       throw AgoraRtcException(code: callApiResult.irisReturnCode);
     }
@@ -517,9 +517,9 @@ class MediaPlayerImpl implements MediaPlayer {
   Future<void> setRenderMode(RenderModeType renderMode) async {
     final apiType =
         '${isOverrideClassName ? className : 'MediaPlayer'}_setRenderMode_bedb5ae';
-    final param = createParams({'renderMode': renderMode.value()});
+    final requestParam = createParams({'renderMode': renderMode.value()});
     final callApiResult = await irisMethodChannel.invokeMethod(
-        IrisMethodCall(apiType, jsonEncode(param), buffers: null));
+        IrisMethodCall(apiType, jsonEncode(requestParam), buffers: null));
     if (callApiResult.irisReturnCode < 0) {
       throw AgoraRtcException(code: callApiResult.irisReturnCode);
     }
@@ -534,10 +534,10 @@ class MediaPlayerImpl implements MediaPlayer {
   void registerPlayerSourceObserver(MediaPlayerSourceObserver observer) {
     // Implementation template
 // final apiType = '${isOverrideClassName ? className : 'MediaPlayer'}_registerPlayerSourceObserver_15621d7';
-// final param = createParams({
+// final requestParam = createParams({
 //   'observer': observer
 // });
-// final callApiResult = await irisMethodChannel.invokeMethod(IrisMethodCall(apiType, jsonEncode(param), buffers:null));
+// final callApiResult = await irisMethodChannel.invokeMethod(IrisMethodCall(apiType, jsonEncode(requestParam), buffers:null));
 // if (callApiResult.irisReturnCode < 0) {
 //   throw AgoraRtcException(code: callApiResult.irisReturnCode);
 // }
@@ -551,10 +551,10 @@ class MediaPlayerImpl implements MediaPlayer {
   void unregisterPlayerSourceObserver(MediaPlayerSourceObserver observer) {
     // Implementation template
 // final apiType = '${isOverrideClassName ? className : 'MediaPlayer'}_unregisterPlayerSourceObserver_15621d7';
-// final param = createParams({
+// final requestParam = createParams({
 //   'observer': observer
 // });
-// final callApiResult = await irisMethodChannel.invokeMethod(IrisMethodCall(apiType, jsonEncode(param), buffers:null));
+// final callApiResult = await irisMethodChannel.invokeMethod(IrisMethodCall(apiType, jsonEncode(requestParam), buffers:null));
 // if (callApiResult.irisReturnCode < 0) {
 //   throw AgoraRtcException(code: callApiResult.irisReturnCode);
 // }
@@ -571,10 +571,10 @@ class MediaPlayerImpl implements MediaPlayer {
           RawAudioFrameOpModeType.rawAudioFrameOpModeReadOnly}) {
     // Implementation template
 // final apiType = '${isOverrideClassName ? className : 'MediaPlayer'}_registerAudioFrameObserver_a5b510b';
-// final param = createParams({
+// final requestParam = createParams({
 //   'observer': observer,'mode': mode.value()
 // });
-// final callApiResult = await irisMethodChannel.invokeMethod(IrisMethodCall(apiType, jsonEncode(param), buffers:null));
+// final callApiResult = await irisMethodChannel.invokeMethod(IrisMethodCall(apiType, jsonEncode(requestParam), buffers:null));
 // if (callApiResult.irisReturnCode < 0) {
 //   throw AgoraRtcException(code: callApiResult.irisReturnCode);
 // }
@@ -588,10 +588,10 @@ class MediaPlayerImpl implements MediaPlayer {
   void unregisterAudioFrameObserver(AudioPcmFrameSink observer) {
     // Implementation template
 // final apiType = '${isOverrideClassName ? className : 'MediaPlayer'}_unregisterAudioFrameObserver_89ab9b5';
-// final param = createParams({
+// final requestParam = createParams({
 //   'observer': observer
 // });
-// final callApiResult = await irisMethodChannel.invokeMethod(IrisMethodCall(apiType, jsonEncode(param), buffers:null));
+// final callApiResult = await irisMethodChannel.invokeMethod(IrisMethodCall(apiType, jsonEncode(requestParam), buffers:null));
 // if (callApiResult.irisReturnCode < 0) {
 //   throw AgoraRtcException(code: callApiResult.irisReturnCode);
 // }
@@ -605,10 +605,10 @@ class MediaPlayerImpl implements MediaPlayer {
   void registerVideoFrameObserver(MediaPlayerVideoFrameObserver observer) {
     // Implementation template
 // final apiType = '${isOverrideClassName ? className : 'MediaPlayer'}_registerVideoFrameObserver_833bd8d';
-// final param = createParams({
+// final requestParam = createParams({
 //   'observer': observer
 // });
-// final callApiResult = await irisMethodChannel.invokeMethod(IrisMethodCall(apiType, jsonEncode(param), buffers:null));
+// final callApiResult = await irisMethodChannel.invokeMethod(IrisMethodCall(apiType, jsonEncode(requestParam), buffers:null));
 // if (callApiResult.irisReturnCode < 0) {
 //   throw AgoraRtcException(code: callApiResult.irisReturnCode);
 // }
@@ -622,10 +622,10 @@ class MediaPlayerImpl implements MediaPlayer {
   void unregisterVideoFrameObserver(MediaPlayerVideoFrameObserver observer) {
     // Implementation template
 // final apiType = '${isOverrideClassName ? className : 'MediaPlayer'}_unregisterVideoFrameObserver_5165d4c';
-// final param = createParams({
+// final requestParam = createParams({
 //   'observer': observer
 // });
-// final callApiResult = await irisMethodChannel.invokeMethod(IrisMethodCall(apiType, jsonEncode(param), buffers:null));
+// final callApiResult = await irisMethodChannel.invokeMethod(IrisMethodCall(apiType, jsonEncode(requestParam), buffers:null));
 // if (callApiResult.irisReturnCode < 0) {
 //   throw AgoraRtcException(code: callApiResult.irisReturnCode);
 // }
@@ -640,10 +640,10 @@ class MediaPlayerImpl implements MediaPlayer {
       {required AudioSpectrumObserver observer, required int intervalInMS}) {
     // Implementation template
 // final apiType = '${isOverrideClassName ? className : 'MediaPlayer'}_registerMediaPlayerAudioSpectrumObserver_226bb48';
-// final param = createParams({
+// final requestParam = createParams({
 //   'observer': observer,'intervalInMS': intervalInMS
 // });
-// final callApiResult = await irisMethodChannel.invokeMethod(IrisMethodCall(apiType, jsonEncode(param), buffers:null));
+// final callApiResult = await irisMethodChannel.invokeMethod(IrisMethodCall(apiType, jsonEncode(requestParam), buffers:null));
 // if (callApiResult.irisReturnCode < 0) {
 //   throw AgoraRtcException(code: callApiResult.irisReturnCode);
 // }
@@ -659,10 +659,10 @@ class MediaPlayerImpl implements MediaPlayer {
       AudioSpectrumObserver observer) {
     // Implementation template
 // final apiType = '${isOverrideClassName ? className : 'MediaPlayer'}_unregisterMediaPlayerAudioSpectrumObserver_09064ce';
-// final param = createParams({
+// final requestParam = createParams({
 //   'observer': observer
 // });
-// final callApiResult = await irisMethodChannel.invokeMethod(IrisMethodCall(apiType, jsonEncode(param), buffers:null));
+// final callApiResult = await irisMethodChannel.invokeMethod(IrisMethodCall(apiType, jsonEncode(requestParam), buffers:null));
 // if (callApiResult.irisReturnCode < 0) {
 //   throw AgoraRtcException(code: callApiResult.irisReturnCode);
 // }
@@ -677,9 +677,9 @@ class MediaPlayerImpl implements MediaPlayer {
   Future<void> setAudioDualMonoMode(AudioDualMonoMode mode) async {
     final apiType =
         '${isOverrideClassName ? className : 'MediaPlayer'}_setAudioDualMonoMode_30c9672';
-    final param = createParams({'mode': mode.value()});
+    final requestParam = createParams({'mode': mode.value()});
     final callApiResult = await irisMethodChannel.invokeMethod(
-        IrisMethodCall(apiType, jsonEncode(param), buffers: null));
+        IrisMethodCall(apiType, jsonEncode(requestParam), buffers: null));
     if (callApiResult.irisReturnCode < 0) {
       throw AgoraRtcException(code: callApiResult.irisReturnCode);
     }
@@ -694,9 +694,9 @@ class MediaPlayerImpl implements MediaPlayer {
   Future<String> getPlayerSdkVersion() async {
     final apiType =
         '${isOverrideClassName ? className : 'MediaPlayer'}_getPlayerSdkVersion';
-    final param = createParams({});
+    final requestParam = createParams({});
     final callApiResult = await irisMethodChannel.invokeMethod(
-        IrisMethodCall(apiType, jsonEncode(param), buffers: null));
+        IrisMethodCall(apiType, jsonEncode(requestParam), buffers: null));
     if (callApiResult.irisReturnCode < 0) {
       throw AgoraRtcException(code: callApiResult.irisReturnCode);
     }
@@ -709,9 +709,9 @@ class MediaPlayerImpl implements MediaPlayer {
   Future<String> getPlaySrc() async {
     final apiType =
         '${isOverrideClassName ? className : 'MediaPlayer'}_getPlaySrc';
-    final param = createParams({});
+    final requestParam = createParams({});
     final callApiResult = await irisMethodChannel.invokeMethod(
-        IrisMethodCall(apiType, jsonEncode(param), buffers: null));
+        IrisMethodCall(apiType, jsonEncode(requestParam), buffers: null));
     if (callApiResult.irisReturnCode < 0) {
       throw AgoraRtcException(code: callApiResult.irisReturnCode);
     }
@@ -725,9 +725,9 @@ class MediaPlayerImpl implements MediaPlayer {
       {required String src, required int startPos}) async {
     final apiType =
         '${isOverrideClassName ? className : 'MediaPlayer'}_openWithAgoraCDNSrc_e43f201';
-    final param = createParams({'src': src, 'startPos': startPos});
+    final requestParam = createParams({'src': src, 'startPos': startPos});
     final callApiResult = await irisMethodChannel.invokeMethod(
-        IrisMethodCall(apiType, jsonEncode(param), buffers: null));
+        IrisMethodCall(apiType, jsonEncode(requestParam), buffers: null));
     if (callApiResult.irisReturnCode < 0) {
       throw AgoraRtcException(code: callApiResult.irisReturnCode);
     }
@@ -742,9 +742,9 @@ class MediaPlayerImpl implements MediaPlayer {
   Future<int> getAgoraCDNLineCount() async {
     final apiType =
         '${isOverrideClassName ? className : 'MediaPlayer'}_getAgoraCDNLineCount';
-    final param = createParams({});
+    final requestParam = createParams({});
     final callApiResult = await irisMethodChannel.invokeMethod(
-        IrisMethodCall(apiType, jsonEncode(param), buffers: null));
+        IrisMethodCall(apiType, jsonEncode(requestParam), buffers: null));
     if (callApiResult.irisReturnCode < 0) {
       throw AgoraRtcException(code: callApiResult.irisReturnCode);
     }
@@ -757,9 +757,9 @@ class MediaPlayerImpl implements MediaPlayer {
   Future<void> switchAgoraCDNLineByIndex(int index) async {
     final apiType =
         '${isOverrideClassName ? className : 'MediaPlayer'}_switchAgoraCDNLineByIndex_46f8ab7';
-    final param = createParams({'index': index});
+    final requestParam = createParams({'index': index});
     final callApiResult = await irisMethodChannel.invokeMethod(
-        IrisMethodCall(apiType, jsonEncode(param), buffers: null));
+        IrisMethodCall(apiType, jsonEncode(requestParam), buffers: null));
     if (callApiResult.irisReturnCode < 0) {
       throw AgoraRtcException(code: callApiResult.irisReturnCode);
     }
@@ -774,9 +774,9 @@ class MediaPlayerImpl implements MediaPlayer {
   Future<int> getCurrentAgoraCDNIndex() async {
     final apiType =
         '${isOverrideClassName ? className : 'MediaPlayer'}_getCurrentAgoraCDNIndex';
-    final param = createParams({});
+    final requestParam = createParams({});
     final callApiResult = await irisMethodChannel.invokeMethod(
-        IrisMethodCall(apiType, jsonEncode(param), buffers: null));
+        IrisMethodCall(apiType, jsonEncode(requestParam), buffers: null));
     if (callApiResult.irisReturnCode < 0) {
       throw AgoraRtcException(code: callApiResult.irisReturnCode);
     }
@@ -789,9 +789,9 @@ class MediaPlayerImpl implements MediaPlayer {
   Future<void> enableAutoSwitchAgoraCDN(bool enable) async {
     final apiType =
         '${isOverrideClassName ? className : 'MediaPlayer'}_enableAutoSwitchAgoraCDN_5039d15';
-    final param = createParams({'enable': enable});
+    final requestParam = createParams({'enable': enable});
     final callApiResult = await irisMethodChannel.invokeMethod(
-        IrisMethodCall(apiType, jsonEncode(param), buffers: null));
+        IrisMethodCall(apiType, jsonEncode(requestParam), buffers: null));
     if (callApiResult.irisReturnCode < 0) {
       throw AgoraRtcException(code: callApiResult.irisReturnCode);
     }
@@ -807,9 +807,9 @@ class MediaPlayerImpl implements MediaPlayer {
       {required String token, required int ts}) async {
     final apiType =
         '${isOverrideClassName ? className : 'MediaPlayer'}_renewAgoraCDNSrcToken_e43f201';
-    final param = createParams({'token': token, 'ts': ts});
+    final requestParam = createParams({'token': token, 'ts': ts});
     final callApiResult = await irisMethodChannel.invokeMethod(
-        IrisMethodCall(apiType, jsonEncode(param), buffers: null));
+        IrisMethodCall(apiType, jsonEncode(requestParam), buffers: null));
     if (callApiResult.irisReturnCode < 0) {
       throw AgoraRtcException(code: callApiResult.irisReturnCode);
     }
@@ -825,9 +825,9 @@ class MediaPlayerImpl implements MediaPlayer {
       {required String src, bool syncPts = false}) async {
     final apiType =
         '${isOverrideClassName ? className : 'MediaPlayer'}_switchAgoraCDNSrc_7a174df';
-    final param = createParams({'src': src, 'syncPts': syncPts});
+    final requestParam = createParams({'src': src, 'syncPts': syncPts});
     final callApiResult = await irisMethodChannel.invokeMethod(
-        IrisMethodCall(apiType, jsonEncode(param), buffers: null));
+        IrisMethodCall(apiType, jsonEncode(requestParam), buffers: null));
     if (callApiResult.irisReturnCode < 0) {
       throw AgoraRtcException(code: callApiResult.irisReturnCode);
     }
@@ -842,9 +842,9 @@ class MediaPlayerImpl implements MediaPlayer {
   Future<void> switchSrc({required String src, bool syncPts = true}) async {
     final apiType =
         '${isOverrideClassName ? className : 'MediaPlayer'}_switchSrc_7a174df';
-    final param = createParams({'src': src, 'syncPts': syncPts});
+    final requestParam = createParams({'src': src, 'syncPts': syncPts});
     final callApiResult = await irisMethodChannel.invokeMethod(
-        IrisMethodCall(apiType, jsonEncode(param), buffers: null));
+        IrisMethodCall(apiType, jsonEncode(requestParam), buffers: null));
     if (callApiResult.irisReturnCode < 0) {
       throw AgoraRtcException(code: callApiResult.irisReturnCode);
     }
@@ -859,9 +859,9 @@ class MediaPlayerImpl implements MediaPlayer {
   Future<void> preloadSrc({required String src, required int startPos}) async {
     final apiType =
         '${isOverrideClassName ? className : 'MediaPlayer'}_preloadSrc_e43f201';
-    final param = createParams({'src': src, 'startPos': startPos});
+    final requestParam = createParams({'src': src, 'startPos': startPos});
     final callApiResult = await irisMethodChannel.invokeMethod(
-        IrisMethodCall(apiType, jsonEncode(param), buffers: null));
+        IrisMethodCall(apiType, jsonEncode(requestParam), buffers: null));
     if (callApiResult.irisReturnCode < 0) {
       throw AgoraRtcException(code: callApiResult.irisReturnCode);
     }
@@ -876,9 +876,9 @@ class MediaPlayerImpl implements MediaPlayer {
   Future<void> playPreloadedSrc(String src) async {
     final apiType =
         '${isOverrideClassName ? className : 'MediaPlayer'}_playPreloadedSrc_3a2037f';
-    final param = createParams({'src': src});
+    final requestParam = createParams({'src': src});
     final callApiResult = await irisMethodChannel.invokeMethod(
-        IrisMethodCall(apiType, jsonEncode(param), buffers: null));
+        IrisMethodCall(apiType, jsonEncode(requestParam), buffers: null));
     if (callApiResult.irisReturnCode < 0) {
       throw AgoraRtcException(code: callApiResult.irisReturnCode);
     }
@@ -893,9 +893,9 @@ class MediaPlayerImpl implements MediaPlayer {
   Future<void> unloadSrc(String src) async {
     final apiType =
         '${isOverrideClassName ? className : 'MediaPlayer'}_unloadSrc_3a2037f';
-    final param = createParams({'src': src});
+    final requestParam = createParams({'src': src});
     final callApiResult = await irisMethodChannel.invokeMethod(
-        IrisMethodCall(apiType, jsonEncode(param), buffers: null));
+        IrisMethodCall(apiType, jsonEncode(requestParam), buffers: null));
     if (callApiResult.irisReturnCode < 0) {
       throw AgoraRtcException(code: callApiResult.irisReturnCode);
     }
@@ -910,11 +910,11 @@ class MediaPlayerImpl implements MediaPlayer {
   Future<void> setSpatialAudioParams(SpatialAudioParams params) async {
     final apiType =
         '${isOverrideClassName ? className : 'MediaPlayer'}_setSpatialAudioParams_5035667';
-    final param = createParams({'params': params.toJson()});
+    final requestParam = createParams({'params': params.toJson()});
     final List<Uint8List> buffers = [];
     buffers.addAll(params.collectBufferList());
     final callApiResult = await irisMethodChannel.invokeMethod(
-        IrisMethodCall(apiType, jsonEncode(param), buffers: buffers));
+        IrisMethodCall(apiType, jsonEncode(requestParam), buffers: buffers));
     if (callApiResult.irisReturnCode < 0) {
       throw AgoraRtcException(code: callApiResult.irisReturnCode);
     }
@@ -930,9 +930,9 @@ class MediaPlayerImpl implements MediaPlayer {
       {required double pan, required double gain}) async {
     final apiType =
         '${isOverrideClassName ? className : 'MediaPlayer'}_setSoundPositionParams_f282d50';
-    final param = createParams({'pan': pan, 'gain': gain});
+    final requestParam = createParams({'pan': pan, 'gain': gain});
     final callApiResult = await irisMethodChannel.invokeMethod(
-        IrisMethodCall(apiType, jsonEncode(param), buffers: null));
+        IrisMethodCall(apiType, jsonEncode(requestParam), buffers: null));
     if (callApiResult.irisReturnCode < 0) {
       throw AgoraRtcException(code: callApiResult.irisReturnCode);
     }
@@ -944,13 +944,33 @@ class MediaPlayerImpl implements MediaPlayer {
   }
 
   @override
+  Future<int> getAudioBufferDelay() async {
+    final apiType =
+        '${isOverrideClassName ? className : 'MediaPlayer'}_getAudioBufferDelay_c30e349';
+    final requestParam = createParams({});
+    final callApiResult = await irisMethodChannel.invokeMethod(
+        IrisMethodCall(apiType, jsonEncode(requestParam), buffers: null));
+    if (callApiResult.irisReturnCode < 0) {
+      throw AgoraRtcException(code: callApiResult.irisReturnCode);
+    }
+    final rm = callApiResult.data;
+    final result = rm['result'];
+    if (result < 0) {
+      throw AgoraRtcException(code: result);
+    }
+    final getAudioBufferDelayJson =
+        MediaPlayerGetAudioBufferDelayJson.fromJson(rm);
+    return getAudioBufferDelayJson.delayMs;
+  }
+
+  @override
   Future<void> setPlayerOptionInInt(
       {required String key, required int value}) async {
     final apiType =
         '${isOverrideClassName ? className : 'MediaPlayer'}_setPlayerOption_4d05d29';
-    final param = createParams({'key': key, 'value': value});
+    final requestParam = createParams({'key': key, 'value': value});
     final callApiResult = await irisMethodChannel.invokeMethod(
-        IrisMethodCall(apiType, jsonEncode(param), buffers: null));
+        IrisMethodCall(apiType, jsonEncode(requestParam), buffers: null));
     if (callApiResult.irisReturnCode < 0) {
       throw AgoraRtcException(code: callApiResult.irisReturnCode);
     }
@@ -966,9 +986,9 @@ class MediaPlayerImpl implements MediaPlayer {
       {required String key, required String value}) async {
     final apiType =
         '${isOverrideClassName ? className : 'MediaPlayer'}_setPlayerOption_ccad422';
-    final param = createParams({'key': key, 'value': value});
+    final requestParam = createParams({'key': key, 'value': value});
     final callApiResult = await irisMethodChannel.invokeMethod(
-        IrisMethodCall(apiType, jsonEncode(param), buffers: null));
+        IrisMethodCall(apiType, jsonEncode(requestParam), buffers: null));
     if (callApiResult.irisReturnCode < 0) {
       throw AgoraRtcException(code: callApiResult.irisReturnCode);
     }
@@ -1001,9 +1021,9 @@ class MediaPlayerCacheManagerImpl implements MediaPlayerCacheManager {
   Future<void> removeAllCaches() async {
     final apiType =
         '${isOverrideClassName ? className : 'MediaPlayerCacheManager'}_removeAllCaches';
-    final param = createParams({});
+    final requestParam = createParams({});
     final callApiResult = await irisMethodChannel.invokeMethod(
-        IrisMethodCall(apiType, jsonEncode(param), buffers: null));
+        IrisMethodCall(apiType, jsonEncode(requestParam), buffers: null));
     if (callApiResult.irisReturnCode < 0) {
       throw AgoraRtcException(code: callApiResult.irisReturnCode);
     }
@@ -1018,9 +1038,9 @@ class MediaPlayerCacheManagerImpl implements MediaPlayerCacheManager {
   Future<void> removeOldCache() async {
     final apiType =
         '${isOverrideClassName ? className : 'MediaPlayerCacheManager'}_removeOldCache';
-    final param = createParams({});
+    final requestParam = createParams({});
     final callApiResult = await irisMethodChannel.invokeMethod(
-        IrisMethodCall(apiType, jsonEncode(param), buffers: null));
+        IrisMethodCall(apiType, jsonEncode(requestParam), buffers: null));
     if (callApiResult.irisReturnCode < 0) {
       throw AgoraRtcException(code: callApiResult.irisReturnCode);
     }
@@ -1035,9 +1055,9 @@ class MediaPlayerCacheManagerImpl implements MediaPlayerCacheManager {
   Future<void> removeCacheByUri(String uri) async {
     final apiType =
         '${isOverrideClassName ? className : 'MediaPlayerCacheManager'}_removeCacheByUri_3a2037f';
-    final param = createParams({'uri': uri});
+    final requestParam = createParams({'uri': uri});
     final callApiResult = await irisMethodChannel.invokeMethod(
-        IrisMethodCall(apiType, jsonEncode(param), buffers: null));
+        IrisMethodCall(apiType, jsonEncode(requestParam), buffers: null));
     if (callApiResult.irisReturnCode < 0) {
       throw AgoraRtcException(code: callApiResult.irisReturnCode);
     }
@@ -1052,9 +1072,9 @@ class MediaPlayerCacheManagerImpl implements MediaPlayerCacheManager {
   Future<void> setCacheDir(String path) async {
     final apiType =
         '${isOverrideClassName ? className : 'MediaPlayerCacheManager'}_setCacheDir_3a2037f';
-    final param = createParams({'path': path});
+    final requestParam = createParams({'path': path});
     final callApiResult = await irisMethodChannel.invokeMethod(
-        IrisMethodCall(apiType, jsonEncode(param), buffers: null));
+        IrisMethodCall(apiType, jsonEncode(requestParam), buffers: null));
     if (callApiResult.irisReturnCode < 0) {
       throw AgoraRtcException(code: callApiResult.irisReturnCode);
     }
@@ -1069,9 +1089,9 @@ class MediaPlayerCacheManagerImpl implements MediaPlayerCacheManager {
   Future<void> setMaxCacheFileCount(int count) async {
     final apiType =
         '${isOverrideClassName ? className : 'MediaPlayerCacheManager'}_setMaxCacheFileCount_46f8ab7';
-    final param = createParams({'count': count});
+    final requestParam = createParams({'count': count});
     final callApiResult = await irisMethodChannel.invokeMethod(
-        IrisMethodCall(apiType, jsonEncode(param), buffers: null));
+        IrisMethodCall(apiType, jsonEncode(requestParam), buffers: null));
     if (callApiResult.irisReturnCode < 0) {
       throw AgoraRtcException(code: callApiResult.irisReturnCode);
     }
@@ -1086,9 +1106,9 @@ class MediaPlayerCacheManagerImpl implements MediaPlayerCacheManager {
   Future<void> setMaxCacheFileSize(int cacheSize) async {
     final apiType =
         '${isOverrideClassName ? className : 'MediaPlayerCacheManager'}_setMaxCacheFileSize_f631116';
-    final param = createParams({'cacheSize': cacheSize});
+    final requestParam = createParams({'cacheSize': cacheSize});
     final callApiResult = await irisMethodChannel.invokeMethod(
-        IrisMethodCall(apiType, jsonEncode(param), buffers: null));
+        IrisMethodCall(apiType, jsonEncode(requestParam), buffers: null));
     if (callApiResult.irisReturnCode < 0) {
       throw AgoraRtcException(code: callApiResult.irisReturnCode);
     }
@@ -1103,9 +1123,9 @@ class MediaPlayerCacheManagerImpl implements MediaPlayerCacheManager {
   Future<void> enableAutoRemoveCache(bool enable) async {
     final apiType =
         '${isOverrideClassName ? className : 'MediaPlayerCacheManager'}_enableAutoRemoveCache_5039d15';
-    final param = createParams({'enable': enable});
+    final requestParam = createParams({'enable': enable});
     final callApiResult = await irisMethodChannel.invokeMethod(
-        IrisMethodCall(apiType, jsonEncode(param), buffers: null));
+        IrisMethodCall(apiType, jsonEncode(requestParam), buffers: null));
     if (callApiResult.irisReturnCode < 0) {
       throw AgoraRtcException(code: callApiResult.irisReturnCode);
     }
@@ -1120,9 +1140,9 @@ class MediaPlayerCacheManagerImpl implements MediaPlayerCacheManager {
   Future<String> getCacheDir(int length) async {
     final apiType =
         '${isOverrideClassName ? className : 'MediaPlayerCacheManager'}_getCacheDir_c9551e8';
-    final param = createParams({'length': length});
+    final requestParam = createParams({'length': length});
     final callApiResult = await irisMethodChannel.invokeMethod(
-        IrisMethodCall(apiType, jsonEncode(param), buffers: null));
+        IrisMethodCall(apiType, jsonEncode(requestParam), buffers: null));
     if (callApiResult.irisReturnCode < 0) {
       throw AgoraRtcException(code: callApiResult.irisReturnCode);
     }
@@ -1139,9 +1159,9 @@ class MediaPlayerCacheManagerImpl implements MediaPlayerCacheManager {
   Future<int> getMaxCacheFileCount() async {
     final apiType =
         '${isOverrideClassName ? className : 'MediaPlayerCacheManager'}_getMaxCacheFileCount';
-    final param = createParams({});
+    final requestParam = createParams({});
     final callApiResult = await irisMethodChannel.invokeMethod(
-        IrisMethodCall(apiType, jsonEncode(param), buffers: null));
+        IrisMethodCall(apiType, jsonEncode(requestParam), buffers: null));
     if (callApiResult.irisReturnCode < 0) {
       throw AgoraRtcException(code: callApiResult.irisReturnCode);
     }
@@ -1154,9 +1174,9 @@ class MediaPlayerCacheManagerImpl implements MediaPlayerCacheManager {
   Future<int> getMaxCacheFileSize() async {
     final apiType =
         '${isOverrideClassName ? className : 'MediaPlayerCacheManager'}_getMaxCacheFileSize';
-    final param = createParams({});
+    final requestParam = createParams({});
     final callApiResult = await irisMethodChannel.invokeMethod(
-        IrisMethodCall(apiType, jsonEncode(param), buffers: null));
+        IrisMethodCall(apiType, jsonEncode(requestParam), buffers: null));
     if (callApiResult.irisReturnCode < 0) {
       throw AgoraRtcException(code: callApiResult.irisReturnCode);
     }
@@ -1169,9 +1189,9 @@ class MediaPlayerCacheManagerImpl implements MediaPlayerCacheManager {
   Future<int> getCacheFileCount() async {
     final apiType =
         '${isOverrideClassName ? className : 'MediaPlayerCacheManager'}_getCacheFileCount';
-    final param = createParams({});
+    final requestParam = createParams({});
     final callApiResult = await irisMethodChannel.invokeMethod(
-        IrisMethodCall(apiType, jsonEncode(param), buffers: null));
+        IrisMethodCall(apiType, jsonEncode(requestParam), buffers: null));
     if (callApiResult.irisReturnCode < 0) {
       throw AgoraRtcException(code: callApiResult.irisReturnCode);
     }

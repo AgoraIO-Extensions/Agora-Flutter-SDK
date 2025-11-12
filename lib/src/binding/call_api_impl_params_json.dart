@@ -108,6 +108,22 @@ class MediaPlayerGetPublishSignalVolumeJson implements AgoraSerializable {
 }
 
 @JsonSerializable(explicitToJson: true, includeIfNull: false)
+class MediaPlayerGetAudioBufferDelayJson implements AgoraSerializable {
+  const MediaPlayerGetAudioBufferDelayJson(this.delayMs);
+
+  @JsonKey(name: 'delayMs')
+  final int delayMs;
+
+  factory MediaPlayerGetAudioBufferDelayJson.fromJson(
+          Map<String, dynamic> json) =>
+      _$MediaPlayerGetAudioBufferDelayJsonFromJson(json);
+
+  @override
+  Map<String, dynamic> toJson() =>
+      _$MediaPlayerGetAudioBufferDelayJsonToJson(this);
+}
+
+@JsonSerializable(explicitToJson: true, includeIfNull: false)
 class MediaPlayerCacheManagerGetCacheDirJson implements AgoraSerializable {
   const MediaPlayerCacheManagerGetCacheDirJson(this.path);
 
