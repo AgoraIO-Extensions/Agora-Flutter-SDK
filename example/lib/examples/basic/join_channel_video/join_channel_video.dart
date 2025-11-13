@@ -100,7 +100,8 @@ class _State extends State<JoinChannelVideo> {
     );
 
     _engine.registerEventHandler(_rtcEngineEventHandler);
-
+    await _engine.setParameters('{"che.video.videoCodecIndex": 1}');
+    await _engine.setParameters('{"rtc.video.enable_pvc": false}');
     await _engine.enableVideo();
     await _engine.startPreview();
   }
