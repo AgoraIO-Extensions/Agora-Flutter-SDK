@@ -32,6 +32,7 @@ class _State extends State<JoinChannelVideo> {
   bool _isUseAndroidSurfaceView = false;
   ChannelProfileType _channelProfileType =
       ChannelProfileType.channelProfileLiveBroadcasting;
+  ClientRoleType _clientRoleType = ClientRoleType.clientRoleBroadcaster;
   late final RtcEngineEventHandler _rtcEngineEventHandler;
 
   @override
@@ -115,7 +116,7 @@ class _State extends State<JoinChannelVideo> {
       uid: config.uid,
       options: ChannelMediaOptions(
         channelProfile: _channelProfileType,
-        clientRoleType: ClientRoleType.clientRoleBroadcaster,
+        clientRoleType: _clientRoleType,
       ),
     );
   }
@@ -160,23 +161,23 @@ class _State extends State<JoinChannelVideo> {
   Future<void> _applyPrivateParameter() async {
     final parameter = _privateParameterController.text.trim();
     if (parameter.isEmpty) {
-      logSink.log('[applyPrivateParameter] 私参为空');
+      logSink.log('[applyPrivateParameter] Private parameter is empty');
       return;
     }
 
     try {
       await _engine.setParameters(parameter);
-      logSink.log('[applyPrivateParameter] 应用私参成功: $parameter');
+      logSink.log('[applyPrivateParameter] Private parameter applied successfully: $parameter');
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('私参应用成功')),
+          const SnackBar(content: Text('Private parameter applied')),
         );
       }
     } catch (e) {
-      logSink.log('[applyPrivateParameter] 应用私参失败: $e');
+      logSink.log('[applyPrivateParameter] Failed to apply private parameter: $e');
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('私参应用失败: $e')),
+          SnackBar(content: Text('Failed to apply private parameter: $e')),
         );
       }
     }
@@ -184,6 +185,21 @@ class _State extends State<JoinChannelVideo> {
 
   void _setPresetParameter(String parameter) {
     _privateParameterController.text = parameter;
+  }
+
+  Future<void> _setClientRole(ClientRoleType role) async {
+    if (isJoined) {
+      await _engine.setClientRole(role: role);
+      logSink.log('[setClientRole] Client role changed successfully: ${role.toString()}');
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Changed to ${role == ClientRoleType.clientRoleBroadcaster ? "Broadcaster" : "Audience"} role')),
+        );
+      }
+    }
+    setState(() {
+      _clientRoleType = role;
+    });
   }
 
   @override
@@ -306,6 +322,27 @@ class _State extends State<JoinChannelVideo> {
             const SizedBox(
               height: 20,
             ),
+            const Text('Client Role: '),
+            DropdownButton<ClientRoleType>(
+              items: [
+                ClientRoleType.clientRoleBroadcaster,
+                ClientRoleType.clientRoleAudience,
+              ].map((e) => DropdownMenuItem(
+                child: Text(
+                  e == ClientRoleType.clientRoleBroadcaster ? 'Broadcaster' : 'Audience',
+                ),
+                value: e,
+              )).toList(),
+              value: _clientRoleType,
+              onChanged: (v) {
+                if (v != null) {
+                  _setClientRole(v);
+                }
+              },
+            ),
+            const SizedBox(
+              height: 20,
+            ),
             BasicVideoConfigurationWidget(
               rtcEngine: _engine,
               title: 'Video Encoder Configuration',
@@ -324,7 +361,7 @@ class _State extends State<JoinChannelVideo> {
             const SizedBox(
               height: 20,
             ),
-            const Text('私参配置 (Private Parameters):', style: TextStyle(fontWeight: FontWeight.bold)),
+            const Text('Private Parameters:', style: TextStyle(fontWeight: FontWeight.bold)),
             const SizedBox(height: 8),
             Row(
               children: [
@@ -336,7 +373,7 @@ class _State extends State<JoinChannelVideo> {
                     style: ElevatedButton.styleFrom(
                       padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 8),
                     ),
-                    child: const Text('SR 开关', style: TextStyle(fontSize: 12)),
+                    child: const Text('SR Toggle', style: TextStyle(fontSize: 12)),
                   ),
                 ),
                 const SizedBox(width: 8),
@@ -348,7 +385,7 @@ class _State extends State<JoinChannelVideo> {
                     style: ElevatedButton.styleFrom(
                       padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 8),
                     ),
-                    child: const Text('AIAEC 开关', style: TextStyle(fontSize: 12)),
+                    child: const Text('AIAEC Toggle', style: TextStyle(fontSize: 12)),
                   ),
                 ),
               ],
@@ -357,7 +394,7 @@ class _State extends State<JoinChannelVideo> {
             TextField(
               controller: _privateParameterController,
               decoration: const InputDecoration(
-                hintText: '输入私参 JSON，如: {"key":"value"}',
+                hintText: 'Enter private parameter JSON, e.g.: {"key":"value"}',
                 border: OutlineInputBorder(),
                 contentPadding: EdgeInsets.all(8),
               ),
@@ -371,7 +408,7 @@ class _State extends State<JoinChannelVideo> {
                   flex: 1,
                   child: ElevatedButton(
                     onPressed: _applyPrivateParameter,
-                    child: const Text('应用私参'),
+                    child: const Text('Apply Parameters'),
                   ),
                 ),
               ],
