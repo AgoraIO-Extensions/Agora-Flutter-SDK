@@ -313,8 +313,8 @@ void rtcEngineSmokeTestCases() {
         bool optionsPublishThirdCameraTrack = true;
         bool optionsPublishFourthCameraTrack = true;
         bool optionsPublishMicrophoneTrack = true;
-        bool optionsPublishScreenCaptureVideo = true;
         bool optionsPublishScreenCaptureAudio = true;
+        bool optionsPublishScreenCaptureVideo = true;
         bool optionsPublishScreenTrack = true;
         bool optionsPublishSecondaryScreenTrack = true;
         bool optionsPublishThirdScreenTrack = true;
@@ -347,8 +347,8 @@ void rtcEngineSmokeTestCases() {
           publishThirdCameraTrack: optionsPublishThirdCameraTrack,
           publishFourthCameraTrack: optionsPublishFourthCameraTrack,
           publishMicrophoneTrack: optionsPublishMicrophoneTrack,
-          publishScreenCaptureVideo: optionsPublishScreenCaptureVideo,
           publishScreenCaptureAudio: optionsPublishScreenCaptureAudio,
+          publishScreenCaptureVideo: optionsPublishScreenCaptureVideo,
           publishScreenTrack: optionsPublishScreenTrack,
           publishSecondaryScreenTrack: optionsPublishSecondaryScreenTrack,
           publishThirdScreenTrack: optionsPublishThirdScreenTrack,
@@ -429,8 +429,8 @@ void rtcEngineSmokeTestCases() {
         bool optionsPublishThirdCameraTrack = true;
         bool optionsPublishFourthCameraTrack = true;
         bool optionsPublishMicrophoneTrack = true;
-        bool optionsPublishScreenCaptureVideo = true;
         bool optionsPublishScreenCaptureAudio = true;
+        bool optionsPublishScreenCaptureVideo = true;
         bool optionsPublishScreenTrack = true;
         bool optionsPublishSecondaryScreenTrack = true;
         bool optionsPublishThirdScreenTrack = true;
@@ -463,8 +463,8 @@ void rtcEngineSmokeTestCases() {
           publishThirdCameraTrack: optionsPublishThirdCameraTrack,
           publishFourthCameraTrack: optionsPublishFourthCameraTrack,
           publishMicrophoneTrack: optionsPublishMicrophoneTrack,
-          publishScreenCaptureVideo: optionsPublishScreenCaptureVideo,
           publishScreenCaptureAudio: optionsPublishScreenCaptureAudio,
+          publishScreenCaptureVideo: optionsPublishScreenCaptureVideo,
           publishScreenTrack: optionsPublishScreenTrack,
           publishSecondaryScreenTrack: optionsPublishSecondaryScreenTrack,
           publishThirdScreenTrack: optionsPublishThirdScreenTrack,
@@ -532,10 +532,12 @@ void rtcEngineSmokeTestCases() {
       try {
         bool optionsStopAudioMixing = true;
         bool optionsStopAllEffect = true;
+        bool optionsUnloadAllEffect = true;
         bool optionsStopMicrophoneRecording = true;
         LeaveChannelOptions options = LeaveChannelOptions(
           stopAudioMixing: optionsStopAudioMixing,
           stopAllEffect: optionsStopAllEffect,
+          unloadAllEffect: optionsUnloadAllEffect,
           stopMicrophoneRecording: optionsStopMicrophoneRecording,
         );
         await rtcEngine.leaveChannel(
@@ -1319,6 +1321,41 @@ void rtcEngineSmokeTestCases() {
         if (e is! AgoraRtcException) {
           debugPrint(
               '[RtcEngine.setFilterEffectOptions] error: ${e.toString()}');
+          rethrow;
+        }
+
+        if (e.code != -4) {
+          // Only not supported error supported.
+          rethrow;
+        }
+      }
+
+      await rtcEngine.release();
+    },
+  );
+
+  testWidgets(
+    'RtcEngine.destroyVideoEffectObject',
+    (WidgetTester tester) async {
+      String engineAppId = const String.fromEnvironment('TEST_APP_ID',
+          defaultValue: '<YOUR_APP_ID>');
+
+      RtcEngine rtcEngine = createAgoraRtcEngine();
+      await rtcEngine.initialize(RtcEngineContext(
+        appId: engineAppId,
+        areaCode: AreaCode.areaCodeGlob.value(),
+      ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
+
+      try {
+        VideoEffectObject? videoEffectObject = null;
+        await rtcEngine.destroyVideoEffectObject(
+          videoEffectObject,
+        );
+      } catch (e) {
+        if (e is! AgoraRtcException) {
+          debugPrint(
+              '[RtcEngine.destroyVideoEffectObject] error: ${e.toString()}');
           rethrow;
         }
 
@@ -6876,12 +6913,23 @@ void rtcEngineSmokeTestCases() {
           width: regionRectWidth,
           height: regionRectHeight,
         );
+        int audioParamsSampleRate = 5;
+        int audioParamsChannels = 5;
+        int audioParamsCaptureSignalVolume = 5;
+        bool audioParamsExcludeCurrentProcessAudio = true;
+        ScreenAudioParameters captureParamsAudioParams = ScreenAudioParameters(
+          sampleRate: audioParamsSampleRate,
+          channels: audioParamsChannels,
+          captureSignalVolume: audioParamsCaptureSignalVolume,
+          excludeCurrentProcessAudio: audioParamsExcludeCurrentProcessAudio,
+        );
         int dimensionsWidth = 5;
         int dimensionsHeight = 5;
         VideoDimensions captureParamsDimensions = VideoDimensions(
           width: dimensionsWidth,
           height: dimensionsHeight,
         );
+        bool captureParamsCaptureAudio = true;
         int captureParamsFrameRate = 5;
         int captureParamsBitrate = 5;
         bool captureParamsCaptureMouseCursor = true;
@@ -6892,6 +6940,8 @@ void rtcEngineSmokeTestCases() {
         int captureParamsHighLightColor = 5;
         bool captureParamsEnableHighLight = true;
         ScreenCaptureParameters captureParams = ScreenCaptureParameters(
+          captureAudio: captureParamsCaptureAudio,
+          audioParams: captureParamsAudioParams,
           dimensions: captureParamsDimensions,
           frameRate: captureParamsFrameRate,
           bitrate: captureParamsBitrate,
@@ -6959,12 +7009,23 @@ void rtcEngineSmokeTestCases() {
           width: regionRectWidth,
           height: regionRectHeight,
         );
+        int audioParamsSampleRate = 5;
+        int audioParamsChannels = 5;
+        int audioParamsCaptureSignalVolume = 5;
+        bool audioParamsExcludeCurrentProcessAudio = true;
+        ScreenAudioParameters captureParamsAudioParams = ScreenAudioParameters(
+          sampleRate: audioParamsSampleRate,
+          channels: audioParamsChannels,
+          captureSignalVolume: audioParamsCaptureSignalVolume,
+          excludeCurrentProcessAudio: audioParamsExcludeCurrentProcessAudio,
+        );
         int dimensionsWidth = 5;
         int dimensionsHeight = 5;
         VideoDimensions captureParamsDimensions = VideoDimensions(
           width: dimensionsWidth,
           height: dimensionsHeight,
         );
+        bool captureParamsCaptureAudio = true;
         int captureParamsFrameRate = 5;
         int captureParamsBitrate = 5;
         bool captureParamsCaptureMouseCursor = true;
@@ -6975,6 +7036,8 @@ void rtcEngineSmokeTestCases() {
         int captureParamsHighLightColor = 5;
         bool captureParamsEnableHighLight = true;
         ScreenCaptureParameters captureParams = ScreenCaptureParameters(
+          captureAudio: captureParamsCaptureAudio,
+          audioParams: captureParamsAudioParams,
           dimensions: captureParamsDimensions,
           frameRate: captureParamsFrameRate,
           bitrate: captureParamsBitrate,
@@ -7064,12 +7127,23 @@ void rtcEngineSmokeTestCases() {
           width: regionRectWidth,
           height: regionRectHeight,
         );
+        int audioParamsSampleRate = 5;
+        int audioParamsChannels = 5;
+        int audioParamsCaptureSignalVolume = 5;
+        bool audioParamsExcludeCurrentProcessAudio = true;
+        ScreenAudioParameters captureParamsAudioParams = ScreenAudioParameters(
+          sampleRate: audioParamsSampleRate,
+          channels: audioParamsChannels,
+          captureSignalVolume: audioParamsCaptureSignalVolume,
+          excludeCurrentProcessAudio: audioParamsExcludeCurrentProcessAudio,
+        );
         int dimensionsWidth = 5;
         int dimensionsHeight = 5;
         VideoDimensions captureParamsDimensions = VideoDimensions(
           width: dimensionsWidth,
           height: dimensionsHeight,
         );
+        bool captureParamsCaptureAudio = true;
         int captureParamsFrameRate = 5;
         int captureParamsBitrate = 5;
         bool captureParamsCaptureMouseCursor = true;
@@ -7080,6 +7154,8 @@ void rtcEngineSmokeTestCases() {
         int captureParamsHighLightColor = 5;
         bool captureParamsEnableHighLight = true;
         ScreenCaptureParameters captureParams = ScreenCaptureParameters(
+          captureAudio: captureParamsCaptureAudio,
+          audioParams: captureParamsAudioParams,
           dimensions: captureParamsDimensions,
           frameRate: captureParamsFrameRate,
           bitrate: captureParamsBitrate,
@@ -7206,12 +7282,23 @@ void rtcEngineSmokeTestCases() {
       await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
+        int audioParamsSampleRate = 5;
+        int audioParamsChannels = 5;
+        int audioParamsCaptureSignalVolume = 5;
+        bool audioParamsExcludeCurrentProcessAudio = true;
+        ScreenAudioParameters captureParamsAudioParams = ScreenAudioParameters(
+          sampleRate: audioParamsSampleRate,
+          channels: audioParamsChannels,
+          captureSignalVolume: audioParamsCaptureSignalVolume,
+          excludeCurrentProcessAudio: audioParamsExcludeCurrentProcessAudio,
+        );
         int dimensionsWidth = 5;
         int dimensionsHeight = 5;
         VideoDimensions captureParamsDimensions = VideoDimensions(
           width: dimensionsWidth,
           height: dimensionsHeight,
         );
+        bool captureParamsCaptureAudio = true;
         int captureParamsFrameRate = 5;
         int captureParamsBitrate = 5;
         bool captureParamsCaptureMouseCursor = true;
@@ -7222,6 +7309,8 @@ void rtcEngineSmokeTestCases() {
         int captureParamsHighLightColor = 5;
         bool captureParamsEnableHighLight = true;
         ScreenCaptureParameters captureParams = ScreenCaptureParameters(
+          captureAudio: captureParamsCaptureAudio,
+          audioParams: captureParamsAudioParams,
           dimensions: captureParamsDimensions,
           frameRate: captureParamsFrameRate,
           bitrate: captureParamsBitrate,
@@ -7270,10 +7359,12 @@ void rtcEngineSmokeTestCases() {
         int audioParamsSampleRate = 5;
         int audioParamsChannels = 5;
         int audioParamsCaptureSignalVolume = 5;
+        bool audioParamsExcludeCurrentProcessAudio = true;
         ScreenAudioParameters captureParamsAudioParams = ScreenAudioParameters(
           sampleRate: audioParamsSampleRate,
           channels: audioParamsChannels,
           captureSignalVolume: audioParamsCaptureSignalVolume,
+          excludeCurrentProcessAudio: audioParamsExcludeCurrentProcessAudio,
         );
         int dimensionsWidth = 5;
         int dimensionsHeight = 5;
@@ -7335,10 +7426,12 @@ void rtcEngineSmokeTestCases() {
         int audioParamsSampleRate = 5;
         int audioParamsChannels = 5;
         int audioParamsCaptureSignalVolume = 5;
+        bool audioParamsExcludeCurrentProcessAudio = true;
         ScreenAudioParameters captureParamsAudioParams = ScreenAudioParameters(
           sampleRate: audioParamsSampleRate,
           channels: audioParamsChannels,
           captureSignalVolume: audioParamsCaptureSignalVolume,
+          excludeCurrentProcessAudio: audioParamsExcludeCurrentProcessAudio,
         );
         int dimensionsWidth = 5;
         int dimensionsHeight = 5;
@@ -9466,8 +9559,8 @@ void rtcEngineSmokeTestCases() {
         bool optionsPublishThirdCameraTrack = true;
         bool optionsPublishFourthCameraTrack = true;
         bool optionsPublishMicrophoneTrack = true;
-        bool optionsPublishScreenCaptureVideo = true;
         bool optionsPublishScreenCaptureAudio = true;
+        bool optionsPublishScreenCaptureVideo = true;
         bool optionsPublishScreenTrack = true;
         bool optionsPublishSecondaryScreenTrack = true;
         bool optionsPublishThirdScreenTrack = true;
@@ -9500,8 +9593,8 @@ void rtcEngineSmokeTestCases() {
           publishThirdCameraTrack: optionsPublishThirdCameraTrack,
           publishFourthCameraTrack: optionsPublishFourthCameraTrack,
           publishMicrophoneTrack: optionsPublishMicrophoneTrack,
-          publishScreenCaptureVideo: optionsPublishScreenCaptureVideo,
           publishScreenCaptureAudio: optionsPublishScreenCaptureAudio,
+          publishScreenCaptureVideo: optionsPublishScreenCaptureVideo,
           publishScreenTrack: optionsPublishScreenTrack,
           publishSecondaryScreenTrack: optionsPublishSecondaryScreenTrack,
           publishThirdScreenTrack: optionsPublishThirdScreenTrack,
@@ -9586,8 +9679,8 @@ void rtcEngineSmokeTestCases() {
         bool optionsPublishThirdCameraTrack = true;
         bool optionsPublishFourthCameraTrack = true;
         bool optionsPublishMicrophoneTrack = true;
-        bool optionsPublishScreenCaptureVideo = true;
         bool optionsPublishScreenCaptureAudio = true;
+        bool optionsPublishScreenCaptureVideo = true;
         bool optionsPublishScreenTrack = true;
         bool optionsPublishSecondaryScreenTrack = true;
         bool optionsPublishThirdScreenTrack = true;
@@ -9620,8 +9713,8 @@ void rtcEngineSmokeTestCases() {
           publishThirdCameraTrack: optionsPublishThirdCameraTrack,
           publishFourthCameraTrack: optionsPublishFourthCameraTrack,
           publishMicrophoneTrack: optionsPublishMicrophoneTrack,
-          publishScreenCaptureVideo: optionsPublishScreenCaptureVideo,
           publishScreenCaptureAudio: optionsPublishScreenCaptureAudio,
+          publishScreenCaptureVideo: optionsPublishScreenCaptureVideo,
           publishScreenTrack: optionsPublishScreenTrack,
           publishSecondaryScreenTrack: optionsPublishSecondaryScreenTrack,
           publishThirdScreenTrack: optionsPublishThirdScreenTrack,
@@ -10868,12 +10961,23 @@ void rtcEngineSmokeTestCases() {
           width: screenRectWidth,
           height: screenRectHeight,
         );
+        int audioParamsSampleRate = 5;
+        int audioParamsChannels = 5;
+        int audioParamsCaptureSignalVolume = 5;
+        bool audioParamsExcludeCurrentProcessAudio = true;
+        ScreenAudioParameters paramsAudioParams = ScreenAudioParameters(
+          sampleRate: audioParamsSampleRate,
+          channels: audioParamsChannels,
+          captureSignalVolume: audioParamsCaptureSignalVolume,
+          excludeCurrentProcessAudio: audioParamsExcludeCurrentProcessAudio,
+        );
         int dimensionsWidth = 5;
         int dimensionsHeight = 5;
         VideoDimensions paramsDimensions = VideoDimensions(
           width: dimensionsWidth,
           height: dimensionsHeight,
         );
+        bool paramsCaptureAudio = true;
         int paramsFrameRate = 5;
         int paramsBitrate = 5;
         bool paramsCaptureMouseCursor = true;
@@ -10884,6 +10988,8 @@ void rtcEngineSmokeTestCases() {
         int paramsHighLightColor = 5;
         bool paramsEnableHighLight = true;
         ScreenCaptureParameters configParams = ScreenCaptureParameters(
+          captureAudio: paramsCaptureAudio,
+          audioParams: paramsAudioParams,
           dimensions: paramsDimensions,
           frameRate: paramsFrameRate,
           bitrate: paramsBitrate,
