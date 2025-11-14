@@ -27,6 +27,7 @@ class _State extends State<JoinChannelVideo> {
       muteAllRemoteVideo = false;
   Set<int> remoteUid = {};
   late TextEditingController _controller;
+  late TextEditingController _privateParameterController;
   bool _isUseFlutterTexture = false;
   bool _isUseAndroidSurfaceView = false;
   ChannelProfileType _channelProfileType =
@@ -37,6 +38,7 @@ class _State extends State<JoinChannelVideo> {
   void initState() {
     super.initState();
     _controller = TextEditingController(text: config.channelId);
+    _privateParameterController = TextEditingController();
 
     _initEngine();
   }
@@ -153,6 +155,35 @@ class _State extends State<JoinChannelVideo> {
     setState(() {
       muteAllRemoteVideo = !muteAllRemoteVideo;
     });
+  }
+
+  Future<void> _applyPrivateParameter() async {
+    final parameter = _privateParameterController.text.trim();
+    if (parameter.isEmpty) {
+      logSink.log('[applyPrivateParameter] 私参为空');
+      return;
+    }
+
+    try {
+      await _engine.setParameters(parameter);
+      logSink.log('[applyPrivateParameter] 应用私参成功: $parameter');
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('私参应用成功')),
+        );
+      }
+    } catch (e) {
+      logSink.log('[applyPrivateParameter] 应用私参失败: $e');
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('私参应用失败: $e')),
+        );
+      }
+    }
+  }
+
+  void _setPresetParameter(String parameter) {
+    _privateParameterController.text = parameter;
   }
 
   @override
@@ -289,6 +320,61 @@ class _State extends State<JoinChannelVideo> {
                   bitrate: bitrate,
                 ));
               },
+            ),
+            const SizedBox(
+              height: 20,
+            ),
+            const Text('私参配置 (Private Parameters):', style: TextStyle(fontWeight: FontWeight.bold)),
+            const SizedBox(height: 8),
+            Row(
+              children: [
+                Expanded(
+                  child: ElevatedButton(
+                    onPressed: () {
+                      _setPresetParameter('{"rtc.video.enable_sr":{"enabled":false,"mode":2}}');
+                    },
+                    style: ElevatedButton.styleFrom(
+                      padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 8),
+                    ),
+                    child: const Text('SR 开关', style: TextStyle(fontSize: 12)),
+                  ),
+                ),
+                const SizedBox(width: 8),
+                Expanded(
+                  child: ElevatedButton(
+                    onPressed: () {
+                      _setPresetParameter('{"che.audio.aiaec.working_mode":0}');
+                    },
+                    style: ElevatedButton.styleFrom(
+                      padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 8),
+                    ),
+                    child: const Text('AIAEC 开关', style: TextStyle(fontSize: 12)),
+                  ),
+                ),
+              ],
+            ),
+            const SizedBox(height: 8),
+            TextField(
+              controller: _privateParameterController,
+              decoration: const InputDecoration(
+                hintText: '输入私参 JSON，如: {"key":"value"}',
+                border: OutlineInputBorder(),
+                contentPadding: EdgeInsets.all(8),
+              ),
+              maxLines: 3,
+              style: const TextStyle(fontSize: 12),
+            ),
+            const SizedBox(height: 8),
+            Row(
+              children: [
+                Expanded(
+                  flex: 1,
+                  child: ElevatedButton(
+                    onPressed: _applyPrivateParameter,
+                    child: const Text('应用私参'),
+                  ),
+                ),
+              ],
             ),
             const SizedBox(
               height: 20,
