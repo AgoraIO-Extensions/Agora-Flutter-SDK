@@ -105,6 +105,7 @@ class _State extends State<JoinChannelVideo> {
     _engine.registerEventHandler(_rtcEngineEventHandler);
     await _engine.setParameters('{"che.video.videoCodecIndex": 1}');
     await _engine.setParameters('{"rtc.video.enable_pvc": false}');
+    await _engine.setParameters('{"che.video.enable_auto_fallback_sw_encoder": false}');
     await _engine.enableVideo();
     await _engine.startPreview();
   }
@@ -190,6 +191,11 @@ class _State extends State<JoinChannelVideo> {
   Future<void> _setClientRole(ClientRoleType role) async {
     if (isJoined) {
       await _engine.setClientRole(role: role);
+      if (role == ClientRoleType.clientRoleAudience) {
+        await _engine.stopPreview();
+      } else {
+        await _engine.startPreview();
+      }
       logSink.log('[setClientRole] Client role changed successfully: ${role.toString()}');
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
