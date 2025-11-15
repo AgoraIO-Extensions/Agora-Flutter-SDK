@@ -191,11 +191,6 @@ class _State extends State<JoinChannelVideo> {
   Future<void> _setClientRole(ClientRoleType role) async {
     if (isJoined) {
       await _engine.setClientRole(role: role);
-      if (role == ClientRoleType.clientRoleAudience) {
-        await _engine.stopPreview();
-      } else {
-        await _engine.startPreview();
-      }
       logSink.log('[setClientRole] Client role changed successfully: ${role.toString()}');
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
@@ -206,6 +201,11 @@ class _State extends State<JoinChannelVideo> {
     setState(() {
       _clientRoleType = role;
     });
+    if (role == ClientRoleType.clientRoleAudience) {
+      _engine.stopPreview();
+    } else {
+      _engine.startPreview();
+    }
   }
 
   @override
@@ -214,7 +214,7 @@ class _State extends State<JoinChannelVideo> {
       displayContentBuilder: (context, isLayoutHorizontal) {
         return Stack(
           children: [
-            StatsMonitoringWidget(
+            if (_clientRoleType == ClientRoleType.clientRoleBroadcaster) StatsMonitoringWidget(
               rtcEngine: _engine,
               uid: 0,
               child: AgoraVideoView(
@@ -427,7 +427,18 @@ class _State extends State<JoinChannelVideo> {
                 Expanded(
                   flex: 1,
                   child: ElevatedButton(
-                    onPressed: isJoined ? _leaveChannel : _joinChannel,
+                    onPressed: () async {
+                      if (isJoined) {
+                        _leaveChannel();
+                      } else {
+                        _joinChannel();
+                        if (_clientRoleType == ClientRoleType.clientRoleBroadcaster) {
+                          await _engine.startPreview();
+                        } else {
+                          await _engine.stopPreview();
+                        }
+                      }
+                    },
                     child: Text('${isJoined ? 'Leave' : 'Join'} channel'),
                   ),
                 )
