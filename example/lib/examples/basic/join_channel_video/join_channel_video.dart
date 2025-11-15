@@ -106,6 +106,7 @@ class _State extends State<JoinChannelVideo> {
     await _engine.setParameters('{"che.video.videoCodecIndex": 1}');
     await _engine.setParameters('{"rtc.video.enable_pvc": false}');
     await _engine.setParameters('{"che.video.enable_auto_fallback_sw_encoder": false}');
+    await _engine.setAudioScenario(AudioScenarioType.audioScenarioGameStreaming);
     await _engine.enableVideo();
     await _engine.startPreview();
   }
