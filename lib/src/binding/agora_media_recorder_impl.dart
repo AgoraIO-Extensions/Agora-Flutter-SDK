@@ -27,9 +27,9 @@ class MediaRecorderImpl implements MediaRecorder {
   Future<void> setMediaRecorderObserver(MediaRecorderObserver callback) async {
     final apiType =
         '${isOverrideClassName ? className : 'MediaRecorder'}_setMediaRecorderObserver_e1f7340';
-    final param = createParams({'callback': callback});
+    final requestParam = createParams({'callback': callback});
     final callApiResult = await irisMethodChannel.invokeMethod(
-        IrisMethodCall(apiType, jsonEncode(param), buffers: null));
+        IrisMethodCall(apiType, jsonEncode(requestParam), buffers: null));
     if (callApiResult.irisReturnCode < 0) {
       throw AgoraRtcException(code: callApiResult.irisReturnCode);
     }
@@ -44,11 +44,11 @@ class MediaRecorderImpl implements MediaRecorder {
   Future<void> startRecording(MediaRecorderConfiguration config) async {
     final apiType =
         '${isOverrideClassName ? className : 'MediaRecorder'}_startRecording_94480b3';
-    final param = createParams({'config': config.toJson()});
+    final requestParam = createParams({'config': config.toJson()});
     final List<Uint8List> buffers = [];
     buffers.addAll(config.collectBufferList());
     final callApiResult = await irisMethodChannel.invokeMethod(
-        IrisMethodCall(apiType, jsonEncode(param), buffers: buffers));
+        IrisMethodCall(apiType, jsonEncode(requestParam), buffers: buffers));
     if (callApiResult.irisReturnCode < 0) {
       throw AgoraRtcException(code: callApiResult.irisReturnCode);
     }
@@ -63,9 +63,9 @@ class MediaRecorderImpl implements MediaRecorder {
   Future<void> stopRecording() async {
     final apiType =
         '${isOverrideClassName ? className : 'MediaRecorder'}_stopRecording';
-    final param = createParams({});
+    final requestParam = createParams({});
     final callApiResult = await irisMethodChannel.invokeMethod(
-        IrisMethodCall(apiType, jsonEncode(param), buffers: null));
+        IrisMethodCall(apiType, jsonEncode(requestParam), buffers: null));
     if (callApiResult.irisReturnCode < 0) {
       throw AgoraRtcException(code: callApiResult.irisReturnCode);
     }

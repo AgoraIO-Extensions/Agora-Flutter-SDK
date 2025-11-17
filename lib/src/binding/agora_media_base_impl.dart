@@ -27,9 +27,9 @@ class VideoFrameMetaInfoImpl implements VideoFrameMetaInfo {
   Future<String> getMetaInfoStr(MetaInfoKey key) async {
     final apiType =
         '${isOverrideClassName ? className : 'VideoFrameMetaInfo'}_getMetaInfoStr_c81192f';
-    final param = createParams({'key': key.value()});
+    final requestParam = createParams({'key': key.value()});
     final callApiResult = await irisMethodChannel.invokeMethod(
-        IrisMethodCall(apiType, jsonEncode(param), buffers: null));
+        IrisMethodCall(apiType, jsonEncode(requestParam), buffers: null));
     if (callApiResult.irisReturnCode < 0) {
       throw AgoraRtcException(code: callApiResult.irisReturnCode);
     }

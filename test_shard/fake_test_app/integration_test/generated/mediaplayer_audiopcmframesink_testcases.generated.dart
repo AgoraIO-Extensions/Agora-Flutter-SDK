@@ -51,6 +51,7 @@ void generatedTestCases(ValueGetter<IrisTester> irisTester) {
         int frameSamplesPerChannel = 5;
         int frameSampleRateHz = 5;
         int frameNumChannels = 5;
+        int frameAudioTrackNumber = 5;
         List<int> frameData = List.filled(5, 5);
         bool frameIsStereo = true;
         AudioPcmFrame frame = AudioPcmFrame(
@@ -58,6 +59,7 @@ void generatedTestCases(ValueGetter<IrisTester> irisTester) {
           samplesPerChannel: frameSamplesPerChannel,
           sampleRateHz: frameSampleRateHz,
           numChannels: frameNumChannels,
+          audioTrackNumber: frameAudioTrackNumber,
           bytesPerSample: frameBytesPerSample,
           data: frameData,
           isStereo: frameIsStereo,
