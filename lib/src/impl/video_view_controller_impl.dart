@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:agora_rtc_engine/src/agora_base.dart';
+import 'package:agora_rtc_engine/src/agora_log.dart';
 import 'package:agora_rtc_engine/src/agora_media_base.dart';
 import 'package:agora_rtc_engine/src/agora_rtc_engine.dart';
 import 'package:agora_rtc_engine/src/agora_rtc_engine_ex.dart';
@@ -131,9 +132,15 @@ mixin VideoViewControllerBaseMixin implements VideoViewControllerBase {
   @internal
   @override
   Future<void> disposeRender() async {
+    _log('disposeRender textureId: $_textureId');
     await disposeRenderInternal();
   }
-
+  void _log(String message, {LogLevel level = LogLevel.logLevelInfo}) {
+    rtcEngine.writeLog(
+      level: level,
+      fmt: "[VideoViewControllerBaseMixin] $message",
+    );
+  }
   @protected
   @override
   Future<int> createTextureRender(
@@ -142,6 +149,7 @@ mixin VideoViewControllerBaseMixin implements VideoViewControllerBase {
     int videoSourceType,
     int videoViewSetupMode,
   ) async {
+    _log('createTextureRender uid: $uid, channelId: $channelId, videoSourceType: $videoSourceType, videoViewSetupMode: $videoViewSetupMode');
     if (rtcEngine.globalVideoViewController == null) {
       return kTextureNotInit;
     }
@@ -153,12 +161,13 @@ mixin VideoViewControllerBaseMixin implements VideoViewControllerBase {
       videoSourceType,
       videoViewSetupMode,
     );
-
+    _log('createTextureRender textureId: $textureId');
     return textureId;
   }
 
   @override
   Future<void> initializeRender() async {
+    _log('initializeRender textureId: $_textureId');
     if (shouldUseFlutterTexture) {
       if (_textureId == kTextureNotInit) {
         _textureId = await createTextureRender(
@@ -168,6 +177,7 @@ mixin VideoViewControllerBaseMixin implements VideoViewControllerBase {
           canvas.setupMode?.value() ??
               VideoViewSetupMode.videoViewSetupReplace.value(),
         );
+        _log('initializeRender textureId: $_textureId');
       }
     } else {
       if (kIsWeb) {

@@ -12,6 +12,7 @@
 #include <jni.h>
 #include <memory>
 #include <vector>
+#include <dlfcn.h>
 
 namespace agora {
 namespace iris {
@@ -23,12 +24,42 @@ namespace rendering {
 #define LOGCATD(...)                                                           \
   __android_log_print(ANDROID_LOG_DEBUG, LOG_TAG, __VA_ARGS__)
 
+typedef void (*WriteIrisLogFunc)(IrisLogLevel level, const char *content);
+
+void WriteIrisLogDynamic(IrisLogLevel level, const char *content) {
+  static WriteIrisLogFunc func = nullptr;
+  if (!func) {
+    // Try to find the symbol in the global scope (RTLD_DEFAULT)
+    // RTLD_DEFAULT is usually ((void *) 0) on Android/Linux
+    func = (WriteIrisLogFunc)dlsym(RTLD_DEFAULT, "WriteIrisLog");
+    
+    if (!func) {
+        // If not found, try explicitly loading known potential library names
+        // Note: The exact library name depends on the specific version of the Iris/Agora SDK
+        // commonly it might be libAgoraRtcWrapper.so or libiris.so
+        void* handle = dlopen("libAgoraRtcWrapper.so", RTLD_LAZY);
+        if (handle) {
+             func = (WriteIrisLogFunc)dlsym(handle, "WriteIrisLog");
+        }
+    }
+  }
+
+  if (func) {
+    func(level, content);
+  } else {
+    LOGCATE("Failed to find WriteIrisLog symbol: %s", content);
+  }
+}
+
 #define CHECK_GL_ERROR(...)                                                    \
   {                                                                            \
     int error = glGetError();                                                  \
-    if (error != 0)                                                            \
-      LOGCATE("CHECK_GL_ERROR %s glGetError = %d, line = %d, ", __FUNCTION__,  \
+    if (error != 0) {                                                          \
+        std::string msg = "CHECK_GL_ERROR glGetError = " + std::to_string(error); \
+        WriteIrisLogDynamic(IrisLogLevel::levelErr, msg.c_str()); \
+        LOGCATE("CHECK_GL_ERROR %s glGetError = %d, line = %d, ", __FUNCTION__,  \
               error, __LINE__);                                                \
+    }                                                                          \
   }
 
 class GLContext {
@@ -740,13 +771,18 @@ class NativeTextureRenderer final
 
     if (video_frame->renderTimeMs < last_frame_time_ms_) {
       LOGCATE("Frame dropped: current time %lld ms, last frame time %lld ms",
-              video_frame->renderTimeMs, last_frame_time_ms_);
+              (long long)video_frame->renderTimeMs, (long long)last_frame_time_ms_);
       return;
     }
 
     last_frame_time_ms_ = video_frame->renderTimeMs;
 
     if (width_ != video_frame->width || height_ != video_frame->height) {
+      {
+          std::string msg = "[NativeTextureRenderer] Video size changed: " + std::to_string(video_frame->width) + " x " + std::to_string(video_frame->height);
+          WriteIrisLogDynamic(IrisLogLevel::levelInfo, msg.c_str());
+      }
+      LOGCATD("Video size changed: %d x %d", video_frame->width, video_frame->height);
       NotifySizeChangeCallback(video_frame->width, video_frame->height);
       width_ = video_frame->width;
       height_ = video_frame->height;
@@ -756,15 +792,21 @@ class NativeTextureRenderer final
     }
 
     if (!gl_context_) {
+      WriteIrisLogDynamic(IrisLogLevel::levelInfo, "[NativeTextureRenderer] Creating GLContext");
       gl_context_ = std::make_shared<GLContext>(native_windows_);
     }
 
     if (!gl_context_->SetupSurface(native_windows_)) {
+      WriteIrisLogDynamic(IrisLogLevel::levelErr, "[NativeTextureRenderer] GLContext#SetupSurface failed");
       LOGCATE("GLContext#SetupSurface failed ");
       return;
+    } else {
+        WriteIrisLogDynamic(IrisLogLevel::levelInfo, "[NativeTextureRenderer] GLContext#SetupSurface success");
+        LOGCATD("GLContext#SetupSurface success");
     }
 
     if (!gl_context_->GLContextMakeCurrent(video_frame->sharedContext)) {
+      WriteIrisLogDynamic(IrisLogLevel::levelErr, "[NativeTextureRenderer] GLContext#CreateContextAndMakeCurrent failed");
       LOGCATE("GLContext#CreateContextAndMakeCurrent failed ");
       return;
     }
@@ -774,6 +816,11 @@ class NativeTextureRenderer final
     }
 
     if (!rendering_op_) {
+      {
+          std::string msg = "[NativeTextureRenderer] Creating rendering op for type: " + std::to_string(video_frame->type);
+          WriteIrisLogDynamic(IrisLogLevel::levelInfo, msg.c_str());
+      }
+      LOGCATD("Creating rendering op for type: %d", video_frame->type);
       if (video_frame->type == agora::media::base::VIDEO_PIXEL_FORMAT::VIDEO_TEXTURE_2D) {
         rendering_op_ = std::make_unique<Texture2DRendering>(gl_context_);
       } else if (video_frame->type
@@ -784,6 +831,7 @@ class NativeTextureRenderer final
         rendering_op_ = std::make_unique<YUVRendering>(gl_context_);
       } else {
         // NOT SUPPORTED.
+        WriteIrisLogDynamic(IrisLogLevel::levelErr, "[NativeTextureRenderer] NOT SUPPORTED format");
         LOGCATE("NOT SUPPORTED format: %d", video_frame->type);
         return;
       }
@@ -792,6 +840,7 @@ class NativeTextureRenderer final
     // Check framebuffer status
     GLenum status = glCheckFramebufferStatus(GL_FRAMEBUFFER);
     if (status != GL_FRAMEBUFFER_COMPLETE) {
+      WriteIrisLogDynamic(IrisLogLevel::levelErr, "[NativeTextureRenderer] Framebuffer is not complete");
       LOGCATE("Framebuffer is not complete: %d", status);
       return;
     }
@@ -803,27 +852,34 @@ class NativeTextureRenderer final
   }
 
   void Dispose() {
+    WriteIrisLogDynamic(IrisLogLevel::levelInfo, "[NativeTextureRenderer] Dispose method called");
     if (iris_rtc_rendering_) {
+      WriteIrisLogDynamic(IrisLogLevel::levelInfo, "[NativeTextureRenderer] Removing video frame observer delegate");
       iris_rtc_rendering_->RemoveVideoFrameObserverDelegate(delegate_id_);
       iris_rtc_rendering_ = nullptr;
     }
 
     if (j_iris_renderer_obj_) {
+      WriteIrisLogDynamic(IrisLogLevel::levelInfo, "[NativeTextureRenderer] Deleting global reference");
       ::iris::AttachThreadScoped ats(jvm_);
       ats.env()->DeleteGlobalRef(j_iris_renderer_obj_);
       j_iris_renderer_obj_ = nullptr;
     }
 
     if (native_windows_) {
+      WriteIrisLogDynamic(IrisLogLevel::levelInfo, "[NativeTextureRenderer] Releasing native window");
       ANativeWindow_release(native_windows_);
       native_windows_ = nullptr;
     }
 
+    WriteIrisLogDynamic(IrisLogLevel::levelInfo, "[NativeTextureRenderer] Resetting rendering op");
     rendering_op_.reset();
+    WriteIrisLogDynamic(IrisLogLevel::levelInfo, "[NativeTextureRenderer] Resetting GL context");
     gl_context_.reset();
   }
 
   void NotifySizeChangeCallback(int width, int height) {
+    WriteIrisLogDynamic(IrisLogLevel::levelInfo, "[NativeTextureRenderer] Notifying size change callback");
     if (!j_iris_renderer_obj_) { return; }
     ::iris::AttachThreadScoped ats(jvm_);
     ats.env()->CallVoidMethod(j_iris_renderer_obj_, j_on_size_changed_method_,
@@ -875,6 +931,20 @@ Java_io_agora_agora_1rtc_1ng_IrisRenderer_nativeStopRenderingToSurface(
     JNIEnv *env, jobject thiz, jlong native_renderer_handle) {
   auto *renderer =
       reinterpret_cast<NativeTextureRenderer *>(native_renderer_handle);
+  WriteIrisLogDynamic(IrisLogLevel::levelInfo, "[NativeTextureRenderer] NativeStopRenderingToSurface method called");
   renderer->Dispose();
+  WriteIrisLogDynamic(IrisLogLevel::levelInfo, "[NativeTextureRenderer] Deleting renderer");
   delete renderer;
+}
+
+#include <string>
+
+extern "C" JNIEXPORT void JNICALL
+Java_io_agora_agora_1rtc_1ng_IrisRenderer_nativeLog(
+    JNIEnv *env, jclass clazz, jint level, jstring message) {
+  auto *j_message = env->GetStringUTFChars(message, nullptr);
+  std::string log_msg = "java call WriteIrisLog: [IrisRenderer] ";
+  log_msg += j_message;
+  agora::iris::rendering::WriteIrisLogDynamic(static_cast<IrisLogLevel>(level), log_msg.c_str());
+  env->ReleaseStringUTFChars(message, j_message);
 }

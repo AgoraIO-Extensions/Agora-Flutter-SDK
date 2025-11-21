@@ -1,4 +1,5 @@
 import 'package:agora_rtc_engine/src/agora_base.dart';
+import 'package:agora_rtc_engine/src/agora_log.dart';
 import 'package:agora_rtc_engine/src/agora_media_base.dart';
 import 'package:agora_rtc_engine/src/agora_rtc_engine.dart';
 import 'package:agora_rtc_engine/src/agora_rtc_engine_ex.dart';
@@ -300,10 +301,17 @@ class _AgoraRtcRenderTextureState extends State<AgoraRtcRenderTexture>
 
   VideoViewControllerBaseMixin? _controllerInternal;
 
+  void _log(String message, {LogLevel level = LogLevel.logLevelInfo}) {
+     _controllerInternal?.rtcEngine.writeLog(
+      level: level,
+      fmt: "[AgoraRtcRenderTexture] $message key:${widget.key}",
+    );
+  }
+
   @override
   void initState() {
     super.initState();
-
+    _log("initState");
     _initialize();
   }
 
@@ -311,6 +319,8 @@ class _AgoraRtcRenderTextureState extends State<AgoraRtcRenderTexture>
     final sourceController = widget.controller;
     _controllerInternal = _VideoViewControllerInternal(
         sourceController as VideoViewControllerBaseMixin);
+
+    _log('initialize');
 
     if (!_controllerInternal!.isInitialzed) {
       _listener ??= () {
@@ -327,13 +337,17 @@ class _AgoraRtcRenderTextureState extends State<AgoraRtcRenderTexture>
 
   Future<void> _initializeTexture() async {
     if (_controllerInternal == null) {
+      _log('initializeTexture _controllerInternal is null', level: LogLevel.logLevelWarn);
       return;
     }
 
     final oldTextureId = _controllerInternal!.getTextureId();
     await _controllerInternal!.initializeRender();
     final textureId = _controllerInternal!.getTextureId();
+    _log('initializeTexture w:$_width, h:$_height, key:${widget.key}, oldTextureId:$oldTextureId, newTextureId:$textureId');
+
     if (oldTextureId != textureId) {
+      _log('textureId changed from $oldTextureId to $textureId');
       _width = 0;
       _height = 0;
       // The parameters is no used
@@ -346,7 +360,7 @@ class _AgoraRtcRenderTextureState extends State<AgoraRtcRenderTexture>
   @override
   void didUpdateWidget(covariant AgoraRtcRenderTexture oldWidget) {
     super.didUpdateWidget(oldWidget);
-
+    _log('didUpdateWidget');
     _didUpdateWidget(oldWidget);
   }
 
@@ -354,11 +368,24 @@ class _AgoraRtcRenderTextureState extends State<AgoraRtcRenderTexture>
       covariant AgoraRtcRenderTexture oldWidget) async {
     if (_controllerInternal == null ||
         _controllerInternal!.getTextureId() == kTextureNotInit) {
+      _log('didUpdateWidget _controllerInternal is null or textureId is not init');
       return;
     }
     if (!oldWidget.controller.isSame(widget.controller) &&
         _controllerInternal != null) {
+      _log('didUpdateWidget isSame: ${oldWidget.controller.isSame(widget.controller)}');
+      _log('didUpdateWidget oldWidget.controller.canvas.view: ${oldWidget.controller.canvas.view}, widget.controller.canvas.view: ${widget.controller.canvas.view}');
+      _log('didUpdateWidget oldWidget.controller.canvas.renderMode: ${oldWidget.controller.canvas.renderMode}, widget.controller.canvas.renderMode: ${widget.controller.canvas.renderMode}');
+      _log('didUpdateWidget oldWidget.controller.canvas.mirrorMode: ${oldWidget.controller.canvas.mirrorMode}, widget.controller.canvas.mirrorMode: ${widget.controller.canvas.mirrorMode}');
+      _log('didUpdateWidget oldWidget.controller.canvas.uid: ${oldWidget.controller.canvas.uid}, widget.controller.canvas.uid: ${widget.controller.canvas.uid}');
+      _log('didUpdateWidget oldWidget.controller.canvas.sourceType: ${oldWidget.controller.canvas.sourceType}, widget.controller.canvas.sourceType: ${widget.controller.canvas.sourceType}');
+      _log('didUpdateWidget oldWidget.controller.canvas.cropArea: ${oldWidget.controller.canvas.cropArea}, widget.controller.canvas.cropArea: ${widget.controller.canvas.cropArea}');
+      _log('didUpdateWidget oldWidget.controller.canvas.setupMode: ${oldWidget.controller.canvas.setupMode}, widget.controller.canvas.setupMode: ${widget.controller.canvas.setupMode}');
+      _log('didUpdateWidget oldWidget.controller.canvas.mediaPlayerId: ${oldWidget.controller.canvas.mediaPlayerId}, widget.controller.canvas.mediaPlayerId: ${widget.controller.canvas.mediaPlayerId}');
+      _log('didUpdateWidget disposeRender and initialize');
+      _log('didUpdateWidget disposeRender start');
       await _controllerInternal!.disposeRender();
+      _log('didUpdateWidget disposeRender end');
       await _initialize();
     }
   }
@@ -370,26 +397,31 @@ class _AgoraRtcRenderTextureState extends State<AgoraRtcRenderTexture>
       _controllerInternal?.removeInitializedCompletedListener(_listener!);
       _listener = null;
     }
+    _log('deactivate _listener is null');
   }
 
   @override
   void dispose() {
+    _log('dispose _controllerInternal is not null');
     _controllerInternal?.disposeRender();
     _controllerInternal = null;
 
     super.dispose();
+    _log('dispose _controllerInternal is null');
   }
 
   @override
   void maybeCreateChannel(int viewId, String viewType) {
     if (_controllerInternal == null) {
+      _log('maybeCreateChannel _controllerInternal is null');
       return;
     }
     final textureId = _controllerInternal!.getTextureId();
-
+    _log('maybeCreateChannel textureId: $textureId');
     methodChannel = MethodChannel('agora_rtc_engine/texture_render_$textureId');
     methodChannel!.setMethodCallHandler((call) async {
       if (call.method == 'onSizeChanged') {
+        _log('onSizeChanged w:$_width, h:$_height, key:${widget.key}, newW:${call.arguments['width']}, newH:${call.arguments['height']}');
         _width = call.arguments['width'];
         _height = call.arguments['height'];
         setState(() {});
@@ -469,35 +501,43 @@ class _AgoraRtcRenderTextureState extends State<AgoraRtcRenderTexture>
   }
 
   @override
-  Widget build(BuildContext context) {
+    Widget build(BuildContext context) {
     Widget result = const SizedBox.expand();
+    _log('build w:$_width, h:$_height, key:${widget.key}');
     if (_controllerInternal == null) {
+      _log('build _controllerInternal is null');
       return result;
     }
     final controller = _controllerInternal!;
+    _log('build textureId: ${controller.getTextureId()}');
     if (controller.getTextureId() != kTextureNotInit) {
       if (_height != 0 && _width != 0) {
+        _log('build buildTexure');
         result = buildTexure(controller.getTextureId());
         final renderMode =
             controller.canvas.renderMode ?? RenderModeType.renderModeHidden;
 
         if (controller.shouldHandlerRenderMode) {
+          _log('build shouldHandlerRenderMode');
           result = _applyRenderMode(renderMode, result);
           VideoMirrorModeType mirrorMode;
           if (controller.isLocalUid) {
+            _log('build isLocalUid');
             mirrorMode = controller.canvas.mirrorMode ??
                 VideoMirrorModeType.videoMirrorModeEnabled;
           } else {
+            _log('build is not LocalUid');
             mirrorMode = controller.canvas.mirrorMode ??
                 VideoMirrorModeType.videoMirrorModeDisabled;
           }
 
           final sourceType = controller.canvas.sourceType ??
               VideoSourceType.videoSourceCameraPrimary;
-
+          _log('build applyMirrorMode');
           result = _applyMirrorMode(mirrorMode, result, sourceType);
         } else {
           // Fit mode by default if does not need to handle render mode
+          _log('build applyRenderMode');
           result = _applyRenderMode(RenderModeType.renderModeFit, result);
         }
       }

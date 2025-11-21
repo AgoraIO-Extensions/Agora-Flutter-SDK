@@ -38,23 +38,24 @@ public:
   void OnVideoFrameReceived(const void *videoFrame,
                             const IrisRtcVideoFrameConfig &config,
                             bool resize) override {
+    // agora::iris::WriteIrisLog(agora::iris::LOG_LEVEL_INFO, "OnVideoFrameReceived: %d %d", config.uid, config.video_source_type);
     TextureRender *strongRenderer = renderer_;
     if (!strongRenderer) {
       return;
     }
-
+   
     std::weak_ptr<RendererDelegate> self_weak = shared_from_this();
 
     agora::media::base::VideoFrame *vf =
         (agora::media::base::VideoFrame *)videoFrame;
 
     if (vf->width == 0 || vf->height == 0) {
+      WriteIrisLogInternal(IrisLogLevel::levelInfo, "[TextureRender] OnVideoFrameReceived: width or height is 0");
       return;
     }
 
     if (vf->renderTimeMs < last_frame_time_ms_) {
-      NSLog(@"Frame dropped: current time %@ ms, last frame time %@ ms",
-            @(vf->renderTimeMs), @(last_frame_time_ms_));
+      WriteIrisLogInternal(IrisLogLevel::levelInfo, "[TextureRender] OnVideoFrameReceived: frame dropped: current time %@ ms, last frame time %@ ms", @(vf->renderTimeMs), @(last_frame_time_ms_));
       return;
     }
 
@@ -63,10 +64,12 @@ public:
     CVPixelBufferRef _Nullable pixelBuffer =
         reinterpret_cast<CVPixelBufferRef>(vf->pixelBuffer);
     if (!pixelBuffer) {
+      WriteIrisLogInternal(IrisLogLevel::levelInfo, "[TextureRender] OnVideoFrameReceived: pixel buffer is nil");
       return;
     }
 
     if (pre_width_ != vf->width || pre_height_ != vf->height) {
+      WriteIrisLogInternal(IrisLogLevel::levelInfo, "[TextureRender] OnVideoFrameReceived: size changed: %d %d", vf->width, vf->height);
       pre_width_ = vf->width;
       pre_height_ = vf->height;
 
@@ -85,6 +88,7 @@ public:
         if (!strongRenderer) {
           return;
         }
+        WriteIrisLogInternal(IrisLogLevel::levelInfo, "[TextureRender] onSizeChanged callback: %d %d", temp_width, temp_height);
         [strongRenderer.channel invokeMethod:@"onSizeChanged"
                                    arguments:@{
                                      @"width" : @(temp_width),
@@ -154,10 +158,12 @@ public:
      irisRtcRenderingHandle:(void *)irisRtcRenderingHandle {
   self = [super init];
   if (self) {
+    WriteIrisLogInternal(IrisLogLevel::levelInfo, "[TextureRender] init method called");
     self.textureRegistry = textureRegistry;
     self.irisRtcRendering =
         (agora::iris::IrisRtcRendering *)irisRtcRenderingHandle;
     self.textureId = [self.textureRegistry registerTexture:self];
+    WriteIrisLogInternal(IrisLogLevel::levelInfo, "[TextureRender] registered textureId: %lld", self.textureId);
     self.channel = [FlutterMethodChannel
         methodChannelWithName:
             [NSString stringWithFormat:@"agora_rtc_engine/texture_render_%lld",
@@ -193,8 +199,11 @@ public:
       agora::media::base::VIDEO_MODULE_POSITION::POSITION_POST_CAPTURER |
       agora::media::base::VIDEO_MODULE_POSITION::POSITION_PRE_RENDERER;
 
+  WriteIrisLogInternal(IrisLogLevel::levelInfo, "[TextureRender] updateData uid: %u, channelId: %s, sourceType: %d, mode: %d", config.uid, config.channelId, config.video_source_type, config.video_view_setup_mode);
+
   self.delegateId = self.irisRtcRendering->AddVideoFrameObserverDelegate(
       config, self.delegate.get());
+  WriteIrisLogInternal(IrisLogLevel::levelInfo, "[TextureRender] AddVideoFrameObserverDelegate returned delegateId: %d", self.delegateId);
 }
 
 - (CVPixelBufferRef _Nullable)copyPixelBuffer {
@@ -206,11 +215,15 @@ public:
     pixelBuffer = self.latestPixelBuffer;
     self.latestPixelBuffer = nil;
   });
+  // Too frequent to log every frame copy
+  // agora::iris::WriteIrisLog(agora::iris::LOG_LEVEL_INFO, "[TextureRender] copyPixelBuffer %p", pixelBuffer);
   return pixelBuffer;
 }
 
 - (void)dispose {
+  WriteIrisLogInternal(IrisLogLevel::levelInfo, "[TextureRender] dispose method called");
   if (self.irisRtcRendering) {
+    WriteIrisLogInternal(IrisLogLevel::levelInfo, "[TextureRender] removing delegateId: %d", self.delegateId);
     self.irisRtcRendering->RemoveVideoFrameObserverDelegate(self.delegateId);
     self.irisRtcRendering = nil;
   }
@@ -218,12 +231,14 @@ public:
     self.delegate.reset();
   }
   if (self.textureRegistry) {
+    WriteIrisLogInternal(IrisLogLevel::levelInfo, "[TextureRender] unregisterTexture: %lld", self.textureId);
     [self.textureRegistry unregisterTexture:self.textureId];
     self.textureRegistry = nil;
   }
 }
 
 - (void)dealloc {
+  WriteIrisLogInternal(IrisLogLevel::levelInfo, "[TextureRender] dealloc method called");
   if (self.irisRtcRendering) {
     // the delegateId is garenteed to be auto incremented, so we can just remove
     // the delegate by the id, no need to check if the delegate is still valid

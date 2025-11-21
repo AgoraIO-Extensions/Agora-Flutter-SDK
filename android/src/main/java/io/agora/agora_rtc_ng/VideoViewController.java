@@ -114,6 +114,7 @@ public class VideoViewController implements MethodChannel.MethodCallHandler, Act
     private SimpleRef currentActivityRef;
 
     VideoViewController(TextureRegistry textureRegistry, BinaryMessenger binaryMessenger) {
+        IrisRenderer.log(2, "VideoViewController constructor called");
         this.textureRegistry = textureRegistry;
         this.binaryMessenger = binaryMessenger;
         methodChannel = new MethodChannel(binaryMessenger, "agora_rtc_ng/video_view_controller");
@@ -125,18 +126,22 @@ public class VideoViewController implements MethodChannel.MethodCallHandler, Act
             int platformViewId,
             Context context,
             AgoraPlatformViewFactory.PlatformViewProvider viewProvider) {
+        IrisRenderer.log(2, "VideoViewController createPlatformRender method called with platformViewId: " + platformViewId);
         return this.pool.createView(platformViewId, context, viewProvider);
     }
 
     public boolean destroyPlatformRender(int platformRenderId) {
+        IrisRenderer.log(2, "VideoViewController destroyPlatformRender method called with platformRenderId: " + platformRenderId);
         return this.pool.deViewRef(platformRenderId);
     }
 
     public boolean addPlatformRenderRef(int platformViewId) {
+        IrisRenderer.log(2, "VideoViewController addPlatformRenderRef method called with platformViewId: " + platformViewId);
         return this.pool.addViewRef(platformViewId);
     }
 
     public boolean dePlatformRenderRef(int platformViewId) {
+        IrisRenderer.log(2, "VideoViewController dePlatformRenderRef method called with platformViewId: " + platformViewId);
         return this.pool.deViewRef(platformViewId);
     }
 
@@ -146,6 +151,7 @@ public class VideoViewController implements MethodChannel.MethodCallHandler, Act
             String channelId,
             int videoSourceType,
             int videoViewSetupMode) {
+        IrisRenderer.log(2, "VideoViewController createTextureRender method called with irisRtcRenderingHandle: " + irisRtcRenderingHandle + ", uid: " + uid + ", channelId: " + channelId + ", videoSourceType: " + videoSourceType + ", videoViewSetupMode: " + videoViewSetupMode);
         final TextureRenderer textureRenderer = new TextureRenderer(
                 textureRegistry,
                 binaryMessenger,
@@ -161,18 +167,23 @@ public class VideoViewController implements MethodChannel.MethodCallHandler, Act
     }
 
     private boolean destroyTextureRender(long textureId) {
+        IrisRenderer.log(2, "VideoViewController destroyTextureRender method called with textureId: " + textureId);
         final TextureRenderer textureRenderer = textureRendererMap.get(textureId);
         if (textureRenderer != null) {
+            IrisRenderer.log(2, "VideoViewController destroyTextureRender method called with textureRenderer: " + textureRenderer);
             textureRenderer.dispose();
             textureRendererMap.remove(textureId);
+            IrisRenderer.log(2, "VideoViewController destroyTextureRender method returned success: " + true);
             return true;
         }
 
+        IrisRenderer.log(2, "VideoViewController destroyTextureRender method returned success: " + false);
         return false;
     }
 
     @Override
     public void onMethodCall(@NonNull MethodCall call, @NonNull MethodChannel.Result result) {
+        IrisRenderer.log(2, "VideoViewController onMethodCall method called with call: " + call.method);
         switch (call.method) {
             case "attachVideoFrameBufferManager":
                 result.success(0);
@@ -212,12 +223,15 @@ public class VideoViewController implements MethodChannel.MethodCallHandler, Act
             }
             case "destroyTextureRender": {
                 final long textureId = getLong(call.arguments);
+                IrisRenderer.log(2, "VideoViewController destroyTextureRender method called with textureId: " + textureId);
                 final boolean success = destroyTextureRender(textureId);
                 result.success(success);
                 break;
             }
             case "dispose": {
+                IrisRenderer.log(2, "VideoViewController dispose method called");
                 disposeAllRenderers();
+                IrisRenderer.log(2, "VideoViewController dispose method returned success: " + true);
                 result.success(true);
                 break;
             }
@@ -225,6 +239,7 @@ public class VideoViewController implements MethodChannel.MethodCallHandler, Act
                 if (currentActivityRef != null) {
                     result.success(currentActivityRef.getNativeHandle());
                 } else {
+                    IrisRenderer.log(2, "VideoViewController getCurrentActivityHandle method returned success: " + 0);
                     result.success(0);
                 }
 
@@ -238,10 +253,13 @@ public class VideoViewController implements MethodChannel.MethodCallHandler, Act
     }
 
     private void disposeAllRenderers() {
+        IrisRenderer.log(2, "VideoViewController disposeAllRenderers method called");
         for (final TextureRenderer textureRenderer : textureRendererMap.values()) {
+            IrisRenderer.log(2, "VideoViewController disposeAllRenderers method called with textureRenderer: " + textureRenderer);
             textureRenderer.dispose();
         }
         textureRendererMap.clear();
+        IrisRenderer.log(2, "VideoViewController disposeAllRenderers method returned success: " + true);
     }
 
     /**
@@ -252,9 +270,11 @@ public class VideoViewController implements MethodChannel.MethodCallHandler, Act
     }
 
     public void dispose() {
+        IrisRenderer.log(2, "VideoViewController dispose method called");
         methodChannel.setMethodCallHandler(null);
         currentActivityRef = null;
         disposeAllRenderers();
+        IrisRenderer.log(2, "VideoViewController dispose method returned success: " + true);
     }
 
     @Override

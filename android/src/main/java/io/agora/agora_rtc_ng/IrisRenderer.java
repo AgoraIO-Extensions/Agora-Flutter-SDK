@@ -66,4 +66,20 @@ public class IrisRenderer {
                                                     int videoViewSetupMode);
 
   private native void nativeStopRenderingToSurface(long nativeRendererHandle);
+
+  private static native void nativeLog(int level, String message);
+
+  public static void log(int level, String message) {
+    nativeLog(level, message);
+  }
+
+  // Add overload to support formatted strings to avoid compilation errors in VideoViewController.java
+  public static void log(int level, String format, Object... args) {
+      try {
+          String message = String.format(format, args);
+          nativeLog(level, message);
+      } catch (Exception e) {
+          nativeLog(level, format); // Fallback to raw format string if formatting fails
+      }
+  }
 }

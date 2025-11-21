@@ -4,6 +4,16 @@
 #import <AgoraRtcWrapper/iris_engine_base.h>
 #import <AgoraRtcWrapper/iris_rtc_rendering_cxx.h>
 
+// Define WriteIrisLogInternal to handle varargs formatting
+void WriteIrisLogInternal(IrisLogLevel level, const char* format, ...) {
+    va_list args;
+    va_start(args, format);
+    NSString *formatStr = [NSString stringWithUTF8String:format];
+    NSString *logMsg = [[NSString alloc] initWithFormat:formatStr arguments:args];
+    WriteIrisLog(level, [logMsg UTF8String]);
+    va_end(args);
+}
+
 /// A simple implemetation of ref count for an object, which just hold the value reference and record the ref count.
 @interface SimpleRef : NSObject
 
@@ -140,6 +150,7 @@
                messenger: (NSObject<FlutterBinaryMessenger> *)messenger {
     self = [super init];
     if (self) {
+      WriteIrisLogInternal(IrisLogLevel::levelInfo, "VideoViewController init method called");
       self.textureRegistry = textureRegistry;
       self.messenger = messenger;
       self.textureRenders = [NSMutableDictionary new];
@@ -162,7 +173,9 @@
 }
 
 - (void)onMethodCall:(FlutterMethodCall *)call result:(FlutterResult)result {
+      WriteIrisLogInternal(IrisLogLevel::levelInfo, "VideoViewController onMethodCall method called");
   if ([@"createTextureRender" isEqualToString:call.method]) {
+    WriteIrisLogInternal(IrisLogLevel::levelInfo, "VideoViewController createTextureRender method called with arguments: %s", [call.arguments description].UTF8String);
       NSDictionary *data = call.arguments;
       NSNumber *irisRtcRenderingHandle = data[@"irisRtcRenderingHandle"];
       NSNumber *uid = data[@"uid"];
@@ -175,41 +188,51 @@
                                           channelId:channelId
                                     videoSourceType:videoSourceType
                                  videoViewSetupMode:videoViewSetupMode];
+      WriteIrisLogInternal(IrisLogLevel::levelInfo, "VideoViewController createTextureRender method returned textureId: %lld", textureId);
       result(@(textureId));
   } else if ([@"destroyTextureRender" isEqualToString:call.method]) {
       NSNumber *textureIdValue = call.arguments;
+      WriteIrisLogInternal(IrisLogLevel::levelInfo, "VideoViewController destroyTextureRender method called with arguments: %s", [textureIdValue description].UTF8String);
       BOOL success = [self destroyTextureRender: [textureIdValue longLongValue]];
+      WriteIrisLogInternal(IrisLogLevel::levelInfo, "VideoViewController destroyTextureRender method returned success: %d", success);
       result(@(success));
   } else if ([@"addPlatformRenderRef" isEqualToString:call.method]) {
       NSNumber *platformViewIdValue = call.arguments;
       int64_t platformViewId = [platformViewIdValue longLongValue];
+      WriteIrisLogInternal(IrisLogLevel::levelInfo, "VideoViewController addPlatformRenderRef method called with arguments: %lld", platformViewId);
       [self addPlatformRenderRef:platformViewId];
       result(@(YES));
   } else if ([@"dePlatfromViewRef" isEqualToString:call.method]) {
       NSNumber *platformViewIdValue = call.arguments;
       int64_t platformViewId = [platformViewIdValue longLongValue];
+      WriteIrisLogInternal(IrisLogLevel::levelInfo, "VideoViewController dePlatfromViewRef method called with arguments: %lld", platformViewId);
       [self dePlatformRenderRef:platformViewId];
       
       result(@(YES));
   } else if ([@"dispose" isEqualToString:call.method]) {
+      WriteIrisLogInternal(IrisLogLevel::levelInfo, "VideoViewController dispose method called");
       [self dispose];
       result(@(YES));
   }
 }
 
 - (id)createPlatformRender:(int64_t)platformViewId frame:(CGRect)frame {
+    WriteIrisLogInternal(IrisLogLevel::levelInfo, "VideoViewController createPlatformRender method called with arguments: %lld %s", platformViewId, NSStringFromCGRect(frame).UTF8String);
     return [self.platformRenderPool createView:platformViewId frame:frame];
 }
 
 - (BOOL)destroyPlatformRender:(int64_t)platformViewId {
+    WriteIrisLogInternal(IrisLogLevel::levelInfo, "VideoViewController destroyPlatformRender method called with arguments: %lld", platformViewId);
     return [self.platformRenderPool deViewRef:platformViewId];
 }
 
 - (BOOL)addPlatformRenderRef:(int64_t)platformViewId {
+    WriteIrisLogInternal(IrisLogLevel::levelInfo, "VideoViewController addPlatformRenderRef method called with arguments: %lld", platformViewId);
     return [self.platformRenderPool addViewRef:platformViewId];
 }
 
 - (BOOL)dePlatformRenderRef:(int64_t)platformViewId {
+    WriteIrisLogInternal(IrisLogLevel::levelInfo, "VideoViewController dePlatformRenderRef method called with arguments: %lld", platformViewId);
     return [self.platformRenderPool deViewRef:platformViewId];
 }
 
@@ -226,24 +249,31 @@
     int64_t textureId = [textureRender textureId];
     [textureRender updateData:uid channelId:channelId videoSourceType:videoSourceType videoViewSetupMode:videoViewSetupMode];
     self.textureRenders[@(textureId)] = textureRender;
+    WriteIrisLogInternal(IrisLogLevel::levelInfo, "VideoViewController createTextureRender method returned textureId: %lld", textureId);
     return textureId;
 }
 
 - (BOOL)destroyTextureRender:(int64_t)textureId {
+    WriteIrisLogInternal(IrisLogLevel::levelInfo, "VideoViewController destroyTextureRender method called with arguments: %lld", textureId);
     TextureRender *textureRender = [self.textureRenders objectForKey:@(textureId)];
     if (textureRender != nil) {
       [textureRender dispose];
       [self.textureRenders removeObjectForKey:@(textureId)];
+      WriteIrisLogInternal(IrisLogLevel::levelInfo, "VideoViewController destroyTextureRender method returned success: %d", YES);
       return YES;
     }
+    WriteIrisLogInternal(IrisLogLevel::levelInfo, "VideoViewController destroyTextureRender method returned success: %d", NO);
     return NO;
 }
 
 - (void)dispose {
+    WriteIrisLogInternal(IrisLogLevel::levelInfo, "VideoViewController dispose method called");
     for (TextureRender * textureRender in self.textureRenders.allValues) {
         [textureRender dispose];
+        WriteIrisLogInternal(IrisLogLevel::levelInfo, "VideoViewController dispose method called with textureRender: %p", textureRender);
     }
     [self.textureRenders removeAllObjects];
+    WriteIrisLogInternal(IrisLogLevel::levelInfo, "VideoViewController dispose method returned");
 }
 
 // - (void)dealloc {

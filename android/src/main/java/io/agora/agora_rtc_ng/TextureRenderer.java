@@ -52,6 +52,7 @@ public class TextureRenderer {
                 }
 
                 handler.post(() -> {
+                    IrisRenderer.log(2, "TextureRenderer onSizeChanged: " + width + " " + height); // 2 is levelInfo
                     methodChannel.invokeMethod(
                             "onSizeChanged",
                             new HashMap<String, Integer>() {{
@@ -63,19 +64,25 @@ public class TextureRenderer {
         });
 
         this.irisRenderer.startRenderingToSurface(renderSurface);
+        IrisRenderer.log(2, "TextureRenderer created: " + flutterTexture.id());
     }
 
     public long getTextureId() {
+        IrisRenderer.log(2, "TextureRenderer getTextureId method called with flutterTexture: " + flutterTexture.id());
         return flutterTexture.id();
     }
 
     public void dispose() {
+        IrisRenderer.log(2, "TextureRenderer dispose method called with flutterTexture: " + flutterTexture.id());
         this.methodChannel.setMethodCallHandler(null);
         irisRenderer.stopRenderingToSurface();
         this.irisRenderer.setCallback(null);
         if (renderSurface != null) {
+            IrisRenderer.log(2, "TextureRenderer dispose method called with renderSurface: " + renderSurface.hashCode());
             renderSurface.release();
+            IrisRenderer.log(2, "TextureRenderer dispose method called with renderSurface: " + renderSurface.hashCode());
             renderSurface = null;
+            IrisRenderer.log(2, "TextureRenderer dispose method called with flutterSurfaceTexture: " + flutterSurfaceTexture.hashCode());
             flutterSurfaceTexture = null;
         }
     }
