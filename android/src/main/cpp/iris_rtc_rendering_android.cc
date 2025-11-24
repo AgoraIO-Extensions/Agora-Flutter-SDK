@@ -13,6 +13,7 @@
 #include <memory>
 #include <vector>
 #include <dlfcn.h>
+#include <string>
 
 namespace agora {
 namespace iris {
