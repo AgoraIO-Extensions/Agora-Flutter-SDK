@@ -119,11 +119,6 @@ class MediaPlayerControllerImpl
   }
 
   @override
-  Future<int> getAudioBufferDelay() {
-    return _mediaPlayer!.getAudioBufferDelay();
-  }
-
-  @override
   Future<MediaPlayerState> getState() {
     return _mediaPlayer!.getState();
   }

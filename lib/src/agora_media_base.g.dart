@@ -54,6 +54,63 @@ Map<String, dynamic> _$AudioParametersToJson(AudioParameters instance) {
   return val;
 }
 
+ContentInspectModule _$ContentInspectModuleFromJson(
+        Map<String, dynamic> json) =>
+    ContentInspectModule(
+      type: $enumDecodeNullable(_$ContentInspectTypeEnumMap, json['type']),
+      interval: (json['interval'] as num?)?.toInt(),
+    );
+
+Map<String, dynamic> _$ContentInspectModuleToJson(
+    ContentInspectModule instance) {
+  final val = <String, dynamic>{};
+
+  void writeNotNull(String key, dynamic value) {
+    if (value != null) {
+      val[key] = value;
+    }
+  }
+
+  writeNotNull('type', _$ContentInspectTypeEnumMap[instance.type]);
+  writeNotNull('interval', instance.interval);
+  return val;
+}
+
+const _$ContentInspectTypeEnumMap = {
+  ContentInspectType.contentInspectInvalid: 0,
+  ContentInspectType.contentInspectModeration: 1,
+  ContentInspectType.contentInspectSupervision: 2,
+  ContentInspectType.contentInspectImageModeration: 3,
+};
+
+ContentInspectConfig _$ContentInspectConfigFromJson(
+        Map<String, dynamic> json) =>
+    ContentInspectConfig(
+      extraInfo: json['extraInfo'] as String?,
+      serverConfig: json['serverConfig'] as String?,
+      modules: (json['modules'] as List<dynamic>?)
+          ?.map((e) => ContentInspectModule.fromJson(e as Map<String, dynamic>))
+          .toList(),
+      moduleCount: (json['moduleCount'] as num?)?.toInt(),
+    );
+
+Map<String, dynamic> _$ContentInspectConfigToJson(
+    ContentInspectConfig instance) {
+  final val = <String, dynamic>{};
+
+  void writeNotNull(String key, dynamic value) {
+    if (value != null) {
+      val[key] = value;
+    }
+  }
+
+  writeNotNull('extraInfo', instance.extraInfo);
+  writeNotNull('serverConfig', instance.serverConfig);
+  writeNotNull('modules', instance.modules?.map((e) => e.toJson()).toList());
+  writeNotNull('moduleCount', instance.moduleCount);
+  return val;
+}
+
 PacketOptions _$PacketOptionsFromJson(Map<String, dynamic> json) =>
     PacketOptions(
       timestamp: (json['timestamp'] as num?)?.toInt(),
@@ -420,73 +477,6 @@ Map<String, dynamic> _$VideoFrameToJson(VideoFrame instance) {
   return val;
 }
 
-ContentInspectModule _$ContentInspectModuleFromJson(
-        Map<String, dynamic> json) =>
-    ContentInspectModule(
-      type: $enumDecodeNullable(_$ContentInspectTypeEnumMap, json['type']),
-      interval: (json['interval'] as num?)?.toInt(),
-      position:
-          $enumDecodeNullable(_$VideoModulePositionEnumMap, json['position']),
-    );
-
-Map<String, dynamic> _$ContentInspectModuleToJson(
-    ContentInspectModule instance) {
-  final val = <String, dynamic>{};
-
-  void writeNotNull(String key, dynamic value) {
-    if (value != null) {
-      val[key] = value;
-    }
-  }
-
-  writeNotNull('type', _$ContentInspectTypeEnumMap[instance.type]);
-  writeNotNull('interval', instance.interval);
-  writeNotNull('position', _$VideoModulePositionEnumMap[instance.position]);
-  return val;
-}
-
-const _$ContentInspectTypeEnumMap = {
-  ContentInspectType.contentInspectInvalid: 0,
-  ContentInspectType.contentInspectModeration: 1,
-  ContentInspectType.contentInspectSupervision: 2,
-  ContentInspectType.contentInspectImageModeration: 3,
-};
-
-const _$VideoModulePositionEnumMap = {
-  VideoModulePosition.positionPostCapturer: 1,
-  VideoModulePosition.positionPreRenderer: 2,
-  VideoModulePosition.positionPreEncoder: 4,
-  VideoModulePosition.positionPostCapturerOrigin: 8,
-};
-
-ContentInspectConfig _$ContentInspectConfigFromJson(
-        Map<String, dynamic> json) =>
-    ContentInspectConfig(
-      extraInfo: json['extraInfo'] as String?,
-      serverConfig: json['serverConfig'] as String?,
-      modules: (json['modules'] as List<dynamic>?)
-          ?.map((e) => ContentInspectModule.fromJson(e as Map<String, dynamic>))
-          .toList(),
-      moduleCount: (json['moduleCount'] as num?)?.toInt(),
-    );
-
-Map<String, dynamic> _$ContentInspectConfigToJson(
-    ContentInspectConfig instance) {
-  final val = <String, dynamic>{};
-
-  void writeNotNull(String key, dynamic value) {
-    if (value != null) {
-      val[key] = value;
-    }
-  }
-
-  writeNotNull('extraInfo', instance.extraInfo);
-  writeNotNull('serverConfig', instance.serverConfig);
-  writeNotNull('modules', instance.modules?.map((e) => e.toJson()).toList());
-  writeNotNull('moduleCount', instance.moduleCount);
-  return val;
-}
-
 SnapshotConfig _$SnapshotConfigFromJson(Map<String, dynamic> json) =>
     SnapshotConfig(
       filePath: json['filePath'] as String?,
@@ -507,6 +497,13 @@ Map<String, dynamic> _$SnapshotConfigToJson(SnapshotConfig instance) {
   writeNotNull('position', _$VideoModulePositionEnumMap[instance.position]);
   return val;
 }
+
+const _$VideoModulePositionEnumMap = {
+  VideoModulePosition.positionPostCapturer: 1,
+  VideoModulePosition.positionPreRenderer: 2,
+  VideoModulePosition.positionPreEncoder: 4,
+  VideoModulePosition.positionPostCapturerOrigin: 8,
+};
 
 AudioFrame _$AudioFrameFromJson(Map<String, dynamic> json) => AudioFrame(
       type: $enumDecodeNullable(_$AudioFrameTypeEnumMap, json['type']),
@@ -769,6 +766,12 @@ const _$MediaSourceTypeEnumMap = {
   MediaSourceType.unknownMediaSource: 100,
 };
 
+const _$ContentInspectResultEnumMap = {
+  ContentInspectResult.contentInspectNeutral: 1,
+  ContentInspectResult.contentInspectSexy: 2,
+  ContentInspectResult.contentInspectPorn: 3,
+};
+
 const _$AudioDualMonoModeEnumMap = {
   AudioDualMonoMode.audioDualMonoStereo: 0,
   AudioDualMonoMode.audioDualMonoL: 1,
@@ -796,12 +799,6 @@ const _$MediaPlayerSourceTypeEnumMap = {
   MediaPlayerSourceType.mediaPlayerSourceDefault: 0,
   MediaPlayerSourceType.mediaPlayerSourceFullFeatured: 1,
   MediaPlayerSourceType.mediaPlayerSourceSimple: 2,
-};
-
-const _$ContentInspectResultEnumMap = {
-  ContentInspectResult.contentInspectNeutral: 1,
-  ContentInspectResult.contentInspectSexy: 2,
-  ContentInspectResult.contentInspectPorn: 3,
 };
 
 const _$AudioFramePositionEnumMap = {

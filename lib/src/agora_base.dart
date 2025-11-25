@@ -5167,120 +5167,52 @@ enum FaceShapeArea {
   faceShapeAreaNone,
 
   /// @nodoc
-  @JsonValue(100)
+  @JsonValue(0)
   faceShapeAreaHeadscale,
 
   /// @nodoc
-  @JsonValue(101)
+  @JsonValue(1)
   faceShapeAreaForehead,
 
   /// @nodoc
-  @JsonValue(102)
+  @JsonValue(2)
   faceShapeAreaFacecontour,
 
   /// @nodoc
-  @JsonValue(103)
+  @JsonValue(3)
   faceShapeAreaFacelength,
 
   /// @nodoc
-  @JsonValue(104)
+  @JsonValue(4)
   faceShapeAreaFacewidth,
 
   /// @nodoc
-  @JsonValue(105)
+  @JsonValue(5)
   faceShapeAreaCheekbone,
 
   /// @nodoc
-  @JsonValue(106)
+  @JsonValue(6)
   faceShapeAreaCheek,
 
   /// @nodoc
-  @JsonValue(107)
-  faceShapeAreaMandible,
-
-  /// @nodoc
-  @JsonValue(108)
+  @JsonValue(7)
   faceShapeAreaChin,
 
   /// @nodoc
-  @JsonValue(200)
+  @JsonValue(8)
   faceShapeAreaEyescale,
 
   /// @nodoc
-  @JsonValue(201)
-  faceShapeAreaEyedistance,
-
-  /// @nodoc
-  @JsonValue(202)
-  faceShapeAreaEyeposition,
-
-  /// @nodoc
-  @JsonValue(203)
-  faceShapeAreaLowereyelid,
-
-  /// @nodoc
-  @JsonValue(204)
-  faceShapeAreaEyepupils,
-
-  /// @nodoc
-  @JsonValue(205)
-  faceShapeAreaEyeinnercorner,
-
-  /// @nodoc
-  @JsonValue(206)
-  faceShapeAreaEyeoutercorner,
-
-  /// @nodoc
-  @JsonValue(300)
+  @JsonValue(9)
   faceShapeAreaNoselength,
 
   /// @nodoc
-  @JsonValue(301)
+  @JsonValue(10)
   faceShapeAreaNosewidth,
 
   /// @nodoc
-  @JsonValue(302)
-  faceShapeAreaNosewing,
-
-  /// @nodoc
-  @JsonValue(303)
-  faceShapeAreaNoseroot,
-
-  /// @nodoc
-  @JsonValue(304)
-  faceShapeAreaNosebridge,
-
-  /// @nodoc
-  @JsonValue(305)
-  faceShapeAreaNosetip,
-
-  /// @nodoc
-  @JsonValue(306)
-  faceShapeAreaNosegeneral,
-
-  /// @nodoc
-  @JsonValue(400)
+  @JsonValue(11)
   faceShapeAreaMouthscale,
-
-  /// @nodoc
-  @JsonValue(401)
-  faceShapeAreaMouthposition,
-
-  /// @nodoc
-  @JsonValue(402)
-  faceShapeAreaMouthsmile,
-
-  /// @nodoc
-  @JsonValue(403)
-  faceShapeAreaMouthlip,
-
-  /// @nodoc
-  @JsonValue(500)
-  faceShapeAreaEyebrowposition,
-
-  /// @nodoc
-  @JsonValue(501)
-  faceShapeAreaEyebrowthickness,
 }
 
 /// @nodoc
@@ -5328,10 +5260,6 @@ enum FaceShapeBeautyStyle {
   /// @nodoc
   @JsonValue(1)
   faceShapeBeautyStyleMale,
-
-  /// @nodoc
-  @JsonValue(2)
-  faceShapeBeautyStyleNatural,
 }
 
 /// @nodoc
@@ -6087,50 +6015,12 @@ extension VoiceAiTunerTypeExt on VoiceAiTunerType {
   }
 }
 
-/// The audio configuration for the shared screen stream.
-///
-/// Only available where captureAudio is true.
-@JsonSerializable(explicitToJson: true, includeIfNull: false)
-class ScreenAudioParameters implements AgoraSerializable {
-  /// @nodoc
-  const ScreenAudioParameters(
-      {this.sampleRate,
-      this.channels,
-      this.captureSignalVolume,
-      this.excludeCurrentProcessAudio});
-
-  /// Audio sample rate (Hz). The default value is 16000.
-  @JsonKey(name: 'sampleRate')
-  final int? sampleRate;
-
-  /// The number of audio channels. The default value is 2, which means stereo.
-  @JsonKey(name: 'channels')
-  final int? channels;
-
-  /// The volume of the captured system audio. The value range is [0, 100]. The default value is 100.
-  @JsonKey(name: 'captureSignalVolume')
-  final int? captureSignalVolume;
-
-  /// @nodoc
-  @JsonKey(name: 'excludeCurrentProcessAudio')
-  final bool? excludeCurrentProcessAudio;
-
-  /// @nodoc
-  factory ScreenAudioParameters.fromJson(Map<String, dynamic> json) =>
-      _$ScreenAudioParametersFromJson(json);
-
-  @override
-  Map<String, dynamic> toJson() => _$ScreenAudioParametersToJson(this);
-}
-
 /// Screen sharing configurations.
 @JsonSerializable(explicitToJson: true, includeIfNull: false)
 class ScreenCaptureParameters implements AgoraSerializable {
   /// @nodoc
   const ScreenCaptureParameters(
-      {this.captureAudio,
-      this.audioParams,
-      this.dimensions,
+      {this.dimensions,
       this.frameRate,
       this.bitrate,
       this.captureMouseCursor,
@@ -6140,14 +6030,6 @@ class ScreenCaptureParameters implements AgoraSerializable {
       this.highLightWidth,
       this.highLightColor,
       this.enableHighLight});
-
-  /// @nodoc
-  @JsonKey(name: 'captureAudio')
-  final bool? captureAudio;
-
-  /// @nodoc
-  @JsonKey(name: 'audioParams')
-  final ScreenAudioParameters? audioParams;
 
   /// The video encoding resolution of the screen sharing stream. See VideoDimensions. The default value is 1920 × 1080, that is, 2,073,600 pixels. Agora uses the value of this parameter to calculate the charges. If the screen dimensions are different from the value of this parameter, Agora applies the following strategies for encoding. Suppose dimensions is set to 1920 × 1080:
   ///  If the value of the screen dimensions is lower than that of dimensions, for example, 1000 × 1000 pixels, the SDK uses the screen dimensions, that is, 1000 × 1000 pixels, for encoding.
@@ -7197,6 +7079,35 @@ class ScreenVideoParameters implements AgoraSerializable {
 
   @override
   Map<String, dynamic> toJson() => _$ScreenVideoParametersToJson(this);
+}
+
+/// The audio configuration for the shared screen stream.
+///
+/// Only available where captureAudio is true.
+@JsonSerializable(explicitToJson: true, includeIfNull: false)
+class ScreenAudioParameters implements AgoraSerializable {
+  /// @nodoc
+  const ScreenAudioParameters(
+      {this.sampleRate, this.channels, this.captureSignalVolume});
+
+  /// Audio sample rate (Hz). The default value is 16000.
+  @JsonKey(name: 'sampleRate')
+  final int? sampleRate;
+
+  /// The number of audio channels. The default value is 2, which means stereo.
+  @JsonKey(name: 'channels')
+  final int? channels;
+
+  /// The volume of the captured system audio. The value range is [0, 100]. The default value is 100.
+  @JsonKey(name: 'captureSignalVolume')
+  final int? captureSignalVolume;
+
+  /// @nodoc
+  factory ScreenAudioParameters.fromJson(Map<String, dynamic> json) =>
+      _$ScreenAudioParametersFromJson(json);
+
+  @override
+  Map<String, dynamic> toJson() => _$ScreenAudioParametersToJson(this);
 }
 
 /// Screen sharing configurations.
