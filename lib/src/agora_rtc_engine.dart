@@ -1349,8 +1349,8 @@ class ChannelMediaOptions implements AgoraSerializable {
       this.publishThirdCameraTrack,
       this.publishFourthCameraTrack,
       this.publishMicrophoneTrack,
-      this.publishScreenCaptureVideo,
       this.publishScreenCaptureAudio,
+      this.publishScreenCaptureVideo,
       this.publishScreenTrack,
       this.publishSecondaryScreenTrack,
       this.publishThirdScreenTrack,
@@ -1402,13 +1402,13 @@ class ChannelMediaOptions implements AgoraSerializable {
   @JsonKey(name: 'publishMicrophoneTrack')
   final bool? publishMicrophoneTrack;
 
-  /// Whether to publish the video captured from the screen: true : Publish the video captured from the screen. false : Do not publish the video captured from the screen. This parameter is for Android and iOS only.
-  @JsonKey(name: 'publishScreenCaptureVideo')
-  final bool? publishScreenCaptureVideo;
-
   /// Whether to publish the audio captured from the screen: true : Publish the audio captured from the screen. false : Publish the audio captured from the screen. This parameter is for Android and iOS only.
   @JsonKey(name: 'publishScreenCaptureAudio')
   final bool? publishScreenCaptureAudio;
+
+  /// Whether to publish the video captured from the screen: true : Publish the video captured from the screen. false : Do not publish the video captured from the screen. This parameter is for Android and iOS only.
+  @JsonKey(name: 'publishScreenCaptureVideo')
+  final bool? publishScreenCaptureVideo;
 
   /// Whether to publish the video captured from the screen: true : Publish the video captured from the screen. false : Do not publish the video captured from the screen. This is for Windows and macOS only.
   @JsonKey(name: 'publishScreenTrack')
@@ -1617,7 +1617,10 @@ extension FeatureTypeExt on FeatureType {
 class LeaveChannelOptions implements AgoraSerializable {
   /// @nodoc
   const LeaveChannelOptions(
-      {this.stopAudioMixing, this.stopAllEffect, this.stopMicrophoneRecording});
+      {this.stopAudioMixing,
+      this.stopAllEffect,
+      this.unloadAllEffect,
+      this.stopMicrophoneRecording});
 
   /// Whether to stop playing and mixing the music file when a user leaves the channel. true : (Default) Stop playing and mixing the music file. false : Do not stop playing and mixing the music file.
   @JsonKey(name: 'stopAudioMixing')
@@ -1626,6 +1629,10 @@ class LeaveChannelOptions implements AgoraSerializable {
   /// Whether to stop playing all audio effects when a user leaves the channel. true : (Default) Stop playing all audio effects. false : Do not stop playing any audio effect.
   @JsonKey(name: 'stopAllEffect')
   final bool? stopAllEffect;
+
+  /// @nodoc
+  @JsonKey(name: 'unloadAllEffect')
+  final bool? unloadAllEffect;
 
   /// Whether to stop microphone recording when a user leaves the channel. true : (Default) Stop microphone recording. false : Do not stop microphone recording.
   @JsonKey(name: 'stopMicrophoneRecording')
@@ -2715,6 +2722,102 @@ abstract class VideoDeviceManager {
   Future<void> release();
 }
 
+/// @nodoc
+abstract class VideoEffectObject {
+  /// @nodoc
+  Future<void> addOrUpdateVideoEffect(
+      {required int nodeId, required String templateName});
+
+  /// @nodoc
+  Future<void> removeVideoEffect(int nodeId);
+
+  /// @nodoc
+  Future<void> performVideoEffectAction(
+      {required int nodeId, required VideoEffectAction actionId});
+
+  /// @nodoc
+  Future<void> setVideoEffectFloatParam(
+      {required String option, required String key, required double param});
+
+  /// @nodoc
+  Future<void> setVideoEffectIntParam(
+      {required String option, required String key, required int param});
+
+  /// @nodoc
+  Future<void> setVideoEffectBoolParam(
+      {required String option, required String key, required bool param});
+
+  /// @nodoc
+  Future<double> getVideoEffectFloatParam(
+      {required String option, required String key});
+
+  /// @nodoc
+  Future<int> getVideoEffectIntParam(
+      {required String option, required String key});
+
+  /// @nodoc
+  Future<bool> getVideoEffectBoolParam(
+      {required String option, required String key});
+}
+
+/// @nodoc
+@JsonEnum(alwaysCreate: true)
+enum VideoEffectNodeId {
+  /// @nodoc
+  @JsonValue(1 << 0)
+  beauty,
+
+  /// @nodoc
+  @JsonValue(1 << 1)
+  styleMakeup,
+
+  /// @nodoc
+  @JsonValue(1 << 2)
+  filter,
+
+  /// @nodoc
+  @JsonValue(1 << 3)
+  sticker,
+}
+
+/// @nodoc
+extension VideoEffectNodeIdExt on VideoEffectNodeId {
+  /// @nodoc
+  static VideoEffectNodeId fromValue(int value) {
+    return $enumDecode(_$VideoEffectNodeIdEnumMap, value);
+  }
+
+  /// @nodoc
+  int value() {
+    return _$VideoEffectNodeIdEnumMap[this]!;
+  }
+}
+
+/// @nodoc
+@JsonEnum(alwaysCreate: true)
+enum VideoEffectAction {
+  /// @nodoc
+  @JsonValue(1)
+  save,
+
+  /// @nodoc
+  @JsonValue(2)
+  reset,
+}
+
+/// @nodoc
+extension VideoEffectActionExt on VideoEffectAction {
+  /// @nodoc
+  static VideoEffectAction fromValue(int value) {
+    return $enumDecode(_$VideoEffectActionEnumMap, value);
+  }
+
+  /// @nodoc
+  int value() {
+    return _$VideoEffectActionEnumMap[this]!;
+  }
+}
+
 /// Configurations for the RtcEngineContext instance.
 @JsonSerializable(explicitToJson: true, includeIfNull: false)
 class RtcEngineContext implements AgoraSerializable {
@@ -3476,6 +3579,14 @@ abstract class RtcEngine {
       {required bool enabled,
       required FilterEffectOptions options,
       MediaSourceType type = MediaSourceType.primaryCameraSource});
+
+  /// @nodoc
+  Future<VideoEffectObject?> createVideoEffectObject(
+      {required String bundlePath,
+      MediaSourceType type = MediaSourceType.primaryCameraSource});
+
+  /// @nodoc
+  Future<void> destroyVideoEffectObject(VideoEffectObject videoEffectObject);
 
   /// Sets low-light enhancement.
   ///
