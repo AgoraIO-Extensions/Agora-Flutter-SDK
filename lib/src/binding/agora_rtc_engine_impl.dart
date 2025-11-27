@@ -165,6 +165,188 @@ class VideoDeviceManagerImpl implements VideoDeviceManager {
   }
 }
 
+class VideoEffectObjectImpl implements VideoEffectObject {
+  VideoEffectObjectImpl(this.irisMethodChannel);
+
+  @protected
+  final IrisMethodChannel irisMethodChannel;
+
+  @protected
+  Map<String, dynamic> createParams(Map<String, dynamic> param) {
+    return param;
+  }
+
+  @protected
+  bool get isOverrideClassName => false;
+
+  @protected
+  String get className => 'VideoEffectObject';
+
+  @override
+  Future<void> addOrUpdateVideoEffect(
+      {required int nodeId, required String templateName}) async {
+    final apiType =
+        '${isOverrideClassName ? className : 'VideoEffectObject'}_addOrUpdateVideoEffect_303a98c';
+    final requestParam =
+        createParams({'nodeId': nodeId, 'templateName': templateName});
+    final callApiResult = await irisMethodChannel.invokeMethod(
+        IrisMethodCall(apiType, jsonEncode(requestParam), buffers: null));
+    if (callApiResult.irisReturnCode < 0) {
+      throw AgoraRtcException(code: callApiResult.irisReturnCode);
+    }
+    final rm = callApiResult.data;
+    final result = rm['result'];
+    if (result < 0) {
+      throw AgoraRtcException(code: result);
+    }
+  }
+
+  @override
+  Future<void> removeVideoEffect(int nodeId) async {
+    final apiType =
+        '${isOverrideClassName ? className : 'VideoEffectObject'}_removeVideoEffect_b48de50';
+    final requestParam = createParams({'nodeId': nodeId});
+    final callApiResult = await irisMethodChannel.invokeMethod(
+        IrisMethodCall(apiType, jsonEncode(requestParam), buffers: null));
+    if (callApiResult.irisReturnCode < 0) {
+      throw AgoraRtcException(code: callApiResult.irisReturnCode);
+    }
+    final rm = callApiResult.data;
+    final result = rm['result'];
+    if (result < 0) {
+      throw AgoraRtcException(code: result);
+    }
+  }
+
+  @override
+  Future<void> performVideoEffectAction(
+      {required int nodeId, required VideoEffectAction actionId}) async {
+    final apiType =
+        '${isOverrideClassName ? className : 'VideoEffectObject'}_performVideoEffectAction_eddb1a6';
+    final requestParam =
+        createParams({'nodeId': nodeId, 'actionId': actionId.value()});
+    final callApiResult = await irisMethodChannel.invokeMethod(
+        IrisMethodCall(apiType, jsonEncode(requestParam), buffers: null));
+    if (callApiResult.irisReturnCode < 0) {
+      throw AgoraRtcException(code: callApiResult.irisReturnCode);
+    }
+    final rm = callApiResult.data;
+    final result = rm['result'];
+    if (result < 0) {
+      throw AgoraRtcException(code: result);
+    }
+  }
+
+  @override
+  Future<void> setVideoEffectFloatParam(
+      {required String option,
+      required String key,
+      required double param}) async {
+    final apiType =
+        '${isOverrideClassName ? className : 'VideoEffectObject'}_setVideoEffectFloatParam_e8dfcf8';
+    final requestParam =
+        createParams({'option': option, 'key': key, 'param': param});
+    final callApiResult = await irisMethodChannel.invokeMethod(
+        IrisMethodCall(apiType, jsonEncode(requestParam), buffers: null));
+    if (callApiResult.irisReturnCode < 0) {
+      throw AgoraRtcException(code: callApiResult.irisReturnCode);
+    }
+    final rm = callApiResult.data;
+    final result = rm['result'];
+    if (result < 0) {
+      throw AgoraRtcException(code: result);
+    }
+  }
+
+  @override
+  Future<void> setVideoEffectIntParam(
+      {required String option, required String key, required int param}) async {
+    final apiType =
+        '${isOverrideClassName ? className : 'VideoEffectObject'}_setVideoEffectIntParam_3b77680';
+    final requestParam =
+        createParams({'option': option, 'key': key, 'param': param});
+    final callApiResult = await irisMethodChannel.invokeMethod(
+        IrisMethodCall(apiType, jsonEncode(requestParam), buffers: null));
+    if (callApiResult.irisReturnCode < 0) {
+      throw AgoraRtcException(code: callApiResult.irisReturnCode);
+    }
+    final rm = callApiResult.data;
+    final result = rm['result'];
+    if (result < 0) {
+      throw AgoraRtcException(code: result);
+    }
+  }
+
+  @override
+  Future<void> setVideoEffectBoolParam(
+      {required String option,
+      required String key,
+      required bool param}) async {
+    final apiType =
+        '${isOverrideClassName ? className : 'VideoEffectObject'}_setVideoEffectBoolParam_918930f';
+    final requestParam =
+        createParams({'option': option, 'key': key, 'param': param});
+    final callApiResult = await irisMethodChannel.invokeMethod(
+        IrisMethodCall(apiType, jsonEncode(requestParam), buffers: null));
+    if (callApiResult.irisReturnCode < 0) {
+      throw AgoraRtcException(code: callApiResult.irisReturnCode);
+    }
+    final rm = callApiResult.data;
+    final result = rm['result'];
+    if (result < 0) {
+      throw AgoraRtcException(code: result);
+    }
+  }
+
+  @override
+  Future<double> getVideoEffectFloatParam(
+      {required String option, required String key}) async {
+    final apiType =
+        '${isOverrideClassName ? className : 'VideoEffectObject'}_getVideoEffectFloatParam_ccad422';
+    final requestParam = createParams({'option': option, 'key': key});
+    final callApiResult = await irisMethodChannel.invokeMethod(
+        IrisMethodCall(apiType, jsonEncode(requestParam), buffers: null));
+    if (callApiResult.irisReturnCode < 0) {
+      throw AgoraRtcException(code: callApiResult.irisReturnCode);
+    }
+    final rm = callApiResult.data;
+    final result = rm['result'];
+    return result as double;
+  }
+
+  @override
+  Future<int> getVideoEffectIntParam(
+      {required String option, required String key}) async {
+    final apiType =
+        '${isOverrideClassName ? className : 'VideoEffectObject'}_getVideoEffectIntParam_ccad422';
+    final requestParam = createParams({'option': option, 'key': key});
+    final callApiResult = await irisMethodChannel.invokeMethod(
+        IrisMethodCall(apiType, jsonEncode(requestParam), buffers: null));
+    if (callApiResult.irisReturnCode < 0) {
+      throw AgoraRtcException(code: callApiResult.irisReturnCode);
+    }
+    final rm = callApiResult.data;
+    final result = rm['result'];
+    return result as int;
+  }
+
+  @override
+  Future<bool> getVideoEffectBoolParam(
+      {required String option, required String key}) async {
+    final apiType =
+        '${isOverrideClassName ? className : 'VideoEffectObject'}_getVideoEffectBoolParam_ccad422';
+    final requestParam = createParams({'option': option, 'key': key});
+    final callApiResult = await irisMethodChannel.invokeMethod(
+        IrisMethodCall(apiType, jsonEncode(requestParam), buffers: null));
+    if (callApiResult.irisReturnCode < 0) {
+      throw AgoraRtcException(code: callApiResult.irisReturnCode);
+    }
+    final rm = callApiResult.data;
+    final result = rm['result'];
+    return result as bool;
+  }
+}
+
 class RtcEngineImpl implements RtcEngine {
   RtcEngineImpl(this.irisMethodChannel);
 
@@ -770,6 +952,42 @@ class RtcEngineImpl implements RtcEngine {
     buffers.addAll(options.collectBufferList());
     final callApiResult = await irisMethodChannel.invokeMethod(
         IrisMethodCall(apiType, jsonEncode(requestParam), buffers: buffers));
+    if (callApiResult.irisReturnCode < 0) {
+      throw AgoraRtcException(code: callApiResult.irisReturnCode);
+    }
+    final rm = callApiResult.data;
+    final result = rm['result'];
+    if (result < 0) {
+      throw AgoraRtcException(code: result);
+    }
+  }
+
+  @override
+  Future<VideoEffectObject?> createVideoEffectObject(
+      {required String bundlePath,
+      MediaSourceType type = MediaSourceType.primaryCameraSource}) async {
+    final apiType =
+        '${isOverrideClassName ? className : 'RtcEngine'}_createVideoEffectObject_65bd50d';
+    final requestParam =
+        createParams({'bundlePath': bundlePath, 'type': type.value()});
+    final callApiResult = await irisMethodChannel.invokeMethod(
+        IrisMethodCall(apiType, jsonEncode(requestParam), buffers: null));
+    if (callApiResult.irisReturnCode < 0) {
+      throw AgoraRtcException(code: callApiResult.irisReturnCode);
+    }
+    final rm = callApiResult.data;
+    final result = rm['result'];
+    return result as VideoEffectObject;
+  }
+
+  @override
+  Future<void> destroyVideoEffectObject(
+      VideoEffectObject videoEffectObject) async {
+    final apiType =
+        '${isOverrideClassName ? className : 'RtcEngine'}_destroyVideoEffectObject_66d092b';
+    final requestParam = createParams({'videoEffectObject': videoEffectObject});
+    final callApiResult = await irisMethodChannel.invokeMethod(
+        IrisMethodCall(apiType, jsonEncode(requestParam), buffers: null));
     if (callApiResult.irisReturnCode < 0) {
       throw AgoraRtcException(code: callApiResult.irisReturnCode);
     }
