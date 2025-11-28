@@ -8,6 +8,7 @@ import 'package:agora_rtc_engine/src/impl/agora_rtc_engine_impl.dart';
 import 'package:agora_rtc_engine/src/impl/platform/global_video_view_controller.dart';
 import 'package:agora_rtc_engine/src/render/video_view_controller.dart';
 import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
 import 'package:meta/meta.dart';
 
 // ignore_for_file: public_member_api_docs
@@ -52,6 +53,9 @@ mixin VideoViewControllerBaseMixin implements VideoViewControllerBase {
   int _textureId = kTextureNotInit;
   int _viewHandle = kNullViewHandle;
   int _platformViewId = kInvalidPlatformViewId;
+  int _textureWidth = 0;
+  int _textureHeight = 0;
+  Widget? _hostWidget;
 
   @internal
   bool get isInitialzed => (rtcEngine as RtcEngineImpl).isInitialzed;
@@ -70,6 +74,30 @@ mixin VideoViewControllerBaseMixin implements VideoViewControllerBase {
 
   @override
   int getTextureId() => _textureId;
+
+  @override
+  int getTextureWidth() => _textureWidth;
+
+  @override
+  void setTextureWidth(int width) {
+    _textureWidth = width;
+  }
+
+  @override
+  int getTextureHeight() => _textureHeight;
+
+  @override
+  void setTextureHeight(int height) {
+    _textureHeight = height;
+  }
+
+  @override
+  Widget? getHostWidget() => _hostWidget;
+
+  @override
+  void setHostWidget(Widget? widget) {
+    _hostWidget = widget;
+  }
 
   @override
   int getViewHandle() => _viewHandle;

@@ -27,7 +27,9 @@ class _State extends State<JoinChannelVideo> {
       muteAllRemoteVideo = false;
   Set<int> remoteUid = {};
   late TextEditingController _controller;
-  bool _isUseFlutterTexture = false;
+  VideoViewController? _remoteVideoController;
+  bool test = false;
+  bool _isUseFlutterTexture = true;
   bool _isUseAndroidSurfaceView = false;
   ChannelProfileType _channelProfileType =
       ChannelProfileType.channelProfileLiveBroadcasting;
@@ -96,6 +98,25 @@ class _State extends State<JoinChannelVideo> {
           RemoteVideoState state, RemoteVideoStateReason reason, int elapsed) {
         logSink.log(
             '[onRemoteVideoStateChanged] connection: ${connection.toJson()} remoteUid: $remoteUid state: $state reason: $reason elapsed: $elapsed');
+      },
+      onFirstRemoteVideoDecoded: (RtcConnection connection, int remoteUid,
+          int width, int height, int elapsed) {
+        logSink.log(
+            '[onFirstRemoteVideoDecoded] connection: ${connection.toJson()} remoteUid: $remoteUid width: $width height: $height elapsed: $elapsed');
+      },
+      onVideoSizeChanged:
+          (connection, sourceType, uid, width, height, rotation) {
+        logSink.log(
+            '[onVideoSizeChanged] connection: ${connection.toJson()} sourceType: $sourceType uid: $uid width: $width height: $height rotation: $rotation');
+        _remoteVideoController = VideoViewController.remote(
+          rtcEngine: _engine,
+          canvas: VideoCanvas(uid: uid),
+          connection: connection,
+          useFlutterTexture: _isUseFlutterTexture,
+          useAndroidSurfaceView: _isUseAndroidSurfaceView,
+        );
+        test = !test;
+        setState(() {});
       },
     );
 
@@ -175,35 +196,47 @@ class _State extends State<JoinChannelVideo> {
                 },
               ),
             ),
-            Align(
-              alignment: Alignment.topLeft,
-              child: SingleChildScrollView(
-                scrollDirection: Axis.horizontal,
-                child: Row(
-                  children: List.of(remoteUid.map(
-                    (e) => SizedBox(
+            if (_remoteVideoController != null)
+              if (test)
+                Align(
+                  alignment: Alignment.topLeft,
+                  child: SingleChildScrollView(
+                    scrollDirection: Axis.horizontal,
+                    child: Row(
+                      children: List.of(remoteUid.map(
+                        (e) => SizedBox(
+                          width: 200,
+                          height: 200,
+                          child: StatsMonitoringWidget(
+                            rtcEngine: _engine,
+                            uid: e,
+                            channelId: _controller.text,
+                            child: AgoraVideoView(
+                              // key: ValueKey(e),
+                              controller: _remoteVideoController!,
+                            ),
+                          ),
+                        ),
+                      )),
+                    ),
+                  ),
+                )
+              else if (remoteUid.isNotEmpty)
+                Align(
+                    alignment: Alignment.topRight,
+                    child: SizedBox(
                       width: 200,
                       height: 200,
                       child: StatsMonitoringWidget(
                         rtcEngine: _engine,
-                        uid: e,
+                        uid: remoteUid.first,
                         channelId: _controller.text,
                         child: AgoraVideoView(
-                          controller: VideoViewController.remote(
-                            rtcEngine: _engine,
-                            canvas: VideoCanvas(uid: e),
-                            connection:
-                                RtcConnection(channelId: _controller.text),
-                            useFlutterTexture: _isUseFlutterTexture,
-                            useAndroidSurfaceView: _isUseAndroidSurfaceView,
-                          ),
+                          // key: ValueKey(remoteUid.first),
+                          controller: _remoteVideoController!,
                         ),
                       ),
-                    ),
-                  )),
-                ),
-              ),
-            )
+                    ))
           ],
         );
       },

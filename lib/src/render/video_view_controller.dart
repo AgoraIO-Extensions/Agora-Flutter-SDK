@@ -3,6 +3,7 @@ import 'package:agora_rtc_engine/src/agora_media_base.dart';
 import 'package:agora_rtc_engine/src/agora_rtc_engine.dart';
 import 'package:agora_rtc_engine/src/agora_rtc_engine_ex.dart';
 import 'package:agora_rtc_engine/src/impl/video_view_controller_impl.dart';
+import 'package:flutter/material.dart';
 import 'package:meta/meta.dart';
 
 /// A AgoraVideoView controller for rendering local and remote video.
@@ -29,6 +30,24 @@ abstract class VideoViewControllerBase {
 
   @internal
   int getTextureId();
+
+  @internal
+  int getTextureWidth();
+
+  @internal
+  void setTextureWidth(int width);
+
+  @internal
+  int getTextureHeight();
+
+  @internal
+  void setTextureHeight(int height);
+
+  @internal
+  Widget? getHostWidget();
+
+  @internal
+  void setHostWidget(Widget? widget);
 
   @internal
   int getViewHandle();
