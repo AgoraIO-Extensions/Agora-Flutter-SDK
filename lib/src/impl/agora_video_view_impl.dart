@@ -27,7 +27,7 @@ class AgoraVideoViewState extends State<AgoraVideoView> {
   Widget build(BuildContext context) {
     if (kIsWeb) {
       return AgoraRtcRenderPlatformView(
-        key: widget.key,
+        key: ObjectKey(widget.controller),
         controller: widget.controller,
         onAgoraVideoViewCreated: widget.onAgoraVideoViewCreated,
       );
@@ -36,7 +36,7 @@ class AgoraVideoViewState extends State<AgoraVideoView> {
     if (defaultTargetPlatform == TargetPlatform.macOS ||
         defaultTargetPlatform == TargetPlatform.windows) {
       return AgoraRtcRenderTexture(
-        key: widget.key,
+        key: ObjectKey(widget.controller),
         controller: widget.controller,
         onAgoraVideoViewCreated: widget.onAgoraVideoViewCreated,
       );
@@ -44,14 +44,14 @@ class AgoraVideoViewState extends State<AgoraVideoView> {
 
     if (widget.controller.useFlutterTexture) {
       return AgoraRtcRenderTexture(
-        key: widget.key,
+        key: ObjectKey(widget.controller),
         controller: widget.controller,
         onAgoraVideoViewCreated: widget.onAgoraVideoViewCreated,
       );
     }
 
     return AgoraRtcRenderPlatformView(
-      key: widget.key,
+      key: ObjectKey(widget.controller),
       controller: widget.controller,
       onAgoraVideoViewCreated: widget.onAgoraVideoViewCreated,
     );
@@ -59,13 +59,11 @@ class AgoraVideoViewState extends State<AgoraVideoView> {
 }
 
 class AgoraRtcRenderPlatformView extends StatefulWidget {
-  AgoraRtcRenderPlatformView({
+  const AgoraRtcRenderPlatformView({
     Key? key,
     required this.controller,
     this.onAgoraVideoViewCreated,
-  }) : super(key: key) {
-    controller.setHostWidget(this);
-  }
+  }) : super(key: key);
 
   final VideoViewControllerBase controller;
 
@@ -218,6 +216,18 @@ class _VideoViewControllerInternal with VideoViewControllerBaseMixin {
   int _textureId = kTextureNotInit;
 
   @override
+  int get textureWidth => _controller.textureWidth;
+
+  @override
+  set textureWidth(int w) => _controller.textureWidth = w;
+
+  @override
+  int get textureHeight => _controller.textureHeight;
+
+  @override
+  set textureHeight(int h) => _controller.textureHeight = h;
+
+  @override
   VideoCanvas get canvas => _controller.canvas;
 
   @override
@@ -242,30 +252,6 @@ class _VideoViewControllerInternal with VideoViewControllerBaseMixin {
 
   @override
   int getTextureId() => _textureId;
-
-  @override
-  int getTextureWidth() => _controller.getTextureWidth();
-
-  @override
-  void setTextureWidth(int width) {
-    _controller.setTextureWidth(width);
-  }
-
-  @override
-  int getTextureHeight() => _controller.getTextureHeight();
-
-  @override
-  void setTextureHeight(int height) {
-    _controller.setTextureHeight(height);
-  }
-
-  @override
-  Widget? getHostWidget() => _controller.getHostWidget();
-
-  @override
-  void setHostWidget(Widget? widget) {
-    _controller.setHostWidget(widget);
-  }
 
   @override
   void addInitializedCompletedListener(VoidCallback listener) =>
@@ -319,6 +305,9 @@ class AgoraRtcRenderTexture extends StatefulWidget {
 
 class _AgoraRtcRenderTextureState extends State<AgoraRtcRenderTexture>
     with RtcRenderMixin {
+  int _width = 0;
+  int _height = 0;
+
   VoidCallback? _listener;
 
   VideoViewControllerBaseMixin? _controllerInternal;
@@ -357,6 +346,14 @@ class _AgoraRtcRenderTextureState extends State<AgoraRtcRenderTexture>
     await _controllerInternal!.initializeRender();
     final textureId = _controllerInternal!.getTextureId();
     if (oldTextureId != textureId) {
+      if (_controllerInternal!.textureWidth != 0 &&
+          _controllerInternal!.textureHeight != 0) {
+        _width = _controllerInternal!.textureWidth;
+        _height = _controllerInternal!.textureHeight;
+      } else {
+        _width = 0;
+        _height = 0;
+      }
       // The parameters is no used
       maybeCreateChannel(-1, '');
       widget.onAgoraVideoViewCreated?.call(textureId);
@@ -395,10 +392,8 @@ class _AgoraRtcRenderTextureState extends State<AgoraRtcRenderTexture>
 
   @override
   void dispose() {
-    if (_controllerInternal?.getHostWidget() == widget) {
-      _controllerInternal?.disposeRender();
-      _controllerInternal = null;
-    }
+    _controllerInternal?.disposeRender();
+    _controllerInternal = null;
 
     super.dispose();
   }
@@ -413,8 +408,10 @@ class _AgoraRtcRenderTextureState extends State<AgoraRtcRenderTexture>
     methodChannel = MethodChannel('agora_rtc_engine/texture_render_$textureId');
     methodChannel!.setMethodCallHandler((call) async {
       if (call.method == 'onSizeChanged') {
-        _controllerInternal!.setTextureWidth(call.arguments['width']);
-        _controllerInternal!.setTextureHeight(call.arguments['height']);
+        _width = call.arguments['width'];
+        _height = call.arguments['height'];
+        _controllerInternal!.textureWidth = _width;
+        _controllerInternal!.textureHeight = _height;
         setState(() {});
         return true;
       }
@@ -430,8 +427,8 @@ class _AgoraRtcRenderTextureState extends State<AgoraRtcRenderTexture>
         child: FittedBox(
           fit: BoxFit.contain,
           child: SizedBox(
-            width: _controllerInternal!.getTextureWidth().toDouble(),
-            height: _controllerInternal!.getTextureHeight().toDouble(),
+            width: _width.toDouble(),
+            height: _height.toDouble(),
             child: child,
           ),
         ),
@@ -443,8 +440,8 @@ class _AgoraRtcRenderTextureState extends State<AgoraRtcRenderTexture>
           fit: BoxFit.cover,
           clipBehavior: Clip.hardEdge,
           child: SizedBox(
-            width: _controllerInternal!.getTextureWidth().toDouble(),
-            height: _controllerInternal!.getTextureHeight().toDouble(),
+            width: _width.toDouble(),
+            height: _height.toDouble(),
             child: child,
           ),
         ),
@@ -456,8 +453,8 @@ class _AgoraRtcRenderTextureState extends State<AgoraRtcRenderTexture>
         child: FittedBox(
           fit: BoxFit.fill,
           child: SizedBox(
-            width: _controllerInternal!.getTextureWidth().toDouble(),
-            height: _controllerInternal!.getTextureHeight().toDouble(),
+            width: _width.toDouble(),
+            height: _height.toDouble(),
             child: child,
           ),
         ),
@@ -499,8 +496,7 @@ class _AgoraRtcRenderTextureState extends State<AgoraRtcRenderTexture>
     }
     final controller = _controllerInternal!;
     if (controller.getTextureId() != kTextureNotInit) {
-      if (controller.getTextureWidth() != 0 &&
-          controller.getTextureHeight() != 0) {
+      if (_height != 0 && _width != 0) {
         result = buildTexure(controller.getTextureId());
         final renderMode =
             controller.canvas.renderMode ?? RenderModeType.renderModeHidden;

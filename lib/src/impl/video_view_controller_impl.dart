@@ -8,7 +8,6 @@ import 'package:agora_rtc_engine/src/impl/agora_rtc_engine_impl.dart';
 import 'package:agora_rtc_engine/src/impl/platform/global_video_view_controller.dart';
 import 'package:agora_rtc_engine/src/render/video_view_controller.dart';
 import 'package:flutter/foundation.dart';
-import 'package:flutter/material.dart';
 import 'package:meta/meta.dart';
 
 // ignore_for_file: public_member_api_docs
@@ -53,9 +52,22 @@ mixin VideoViewControllerBaseMixin implements VideoViewControllerBase {
   int _textureId = kTextureNotInit;
   int _viewHandle = kNullViewHandle;
   int _platformViewId = kInvalidPlatformViewId;
+
+  int _renderRefCount = 0;
   int _textureWidth = 0;
   int _textureHeight = 0;
-  Widget? _hostWidget;
+  
+  @internal
+  int get textureWidth => _textureWidth;
+
+  @internal
+  set textureWidth(int width) => _textureWidth = width;
+
+  @internal
+  int get textureHeight => _textureHeight;
+
+  @internal
+  set textureHeight(int height) => _textureHeight = height;
 
   @internal
   bool get isInitialzed => (rtcEngine as RtcEngineImpl).isInitialzed;
@@ -74,30 +86,6 @@ mixin VideoViewControllerBaseMixin implements VideoViewControllerBase {
 
   @override
   int getTextureId() => _textureId;
-
-  @override
-  int getTextureWidth() => _textureWidth;
-
-  @override
-  void setTextureWidth(int width) {
-    _textureWidth = width;
-  }
-
-  @override
-  int getTextureHeight() => _textureHeight;
-
-  @override
-  void setTextureHeight(int height) {
-    _textureHeight = height;
-  }
-
-  @override
-  Widget? getHostWidget() => _hostWidget;
-
-  @override
-  void setHostWidget(Widget? widget) {
-    _hostWidget = widget;
-  }
 
   @override
   int getViewHandle() => _viewHandle;
@@ -120,9 +108,15 @@ mixin VideoViewControllerBaseMixin implements VideoViewControllerBase {
   @protected
   Future<void> disposeRenderInternal() async {
     if (shouldUseFlutterTexture) {
+      _renderRefCount--;
+      if (_renderRefCount > 0) {
+        return;
+      }
       await rtcEngine.globalVideoViewController
           ?.destroyTextureRender(getTextureId());
       _textureId = kTextureNotInit;
+      _textureWidth = 0;
+      _textureHeight = 0;
       return;
     }
 
@@ -188,6 +182,7 @@ mixin VideoViewControllerBaseMixin implements VideoViewControllerBase {
   @override
   Future<void> initializeRender() async {
     if (shouldUseFlutterTexture) {
+      _renderRefCount++;
       if (_textureId == kTextureNotInit) {
         _textureId = await createTextureRender(
           canvas.uid!,

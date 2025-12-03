@@ -108,7 +108,7 @@ class _State extends State<JoinChannelVideo> {
           (connection, sourceType, uid, width, height, rotation) {
         logSink.log(
             '[onVideoSizeChanged] connection: ${connection.toJson()} sourceType: $sourceType uid: $uid width: $width height: $height rotation: $rotation');
-        _remoteVideoController = VideoViewController.remote(
+        _remoteVideoController ??= VideoViewController.remote(
           rtcEngine: _engine,
           canvas: VideoCanvas(uid: uid),
           connection: connection,
@@ -212,6 +212,7 @@ class _State extends State<JoinChannelVideo> {
                             uid: e,
                             channelId: _controller.text,
                             child: AgoraVideoView(
+                              key: UniqueKey(),
                               // key: ValueKey(e),
                               controller: _remoteVideoController!,
                             ),
@@ -232,6 +233,7 @@ class _State extends State<JoinChannelVideo> {
                         uid: remoteUid.first,
                         channelId: _controller.text,
                         child: AgoraVideoView(
+                          key: UniqueKey(),
                           // key: ValueKey(remoteUid.first),
                           controller: _remoteVideoController!,
                         ),
