@@ -209,11 +209,12 @@ class _AgoraRtcRenderPlatformViewState extends State<AgoraRtcRenderPlatformView>
 
 /// Delegate of the `VideoViewController` to handle the state of the texture rendering.
 class _VideoViewControllerInternal with VideoViewControllerBaseMixin {
-  _VideoViewControllerInternal(this._controller);
+  _VideoViewControllerInternal(this._controller, this._viewId);
 
   final VideoViewControllerBaseMixin _controller;
+  final int _viewId;
 
-  int _textureId = kTextureNotInit;
+  TextureRenderDisposable? _renderDisposable;
 
   @override
   int get textureWidth => _controller.textureWidth;
@@ -251,7 +252,7 @@ class _VideoViewControllerInternal with VideoViewControllerBaseMixin {
   bool get shouldHandlerRenderMode => _controller.shouldHandlerRenderMode;
 
   @override
-  int getTextureId() => _textureId;
+  int getTextureId() => _renderDisposable?.textureId ?? kTextureNotInit;
 
   @override
   void addInitializedCompletedListener(VoidCallback listener) =>
@@ -279,9 +280,15 @@ class _VideoViewControllerInternal with VideoViewControllerBaseMixin {
 
   @override
   Future<void> initializeRender() async {
-    await _controller.initializeRender();
-    // Renew the texture id
-    _textureId = _controller.getTextureId();
+    if (_renderDisposable != null && !_renderDisposable!.isDisposed) {
+      return;
+    }
+    _renderDisposable = await TextureRenderDisposable.create(_controller, _viewId);
+  }
+
+  Future<void> disposeTextureRender() async {
+    await _renderDisposable?.dispose();
+    _renderDisposable = null;
   }
 
   @override
@@ -310,20 +317,18 @@ class _AgoraRtcRenderTextureState extends State<AgoraRtcRenderTexture>
 
   VoidCallback? _listener;
 
-  VideoViewControllerBaseMixin? _controllerInternal;
+  _VideoViewControllerInternal? _controllerInternal;
 
   @override
   void initState() {
     super.initState();
-
     _initialize();
   }
 
   Future<void> _initialize() async {
-    final sourceController = widget.controller;
-    _controllerInternal = _VideoViewControllerInternal(
-        sourceController as VideoViewControllerBaseMixin);
-
+    final sourceController = widget.controller as VideoViewControllerBaseMixin;
+    _controllerInternal = _VideoViewControllerInternal(sourceController, hashCode);
+    
     if (!_controllerInternal!.isInitialzed) {
       _listener ??= () {
         _controllerInternal?.removeInitializedCompletedListener(_listener!);
@@ -342,10 +347,9 @@ class _AgoraRtcRenderTextureState extends State<AgoraRtcRenderTexture>
       return;
     }
 
-    final oldTextureId = _controllerInternal!.getTextureId();
     await _controllerInternal!.initializeRender();
     final textureId = _controllerInternal!.getTextureId();
-    if (oldTextureId != textureId) {
+    if (textureId != kTextureNotInit) {
       if (_controllerInternal!.textureWidth != 0 &&
           _controllerInternal!.textureHeight != 0) {
         _width = _controllerInternal!.textureWidth;
@@ -354,10 +358,11 @@ class _AgoraRtcRenderTextureState extends State<AgoraRtcRenderTexture>
         _width = 0;
         _height = 0;
       }
-      // The parameters is no used
       maybeCreateChannel(-1, '');
       widget.onAgoraVideoViewCreated?.call(textureId);
-      setState(() {});
+      if (mounted) {
+        setState(() {});
+      }
     }
   }
 
@@ -374,9 +379,8 @@ class _AgoraRtcRenderTextureState extends State<AgoraRtcRenderTexture>
         _controllerInternal!.getTextureId() == kTextureNotInit) {
       return;
     }
-    if (!oldWidget.controller.isSame(widget.controller) &&
-        _controllerInternal != null) {
-      await _controllerInternal!.disposeRender();
+    if (!oldWidget.controller.isSame(widget.controller)) {
+      await _controllerInternal?.disposeTextureRender();
       await _initialize();
     }
   }
@@ -392,7 +396,9 @@ class _AgoraRtcRenderTextureState extends State<AgoraRtcRenderTexture>
 
   @override
   void dispose() {
-    _controllerInternal?.disposeRender();
+    methodChannel?.setMethodCallHandler(null);
+    
+    _controllerInternal?.disposeTextureRender();
     _controllerInternal = null;
 
     super.dispose();
@@ -404,6 +410,9 @@ class _AgoraRtcRenderTextureState extends State<AgoraRtcRenderTexture>
       return;
     }
     final textureId = _controllerInternal!.getTextureId();
+    if (textureId == kTextureNotInit) {
+      return;
+    }
 
     methodChannel = MethodChannel('agora_rtc_engine/texture_render_$textureId');
     methodChannel!.setMethodCallHandler((call) async {
@@ -412,7 +421,9 @@ class _AgoraRtcRenderTextureState extends State<AgoraRtcRenderTexture>
         _height = call.arguments['height'];
         _controllerInternal!.textureWidth = _width;
         _controllerInternal!.textureHeight = _height;
-        setState(() {});
+        if (mounted) {
+          setState(() {});
+        }
         return true;
       }
       return false;
