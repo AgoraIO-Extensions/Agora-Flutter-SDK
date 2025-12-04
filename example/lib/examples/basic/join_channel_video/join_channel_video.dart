@@ -31,10 +31,15 @@ class _State extends State<JoinChannelVideo> {
   bool test = false;
   bool _isUseFlutterTexture = true;
   bool _isUseAndroidSurfaceView = false;
+  
+  // Test switches
+  bool _reuseController = true; // Whether to reuse controller
+  bool _switchViewLevel = true; // Whether to switch view level when remote resolution changes
   ChannelProfileType _channelProfileType =
       ChannelProfileType.channelProfileLiveBroadcasting;
   late final RtcEngineEventHandler _rtcEngineEventHandler;
-
+  // global key
+  final GlobalKey _agoraVideoViewKey = GlobalKey();
   @override
   void initState() {
     super.initState();
@@ -104,18 +109,40 @@ class _State extends State<JoinChannelVideo> {
         logSink.log(
             '[onFirstRemoteVideoDecoded] connection: ${connection.toJson()} remoteUid: $remoteUid width: $width height: $height elapsed: $elapsed');
       },
+      onFirstRemoteVideoFrame: (RtcConnection connection, int remoteUid,
+          int width, int height, int elapsed) {
+        logSink.log(
+            '[onFirstRemoteVideoFrame] connection: ${connection.toJson()} remoteUid: $remoteUid width: $width height: $height elapsed: $elapsed');
+      },
       onVideoSizeChanged:
           (connection, sourceType, uid, width, height, rotation) {
         logSink.log(
             '[onVideoSizeChanged] connection: ${connection.toJson()} sourceType: $sourceType uid: $uid width: $width height: $height rotation: $rotation');
-        _remoteVideoController ??= VideoViewController.remote(
-          rtcEngine: _engine,
-          canvas: VideoCanvas(uid: uid),
-          connection: connection,
-          useFlutterTexture: _isUseFlutterTexture,
-          useAndroidSurfaceView: _isUseAndroidSurfaceView,
-        );
-        test = !test;
+        
+        if (_reuseController) {
+          // Reuse controller
+          _remoteVideoController ??= VideoViewController.remote(
+            rtcEngine: _engine,
+            canvas: VideoCanvas(uid: uid),
+            connection: connection,
+            useFlutterTexture: _isUseFlutterTexture,
+            useAndroidSurfaceView: _isUseAndroidSurfaceView,
+          );
+        } else {
+          // Create new controller each time
+          _remoteVideoController = VideoViewController.remote(
+            rtcEngine: _engine,
+            canvas: VideoCanvas(uid: uid),
+            connection: connection,
+            useFlutterTexture: _isUseFlutterTexture,
+            useAndroidSurfaceView: _isUseAndroidSurfaceView,
+          );
+        }
+        
+        if (_switchViewLevel) {
+          // Switch view level
+          test = !test;
+        }
         setState(() {});
       },
     );
@@ -123,7 +150,7 @@ class _State extends State<JoinChannelVideo> {
     _engine.registerEventHandler(_rtcEngineEventHandler);
 
     await _engine.enableVideo();
-    await _engine.startPreview();
+    // await _engine.startPreview();
   }
 
   Future<void> _joinChannel() async {
@@ -181,21 +208,21 @@ class _State extends State<JoinChannelVideo> {
       displayContentBuilder: (context, isLayoutHorizontal) {
         return Stack(
           children: [
-            StatsMonitoringWidget(
-              rtcEngine: _engine,
-              uid: 0,
-              child: AgoraVideoView(
-                controller: VideoViewController(
-                  rtcEngine: _engine,
-                  canvas: const VideoCanvas(uid: 0),
-                  useFlutterTexture: _isUseFlutterTexture,
-                  useAndroidSurfaceView: _isUseAndroidSurfaceView,
-                ),
-                onAgoraVideoViewCreated: (viewId) {
-                  _engine.startPreview();
-                },
-              ),
-            ),
+            // StatsMonitoringWidget(
+            //   rtcEngine: _engine,
+            //   uid: 0,
+            //   child: AgoraVideoView(
+            //     controller: VideoViewController(
+            //       rtcEngine: _engine,
+            //       canvas: const VideoCanvas(uid: 0),
+            //       useFlutterTexture: _isUseFlutterTexture,
+            //       useAndroidSurfaceView: _isUseAndroidSurfaceView,
+            //     ),
+            //     onAgoraVideoViewCreated: (viewId) {
+            //       _engine.startPreview();
+            //     },
+            //   ),
+            // ),
             if (_remoteVideoController != null)
               if (test)
                 Align(
@@ -305,6 +332,85 @@ class _State extends State<JoinChannelVideo> {
                         _channelProfileType = v!;
                       });
                     },
+            ),
+            const SizedBox(
+              height: 20,
+            ),
+            // Test switches area
+            Container(
+              padding: const EdgeInsets.all(8),
+              decoration: BoxDecoration(
+                color: Colors.grey[200],
+                borderRadius: BorderRadius.circular(8),
+              ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const Text(
+                    'Test Switches',
+                    style: TextStyle(fontWeight: FontWeight.bold),
+                  ),
+                  const Text(
+                    'Triggers onVideoSizeChanged when remote resolution changes',
+                    style: TextStyle(fontSize: 10, color: Colors.grey),
+                  ),
+                  const SizedBox(height: 8),
+                  Row(
+                    children: [
+                      const Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text('Reuse Controller', style: TextStyle(fontSize: 12)),
+                            Text(
+                              'ON: Reuse same controller\nOFF: Create new controller each time',
+                              style: TextStyle(fontSize: 9, color: Colors.grey),
+                            ),
+                          ],
+                        ),
+                      ),
+                      Switch(
+                        value: _reuseController,
+                        onChanged: isJoined
+                            ? null
+                            : (changed) {
+                                setState(() {
+                                  _reuseController = changed;
+                                });
+                              },
+                      ),
+                    ],
+                  ),
+                  Row(
+                    children: [
+                      const Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text('Switch View Level', style: TextStyle(fontSize: 12)),
+                            Text(
+                              'ON: Toggle test, switch layout\nOFF: View level unchanged',
+                              style: TextStyle(fontSize: 9, color: Colors.grey),
+                            ),
+                          ],
+                        ),
+                      ),
+                      Switch(
+                        value: _switchViewLevel,
+                        onChanged: (changed) {
+                          setState(() {
+                            _switchViewLevel = changed;
+                          });
+                        },
+                      ),
+                    ],
+                  ),
+                  Text(
+                    'Current: test=$test, controller=${_remoteVideoController?.hashCode ?? "null"}',
+                    style: const TextStyle(fontSize: 10, color: Colors.blue),
+                  ),
+                ],
+              ),
             ),
             const SizedBox(
               height: 20,
