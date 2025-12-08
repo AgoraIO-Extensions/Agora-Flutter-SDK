@@ -27,7 +27,6 @@ class AgoraVideoViewState extends State<AgoraVideoView> {
   Widget build(BuildContext context) {
     if (kIsWeb) {
       return AgoraRtcRenderPlatformView(
-        key: ObjectKey(widget.controller),
         controller: widget.controller,
         onAgoraVideoViewCreated: widget.onAgoraVideoViewCreated,
       );
@@ -36,7 +35,6 @@ class AgoraVideoViewState extends State<AgoraVideoView> {
     if (defaultTargetPlatform == TargetPlatform.macOS ||
         defaultTargetPlatform == TargetPlatform.windows) {
       return AgoraRtcRenderTexture(
-        key: ObjectKey(widget.controller),
         controller: widget.controller,
         onAgoraVideoViewCreated: widget.onAgoraVideoViewCreated,
       );
@@ -44,14 +42,12 @@ class AgoraVideoViewState extends State<AgoraVideoView> {
 
     if (widget.controller.useFlutterTexture) {
       return AgoraRtcRenderTexture(
-        key: ObjectKey(widget.controller),
         controller: widget.controller,
         onAgoraVideoViewCreated: widget.onAgoraVideoViewCreated,
       );
     }
 
     return AgoraRtcRenderPlatformView(
-      key: ObjectKey(widget.controller),
       controller: widget.controller,
       onAgoraVideoViewCreated: widget.onAgoraVideoViewCreated,
     );
