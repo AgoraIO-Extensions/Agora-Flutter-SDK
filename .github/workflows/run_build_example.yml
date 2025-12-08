@@ -182,6 +182,19 @@ jobs:
           distribution: 'zulu'
           java-version: '17'
 
+      - name: Install compatible Bundler for iOS
+        if: ${{ matrix.platform == 'ios' }}
+        working-directory: example/ios
+        run: |
+          # Install Bundler 2.7.x which is compatible with fastlane
+          gem install bundler:2.7.2
+          
+          # Verify bundler version
+          bundle _2.7.2_ --version
+          
+          # Install gems using specific bundler version
+          bundle _2.7.2_ install
+
       - name: Setup signing key for iOS
         if: ${{ matrix.platform == 'ios' }}
         working-directory: example/ios
@@ -217,10 +230,10 @@ jobs:
           cp $PP_PATH ~/Library/MobileDevice/Provisioning\ Profiles
 
           # update project settings for Runner target
-          bundle exec fastlane run update_code_signing_settings use_automatic_signing:false path:Runner.xcodeproj bundle_identifier:io.agora.agoraRtcEngineExample team_id:$DEFAULT_BUILD_PROVISION_PROFILE_TEAMID profile_name:$DEFAULT_BUILD_PROVISION_PROFILE_NAME code_sign_identity:$DEFAULT_BUILD_PROVISION_PROFILE_IDENTITY targets:Runner
+          bundle _2.7.2_ exec fastlane run update_code_signing_settings use_automatic_signing:false path:Runner.xcodeproj bundle_identifier:io.agora.agoraRtcEngineExample team_id:$DEFAULT_BUILD_PROVISION_PROFILE_TEAMID profile_name:$DEFAULT_BUILD_PROVISION_PROFILE_NAME code_sign_identity:$DEFAULT_BUILD_PROVISION_PROFILE_IDENTITY targets:Runner
 
           # update project settings for ScreenSharing target
-          bundle exec fastlane run update_code_signing_settings use_automatic_signing:false path:Runner.xcodeproj bundle_identifier:io.agora.agoraRtcEngineExample.ScreenSharing team_id:$DEFAULT_BUILD_PROVISION_PROFILE_TEAMID profile_name:$DEFAULT_BUILD_PROVISION_PROFILE_NAME code_sign_identity:$DEFAULT_BUILD_PROVISION_PROFILE_IDENTITY targets:ScreenSharing
+          bundle _2.7.2_ exec fastlane run update_code_signing_settings use_automatic_signing:false path:Runner.xcodeproj bundle_identifier:io.agora.agoraRtcEngineExample.ScreenSharing team_id:$DEFAULT_BUILD_PROVISION_PROFILE_TEAMID profile_name:$DEFAULT_BUILD_PROVISION_PROFILE_NAME code_sign_identity:$DEFAULT_BUILD_PROVISION_PROFILE_IDENTITY targets:ScreenSharing
 
           # replace all DEFAULT_BUILD_PROVISION_PROFILE_NAME in export.plist with $DEFAULT_BUILD_PROVISION_PROFILE_NAME
           sed -i '' "s/DEFAULT_BUILD_PROVISION_PROFILE_NAME/$DEFAULT_BUILD_PROVISION_PROFILE_NAME/g" export.plist
