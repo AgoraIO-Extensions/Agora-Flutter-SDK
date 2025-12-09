@@ -163,6 +163,7 @@ class __StatsMonitoringInternalWidgetState
       mainAxisAlignment: MainAxisAlignment.start,
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
+        Text('uid: ${widget.uid}', style: style),
         Text('$width x $height, $fps fps', style: style),
         Text('LM Delay: ${lastmileDelay}ms', style: style),
         Text('Volume: $_volume', style: style),

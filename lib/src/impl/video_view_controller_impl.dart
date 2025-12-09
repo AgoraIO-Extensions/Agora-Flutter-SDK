@@ -15,6 +15,34 @@ import 'package:meta/meta.dart';
 const int kTextureNotInit = -1;
 const int kInvalidPlatformViewId = -1;
 
+class TextureRenderDisposable {
+  TextureRenderDisposable._(this._controller, this._viewId);
+
+  final VideoViewControllerBaseMixin _controller;
+  final int _viewId;
+  bool _isDisposed = false;
+
+  static Future<TextureRenderDisposable> create(
+    VideoViewControllerBaseMixin controller,
+    int viewId,
+  ) async {
+    await controller._acquireTextureRender(viewId);
+    return TextureRenderDisposable._(controller, viewId);
+  }
+
+  int get textureId => _isDisposed ? kTextureNotInit : _controller.getTextureId();
+
+  bool get isDisposed => _isDisposed;
+
+  Future<void> dispose() async {
+    if (_isDisposed) {
+      return;
+    }
+    _isDisposed = true;
+    await _controller._releaseTextureRender(_viewId);
+  }
+}
+
 extension VideoViewControllerBaseExt on VideoViewControllerBase {
   bool isSame(VideoViewControllerBase other) {
     bool isSame = canvas.view == other.canvas.view &&
@@ -53,6 +81,26 @@ mixin VideoViewControllerBaseMixin implements VideoViewControllerBase {
   int _viewHandle = kNullViewHandle;
   int _platformViewId = kInvalidPlatformViewId;
 
+  final Set<int> _activeViewIds = {};
+  
+  int _textureWidth = 0;
+  int _textureHeight = 0;
+
+  @internal
+  int get textureWidth => _textureWidth;
+
+  @internal
+  set textureWidth(int width) => _textureWidth = width;
+
+  @internal
+  int get textureHeight => _textureHeight;
+
+  @internal
+  set textureHeight(int height) => _textureHeight = height;
+  
+  @internal
+  int get renderRefCount => _activeViewIds.length;
+
   @internal
   bool get isInitialzed => (rtcEngine as RtcEngineImpl).isInitialzed;
 
@@ -87,17 +135,52 @@ mixin VideoViewControllerBaseMixin implements VideoViewControllerBase {
   }
 
   @override
-  Future<void> dispose() async {}
+  Future<void> dispose() async {
+  }
+
+  Future<void> _acquireTextureRender(int viewId) async {
+    if (!shouldUseFlutterTexture) {
+      return;
+    }
+    
+    if (_activeViewIds.contains(viewId)) {
+      return;
+    }
+    
+    _activeViewIds.add(viewId);
+    
+    if (_textureId == kTextureNotInit) {
+      _textureId = await createTextureRender(
+        canvas.uid!,
+        connection?.channelId ?? '',
+        canvas.sourceType?.value() ?? getVideoSourceType(),
+        canvas.setupMode?.value() ??
+            VideoViewSetupMode.videoViewSetupReplace.value(),
+      );
+    }
+  }
+
+  Future<void> _releaseTextureRender(int viewId) async {
+    if (!shouldUseFlutterTexture) {
+      return;
+    }
+    
+    if (!_activeViewIds.contains(viewId)) {
+      return;
+    }
+    
+    _activeViewIds.remove(viewId);
+    
+    if (_activeViewIds.isEmpty && _textureId != kTextureNotInit) {
+      await rtcEngine.globalVideoViewController?.destroyTextureRender(_textureId);
+      _textureId = kTextureNotInit;
+      _textureWidth = 0;
+      _textureHeight = 0;
+    }
+  }
 
   @protected
   Future<void> disposeRenderInternal() async {
-    if (shouldUseFlutterTexture) {
-      await rtcEngine.globalVideoViewController
-          ?.destroyTextureRender(getTextureId());
-      _textureId = kTextureNotInit;
-      return;
-    }
-
     // Pass view handle with kNullViewHandle will clear all setup renderers,
     // since we decide to use VideoViewSetupMode.videoViewSetupRemove to remove
     // the renderers, we should return directly here.
@@ -159,17 +242,7 @@ mixin VideoViewControllerBaseMixin implements VideoViewControllerBase {
 
   @override
   Future<void> initializeRender() async {
-    if (shouldUseFlutterTexture) {
-      if (_textureId == kTextureNotInit) {
-        _textureId = await createTextureRender(
-          canvas.uid!,
-          connection?.channelId ?? '',
-          canvas.sourceType?.value() ?? getVideoSourceType(),
-          canvas.setupMode?.value() ??
-              VideoViewSetupMode.videoViewSetupReplace.value(),
-        );
-      }
-    } else {
+    if (!shouldUseFlutterTexture) {
       if (kIsWeb) {
         // Make sure the `platformViewRegistry.registerViewFactory` is called.
         rtcEngine.globalVideoViewController;
