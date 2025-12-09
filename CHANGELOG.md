@@ -1,5 +1,209 @@
 # Changelog
 
+## [6.3.2-sp.432246.b.2](///compare/6.3.2-sp.432246.b.1...6.3.2-sp.432246.b.2) (2025-12-09)
+
+### Features
+
+* hardcode full range ([#2450](undefined/undefined/undefined/issues/2450)) 20fd4af
+* upgrade native sdk 4.3.2.246-dev.2 ([#2409](undefined/undefined/undefined/issues/2409)) be1010f
+## 6.3.2-sp.432246.b.1 (2025-07-07)
+
+### Bug Fixes
+
+* copy CVPixelBuffer for iOS and macOS ([#2376](undefined/undefined/undefined/issues/2376)) cab0341
+* drop frame if current render timems is less than last one ([#2377](undefined/undefined/undefined/issues/2377)) c2900db
+* try to fix frame skip issue on android ([#2341](undefined/undefined/undefined/issues/2341)) 88648a8
+## 6.3.2-sp.432236.b.2 (2025-05-08)
+
+### Bug Fixes
+
+* add temp variables to avoid data race from commit: 06896207 ([#2188](undefined/undefined/undefined/issues/2188)) 0af4751
+* check the renderer in OnVideoFrameReceived before use it ([#2222](undefined/undefined/undefined/issues/2222)) d9b76c4
+* do not clear all platform view renders when dispose render ([#2214](undefined/undefined/undefined/issues/2214)) 7f18eca
+* hold weak ref of RendererDelegate in async task ([#2265](undefined/undefined/undefined/issues/2265)) ([#2271](undefined/undefined/undefined/issues/2271)) ([#2278](undefined/undefined/undefined/issues/2278)) 2c9545b
+* unregister video frame delegate in dealloc of TextureRender to a… ([#2297](undefined/undefined/undefined/issues/2297)) 9a15415, closes #2296
+* use weak ref of renderer to avoid crash in async task ([#2194](undefined/undefined/undefined/issues/2194)) dc54474
+## 6.3.2-sp.432236.b.1 (2025-05-08)
+
+### Bug Fixes
+
+* eliminate video playback flicker during resolution changes ([#2305](undefined/undefined/undefined/issues/2305)) 938ac09
+## 6.3.2-sp.432236 (2025-03-06)
+
+### Features
+
+* upgrade native sdk 4.3.2.236 ([#2213](undefined/undefined/undefined/issues/2213)) e8bec71
+## 6.3.2-sp.432234.b.3 (2025-01-16)
+
+### Features
+
+* upgrade iris 4.3.2.234-build.3 ([#2180](undefined/undefined/undefined/issues/2180)) 60bb55c
+## 6.3.2-sp.432234 (2024-12-18)
+
+### Features
+
+* replace urls of test media files with agora cdn links ([#2139](undefined/undefined/undefined/issues/2139)) 7bd2893
+* upgrade native sdk 4.3.2.234 ([#2160](undefined/undefined/undefined/issues/2160)) 9afcc81
+
+### Bug Fixes
+
+* add missed extra link flags to support to enable 16K page size f… ([#2143](undefined/undefined/undefined/issues/2143)) 43df691
+
+### Reverts
+
+* Revert "chore: limit timeout from 120 or 60 mins to 30 mins" (#2138) 94e973c, closes #2138
+## 6.3.2-sp.43211 (2024-12-06)
+
+### Features
+
+* Bump minimum supported Flutter SDK >= 3.7.0 ([#2001](undefined/undefined/undefined/issues/2001)) 3cc945b
+* Implement picture-in-picture feature ([#2015](undefined/undefined/undefined/issues/2015)) 16b2530
+* upgrade native sdk 4.3.2.5 4c5e2a2
+* upgrade native sdk dependencies 20240919 ([#2026](undefined/undefined/undefined/issues/2026)) c5d929e
+* upgrade native sdk to 4.3.2.11 ([#2136](undefined/undefined/undefined/issues/2136)) 79c7329
+
+### Bug Fixes
+
+* [windows] Fix TextureRender crash ([#1999](undefined/undefined/undefined/issues/1999)) 0edbfe5
+* Fix a potential crash in AgoraVideoView when the app is force quit ([#2055](undefined/undefined/undefined/issues/2055)) 10f92fe
+* Fix black screen issue in AgoraVideoView caused by incorrect resize handling ([#2052](undefined/undefined/undefined/issues/2052)) 5ce7f00
+* Fix potentially NPE in AgoraVideoView ([#2035](undefined/undefined/undefined/issues/2035)) 3d51db3
+* Fix some callbacks not fired ([#2033](undefined/undefined/undefined/issues/2033)) e36069b
+* pin kotlin to 1.9.10 and do not test on macos-12 anymore ([#2134](undefined/undefined/undefined/issues/2134)) ec04bf4
+* replace public video urls bf8d927
+* support android 15 16k page size ([#2043](undefined/undefined/undefined/issues/2043)) 98c9092
+* Suppress R8 missing class com.google.devtools.*.ThrowableExtension for AGP 8.x ([#2050](undefined/undefined/undefined/issues/2050)) 3babf2d
+* Update minSdkVersion to 21 to Fix NDK Compatibility Issue ([#1832](undefined/undefined/undefined/issues/1832)) 010392b
+## 6.3.2 (2024-06-06)
+
+### Features
+
+* upgrade native sdk 4.3.2 ([#1795](undefined/undefined/undefined/issues/1795)) e937989
+## 6.3.1 (2024-05-09)
+
+### Features
+
+* Upgrade native sdk 4.3.1 ([#1611](undefined/undefined/undefined/issues/1611)) 18f1a56
+
+### Bug Fixes
+
+* AgoraVideoView crash when dispose after RtcEngine.release ([#1585](undefined/undefined/undefined/issues/1585)) cd33120
+* AgoraVideoView takes over the whole browser window ([#1717](undefined/undefined/undefined/issues/1717)) 0052cc7
+* Prevent multiple initializations of internal resources when `RtcEngine.initialize` is called simultaneously ([#1712](undefined/undefined/undefined/issues/1712)) 462cfc3
+## 6.3.0 (2024-02-28)
+
+### Features
+
+* Upgrade native sdk 4.3.0 ([#1462](undefined/undefined/undefined/issues/1462)) 499d68c
+
+### Bug Fixes
+
+* [texture rendering] Fix texture id lost when widget is updated ([#1543](undefined/undefined/undefined/issues/1543)) f72552d
+* Fix MediaEngineImpl.unregisterAudioFrameObserver not unregister eventhandler internally ([#1495](undefined/undefined/undefined/issues/1495)) 7edcd59
+## 6.2.6 (2023-11-21)
+
+### Features
+
+* upgrade native sdk 4.2.6 ([#1425](undefined/undefined/undefined/issues/1425)) ([#1442](undefined/undefined/undefined/issues/1442)) 48b3dc4
+## 6.2.4 (2023-10-23)
+
+### Bug Fixes
+
+* [iOS/macOS] Fix CFBundleShortVersionString not correct in AgoraRtcWrapper framework ([#1387](undefined/undefined/undefined/issues/1387)) ff7a6ce
+## 6.2.3 (2023-10-13)
+
+### Features
+
+* [android] Implement flutter texture rendering ([#1246](undefined/undefined/undefined/issues/1246)) 7fd8fee
+* Upgrade native sdk 4.2.3 ([#1312](undefined/undefined/undefined/issues/1312)) 553863a
+
+### Bug Fixes
+
+* [windows] Fix can not get `irisRtcRenderingHandle` in 32-bit ([#1311](undefined/undefined/undefined/issues/1311)) 7438fb2
+## 6.2.2 (2023-08-01)
+
+### Features
+
+* Upgrade native sdk 4.2.2 ([#1142](undefined/undefined/undefined/issues/1142)) 3e04fd5
+
+### Bug Fixes
+
+* [android] Fix reset the log file in RtcEngine.initialize cause incorrect log file path ([#1201](undefined/undefined/undefined/issues/1201)) b437bee
+* [android/ios] Fix crash due to AgoraVideoView.dispose call before RtcEngine.setupxxVideo is completed ([#1224](undefined/undefined/undefined/issues/1224)) f50c4e4
+* ArgumentError: Invalid argument(s): `6` is not one of the supported values 25471b8
+* Fix MediaRecorder.startRecording return -4 after the previous destroy 76d4dc4
+* Fix VideoViewControllerBaseMixin state in-correct issue 10038b8
+## 6.2.1 (2023-06-30)
+
+### Features
+
+* upgrade native sdk 4.2.1 ([#1161](undefined/undefined/undefined/issues/1161)) fbfeb12
+
+### Bug Fixes
+
+* do not setup native view if the widget is disposed in platform view rendering 8fcadea
+* Fix AgoraVideoView not showing correctly when reusing the same VideoViewController ([#1169](undefined/undefined/undefined/issues/1169)) 6f79203
+* Fix VideoViewController state not correct when the AgoraVideoView is reused 37e4a21
+* no-op if call RtcEngine.release without calling RtcEngine.initialize directly 95d29ae
+
+### Reverts
+
+* Revert "[ci][ios][rendering-test] Use github action to manipulate the ios simulator (#1167)" 7513d85, closes #1167
+* Revert "[ios] Run ios rendering test on github action runner" 80c9e52
+## 6.2.0 (2023-05-26)
+
+### Features
+
+* upgrade native sdk 4.2.0 ([#1071](undefined/undefined/undefined/issues/1071)) 1c2813a, closes #1106
+## 6.1.1+1 (2023-05-19)
+
+### Bug Fixes
+
+* Fix build error due to iris_method_channel break change 7841c26
+## 6.1.1 (2023-04-28)
+
+### Features
+
+* [ios] Support render mode and mirror mode for AgoraVideoView with flutter texture rendering 3b5a1b3
+* [macos] Support render mode and mirror mode for AgoraVideoView … ([#847](undefined/undefined/undefined/issues/847)) 27db897
+* [windows] Support render mode and mirror mode for AgoraVideoView with flutter texture rendering ([#856](undefined/undefined/undefined/issues/856)) 9bcb1c7
+
+### Bug Fixes
+
+* [windows] fix AgoraVideoView dispose crash due to multithreading 7e948db
+* can not call startDirectCdnStreaming again after stopDirectCdnStreaming 37d6ecc
+* fix _HotRestartFinalizer._onExitPort not be initialized in release build fad76a5
+* Fix AgoraVideoView not dispose previous renderer when didUpdateWidget called 24aa879
+* fix crash caused by memory leak when register the raw data observers ([#957](undefined/undefined/undefined/issues/957)) 8c3be90
+* fix crash of AgoraVideoView with flutter texture rendering 244128b
+* Fix getNativeHandle not return correctly 8dbb478
+* fix hot restart not work df4d8be
+* fix RtcEngine.release be called due to inaccurate app lifecycle callback in add2app scenario 9072ad2
+* fix setupRemoteVideoEx not call correctly ([#909](undefined/undefined/undefined/issues/909)) 856e6d7
+* lazy initialize AgoraVideoView ([#905](undefined/undefined/undefined/issues/905)) 9904cc2
+* should not mirror the screen sharing cc3d402
+
+### Reverts
+
+* Revert "Optimize initilizate time of AgoraVideoView with PlatformView rendering (#937)" 0d32d58, closes #937
+* Revert "[test] add multiple AgoraVideoViews (flutter texture rendering) show/dispose integration test" 2cfb3f9
+## 6.1.0 (2022-12-20)
+
+### Features
+
+* Upgrade native sdk 4.1.0 a56d0f7
+## 6.0.0 (2022-09-28)
+
+### Bug Fixes
+
+* fix AudioFrameObserver event bugs 2f82f70
+## 6.0.0-rc.1 (2022-09-13)
+
+### Features
+
+* Convert kotlin to java to avoid kotlin version conflict ([#2](undefined/undefined/undefined/issues/2)) 10d5166
+* Upgrade native sdk 4.0.0-rc.1 1ce73fc
+
 ## [6.3.2-sp.432236.b.2](https://github.com/AgoraIO-Extensions/Agora-Flutter-SDK/compare/6.3.2-sp.432236.b.1...6.3.2-sp.432236.b.2) (2025-05-08)
 
 ### Bug Fixes
