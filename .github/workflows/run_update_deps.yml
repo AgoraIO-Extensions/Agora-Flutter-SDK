@@ -155,7 +155,9 @@ jobs:
           [ -n "$rtc_version" ] && echo "Final version: ${rtc_version}" || echo "No version specified, will use current branch"
 
       - name: Run gen code
+        id: gen_code
         if: ${{ inputs.run_gen_code == true }}
+        continue-on-error: true
         uses: ./.github/actions/gen_code
         with:
           code_gen_public_headers: ${{ steps.extract_rtc_version.outputs.rtc_version }}
@@ -182,6 +184,9 @@ jobs:
             Update dependencies with the following content:
 
             ${{ inputs.dependencies_content }}
+
+            ---
+            **Code Generation Status:** ${{ steps.gen_code.outcome == 'success' && '✅ Success' || (steps.gen_code.outcome == 'failure' && '❌ Failed (please check and fix manually)' || '⏭️ Skipped') }}
 
             > This pull request is trigger by bot, you can checkout this branch and update it.
           labels: |
