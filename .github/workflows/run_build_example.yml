@@ -170,7 +170,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
         with:
-          ref: ${{ inputs.target_branch }}
+          ref: ${{ inputs.target_branch || github.ref_name }}
           fetch-depth: '1'
           lfs: 'true'
           submodules: 'true'

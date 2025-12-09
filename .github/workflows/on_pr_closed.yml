@@ -1,9 +1,12 @@
 name: 'on: pr closed'
 
+# DEPRECATED: This workflow is replaced by release.yaml
+# The release.yaml workflow now handles all PR-triggered releases
+# This file is kept for reference but is disabled
+
 on:
-  pull_request:
-    types:
-      - closed
+  # Disabled to prevent conflict with release.yaml
+  workflow_dispatch: {}
 
 jobs:
   # Release to pub.dev and Github release with below conditions
