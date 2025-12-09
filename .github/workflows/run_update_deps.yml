@@ -205,3 +205,9 @@ jobs:
         run: |
           echo "::warning title=No Changes::No changes detected, PR was not created"
           echo "⚠️ No changes detected in the repository"
+
+      - name: Fail if code generation failed
+        if: ${{ inputs.run_gen_code == true && steps.gen_code.outcome == 'failure' }}
+        run: |
+          echo "::error title=Code Generation Failed::Terra code generation failed, but PR was still created for manual fixing"
+          exit 1
