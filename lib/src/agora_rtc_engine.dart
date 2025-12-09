@@ -394,7 +394,8 @@ class LocalVideoStats implements AgoraSerializable {
       this.captureBrightnessLevel,
       this.dualStreamEnabled,
       this.hwEncoderAccelerating,
-      this.simulcastDimensions});
+      this.simulcastDimensions,
+      this.encodedFrameDepth});
 
   /// The ID of the local user.
   @JsonKey(name: 'uid')
@@ -495,6 +496,10 @@ class LocalVideoStats implements AgoraSerializable {
   final List<VideoDimensions>? simulcastDimensions;
 
   /// @nodoc
+  @JsonKey(name: 'encodedFrameDepth')
+  final int? encodedFrameDepth;
+
+  /// @nodoc
   factory LocalVideoStats.fromJson(Map<String, dynamic> json) =>
       _$LocalVideoStatsFromJson(json);
 
@@ -520,6 +525,8 @@ class RemoteAudioStats implements AgoraSerializable {
       this.mosValue,
       this.frozenRateByCustomPlcCount,
       this.plcCount,
+      this.frozenCntByCustom,
+      this.frozenTimeByCustom,
       this.totalActiveTime,
       this.publishDuration,
       this.qoeQuality,
@@ -578,6 +585,14 @@ class RemoteAudioStats implements AgoraSerializable {
   /// @nodoc
   @JsonKey(name: 'plcCount')
   final int? plcCount;
+
+  /// @nodoc
+  @JsonKey(name: 'frozenCntByCustom')
+  final int? frozenCntByCustom;
+
+  /// @nodoc
+  @JsonKey(name: 'frozenTimeByCustom')
+  final int? frozenTimeByCustom;
 
   /// The total active time (ms) between the start of the audio call and the callback of the remote user. The active time refers to the total duration of the remote user without the mute state.
   @JsonKey(name: 'totalActiveTime')
@@ -1380,7 +1395,11 @@ class ChannelMediaOptions implements AgoraSerializable {
       this.isInteractiveAudience,
       this.customVideoTrackId,
       this.isAudioFilterable,
-      this.parameters});
+      this.parameters,
+      this.enableMultipath,
+      this.uplinkMultipathMode,
+      this.downlinkMultipathMode,
+      this.preferMultipathType});
 
   /// Whether to publish the video captured by the camera: true : Publish the video captured by the camera. false : Do not publish the video captured by the camera.
   @JsonKey(name: 'publishCameraTrack')
@@ -1535,6 +1554,22 @@ class ChannelMediaOptions implements AgoraSerializable {
   final String? parameters;
 
   /// @nodoc
+  @JsonKey(name: 'enableMultipath')
+  final bool? enableMultipath;
+
+  /// @nodoc
+  @JsonKey(name: 'uplinkMultipathMode')
+  final MultipathMode? uplinkMultipathMode;
+
+  /// @nodoc
+  @JsonKey(name: 'downlinkMultipathMode')
+  final MultipathMode? downlinkMultipathMode;
+
+  /// @nodoc
+  @JsonKey(name: 'preferMultipathType')
+  final MultipathType? preferMultipathType;
+
+  /// @nodoc
   factory ChannelMediaOptions.fromJson(Map<String, dynamic> json) =>
       _$ChannelMediaOptionsFromJson(json);
 
@@ -1617,10 +1652,7 @@ extension FeatureTypeExt on FeatureType {
 class LeaveChannelOptions implements AgoraSerializable {
   /// @nodoc
   const LeaveChannelOptions(
-      {this.stopAudioMixing,
-      this.stopAllEffect,
-      this.unloadAllEffect,
-      this.stopMicrophoneRecording});
+      {this.stopAudioMixing, this.stopAllEffect, this.stopMicrophoneRecording});
 
   /// Whether to stop playing and mixing the music file when a user leaves the channel. true : (Default) Stop playing and mixing the music file. false : Do not stop playing and mixing the music file.
   @JsonKey(name: 'stopAudioMixing')
@@ -1629,10 +1661,6 @@ class LeaveChannelOptions implements AgoraSerializable {
   /// Whether to stop playing all audio effects when a user leaves the channel. true : (Default) Stop playing all audio effects. false : Do not stop playing any audio effect.
   @JsonKey(name: 'stopAllEffect')
   final bool? stopAllEffect;
-
-  /// @nodoc
-  @JsonKey(name: 'unloadAllEffect')
-  final bool? unloadAllEffect;
 
   /// Whether to stop microphone recording when a user leaves the channel. true : (Default) Stop microphone recording. false : Do not stop microphone recording.
   @JsonKey(name: 'stopMicrophoneRecording')
@@ -1671,12 +1699,12 @@ class RtcEngineEventHandler {
     this.onNetworkQuality,
     this.onIntraRequestReceived,
     this.onUplinkNetworkInfoUpdated,
-    this.onDownlinkNetworkInfoUpdated,
     this.onLastmileQuality,
     this.onFirstLocalVideoFrame,
     this.onFirstLocalVideoFramePublished,
     this.onFirstRemoteVideoDecoded,
     this.onVideoSizeChanged,
+    this.onLocalVideoEvent,
     this.onLocalVideoStateChanged,
     this.onRemoteVideoStateChanged,
     this.onFirstRemoteVideoFrame,
@@ -1703,6 +1731,9 @@ class RtcEngineEventHandler {
     this.onConnectionBanned,
     this.onStreamMessage,
     this.onStreamMessageError,
+    this.onRdtMessage,
+    this.onRdtStateChanged,
+    this.onMediaControlMessage,
     this.onRequestToken,
     this.onTokenPrivilegeWillExpire,
     this.onLicenseValidationFailure,
@@ -1722,16 +1753,14 @@ class RtcEngineEventHandler {
     this.onTranscodingUpdated,
     this.onAudioRoutingChanged,
     this.onChannelMediaRelayStateChanged,
-    this.onLocalPublishFallbackToAudioOnly,
     this.onRemoteSubscribeFallbackToAudioOnly,
     this.onRemoteAudioTransportStats,
     this.onRemoteVideoTransportStats,
     this.onConnectionStateChanged,
-    this.onWlAccMessage,
-    this.onWlAccStats,
     this.onNetworkTypeChanged,
     this.onEncryptionError,
     this.onPermissionError,
+    this.onPermissionGranted,
     this.onLocalUserRegistered,
     this.onUserInfoUpdated,
     this.onUserAccountUpdated,
@@ -1749,6 +1778,8 @@ class RtcEngineEventHandler {
     this.onExtensionStoppedWithContext,
     this.onExtensionErrorWithContext,
     this.onSetRtmFlagResult,
+    this.onMultipathStats,
+    this.onRenewTokenResult,
   });
 
   /// Occurs when a user joins a channel.
@@ -1895,9 +1926,6 @@ class RtcEngineEventHandler {
   /// * [info] The uplink network information. See UplinkNetworkInfo.
   final void Function(UplinkNetworkInfo info)? onUplinkNetworkInfoUpdated;
 
-  /// @nodoc
-  final void Function(DownlinkNetworkInfo info)? onDownlinkNetworkInfoUpdated;
-
   /// Reports the last-mile network quality of the local user.
   ///
   /// This callback reports the last-mile network conditions of the local user before the user joins the channel. Last mile refers to the connection between the local device and Agora's edge server. Before the user joins the channel, this callback is triggered by the SDK once startLastmileProbeTest is called and reports the last-mile network conditions of the local user.
@@ -1956,6 +1984,10 @@ class RtcEngineEventHandler {
   /// * [rotation] The rotation information. The value range is [0,360). On the iOS platform, the parameter value is always 0.
   final void Function(RtcConnection connection, VideoSourceType sourceType,
       int uid, int width, int height, int rotation)? onVideoSizeChanged;
+
+  /// @nodoc
+  final void Function(VideoSourceType source, LocalVideoEventType event)?
+      onLocalVideoEvent;
 
   /// Occurs when the local video stream state changes.
   ///
@@ -2086,8 +2118,8 @@ class RtcEngineEventHandler {
   ///
   /// * [connection] The connection information. See RtcConnection.
   /// * [stats] The statistics of the local video stream. See LocalVideoStats.
-  final void Function(RtcConnection connection, LocalVideoStats stats)?
-      onLocalVideoStats;
+  final void Function(RtcConnection connection, VideoSourceType sourceType,
+      LocalVideoStats stats)? onLocalVideoStats;
 
   /// Reports the statistics of the video stream sent by each remote users.
   ///
@@ -2214,6 +2246,19 @@ class RtcEngineEventHandler {
   /// * [cached] Number of incoming cached messages when the data stream is interrupted.
   final void Function(RtcConnection connection, int remoteUid, int streamId,
       ErrorCodeType code, int missed, int cached)? onStreamMessageError;
+
+  /// @nodoc
+  final void Function(RtcConnection connection, int userId, RdtStreamType type,
+      String data, int length)? onRdtMessage;
+
+  /// @nodoc
+  final void Function(RtcConnection connection, int userId, RdtState state)?
+      onRdtStateChanged;
+
+  /// @nodoc
+  final void Function(
+          RtcConnection connection, int userId, String data, int length)?
+      onMediaControlMessage;
 
   /// Occurs when the token expires.
   ///
@@ -2411,10 +2456,6 @@ class RtcEngineEventHandler {
           ChannelMediaRelayState state, ChannelMediaRelayError code)?
       onChannelMediaRelayStateChanged;
 
-  /// @nodoc
-  final void Function(bool isFallbackOrRecover)?
-      onLocalPublishFallbackToAudioOnly;
-
   /// Occurs when the remote media stream falls back to the audio-only stream due to poor network conditions or switches back to the video stream after the network conditions improve.
   ///
   /// If you call setRemoteSubscribeFallbackOption and set option to streamFallbackOptionAudioOnly, the SDK triggers this callback in the following situations:
@@ -2460,14 +2501,6 @@ class RtcEngineEventHandler {
   final void Function(RtcConnection connection, ConnectionStateType state,
       ConnectionChangedReasonType reason)? onConnectionStateChanged;
 
-  /// @nodoc
-  final void Function(RtcConnection connection, WlaccMessageReason reason,
-      WlaccSuggestAction action, String wlAccMsg)? onWlAccMessage;
-
-  /// @nodoc
-  final void Function(RtcConnection connection, WlAccStats currentStats,
-      WlAccStats averageStats)? onWlAccStats;
-
   /// Occurs when the local network type changes.
   ///
   /// This callback occurs when the connection state of the local user changes. You can get the connection state and reason for the state change in this callback. When the network connection is interrupted, this callback indicates whether the interruption is caused by a network type change or poor network conditions.
@@ -2492,6 +2525,9 @@ class RtcEngineEventHandler {
   ///
   /// * [permissionType] The type of the device permission. See PermissionType.
   final void Function(PermissionType permissionType)? onPermissionError;
+
+  /// @nodoc
+  final void Function(PermissionType permissionType)? onPermissionGranted;
 
   /// Occurs when the local user registers a user account.
   ///
@@ -2655,6 +2691,15 @@ class RtcEngineEventHandler {
 
   /// @nodoc
   final void Function(RtcConnection connection, int code)? onSetRtmFlagResult;
+
+  /// @nodoc
+  final void Function(RtcConnection connection, MultipathStats stats)?
+      onMultipathStats;
+
+  /// @nodoc
+  final void Function(
+          RtcConnection connection, String token, RenewTokenErrorCode code)?
+      onRenewTokenResult;
 }
 
 /// Video device management methods.
@@ -2774,10 +2819,6 @@ enum VideoEffectNodeId {
   /// @nodoc
   @JsonValue(1 << 2)
   filter,
-
-  /// @nodoc
-  @JsonValue(1 << 3)
-  sticker,
 }
 
 /// @nodoc
@@ -4881,6 +4922,22 @@ abstract class RtcEngine {
   Future<void> setPlaybackAudioFrameBeforeMixingParameters(
       {required int sampleRate, required int channel});
 
+  /// Sets the format of the raw audio playback data before mixing.
+  ///
+  /// The SDK triggers the onPlaybackAudioFrameBeforeMixing callback according to the sampling interval.
+  ///
+  /// * [sampleRate] The sample rate returned in the callback, which can be set as 8000, 16000, 32000, 44100, or 48000 Hz.
+  /// * [channel] The number of audio channels. You can set the value as 1 or 2.
+  ///  1: Mono.
+  ///  2: Stereo.
+  ///
+  /// Returns
+  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown. You need to catch the exception and handle it accordingly.
+  Future<void> setPlaybackAudioFrameBeforeMixingParameters(
+      {required int sampleRate,
+      required int channel,
+      required int samplesPerCall});
+
   /// Turns on audio spectrum monitoring.
   ///
   /// If you want to obtain the audio spectrum data of local or remote users, you can register the audio spectrum observer and enable audio spectrum monitoring. You can call this method either before or after joining a channel.
@@ -4969,9 +5026,6 @@ abstract class RtcEngine {
   /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown. You need to catch the exception and handle it accordingly.
   Future<void> adjustUserPlaybackSignalVolume(
       {required int uid, required int volume});
-
-  /// @nodoc
-  Future<void> setLocalPublishFallbackOption(StreamFallbackOptions option);
 
   /// Sets the fallback option for the subscribed video stream based on the network conditions.
   ///
@@ -5882,6 +5936,17 @@ abstract class RtcEngine {
   Future<void> sendStreamMessage(
       {required int streamId, required Uint8List data, required int length});
 
+  /// @nodoc
+  Future<void> sendRdtMessage(
+      {required int uid,
+      required RdtStreamType type,
+      required String data,
+      required int length});
+
+  /// @nodoc
+  Future<void> sendMediaControlMessage(
+      {required int uid, required String data, required int length});
+
   /// Adds a watermark image to the local video.
   ///
   /// This method adds a PNG watermark image to the local video in the live streaming. Once the watermark image is added, all the audience in the channel (CDN audience included), and the capturing device can see and capture it. The Agora SDK supports adding only one watermark image onto a live video stream. The newly added watermark image replaces the previous one. The watermark coordinates are dependent on the settings in the setVideoEncoderConfiguration method:
@@ -5901,6 +5966,9 @@ abstract class RtcEngine {
   /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown. You need to catch the exception and handle it accordingly.
   Future<void> addVideoWatermark(
       {required String watermarkUrl, required WatermarkOptions options});
+
+  /// @nodoc
+  Future<void> removeVideoWatermark(String id);
 
   /// Removes the watermark image from the video stream.
   ///
@@ -6345,9 +6413,6 @@ abstract class RtcEngine {
   /// ≥ 0: The method call is successful, and returns the current Monotonic Time of the SDK (in milliseconds).
   ///  < 0: Failure.
   Future<int> getCurrentMonotonicTimeInMs();
-
-  /// @nodoc
-  Future<void> enableWirelessAccelerate(bool enabled);
 
   /// Gets the type of the local network connection.
   ///

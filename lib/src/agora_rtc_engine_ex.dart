@@ -454,6 +454,21 @@ abstract class RtcEngineEx implements RtcEngine {
       required int length,
       required RtcConnection connection});
 
+  /// @nodoc
+  Future<void> sendRdtMessageEx(
+      {required int uid,
+      required RdtStreamType type,
+      required String data,
+      required int length,
+      required RtcConnection connection});
+
+  /// @nodoc
+  Future<void> sendMediaControlMessageEx(
+      {required int uid,
+      required String data,
+      required int length,
+      required RtcConnection connection});
+
   /// Adds a watermark image to the local video.
   ///
   /// This method adds a PNG watermark image to the local video in the live streaming. Once the watermark image is added, all the audience in the channel (CDN audience included), and the capturing device can see and capture it. The Agora SDK supports adding only one watermark image onto a live video stream. The newly added watermark image replaces the previous one. The watermark coordinates are dependent on the settings in the setVideoEncoderConfigurationEx method:
@@ -476,6 +491,31 @@ abstract class RtcEngineEx implements RtcEngine {
       {required String watermarkUrl,
       required WatermarkOptions options,
       required RtcConnection connection});
+
+  /// Adds a watermark image to the local video.
+  ///
+  /// This method adds a PNG watermark image to the local video in the live streaming. Once the watermark image is added, all the audience in the channel (CDN audience included), and the capturing device can see and capture it. The Agora SDK supports adding only one watermark image onto a live video stream. The newly added watermark image replaces the previous one. The watermark coordinates are dependent on the settings in the setVideoEncoderConfigurationEx method:
+  ///  If the orientation mode of the encoding video (OrientationMode) is fixed landscape mode or the adaptive landscape mode, the watermark uses the landscape orientation.
+  ///  If the orientation mode of the encoding video (OrientationMode) is fixed portrait mode or the adaptive portrait mode, the watermark uses the portrait orientation.
+  ///  When setting the watermark position, the region must be less than the dimensions set in the setVideoEncoderConfigurationEx method; otherwise, the watermark image will be cropped.
+  ///  Ensure that you have called enableVideo before calling this method.
+  ///  This method supports adding a watermark image in the PNG file format only. Supported pixel formats of the PNG image are RGBA, RGB, Palette, Gray, and Alpha_gray.
+  ///  If the dimensions of the PNG image differ from your settings in this method, the image will be cropped or zoomed to conform to your settings.
+  ///  If you have enabled the local video preview by calling the startPreview method, you can use the visibleInPreview member to set whether or not the watermark is visible in the preview.
+  ///  If you have enabled the mirror mode for the local video, the watermark on the local video is also mirrored. To avoid mirroring the watermark, Agora recommends that you do not use the mirror and watermark functions for the local video at the same time. You can implement the watermark function in your application layer.
+  ///
+  /// * [watermarkUrl] The local file path of the watermark image to be added. This method supports adding a watermark image from the local absolute or relative file path.
+  /// * [options] The options of the watermark image to be added. See WatermarkOptions.
+  /// * [connection] The connection information. See RtcConnection.
+  ///
+  /// Returns
+  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown. You need to catch the exception and handle it accordingly.
+  Future<void> addVideoWatermarkEx(
+      {required WatermarkConfig config, required RtcConnection connection});
+
+  /// @nodoc
+  Future<void> removeVideoWatermarkEx(
+      {required String id, required RtcConnection connection});
 
   /// Removes the watermark image from the video stream.
   ///
@@ -752,12 +792,6 @@ abstract class RtcEngineEx implements RtcEngine {
       {required RtcConnection connection,
       required Uint8List metadata,
       required int length});
-
-  /// @nodoc
-  Future<void> enableVideoImageSourceEx(
-      {required bool enable,
-      required ImageTrackOptions options,
-      required RtcConnection connection});
 
   /// @nodoc
   Future<void> preloadEffectEx(

@@ -1,3 +1,4 @@
+export '/src/binding/agora_base_impl.dart';
 export '/src/binding/agora_base_event_impl.dart';
 export '/src/binding/agora_media_base_impl.dart';
 export '/src/binding/agora_media_base_event_impl.dart';

@@ -286,6 +286,10 @@ enum ErrorCodeType {
   @JsonValue(22)
   errResourceLimited,
 
+  /// @nodoc
+  @JsonValue(23)
+  errFuncIsProhibited,
+
   /// 101: The specified App ID is invalid. Rejoin the channel with a valid App ID.
   @JsonValue(101)
   errInvalidAppId,
@@ -427,6 +431,30 @@ enum ErrorCodeType {
   /// @nodoc
   @JsonValue(201)
   errPcmsendBufferoverflow,
+
+  /// @nodoc
+  @JsonValue(250)
+  errRdtUserNotExist,
+
+  /// @nodoc
+  @JsonValue(251)
+  errRdtUserNotReady,
+
+  /// @nodoc
+  @JsonValue(252)
+  errRdtDataBlocked,
+
+  /// @nodoc
+  @JsonValue(253)
+  errRdtCmdExceedLimit,
+
+  /// @nodoc
+  @JsonValue(254)
+  errRdtDataExceedLimit,
+
+  /// @nodoc
+  @JsonValue(255)
+  errRdtEncryption,
 
   /// @nodoc
   @JsonValue(428)
@@ -1584,8 +1612,7 @@ extension MaxUserAccountLengthTypeExt on MaxUserAccountLengthType {
 class EncodedVideoFrameInfo implements AgoraSerializable {
   /// @nodoc
   const EncodedVideoFrameInfo(
-      {this.uid,
-      this.codecType,
+      {this.codecType,
       this.width,
       this.height,
       this.framesPerSecond,
@@ -1596,10 +1623,6 @@ class EncodedVideoFrameInfo implements AgoraSerializable {
       this.decodeTimeMs,
       this.streamType,
       this.presentationMs});
-
-  /// The user ID to push the externally encoded video frame.
-  @JsonKey(name: 'uid')
-  final int? uid;
 
   /// The codec type of the local video stream. See VideoCodecType. The default value is videoCodecH264 (2).
   @JsonKey(name: 'codecType')
@@ -2115,11 +2138,15 @@ class SimulcastStreamConfig implements AgoraSerializable {
 @JsonSerializable(explicitToJson: true, includeIfNull: false)
 class SimulcastConfig implements AgoraSerializable {
   /// @nodoc
-  const SimulcastConfig({this.configs});
+  const SimulcastConfig({this.configs, this.publishFallbackEnable});
 
   /// @nodoc
   @JsonKey(name: 'configs')
   final List<StreamLayerConfig>? configs;
+
+  /// @nodoc
+  @JsonKey(name: 'publish_fallback_enable')
+  final bool? publishFallbackEnable;
 
   /// @nodoc
   factory SimulcastConfig.fromJson(Map<String, dynamic> json) =>
@@ -2275,7 +2302,8 @@ class WatermarkOptions implements AgoraSerializable {
       this.positionInLandscapeMode,
       this.positionInPortraitMode,
       this.watermarkRatio,
-      this.mode});
+      this.mode,
+      this.zOrder});
 
   /// Whether the watermark is visible in the local preview view: true : (Default) The watermark is visible in the local preview view. false : The watermark is not visible in the local preview view.
   @JsonKey(name: 'visibleInPreview')
@@ -2298,11 +2326,309 @@ class WatermarkOptions implements AgoraSerializable {
   final WatermarkFitMode? mode;
 
   /// @nodoc
+  @JsonKey(name: 'zOrder')
+  final int? zOrder;
+
+  /// @nodoc
   factory WatermarkOptions.fromJson(Map<String, dynamic> json) =>
       _$WatermarkOptionsFromJson(json);
 
   @override
   Map<String, dynamic> toJson() => _$WatermarkOptionsToJson(this);
+}
+
+/// @nodoc
+@JsonEnum(alwaysCreate: true)
+enum WatermarkSourceType {
+  /// @nodoc
+  @JsonValue(0)
+  image,
+
+  /// @nodoc
+  @JsonValue(1)
+  buffer,
+
+  /// @nodoc
+  @JsonValue(2)
+  literal,
+
+  /// @nodoc
+  @JsonValue(3)
+  timestamps,
+}
+
+/// @nodoc
+extension WatermarkSourceTypeExt on WatermarkSourceType {
+  /// @nodoc
+  static WatermarkSourceType fromValue(int value) {
+    return $enumDecode(_$WatermarkSourceTypeEnumMap, value);
+  }
+
+  /// @nodoc
+  int value() {
+    return _$WatermarkSourceTypeEnumMap[this]!;
+  }
+}
+
+/// @nodoc
+@JsonSerializable(explicitToJson: true, includeIfNull: false)
+class WatermarkTimestamp implements AgoraSerializable {
+  /// @nodoc
+  const WatermarkTimestamp(
+      {this.fontSize, this.fontFilePath, this.strokeWidth, this.format});
+
+  /// @nodoc
+  @JsonKey(name: 'fontSize')
+  final int? fontSize;
+
+  /// @nodoc
+  @JsonKey(name: 'fontFilePath')
+  final String? fontFilePath;
+
+  /// @nodoc
+  @JsonKey(name: 'strokeWidth')
+  final int? strokeWidth;
+
+  /// @nodoc
+  @JsonKey(name: 'format')
+  final String? format;
+
+  /// @nodoc
+  factory WatermarkTimestamp.fromJson(Map<String, dynamic> json) =>
+      _$WatermarkTimestampFromJson(json);
+
+  @override
+  Map<String, dynamic> toJson() => _$WatermarkTimestampToJson(this);
+}
+
+/// @nodoc
+@JsonSerializable(explicitToJson: true, includeIfNull: false)
+class WatermarkLiteral implements AgoraSerializable {
+  /// @nodoc
+  const WatermarkLiteral(
+      {this.fontSize, this.strokeWidth, this.wmLiteral, this.fontFilePath});
+
+  /// @nodoc
+  @JsonKey(name: 'fontSize')
+  final int? fontSize;
+
+  /// @nodoc
+  @JsonKey(name: 'strokeWidth')
+  final int? strokeWidth;
+
+  /// @nodoc
+  @JsonKey(name: 'wmLiteral')
+  final String? wmLiteral;
+
+  /// @nodoc
+  @JsonKey(name: 'fontFilePath')
+  final String? fontFilePath;
+
+  /// @nodoc
+  factory WatermarkLiteral.fromJson(Map<String, dynamic> json) =>
+      _$WatermarkLiteralFromJson(json);
+
+  @override
+  Map<String, dynamic> toJson() => _$WatermarkLiteralToJson(this);
+}
+
+/// @nodoc
+@JsonSerializable(explicitToJson: true, includeIfNull: false)
+class WatermarkBuffer implements AgoraSerializable {
+  /// @nodoc
+  const WatermarkBuffer(
+      {this.width, this.height, this.length, this.format, this.buffer});
+
+  /// @nodoc
+  @JsonKey(name: 'width')
+  final int? width;
+
+  /// @nodoc
+  @JsonKey(name: 'height')
+  final int? height;
+
+  /// @nodoc
+  @JsonKey(name: 'length')
+  final int? length;
+
+  /// @nodoc
+  @JsonKey(name: 'format')
+  final VideoPixelFormat? format;
+
+  /// @nodoc
+  @JsonKey(name: 'buffer', ignore: true)
+  final Uint8List? buffer;
+
+  /// @nodoc
+  factory WatermarkBuffer.fromJson(Map<String, dynamic> json) =>
+      _$WatermarkBufferFromJson(json);
+
+  @override
+  Map<String, dynamic> toJson() => _$WatermarkBufferToJson(this);
+}
+
+/// @nodoc
+@JsonSerializable(explicitToJson: true, includeIfNull: false)
+class WatermarkConfig implements AgoraSerializable {
+  /// @nodoc
+  const WatermarkConfig({this.id, this.type, this.options});
+
+  /// @nodoc
+  @JsonKey(name: 'id')
+  final String? id;
+
+  /// @nodoc
+  @JsonKey(name: 'type')
+  final WatermarkSourceType? type;
+
+  /// @nodoc
+  @JsonKey(name: 'options')
+  final WatermarkOptions? options;
+
+  /// @nodoc
+  factory WatermarkConfig.fromJson(Map<String, dynamic> json) =>
+      _$WatermarkConfigFromJson(json);
+
+  @override
+  Map<String, dynamic> toJson() => _$WatermarkConfigToJson(this);
+}
+
+/// @nodoc
+@JsonEnum(alwaysCreate: true)
+enum MultipathMode {
+  /// @nodoc
+  @JsonValue(0)
+  duplicate,
+
+  /// @nodoc
+  @JsonValue(1)
+  dynamic,
+}
+
+/// @nodoc
+extension MultipathModeExt on MultipathMode {
+  /// @nodoc
+  static MultipathMode fromValue(int value) {
+    return $enumDecode(_$MultipathModeEnumMap, value);
+  }
+
+  /// @nodoc
+  int value() {
+    return _$MultipathModeEnumMap[this]!;
+  }
+}
+
+/// @nodoc
+@JsonEnum(alwaysCreate: true)
+enum MultipathType {
+  /// @nodoc
+  @JsonValue(0)
+  lan,
+
+  /// @nodoc
+  @JsonValue(1)
+  wifi,
+
+  /// @nodoc
+  @JsonValue(2)
+  mobile,
+
+  /// @nodoc
+  @JsonValue(99)
+  unknown,
+}
+
+/// @nodoc
+extension MultipathTypeExt on MultipathType {
+  /// @nodoc
+  static MultipathType fromValue(int value) {
+    return $enumDecode(_$MultipathTypeEnumMap, value);
+  }
+
+  /// @nodoc
+  int value() {
+    return _$MultipathTypeEnumMap[this]!;
+  }
+}
+
+/// @nodoc
+@JsonSerializable(explicitToJson: true, includeIfNull: false)
+class PathStats implements AgoraSerializable {
+  /// @nodoc
+  const PathStats({this.type, this.txKBitRate, this.rxKBitRate});
+
+  /// @nodoc
+  @JsonKey(name: 'type')
+  final MultipathType? type;
+
+  /// @nodoc
+  @JsonKey(name: 'txKBitRate')
+  final int? txKBitRate;
+
+  /// @nodoc
+  @JsonKey(name: 'rxKBitRate')
+  final int? rxKBitRate;
+
+  /// @nodoc
+  factory PathStats.fromJson(Map<String, dynamic> json) =>
+      _$PathStatsFromJson(json);
+
+  @override
+  Map<String, dynamic> toJson() => _$PathStatsToJson(this);
+}
+
+/// @nodoc
+@JsonSerializable(explicitToJson: true, includeIfNull: false)
+class MultipathStats implements AgoraSerializable {
+  /// @nodoc
+  const MultipathStats(
+      {this.lanTxBytes,
+      this.lanRxBytes,
+      this.wifiTxBytes,
+      this.wifiRxBytes,
+      this.mobileTxBytes,
+      this.mobileRxBytes,
+      this.activePathNum,
+      this.pathStats});
+
+  /// @nodoc
+  @JsonKey(name: 'lanTxBytes')
+  final int? lanTxBytes;
+
+  /// @nodoc
+  @JsonKey(name: 'lanRxBytes')
+  final int? lanRxBytes;
+
+  /// @nodoc
+  @JsonKey(name: 'wifiTxBytes')
+  final int? wifiTxBytes;
+
+  /// @nodoc
+  @JsonKey(name: 'wifiRxBytes')
+  final int? wifiRxBytes;
+
+  /// @nodoc
+  @JsonKey(name: 'mobileTxBytes')
+  final int? mobileTxBytes;
+
+  /// @nodoc
+  @JsonKey(name: 'mobileRxBytes')
+  final int? mobileRxBytes;
+
+  /// @nodoc
+  @JsonKey(name: 'activePathNum')
+  final int? activePathNum;
+
+  /// @nodoc
+  @JsonKey(name: 'pathStats')
+  final List<PathStats>? pathStats;
+
+  /// @nodoc
+  factory MultipathStats.fromJson(Map<String, dynamic> json) =>
+      _$MultipathStatsFromJson(json);
+
+  @override
+  Map<String, dynamic> toJson() => _$MultipathStatsToJson(this);
 }
 
 /// Statistics of a call session.
@@ -2342,7 +2668,8 @@ class RtcStats implements AgoraSerializable {
       this.firstVideoKeyFrameDecodedDurationAfterUnmute,
       this.firstVideoKeyFrameRenderedDurationAfterUnmute,
       this.txPacketLossRate,
-      this.rxPacketLossRate});
+      this.rxPacketLossRate,
+      this.lanAccelerateState});
 
   /// Call duration of the local user in seconds, represented by an aggregate value.
   @JsonKey(name: 'duration')
@@ -2478,6 +2805,10 @@ class RtcStats implements AgoraSerializable {
   /// The packet loss rate (%) from the Agora server to the client before using the anti-packet-loss method.
   @JsonKey(name: 'rxPacketLossRate')
   final int? rxPacketLossRate;
+
+  /// @nodoc
+  @JsonKey(name: 'lanAccelerateState')
+  final int? lanAccelerateState;
 
   /// @nodoc
   factory RtcStats.fromJson(Map<String, dynamic> json) =>
@@ -3146,6 +3477,39 @@ extension LocalVideoStreamStateExt on LocalVideoStreamState {
   }
 }
 
+/// @nodoc
+@JsonEnum(alwaysCreate: true)
+enum LocalVideoEventType {
+  /// @nodoc
+  @JsonValue(1)
+  localVideoEventTypeScreenCaptureWindowHidden,
+
+  /// @nodoc
+  @JsonValue(2)
+  localVideoEventTypeScreenCaptureWindowRecoverFromHidden,
+
+  /// @nodoc
+  @JsonValue(3)
+  localVideoEventTypeScreenCaptureStoppedByUser,
+
+  /// @nodoc
+  @JsonValue(4)
+  localVideoEventTypeScreenCaptureSystemInternalError,
+}
+
+/// @nodoc
+extension LocalVideoEventTypeExt on LocalVideoEventType {
+  /// @nodoc
+  static LocalVideoEventType fromValue(int value) {
+    return $enumDecode(_$LocalVideoEventTypeEnumMap, value);
+  }
+
+  /// @nodoc
+  int value() {
+    return _$LocalVideoEventTypeEnumMap[this]!;
+  }
+}
+
 /// Reasons for local video state changes.
 @JsonEnum(alwaysCreate: true)
 enum LocalVideoStreamReason {
@@ -3261,6 +3625,22 @@ enum LocalVideoStreamReason {
   /// 30: (Windows and macOS only) The displayer used for screen capture is disconnected. The current screen sharing has been paused. Prompt the user to restart the screen sharing.
   @JsonValue(30)
   localVideoStreamReasonScreenCaptureDisplayDisconnected,
+
+  /// @nodoc
+  @JsonValue(31)
+  localVideoStreamReasonScreenCaptureStoppedByUser,
+
+  /// @nodoc
+  @JsonValue(32)
+  localVideoStreamReasonScreenCaptureInterruptedByOther,
+
+  /// @nodoc
+  @JsonValue(33)
+  localVideoStreamReasonScreenCaptureStoppedByCall,
+
+  /// @nodoc
+  @JsonValue(34)
+  localVideoStreamReasonScreenCaptureExcludeWindowFailed,
 }
 
 /// @nodoc
@@ -4828,91 +5208,6 @@ extension ClientRoleChangeFailedReasonExt on ClientRoleChangeFailedReason {
   }
 }
 
-/// @nodoc
-@JsonEnum(alwaysCreate: true)
-enum WlaccMessageReason {
-  /// @nodoc
-  @JsonValue(0)
-  wlaccMessageReasonWeakSignal,
-
-  /// @nodoc
-  @JsonValue(1)
-  wlaccMessageReasonChannelCongestion,
-}
-
-/// @nodoc
-extension WlaccMessageReasonExt on WlaccMessageReason {
-  /// @nodoc
-  static WlaccMessageReason fromValue(int value) {
-    return $enumDecode(_$WlaccMessageReasonEnumMap, value);
-  }
-
-  /// @nodoc
-  int value() {
-    return _$WlaccMessageReasonEnumMap[this]!;
-  }
-}
-
-/// @nodoc
-@JsonEnum(alwaysCreate: true)
-enum WlaccSuggestAction {
-  /// @nodoc
-  @JsonValue(0)
-  wlaccSuggestActionCloseToWifi,
-
-  /// @nodoc
-  @JsonValue(1)
-  wlaccSuggestActionConnectSsid,
-
-  /// @nodoc
-  @JsonValue(2)
-  wlaccSuggestActionCheck5g,
-
-  /// @nodoc
-  @JsonValue(3)
-  wlaccSuggestActionModifySsid,
-}
-
-/// @nodoc
-extension WlaccSuggestActionExt on WlaccSuggestAction {
-  /// @nodoc
-  static WlaccSuggestAction fromValue(int value) {
-    return $enumDecode(_$WlaccSuggestActionEnumMap, value);
-  }
-
-  /// @nodoc
-  int value() {
-    return _$WlaccSuggestActionEnumMap[this]!;
-  }
-}
-
-/// @nodoc
-@JsonSerializable(explicitToJson: true, includeIfNull: false)
-class WlAccStats implements AgoraSerializable {
-  /// @nodoc
-  const WlAccStats(
-      {this.e2eDelayPercent, this.frozenRatioPercent, this.lossRatePercent});
-
-  /// @nodoc
-  @JsonKey(name: 'e2eDelayPercent')
-  final int? e2eDelayPercent;
-
-  /// @nodoc
-  @JsonKey(name: 'frozenRatioPercent')
-  final int? frozenRatioPercent;
-
-  /// @nodoc
-  @JsonKey(name: 'lossRatePercent')
-  final int? lossRatePercent;
-
-  /// @nodoc
-  factory WlAccStats.fromJson(Map<String, dynamic> json) =>
-      _$WlAccStatsFromJson(json);
-
-  @override
-  Map<String, dynamic> toJson() => _$WlAccStatsToJson(this);
-}
-
 /// Network type.
 @JsonEnum(alwaysCreate: true)
 enum NetworkType {
@@ -5645,7 +5940,8 @@ extension BackgroundBlurDegreeExt on BackgroundBlurDegree {
 @JsonSerializable(explicitToJson: true, includeIfNull: false)
 class SegmentationProperty implements AgoraSerializable {
   /// @nodoc
-  const SegmentationProperty({this.modelType, this.greenCapacity});
+  const SegmentationProperty(
+      {this.modelType, this.greenCapacity, this.screenColorType});
 
   /// The type of algorithms to user for background processing. See SegModelType.
   @JsonKey(name: 'modelType')
@@ -5654,6 +5950,10 @@ class SegmentationProperty implements AgoraSerializable {
   /// The accuracy range for recognizing background colors in the image. The value range is [0,1], and the default value is 0.5. The larger the value, the wider the range of identifiable shades of pure color. When the value of this parameter is too large, the edge of the portrait and the pure color in the portrait range are also detected. Agora recommends that you dynamically adjust the value of this parameter according to the actual effect. This parameter only takes effect when modelType is set to segModelGreen.
   @JsonKey(name: 'greenCapacity')
   final double? greenCapacity;
+
+  /// @nodoc
+  @JsonKey(name: 'screenColorType')
+  final ScreenColorType? screenColorType;
 
   /// @nodoc
   factory SegmentationProperty.fromJson(Map<String, dynamic> json) =>
@@ -5685,6 +5985,35 @@ extension SegModelTypeExt on SegModelType {
   /// @nodoc
   int value() {
     return _$SegModelTypeEnumMap[this]!;
+  }
+}
+
+/// @nodoc
+@JsonEnum(alwaysCreate: true)
+enum ScreenColorType {
+  /// @nodoc
+  @JsonValue(0)
+  screenColorAuto,
+
+  /// @nodoc
+  @JsonValue(1)
+  screenColorGreen,
+
+  /// @nodoc
+  @JsonValue(2)
+  screenColorBlue,
+}
+
+/// @nodoc
+extension ScreenColorTypeExt on ScreenColorType {
+  /// @nodoc
+  static ScreenColorType fromValue(int value) {
+    return $enumDecode(_$ScreenColorTypeEnumMap, value);
+  }
+
+  /// @nodoc
+  int value() {
+    return _$ScreenColorTypeEnumMap[this]!;
   }
 }
 
@@ -6919,6 +7248,51 @@ extension UploadErrorReasonExt on UploadErrorReason {
   }
 }
 
+/// @nodoc
+@JsonEnum(alwaysCreate: true)
+enum RenewTokenErrorCode {
+  /// @nodoc
+  @JsonValue(0)
+  renewTokenSuccess,
+
+  /// @nodoc
+  @JsonValue(1)
+  renewTokenFailure,
+
+  /// @nodoc
+  @JsonValue(2)
+  renewTokenTokenExpired,
+
+  /// @nodoc
+  @JsonValue(3)
+  renewTokenInvalidToken,
+
+  /// @nodoc
+  @JsonValue(4)
+  renewTokenInvalidChannelName,
+
+  /// @nodoc
+  @JsonValue(5)
+  renewTokenInconsistentAppid,
+
+  /// @nodoc
+  @JsonValue(6)
+  renewTokenCanceledByNewRequest,
+}
+
+/// @nodoc
+extension RenewTokenErrorCodeExt on RenewTokenErrorCode {
+  /// @nodoc
+  static RenewTokenErrorCode fromValue(int value) {
+    return $enumDecode(_$RenewTokenErrorCodeEnumMap, value);
+  }
+
+  /// @nodoc
+  int value() {
+    return _$RenewTokenErrorCodeEnumMap[this]!;
+  }
+}
+
 /// The type of the device permission.
 @JsonEnum(alwaysCreate: true)
 enum PermissionType {
@@ -7523,6 +7897,72 @@ class RecorderStreamInfo implements AgoraSerializable {
 
   @override
   Map<String, dynamic> toJson() => _$RecorderStreamInfoToJson(this);
+}
+
+/// @nodoc
+@JsonEnum(alwaysCreate: true)
+enum RdtStreamType {
+  /// @nodoc
+  @JsonValue(0)
+  rdtStreamCmd,
+
+  /// @nodoc
+  @JsonValue(1)
+  rdtStreamData,
+
+  /// @nodoc
+  @JsonValue(2)
+  rdtStreamCount,
+}
+
+/// @nodoc
+extension RdtStreamTypeExt on RdtStreamType {
+  /// @nodoc
+  static RdtStreamType fromValue(int value) {
+    return $enumDecode(_$RdtStreamTypeEnumMap, value);
+  }
+
+  /// @nodoc
+  int value() {
+    return _$RdtStreamTypeEnumMap[this]!;
+  }
+}
+
+/// @nodoc
+@JsonEnum(alwaysCreate: true)
+enum RdtState {
+  /// @nodoc
+  @JsonValue(0)
+  rdtStateClosed,
+
+  /// @nodoc
+  @JsonValue(1)
+  rdtStateOpened,
+
+  /// @nodoc
+  @JsonValue(2)
+  rdtStateBlocked,
+
+  /// @nodoc
+  @JsonValue(3)
+  rdtStatePending,
+
+  /// @nodoc
+  @JsonValue(4)
+  rdtStateBroken,
+}
+
+/// @nodoc
+extension RdtStateExt on RdtState {
+  /// @nodoc
+  static RdtState fromValue(int value) {
+    return $enumDecode(_$RdtStateEnumMap, value);
+  }
+
+  /// @nodoc
+  int value() {
+    return _$RdtStateEnumMap[this]!;
+  }
 }
 
 /// The spatial audio parameters.
