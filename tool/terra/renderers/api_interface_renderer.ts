@@ -3,6 +3,7 @@ import {
   CXXTYPE,
   Clazz,
   MemberFunction,
+  MemberVariable,
   SimpleTypeKind,
   Variable,
 } from "@agoraio-extensions/cxx-parser";
@@ -30,6 +31,7 @@ import {
   dartFileName,
   dartName,
   toDartMemberName,
+  toDartStyleNaming,
 } from "../parsers/dart_syntax_parser";
 
 export default function ApiInterfaceRenderer(
@@ -51,10 +53,15 @@ export default function ApiInterfaceRenderer(
             }
           }
           case CXXTYPE.Struct: {
+            let structNode = node.asStruct();
+            let memberVariables = getStructMemberVariables(
+              parseResult,
+              structNode
+            );
             return renderJsonSerializable(
               parseResult,
-              dartName(node.asStruct()),
-              node.asStruct()!.member_variables
+              dartName(structNode),
+              memberVariables
             );
           }
           case CXXTYPE.Enumz: {
@@ -115,6 +122,57 @@ abstract class ${dartName(clazz)} ${implementsBlock} {
     ${funcs}
 }
     `;
+}
+
+function getStructMemberVariables(
+  parseResult: ParseResult,
+  structNode: Clazz
+): MemberVariable[] {
+  const dartUserDataKey = "DartSyntaxParser";
+  let memberVariables: MemberVariable[] = [];
+
+  structNode.member_variables.forEach((member) => {
+    const typeNode = parseResult.resolveNodeByType(member.type);
+    const isAnonymousStructOrClazz =
+      typeNode &&
+      (typeNode.__TYPE == CXXTYPE.Clazz || typeNode.__TYPE == CXXTYPE.Struct) &&
+      typeNode.name.trim().length === 0;
+
+    if (
+      isAnonymousStructOrClazz &&
+      (typeNode as Clazz).member_variables?.length
+    ) {
+      (typeNode as Clazz).member_variables.forEach((unionMember: MemberVariable) => {
+        const clonedMember: MemberVariable = {
+          ...unionMember,
+          user_data: unionMember.user_data ?? {},
+        };
+
+        // 补齐 dartName，避免匿名 union 成员缺省命名
+        clonedMember.user_data![dartUserDataKey] ??= {};
+        clonedMember.user_data![dartUserDataKey].dartName ??=
+          toDartStyleNaming(unionMember.name);
+
+        // 补齐类型的 dartName（若缺失）
+        if (
+          clonedMember.type &&
+          !clonedMember.type.user_data?.[dartUserDataKey]?.dartName
+        ) {
+          clonedMember.type.user_data ??= {};
+          clonedMember.type.user_data![dartUserDataKey] ??= {};
+          clonedMember.type.user_data![dartUserDataKey].dartName = toDartStyleNaming(
+            clonedMember.type.name.trimNamespace()
+          );
+        }
+
+        memberVariables.push(clonedMember);
+      });
+    } else {
+      memberVariables.push(member);
+    }
+  });
+
+  return memberVariables;
 }
 
 export function renderCallbackClass(parseResult: ParseResult, clazz: Clazz) {

@@ -57,6 +57,10 @@ parsers:
   # Need put it below `PointerToArrayParser`, since the `PointerToArrayParser` will change the pointer type to array type
   - path: parsers/dart_syntax_parser.ts
 
+  - path: parsers/union_flatten_parser.ts
+    args:
+      configPath: configs/union_flatten.config.ts
+
   # This should be ordered in last step
   - name: MergeNodeParser
     package: '@agoraio-extensions/terra_shared_configs'

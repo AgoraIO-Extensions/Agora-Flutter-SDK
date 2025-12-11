@@ -22,7 +22,11 @@ export default function ForwardExportRenderer(
     bindingExportFiles.push(`export '/src/${dartFileName(cxxFile)}.dart';`);
 
     let hasImplClass = cxxFile.nodes.find((node) => {
-      return node.__TYPE == CXXTYPE.Clazz && !isCallbackClass(node as Clazz);
+      if (node.__TYPE != CXXTYPE.Clazz) {
+        return false;
+      }
+      const clazz = node.asClazz();
+      return !isCallbackClass(clazz) && clazz.name.trim().length > 0;
     });
     let hasCallbackImplClass = cxxFile.nodes.find((node) => {
       return node.__TYPE == CXXTYPE.Clazz && isCallbackClass(node as Clazz);

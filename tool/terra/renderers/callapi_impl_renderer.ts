@@ -43,17 +43,29 @@ export default function CallApiImplRenderer(
   parseResult: ParseResult
 ): RenderResult[] {
   let cxxFiles = (parseResult!.nodes as CXXFile[]).filter((cxxFile) => {
-    return cxxFile.nodes.find((node) => {
-      return node.__TYPE == CXXTYPE.Clazz && !isCallbackClass(node as Clazz);
+    return cxxFile.nodes.some((node) => {
+      if (node.__TYPE != CXXTYPE.Clazz) {
+        return false;
+      }
+      const clazz = node.asClazz();
+      return !isCallbackClass(clazz) && clazz.name.trim().length > 0;
     });
   });
   let renderResults = cxxFiles.map((cxxFile) => {
     let subContents = cxxFile.nodes
       .filter((it) => it.__TYPE == CXXTYPE.Clazz)
       .filter((it) => !isCallbackClass(it.asClazz()))
+      // Filter out anonymous classes (e.g., anonymous unions) that have empty names
+      .filter((it) => it.asClazz().name.trim().length > 0)
+      // Skip any class whose dart name is empty to avoid generating invalid Impl
+      .filter((it) => dartName(it.asClazz()).trim().length > 0)
       .map((it) => {
         let clazz = it.asClazz();
         let clazzName = dartName(clazz);
+
+        if (clazzName.trim().length === 0) {
+          return "";
+        }
         let methods = clazz.methods;
         let methodImpls = methods
           .map((method) => callApiImplBlock(parseResult, clazz, method))
@@ -103,6 +115,10 @@ export default function CallApiImplRenderer(
       })
       .join("\n\n");
 
+    if (_trim(subContents).length === 0) {
+      return null;
+    }
+
     let content = `
       ${defaultDartHeader}
       
@@ -120,6 +136,8 @@ export default function CallApiImplRenderer(
       file_content: content,
     };
   });
+
+  renderResults = renderResults.filter((it) => it !== null) as RenderResult[];
 
   return [...renderResults, callApiImplParamsJsonFile(parseResult, cxxFiles)];
 }
@@ -291,7 +309,8 @@ function callApiImplParamsJsonFile(
   let nodes = cxxFiles.flatMap((cxxFile) => {
     return cxxFile.nodes
       .filter((it) => it.__TYPE == CXXTYPE.Clazz)
-      .filter((it) => !isCallbackClass(it.asClazz()));
+      .filter((it) => !isCallbackClass(it.asClazz()))
+      .filter((it) => it.asClazz().name.trim().length > 0);
   });
 
   let jsonClassContents = nodes
