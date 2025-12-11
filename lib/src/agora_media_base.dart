@@ -1979,7 +1979,11 @@ class VideoEncodedFrameObserver {
   /// * [imageBuffer] The encoded video image buffer.
   /// * [length] The data length of the video image.
   /// * [videoEncodedFrameInfo] For the information of the encoded video frame, see EncodedVideoFrameInfo.
-  final void Function(int uid, Uint8List imageBuffer, int length,
+  final void Function(
+      String channelId,
+      int uid,
+      Uint8List imageBuffer,
+      int length,
       EncodedVideoFrameInfo videoEncodedFrameInfo)? onEncodedVideoFrameReceived;
 }
 

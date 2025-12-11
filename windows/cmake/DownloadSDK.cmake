@@ -1,9 +1,9 @@
 # iris dependencies start
-set(IRIS_SDK_DOWNLOAD_URL "https://download.agora.io/sdk/release/iris_4.5.2.6-build.1_DCG_Windows_Video_Standalone_20251110_0346_31816.zip")
+set(IRIS_SDK_DOWNLOAD_URL "https://download.agora.io/sdk/release/iris_4.6.2-dev.3_DCG_Windows_Video_Standalone_20251208_0538_31859.zip")
 # iris dependencies end
 
 # native dependencies start
-set(NATIVE_SDK_DOWNLOAD_URL "https://download.agora.io/sdk/release/Agora_Native_SDK_for_Windows_rel.v4.5.2.6_30545_FULL_20251105_1129_962464.zip")
+set(NATIVE_SDK_DOWNLOAD_URL "https://download.agora.io/sdk/release/AgoraRtcEngine_windows_Preview_4.6.2-dev.3_20251208_173733.zip")
 # native dependencies end
 
 function(download_and_extract URL TARGET_DIR EXTRACTED_DIR)
