@@ -147,10 +147,13 @@ jobs:
           xcodebuild -showsdks | grep iphoneos
           echo "Available iOS Simulator SDKs:"
           xcodebuild -showsdks | grep iphonesimulator
-      - uses: futureware-tech/simulator-action@v3
+      - uses: futureware-tech/simulator-action@v4
         with:
           model: 'iPhone 16'
           os: 'iOS 18.5'
+          erase_before_boot: true
+          wait_for_boot: true
+          shutdown_after_job: true
       - run: bash ci/run_flutter_integration_test_ios.sh
       - name: Get ios crash logs
         if: always()
@@ -476,9 +479,12 @@ jobs:
         with:
           flutter-version: ${{ matrix.version }}
           cache: true
-      - uses: futureware-tech/simulator-action@v3
+      - uses: futureware-tech/simulator-action@v4
         with:
           model: 'iPhone 15'
+          erase_before_boot: true
+          wait_for_boot: true
+          shutdown_after_job: true
       - run: bash ci/rendering_test_ios.sh
 
       - uses: actions/upload-artifact@v4
