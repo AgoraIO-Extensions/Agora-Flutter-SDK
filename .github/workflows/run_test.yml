@@ -129,9 +129,11 @@ jobs:
       matrix:
         include:
           - version: "3.7.0"
-            model: "iPhone 15"  # Use different model for 3.7.0
+            model: "iPhone 16"
+            os_version: "18.4"
           - version: "3.16"
-            model: "iPhone 16"  # Use different model for 3.16
+            model: "iPhone 16"
+            os_version: "18.4"
     runs-on: macos-latest  # Updated from macos-13
     timeout-minutes: 120
     env:
@@ -155,7 +157,7 @@ jobs:
         with:
           model: ${{ matrix.model }}
           os: iOS
-          os_version: '>=18.0'
+          os_version: ${{ matrix.os_version }}
           erase_before_boot: true
           wait_for_boot: true
           shutdown_after_job: true
@@ -466,9 +468,9 @@ jobs:
           cache: true
       - uses: futureware-tech/simulator-action@v4
         with:
-          model: 'iPhone 15'
+          model: 'iPhone 16'
           os: iOS
-          os_version: '>=18.0'
+          os_version: '18.4'
           erase_before_boot: true
           wait_for_boot: true
           shutdown_after_job: true

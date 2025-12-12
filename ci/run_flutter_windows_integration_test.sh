@@ -14,13 +14,49 @@ echo "Building Windows application..."
 flutter build windows --debug
 
 # Verify the build succeeded
-if [ ! -f "build/windows/x64/runner/Debug/integration_test_app.exe" ]; then
+# Flutter 3.16+ uses build/windows/x64/runner/Debug/
+# Flutter < 3.16 uses build/windows/runner/Debug/
+WINDOWS_BUILD_DIR=""
+if [ -f "build/windows/x64/runner/Debug/integration_test_app.exe" ]; then
+    WINDOWS_BUILD_DIR="build/windows/x64/runner/Debug"
+elif [ -f "build/windows/runner/Debug/integration_test_app.exe" ]; then
+    WINDOWS_BUILD_DIR="build/windows/runner/Debug"
+else
     echo "Error: Windows app build failed - executable not found"
+    echo "Checked paths:"
+    echo "  - build/windows/x64/runner/Debug/integration_test_app.exe"
+    echo "  - build/windows/runner/Debug/integration_test_app.exe"
+    echo ""
+    echo "Listing build/windows directory structure:"
+    find build/windows -name "*.exe" 2>/dev/null || echo "No .exe files found"
     exit 1
 fi
 
+echo "Found Windows build at: $WINDOWS_BUILD_DIR"
+
+# List all DLL dependencies to verify they're present
+echo "Checking DLL dependencies..."
+ls -la ${WINDOWS_BUILD_DIR}/*.dll 2>/dev/null || echo "Warning: No DLLs found in Debug folder"
+
+# Check if Visual C++ Runtime is available
+echo "Checking system dependencies..."
+where vcruntime140.dll 2>/dev/null || echo "Warning: vcruntime140.dll not in PATH"
+
 # Give Windows a moment to settle after build
 sleep 5
+
+# Try to run a simple test first to verify the app can start
+echo "Testing if app can start with a simple test..."
+flutter test integration_test/apis_call_integration_test.dart \
+    --dart-define=TEST_APP_ID="${TEST_APP_ID}" \
+    -d windows \
+    --verbose \
+    --timeout=2m || {
+    echo "Warning: Initial test failed, but continuing with full test suite..."
+    echo "This failure might indicate environment issues."
+}
+
+sleep 3
 
 # It's a little tricky that you should run integration test one by one on flutter macOS/Windows
 for filename in integration_test/*.dart; do
@@ -47,6 +83,11 @@ for filename in integration_test/*.dart; do
         RETRY_COUNT=$((RETRY_COUNT+1))
         if [ $RETRY_COUNT -lt $MAX_RETRIES ]; then
             echo "Test failed, retrying ($RETRY_COUNT/$MAX_RETRIES)..."
+            
+            # Try to capture Windows Event Log errors (last 5 application errors)
+            echo "Checking for recent application errors..."
+            powershell.exe -Command "Get-EventLog -LogName Application -EntryType Error -Newest 5 -After (Get-Date).AddMinutes(-5) | Select-Object TimeGenerated, Source, Message | Format-List" 2>/dev/null || true
+            
             # Clean up any stuck processes
             taskkill //F //IM integration_test_app.exe //T 2>/dev/null || true
             sleep 10
