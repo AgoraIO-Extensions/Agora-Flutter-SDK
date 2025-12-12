@@ -265,7 +265,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        version: ["3.7.0", "3.24.5"]
+        version: ["3.24.5"]  # Note: 3.7.0 removed due to SDK compatibility issues
     runs-on: windows-2022
     timeout-minutes: 120
     env:
@@ -592,21 +592,3 @@ jobs:
         working-directory: example
       - name: Check android15 16k page size alignment
         run: bash scripts/check_android15_16k_page_alignment.sh example/build/app/intermediates/merged_native_libs/release/mergeReleaseNativeLibs/out/lib/arm64-v8a/libiris_rendering_android.so
-
-  Debug_Simulator_Setup:
-    name: Debug Simulator Setup
-    runs-on: macos-latest
-    steps:
-      - name: Debug Simulator Setup
-        run: |
-          echo "=== All Simulator Runtimes ==="
-          xcrun simctl list runtimes
-          echo ""
-          echo "=== Available Simulator Runtimes ==="  
-          xcrun simctl list runtimes available
-          echo ""
-          echo "=== iPhone 16 Compatible Runtimes ==="
-          xcrun simctl list devicetypes | grep iPhone
-          echo ""
-          echo "=== Created Simulator Details ==="
-          xcrun simctl list devices | grep "F925091F-C3FC-4D51-B786-8597A1A2A8F2" -A2 -B2
