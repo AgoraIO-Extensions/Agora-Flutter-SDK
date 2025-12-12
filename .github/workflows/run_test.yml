@@ -154,7 +154,8 @@ jobs:
       - uses: futureware-tech/simulator-action@v4
         with:
           model: ${{ matrix.model }}
-          os_version: '>=18.4'
+          os: iOS
+          os_version: '>=18.0'
           erase_before_boot: true
           wait_for_boot: true
           shutdown_after_job: true
@@ -393,7 +394,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        version: ["3.10.0", "3.24.5"]
+        version: ["3.24.5"]
     runs-on: ubuntu-latest
     timeout-minutes: 120
     steps:
@@ -466,6 +467,8 @@ jobs:
       - uses: futureware-tech/simulator-action@v4
         with:
           model: 'iPhone 15'
+          os: iOS
+          os_version: '>=18.0'
           erase_before_boot: true
           wait_for_boot: true
           shutdown_after_job: true
