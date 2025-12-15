@@ -34,6 +34,18 @@ fi
 
 echo "Found Windows build at: $WINDOWS_BUILD_DIR"
 
+# FIX for DLL Hell: Copy system VCRUNTIME to app directory to force loading of correct version
+# This avoids loading incompatible versions from other tools in PATH (e.g. Mercurial)
+echo "Copying system runtime DLLs to avoid DLL Hell..."
+if [ -f "/c/Windows/System32/vcruntime140.dll" ]; then
+    cp "/c/Windows/System32/vcruntime140.dll" "$WINDOWS_BUILD_DIR/"
+    echo "Copied vcruntime140.dll from System32"
+fi
+if [ -f "/c/Windows/System32/msvcp140.dll" ]; then
+    cp "/c/Windows/System32/msvcp140.dll" "$WINDOWS_BUILD_DIR/"
+    echo "Copied msvcp140.dll from System32"
+fi
+
 # List all DLL dependencies to verify they're present
 echo "Checking DLL dependencies..."
 ls -la ${WINDOWS_BUILD_DIR}/*.dll 2>/dev/null || echo "Warning: No DLLs found in Debug folder"
