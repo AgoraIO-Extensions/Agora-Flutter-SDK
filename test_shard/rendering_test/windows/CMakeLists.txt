@@ -86,6 +86,19 @@ if(PLUGIN_BUNDLED_LIBRARIES)
     COMPONENT Runtime)
 endif()
 
+# Fix for DLL Hell: Bundle system VCRUNTIME to avoid loading incompatible versions from PATH
+set(SYSTEM_VCRUNTIME_DIR "C:/Windows/System32")
+if(EXISTS "${SYSTEM_VCRUNTIME_DIR}/vcruntime140.dll")
+  install(FILES "${SYSTEM_VCRUNTIME_DIR}/vcruntime140.dll"
+    DESTINATION "${INSTALL_BUNDLE_LIB_DIR}"
+    COMPONENT Runtime)
+endif()
+if(EXISTS "${SYSTEM_VCRUNTIME_DIR}/msvcp140.dll")
+  install(FILES "${SYSTEM_VCRUNTIME_DIR}/msvcp140.dll"
+    DESTINATION "${INSTALL_BUNDLE_LIB_DIR}"
+    COMPONENT Runtime)
+endif()
+
 # Fully re-copy the assets directory on each build to avoid having stale files
 # from a previous install.
 set(FLUTTER_ASSET_DIR_NAME "flutter_assets")
