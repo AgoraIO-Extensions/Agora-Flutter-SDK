@@ -93,8 +93,28 @@ if(EXISTS "${SYSTEM_VCRUNTIME_DIR}/vcruntime140.dll")
     DESTINATION "${INSTALL_BUNDLE_LIB_DIR}"
     COMPONENT Runtime)
 endif()
+if(EXISTS "${SYSTEM_VCRUNTIME_DIR}/vcruntime140_1.dll")
+  install(FILES "${SYSTEM_VCRUNTIME_DIR}/vcruntime140_1.dll"
+    DESTINATION "${INSTALL_BUNDLE_LIB_DIR}"
+    COMPONENT Runtime)
+endif()
 if(EXISTS "${SYSTEM_VCRUNTIME_DIR}/msvcp140.dll")
   install(FILES "${SYSTEM_VCRUNTIME_DIR}/msvcp140.dll"
+    DESTINATION "${INSTALL_BUNDLE_LIB_DIR}"
+    COMPONENT Runtime)
+endif()
+if(EXISTS "${SYSTEM_VCRUNTIME_DIR}/msvcp140_1.dll")
+  install(FILES "${SYSTEM_VCRUNTIME_DIR}/msvcp140_1.dll"
+    DESTINATION "${INSTALL_BUNDLE_LIB_DIR}"
+    COMPONENT Runtime)
+endif()
+if(EXISTS "${SYSTEM_VCRUNTIME_DIR}/msvcp140_2.dll")
+  install(FILES "${SYSTEM_VCRUNTIME_DIR}/msvcp140_2.dll"
+    DESTINATION "${INSTALL_BUNDLE_LIB_DIR}"
+    COMPONENT Runtime)
+endif()
+if(EXISTS "${SYSTEM_VCRUNTIME_DIR}/msvcp140_codecvt_ids.dll")
+  install(FILES "${SYSTEM_VCRUNTIME_DIR}/msvcp140_codecvt_ids.dll"
     DESTINATION "${INSTALL_BUNDLE_LIB_DIR}"
     COMPONENT Runtime)
 endif()
