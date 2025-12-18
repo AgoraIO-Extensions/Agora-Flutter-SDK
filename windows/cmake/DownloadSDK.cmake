@@ -1,5 +1,5 @@
 # iris dependencies start
-set(IRIS_SDK_DOWNLOAD_URL "https://download.agora.io/sdk/release/iris_4.5.2.6-build.1_DCG_Windows_Video_Standalone_20251110_0346_31816.zip")
+set(IRIS_SDK_DOWNLOAD_URL "https://download.agora.io/sdk/release/iris_4.5.2.7-build.1_DCG_Windows_Video_Standalone_20251217_0836_31866.zip")
 # iris dependencies end
 
 # native dependencies start
