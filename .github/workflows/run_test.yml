@@ -127,8 +127,14 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        version: ["3.7.0", "3.16"]
-    runs-on: macos-latest
+        include:
+          - version: "3.7.0"
+            model: "iPhone 16"
+            os_version: "18.4"
+          - version: "3.16"
+            model: "iPhone 16"
+            os_version: "18.4"
+    runs-on: macos-latest  # Updated from macos-13
     timeout-minutes: 120
     env:
       TEST_APP_ID: ${{ secrets.APP_ID }}
@@ -147,10 +153,14 @@ jobs:
           xcodebuild -showsdks | grep iphoneos
           echo "Available iOS Simulator SDKs:"
           xcodebuild -showsdks | grep iphonesimulator
-      - uses: futureware-tech/simulator-action@v3
+      - uses: futureware-tech/simulator-action@v4
         with:
-          model: 'iPhone 16'
-          os: 'iOS 18.5'
+          model: ${{ matrix.model }}
+          os: iOS
+          os_version: ${{ matrix.os_version }}
+          erase_before_boot: true
+          wait_for_boot: true
+          shutdown_after_job: true
       - run: bash ci/run_flutter_integration_test_ios.sh
       - name: Get ios crash logs
         if: always()
@@ -255,7 +265,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        version: ["3.7.0", "3.24.5"]
+        version: ["3.24.5"]  # Note: 3.7.0 removed due to SDK compatibility issues
     runs-on: windows-2022
     timeout-minutes: 120
     env:
@@ -270,6 +280,12 @@ jobs:
         run: .\ci\setup-crash-dumps.ps1
         shell: powershell
       - run: flutter config --enable-windows-desktop
+      - name: Clean build artifacts
+        shell: bash
+        run: |
+          cd test_shard/integration_test_app
+          flutter clean
+          flutter pub get
       - name: Run windows integration test
         shell: bash
         run: |
@@ -374,39 +390,13 @@ jobs:
         env:
           IOS_SIMULATOR_SDK_VERSION: 18.4
 
-  # This job aim to cover https://github.com/flutter/flutter/issues/135739
-  build_ios_xcode_15:
-    name: Build iOS with xcode 15.x
-    if: ${{ !contains(github.event.pull_request.labels.*.name, 'ci:skip') }}
-    strategy:
-      matrix:
-        version: ["3.24.5"]
-    runs-on: macos-13
-    timeout-minutes: 120
-    steps:
-      - uses: actions/checkout@v3
-      - uses: subosito/flutter-action@v2
-        with:
-          flutter-version: ${{ matrix.version }}
-          cache: true
-      - run: | # https://github.com/actions/runner-images/issues/6746#issuecomment-1380042553
-          # set xcode version to use for build
-          sudo xcode-select -switch /Applications/Xcode_15.0.1.app
-          # Print used xCode version
-          xcode-select -print-path
-          xcodebuild -version
-      - run: flutter pub get
-      - name: Run flutter build ios --no-codesign
-        run: flutter build ios --no-codesign
-        working-directory: example
-
   build_web:
     name: Build Web
     if: ${{ !contains(github.event.pull_request.labels.*.name, 'ci:skip') }}
     strategy:
       fail-fast: false
       matrix:
-        version: ["3.7.0", "3.24.5"]
+        version: ["3.24.5"]
     runs-on: ubuntu-latest
     timeout-minutes: 120
     steps:
@@ -466,7 +456,7 @@ jobs:
     strategy:
       matrix:
         version: ["3.24.5"]
-    runs-on: macos-13 # Rendering test on ios simulator need macos 13+
+    runs-on: macos-latest  # Updated: macos-13 is retired
     timeout-minutes: 60
     env:
       TEST_APP_ID: ${{ secrets.APP_ID }}
@@ -476,9 +466,14 @@ jobs:
         with:
           flutter-version: ${{ matrix.version }}
           cache: true
-      - uses: futureware-tech/simulator-action@v3
+      - uses: futureware-tech/simulator-action@v4
         with:
-          model: 'iPhone 15'
+          model: 'iPhone 16'
+          os: iOS
+          os_version: '18.4'
+          erase_before_boot: true
+          wait_for_boot: true
+          shutdown_after_job: true
       - run: bash ci/rendering_test_ios.sh
 
       - uses: actions/upload-artifact@v4
@@ -597,21 +592,3 @@ jobs:
         working-directory: example
       - name: Check android15 16k page size alignment
         run: bash scripts/check_android15_16k_page_alignment.sh example/build/app/intermediates/merged_native_libs/release/mergeReleaseNativeLibs/out/lib/arm64-v8a/libiris_rendering_android.so
-
-  Debug_Simulator_Setup:
-    name: Debug Simulator Setup
-    runs-on: macos-latest
-    steps:
-      - name: Debug Simulator Setup
-        run: |
-          echo "=== All Simulator Runtimes ==="
-          xcrun simctl list runtimes
-          echo ""
-          echo "=== Available Simulator Runtimes ==="  
-          xcrun simctl list runtimes available
-          echo ""
-          echo "=== iPhone 16 Compatible Runtimes ==="
-          xcrun simctl list devicetypes | grep iPhone
-          echo ""
-          echo "=== Created Simulator Details ==="
-          xcrun simctl list devices | grep "F925091F-C3FC-4D51-B786-8597A1A2A8F2" -A2 -B2
