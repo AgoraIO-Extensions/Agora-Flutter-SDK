@@ -5,7 +5,7 @@ on:
   workflow_dispatch:
     inputs:
       increment:
-        description: 'The version to be released (e.g., 6.5.3 for standard, 6.5.2-sp.452143 for special)'
+        description: 'The version to be released (e.g., 6.5.3 for standard, 6.5.3-sp.453163 for special)'
         required: true
         type: string
       dry-run:
@@ -18,7 +18,7 @@ on:
   workflow_call:
     inputs:
       increment:
-        description: 'The version to be released (e.g., 6.5.3 for standard, 6.5.2-sp.452143 for special)'
+        description: 'The version to be released (e.g., 6.5.3 for standard, 6.5.3-sp.453163 for special)'
         required: false
         type: string
       dry-run:
@@ -122,7 +122,7 @@ jobs:
               echo "🚀 Detected standard release version: $RELEASE_VERSION"
             else
               # Special version: any version with suffix
-              # Examples: 6.5.0-beta.1, 6.5.0-rc.2, 6.5.2-sp.452143, 6.5.0+build.123
+              # Examples: 6.5.3-beta.1, 6.5.3-rc.2, 6.5.3-sp.452163, 6.5.3+build.123
               RELEASE_TYPE="special"
               IS_PRERELEASE="true"
               echo "🔧 Detected special release version: $RELEASE_VERSION"
@@ -235,16 +235,19 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Setup Dart for pub publish
+      - name: Setup Flutter for pub publish
         if: ${{ steps.version_check.outputs.release_type == 'standard' }}
-        uses: dart-lang/setup-dart@v1
+        uses: subosito/flutter-action@v2
+        with:
+          channel: 'stable'
+          cache: true
 
       - name: Publish to pub.dev (dry-run check)
         if: ${{ steps.version_check.outputs.release_type == 'standard' && steps.version_check.outputs.dry-run == 'true' }}
         run: |
           echo "[DRY-RUN MODE] Running pub publish dry-run"
-          dart pub get
-          dart pub publish --dry-run
+          flutter pub get
+          flutter pub publish --dry-run
       
       - name: Publish to pub.dev (real)
         if: ${{ steps.version_check.outputs.release_type == 'standard' && steps.version_check.outputs.dry-run == 'false' }}
@@ -298,20 +301,20 @@ jobs:
           # Generate DartDoc
           dart doc
           # Create a zip file of the DartDoc output
-          zip -r agora_rtc_engine_docs.zip doc
+          zip -r agora_rtc_docs.zip doc
 
       - name: Upload DartDoc Artifact ⬆️
         uses: actions/upload-artifact@v4
         with:
-          name: agora_rtc_engine_docs.zip
-          path: agora_rtc_engine_docs.zip
+          name: agora_rtc_docs.zip
+          path: agora_rtc_docs.zip
 
       - name: Upload DartDoc Archive to GitHub release ⬆️
         uses: svenstaro/upload-release-action@v2
         with:
           repo_token: ${{ secrets.GITHUB_TOKEN }}
-          file: agora_rtc_engine_docs.zip
-          asset_name: agora_rtc_engine_docs.zip
+          file: agora_rtc_docs.zip
+          asset_name: agora_rtc_docs.zip
           tag: ${{ steps.doc_version.outputs.version }}
           overwrite: true
 
@@ -369,3 +372,19 @@ jobs:
           echo "❌ Release failed!"
           echo "Please check the logs and try again."
           exit 1
+
+      - name: print publish info
+        run: |
+          RELEASE_VERSION="${{ needs.release.outputs.increment }}"
+          RELEASE_TYPE="${{ needs.release.outputs.release_type }}"
+          
+          if [ "$RELEASE_TYPE" = "standard" ]; then
+            echo "[publish info]  dependencies:"
+            echo "[publish info]    agora_rtc_engine: ^$RELEASE_VERSION"
+          else
+            echo "[publish info]  dependencies:"
+            echo "[publish info]    agora_rtc_engine:"
+            echo "[publish info]     git:"
+            echo "[publish info]      url: https://github.com/AgoraIO-Extensions/Agora-Flutter-SDK.git"
+            echo "[publish info]      ref: $RELEASE_VERSION"
+          fi
