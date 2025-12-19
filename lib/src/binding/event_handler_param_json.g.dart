@@ -296,6 +296,7 @@ VideoEncodedFrameObserverOnEncodedVideoFrameReceivedJson
     _$VideoEncodedFrameObserverOnEncodedVideoFrameReceivedJsonFromJson(
             Map<String, dynamic> json) =>
         VideoEncodedFrameObserverOnEncodedVideoFrameReceivedJson(
+          channelId: json['channelId'] as String?,
           uid: (json['uid'] as num?)?.toInt(),
           length: (json['length'] as num?)?.toInt(),
           videoEncodedFrameInfo: json['videoEncodedFrameInfo'] == null
@@ -315,6 +316,7 @@ Map<String, dynamic>
     }
   }
 
+  writeNotNull('channelId', instance.channelId);
   writeNotNull('uid', instance.uid);
   writeNotNull('length', instance.length);
   writeNotNull(
@@ -1317,6 +1319,7 @@ const _$ErrorCodeTypeEnumMap = {
   ErrorCodeType.errAborted: 20,
   ErrorCodeType.errInitNetEngine: 21,
   ErrorCodeType.errResourceLimited: 22,
+  ErrorCodeType.errFuncIsProhibited: 23,
   ErrorCodeType.errInvalidAppId: 101,
   ErrorCodeType.errInvalidChannelName: 102,
   ErrorCodeType.errNoServerResources: 103,
@@ -1352,6 +1355,12 @@ const _$ErrorCodeTypeEnumMap = {
   ErrorCodeType.errCertRequest: 168,
   ErrorCodeType.errPcmsendFormat: 200,
   ErrorCodeType.errPcmsendBufferoverflow: 201,
+  ErrorCodeType.errRdtUserNotExist: 250,
+  ErrorCodeType.errRdtUserNotReady: 251,
+  ErrorCodeType.errRdtDataBlocked: 252,
+  ErrorCodeType.errRdtCmdExceedLimit: 253,
+  ErrorCodeType.errRdtDataExceedLimit: 254,
+  ErrorCodeType.errRdtEncryption: 255,
   ErrorCodeType.errLoginAlreadyLogin: 428,
   ErrorCodeType.errLoadMediaEngine: 1001,
   ErrorCodeType.errAdmGeneralError: 1005,
@@ -1728,31 +1737,6 @@ Map<String, dynamic>
   return val;
 }
 
-RtcEngineEventHandlerOnDownlinkNetworkInfoUpdatedJson
-    _$RtcEngineEventHandlerOnDownlinkNetworkInfoUpdatedJsonFromJson(
-            Map<String, dynamic> json) =>
-        RtcEngineEventHandlerOnDownlinkNetworkInfoUpdatedJson(
-          info: json['info'] == null
-              ? null
-              : DownlinkNetworkInfo.fromJson(
-                  json['info'] as Map<String, dynamic>),
-        );
-
-Map<String, dynamic>
-    _$RtcEngineEventHandlerOnDownlinkNetworkInfoUpdatedJsonToJson(
-        RtcEngineEventHandlerOnDownlinkNetworkInfoUpdatedJson instance) {
-  final val = <String, dynamic>{};
-
-  void writeNotNull(String key, dynamic value) {
-    if (value != null) {
-      val[key] = value;
-    }
-  }
-
-  writeNotNull('info', instance.info?.toJson());
-  return val;
-}
-
 RtcEngineEventHandlerOnLastmileQualityJson
     _$RtcEngineEventHandlerOnLastmileQualityJsonFromJson(
             Map<String, dynamic> json) =>
@@ -1895,6 +1879,38 @@ Map<String, dynamic> _$RtcEngineEventHandlerOnVideoSizeChangedJsonToJson(
   return val;
 }
 
+RtcEngineEventHandlerOnLocalVideoEventJson
+    _$RtcEngineEventHandlerOnLocalVideoEventJsonFromJson(
+            Map<String, dynamic> json) =>
+        RtcEngineEventHandlerOnLocalVideoEventJson(
+          source: $enumDecodeNullable(_$VideoSourceTypeEnumMap, json['source']),
+          event:
+              $enumDecodeNullable(_$LocalVideoEventTypeEnumMap, json['event']),
+        );
+
+Map<String, dynamic> _$RtcEngineEventHandlerOnLocalVideoEventJsonToJson(
+    RtcEngineEventHandlerOnLocalVideoEventJson instance) {
+  final val = <String, dynamic>{};
+
+  void writeNotNull(String key, dynamic value) {
+    if (value != null) {
+      val[key] = value;
+    }
+  }
+
+  writeNotNull('source', _$VideoSourceTypeEnumMap[instance.source]);
+  writeNotNull('event', _$LocalVideoEventTypeEnumMap[instance.event]);
+  return val;
+}
+
+const _$LocalVideoEventTypeEnumMap = {
+  LocalVideoEventType.localVideoEventTypeScreenCaptureWindowHidden: 1,
+  LocalVideoEventType.localVideoEventTypeScreenCaptureWindowRecoverFromHidden:
+      2,
+  LocalVideoEventType.localVideoEventTypeScreenCaptureStoppedByUser: 3,
+  LocalVideoEventType.localVideoEventTypeScreenCaptureSystemInternalError: 4,
+};
+
 RtcEngineEventHandlerOnLocalVideoStateChangedJson
     _$RtcEngineEventHandlerOnLocalVideoStateChangedJsonFromJson(
             Map<String, dynamic> json) =>
@@ -1961,6 +1977,12 @@ const _$LocalVideoStreamReasonEnumMap = {
   LocalVideoStreamReason.localVideoStreamReasonScreenCaptureResumed: 29,
   LocalVideoStreamReason.localVideoStreamReasonScreenCaptureDisplayDisconnected:
       30,
+  LocalVideoStreamReason.localVideoStreamReasonScreenCaptureStoppedByUser: 31,
+  LocalVideoStreamReason.localVideoStreamReasonScreenCaptureInterruptedByOther:
+      32,
+  LocalVideoStreamReason.localVideoStreamReasonScreenCaptureStoppedByCall: 33,
+  LocalVideoStreamReason.localVideoStreamReasonScreenCaptureExcludeWindowFailed:
+      34,
 };
 
 RtcEngineEventHandlerOnRemoteVideoStateChangedJson
@@ -2321,6 +2343,8 @@ RtcEngineEventHandlerOnLocalVideoStatsJson
               ? null
               : RtcConnection.fromJson(
                   json['connection'] as Map<String, dynamic>),
+          sourceType:
+              $enumDecodeNullable(_$VideoSourceTypeEnumMap, json['sourceType']),
           stats: json['stats'] == null
               ? null
               : LocalVideoStats.fromJson(json['stats'] as Map<String, dynamic>),
@@ -2337,6 +2361,7 @@ Map<String, dynamic> _$RtcEngineEventHandlerOnLocalVideoStatsJsonToJson(
   }
 
   writeNotNull('connection', instance.connection?.toJson());
+  writeNotNull('sourceType', _$VideoSourceTypeEnumMap[instance.sourceType]);
   writeNotNull('stats', instance.stats?.toJson());
   return val;
 }
@@ -2697,6 +2722,110 @@ Map<String, dynamic> _$RtcEngineEventHandlerOnStreamMessageErrorJsonToJson(
   writeNotNull('code', _$ErrorCodeTypeEnumMap[instance.code]);
   writeNotNull('missed', instance.missed);
   writeNotNull('cached', instance.cached);
+  return val;
+}
+
+RtcEngineEventHandlerOnRdtMessageJson
+    _$RtcEngineEventHandlerOnRdtMessageJsonFromJson(
+            Map<String, dynamic> json) =>
+        RtcEngineEventHandlerOnRdtMessageJson(
+          connection: json['connection'] == null
+              ? null
+              : RtcConnection.fromJson(
+                  json['connection'] as Map<String, dynamic>),
+          userId: (json['userId'] as num?)?.toInt(),
+          type: $enumDecodeNullable(_$RdtStreamTypeEnumMap, json['type']),
+          data: json['data'] as String?,
+          length: (json['length'] as num?)?.toInt(),
+        );
+
+Map<String, dynamic> _$RtcEngineEventHandlerOnRdtMessageJsonToJson(
+    RtcEngineEventHandlerOnRdtMessageJson instance) {
+  final val = <String, dynamic>{};
+
+  void writeNotNull(String key, dynamic value) {
+    if (value != null) {
+      val[key] = value;
+    }
+  }
+
+  writeNotNull('connection', instance.connection?.toJson());
+  writeNotNull('userId', instance.userId);
+  writeNotNull('type', _$RdtStreamTypeEnumMap[instance.type]);
+  writeNotNull('data', instance.data);
+  writeNotNull('length', instance.length);
+  return val;
+}
+
+const _$RdtStreamTypeEnumMap = {
+  RdtStreamType.rdtStreamCmd: 0,
+  RdtStreamType.rdtStreamData: 1,
+  RdtStreamType.rdtStreamCount: 2,
+};
+
+RtcEngineEventHandlerOnRdtStateChangedJson
+    _$RtcEngineEventHandlerOnRdtStateChangedJsonFromJson(
+            Map<String, dynamic> json) =>
+        RtcEngineEventHandlerOnRdtStateChangedJson(
+          connection: json['connection'] == null
+              ? null
+              : RtcConnection.fromJson(
+                  json['connection'] as Map<String, dynamic>),
+          userId: (json['userId'] as num?)?.toInt(),
+          state: $enumDecodeNullable(_$RdtStateEnumMap, json['state']),
+        );
+
+Map<String, dynamic> _$RtcEngineEventHandlerOnRdtStateChangedJsonToJson(
+    RtcEngineEventHandlerOnRdtStateChangedJson instance) {
+  final val = <String, dynamic>{};
+
+  void writeNotNull(String key, dynamic value) {
+    if (value != null) {
+      val[key] = value;
+    }
+  }
+
+  writeNotNull('connection', instance.connection?.toJson());
+  writeNotNull('userId', instance.userId);
+  writeNotNull('state', _$RdtStateEnumMap[instance.state]);
+  return val;
+}
+
+const _$RdtStateEnumMap = {
+  RdtState.rdtStateClosed: 0,
+  RdtState.rdtStateOpened: 1,
+  RdtState.rdtStateBlocked: 2,
+  RdtState.rdtStatePending: 3,
+  RdtState.rdtStateBroken: 4,
+};
+
+RtcEngineEventHandlerOnMediaControlMessageJson
+    _$RtcEngineEventHandlerOnMediaControlMessageJsonFromJson(
+            Map<String, dynamic> json) =>
+        RtcEngineEventHandlerOnMediaControlMessageJson(
+          connection: json['connection'] == null
+              ? null
+              : RtcConnection.fromJson(
+                  json['connection'] as Map<String, dynamic>),
+          userId: (json['userId'] as num?)?.toInt(),
+          data: json['data'] as String?,
+          length: (json['length'] as num?)?.toInt(),
+        );
+
+Map<String, dynamic> _$RtcEngineEventHandlerOnMediaControlMessageJsonToJson(
+    RtcEngineEventHandlerOnMediaControlMessageJson instance) {
+  final val = <String, dynamic>{};
+
+  void writeNotNull(String key, dynamic value) {
+    if (value != null) {
+      val[key] = value;
+    }
+  }
+
+  writeNotNull('connection', instance.connection?.toJson());
+  writeNotNull('userId', instance.userId);
+  writeNotNull('data', instance.data);
+  writeNotNull('length', instance.length);
   return val;
 }
 
@@ -3335,28 +3464,6 @@ const _$ChannelMediaRelayErrorEnumMap = {
   ChannelMediaRelayError.relayErrorDestTokenExpired: 11,
 };
 
-RtcEngineEventHandlerOnLocalPublishFallbackToAudioOnlyJson
-    _$RtcEngineEventHandlerOnLocalPublishFallbackToAudioOnlyJsonFromJson(
-            Map<String, dynamic> json) =>
-        RtcEngineEventHandlerOnLocalPublishFallbackToAudioOnlyJson(
-          isFallbackOrRecover: json['isFallbackOrRecover'] as bool?,
-        );
-
-Map<String, dynamic>
-    _$RtcEngineEventHandlerOnLocalPublishFallbackToAudioOnlyJsonToJson(
-        RtcEngineEventHandlerOnLocalPublishFallbackToAudioOnlyJson instance) {
-  final val = <String, dynamic>{};
-
-  void writeNotNull(String key, dynamic value) {
-    if (value != null) {
-      val[key] = value;
-    }
-  }
-
-  writeNotNull('isFallbackOrRecover', instance.isFallbackOrRecover);
-  return val;
-}
-
 RtcEngineEventHandlerOnRemoteSubscribeFallbackToAudioOnlyJson
     _$RtcEngineEventHandlerOnRemoteSubscribeFallbackToAudioOnlyJsonFromJson(
             Map<String, dynamic> json) =>
@@ -3514,84 +3621,6 @@ const _$ConnectionChangedReasonTypeEnumMap = {
   ConnectionChangedReasonType.connectionChangedInconsistentAppid: 24,
 };
 
-RtcEngineEventHandlerOnWlAccMessageJson
-    _$RtcEngineEventHandlerOnWlAccMessageJsonFromJson(
-            Map<String, dynamic> json) =>
-        RtcEngineEventHandlerOnWlAccMessageJson(
-          connection: json['connection'] == null
-              ? null
-              : RtcConnection.fromJson(
-                  json['connection'] as Map<String, dynamic>),
-          reason:
-              $enumDecodeNullable(_$WlaccMessageReasonEnumMap, json['reason']),
-          action:
-              $enumDecodeNullable(_$WlaccSuggestActionEnumMap, json['action']),
-          wlAccMsg: json['wlAccMsg'] as String?,
-        );
-
-Map<String, dynamic> _$RtcEngineEventHandlerOnWlAccMessageJsonToJson(
-    RtcEngineEventHandlerOnWlAccMessageJson instance) {
-  final val = <String, dynamic>{};
-
-  void writeNotNull(String key, dynamic value) {
-    if (value != null) {
-      val[key] = value;
-    }
-  }
-
-  writeNotNull('connection', instance.connection?.toJson());
-  writeNotNull('reason', _$WlaccMessageReasonEnumMap[instance.reason]);
-  writeNotNull('action', _$WlaccSuggestActionEnumMap[instance.action]);
-  writeNotNull('wlAccMsg', instance.wlAccMsg);
-  return val;
-}
-
-const _$WlaccMessageReasonEnumMap = {
-  WlaccMessageReason.wlaccMessageReasonWeakSignal: 0,
-  WlaccMessageReason.wlaccMessageReasonChannelCongestion: 1,
-};
-
-const _$WlaccSuggestActionEnumMap = {
-  WlaccSuggestAction.wlaccSuggestActionCloseToWifi: 0,
-  WlaccSuggestAction.wlaccSuggestActionConnectSsid: 1,
-  WlaccSuggestAction.wlaccSuggestActionCheck5g: 2,
-  WlaccSuggestAction.wlaccSuggestActionModifySsid: 3,
-};
-
-RtcEngineEventHandlerOnWlAccStatsJson
-    _$RtcEngineEventHandlerOnWlAccStatsJsonFromJson(
-            Map<String, dynamic> json) =>
-        RtcEngineEventHandlerOnWlAccStatsJson(
-          connection: json['connection'] == null
-              ? null
-              : RtcConnection.fromJson(
-                  json['connection'] as Map<String, dynamic>),
-          currentStats: json['currentStats'] == null
-              ? null
-              : WlAccStats.fromJson(
-                  json['currentStats'] as Map<String, dynamic>),
-          averageStats: json['averageStats'] == null
-              ? null
-              : WlAccStats.fromJson(
-                  json['averageStats'] as Map<String, dynamic>),
-        );
-
-Map<String, dynamic> _$RtcEngineEventHandlerOnWlAccStatsJsonToJson(
-    RtcEngineEventHandlerOnWlAccStatsJson instance) {
-  final val = <String, dynamic>{};
-
-  void writeNotNull(String key, dynamic value) {
-    if (value != null) {
-      val[key] = value;
-    }
-  }
-
-  writeNotNull('connection', instance.connection?.toJson());
-  writeNotNull('currentStats', instance.currentStats?.toJson());
-  writeNotNull('averageStats', instance.averageStats?.toJson());
-  return val;
-}
-
 RtcEngineEventHandlerOnNetworkTypeChangedJson
     _$RtcEngineEventHandlerOnNetworkTypeChangedJsonFromJson(
             Map<String, dynamic> json) =>
@@ -3692,6 +3721,29 @@ const _$PermissionTypeEnumMap = {
   PermissionType.camera: 1,
   PermissionType.screenCapture: 2,
 };
+
+RtcEngineEventHandlerOnPermissionGrantedJson
+    _$RtcEngineEventHandlerOnPermissionGrantedJsonFromJson(
+            Map<String, dynamic> json) =>
+        RtcEngineEventHandlerOnPermissionGrantedJson(
+          permissionType: $enumDecodeNullable(
+              _$PermissionTypeEnumMap, json['permissionType']),
+        );
+
+Map<String, dynamic> _$RtcEngineEventHandlerOnPermissionGrantedJsonToJson(
+    RtcEngineEventHandlerOnPermissionGrantedJson instance) {
+  final val = <String, dynamic>{};
+
+  void writeNotNull(String key, dynamic value) {
+    if (value != null) {
+      val[key] = value;
+    }
+  }
+
+  writeNotNull(
+      'permissionType', _$PermissionTypeEnumMap[instance.permissionType]);
+  return val;
+}
 
 RtcEngineEventHandlerOnLocalUserRegisteredJson
     _$RtcEngineEventHandlerOnLocalUserRegisteredJsonFromJson(
@@ -4222,6 +4274,72 @@ Map<String, dynamic> _$RtcEngineEventHandlerOnSetRtmFlagResultJsonToJson(
   writeNotNull('code', instance.code);
   return val;
 }
+
+RtcEngineEventHandlerOnMultipathStatsJson
+    _$RtcEngineEventHandlerOnMultipathStatsJsonFromJson(
+            Map<String, dynamic> json) =>
+        RtcEngineEventHandlerOnMultipathStatsJson(
+          connection: json['connection'] == null
+              ? null
+              : RtcConnection.fromJson(
+                  json['connection'] as Map<String, dynamic>),
+          stats: json['stats'] == null
+              ? null
+              : MultipathStats.fromJson(json['stats'] as Map<String, dynamic>),
+        );
+
+Map<String, dynamic> _$RtcEngineEventHandlerOnMultipathStatsJsonToJson(
+    RtcEngineEventHandlerOnMultipathStatsJson instance) {
+  final val = <String, dynamic>{};
+
+  void writeNotNull(String key, dynamic value) {
+    if (value != null) {
+      val[key] = value;
+    }
+  }
+
+  writeNotNull('connection', instance.connection?.toJson());
+  writeNotNull('stats', instance.stats?.toJson());
+  return val;
+}
+
+RtcEngineEventHandlerOnRenewTokenResultJson
+    _$RtcEngineEventHandlerOnRenewTokenResultJsonFromJson(
+            Map<String, dynamic> json) =>
+        RtcEngineEventHandlerOnRenewTokenResultJson(
+          connection: json['connection'] == null
+              ? null
+              : RtcConnection.fromJson(
+                  json['connection'] as Map<String, dynamic>),
+          token: json['token'] as String?,
+          code: $enumDecodeNullable(_$RenewTokenErrorCodeEnumMap, json['code']),
+        );
+
+Map<String, dynamic> _$RtcEngineEventHandlerOnRenewTokenResultJsonToJson(
+    RtcEngineEventHandlerOnRenewTokenResultJson instance) {
+  final val = <String, dynamic>{};
+
+  void writeNotNull(String key, dynamic value) {
+    if (value != null) {
+      val[key] = value;
+    }
+  }
+
+  writeNotNull('connection', instance.connection?.toJson());
+  writeNotNull('token', instance.token);
+  writeNotNull('code', _$RenewTokenErrorCodeEnumMap[instance.code]);
+  return val;
+}
+
+const _$RenewTokenErrorCodeEnumMap = {
+  RenewTokenErrorCode.renewTokenSuccess: 0,
+  RenewTokenErrorCode.renewTokenFailure: 1,
+  RenewTokenErrorCode.renewTokenTokenExpired: 2,
+  RenewTokenErrorCode.renewTokenInvalidToken: 3,
+  RenewTokenErrorCode.renewTokenInvalidChannelName: 4,
+  RenewTokenErrorCode.renewTokenInconsistentAppid: 5,
+  RenewTokenErrorCode.renewTokenCanceledByNewRequest: 6,
+};
 
 MetadataObserverOnMetadataReceivedJson
     _$MetadataObserverOnMetadataReceivedJsonFromJson(

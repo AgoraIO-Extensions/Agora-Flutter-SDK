@@ -454,6 +454,21 @@ abstract class RtcEngineEx implements RtcEngine {
       required int length,
       required RtcConnection connection});
 
+  /// @nodoc
+  Future<void> sendRdtMessageEx(
+      {required int uid,
+      required RdtStreamType type,
+      required String data,
+      required int length,
+      required RtcConnection connection});
+
+  /// @nodoc
+  Future<void> sendMediaControlMessageEx(
+      {required int uid,
+      required String data,
+      required int length,
+      required RtcConnection connection});
+
   /// Adds a watermark image to the local video.
   ///
   /// This method adds a PNG watermark image to the local video in the live streaming. Once the watermark image is added, all the audience in the channel (CDN audience included), and the capturing device can see and capture it. The Agora SDK supports adding only one watermark image onto a live video stream. The newly added watermark image replaces the previous one. The watermark coordinates are dependent on the settings in the setVideoEncoderConfigurationEx method:
@@ -476,6 +491,10 @@ abstract class RtcEngineEx implements RtcEngine {
       {required String watermarkUrl,
       required WatermarkOptions options,
       required RtcConnection connection});
+
+  /// @nodoc
+  Future<void> removeVideoWatermarkEx(
+      {required String id, required RtcConnection connection});
 
   /// Removes the watermark image from the video stream.
   ///
@@ -754,12 +773,6 @@ abstract class RtcEngineEx implements RtcEngine {
       required int length});
 
   /// @nodoc
-  Future<void> enableVideoImageSourceEx(
-      {required bool enable,
-      required ImageTrackOptions options,
-      required RtcConnection connection});
-
-  /// @nodoc
   Future<void> preloadEffectEx(
       {required RtcConnection connection,
       required int soundId,
@@ -792,4 +805,8 @@ abstract class RtcEngineEx implements RtcEngine {
       {required RtcConnection connection,
       required int uid,
       required SnapshotConfig config});
+
+  /// @nodoc
+  Future<void> addVideoWatermarkWithConfigEx(
+      {required WatermarkConfig config, required RtcConnection connection});
 }

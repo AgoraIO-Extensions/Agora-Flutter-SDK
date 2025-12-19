@@ -420,7 +420,14 @@ extension AudioSpectrumObserverOnRemoteAudioSpectrumJsonBufferExt
 class VideoEncodedFrameObserverOnEncodedVideoFrameReceivedJson
     implements AgoraSerializable {
   const VideoEncodedFrameObserverOnEncodedVideoFrameReceivedJson(
-      {this.uid, this.imageBuffer, this.length, this.videoEncodedFrameInfo});
+      {this.channelId,
+      this.uid,
+      this.imageBuffer,
+      this.length,
+      this.videoEncodedFrameInfo});
+
+  @JsonKey(name: 'channelId')
+  final String? channelId;
 
   @JsonKey(name: 'uid')
   final int? uid;
@@ -453,6 +460,7 @@ extension VideoEncodedFrameObserverOnEncodedVideoFrameReceivedJsonBufferExt
       imageBuffer = bufferList[0];
     }
     return VideoEncodedFrameObserverOnEncodedVideoFrameReceivedJson(
+        channelId: channelId,
         uid: uid,
         imageBuffer: imageBuffer,
         length: length,
@@ -2107,37 +2115,6 @@ extension RtcEngineEventHandlerOnUplinkNetworkInfoUpdatedJsonBufferExt
 }
 
 @JsonSerializable(explicitToJson: true, includeIfNull: false)
-class RtcEngineEventHandlerOnDownlinkNetworkInfoUpdatedJson
-    implements AgoraSerializable {
-  const RtcEngineEventHandlerOnDownlinkNetworkInfoUpdatedJson({this.info});
-
-  @JsonKey(name: 'info')
-  final DownlinkNetworkInfo? info;
-
-  factory RtcEngineEventHandlerOnDownlinkNetworkInfoUpdatedJson.fromJson(
-          Map<String, dynamic> json) =>
-      _$RtcEngineEventHandlerOnDownlinkNetworkInfoUpdatedJsonFromJson(json);
-
-  @override
-  Map<String, dynamic> toJson() =>
-      _$RtcEngineEventHandlerOnDownlinkNetworkInfoUpdatedJsonToJson(this);
-}
-
-extension RtcEngineEventHandlerOnDownlinkNetworkInfoUpdatedJsonBufferExt
-    on RtcEngineEventHandlerOnDownlinkNetworkInfoUpdatedJson {
-  RtcEngineEventHandlerOnDownlinkNetworkInfoUpdatedJson fillBuffers(
-      List<Uint8List> bufferList) {
-    if (bufferList.isEmpty) return this;
-    return this;
-  }
-
-  List<Uint8List> collectBufferList() {
-    final bufferList = <Uint8List>[];
-    return bufferList;
-  }
-}
-
-@JsonSerializable(explicitToJson: true, includeIfNull: false)
 class RtcEngineEventHandlerOnLastmileQualityJson implements AgoraSerializable {
   const RtcEngineEventHandlerOnLastmileQualityJson({this.quality});
 
@@ -2327,6 +2304,39 @@ class RtcEngineEventHandlerOnVideoSizeChangedJson implements AgoraSerializable {
 extension RtcEngineEventHandlerOnVideoSizeChangedJsonBufferExt
     on RtcEngineEventHandlerOnVideoSizeChangedJson {
   RtcEngineEventHandlerOnVideoSizeChangedJson fillBuffers(
+      List<Uint8List> bufferList) {
+    if (bufferList.isEmpty) return this;
+    return this;
+  }
+
+  List<Uint8List> collectBufferList() {
+    final bufferList = <Uint8List>[];
+    return bufferList;
+  }
+}
+
+@JsonSerializable(explicitToJson: true, includeIfNull: false)
+class RtcEngineEventHandlerOnLocalVideoEventJson implements AgoraSerializable {
+  const RtcEngineEventHandlerOnLocalVideoEventJson({this.source, this.event});
+
+  @JsonKey(name: 'source')
+  final VideoSourceType? source;
+
+  @JsonKey(name: 'event')
+  final LocalVideoEventType? event;
+
+  factory RtcEngineEventHandlerOnLocalVideoEventJson.fromJson(
+          Map<String, dynamic> json) =>
+      _$RtcEngineEventHandlerOnLocalVideoEventJsonFromJson(json);
+
+  @override
+  Map<String, dynamic> toJson() =>
+      _$RtcEngineEventHandlerOnLocalVideoEventJsonToJson(this);
+}
+
+extension RtcEngineEventHandlerOnLocalVideoEventJsonBufferExt
+    on RtcEngineEventHandlerOnLocalVideoEventJson {
+  RtcEngineEventHandlerOnLocalVideoEventJson fillBuffers(
       List<Uint8List> bufferList) {
     if (bufferList.isEmpty) return this;
     return this;
@@ -2795,10 +2805,13 @@ extension RtcEngineEventHandlerOnLocalAudioStatsJsonBufferExt
 @JsonSerializable(explicitToJson: true, includeIfNull: false)
 class RtcEngineEventHandlerOnLocalVideoStatsJson implements AgoraSerializable {
   const RtcEngineEventHandlerOnLocalVideoStatsJson(
-      {this.connection, this.stats});
+      {this.connection, this.sourceType, this.stats});
 
   @JsonKey(name: 'connection')
   final RtcConnection? connection;
+
+  @JsonKey(name: 'sourceType')
+  final VideoSourceType? sourceType;
 
   @JsonKey(name: 'stats')
   final LocalVideoStats? stats;
@@ -3310,6 +3323,127 @@ class RtcEngineEventHandlerOnStreamMessageErrorJson
 extension RtcEngineEventHandlerOnStreamMessageErrorJsonBufferExt
     on RtcEngineEventHandlerOnStreamMessageErrorJson {
   RtcEngineEventHandlerOnStreamMessageErrorJson fillBuffers(
+      List<Uint8List> bufferList) {
+    if (bufferList.isEmpty) return this;
+    return this;
+  }
+
+  List<Uint8List> collectBufferList() {
+    final bufferList = <Uint8List>[];
+    return bufferList;
+  }
+}
+
+@JsonSerializable(explicitToJson: true, includeIfNull: false)
+class RtcEngineEventHandlerOnRdtMessageJson implements AgoraSerializable {
+  const RtcEngineEventHandlerOnRdtMessageJson(
+      {this.connection, this.userId, this.type, this.data, this.length});
+
+  @JsonKey(name: 'connection')
+  final RtcConnection? connection;
+
+  @JsonKey(name: 'userId')
+  final int? userId;
+
+  @JsonKey(name: 'type')
+  final RdtStreamType? type;
+
+  @JsonKey(name: 'data')
+  final String? data;
+
+  @JsonKey(name: 'length')
+  final int? length;
+
+  factory RtcEngineEventHandlerOnRdtMessageJson.fromJson(
+          Map<String, dynamic> json) =>
+      _$RtcEngineEventHandlerOnRdtMessageJsonFromJson(json);
+
+  @override
+  Map<String, dynamic> toJson() =>
+      _$RtcEngineEventHandlerOnRdtMessageJsonToJson(this);
+}
+
+extension RtcEngineEventHandlerOnRdtMessageJsonBufferExt
+    on RtcEngineEventHandlerOnRdtMessageJson {
+  RtcEngineEventHandlerOnRdtMessageJson fillBuffers(
+      List<Uint8List> bufferList) {
+    if (bufferList.isEmpty) return this;
+    return this;
+  }
+
+  List<Uint8List> collectBufferList() {
+    final bufferList = <Uint8List>[];
+    return bufferList;
+  }
+}
+
+@JsonSerializable(explicitToJson: true, includeIfNull: false)
+class RtcEngineEventHandlerOnRdtStateChangedJson implements AgoraSerializable {
+  const RtcEngineEventHandlerOnRdtStateChangedJson(
+      {this.connection, this.userId, this.state});
+
+  @JsonKey(name: 'connection')
+  final RtcConnection? connection;
+
+  @JsonKey(name: 'userId')
+  final int? userId;
+
+  @JsonKey(name: 'state')
+  final RdtState? state;
+
+  factory RtcEngineEventHandlerOnRdtStateChangedJson.fromJson(
+          Map<String, dynamic> json) =>
+      _$RtcEngineEventHandlerOnRdtStateChangedJsonFromJson(json);
+
+  @override
+  Map<String, dynamic> toJson() =>
+      _$RtcEngineEventHandlerOnRdtStateChangedJsonToJson(this);
+}
+
+extension RtcEngineEventHandlerOnRdtStateChangedJsonBufferExt
+    on RtcEngineEventHandlerOnRdtStateChangedJson {
+  RtcEngineEventHandlerOnRdtStateChangedJson fillBuffers(
+      List<Uint8List> bufferList) {
+    if (bufferList.isEmpty) return this;
+    return this;
+  }
+
+  List<Uint8List> collectBufferList() {
+    final bufferList = <Uint8List>[];
+    return bufferList;
+  }
+}
+
+@JsonSerializable(explicitToJson: true, includeIfNull: false)
+class RtcEngineEventHandlerOnMediaControlMessageJson
+    implements AgoraSerializable {
+  const RtcEngineEventHandlerOnMediaControlMessageJson(
+      {this.connection, this.userId, this.data, this.length});
+
+  @JsonKey(name: 'connection')
+  final RtcConnection? connection;
+
+  @JsonKey(name: 'userId')
+  final int? userId;
+
+  @JsonKey(name: 'data')
+  final String? data;
+
+  @JsonKey(name: 'length')
+  final int? length;
+
+  factory RtcEngineEventHandlerOnMediaControlMessageJson.fromJson(
+          Map<String, dynamic> json) =>
+      _$RtcEngineEventHandlerOnMediaControlMessageJsonFromJson(json);
+
+  @override
+  Map<String, dynamic> toJson() =>
+      _$RtcEngineEventHandlerOnMediaControlMessageJsonToJson(this);
+}
+
+extension RtcEngineEventHandlerOnMediaControlMessageJsonBufferExt
+    on RtcEngineEventHandlerOnMediaControlMessageJson {
+  RtcEngineEventHandlerOnMediaControlMessageJson fillBuffers(
       List<Uint8List> bufferList) {
     if (bufferList.isEmpty) return this;
     return this;
@@ -4014,39 +4148,6 @@ extension RtcEngineEventHandlerOnChannelMediaRelayStateChangedJsonBufferExt
 }
 
 @JsonSerializable(explicitToJson: true, includeIfNull: false)
-class RtcEngineEventHandlerOnLocalPublishFallbackToAudioOnlyJson
-    implements AgoraSerializable {
-  const RtcEngineEventHandlerOnLocalPublishFallbackToAudioOnlyJson(
-      {this.isFallbackOrRecover});
-
-  @JsonKey(name: 'isFallbackOrRecover')
-  final bool? isFallbackOrRecover;
-
-  factory RtcEngineEventHandlerOnLocalPublishFallbackToAudioOnlyJson.fromJson(
-          Map<String, dynamic> json) =>
-      _$RtcEngineEventHandlerOnLocalPublishFallbackToAudioOnlyJsonFromJson(
-          json);
-
-  @override
-  Map<String, dynamic> toJson() =>
-      _$RtcEngineEventHandlerOnLocalPublishFallbackToAudioOnlyJsonToJson(this);
-}
-
-extension RtcEngineEventHandlerOnLocalPublishFallbackToAudioOnlyJsonBufferExt
-    on RtcEngineEventHandlerOnLocalPublishFallbackToAudioOnlyJson {
-  RtcEngineEventHandlerOnLocalPublishFallbackToAudioOnlyJson fillBuffers(
-      List<Uint8List> bufferList) {
-    if (bufferList.isEmpty) return this;
-    return this;
-  }
-
-  List<Uint8List> collectBufferList() {
-    final bufferList = <Uint8List>[];
-    return bufferList;
-  }
-}
-
-@JsonSerializable(explicitToJson: true, includeIfNull: false)
 class RtcEngineEventHandlerOnRemoteSubscribeFallbackToAudioOnlyJson
     implements AgoraSerializable {
   const RtcEngineEventHandlerOnRemoteSubscribeFallbackToAudioOnlyJson(
@@ -4218,83 +4319,6 @@ extension RtcEngineEventHandlerOnConnectionStateChangedJsonBufferExt
 }
 
 @JsonSerializable(explicitToJson: true, includeIfNull: false)
-class RtcEngineEventHandlerOnWlAccMessageJson implements AgoraSerializable {
-  const RtcEngineEventHandlerOnWlAccMessageJson(
-      {this.connection, this.reason, this.action, this.wlAccMsg});
-
-  @JsonKey(name: 'connection')
-  final RtcConnection? connection;
-
-  @JsonKey(name: 'reason')
-  final WlaccMessageReason? reason;
-
-  @JsonKey(name: 'action')
-  final WlaccSuggestAction? action;
-
-  @JsonKey(name: 'wlAccMsg')
-  final String? wlAccMsg;
-
-  factory RtcEngineEventHandlerOnWlAccMessageJson.fromJson(
-          Map<String, dynamic> json) =>
-      _$RtcEngineEventHandlerOnWlAccMessageJsonFromJson(json);
-
-  @override
-  Map<String, dynamic> toJson() =>
-      _$RtcEngineEventHandlerOnWlAccMessageJsonToJson(this);
-}
-
-extension RtcEngineEventHandlerOnWlAccMessageJsonBufferExt
-    on RtcEngineEventHandlerOnWlAccMessageJson {
-  RtcEngineEventHandlerOnWlAccMessageJson fillBuffers(
-      List<Uint8List> bufferList) {
-    if (bufferList.isEmpty) return this;
-    return this;
-  }
-
-  List<Uint8List> collectBufferList() {
-    final bufferList = <Uint8List>[];
-    return bufferList;
-  }
-}
-
-@JsonSerializable(explicitToJson: true, includeIfNull: false)
-class RtcEngineEventHandlerOnWlAccStatsJson implements AgoraSerializable {
-  const RtcEngineEventHandlerOnWlAccStatsJson(
-      {this.connection, this.currentStats, this.averageStats});
-
-  @JsonKey(name: 'connection')
-  final RtcConnection? connection;
-
-  @JsonKey(name: 'currentStats')
-  final WlAccStats? currentStats;
-
-  @JsonKey(name: 'averageStats')
-  final WlAccStats? averageStats;
-
-  factory RtcEngineEventHandlerOnWlAccStatsJson.fromJson(
-          Map<String, dynamic> json) =>
-      _$RtcEngineEventHandlerOnWlAccStatsJsonFromJson(json);
-
-  @override
-  Map<String, dynamic> toJson() =>
-      _$RtcEngineEventHandlerOnWlAccStatsJsonToJson(this);
-}
-
-extension RtcEngineEventHandlerOnWlAccStatsJsonBufferExt
-    on RtcEngineEventHandlerOnWlAccStatsJson {
-  RtcEngineEventHandlerOnWlAccStatsJson fillBuffers(
-      List<Uint8List> bufferList) {
-    if (bufferList.isEmpty) return this;
-    return this;
-  }
-
-  List<Uint8List> collectBufferList() {
-    final bufferList = <Uint8List>[];
-    return bufferList;
-  }
-}
-
-@JsonSerializable(explicitToJson: true, includeIfNull: false)
 class RtcEngineEventHandlerOnNetworkTypeChangedJson
     implements AgoraSerializable {
   const RtcEngineEventHandlerOnNetworkTypeChangedJson(
@@ -4382,6 +4406,37 @@ class RtcEngineEventHandlerOnPermissionErrorJson implements AgoraSerializable {
 extension RtcEngineEventHandlerOnPermissionErrorJsonBufferExt
     on RtcEngineEventHandlerOnPermissionErrorJson {
   RtcEngineEventHandlerOnPermissionErrorJson fillBuffers(
+      List<Uint8List> bufferList) {
+    if (bufferList.isEmpty) return this;
+    return this;
+  }
+
+  List<Uint8List> collectBufferList() {
+    final bufferList = <Uint8List>[];
+    return bufferList;
+  }
+}
+
+@JsonSerializable(explicitToJson: true, includeIfNull: false)
+class RtcEngineEventHandlerOnPermissionGrantedJson
+    implements AgoraSerializable {
+  const RtcEngineEventHandlerOnPermissionGrantedJson({this.permissionType});
+
+  @JsonKey(name: 'permissionType')
+  final PermissionType? permissionType;
+
+  factory RtcEngineEventHandlerOnPermissionGrantedJson.fromJson(
+          Map<String, dynamic> json) =>
+      _$RtcEngineEventHandlerOnPermissionGrantedJsonFromJson(json);
+
+  @override
+  Map<String, dynamic> toJson() =>
+      _$RtcEngineEventHandlerOnPermissionGrantedJsonToJson(this);
+}
+
+extension RtcEngineEventHandlerOnPermissionGrantedJsonBufferExt
+    on RtcEngineEventHandlerOnPermissionGrantedJson {
+  RtcEngineEventHandlerOnPermissionGrantedJson fillBuffers(
       List<Uint8List> bufferList) {
     if (bufferList.isEmpty) return this;
     return this;
@@ -5062,6 +5117,77 @@ class RtcEngineEventHandlerOnSetRtmFlagResultJson implements AgoraSerializable {
 extension RtcEngineEventHandlerOnSetRtmFlagResultJsonBufferExt
     on RtcEngineEventHandlerOnSetRtmFlagResultJson {
   RtcEngineEventHandlerOnSetRtmFlagResultJson fillBuffers(
+      List<Uint8List> bufferList) {
+    if (bufferList.isEmpty) return this;
+    return this;
+  }
+
+  List<Uint8List> collectBufferList() {
+    final bufferList = <Uint8List>[];
+    return bufferList;
+  }
+}
+
+@JsonSerializable(explicitToJson: true, includeIfNull: false)
+class RtcEngineEventHandlerOnMultipathStatsJson implements AgoraSerializable {
+  const RtcEngineEventHandlerOnMultipathStatsJson(
+      {this.connection, this.stats});
+
+  @JsonKey(name: 'connection')
+  final RtcConnection? connection;
+
+  @JsonKey(name: 'stats')
+  final MultipathStats? stats;
+
+  factory RtcEngineEventHandlerOnMultipathStatsJson.fromJson(
+          Map<String, dynamic> json) =>
+      _$RtcEngineEventHandlerOnMultipathStatsJsonFromJson(json);
+
+  @override
+  Map<String, dynamic> toJson() =>
+      _$RtcEngineEventHandlerOnMultipathStatsJsonToJson(this);
+}
+
+extension RtcEngineEventHandlerOnMultipathStatsJsonBufferExt
+    on RtcEngineEventHandlerOnMultipathStatsJson {
+  RtcEngineEventHandlerOnMultipathStatsJson fillBuffers(
+      List<Uint8List> bufferList) {
+    if (bufferList.isEmpty) return this;
+    return this;
+  }
+
+  List<Uint8List> collectBufferList() {
+    final bufferList = <Uint8List>[];
+    return bufferList;
+  }
+}
+
+@JsonSerializable(explicitToJson: true, includeIfNull: false)
+class RtcEngineEventHandlerOnRenewTokenResultJson implements AgoraSerializable {
+  const RtcEngineEventHandlerOnRenewTokenResultJson(
+      {this.connection, this.token, this.code});
+
+  @JsonKey(name: 'connection')
+  final RtcConnection? connection;
+
+  @JsonKey(name: 'token')
+  final String? token;
+
+  @JsonKey(name: 'code')
+  final RenewTokenErrorCode? code;
+
+  factory RtcEngineEventHandlerOnRenewTokenResultJson.fromJson(
+          Map<String, dynamic> json) =>
+      _$RtcEngineEventHandlerOnRenewTokenResultJsonFromJson(json);
+
+  @override
+  Map<String, dynamic> toJson() =>
+      _$RtcEngineEventHandlerOnRenewTokenResultJsonToJson(this);
+}
+
+extension RtcEngineEventHandlerOnRenewTokenResultJsonBufferExt
+    on RtcEngineEventHandlerOnRenewTokenResultJson {
+  RtcEngineEventHandlerOnRenewTokenResultJson fillBuffers(
       List<Uint8List> bufferList) {
     if (bufferList.isEmpty) return this;
     return this;

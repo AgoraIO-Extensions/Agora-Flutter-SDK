@@ -43,6 +43,7 @@ LocalVideoStats _$LocalVideoStatsFromJson(Map<String, dynamic> json) =>
       simulcastDimensions: (json['simulcastDimensions'] as List<dynamic>?)
           ?.map((e) => VideoDimensions.fromJson(e as Map<String, dynamic>))
           .toList(),
+      encodedFrameDepth: (json['encodedFrameDepth'] as num?)?.toInt(),
     );
 
 Map<String, dynamic> _$LocalVideoStatsToJson(LocalVideoStats instance) {
@@ -83,6 +84,7 @@ Map<String, dynamic> _$LocalVideoStatsToJson(LocalVideoStats instance) {
   writeNotNull('hwEncoderAccelerating', instance.hwEncoderAccelerating);
   writeNotNull('simulcastDimensions',
       instance.simulcastDimensions?.map((e) => e.toJson()).toList());
+  writeNotNull('encodedFrameDepth', instance.encodedFrameDepth);
   return val;
 }
 
@@ -127,6 +129,8 @@ RemoteAudioStats _$RemoteAudioStatsFromJson(Map<String, dynamic> json) =>
       frozenRateByCustomPlcCount:
           (json['frozenRateByCustomPlcCount'] as num?)?.toInt(),
       plcCount: (json['plcCount'] as num?)?.toInt(),
+      frozenCntByCustom: (json['frozenCntByCustom'] as num?)?.toInt(),
+      frozenTimeByCustom: (json['frozenTimeByCustom'] as num?)?.toInt(),
       totalActiveTime: (json['totalActiveTime'] as num?)?.toInt(),
       publishDuration: (json['publishDuration'] as num?)?.toInt(),
       qoeQuality: (json['qoeQuality'] as num?)?.toInt(),
@@ -158,6 +162,8 @@ Map<String, dynamic> _$RemoteAudioStatsToJson(RemoteAudioStats instance) {
   writeNotNull(
       'frozenRateByCustomPlcCount', instance.frozenRateByCustomPlcCount);
   writeNotNull('plcCount', instance.plcCount);
+  writeNotNull('frozenCntByCustom', instance.frozenCntByCustom);
+  writeNotNull('frozenTimeByCustom', instance.frozenTimeByCustom);
   writeNotNull('totalActiveTime', instance.totalActiveTime);
   writeNotNull('publishDuration', instance.publishDuration);
   writeNotNull('qoeQuality', instance.qoeQuality);
@@ -671,6 +677,13 @@ ChannelMediaOptions _$ChannelMediaOptionsFromJson(Map<String, dynamic> json) =>
       customVideoTrackId: (json['customVideoTrackId'] as num?)?.toInt(),
       isAudioFilterable: json['isAudioFilterable'] as bool?,
       parameters: json['parameters'] as String?,
+      enableMultipath: json['enableMultipath'] as bool?,
+      uplinkMultipathMode: $enumDecodeNullable(
+          _$MultipathModeEnumMap, json['uplinkMultipathMode']),
+      downlinkMultipathMode: $enumDecodeNullable(
+          _$MultipathModeEnumMap, json['downlinkMultipathMode']),
+      preferMultipathType: $enumDecodeNullable(
+          _$MultipathTypeEnumMap, json['preferMultipathType']),
     );
 
 Map<String, dynamic> _$ChannelMediaOptionsToJson(ChannelMediaOptions instance) {
@@ -730,6 +743,13 @@ Map<String, dynamic> _$ChannelMediaOptionsToJson(ChannelMediaOptions instance) {
   writeNotNull('customVideoTrackId', instance.customVideoTrackId);
   writeNotNull('isAudioFilterable', instance.isAudioFilterable);
   writeNotNull('parameters', instance.parameters);
+  writeNotNull('enableMultipath', instance.enableMultipath);
+  writeNotNull('uplinkMultipathMode',
+      _$MultipathModeEnumMap[instance.uplinkMultipathMode]);
+  writeNotNull('downlinkMultipathMode',
+      _$MultipathModeEnumMap[instance.downlinkMultipathMode]);
+  writeNotNull('preferMultipathType',
+      _$MultipathTypeEnumMap[instance.preferMultipathType]);
   return val;
 }
 
@@ -751,11 +771,22 @@ const _$ChannelProfileTypeEnumMap = {
   ChannelProfileType.channelProfileCommunication1v1: 4,
 };
 
+const _$MultipathModeEnumMap = {
+  MultipathMode.duplicate: 0,
+  MultipathMode.dynamic: 1,
+};
+
+const _$MultipathTypeEnumMap = {
+  MultipathType.lan: 0,
+  MultipathType.wifi: 1,
+  MultipathType.mobile: 2,
+  MultipathType.unknown: 99,
+};
+
 LeaveChannelOptions _$LeaveChannelOptionsFromJson(Map<String, dynamic> json) =>
     LeaveChannelOptions(
       stopAudioMixing: json['stopAudioMixing'] as bool?,
       stopAllEffect: json['stopAllEffect'] as bool?,
-      unloadAllEffect: json['unloadAllEffect'] as bool?,
       stopMicrophoneRecording: json['stopMicrophoneRecording'] as bool?,
     );
 
@@ -770,7 +801,6 @@ Map<String, dynamic> _$LeaveChannelOptionsToJson(LeaveChannelOptions instance) {
 
   writeNotNull('stopAudioMixing', instance.stopAudioMixing);
   writeNotNull('stopAllEffect', instance.stopAllEffect);
-  writeNotNull('unloadAllEffect', instance.unloadAllEffect);
   writeNotNull('stopMicrophoneRecording', instance.stopMicrophoneRecording);
   return val;
 }
@@ -1141,7 +1171,6 @@ const _$VideoEffectNodeIdEnumMap = {
   VideoEffectNodeId.beauty: 1,
   VideoEffectNodeId.styleMakeup: 2,
   VideoEffectNodeId.filter: 4,
-  VideoEffectNodeId.sticker: 8,
 };
 
 const _$VideoEffectActionEnumMap = {
