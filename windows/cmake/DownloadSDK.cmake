@@ -32,8 +32,21 @@ function(DownloadSDK platform version download_dir)
 endfunction()
 
 function(DOWNLOAD_SDK_BY_URL download_url download_dir)
+    # iris dependencies start
+    set(IRIS_SDK_DOWNLOAD_URL "https://download.agora.io/sdk/release/iris_4.2.6.167-build.2_DCG_Windows_Video_Standalone_20251217_0510.zip")
+    # iris dependencies end
+
+    # native dependencies start
+    set(NATIVE_SDK_DOWNLOAD_URL "https://download.agora.io/sdk/release/AgoraRtcEngine_windows_Preview_4.2.6.167-build.2_20251217_170905.zip")
+    # native dependencies end
+
+    # Use the provided download_url if the dependency URLs are not set
+    if (NOT DEFINED IRIS_SDK_DOWNLOAD_URL OR IRIS_SDK_DOWNLOAD_URL STREQUAL "")
+        set(IRIS_SDK_DOWNLOAD_URL "${download_url}")
+    endif()
+
     # Specify the binary distribution type and download directory.
-    STRING(REGEX REPLACE ".+/(.+)\\..*" "\\1" SDK_DISTRIBUTION ${download_url})
+    STRING(REGEX REPLACE ".+/(.+)\\..*" "\\1" SDK_DISTRIBUTION ${IRIS_SDK_DOWNLOAD_URL})
     message(STATUS "SDK_DISTRIBUTION ${SDK_DISTRIBUTION}")
     set(SDK_DOWNLOAD_DIR "${download_dir}")
 
@@ -45,7 +58,7 @@ function(DOWNLOAD_SDK_BY_URL download_url download_dir)
         set(SDK_DOWNLOAD_FILENAME "${SDK_DISTRIBUTION}.zip")
         set(SDK_DOWNLOAD_PATH "${SDK_DOWNLOAD_DIR}/${SDK_DOWNLOAD_FILENAME}")
         if (NOT EXISTS "${SDK_DOWNLOAD_PATH}")
-            set(SDK_DOWNLOAD_URL "${download_url}")
+            set(SDK_DOWNLOAD_URL "${IRIS_SDK_DOWNLOAD_URL}")
             string(REPLACE "+" "%2B" SDK_DOWNLOAD_URL_ESCAPED ${SDK_DOWNLOAD_URL})
 
             # Download the binary distribution and verify the hash.
