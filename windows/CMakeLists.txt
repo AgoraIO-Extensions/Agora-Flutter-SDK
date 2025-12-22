@@ -12,6 +12,11 @@ project(${PROJECT_NAME} LANGUAGES CXX)
 # not be changed
 set(PLUGIN_NAME "agora_rtc_engine_plugin")
 
+set(IRIS_SDK_DOWNLOAD_URL "https://download.agora.io/sdk/release/iris_4.2.6.168-build.3_DCG_Windows_Video_20251222_0611.zip")
+set(IRIS_SDK_DOWNLOAD_NAME "iris_4.2.6.168-build.3_DCG_Windows")
+set(RTC_SDK_DOWNLOAD_NAME "Agora_Native_SDK_for_Windows_FULL")
+set(IRIS_SDK_VERSION "v3_6_2_fix.1")
+
 # Add this project's cmake/ directory to the module path.
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_CURRENT_SOURCE_DIR}/cmake")
 
@@ -19,31 +24,18 @@ message("CMAKE_CURRENT_SOURCE_DIR: ${CMAKE_CURRENT_SOURCE_DIR}")
 
 set(IRIS_DOWNLOAD_PATH "${CMAKE_CURRENT_SOURCE_DIR}/third_party/iris")
 
-if(NOT EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/.plugin_dev")
-    # Download and extract the SDK binary distribution (executes DownloadSDK.cmake).
-    include(DownloadSDK)
-    DOWNLOAD_SDK_BY_URL("" "${IRIS_DOWNLOAD_PATH}")
-endif()
-
-# Extract SDK name from the downloaded SDK
-file(GLOB IRIS_SDK_DIRS "${IRIS_DOWNLOAD_PATH}/iris_*_DCG_Windows_Video_Standalone_*")
-if(IRIS_SDK_DIRS)
-    list(GET IRIS_SDK_DIRS 0 IRIS_SDK_FIRST_DIR)
-    get_filename_component(IRIS_SDK_DOWNLOAD_NAME "${IRIS_SDK_FIRST_DIR}" NAME)
-else()
-    # Fallback to default name if not found
-    set(IRIS_SDK_DOWNLOAD_NAME "iris_4.2.6.167-build.2_DCG_Windows_Video_Standalone_20251217_0510")
-endif()
-
-set(RTC_SDK_DOWNLOAD_NAME "Agora_Native_SDK_for_Windows_FULL")
-set(IRIS_SDK_VERSION "v3_6_2_fix.1")
-
 set(IRIS_SDK_PATH "${IRIS_DOWNLOAD_PATH}/${IRIS_SDK_DOWNLOAD_NAME}/x64")
 set(IRIS_SDK_BIN_PATH "${IRIS_SDK_PATH}/Release")
 set(RTC_SDK_PATH "${IRIS_DOWNLOAD_PATH}/${IRIS_SDK_DOWNLOAD_NAME}/DCG/${RTC_SDK_DOWNLOAD_NAME}/sdk")
 set(RTC_SDK_BIN_PATH "${RTC_SDK_PATH}/x86_64")
 
 message("RTC_SDK_PATH: ${RTC_SDK_PATH}")
+
+if(NOT EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/.plugin_dev")
+    # Download and extract the SDK binary distribution (executes DownloadSDK.cmake).
+    include(DownloadSDK)
+    DOWNLOAD_SDK_BY_URL("${IRIS_SDK_DOWNLOAD_URL}" "${IRIS_DOWNLOAD_PATH}")
+endif()
 
 # Any new source files that you add to the plugin should be added here.
 list(APPEND PLUGIN_SOURCES
