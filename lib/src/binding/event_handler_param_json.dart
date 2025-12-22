@@ -4072,6 +4072,35 @@ extension RtcEngineEventHandlerOnPermissionErrorJsonBufferExt
 }
 
 @JsonSerializable(explicitToJson: true, includeIfNull: false)
+class RtcEngineEventHandlerOnPermissionGrantedJson {
+  const RtcEngineEventHandlerOnPermissionGrantedJson({this.permissionType});
+
+  @JsonKey(name: 'permissionType')
+  final PermissionType? permissionType;
+
+  factory RtcEngineEventHandlerOnPermissionGrantedJson.fromJson(
+          Map<String, dynamic> json) =>
+      _$RtcEngineEventHandlerOnPermissionGrantedJsonFromJson(json);
+
+  Map<String, dynamic> toJson() =>
+      _$RtcEngineEventHandlerOnPermissionGrantedJsonToJson(this);
+}
+
+extension RtcEngineEventHandlerOnPermissionGrantedJsonBufferExt
+    on RtcEngineEventHandlerOnPermissionGrantedJson {
+  RtcEngineEventHandlerOnPermissionGrantedJson fillBuffers(
+      List<Uint8List> bufferList) {
+    if (bufferList.isEmpty) return this;
+    return this;
+  }
+
+  List<Uint8List> collectBufferList() {
+    final bufferList = <Uint8List>[];
+    return bufferList;
+  }
+}
+
+@JsonSerializable(explicitToJson: true, includeIfNull: false)
 class RtcEngineEventHandlerOnLocalUserRegisteredJson {
   const RtcEngineEventHandlerOnLocalUserRegisteredJson(
       {this.uid, this.userAccount});

@@ -163,10 +163,18 @@ abstract class AudioDeviceManager {
   /// true : The audio playback device is muted. false : The audio playback device is unmuted.
   Future<bool> getPlaybackDeviceMute();
 
-  /// @nodoc
+  /// Sets the mute status of the audio capture device.
+  ///
+  /// * [mute] Whether to mute the audio recording device: true : Mute the audio capture device. false : Unmute the audio capture device.
+  ///
+  /// Returns
+  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown. You need to catch the exception and handle it accordingly.
   Future<void> setRecordingDeviceMute(bool mute);
 
-  /// @nodoc
+  /// Gets whether the audio capture device is muted.
+  ///
+  /// Returns
+  /// true : The microphone is muted. false : The microphone is unmuted.
   Future<bool> getRecordingDeviceMute();
 
   /// Starts the audio playback device test.

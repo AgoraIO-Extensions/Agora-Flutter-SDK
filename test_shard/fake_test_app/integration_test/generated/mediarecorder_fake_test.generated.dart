@@ -143,4 +143,3 @@ void mediaRecorderSmokeTestCases() {
 //  skip: !(),
   );
 }
-

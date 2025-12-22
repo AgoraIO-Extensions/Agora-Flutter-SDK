@@ -4,7 +4,7 @@ part 'agora_rhythm_player.g.dart';
 /// Virtual metronome state.
 @JsonEnum(alwaysCreate: true)
 enum RhythmPlayerStateType {
-  /// (810): The virtual metronome is not enabled or disabled already.
+  /// 810: The virtual metronome is not enabled or disabled already.
   @JsonValue(810)
   rhythmPlayerStateIdle,
 

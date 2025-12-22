@@ -39,7 +39,7 @@ class AgoraRtcException implements Exception {
 /// Currently, the Agora RTC SDK v6.x supports creating only one RtcEngine object for each app.
 ///
 /// Returns
-/// One RtcEngine object.
+/// RtcEngine object.
 RtcEngine createAgoraRtcEngine() {
   return impl.RtcEngineImpl.create();
 }
@@ -49,7 +49,7 @@ RtcEngine createAgoraRtcEngine() {
 /// Currently, the Agora RTC v6.x SDK supports creating only one RtcEngineEx object for each app.
 ///
 /// Returns
-/// One RtcEngineEx object.
+/// RtcEngineEx object.
 RtcEngineEx createAgoraRtcEngineEx() {
   return impl.RtcEngineImpl.create();
 }

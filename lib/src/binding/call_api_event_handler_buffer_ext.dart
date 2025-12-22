@@ -517,6 +517,18 @@ extension AudioTrackConfigBufferExt on AudioTrackConfig {
   }
 }
 
+extension LoopbackAudioTrackConfigBufferExt on LoopbackAudioTrackConfig {
+  LoopbackAudioTrackConfig fillBuffers(List<Uint8List> bufferList) {
+    if (bufferList.isEmpty) return this;
+    return this;
+  }
+
+  List<Uint8List> collectBufferList() {
+    final bufferList = <Uint8List>[];
+    return bufferList;
+  }
+}
+
 extension ScreenCaptureParametersBufferExt on ScreenCaptureParameters {
   ScreenCaptureParameters fillBuffers(List<Uint8List> bufferList) {
     if (bufferList.isEmpty) return this;

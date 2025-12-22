@@ -11,7 +11,7 @@ abstract class MediaPlayer {
 
   /// Opens the media resource.
   ///
-  /// This method is called asynchronously. If you need to play a media file, make sure you receive the onPlayerSourceStateChanged callback reporting playerStateOpenCompleted before calling the play method to play the file.
+  /// This method is called asynchronously.
   ///
   /// * [url] The path of the media file. Both local path and online path are supported.
   /// * [startPos] The starting position (ms) for playback. Default value is 0.
@@ -33,8 +33,6 @@ abstract class MediaPlayer {
 
   /// Plays the media file.
   ///
-  /// After calling open or seek, you can call this method to play the media file.
-  ///
   /// Returns
   /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown. You need to catch the exception and handle it accordingly.
   Future<void> play();
@@ -46,6 +44,8 @@ abstract class MediaPlayer {
   Future<void> pause();
 
   /// Stops playing the media track.
+  ///
+  /// After calling this method to stop playback, if you want to play again, you need to call open or openWithMediaSource to open the media resource.
   ///
   /// Returns
   /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown. You need to catch the exception and handle it accordingly.
@@ -59,9 +59,8 @@ abstract class MediaPlayer {
 
   /// Seeks to a new playback position.
   ///
-  /// After successfully calling this method, you will receive the onPlayerEvent callback, reporting the result of the seek operation to the new playback position. To play the media file from a specific position, do the following:
-  ///  Call this method to seek to the position you want to begin playback.
-  ///  Call the play method to play the media file.
+  /// If you call seek after the playback has completed (upon receiving callback onPlayerSourceStateChanged reporting playback status as playerStatePlaybackCompleted or playerStatePlaybackAllLoopsCompleted), the SDK will play the media file from the specified position. At this point, you will receive callback onPlayerSourceStateChanged reporting playback status as playerStatePlaying.
+  ///  If you call seek while the playback is paused, upon successful call of this method, the SDK will seek to the specified position. To resume playback, call resume or play .
   ///
   /// * [newPos] The new playback position (ms).
   ///
@@ -103,13 +102,10 @@ abstract class MediaPlayer {
 
   /// Gets the detailed information of the media stream.
   ///
-  /// Call this method after calling getStreamCount.
-  ///
   /// * [index] The index of the media stream. This parameter must be less than the return value of getStreamCount.
   ///
   /// Returns
-  /// If the call succeeds, returns the detailed information of the media stream. See PlayerStreamInfo.
-  ///  If the call fails, returns NULL.
+  /// If the call succeeds, returns the detailed information of the media stream. See PlayerStreamInfo. NULL is returned, if the method call fails.
   Future<PlayerStreamInfo> getStreamInfo(int index);
 
   /// Sets the loop playback.
@@ -117,6 +113,8 @@ abstract class MediaPlayer {
   /// If you want to loop, call this method and set the number of the loops. When the loop finishes, the SDK triggers onPlayerSourceStateChanged and reports the playback state as playerStatePlaybackAllLoopsCompleted.
   ///
   /// * [loopCount] The number of times the audio effect loops:
+  ///  ≥0: Number of times for playing. For example, setting it to 0 means no loop playback, playing only once; setting it to 1 means loop playback once, playing a total of twice.
+  ///  -1: Play the audio file in an infinite loop.
   ///
   /// Returns
   /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown. You need to catch the exception and handle it accordingly.
@@ -126,8 +124,8 @@ abstract class MediaPlayer {
   ///
   /// Call this method after calling open.
   ///
-  /// * [speed] The playback speed. Agora recommends that you limit this value to a range between 50 and 400, which is defined as follows:
-  ///  50: Half the original speed.
+  /// * [speed] The playback speed. Agora recommends that you set this to a value between 30 and 400, defined as follows:
+  ///  30: 0.3 times the original speed.
   ///  100: The original speed.
   ///  400: 4 times the original speed.
   ///
@@ -352,7 +350,7 @@ abstract class MediaPlayer {
   ///
   /// You can call this method to switch the media resource to be played according to the current network status. For example:
   ///  When the network is poor, the media resource to be played is switched to a media resource address with a lower bitrate.
-  ///  When the network is good, the media resource to be played is switched to a media resource address with a higher bitrate. After calling this method, if you receive the playerEventSwitchComplete event in the onPlayerEvent callback, the switch is successful; If you receive the playerEventSwitchError event in the onPlayerEvent callback, the switch fails.
+  ///  When the network is good, the media resource to be played is switched to a media resource address with a higher bitrate. After calling this method, if you receive the onPlayerEvent callback report the playerEventSwitchComplete event, the switching is successful. If the switching fails, the SDK will automatically retry 3 times. If it still fails, you will receive the onPlayerEvent callback reporting the playerEventSwitchError event indicating an error occurred during media resource switching.
   ///  Ensure that you call this method after open.
   ///  To ensure normal playback, pay attention to the following when calling this method:
   ///  Do not call this method when playback is paused.
@@ -360,7 +358,7 @@ abstract class MediaPlayer {
   ///  Before switching the media resource, make sure that the playback position does not exceed the total duration of the media resource to be switched.
   ///
   /// * [src] The URL of the media resource.
-  /// * [syncPts] Whether to synchronize the playback position (ms) before and after the switch: true : Synchronize the playback position before and after the switch. false : (Default) Do not synchronize the playback position before and after the switch. Make sure to set this parameter as false if you need to play live streams, or the switch fails. If you need to play on-demand streams, you can set the value of this parameter according to your scenarios.
+  /// * [syncPts] Whether to synchronize the playback position (ms) before and after the switch: true : Synchronize the playback position before and after the switch. false : (Default) Do not synchronize the playback position before and after the switch.
   ///
   /// Returns
   /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown. You need to catch the exception and handle it accordingly.
@@ -368,7 +366,9 @@ abstract class MediaPlayer {
 
   /// Preloads a media resource.
   ///
-  /// You can call this method to preload a media resource into the playlist. If you need to preload multiple media resources, you can call this method multiple times. If the preload is successful and you want to play the media resource, call playPreloadedSrc; if you want to clear the playlist, call stop. Agora does not support preloading duplicate media resources to the playlist. However, you can preload the media resources that are being played to the playlist again.
+  /// You can call this method to preload a media resource into the playlist. If you need to preload multiple media resources, you can call this method multiple times. If the preload is successful and you want to play the media resource, call playPreloadedSrc; if you want to clear the playlist, call stop.
+  ///  Before calling this method, ensure that you have called open or openWithMediaSource to open the media resource successfully.
+  ///  Agora does not support preloading duplicate media resources to the playlist. However, you can preload the media resources that are being played to the playlist again.
   ///
   /// * [src] The URL of the media resource.
   /// * [startPos] The starting position (ms) for playing after the media resource is preloaded to the playlist. When preloading a live stream, set this parameter to 0.
@@ -411,9 +411,9 @@ abstract class MediaPlayer {
   Future<void> setSoundPositionParams(
       {required double pan, required double gain});
 
-  /// Set media player options for providing technical previews or special customization features.
+  /// Sets media player options.
   ///
-  /// The media player supports setting options through key and value. In general, you don't need to know about the option settings. You can use the default option settings of the media player. The difference between this method and setPlayerOptionInString is that the value parameter of this method is of type Int, while the value of setPlayerOptionInString is of type String. These two methods cannot be used together. Ensure that you call this method before open or openWithMediaSource.
+  /// The media player supports setting options through key and value. The difference between this method and setPlayerOptionInString is that the value parameter of this method is of type Int, while the value of setPlayerOptionInString is of type String. These two methods cannot be used together.
   ///
   /// * [key] The key of the option.
   /// * [value] The value of the key.
@@ -422,9 +422,9 @@ abstract class MediaPlayer {
   /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown. You need to catch the exception and handle it accordingly.
   Future<void> setPlayerOptionInInt({required String key, required int value});
 
-  /// Set media player options for providing technical previews or special customization features.
+  /// Sets media player options.
   ///
-  /// Ensure that you call this method before open or openWithMediaSource. The media player supports setting options through key and value. In general, you don't need to know about the option settings. You can use the default option settings of the media player. The difference between this method and setPlayerOptionInInt is that the value parameter of this method is of type String, while the value of setPlayerOptionInInt is of type String. These two methods cannot be used together.
+  /// The media player supports setting options through key and value. The difference between this method and setPlayerOptionInInt is that the value parameter of this method is of type String, while the value of setPlayerOptionInInt is of type String. These two methods cannot be used together.
   ///
   /// * [key] The key of the option.
   /// * [value] The value of the key.

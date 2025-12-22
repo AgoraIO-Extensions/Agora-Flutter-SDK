@@ -33,12 +33,12 @@ endfunction()
 
 function(DOWNLOAD_SDK_BY_URL download_url download_dir)
     # iris dependencies start
-    set(IRIS_SDK_DOWNLOAD_URL "https://download.agora.io/sdk/release/iris_4.2.6.167-build.2_DCG_Windows_Video_Standalone_20251217_0510.zip")
-    # iris dependencies end
+set(IRIS_SDK_DOWNLOAD_URL "https://download.agora.io/sdk/release/iris_4.2.6.168-build.3_DCG_Windows_Video_Standalone_20251222_0611.zip")
+# iris dependencies end
 
     # native dependencies start
-    set(NATIVE_SDK_DOWNLOAD_URL "https://download.agora.io/sdk/release/AgoraRtcEngine_windows_Preview_4.2.6.167-build.2_20251217_170905.zip")
-    # native dependencies end
+set(NATIVE_SDK_DOWNLOAD_URL "https://download.agora.io/sdk/release/Agora_Native_SDK_for_Windows_rel.v4.2.6.168_31054_FULL_20251220_1323_995202.zip")
+# native dependencies end
 
     # Use the provided download_url if the dependency URLs are not set
     if (NOT DEFINED IRIS_SDK_DOWNLOAD_URL OR IRIS_SDK_DOWNLOAD_URL STREQUAL "")

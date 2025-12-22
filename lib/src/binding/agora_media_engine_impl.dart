@@ -313,6 +313,60 @@ class MediaEngineImpl implements MediaEngine {
   }
 
   @override
+  Future<int> createLoopbackAudioTrack(LoopbackAudioTrackConfig config) async {
+    final apiType =
+        '${isOverrideClassName ? className : 'MediaEngine'}_createLoopbackAudioTrack';
+    final param = createParams({'config': config.toJson()});
+    final List<Uint8List> buffers = [];
+    buffers.addAll(config.collectBufferList());
+    final callApiResult = await irisMethodChannel.invokeMethod(
+        IrisMethodCall(apiType, jsonEncode(param), buffers: buffers));
+    if (callApiResult.irisReturnCode < 0) {
+      throw AgoraRtcException(code: callApiResult.irisReturnCode);
+    }
+    final rm = callApiResult.data;
+    final result = rm['result'];
+    return result as int;
+  }
+
+  @override
+  Future<void> destroyLoopbackAudioTrack(int trackId) async {
+    final apiType =
+        '${isOverrideClassName ? className : 'MediaEngine'}_destroyLoopbackAudioTrack';
+    final param = createParams({'trackId': trackId});
+    final callApiResult = await irisMethodChannel.invokeMethod(
+        IrisMethodCall(apiType, jsonEncode(param), buffers: null));
+    if (callApiResult.irisReturnCode < 0) {
+      throw AgoraRtcException(code: callApiResult.irisReturnCode);
+    }
+    final rm = callApiResult.data;
+    final result = rm['result'];
+    if (result < 0) {
+      throw AgoraRtcException(code: result);
+    }
+  }
+
+  @override
+  Future<void> updateLoopbackAudioTrackConfig(
+      {required int trackId, required LoopbackAudioTrackConfig config}) async {
+    final apiType =
+        '${isOverrideClassName ? className : 'MediaEngine'}_updateLoopbackAudioTrackConfig';
+    final param = createParams({'trackId': trackId, 'config': config.toJson()});
+    final List<Uint8List> buffers = [];
+    buffers.addAll(config.collectBufferList());
+    final callApiResult = await irisMethodChannel.invokeMethod(
+        IrisMethodCall(apiType, jsonEncode(param), buffers: buffers));
+    if (callApiResult.irisReturnCode < 0) {
+      throw AgoraRtcException(code: callApiResult.irisReturnCode);
+    }
+    final rm = callApiResult.data;
+    final result = rm['result'];
+    if (result < 0) {
+      throw AgoraRtcException(code: result);
+    }
+  }
+
+  @override
   Future<void> release() async {
     final apiType =
         '${isOverrideClassName ? className : 'MediaEngine'}_release';
@@ -379,74 +433,5 @@ class MediaEngineImpl implements MediaEngine {
 // if (result < 0) { throw AgoraRtcException(code: result); }
     throw UnimplementedError(
         'Unimplement for unregisterVideoEncodedFrameObserver');
-  }
-
-  @override
-  void unregisterFaceInfoObserver(FaceInfoObserver observer) {
-    // Implementation template
-// final apiType = '${isOverrideClassName ? className : 'MediaEngine'}_unregisterFaceInfoObserver';
-// final param = createParams({
-//   'observer': observer
-// });
-// final callApiResult = await irisMethodChannel.invokeMethod(IrisMethodCall(apiType, jsonEncode(param), buffers:null));
-// if (callApiResult.irisReturnCode < 0) {
-//   throw AgoraRtcException(code: callApiResult.irisReturnCode);
-// }
-// final rm = callApiResult.data;
-// final result = rm['result'];
-// if (result < 0) { throw AgoraRtcException(code: result); }
-    throw UnimplementedError('Unimplement for unregisterFaceInfoObserver');
-  }
-
-  @override
-  Future<int> createLoopbackAudioTrack(LoopbackAudioTrackConfig config) async {
-    final apiType =
-        '${isOverrideClassName ? className : 'MediaEngine'}_createLoopbackAudioTrack';
-    final param = createParams({'config': config.toJson()});
-    final callApiResult = await irisMethodChannel.invokeMethod(
-        IrisMethodCall(apiType, jsonEncode(param), buffers: null));
-    if (callApiResult.irisReturnCode < 0) {
-      throw AgoraRtcException(code: callApiResult.irisReturnCode);
-    }
-    final rm = callApiResult.data;
-    final result = rm['result'];
-    return result as int;
-  }
-
-  @override
-  Future<int> destroyLoopbackAudioTrack(int trackId) async {
-    final apiType =
-        '${isOverrideClassName ? className : 'MediaEngine'}_destroyLoopbackAudioTrack';
-    final param = createParams({'trackId': trackId});
-    final callApiResult = await irisMethodChannel.invokeMethod(
-        IrisMethodCall(apiType, jsonEncode(param), buffers: null));
-    if (callApiResult.irisReturnCode < 0) {
-      throw AgoraRtcException(code: callApiResult.irisReturnCode);
-    }
-    final rm = callApiResult.data;
-    final result = rm['result'];
-    if (result < 0) {
-      throw AgoraRtcException(code: result);
-    }
-    return result as int;
-  }
-
-  @override
-  Future<int> updateLoopbackAudioTrackConfig(
-      int trackId, LoopbackAudioTrackConfig config) async {
-    final apiType =
-        '${isOverrideClassName ? className : 'MediaEngine'}_updateLoopbackAudioTrackConfig';
-    final param = createParams({'trackId': trackId, 'config': config.toJson()});
-    final callApiResult = await irisMethodChannel.invokeMethod(
-        IrisMethodCall(apiType, jsonEncode(param), buffers: null));
-    if (callApiResult.irisReturnCode < 0) {
-      throw AgoraRtcException(code: callApiResult.irisReturnCode);
-    }
-    final rm = callApiResult.data;
-    final result = rm['result'];
-    if (result < 0) {
-      throw AgoraRtcException(code: result);
-    }
-    return result as int;
   }
 }
