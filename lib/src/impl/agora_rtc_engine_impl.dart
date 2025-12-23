@@ -99,6 +99,7 @@ extension RtcEngineExt on RtcEngine {
       cropArea: videoCanvas.cropArea,
       setupMode: videoCanvas.setupMode,
       mediaPlayerId: videoCanvas.mediaPlayerId,
+      backgroundColor: videoCanvas.backgroundColor,
     );
     try {
       if (newVideoCanvas.uid != 0) {
