@@ -26,7 +26,7 @@ A new flutter plugin project.
     # iris dependencies end
 
     # native dependencies start
-    s.dependency 'AgoraRtcEngine_Special_macOS', '4.5.2.6'
+    s.dependency 'AgoraRtcEngine_Special_macOS', '4.5.2.7'
     # native dependencies end
   end
 
