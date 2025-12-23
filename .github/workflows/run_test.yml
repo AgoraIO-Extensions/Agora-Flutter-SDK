@@ -89,7 +89,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        version: ["3.7.0", "3.24.5", "3.38.5"]
+        version: ["3.16", "3.24.5", "3.38.5"]
     runs-on: ubuntu-latest
     timeout-minutes: 120
     env:
@@ -117,8 +117,12 @@ jobs:
           arch: x86_64
           profile: pixel_5
           ram-size: 2048M
-          heap-size: 4096M
-          disk-size: 8192M
+          heap-size: 2048M
+          disk-size: 6144M
+          emulator-boot-timeout: 600
+          disable-animations: true
+          force-avd-creation: false
+          emulator-options: -no-snapshot-save -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim
           script: bash ci/run_flutter_integration_test_android.sh
 
   integration_test_ios:
@@ -128,9 +132,6 @@ jobs:
       fail-fast: false
       matrix:
         include:
-          - version: "3.7.0"
-            model: "iPhone 16"
-            os_version: "18.4"
           - version: "3.16"
             model: "iPhone 16"
             os_version: "18.4"
@@ -192,7 +193,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        version: ["3.7.0", "3.38.5"]
+        version: ["3.16", "3.38.5"]
     runs-on: macos-latest
     timeout-minutes: 120
     env:
@@ -329,7 +330,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        version: ["3.7.12", "3.24.5", "3.38.5"] # Need 3.7.12 to build with Gradle 8.x https://github.com/flutter/flutter/issues/124838
+        version: ["3.16", "3.24.5", "3.38.5"]
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
@@ -353,7 +354,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        version: ["3.7.12", "3.24.5", "3.38.5"] # Need 3.7.12 to build with Gradle 8.x https://github.com/flutter/flutter/issues/124838
+        version: ["3.16", "3.24.5", "3.38.5"]
     runs-on: windows-2022
     steps:
       - uses: actions/checkout@v3
@@ -377,7 +378,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        version: ["3.7.12", "3.38.5"]
+        version: ["3.16", "3.38.5"]
     runs-on: macos-latest
     timeout-minutes: 120
     steps:
@@ -443,8 +444,12 @@ jobs:
           arch: x86_64
           profile: pixel_5
           ram-size: 2048M
-          heap-size: 4096M
-          disk-size: 8192M
+          heap-size: 2048M
+          disk-size: 6144M
+          emulator-boot-timeout: 600
+          disable-animations: true
+          force-avd-creation: false
+          emulator-options: -no-snapshot-save -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim
           script: bash ci/rendering_test_android.sh
 
       - uses: actions/upload-artifact@v4
@@ -482,7 +487,7 @@ jobs:
       - uses: actions/upload-artifact@v4
         if: always()
         with:
-          name: ios-debug-golden-files
+          name: ios-debug-golden-files-${{ matrix.version }}
           path: test_shard/rendering_test/screenshot/*.debug.png
 
   rendering_test_macos:
@@ -509,7 +514,7 @@ jobs:
       - uses: actions/upload-artifact@v4
         if: always()
         with:
-          name: macos-debug-golden-files
+          name: macos-debug-golden-files-${{ matrix.version }}
           path: test_shard/rendering_test/screenshot/*.debug.png
 
   rendering_test_windows:
@@ -538,7 +543,7 @@ jobs:
       - uses: actions/upload-artifact@v4
         if: always()
         with:
-          name: windows-debug-golden-files
+          name: windows-debug-golden-files-${{ matrix.version }}
           path: test_shard/rendering_test/screenshot/*.debug.png
 
   rendering_test_web:
@@ -568,7 +573,7 @@ jobs:
       - uses: actions/upload-artifact@v4
         if: always()
         with:
-          name: web-debug-golden-files
+          name: web-debug-golden-files-${{ matrix.version }}
           path: test_shard/rendering_test/screenshot/*.debug.png
 
   check_android15_16k_page_alignment:
