@@ -23,6 +23,14 @@
 + (CVPixelBufferRef _Nullable)copyCVPixelBuffer:
     (CVPixelBufferRef _Nonnull)sourcePixelBuffer;
 
+/**
+ * Copies all attachments from source CVPixelBuffer to destination CVPixelBuffer.
+ *
+ * @param sourcePixelBuffer The source CVPixelBuffer to copy attachments from
+ * @param destPixelBuffer The destination CVPixelBuffer to copy attachments to
+ */
++ (void)copyPixelBufferAttachments:(CVPixelBufferRef _Nonnull)sourcePixelBuffer
+                                to:(CVPixelBufferRef _Nonnull)destPixelBuffer;
 
 #if defined(TARGET_OS_OSX) && TARGET_OS_OSX
 /**

@@ -298,8 +298,32 @@ struct AgoraCVPixelBufferPoolKeyHash {
     CVPixelBufferRelease(destPixelBuffer);
     return nil;
   }
+  
+  // Copy all CVPixelBuffer attachments, including color space related properties
+  [self copyPixelBufferAttachments:sourcePixelBuffer to:destPixelBuffer];
 
   return destPixelBuffer;
+}
+
++ (void)copyPixelBufferAttachments:(CVPixelBufferRef)sourcePixelBuffer
+                                to:(CVPixelBufferRef)destPixelBuffer {
+    if (!sourcePixelBuffer || !destPixelBuffer) {
+        return;
+    }
+    
+    // Get all attachments of source CVPixelBuffer
+    CFDictionaryRef attachments = CVBufferGetAttachments(sourcePixelBuffer, kCVAttachmentMode_ShouldPropagate);
+    
+    if (attachments) {
+        // Copy all attachments to destination CVPixelBuffer
+        CFDictionaryRef copiedAttachments = CFDictionaryCreateCopy(kCFAllocatorDefault, attachments);
+        CVBufferSetAttachments(destPixelBuffer, copiedAttachments, kCVAttachmentMode_ShouldPropagate);
+        CFRelease(copiedAttachments);
+        
+        NSLog(@"Copied CVPixelBuffer attachments: %@", (__bridge NSDictionary*)attachments);
+    } else {
+        NSLog(@"No attachments found on source CVPixelBuffer");
+    }
 }
 
 #if defined(TARGET_OS_OSX) && TARGET_OS_OSX
