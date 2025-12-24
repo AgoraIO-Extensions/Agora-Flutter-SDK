@@ -111,7 +111,7 @@ class MusicPlayerImpl extends media_player_impl.MediaPlayerImpl
   @override
   Future<void> setPlayMode(MusicPlayMode mode) async {
     final apiType =
-        '${isOverrideClassName ? className : 'MusicPlayer'}_setPlayMode';
+        '${isOverrideClassName ? className : 'MusicPlayer'}_setPlayMode_748bee0';
     final param = createParams({'mode': mode.value()});
     final callApiResult = await irisMethodChannel.invokeMethod(
         IrisMethodCall(apiType, jsonEncode(param), buffers: null));
@@ -167,7 +167,7 @@ class MusicContentCenterImpl extends binding.MusicContentCenterImpl
   @override
   Future<void> destroyMusicPlayer(MusicPlayer musicPlayer) async {
     final apiType =
-        '${isOverrideClassName ? className : 'MusicContentCenter'}_destroyMusicPlayer';
+        '${isOverrideClassName ? className : 'MusicContentCenter'}_destroyMusicPlayer_876d086';
     final param = createParams({'playerId': musicPlayer.getMediaPlayerId()});
     await irisMethodChannel.invokeMethod(
         IrisMethodCall(apiType, jsonEncode(param), buffers: null));
