@@ -51,6 +51,12 @@ export default function CallApiImplRenderer(
     let subContents = cxxFile.nodes
       .filter((it) => it.__TYPE == CXXTYPE.Clazz)
       .filter((it) => !isCallbackClass(it.asClazz()))
+      .filter((it) => {
+        // Filter out classes with empty dartName to avoid generating empty impl files
+        let clazz = it.asClazz();
+        let clazzName = dartName(clazz);
+        return clazzName.length > 0;
+      })
       .map((it) => {
         let clazz = it.asClazz();
         let clazzName = dartName(clazz);
@@ -103,6 +109,11 @@ export default function CallApiImplRenderer(
       })
       .join("\n\n");
 
+    // Skip generating file if no valid classes found (only generate impl files for classes with valid names)
+    if (subContents.trim().length === 0) {
+      return null;
+    }
+
     let content = `
       ${defaultDartHeader}
       
@@ -121,7 +132,8 @@ export default function CallApiImplRenderer(
     };
   });
 
-  return [...renderResults, callApiImplParamsJsonFile(parseResult, cxxFiles)];
+  let validRenderResults = renderResults.filter((result) => result !== null) as RenderResult[];
+  return [...validRenderResults, callApiImplParamsJsonFile(parseResult, cxxFiles)];
 }
 
 interface JsonMapInitBlock {
