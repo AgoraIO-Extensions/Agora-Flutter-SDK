@@ -24,11 +24,11 @@ Pod::Spec.new do |s|
     s.vendored_frameworks = 'libs/*.xcframework'
   else
     # iris dependencies start
-    s.dependency 'AgoraIrisRTC_iOS', '4.6.2-dev.7'
+    s.dependency 'AgoraIrisRTC_iOS', '4.6.2-dev.9'
     # iris dependencies end
 
     # native dependencies start
-    s.dependency 'AgoraRtcEngine_iOS_Preview', '4.6.2-dev.7'
+    s.dependency 'AgoraRtcEngine_iOS_Preview', '4.6.2-dev.9'
     # native dependencies end
   end
   
