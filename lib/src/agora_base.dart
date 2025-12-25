@@ -2474,11 +2474,11 @@ class WatermarkConfig implements AgoraSerializable {
   const WatermarkConfig(
       {this.id,
       this.type,
-      this.options,
       this.buffer,
       this.timestamp,
       this.literal,
-      this.imageUrl});
+      this.imageUrl,
+      this.options});
 
   /// @nodoc
   @JsonKey(name: 'id')
@@ -2487,10 +2487,6 @@ class WatermarkConfig implements AgoraSerializable {
   /// @nodoc
   @JsonKey(name: 'type')
   final WatermarkSourceType? type;
-
-  /// @nodoc
-  @JsonKey(name: 'options')
-  final WatermarkOptions? options;
 
   /// @nodoc
   @JsonKey(name: 'buffer')
@@ -2507,6 +2503,10 @@ class WatermarkConfig implements AgoraSerializable {
   /// @nodoc
   @JsonKey(name: 'imageUrl')
   final String? imageUrl;
+
+  /// @nodoc
+  @JsonKey(name: 'options')
+  final WatermarkOptions? options;
 
   /// @nodoc
   factory WatermarkConfig.fromJson(Map<String, dynamic> json) =>

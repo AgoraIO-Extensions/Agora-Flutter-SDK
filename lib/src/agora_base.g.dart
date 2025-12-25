@@ -725,9 +725,6 @@ WatermarkConfig _$WatermarkConfigFromJson(Map<String, dynamic> json) =>
     WatermarkConfig(
       id: json['id'] as String?,
       type: $enumDecodeNullable(_$WatermarkSourceTypeEnumMap, json['type']),
-      options: json['options'] == null
-          ? null
-          : WatermarkOptions.fromJson(json['options'] as Map<String, dynamic>),
       buffer: json['buffer'] == null
           ? null
           : WatermarkBuffer.fromJson(json['buffer'] as Map<String, dynamic>),
@@ -739,6 +736,9 @@ WatermarkConfig _$WatermarkConfigFromJson(Map<String, dynamic> json) =>
           ? null
           : WatermarkLiteral.fromJson(json['literal'] as Map<String, dynamic>),
       imageUrl: json['imageUrl'] as String?,
+      options: json['options'] == null
+          ? null
+          : WatermarkOptions.fromJson(json['options'] as Map<String, dynamic>),
     );
 
 Map<String, dynamic> _$WatermarkConfigToJson(WatermarkConfig instance) {
@@ -752,11 +752,11 @@ Map<String, dynamic> _$WatermarkConfigToJson(WatermarkConfig instance) {
 
   writeNotNull('id', instance.id);
   writeNotNull('type', _$WatermarkSourceTypeEnumMap[instance.type]);
-  writeNotNull('options', instance.options?.toJson());
   writeNotNull('buffer', instance.buffer?.toJson());
   writeNotNull('timestamp', instance.timestamp?.toJson());
   writeNotNull('literal', instance.literal?.toJson());
   writeNotNull('imageUrl', instance.imageUrl);
+  writeNotNull('options', instance.options?.toJson());
   return val;
 }
 
