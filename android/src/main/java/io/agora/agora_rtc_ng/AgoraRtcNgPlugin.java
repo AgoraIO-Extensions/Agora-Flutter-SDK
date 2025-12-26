@@ -65,6 +65,8 @@ public class AgoraRtcNgPlugin implements FlutterPlugin, MethodChannel.MethodCall
         if ("getAssetAbsolutePath".equals(call.method)) {
             getAssetAbsolutePath(call, result);
         } else if ("androidInit".equals(call.method)) {
+            // dart ffi DynamicLibrary.open do not trigger JNI_OnLoad in iris, so we need call java
+            // System.loadLibrary here to trigger the JNI_OnLoad explicitly.
             System.loadLibrary("AgoraRtcWrapper");
 
             String externalFilesDir = getReliableStoragePath(applicationContext);
