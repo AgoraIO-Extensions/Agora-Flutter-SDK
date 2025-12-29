@@ -460,7 +460,7 @@ extension ContentInspectTypeExt on ContentInspectType {
   }
 }
 
-/// ContentInspectModule A structure used to configure the frequency of video screenshot and upload.
+/// ContentInspectModule class, a structure used to configure the frequency of video screenshot and upload.
 @JsonSerializable(explicitToJson: true, includeIfNull: false)
 class ContentInspectModule implements AgoraSerializable {
   /// @nodoc
@@ -1330,7 +1330,7 @@ class ExternalVideoFrame implements AgoraSerializable {
   @JsonKey(name: 'hdr10MetadataInfo')
   final Hdr10MetadataInfo? hdr10MetadataInfo;
 
-  /// By default, the color space properties of video frames will apply the Full Range and BT.709 standard configurations. You can configure the settings according your needs for custom video capturing and rendering.
+  /// By default, the color space properties of video frames will apply the Full Range and BT.709 standard configurations.
   @JsonKey(name: 'colorSpace')
   final ColorSpace? colorSpace;
 
@@ -1513,7 +1513,7 @@ class VideoFrame implements AgoraSerializable {
   @JsonKey(name: 'hdr10MetadataInfo')
   final Hdr10MetadataInfo? hdr10MetadataInfo;
 
-  /// By default, the color space properties of video frames will apply the Full Range and BT.709 standard configurations. You can configure the settings according your needs for custom video capturing and rendering.
+  /// By default, the color space properties of video frames will apply the Full Range and BT.709 standard configurations.
   @JsonKey(name: 'colorSpace')
   final ColorSpace? colorSpace;
 
@@ -2118,15 +2118,15 @@ extension MediaRecorderContainerFormatExt on MediaRecorderContainerFormat {
 /// The recording content.
 @JsonEnum(alwaysCreate: true)
 enum MediaRecorderStreamType {
-  /// Only audio.
+  /// 1: Only audio.
   @JsonValue(0x01)
   streamTypeAudio,
 
-  /// Only video.
+  /// 2: Only video.
   @JsonValue(0x02)
   streamTypeVideo,
 
-  /// (Default) Audio and video.
+  /// 3: (Default) Audio and video.
   @JsonValue(0x01 | 0x02)
   streamTypeBoth,
 }
