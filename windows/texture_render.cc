@@ -46,11 +46,13 @@ void TextureRender::OnVideoFrameReceived(const void *videoFrame,
                                          const IrisRtcVideoFrameConfig &config,
                                          bool resize)
 {
-    // Record frame received timestamp for performance monitoring
-    int64_t receiveTimestamp = std::chrono::duration_cast<std::chrono::milliseconds>(
-        std::chrono::system_clock::now().time_since_epoch()).count();
+    // Capture frame received timestamp locally to avoid race conditions
+    int64_t frameReceivedTimeMicros = std::chrono::duration_cast<std::chrono::microseconds>(
+        std::chrono::steady_clock::now().time_since_epoch()).count();
+
+    // Record frame received for FPS calculation
     if (performance_monitor_) {
-        performance_monitor_->recordFrameReceived(receiveTimestamp);
+        performance_monitor_->recordFrameReceived();
     }
 
     std::lock_guard<std::mutex> lock_guard(buffer_mutex_);
@@ -73,24 +75,22 @@ void TextureRender::OnVideoFrameReceived(const void *videoFrame,
             method_channel_->InvokeMethod("onSizeChanged", std::make_unique<EncodableValue>(EncodableValue(args)));
         }
 
-        // Record render timestamp before copying data to measure frame interval more accurately
-        int64_t renderTimestamp = std::chrono::duration_cast<std::chrono::milliseconds>(
-            std::chrono::system_clock::now().time_since_epoch()).count();
-        
-        // Record processing start time for draw cost measurement
-        int64_t processStartTime = std::chrono::duration_cast<std::chrono::microseconds>(
-            std::chrono::system_clock::now().time_since_epoch()).count();
+        // Record frame rendered interval before copying data
+        if (performance_monitor_) {
+            performance_monitor_->recordFrameRenderedInterval();
+        }
 
+        // Copy pixel data
         std::copy(static_cast<uint8_t *>(video_frame->yBuffer), static_cast<uint8_t *>(video_frame->yBuffer) + data_size, buffer_.data());
 
-        // Record processing end time and calculate draw cost
-        int64_t processEndTime = std::chrono::duration_cast<std::chrono::microseconds>(
-            std::chrono::system_clock::now().time_since_epoch()).count();
-        double drawCostMs = (processEndTime - processStartTime) / 1000.0;
+        // Calculate render draw cost using the locally captured timestamp
+        int64_t nowMicros = std::chrono::duration_cast<std::chrono::microseconds>(
+            std::chrono::steady_clock::now().time_since_epoch()).count();
+        double drawCostMs = (nowMicros - frameReceivedTimeMicros) / 1000.0;
 
-        // Record frame rendered with timestamp and draw cost
+        // Record render draw cost with the calculated value
         if (performance_monitor_) {
-            performance_monitor_->recordFrameRendered(renderTimestamp, drawCostMs);
+            performance_monitor_->recordRenderDrawCostWithValue(drawCostMs);
         }
 
         frame_width_ = video_frame->width;

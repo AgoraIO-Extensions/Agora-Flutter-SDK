@@ -22,8 +22,8 @@ struct AgoraRenderPerformanceStats {
     /// Output frame rate (frames actually rendered per second).
     double renderOutputFps;
 
-    /// Render interval variance (measure of smoothness, lower is better).
-    double renderIntervalVariance;
+    /// Average frame interval (time between consecutive frames) in milliseconds.
+    double renderFrameIntervalMs;
 
     /// Average rendering draw cost per frame in milliseconds.
     double renderDrawCostMs;
@@ -62,11 +62,16 @@ public:
     /// Set report interval in milliseconds (default: 1000).
     void setReportIntervalMs(int64_t intervalMs);
 
-    /// Record a frame received event with timestamp in milliseconds.
-    void recordFrameReceived(int64_t timestamp);
+    /// Record a frame received event.
+    /// Internally captures the current timestamp.
+    void recordFrameReceived();
 
-    /// Record a frame rendered event with timestamp and draw cost in milliseconds.
-    void recordFrameRendered(int64_t timestamp, double drawCost);
+    /// Record a frame rendered interval event.
+    /// Calculates the interval from the last rendered frame.
+    void recordFrameRenderedInterval();
+
+    /// Record render draw cost with a pre-calculated value in milliseconds.
+    void recordRenderDrawCostWithValue(double drawCostMs);
 
     /// Get current performance statistics.
     AgoraRenderPerformanceStats getCurrentStats();
@@ -80,8 +85,8 @@ private:
     void checkAndReportStats();
     AgoraRenderPerformanceStats computeStatsInternal();
     double calculateFPS(const std::vector<int64_t>& timestamps);
-    double calculateIntervalVariance(const std::vector<int64_t>& timestamps);
-    double calculateAverageDrawCost();
+    double calculateAverageFrameInterval();
+    double calculateAverageRenderDrawCost();
     int64_t currentTimeMs();
 
     AgoraRenderPerformanceDelegate* delegate_;
@@ -90,7 +95,8 @@ private:
 
     std::vector<int64_t> frameReceiveTimestamps_;
     std::vector<int64_t> frameRenderTimestamps_;
-    std::vector<double> drawCostSamples_;
+    std::vector<double> frameIntervalSamples_;
+    std::vector<double> renderDrawCostSamples_;
     int64_t totalFramesReceived_;
     int64_t totalFramesRendered_;
     int64_t lastReportTime_;

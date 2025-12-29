@@ -13,7 +13,7 @@ std::map<std::string, double> AgoraRenderPerformanceStats::toDictionary() const 
     dict["uid"] = static_cast<double>(uid);
     dict["renderInputFps"] = renderInputFps;
     dict["renderOutputFps"] = renderOutputFps;
-    dict["renderIntervalVariance"] = renderIntervalVariance;
+    dict["renderFrameIntervalMs"] = renderFrameIntervalMs;
     dict["renderDrawCostMs"] = renderDrawCostMs;
     dict["totalFramesReceived"] = static_cast<double>(totalFramesReceived);
     dict["totalFramesRendered"] = static_cast<double>(totalFramesRendered);
@@ -23,12 +23,13 @@ std::map<std::string, double> AgoraRenderPerformanceStats::toDictionary() const 
 AgoraRenderPerformanceMonitor::AgoraRenderPerformanceMonitor()
     : delegate_(nullptr),
       enabled_(true),
-      reportIntervalMs_(1000),
+      reportIntervalMs_(6000),
       totalFramesReceived_(0),
       totalFramesRendered_(0) {
     frameReceiveTimestamps_.reserve(MAX_SAMPLE_SIZE);
     frameRenderTimestamps_.reserve(MAX_SAMPLE_SIZE);
-    drawCostSamples_.reserve(MAX_SAMPLE_SIZE);
+    frameIntervalSamples_.reserve(MAX_SAMPLE_SIZE);
+    renderDrawCostSamples_.reserve(MAX_SAMPLE_SIZE);
     lastReportTime_ = currentTimeMs();
 }
 
@@ -51,11 +52,13 @@ void AgoraRenderPerformanceMonitor::setReportIntervalMs(int64_t intervalMs) {
     reportIntervalMs_ = intervalMs;
 }
 
-void AgoraRenderPerformanceMonitor::recordFrameReceived(int64_t timestamp) {
+void AgoraRenderPerformanceMonitor::recordFrameReceived() {
     if (!enabled_) return;
 
+    int64_t nowMs = currentTimeMs();
+
     std::lock_guard<std::mutex> lock(mutex_);
-    frameReceiveTimestamps_.push_back(timestamp);
+    frameReceiveTimestamps_.push_back(nowMs);
     if (frameReceiveTimestamps_.size() > MAX_SAMPLE_SIZE) {
         frameReceiveTimestamps_.erase(frameReceiveTimestamps_.begin());
     }
@@ -64,23 +67,40 @@ void AgoraRenderPerformanceMonitor::recordFrameReceived(int64_t timestamp) {
     checkAndReportStats();
 }
 
-void AgoraRenderPerformanceMonitor::recordFrameRendered(int64_t timestamp, double drawCost) {
+void AgoraRenderPerformanceMonitor::recordFrameRenderedInterval() {
     if (!enabled_) return;
 
+    int64_t nowMs = currentTimeMs();
+
     std::lock_guard<std::mutex> lock(mutex_);
-    frameRenderTimestamps_.push_back(timestamp);
+    frameRenderTimestamps_.push_back(nowMs);
     if (frameRenderTimestamps_.size() > MAX_SAMPLE_SIZE) {
         frameRenderTimestamps_.erase(frameRenderTimestamps_.begin());
     }
 
-    drawCostSamples_.push_back(drawCost);
-    if (drawCostSamples_.size() > MAX_SAMPLE_SIZE) {
-        drawCostSamples_.erase(drawCostSamples_.begin());
+    // Calculate frame interval (time between consecutive rendered frames)
+    if (frameRenderTimestamps_.size() >= 2) {
+        size_t size = frameRenderTimestamps_.size();
+        int64_t intervalMs = frameRenderTimestamps_[size - 1] - frameRenderTimestamps_[size - 2];
+        frameIntervalSamples_.push_back(static_cast<double>(intervalMs));
+        if (frameIntervalSamples_.size() > MAX_SAMPLE_SIZE) {
+            frameIntervalSamples_.erase(frameIntervalSamples_.begin());
+        }
     }
 
     totalFramesRendered_++;
 
     checkAndReportStats();
+}
+
+void AgoraRenderPerformanceMonitor::recordRenderDrawCostWithValue(double drawCostMs) {
+    if (!enabled_) return;
+
+    std::lock_guard<std::mutex> lock(mutex_);
+    renderDrawCostSamples_.push_back(drawCostMs);
+    if (renderDrawCostSamples_.size() > MAX_SAMPLE_SIZE) {
+        renderDrawCostSamples_.erase(renderDrawCostSamples_.begin());
+    }
 }
 
 void AgoraRenderPerformanceMonitor::checkAndReportStats() {
@@ -108,8 +128,8 @@ AgoraRenderPerformanceStats AgoraRenderPerformanceMonitor::computeStatsInternal(
     stats.uid = 0; // Will be set by caller
     stats.renderInputFps = calculateFPS(frameReceiveTimestamps_);
     stats.renderOutputFps = calculateFPS(frameRenderTimestamps_);
-    stats.renderIntervalVariance = calculateIntervalVariance(frameRenderTimestamps_);
-    stats.renderDrawCostMs = calculateAverageDrawCost();
+    stats.renderFrameIntervalMs = calculateAverageFrameInterval();
+    stats.renderDrawCostMs = calculateAverageRenderDrawCost();
     stats.totalFramesReceived = totalFramesReceived_;
     stats.totalFramesRendered = totalFramesRendered_;
     return stats;
@@ -127,42 +147,26 @@ double AgoraRenderPerformanceMonitor::calculateFPS(const std::vector<int64_t>& t
     return (timestamps.size() - 1) / durationSeconds;
 }
 
-double AgoraRenderPerformanceMonitor::calculateIntervalVariance(const std::vector<int64_t>& timestamps) {
-    if (timestamps.size() < 2) return 0.0;
+double AgoraRenderPerformanceMonitor::calculateAverageFrameInterval() {
+    if (frameIntervalSamples_.empty()) return 0.0;
 
-    // Calculate intervals between consecutive timestamps
-    std::vector<int64_t> intervals;
-    intervals.reserve(timestamps.size() - 1);
-    for (size_t i = 1; i < timestamps.size(); i++) {
-        intervals.push_back(timestamps[i] - timestamps[i - 1]);
-    }
-
-    // Calculate mean interval
-    double sum = std::accumulate(intervals.begin(), intervals.end(), 0.0);
-    double mean = sum / intervals.size();
-
-    // Calculate variance: sum of squared differences from mean
-    double varianceSum = 0.0;
-    for (int64_t interval : intervals) {
-        double diff = interval - mean;
-        varianceSum += diff * diff;
-    }
-
-    return varianceSum / intervals.size();
+    double sum = std::accumulate(frameIntervalSamples_.begin(), frameIntervalSamples_.end(), 0.0);
+    return sum / frameIntervalSamples_.size();
 }
 
-double AgoraRenderPerformanceMonitor::calculateAverageDrawCost() {
-    if (drawCostSamples_.empty()) return 0.0;
+double AgoraRenderPerformanceMonitor::calculateAverageRenderDrawCost() {
+    if (renderDrawCostSamples_.empty()) return 0.0;
 
-    double sum = std::accumulate(drawCostSamples_.begin(), drawCostSamples_.end(), 0.0);
-    return sum / drawCostSamples_.size();
+    double sum = std::accumulate(renderDrawCostSamples_.begin(), renderDrawCostSamples_.end(), 0.0);
+    return sum / renderDrawCostSamples_.size();
 }
 
 void AgoraRenderPerformanceMonitor::reset() {
     std::lock_guard<std::mutex> lock(mutex_);
     frameReceiveTimestamps_.clear();
     frameRenderTimestamps_.clear();
-    drawCostSamples_.clear();
+    frameIntervalSamples_.clear();
+    renderDrawCostSamples_.clear();
     totalFramesReceived_ = 0;
     totalFramesRendered_ = 0;
     lastReportTime_ = currentTimeMs();
