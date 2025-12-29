@@ -67,6 +67,9 @@ public:
     // Performance monitoring
     unsigned int uid_ = 0;
     std::unique_ptr<agora::rtc::flutter::AgoraRenderPerformanceMonitor> performance_monitor_;
+    
+    // Track frame received timestamp for end-to-end latency measurement
+    int64_t last_frame_received_time_micros_ = 0;
 };
 
 #endif // TEXTURE_RENDER_H_

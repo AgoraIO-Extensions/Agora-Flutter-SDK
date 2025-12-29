@@ -13,7 +13,8 @@ TextureRender::TextureRender(flutter::BinaryMessenger *messenger,
     : registrar_(registrar),
       iris_rtc_rendering_(iris_rtc_rendering),
       delegate_id_(agora::iris::INVALID_DELEGATE_ID),
-      is_dirty_(false)
+      is_dirty_(false),
+      last_frame_received_time_micros_(0)
 {
     // Create flutter desktop pixelbuffer texture;
     texture_ =
@@ -46,9 +47,13 @@ void TextureRender::OnVideoFrameReceived(const void *videoFrame,
                                          const IrisRtcVideoFrameConfig &config,
                                          bool resize)
 {
-    // Capture frame received timestamp locally to avoid race conditions
+    // Capture frame received timestamp at the VERY BEGINNING for accurate end-to-end latency measurement
+    // This includes mutex wait time, which is important for performance analysis
     int64_t frameReceivedTimeMicros = std::chrono::duration_cast<std::chrono::microseconds>(
         std::chrono::steady_clock::now().time_since_epoch()).count();
+    
+    // Store timestamp immediately for end-to-end latency measurement (will be used in CopyPixelBuffer)
+    last_frame_received_time_micros_ = frameReceivedTimeMicros;
 
     // Record frame received for FPS calculation
     if (performance_monitor_) {
@@ -83,16 +88,6 @@ void TextureRender::OnVideoFrameReceived(const void *videoFrame,
         // Copy pixel data
         std::copy(static_cast<uint8_t *>(video_frame->yBuffer), static_cast<uint8_t *>(video_frame->yBuffer) + data_size, buffer_.data());
 
-        // Calculate render draw cost using the locally captured timestamp
-        int64_t nowMicros = std::chrono::duration_cast<std::chrono::microseconds>(
-            std::chrono::steady_clock::now().time_since_epoch()).count();
-        double drawCostMs = (nowMicros - frameReceivedTimeMicros) / 1000.0;
-
-        // Record render draw cost with the calculated value
-        if (performance_monitor_) {
-            performance_monitor_->recordRenderDrawCostWithValue(drawCostMs);
-        }
-
         frame_width_ = video_frame->width;
         frame_height_ = video_frame->height;
 
@@ -108,6 +103,15 @@ const FlutterDesktopPixelBuffer *
 TextureRender::CopyPixelBuffer(size_t width, size_t height)
 {
     std::unique_lock<std::mutex> buffer_lock(buffer_mutex_);
+
+    // Calculate end-to-end render latency: from frame received to Flutter consumption
+    if (performance_monitor_ && last_frame_received_time_micros_ > 0) {
+        int64_t nowMicros = std::chrono::duration_cast<std::chrono::microseconds>(
+            std::chrono::steady_clock::now().time_since_epoch()).count();
+        double drawCostMs = (nowMicros - last_frame_received_time_micros_) / 1000.0;
+        performance_monitor_->recordRenderDrawCostWithValue(drawCostMs);
+        last_frame_received_time_micros_ = 0; // Reset after measurement
+    }
 
     is_dirty_ = false;
 
