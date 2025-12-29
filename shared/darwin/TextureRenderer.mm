@@ -50,9 +50,8 @@ public:
       return;
     }
 
-    // Record frame received timestamp for performance monitoring
-    int64_t receiveTimestamp = (int64_t)([[NSDate date] timeIntervalSince1970] * 1000);
-    [strongRenderer.performanceMonitor recordFrameReceived:receiveTimestamp];
+    // Record frame received (timestamp captured internally)
+    [strongRenderer.performanceMonitor recordFrameReceived];
 
     std::weak_ptr<RendererDelegate> self_weak = shared_from_this();
 
@@ -96,9 +95,6 @@ public:
       });
     }
 
-    // Record processing start time for draw cost measurement (microseconds for higher precision)
-    int64_t processStartTime = (int64_t)([[NSDate date] timeIntervalSince1970] * 1000000);
-    
     __block CVPixelBufferRef previousPixelBuffer = nil;
     // Use `dispatch_sync` to avoid unnecessary context switch under common
     // non-contest scenarios;
@@ -125,11 +121,6 @@ public:
       CVPixelBufferRelease(previousPixelBuffer);
     }
 
-    // Record processing end time and calculate draw cost (in microseconds, then convert to milliseconds)
-    int64_t processEndTimeMicros = (int64_t)([[NSDate date] timeIntervalSince1970] * 1000000);
-    int64_t drawCostMicros = processEndTimeMicros - processStartTime;
-    double drawCostMs = drawCostMicros / 1000.0;  // Convert to milliseconds with decimal precision
-
     // notify new frame available on main thread
     dispatch_async(dispatch_get_main_queue(), ^{
       std::shared_ptr<RendererDelegate> self_strong = self_weak.lock();
@@ -141,10 +132,7 @@ public:
       if (!strongRenderer) {
         return;
       }
-      
-      int64_t renderTimestamp = (int64_t)([[NSDate date] timeIntervalSince1970] * 1000);
-      [strongRenderer.performanceMonitor recordFrameRendered:renderTimestamp drawCost:drawCostMs];
-      
+      [strongRenderer.performanceMonitor recordFrameRenderedInterval];
       [strongRenderer.textureRegistry
           textureFrameAvailable:strongRenderer.textureId];
     });
@@ -224,6 +212,7 @@ public:
 
 - (CVPixelBufferRef _Nullable)copyPixelBuffer {
   __block CVPixelBufferRef pixelBuffer = nil;
+  
   // Use `dispatch_sync` because `copyPixelBuffer` API requires synchronous
   // return.
   dispatch_sync(self.pixelBufferSynchronizationQueue, ^{
@@ -231,6 +220,12 @@ public:
     pixelBuffer = self.latestPixelBuffer;
     self.latestPixelBuffer = nil;
   });
+  
+  // Record render draw cost (duration calculated internally)
+  if (pixelBuffer) {
+    [self.performanceMonitor recordRenderDrawCost];
+  }
+  
   return pixelBuffer;
 }
 

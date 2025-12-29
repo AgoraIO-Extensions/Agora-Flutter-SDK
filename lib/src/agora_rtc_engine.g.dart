@@ -241,8 +241,8 @@ VideoRenderingPerformanceStats _$VideoRenderingPerformanceStatsFromJson(
       uid: (json['uid'] as num?)?.toInt(),
       renderInputFps: (json['renderInputFps'] as num?)?.toDouble(),
       renderOutputFps: (json['renderOutputFps'] as num?)?.toDouble(),
-      renderIntervalVariance:
-          (json['renderIntervalVariance'] as num?)?.toDouble(),
+      renderFrameIntervalMs:
+          (json['renderFrameIntervalMs'] as num?)?.toDouble(),
       renderDrawCostMs: (json['renderDrawCostMs'] as num?)?.toDouble(),
       totalFramesReceived: (json['totalFramesReceived'] as num?)?.toInt(),
       totalFramesRendered: (json['totalFramesRendered'] as num?)?.toInt(),
@@ -262,7 +262,7 @@ Map<String, dynamic> _$VideoRenderingPerformanceStatsToJson(
   writeNotNull('uid', instance.uid);
   writeNotNull('renderInputFps', instance.renderInputFps);
   writeNotNull('renderOutputFps', instance.renderOutputFps);
-  writeNotNull('renderIntervalVariance', instance.renderIntervalVariance);
+  writeNotNull('renderFrameIntervalMs', instance.renderFrameIntervalMs);
   writeNotNull('renderDrawCostMs', instance.renderDrawCostMs);
   writeNotNull('totalFramesReceived', instance.totalFramesReceived);
   writeNotNull('totalFramesRendered', instance.totalFramesRendered);

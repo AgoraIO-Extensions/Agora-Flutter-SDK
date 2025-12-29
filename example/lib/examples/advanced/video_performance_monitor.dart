@@ -100,25 +100,25 @@ class _VideoPerformanceMonitorExampleState
   void onVideoRenderingPerformance(VideoRenderingPerformanceStats stats) {
     print('${DateTime.now().toString().split(' ').last.substring(0, 8)} - '
           'Texture #${stats.textureId ?? 'N/A'}: UID=${stats.uid ?? 'N/A'}, '
-          'InFPS=${stats.renderInputFps?.toStringAsFixed(1)}, '
-          'OutFPS=${stats.renderOutputFps?.toStringAsFixed(1)}, '
-          'DrawCost=${stats.renderDrawCostMs?.toStringAsFixed(2)}ms, '
-          'Variance=${stats.renderIntervalVariance?.toStringAsFixed(2)}ms²');
+          'InFPS=${stats.renderInputFps?.toStringAsFixed(1) ?? 'N/A'}, '
+          'OutFPS=${stats.renderOutputFps?.toStringAsFixed(1) ?? 'N/A'}, '
+          'Interval=${stats.renderFrameIntervalMs?.toStringAsFixed(2) ?? 'N/A'}ms, '
+          'DrawCost=${stats.renderDrawCostMs?.toStringAsFixed(2) ?? 'N/A'}ms');
     if (mounted) {
       setState(() {
         _performanceLog.add(
           '${DateTime.now().toString().split(' ').last.substring(0, 8)} - '
           'Texture #${stats.textureId}: UID=${stats.uid}, '
-          'InFPS=${stats.renderInputFps?.toStringAsFixed(1)}, '
-          'OutFPS=${stats.renderOutputFps?.toStringAsFixed(1)}, '
-          'DrawCost=${stats.renderDrawCostMs?.toStringAsFixed(2)}ms, '
-          'Variance=${stats.renderIntervalVariance?.toStringAsFixed(2)}ms²',
+          'InFPS=${stats.renderInputFps?.toStringAsFixed(1) ?? 'N/A'}, '
+          'OutFPS=${stats.renderOutputFps?.toStringAsFixed(1) ?? 'N/A'}, '
+          'Interval=${stats.renderFrameIntervalMs?.toStringAsFixed(2) ?? 'N/A'}ms, '
+          'DrawCost=${stats.renderDrawCostMs?.toStringAsFixed(2) ?? 'N/A'}ms',
         );
 
         // Keep only last 10 entries
-        if (_performanceLog.length > 10) {
-          _performanceLog.removeAt(0);
-        }
+        // if (_performanceLog.length > 10) {
+        //   _performanceLog.removeAt(0);
+        // }
       });
     }
   }

@@ -18,9 +18,12 @@ NS_ASSUME_NONNULL_BEGIN
 @property(nonatomic, assign) double renderOutputFps;
 
 /// Render interval variance (measure of smoothness, lower is better).
-@property(nonatomic, assign) double renderIntervalVariance;
+//@property(nonatomic, assign) double renderIntervalVariance;
 
-/// Average rendering draw cost per frame in milliseconds.
+/// Average frame interval (time between consecutive frame notifications) in milliseconds.
+@property(nonatomic, assign) double renderFrameIntervalMs;
+
+/// Average render duration (from frame received to copyPixelBuffer completed) in milliseconds.
 @property(nonatomic, assign) double renderDrawCostMs;
 
 /// Total number of frames received from SDK.
@@ -56,11 +59,15 @@ NS_ASSUME_NONNULL_BEGIN
 /// Initialize the performance monitor.
 - (instancetype)init;
 
-/// Record a frame received event with timestamp in milliseconds.
-- (void)recordFrameReceived:(int64_t)timestamp;
+/// Record a frame received event (internally captures timestamp).
+- (void)recordFrameReceived;
 
-/// Record a frame rendered event with timestamp and draw cost in milliseconds.
-- (void)recordFrameRendered:(int64_t)timestamp drawCost:(double)drawCost;
+/// Record a frame rendered event (when textureFrameAvailable is called).
+- (void)recordFrameRenderedInterval;
+
+/// Record the render duration (from last frame received to copyPixelBuffer completed).
+/// Calculates duration internally using the last recorded frame received time.
+- (void)recordRenderDrawCost;
 
 /// Get current performance statistics.
 - (AgoraRenderPerformanceStats *)getCurrentStats;

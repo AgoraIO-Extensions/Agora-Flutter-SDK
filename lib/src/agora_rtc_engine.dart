@@ -733,7 +733,7 @@ class VideoRenderingPerformanceStats implements AgoraSerializable {
     this.uid,
     this.renderInputFps,
     this.renderOutputFps,
-    this.renderIntervalVariance,
+    this.renderFrameIntervalMs,
     this.renderDrawCostMs,
     this.totalFramesReceived,
     this.totalFramesRendered,
@@ -768,19 +768,26 @@ class VideoRenderingPerformanceStats implements AgoraSerializable {
   @JsonKey(name: 'renderOutputFps')
   final double? renderOutputFps;
 
-  /// The variance of rendering intervals, indicating rendering smoothness.
+  /// The average frame interval between consecutive frame notifications.
   ///
-  /// Lower values indicate more uniform frame intervals and smoother playback.
-  /// Higher values suggest inconsistent frame timing, which can cause perceived jank or stuttering.
-  /// Unit: milliseconds squared (ms²)
-  @JsonKey(name: 'renderIntervalVariance')
-  final double? renderIntervalVariance;
+  /// This measures the time interval between consecutive calls to textureFrameAvailable,
+  /// representing the actual frame processing cycle. For 30fps video, this should be
+  /// approximately 33.33ms; for 60fps, it should be approximately 16.67ms.
+  /// 
+  /// A higher value indicates lower frame rate or frame drops.
+  /// Unit: milliseconds (ms)
+  @JsonKey(name: 'renderFrameIntervalMs')
+  final double? renderFrameIntervalMs;
 
-  /// The average rendering draw cost per frame.
+  /// The average render duration from frame received to copyPixelBuffer completion.
   ///
-  /// This measures the time spent processing each frame, including texture copying and
-  /// Flutter notification. For smooth 60fps playback, this should be well below 16.67ms.
-  /// For 30fps, it should be below 33.33ms.
+  /// This measures the actual processing time for a single frame, from when the frame
+  /// arrives at OnVideoFrameReceived to when Flutter Engine completes reading it via
+  /// copyPixelBuffer. This reflects the true rendering latency, excluding wait time
+  /// between frames.
+  /// 
+  /// Typical values: 1-10ms on modern devices. Values above 16ms may indicate
+  /// performance issues or system load.
   /// Unit: milliseconds (ms)
   @JsonKey(name: 'renderDrawCostMs')
   final double? renderDrawCostMs;

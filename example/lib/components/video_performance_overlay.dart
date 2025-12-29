@@ -139,25 +139,18 @@ class _VideoPerformanceOverlayState extends State<VideoPerformanceOverlay>
                 _getFpsColor(stats.renderOutputFps ?? 0),
               ),
               _buildMetricRow(
-                'Draw Cost',
-                '${stats.renderDrawCostMs?.toStringAsFixed(2) ?? 'N/A'} ms',
-                _getDrawCostColor(stats.renderDrawCostMs ?? 0),
+                'Interval',
+                '${stats.renderFrameIntervalMs?.toStringAsFixed(2) ?? 'N/A'} ms',
+                _getFrameIntervalColor(stats.renderFrameIntervalMs ?? 0, stats.renderOutputFps ?? 0),
               ),
               _buildMetricRow(
-                'Smoothness',
-                _getSmoothness(stats.renderIntervalVariance ?? 0),
-                _getSmoothnessColor(stats.renderIntervalVariance ?? 0),
+                'Duration',
+                '${stats.renderDrawCostMs?.toStringAsFixed(2) ?? 'N/A'} ms',
+                _getDrawCostColor(stats.renderDrawCostMs ?? 0),
               ),
               const SizedBox(height: 2),
               Text(
                 'Frames: ${stats.totalFramesReceived ?? 0}/${stats.totalFramesRendered ?? 0}',
-                style: const TextStyle(
-                  color: Colors.white70,
-                  fontSize: 9,
-                ),
-              ),
-              Text(
-                'Variance: ${stats.renderIntervalVariance?.toStringAsFixed(2) ?? 'N/A'} ms²',
                 style: const TextStyle(
                   color: Colors.white70,
                   fontSize: 9,
@@ -230,17 +223,20 @@ class _VideoPerformanceOverlayState extends State<VideoPerformanceOverlay>
     return Colors.red; // Too slow
   }
 
-  String _getSmoothness(double variance) {
-    if (variance < 50) return 'Excellent';
-    if (variance < 150) return 'Good';
-    if (variance < 300) return 'Fair';
-    return 'Poor';
-  }
-
-  Color _getSmoothnessColor(double variance) {
-    if (variance < 50) return Colors.green;
-    if (variance < 150) return Colors.lightGreen;
-    if (variance < 300) return Colors.orange;
+  Color _getFrameIntervalColor(double interval, double fps) {
+    if (fps == 0 || interval == 0) return Colors.grey;
+    
+    // Calculate expected interval for the given FPS
+    double expectedInterval = 1000.0 / fps; // ms
+    double deviation = (interval - expectedInterval).abs() / expectedInterval;
+    
+    // Green: within 10% of expected
+    // Yellow: 10-30% deviation
+    // Orange: 30-50% deviation
+    // Red: >50% deviation
+    if (deviation < 0.1) return Colors.green;
+    if (deviation < 0.3) return Colors.lightGreen;
+    if (deviation < 0.5) return Colors.orange;
     return Colors.red;
   }
 }
