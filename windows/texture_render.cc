@@ -55,10 +55,11 @@ void TextureRender::OnVideoFrameReceived(const void *videoFrame,
         {
             buffer_.resize(data_size);
 
-            flutter::EncodableMap args = {
-                {EncodableValue("width"), EncodableValue(video_frame->width)},
-                {EncodableValue("height"), EncodableValue(video_frame->height)}};
-            method_channel_->InvokeMethod("onSizeChanged", std::make_unique<EncodableValue>(EncodableValue(args)));
+            // Mark that we have a pending size change notification
+            // This will be sent from the main thread in CopyPixelBuffer
+            has_pending_size_change_ = true;
+            pending_width_ = video_frame->width;
+            pending_height_ = video_frame->height;
         }
 
         std::copy(static_cast<uint8_t *>(video_frame->yBuffer), static_cast<uint8_t *>(video_frame->yBuffer) + data_size, buffer_.data());
@@ -80,6 +81,16 @@ TextureRender::CopyPixelBuffer(size_t width, size_t height)
     std::unique_lock<std::mutex> buffer_lock(buffer_mutex_);
 
     is_dirty_ = false;
+
+    // Send pending size change notification on the main thread
+    if (has_pending_size_change_)
+    {
+        has_pending_size_change_ = false;
+        flutter::EncodableMap args = {
+            {flutter::EncodableValue("width"), flutter::EncodableValue(static_cast<int32_t>(pending_width_))},
+            {flutter::EncodableValue("height"), flutter::EncodableValue(static_cast<int32_t>(pending_height_))}};
+        method_channel_->InvokeMethod("onSizeChanged", std::make_unique<flutter::EncodableValue>(flutter::EncodableValue(args)));
+    }
 
     if (!TextureRegistered())
     {

@@ -58,6 +58,11 @@ public:
     int delegate_id_;
 
     bool is_dirty_;
+    
+    // Pending size change notification
+    bool has_pending_size_change_ = false;
+    uint32_t pending_width_ = 0;
+    uint32_t pending_height_ = 0;
 };
 
 #endif // TEXTURE_RENDER_H_
