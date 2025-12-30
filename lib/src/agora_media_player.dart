@@ -106,7 +106,7 @@ abstract class MediaPlayer {
   /// * [index] The index of the media stream. This parameter must be less than the return value of getStreamCount.
   ///
   /// Returns
-  /// If the call succeeds, returns the detailed information of the media stream. See PlayerStreamInfo. NULL, if the method call fails.
+  /// If the call succeeds, returns the detailed information of the media stream. See PlayerStreamInfo. NULL is returned, if the method call fails.
   Future<PlayerStreamInfo> getStreamInfo(int index);
 
   /// Sets the loop playback.
@@ -411,6 +411,9 @@ abstract class MediaPlayer {
   /// @nodoc
   Future<void> setSoundPositionParams(
       {required double pan, required double gain});
+
+  /// @nodoc
+  Future<int> getAudioBufferDelay();
 
   /// Sets media player options.
   ///
