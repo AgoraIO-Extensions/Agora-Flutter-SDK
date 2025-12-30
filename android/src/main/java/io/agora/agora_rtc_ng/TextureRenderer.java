@@ -75,13 +75,18 @@ public class TextureRenderer implements AgoraRenderPerformanceDelegate {
         // Set performance callback to bridge native performance data to monitor
         this.irisRenderer.setPerformanceCallback(new IrisRenderer.PerformanceCallback() {
             @Override
-            public void onFrameReceived(long timestamp) {
-                performanceMonitor.recordFrameReceived(timestamp);
+            public void onFrameReceived() {
+                performanceMonitor.recordFrameReceived();
             }
 
             @Override
-            public void onFrameRendered(long timestamp, double drawCost) {
-                performanceMonitor.recordFrameRendered(timestamp, drawCost);
+            public void onFrameRenderedInterval() {
+                performanceMonitor.recordFrameRenderedInterval();
+            }
+
+            @Override
+            public void onRenderDrawCost(double drawCostMs) {
+                performanceMonitor.recordRenderDrawCostWithValue(drawCostMs);
             }
         });
 

@@ -12,7 +12,7 @@ class AgoraRenderPerformanceStats {
     public long uid;
     public double renderInputFps;
     public double renderOutputFps;
-    public double renderIntervalVariance;
+    public double renderFrameIntervalMs;
     public double renderDrawCostMs;
     public long totalFramesReceived;
     public long totalFramesRendered;
@@ -22,7 +22,7 @@ class AgoraRenderPerformanceStats {
         map.put("uid", uid);
         map.put("renderInputFps", renderInputFps);
         map.put("renderOutputFps", renderOutputFps);
-        map.put("renderIntervalVariance", renderIntervalVariance);
+        map.put("renderFrameIntervalMs", renderFrameIntervalMs);
         map.put("renderDrawCostMs", renderDrawCostMs);
         map.put("totalFramesReceived", totalFramesReceived);
         map.put("totalFramesRendered", totalFramesRendered);
@@ -32,10 +32,10 @@ class AgoraRenderPerformanceStats {
     @Override
     public String toString() {
         return String.format(
-            "AgoraRenderPerformanceStats: InFPS=%.1f, OutFPS=%.1f, Cost=%.2fms, " +
-            "Variance=%.2f, Received=%d, Rendered=%d",
-            renderInputFps, renderOutputFps, renderDrawCostMs,
-            renderIntervalVariance, totalFramesReceived, totalFramesRendered
+            "<AgoraRenderPerformanceStats: InFPS=%.1f, OutFPS=%.1f, Interval=%.2fms, " +
+            "drawCost=%.2fms, Received=%d, Rendered=%d>",
+            renderInputFps, renderOutputFps, renderFrameIntervalMs,
+            renderDrawCostMs, totalFramesReceived, totalFramesRendered
         );
     }
 }
@@ -55,11 +55,12 @@ public class AgoraRenderPerformanceMonitor {
 
     private AgoraRenderPerformanceDelegate delegate;
     private boolean enabled = true;
-    private long reportIntervalMs = 1000; // Report once per second
+    private long reportIntervalMs = 6000; // Report once per second
 
     private final List<Long> frameReceiveTimestamps = new ArrayList<>();
     private final List<Long> frameRenderTimestamps = new ArrayList<>();
-    private final List<Double> drawCostSamples = new ArrayList<>();
+    private final List<Double> frameIntervalSamples = new ArrayList<>();
+    private final List<Double> renderDrawCostSamples = new ArrayList<>();
     private long totalFramesReceived = 0;
     private long totalFramesRendered = 0;
     private long lastReportTime;
@@ -89,13 +90,15 @@ public class AgoraRenderPerformanceMonitor {
     }
 
     /**
-     * Record a frame received event with timestamp in milliseconds.
+     * Record a frame received event for FPS calculation.
      */
-    public void recordFrameReceived(long timestamp) {
+    public void recordFrameReceived() {
         if (!enabled) return;
 
+        long nowMs = System.currentTimeMillis();
+
         synchronized (lock) {
-            frameReceiveTimestamps.add(timestamp);
+            frameReceiveTimestamps.add(nowMs);
             if (frameReceiveTimestamps.size() > MAX_SAMPLE_SIZE) {
                 frameReceiveTimestamps.remove(0);
             }
@@ -106,25 +109,48 @@ public class AgoraRenderPerformanceMonitor {
     }
 
     /**
-     * Record a frame rendered event with timestamp and draw cost in milliseconds.
+     * Record a frame rendered event (textureFrameAvailable notification).
+     * Calculates frame interval from the last notification.
      */
-    public void recordFrameRendered(long timestamp, double drawCost) {
+    public void recordFrameRenderedInterval() {
         if (!enabled) return;
 
+        long nowMs = System.currentTimeMillis();
+
         synchronized (lock) {
-            frameRenderTimestamps.add(timestamp);
+            frameRenderTimestamps.add(nowMs);
             if (frameRenderTimestamps.size() > MAX_SAMPLE_SIZE) {
                 frameRenderTimestamps.remove(0);
             }
 
-            drawCostSamples.add(drawCost);
-            if (drawCostSamples.size() > MAX_SAMPLE_SIZE) {
-                drawCostSamples.remove(0);
+            // Calculate frame interval (time between consecutive textureFrameAvailable calls)
+            if (frameRenderTimestamps.size() >= 2) {
+                int size = frameRenderTimestamps.size();
+                long intervalMs = frameRenderTimestamps.get(size - 1) - frameRenderTimestamps.get(size - 2);
+                frameIntervalSamples.add((double) intervalMs);
+                if (frameIntervalSamples.size() > MAX_SAMPLE_SIZE) {
+                    frameIntervalSamples.remove(0);
+                }
             }
 
             totalFramesRendered++;
 
             checkAndReportStats();
+        }
+    }
+
+    /**
+     * Record render draw cost with a pre-calculated value (in milliseconds).
+     * This is used when the draw cost is calculated in native code to avoid race conditions.
+     */
+    public void recordRenderDrawCostWithValue(double drawCostMs) {
+        if (!enabled) return;
+
+        synchronized (lock) {
+            renderDrawCostSamples.add(drawCostMs);
+            if (renderDrawCostSamples.size() > MAX_SAMPLE_SIZE) {
+                renderDrawCostSamples.remove(0);
+            }
         }
     }
 
@@ -157,8 +183,8 @@ public class AgoraRenderPerformanceMonitor {
 
         stats.renderInputFps = calculateFPS(frameReceiveTimestamps);
         stats.renderOutputFps = calculateFPS(frameRenderTimestamps);
-        stats.renderIntervalVariance = calculateIntervalVariance(frameRenderTimestamps);
-        stats.renderDrawCostMs = calculateAverageDrawCost();
+        stats.renderFrameIntervalMs = calculateAverageFrameInterval();
+        stats.renderDrawCostMs = calculateAverageRenderDrawCost();
         stats.totalFramesReceived = totalFramesReceived;
         stats.totalFramesRendered = totalFramesRendered;
 
@@ -177,42 +203,26 @@ public class AgoraRenderPerformanceMonitor {
         return (timestamps.size() - 1) / durationSeconds;
     }
 
-    private double calculateIntervalVariance(List<Long> timestamps) {
-        if (timestamps.size() < 2) return 0.0;
+    private double calculateAverageFrameInterval() {
+        if (frameIntervalSamples.isEmpty()) return 0.0;
 
-        // Calculate intervals between consecutive timestamps
-        List<Long> intervals = new ArrayList<>();
-        for (int i = 1; i < timestamps.size(); i++) {
-            long interval = timestamps.get(i) - timestamps.get(i - 1);
-            intervals.add(interval);
-        }
-
-        // Calculate mean interval
         double sum = 0;
-        for (long interval : intervals) {
+        for (double interval : frameIntervalSamples) {
             sum += interval;
         }
-        double mean = sum / intervals.size();
 
-        // Calculate variance: sum of squared differences from mean
-        double varianceSum = 0;
-        for (long interval : intervals) {
-            double diff = interval - mean;
-            varianceSum += diff * diff;
-        }
-
-        return varianceSum / intervals.size();
+        return sum / frameIntervalSamples.size();
     }
 
-    private double calculateAverageDrawCost() {
-        if (drawCostSamples.isEmpty()) return 0.0;
+    private double calculateAverageRenderDrawCost() {
+        if (renderDrawCostSamples.isEmpty()) return 0.0;
 
         double sum = 0;
-        for (double cost : drawCostSamples) {
+        for (double cost : renderDrawCostSamples) {
             sum += cost;
         }
 
-        return sum / drawCostSamples.size();
+        return sum / renderDrawCostSamples.size();
     }
 
     /**
@@ -222,7 +232,8 @@ public class AgoraRenderPerformanceMonitor {
         synchronized (lock) {
             frameReceiveTimestamps.clear();
             frameRenderTimestamps.clear();
-            drawCostSamples.clear();
+            frameIntervalSamples.clear();
+            renderDrawCostSamples.clear();
             totalFramesReceived = 0;
             totalFramesRendered = 0;
             lastReportTime = System.currentTimeMillis();

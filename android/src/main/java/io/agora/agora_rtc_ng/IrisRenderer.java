@@ -17,8 +17,9 @@ public class IrisRenderer {
   }
 
   public interface PerformanceCallback {
-    void onFrameReceived(long timestamp);
-    void onFrameRendered(long timestamp, double drawCost);
+    void onFrameReceived();
+    void onFrameRenderedInterval();
+    void onRenderDrawCost(double drawCostMs);
   }
 
   private final long videoFrameManagerNativeHandle;
@@ -59,19 +60,29 @@ public class IrisRenderer {
    * Call from native - record frame received for performance monitoring
    */
   @Keep
-  private void recordFrameReceived(long timestamp) {
+  private void recordFrameReceived() {
     if (performanceCallback != null) { 
-      performanceCallback.onFrameReceived(timestamp); 
+      performanceCallback.onFrameReceived(); 
     }
   }
 
   /**
-   * Call from native - record frame rendered for performance monitoring
+   * Call from native - record frame rendered interval for performance monitoring
    */
   @Keep
-  private void recordFrameRendered(long timestamp, double drawCost) {
+  private void recordFrameRenderedInterval() {
     if (performanceCallback != null) { 
-      performanceCallback.onFrameRendered(timestamp, drawCost); 
+      performanceCallback.onFrameRenderedInterval(); 
+    }
+  }
+
+  /**
+   * Call from native - record render draw cost for performance monitoring
+   */
+  @Keep
+  private void recordRenderDrawCost(double drawCostMs) {
+    if (performanceCallback != null) { 
+      performanceCallback.onRenderDrawCost(drawCostMs); 
     }
   }
 
