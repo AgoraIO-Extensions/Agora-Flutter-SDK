@@ -105,8 +105,10 @@ class _State extends State<JoinChannelVideo> {
     _engine.registerEventHandler(_rtcEngineEventHandler);
     await _engine.setParameters('{"che.video.videoCodecIndex": 1}');
     await _engine.setParameters('{"rtc.video.enable_pvc": false}');
-    await _engine.setParameters('{"che.video.enable_auto_fallback_sw_encoder": false}');
-    await _engine.setAudioScenario(AudioScenarioType.audioScenarioGameStreaming);
+    await _engine
+        .setParameters('{"che.video.enable_auto_fallback_sw_encoder": false}');
+    await _engine
+        .setAudioScenario(AudioScenarioType.audioScenarioGameStreaming);
     await _engine.enableVideo();
     await _engine.startPreview();
   }
@@ -169,14 +171,16 @@ class _State extends State<JoinChannelVideo> {
 
     try {
       await _engine.setParameters(parameter);
-      logSink.log('[applyPrivateParameter] Private parameter applied successfully: $parameter');
+      logSink.log(
+          '[applyPrivateParameter] Private parameter applied successfully: $parameter');
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(content: Text('Private parameter applied')),
         );
       }
     } catch (e) {
-      logSink.log('[applyPrivateParameter] Failed to apply private parameter: $e');
+      logSink
+          .log('[applyPrivateParameter] Failed to apply private parameter: $e');
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(content: Text('Failed to apply private parameter: $e')),
@@ -192,10 +196,13 @@ class _State extends State<JoinChannelVideo> {
   Future<void> _setClientRole(ClientRoleType role) async {
     if (isJoined) {
       await _engine.setClientRole(role: role);
-      logSink.log('[setClientRole] Client role changed successfully: ${role.toString()}');
+      logSink.log(
+          '[setClientRole] Client role changed successfully: ${role.toString()}');
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Changed to ${role == ClientRoleType.clientRoleBroadcaster ? "Broadcaster" : "Audience"} role')),
+          SnackBar(
+              content: Text(
+                  'Changed to ${role == ClientRoleType.clientRoleBroadcaster ? "Broadcaster" : "Audience"} role')),
         );
       }
     }
@@ -215,21 +222,22 @@ class _State extends State<JoinChannelVideo> {
       displayContentBuilder: (context, isLayoutHorizontal) {
         return Stack(
           children: [
-            if (_clientRoleType == ClientRoleType.clientRoleBroadcaster) StatsMonitoringWidget(
-              rtcEngine: _engine,
-              uid: 0,
-              child: AgoraVideoView(
-                controller: VideoViewController(
-                  rtcEngine: _engine,
-                  canvas: const VideoCanvas(uid: 0),
-                  useFlutterTexture: _isUseFlutterTexture,
-                  useAndroidSurfaceView: _isUseAndroidSurfaceView,
+            if (_clientRoleType == ClientRoleType.clientRoleBroadcaster)
+              StatsMonitoringWidget(
+                rtcEngine: _engine,
+                uid: 0,
+                child: AgoraVideoView(
+                  controller: VideoViewController(
+                    rtcEngine: _engine,
+                    canvas: const VideoCanvas(uid: 0),
+                    useFlutterTexture: _isUseFlutterTexture,
+                    useAndroidSurfaceView: _isUseAndroidSurfaceView,
+                  ),
+                  onAgoraVideoViewCreated: (viewId) {
+                    _engine.startPreview();
+                  },
                 ),
-                onAgoraVideoViewCreated: (viewId) {
-                  _engine.startPreview();
-                },
               ),
-            ),
             Align(
               alignment: Alignment.topLeft,
               child: SingleChildScrollView(
@@ -334,12 +342,16 @@ class _State extends State<JoinChannelVideo> {
               items: [
                 ClientRoleType.clientRoleBroadcaster,
                 ClientRoleType.clientRoleAudience,
-              ].map((e) => DropdownMenuItem(
-                child: Text(
-                  e == ClientRoleType.clientRoleBroadcaster ? 'Broadcaster' : 'Audience',
-                ),
-                value: e,
-              )).toList(),
+              ]
+                  .map((e) => DropdownMenuItem(
+                        child: Text(
+                          e == ClientRoleType.clientRoleBroadcaster
+                              ? 'Broadcaster'
+                              : 'Audience',
+                        ),
+                        value: e,
+                      ))
+                  .toList(),
               value: _clientRoleType,
               onChanged: (v) {
                 if (v != null) {
@@ -368,19 +380,23 @@ class _State extends State<JoinChannelVideo> {
             const SizedBox(
               height: 20,
             ),
-            const Text('Private Parameters:', style: TextStyle(fontWeight: FontWeight.bold)),
+            const Text('Private Parameters:',
+                style: TextStyle(fontWeight: FontWeight.bold)),
             const SizedBox(height: 8),
             Row(
               children: [
                 Expanded(
                   child: ElevatedButton(
                     onPressed: () {
-                      _setPresetParameter('{"rtc.video.enable_sr":{"enabled":false,"mode":2}}');
+                      _setPresetParameter(
+                          '{"rtc.video.enable_sr":{"enabled":false,"mode":2}}');
                     },
                     style: ElevatedButton.styleFrom(
-                      padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 8),
+                      padding: const EdgeInsets.symmetric(
+                          vertical: 8, horizontal: 8),
                     ),
-                    child: const Text('SR Toggle', style: TextStyle(fontSize: 12)),
+                    child:
+                        const Text('SR Toggle', style: TextStyle(fontSize: 12)),
                   ),
                 ),
                 const SizedBox(width: 8),
@@ -390,9 +406,11 @@ class _State extends State<JoinChannelVideo> {
                       _setPresetParameter('{"che.audio.aiaec.working_mode":0}');
                     },
                     style: ElevatedButton.styleFrom(
-                      padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 8),
+                      padding: const EdgeInsets.symmetric(
+                          vertical: 8, horizontal: 8),
                     ),
-                    child: const Text('AIAEC Toggle', style: TextStyle(fontSize: 12)),
+                    child: const Text('AIAEC Toggle',
+                        style: TextStyle(fontSize: 12)),
                   ),
                 ),
               ],
@@ -433,7 +451,8 @@ class _State extends State<JoinChannelVideo> {
                         _leaveChannel();
                       } else {
                         _joinChannel();
-                        if (_clientRoleType == ClientRoleType.clientRoleBroadcaster) {
+                        if (_clientRoleType ==
+                            ClientRoleType.clientRoleBroadcaster) {
                           await _engine.startPreview();
                         } else {
                           await _engine.stopPreview();
