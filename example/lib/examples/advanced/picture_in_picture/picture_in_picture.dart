@@ -625,20 +625,24 @@ class _State extends State<PictureInPicture> with WidgetsBindingObserver {
                               items: [
                                 ClientRoleType.clientRoleBroadcaster,
                                 ClientRoleType.clientRoleAudience,
-                              ].map((role) => DropdownMenuItem(
-                                value: role,
-                                child: Text(
-                                  role.toString().split('.')[1],
-                                  style: const TextStyle(fontSize: 12),
-                                ),
-                              )).toList(),
-                              onChanged: _isJoined ? null : (value) {
-                                if (value != null) {
-                                  setState(() {
-                                    _clientRoleType = value;
-                                  });
-                                }
-                              },
+                              ]
+                                  .map((role) => DropdownMenuItem(
+                                        value: role,
+                                        child: Text(
+                                          role.toString().split('.')[1],
+                                          style: const TextStyle(fontSize: 12),
+                                        ),
+                                      ))
+                                  .toList(),
+                              onChanged: _isJoined
+                                  ? null
+                                  : (value) {
+                                      if (value != null) {
+                                        setState(() {
+                                          _clientRoleType = value;
+                                        });
+                                      }
+                                    },
                             ),
                           ),
                         ),
