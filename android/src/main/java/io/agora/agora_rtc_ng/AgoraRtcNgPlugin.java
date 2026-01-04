@@ -2,6 +2,7 @@ package io.agora.agora_rtc_ng;
 
 import android.app.Activity;
 import android.content.Context;
+import android.util.Log;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -9,7 +10,7 @@ import androidx.annotation.Nullable;
 import java.io.IOException;
 import java.lang.ref.WeakReference;
 import java.util.HashMap;
-
+import java.io.File;
 import io.flutter.embedding.engine.plugins.FlutterPlugin;
 import io.flutter.embedding.engine.plugins.activity.ActivityAware;
 import io.flutter.embedding.engine.plugins.activity.ActivityPluginBinding;
@@ -18,6 +19,7 @@ import io.flutter.plugin.common.MethodChannel;
 
 public class AgoraRtcNgPlugin implements FlutterPlugin, MethodChannel.MethodCallHandler, ActivityAware {
 
+    private static final String TAG = "AgoraRtcNgPlugin";
     private MethodChannel channel;
     private WeakReference<FlutterPluginBinding> flutterPluginBindingRef;
     private VideoViewController videoViewController;
@@ -67,14 +69,10 @@ public class AgoraRtcNgPlugin implements FlutterPlugin, MethodChannel.MethodCall
             // System.loadLibrary here to trigger the JNI_OnLoad explicitly.
             System.loadLibrary("AgoraRtcWrapper");
 
-            String externalFilesDir;
-            if (applicationContext != null) {
-                externalFilesDir = applicationContext.getExternalFilesDir(null).getAbsolutePath();
-            } else {
-                externalFilesDir = "";
-            }
+            String externalFilesDir = getReliableStoragePath(applicationContext);
+            final String finalPath = externalFilesDir;
             result.success(new HashMap<String, String>() {{
-                put("externalFilesDir", externalFilesDir);
+                put("externalFilesDir", finalPath);
             }});
         } else {
             result.notImplemented();
@@ -104,6 +102,80 @@ public class AgoraRtcNgPlugin implements FlutterPlugin, MethodChannel.MethodCall
             }
         }
         result.error("IllegalArgumentException", "The parameter should not be null", null);
+    }
+
+    private String getReliableStoragePath(Context context) {
+        if (context == null) {
+            Log.e(TAG, "Context is null");
+            return "";
+        }
+
+        try {
+            File externalDir = context.getExternalFilesDir(null);
+            if (isDirectoryUsable(externalDir)) {
+                String path = externalDir.getAbsolutePath();
+                Log.d(TAG, "Using external storage: " + path);
+                return path;
+            }
+            Log.w(TAG, "External storage not usable");
+        } catch (Exception e) {
+            Log.e(TAG, "External storage error: " + e.getMessage());
+        }
+
+        try {
+            File internalDir = context.getFilesDir();
+            if (internalDir != null) {
+                String path = internalDir.getAbsolutePath();
+                Log.w(TAG, "Using internal storage (fallback): " + path);
+                return path;
+            }
+        } catch (Exception e) {
+            Log.e(TAG, "Internal storage error: " + e.getMessage());
+        }
+
+        Log.e(TAG, "All storage options failed, returning empty string");
+        return "";
+    }
+
+    private boolean isDirectoryUsable(File dir) {
+        if (dir == null) {
+            return false;
+        }
+
+        if (!dir.exists()) {
+            try {
+                if (!dir.mkdirs() && !dir.exists()) {
+                    Log.w(TAG, "Failed to create directory");
+                    return false;
+                }
+            } catch (SecurityException e) {
+                Log.e(TAG, "Security exception when creating directory: " + e.getMessage());
+                return false;
+            }
+        }
+
+        if (!dir.isDirectory()) {
+            Log.w(TAG, "Path exists but is not a directory");
+            return false;
+        }
+
+        if (!dir.canWrite()) {
+            Log.w(TAG, "Directory is not writable");
+            return false;
+        }
+
+        File testFile = new File(dir, ".agora_storage_test");
+        try {
+            if (testFile.createNewFile()) {
+                testFile.delete();
+                return true;
+            }
+            Log.w(TAG, "Cannot create test file in directory");
+            return false;
+        } catch (IOException e) {
+            Log.e(TAG, "Write test failed: " + e.getMessage());
+            return false;
+        }
     }
 
     @Override
