@@ -17,10 +17,12 @@ public class TextureRenderer implements AgoraRenderPerformanceDelegate {
 
     private final IrisRenderer irisRenderer;
     private final MethodChannel methodChannel;
+    private final MethodChannel sharedMethodChannel;  // Shared channel from VideoViewController
     private final Handler handler;
     private SurfaceTexture flutterSurfaceTexture;
     private Surface renderSurface;
     private final long uid;
+    private final long textureId;
     
     // Performance monitor
     private final AgoraRenderPerformanceMonitor performanceMonitor;
@@ -28,6 +30,7 @@ public class TextureRenderer implements AgoraRenderPerformanceDelegate {
     public TextureRenderer(
             TextureRegistry textureRegistry,
             BinaryMessenger binaryMessenger,
+            MethodChannel sharedMethodChannel,  // Pass shared channel
             long irisRtcRenderingHandle,
             long uid,
             String channelId,
@@ -35,8 +38,10 @@ public class TextureRenderer implements AgoraRenderPerformanceDelegate {
 
         this.handler = new Handler(Looper.getMainLooper());
         this.uid = uid;
+        this.sharedMethodChannel = sharedMethodChannel;
 
         this.flutterTexture = textureRegistry.createSurfaceTexture();
+        this.textureId = flutterTexture.id();
         this.flutterSurfaceTexture = this.flutterTexture.surfaceTexture();
 
         this.renderSurface = new Surface(this.flutterSurfaceTexture);
@@ -94,11 +99,29 @@ public class TextureRenderer implements AgoraRenderPerformanceDelegate {
     }
 
     public long getTextureId() {
-        return flutterTexture.id();
+        return textureId;
     }
 
     public void dispose() {
-        this.methodChannel.setMethodCallHandler(null);
+        // Force report final stats with callback before cleanup
+        final MethodChannel channel = this.sharedMethodChannel;
+        final long texId = this.textureId;
+        final long uidValue = this.uid;
+        
+        if (performanceMonitor != null) {
+            performanceMonitor.forceReportWithCallback(stats -> {
+                if (channel != null) {
+                    Map<String, Object> statsMap = new HashMap<>(stats.toDictionary());
+                    statsMap.put("textureId", texId);
+                    statsMap.put("uid", uidValue);
+                    
+                    handler.post(() -> {
+                        channel.invokeMethod("onVideoRenderingPerformance", statsMap);
+                    });
+                }
+            });
+        }
+        
         irisRenderer.stopRenderingToSurface();
         this.irisRenderer.setCallback(null);
         this.irisRenderer.setPerformanceCallback(null);
@@ -106,6 +129,7 @@ public class TextureRenderer implements AgoraRenderPerformanceDelegate {
         // Clean up performance monitor
         if (performanceMonitor != null) {
             performanceMonitor.setDelegate(null);
+            performanceMonitor.dispose();
         }
         
         if (renderSurface != null) {
@@ -117,13 +141,13 @@ public class TextureRenderer implements AgoraRenderPerformanceDelegate {
 
     @Override
     public void onPerformanceStatsUpdated(AgoraRenderPerformanceStats stats) {
-        // Send performance stats to Flutter layer via method channel
+        // Send performance stats to Flutter layer via shared method channel
         Map<String, Object> statsMap = new HashMap<>(stats.toDictionary());
-        statsMap.put("textureId", getTextureId());
+        statsMap.put("textureId", textureId);
         statsMap.put("uid", uid);
         
         handler.post(() -> {
-            methodChannel.invokeMethod("onVideoRenderingPerformance", statsMap);
+            sharedMethodChannel.invokeMethod("onVideoRenderingPerformance", statsMap);
         });
     }
 }

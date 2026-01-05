@@ -55,7 +55,7 @@ public class AgoraRenderPerformanceMonitor {
 
     private AgoraRenderPerformanceDelegate delegate;
     private boolean enabled = true;
-    private long reportIntervalMs = 6000; // Report once per second
+    private long reportIntervalMs = 6000; // Report once per 6 seconds
 
     private final List<Long> frameReceiveTimestamps = new ArrayList<>();
     private final List<Long> frameRenderTimestamps = new ArrayList<>();
@@ -65,10 +65,19 @@ public class AgoraRenderPerformanceMonitor {
     private long totalFramesRendered = 0;
     private long lastReportTime;
 
+    // Period counters for accurate FPS calculation
+    private long periodFramesReceived = 0;
+    private long periodFramesRendered = 0;
+    private long periodStartTime;
+
+    // Timer for periodic reporting
+    private java.util.Timer reportTimer;
     private final Object lock = new Object();
 
     public AgoraRenderPerformanceMonitor() {
         this.lastReportTime = System.currentTimeMillis();
+        this.periodStartTime = System.currentTimeMillis();
+        startReportTimer();
     }
 
     public void setDelegate(AgoraRenderPerformanceDelegate delegate) {
@@ -86,6 +95,39 @@ public class AgoraRenderPerformanceMonitor {
     public void setReportIntervalMs(long intervalMs) {
         synchronized (lock) {
             this.reportIntervalMs = intervalMs;
+            // Restart timer with new interval
+            stopReportTimer();
+            startReportTimer();
+        }
+    }
+
+    private void startReportTimer() {
+        if (reportTimer != null) {
+            return; // Already running
+        }
+        
+        reportTimer = new java.util.Timer("AgoraPerformanceReportTimer", true);
+        reportTimer.scheduleAtFixedRate(new java.util.TimerTask() {
+            @Override
+            public void run() {
+                performPeriodicReport();
+            }
+        }, reportIntervalMs, reportIntervalMs);
+    }
+
+    private void stopReportTimer() {
+        if (reportTimer != null) {
+            reportTimer.cancel();
+            reportTimer = null;
+        }
+    }
+
+    private void performPeriodicReport() {
+        synchronized (lock) {
+            AgoraRenderPerformanceStats stats = computeStatsAndReset();
+            if (stats != null && delegate != null) {
+                delegate.onPerformanceStatsUpdated(stats);
+            }
         }
     }
 
@@ -103,8 +145,7 @@ public class AgoraRenderPerformanceMonitor {
                 frameReceiveTimestamps.remove(0);
             }
             totalFramesReceived++;
-
-            checkAndReportStats();
+            periodFramesReceived++; // Increment period counter
         }
     }
 
@@ -134,8 +175,7 @@ public class AgoraRenderPerformanceMonitor {
             }
 
             totalFramesRendered++;
-
-            checkAndReportStats();
+            periodFramesRendered++; // Increment period counter
         }
     }
 
@@ -154,53 +194,60 @@ public class AgoraRenderPerformanceMonitor {
         }
     }
 
-    private void checkAndReportStats() {
-        long now = System.currentTimeMillis();
-        long timeSinceLastReport = now - lastReportTime;
-
-        if (timeSinceLastReport >= reportIntervalMs) {
-            lastReportTime = now;
-
-            AgoraRenderPerformanceStats stats = computeStatsInternal();
-
-            if (delegate != null) {
-                delegate.onPerformanceStatsUpdated(stats);
-            }
+    /**
+     * Get current performance statistics without resetting counters.
+     */
+    public AgoraRenderPerformanceStats getCurrentStats() {
+        synchronized (lock) {
+            return computeStatsInternal(false);
         }
     }
 
     /**
-     * Get current performance statistics.
+     * Force report with callback for final stats during disposal.
      */
-    public AgoraRenderPerformanceStats getCurrentStats() {
+    public void forceReportWithCallback(java.util.function.Consumer<AgoraRenderPerformanceStats> callback) {
         synchronized (lock) {
-            return computeStatsInternal();
+            AgoraRenderPerformanceStats stats = computeStatsAndReset();
+            if (stats != null && callback != null) {
+                callback.accept(stats);
+            }
         }
     }
 
-    private AgoraRenderPerformanceStats computeStatsInternal() {
-        AgoraRenderPerformanceStats stats = new AgoraRenderPerformanceStats();
+    private AgoraRenderPerformanceStats computeStatsAndReset() {
+        return computeStatsInternal(true);
+    }
 
-        stats.renderInputFps = calculateFPS(frameReceiveTimestamps);
-        stats.renderOutputFps = calculateFPS(frameRenderTimestamps);
+    private AgoraRenderPerformanceStats computeStatsInternal(boolean shouldReset) {
+        long now = System.currentTimeMillis();
+        long actualPeriodDuration = now - periodStartTime;
+
+        if (actualPeriodDuration <= 0) {
+            return null; // Avoid division by zero
+        }
+
+        // Calculate FPS based on frame counts in this period
+        double periodDurationSeconds = actualPeriodDuration / 1000.0;
+        double inputFps = periodFramesReceived / periodDurationSeconds;
+        double outputFps = periodFramesRendered / periodDurationSeconds;
+
+        AgoraRenderPerformanceStats stats = new AgoraRenderPerformanceStats();
+        stats.renderInputFps = inputFps;
+        stats.renderOutputFps = outputFps;
         stats.renderFrameIntervalMs = calculateAverageFrameInterval();
         stats.renderDrawCostMs = calculateAverageRenderDrawCost();
         stats.totalFramesReceived = totalFramesReceived;
         stats.totalFramesRendered = totalFramesRendered;
 
+        // Reset period counters only if requested
+        if (shouldReset) {
+            periodFramesReceived = 0;
+            periodFramesRendered = 0;
+            periodStartTime = now;
+        }
+
         return stats;
-    }
-
-    private double calculateFPS(List<Long> timestamps) {
-        if (timestamps.size() < 2) return 0.0;
-
-        long first = timestamps.get(0);
-        long last = timestamps.get(timestamps.size() - 1);
-        double durationSeconds = (last - first) / 1000.0;
-
-        if (durationSeconds <= 0) return 0.0;
-
-        return (timestamps.size() - 1) / durationSeconds;
     }
 
     private double calculateAverageFrameInterval() {
@@ -236,7 +283,20 @@ public class AgoraRenderPerformanceMonitor {
             renderDrawCostSamples.clear();
             totalFramesReceived = 0;
             totalFramesRendered = 0;
+            periodFramesReceived = 0;
+            periodFramesRendered = 0;
             lastReportTime = System.currentTimeMillis();
+            periodStartTime = System.currentTimeMillis();
+        }
+    }
+
+    /**
+     * Clean up resources.
+     */
+    public void dispose() {
+        stopReportTimer();
+        synchronized (lock) {
+            delegate = null;
         }
     }
 }

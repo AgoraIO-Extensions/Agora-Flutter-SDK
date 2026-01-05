@@ -86,25 +86,29 @@ class VideoRenderingPerformanceMonitor {
   }
 
   void _handlePerformanceStats(dynamic arguments) {
-    try {
-      final stats = VideoRenderingPerformanceStats.fromJson(
-        Map<String, dynamic>.from(arguments as Map),
-      );
-
-      // Dispatch to all registered handlers
-      for (final handler in _handlers) {
-        try {
-          handler.onVideoRenderingPerformance(stats);
-        } catch (e) {
-          debugPrint(
-              '[VideoRenderingPerformanceMonitor] Error in handler: $e');
-        }
-      }
-    } catch (e) {
-      debugPrint(
-          '[VideoRenderingPerformanceMonitor] Failed to parse performance stats: $e');
-      debugPrint('[VideoRenderingPerformanceMonitor] Raw arguments: $arguments');
+    if (_handlers.isEmpty) {
+      return;
     }
+    Future(() {
+      try {
+        final stats = VideoRenderingPerformanceStats.fromJson(
+          Map<String, dynamic>.from(arguments as Map),
+        );
+
+        // Dispatch to all registered handlers
+        for (final handler in _handlers) {
+          try {
+            handler.onVideoRenderingPerformance(stats);
+          } catch (e) {
+            debugPrint(
+                '[VideoRenderingPerformanceMonitor] Error in handler: $e');
+          }
+        }
+      } catch (e) {
+        debugPrint(
+            '[VideoRenderingPerformanceMonitor] Failed to parse performance stats: $e');
+      }
+    });
   }
 
   /// Get the number of currently monitored textures.

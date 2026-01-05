@@ -136,11 +136,11 @@ class PerformanceStatsHandler implements VideoRenderingPerformanceEventHandler {
     // Note: VideoRenderingPerformanceMonitor already dispatched to US, so don't loop back.
     // But if there are other handlers, they got the message too.
 
-    debugPrint(
-        'xpz == ${DateTime.now().toString()} [AgoraRenderTexture] Performance: isLocal=$isLocal, channelId=$effectiveChannelId, localUid=$effectiveLocalUid, UID=$uid, InFPS=${stats.renderInputFps?.toStringAsFixed(1)}, '
-        'OutFPS=${stats.renderOutputFps?.toStringAsFixed(1)}, '
-        'Interval=${stats.renderFrameIntervalMs?.toStringAsFixed(2)}ms, '
-        'DrawCost=${stats.renderDrawCostMs?.toStringAsFixed(2)}ms');
+    // debugPrint(
+    //     '${DateTime.now().toString()} [AgoraRenderTexture] Performance: isLocal=$isLocal, channelId=$effectiveChannelId, localUid=$effectiveLocalUid, UID=$uid, InFPS=${stats.renderInputFps?.toStringAsFixed(1)}, '
+    //     'OutFPS=${stats.renderOutputFps?.toStringAsFixed(1)}, '
+    //     'Interval=${stats.renderFrameIntervalMs?.toStringAsFixed(2)}ms, '
+    //     'DrawCost=${stats.renderDrawCostMs?.toStringAsFixed(2)}ms');
   }
 }
 
@@ -161,7 +161,6 @@ class PerformanceDataCollector {
   static const int _gracePeriodMs = 2000;
 
   Timer? _uploadTimer;
-  // 延迟上传时间，用于聚合同一批次的多个 uid 数据
   static const Duration _uploadDelay = Duration(milliseconds: 100);
 
   // Set of channel keys that have pending data to upload
@@ -193,8 +192,6 @@ class PerformanceDataCollector {
         _clearedChannelsGracePeriod.remove(key);
       }
     }
-
-    // 获取或创建该频道的数据容器
     _channelDataMap.putIfAbsent(
       key,
       () => _ChannelPerformanceData(
@@ -204,11 +201,9 @@ class PerformanceDataCollector {
       ),
     );
 
-    // 添加该 uid 的数据
     _channelDataMap[key]!.addUidData(uid, counters);
     _pendingChannelKeys.add(key);
 
-    // 如果没有正在运行的定时器，则开启一个新的
     _uploadTimer ??= Timer(_uploadDelay, () {
         _uploadPendingData();
         _uploadTimer = null;
@@ -258,7 +253,7 @@ class PerformanceDataCollector {
       _channelDataMap[key]!.uploadAndClear();
       _channelDataMap.remove(key);
       debugPrint(
-          'xpz == [PerformanceDataCollector] Cleared data for channel: $key');
+          '[PerformanceDataCollector] Cleared data for channel: $key');
     }
   }
 
@@ -336,9 +331,8 @@ class _ChannelPerformanceData {
         "localUid": localUid,
       }
     };
-    // TODO: Uncomment when ready to upload to SDK
     // rtcEngine.setParameters(jsonEncode(params));
-    debugPrint('xpz ==[AgoraRenderTexture] Performance: $params');
+    // debugPrint('xpz ==[AgoraRenderTexture] Performance: $params');
     _uidDataMap.clear();
   }
 }
