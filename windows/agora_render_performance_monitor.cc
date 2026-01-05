@@ -3,6 +3,7 @@
 #include <chrono>
 #include <cmath>
 #include <numeric>
+#include <thread>
 
 namespace agora {
 namespace rtc {
@@ -25,15 +26,22 @@ AgoraRenderPerformanceMonitor::AgoraRenderPerformanceMonitor()
       enabled_(true),
       reportIntervalMs_(6000),
       totalFramesReceived_(0),
-      totalFramesRendered_(0) {
+      totalFramesRendered_(0),
+      periodFramesReceived_(0),
+      periodFramesRendered_(0),
+      reportThread_(nullptr),
+      timerRunning_(false) {
     frameReceiveTimestamps_.reserve(MAX_SAMPLE_SIZE);
     frameRenderTimestamps_.reserve(MAX_SAMPLE_SIZE);
     frameIntervalSamples_.reserve(MAX_SAMPLE_SIZE);
     renderDrawCostSamples_.reserve(MAX_SAMPLE_SIZE);
     lastReportTime_ = currentTimeMs();
+    periodStartTime_ = currentTimeMs();
+    startReportTimer();
 }
 
 AgoraRenderPerformanceMonitor::~AgoraRenderPerformanceMonitor() {
+    stopReportTimer();
     delegate_ = nullptr;
 }
 
@@ -49,7 +57,48 @@ void AgoraRenderPerformanceMonitor::setEnabled(bool enabled) {
 
 void AgoraRenderPerformanceMonitor::setReportIntervalMs(int64_t intervalMs) {
     std::lock_guard<std::mutex> lock(mutex_);
-    reportIntervalMs_ = intervalMs;
+    if (reportIntervalMs_ != intervalMs) {
+        reportIntervalMs_ = intervalMs;
+        // Restart timer with new interval
+        stopReportTimer();
+        startReportTimer();
+    }
+}
+
+void AgoraRenderPerformanceMonitor::startReportTimer() {
+    if (timerRunning_) {
+        return; // Already running
+    }
+
+    timerRunning_ = true;
+    reportThread_ = new std::thread([this]() {
+        while (timerRunning_) {
+            std::this_thread::sleep_for(std::chrono::milliseconds(reportIntervalMs_));
+            if (timerRunning_) {
+                performPeriodicReport();
+            }
+        }
+    });
+}
+
+void AgoraRenderPerformanceMonitor::stopReportTimer() {
+    if (timerRunning_) {
+        timerRunning_ = false;
+        if (reportThread_ && reportThread_->joinable()) {
+            reportThread_->join();
+        }
+        delete reportThread_;
+        reportThread_ = nullptr;
+    }
+}
+
+void AgoraRenderPerformanceMonitor::performPeriodicReport() {
+    std::lock_guard<std::mutex> lock(mutex_);
+    AgoraRenderPerformanceStats stats = computeStatsAndReset();
+    
+    if (delegate_) {
+        delegate_->onPerformanceStatsUpdated(stats);
+    }
 }
 
 void AgoraRenderPerformanceMonitor::recordFrameReceived() {
@@ -63,8 +112,7 @@ void AgoraRenderPerformanceMonitor::recordFrameReceived() {
         frameReceiveTimestamps_.erase(frameReceiveTimestamps_.begin());
     }
     totalFramesReceived_++;
-
-    checkAndReportStats();
+    periodFramesReceived_++; // Increment period counter
 }
 
 void AgoraRenderPerformanceMonitor::recordFrameRenderedInterval() {
@@ -89,8 +137,7 @@ void AgoraRenderPerformanceMonitor::recordFrameRenderedInterval() {
     }
 
     totalFramesRendered_++;
-
-    checkAndReportStats();
+    periodFramesRendered_++; // Increment period counter
 }
 
 void AgoraRenderPerformanceMonitor::recordRenderDrawCostWithValue(double drawCostMs) {
@@ -103,48 +150,50 @@ void AgoraRenderPerformanceMonitor::recordRenderDrawCostWithValue(double drawCos
     }
 }
 
-void AgoraRenderPerformanceMonitor::checkAndReportStats() {
-    int64_t now = currentTimeMs();
-    int64_t timeSinceLastReport = now - lastReportTime_;
+AgoraRenderPerformanceStats AgoraRenderPerformanceMonitor::getCurrentStats() {
+    std::lock_guard<std::mutex> lock(mutex_);
+    return computeStatsInternal(false); // Don't reset
+}
 
-    if (timeSinceLastReport >= reportIntervalMs_) {
-        lastReportTime_ = now;
-
-        AgoraRenderPerformanceStats stats = computeStatsInternal();
-
-        if (delegate_) {
-            delegate_->onPerformanceStatsUpdated(stats);
-        }
+void AgoraRenderPerformanceMonitor::forceReportWithCallback(
+    std::function<void(const AgoraRenderPerformanceStats&)> callback) {
+    std::lock_guard<std::mutex> lock(mutex_);
+    AgoraRenderPerformanceStats stats = computeStatsAndReset(); // Reset for final report
+    if (callback) {
+        callback(stats);
     }
 }
 
-AgoraRenderPerformanceStats AgoraRenderPerformanceMonitor::getCurrentStats() {
-    std::lock_guard<std::mutex> lock(mutex_);
-    return computeStatsInternal();
+AgoraRenderPerformanceStats AgoraRenderPerformanceMonitor::computeStatsAndReset() {
+    return computeStatsInternal(true);
 }
 
-AgoraRenderPerformanceStats AgoraRenderPerformanceMonitor::computeStatsInternal() {
+AgoraRenderPerformanceStats AgoraRenderPerformanceMonitor::computeStatsInternal(bool shouldReset) {
+    int64_t now = currentTimeMs();
+    int64_t actualPeriodDuration = now - periodStartTime_;
+
+    // Calculate FPS based on frame counts in this period
+    double periodDurationSeconds = actualPeriodDuration / 1000.0;
+    double inputFps = (periodDurationSeconds > 0) ? (periodFramesReceived_ / periodDurationSeconds) : 0.0;
+    double outputFps = (periodDurationSeconds > 0) ? (periodFramesRendered_ / periodDurationSeconds) : 0.0;
+
     AgoraRenderPerformanceStats stats;
     stats.uid = 0; // Will be set by caller
-    stats.renderInputFps = calculateFPS(frameReceiveTimestamps_);
-    stats.renderOutputFps = calculateFPS(frameRenderTimestamps_);
+    stats.renderInputFps = inputFps;
+    stats.renderOutputFps = outputFps;
     stats.renderFrameIntervalMs = calculateAverageFrameInterval();
     stats.renderDrawCostMs = calculateAverageRenderDrawCost();
     stats.totalFramesReceived = totalFramesReceived_;
     stats.totalFramesRendered = totalFramesRendered_;
+
+    // Reset period counters only if requested
+    if (shouldReset) {
+        periodFramesReceived_ = 0;
+        periodFramesRendered_ = 0;
+        periodStartTime_ = now;
+    }
+
     return stats;
-}
-
-double AgoraRenderPerformanceMonitor::calculateFPS(const std::vector<int64_t>& timestamps) {
-    if (timestamps.size() < 2) return 0.0;
-
-    int64_t first = timestamps.front();
-    int64_t last = timestamps.back();
-    double durationSeconds = (last - first) / 1000.0;
-
-    if (durationSeconds <= 0) return 0.0;
-
-    return (timestamps.size() - 1) / durationSeconds;
 }
 
 double AgoraRenderPerformanceMonitor::calculateAverageFrameInterval() {
@@ -169,7 +218,10 @@ void AgoraRenderPerformanceMonitor::reset() {
     renderDrawCostSamples_.clear();
     totalFramesReceived_ = 0;
     totalFramesRendered_ = 0;
+    periodFramesReceived_ = 0;
+    periodFramesRendered_ = 0;
     lastReportTime_ = currentTimeMs();
+    periodStartTime_ = currentTimeMs();
 }
 
 int64_t AgoraRenderPerformanceMonitor::currentTimeMs() {

@@ -17,6 +17,7 @@ class TextureRender : public agora::iris::VideoFrameObserverDelegate,
 public:
     TextureRender(flutter::BinaryMessenger *messenger,
                   flutter::TextureRegistrar *registrar,
+                  flutter::MethodChannel<flutter::EncodableValue> *shared_method_channel,
                   agora::iris::IrisRtcRendering *iris_rtc_rendering);
     virtual ~TextureRender();
 
@@ -45,7 +46,8 @@ private:
 public:
     flutter::TextureRegistrar *registrar_;
     agora::iris::IrisRtcRendering *iris_rtc_rendering_;
-    std::unique_ptr<flutter::MethodChannel<flutter::EncodableValue>> method_channel_;
+    flutter::MethodChannel<flutter::EncodableValue> *shared_method_channel_;  // Shared channel
+    std::unique_ptr<flutter::MethodChannel<flutter::EncodableValue>> method_channel_; // Private channel
 
     int64_t texture_id_ = -1;
 

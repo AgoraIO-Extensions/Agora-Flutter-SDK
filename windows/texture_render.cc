@@ -9,9 +9,11 @@ using namespace flutter;
 
 TextureRender::TextureRender(flutter::BinaryMessenger *messenger,
                              flutter::TextureRegistrar *registrar,
+                             flutter::MethodChannel<EncodableValue> *shared_method_channel,
                              agora::iris::IrisRtcRendering *iris_rtc_rendering)
     : registrar_(registrar),
       iris_rtc_rendering_(iris_rtc_rendering),
+      shared_method_channel_(shared_method_channel),
       delegate_id_(agora::iris::INVALID_DELEGATE_ID),
       is_dirty_(false),
       last_frame_received_time_micros_(0)
@@ -177,6 +179,30 @@ void TextureRender::UpdateData(unsigned int uid, const std::string &channelId, u
 
 void TextureRender::Dispose()
 {
+    // Force report final stats with callback before cleanup
+    auto channel = shared_method_channel_;
+    auto texId = texture_id_;
+    auto uidValue = uid_;
+    
+    if (performance_monitor_) {
+        performance_monitor_->forceReportWithCallback([channel, texId, uidValue](const agora::rtc::flutter::AgoraRenderPerformanceStats& stats) {
+            if (channel) {
+                flutter::EncodableMap statsMap;
+                auto dict = stats.toDictionary();
+                
+                for (const auto& pair : dict) {
+                    statsMap[EncodableValue(pair.first)] = EncodableValue(pair.second);
+                }
+                
+                statsMap[EncodableValue("textureId")] = EncodableValue(static_cast<int64_t>(texId));
+                statsMap[EncodableValue("uid")] = EncodableValue(static_cast<int64_t>(uidValue));
+
+                channel->InvokeMethod("onVideoRenderingPerformance", 
+                                     std::make_unique<EncodableValue>(EncodableValue(statsMap)));
+            }
+        });
+    }
+    
     if (iris_rtc_rendering_)
     {
         iris_rtc_rendering_->RemoveVideoFrameObserverDelegate(delegate_id_);
@@ -204,11 +230,11 @@ void TextureRender::Dispose()
 
 void TextureRender::onPerformanceStatsUpdated(const agora::rtc::flutter::AgoraRenderPerformanceStats& stats)
 {
-    if (!method_channel_) {
+    if (!shared_method_channel_) {
         return;
     }
 
-    // Send performance stats to Flutter layer via method channel
+    // Send performance stats to Flutter layer via shared method channel
     flutter::EncodableMap statsMap;
     auto dict = stats.toDictionary();
     
@@ -219,6 +245,6 @@ void TextureRender::onPerformanceStatsUpdated(const agora::rtc::flutter::AgoraRe
     statsMap[EncodableValue("textureId")] = EncodableValue(static_cast<int64_t>(texture_id_));
     statsMap[EncodableValue("uid")] = EncodableValue(static_cast<int64_t>(uid_));
 
-    method_channel_->InvokeMethod("onVideoRenderingPerformance", 
-                                   std::make_unique<EncodableValue>(EncodableValue(statsMap)));
+    shared_method_channel_->InvokeMethod("onVideoRenderingPerformance", 
+                                        std::make_unique<EncodableValue>(EncodableValue(statsMap)));
 }

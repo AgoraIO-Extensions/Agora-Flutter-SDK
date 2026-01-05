@@ -76,15 +76,20 @@ public:
     /// Get current performance statistics.
     AgoraRenderPerformanceStats getCurrentStats();
 
+    /// Force report with callback for final stats during disposal.
+    void forceReportWithCallback(std::function<void(const AgoraRenderPerformanceStats&)> callback);
+
     /// Reset all statistics.
     void reset();
 
 private:
     static const int MAX_SAMPLE_SIZE = 100;
 
-    void checkAndReportStats();
-    AgoraRenderPerformanceStats computeStatsInternal();
-    double calculateFPS(const std::vector<int64_t>& timestamps);
+    void startReportTimer();
+    void stopReportTimer();
+    void performPeriodicReport();
+    AgoraRenderPerformanceStats computeStatsAndReset();
+    AgoraRenderPerformanceStats computeStatsInternal(bool shouldReset);
     double calculateAverageFrameInterval();
     double calculateAverageRenderDrawCost();
     int64_t currentTimeMs();
@@ -100,6 +105,15 @@ private:
     int64_t totalFramesReceived_;
     int64_t totalFramesRendered_;
     int64_t lastReportTime_;
+
+    // Period counters for accurate FPS calculation
+    int64_t periodFramesReceived_;
+    int64_t periodFramesRendered_;
+    int64_t periodStartTime_;
+
+    // Timer for periodic reporting
+    std::thread* reportThread_;
+    std::atomic<bool> timerRunning_;
 
     std::mutex mutex_;
 };
