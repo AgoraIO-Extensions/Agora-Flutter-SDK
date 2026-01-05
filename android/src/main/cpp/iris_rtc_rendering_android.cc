@@ -12,6 +12,7 @@
 #include <jni.h>
 #include <memory>
 #include <vector>
+#include <chrono>
 
 namespace agora {
 namespace iris {
@@ -691,13 +692,19 @@ class NativeTextureRenderer final
       JNIEnv *env, jobject j_iris_renderer_obj, jobject surface_jni,
       agora::iris::IrisRtcRendering *iris_rtc_rendering, unsigned int uid,
       const char *channel_id, int video_source_type, int video_view_setup_mode)
-      : jvm_(nullptr), iris_rtc_rendering_(iris_rtc_rendering), width_(0),
+      : jvm_(nullptr), iris_rtc_rendering_(iris_rtc_rendering), uid_(uid), width_(0),
         height_(0) {
     env->GetJavaVM(&jvm_);
     j_iris_renderer_obj_ = env->NewGlobalRef(j_iris_renderer_obj);
     jclass j_caller_class = env->GetObjectClass(j_iris_renderer_obj_);
     j_on_size_changed_method_ =
         env->GetMethodID(j_caller_class, "onSizeChanged", "(II)V");
+    j_record_frame_received_method_ =
+        env->GetMethodID(j_caller_class, "recordFrameReceived", "()V");
+    j_record_frame_rendered_interval_method_ =
+        env->GetMethodID(j_caller_class, "recordFrameRenderedInterval", "()V");
+    j_record_render_draw_cost_method_ =
+        env->GetMethodID(j_caller_class, "recordRenderDrawCost", "(D)V");
     env->DeleteLocalRef(j_caller_class);
 
     native_windows_ = ANativeWindow_fromSurface(env, surface_jni);
@@ -733,6 +740,13 @@ class NativeTextureRenderer final
         static_cast<const agora::media::base::VideoFrame *>(videoFrame);
 
     if (video_frame->width == 0 || video_frame->height == 0) { return; }
+
+    // Capture frame received timestamp locally to avoid race conditions
+    int64_t frame_received_time_micros = std::chrono::duration_cast<std::chrono::microseconds>(
+        std::chrono::steady_clock::now().time_since_epoch()).count();
+
+    // Record frame received for FPS calculation
+    RecordFrameReceived();
 
     if (width_ != video_frame->width || height_ != video_frame->height) {
       NotifySizeChangeCallback(video_frame->width, video_frame->height);
@@ -777,9 +791,22 @@ class NativeTextureRenderer final
       }
     }
 
+    // Record frame rendered interval before actual rendering
+    // This measures the time between consecutive textureFrameAvailable notifications
+    RecordFrameRenderedInterval();
+
     rendering_op_->Rendering(video_frame);
 
     gl_context_->GLContextClearCurrent();
+
+    // Calculate render draw cost using the locally captured timestamp
+    // Measured after GLContextClearCurrent() to include the complete rendering pipeline
+    int64_t now_micros = std::chrono::duration_cast<std::chrono::microseconds>(
+        std::chrono::steady_clock::now().time_since_epoch()).count();
+    double draw_cost_ms = (now_micros - frame_received_time_micros) / 1000.0;
+
+    // Record render draw cost with the calculated value
+    RecordRenderDrawCostWithValue(draw_cost_ms);
   }
 
   void Dispose() {
@@ -811,14 +838,36 @@ class NativeTextureRenderer final
   }
 
  private:
+  void RecordFrameReceived() {
+    if (!j_iris_renderer_obj_) { return; }
+    ::iris::AttachThreadScoped ats(jvm_);
+    ats.env()->CallVoidMethod(j_iris_renderer_obj_, j_record_frame_received_method_);
+  }
+
+  void RecordFrameRenderedInterval() {
+    if (!j_iris_renderer_obj_) { return; }
+    ::iris::AttachThreadScoped ats(jvm_);
+    ats.env()->CallVoidMethod(j_iris_renderer_obj_, j_record_frame_rendered_interval_method_);
+  }
+
+  void RecordRenderDrawCostWithValue(double draw_cost_ms) {
+    if (!j_iris_renderer_obj_) { return; }
+    ::iris::AttachThreadScoped ats(jvm_);
+    ats.env()->CallVoidMethod(j_iris_renderer_obj_, j_record_render_draw_cost_method_, draw_cost_ms);
+  }
+
   JavaVM *jvm_;
   jobject j_iris_renderer_obj_;
   jmethodID j_on_size_changed_method_;
+  jmethodID j_record_frame_received_method_;
+  jmethodID j_record_frame_rendered_interval_method_;
+  jmethodID j_record_render_draw_cost_method_;
 
   agora::iris::IrisRtcRendering *iris_rtc_rendering_;
   ANativeWindow *native_windows_;
   int width_;
   int height_;
+  unsigned int uid_;
 
   int delegate_id_;
 

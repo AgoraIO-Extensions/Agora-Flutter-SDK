@@ -14,6 +14,7 @@
 - (instancetype)
 initWithTextureRegistry:(NSObject<FlutterTextureRegistry> *)textureRegistry
                   messenger:(NSObject<FlutterBinaryMessenger> *)messenger
+              methodChannel:(FlutterMethodChannel *)methodChannel
 irisRtcRenderingHandle:(void *)irisRtcRenderingHandle;
 
 - (void)updateData:(NSNumber *)uid channelId:(NSString *)channelId videoSourceType:(NSNumber *)videoSourceType videoViewSetupMode:(NSNumber *)videoViewSetupMode;

@@ -24,6 +24,7 @@ list(APPEND PLUGIN_SOURCES
   "agora_rtc_engine_plugin.cpp"
   "texture_render.cc"
   "video_view_controller.cc"
+  "agora_render_performance_monitor.cc"
 )
 
 # Define the plugin library target. Its name must not be changed (see comment

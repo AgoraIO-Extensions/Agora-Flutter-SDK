@@ -16,6 +16,7 @@ import 'package:agora_rtc_engine_example/examples/advanced/start_direct_cdn_stre
 import 'package:agora_rtc_engine_example/examples/advanced/start_local_video_transcoder/start_local_video_transcoder.dart';
 import 'package:agora_rtc_engine_example/examples/advanced/stream_message/stream_message.dart';
 import 'package:agora_rtc_engine_example/examples/advanced/take_snapshot/take_snapshot.dart';
+import 'package:agora_rtc_engine_example/examples/advanced/video_performance_monitor.dart';
 import 'package:flutter/foundation.dart';
 
 import 'audio_effect_mixing/audio_effect_mixing.dart';
@@ -37,6 +38,7 @@ import 'voice_changer/voice_changer.dart';
 /// Data source for advanced examples
 final advanced = [
   {'name': 'Advanced'},
+  {'name': 'VideoPerformanceMonitorExample', 'widget': const VideoPerformanceMonitorExample()},
   if (!kIsWeb)
     {'name': 'AudioEffectMixing', 'widget': const AudioEffectMixing()},
   if (!kIsWeb)

@@ -1,11 +1,15 @@
+
 import '/src/agora_base.dart';
 import '/src/agora_media_base.dart';
 import '/src/agora_rtc_engine.dart';
 import '/src/agora_rtc_engine_ex.dart';
 import '/src/impl/video_view_controller_impl.dart';
 import '/src/impl/agora_rtc_renderer.dart';
+import '/src/impl/video_rendering_performance_uploader.dart';
 import '/src/render/agora_video_view.dart';
 import '/src/render/video_view_controller.dart';
+
+import 'dart:async';
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart' show Colors;
@@ -338,6 +342,18 @@ class _AgoraRtcRenderTextureState extends State<AgoraRtcRenderTexture>
       // The parameters is no used
       maybeCreateChannel(-1, '');
       widget.onAgoraVideoViewCreated?.call(textureId);
+
+      // Register context for performance reporting (shared channel)
+      PerformanceStatsHandler.instance.register(
+        textureId,
+        RenderContext(
+          rtcEngine: widget.controller.rtcEngine,
+          uid: widget.controller.canvas.uid ?? 0,
+          channelId: widget.controller.connection?.channelId ?? '',
+          localUid: widget.controller.connection?.localUid ?? 0,
+        ),
+      );
+
       setState(() {});
     }
   }
@@ -373,11 +389,16 @@ class _AgoraRtcRenderTextureState extends State<AgoraRtcRenderTexture>
 
   @override
   void dispose() {
-    _controllerInternal?.disposeRender();
-    _controllerInternal = null;
+    if (_controllerInternal != null) {
+      PerformanceStatsHandler.instance
+          .unregister(_controllerInternal!.getTextureId());
+      _controllerInternal?.disposeRender();
+      _controllerInternal = null;
+    }
 
     super.dispose();
   }
+
 
   @override
   void maybeCreateChannel(int viewId, String viewType) {
@@ -394,6 +415,7 @@ class _AgoraRtcRenderTextureState extends State<AgoraRtcRenderTexture>
         setState(() {});
         return true;
       }
+      
       return false;
     });
   }

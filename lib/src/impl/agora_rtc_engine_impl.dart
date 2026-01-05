@@ -2,6 +2,9 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:typed_data';
 
+import 'package:agora_rtc_engine/src/impl/channel_connection_manager.dart';
+import 'package:agora_rtc_engine/src/impl/video_rendering_performance_uploader.dart';
+
 import '/src/agora_base.dart';
 import '/src/agora_h265_transcoder.dart';
 import '/src/agora_media_base.dart';
@@ -514,6 +517,9 @@ class RtcEngineImpl extends rtc_engine_ex_binding.RtcEngineExImpl
     _globalVideoViewController = null;
 
     await irisMethodChannel.unregisterEventHandlers(_rtcEngineImplScopedKey);
+    
+    // Clear all channel connections
+    ChannelConnectionManager.instance.clear();
 
     await super.release(sync: sync);
 
@@ -1098,7 +1104,99 @@ class RtcEngineImpl extends rtc_engine_ex_binding.RtcEngineExImpl
 
     return Future.value();
   }
+  @override
+  Future<void> joinChannelEx(
+      {required String token,
+      required RtcConnection connection,
+      required ChannelMediaOptions options}) async {
+    final apiType =
+        '${isOverrideClassName ? className : 'RtcEngineEx'}_joinChannelEx_a3cd08c';
+    final requestParam = createParams({
+      'token': token,
+      'connection': connection.toJson(),
+      'options': options.toJson()
+    });
+    final List<Uint8List> buffers = [];
+    buffers.addAll(connection.collectBufferList());
+    buffers.addAll(options.collectBufferList());
+    final callApiResult = await irisMethodChannel.invokeMethod(
+        IrisMethodCall(apiType, jsonEncode(requestParam), buffers: buffers));
+    if (callApiResult.irisReturnCode < 0) {
+      throw AgoraRtcException(code: callApiResult.irisReturnCode);
+    }
+    final rm = callApiResult.data;
+    final result = rm['result'];
+    if (result < 0) {
+      throw AgoraRtcException(code: result);
+    }
 
+    // Track this channel connection
+    ChannelConnectionManager.instance.addConnection(connection);
+
+    // If this channel is publishing video, set it as the publishing connection
+    if (options.publishCameraTrack == true) {
+      ChannelConnectionManager.instance
+          .setPublishingVideoConnection(connection);
+    }
+  }
+
+  @override
+  Future<void> leaveChannelEx(
+      {required RtcConnection connection, LeaveChannelOptions? options}) async {
+    final apiType =
+        '${isOverrideClassName ? className : 'RtcEngineEx'}_leaveChannelEx_b03ee9a';
+    final requestParam = createParams(
+        {'connection': connection.toJson(), 'options': options?.toJson()});
+    final List<Uint8List> buffers = [];
+    buffers.addAll(connection.collectBufferList());
+    if (options != null) {
+      buffers.addAll(options.collectBufferList());
+    }
+    final callApiResult = await irisMethodChannel.invokeMethod(
+        IrisMethodCall(apiType, jsonEncode(requestParam), buffers: buffers));
+    if (callApiResult.irisReturnCode < 0) {
+      throw AgoraRtcException(code: callApiResult.irisReturnCode);
+    }
+    final rm = callApiResult.data;
+    final result = rm['result'];
+    if (result < 0) {
+      throw AgoraRtcException(code: result);
+    }
+
+    // Remove this channel connection from tracking
+    if (connection.channelId != null) {
+      ChannelConnectionManager.instance.removeConnection(connection.channelId!);
+    }
+  }
+
+  @override
+  Future<void> updateChannelMediaOptionsEx(
+      {required ChannelMediaOptions options,
+      required RtcConnection connection}) async {
+    final apiType =
+        '${isOverrideClassName ? className : 'RtcEngineEx'}_updateChannelMediaOptionsEx_457bb35';
+    final requestParam = createParams(
+        {'options': options.toJson(), 'connection': connection.toJson()});
+    final List<Uint8List> buffers = [];
+    buffers.addAll(options.collectBufferList());
+    buffers.addAll(connection.collectBufferList());
+    final callApiResult = await irisMethodChannel.invokeMethod(
+        IrisMethodCall(apiType, jsonEncode(requestParam), buffers: buffers));
+    if (callApiResult.irisReturnCode < 0) {
+      throw AgoraRtcException(code: callApiResult.irisReturnCode);
+    }
+    final rm = callApiResult.data;
+    final result = rm['result'];
+    if (result < 0) {
+      throw AgoraRtcException(code: result);
+    }
+
+    // Track which channel is publishing video
+    if (options.publishCameraTrack == true) {
+      ChannelConnectionManager.instance
+          .setPublishingVideoConnection(connection);
+    }
+  }
   /////////// debug ////////
 
   /// [type] see [VideoSourceType], only [VideoSourceType.videoSourceCamera], [VideoSourceType.videoSourceRemote] supported

@@ -8,6 +8,7 @@ import '/src/impl/platform/io/native_iris_api_engine_binding_delegate.dart';
 import '/src/impl/video_view_controller_impl.dart';
 import 'package:flutter/services.dart';
 import 'package:iris_method_channel/iris_method_channel.dart';
+import '/src/render/video_rendering_performance_monitor.dart';
 
 // ignore_for_file: public_member_api_docs
 
@@ -16,10 +17,19 @@ const kNullViewHandle = 0;
 class GlobalVideoViewControllerIO extends GlobalVideoViewControllerPlatfrom {
   GlobalVideoViewControllerIO(
       IrisMethodChannel irisMethodChannel, RtcEngine rtcEngine)
-      : super(irisMethodChannel, rtcEngine);
+      : super(irisMethodChannel, rtcEngine) {
+    methodChannel.setMethodCallHandler(_handleMethodCall);
+  }
 
   final MethodChannel methodChannel =
       const MethodChannel('agora_rtc_ng/video_view_controller');
+
+  Future<dynamic> _handleMethodCall(MethodCall call) async {
+    if (call.method == 'onVideoRenderingPerformance') {
+      VideoRenderingPerformanceMonitor.instance
+          .handlePerformanceStatsFromNative(call.arguments);
+    }
+  }
 
   int _irisRtcRenderingHandle = 0;
   @override

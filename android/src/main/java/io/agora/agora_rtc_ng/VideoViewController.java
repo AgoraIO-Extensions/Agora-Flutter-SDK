@@ -144,6 +144,7 @@ public class VideoViewController implements MethodChannel.MethodCallHandler {
         final TextureRenderer textureRenderer = new TextureRenderer(
                 textureRegistry,
                 binaryMessenger,
+                methodChannel,  // Pass shared method channel
                 irisRtcRenderingHandle,
                 uid,
                 channelId,

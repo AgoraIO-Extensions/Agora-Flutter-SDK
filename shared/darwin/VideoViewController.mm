@@ -222,6 +222,7 @@
     TextureRender *textureRender = [[TextureRender alloc]
         initWithTextureRegistry:self.textureRegistry
                       messenger:self.messenger
+                  methodChannel:self.methodChannel
          irisRtcRenderingHandle:irisRtcRendering];
     int64_t textureId = [textureRender textureId];
     [textureRender updateData:uid channelId:channelId videoSourceType:videoSourceType videoViewSetupMode:videoViewSetupMode];

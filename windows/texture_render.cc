@@ -1,5 +1,6 @@
 #include "include/agora_rtc_engine/texture_render.h"
 
+#include <chrono>
 #include <functional>
 
 #include "AgoraMediaBase.h"
@@ -8,11 +9,14 @@ using namespace flutter;
 
 TextureRender::TextureRender(flutter::BinaryMessenger *messenger,
                              flutter::TextureRegistrar *registrar,
+                             flutter::MethodChannel<EncodableValue> *shared_method_channel,
                              agora::iris::IrisRtcRendering *iris_rtc_rendering)
     : registrar_(registrar),
       iris_rtc_rendering_(iris_rtc_rendering),
+      shared_method_channel_(shared_method_channel),
       delegate_id_(agora::iris::INVALID_DELEGATE_ID),
-      is_dirty_(false)
+      is_dirty_(false),
+      last_frame_received_time_micros_(0)
 {
     // Create flutter desktop pixelbuffer texture;
     texture_ =
@@ -29,6 +33,10 @@ TextureRender::TextureRender(flutter::BinaryMessenger *messenger,
         messenger,
         "agora_rtc_engine/texture_render_" + std::to_string(texture_id_),
         &flutter::StandardMethodCodec::GetInstance());
+
+    // Initialize performance monitor
+    performance_monitor_ = std::make_unique<agora::rtc::flutter::AgoraRenderPerformanceMonitor>();
+    performance_monitor_->setDelegate(this);
 }
 
 TextureRender::~TextureRender()
@@ -41,6 +49,19 @@ void TextureRender::OnVideoFrameReceived(const void *videoFrame,
                                          const IrisRtcVideoFrameConfig &config,
                                          bool resize)
 {
+    // Capture frame received timestamp at the VERY BEGINNING for accurate end-to-end latency measurement
+    // This includes mutex wait time, which is important for performance analysis
+    int64_t frameReceivedTimeMicros = std::chrono::duration_cast<std::chrono::microseconds>(
+        std::chrono::steady_clock::now().time_since_epoch()).count();
+    
+    // Store timestamp immediately for end-to-end latency measurement (will be used in CopyPixelBuffer)
+    last_frame_received_time_micros_ = frameReceivedTimeMicros;
+
+    // Record frame received for FPS calculation
+    if (performance_monitor_) {
+        performance_monitor_->recordFrameReceived();
+    }
+
     std::lock_guard<std::mutex> lock_guard(buffer_mutex_);
 
     if (!is_dirty_)
@@ -61,6 +82,12 @@ void TextureRender::OnVideoFrameReceived(const void *videoFrame,
             method_channel_->InvokeMethod("onSizeChanged", std::make_unique<EncodableValue>(EncodableValue(args)));
         }
 
+        // Record frame rendered interval before copying data
+        if (performance_monitor_) {
+            performance_monitor_->recordFrameRenderedInterval();
+        }
+
+        // Copy pixel data
         std::copy(static_cast<uint8_t *>(video_frame->yBuffer), static_cast<uint8_t *>(video_frame->yBuffer) + data_size, buffer_.data());
 
         frame_width_ = video_frame->width;
@@ -78,6 +105,15 @@ const FlutterDesktopPixelBuffer *
 TextureRender::CopyPixelBuffer(size_t width, size_t height)
 {
     std::unique_lock<std::mutex> buffer_lock(buffer_mutex_);
+
+    // Calculate end-to-end render latency: from frame received to Flutter consumption
+    if (performance_monitor_ && last_frame_received_time_micros_ > 0) {
+        int64_t nowMicros = std::chrono::duration_cast<std::chrono::microseconds>(
+            std::chrono::steady_clock::now().time_since_epoch()).count();
+        double drawCostMs = (nowMicros - last_frame_received_time_micros_) / 1000.0;
+        performance_monitor_->recordRenderDrawCostWithValue(drawCostMs);
+        last_frame_received_time_micros_ = 0; // Reset after measurement
+    }
 
     is_dirty_ = false;
 
@@ -117,6 +153,9 @@ TextureRender::CopyPixelBuffer(size_t width, size_t height)
 
 void TextureRender::UpdateData(unsigned int uid, const std::string &channelId, unsigned int videoSourceType, unsigned int videoViewSetupMode)
 {
+    // Store uid for performance reporting
+    uid_ = uid;
+
     IrisRtcVideoFrameConfig config;
     config.uid = uid;
     config.video_source_type = videoSourceType;
@@ -140,10 +179,40 @@ void TextureRender::UpdateData(unsigned int uid, const std::string &channelId, u
 
 void TextureRender::Dispose()
 {
+    // Force report final stats with callback before cleanup
+    auto channel = shared_method_channel_;
+    auto texId = texture_id_;
+    auto uidValue = uid_;
+    
+    if (performance_monitor_) {
+        performance_monitor_->forceReportWithCallback([channel, texId, uidValue](const agora::rtc::flutter::AgoraRenderPerformanceStats& stats) {
+            if (channel) {
+                flutter::EncodableMap statsMap;
+                auto dict = stats.toDictionary();
+                
+                for (const auto& pair : dict) {
+                    statsMap[EncodableValue(pair.first)] = EncodableValue(pair.second);
+                }
+                
+                statsMap[EncodableValue("textureId")] = EncodableValue(static_cast<int64_t>(texId));
+                statsMap[EncodableValue("uid")] = EncodableValue(static_cast<int64_t>(uidValue));
+
+                channel->InvokeMethod("onVideoRenderingPerformance", 
+                                     std::make_unique<EncodableValue>(EncodableValue(statsMap)));
+            }
+        });
+    }
+    
     if (iris_rtc_rendering_)
     {
         iris_rtc_rendering_->RemoveVideoFrameObserverDelegate(delegate_id_);
         iris_rtc_rendering_ = nullptr;
+    }
+
+    // Clean up performance monitor
+    if (performance_monitor_) {
+        performance_monitor_->setDelegate(nullptr);
+        performance_monitor_.reset();
     }
 
     const std::lock_guard<std::mutex> lock(buffer_mutex_);
@@ -157,4 +226,25 @@ void TextureRender::Dispose()
         registrar_ = nullptr;
         texture_id_ = -1;
     }
+}
+
+void TextureRender::onPerformanceStatsUpdated(const agora::rtc::flutter::AgoraRenderPerformanceStats& stats)
+{
+    if (!shared_method_channel_) {
+        return;
+    }
+
+    // Send performance stats to Flutter layer via shared method channel
+    flutter::EncodableMap statsMap;
+    auto dict = stats.toDictionary();
+    
+    for (const auto& pair : dict) {
+        statsMap[EncodableValue(pair.first)] = EncodableValue(pair.second);
+    }
+    
+    statsMap[EncodableValue("textureId")] = EncodableValue(static_cast<int64_t>(texture_id_));
+    statsMap[EncodableValue("uid")] = EncodableValue(static_cast<int64_t>(uid_));
+
+    shared_method_channel_->InvokeMethod("onVideoRenderingPerformance", 
+                                        std::make_unique<EncodableValue>(EncodableValue(statsMap)));
 }
