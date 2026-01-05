@@ -19,14 +19,13 @@ class VideoPerformanceMonitorExample extends StatefulWidget {
 }
 
 class _VideoPerformanceMonitorExampleState
-    extends State<VideoPerformanceMonitorExample>
-    implements VideoRenderingPerformanceEventHandler {
+    extends State<VideoPerformanceMonitorExample> {
   late RtcEngine _rtcEngine;
   VideoViewController? _localVideoController;
   bool _isJoined = false;
-  final List<String> _performanceLog = [];
   final Completer<void> _videoViewReadyCompleter = Completer<void>();
   Set<int> remoteUid = {};
+  bool _isUseFlutterTexture = false;
 
   @override
   void initState() {
@@ -68,21 +67,18 @@ class _VideoPerformanceMonitorExampleState
       },
     ));
 
-    // Register performance monitoring handler (optional, for custom handling)
-    VideoRenderingPerformanceMonitor.instance.registerHandler(this);
-
     // Enable video
     await _rtcEngine.enableVideo();
-    
+
     // Create local video controller with Flutter Texture rendering
     _localVideoController = VideoViewController(
       rtcEngine: _rtcEngine,
       canvas: const VideoCanvas(uid: 0),
-      useFlutterTexture: true, // Performance monitoring only works with Flutter Texture
+      useFlutterTexture: false,
     );
 
     setState(() {});
-    
+
     // Wait for video view to be created before joining channel
     await _videoViewReadyCompleter.future;
     await _joinChannel();
@@ -90,37 +86,9 @@ class _VideoPerformanceMonitorExampleState
 
   @override
   void dispose() {
-    VideoRenderingPerformanceMonitor.instance.unregisterHandler(this);
     _rtcEngine.leaveChannel();
     _rtcEngine.release();
     super.dispose();
-  }
-
-  @override
-  void onVideoRenderingPerformance(VideoRenderingPerformanceStats stats) {
-    print('${DateTime.now().toString().split(' ').last.substring(0, 8)} - '
-          'Texture #${stats.textureId ?? 'N/A'}: UID=${stats.uid ?? 'N/A'}, '
-          'InFPS=${stats.renderInputFps?.toStringAsFixed(1) ?? 'N/A'}, '
-          'OutFPS=${stats.renderOutputFps?.toStringAsFixed(1) ?? 'N/A'}, '
-          'Interval=${stats.renderFrameIntervalMs?.toStringAsFixed(2) ?? 'N/A'}ms, '
-          'DrawCost=${stats.renderDrawCostMs?.toStringAsFixed(2) ?? 'N/A'}ms');
-    if (mounted) {
-      setState(() {
-        _performanceLog.add(
-          '${DateTime.now().toString().split(' ').last.substring(0, 8)} - '
-          'Texture #${stats.textureId}: UID=${stats.uid}, '
-          'InFPS=${stats.renderInputFps?.toStringAsFixed(1) ?? 'N/A'}, '
-          'OutFPS=${stats.renderOutputFps?.toStringAsFixed(1) ?? 'N/A'}, '
-          'Interval=${stats.renderFrameIntervalMs?.toStringAsFixed(2) ?? 'N/A'}ms, '
-          'DrawCost=${stats.renderDrawCostMs?.toStringAsFixed(2) ?? 'N/A'}ms',
-        );
-
-        // Keep only last 10 entries
-        // if (_performanceLog.length > 10) {
-        //   _performanceLog.removeAt(0);
-        // }
-      });
-    }
   }
 
   Future<void> _joinChannel() async {
@@ -158,7 +126,7 @@ class _VideoPerformanceMonitorExampleState
                           controller: _localVideoController!,
                           onAgoraVideoViewCreated: (viewId) {
                             _rtcEngine.startPreview();
-                            
+
                             // Signal that video view is ready
                             if (!_videoViewReadyCompleter.isCompleted) {
                               _videoViewReadyCompleter.complete();
@@ -172,19 +140,48 @@ class _VideoPerformanceMonitorExampleState
                           scrollDirection: Axis.horizontal,
                           child: Row(
                             children: List.of(remoteUid.map(
-                              (e) => Container(
-                                margin: const EdgeInsets.all(4),
-                                width: 120,
-                                height: 160,
-                                child: AgoraVideoView(
-                                  controller: VideoViewController.remote(
-                                    rtcEngine: _rtcEngine,
-                                    canvas: VideoCanvas(uid: e),
-                                    connection: RtcConnection(channelId: config.channelId),
-                                    useFlutterTexture: true,
-                                  ),
-                                ),
-                              ),
+                              (e) {
+                                return Column(
+                                  children: [
+                                    Container(
+                                      color: Colors.red,
+                                      // key: ValueKey(e),
+                                      margin: const EdgeInsets.all(4),
+                                      width: 120,
+                                      height: 160,
+                                      child: AgoraVideoView(
+                                        controller: VideoViewController.remote(
+                                          rtcEngine: _rtcEngine,
+                                          canvas: VideoCanvas(uid: e),
+                                          connection: RtcConnection(
+                                              channelId: config.channelId),
+                                          useFlutterTexture: _isUseFlutterTexture,
+                                        ),
+                                      ),
+                                    ),
+                                    // Container(
+                                    //   color: Colors.blue,
+                                    //   // key: ValueKey('${e}_2'),
+                                    //   margin: const EdgeInsets.all(4),
+                                    //   width: 120,
+                                    //   height: 160,
+                                    //   child: AgoraVideoView(
+                                    //     controller: VideoViewController.remote(
+                                    //       rtcEngine: _rtcEngine,
+                                    //       canvas: VideoCanvas(
+                                    //         uid: e,
+                                    //         setupMode: VideoViewSetupMode
+                                    //             .videoViewSetupAdd,
+                                    //       ),
+                                    //       connection: RtcConnection(
+                                    //           channelId: config.channelId),
+                                    //       useFlutterTexture: false,
+                                    //     ),
+                                    //   ),
+                                    // ),
+                                  ],
+                                );
+                              },
                             )),
                           ),
                         ),
@@ -195,46 +192,31 @@ class _VideoPerformanceMonitorExampleState
                     child: CircularProgressIndicator(),
                   ),
           ),
-          
 
-          // Performance log
+          // Info panel
           Expanded(
             flex: 2,
             child: Container(
               color: Colors.black87,
-              padding: const EdgeInsets.all(8),
+              padding: const EdgeInsets.all(16),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  const Text(
-                    'Performance Log:',
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                  const SizedBox(height: 8),
-                  Expanded(
-                    child: _performanceLog.isEmpty
-                        ? const Center(
-                            child: Text(
-                              'Waiting for performance data...',
-                              style: TextStyle(color: Colors.white54),
-                            ),
-                          )
-                        : ListView.builder(
-                            itemCount: _performanceLog.length,
-                            itemBuilder: (context, index) {
-                              return Text(
-                                _performanceLog[index],
-                                style: const TextStyle(
-                                  color: Colors.greenAccent,
-                                  fontSize: 10,
-                                  fontFamily: 'monospace',
-                                ),
-                              );
-                            },
-                          ),
+                  Row(
+                    children: [
+                      const Text(
+                        'Use Flutter Texture: ',
+                        style: TextStyle(color: Colors.white),
+                      ),
+                      Switch(
+                        value: _isUseFlutterTexture,
+                        onChanged: (value) {
+                          setState(() {
+                            _isUseFlutterTexture = value;
+                          });
+                        },
+                      ),
+                    ],
                   ),
                 ],
               ),
@@ -249,7 +231,8 @@ class _VideoPerformanceMonitorExampleState
               children: [
                 ElevatedButton(
                   onPressed: _isJoined ? null : _joinChannel,
-                  child: Text(_isJoined ? 'Channel Joined ✓' : 'Rejoin Channel'),
+                  child:
+                      Text(_isJoined ? 'Channel Joined ✓' : 'Rejoin Channel'),
                 ),
                 ElevatedButton(
                   onPressed: _isJoined ? _leaveChannel : null,
@@ -261,34 +244,8 @@ class _VideoPerformanceMonitorExampleState
               ],
             ),
           ),
-
-          // Info panel
-          // Container(
-          //   padding: const EdgeInsets.all(8),
-          //   color: Colors.blue.shade50,
-          //   child: const Column(
-          //     crossAxisAlignment: CrossAxisAlignment.start,
-          //     children: [
-          //       Text(
-          //         'Performance Metrics Explained:',
-          //         style: TextStyle(fontWeight: FontWeight.bold),
-          //       ),
-          //       SizedBox(height: 4),
-          //       Text('• In FPS: Frames arriving at renderer'),
-          //       Text('• Out FPS: Frames actually rendered'),
-          //       Text('• Draw Cost: Processing time per frame'),
-          //       Text('• Smoothness: Rendering consistency'),
-          //       SizedBox(height: 4),
-          //       Text(
-          //         'Note: Performance monitoring only works with Flutter Texture rendering mode.',
-          //         style: TextStyle(fontSize: 10, fontStyle: FontStyle.italic),
-          //       ),
-          //     ],
-          //   ),
-          // ),
         ],
       ),
     );
   }
 }
-

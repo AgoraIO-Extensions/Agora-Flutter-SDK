@@ -72,8 +72,10 @@ NS_ASSUME_NONNULL_BEGIN
 /// Get current performance statistics.
 - (AgoraRenderPerformanceStats *)getCurrentStats;
 
-/// Reset all statistics.
-- (void)reset;
+/// Force report statistics immediately with a custom callback block.
+/// The block will be executed on the main thread.
+/// @param callback Block to receive statistics.
+- (void)forceReportWithCallback:(void (^)(AgoraRenderPerformanceStats *stats))callback;
 
 @end
 

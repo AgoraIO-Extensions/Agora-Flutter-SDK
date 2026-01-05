@@ -18,6 +18,7 @@ using namespace agora::iris;
 
 @property(nonatomic, weak) NSObject<FlutterTextureRegistry> *textureRegistry;
 @property(nonatomic, strong) FlutterMethodChannel *channel;
+@property(nonatomic, strong) FlutterMethodChannel *sharedMethodChannel;
 @property(nonatomic) agora::iris::IrisRtcRendering *irisRtcRendering;
 @property(nonatomic, assign) int delegateId;
 @property(nonatomic, assign) unsigned int uid;  // Store uid for performance reporting
@@ -156,10 +157,12 @@ public:
 - (instancetype)
     initWithTextureRegistry:(NSObject<FlutterTextureRegistry> *)textureRegistry
                   messenger:(NSObject<FlutterBinaryMessenger> *)messenger
+              methodChannel:(FlutterMethodChannel *)methodChannel
      irisRtcRenderingHandle:(void *)irisRtcRenderingHandle {
   self = [super init];
   if (self) {
     self.textureRegistry = textureRegistry;
+    self.sharedMethodChannel = methodChannel;
     self.irisRtcRendering =
         (agora::iris::IrisRtcRendering *)irisRtcRenderingHandle;
     self.textureId = [self.textureRegistry registerTexture:self];
@@ -230,6 +233,23 @@ public:
 }
 
 - (void)dispose {
+  // Use async report to avoid blocking the main thread during critical cleanup.
+  // This reduces the chance of irisRtcRendering becoming dangling before we call RemoveVideoFrameObserverDelegate.
+  // Use async report with callback to ensure stats are sent even if this renderer is deallocated
+  // Capture necessary variables for the block
+  FlutterMethodChannel *sharedChannel = self.sharedMethodChannel;
+  int64_t textureId = self.textureId;
+  unsigned int uid = self.uid;
+  
+  [self.performanceMonitor forceReportWithCallback:^(AgoraRenderPerformanceStats *stats) {
+    if (sharedChannel) {
+        NSMutableDictionary *statsDict = [[stats toDictionary] mutableCopy];
+        statsDict[@"textureId"] = @(textureId);
+        statsDict[@"uid"] = @(uid);
+        [sharedChannel invokeMethod:@"onVideoRenderingPerformance" arguments:statsDict];
+    }
+  }];
+  
   if (self.irisRtcRendering) {
     self.irisRtcRendering->RemoveVideoFrameObserverDelegate(self.delegateId);
     self.irisRtcRendering = nil;
@@ -250,7 +270,7 @@ public:
 #pragma mark - AgoraRenderPerformanceDelegate
 
 - (void)onPerformanceStatsUpdated:(AgoraRenderPerformanceStats *)stats {
-  if (!self.channel) {
+  if (!self.sharedMethodChannel) {
     return;
   }
   
@@ -258,7 +278,7 @@ public:
   NSMutableDictionary *statsDict = [[stats toDictionary] mutableCopy];
   statsDict[@"textureId"] = @(self.textureId);
   statsDict[@"uid"] = @(self.uid);  // Add uid to distinguish local/remote
-  [self.channel invokeMethod:@"onVideoRenderingPerformance"
+  [self.sharedMethodChannel invokeMethod:@"onVideoRenderingPerformance"
                          arguments:statsDict];
 }
 
