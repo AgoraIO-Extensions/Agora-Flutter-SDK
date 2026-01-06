@@ -3,7 +3,6 @@ import 'dart:convert';
 import 'dart:typed_data';
 
 import 'package:agora_rtc_engine/src/impl/channel_connection_manager.dart';
-import 'package:agora_rtc_engine/src/impl/video_rendering_performance_uploader.dart';
 
 import '/src/agora_base.dart';
 import '/src/agora_h265_transcoder.dart';
@@ -1129,15 +1128,53 @@ class RtcEngineImpl extends rtc_engine_ex_binding.RtcEngineExImpl
     if (result < 0) {
       throw AgoraRtcException(code: result);
     }
-
     // Track this channel connection
     ChannelConnectionManager.instance.addConnection(connection);
 
-    // If this channel is publishing video, set it as the publishing connection
+    // Track camera video publishing
     if (options.publishCameraTrack == true) {
-      ChannelConnectionManager.instance
-          .setPublishingVideoConnection(connection);
+      ChannelConnectionManager.instance.setPublishingVideoConnectionBySource(
+          VideoSourceType.videoSourceCamera, connection);
     }
+
+    // Track screen video publishing
+    if (options.publishScreenTrack == true ||
+        options.publishScreenCaptureVideo == true) {
+      ChannelConnectionManager.instance.setPublishingVideoConnectionBySource(
+          VideoSourceType.videoSourceScreen, connection);
+    }
+
+    // Track secondary screen publishing
+    if (options.publishSecondaryScreenTrack == true) {
+      ChannelConnectionManager.instance.setPublishingVideoConnectionBySource(
+          VideoSourceType.videoSourceScreenSecondary, connection);
+    }
+
+    // Track custom video publishing
+    if (options.publishCustomVideoTrack == true) {
+      ChannelConnectionManager.instance.setPublishingVideoConnectionBySource(
+          VideoSourceType.videoSourceCustom, connection);
+    }
+
+    // Track secondary camera publishing
+    if (options.publishSecondaryCameraTrack == true) {
+      ChannelConnectionManager.instance.setPublishingVideoConnectionBySource(
+          VideoSourceType.videoSourceCameraSecondary, connection);
+    }
+
+    // Track media player video publishing
+    if (options.publishMediaPlayerVideoTrack == true) {
+      ChannelConnectionManager.instance.setPublishingVideoConnectionBySource(
+          VideoSourceType.videoSourceMediaPlayer, connection);
+    }
+
+    // Track encoded video publishing (typically treated as camera/primary source or custom)
+    // Mapping to Camera as a fallback if not explicitly Custom
+    if (options.publishEncodedVideoTrack == true) {
+      ChannelConnectionManager.instance.setPublishingVideoConnectionBySource(
+          VideoSourceType.videoSourceCamera, connection);
+    }
+    print('joinChannelEx end1 = ${DateTime.now()}');
   }
 
   @override
@@ -1193,8 +1230,43 @@ class RtcEngineImpl extends rtc_engine_ex_binding.RtcEngineExImpl
 
     // Track which channel is publishing video
     if (options.publishCameraTrack == true) {
-      ChannelConnectionManager.instance
-          .setPublishingVideoConnection(connection);
+      ChannelConnectionManager.instance.setPublishingVideoConnectionBySource(
+          VideoSourceType.videoSourceCamera, connection);
+    }
+
+    if (options.publishScreenTrack == true ||
+        options.publishScreenCaptureVideo == true) {
+      ChannelConnectionManager.instance.setPublishingVideoConnectionBySource(
+          VideoSourceType.videoSourceScreen, connection);
+    }
+
+    if (options.publishSecondaryScreenTrack == true) {
+      ChannelConnectionManager.instance.setPublishingVideoConnectionBySource(
+          VideoSourceType.videoSourceScreenSecondary, connection);
+    }
+
+    // Track custom video publishing
+    if (options.publishCustomVideoTrack == true) {
+      ChannelConnectionManager.instance.setPublishingVideoConnectionBySource(
+          VideoSourceType.videoSourceCustom, connection);
+    }
+
+    // Track secondary camera publishing
+    if (options.publishSecondaryCameraTrack == true) {
+      ChannelConnectionManager.instance.setPublishingVideoConnectionBySource(
+          VideoSourceType.videoSourceCameraSecondary, connection);
+    }
+
+    // Track media player video publishing
+    if (options.publishMediaPlayerVideoTrack == true) {
+      ChannelConnectionManager.instance.setPublishingVideoConnectionBySource(
+          VideoSourceType.videoSourceMediaPlayer, connection);
+    }
+
+    // Track encoded video publishing
+    if (options.publishEncodedVideoTrack == true) {
+      ChannelConnectionManager.instance.setPublishingVideoConnectionBySource(
+          VideoSourceType.videoSourceCamera, connection);
     }
   }
   /////////// debug ////////
