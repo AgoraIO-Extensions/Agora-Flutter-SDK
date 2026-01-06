@@ -18,20 +18,32 @@ class ChannelConnectionManager {
   // Legacy single publishing connection (for backward compatibility)
   RtcConnection? _publishingVideoConnection;
 
+  bool _isSameConnection(RtcConnection? a, RtcConnection? b) {
+    if (identical(a, b)) return true;
+    if (a == null || b == null) return false;
+    return a.channelId == b.channelId && a.localUid == b.localUid;
+  }
+
   void addConnection(RtcConnection connection) {
     if (connection.channelId != null && connection.channelId!.isNotEmpty) {
+      final existing = _activeConnections[connection.channelId!];
+      if (_isSameConnection(existing, connection)) {
+        return;
+      }
+
       _activeConnections[connection.channelId!] = connection;
       debugPrint(
-          '[ChannelConnectionManager] Added connection: channelId=${connection.channelId}, localUid=${connection.localUid}');
+          '[ChannelConnectionManager] Added/Updated connection: channelId=${connection.channelId}, localUid=${connection.localUid}');
     }
   }
 
   void removeConnection(String channelId) {
-    if (_activeConnections.containsKey(channelId)) {
-      _activeConnections.remove(channelId);
-      debugPrint(
-          '[ChannelConnectionManager] Removed connection: channelId=$channelId');
+    if (!_activeConnections.containsKey(channelId)) {
+      return;
     }
+    _activeConnections.remove(channelId);
+    debugPrint(
+        '[ChannelConnectionManager] Removed connection: channelId=$channelId');
 
     // Remove from legacy publishing connection
     if (_publishingVideoConnection?.channelId == channelId) {
@@ -55,6 +67,11 @@ class ChannelConnectionManager {
   /// Set publishing video connection for a specific source type
   void setPublishingVideoConnectionBySource(
       VideoSourceType sourceType, RtcConnection connection) {
+    final existing = _publishingVideoConnections[sourceType];
+    if (_isSameConnection(existing, connection)) {
+      return;
+    }
+
     _publishingVideoConnections[sourceType] = connection;
     debugPrint(
         '[ChannelConnectionManager] Set publishing connection for $sourceType: channelId=${connection.channelId}, localUid=${connection.localUid}');

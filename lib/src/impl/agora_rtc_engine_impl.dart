@@ -296,6 +296,76 @@ extension MetadataObserverExt on MetadataObserver {
   }
 }
 
+class _RtcEngineEventHandlerWrapper extends RtcEngineEventHandlerWrapper {
+  _RtcEngineEventHandlerWrapper(RtcEngineEventHandler rtcEngineEventHandler)
+      : super(rtcEngineEventHandler);
+
+  @override
+  bool handleEventInternal(
+      String eventName, String eventData, List<Uint8List> buffers) {
+    switch (eventName) {
+      case 'onJoinChannelSuccess_263e4cd':
+      case 'onRejoinChannelSuccess_263e4cd':
+        final Map jsonMap = jsonDecode(eventData);
+        RtcEngineEventHandlerOnJoinChannelSuccessJson paramJson =
+            RtcEngineEventHandlerOnJoinChannelSuccessJson.fromJson(
+                jsonMap.cast<String, dynamic>());
+        RtcConnection? connection = paramJson.connection;
+        if (connection != null) {
+          ChannelConnectionManager.instance.addConnection(connection);
+        }
+        break;
+      case 'onLeaveChannel_c8e730d':
+        final Map jsonMap = jsonDecode(eventData);
+        RtcEngineEventHandlerOnLeaveChannelJson paramJson =
+            RtcEngineEventHandlerOnLeaveChannelJson.fromJson(
+                jsonMap.cast<String, dynamic>());
+        RtcConnection? connection = paramJson.connection;
+        if (connection?.channelId != null) {
+          ChannelConnectionManager.instance
+              .removeConnection(connection!.channelId!);
+        }
+        break;
+      case 'onLocalVideoStats_0cebfd7':
+        final Map jsonMap = jsonDecode(eventData);
+        RtcEngineEventHandlerOnLocalVideoStatsJson paramJson =
+            RtcEngineEventHandlerOnLocalVideoStatsJson.fromJson(
+                jsonMap.cast<String, dynamic>());
+        RtcConnection? connection = paramJson.connection;
+        VideoSourceType? sourceType = paramJson.sourceType;
+        if (connection != null && sourceType != null) {
+          ChannelConnectionManager.instance
+              .setPublishingVideoConnectionBySource(sourceType, connection);
+        }
+        break;
+      case 'onRemoteVideoStats_2f43a70':
+        final Map jsonMap = jsonDecode(eventData);
+        RtcEngineEventHandlerOnRemoteVideoStatsJson paramJson =
+            RtcEngineEventHandlerOnRemoteVideoStatsJson.fromJson(
+                jsonMap.cast<String, dynamic>());
+        RtcConnection? connection = paramJson.connection;
+        if (connection != null) {
+          ChannelConnectionManager.instance.addConnection(connection);
+        }
+        break;
+    }
+
+    return super.handleEventInternal(eventName, eventData, buffers);
+  }
+
+  @override
+  bool operator ==(Object other) {
+    if (other.runtimeType != runtimeType) {
+      return false;
+    }
+    return other is _RtcEngineEventHandlerWrapper &&
+        other.rtcEngineEventHandler == rtcEngineEventHandler;
+  }
+
+  @override
+  int get hashCode => rtcEngineEventHandler.hashCode;
+}
+
 @internal
 class InitializationState extends ChangeNotifier {
   bool _isInitialzed = false;
@@ -534,7 +604,7 @@ class RtcEngineImpl extends rtc_engine_ex_binding.RtcEngineExImpl
   @override
   void registerEventHandler(
       covariant RtcEngineEventHandler eventHandler) async {
-    final eventHandlerWrapper = RtcEngineEventHandlerWrapper(eventHandler);
+    final eventHandlerWrapper = _RtcEngineEventHandlerWrapper(eventHandler);
     final param = createParams({});
 
     await irisMethodChannel.registerEventHandler(
@@ -549,7 +619,7 @@ class RtcEngineImpl extends rtc_engine_ex_binding.RtcEngineExImpl
   @override
   void unregisterEventHandler(
       covariant RtcEngineEventHandler eventHandler) async {
-    final eventHandlerWrapper = RtcEngineEventHandlerWrapper(eventHandler);
+    final eventHandlerWrapper = _RtcEngineEventHandlerWrapper(eventHandler);
     final param = createParams({});
 
     await irisMethodChannel.unregisterEventHandler(
@@ -903,32 +973,6 @@ class RtcEngineImpl extends rtc_engine_ex_binding.RtcEngineExImpl
     }
   }
 
-  @override
-  Future<void> joinChannelWithUserAccount(
-      {required String token,
-      required String channelId,
-      required String userAccount,
-      ChannelMediaOptions? options}) async {
-    final apiType = options == null
-        ? 'RtcEngine_joinChannelWithUserAccount_0e4f59e'
-        : 'RtcEngine_joinChannelWithUserAccount_4685af9';
-    final param = createParams({
-      'token': token,
-      'channelId': channelId,
-      'userAccount': userAccount,
-      'options': options?.toJson()
-    });
-    final callApiResult = await irisMethodChannel
-        .invokeMethod(IrisMethodCall(apiType, jsonEncode(param)));
-    if (callApiResult.irisReturnCode < 0) {
-      throw AgoraRtcException(code: callApiResult.irisReturnCode);
-    }
-    final rm = callApiResult.data;
-    final result = rm['result'];
-    if (result < 0) {
-      throw AgoraRtcException(code: result);
-    }
-  }
 
   @override
   void registerAudioEncodedFrameObserver(
@@ -1102,172 +1146,6 @@ class RtcEngineImpl extends rtc_engine_ex_binding.RtcEngineExImpl
     }
 
     return Future.value();
-  }
-  @override
-  Future<void> joinChannelEx(
-      {required String token,
-      required RtcConnection connection,
-      required ChannelMediaOptions options}) async {
-    final apiType =
-        '${isOverrideClassName ? className : 'RtcEngineEx'}_joinChannelEx_a3cd08c';
-    final requestParam = createParams({
-      'token': token,
-      'connection': connection.toJson(),
-      'options': options.toJson()
-    });
-    final List<Uint8List> buffers = [];
-    buffers.addAll(connection.collectBufferList());
-    buffers.addAll(options.collectBufferList());
-    final callApiResult = await irisMethodChannel.invokeMethod(
-        IrisMethodCall(apiType, jsonEncode(requestParam), buffers: buffers));
-    if (callApiResult.irisReturnCode < 0) {
-      throw AgoraRtcException(code: callApiResult.irisReturnCode);
-    }
-    final rm = callApiResult.data;
-    final result = rm['result'];
-    if (result < 0) {
-      throw AgoraRtcException(code: result);
-    }
-    // Track this channel connection
-    ChannelConnectionManager.instance.addConnection(connection);
-
-    // Track camera video publishing
-    if (options.publishCameraTrack == true) {
-      ChannelConnectionManager.instance.setPublishingVideoConnectionBySource(
-          VideoSourceType.videoSourceCamera, connection);
-    }
-
-    // Track screen video publishing
-    if (options.publishScreenTrack == true ||
-        options.publishScreenCaptureVideo == true) {
-      ChannelConnectionManager.instance.setPublishingVideoConnectionBySource(
-          VideoSourceType.videoSourceScreen, connection);
-    }
-
-    // Track secondary screen publishing
-    if (options.publishSecondaryScreenTrack == true) {
-      ChannelConnectionManager.instance.setPublishingVideoConnectionBySource(
-          VideoSourceType.videoSourceScreenSecondary, connection);
-    }
-
-    // Track custom video publishing
-    if (options.publishCustomVideoTrack == true) {
-      ChannelConnectionManager.instance.setPublishingVideoConnectionBySource(
-          VideoSourceType.videoSourceCustom, connection);
-    }
-
-    // Track secondary camera publishing
-    if (options.publishSecondaryCameraTrack == true) {
-      ChannelConnectionManager.instance.setPublishingVideoConnectionBySource(
-          VideoSourceType.videoSourceCameraSecondary, connection);
-    }
-
-    // Track media player video publishing
-    if (options.publishMediaPlayerVideoTrack == true) {
-      ChannelConnectionManager.instance.setPublishingVideoConnectionBySource(
-          VideoSourceType.videoSourceMediaPlayer, connection);
-    }
-
-    // Track encoded video publishing (typically treated as camera/primary source or custom)
-    // Mapping to Camera as a fallback if not explicitly Custom
-    if (options.publishEncodedVideoTrack == true) {
-      ChannelConnectionManager.instance.setPublishingVideoConnectionBySource(
-          VideoSourceType.videoSourceCamera, connection);
-    }
-    print('joinChannelEx end1 = ${DateTime.now()}');
-  }
-
-  @override
-  Future<void> leaveChannelEx(
-      {required RtcConnection connection, LeaveChannelOptions? options}) async {
-    final apiType =
-        '${isOverrideClassName ? className : 'RtcEngineEx'}_leaveChannelEx_b03ee9a';
-    final requestParam = createParams(
-        {'connection': connection.toJson(), 'options': options?.toJson()});
-    final List<Uint8List> buffers = [];
-    buffers.addAll(connection.collectBufferList());
-    if (options != null) {
-      buffers.addAll(options.collectBufferList());
-    }
-    final callApiResult = await irisMethodChannel.invokeMethod(
-        IrisMethodCall(apiType, jsonEncode(requestParam), buffers: buffers));
-    if (callApiResult.irisReturnCode < 0) {
-      throw AgoraRtcException(code: callApiResult.irisReturnCode);
-    }
-    final rm = callApiResult.data;
-    final result = rm['result'];
-    if (result < 0) {
-      throw AgoraRtcException(code: result);
-    }
-
-    // Remove this channel connection from tracking
-    if (connection.channelId != null) {
-      ChannelConnectionManager.instance.removeConnection(connection.channelId!);
-    }
-  }
-
-  @override
-  Future<void> updateChannelMediaOptionsEx(
-      {required ChannelMediaOptions options,
-      required RtcConnection connection}) async {
-    final apiType =
-        '${isOverrideClassName ? className : 'RtcEngineEx'}_updateChannelMediaOptionsEx_457bb35';
-    final requestParam = createParams(
-        {'options': options.toJson(), 'connection': connection.toJson()});
-    final List<Uint8List> buffers = [];
-    buffers.addAll(options.collectBufferList());
-    buffers.addAll(connection.collectBufferList());
-    final callApiResult = await irisMethodChannel.invokeMethod(
-        IrisMethodCall(apiType, jsonEncode(requestParam), buffers: buffers));
-    if (callApiResult.irisReturnCode < 0) {
-      throw AgoraRtcException(code: callApiResult.irisReturnCode);
-    }
-    final rm = callApiResult.data;
-    final result = rm['result'];
-    if (result < 0) {
-      throw AgoraRtcException(code: result);
-    }
-
-    // Track which channel is publishing video
-    if (options.publishCameraTrack == true) {
-      ChannelConnectionManager.instance.setPublishingVideoConnectionBySource(
-          VideoSourceType.videoSourceCamera, connection);
-    }
-
-    if (options.publishScreenTrack == true ||
-        options.publishScreenCaptureVideo == true) {
-      ChannelConnectionManager.instance.setPublishingVideoConnectionBySource(
-          VideoSourceType.videoSourceScreen, connection);
-    }
-
-    if (options.publishSecondaryScreenTrack == true) {
-      ChannelConnectionManager.instance.setPublishingVideoConnectionBySource(
-          VideoSourceType.videoSourceScreenSecondary, connection);
-    }
-
-    // Track custom video publishing
-    if (options.publishCustomVideoTrack == true) {
-      ChannelConnectionManager.instance.setPublishingVideoConnectionBySource(
-          VideoSourceType.videoSourceCustom, connection);
-    }
-
-    // Track secondary camera publishing
-    if (options.publishSecondaryCameraTrack == true) {
-      ChannelConnectionManager.instance.setPublishingVideoConnectionBySource(
-          VideoSourceType.videoSourceCameraSecondary, connection);
-    }
-
-    // Track media player video publishing
-    if (options.publishMediaPlayerVideoTrack == true) {
-      ChannelConnectionManager.instance.setPublishingVideoConnectionBySource(
-          VideoSourceType.videoSourceMediaPlayer, connection);
-    }
-
-    // Track encoded video publishing
-    if (options.publishEncodedVideoTrack == true) {
-      ChannelConnectionManager.instance.setPublishingVideoConnectionBySource(
-          VideoSourceType.videoSourceCamera, connection);
-    }
   }
   /////////// debug ////////
 
