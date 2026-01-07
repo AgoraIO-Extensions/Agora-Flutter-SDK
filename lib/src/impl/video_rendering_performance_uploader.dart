@@ -1,28 +1,22 @@
 import 'dart:async';
 import 'dart:convert';
 
+import 'package:agora_rtc_engine/agora_rtc_engine.dart';
 import 'package:flutter/foundation.dart';
-
-import '../agora_rtc_engine.dart';
-import '../agora_media_base.dart';
-import '../render/video_rendering_performance_monitor.dart';
 import 'channel_connection_manager.dart';
 
 /// Context information for a texture renderer
 class RenderContext {
   final RtcEngine rtcEngine;
   final int uid;
-  final String channelId;
-  final int localUid;
+  final RtcConnection? connection;
   final VideoSourceType? sourceType;
 
-  RenderContext({
-    required this.rtcEngine,
-    required this.uid,
-    required this.channelId,
-    required this.localUid,
-    this.sourceType,
-  });
+  RenderContext(
+      {required this.rtcEngine,
+      required this.uid,
+      this.connection,
+      this.sourceType});
 }
 
 /// Handler for processing video rendering performance statistics.
@@ -60,44 +54,79 @@ class PerformanceStatsHandler implements VideoRenderingPerformanceEventHandler {
       VideoRenderingPerformanceStats stats, RenderContext context) {
     final rtcEngine = context.rtcEngine;
     final uid = context.uid;
-    final channelId = context.channelId;
-    final localUid = context.localUid;
+    final connection = context.connection;
 
-    // For local video (uid=0), try to get connection info from manager if not provided
-    String effectiveChannelId = channelId;
-    int effectiveLocalUid = localUid;
-
+    RtcConnection? effectiveConnection = connection;
     final isLocal = uid == 0;
-    if (isLocal && (channelId.isEmpty || localUid == 0)) {
-      // Use sourceType to query the correct publishing connection
-      final sourceType =
-          context.sourceType ?? VideoSourceType.videoSourceCamera;
-      final publishingConnection = ChannelConnectionManager.instance
-          .getPublishingVideoConnectionBySource(sourceType);
 
-      if (publishingConnection != null) {
-        effectiveChannelId = publishingConnection.channelId ?? '';
-        effectiveLocalUid = publishingConnection.localUid ?? 0;
-        debugPrint(
-            '[PerformanceStatsHandler] Auto-resolved connection for local $sourceType: channelId=$effectiveChannelId, localUid=$effectiveLocalUid');
-      } else {
-        // Fallback: try to get any publishing connection
-        final anyPublishingConnection =
-            ChannelConnectionManager.instance.getPublishingVideoConnection();
-        if (anyPublishingConnection != null) {
-          effectiveChannelId = anyPublishingConnection.channelId ?? '';
-          effectiveLocalUid = anyPublishingConnection.localUid ?? 0;
-          debugPrint(
-              '[PerformanceStatsHandler] Auto-resolved connection to ANY publishing connection for local video: channelId=$effectiveChannelId, localUid=$effectiveLocalUid');
-        } else {
-          // Last resort: use default connection
-          final defaultConnection =
-              ChannelConnectionManager.instance.getDefaultConnection();
-          if (defaultConnection != null) {
-            effectiveChannelId = defaultConnection.channelId ?? '';
-            effectiveLocalUid = defaultConnection.localUid ?? 0;
+    // For remote video, always validate connection against active connections
+    // to ensure we use the correct connection (context.connection might be stale)
+    if (!isLocal && connection?.channelId != null) {
+      final activeConnections = ChannelConnectionManager.instance
+          .getActiveConnectionsByChannelId(connection!.channelId!);
+      if (activeConnections.isNotEmpty) {
+        // Prefer connection matching the localUid from context
+        if (connection.localUid != null) {
+          final matchingConnection = activeConnections.firstWhere(
+            (conn) => conn.localUid == connection.localUid,
+            orElse: () => activeConnections.first,
+          );
+          effectiveConnection = matchingConnection;
+          if (matchingConnection.localUid != connection.localUid) {
             debugPrint(
-                '[PerformanceStatsHandler] Auto-resolved connection to DEFAULT connection for local video: channelId=$effectiveChannelId, localUid=$effectiveLocalUid');
+                '[PerformanceStatsHandler] Corrected remote video connection: from ${connection.localUid} to ${matchingConnection.localUid}');
+          }
+        } else {
+          effectiveConnection = activeConnections.first;
+        }
+      }
+    }
+
+    // Only auto-resolve connection if it's null or invalid
+    if (effectiveConnection == null ||
+        effectiveConnection.channelId == null ||
+        effectiveConnection.localUid == null) {
+      if (isLocal) {
+        // For local video (uid=0), try to get connection info from manager
+        // Use sourceType to query the correct publishing connection
+        final sourceType =
+            context.sourceType ?? VideoSourceType.videoSourceCamera;
+        final publishingConnection = ChannelConnectionManager.instance
+            .getPublishingVideoConnectionBySource(sourceType);
+
+        if (publishingConnection != null) {
+          effectiveConnection = publishingConnection;
+          debugPrint(
+              '[PerformanceStatsHandler] Auto-resolved connection for local $sourceType: connection=${effectiveConnection.toString()}');
+        } else {
+          // Fallback: try to get any publishing connection
+          final anyPublishingConnection =
+              ChannelConnectionManager.instance.getPublishingVideoConnection();
+          if (anyPublishingConnection != null) {
+            effectiveConnection = anyPublishingConnection;
+            debugPrint(
+                '[PerformanceStatsHandler] Auto-resolved connection to ANY publishing connection for local video: connection=${effectiveConnection.toString()}');
+          } else {
+            // Last resort: use default connection
+            final defaultConnection =
+                ChannelConnectionManager.instance.getDefaultConnection();
+            if (defaultConnection != null) {
+              effectiveConnection = defaultConnection;
+              debugPrint(
+                  '[PerformanceStatsHandler] Auto-resolved connection to DEFAULT connection for local video: connection=${effectiveConnection.toString()}');
+            }
+          }
+        }
+      } else {
+        // For remote video (uid != 0), if still no valid connection,
+        // try to find from active connections by channelId
+        if (connection?.channelId != null) {
+          final activeConnections = ChannelConnectionManager.instance
+              .getActiveConnectionsByChannelId(connection!.channelId!);
+          if (activeConnections.isNotEmpty) {
+            effectiveConnection = activeConnections.first;
+            debugPrint(
+                '[PerformanceStatsHandler] Auto-resolved connection for remote video from active connections: connection=${effectiveConnection.toString()}');
           }
         }
       }
@@ -107,15 +136,14 @@ class PerformanceStatsHandler implements VideoRenderingPerformanceEventHandler {
     PerformanceDataCollector.instance.addPerformanceData(
       rtcEngine: rtcEngine,
       uid: uid,
-      channelId: effectiveChannelId,
-      localUid: effectiveLocalUid,
+      connection: effectiveConnection,
       sourceType: context.sourceType ?? VideoSourceType.videoSourceCamera,
       totalFramesRendered: stats.totalFramesRendered ?? 0,
       drawCost: stats.renderDrawCostMs,
     );
 
     debugPrint(
-        '${DateTime.now().toString()} [AgoraRenderTexture] RawFrame: isLocal=$isLocal, channelId=$effectiveChannelId, localUid=$effectiveLocalUid, UID=$uid, '
+        '${DateTime.now().toString()} [AgoraRenderTexture] RawFrame: isLocal=$isLocal, connection=${effectiveConnection.toString()}, UID=$uid, '
         'TotalRendered=${stats.totalFramesRendered}, '
         'DrawCost=${stats.renderDrawCostMs?.toStringAsFixed(2)}ms');
   }
@@ -139,25 +167,30 @@ class PerformanceDataCollector {
 
   Timer? _uploadTimer;
   static const Duration _uploadInterval = Duration(seconds: 6);
+  bool _isDisposed = false;
 
   /// Add raw frame data for a specific uid in a channel
   void addPerformanceData({
     required RtcEngine rtcEngine,
     required int uid,
-    required String channelId,
-    required int localUid,
+    required RtcConnection? connection,
     required VideoSourceType sourceType,
     required int totalFramesRendered,
     double? drawCost,
   }) {
-    // 2. Condition: don't upload if channelId is empty
-    if (channelId.isEmpty) {
+    // Reset disposed state if new data arrives (new channel joined)
+    if (_isDisposed) {
+      _isDisposed = false;
+    }
+
+    // 2. Condition: don't upload if connection is null
+    if (connection?.channelId == null) {
       return;
     }
 
-    // 1. Separate uploads: Include sourceType index in the key to ensure
-    // different local sources (camera, screen) in the same connection are uploaded separately.
-    final key = '$channelId-$localUid-${sourceType.index}';
+    // 1. Group by connection only: Include only channelId and localUid in the key.
+    // Multiple sourceTypes (camera, screen) will be aggregated in the same _ChannelPerformanceData.
+    final key = '${connection?.channelId}-${connection?.localUid}';
 
     // Check if this channel/source was recently cleared (grace period)
     if (_clearedChannelsGracePeriod.containsKey(key)) {
@@ -174,8 +207,7 @@ class PerformanceDataCollector {
       key,
       () => _ChannelPerformanceData(
         rtcEngine: rtcEngine,
-        channelId: channelId,
-        localUid: localUid,
+        connection: connection,
       ),
     );
 
@@ -191,6 +223,14 @@ class PerformanceDataCollector {
       // First, scan and clear data for channels that are no longer active in the manager
       final activeKeys = ChannelConnectionManager.instance.activeConnectionKeys;
       clearInactiveChannelData(activeKeys);
+
+      // Auto-cleanup when all channels are left and no data remains
+      // This serves as a fallback cleanup mechanism that doesn't depend on
+      // client calling specific methods (e.g., leaveChannel or release)
+      if (activeKeys.isEmpty && _channelDataMap.isEmpty) {
+        dispose();
+        return;
+      }
 
       _uploadAllChannelData();
     });
@@ -210,26 +250,8 @@ class PerformanceDataCollector {
   /// to prevent data from different channels being mixed together
   void clearChannelData(String channelId, int localUid,
       [VideoSourceType? sourceType]) {
-    if (sourceType != null) {
-      final key = '$channelId-$localUid-${sourceType.index}';
-      _clearSpecificKey(key);
-    } else {
-      // Clear all sources for this connection
-      final prefix = '$channelId-$localUid-';
-      final keysToRemove =
-          _channelDataMap.keys.where((k) => k.startsWith(prefix)).toList();
-      for (final key in keysToRemove) {
-        _clearSpecificKey(key);
-      }
-
-      // Also clear any matching grace periods
-      final graceKeysToRemove = _clearedChannelsGracePeriod.keys
-          .where((k) => k.startsWith(prefix))
-          .toList();
-      for (final key in graceKeysToRemove) {
-        _clearedChannelsGracePeriod.remove(key);
-      }
-    }
+    final key = '$channelId-$localUid';
+    _clearSpecificKey(key);
   }
 
   void _clearSpecificKey(String key) {
@@ -248,13 +270,8 @@ class PerformanceDataCollector {
   void clearInactiveChannelData(List<String> activeConnectionKeys) {
     final keysToRemove = <String>[];
     for (final key in _channelDataMap.keys) {
-      // Extract connection key (channelId-localUid) from full key (channelId-localUid-sourceType)
-      final parts = key.split('-');
-      if (parts.length >= 2) {
-        final connectionKey = '${parts[0]}-${parts[1]}';
-        if (!activeConnectionKeys.contains(connectionKey)) {
-          keysToRemove.add(key);
-        }
+      if (!activeConnectionKeys.contains(key)) {
+        keysToRemove.add(key);
       }
     }
 
@@ -268,7 +285,13 @@ class PerformanceDataCollector {
   }
 
   /// Dispose the collector and cancel timer
+  /// This method is idempotent and can be safely called multiple times
   void dispose() {
+    if (_isDisposed) {
+      return;
+    }
+    _isDisposed = true;
+
     _uploadTimer?.cancel();
     _uploadTimer = null;
 
@@ -284,13 +307,11 @@ class PerformanceDataCollector {
 class _ChannelPerformanceData {
   _ChannelPerformanceData({
     required this.rtcEngine,
-    required this.channelId,
-    required this.localUid,
+    required this.connection,
   });
 
   final RtcEngine rtcEngine;
-  final String channelId;
-  final int localUid;
+  final RtcConnection? connection;
 
   // Raw frame data buffer for FPS calculation
   // Key: "uid-sourceType" -> _UidFrameBuffer
@@ -331,8 +352,8 @@ class _ChannelPerformanceData {
     final params = {
       "data": dataArray,
       "connection": {
-        "channelId": channelId,
-        "localUid": localUid,
+        "channelId": connection?.channelId,
+        "localUid": connection?.localUid,
       }
     };
 
@@ -340,7 +361,7 @@ class _ChannelPerformanceData {
 
     // rtcEngine.setParameters(jsonString);
 
-    debugPrint(
+    print(
         '[AgoraRenderTexture][PerformanceDataCollector] UPLOAD 6s Metrics for connection time: ${DateTime.now()} $jsonString');
 
     // Clear buffers after upload

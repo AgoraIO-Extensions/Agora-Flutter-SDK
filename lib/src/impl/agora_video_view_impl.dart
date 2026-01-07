@@ -349,8 +349,7 @@ class _AgoraRtcRenderTextureState extends State<AgoraRtcRenderTexture>
         RenderContext(
           rtcEngine: widget.controller.rtcEngine,
           uid: widget.controller.canvas.uid ?? 0,
-          channelId: widget.controller.connection?.channelId ?? '',
-          localUid: widget.controller.connection?.localUid ?? 0,
+          connection: widget.controller.connection,
           sourceType: widget.controller.canvas.sourceType ??
               VideoSourceTypeExt.fromValue(
                   widget.controller.getVideoSourceType()),

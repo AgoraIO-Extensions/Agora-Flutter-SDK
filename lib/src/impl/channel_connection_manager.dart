@@ -1,6 +1,6 @@
-import 'package:flutter/foundation.dart';
-import '../agora_rtc_engine_ex.dart';
-import '../agora_media_base.dart';
+import 'package:agora_rtc_engine/src/agora_media_base.dart';
+import 'package:agora_rtc_engine/src/agora_rtc_engine_ex.dart';
+import 'package:agora_rtc_engine/src/impl/video_rendering_performance_uploader.dart';
 
 class ChannelConnectionManager {
   static final ChannelConnectionManager _instance =
@@ -30,10 +30,7 @@ class ChannelConnectionManager {
       if (_isSameConnection(existing, connection)) {
         return;
       }
-
       _activeConnections[connection.channelId!] = connection;
-      debugPrint(
-          '[ChannelConnectionManager] Added/Updated connection: channelId=${connection.channelId}, localUid=${connection.localUid}');
     }
   }
 
@@ -42,10 +39,6 @@ class ChannelConnectionManager {
       return;
     }
     _activeConnections.remove(channelId);
-    debugPrint(
-        '[ChannelConnectionManager] Removed connection: channelId=$channelId');
-
-    // Remove from legacy publishing connection
     if (_publishingVideoConnection?.channelId == channelId) {
       _publishingVideoConnection = null;
     }
@@ -59,8 +52,17 @@ class ChannelConnectionManager {
     });
     for (final sourceType in keysToRemove) {
       _publishingVideoConnections.remove(sourceType);
-      debugPrint(
-          '[ChannelConnectionManager] Removed publishing connection for $sourceType due to channel leave');
+    }
+
+    // Auto-cleanup when all channels are left
+    // This ensures cleanup happens even if the client doesn't call leaveChannel
+    // or forgets to call it (e.g., directly navigating away from the page)
+    if (_activeConnections.isEmpty && _publishingVideoConnections.isEmpty) {
+      // Clear connection manager state
+      clear();
+      // Dispose performance collector to free resources
+      // This is safe to call multiple times as dispose() is idempotent
+      PerformanceDataCollector.instance.dispose();
     }
   }
 
@@ -73,8 +75,6 @@ class ChannelConnectionManager {
     }
 
     _publishingVideoConnections[sourceType] = connection;
-    debugPrint(
-        '[ChannelConnectionManager] Set publishing connection for $sourceType: channelId=${connection.channelId}, localUid=${connection.localUid}');
   }
 
   /// Get publishing video connection for a specific source type
@@ -83,22 +83,6 @@ class ChannelConnectionManager {
     return _publishingVideoConnections[sourceType];
   }
 
-  /// Remove publishing video connection for a specific source type
-  void removePublishingVideoConnectionBySource(VideoSourceType sourceType) {
-    _publishingVideoConnections.remove(sourceType);
-    debugPrint(
-        '[ChannelConnectionManager] Removed publishing connection for $sourceType');
-  }
-
-  /// Legacy method: Set publishing video connection (defaults to camera source)
-  void setPublishingVideoConnection(RtcConnection connection) {
-    _publishingVideoConnection = connection;
-    // Also set it for camera source for consistency
-    setPublishingVideoConnectionBySource(
-        VideoSourceType.videoSourceCamera, connection);
-    debugPrint(
-        '[ChannelConnectionManager] Set publishing connection (legacy): channelId=${connection.channelId}, localUid=${connection.localUid}');
-  }
 
   /// Legacy method: Get publishing video connection
   /// Returns camera connection first, then screen, then any other, or legacy connection
@@ -112,10 +96,6 @@ class ChannelConnectionManager {
         _publishingVideoConnection;
   }
 
-  List<RtcConnection> getAllActiveConnections() {
-    return _activeConnections.values.toList();
-  }
-
   List<String> get activeConnectionKeys {
     final keys = <String>[];
     for (final connection in _activeConnections.values) {
@@ -126,24 +106,79 @@ class ChannelConnectionManager {
     return keys;
   }
 
-  RtcConnection? getConnection(String channelId) {
-    return _activeConnections[channelId];
-  }
-
   void clear() {
     _activeConnections.clear();
     _publishingVideoConnection = null;
     _publishingVideoConnections.clear();
-    debugPrint('[ChannelConnectionManager] Cleared all connections');
   }
 
   RtcConnection? getDefaultConnection() {
     if (_publishingVideoConnection != null) {
       return _publishingVideoConnection;
     }
-    if (_activeConnections.isNotEmpty) {
-      return _activeConnections.values.first;
-    }
     return null;
+  }
+
+  /// Get active connections by channelId
+  /// Returns all unique connections matching the given channelId
+  /// (deduplicated by channelId and localUid)
+  List<RtcConnection> getActiveConnectionsByChannelId(String channelId) {
+    final connections = <RtcConnection>[];
+    if (channelId.isEmpty) {
+      return connections;
+    }
+    
+    // Use a set to track seen connection keys (channelId-localUid) for deduplication
+    final seenKeys = <String>{};
+    
+    // Check in _activeConnections
+    final connection = _activeConnections[channelId];
+    if (connection != null) {
+      connections.add(connection);
+      final key = '${connection.channelId}-${connection.localUid ?? 0}';
+      seenKeys.add(key);
+    }
+    
+    // Also check in _publishingVideoConnections (in case it's a publishing connection)
+    for (final conn in _publishingVideoConnections.values) {
+      if (conn.channelId == channelId) {
+        final key = '${conn.channelId}-${conn.localUid ?? 0}';
+        if (!seenKeys.contains(key)) {
+          // Check if it's actually a different connection using _isSameConnection
+          bool isDuplicate = false;
+          for (final existingConn in connections) {
+            if (_isSameConnection(existingConn, conn)) {
+              isDuplicate = true;
+              break;
+            }
+          }
+          if (!isDuplicate) {
+            connections.add(conn);
+            seenKeys.add(key);
+          }
+        }
+      }
+    }
+    
+    // Also check legacy _publishingVideoConnection
+    if (_publishingVideoConnection != null &&
+        _publishingVideoConnection!.channelId == channelId) {
+      final key = '${_publishingVideoConnection!.channelId}-${_publishingVideoConnection!.localUid ?? 0}';
+      if (!seenKeys.contains(key)) {
+        bool isDuplicate = false;
+        for (final existingConn in connections) {
+          if (_isSameConnection(existingConn, _publishingVideoConnection)) {
+            isDuplicate = true;
+            break;
+          }
+        }
+        if (!isDuplicate) {
+          connections.add(_publishingVideoConnection!);
+          seenKeys.add(key);
+        }
+      }
+    }
+    
+    return connections;
   }
 }

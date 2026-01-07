@@ -323,10 +323,11 @@ class _RtcEngineEventHandlerWrapper extends RtcEngineEventHandlerWrapper {
                 jsonMap.cast<String, dynamic>());
         RtcConnection? connection = paramJson.connection;
         if (connection?.channelId != null) {
-          ChannelConnectionManager.instance
-              .removeConnection(connection!.channelId!);
           PerformanceDataCollector.instance.clearChannelData(
-              connection.channelId!, connection.localUid ?? 0);
+              connection!.channelId!, connection.localUid ?? 0);
+          // removeConnection will automatically trigger cleanup if all channels are left
+          ChannelConnectionManager.instance
+              .removeConnection(connection.channelId!);
         }
         break;
       case 'onLocalVideoStats_0cebfd7':
@@ -590,7 +591,9 @@ class RtcEngineImpl extends rtc_engine_ex_binding.RtcEngineExImpl
 
     await irisMethodChannel.unregisterEventHandlers(_rtcEngineImplScopedKey);
     
-    // Clear all channel connections
+    // Clear all channel connections and dispose performance collector
+    // This serves as a fallback cleanup in case cleanup wasn't performed
+    // when all channels were left (e.g., if onLeaveChannel event wasn't triggered)
     ChannelConnectionManager.instance.clear();
 
     PerformanceDataCollector.instance.dispose();
