@@ -1,4 +1,5 @@
 #import "TextureRenderer.h"
+#import "AgoraRenderPerformanceMonitor.h"
 #if defined(TARGET_OS_OSX) && TARGET_OS_OSX
 #import "AgoraCVPixelBufferUtils.h"
 #endif
@@ -97,12 +98,14 @@ kernel void processYUVColorSpace(texture2d<float, access::read> yTexture [[textu
 }
 )";
 
-@interface TextureRender ()
+@interface TextureRender () <AgoraRenderPerformanceDelegate>
 
 @property(nonatomic, weak) NSObject<FlutterTextureRegistry> *textureRegistry;
 @property(nonatomic, strong) FlutterMethodChannel *channel;
+@property(nonatomic, strong) FlutterMethodChannel *sharedMethodChannel;
 @property(nonatomic) agora::iris::IrisRtcRendering *irisRtcRendering;
 @property(nonatomic, assign) int delegateId;
+@property(nonatomic, assign) unsigned int uid;  // Store uid for performance reporting
 
 /// Tracks the latest pixel buffer sent from AVFoundation's sample buffer
 /// delegate callback. Used to deliver the latest pixel buffer to the flutter
@@ -127,6 +130,8 @@ kernel void processYUVColorSpace(texture2d<float, access::read> yTexture [[textu
 - (const float*)getColorMatrixForColorSpace:(const agora::media::base::ColorSpace&)colorSpace;
 - (void)processColorSpace:(CVPixelBufferRef)pixelBuffer 
                 colorSpace:(const agora::media::base::ColorSpace&)colorSpace;
+/// Performance monitor (optional, created only when enabled)
+@property(nonatomic, strong) AgoraRenderPerformanceMonitor *performanceMonitor;
 
 @end
 
@@ -146,6 +151,9 @@ public:
     if (!strongRenderer) {
       return;
     }
+
+    // Record frame received (timestamp captured internally)
+    [strongRenderer.performanceMonitor recordFrameReceived];
 
     std::weak_ptr<RendererDelegate> self_weak = shared_from_this();
 
@@ -232,6 +240,7 @@ public:
       if (!strongRenderer) {
         return;
       }
+      [strongRenderer.performanceMonitor recordFrameRenderedInterval];
       [strongRenderer.textureRegistry
           textureFrameAvailable:strongRenderer.textureId];
     });
@@ -255,10 +264,12 @@ public:
 - (instancetype)
     initWithTextureRegistry:(NSObject<FlutterTextureRegistry> *)textureRegistry
                   messenger:(NSObject<FlutterBinaryMessenger> *)messenger
+              methodChannel:(FlutterMethodChannel *)methodChannel
      irisRtcRenderingHandle:(void *)irisRtcRenderingHandle {
   self = [super init];
   if (self) {
     self.textureRegistry = textureRegistry;
+    self.sharedMethodChannel = methodChannel;
     self.irisRtcRendering =
         (agora::iris::IrisRtcRendering *)irisRtcRenderingHandle;
     self.textureId = [self.textureRegistry registerTexture:self];
@@ -279,18 +290,25 @@ public:
     self.hasValidColorSpace = NO;
     memset(&_currentColorSpace, 0, sizeof(_currentColorSpace));
     [self setupColorSpaceProcessing];
+    // Initialize performance monitor
+    self.performanceMonitor = [[AgoraRenderPerformanceMonitor alloc] init];
+    self.performanceMonitor.delegate = self;
   }
   return self;
 }
 
 - (void)updateData:(NSNumber *)uid
-             channelId:(NSString *)channelId
-       videoSourceType:(NSNumber *)videoSourceType
-    videoViewSetupMode:(NSNumber *)videoViewSetupMode {
+            channelId:(NSString *)channelId
+      videoSourceType:(NSNumber *)videoSourceType
+   videoViewSetupMode:(NSNumber *)videoViewSetupMode {
+  
+  // Store uid for performance reporting
+  self.uid = [uid unsignedIntValue];
+  
   IrisRtcVideoFrameConfig config;
   config.video_frame_format =
       agora::media::base::VIDEO_PIXEL_FORMAT::VIDEO_CVPIXEL_NV12;
-  config.uid = [uid unsignedIntValue];
+  config.uid = self.uid;
   config.video_source_type = [videoSourceType intValue];
   if (channelId && (NSNull *)channelId != [NSNull null]) {
     strcpy(config.channelId, [channelId UTF8String]);
@@ -308,6 +326,7 @@ public:
 
 - (CVPixelBufferRef _Nullable)copyPixelBuffer {
   __block CVPixelBufferRef pixelBuffer = nil;
+  
   // Use `dispatch_sync` because `copyPixelBuffer` API requires synchronous
   // return.
   dispatch_sync(self.pixelBufferSynchronizationQueue, ^{
@@ -330,10 +349,32 @@ public:
   
   NSLog(@"Returning pixelBuffer to Flutter Engine");
   
+  // Record render draw cost (duration calculated internally)
+  if (pixelBuffer) {
+    [self.performanceMonitor recordRenderDrawCost];
+  }
+  
   return pixelBuffer;
 }
 
 - (void)dispose {
+  // Use async report to avoid blocking the main thread during critical cleanup.
+  // This reduces the chance of irisRtcRendering becoming dangling before we call RemoveVideoFrameObserverDelegate.
+  // Use async report with callback to ensure stats are sent even if this renderer is deallocated
+  // Capture necessary variables for the block
+  FlutterMethodChannel *sharedChannel = self.sharedMethodChannel;
+  int64_t textureId = self.textureId;
+  unsigned int uid = self.uid;
+  
+  [self.performanceMonitor forceReportWithCallback:^(AgoraRenderPerformanceStats *stats) {
+    if (sharedChannel) {
+        NSMutableDictionary *statsDict = [[stats toDictionary] mutableCopy];
+        statsDict[@"textureId"] = @(textureId);
+        statsDict[@"uid"] = @(uid);
+        [sharedChannel invokeMethod:@"onVideoRenderingPerformance" arguments:statsDict];
+    }
+  }];
+  
   if (self.irisRtcRendering) {
     self.irisRtcRendering->RemoveVideoFrameObserverDelegate(self.delegateId);
     self.irisRtcRendering = nil;
@@ -345,6 +386,25 @@ public:
     [self.textureRegistry unregisterTexture:self.textureId];
     self.textureRegistry = nil;
   }
+  
+  // Clean up performance monitor
+  self.performanceMonitor.delegate = nil;
+  self.performanceMonitor = nil;
+}
+
+#pragma mark - AgoraRenderPerformanceDelegate
+
+- (void)onPerformanceStatsUpdated:(AgoraRenderPerformanceStats *)stats {
+  if (!self.sharedMethodChannel) {
+    return;
+  }
+  
+  // Send performance stats to Flutter layer via shared channel
+  NSMutableDictionary *statsDict = [[stats toDictionary] mutableCopy];
+  statsDict[@"textureId"] = @(self.textureId);
+  statsDict[@"uid"] = @(self.uid);  // Add uid to distinguish local/remote
+  [self.sharedMethodChannel invokeMethod:@"onVideoRenderingPerformance"
+                         arguments:statsDict];
 }
 
 #pragma mark - ColorSpace Processing

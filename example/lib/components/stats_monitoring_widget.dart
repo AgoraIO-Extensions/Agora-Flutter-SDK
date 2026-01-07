@@ -87,7 +87,7 @@ class __StatsMonitoringInternalWidgetState
           _localAudioStats = stats;
         });
       },
-      onLocalVideoStats: (connection, stats) {
+      onLocalVideoStats: (connection, sourceType, stats) {
         setState(() {
           _localVideoStats = stats;
         });

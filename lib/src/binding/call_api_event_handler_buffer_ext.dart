@@ -233,6 +233,90 @@ extension WatermarkOptionsBufferExt on WatermarkOptions {
   }
 }
 
+extension WatermarkTimestampBufferExt on WatermarkTimestamp {
+  WatermarkTimestamp fillBuffers(List<Uint8List> bufferList) {
+    if (bufferList.isEmpty) return this;
+    return this;
+  }
+
+  List<Uint8List> collectBufferList() {
+    final bufferList = <Uint8List>[];
+    return bufferList;
+  }
+}
+
+extension WatermarkLiteralBufferExt on WatermarkLiteral {
+  WatermarkLiteral fillBuffers(List<Uint8List> bufferList) {
+    if (bufferList.isEmpty) return this;
+    return this;
+  }
+
+  List<Uint8List> collectBufferList() {
+    final bufferList = <Uint8List>[];
+    return bufferList;
+  }
+}
+
+extension WatermarkBufferBufferExt on WatermarkBuffer {
+  WatermarkBuffer fillBuffers(List<Uint8List> bufferList) {
+    if (bufferList.isEmpty) return this;
+    Uint8List? buffer;
+    if (bufferList.length > 0) {
+      buffer = bufferList[0];
+    }
+    return WatermarkBuffer(
+        width: width,
+        height: height,
+        length: length,
+        format: format,
+        buffer: buffer);
+  }
+
+  List<Uint8List> collectBufferList() {
+    final bufferList = <Uint8List>[];
+    if (buffer != null) {
+      bufferList.add(buffer!);
+    }
+    return bufferList;
+  }
+}
+
+extension WatermarkConfigBufferExt on WatermarkConfig {
+  WatermarkConfig fillBuffers(List<Uint8List> bufferList) {
+    if (bufferList.isEmpty) return this;
+    return this;
+  }
+
+  List<Uint8List> collectBufferList() {
+    final bufferList = <Uint8List>[];
+    return bufferList;
+  }
+}
+
+extension PathStatsBufferExt on PathStats {
+  PathStats fillBuffers(List<Uint8List> bufferList) {
+    if (bufferList.isEmpty) return this;
+    return this;
+  }
+
+  List<Uint8List> collectBufferList() {
+    final bufferList = <Uint8List>[];
+    return bufferList;
+  }
+}
+
+extension MultipathStatsBufferExt on MultipathStats {
+  MultipathStats fillBuffers(List<Uint8List> bufferList) {
+    if (bufferList.isEmpty) return this;
+    return this;
+  }
+
+  List<Uint8List> collectBufferList() {
+    final bufferList = <Uint8List>[];
+    return bufferList;
+  }
+}
+
 extension RtcStatsBufferExt on RtcStats {
   RtcStats fillBuffers(List<Uint8List> bufferList) {
     if (bufferList.isEmpty) return this;
@@ -460,18 +544,6 @@ extension LastmileProbeOneWayResultBufferExt on LastmileProbeOneWayResult {
 
 extension LastmileProbeResultBufferExt on LastmileProbeResult {
   LastmileProbeResult fillBuffers(List<Uint8List> bufferList) {
-    if (bufferList.isEmpty) return this;
-    return this;
-  }
-
-  List<Uint8List> collectBufferList() {
-    final bufferList = <Uint8List>[];
-    return bufferList;
-  }
-}
-
-extension WlAccStatsBufferExt on WlAccStats {
-  WlAccStats fillBuffers(List<Uint8List> bufferList) {
     if (bufferList.isEmpty) return this;
     return this;
   }

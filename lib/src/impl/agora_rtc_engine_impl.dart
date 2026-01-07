@@ -2,6 +2,8 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:typed_data';
 
+import 'package:agora_rtc_engine/src/impl/channel_connection_manager.dart';
+
 import '/src/agora_base.dart';
 import '/src/agora_h265_transcoder.dart';
 import '/src/agora_media_base.dart';
@@ -294,6 +296,76 @@ extension MetadataObserverExt on MetadataObserver {
   }
 }
 
+class _RtcEngineEventHandlerWrapper extends RtcEngineEventHandlerWrapper {
+  _RtcEngineEventHandlerWrapper(RtcEngineEventHandler rtcEngineEventHandler)
+      : super(rtcEngineEventHandler);
+
+  @override
+  bool handleEventInternal(
+      String eventName, String eventData, List<Uint8List> buffers) {
+    switch (eventName) {
+      case 'onJoinChannelSuccess_263e4cd':
+      case 'onRejoinChannelSuccess_263e4cd':
+        final Map jsonMap = jsonDecode(eventData);
+        RtcEngineEventHandlerOnJoinChannelSuccessJson paramJson =
+            RtcEngineEventHandlerOnJoinChannelSuccessJson.fromJson(
+                jsonMap.cast<String, dynamic>());
+        RtcConnection? connection = paramJson.connection;
+        if (connection != null) {
+          ChannelConnectionManager.instance.addConnection(connection);
+        }
+        break;
+      case 'onLeaveChannel_c8e730d':
+        final Map jsonMap = jsonDecode(eventData);
+        RtcEngineEventHandlerOnLeaveChannelJson paramJson =
+            RtcEngineEventHandlerOnLeaveChannelJson.fromJson(
+                jsonMap.cast<String, dynamic>());
+        RtcConnection? connection = paramJson.connection;
+        if (connection?.channelId != null) {
+          ChannelConnectionManager.instance
+              .removeConnection(connection!.channelId!);
+        }
+        break;
+      case 'onLocalVideoStats_0cebfd7':
+        final Map jsonMap = jsonDecode(eventData);
+        RtcEngineEventHandlerOnLocalVideoStatsJson paramJson =
+            RtcEngineEventHandlerOnLocalVideoStatsJson.fromJson(
+                jsonMap.cast<String, dynamic>());
+        RtcConnection? connection = paramJson.connection;
+        VideoSourceType? sourceType = paramJson.sourceType;
+        if (connection != null && sourceType != null) {
+          ChannelConnectionManager.instance
+              .setPublishingVideoConnectionBySource(sourceType, connection);
+        }
+        break;
+      case 'onRemoteVideoStats_2f43a70':
+        final Map jsonMap = jsonDecode(eventData);
+        RtcEngineEventHandlerOnRemoteVideoStatsJson paramJson =
+            RtcEngineEventHandlerOnRemoteVideoStatsJson.fromJson(
+                jsonMap.cast<String, dynamic>());
+        RtcConnection? connection = paramJson.connection;
+        if (connection != null) {
+          ChannelConnectionManager.instance.addConnection(connection);
+        }
+        break;
+    }
+
+    return super.handleEventInternal(eventName, eventData, buffers);
+  }
+
+  @override
+  bool operator ==(Object other) {
+    if (other.runtimeType != runtimeType) {
+      return false;
+    }
+    return other is _RtcEngineEventHandlerWrapper &&
+        other.rtcEngineEventHandler == rtcEngineEventHandler;
+  }
+
+  @override
+  int get hashCode => rtcEngineEventHandler.hashCode;
+}
+
 @internal
 class InitializationState extends ChangeNotifier {
   bool _isInitialzed = false;
@@ -514,6 +586,9 @@ class RtcEngineImpl extends rtc_engine_ex_binding.RtcEngineExImpl
     _globalVideoViewController = null;
 
     await irisMethodChannel.unregisterEventHandlers(_rtcEngineImplScopedKey);
+    
+    // Clear all channel connections
+    ChannelConnectionManager.instance.clear();
 
     await super.release(sync: sync);
 
@@ -529,7 +604,7 @@ class RtcEngineImpl extends rtc_engine_ex_binding.RtcEngineExImpl
   @override
   void registerEventHandler(
       covariant RtcEngineEventHandler eventHandler) async {
-    final eventHandlerWrapper = RtcEngineEventHandlerWrapper(eventHandler);
+    final eventHandlerWrapper = _RtcEngineEventHandlerWrapper(eventHandler);
     final param = createParams({});
 
     await irisMethodChannel.registerEventHandler(
@@ -544,7 +619,7 @@ class RtcEngineImpl extends rtc_engine_ex_binding.RtcEngineExImpl
   @override
   void unregisterEventHandler(
       covariant RtcEngineEventHandler eventHandler) async {
-    final eventHandlerWrapper = RtcEngineEventHandlerWrapper(eventHandler);
+    final eventHandlerWrapper = _RtcEngineEventHandlerWrapper(eventHandler);
     final param = createParams({});
 
     await irisMethodChannel.unregisterEventHandler(
@@ -898,32 +973,6 @@ class RtcEngineImpl extends rtc_engine_ex_binding.RtcEngineExImpl
     }
   }
 
-  @override
-  Future<void> joinChannelWithUserAccount(
-      {required String token,
-      required String channelId,
-      required String userAccount,
-      ChannelMediaOptions? options}) async {
-    final apiType = options == null
-        ? 'RtcEngine_joinChannelWithUserAccount_0e4f59e'
-        : 'RtcEngine_joinChannelWithUserAccount_4685af9';
-    final param = createParams({
-      'token': token,
-      'channelId': channelId,
-      'userAccount': userAccount,
-      'options': options?.toJson()
-    });
-    final callApiResult = await irisMethodChannel
-        .invokeMethod(IrisMethodCall(apiType, jsonEncode(param)));
-    if (callApiResult.irisReturnCode < 0) {
-      throw AgoraRtcException(code: callApiResult.irisReturnCode);
-    }
-    final rm = callApiResult.data;
-    final result = rm['result'];
-    if (result < 0) {
-      throw AgoraRtcException(code: result);
-    }
-  }
 
   @override
   void registerAudioEncodedFrameObserver(
@@ -1098,7 +1147,6 @@ class RtcEngineImpl extends rtc_engine_ex_binding.RtcEngineExImpl
 
     return Future.value();
   }
-
   /////////// debug ////////
 
   /// [type] see [VideoSourceType], only [VideoSourceType.videoSourceCamera], [VideoSourceType.videoSourceRemote] supported

@@ -337,7 +337,7 @@ class VideoEncodedFrameObserverWrapper implements EventLoopEventHandler {
   bool handleEventInternal(
       String eventName, String eventData, List<Uint8List> buffers) {
     switch (eventName) {
-      case 'onEncodedVideoFrameReceived_6922697':
+      case 'onEncodedVideoFrameReceived_5f183eb':
         if (videoEncodedFrameObserver.onEncodedVideoFrameReceived == null) {
           return true;
         }
@@ -346,12 +346,14 @@ class VideoEncodedFrameObserverWrapper implements EventLoopEventHandler {
             VideoEncodedFrameObserverOnEncodedVideoFrameReceivedJson.fromJson(
                 jsonMap);
         paramJson = paramJson.fillBuffers(buffers);
+        String? channelId = paramJson.channelId;
         int? uid = paramJson.uid;
         Uint8List? imageBuffer = paramJson.imageBuffer;
         int? length = paramJson.length;
         EncodedVideoFrameInfo? videoEncodedFrameInfo =
             paramJson.videoEncodedFrameInfo;
-        if (uid == null ||
+        if (channelId == null ||
+            uid == null ||
             imageBuffer == null ||
             length == null ||
             videoEncodedFrameInfo == null) {
@@ -359,7 +361,7 @@ class VideoEncodedFrameObserverWrapper implements EventLoopEventHandler {
         }
         videoEncodedFrameInfo = videoEncodedFrameInfo.fillBuffers(buffers);
         videoEncodedFrameObserver.onEncodedVideoFrameReceived!(
-            uid, imageBuffer, length, videoEncodedFrameInfo);
+            channelId, uid, imageBuffer, length, videoEncodedFrameInfo);
         return true;
     }
     return false;

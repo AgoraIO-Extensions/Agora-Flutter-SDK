@@ -30,12 +30,12 @@ VideoViewController::VideoViewController(
     flutter::BinaryMessenger *messenger) : texture_registrar_(texture_registrar),
                                            messenger_(messenger)
 {
-  auto channel =
+  shared_method_channel_ =
       std::make_unique<flutter::MethodChannel<flutter::EncodableValue>>(
           messenger_, "agora_rtc_ng/video_view_controller",
           &flutter::StandardMethodCodec::GetInstance());
 
-  channel->SetMethodCallHandler([this](const auto &call, auto result)
+  shared_method_channel_->SetMethodCallHandler([this](const auto &call, auto result)
                                 { this->HandleMethodCall(call, std::move(result)); });
 }
 
@@ -158,6 +158,7 @@ int64_t VideoViewController::CreateTextureRender(
   auto textureRender = new TextureRender(
       messenger_,
       texture_registrar_,
+      shared_method_channel_.get(),  // Pass shared method channel
       iris_rtc_rendering);
 
   int64_t texture_id = textureRender->texture_id();

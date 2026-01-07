@@ -16,6 +16,7 @@ private:
     flutter::BinaryMessenger *messenger_;
     flutter::TextureRegistrar *texture_registrar_;
     std::map<int64_t, TextureRender *> renderers_;
+    std::unique_ptr<flutter::MethodChannel<flutter::EncodableValue>> shared_method_channel_;
 
     void HandleMethodCall(
         const flutter::MethodCall<flutter::EncodableValue> &method_call,
