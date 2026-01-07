@@ -50,6 +50,7 @@ class _State extends State<JoinMultipleChannel> {
     _engine = createAgoraRtcEngineEx();
     await _engine.initialize(RtcEngineContext(
       appId: config.appId,
+      enableArgusCounters: true,
       channelProfile: ChannelProfileType.channelProfileLiveBroadcasting,
     ));
 

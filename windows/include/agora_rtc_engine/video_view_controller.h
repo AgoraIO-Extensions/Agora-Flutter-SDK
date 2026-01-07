@@ -31,7 +31,8 @@ private:
         unsigned int uid,
         const std::string &channelId,
         unsigned int videoSourceType,
-        unsigned int videoViewSetupMode);
+        unsigned int videoViewSetupMode,
+        bool enableArgusCounters);
 
     bool DestroyTextureRender(int64_t textureId);
 

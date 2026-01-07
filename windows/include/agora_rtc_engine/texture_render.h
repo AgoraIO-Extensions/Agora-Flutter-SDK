@@ -18,7 +18,8 @@ public:
     TextureRender(flutter::BinaryMessenger *messenger,
                   flutter::TextureRegistrar *registrar,
                   flutter::MethodChannel<flutter::EncodableValue> *shared_method_channel,
-                  agora::iris::IrisRtcRendering *iris_rtc_rendering);
+                  agora::iris::IrisRtcRendering *iris_rtc_rendering,
+                  bool enable_argus_counters = true);
     virtual ~TextureRender();
 
     int64_t texture_id();
@@ -38,7 +39,7 @@ public:
     void Dispose();
 
     // AgoraRenderPerformanceDelegate implementation
-    void onPerformanceStatsUpdated(const agora::rtc::flutter::AgoraRenderPerformanceStats& stats) override;
+    void onRawFrameStats(const std::map<std::string, double>& rawStats) override;
 
 private:
     const FlutterDesktopPixelBuffer *CopyPixelBuffer(size_t width, size_t height);

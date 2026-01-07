@@ -296,10 +296,12 @@ public:
     self.hasValidColorSpace = NO;
     memset(&_currentColorSpace, 0, sizeof(_currentColorSpace));
     [self setupColorSpaceProcessing];
-    // Initialize performance monitor
-    self.performanceMonitor = [[AgoraRenderPerformanceMonitor alloc] init];
-    self.performanceMonitor.enabled = enableArgusCounters;
-    self.performanceMonitor.delegate = self;
+    // Initialize performance monitor (only if enabled to save resources)
+    if (enableArgusCounters) {
+        self.performanceMonitor = [[AgoraRenderPerformanceMonitor alloc] init];
+        self.performanceMonitor.enabled = YES;
+        self.performanceMonitor.delegate = self;
+    }
     // Initialize dispose flag
     self.isDisposed = NO;
   }

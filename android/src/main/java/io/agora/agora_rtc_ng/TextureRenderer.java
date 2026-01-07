@@ -34,7 +34,8 @@ public class TextureRenderer implements AgoraRenderPerformanceDelegate {
             long irisRtcRenderingHandle,
             long uid,
             String channelId,
-            int videoSourceType, int videoViewSetupMode) {
+            int videoSourceType, int videoViewSetupMode,
+            boolean enableArgusCounters) {
 
         this.handler = new Handler(Looper.getMainLooper());
         this.uid = uid;
@@ -50,6 +51,7 @@ public class TextureRenderer implements AgoraRenderPerformanceDelegate {
 
         // Initialize performance monitor
         this.performanceMonitor = new AgoraRenderPerformanceMonitor();
+        this.performanceMonitor.setEnabled(enableArgusCounters);
         this.performanceMonitor.setDelegate(this);
 
         this.irisRenderer = new IrisRenderer(
@@ -109,17 +111,7 @@ public class TextureRenderer implements AgoraRenderPerformanceDelegate {
         final long uidValue = this.uid;
         
         if (performanceMonitor != null) {
-            performanceMonitor.forceReportWithCallback(stats -> {
-                if (channel != null) {
-                    Map<String, Object> statsMap = new HashMap<>(stats.toDictionary());
-                    statsMap.put("textureId", texId);
-                    statsMap.put("uid", uidValue);
-                    
-                    handler.post(() -> {
-                        channel.invokeMethod("onVideoRenderingPerformance", statsMap);
-                    });
-                }
-            });
+            performanceMonitor.dispose();
         }
         
         irisRenderer.stopRenderingToSurface();
@@ -140,9 +132,9 @@ public class TextureRenderer implements AgoraRenderPerformanceDelegate {
     }
 
     @Override
-    public void onPerformanceStatsUpdated(AgoraRenderPerformanceStats stats) {
+    public void onRawFrameStats(Map<String, Object> rawStats) {
         // Send performance stats to Flutter layer via shared method channel
-        Map<String, Object> statsMap = new HashMap<>(stats.toDictionary());
+        Map<String, Object> statsMap = new HashMap<>(rawStats);
         statsMap.put("textureId", textureId);
         statsMap.put("uid", uid);
         

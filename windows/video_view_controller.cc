@@ -110,7 +110,10 @@ void VideoViewController::HandleMethodCall(
       return;
     }
 
-    auto textureId = CreateTextureRender(irisRtcRenderingHandle, static_cast<unsigned int>(uid), channelId, videoSourceType, videoViewSetupMode);
+    bool enableArgusCounters = true;
+    GetValueFromEncodableMap(arguments, "enableArgusCounters", enableArgusCounters);
+
+    auto textureId = CreateTextureRender(irisRtcRenderingHandle, static_cast<unsigned int>(uid), channelId, videoSourceType, videoViewSetupMode, enableArgusCounters);
 
     result->Success(flutter::EncodableValue(textureId));
   }
@@ -152,14 +155,16 @@ int64_t VideoViewController::CreateTextureRender(
     unsigned int uid,
     const std::string &channelId,
     unsigned int videoSourceType,
-    unsigned int videoViewSetupMode)
+    unsigned int videoViewSetupMode,
+    bool enableArgusCounters)
 {
   agora::iris::IrisRtcRendering *iris_rtc_rendering = reinterpret_cast<agora::iris::IrisRtcRendering *>(irisRtcRenderingHandle);
   auto textureRender = new TextureRender(
       messenger_,
       texture_registrar_,
       shared_method_channel_.get(),  // Pass shared method channel
-      iris_rtc_rendering);
+      iris_rtc_rendering,
+      enableArgusCounters);
 
   int64_t texture_id = textureRender->texture_id();
 

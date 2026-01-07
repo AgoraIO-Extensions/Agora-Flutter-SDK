@@ -11,6 +11,7 @@ namespace agora {
 namespace rtc {
 namespace flutter {
 
+/*
 /// Video rendering performance statistics.
 struct AgoraRenderPerformanceStats {
     /// User ID of the video stream (0 for local, non-zero for remote).
@@ -37,14 +38,15 @@ struct AgoraRenderPerformanceStats {
     /// Converts stats to map for Flutter communication.
     std::map<std::string, double> toDictionary() const;
 };
+*/
 
 /// Delegate interface for performance statistics callbacks.
 class AgoraRenderPerformanceDelegate {
 public:
     virtual ~AgoraRenderPerformanceDelegate() = default;
     
-    /// Called when performance statistics are updated.
-    virtual void onPerformanceStatsUpdated(const AgoraRenderPerformanceStats& stats) = 0;
+    /// Called when raw frame statistics are available (immediate reporting).
+    virtual void onRawFrameStats(const std::map<std::string, double>& rawStats) = 0;
 };
 
 /// Performance monitor for video rendering in Flutter Texture mode.
@@ -59,9 +61,6 @@ public:
     /// Enable/disable performance monitoring (default: true).
     void setEnabled(bool enabled);
 
-    /// Set report interval in milliseconds (default: 1000).
-    void setReportIntervalMs(int64_t intervalMs);
-
     /// Record a frame received event.
     /// Internally captures the current timestamp.
     void recordFrameReceived();
@@ -70,50 +69,33 @@ public:
     /// Calculates the interval from the last rendered frame.
     void recordFrameRenderedInterval();
 
-    /// Record render draw cost with a pre-calculated value in milliseconds.
-    void recordRenderDrawCostWithValue(double drawCostMs);
-
+    /*
     /// Get current performance statistics.
     AgoraRenderPerformanceStats getCurrentStats();
 
     /// Force report with callback for final stats during disposal.
     void forceReportWithCallback(std::function<void(const AgoraRenderPerformanceStats&)> callback);
+    */
 
     /// Reset all statistics.
     void reset();
 
 private:
-    static const int MAX_SAMPLE_SIZE = 100;
-
-    void startReportTimer();
-    void stopReportTimer();
-    void performPeriodicReport();
-    AgoraRenderPerformanceStats computeStatsAndReset();
-    AgoraRenderPerformanceStats computeStatsInternal(bool shouldReset);
-    double calculateAverageFrameInterval();
-    double calculateAverageRenderDrawCost();
+    void reportRawFrameStats();
     int64_t currentTimeMs();
 
     AgoraRenderPerformanceDelegate* delegate_;
     bool enabled_;
-    int64_t reportIntervalMs_;
 
-    std::vector<int64_t> frameReceiveTimestamps_;
-    std::vector<int64_t> frameRenderTimestamps_;
-    std::vector<double> frameIntervalSamples_;
-    std::vector<double> renderDrawCostSamples_;
     int64_t totalFramesReceived_;
     int64_t totalFramesRendered_;
-    int64_t lastReportTime_;
 
-    // Period counters for accurate FPS calculation
-    int64_t periodFramesReceived_;
-    int64_t periodFramesRendered_;
-    int64_t periodStartTime_;
-
-    // Timer for periodic reporting
-    std::thread* reportThread_;
-    std::atomic<bool> timerRunning_;
+    /// Timestamp of last frame notification to Flutter (in milliseconds)
+    int64_t last_frame_notify_time_ms_ = 0;
+    /// Last calculated frame interval for immediate reporting
+    double last_frame_interval_ms_ = 0.0;
+    /// Last calculated draw cost for immediate reporting
+    double last_draw_cost_ms_ = 0.0;
 
     std::mutex mutex_;
 };
