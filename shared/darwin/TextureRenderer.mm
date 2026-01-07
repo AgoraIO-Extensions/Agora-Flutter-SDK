@@ -362,18 +362,18 @@ public:
   // This reduces the chance of irisRtcRendering becoming dangling before we call RemoveVideoFrameObserverDelegate.
   // Use async report with callback to ensure stats are sent even if this renderer is deallocated
   // Capture necessary variables for the block
-  FlutterMethodChannel *sharedChannel = self.sharedMethodChannel;
-  int64_t textureId = self.textureId;
-  unsigned int uid = self.uid;
+//  FlutterMethodChannel *sharedChannel = self.sharedMethodChannel;
+//  int64_t textureId = self.textureId;
+//  unsigned int uid = self.uid;
   
-  [self.performanceMonitor forceReportWithCallback:^(AgoraRenderPerformanceStats *stats) {
-    if (sharedChannel) {
-        NSMutableDictionary *statsDict = [[stats toDictionary] mutableCopy];
-        statsDict[@"textureId"] = @(textureId);
-        statsDict[@"uid"] = @(uid);
-        [sharedChannel invokeMethod:@"onVideoRenderingPerformance" arguments:statsDict];
-    }
-  }];
+//  [self.performanceMonitor forceReportWithCallback:^(AgoraRenderPerformanceStats *stats) {
+//    if (sharedChannel) {
+//        NSMutableDictionary *statsDict = [[stats toDictionary] mutableCopy];
+//        statsDict[@"textureId"] = @(textureId);
+//        statsDict[@"uid"] = @(uid);
+//        [sharedChannel invokeMethod:@"onVideoRenderingPerformance" arguments:statsDict];
+//    }
+//  }];
   
   if (self.irisRtcRendering) {
     self.irisRtcRendering->RemoveVideoFrameObserverDelegate(self.delegateId);
@@ -393,18 +393,30 @@ public:
 }
 
 #pragma mark - AgoraRenderPerformanceDelegate
+//
+//- (void)onPerformanceStatsUpdated:(AgoraRenderPerformanceStats *)stats {
+//  if (!self.sharedMethodChannel) {
+//    return;
+//  }
+//  
+//  // Send performance stats to Flutter layer via shared channel
+//  NSMutableDictionary *statsDict = [[stats toDictionary] mutableCopy];
+//  statsDict[@"textureId"] = @(self.textureId);
+//  statsDict[@"uid"] = @(self.uid);  // Add uid to distinguish local/remote
+//  [self.sharedMethodChannel invokeMethod:@"onVideoRenderingPerformance"
+//                         arguments:statsDict];
+//}
 
-- (void)onPerformanceStatsUpdated:(AgoraRenderPerformanceStats *)stats {
-  if (!self.sharedMethodChannel) {
-    return;
-  }
-  
-  // Send performance stats to Flutter layer via shared channel
-  NSMutableDictionary *statsDict = [[stats toDictionary] mutableCopy];
-  statsDict[@"textureId"] = @(self.textureId);
-  statsDict[@"uid"] = @(self.uid);  // Add uid to distinguish local/remote
-  [self.sharedMethodChannel invokeMethod:@"onVideoRenderingPerformance"
-                         arguments:statsDict];
+- (void)onRawFrameStats:(NSDictionary *)rawStats {
+    if (!self.sharedMethodChannel) {
+        return;
+    }
+    
+    NSMutableDictionary *statsDict = [rawStats mutableCopy];
+    statsDict[@"textureId"] = @(self.textureId);
+    statsDict[@"uid"] = @(self.uid);  // Add uid to distinguish local/remote
+    [self.sharedMethodChannel invokeMethod:@"onVideoRenderingPerformance"
+                                 arguments:statsDict];
 }
 
 #pragma mark - ColorSpace Processing

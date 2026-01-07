@@ -116,6 +116,16 @@ class ChannelConnectionManager {
     return _activeConnections.values.toList();
   }
 
+  List<String> get activeConnectionKeys {
+    final keys = <String>[];
+    for (final connection in _activeConnections.values) {
+      if (connection.channelId != null && connection.channelId!.isNotEmpty) {
+        keys.add('${connection.channelId}-${connection.localUid ?? 0}');
+      }
+    }
+    return keys;
+  }
+
   RtcConnection? getConnection(String channelId) {
     return _activeConnections[channelId];
   }

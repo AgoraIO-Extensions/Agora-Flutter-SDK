@@ -2,119 +2,67 @@ import 'package:flutter/foundation.dart';
 import '../agora_rtc_engine.dart';
 
 /// Callback handler for video rendering performance updates.
-///
-/// Implement this interface to receive periodic performance statistics
-/// for Flutter Texture rendering mode.
 abstract class VideoRenderingPerformanceEventHandler {
-  /// Called when video rendering performance statistics are updated.
-  ///
-  /// This callback is triggered approximately once per second (by default)
-  /// for each active video texture that has performance monitoring enabled.
-  ///
-  /// * [stats] The performance statistics containing FPS, draw cost, and smoothness metrics.
+  /// Called when raw frame stats are received from native layer.
   void onVideoRenderingPerformance(VideoRenderingPerformanceStats stats);
 }
 
-/// Performance monitor manager for video rendering in Flutter Texture mode.
-///
-/// This class manages performance monitoring for video textures and provides
-/// a centralized way to receive performance callbacks. Performance data is
-/// received through the shared `video_view_controller` channel.
-///
-/// Example usage:
-/// ```dart
-/// final monitor = VideoRenderingPerformanceMonitor.instance;
-/// monitor.registerHandler(myHandler);
-/// ```
+/// Simple performance monitor that receives raw frame data from native
+/// and dispatches to registered handlers.
+/// 
+/// Native layer sends raw data per frame (no timer).
+/// Handlers (like PerformanceStatsHandler) collect and aggregate data.
 class VideoRenderingPerformanceMonitor {
   VideoRenderingPerformanceMonitor._();
 
-  /// Singleton instance of the performance monitor.
   static final VideoRenderingPerformanceMonitor instance =
       VideoRenderingPerformanceMonitor._();
 
   final List<VideoRenderingPerformanceEventHandler> _handlers = [];
-  
-  /// Set of texture IDs being monitored (for tracking only)
   final Set<int> _monitoredTextures = {};
 
-  /// Register a performance event handler.
-  ///
-  /// The handler will receive performance updates for all monitored textures.
-  /// You can register multiple handlers - they will all receive the same events.
-  ///
-  /// * [handler] The handler to register for performance callbacks.
   void registerHandler(VideoRenderingPerformanceEventHandler handler) {
     if (!_handlers.contains(handler)) {
       _handlers.add(handler);
     }
   }
 
-  /// Unregister a performance event handler.
-  ///
-  /// * [handler] The handler to remove from performance callbacks.
   void unregisterHandler(VideoRenderingPerformanceEventHandler handler) {
     _handlers.remove(handler);
   }
 
-  /// Start monitoring performance for a specific texture.
-  ///
-  /// Called automatically by VideoViewController when a texture is created.
-  /// Note: Actual data reception happens through the shared channel in GlobalVideoViewController.
-  ///
-  /// * [textureId] The texture ID to monitor.
   void startMonitoring(int textureId) {
     _monitoredTextures.add(textureId);
   }
 
-  /// Stop monitoring performance for a specific texture.
-  ///
-  /// Called automatically by VideoViewController when a texture is disposed.
-  ///
-  /// * [textureId] The texture ID to stop monitoring.
   void stopMonitoring(int textureId) {
     _monitoredTextures.remove(textureId);
   }
-  
-  /// Handle performance stats from native side (called by GlobalVideoViewController).
-  ///
-  /// This is a public method that can be called from the platform-specific implementations.
-  ///
-  /// * [data] The performance data from native side.
+
+  /// Called from GlobalVideoViewControllerIO when native sends raw frame data.
   void handlePerformanceStatsFromNative(dynamic data) {
-    _handlePerformanceStats(data);
-  }
+    if (_handlers.isEmpty) return;
 
-  void _handlePerformanceStats(dynamic arguments) {
-    if (_handlers.isEmpty) {
-      return;
-    }
-    Future(() {
-      try {
-        final stats = VideoRenderingPerformanceStats.fromJson(
-          Map<String, dynamic>.from(arguments as Map),
-        );
+    try {
+      final stats = VideoRenderingPerformanceStats.fromJson(
+        Map<String, dynamic>.from(data as Map),
+      );
 
-        // Dispatch to all registered handlers
-        for (final handler in _handlers) {
-          try {
-            handler.onVideoRenderingPerformance(stats);
-          } catch (e) {
-            debugPrint(
-                '[VideoRenderingPerformanceMonitor] Error in handler: $e');
-          }
+      for (final handler in _handlers) {
+        try {
+          handler.onVideoRenderingPerformance(stats);
+        } catch (e) {
+          debugPrint('[VideoRenderingPerformanceMonitor] Handler error: $e');
         }
-      } catch (e) {
-        debugPrint(
-            '[VideoRenderingPerformanceMonitor] Failed to parse performance stats: $e');
       }
-    });
+    } catch (e) {
+      debugPrint('[VideoRenderingPerformanceMonitor] Parse error: $e');
+    }
   }
 
   /// Get the number of currently monitored textures.
   int get monitoredTextureCount => _monitoredTextures.length;
 
-  /// Clear all handlers and stop monitoring all textures.
   void dispose() {
     _handlers.clear();
     _monitoredTextures.clear();

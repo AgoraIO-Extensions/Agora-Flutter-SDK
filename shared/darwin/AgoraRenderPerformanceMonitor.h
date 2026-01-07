@@ -6,45 +6,48 @@
 NS_ASSUME_NONNULL_BEGIN
 
 /// Video rendering performance statistics.
-@interface AgoraRenderPerformanceStats : NSObject
-
-/// User ID of the video stream (0 for local, non-zero for remote).
-@property(nonatomic, assign) unsigned int uid;
-
-/// Input frame rate (frames received from SDK per second).
-@property(nonatomic, assign) double renderInputFps;
-
-/// Output frame rate (frames actually rendered per second).
-@property(nonatomic, assign) double renderOutputFps;
-
-/// Render interval variance (measure of smoothness, lower is better).
-//@property(nonatomic, assign) double renderIntervalVariance;
-
-/// Average frame interval (time between consecutive frame notifications) in milliseconds.
-@property(nonatomic, assign) double renderFrameIntervalMs;
-
-/// Average render duration (from frame received to copyPixelBuffer completed) in milliseconds.
-@property(nonatomic, assign) double renderDrawCostMs;
-
-/// Total number of frames received from SDK.
-@property(nonatomic, assign) int64_t totalFramesReceived;
-
-/// Total number of frames rendered.
-@property(nonatomic, assign) int64_t totalFramesRendered;
-
-/// Converts stats to dictionary for Flutter communication.
-- (NSDictionary *)toDictionary;
-
-@end
+//@interface AgoraRenderPerformanceStats : NSObject
+//
+///// User ID of the video stream (0 for local, non-zero for remote).
+//@property(nonatomic, assign) unsigned int uid;
+//
+///// Input frame rate (frames received from SDK per second).
+//@property(nonatomic, assign) double renderInputFps;
+//
+///// Output frame rate (frames actually rendered per second).
+//@property(nonatomic, assign) double renderOutputFps;
+//
+///// Render interval variance (measure of smoothness, lower is better).
+////@property(nonatomic, assign) double renderIntervalVariance;
+//
+///// Average frame interval (time between consecutive frame notifications) in milliseconds.
+//@property(nonatomic, assign) double renderFrameIntervalMs;
+//
+///// Average render duration (from frame received to copyPixelBuffer completed) in milliseconds.
+//@property(nonatomic, assign) double renderDrawCostMs;
+//
+///// Total number of frames received from SDK.
+//@property(nonatomic, assign) int64_t totalFramesReceived;
+//
+///// Total number of frames rendered.
+//@property(nonatomic, assign) int64_t totalFramesRendered;
+//
+///// Converts stats to dictionary for Flutter communication.
+//- (NSDictionary *)toDictionary;
+//
+//@end
 
 /// Delegate protocol for performance statistics callbacks.
 @protocol AgoraRenderPerformanceDelegate <NSObject>
 @optional
 /// Called when performance statistics are updated.
-- (void)onPerformanceStatsUpdated:(AgoraRenderPerformanceStats *)stats;
+//- (void)onPerformanceStatsUpdated:(AgoraRenderPerformanceStats *)stats;
+/// Called when raw frame statistics are available (immediate reporting).
+- (void)onRawFrameStats:(NSDictionary *)rawStats;
 @end
 
 /// Performance monitor for video rendering in Flutter Texture mode.
+/// Reports raw frame statistics immediately per frame to Dart layer.
 @interface AgoraRenderPerformanceMonitor : NSObject
 
 /// Performance callback delegate.
@@ -53,9 +56,6 @@ NS_ASSUME_NONNULL_BEGIN
 /// Enable/disable performance monitoring (default: YES).
 @property(nonatomic, assign) BOOL enabled;
 
-/// Report interval in milliseconds (default: 1000).
-@property(nonatomic, assign) int64_t reportIntervalMs;
-
 /// Initialize the performance monitor.
 - (instancetype)init;
 
@@ -63,6 +63,7 @@ NS_ASSUME_NONNULL_BEGIN
 - (void)recordFrameReceived;
 
 /// Record a frame rendered event (when textureFrameAvailable is called).
+/// Reports raw frame statistics immediately to delegate.
 - (void)recordFrameRenderedInterval;
 
 /// Record the render duration (from last frame received to copyPixelBuffer completed).
@@ -70,12 +71,12 @@ NS_ASSUME_NONNULL_BEGIN
 - (void)recordRenderDrawCost;
 
 /// Get current performance statistics.
-- (AgoraRenderPerformanceStats *)getCurrentStats;
+//- (AgoraRenderPerformanceStats *)getCurrentStats;
 
 /// Force report statistics immediately with a custom callback block.
 /// The block will be executed on the main thread.
 /// @param callback Block to receive statistics.
-- (void)forceReportWithCallback:(void (^)(AgoraRenderPerformanceStats *stats))callback;
+//- (void)forceReportWithCallback:(void (^)(AgoraRenderPerformanceStats *stats))callback;
 
 @end
 

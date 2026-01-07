@@ -47,6 +47,7 @@ import 'package:flutter/foundation.dart'
 import 'package:flutter/services.dart' show MethodCall, MethodChannel;
 import 'package:flutter/widgets.dart' show VoidCallback, TargetPlatform;
 import 'package:iris_method_channel/iris_method_channel.dart';
+import '/src/impl/video_rendering_performance_uploader.dart';
 import 'package:meta/meta.dart';
 
 import 'platform/global_video_view_controller.dart';
@@ -324,6 +325,8 @@ class _RtcEngineEventHandlerWrapper extends RtcEngineEventHandlerWrapper {
         if (connection?.channelId != null) {
           ChannelConnectionManager.instance
               .removeConnection(connection!.channelId!);
+          PerformanceDataCollector.instance.clearChannelData(
+              connection.channelId!, connection.localUid ?? 0);
         }
         break;
       case 'onLocalVideoStats_0cebfd7':
@@ -589,6 +592,8 @@ class RtcEngineImpl extends rtc_engine_ex_binding.RtcEngineExImpl
     
     // Clear all channel connections
     ChannelConnectionManager.instance.clear();
+
+    PerformanceDataCollector.instance.dispose();
 
     await super.release(sync: sync);
 

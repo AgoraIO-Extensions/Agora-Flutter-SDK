@@ -1,8 +1,10 @@
 import 'dart:async';
+import 'dart:convert';
 
 import 'package:flutter/foundation.dart';
 
 import '../agora_rtc_engine.dart';
+import '../agora_media_base.dart';
 import '../render/video_rendering_performance_monitor.dart';
 import 'channel_connection_manager.dart';
 
@@ -12,12 +14,14 @@ class RenderContext {
   final int uid;
   final String channelId;
   final int localUid;
+  final VideoSourceType? sourceType;
 
   RenderContext({
     required this.rtcEngine,
     required this.uid,
     required this.channelId,
     required this.localUid,
+    this.sourceType,
   });
 }
 
@@ -65,82 +69,55 @@ class PerformanceStatsHandler implements VideoRenderingPerformanceEventHandler {
 
     final isLocal = uid == 0;
     if (isLocal && (channelId.isEmpty || localUid == 0)) {
-      // Try to get the current publishing connection from manager
-      final publishingConnection =
-          ChannelConnectionManager.instance.getPublishingVideoConnection();
+      // Use sourceType to query the correct publishing connection
+      final sourceType =
+          context.sourceType ?? VideoSourceType.videoSourceCamera;
+      final publishingConnection = ChannelConnectionManager.instance
+          .getPublishingVideoConnectionBySource(sourceType);
+
       if (publishingConnection != null) {
         effectiveChannelId = publishingConnection.channelId ?? '';
         effectiveLocalUid = publishingConnection.localUid ?? 0;
         debugPrint(
-            'xpz ==[PerformanceStatsHandler] Auto-resolved connection for local video: channelId=$effectiveChannelId, localUid=$effectiveLocalUid');
+            '[PerformanceStatsHandler] Auto-resolved connection for local $sourceType: channelId=$effectiveChannelId, localUid=$effectiveLocalUid');
       } else {
-        // If no current publishing connection, check if it's a late report from the last one
-        final lastConnection = ChannelConnectionManager.instance
-            .getDefaultConnection();
-        if (lastConnection != null) {
-          effectiveChannelId = lastConnection.channelId ?? '';
-          effectiveLocalUid = lastConnection.localUid ?? 0;
+        // Fallback: try to get any publishing connection
+        final anyPublishingConnection =
+            ChannelConnectionManager.instance.getPublishingVideoConnection();
+        if (anyPublishingConnection != null) {
+          effectiveChannelId = anyPublishingConnection.channelId ?? '';
+          effectiveLocalUid = anyPublishingConnection.localUid ?? 0;
           debugPrint(
-              'xpz ==[PerformanceStatsHandler] Auto-resolved connection to LAST connection for local video: channelId=$effectiveChannelId, localUid=$effectiveLocalUid');
+              '[PerformanceStatsHandler] Auto-resolved connection to ANY publishing connection for local video: channelId=$effectiveChannelId, localUid=$effectiveLocalUid');
         } else {
-          // Fallback to default
+          // Last resort: use default connection
           final defaultConnection =
               ChannelConnectionManager.instance.getDefaultConnection();
           if (defaultConnection != null) {
             effectiveChannelId = defaultConnection.channelId ?? '';
             effectiveLocalUid = defaultConnection.localUid ?? 0;
+            debugPrint(
+                '[PerformanceStatsHandler] Auto-resolved connection to DEFAULT connection for local video: channelId=$effectiveChannelId, localUid=$effectiveLocalUid');
           }
         }
       }
     }
+    // Pass raw frame data to collector for aggregation
+    // FPS will be calculated in Dart layer based on totalFramesRendered delta
+    PerformanceDataCollector.instance.addPerformanceData(
+      rtcEngine: rtcEngine,
+      uid: uid,
+      channelId: effectiveChannelId,
+      localUid: effectiveLocalUid,
+      sourceType: context.sourceType ?? VideoSourceType.videoSourceCamera,
+      totalFramesRendered: stats.totalFramesRendered ?? 0,
+      drawCost: stats.renderDrawCostMs,
+    );
 
-    // Report metrics to native SDK using setParameters
-    // Counter IDs:
-    // - 526: Video Local Render Mean FPS
-    // - 537: Video Remote Render Mean FPS
-    // - 577: Video Local Render Draw Cost
-    // - 576: Video Remote Render Draw Cost
-
-    final fpsCounterId = isLocal ? 526 : 537;
-    final drawCostCounterId = isLocal ? 577 : 576;
-
-    // Build counters array with all metrics
-    final List<Map<String, dynamic>> counters = [];
-
-    // Add FPS counter if available
-    if (stats.renderOutputFps != null) {
-      counters.add(
-          {"counterId": fpsCounterId, "value": stats.renderOutputFps!.round()});
-    }
-
-    // Add Draw Cost counter if available
-    if (stats.renderDrawCostMs != null) {
-      counters.add({
-        "counterId": drawCostCounterId,
-        "value": stats.renderDrawCostMs!.round()
-      });
-    }
-
-    // Add data to global collector to aggregate all uids before uploading
-    if (counters.isNotEmpty) {
-      PerformanceDataCollector.instance.addPerformanceData(
-        rtcEngine: rtcEngine,
-        uid: effectiveLocalUid,
-        channelId: effectiveChannelId,
-        localUid: effectiveLocalUid,
-        counters: counters,
-      );
-    }
-
-    // Also dispatch to any registered handlers (for debugging/monitoring)
-    // Note: VideoRenderingPerformanceMonitor already dispatched to US, so don't loop back.
-    // But if there are other handlers, they got the message too.
-
-    // debugPrint(
-    //     '${DateTime.now().toString()} [AgoraRenderTexture] Performance: isLocal=$isLocal, channelId=$effectiveChannelId, localUid=$effectiveLocalUid, UID=$uid, InFPS=${stats.renderInputFps?.toStringAsFixed(1)}, '
-    //     'OutFPS=${stats.renderOutputFps?.toStringAsFixed(1)}, '
-    //     'Interval=${stats.renderFrameIntervalMs?.toStringAsFixed(2)}ms, '
-    //     'DrawCost=${stats.renderDrawCostMs?.toStringAsFixed(2)}ms');
+    debugPrint(
+        '${DateTime.now().toString()} [AgoraRenderTexture] RawFrame: isLocal=$isLocal, channelId=$effectiveChannelId, localUid=$effectiveLocalUid, UID=$uid, '
+        'TotalRendered=${stats.totalFramesRendered}, '
+        'DrawCost=${stats.renderDrawCostMs?.toStringAsFixed(2)}ms');
   }
 }
 
@@ -161,37 +138,38 @@ class PerformanceDataCollector {
   static const int _gracePeriodMs = 2000;
 
   Timer? _uploadTimer;
-  static const Duration _uploadDelay = Duration(milliseconds: 100);
+  static const Duration _uploadInterval = Duration(seconds: 6);
 
-  // Set of channel keys that have pending data to upload
-  final Set<String> _pendingChannelKeys = {};
-
-  /// Add performance data for a specific uid in a channel
+  /// Add raw frame data for a specific uid in a channel
   void addPerformanceData({
     required RtcEngine rtcEngine,
     required int uid,
     required String channelId,
     required int localUid,
-    required List<Map<String, dynamic>> counters,
+    required VideoSourceType sourceType,
+    required int totalFramesRendered,
+    double? drawCost,
   }) {
-    if (counters.isEmpty) return;
+    // 2. Condition: don't upload if channelId is empty
+    if (channelId.isEmpty) {
+      return;
+    }
 
-    final key = '$channelId-$localUid';
+    // 1. Separate uploads: Include sourceType index in the key to ensure
+    // different local sources (camera, screen) in the same connection are uploaded separately.
+    final key = '$channelId-$localUid-${sourceType.index}';
 
-    // Check if this channel was recently cleared (grace period)
+    // Check if this channel/source was recently cleared (grace period)
     if (_clearedChannelsGracePeriod.containsKey(key)) {
       final clearTime = _clearedChannelsGracePeriod[key]!;
       final now = DateTime.now().millisecondsSinceEpoch;
       if (now - clearTime < _gracePeriodMs) {
-        // Ignored stale data during grace period
-        debugPrint(
-            'xpz ==[PerformanceDataCollector] Ignored stale data for recently cleared channel: $key');
-        return;
+        return; // Ignore stale data during grace period
       } else {
-        // Grace period passed, remove from the map
         _clearedChannelsGracePeriod.remove(key);
       }
     }
+
     _channelDataMap.putIfAbsent(
       key,
       () => _ChannelPerformanceData(
@@ -201,83 +179,91 @@ class PerformanceDataCollector {
       ),
     );
 
-    _channelDataMap[key]!.addUidData(uid, counters);
-    _pendingChannelKeys.add(key);
+    _channelDataMap[key]!.addRawFrameData(
+      uid: uid,
+      sourceType: sourceType,
+      totalFramesRendered: totalFramesRendered,
+      drawCost: drawCost,
+    );
 
-    _uploadTimer ??= Timer(_uploadDelay, () {
-        _uploadPendingData();
-        _uploadTimer = null;
+    // Start periodic timer when first data arrives (??= only creates if null)
+    _uploadTimer ??= Timer.periodic(_uploadInterval, (_) {
+      // First, scan and clear data for channels that are no longer active in the manager
+      final activeKeys = ChannelConnectionManager.instance.activeConnectionKeys;
+      clearInactiveChannelData(activeKeys);
+
+      _uploadAllChannelData();
     });
   }
 
-  /// Upload pending data for marked channels
-  void _uploadPendingData() {
-    if (_pendingChannelKeys.isEmpty) return;
-
-    final keysToUpload = List<String>.from(_pendingChannelKeys);
-    _pendingChannelKeys.clear();
-
-    for (final key in keysToUpload) {
-      if (_channelDataMap.containsKey(key)) {
-        _channelDataMap[key]!.uploadAndClear();
-      }
-    }
-  }
-
-  /// Upload all collected data for all channels
-  void _uploadAllData() {
+  /// Upload all channel data (called by periodic timer)
+  void _uploadAllChannelData() {
     if (_channelDataMap.isEmpty) return;
 
     for (final channelData in _channelDataMap.values) {
       channelData.uploadAndClear();
     }
-    _pendingChannelKeys.clear();
   }
 
-  /// Clear performance data for a specific channel
+  /// Clear performance data for a specific channel and optionally a specific source
   /// This should be called when leaving a channel or switching publishing channel
   /// to prevent data from different channels being mixed together
-  void clearChannelData(String channelId, int localUid) {
-    final key = '$channelId-$localUid';
+  void clearChannelData(String channelId, int localUid,
+      [VideoSourceType? sourceType]) {
+    if (sourceType != null) {
+      final key = '$channelId-$localUid-${sourceType.index}';
+      _clearSpecificKey(key);
+    } else {
+      // Clear all sources for this connection
+      final prefix = '$channelId-$localUid-';
+      final keysToRemove =
+          _channelDataMap.keys.where((k) => k.startsWith(prefix)).toList();
+      for (final key in keysToRemove) {
+        _clearSpecificKey(key);
+      }
 
-    // Mark the channel as cleared for the grace period
+      // Also clear any matching grace periods
+      final graceKeysToRemove = _clearedChannelsGracePeriod.keys
+          .where((k) => k.startsWith(prefix))
+          .toList();
+      for (final key in graceKeysToRemove) {
+        _clearedChannelsGracePeriod.remove(key);
+      }
+    }
+  }
+
+  void _clearSpecificKey(String key) {
+    // Mark the channel/source as cleared for the grace period
     _clearedChannelsGracePeriod[key] = DateTime.now().millisecondsSinceEpoch;
 
     if (_channelDataMap.containsKey(key)) {
-      // Remove from pending keys to prevent redundant upload
-      _pendingChannelKeys.remove(key);
-
       // Upload the data immediately before clearing to ensure no data is lost
-      print(
-          'xpz ==xpz[AgoraRenderTexture] _channelDataMap = ${_channelDataMap[key]?.localUid}');
       _channelDataMap[key]!.uploadAndClear();
       _channelDataMap.remove(key);
-      debugPrint(
-          '[PerformanceDataCollector] Cleared data for channel: $key');
+      debugPrint('[PerformanceDataCollector] Cleared data for key: $key');
     }
   }
 
   /// Clear all data for channels that are no longer active
-  /// This is called when switching publishing channel to prevent old channel data
-  /// from being mixed with new channel data
-  void clearInactiveChannelData(List<String> activeChannelKeys) {
+  void clearInactiveChannelData(List<String> activeConnectionKeys) {
     final keysToRemove = <String>[];
     for (final key in _channelDataMap.keys) {
-      if (!activeChannelKeys.contains(key)) {
-        keysToRemove.add(key);
+      // Extract connection key (channelId-localUid) from full key (channelId-localUid-sourceType)
+      final parts = key.split('-');
+      if (parts.length >= 2) {
+        final connectionKey = '${parts[0]}-${parts[1]}';
+        if (!activeConnectionKeys.contains(connectionKey)) {
+          keysToRemove.add(key);
+        }
       }
     }
 
     for (final key in keysToRemove) {
-      // Mark as cleared for grace period
       _clearedChannelsGracePeriod[key] = DateTime.now().millisecondsSinceEpoch;
-
-      _pendingChannelKeys.remove(key);
-      // Upload the data before clearing
       _channelDataMap[key]!.uploadAndClear();
       _channelDataMap.remove(key);
       debugPrint(
-          'xpz ==[PerformanceDataCollector] Cleared inactive channel data: $key');
+          '[PerformanceDataCollector] Cleared inactive channel data: $key');
     }
   }
 
@@ -285,7 +271,12 @@ class PerformanceDataCollector {
   void dispose() {
     _uploadTimer?.cancel();
     _uploadTimer = null;
+
+    // Final upload of all remaining data before clearing
+    _uploadAllChannelData();
+
     _channelDataMap.clear();
+    _clearedChannelsGracePeriod.clear();
   }
 }
 
@@ -301,29 +292,42 @@ class _ChannelPerformanceData {
   final String channelId;
   final int localUid;
 
-  // Map of uid -> counters
-  final Map<int, List<Map<String, dynamic>>> _uidDataMap = {};
+  // Raw frame data buffer for FPS calculation
+  // Key: "uid-sourceType" -> _UidFrameBuffer
+  final Map<String, _UidFrameBuffer> _uidBuffers = {};
 
-  /// Add performance counters for a specific uid
-  void addUidData(int uid, List<Map<String, dynamic>> counters) {
-    _uidDataMap[uid] = counters;
+  /// Add raw frame data for a specific uid
+  void addRawFrameData({
+    required int uid,
+    required VideoSourceType sourceType,
+    required int totalFramesRendered,
+    double? drawCost,
+  }) {
+    final String key = '$uid-${sourceType.index}';
+    _uidBuffers.putIfAbsent(
+        key, () => _UidFrameBuffer(uid: uid, isLocal: uid == 0));
+    _uidBuffers[key]!
+        .addFrame(totalFramesRendered: totalFramesRendered, drawCost: drawCost);
   }
 
   /// Upload all collected data to RtcEngine and clear the buffer
   void uploadAndClear() {
-    if (_uidDataMap.isEmpty) return;
+    if (_uidBuffers.isEmpty) return;
 
-    // Build data array with all uids
     final List<Map<String, dynamic>> dataArray = [];
-    for (final entry in _uidDataMap.entries) {
-      dataArray.add({
-        "counters": entry.value,
-        "uid": entry.key,
-      });
-    }
 
-    // Prepare params for upload to SDK (currently commented out)
-    // ignore: unused_local_variable
+    _uidBuffers.forEach((key, buffer) {
+      final counters = buffer.computeCounters();
+      if (counters.isNotEmpty) {
+        dataArray.add({
+          "uid": buffer.uid,
+          "counters": counters,
+        });
+      }
+    });
+
+    if (dataArray.isEmpty) return;
+
     final params = {
       "data": dataArray,
       "connection": {
@@ -331,8 +335,98 @@ class _ChannelPerformanceData {
         "localUid": localUid,
       }
     };
-    // rtcEngine.setParameters(jsonEncode(params));
-    // debugPrint('xpz ==[AgoraRenderTexture] Performance: $params');
-    _uidDataMap.clear();
+
+    final jsonString = jsonEncode(params);
+
+    // rtcEngine.setParameters(jsonString);
+
+    debugPrint(
+        '[AgoraRenderTexture][PerformanceDataCollector] UPLOAD 6s Metrics for connection time: ${DateTime.now()} $jsonString');
+
+    // Clear buffers after upload
+    _uidBuffers.forEach((_, buffer) => buffer.clear());
+  }
+}
+
+/// Buffer for collecting raw frame data per uid
+class _UidFrameBuffer {
+  _UidFrameBuffer({required this.uid, required this.isLocal});
+
+  final int uid;
+  final bool isLocal;
+
+  // For FPS calculation: track frame count at period start and end
+  int? _periodStartFrameCount;
+  int? _periodStartTimestamp;
+  int? _latestFrameCount;
+  int? _latestTimestamp;
+
+  final List<double> _drawCostSamples = [];
+
+  void addFrame({required int totalFramesRendered, double? drawCost}) {
+    final now = DateTime.now().millisecondsSinceEpoch;
+
+    // Record period start (first frame of this period)
+    if (_periodStartFrameCount == null) {
+      _periodStartFrameCount = totalFramesRendered;
+      _periodStartTimestamp = now;
+    }
+
+    // Always update latest frame
+    _latestFrameCount = totalFramesRendered;
+    _latestTimestamp = now;
+
+    // Collect draw cost samples (filter out invalid values)
+    if (drawCost != null && drawCost > 0 && drawCost < 1000) {
+      _drawCostSamples.add(drawCost);
+    }
+  }
+
+  /// Compute FPS and average draw cost, return counters array
+  List<Map<String, dynamic>> computeCounters() {
+    final counters = <Map<String, dynamic>>[];
+
+    // Counter IDs:
+    // 526/537: Local/Remote Render FPS
+    // 577/576: Local/Remote Render Draw Cost
+    final fpsId = isLocal ? 526 : 537;
+    final drawCostId = isLocal ? 577 : 576;
+
+    // Calculate FPS: (latestFrameCount - periodStartFrameCount) / durationSeconds
+    if (_periodStartFrameCount != null &&
+        _latestFrameCount != null &&
+        _periodStartTimestamp != null &&
+        _latestTimestamp != null) {
+      final framesDelta = _latestFrameCount! - _periodStartFrameCount!;
+      final durationMs = _latestTimestamp! - _periodStartTimestamp!;
+
+      debugPrint(
+          '[_UidFrameBuffer] uid=$uid, startFrame=$_periodStartFrameCount, latestFrame=$_latestFrameCount, framesDelta=$framesDelta, durationMs=$durationMs, samples=${_drawCostSamples.length}');
+
+      if (durationMs > 0 && framesDelta > 0) {
+        final fps = framesDelta / (durationMs / 1000.0);
+        counters.add({"counterId": fpsId, "value": fps.round()});
+      }
+    }
+
+    // Calculate average draw cost
+    if (_drawCostSamples.isNotEmpty) {
+      final avgDrawCost =
+          _drawCostSamples.reduce((a, b) => a + b) / _drawCostSamples.length;
+      counters.add({
+        "counterId": drawCostId,
+        "value": double.parse(avgDrawCost.toStringAsFixed(2))
+      });
+    }
+
+    return counters;
+  }
+
+  /// Reset for next period, keeping latest frame as next period's start
+  void clear() {
+    // Use latest frame as next period's start point
+    _periodStartFrameCount = _latestFrameCount;
+    _periodStartTimestamp = _latestTimestamp;
+    _drawCostSamples.clear();
   }
 }

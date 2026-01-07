@@ -2,6 +2,7 @@ import '/src/agora_base.dart';
 import '/src/agora_media_base.dart';
 import '/src/impl/agora_rtc_engine_impl.dart';
 import '/src/impl/platform/global_video_view_controller.dart';
+import '/src/impl/video_rendering_performance_uploader.dart';
 import '/src/render/video_view_controller.dart';
 import '/src/render/video_rendering_performance_monitor.dart';
 import 'package:flutter/foundation.dart';
@@ -97,6 +98,12 @@ mixin VideoViewControllerBaseMixin implements VideoViewControllerBase {
       await rtcEngine.globalVideoViewController
           ?.destroyTextureRender(getTextureId());
       _textureId = kTextureNotInit;
+      if (connection != null) {
+        PerformanceDataCollector.instance.clearChannelData(
+            connection!.channelId ?? '',
+            connection!.localUid ?? 0,
+            VideoSourceTypeExt.fromValue(getVideoSourceType()));
+      }
       return;
     }
 
@@ -127,6 +134,13 @@ mixin VideoViewControllerBaseMixin implements VideoViewControllerBase {
     if (_platformViewId != kInvalidPlatformViewId) {
       await dePlatformRenderRef(_platformViewId);
       _platformViewId = kInvalidPlatformViewId;
+    }
+
+    if (connection != null) {
+      PerformanceDataCollector.instance.clearChannelData(
+          connection!.channelId ?? '',
+          connection!.localUid ?? 0,
+          VideoSourceTypeExt.fromValue(getVideoSourceType()));
     }
   }
 
