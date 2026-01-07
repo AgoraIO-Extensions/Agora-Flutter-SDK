@@ -106,6 +106,7 @@ kernel void processYUVColorSpace(texture2d<float, access::read> yTexture [[textu
 @property(nonatomic) agora::iris::IrisRtcRendering *irisRtcRendering;
 @property(nonatomic, assign) int delegateId;
 @property(nonatomic, assign) unsigned int uid;  // Store uid for performance reporting
+@property(nonatomic, assign) BOOL isDisposed;  // Flag to prevent duplicate cleanup
 
 /// Tracks the latest pixel buffer sent from AVFoundation's sample buffer
 /// delegate callback. Used to deliver the latest pixel buffer to the flutter
@@ -132,6 +133,11 @@ kernel void processYUVColorSpace(texture2d<float, access::read> yTexture [[textu
                 colorSpace:(const agora::media::base::ColorSpace&)colorSpace;
 /// Performance monitor (optional, created only when enabled)
 @property(nonatomic, strong) AgoraRenderPerformanceMonitor *performanceMonitor;
+
+// Cleanup helper methods
+- (void)_cleanupIrisRtcRendering;
+- (void)_cleanupPixelBuffer;
+- (void)_cleanupMetalResources;
 
 @end
 
@@ -293,6 +299,8 @@ public:
     // Initialize performance monitor
     self.performanceMonitor = [[AgoraRenderPerformanceMonitor alloc] init];
     self.performanceMonitor.delegate = self;
+    // Initialize dispose flag
+    self.isDisposed = NO;
   }
   return self;
 }
@@ -358,30 +366,15 @@ public:
 }
 
 - (void)dispose {
-  // Use async report to avoid blocking the main thread during critical cleanup.
-  // This reduces the chance of irisRtcRendering becoming dangling before we call RemoveVideoFrameObserverDelegate.
-  // Use async report with callback to ensure stats are sent even if this renderer is deallocated
-  // Capture necessary variables for the block
-//  FlutterMethodChannel *sharedChannel = self.sharedMethodChannel;
-//  int64_t textureId = self.textureId;
-//  unsigned int uid = self.uid;
-  
-//  [self.performanceMonitor forceReportWithCallback:^(AgoraRenderPerformanceStats *stats) {
-//    if (sharedChannel) {
-//        NSMutableDictionary *statsDict = [[stats toDictionary] mutableCopy];
-//        statsDict[@"textureId"] = @(textureId);
-//        statsDict[@"uid"] = @(uid);
-//        [sharedChannel invokeMethod:@"onVideoRenderingPerformance" arguments:statsDict];
-//    }
-//  }];
-  
-  if (self.irisRtcRendering) {
-    self.irisRtcRendering->RemoveVideoFrameObserverDelegate(self.delegateId);
-    self.irisRtcRendering = nil;
+  // Prevent duplicate cleanup
+  if (self.isDisposed) {
+    return;
   }
-  if (self.delegate) {
-    self.delegate.reset();
-  }
+  self.isDisposed = YES;
+  
+  // Clean up irisRtcRendering and delegate
+  [self _cleanupIrisRtcRendering];
+  
   if (self.textureRegistry) {
     [self.textureRegistry unregisterTexture:self.textureId];
     self.textureRegistry = nil;
@@ -661,33 +654,71 @@ public:
 }
 
 - (void)dealloc {
-  if (self.irisRtcRendering) {
-    // the delegateId is garenteed to be auto incremented, so we can just remove
-    // the delegate by the id, no need to check if the delegate is still valid
-    // or is belong to this TextureRender
-    self.irisRtcRendering->RemoveVideoFrameObserverDelegate(self.delegateId);
-    self.irisRtcRendering = nil;
-  }
-
-  dispatch_sync(self.pixelBufferSynchronizationQueue, ^{
-    if (self.latestPixelBuffer) {
-      CVPixelBufferRelease(self.latestPixelBuffer);
-      self.latestPixelBuffer = nil;
+    // If dispose was already called, only clean up resources that weren't handled in dispose
+    if (!self.isDisposed) {
+        // Clean up irisRtcRendering and delegate if dispose wasn't called
+        [self _cleanupIrisRtcRendering];
     }
-  });
-  
-  // Clean up Metal resources
-  if (self.textureCache) {
-    CVMetalTextureCacheFlush(self.textureCache, 0);
-    CFRelease(self.textureCache);
-    self.textureCache = NULL;
-  }
-  
-  // Metal objects are automatically released (ARC)
-  self.metalDevice = nil;
-  self.commandQueue = nil;
-  self.colorSpacePipelineState = nil;
-  self.colorMatrixBuffer = nil;
+    
+    // Always clean up pixel buffer and Metal resources
+    [self _cleanupPixelBuffer];
+    [self _cleanupMetalResources];
+}
+
+#pragma mark - Cleanup Helpers
+
+- (void)_cleanupIrisRtcRendering {
+    // First, clear delegate to prevent new callbacks
+    if (self.delegate) {
+        self.delegate.reset();
+        self.delegate = nullptr;
+    }
+    
+    // Use local variables to avoid race conditions
+    // Save pointer and ID before clearing the property
+    agora::iris::IrisRtcRendering *rendering = self.irisRtcRendering;
+    int delegateId = self.delegateId;
+    
+    // Immediately clear the property to prevent other threads from accessing it
+    self.irisRtcRendering = nil;
+    
+    // Now use local variables - even if object was freed, at least we won't call twice
+    if (rendering != nullptr && delegateId >= 0) {
+        @try {
+            // the delegateId is garenteed to be auto incremented, so we can just remove
+            // the delegate by the id, no need to check if the delegate is still valid
+            // or is belong to this TextureRender
+            rendering->RemoveVideoFrameObserverDelegate(delegateId);
+        } @catch (NSException *exception) {
+            NSLog(@"Error removing video frame observer delegate: %@", exception);
+        } @catch (...) {
+            NSLog(@"Unknown C++ exception when removing video frame observer delegate");
+        }
+    }
+}
+
+- (void)_cleanupPixelBuffer {
+    dispatch_sync(self.pixelBufferSynchronizationQueue, ^{
+        if (self.latestPixelBuffer) {
+            CVPixelBufferRelease(self.latestPixelBuffer);
+            self.latestPixelBuffer = nil;
+        }
+    });
+}
+
+- (void)_cleanupMetalResources {
+    // Clean up Metal texture cache
+    if (self.textureCache) {
+        CVMetalTextureCacheFlush(self.textureCache, 0);
+        CFRelease(self.textureCache);
+        self.textureCache = NULL;
+    }
+    
+    // Metal objects are automatically released (ARC)
+    self.metalDevice = nil;
+    self.commandQueue = nil;
+    self.colorSpacePipelineState = nil;
+    self.colorMatrixBuffer = nil;
 }
 
 @end

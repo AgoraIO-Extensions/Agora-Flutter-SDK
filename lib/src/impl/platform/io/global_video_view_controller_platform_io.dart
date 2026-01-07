@@ -76,15 +76,15 @@ class GlobalVideoViewControllerIO extends GlobalVideoViewControllerPlatfrom {
 
     irisMethodChannel.removeHotRestartListener(_hotRestartListener);
 
-    await methodChannel.invokeMethod('dispose');
-
-    await irisMethodChannel.invokeMethod(IrisMethodCall(
-      'FreeIrisRtcRendering',
-      jsonEncode({
-        'irisRtcEngineNativeHandle': irisRtcEngineIntPtr,
-        'irisRtcRenderingHandle': irisRtcRenderingHandle,
-      }),
-    ));
+    await methodChannel.invokeMethod('dispose').then((value) {
+      return irisMethodChannel.invokeMethod(IrisMethodCall(
+        'FreeIrisRtcRendering',
+        jsonEncode({
+          'irisRtcEngineNativeHandle': irisRtcEngineIntPtr,
+          'irisRtcRenderingHandle': irisRtcRenderingHandle,
+        }),
+      ));
+    });
   }
 
   @override
