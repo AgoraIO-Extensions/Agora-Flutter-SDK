@@ -857,6 +857,7 @@ RtcEngineContext _$RtcEngineContextFromJson(Map<String, dynamic> json) =>
       useExternalEglContext: json['useExternalEglContext'] as bool?,
       domainLimit: json['domainLimit'] as bool?,
       autoRegisterAgoraExtensions: json['autoRegisterAgoraExtensions'] as bool?,
+      enableArgusCounters: json['enableArgusCounters'] as bool?,
     );
 
 Map<String, dynamic> _$RtcEngineContextToJson(RtcEngineContext instance) {
@@ -882,6 +883,7 @@ Map<String, dynamic> _$RtcEngineContextToJson(RtcEngineContext instance) {
   writeNotNull('domainLimit', instance.domainLimit);
   writeNotNull(
       'autoRegisterAgoraExtensions', instance.autoRegisterAgoraExtensions);
+  writeNotNull('enableArgusCounters', instance.enableArgusCounters);
   return val;
 }
 

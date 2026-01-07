@@ -267,19 +267,19 @@ public:
 
 @implementation TextureRender
 
-- (instancetype)
-    initWithTextureRegistry:(NSObject<FlutterTextureRegistry> *)textureRegistry
-                  messenger:(NSObject<FlutterBinaryMessenger> *)messenger
-              methodChannel:(FlutterMethodChannel *)methodChannel
-     irisRtcRenderingHandle:(void *)irisRtcRenderingHandle {
-  self = [super init];
-  if (self) {
-    self.textureRegistry = textureRegistry;
-    self.sharedMethodChannel = methodChannel;
-    self.irisRtcRendering =
+- (instancetype)initWithTextureRegistry:(NSObject<FlutterTextureRegistry> *)textureRegistry
+                              messenger:(NSObject<FlutterBinaryMessenger> *)messenger
+                          methodChannel:(FlutterMethodChannel *)methodChannel
+                 irisRtcRenderingHandle:(void *)irisRtcRenderingHandle
+                    enableArgusCounters:(BOOL)enableArgusCounters{
+    self = [super init];
+    if (self) {
+        self.textureRegistry = textureRegistry;
+        self.sharedMethodChannel = methodChannel;
+        self.irisRtcRendering =
         (agora::iris::IrisRtcRendering *)irisRtcRenderingHandle;
-    self.textureId = [self.textureRegistry registerTexture:self];
-    self.channel = [FlutterMethodChannel
+        self.textureId = [self.textureRegistry registerTexture:self];
+        self.channel = [FlutterMethodChannel
         methodChannelWithName:
             [NSString stringWithFormat:@"agora_rtc_engine/texture_render_%lld",
                                        self.textureId]
@@ -298,6 +298,7 @@ public:
     [self setupColorSpaceProcessing];
     // Initialize performance monitor
     self.performanceMonitor = [[AgoraRenderPerformanceMonitor alloc] init];
+    self.performanceMonitor.enabled = enableArgusCounters;
     self.performanceMonitor.delegate = self;
     // Initialize dispose flag
     self.isDisposed = NO;

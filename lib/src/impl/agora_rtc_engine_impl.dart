@@ -335,6 +335,7 @@ class _RtcEngineEventHandlerWrapper extends RtcEngineEventHandlerWrapper {
         RtcEngineEventHandlerOnLocalVideoStatsJson paramJson =
             RtcEngineEventHandlerOnLocalVideoStatsJson.fromJson(
                 jsonMap.cast<String, dynamic>());
+        print('xpz ==== ${paramJson.sourceType} ${paramJson.connection?.channelId} ${paramJson.connection?.localUid}');
         RtcConnection? connection = paramJson.connection;
         VideoSourceType? sourceType = paramJson.sourceType;
         if (connection != null && sourceType != null) {
@@ -348,6 +349,7 @@ class _RtcEngineEventHandlerWrapper extends RtcEngineEventHandlerWrapper {
             RtcEngineEventHandlerOnRemoteVideoStatsJson.fromJson(
                 jsonMap.cast<String, dynamic>());
         RtcConnection? connection = paramJson.connection;
+        print('xpz ==== [AgoraRenderTexture][PerformanceDataCollector] ${paramJson.connection?.channelId} ${paramJson.connection?.localUid}');
         if (connection != null) {
           ChannelConnectionManager.instance.addConnection(connection);
         }
@@ -443,6 +445,9 @@ class RtcEngineImpl extends rtc_engine_ex_binding.RtcEngineExImpl
 
   AsyncMemoizer? _initializeCallOnce;
 
+  bool? _enableArgusCounters = true; // Default to true for backward compatibility
+  bool get enableArgusCounters => _enableArgusCounters ?? true;
+
   static RtcEngineEx create({
     Object? sharedNativeHandle,
     IrisMethodChannel? irisMethodChannel,
@@ -536,6 +541,9 @@ class RtcEngineImpl extends rtc_engine_ex_binding.RtcEngineExImpl
       await irisMethodChannel.initilize(args);
       await _initializeInternal(context);
     });
+
+    // Store enableArgusCounters flag from context
+    _enableArgusCounters = context.enableArgusCounters;
 
     await super.initialize(context);
 

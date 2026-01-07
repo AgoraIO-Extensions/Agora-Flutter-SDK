@@ -9,6 +9,8 @@ import '/src/impl/video_view_controller_impl.dart';
 import 'package:flutter/services.dart';
 import 'package:iris_method_channel/iris_method_channel.dart';
 import '/src/render/video_rendering_performance_monitor.dart';
+import '/src/impl/agora_rtc_engine_impl.dart';
+import 'package:flutter/foundation.dart';
 
 // ignore_for_file: public_member_api_docs
 
@@ -93,6 +95,17 @@ class GlobalVideoViewControllerIO extends GlobalVideoViewControllerPlatfrom {
     if (_irisRtcRenderingHandle == 0) {
       return kTextureNotInit;
     }
+    
+    // Get enableArgusCounters from RtcEngine
+    bool enableArgusCounters = true; // Default to enabled for backward compatibility
+    try {
+      final rtcEngineImpl = rtcEngine as RtcEngineImpl;
+      enableArgusCounters = rtcEngineImpl.enableArgusCounters;
+    } catch (e) {
+      // If cast fails, use default (enabled)
+      debugPrint('[GlobalVideoViewControllerIO] Failed to get enableArgusCounters: $e');
+    }
+    
     final textureId =
         await methodChannel.invokeMethod<int>('createTextureRender', {
       'irisRtcRenderingHandle': _irisRtcRenderingHandle,
@@ -100,6 +113,7 @@ class GlobalVideoViewControllerIO extends GlobalVideoViewControllerPlatfrom {
       'channelId': channelId,
       'videoSourceType': videoSourceType,
       'videoViewSetupMode': videoViewSetupMode,
+      'enableArgusCounters': enableArgusCounters,
     });
     return textureId ?? kTextureNotInit;
   }
