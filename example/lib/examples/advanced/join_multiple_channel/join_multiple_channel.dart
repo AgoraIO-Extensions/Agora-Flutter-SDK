@@ -112,6 +112,11 @@ class _State extends State<JoinMultipleChannel> {
           });
         }
       },
+      onLocalVideoStats: (RtcConnection connection, VideoSourceType sourceType,
+          LocalVideoStats stats) {
+        print(
+            'onLocalVideoStats: connection: ${connection.toJson()} stats: ${stats.uid}');
+      },
     ));
 
     await _engine.enableVideo();
@@ -212,7 +217,12 @@ class _State extends State<JoinMultipleChannel> {
               controller: VideoViewController(
                 rtcEngine: _engine,
                 canvas: const VideoCanvas(uid: 0),
+                useFlutterTexture: true,
+                useAndroidSurfaceView: false,
               ),
+              onAgoraVideoViewCreated: (viewId) {
+                _engine.startPreview();
+              },
             ),
             if (remoteUid.isNotEmpty)
               Align(
@@ -228,6 +238,7 @@ class _State extends State<JoinMultipleChannel> {
                                 rtcEngine: _engine,
                                 canvas: VideoCanvas(uid: e),
                                 connection: connection,
+                                useFlutterTexture: true,
                               ),
                             )),
                       )

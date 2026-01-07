@@ -93,6 +93,7 @@ class _RemoteVideoViewsWidgetState extends State<RemoteVideoViewsWidget> {
                   connection: RtcConnection(
                       channelId: widget.channelId,
                       localUid: widget.connectionUid),
+                  useFlutterTexture: true,
                 ),
               ),
               Column(
