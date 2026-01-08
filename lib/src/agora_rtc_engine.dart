@@ -735,94 +735,6 @@ class RemoteVideoStats implements AgoraSerializable {
   Map<String, dynamic> toJson() => _$RemoteVideoStatsToJson(this);
 }
 
-/// Video rendering performance statistics for Flutter Texture rendering mode.
-///
-/// This class provides detailed performance metrics for monitoring the video rendering pipeline
-/// in Flutter Texture mode. These metrics help diagnose rendering performance issues and optimize
-/// the video display experience.
-@JsonSerializable(explicitToJson: true, includeIfNull: false)
-class VideoRenderingPerformanceStats implements AgoraSerializable {
-  /// @nodoc
-  const VideoRenderingPerformanceStats({
-    this.textureId,
-    this.uid,
-    this.renderInputFps,
-    this.renderOutputFps,
-    this.renderFrameIntervalMs,
-    this.renderDrawCostMs,
-    this.totalFramesReceived,
-    this.totalFramesRendered,
-  });
-
-  /// The texture ID of the video view.
-  @JsonKey(name: 'textureId')
-  final int? textureId;
-
-  /// The user ID of the video stream.
-  ///
-  /// * 0: Local user (local video stream)
-  /// * Non-zero: Remote user (remote video stream)
-  ///
-  /// Use this field to distinguish between local and remote video streams.
-  @JsonKey(name: 'uid')
-  final int? uid;
-
-  /// The frame rate (FPS) of video frames arriving at the renderer (Input FPS).
-  ///
-  /// This indicates how many frames per second are being delivered from the Native SDK
-  /// to the Flutter rendering layer. If this value is significantly lower than expected,
-  /// it may indicate issues with network, decoding, or the Native SDK pipeline.
-  @JsonKey(name: 'renderInputFps')
-  final double? renderInputFps;
-
-  /// The frame rate (FPS) of video frames actually rendered to the screen (Output FPS).
-  ///
-  /// This indicates how many frames per second are successfully rendered by Flutter Engine.
-  /// If this value is lower than renderInputFps, it suggests rendering performance issues
-  /// or frame drops in the Flutter layer.
-  @JsonKey(name: 'renderOutputFps')
-  final double? renderOutputFps;
-
-  /// The average frame interval between consecutive frame notifications.
-  ///
-  /// This measures the time interval between consecutive calls to textureFrameAvailable,
-  /// representing the actual frame processing cycle. For 30fps video, this should be
-  /// approximately 33.33ms; for 60fps, it should be approximately 16.67ms.
-  /// 
-  /// A higher value indicates lower frame rate or frame drops.
-  /// Unit: milliseconds (ms)
-  @JsonKey(name: 'renderFrameIntervalMs')
-  final double? renderFrameIntervalMs;
-
-  /// The average render duration from frame received to copyPixelBuffer completion.
-  ///
-  /// This measures the actual processing time for a single frame, from when the frame
-  /// arrives at OnVideoFrameReceived to when Flutter Engine completes reading it via
-  /// copyPixelBuffer. This reflects the true rendering latency, excluding wait time
-  /// between frames.
-  /// 
-  /// Typical values: 1-10ms on modern devices. Values above 16ms may indicate
-  /// performance issues or system load.
-  /// Unit: milliseconds (ms)
-  @JsonKey(name: 'renderDrawCostMs')
-  final double? renderDrawCostMs;
-
-  /// The total number of video frames received from Native SDK.
-  @JsonKey(name: 'totalFramesReceived')
-  final int? totalFramesReceived;
-
-  /// The total number of video frames successfully rendered to the screen.
-  @JsonKey(name: 'totalFramesRendered')
-  final int? totalFramesRendered;
-
-  /// @nodoc
-  factory VideoRenderingPerformanceStats.fromJson(Map<String, dynamic> json) =>
-      _$VideoRenderingPerformanceStatsFromJson(json);
-
-  @override
-  Map<String, dynamic> toJson() => _$VideoRenderingPerformanceStatsToJson(this);
-}
-
 /// @nodoc
 @JsonSerializable(explicitToJson: true, includeIfNull: false)
 class VideoCompositingLayout implements AgoraSerializable {
@@ -1488,7 +1400,6 @@ class ChannelMediaOptions implements AgoraSerializable {
       this.uplinkMultipathMode,
       this.downlinkMultipathMode,
       this.preferMultipathType});
-      this.customUserInfo});
 
   /// Whether to publish the video captured by the camera: true : Publish the video captured by the camera. false : Do not publish the video captured by the camera.
   @JsonKey(name: 'publishCameraTrack')
@@ -1657,8 +1568,6 @@ class ChannelMediaOptions implements AgoraSerializable {
   /// @nodoc
   @JsonKey(name: 'preferMultipathType')
   final MultipathType? preferMultipathType;
-  @JsonKey(name: 'customUserInfo')
-  final String? customUserInfo;
 
   /// @nodoc
   factory ChannelMediaOptions.fromJson(Map<String, dynamic> json) =>
@@ -2964,8 +2873,7 @@ class RtcEngineContext implements AgoraSerializable {
       this.threadPriority,
       this.useExternalEglContext,
       this.domainLimit,
-      this.autoRegisterAgoraExtensions,
-      this.enableArgusCounters});
+      this.autoRegisterAgoraExtensions});
 
   /// The App ID issued by Agora for your project. Only users in apps with the same App ID can join the same channel and communicate with each other. An App ID can only be used to create one RtcEngine instance. To change your App ID, call release to destroy the current RtcEngine instance, and then create a new one.
   @JsonKey(name: 'appId')
@@ -3016,10 +2924,6 @@ class RtcEngineContext implements AgoraSerializable {
   /// Whether to automatically register the Agora extensions when initializing RtcEngine : true : (Default) Automatically register the Agora extensions when initializing RtcEngine. false : Do not register the Agora extensions when initializing RtcEngine. You need to call enableExtension to register the Agora extensions.
   @JsonKey(name: 'autoRegisterAgoraExtensions')
   final bool? autoRegisterAgoraExtensions;
-
-  /// Whether to enable Argus counters for texture rendering performance statistics: true : (Default) Enable Argus counters. When using texture rendering, performance data will be collected and uploaded. false : Disable Argus counters. No performance data will be collected or uploaded when using texture rendering.
-  @JsonKey(name: 'enableArgusCounters')
-  final bool? enableArgusCounters;
 
   /// @nodoc
   factory RtcEngineContext.fromJson(Map<String, dynamic> json) =>

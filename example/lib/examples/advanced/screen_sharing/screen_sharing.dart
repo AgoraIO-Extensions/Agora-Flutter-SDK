@@ -100,9 +100,10 @@ class _State extends State<ScreenSharing> with KeepRemoteVideoViewsMixin {
     _engine = createAgoraRtcEngineEx();
     await _engine.initialize(RtcEngineContext(
       appId: config.appId,
-      enableArgusCounters: true,
       channelProfile: ChannelProfileType.channelProfileLiveBroadcasting,
     ));
+    // Set enableArgusCounters after initialize (since RtcEngineContext is auto-generated)
+    _engine.setEnableArgusCounters(true);
     await _engine.setLogLevel(LogLevel.logLevelError);
 
     _engine.registerEventHandler(_rtcEngineEventHandler);

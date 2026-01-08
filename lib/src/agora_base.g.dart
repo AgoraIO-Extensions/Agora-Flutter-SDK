@@ -2312,7 +2312,6 @@ Map<String, dynamic> _$EchoTestConfigurationToJson(
 UserInfo _$UserInfoFromJson(Map<String, dynamic> json) => UserInfo(
       uid: (json['uid'] as num?)?.toInt(),
       userAccount: json['userAccount'] as String?,
-      customUserInfo: json['customUserInfo'] as String?,
     );
 
 Map<String, dynamic> _$UserInfoToJson(UserInfo instance) {
@@ -2326,7 +2325,6 @@ Map<String, dynamic> _$UserInfoToJson(UserInfo instance) {
 
   writeNotNull('uid', instance.uid);
   writeNotNull('userAccount', instance.userAccount);
-  writeNotNull('customUserInfo', instance.customUserInfo);
   return val;
 }
 
@@ -2647,7 +2645,6 @@ const _$WarnCodeTypeEnumMap = {
   WarnCodeType.warnAdmRecordMalfunction: 1021,
   WarnCodeType.warnAdmRecordAudioLowlevel: 1031,
   WarnCodeType.warnAdmPlayoutAudioLowlevel: 1032,
-  WarnCodeType.warnAdmRecordIsOccupied: 1033,
   WarnCodeType.warnAdmWindowsNoDataReadyEvent: 1040,
   WarnCodeType.warnApmHowling: 1051,
   WarnCodeType.warnAdmGlitchState: 1052,
@@ -2825,10 +2822,6 @@ const _$H264PacketizeModeEnumMap = {
 
 const _$MaxUserAccountLengthTypeEnumMap = {
   MaxUserAccountLengthType.maxUserAccountLength: 256,
-};
-
-const _$MaxCustomUserInfoLengthTypeEnumMap = {
-  MaxCustomUserInfoLengthType.maxCustomUserInfoLength: 1024,
 };
 
 const _$CameraFormatTypeEnumMap = {

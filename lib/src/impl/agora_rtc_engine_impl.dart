@@ -445,8 +445,20 @@ class RtcEngineImpl extends rtc_engine_ex_binding.RtcEngineExImpl
 
   AsyncMemoizer? _initializeCallOnce;
 
-  bool? _enableArgusCounters = true; // Default to true for backward compatibility
+  bool? _enableArgusCounters =
+      true; // Default to true for backward compatibility
   bool get enableArgusCounters => _enableArgusCounters ?? true;
+
+  /// Set whether to enable Argus counters for texture rendering performance statistics.
+  /// This should be called after initialize() if you want to change the default value.
+  ///
+  /// [enabled] true: Enable Argus counters (default). When using texture rendering,
+  ///           performance data will be collected and uploaded.
+  ///           false: Disable Argus counters. No performance data will be collected
+  ///           or uploaded when using texture rendering.
+  void setEnableArgusCounters(bool enabled) {
+    _enableArgusCounters = enabled;
+  }
 
   static RtcEngineEx create({
     Object? sharedNativeHandle,
@@ -542,8 +554,8 @@ class RtcEngineImpl extends rtc_engine_ex_binding.RtcEngineExImpl
       await _initializeInternal(context);
     });
 
-    // Store enableArgusCounters flag from context
-    _enableArgusCounters = context.enableArgusCounters;
+    // Note: enableArgusCounters cannot be added to RtcEngineContext as it's auto-generated
+    // It will be set via setEnableArgusCounters method if needed, default is true
 
     await super.initialize(context);
 
@@ -598,7 +610,7 @@ class RtcEngineImpl extends rtc_engine_ex_binding.RtcEngineExImpl
     _globalVideoViewController = null;
 
     await irisMethodChannel.unregisterEventHandlers(_rtcEngineImplScopedKey);
-    
+
     // Clear all channel connections and dispose performance collector
     // This serves as a fallback cleanup in case cleanup wasn't performed
     // when all channels were left (e.g., if onLeaveChannel event wasn't triggered)
@@ -988,7 +1000,6 @@ class RtcEngineImpl extends rtc_engine_ex_binding.RtcEngineExImpl
       throw AgoraRtcException(code: result);
     }
   }
-
 
   @override
   void registerAudioEncodedFrameObserver(

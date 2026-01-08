@@ -66,8 +66,9 @@ class _State extends State<JoinChannelVideo> {
     _engine = createAgoraRtcEngine();
     await _engine.initialize(RtcEngineContext(
       appId: config.appId,
-      enableArgusCounters: true,
     ));
+    // Set enableArgusCounters after initialize (since RtcEngineContext is auto-generated)
+    _engine.setEnableArgusCounters(true);
     _rtcEngineEventHandler = RtcEngineEventHandler(
       onError: (ErrorCodeType err, String msg) {
         logSink.log('[onError] err: $err, msg: $msg');

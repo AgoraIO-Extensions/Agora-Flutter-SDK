@@ -58,6 +58,13 @@ extension RtcEngineExt on RtcEngine {
     final impl = this as RtcEngineImpl;
     return impl.unregisterMethodChannelHandler(method, handler);
   }
+
+  /// @nodoc
+  void setEnableArgusCounters(bool enabled) {
+    if (this is RtcEngineImpl) {
+      (this as RtcEngineImpl).setEnableArgusCounters(enabled);
+    }
+  }
 }
 
 /// Error codes and error messages.

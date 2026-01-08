@@ -83,7 +83,6 @@ class ChannelConnectionManager {
     return _publishingVideoConnections[sourceType];
   }
 
-
   /// Legacy method: Get publishing video connection
   /// Returns camera connection first, then screen, then any other, or legacy connection
   RtcConnection? getPublishingVideoConnection() {
@@ -127,10 +126,10 @@ class ChannelConnectionManager {
     if (channelId.isEmpty) {
       return connections;
     }
-    
+
     // Use a set to track seen connection keys (channelId-localUid) for deduplication
     final seenKeys = <String>{};
-    
+
     // Check in _activeConnections
     final connection = _activeConnections[channelId];
     if (connection != null) {
@@ -138,7 +137,7 @@ class ChannelConnectionManager {
       final key = '${connection.channelId}-${connection.localUid ?? 0}';
       seenKeys.add(key);
     }
-    
+
     // Also check in _publishingVideoConnections (in case it's a publishing connection)
     for (final conn in _publishingVideoConnections.values) {
       if (conn.channelId == channelId) {
@@ -159,11 +158,12 @@ class ChannelConnectionManager {
         }
       }
     }
-    
+
     // Also check legacy _publishingVideoConnection
     if (_publishingVideoConnection != null &&
         _publishingVideoConnection!.channelId == channelId) {
-      final key = '${_publishingVideoConnection!.channelId}-${_publishingVideoConnection!.localUid ?? 0}';
+      final key =
+          '${_publishingVideoConnection!.channelId}-${_publishingVideoConnection!.localUid ?? 0}';
       if (!seenKeys.contains(key)) {
         bool isDuplicate = false;
         for (final existingConn in connections) {
@@ -178,7 +178,7 @@ class ChannelConnectionManager {
         }
       }
     }
-    
+
     return connections;
   }
 }

@@ -95,17 +95,18 @@ class GlobalVideoViewControllerIO extends GlobalVideoViewControllerPlatfrom {
     if (_irisRtcRenderingHandle == 0) {
       return kTextureNotInit;
     }
-    
+
     // Get enableArgusCounters from RtcEngine
-    bool enableArgusCounters = true; // Default to enabled for backward compatibility
+    bool enableArgusCounters = true;
     try {
       final rtcEngineImpl = rtcEngine as RtcEngineImpl;
       enableArgusCounters = rtcEngineImpl.enableArgusCounters;
     } catch (e) {
       // If cast fails, use default (enabled)
-      debugPrint('[GlobalVideoViewControllerIO] Failed to get enableArgusCounters: $e');
+      debugPrint(
+          '[GlobalVideoViewControllerIO] Failed to get enableArgusCounters: $e');
     }
-    
+
     final textureId =
         await methodChannel.invokeMethod<int>('createTextureRender', {
       'irisRtcRenderingHandle': _irisRtcRenderingHandle,
