@@ -620,6 +620,21 @@ class IrisRtcVideoFrameConfig extends ffi.Struct {
 
   @ffi.Array.multi([512])
   external ffi.Array<ffi.Int8> channelId;
+
+  /// int value of agora::rtc::VIDEO_VIEW_SETUP_MODE.
+  @ffi.Int32()
+  external int video_view_setup_mode;
+
+  /// int value of agora::media::base::VIDEO_MODULE_POSITION.
+  /// Default value is
+  /// `agora::media::base::VIDEO_MODULE_POSITION::POSITION_PRE_ENCODER | agora::media::base::VIDEO_MODULE_POSITION::POSITION_PRE_RENDERER`
+  @ffi.Uint32()
+  external int observed_frame_position;
+
+  /// If true, use queue to cache video frame, otherwise use cacheable frame cache.
+  /// Default value is false.
+  @ffi.Bool()
+  external bool use_queue;
 }
 
 abstract class GET_VIDEO_FRAME_CACHE_RETURN_TYPE {
