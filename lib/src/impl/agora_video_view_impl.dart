@@ -5,7 +5,7 @@ import '/src/agora_rtc_engine.dart';
 import '/src/agora_rtc_engine_ex.dart';
 import '/src/impl/video_view_controller_impl.dart';
 import '/src/impl/agora_rtc_renderer.dart';
-import '/src/impl/video_rendering_performance_uploader.dart';
+
 import '/src/render/agora_video_view.dart';
 import '/src/render/video_view_controller.dart';
 
@@ -360,18 +360,6 @@ class _AgoraRtcRenderTextureState extends State<AgoraRtcRenderTexture>
       maybeCreateChannel(-1, '');
       widget.onAgoraVideoViewCreated?.call(textureId);
 
-      // Register context for performance reporting (shared channel)
-      PerformanceStatsHandler.instance.register(
-        textureId,
-        RenderContext(
-          rtcEngine: widget.controller.rtcEngine,
-          uid: widget.controller.canvas.uid ?? 0,
-          connection: widget.controller.connection,
-          sourceType: widget.controller.canvas.sourceType ??
-              VideoSourceTypeExt.fromValue(
-                  widget.controller.getVideoSourceType()),
-        ),
-      );
       if (mounted) {
         setState(() {});
       }
@@ -410,8 +398,6 @@ class _AgoraRtcRenderTextureState extends State<AgoraRtcRenderTexture>
   void dispose() {
     methodChannel?.setMethodCallHandler(null);
     if (_controllerInternal != null) {
-      PerformanceStatsHandler.instance
-          .unregister(_controllerInternal!.getTextureId());
       _controllerInternal?.disposeTextureRender();
       _controllerInternal = null;
     }

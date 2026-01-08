@@ -155,7 +155,30 @@ mixin VideoViewControllerBaseMixin implements VideoViewControllerBase {
         canvas.setupMode?.value() ??
             VideoViewSetupMode.videoViewSetupReplace.value(),
       );
+
+      if (_textureId != kTextureNotInit) {
+        _registerPerformanceStats(_textureId);
+      }
     }
+  }
+
+  void _registerPerformanceStats(int textureId) {
+    PerformanceStatsHandler.instance.register(
+      textureId,
+      RenderContext(
+        rtcEngine: rtcEngine,
+        uid: canvas.uid ?? 0,
+        connection: connection,
+        sourceType: canvas.sourceType ??
+            VideoSourceTypeExt.fromValue(getVideoSourceType()),
+      ),
+    );
+    VideoRenderingPerformanceMonitor.instance.startMonitoring(textureId);
+  }
+
+  void _unregisterPerformanceStats(int textureId) {
+    PerformanceStatsHandler.instance.unregister(textureId);
+    VideoRenderingPerformanceMonitor.instance.stopMonitoring(textureId);
   }
 
   Future<void> _releaseTextureRender(int viewId) async {
@@ -170,6 +193,7 @@ mixin VideoViewControllerBaseMixin implements VideoViewControllerBase {
     _activeViewIds.remove(viewId);
     
     if (_activeViewIds.isEmpty && _textureId != kTextureNotInit) {
+      _unregisterPerformanceStats(_textureId);
       await rtcEngine.globalVideoViewController?.destroyTextureRender(_textureId);
       _textureId = kTextureNotInit;
       _textureWidth = 0;
@@ -182,9 +206,9 @@ mixin VideoViewControllerBaseMixin implements VideoViewControllerBase {
     if (shouldUseFlutterTexture) {
       // Stop performance monitoring for this texture
       if (_textureId != kTextureNotInit) {
-        VideoRenderingPerformanceMonitor.instance.stopMonitoring(_textureId);
+        _unregisterPerformanceStats(_textureId);
       }
-      
+
       await rtcEngine.globalVideoViewController
           ?.destroyTextureRender(getTextureId());
       _textureId = kTextureNotInit;
@@ -277,7 +301,7 @@ mixin VideoViewControllerBaseMixin implements VideoViewControllerBase {
         
         // Start performance monitoring for this texture
         if (_textureId != kTextureNotInit) {
-          VideoRenderingPerformanceMonitor.instance.startMonitoring(_textureId);
+          _registerPerformanceStats(_textureId);
         }
       }
     } else {

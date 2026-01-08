@@ -143,7 +143,7 @@ class PerformanceStatsHandler implements VideoRenderingPerformanceEventHandler {
     );
 
     debugPrint(
-        '${DateTime.now().toString()} [AgoraRenderTexture] RawFrame: isLocal=$isLocal, connection=${effectiveConnection.toString()}, UID=$uid, '
+        '${DateTime.now().toString()} [AgoraRenderTexture] RawFrame: isLocal=$isLocal, connection=${effectiveConnection?.toJson()}, UID=$uid, '
         'TotalRendered=${stats.totalFramesRendered}, '
         'DrawCost=${stats.renderDrawCostMs?.toStringAsFixed(2)}ms');
   }
