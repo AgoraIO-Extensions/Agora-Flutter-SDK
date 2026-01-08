@@ -719,6 +719,7 @@ ChannelMediaOptions _$ChannelMediaOptionsFromJson(Map<String, dynamic> json) =>
           _$MultipathModeEnumMap, json['downlinkMultipathMode']),
       preferMultipathType: $enumDecodeNullable(
           _$MultipathTypeEnumMap, json['preferMultipathType']),
+      customUserInfo: json['customUserInfo'] as String?,
     );
 
 Map<String, dynamic> _$ChannelMediaOptionsToJson(ChannelMediaOptions instance) {
@@ -785,6 +786,7 @@ Map<String, dynamic> _$ChannelMediaOptionsToJson(ChannelMediaOptions instance) {
       _$MultipathModeEnumMap[instance.downlinkMultipathMode]);
   writeNotNull('preferMultipathType',
       _$MultipathTypeEnumMap[instance.preferMultipathType]);
+  writeNotNull('customUserInfo', instance.customUserInfo);
   return val;
 }
 

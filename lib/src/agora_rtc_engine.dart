@@ -1488,6 +1488,7 @@ class ChannelMediaOptions implements AgoraSerializable {
       this.uplinkMultipathMode,
       this.downlinkMultipathMode,
       this.preferMultipathType});
+      this.customUserInfo});
 
   /// Whether to publish the video captured by the camera: true : Publish the video captured by the camera. false : Do not publish the video captured by the camera.
   @JsonKey(name: 'publishCameraTrack')
@@ -1656,6 +1657,8 @@ class ChannelMediaOptions implements AgoraSerializable {
   /// @nodoc
   @JsonKey(name: 'preferMultipathType')
   final MultipathType? preferMultipathType;
+  @JsonKey(name: 'customUserInfo')
+  final String? customUserInfo;
 
   /// @nodoc
   factory ChannelMediaOptions.fromJson(Map<String, dynamic> json) =>
