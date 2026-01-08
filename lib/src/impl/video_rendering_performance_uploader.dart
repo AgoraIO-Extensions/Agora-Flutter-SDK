@@ -141,11 +141,6 @@ class PerformanceStatsHandler implements VideoRenderingPerformanceEventHandler {
       totalFramesRendered: stats.totalFramesRendered ?? 0,
       drawCost: stats.renderDrawCostMs,
     );
-
-    debugPrint(
-        '${DateTime.now().toString()} [AgoraRenderTexture] RawFrame: isLocal=$isLocal, connection=${effectiveConnection?.toJson()}, UID=$uid, '
-        'TotalRendered=${stats.totalFramesRendered}, '
-        'DrawCost=${stats.renderDrawCostMs?.toStringAsFixed(2)}ms');
   }
 }
 
@@ -359,10 +354,7 @@ class _ChannelPerformanceData {
 
     final jsonString = jsonEncode(params);
 
-    // rtcEngine.setParameters(jsonString);
-
-    print(
-        '[AgoraRenderTexture][PerformanceDataCollector] UPLOAD 6s Metrics for connection time: ${DateTime.now()} $jsonString');
+    rtcEngine.setParameters(jsonString);
 
     // Clear buffers after upload
     _uidBuffers.forEach((_, buffer) => buffer.clear());
