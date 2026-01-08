@@ -49,6 +49,10 @@ typedef struct IrisRtcVideoFrameConfig {
   /// Default value is
   /// `agora::media::base::VIDEO_MODULE_POSITION::POSITION_PRE_ENCODER | agora::media::base::VIDEO_MODULE_POSITION::POSITION_PRE_RENDERER`
   uint32_t observed_frame_position;
+
+  /// If true, use queue to cache video frame, otherwise use cacheable frame cache.
+  /// Default value is false.
+  bool use_queue;
 } IrisRtcVideoFrameConfig;
 
 /// Export an empty `IrisRtcVideoFrameConfig` with initialized value.
