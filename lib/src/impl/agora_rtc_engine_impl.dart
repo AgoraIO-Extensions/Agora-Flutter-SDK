@@ -335,7 +335,6 @@ class _RtcEngineEventHandlerWrapper extends RtcEngineEventHandlerWrapper {
         RtcEngineEventHandlerOnLocalVideoStatsJson paramJson =
             RtcEngineEventHandlerOnLocalVideoStatsJson.fromJson(
                 jsonMap.cast<String, dynamic>());
-        print('xpz ==== ${paramJson.sourceType} ${paramJson.connection?.channelId} ${paramJson.connection?.localUid}');
         RtcConnection? connection = paramJson.connection;
         VideoSourceType? sourceType = paramJson.sourceType;
         if (connection != null && sourceType != null) {
@@ -349,7 +348,6 @@ class _RtcEngineEventHandlerWrapper extends RtcEngineEventHandlerWrapper {
             RtcEngineEventHandlerOnRemoteVideoStatsJson.fromJson(
                 jsonMap.cast<String, dynamic>());
         RtcConnection? connection = paramJson.connection;
-        print('xpz ==== [AgoraRenderTexture][PerformanceDataCollector] ${paramJson.connection?.channelId} ${paramJson.connection?.localUid}');
         if (connection != null) {
           ChannelConnectionManager.instance.addConnection(connection);
         }

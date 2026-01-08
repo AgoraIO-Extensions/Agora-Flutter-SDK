@@ -26,9 +26,9 @@ class VideoRenderingPerformanceStats {
   factory VideoRenderingPerformanceStats.fromJson(Map<String, dynamic> json) {
     /// @nodoc
     return VideoRenderingPerformanceStats(
-      textureId: json['textureId'] as int?,
-      uid: json['uid'] as int?,
-      totalFramesRendered: json['totalFramesRendered'] as int?,
+      textureId: (json['textureId'] as num?)?.toInt(),
+      uid: (json['uid'] as num?)?.toInt(),
+      totalFramesRendered: (json['totalFramesRendered'] as num?)?.toInt(),
       renderDrawCostMs: (json['renderDrawCostMs'] as num?)?.toDouble(),
     );
   }
