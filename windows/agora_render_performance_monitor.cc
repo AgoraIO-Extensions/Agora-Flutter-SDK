@@ -47,8 +47,6 @@ void AgoraRenderPerformanceMonitor::setEnabled(bool enabled) {
 void AgoraRenderPerformanceMonitor::recordFrameReceived() {
     if (!enabled_) return;
 
-    int64_t nowMs = currentTimeMs();
-
     std::lock_guard<std::mutex> lock(mutex_);
     totalFramesReceived_++;
 }

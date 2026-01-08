@@ -69,6 +69,9 @@ public:
     /// Calculates the interval from the last rendered frame.
     void recordFrameRenderedInterval();
 
+    /// Record the render draw cost value in milliseconds.
+    void recordRenderDrawCostWithValue(double drawCostMs);
+
     /*
     /// Get current performance statistics.
     AgoraRenderPerformanceStats getCurrentStats();
