@@ -177,18 +177,18 @@ public:
     }
 
     // Apply color space to pixel buffer if provided
-    NSLog(@"OnVideoFrameReceived: frame=%dx%d, format=%u, colorSpace.validate=%d", 
-          vf->width, vf->height, CVPixelBufferGetPixelFormatType(pixelBuffer), vf->colorSpace.validate());
+    // NSLog(@"OnVideoFrameReceived: frame=%dx%d, format=%u, colorSpace.validate=%d", 
+        //   vf->width, vf->height, CVPixelBufferGetPixelFormatType(pixelBuffer), vf->colorSpace.validate());
     
     // Store color space information, process when Flutter retrieves it
     if (vf->colorSpace.validate()) {
         strongRenderer.currentColorSpace = vf->colorSpace;
         strongRenderer.hasValidColorSpace = YES;
-        NSLog(@"Stored color space for deferred processing: Matrix:%d, Range:%d", 
-              vf->colorSpace.matrix, vf->colorSpace.range);
+        // NSLog(@"Stored color space for deferred processing: Matrix:%d, Range:%d", 
+            //   vf->colorSpace.matrix, vf->colorSpace.range);
     } else {
         strongRenderer.hasValidColorSpace = NO;
-        NSLog(@"No valid color space received");
+        // NSLog(@"No valid color space received");
     }
    
     if (pre_width_ != vf->width || pre_height_ != vf->height) {
@@ -222,11 +222,11 @@ public:
     dispatch_sync(strongRenderer.pixelBufferSynchronizationQueue, ^{
       previousPixelBuffer = strongRenderer.latestPixelBuffer;
 #if defined(TARGET_OS_OSX) && TARGET_OS_OSX
-      NSLog(@"macOS: Copying CVPixelBuffer with attachments...");
+    //   NSLog(@"macOS: Copying CVPixelBuffer with attachments...");
       strongRenderer.latestPixelBuffer =
           [AgoraCVPixelBufferUtils copyCVPixelBuffer:pixelBuffer];
 #else
-      NSLog(@"iOS: Retaining original CVPixelBuffer...");
+    //   NSLog(@"iOS: Retaining original CVPixelBuffer...");
       strongRenderer.latestPixelBuffer = CVPixelBufferRetain(pixelBuffer);
 #endif
     });
@@ -348,17 +348,17 @@ public:
   
   // Key: Apply color space processing before returning to Flutter
   if (pixelBuffer && self.hasValidColorSpace) {
-    NSLog(@"Applying Metal ColorSpace transform - Matrix:%d, Range:%d", 
-          self.currentColorSpace.matrix, self.currentColorSpace.range);
+    // NSLog(@"Applying Metal ColorSpace transform - Matrix:%d, Range:%d", 
+    //       self.currentColorSpace.matrix, self.currentColorSpace.range);
     
     [self processColorSpace:pixelBuffer colorSpace:self.currentColorSpace];
   } else if (pixelBuffer) {
-    NSLog(@"Flutter requesting pixelBuffer but no valid color space");
+    // NSLog(@"Flutter requesting pixelBuffer but no valid color space");
   } else {
-    NSLog(@"No pixelBuffer available for Flutter Engine");
+    // NSLog(@"No pixelBuffer available for Flutter Engine");
   }
   
-  NSLog(@"Returning pixelBuffer to Flutter Engine");
+  // NSLog(@"Returning pixelBuffer to Flutter Engine");
   
   // Record render draw cost (duration calculated internally)
   if (pixelBuffer) {
@@ -421,7 +421,7 @@ public:
     // Initialize Metal device
     self.metalDevice = MTLCreateSystemDefaultDevice();
     if (!self.metalDevice) {
-        NSLog(@"Metal is not supported on this device");
+        // NSLog(@"Metal is not supported on this device");
         return;
     }
 
@@ -431,7 +431,7 @@ public:
     CVReturn result = CVMetalTextureCacheCreate(
         kCFAllocatorDefault, NULL, self.metalDevice, NULL, &_textureCache);
     if (result != kCVReturnSuccess) {
-        NSLog(@"Failed to create Metal texture cache: %d", result);
+        // NSLog(@"Failed to create Metal texture cache: %d", result);
         return;
     }
     
@@ -442,20 +442,20 @@ public:
         options:nil
         error:&error];
     if (!library) {
-        NSLog(@"Failed to create shader library: %@", error);
+        // NSLog(@"Failed to create shader library: %@", error);
         return;
     }
     
     id<MTLFunction> function = [library newFunctionWithName:@"processYUVColorSpace"];
     if (!function) {
-        NSLog(@"Failed to create shader function");
+        // NSLog(@"Failed to create shader function");
         return;
     }
     
     self.colorSpacePipelineState = [self.metalDevice 
         newComputePipelineStateWithFunction:function error:&error];
     if (!self.colorSpacePipelineState) {
-        NSLog(@"Failed to create pipeline state: %@", error);
+        // NSLog(@"Failed to create pipeline state: %@", error);
         return;
     }
     
@@ -463,7 +463,7 @@ public:
     self.colorMatrixBuffer = [self.metalDevice newBufferWithLength:sizeof(float) * 9 
                                                           options:MTLResourceStorageModeShared];
     
-    NSLog(@"Metal ColorSpace shader setup completed");
+    // NSLog(@"Metal ColorSpace shader setup completed");
 }
 
 - (const float*)getColorMatrixForColorSpace:(const agora::media::base::ColorSpace&)colorSpace {
@@ -472,18 +472,18 @@ public:
     
     switch (colorSpace.matrix) {
         case agora::media::base::ColorSpace::MATRIXID_BT709:
-            NSLog(@"Using BT.709 matrix (%s range)", isFullRange ? "Full" : "Limited");
+            // NSLog(@"Using BT.709 matrix (%s range)", isFullRange ? "Full" : "Limited");
             return isFullRange ? g_color709_full : g_color709_limit;
             
         case agora::media::base::ColorSpace::MATRIXID_BT2020_NCL:
         case agora::media::base::ColorSpace::MATRIXID_BT2020_CL:
-            NSLog(@"Using BT.2020 matrix (Full range - as per Android)");
+            // NSLog(@"Using BT.2020 matrix (Full range - as per Android)");
             return g_color2020_full;
             
         case agora::media::base::ColorSpace::MATRIXID_SMPTE170M:
         case agora::media::base::ColorSpace::MATRIXID_BT470BG:
         default:
-            NSLog(@"Using BT.601/SMPTE170M matrix (%s range)", isFullRange ? "Full" : "Limited");
+            // NSLog(@"Using BT.601/SMPTE170M matrix (%s range)", isFullRange ? "Full" : "Limited");
             return isFullRange ? g_color601_full : g_color601_limit;
     }
 }
@@ -500,7 +500,7 @@ public:
     // Only process YUV format
     if (pixelFormat != kCVPixelFormatType_420YpCbCr8BiPlanarVideoRange &&
         pixelFormat != kCVPixelFormatType_420YpCbCr8BiPlanarFullRange) {
-        NSLog(@"Unsupported pixel format for color space processing: %u", pixelFormat);
+        // NSLog(@"Unsupported pixel format for color space processing: %u", pixelFormat);
         return;
     }
     
@@ -523,7 +523,7 @@ public:
             MTLPixelFormatR8Unorm, width, height, 0, &yTextureRef);
         
         if (result != kCVReturnSuccess || !yTextureRef) {
-            NSLog(@"Failed to create Y texture: %d", result);
+            // NSLog(@"Failed to create Y texture: %d", result);
             return;
         }
         
@@ -532,7 +532,7 @@ public:
             MTLPixelFormatRG8Unorm, width/2, height/2, 1, &uvTextureRef);
         
         if (result != kCVReturnSuccess || !uvTextureRef) {
-            NSLog(@"Failed to create UV texture: %d", result);
+            // NSLog(@"Failed to create UV texture: %d", result);
             CFRelease(yTextureRef);
             return;
         }
@@ -584,9 +584,9 @@ public:
         CFRelease(yTextureRef);
         CFRelease(uvTextureRef);
         
-        NSLog(@"Applied ColorSpace transform - Matrix:%d, Range:%d (%s)", 
-              colorSpace.matrix, colorSpace.range, 
-              (colorSpace.range == agora::media::base::ColorSpace::RANGEID_FULL) ? "Full" : "Limited");
+        // NSLog(@"Applied ColorSpace transform - Matrix:%d, Range:%d (%s)", 
+            //   colorSpace.matrix, colorSpace.range, 
+            //   (colorSpace.range == agora::media::base::ColorSpace::RANGEID_FULL) ? "Full" : "Limited");
     }
 }
 
@@ -596,7 +596,7 @@ public:
     // Lock CVPixelBuffer for writing
     CVReturn result = CVPixelBufferLockBaseAddress(pixelBuffer, 0);
     if (result != kCVReturnSuccess) {
-        NSLog(@"Failed to lock pixel buffer: %d", result);
+        // NSLog(@"Failed to lock pixel buffer: %d", result);
         return;
     }
     
@@ -653,7 +653,7 @@ public:
     free(rgbaData);
     CVPixelBufferUnlockBaseAddress(pixelBuffer, 0);
     
-    NSLog(@"Copied processed RGBA back to YUV CVPixelBuffer");
+    // NSLog(@"Copied processed RGBA back to YUV CVPixelBuffer");
 }
 
 - (void)dealloc {
@@ -693,9 +693,9 @@ public:
             // or is belong to this TextureRender
             rendering->RemoveVideoFrameObserverDelegate(delegateId);
         } @catch (NSException *exception) {
-            NSLog(@"Error removing video frame observer delegate: %@", exception);
+            //  NSLog(@"Error removing video frame observer delegate: %@", exception);
         } @catch (...) {
-            NSLog(@"Unknown C++ exception when removing video frame observer delegate");
+            //  NSLog(@"Unknown C++ exception when removing video frame observer delegate");
         }
     }
 }

@@ -320,9 +320,9 @@ struct AgoraCVPixelBufferPoolKeyHash {
         CVBufferSetAttachments(destPixelBuffer, copiedAttachments, kCVAttachmentMode_ShouldPropagate);
         CFRelease(copiedAttachments);
         
-        NSLog(@"Copied CVPixelBuffer attachments: %@", (__bridge NSDictionary*)attachments);
+        // NSLog(@"Copied CVPixelBuffer attachments: %@", (__bridge NSDictionary*)attachments);
     } else {
-        NSLog(@"No attachments found on source CVPixelBuffer");
+        // NSLog(@"No attachments found on source CVPixelBuffer");
     }
 }
 

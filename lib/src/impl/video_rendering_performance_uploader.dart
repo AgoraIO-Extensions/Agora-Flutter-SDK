@@ -254,8 +254,6 @@ class PerformanceDataCollector {
     _clearedChannelsGracePeriod[key] = DateTime.now().millisecondsSinceEpoch;
 
     if (_channelDataMap.containsKey(key)) {
-      // Upload the data immediately before clearing to ensure no data is lost
-      _channelDataMap[key]!.uploadAndClear();
       _channelDataMap.remove(key);
       debugPrint('[PerformanceDataCollector] Cleared data for key: $key');
     }
@@ -352,10 +350,10 @@ class _ChannelPerformanceData {
       }
     };
 
+
     final jsonString = jsonEncode(params);
 
-    rtcEngine.setParameters(jsonString);
-
+    rtcEngine.setParameters('{"rtc.report.argus_counters":$jsonString}');
     // Clear buffers after upload
     _uidBuffers.forEach((_, buffer) => buffer.clear());
   }

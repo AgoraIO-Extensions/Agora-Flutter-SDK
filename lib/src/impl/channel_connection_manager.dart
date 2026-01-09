@@ -62,7 +62,6 @@ class ChannelConnectionManager {
       clear();
       // Dispose performance collector to free resources
       // This is safe to call multiple times as dispose() is idempotent
-      PerformanceDataCollector.instance.dispose();
     }
   }
 

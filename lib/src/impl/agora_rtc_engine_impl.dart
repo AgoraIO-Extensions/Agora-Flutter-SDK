@@ -609,13 +609,6 @@ class RtcEngineImpl extends rtc_engine_ex_binding.RtcEngineExImpl
 
     await irisMethodChannel.unregisterEventHandlers(_rtcEngineImplScopedKey);
 
-    // Clear all channel connections and dispose performance collector
-    // This serves as a fallback cleanup in case cleanup wasn't performed
-    // when all channels were left (e.g., if onLeaveChannel event wasn't triggered)
-    ChannelConnectionManager.instance.clear();
-
-    PerformanceDataCollector.instance.dispose();
-
     await super.release(sync: sync);
 
     await irisMethodChannel.dispose();
