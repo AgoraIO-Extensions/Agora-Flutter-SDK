@@ -389,7 +389,7 @@ jobs:
     if: ${{ inputs.issue_number != null && !cancelled() }}
     needs: [build]
     steps:
-      - uses: peter-evans/create-or-update-comment@v2
+      - uses: peter-evans/create-or-update-comment@v3
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
           issue-number: ${{ inputs.issue_number }}

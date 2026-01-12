@@ -16,7 +16,7 @@ jobs:
     if: ${{ !contains(github.event.pull_request.labels.*.name, 'ci:skip') }}
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - uses: subosito/flutter-action@v2
         with:
           channel: 'stable'
@@ -43,7 +43,7 @@ jobs:
     if: ${{ !contains(github.event.pull_request.labels.*.name, 'ci:skip') }}
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - uses: subosito/flutter-action@v2
         with:
           channel: 'stable'
@@ -54,7 +54,7 @@ jobs:
     name: Attach dartdoc
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - uses: subosito/flutter-action@v2
         with:
           channel: 'stable'
@@ -76,7 +76,7 @@ jobs:
     if: ${{ !contains(github.event.pull_request.labels.*.name, 'ci:skip') }}
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - uses: subosito/flutter-action@v2
         with:
           channel: 'stable'
@@ -95,7 +95,7 @@ jobs:
     env:
       TEST_APP_ID: ${{ secrets.APP_ID }}
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - name: Install JDK
         uses: actions/setup-java@v4
         with:
@@ -143,7 +143,7 @@ jobs:
     env:
       TEST_APP_ID: ${{ secrets.APP_ID }}
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - uses: subosito/flutter-action@v2
         with:
           flutter-version: ${{ matrix.version }}
@@ -199,7 +199,7 @@ jobs:
     env:
       TEST_APP_ID: ${{ secrets.APP_ID }}
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - uses: subosito/flutter-action@v2
         with:
           flutter-version: ${{ matrix.version }}
@@ -243,7 +243,7 @@ jobs:
     runs-on: macos-latest
     timeout-minutes: 120
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - uses: subosito/flutter-action@v2
         with:
           channel: 'stable'
@@ -275,7 +275,7 @@ jobs:
     env:
       TEST_APP_ID: ${{ secrets.APP_ID }}
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - uses: subosito/flutter-action@v2
         with:
           flutter-version: ${{ matrix.version }}
@@ -313,7 +313,7 @@ jobs:
     env:
       TEST_APP_ID: ${{ secrets.APP_ID }}
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - uses: subosito/flutter-action@v2
         with:
           flutter-version: ${{ matrix.version }}
@@ -333,7 +333,7 @@ jobs:
         version: ["3.16", "3.24.5", "3.38.5"]
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - name: Install JDK
         uses: actions/setup-java@v4
         with:
@@ -357,7 +357,7 @@ jobs:
         version: ["3.16", "3.24.5", "3.38.5"]
     runs-on: windows-2022
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - name: Install JDK
         uses: actions/setup-java@v4
         with:
@@ -382,7 +382,7 @@ jobs:
     runs-on: macos-latest
     timeout-minutes: 120
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - uses: subosito/flutter-action@v2
         with:
           flutter-version: ${{ matrix.version }}
@@ -404,7 +404,7 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 120
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - uses: subosito/flutter-action@v2
         with:
           flutter-version: ${{ matrix.version }}
@@ -422,7 +422,7 @@ jobs:
     env:
       TEST_APP_ID: ${{ secrets.APP_ID }}
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - name: Install JDK
         uses: actions/setup-java@v4
         with:
@@ -469,7 +469,7 @@ jobs:
     env:
       TEST_APP_ID: ${{ secrets.APP_ID }}
     steps:
-      - uses: actions/checkout@v1
+      - uses: actions/checkout@v4
       - uses: subosito/flutter-action@v2
         with:
           flutter-version: ${{ matrix.version }}
@@ -501,7 +501,7 @@ jobs:
     env:
       TEST_APP_ID: ${{ secrets.APP_ID }}
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - uses: subosito/flutter-action@v2
         with:
           flutter-version: ${{ matrix.version }}
@@ -528,7 +528,7 @@ jobs:
     env:
       TEST_APP_ID: ${{ secrets.APP_ID }}
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - uses: subosito/flutter-action@v2
         with:
           flutter-version: ${{ matrix.version }}
@@ -557,7 +557,7 @@ jobs:
     env:
       TEST_APP_ID: ${{ secrets.APP_ID }}
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - uses: subosito/flutter-action@v2
         with:
           flutter-version: ${{ matrix.version }}
@@ -584,7 +584,7 @@ jobs:
         version: ["3.38.5"]
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - name: Install JDK
         uses: actions/setup-java@v4
         with:
