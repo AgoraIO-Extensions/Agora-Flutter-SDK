@@ -115,32 +115,31 @@ jobs:
         if: ${{ inputs.run_gen_code == true }}
         shell: bash
         run: |
-          # Priority: 
-          # 1. If code_gen_public_headers is explicitly provided, use it directly
-          # 2. Extract from dependencies_content (priority: Windows > iOS > macOS > Android)
-          # 3. If both empty, leave empty to use current branch version
-          
           if [ -n "${{ inputs.code_gen_public_headers }}" ]; then
             rtc_version="${{ inputs.code_gen_public_headers }}"
             echo "Using explicitly provided version: ${rtc_version}"
           else
-            # The output is a stringified JSON, we need to parse it first
             dependencies_raw='${{ steps.parse_dependencies_content.outputs.matches }}'
-            # Remove outer quotes and unescape inner quotes
             dependencies_json=$(echo "$dependencies_raw" | sed 's/^"//;s/"$//' | sed 's/\\"/"/g')
             
             if [ -n "$dependencies_json" ] && [ "$dependencies_json" != "null" ] && [ "$dependencies_json" != "" ]; then
-              # Extract version from platform objects (priority: Windows > iOS > macOS > Android)
-              version=$(echo "$dependencies_json" | jq -r '.[] | select(.platform == "Windows") | .version' | head -n1)
-              [ -z "$version" ] && version=$(echo "$dependencies_json" | jq -r '.[] | select(.platform == "iOS") | .version' | head -n1)
-              [ -z "$version" ] && version=$(echo "$dependencies_json" | jq -r '.[] | select(.platform == "macOS") | .version' | head -n1)
-              [ -z "$version" ] && version=$(echo "$dependencies_json" | jq -r '.[] | select(.platform == "Android") | .version' | head -n1)
+              version=$(echo "$dependencies_json" | jq -r '.[] | select(.platform == "Windows") | .iris_version' | head -n1)
+              [ -z "$version" ] || [ "$version" == "null" ] || [ "$version" == "" ] && version=$(echo "$dependencies_json" | jq -r '.[] | select(.platform == "iOS") | .iris_version' | head -n1)
+              [ -z "$version" ] || [ "$version" == "null" ] || [ "$version" == "" ] && version=$(echo "$dependencies_json" | jq -r '.[] | select(.platform == "macOS") | .iris_version' | head -n1)
+              [ -z "$version" ] || [ "$version" == "null" ] || [ "$version" == "" ] && version=$(echo "$dependencies_json" | jq -r '.[] | select(.platform == "Android") | .iris_version' | head -n1)
               
-              # Remove -build.X suffix and format as rtc_X.X.X
-              if [ -n "$version" ] && [ "$version" != "null" ]; then
-                version=$(echo "$version" | sed 's/-build\.[0-9]*$//')
+              if [ -z "$version" ] || [ "$version" == "null" ] || [ "$version" == "" ]; then
+                version=$(echo "$dependencies_json" | jq -r '.[] | select(.platform == "Windows") | .version' | head -n1)
+                [ -z "$version" ] || [ "$version" == "null" ] || [ "$version" == "" ] && version=$(echo "$dependencies_json" | jq -r '.[] | select(.platform == "iOS") | .version' | head -n1)
+                [ -z "$version" ] || [ "$version" == "null" ] || [ "$version" == "" ] && version=$(echo "$dependencies_json" | jq -r '.[] | select(.platform == "macOS") | .version' | head -n1)
+                [ -z "$version" ] || [ "$version" == "null" ] || [ "$version" == "" ] && version=$(echo "$dependencies_json" | jq -r '.[] | select(.platform == "Android") | .version' | head -n1)
+              fi
+              
+              if [ -n "$version" ] && [ "$version" != "null" ] && [ "$version" != "" ]; then
+                original_version="$version"
+                version=$(echo "$version" | sed 's/-build\.[0-9][0-9.]*$//')
                 rtc_version="rtc_${version}"
-                echo "Extracted version from dependencies: ${rtc_version}"
+                echo "Extracted version from dependencies: ${rtc_version} (original: ${original_version})"
               else
                 rtc_version=""
                 echo "No version found in dependencies"
@@ -155,7 +154,9 @@ jobs:
           [ -n "$rtc_version" ] && echo "Final version: ${rtc_version}" || echo "No version specified, will use current branch"
 
       - name: Run gen code
+        id: gen_code
         if: ${{ inputs.run_gen_code == true }}
+        continue-on-error: true
         uses: ./.github/actions/gen_code
         with:
           code_gen_public_headers: ${{ steps.extract_rtc_version.outputs.rtc_version }}
@@ -183,6 +184,9 @@ jobs:
 
             ${{ inputs.dependencies_content }}
 
+            ---
+            **Code Generation Status:** ${{ steps.gen_code.outcome == 'success' && '✅ Success' || (steps.gen_code.outcome == 'failure' && '❌ Failed (please check and fix manually)' || '⏭️ Skipped') }}
+
             > This pull request is trigger by bot, you can checkout this branch and update it.
           labels: |
             ci:ready_release_special
@@ -200,3 +204,9 @@ jobs:
         run: |
           echo "::warning title=No Changes::No changes detected, PR was not created"
           echo "⚠️ No changes detected in the repository"
+
+      - name: Fail if code generation failed
+        if: ${{ inputs.run_gen_code == true && steps.gen_code.outcome == 'failure' }}
+        run: |
+          echo "::error title=Code Generation Failed::Terra code generation failed, but PR was still created for manual fixing"
+          exit 1
