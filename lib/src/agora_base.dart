@@ -139,6 +139,10 @@ enum WarnCodeType {
   warnAdmPlayoutAudioLowlevel,
 
   /// @nodoc
+  @JsonValue(1033)
+  warnAdmRecordIsOccupied,
+
+  /// @nodoc
   @JsonValue(1040)
   warnAdmWindowsNoDataReadyEvent,
 

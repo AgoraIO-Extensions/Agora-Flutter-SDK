@@ -2453,6 +2453,7 @@ const _$WarnCodeTypeEnumMap = {
   WarnCodeType.warnAdmRecordMalfunction: 1021,
   WarnCodeType.warnAdmRecordAudioLowlevel: 1031,
   WarnCodeType.warnAdmPlayoutAudioLowlevel: 1032,
+  WarnCodeType.warnAdmRecordIsOccupied: 1033,
   WarnCodeType.warnAdmWindowsNoDataReadyEvent: 1040,
   WarnCodeType.warnApmHowling: 1051,
   WarnCodeType.warnAdmGlitchState: 1052,
