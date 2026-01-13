@@ -123,21 +123,21 @@ jobs:
             dependencies_json=$(echo "$dependencies_raw" | sed 's/^"//;s/"$//' | sed 's/\\"/"/g')
             
             if [ -n "$dependencies_json" ] && [ "$dependencies_json" != "null" ] && [ "$dependencies_json" != "" ]; then
-              version=$(echo "$dependencies_json" | jq -r '.[] | select(.platform == "Windows") | .iris_version' | head -n1)
-              [ -z "$version" ] || [ "$version" == "null" ] || [ "$version" == "" ] && version=$(echo "$dependencies_json" | jq -r '.[] | select(.platform == "iOS") | .iris_version' | head -n1)
-              [ -z "$version" ] || [ "$version" == "null" ] || [ "$version" == "" ] && version=$(echo "$dependencies_json" | jq -r '.[] | select(.platform == "macOS") | .iris_version' | head -n1)
-              [ -z "$version" ] || [ "$version" == "null" ] || [ "$version" == "" ] && version=$(echo "$dependencies_json" | jq -r '.[] | select(.platform == "Android") | .iris_version' | head -n1)
+              version=$(echo "$dependencies_json" | jq -r '.[] | select(.platform == "Windows") | .version' | head -n1)
+              [ -z "$version" ] || [ "$version" == "null" ] || [ "$version" == "" ] && version=$(echo "$dependencies_json" | jq -r '.[] | select(.platform == "iOS") | .version' | head -n1)
+              [ -z "$version" ] || [ "$version" == "null" ] || [ "$version" == "" ] && version=$(echo "$dependencies_json" | jq -r '.[] | select(.platform == "macOS") | .version' | head -n1)
+              [ -z "$version" ] || [ "$version" == "null" ] || [ "$version" == "" ] && version=$(echo "$dependencies_json" | jq -r '.[] | select(.platform == "Android") | .version' | head -n1)
               
               if [ -z "$version" ] || [ "$version" == "null" ] || [ "$version" == "" ]; then
-                version=$(echo "$dependencies_json" | jq -r '.[] | select(.platform == "Windows") | .version' | head -n1)
-                [ -z "$version" ] || [ "$version" == "null" ] || [ "$version" == "" ] && version=$(echo "$dependencies_json" | jq -r '.[] | select(.platform == "iOS") | .version' | head -n1)
-                [ -z "$version" ] || [ "$version" == "null" ] || [ "$version" == "" ] && version=$(echo "$dependencies_json" | jq -r '.[] | select(.platform == "macOS") | .version' | head -n1)
-                [ -z "$version" ] || [ "$version" == "null" ] || [ "$version" == "" ] && version=$(echo "$dependencies_json" | jq -r '.[] | select(.platform == "Android") | .version' | head -n1)
+                version=$(echo "$dependencies_json" | jq -r '.[] | select(.platform == "Windows") | .iris_version' | head -n1)
+                [ -z "$version" ] || [ "$version" == "null" ] || [ "$version" == "" ] && version=$(echo "$dependencies_json" | jq -r '.[] | select(.platform == "iOS") | .iris_version' | head -n1)
+                [ -z "$version" ] || [ "$version" == "null" ] || [ "$version" == "" ] && version=$(echo "$dependencies_json" | jq -r '.[] | select(.platform == "macOS") | .iris_version' | head -n1)
+                [ -z "$version" ] || [ "$version" == "null" ] || [ "$version" == "" ] && version=$(echo "$dependencies_json" | jq -r '.[] | select(.platform == "Android") | .iris_version' | head -n1)
               fi
               
               if [ -n "$version" ] && [ "$version" != "null" ] && [ "$version" != "" ]; then
                 original_version="$version"
-                version=$(echo "$version" | sed 's/-build\.[0-9][0-9.]*$//')
+                version=$(echo "$version" | sed 's/-[^-]*$//')
                 rtc_version="rtc_${version}"
                 echo "Extracted version from dependencies: ${rtc_version} (original: ${original_version})"
               else
