@@ -2736,6 +2736,10 @@ abstract class VideoEffectObject {
       {required int nodeId, required VideoEffectAction actionId});
 
   /// @nodoc
+  Future<void> setVideoEffectStringParam(
+      {required String option, required String key, required String param});
+
+  /// @nodoc
   Future<void> setVideoEffectFloatParam(
       {required String option, required String key, required double param});
 
