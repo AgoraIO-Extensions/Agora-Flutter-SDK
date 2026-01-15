@@ -390,6 +390,54 @@
     } else {
       result([FlutterError errorWithCode:@"RTE_ERROR" message:error.localizedDescription details:nil]);
     }
+  } else if ([@"rteSetAppId" isEqualToString:call.method]) {
+    NSString *appId = args[@"appId"];
+    BOOL success = [self.rteController setAppId:appId error:&error];
+    if (success) {
+      result(@(YES));
+    } else {
+      result([FlutterError errorWithCode:@"RTE_ERROR" message:error.localizedDescription details:nil]);
+    }
+  } else if ([@"rteSetLogFolder" isEqualToString:call.method]) {
+    NSString *logFolder = args[@"logFolder"];
+    BOOL success = [self.rteController setLogFolder:logFolder error:&error];
+    if (success) {
+      result(@(YES));
+    } else {
+      result([FlutterError errorWithCode:@"RTE_ERROR" message:error.localizedDescription details:nil]);
+    }
+  } else if ([@"rteSetLogFileSize" isEqualToString:call.method]) {
+    NSNumber *logFileSize = args[@"logFileSize"];
+    BOOL success = [self.rteController setLogFileSize:logFileSize error:&error];
+    if (success) {
+      result(@(YES));
+    } else {
+      result([FlutterError errorWithCode:@"RTE_ERROR" message:error.localizedDescription details:nil]);
+    }
+  } else if ([@"rteSetAreaCode" isEqualToString:call.method]) {
+    NSNumber *areaCode = args[@"areaCode"];
+    BOOL success = [self.rteController setAreaCode:areaCode error:&error];
+    if (success) {
+      result(@(YES));
+    } else {
+      result([FlutterError errorWithCode:@"RTE_ERROR" message:error.localizedDescription details:nil]);
+    }
+  } else if ([@"rteSetCloudProxy" isEqualToString:call.method]) {
+    NSString *cloudProxy = args[@"cloudProxy"];
+    BOOL success = [self.rteController setCloudProxy:cloudProxy error:&error];
+    if (success) {
+      result(@(YES));
+    } else {
+      result([FlutterError errorWithCode:@"RTE_ERROR" message:error.localizedDescription details:nil]);
+    }
+  } else if ([@"rteSetJsonParameter" isEqualToString:call.method]) {
+    NSString *jsonParameter = args[@"jsonParameter"];
+    BOOL success = [self.rteController setJsonParameter:jsonParameter error:&error];
+    if (success) {
+      result(@(YES));
+    } else {
+      result([FlutterError errorWithCode:@"RTE_ERROR" message:error.localizedDescription details:nil]);
+    }
 //  } else if ([@"rteRegisterObserver" isEqualToString:call.method]) {
 //    BOOL success = [self.rteController registerRteObserver:&error];
 //    if (success) {
@@ -706,6 +754,227 @@
     } else {
         result([FlutterError errorWithCode:@"RTE_ERROR" message:error.localizedDescription details:nil]);
     }
+  } else if ([@"rtePlayerGetAutoPlay" isEqualToString:call.method]) {
+    NSString *playerId = args[@"playerId"];
+    BOOL autoPlay = [self.rteController playerGetAutoPlay:playerId error:&error];
+    if (!error) {
+      result(@(autoPlay));
+    } else {
+      result([FlutterError errorWithCode:@"RTE_ERROR" message:error.localizedDescription details:nil]);
+    }
+  } else if ([@"rtePlayerSetAutoPlay" isEqualToString:call.method]) {
+    NSString *playerId = args[@"playerId"];
+    BOOL autoPlay = [args[@"autoPlay"] boolValue];
+    BOOL success = [self.rteController playerSetAutoPlay:playerId autoPlay:autoPlay error:&error];
+    if (success) {
+      result(@(YES));
+    } else {
+      result([FlutterError errorWithCode:@"RTE_ERROR" message:error.localizedDescription details:nil]);
+    }
+  } else if ([@"rtePlayerGetPlayoutAudioTrackIdx" isEqualToString:call.method]) {
+    NSString *playerId = args[@"playerId"];
+    int32_t idx = [self.rteController playerGetPlayoutAudioTrackIdx:playerId error:&error];
+    if (!error) {
+      result(@(idx));
+    } else {
+      result([FlutterError errorWithCode:@"RTE_ERROR" message:error.localizedDescription details:nil]);
+    }
+  } else if ([@"rtePlayerSetPlayoutAudioTrackIdx" isEqualToString:call.method]) {
+    NSString *playerId = args[@"playerId"];
+    NSNumber *idx = args[@"idx"];
+    BOOL success = [self.rteController playerSetPlayoutAudioTrackIdx:playerId idx:[idx intValue] error:&error];
+    if (success) {
+      result(@(YES));
+    } else {
+      result([FlutterError errorWithCode:@"RTE_ERROR" message:error.localizedDescription details:nil]);
+    }
+  } else if ([@"rtePlayerGetPublishAudioTrackIdx" isEqualToString:call.method]) {
+    NSString *playerId = args[@"playerId"];
+    int32_t idx = [self.rteController playerGetPublishAudioTrackIdx:playerId error:&error];
+    if (!error) {
+      result(@(idx));
+    } else {
+      result([FlutterError errorWithCode:@"RTE_ERROR" message:error.localizedDescription details:nil]);
+    }
+  } else if ([@"rtePlayerSetPublishAudioTrackIdx" isEqualToString:call.method]) {
+    NSString *playerId = args[@"playerId"];
+    NSNumber *idx = args[@"idx"];
+    BOOL success = [self.rteController playerSetPublishAudioTrackIdx:playerId idx:[idx intValue] error:&error];
+    if (success) {
+      result(@(YES));
+    } else {
+      result([FlutterError errorWithCode:@"RTE_ERROR" message:error.localizedDescription details:nil]);
+    }
+  } else if ([@"rtePlayerGetAudioTrackIdx" isEqualToString:call.method]) {
+    NSString *playerId = args[@"playerId"];
+    int32_t idx = [self.rteController playerGetAudioTrackIdx:playerId error:&error];
+    if (!error) {
+      result(@(idx));
+    } else {
+      result([FlutterError errorWithCode:@"RTE_ERROR" message:error.localizedDescription details:nil]);
+    }
+  } else if ([@"rtePlayerSetAudioTrackIdx" isEqualToString:call.method]) {
+    NSString *playerId = args[@"playerId"];
+    NSNumber *idx = args[@"idx"];
+    BOOL success = [self.rteController playerSetAudioTrackIdx:playerId idx:[idx intValue] error:&error];
+    if (success) {
+      result(@(YES));
+    } else {
+      result([FlutterError errorWithCode:@"RTE_ERROR" message:error.localizedDescription details:nil]);
+    }
+  } else if ([@"rtePlayerGetSubtitleTrackIdx" isEqualToString:call.method]) {
+    NSString *playerId = args[@"playerId"];
+    int32_t idx = [self.rteController playerGetSubtitleTrackIdx:playerId error:&error];
+    if (!error) {
+      result(@(idx));
+    } else {
+      result([FlutterError errorWithCode:@"RTE_ERROR" message:error.localizedDescription details:nil]);
+    }
+  } else if ([@"rtePlayerSetSubtitleTrackIdx" isEqualToString:call.method]) {
+    NSString *playerId = args[@"playerId"];
+    NSNumber *idx = args[@"idx"];
+    BOOL success = [self.rteController playerSetSubtitleTrackIdx:playerId idx:[idx intValue] error:&error];
+    if (success) {
+      result(@(YES));
+    } else {
+      result([FlutterError errorWithCode:@"RTE_ERROR" message:error.localizedDescription details:nil]);
+    }
+  } else if ([@"rtePlayerGetExternalSubtitleTrackIdx" isEqualToString:call.method]) {
+    NSString *playerId = args[@"playerId"];
+    int32_t idx = [self.rteController playerGetExternalSubtitleTrackIdx:playerId error:&error];
+    if (!error) {
+      result(@(idx));
+    } else {
+      result([FlutterError errorWithCode:@"RTE_ERROR" message:error.localizedDescription details:nil]);
+    }
+  } else if ([@"rtePlayerSetExternalSubtitleTrackIdx" isEqualToString:call.method]) {
+    NSString *playerId = args[@"playerId"];
+    NSNumber *idx = args[@"idx"];
+    BOOL success = [self.rteController playerSetExternalSubtitleTrackIdx:playerId idx:[idx intValue] error:&error];
+    if (success) {
+      result(@(YES));
+    } else {
+      result([FlutterError errorWithCode:@"RTE_ERROR" message:error.localizedDescription details:nil]);
+    }
+  } else if ([@"rtePlayerGetAudioPitch" isEqualToString:call.method]) {
+    NSString *playerId = args[@"playerId"];
+    int32_t pitch = [self.rteController playerGetAudioPitch:playerId error:&error];
+    if (!error) {
+      result(@(pitch));
+    } else {
+      result([FlutterError errorWithCode:@"RTE_ERROR" message:error.localizedDescription details:nil]);
+    }
+  } else if ([@"rtePlayerSetAudioPitch" isEqualToString:call.method]) {
+    NSString *playerId = args[@"playerId"];
+    NSNumber *pitch = args[@"pitch"];
+    BOOL success = [self.rteController playerSetAudioPitch:playerId pitch:[pitch intValue] error:&error];
+    if (success) {
+      result(@(YES));
+    } else {
+      result([FlutterError errorWithCode:@"RTE_ERROR" message:error.localizedDescription details:nil]);
+    }
+  } else if ([@"rtePlayerGetAudioPlaybackDelay" isEqualToString:call.method]) {
+    NSString *playerId = args[@"playerId"];
+    int32_t delay = [self.rteController playerGetAudioPlaybackDelay:playerId error:&error];
+    if (!error) {
+      result(@(delay));
+    } else {
+      result([FlutterError errorWithCode:@"RTE_ERROR" message:error.localizedDescription details:nil]);
+    }
+  } else if ([@"rtePlayerSetAudioPlaybackDelay" isEqualToString:call.method]) {
+    NSString *playerId = args[@"playerId"];
+    NSNumber *delay = args[@"delay"];
+    BOOL success = [self.rteController playerSetAudioPlaybackDelay:playerId delay:[delay intValue] error:&error];
+    if (success) {
+      result(@(YES));
+    } else {
+      result([FlutterError errorWithCode:@"RTE_ERROR" message:error.localizedDescription details:nil]);
+    }
+  } else if ([@"rtePlayerGetAudioDualMonoMode" isEqualToString:call.method]) {
+    NSString *playerId = args[@"playerId"];
+    int32_t mode = [self.rteController playerGetAudioDualMonoMode:playerId error:&error];
+    if (!error) {
+      result(@(mode));
+    } else {
+      result([FlutterError errorWithCode:@"RTE_ERROR" message:error.localizedDescription details:nil]);
+    }
+  } else if ([@"rtePlayerSetAudioDualMonoMode" isEqualToString:call.method]) {
+    NSString *playerId = args[@"playerId"];
+    NSNumber *mode = args[@"mode"];
+    BOOL success = [self.rteController playerSetAudioDualMonoMode:playerId mode:[mode intValue] error:&error];
+    if (success) {
+      result(@(YES));
+    } else {
+      result([FlutterError errorWithCode:@"RTE_ERROR" message:error.localizedDescription details:nil]);
+    }
+  } else if ([@"rtePlayerGetPublishVolume" isEqualToString:call.method]) {
+    NSString *playerId = args[@"playerId"];
+    int32_t volume = [self.rteController playerGetPublishVolume:playerId error:&error];
+    if (!error) {
+      result(@(volume));
+    } else {
+      result([FlutterError errorWithCode:@"RTE_ERROR" message:error.localizedDescription details:nil]);
+    }
+  } else if ([@"rtePlayerSetPublishVolume" isEqualToString:call.method]) {
+    NSString *playerId = args[@"playerId"];
+    NSNumber *volume = args[@"volume"];
+    BOOL success = [self.rteController playerSetPublishVolume:playerId volume:[volume intValue] error:&error];
+    if (success) {
+      result(@(YES));
+    } else {
+      result([FlutterError errorWithCode:@"RTE_ERROR" message:error.localizedDescription details:nil]);
+    }
+  } else if ([@"rtePlayerGetJsonParameter" isEqualToString:call.method]) {
+    NSString *playerId = args[@"playerId"];
+    NSString *jsonParameter = [self.rteController playerGetJsonParameter:playerId error:&error];
+    if (jsonParameter) {
+      result(jsonParameter);
+    } else {
+      result([FlutterError errorWithCode:@"RTE_ERROR" message:error.localizedDescription details:nil]);
+    }
+  } else if ([@"rtePlayerSetJsonParameter" isEqualToString:call.method]) {
+    NSString *playerId = args[@"playerId"];
+    NSString *jsonParameter = args[@"jsonParameter"];
+    BOOL success = [self.rteController playerSetJsonParameter:playerId jsonParameter:jsonParameter error:&error];
+    if (success) {
+      result(@(YES));
+    } else {
+      result([FlutterError errorWithCode:@"RTE_ERROR" message:error.localizedDescription details:nil]);
+    }
+  } else if ([@"rtePlayerGetAbrSubscriptionLayer" isEqualToString:call.method]) {
+    NSString *playerId = args[@"playerId"];
+    AgoraRteAbrSubscriptionLayer layer = [self.rteController playerGetAbrSubscriptionLayer:playerId error:&error];
+    if (!error) {
+      result(@(layer));
+    } else {
+      result([FlutterError errorWithCode:@"RTE_ERROR" message:error.localizedDescription details:nil]);
+    }
+  } else if ([@"rtePlayerSetAbrSubscriptionLayer" isEqualToString:call.method]) {
+    NSString *playerId = args[@"playerId"];
+    NSNumber *layer = args[@"layer"];
+    BOOL success = [self.rteController playerSetAbrSubscriptionLayer:playerId layer:[layer intValue] error:&error];
+    if (success) {
+      result(@(YES));
+    } else {
+      result([FlutterError errorWithCode:@"RTE_ERROR" message:error.localizedDescription details:nil]);
+    }
+  } else if ([@"rtePlayerGetAbrFallbackLayer" isEqualToString:call.method]) {
+    NSString *playerId = args[@"playerId"];
+    AgoraRteAbrFallbackLayer layer = [self.rteController playerGetAbrFallbackLayer:playerId error:&error];
+    if (!error) {
+      result(@(layer));
+    } else {
+      result([FlutterError errorWithCode:@"RTE_ERROR" message:error.localizedDescription details:nil]);
+    }
+  } else if ([@"rtePlayerSetAbrFallbackLayer" isEqualToString:call.method]) {
+    NSString *playerId = args[@"playerId"];
+    NSNumber *layer = args[@"layer"];
+    BOOL success = [self.rteController playerSetAbrFallbackLayer:playerId layer:[layer intValue] error:&error];
+    if (success) {
+      result(@(YES));
+    } else {
+      result([FlutterError errorWithCode:@"RTE_ERROR" message:error.localizedDescription details:nil]);
+    }
   } else if ([@"rteCanvasCreate" isEqualToString:call.method]) {
       NSString *canvasId = [self.rteController createCanvas:args error:&error];
       if (canvasId) {
@@ -753,6 +1022,60 @@
       UIView *view = (__bridge UIView *)(void *)(intptr_t)[args[@"viewPtr"] longLongValue];
       NSDictionary *config = args[@"config"];
       BOOL success = [self.rteController canvasRemoveView:canvasId view:view config:config error:&error];
+      if (success) {
+          result(@(YES));
+      } else {
+          result([FlutterError errorWithCode:@"RTE_ERROR" message:error.localizedDescription details:nil]);
+      }
+  } else if ([@"rteCanvasGetVideoRenderMode" isEqualToString:call.method]) {
+      NSString *canvasId = args[@"canvasId"];
+      AgoraRteVideoRenderMode mode = [self.rteController canvasGetVideoRenderMode:canvasId error:&error];
+      if (!error) {
+          result(@(mode));
+      } else {
+          result([FlutterError errorWithCode:@"RTE_ERROR" message:error.localizedDescription details:nil]);
+      }
+  } else if ([@"rteCanvasSetVideoRenderMode" isEqualToString:call.method]) {
+      NSString *canvasId = args[@"canvasId"];
+      NSNumber *mode = args[@"mode"];
+      BOOL success = [self.rteController canvasSetVideoRenderMode:canvasId mode:[mode intValue] error:&error];
+      if (success) {
+          result(@(YES));
+      } else {
+          result([FlutterError errorWithCode:@"RTE_ERROR" message:error.localizedDescription details:nil]);
+      }
+  } else if ([@"rteCanvasGetVideoMirrorMode" isEqualToString:call.method]) {
+      NSString *canvasId = args[@"canvasId"];
+      AgoraRteVideoMirrorMode mode = [self.rteController canvasGetVideoMirrorMode:canvasId error:&error];
+      if (!error) {
+          result(@(mode));
+      } else {
+          result([FlutterError errorWithCode:@"RTE_ERROR" message:error.localizedDescription details:nil]);
+      }
+  } else if ([@"rteCanvasSetVideoMirrorMode" isEqualToString:call.method]) {
+      NSString *canvasId = args[@"canvasId"];
+      NSNumber *mode = args[@"mode"];
+      BOOL success = [self.rteController canvasSetVideoMirrorMode:canvasId mode:[mode intValue] error:&error];
+      if (success) {
+          result(@(YES));
+      } else {
+          result([FlutterError errorWithCode:@"RTE_ERROR" message:error.localizedDescription details:nil]);
+      }
+  } else if ([@"rteCanvasGetCropArea" isEqualToString:call.method]) {
+      NSString *canvasId = args[@"canvasId"];
+      NSDictionary *cropArea = [self.rteController canvasGetCropArea:canvasId error:&error];
+      if (cropArea) {
+          result(cropArea);
+      } else {
+          result([FlutterError errorWithCode:@"RTE_ERROR" message:error.localizedDescription details:nil]);
+      }
+  } else if ([@"rteCanvasSetCropArea" isEqualToString:call.method]) {
+      NSString *canvasId = args[@"canvasId"];
+      NSNumber *x = args[@"x"];
+      NSNumber *y = args[@"y"];
+      NSNumber *width = args[@"width"];
+      NSNumber *height = args[@"height"];
+      BOOL success = [self.rteController canvasSetCropArea:canvasId x:[x intValue] y:[y intValue] width:[width intValue] height:[height intValue] error:&error];
       if (success) {
           result(@(YES));
       } else {
