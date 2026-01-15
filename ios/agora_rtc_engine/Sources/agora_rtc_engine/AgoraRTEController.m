@@ -241,30 +241,62 @@ static inline NSString * _Nullable SafeGetRteErrorMessage(AgoraRteError * _Nulla
 - (BOOL)setRteConfig:(NSDictionary *)config error:(NSError **)error {
     CHECK_RTE_INSTANCE(error);
     
+    // 先获取当前配置，避免覆盖其他属性
     AgoraRteConfig *rteConfig = [[AgoraRteConfig alloc] init];
     AgoraRteError *rteError = [[AgoraRteError alloc] init];
+    BOOL success = [self.rteInstance getConfigs:rteConfig error:rteError];
+    if (!success || rteError.code != AgoraRteOk) {
+        if (error) *error = RTE_NSERROR_FROM_RTE_ERROR(rteError);
+        return NO;
+    }
     
+    // 只更新字典中提供的属性
     if (config[@"appId"] && config[@"appId"] != [NSNull null]) {
         [rteConfig setAppId:config[@"appId"] error:rteError];
+        if (rteError.code != AgoraRteOk) {
+            if (error) *error = RTE_NSERROR_FROM_RTE_ERROR(rteError);
+            return NO;
+        }
     }
     if (config[@"logFolder"] && config[@"logFolder"] != [NSNull null]) {
         [rteConfig setLogFolder:config[@"logFolder"] error:rteError];
+        if (rteError.code != AgoraRteOk) {
+            if (error) *error = RTE_NSERROR_FROM_RTE_ERROR(rteError);
+            return NO;
+        }
     }
     if (config[@"logFileSize"] && config[@"logFileSize"] != [NSNull null]) {
         [rteConfig setLogFileSize:[config[@"logFileSize"] unsignedLongValue] error:rteError];
+        if (rteError.code != AgoraRteOk) {
+            if (error) *error = RTE_NSERROR_FROM_RTE_ERROR(rteError);
+            return NO;
+        }
     }
     if (config[@"areaCode"] && config[@"areaCode"] != [NSNull null]) {
         [rteConfig setAreaCode:[config[@"areaCode"] intValue] error:rteError];
+        if (rteError.code != AgoraRteOk) {
+            if (error) *error = RTE_NSERROR_FROM_RTE_ERROR(rteError);
+            return NO;
+        }
     }
     if (config[@"cloudProxy"] && config[@"cloudProxy"] != [NSNull null]) {
         [rteConfig setCloudProxy:config[@"cloudProxy"] error:rteError];
+        if (rteError.code != AgoraRteOk) {
+            if (error) *error = RTE_NSERROR_FROM_RTE_ERROR(rteError);
+            return NO;
+        }
     }
     if (config[@"jsonParameter"] && config[@"jsonParameter"] != [NSNull null]) {
         [rteConfig setJsonParameter:config[@"jsonParameter"] error:rteError];
+        if (rteError.code != AgoraRteOk) {
+            if (error) *error = RTE_NSERROR_FROM_RTE_ERROR(rteError);
+            return NO;
+        }
     }
     
+    // 设置修改后的配置
     AgoraRteError *setError = [[AgoraRteError alloc] init];
-    BOOL success = [self.rteInstance setConfigs:rteConfig error:setError];
+    success = [self.rteInstance setConfigs:rteConfig error:setError];
     
     if (!success || setError.code != AgoraRteOk) {
         if (error) *error = RTE_NSERROR_FROM_RTE_ERROR(setError);
@@ -431,6 +463,166 @@ static inline NSString * _Nullable SafeGetRteErrorMessage(AgoraRteError * _Nulla
     }
     
     return jsonParameter ?: @"";
+}
+
+// RTE Config Setters
+- (BOOL)setAppId:(NSString *)appId error:(NSError **)error {
+    CHECK_RTE_INSTANCE(error);
+    
+    // 先获取当前配置，避免覆盖其他属性
+    AgoraRteConfig *config = [[AgoraRteConfig alloc] init];
+    AgoraRteError *rteError = [[AgoraRteError alloc] init];
+    BOOL success = [self.rteInstance getConfigs:config error:rteError];
+    if (!success || rteError.code != AgoraRteOk) {
+        if (error) *error = RTE_NSERROR_FROM_RTE_ERROR(rteError);
+        return NO;
+    }
+    
+    // 只修改需要修改的属性
+    [config setAppId:appId error:rteError];
+    if (rteError.code != AgoraRteOk) {
+        if (error) *error = RTE_NSERROR_FROM_RTE_ERROR(rteError);
+        return NO;
+    }
+    
+    // 设置修改后的配置
+    // AgoraRteError *setError = [[AgoraRteError alloc] init];
+    // success = [self.rteInstance setConfigs:config error:setError];
+    // if (!success || setError.code != AgoraRteOk) {
+    //     if (error) *error = RTE_NSERROR_FROM_RTE_ERROR(setError);
+    //     return NO;
+    // }
+    return YES;
+}
+
+- (BOOL)setLogFolder:(NSString *)logFolder error:(NSError **)error {
+    CHECK_RTE_INSTANCE(error);
+    
+    AgoraRteConfig *config = [[AgoraRteConfig alloc] init];
+    AgoraRteError *rteError = [[AgoraRteError alloc] init];
+    BOOL success = [self.rteInstance getConfigs:config error:rteError];
+    if (!success || rteError.code != AgoraRteOk) {
+        if (error) *error = RTE_NSERROR_FROM_RTE_ERROR(rteError);
+        return NO;
+    }
+    
+    [config setLogFolder:logFolder error:rteError];
+    if (rteError.code != AgoraRteOk) {
+        if (error) *error = RTE_NSERROR_FROM_RTE_ERROR(rteError);
+        return NO;
+    }
+    
+    // AgoraRteError *setError = [[AgoraRteError alloc] init];
+    // success = [self.rteInstance setConfigs:config error:setError];
+    // if (!success || setError.code != AgoraRteOk) {
+    //     if (error) *error = RTE_NSERROR_FROM_RTE_ERROR(setError);
+    //     return NO;
+    // }
+    return YES;
+}
+
+- (BOOL)setLogFileSize:(NSNumber *)logFileSize error:(NSError **)error {
+    CHECK_RTE_INSTANCE(error);
+    
+    AgoraRteConfig *config = [[AgoraRteConfig alloc] init];
+    AgoraRteError *rteError = [[AgoraRteError alloc] init];
+    BOOL success = [self.rteInstance getConfigs:config error:rteError];
+    if (!success || rteError.code != AgoraRteOk) {
+        if (error) *error = RTE_NSERROR_FROM_RTE_ERROR(rteError);
+        return NO;
+    }
+    
+    [config setLogFileSize:[logFileSize unsignedLongValue] error:rteError];
+    if (rteError.code != AgoraRteOk) {
+        if (error) *error = RTE_NSERROR_FROM_RTE_ERROR(rteError);
+        return NO;
+    }
+    
+    // AgoraRteError *setError = [[AgoraRteError alloc] init];
+    // success = [self.rteInstance setConfigs:config error:setError];
+    // if (!success || setError.code != AgoraRteOk) {
+    //     if (error) *error = RTE_NSERROR_FROM_RTE_ERROR(setError);
+    //     return NO;
+    // }
+    return YES;
+}
+
+- (BOOL)setAreaCode:(NSNumber *)areaCode error:(NSError **)error {
+    CHECK_RTE_INSTANCE(error);
+    
+    AgoraRteConfig *config = [[AgoraRteConfig alloc] init];
+    AgoraRteError *rteError = [[AgoraRteError alloc] init];
+    BOOL success = [self.rteInstance getConfigs:config error:rteError];
+    if (!success || rteError.code != AgoraRteOk) {
+        if (error) *error = RTE_NSERROR_FROM_RTE_ERROR(rteError);
+        return NO;
+    }
+    
+    [config setAreaCode:[areaCode intValue] error:rteError];
+    if (rteError.code != AgoraRteOk) {
+        if (error) *error = RTE_NSERROR_FROM_RTE_ERROR(rteError);
+        return NO;
+    }
+    
+    // AgoraRteError *setError = [[AgoraRteError alloc] init];
+    // success = [self.rteInstance setConfigs:config error:setError];
+    // if (!success || setError.code != AgoraRteOk) {
+    //     if (error) *error = RTE_NSERROR_FROM_RTE_ERROR(setError);
+    //     return NO;
+    // }
+    return YES;
+}
+
+- (BOOL)setCloudProxy:(NSString *)cloudProxy error:(NSError **)error {
+    CHECK_RTE_INSTANCE(error);
+    
+    AgoraRteConfig *config = [[AgoraRteConfig alloc] init];
+    AgoraRteError *rteError = [[AgoraRteError alloc] init];
+    BOOL success = [self.rteInstance getConfigs:config error:rteError];
+    if (!success || rteError.code != AgoraRteOk) {
+        if (error) *error = RTE_NSERROR_FROM_RTE_ERROR(rteError);
+        return NO;
+    }
+    
+    [config setCloudProxy:cloudProxy error:rteError];
+    if (rteError.code != AgoraRteOk) {
+        if (error) *error = RTE_NSERROR_FROM_RTE_ERROR(rteError);
+        return NO;
+    }
+    
+    // AgoraRteError *setError = [[AgoraRteError alloc] init];
+    // success = [self.rteInstance setConfigs:config error:setError];
+    // if (!success || setError.code != AgoraRteOk) {
+    //     if (error) *error = RTE_NSERROR_FROM_RTE_ERROR(setError);
+    //     return NO;
+    // }
+    return YES;
+}
+
+- (BOOL)setJsonParameter:(NSString *)jsonParameter error:(NSError **)error {
+    CHECK_RTE_INSTANCE(error);
+    
+    AgoraRteConfig *config = [[AgoraRteConfig alloc] init];
+    AgoraRteError *rteError = [[AgoraRteError alloc] init];
+    BOOL success = [self.rteInstance getConfigs:config error:rteError];
+    if (!success || rteError.code != AgoraRteOk) {
+        if (error) *error = RTE_NSERROR_FROM_RTE_ERROR(rteError);
+        return NO;
+    }
+    
+    [config setJsonParameter:jsonParameter error:rteError];
+    if (rteError.code != AgoraRteOk) {
+        if (error) *error = RTE_NSERROR_FROM_RTE_ERROR(rteError);
+        return NO;
+    }
+    
+    // AgoraRteError *setError = [[AgoraRteError alloc] init];
+    // success = [self.rteInstance setConfigs:config error:setError];
+    // if (!success || setError.code != AgoraRteOk) {
+    //     if (error) *error = RTE_NSERROR_FROM_RTE_ERROR(setError);
+    //     return NO;
+    // }
+    return YES;
 }
 
 #pragma mark - RTE Observer
@@ -694,11 +886,11 @@ static inline NSString * _Nullable SafeGetRteErrorMessage(AgoraRteError * _Nulla
     }
     
     // 设置修改后的配置
-    success = [player setConfigs:config error:rteError];
-    if (!success || rteError.code != AgoraRteOk) {
-        if (error) *error = RTE_NSERROR_FROM_RTE_ERROR(rteError);
-        return NO;
-    }
+    // success = [player setConfigs:config error:rteError];
+    // if (!success || rteError.code != AgoraRteOk) {
+    //     if (error) *error = RTE_NSERROR_FROM_RTE_ERROR(rteError);
+    //     return NO;
+    // }
     return YES;
 }
 
@@ -735,11 +927,11 @@ static inline NSString * _Nullable SafeGetRteErrorMessage(AgoraRteError * _Nulla
     }
     
     // 设置修改后的配置
-    success = [player setConfigs:config error:rteError];
-    if (!success || rteError.code != AgoraRteOk) {
-        if (error) *error = RTE_NSERROR_FROM_RTE_ERROR(rteError);
-        return NO;
-    }
+    // success = [player setConfigs:config error:rteError];
+    // if (!success || rteError.code != AgoraRteOk) {
+    //     if (error) *error = RTE_NSERROR_FROM_RTE_ERROR(rteError);
+    //     return NO;
+    // }
     return YES;
 }
 
@@ -776,11 +968,11 @@ static inline NSString * _Nullable SafeGetRteErrorMessage(AgoraRteError * _Nulla
     }
     
     // 设置修改后的配置
-    success = [player setConfigs:config error:rteError];
-    if (!success || rteError.code != AgoraRteOk) {
-        if (error) *error = RTE_NSERROR_FROM_RTE_ERROR(rteError);
-        return NO;
-    }
+    // success = [player setConfigs:config error:rteError];
+    // if (!success || rteError.code != AgoraRteOk) {
+    //     if (error) *error = RTE_NSERROR_FROM_RTE_ERROR(rteError);
+    //     return NO;
+    // }
     return YES;
 }
 
@@ -795,6 +987,501 @@ static inline NSString * _Nullable SafeGetRteErrorMessage(AgoraRteError * _Nulla
         return 0;
     }
     return [config loopCount:rteError];
+}
+
+// RTE Player Config - Additional Setters/Getters
+- (BOOL)playerSetAutoPlay:(NSString *)playerId autoPlay:(BOOL)autoPlay error:(NSError **)error {
+    GET_PLAYER_OR_RETURN(playerId, error, NO);
+    
+    AgoraRtePlayerConfig *config = [[AgoraRtePlayerConfig alloc] init];
+    AgoraRteError *rteError = [[AgoraRteError alloc] init];
+    BOOL success = [player getConfigs:config error:rteError];
+    if (!success || rteError.code != AgoraRteOk) {
+        if (error) *error = RTE_NSERROR_FROM_RTE_ERROR(rteError);
+        return NO;
+    }
+    
+    [config setAutoPlay:autoPlay error:rteError];
+    if (rteError.code != AgoraRteOk) {
+        if (error) *error = RTE_NSERROR_FROM_RTE_ERROR(rteError);
+        return NO;
+    }
+    
+    // success = [player setConfigs:config error:rteError];
+    // if (!success || rteError.code != AgoraRteOk) {
+    //     if (error) *error = RTE_NSERROR_FROM_RTE_ERROR(rteError);
+    //     return NO;
+    // }
+    return YES;
+}
+
+- (BOOL)playerGetAutoPlay:(NSString *)playerId error:(NSError **)error {
+    GET_PLAYER_OR_RETURN(playerId, error, NO);
+    
+    AgoraRtePlayerConfig *config = [[AgoraRtePlayerConfig alloc] init];
+    AgoraRteError *rteError = [[AgoraRteError alloc] init];
+    BOOL success = [player getConfigs:config error:rteError];
+    if (!success || rteError.code != AgoraRteOk) {
+        if (error) *error = RTE_NSERROR_FROM_RTE_ERROR(rteError);
+        return NO;
+    }
+    return [config autoPlay:rteError];
+}
+
+- (BOOL)playerSetPlayoutAudioTrackIdx:(NSString *)playerId idx:(int32_t)idx error:(NSError **)error {
+    GET_PLAYER_OR_RETURN(playerId, error, NO);
+    
+    AgoraRtePlayerConfig *config = [[AgoraRtePlayerConfig alloc] init];
+    AgoraRteError *rteError = [[AgoraRteError alloc] init];
+    BOOL success = [player getConfigs:config error:rteError];
+    if (!success || rteError.code != AgoraRteOk) {
+        if (error) *error = RTE_NSERROR_FROM_RTE_ERROR(rteError);
+        return NO;
+    }
+    
+    [config setPlayoutAudioTrackIdx:idx error:rteError];
+    if (rteError.code != AgoraRteOk) {
+        if (error) *error = RTE_NSERROR_FROM_RTE_ERROR(rteError);
+        return NO;
+    }
+    
+    // success = [player setConfigs:config error:rteError];
+    // if (!success || rteError.code != AgoraRteOk) {
+    //     if (error) *error = RTE_NSERROR_FROM_RTE_ERROR(rteError);
+    //     return NO;
+    // }
+    return YES;
+}
+
+- (int32_t)playerGetPlayoutAudioTrackIdx:(NSString *)playerId error:(NSError **)error {
+    GET_PLAYER_OR_RETURN(playerId, error, 0);
+    
+    AgoraRtePlayerConfig *config = [[AgoraRtePlayerConfig alloc] init];
+    AgoraRteError *rteError = [[AgoraRteError alloc] init];
+    BOOL success = [player getConfigs:config error:rteError];
+    if (!success || rteError.code != AgoraRteOk) {
+        if (error) *error = RTE_NSERROR_FROM_RTE_ERROR(rteError);
+        return 0;
+    }
+    return [config playoutAudioTrackIdx:rteError];
+}
+
+- (BOOL)playerSetPublishAudioTrackIdx:(NSString *)playerId idx:(int32_t)idx error:(NSError **)error {
+    GET_PLAYER_OR_RETURN(playerId, error, NO);
+    
+    AgoraRtePlayerConfig *config = [[AgoraRtePlayerConfig alloc] init];
+    AgoraRteError *rteError = [[AgoraRteError alloc] init];
+    BOOL success = [player getConfigs:config error:rteError];
+    if (!success || rteError.code != AgoraRteOk) {
+        if (error) *error = RTE_NSERROR_FROM_RTE_ERROR(rteError);
+        return NO;
+    }
+    
+    [config setPublishAudioTrackIdx:idx error:rteError];
+    if (rteError.code != AgoraRteOk) {
+        if (error) *error = RTE_NSERROR_FROM_RTE_ERROR(rteError);
+        return NO;
+    }
+    
+    // success = [player setConfigs:config error:rteError];
+    // if (!success || rteError.code != AgoraRteOk) {
+    //     if (error) *error = RTE_NSERROR_FROM_RTE_ERROR(rteError);
+    //     return NO;
+    // }
+    return YES;
+}
+
+- (int32_t)playerGetPublishAudioTrackIdx:(NSString *)playerId error:(NSError **)error {
+    GET_PLAYER_OR_RETURN(playerId, error, 0);
+    
+    AgoraRtePlayerConfig *config = [[AgoraRtePlayerConfig alloc] init];
+    AgoraRteError *rteError = [[AgoraRteError alloc] init];
+    BOOL success = [player getConfigs:config error:rteError];
+    if (!success || rteError.code != AgoraRteOk) {
+        if (error) *error = RTE_NSERROR_FROM_RTE_ERROR(rteError);
+        return 0;
+    }
+    return [config publishAudioTrackIdx:rteError];
+}
+
+- (BOOL)playerSetAudioTrackIdx:(NSString *)playerId idx:(int32_t)idx error:(NSError **)error {
+    GET_PLAYER_OR_RETURN(playerId, error, NO);
+    
+    AgoraRtePlayerConfig *config = [[AgoraRtePlayerConfig alloc] init];
+    AgoraRteError *rteError = [[AgoraRteError alloc] init];
+    BOOL success = [player getConfigs:config error:rteError];
+    if (!success || rteError.code != AgoraRteOk) {
+        if (error) *error = RTE_NSERROR_FROM_RTE_ERROR(rteError);
+        return NO;
+    }
+    
+    [config setAudioTrackIdx:idx error:rteError];
+    if (rteError.code != AgoraRteOk) {
+        if (error) *error = RTE_NSERROR_FROM_RTE_ERROR(rteError);
+        return NO;
+    }
+    
+    // success = [player setConfigs:config error:rteError];
+    // if (!success || rteError.code != AgoraRteOk) {
+    //     if (error) *error = RTE_NSERROR_FROM_RTE_ERROR(rteError);
+    //     return NO;
+    // }
+    return YES;
+}
+
+- (int32_t)playerGetAudioTrackIdx:(NSString *)playerId error:(NSError **)error {
+    GET_PLAYER_OR_RETURN(playerId, error, 0);
+    
+    AgoraRtePlayerConfig *config = [[AgoraRtePlayerConfig alloc] init];
+    AgoraRteError *rteError = [[AgoraRteError alloc] init];
+    BOOL success = [player getConfigs:config error:rteError];
+    if (!success || rteError.code != AgoraRteOk) {
+        if (error) *error = RTE_NSERROR_FROM_RTE_ERROR(rteError);
+        return 0;
+    }
+    return [config audioTrackIdx:rteError];
+}
+
+- (BOOL)playerSetSubtitleTrackIdx:(NSString *)playerId idx:(int32_t)idx error:(NSError **)error {
+    GET_PLAYER_OR_RETURN(playerId, error, NO);
+    
+    AgoraRtePlayerConfig *config = [[AgoraRtePlayerConfig alloc] init];
+    AgoraRteError *rteError = [[AgoraRteError alloc] init];
+    BOOL success = [player getConfigs:config error:rteError];
+    if (!success || rteError.code != AgoraRteOk) {
+        if (error) *error = RTE_NSERROR_FROM_RTE_ERROR(rteError);
+        return NO;
+    }
+    
+    [config setSubtitleTrackIdx:idx error:rteError];
+    if (rteError.code != AgoraRteOk) {
+        if (error) *error = RTE_NSERROR_FROM_RTE_ERROR(rteError);
+        return NO;
+    }
+    
+    // success = [player setConfigs:config error:rteError];
+    // if (!success || rteError.code != AgoraRteOk) {
+    //     if (error) *error = RTE_NSERROR_FROM_RTE_ERROR(rteError);
+    //     return NO;
+    // }
+    return YES;
+}
+
+- (int32_t)playerGetSubtitleTrackIdx:(NSString *)playerId error:(NSError **)error {
+    GET_PLAYER_OR_RETURN(playerId, error, 0);
+    
+    AgoraRtePlayerConfig *config = [[AgoraRtePlayerConfig alloc] init];
+    AgoraRteError *rteError = [[AgoraRteError alloc] init];
+    BOOL success = [player getConfigs:config error:rteError];
+    if (!success || rteError.code != AgoraRteOk) {
+        if (error) *error = RTE_NSERROR_FROM_RTE_ERROR(rteError);
+        return 0;
+    }
+    return [config subtitleTrackIdx:rteError];
+}
+
+- (BOOL)playerSetExternalSubtitleTrackIdx:(NSString *)playerId idx:(int32_t)idx error:(NSError **)error {
+    GET_PLAYER_OR_RETURN(playerId, error, NO);
+    
+    AgoraRtePlayerConfig *config = [[AgoraRtePlayerConfig alloc] init];
+    AgoraRteError *rteError = [[AgoraRteError alloc] init];
+    BOOL success = [player getConfigs:config error:rteError];
+    if (!success || rteError.code != AgoraRteOk) {
+        if (error) *error = RTE_NSERROR_FROM_RTE_ERROR(rteError);
+        return NO;
+    }
+    
+    [config setExternalSubtitleTrackIdx:idx error:rteError];
+    if (rteError.code != AgoraRteOk) {
+        if (error) *error = RTE_NSERROR_FROM_RTE_ERROR(rteError);
+        return NO;
+    }
+    
+    // success = [player setConfigs:config error:rteError];
+    // if (!success || rteError.code != AgoraRteOk) {
+    //     if (error) *error = RTE_NSERROR_FROM_RTE_ERROR(rteError);
+    //     return NO;
+    // }
+    return YES;
+}
+
+- (int32_t)playerGetExternalSubtitleTrackIdx:(NSString *)playerId error:(NSError **)error {
+    GET_PLAYER_OR_RETURN(playerId, error, 0);
+    
+    AgoraRtePlayerConfig *config = [[AgoraRtePlayerConfig alloc] init];
+    AgoraRteError *rteError = [[AgoraRteError alloc] init];
+    BOOL success = [player getConfigs:config error:rteError];
+    if (!success || rteError.code != AgoraRteOk) {
+        if (error) *error = RTE_NSERROR_FROM_RTE_ERROR(rteError);
+        return 0;
+    }
+    return [config externalSubtitleTrackIdx:rteError];
+}
+
+- (BOOL)playerSetAudioPitch:(NSString *)playerId pitch:(int32_t)pitch error:(NSError **)error {
+    GET_PLAYER_OR_RETURN(playerId, error, NO);
+    
+    AgoraRtePlayerConfig *config = [[AgoraRtePlayerConfig alloc] init];
+    AgoraRteError *rteError = [[AgoraRteError alloc] init];
+    BOOL success = [player getConfigs:config error:rteError];
+    if (!success || rteError.code != AgoraRteOk) {
+        if (error) *error = RTE_NSERROR_FROM_RTE_ERROR(rteError);
+        return NO;
+    }
+    
+    [config setAudioPitch:pitch error:rteError];
+    if (rteError.code != AgoraRteOk) {
+        if (error) *error = RTE_NSERROR_FROM_RTE_ERROR(rteError);
+        return NO;
+    }
+    
+    success = [player setConfigs:config error:rteError];
+    if (!success || rteError.code != AgoraRteOk) {
+        if (error) *error = RTE_NSERROR_FROM_RTE_ERROR(rteError);
+        return NO;
+    }
+    return YES;
+}
+
+- (int32_t)playerGetAudioPitch:(NSString *)playerId error:(NSError **)error {
+    GET_PLAYER_OR_RETURN(playerId, error, 0);
+    
+    AgoraRtePlayerConfig *config = [[AgoraRtePlayerConfig alloc] init];
+    AgoraRteError *rteError = [[AgoraRteError alloc] init];
+    BOOL success = [player getConfigs:config error:rteError];
+    if (!success || rteError.code != AgoraRteOk) {
+        if (error) *error = RTE_NSERROR_FROM_RTE_ERROR(rteError);
+        return 0;
+    }
+    return [config audioPitch:rteError];
+}
+
+- (BOOL)playerSetAudioPlaybackDelay:(NSString *)playerId delay:(int32_t)delay error:(NSError **)error {
+    GET_PLAYER_OR_RETURN(playerId, error, NO);
+    
+    AgoraRtePlayerConfig *config = [[AgoraRtePlayerConfig alloc] init];
+    AgoraRteError *rteError = [[AgoraRteError alloc] init];
+    BOOL success = [player getConfigs:config error:rteError];
+    if (!success || rteError.code != AgoraRteOk) {
+        if (error) *error = RTE_NSERROR_FROM_RTE_ERROR(rteError);
+        return NO;
+    }
+    
+    [config setAudioPlaybackDelay:delay error:rteError];
+    if (rteError.code != AgoraRteOk) {
+        if (error) *error = RTE_NSERROR_FROM_RTE_ERROR(rteError);
+        return NO;
+    }
+    
+    // success = [player setConfigs:config error:rteError];
+    // if (!success || rteError.code != AgoraRteOk) {
+    //     if (error) *error = RTE_NSERROR_FROM_RTE_ERROR(rteError);
+    //     return NO;
+    // }
+    return YES;
+}
+
+- (int32_t)playerGetAudioPlaybackDelay:(NSString *)playerId error:(NSError **)error {
+    GET_PLAYER_OR_RETURN(playerId, error, 0);
+    
+    AgoraRtePlayerConfig *config = [[AgoraRtePlayerConfig alloc] init];
+    AgoraRteError *rteError = [[AgoraRteError alloc] init];
+    BOOL success = [player getConfigs:config error:rteError];
+    if (!success || rteError.code != AgoraRteOk) {
+        if (error) *error = RTE_NSERROR_FROM_RTE_ERROR(rteError);
+        return 0;
+    }
+    return [config audioPlaybackDelay:rteError];
+}
+
+- (BOOL)playerSetAudioDualMonoMode:(NSString *)playerId mode:(int32_t)mode error:(NSError **)error {
+    GET_PLAYER_OR_RETURN(playerId, error, NO);
+    
+    AgoraRtePlayerConfig *config = [[AgoraRtePlayerConfig alloc] init];
+    AgoraRteError *rteError = [[AgoraRteError alloc] init];
+    BOOL success = [player getConfigs:config error:rteError];
+    if (!success || rteError.code != AgoraRteOk) {
+        if (error) *error = RTE_NSERROR_FROM_RTE_ERROR(rteError);
+        return NO;
+    }
+    
+    [config setAudioDualMonoMode:mode error:rteError];
+    if (rteError.code != AgoraRteOk) {
+        if (error) *error = RTE_NSERROR_FROM_RTE_ERROR(rteError);
+        return NO;
+    }
+    
+    // success = [player setConfigs:config error:rteError];
+    // if (!success || rteError.code != AgoraRteOk) {
+    //     if (error) *error = RTE_NSERROR_FROM_RTE_ERROR(rteError);
+    //     return NO;
+    // }
+    return YES;
+}
+
+- (int32_t)playerGetAudioDualMonoMode:(NSString *)playerId error:(NSError **)error {
+    GET_PLAYER_OR_RETURN(playerId, error, 0);
+    
+    AgoraRtePlayerConfig *config = [[AgoraRtePlayerConfig alloc] init];
+    AgoraRteError *rteError = [[AgoraRteError alloc] init];
+    BOOL success = [player getConfigs:config error:rteError];
+    if (!success || rteError.code != AgoraRteOk) {
+        if (error) *error = RTE_NSERROR_FROM_RTE_ERROR(rteError);
+        return 0;
+    }
+    return [config audioDualMonoMode:rteError];
+}
+
+- (BOOL)playerSetPublishVolume:(NSString *)playerId volume:(int32_t)volume error:(NSError **)error {
+    GET_PLAYER_OR_RETURN(playerId, error, NO);
+    
+    AgoraRtePlayerConfig *config = [[AgoraRtePlayerConfig alloc] init];
+    AgoraRteError *rteError = [[AgoraRteError alloc] init];
+    BOOL success = [player getConfigs:config error:rteError];
+    if (!success || rteError.code != AgoraRteOk) {
+        if (error) *error = RTE_NSERROR_FROM_RTE_ERROR(rteError);
+        return NO;
+    }
+    
+    [config setPublishVolume:volume error:rteError];
+    if (rteError.code != AgoraRteOk) {
+        if (error) *error = RTE_NSERROR_FROM_RTE_ERROR(rteError);
+        return NO;
+    }
+    
+    // success = [player setConfigs:config error:rteError];
+    // if (!success || rteError.code != AgoraRteOk) {
+    //     if (error) *error = RTE_NSERROR_FROM_RTE_ERROR(rteError);
+    //     return NO;
+    // }
+    return YES;
+}
+
+- (int32_t)playerGetPublishVolume:(NSString *)playerId error:(NSError **)error {
+    GET_PLAYER_OR_RETURN(playerId, error, 0);
+    
+    AgoraRtePlayerConfig *config = [[AgoraRtePlayerConfig alloc] init];
+    AgoraRteError *rteError = [[AgoraRteError alloc] init];
+    BOOL success = [player getConfigs:config error:rteError];
+    if (!success || rteError.code != AgoraRteOk) {
+        if (error) *error = RTE_NSERROR_FROM_RTE_ERROR(rteError);
+        return 0;
+    }
+    return [config publishVolume:rteError];
+}
+
+- (BOOL)playerSetJsonParameter:(NSString *)playerId jsonParameter:(NSString *)jsonParameter error:(NSError **)error {
+    GET_PLAYER_OR_RETURN(playerId, error, NO);
+    
+    AgoraRtePlayerConfig *config = [[AgoraRtePlayerConfig alloc] init];
+    AgoraRteError *rteError = [[AgoraRteError alloc] init];
+    BOOL success = [player getConfigs:config error:rteError];
+    if (!success || rteError.code != AgoraRteOk) {
+        if (error) *error = RTE_NSERROR_FROM_RTE_ERROR(rteError);
+        return NO;
+    }
+    
+    [config setJsonParameter:jsonParameter error:rteError];
+    if (rteError.code != AgoraRteOk) {
+        if (error) *error = RTE_NSERROR_FROM_RTE_ERROR(rteError);
+        return NO;
+    }
+    
+    // success = [player setConfigs:config error:rteError];
+    // if (!success || rteError.code != AgoraRteOk) {
+    //     if (error) *error = RTE_NSERROR_FROM_RTE_ERROR(rteError);
+    //     return NO;
+    // }
+    return YES;
+}
+
+- (NSString *)playerGetJsonParameter:(NSString *)playerId error:(NSError **)error {
+    GET_PLAYER_OR_RETURN(playerId, error, nil);
+    
+    AgoraRtePlayerConfig *config = [[AgoraRtePlayerConfig alloc] init];
+    AgoraRteError *rteError = [[AgoraRteError alloc] init];
+    BOOL success = [player getConfigs:config error:rteError];
+    if (!success || rteError.code != AgoraRteOk) {
+        if (error) *error = RTE_NSERROR_FROM_RTE_ERROR(rteError);
+        return nil;
+    }
+    return [config jsonParameter:rteError] ?: @"";
+}
+
+- (BOOL)playerSetAbrSubscriptionLayer:(NSString *)playerId layer:(AgoraRteAbrSubscriptionLayer)layer error:(NSError **)error {
+    GET_PLAYER_OR_RETURN(playerId, error, NO);
+    
+    AgoraRtePlayerConfig *config = [[AgoraRtePlayerConfig alloc] init];
+    AgoraRteError *rteError = [[AgoraRteError alloc] init];
+    BOOL success = [player getConfigs:config error:rteError];
+    if (!success || rteError.code != AgoraRteOk) {
+        if (error) *error = RTE_NSERROR_FROM_RTE_ERROR(rteError);
+        return NO;
+    }
+    
+    [config setAbrSubscriptionLayer:layer error:rteError];
+    if (rteError.code != AgoraRteOk) {
+        if (error) *error = RTE_NSERROR_FROM_RTE_ERROR(rteError);
+        return NO;
+    }
+    
+    // success = [player setConfigs:config error:rteError];
+    // if (!success || rteError.code != AgoraRteOk) {
+    //     if (error) *error = RTE_NSERROR_FROM_RTE_ERROR(rteError);
+    //     return NO;
+    // }
+    return YES;
+}
+
+- (AgoraRteAbrSubscriptionLayer)playerGetAbrSubscriptionLayer:(NSString *)playerId error:(NSError **)error {
+    GET_PLAYER_OR_RETURN(playerId, error, AgoraRteAbrSubscriptionHigh);
+    
+    AgoraRtePlayerConfig *config = [[AgoraRtePlayerConfig alloc] init];
+    AgoraRteError *rteError = [[AgoraRteError alloc] init];
+    BOOL success = [player getConfigs:config error:rteError];
+    if (!success || rteError.code != AgoraRteOk) {
+        if (error) *error = RTE_NSERROR_FROM_RTE_ERROR(rteError);
+        return AgoraRteAbrSubscriptionHigh;
+    }
+    return [config abrSubscriptionLayer:rteError];
+}
+
+- (BOOL)playerSetAbrFallbackLayer:(NSString *)playerId layer:(AgoraRteAbrFallbackLayer)layer error:(NSError **)error {
+    GET_PLAYER_OR_RETURN(playerId, error, NO);
+    
+    AgoraRtePlayerConfig *config = [[AgoraRtePlayerConfig alloc] init];
+    AgoraRteError *rteError = [[AgoraRteError alloc] init];
+    BOOL success = [player getConfigs:config error:rteError];
+    if (!success || rteError.code != AgoraRteOk) {
+        if (error) *error = RTE_NSERROR_FROM_RTE_ERROR(rteError);
+        return NO;
+    }
+    
+    [config setAbrFallbackLayer:layer error:rteError];
+    if (rteError.code != AgoraRteOk) {
+        if (error) *error = RTE_NSERROR_FROM_RTE_ERROR(rteError);
+        return NO;
+    }
+    
+    // success = [player setConfigs:config error:rteError];
+    // if (!success || rteError.code != AgoraRteOk) {
+    //     if (error) *error = RTE_NSERROR_FROM_RTE_ERROR(rteError);
+    //     return NO;
+    // }
+    return YES;
+}
+
+- (AgoraRteAbrFallbackLayer)playerGetAbrFallbackLayer:(NSString *)playerId error:(NSError **)error {
+    GET_PLAYER_OR_RETURN(playerId, error, AgoraRteAbrFallbackLow);
+    
+    AgoraRtePlayerConfig *config = [[AgoraRtePlayerConfig alloc] init];
+    AgoraRteError *rteError = [[AgoraRteError alloc] init];
+    BOOL success = [player getConfigs:config error:rteError];
+    if (!success || rteError.code != AgoraRteOk) {
+        if (error) *error = RTE_NSERROR_FROM_RTE_ERROR(rteError);
+        return AgoraRteAbrFallbackLow;
+    }
+    return [config abrFallbackLayer:rteError];
 }
 
 #pragma mark - RTE Player Info
@@ -1092,14 +1779,29 @@ static inline NSString * _Nullable SafeGetRteErrorMessage(AgoraRteError * _Nulla
 - (BOOL)canvasSetConfig:(NSString *)canvasId config:(NSDictionary *)config error:(NSError **)error {
     GET_CANVAS_OR_RETURN(canvasId, error, NO);
     
+    // 先获取当前配置，避免覆盖其他属性
     AgoraRteCanvasConfig *canvasConfig = [[AgoraRteCanvasConfig alloc] init];
     AgoraRteError *rteError = [[AgoraRteError alloc] init];
+    BOOL success = [canvas getConfigs:canvasConfig error:rteError];
+    if (!success || rteError.code != AgoraRteOk) {
+        if (error) *error = RTE_NSERROR_FROM_RTE_ERROR(rteError);
+        return NO;
+    }
     
+    // 只更新字典中提供的属性
     if (config[@"videoRenderMode"] && config[@"videoRenderMode"] != [NSNull null]) {
         [canvasConfig setVideoRenderMode:(AgoraRteVideoRenderMode)[config[@"videoRenderMode"] intValue] error:rteError];
+        if (rteError.code != AgoraRteOk) {
+            if (error) *error = RTE_NSERROR_FROM_RTE_ERROR(rteError);
+            return NO;
+        }
     }
     if (config[@"videoMirrorMode"] && config[@"videoMirrorMode"] != [NSNull null]) {
         [canvasConfig setVideoMirrorMode:(AgoraRteVideoMirrorMode)[config[@"videoMirrorMode"] intValue] error:rteError];
+        if (rteError.code != AgoraRteOk) {
+            if (error) *error = RTE_NSERROR_FROM_RTE_ERROR(rteError);
+            return NO;
+        }
     }
     if (config[@"cropArea"] && config[@"cropArea"] != [NSNull null]) {
         NSDictionary *cropAreaDict = config[@"cropArea"];
@@ -1109,10 +1811,15 @@ static inline NSString * _Nullable SafeGetRteErrorMessage(AgoraRteError * _Nulla
         [rect setWidth:[cropAreaDict[@"width"] intValue]];
         [rect setHeight:[cropAreaDict[@"height"] intValue]];
         [canvasConfig setCropArea:rect error:rteError];
+        if (rteError.code != AgoraRteOk) {
+            if (error) *error = RTE_NSERROR_FROM_RTE_ERROR(rteError);
+            return NO;
+        }
     }
     
+    // 设置修改后的配置
     AgoraRteError *setError = [[AgoraRteError alloc] init];
-    BOOL success = [canvas setConfigs:canvasConfig error:setError];
+    success = [canvas setConfigs:canvasConfig error:setError];
     
     if (!success || setError.code != AgoraRteOk) {
         if (error) *error = RTE_NSERROR_FROM_RTE_ERROR(setError);
@@ -1149,6 +1856,138 @@ static inline NSString * _Nullable SafeGetRteErrorMessage(AgoraRteError * _Nulla
             @"width": @([cropArea width]),
             @"height": @([cropArea height])
         }
+    };
+}
+
+// RTE Canvas Config - Individual Setters
+- (BOOL)canvasSetVideoRenderMode:(NSString *)canvasId mode:(AgoraRteVideoRenderMode)mode error:(NSError **)error {
+    GET_CANVAS_OR_RETURN(canvasId, error, NO);
+    
+    AgoraRteCanvasConfig *config = [[AgoraRteCanvasConfig alloc] init];
+    AgoraRteError *rteError = [[AgoraRteError alloc] init];
+    BOOL success = [canvas getConfigs:config error:rteError];
+    if (!success || rteError.code != AgoraRteOk) {
+        if (error) *error = RTE_NSERROR_FROM_RTE_ERROR(rteError);
+        return NO;
+    }
+    
+    [config setVideoRenderMode:mode error:rteError];
+    if (rteError.code != AgoraRteOk) {
+        if (error) *error = RTE_NSERROR_FROM_RTE_ERROR(rteError);
+        return NO;
+    }
+    
+    // success = [canvas setConfigs:config error:rteError];
+    // if (!success || rteError.code != AgoraRteOk) {
+    //     if (error) *error = RTE_NSERROR_FROM_RTE_ERROR(rteError);
+    //     return NO;
+    // }
+    return YES;
+}
+
+- (AgoraRteVideoRenderMode)canvasGetVideoRenderMode:(NSString *)canvasId error:(NSError **)error {
+    GET_CANVAS_OR_RETURN(canvasId, error, AgoraRteVideoRenderModeHidden);
+    
+    AgoraRteCanvasConfig *config = [[AgoraRteCanvasConfig alloc] init];
+    AgoraRteError *rteError = [[AgoraRteError alloc] init];
+    BOOL success = [canvas getConfigs:config error:rteError];
+    if (!success || rteError.code != AgoraRteOk) {
+        if (error) *error = RTE_NSERROR_FROM_RTE_ERROR(rteError);
+        return AgoraRteVideoRenderModeHidden;
+    }
+    return [config videoRenderMode:rteError];
+}
+
+- (BOOL)canvasSetVideoMirrorMode:(NSString *)canvasId mode:(AgoraRteVideoMirrorMode)mode error:(NSError **)error {
+    GET_CANVAS_OR_RETURN(canvasId, error, NO);
+    
+    AgoraRteCanvasConfig *config = [[AgoraRteCanvasConfig alloc] init];
+    AgoraRteError *rteError = [[AgoraRteError alloc] init];
+    BOOL success = [canvas getConfigs:config error:rteError];
+    if (!success || rteError.code != AgoraRteOk) {
+        if (error) *error = RTE_NSERROR_FROM_RTE_ERROR(rteError);
+        return NO;
+    }
+    
+    [config setVideoMirrorMode:mode error:rteError];
+    if (rteError.code != AgoraRteOk) {
+        if (error) *error = RTE_NSERROR_FROM_RTE_ERROR(rteError);
+        return NO;
+    }
+    
+    // success = [canvas setConfigs:config error:rteError];
+    // if (!success || rteError.code != AgoraRteOk) {
+    //     if (error) *error = RTE_NSERROR_FROM_RTE_ERROR(rteError);
+    //     return NO;
+    // }
+    return YES;
+}
+
+- (AgoraRteVideoMirrorMode)canvasGetVideoMirrorMode:(NSString *)canvasId error:(NSError **)error {
+    GET_CANVAS_OR_RETURN(canvasId, error, AgoraRteVideoMirrorModeDisabled);
+    
+    AgoraRteCanvasConfig *config = [[AgoraRteCanvasConfig alloc] init];
+    AgoraRteError *rteError = [[AgoraRteError alloc] init];
+    BOOL success = [canvas getConfigs:config error:rteError];
+    if (!success || rteError.code != AgoraRteOk) {
+        if (error) *error = RTE_NSERROR_FROM_RTE_ERROR(rteError);
+        return AgoraRteVideoMirrorModeDisabled;
+    }
+    return [config videoMirrorMode:rteError];
+}
+
+- (BOOL)canvasSetCropArea:(NSString *)canvasId x:(int32_t)x y:(int32_t)y width:(int32_t)width height:(int32_t)height error:(NSError **)error {
+    GET_CANVAS_OR_RETURN(canvasId, error, NO);
+    
+    AgoraRteCanvasConfig *config = [[AgoraRteCanvasConfig alloc] init];
+    AgoraRteError *rteError = [[AgoraRteError alloc] init];
+    BOOL success = [canvas getConfigs:config error:rteError];
+    if (!success || rteError.code != AgoraRteOk) {
+        if (error) *error = RTE_NSERROR_FROM_RTE_ERROR(rteError);
+        return NO;
+    }
+    
+    AgoraRteRect *rect = [[AgoraRteRect alloc] init];
+    [rect setX:x];
+    [rect setY:y];
+    [rect setWidth:width];
+    [rect setHeight:height];
+    [config setCropArea:rect error:rteError];
+    if (rteError.code != AgoraRteOk) {
+        if (error) *error = RTE_NSERROR_FROM_RTE_ERROR(rteError);
+        return NO;
+    }
+    
+    // success = [canvas setConfigs:config error:rteError];
+    // if (!success || rteError.code != AgoraRteOk) {
+    //     if (error) *error = RTE_NSERROR_FROM_RTE_ERROR(rteError);
+    //     return NO;
+    // }
+    return YES;
+}
+
+- (NSDictionary *)canvasGetCropArea:(NSString *)canvasId error:(NSError **)error {
+    GET_CANVAS_OR_RETURN(canvasId, error, nil);
+    
+    AgoraRteCanvasConfig *config = [[AgoraRteCanvasConfig alloc] init];
+    AgoraRteError *rteError = [[AgoraRteError alloc] init];
+    BOOL success = [canvas getConfigs:config error:rteError];
+    if (!success || rteError.code != AgoraRteOk) {
+        if (error) *error = RTE_NSERROR_FROM_RTE_ERROR(rteError);
+        return nil;
+    }
+    
+    AgoraRteRect *cropArea = [config cropArea:rteError];
+    if (rteError.code != AgoraRteOk) {
+        if (error) *error = RTE_NSERROR_FROM_RTE_ERROR(rteError);
+        return nil;
+    }
+    
+    return @{
+        @"x": @([cropArea x]),
+        @"y": @([cropArea y]),
+        @"width": @([cropArea width]),
+        @"height": @([cropArea height])
     };
 }
 

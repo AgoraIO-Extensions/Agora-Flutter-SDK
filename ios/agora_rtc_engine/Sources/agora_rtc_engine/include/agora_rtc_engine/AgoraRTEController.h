@@ -1,16 +1,5 @@
 #import <Foundation/Foundation.h>
-#import <UIKit/UIKit.h>
-
-#import <AgoraRtcKit/AgoraRtcKit.h>
-
-// Forward declarations
-@class AgoraRte;
-@class AgoraRtePlayer;
-@class AgoraRteCanvas;
-@class AgoraRteObserver;
-@class AgoraRtePlayerObserver;
-@class AgoraRteError;
-
+#import <AgoraRtcKit/AgoraRteKit.h>
 #pragma mark - AgoraRTEPlayerObserverDelegate
 
 @protocol AgoraRTEPlayerObserverDelegate <NSObject>
@@ -54,17 +43,29 @@
 - (BOOL)setRteConfig:(NSDictionary *)config error:(NSError **)error;
 - (NSDictionary *)getRteConfig:(NSError **)error;
 - (NSString *)appId:(NSError **)error;
+- (BOOL)setAppId:(NSString *)appId error:(NSError **)error;
 - (NSString *)logFolder:(NSError **)error;
+- (BOOL)setLogFolder:(NSString *)logFolder error:(NSError **)error;
 - (NSNumber *)logFileSize:(NSError **)error;
+- (BOOL)setLogFileSize:(NSNumber *)logFileSize error:(NSError **)error;
 - (NSNumber *)areaCode:(NSError **)error;
+- (BOOL)setAreaCode:(NSNumber *)areaCode error:(NSError **)error;
 - (NSString *)cloudProxy:(NSError **)error;
+- (BOOL)setCloudProxy:(NSString *)cloudProxy error:(NSError **)error;
 - (NSString *)jsonParameter:(NSError **)error;
+- (BOOL)setJsonParameter:(NSString *)jsonParameter error:(NSError **)error;
 
 #pragma mark - RTE Observer
 //- (BOOL)registerRteObserver:(NSError **)error;
 //- (BOOL)unregisterRteObserver:(NSError **)error;
 
 #pragma mark - RTE Canvas Config
+- (BOOL)canvasSetVideoRenderMode:(NSString *)canvasId mode:(AgoraRteVideoRenderMode)mode error:(NSError **)error;
+- (AgoraRteVideoRenderMode)canvasGetVideoRenderMode:(NSString *)canvasId error:(NSError **)error;
+- (BOOL)canvasSetVideoMirrorMode:(NSString *)canvasId mode:(AgoraRteVideoMirrorMode)mode error:(NSError **)error;
+- (AgoraRteVideoMirrorMode)canvasGetVideoMirrorMode:(NSString *)canvasId error:(NSError **)error;
+- (BOOL)canvasSetCropArea:(NSString *)canvasId x:(int32_t)x y:(int32_t)y width:(int32_t)width height:(int32_t)height error:(NSError **)error;
+- (NSDictionary *)canvasGetCropArea:(NSString *)canvasId error:(NSError **)error;
 
 #pragma mark - RTE Canvas Lifecycle
 - (NSString *)createCanvas:(NSDictionary *)config error:(NSError **)error;
@@ -75,12 +76,38 @@
 - (BOOL)canvasRemoveView:(NSString *)canvasId view:(UIView *)view config:(NSDictionary *)config error:(NSError **)error;
 
 #pragma mark - RTE AgoraRtePlayerConfig
+- (BOOL)playerSetAutoPlay:(NSString *)playerId autoPlay:(BOOL)autoPlay error:(NSError **)error;
+- (BOOL)playerGetAutoPlay:(NSString *)playerId error:(NSError **)error;
 - (BOOL)playerSetPlaybackSpeed:(NSString *)playerId speed:(int32_t)speed error:(NSError **)error;
 - (int32_t)playerGetPlaybackSpeed:(NSString *)playerId error:(NSError **)error;
+- (BOOL)playerSetPlayoutAudioTrackIdx:(NSString *)playerId idx:(int32_t)idx error:(NSError **)error;
+- (int32_t)playerGetPlayoutAudioTrackIdx:(NSString *)playerId error:(NSError **)error;
+- (BOOL)playerSetPublishAudioTrackIdx:(NSString *)playerId idx:(int32_t)idx error:(NSError **)error;
+- (int32_t)playerGetPublishAudioTrackIdx:(NSString *)playerId error:(NSError **)error;
+- (BOOL)playerSetAudioTrackIdx:(NSString *)playerId idx:(int32_t)idx error:(NSError **)error;
+- (int32_t)playerGetAudioTrackIdx:(NSString *)playerId error:(NSError **)error;
+- (BOOL)playerSetSubtitleTrackIdx:(NSString *)playerId idx:(int32_t)idx error:(NSError **)error;
+- (int32_t)playerGetSubtitleTrackIdx:(NSString *)playerId error:(NSError **)error;
+- (BOOL)playerSetExternalSubtitleTrackIdx:(NSString *)playerId idx:(int32_t)idx error:(NSError **)error;
+- (int32_t)playerGetExternalSubtitleTrackIdx:(NSString *)playerId error:(NSError **)error;
+- (BOOL)playerSetAudioPitch:(NSString *)playerId pitch:(int32_t)pitch error:(NSError **)error;
+- (int32_t)playerGetAudioPitch:(NSString *)playerId error:(NSError **)error;
 - (BOOL)playerSetPlayoutVolume:(NSString *)playerId volume:(int32_t)volume error:(NSError **)error;
 - (int32_t)playerGetPlayoutVolume:(NSString *)playerId error:(NSError **)error;
+- (BOOL)playerSetAudioPlaybackDelay:(NSString *)playerId delay:(int32_t)delay error:(NSError **)error;
+- (int32_t)playerGetAudioPlaybackDelay:(NSString *)playerId error:(NSError **)error;
+- (BOOL)playerSetAudioDualMonoMode:(NSString *)playerId mode:(int32_t)mode error:(NSError **)error;
+- (int32_t)playerGetAudioDualMonoMode:(NSString *)playerId error:(NSError **)error;
+- (BOOL)playerSetPublishVolume:(NSString *)playerId volume:(int32_t)volume error:(NSError **)error;
+- (int32_t)playerGetPublishVolume:(NSString *)playerId error:(NSError **)error;
 - (BOOL)playerSetLoopCount:(NSString *)playerId count:(int32_t)count error:(NSError **)error;
 - (int32_t)playerGetLoopCount:(NSString *)playerId error:(NSError **)error;
+- (BOOL)playerSetJsonParameter:(NSString *)playerId jsonParameter:(NSString *)jsonParameter error:(NSError **)error;
+- (NSString *)playerGetJsonParameter:(NSString *)playerId error:(NSError **)error;
+- (BOOL)playerSetAbrSubscriptionLayer:(NSString *)playerId layer:(AgoraRteAbrSubscriptionLayer)layer error:(NSError **)error;
+- (AgoraRteAbrSubscriptionLayer)playerGetAbrSubscriptionLayer:(NSString *)playerId error:(NSError **)error;
+- (BOOL)playerSetAbrFallbackLayer:(NSString *)playerId layer:(AgoraRteAbrFallbackLayer)layer error:(NSError **)error;
+- (AgoraRteAbrFallbackLayer)playerGetAbrFallbackLayer:(NSString *)playerId error:(NSError **)error;
 
 #pragma mark - RTE Player Playback Control
 + (BOOL)preloadWithUrl:(NSString *)url error:(NSError **)error;
