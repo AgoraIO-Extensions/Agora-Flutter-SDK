@@ -446,6 +446,12 @@ abstract class AgoraRte {
   Future<void> destroy();
   Future<void> setConfigs(AgoraRteConfig config);
   Future<AgoraRteConfig> getConfigs();
+  Future<String> appId();
+  Future<String> logFolder();
+  Future<int> logFileSize();
+  Future<int> areaCode();
+  Future<String> cloudProxy();
+  Future<String> jsonParameter();
   Future<void> registerObserver(AgoraRteObserver observer);
   Future<void> unregisterObserver(AgoraRteObserver observer);
 }

@@ -53,61 +53,65 @@
 #pragma mark - RTE Config
 - (BOOL)setRteConfig:(NSDictionary *)config error:(NSError **)error;
 - (NSDictionary *)getRteConfig:(NSError **)error;
+- (NSString *)appId:(NSError **)error;
+- (NSString *)logFolder:(NSError **)error;
+- (NSNumber *)logFileSize:(NSError **)error;
+- (NSNumber *)areaCode:(NSError **)error;
+- (NSString *)cloudProxy:(NSError **)error;
+- (NSString *)jsonParameter:(NSError **)error;
 
 #pragma mark - RTE Observer
-- (BOOL)registerRteObserver:(NSError **)error;
-- (BOOL)unregisterRteObserver:(NSError **)error;
+//- (BOOL)registerRteObserver:(NSError **)error;
+//- (BOOL)unregisterRteObserver:(NSError **)error;
 
-#pragma mark - RTE Player Lifecycle
-+ (BOOL)preloadWithUrl:(NSString *)url error:(NSError **)error;
-- (NSString *)createPlayer:(NSDictionary *)config error:(NSError **)error;
-- (BOOL)destroyPlayer:(NSString *)playerId error:(NSError **)error;
+#pragma mark - RTE Canvas Config
 
-#pragma mark - RTE Player Playback Control
-- (BOOL)playerOpenUrl:(NSString *)playerId url:(NSString *)url startTime:(uint64_t)startTime completion:(void (^)(NSError *error))completion error:(NSError **)error;
-- (BOOL)playerOpenWithCustomSourceProvider:(NSString *)playerId provider:(void *)provider startTime:(uint64_t)startTime completion:(void (^)(NSError *error))completion error:(NSError **)error;
-- (BOOL)playerOpenWithStream:(NSString *)playerId stream:(void *)stream completion:(void (^)(NSError *error))completion error:(NSError **)error;
-- (BOOL)playerPlay:(NSString *)playerId error:(NSError **)error;
-- (BOOL)playerPause:(NSString *)playerId error:(NSError **)error;
-- (BOOL)playerStop:(NSString *)playerId error:(NSError **)error;
-- (BOOL)playerSeek:(NSString *)playerId position:(uint64_t)position error:(NSError **)error;
-- (BOOL)playerMuteAudio:(NSString *)playerId mute:(BOOL)mute error:(NSError **)error;
-- (BOOL)playerMuteVideo:(NSString *)playerId mute:(BOOL)mute error:(NSError **)error;
+#pragma mark - RTE Canvas Lifecycle
+- (NSString *)createCanvas:(NSDictionary *)config error:(NSError **)error;
+- (BOOL)destroyCanvas:(NSString *)canvasId error:(NSError **)error;
+- (BOOL)canvasSetConfig:(NSString *)canvasId config:(NSDictionary *)config error:(NSError **)error;
+- (NSDictionary *)canvasGetConfig:(NSString *)canvasId error:(NSError **)error;
+- (BOOL)canvasAddView:(NSString *)canvasId view:(UIView *)view config:(NSDictionary *)config error:(NSError **)error;
+- (BOOL)canvasRemoveView:(NSString *)canvasId view:(UIView *)view config:(NSDictionary *)config error:(NSError **)error;
+
+#pragma mark - RTE AgoraRtePlayerConfig
 - (BOOL)playerSetPlaybackSpeed:(NSString *)playerId speed:(int32_t)speed error:(NSError **)error;
 - (int32_t)playerGetPlaybackSpeed:(NSString *)playerId error:(NSError **)error;
 - (BOOL)playerSetPlayoutVolume:(NSString *)playerId volume:(int32_t)volume error:(NSError **)error;
 - (int32_t)playerGetPlayoutVolume:(NSString *)playerId error:(NSError **)error;
 - (BOOL)playerSetLoopCount:(NSString *)playerId count:(int32_t)count error:(NSError **)error;
 - (int32_t)playerGetLoopCount:(NSString *)playerId error:(NSError **)error;
-- (BOOL)playerSwitch:(NSString *)playerId url:(NSString *)url syncPts:(BOOL)syncPts completion:(void (^)(NSError *error))completion error:(NSError **)error;
 
-#pragma mark - RTE Player Info
+#pragma mark - RTE Player Playback Control
++ (BOOL)preloadWithUrl:(NSString *)url error:(NSError **)error;
+- (NSString *)createPlayer:(NSDictionary *)config error:(NSError **)error;
+- (BOOL)playerOpenUrl:(NSString *)playerId url:(NSString *)url startTime:(uint64_t)startTime completion:(void (^)(NSError *error))completion error:(NSError **)error;
+- (BOOL)playerOpenWithCustomSourceProvider:(NSString *)playerId provider:(void *)provider startTime:(uint64_t)startTime completion:(void (^)(NSError *error))completion error:(NSError **)error;
+- (BOOL)playerOpenWithStream:(NSString *)playerId stream:(void *)stream completion:(void (^)(NSError *error))completion error:(NSError **)error;
+- (BOOL)playerSwitch:(NSString *)playerId url:(NSString *)url syncPts:(BOOL)syncPts completion:(void (^)(NSError *error))completion error:(NSError **)error;
+// RTE Player Canvas bindng
+- (BOOL)playerSetCanvas:(NSString *)playerId canvasId:(NSString *)canvasId error:(NSError **)error;
+
+- (BOOL)playerPlay:(NSString *)playerId error:(NSError **)error;
+- (BOOL)playerPause:(NSString *)playerId error:(NSError **)error;
+- (BOOL)playerStop:(NSString *)playerId error:(NSError **)error;
+- (BOOL)playerSeek:(NSString *)playerId position:(uint64_t)position error:(NSError **)error;
+- (BOOL)playerMuteAudio:(NSString *)playerId mute:(BOOL)mute error:(NSError **)error;
+- (BOOL)playerMuteVideo:(NSString *)playerId mute:(BOOL)mute error:(NSError **)error;
+
+// RTE Player Info
+- (void)playerGetStats:(NSString *)playerId completion:(void (^)(NSDictionary *stats, NSError *error))completion;
 - (int64_t)playerGetCurrentTime:(NSString *)playerId error:(NSError **)error;
 - (int64_t)playerGetDuration:(NSString *)playerId error:(NSError **)error;
 - (NSDictionary *)playerGetInfo:(NSString *)playerId error:(NSError **)error;
-- (void)playerGetStats:(NSString *)playerId completion:(void (^)(NSDictionary *stats, NSError *error))completion;
-
-#pragma mark - RTE Player Config
+// RTE Player Config
 - (BOOL)playerSetConfig:(NSString *)playerId config:(NSDictionary *)config error:(NSError **)error;
 - (NSDictionary *)playerGetConfig:(NSString *)playerId error:(NSError **)error;
 
-#pragma mark - RTE Player Observer
+// RTE Player Observer
 - (BOOL)playerRegisterObserver:(NSString *)playerId error:(NSError **)error;
+- (BOOL)destroyPlayer:(NSString *)playerId error:(NSError **)error;
 - (BOOL)playerUnregisterObserver:(NSString *)playerId error:(NSError **)error;
 
-#pragma mark - RTE Canvas Lifecycle
-- (NSString *)createCanvas:(NSDictionary *)config error:(NSError **)error;
-- (BOOL)destroyCanvas:(NSString *)canvasId error:(NSError **)error;
-
-#pragma mark - RTE Canvas Config
-- (BOOL)canvasSetConfig:(NSString *)canvasId config:(NSDictionary *)config error:(NSError **)error;
-- (NSDictionary *)canvasGetConfig:(NSString *)canvasId error:(NSError **)error;
-
-#pragma mark - RTE Canvas View
-- (BOOL)canvasAddView:(NSString *)canvasId view:(UIView *)view config:(NSDictionary *)config error:(NSError **)error;
-- (BOOL)canvasRemoveView:(NSString *)canvasId view:(UIView *)view config:(NSDictionary *)config error:(NSError **)error;
-
-#pragma mark - RTE Player Canvas bindng
-- (BOOL)playerSetCanvas:(NSString *)playerId canvasId:(NSString *)canvasId error:(NSError **)error;
 
 @end

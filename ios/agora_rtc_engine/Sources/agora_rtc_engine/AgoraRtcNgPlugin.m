@@ -347,20 +347,62 @@
     } else {
       result([FlutterError errorWithCode:@"RTE_ERROR" message:error.localizedDescription details:nil]);
     }
-  } else if ([@"rteRegisterObserver" isEqualToString:call.method]) {
-    BOOL success = [self.rteController registerRteObserver:&error];
-    if (success) {
-      result(@(YES));
+  } else if ([@"rteGetAppId" isEqualToString:call.method]) {
+    NSString *appId = [self.rteController appId:&error];
+    if (appId) {
+      result(appId);
     } else {
       result([FlutterError errorWithCode:@"RTE_ERROR" message:error.localizedDescription details:nil]);
     }
-  } else if ([@"rteUnregisterObserver" isEqualToString:call.method]) {
-    BOOL success = [self.rteController unregisterRteObserver:&error];
-    if (success) {
-      result(@(YES));
+  } else if ([@"rteGetLogFolder" isEqualToString:call.method]) {
+    NSString *logFolder = [self.rteController logFolder:&error];
+    if (logFolder) {
+      result(logFolder);
     } else {
       result([FlutterError errorWithCode:@"RTE_ERROR" message:error.localizedDescription details:nil]);
     }
+  } else if ([@"rteGetLogFileSize" isEqualToString:call.method]) {
+    NSNumber *logFileSize = [self.rteController logFileSize:&error];
+    if (logFileSize) {
+      result(logFileSize);
+    } else {
+      result([FlutterError errorWithCode:@"RTE_ERROR" message:error.localizedDescription details:nil]);
+    }
+  } else if ([@"rteGetAreaCode" isEqualToString:call.method]) {
+    NSNumber *areaCode = [self.rteController areaCode:&error];
+    if (areaCode) {
+      result(areaCode);
+    } else {
+      result([FlutterError errorWithCode:@"RTE_ERROR" message:error.localizedDescription details:nil]);
+    }
+  } else if ([@"rteGetCloudProxy" isEqualToString:call.method]) {
+    NSString *cloudProxy = [self.rteController cloudProxy:&error];
+    if (cloudProxy) {
+      result(cloudProxy);
+    } else {
+      result([FlutterError errorWithCode:@"RTE_ERROR" message:error.localizedDescription details:nil]);
+    }
+  } else if ([@"rteGetJsonParameter" isEqualToString:call.method]) {
+    NSString *jsonParameter = [self.rteController jsonParameter:&error];
+    if (jsonParameter) {
+      result(jsonParameter);
+    } else {
+      result([FlutterError errorWithCode:@"RTE_ERROR" message:error.localizedDescription details:nil]);
+    }
+//  } else if ([@"rteRegisterObserver" isEqualToString:call.method]) {
+//    BOOL success = [self.rteController registerRteObserver:&error];
+//    if (success) {
+//      result(@(YES));
+//    } else {
+//      result([FlutterError errorWithCode:@"RTE_ERROR" message:error.localizedDescription details:nil]);
+//    }
+//  } else if ([@"rteUnregisterObserver" isEqualToString:call.method]) {
+//    BOOL success = [self.rteController unregisterRteObserver:&error];
+//    if (success) {
+//      result(@(YES));
+//    } else {
+//      result([FlutterError errorWithCode:@"RTE_ERROR" message:error.localizedDescription details:nil]);
+//    }
   }
   // RTE Player 方法
   else if ([@"rtePlayerCreate" isEqualToString:call.method]) {

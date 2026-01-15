@@ -67,6 +67,42 @@ class AgoraRteImpl implements AgoraRte {
   }
 
   @override
+  Future<String> appId() async {
+    final String result = await _channel.invokeMethod('rteGetAppId');
+    return result;
+  }
+
+  @override
+  Future<String> logFolder() async {
+    final String result = await _channel.invokeMethod('rteGetLogFolder');
+    return result;
+  }
+
+  @override
+  Future<int> logFileSize() async {
+    final int result = await _channel.invokeMethod('rteGetLogFileSize');
+    return result;
+  }
+
+  @override
+  Future<int> areaCode() async {
+    final int result = await _channel.invokeMethod('rteGetAreaCode');
+    return result;
+  }
+
+  @override
+  Future<String> cloudProxy() async {
+    final String result = await _channel.invokeMethod('rteGetCloudProxy');
+    return result;
+  }
+
+  @override
+  Future<String> jsonParameter() async {
+    final String result = await _channel.invokeMethod('rteGetJsonParameter');
+    return result;
+  }
+
+  @override
   Future<void> registerObserver(AgoraRteObserver observer) async {
     await _channel.invokeMethod('rteRegisterObserver');
   }

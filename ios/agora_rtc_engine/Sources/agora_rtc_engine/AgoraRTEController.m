@@ -295,6 +295,143 @@ static inline NSString * _Nullable SafeGetRteErrorMessage(AgoraRteError * _Nulla
         @"jsonParameter": [config jsonParameter:getError] ?: @""
     };
 }
+- (NSString *)appId:(NSError **)error {
+    CHECK_RTE_INSTANCE_NIL(error);
+    
+    AgoraRteConfig *config = [[AgoraRteConfig alloc] init];
+    AgoraRteError *rteError = [[AgoraRteError alloc] init];
+    
+    BOOL success = [self.rteInstance getConfigs:config error:rteError];
+    if (!success || rteError.code != AgoraRteOk) {
+        if (error) *error = RTE_NSERROR_FROM_RTE_ERROR(rteError);
+        return nil;
+    }
+    
+    AgoraRteError *getError = [[AgoraRteError alloc] init];
+    NSString *appId = [config appId:getError];
+    
+    if (getError.code != AgoraRteOk) {
+        if (error) *error = RTE_NSERROR_FROM_RTE_ERROR(getError);
+        return nil;
+    }
+    
+    return appId ?: @"";
+}
+
+- (NSString *)logFolder:(NSError **)error {
+    CHECK_RTE_INSTANCE_NIL(error);
+    
+    AgoraRteConfig *config = [[AgoraRteConfig alloc] init];
+    AgoraRteError *rteError = [[AgoraRteError alloc] init];
+    
+    BOOL success = [self.rteInstance getConfigs:config error:rteError];
+    if (!success || rteError.code != AgoraRteOk) {
+        if (error) *error = RTE_NSERROR_FROM_RTE_ERROR(rteError);
+        return nil;
+    }
+    
+    AgoraRteError *getError = [[AgoraRteError alloc] init];
+    NSString *logFolder = [config logFolder:getError];
+    
+    if (getError.code != AgoraRteOk) {
+        if (error) *error = RTE_NSERROR_FROM_RTE_ERROR(getError);
+        return nil;
+    }
+    
+    return logFolder ?: @"";
+}
+
+- (NSNumber *)logFileSize:(NSError **)error {
+    CHECK_RTE_INSTANCE_NIL(error);
+    
+    AgoraRteConfig *config = [[AgoraRteConfig alloc] init];
+    AgoraRteError *rteError = [[AgoraRteError alloc] init];
+    
+    BOOL success = [self.rteInstance getConfigs:config error:rteError];
+    if (!success || rteError.code != AgoraRteOk) {
+        if (error) *error = RTE_NSERROR_FROM_RTE_ERROR(rteError);
+        return nil;
+    }
+    
+    AgoraRteError *getError = [[AgoraRteError alloc] init];
+    size_t logFileSize = [config logFileSize:getError];
+    
+    if (getError.code != AgoraRteOk) {
+        if (error) *error = RTE_NSERROR_FROM_RTE_ERROR(getError);
+        return nil;
+    }
+    
+    return @(logFileSize);
+}
+
+- (NSNumber *)areaCode:(NSError **)error {
+    CHECK_RTE_INSTANCE_NIL(error);
+    
+    AgoraRteConfig *config = [[AgoraRteConfig alloc] init];
+    AgoraRteError *rteError = [[AgoraRteError alloc] init];
+    
+    BOOL success = [self.rteInstance getConfigs:config error:rteError];
+    if (!success || rteError.code != AgoraRteOk) {
+        if (error) *error = RTE_NSERROR_FROM_RTE_ERROR(rteError);
+        return nil;
+    }
+    
+    AgoraRteError *getError = [[AgoraRteError alloc] init];
+    int32_t areaCode = [config areaCode:getError];
+    
+    if (getError.code != AgoraRteOk) {
+        if (error) *error = RTE_NSERROR_FROM_RTE_ERROR(getError);
+        return nil;
+    }
+    
+    return @(areaCode);
+}
+
+- (NSString *)cloudProxy:(NSError **)error {
+    CHECK_RTE_INSTANCE_NIL(error);
+    
+    AgoraRteConfig *config = [[AgoraRteConfig alloc] init];
+    AgoraRteError *rteError = [[AgoraRteError alloc] init];
+    
+    BOOL success = [self.rteInstance getConfigs:config error:rteError];
+    if (!success || rteError.code != AgoraRteOk) {
+        if (error) *error = RTE_NSERROR_FROM_RTE_ERROR(rteError);
+        return nil;
+    }
+    
+    AgoraRteError *getError = [[AgoraRteError alloc] init];
+    NSString *cloudProxy = [config cloudProxy:getError];
+    
+    if (getError.code != AgoraRteOk) {
+        if (error) *error = RTE_NSERROR_FROM_RTE_ERROR(getError);
+        return nil;
+    }
+    
+    return cloudProxy ?: @"";
+}
+
+- (NSString *)jsonParameter:(NSError **)error {
+    CHECK_RTE_INSTANCE_NIL(error);
+    
+    AgoraRteConfig *config = [[AgoraRteConfig alloc] init];
+    AgoraRteError *rteError = [[AgoraRteError alloc] init];
+    
+    BOOL success = [self.rteInstance getConfigs:config error:rteError];
+    if (!success || rteError.code != AgoraRteOk) {
+        if (error) *error = RTE_NSERROR_FROM_RTE_ERROR(rteError);
+        return nil;
+    }
+    
+    AgoraRteError *getError = [[AgoraRteError alloc] init];
+    NSString *jsonParameter = [config jsonParameter:getError];
+    
+    if (getError.code != AgoraRteOk) {
+        if (error) *error = RTE_NSERROR_FROM_RTE_ERROR(getError);
+        return nil;
+    }
+    
+    return jsonParameter ?: @"";
+}
 
 #pragma mark - RTE Observer
 
@@ -540,11 +677,24 @@ static inline NSString * _Nullable SafeGetRteErrorMessage(AgoraRteError * _Nulla
 - (BOOL)playerSetPlaybackSpeed:(NSString *)playerId speed:(int32_t)speed error:(NSError **)error {
     GET_PLAYER_OR_RETURN(playerId, error, NO);
     
+    // 先获取当前配置，避免覆盖其他属性
     AgoraRtePlayerConfig *config = [[AgoraRtePlayerConfig alloc] init];
     AgoraRteError *rteError = [[AgoraRteError alloc] init];
-    [config setPlaybackSpeed:speed error:rteError];
+    BOOL success = [player getConfigs:config error:rteError];
+    if (!success || rteError.code != AgoraRteOk) {
+        if (error) *error = RTE_NSERROR_FROM_RTE_ERROR(rteError);
+        return NO;
+    }
     
-    BOOL success = [player setConfigs:config error:rteError];
+    // 只修改需要修改的属性
+    [config setPlaybackSpeed:speed error:rteError];
+    if (rteError.code != AgoraRteOk) {
+        if (error) *error = RTE_NSERROR_FROM_RTE_ERROR(rteError);
+        return NO;
+    }
+    
+    // 设置修改后的配置
+    success = [player setConfigs:config error:rteError];
     if (!success || rteError.code != AgoraRteOk) {
         if (error) *error = RTE_NSERROR_FROM_RTE_ERROR(rteError);
         return NO;
@@ -568,11 +718,24 @@ static inline NSString * _Nullable SafeGetRteErrorMessage(AgoraRteError * _Nulla
 - (BOOL)playerSetPlayoutVolume:(NSString *)playerId volume:(int32_t)volume error:(NSError **)error {
     GET_PLAYER_OR_RETURN(playerId, error, NO);
     
+    // 先获取当前配置，避免覆盖其他属性
     AgoraRtePlayerConfig *config = [[AgoraRtePlayerConfig alloc] init];
     AgoraRteError *rteError = [[AgoraRteError alloc] init];
-    [config setPlayoutVolume:volume error:rteError];
+    BOOL success = [player getConfigs:config error:rteError];
+    if (!success || rteError.code != AgoraRteOk) {
+        if (error) *error = RTE_NSERROR_FROM_RTE_ERROR(rteError);
+        return NO;
+    }
     
-    BOOL success = [player setConfigs:config error:rteError];
+    // 只修改需要修改的属性
+    [config setPlayoutVolume:volume error:rteError];
+    if (rteError.code != AgoraRteOk) {
+        if (error) *error = RTE_NSERROR_FROM_RTE_ERROR(rteError);
+        return NO;
+    }
+    
+    // 设置修改后的配置
+    success = [player setConfigs:config error:rteError];
     if (!success || rteError.code != AgoraRteOk) {
         if (error) *error = RTE_NSERROR_FROM_RTE_ERROR(rteError);
         return NO;
@@ -596,11 +759,24 @@ static inline NSString * _Nullable SafeGetRteErrorMessage(AgoraRteError * _Nulla
 - (BOOL)playerSetLoopCount:(NSString *)playerId count:(int32_t)count error:(NSError **)error {
     GET_PLAYER_OR_RETURN(playerId, error, NO);
     
+    // 先获取当前配置，避免覆盖其他属性
     AgoraRtePlayerConfig *config = [[AgoraRtePlayerConfig alloc] init];
     AgoraRteError *rteError = [[AgoraRteError alloc] init];
-    [config setLoopCount:count error:rteError];
+    BOOL success = [player getConfigs:config error:rteError];
+    if (!success || rteError.code != AgoraRteOk) {
+        if (error) *error = RTE_NSERROR_FROM_RTE_ERROR(rteError);
+        return NO;
+    }
     
-    BOOL success = [player setConfigs:config error:rteError];
+    // 只修改需要修改的属性
+    [config setLoopCount:count error:rteError];
+    if (rteError.code != AgoraRteOk) {
+        if (error) *error = RTE_NSERROR_FROM_RTE_ERROR(rteError);
+        return NO;
+    }
+    
+    // 设置修改后的配置
+    success = [player setConfigs:config error:rteError];
     if (!success || rteError.code != AgoraRteOk) {
         if (error) *error = RTE_NSERROR_FROM_RTE_ERROR(rteError);
         return NO;
