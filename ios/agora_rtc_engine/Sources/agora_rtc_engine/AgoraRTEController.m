@@ -1,149 +1,17 @@
-#import "./include/agora_rtc_engine/AgoraRTEController.h"
-#import <AgoraRtcKit/AgoraRteKit.h>
-
-#pragma mark - Helper Macros
-
-#define RTE_NSERROR(errCode, msg) \
-    [NSError errorWithDomain:@"AgoraRTE" code:errCode userInfo:@{NSLocalizedDescriptionKey: msg ?: @"Unknown error"}]
-
-
-static inline NSString * _Nullable SafeGetRteErrorMessage(AgoraRteError * _Nullable rteError) {
-    if (!rteError) {
-        return nil;
-    }
-    AgoraRteErrorCode code = [rteError code];
-    return [NSString stringWithFormat:@"RTE Error (code: %ld)", (long)code];
-}
-
-#define RTE_NSERROR_FROM_RTE_ERROR(rteError) \
-    RTE_NSERROR([rteError code], SafeGetRteErrorMessage(rteError))
-
-#define CHECK_RTE_INSTANCE(error) \
-    if (!self.rteInstance) { \
-        if (error) *error = RTE_NSERROR(-1, @"RTE instance not created"); \
-        return NO; \
-    }
-
-#define CHECK_RTE_INSTANCE_NIL(error) \
-    if (!self.rteInstance) { \
-        if (error) *error = RTE_NSERROR(-1, @"RTE instance not created"); \
-        return nil; \
-    }
-
-#define GET_PLAYER_OR_RETURN(playerId, error, retVal) \
-    AgoraRtePlayer *player = self.players[playerId]; \
-    if (!player) { \
-        if (error) *error = RTE_NSERROR(-1, @"Player not found"); \
-        return retVal; \
-    }
-
-#define GET_CANVAS_OR_RETURN(canvasId, error, retVal) \
-    AgoraRteCanvas *canvas = self.canvases[canvasId]; \
-    if (!canvas) { \
-        if (error) *error = RTE_NSERROR(-1, @"Canvas not found"); \
-        return retVal; \
-    }
-
-#pragma mark - AgoraRTEPlayerObserverBridge
-
-@interface AgoraRTEPlayerObserverBridge : AgoraRtePlayerObserver
-@property (nonatomic, weak) AgoraRTEController *controller;
-@property (nonatomic, copy) NSString *playerId;
-@end
-
-@implementation AgoraRTEPlayerObserverBridge
-
-- (void)onStateChanged:(AgoraRtePlayerState)oldState newState:(AgoraRtePlayerState)newState error:(AgoraRteError *)error {
-    dispatch_async(dispatch_get_main_queue(), ^{
-        if ([self.controller.playerObserverDelegate respondsToSelector:@selector(player:onStateChanged:newState:errorCode:errorMessage:)]) {
-            [self.controller.playerObserverDelegate player:self.playerId
-                                            onStateChanged:(NSInteger)oldState
-                                                  newState:(NSInteger)newState
-                                                 errorCode:error ? (NSInteger)error.code : 0
-                                              errorMessage:error ? SafeGetRteErrorMessage(error) : nil];
-        }
-    });
-}
-
-- (void)onPositionChanged:(uint64_t)currentTime utcTime:(uint64_t)utcTime {
-    dispatch_async(dispatch_get_main_queue(), ^{
-        if ([self.controller.playerObserverDelegate respondsToSelector:@selector(player:onPositionChanged:utcTime:)]) {
-            [self.controller.playerObserverDelegate player:self.playerId onPositionChanged:currentTime utcTime:utcTime];
-        }
-    });
-}
-
-- (void)onResolutionChanged:(int)width height:(int)height {
-    dispatch_async(dispatch_get_main_queue(), ^{
-        if ([self.controller.playerObserverDelegate respondsToSelector:@selector(player:onResolutionChanged:height:)]) {
-            [self.controller.playerObserverDelegate player:self.playerId onResolutionChanged:width height:height];
-        }
-    });
-}
-
-- (void)onEvent:(AgoraRtePlayerEvent)event {
-    dispatch_async(dispatch_get_main_queue(), ^{
-        if ([self.controller.playerObserverDelegate respondsToSelector:@selector(player:onEvent:)]) {
-            [self.controller.playerObserverDelegate player:self.playerId onEvent:(NSInteger)event];
-        }
-    });
-}
-
-- (void)onMetadata:(AgoraRtePlayerMetadataType)type data:(NSData *)data {
-    dispatch_async(dispatch_get_main_queue(), ^{
-        if ([self.controller.playerObserverDelegate respondsToSelector:@selector(player:onMetadata:data:)]) {
-            [self.controller.playerObserverDelegate player:self.playerId onMetadata:(NSInteger)type data:data];
-        }
-    });
-}
-
-- (void)onPlayerInfoUpdated:(AgoraRtePlayerInfo *)info {
-    dispatch_async(dispatch_get_main_queue(), ^{
-        if ([self.controller.playerObserverDelegate respondsToSelector:@selector(player:onPlayerInfoUpdated:)]) {
-            NSDictionary *infoDict = @{
-                @"state": @([info state]),
-                @"duration": @([info duration]),
-                @"streamCount": @([info streamCount]),
-                @"hasAudio": @([info hasAudio]),
-                @"hasVideo": @([info hasVideo]),
-                @"isAudioMuted": @([info isAudioMuted]),
-                @"isVideoMuted": @([info isVideoMuted]),
-                @"videoHeight": @([info videoHeight]),
-                @"videoWidth": @([info videoWidth]),
-                @"audioSampleRate": @([info audioSampleRate]),
-                @"audioChannels": @([info audioChannels]),
-                @"audioBitsPerSample": @([info audioBitsPerSample]),
-                @"abrSubscriptionLayer": @([info abrSubscriptionLayer]),
-                @"currentUrl": [info currentUrl] ?: @""
-            };
-            [self.controller.playerObserverDelegate player:self.playerId onPlayerInfoUpdated:infoDict];
-        }
-    });
-}
-
-- (void)onAudioVolumeIndication:(int32_t)volume {
-    dispatch_async(dispatch_get_main_queue(), ^{
-        if ([self.controller.playerObserverDelegate respondsToSelector:@selector(player:onAudioVolumeIndication:)]) {
-            [self.controller.playerObserverDelegate player:self.playerId onAudioVolumeIndication:volume];
-        }
-    });
-}
-
-@end
-
-#pragma mark - AgoraRTEObserverBridge
-
-@interface AgoraRTEObserverBridge : NSObject
-@property (nonatomic, weak) AgoraRTEController *controller;
-@end
-
-@implementation AgoraRTEObserverBridge
-@end
+#import "AgoraRTEController.h"
+#import "AgoraRTE.h"
+#import "AgoraRTEConfig.h"
+#import "AgoraRTEPlayer.h"
+#import "AgoraRTECanvas.h"
+#import "AgoraRTECommon.h"
 
 #pragma mark - AgoraRTEController Private
 
 @interface AgoraRTEController ()
-@property (nonatomic, strong) AgoraRTEObserverBridge *rteObserver;
+@property (nonatomic, strong, readwrite) AgoraRTE *rte;
+@property (nonatomic, strong, readwrite) AgoraRTEConfig *rteConfig;
+@property (nonatomic, strong, readwrite) AgoraRTEPlayer *rtePlayer;
+@property (nonatomic, strong, readwrite) AgoraRTECanvas *rteCanvas;
 @end
 
 #pragma mark - AgoraRTEController Implementation
@@ -153,9 +21,10 @@ static inline NSString * _Nullable SafeGetRteErrorMessage(AgoraRteError * _Nulla
 - (instancetype)init {
     self = [super init];
     if (self) {
-        self.players = [NSMutableDictionary dictionary];
-        self.canvases = [NSMutableDictionary dictionary];
-        self.playerObservers = [NSMutableDictionary dictionary];
+        _rte = [[AgoraRTE alloc] init];
+        _rteConfig = nil;
+        _rtePlayer = nil;
+        _rteCanvas = nil;
     }
     return self;
 }
@@ -163,502 +32,178 @@ static inline NSString * _Nullable SafeGetRteErrorMessage(AgoraRteError * _Nulla
 #pragma mark - RTE Lifecycle
 
 - (BOOL)createRteFromBridge:(NSError **)error {
-    AgoraRteError *rteError = [[AgoraRteError alloc] init];
-    self.rteInstance = [AgoraRte getFromBridge:rteError];
-    
-    if (!self.rteInstance || rteError.code != AgoraRteOk) {
-        if (error) *error = RTE_NSERROR_FROM_RTE_ERROR(rteError);
-        return NO;
+    BOOL success = [self.rte getFromBridge:error];
+    if (success && self.rte.rteInstance) {
+        self.rteConfig = [[AgoraRTEConfig alloc] initWithRte:self.rte.rteInstance];
+        self.rtePlayer = [[AgoraRTEPlayer alloc] initWithRte:self.rte.rteInstance];
+        self.rteCanvas = [[AgoraRTECanvas alloc] initWithRte:self.rte.rteInstance];
+        self.rtePlayer.observerDelegate = self.playerObserverDelegate;
     }
-    return YES;
+    return success;
 }
 
 - (BOOL)createRteWithConfig:(NSDictionary *)config error:(NSError **)error {
-    AgoraRteInitialConfig *initialConfig = [[AgoraRteInitialConfig alloc] init];
-    self.rteInstance = [[AgoraRte alloc] initWithInitialConfig:initialConfig];
-    
-    if (!self.rteInstance) {
-        if (error) *error = RTE_NSERROR(-1, @"Failed to create RTE instance");
-        return NO;
+    BOOL success = [self.rte createWithConfig:config error:error];
+    if (success && self.rte.rteInstance) {
+        self.rteConfig = [[AgoraRTEConfig alloc] initWithRte:self.rte.rteInstance];
+        self.rtePlayer = [[AgoraRTEPlayer alloc] initWithRte:self.rte.rteInstance];
+        self.rteCanvas = [[AgoraRTECanvas alloc] initWithRte:self.rte.rteInstance];
+        self.rtePlayer.observerDelegate = self.playerObserverDelegate;
     }
-    
-    if (config && config.count > 0) {
-        return [self setRteConfig:config error:error];
-    }
-    
-    return YES;
+    return success;
 }
 
 - (BOOL)initMediaEngine:(void (^)(NSError *error))completion error:(NSError **)error {
-    CHECK_RTE_INSTANCE(error);
-    
-    AgoraRteError *rteError = [[AgoraRteError alloc] init];
-    BOOL success = [self.rteInstance initMediaEngine:^(AgoraRteError *err) {
-        NSError *nsError = nil;
-        if (err && err.code != AgoraRteOk) {
-            nsError = RTE_NSERROR_FROM_RTE_ERROR(err);
-        }
-        if (completion) completion(nsError);
-    } error:rteError];
-    
-    if (!success || rteError.code != AgoraRteOk) {
-        if (error) *error = RTE_NSERROR_FROM_RTE_ERROR(rteError);
-        return NO;
-    }
-    return YES;
+    return [self.rte initMediaEngine:completion error:error];
 }
 
 - (BOOL)destroyRte:(NSError **)error {
-    if (!self.rteInstance) return YES;
-    
-    // Destroy all players
-    for (NSString *playerId in [self.players allKeys]) {
-        [self destroyPlayer:playerId error:nil];
+    // Destroy all players and canvases first
+    if (self.rtePlayer) {
+        for (NSString *playerId in [self.rtePlayer.players allKeys]) {
+            [self.rtePlayer destroyPlayer:playerId error:nil];
+        }
+    }
+    if (self.rteCanvas) {
+        for (NSString *canvasId in [self.rteCanvas.canvases allKeys]) {
+            [self.rteCanvas destroyCanvas:canvasId error:nil];
+        }
     }
     
-    // Destroy all canvases
-    for (NSString *canvasId in [self.canvases allKeys]) {
-        [self destroyCanvas:canvasId error:nil];
+    BOOL success = [self.rte destroy:error];
+    if (success) {
+        self.rteConfig = nil;
+        self.rtePlayer = nil;
+        self.rteCanvas = nil;
     }
-    
-    // Unregister RTE observer
-    [self unregisterRteObserver:nil];
-    
-    AgoraRteError *rteError = [[AgoraRteError alloc] init];
-    BOOL success = [self.rteInstance destroy:rteError];
-    
-    if (!success || rteError.code != AgoraRteOk) {
-        if (error) *error = RTE_NSERROR_FROM_RTE_ERROR(rteError);
-        return NO;
-    }
-    
-    self.rteInstance = nil;
-    return YES;
+    return success;
 }
 
 #pragma mark - RTE Config
 
 - (BOOL)setRteConfig:(NSDictionary *)config error:(NSError **)error {
-    CHECK_RTE_INSTANCE(error);
-    
-    // 先获取当前配置，避免覆盖其他属性
-    AgoraRteConfig *rteConfig = [[AgoraRteConfig alloc] init];
-    AgoraRteError *rteError = [[AgoraRteError alloc] init];
-    BOOL success = [self.rteInstance getConfigs:rteConfig error:rteError];
-    if (!success || rteError.code != AgoraRteOk) {
-        if (error) *error = RTE_NSERROR_FROM_RTE_ERROR(rteError);
+    if (!self.rteConfig) {
+        if (error) *error = RTE_NSERROR(-1, @"RTE config not initialized");
         return NO;
     }
-    
-    // 只更新字典中提供的属性
-    if (config[@"appId"] && config[@"appId"] != [NSNull null]) {
-        [rteConfig setAppId:config[@"appId"] error:rteError];
-        if (rteError.code != AgoraRteOk) {
-            if (error) *error = RTE_NSERROR_FROM_RTE_ERROR(rteError);
-            return NO;
-        }
-    }
-    if (config[@"logFolder"] && config[@"logFolder"] != [NSNull null]) {
-        [rteConfig setLogFolder:config[@"logFolder"] error:rteError];
-        if (rteError.code != AgoraRteOk) {
-            if (error) *error = RTE_NSERROR_FROM_RTE_ERROR(rteError);
-            return NO;
-        }
-    }
-    if (config[@"logFileSize"] && config[@"logFileSize"] != [NSNull null]) {
-        [rteConfig setLogFileSize:[config[@"logFileSize"] unsignedLongValue] error:rteError];
-        if (rteError.code != AgoraRteOk) {
-            if (error) *error = RTE_NSERROR_FROM_RTE_ERROR(rteError);
-            return NO;
-        }
-    }
-    if (config[@"areaCode"] && config[@"areaCode"] != [NSNull null]) {
-        [rteConfig setAreaCode:[config[@"areaCode"] intValue] error:rteError];
-        if (rteError.code != AgoraRteOk) {
-            if (error) *error = RTE_NSERROR_FROM_RTE_ERROR(rteError);
-            return NO;
-        }
-    }
-    if (config[@"cloudProxy"] && config[@"cloudProxy"] != [NSNull null]) {
-        [rteConfig setCloudProxy:config[@"cloudProxy"] error:rteError];
-        if (rteError.code != AgoraRteOk) {
-            if (error) *error = RTE_NSERROR_FROM_RTE_ERROR(rteError);
-            return NO;
-        }
-    }
-    if (config[@"jsonParameter"] && config[@"jsonParameter"] != [NSNull null]) {
-        [rteConfig setJsonParameter:config[@"jsonParameter"] error:rteError];
-        if (rteError.code != AgoraRteOk) {
-            if (error) *error = RTE_NSERROR_FROM_RTE_ERROR(rteError);
-            return NO;
-        }
-    }
-    
-    // 设置修改后的配置
-    AgoraRteError *setError = [[AgoraRteError alloc] init];
-    success = [self.rteInstance setConfigs:rteConfig error:setError];
-    
-    if (!success || setError.code != AgoraRteOk) {
-        if (error) *error = RTE_NSERROR_FROM_RTE_ERROR(setError);
-        return NO;
-    }
-    return YES;
+    return [self.rte setConfigs:config error:error];
 }
 
 - (NSDictionary *)getRteConfig:(NSError **)error {
-    CHECK_RTE_INSTANCE_NIL(error);
-    
-    AgoraRteConfig *config = [[AgoraRteConfig alloc] init];
-    AgoraRteError *rteError = [[AgoraRteError alloc] init];
-    
-    BOOL success = [self.rteInstance getConfigs:config error:rteError];
-    if (!success || rteError.code != AgoraRteOk) {
-        if (error) *error = RTE_NSERROR_FROM_RTE_ERROR(rteError);
+    if (!self.rteConfig) {
+        if (error) *error = RTE_NSERROR(-1, @"RTE config not initialized");
         return nil;
     }
-    
-    AgoraRteError *getError = [[AgoraRteError alloc] init];
-    return @{
-        @"appId": [config appId:getError] ?: @"",
-        @"logFolder": [config logFolder:getError] ?: @"",
-        @"logFileSize": @([config logFileSize:getError]),
-        @"areaCode": @([config areaCode:getError]),
-        @"cloudProxy": [config cloudProxy:getError] ?: @"",
-        @"jsonParameter": [config jsonParameter:getError] ?: @""
-    };
+    return [self.rte getConfigs:error];
 }
 - (NSString *)appId:(NSError **)error {
-    CHECK_RTE_INSTANCE_NIL(error);
-    
-    AgoraRteConfig *config = [[AgoraRteConfig alloc] init];
-    AgoraRteError *rteError = [[AgoraRteError alloc] init];
-    
-    BOOL success = [self.rteInstance getConfigs:config error:rteError];
-    if (!success || rteError.code != AgoraRteOk) {
-        if (error) *error = RTE_NSERROR_FROM_RTE_ERROR(rteError);
+    if (!self.rteConfig) {
+        if (error) *error = RTE_NSERROR(-1, @"RTE config not initialized");
         return nil;
     }
-    
-    AgoraRteError *getError = [[AgoraRteError alloc] init];
-    NSString *appId = [config appId:getError];
-    
-    if (getError.code != AgoraRteOk) {
-        if (error) *error = RTE_NSERROR_FROM_RTE_ERROR(getError);
-        return nil;
-    }
-    
-    return appId ?: @"";
+    return [self.rteConfig appId:error];
 }
 
 - (NSString *)logFolder:(NSError **)error {
-    CHECK_RTE_INSTANCE_NIL(error);
-    
-    AgoraRteConfig *config = [[AgoraRteConfig alloc] init];
-    AgoraRteError *rteError = [[AgoraRteError alloc] init];
-    
-    BOOL success = [self.rteInstance getConfigs:config error:rteError];
-    if (!success || rteError.code != AgoraRteOk) {
-        if (error) *error = RTE_NSERROR_FROM_RTE_ERROR(rteError);
+    if (!self.rteConfig) {
+        if (error) *error = RTE_NSERROR(-1, @"RTE config not initialized");
         return nil;
     }
-    
-    AgoraRteError *getError = [[AgoraRteError alloc] init];
-    NSString *logFolder = [config logFolder:getError];
-    
-    if (getError.code != AgoraRteOk) {
-        if (error) *error = RTE_NSERROR_FROM_RTE_ERROR(getError);
-        return nil;
-    }
-    
-    return logFolder ?: @"";
+    return [self.rteConfig logFolder:error];
 }
 
 - (NSNumber *)logFileSize:(NSError **)error {
-    CHECK_RTE_INSTANCE_NIL(error);
-    
-    AgoraRteConfig *config = [[AgoraRteConfig alloc] init];
-    AgoraRteError *rteError = [[AgoraRteError alloc] init];
-    
-    BOOL success = [self.rteInstance getConfigs:config error:rteError];
-    if (!success || rteError.code != AgoraRteOk) {
-        if (error) *error = RTE_NSERROR_FROM_RTE_ERROR(rteError);
+    if (!self.rteConfig) {
+        if (error) *error = RTE_NSERROR(-1, @"RTE config not initialized");
         return nil;
     }
-    
-    AgoraRteError *getError = [[AgoraRteError alloc] init];
-    size_t logFileSize = [config logFileSize:getError];
-    
-    if (getError.code != AgoraRteOk) {
-        if (error) *error = RTE_NSERROR_FROM_RTE_ERROR(getError);
-        return nil;
-    }
-    
-    return @(logFileSize);
+    return [self.rteConfig logFileSize:error];
 }
 
 - (NSNumber *)areaCode:(NSError **)error {
-    CHECK_RTE_INSTANCE_NIL(error);
-    
-    AgoraRteConfig *config = [[AgoraRteConfig alloc] init];
-    AgoraRteError *rteError = [[AgoraRteError alloc] init];
-    
-    BOOL success = [self.rteInstance getConfigs:config error:rteError];
-    if (!success || rteError.code != AgoraRteOk) {
-        if (error) *error = RTE_NSERROR_FROM_RTE_ERROR(rteError);
+    if (!self.rteConfig) {
+        if (error) *error = RTE_NSERROR(-1, @"RTE config not initialized");
         return nil;
     }
-    
-    AgoraRteError *getError = [[AgoraRteError alloc] init];
-    int32_t areaCode = [config areaCode:getError];
-    
-    if (getError.code != AgoraRteOk) {
-        if (error) *error = RTE_NSERROR_FROM_RTE_ERROR(getError);
-        return nil;
-    }
-    
-    return @(areaCode);
+    return [self.rteConfig areaCode:error];
 }
 
 - (NSString *)cloudProxy:(NSError **)error {
-    CHECK_RTE_INSTANCE_NIL(error);
-    
-    AgoraRteConfig *config = [[AgoraRteConfig alloc] init];
-    AgoraRteError *rteError = [[AgoraRteError alloc] init];
-    
-    BOOL success = [self.rteInstance getConfigs:config error:rteError];
-    if (!success || rteError.code != AgoraRteOk) {
-        if (error) *error = RTE_NSERROR_FROM_RTE_ERROR(rteError);
+    if (!self.rteConfig) {
+        if (error) *error = RTE_NSERROR(-1, @"RTE config not initialized");
         return nil;
     }
-    
-    AgoraRteError *getError = [[AgoraRteError alloc] init];
-    NSString *cloudProxy = [config cloudProxy:getError];
-    
-    if (getError.code != AgoraRteOk) {
-        if (error) *error = RTE_NSERROR_FROM_RTE_ERROR(getError);
-        return nil;
-    }
-    
-    return cloudProxy ?: @"";
+    return [self.rteConfig cloudProxy:error];
 }
 
 - (NSString *)jsonParameter:(NSError **)error {
-    CHECK_RTE_INSTANCE_NIL(error);
-    
-    AgoraRteConfig *config = [[AgoraRteConfig alloc] init];
-    AgoraRteError *rteError = [[AgoraRteError alloc] init];
-    
-    BOOL success = [self.rteInstance getConfigs:config error:rteError];
-    if (!success || rteError.code != AgoraRteOk) {
-        if (error) *error = RTE_NSERROR_FROM_RTE_ERROR(rteError);
+    if (!self.rteConfig) {
+        if (error) *error = RTE_NSERROR(-1, @"RTE config not initialized");
         return nil;
     }
-    
-    AgoraRteError *getError = [[AgoraRteError alloc] init];
-    NSString *jsonParameter = [config jsonParameter:getError];
-    
-    if (getError.code != AgoraRteOk) {
-        if (error) *error = RTE_NSERROR_FROM_RTE_ERROR(getError);
-        return nil;
-    }
-    
-    return jsonParameter ?: @"";
+    return [self.rteConfig jsonParameter:error];
 }
 
 // RTE Config Setters
 - (BOOL)setAppId:(NSString *)appId error:(NSError **)error {
-    CHECK_RTE_INSTANCE(error);
-    
-    // 先获取当前配置，避免覆盖其他属性
-    AgoraRteConfig *config = [[AgoraRteConfig alloc] init];
-    AgoraRteError *rteError = [[AgoraRteError alloc] init];
-    BOOL success = [self.rteInstance getConfigs:config error:rteError];
-    if (!success || rteError.code != AgoraRteOk) {
-        if (error) *error = RTE_NSERROR_FROM_RTE_ERROR(rteError);
+    if (!self.rteConfig) {
+        if (error) *error = RTE_NSERROR(-1, @"RTE config not initialized");
         return NO;
     }
-    
-    // 只修改需要修改的属性
-    [config setAppId:appId error:rteError];
-    if (rteError.code != AgoraRteOk) {
-        if (error) *error = RTE_NSERROR_FROM_RTE_ERROR(rteError);
-        return NO;
-    }
-    
-    // 设置修改后的配置
-    // AgoraRteError *setError = [[AgoraRteError alloc] init];
-    // success = [self.rteInstance setConfigs:config error:setError];
-    // if (!success || setError.code != AgoraRteOk) {
-    //     if (error) *error = RTE_NSERROR_FROM_RTE_ERROR(setError);
-    //     return NO;
-    // }
-    return YES;
+    return [self.rteConfig setAppId:appId error:error];
 }
 
 - (BOOL)setLogFolder:(NSString *)logFolder error:(NSError **)error {
-    CHECK_RTE_INSTANCE(error);
-    
-    AgoraRteConfig *config = [[AgoraRteConfig alloc] init];
-    AgoraRteError *rteError = [[AgoraRteError alloc] init];
-    BOOL success = [self.rteInstance getConfigs:config error:rteError];
-    if (!success || rteError.code != AgoraRteOk) {
-        if (error) *error = RTE_NSERROR_FROM_RTE_ERROR(rteError);
+    if (!self.rteConfig) {
+        if (error) *error = RTE_NSERROR(-1, @"RTE config not initialized");
         return NO;
     }
-    
-    [config setLogFolder:logFolder error:rteError];
-    if (rteError.code != AgoraRteOk) {
-        if (error) *error = RTE_NSERROR_FROM_RTE_ERROR(rteError);
-        return NO;
-    }
-    
-    // AgoraRteError *setError = [[AgoraRteError alloc] init];
-    // success = [self.rteInstance setConfigs:config error:setError];
-    // if (!success || setError.code != AgoraRteOk) {
-    //     if (error) *error = RTE_NSERROR_FROM_RTE_ERROR(setError);
-    //     return NO;
-    // }
-    return YES;
+    return [self.rteConfig setLogFolder:logFolder error:error];
 }
 
 - (BOOL)setLogFileSize:(NSNumber *)logFileSize error:(NSError **)error {
-    CHECK_RTE_INSTANCE(error);
-    
-    AgoraRteConfig *config = [[AgoraRteConfig alloc] init];
-    AgoraRteError *rteError = [[AgoraRteError alloc] init];
-    BOOL success = [self.rteInstance getConfigs:config error:rteError];
-    if (!success || rteError.code != AgoraRteOk) {
-        if (error) *error = RTE_NSERROR_FROM_RTE_ERROR(rteError);
+    if (!self.rteConfig) {
+        if (error) *error = RTE_NSERROR(-1, @"RTE config not initialized");
         return NO;
     }
-    
-    [config setLogFileSize:[logFileSize unsignedLongValue] error:rteError];
-    if (rteError.code != AgoraRteOk) {
-        if (error) *error = RTE_NSERROR_FROM_RTE_ERROR(rteError);
-        return NO;
-    }
-    
-    // AgoraRteError *setError = [[AgoraRteError alloc] init];
-    // success = [self.rteInstance setConfigs:config error:setError];
-    // if (!success || setError.code != AgoraRteOk) {
-    //     if (error) *error = RTE_NSERROR_FROM_RTE_ERROR(setError);
-    //     return NO;
-    // }
-    return YES;
+    return [self.rteConfig setLogFileSize:logFileSize error:error];
 }
 
 - (BOOL)setAreaCode:(NSNumber *)areaCode error:(NSError **)error {
-    CHECK_RTE_INSTANCE(error);
-    
-    AgoraRteConfig *config = [[AgoraRteConfig alloc] init];
-    AgoraRteError *rteError = [[AgoraRteError alloc] init];
-    BOOL success = [self.rteInstance getConfigs:config error:rteError];
-    if (!success || rteError.code != AgoraRteOk) {
-        if (error) *error = RTE_NSERROR_FROM_RTE_ERROR(rteError);
+    if (!self.rteConfig) {
+        if (error) *error = RTE_NSERROR(-1, @"RTE config not initialized");
         return NO;
     }
-    
-    [config setAreaCode:[areaCode intValue] error:rteError];
-    if (rteError.code != AgoraRteOk) {
-        if (error) *error = RTE_NSERROR_FROM_RTE_ERROR(rteError);
-        return NO;
-    }
-    
-    // AgoraRteError *setError = [[AgoraRteError alloc] init];
-    // success = [self.rteInstance setConfigs:config error:setError];
-    // if (!success || setError.code != AgoraRteOk) {
-    //     if (error) *error = RTE_NSERROR_FROM_RTE_ERROR(setError);
-    //     return NO;
-    // }
-    return YES;
+    return [self.rteConfig setAreaCode:areaCode error:error];
 }
 
 - (BOOL)setCloudProxy:(NSString *)cloudProxy error:(NSError **)error {
-    CHECK_RTE_INSTANCE(error);
-    
-    AgoraRteConfig *config = [[AgoraRteConfig alloc] init];
-    AgoraRteError *rteError = [[AgoraRteError alloc] init];
-    BOOL success = [self.rteInstance getConfigs:config error:rteError];
-    if (!success || rteError.code != AgoraRteOk) {
-        if (error) *error = RTE_NSERROR_FROM_RTE_ERROR(rteError);
+    if (!self.rteConfig) {
+        if (error) *error = RTE_NSERROR(-1, @"RTE config not initialized");
         return NO;
     }
-    
-    [config setCloudProxy:cloudProxy error:rteError];
-    if (rteError.code != AgoraRteOk) {
-        if (error) *error = RTE_NSERROR_FROM_RTE_ERROR(rteError);
-        return NO;
-    }
-    
-    // AgoraRteError *setError = [[AgoraRteError alloc] init];
-    // success = [self.rteInstance setConfigs:config error:setError];
-    // if (!success || setError.code != AgoraRteOk) {
-    //     if (error) *error = RTE_NSERROR_FROM_RTE_ERROR(setError);
-    //     return NO;
-    // }
-    return YES;
+    return [self.rteConfig setCloudProxy:cloudProxy error:error];
 }
 
 - (BOOL)setJsonParameter:(NSString *)jsonParameter error:(NSError **)error {
-    CHECK_RTE_INSTANCE(error);
-    
-    AgoraRteConfig *config = [[AgoraRteConfig alloc] init];
-    AgoraRteError *rteError = [[AgoraRteError alloc] init];
-    BOOL success = [self.rteInstance getConfigs:config error:rteError];
-    if (!success || rteError.code != AgoraRteOk) {
-        if (error) *error = RTE_NSERROR_FROM_RTE_ERROR(rteError);
+    if (!self.rteConfig) {
+        if (error) *error = RTE_NSERROR(-1, @"RTE config not initialized");
         return NO;
     }
-    
-    [config setJsonParameter:jsonParameter error:rteError];
-    if (rteError.code != AgoraRteOk) {
-        if (error) *error = RTE_NSERROR_FROM_RTE_ERROR(rteError);
-        return NO;
-    }
-    
-    // AgoraRteError *setError = [[AgoraRteError alloc] init];
-    // success = [self.rteInstance setConfigs:config error:setError];
-    // if (!success || setError.code != AgoraRteOk) {
-    //     if (error) *error = RTE_NSERROR_FROM_RTE_ERROR(setError);
-    //     return NO;
-    // }
-    return YES;
+    return [self.rteConfig setJsonParameter:jsonParameter error:error];
 }
 
 #pragma mark - RTE Observer
 
 - (BOOL)registerRteObserver:(NSError **)error {
-    CHECK_RTE_INSTANCE(error);
-    
-    if (self.rteObserver) return YES;
-    
-    AgoraRTEObserverBridge *bridge = [[AgoraRTEObserverBridge alloc] init];
-    bridge.controller = self;
-    self.rteObserver = bridge;
-    
-    AgoraRteError *rteError = [[AgoraRteError alloc] init];
-    BOOL success = [self.rteInstance registerObserver:(id)bridge error:rteError];
-    
-    if (!success || rteError.code != AgoraRteOk) {
-        self.rteObserver = nil;
-        if (error) *error = RTE_NSERROR_FROM_RTE_ERROR(rteError);
-        return NO;
-    }
+    // RTE Observer functionality is not yet implemented in the separated classes
+    // This method is kept for backward compatibility but does nothing
     return YES;
 }
 
 - (BOOL)unregisterRteObserver:(NSError **)error {
-    if (!self.rteInstance || !self.rteObserver) return YES;
-    
-    AgoraRteError *rteError = [[AgoraRteError alloc] init];
-    BOOL success = [self.rteInstance unregisterObserver:(id)self.rteObserver error:rteError];
-    
-    self.rteObserver = nil;
-    
-    if (!success || rteError.code != AgoraRteOk) {
-        if (error) *error = RTE_NSERROR_FROM_RTE_ERROR(rteError);
-        return NO;
-    }
+    // RTE Observer functionality is not yet implemented in the separated classes
+    // This method is kept for backward compatibility but does nothing
     return YES;
 }
 
@@ -666,1403 +211,549 @@ static inline NSString * _Nullable SafeGetRteErrorMessage(AgoraRteError * _Nulla
 #pragma mark - RTE Player Lifecycle
 
 + (BOOL)preloadWithUrl:(NSString *)url error:(NSError **)error {
-    AgoraRteError *rteError = [[AgoraRteError alloc] init];
-    BOOL success = [AgoraRtePlayer preloadWithUrl:url error:rteError];
-    
-    if (!success || rteError.code != AgoraRteOk) {
-        if (error) *error = RTE_NSERROR_FROM_RTE_ERROR(rteError);
-        return NO;
-    }
-    return YES;
+    return [AgoraRTEPlayer preloadWithUrl:url error:error];
 }
 
 - (NSString *)createPlayer:(NSDictionary *)config error:(NSError **)error {
-    CHECK_RTE_INSTANCE_NIL(error);
-    
-    AgoraRtePlayerInitialConfig *initialConfig = [[AgoraRtePlayerInitialConfig alloc] init];
-    AgoraRtePlayer *player = [[AgoraRtePlayer alloc] initWithRte:self.rteInstance initialConfig:initialConfig];
-    
-    if (!player) {
-        if (error) *error = RTE_NSERROR(-1, @"Failed to create player");
+    if (!self.rtePlayer) {
+        if (error) *error = RTE_NSERROR(-1, @"RTE player not initialized");
         return nil;
     }
-    
-    // Apply config if provided
-    if (config && config.count > 0) {
-        NSString *playerId = [[NSUUID UUID] UUIDString];
-        self.players[playerId] = player;
-        
-        NSError *configError = nil;
-        if (![self playerSetConfig:playerId config:config error:&configError]) {
-            [self.players removeObjectForKey:playerId];
-            if (error) *error = configError;
-            return nil;
-        }
-        return playerId;
-    }
-    
-    NSString *playerId = [[NSUUID UUID] UUIDString];
-    self.players[playerId] = player;
-    return playerId;
+    return [self.rtePlayer createPlayer:config error:error];
 }
 
 - (BOOL)destroyPlayer:(NSString *)playerId error:(NSError **)error {
-    AgoraRtePlayer *player = self.players[playerId];
-    if (!player) {
-        if (error) *error = RTE_NSERROR(-1, @"Player not found");
+    if (!self.rtePlayer) {
+        if (error) *error = RTE_NSERROR(-1, @"RTE player not initialized");
         return NO;
     }
-    
-    // Unregister observer
-    [self playerUnregisterObserver:playerId error:nil];
-    
-    [self.players removeObjectForKey:playerId];
-    return YES;
+    return [self.rtePlayer destroyPlayer:playerId error:error];
 }
 
 #pragma mark - RTE Player Playback Control
 
 - (BOOL)playerOpenUrl:(NSString *)playerId url:(NSString *)url startTime:(uint64_t)startTime completion:(void (^)(NSError *error))completion error:(NSError **)error {
-    GET_PLAYER_OR_RETURN(playerId, error, NO);
-    
-    [player openWithUrl:url startTime:startTime cb:^(AgoraRteError *err) {
-        dispatch_async(dispatch_get_main_queue(), ^{
-            NSError *nsError = nil;
-            if (err && err.code != AgoraRteOk) {
-                nsError = RTE_NSERROR_FROM_RTE_ERROR(err);
-            }
-            if (completion) completion(nsError);
-        });
-    }];
-    
-    return YES;
+    if (!self.rtePlayer) {
+        if (error) *error = RTE_NSERROR(-1, @"RTE player not initialized");
+        return NO;
+    }
+    return [self.rtePlayer openUrl:playerId url:url startTime:startTime completion:completion error:error];
 }
 
 - (BOOL)playerOpenWithCustomSourceProvider:(NSString *)playerId provider:(void *)provider startTime:(uint64_t)startTime completion:(void (^)(NSError *error))completion error:(NSError **)error {
-    GET_PLAYER_OR_RETURN(playerId, error, NO);
-    
-    AgoraRtePlayerCustomSourceProvider *sourceProvider = (__bridge AgoraRtePlayerCustomSourceProvider *)provider;
-    [player openWithCustomSourceProvider:sourceProvider startTime:startTime cb:^(AgoraRteError *err) {
-        dispatch_async(dispatch_get_main_queue(), ^{
-            NSError *nsError = nil;
-            if (err && err.code != AgoraRteOk) {
-                nsError = RTE_NSERROR_FROM_RTE_ERROR(err);
-            }
-            if (completion) completion(nsError);
-        });
-    }];
-    
-    return YES;
+    if (!self.rtePlayer) {
+        if (error) *error = RTE_NSERROR(-1, @"RTE player not initialized");
+        return NO;
+    }
+    return [self.rtePlayer openWithCustomSourceProvider:playerId provider:provider startTime:startTime completion:completion error:error];
 }
 
 - (BOOL)playerOpenWithStream:(NSString *)playerId stream:(void *)stream completion:(void (^)(NSError *error))completion error:(NSError **)error {
-    GET_PLAYER_OR_RETURN(playerId, error, NO);
-    
-    AgoraRteStream *rteStream = (__bridge AgoraRteStream *)stream;
-    [player openWithStream:rteStream cb:^(AgoraRteError *err) {
-        dispatch_async(dispatch_get_main_queue(), ^{
-            NSError *nsError = nil;
-            if (err && err.code != AgoraRteOk) {
-                nsError = RTE_NSERROR_FROM_RTE_ERROR(err);;
-            }
-            if (completion) completion(nsError);
-        });
-    }];
-    
-    return YES;
+    if (!self.rtePlayer) {
+        if (error) *error = RTE_NSERROR(-1, @"RTE player not initialized");
+        return NO;
+    }
+    return [self.rtePlayer openWithStream:playerId stream:stream completion:completion error:error];
 }
 
 - (BOOL)playerPlay:(NSString *)playerId error:(NSError **)error {
-    GET_PLAYER_OR_RETURN(playerId, error, NO);
-    
-    AgoraRteError *rteError = [[AgoraRteError alloc] init];
-    BOOL success = [player play:rteError];
-    
-    if (!success || rteError.code != AgoraRteOk) {
-        if (error) *error = RTE_NSERROR_FROM_RTE_ERROR(rteError);
+    if (!self.rtePlayer) {
+        if (error) *error = RTE_NSERROR(-1, @"RTE player not initialized");
         return NO;
     }
-    return YES;
+    return [self.rtePlayer play:playerId error:error];
 }
 
 - (BOOL)playerPause:(NSString *)playerId error:(NSError **)error {
-    GET_PLAYER_OR_RETURN(playerId, error, NO);
-    
-    AgoraRteError *rteError = [[AgoraRteError alloc] init];
-    BOOL success = [player pause:rteError];
-    
-    if (!success || rteError.code != AgoraRteOk) {
-        if (error) *error = RTE_NSERROR_FROM_RTE_ERROR(rteError);
+    if (!self.rtePlayer) {
+        if (error) *error = RTE_NSERROR(-1, @"RTE player not initialized");
         return NO;
     }
-    return YES;
+    return [self.rtePlayer pause:playerId error:error];
 }
 
 - (BOOL)playerStop:(NSString *)playerId error:(NSError **)error {
-    GET_PLAYER_OR_RETURN(playerId, error, NO);
-    
-    AgoraRteError *rteError = [[AgoraRteError alloc] init];
-    BOOL success = [player stop:rteError];
-    
-    if (!success || rteError.code != AgoraRteOk) {
-        if (error) *error = RTE_NSERROR_FROM_RTE_ERROR(rteError);
+    if (!self.rtePlayer) {
+        if (error) *error = RTE_NSERROR(-1, @"RTE player not initialized");
         return NO;
     }
-    return YES;
+    return [self.rtePlayer stop:playerId error:error];
 }
 
 - (BOOL)playerSeek:(NSString *)playerId position:(uint64_t)position error:(NSError **)error {
-    GET_PLAYER_OR_RETURN(playerId, error, NO);
-    
-    AgoraRteError *rteError = [[AgoraRteError alloc] init];
-    BOOL success = [player seek:position error:rteError];
-    
-    if (!success || rteError.code != AgoraRteOk) {
-        if (error) *error = RTE_NSERROR_FROM_RTE_ERROR(rteError);
+    if (!self.rtePlayer) {
+        if (error) *error = RTE_NSERROR(-1, @"RTE player not initialized");
         return NO;
     }
-    return YES;
+    return [self.rtePlayer seek:playerId position:position error:error];
 }
 
 - (BOOL)playerMuteAudio:(NSString *)playerId mute:(BOOL)mute error:(NSError **)error {
-    GET_PLAYER_OR_RETURN(playerId, error, NO);
-    
-    AgoraRteError *rteError = [[AgoraRteError alloc] init];
-    BOOL success = [player muteAudio:mute error:rteError];
-    
-    if (!success || rteError.code != AgoraRteOk) {
-        if (error) *error = RTE_NSERROR_FROM_RTE_ERROR(rteError);
+    if (!self.rtePlayer) {
+        if (error) *error = RTE_NSERROR(-1, @"RTE player not initialized");
         return NO;
     }
-    return YES;
+    return [self.rtePlayer muteAudio:playerId mute:mute error:error];
 }
 
 - (BOOL)playerMuteVideo:(NSString *)playerId mute:(BOOL)mute error:(NSError **)error {
-    GET_PLAYER_OR_RETURN(playerId, error, NO);
-    
-    AgoraRteError *rteError = [[AgoraRteError alloc] init];
-    BOOL success = [player muteVideo:mute error:rteError];
-    
-    if (!success || rteError.code != AgoraRteOk) {
-        if (error) *error = RTE_NSERROR_FROM_RTE_ERROR(rteError);
+    if (!self.rtePlayer) {
+        if (error) *error = RTE_NSERROR(-1, @"RTE player not initialized");
         return NO;
     }
-    return YES;
+    return [self.rtePlayer muteVideo:playerId mute:mute error:error];
 }
 
 - (BOOL)playerSwitch:(NSString *)playerId url:(NSString *)url syncPts:(BOOL)syncPts completion:(void (^)(NSError *error))completion error:(NSError **)error {
-    GET_PLAYER_OR_RETURN(playerId, error, NO);
-    
-    [player switchWithUrl:url syncPts:syncPts cb:^(AgoraRteError *err) {
-        dispatch_async(dispatch_get_main_queue(), ^{
-            NSError *nsError = nil;
-            if (err && err.code != AgoraRteOk) {
-                nsError = RTE_NSERROR_FROM_RTE_ERROR(err);;
-            }
-            if (completion) completion(nsError);
-        });
-    }];
-    
-    return YES;
+    if (!self.rtePlayer) {
+        if (error) *error = RTE_NSERROR(-1, @"RTE player not initialized");
+        return NO;
+    }
+    return [self.rtePlayer switchWithUrl:playerId url:url syncPts:syncPts completion:completion error:error];
 }
 
 - (BOOL)playerSetPlaybackSpeed:(NSString *)playerId speed:(int32_t)speed error:(NSError **)error {
-    GET_PLAYER_OR_RETURN(playerId, error, NO);
-    
-    // 先获取当前配置，避免覆盖其他属性
-    AgoraRtePlayerConfig *config = [[AgoraRtePlayerConfig alloc] init];
-    AgoraRteError *rteError = [[AgoraRteError alloc] init];
-    BOOL success = [player getConfigs:config error:rteError];
-    if (!success || rteError.code != AgoraRteOk) {
-        if (error) *error = RTE_NSERROR_FROM_RTE_ERROR(rteError);
+    if (!self.rtePlayer) {
+        if (error) *error = RTE_NSERROR(-1, @"RTE player not initialized");
         return NO;
     }
-    
-    // 只修改需要修改的属性
-    [config setPlaybackSpeed:speed error:rteError];
-    if (rteError.code != AgoraRteOk) {
-        if (error) *error = RTE_NSERROR_FROM_RTE_ERROR(rteError);
-        return NO;
-    }
-    
-    // 设置修改后的配置
-    // success = [player setConfigs:config error:rteError];
-    // if (!success || rteError.code != AgoraRteOk) {
-    //     if (error) *error = RTE_NSERROR_FROM_RTE_ERROR(rteError);
-    //     return NO;
-    // }
-    return YES;
+    return [self.rtePlayer setPlaybackSpeed:playerId speed:speed error:error];
 }
 
 - (int32_t)playerGetPlaybackSpeed:(NSString *)playerId error:(NSError **)error {
-    GET_PLAYER_OR_RETURN(playerId, error, 0);
-    
-    AgoraRtePlayerConfig *config = [[AgoraRtePlayerConfig alloc] init];
-    AgoraRteError *rteError = [[AgoraRteError alloc] init];
-    BOOL success = [player getConfigs:config error:rteError];
-    if (!success || rteError.code != AgoraRteOk) {
-        if (error) *error = RTE_NSERROR_FROM_RTE_ERROR(rteError);
+    if (!self.rtePlayer) {
+        if (error) *error = RTE_NSERROR(-1, @"RTE player not initialized");
         return 0;
     }
-    return [config playbackSpeed:rteError];
+    return [self.rtePlayer getPlaybackSpeed:playerId error:error];
 }
 
 - (BOOL)playerSetPlayoutVolume:(NSString *)playerId volume:(int32_t)volume error:(NSError **)error {
-    GET_PLAYER_OR_RETURN(playerId, error, NO);
-    
-    // 先获取当前配置，避免覆盖其他属性
-    AgoraRtePlayerConfig *config = [[AgoraRtePlayerConfig alloc] init];
-    AgoraRteError *rteError = [[AgoraRteError alloc] init];
-    BOOL success = [player getConfigs:config error:rteError];
-    if (!success || rteError.code != AgoraRteOk) {
-        if (error) *error = RTE_NSERROR_FROM_RTE_ERROR(rteError);
+    if (!self.rtePlayer) {
+        if (error) *error = RTE_NSERROR(-1, @"RTE player not initialized");
         return NO;
     }
-    
-    // 只修改需要修改的属性
-    [config setPlayoutVolume:volume error:rteError];
-    if (rteError.code != AgoraRteOk) {
-        if (error) *error = RTE_NSERROR_FROM_RTE_ERROR(rteError);
-        return NO;
-    }
-    
-    // 设置修改后的配置
-    // success = [player setConfigs:config error:rteError];
-    // if (!success || rteError.code != AgoraRteOk) {
-    //     if (error) *error = RTE_NSERROR_FROM_RTE_ERROR(rteError);
-    //     return NO;
-    // }
-    return YES;
+    return [self.rtePlayer setPlayoutVolume:playerId volume:volume error:error];
 }
 
 - (int32_t)playerGetPlayoutVolume:(NSString *)playerId error:(NSError **)error {
-    GET_PLAYER_OR_RETURN(playerId, error, 0);
-    
-    AgoraRtePlayerConfig *config = [[AgoraRtePlayerConfig alloc] init];
-    AgoraRteError *rteError = [[AgoraRteError alloc] init];
-    BOOL success = [player getConfigs:config error:rteError];
-    if (!success || rteError.code != AgoraRteOk) {
-        if (error) *error = RTE_NSERROR_FROM_RTE_ERROR(rteError);
+    if (!self.rtePlayer) {
+        if (error) *error = RTE_NSERROR(-1, @"RTE player not initialized");
         return 0;
     }
-    return [config playoutVolume:rteError];
+    return [self.rtePlayer getPlayoutVolume:playerId error:error];
 }
 
 - (BOOL)playerSetLoopCount:(NSString *)playerId count:(int32_t)count error:(NSError **)error {
-    GET_PLAYER_OR_RETURN(playerId, error, NO);
-    
-    // 先获取当前配置，避免覆盖其他属性
-    AgoraRtePlayerConfig *config = [[AgoraRtePlayerConfig alloc] init];
-    AgoraRteError *rteError = [[AgoraRteError alloc] init];
-    BOOL success = [player getConfigs:config error:rteError];
-    if (!success || rteError.code != AgoraRteOk) {
-        if (error) *error = RTE_NSERROR_FROM_RTE_ERROR(rteError);
+    if (!self.rtePlayer) {
+        if (error) *error = RTE_NSERROR(-1, @"RTE player not initialized");
         return NO;
     }
-    
-    // 只修改需要修改的属性
-    [config setLoopCount:count error:rteError];
-    if (rteError.code != AgoraRteOk) {
-        if (error) *error = RTE_NSERROR_FROM_RTE_ERROR(rteError);
-        return NO;
-    }
-    
-    // 设置修改后的配置
-    // success = [player setConfigs:config error:rteError];
-    // if (!success || rteError.code != AgoraRteOk) {
-    //     if (error) *error = RTE_NSERROR_FROM_RTE_ERROR(rteError);
-    //     return NO;
-    // }
-    return YES;
+    return [self.rtePlayer setLoopCount:playerId count:count error:error];
 }
 
 - (int32_t)playerGetLoopCount:(NSString *)playerId error:(NSError **)error {
-    GET_PLAYER_OR_RETURN(playerId, error, 0);
-    
-    AgoraRtePlayerConfig *config = [[AgoraRtePlayerConfig alloc] init];
-    AgoraRteError *rteError = [[AgoraRteError alloc] init];
-    BOOL success = [player getConfigs:config error:rteError];
-    if (!success || rteError.code != AgoraRteOk) {
-        if (error) *error = RTE_NSERROR_FROM_RTE_ERROR(rteError);
+    if (!self.rtePlayer) {
+        if (error) *error = RTE_NSERROR(-1, @"RTE player not initialized");
         return 0;
     }
-    return [config loopCount:rteError];
+    return [self.rtePlayer getLoopCount:playerId error:error];
 }
 
 // RTE Player Config - Additional Setters/Getters
 - (BOOL)playerSetAutoPlay:(NSString *)playerId autoPlay:(BOOL)autoPlay error:(NSError **)error {
-    GET_PLAYER_OR_RETURN(playerId, error, NO);
-    
-    AgoraRtePlayerConfig *config = [[AgoraRtePlayerConfig alloc] init];
-    AgoraRteError *rteError = [[AgoraRteError alloc] init];
-    BOOL success = [player getConfigs:config error:rteError];
-    if (!success || rteError.code != AgoraRteOk) {
-        if (error) *error = RTE_NSERROR_FROM_RTE_ERROR(rteError);
+    if (!self.rtePlayer) {
+        if (error) *error = RTE_NSERROR(-1, @"RTE player not initialized");
         return NO;
     }
-    
-    [config setAutoPlay:autoPlay error:rteError];
-    if (rteError.code != AgoraRteOk) {
-        if (error) *error = RTE_NSERROR_FROM_RTE_ERROR(rteError);
-        return NO;
-    }
-    
-    // success = [player setConfigs:config error:rteError];
-    // if (!success || rteError.code != AgoraRteOk) {
-    //     if (error) *error = RTE_NSERROR_FROM_RTE_ERROR(rteError);
-    //     return NO;
-    // }
-    return YES;
+    return [self.rtePlayer setAutoPlay:playerId autoPlay:autoPlay error:error];
 }
 
 - (BOOL)playerGetAutoPlay:(NSString *)playerId error:(NSError **)error {
-    GET_PLAYER_OR_RETURN(playerId, error, NO);
-    
-    AgoraRtePlayerConfig *config = [[AgoraRtePlayerConfig alloc] init];
-    AgoraRteError *rteError = [[AgoraRteError alloc] init];
-    BOOL success = [player getConfigs:config error:rteError];
-    if (!success || rteError.code != AgoraRteOk) {
-        if (error) *error = RTE_NSERROR_FROM_RTE_ERROR(rteError);
+    if (!self.rtePlayer) {
+        if (error) *error = RTE_NSERROR(-1, @"RTE player not initialized");
         return NO;
     }
-    return [config autoPlay:rteError];
+    return [self.rtePlayer getAutoPlay:playerId error:error];
 }
 
 - (BOOL)playerSetPlayoutAudioTrackIdx:(NSString *)playerId idx:(int32_t)idx error:(NSError **)error {
-    GET_PLAYER_OR_RETURN(playerId, error, NO);
-    
-    AgoraRtePlayerConfig *config = [[AgoraRtePlayerConfig alloc] init];
-    AgoraRteError *rteError = [[AgoraRteError alloc] init];
-    BOOL success = [player getConfigs:config error:rteError];
-    if (!success || rteError.code != AgoraRteOk) {
-        if (error) *error = RTE_NSERROR_FROM_RTE_ERROR(rteError);
+    if (!self.rtePlayer) {
+        if (error) *error = RTE_NSERROR(-1, @"RTE player not initialized");
         return NO;
     }
-    
-    [config setPlayoutAudioTrackIdx:idx error:rteError];
-    if (rteError.code != AgoraRteOk) {
-        if (error) *error = RTE_NSERROR_FROM_RTE_ERROR(rteError);
-        return NO;
-    }
-    
-    // success = [player setConfigs:config error:rteError];
-    // if (!success || rteError.code != AgoraRteOk) {
-    //     if (error) *error = RTE_NSERROR_FROM_RTE_ERROR(rteError);
-    //     return NO;
-    // }
-    return YES;
+    return [self.rtePlayer setPlayoutAudioTrackIdx:playerId idx:idx error:error];
 }
 
 - (int32_t)playerGetPlayoutAudioTrackIdx:(NSString *)playerId error:(NSError **)error {
-    GET_PLAYER_OR_RETURN(playerId, error, 0);
-    
-    AgoraRtePlayerConfig *config = [[AgoraRtePlayerConfig alloc] init];
-    AgoraRteError *rteError = [[AgoraRteError alloc] init];
-    BOOL success = [player getConfigs:config error:rteError];
-    if (!success || rteError.code != AgoraRteOk) {
-        if (error) *error = RTE_NSERROR_FROM_RTE_ERROR(rteError);
+    if (!self.rtePlayer) {
+        if (error) *error = RTE_NSERROR(-1, @"RTE player not initialized");
         return 0;
     }
-    return [config playoutAudioTrackIdx:rteError];
+    return [self.rtePlayer getPlayoutAudioTrackIdx:playerId error:error];
 }
 
 - (BOOL)playerSetPublishAudioTrackIdx:(NSString *)playerId idx:(int32_t)idx error:(NSError **)error {
-    GET_PLAYER_OR_RETURN(playerId, error, NO);
-    
-    AgoraRtePlayerConfig *config = [[AgoraRtePlayerConfig alloc] init];
-    AgoraRteError *rteError = [[AgoraRteError alloc] init];
-    BOOL success = [player getConfigs:config error:rteError];
-    if (!success || rteError.code != AgoraRteOk) {
-        if (error) *error = RTE_NSERROR_FROM_RTE_ERROR(rteError);
+    if (!self.rtePlayer) {
+        if (error) *error = RTE_NSERROR(-1, @"RTE player not initialized");
         return NO;
     }
-    
-    [config setPublishAudioTrackIdx:idx error:rteError];
-    if (rteError.code != AgoraRteOk) {
-        if (error) *error = RTE_NSERROR_FROM_RTE_ERROR(rteError);
-        return NO;
-    }
-    
-    // success = [player setConfigs:config error:rteError];
-    // if (!success || rteError.code != AgoraRteOk) {
-    //     if (error) *error = RTE_NSERROR_FROM_RTE_ERROR(rteError);
-    //     return NO;
-    // }
-    return YES;
+    return [self.rtePlayer setPublishAudioTrackIdx:playerId idx:idx error:error];
 }
 
 - (int32_t)playerGetPublishAudioTrackIdx:(NSString *)playerId error:(NSError **)error {
-    GET_PLAYER_OR_RETURN(playerId, error, 0);
-    
-    AgoraRtePlayerConfig *config = [[AgoraRtePlayerConfig alloc] init];
-    AgoraRteError *rteError = [[AgoraRteError alloc] init];
-    BOOL success = [player getConfigs:config error:rteError];
-    if (!success || rteError.code != AgoraRteOk) {
-        if (error) *error = RTE_NSERROR_FROM_RTE_ERROR(rteError);
+    if (!self.rtePlayer) {
+        if (error) *error = RTE_NSERROR(-1, @"RTE player not initialized");
         return 0;
     }
-    return [config publishAudioTrackIdx:rteError];
+    return [self.rtePlayer getPublishAudioTrackIdx:playerId error:error];
 }
 
 - (BOOL)playerSetAudioTrackIdx:(NSString *)playerId idx:(int32_t)idx error:(NSError **)error {
-    GET_PLAYER_OR_RETURN(playerId, error, NO);
-    
-    AgoraRtePlayerConfig *config = [[AgoraRtePlayerConfig alloc] init];
-    AgoraRteError *rteError = [[AgoraRteError alloc] init];
-    BOOL success = [player getConfigs:config error:rteError];
-    if (!success || rteError.code != AgoraRteOk) {
-        if (error) *error = RTE_NSERROR_FROM_RTE_ERROR(rteError);
+    if (!self.rtePlayer) {
+        if (error) *error = RTE_NSERROR(-1, @"RTE player not initialized");
         return NO;
     }
-    
-    [config setAudioTrackIdx:idx error:rteError];
-    if (rteError.code != AgoraRteOk) {
-        if (error) *error = RTE_NSERROR_FROM_RTE_ERROR(rteError);
-        return NO;
-    }
-    
-    // success = [player setConfigs:config error:rteError];
-    // if (!success || rteError.code != AgoraRteOk) {
-    //     if (error) *error = RTE_NSERROR_FROM_RTE_ERROR(rteError);
-    //     return NO;
-    // }
-    return YES;
+    return [self.rtePlayer setAudioTrackIdx:playerId idx:idx error:error];
 }
 
 - (int32_t)playerGetAudioTrackIdx:(NSString *)playerId error:(NSError **)error {
-    GET_PLAYER_OR_RETURN(playerId, error, 0);
-    
-    AgoraRtePlayerConfig *config = [[AgoraRtePlayerConfig alloc] init];
-    AgoraRteError *rteError = [[AgoraRteError alloc] init];
-    BOOL success = [player getConfigs:config error:rteError];
-    if (!success || rteError.code != AgoraRteOk) {
-        if (error) *error = RTE_NSERROR_FROM_RTE_ERROR(rteError);
+    if (!self.rtePlayer) {
+        if (error) *error = RTE_NSERROR(-1, @"RTE player not initialized");
         return 0;
     }
-    return [config audioTrackIdx:rteError];
+    return [self.rtePlayer getAudioTrackIdx:playerId error:error];
 }
 
 - (BOOL)playerSetSubtitleTrackIdx:(NSString *)playerId idx:(int32_t)idx error:(NSError **)error {
-    GET_PLAYER_OR_RETURN(playerId, error, NO);
-    
-    AgoraRtePlayerConfig *config = [[AgoraRtePlayerConfig alloc] init];
-    AgoraRteError *rteError = [[AgoraRteError alloc] init];
-    BOOL success = [player getConfigs:config error:rteError];
-    if (!success || rteError.code != AgoraRteOk) {
-        if (error) *error = RTE_NSERROR_FROM_RTE_ERROR(rteError);
+    if (!self.rtePlayer) {
+        if (error) *error = RTE_NSERROR(-1, @"RTE player not initialized");
         return NO;
     }
-    
-    [config setSubtitleTrackIdx:idx error:rteError];
-    if (rteError.code != AgoraRteOk) {
-        if (error) *error = RTE_NSERROR_FROM_RTE_ERROR(rteError);
-        return NO;
-    }
-    
-    // success = [player setConfigs:config error:rteError];
-    // if (!success || rteError.code != AgoraRteOk) {
-    //     if (error) *error = RTE_NSERROR_FROM_RTE_ERROR(rteError);
-    //     return NO;
-    // }
-    return YES;
+    return [self.rtePlayer setSubtitleTrackIdx:playerId idx:idx error:error];
 }
 
 - (int32_t)playerGetSubtitleTrackIdx:(NSString *)playerId error:(NSError **)error {
-    GET_PLAYER_OR_RETURN(playerId, error, 0);
-    
-    AgoraRtePlayerConfig *config = [[AgoraRtePlayerConfig alloc] init];
-    AgoraRteError *rteError = [[AgoraRteError alloc] init];
-    BOOL success = [player getConfigs:config error:rteError];
-    if (!success || rteError.code != AgoraRteOk) {
-        if (error) *error = RTE_NSERROR_FROM_RTE_ERROR(rteError);
+    if (!self.rtePlayer) {
+        if (error) *error = RTE_NSERROR(-1, @"RTE player not initialized");
         return 0;
     }
-    return [config subtitleTrackIdx:rteError];
+    return [self.rtePlayer getSubtitleTrackIdx:playerId error:error];
 }
 
 - (BOOL)playerSetExternalSubtitleTrackIdx:(NSString *)playerId idx:(int32_t)idx error:(NSError **)error {
-    GET_PLAYER_OR_RETURN(playerId, error, NO);
-    
-    AgoraRtePlayerConfig *config = [[AgoraRtePlayerConfig alloc] init];
-    AgoraRteError *rteError = [[AgoraRteError alloc] init];
-    BOOL success = [player getConfigs:config error:rteError];
-    if (!success || rteError.code != AgoraRteOk) {
-        if (error) *error = RTE_NSERROR_FROM_RTE_ERROR(rteError);
+    if (!self.rtePlayer) {
+        if (error) *error = RTE_NSERROR(-1, @"RTE player not initialized");
         return NO;
     }
-    
-    [config setExternalSubtitleTrackIdx:idx error:rteError];
-    if (rteError.code != AgoraRteOk) {
-        if (error) *error = RTE_NSERROR_FROM_RTE_ERROR(rteError);
-        return NO;
-    }
-    
-    // success = [player setConfigs:config error:rteError];
-    // if (!success || rteError.code != AgoraRteOk) {
-    //     if (error) *error = RTE_NSERROR_FROM_RTE_ERROR(rteError);
-    //     return NO;
-    // }
-    return YES;
+    return [self.rtePlayer setExternalSubtitleTrackIdx:playerId idx:idx error:error];
 }
 
 - (int32_t)playerGetExternalSubtitleTrackIdx:(NSString *)playerId error:(NSError **)error {
-    GET_PLAYER_OR_RETURN(playerId, error, 0);
-    
-    AgoraRtePlayerConfig *config = [[AgoraRtePlayerConfig alloc] init];
-    AgoraRteError *rteError = [[AgoraRteError alloc] init];
-    BOOL success = [player getConfigs:config error:rteError];
-    if (!success || rteError.code != AgoraRteOk) {
-        if (error) *error = RTE_NSERROR_FROM_RTE_ERROR(rteError);
+    if (!self.rtePlayer) {
+        if (error) *error = RTE_NSERROR(-1, @"RTE player not initialized");
         return 0;
     }
-    return [config externalSubtitleTrackIdx:rteError];
+    return [self.rtePlayer getExternalSubtitleTrackIdx:playerId error:error];
 }
 
 - (BOOL)playerSetAudioPitch:(NSString *)playerId pitch:(int32_t)pitch error:(NSError **)error {
-    GET_PLAYER_OR_RETURN(playerId, error, NO);
-    
-    AgoraRtePlayerConfig *config = [[AgoraRtePlayerConfig alloc] init];
-    AgoraRteError *rteError = [[AgoraRteError alloc] init];
-    BOOL success = [player getConfigs:config error:rteError];
-    if (!success || rteError.code != AgoraRteOk) {
-        if (error) *error = RTE_NSERROR_FROM_RTE_ERROR(rteError);
+    if (!self.rtePlayer) {
+        if (error) *error = RTE_NSERROR(-1, @"RTE player not initialized");
         return NO;
     }
-    
-    [config setAudioPitch:pitch error:rteError];
-    if (rteError.code != AgoraRteOk) {
-        if (error) *error = RTE_NSERROR_FROM_RTE_ERROR(rteError);
-        return NO;
-    }
-    
-    success = [player setConfigs:config error:rteError];
-    if (!success || rteError.code != AgoraRteOk) {
-        if (error) *error = RTE_NSERROR_FROM_RTE_ERROR(rteError);
-        return NO;
-    }
-    return YES;
+    return [self.rtePlayer setAudioPitch:playerId pitch:pitch error:error];
 }
 
 - (int32_t)playerGetAudioPitch:(NSString *)playerId error:(NSError **)error {
-    GET_PLAYER_OR_RETURN(playerId, error, 0);
-    
-    AgoraRtePlayerConfig *config = [[AgoraRtePlayerConfig alloc] init];
-    AgoraRteError *rteError = [[AgoraRteError alloc] init];
-    BOOL success = [player getConfigs:config error:rteError];
-    if (!success || rteError.code != AgoraRteOk) {
-        if (error) *error = RTE_NSERROR_FROM_RTE_ERROR(rteError);
+    if (!self.rtePlayer) {
+        if (error) *error = RTE_NSERROR(-1, @"RTE player not initialized");
         return 0;
     }
-    return [config audioPitch:rteError];
+    return [self.rtePlayer getAudioPitch:playerId error:error];
 }
 
 - (BOOL)playerSetAudioPlaybackDelay:(NSString *)playerId delay:(int32_t)delay error:(NSError **)error {
-    GET_PLAYER_OR_RETURN(playerId, error, NO);
-    
-    AgoraRtePlayerConfig *config = [[AgoraRtePlayerConfig alloc] init];
-    AgoraRteError *rteError = [[AgoraRteError alloc] init];
-    BOOL success = [player getConfigs:config error:rteError];
-    if (!success || rteError.code != AgoraRteOk) {
-        if (error) *error = RTE_NSERROR_FROM_RTE_ERROR(rteError);
+    if (!self.rtePlayer) {
+        if (error) *error = RTE_NSERROR(-1, @"RTE player not initialized");
         return NO;
     }
-    
-    [config setAudioPlaybackDelay:delay error:rteError];
-    if (rteError.code != AgoraRteOk) {
-        if (error) *error = RTE_NSERROR_FROM_RTE_ERROR(rteError);
-        return NO;
-    }
-    
-    // success = [player setConfigs:config error:rteError];
-    // if (!success || rteError.code != AgoraRteOk) {
-    //     if (error) *error = RTE_NSERROR_FROM_RTE_ERROR(rteError);
-    //     return NO;
-    // }
-    return YES;
+    return [self.rtePlayer setAudioPlaybackDelay:playerId delay:delay error:error];
 }
 
 - (int32_t)playerGetAudioPlaybackDelay:(NSString *)playerId error:(NSError **)error {
-    GET_PLAYER_OR_RETURN(playerId, error, 0);
-    
-    AgoraRtePlayerConfig *config = [[AgoraRtePlayerConfig alloc] init];
-    AgoraRteError *rteError = [[AgoraRteError alloc] init];
-    BOOL success = [player getConfigs:config error:rteError];
-    if (!success || rteError.code != AgoraRteOk) {
-        if (error) *error = RTE_NSERROR_FROM_RTE_ERROR(rteError);
+    if (!self.rtePlayer) {
+        if (error) *error = RTE_NSERROR(-1, @"RTE player not initialized");
         return 0;
     }
-    return [config audioPlaybackDelay:rteError];
+    return [self.rtePlayer getAudioPlaybackDelay:playerId error:error];
 }
 
 - (BOOL)playerSetAudioDualMonoMode:(NSString *)playerId mode:(int32_t)mode error:(NSError **)error {
-    GET_PLAYER_OR_RETURN(playerId, error, NO);
-    
-    AgoraRtePlayerConfig *config = [[AgoraRtePlayerConfig alloc] init];
-    AgoraRteError *rteError = [[AgoraRteError alloc] init];
-    BOOL success = [player getConfigs:config error:rteError];
-    if (!success || rteError.code != AgoraRteOk) {
-        if (error) *error = RTE_NSERROR_FROM_RTE_ERROR(rteError);
+    if (!self.rtePlayer) {
+        if (error) *error = RTE_NSERROR(-1, @"RTE player not initialized");
         return NO;
     }
-    
-    [config setAudioDualMonoMode:mode error:rteError];
-    if (rteError.code != AgoraRteOk) {
-        if (error) *error = RTE_NSERROR_FROM_RTE_ERROR(rteError);
-        return NO;
-    }
-    
-    // success = [player setConfigs:config error:rteError];
-    // if (!success || rteError.code != AgoraRteOk) {
-    //     if (error) *error = RTE_NSERROR_FROM_RTE_ERROR(rteError);
-    //     return NO;
-    // }
-    return YES;
+    return [self.rtePlayer setAudioDualMonoMode:playerId mode:mode error:error];
 }
 
 - (int32_t)playerGetAudioDualMonoMode:(NSString *)playerId error:(NSError **)error {
-    GET_PLAYER_OR_RETURN(playerId, error, 0);
-    
-    AgoraRtePlayerConfig *config = [[AgoraRtePlayerConfig alloc] init];
-    AgoraRteError *rteError = [[AgoraRteError alloc] init];
-    BOOL success = [player getConfigs:config error:rteError];
-    if (!success || rteError.code != AgoraRteOk) {
-        if (error) *error = RTE_NSERROR_FROM_RTE_ERROR(rteError);
+    if (!self.rtePlayer) {
+        if (error) *error = RTE_NSERROR(-1, @"RTE player not initialized");
         return 0;
     }
-    return [config audioDualMonoMode:rteError];
+    return [self.rtePlayer getAudioDualMonoMode:playerId error:error];
 }
 
 - (BOOL)playerSetPublishVolume:(NSString *)playerId volume:(int32_t)volume error:(NSError **)error {
-    GET_PLAYER_OR_RETURN(playerId, error, NO);
-    
-    AgoraRtePlayerConfig *config = [[AgoraRtePlayerConfig alloc] init];
-    AgoraRteError *rteError = [[AgoraRteError alloc] init];
-    BOOL success = [player getConfigs:config error:rteError];
-    if (!success || rteError.code != AgoraRteOk) {
-        if (error) *error = RTE_NSERROR_FROM_RTE_ERROR(rteError);
+    if (!self.rtePlayer) {
+        if (error) *error = RTE_NSERROR(-1, @"RTE player not initialized");
         return NO;
     }
-    
-    [config setPublishVolume:volume error:rteError];
-    if (rteError.code != AgoraRteOk) {
-        if (error) *error = RTE_NSERROR_FROM_RTE_ERROR(rteError);
-        return NO;
-    }
-    
-    // success = [player setConfigs:config error:rteError];
-    // if (!success || rteError.code != AgoraRteOk) {
-    //     if (error) *error = RTE_NSERROR_FROM_RTE_ERROR(rteError);
-    //     return NO;
-    // }
-    return YES;
+    return [self.rtePlayer setPublishVolume:playerId volume:volume error:error];
 }
 
 - (int32_t)playerGetPublishVolume:(NSString *)playerId error:(NSError **)error {
-    GET_PLAYER_OR_RETURN(playerId, error, 0);
-    
-    AgoraRtePlayerConfig *config = [[AgoraRtePlayerConfig alloc] init];
-    AgoraRteError *rteError = [[AgoraRteError alloc] init];
-    BOOL success = [player getConfigs:config error:rteError];
-    if (!success || rteError.code != AgoraRteOk) {
-        if (error) *error = RTE_NSERROR_FROM_RTE_ERROR(rteError);
+    if (!self.rtePlayer) {
+        if (error) *error = RTE_NSERROR(-1, @"RTE player not initialized");
         return 0;
     }
-    return [config publishVolume:rteError];
+    return [self.rtePlayer getPublishVolume:playerId error:error];
 }
 
 - (BOOL)playerSetJsonParameter:(NSString *)playerId jsonParameter:(NSString *)jsonParameter error:(NSError **)error {
-    GET_PLAYER_OR_RETURN(playerId, error, NO);
-    
-    AgoraRtePlayerConfig *config = [[AgoraRtePlayerConfig alloc] init];
-    AgoraRteError *rteError = [[AgoraRteError alloc] init];
-    BOOL success = [player getConfigs:config error:rteError];
-    if (!success || rteError.code != AgoraRteOk) {
-        if (error) *error = RTE_NSERROR_FROM_RTE_ERROR(rteError);
+    if (!self.rtePlayer) {
+        if (error) *error = RTE_NSERROR(-1, @"RTE player not initialized");
         return NO;
     }
-    
-    [config setJsonParameter:jsonParameter error:rteError];
-    if (rteError.code != AgoraRteOk) {
-        if (error) *error = RTE_NSERROR_FROM_RTE_ERROR(rteError);
-        return NO;
-    }
-    
-    // success = [player setConfigs:config error:rteError];
-    // if (!success || rteError.code != AgoraRteOk) {
-    //     if (error) *error = RTE_NSERROR_FROM_RTE_ERROR(rteError);
-    //     return NO;
-    // }
-    return YES;
+    return [self.rtePlayer setJsonParameter:playerId jsonParameter:jsonParameter error:error];
 }
 
 - (NSString *)playerGetJsonParameter:(NSString *)playerId error:(NSError **)error {
-    GET_PLAYER_OR_RETURN(playerId, error, nil);
-    
-    AgoraRtePlayerConfig *config = [[AgoraRtePlayerConfig alloc] init];
-    AgoraRteError *rteError = [[AgoraRteError alloc] init];
-    BOOL success = [player getConfigs:config error:rteError];
-    if (!success || rteError.code != AgoraRteOk) {
-        if (error) *error = RTE_NSERROR_FROM_RTE_ERROR(rteError);
+    if (!self.rtePlayer) {
+        if (error) *error = RTE_NSERROR(-1, @"RTE player not initialized");
         return nil;
     }
-    return [config jsonParameter:rteError] ?: @"";
+    return [self.rtePlayer getJsonParameter:playerId error:error];
 }
 
 - (BOOL)playerSetAbrSubscriptionLayer:(NSString *)playerId layer:(AgoraRteAbrSubscriptionLayer)layer error:(NSError **)error {
-    GET_PLAYER_OR_RETURN(playerId, error, NO);
-    
-    AgoraRtePlayerConfig *config = [[AgoraRtePlayerConfig alloc] init];
-    AgoraRteError *rteError = [[AgoraRteError alloc] init];
-    BOOL success = [player getConfigs:config error:rteError];
-    if (!success || rteError.code != AgoraRteOk) {
-        if (error) *error = RTE_NSERROR_FROM_RTE_ERROR(rteError);
+    if (!self.rtePlayer) {
+        if (error) *error = RTE_NSERROR(-1, @"RTE player not initialized");
         return NO;
     }
-    
-    [config setAbrSubscriptionLayer:layer error:rteError];
-    if (rteError.code != AgoraRteOk) {
-        if (error) *error = RTE_NSERROR_FROM_RTE_ERROR(rteError);
-        return NO;
-    }
-    
-    // success = [player setConfigs:config error:rteError];
-    // if (!success || rteError.code != AgoraRteOk) {
-    //     if (error) *error = RTE_NSERROR_FROM_RTE_ERROR(rteError);
-    //     return NO;
-    // }
-    return YES;
+    return [self.rtePlayer setAbrSubscriptionLayer:playerId layer:layer error:error];
 }
 
 - (AgoraRteAbrSubscriptionLayer)playerGetAbrSubscriptionLayer:(NSString *)playerId error:(NSError **)error {
-    GET_PLAYER_OR_RETURN(playerId, error, AgoraRteAbrSubscriptionHigh);
-    
-    AgoraRtePlayerConfig *config = [[AgoraRtePlayerConfig alloc] init];
-    AgoraRteError *rteError = [[AgoraRteError alloc] init];
-    BOOL success = [player getConfigs:config error:rteError];
-    if (!success || rteError.code != AgoraRteOk) {
-        if (error) *error = RTE_NSERROR_FROM_RTE_ERROR(rteError);
+    if (!self.rtePlayer) {
+        if (error) *error = RTE_NSERROR(-1, @"RTE player not initialized");
         return AgoraRteAbrSubscriptionHigh;
     }
-    return [config abrSubscriptionLayer:rteError];
+    return [self.rtePlayer getAbrSubscriptionLayer:playerId error:error];
 }
 
 - (BOOL)playerSetAbrFallbackLayer:(NSString *)playerId layer:(AgoraRteAbrFallbackLayer)layer error:(NSError **)error {
-    GET_PLAYER_OR_RETURN(playerId, error, NO);
-    
-    AgoraRtePlayerConfig *config = [[AgoraRtePlayerConfig alloc] init];
-    AgoraRteError *rteError = [[AgoraRteError alloc] init];
-    BOOL success = [player getConfigs:config error:rteError];
-    if (!success || rteError.code != AgoraRteOk) {
-        if (error) *error = RTE_NSERROR_FROM_RTE_ERROR(rteError);
+    if (!self.rtePlayer) {
+        if (error) *error = RTE_NSERROR(-1, @"RTE player not initialized");
         return NO;
     }
-    
-    [config setAbrFallbackLayer:layer error:rteError];
-    if (rteError.code != AgoraRteOk) {
-        if (error) *error = RTE_NSERROR_FROM_RTE_ERROR(rteError);
-        return NO;
-    }
-    
-    // success = [player setConfigs:config error:rteError];
-    // if (!success || rteError.code != AgoraRteOk) {
-    //     if (error) *error = RTE_NSERROR_FROM_RTE_ERROR(rteError);
-    //     return NO;
-    // }
-    return YES;
+    return [self.rtePlayer setAbrFallbackLayer:playerId layer:layer error:error];
 }
 
 - (AgoraRteAbrFallbackLayer)playerGetAbrFallbackLayer:(NSString *)playerId error:(NSError **)error {
-    GET_PLAYER_OR_RETURN(playerId, error, AgoraRteAbrFallbackLow);
-    
-    AgoraRtePlayerConfig *config = [[AgoraRtePlayerConfig alloc] init];
-    AgoraRteError *rteError = [[AgoraRteError alloc] init];
-    BOOL success = [player getConfigs:config error:rteError];
-    if (!success || rteError.code != AgoraRteOk) {
-        if (error) *error = RTE_NSERROR_FROM_RTE_ERROR(rteError);
+    if (!self.rtePlayer) {
+        if (error) *error = RTE_NSERROR(-1, @"RTE player not initialized");
         return AgoraRteAbrFallbackLow;
     }
-    return [config abrFallbackLayer:rteError];
+    return [self.rtePlayer getAbrFallbackLayer:playerId error:error];
 }
 
 #pragma mark - RTE Player Info
 
+- (void)playerGetStats:(NSString *)playerId completion:(void (^)(NSDictionary *stats, NSError *error))completion {
+    if (!self.rtePlayer) {
+        if (completion) completion(nil, RTE_NSERROR(-1, @"RTE player not initialized"));
+        return;
+    }
+    [self.rtePlayer getStats:playerId completion:completion];
+}
+
 - (int64_t)playerGetCurrentTime:(NSString *)playerId error:(NSError **)error {
-    AgoraRtePlayer *player = self.players[playerId];
-    if (!player) {
-        if (error) *error = RTE_NSERROR(-1, @"Player not found");
+    if (!self.rtePlayer) {
+        if (error) *error = RTE_NSERROR(-1, @"RTE player not initialized");
         return 0;
     }
-    
-    AgoraRteError *rteError = [[AgoraRteError alloc] init];
-    uint64_t position = [player getPosition:rteError];
-    
-    if (rteError.code != AgoraRteOk) {
-        if (error) *error = RTE_NSERROR_FROM_RTE_ERROR(rteError);
-        return 0;
-    }
-    return (int64_t)position;
+    return [self.rtePlayer getCurrentTime:playerId error:error];
 }
 
 - (int64_t)playerGetDuration:(NSString *)playerId error:(NSError **)error {
-    AgoraRtePlayer *player = self.players[playerId];
-    if (!player) {
-        if (error) *error = RTE_NSERROR(-1, @"Player not found");
+    if (!self.rtePlayer) {
+        if (error) *error = RTE_NSERROR(-1, @"RTE player not initialized");
         return 0;
     }
-    
-    AgoraRtePlayerConfig *config = [[AgoraRtePlayerConfig alloc] init];
-    AgoraRteError *rteError = [[AgoraRteError alloc] init];
-    BOOL success = [player getConfigs:config error:rteError];
-    if (!success || rteError.code != AgoraRteOk) {
-        if (error) *error = RTE_NSERROR_FROM_RTE_ERROR(rteError);
-        return 0;
-    }
-    
-    AgoraRtePlayerInfo *info = [[AgoraRtePlayerInfo alloc] init];
-    success = [player getInfo:info error:rteError];
-    if (!success || rteError.code != AgoraRteOk) {
-        if (error) *error = RTE_NSERROR_FROM_RTE_ERROR(rteError);
-        return 0;
-    }
-    
-    return [info duration];
+    return [self.rtePlayer getDuration:playerId error:error];
 }
 
 - (NSDictionary *)playerGetInfo:(NSString *)playerId error:(NSError **)error {
-    AgoraRtePlayer *player = self.players[playerId];
-    if (!player) {
-        if (error) *error = RTE_NSERROR(-1, @"Player not found");
+    if (!self.rtePlayer) {
+        if (error) *error = RTE_NSERROR(-1, @"RTE player not initialized");
         return nil;
     }
-    
-    AgoraRtePlayerInfo *info = [[AgoraRtePlayerInfo alloc] init];
-    AgoraRteError *rteError = [[AgoraRteError alloc] init];
-    
-    BOOL success = [player getInfo:info error:rteError];
-    if (!success || rteError.code != AgoraRteOk) {
-        if (error) *error = RTE_NSERROR_FROM_RTE_ERROR(rteError);
-        return nil;
-    }
-    
-    return @{
-        @"state": @([info state]),
-        @"duration": @([info duration]),
-        @"streamCount": @([info streamCount]),
-        @"hasAudio": @([info hasAudio]),
-        @"hasVideo": @([info hasVideo]),
-        @"isAudioMuted": @([info isAudioMuted]),
-        @"isVideoMuted": @([info isVideoMuted]),
-        @"videoHeight": @([info videoHeight]),
-        @"videoWidth": @([info videoWidth]),
-        @"audioSampleRate": @([info audioSampleRate]),
-        @"audioChannels": @([info audioChannels]),
-        @"audioBitsPerSample": @([info audioBitsPerSample]),
-        @"abrSubscriptionLayer": @([info abrSubscriptionLayer]),
-        @"currentUrl": [info currentUrl] ?: @""
-    };
+    return [self.rtePlayer getInfo:playerId error:error];
 }
-
-- (void)playerGetStats:(NSString *)playerId completion:(void (^)(NSDictionary *stats, NSError *error))completion {
-    AgoraRtePlayer *player = self.players[playerId];
-    if (!player) {
-        if (completion) completion(nil, RTE_NSERROR(-1, @"Player not found"));
-        return;
-    }
-    
-    [player getStats:^(AgoraRtePlayerStats *stats, AgoraRteError *err) {
-        dispatch_async(dispatch_get_main_queue(), ^{
-            if (err && err.code != AgoraRteOk) {
-                if (completion) completion(nil, RTE_NSERROR_FROM_RTE_ERROR(err));
-                return;
-            }
-            
-            NSDictionary *statsDict = @{
-                @"videoDecodeFrameRate": @([stats videoDecodeFrameRate]),
-                @"videoRenderFrameRate": @([stats videoRenderFrameRate]),
-                @"videoBitrate": @([stats videoBitrate]),
-                @"audioBitrate": @([stats audioBitrate])
-            };
-            
-            if (completion) completion(statsDict, nil);
-        });
-    }];
-}
-
 
 #pragma mark - RTE Player Config
 
 - (BOOL)playerSetConfig:(NSString *)playerId config:(NSDictionary *)config error:(NSError **)error {
-    GET_PLAYER_OR_RETURN(playerId, error, NO);
-    
-    AgoraRtePlayerConfig *playerConfig = [[AgoraRtePlayerConfig alloc] init];
-    AgoraRteError *rteError = [[AgoraRteError alloc] init];
-    
-    if (config[@"autoPlay"] && config[@"autoPlay"] != [NSNull null]) {
-        [playerConfig setAutoPlay:[config[@"autoPlay"] boolValue] error:rteError];
-    }
-    if (config[@"playbackSpeed"] && config[@"playbackSpeed"] != [NSNull null]) {
-        [playerConfig setPlaybackSpeed:[config[@"playbackSpeed"] intValue] error:rteError];
-    }
-    if (config[@"playoutAudioTrackIdx"] && config[@"playoutAudioTrackIdx"] != [NSNull null]) {
-        [playerConfig setPlayoutAudioTrackIdx:[config[@"playoutAudioTrackIdx"] intValue] error:rteError];
-    }
-    if (config[@"publishAudioTrackIdx"] && config[@"publishAudioTrackIdx"] != [NSNull null]) {
-        [playerConfig setPublishAudioTrackIdx:[config[@"publishAudioTrackIdx"] intValue] error:rteError];
-    }
-    if (config[@"audioTrackIdx"] && config[@"audioTrackIdx"] != [NSNull null]) {
-        [playerConfig setAudioTrackIdx:[config[@"audioTrackIdx"] intValue] error:rteError];
-    }
-    if (config[@"subtitleTrackIdx"] && config[@"subtitleTrackIdx"] != [NSNull null]) {
-        [playerConfig setSubtitleTrackIdx:[config[@"subtitleTrackIdx"] intValue] error:rteError];
-    }
-    if (config[@"externalSubtitleTrackIdx"] && config[@"externalSubtitleTrackIdx"] != [NSNull null]) {
-        [playerConfig setExternalSubtitleTrackIdx:[config[@"externalSubtitleTrackIdx"] intValue] error:rteError];
-    }
-    if (config[@"audioPitch"] && config[@"audioPitch"] != [NSNull null]) {
-        [playerConfig setAudioPitch:[config[@"audioPitch"] intValue] error:rteError];
-    }
-    if (config[@"playoutVolume"] && config[@"playoutVolume"] != [NSNull null]) {
-        [playerConfig setPlayoutVolume:[config[@"playoutVolume"] intValue] error:rteError];
-    }
-    if (config[@"audioPlaybackDelay"] && config[@"audioPlaybackDelay"] != [NSNull null]) {
-        [playerConfig setAudioPlaybackDelay:[config[@"audioPlaybackDelay"] intValue] error:rteError];
-    }
-    if (config[@"audioDualMonoMode"] && config[@"audioDualMonoMode"] != [NSNull null]) {
-        [playerConfig setAudioDualMonoMode:[config[@"audioDualMonoMode"] intValue] error:rteError];
-    }
-    if (config[@"publishVolume"] && config[@"publishVolume"] != [NSNull null]) {
-        [playerConfig setPublishVolume:[config[@"publishVolume"] intValue] error:rteError];
-    }
-    if (config[@"loopCount"] && config[@"loopCount"] != [NSNull null]) {
-        [playerConfig setLoopCount:[config[@"loopCount"] intValue] error:rteError];
-    }
-    if (config[@"jsonParameter"] && config[@"jsonParameter"] != [NSNull null]) {
-        [playerConfig setJsonParameter:config[@"jsonParameter"] error:rteError];
-    }
-    if (config[@"abrSubscriptionLayer"] && config[@"abrSubscriptionLayer"] != [NSNull null]) {
-        [playerConfig setAbrSubscriptionLayer:(AgoraRteAbrSubscriptionLayer)[config[@"abrSubscriptionLayer"] intValue] error:rteError];
-    }
-    if (config[@"abrFallbackLayer"] && config[@"abrFallbackLayer"] != [NSNull null]) {
-        [playerConfig setAbrFallbackLayer:(AgoraRteAbrFallbackLayer)[config[@"abrFallbackLayer"] intValue] error:rteError];
-    }
-    
-    AgoraRteError *setError = [[AgoraRteError alloc] init];
-    BOOL success = [player setConfigs:playerConfig error:setError];
-    
-    if (!success || setError.code != AgoraRteOk) {
-        if (error) *error = RTE_NSERROR_FROM_RTE_ERROR(setError);
+    if (!self.rtePlayer) {
+        if (error) *error = RTE_NSERROR(-1, @"RTE player not initialized");
         return NO;
     }
-    return YES;
+    return [self.rtePlayer setConfigs:playerId config:config error:error];
 }
 
 - (NSDictionary *)playerGetConfig:(NSString *)playerId error:(NSError **)error {
-    AgoraRtePlayer *player = self.players[playerId];
-    if (!player) {
-        if (error) *error = RTE_NSERROR(-1, @"Player not found");
+    if (!self.rtePlayer) {
+        if (error) *error = RTE_NSERROR(-1, @"RTE player not initialized");
         return nil;
     }
-    
-    AgoraRtePlayerConfig *config = [[AgoraRtePlayerConfig alloc] init];
-    AgoraRteError *rteError = [[AgoraRteError alloc] init];
-    
-    BOOL success = [player getConfigs:config error:rteError];
-    if (!success || rteError.code != AgoraRteOk) {
-        if (error) *error = RTE_NSERROR_FROM_RTE_ERROR(rteError);
-        return nil;
-    }
-    
-    AgoraRteError *getError = [[AgoraRteError alloc] init];
-    return @{
-        @"autoPlay": @([config autoPlay:getError]),
-        @"playbackSpeed": @([config playbackSpeed:getError]),
-        @"playoutAudioTrackIdx": @([config playoutAudioTrackIdx:getError]),
-        @"publishAudioTrackIdx": @([config publishAudioTrackIdx:getError]),
-        @"audioTrackIdx": @([config audioTrackIdx:getError]),
-        @"subtitleTrackIdx": @([config subtitleTrackIdx:getError]),
-        @"externalSubtitleTrackIdx": @([config externalSubtitleTrackIdx:getError]),
-        @"audioPitch": @([config audioPitch:getError]),
-        @"playoutVolume": @([config playoutVolume:getError]),
-        @"audioPlaybackDelay": @([config audioPlaybackDelay:getError]),
-        @"audioDualMonoMode": @([config audioDualMonoMode:getError]),
-        @"publishVolume": @([config publishVolume:getError]),
-        @"loopCount": @([config loopCount:getError]),
-        @"jsonParameter": [config jsonParameter:getError] ?: @"",
-        @"abrSubscriptionLayer": @([config abrSubscriptionLayer:getError]),
-        @"abrFallbackLayer": @([config abrFallbackLayer:getError])
-    };
+    return [self.rtePlayer getConfigs:playerId error:error];
 }
 
 #pragma mark - RTE Player Observer
 
 - (BOOL)playerRegisterObserver:(NSString *)playerId error:(NSError **)error {
-    GET_PLAYER_OR_RETURN(playerId, error, NO);
-    
-    if (self.playerObservers[playerId]) return YES;
-    
-    AgoraRTEPlayerObserverBridge *bridge = [[AgoraRTEPlayerObserverBridge alloc] init];
-    bridge.controller = self;
-    bridge.playerId = playerId;
-    
-    AgoraRteError *rteError = [[AgoraRteError alloc] init];
-    BOOL success = [player registerObserver:(id)bridge error:rteError];
-    
-    if (!success || rteError.code != AgoraRteOk) {
-        if (error) *error = RTE_NSERROR_FROM_RTE_ERROR(rteError);
+    if (!self.rtePlayer) {
+        if (error) *error = RTE_NSERROR(-1, @"RTE player not initialized");
         return NO;
     }
-    
-    self.playerObservers[playerId] = bridge;
-    return YES;
+    return [self.rtePlayer registerObserver:playerId error:error];
 }
 
 - (BOOL)playerUnregisterObserver:(NSString *)playerId error:(NSError **)error {
-    AgoraRtePlayer *player = self.players[playerId];
-    AgoraRtePlayerObserver *observer = self.playerObservers[playerId];
-    
-    if (!player || !observer) return YES;
-    
-    AgoraRteError *rteError = [[AgoraRteError alloc] init];
-    BOOL success = [player unregisterObserver:(id)observer error:rteError];
-    
-    [self.playerObservers removeObjectForKey:playerId];
-    
-    if (!success || rteError.code != AgoraRteOk) {
-        if (error) *error = RTE_NSERROR_FROM_RTE_ERROR(rteError);
+    if (!self.rtePlayer) {
+        if (error) *error = RTE_NSERROR(-1, @"RTE player not initialized");
         return NO;
     }
-    return YES;
+    return [self.rtePlayer unregisterObserver:playerId error:error];
 }
 
 #pragma mark - RTE Canvas Lifecycle
 
 - (NSString *)createCanvas:(NSDictionary *)config error:(NSError **)error {
-    CHECK_RTE_INSTANCE_NIL(error);
-    
-    AgoraRteCanvasInitialConfig *initialConfig = [[AgoraRteCanvasInitialConfig alloc] init];
-    AgoraRteCanvas *canvas = [[AgoraRteCanvas alloc] initWithRte:self.rteInstance initialConfig:initialConfig];
-    
-    if (!canvas) {
-        if (error) *error = RTE_NSERROR(-1, @"Failed to create canvas");
+    if (!self.rteCanvas) {
+        if (error) *error = RTE_NSERROR(-1, @"RTE canvas not initialized");
         return nil;
     }
-    
-    NSString *canvasId = [[NSUUID UUID] UUIDString];
-    self.canvases[canvasId] = canvas;
-    
-    // Apply config if provided
-    if (config && config.count > 0) {
-        NSError *configError = nil;
-        if (![self canvasSetConfig:canvasId config:config error:&configError]) {
-            [self.canvases removeObjectForKey:canvasId];
-            if (error) *error = configError;
-            return nil;
-        }
-    }
-    
-    return canvasId;
+    return [self.rteCanvas createCanvas:config error:error];
 }
 
 - (BOOL)destroyCanvas:(NSString *)canvasId error:(NSError **)error {
-    AgoraRteCanvas *canvas = self.canvases[canvasId];
-    if (!canvas) {
-        if (error) *error = RTE_NSERROR(-1, @"Canvas not found");
+    if (!self.rteCanvas) {
+        if (error) *error = RTE_NSERROR(-1, @"RTE canvas not initialized");
         return NO;
     }
-    
-    [self.canvases removeObjectForKey:canvasId];
-    return YES;
+    return [self.rteCanvas destroyCanvas:canvasId error:error];
 }
 
 #pragma mark - RTE Canvas Config
 
 - (BOOL)canvasSetConfig:(NSString *)canvasId config:(NSDictionary *)config error:(NSError **)error {
-    GET_CANVAS_OR_RETURN(canvasId, error, NO);
-    
-    // 先获取当前配置，避免覆盖其他属性
-    AgoraRteCanvasConfig *canvasConfig = [[AgoraRteCanvasConfig alloc] init];
-    AgoraRteError *rteError = [[AgoraRteError alloc] init];
-    BOOL success = [canvas getConfigs:canvasConfig error:rteError];
-    if (!success || rteError.code != AgoraRteOk) {
-        if (error) *error = RTE_NSERROR_FROM_RTE_ERROR(rteError);
+    if (!self.rteCanvas) {
+        if (error) *error = RTE_NSERROR(-1, @"RTE canvas not initialized");
         return NO;
     }
-    
-    // 只更新字典中提供的属性
-    if (config[@"videoRenderMode"] && config[@"videoRenderMode"] != [NSNull null]) {
-        [canvasConfig setVideoRenderMode:(AgoraRteVideoRenderMode)[config[@"videoRenderMode"] intValue] error:rteError];
-        if (rteError.code != AgoraRteOk) {
-            if (error) *error = RTE_NSERROR_FROM_RTE_ERROR(rteError);
-            return NO;
-        }
-    }
-    if (config[@"videoMirrorMode"] && config[@"videoMirrorMode"] != [NSNull null]) {
-        [canvasConfig setVideoMirrorMode:(AgoraRteVideoMirrorMode)[config[@"videoMirrorMode"] intValue] error:rteError];
-        if (rteError.code != AgoraRteOk) {
-            if (error) *error = RTE_NSERROR_FROM_RTE_ERROR(rteError);
-            return NO;
-        }
-    }
-    if (config[@"cropArea"] && config[@"cropArea"] != [NSNull null]) {
-        NSDictionary *cropAreaDict = config[@"cropArea"];
-        AgoraRteRect *rect = [[AgoraRteRect alloc] init];
-        [rect setX:[cropAreaDict[@"x"] intValue]];
-        [rect setY:[cropAreaDict[@"y"] intValue]];
-        [rect setWidth:[cropAreaDict[@"width"] intValue]];
-        [rect setHeight:[cropAreaDict[@"height"] intValue]];
-        [canvasConfig setCropArea:rect error:rteError];
-        if (rteError.code != AgoraRteOk) {
-            if (error) *error = RTE_NSERROR_FROM_RTE_ERROR(rteError);
-            return NO;
-        }
-    }
-    
-    // 设置修改后的配置
-    AgoraRteError *setError = [[AgoraRteError alloc] init];
-    success = [canvas setConfigs:canvasConfig error:setError];
-    
-    if (!success || setError.code != AgoraRteOk) {
-        if (error) *error = RTE_NSERROR_FROM_RTE_ERROR(setError);
-        return NO;
-    }
-    return YES;
+    return [self.rteCanvas setConfigs:canvasId config:config error:error];
 }
 
 - (NSDictionary *)canvasGetConfig:(NSString *)canvasId error:(NSError **)error {
-    AgoraRteCanvas *canvas = self.canvases[canvasId];
-    if (!canvas) {
-        if (error) *error = RTE_NSERROR(-1, @"Canvas not found");
+    if (!self.rteCanvas) {
+        if (error) *error = RTE_NSERROR(-1, @"RTE canvas not initialized");
         return nil;
     }
-    
-    AgoraRteCanvasConfig *config = [[AgoraRteCanvasConfig alloc] init];
-    AgoraRteError *rteError = [[AgoraRteError alloc] init];
-    
-    BOOL success = [canvas getConfigs:config error:rteError];
-    if (!success || rteError.code != AgoraRteOk) {
-        if (error) *error = RTE_NSERROR_FROM_RTE_ERROR(rteError);
-        return nil;
-    }
-    
-    AgoraRteError *getError = [[AgoraRteError alloc] init];
-    AgoraRteRect *cropArea = [config cropArea:getError];
-    
-    return @{
-        @"videoRenderMode": @([config videoRenderMode:getError]),
-        @"videoMirrorMode": @([config videoMirrorMode:getError]),
-        @"cropArea": @{
-            @"x": @([cropArea x]),
-            @"y": @([cropArea y]),
-            @"width": @([cropArea width]),
-            @"height": @([cropArea height])
-        }
-    };
+    return [self.rteCanvas getConfigs:canvasId error:error];
 }
 
-// RTE Canvas Config - Individual Setters
 - (BOOL)canvasSetVideoRenderMode:(NSString *)canvasId mode:(AgoraRteVideoRenderMode)mode error:(NSError **)error {
-    GET_CANVAS_OR_RETURN(canvasId, error, NO);
-    
-    AgoraRteCanvasConfig *config = [[AgoraRteCanvasConfig alloc] init];
-    AgoraRteError *rteError = [[AgoraRteError alloc] init];
-    BOOL success = [canvas getConfigs:config error:rteError];
-    if (!success || rteError.code != AgoraRteOk) {
-        if (error) *error = RTE_NSERROR_FROM_RTE_ERROR(rteError);
+    if (!self.rteCanvas) {
+        if (error) *error = RTE_NSERROR(-1, @"RTE canvas not initialized");
         return NO;
     }
-    
-    [config setVideoRenderMode:mode error:rteError];
-    if (rteError.code != AgoraRteOk) {
-        if (error) *error = RTE_NSERROR_FROM_RTE_ERROR(rteError);
-        return NO;
-    }
-    
-    // success = [canvas setConfigs:config error:rteError];
-    // if (!success || rteError.code != AgoraRteOk) {
-    //     if (error) *error = RTE_NSERROR_FROM_RTE_ERROR(rteError);
-    //     return NO;
-    // }
-    return YES;
+    return [self.rteCanvas setVideoRenderMode:canvasId mode:mode error:error];
 }
 
 - (AgoraRteVideoRenderMode)canvasGetVideoRenderMode:(NSString *)canvasId error:(NSError **)error {
-    GET_CANVAS_OR_RETURN(canvasId, error, AgoraRteVideoRenderModeHidden);
-    
-    AgoraRteCanvasConfig *config = [[AgoraRteCanvasConfig alloc] init];
-    AgoraRteError *rteError = [[AgoraRteError alloc] init];
-    BOOL success = [canvas getConfigs:config error:rteError];
-    if (!success || rteError.code != AgoraRteOk) {
-        if (error) *error = RTE_NSERROR_FROM_RTE_ERROR(rteError);
+    if (!self.rteCanvas) {
+        if (error) *error = RTE_NSERROR(-1, @"RTE canvas not initialized");
         return AgoraRteVideoRenderModeHidden;
     }
-    return [config videoRenderMode:rteError];
+    return [self.rteCanvas getVideoRenderMode:canvasId error:error];
 }
 
 - (BOOL)canvasSetVideoMirrorMode:(NSString *)canvasId mode:(AgoraRteVideoMirrorMode)mode error:(NSError **)error {
-    GET_CANVAS_OR_RETURN(canvasId, error, NO);
-    
-    AgoraRteCanvasConfig *config = [[AgoraRteCanvasConfig alloc] init];
-    AgoraRteError *rteError = [[AgoraRteError alloc] init];
-    BOOL success = [canvas getConfigs:config error:rteError];
-    if (!success || rteError.code != AgoraRteOk) {
-        if (error) *error = RTE_NSERROR_FROM_RTE_ERROR(rteError);
+    if (!self.rteCanvas) {
+        if (error) *error = RTE_NSERROR(-1, @"RTE canvas not initialized");
         return NO;
     }
-    
-    [config setVideoMirrorMode:mode error:rteError];
-    if (rteError.code != AgoraRteOk) {
-        if (error) *error = RTE_NSERROR_FROM_RTE_ERROR(rteError);
-        return NO;
-    }
-    
-    // success = [canvas setConfigs:config error:rteError];
-    // if (!success || rteError.code != AgoraRteOk) {
-    //     if (error) *error = RTE_NSERROR_FROM_RTE_ERROR(rteError);
-    //     return NO;
-    // }
-    return YES;
+    return [self.rteCanvas setVideoMirrorMode:canvasId mode:mode error:error];
 }
 
 - (AgoraRteVideoMirrorMode)canvasGetVideoMirrorMode:(NSString *)canvasId error:(NSError **)error {
-    GET_CANVAS_OR_RETURN(canvasId, error, AgoraRteVideoMirrorModeDisabled);
-    
-    AgoraRteCanvasConfig *config = [[AgoraRteCanvasConfig alloc] init];
-    AgoraRteError *rteError = [[AgoraRteError alloc] init];
-    BOOL success = [canvas getConfigs:config error:rteError];
-    if (!success || rteError.code != AgoraRteOk) {
-        if (error) *error = RTE_NSERROR_FROM_RTE_ERROR(rteError);
+    if (!self.rteCanvas) {
+        if (error) *error = RTE_NSERROR(-1, @"RTE canvas not initialized");
         return AgoraRteVideoMirrorModeDisabled;
     }
-    return [config videoMirrorMode:rteError];
+    return [self.rteCanvas getVideoMirrorMode:canvasId error:error];
 }
 
 - (BOOL)canvasSetCropArea:(NSString *)canvasId x:(int32_t)x y:(int32_t)y width:(int32_t)width height:(int32_t)height error:(NSError **)error {
-    GET_CANVAS_OR_RETURN(canvasId, error, NO);
-    
-    AgoraRteCanvasConfig *config = [[AgoraRteCanvasConfig alloc] init];
-    AgoraRteError *rteError = [[AgoraRteError alloc] init];
-    BOOL success = [canvas getConfigs:config error:rteError];
-    if (!success || rteError.code != AgoraRteOk) {
-        if (error) *error = RTE_NSERROR_FROM_RTE_ERROR(rteError);
+    if (!self.rteCanvas) {
+        if (error) *error = RTE_NSERROR(-1, @"RTE canvas not initialized");
         return NO;
     }
-    
-    AgoraRteRect *rect = [[AgoraRteRect alloc] init];
-    [rect setX:x];
-    [rect setY:y];
-    [rect setWidth:width];
-    [rect setHeight:height];
-    [config setCropArea:rect error:rteError];
-    if (rteError.code != AgoraRteOk) {
-        if (error) *error = RTE_NSERROR_FROM_RTE_ERROR(rteError);
-        return NO;
-    }
-    
-    // success = [canvas setConfigs:config error:rteError];
-    // if (!success || rteError.code != AgoraRteOk) {
-    //     if (error) *error = RTE_NSERROR_FROM_RTE_ERROR(rteError);
-    //     return NO;
-    // }
-    return YES;
+    return [self.rteCanvas setCropArea:canvasId x:x y:y width:width height:height error:error];
 }
 
 - (NSDictionary *)canvasGetCropArea:(NSString *)canvasId error:(NSError **)error {
-    GET_CANVAS_OR_RETURN(canvasId, error, nil);
-    
-    AgoraRteCanvasConfig *config = [[AgoraRteCanvasConfig alloc] init];
-    AgoraRteError *rteError = [[AgoraRteError alloc] init];
-    BOOL success = [canvas getConfigs:config error:rteError];
-    if (!success || rteError.code != AgoraRteOk) {
-        if (error) *error = RTE_NSERROR_FROM_RTE_ERROR(rteError);
+    if (!self.rteCanvas) {
+        if (error) *error = RTE_NSERROR(-1, @"RTE canvas not initialized");
         return nil;
     }
-    
-    AgoraRteRect *cropArea = [config cropArea:rteError];
-    if (rteError.code != AgoraRteOk) {
-        if (error) *error = RTE_NSERROR_FROM_RTE_ERROR(rteError);
-        return nil;
-    }
-    
-    return @{
-        @"x": @([cropArea x]),
-        @"y": @([cropArea y]),
-        @"width": @([cropArea width]),
-        @"height": @([cropArea height])
-    };
+    return [self.rteCanvas getCropArea:canvasId error:error];
 }
 
 #pragma mark - RTE Canvas View
 
 - (BOOL)canvasAddView:(NSString *)canvasId view:(UIView *)view config:(NSDictionary *)config error:(NSError **)error {
-    GET_CANVAS_OR_RETURN(canvasId, error, NO);
-    
-    AgoraRteViewConfig *viewConfig = nil;
-    if (config && config.count > 0) {
-        viewConfig = [[AgoraRteViewConfig alloc] init];
-        if (config[@"cropArea"]) {
-            NSDictionary *cropAreaDict = config[@"cropArea"];
-            AgoraRteRect *rect = [[AgoraRteRect alloc] init];
-            [rect setX:[cropAreaDict[@"x"] intValue]];
-            [rect setY:[cropAreaDict[@"y"] intValue]];
-            [rect setWidth:[cropAreaDict[@"width"] intValue]];
-            [rect setHeight:[cropAreaDict[@"height"] intValue]];
-            AgoraRteError *rteError = [[AgoraRteError alloc] init];
-            [viewConfig setCropArea:rect error:rteError];
-        }
-    }
-    
-    AgoraRteError *rteError = [[AgoraRteError alloc] init];
-    BOOL success = [canvas addView:view config:viewConfig error:rteError];
-    
-    if (!success || rteError.code != AgoraRteOk) {
-        if (error) *error = RTE_NSERROR_FROM_RTE_ERROR(rteError);
+    if (!self.rteCanvas) {
+        if (error) *error = RTE_NSERROR(-1, @"RTE canvas not initialized");
         return NO;
     }
-    return YES;
+    return [self.rteCanvas addView:canvasId view:view config:config error:error];
 }
 
 - (BOOL)canvasRemoveView:(NSString *)canvasId view:(UIView *)view config:(NSDictionary *)config error:(NSError **)error {
-    GET_CANVAS_OR_RETURN(canvasId, error, NO);
-    
-    AgoraRteViewConfig *viewConfig = nil;
-    if (config && config.count > 0) {
-        viewConfig = [[AgoraRteViewConfig alloc] init];
-        if (config[@"cropArea"]) {
-            NSDictionary *cropAreaDict = config[@"cropArea"];
-            AgoraRteRect *rect = [[AgoraRteRect alloc] init];
-            [rect setX:[cropAreaDict[@"x"] intValue]];
-            [rect setY:[cropAreaDict[@"y"] intValue]];
-            [rect setWidth:[cropAreaDict[@"width"] intValue]];
-            [rect setHeight:[cropAreaDict[@"height"] intValue]];
-            AgoraRteError *rteError = [[AgoraRteError alloc] init];
-            [viewConfig setCropArea:rect error:rteError];
-        }
-    }
-    
-    AgoraRteError *rteError = [[AgoraRteError alloc] init];
-    BOOL success = [canvas removeView:view config:viewConfig error:rteError];
-    
-    if (!success || rteError.code != AgoraRteOk) {
-        if (error) *error = RTE_NSERROR_FROM_RTE_ERROR(rteError);
+    if (!self.rteCanvas) {
+        if (error) *error = RTE_NSERROR(-1, @"RTE canvas not initialized");
         return NO;
     }
-    return YES;
+    return [self.rteCanvas removeView:canvasId view:view config:config error:error];
 }
 
-#pragma mark - RTE Player Canvas Bindng
+#pragma mark - RTE Player Canvas Binding
 
 - (BOOL)playerSetCanvas:(NSString *)playerId canvasId:(NSString *)canvasId error:(NSError **)error {
-    GET_PLAYER_OR_RETURN(playerId, error, NO);
-    GET_CANVAS_OR_RETURN(canvasId, error, NO);
-    
-    AgoraRteError *rteError = [[AgoraRteError alloc] init];
-    BOOL success = [player setCanvas:canvas error:rteError];
-    
-    if (!success || rteError.code != AgoraRteOk) {
-        if (error) *error = RTE_NSERROR_FROM_RTE_ERROR(rteError);
+    if (!self.rtePlayer || !self.rteCanvas) {
+        if (error) *error = RTE_NSERROR(-1, @"RTE player or canvas not initialized");
         return NO;
     }
-    return YES;
+    AgoraRteCanvas *canvas = [self.rteCanvas getCanvas:canvasId];
+    if (!canvas) {
+        if (error) *error = RTE_NSERROR(-1, @"Canvas not found");
+        return NO;
+    }
+    return [self.rtePlayer setCanvas:playerId canvas:canvas error:error];
 }
 
 @end

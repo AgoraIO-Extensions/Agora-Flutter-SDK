@@ -1,7 +1,8 @@
-#import "./include/agora_rtc_engine/AgoraRtcNgPlugin.h"
-#import "./include/agora_rtc_engine/AgoraSurfaceViewFactory.h"
-#import "./include/agora_rtc_engine/AgoraUtils.h"
-#import "./include/agora_rtc_engine/VideoViewController.h"
+#import "AgoraRtcNgPlugin.h"
+#import "AgoraSurfaceViewFactory.h"
+#import "AgoraUtils.h"
+#import "VideoViewController.h"
+#import "AgoraRTEPlayerObserverDelegate.h"
 #include <Foundation/Foundation.h>
 
 @interface AgoraRtcNgPlugin ()

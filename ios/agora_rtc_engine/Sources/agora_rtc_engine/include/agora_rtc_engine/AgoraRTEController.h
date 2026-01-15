@@ -1,17 +1,10 @@
 #import <Foundation/Foundation.h>
 #import <AgoraRtcKit/AgoraRteKit.h>
-#pragma mark - AgoraRTEPlayerObserverDelegate
-
-@protocol AgoraRTEPlayerObserverDelegate <NSObject>
-@optional
-- (void)player:(NSString *)playerId onStateChanged:(NSInteger)oldState newState:(NSInteger)newState errorCode:(NSInteger)errorCode errorMessage:(NSString *)errorMessage;
-- (void)player:(NSString *)playerId onPositionChanged:(uint64_t)currentTime utcTime:(uint64_t)utcTime;
-- (void)player:(NSString *)playerId onResolutionChanged:(int)width height:(int)height;
-- (void)player:(NSString *)playerId onEvent:(NSInteger)event;
-- (void)player:(NSString *)playerId onMetadata:(NSInteger)type data:(NSData *)data;
-- (void)player:(NSString *)playerId onPlayerInfoUpdated:(NSDictionary *)info;
-- (void)player:(NSString *)playerId onAudioVolumeIndication:(int32_t)volume;
-@end
+#import "AgoraRTE.h"
+#import "AgoraRTEConfig.h"
+#import "AgoraRTEPlayerObserverDelegate.h"
+#import "AgoraRTEPlayer.h"
+#import "AgoraRTECanvas.h"
 
 #pragma mark - AgoraRTEControllerDelegate
 
@@ -26,18 +19,20 @@
 
 @property (nonatomic, weak) id<AgoraRTEControllerDelegate> delegate;
 @property (nonatomic, weak) id<AgoraRTEPlayerObserverDelegate> playerObserverDelegate;
-@property (nonatomic, strong) AgoraRte *rteInstance;
-@property (nonatomic, strong) NSMutableDictionary<NSString *, AgoraRtePlayer *> *players;
-@property (nonatomic, strong) NSMutableDictionary<NSString *, AgoraRteCanvas *> *canvases;
-@property (nonatomic, strong) NSMutableDictionary<NSString *, AgoraRtePlayerObserver *> *playerObservers;
+
+// 使用新的分离类
+@property (nonatomic, strong, readonly) AgoraRTE *rte;
+@property (nonatomic, strong, readonly) AgoraRTEConfig *rteConfig;
+@property (nonatomic, strong, readonly) AgoraRTEPlayer *rtePlayer;
+@property (nonatomic, strong, readonly) AgoraRTECanvas *rteCanvas;
 
 - (instancetype)init;
 
-#pragma mark - RTE Lifecycle
-- (BOOL)createRteFromBridge:(NSError **)error;
-- (BOOL)createRteWithConfig:(NSDictionary *)config error:(NSError **)error;
-- (BOOL)initMediaEngine:(void (^)(NSError *error))completion error:(NSError **)error;
-- (BOOL)destroyRte:(NSError **)error;
+// #pragma mark - RTE Lifecycle
+ - (BOOL)createRteFromBridge:(NSError **)error;
+ - (BOOL)createRteWithConfig:(NSDictionary *)config error:(NSError **)error;
+ - (BOOL)initMediaEngine:(void (^)(NSError *error))completion error:(NSError **)error;
+ - (BOOL)destroyRte:(NSError **)error;
 
 #pragma mark - RTE Config
 - (BOOL)setRteConfig:(NSDictionary *)config error:(NSError **)error;
@@ -55,7 +50,7 @@
 - (NSString *)jsonParameter:(NSError **)error;
 - (BOOL)setJsonParameter:(NSString *)jsonParameter error:(NSError **)error;
 
-#pragma mark - RTE Observer
+// #pragma mark - RTE Observer
 //- (BOOL)registerRteObserver:(NSError **)error;
 //- (BOOL)unregisterRteObserver:(NSError **)error;
 

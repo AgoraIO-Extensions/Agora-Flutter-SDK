@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'package:agora_rtc_engine/src/agora_rte.dart';
 import 'package:agora_rtc_engine/src/impl/agora_rte_impl.dart';
+import 'package:agora_rtc_engine_example/components/log_sink.dart';
 import 'package:agora_rtc_engine_example/config/agora.config.dart' as config;
 import 'package:flutter/material.dart';
 
@@ -76,6 +77,7 @@ class _RtePlayerExampleState extends State<RtePlayerExample>
         _infoText = 'RTE Ready';
       });
     } catch (e) {
+      logSink.log('Error: $e');
       setState(() {
         _infoText = 'Error: $e';
       });
