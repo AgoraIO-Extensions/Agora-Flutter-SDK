@@ -87,9 +87,8 @@ class IrisApiEngineBindingsDelegateJS
       return CallApiResult(irisReturnCode: 0, data: {'result': 0});
     }
 
-    final promiseFuture =
-        js_util.promiseToFuture<js.CallIrisApiResult>(
-            js.callIrisApi(nApiEnginePtr, nParam));
+    final promiseFuture = js_util.promiseToFuture<js.CallIrisApiResult>(
+        js.callIrisApi(nApiEnginePtr, nParam));
 
     final js.CallIrisApiResult irisApiResult = await promiseFuture;
 
