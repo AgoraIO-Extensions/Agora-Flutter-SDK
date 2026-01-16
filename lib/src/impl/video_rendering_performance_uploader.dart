@@ -350,7 +350,6 @@ class _ChannelPerformanceData {
       }
     };
 
-
     final jsonString = jsonEncode(params);
 
     rtcEngine.setParameters('{"rtc.report.argus_counters":$jsonString}');
