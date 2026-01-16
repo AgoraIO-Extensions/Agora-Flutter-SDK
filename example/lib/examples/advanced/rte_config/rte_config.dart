@@ -1,5 +1,4 @@
-import 'package:agora_rtc_engine/src/agora_rte.dart';
-import 'package:agora_rtc_engine/src/impl/agora_rte_impl.dart';
+import 'package:agora_rtc_engine/agora_rtc_engine.dart';
 import 'package:agora_rtc_engine_example/components/log_sink.dart';
 import 'package:agora_rtc_engine_example/config/agora.config.dart' as config;
 import 'package:flutter/material.dart';

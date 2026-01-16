@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'package:agora_rtc_engine/src/agora_rte.dart';
+import 'package:agora_rtc_engine/src/agora_rte_enums.dart';
 import 'package:flutter/services.dart';
 
 /// RTE 画布实现类

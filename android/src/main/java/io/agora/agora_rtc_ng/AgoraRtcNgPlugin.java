@@ -395,6 +395,184 @@ public class AgoraRtcNgPlugin implements FlutterPlugin, MethodChannel.MethodCall
                         (Map<String, Object>) args.get("config") : new HashMap<>();
                     result.success(rteController.canvasRemoveView(canvasIdForRemoveView, viewPtrForRemove, configForRemoveView));
                     break;
+                // Player Individual Config Methods
+                case "rtePlayerGetAutoPlay":
+                    result.success(rteController.playerGetAutoPlay((String) args.get("playerId")));
+                    break;
+                case "rtePlayerSetAutoPlay":
+                    String playerIdForAutoPlay = (String) args.get("playerId");
+                    boolean autoPlay = args.get("autoPlay") != null ? 
+                        ((Boolean) args.get("autoPlay")) : false;
+                    result.success(rteController.playerSetAutoPlay(playerIdForAutoPlay, autoPlay));
+                    break;
+                case "rtePlayerGetPlaybackSpeed":
+                    result.success(rteController.playerGetPlaybackSpeed((String) args.get("playerId")));
+                    break;
+                case "rtePlayerSetPlaybackSpeed":
+                    String playerIdForSpeed = (String) args.get("playerId");
+                    int speed = args.get("speed") != null ? 
+                        ((Number) args.get("speed")).intValue() : 0;
+                    result.success(rteController.playerSetPlaybackSpeed(playerIdForSpeed, speed));
+                    break;
+                case "rtePlayerGetPlayoutAudioTrackIdx":
+                    result.success(rteController.playerGetPlayoutAudioTrackIdx((String) args.get("playerId")));
+                    break;
+                case "rtePlayerSetPlayoutAudioTrackIdx":
+                    String playerIdForPlayoutTrack = (String) args.get("playerId");
+                    int playoutTrackIdx = args.get("idx") != null ? 
+                        ((Number) args.get("idx")).intValue() : 0;
+                    result.success(rteController.playerSetPlayoutAudioTrackIdx(playerIdForPlayoutTrack, playoutTrackIdx));
+                    break;
+                case "rtePlayerGetPublishAudioTrackIdx":
+                    result.success(rteController.playerGetPublishAudioTrackIdx((String) args.get("playerId")));
+                    break;
+                case "rtePlayerSetPublishAudioTrackIdx":
+                    String playerIdForPublishTrack = (String) args.get("playerId");
+                    int publishTrackIdx = args.get("idx") != null ? 
+                        ((Number) args.get("idx")).intValue() : 0;
+                    result.success(rteController.playerSetPublishAudioTrackIdx(playerIdForPublishTrack, publishTrackIdx));
+                    break;
+                case "rtePlayerGetAudioTrackIdx":
+                    result.success(rteController.playerGetAudioTrackIdx((String) args.get("playerId")));
+                    break;
+                case "rtePlayerSetAudioTrackIdx":
+                    String playerIdForAudioTrack = (String) args.get("playerId");
+                    int audioTrackIdx = args.get("idx") != null ? 
+                        ((Number) args.get("idx")).intValue() : 0;
+                    result.success(rteController.playerSetAudioTrackIdx(playerIdForAudioTrack, audioTrackIdx));
+                    break;
+                case "rtePlayerGetSubtitleTrackIdx":
+                    result.success(rteController.playerGetSubtitleTrackIdx((String) args.get("playerId")));
+                    break;
+                case "rtePlayerSetSubtitleTrackIdx":
+                    String playerIdForSubtitleTrack = (String) args.get("playerId");
+                    int subtitleTrackIdx = args.get("idx") != null ? 
+                        ((Number) args.get("idx")).intValue() : 0;
+                    result.success(rteController.playerSetSubtitleTrackIdx(playerIdForSubtitleTrack, subtitleTrackIdx));
+                    break;
+                case "rtePlayerGetExternalSubtitleTrackIdx":
+                    result.success(rteController.playerGetExternalSubtitleTrackIdx((String) args.get("playerId")));
+                    break;
+                case "rtePlayerSetExternalSubtitleTrackIdx":
+                    String playerIdForExtSubtitleTrack = (String) args.get("playerId");
+                    int extSubtitleTrackIdx = args.get("idx") != null ? 
+                        ((Number) args.get("idx")).intValue() : 0;
+                    result.success(rteController.playerSetExternalSubtitleTrackIdx(playerIdForExtSubtitleTrack, extSubtitleTrackIdx));
+                    break;
+                case "rtePlayerGetAudioPitch":
+                    result.success(rteController.playerGetAudioPitch((String) args.get("playerId")));
+                    break;
+                case "rtePlayerSetAudioPitch":
+                    String playerIdForPitch = (String) args.get("playerId");
+                    int pitch = args.get("pitch") != null ? 
+                        ((Number) args.get("pitch")).intValue() : 0;
+                    result.success(rteController.playerSetAudioPitch(playerIdForPitch, pitch));
+                    break;
+                case "rtePlayerGetPlayoutVolume":
+                    result.success(rteController.playerGetPlayoutVolume((String) args.get("playerId")));
+                    break;
+                case "rtePlayerSetPlayoutVolume":
+                    String playerIdForPlayoutVolume = (String) args.get("playerId");
+                    int playoutVolume = args.get("volume") != null ? 
+                        ((Number) args.get("volume")).intValue() : 0;
+                    result.success(rteController.playerSetPlayoutVolume(playerIdForPlayoutVolume, playoutVolume));
+                    break;
+                case "rtePlayerGetAudioPlaybackDelay":
+                    result.success(rteController.playerGetAudioPlaybackDelay((String) args.get("playerId")));
+                    break;
+                case "rtePlayerSetAudioPlaybackDelay":
+                    String playerIdForDelay = (String) args.get("playerId");
+                    int delay = args.get("delay") != null ? 
+                        ((Number) args.get("delay")).intValue() : 0;
+                    result.success(rteController.playerSetAudioPlaybackDelay(playerIdForDelay, delay));
+                    break;
+                case "rtePlayerGetAudioDualMonoMode":
+                    result.success(rteController.playerGetAudioDualMonoMode((String) args.get("playerId")));
+                    break;
+                case "rtePlayerSetAudioDualMonoMode":
+                    String playerIdForDualMono = (String) args.get("playerId");
+                    int dualMonoMode = args.get("mode") != null ? 
+                        ((Number) args.get("mode")).intValue() : 0;
+                    result.success(rteController.playerSetAudioDualMonoMode(playerIdForDualMono, dualMonoMode));
+                    break;
+                case "rtePlayerGetPublishVolume":
+                    result.success(rteController.playerGetPublishVolume((String) args.get("playerId")));
+                    break;
+                case "rtePlayerSetPublishVolume":
+                    String playerIdForPublishVolume = (String) args.get("playerId");
+                    int publishVolume = args.get("volume") != null ? 
+                        ((Number) args.get("volume")).intValue() : 0;
+                    result.success(rteController.playerSetPublishVolume(playerIdForPublishVolume, publishVolume));
+                    break;
+                case "rtePlayerGetLoopCount":
+                    result.success(rteController.playerGetLoopCount((String) args.get("playerId")));
+                    break;
+                case "rtePlayerSetLoopCount":
+                    String playerIdForLoopCount = (String) args.get("playerId");
+                    int loopCount = args.get("count") != null ? 
+                        ((Number) args.get("count")).intValue() : 0;
+                    result.success(rteController.playerSetLoopCount(playerIdForLoopCount, loopCount));
+                    break;
+                case "rtePlayerGetJsonParameter":
+                    result.success(rteController.playerGetJsonParameter((String) args.get("playerId")));
+                    break;
+                case "rtePlayerSetJsonParameter":
+                    String playerIdForJsonParam = (String) args.get("playerId");
+                    String jsonParameter = (String) args.get("jsonParameter");
+                    result.success(rteController.playerSetJsonParameter(playerIdForJsonParam, jsonParameter));
+                    break;
+                case "rtePlayerGetAbrSubscriptionLayer":
+                    result.success(rteController.playerGetAbrSubscriptionLayer((String) args.get("playerId")));
+                    break;
+                case "rtePlayerSetAbrSubscriptionLayer":
+                    String playerIdForAbrSub = (String) args.get("playerId");
+                    int abrSubLayer = args.get("layer") != null ? 
+                        ((Number) args.get("layer")).intValue() : 0;
+                    result.success(rteController.playerSetAbrSubscriptionLayer(playerIdForAbrSub, abrSubLayer));
+                    break;
+                case "rtePlayerGetAbrFallbackLayer":
+                    result.success(rteController.playerGetAbrFallbackLayer((String) args.get("playerId")));
+                    break;
+                case "rtePlayerSetAbrFallbackLayer":
+                    String playerIdForAbrFallback = (String) args.get("playerId");
+                    int abrFallbackLayer = args.get("layer") != null ? 
+                        ((Number) args.get("layer")).intValue() : 0;
+                    result.success(rteController.playerSetAbrFallbackLayer(playerIdForAbrFallback, abrFallbackLayer));
+                    break;
+                // Canvas Individual Config Methods
+                case "rteCanvasGetVideoRenderMode":
+                    result.success(rteController.canvasGetVideoRenderMode((String) args.get("canvasId")));
+                    break;
+                case "rteCanvasSetVideoRenderMode":
+                    String canvasIdForRenderMode = (String) args.get("canvasId");
+                    int renderMode = args.get("mode") != null ? 
+                        ((Number) args.get("mode")).intValue() : 0;
+                    result.success(rteController.canvasSetVideoRenderMode(canvasIdForRenderMode, renderMode));
+                    break;
+                case "rteCanvasGetVideoMirrorMode":
+                    result.success(rteController.canvasGetVideoMirrorMode((String) args.get("canvasId")));
+                    break;
+                case "rteCanvasSetVideoMirrorMode":
+                    String canvasIdForMirrorMode = (String) args.get("canvasId");
+                    int mirrorMode = args.get("mode") != null ? 
+                        ((Number) args.get("mode")).intValue() : 0;
+                    result.success(rteController.canvasSetVideoMirrorMode(canvasIdForMirrorMode, mirrorMode));
+                    break;
+                case "rteCanvasGetCropArea":
+                    result.success(rteController.canvasGetCropArea((String) args.get("canvasId")));
+                    break;
+                case "rteCanvasSetCropArea":
+                    String canvasIdForCrop = (String) args.get("canvasId");
+                    int x = args.get("x") != null ? 
+                        ((Number) args.get("x")).intValue() : 0;
+                    int y = args.get("y") != null ? 
+                        ((Number) args.get("y")).intValue() : 0;
+                    int width = args.get("width") != null ? 
+                        ((Number) args.get("width")).intValue() : 0;
+                    int height = args.get("height") != null ? 
+                        ((Number) args.get("height")).intValue() : 0;
+                    result.success(rteController.canvasSetCropArea(canvasIdForCrop, x, y, width, height));
+                    break;
                 default:
                     result.notImplemented();
             }

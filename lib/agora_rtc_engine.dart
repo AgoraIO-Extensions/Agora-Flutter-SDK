@@ -21,3 +21,11 @@ export 'src/render/video_view_controller.dart';
 
 export 'src/agora_rtc_engine_ext.dart';
 export 'src/agora_pip_controller.dart';
+
+export 'src/agora_rte_enums.dart';
+export 'src/agora_rte.dart';
+export 'src/impl/agora_rte_impl.dart';
+export 'src/impl/agora_rte_player_impl.dart';
+export 'src/impl/agora_rte_canvas_impl.dart';
+export 'src/impl/agora_rte_core_impl.dart';
+export 'src/impl/agora_rte_config_impl.dart';

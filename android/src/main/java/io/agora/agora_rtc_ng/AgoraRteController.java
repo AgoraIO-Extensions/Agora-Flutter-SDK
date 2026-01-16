@@ -11,23 +11,8 @@ import java.util.Map;
 
 // Android RTE Java API uses simplified class names (Rte, Config, Player) instead of AgoraRte* prefix
 import io.agora.rte.Rte;
-import io.agora.rte.InitialConfig;
-import io.agora.rte.Config;
 import io.agora.rte.Error;
-import io.agora.rte.Observer;
-import io.agora.rte.Player;
-import io.agora.rte.PlayerInitialConfig;
-import io.agora.rte.PlayerConfig;
-import io.agora.rte.PlayerInfo;
-import io.agora.rte.PlayerStats;
-import io.agora.rte.PlayerObserver;
-import io.agora.rte.PlayerCustomSourceProvider;
-import io.agora.rte.Stream;
 import io.agora.rte.Canvas;
-import io.agora.rte.CanvasInitialConfig;
-import io.agora.rte.CanvasConfig;
-import io.agora.rte.ViewConfig;
-import io.agora.rte.Constants;
 import io.agora.rte.callback.AsyncCallback;
 import io.agora.rte.callback.PlayerGetStatsCallback;
 import io.agora.rte.exception.RteException;
@@ -37,700 +22,663 @@ public class AgoraRteController {
     private final MethodChannel channel;
     private final Handler mainHandler;
 
-    private Rte rteInstance; // Android uses Rte instance, not static AgoraRteSdk
-    private final Map<String, Player> players = new HashMap<>();
-    private final Map<String, Canvas> canvases = new HashMap<>();
-    private final Map<String, PlayerObserver> playerObservers = new HashMap<>();
+    // 使用新的分离类
+    private AgoraRTE rte;
+    private AgoraRTEConfig rteConfig;
+    private AgoraRTEPlayer rtePlayer;
+    private AgoraRTECanvas rteCanvas;
 
     public AgoraRteController(Context context, MethodChannel channel) {
         this.context = context;
         this.channel = channel;
         this.mainHandler = new Handler(Looper.getMainLooper());
+        
+        // Initialize RTE instance (but not the config/player/canvas until RTE is created)
+        this.rte = new AgoraRTE();
     }
 
     // --- RTE Lifecycle ---
 
     public boolean createRteFromBridge() {
-        try {
-            rteInstance = Rte.getFromBridge();
-            return rteInstance != null;
-        } catch (RteException e) {
-            return false;
+        boolean success = rte.getFromBridge();
+        if (success && rte.getRteInstance() != null) {
+            rteConfig = rte.getConfig();
+            rtePlayer = new AgoraRTEPlayer(rte.getRteInstance());
+            rteCanvas = new AgoraRTECanvas(rte.getRteInstance());
+            // Set up observer delegate bridge
+            setupPlayerObserverDelegate();
         }
+        return success;
     }
 
     public boolean createRteWithConfig(Map<String, Object> config) {
-        InitialConfig initialConfig = new InitialConfig();
-        rteInstance = new Rte(initialConfig);
-        
-        if (config != null && !config.isEmpty()) {
-            return setRteConfig(config);
+        boolean success = rte.createWithConfig(config);
+        if (success && rte.getRteInstance() != null) {
+            rteConfig = rte.getConfig();
+            rtePlayer = new AgoraRTEPlayer(rte.getRteInstance());
+            rteCanvas = new AgoraRTECanvas(rte.getRteInstance());
+            // Set up observer delegate bridge
+            setupPlayerObserverDelegate();
         }
-        return true;
+        return success;
     }
 
     public boolean initMediaEngine() {
-        if (rteInstance == null) {
+        if (rte == null || rte.getRteInstance() == null) {
             return false;
         }
-        try {
-            rteInstance.initMediaEngine(new AsyncCallback() {
-                @Override
-                public void onResult(Error error) {
-                    runOnMainThread(() -> {
-                        Map<String, Object> args = new HashMap<>();
-                        if (error == null) {
-                            args.put("error", null);
-                        } else {
-                            args.put("error", error.message());
-                        }
-                        channel.invokeMethod("rteInitMediaEngineCallback", args);
-                    });
-                }
-            });
-            return true;
-        } catch (RteException e) {
-            return false;
-        }
+        return rte.initMediaEngine(new AsyncCallback() {
+            @Override
+            public void onResult(Error error) {
+                runOnMainThread(() -> {
+                    Map<String, Object> args = new HashMap<>();
+                    if (error == null) {
+                        args.put("error", null);
+                    } else {
+                        args.put("error", error.message());
+                    }
+                    channel.invokeMethod("rteInitMediaEngineCallback", args);
+                });
+            }
+        });
     }
 
     public void destroyRte() {
-        if (rteInstance == null) {
-            return;
+        // Destroy all players and canvases first
+        if (rtePlayer != null) {
+            for (String playerId : rtePlayer.getPlayers().keySet()) {
+                destroyPlayer(playerId);
+            }
+        }
+        if (rteCanvas != null) {
+            for (String canvasId : rteCanvas.getCanvases().keySet()) {
+                destroyCanvas(canvasId);
+            }
         }
         
-        for (String playerId : players.keySet()) {
-            destroyPlayer(playerId);
+        if (rte != null) {
+            rte.destroy();
         }
-        players.clear();
         
-        for (String canvasId : canvases.keySet()) {
-            destroyCanvas(canvasId);
+        rteConfig = null;
+        rtePlayer = null;
+        rteCanvas = null;
+    }
+
+    private void setupPlayerObserverDelegate() {
+        if (rtePlayer != null) {
+            rtePlayer.setObserverDelegate(new AgoraRTEPlayerObserverDelegate() {
+                @Override
+                public void onStateChanged(String playerId, int oldState, int newState, int errorCode, String errorMessage) {
+                    runOnMainThread(() -> {
+                        Map<String, Object> args = new HashMap<>();
+                        args.put("playerId", playerId);
+                        args.put("oldState", oldState);
+                        args.put("newState", newState);
+                        args.put("errorCode", errorCode);
+                        args.put("errorMessage", errorMessage);
+                        channel.invokeMethod("onStateChanged", args);
+                    });
+                }
+
+                @Override
+                public void onPositionChanged(String playerId, long currentTime, long utcTime) {
+                    runOnMainThread(() -> {
+                        Map<String, Object> args = new HashMap<>();
+                        args.put("playerId", playerId);
+                        args.put("currentTime", currentTime);
+                        args.put("utcTime", utcTime);
+                        channel.invokeMethod("onPositionChanged", args);
+                    });
+                }
+
+                @Override
+                public void onResolutionChanged(String playerId, int width, int height) {
+                    runOnMainThread(() -> {
+                        Map<String, Object> args = new HashMap<>();
+                        args.put("playerId", playerId);
+                        args.put("width", width);
+                        args.put("height", height);
+                        channel.invokeMethod("onResolutionChanged", args);
+                    });
+                }
+
+                @Override
+                public void onEvent(String playerId, int event) {
+                    runOnMainThread(() -> {
+                        Map<String, Object> args = new HashMap<>();
+                        args.put("playerId", playerId);
+                        args.put("event", event);
+                        channel.invokeMethod("onEvent", args);
+                    });
+                }
+
+                @Override
+                public void onMetadata(String playerId, int type, byte[] data) {
+                    runOnMainThread(() -> {
+                        Map<String, Object> args = new HashMap<>();
+                        args.put("playerId", playerId);
+                        args.put("type", type);
+                        args.put("data", data);
+                        channel.invokeMethod("onMetadata", args);
+                    });
+                }
+
+                @Override
+                public void onPlayerInfoUpdated(String playerId, Map<String, Object> info) {
+                    runOnMainThread(() -> {
+                        Map<String, Object> args = new HashMap<>();
+                        args.put("playerId", playerId);
+                        args.put("info", info);
+                        channel.invokeMethod("onPlayerInfoUpdated", args);
+                    });
+                }
+
+                @Override
+                public void onAudioVolumeIndication(String playerId, int volume) {
+                    runOnMainThread(() -> {
+                        Map<String, Object> args = new HashMap<>();
+                        args.put("playerId", playerId);
+                        args.put("volume", volume);
+                        channel.invokeMethod("onAudioVolumeIndication", args);
+                    });
+                }
+            });
         }
-        canvases.clear();
-        
-        try {
-            rteInstance.destroy();
-        } catch (RteException e) {
-            // Ignore
-        }
-        rteInstance = null;
     }
 
     // --- RTE Config ---
 
     public boolean setRteConfig(Map<String, Object> config) {
-        if (rteInstance == null) {
+        if (rte == null) {
             return false;
         }
-        try {
-            Config rteConfig = new Config();
-            if (config.containsKey("appId")) {
-                rteConfig.setAppId((String) config.get("appId"));
-            }
-            if (config.containsKey("logFolder")) {
-                rteConfig.setLogFolder((String) config.get("logFolder"));
-            }
-            if (config.containsKey("logFileSize")) {
-                rteConfig.setLogFileSize(parseInt(config.get("logFileSize")));
-            }
-            if (config.containsKey("areaCode")) {
-                rteConfig.setAreaCode(parseInt(config.get("areaCode")));
-            }
-            if (config.containsKey("cloudProxy")) {
-                rteConfig.setCloudProxy((String) config.get("cloudProxy"));
-            }
-            if (config.containsKey("jsonParameter")) {
-                rteConfig.setJsonParameter((String) config.get("jsonParameter"));
-            }
-            
-            rteInstance.setConfigs(rteConfig);
-            return true;
-        } catch (RteException e) {
-            return false;
-        }
+        return rte.setConfigs(config);
     }
 
     public Map<String, Object> getRteConfig() {
-        if (rteInstance == null) {
+        if (rte == null) {
             return null;
         }
-        try {
-            Config config = new Config();
-            rteInstance.getConfigs(config);
-            
-            Map<String, Object> map = new HashMap<>();
-            map.put("appId", config.getAppId());
-            map.put("logFolder", config.getLogFolder());
-            map.put("logFileSize", config.getLogFileSize());
-            map.put("areaCode", config.getAreaCode());
-            map.put("cloudProxy", config.getCloudProxy());
-            map.put("jsonParameter", config.getJsonParameter());
-            return map;
-        } catch (RteException e) {
-            return null;
-        }
+        return rte.getConfigs();
     }
 
     public String appId() {
-        if (rteInstance == null) {
+        if (rteConfig == null) {
             return "";
         }
-        try {
-            Config config = new Config();
-            rteInstance.getConfigs(config);
-            String appId = config.getAppId();
-            return appId != null ? appId : "";
-        } catch (RteException e) {
-            return "";
-        }
+        return rteConfig.getAppId();
     }
 
     public String logFolder() {
-        if (rteInstance == null) {
+        if (rteConfig == null) {
             return "";
         }
-        try {
-            Config config = new Config();
-            rteInstance.getConfigs(config);
-            String logFolder = config.getLogFolder();
-            return logFolder != null ? logFolder : "";
-        } catch (RteException e) {
-            return "";
-        }
+        return rteConfig.getLogFolder();
     }
 
     public int logFileSize() {
-        if (rteInstance == null) {
+        if (rteConfig == null) {
             return 0;
         }
-        try {
-            Config config = new Config();
-            rteInstance.getConfigs(config);
-            return config.getLogFileSize();
-        } catch (RteException e) {
-            return 0;
-        }
+        return rteConfig.getLogFileSize();
     }
 
     public int areaCode() {
-        if (rteInstance == null) {
+        if (rteConfig == null) {
             return 0;
         }
-        try {
-            Config config = new Config();
-            rteInstance.getConfigs(config);
-            return config.getAreaCode();
-        } catch (RteException e) {
-            return 0;
-        }
+        return rteConfig.getAreaCode();
     }
 
     public String cloudProxy() {
-        if (rteInstance == null) {
+        if (rteConfig == null) {
             return "";
         }
-        try {
-            Config config = new Config();
-            rteInstance.getConfigs(config);
-            String cloudProxy = config.getCloudProxy();
-            return cloudProxy != null ? cloudProxy : "";
-        } catch (RteException e) {
-            return "";
-        }
+        return rteConfig.getCloudProxy();
     }
 
     public String jsonParameter() {
-        if (rteInstance == null) {
+        if (rteConfig == null) {
             return "";
         }
-        try {
-            Config config = new Config();
-            rteInstance.getConfigs(config);
-            String jsonParameter = config.getJsonParameter();
-            return jsonParameter != null ? jsonParameter : "";
-        } catch (RteException e) {
-            return "";
-        }
+        return rteConfig.getJsonParameter();
     }
 
     public boolean registerRteObserver() {
-        // TODO: Implement general RTE observer if needed
+        // RTE Observer functionality is not yet implemented in the separated classes
+        // This method is kept for backward compatibility but does nothing
         return true;
     }
 
     public boolean unregisterRteObserver() {
-        // TODO: Implement general RTE observer if needed
+        // RTE Observer functionality is not yet implemented in the separated classes
+        // This method is kept for backward compatibility but does nothing
         return true;
     }
 
     // --- Player Lifecycle ---
 
     public String createPlayer(Map<String, Object> config) {
-        if (rteInstance == null) {
+        if (rtePlayer == null) {
             return null;
         }
-        PlayerInitialConfig initialConfig = new PlayerInitialConfig();
-        Player player = new Player(rteInstance, initialConfig);
-        String playerId = String.valueOf(player.hashCode());
-        players.put(playerId, player);
-        
-        if (config != null) {
-            playerSetConfig(playerId, config);
-        }
-        return playerId;
+        return rtePlayer.createPlayer(config);
     }
 
     public boolean destroyPlayer(String playerId) {
-        Player player = players.remove(playerId);
-        if (player != null) {
-            playerUnregisterObserver(playerId);
-            // Player destruction is handled by finalize() in Android SDK
-            return true;
+        if (rtePlayer == null) {
+            return false;
         }
-        return false;
+        return rtePlayer.destroyPlayer(playerId);
     }
 
     // --- Player Control ---
 
     public boolean playerOpenUrl(String playerId, String url, long startTime) {
-        Player player = players.get(playerId);
-        if (player != null) {
-            player.openWithUrl(url, startTime, new AsyncCallback() {
-                @Override
-                public void onResult(Error error) {
-                    // Result handled by observer
-                }
-            });
-            return true;
+        if (rtePlayer == null) {
+            return false;
         }
-        return false;
+        return rtePlayer.openUrl(playerId, url, startTime, new AsyncCallback() {
+            @Override
+            public void onResult(Error error) {
+                // Result handled by observer
+            }
+        });
     }
     
     public void playerOpenWithCustomSourceProvider(String playerId, long provider, long startTime, MethodChannel.Result result) {
-        Player player = players.get(playerId);
-        if (player == null) {
-            result.error("PLAYER_NOT_FOUND", "Player not found", null);
-            return;
-        }
         // Custom source provider needs proper implementation
         result.notImplemented(); 
     }
     
     public void playerOpenWithStream(String playerId, long stream, MethodChannel.Result result) {
-        Player player = players.get(playerId);
-        if (player == null) {
-            result.error("PLAYER_NOT_FOUND", "Player not found", null);
-            return;
-        }
         // Stream opening needs proper implementation
         result.notImplemented();
     }
 
     public boolean playerPlay(String playerId) {
-        Player player = players.get(playerId);
-        if (player != null) {
-            try {
-                player.play();
-                return true;
-            } catch (RteException e) {
-                return false;
-            }
+        if (rtePlayer == null) {
+            return false;
         }
-        return false;
+        return rtePlayer.play(playerId);
     }
 
     public boolean playerPause(String playerId) {
-        Player player = players.get(playerId);
-        if (player != null) {
-            try {
-                player.pause();
-                return true;
-            } catch (RteException e) {
-                return false;
-            }
+        if (rtePlayer == null) {
+            return false;
         }
-        return false;
+        return rtePlayer.pause(playerId);
     }
 
     public boolean playerStop(String playerId) {
-        Player player = players.get(playerId);
-        if (player != null) {
-            try {
-                player.stop();
-                return true;
-            } catch (RteException e) {
-                return false;
-            }
+        if (rtePlayer == null) {
+            return false;
         }
-        return false;
+        return rtePlayer.stop(playerId);
     }
 
     public boolean playerSeek(String playerId, long position) {
-        Player player = players.get(playerId);
-        if (player != null) {
-            try {
-                player.seek(position);
-                return true;
-            } catch (RteException e) {
-                return false;
-            }
+        if (rtePlayer == null) {
+            return false;
         }
-        return false;
+        return rtePlayer.seek(playerId, position);
     }
 
     public boolean playerMuteAudio(String playerId, boolean mute) {
-        Player player = players.get(playerId);
-        if (player != null) {
-            try {
-                player.muteAudio(mute);
-                return true;
-            } catch (RteException e) {
-                return false;
-            }
+        if (rtePlayer == null) {
+            return false;
         }
-        return false;
+        return rtePlayer.muteAudio(playerId, mute);
     }
 
     public boolean playerMuteVideo(String playerId, boolean mute) {
-        Player player = players.get(playerId);
-        if (player != null) {
-            try {
-                player.muteVideo(mute);
-                return true;
-            } catch (RteException e) {
-                return false;
-            }
+        if (rtePlayer == null) {
+            return false;
         }
-        return false;
+        return rtePlayer.muteVideo(playerId, mute);
     }
     
     public boolean playerSwitch(String playerId, String url, boolean syncPts) {
-        Player player = players.get(playerId);
-        if (player != null) {
-            player.switchWithUrl(url, syncPts, new AsyncCallback() {
-                @Override
-                public void onResult(Error error) {
-                    // Result handled by observer
-                }
-            });
-            return true;
+        if (rtePlayer == null) {
+            return false;
         }
-        return false;
+        return rtePlayer.switchWithUrl(playerId, url, syncPts, new AsyncCallback() {
+            @Override
+            public void onResult(Error error) {
+                // Result handled by observer
+            }
+        });
     }
 
     public long playerGetDuration(String playerId) {
-        Player player = players.get(playerId);
-        if (player != null) {
-            try {
-                PlayerInfo info = new PlayerInfo();
-                player.getInfo(info);
-                return info.duration();
-            } catch (RteException e) {
-                return 0;
-            }
+        if (rtePlayer == null) {
+            return 0;
         }
-        return 0;
+        return rtePlayer.getDuration(playerId);
     }
 
     public long playerGetCurrentTime(String playerId) {
-        Player player = players.get(playerId);
-        if (player != null) {
-            try {
-                return player.getPosition();
-            } catch (RteException e) {
-                return 0;
-            }
+        if (rtePlayer == null) {
+            return 0;
         }
-        return 0;
+        return rtePlayer.getCurrentTime(playerId);
     }
 
     public Map<String, Object> playerGetInfo(String playerId) {
-        Player player = players.get(playerId);
-        if (player != null) {
-            try {
-                PlayerInfo info = new PlayerInfo();
-                player.getInfo(info);
-                
-                Map<String, Object> map = new HashMap<>();
-                map.put("state", info.state()); // state() returns int directly
-                map.put("duration", info.duration());
-                map.put("streamCount", info.streamCount());
-                map.put("hasAudio", info.hasAudio());
-                map.put("hasVideo", info.hasVideo());
-                map.put("isAudioMuted", info.isAudioMuted());
-                map.put("isVideoMuted", info.isVideoMuted());
-                map.put("videoHeight", info.videoHeight());
-                map.put("videoWidth", info.videoWidth());
-                map.put("audioSampleRate", info.audioSampleRate());
-                map.put("audioChannels", info.audioChannels());
-                map.put("audioBitsPerSample", info.audioBitsPerSample());
-                map.put("abrSubscriptionLayer", Constants.AbrSubscriptionLayer.getValue(info.abrSubscriptionLayer()));
-                map.put("currentUrl", info.currentUrl());
-                return map;
-            } catch (RteException e) {
-                return null;
-            }
+        if (rtePlayer == null) {
+            return null;
         }
-        return null;
+        return rtePlayer.getInfo(playerId);
     }
 
     public Map<String, Object> playerGetStats(String playerId) {
-        Player player = players.get(playerId);
-        if (player != null) {
-            player.getStats(new PlayerGetStatsCallback() {
-                @Override
-                public void onResult(PlayerStats stats, Error error) {
-                    // Stats are returned asynchronously, need to handle via callback
-                    // For now, return null and handle via observer if needed
-                }
-            });
-            // Note: Stats are async, this method returns null
-            // Consider using callback-based approach
+        if (rtePlayer == null) {
             return null;
         }
+        // Stats are async, return null for now
+        // Consider using callback-based approach if needed
+        rtePlayer.getStats(playerId, new PlayerGetStatsCallback() {
+            @Override
+            public void onResult(io.agora.rte.PlayerStats stats, Error error) {
+                // Stats are returned asynchronously, handle via observer if needed
+            }
+        });
         return null;
     }
 
     public boolean playerSetConfig(String playerId, Map<String, Object> config) {
-        Player player = players.get(playerId);
-        if (player != null) {
-            try {
-                PlayerConfig playerConfig = new PlayerConfig();
-                if (config.containsKey("autoPlay")) {
-                    playerConfig.setAutoPlay((Boolean) config.get("autoPlay"));
-                }
-                if (config.containsKey("playbackSpeed")) {
-                    playerConfig.setPlaybackSpeed(parseInt(config.get("playbackSpeed")));
-                }
-                if (config.containsKey("playoutVolume")) {
-                    playerConfig.setPlayoutVolume(parseInt(config.get("playoutVolume")));
-                }
-                if (config.containsKey("loopCount")) {
-                    playerConfig.setLoopCount(parseInt(config.get("loopCount")));
-                }
-                if (config.containsKey("jsonParameter")) {
-                    playerConfig.setJsonParameter((String) config.get("jsonParameter"));
-                }
-                // Add other properties as needed
-                
-                player.setConfigs(playerConfig);
-                return true;
-            } catch (RteException e) {
-                return false;
-            }
+        if (rtePlayer == null) {
+            return false;
         }
-        return false;
+        return rtePlayer.setConfigs(playerId, config);
     }
 
     public Map<String, Object> playerGetConfig(String playerId) {
-        Player player = players.get(playerId);
-        if (player != null) {
-            try {
-                PlayerConfig config = new PlayerConfig();
-                player.getConfigs(config);
-                
-                Map<String, Object> map = new HashMap<>();
-                try {
-                    map.put("autoPlay", config.getAutoPlay());
-                    map.put("playbackSpeed", config.getPlaybackSpeed());
-                    map.put("playoutVolume", config.getPlayoutVolume());
-                    map.put("loopCount", config.getLoopCount());
-                    map.put("jsonParameter", config.getJsonParameter());
-                } catch (RteException e) {
-                    // Individual getter failed, return partial map
-                }
-                return map;
-            } catch (RteException e) {
-                return null;
-            }
+        if (rtePlayer == null) {
+            return null;
         }
-        return null;
+        return rtePlayer.getConfigs(playerId);
     }
     
     // --- Player Observer ---
 
     public boolean playerRegisterObserver(String playerId) {
-        Player player = players.get(playerId);
-        if (player != null) {
-            try {
-                PlayerObserver observer = new PlayerObserver() {
-                    @Override
-                    public void onStateChanged(int oldState, int newState, Error error) {
-                        runOnMainThread(() -> {
-                           Map<String, Object> args = new HashMap<>();
-                           args.put("playerId", playerId);
-                           args.put("oldState", oldState);
-                           args.put("newState", newState);
-                           args.put("errorCode", error != null ? Constants.ErrorCode.getValue(error.code()) : 0);
-                           args.put("errorMessage", error != null ? error.message() : "");
-                           channel.invokeMethod("onStateChanged", args);
-                        });
-                    }
-
-                    @Override
-                    public void onPositionChanged(long currentTime, long utcTime) {
-                        runOnMainThread(() -> {
-                            Map<String, Object> args = new HashMap<>();
-                            args.put("playerId", playerId);
-                            args.put("currentTime", currentTime);
-                            args.put("utcTime", utcTime);
-                            channel.invokeMethod("onPositionChanged", args);
-                        });
-                    }
-
-                    @Override
-                    public void onResolutionChanged(int width, int height) {
-                        runOnMainThread(() -> {
-                            Map<String, Object> args = new HashMap<>();
-                            args.put("playerId", playerId);
-                            args.put("width", width);
-                            args.put("height", height);
-                            channel.invokeMethod("onResolutionChanged", args);
-                        });
-                    }
-
-                    @Override
-                    public void onEvent(int event) {
-                        runOnMainThread(() -> {
-                            Map<String, Object> args = new HashMap<>();
-                            args.put("playerId", playerId);
-                            args.put("event", event);
-                            channel.invokeMethod("onEvent", args);
-                        });
-                    }
-
-                    @Override
-                    public void onMetadata(int type, byte[] data) {
-                        runOnMainThread(() -> {
-                            Map<String, Object> args = new HashMap<>();
-                            args.put("playerId", playerId);
-                            args.put("type", type);
-                            args.put("data", data);
-                            channel.invokeMethod("onMetadata", args);
-                        });
-                    }
-
-                    @Override
-                    public void onPlayerInfoUpdated(PlayerInfo info) {
-                        runOnMainThread(() -> {
-                            Map<String, Object> args = new HashMap<>();
-                            args.put("playerId", playerId);
-                            args.put("info", infoToMap(info));
-                            channel.invokeMethod("onPlayerInfoUpdated", args);
-                        });
-                    }
-
-                    @Override
-                    public void onAudioVolumeIndication(int volume) {
-                        runOnMainThread(() -> {
-                            Map<String, Object> args = new HashMap<>();
-                            args.put("playerId", playerId);
-                            args.put("volume", volume);
-                            channel.invokeMethod("onAudioVolumeIndication", args);
-                        });
-                    }
-                };
-                playerObservers.put(playerId, observer);
-                player.registerObserver(observer);
-                return true;
-            } catch (RteException e) {
-                return false;
-            }
+        if (rtePlayer == null) {
+            return false;
         }
-        return false;
+        return rtePlayer.registerObserver(playerId);
     }
 
     public boolean playerUnregisterObserver(String playerId) {
-        Player player = players.get(playerId);
-        PlayerObserver observer = playerObservers.remove(playerId);
-        if (player != null && observer != null) {
-            try {
-                player.unregisterObserver(observer);
-                return true;
-            } catch (RteException e) {
-                return false;
-            }
+        if (rtePlayer == null) {
+            return false;
         }
-        return false;
+        return rtePlayer.unregisterObserver(playerId);
+    }
+
+    // --- Player Individual Config Methods ---
+    public boolean playerGetAutoPlay(String playerId) {
+        if (rtePlayer == null) {
+            return false;
+        }
+        return rtePlayer.getAutoPlay(playerId);
+    }
+
+    public boolean playerSetAutoPlay(String playerId, boolean autoPlay) {
+        if (rtePlayer == null) {
+            return false;
+        }
+        return rtePlayer.setAutoPlay(playerId, autoPlay);
+    }
+
+    public int playerGetPlaybackSpeed(String playerId) {
+        if (rtePlayer == null) {
+            return 0;
+        }
+        return rtePlayer.getPlaybackSpeed(playerId);
+    }
+
+    public boolean playerSetPlaybackSpeed(String playerId, int speed) {
+        if (rtePlayer == null) {
+            return false;
+        }
+        return rtePlayer.setPlaybackSpeed(playerId, speed);
+    }
+
+    public int playerGetPlayoutAudioTrackIdx(String playerId) {
+        if (rtePlayer == null) {
+            return 0;
+        }
+        return rtePlayer.getPlayoutAudioTrackIdx(playerId);
+    }
+
+    public boolean playerSetPlayoutAudioTrackIdx(String playerId, int idx) {
+        if (rtePlayer == null) {
+            return false;
+        }
+        return rtePlayer.setPlayoutAudioTrackIdx(playerId, idx);
+    }
+
+    public int playerGetPublishAudioTrackIdx(String playerId) {
+        if (rtePlayer == null) {
+            return 0;
+        }
+        return rtePlayer.getPublishAudioTrackIdx(playerId);
+    }
+
+    public boolean playerSetPublishAudioTrackIdx(String playerId, int idx) {
+        if (rtePlayer == null) {
+            return false;
+        }
+        return rtePlayer.setPublishAudioTrackIdx(playerId, idx);
+    }
+
+    public int playerGetAudioTrackIdx(String playerId) {
+        if (rtePlayer == null) {
+            return 0;
+        }
+        return rtePlayer.getAudioTrackIdx(playerId);
+    }
+
+    public boolean playerSetAudioTrackIdx(String playerId, int idx) {
+        if (rtePlayer == null) {
+            return false;
+        }
+        return rtePlayer.setAudioTrackIdx(playerId, idx);
+    }
+
+    public int playerGetSubtitleTrackIdx(String playerId) {
+        if (rtePlayer == null) {
+            return 0;
+        }
+        return rtePlayer.getSubtitleTrackIdx(playerId);
+    }
+
+    public boolean playerSetSubtitleTrackIdx(String playerId, int idx) {
+        if (rtePlayer == null) {
+            return false;
+        }
+        return rtePlayer.setSubtitleTrackIdx(playerId, idx);
+    }
+
+    public int playerGetExternalSubtitleTrackIdx(String playerId) {
+        if (rtePlayer == null) {
+            return 0;
+        }
+        return rtePlayer.getExternalSubtitleTrackIdx(playerId);
+    }
+
+    public boolean playerSetExternalSubtitleTrackIdx(String playerId, int idx) {
+        if (rtePlayer == null) {
+            return false;
+        }
+        return rtePlayer.setExternalSubtitleTrackIdx(playerId, idx);
+    }
+
+    public int playerGetAudioPitch(String playerId) {
+        if (rtePlayer == null) {
+            return 0;
+        }
+        return rtePlayer.getAudioPitch(playerId);
+    }
+
+    public boolean playerSetAudioPitch(String playerId, int pitch) {
+        if (rtePlayer == null) {
+            return false;
+        }
+        return rtePlayer.setAudioPitch(playerId, pitch);
+    }
+
+    public int playerGetPlayoutVolume(String playerId) {
+        if (rtePlayer == null) {
+            return 0;
+        }
+        return rtePlayer.getPlayoutVolume(playerId);
+    }
+
+    public boolean playerSetPlayoutVolume(String playerId, int volume) {
+        if (rtePlayer == null) {
+            return false;
+        }
+        return rtePlayer.setPlayoutVolume(playerId, volume);
+    }
+
+    public int playerGetAudioPlaybackDelay(String playerId) {
+        if (rtePlayer == null) {
+            return 0;
+        }
+        return rtePlayer.getAudioPlaybackDelay(playerId);
+    }
+
+    public boolean playerSetAudioPlaybackDelay(String playerId, int delay) {
+        if (rtePlayer == null) {
+            return false;
+        }
+        return rtePlayer.setAudioPlaybackDelay(playerId, delay);
+    }
+
+    public int playerGetAudioDualMonoMode(String playerId) {
+        if (rtePlayer == null) {
+            return 0;
+        }
+        return rtePlayer.getAudioDualMonoMode(playerId);
+    }
+
+    public boolean playerSetAudioDualMonoMode(String playerId, int mode) {
+        if (rtePlayer == null) {
+            return false;
+        }
+        return rtePlayer.setAudioDualMonoMode(playerId, mode);
+    }
+
+    public int playerGetPublishVolume(String playerId) {
+        if (rtePlayer == null) {
+            return 0;
+        }
+        return rtePlayer.getPublishVolume(playerId);
+    }
+
+    public boolean playerSetPublishVolume(String playerId, int volume) {
+        if (rtePlayer == null) {
+            return false;
+        }
+        return rtePlayer.setPublishVolume(playerId, volume);
+    }
+
+    public int playerGetLoopCount(String playerId) {
+        if (rtePlayer == null) {
+            return 0;
+        }
+        return rtePlayer.getLoopCount(playerId);
+    }
+
+    public boolean playerSetLoopCount(String playerId, int count) {
+        if (rtePlayer == null) {
+            return false;
+        }
+        return rtePlayer.setLoopCount(playerId, count);
+    }
+
+    public String playerGetJsonParameter(String playerId) {
+        if (rtePlayer == null) {
+            return "";
+        }
+        return rtePlayer.getJsonParameter(playerId);
+    }
+
+    public boolean playerSetJsonParameter(String playerId, String jsonParameter) {
+        if (rtePlayer == null) {
+            return false;
+        }
+        return rtePlayer.setJsonParameter(playerId, jsonParameter);
+    }
+
+    public int playerGetAbrSubscriptionLayer(String playerId) {
+        if (rtePlayer == null) {
+            return 0;
+        }
+        return rtePlayer.getAbrSubscriptionLayer(playerId);
+    }
+
+    public boolean playerSetAbrSubscriptionLayer(String playerId, int layer) {
+        if (rtePlayer == null) {
+            return false;
+        }
+        return rtePlayer.setAbrSubscriptionLayer(playerId, layer);
+    }
+
+    public int playerGetAbrFallbackLayer(String playerId) {
+        if (rtePlayer == null) {
+            return 0;
+        }
+        return rtePlayer.getAbrFallbackLayer(playerId);
+    }
+
+    public boolean playerSetAbrFallbackLayer(String playerId, int layer) {
+        if (rtePlayer == null) {
+            return false;
+        }
+        return rtePlayer.setAbrFallbackLayer(playerId, layer);
     }
 
     // --- Canvas ---
 
     public String createCanvas(Map<String, Object> config) {
-        if (rteInstance == null) {
+        if (rteCanvas == null) {
             return null;
         }
-        CanvasInitialConfig initialConfig = new CanvasInitialConfig();
-        Canvas canvas = new Canvas(rteInstance, initialConfig);
-        
-        String canvasId = String.valueOf(canvas.hashCode());
-        canvases.put(canvasId, canvas);
-        
-        if (config != null) {
-            canvasSetConfig(canvasId, config);
-        }
-        return canvasId;
+        return rteCanvas.createCanvas(config);
     }
 
     public boolean destroyCanvas(String canvasId) {
-        Canvas canvas = canvases.remove(canvasId);
-        // Canvas destruction is handled by finalize() in Android SDK
-        return canvas != null;
+        if (rteCanvas == null) {
+            return false;
+        }
+        return rteCanvas.destroyCanvas(canvasId);
     }
 
     public boolean canvasSetConfig(String canvasId, Map<String, Object> config) {
-        Canvas canvas = canvases.get(canvasId);
-        if (canvas != null) {
-            try {
-                CanvasConfig c = new CanvasConfig();
-                if (config.containsKey("videoRenderMode")) {
-                    c.setVideoRenderMode(Constants.VideoRenderMode.fromInt(parseInt(config.get("videoRenderMode"))));
-                }
-                if (config.containsKey("videoMirrorMode")) {
-                    c.setVideoMirrorMode(Constants.VideoMirrorMode.fromInt(parseInt(config.get("videoMirrorMode"))));
-                }
-                canvas.setConfigs(c);
-                return true;
-            } catch (RteException e) {
-                return false;
-            }
+        if (rteCanvas == null) {
+            return false;
         }
-        return false;
+        return rteCanvas.setConfigs(canvasId, config);
     }
     
     public void canvasGetConfig(String canvasId, MethodChannel.Result result) {
-        Canvas canvas = canvases.get(canvasId);
-        if (canvas != null) {
-            try {
-                CanvasConfig c = new CanvasConfig();
-                canvas.getConfigs(c);
-                
-                Map<String, Object> map = new HashMap<>();
-                map.put("videoRenderMode", c.getVideoRenderMode() != null ? Constants.VideoRenderMode.getValue(c.getVideoRenderMode()) : 0);
-                map.put("videoMirrorMode", c.getVideoMirrorMode() != null ? Constants.VideoMirrorMode.getValue(c.getVideoMirrorMode()) : 0);
-                result.success(map);
-                return;
-            } catch (RteException e) {
-                result.success(null);
-                return;
-            }
+        if (rteCanvas == null) {
+            result.success(null);
+            return;
         }
-        result.success(null);
+        Map<String, Object> config = rteCanvas.getConfigs(canvasId);
+        result.success(config);
     }
 
     public boolean canvasAddView(String canvasId, View view, Map<String, Object> config) {
-        Canvas canvas = canvases.get(canvasId);
-        if (canvas != null) {
-            try {
-                ViewConfig viewConfig = new ViewConfig();
-                canvas.addView(view, viewConfig);
-                return true;
-            } catch (RteException e) {
-                return false;
-            }
+        if (rteCanvas == null) {
+            return false;
         }
-        return false;
+        return rteCanvas.addView(canvasId, view, config);
     }
     
     public boolean canvasAddView(String canvasId, long viewPtr, Map<String, Object> config) {
@@ -739,17 +687,10 @@ public class AgoraRteController {
     }
 
     public boolean canvasRemoveView(String canvasId, View view, Map<String, Object> config) {
-        Canvas canvas = canvases.get(canvasId);
-        if (canvas != null) {
-            try {
-                ViewConfig viewConfig = new ViewConfig();
-                canvas.removeView(view, viewConfig);
-                return true;
-            } catch (RteException e) {
-                return false;
-            }
+        if (rteCanvas == null) {
+            return false;
         }
-        return false;
+        return rteCanvas.removeView(canvasId, view, config);
     }
     
     public boolean canvasRemoveView(String canvasId, long viewPtr, Map<String, Object> config) {
@@ -758,17 +699,57 @@ public class AgoraRteController {
     }
 
     public boolean playerSetCanvas(String playerId, String canvasId) {
-        Player player = players.get(playerId);
-        Canvas canvas = canvases.get(canvasId);
-        if (player != null && canvas != null) {
-            try {
-                player.setCanvas(canvas);
-                return true;
-            } catch (RteException e) {
-                return false;
-            }
+        if (rtePlayer == null || rteCanvas == null) {
+            return false;
         }
-        return false;
+        Canvas canvas = rteCanvas.getCanvas(canvasId);
+        if (canvas == null) {
+            return false;
+        }
+        return rtePlayer.setCanvas(playerId, canvas);
+    }
+
+    // --- Canvas Individual Config Methods ---
+    public int canvasGetVideoRenderMode(String canvasId) {
+        if (rteCanvas == null) {
+            return 0;
+        }
+        return rteCanvas.getVideoRenderMode(canvasId);
+    }
+
+    public boolean canvasSetVideoRenderMode(String canvasId, int mode) {
+        if (rteCanvas == null) {
+            return false;
+        }
+        return rteCanvas.setVideoRenderMode(canvasId, mode);
+    }
+
+    public int canvasGetVideoMirrorMode(String canvasId) {
+        if (rteCanvas == null) {
+            return 0;
+        }
+        return rteCanvas.getVideoMirrorMode(canvasId);
+    }
+
+    public boolean canvasSetVideoMirrorMode(String canvasId, int mode) {
+        if (rteCanvas == null) {
+            return false;
+        }
+        return rteCanvas.setVideoMirrorMode(canvasId, mode);
+    }
+
+    public Map<String, Object> canvasGetCropArea(String canvasId) {
+        if (rteCanvas == null) {
+            return null;
+        }
+        return rteCanvas.getCropArea(canvasId);
+    }
+
+    public boolean canvasSetCropArea(String canvasId, int x, int y, int width, int height) {
+        if (rteCanvas == null) {
+            return false;
+        }
+        return rteCanvas.setCropArea(canvasId, x, y, width, height);
     }
 
     // --- Helpers ---
@@ -777,37 +758,5 @@ public class AgoraRteController {
         if (mainHandler != null) {
             mainHandler.post(runnable);
         }
-    }
-
-    private int parseInt(Object obj) {
-        if (obj instanceof Number) return ((Number) obj).intValue();
-        if (obj instanceof String) {
-            try { return Integer.parseInt((String) obj); } catch (Exception e) { return 0; }
-        }
-        return 0;
-    }
-    
-    private Map<String, Object> infoToMap(PlayerInfo info) {
-        Map<String, Object> map = new HashMap<>();
-        if (info == null) return map;
-        try {
-            map.put("state", info.state()); // state() returns int directly
-            map.put("duration", info.duration());
-            map.put("streamCount", info.streamCount());
-            map.put("hasAudio", info.hasAudio());
-            map.put("hasVideo", info.hasVideo());
-            map.put("isAudioMuted", info.isAudioMuted());
-            map.put("isVideoMuted", info.isVideoMuted());
-            map.put("videoHeight", info.videoHeight());
-            map.put("videoWidth", info.videoWidth());
-            map.put("audioSampleRate", info.audioSampleRate());
-            map.put("audioChannels", info.audioChannels());
-            map.put("audioBitsPerSample", info.audioBitsPerSample());
-            map.put("abrSubscriptionLayer", Constants.AbrSubscriptionLayer.getValue(info.abrSubscriptionLayer()));
-            map.put("currentUrl", info.currentUrl());
-        } catch (Exception e) {
-            // Ignore
-        }
-        return map;
     }
 }
