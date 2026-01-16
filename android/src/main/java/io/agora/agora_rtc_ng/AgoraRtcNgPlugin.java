@@ -59,7 +59,7 @@ public class AgoraRtcNgPlugin implements FlutterPlugin, MethodChannel.MethodCall
                         this.videoViewController));
         
         // 初始化 RTE 控制器
-        rteController = new AgoraRteController(applicationContext, channel);
+        rteController = new AgoraRteController(applicationContext, channel, videoViewController);
     }
 
     @Override

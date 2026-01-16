@@ -3,6 +3,9 @@ import 'package:agora_rtc_engine/agora_rtc_engine.dart';
 import 'package:agora_rtc_engine_example/components/log_sink.dart';
 import 'package:agora_rtc_engine_example/config/agora.config.dart' as config;
 import 'package:flutter/material.dart';
+import 'package:flutter/foundation.dart' show defaultTargetPlatform, kIsWeb;
+import 'package:flutter/rendering.dart';
+import 'package:flutter/services.dart';
 
 class RtePlayerExample extends StatefulWidget {
   const RtePlayerExample({Key? key}) : super(key: key);
@@ -20,10 +23,15 @@ class _RtePlayerExampleState extends State<RtePlayerExample>
   bool _isReady = false;
   String _infoText = 'Initializing...';
   late TabController _tabController;
+  
+  // PlatformView 相关
+  int? _platformViewId;
+  int? _viewPtr;
+  MethodChannel? _platformViewChannel;
 
   // URL 输入
   final TextEditingController _urlController =
-      TextEditingController(text: 'rte://your_channel_id?token=xxx&uid=xxx');
+      TextEditingController(text: 'https://rtc-fallback-test.agoramdn.com/857c6564e7db469387eb44205f287b9a/zzytest.m3u8?token=857c6564e7db469387eb44205f287b9a&userUid=7788');
   final TextEditingController _switchUrlController =
       TextEditingController(text: 'rte://your_channel_id_2?token=xxx&uid=xxx');
   final TextEditingController _preloadUrlController =
@@ -112,11 +120,20 @@ class _RtePlayerExampleState extends State<RtePlayerExample>
       await _loadCanvasConfig();
 
       await _player!.setCanvas(_canvas!);
+      logSink.log('Player canvas set: ${_canvas!.canvasId}');
 
       setState(() {
         _isReady = true;
         _infoText = 'RTE Ready';
       });
+      
+      // 如果 PlatformView 已经创建，添加视图到画布
+      if (_viewPtr != null && _canvas != null) {
+        logSink.log('PlatformView already created, adding view to canvas');
+        await _addViewToCanvas();
+      } else {
+        logSink.log('PlatformView not yet created, will add view when PlatformView is ready');
+      }
     } catch (e) {
       logSink.log('Error: $e');
       setState(() {
@@ -211,8 +228,91 @@ class _RtePlayerExampleState extends State<RtePlayerExample>
     _positionTimer?.cancel();
     _statsTimer?.cancel();
     _player?.unregisterObserver(this);
+    if (_viewPtr != null && _canvas != null) {
+      _canvas!.removeView(_viewPtr!);
+    }
     _rte.destroy();
     super.dispose();
+  }
+  
+  // 构建 PlatformView
+  Widget _buildPlatformView() {
+    if (kIsWeb) {
+      return const Center(child: Text('Web platform not supported for RTE video view'));
+    }
+    
+    final String viewType = defaultTargetPlatform == TargetPlatform.iOS
+        ? 'AgoraSurfaceView'
+        : 'AgoraTextureView';
+    
+    if (defaultTargetPlatform == TargetPlatform.iOS) {
+      return UiKitView(
+        viewType: viewType,
+        onPlatformViewCreated: _onPlatformViewCreated,
+        hitTestBehavior: PlatformViewHitTestBehavior.transparent,
+      );
+    } else if (defaultTargetPlatform == TargetPlatform.android) {
+      return AndroidView(
+        viewType: viewType,
+        onPlatformViewCreated: _onPlatformViewCreated,
+        hitTestBehavior: PlatformViewHitTestBehavior.transparent,
+      );
+    } else {
+      return const Center(child: Text('Platform not supported'));
+    }
+  }
+  
+  // PlatformView 创建回调
+  void _onPlatformViewCreated(int id) {
+    _platformViewId = id;
+    final String viewType = defaultTargetPlatform == TargetPlatform.iOS
+        ? 'AgoraSurfaceView'
+        : 'AgoraTextureView';
+    _platformViewChannel = MethodChannel('agora_rtc_ng/${viewType}_$id');
+    logSink.log('PlatformView created: id=$id, type=$viewType');
+    _getNativeViewPtr();
+  }
+  
+  // 获取原生视图指针
+  Future<void> _getNativeViewPtr() async {
+    if (_platformViewChannel == null) {
+      logSink.log('PlatformView channel is null');
+      return;
+    }
+    
+    try {
+      logSink.log('Getting native view ptr from channel: agora_rtc_ng/${defaultTargetPlatform == TargetPlatform.iOS ? "AgoraSurfaceView" : "AgoraTextureView"}_$_platformViewId');
+      final viewPtr = await _platformViewChannel!.invokeMethod<int>('getNativeViewPtr');
+      logSink.log('Got viewPtr: $viewPtr');
+      if (viewPtr != null && viewPtr != 0) {
+        _viewPtr = viewPtr;
+        logSink.log('ViewPtr set to: $_viewPtr');
+        await _addViewToCanvas();
+      } else {
+        logSink.log('Invalid viewPtr: $viewPtr');
+      }
+    } catch (e) {
+      logSink.log('Get native view ptr error: $e');
+    }
+  }
+  
+  // 添加视图到画布
+  Future<void> _addViewToCanvas() async {
+    if (_viewPtr == null || _canvas == null) return;
+    
+    try {
+      // 不设置 cropArea，让 SDK 自动处理
+      await _canvas!.addView(_viewPtr!);
+      logSink.log('View added to canvas successfully, viewPtr: $_viewPtr');
+      
+      // 如果 Player 已经设置了 Canvas，可能需要重新关联
+      if (_player != null) {
+        await _player!.setCanvas(_canvas!);
+        logSink.log('Canvas re-associated with player');
+      }
+    } catch (e) {
+      logSink.log('Add view to canvas error: $e');
+    }
   }
 
   Future<void> _onOpen() async {
@@ -227,13 +327,13 @@ class _RtePlayerExampleState extends State<RtePlayerExample>
       return;
     }
 
-    if (!url.startsWith('rte://')) {
-      setState(() {
-        _infoText = 'Error: URL 必须以 rte:// 开头';
-      });
-      _addLog('Error: URL must start with rte://');
-      return;
-    }
+    // if (!url.startsWith('rte://')) {
+    //   setState(() {
+    //     _infoText = 'Error: URL 必须以 rte:// 开头';
+    //   });
+    //   _addLog('Error: URL must start with rte://');
+    //   return;
+    // }
 
     try {
       setState(() {
@@ -241,7 +341,17 @@ class _RtePlayerExampleState extends State<RtePlayerExample>
         _eventLogs.clear();
       });
       _addLog('Opening URL: $url');
+      
+      // 确保视图已添加到画布
+      if (_viewPtr != null && _canvas != null) {
+        await _addViewToCanvas();
+      }
+      
       await _player!.openWithUrl(url, 0);
+      
+      // 显式调用 play（即使设置了 autoPlay）
+      // await _player!.play();
+      
       _startPositionTimer();
       _startStatsTimer();
     } catch (e) {
@@ -680,6 +790,13 @@ class _RtePlayerExampleState extends State<RtePlayerExample>
       _width = width;
       _height = height;
     });
+    
+    // 分辨率改变后，可能需要更新视图配置
+    if (_viewPtr != null && _canvas != null && width > 0 && height > 0) {
+      // 可以在这里更新 cropArea 或其他配置
+      // 但通常不需要，SDK 会自动处理
+      logSink.log('Resolution changed: $width x $height, viewPtr: $_viewPtr');
+    }
   }
 
   @override
@@ -782,22 +899,30 @@ class _RtePlayerExampleState extends State<RtePlayerExample>
           Container(
             height: 200,
             color: Colors.black,
-            child: Center(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Text(
-                    _infoText,
-                    style: const TextStyle(color: Colors.white),
-                    textAlign: TextAlign.center,
-                  ),
-                  if (_width > 0 && _height > 0)
-                    Text(
-                      '${_width}x$_height',
-                      style: const TextStyle(color: Colors.white70, fontSize: 12),
+            child: Stack(
+              children: [
+                // PlatformView 用于显示视频
+                if (_isReady)
+                  _buildPlatformView()
+                else
+                  Center(
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text(
+                          "infoText:$_infoText, width:$_width, height:$_height",
+                          style: const TextStyle(color: Colors.white),
+                          textAlign: TextAlign.center,
+                        ),
+                        if (_width > 0 && _height > 0)
+                          Text(
+                            '${_width}x$_height',
+                            style: const TextStyle(color: Colors.white70, fontSize: 12),
+                          ),
+                      ],
                     ),
-                ],
-              ),
+                  ),
+              ],
             ),
           ),
 

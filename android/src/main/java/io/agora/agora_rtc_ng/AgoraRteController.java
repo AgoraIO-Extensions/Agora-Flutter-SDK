@@ -21,6 +21,7 @@ public class AgoraRteController {
     private final Context context;
     private final MethodChannel channel;
     private final Handler mainHandler;
+    private final VideoViewController videoViewController;
 
     // 使用新的分离类
     private AgoraRTE rte;
@@ -28,9 +29,10 @@ public class AgoraRteController {
     private AgoraRTEPlayer rtePlayer;
     private AgoraRTECanvas rteCanvas;
 
-    public AgoraRteController(Context context, MethodChannel channel) {
+    public AgoraRteController(Context context, MethodChannel channel, VideoViewController videoViewController) {
         this.context = context;
         this.channel = channel;
+        this.videoViewController = videoViewController;
         this.mainHandler = new Handler(Looper.getMainLooper());
         
         // Initialize RTE instance (but not the config/player/canvas until RTE is created)
@@ -682,8 +684,14 @@ public class AgoraRteController {
     }
     
     public boolean canvasAddView(String canvasId, long viewPtr, Map<String, Object> config) {
-        // Android uses View objects, not viewPtr
-        return false;
+        if (rteCanvas == null || videoViewController == null) {
+            return false;
+        }
+        View view = videoViewController.getViewByPtr(viewPtr);
+        if (view == null) {
+            return false;
+        }
+        return rteCanvas.addView(canvasId, view, config);
     }
 
     public boolean canvasRemoveView(String canvasId, View view, Map<String, Object> config) {
@@ -694,8 +702,14 @@ public class AgoraRteController {
     }
     
     public boolean canvasRemoveView(String canvasId, long viewPtr, Map<String, Object> config) {
-        // Android uses View objects, not viewPtr
-        return false;
+        if (rteCanvas == null || videoViewController == null) {
+            return false;
+        }
+        View view = videoViewController.getViewByPtr(viewPtr);
+        if (view == null) {
+            return false;
+        }
+        return rteCanvas.removeView(canvasId, view, config);
     }
 
     public boolean playerSetCanvas(String playerId, String canvasId) {

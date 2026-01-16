@@ -281,7 +281,7 @@
     GET_CANVAS_OR_RETURN(self.canvases, canvasId, error, NO);
     
     AgoraRteViewConfig *viewConfig = nil;
-    if (config && config.count > 0) {
+    if (config && config != [NSNull null] && [config isKindOfClass:[NSDictionary class]] && config.count > 0) {
         viewConfig = [[AgoraRteViewConfig alloc] init];
         if (config[@"cropArea"]) {
             NSDictionary *cropAreaDict = config[@"cropArea"];
@@ -309,7 +309,7 @@
     GET_CANVAS_OR_RETURN(self.canvases, canvasId, error, NO);
     
     AgoraRteViewConfig *viewConfig = nil;
-    if (config && config.count > 0) {
+    if (config && config != [NSNull null] && [config isKindOfClass:[NSDictionary class]] && config.count > 0) {
         viewConfig = [[AgoraRteViewConfig alloc] init];
         if (config[@"cropArea"]) {
             NSDictionary *cropAreaDict = config[@"cropArea"];

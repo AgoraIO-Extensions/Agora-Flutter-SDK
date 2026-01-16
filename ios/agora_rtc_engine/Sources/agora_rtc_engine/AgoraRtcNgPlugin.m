@@ -1010,7 +1010,8 @@
   } else if ([@"rteCanvasAddView" isEqualToString:call.method]) {
       NSString *canvasId = args[@"canvasId"];
       UIView *view = (__bridge UIView *)(void *)(intptr_t)[args[@"viewPtr"] longLongValue];
-      NSDictionary *config = args[@"config"];
+      id configObj = args[@"config"];
+      NSDictionary *config = (configObj && configObj != [NSNull null]) ? configObj : @{};
       BOOL success = [self.rteController canvasAddView:canvasId view:view config:config error:&error];
       if (success) {
           result(@(YES));
@@ -1020,7 +1021,8 @@
   } else if ([@"rteCanvasRemoveView" isEqualToString:call.method]) {
       NSString *canvasId = args[@"canvasId"];
       UIView *view = (__bridge UIView *)(void *)(intptr_t)[args[@"viewPtr"] longLongValue];
-      NSDictionary *config = args[@"config"];
+      id configObj = args[@"config"];
+      NSDictionary *config = (configObj && configObj != [NSNull null]) ? configObj : @{};
       BOOL success = [self.rteController canvasRemoveView:canvasId view:view config:config error:&error];
       if (success) {
           result(@(YES));

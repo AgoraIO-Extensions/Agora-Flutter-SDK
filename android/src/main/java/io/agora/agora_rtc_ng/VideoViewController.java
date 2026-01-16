@@ -56,6 +56,7 @@ class SimpleRef {
 class PlatformRenderPool {
 
     private final Map<Integer, SimpleRef> renders = new HashMap<>();
+    private final Map<Long, SimpleRef> viewPtrToRef = new HashMap<>();
 
     SimpleRef createView(int platformViewId,
                          Context context,
@@ -64,8 +65,20 @@ class PlatformRenderPool {
 
         final SimpleRef simpleRef = new SimpleRef(view);
         renders.put(platformViewId, simpleRef);
+        viewPtrToRef.put(simpleRef.getNativeHandle(), simpleRef);
 
         return simpleRef;
+    }
+    
+    View getViewByPtr(long viewPtr) {
+        SimpleRef ref = viewPtrToRef.get(viewPtr);
+        if (ref != null) {
+            Object value = ref.getValue();
+            if (value instanceof View) {
+                return (View) value;
+            }
+        }
+        return null;
     }
 
     boolean addViewRef(int platformViewId) {
@@ -133,6 +146,10 @@ public class VideoViewController implements MethodChannel.MethodCallHandler {
 
     public boolean dePlatformRenderRef(int platformViewId) {
         return this.pool.deViewRef(platformViewId);
+    }
+    
+    public View getViewByPtr(long viewPtr) {
+        return this.pool.getViewByPtr(viewPtr);
     }
 
     private long createTextureRender(
