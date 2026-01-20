@@ -28,7 +28,7 @@ class _State extends State<JoinChannelVideo> {
   Set<int> remoteUid = {};
   late TextEditingController _controller;
   late TextEditingController uidController;
-  VideoViewController? _remoteVideoController;
+  Map<int, VideoViewController> _remoteVideoControllers = {};
   bool test = false;
   bool _isUseFlutterTexture = true;
   bool _isUseAndroidSurfaceView = false;
@@ -39,8 +39,6 @@ class _State extends State<JoinChannelVideo> {
   ChannelProfileType _channelProfileType =
       ChannelProfileType.channelProfileLiveBroadcasting;
   late final RtcEngineEventHandler _rtcEngineEventHandler;
-  // global key
-  final GlobalKey _agoraVideoViewKey = GlobalKey();
   @override
   void initState() {
     super.initState();
@@ -57,6 +55,10 @@ class _State extends State<JoinChannelVideo> {
   }
 
   Future<void> _dispose() async {
+    _remoteVideoControllers.forEach((key, value) {
+      value.dispose();
+    });
+    _remoteVideoControllers.clear();
     _engine.unregisterEventHandler(_rtcEngineEventHandler);
     await _engine.leaveChannel();
     await _engine.release();
@@ -94,6 +96,8 @@ class _State extends State<JoinChannelVideo> {
             '[onUserOffline] connection: ${connection.toJson()}  rUid: $rUid reason: $reason');
         setState(() {
           remoteUid.removeWhere((element) => element == rUid);
+          final vc = _remoteVideoControllers.remove(rUid);
+          vc?.dispose();
         });
       },
       onLeaveChannel: (RtcConnection connection, RtcStats stats) {
@@ -102,6 +106,10 @@ class _State extends State<JoinChannelVideo> {
         setState(() {
           isJoined = false;
           remoteUid.clear();
+          _remoteVideoControllers.forEach((key, value) {
+            value.dispose();
+          });
+          _remoteVideoControllers.clear();
         });
       },
       onRemoteVideoStateChanged: (RtcConnection connection, int remoteUid,
@@ -138,25 +146,19 @@ class _State extends State<JoinChannelVideo> {
     if (uid == 0) {
       return;
     }
-    if (_reuseController) {
-      // Reuse controller
-      _remoteVideoController ??= VideoViewController.remote(
-        rtcEngine: _engine,
-        canvas: VideoCanvas(uid: uid),
-        connection: connection,
-        useFlutterTexture: _isUseFlutterTexture,
-        useAndroidSurfaceView: _isUseAndroidSurfaceView,
-      );
-    } else {
-      // Create new controller each time
-      _remoteVideoController = VideoViewController.remote(
-        rtcEngine: _engine,
-        canvas: VideoCanvas(uid: uid),
-        connection: connection,
-        useFlutterTexture: _isUseFlutterTexture,
-        useAndroidSurfaceView: _isUseAndroidSurfaceView,
-      );
+    if (_reuseController && _remoteVideoControllers.containsKey(uid)) {
+      return;
     }
+
+    _remoteVideoControllers[uid]?.dispose();
+
+    _remoteVideoControllers[uid] = VideoViewController.remote(
+      rtcEngine: _engine,
+      canvas: VideoCanvas(uid: uid),
+      connection: connection,
+      useFlutterTexture: _isUseFlutterTexture,
+      useAndroidSurfaceView: _isUseAndroidSurfaceView,
+    );
 
     if (_switchViewLevel) {
       // Switch view level
@@ -236,7 +238,7 @@ class _State extends State<JoinChannelVideo> {
                 },
               ),
             ),
-            if (_remoteVideoController != null)
+            if (_remoteVideoControllers.isNotEmpty)
               if (test)
                 Align(
                   alignment: Alignment.topLeft,
@@ -253,7 +255,7 @@ class _State extends State<JoinChannelVideo> {
                             channelId: _controller.text,
                             child: AgoraVideoView(
                               key: ValueKey('true_$e'),
-                              controller: _remoteVideoController!,
+                              controller: _remoteVideoControllers[e]!,
                             ),
                           ),
                         ),
@@ -277,7 +279,7 @@ class _State extends State<JoinChannelVideo> {
                           channelId: _controller.text,
                           child: AgoraVideoView(
                             key: ValueKey('false_$e'),
-                            controller: _remoteVideoController!,
+                            controller: _remoteVideoControllers[e]!,
                           ),
                         ),
                       ),
@@ -435,7 +437,7 @@ class _State extends State<JoinChannelVideo> {
                     ],
                   ),
                   Text(
-                    'Current: test=$test, controller=${_remoteVideoController?.hashCode ?? "null"}',
+                    'Current: test=$test, controller count=${_remoteVideoControllers.length}',
                     style: const TextStyle(fontSize: 10, color: Colors.blue),
                   ),
                 ],
