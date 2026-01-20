@@ -3,8 +3,8 @@ import 'package:agora_rtc_engine_example/components/log_sink.dart';
 import 'package:agora_rtc_engine_example/config/agora.config.dart' as config;
 import 'package:flutter/material.dart';
 
-/// RTE 配置示例
-/// 演示如何获取和设置 RTE 配置，特别是如何获取 App ID
+/// RTE Configuration Example
+/// Demonstrates how to get and set RTE configuration, especially how to get App ID
 class RteConfigExample extends StatefulWidget {
   const RteConfigExample({Key? key}) : super(key: key);
 
@@ -17,7 +17,7 @@ class _RteConfigExampleState extends State<RteConfigExample> {
   bool _isInitialized = false;
   String _statusText = 'Initializing...';
   
-  // 配置信息
+  // Configuration info
   String _appId = '';
   String _logFolder = '';
   int _logFileSize = 0;
@@ -34,14 +34,14 @@ class _RteConfigExampleState extends State<RteConfigExample> {
   Future<void> _initRte() async {
     _rte = AgoraRteImpl();
     try {
-      // 使用配置创建 RTE 实例
+      // Create RTE instance with configuration
       await _rte.createWithConfig(AgoraRteConfig(
         appId: config.appId,
         logFolder: '/tmp/agora_rte_logs',
         logFileSize: 1024 * 1024, // 1MB
       ));
       
-      // 初始化引擎
+      // Initialize engine
       await _rte.initMediaEngine();
       
       setState(() {
@@ -49,7 +49,7 @@ class _RteConfigExampleState extends State<RteConfigExample> {
         _statusText = 'RTE Initialized';
       });
       
-      // 初始化后立即获取配置
+      // Get configuration immediately after initialization
       await _getAllConfigs();
     } catch (e) {
       logSink.log('Error initializing RTE: $e');
@@ -59,7 +59,7 @@ class _RteConfigExampleState extends State<RteConfigExample> {
     }
   }
 
-  /// 获取 App ID（单独获取）
+  /// Get App ID (get individually)
   Future<void> _getAppId() async {
     if (!_isInitialized) {
       setState(() {
@@ -83,7 +83,7 @@ class _RteConfigExampleState extends State<RteConfigExample> {
     }
   }
 
-  /// 获取 Log Folder（单独获取）
+  /// Get Log Folder (get individually)
   Future<void> _getLogFolder() async {
     if (!_isInitialized) {
       setState(() {
@@ -107,7 +107,7 @@ class _RteConfigExampleState extends State<RteConfigExample> {
     }
   }
 
-  /// 获取 Log File Size（单独获取）
+  /// Get Log File Size (get individually)
   Future<void> _getLogFileSize() async {
     if (!_isInitialized) {
       setState(() {
@@ -131,7 +131,7 @@ class _RteConfigExampleState extends State<RteConfigExample> {
     }
   }
 
-  /// 获取 Area Code（单独获取）
+  /// Get Area Code (get individually)
   Future<void> _getAreaCode() async {
     if (!_isInitialized) {
       setState(() {
@@ -155,7 +155,7 @@ class _RteConfigExampleState extends State<RteConfigExample> {
     }
   }
 
-  /// 获取 Cloud Proxy（单独获取）
+  /// Get Cloud Proxy (get individually)
   Future<void> _getCloudProxy() async {
     if (!_isInitialized) {
       setState(() {
@@ -181,7 +181,7 @@ class _RteConfigExampleState extends State<RteConfigExample> {
     }
   }
 
-  /// 获取 JSON Parameter（单独获取）
+  /// Get JSON Parameter (get individually)
   Future<void> _getJsonParameter() async {
     if (!_isInitialized) {
       setState(() {
@@ -207,7 +207,7 @@ class _RteConfigExampleState extends State<RteConfigExample> {
     }
   }
 
-  /// 获取所有配置
+  /// Get all configurations
   Future<void> _getAllConfigs() async {
     if (!_isInitialized) {
       setState(() {
@@ -236,7 +236,7 @@ class _RteConfigExampleState extends State<RteConfigExample> {
     }
   }
 
-  /// 设置配置
+  /// Set configuration
   Future<void> _setConfig() async {
     if (!_isInitialized) {
       setState(() {
@@ -259,7 +259,7 @@ class _RteConfigExampleState extends State<RteConfigExample> {
       });
       logSink.log('Config set: ${newConfig.toJson()}');
       
-      // 设置后重新获取配置以验证
+      // Re-fetch configuration after setting to verify
       await _getAllConfigs();
     } catch (e) {
       logSink.log('Error setting config: $e');
@@ -283,7 +283,7 @@ class _RteConfigExampleState extends State<RteConfigExample> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            // 状态显示
+            // Status display
             Card(
               child: Padding(
                 padding: const EdgeInsets.all(16.0),
@@ -311,7 +311,7 @@ class _RteConfigExampleState extends State<RteConfigExample> {
             
             const SizedBox(height: 16),
             
-            // 操作按钮
+            // Action buttons
             Wrap(
               spacing: 8,
               runSpacing: 8,
@@ -361,7 +361,7 @@ class _RteConfigExampleState extends State<RteConfigExample> {
             
             const SizedBox(height: 16),
             
-            // 配置信息显示
+            // Configuration info display
             Card(
               child: Padding(
                 padding: const EdgeInsets.all(16.0),
@@ -389,7 +389,7 @@ class _RteConfigExampleState extends State<RteConfigExample> {
             
             const SizedBox(height: 16),
             
-            // 说明
+            // Instructions
             Card(
               color: Colors.blue[50],
               child: const Padding(
@@ -398,7 +398,7 @@ class _RteConfigExampleState extends State<RteConfigExample> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      '说明',
+                      'Instructions',
                       style: TextStyle(
                         fontSize: 16,
                         fontWeight: FontWeight.bold,
@@ -406,16 +406,16 @@ class _RteConfigExampleState extends State<RteConfigExample> {
                     ),
                     SizedBox(height: 8),
                     Text(
-                      '1. 各个 "Get XXX" 按钮演示如何使用单独的方法获取对应的配置项：\n'
+                      '1. Each "Get XXX" button demonstrates how to use individual methods to get the corresponding configuration item:\n'
                       '   - Get App ID: appId()\n'
                       '   - Get Log Folder: logFolder()\n'
                       '   - Get Log File Size: logFileSize()\n'
                       '   - Get Area Code: areaCode()\n'
                       '   - Get Cloud Proxy: cloudProxy()\n'
                       '   - Get JSON Parameter: jsonParameter()\n'
-                      '2. "Get All Configs" 按钮演示如何使用 getConfigs() 方法获取所有配置\n'
-                      '3. "Set Config" 按钮演示如何设置配置\n'
-                      '4. 配置信息会在下方显示',
+                      '2. "Get All Configs" button demonstrates how to use getConfigs() method to get all configurations\n'
+                      '3. "Set Config" button demonstrates how to set configuration\n'
+                      '4. Configuration information will be displayed below',
                       style: TextStyle(fontSize: 14),
                     ),
                   ],

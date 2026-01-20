@@ -1,7 +1,6 @@
 #import <Foundation/Foundation.h>
 #import <AgoraRtcKit/AgoraRteKit.h>
 #import "AgoraRTE.h"
-#import "AgoraRTEConfig.h"
 #import "AgoraRTEPlayerObserverDelegate.h"
 #import "AgoraRTEPlayer.h"
 #import "AgoraRTECanvas.h"
@@ -20,9 +19,8 @@
 @property (nonatomic, weak) id<AgoraRTEControllerDelegate> delegate;
 @property (nonatomic, weak) id<AgoraRTEPlayerObserverDelegate> playerObserverDelegate;
 
-// 使用新的分离类
+
 @property (nonatomic, strong, readonly) AgoraRTE *rte;
-@property (nonatomic, strong, readonly) AgoraRTEConfig *rteConfig;
 @property (nonatomic, strong, readonly) AgoraRTEPlayer *rtePlayer;
 @property (nonatomic, strong, readonly) AgoraRTECanvas *rteCanvas;
 

@@ -21,7 +21,7 @@ import java.util.Map;
 import java.util.UUID;
 
 /**
- * RTE Player 管理类
+ * RTE Player management class
  */
 public class AgoraRTEPlayer {
     private final Rte rte;
@@ -44,7 +44,7 @@ public class AgoraRTEPlayer {
     }
 
     /**
-     * 预加载 URL
+     * Preload URL
      */
     public static boolean preloadWithUrl(String url) {
         try {
@@ -56,7 +56,7 @@ public class AgoraRTEPlayer {
     }
 
     /**
-     * 创建播放器
+     * Create player
      */
     public String createPlayer(Map<String, Object> config) {
         if (rte == null) {
@@ -77,7 +77,7 @@ public class AgoraRTEPlayer {
     }
 
     /**
-     * 销毁播放器
+     * Destroy player
      */
     public boolean destroyPlayer(String playerId) {
         Player player = players.remove(playerId);
@@ -91,7 +91,7 @@ public class AgoraRTEPlayer {
     // --- Player Playback Control ---
 
     /**
-     * 打开 URL
+     * Open URL
      */
     public boolean openUrl(String playerId, String url, long startTime, AsyncCallback completion) {
         Player player = players.get(playerId);
@@ -103,7 +103,7 @@ public class AgoraRTEPlayer {
     }
 
     /**
-     * 切换 URL
+     * Switch URL
      */
     public boolean switchWithUrl(String playerId, String url, boolean syncPts, AsyncCallback completion) {
         Player player = players.get(playerId);
@@ -115,7 +115,7 @@ public class AgoraRTEPlayer {
     }
 
     /**
-     * 设置 Canvas
+     * Set Canvas
      */
     public boolean setCanvas(String playerId, Canvas canvas) {
         Player player = players.get(playerId);
@@ -131,7 +131,7 @@ public class AgoraRTEPlayer {
     }
 
     /**
-     * 播放
+     * Play
      */
     public boolean play(String playerId) {
         Player player = players.get(playerId);
@@ -147,7 +147,7 @@ public class AgoraRTEPlayer {
     }
 
     /**
-     * 暂停
+     * Pause
      */
     public boolean pause(String playerId) {
         Player player = players.get(playerId);
@@ -163,7 +163,7 @@ public class AgoraRTEPlayer {
     }
 
     /**
-     * 停止
+     * Stop
      */
     public boolean stop(String playerId) {
         Player player = players.get(playerId);
@@ -179,7 +179,7 @@ public class AgoraRTEPlayer {
     }
 
     /**
-     * 跳转
+     * Seek
      */
     public boolean seek(String playerId, long position) {
         Player player = players.get(playerId);
@@ -195,7 +195,7 @@ public class AgoraRTEPlayer {
     }
 
     /**
-     * 静音音频
+     * Mute audio
      */
     public boolean muteAudio(String playerId, boolean mute) {
         Player player = players.get(playerId);
@@ -211,7 +211,7 @@ public class AgoraRTEPlayer {
     }
 
     /**
-     * 静音视频
+     * Mute video
      */
     public boolean muteVideo(String playerId, boolean mute) {
         Player player = players.get(playerId);
@@ -229,7 +229,7 @@ public class AgoraRTEPlayer {
     // --- Player Info ---
 
     /**
-     * 获取统计信息
+     * Get statistics
      */
     public void getStats(String playerId, PlayerGetStatsCallback callback) {
         Player player = players.get(playerId);
@@ -239,7 +239,7 @@ public class AgoraRTEPlayer {
     }
 
     /**
-     * 获取当前时间
+     * Get current time
      */
     public long getCurrentTime(String playerId) {
         Player player = players.get(playerId);
@@ -254,7 +254,7 @@ public class AgoraRTEPlayer {
     }
 
     /**
-     * 获取时长
+     * Get duration
      */
     public long getDuration(String playerId) {
         Player player = players.get(playerId);
@@ -271,7 +271,7 @@ public class AgoraRTEPlayer {
     }
 
     /**
-     * 获取播放器信息
+     * Get player info
      */
     public Map<String, Object> getInfo(String playerId) {
         Player player = players.get(playerId);
@@ -306,7 +306,7 @@ public class AgoraRTEPlayer {
     // --- Player Config ---
 
     /**
-     * 批量设置配置
+     * Batch set configurations
      */
     public boolean setConfigs(String playerId, Map<String, Object> configMap) {
         Player player = players.get(playerId);
@@ -314,11 +314,9 @@ public class AgoraRTEPlayer {
             return false;
         }
         try {
-            // 先获取当前配置，避免覆盖其他属性
             PlayerConfig playerConfig = new PlayerConfig();
             player.getConfigs(playerConfig);
             
-            // 只更新字典中提供的属性
             if (configMap.containsKey("autoPlay") && configMap.get("autoPlay") != null) {
                 playerConfig.setAutoPlay((Boolean) configMap.get("autoPlay"));
             }
@@ -376,7 +374,7 @@ public class AgoraRTEPlayer {
     }
 
     /**
-     * 获取配置
+     * Get configurations
      */
     public Map<String, Object> getConfigs(String playerId) {
         Player player = players.get(playerId);
@@ -815,7 +813,7 @@ public class AgoraRTEPlayer {
     // --- Player Observer ---
 
     /**
-     * 注册观察者
+     * Register observer
      */
     public boolean registerObserver(String playerId) {
         Player player = players.get(playerId);
@@ -903,7 +901,7 @@ public class AgoraRTEPlayer {
     }
 
     /**
-     * 注销观察者
+     * Unregister observer
      */
     public boolean unregisterObserver(String playerId) {
         Player player = players.get(playerId);

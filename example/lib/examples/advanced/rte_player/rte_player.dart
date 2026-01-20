@@ -24,12 +24,12 @@ class _RtePlayerExampleState extends State<RtePlayerExample>
   String _infoText = 'Initializing...';
   late TabController _tabController;
   
-  // PlatformView 相关
+  // PlatformView related
   int? _platformViewId;
   int? _viewPtr;
   MethodChannel? _platformViewChannel;
 
-  // URL 输入
+  // URL input
   final TextEditingController _urlController =
       TextEditingController(text: 'https://rtc-fallback-test.agoramdn.com/857c6564e7db469387eb44205f287b9a/zzytest.m3u8?token=857c6564e7db469387eb44205f287b9a&userUid=7788');
   final TextEditingController _switchUrlController =
@@ -37,7 +37,7 @@ class _RtePlayerExampleState extends State<RtePlayerExample>
   final TextEditingController _preloadUrlController =
       TextEditingController(text: 'rte://your_channel_id?token=xxx&uid=xxx');
 
-  // 播放状态
+  // Playback state
   int _currentPosition = 0;
   int _duration = 0;
   int _playbackSpeed = 100;
@@ -45,14 +45,14 @@ class _RtePlayerExampleState extends State<RtePlayerExample>
   bool _isAudioMuted = false;
   bool _isVideoMuted = false;
 
-  // 播放器信息
+  // Player info
   AgoraRtePlayerInfo? _playerInfo;
   AgoraRtePlayerStats? _stats;
   int _width = 0;
   int _height = 0;
   int _audioVolume = 0;
 
-  // RTE 配置
+  // RTE config
   String _appId = '';
   String _logFolder = '';
   int _logFileSize = 0;
@@ -60,7 +60,7 @@ class _RtePlayerExampleState extends State<RtePlayerExample>
   String _cloudProxy = '';
   String _jsonParameter = '';
 
-  // Player 配置
+  // Player config
   bool _autoPlay = false;
   int _playoutAudioTrackIdx = 0;
   int _publishAudioTrackIdx = 0;
@@ -78,12 +78,12 @@ class _RtePlayerExampleState extends State<RtePlayerExample>
   AgoraRteAbrFallbackLayer _abrFallbackLayer =
       AgoraRteAbrFallbackLayer.disabled;
 
-  // Canvas 配置
+  // Canvas config
   AgoraRteVideoRenderMode _videoRenderMode = AgoraRteVideoRenderMode.fit;
   AgoraRteVideoMirrorMode _videoMirrorMode = AgoraRteVideoMirrorMode.auto;
   AgoraRteRect _cropArea = const AgoraRteRect();
 
-  // 事件日志
+  // Event logs
   final List<String> _eventLogs = [];
   Timer? _positionTimer;
   Timer? _statsTimer;
@@ -91,7 +91,7 @@ class _RtePlayerExampleState extends State<RtePlayerExample>
   @override
   void initState() {
     super.initState();
-    _tabController = TabController(length: 5, vsync: this);
+    _tabController = TabController(length: 4, vsync: this);
     _initRte();
   }
 
@@ -101,7 +101,7 @@ class _RtePlayerExampleState extends State<RtePlayerExample>
       await _rte.createWithConfig(AgoraRteConfig(appId: config.appId));
       await _rte.initMediaEngine();
 
-      // 加载 RTE 配置
+      // Load RTE config
       await _loadRteConfig();
 
       final player = await _rte.createPlayer(
@@ -109,14 +109,14 @@ class _RtePlayerExampleState extends State<RtePlayerExample>
       _player = player as AgoraRtePlayerImpl;
       await _player!.registerObserver(this);
 
-      // 加载 Player 配置
+      // Load Player config
       await _loadPlayerConfig();
 
       final canvas = await _rte.createCanvas(
           const AgoraRteCanvasConfig(videoRenderMode: AgoraRteVideoRenderMode.fit));
       _canvas = canvas as AgoraRteCanvasImpl;
 
-      // 加载 Canvas 配置
+      // Load Canvas config
       await _loadCanvasConfig();
 
       await _player!.setCanvas(_canvas!);
@@ -127,7 +127,7 @@ class _RtePlayerExampleState extends State<RtePlayerExample>
         _infoText = 'RTE Ready';
       });
       
-      // 如果 PlatformView 已经创建，添加视图到画布
+      // If PlatformView is already created, add view to canvas
       if (_viewPtr != null && _canvas != null) {
         logSink.log('PlatformView already created, adding view to canvas');
         await _addViewToCanvas();
@@ -235,7 +235,7 @@ class _RtePlayerExampleState extends State<RtePlayerExample>
     super.dispose();
   }
   
-  // 构建 PlatformView
+  // Build PlatformView
   Widget _buildPlatformView() {
     if (kIsWeb) {
       return const Center(child: Text('Web platform not supported for RTE video view'));
@@ -262,7 +262,7 @@ class _RtePlayerExampleState extends State<RtePlayerExample>
     }
   }
   
-  // PlatformView 创建回调
+  // PlatformView creation callback
   void _onPlatformViewCreated(int id) {
     _platformViewId = id;
     final String viewType = defaultTargetPlatform == TargetPlatform.iOS
@@ -273,7 +273,7 @@ class _RtePlayerExampleState extends State<RtePlayerExample>
     _getNativeViewPtr();
   }
   
-  // 获取原生视图指针
+  // Get native view pointer
   Future<void> _getNativeViewPtr() async {
     if (_platformViewChannel == null) {
       logSink.log('PlatformView channel is null');
@@ -296,16 +296,16 @@ class _RtePlayerExampleState extends State<RtePlayerExample>
     }
   }
   
-  // 添加视图到画布
+  // Add view to canvas
   Future<void> _addViewToCanvas() async {
     if (_viewPtr == null || _canvas == null) return;
     
     try {
-      // 不设置 cropArea，让 SDK 自动处理
+      // Don't set cropArea, let SDK handle it automatically
       await _canvas!.addView(_viewPtr!);
       logSink.log('View added to canvas successfully, viewPtr: $_viewPtr');
       
-      // 如果 Player 已经设置了 Canvas，可能需要重新关联
+      // If Player has already set Canvas, may need to re-associate
       if (_player != null) {
         await _player!.setCanvas(_canvas!);
         logSink.log('Canvas re-associated with player');
@@ -321,7 +321,7 @@ class _RtePlayerExampleState extends State<RtePlayerExample>
     final url = _urlController.text.trim();
     if (url.isEmpty) {
       setState(() {
-        _infoText = 'Error: URL 不能为空';
+        _infoText = 'Error: URL cannot be empty';
       });
       _addLog('Error: URL is empty');
       return;
@@ -329,7 +329,7 @@ class _RtePlayerExampleState extends State<RtePlayerExample>
 
     // if (!url.startsWith('rte://')) {
     //   setState(() {
-    //     _infoText = 'Error: URL 必须以 rte:// 开头';
+    //     _infoText = 'Error: URL must start with rte://';
     //   });
     //   _addLog('Error: URL must start with rte://');
     //   return;
@@ -342,14 +342,14 @@ class _RtePlayerExampleState extends State<RtePlayerExample>
       });
       _addLog('Opening URL: $url');
       
-      // 确保视图已添加到画布
+      // Ensure view is added to canvas
       if (_viewPtr != null && _canvas != null) {
         await _addViewToCanvas();
       }
       
       await _player!.openWithUrl(url, 0);
       
-      // 显式调用 play（即使设置了 autoPlay）
+      // Explicitly call play (even if autoPlay is set)
       // await _player!.play();
       
       _startPositionTimer();
@@ -414,7 +414,7 @@ class _RtePlayerExampleState extends State<RtePlayerExample>
     return '${minutes.toString().padLeft(2, '0')}:${remainingSeconds.toString().padLeft(2, '0')}';
   }
 
-  // ========== RTE 配置方法 ==========
+  // ========== RTE Config Methods ==========
   Future<void> _setRteAppId(String appId) async {
     try {
       await _rte.config.setAppId(appId);
@@ -475,7 +475,7 @@ class _RtePlayerExampleState extends State<RtePlayerExample>
     }
   }
 
-  // ========== Player 配置方法 ==========
+  // ========== Player Config Methods ==========
   Future<void> _setPlayerAutoPlay(bool value) async {
     if (_player == null) return;
     try {
@@ -660,7 +660,7 @@ class _RtePlayerExampleState extends State<RtePlayerExample>
     }
   }
 
-  // ========== Canvas 配置方法 ==========
+  // ========== Canvas Config Methods ==========
   Future<void> _setCanvasVideoRenderMode(
       AgoraRteVideoRenderMode mode) async {
     if (_canvas == null) return;
@@ -702,7 +702,7 @@ class _RtePlayerExampleState extends State<RtePlayerExample>
     }
   }
 
-  // ========== 其他功能 ==========
+  // ========== Other Features ==========
   Future<void> _onPreloadUrl() async {
     final url = _preloadUrlController.text.trim();
     if (url.isEmpty || !url.startsWith('rte://')) {
@@ -763,7 +763,7 @@ class _RtePlayerExampleState extends State<RtePlayerExample>
     }
   }
 
-  // ========== Observer 回调 ==========
+  // ========== Observer Callbacks ==========
   @override
   void onStateChanged(AgoraRtePlayerState oldState,
       AgoraRtePlayerState newState, AgoraRteErrorCode? error) {
@@ -791,10 +791,10 @@ class _RtePlayerExampleState extends State<RtePlayerExample>
       _height = height;
     });
     
-    // 分辨率改变后，可能需要更新视图配置
+    // After resolution changes, may need to update view configuration
     if (_viewPtr != null && _canvas != null && width > 0 && height > 0) {
-      // 可以在这里更新 cropArea 或其他配置
-      // 但通常不需要，SDK 会自动处理
+      // Can update cropArea or other config here
+      // But usually not needed, SDK will handle it automatically
       logSink.log('Resolution changed: $width x $height, viewPtr: $_viewPtr');
     }
   }
@@ -831,17 +831,20 @@ class _RtePlayerExampleState extends State<RtePlayerExample>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      floatingActionButton: FloatingActionButton(
+        onPressed: () => _showInfoLogDialog(context),
+        child: const Icon(Icons.info_outline),
+      ),
       body: Column(
         children: [
           TabBar(
             controller: _tabController,
             isScrollable: true,
             tabs: const [
-              Tab(text: '播放控制'),
-              Tab(text: 'RTE配置'),
-              Tab(text: 'Player配置'),
-              Tab(text: 'Canvas配置'),
-              Tab(text: '信息日志'),
+              Tab(text: 'Playback Control'),
+              Tab(text: 'RTE Config'),
+              Tab(text: 'Player Config'),
+              Tab(text: 'Canvas Config'),
             ],
           ),
           Expanded(
@@ -852,7 +855,6 @@ class _RtePlayerExampleState extends State<RtePlayerExample>
                 _buildRteConfigTab(),
                 _buildPlayerConfigTab(),
                 _buildCanvasConfigTab(),
-                _buildInfoLogTab(),
               ],
             ),
           ),
@@ -865,7 +867,7 @@ class _RtePlayerExampleState extends State<RtePlayerExample>
     return SingleChildScrollView(
       child: Column(
         children: [
-          // URL 输入
+          // URL input
           Padding(
             padding: const EdgeInsets.all(8.0),
             child: Column(
@@ -877,13 +879,13 @@ class _RtePlayerExampleState extends State<RtePlayerExample>
                     labelText: 'RTE URL',
                     hintText: 'rte://your_channel_id?token=xxx&uid=xxx',
                     border: OutlineInputBorder(),
-                    helperText: '仅支持 rte:// 协议',
+                    helperText: 'Only rte:// protocol is supported',
                   ),
                 ),
                 Padding(
                   padding: const EdgeInsets.only(top: 4.0),
                   child: Text(
-                    '注意：RTE Player 目前仅支持 rte:// 协议的 URL。',
+                    'Note: RTE Player currently only supports URLs with rte:// protocol.',
                     style: TextStyle(fontSize: 12, color: Colors.grey[600]),
                   ),
                 ),
@@ -895,13 +897,13 @@ class _RtePlayerExampleState extends State<RtePlayerExample>
             child: const Text('Open & Play'),
           ),
 
-          // 视频显示区域
+          // Video display area
           Container(
             height: 200,
             color: Colors.black,
             child: Stack(
               children: [
-                // PlatformView 用于显示视频
+                // PlatformView for displaying video
                 if (_isReady)
                   _buildPlatformView()
                 else
@@ -926,7 +928,7 @@ class _RtePlayerExampleState extends State<RtePlayerExample>
             ),
           ),
 
-          // 播放进度
+          // Playback progress
           if (_duration > 0) ...[
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 16.0),
@@ -951,7 +953,7 @@ class _RtePlayerExampleState extends State<RtePlayerExample>
             ),
           ],
 
-          // 基本控制按钮
+          // Basic control buttons
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
@@ -994,7 +996,7 @@ class _RtePlayerExampleState extends State<RtePlayerExample>
             ],
           ),
 
-          // 播放速度控制
+          // Playback speed control
           Padding(
             padding: const EdgeInsets.all(8.0),
             child: Column(
@@ -1026,7 +1028,7 @@ class _RtePlayerExampleState extends State<RtePlayerExample>
             ),
           ),
 
-          // 音量控制
+          // Volume control
           Padding(
             padding: const EdgeInsets.all(8.0),
             child: Column(
@@ -1048,7 +1050,7 @@ class _RtePlayerExampleState extends State<RtePlayerExample>
             ),
           ),
 
-          // 预加载 URL
+          // Preload URL
           Padding(
             padding: const EdgeInsets.all(8.0),
             child: Column(
@@ -1077,7 +1079,7 @@ class _RtePlayerExampleState extends State<RtePlayerExample>
             ),
           ),
 
-          // 切换 URL
+          // Switch URL
           Padding(
             padding: const EdgeInsets.all(8.0),
             child: Column(
@@ -1131,7 +1133,7 @@ class _RtePlayerExampleState extends State<RtePlayerExample>
             const SizedBox(height: 16),
             ElevatedButton(
               onPressed: _loadRteConfig,
-              child: const Text('刷新配置'),
+              child: const Text('Refresh Config'),
             ),
           ],
         ),
@@ -1211,7 +1213,7 @@ class _RtePlayerExampleState extends State<RtePlayerExample>
             const SizedBox(height: 16),
             ElevatedButton(
               onPressed: _loadPlayerConfig,
-              child: const Text('刷新配置'),
+              child: const Text('Refresh Config'),
             ),
           ],
         ),
@@ -1326,7 +1328,7 @@ class _RtePlayerExampleState extends State<RtePlayerExample>
             const SizedBox(height: 16),
             ElevatedButton(
               onPressed: _loadCanvasConfig,
-              child: const Text('刷新配置'),
+              child: const Text('Refresh Config'),
             ),
           ],
         ),
@@ -1334,106 +1336,162 @@ class _RtePlayerExampleState extends State<RtePlayerExample>
     );
   }
 
-  Widget _buildInfoLogTab() {
-    return SingleChildScrollView(
-      child: Column(
-        children: [
-          // 统计信息
-          if (_stats != null)
-            Card(
-              margin: const EdgeInsets.all(8.0),
-              child: Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    const Text('Statistics:',
-                        style: TextStyle(fontWeight: FontWeight.bold)),
-                    Text('Video Decode FPS: ${_stats!.videoDecodeFrameRate}'),
-                    Text('Video Render FPS: ${_stats!.videoRenderFrameRate}'),
-                    Text('Video Bitrate: ${_stats!.videoBitrate} bps'),
-                    Text('Audio Bitrate: ${_stats!.audioBitrate} bps'),
-                  ],
+  void _showInfoLogDialog(BuildContext context) {
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      backgroundColor: Colors.transparent,
+      builder: (context) => DraggableScrollableSheet(
+        initialChildSize: 0.9,
+        minChildSize: 0.5,
+        maxChildSize: 0.95,
+        builder: (context, scrollController) => Container(
+          decoration: const BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+          ),
+          child: Column(
+            children: [
+              // Title bar
+              Container(
+                padding: const EdgeInsets.all(16.0),
+                decoration: BoxDecoration(
+                  border: Border(
+                    bottom: BorderSide(color: Colors.grey[300]!),
+                  ),
                 ),
-              ),
-            ),
-
-          // 播放器信息
-          if (_playerInfo != null)
-            Card(
-              margin: const EdgeInsets.all(8.0),
-              child: Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    const Text('Player Info:',
-                        style: TextStyle(fontWeight: FontWeight.bold)),
-                    Text(
-                        'State: ${AgoraRtePlayerState.values[_playerInfo!.state].name}'),
-                    Text('Duration: ${_formatTime(_playerInfo!.duration)}'),
-                    Text('Stream Count: ${_playerInfo!.streamCount}'),
-                    Text('Has Audio: ${_playerInfo!.hasAudio}'),
-                    Text('Has Video: ${_playerInfo!.hasVideo}'),
-                    Text('Audio Muted: ${_playerInfo!.isAudioMuted}'),
-                    Text('Video Muted: ${_playerInfo!.isVideoMuted}'),
-                    if (_playerInfo!.videoWidth > 0 && _playerInfo!.videoHeight > 0)
-                      Text(
-                          'Video Size: ${_playerInfo!.videoWidth}x${_playerInfo!.videoHeight}'),
-                    if (_playerInfo!.currentUrl.isNotEmpty)
-                      Text('Current URL: ${_playerInfo!.currentUrl}'),
-                  ],
-                ),
-              ),
-            ),
-
-          // 事件日志
-          Card(
-            margin: const EdgeInsets.all(8.0),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      const Text('Event Logs:',
-                          style: TextStyle(fontWeight: FontWeight.bold)),
-                      TextButton(
-                        onPressed: () {
-                          setState(() {
-                            _eventLogs.clear();
-                          });
-                        },
-                        child: const Text('Clear'),
+                    const Text(
+                      'Info Logs',
+                      style: TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold,
                       ),
+                    ),
+                    IconButton(
+                      icon: const Icon(Icons.close),
+                      onPressed: () => Navigator.of(context).pop(),
+                    ),
+                  ],
+                ),
+              ),
+              // Content area
+              Expanded(
+                child: _buildInfoLogTab(),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildInfoLogTab() {
+    return StatefulBuilder(builder: (context, setState) {
+      return SingleChildScrollView(
+        child: Column(
+          children: [
+            // Statistics
+            if (_stats != null)
+              Card(
+                margin: const EdgeInsets.all(8.0),
+                child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      const Text('Statistics:',
+                          style: TextStyle(fontWeight: FontWeight.bold)),
+                      Text('Video Decode FPS: ${_stats!.videoDecodeFrameRate}'),
+                      Text('Video Render FPS: ${_stats!.videoRenderFrameRate}'),
+                      Text('Video Bitrate: ${_stats!.videoBitrate} bps'),
+                      Text('Audio Bitrate: ${_stats!.audioBitrate} bps'),
                     ],
                   ),
                 ),
-                Container(
-                  height: 300,
+              ),
+
+            // Player info
+            if (_playerInfo != null)
+              Card(
+                margin: const EdgeInsets.all(8.0),
+                child: Padding(
                   padding: const EdgeInsets.all(8.0),
-                  child: ListView.builder(
-                    reverse: true,
-                    itemCount: _eventLogs.length,
-                    itemBuilder: (context, index) {
-                      return Padding(
-                        padding: const EdgeInsets.symmetric(vertical: 2.0),
-                        child: Text(
-                          _eventLogs[index],
-                          style: const TextStyle(
-                              fontSize: 12, fontFamily: 'monospace'),
-                        ),
-                      );
-                    },
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      const Text('Player Info:',
+                          style: TextStyle(fontWeight: FontWeight.bold)),
+                      Text(
+                          'State: ${AgoraRtePlayerState.values[_playerInfo!.state].name}'),
+                      Text('Duration: ${_formatTime(_playerInfo!.duration)}'),
+                      Text('Stream Count: ${_playerInfo!.streamCount}'),
+                      Text('Has Audio: ${_playerInfo!.hasAudio}'),
+                      Text('Has Video: ${_playerInfo!.hasVideo}'),
+                      Text('Audio Muted: ${_playerInfo!.isAudioMuted}'),
+                      Text('Video Muted: ${_playerInfo!.isVideoMuted}'),
+                      if (_playerInfo!.videoWidth > 0 &&
+                          _playerInfo!.videoHeight > 0)
+                        Text(
+                            'Video Size: ${_playerInfo!.videoWidth}x${_playerInfo!.videoHeight}'),
+                      if (_playerInfo!.currentUrl.isNotEmpty)
+                        Text('Current URL: ${_playerInfo!.currentUrl}'),
+                    ],
                   ),
                 ),
-              ],
+              ),
+
+            // Event logs
+            Card(
+              margin: const EdgeInsets.all(8.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        const Text('Event Logs:',
+                            style: TextStyle(fontWeight: FontWeight.bold)),
+                        TextButton(
+                          onPressed: () {
+                            setState(() {
+                              _eventLogs.clear();
+                            });
+                          },
+                          child: const Text('Clear'),
+                        ),
+                      ],
+                    ),
+                  ),
+                  Container(
+                    height: 300,
+                    padding: const EdgeInsets.all(8.0),
+                    child: ListView.builder(
+                      reverse: true,
+                      itemCount: _eventLogs.length,
+                      itemBuilder: (context, index) {
+                        return Padding(
+                          padding: const EdgeInsets.symmetric(vertical: 2.0),
+                          child: Text(
+                            _eventLogs[index],
+                            style: const TextStyle(
+                                fontSize: 12, fontFamily: 'monospace'),
+                          ),
+                        );
+                      },
+                    ),
+                  ),
+                ],
+              ),
             ),
-          ),
-        ],
-      ),
+          ],
+        ),
+      );
+    }
     );
   }
 

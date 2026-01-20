@@ -1,71 +1,71 @@
 import 'package:flutter/services.dart';
 
-/// RTE 配置实现类
+/// RTE configuration implementation
 class AgoraRteConfigImpl {
   static const MethodChannel _channel = MethodChannel('agora_rtc_ng');
 
-  /// 获取 App ID
+  /// Get App ID
   Future<String> appId() async {
     final String result = await _channel.invokeMethod('rteGetAppId');
     return result;
   }
 
-  /// 设置 App ID
+  /// Set App ID
   Future<void> setAppId(String appId) async {
     await _channel.invokeMethod('rteSetAppId', {'appId': appId});
   }
 
-  /// 获取日志文件夹
+  /// Get log folder
   Future<String> logFolder() async {
     final String result = await _channel.invokeMethod('rteGetLogFolder');
     return result;
   }
 
-  /// 设置日志文件夹
+  /// Set log folder
   Future<void> setLogFolder(String logFolder) async {
     await _channel.invokeMethod('rteSetLogFolder', {'logFolder': logFolder});
   }
 
-  /// 获取日志文件大小
+  /// Get log file size
   Future<int> logFileSize() async {
     final int result = await _channel.invokeMethod('rteGetLogFileSize');
     return result;
   }
 
-  /// 设置日志文件大小
+  /// Set log file size
   Future<void> setLogFileSize(int logFileSize) async {
     await _channel.invokeMethod('rteSetLogFileSize', {'logFileSize': logFileSize});
   }
 
-  /// 获取区域代码
+  /// Get area code
   Future<int> areaCode() async {
     final int result = await _channel.invokeMethod('rteGetAreaCode');
     return result;
   }
 
-  /// 设置区域代码
+  /// Set area code
   Future<void> setAreaCode(int areaCode) async {
     await _channel.invokeMethod('rteSetAreaCode', {'areaCode': areaCode});
   }
 
-  /// 获取云代理
+  /// Get cloud proxy
   Future<String> cloudProxy() async {
     final String result = await _channel.invokeMethod('rteGetCloudProxy');
     return result;
   }
 
-  /// 设置云代理
+  /// Set cloud proxy
   Future<void> setCloudProxy(String cloudProxy) async {
     await _channel.invokeMethod('rteSetCloudProxy', {'cloudProxy': cloudProxy});
   }
 
-  /// 获取 JSON 参数
+  /// Get JSON parameter
   Future<String> jsonParameter() async {
     final String result = await _channel.invokeMethod('rteGetJsonParameter');
     return result;
   }
 
-  /// 设置 JSON 参数
+  /// Set JSON parameter
   Future<void> setJsonParameter(String jsonParameter) async {
     await _channel.invokeMethod('rteSetJsonParameter', {'jsonParameter': jsonParameter});
   }

@@ -3,23 +3,23 @@
 #import <AgoraRtcKit/AgoraRteKit.h>
 
 
-/// RTE Canvas 管理类
+/// RTE Canvas Manager
 @interface AgoraRTECanvas : NSObject
 
 @property (nonatomic, strong, readonly) NSMutableDictionary<NSString *, AgoraRteCanvas *> *canvases;
 
 - (instancetype)initWithRte:(AgoraRte *)rte;
 
-/// 创建 Canvas
+/// Create canvas
 - (NSString *)createCanvas:(NSDictionary *)config error:(NSError **)error;
 
-/// 销毁 Canvas
+/// Destroy canvas
 - (BOOL)destroyCanvas:(NSString *)canvasId error:(NSError **)error;
 
-/// 批量设置配置
+/// Set configs
 - (BOOL)setConfigs:(NSString *)canvasId config:(NSDictionary *)config error:(NSError **)error;
 
-/// 获取配置
+/// Get configs
 - (NSDictionary *)getConfigs:(NSString *)canvasId error:(NSError **)error;
 
 // Individual Config Setters/Getters
@@ -30,13 +30,13 @@
 - (BOOL)setCropArea:(NSString *)canvasId x:(int32_t)x y:(int32_t)y width:(int32_t)width height:(int32_t)height error:(NSError **)error;
 - (NSDictionary *)getCropArea:(NSString *)canvasId error:(NSError **)error;
 
-/// 添加视图
+/// Add view
 - (BOOL)addView:(NSString *)canvasId view:(UIView *)view config:(NSDictionary *)config error:(NSError **)error;
 
-/// 移除视图
+/// Remove view
 - (BOOL)removeView:(NSString *)canvasId view:(UIView *)view config:(NSDictionary *)config error:(NSError **)error;
 
-/// 获取 Canvas 实例
+/// Get Canvas instance
 - (AgoraRteCanvas *)getCanvas:(NSString *)canvasId;
 
 @end

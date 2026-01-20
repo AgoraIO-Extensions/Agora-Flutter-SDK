@@ -6,30 +6,28 @@
 - (void)rteErrorOccurred:(NSInteger)code message:(NSString *)message;
 @end
 
-/// RTE 主类，管理 RTE 生命周期
+/// RTE main class, manages RTE lifecycle
 @interface AgoraRTE : NSObject
 
 @property (nonatomic, weak) id<AgoraRTEDelegate> delegate;
 @property (nonatomic, strong, readonly) AgoraRte *rteInstance;
 
-- (instancetype)init;
-
-/// 从 Bridge 创建 RTE 实例
+/// Create RTE from bridge
 - (BOOL)getFromBridge:(NSError **)error;
 
-/// 使用配置创建 RTE 实例
+/// Create RTE with config
 - (BOOL)createWithConfig:(NSDictionary *)config error:(NSError **)error;
 
-/// 初始化媒体引擎
+/// Initialize media engine
 - (BOOL)initMediaEngine:(void (^)(NSError *error))completion error:(NSError **)error;
 
-/// 批量设置配置
+/// Set configs
 - (BOOL)setConfigs:(NSDictionary *)config error:(NSError **)error;
 
-/// 获取所有配置
+/// Get all configs
 - (NSDictionary *)getConfigs:(NSError **)error;
 
-/// 销毁 RTE 实例
+/// Destroy RTE
 - (BOOL)destroy:(NSError **)error;
 
 @end

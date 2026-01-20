@@ -3,7 +3,7 @@ import 'package:agora_rtc_engine/src/agora_rte.dart';
 import 'package:agora_rtc_engine/src/agora_rte_enums.dart';
 import 'package:flutter/services.dart';
 
-/// RTE 画布实现类
+/// RTE canvas implementation
 class AgoraRteCanvasImpl implements AgoraRteCanvas {
   @override
   final String canvasId;
@@ -11,25 +11,25 @@ class AgoraRteCanvasImpl implements AgoraRteCanvas {
 
   AgoraRteCanvasImpl(this.canvasId, this._channel);
 
-  /// 处理回调（由 AgoraRteCoreImpl 调用）
-  /// 
-  /// 注意：当前 AgoraRteCanvas 没有定义观察者回调机制。
-  /// Canvas 主要用于视图渲染配置（视频渲染模式、镜像模式、裁剪区域等），
-  /// 不涉及状态变化或事件回调。
-  /// 
-  /// 此方法保留用于未来可能的扩展，如果原生 SDK 添加了 Canvas 相关的回调机制。
+  /// Handle callbacks (called by AgoraRteCoreImpl)
+  ///
+  /// Note: Currently AgoraRteCanvas does not define observer callback mechanism.
+  /// Canvas is mainly used for view rendering configuration (video render mode, mirror mode, crop area, etc.),
+  /// does not involve state changes or event callbacks.
+  ///
+  /// This method is reserved for future extensions, if native SDK adds Canvas related callback mechanisms.
   void handleCallback(String method, Map args) {
-    // 当前没有 Canvas 相关的回调需要处理
-    // 如果未来原生 SDK 添加了 Canvas 回调（如视图添加/移除事件等），
-    // 可以在这里添加相应的处理逻辑
-    
-    // 示例：如果未来有视图添加回调
+    // Currently no Canvas related callbacks to handle
+    // If native SDK adds Canvas callbacks (e.g., view add/remove events) in the future,
+    // corresponding handling logic can be added here
+
+    // Example: if there is a view add callback in the future
     // switch (method) {
     //   case 'rteCanvasOnViewAdded':
-    //     // 处理视图添加回调
+    //     // Handle view add callback
     //     break;
     //   case 'rteCanvasOnViewRemoved':
-    //     // 处理视图移除回调
+    //     // Handle view remove callback
     //     break;
     // }
   }
@@ -59,10 +59,9 @@ class AgoraRteCanvasImpl implements AgoraRteCanvas {
     );
   }
 
-  // 单个配置属性的 getter/setter
   Future<AgoraRteVideoRenderMode> getVideoRenderMode() async {
-    final result = await _channel.invokeMethod(
-        'rteCanvasGetVideoRenderMode', {'canvasId': canvasId});
+    final result = await _channel
+        .invokeMethod('rteCanvasGetVideoRenderMode', {'canvasId': canvasId});
     return AgoraRteVideoRenderMode.values[result ?? 0];
   }
 
@@ -74,8 +73,8 @@ class AgoraRteCanvasImpl implements AgoraRteCanvas {
   }
 
   Future<AgoraRteVideoMirrorMode> getVideoMirrorMode() async {
-    final result = await _channel.invokeMethod(
-        'rteCanvasGetVideoMirrorMode', {'canvasId': canvasId});
+    final result = await _channel
+        .invokeMethod('rteCanvasGetVideoMirrorMode', {'canvasId': canvasId});
     return AgoraRteVideoMirrorMode.values[result ?? 0];
   }
 
@@ -87,8 +86,8 @@ class AgoraRteCanvasImpl implements AgoraRteCanvas {
   }
 
   Future<AgoraRteRect> getCropArea() async {
-    final result = await _channel.invokeMethod(
-        'rteCanvasGetCropArea', {'canvasId': canvasId});
+    final result = await _channel
+        .invokeMethod('rteCanvasGetCropArea', {'canvasId': canvasId});
     return AgoraRteRect.fromJson(Map<String, dynamic>.from(result ?? {}));
   }
 

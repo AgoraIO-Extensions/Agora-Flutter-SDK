@@ -1,41 +1,41 @@
 package io.agora.agora_rtc_ng;
 
 /**
- * Player 观察者接口
+ * Player observer interface
  */
 public interface AgoraRTEPlayerObserverDelegate {
     /**
-     * 播放器状态改变回调
+     * Player state changed callback
      */
     void onStateChanged(String playerId, int oldState, int newState, int errorCode, String errorMessage);
 
     /**
-     * 播放位置改变回调
+     * Playback position changed callback
      */
     void onPositionChanged(String playerId, long currentTime, long utcTime);
 
     /**
-     * 分辨率改变回调
+     * Resolution changed callback
      */
     void onResolutionChanged(String playerId, int width, int height);
 
     /**
-     * 播放器事件回调
+     * Player event callback
      */
     void onEvent(String playerId, int event);
 
     /**
-     * 元数据回调
+     * Metadata callback
      */
     void onMetadata(String playerId, int type, byte[] data);
 
     /**
-     * 播放器信息更新回调
+     * Player info updated callback
      */
     void onPlayerInfoUpdated(String playerId, java.util.Map<String, Object> info);
 
     /**
-     * 音频音量指示回调
+     * Audio volume indication callback
      */
     void onAudioVolumeIndication(String playerId, int volume);
 }

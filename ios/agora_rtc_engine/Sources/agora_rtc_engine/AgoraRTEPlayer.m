@@ -55,24 +55,24 @@
 }
 
 - (void)onPlayerInfoUpdated:(AgoraRtePlayerInfo *)info {
+    NSDictionary *infoDict = @{
+        @"state": @([info state]),
+        @"duration": @([info duration]),
+        @"streamCount": @([info streamCount]),
+        @"hasAudio": @([info hasAudio]),
+        @"hasVideo": @([info hasVideo]),
+        @"isAudioMuted": @([info isAudioMuted]),
+        @"isVideoMuted": @([info isVideoMuted]),
+        @"videoHeight": @([info videoHeight]),
+        @"videoWidth": @([info videoWidth]),
+        @"audioSampleRate": @([info audioSampleRate]),
+        @"audioChannels": @([info audioChannels]),
+        @"audioBitsPerSample": @([info audioBitsPerSample]),
+        @"abrSubscriptionLayer": @([info abrSubscriptionLayer]),
+        @"currentUrl": [info currentUrl] ?: @""
+    };
     dispatch_async(dispatch_get_main_queue(), ^{
         if ([self.playerManager.observerDelegate respondsToSelector:@selector(player:onPlayerInfoUpdated:)]) {
-            NSDictionary *infoDict = @{
-                @"state": @([info state]),
-                @"duration": @([info duration]),
-                @"streamCount": @([info streamCount]),
-                @"hasAudio": @([info hasAudio]),
-                @"hasVideo": @([info hasVideo]),
-                @"isAudioMuted": @([info isAudioMuted]),
-                @"isVideoMuted": @([info isVideoMuted]),
-                @"videoHeight": @([info videoHeight]),
-                @"videoWidth": @([info videoWidth]),
-                @"audioSampleRate": @([info audioSampleRate]),
-                @"audioChannels": @([info audioChannels]),
-                @"audioBitsPerSample": @([info audioBitsPerSample]),
-                @"abrSubscriptionLayer": @([info abrSubscriptionLayer]),
-                @"currentUrl": [info currentUrl] ?: @""
-            };
             [self.playerManager.observerDelegate player:self.playerId onPlayerInfoUpdated:infoDict];
         }
     });
@@ -166,10 +166,12 @@
     GET_PLAYER_OR_RETURN(self.players, playerId, error, NO);
     
     [player openWithUrl:url startTime:startTime cb:^(AgoraRteError *err) {
+        AgoraRteError *rteError = [[AgoraRteError alloc] init];
+        [rteError setErrorWithCode:err.code message:err.message];
         dispatch_async(dispatch_get_main_queue(), ^{
             NSError *nsError = nil;
-            if (err && err.code != AgoraRteOk) {
-                nsError = RTE_NSERROR_FROM_RTE_ERROR(err);
+            if (rteError && rteError.code != AgoraRteOk) {
+                nsError = RTE_NSERROR_FROM_RTE_ERROR(rteError);
             }
             if (completion) completion(nsError);
         });
@@ -183,10 +185,12 @@
     
     AgoraRtePlayerCustomSourceProvider *sourceProvider = (__bridge AgoraRtePlayerCustomSourceProvider *)provider;
     [player openWithCustomSourceProvider:sourceProvider startTime:startTime cb:^(AgoraRteError *err) {
+        AgoraRteError *rteError = [[AgoraRteError alloc] init];
+        [rteError setErrorWithCode:err.code message:err.message];
         dispatch_async(dispatch_get_main_queue(), ^{
             NSError *nsError = nil;
-            if (err && err.code != AgoraRteOk) {
-                nsError = RTE_NSERROR_FROM_RTE_ERROR(err);
+            if (rteError && rteError.code != AgoraRteOk) {
+                nsError = RTE_NSERROR_FROM_RTE_ERROR(rteError);
             }
             if (completion) completion(nsError);
         });
@@ -200,10 +204,12 @@
     
     AgoraRteStream *rteStream = (__bridge AgoraRteStream *)stream;
     [player openWithStream:rteStream cb:^(AgoraRteError *err) {
+        AgoraRteError *rteError = [[AgoraRteError alloc] init];
+        [rteError setErrorWithCode:err.code message:err.message];
         dispatch_async(dispatch_get_main_queue(), ^{
             NSError *nsError = nil;
-            if (err && err.code != AgoraRteOk) {
-                nsError = RTE_NSERROR_FROM_RTE_ERROR(err);
+            if (rteError && rteError.code != AgoraRteOk) {
+                nsError = RTE_NSERROR_FROM_RTE_ERROR(rteError);
             }
             if (completion) completion(nsError);
         });
@@ -216,10 +222,12 @@
     GET_PLAYER_OR_RETURN(self.players, playerId, error, NO);
     
     [player switchWithUrl:url syncPts:syncPts cb:^(AgoraRteError *err) {
+        AgoraRteError *rteError = [[AgoraRteError alloc] init];
+        [rteError setErrorWithCode:err.code message:err.message];
         dispatch_async(dispatch_get_main_queue(), ^{
             NSError *nsError = nil;
-            if (err && err.code != AgoraRteOk) {
-                nsError = RTE_NSERROR_FROM_RTE_ERROR(err);
+            if (rteError && rteError.code != AgoraRteOk) {
+                nsError = RTE_NSERROR_FROM_RTE_ERROR(rteError);
             }
             if (completion) completion(nsError);
         });
@@ -329,9 +337,11 @@
     }
     
     [player getStats:^(AgoraRtePlayerStats *stats, AgoraRteError *err) {
+        AgoraRteError *rteError = [[AgoraRteError alloc] init];
+        [rteError setErrorWithCode:err.code message:err.message];
         dispatch_async(dispatch_get_main_queue(), ^{
-            if (err && err.code != AgoraRteOk) {
-                if (completion) completion(nil, RTE_NSERROR_FROM_RTE_ERROR(err));
+            if (rteError && rteError.code != AgoraRteOk) {
+                if (completion) completion(nil, RTE_NSERROR_FROM_RTE_ERROR(rteError));
                 return;
             }
             
@@ -422,7 +432,7 @@
 - (BOOL)setConfigs:(NSString *)playerId config:(NSDictionary *)config error:(NSError **)error {
     GET_PLAYER_OR_RETURN(self.players, playerId, error, NO);
     
-    // 先获取当前配置，避免覆盖其他属性
+    
     AgoraRtePlayerConfig *playerConfig = [[AgoraRtePlayerConfig alloc] init];
     AgoraRteError *rteError = [[AgoraRteError alloc] init];
     BOOL success = [player getConfigs:playerConfig error:rteError];
@@ -431,7 +441,7 @@
         return NO;
     }
     
-    // 只更新字典中提供的属性
+    
     if (config[@"autoPlay"] && config[@"autoPlay"] != [NSNull null]) {
         [playerConfig setAutoPlay:[config[@"autoPlay"] boolValue] error:rteError];
         if (rteError.code != AgoraRteOk) {
@@ -545,7 +555,7 @@
         }
     }
     
-    // 设置修改后的配置
+    
     AgoraRteError *setError = [[AgoraRteError alloc] init];
     success = [player setConfigs:playerConfig error:setError];
     
@@ -649,11 +659,11 @@
         return NO;
     }
     
-    // success = [player setConfigs:config error:rteError];
-    // if (!success || rteError.code != AgoraRteOk) {
-    //     if (error) *error = RTE_NSERROR_FROM_RTE_ERROR(rteError);
-    //     return NO;
-    // }
+     success = [player setConfigs:config error:rteError];
+     if (!success || rteError.code != AgoraRteOk) {
+         if (error) *error = RTE_NSERROR_FROM_RTE_ERROR(rteError);
+         return NO;
+     }
     return YES;
 }
 
@@ -903,23 +913,23 @@
     
     AgoraRtePlayerConfig *config = [[AgoraRtePlayerConfig alloc] init];
     AgoraRteError *rteError = [[AgoraRteError alloc] init];
-    BOOL success = [player getConfigs:config error:rteError];
-    if (!success || rteError.code != AgoraRteOk) {
-        if (error) *error = RTE_NSERROR_FROM_RTE_ERROR(rteError);
-        return NO;
-    }
-    
+//    BOOL success = [player getConfigs:config error:rteError];
+//    if (!success || rteError.code != AgoraRteOk) {
+//        if (error) *error = RTE_NSERROR_FROM_RTE_ERROR(rteError);
+//        return NO;
+//    }
+//    
     [config setPlayoutVolume:volume error:rteError];
     if (rteError.code != AgoraRteOk) {
         if (error) *error = RTE_NSERROR_FROM_RTE_ERROR(rteError);
         return NO;
     }
     
-    // success = [player setConfigs:config error:rteError];
-    // if (!success || rteError.code != AgoraRteOk) {
-    //     if (error) *error = RTE_NSERROR_FROM_RTE_ERROR(rteError);
-    //     return NO;
-    // }
+    BOOL success = [player setConfigs:config error:rteError];
+     if (!success || rteError.code != AgoraRteOk) {
+         if (error) *error = RTE_NSERROR_FROM_RTE_ERROR(rteError);
+         return NO;
+     }
     return YES;
 }
 

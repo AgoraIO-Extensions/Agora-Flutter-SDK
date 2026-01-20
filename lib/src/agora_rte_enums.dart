@@ -1,205 +1,205 @@
-/// RTE 枚举定义文件
-/// 
-/// 此文件包含所有 RTE 相关的枚举类型，与原生 SDK 的枚举定义对应。
-/// 原生 SDK 的枚举通过 #import <AgoraRtcKit/AgoraRteKit.h> 引入，不需要在 native 层重新定义。
+/// RTE enum definitions
+///
+/// This file contains all RTE-related enum types corresponding to native SDK enums.
+/// Native SDK enums are imported via #import <AgoraRtcKit/AgoraRteKit.h>, no need to redefine in native layer.
 
-/// RTE 错误代码
+/// RTE error codes
 enum AgoraRteErrorCode {
-  /// 0: 成功
+  /// 0: Success
   ok,
 
-  /// 1: 默认错误，未具体分类
+  /// 1: Default error, not specifically categorized
   errorDefault,
 
-  /// 2: 调用 API 时传递的参数无效
+  /// 2: Invalid parameter passed when calling API
   errorInvalidArgument,
 
-  /// 3: 不支持的 API 操作
+  /// 3: Unsupported API operation
   errorInvalidOperation,
 
-  /// 4: 网络错误
+  /// 4: Network error
   errorNetworkError,
 
-  /// 5: 身份验证失败
+  /// 5: Authentication failed
   errorAuthenticationFailed,
 
-  /// 6: 未找到流
+  /// 6: Stream not found
   errorStreamNotFound,
 }
 
-/// 播放器状态
+/// Player state
 enum AgoraRtePlayerState {
-  /// 0: 空闲状态
+  /// 0: Idle state
   idle,
 
-  /// 1: 正在打开
+  /// 1: Opening
   opening,
 
-  /// 2: 打开完成
+  /// 2: Open completed
   openCompleted,
 
-  /// 3: 正在播放
+  /// 3: Playing
   playing,
 
-  /// 4: 已暂停
+  /// 4: Paused
   paused,
 
-  /// 5: 播放完成
+  /// 5: Playback completed
   playbackCompleted,
 
-  /// 6: 已停止
+  /// 6: Stopped
   stopped,
 
-  /// 7: 失败状态
+  /// 7: Failed
   failed,
 }
 
-/// 播放器事件
+/// Player events
 enum AgoraRtePlayerEvent {
-  /// 0: 开始跳转到指定位置播放
+  /// 0: Start seeking to specified position
   seekBegin,
 
-  /// 1: 跳转完成
+  /// 1: Seek completed
   seekComplete,
 
-  /// 2: 跳转到新播放位置时发生错误
+  /// 2: Error occurred while seeking to new position
   seekError,
 
-  /// 3: 当前缓存数据不足以支持播放
+  /// 3: Current buffer insufficient for playback
   bufferLow,
 
-  /// 4: 当前缓存数据刚好足以支持播放
+  /// 4: Current buffer sufficient for playback
   bufferRecover,
 
-  /// 5: 音频或视频播放开始卡顿
+  /// 5: Audio or video playback started stuttering
   freezeStart,
 
-  /// 6: 音频或视频播放恢复，不再卡顿
+  /// 6: Audio or video playback recovered, no longer stuttering
   freezeStop,
 
-  /// 7: 一轮循环播放完成
+  /// 7: One loop of playback completed
   oneLoopPlaybackCompleted,
 
-  /// 8: URL 身份验证即将过期
+  /// 8: URL authentication is about to expire
   authenticationWillExpire,
 
-  /// 9: 开启降级选项时，由于网络差，ABR 降级到纯音频层
+  /// 9: When fallback enabled, ABR degraded to audio-only due to poor network
   abrFallbackToAudioOnlyLayer,
 
-  /// 10: 开启降级选项时，ABR 从纯音频层恢复到视频层
+  /// 10: When fallback enabled, ABR recovered from audio-only to video
   abrRecoverFromAudioOnlyLayer,
 
-  /// 11: 开始切换到新 URL
+  /// 11: Start switching to new URL
   switchBegin,
 
-  /// 12: 切换到新 URL 完成
+  /// 12: Switch to new URL completed
   switchComplete,
 
-  /// 13: 切换到新 URL 时发生错误
+  /// 13: Error occurred while switching to new URL
   switchError,
 
-  /// 14: 视频第一帧已显示
+  /// 14: First video frame rendered
   firstDisplayed,
 
-  /// 15: 缓存文件数量达到最大值
+  /// 15: Cache file count reached maximum
   reachCacheFileMaxCount,
 
-  /// 16: 缓存文件大小达到最大值
+  /// 16: Cache file size reached maximum
   reachCacheFileMaxSize,
 
-  /// 17: 开始尝试打开新 URL
+  /// 17: Start attempting to open new URL
   tryOpenStart,
 
-  /// 18: 尝试打开新 URL 成功
+  /// 18: Successfully opened new URL
   tryOpenSucceed,
 
-  /// 19: 尝试打开新 URL 失败
+  /// 19: Failed to open new URL
   tryOpenFailed,
 
-  /// 20: 音轨已更改
+  /// 20: Audio track changed
   audioTrackChanged,
 }
 
-/// 视频渲染模式
+/// Video render mode
 enum AgoraRteVideoRenderMode {
-  /// 0: 隐藏模式，填满整个视图，超出部分将被裁剪
+  /// 0: Hidden mode, fills the view, excess is cropped
   hidden,
 
-  /// 1: 适应模式，在视图内完整渲染整个图像
+  /// 1: Fit mode, renders entire image within the view
   fit,
 }
 
-/// 镜像模式
+/// Mirror mode
 enum AgoraRteVideoMirrorMode {
-  /// 0: SDK 决定镜像模式
+  /// 0: SDK decides mirror mode
   auto,
 
-  /// 1: 启用镜像模式
+  /// 1: Enable mirror mode
   enabled,
 
-  /// 2: 禁用镜像模式
+  /// 2: Disable mirror mode
   disabled,
 }
 
-/// 元数据类型
+/// Metadata type
 enum AgoraRtePlayerMetadataType {
-  /// SEI 类型
+  /// SEI type
   sei,
 }
 
-/// ABR 订阅层
+/// ABR subscription layer
 enum AgoraRteAbrSubscriptionLayer {
-  /// 0: 高质量视频流，分辨率和码率最高
+  /// 0: High quality video stream, highest resolution and bitrate
   high,
 
-  /// 1: 低质量视频流，分辨率和码率最低
+  /// 1: Low quality video stream, lowest resolution and bitrate
   low,
 
-  /// 2: Layer1 视频流，分辨率和码率低于高质量流
+  /// 2: Layer1 video stream, resolution and bitrate lower than high quality
   layer1,
 
-  /// 3: Layer2 视频流，分辨率和码率低于 layer1
+  /// 3: Layer2 video stream, resolution and bitrate lower than layer1
   layer2,
 
-  /// 4: Layer3 视频流，分辨率和码率低于 layer2
+  /// 4: Layer3 video stream, resolution and bitrate lower than layer2
   layer3,
 
-  /// 5: Layer4 视频流，分辨率和码率低于 layer3
+  /// 5: Layer4 video stream, resolution and bitrate lower than layer3
   layer4,
 
-  /// 6: Layer5 视频流，分辨率和码率低于 layer4
+  /// 6: Layer5 video stream, resolution and bitrate lower than layer4
   layer5,
 
-  /// 7: Layer6 视频流，分辨率和码率低于 layer5
+  /// 7: Layer6 video stream, resolution and bitrate lower than layer5
   layer6,
 }
 
-/// ABR 降级层
+/// ABR fallback layer
 enum AgoraRteAbrFallbackLayer {
-  /// 0: 网络差时不降级到低分辨率流，可能降级到可伸缩视频编码但保持高质量分辨率
+  /// 0: No fallback to low resolution stream on poor network, may fallback to SVC but keeps high resolution
   disabled,
 
-  /// 1: 网络差时接收低质量视频流
+  /// 1: Receive low quality video stream on poor network
   low,
 
-  /// 2: 网络差时先降级到低质量流，若存在则继续降级到音频层，若网络极差则仅接收音频
+  /// 2: Fallback to low quality first on poor network, then to audio layer, receive only audio if network is extremely poor
   audioOnly,
 
-  /// 3: Layer1 降级
+  /// 3: Layer1 fallback
   layer1,
 
-  /// 4: Layer2 降级
+  /// 4: Layer2 fallback
   layer2,
 
-  /// 5: Layer3 降级
+  /// 5: Layer3 fallback
   layer3,
 
-  /// 6: Layer4 降级
+  /// 6: Layer4 fallback
   layer4,
 
-  /// 7: Layer5 降级
+  /// 7: Layer5 fallback
   layer5,
 
-  /// 8: Layer6 降级
+  /// 8: Layer6 fallback
   layer6,
 }

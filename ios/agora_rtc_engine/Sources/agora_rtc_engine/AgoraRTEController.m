@@ -1,6 +1,5 @@
 #import "AgoraRTEController.h"
 #import "AgoraRTE.h"
-#import "AgoraRTEConfig.h"
 #import "AgoraRTEPlayer.h"
 #import "AgoraRTECanvas.h"
 #import "AgoraRTECommon.h"
@@ -9,7 +8,6 @@
 
 @interface AgoraRTEController ()
 @property (nonatomic, strong, readwrite) AgoraRTE *rte;
-@property (nonatomic, strong, readwrite) AgoraRTEConfig *rteConfig;
 @property (nonatomic, strong, readwrite) AgoraRTEPlayer *rtePlayer;
 @property (nonatomic, strong, readwrite) AgoraRTECanvas *rteCanvas;
 @end
@@ -22,7 +20,6 @@
     self = [super init];
     if (self) {
         _rte = [[AgoraRTE alloc] init];
-        _rteConfig = nil;
         _rtePlayer = nil;
         _rteCanvas = nil;
     }
@@ -34,7 +31,6 @@
 - (BOOL)createRteFromBridge:(NSError **)error {
     BOOL success = [self.rte getFromBridge:error];
     if (success && self.rte.rteInstance) {
-        self.rteConfig = [[AgoraRTEConfig alloc] initWithRte:self.rte.rteInstance];
         self.rtePlayer = [[AgoraRTEPlayer alloc] initWithRte:self.rte.rteInstance];
         self.rteCanvas = [[AgoraRTECanvas alloc] initWithRte:self.rte.rteInstance];
         self.rtePlayer.observerDelegate = self.playerObserverDelegate;
@@ -45,7 +41,6 @@
 - (BOOL)createRteWithConfig:(NSDictionary *)config error:(NSError **)error {
     BOOL success = [self.rte createWithConfig:config error:error];
     if (success && self.rte.rteInstance) {
-        self.rteConfig = [[AgoraRTEConfig alloc] initWithRte:self.rte.rteInstance];
         self.rtePlayer = [[AgoraRTEPlayer alloc] initWithRte:self.rte.rteInstance];
         self.rteCanvas = [[AgoraRTECanvas alloc] initWithRte:self.rte.rteInstance];
         self.rtePlayer.observerDelegate = self.playerObserverDelegate;
@@ -72,7 +67,6 @@
     
     BOOL success = [self.rte destroy:error];
     if (success) {
-        self.rteConfig = nil;
         self.rtePlayer = nil;
         self.rteCanvas = nil;
     }
@@ -82,115 +76,164 @@
 #pragma mark - RTE Config
 
 - (BOOL)setRteConfig:(NSDictionary *)config error:(NSError **)error {
-    if (!self.rteConfig) {
-        if (error) *error = RTE_NSERROR(-1, @"RTE config not initialized");
-        return NO;
-    }
+    CHECK_RTE_INSTANCE(self.rte.rteInstance, error);
     return [self.rte setConfigs:config error:error];
 }
 
 - (NSDictionary *)getRteConfig:(NSError **)error {
-    if (!self.rteConfig) {
-        if (error) *error = RTE_NSERROR(-1, @"RTE config not initialized");
-        return nil;
-    }
+    CHECK_RTE_INSTANCE_NIL(self.rte.rteInstance, error);
     return [self.rte getConfigs:error];
 }
+
 - (NSString *)appId:(NSError **)error {
-    if (!self.rteConfig) {
-        if (error) *error = RTE_NSERROR(-1, @"RTE config not initialized");
+    CHECK_RTE_INSTANCE_NIL(self.rte.rteInstance, error);
+    
+    AgoraRteConfig *config = [[AgoraRteConfig alloc] init];
+//    AgoraRteError *rteError = [[AgoraRteError alloc] init];
+//    BOOL success = [self.rte.rteInstance getConfigs:config error:rteError];
+//    if (!success || rteError.code != AgoraRteOk) {
+//        if (error) *error = RTE_NSERROR_FROM_RTE_ERROR(rteError);
+//        return nil;
+//    }
+    
+    AgoraRteError *getError = [[AgoraRteError alloc] init];
+    NSString *appId = [config appId:getError];
+    if (getError.code != AgoraRteOk) {
+        if (error) *error = RTE_NSERROR_FROM_RTE_ERROR(getError);
         return nil;
     }
-    return [self.rteConfig appId:error];
+    return appId ?: @"";
 }
 
 - (NSString *)logFolder:(NSError **)error {
-    if (!self.rteConfig) {
-        if (error) *error = RTE_NSERROR(-1, @"RTE config not initialized");
+    CHECK_RTE_INSTANCE_NIL(self.rte.rteInstance, error);
+    
+    AgoraRteConfig *config = [[AgoraRteConfig alloc] init];
+    AgoraRteError *rteError = [[AgoraRteError alloc] init];
+    BOOL success = [self.rte.rteInstance getConfigs:config error:rteError];
+    if (!success || rteError.code != AgoraRteOk) {
+        if (error) *error = RTE_NSERROR_FROM_RTE_ERROR(rteError);
         return nil;
     }
-    return [self.rteConfig logFolder:error];
+    
+    AgoraRteError *getError = [[AgoraRteError alloc] init];
+    NSString *logFolder = [config logFolder:getError];
+    if (getError.code != AgoraRteOk) {
+        if (error) *error = RTE_NSERROR_FROM_RTE_ERROR(getError);
+        return nil;
+    }
+    return logFolder ?: @"";
 }
 
 - (NSNumber *)logFileSize:(NSError **)error {
-    if (!self.rteConfig) {
-        if (error) *error = RTE_NSERROR(-1, @"RTE config not initialized");
+    CHECK_RTE_INSTANCE_NIL(self.rte.rteInstance, error);
+    
+    AgoraRteConfig *config = [[AgoraRteConfig alloc] init];
+    AgoraRteError *rteError = [[AgoraRteError alloc] init];
+    BOOL success = [self.rte.rteInstance getConfigs:config error:rteError];
+    if (!success || rteError.code != AgoraRteOk) {
+        if (error) *error = RTE_NSERROR_FROM_RTE_ERROR(rteError);
         return nil;
     }
-    return [self.rteConfig logFileSize:error];
+    
+    AgoraRteError *getError = [[AgoraRteError alloc] init];
+    size_t logFileSize = [config logFileSize:getError];
+    if (getError.code != AgoraRteOk) {
+        if (error) *error = RTE_NSERROR_FROM_RTE_ERROR(getError);
+        return nil;
+    }
+    return @(logFileSize);
 }
 
 - (NSNumber *)areaCode:(NSError **)error {
-    if (!self.rteConfig) {
-        if (error) *error = RTE_NSERROR(-1, @"RTE config not initialized");
+    CHECK_RTE_INSTANCE_NIL(self.rte.rteInstance, error);
+    
+    AgoraRteConfig *config = [[AgoraRteConfig alloc] init];
+    AgoraRteError *rteError = [[AgoraRteError alloc] init];
+    BOOL success = [self.rte.rteInstance getConfigs:config error:rteError];
+    if (!success || rteError.code != AgoraRteOk) {
+        if (error) *error = RTE_NSERROR_FROM_RTE_ERROR(rteError);
         return nil;
     }
-    return [self.rteConfig areaCode:error];
+    
+    AgoraRteError *getError = [[AgoraRteError alloc] init];
+    int32_t areaCode = [config areaCode:getError];
+    if (getError.code != AgoraRteOk) {
+        if (error) *error = RTE_NSERROR_FROM_RTE_ERROR(getError);
+        return nil;
+    }
+    return @(areaCode);
 }
 
 - (NSString *)cloudProxy:(NSError **)error {
-    if (!self.rteConfig) {
-        if (error) *error = RTE_NSERROR(-1, @"RTE config not initialized");
+    CHECK_RTE_INSTANCE_NIL(self.rte.rteInstance, error);
+    
+    AgoraRteConfig *config = [[AgoraRteConfig alloc] init];
+    AgoraRteError *rteError = [[AgoraRteError alloc] init];
+    BOOL success = [self.rte.rteInstance getConfigs:config error:rteError];
+    if (!success || rteError.code != AgoraRteOk) {
+        if (error) *error = RTE_NSERROR_FROM_RTE_ERROR(rteError);
         return nil;
     }
-    return [self.rteConfig cloudProxy:error];
+    
+    AgoraRteError *getError = [[AgoraRteError alloc] init];
+    NSString *cloudProxy = [config cloudProxy:getError];
+    if (getError.code != AgoraRteOk) {
+        if (error) *error = RTE_NSERROR_FROM_RTE_ERROR(getError);
+        return nil;
+    }
+    return cloudProxy ?: @"";
 }
 
 - (NSString *)jsonParameter:(NSError **)error {
-    if (!self.rteConfig) {
-        if (error) *error = RTE_NSERROR(-1, @"RTE config not initialized");
+    CHECK_RTE_INSTANCE_NIL(self.rte.rteInstance, error);
+    
+    AgoraRteConfig *config = [[AgoraRteConfig alloc] init];
+    AgoraRteError *rteError = [[AgoraRteError alloc] init];
+    BOOL success = [self.rte.rteInstance getConfigs:config error:rteError];
+    if (!success || rteError.code != AgoraRteOk) {
+        if (error) *error = RTE_NSERROR_FROM_RTE_ERROR(rteError);
         return nil;
     }
-    return [self.rteConfig jsonParameter:error];
+    
+    AgoraRteError *getError = [[AgoraRteError alloc] init];
+    NSString *jsonParameter = [config jsonParameter:getError];
+    if (getError.code != AgoraRteOk) {
+        if (error) *error = RTE_NSERROR_FROM_RTE_ERROR(getError);
+        return nil;
+    }
+    return jsonParameter ?: @"";
 }
 
 // RTE Config Setters
 - (BOOL)setAppId:(NSString *)appId error:(NSError **)error {
-    if (!self.rteConfig) {
-        if (error) *error = RTE_NSERROR(-1, @"RTE config not initialized");
-        return NO;
-    }
-    return [self.rteConfig setAppId:appId error:error];
+    CHECK_RTE_INSTANCE(self.rte.rteInstance, error);
+    return [self.rte setConfigs:@{@"appId": appId} error:error];
 }
 
 - (BOOL)setLogFolder:(NSString *)logFolder error:(NSError **)error {
-    if (!self.rteConfig) {
-        if (error) *error = RTE_NSERROR(-1, @"RTE config not initialized");
-        return NO;
-    }
-    return [self.rteConfig setLogFolder:logFolder error:error];
+    CHECK_RTE_INSTANCE(self.rte.rteInstance, error);
+    return [self.rte setConfigs:@{@"logFolder": logFolder} error:error];
 }
 
 - (BOOL)setLogFileSize:(NSNumber *)logFileSize error:(NSError **)error {
-    if (!self.rteConfig) {
-        if (error) *error = RTE_NSERROR(-1, @"RTE config not initialized");
-        return NO;
-    }
-    return [self.rteConfig setLogFileSize:logFileSize error:error];
+    CHECK_RTE_INSTANCE(self.rte.rteInstance, error);
+    return [self.rte setConfigs:@{@"logFileSize": logFileSize} error:error];
 }
 
 - (BOOL)setAreaCode:(NSNumber *)areaCode error:(NSError **)error {
-    if (!self.rteConfig) {
-        if (error) *error = RTE_NSERROR(-1, @"RTE config not initialized");
-        return NO;
-    }
-    return [self.rteConfig setAreaCode:areaCode error:error];
+    CHECK_RTE_INSTANCE(self.rte.rteInstance, error);
+    return [self.rte setConfigs:@{@"areaCode": areaCode} error:error];
 }
 
 - (BOOL)setCloudProxy:(NSString *)cloudProxy error:(NSError **)error {
-    if (!self.rteConfig) {
-        if (error) *error = RTE_NSERROR(-1, @"RTE config not initialized");
-        return NO;
-    }
-    return [self.rteConfig setCloudProxy:cloudProxy error:error];
+    CHECK_RTE_INSTANCE(self.rte.rteInstance, error);
+    return [self.rte setConfigs:@{@"cloudProxy": cloudProxy} error:error];
 }
 
 - (BOOL)setJsonParameter:(NSString *)jsonParameter error:(NSError **)error {
-    if (!self.rteConfig) {
-        if (error) *error = RTE_NSERROR(-1, @"RTE config not initialized");
-        return NO;
-    }
-    return [self.rteConfig setJsonParameter:jsonParameter error:error];
+    CHECK_RTE_INSTANCE(self.rte.rteInstance, error);
+    return [self.rte setConfigs:@{@"jsonParameter": jsonParameter} error:error];
 }
 
 #pragma mark - RTE Observer

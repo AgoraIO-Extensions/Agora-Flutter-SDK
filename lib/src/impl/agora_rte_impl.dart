@@ -4,7 +4,7 @@ import 'package:flutter/services.dart';
 import 'agora_rte_core_impl.dart';
 import 'agora_rte_config_impl.dart';
 
-/// RTE 主实现类 - 委托给分离的类
+/// RTE main implementation - delegates to separated classes
 class AgoraRteImpl implements AgoraRte {
   static final AgoraRteImpl _instance = AgoraRteImpl._internal();
   factory AgoraRteImpl() => _instance;
@@ -14,30 +14,30 @@ class AgoraRteImpl implements AgoraRte {
 
   AgoraRteImpl._internal();
 
-  /// 获取配置管理器
+  /// Get configuration manager
   AgoraRteConfigImpl get config => _config;
 
-  /// 创建播放器
+  /// Create player
   Future<AgoraRtePlayer> createPlayer(AgoraRtePlayerConfig config) async {
     return await _core.createPlayer(config);
   }
 
-  /// 销毁播放器
+  /// Destroy player
   Future<void> destroyPlayer(String playerId) async {
     return await _core.destroyPlayer(playerId);
   }
 
-  /// 创建画布
+  /// Create canvas
   Future<AgoraRteCanvas> createCanvas(AgoraRteCanvasConfig config) async {
     return await _core.createCanvas(config);
   }
 
-  /// 销毁画布
+  /// Destroy canvas
   Future<void> destroyCanvas(String canvasId) async {
     return await _core.destroyCanvas(canvasId);
   }
 
-  /// 预加载 URL
+  /// Preload URL
   static Future<void> preloadWithUrl(String url) async {
     return await AgoraRteCoreImpl.preloadWithUrl(url);
   }

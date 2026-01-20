@@ -1,21 +1,11 @@
 #import "AgoraRTE.h"
-#import "AgoraRTEConfig.h"
 #import "AgoraRTECommon.h"
 
 @interface AgoraRTE ()
 @property (nonatomic, strong, readwrite) AgoraRte *rteInstance;
-@property (nonatomic, strong) AgoraRTEConfig *config;
 @end
 
 @implementation AgoraRTE
-
-- (instancetype)init {
-    self = [super init];
-    if (self) {
-        _config = nil;
-    }
-    return self;
-}
 
 - (BOOL)getFromBridge:(NSError **)error {
     AgoraRteError *rteError = [[AgoraRteError alloc] init];
@@ -25,9 +15,6 @@
         if (error) *error = RTE_NSERROR_FROM_RTE_ERROR(rteError);
         return NO;
     }
-    
-    // 创建配置管理器
-    self.config = [[AgoraRTEConfig alloc] initWithRte:self.rteInstance];
     
     return YES;
 }
@@ -40,9 +27,6 @@
         if (error) *error = RTE_NSERROR(-1, @"Failed to create RTE instance");
         return NO;
     }
-    
-    // 创建配置管理器
-    self.config = [[AgoraRTEConfig alloc] initWithRte:self.rteInstance];
     
     if (config && config.count > 0) {
         return [self setConfigs:config error:error];
@@ -59,9 +43,11 @@
     
     AgoraRteError *rteError = [[AgoraRteError alloc] init];
     BOOL success = [self.rteInstance initMediaEngine:^(AgoraRteError *err) {
+        AgoraRteError *rteErrorCopy = [[AgoraRteError alloc] init];
+        [rteErrorCopy setErrorWithCode:err.code message:err.message];
         NSError *nsError = nil;
-        if (err && err.code != AgoraRteOk) {
-            nsError = RTE_NSERROR_FROM_RTE_ERROR(err);
+        if (rteErrorCopy && rteErrorCopy.code != AgoraRteOk) {
+            nsError = RTE_NSERROR_FROM_RTE_ERROR(rteErrorCopy);
         }
         if (completion) completion(nsError);
     } error:rteError];
@@ -85,22 +71,21 @@
     }
     
     self.rteInstance = nil;
-    self.config = nil;
     return YES;
 }
 - (BOOL)setConfigs:(NSDictionary *)config error:(NSError **)error {
     CHECK_RTE_INSTANCE(self.rteInstance, error);
     
-    // 先获取当前配置，避免覆盖其他属性
+    
     AgoraRteConfig *rteConfig = [[AgoraRteConfig alloc] init];
     AgoraRteError *rteError = [[AgoraRteError alloc] init];
-    BOOL success = [self.rteInstance getConfigs:rteConfig error:rteError];
-    if (!success || rteError.code != AgoraRteOk) {
-        if (error) *error = RTE_NSERROR_FROM_RTE_ERROR(rteError);
-        return NO;
-    }
+//    BOOL success = [self.rteInstance getConfigs:rteConfig error:rteError];
+//    if (!success || rteError.code != AgoraRteOk) {
+//        if (error) *error = RTE_NSERROR_FROM_RTE_ERROR(rteError);
+//        return NO;
+//    }
     
-    // 只更新字典中提供的属性
+    
     if (config[@"appId"] && config[@"appId"] != [NSNull null]) {
         [rteConfig setAppId:config[@"appId"] error:rteError];
         if (rteError.code != AgoraRteOk) {
@@ -144,9 +129,9 @@
         }
     }
     
-    // 设置修改后的配置
+    
     AgoraRteError *setError = [[AgoraRteError alloc] init];
-    success = [self.rteInstance setConfigs:rteConfig error:setError];
+    BOOL success = [self.rteInstance setConfigs:rteConfig error:setError];
     
     if (!success || setError.code != AgoraRteOk) {
         if (error) *error = RTE_NSERROR_FROM_RTE_ERROR(setError);
@@ -176,9 +161,6 @@
         @"cloudProxy": [config cloudProxy:getError] ?: @"",
         @"jsonParameter": [config jsonParameter:getError] ?: @""
     };
-}
-- (AgoraRTEConfig *)config {
-    return _config;
 }
 
 @end

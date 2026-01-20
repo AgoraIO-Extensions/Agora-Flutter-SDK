@@ -63,7 +63,7 @@
 - (BOOL)setConfigs:(NSString *)canvasId config:(NSDictionary *)config error:(NSError **)error {
     GET_CANVAS_OR_RETURN(self.canvases, canvasId, error, NO);
     
-    // 先获取当前配置，避免覆盖其他属性
+    
     AgoraRteCanvasConfig *canvasConfig = [[AgoraRteCanvasConfig alloc] init];
     AgoraRteError *rteError = [[AgoraRteError alloc] init];
     BOOL success = [canvas getConfigs:canvasConfig error:rteError];
@@ -72,7 +72,7 @@
         return NO;
     }
     
-    // 只更新字典中提供的属性
+    
     if (config[@"videoRenderMode"] && config[@"videoRenderMode"] != [NSNull null]) {
         [canvasConfig setVideoRenderMode:(AgoraRteVideoRenderMode)[config[@"videoRenderMode"] intValue] error:rteError];
         if (rteError.code != AgoraRteOk) {
@@ -101,7 +101,7 @@
         }
     }
     
-    // 设置修改后的配置
+    
     AgoraRteError *setError = [[AgoraRteError alloc] init];
     success = [canvas setConfigs:canvasConfig error:setError];
     
@@ -299,7 +299,7 @@
     BOOL success = [canvas addView:view config:viewConfig error:rteError];
     
     if (!success || rteError.code != AgoraRteOk) {
-        if (error) *error = RTE_NSERROR_FROM_RTE_ERROR(rteError);
+        if (error) *error = RTE_NSERROR_FROM_RTE_ERROR_WITH_LOCATION(rteError, @"AgoraRTECanvas.addView");
         return NO;
     }
     return YES;
@@ -327,7 +327,7 @@
     BOOL success = [canvas removeView:view config:viewConfig error:rteError];
     
     if (!success || rteError.code != AgoraRteOk) {
-        if (error) *error = RTE_NSERROR_FROM_RTE_ERROR(rteError);
+        if (error) *error = RTE_NSERROR_FROM_RTE_ERROR_WITH_LOCATION(rteError, @"AgoraRTECanvas.removeView");
         return NO;
     }
     return YES;

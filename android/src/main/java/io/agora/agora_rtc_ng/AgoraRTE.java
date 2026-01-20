@@ -11,43 +11,35 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * RTE 主类，管理 RTE 生命周期
+ * RTE main class, manages RTE lifecycle
  */
 public class AgoraRTE {
     private Rte rteInstance;
-    private AgoraRTEConfig config;
 
     public AgoraRTE() {
         this.rteInstance = null;
-        this.config = null;
     }
 
     /**
-     * 从 Bridge 创建 RTE 实例
+     * Create RTE instance from Bridge
      */
     public boolean getFromBridge() {
         try {
             rteInstance = Rte.getFromBridge();
-            if (rteInstance != null) {
-                config = new AgoraRTEConfig(rteInstance);
-                return true;
-            }
-            return false;
+            return rteInstance != null;
         } catch (RteException e) {
             return false;
         }
     }
 
     /**
-     * 使用配置创建 RTE 实例
+     * Create RTE instance with configuration
      */
     public boolean createWithConfig(Map<String, Object> configMap) {
         InitialConfig initialConfig = new InitialConfig();
         rteInstance = new Rte(initialConfig);
         
         if (rteInstance != null) {
-            config = new AgoraRTEConfig(rteInstance);
-            
             if (configMap != null && !configMap.isEmpty()) {
                 return setConfigs(configMap);
             }
@@ -57,7 +49,7 @@ public class AgoraRTE {
     }
 
     /**
-     * 初始化媒体引擎
+     * Initialize media engine
      */
     public boolean initMediaEngine(AsyncCallback completion) {
         if (rteInstance == null) {
@@ -72,7 +64,7 @@ public class AgoraRTE {
     }
 
     /**
-     * 批量设置配置
+     * Batch set configurations
      */
     public boolean setConfigs(Map<String, Object> configMap) {
         if (rteInstance == null) {
@@ -80,11 +72,10 @@ public class AgoraRTE {
         }
         try {
             Config rteConfig = new Config();
-            
-            // 先获取当前配置，避免覆盖其他属性
+            // First, get the current configuration to avoid overwriting other properties.
             rteInstance.getConfigs(rteConfig);
             
-            // 只更新字典中提供的属性
+            // Only update properties provided in the map.
             if (configMap.containsKey("appId") && configMap.get("appId") != null) {
                 rteConfig.setAppId((String) configMap.get("appId"));
             }
@@ -112,7 +103,7 @@ public class AgoraRTE {
     }
 
     /**
-     * 获取所有配置
+     * Get all configurations
      */
     public Map<String, Object> getConfigs() {
         if (rteInstance == null) {
@@ -136,7 +127,7 @@ public class AgoraRTE {
     }
 
     /**
-     * 销毁 RTE 实例
+     * Destroy RTE instance
      */
     public boolean destroy() {
         if (rteInstance == null) {
@@ -145,7 +136,6 @@ public class AgoraRTE {
         try {
             rteInstance.destroy();
             rteInstance = null;
-            config = null;
             return true;
         } catch (RteException e) {
             return false;
@@ -154,10 +144,6 @@ public class AgoraRTE {
 
     public Rte getRteInstance() {
         return rteInstance;
-    }
-
-    public AgoraRTEConfig getConfig() {
-        return config;
     }
 
     private int parseInt(Object obj) {

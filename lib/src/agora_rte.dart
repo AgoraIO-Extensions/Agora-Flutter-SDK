@@ -1,6 +1,6 @@
 import 'package:flutter/foundation.dart';
 import 'agora_rte_enums.dart';
-/// 矩形区域
+/// Rectangle area
 class AgoraRteRect {
   final int x;
   final int y;
@@ -29,7 +29,7 @@ class AgoraRteRect {
       );
 }
 
-/// 视图配置
+/// View configuration
 class AgoraRteViewConfig {
   final AgoraRteRect? cropArea;
 
@@ -40,7 +40,7 @@ class AgoraRteViewConfig {
       };
 }
 
-/// RTE 配置
+/// RTE configuration
 class AgoraRteConfig {
   final String? appId;
   final String? logFolder;
@@ -68,7 +68,7 @@ class AgoraRteConfig {
       };
 }
 
-/// 播放器配置
+/// Player configuration
 class AgoraRtePlayerConfig {
   final bool? autoPlay;
   final int? playbackSpeed;
@@ -126,7 +126,7 @@ class AgoraRtePlayerConfig {
       };
 }
 
-/// 画布配置
+/// Canvas configuration
 class AgoraRteCanvasConfig {
   final AgoraRteVideoRenderMode? videoRenderMode;
   final AgoraRteVideoMirrorMode? videoMirrorMode;
@@ -145,7 +145,7 @@ class AgoraRteCanvasConfig {
       };
 }
 
-/// 播放器统计数据
+/// Player statistics
 class AgoraRtePlayerStats {
   final int videoDecodeFrameRate;
   final int videoRenderFrameRate;
@@ -168,7 +168,7 @@ class AgoraRtePlayerStats {
       );
 }
 
-/// 播放器信息
+/// Player information
 class AgoraRtePlayerInfo {
   final int state;
   final int duration;
@@ -222,10 +222,10 @@ class AgoraRtePlayerInfo {
       );
 }
 
-/// RTE 观察者回调
+/// RTE observer callback
 abstract class AgoraRteObserver {}
 
-/// 播放器观察者回调
+/// Player observer callback
 abstract class AgoraRtePlayerObserver {
   void onStateChanged(AgoraRtePlayerState oldState, AgoraRtePlayerState newState,
       AgoraRteErrorCode? error);
@@ -237,7 +237,7 @@ abstract class AgoraRtePlayerObserver {
   void onAudioVolumeIndication(int volume);
 }
 
-/// RTE 主接口
+/// RTE main interface
 abstract class AgoraRte {
   Future<void> createFromBridge();
   Future<void> createWithConfig(AgoraRteConfig config);
@@ -255,7 +255,7 @@ abstract class AgoraRte {
   Future<void> unregisterObserver(AgoraRteObserver observer);
 }
 
-/// RTE 播放器接口
+/// RTE player interface
 abstract class AgoraRtePlayer {
   String get playerId;
   static Future<void> preloadWithUrl(String url) async {}
@@ -279,7 +279,7 @@ abstract class AgoraRtePlayer {
   Future<void> unregisterObserver(AgoraRtePlayerObserver observer);
 }
 
-/// RTE 画布接口
+/// RTE canvas interface
 abstract class AgoraRteCanvas {
   String get canvasId;
   Future<void> setConfigs(AgoraRteCanvasConfig config);

@@ -8,7 +8,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * RTE 配置管理类
+ * RTE configuration management class
  */
 public class AgoraRTEConfig {
     private final Rte rte;
@@ -106,14 +106,11 @@ public class AgoraRTEConfig {
             return false;
         }
         try {
-            // 先获取当前配置，避免覆盖其他属性
             Config config = new Config();
             rte.getConfigs(config);
             
-            // 只修改需要修改的属性
+            // Set the modified configuration
             config.setAppId(appId);
-            
-            // 设置修改后的配置
             rte.setConfigs(config);
             return true;
         } catch (RteException e) {

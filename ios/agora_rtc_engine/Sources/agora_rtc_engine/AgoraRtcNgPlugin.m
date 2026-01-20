@@ -52,8 +52,8 @@
 
 - (void)handleMethodCall:(FlutterMethodCall *)call
                   result:(FlutterResult)result {
-  AGORA_LOG(@"handleMethodCall: %@ with arguments: %@", call.method,
-            call.arguments);
+//  AGORA_LOG(@"handleMethodCall: %@ with arguments: %@", call.method,
+//            call.arguments);
 
   if ([@"getAssetAbsolutePath" isEqualToString:call.method]) {
     [self getAssetAbsolutePath:call result:result];
@@ -277,7 +277,7 @@
   NSDictionary *args = call.arguments;
   NSError *error = nil;
   
-  // RTE 基础方法
+  // RTE basic methods
   if ([@"rteCreateFromBridge" isEqualToString:call.method]) {
     BOOL success = [self.rteController createRteFromBridge:&error];
     if (success) {
@@ -453,7 +453,7 @@
 //      result([FlutterError errorWithCode:@"RTE_ERROR" message:error.localizedDescription details:nil]);
 //    }
   }
-  // RTE Player 方法
+  // RTE Player methods
   else if ([@"rtePlayerCreate" isEqualToString:call.method]) {
     NSString *playerId = [self.rteController createPlayer:args error:&error];
     if (playerId) {
@@ -1016,7 +1016,9 @@
       if (success) {
           result(@(YES));
       } else {
-          result([FlutterError errorWithCode:@"RTE_ERROR" message:error.localizedDescription details:nil]);
+          NSString *errorMsg = error ? error.localizedDescription : @"Unknown error";
+          NSString *details = [NSString stringWithFormat:@"Method: rteCanvasAddView (line %d), canvasId: %@, viewPtr: %p", __LINE__, canvasId, view];
+          result([FlutterError errorWithCode:@"RTE_ERROR" message:errorMsg details:details]);
       }
   } else if ([@"rteCanvasRemoveView" isEqualToString:call.method]) {
       NSString *canvasId = args[@"canvasId"];
@@ -1027,7 +1029,9 @@
       if (success) {
           result(@(YES));
       } else {
-          result([FlutterError errorWithCode:@"RTE_ERROR" message:error.localizedDescription details:nil]);
+          NSString *errorMsg = error ? error.localizedDescription : @"Unknown error";
+          NSString *details = [NSString stringWithFormat:@"Method: rteCanvasRemoveView (line %d), canvasId: %@, viewPtr: %p", __LINE__, canvasId, view];
+          result([FlutterError errorWithCode:@"RTE_ERROR" message:errorMsg details:details]);
       }
   } else if ([@"rteCanvasGetVideoRenderMode" isEqualToString:call.method]) {
       NSString *canvasId = args[@"canvasId"];

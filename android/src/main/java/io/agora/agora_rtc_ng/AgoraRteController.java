@@ -11,8 +11,10 @@ import java.util.Map;
 
 // Android RTE Java API uses simplified class names (Rte, Config, Player) instead of AgoraRte* prefix
 import io.agora.rte.Rte;
+import io.agora.rte.Config;
 import io.agora.rte.Error;
 import io.agora.rte.Canvas;
+import io.agora.rte.Constants;
 import io.agora.rte.callback.AsyncCallback;
 import io.agora.rte.callback.PlayerGetStatsCallback;
 import io.agora.rte.exception.RteException;
@@ -23,9 +25,7 @@ public class AgoraRteController {
     private final Handler mainHandler;
     private final VideoViewController videoViewController;
 
-    // 使用新的分离类
     private AgoraRTE rte;
-    private AgoraRTEConfig rteConfig;
     private AgoraRTEPlayer rtePlayer;
     private AgoraRTECanvas rteCanvas;
 
@@ -44,7 +44,6 @@ public class AgoraRteController {
     public boolean createRteFromBridge() {
         boolean success = rte.getFromBridge();
         if (success && rte.getRteInstance() != null) {
-            rteConfig = rte.getConfig();
             rtePlayer = new AgoraRTEPlayer(rte.getRteInstance());
             rteCanvas = new AgoraRTECanvas(rte.getRteInstance());
             // Set up observer delegate bridge
@@ -56,7 +55,6 @@ public class AgoraRteController {
     public boolean createRteWithConfig(Map<String, Object> config) {
         boolean success = rte.createWithConfig(config);
         if (success && rte.getRteInstance() != null) {
-            rteConfig = rte.getConfig();
             rtePlayer = new AgoraRTEPlayer(rte.getRteInstance());
             rteCanvas = new AgoraRTECanvas(rte.getRteInstance());
             // Set up observer delegate bridge
@@ -102,7 +100,6 @@ public class AgoraRteController {
             rte.destroy();
         }
         
-        rteConfig = null;
         rtePlayer = null;
         rteCanvas = null;
     }
@@ -206,45 +203,85 @@ public class AgoraRteController {
     }
 
     public String appId() {
-        if (rteConfig == null) {
+        if (rte == null || rte.getRteInstance() == null) {
             return "";
         }
-        return rteConfig.getAppId();
+        try {
+            Config config = new Config();
+            rte.getRteInstance().getConfigs(config);
+            String appId = config.getAppId();
+            return appId != null ? appId : "";
+        } catch (RteException e) {
+            return "";
+        }
     }
 
     public String logFolder() {
-        if (rteConfig == null) {
+        if (rte == null || rte.getRteInstance() == null) {
             return "";
         }
-        return rteConfig.getLogFolder();
+        try {
+            Config config = new Config();
+            rte.getRteInstance().getConfigs(config);
+            String logFolder = config.getLogFolder();
+            return logFolder != null ? logFolder : "";
+        } catch (RteException e) {
+            return "";
+        }
     }
 
     public int logFileSize() {
-        if (rteConfig == null) {
+        if (rte == null || rte.getRteInstance() == null) {
             return 0;
         }
-        return rteConfig.getLogFileSize();
+        try {
+            Config config = new Config();
+            rte.getRteInstance().getConfigs(config);
+            return config.getLogFileSize();
+        } catch (RteException e) {
+            return 0;
+        }
     }
 
     public int areaCode() {
-        if (rteConfig == null) {
+        if (rte == null || rte.getRteInstance() == null) {
             return 0;
         }
-        return rteConfig.getAreaCode();
+        try {
+            Config config = new Config();
+            rte.getRteInstance().getConfigs(config);
+            return config.getAreaCode();
+        } catch (RteException e) {
+            return 0;
+        }
     }
 
     public String cloudProxy() {
-        if (rteConfig == null) {
+        if (rte == null || rte.getRteInstance() == null) {
             return "";
         }
-        return rteConfig.getCloudProxy();
+        try {
+            Config config = new Config();
+            rte.getRteInstance().getConfigs(config);
+            String cloudProxy = config.getCloudProxy();
+            return cloudProxy != null ? cloudProxy : "";
+        } catch (RteException e) {
+            return "";
+        }
     }
 
     public String jsonParameter() {
-        if (rteConfig == null) {
+        if (rte == null || rte.getRteInstance() == null) {
             return "";
         }
-        return rteConfig.getJsonParameter();
+        try {
+            Config config = new Config();
+            rte.getRteInstance().getConfigs(config);
+            String jsonParameter = config.getJsonParameter();
+            return jsonParameter != null ? jsonParameter : "";
+        } catch (RteException e) {
+            return "";
+        }
     }
 
     public boolean registerRteObserver() {
@@ -374,19 +411,34 @@ public class AgoraRteController {
         return rtePlayer.getInfo(playerId);
     }
 
-    public Map<String, Object> playerGetStats(String playerId) {
+    public interface PlayerGetStatsResultCallback {
+        void onResult(Map<String, Object> stats, Error error);
+    }
+
+    public void playerGetStats(String playerId, PlayerGetStatsResultCallback callback) {
         if (rtePlayer == null) {
-            return null;
+            if (callback != null) {
+                callback.onResult(null, null);
+            }
+            return;
         }
-        // Stats are async, return null for now
-        // Consider using callback-based approach if needed
         rtePlayer.getStats(playerId, new PlayerGetStatsCallback() {
             @Override
             public void onResult(io.agora.rte.PlayerStats stats, Error error) {
-                // Stats are returned asynchronously, handle via observer if needed
+                if (callback != null) {
+                    // Check if there's a real error (error != null and code != 0)
+                    if (error != null && Constants.ErrorCode.getValue(error.code()) != 0) {
+                        callback.onResult(null, error);
+                    } else if (stats != null) {
+                        // TODO: Add actual stats fields when PlayerStats API is confirmed
+                        Map<String, Object> statsMap = new HashMap<>();
+                        callback.onResult(statsMap, null);
+                    } else {
+                        callback.onResult(null, null);
+                    }
+                }
             }
         });
-        return null;
     }
 
     public boolean playerSetConfig(String playerId, Map<String, Object> config) {

@@ -11,6 +11,7 @@ import androidx.annotation.Nullable;
 
 import io.agora.iris.pip.AgoraPIPActivityProxy;
 import io.agora.iris.pip.AgoraPIPController;
+import io.agora.rte.Constants;
 import io.flutter.embedding.engine.plugins.FlutterPlugin;
 import io.flutter.embedding.engine.plugins.activity.ActivityAware;
 import io.flutter.embedding.engine.plugins.activity.ActivityPluginBinding;
@@ -58,7 +59,6 @@ public class AgoraRtcNgPlugin implements FlutterPlugin, MethodChannel.MethodCall
                         new AgoraPlatformViewFactory.PlatformViewProviderSurfaceView(),
                         this.videoViewController));
         
-        // 初始化 RTE 控制器
         rteController = new AgoraRteController(applicationContext, channel, videoViewController);
     }
 
@@ -329,7 +329,24 @@ public class AgoraRtcNgPlugin implements FlutterPlugin, MethodChannel.MethodCall
                     result.success(rteController.playerGetInfo((String) args.get("playerId")));
                     break;
                 case "rtePlayerGetStats":
-                    result.success(rteController.playerGetStats((String) args.get("playerId")));
+                    String playerIdForStats = (String) args.get("playerId");
+                    rteController.playerGetStats(playerIdForStats, (stats, err) -> {
+                        if (err != null) {
+                            int code = Constants.ErrorCode.getValue(err.code());
+                            String message = err.message();
+                            String errorMsg;
+                            if (message != null && !message.isEmpty()) {
+                                errorMsg = String.format("RTE Error (code: %d, message: %s)", code, message);
+                            } else {
+                                errorMsg = String.format("RTE Error (code: %d)", code);
+                            }
+                            result.error("RTE_ERROR", errorMsg, null);
+                        } else if (stats != null) {
+                            result.success(stats);
+                        } else {
+                            result.error("RTE_ERROR", "RTE player not initialized or stats unavailable", null);
+                        }
+                    });
                     break;
                 case "rtePlayerSetCanvas":
                     String playerIdForCanvas = (String) args.get("playerId");

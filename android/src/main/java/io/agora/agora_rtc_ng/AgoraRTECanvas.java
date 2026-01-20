@@ -14,7 +14,7 @@ import java.util.Map;
 import java.util.UUID;
 
 /**
- * RTE Canvas 管理类
+ * RTE Canvas management class
  */
 public class AgoraRTECanvas {
     private final Rte rte;
@@ -29,7 +29,7 @@ public class AgoraRTECanvas {
     }
 
     /**
-     * 创建 Canvas
+     * Create Canvas
      */
     public String createCanvas(Map<String, Object> config) {
         if (rte == null) {
@@ -50,7 +50,7 @@ public class AgoraRTECanvas {
     }
 
     /**
-     * 销毁 Canvas
+     * Destroy Canvas
      */
     public boolean destroyCanvas(String canvasId) {
         Canvas canvas = canvases.remove(canvasId);
@@ -58,7 +58,7 @@ public class AgoraRTECanvas {
     }
 
     /**
-     * 批量设置配置
+     * Batch set configurations
      */
     public boolean setConfigs(String canvasId, Map<String, Object> configMap) {
         Canvas canvas = canvases.get(canvasId);
@@ -66,11 +66,9 @@ public class AgoraRTECanvas {
             return false;
         }
         try {
-            // 先获取当前配置，避免覆盖其他属性
             CanvasConfig canvasConfig = new CanvasConfig();
             canvas.getConfigs(canvasConfig);
             
-            // 只更新字典中提供的属性
             if (configMap.containsKey("videoRenderMode") && configMap.get("videoRenderMode") != null) {
                 canvasConfig.setVideoRenderMode(Constants.VideoRenderMode.fromInt(parseInt(configMap.get("videoRenderMode"))));
             }
@@ -93,7 +91,7 @@ public class AgoraRTECanvas {
     }
 
     /**
-     * 获取配置
+     * Get configurations
      */
     public Map<String, Object> getConfigs(String canvasId) {
         Canvas canvas = canvases.get(canvasId);
@@ -200,7 +198,7 @@ public class AgoraRTECanvas {
     }
 
     /**
-     * 添加视图
+     * Add view
      */
     public boolean addView(String canvasId, View view, Map<String, Object> config) {
         Canvas canvas = canvases.get(canvasId);
@@ -217,7 +215,7 @@ public class AgoraRTECanvas {
     }
 
     /**
-     * 移除视图
+     * Remove view
      */
     public boolean removeView(String canvasId, View view, Map<String, Object> config) {
         Canvas canvas = canvases.get(canvasId);
@@ -234,7 +232,7 @@ public class AgoraRTECanvas {
     }
 
     /**
-     * 获取 Canvas 实例
+     * Get Canvas instance
      */
     public Canvas getCanvas(String canvasId) {
         return canvases.get(canvasId);

@@ -3,7 +3,7 @@ import 'package:agora_rtc_engine/src/agora_rte.dart';
 import 'package:agora_rtc_engine/src/agora_rte_enums.dart';
 import 'package:flutter/services.dart';
 
-/// RTE 播放器实现类
+/// RTE player implementation
 class AgoraRtePlayerImpl implements AgoraRtePlayer {
   @override
   final String playerId;
@@ -12,7 +12,7 @@ class AgoraRtePlayerImpl implements AgoraRtePlayer {
 
   AgoraRtePlayerImpl(this.playerId, this._channel);
 
-  /// 处理回调（由 AgoraRteCoreImpl 调用）
+  /// Handle callbacks (called by AgoraRteCoreImpl)
   void handleCallback(String method, Map args) {
     if (_observer == null) return;
 
@@ -90,8 +90,11 @@ class AgoraRtePlayerImpl implements AgoraRtePlayer {
 
   @override
   Future<AgoraRtePlayerStats> getStats() async {
-    final Map result = await _channel
+    final result = await _channel
         .invokeMethod('rtePlayerGetStats', {'playerId': playerId});
+    if (result == null) {
+      return const AgoraRtePlayerStats();
+    }
     return AgoraRtePlayerStats.fromJson(Map<String, dynamic>.from(result));
   }
 
@@ -142,7 +145,7 @@ class AgoraRtePlayerImpl implements AgoraRtePlayer {
         .invokeMethod('rtePlayerGetCurrentTime', {'playerId': playerId});
   }
 
-  /// 获取播放时长
+  /// Get duration
   Future<int> getDuration() async {
     return await _channel
         .invokeMethod('rtePlayerGetDuration', {'playerId': playerId});
@@ -150,8 +153,11 @@ class AgoraRtePlayerImpl implements AgoraRtePlayer {
 
   @override
   Future<AgoraRtePlayerInfo> getInfo() async {
-    final Map result = await _channel
+    final result = await _channel
         .invokeMethod('rtePlayerGetInfo', {'playerId': playerId});
+    if (result == null) {
+      return const AgoraRtePlayerInfo();
+    }
     return AgoraRtePlayerInfo.fromJson(Map<String, dynamic>.from(result));
   }
 
@@ -165,33 +171,37 @@ class AgoraRtePlayerImpl implements AgoraRtePlayer {
 
   @override
   Future<AgoraRtePlayerConfig> getConfigs() async {
-    final Map result = await _channel
+    final result = await _channel
         .invokeMethod('rtePlayerGetConfigs', {'playerId': playerId});
+    if (result == null) {
+      return const AgoraRtePlayerConfig();
+    }
+    final Map configMap = Map<String, dynamic>.from(result);
     return AgoraRtePlayerConfig(
-      autoPlay: result['autoPlay'],
-      playbackSpeed: result['playbackSpeed'],
-      playoutAudioTrackIdx: result['playoutAudioTrackIdx'],
-      publishAudioTrackIdx: result['publishAudioTrackIdx'],
-      audioTrackIdx: result['audioTrackIdx'],
-      subtitleTrackIdx: result['subtitleTrackIdx'],
-      externalSubtitleTrackIdx: result['externalSubtitleTrackIdx'],
-      audioPitch: result['audioPitch'],
-      playoutVolume: result['playoutVolume'],
-      audioPlaybackDelay: result['audioPlaybackDelay'],
-      audioDualMonoMode: result['audioDualMonoMode'],
-      publishVolume: result['publishVolume'],
-      loopCount: result['loopCount'],
-      jsonParameter: result['jsonParameter'],
-      abrSubscriptionLayer: result['abrSubscriptionLayer'] != null
-          ? AgoraRteAbrSubscriptionLayer.values[result['abrSubscriptionLayer']]
+      autoPlay: configMap['autoPlay'],
+      playbackSpeed: configMap['playbackSpeed'],
+      playoutAudioTrackIdx: configMap['playoutAudioTrackIdx'],
+      publishAudioTrackIdx: configMap['publishAudioTrackIdx'],
+      audioTrackIdx: configMap['audioTrackIdx'],
+      subtitleTrackIdx: configMap['subtitleTrackIdx'],
+      externalSubtitleTrackIdx: configMap['externalSubtitleTrackIdx'],
+      audioPitch: configMap['audioPitch'],
+      playoutVolume: configMap['playoutVolume'],
+      audioPlaybackDelay: configMap['audioPlaybackDelay'],
+      audioDualMonoMode: configMap['audioDualMonoMode'],
+      publishVolume: configMap['publishVolume'],
+      loopCount: configMap['loopCount'],
+      jsonParameter: configMap['jsonParameter'],
+      abrSubscriptionLayer: configMap['abrSubscriptionLayer'] != null
+          ? AgoraRteAbrSubscriptionLayer.values[configMap['abrSubscriptionLayer']]
           : null,
-      abrFallbackLayer: result['abrFallbackLayer'] != null
-          ? AgoraRteAbrFallbackLayer.values[result['abrFallbackLayer']]
+      abrFallbackLayer: configMap['abrFallbackLayer'] != null
+          ? AgoraRteAbrFallbackLayer.values[configMap['abrFallbackLayer']]
           : null,
     );
   }
 
-  // 单个配置属性的 getter/setter
+  
   Future<bool> getAutoPlay() async {
     final result = await _channel.invokeMethod(
         'rtePlayerGetAutoPlay', {'playerId': playerId});

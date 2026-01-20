@@ -2,7 +2,7 @@
 #import <AgoraRtcKit/AgoraRteKit.h>
 #import "AgoraRTEPlayerObserverDelegate.h"
 
-/// RTE Player 管理类
+/// RTE Player Manager
 @interface AgoraRTEPlayer : NSObject
 
 @property (nonatomic, weak) id<AgoraRTEPlayerObserverDelegate> observerDelegate;
@@ -11,70 +11,70 @@
 
 - (instancetype)initWithRte:(AgoraRte *)rte;
 
-/// 预加载 URL
+/// Preload URL
 + (BOOL)preloadWithUrl:(NSString *)url error:(NSError **)error;
 
-/// 创建播放器
+/// Create player
 - (NSString *)createPlayer:(NSDictionary *)config error:(NSError **)error;
 
-/// 销毁播放器
+/// Destroy player
 - (BOOL)destroyPlayer:(NSString *)playerId error:(NSError **)error;
 
 #pragma mark - Player Playback Control
 
-/// 打开 URL
+/// Open URL
 - (BOOL)openUrl:(NSString *)playerId url:(NSString *)url startTime:(uint64_t)startTime completion:(void (^)(NSError *error))completion error:(NSError **)error;
 
-/// 使用自定义源提供者打开
+/// Open with custom source provider
 - (BOOL)openWithCustomSourceProvider:(NSString *)playerId provider:(void *)provider startTime:(uint64_t)startTime completion:(void (^)(NSError *error))completion error:(NSError **)error;
 
-/// 使用流打开
+/// Open with stream
 - (BOOL)openWithStream:(NSString *)playerId stream:(void *)stream completion:(void (^)(NSError *error))completion error:(NSError **)error;
 
-/// 切换 URL
+/// Switch URL
 - (BOOL)switchWithUrl:(NSString *)playerId url:(NSString *)url syncPts:(BOOL)syncPts completion:(void (^)(NSError *error))completion error:(NSError **)error;
 
-/// 设置 Canvas
+/// Set canvas
 - (BOOL)setCanvas:(NSString *)playerId canvas:(AgoraRteCanvas *)canvas error:(NSError **)error;
 
-/// 播放
+/// Play
 - (BOOL)play:(NSString *)playerId error:(NSError **)error;
 
-/// 暂停
+/// Pause
 - (BOOL)pause:(NSString *)playerId error:(NSError **)error;
 
-/// 停止
+/// Stop
 - (BOOL)stop:(NSString *)playerId error:(NSError **)error;
 
-/// 跳转
+/// Seek
 - (BOOL)seek:(NSString *)playerId position:(uint64_t)position error:(NSError **)error;
 
-/// 静音音频
+/// Mute audio
 - (BOOL)muteAudio:(NSString *)playerId mute:(BOOL)mute error:(NSError **)error;
 
-/// 静音视频
+/// Mute video
 - (BOOL)muteVideo:(NSString *)playerId mute:(BOOL)mute error:(NSError **)error;
 
 #pragma mark - Player Info
 
-/// 获取统计信息
+/// Get stats
 - (void)getStats:(NSString *)playerId completion:(void (^)(NSDictionary *stats, NSError *error))completion;
 
-/// 获取当前时间
+/// Get current time
 - (int64_t)getCurrentTime:(NSString *)playerId error:(NSError **)error;
 
-/// 获取时长
+/// Get duration
 - (int64_t)getDuration:(NSString *)playerId error:(NSError **)error;
 
-/// 获取播放器信息
+/// Get player info
 - (NSDictionary *)getInfo:(NSString *)playerId error:(NSError **)error;
 
 #pragma mark - Player Config
 
-/// 批量设置配置
+/// Set configs
 - (BOOL)setConfigs:(NSString *)playerId config:(NSDictionary *)config error:(NSError **)error;
 
-/// 获取配置
+/// Get configs
 - (NSDictionary *)getConfigs:(NSString *)playerId error:(NSError **)error;
 
 // Individual Config Setters/Getters
@@ -113,10 +113,10 @@
 
 #pragma mark - Player Observer
 
-/// 注册观察者
+/// Register observer
 - (BOOL)registerObserver:(NSString *)playerId error:(NSError **)error;
 
-/// 注销观察者
+/// Unregister observer
 - (BOOL)unregisterObserver:(NSString *)playerId error:(NSError **)error;
 
 @end
