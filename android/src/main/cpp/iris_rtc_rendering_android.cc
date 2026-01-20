@@ -725,7 +725,7 @@ class YUVRendering final : public RenderingOp {
       "varying vec2 vTextCoord;\n"
       "void main() {\n"
       "  gl_Position = aPosition;\n"
-      "  vTextCoord = aTextCoord;\n"
+      "  vTextCoord = vec2(aTextCoord.x, 1.0 - aTextCoord.y);\n"
       "}\n";
 
   const char *frag_shader_yuv_ =
