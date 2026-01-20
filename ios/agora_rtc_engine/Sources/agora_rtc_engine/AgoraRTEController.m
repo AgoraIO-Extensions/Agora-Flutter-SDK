@@ -89,12 +89,12 @@
     CHECK_RTE_INSTANCE_NIL(self.rte.rteInstance, error);
     
     AgoraRteConfig *config = [[AgoraRteConfig alloc] init];
-//    AgoraRteError *rteError = [[AgoraRteError alloc] init];
-//    BOOL success = [self.rte.rteInstance getConfigs:config error:rteError];
-//    if (!success || rteError.code != AgoraRteOk) {
-//        if (error) *error = RTE_NSERROR_FROM_RTE_ERROR(rteError);
-//        return nil;
-//    }
+    AgoraRteError *rteError = [[AgoraRteError alloc] init];
+    BOOL success = [self.rte.rteInstance getConfigs:config error:rteError];
+    if (!success || rteError.code != AgoraRteOk) {
+        if (error) *error = RTE_NSERROR_FROM_RTE_ERROR(rteError);
+        return nil;
+    }
     
     AgoraRteError *getError = [[AgoraRteError alloc] init];
     NSString *appId = [config appId:getError];

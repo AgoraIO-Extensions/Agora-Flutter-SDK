@@ -609,11 +609,6 @@
     
     AgoraRtePlayerConfig *config = [[AgoraRtePlayerConfig alloc] init];
     AgoraRteError *rteError = [[AgoraRteError alloc] init];
-    BOOL success = [player getConfigs:config error:rteError];
-    if (!success || rteError.code != AgoraRteOk) {
-        if (error) *error = RTE_NSERROR_FROM_RTE_ERROR(rteError);
-        return NO;
-    }
     
     [config setAutoPlay:autoPlay error:rteError];
     if (rteError.code != AgoraRteOk) {
@@ -621,11 +616,11 @@
         return NO;
     }
     
-    // success = [player setConfigs:config error:rteError];
-    // if (!success || rteError.code != AgoraRteOk) {
-    //     if (error) *error = RTE_NSERROR_FROM_RTE_ERROR(rteError);
-    //     return NO;
-    // }
+    BOOL success = [player setConfigs:config error:rteError];
+    if (!success || rteError.code != AgoraRteOk) {
+        if (error) *error = RTE_NSERROR_FROM_RTE_ERROR(rteError);
+        return NO;
+    }
     return YES;
 }
 
@@ -647,11 +642,6 @@
     
     AgoraRtePlayerConfig *config = [[AgoraRtePlayerConfig alloc] init];
     AgoraRteError *rteError = [[AgoraRteError alloc] init];
-    BOOL success = [player getConfigs:config error:rteError];
-    if (!success || rteError.code != AgoraRteOk) {
-        if (error) *error = RTE_NSERROR_FROM_RTE_ERROR(rteError);
-        return NO;
-    }
     
     [config setPlaybackSpeed:speed error:rteError];
     if (rteError.code != AgoraRteOk) {
@@ -659,11 +649,11 @@
         return NO;
     }
     
-     success = [player setConfigs:config error:rteError];
-     if (!success || rteError.code != AgoraRteOk) {
-         if (error) *error = RTE_NSERROR_FROM_RTE_ERROR(rteError);
-         return NO;
-     }
+    BOOL success = [player setConfigs:config error:rteError];
+    if (!success || rteError.code != AgoraRteOk) {
+        if (error) *error = RTE_NSERROR_FROM_RTE_ERROR(rteError);
+        return NO;
+    }
     return YES;
 }
 
@@ -685,11 +675,6 @@
     
     AgoraRtePlayerConfig *config = [[AgoraRtePlayerConfig alloc] init];
     AgoraRteError *rteError = [[AgoraRteError alloc] init];
-    BOOL success = [player getConfigs:config error:rteError];
-    if (!success || rteError.code != AgoraRteOk) {
-        if (error) *error = RTE_NSERROR_FROM_RTE_ERROR(rteError);
-        return NO;
-    }
     
     [config setPlayoutAudioTrackIdx:idx error:rteError];
     if (rteError.code != AgoraRteOk) {
@@ -697,11 +682,11 @@
         return NO;
     }
     
-    // success = [player setConfigs:config error:rteError];
-    // if (!success || rteError.code != AgoraRteOk) {
-    //     if (error) *error = RTE_NSERROR_FROM_RTE_ERROR(rteError);
-    //     return NO;
-    // }
+    BOOL success = [player setConfigs:config error:rteError];
+    if (!success || rteError.code != AgoraRteOk) {
+        if (error) *error = RTE_NSERROR_FROM_RTE_ERROR(rteError);
+        return NO;
+    }
     return YES;
 }
 
@@ -723,11 +708,6 @@
     
     AgoraRtePlayerConfig *config = [[AgoraRtePlayerConfig alloc] init];
     AgoraRteError *rteError = [[AgoraRteError alloc] init];
-    BOOL success = [player getConfigs:config error:rteError];
-    if (!success || rteError.code != AgoraRteOk) {
-        if (error) *error = RTE_NSERROR_FROM_RTE_ERROR(rteError);
-        return NO;
-    }
     
     [config setPublishAudioTrackIdx:idx error:rteError];
     if (rteError.code != AgoraRteOk) {
@@ -735,11 +715,11 @@
         return NO;
     }
     
-    // success = [player setConfigs:config error:rteError];
-    // if (!success || rteError.code != AgoraRteOk) {
-    //     if (error) *error = RTE_NSERROR_FROM_RTE_ERROR(rteError);
-    //     return NO;
-    // }
+    BOOL success = [player setConfigs:config error:rteError];
+    if (!success || rteError.code != AgoraRteOk) {
+        if (error) *error = RTE_NSERROR_FROM_RTE_ERROR(rteError);
+        return NO;
+    }
     return YES;
 }
 
@@ -761,11 +741,6 @@
     
     AgoraRtePlayerConfig *config = [[AgoraRtePlayerConfig alloc] init];
     AgoraRteError *rteError = [[AgoraRteError alloc] init];
-    BOOL success = [player getConfigs:config error:rteError];
-    if (!success || rteError.code != AgoraRteOk) {
-        if (error) *error = RTE_NSERROR_FROM_RTE_ERROR(rteError);
-        return NO;
-    }
     
     [config setAudioTrackIdx:idx error:rteError];
     if (rteError.code != AgoraRteOk) {
@@ -773,11 +748,11 @@
         return NO;
     }
     
-    // success = [player setConfigs:config error:rteError];
-    // if (!success || rteError.code != AgoraRteOk) {
-    //     if (error) *error = RTE_NSERROR_FROM_RTE_ERROR(rteError);
-    //     return NO;
-    // }
+    BOOL success = [player setConfigs:config error:rteError];
+    if (!success || rteError.code != AgoraRteOk) {
+        if (error) *error = RTE_NSERROR_FROM_RTE_ERROR(rteError);
+        return NO;
+    }
     return YES;
 }
 
@@ -799,11 +774,6 @@
     
     AgoraRtePlayerConfig *config = [[AgoraRtePlayerConfig alloc] init];
     AgoraRteError *rteError = [[AgoraRteError alloc] init];
-    BOOL success = [player getConfigs:config error:rteError];
-    if (!success || rteError.code != AgoraRteOk) {
-        if (error) *error = RTE_NSERROR_FROM_RTE_ERROR(rteError);
-        return NO;
-    }
     
     [config setSubtitleTrackIdx:idx error:rteError];
     if (rteError.code != AgoraRteOk) {
@@ -811,11 +781,11 @@
         return NO;
     }
     
-    // success = [player setConfigs:config error:rteError];
-    // if (!success || rteError.code != AgoraRteOk) {
-    //     if (error) *error = RTE_NSERROR_FROM_RTE_ERROR(rteError);
-    //     return NO;
-    // }
+    BOOL success = [player setConfigs:config error:rteError];
+    if (!success || rteError.code != AgoraRteOk) {
+        if (error) *error = RTE_NSERROR_FROM_RTE_ERROR(rteError);
+        return NO;
+    }
     return YES;
 }
 
@@ -837,11 +807,6 @@
     
     AgoraRtePlayerConfig *config = [[AgoraRtePlayerConfig alloc] init];
     AgoraRteError *rteError = [[AgoraRteError alloc] init];
-    BOOL success = [player getConfigs:config error:rteError];
-    if (!success || rteError.code != AgoraRteOk) {
-        if (error) *error = RTE_NSERROR_FROM_RTE_ERROR(rteError);
-        return NO;
-    }
     
     [config setExternalSubtitleTrackIdx:idx error:rteError];
     if (rteError.code != AgoraRteOk) {
@@ -849,11 +814,11 @@
         return NO;
     }
     
-    // success = [player setConfigs:config error:rteError];
-    // if (!success || rteError.code != AgoraRteOk) {
-    //     if (error) *error = RTE_NSERROR_FROM_RTE_ERROR(rteError);
-    //     return NO;
-    // }
+    BOOL success = [player setConfigs:config error:rteError];
+    if (!success || rteError.code != AgoraRteOk) {
+        if (error) *error = RTE_NSERROR_FROM_RTE_ERROR(rteError);
+        return NO;
+    }
     return YES;
 }
 
@@ -875,11 +840,6 @@
     
     AgoraRtePlayerConfig *config = [[AgoraRtePlayerConfig alloc] init];
     AgoraRteError *rteError = [[AgoraRteError alloc] init];
-    BOOL success = [player getConfigs:config error:rteError];
-    if (!success || rteError.code != AgoraRteOk) {
-        if (error) *error = RTE_NSERROR_FROM_RTE_ERROR(rteError);
-        return NO;
-    }
     
     [config setAudioPitch:pitch error:rteError];
     if (rteError.code != AgoraRteOk) {
@@ -887,11 +847,11 @@
         return NO;
     }
     
-    // success = [player setConfigs:config error:rteError];
-    // if (!success || rteError.code != AgoraRteOk) {
-    //     if (error) *error = RTE_NSERROR_FROM_RTE_ERROR(rteError);
-    //     return NO;
-    // }
+    BOOL success = [player setConfigs:config error:rteError];
+    if (!success || rteError.code != AgoraRteOk) {
+        if (error) *error = RTE_NSERROR_FROM_RTE_ERROR(rteError);
+        return NO;
+    }
     return YES;
 }
 
@@ -913,12 +873,7 @@
     
     AgoraRtePlayerConfig *config = [[AgoraRtePlayerConfig alloc] init];
     AgoraRteError *rteError = [[AgoraRteError alloc] init];
-//    BOOL success = [player getConfigs:config error:rteError];
-//    if (!success || rteError.code != AgoraRteOk) {
-//        if (error) *error = RTE_NSERROR_FROM_RTE_ERROR(rteError);
-//        return NO;
-//    }
-//    
+    
     [config setPlayoutVolume:volume error:rteError];
     if (rteError.code != AgoraRteOk) {
         if (error) *error = RTE_NSERROR_FROM_RTE_ERROR(rteError);
@@ -951,11 +906,6 @@
     
     AgoraRtePlayerConfig *config = [[AgoraRtePlayerConfig alloc] init];
     AgoraRteError *rteError = [[AgoraRteError alloc] init];
-    BOOL success = [player getConfigs:config error:rteError];
-    if (!success || rteError.code != AgoraRteOk) {
-        if (error) *error = RTE_NSERROR_FROM_RTE_ERROR(rteError);
-        return NO;
-    }
     
     [config setAudioPlaybackDelay:delay error:rteError];
     if (rteError.code != AgoraRteOk) {
@@ -963,11 +913,11 @@
         return NO;
     }
     
-    // success = [player setConfigs:config error:rteError];
-    // if (!success || rteError.code != AgoraRteOk) {
-    //     if (error) *error = RTE_NSERROR_FROM_RTE_ERROR(rteError);
-    //     return NO;
-    // }
+    BOOL success = [player setConfigs:config error:rteError];
+    if (!success || rteError.code != AgoraRteOk) {
+        if (error) *error = RTE_NSERROR_FROM_RTE_ERROR(rteError);
+        return NO;
+    }
     return YES;
 }
 
@@ -989,11 +939,6 @@
     
     AgoraRtePlayerConfig *config = [[AgoraRtePlayerConfig alloc] init];
     AgoraRteError *rteError = [[AgoraRteError alloc] init];
-    BOOL success = [player getConfigs:config error:rteError];
-    if (!success || rteError.code != AgoraRteOk) {
-        if (error) *error = RTE_NSERROR_FROM_RTE_ERROR(rteError);
-        return NO;
-    }
     
     [config setAudioDualMonoMode:mode error:rteError];
     if (rteError.code != AgoraRteOk) {
@@ -1001,11 +946,11 @@
         return NO;
     }
     
-    // success = [player setConfigs:config error:rteError];
-    // if (!success || rteError.code != AgoraRteOk) {
-    //     if (error) *error = RTE_NSERROR_FROM_RTE_ERROR(rteError);
-    //     return NO;
-    // }
+    BOOL success = [player setConfigs:config error:rteError];
+    if (!success || rteError.code != AgoraRteOk) {
+        if (error) *error = RTE_NSERROR_FROM_RTE_ERROR(rteError);
+        return NO;
+    }
     return YES;
 }
 
@@ -1027,11 +972,6 @@
     
     AgoraRtePlayerConfig *config = [[AgoraRtePlayerConfig alloc] init];
     AgoraRteError *rteError = [[AgoraRteError alloc] init];
-    BOOL success = [player getConfigs:config error:rteError];
-    if (!success || rteError.code != AgoraRteOk) {
-        if (error) *error = RTE_NSERROR_FROM_RTE_ERROR(rteError);
-        return NO;
-    }
     
     [config setPublishVolume:volume error:rteError];
     if (rteError.code != AgoraRteOk) {
@@ -1039,11 +979,11 @@
         return NO;
     }
     
-    // success = [player setConfigs:config error:rteError];
-    // if (!success || rteError.code != AgoraRteOk) {
-    //     if (error) *error = RTE_NSERROR_FROM_RTE_ERROR(rteError);
-    //     return NO;
-    // }
+    BOOL success = [player setConfigs:config error:rteError];
+    if (!success || rteError.code != AgoraRteOk) {
+        if (error) *error = RTE_NSERROR_FROM_RTE_ERROR(rteError);
+        return NO;
+    }
     return YES;
 }
 
@@ -1065,11 +1005,6 @@
     
     AgoraRtePlayerConfig *config = [[AgoraRtePlayerConfig alloc] init];
     AgoraRteError *rteError = [[AgoraRteError alloc] init];
-    BOOL success = [player getConfigs:config error:rteError];
-    if (!success || rteError.code != AgoraRteOk) {
-        if (error) *error = RTE_NSERROR_FROM_RTE_ERROR(rteError);
-        return NO;
-    }
     
     [config setLoopCount:count error:rteError];
     if (rteError.code != AgoraRteOk) {
@@ -1077,11 +1012,11 @@
         return NO;
     }
     
-    // success = [player setConfigs:config error:rteError];
-    // if (!success || rteError.code != AgoraRteOk) {
-    //     if (error) *error = RTE_NSERROR_FROM_RTE_ERROR(rteError);
-    //     return NO;
-    // }
+    BOOL success = [player setConfigs:config error:rteError];
+    if (!success || rteError.code != AgoraRteOk) {
+        if (error) *error = RTE_NSERROR_FROM_RTE_ERROR(rteError);
+        return NO;
+    }
     return YES;
 }
 
@@ -1103,11 +1038,6 @@
     
     AgoraRtePlayerConfig *config = [[AgoraRtePlayerConfig alloc] init];
     AgoraRteError *rteError = [[AgoraRteError alloc] init];
-    BOOL success = [player getConfigs:config error:rteError];
-    if (!success || rteError.code != AgoraRteOk) {
-        if (error) *error = RTE_NSERROR_FROM_RTE_ERROR(rteError);
-        return NO;
-    }
     
     [config setJsonParameter:jsonParameter error:rteError];
     if (rteError.code != AgoraRteOk) {
@@ -1115,11 +1045,11 @@
         return NO;
     }
     
-    // success = [player setConfigs:config error:rteError];
-    // if (!success || rteError.code != AgoraRteOk) {
-    //     if (error) *error = RTE_NSERROR_FROM_RTE_ERROR(rteError);
-    //     return NO;
-    // }
+    BOOL success = [player setConfigs:config error:rteError];
+    if (!success || rteError.code != AgoraRteOk) {
+        if (error) *error = RTE_NSERROR_FROM_RTE_ERROR(rteError);
+        return NO;
+    }
     return YES;
 }
 
@@ -1141,11 +1071,6 @@
     
     AgoraRtePlayerConfig *config = [[AgoraRtePlayerConfig alloc] init];
     AgoraRteError *rteError = [[AgoraRteError alloc] init];
-    BOOL success = [player getConfigs:config error:rteError];
-    if (!success || rteError.code != AgoraRteOk) {
-        if (error) *error = RTE_NSERROR_FROM_RTE_ERROR(rteError);
-        return NO;
-    }
     
     [config setAbrSubscriptionLayer:layer error:rteError];
     if (rteError.code != AgoraRteOk) {
@@ -1153,11 +1078,11 @@
         return NO;
     }
     
-    // success = [player setConfigs:config error:rteError];
-    // if (!success || rteError.code != AgoraRteOk) {
-    //     if (error) *error = RTE_NSERROR_FROM_RTE_ERROR(rteError);
-    //     return NO;
-    // }
+    BOOL success = [player setConfigs:config error:rteError];
+    if (!success || rteError.code != AgoraRteOk) {
+        if (error) *error = RTE_NSERROR_FROM_RTE_ERROR(rteError);
+        return NO;
+    }
     return YES;
 }
 
@@ -1179,11 +1104,6 @@
     
     AgoraRtePlayerConfig *config = [[AgoraRtePlayerConfig alloc] init];
     AgoraRteError *rteError = [[AgoraRteError alloc] init];
-    BOOL success = [player getConfigs:config error:rteError];
-    if (!success || rteError.code != AgoraRteOk) {
-        if (error) *error = RTE_NSERROR_FROM_RTE_ERROR(rteError);
-        return NO;
-    }
     
     [config setAbrFallbackLayer:layer error:rteError];
     if (rteError.code != AgoraRteOk) {
@@ -1191,11 +1111,11 @@
         return NO;
     }
     
-    // success = [player setConfigs:config error:rteError];
-    // if (!success || rteError.code != AgoraRteOk) {
-    //     if (error) *error = RTE_NSERROR_FROM_RTE_ERROR(rteError);
-    //     return NO;
-    // }
+    BOOL success = [player setConfigs:config error:rteError];
+    if (!success || rteError.code != AgoraRteOk) {
+        if (error) *error = RTE_NSERROR_FROM_RTE_ERROR(rteError);
+        return NO;
+    }
     return YES;
 }
 

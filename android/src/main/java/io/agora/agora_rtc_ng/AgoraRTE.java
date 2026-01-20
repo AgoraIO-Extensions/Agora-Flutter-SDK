@@ -72,8 +72,6 @@ public class AgoraRTE {
         }
         try {
             Config rteConfig = new Config();
-            // First, get the current configuration to avoid overwriting other properties.
-            rteInstance.getConfigs(rteConfig);
             
             // Only update properties provided in the map.
             if (configMap.containsKey("appId") && configMap.get("appId") != null) {

@@ -315,7 +315,6 @@ public class AgoraRTEPlayer {
         }
         try {
             PlayerConfig playerConfig = new PlayerConfig();
-            player.getConfigs(playerConfig);
             
             if (configMap.containsKey("autoPlay") && configMap.get("autoPlay") != null) {
                 playerConfig.setAutoPlay((Boolean) configMap.get("autoPlay"));
@@ -323,7 +322,7 @@ public class AgoraRTEPlayer {
             if (configMap.containsKey("playbackSpeed") && configMap.get("playbackSpeed") != null) {
                 playerConfig.setPlaybackSpeed(parseInt(configMap.get("playbackSpeed")));
             }
-            if (configMap.containsKey("playoutAudioTrackIdx") && configMap.get("playoutAudioTrackIdx") != null) {
+            if (configMap.containsKey("playoutAudioTrackIdx") && configMap.get("playoutAudioTrackIdx")!= null) {
                 playerConfig.setPlayoutAudioTrackIdx(parseInt(configMap.get("playoutAudioTrackIdx")));
             }
             if (configMap.containsKey("publishAudioTrackIdx") && configMap.get("publishAudioTrackIdx") != null) {
@@ -414,9 +413,8 @@ public class AgoraRTEPlayer {
         if (player == null) return false;
         try {
             PlayerConfig config = new PlayerConfig();
-            player.getConfigs(config);
             config.setAutoPlay(autoPlay);
-            // player.setConfigs(config); // Commented out following iOS pattern
+            player.setConfigs(config);
             return true;
         } catch (RteException e) {
             return false;
@@ -440,8 +438,8 @@ public class AgoraRTEPlayer {
         if (player == null) return false;
         try {
             PlayerConfig config = new PlayerConfig();
-            player.getConfigs(config);
             config.setPlaybackSpeed(speed);
+            player.setConfigs(config);
             return true;
         } catch (RteException e) {
             return false;
@@ -465,8 +463,8 @@ public class AgoraRTEPlayer {
         if (player == null) return false;
         try {
             PlayerConfig config = new PlayerConfig();
-            player.getConfigs(config);
             config.setPlayoutAudioTrackIdx(idx);
+            player.setConfigs(config);
             return true;
         } catch (RteException e) {
             return false;
@@ -490,8 +488,8 @@ public class AgoraRTEPlayer {
         if (player == null) return false;
         try {
             PlayerConfig config = new PlayerConfig();
-            player.getConfigs(config);
             config.setPublishAudioTrackIdx(idx);
+            player.setConfigs(config);
             return true;
         } catch (RteException e) {
             return false;
@@ -515,8 +513,8 @@ public class AgoraRTEPlayer {
         if (player == null) return false;
         try {
             PlayerConfig config = new PlayerConfig();
-            player.getConfigs(config);
             config.setAudioTrackIdx(idx);
+            player.setConfigs(config);
             return true;
         } catch (RteException e) {
             return false;
@@ -540,8 +538,8 @@ public class AgoraRTEPlayer {
         if (player == null) return false;
         try {
             PlayerConfig config = new PlayerConfig();
-            player.getConfigs(config);
             config.setSubtitleTrackIdx(idx);
+            player.setConfigs(config);
             return true;
         } catch (RteException e) {
             return false;
@@ -565,8 +563,8 @@ public class AgoraRTEPlayer {
         if (player == null) return false;
         try {
             PlayerConfig config = new PlayerConfig();
-            player.getConfigs(config);
             config.setExternalSubtitleTrackIdx(idx);
+            player.setConfigs(config);
             return true;
         } catch (RteException e) {
             return false;
@@ -590,8 +588,8 @@ public class AgoraRTEPlayer {
         if (player == null) return false;
         try {
             PlayerConfig config = new PlayerConfig();
-            player.getConfigs(config);
             config.setAudioPitch(pitch);
+            player.setConfigs(config);
             return true;
         } catch (RteException e) {
             return false;
@@ -615,8 +613,8 @@ public class AgoraRTEPlayer {
         if (player == null) return false;
         try {
             PlayerConfig config = new PlayerConfig();
-            player.getConfigs(config);
             config.setPlayoutVolume(volume);
+            player.setConfigs(config);
             return true;
         } catch (RteException e) {
             return false;
@@ -640,8 +638,8 @@ public class AgoraRTEPlayer {
         if (player == null) return false;
         try {
             PlayerConfig config = new PlayerConfig();
-            player.getConfigs(config);
             config.setAudioPlaybackDelay(delay);
+            player.setConfigs(config);
             return true;
         } catch (RteException e) {
             return false;
@@ -665,8 +663,8 @@ public class AgoraRTEPlayer {
         if (player == null) return false;
         try {
             PlayerConfig config = new PlayerConfig();
-            player.getConfigs(config);
             config.setAudioDualMonoMode(mode);
+            player.setConfigs(config);
             return true;
         } catch (RteException e) {
             return false;
@@ -690,8 +688,8 @@ public class AgoraRTEPlayer {
         if (player == null) return false;
         try {
             PlayerConfig config = new PlayerConfig();
-            player.getConfigs(config);
             config.setPublishVolume(volume);
+            player.setConfigs(config);
             return true;
         } catch (RteException e) {
             return false;
@@ -715,8 +713,8 @@ public class AgoraRTEPlayer {
         if (player == null) return false;
         try {
             PlayerConfig config = new PlayerConfig();
-            player.getConfigs(config);
             config.setLoopCount(count);
+            player.setConfigs(config);
             return true;
         } catch (RteException e) {
             return false;
@@ -740,8 +738,8 @@ public class AgoraRTEPlayer {
         if (player == null) return false;
         try {
             PlayerConfig config = new PlayerConfig();
-            player.getConfigs(config);
             config.setJsonParameter(jsonParameter);
+            player.setConfigs(config);
             return true;
         } catch (RteException e) {
             return false;
@@ -765,8 +763,8 @@ public class AgoraRTEPlayer {
         if (player == null) return false;
         try {
             PlayerConfig config = new PlayerConfig();
-            player.getConfigs(config);
             config.setAbrSubscriptionLayer(Constants.AbrSubscriptionLayer.fromInt(layer));
+            player.setConfigs(config);
             return true;
         } catch (RteException e) {
             return false;
@@ -790,8 +788,8 @@ public class AgoraRTEPlayer {
         if (player == null) return false;
         try {
             PlayerConfig config = new PlayerConfig();
-            player.getConfigs(config);
             config.setAbrFallbackLayer(Constants.AbrFallbackLayer.fromInt(layer));
+            player.setConfigs(config);
             return true;
         } catch (RteException e) {
             return false;
