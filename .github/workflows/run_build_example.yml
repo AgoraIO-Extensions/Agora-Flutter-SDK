@@ -261,18 +261,42 @@ jobs:
           # install dependencies
           flutter pub get
 
-          # prepare build command, android: apk, ios: ipa, macos: macos, windows: (empty), web: web
+          # prepare build command, android: apk, ios, ipa, macos: macos, windows: windows, web: web
           build_command=""
+          is_debug_build=false
+          
+          # check if --debug is in extra_build_arguments and remove it (we'll add it back intelligently)
+          filtered_extra_build_arguments="$extra_build_arguments"
+          if [[ "$extra_build_arguments" == *"--debug"* ]]; then
+            is_debug_build=true
+            # Remove --debug from extra_build_arguments to prevent errors on platforms that don't support it
+            filtered_extra_build_arguments="${extra_build_arguments//--debug/}"
+            # Remove any double spaces that might result from removing --debug
+            filtered_extra_build_arguments=$(echo "$filtered_extra_build_arguments" | sed 's/  */ /g' | sed 's/^ *//;s/ *$//')
+          fi
+          
           if [ "$platform" == "android" ]; then
             build_command="flutter build apk"
           elif [ "$platform" == "ios" ]; then
-            build_command="flutter build ipa"
+            # For iOS debug builds, use 'flutter build ios' instead of 'flutter build ipa'
+            # because 'flutter build ipa' doesn't support --debug flag
+            # Debug builds produce .app bundle that can be used in Xcode for memory leak detection
+            if [ "$is_debug_build" == "true" ]; then
+              build_command="flutter build ios"
+            else
+              build_command="flutter build ipa"
+            fi
           elif [ "$platform" == "macos" ]; then
             build_command="flutter build macos"
           elif [ "$platform" == "windows" ]; then
             build_command="flutter build windows"
           elif [ "$platform" == "web" ]; then
             build_command="flutter build web"
+            # Web platform doesn't support --debug flag, so we force is_debug_build to false
+            if [ "$is_debug_build" == "true" ]; then
+              echo "⚠️  Warning: Web platform doesn't support --debug flag, building in profile mode instead"
+              is_debug_build=false
+            fi
           fi
 
           # prepare build options
@@ -288,19 +312,25 @@ jobs:
             DEFAULT_BUILD_APP_ID=""
           fi
 
-          build_arguments="--dart-define=TEST_APP_ID=$DEFAULT_BUILD_APP_ID --dart-define=TEST_TOKEN="" --dart-define=TEST_CHANNEL_ID="testapi" --dart-define=INTERNAL_TESTING=true"
+          build_arguments="--dart-define=TEST_APP_ID=$DEFAULT_BUILD_APP_ID --dart-define=TEST_TOKEN=\"\" --dart-define=TEST_CHANNEL_ID=\"testapi\" --dart-define=INTERNAL_TESTING=true"
 
-          # append extra build arguments
-          if [ -n "$extra_build_arguments" ]; then
-            build_arguments="$build_arguments $extra_build_arguments"
+          # append filtered extra build arguments (with --debug removed)
+          if [ -n "$filtered_extra_build_arguments" ]; then
+            build_arguments="$build_arguments $filtered_extra_build_arguments"
+          fi
+          
+          # Add --debug flag back for platforms that support it
+          if [ "$is_debug_build" == "true" ]; then
+            build_arguments="$build_arguments --debug"
           fi
 
-          # append build arguments for ios
-          if [ "$platform" == "ios" ]; then
+          # append build arguments for ios (only for release builds, debug builds don't need export-options-plist)
+          if [ "$platform" == "ios" ] && [ "$is_debug_build" != "true" ]; then
             build_arguments="--export-options-plist ios/export.plist $build_arguments"
           fi
 
           # run build command
+          echo "$build_command $build_options $build_arguments"
           $build_command $build_options $build_arguments
 
           # create output directory if it doesn't exist
@@ -316,22 +346,63 @@ jobs:
             # copy whole symbol directory to ../output directory
             cp -r build/app/outputs/native-debug-symbols ../output
           elif [ "$platform" == "ios" ]; then
-            # copy build/ios/ipa/agora_rtc_engine_example.ipa to ../output directory
-            cp build/ios/ipa/agora_rtc_engine_example.ipa ../output
-
-            # copy dSYMs in build/ios/archive/Runner.xcarchive/dSYMs directory to ../output directory
-            cp -RP build/ios/archive/Runner.xcarchive/dSYMs ../output
+            if [ "$is_debug_build" == "true" ]; then
+              # For debug builds, manually package .app into IPA for easier distribution
+              # The debug build output is in build/ios/iphoneos/Runner.app
+              echo "Packaging iOS debug build into IPA..."
+              
+              if [ -d "build/ios/iphoneos/Runner.app" ]; then
+                cd build/ios/iphoneos
+                IPA_NAME="agora_rtc_engine_example_debug.ipa"
+                
+                # Create Payload directory and copy .app into it
+                mkdir -p Payload
+                cp -r Runner.app Payload/
+                
+                # Zip the Payload directory to create IPA
+                zip -qry "$IPA_NAME" Payload/
+                
+                # Move IPA to output directory
+                mv "$IPA_NAME" "../../../output/"
+                
+                # Clean up
+                rm -rf Payload
+                cd ../../..
+                
+                echo "Debug IPA created: $IPA_NAME"
+              else
+                echo "Error: Runner.app not found at build/ios/iphoneos/Runner.app"
+                exit 1
+              fi
+              
+              # Copy dSYMs if they exist (debug builds may have dSYMs in different locations)
+              if [ -d "build/ios/iphoneos/Runner.app.dSYM" ]; then
+                cp -RP build/ios/iphoneos/Runner.app.dSYM ../output
+              fi
+            else
+              # For release builds, copy IPA and dSYMs as before
+              cp build/ios/ipa/agora_rtc_engine_example.ipa ../output
+              cp -RP build/ios/archive/Runner.xcarchive/dSYMs ../output
+            fi
           elif [ "$platform" == "macos" ]; then
             # cp example/build/macos/Build/Products/*/agora_rtc_engine_example.app to ../output directory
             cp -RP build/macos/Build/Products/*/agora_rtc_engine_example.app ../output
 
-            # mkdir dSYMs directory in ../output directory if it doesn't exist
-            if [ ! -d "../output/dSYMs" ]; then
-              mkdir -p ../output/dSYMs
-            fi
-
             # copy all dSYM files from example/build/macos/Build/Products and subdirectories to ../output/dSYMs directory
-            cp -RP build/macos/Build/Products/**/*.dSYM ../output/dSYMs
+            # Note: Debug builds typically don't generate separate .dSYM files, so only copy if they exist
+            dSYM_FILES=$(find build/macos/Build/Products -name "*.dSYM" -type d 2>/dev/null || true)
+            if [ -n "$dSYM_FILES" ]; then
+              # mkdir dSYMs directory in ../output directory if it doesn't exist
+              if [ ! -d "../output/dSYMs" ]; then
+                mkdir -p ../output/dSYMs
+              fi
+              
+              # copy all found dSYM files
+              find build/macos/Build/Products -name "*.dSYM" -type d -exec cp -RP {} ../output/dSYMs \;
+              echo "dSYM files copied successfully"
+            else
+              echo "No dSYM files found (this is expected for debug builds)"
+            fi
           elif [ "$platform" == "windows" ]; then
             # since flutter have no plain to support to build to run on 32-bit windows, we only need concern about the 64-bit windows
             
