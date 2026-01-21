@@ -35,9 +35,9 @@ class PerformanceStatsHandler implements VideoRenderingPerformanceEventHandler {
 
   void unregister(int textureId) {
     // Keep context for a while to handle final reports arriving after dispose
-    Future.delayed(const Duration(seconds: 2), () {
+    // Future.delayed(const Duration(seconds: 2), () {
       _contextMap.remove(textureId);
-    });
+    // });
   }
 
   @override
@@ -179,7 +179,7 @@ class PerformanceDataCollector {
     }
 
     // 2. Condition: don't upload if connection is null
-    if (connection?.channelId == null) {
+    if (connection?.channelId == null || connection?.localUid == null) {
       return;
     }
 
@@ -287,10 +287,7 @@ class PerformanceDataCollector {
 
     _uploadTimer?.cancel();
     _uploadTimer = null;
-
-    // Final upload of all remaining data before clearing
-    _uploadAllChannelData();
-
+    ChannelConnectionManager.instance.clear();
     _channelDataMap.clear();
     _clearedChannelsGracePeriod.clear();
   }
@@ -353,8 +350,12 @@ class _ChannelPerformanceData {
     final jsonString = jsonEncode(params);
 
     rtcEngine.setParameters('{"rtc.report.argus_counters":$jsonString}');
-    // Clear buffers after upload
-    _uidBuffers.forEach((_, buffer) => buffer.clear());
+
+    clear();
+  }
+
+  void clear() {
+    _uidBuffers.clear();
   }
 }
 

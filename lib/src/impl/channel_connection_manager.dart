@@ -1,6 +1,5 @@
 import 'package:agora_rtc_engine/src/agora_media_base.dart';
 import 'package:agora_rtc_engine/src/agora_rtc_engine_ex.dart';
-import 'package:agora_rtc_engine/src/impl/video_rendering_performance_uploader.dart';
 
 class ChannelConnectionManager {
   static final ChannelConnectionManager _instance =
@@ -35,9 +34,6 @@ class ChannelConnectionManager {
   }
 
   void removeConnection(String channelId) {
-    if (!_activeConnections.containsKey(channelId)) {
-      return;
-    }
     _activeConnections.remove(channelId);
     if (_publishingVideoConnection?.channelId == channelId) {
       _publishingVideoConnection = null;
@@ -54,15 +50,6 @@ class ChannelConnectionManager {
       _publishingVideoConnections.remove(sourceType);
     }
 
-    // Auto-cleanup when all channels are left
-    // This ensures cleanup happens even if the client doesn't call leaveChannel
-    // or forgets to call it (e.g., directly navigating away from the page)
-    if (_activeConnections.isEmpty && _publishingVideoConnections.isEmpty) {
-      // Clear connection manager state
-      clear();
-      // Dispose performance collector to free resources
-      // This is safe to call multiple times as dispose() is idempotent
-    }
   }
 
   /// Set publishing video connection for a specific source type

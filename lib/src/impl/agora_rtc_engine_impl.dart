@@ -562,6 +562,8 @@ class RtcEngineImpl extends rtc_engine_ex_binding.RtcEngineExImpl
       jsonEncode({'appType': 4}),
     ));
 
+    PerformanceDataCollector.instance.dispose();
+
     _rtcEngineState.isInitialzed = true;
     _isReleased = false;
     _initializingCompleter?.complete(null);
@@ -600,6 +602,8 @@ class RtcEngineImpl extends rtc_engine_ex_binding.RtcEngineExImpl
 
     _rtcEngineStateInternal?.dispose();
     _rtcEngineStateInternal = null;
+    
+    PerformanceDataCollector.instance.dispose();
 
     await _objectPool.clear();
 
