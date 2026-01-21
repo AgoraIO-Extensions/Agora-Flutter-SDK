@@ -263,10 +263,24 @@ jobs:
 
           # prepare build command, android: apk, ios: ipa, macos: macos, windows: (empty), web: web
           build_command=""
+          is_debug_build=false
+          
+          # check if --debug is in extra_build_arguments
+          if [[ "$extra_build_arguments" == *"--debug"* ]]; then
+            is_debug_build=true
+          fi
+          
           if [ "$platform" == "android" ]; then
             build_command="flutter build apk"
           elif [ "$platform" == "ios" ]; then
-            build_command="flutter build ipa"
+            # For iOS debug builds, use 'flutter build ios --debug' instead of 'flutter build ipa'
+            # because 'flutter build ipa' doesn't support --debug flag
+            # Debug builds produce .app bundle that can be used in Xcode for memory leak detection
+            if [ "$is_debug_build" == "true" ]; then
+              build_command="flutter build ios --debug"
+            else
+              build_command="flutter build ipa"
+            fi
           elif [ "$platform" == "macos" ]; then
             build_command="flutter build macos"
           elif [ "$platform" == "windows" ]; then
@@ -295,8 +309,8 @@ jobs:
             build_arguments="$build_arguments $extra_build_arguments"
           fi
 
-          # append build arguments for ios
-          if [ "$platform" == "ios" ]; then
+          # append build arguments for ios (only for release builds, debug builds don't need export-options-plist)
+          if [ "$platform" == "ios" ] && [ "$is_debug_build" != "true" ]; then
             build_arguments="--export-options-plist ios/export.plist $build_arguments"
           fi
 
@@ -316,11 +330,40 @@ jobs:
             # copy whole symbol directory to ../output directory
             cp -r build/app/outputs/native-debug-symbols ../output
           elif [ "$platform" == "ios" ]; then
-            # copy build/ios/ipa/agora_rtc_engine_example.ipa to ../output directory
-            cp build/ios/ipa/agora_rtc_engine_example.ipa ../output
-
-            # copy dSYMs in build/ios/archive/Runner.xcarchive/dSYMs directory to ../output directory
-            cp -RP build/ios/archive/Runner.xcarchive/dSYMs ../output
+            if [ "$is_debug_build" == "true" ]; then
+              # For debug builds, manually package .app into IPA for easier distribution
+              # The debug build output is in build/ios/iphoneos/Runner.app
+              if [ -d "build/ios/iphoneos/Runner.app" ]; then
+                cd build/ios/iphoneos
+                IPA_NAME="agora_rtc_engine_example_debug.ipa"
+                mkdir -p Payload
+                cp -r Runner.app Payload/
+                zip -qr Runner-unsigned.ipa Payload/
+                mv Runner-unsigned.ipa "../../../output/$IPA_NAME"
+                rm -rf Payload
+                cd ../../..
+                
+                # Also copy the .app bundle for direct use
+                cp -RP build/ios/iphoneos/Runner.app ../output
+              fi
+              
+              # Copy dSYMs if they exist (debug builds may have dSYMs in different locations)
+              if [ -d "build/ios/iphoneos/Runner.app.dSYM" ]; then
+                cp -RP build/ios/iphoneos/Runner.app.dSYM ../output
+              fi
+              
+              # Also copy the Xcode project workspace for easier debugging in Xcode
+              # QA can open ios/Runner.xcworkspace in Xcode and use Instruments for memory leak detection
+              if [ -d "ios/Runner.xcworkspace" ]; then
+                mkdir -p ../output/ios_project
+                cp -RP ios/Runner.xcworkspace ../output/ios_project
+                cp -RP ios/Runner.xcodeproj ../output/ios_project 2>/dev/null || true
+              fi
+            else
+              # For release builds, copy IPA and dSYMs as before
+              cp build/ios/ipa/agora_rtc_engine_example.ipa ../output
+              cp -RP build/ios/archive/Runner.xcarchive/dSYMs ../output
+            fi
           elif [ "$platform" == "macos" ]; then
             # cp example/build/macos/Build/Products/*/agora_rtc_engine_example.app to ../output directory
             cp -RP build/macos/Build/Products/*/agora_rtc_engine_example.app ../output
