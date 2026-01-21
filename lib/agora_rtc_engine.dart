@@ -29,3 +29,4 @@ export 'src/impl/agora_rte_player_impl.dart';
 export 'src/impl/agora_rte_canvas_impl.dart';
 export 'src/impl/agora_rte_core_impl.dart';
 export 'src/impl/agora_rte_config_impl.dart';
+export 'src/agora_rte_video_view.dart';

@@ -66,12 +66,6 @@
     
     AgoraRteCanvasConfig *canvasConfig = [[AgoraRteCanvasConfig alloc] init];
     AgoraRteError *rteError = [[AgoraRteError alloc] init];
-    BOOL success = [canvas getConfigs:canvasConfig error:rteError];
-    if (!success || rteError.code != AgoraRteOk) {
-        if (error) *error = RTE_NSERROR_FROM_RTE_ERROR(rteError);
-        return NO;
-    }
-    
     
     if (config[@"videoRenderMode"] && config[@"videoRenderMode"] != [NSNull null]) {
         [canvasConfig setVideoRenderMode:(AgoraRteVideoRenderMode)[config[@"videoRenderMode"] intValue] error:rteError];
@@ -103,7 +97,7 @@
     
     
     AgoraRteError *setError = [[AgoraRteError alloc] init];
-    success = [canvas setConfigs:canvasConfig error:setError];
+    BOOL success = [canvas setConfigs:canvasConfig error:setError];
     
     if (!success || setError.code != AgoraRteOk) {
         if (error) *error = RTE_NSERROR_FROM_RTE_ERROR(setError);
@@ -149,11 +143,6 @@
     
     AgoraRteCanvasConfig *config = [[AgoraRteCanvasConfig alloc] init];
     AgoraRteError *rteError = [[AgoraRteError alloc] init];
-    BOOL success = [canvas getConfigs:config error:rteError];
-    if (!success || rteError.code != AgoraRteOk) {
-        if (error) *error = RTE_NSERROR_FROM_RTE_ERROR(rteError);
-        return NO;
-    }
     
     [config setVideoRenderMode:mode error:rteError];
     if (rteError.code != AgoraRteOk) {
@@ -161,11 +150,11 @@
         return NO;
     }
     
-    // success = [canvas setConfigs:config error:rteError];
-    // if (!success || rteError.code != AgoraRteOk) {
-    //     if (error) *error = RTE_NSERROR_FROM_RTE_ERROR(rteError);
-    //     return NO;
-    // }
+     BOOL success = [canvas setConfigs:config error:rteError];
+     if (!success || rteError.code != AgoraRteOk) {
+         if (error) *error = RTE_NSERROR_FROM_RTE_ERROR(rteError);
+         return NO;
+     }
     return YES;
 }
 
@@ -187,11 +176,6 @@
     
     AgoraRteCanvasConfig *config = [[AgoraRteCanvasConfig alloc] init];
     AgoraRteError *rteError = [[AgoraRteError alloc] init];
-    BOOL success = [canvas getConfigs:config error:rteError];
-    if (!success || rteError.code != AgoraRteOk) {
-        if (error) *error = RTE_NSERROR_FROM_RTE_ERROR(rteError);
-        return NO;
-    }
     
     [config setVideoMirrorMode:mode error:rteError];
     if (rteError.code != AgoraRteOk) {
@@ -199,11 +183,11 @@
         return NO;
     }
     
-    // success = [canvas setConfigs:config error:rteError];
-    // if (!success || rteError.code != AgoraRteOk) {
-    //     if (error) *error = RTE_NSERROR_FROM_RTE_ERROR(rteError);
-    //     return NO;
-    // }
+    BOOL success = [canvas setConfigs:config error:rteError];
+     if (!success || rteError.code != AgoraRteOk) {
+         if (error) *error = RTE_NSERROR_FROM_RTE_ERROR(rteError);
+         return NO;
+     }
     return YES;
 }
 
@@ -225,12 +209,6 @@
     
     AgoraRteCanvasConfig *config = [[AgoraRteCanvasConfig alloc] init];
     AgoraRteError *rteError = [[AgoraRteError alloc] init];
-    BOOL success = [canvas getConfigs:config error:rteError];
-    if (!success || rteError.code != AgoraRteOk) {
-        if (error) *error = RTE_NSERROR_FROM_RTE_ERROR(rteError);
-        return NO;
-    }
-    
     AgoraRteRect *rect = [[AgoraRteRect alloc] init];
     [rect setX:x];
     [rect setY:y];
@@ -242,11 +220,11 @@
         return NO;
     }
     
-    // success = [canvas setConfigs:config error:rteError];
-    // if (!success || rteError.code != AgoraRteOk) {
-    //     if (error) *error = RTE_NSERROR_FROM_RTE_ERROR(rteError);
-    //     return NO;
-    // }
+    BOOL success = [canvas setConfigs:config error:rteError];
+     if (!success || rteError.code != AgoraRteOk) {
+         if (error) *error = RTE_NSERROR_FROM_RTE_ERROR(rteError);
+         return NO;
+     }
     return YES;
 }
 
@@ -281,7 +259,7 @@
     GET_CANVAS_OR_RETURN(self.canvases, canvasId, error, NO);
     
     AgoraRteViewConfig *viewConfig = nil;
-    if (config && config != [NSNull null] && [config isKindOfClass:[NSDictionary class]] && config.count > 0) {
+    if (config && [config isKindOfClass:[NSDictionary class]] && config.count > 0) {
         viewConfig = [[AgoraRteViewConfig alloc] init];
         if (config[@"cropArea"]) {
             NSDictionary *cropAreaDict = config[@"cropArea"];
@@ -309,7 +287,7 @@
     GET_CANVAS_OR_RETURN(self.canvases, canvasId, error, NO);
     
     AgoraRteViewConfig *viewConfig = nil;
-    if (config && config != [NSNull null] && [config isKindOfClass:[NSDictionary class]] && config.count > 0) {
+    if (config && [config isKindOfClass:[NSDictionary class]] && config.count > 0) {
         viewConfig = [[AgoraRteViewConfig alloc] init];
         if (config[@"cropArea"]) {
             NSDictionary *cropAreaDict = config[@"cropArea"];

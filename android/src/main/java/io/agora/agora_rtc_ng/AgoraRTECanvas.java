@@ -7,6 +7,7 @@ import io.agora.rte.CanvasInitialConfig;
 import io.agora.rte.CanvasConfig;
 import io.agora.rte.ViewConfig;
 import io.agora.rte.Constants;
+import io.agora.rte.Rect;
 import io.agora.rte.exception.RteException;
 
 import java.util.HashMap;
@@ -67,7 +68,6 @@ public class AgoraRTECanvas {
         }
         try {
             CanvasConfig canvasConfig = new CanvasConfig();
-            canvas.getConfigs(canvasConfig);
             
             if (configMap.containsKey("videoRenderMode") && configMap.get("videoRenderMode") != null) {
                 canvasConfig.setVideoRenderMode(Constants.VideoRenderMode.fromInt(parseInt(configMap.get("videoRenderMode"))));
@@ -76,10 +76,19 @@ public class AgoraRTECanvas {
                 canvasConfig.setVideoMirrorMode(Constants.VideoMirrorMode.fromInt(parseInt(configMap.get("videoMirrorMode"))));
             }
             if (configMap.containsKey("cropArea") && configMap.get("cropArea") != null) {
+                @SuppressWarnings("unchecked")
                 Map<String, Object> cropAreaDict = (Map<String, Object>) configMap.get("cropArea");
                 if (cropAreaDict != null) {
-                    // Note: Android SDK may not have setCropArea method, check SDK API
-                    // For now, skip crop area setting
+                    int x = parseInt(cropAreaDict.get("x"));
+                    int y = parseInt(cropAreaDict.get("y"));
+                    int width = parseInt(cropAreaDict.get("width"));
+                    int height = parseInt(cropAreaDict.get("height"));
+                    Rect rect = new Rect();
+                    rect.x = x;
+                    rect.y = y;
+                    rect.width = width;
+                    rect.height = height;
+                    canvasConfig.setCropArea(rect);
                 }
             }
             
@@ -105,7 +114,17 @@ public class AgoraRTECanvas {
             Map<String, Object> map = new HashMap<>();
             map.put("videoRenderMode", Constants.VideoRenderMode.getValue(config.getVideoRenderMode()));
             map.put("videoMirrorMode", Constants.VideoMirrorMode.getValue(config.getVideoMirrorMode()));
-            // Note: Crop area may not be available in Android SDK
+            
+            // Get crop area
+            Rect cropArea = config.getCropArea();
+            if (cropArea != null) {
+                Map<String, Object> cropMap = new HashMap<>();
+                cropMap.put("x", cropArea.x);
+                cropMap.put("y", cropArea.y);
+                cropMap.put("width", cropArea.width);
+                cropMap.put("height", cropArea.height);
+                map.put("cropArea", cropMap);
+            }
             return map;
         } catch (RteException e) {
             return null;
@@ -118,9 +137,8 @@ public class AgoraRTECanvas {
         if (canvas == null) return false;
         try {
             CanvasConfig config = new CanvasConfig();
-            canvas.getConfigs(config);
             config.setVideoRenderMode(Constants.VideoRenderMode.fromInt(mode));
-            // canvas.setConfigs(config); // Commented out following iOS pattern
+            canvas.setConfigs(config);
             return true;
         } catch (RteException e) {
             return false;
@@ -144,8 +162,8 @@ public class AgoraRTECanvas {
         if (canvas == null) return false;
         try {
             CanvasConfig config = new CanvasConfig();
-            canvas.getConfigs(config);
             config.setVideoMirrorMode(Constants.VideoMirrorMode.fromInt(mode));
+            canvas.setConfigs(config);
             return true;
         } catch (RteException e) {
             return false;
@@ -169,9 +187,13 @@ public class AgoraRTECanvas {
         if (canvas == null) return false;
         try {
             CanvasConfig config = new CanvasConfig();
-            canvas.getConfigs(config);
-            // Note: Android SDK may not have setCropArea method
-            // For now, return true without setting
+            Rect rect = new Rect();
+            rect.x = x;
+            rect.y = y;
+            rect.width = width;
+            rect.height = height;
+            config.setCropArea(rect);
+            canvas.setConfigs(config);
             return true;
         } catch (RteException e) {
             return false;
@@ -184,13 +206,19 @@ public class AgoraRTECanvas {
         try {
             CanvasConfig config = new CanvasConfig();
             canvas.getConfigs(config);
-            // Note: Android SDK may not have getCropArea method
-            // Return default values for now
+            Rect cropArea = config.getCropArea();
             Map<String, Object> map = new HashMap<>();
-            map.put("x", 0);
-            map.put("y", 0);
-            map.put("width", 0);
-            map.put("height", 0);
+            if (cropArea != null) {
+                map.put("x", cropArea.x);
+                map.put("y", cropArea.y);
+                map.put("width", cropArea.width);
+                map.put("height", cropArea.height);
+            } else {
+                map.put("x", 0);
+                map.put("y", 0);
+                map.put("width", 0);
+                map.put("height", 0);
+            }
             return map;
         } catch (RteException e) {
             return null;

@@ -1,0 +1,218 @@
+import 'package:agora_rtc_engine/agora_rtc_engine.dart';
+import 'package:flutter/material.dart';
+
+class RteCanvasConfigTab extends StatefulWidget {
+  final AgoraRteCanvasImpl? canvas;
+  final Function(String) onLog;
+
+  const RteCanvasConfigTab({
+    Key? key,
+    this.canvas,
+    required this.onLog,
+  }) : super(key: key);
+
+  @override
+  State<RteCanvasConfigTab> createState() => _RteCanvasConfigTabState();
+}
+
+class _RteCanvasConfigTabState extends State<RteCanvasConfigTab> {
+  AgoraRteVideoRenderMode _videoRenderMode = AgoraRteVideoRenderMode.fit;
+  AgoraRteVideoMirrorMode _videoMirrorMode = AgoraRteVideoMirrorMode.auto;
+  AgoraRteRect _cropArea = const AgoraRteRect();
+
+  @override
+  void initState() {
+    super.initState();
+    _loadCanvasConfig();
+  }
+
+  @override
+  void didUpdateWidget(covariant RteCanvasConfigTab oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (oldWidget.canvas != widget.canvas) {
+      _loadCanvasConfig();
+    }
+  }
+
+  Future<void> _loadCanvasConfig() async {
+    if (widget.canvas == null) return;
+    try {
+      final videoRenderMode = await widget.canvas!.getVideoRenderMode();
+      final videoMirrorMode = await widget.canvas!.getVideoMirrorMode();
+      final cropArea = await widget.canvas!.getCropArea();
+      if (mounted) {
+        setState(() {
+          _videoRenderMode = videoRenderMode;
+          _videoMirrorMode = videoMirrorMode;
+          _cropArea = cropArea;
+        });
+      }
+    } catch (e) {
+      widget.onLog('Load Canvas config error: $e');
+    }
+  }
+
+  Future<void> _setCanvasVideoRenderMode(AgoraRteVideoRenderMode mode) async {
+    if (widget.canvas == null) return;
+    try {
+      await widget.canvas!.setVideoRenderMode(mode);
+      setState(() {
+        _videoRenderMode = mode;
+      });
+      widget.onLog('Set VideoRenderMode: ${mode.name}');
+    } catch (e) {
+      widget.onLog('Set VideoRenderMode error: $e');
+    }
+  }
+
+  Future<void> _setCanvasVideoMirrorMode(AgoraRteVideoMirrorMode mode) async {
+    if (widget.canvas == null) return;
+    try {
+      await widget.canvas!.setVideoMirrorMode(mode);
+      setState(() {
+        _videoMirrorMode = mode;
+      });
+      widget.onLog('Set VideoMirrorMode: ${mode.name}');
+    } catch (e) {
+      widget.onLog('Set VideoMirrorMode error: $e');
+    }
+  }
+
+  Future<void> _setCanvasCropArea(AgoraRteRect rect) async {
+    if (widget.canvas == null) return;
+    try {
+      await widget.canvas!.setCropArea(rect);
+      setState(() {
+        _cropArea = rect;
+      });
+      // Removing log spam for onChanged
+    } catch (e) {
+      widget.onLog('Set CropArea error: $e');
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    if (widget.canvas == null) {
+      return const Center(child: Text('Canvas not initialized'));
+    }
+    return GestureDetector(
+      onTap: () {
+        FocusScope.of(context).unfocus();
+      },
+      child: SingleChildScrollView(
+        child: Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const Text('Video Render Mode:',
+                  style: TextStyle(fontWeight: FontWeight.bold)),
+              Wrap(
+                spacing: 8.0,
+                children: AgoraRteVideoRenderMode.values.map((mode) {
+                  return ChoiceChip(
+                    label: Text(mode.name),
+                    selected: _videoRenderMode == mode,
+                    onSelected: (selected) {
+                      if (selected) _setCanvasVideoRenderMode(mode);
+                    },
+                  );
+                }).toList(),
+              ),
+              const SizedBox(height: 16),
+              const Text('Video Mirror Mode:',
+                  style: TextStyle(fontWeight: FontWeight.bold)),
+              Wrap(
+                spacing: 8.0,
+                children: AgoraRteVideoMirrorMode.values.map((mode) {
+                  return ChoiceChip(
+                    label: Text(mode.name),
+                    selected: _videoMirrorMode == mode,
+                    onSelected: (selected) {
+                      if (selected) _setCanvasVideoMirrorMode(mode);
+                    },
+                  );
+                }).toList(),
+              ),
+              const SizedBox(height: 16),
+              const Text('Crop Area:',
+                  style: TextStyle(fontWeight: FontWeight.bold)),
+              Text('X: ${_cropArea.x}, Y: ${_cropArea.y}'),
+              Text('Width: ${_cropArea.width}, Height: ${_cropArea.height}'),
+              Row(
+                children: [
+                  Expanded(
+                    child: TextField(
+                      decoration: const InputDecoration(labelText: 'X'),
+                      keyboardType: TextInputType.datetime,
+                      onSubmitted: (value) {
+                        final x = int.tryParse(value) ?? 0;
+                        _setCanvasCropArea(AgoraRteRect(
+                          x: x,
+                          y: _cropArea.y,
+                          width: _cropArea.width,
+                          height: _cropArea.height,
+                        ));
+                      },
+                    ),
+                  ),
+                  Expanded(
+                    child: TextField(
+                      decoration: const InputDecoration(labelText: 'Y'),
+                      keyboardType: TextInputType.datetime,
+                      onSubmitted: (value) {
+                        final y = int.tryParse(value) ?? 0;
+                        _setCanvasCropArea(AgoraRteRect(
+                          x: _cropArea.x,
+                          y: y,
+                          width: _cropArea.width,
+                          height: _cropArea.height,
+                        ));
+                      },
+                    ),
+                  ),
+                  Expanded(
+                    child: TextField(
+                      decoration: const InputDecoration(labelText: 'Width'),
+                      keyboardType: TextInputType.datetime,
+                      onSubmitted: (value) {
+                        final width = int.tryParse(value) ?? 0;
+                        _setCanvasCropArea(AgoraRteRect(
+                          x: _cropArea.x,
+                          y: _cropArea.y,
+                          width: width,
+                          height: _cropArea.height,
+                        ));
+                      },
+                    ),
+                  ),
+                  Expanded(
+                    child: TextField(
+                      decoration: const InputDecoration(labelText: 'Height'),
+                      keyboardType: TextInputType.datetime,
+                      onSubmitted: (value) {
+                        final height = int.tryParse(value) ?? 0;
+                        _setCanvasCropArea(AgoraRteRect(
+                          x: _cropArea.x,
+                          y: _cropArea.y,
+                          width: _cropArea.width,
+                          height: height,
+                        ));
+                      },
+                    ),
+                  ),
+                ],
+              ),
+              const SizedBox(height: 16),
+              ElevatedButton(
+                onPressed: _loadCanvasConfig,
+                child: const Text('Refresh Config'),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
