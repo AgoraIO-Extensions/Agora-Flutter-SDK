@@ -255,34 +255,24 @@ jobs:
         shell: bash
         working-directory: example
         run: |
-          # show flutter version
           flutter --version && which flutter
-
-          # install dependencies
           flutter pub get
 
-          # prepare build command, android: apk, ios, ipa, macos: macos, windows: windows, web: web
           build_command=""
           is_debug_build=false
           
-          # check if --debug is in extra_build_arguments and remove it (we'll add it back intelligently)
           filtered_extra_build_arguments="$extra_build_arguments"
           if [[ "$extra_build_arguments" == *"--debug"* ]]; then
             is_debug_build=true
-            # Remove --debug from extra_build_arguments to prevent errors on platforms that don't support it
             filtered_extra_build_arguments="${extra_build_arguments//--debug/}"
-            # Remove any double spaces that might result from removing --debug
             filtered_extra_build_arguments=$(echo "$filtered_extra_build_arguments" | sed 's/  */ /g' | sed 's/^ *//;s/ *$//')
           fi
           
           if [ "$platform" == "android" ]; then
             build_command="flutter build apk"
           elif [ "$platform" == "ios" ]; then
-            # For iOS debug builds, use 'flutter build ios' instead of 'flutter build ipa'
-            # because 'flutter build ipa' doesn't support --debug flag
-            # Debug builds produce .app bundle that can be used in Xcode for memory leak detection
             if [ "$is_debug_build" == "true" ]; then
-              build_command="flutter build ios"
+              build_command="flutter build ios --no-codesign"
             else
               build_command="flutter build ipa"
             fi
@@ -292,137 +282,96 @@ jobs:
             build_command="flutter build windows"
           elif [ "$platform" == "web" ]; then
             build_command="flutter build web"
-            # Web platform doesn't support --debug flag, so we force is_debug_build to false
             if [ "$is_debug_build" == "true" ]; then
               echo "⚠️  Warning: Web platform doesn't support --debug flag, building in profile mode instead"
               is_debug_build=false
             fi
           fi
 
-          # prepare build options
           build_options=""
-
-          # append extra build options
           if [ -n "$extra_build_options" ]; then
             build_options="$build_options $extra_build_options"
           fi
 
-          # prepare default build arguments, if current platform is web, set DEFAULT_BUILD_APP_ID to empty string
           if [ "$platform" == "web" ]; then
             DEFAULT_BUILD_APP_ID=""
           fi
 
           build_arguments="--dart-define=TEST_APP_ID=$DEFAULT_BUILD_APP_ID --dart-define=TEST_TOKEN=\"\" --dart-define=TEST_CHANNEL_ID=\"testapi\" --dart-define=INTERNAL_TESTING=true"
 
-          # append filtered extra build arguments (with --debug removed)
           if [ -n "$filtered_extra_build_arguments" ]; then
             build_arguments="$build_arguments $filtered_extra_build_arguments"
           fi
           
-          # Add --debug flag back for platforms that support it
           if [ "$is_debug_build" == "true" ]; then
             build_arguments="$build_arguments --debug"
           fi
 
-          # append build arguments for ios (only for release builds, debug builds don't need export-options-plist)
           if [ "$platform" == "ios" ] && [ "$is_debug_build" != "true" ]; then
             build_arguments="--export-options-plist ios/export.plist $build_arguments"
           fi
 
-          # run build command
-          echo "$build_command $build_options $build_arguments"
+          echo "========================================="
+          echo "🔨 Building for platform: $platform"
+          echo "📦 Debug build: $is_debug_build"
+          echo "🚀 Command: $build_command $build_options $build_arguments"
+          echo "========================================="
+
           $build_command $build_options $build_arguments
 
-          # create output directory if it doesn't exist
           if [ ! -d "../output" ]; then
             mkdir -p ../output
           fi
 
-          # copy build result to output directory by different platforms
           if [ "$platform" == "android" ]; then
-            # copy files in build/app/outputs/flutter-apk directory to ../output directory
             cp build/app/outputs/flutter-apk/* ../output
-
-            # copy whole symbol directory to ../output directory
-            cp -r build/app/outputs/native-debug-symbols ../output
+            if [ -d "build/app/outputs/native-debug-symbols" ]; then
+              cp -r build/app/outputs/native-debug-symbols ../output
+            fi
           elif [ "$platform" == "ios" ]; then
             if [ "$is_debug_build" == "true" ]; then
-              # For debug builds, manually package .app into IPA for easier distribution
-              # The debug build output is in build/ios/iphoneos/Runner.app
-              echo "Packaging iOS debug build into IPA..."
-              
               if [ -d "build/ios/iphoneos/Runner.app" ]; then
                 cd build/ios/iphoneos
                 IPA_NAME="agora_rtc_engine_example_debug.ipa"
-                
-                # Create Payload directory and copy .app into it
                 mkdir -p Payload
                 cp -r Runner.app Payload/
-                
-                # Zip the Payload directory to create IPA
                 zip -qry "$IPA_NAME" Payload/
-                
-                # Move IPA to output directory
-                mv "$IPA_NAME" "../../../output/"
-                
-                # Clean up
+                mv "$IPA_NAME" "../../../../output/"
                 rm -rf Payload
                 cd ../../..
-                
-                echo "Debug IPA created: $IPA_NAME"
               else
                 echo "Error: Runner.app not found at build/ios/iphoneos/Runner.app"
                 exit 1
               fi
               
-              # Copy dSYMs if they exist (debug builds may have dSYMs in different locations)
               if [ -d "build/ios/iphoneos/Runner.app.dSYM" ]; then
                 cp -RP build/ios/iphoneos/Runner.app.dSYM ../output
               fi
             else
-              # For release builds, copy IPA and dSYMs as before
               cp build/ios/ipa/agora_rtc_engine_example.ipa ../output
               cp -RP build/ios/archive/Runner.xcarchive/dSYMs ../output
             fi
           elif [ "$platform" == "macos" ]; then
-            # cp example/build/macos/Build/Products/*/agora_rtc_engine_example.app to ../output directory
             cp -RP build/macos/Build/Products/*/agora_rtc_engine_example.app ../output
 
-            # copy all dSYM files from example/build/macos/Build/Products and subdirectories to ../output/dSYMs directory
-            # Note: Debug builds typically don't generate separate .dSYM files, so only copy if they exist
             dSYM_FILES=$(find build/macos/Build/Products -name "*.dSYM" -type d 2>/dev/null || true)
             if [ -n "$dSYM_FILES" ]; then
-              # mkdir dSYMs directory in ../output directory if it doesn't exist
               if [ ! -d "../output/dSYMs" ]; then
                 mkdir -p ../output/dSYMs
               fi
-              
-              # copy all found dSYM files
               find build/macos/Build/Products -name "*.dSYM" -type d -exec cp -RP {} ../output/dSYMs \;
-              echo "dSYM files copied successfully"
-            else
-              echo "No dSYM files found (this is expected for debug builds)"
             fi
           elif [ "$platform" == "windows" ]; then
-            # since flutter have no plain to support to build to run on 32-bit windows, we only need concern about the 64-bit windows
-            
-            # copy whole build/windows/x64/runner/Release directory to ../output if the directory exists
             if [ -d "build/windows/x64/runner/Release" ]; then
               cp -r build/windows/x64/runner/Release ../output
-
-              # copy all pdb files in build/windows/x64/plugins/**/Release/ to ../output/Release
               cp -r build/windows/x64/plugins/**/Release/*.pdb ../output/Release
             fi
 
-            # copy whole build/windows/x64/runner/Debug directory to ../output if the directory exists
             if [ -d "build/windows/x64/runner/Debug" ]; then
               cp -r build/windows/x64/runner/Debug ../output
-
-              # copy all pdb files in build/windows/x64/plugins/**/Debug/ to ../output/Debug
               cp -r build/windows/x64/plugins/**/Debug/*.pdb ../output/Debug
             fi
           elif [ "$platform" == "web" ]; then
-            # copy all files and files in subdirectories to ../output directory
             cp -r build/web/* ../output
           fi
 
@@ -430,13 +379,8 @@ jobs:
         id: generate_artifact_name
         shell: bash
         run: |
-          # get pub_version from pubspec.yaml
           pub_version=$(grep 'version: ' pubspec.yaml | sed -e 's,.*: \(.*\),\1,')
-          
-          # get build_timestamp
           build_timestamp=$(date +%Y%m%d%H%M%S)
-
-          # generate artifact_name
           artifact_name="agora_rtc_engine_example_${{ matrix.platform }}_${pub_version}_${build_timestamp}_${{ github.run_id }}"
           echo "artifact_name=$artifact_name" >> $GITHUB_OUTPUT
 
@@ -451,7 +395,6 @@ jobs:
         id: setup_output
         shell: bash
         run: |
-          # see https://docs.github.com/en/actions/writing-workflows/choosing-what-your-workflow-does/passing-information-between-jobs
           current_platform="${{ matrix.platform }}"
           echo "artifact_nightly_link_${current_platform}=https://nightly.link/${{ github.repository }}/actions/runs/${{ github.run_id }}/${{ steps.generate_artifact_name.outputs.artifact_name }}.zip" >> $GITHUB_OUTPUT
 
