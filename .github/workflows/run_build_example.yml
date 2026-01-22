@@ -259,33 +259,26 @@ jobs:
           flutter pub get
 
           build_command=""
-          is_debug_build=false
           
-          filtered_extra_build_arguments="$extra_build_arguments"
-          if [[ "$extra_build_arguments" == *"--debug"* ]]; then
-            is_debug_build=true
-            filtered_extra_build_arguments="${extra_build_arguments//--debug/}"
-            filtered_extra_build_arguments=$(echo "$filtered_extra_build_arguments" | sed 's/  */ /g' | sed 's/^ *//;s/ *$//')
+          if [ "$platform" == "web" ]; then
+             filtered_extra_build_arguments="${extra_build_arguments//--debug/}"
+             filtered_extra_build_arguments="${filtered_extra_build_arguments//--profile/}"
+             filtered_extra_build_arguments="${filtered_extra_build_arguments//--release/}"
+             filtered_extra_build_arguments=$(echo "$filtered_extra_build_arguments" | sed 's/  */ /g' | sed 's/^ *//;s/ *$//')
+          else
+             filtered_extra_build_arguments="$extra_build_arguments"
           fi
-          
+
           if [ "$platform" == "android" ]; then
             build_command="flutter build apk"
           elif [ "$platform" == "ios" ]; then
-            if [ "$is_debug_build" == "true" ]; then
-              build_command="flutter build ios --no-codesign"
-            else
-              build_command="flutter build ipa"
-            fi
+            build_command="flutter build ipa"
           elif [ "$platform" == "macos" ]; then
             build_command="flutter build macos"
           elif [ "$platform" == "windows" ]; then
             build_command="flutter build windows"
           elif [ "$platform" == "web" ]; then
             build_command="flutter build web"
-            if [ "$is_debug_build" == "true" ]; then
-              echo "⚠️  Warning: Web platform doesn't support --debug flag, building in profile mode instead"
-              is_debug_build=false
-            fi
           fi
 
           build_options=""
@@ -302,22 +295,13 @@ jobs:
           if [ -n "$filtered_extra_build_arguments" ]; then
             build_arguments="$build_arguments $filtered_extra_build_arguments"
           fi
-          
-          if [ "$is_debug_build" == "true" ]; then
-            if [ "$platform" == "ios" ]; then
-               build_arguments="$build_arguments --profile"
-            elif [ "$platform" != "web" ]; then
-               build_arguments="$build_arguments --debug"
-            fi
-          fi
 
-          if [ "$platform" == "ios" ] && [ "$is_debug_build" != "true" ]; then
+          if [ "$platform" == "ios" ]; then
             build_arguments="--export-options-plist ios/export.plist $build_arguments"
           fi
 
           echo "========================================="
           echo "🔨 Building for platform: $platform"
-          echo "📦 Debug build: $is_debug_build"
           echo "🚀 Command: $build_command $build_options $build_arguments"
           echo "========================================="
 
@@ -374,6 +358,11 @@ jobs:
             if [ -d "build/windows/x64/runner/Debug" ]; then
               cp -r build/windows/x64/runner/Debug ../output
               cp -r build/windows/x64/plugins/**/Debug/*.pdb ../output/Debug
+            fi
+
+            if [ -d "build/windows/x64/runner/Profile" ]; then
+              cp -r build/windows/x64/runner/Profile ../output
+              cp -r build/windows/x64/plugins/**/Profile/*.pdb ../output/Profile
             fi
           elif [ "$platform" == "web" ]; then
             cp -r build/web/* ../output
