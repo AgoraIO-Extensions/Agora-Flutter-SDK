@@ -255,20 +255,14 @@ jobs:
         shell: bash
         working-directory: example
         run: |
+          # show flutter version
           flutter --version && which flutter
+
+          # install dependencies
           flutter pub get
 
+          # prepare build command, android: apk, ios: ipa, macos: macos, windows: (empty), web: web
           build_command=""
-          
-          if [ "$platform" == "web" ]; then
-             filtered_extra_build_arguments="${extra_build_arguments//--debug/}"
-             filtered_extra_build_arguments="${filtered_extra_build_arguments//--profile/}"
-             filtered_extra_build_arguments="${filtered_extra_build_arguments//--release/}"
-             filtered_extra_build_arguments=$(echo "$filtered_extra_build_arguments" | sed 's/  */ /g' | sed 's/^ *//;s/ *$//')
-          else
-             filtered_extra_build_arguments="$extra_build_arguments"
-          fi
-
           if [ "$platform" == "android" ]; then
             build_command="flutter build apk"
           elif [ "$platform" == "ios" ]; then
@@ -281,90 +275,83 @@ jobs:
             build_command="flutter build web"
           fi
 
+          # prepare build options
           build_options=""
+
+          # append extra build options
           if [ -n "$extra_build_options" ]; then
             build_options="$build_options $extra_build_options"
           fi
 
+          # prepare default build arguments, if current platform is web, set DEFAULT_BUILD_APP_ID to empty string
           if [ "$platform" == "web" ]; then
             DEFAULT_BUILD_APP_ID=""
           fi
 
           build_arguments="--dart-define=TEST_APP_ID=$DEFAULT_BUILD_APP_ID --dart-define=TEST_TOKEN="" --dart-define=TEST_CHANNEL_ID="testapi" --dart-define=INTERNAL_TESTING=true"
 
-          if [ -n "$filtered_extra_build_arguments" ]; then
-            build_arguments="$build_arguments $filtered_extra_build_arguments"
+          # append extra build arguments
+          if [ -n "$extra_build_arguments" ]; then
+            build_arguments="$build_arguments $extra_build_arguments"
           fi
 
+          # append build arguments for ios
           if [ "$platform" == "ios" ]; then
             build_arguments="--export-options-plist ios/export.plist $build_arguments"
           fi
 
-          echo "========================================="
-          echo "🔨 Building for platform: $platform"
-          echo "🚀 Command: $build_command $build_options $build_arguments"
-          echo "========================================="
-
+          # run build command
           $build_command $build_options $build_arguments
 
+          # create output directory if it doesn't exist
           if [ ! -d "../output" ]; then
             mkdir -p ../output
           fi
 
+          # copy build result to output directory by different platforms
           if [ "$platform" == "android" ]; then
+            # copy files in build/app/outputs/flutter-apk directory to ../output directory
             cp build/app/outputs/flutter-apk/* ../output
-            if [ -d "build/app/outputs/native-debug-symbols" ]; then
-              cp -r build/app/outputs/native-debug-symbols ../output
-            fi
+
+            # copy whole symbol directory to ../output directory
+            cp -r build/app/outputs/native-debug-symbols ../output
           elif [ "$platform" == "ios" ]; then
-            if [ "$is_debug_build" == "true" ]; then
-              if [ -d "build/ios/iphoneos/Runner.app" ]; then
-                cd build/ios/iphoneos
-                IPA_NAME="agora_rtc_engine_example_debug.ipa"
-                mkdir -p Payload
-                cp -r Runner.app Payload/
-                zip -qry "$IPA_NAME" Payload/
-                mv "$IPA_NAME" "../../../../output/"
-                rm -rf Payload
-                cd ../../..
-              else
-                echo "Error: Runner.app not found at build/ios/iphoneos/Runner.app"
-                exit 1
-              fi
-              
-              if [ -d "build/ios/iphoneos/Runner.app.dSYM" ]; then
-                cp -RP build/ios/iphoneos/Runner.app.dSYM ../output
-              fi
-            else
-              cp build/ios/ipa/agora_rtc_engine_example.ipa ../output
-              cp -RP build/ios/archive/Runner.xcarchive/dSYMs ../output
-            fi
+            # copy build/ios/ipa/agora_rtc_engine_example.ipa to ../output directory
+            cp build/ios/ipa/agora_rtc_engine_example.ipa ../output
+
+            # copy dSYMs in build/ios/archive/Runner.xcarchive/dSYMs directory to ../output directory
+            cp -RP build/ios/archive/Runner.xcarchive/dSYMs ../output
           elif [ "$platform" == "macos" ]; then
+            # cp example/build/macos/Build/Products/*/agora_rtc_engine_example.app to ../output directory
             cp -RP build/macos/Build/Products/*/agora_rtc_engine_example.app ../output
 
-            dSYM_FILES=$(find build/macos/Build/Products -name "*.dSYM" -type d 2>/dev/null || true)
-            if [ -n "$dSYM_FILES" ]; then
-              if [ ! -d "../output/dSYMs" ]; then
-                mkdir -p ../output/dSYMs
-              fi
-              find build/macos/Build/Products -name "*.dSYM" -type d -exec cp -RP {} ../output/dSYMs \;
+            # mkdir dSYMs directory in ../output directory if it doesn't exist
+            if [ ! -d "../output/dSYMs" ]; then
+              mkdir -p ../output/dSYMs
             fi
+
+            # copy all dSYM files from example/build/macos/Build/Products and subdirectories to ../output/dSYMs directory
+            cp -RP build/macos/Build/Products/**/*.dSYM ../output/dSYMs
           elif [ "$platform" == "windows" ]; then
+            # since flutter have no plain to support to build to run on 32-bit windows, we only need concern about the 64-bit windows
+            
+            # copy whole build/windows/x64/runner/Release directory to ../output if the directory exists
             if [ -d "build/windows/x64/runner/Release" ]; then
               cp -r build/windows/x64/runner/Release ../output
+
+              # copy all pdb files in build/windows/x64/plugins/**/Release/ to ../output/Release
               cp -r build/windows/x64/plugins/**/Release/*.pdb ../output/Release
             fi
 
+            # copy whole build/windows/x64/runner/Debug directory to ../output if the directory exists
             if [ -d "build/windows/x64/runner/Debug" ]; then
               cp -r build/windows/x64/runner/Debug ../output
+
+              # copy all pdb files in build/windows/x64/plugins/**/Debug/ to ../output/Debug
               cp -r build/windows/x64/plugins/**/Debug/*.pdb ../output/Debug
             fi
-
-            if [ -d "build/windows/x64/runner/Profile" ]; then
-              cp -r build/windows/x64/runner/Profile ../output
-              cp -r build/windows/x64/plugins/**/Profile/*.pdb ../output/Profile
-            fi
           elif [ "$platform" == "web" ]; then
+            # copy all files and files in subdirectories to ../output directory
             cp -r build/web/* ../output
           fi
 
@@ -372,8 +359,13 @@ jobs:
         id: generate_artifact_name
         shell: bash
         run: |
+          # get pub_version from pubspec.yaml
           pub_version=$(grep 'version: ' pubspec.yaml | sed -e 's,.*: \(.*\),\1,')
+          
+          # get build_timestamp
           build_timestamp=$(date +%Y%m%d%H%M%S)
+
+          # generate artifact_name
           artifact_name="agora_rtc_engine_example_${{ matrix.platform }}_${pub_version}_${build_timestamp}_${{ github.run_id }}"
           echo "artifact_name=$artifact_name" >> $GITHUB_OUTPUT
 
@@ -388,6 +380,7 @@ jobs:
         id: setup_output
         shell: bash
         run: |
+          # see https://docs.github.com/en/actions/writing-workflows/choosing-what-your-workflow-does/passing-information-between-jobs
           current_platform="${{ matrix.platform }}"
           echo "artifact_nightly_link_${current_platform}=https://nightly.link/${{ github.repository }}/actions/runs/${{ github.run_id }}/${{ steps.generate_artifact_name.outputs.artifact_name }}.zip" >> $GITHUB_OUTPUT
 
