@@ -304,7 +304,11 @@ jobs:
           fi
           
           if [ "$is_debug_build" == "true" ]; then
-            build_arguments="$build_arguments --debug"
+            if [ "$platform" == "ios" ]; then
+               build_arguments="$build_arguments --profile"
+            elif [ "$platform" != "web" ]; then
+               build_arguments="$build_arguments --debug"
+            fi
           fi
 
           if [ "$platform" == "ios" ] && [ "$is_debug_build" != "true" ]; then
