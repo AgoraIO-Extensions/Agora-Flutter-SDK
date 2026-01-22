@@ -426,7 +426,7 @@ class _UidFrameBuffer {
           _drawCostSamples.reduce((a, b) => a + b) / _drawCostSamples.length;
       counters.add({
         "counterId": drawCostId,
-        "value": double.parse(avgDrawCost.toStringAsFixed(2))
+        "value": avgDrawCost.round()
       });
     }
 
