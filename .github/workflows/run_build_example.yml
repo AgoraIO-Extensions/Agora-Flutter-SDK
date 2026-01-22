@@ -297,7 +297,7 @@ jobs:
             DEFAULT_BUILD_APP_ID=""
           fi
 
-          build_arguments="--dart-define=TEST_APP_ID=$DEFAULT_BUILD_APP_ID --dart-define=TEST_TOKEN=\"\" --dart-define=TEST_CHANNEL_ID=\"testapi\" --dart-define=INTERNAL_TESTING=true"
+          build_arguments="--dart-define=TEST_APP_ID=$DEFAULT_BUILD_APP_ID --dart-define=TEST_TOKEN="" --dart-define=TEST_CHANNEL_ID="testapi" --dart-define=INTERNAL_TESTING=true"
 
           if [ -n "$filtered_extra_build_arguments" ]; then
             build_arguments="$build_arguments $filtered_extra_build_arguments"
