@@ -103,16 +103,8 @@ class AgoraRteImpl implements AgoraRte {
   }
 
   @override
-  Future<void> registerObserver(AgoraRteObserver observer) async {
-    // TODO: Implement when RTE observer is available
-    const channel = MethodChannel('agora_rtc_ng');
-    await channel.invokeMethod('rteRegisterObserver');
+  Future<bool> useStringUid() async {
+    return await _config.useStringUid();
   }
 
-  @override
-  Future<void> unregisterObserver(AgoraRteObserver observer) async {
-    // TODO: Implement when RTE observer is available
-    const channel = MethodChannel('agora_rtc_ng');
-    await channel.invokeMethod('rteUnregisterObserver');
-  }
 }

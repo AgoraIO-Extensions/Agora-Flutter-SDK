@@ -22,6 +22,7 @@ class _RteConfigTabState extends State<RteConfigTab> {
   int _areaCode = 0;
   String _cloudProxy = '';
   String _jsonParameter = '';
+  bool _useStringUid = false;
 
   @override
   void initState() {
@@ -39,24 +40,45 @@ class _RteConfigTabState extends State<RteConfigTab> {
 
   Future<void> _loadRteConfig() async {
     try {
-      final appId = await widget.rte.appId();
-      final logFolder = await widget.rte.logFolder();
-      final logFileSize = await widget.rte.logFileSize();
-      final areaCode = await widget.rte.areaCode();
-      final cloudProxy = await widget.rte.cloudProxy();
-      final jsonParameter = await widget.rte.jsonParameter();
+      // Example: Using getConfigs() to get all configs at once
+      final config = await widget.rte.getConfigs();
       if (mounted) {
         setState(() {
-          _appId = appId;
-          _logFolder = logFolder;
-          _logFileSize = logFileSize;
-          _areaCode = areaCode;
-          _cloudProxy = cloudProxy;
-          _jsonParameter = jsonParameter;
+          _appId = config.appId ?? '';
+          _logFolder = config.logFolder ?? '';
+          _logFileSize = config.logFileSize ?? 0;
+          _areaCode = config.areaCode ?? 0;
+          _cloudProxy = config.cloudProxy ?? '';
+          _jsonParameter = config.jsonParameter ?? '';
+          _useStringUid = config.useStringUid ?? false;
         });
       }
+      widget.onLog('Loaded RTE config using getConfigs()');
     } catch (e) {
       widget.onLog('Load RTE config error: $e');
+      // Fallback to individual getters
+      try {
+        final appId = await widget.rte.appId();
+        final logFolder = await widget.rte.logFolder();
+        final logFileSize = await widget.rte.logFileSize();
+        final areaCode = await widget.rte.areaCode();
+        final cloudProxy = await widget.rte.cloudProxy();
+        final jsonParameter = await widget.rte.jsonParameter();
+        final useStringUid = await widget.rte.useStringUid();
+        if (mounted) {
+          setState(() {
+            _appId = appId;
+            _logFolder = logFolder;
+            _logFileSize = logFileSize;
+            _areaCode = areaCode;
+            _cloudProxy = cloudProxy;
+            _jsonParameter = jsonParameter;
+            _useStringUid = useStringUid;
+          });
+        }
+      } catch (e2) {
+        widget.onLog('Load RTE config (fallback) error: $e2');
+      }
     }
   }
 
@@ -120,6 +142,35 @@ class _RteConfigTabState extends State<RteConfigTab> {
     }
   }
 
+  Future<void> _setRteUseStringUid(bool value) async {
+    try {
+      await widget.rte.config.setUseStringUid(value);
+      await _loadRteConfig();
+      widget.onLog('Set RTE UseStringUid: $value');
+    } catch (e) {
+      widget.onLog('Set UseStringUid error: $e');
+    }
+  }
+
+  /// Example: Using setConfigs() to set multiple configs at once
+  Future<void> _setRteConfigsBatch() async {
+    try {
+      await widget.rte.setConfigs(AgoraRteConfig(
+        appId: _appId.isEmpty ? null : _appId,
+        logFolder: _logFolder.isEmpty ? null : _logFolder,
+        logFileSize: _logFileSize == 0 ? null : _logFileSize,
+        areaCode: _areaCode == 0 ? null : _areaCode,
+        cloudProxy: _cloudProxy.isEmpty ? null : _cloudProxy,
+        jsonParameter: _jsonParameter.isEmpty ? null : _jsonParameter,
+        useStringUid: _useStringUid,
+      ));
+      await _loadRteConfig();
+      widget.onLog('Set RTE configs using setConfigs() batch method');
+    } catch (e) {
+      widget.onLog('Set RTE configs (batch) error: $e');
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
@@ -144,10 +195,20 @@ class _RteConfigTabState extends State<RteConfigTab> {
                   (value) => _setRteCloudProxy(value)),
               _buildConfigItem('JSON Parameter', _jsonParameter,
                   (value) => _setRteJsonParameter(value)),
+              SwitchListTile(
+                title: const Text('Use String UID'),
+                value: _useStringUid,
+                onChanged: _setRteUseStringUid,
+              ),
               const SizedBox(height: 16),
               ElevatedButton(
                 onPressed: _loadRteConfig,
-                child: const Text('Refresh Config'),
+                child: const Text('Refresh Config (getConfigs)'),
+              ),
+              const SizedBox(height: 8),
+              ElevatedButton(
+                onPressed: _setRteConfigsBatch,
+                child: const Text('Set All Configs (setConfigs)'),
               ),
             ],
           ),

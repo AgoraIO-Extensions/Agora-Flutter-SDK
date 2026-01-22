@@ -92,6 +92,9 @@ public class AgoraRTE {
             if (configMap.containsKey("jsonParameter") && configMap.get("jsonParameter") != null) {
                 rteConfig.setJsonParameter((String) configMap.get("jsonParameter"));
             }
+            if (configMap.containsKey("useStringUid") && configMap.get("useStringUid") != null) {
+                rteConfig.setUseStringUid((Boolean) configMap.get("useStringUid"));
+            }
             
             rteInstance.setConfigs(rteConfig);
             return true;
@@ -118,6 +121,7 @@ public class AgoraRTE {
             map.put("areaCode", config.getAreaCode());
             map.put("cloudProxy", config.getCloudProxy() != null ? config.getCloudProxy() : "");
             map.put("jsonParameter", config.getJsonParameter() != null ? config.getJsonParameter() : "");
+            map.put("useStringUid", config.getUseStringUid() != null ? config.getUseStringUid() : false);
             return map;
         } catch (RteException e) {
             return null;

@@ -79,12 +79,6 @@
     
     AgoraRteConfig *rteConfig = [[AgoraRteConfig alloc] init];
     AgoraRteError *rteError = [[AgoraRteError alloc] init];
-//    BOOL success = [self.rteInstance getConfigs:rteConfig error:rteError];
-//    if (!success || rteError.code != AgoraRteOk) {
-//        if (error) *error = RTE_NSERROR_FROM_RTE_ERROR(rteError);
-//        return NO;
-//    }
-    
     
     if (config[@"appId"] && config[@"appId"] != [NSNull null]) {
         [rteConfig setAppId:config[@"appId"] error:rteError];
@@ -128,8 +122,13 @@
             return NO;
         }
     }
-    
-    
+    if (config[@"useStringUid"] && config[@"useStringUid"] != [NSNull null]) {
+        [rteConfig setUseStringUid:[config[@"useStringUid"] boolValue] error:rteError];
+        if (rteError.code != AgoraRteOk) {
+            if (error) *error = RTE_NSERROR_FROM_RTE_ERROR(rteError);
+            return NO;
+        }
+    }
     AgoraRteError *setError = [[AgoraRteError alloc] init];
     BOOL success = [self.rteInstance setConfigs:rteConfig error:setError];
     
@@ -159,7 +158,8 @@
         @"logFileSize": @([config logFileSize:getError]),
         @"areaCode": @([config areaCode:getError]),
         @"cloudProxy": [config cloudProxy:getError] ?: @"",
-        @"jsonParameter": [config jsonParameter:getError] ?: @""
+        @"jsonParameter": [config jsonParameter:getError] ?: @"",
+        @"useStringUid": @([config useStringUid:getError] ? YES : NO)
     };
 }
 

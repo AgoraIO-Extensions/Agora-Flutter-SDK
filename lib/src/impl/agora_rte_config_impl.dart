@@ -69,4 +69,15 @@ class AgoraRteConfigImpl {
   Future<void> setJsonParameter(String jsonParameter) async {
     await _channel.invokeMethod('rteSetJsonParameter', {'jsonParameter': jsonParameter});
   }
+
+  /// Get useStringUid
+  Future<bool> useStringUid() async {
+    final bool result = await _channel.invokeMethod('rteGetUseStringUid');
+    return result;
+  }
+
+  /// Set useStringUid
+  Future<void> setUseStringUid(bool useStringUid) async {
+    await _channel.invokeMethod('rteSetUseStringUid', {'useStringUid': useStringUid});
+  }
 }

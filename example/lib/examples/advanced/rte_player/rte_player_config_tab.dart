@@ -290,6 +290,35 @@ class _RtePlayerConfigTabState extends State<RtePlayerConfigTab> {
     }
   }
 
+  /// Example: Using setConfigs() to set multiple player configs at once
+  Future<void> _setPlayerConfigsBatch() async {
+    if (widget.player == null) return;
+    try {
+      await widget.player!.setConfigs(AgoraRtePlayerConfig(
+        autoPlay: _autoPlay,
+        playbackSpeed: _playbackSpeed,
+        playoutVolume: _volume,
+        loopCount: _loopCount,
+        playoutAudioTrackIdx: _playoutAudioTrackIdx,
+        publishAudioTrackIdx: _publishAudioTrackIdx,
+        audioTrackIdx: _audioTrackIdx,
+        subtitleTrackIdx: _subtitleTrackIdx,
+        externalSubtitleTrackIdx: _externalSubtitleTrackIdx,
+        audioPitch: _audioPitch,
+        audioPlaybackDelay: _audioPlaybackDelay,
+        audioDualMonoMode: _audioDualMonoMode,
+        publishVolume: _publishVolume,
+        jsonParameter: _playerJsonParameter.isEmpty ? null : _playerJsonParameter,
+        abrSubscriptionLayer: _abrSubscriptionLayer,
+        abrFallbackLayer: _abrFallbackLayer,
+      ));
+      await _loadPlayerConfig();
+      widget.onLog('Set Player configs using setConfigs() batch method');
+    } catch (e) {
+      widget.onLog('Set Player configs (batch) error: $e');
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     if (widget.player == null) {
@@ -396,7 +425,12 @@ class _RtePlayerConfigTabState extends State<RtePlayerConfigTab> {
               const SizedBox(height: 16),
               ElevatedButton(
                 onPressed: _loadPlayerConfig,
-                child: const Text('Refresh Config'),
+                child: const Text('Refresh Config (getConfigs)'),
+              ),
+              const SizedBox(height: 8),
+              ElevatedButton(
+                onPressed: _setPlayerConfigsBatch,
+                child: const Text('Set All Configs (setConfigs)'),
               ),
             ],
           ),

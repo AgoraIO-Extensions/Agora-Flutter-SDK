@@ -204,6 +204,26 @@
     }
     return jsonParameter ?: @"";
 }
+- (BOOL)useStringUid:(NSError **)error {
+    CHECK_RTE_INSTANCE_NIL(self.rte.rteInstance, error);
+    
+    AgoraRteConfig *config = [[AgoraRteConfig alloc] init];
+    AgoraRteError *rteError = [[AgoraRteError alloc] init];
+    BOOL success = [self.rte.rteInstance getConfigs:config error:rteError];
+    if (!success || rteError.code != AgoraRteOk) {
+        if (error) *error = RTE_NSERROR_FROM_RTE_ERROR(rteError);
+        return NO;
+    }
+
+    AgoraRteError *getError = [[AgoraRteError alloc] init];
+    BOOL useStringUid = [config useStringUid:getError];
+    if (getError.code != AgoraRteOk) {
+        if (error) *error = RTE_NSERROR_FROM_RTE_ERROR(getError);
+        return NO;
+    }
+    return useStringUid ? YES : NO;
+}
+
 
 // RTE Config Setters
 - (BOOL)setAppId:(NSString *)appId error:(NSError **)error {
@@ -236,18 +256,9 @@
     return [self.rte setConfigs:@{@"jsonParameter": jsonParameter} error:error];
 }
 
-#pragma mark - RTE Observer
-
-- (BOOL)registerRteObserver:(NSError **)error {
-    // RTE Observer functionality is not yet implemented in the separated classes
-    // This method is kept for backward compatibility but does nothing
-    return YES;
-}
-
-- (BOOL)unregisterRteObserver:(NSError **)error {
-    // RTE Observer functionality is not yet implemented in the separated classes
-    // This method is kept for backward compatibility but does nothing
-    return YES;
+- (BOOL)setUseStringUid:(BOOL)useStringUid error:(NSError **)error {
+    CHECK_RTE_INSTANCE(self.rte.rteInstance, error);
+    return [self.rte setConfigs:@{@"useStringUid": @(useStringUid)} error:error];
 }
 
 

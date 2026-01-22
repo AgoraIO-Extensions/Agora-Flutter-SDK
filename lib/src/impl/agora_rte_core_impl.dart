@@ -98,6 +98,7 @@ class AgoraRteCoreImpl {
       areaCode: result['areaCode'],
       cloudProxy: result['cloudProxy'],
       jsonParameter: result['jsonParameter'],
+      useStringUid: result['useStringUid'],
     );
   }
 

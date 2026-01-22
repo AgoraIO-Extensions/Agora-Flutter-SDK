@@ -438,20 +438,21 @@
     } else {
       result([FlutterError errorWithCode:@"RTE_ERROR" message:error.localizedDescription details:nil]);
     }
-//  } else if ([@"rteRegisterObserver" isEqualToString:call.method]) {
-//    BOOL success = [self.rteController registerRteObserver:&error];
-//    if (success) {
-//      result(@(YES));
-//    } else {
-//      result([FlutterError errorWithCode:@"RTE_ERROR" message:error.localizedDescription details:nil]);
-//    }
-//  } else if ([@"rteUnregisterObserver" isEqualToString:call.method]) {
-//    BOOL success = [self.rteController unregisterRteObserver:&error];
-//    if (success) {
-//      result(@(YES));
-//    } else {
-//      result([FlutterError errorWithCode:@"RTE_ERROR" message:error.localizedDescription details:nil]);
-//    }
+  } else if ([@"rteGetUseStringUid" isEqualToString:call.method]) {
+    BOOL useStringUid = [self.rteController useStringUid:&error];
+    if (error == nil) {
+      result(@(useStringUid));
+    } else {
+      result([FlutterError errorWithCode:@"RTE_ERROR" message:error.localizedDescription details:nil]);
+    }
+  } else if ([@"rteSetUseStringUid" isEqualToString:call.method]) {
+    NSNumber *useStringUid = args[@"useStringUid"];
+    BOOL success = [self.rteController setUseStringUid:[useStringUid boolValue] error:&error];
+    if (success) {
+      result(@(YES));
+    } else {
+      result([FlutterError errorWithCode:@"RTE_ERROR" message:error.localizedDescription details:nil]);
+    }
   }
   // RTE Player methods
   else if ([@"rtePlayerCreate" isEqualToString:call.method]) {

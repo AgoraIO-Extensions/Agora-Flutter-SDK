@@ -91,6 +91,22 @@ class _RteCanvasConfigTabState extends State<RteCanvasConfigTab> {
     }
   }
 
+  /// Example: Using setConfigs() to set multiple canvas configs at once
+  Future<void> _setCanvasConfigsBatch() async {
+    if (widget.canvas == null) return;
+    try {
+      await widget.canvas!.setConfigs(AgoraRteCanvasConfig(
+        videoRenderMode: _videoRenderMode,
+        videoMirrorMode: _videoMirrorMode,
+        cropArea: _cropArea,
+      ));
+      await _loadCanvasConfig();
+      widget.onLog('Set Canvas configs using setConfigs() batch method');
+    } catch (e) {
+      widget.onLog('Set Canvas configs (batch) error: $e');
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     if (widget.canvas == null) {
@@ -207,7 +223,36 @@ class _RteCanvasConfigTabState extends State<RteCanvasConfigTab> {
               const SizedBox(height: 16),
               ElevatedButton(
                 onPressed: _loadCanvasConfig,
-                child: const Text('Refresh Config'),
+                child: const Text('Refresh Config (getConfigs)'),
+              ),
+              const SizedBox(height: 8),
+              ElevatedButton(
+                onPressed: _setCanvasConfigsBatch,
+                child: const Text('Set All Configs (setConfigs)'),
+              ),
+              const SizedBox(height: 16),
+              const Divider(),
+              const SizedBox(height: 8),
+              const Text('Canvas View Management:',
+                  style: TextStyle(fontWeight: FontWeight.bold)),
+              const Text(
+                'addView() and removeView() are typically called automatically by AgoraRteVideoView:\n'
+                '- addView() is called when the view is created\n'
+                '- removeView() is called when the widget is disposed\n\n'
+                'Manual usage example:\n'
+                '```dart\n'
+                '// Get viewPtr from platform view\n'
+                'final viewPtr = await _platformViewChannel.invokeMethod<int>(\'getNativeViewPtr\');\n'
+                '\n'
+                '// Add view to canvas\n'
+                'await canvas.addView(viewPtr!);\n'
+                '\n'
+                '// Remove view from canvas (usually called automatically on dispose)\n'
+                'await canvas.removeView(viewPtr!);\n'
+                '```\n\n'
+                'Note: In most cases, you don\'t need to call these methods manually as '
+                'AgoraRteVideoView handles view lifecycle automatically.',
+                style: TextStyle(fontSize: 12, color: Colors.grey),
               ),
             ],
           ),

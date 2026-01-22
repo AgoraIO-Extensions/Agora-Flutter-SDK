@@ -48,6 +48,7 @@ class AgoraRteConfig {
   final int? areaCode;
   final String? cloudProxy;
   final String? jsonParameter;
+  final bool? useStringUid;
 
   const AgoraRteConfig({
     this.appId,
@@ -56,6 +57,7 @@ class AgoraRteConfig {
     this.areaCode,
     this.cloudProxy,
     this.jsonParameter,
+    this.useStringUid,
   });
 
   Map<String, dynamic> toJson() => {
@@ -65,6 +67,7 @@ class AgoraRteConfig {
         'areaCode': areaCode,
         'cloudProxy': cloudProxy,
         'jsonParameter': jsonParameter,
+        'useStringUid': useStringUid,
       };
 }
 
@@ -251,8 +254,7 @@ abstract class AgoraRte {
   Future<int> areaCode();
   Future<String> cloudProxy();
   Future<String> jsonParameter();
-  Future<void> registerObserver(AgoraRteObserver observer);
-  Future<void> unregisterObserver(AgoraRteObserver observer);
+  Future<bool> useStringUid();
 }
 
 /// RTE player interface

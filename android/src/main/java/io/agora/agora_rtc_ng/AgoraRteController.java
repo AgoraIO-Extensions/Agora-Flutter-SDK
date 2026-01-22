@@ -284,18 +284,82 @@ public class AgoraRteController {
         }
     }
 
-    public boolean registerRteObserver() {
-        // RTE Observer functionality is not yet implemented in the separated classes
-        // This method is kept for backward compatibility but does nothing
-        return true;
+    public boolean useStringUid() {
+        if (rte == null || rte.getRteInstance() == null) {
+            return false;
+        }
+        try {
+            Config config = new Config();
+            rte.getRteInstance().getConfigs(config);
+            return config.getUseStringUid() != null ? config.getUseStringUid() : false;
+        } catch (RteException e) {
+            return false;
+        }
     }
 
-    public boolean unregisterRteObserver() {
-        // RTE Observer functionality is not yet implemented in the separated classes
-        // This method is kept for backward compatibility but does nothing
-        return true;
+    // RTE Config Setters
+    public boolean setAppId(String appId) {
+        if (rte == null) {
+            return false;
+        }
+        Map<String, Object> configMap = new HashMap<>();
+        configMap.put("appId", appId);
+        return rte.setConfigs(configMap);
     }
 
+    public boolean setLogFolder(String logFolder) {
+        if (rte == null) {
+            return false;
+        }
+        Map<String, Object> configMap = new HashMap<>();
+        configMap.put("logFolder", logFolder);
+        return rte.setConfigs(configMap);
+    }
+
+    public boolean setLogFileSize(int logFileSize) {
+        if (rte == null) {
+            return false;
+        }
+        Map<String, Object> configMap = new HashMap<>();
+        configMap.put("logFileSize", logFileSize);
+        return rte.setConfigs(configMap);
+    }
+
+    public boolean setAreaCode(int areaCode) {
+        if (rte == null) {
+            return false;
+        }
+        Map<String, Object> configMap = new HashMap<>();
+        configMap.put("areaCode", areaCode);
+        return rte.setConfigs(configMap);
+    }
+
+    public boolean setCloudProxy(String cloudProxy) {
+        if (rte == null) {
+            return false;
+        }
+        Map<String, Object> configMap = new HashMap<>();
+        configMap.put("cloudProxy", cloudProxy);
+        return rte.setConfigs(configMap);
+    }
+
+    public boolean setJsonParameter(String jsonParameter) {
+        if (rte == null) {
+            return false;
+        }
+        Map<String, Object> configMap = new HashMap<>();
+        configMap.put("jsonParameter", jsonParameter);
+        return rte.setConfigs(configMap);
+    }
+
+    public boolean setUseStringUid(boolean useStringUid) {
+        if (rte == null) {
+            return false;
+        }
+        Map<String, Object> configMap = new HashMap<>();
+        configMap.put("useStringUid", useStringUid);
+        return rte.setConfigs(configMap);
+    }
     // --- Player Lifecycle ---
 
     public String createPlayer(Map<String, Object> config) {

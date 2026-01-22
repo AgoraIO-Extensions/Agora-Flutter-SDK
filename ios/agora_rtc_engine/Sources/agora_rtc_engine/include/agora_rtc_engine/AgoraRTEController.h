@@ -47,6 +47,8 @@
 - (BOOL)setCloudProxy:(NSString *)cloudProxy error:(NSError **)error;
 - (NSString *)jsonParameter:(NSError **)error;
 - (BOOL)setJsonParameter:(NSString *)jsonParameter error:(NSError **)error;
+- (BOOL)useStringUid:(NSError **)error;
+- (BOOL)setUseStringUid:(BOOL)useStringUid error:(NSError **)error;
 
 // #pragma mark - RTE Observer
 //- (BOOL)registerRteObserver:(NSError **)error;

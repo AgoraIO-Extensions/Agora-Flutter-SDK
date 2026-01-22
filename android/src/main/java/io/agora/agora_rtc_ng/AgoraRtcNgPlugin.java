@@ -277,11 +277,40 @@ public class AgoraRtcNgPlugin implements FlutterPlugin, MethodChannel.MethodCall
                 case "rteGetJsonParameter":
                     result.success(rteController.jsonParameter());
                     break;
-                case "rteRegisterObserver":
-                    result.success(rteController.registerRteObserver());
+                case "rteGetUseStringUid":
+                    result.success(rteController.useStringUid());
                     break;
-                case "rteUnregisterObserver":
-                    result.success(rteController.unregisterRteObserver());
+                case "rteSetAppId":
+                    String appId = (String) args.get("appId");
+                    result.success(rteController.setAppId(appId));
+                    break;
+                case "rteSetLogFolder":
+                    String logFolder = (String) args.get("logFolder");
+                    result.success(rteController.setLogFolder(logFolder));
+                    break;
+                case "rteSetLogFileSize":
+                    int logFileSize = args.get("logFileSize") != null ? 
+                        ((Number) args.get("logFileSize")).intValue() : 0;
+                    result.success(rteController.setLogFileSize(logFileSize));
+                    break;
+                case "rteSetAreaCode":
+                    int areaCode = args.get("areaCode") != null ? 
+                        ((Number) args.get("areaCode")).intValue() : 0;
+                    result.success(rteController.setAreaCode(areaCode));
+                    break;
+                case "rteSetCloudProxy":
+                    String cloudProxy = (String) args.get("cloudProxy");
+                    result.success(rteController.setCloudProxy(cloudProxy));
+                    break;
+                case "rteSetJsonParameter":
+                    String jsonParameter = (String) args.get("jsonParameter");
+                    result.success(rteController.setJsonParameter(jsonParameter));
+                    break;
+                case "rteSetUseStringUid":
+                    Object useStringUidObj = args.get("useStringUid");
+                    boolean useStringUid = useStringUidObj instanceof Boolean ? 
+                        ((Boolean) useStringUidObj) : false;
+                    result.success(rteController.setUseStringUid(useStringUid));
                     break;
                 case "rtePlayerCreate":
                     String playerId = rteController.createPlayer(args);
@@ -412,7 +441,6 @@ public class AgoraRtcNgPlugin implements FlutterPlugin, MethodChannel.MethodCall
                         (Map<String, Object>) args.get("config") : new HashMap<>();
                     result.success(rteController.canvasRemoveView(canvasIdForRemoveView, viewPtrForRemove, configForRemoveView));
                     break;
-                // Player Individual Config Methods
                 case "rtePlayerGetAutoPlay":
                     result.success(rteController.playerGetAutoPlay((String) args.get("playerId")));
                     break;
@@ -535,8 +563,8 @@ public class AgoraRtcNgPlugin implements FlutterPlugin, MethodChannel.MethodCall
                     break;
                 case "rtePlayerSetJsonParameter":
                     String playerIdForJsonParam = (String) args.get("playerId");
-                    String jsonParameter = (String) args.get("jsonParameter");
-                    result.success(rteController.playerSetJsonParameter(playerIdForJsonParam, jsonParameter));
+                    String playerJsonParameter = (String) args.get("jsonParameter");
+                    result.success(rteController.playerSetJsonParameter(playerIdForJsonParam, playerJsonParameter));
                     break;
                 case "rtePlayerGetAbrSubscriptionLayer":
                     result.success(rteController.playerGetAbrSubscriptionLayer((String) args.get("playerId")));
