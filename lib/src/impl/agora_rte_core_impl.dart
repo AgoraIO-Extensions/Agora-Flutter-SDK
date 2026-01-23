@@ -1,7 +1,7 @@
 import 'dart:async';
+import 'package:agora_rtc_engine/agora_rte_engine.dart';
 import 'package:agora_rtc_engine/src/agora_rte.dart';
 import 'package:flutter/services.dart';
-import 'agora_rte_config_impl.dart';
 import 'agora_rte_player_impl.dart';
 import 'agora_rte_canvas_impl.dart';
 
@@ -18,13 +18,8 @@ class AgoraRteCoreImpl {
   AgoraRteCoreImpl._internal() {
     _channel.setMethodCallHandler(_handleMethodCall);
   }
-
-  final AgoraRteConfigImpl _config = AgoraRteConfigImpl();
   final Map<String, AgoraRtePlayerImpl> _players = {};
   final Map<String, AgoraRteCanvasImpl> _canvases = {};
-
-  /// Get configuration manager
-  AgoraRteConfigImpl get config => _config;
 
   /// Get player instance
   AgoraRtePlayerImpl? getPlayer(String playerId) => _players[playerId];
@@ -90,16 +85,8 @@ class AgoraRteCoreImpl {
 
   /// Get all configurations
   Future<AgoraRteConfig> getConfigs() async {
-    final Map result = await _channel.invokeMethod('rteGetConfigs');
-    return AgoraRteConfig(
-      appId: result['appId'],
-      logFolder: result['logFolder'],
-      logFileSize: result['logFileSize'],
-      areaCode: result['areaCode'],
-      cloudProxy: result['cloudProxy'],
-      jsonParameter: result['jsonParameter'],
-      useStringUid: result['useStringUid'],
-    );
+    Map<String, dynamic> result = await _channel.invokeMethod('rteGetConfigs');
+    return AgoraRteConfig.fromJson(result);
   }
 
   /// Create player
@@ -134,7 +121,6 @@ class AgoraRteCoreImpl {
 
   /// Preload URL
   static Future<void> preloadWithUrl(String url) async {
-    const channel = MethodChannel('agora_rtc_ng');
-    await channel.invokeMethod('rtePlayerPreloadWithUrl', {'url': url});
+    await _channel.invokeMethod('rtePlayerPreloadWithUrl', {'url': url});
   }
 }

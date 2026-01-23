@@ -34,15 +34,12 @@ import 'set_content_inspect/set_content_inspect.dart';
 import 'start_rhythm_player/start_rhythm_player.dart';
 import 'voice_changer/voice_changer.dart';
 import 'rte_player/rte_player.dart';
-import 'rte_config/rte_config.dart';
 
 /// Data source for advanced examples
 final advanced = [
   {'name': 'Advanced'},
   if (!kIsWeb && (Platform.isAndroid || Platform.isIOS))
     {'name': 'RtePlayer', 'widget': const RtePlayerExample()},
-  if (!kIsWeb && (Platform.isAndroid || Platform.isIOS))
-    {'name': 'RteConfig', 'widget': const RteConfigExample()},
   if (!kIsWeb)
     {'name': 'AudioEffectMixing', 'widget': const AudioEffectMixing()},
   if (!kIsWeb)

@@ -1,8 +1,8 @@
-import 'package:agora_rtc_engine/agora_rtc_engine.dart';
+import 'package:agora_rtc_engine/agora_rte_engine.dart';
 import 'package:flutter/material.dart';
 
 class RtePlayerConfigTab extends StatefulWidget {
-  final AgoraRtePlayerImpl? player;
+  final AgoraRtePlayer? player;
   final Function(String) onLog;
   final Function(int)? onPlaybackSpeedChanged;
   final Function(int)? onVolumeChanged;
@@ -56,48 +56,32 @@ class _RtePlayerConfigTabState extends State<RtePlayerConfigTab> {
   Future<void> _loadPlayerConfig() async {
     if (widget.player == null) return;
     try {
-      final autoPlay = await widget.player!.getAutoPlay();
-      final playbackSpeed = await widget.player!.getPlaybackSpeed();
-      final playoutVolume = await widget.player!.getPlayoutVolume();
-      final loopCount = await widget.player!.getLoopCount();
-      final playoutAudioTrackIdx = await widget.player!.getPlayoutAudioTrackIdx();
-      final publishAudioTrackIdx = await widget.player!.getPublishAudioTrackIdx();
-      final audioTrackIdx = await widget.player!.getAudioTrackIdx();
-      final subtitleTrackIdx = await widget.player!.getSubtitleTrackIdx();
-      final externalSubtitleTrackIdx =
-          await widget.player!.getExternalSubtitleTrackIdx();
-      final audioPitch = await widget.player!.getAudioPitch();
-      final audioPlaybackDelay = await widget.player!.getAudioPlaybackDelay();
-      final audioDualMonoMode = await widget.player!.getAudioDualMonoMode();
-      final publishVolume = await widget.player!.getPublishVolume();
-      final jsonParameter = await widget.player!.getJsonParameter();
-      final abrSubscriptionLayer =
-          await widget.player!.getAbrSubscriptionLayer();
-      final abrFallbackLayer = await widget.player!.getAbrFallbackLayer();
-      
+      final rtePlayerConfig = await widget.player!.getConfigs();
       if (mounted) {
         setState(() {
-          _autoPlay = autoPlay;
-          _playbackSpeed = playbackSpeed;
-          _volume = playoutVolume;
-          _loopCount = loopCount;
-          _playoutAudioTrackIdx = playoutAudioTrackIdx;
-          _publishAudioTrackIdx = publishAudioTrackIdx;
-          _audioTrackIdx = audioTrackIdx;
-          _subtitleTrackIdx = subtitleTrackIdx;
-          _externalSubtitleTrackIdx = externalSubtitleTrackIdx;
-          _audioPitch = audioPitch;
-          _audioPlaybackDelay = audioPlaybackDelay;
-          _audioDualMonoMode = audioDualMonoMode;
-          _publishVolume = publishVolume;
-          _playerJsonParameter = jsonParameter;
-          _abrSubscriptionLayer = abrSubscriptionLayer;
-          _abrFallbackLayer = abrFallbackLayer;
+          _autoPlay = rtePlayerConfig.autoPlay ?? false;
+          _playbackSpeed = rtePlayerConfig.playbackSpeed ?? 100;
+          _volume = rtePlayerConfig.playoutVolume ?? 100;
+          _loopCount = rtePlayerConfig.loopCount ?? 0;
+          _playoutAudioTrackIdx = rtePlayerConfig.playoutAudioTrackIdx ?? 0;
+          _publishAudioTrackIdx = rtePlayerConfig.publishAudioTrackIdx ?? 0;
+          _audioTrackIdx = rtePlayerConfig.audioTrackIdx ?? 0;
+          _subtitleTrackIdx = rtePlayerConfig.subtitleTrackIdx ?? 0;
+          _externalSubtitleTrackIdx =
+              rtePlayerConfig.externalSubtitleTrackIdx ?? 0;
+          _audioPitch = rtePlayerConfig.audioPitch ?? 0;
+          _audioPlaybackDelay = rtePlayerConfig.audioPlaybackDelay ?? 0;
+          _audioDualMonoMode = rtePlayerConfig.audioDualMonoMode ?? 0;
+          _publishVolume = rtePlayerConfig.publishVolume ?? 100;
+          _playerJsonParameter = rtePlayerConfig.jsonParameter ?? '';
+          _abrSubscriptionLayer = rtePlayerConfig.abrSubscriptionLayer ??
+              AgoraRteAbrSubscriptionLayer.high;
+          _abrFallbackLayer = rtePlayerConfig.abrFallbackLayer ??
+              AgoraRteAbrFallbackLayer.disabled;
         });
         
-        // Notify parent about initial values if needed
-        widget.onPlaybackSpeedChanged?.call(playbackSpeed);
-        widget.onVolumeChanged?.call(playoutVolume);
+        widget.onPlaybackSpeedChanged?.call(_playbackSpeed);
+        widget.onVolumeChanged?.call(_volume);
       }
     } catch (e) {
       widget.onLog('Load Player config error: $e');
@@ -107,7 +91,7 @@ class _RtePlayerConfigTabState extends State<RtePlayerConfigTab> {
   Future<void> _setPlayerAutoPlay(bool value) async {
     if (widget.player == null) return;
     try {
-      await widget.player!.setAutoPlay(value);
+      await widget.player!.setConfigs(AgoraRtePlayerConfig(autoPlay: value));
       await _loadPlayerConfig();
       widget.onLog('Set AutoPlay: $value');
     } catch (e) {
@@ -118,7 +102,8 @@ class _RtePlayerConfigTabState extends State<RtePlayerConfigTab> {
   Future<void> _setPlayerPlaybackSpeed(int speed) async {
     if (widget.player == null) return;
     try {
-      await widget.player!.setPlaybackSpeed(speed);
+      await widget.player!
+          .setConfigs(AgoraRtePlayerConfig(playbackSpeed: speed));
       setState(() {
         _playbackSpeed = speed;
       });
@@ -132,7 +117,8 @@ class _RtePlayerConfigTabState extends State<RtePlayerConfigTab> {
   Future<void> _setPlayerPlayoutVolume(int volume) async {
     if (widget.player == null) return;
     try {
-      await widget.player!.setPlayoutVolume(volume);
+      await widget.player!
+          .setConfigs(AgoraRtePlayerConfig(playoutVolume: volume));
       setState(() {
         _volume = volume;
       });
@@ -146,7 +132,7 @@ class _RtePlayerConfigTabState extends State<RtePlayerConfigTab> {
   Future<void> _setPlayerLoopCount(int count) async {
     if (widget.player == null) return;
     try {
-      await widget.player!.setLoopCount(count);
+      await widget.player!.setConfigs(AgoraRtePlayerConfig(loopCount: count));
       setState(() {
         _loopCount = count;
       });
@@ -159,7 +145,8 @@ class _RtePlayerConfigTabState extends State<RtePlayerConfigTab> {
   Future<void> _setPlayerPlayoutAudioTrackIdx(int idx) async {
     if (widget.player == null) return;
     try {
-      await widget.player!.setPlayoutAudioTrackIdx(idx);
+      await widget.player!
+          .setConfigs(AgoraRtePlayerConfig(playoutAudioTrackIdx: idx));
       await _loadPlayerConfig();
       widget.onLog('Set PlayoutAudioTrackIdx: $idx');
     } catch (e) {
@@ -170,7 +157,8 @@ class _RtePlayerConfigTabState extends State<RtePlayerConfigTab> {
   Future<void> _setPlayerPublishAudioTrackIdx(int idx) async {
     if (widget.player == null) return;
     try {
-      await widget.player!.setPublishAudioTrackIdx(idx);
+      await widget.player!
+          .setConfigs(AgoraRtePlayerConfig(publishAudioTrackIdx: idx));
       await _loadPlayerConfig();
       widget.onLog('Set PublishAudioTrackIdx: $idx');
     } catch (e) {
@@ -181,7 +169,7 @@ class _RtePlayerConfigTabState extends State<RtePlayerConfigTab> {
   Future<void> _setPlayerAudioTrackIdx(int idx) async {
     if (widget.player == null) return;
     try {
-      await widget.player!.setAudioTrackIdx(idx);
+      await widget.player!.setConfigs(AgoraRtePlayerConfig(audioTrackIdx: idx));
       await _loadPlayerConfig();
       widget.onLog('Set AudioTrackIdx: $idx');
     } catch (e) {
@@ -192,7 +180,8 @@ class _RtePlayerConfigTabState extends State<RtePlayerConfigTab> {
   Future<void> _setPlayerSubtitleTrackIdx(int idx) async {
     if (widget.player == null) return;
     try {
-      await widget.player!.setSubtitleTrackIdx(idx);
+      await widget.player!
+          .setConfigs(AgoraRtePlayerConfig(subtitleTrackIdx: idx));
       await _loadPlayerConfig();
       widget.onLog('Set SubtitleTrackIdx: $idx');
     } catch (e) {
@@ -203,7 +192,8 @@ class _RtePlayerConfigTabState extends State<RtePlayerConfigTab> {
   Future<void> _setPlayerExternalSubtitleTrackIdx(int idx) async {
     if (widget.player == null) return;
     try {
-      await widget.player!.setExternalSubtitleTrackIdx(idx);
+      await widget.player!
+          .setConfigs(AgoraRtePlayerConfig(externalSubtitleTrackIdx: idx));
       await _loadPlayerConfig();
       widget.onLog('Set ExternalSubtitleTrackIdx: $idx');
     } catch (e) {
@@ -214,7 +204,7 @@ class _RtePlayerConfigTabState extends State<RtePlayerConfigTab> {
   Future<void> _setPlayerAudioPitch(int pitch) async {
     if (widget.player == null) return;
     try {
-      await widget.player!.setAudioPitch(pitch);
+      await widget.player!.setConfigs(AgoraRtePlayerConfig(audioPitch: pitch));
       await _loadPlayerConfig();
       widget.onLog('Set AudioPitch: $pitch');
     } catch (e) {
@@ -225,7 +215,8 @@ class _RtePlayerConfigTabState extends State<RtePlayerConfigTab> {
   Future<void> _setPlayerAudioPlaybackDelay(int delay) async {
     if (widget.player == null) return;
     try {
-      await widget.player!.setAudioPlaybackDelay(delay);
+      await widget.player!
+          .setConfigs(AgoraRtePlayerConfig(audioPlaybackDelay: delay));
       await _loadPlayerConfig();
       widget.onLog('Set AudioPlaybackDelay: $delay');
     } catch (e) {
@@ -236,7 +227,8 @@ class _RtePlayerConfigTabState extends State<RtePlayerConfigTab> {
   Future<void> _setPlayerAudioDualMonoMode(int mode) async {
     if (widget.player == null) return;
     try {
-      await widget.player!.setAudioDualMonoMode(mode);
+      await widget.player!
+          .setConfigs(AgoraRtePlayerConfig(audioDualMonoMode: mode));
       await _loadPlayerConfig();
       widget.onLog('Set AudioDualMonoMode: $mode');
     } catch (e) {
@@ -247,7 +239,8 @@ class _RtePlayerConfigTabState extends State<RtePlayerConfigTab> {
   Future<void> _setPlayerPublishVolume(int volume) async {
     if (widget.player == null) return;
     try {
-      await widget.player!.setPublishVolume(volume);
+      await widget.player!
+          .setConfigs(AgoraRtePlayerConfig(publishVolume: volume));
       await _loadPlayerConfig();
       widget.onLog('Set PublishVolume: $volume');
     } catch (e) {
@@ -258,7 +251,8 @@ class _RtePlayerConfigTabState extends State<RtePlayerConfigTab> {
   Future<void> _setPlayerJsonParameter(String param) async {
     if (widget.player == null) return;
     try {
-      await widget.player!.setJsonParameter(param);
+      await widget.player!
+          .setConfigs(AgoraRtePlayerConfig(jsonParameter: param));
       await _loadPlayerConfig();
       widget.onLog('Set Player JsonParameter: $param');
     } catch (e) {
@@ -270,7 +264,8 @@ class _RtePlayerConfigTabState extends State<RtePlayerConfigTab> {
       AgoraRteAbrSubscriptionLayer layer) async {
     if (widget.player == null) return;
     try {
-      await widget.player!.setAbrSubscriptionLayer(layer);
+      await widget.player!
+          .setConfigs(AgoraRtePlayerConfig(abrSubscriptionLayer: layer));
       await _loadPlayerConfig();
       widget.onLog('Set AbrSubscriptionLayer: ${layer.name}');
     } catch (e) {
@@ -282,7 +277,8 @@ class _RtePlayerConfigTabState extends State<RtePlayerConfigTab> {
       AgoraRteAbrFallbackLayer layer) async {
     if (widget.player == null) return;
     try {
-      await widget.player!.setAbrFallbackLayer(layer);
+      await widget.player!
+          .setConfigs(AgoraRtePlayerConfig(abrFallbackLayer: layer));
       await _loadPlayerConfig();
       widget.onLog('Set AbrFallbackLayer: ${layer.name}');
     } catch (e) {

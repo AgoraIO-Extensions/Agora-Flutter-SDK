@@ -1,8 +1,8 @@
-import 'package:agora_rtc_engine/agora_rtc_engine.dart';
+import 'package:agora_rtc_engine/agora_rte_engine.dart';
 import 'package:flutter/material.dart';
 
 class RteConfigTab extends StatefulWidget {
-  final AgoraRteImpl rte;
+  final AgoraRte rte;
   final Function(String) onLog;
 
   const RteConfigTab({
@@ -23,7 +23,6 @@ class _RteConfigTabState extends State<RteConfigTab> {
   String _cloudProxy = '';
   String _jsonParameter = '';
   bool _useStringUid = false;
-
   @override
   void initState() {
     super.initState();
@@ -56,102 +55,8 @@ class _RteConfigTabState extends State<RteConfigTab> {
       widget.onLog('Loaded RTE config using getConfigs()');
     } catch (e) {
       widget.onLog('Load RTE config error: $e');
-      // Fallback to individual getters
-      try {
-        final appId = await widget.rte.appId();
-        final logFolder = await widget.rte.logFolder();
-        final logFileSize = await widget.rte.logFileSize();
-        final areaCode = await widget.rte.areaCode();
-        final cloudProxy = await widget.rte.cloudProxy();
-        final jsonParameter = await widget.rte.jsonParameter();
-        final useStringUid = await widget.rte.useStringUid();
-        if (mounted) {
-          setState(() {
-            _appId = appId;
-            _logFolder = logFolder;
-            _logFileSize = logFileSize;
-            _areaCode = areaCode;
-            _cloudProxy = cloudProxy;
-            _jsonParameter = jsonParameter;
-            _useStringUid = useStringUid;
-          });
-        }
-      } catch (e2) {
-        widget.onLog('Load RTE config (fallback) error: $e2');
-      }
     }
   }
-
-  Future<void> _setRteAppId(String appId) async {
-    try {
-      await widget.rte.config.setAppId(appId);
-      await _loadRteConfig();
-      widget.onLog('Set RTE AppId: $appId');
-    } catch (e) {
-      widget.onLog('Set AppId error: $e');
-    }
-  }
-
-  Future<void> _setRteLogFolder(String folder) async {
-    try {
-      await widget.rte.config.setLogFolder(folder);
-      await _loadRteConfig();
-      widget.onLog('Set RTE LogFolder: $folder');
-    } catch (e) {
-      widget.onLog('Set LogFolder error: $e');
-    }
-  }
-
-  Future<void> _setRteLogFileSize(int size) async {
-    try {
-      await widget.rte.config.setLogFileSize(size);
-      await _loadRteConfig();
-      widget.onLog('Set RTE LogFileSize: $size');
-    } catch (e) {
-      widget.onLog('Set LogFileSize error: $e');
-    }
-  }
-
-  Future<void> _setRteAreaCode(int code) async {
-    try {
-      await widget.rte.config.setAreaCode(code);
-      await _loadRteConfig();
-      widget.onLog('Set RTE AreaCode: $code');
-    } catch (e) {
-      widget.onLog('Set AreaCode error: $e');
-    }
-  }
-
-  Future<void> _setRteCloudProxy(String proxy) async {
-    try {
-      await widget.rte.config.setCloudProxy(proxy);
-      await _loadRteConfig();
-      widget.onLog('Set RTE CloudProxy: $proxy');
-    } catch (e) {
-      widget.onLog('Set CloudProxy error: $e');
-    }
-  }
-
-  Future<void> _setRteJsonParameter(String param) async {
-    try {
-      await widget.rte.config.setJsonParameter(param);
-      await _loadRteConfig();
-      widget.onLog('Set RTE JsonParameter: $param');
-    } catch (e) {
-      widget.onLog('Set JsonParameter error: $e');
-    }
-  }
-
-  Future<void> _setRteUseStringUid(bool value) async {
-    try {
-      await widget.rte.config.setUseStringUid(value);
-      await _loadRteConfig();
-      widget.onLog('Set RTE UseStringUid: $value');
-    } catch (e) {
-      widget.onLog('Set UseStringUid error: $e');
-    }
-  }
-
   /// Example: Using setConfigs() to set multiple configs at once
   Future<void> _setRteConfigsBatch() async {
     try {
@@ -184,21 +89,46 @@ class _RteConfigTabState extends State<RteConfigTab> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               _buildConfigItem(
-                  'App ID', _appId, (value) => _setRteAppId(value)),
+                  'App ID', _appId, (value) async {
+                await widget.rte.setConfigs(AgoraRteConfig(appId: value));
+                await _loadRteConfig();
+              }),
               _buildConfigItem(
-                  'Log Folder', _logFolder, (value) => _setRteLogFolder(value)),
+                  'Log Folder', _logFolder, (value) async {
+                await widget.rte.setConfigs(AgoraRteConfig(logFolder: value));
+                await _loadRteConfig();
+              }),
               _buildConfigItem('Log File Size', '$_logFileSize',
-                  (value) => _setRteLogFileSize(int.tryParse(value) ?? 0)),
+                  (value) async {
+                await widget.rte.setConfigs(
+                    AgoraRteConfig(logFileSize: int.tryParse(value) ?? 0));
+                await _loadRteConfig();
+              }),
               _buildConfigItem('Area Code', '$_areaCode',
-                  (value) => _setRteAreaCode(int.tryParse(value) ?? 0)),
+                  (value) async {
+                await widget.rte.setConfigs(
+                    AgoraRteConfig(areaCode: int.tryParse(value) ?? 0));
+                await _loadRteConfig();
+              }),
               _buildConfigItem('Cloud Proxy', _cloudProxy,
-                  (value) => _setRteCloudProxy(value)),
+                  (value) async {
+                await widget.rte.setConfigs(AgoraRteConfig(cloudProxy: value));
+                await _loadRteConfig();
+              }),
               _buildConfigItem('JSON Parameter', _jsonParameter,
-                  (value) => _setRteJsonParameter(value)),
+                  (value) async {
+                await widget.rte
+                    .setConfigs(AgoraRteConfig(jsonParameter: value));
+                await _loadRteConfig();
+              }),
               SwitchListTile(
                 title: const Text('Use String UID'),
                 value: _useStringUid,
-                onChanged: _setRteUseStringUid,
+                onChanged: (value) async {
+                  await widget.rte
+                      .setConfigs(AgoraRteConfig(useStringUid: value));
+                  await _loadRteConfig();
+                },
               ),
               const SizedBox(height: 16),
               ElevatedButton(
@@ -217,7 +147,8 @@ class _RteConfigTabState extends State<RteConfigTab> {
     );
   }
 
-  Widget _buildConfigItem(String label, String value, Function(String) onSave) {
+  Widget _buildConfigItem(
+      String label, String value, Future<void> Function(String) onSave) {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 8.0),
       child: Row(

@@ -1,4 +1,4 @@
-import 'package:agora_rtc_engine/agora_rtc_engine.dart';
+import 'package:agora_rtc_engine/agora_rte_engine.dart';
 import 'package:flutter/material.dart';
 
 class RteInfoLogView extends StatefulWidget {
@@ -72,18 +72,19 @@ class _RteInfoLogViewState extends State<RteInfoLogView> {
                       const Text('Player Info:',
                           style: TextStyle(fontWeight: FontWeight.bold)),
                       Text(
-                          'State: ${AgoraRtePlayerState.values[playerInfo.state].name}'),
-                      Text('Duration: ${_formatTime(playerInfo.duration)}'),
+                          'State: ${AgoraRtePlayerState.values[playerInfo.state ?? 0].name}'),
+                      Text(
+                          'Duration: ${_formatTime(playerInfo.duration ?? 0)}'),
                       Text('Stream Count: ${playerInfo.streamCount}'),
                       Text('Has Audio: ${playerInfo.hasAudio}'),
                       Text('Has Video: ${playerInfo.hasVideo}'),
                       Text('Audio Muted: ${playerInfo.isAudioMuted}'),
                       Text('Video Muted: ${playerInfo.isVideoMuted}'),
-                      if (playerInfo.videoWidth > 0 &&
-                          playerInfo.videoHeight > 0)
+                      if ((playerInfo.videoWidth ?? 0) > 0 &&
+                          (playerInfo.videoHeight ?? 0) > 0)
                         Text(
                             'Video Size: ${playerInfo.videoWidth}x${playerInfo.videoHeight}'),
-                      if (playerInfo.currentUrl.isNotEmpty)
+                      if ((playerInfo.currentUrl ?? '').isNotEmpty)
                         Text('Current URL: ${playerInfo.currentUrl}'),
                     ],
                   ),

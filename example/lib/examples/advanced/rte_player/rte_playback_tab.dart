@@ -1,38 +1,38 @@
-import 'package:agora_rtc_engine/agora_rtc_engine.dart';
+import 'package:agora_rtc_engine/agora_rte_engine.dart';
 import 'package:flutter/material.dart';
 
 class RtePlaybackTab extends StatefulWidget {
-  final AgoraRtePlayerImpl? player;
-  final AgoraRteCanvasImpl? canvas;
-  final bool isReady;
-  final String infoText;
-  final int width;
-  final int height;
-  final int currentPosition;
-  final int duration;
-  final int playbackSpeed;
-  final int volume;
-  final int audioVolume;
-  final Function(String) onLog;
-  final Function(int) onVolumeChanged;
-  final Function(int) onPlaybackSpeedChanged;
+  final AgoraRtePlayer? player;
+  final AgoraRteCanvas? canvas;
+  final bool? isReady;
+  final String? infoText;
+  final int? width;
+  final int? height;
+  final int? currentPosition;
+  final int? duration;
+  final int? playbackSpeed;
+  final int? volume;
+  final int? audioVolume;
+  final Function(String)? onLog;
+  final Function(int)? onVolumeChanged;
+  final Function(int)? onPlaybackSpeedChanged;
 
   const RtePlaybackTab({
     Key? key,
     this.player,
     this.canvas,
-    required this.isReady,
-    required this.infoText,
-    required this.width,
-    required this.height,
-    required this.currentPosition,
-    required this.duration,
-    required this.playbackSpeed,
-    required this.volume,
-    required this.audioVolume,
-    required this.onLog,
-    required this.onVolumeChanged,
-    required this.onPlaybackSpeedChanged,
+    this.isReady,
+    this.infoText,
+    this.width,
+    this.height,
+    this.currentPosition,
+    this.duration,
+    this.playbackSpeed,
+    this.volume,
+    this.audioVolume,
+    this.onLog,
+    this.onVolumeChanged,
+    this.onPlaybackSpeedChanged,
   }) : super(key: key);
 
   @override
@@ -64,39 +64,39 @@ class _RtePlaybackTabState extends State<RtePlaybackTab> {
 
     final url = _urlController.text.trim();
     if (url.isEmpty) {
-      widget.onLog('Error: URL is empty');
+      widget.onLog?.call('Error: URL is empty');
       return;
     }
 
     try {
-      widget.onLog('Opening URL: $url');
+      widget.onLog?.call('Opening URL: $url');
       await widget.player!.openWithUrl(url, 0);
     } catch (e) {
-      widget.onLog('Open error: $e');
+      widget.onLog?.call('Open error: $e');
     }
   }
 
-  Future<void> _onPreloadUrl() async {
-    final url = _preloadUrlController.text.trim();
-    if (url.isEmpty || !url.startsWith('rte://')) {
-      widget.onLog('Error: Invalid preload URL');
-      return;
-    }
-    try {
-      await AgoraRteImpl.preloadWithUrl(url);
-      widget.onLog('Preload URL: $url');
-    } catch (e) {
-      widget.onLog('Preload URL error: $e');
-    }
-  }
+  // Future<void> _onPreloadUrl() async {
+  //   final url = _preloadUrlController.text.trim();
+  //   if (url.isEmpty || !url.startsWith('rte://')) {
+  //     widget.onLog('Error: Invalid preload URL');
+  //     return;
+  //   }
+  //   try {
+  //     await AgoraRteImpl.preloadWithUrl(url);
+  //     widget.onLog('Preload URL: $url');
+  //   } catch (e) {
+  //     widget.onLog('Preload URL error: $e');
+  //   }
+  // }
 
   Future<void> _onSwitchUrl() async {
     if (widget.player == null) return;
     try {
       await widget.player!.switchWithUrl(_switchUrlController.text, true);
-      widget.onLog('Switch URL to ${_switchUrlController.text}');
+      widget.onLog?.call('Switch URL to ${_switchUrlController.text}');
     } catch (e) {
-      widget.onLog('Switch URL error: $e');
+      widget.onLog?.call('Switch URL error: $e');
     }
   }
 
@@ -104,9 +104,9 @@ class _RtePlaybackTabState extends State<RtePlaybackTab> {
     if (widget.player == null) return;
     try {
       await widget.player!.seek(value.toInt());
-      widget.onLog('Seek to ${value.toInt()}ms');
+      widget.onLog?.call('Seek to ${value.toInt()}ms');
     } catch (e) {
-      widget.onLog('Seek error: $e');
+      widget.onLog?.call('Seek error: $e');
     }
   }
 
@@ -117,9 +117,9 @@ class _RtePlaybackTabState extends State<RtePlaybackTab> {
       setState(() {
         _isAudioMuted = !_isAudioMuted;
       });
-      widget.onLog('Audio ${_isAudioMuted ? 'muted' : 'unmuted'}');
+      widget.onLog?.call('Audio ${_isAudioMuted ? 'muted' : 'unmuted'}');
     } catch (e) {
-      widget.onLog('Mute audio error: $e');
+      widget.onLog?.call('Mute audio error: $e');
     }
   }
 
@@ -130,31 +130,33 @@ class _RtePlaybackTabState extends State<RtePlaybackTab> {
       setState(() {
         _isVideoMuted = !_isVideoMuted;
       });
-      widget.onLog('Video ${_isVideoMuted ? 'muted' : 'unmuted'}');
+      widget.onLog?.call('Video ${_isVideoMuted ? 'muted' : 'unmuted'}');
     } catch (e) {
-      widget.onLog('Mute video error: $e');
+      widget.onLog?.call('Mute video error: $e');
     }
   }
 
   Future<void> _setPlayerPlaybackSpeed(int speed) async {
     if (widget.player == null) return;
     try {
-      await widget.player!.setPlaybackSpeed(speed);
-      widget.onPlaybackSpeedChanged(speed);
-      widget.onLog('Set PlaybackSpeed: ${speed / 100.0}x');
+      await widget.player!
+          .setConfigs(AgoraRtePlayerConfig(playbackSpeed: speed));
+      widget.onPlaybackSpeedChanged?.call(speed);
+      widget.onLog?.call('Set PlaybackSpeed: ${speed / 100.0}x');
     } catch (e) {
-      widget.onLog('Set PlaybackSpeed error: $e');
+      widget.onLog?.call('Set PlaybackSpeed error: $e');
     }
   }
 
   Future<void> _setPlayerPlayoutVolume(int volume) async {
     if (widget.player == null) return;
     try {
-      await widget.player!.setPlayoutVolume(volume);
-      widget.onVolumeChanged(volume);
-      widget.onLog('Set PlayoutVolume: $volume');
+      await widget.player!
+          .setConfigs(AgoraRtePlayerConfig(playoutVolume: volume));
+      widget.onVolumeChanged?.call(volume);
+      widget.onLog?.call('Set PlayoutVolume: $volume');
     } catch (e) {
-      widget.onLog('Set PlayoutVolume error: $e');
+      widget.onLog?.call('Set PlayoutVolume error: $e');
     }
   }
 
@@ -200,7 +202,7 @@ class _RtePlaybackTabState extends State<RtePlaybackTab> {
               ),
             ),
             ElevatedButton(
-              onPressed: widget.isReady ? _onOpen : null,
+              onPressed: widget.isReady == true ? _onOpen : null,
               child: const Text('Open & Play'),
             ),
 
@@ -210,13 +212,13 @@ class _RtePlaybackTabState extends State<RtePlaybackTab> {
               color: Colors.black,
               child: Stack(
                 children: [
-                  if (widget.isReady && widget.canvas != null)
+                  if (widget.isReady == true && widget.canvas != null)
                     AgoraRteVideoView(
                       canvas: widget.canvas,
                       player: widget.player,
                       onLog: widget.onLog,
                       onViewCreated: () {
-                        widget.onLog('AgoraRteVideoView created');
+                        widget.onLog?.call('AgoraRteVideoView created');
                       },
                     )
                   else
@@ -229,7 +231,7 @@ class _RtePlaybackTabState extends State<RtePlaybackTab> {
                             style: const TextStyle(color: Colors.white),
                             textAlign: TextAlign.center,
                           ),
-                          if (widget.width > 0 && widget.height > 0)
+                          if (widget.width != null && widget.height != null)
                             Text(
                               '${widget.width}x${widget.height}',
                               style: const TextStyle(
@@ -243,23 +245,23 @@ class _RtePlaybackTabState extends State<RtePlaybackTab> {
             ),
 
             // Playback progress
-            if (widget.duration > 0) ...[
+            if (widget.duration != null && widget.duration! > 0) ...[
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 16.0),
                 child: Column(
                   children: [
                     Slider(
-                      value: widget.currentPosition.toDouble(),
+                      value: widget.currentPosition?.toDouble() ?? 0,
                       min: 0,
-                      max: widget.duration.toDouble(),
+                      max: widget.duration?.toDouble() ?? 0,
                       onChanged: _onSeek,
-                      label: _formatTime(widget.currentPosition),
+                      label: _formatTime(widget.currentPosition ?? 0),
                     ),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        Text(_formatTime(widget.currentPosition)),
-                        Text(_formatTime(widget.duration)),
+                        Text(_formatTime(widget.currentPosition ?? 0)),
+                        Text(_formatTime(widget.duration ?? 0)),
                       ],
                     ),
                   ],
@@ -274,7 +276,7 @@ class _RtePlaybackTabState extends State<RtePlaybackTab> {
                 IconButton(
                   onPressed: () {
                     widget.player?.play();
-                    widget.onLog('Play');
+                    widget.onLog?.call('Play');
                   },
                   icon: const Icon(Icons.play_arrow),
                   tooltip: 'Play',
@@ -282,7 +284,7 @@ class _RtePlaybackTabState extends State<RtePlaybackTab> {
                 IconButton(
                   onPressed: () {
                     widget.player?.pause();
-                    widget.onLog('Pause');
+                    widget.onLog?.call('Pause');
                   },
                   icon: const Icon(Icons.pause),
                   tooltip: 'Pause',
@@ -290,7 +292,7 @@ class _RtePlaybackTabState extends State<RtePlaybackTab> {
                 IconButton(
                   onPressed: () {
                     widget.player?.stop();
-                    widget.onLog('Stop');
+                    widget.onLog?.call('Stop');
                   },
                   icon: const Icon(Icons.stop),
                   tooltip: 'Stop',
@@ -316,7 +318,8 @@ class _RtePlaybackTabState extends State<RtePlaybackTab> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text('Playback Speed: ${widget.playbackSpeed / 100.0}x'),
+                  Text(
+                      'Playback Speed: ${(widget.playbackSpeed ?? 100) / 100.0}x'),
                   Wrap(
                     spacing: 8.0,
                     children: [
@@ -348,17 +351,17 @@ class _RtePlaybackTabState extends State<RtePlaybackTab> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text('Volume: ${widget.volume}'),
+                  Text('Volume: ${widget.volume ?? 100}'),
                   Slider(
-                    value: widget.volume.toDouble(),
+                    value: (widget.volume ?? 100).toDouble(),
                     min: 0,
                     max: 100,
                     divisions: 10,
-                    label: '${widget.volume}',
+                    label: '${widget.volume ?? 100}',
                     onChanged: (value) =>
                         _setPlayerPlayoutVolume(value.toInt()),
                   ),
-                  if (widget.audioVolume > 0)
+                  if ((widget.audioVolume ?? 0) > 0)
                     Text('Audio Volume Indication: ${widget.audioVolume}',
                         style:
                             const TextStyle(fontSize: 12, color: Colors.grey)),
@@ -367,33 +370,33 @@ class _RtePlaybackTabState extends State<RtePlaybackTab> {
             ),
 
             // Preload URL
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Row(
-                    children: [
-                      Expanded(
-                        child: TextField(
-                          controller: _preloadUrlController,
-                          decoration: const InputDecoration(
-                            labelText: 'Preload URL',
-                            hintText: 'rte://channel_id?token=xxx&uid=xxx',
-                            border: OutlineInputBorder(),
-                            isDense: true,
-                          ),
-                        ),
-                      ),
-                      ElevatedButton(
-                        onPressed: _onPreloadUrl,
-                        child: const Text('Preload'),
-                      ),
-                    ],
-                  ),
-                ],
-              ),
-            ),
+            // Padding(
+            //   padding: const EdgeInsets.all(8.0),
+            //   child: Column(
+            //     crossAxisAlignment: CrossAxisAlignment.start,
+            //     children: [
+            //       Row(
+            //         children: [
+            //           Expanded(
+            //             child: TextField(
+            //               controller: _preloadUrlController,
+            //               decoration: const InputDecoration(
+            //                 labelText: 'Preload URL',
+            //                 hintText: 'rte://channel_id?token=xxx&uid=xxx',
+            //                 border: OutlineInputBorder(),
+            //                 isDense: true,
+            //               ),
+            //             ),
+            //           ),
+            //           ElevatedButton(
+            //             onPressed: _onPreloadUrl,
+            //             child: const Text('Preload'),
+            //           ),
+            //         ],
+            //       ),
+            //     ],
+            //   ),
+            // ),
 
             // Switch URL
             Padding(

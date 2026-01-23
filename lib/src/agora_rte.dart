@@ -1,11 +1,12 @@
+import 'package:agora_rtc_engine/agora_rte_engine.dart';
 import 'package:flutter/foundation.dart';
 import 'agora_rte_enums.dart';
 /// Rectangle area
 class AgoraRteRect {
-  final int x;
-  final int y;
-  final int width;
-  final int height;
+  final int? x;
+  final int? y;
+  final int? width;
+  final int? height;
 
   const AgoraRteRect({
     this.x = 0,
@@ -40,120 +41,13 @@ class AgoraRteViewConfig {
       };
 }
 
-/// RTE configuration
-class AgoraRteConfig {
-  final String? appId;
-  final String? logFolder;
-  final int? logFileSize;
-  final int? areaCode;
-  final String? cloudProxy;
-  final String? jsonParameter;
-  final bool? useStringUid;
-
-  const AgoraRteConfig({
-    this.appId,
-    this.logFolder,
-    this.logFileSize,
-    this.areaCode,
-    this.cloudProxy,
-    this.jsonParameter,
-    this.useStringUid,
-  });
-
-  Map<String, dynamic> toJson() => {
-        'appId': appId,
-        'logFolder': logFolder,
-        'logFileSize': logFileSize,
-        'areaCode': areaCode,
-        'cloudProxy': cloudProxy,
-        'jsonParameter': jsonParameter,
-        'useStringUid': useStringUid,
-      };
-}
-
-/// Player configuration
-class AgoraRtePlayerConfig {
-  final bool? autoPlay;
-  final int? playbackSpeed;
-  final int? playoutAudioTrackIdx;
-  final int? publishAudioTrackIdx;
-  final int? audioTrackIdx;
-  final int? subtitleTrackIdx;
-  final int? externalSubtitleTrackIdx;
-  final int? audioPitch;
-  final int? playoutVolume;
-  final int? audioPlaybackDelay;
-  final int? audioDualMonoMode;
-  final int? publishVolume;
-  final int? loopCount;
-  final String? jsonParameter;
-  final AgoraRteAbrSubscriptionLayer? abrSubscriptionLayer;
-  final AgoraRteAbrFallbackLayer? abrFallbackLayer;
-
-  const AgoraRtePlayerConfig({
-    this.autoPlay,
-    this.playbackSpeed,
-    this.playoutAudioTrackIdx,
-    this.publishAudioTrackIdx,
-    this.audioTrackIdx,
-    this.subtitleTrackIdx,
-    this.externalSubtitleTrackIdx,
-    this.audioPitch,
-    this.playoutVolume,
-    this.audioPlaybackDelay,
-    this.audioDualMonoMode,
-    this.publishVolume,
-    this.loopCount,
-    this.jsonParameter,
-    this.abrSubscriptionLayer,
-    this.abrFallbackLayer,
-  });
-
-  Map<String, dynamic> toJson() => {
-        'autoPlay': autoPlay,
-        'playbackSpeed': playbackSpeed,
-        'playoutAudioTrackIdx': playoutAudioTrackIdx,
-        'publishAudioTrackIdx': publishAudioTrackIdx,
-        'audioTrackIdx': audioTrackIdx,
-        'subtitleTrackIdx': subtitleTrackIdx,
-        'externalSubtitleTrackIdx': externalSubtitleTrackIdx,
-        'audioPitch': audioPitch,
-        'playoutVolume': playoutVolume,
-        'audioPlaybackDelay': audioPlaybackDelay,
-        'audioDualMonoMode': audioDualMonoMode,
-        'publishVolume': publishVolume,
-        'loopCount': loopCount,
-        'jsonParameter': jsonParameter,
-        'abrSubscriptionLayer': abrSubscriptionLayer?.index,
-        'abrFallbackLayer': abrFallbackLayer?.index,
-      };
-}
-
-/// Canvas configuration
-class AgoraRteCanvasConfig {
-  final AgoraRteVideoRenderMode? videoRenderMode;
-  final AgoraRteVideoMirrorMode? videoMirrorMode;
-  final AgoraRteRect? cropArea;
-
-  const AgoraRteCanvasConfig({
-    this.videoRenderMode,
-    this.videoMirrorMode,
-    this.cropArea,
-  });
-
-  Map<String, dynamic> toJson() => {
-        'videoRenderMode': videoRenderMode?.index,
-        'videoMirrorMode': videoMirrorMode?.index,
-        'cropArea': cropArea?.toJson(),
-      };
-}
 
 /// Player statistics
 class AgoraRtePlayerStats {
-  final int videoDecodeFrameRate;
-  final int videoRenderFrameRate;
-  final int videoBitrate;
-  final int audioBitrate;
+  final int? videoDecodeFrameRate;
+  final int? videoRenderFrameRate;
+  final int? videoBitrate;
+  final int? audioBitrate;
 
   const AgoraRtePlayerStats({
     this.videoDecodeFrameRate = 0,
@@ -173,20 +67,20 @@ class AgoraRtePlayerStats {
 
 /// Player information
 class AgoraRtePlayerInfo {
-  final int state;
-  final int duration;
-  final int streamCount;
-  final bool hasAudio;
-  final bool hasVideo;
-  final bool isAudioMuted;
-  final bool isVideoMuted;
-  final int videoHeight;
-  final int videoWidth;
-  final AgoraRteAbrSubscriptionLayer abrSubscriptionLayer;
-  final int audioSampleRate;
-  final int audioChannels;
-  final int audioBitsPerSample;
-  final String currentUrl;
+  final int? state;
+  final int? duration;
+  final int? streamCount;
+  final bool? hasAudio;
+  final bool? hasVideo;
+  final bool? isAudioMuted;
+  final bool? isVideoMuted;
+  final int? videoHeight;
+  final int? videoWidth;
+  final AgoraRteAbrSubscriptionLayer? abrSubscriptionLayer;
+  final int? audioSampleRate;
+  final int? audioChannels;
+  final int? audioBitsPerSample;
+  final String? currentUrl;
 
   const AgoraRtePlayerInfo({
     this.state = 0,
@@ -242,19 +136,24 @@ abstract class AgoraRtePlayerObserver {
 
 /// RTE main interface
 abstract class AgoraRte {
-  Future<void> createFromBridge();
+  // Future<void> createFromBridge();
   Future<void> createWithConfig(AgoraRteConfig config);
   Future<void> initMediaEngine();
   Future<void> destroy();
   Future<void> setConfigs(AgoraRteConfig config);
   Future<AgoraRteConfig> getConfigs();
-  Future<String> appId();
-  Future<String> logFolder();
-  Future<int> logFileSize();
-  Future<int> areaCode();
-  Future<String> cloudProxy();
-  Future<String> jsonParameter();
-  Future<bool> useStringUid();
+
+  /// Create player
+  Future<AgoraRtePlayer> createPlayer(AgoraRtePlayerConfig config);
+
+  /// Destroy player
+  Future<void> destroyPlayer(String playerId);
+
+  /// Create canvas
+  Future<AgoraRteCanvas> createCanvas(AgoraRteCanvasConfig config);
+
+  /// Destroy canvas
+  Future<void> destroyCanvas(String canvasId);
 }
 
 /// RTE player interface
@@ -280,7 +179,6 @@ abstract class AgoraRtePlayer {
   Future<void> registerObserver(AgoraRtePlayerObserver observer);
   Future<void> unregisterObserver(AgoraRtePlayerObserver observer);
 }
-
 /// RTE canvas interface
 abstract class AgoraRteCanvas {
   String get canvasId;

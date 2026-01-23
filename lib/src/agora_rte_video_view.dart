@@ -1,4 +1,4 @@
-import 'package:agora_rtc_engine/agora_rtc_engine.dart';
+import 'package:agora_rtc_engine/agora_rte_engine.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
@@ -11,10 +11,10 @@ import 'package:flutter/services.dart';
 /// and automatically binds it to the provided canvas.
 class AgoraRteVideoView extends StatefulWidget {
   /// The RTE canvas to render video on
-  final AgoraRteCanvasImpl? canvas;
+  final AgoraRteCanvas? canvas;
 
   /// The RTE player that provides video content
-  final AgoraRtePlayerImpl? player;
+  final AgoraRtePlayer? player;
 
   /// Optional callback when the view is created
   final VoidCallback? onViewCreated;

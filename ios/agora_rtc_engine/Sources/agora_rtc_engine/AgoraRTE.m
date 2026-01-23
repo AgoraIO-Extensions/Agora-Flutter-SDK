@@ -20,8 +20,7 @@
 }
 
 - (BOOL)createWithConfig:(NSDictionary *)config error:(NSError **)error {
-    AgoraRteInitialConfig *initialConfig = [[AgoraRteInitialConfig alloc] init];
-    self.rteInstance = [[AgoraRte alloc] initWithInitialConfig:initialConfig];
+    self.rteInstance = [[AgoraRte alloc] initWithInitialConfig:nil];
     
     if (!self.rteInstance) {
         if (error) *error = RTE_NSERROR(-1, @"Failed to create RTE instance");

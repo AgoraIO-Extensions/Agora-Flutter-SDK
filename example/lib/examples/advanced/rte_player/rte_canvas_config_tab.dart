@@ -1,8 +1,8 @@
-import 'package:agora_rtc_engine/agora_rtc_engine.dart';
+import 'package:agora_rtc_engine/agora_rte_engine.dart';
 import 'package:flutter/material.dart';
 
 class RteCanvasConfigTab extends StatefulWidget {
-  final AgoraRteCanvasImpl? canvas;
+  final AgoraRteCanvas? canvas;
   final Function(String) onLog;
 
   const RteCanvasConfigTab({
@@ -37,14 +37,14 @@ class _RteCanvasConfigTabState extends State<RteCanvasConfigTab> {
   Future<void> _loadCanvasConfig() async {
     if (widget.canvas == null) return;
     try {
-      final videoRenderMode = await widget.canvas!.getVideoRenderMode();
-      final videoMirrorMode = await widget.canvas!.getVideoMirrorMode();
-      final cropArea = await widget.canvas!.getCropArea();
+      final rteCanvasConfig = await widget.canvas!.getConfigs();
       if (mounted) {
         setState(() {
-          _videoRenderMode = videoRenderMode;
-          _videoMirrorMode = videoMirrorMode;
-          _cropArea = cropArea;
+          _videoRenderMode =
+              rteCanvasConfig.videoRenderMode ?? AgoraRteVideoRenderMode.fit;
+          _videoMirrorMode =
+              rteCanvasConfig.videoMirrorMode ?? AgoraRteVideoMirrorMode.auto;
+          _cropArea = rteCanvasConfig.cropArea ?? const AgoraRteRect();
         });
       }
     } catch (e) {
@@ -55,7 +55,8 @@ class _RteCanvasConfigTabState extends State<RteCanvasConfigTab> {
   Future<void> _setCanvasVideoRenderMode(AgoraRteVideoRenderMode mode) async {
     if (widget.canvas == null) return;
     try {
-      await widget.canvas!.setVideoRenderMode(mode);
+      await widget.canvas!
+          .setConfigs(AgoraRteCanvasConfig(videoRenderMode: mode));
       setState(() {
         _videoRenderMode = mode;
       });
@@ -68,7 +69,8 @@ class _RteCanvasConfigTabState extends State<RteCanvasConfigTab> {
   Future<void> _setCanvasVideoMirrorMode(AgoraRteVideoMirrorMode mode) async {
     if (widget.canvas == null) return;
     try {
-      await widget.canvas!.setVideoMirrorMode(mode);
+      await widget.canvas!
+          .setConfigs(AgoraRteCanvasConfig(videoMirrorMode: mode));
       setState(() {
         _videoMirrorMode = mode;
       });
@@ -81,7 +83,7 @@ class _RteCanvasConfigTabState extends State<RteCanvasConfigTab> {
   Future<void> _setCanvasCropArea(AgoraRteRect rect) async {
     if (widget.canvas == null) return;
     try {
-      await widget.canvas!.setCropArea(rect);
+      await widget.canvas!.setConfigs(AgoraRteCanvasConfig(cropArea: rect));
       setState(() {
         _cropArea = rect;
       });
