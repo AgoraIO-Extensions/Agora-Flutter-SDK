@@ -3,7 +3,6 @@ package io.agora.agora_rtc_ng;
 import io.agora.rte.Rte;
 import io.agora.rte.InitialConfig;
 import io.agora.rte.Config;
-import io.agora.rte.Error;
 import io.agora.rte.callback.AsyncCallback;
 import io.agora.rte.exception.RteException;
 
@@ -26,8 +25,9 @@ public class AgoraRTE {
     public boolean getFromBridge() {
         try {
             rteInstance = Rte.getFromBridge();
-            return rteInstance != null;
+            return true;
         } catch (RteException e) {
+            rteInstance = null;
             return false;
         }
     }
@@ -39,13 +39,10 @@ public class AgoraRTE {
         InitialConfig initialConfig = new InitialConfig();
         rteInstance = new Rte(initialConfig);
         
-        if (rteInstance != null) {
-            if (configMap != null && !configMap.isEmpty()) {
-                return setConfigs(configMap);
-            }
-            return true;
+        if (configMap != null && !configMap.isEmpty()) {
+            return setConfigs(configMap);
         }
-        return false;
+        return true;
     }
 
     /**
@@ -93,7 +90,10 @@ public class AgoraRTE {
                 rteConfig.setJsonParameter((String) configMap.get("jsonParameter"));
             }
             if (configMap.containsKey("useStringUid") && configMap.get("useStringUid") != null) {
-                rteConfig.setUseStringUid((Boolean) configMap.get("useStringUid"));
+                Object useStringUidObj = configMap.get("useStringUid");
+                if (useStringUidObj instanceof Boolean) {
+                    rteConfig.setUseStringUid((Boolean) useStringUidObj);
+                }
             }
             
             rteInstance.setConfigs(rteConfig);
@@ -121,7 +121,7 @@ public class AgoraRTE {
             map.put("areaCode", config.getAreaCode());
             map.put("cloudProxy", config.getCloudProxy() != null ? config.getCloudProxy() : "");
             map.put("jsonParameter", config.getJsonParameter() != null ? config.getJsonParameter() : "");
-            map.put("useStringUid", config.getUseStringUid() != null ? config.getUseStringUid() : false);
+            map.put("useStringUid", config.getUseStringUid());
             return map;
         } catch (RteException e) {
             return null;
@@ -149,6 +149,9 @@ public class AgoraRTE {
     }
 
     private int parseInt(Object obj) {
+        if (obj == null) {
+            return 0;
+        }
         if (obj instanceof Number) {
             return ((Number) obj).intValue();
         }

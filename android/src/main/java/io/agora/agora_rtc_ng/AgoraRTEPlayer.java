@@ -49,6 +49,7 @@ public class AgoraRTEPlayer {
     public static boolean preloadWithUrl(String url) {
         try {
             // Android SDK doesn't have static preload method, return true for now
+            Player.preloadWithUrl(url);
             return true;
         } catch (Exception e) {
             return false;
@@ -317,7 +318,10 @@ public class AgoraRTEPlayer {
             PlayerConfig playerConfig = new PlayerConfig();
             
             if (configMap.containsKey("autoPlay") && configMap.get("autoPlay") != null) {
-                playerConfig.setAutoPlay((Boolean) configMap.get("autoPlay"));
+                Object autoPlayObj = configMap.get("autoPlay");
+                if (autoPlayObj instanceof Boolean) {
+                    playerConfig.setAutoPlay((Boolean) autoPlayObj);
+                }
             }
             if (configMap.containsKey("playbackSpeed") && configMap.get("playbackSpeed") != null) {
                 playerConfig.setPlaybackSpeed(parseInt(configMap.get("playbackSpeed")));
@@ -916,6 +920,9 @@ public class AgoraRTEPlayer {
     }
 
     private int parseInt(Object obj) {
+        if (obj == null) {
+            return 0;
+        }
         if (obj instanceof Number) {
             return ((Number) obj).intValue();
         }

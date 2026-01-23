@@ -227,6 +227,9 @@ public class AgoraRTECanvas {
 
     /**
      * Add view
+     * @param canvasId Canvas ID
+     * @param view View to add
+     * @param config View configuration (currently unused as Android ViewConfig doesn't support cropArea)
      */
     public boolean addView(String canvasId, View view, Map<String, Object> config) {
         Canvas canvas = canvases.get(canvasId);
@@ -234,6 +237,8 @@ public class AgoraRTECanvas {
             return false;
         }
         try {
+            // Note: Android ViewConfig doesn't support setCropArea
+            // cropArea should be configured at Canvas level using setCropArea() method
             ViewConfig viewConfig = new ViewConfig();
             canvas.addView(view, viewConfig);
             return true;
@@ -244,6 +249,9 @@ public class AgoraRTECanvas {
 
     /**
      * Remove view
+     * @param canvasId Canvas ID
+     * @param view View to remove
+     * @param config View configuration (currently unused as Android ViewConfig doesn't support cropArea)
      */
     public boolean removeView(String canvasId, View view, Map<String, Object> config) {
         Canvas canvas = canvases.get(canvasId);
@@ -251,6 +259,8 @@ public class AgoraRTECanvas {
             return false;
         }
         try {
+            // Note: Android ViewConfig doesn't support setCropArea
+            // cropArea should be configured at Canvas level using setCropArea() method
             ViewConfig viewConfig = new ViewConfig();
             canvas.removeView(view, viewConfig);
             return true;
@@ -267,6 +277,9 @@ public class AgoraRTECanvas {
     }
 
     private int parseInt(Object obj) {
+        if (obj == null) {
+            return 0;
+        }
         if (obj instanceof Number) {
             return ((Number) obj).intValue();
         }

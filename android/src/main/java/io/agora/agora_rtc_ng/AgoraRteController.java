@@ -83,15 +83,18 @@ public class AgoraRteController {
         });
     }
 
+    @SuppressWarnings("UnusedReturnValue")
     public void destroyRte() {
         // Destroy all players and canvases first
         if (rtePlayer != null) {
             for (String playerId : rtePlayer.getPlayers().keySet()) {
+                // Ignore return value during cleanup - continue even if some fail
                 destroyPlayer(playerId);
             }
         }
         if (rteCanvas != null) {
             for (String canvasId : rteCanvas.getCanvases().keySet()) {
+                // Ignore return value during cleanup - continue even if some fail
                 destroyCanvas(canvasId);
             }
         }
@@ -291,7 +294,7 @@ public class AgoraRteController {
         try {
             Config config = new Config();
             rte.getRteInstance().getConfigs(config);
-            return config.getUseStringUid() != null ? config.getUseStringUid() : false;
+            return config.getUseStringUid();
         } catch (RteException e) {
             return false;
         }

@@ -21,6 +21,7 @@ import io.flutter.plugin.common.MethodChannel;
 import java.io.IOException;
 import java.lang.ref.WeakReference;
 import java.util.HashMap;
+import java.util.Locale;
 import java.util.Map;
 
 public class AgoraRtcNgPlugin implements FlutterPlugin, MethodChannel.MethodCallHandler, ActivityAware {
@@ -165,16 +166,16 @@ public class AgoraRtcNgPlugin implements FlutterPlugin, MethodChannel.MethodCall
                     result.success(pipController.isActivated());
                     break;
                 case "pipSetup":
-                    final Map<?, ?> args = (Map<?, ?>) call.arguments;
+                    final Map<String, Object> args = safeCastToMap(call.arguments);
                     Rational aspectRatio = null;
                     if (args.get("aspectRatioX") != null &&
                             args.get("aspectRatioY") != null) {
-                        aspectRatio = new Rational((int) args.get("aspectRatioX"),
-                                (int) args.get("aspectRatioY"));
+                        aspectRatio = new Rational(getIntValue(args, "aspectRatioX", 0),
+                                getIntValue(args, "aspectRatioY", 0));
                     }
                     Boolean autoEnterEnabled = null;
                     if (args.get("autoEnterEnabled") != null) {
-                        autoEnterEnabled = (boolean) args.get("autoEnterEnabled");
+                        autoEnterEnabled = getBooleanValue(args, "autoEnterEnabled", false);
                     }
                     Rect sourceRectHint = null;
                     if (args.get("sourceRectHintLeft") != null &&
@@ -182,25 +183,22 @@ public class AgoraRtcNgPlugin implements FlutterPlugin, MethodChannel.MethodCall
                             args.get("sourceRectHintRight") != null &&
                             args.get("sourceRectHintBottom") != null) {
                         sourceRectHint =
-                                new Rect((int) args.get("sourceRectHintLeft"),
-                                        (int) args.get("sourceRectHintTop"),
-                                        (int) args.get("sourceRectHintRight"),
-                                        (int) args.get("sourceRectHintBottom"));
+                                new Rect(getIntValue(args, "sourceRectHintLeft", 0),
+                                        getIntValue(args, "sourceRectHintTop", 0),
+                                        getIntValue(args, "sourceRectHintRight", 0),
+                                        getIntValue(args, "sourceRectHintBottom", 0));
                     }
                     Boolean seamlessResizeEnabled = null;
                     if (args.get("seamlessResizeEnabled") != null) {
-                        seamlessResizeEnabled =
-                                (boolean) args.get("seamlessResizeEnabled");
+                        seamlessResizeEnabled = getBooleanValue(args, "seamlessResizeEnabled", false);
                     }
                     Boolean useExternalStateMonitor = null;
                     if (args.get("useExternalStateMonitor") != null) {
-                        useExternalStateMonitor =
-                                (boolean) args.get("useExternalStateMonitor");
+                        useExternalStateMonitor = getBooleanValue(args, "useExternalStateMonitor", false);
                     }
                     Integer externalStateMonitorInterval = null;
                     if (args.get("externalStateMonitorInterval") != null) {
-                        externalStateMonitorInterval =
-                                (int) args.get("externalStateMonitorInterval");
+                        externalStateMonitorInterval = getIntValue(args, "externalStateMonitorInterval", 0);
                     }
 
                     result.success(pipController.setup(
@@ -228,6 +226,59 @@ public class AgoraRtcNgPlugin implements FlutterPlugin, MethodChannel.MethodCall
         }
     }
 
+    /**
+     * Safely get int value from Map, avoiding NullPointerException
+     */
+    private int getIntValue(Map<String, Object> args, String key, int defaultValue) {
+        Object value = args.get(key);
+        if (value == null) {
+            return defaultValue;
+        }
+        if (value instanceof Number) {
+            return ((Number) value).intValue();
+        }
+        return defaultValue;
+    }
+
+    /**
+     * Safely get long value from Map, avoiding NullPointerException
+     */
+    private long getLongValue(Map<String, Object> args, String key, long defaultValue) {
+        Object value = args.get(key);
+        if (value == null) {
+            return defaultValue;
+        }
+        if (value instanceof Number) {
+            return ((Number) value).longValue();
+        }
+        return defaultValue;
+    }
+
+    /**
+     * Safely get boolean value from Map, avoiding NullPointerException
+     */
+    private boolean getBooleanValue(Map<String, Object> args, String key, boolean defaultValue) {
+        Object value = args.get(key);
+        if (value == null) {
+            return defaultValue;
+        }
+        if (value instanceof Boolean) {
+            return (Boolean) value;
+        }
+        return defaultValue;
+    }
+
+    /**
+     * Safely cast Object to Map<String, Object>, avoiding ClassCastException
+     */
+    @SuppressWarnings("unchecked")
+    private Map<String, Object> safeCastToMap(Object obj) {
+        if (obj instanceof Map) {
+            return (Map<String, Object>) obj;
+        }
+        return new HashMap<>();
+    }
+
     private void handleRteMethodCall(@NonNull MethodCall call,
                                      @NonNull MethodChannel.Result result) {
         if (rteController == null) {
@@ -236,8 +287,7 @@ public class AgoraRtcNgPlugin implements FlutterPlugin, MethodChannel.MethodCall
         }
 
         try {
-            final Map<String, Object> args = call.arguments instanceof Map ? 
-                (Map<String, Object>) call.arguments : new HashMap<>();
+            final Map<String, Object> args = safeCastToMap(call.arguments);
             
             switch (call.method) {
                 case "rteCreateFromBridge":
@@ -289,13 +339,11 @@ public class AgoraRtcNgPlugin implements FlutterPlugin, MethodChannel.MethodCall
                     result.success(rteController.setLogFolder(logFolder));
                     break;
                 case "rteSetLogFileSize":
-                    int logFileSize = args.get("logFileSize") != null ? 
-                        ((Number) args.get("logFileSize")).intValue() : 0;
+                    int logFileSize = getIntValue(args, "logFileSize", 0);
                     result.success(rteController.setLogFileSize(logFileSize));
                     break;
                 case "rteSetAreaCode":
-                    int areaCode = args.get("areaCode") != null ? 
-                        ((Number) args.get("areaCode")).intValue() : 0;
+                    int areaCode = getIntValue(args, "areaCode", 0);
                     result.success(rteController.setAreaCode(areaCode));
                     break;
                 case "rteSetCloudProxy":
@@ -316,15 +364,22 @@ public class AgoraRtcNgPlugin implements FlutterPlugin, MethodChannel.MethodCall
                     String playerId = rteController.createPlayer(args);
                     result.success(playerId != null ? playerId : "player_" + System.currentTimeMillis());
                     break;
+                case "rtePlayerDestroy":
+                    String playerIdForDestroy = (String) args.get("playerId");
+                    result.success(rteController.destroyPlayer(playerIdForDestroy));
+                    break;
                 case "rteCanvasCreate":
                     String canvasId = rteController.createCanvas(args);
                     result.success(canvasId != null ? canvasId : "canvas_" + System.currentTimeMillis());
                     break;
+                case "rteCanvasDestroy":
+                    String canvasIdForDestroy = (String) args.get("canvasId");
+                    result.success(rteController.destroyCanvas(canvasIdForDestroy));
+                    break;
                 case "rtePlayerOpenUrl":
                     String playerIdForOpen = (String) args.get("playerId");
                     String url = (String) args.get("url");
-                    long startTime = args.get("startTime") != null ? 
-                        ((Number) args.get("startTime")).longValue() : 0;
+                    long startTime = getLongValue(args, "startTime", 0);
                     result.success(rteController.playerOpenUrl(playerIdForOpen, url, startTime));
                     break;
                 case "rtePlayerPlay":
@@ -338,17 +393,17 @@ public class AgoraRtcNgPlugin implements FlutterPlugin, MethodChannel.MethodCall
                     break;
                 case "rtePlayerSeek":
                     String playerIdForSeek = (String) args.get("playerId");
-                    long position = ((Number) args.get("position")).longValue();
+                    long position = getLongValue(args, "position", 0);
                     result.success(rteController.playerSeek(playerIdForSeek, position));
                     break;
                 case "rtePlayerMuteAudio":
                     String playerIdForMuteAudio = (String) args.get("playerId");
-                    boolean muteAudio = (boolean) args.get("mute");
+                    boolean muteAudio = getBooleanValue(args, "mute", false);
                     result.success(rteController.playerMuteAudio(playerIdForMuteAudio, muteAudio));
                     break;
                 case "rtePlayerMuteVideo":
                     String playerIdForMuteVideo = (String) args.get("playerId");
-                    boolean muteVideo = (boolean) args.get("mute");
+                    boolean muteVideo = getBooleanValue(args, "mute", false);
                     result.success(rteController.playerMuteVideo(playerIdForMuteVideo, muteVideo));
                     break;
                 case "rtePlayerGetCurrentTime":
@@ -365,9 +420,9 @@ public class AgoraRtcNgPlugin implements FlutterPlugin, MethodChannel.MethodCall
                             String message = err.message();
                             String errorMsg;
                             if (message != null && !message.isEmpty()) {
-                                errorMsg = String.format("RTE Error (code: %d, message: %s)", code, message);
+                                errorMsg = String.format(Locale.US, "RTE Error (code: %d, message: %s)", code, message);
                             } else {
-                                errorMsg = String.format("RTE Error (code: %d)", code);
+                                errorMsg = String.format(Locale.US, "RTE Error (code: %d)", code);
                             }
                             result.error("RTE_ERROR", errorMsg, null);
                         } else if (stats != null) {
@@ -384,7 +439,7 @@ public class AgoraRtcNgPlugin implements FlutterPlugin, MethodChannel.MethodCall
                     break;
                 case "rtePlayerSetConfigs":
                     String playerIdForSetConfig = (String) args.get("playerId");
-                    Map<String, Object> playerConfig = (Map<String, Object>) args.get("config");
+                    Map<String, Object> playerConfig = safeCastToMap(args.get("config"));
                     result.success(rteController.playerSetConfig(playerIdForSetConfig, playerConfig));
                     break;
                 case "rtePlayerGetConfigs":
@@ -398,7 +453,7 @@ public class AgoraRtcNgPlugin implements FlutterPlugin, MethodChannel.MethodCall
                     break;
                 case "rteCanvasSetConfigs":
                     String canvasIdForSetConfig = (String) args.get("canvasId");
-                    Map<String, Object> canvasConfig = (Map<String, Object>) args.get("config");
+                    Map<String, Object> canvasConfig = safeCastToMap(args.get("config"));
                     result.success(rteController.canvasSetConfig(canvasIdForSetConfig, canvasConfig));
                     break;
                 case "rteCanvasGetConfigs":
@@ -406,39 +461,31 @@ public class AgoraRtcNgPlugin implements FlutterPlugin, MethodChannel.MethodCall
                     break;
                 case "rtePlayerOpenWithCustomSourceProvider":
                     String playerIdForCustomProvider = (String) args.get("playerId");
-                    long provider = args.get("provider") != null ? 
-                        ((Number) args.get("provider")).longValue() : 0;
-                    long startTimeForCustom = args.get("startTime") != null ? 
-                        ((Number) args.get("startTime")).longValue() : 0;
+                    long provider = getLongValue(args, "provider", 0);
+                    long startTimeForCustom = getLongValue(args, "startTime", 0);
                     rteController.playerOpenWithCustomSourceProvider(playerIdForCustomProvider, provider, startTimeForCustom, result);
                     break;
                 case "rtePlayerOpenWithStream":
                     String playerIdForStream = (String) args.get("playerId");
-                    long stream = args.get("stream") != null ? 
-                        ((Number) args.get("stream")).longValue() : 0;
+                    long stream = getLongValue(args, "stream", 0);
                     rteController.playerOpenWithStream(playerIdForStream, stream, result);
                     break;
                 case "rtePlayerSwitchWithUrl":
                     String playerIdForSwitch = (String) args.get("playerId");
                     String switchUrl = (String) args.get("url");
-                    boolean syncPts = args.get("syncPts") != null ? 
-                        (boolean) args.get("syncPts") : false;
+                    boolean syncPts = getBooleanValue(args, "syncPts", false);
                     result.success(rteController.playerSwitch(playerIdForSwitch, switchUrl, syncPts));
                     break;
                 case "rteCanvasAddView":
                     String canvasIdForAddView = (String) args.get("canvasId");
-                    long viewPtrForAdd = args.get("viewPtr") != null ? 
-                        ((Number) args.get("viewPtr")).longValue() : 0;
-                    Map<String, Object> configForAddView = args.get("config") != null ? 
-                        (Map<String, Object>) args.get("config") : new HashMap<>();
+                    long viewPtrForAdd = getLongValue(args, "viewPtr", 0);
+                    Map<String, Object> configForAddView = safeCastToMap(args.get("config"));
                     result.success(rteController.canvasAddView(canvasIdForAddView, viewPtrForAdd, configForAddView));
                     break;
                 case "rteCanvasRemoveView":
                     String canvasIdForRemoveView = (String) args.get("canvasId");
-                    long viewPtrForRemove = args.get("viewPtr") != null ? 
-                        ((Number) args.get("viewPtr")).longValue() : 0;
-                    Map<String, Object> configForRemoveView = args.get("config") != null ? 
-                        (Map<String, Object>) args.get("config") : new HashMap<>();
+                    long viewPtrForRemove = getLongValue(args, "viewPtr", 0);
+                    Map<String, Object> configForRemoveView = safeCastToMap(args.get("config"));
                     result.success(rteController.canvasRemoveView(canvasIdForRemoveView, viewPtrForRemove, configForRemoveView));
                     break;
                 case "rtePlayerGetAutoPlay":
@@ -446,8 +493,7 @@ public class AgoraRtcNgPlugin implements FlutterPlugin, MethodChannel.MethodCall
                     break;
                 case "rtePlayerSetAutoPlay":
                     String playerIdForAutoPlay = (String) args.get("playerId");
-                    boolean autoPlay = args.get("autoPlay") != null ? 
-                        ((Boolean) args.get("autoPlay")) : false;
+                    boolean autoPlay = getBooleanValue(args, "autoPlay", false);
                     result.success(rteController.playerSetAutoPlay(playerIdForAutoPlay, autoPlay));
                     break;
                 case "rtePlayerGetPlaybackSpeed":
@@ -455,8 +501,7 @@ public class AgoraRtcNgPlugin implements FlutterPlugin, MethodChannel.MethodCall
                     break;
                 case "rtePlayerSetPlaybackSpeed":
                     String playerIdForSpeed = (String) args.get("playerId");
-                    int speed = args.get("speed") != null ? 
-                        ((Number) args.get("speed")).intValue() : 0;
+                    int speed = getIntValue(args, "speed", 0);
                     result.success(rteController.playerSetPlaybackSpeed(playerIdForSpeed, speed));
                     break;
                 case "rtePlayerGetPlayoutAudioTrackIdx":
@@ -464,8 +509,7 @@ public class AgoraRtcNgPlugin implements FlutterPlugin, MethodChannel.MethodCall
                     break;
                 case "rtePlayerSetPlayoutAudioTrackIdx":
                     String playerIdForPlayoutTrack = (String) args.get("playerId");
-                    int playoutTrackIdx = args.get("idx") != null ? 
-                        ((Number) args.get("idx")).intValue() : 0;
+                    int playoutTrackIdx = getIntValue(args, "idx", 0);
                     result.success(rteController.playerSetPlayoutAudioTrackIdx(playerIdForPlayoutTrack, playoutTrackIdx));
                     break;
                 case "rtePlayerGetPublishAudioTrackIdx":
@@ -473,8 +517,7 @@ public class AgoraRtcNgPlugin implements FlutterPlugin, MethodChannel.MethodCall
                     break;
                 case "rtePlayerSetPublishAudioTrackIdx":
                     String playerIdForPublishTrack = (String) args.get("playerId");
-                    int publishTrackIdx = args.get("idx") != null ? 
-                        ((Number) args.get("idx")).intValue() : 0;
+                    int publishTrackIdx = getIntValue(args, "idx", 0);
                     result.success(rteController.playerSetPublishAudioTrackIdx(playerIdForPublishTrack, publishTrackIdx));
                     break;
                 case "rtePlayerGetAudioTrackIdx":
@@ -482,8 +525,7 @@ public class AgoraRtcNgPlugin implements FlutterPlugin, MethodChannel.MethodCall
                     break;
                 case "rtePlayerSetAudioTrackIdx":
                     String playerIdForAudioTrack = (String) args.get("playerId");
-                    int audioTrackIdx = args.get("idx") != null ? 
-                        ((Number) args.get("idx")).intValue() : 0;
+                    int audioTrackIdx = getIntValue(args, "idx", 0);
                     result.success(rteController.playerSetAudioTrackIdx(playerIdForAudioTrack, audioTrackIdx));
                     break;
                 case "rtePlayerGetSubtitleTrackIdx":
@@ -491,8 +533,7 @@ public class AgoraRtcNgPlugin implements FlutterPlugin, MethodChannel.MethodCall
                     break;
                 case "rtePlayerSetSubtitleTrackIdx":
                     String playerIdForSubtitleTrack = (String) args.get("playerId");
-                    int subtitleTrackIdx = args.get("idx") != null ? 
-                        ((Number) args.get("idx")).intValue() : 0;
+                    int subtitleTrackIdx = getIntValue(args, "idx", 0);
                     result.success(rteController.playerSetSubtitleTrackIdx(playerIdForSubtitleTrack, subtitleTrackIdx));
                     break;
                 case "rtePlayerGetExternalSubtitleTrackIdx":
@@ -500,8 +541,7 @@ public class AgoraRtcNgPlugin implements FlutterPlugin, MethodChannel.MethodCall
                     break;
                 case "rtePlayerSetExternalSubtitleTrackIdx":
                     String playerIdForExtSubtitleTrack = (String) args.get("playerId");
-                    int extSubtitleTrackIdx = args.get("idx") != null ? 
-                        ((Number) args.get("idx")).intValue() : 0;
+                    int extSubtitleTrackIdx = getIntValue(args, "idx", 0);
                     result.success(rteController.playerSetExternalSubtitleTrackIdx(playerIdForExtSubtitleTrack, extSubtitleTrackIdx));
                     break;
                 case "rtePlayerGetAudioPitch":
@@ -509,8 +549,7 @@ public class AgoraRtcNgPlugin implements FlutterPlugin, MethodChannel.MethodCall
                     break;
                 case "rtePlayerSetAudioPitch":
                     String playerIdForPitch = (String) args.get("playerId");
-                    int pitch = args.get("pitch") != null ? 
-                        ((Number) args.get("pitch")).intValue() : 0;
+                    int pitch = getIntValue(args, "pitch", 0);
                     result.success(rteController.playerSetAudioPitch(playerIdForPitch, pitch));
                     break;
                 case "rtePlayerGetPlayoutVolume":
@@ -518,8 +557,7 @@ public class AgoraRtcNgPlugin implements FlutterPlugin, MethodChannel.MethodCall
                     break;
                 case "rtePlayerSetPlayoutVolume":
                     String playerIdForPlayoutVolume = (String) args.get("playerId");
-                    int playoutVolume = args.get("volume") != null ? 
-                        ((Number) args.get("volume")).intValue() : 0;
+                    int playoutVolume = getIntValue(args, "volume", 0);
                     result.success(rteController.playerSetPlayoutVolume(playerIdForPlayoutVolume, playoutVolume));
                     break;
                 case "rtePlayerGetAudioPlaybackDelay":
@@ -527,8 +565,7 @@ public class AgoraRtcNgPlugin implements FlutterPlugin, MethodChannel.MethodCall
                     break;
                 case "rtePlayerSetAudioPlaybackDelay":
                     String playerIdForDelay = (String) args.get("playerId");
-                    int delay = args.get("delay") != null ? 
-                        ((Number) args.get("delay")).intValue() : 0;
+                    int delay = getIntValue(args, "delay", 0);
                     result.success(rteController.playerSetAudioPlaybackDelay(playerIdForDelay, delay));
                     break;
                 case "rtePlayerGetAudioDualMonoMode":
@@ -536,8 +573,7 @@ public class AgoraRtcNgPlugin implements FlutterPlugin, MethodChannel.MethodCall
                     break;
                 case "rtePlayerSetAudioDualMonoMode":
                     String playerIdForDualMono = (String) args.get("playerId");
-                    int dualMonoMode = args.get("mode") != null ? 
-                        ((Number) args.get("mode")).intValue() : 0;
+                    int dualMonoMode = getIntValue(args, "mode", 0);
                     result.success(rteController.playerSetAudioDualMonoMode(playerIdForDualMono, dualMonoMode));
                     break;
                 case "rtePlayerGetPublishVolume":
@@ -545,8 +581,7 @@ public class AgoraRtcNgPlugin implements FlutterPlugin, MethodChannel.MethodCall
                     break;
                 case "rtePlayerSetPublishVolume":
                     String playerIdForPublishVolume = (String) args.get("playerId");
-                    int publishVolume = args.get("volume") != null ? 
-                        ((Number) args.get("volume")).intValue() : 0;
+                    int publishVolume = getIntValue(args, "volume", 0);
                     result.success(rteController.playerSetPublishVolume(playerIdForPublishVolume, publishVolume));
                     break;
                 case "rtePlayerGetLoopCount":
@@ -554,8 +589,7 @@ public class AgoraRtcNgPlugin implements FlutterPlugin, MethodChannel.MethodCall
                     break;
                 case "rtePlayerSetLoopCount":
                     String playerIdForLoopCount = (String) args.get("playerId");
-                    int loopCount = args.get("count") != null ? 
-                        ((Number) args.get("count")).intValue() : 0;
+                    int loopCount = getIntValue(args, "count", 0);
                     result.success(rteController.playerSetLoopCount(playerIdForLoopCount, loopCount));
                     break;
                 case "rtePlayerGetJsonParameter":
@@ -571,8 +605,7 @@ public class AgoraRtcNgPlugin implements FlutterPlugin, MethodChannel.MethodCall
                     break;
                 case "rtePlayerSetAbrSubscriptionLayer":
                     String playerIdForAbrSub = (String) args.get("playerId");
-                    int abrSubLayer = args.get("layer") != null ? 
-                        ((Number) args.get("layer")).intValue() : 0;
+                    int abrSubLayer = getIntValue(args, "layer", 0);
                     result.success(rteController.playerSetAbrSubscriptionLayer(playerIdForAbrSub, abrSubLayer));
                     break;
                 case "rtePlayerGetAbrFallbackLayer":
@@ -580,8 +613,7 @@ public class AgoraRtcNgPlugin implements FlutterPlugin, MethodChannel.MethodCall
                     break;
                 case "rtePlayerSetAbrFallbackLayer":
                     String playerIdForAbrFallback = (String) args.get("playerId");
-                    int abrFallbackLayer = args.get("layer") != null ? 
-                        ((Number) args.get("layer")).intValue() : 0;
+                    int abrFallbackLayer = getIntValue(args, "layer", 0);
                     result.success(rteController.playerSetAbrFallbackLayer(playerIdForAbrFallback, abrFallbackLayer));
                     break;
                 // Canvas Individual Config Methods
@@ -590,8 +622,7 @@ public class AgoraRtcNgPlugin implements FlutterPlugin, MethodChannel.MethodCall
                     break;
                 case "rteCanvasSetVideoRenderMode":
                     String canvasIdForRenderMode = (String) args.get("canvasId");
-                    int renderMode = args.get("mode") != null ? 
-                        ((Number) args.get("mode")).intValue() : 0;
+                    int renderMode = getIntValue(args, "mode", 0);
                     result.success(rteController.canvasSetVideoRenderMode(canvasIdForRenderMode, renderMode));
                     break;
                 case "rteCanvasGetVideoMirrorMode":
@@ -599,8 +630,7 @@ public class AgoraRtcNgPlugin implements FlutterPlugin, MethodChannel.MethodCall
                     break;
                 case "rteCanvasSetVideoMirrorMode":
                     String canvasIdForMirrorMode = (String) args.get("canvasId");
-                    int mirrorMode = args.get("mode") != null ? 
-                        ((Number) args.get("mode")).intValue() : 0;
+                    int mirrorMode = getIntValue(args, "mode", 0);
                     result.success(rteController.canvasSetVideoMirrorMode(canvasIdForMirrorMode, mirrorMode));
                     break;
                 case "rteCanvasGetCropArea":
@@ -608,14 +638,10 @@ public class AgoraRtcNgPlugin implements FlutterPlugin, MethodChannel.MethodCall
                     break;
                 case "rteCanvasSetCropArea":
                     String canvasIdForCrop = (String) args.get("canvasId");
-                    int x = args.get("x") != null ? 
-                        ((Number) args.get("x")).intValue() : 0;
-                    int y = args.get("y") != null ? 
-                        ((Number) args.get("y")).intValue() : 0;
-                    int width = args.get("width") != null ? 
-                        ((Number) args.get("width")).intValue() : 0;
-                    int height = args.get("height") != null ? 
-                        ((Number) args.get("height")).intValue() : 0;
+                    int x = getIntValue(args, "x", 0);
+                    int y = getIntValue(args, "y", 0);
+                    int width = getIntValue(args, "width", 0);
+                    int height = getIntValue(args, "height", 0);
                     result.success(rteController.canvasSetCropArea(canvasIdForCrop, x, y, width, height));
                     break;
                 default:
