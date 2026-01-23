@@ -2,6 +2,7 @@ import 'dart:async';
 import 'package:agora_rtc_engine/agora_rte_engine.dart';
 import 'package:agora_rtc_engine/src/agora_rte.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter/foundation.dart';
 import 'agora_rte_player_impl.dart';
 import 'agora_rte_canvas_impl.dart';
 
@@ -73,6 +74,18 @@ class AgoraRteCoreImpl {
 
   /// Destroy RTE instance
   Future<void> destroy() async {
+    // Stop all players before destroying engine to ensure audio/video stops
+    if (_players.isNotEmpty) {
+      await Future.wait(_players.values.map((player) async {
+        try {
+          await player.stop();
+        } catch (e) {
+          // Ignore errors during destroy
+          debugPrint('Error stopping player during destroy: $e');
+        }
+      }));
+    }
+
     await _channel.invokeMethod('rteDestroy');
     _players.clear();
     _canvases.clear();
