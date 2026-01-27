@@ -125,7 +125,7 @@
     AgoraRteError *getError = [[AgoraRteError alloc] init];
     AgoraRteRect *cropArea = [config cropArea:getError];
     
-    return @{
+    NSDictionary *result =  @{
         @"videoRenderMode": @([config videoRenderMode:getError]),
         @"videoMirrorMode": @([config videoMirrorMode:getError]),
         @"cropArea": @{
@@ -135,6 +135,7 @@
             @"height": @([cropArea height])
         }
     };
+    return result;
 }
 
 // Individual Config Setters/Getters

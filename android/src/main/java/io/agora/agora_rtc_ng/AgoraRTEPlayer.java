@@ -294,7 +294,7 @@ public class AgoraRTEPlayer {
                 map.put("audioSampleRate", info.audioSampleRate());
                 map.put("audioChannels", info.audioChannels());
                 map.put("audioBitsPerSample", info.audioBitsPerSample());
-                map.put("abrSubscriptionLayer", Constants.AbrSubscriptionLayer.getValue(info.abrSubscriptionLayer()));
+                map.put("abrSubscriptionLayer", info.abrSubscriptionLayer() != null ? Constants.AbrSubscriptionLayer.getValue(info.abrSubscriptionLayer()) : 0);
                 map.put("currentUrl", info.currentUrl() != null ? info.currentUrl() : "");
                 return map;
             } catch (RteException e) {
@@ -403,8 +403,8 @@ public class AgoraRTEPlayer {
             map.put("publishVolume", config.getPublishVolume());
             map.put("loopCount", config.getLoopCount());
             map.put("jsonParameter", config.getJsonParameter() != null ? config.getJsonParameter() : "");
-            map.put("abrSubscriptionLayer", Constants.AbrSubscriptionLayer.getValue(config.getAbrSubscriptionLayer()));
-            map.put("abrFallbackLayer", Constants.AbrFallbackLayer.getValue(config.getAbrFallbackLayer()));
+            map.put("abrSubscriptionLayer", config.getAbrSubscriptionLayer() != null ? Constants.AbrSubscriptionLayer.getValue(config.getAbrSubscriptionLayer()) : 0);
+            map.put("abrFallbackLayer", config.getAbrFallbackLayer() != null ? Constants.AbrFallbackLayer.getValue(config.getAbrFallbackLayer()) : 0);
             return map;
         } catch (RteException e) {
             return null;
@@ -781,7 +781,7 @@ public class AgoraRTEPlayer {
         try {
             PlayerConfig config = new PlayerConfig();
             player.getConfigs(config);
-            return Constants.AbrSubscriptionLayer.getValue(config.getAbrSubscriptionLayer());
+            return config.getAbrSubscriptionLayer() != null ? Constants.AbrSubscriptionLayer.getValue(config.getAbrSubscriptionLayer()) : 0;
         } catch (RteException e) {
             return 0;
         }
@@ -806,7 +806,7 @@ public class AgoraRTEPlayer {
         try {
             PlayerConfig config = new PlayerConfig();
             player.getConfigs(config);
-            return Constants.AbrFallbackLayer.getValue(config.getAbrFallbackLayer());
+            return config.getAbrFallbackLayer() != null ? Constants.AbrFallbackLayer.getValue(config.getAbrFallbackLayer()) : 0;
         } catch (RteException e) {
             return 0;
         }
@@ -832,7 +832,7 @@ public class AgoraRTEPlayer {
                                 playerId,
                                 oldState,
                                 newState,
-                                error != null ? Constants.ErrorCode.getValue(error.code()) : 0,
+                                error != null && error.code() != null ? Constants.ErrorCode.getValue(error.code()) : 0,
                                 error != null ? error.message() : ""
                             );
                         });

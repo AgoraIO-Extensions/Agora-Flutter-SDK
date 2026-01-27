@@ -221,7 +221,7 @@
         if (error) *error = RTE_NSERROR_FROM_RTE_ERROR(getError);
         return NO;
     }
-    return useStringUid ? YES : NO;
+    return [NSNumber numberWithBool:useStringUid];
 }
 
 

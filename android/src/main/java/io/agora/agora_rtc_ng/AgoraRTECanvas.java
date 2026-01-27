@@ -112,8 +112,8 @@ public class AgoraRTECanvas {
             canvas.getConfigs(config);
             
             Map<String, Object> map = new HashMap<>();
-            map.put("videoRenderMode", Constants.VideoRenderMode.getValue(config.getVideoRenderMode()));
-            map.put("videoMirrorMode", Constants.VideoMirrorMode.getValue(config.getVideoMirrorMode()));
+            map.put("videoRenderMode", config.getVideoRenderMode() != null ? Constants.VideoRenderMode.getValue(config.getVideoRenderMode()) : 0);
+            map.put("videoMirrorMode", config.getVideoMirrorMode() != null ? Constants.VideoMirrorMode.getValue(config.getVideoMirrorMode()) : 0);
             
             // Get crop area
             Rect cropArea = config.getCropArea();
@@ -151,7 +151,7 @@ public class AgoraRTECanvas {
         try {
             CanvasConfig config = new CanvasConfig();
             canvas.getConfigs(config);
-            return Constants.VideoRenderMode.getValue(config.getVideoRenderMode());
+            return config.getVideoRenderMode() != null ? Constants.VideoRenderMode.getValue(config.getVideoRenderMode()) : 0;
         } catch (RteException e) {
             return 0;
         }
@@ -176,7 +176,7 @@ public class AgoraRTECanvas {
         try {
             CanvasConfig config = new CanvasConfig();
             canvas.getConfigs(config);
-            return Constants.VideoMirrorMode.getValue(config.getVideoMirrorMode());
+            return config.getVideoMirrorMode() != null ? Constants.VideoMirrorMode.getValue(config.getVideoMirrorMode()) : 0;
         } catch (RteException e) {
             return 0;
         }

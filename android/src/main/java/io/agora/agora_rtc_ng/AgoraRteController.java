@@ -3,6 +3,7 @@ package io.agora.agora_rtc_ng;
 import android.content.Context;
 import android.os.Handler;
 import android.os.Looper;
+import android.util.Log;
 import android.view.View;
 import io.flutter.plugin.common.MethodChannel;
 
@@ -494,7 +495,7 @@ public class AgoraRteController {
             public void onResult(io.agora.rte.PlayerStats stats, Error error) {
                 if (callback != null) {
                     // Check if there's a real error (error != null and code != 0)
-                    if (error != null && Constants.ErrorCode.getValue(error.code()) != 0) {
+                    if (error != null && (error.code() == null || Constants.ErrorCode.getValue(error.code()) != 0)) {
                         callback.onResult(null, error);
                     } else if (stats != null) {
                         // TODO: Add actual stats fields when PlayerStats API is confirmed
@@ -804,12 +805,15 @@ public class AgoraRteController {
     
     public boolean canvasAddView(String canvasId, long viewPtr, Map<String, Object> config) {
         if (rteCanvas == null || videoViewController == null) {
+            Log.e("AgoraRteController", "canvasAddView failed: rteCanvas or videoViewController is null");
             return false;
         }
         View view = videoViewController.getViewByPtr(viewPtr);
         if (view == null) {
+            Log.e("AgoraRteController", "canvasAddView failed: view not found for ptr " + viewPtr);
             return false;
         }
+        Log.i("AgoraRteController", "canvasAddView success: adding view " + view + " to canvas " + canvasId);
         return rteCanvas.addView(canvasId, view, config);
     }
 

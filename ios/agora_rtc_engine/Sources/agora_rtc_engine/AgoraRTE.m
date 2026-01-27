@@ -151,6 +151,7 @@
     }
     
     AgoraRteError *getError = [[AgoraRteError alloc] init];
+    BOOL useStringUidValue = [config useStringUid:getError];
     return @{
         @"appId": [config appId:getError] ?: @"",
         @"logFolder": [config logFolder:getError] ?: @"",
@@ -158,7 +159,7 @@
         @"areaCode": @([config areaCode:getError]),
         @"cloudProxy": [config cloudProxy:getError] ?: @"",
         @"jsonParameter": [config jsonParameter:getError] ?: @"",
-        @"useStringUid": @([config useStringUid:getError] ? YES : NO)
+        @"useStringUid": [NSNumber numberWithBool:useStringUidValue]
     };
 }
 

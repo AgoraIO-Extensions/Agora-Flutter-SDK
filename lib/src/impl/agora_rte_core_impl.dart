@@ -29,7 +29,9 @@ class AgoraRteCoreImpl {
   AgoraRteCanvasImpl? getCanvas(String canvasId) => _canvases[canvasId];
 
   Future<dynamic> _handleMethodCall(MethodCall call) async {
-    final args = call.arguments as Map?;
+    final args = call.arguments != null
+        ? Map<String, dynamic>.from(call.arguments)
+        : null;
     final playerId = args?['playerId'] as String?;
     final canvasId = args?['canvasId'] as String?;
 
@@ -98,8 +100,8 @@ class AgoraRteCoreImpl {
 
   /// Get all configurations
   Future<AgoraRteConfig> getConfigs() async {
-    Map<String, dynamic> result = await _channel.invokeMethod('rteGetConfigs');
-    return AgoraRteConfig.fromJson(result);
+    final result = await _channel.invokeMethod('rteGetConfigs');
+    return AgoraRteConfig.fromJson(Map<String, dynamic>.from(result));
   }
 
   /// Create player

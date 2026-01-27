@@ -104,19 +104,27 @@ class AgoraRteCanvasImpl implements AgoraRteCanvas {
 
   @override
   Future<void> addView(int viewPtr, {AgoraRteViewConfig? config}) async {
-    await _channel.invokeMethod('rteCanvasAddView', {
+    final result = await _channel.invokeMethod<bool>('rteCanvasAddView', {
       'canvasId': canvasId,
       'viewPtr': viewPtr,
       'config': config?.toJson(),
     });
+    if (result != true) {
+      throw PlatformException(
+          code: 'RTE_ERROR', message: 'Failed to add view to canvas');
+    }
   }
 
   @override
   Future<void> removeView(int viewPtr, {AgoraRteViewConfig? config}) async {
-    await _channel.invokeMethod('rteCanvasRemoveView', {
+    final result = await _channel.invokeMethod<bool>('rteCanvasRemoveView', {
       'canvasId': canvasId,
       'viewPtr': viewPtr,
       'config': config?.toJson(),
     });
+    if (result != true) {
+      throw PlatformException(
+          code: 'RTE_ERROR', message: 'Failed to remove view from canvas');
+    }
   }
 }

@@ -100,6 +100,7 @@ class PlatformRenderPool {
             simpleRef.deRef();
 
             if (simpleRef.getRefCount() <= 0) {
+                viewPtrToRef.remove(simpleRef.getNativeHandle());
                 simpleRef.releaseRef();
                 renders.remove(platformViewId);
             }
