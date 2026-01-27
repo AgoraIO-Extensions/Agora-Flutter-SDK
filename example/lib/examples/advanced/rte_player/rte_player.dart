@@ -51,8 +51,10 @@ class _RtePlayerExampleState extends State<RtePlayerExample> {
       setState(() {
         _isInit = true;
       });
-    } catch (e) {
-      logSink.log('Init Error: $e');
+      logSink.log('[RTE] Initialization completed successfully');
+    } catch (e, stackTrace) {
+      logSink.log('[RTE] Init Error: $e');
+      logSink.log('[RTE] Stack trace: $stackTrace');
     }
   }
 
@@ -76,6 +78,7 @@ class _RtePlayerExampleState extends State<RtePlayerExample> {
       ctrl.dispose();
     }
     _rte.destroy();
+    logSink.log('[RTE] Disposed');
     super.dispose();
   }
 
@@ -313,10 +316,12 @@ class _PlayerController implements AgoraRtePlayerObserver {
 
       isReady = true;
       infoText = 'RTE Ready';
+      addLog('[$id] Ready');
       onUpdate();
-    } catch (e) {
+    } catch (e, stackTrace) {
       infoText = 'Init Error: $e';
-      addLog('Init Error: $e');
+      addLog('[$id] Init Error: $e');
+      addLog('[$id] Stack: $stackTrace');
       onUpdate();
     }
   }
@@ -346,7 +351,7 @@ class _PlayerController implements AgoraRtePlayerObserver {
     final newLogs = List<String>.from(eventLogsNotifier.value);
     newLogs.insert(
         0, '${DateTime.now().toString().substring(11, 19)}: $message');
-    if (newLogs.length > 100) newLogs.removeLast();
+    // if (newLogs.length > 100) newLogs.removeLast();
     eventLogsNotifier.value = newLogs;
   }
 
@@ -371,9 +376,9 @@ class _PlayerController implements AgoraRtePlayerObserver {
   void onStateChanged(AgoraRtePlayerState oldState,
       AgoraRtePlayerState newState, AgoraRteErrorCode? error) {
     addLog(
-        'State: $oldState -> $newState${error != null ? ' (Error: $error)' : ''}');
+        '[$id] State changed: ${oldState.name} -> ${newState.name}${error != null ? ' (Error: ${error.name})' : ''}');
     infoText =
-        'State: ${newState.name}${error != null ? ' (Error: $error)' : ''}';
+        'State: ${newState.name}${error != null ? ' (Error: ${error.name})' : ''}';
     onUpdate();
   }
 

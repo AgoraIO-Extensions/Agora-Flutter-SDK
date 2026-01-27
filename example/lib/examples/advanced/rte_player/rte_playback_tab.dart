@@ -40,9 +40,12 @@ class RtePlaybackTab extends StatefulWidget {
 }
 
 class _RtePlaybackTabState extends State<RtePlaybackTab> {
+//   final TextEditingController _urlController = TextEditingController(
+//       text:
+//           'https://rtc-fallback-test.agoramdn.com/857c6564e7db469387eb44205f287b9a/zzytest.m3u8?token=857c6564e7db469387eb44205f287b9a&userUid=7788');
   final TextEditingController _urlController = TextEditingController(
       text:
-          'https://rtc-fallback-test.agoramdn.com/857c6564e7db469387eb44205f287b9a/zzytest.m3u8?token=857c6564e7db469387eb44205f287b9a&userUid=7788');
+          'rte://aab8b8f5a8cd4469a63042fcfafe7063/XPZ123?token=aab8b8f5a8cd4469a63042fcfafe7063&uid=0&remoteUid=8888889');
   final TextEditingController _switchUrlController =
       TextEditingController(text: 'rte://your_channel_id_2?token=xxx&uid=xxx');
   final TextEditingController _preloadUrlController =
@@ -60,7 +63,10 @@ class _RtePlaybackTabState extends State<RtePlaybackTab> {
   }
 
   Future<void> _onOpen() async {
-    if (widget.player == null) return;
+    if (widget.player == null) {
+      widget.onLog?.call('Error: Player is null');
+      return;
+    }
 
     final url = _urlController.text.trim();
     if (url.isEmpty) {
@@ -71,8 +77,10 @@ class _RtePlaybackTabState extends State<RtePlaybackTab> {
     try {
       widget.onLog?.call('Opening URL: $url');
       await widget.player!.openWithUrl(url, 0);
-    } catch (e) {
+      widget.onLog?.call('Open URL success');
+    } catch (e, stackTrace) {
       widget.onLog?.call('Open error: $e');
+      widget.onLog?.call('Stack: $stackTrace');
     }
   }
 
