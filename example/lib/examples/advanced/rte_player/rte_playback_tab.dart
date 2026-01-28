@@ -434,6 +434,8 @@ class _RtePlaybackTabState extends State<RtePlaybackTab> {
                 ],
               ),
             ),
+
+            const SizedBox(height: 200),
           ],
         ),
       ),
