@@ -416,7 +416,10 @@ public class AgoraRtcNgPlugin implements FlutterPlugin, MethodChannel.MethodCall
                     String playerIdForStats = (String) args.get("playerId");
                     rteController.playerGetStats(playerIdForStats, (stats, err) -> {
                         if (err != null) {
-                            int code = Constants.ErrorCode.getValue(err.code());
+                            // Safely get error code value, use -1 if code is null
+                            int code = (err.code() != null) 
+                                ? Constants.ErrorCode.getValue(err.code()) 
+                                : -1;
                             String message = err.message();
                             String errorMsg;
                             if (message != null && !message.isEmpty()) {

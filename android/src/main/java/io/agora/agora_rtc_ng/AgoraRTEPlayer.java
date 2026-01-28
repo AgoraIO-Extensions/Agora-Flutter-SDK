@@ -952,7 +952,7 @@ public class AgoraRTEPlayer {
             map.put("audioSampleRate", info.audioSampleRate());
             map.put("audioChannels", info.audioChannels());
             map.put("audioBitsPerSample", info.audioBitsPerSample());
-            map.put("abrSubscriptionLayer", Constants.AbrSubscriptionLayer.getValue(info.abrSubscriptionLayer()));
+            map.put("abrSubscriptionLayer", info.abrSubscriptionLayer() != null ? Constants.AbrSubscriptionLayer.getValue(info.abrSubscriptionLayer()) : 0);
             map.put("currentUrl", info.currentUrl() != null ? info.currentUrl() : "");
         } catch (Exception e) {
             // Ignore

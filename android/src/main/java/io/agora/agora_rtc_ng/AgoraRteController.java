@@ -494,12 +494,18 @@ public class AgoraRteController {
             @Override
             public void onResult(io.agora.rte.PlayerStats stats, Error error) {
                 if (callback != null) {
-                    // Check if there's a real error (error != null and code != 0)
-                    if (error != null && (error.code() == null || Constants.ErrorCode.getValue(error.code()) != 0)) {
+                    if (error != null && error.code() != null && Constants.ErrorCode.getValue(error.code()) != 0) {
                         callback.onResult(null, error);
                     } else if (stats != null) {
-                        // TODO: Add actual stats fields when PlayerStats API is confirmed
                         Map<String, Object> statsMap = new HashMap<>();
+                        try {
+                            statsMap.put("videoDecodeFrameRate", stats.videoDecodeFrameRate());
+                            statsMap.put("videoRenderFrameRate", stats.videoRenderFrameRate());
+                            statsMap.put("videoBitrate", stats.videoBitrate());
+                            statsMap.put("audioBitrate", stats.audioBitrate());
+                        } catch (Exception e) {
+                            // If any method throws exception, continue with partial data
+                        }
                         callback.onResult(statsMap, null);
                     } else {
                         callback.onResult(null, null);
