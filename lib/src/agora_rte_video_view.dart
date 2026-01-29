@@ -4,22 +4,114 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
 
-/// A widget that displays RTE video content.
+/// A Flutter widget that displays RTE video content.
 ///
-/// This widget encapsulates the platform view creation and canvas binding
-/// for RTE video rendering. It creates an iOS UiKitView or Android AndroidView
-/// and automatically binds it to the provided canvas.
+/// This widget encapsulates the platform view creation and automatic canvas
+/// binding for RTE video rendering. It creates:
+/// - iOS: `UiKitView` with "AgoraSurfaceView"
+/// - Android: `AndroidView` with "AgoraTextureView"
+///
+/// The widget automatically retrieves the native view pointer and binds it to
+/// the provided [canvas] using [AgoraRteCanvas.addView]. When the widget is
+/// disposed, it automatically unbinds the view using [AgoraRteCanvas.removeView].
+///
+/// **Usage Pattern:**
+/// 1. Create an [AgoraRte] instance
+/// 2. Create an [AgoraRtePlayer] and [AgoraRteCanvas]
+/// 3. Pass both to this widget
+/// 4. The widget handles all native view binding automatically
+///
+/// **Since:** v4.4.0
+///
+/// **Supported Platforms:** iOS, Android (Web is not supported)
+///
+/// **Example:**
+/// ```dart
+/// // Initialize RTE
+/// final rte = createAgoraRte();
+/// await rte.createWithConfig(AgoraRteConfig(appId: 'your_app_id'));
+/// await rte.initMediaEngine();
+///
+/// // Create player and canvas
+/// final player = await rte.createPlayer(AgoraRtePlayerConfig());
+/// final canvas = await rte.createCanvas(AgoraRteCanvasConfig());
+///
+/// // Set canvas to player
+/// await player.setCanvas(canvas);
+///
+/// // Use the widget in your UI
+/// @override
+/// Widget build(BuildContext context) {
+///   return AgoraRteVideoView(
+///     player: player,
+///     canvas: canvas,
+///     onViewCreated: () {
+///       print('Video view created and bound');
+///     },
+///     onLog: (message) {
+///       print('RTE Video: $message');
+///     },
+///   );
+/// }
+/// ```
+///
+/// **See also:**
+/// - [AgoraRteCanvas]
+/// - [AgoraRtePlayer]
+/// - [AgoraRte.createCanvas]
 class AgoraRteVideoView extends StatefulWidget {
-  /// The RTE canvas to render video on
+  /// The RTE canvas used for rendering video.
+  ///
+  /// This canvas should be created using [AgoraRte.createCanvas]. The widget
+  /// will automatically bind the native view to this canvas.
+  ///
+  /// Can be `null` during initialization or temporary states.
   final AgoraRteCanvas? canvas;
 
-  /// The RTE player that provides video content
+  /// The RTE player that provides video content.
+  ///
+  /// This player should be created using [AgoraRte.createPlayer] and should
+  /// have [AgoraRtePlayer.setCanvas] called with the same [canvas] instance.
+  ///
+  /// When both [canvas] and [player] are non-null and the view is created,
+  /// the widget will re-associate the canvas with the player to ensure proper
+  /// binding.
+  ///
+  /// Can be `null` during initialization or temporary states.
   final AgoraRtePlayer? player;
 
-  /// Optional callback when the view is created
+  /// Callback invoked when the platform view has been created and successfully
+  /// bound to the canvas.
+  ///
+  /// This is a good place to start playback or perform other operations that
+  /// require the view to be ready.
+  ///
+  /// **Example:**
+  /// ```dart
+  /// AgoraRteVideoView(
+  ///   canvas: myCanvas,
+  ///   player: myPlayer,
+  ///   onViewCreated: () async {
+  ///     // View is ready, now open and play the URL
+  ///     await myPlayer.openWithUrl('rte://...');
+  ///   },
+  /// )
+  /// ```
   final VoidCallback? onViewCreated;
 
-  /// Optional callback for logging
+  /// Optional callback for receiving log messages from the widget.
+  ///
+  /// Useful for debugging view creation, binding, and lifecycle events.
+  /// All messages are also output to [debugPrint].
+  ///
+  /// **Example:**
+  /// ```dart
+  /// AgoraRteVideoView(
+  ///   onLog: (message) {
+  ///     print('[RTE Video] $message');
+  ///   },
+  /// )
+  /// ```
   final Function(String)? onLog;
 
   const AgoraRteVideoView({

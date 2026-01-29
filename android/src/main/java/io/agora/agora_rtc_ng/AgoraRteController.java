@@ -386,10 +386,19 @@ public class AgoraRteController {
         if (rtePlayer == null) {
             return false;
         }
+        final String pid = playerId;
         return rtePlayer.openUrl(playerId, url, startTime, new AsyncCallback() {
             @Override
             public void onResult(Error error) {
-                // Result handled by observer
+                if (error != null && error.code() != null && Constants.ErrorCode.getValue(error.code()) != 0) {
+                    runOnMainThread(() -> {
+                        Map<String, Object> args = new HashMap<>();
+                        args.put("playerId", pid);
+                        args.put("errorCode", Constants.ErrorCode.getValue(error.code()));
+                        args.put("errorMessage", error.message() != null ? error.message() : "");
+                        channel.invokeMethod("rtePlayerOpenUrlCallback", args);
+                    });
+                }
             }
         });
     }
