@@ -9,8 +9,18 @@ class AgoraRteCanvasImpl implements AgoraRteCanvas {
   @override
   final String canvasId;
   final MethodChannel _channel;
+  String? _playerId;
 
   AgoraRteCanvasImpl(this.canvasId, this._channel);
+
+  /// Set the associated player ID for this canvas.
+  /// This is used when calling setConfigs to automatically associate the canvas with the player.
+  void setPlayerId(String? playerId) {
+    _playerId = playerId;
+  }
+
+  /// Get the associated player ID for this canvas.
+  String? get playerId => _playerId;
 
   /// Handle callbacks (called by AgoraRteCoreImpl)
   ///
@@ -41,6 +51,13 @@ class AgoraRteCanvasImpl implements AgoraRteCanvas {
       'canvasId': canvasId,
       'config': config.toJson(),
     });
+    // If playerId is set, associate the canvas with the player
+    if (_playerId != null) {
+      await _channel.invokeMethod('rtePlayerSetCanvas', {
+        'playerId': _playerId,
+        'canvasId': canvasId,
+      });
+    }
   }
 
   @override

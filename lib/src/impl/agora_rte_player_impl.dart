@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'package:agora_rtc_engine/agora_rte_engine.dart';
 import 'package:flutter/services.dart';
+import 'agora_rte_canvas_impl.dart';
 
 /// RTE player implementation
 class AgoraRtePlayerImpl implements AgoraRtePlayer {
@@ -116,6 +117,10 @@ class AgoraRtePlayerImpl implements AgoraRtePlayer {
       'playerId': playerId,
       'canvasId': canvas.canvasId,
     });
+    // Automatically set playerId in canvas implementation for setConfigs to work
+    if (canvas is AgoraRteCanvasImpl) {
+      canvas.setPlayerId(playerId);
+    }
   }
 
   @override
