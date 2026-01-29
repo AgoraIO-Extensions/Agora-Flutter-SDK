@@ -1,6 +1,6 @@
 import 'package:json_annotation/json_annotation.dart';
 import 'package:agora_rtc_engine/src/agora_rte_enums.dart';
-import 'package:agora_rtc_engine/src/agora_rte.dart';
+import 'package:agora_rtc_engine/src/agora_rte_config.dart';
 import 'package:agora_rtc_engine/src/_serializable.dart';
 
 part 'agora_rte_canvas_config.g.dart';

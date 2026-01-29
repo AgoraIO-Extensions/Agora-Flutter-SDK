@@ -361,11 +361,11 @@ class _RtePlaybackTabState extends State<RtePlaybackTab> {
                 children: [
                   Text('Volume: ${widget.volume ?? 100}'),
                   Slider(
-                    value: (widget.volume ?? 100).toDouble(),
+                    value: ((widget.volume ?? 100).clamp(0, 400)).toDouble(),
                     min: 0,
-                    max: 100,
-                    divisions: 10,
-                    label: '${widget.volume ?? 100}',
+                    max: 400,
+                    divisions: 40,
+                    label: '${(widget.volume ?? 100).clamp(0, 400)}',
                     onChanged: (value) =>
                         _setPlayerPlayoutVolume(value.toInt()),
                   ),

@@ -120,7 +120,7 @@ public class AgoraRteController {
                         args.put("newState", newState);
                         args.put("errorCode", errorCode);
                         args.put("errorMessage", errorMessage);
-                        channel.invokeMethod("onStateChanged", args);
+                        channel.invokeMethod("rtePlayerOnStateChanged", args);
                     });
                 }
 
@@ -131,7 +131,7 @@ public class AgoraRteController {
                         args.put("playerId", playerId);
                         args.put("currentTime", currentTime);
                         args.put("utcTime", utcTime);
-                        channel.invokeMethod("onPositionChanged", args);
+                        channel.invokeMethod("rtePlayerOnPositionChanged", args);
                     });
                 }
 
@@ -142,7 +142,7 @@ public class AgoraRteController {
                         args.put("playerId", playerId);
                         args.put("width", width);
                         args.put("height", height);
-                        channel.invokeMethod("onResolutionChanged", args);
+                        channel.invokeMethod("rtePlayerOnResolutionChanged", args);
                     });
                 }
 
@@ -152,7 +152,7 @@ public class AgoraRteController {
                         Map<String, Object> args = new HashMap<>();
                         args.put("playerId", playerId);
                         args.put("event", event);
-                        channel.invokeMethod("onEvent", args);
+                        channel.invokeMethod("rtePlayerOnEvent", args);
                     });
                 }
 
@@ -163,7 +163,7 @@ public class AgoraRteController {
                         args.put("playerId", playerId);
                         args.put("type", type);
                         args.put("data", data);
-                        channel.invokeMethod("onMetadata", args);
+                        channel.invokeMethod("rtePlayerOnMetadata", args);
                     });
                 }
 
@@ -173,7 +173,7 @@ public class AgoraRteController {
                         Map<String, Object> args = new HashMap<>();
                         args.put("playerId", playerId);
                         args.put("info", info);
-                        channel.invokeMethod("onPlayerInfoUpdated", args);
+                        channel.invokeMethod("rtePlayerOnPlayerInfoUpdated", args);
                     });
                 }
 
@@ -183,7 +183,7 @@ public class AgoraRteController {
                         Map<String, Object> args = new HashMap<>();
                         args.put("playerId", playerId);
                         args.put("volume", volume);
-                        channel.invokeMethod("onAudioVolumeIndication", args);
+                        channel.invokeMethod("rtePlayerOnAudioVolumeIndication", args);
                     });
                 }
             });

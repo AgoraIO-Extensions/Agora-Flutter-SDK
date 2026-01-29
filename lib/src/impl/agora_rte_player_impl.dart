@@ -43,8 +43,15 @@ class AgoraRtePlayerImpl implements AgoraRtePlayer {
             args['data'] is Uint8List ? args['data'] : Uint8List(0));
         break;
       case 'rtePlayerOnPlayerInfoUpdated':
+        final info = args['info'];
+        Map<String, dynamic> infoMap;
+        if (info is Map) {
+          infoMap = Map<String, dynamic>.from(info);
+        } else {
+          infoMap = <String, dynamic>{};
+        }
         _observer!.onPlayerInfoUpdated(
-            AgoraRtePlayerInfo.fromJson(args['info'] ?? {}));
+            AgoraRtePlayerInfo.fromJson(infoMap));
         break;
       case 'rtePlayerOnAudioVolumeIndication':
         _observer!.onAudioVolumeIndication(args['volume'] ?? 0);

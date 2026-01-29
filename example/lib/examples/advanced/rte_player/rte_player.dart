@@ -133,11 +133,47 @@ class _PlayerView extends StatefulWidget {
 class _PlayerViewState extends State<_PlayerView>
     with SingleTickerProviderStateMixin {
   late TabController _tabController;
+  Widget? _cachedRteConfigTab;
+  Widget? _cachedPlayerConfigTab;
+  Widget? _cachedCanvasConfigTab;
 
   @override
   void initState() {
     super.initState();
     _tabController = TabController(length: 4, vsync: this);
+    _buildCachedConfigTabs();
+  }
+
+  void _buildCachedConfigTabs() {
+    final activeCtrl = widget.controller;
+    _cachedRteConfigTab = RteConfigTab(
+      key: ValueKey('rteconfig_${activeCtrl.id}'),
+      rte: widget.rte, // Shared engine
+      onLog: (msg) => activeCtrl.addLog('[Config] $msg'),
+    );
+    _cachedPlayerConfigTab = RtePlayerConfigTab(
+      key: ValueKey('pconfig_${activeCtrl.id}'),
+      player: activeCtrl.player,
+      onLog: activeCtrl.addLog,
+      onPlaybackSpeedChanged: (s) => activeCtrl.setPlaybackSpeed(s),
+      onVolumeChanged: (v) => activeCtrl.setVolume(v),
+      onEnableAudioVolumeLogChanged: (enable) =>
+          activeCtrl.setEnableAudioVolumeLog(enable),
+    );
+    _cachedCanvasConfigTab = RteCanvasConfigTab(
+      key: ValueKey('cconfig_${activeCtrl.id}'),
+      canvas: activeCtrl.canvas,
+      onLog: activeCtrl.addLog,
+    );
+  }
+
+  @override
+  void didUpdateWidget(covariant _PlayerView oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    // Only rebuild cached config tabs if controller changed
+    if (oldWidget.controller != widget.controller) {
+      _buildCachedConfigTabs();
+    }
   }
 
   @override
@@ -191,22 +227,9 @@ class _PlayerViewState extends State<_PlayerView>
                   onVolumeChanged: (v) => activeCtrl.setVolume(v),
                   onPlaybackSpeedChanged: (s) => activeCtrl.setPlaybackSpeed(s),
                 ),
-                RteConfigTab(
-                  rte: widget.rte, // Shared engine
-                  onLog: (msg) => activeCtrl.addLog('[Config] $msg'),
-                ),
-                RtePlayerConfigTab(
-                  key: ValueKey('pconfig_${activeCtrl.id}'),
-                  player: activeCtrl.player,
-                  onLog: activeCtrl.addLog,
-                  onPlaybackSpeedChanged: (s) => activeCtrl.setPlaybackSpeed(s),
-                  onVolumeChanged: (v) => activeCtrl.setVolume(v),
-                ),
-                RteCanvasConfigTab(
-                  key: ValueKey('cconfig_${activeCtrl.id}'),
-                  canvas: activeCtrl.canvas,
-                  onLog: activeCtrl.addLog,
-                ),
+                _cachedRteConfigTab!,
+                _cachedPlayerConfigTab!,
+                _cachedCanvasConfigTab!,
               ],
             ),
           ),
@@ -291,6 +314,8 @@ class _PlayerController implements AgoraRtePlayerObserver {
   int? playbackSpeed = 100;
   int? volume = 100;
 
+  bool _enableAudioVolumeLog = false;
+
   final ValueNotifier<AgoraRtePlayerInfo?> playerInfoNotifier =
       ValueNotifier(null);
   final ValueNotifier<AgoraRtePlayerStats?> statsNotifier = ValueNotifier(null);
@@ -306,7 +331,8 @@ class _PlayerController implements AgoraRtePlayerObserver {
 
       final rtePlayerConfig = await player!.getConfigs();
       playbackSpeed = rtePlayerConfig.playbackSpeed ?? 100;
-      volume = rtePlayerConfig.playoutVolume ?? 100;
+      final configVolume = rtePlayerConfig.playoutVolume ?? 100;
+      volume = configVolume.clamp(0, 400);
 
       canvas = await rte.createCanvas(const AgoraRteCanvasConfig(
           videoRenderMode: AgoraRteVideoRenderMode.fit));
@@ -356,13 +382,17 @@ class _PlayerController implements AgoraRtePlayerObserver {
   }
 
   void setVolume(int v) {
-    volume = v;
+    volume = v.clamp(0, 400);
     onUpdate();
   }
 
   void setPlaybackSpeed(int s) {
     playbackSpeed = s;
     onUpdate();
+  }
+
+  void setEnableAudioVolumeLog(bool enable) {
+    _enableAudioVolumeLog = enable;
   }
 
   void dispose() {
@@ -376,7 +406,7 @@ class _PlayerController implements AgoraRtePlayerObserver {
   void onStateChanged(AgoraRtePlayerState oldState,
       AgoraRtePlayerState newState, AgoraRteErrorCode? error) {
     addLog(
-        '[$id] State changed: ${oldState.name} -> ${newState.name}${error != null ? ' (Error: ${error.name})' : ''}');
+        'playerObserver [$id] onStateChanged: ${oldState.name} -> ${newState.name}${error != null ? ' (Error: ${error.name})' : ''}');
     infoText =
         'State: ${newState.name}${error != null ? ' (Error: ${error.name})' : ''}';
     onUpdate();
@@ -384,13 +414,14 @@ class _PlayerController implements AgoraRtePlayerObserver {
 
   @override
   void onPositionChanged(int currentTime, int utcTime) {
+    addLog('playerObserver onPositionChanged: $currentTime');
     currentPosition = currentTime;
     onUpdate();
   }
 
   @override
   void onResolutionChanged(int newWidth, int newHeight) {
-    addLog('Resolution changed: ${newWidth}x$newHeight');
+    addLog('playerObserver onResolutionChanged: ${newWidth}x$newHeight');
     width = newWidth;
     height = newHeight;
     onUpdate();
@@ -398,17 +429,17 @@ class _PlayerController implements AgoraRtePlayerObserver {
 
   @override
   void onEvent(AgoraRtePlayerEvent event) {
-    addLog('Event: ${event.name}');
+    addLog('playerObserver onEvent: ${event.name}');
   }
 
   @override
   void onMetadata(AgoraRtePlayerMetadataType type, Uint8List data) {
-    addLog('Metadata: ${type.name}');
+    addLog('playerObserver onMetadata: ${type.name}');
   }
 
   @override
   void onPlayerInfoUpdated(AgoraRtePlayerInfo info) {
-    addLog('Info updated: ${info.currentUrl}');
+    addLog('playerObserver onPlayerInfoUpdated: ${info.toJson()}');
     playerInfoNotifier.value = info;
     final newDuration = info.duration ?? 0;
     if (duration != newDuration) {
@@ -419,6 +450,9 @@ class _PlayerController implements AgoraRtePlayerObserver {
 
   @override
   void onAudioVolumeIndication(int vol) {
+    if (_enableAudioVolumeLog) {
+      addLog('playerObserver onAudioVolumeIndication: $vol');
+    }
     audioVolume = vol;
     onUpdate();
   }

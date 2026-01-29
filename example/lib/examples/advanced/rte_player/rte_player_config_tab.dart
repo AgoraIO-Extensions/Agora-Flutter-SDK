@@ -6,6 +6,7 @@ class RtePlayerConfigTab extends StatefulWidget {
   final Function(String) onLog;
   final Function(int)? onPlaybackSpeedChanged;
   final Function(int)? onVolumeChanged;
+  final Function(bool)? onEnableAudioVolumeLogChanged;
 
   const RtePlayerConfigTab({
     Key? key,
@@ -13,6 +14,7 @@ class RtePlayerConfigTab extends StatefulWidget {
     required this.onLog,
     this.onPlaybackSpeedChanged,
     this.onVolumeChanged,
+    this.onEnableAudioVolumeLogChanged,
   }) : super(key: key);
 
   @override
@@ -38,6 +40,7 @@ class _RtePlayerConfigTabState extends State<RtePlayerConfigTab> {
       AgoraRteAbrSubscriptionLayer.high;
   AgoraRteAbrFallbackLayer _abrFallbackLayer =
       AgoraRteAbrFallbackLayer.disabled;
+  bool _enableAudioVolumeLog = false;
 
   @override
   void initState() {
@@ -53,8 +56,8 @@ class _RtePlayerConfigTabState extends State<RtePlayerConfigTab> {
     }
   }
 
-  Future<void> _loadPlayerConfig() async {
-    if (widget.player == null) return;
+  Future<AgoraRtePlayerConfig> _loadPlayerConfig() async {
+    if (widget.player == null) return const AgoraRtePlayerConfig();
     try {
       final rtePlayerConfig = await widget.player!.getConfigs();
       if (mounted) {
@@ -83,8 +86,10 @@ class _RtePlayerConfigTabState extends State<RtePlayerConfigTab> {
         widget.onPlaybackSpeedChanged?.call(_playbackSpeed);
         widget.onVolumeChanged?.call(_volume);
       }
+      return rtePlayerConfig;
     } catch (e) {
       widget.onLog('Load Player config error: $e');
+      return const AgoraRtePlayerConfig();
     }
   }
 
@@ -335,6 +340,18 @@ class _RtePlayerConfigTabState extends State<RtePlayerConfigTab> {
                 value: _autoPlay,
                 onChanged: _setPlayerAutoPlay,
               ),
+              SwitchListTile(
+                title: const Text('Enable Audio Volume Log'),
+                subtitle: const Text('Enable onAudioVolumeIndication log'),
+                value: _enableAudioVolumeLog,
+                onChanged: (value) {
+                  setState(() {
+                    _enableAudioVolumeLog = value;
+                  });
+                  widget.onEnableAudioVolumeLogChanged?.call(value);
+                  widget.onLog('Set EnableAudioVolumeLog: $value');
+                },
+              ),
               _buildConfigItem(
                   'Playback Speed',
                   '$_playbackSpeed',
@@ -420,7 +437,10 @@ class _RtePlayerConfigTabState extends State<RtePlayerConfigTab> {
               ),
               const SizedBox(height: 16),
               ElevatedButton(
-                onPressed: _loadPlayerConfig,
+                onPressed: () async {
+                  final rtePlayerConfig = await _loadPlayerConfig();
+                  widget.onLog('getConfigs result: ${rtePlayerConfig.toJson()}');
+                },
                 child: const Text('Refresh Config (getConfigs)'),
               ),
               const SizedBox(height: 8),
