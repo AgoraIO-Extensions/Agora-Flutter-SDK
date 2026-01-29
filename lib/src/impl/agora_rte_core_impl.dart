@@ -1,6 +1,5 @@
 import 'dart:async';
 import 'package:agora_rtc_engine/agora_rte_engine.dart';
-import 'package:agora_rtc_engine/src/agora_rte.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/foundation.dart';
 import 'agora_rte_player_impl.dart';
@@ -21,12 +20,27 @@ class AgoraRteCoreImpl {
   }
   final Map<String, AgoraRtePlayerImpl> _players = {};
   final Map<String, AgoraRteCanvasImpl> _canvases = {};
+  // Maintain canvas -> player mapping for automatic re-association after config changes
+  final Map<String, String> _canvasToPlayer = {};
 
   /// Get player instance
   AgoraRtePlayerImpl? getPlayer(String playerId) => _players[playerId];
 
   /// Get canvas instance
   AgoraRteCanvasImpl? getCanvas(String canvasId) => _canvases[canvasId];
+
+  /// Get player ID associated with a canvas
+  String? getPlayerIdForCanvas(String canvasId) => _canvasToPlayer[canvasId];
+
+  /// Associate a canvas with a player
+  /// Internal method used by player.setCanvas to register the association
+  void associateCanvasWithPlayer(String canvasId, String? playerId) {
+    if (playerId != null) {
+      _canvasToPlayer[canvasId] = playerId;
+    } else {
+      _canvasToPlayer.remove(canvasId);
+    }
+  }
 
   Future<dynamic> _handleMethodCall(MethodCall call) async {
     final args = call.arguments != null
@@ -91,6 +105,7 @@ class AgoraRteCoreImpl {
     await _channel.invokeMethod('rteDestroy');
     _players.clear();
     _canvases.clear();
+    _canvasToPlayer.clear();
   }
 
   /// Set configurations in batch
@@ -123,7 +138,7 @@ class AgoraRteCoreImpl {
   Future<AgoraRteCanvas> createCanvas(AgoraRteCanvasConfig config) async {
     final String canvasId =
         await _channel.invokeMethod('rteCanvasCreate', config.toJson());
-    final canvas = AgoraRteCanvasImpl(canvasId, _channel);
+    final canvas = AgoraRteCanvasImpl(canvasId, _channel, this);
     _canvases[canvasId] = canvas;
     return canvas;
   }
@@ -132,6 +147,32 @@ class AgoraRteCoreImpl {
   Future<void> destroyCanvas(String canvasId) async {
     await _channel.invokeMethod('rteCanvasDestroy', {'canvasId': canvasId});
     _canvases.remove(canvasId);
+    _canvasToPlayer.remove(canvasId);
+  }
+
+  /// Set canvas for a player (unified method for rtePlayerSetCanvas)
+  /// This is the single point of calling rtePlayerSetCanvas
+  /// [registerAssociation] indicates whether to register the association for future re-association
+  Future<void> setPlayerCanvas(String playerId, String canvasId,
+      {bool registerAssociation = false}) async {
+    await _channel.invokeMethod('rtePlayerSetCanvas', {
+      'playerId': playerId,
+      'canvasId': canvasId,
+    });
+    // Register canvas-player association if requested (for first-time setup)
+    if (registerAssociation) {
+      associateCanvasWithPlayer(canvasId, playerId);
+    }
+  }
+
+  /// Re-associate canvas with player after config change
+  /// This is called internally by canvas.setConfigs when needed
+  Future<void> reassociateCanvasWithPlayer(String canvasId) async {
+    final playerId = _canvasToPlayer[canvasId];
+    if (playerId != null) {
+      // Re-associate without registering (association already exists)
+      await setPlayerCanvas(playerId, canvasId, registerAssociation: false);
+    }
   }
 
   /// Preload URL

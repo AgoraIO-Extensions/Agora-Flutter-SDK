@@ -1,7 +1,7 @@
 import 'dart:async';
 import 'package:agora_rtc_engine/agora_rte_engine.dart';
+import 'package:agora_rtc_engine/src/impl/agora_rte_core_impl.dart';
 import 'package:flutter/services.dart';
-import 'agora_rte_canvas_impl.dart';
 
 /// RTE player implementation
 class AgoraRtePlayerImpl implements AgoraRtePlayer {
@@ -14,7 +14,7 @@ class AgoraRtePlayerImpl implements AgoraRtePlayer {
 
   /// Handle callbacks (called by AgoraRteCoreImpl)
   void handleCallback(String method, Map args) {
-    print('xpz = $method');
+    print('xpz = $method $args');
     if (_observer == null) return;
 
     switch (method) {
@@ -113,14 +113,11 @@ class AgoraRtePlayerImpl implements AgoraRtePlayer {
 
   @override
   Future<void> setCanvas(AgoraRteCanvas canvas) async {
-    await _channel.invokeMethod('rtePlayerSetCanvas', {
-      'playerId': playerId,
-      'canvasId': canvas.canvasId,
-    });
-    // Automatically set playerId in canvas implementation for setConfigs to work
-    if (canvas is AgoraRteCanvasImpl) {
-      canvas.setPlayerId(playerId);
-    }
+    // Use unified method in Core to avoid duplicate rtePlayerSetCanvas calls
+    // registerAssociation=true to register the association for future re-association
+    await AgoraRteCoreImpl.instance.setPlayerCanvas(
+        playerId, canvas.canvasId,
+        registerAssociation: true);
   }
 
   @override

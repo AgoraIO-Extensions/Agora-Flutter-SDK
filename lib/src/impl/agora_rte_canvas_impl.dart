@@ -2,6 +2,7 @@ import 'dart:async';
 import 'package:agora_rtc_engine/src/agora_rte.dart';
 import 'package:agora_rtc_engine/src/agora_rte_enums.dart';
 import 'package:agora_rtc_engine/src/agora_rte_canvas_config.dart';
+import 'package:agora_rtc_engine/src/impl/agora_rte_core_impl.dart';
 import 'package:flutter/services.dart';
 
 /// RTE canvas implementation
@@ -9,18 +10,9 @@ class AgoraRteCanvasImpl implements AgoraRteCanvas {
   @override
   final String canvasId;
   final MethodChannel _channel;
-  String? _playerId;
+  final AgoraRteCoreImpl _core;
 
-  AgoraRteCanvasImpl(this.canvasId, this._channel);
-
-  /// Set the associated player ID for this canvas.
-  /// This is used when calling setConfigs to automatically associate the canvas with the player.
-  void setPlayerId(String? playerId) {
-    _playerId = playerId;
-  }
-
-  /// Get the associated player ID for this canvas.
-  String? get playerId => _playerId;
+  AgoraRteCanvasImpl(this.canvasId, this._channel, this._core);
 
   /// Handle callbacks (called by AgoraRteCoreImpl)
   ///
@@ -51,13 +43,9 @@ class AgoraRteCanvasImpl implements AgoraRteCanvas {
       'canvasId': canvasId,
       'config': config.toJson(),
     });
-    // If playerId is set, associate the canvas with the player
-    if (_playerId != null) {
-      await _channel.invokeMethod('rtePlayerSetCanvas', {
-        'playerId': _playerId,
-        'canvasId': canvasId,
-      });
-    }
+    // Re-associate canvas with player if previously associated
+    // This ensures canvas config changes are applied to the player
+    await _core.reassociateCanvasWithPlayer(canvasId);
   }
 
   @override
