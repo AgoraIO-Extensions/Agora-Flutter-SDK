@@ -34,8 +34,8 @@ class _RteCanvasConfigTabState extends State<RteCanvasConfigTab> {
     }
   }
 
-  Future<void> _loadCanvasConfig() async {
-    if (widget.canvas == null) return;
+  Future<AgoraRteCanvasConfig> _loadCanvasConfig() async {
+    if (widget.canvas == null) return const AgoraRteCanvasConfig();
     try {
       final rteCanvasConfig = await widget.canvas!.getConfigs();
       if (mounted) {
@@ -47,8 +47,10 @@ class _RteCanvasConfigTabState extends State<RteCanvasConfigTab> {
           _cropArea = rteCanvasConfig.cropArea ?? const AgoraRteRect();
         });
       }
+      return rteCanvasConfig;
     } catch (e) {
       widget.onLog('Load Canvas config error: $e');
+      return const AgoraRteCanvasConfig();
     }
   }
 
@@ -224,7 +226,11 @@ class _RteCanvasConfigTabState extends State<RteCanvasConfigTab> {
               ),
               const SizedBox(height: 16),
               ElevatedButton(
-                onPressed: _loadCanvasConfig,
+                onPressed: () {
+                  _loadCanvasConfig().then((value) {
+                    widget.onLog('getConfigs result: ${value.toJson()}');
+                  });
+                },
                 child: const Text('Refresh Config (getConfigs)'),
               ),
               const SizedBox(height: 8),

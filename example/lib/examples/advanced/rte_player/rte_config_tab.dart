@@ -37,7 +37,7 @@ class _RteConfigTabState extends State<RteConfigTab> {
     }
   }
 
-  Future<void> _loadRteConfig() async {
+  Future<AgoraRteConfig> _loadRteConfig() async {
     try {
       // Example: Using getConfigs() to get all configs at once
       final config = await widget.rte.getConfigs();
@@ -53,8 +53,10 @@ class _RteConfigTabState extends State<RteConfigTab> {
         });
       }
       widget.onLog('Loaded RTE config using getConfigs()');
+      return config;
     } catch (e) {
       widget.onLog('Load RTE config error: $e');
+      return AgoraRteConfig();
     }
   }
   /// Example: Using setConfigs() to set multiple configs at once
@@ -132,7 +134,11 @@ class _RteConfigTabState extends State<RteConfigTab> {
               ),
               const SizedBox(height: 16),
               ElevatedButton(
-                onPressed: _loadRteConfig,
+                onPressed: () {
+                  _loadRteConfig().then((value) {
+                    widget.onLog('getConfigs result: ${value.toJson()}');
+                  });
+                },
                 child: const Text('Refresh Config (getConfigs)'),
               ),
               const SizedBox(height: 8),

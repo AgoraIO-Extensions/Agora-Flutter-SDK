@@ -13,6 +13,7 @@ class AgoraRtePlayerImpl implements AgoraRtePlayer {
 
   /// Handle callbacks (called by AgoraRteCoreImpl)
   void handleCallback(String method, Map args) {
+    print('xpz = $method');
     if (_observer == null) return;
 
     switch (method) {
@@ -38,9 +39,14 @@ class AgoraRtePlayerImpl implements AgoraRtePlayer {
             AgoraRtePlayerEvent.values[args['event'] ?? 0]);
         break;
       case 'rtePlayerOnMetadata':
+        final data = args['data'] is Uint8List 
+            ? args['data'] as Uint8List 
+            : (args['data'] is List 
+                ? Uint8List.fromList(List<int>.from(args['data']))
+                : Uint8List(0));
         _observer!.onMetadata(
-            AgoraRtePlayerMetadataType.values[args['type'] ?? 0],
-            args['data'] is Uint8List ? args['data'] : Uint8List(0));
+          AgoraRtePlayerMetadataType.values[args['type'] ?? 0],
+          data);
         break;
       case 'rtePlayerOnPlayerInfoUpdated':
         final info = args['info'];

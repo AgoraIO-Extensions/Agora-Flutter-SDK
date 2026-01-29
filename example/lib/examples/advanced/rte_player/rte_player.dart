@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:convert';
 import 'dart:typed_data';
 
 import 'package:agora_rtc_engine/agora_rte_engine.dart';
@@ -434,7 +435,51 @@ class _PlayerController implements AgoraRtePlayerObserver {
 
   @override
   void onMetadata(AgoraRtePlayerMetadataType type, Uint8List data) {
-    addLog('playerObserver onMetadata: ${type.name}');
+    // Decode metadata content for better visibility
+    String decodedContent = '';
+    String hexContent = '';
+    
+    if (data.isNotEmpty) {
+      // Try to decode as UTF-8 string
+      try {
+        decodedContent = utf8.decode(data, allowMalformed: true);
+        // Check if it's valid printable text
+        final isPrintable = decodedContent.codeUnits.every((code) => 
+            (code >= 32 && code <= 126) || 
+            code == 9 || code == 10 || code == 13);
+        if (!isPrintable || decodedContent.trim().isEmpty) {
+          decodedContent = '';
+        }
+      } catch (e) {
+        decodedContent = '';
+      }
+      
+      // Convert to hex string for binary data
+      final maxHexBytes = data.length > 64 ? 64 : data.length;
+      final hexBuffer = StringBuffer();
+      for (int i = 0; i < maxHexBytes; i++) {
+        hexBuffer.write(data[i].toRadixString(16).padLeft(2, '0').toUpperCase());
+        hexBuffer.write(' ');
+        if ((i + 1) % 16 == 0) {
+          hexBuffer.writeln();
+        }
+      }
+      if (data.length > maxHexBytes) {
+        hexBuffer.write('... (${data.length} bytes total)');
+      }
+      hexContent = hexBuffer.toString();
+    }
+    
+    // Log decoded content
+    final logMessage = StringBuffer();
+    logMessage.write('playerObserver onMetadata: ${type.name}, length: ${data.length}');
+    if (decodedContent.isNotEmpty) {
+      logMessage.write('\n  Decoded (UTF-8): $decodedContent');
+    }
+    if (hexContent.isNotEmpty) {
+      logMessage.write('\n  Hex: $hexContent');
+    }
+    addLog(logMessage.toString());
   }
 
   @override

@@ -47,17 +47,7 @@ class AgoraRteCanvasImpl implements AgoraRteCanvas {
   Future<AgoraRteCanvasConfig> getConfigs() async {
     final Map result = await _channel
         .invokeMethod('rteCanvasGetConfigs', {'canvasId': canvasId});
-    return AgoraRteCanvasConfig(
-      videoRenderMode: result['videoRenderMode'] != null
-          ? AgoraRteVideoRenderMode.values[result['videoRenderMode']]
-          : null,
-      videoMirrorMode: result['videoMirrorMode'] != null
-          ? AgoraRteVideoMirrorMode.values[result['videoMirrorMode']]
-          : null,
-      cropArea: result['cropArea'] != null
-          ? AgoraRteRect.fromJson(Map<String, dynamic>.from(result['cropArea']))
-          : null,
-    );
+    return AgoraRteCanvasConfig.fromJson(Map<String, dynamic>.from(result));
   }
 
   Future<AgoraRteVideoRenderMode> getVideoRenderMode() async {
