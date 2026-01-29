@@ -11,13 +11,15 @@
 @implementation AgoraRTEPlayerObserverBridge
 
 - (void)onStateChanged:(AgoraRtePlayerState)oldState newState:(AgoraRtePlayerState)newState error:(AgoraRteError *)error {
+    AgoraRteError *rteError = [[AgoraRteError alloc] init];
+    [rteError setErrorWithCode:error.code message:error.message];
     dispatch_async(dispatch_get_main_queue(), ^{
         if ([self.playerManager.observerDelegate respondsToSelector:@selector(player:onStateChanged:newState:errorCode:errorMessage:)]) {
             [self.playerManager.observerDelegate player:self.playerId
                                         onStateChanged:(NSInteger)oldState
                                               newState:(NSInteger)newState
-                                             errorCode:error ? (NSInteger)error.code : 0
-                                          errorMessage:error ? SafeGetRteErrorMessage(error) : nil];
+                                             errorCode:rteError ? (NSInteger)rteError.code : 0
+                                          errorMessage:rteError ? SafeGetRteErrorMessage(rteError) : nil];
         }
     });
 }
