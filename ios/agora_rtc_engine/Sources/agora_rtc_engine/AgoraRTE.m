@@ -3,6 +3,9 @@
 
 @interface AgoraRTE ()
 @property (nonatomic, strong, readwrite) AgoraRte *rteInstance;
+/// Cache for uint32 values that overflow int (SDK may return signed int).
+@property (nonatomic, strong) NSNumber *lastSetLogFileSize;
+@property (nonatomic, strong) NSNumber *lastSetAreaCode;
 @end
 
 @implementation AgoraRTE
@@ -94,14 +97,20 @@
         }
     }
     if (config[@"logFileSize"] && config[@"logFileSize"] != [NSNull null]) {
-        [rteConfig setLogFileSize:[config[@"logFileSize"] unsignedLongValue] error:rteError];
+        NSNumber *num = config[@"logFileSize"];
+        unsigned long v = [num unsignedLongValue];
+        self.lastSetLogFileSize = @(v);
+        [rteConfig setLogFileSize:v error:rteError];
         if (rteError.code != AgoraRteOk) {
             if (error) *error = RTE_NSERROR_FROM_RTE_ERROR(rteError);
             return NO;
         }
     }
     if (config[@"areaCode"] && config[@"areaCode"] != [NSNull null]) {
-        [rteConfig setAreaCode:[config[@"areaCode"] intValue] error:rteError];
+        NSNumber *num = config[@"areaCode"];
+        unsigned long v = [num unsignedLongValue];
+        self.lastSetAreaCode = @(v);
+        [rteConfig setAreaCode:(int32_t)v error:rteError];
         if (rteError.code != AgoraRteOk) {
             if (error) *error = RTE_NSERROR_FROM_RTE_ERROR(rteError);
             return NO;
@@ -152,11 +161,17 @@
     
     AgoraRteError *getError = [[AgoraRteError alloc] init];
     BOOL useStringUidValue = [config useStringUid:getError];
+    NSNumber *logFileSizeVal = self.lastSetLogFileSize != nil
+        ? self.lastSetLogFileSize
+        : @([config logFileSize:getError]);
+    NSNumber *areaCodeVal = self.lastSetAreaCode != nil
+        ? self.lastSetAreaCode
+        : @([config areaCode:getError]);
     return @{
         @"appId": [config appId:getError] ?: @"",
         @"logFolder": [config logFolder:getError] ?: @"",
-        @"logFileSize": @([config logFileSize:getError]),
-        @"areaCode": @([config areaCode:getError]),
+        @"logFileSize": logFileSizeVal,
+        @"areaCode": areaCodeVal,
         @"cloudProxy": [config cloudProxy:getError] ?: @"",
         @"jsonParameter": [config jsonParameter:getError] ?: @"",
         @"useStringUid": [NSNumber numberWithBool:useStringUidValue]

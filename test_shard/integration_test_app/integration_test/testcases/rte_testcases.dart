@@ -1,7 +1,34 @@
+import 'dart:typed_data';
+
 import 'package:agora_rtc_engine/agora_rte_engine.dart';
 import 'package:agora_rtc_engine/src/impl/agora_rte_impl.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_test/flutter_test.dart';
+
+/// 用于 registerObserver/unregisterObserver 测试的空实现
+class _DummyPlayerObserver implements AgoraRtePlayerObserver {
+  @override
+  void onStateChanged(AgoraRtePlayerState oldState, AgoraRtePlayerState newState,
+      AgoraRteErrorCode? error) {}
+
+  @override
+  void onPositionChanged(int currentTime, int utcTime) {}
+
+  @override
+  void onResolutionChanged(int width, int height) {}
+
+  @override
+  void onEvent(AgoraRtePlayerEvent event) {}
+
+  @override
+  void onMetadata(AgoraRtePlayerMetadataType type, Uint8List data) {}
+
+  @override
+  void onPlayerInfoUpdated(AgoraRtePlayerInfo info) {}
+
+  @override
+  void onAudioVolumeIndication(int volume) {}
+}
 
 /// RTE Integration Test Cases
 ///
@@ -143,6 +170,108 @@ void testCases() {
             reason: 'Native 返回的 playbackSpeed 不正确');
       });
 
+      testWidgets('Player autoPlay - 验证布尔配置往返', (tester) async {
+        if (testPlayer == null) {
+          testPlayer = await rte.createPlayer(AgoraRtePlayerConfig());
+        }
+
+        await testPlayer!.setConfigs(AgoraRtePlayerConfig(autoPlay: true));
+        var config = await testPlayer!.getConfigs();
+        expect(config.autoPlay, equals(true), reason: 'autoPlay=true 往返不正确');
+
+        await testPlayer!.setConfigs(AgoraRtePlayerConfig(autoPlay: false));
+        config = await testPlayer!.getConfigs();
+        expect(config.autoPlay, equals(false),
+            reason: 'autoPlay=false 往返不正确');
+      });
+
+      testWidgets('Player 数字边界 - playoutVolume/playbackSpeed/loopCount',
+          (tester) async {
+        if (testPlayer == null) {
+          testPlayer = await rte.createPlayer(AgoraRtePlayerConfig());
+        }
+
+        await testPlayer!.setConfigs(AgoraRtePlayerConfig(
+          playoutVolume: 0,
+          playbackSpeed: 50,
+          loopCount: 1,
+        ));
+        var config = await testPlayer!.getConfigs();
+        expect(config.playoutVolume, equals(0), reason: 'playoutVolume=0 不正确');
+        expect(config.playbackSpeed, equals(50),
+            reason: 'playbackSpeed=50 不正确');
+        expect(config.loopCount, equals(1), reason: 'loopCount=1 不正确');
+
+        await testPlayer!.setConfigs(AgoraRtePlayerConfig(
+          playoutVolume: 400,
+          playbackSpeed: 400,
+          loopCount: -1,
+        ));
+        config = await testPlayer!.getConfigs();
+        expect(config.playoutVolume, equals(400),
+            reason: 'playoutVolume=400 不正确');
+        expect(config.playbackSpeed, equals(400),
+            reason: 'playbackSpeed=400 不正确');
+        expect(config.loopCount, equals(-1), reason: 'loopCount=-1 不正确');
+      });
+
+      testWidgets('Player abrSubscriptionLayer - 枚举往返', (tester) async {
+        if (testPlayer == null) {
+          testPlayer = await rte.createPlayer(AgoraRtePlayerConfig());
+        }
+
+        for (final layer in AgoraRteAbrSubscriptionLayer.values) {
+          await testPlayer!.setConfigs(AgoraRtePlayerConfig(
+            abrSubscriptionLayer: layer,
+          ));
+          final config = await testPlayer!.getConfigs();
+          expect(config.abrSubscriptionLayer, equals(layer),
+              reason: 'abrSubscriptionLayer $layer 映射不正确');
+        }
+      });
+
+      testWidgets('Player abrFallbackLayer - 枚举往返', (tester) async {
+        if (testPlayer == null) {
+          testPlayer = await rte.createPlayer(AgoraRtePlayerConfig());
+        }
+
+        for (final layer in AgoraRteAbrFallbackLayer.values) {
+          await testPlayer!.setConfigs(AgoraRtePlayerConfig(
+            abrFallbackLayer: layer,
+          ));
+          final config = await testPlayer!.getConfigs();
+          expect(config.abrFallbackLayer, equals(layer),
+              reason: 'abrFallbackLayer $layer 映射不正确');
+        }
+      });
+
+      testWidgets('Player jsonParameter - 字符串往返', (tester) async {
+        if (testPlayer == null) {
+          testPlayer = await rte.createPlayer(AgoraRtePlayerConfig());
+        }
+
+        const param = '{"abr":"high","quality":1}';
+        await testPlayer!.setConfigs(AgoraRtePlayerConfig(
+          jsonParameter: param,
+        ));
+        final config = await testPlayer!.getConfigs();
+        expect(config.jsonParameter, equals(param),
+            reason: 'jsonParameter 往返不正确');
+      });
+
+      testWidgets('Player registerObserver/unregisterObserver - 不抛异常',
+          (tester) async {
+        if (testPlayer == null) {
+          testPlayer = await rte.createPlayer(AgoraRtePlayerConfig());
+        }
+
+        final observer = _DummyPlayerObserver();
+        await testPlayer!.registerObserver(observer);
+        await testPlayer!.unregisterObserver(observer);
+        // 重复 unregister 不应抛
+        await testPlayer!.unregisterObserver(observer);
+      });
+
       testWidgets('Player getInfo - 验证返回数据结构', (tester) async {
         if (testPlayer == null) {
           testPlayer = await rte.createPlayer(AgoraRtePlayerConfig());
@@ -251,21 +380,71 @@ void testCases() {
       //     testCanvas = await rte.createCanvas(AgoraRteCanvasConfig());
       //   }
 
-      //   // 设置包含 cropArea 的配置
       //   await testCanvas!.setConfigs(AgoraRteCanvasConfig(
       //     cropArea: const AgoraRteRect(x: 10, y: 20, width: 1920, height: 1080),
       //   ));
 
-      //   // 获取配置验证嵌套对象
       //   final config = await testCanvas!.getConfigs();
 
-      //   expect(config.cropArea, isNotNull, reason: 'cropArea 不应该为 null');
-      //   expect(config.cropArea!.x, equals(10), reason: 'cropArea.x 不正确');
-      //   expect(config.cropArea!.y, equals(20), reason: 'cropArea.y 不正确');
-      //   expect(config.cropArea!.width, equals(1920),
-      //       reason: 'cropArea.width 不正确');
-      //   expect(config.cropArea!.height, equals(1080),
-      //       reason: 'cropArea.height 不正确');
+      //   final failures = <String>[];
+      //   if (config.cropArea == null) {
+      //     failures.add('cropArea 不应该为 null');
+      //   } else {
+      //     if (config.cropArea!.x != 10) {
+      //       failures.add('cropArea.x 不正确: expected 10, actual ${config.cropArea!.x}');
+      //     }
+      //     if (config.cropArea!.y != 20) {
+      //       failures.add('cropArea.y 不正确: expected 20, actual ${config.cropArea!.y}');
+      //     }
+      //     if (config.cropArea!.width != 1920) {
+      //       failures.add('cropArea.width 不正确: expected 1920, actual ${config.cropArea!.width}');
+      //     }
+      //     if (config.cropArea!.height != 1080) {
+      //       failures.add('cropArea.height 不正确: expected 1080, actual ${config.cropArea!.height}');
+      //     }
+      //   }
+      //   if (failures.isNotEmpty) {
+      //     expect(failures, isEmpty, reason: failures.join('; '));
+      //   }
+      // });
+
+      // testWidgets('Canvas CropArea - 验证 AgoraRteRect 边界值', (tester) async {
+      //   if (testCanvas == null) {
+      //     testCanvas = await rte.createCanvas(AgoraRteCanvasConfig());
+      //   }
+
+      //   final failures = <String>[];
+
+      //   await testCanvas!.setConfigs(AgoraRteCanvasConfig(
+      //     cropArea: const AgoraRteRect(x: 0, y: 0, width: 0, height: 0),
+      //   ));
+      //   var config = await testCanvas!.getConfigs();
+      //   if (config.cropArea == null) {
+      //     failures.add('cropArea(0,0,0,0) 不应为 null');
+      //   } else {
+      //     if (config.cropArea!.x != 0) failures.add('cropArea.x 边界值: expected 0, actual ${config.cropArea!.x}');
+      //     if (config.cropArea!.y != 0) failures.add('cropArea.y 边界值: expected 0, actual ${config.cropArea!.y}');
+      //     if (config.cropArea!.width != 0) failures.add('cropArea.width 边界值: expected 0, actual ${config.cropArea!.width}');
+      //     if (config.cropArea!.height != 0) failures.add('cropArea.height 边界值: expected 0, actual ${config.cropArea!.height}');
+      //   }
+
+      //   await testCanvas!.setConfigs(AgoraRteCanvasConfig(
+      //     cropArea: const AgoraRteRect(
+      //         x: 100, y: 200, width: 1280, height: 720),
+      //   ));
+      //   config = await testCanvas!.getConfigs();
+      //   if (config.cropArea == null) {
+      //     failures.add('cropArea(100,200,1280,720) 不应为 null');
+      //   } else {
+      //     if (config.cropArea!.x != 100) failures.add('cropArea.x: expected 100, actual ${config.cropArea!.x}');
+      //     if (config.cropArea!.y != 200) failures.add('cropArea.y: expected 200, actual ${config.cropArea!.y}');
+      //     if (config.cropArea!.width != 1280) failures.add('cropArea.width: expected 1280, actual ${config.cropArea!.width}');
+      //     if (config.cropArea!.height != 720) failures.add('cropArea.height: expected 720, actual ${config.cropArea!.height}');
+      //   }
+
+      //   if (failures.isNotEmpty) {
+      //     expect(failures, isEmpty, reason: failures.join('; '));
+      //   }
       // });
 
       testWidgets('destroyCanvas - 验证 Canvas 销毁', (tester) async {
@@ -330,6 +509,59 @@ void testCases() {
 
         expect(retrieved.logFileSize, equals(4294967295),
             reason: '大数值 logFileSize 处理不正确');
+        expect(retrieved.areaCode, equals(0xFFFFFFFF),
+            reason: '大数值 areaCode 处理不正确');
+      });
+
+      testWidgets('字符串类型 - cloudProxy/jsonParameter 往返', (tester) async {
+        await rte.setConfigs(AgoraRteConfig(
+          appId: testAppId,
+          cloudProxy: 'proxy.example.com:8080',
+          jsonParameter: '{"key":"value","nested":{"a":1}}',
+        ));
+        final config = await rte.getConfigs();
+        expect(config.cloudProxy, equals('proxy.example.com:8080'),
+            reason: 'cloudProxy 往返不正确');
+        expect(config.jsonParameter, equals('{"key":"value","nested":{"a":1}}'),
+            reason: 'jsonParameter 往返不正确');
+      });
+
+      testWidgets('字符串类型 - 空字符串与长字符串', (tester) async {
+        await rte.setConfigs(AgoraRteConfig(
+          appId: testAppId,
+          cloudProxy: '',
+          jsonParameter: '',
+        ));
+        var config = await rte.getConfigs();
+        expect(config.cloudProxy, equals(''), reason: '空 cloudProxy 应保留');
+        expect(config.jsonParameter, equals(''), reason: '空 jsonParameter 应保留');
+
+        final longJson = '{"k":"${'x' * 500}"}';
+        await rte.setConfigs(AgoraRteConfig(
+          appId: testAppId,
+          jsonParameter: longJson,
+        ));
+        config = await rte.getConfigs();
+        expect(config.jsonParameter, equals(longJson),
+            reason: '长 jsonParameter 往返不正确');
+      });
+
+      testWidgets('数字类型 - 零值与 areaCode 多区域', (tester) async {
+        await rte.setConfigs(AgoraRteConfig(
+          appId: testAppId,
+          logFileSize: 0,
+          areaCode: 0,
+        ));
+        var config = await rte.getConfigs();
+        expect(config.logFileSize, equals(0), reason: 'logFileSize=0 不正确');
+        expect(config.areaCode, equals(0), reason: 'areaCode=0 不正确');
+
+        for (final code in [0x01, 0x02, 0x04, 0x08, 0x0F]) {
+          await rte.setConfigs(AgoraRteConfig(appId: testAppId, areaCode: code));
+          config = await rte.getConfigs();
+          expect(config.areaCode, equals(code),
+              reason: 'areaCode $code 往返不正确');
+        }
       });
 
       testWidgets('布尔类型 - 验证 true/false 传递', (tester) async {
@@ -352,6 +584,27 @@ void testCases() {
         config = await rte.getConfigs();
         expect(config.useStringUid, equals(false),
             reason: 'useStringUid=false 传递不正确');
+      });
+
+      testWidgets('JSON 特殊字符 - jsonParameter 转义与嵌套', (tester) async {
+        const param = '{"a":"b\\c","d":"e\"f","nested":[1,2]}';
+        await rte.setConfigs(AgoraRteConfig(
+          appId: testAppId,
+          jsonParameter: param,
+        ));
+        final config = await rte.getConfigs();
+        expect(config.jsonParameter, equals(param),
+            reason: '含转义/嵌套的 jsonParameter 往返不正确');
+      });
+
+      testWidgets('logFolder - 路径格式', (tester) async {
+        await rte.setConfigs(AgoraRteConfig(
+          appId: testAppId,
+          logFolder: '/sdcard/agora/rte_logs',
+        ));
+        final config = await rte.getConfigs();
+        expect(config.logFolder, equals('/sdcard/agora/rte_logs'),
+            reason: 'logFolder 往返不正确');
       });
     });
   });
