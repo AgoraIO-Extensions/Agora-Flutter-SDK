@@ -173,6 +173,79 @@ jobs:
           name: logs-ios-${{ matrix.version }}
           path: logs-ios/*
 
+  integration_test_rte_android:
+    name: Run RTE Android Integration Tests
+    if: ${{ !contains(github.event.pull_request.labels.*.name, 'ci:skip') }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    env:
+      TEST_APP_ID: ${{ secrets.APP_ID }}
+    steps:
+      - uses: actions/checkout@v3
+      - name: Install JDK
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'zulu'
+          java-version: '17'
+      - uses: subosito/flutter-action@v2
+        with:
+          flutter-version: '3.24.5'
+          cache: true
+      - name: Enable KVM
+        run: |
+          echo 'KERNEL=="kvm", GROUP="kvm", MODE="0666", OPTIONS+="static_node=kvm"' | sudo tee /etc/udev/rules.d/99-kvm4all.rules
+          sudo udevadm control --reload-rules
+          sudo udevadm trigger --name-match=kvm
+      - name: Run RTE Android tests
+        uses: reactivecircus/android-emulator-runner@v2
+        with:
+          api-level: 31
+          arch: x86_64
+          profile: pixel_5
+          ram-size: 2048M
+          heap-size: 4096M
+          disk-size: 8192M
+          script: bash ci/run_rte_integration_test_android.sh
+
+  integration_test_rte_ios:
+    name: Run RTE iOS Integration Tests
+    if: ${{ !contains(github.event.pull_request.labels.*.name, 'ci:skip') }}
+    runs-on: macos-latest
+    timeout-minutes: 30
+    env:
+      TEST_APP_ID: ${{ secrets.APP_ID }}
+    steps:
+      - uses: actions/checkout@v3
+      - uses: subosito/flutter-action@v2
+        with:
+          flutter-version: '3.24.5'
+          cache: true
+      - name: Switch to Xcode 16.4
+        run: |
+          sudo xcode-select --switch /Applications/Xcode_16.4.app
+          xcode-select --print-path
+          xcodebuild -version
+      - uses: futureware-tech/simulator-action@v3
+        with:
+          model: 'iPhone 16'
+          os: 'iOS 18.5'
+      - run: bash ci/run_rte_integration_test_ios.sh
+      - name: Get ios crash logs
+        if: always()
+        run: |
+          sleep 30
+          mkdir logs-ios-rte
+          CRASH_DIR="${HOME}/Library/Logs/DiagnosticReports/"
+          OUTPUT_CRASH_DIR=./logs-ios-rte/crash
+          mkdir -p ${OUTPUT_CRASH_DIR}
+          cp -RP $CRASH_DIR* $OUTPUT_CRASH_DIR || true
+      - name: Upload ios logs
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: logs-ios-rte
+          path: logs-ios-rte/*
+
   integration_test_macos:
     name: Run Flutter macOS Integration Tests
     if: ${{ !contains(github.event.pull_request.labels.*.name, 'ci:skip') }}

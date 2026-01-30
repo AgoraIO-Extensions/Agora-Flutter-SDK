@@ -14,6 +14,9 @@ import java.util.Map;
  */
 public class AgoraRTE {
     private Rte rteInstance;
+    /** Cache for uint32 values that overflow int (SDK uses int). */
+    private Long lastSetLogFileSize;
+    private Long lastSetAreaCode;
 
     public AgoraRTE() {
         this.rteInstance = null;
@@ -78,10 +81,14 @@ public class AgoraRTE {
                 rteConfig.setLogFolder((String) configMap.get("logFolder"));
             }
             if (configMap.containsKey("logFileSize") && configMap.get("logFileSize") != null) {
-                rteConfig.setLogFileSize(parseInt(configMap.get("logFileSize")));
+                long v = parseLong(configMap.get("logFileSize"));
+                lastSetLogFileSize = v;
+                rteConfig.setLogFileSize((int) v);
             }
             if (configMap.containsKey("areaCode") && configMap.get("areaCode") != null) {
-                rteConfig.setAreaCode(parseInt(configMap.get("areaCode")));
+                long v = parseLong(configMap.get("areaCode"));
+                lastSetAreaCode = v;
+                rteConfig.setAreaCode((int) v);
             }
             if (configMap.containsKey("cloudProxy") && configMap.get("cloudProxy") != null) {
                 rteConfig.setCloudProxy((String) configMap.get("cloudProxy"));
@@ -117,8 +124,8 @@ public class AgoraRTE {
             Map<String, Object> map = new HashMap<>();
             map.put("appId", config.getAppId() != null ? config.getAppId() : "");
             map.put("logFolder", config.getLogFolder() != null ? config.getLogFolder() : "");
-            map.put("logFileSize", config.getLogFileSize());
-            map.put("areaCode", config.getAreaCode());
+            map.put("logFileSize", lastSetLogFileSize != null ? lastSetLogFileSize : (long) config.getLogFileSize());
+            map.put("areaCode", lastSetAreaCode != null ? lastSetAreaCode : (long) config.getAreaCode());
             map.put("cloudProxy", config.getCloudProxy() != null ? config.getCloudProxy() : "");
             map.put("jsonParameter", config.getJsonParameter() != null ? config.getJsonParameter() : "");
             map.put("useStringUid", config.getUseStringUid());
@@ -163,5 +170,22 @@ public class AgoraRTE {
             }
         }
         return 0;
+    }
+
+    private long parseLong(Object obj) {
+        if (obj == null) {
+            return 0L;
+        }
+        if (obj instanceof Number) {
+            return ((Number) obj).longValue();
+        }
+        if (obj instanceof String) {
+            try {
+                return Long.parseLong((String) obj);
+            } catch (Exception e) {
+                return 0L;
+            }
+        }
+        return 0L;
     }
 }
