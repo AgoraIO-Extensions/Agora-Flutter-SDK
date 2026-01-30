@@ -134,10 +134,10 @@ jobs:
         include:
           - version: "3.16"
             model: "iPhone 16"
-            os_version: "18.4"
+            os_version: ">=18.0"
           - version: "3.38.5"
             model: "iPhone 16"
-            os_version: "18.4"
+            os_version: ">=18.0"
     runs-on: macos-latest  # Updated from macos-13
     timeout-minutes: 120
     env:
@@ -243,7 +243,7 @@ jobs:
         with:
           model: 'iPhone 16'
           os: iOS
-          os_version: '18.4'
+          os_version: '>=18.0'
           erase_before_boot: true
           wait_for_boot: true
           shutdown_after_job: true
@@ -555,7 +555,7 @@ jobs:
         with:
           model: 'iPhone 16'
           os: iOS
-          os_version: '18.4'
+          os_version: '>=18.0'
           erase_before_boot: true
           wait_for_boot: true
           shutdown_after_job: true

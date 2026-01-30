@@ -106,7 +106,7 @@ class _RteTestTabState extends State<RteTestTab> {
       _totalTests = 0;
     });
 
-    const String _appId = config.appId;
+    String _appId = config.appId;
     _log('========== RTE Automated Test Started ==========');
 
     // === RTE Engine tests ===
