@@ -40,12 +40,7 @@ class RtePlaybackTab extends StatefulWidget {
 }
 
 class _RtePlaybackTabState extends State<RtePlaybackTab> {
-//   final TextEditingController _urlController = TextEditingController(
-//       text:
-//           'https://rtc-fallback-test.agoramdn.com/857c6564e7db469387eb44205f287b9a/zzytest.m3u8?token=857c6564e7db469387eb44205f287b9a&userUid=7788');
-  final TextEditingController _urlController = TextEditingController(
-      text:
-          'rte://aab8b8f5a8cd4469a63042fcfafe7063/XPZ123?token=aab8b8f5a8cd4469a63042fcfafe7063&uid=0&remoteUid=8888889');
+  final TextEditingController _urlController = TextEditingController(text:'');
   final TextEditingController _switchUrlController =
       TextEditingController(text: 'rte://your_channel_id_2?token=xxx&uid=xxx');
   final TextEditingController _preloadUrlController =

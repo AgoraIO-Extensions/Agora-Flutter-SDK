@@ -4,9 +4,6 @@ import 'testcases/rte_testcases.dart' as rte;
 
 /// RTE Integration Test - Main Entry
 /// 
-/// 运行所有 RTE 集成测试
-/// 
-/// 运行方式:
 /// ```bash
 /// cd test_shard/integration_test_app
 /// flutter test integration_test/rte_integration_test.dart \

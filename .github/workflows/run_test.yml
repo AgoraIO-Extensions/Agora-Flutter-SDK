@@ -242,7 +242,7 @@ jobs:
       - uses: futureware-tech/simulator-action@v3
         with:
           model: 'iPhone 16'
-          os: 'iOS 18.5'
+          os: 'iOS 18.4'
       - run: bash ci/run_rte_integration_test_ios.sh
       - name: Get ios crash logs
         if: always()

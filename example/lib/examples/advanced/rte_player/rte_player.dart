@@ -12,6 +12,7 @@ import 'rte_config_tab.dart';
 import 'rte_info_log_view.dart';
 import 'rte_playback_tab.dart';
 import 'rte_player_config_tab.dart';
+import 'rte_test_tab.dart';
 
 class RtePlayerExample extends StatefulWidget {
   const RtePlayerExample({Key? key}) : super(key: key);
@@ -90,7 +91,7 @@ class _RtePlayerExampleState extends State<RtePlayerExample> {
     }
 
     return DefaultTabController(
-      length: _controllers.length,
+      length: _controllers.length + 1,
       child: Column(
         children: [
           Container(
@@ -98,17 +99,21 @@ class _RtePlayerExampleState extends State<RtePlayerExample> {
             child: TabBar(
               labelColor: Theme.of(context).primaryColor,
               unselectedLabelColor: Colors.grey,
-              tabs: _controllers.map((c) => Tab(text: c.id)).toList(),
+              tabs: [
+                ..._controllers.map((c) => Tab(text: c.id)),
+                const Tab(text: 'Test'),
+              ],
             ),
           ),
           Expanded(
             child: TabBarView(
-              children: _controllers
-                  .map((ctrl) => _PlayerView(
-                        controller: ctrl,
-                        rte: _rte,
-                      ))
-                  .toList(),
+              children: [
+                ..._controllers.map((ctrl) => _PlayerView(
+                      controller: ctrl,
+                      rte: _rte,
+                    )),
+                const RteTestTab(),
+              ],
             ),
           ),
         ],
@@ -141,7 +146,7 @@ class _PlayerViewState extends State<_PlayerView>
   @override
   void initState() {
     super.initState();
-    _tabController = TabController(length: 4, vsync: this);
+    _tabController = TabController(length: 5, vsync: this);
     _buildCachedConfigTabs();
   }
 
@@ -205,6 +210,7 @@ class _PlayerViewState extends State<_PlayerView>
               Tab(text: 'RTE Config'),
               Tab(text: 'Player Config'),
               Tab(text: 'Canvas Config'),
+              Tab(text: 'Test'),
             ],
           ),
           Expanded(
