@@ -37,5 +37,10 @@ Pod::Spec.new do |s|
   s.libraries = 'stdc++'
 
   # Flutter.framework does not contain a i386 slice.
-  s.pod_target_xcconfig = { 'DEFINES_MODULE' => 'YES', 'EXCLUDED_ARCHS[sdk=iphonesimulator*]' => 'i386' }
+  pod_xcconfig = { 'DEFINES_MODULE' => 'YES', 'EXCLUDED_ARCHS[sdk=iphonesimulator*]' => 'i386' }
+  if File.exist?(plugin_dev_path)
+    # Force link AgoraRtcKit so RTE symbols (AgoraRte, AgoraRtePlayer, etc.) from libs/*.xcframework resolve
+    pod_xcconfig['OTHER_LDFLAGS'] = '$(inherited) -framework "AgoraRtcKit"'
+  end
+  s.pod_target_xcconfig = pod_xcconfig
 end

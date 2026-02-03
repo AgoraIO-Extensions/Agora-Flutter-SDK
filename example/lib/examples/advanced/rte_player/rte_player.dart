@@ -146,7 +146,7 @@ class _PlayerViewState extends State<_PlayerView>
   @override
   void initState() {
     super.initState();
-    _tabController = TabController(length: 5, vsync: this);
+    _tabController = TabController(length: 4, vsync: this);
     _buildCachedConfigTabs();
   }
 
@@ -210,7 +210,6 @@ class _PlayerViewState extends State<_PlayerView>
               Tab(text: 'RTE Config'),
               Tab(text: 'Player Config'),
               Tab(text: 'Canvas Config'),
-              Tab(text: 'Test'),
             ],
           ),
           Expanded(

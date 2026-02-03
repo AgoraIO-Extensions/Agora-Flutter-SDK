@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:convert';
 import 'package:agora_rtc_engine/agora_rte_engine.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/foundation.dart';
@@ -80,7 +81,10 @@ class AgoraRteCoreImpl {
 
   /// Create RTE instance with config
   Future<void> createWithConfig(AgoraRteConfig config) async {
-    await _channel.invokeMethod('rteCreateWithConfig', config.toJson());
+    // Merge SDK protected parameters into config
+    final protectedConfig = _mergeProtectedParams(config);
+    await _channel.invokeMethod(
+        'rteCreateWithConfig', protectedConfig.toJson());
   }
 
   /// Initialize media engine
@@ -110,7 +114,45 @@ class AgoraRteCoreImpl {
 
   /// Set configurations in batch
   Future<void> setConfigs(AgoraRteConfig config) async {
-    await _channel.invokeMethod('rteSetConfigs', config.toJson());
+    // Merge SDK protected parameters into config
+    final protectedConfig = _mergeProtectedParams(config);
+    await _channel.invokeMethod('rteSetConfigs', protectedConfig.toJson());
+  }
+
+  /// Merge SDK protected parameters with user's config
+  /// Ensures rtc.set_app_type is always set to 4 and cannot be overridden
+  AgoraRteConfig _mergeProtectedParams(AgoraRteConfig config) {
+    const sdkProtectedParams = '{"rtc.set_app_type": 4}';
+
+    String mergedJson;
+    if (config.jsonParameter == null || config.jsonParameter!.isEmpty) {
+      // No client params, use SDK params only
+      mergedJson = sdkProtectedParams;
+    } else {
+      // Merge client params with SDK protected params
+      try {
+        final clientParams =
+            Map<String, dynamic>.from(jsonDecode(config.jsonParameter!));
+        // Force SDK protected parameter (cannot be overridden)
+        clientParams['rtc.set_app_type'] = 4;
+        mergedJson = jsonEncode(clientParams);
+      } catch (e) {
+        // If client JSON is invalid, fallback to SDK params only
+        debugPrint('Invalid jsonParameter, using SDK defaults: $e');
+        mergedJson = sdkProtectedParams;
+      }
+    }
+
+    // Return new config with merged jsonParameter
+    return AgoraRteConfig(
+      appId: config.appId,
+      logFolder: config.logFolder,
+      logFileSize: config.logFileSize,
+      areaCode: config.areaCode,
+      cloudProxy: config.cloudProxy,
+      jsonParameter: mergedJson,
+      useStringUid: config.useStringUid,
+    );
   }
 
   /// Get all configurations
