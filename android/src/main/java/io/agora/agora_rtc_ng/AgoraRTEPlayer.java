@@ -81,6 +81,9 @@ public class AgoraRTEPlayer {
      * Destroy player
      */
     public boolean destroyPlayer(String playerId) {
+        if (playerId == null || playerId.isEmpty()) {
+            return false;
+        }
         Player player = players.remove(playerId);
         if (player != null) {
             unregisterObserver(playerId);

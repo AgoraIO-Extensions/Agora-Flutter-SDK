@@ -86,26 +86,32 @@ public class AgoraRteController {
 
     @SuppressWarnings("UnusedReturnValue")
     public void destroyRte() {
-        // Destroy all players and canvases first
-        if (rtePlayer != null) {
-            for (String playerId : rtePlayer.getPlayers().keySet()) {
-                // Ignore return value during cleanup - continue even if some fail
-                destroyPlayer(playerId);
+        try {
+            // Destroy all players and canvases first
+            if (rtePlayer != null) {
+                for (String playerId : rtePlayer.getPlayers().keySet()) {
+                    // Ignore return value during cleanup - continue even if some fail
+                    destroyPlayer(playerId);
+                }
             }
-        }
-        if (rteCanvas != null) {
-            for (String canvasId : rteCanvas.getCanvases().keySet()) {
-                // Ignore return value during cleanup - continue even if some fail
-                destroyCanvas(canvasId);
+            if (rteCanvas != null) {
+                for (String canvasId : rteCanvas.getCanvases().keySet()) {
+                    // Ignore return value during cleanup - continue even if some fail
+                    destroyCanvas(canvasId);
+                }
             }
+            if (rte != null) {
+                rte.destroy();
+            }
+        } catch (Throwable t) {
+            // Ignore - ensure we clear state in finally so next initMediaEngine() fails as expected
+        } finally {
+            if (rte != null) {
+                rte.forceClearInstance();
+            }
+            rtePlayer = null;
+            rteCanvas = null;
         }
-        
-        if (rte != null) {
-            rte.destroy();
-        }
-        
-        rtePlayer = null;
-        rteCanvas = null;
     }
 
     private void setupPlayerObserverDelegate() {
@@ -808,11 +814,15 @@ public class AgoraRteController {
     
     public void canvasGetConfig(String canvasId, MethodChannel.Result result) {
         if (rteCanvas == null) {
-            result.success(null);
+            result.error("RTE_ERROR", "RTE instance not created", null);
             return;
         }
         Map<String, Object> config = rteCanvas.getConfigs(canvasId);
-        result.success(config);
+        if (config == null) {
+            result.error("RTE_ERROR", "Canvas not found", null);
+        } else {
+            result.success(config);
+        }
     }
 
     public boolean canvasAddView(String canvasId, View view, Map<String, Object> config) {

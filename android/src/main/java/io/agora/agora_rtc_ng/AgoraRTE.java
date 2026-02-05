@@ -164,6 +164,14 @@ public class AgoraRTE {
         return rteInstance;
     }
 
+    /**
+     * Force clear RTE instance reference without calling native destroy.
+     * Used when destroy() throws so that the next initMediaEngine() still sees uninitialized state.
+     */
+    public void forceClearInstance() {
+        rteInstance = null;
+    }
+
     private int parseInt(Object obj) {
         if (obj == null) {
             return 0;

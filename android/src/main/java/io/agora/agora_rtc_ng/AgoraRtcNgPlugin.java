@@ -294,10 +294,18 @@ public class AgoraRtcNgPlugin implements FlutterPlugin, MethodChannel.MethodCall
                     result.success(rteController.createRteFromBridge());
                     break;
                 case "rteCreateWithConfig":
-                    result.success(rteController.createRteWithConfig(args));
+                    if (!rteController.createRteWithConfig(args)) {
+                        result.error("RTE_ERROR", "RTE instance already created or invalid config", null);
+                    } else {
+                        result.success(true);
+                    }
                     break;
                 case "rteInitMediaEngine":
-                    result.success(rteController.initMediaEngine());
+                    if (!rteController.initMediaEngine()) {
+                        result.error("RTE_ERROR", "RTE instance not created", null);
+                    } else {
+                        result.success(true);
+                    }
                     break;
                 case "rteDestroy":
                     rteController.destroyRte();
@@ -307,7 +315,12 @@ public class AgoraRtcNgPlugin implements FlutterPlugin, MethodChannel.MethodCall
                     result.success(rteController.setRteConfig(args));
                     break;
                 case "rteGetConfigs":
-                    result.success(rteController.getRteConfig());
+                    Map<String, Object> rteConfig = rteController.getRteConfig();
+                    if (rteConfig == null) {
+                        result.error("RTE_ERROR", "RTE instance not created", null);
+                    } else {
+                        result.success(rteConfig);
+                    }
                     break;
                 case "rteGetAppId":
                     result.success(rteController.appId());
@@ -362,19 +375,35 @@ public class AgoraRtcNgPlugin implements FlutterPlugin, MethodChannel.MethodCall
                     break;
                 case "rtePlayerCreate":
                     String playerId = rteController.createPlayer(args);
-                    result.success(playerId != null ? playerId : "player_" + System.currentTimeMillis());
+                    if (playerId == null) {
+                        result.error("RTE_ERROR", "Failed to create player or RTE not initialized", null);
+                    } else {
+                        result.success(playerId);
+                    }
                     break;
                 case "rtePlayerDestroy":
                     String playerIdForDestroy = (String) args.get("playerId");
-                    result.success(rteController.destroyPlayer(playerIdForDestroy));
+                    if (!rteController.destroyPlayer(playerIdForDestroy)) {
+                        result.error("RTE_ERROR", "Player not found", null);
+                    } else {
+                        result.success(true);
+                    }
                     break;
                 case "rteCanvasCreate":
                     String canvasId = rteController.createCanvas(args);
-                    result.success(canvasId != null ? canvasId : "canvas_" + System.currentTimeMillis());
+                    if (canvasId == null) {
+                        result.error("RTE_ERROR", "Failed to create canvas or RTE not initialized", null);
+                    } else {
+                        result.success(canvasId);
+                    }
                     break;
                 case "rteCanvasDestroy":
                     String canvasIdForDestroy = (String) args.get("canvasId");
-                    result.success(rteController.destroyCanvas(canvasIdForDestroy));
+                    if (!rteController.destroyCanvas(canvasIdForDestroy)) {
+                        result.error("RTE_ERROR", "Canvas not found", null);
+                    } else {
+                        result.success(true);
+                    }
                     break;
                 case "rtePlayerOpenUrl":
                     String playerIdForOpen = (String) args.get("playerId");
@@ -383,7 +412,11 @@ public class AgoraRtcNgPlugin implements FlutterPlugin, MethodChannel.MethodCall
                     result.success(rteController.playerOpenUrl(playerIdForOpen, url, startTime));
                     break;
                 case "rtePlayerPlay":
-                    result.success(rteController.playerPlay((String) args.get("playerId")));
+                    if (!rteController.playerPlay((String) args.get("playerId"))) {
+                        result.error("RTE_ERROR", "Player not found or invalid state", null);
+                    } else {
+                        result.success(true);
+                    }
                     break;
                 case "rtePlayerStop":
                     result.success(rteController.playerStop((String) args.get("playerId")));
@@ -394,7 +427,11 @@ public class AgoraRtcNgPlugin implements FlutterPlugin, MethodChannel.MethodCall
                 case "rtePlayerSeek":
                     String playerIdForSeek = (String) args.get("playerId");
                     long position = getLongValue(args, "position", 0);
-                    result.success(rteController.playerSeek(playerIdForSeek, position));
+                    if (!rteController.playerSeek(playerIdForSeek, position)) {
+                        result.error("RTE_ERROR", "Player not found or invalid state", null);
+                    } else {
+                        result.success(true);
+                    }
                     break;
                 case "rtePlayerMuteAudio":
                     String playerIdForMuteAudio = (String) args.get("playerId");
@@ -446,10 +483,19 @@ public class AgoraRtcNgPlugin implements FlutterPlugin, MethodChannel.MethodCall
                 case "rtePlayerSetConfigs":
                     String playerIdForSetConfig = (String) args.get("playerId");
                     Map<String, Object> playerConfig = safeCastToMap(args.get("config"));
-                    result.success(rteController.playerSetConfig(playerIdForSetConfig, playerConfig));
+                    if (!rteController.playerSetConfig(playerIdForSetConfig, playerConfig)) {
+                        result.error("RTE_ERROR", "Player not found", null);
+                    } else {
+                        result.success(true);
+                    }
                     break;
                 case "rtePlayerGetConfigs":
-                    result.success(rteController.playerGetConfig((String) args.get("playerId")));
+                    Map<String, Object> playerConfigResult = rteController.playerGetConfig((String) args.get("playerId"));
+                    if (playerConfigResult == null) {
+                        result.error("RTE_ERROR", "Player not found", null);
+                    } else {
+                        result.success(playerConfigResult);
+                    }
                     break;
                 case "rtePlayerRegisterObserver":
                     result.success(rteController.playerRegisterObserver((String) args.get("playerId")));
@@ -460,7 +506,11 @@ public class AgoraRtcNgPlugin implements FlutterPlugin, MethodChannel.MethodCall
                 case "rteCanvasSetConfigs":
                     String canvasIdForSetConfig = (String) args.get("canvasId");
                     Map<String, Object> canvasConfig = safeCastToMap(args.get("config"));
-                    result.success(rteController.canvasSetConfig(canvasIdForSetConfig, canvasConfig));
+                    if (!rteController.canvasSetConfig(canvasIdForSetConfig, canvasConfig)) {
+                        result.error("RTE_ERROR", "Canvas not found", null);
+                    } else {
+                        result.success(true);
+                    }
                     break;
                 case "rteCanvasGetConfigs":
                     rteController.canvasGetConfig((String) args.get("canvasId"), result);
@@ -658,7 +708,8 @@ public class AgoraRtcNgPlugin implements FlutterPlugin, MethodChannel.MethodCall
                     result.notImplemented();
             }
         } catch (Exception e) {
-            result.error("RTE_ERROR", e.getMessage(), e.getCause());
+            String message = e.getMessage();
+            result.error("RTE_ERROR", message != null && !message.isEmpty() ? message : "Unknown error", e.getCause());
         }
     }
 

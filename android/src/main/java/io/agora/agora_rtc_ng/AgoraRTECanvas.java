@@ -54,6 +54,9 @@ public class AgoraRTECanvas {
      * Destroy Canvas
      */
     public boolean destroyCanvas(String canvasId) {
+        if (canvasId == null || canvasId.isEmpty()) {
+            return false;
+        }
         Canvas canvas = canvases.remove(canvasId);
         return canvas != null;
     }
