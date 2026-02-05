@@ -1,4 +1,5 @@
 import 'package:agora_rtc_engine/agora_rte_engine.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 class RtePlaybackTab extends StatefulWidget {
@@ -42,7 +43,11 @@ class RtePlaybackTab extends StatefulWidget {
   State<RtePlaybackTab> createState() => _RtePlaybackTabState();
 }
 
-class _RtePlaybackTabState extends State<RtePlaybackTab> {
+class _RtePlaybackTabState extends State<RtePlaybackTab>
+    with AutomaticKeepAliveClientMixin {
+  @override
+  bool get wantKeepAlive => true;
+
   final TextEditingController _urlController = TextEditingController(text:'https://download.agora.io/demo/test/Agora.io-Interactions.mp4');
 
   final TextEditingController _switchUrlController =
@@ -157,11 +162,15 @@ class _RtePlaybackTabState extends State<RtePlaybackTab> {
 
   Future<void> _setPlayerPlaybackSpeed(int speed) async {
     if (widget.player == null) return;
+    // iOS RTE may only accept 50–200 (0.5x–2.0x); clamp to avoid "speed param is invalid"
+    final clampedSpeed = defaultTargetPlatform == TargetPlatform.iOS
+        ? speed.clamp(50, 200)
+        : speed;
     try {
       await widget.player!
-          .setConfigs(AgoraRtePlayerConfig(playbackSpeed: speed));
-      widget.onPlaybackSpeedChanged?.call(speed);
-      widget.onLog?.call('Set PlaybackSpeed: ${speed / 100.0}x');
+          .setConfigs(AgoraRtePlayerConfig(playbackSpeed: clampedSpeed));
+      widget.onPlaybackSpeedChanged?.call(clampedSpeed);
+      widget.onLog?.call('Set PlaybackSpeed: ${clampedSpeed / 100.0}x');
     } catch (e) {
       widget.onLog?.call('Set PlaybackSpeed error: $e');
     }
@@ -188,6 +197,7 @@ class _RtePlaybackTabState extends State<RtePlaybackTab> {
 
   @override
   Widget build(BuildContext context) {
+    super.build(context); // Required for AutomaticKeepAliveClientMixin
     return GestureDetector(
       onTap: () {
         FocusScope.of(context).unfocus();

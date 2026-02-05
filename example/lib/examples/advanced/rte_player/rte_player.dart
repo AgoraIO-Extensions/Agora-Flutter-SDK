@@ -37,6 +37,9 @@ class _RtePlayerExampleState extends State<RtePlayerExample> {
   Future<void> _initRte() async {
     _rte = createAgoraRte();
     try {
+      try {
+        await _rte.destroy();
+      } catch (_) {}
       await _rte.createWithConfig(AgoraRteConfig(appId: config.appId));
       await _rte.initMediaEngine();
 
@@ -79,7 +82,7 @@ class _RtePlayerExampleState extends State<RtePlayerExample> {
     for (final ctrl in _controllers) {
       ctrl.dispose();
     }
-    _rte.destroy();
+    _rte.destroy(); // Fire-and-forget; re-entry uses destroy-before-create in _initRte
     logSink.log('[RTE] Disposed');
     super.dispose();
   }
@@ -324,6 +327,7 @@ class _PlayerController implements AgoraRtePlayerObserver {
   int? volume = 100;
 
   bool _enableAudioVolumeLog = false;
+  bool _disposed = false;
 
   final ValueNotifier<AgoraRtePlayerInfo?> playerInfoNotifier =
       ValueNotifier(null);
@@ -362,8 +366,8 @@ class _PlayerController implements AgoraRtePlayerObserver {
   }
 
   void updateStats() async {
-    if (player != null) {
-      try {
+    if (_disposed || player == null) return;
+    try {
         final stats = await player!.getStats();
         final info = await player!.getInfo();
 
@@ -373,15 +377,15 @@ class _PlayerController implements AgoraRtePlayerObserver {
         final newDuration = info.duration ?? 0;
         if (duration != newDuration) {
           duration = newDuration;
-          onUpdate();
+          _controllerUpdateFromObserver();
         }
       } catch (e) {
         // debugPrint('Get stats error: $e');
       }
-    }
   }
 
   void addLog(String message) {
+    if (_disposed) return;
     logSink.log('[$id] $message');
     final newLogs = List<String>.from(eventLogsNotifier.value);
     newLogs.insert(
@@ -404,7 +408,13 @@ class _PlayerController implements AgoraRtePlayerObserver {
     _enableAudioVolumeLog = enable;
   }
 
+  void _controllerUpdateFromObserver() {
+    if (_disposed) return;
+    onUpdate();
+  }
+
   void dispose() {
+    _disposed = true;
     player?.unregisterObserver(this);
     playerInfoNotifier.dispose();
     statsNotifier.dispose();
@@ -418,14 +428,14 @@ class _PlayerController implements AgoraRtePlayerObserver {
         'playerObserver [$id] onStateChanged: ${oldState.name} -> ${newState.name}${error != null ? ' (Error: ${error.name})' : ''}');
     infoText =
         'State: ${newState.name}${error != null ? ' (Error: ${error.name})' : ''}';
-    onUpdate();
+    _controllerUpdateFromObserver();
   }
 
   @override
   void onPositionChanged(int currentTime, int utcTime) {
     addLog('playerObserver onPositionChanged: $currentTime');
     currentPosition = currentTime;
-    onUpdate();
+    _controllerUpdateFromObserver();
   }
 
   @override
@@ -433,7 +443,7 @@ class _PlayerController implements AgoraRtePlayerObserver {
     addLog('playerObserver onResolutionChanged: ${newWidth}x$newHeight');
     width = newWidth;
     height = newHeight;
-    onUpdate();
+    _controllerUpdateFromObserver();
   }
 
   @override
@@ -492,12 +502,13 @@ class _PlayerController implements AgoraRtePlayerObserver {
 
   @override
   void onPlayerInfoUpdated(AgoraRtePlayerInfo info) {
+    if (_disposed) return;
     addLog('playerObserver onPlayerInfoUpdated: ${info.toJson()}');
     playerInfoNotifier.value = info;
     final newDuration = info.duration ?? 0;
     if (duration != newDuration) {
       duration = newDuration;
-      onUpdate();
+      _controllerUpdateFromObserver();
     }
   }
 
@@ -507,6 +518,6 @@ class _PlayerController implements AgoraRtePlayerObserver {
       addLog('playerObserver onAudioVolumeIndication: $vol');
     }
     audioVolume = vol;
-    onUpdate();
+    _controllerUpdateFromObserver();
   }
 }
