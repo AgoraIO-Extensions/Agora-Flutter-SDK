@@ -33,10 +33,13 @@ import 'send_metadata/send_metadata.dart';
 import 'set_content_inspect/set_content_inspect.dart';
 import 'start_rhythm_player/start_rhythm_player.dart';
 import 'voice_changer/voice_changer.dart';
+import 'rte_player/rte_player.dart';
 
 /// Data source for advanced examples
 final advanced = [
   {'name': 'Advanced'},
+  if (!kIsWeb && (Platform.isAndroid || Platform.isIOS))
+    {'name': 'RtePlayer', 'widget': const RtePlayerExample()},
   if (!kIsWeb)
     {'name': 'AudioEffectMixing', 'widget': const AudioEffectMixing()},
   if (!kIsWeb)
@@ -109,4 +112,5 @@ final advanced = [
     {'name': 'MusicPlayer', 'widget': const MusicPlayerExample()},
   if (!kIsWeb && (Platform.isAndroid || Platform.isIOS))
     {'name': 'PictureInPicture', 'widget': const PictureInPicture()},
+  
 ];

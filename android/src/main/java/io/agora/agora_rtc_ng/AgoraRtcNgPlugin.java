@@ -11,6 +11,7 @@ import androidx.annotation.Nullable;
 
 import io.agora.iris.pip.AgoraPIPActivityProxy;
 import io.agora.iris.pip.AgoraPIPController;
+import io.agora.rte.Constants;
 import io.flutter.embedding.engine.plugins.FlutterPlugin;
 import io.flutter.embedding.engine.plugins.activity.ActivityAware;
 import io.flutter.embedding.engine.plugins.activity.ActivityPluginBinding;
@@ -20,6 +21,7 @@ import io.flutter.plugin.common.MethodChannel;
 import java.io.IOException;
 import java.lang.ref.WeakReference;
 import java.util.HashMap;
+import java.util.Locale;
 import java.util.Map;
 
 public class AgoraRtcNgPlugin implements FlutterPlugin, MethodChannel.MethodCallHandler, ActivityAware {
@@ -28,6 +30,7 @@ public class AgoraRtcNgPlugin implements FlutterPlugin, MethodChannel.MethodCall
     private WeakReference<FlutterPluginBinding> flutterPluginBindingRef;
     private VideoViewController videoViewController;
     private AgoraPIPController pipController;
+    private AgoraRteController rteController;
     @Nullable
     private Context applicationContext;
 
@@ -56,6 +59,8 @@ public class AgoraRtcNgPlugin implements FlutterPlugin, MethodChannel.MethodCall
                         flutterPluginBinding.getBinaryMessenger(),
                         new AgoraPlatformViewFactory.PlatformViewProviderSurfaceView(),
                         this.videoViewController));
+        
+        rteController = new AgoraRteController(applicationContext, channel, videoViewController);
     }
 
     @Override
@@ -77,6 +82,8 @@ public class AgoraRtcNgPlugin implements FlutterPlugin, MethodChannel.MethodCall
             result.success(true);
         } else if (call.method.startsWith("pip")) {
             handlePipMethodCall(call, result);
+        } else if (call.method.startsWith("rte")) {
+            handleRteMethodCall(call, result);
         } else {
             result.notImplemented();
         }
@@ -159,16 +166,16 @@ public class AgoraRtcNgPlugin implements FlutterPlugin, MethodChannel.MethodCall
                     result.success(pipController.isActivated());
                     break;
                 case "pipSetup":
-                    final Map<?, ?> args = (Map<?, ?>) call.arguments;
+                    final Map<String, Object> args = safeCastToMap(call.arguments);
                     Rational aspectRatio = null;
                     if (args.get("aspectRatioX") != null &&
                             args.get("aspectRatioY") != null) {
-                        aspectRatio = new Rational((int) args.get("aspectRatioX"),
-                                (int) args.get("aspectRatioY"));
+                        aspectRatio = new Rational(getIntValue(args, "aspectRatioX", 0),
+                                getIntValue(args, "aspectRatioY", 0));
                     }
                     Boolean autoEnterEnabled = null;
                     if (args.get("autoEnterEnabled") != null) {
-                        autoEnterEnabled = (boolean) args.get("autoEnterEnabled");
+                        autoEnterEnabled = getBooleanValue(args, "autoEnterEnabled", false);
                     }
                     Rect sourceRectHint = null;
                     if (args.get("sourceRectHintLeft") != null &&
@@ -176,25 +183,22 @@ public class AgoraRtcNgPlugin implements FlutterPlugin, MethodChannel.MethodCall
                             args.get("sourceRectHintRight") != null &&
                             args.get("sourceRectHintBottom") != null) {
                         sourceRectHint =
-                                new Rect((int) args.get("sourceRectHintLeft"),
-                                        (int) args.get("sourceRectHintTop"),
-                                        (int) args.get("sourceRectHintRight"),
-                                        (int) args.get("sourceRectHintBottom"));
+                                new Rect(getIntValue(args, "sourceRectHintLeft", 0),
+                                        getIntValue(args, "sourceRectHintTop", 0),
+                                        getIntValue(args, "sourceRectHintRight", 0),
+                                        getIntValue(args, "sourceRectHintBottom", 0));
                     }
                     Boolean seamlessResizeEnabled = null;
                     if (args.get("seamlessResizeEnabled") != null) {
-                        seamlessResizeEnabled =
-                                (boolean) args.get("seamlessResizeEnabled");
+                        seamlessResizeEnabled = getBooleanValue(args, "seamlessResizeEnabled", false);
                     }
                     Boolean useExternalStateMonitor = null;
                     if (args.get("useExternalStateMonitor") != null) {
-                        useExternalStateMonitor =
-                                (boolean) args.get("useExternalStateMonitor");
+                        useExternalStateMonitor = getBooleanValue(args, "useExternalStateMonitor", false);
                     }
                     Integer externalStateMonitorInterval = null;
                     if (args.get("externalStateMonitorInterval") != null) {
-                        externalStateMonitorInterval =
-                                (int) args.get("externalStateMonitorInterval");
+                        externalStateMonitorInterval = getIntValue(args, "externalStateMonitorInterval", 0);
                     }
 
                     result.success(pipController.setup(
@@ -219,6 +223,493 @@ public class AgoraRtcNgPlugin implements FlutterPlugin, MethodChannel.MethodCall
         } catch (Exception e) {
             result.error(e.getClass().getSimpleName(), e.getMessage(),
                     e.getCause());
+        }
+    }
+
+    /**
+     * Safely get int value from Map, avoiding NullPointerException
+     */
+    private int getIntValue(Map<String, Object> args, String key, int defaultValue) {
+        Object value = args.get(key);
+        if (value == null) {
+            return defaultValue;
+        }
+        if (value instanceof Number) {
+            return ((Number) value).intValue();
+        }
+        return defaultValue;
+    }
+
+    /**
+     * Safely get long value from Map, avoiding NullPointerException
+     */
+    private long getLongValue(Map<String, Object> args, String key, long defaultValue) {
+        Object value = args.get(key);
+        if (value == null) {
+            return defaultValue;
+        }
+        if (value instanceof Number) {
+            return ((Number) value).longValue();
+        }
+        return defaultValue;
+    }
+
+    /**
+     * Safely get boolean value from Map, avoiding NullPointerException
+     */
+    private boolean getBooleanValue(Map<String, Object> args, String key, boolean defaultValue) {
+        Object value = args.get(key);
+        if (value == null) {
+            return defaultValue;
+        }
+        if (value instanceof Boolean) {
+            return (Boolean) value;
+        }
+        return defaultValue;
+    }
+
+    /**
+     * Safely cast Object to Map<String, Object>, avoiding ClassCastException
+     */
+    @SuppressWarnings("unchecked")
+    private Map<String, Object> safeCastToMap(Object obj) {
+        if (obj instanceof Map) {
+            return (Map<String, Object>) obj;
+        }
+        return new HashMap<>();
+    }
+
+    private void handleRteMethodCall(@NonNull MethodCall call,
+                                     @NonNull MethodChannel.Result result) {
+        if (rteController == null) {
+            result.error("RTE_ERROR", "RTE Controller not initialized", null);
+            return;
+        }
+
+        try {
+            final Map<String, Object> args = safeCastToMap(call.arguments);
+            
+            switch (call.method) {
+                case "rteCreateFromBridge":
+                    result.success(rteController.createRteFromBridge());
+                    break;
+                case "rteCreateWithConfig":
+                    if (!rteController.createRteWithConfig(args)) {
+                        result.error("RTE_ERROR", "RTE instance already created or invalid config", null);
+                    } else {
+                        result.success(true);
+                    }
+                    break;
+                case "rteInitMediaEngine":
+                    if (!rteController.initMediaEngine()) {
+                        result.error("RTE_ERROR", "RTE instance not created", null);
+                    } else {
+                        result.success(true);
+                    }
+                    break;
+                case "rteDestroy":
+                    rteController.destroyRte();
+                    result.success(null);
+                    break;
+                case "rteSetConfigs":
+                    result.success(rteController.setRteConfig(args));
+                    break;
+                case "rteGetConfigs":
+                    Map<String, Object> rteConfig = rteController.getRteConfig();
+                    if (rteConfig == null) {
+                        result.error("RTE_ERROR", "RTE instance not created", null);
+                    } else {
+                        result.success(rteConfig);
+                    }
+                    break;
+                case "rteGetAppId":
+                    result.success(rteController.appId());
+                    break;
+                case "rteGetLogFolder":
+                    result.success(rteController.logFolder());
+                    break;
+                case "rteGetLogFileSize":
+                    result.success(rteController.logFileSize());
+                    break;
+                case "rteGetAreaCode":
+                    result.success(rteController.areaCode());
+                    break;
+                case "rteGetCloudProxy":
+                    result.success(rteController.cloudProxy());
+                    break;
+                case "rteGetJsonParameter":
+                    result.success(rteController.jsonParameter());
+                    break;
+                case "rteGetUseStringUid":
+                    result.success(rteController.useStringUid());
+                    break;
+                case "rteSetAppId":
+                    String appId = (String) args.get("appId");
+                    result.success(rteController.setAppId(appId));
+                    break;
+                case "rteSetLogFolder":
+                    String logFolder = (String) args.get("logFolder");
+                    result.success(rteController.setLogFolder(logFolder));
+                    break;
+                case "rteSetLogFileSize":
+                    int logFileSize = getIntValue(args, "logFileSize", 0);
+                    result.success(rteController.setLogFileSize(logFileSize));
+                    break;
+                case "rteSetAreaCode":
+                    int areaCode = getIntValue(args, "areaCode", 0);
+                    result.success(rteController.setAreaCode(areaCode));
+                    break;
+                case "rteSetCloudProxy":
+                    String cloudProxy = (String) args.get("cloudProxy");
+                    result.success(rteController.setCloudProxy(cloudProxy));
+                    break;
+                case "rteSetJsonParameter":
+                    String jsonParameter = (String) args.get("jsonParameter");
+                    result.success(rteController.setJsonParameter(jsonParameter));
+                    break;
+                case "rteSetUseStringUid":
+                    Object useStringUidObj = args.get("useStringUid");
+                    boolean useStringUid = useStringUidObj instanceof Boolean ? 
+                        ((Boolean) useStringUidObj) : false;
+                    result.success(rteController.setUseStringUid(useStringUid));
+                    break;
+                case "rtePlayerCreate":
+                    String playerId = rteController.createPlayer(args);
+                    if (playerId == null) {
+                        result.error("RTE_ERROR", "Failed to create player or RTE not initialized", null);
+                    } else {
+                        result.success(playerId);
+                    }
+                    break;
+                case "rtePlayerDestroy":
+                    String playerIdForDestroy = (String) args.get("playerId");
+                    if (!rteController.destroyPlayer(playerIdForDestroy)) {
+                        result.error("RTE_ERROR", "Player not found", null);
+                    } else {
+                        result.success(true);
+                    }
+                    break;
+                case "rteCanvasCreate":
+                    String canvasId = rteController.createCanvas(args);
+                    if (canvasId == null) {
+                        result.error("RTE_ERROR", "Failed to create canvas or RTE not initialized", null);
+                    } else {
+                        result.success(canvasId);
+                    }
+                    break;
+                case "rteCanvasDestroy":
+                    String canvasIdForDestroy = (String) args.get("canvasId");
+                    if (!rteController.destroyCanvas(canvasIdForDestroy)) {
+                        result.error("RTE_ERROR", "Canvas not found", null);
+                    } else {
+                        result.success(true);
+                    }
+                    break;
+                case "rtePlayerOpenUrl":
+                    String playerIdForOpen = (String) args.get("playerId");
+                    String url = (String) args.get("url");
+                    long startTime = getLongValue(args, "startTime", 0);
+                    result.success(rteController.playerOpenUrl(playerIdForOpen, url, startTime));
+                    break;
+                case "rtePlayerPlay":
+                    if (!rteController.playerPlay((String) args.get("playerId"))) {
+                        result.error("RTE_ERROR", "Player not found or invalid state", null);
+                    } else {
+                        result.success(true);
+                    }
+                    break;
+                case "rtePlayerStop":
+                    result.success(rteController.playerStop((String) args.get("playerId")));
+                    break;
+                case "rtePlayerPause":
+                    result.success(rteController.playerPause((String) args.get("playerId")));
+                    break;
+                case "rtePlayerSeek":
+                    String playerIdForSeek = (String) args.get("playerId");
+                    long position = getLongValue(args, "position", 0);
+                    if (!rteController.playerSeek(playerIdForSeek, position)) {
+                        result.error("RTE_ERROR", "Player not found or invalid state", null);
+                    } else {
+                        result.success(true);
+                    }
+                    break;
+                case "rtePlayerMuteAudio":
+                    String playerIdForMuteAudio = (String) args.get("playerId");
+                    boolean muteAudio = getBooleanValue(args, "mute", false);
+                    result.success(rteController.playerMuteAudio(playerIdForMuteAudio, muteAudio));
+                    break;
+                case "rtePlayerMuteVideo":
+                    String playerIdForMuteVideo = (String) args.get("playerId");
+                    boolean muteVideo = getBooleanValue(args, "mute", false);
+                    result.success(rteController.playerMuteVideo(playerIdForMuteVideo, muteVideo));
+                    break;
+                case "rtePlayerGetCurrentTime":
+                    result.success(rteController.playerGetCurrentTime((String) args.get("playerId")));
+                    break;
+                case "rtePlayerGetDuration":
+                    result.success(rteController.playerGetDuration((String) args.get("playerId")));
+                    break;
+                case "rtePlayerGetInfo":
+                    result.success(rteController.playerGetInfo((String) args.get("playerId")));
+                    break;
+                case "rtePlayerGetStats":
+                    String playerIdForStats = (String) args.get("playerId");
+                    rteController.playerGetStats(playerIdForStats, (stats, err) -> {
+                        if (err != null) {
+                            // Safely get error code value, use -1 if code is null
+                            int code = (err.code() != null) 
+                                ? Constants.ErrorCode.getValue(err.code()) 
+                                : -1;
+                            String message = err.message();
+                            String errorMsg;
+                            if (message != null && !message.isEmpty()) {
+                                errorMsg = String.format(Locale.US, "RTE Error (code: %d, message: %s)", code, message);
+                            } else {
+                                errorMsg = String.format(Locale.US, "RTE Error (code: %d)", code);
+                            }
+                            result.error("RTE_ERROR", errorMsg, null);
+                        } else if (stats != null) {
+                            result.success(stats);
+                        } else {
+                            result.error("RTE_ERROR", "RTE player not initialized or stats unavailable", null);
+                        }
+                    });
+                    break;
+                case "rtePlayerSetCanvas":
+                    String playerIdForCanvas = (String) args.get("playerId");
+                    String canvasIdForPlayer = (String) args.get("canvasId");
+                    result.success(rteController.playerSetCanvas(playerIdForCanvas, canvasIdForPlayer));
+                    break;
+                case "rtePlayerSetConfigs":
+                    String playerIdForSetConfig = (String) args.get("playerId");
+                    Map<String, Object> playerConfig = safeCastToMap(args.get("config"));
+                    if (!rteController.playerSetConfig(playerIdForSetConfig, playerConfig)) {
+                        result.error("RTE_ERROR", "Player not found", null);
+                    } else {
+                        result.success(true);
+                    }
+                    break;
+                case "rtePlayerGetConfigs":
+                    Map<String, Object> playerConfigResult = rteController.playerGetConfig((String) args.get("playerId"));
+                    if (playerConfigResult == null) {
+                        result.error("RTE_ERROR", "Player not found", null);
+                    } else {
+                        result.success(playerConfigResult);
+                    }
+                    break;
+                case "rtePlayerRegisterObserver":
+                    result.success(rteController.playerRegisterObserver((String) args.get("playerId")));
+                    break;
+                case "rtePlayerUnregisterObserver":
+                    result.success(rteController.playerUnregisterObserver((String) args.get("playerId")));
+                    break;
+                case "rteCanvasSetConfigs":
+                    String canvasIdForSetConfig = (String) args.get("canvasId");
+                    Map<String, Object> canvasConfig = safeCastToMap(args.get("config"));
+                    if (!rteController.canvasSetConfig(canvasIdForSetConfig, canvasConfig)) {
+                        result.error("RTE_ERROR", "Canvas not found", null);
+                    } else {
+                        result.success(true);
+                    }
+                    break;
+                case "rteCanvasGetConfigs":
+                    rteController.canvasGetConfig((String) args.get("canvasId"), result);
+                    break;
+                case "rtePlayerOpenWithCustomSourceProvider":
+                    String playerIdForCustomProvider = (String) args.get("playerId");
+                    long provider = getLongValue(args, "provider", 0);
+                    long startTimeForCustom = getLongValue(args, "startTime", 0);
+                    rteController.playerOpenWithCustomSourceProvider(playerIdForCustomProvider, provider, startTimeForCustom, result);
+                    break;
+                case "rtePlayerOpenWithStream":
+                    String playerIdForStream = (String) args.get("playerId");
+                    long stream = getLongValue(args, "stream", 0);
+                    rteController.playerOpenWithStream(playerIdForStream, stream, result);
+                    break;
+                case "rtePlayerSwitchWithUrl":
+                    String playerIdForSwitch = (String) args.get("playerId");
+                    String switchUrl = (String) args.get("url");
+                    boolean syncPts = getBooleanValue(args, "syncPts", false);
+                    result.success(rteController.playerSwitch(playerIdForSwitch, switchUrl, syncPts));
+                    break;
+                case "rtePlayerPreloadWithUrl":
+                    String preloadUrl = (String) args.get("url");
+                    result.success(rteController.playerPreloadWithUrl(preloadUrl));
+                    break;
+                case "rteCanvasAddView":
+                    String canvasIdForAddView = (String) args.get("canvasId");
+                    long viewPtrForAdd = getLongValue(args, "viewPtr", 0);
+                    Map<String, Object> configForAddView = safeCastToMap(args.get("config"));
+                    result.success(rteController.canvasAddView(canvasIdForAddView, viewPtrForAdd, configForAddView));
+                    break;
+                case "rteCanvasRemoveView":
+                    String canvasIdForRemoveView = (String) args.get("canvasId");
+                    long viewPtrForRemove = getLongValue(args, "viewPtr", 0);
+                    Map<String, Object> configForRemoveView = safeCastToMap(args.get("config"));
+                    result.success(rteController.canvasRemoveView(canvasIdForRemoveView, viewPtrForRemove, configForRemoveView));
+                    break;
+                case "rtePlayerGetAutoPlay":
+                    result.success(rteController.playerGetAutoPlay((String) args.get("playerId")));
+                    break;
+                case "rtePlayerSetAutoPlay":
+                    String playerIdForAutoPlay = (String) args.get("playerId");
+                    boolean autoPlay = getBooleanValue(args, "autoPlay", false);
+                    result.success(rteController.playerSetAutoPlay(playerIdForAutoPlay, autoPlay));
+                    break;
+                case "rtePlayerGetPlaybackSpeed":
+                    result.success(rteController.playerGetPlaybackSpeed((String) args.get("playerId")));
+                    break;
+                case "rtePlayerSetPlaybackSpeed":
+                    String playerIdForSpeed = (String) args.get("playerId");
+                    int speed = getIntValue(args, "speed", 0);
+                    result.success(rteController.playerSetPlaybackSpeed(playerIdForSpeed, speed));
+                    break;
+                case "rtePlayerGetPlayoutAudioTrackIdx":
+                    result.success(rteController.playerGetPlayoutAudioTrackIdx((String) args.get("playerId")));
+                    break;
+                case "rtePlayerSetPlayoutAudioTrackIdx":
+                    String playerIdForPlayoutTrack = (String) args.get("playerId");
+                    int playoutTrackIdx = getIntValue(args, "idx", 0);
+                    result.success(rteController.playerSetPlayoutAudioTrackIdx(playerIdForPlayoutTrack, playoutTrackIdx));
+                    break;
+                case "rtePlayerGetPublishAudioTrackIdx":
+                    result.success(rteController.playerGetPublishAudioTrackIdx((String) args.get("playerId")));
+                    break;
+                case "rtePlayerSetPublishAudioTrackIdx":
+                    String playerIdForPublishTrack = (String) args.get("playerId");
+                    int publishTrackIdx = getIntValue(args, "idx", 0);
+                    result.success(rteController.playerSetPublishAudioTrackIdx(playerIdForPublishTrack, publishTrackIdx));
+                    break;
+                case "rtePlayerGetAudioTrackIdx":
+                    result.success(rteController.playerGetAudioTrackIdx((String) args.get("playerId")));
+                    break;
+                case "rtePlayerSetAudioTrackIdx":
+                    String playerIdForAudioTrack = (String) args.get("playerId");
+                    int audioTrackIdx = getIntValue(args, "idx", 0);
+                    result.success(rteController.playerSetAudioTrackIdx(playerIdForAudioTrack, audioTrackIdx));
+                    break;
+                case "rtePlayerGetSubtitleTrackIdx":
+                    result.success(rteController.playerGetSubtitleTrackIdx((String) args.get("playerId")));
+                    break;
+                case "rtePlayerSetSubtitleTrackIdx":
+                    String playerIdForSubtitleTrack = (String) args.get("playerId");
+                    int subtitleTrackIdx = getIntValue(args, "idx", 0);
+                    result.success(rteController.playerSetSubtitleTrackIdx(playerIdForSubtitleTrack, subtitleTrackIdx));
+                    break;
+                case "rtePlayerGetExternalSubtitleTrackIdx":
+                    result.success(rteController.playerGetExternalSubtitleTrackIdx((String) args.get("playerId")));
+                    break;
+                case "rtePlayerSetExternalSubtitleTrackIdx":
+                    String playerIdForExtSubtitleTrack = (String) args.get("playerId");
+                    int extSubtitleTrackIdx = getIntValue(args, "idx", 0);
+                    result.success(rteController.playerSetExternalSubtitleTrackIdx(playerIdForExtSubtitleTrack, extSubtitleTrackIdx));
+                    break;
+                case "rtePlayerGetAudioPitch":
+                    result.success(rteController.playerGetAudioPitch((String) args.get("playerId")));
+                    break;
+                case "rtePlayerSetAudioPitch":
+                    String playerIdForPitch = (String) args.get("playerId");
+                    int pitch = getIntValue(args, "pitch", 0);
+                    result.success(rteController.playerSetAudioPitch(playerIdForPitch, pitch));
+                    break;
+                case "rtePlayerGetPlayoutVolume":
+                    result.success(rteController.playerGetPlayoutVolume((String) args.get("playerId")));
+                    break;
+                case "rtePlayerSetPlayoutVolume":
+                    String playerIdForPlayoutVolume = (String) args.get("playerId");
+                    int playoutVolume = getIntValue(args, "volume", 0);
+                    result.success(rteController.playerSetPlayoutVolume(playerIdForPlayoutVolume, playoutVolume));
+                    break;
+                case "rtePlayerGetAudioPlaybackDelay":
+                    result.success(rteController.playerGetAudioPlaybackDelay((String) args.get("playerId")));
+                    break;
+                case "rtePlayerSetAudioPlaybackDelay":
+                    String playerIdForDelay = (String) args.get("playerId");
+                    int delay = getIntValue(args, "delay", 0);
+                    result.success(rteController.playerSetAudioPlaybackDelay(playerIdForDelay, delay));
+                    break;
+                case "rtePlayerGetAudioDualMonoMode":
+                    result.success(rteController.playerGetAudioDualMonoMode((String) args.get("playerId")));
+                    break;
+                case "rtePlayerSetAudioDualMonoMode":
+                    String playerIdForDualMono = (String) args.get("playerId");
+                    int dualMonoMode = getIntValue(args, "mode", 0);
+                    result.success(rteController.playerSetAudioDualMonoMode(playerIdForDualMono, dualMonoMode));
+                    break;
+                case "rtePlayerGetPublishVolume":
+                    result.success(rteController.playerGetPublishVolume((String) args.get("playerId")));
+                    break;
+                case "rtePlayerSetPublishVolume":
+                    String playerIdForPublishVolume = (String) args.get("playerId");
+                    int publishVolume = getIntValue(args, "volume", 0);
+                    result.success(rteController.playerSetPublishVolume(playerIdForPublishVolume, publishVolume));
+                    break;
+                case "rtePlayerGetLoopCount":
+                    result.success(rteController.playerGetLoopCount((String) args.get("playerId")));
+                    break;
+                case "rtePlayerSetLoopCount":
+                    String playerIdForLoopCount = (String) args.get("playerId");
+                    int loopCount = getIntValue(args, "count", 0);
+                    result.success(rteController.playerSetLoopCount(playerIdForLoopCount, loopCount));
+                    break;
+                case "rtePlayerGetJsonParameter":
+                    result.success(rteController.playerGetJsonParameter((String) args.get("playerId")));
+                    break;
+                case "rtePlayerSetJsonParameter":
+                    String playerIdForJsonParam = (String) args.get("playerId");
+                    String playerJsonParameter = (String) args.get("jsonParameter");
+                    result.success(rteController.playerSetJsonParameter(playerIdForJsonParam, playerJsonParameter));
+                    break;
+                case "rtePlayerGetAbrSubscriptionLayer":
+                    result.success(rteController.playerGetAbrSubscriptionLayer((String) args.get("playerId")));
+                    break;
+                case "rtePlayerSetAbrSubscriptionLayer":
+                    String playerIdForAbrSub = (String) args.get("playerId");
+                    int abrSubLayer = getIntValue(args, "layer", 0);
+                    result.success(rteController.playerSetAbrSubscriptionLayer(playerIdForAbrSub, abrSubLayer));
+                    break;
+                case "rtePlayerGetAbrFallbackLayer":
+                    result.success(rteController.playerGetAbrFallbackLayer((String) args.get("playerId")));
+                    break;
+                case "rtePlayerSetAbrFallbackLayer":
+                    String playerIdForAbrFallback = (String) args.get("playerId");
+                    int abrFallbackLayer = getIntValue(args, "layer", 0);
+                    result.success(rteController.playerSetAbrFallbackLayer(playerIdForAbrFallback, abrFallbackLayer));
+                    break;
+                // Canvas Individual Config Methods
+                case "rteCanvasGetVideoRenderMode":
+                    result.success(rteController.canvasGetVideoRenderMode((String) args.get("canvasId")));
+                    break;
+                case "rteCanvasSetVideoRenderMode":
+                    String canvasIdForRenderMode = (String) args.get("canvasId");
+                    int renderMode = getIntValue(args, "mode", 0);
+                    result.success(rteController.canvasSetVideoRenderMode(canvasIdForRenderMode, renderMode));
+                    break;
+                case "rteCanvasGetVideoMirrorMode":
+                    result.success(rteController.canvasGetVideoMirrorMode((String) args.get("canvasId")));
+                    break;
+                case "rteCanvasSetVideoMirrorMode":
+                    String canvasIdForMirrorMode = (String) args.get("canvasId");
+                    int mirrorMode = getIntValue(args, "mode", 0);
+                    result.success(rteController.canvasSetVideoMirrorMode(canvasIdForMirrorMode, mirrorMode));
+                    break;
+                case "rteCanvasGetCropArea":
+                    result.success(rteController.canvasGetCropArea((String) args.get("canvasId")));
+                    break;
+                case "rteCanvasSetCropArea":
+                    String canvasIdForCrop = (String) args.get("canvasId");
+                    int x = getIntValue(args, "x", 0);
+                    int y = getIntValue(args, "y", 0);
+                    int width = getIntValue(args, "width", 0);
+                    int height = getIntValue(args, "height", 0);
+                    result.success(rteController.canvasSetCropArea(canvasIdForCrop, x, y, width, height));
+                    break;
+                default:
+                    result.notImplemented();
+            }
+        } catch (Exception e) {
+            String message = e.getMessage();
+            result.error("RTE_ERROR", message != null && !message.isEmpty() ? message : "Unknown error", e.getCause());
         }
     }
 

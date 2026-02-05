@@ -22,13 +22,14 @@ Pod::Spec.new do |s|
   if File.exist?(plugin_dev_path)
     puts '[plugin_dev] Found .plugin_dev file, use vendored_frameworks instead.'
     s.vendored_frameworks = 'libs/*.xcframework'
+    s.dependency 'AgoraIrisRTC_iOS', '4.5.2.8-build.1'
   else
     # iris dependencies start
-    s.dependency 'AgoraIrisRTC_iOS', '4.5.2.184-dev.1'
+    s.dependency 'AgoraIrisRTC_iOS', '4.5.2.8-build.1'
     # iris dependencies end
 
     # native dependencies start
-    s.dependency 'AgoraRtcEngine_iOS_Preview', '4.5.2.184-dev.1'
+    s.dependency 'AgoraVideo_Special_iOS', '4.5.2.185'
     # native dependencies end
   end
   
@@ -37,5 +38,10 @@ Pod::Spec.new do |s|
   s.libraries = 'stdc++'
 
   # Flutter.framework does not contain a i386 slice.
-  s.pod_target_xcconfig = { 'DEFINES_MODULE' => 'YES', 'EXCLUDED_ARCHS[sdk=iphonesimulator*]' => 'i386' }
+  pod_xcconfig = { 'DEFINES_MODULE' => 'YES', 'EXCLUDED_ARCHS[sdk=iphonesimulator*]' => 'i386' }
+  if File.exist?(plugin_dev_path)
+    # Force link AgoraRtcKit so RTE symbols (AgoraRte, AgoraRtePlayer, etc.) from libs/*.xcframework resolve
+    pod_xcconfig['OTHER_LDFLAGS'] = '$(inherited) -framework "AgoraRtcKit"'
+  end
+  s.pod_target_xcconfig = pod_xcconfig
 end
