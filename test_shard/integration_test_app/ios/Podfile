@@ -44,7 +44,9 @@ target 'Runner' do
   flutter_install_all_ios_pods File.dirname(File.realpath(__FILE__))
 
   if plugin_dev != nil
-    pod 'AgoraRtcWrapper', :path => File.join('.symlinks', 'plugins', 'agora_rtc_engine', 'ios')
+    # Use the actual podspec name 'agora_rtc_engine' instead of 'AgoraRtcWrapper'
+    # The podspec file is ios/agora_rtc_engine.podspec
+    pod 'agora_rtc_engine', :path => File.join('.symlinks', 'plugins', 'agora_rtc_engine', 'ios')
     # pod 'iris_event_handler', :path => File.join('.symlinks', 'plugins', 'iris_event', 'ios')
   end
 end

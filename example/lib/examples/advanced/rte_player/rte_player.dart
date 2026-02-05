@@ -229,6 +229,9 @@ class _PlayerViewState extends State<_PlayerView>
                   playbackSpeed: activeCtrl.playbackSpeed,
                   volume: activeCtrl.volume,
                   audioVolume: activeCtrl.audioVolume,
+                  isPlaying: AgoraRtePlayerState.values[
+                          activeCtrl.playerInfoNotifier.value?.state ?? 0] ==
+                      AgoraRtePlayerState.playing,
                   onLog: activeCtrl.addLog,
                   onVolumeChanged: (v) => activeCtrl.setVolume(v),
                   onPlaybackSpeedChanged: (s) => activeCtrl.setPlaybackSpeed(s),

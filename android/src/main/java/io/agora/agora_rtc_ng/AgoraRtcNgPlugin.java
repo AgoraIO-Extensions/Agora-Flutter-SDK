@@ -409,6 +409,9 @@ public class AgoraRtcNgPlugin implements FlutterPlugin, MethodChannel.MethodCall
                 case "rtePlayerGetCurrentTime":
                     result.success(rteController.playerGetCurrentTime((String) args.get("playerId")));
                     break;
+                case "rtePlayerGetDuration":
+                    result.success(rteController.playerGetDuration((String) args.get("playerId")));
+                    break;
                 case "rtePlayerGetInfo":
                     result.success(rteController.playerGetInfo((String) args.get("playerId")));
                     break;
@@ -478,6 +481,10 @@ public class AgoraRtcNgPlugin implements FlutterPlugin, MethodChannel.MethodCall
                     String switchUrl = (String) args.get("url");
                     boolean syncPts = getBooleanValue(args, "syncPts", false);
                     result.success(rteController.playerSwitch(playerIdForSwitch, switchUrl, syncPts));
+                    break;
+                case "rtePlayerPreloadWithUrl":
+                    String preloadUrl = (String) args.get("url");
+                    result.success(rteController.playerPreloadWithUrl(preloadUrl));
                     break;
                 case "rteCanvasAddView":
                     String canvasIdForAddView = (String) args.get("canvasId");

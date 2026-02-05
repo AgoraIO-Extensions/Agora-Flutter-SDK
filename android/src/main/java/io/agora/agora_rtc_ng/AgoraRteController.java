@@ -467,6 +467,10 @@ public class AgoraRteController {
         });
     }
 
+    public boolean playerPreloadWithUrl(String url) {
+        return AgoraRTEPlayer.preloadWithUrl(url);
+    }
+
     public long playerGetDuration(String playerId) {
         if (rtePlayer == null) {
             return 0;

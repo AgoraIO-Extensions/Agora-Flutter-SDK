@@ -39,10 +39,19 @@ public class AgoraRTE {
      * Create RTE instance with configuration
      */
     public boolean createWithConfig(Map<String, Object> configMap) {
+        if (rteInstance != null) {
+            return false;
+        }
         InitialConfig initialConfig = new InitialConfig();
         rteInstance = new Rte(initialConfig);
         
         if (configMap != null && !configMap.isEmpty()) {
+            if (configMap.containsKey("appId")) {
+                Object appIdObj = configMap.get("appId");
+                if (appIdObj == null || (appIdObj instanceof String && ((String) appIdObj).isEmpty())) {
+                    return false;
+                }
+            }
             return setConfigs(configMap);
         }
         return true;

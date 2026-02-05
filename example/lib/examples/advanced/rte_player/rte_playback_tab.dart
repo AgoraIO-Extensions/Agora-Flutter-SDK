@@ -13,6 +13,8 @@ class RtePlaybackTab extends StatefulWidget {
   final int? playbackSpeed;
   final int? volume;
   final int? audioVolume;
+  /// Whether the player is currently playing (used to decide whether to resume after seek).
+  final bool? isPlaying;
   final Function(String)? onLog;
   final Function(int)? onVolumeChanged;
   final Function(int)? onPlaybackSpeedChanged;
@@ -30,6 +32,7 @@ class RtePlaybackTab extends StatefulWidget {
     this.playbackSpeed,
     this.volume,
     this.audioVolume,
+    this.isPlaying,
     this.onLog,
     this.onVolumeChanged,
     this.onPlaybackSpeedChanged,
@@ -40,7 +43,8 @@ class RtePlaybackTab extends StatefulWidget {
 }
 
 class _RtePlaybackTabState extends State<RtePlaybackTab> {
-  final TextEditingController _urlController = TextEditingController(text:'');
+  final TextEditingController _urlController = TextEditingController(text:'https://download.agora.io/demo/test/Agora.io-Interactions.mp4');
+
   final TextEditingController _switchUrlController =
       TextEditingController(text: 'rte://your_channel_id_2?token=xxx&uid=xxx');
   final TextEditingController _preloadUrlController =
@@ -48,6 +52,12 @@ class _RtePlaybackTabState extends State<RtePlaybackTab> {
 
   bool _isAudioMuted = false;
   bool _isVideoMuted = false;
+  /// True while user is dragging the progress slider.
+  bool _isSliding = false;
+  /// Local slider value during drag (so thumb follows finger without triggering seek).
+  double _sliderValue = 0;
+  /// Captured at onChangeStart: whether to call play() after seek.
+  bool _wasPlayingBeforeSeek = false;
 
   @override
   void dispose() {
@@ -103,11 +113,17 @@ class _RtePlaybackTabState extends State<RtePlaybackTab> {
     }
   }
 
-  Future<void> _onSeek(double value) async {
+  /// [resumePlayback] If true, call [AgoraRtePlayer.play] after seek (e.g. user was playing before drag).
+  Future<void> _onSeek(double value, {bool resumePlayback = false}) async {
     if (widget.player == null) return;
     try {
       await widget.player!.seek(value.toInt());
-      widget.onLog?.call('Seek to ${value.toInt()}ms');
+      // if (resumePlayback) {
+      //   Future.delayed(const Duration(milliseconds: 100), () async {
+            widget.player!.play();
+      //   });
+      // }
+      widget.onLog?.call('Seek to ${value.toInt()}ms${resumePlayback ? ', resumed' : ''}');
     } catch (e) {
       widget.onLog?.call('Seek error: $e');
     }
@@ -247,23 +263,49 @@ class _RtePlaybackTabState extends State<RtePlaybackTab> {
               ),
             ),
 
-            // Playback progress
+            // Playback progress 
             if (widget.duration != null && widget.duration! > 0) ...[
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 16.0),
                 child: Column(
                   children: [
                     Slider(
-                      value: widget.currentPosition?.toDouble() ?? 0,
+                      value: _isSliding
+                          ? _sliderValue
+                          : (widget.currentPosition?.toDouble() ?? 0),
                       min: 0,
                       max: widget.duration?.toDouble() ?? 0,
-                      onChanged: _onSeek,
-                      label: _formatTime(widget.currentPosition ?? 0),
+                      onChangeStart: (value) {
+                        setState(() {
+                          _isSliding = true;
+                          _sliderValue = value;
+                          _wasPlayingBeforeSeek = widget.isPlaying ?? false;
+                        });
+                      },
+                      onChanged: (value) {
+                        setState(() {
+                          _sliderValue = value;
+                        });
+                      },
+                      onChangeEnd: (value) async {
+                        final wasPlaying = _wasPlayingBeforeSeek;
+                        await _onSeek(value, resumePlayback: wasPlaying);
+                        if (mounted) {
+                          setState(() {
+                            _isSliding = false;
+                          });
+                        }
+                      },
+                      label: _formatTime(_isSliding
+                          ? _sliderValue.toInt()
+                          : (widget.currentPosition ?? 0)),
                     ),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        Text(_formatTime(widget.currentPosition ?? 0)),
+                        Text(_formatTime(_isSliding
+                            ? _sliderValue.toInt()
+                            : (widget.currentPosition ?? 0))),
                         Text(_formatTime(widget.duration ?? 0)),
                       ],
                     ),

@@ -23,6 +23,12 @@
 }
 
 - (BOOL)createWithConfig:(NSDictionary *)config error:(NSError **)error {
+    // Prevent duplicate initialization
+    if (self.rteInstance) {
+        if (error) *error = RTE_NSERROR(-2, @"RTE instance already created. Call destroy() before creating a new instance.");
+        return NO;
+    }
+    
     self.rteInstance = [[AgoraRte alloc] initWithInitialConfig:nil];
     
     if (!self.rteInstance) {
@@ -31,6 +37,11 @@
     }
     
     if (config && config.count > 0) {
+        NSString *appId = config[@"appId"];
+        if ([appId isKindOfClass:[NSString class]] && appId.length == 0) {
+            if (error) *error = RTE_NSERROR(-2, @"appId cannot be empty");
+            return NO;
+        }
         return [self setConfigs:config error:error];
     }
     

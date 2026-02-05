@@ -22,9 +22,9 @@ static inline NSString * _Nonnull SafeGetRteErrorMessageWithLocation(AgoraRteErr
     AgoraRteErrorCode code = [rteError code];
     NSString *message = [rteError message];
     if (message && message.length > 0) {
-        return [NSString stringWithFormat:@"%@:%ld: RTE Error (code: %ld, message: %@)", location, (long)lineNumber, (long)code, message];
+        return [NSString stringWithFormat:@"%@:Line%ld: RTE Error (code: %ld, message: %@)", location, (long)lineNumber, (long)code, message];
     } else {
-        return [NSString stringWithFormat:@"%@:%ld: RTE Error (code: %ld)", location, (long)lineNumber, (long)code];
+        return [NSString stringWithFormat:@"%@:Line%ld: RTE Error (code: %ld)", location, (long)lineNumber, (long)code];
     }
 }
 
