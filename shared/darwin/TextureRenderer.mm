@@ -93,8 +93,8 @@ kernel void processYUVColorSpace(texture2d<float, access::read> yTexture [[textu
     float3 rgb = matrix * yuv;
     rgb = clamp(rgb, 0.0, 1.0);
     
-    // Output as RGBA
-    outputTexture.write(float4(rgb, 1.0), gid);
+    // Output RGB directly (Metal handles format conversion to BGRA)
+    outputTexture.write(float4(rgb.r, rgb.g, rgb.b, 1.0), gid);
 }
 )";
 
@@ -126,11 +126,14 @@ kernel void processYUVColorSpace(texture2d<float, access::read> yTexture [[textu
 @property(nonatomic, assign) agora::media::base::ColorSpace currentColorSpace;
 @property(nonatomic, assign) BOOL hasValidColorSpace;
 
+// Cache for processed RGBA pixel buffer
+@property(nonatomic) CVPixelBufferRef processedPixelBuffer;
+
 // ColorSpace processing methods
 - (void)setupColorSpaceProcessing;
 - (const float*)getColorMatrixForColorSpace:(const agora::media::base::ColorSpace&)colorSpace;
-- (void)processColorSpace:(CVPixelBufferRef)pixelBuffer 
-                colorSpace:(const agora::media::base::ColorSpace&)colorSpace;
+- (CVPixelBufferRef _Nullable)processColorSpace:(CVPixelBufferRef)pixelBuffer 
+                                      colorSpace:(const agora::media::base::ColorSpace&)colorSpace;
 /// Performance monitor (optional, created only when enabled)
 @property(nonatomic, strong) AgoraRenderPerformanceMonitor *performanceMonitor;
 
@@ -346,21 +349,45 @@ public:
     self.latestPixelBuffer = nil;
   });
   
-  // Key: Apply color space processing before returning to Flutter
-  if (pixelBuffer && self.hasValidColorSpace) {
-    // NSLog(@"Applying Metal ColorSpace transform - Matrix:%d, Range:%d", 
-    //       self.currentColorSpace.matrix, self.currentColorSpace.range);
-    
-    [self processColorSpace:pixelBuffer colorSpace:self.currentColorSpace];
-  } else if (pixelBuffer) {
-    // NSLog(@"Flutter requesting pixelBuffer but no valid color space");
-  } else {
-    // NSLog(@"No pixelBuffer available for Flutter Engine");
+  if (!pixelBuffer) {
+    return nil;
   }
   
-  // NSLog(@"Returning pixelBuffer to Flutter Engine");
+  // Apply color space as CVPixelBuffer attachment
+  if (self.hasValidColorSpace) {
+    CFStringRef colorPrimaries = NULL;
+    CFStringRef transferFunction = NULL;
+    CFStringRef ycbcrMatrix = NULL;
+    
+    // Set color primaries and transfer function based on matrix
+    switch (self.currentColorSpace.matrix) {
+      case agora::media::base::ColorSpace::MATRIXID_BT709:
+        colorPrimaries = kCVImageBufferColorPrimaries_ITU_R_709_2;
+        transferFunction = kCVImageBufferTransferFunction_ITU_R_709_2;
+        ycbcrMatrix = kCVImageBufferYCbCrMatrix_ITU_R_709_2;
+        break;
+      case agora::media::base::ColorSpace::MATRIXID_BT2020_NCL:
+      case agora::media::base::ColorSpace::MATRIXID_BT2020_CL:
+        colorPrimaries = kCVImageBufferColorPrimaries_ITU_R_2020;
+        transferFunction = kCVImageBufferTransferFunction_ITU_R_2020;
+        ycbcrMatrix = kCVImageBufferYCbCrMatrix_ITU_R_2020;
+        break;
+      case agora::media::base::ColorSpace::MATRIXID_SMPTE170M:
+      case agora::media::base::ColorSpace::MATRIXID_BT470BG:
+      default:
+        colorPrimaries = kCVImageBufferColorPrimaries_SMPTE_C;
+        transferFunction = kCVImageBufferTransferFunction_ITU_R_709_2;
+        ycbcrMatrix = kCVImageBufferYCbCrMatrix_ITU_R_601_4;
+        break;
+    }
+    
+    // Attach color space metadata
+    CVBufferSetAttachment(pixelBuffer, kCVImageBufferColorPrimariesKey, colorPrimaries, kCVAttachmentMode_ShouldPropagate);
+    CVBufferSetAttachment(pixelBuffer, kCVImageBufferTransferFunctionKey, transferFunction, kCVAttachmentMode_ShouldPropagate);
+    CVBufferSetAttachment(pixelBuffer, kCVImageBufferYCbCrMatrixKey, ycbcrMatrix, kCVAttachmentMode_ShouldPropagate);
+  }
   
-  // Record render draw cost (duration calculated internally)
+  // Record render draw cost
   if (pixelBuffer) {
     [self.performanceMonitor recordRenderDrawCost];
   }
@@ -472,27 +499,27 @@ public:
     
     switch (colorSpace.matrix) {
         case agora::media::base::ColorSpace::MATRIXID_BT709:
-            // NSLog(@"Using BT.709 matrix (%s range)", isFullRange ? "Full" : "Limited");
+            // NSLog(@"Using BT.709 matrix");
             return isFullRange ? g_color709_full : g_color709_limit;
             
         case agora::media::base::ColorSpace::MATRIXID_BT2020_NCL:
         case agora::media::base::ColorSpace::MATRIXID_BT2020_CL:
-            // NSLog(@"Using BT.2020 matrix (Full range - as per Android)");
+            // NSLog(@"Using BT.2020 matrix - Full range as per Android");
             return g_color2020_full;
             
         case agora::media::base::ColorSpace::MATRIXID_SMPTE170M:
         case agora::media::base::ColorSpace::MATRIXID_BT470BG:
         default:
-            // NSLog(@"Using BT.601/SMPTE170M matrix (%s range)", isFullRange ? "Full" : "Limited");
+            // NSLog(@"Using BT.601/SMPTE170M matrix");
             return isFullRange ? g_color601_full : g_color601_limit;
     }
 }
 
-- (void)processColorSpace:(CVPixelBufferRef)pixelBuffer 
-                colorSpace:(const agora::media::base::ColorSpace&)colorSpace {
+- (CVPixelBufferRef _Nullable)processColorSpace:(CVPixelBufferRef)pixelBuffer 
+                                      colorSpace:(const agora::media::base::ColorSpace&)colorSpace {
     
     if (!pixelBuffer || !self.metalDevice || !self.colorSpacePipelineState) {
-        return;
+        return CVPixelBufferRetain(pixelBuffer); // Retain and return original
     }
     
     OSType pixelFormat = CVPixelBufferGetPixelFormatType(pixelBuffer);
@@ -501,7 +528,7 @@ public:
     if (pixelFormat != kCVPixelFormatType_420YpCbCr8BiPlanarVideoRange &&
         pixelFormat != kCVPixelFormatType_420YpCbCr8BiPlanarFullRange) {
         // NSLog(@"Unsupported pixel format for color space processing: %u", pixelFormat);
-        return;
+        return CVPixelBufferRetain(pixelBuffer); // Retain and return original
     }
     
     // Get appropriate color matrix
@@ -514,7 +541,7 @@ public:
         size_t width = CVPixelBufferGetWidth(pixelBuffer);
         size_t height = CVPixelBufferGetHeight(pixelBuffer);
         
-        // Create Metal textures
+        // Create Metal textures from source YUV buffer
         CVMetalTextureRef yTextureRef = NULL;
         CVMetalTextureRef uvTextureRef = NULL;
         
@@ -524,7 +551,7 @@ public:
         
         if (result != kCVReturnSuccess || !yTextureRef) {
             // NSLog(@"Failed to create Y texture: %d", result);
-            return;
+            return CVPixelBufferRetain(pixelBuffer);
         }
         
         result = CVMetalTextureCacheCreateTextureFromImage(
@@ -534,35 +561,61 @@ public:
         if (result != kCVReturnSuccess || !uvTextureRef) {
             // NSLog(@"Failed to create UV texture: %d", result);
             CFRelease(yTextureRef);
-            return;
+            return CVPixelBufferRetain(pixelBuffer);
         }
         
         id<MTLTexture> yTexture = CVMetalTextureGetTexture(yTextureRef);
         id<MTLTexture> uvTexture = CVMetalTextureGetTexture(uvTextureRef);
         
-        // Create output texture descriptor
-        MTLTextureDescriptor *outputDesc = [[MTLTextureDescriptor alloc] init];
-        outputDesc.pixelFormat = MTLPixelFormatRGBA8Unorm;
-        outputDesc.width = width;
-        outputDesc.height = height;
-        outputDesc.usage = MTLTextureUsageShaderWrite | MTLTextureUsageShaderRead;
+        // Create RGBA CVPixelBuffer as output (NOT converting back to YUV!)
+        CVPixelBufferRef rgbaPixelBuffer = NULL;
+        NSDictionary *pixelBufferAttributes = @{
+            (id)kCVPixelBufferIOSurfacePropertiesKey: @{},
+            (id)kCVPixelBufferMetalCompatibilityKey: @YES
+        };
         
-        id<MTLTexture> outputTexture = [self.metalDevice newTextureWithDescriptor:outputDesc];
+        result = CVPixelBufferCreate(kCFAllocatorDefault, width, height,
+                                    kCVPixelFormatType_32BGRA,
+                                    (__bridge CFDictionaryRef)pixelBufferAttributes,
+                                    &rgbaPixelBuffer);
         
-        // Prepare range parameter (reference GlGenericDrawer.java)
+        if (result != kCVReturnSuccess || !rgbaPixelBuffer) {
+            // NSLog(@"Failed to create RGBA pixel buffer: %d", result);
+            CFRelease(yTextureRef);
+            CFRelease(uvTextureRef);
+            return CVPixelBufferRetain(pixelBuffer);
+        }
+        
+        // Create Metal texture from RGBA pixel buffer
+        CVMetalTextureRef rgbaTextureRef = NULL;
+        result = CVMetalTextureCacheCreateTextureFromImage(
+            kCFAllocatorDefault, self.textureCache, rgbaPixelBuffer, NULL,
+            MTLPixelFormatBGRA8Unorm, width, height, 0, &rgbaTextureRef);
+        
+        if (result != kCVReturnSuccess || !rgbaTextureRef) {
+            // NSLog(@"Failed to create RGBA texture: %d", result);
+            CFRelease(yTextureRef);
+            CFRelease(uvTextureRef);
+            CVPixelBufferRelease(rgbaPixelBuffer);
+            return CVPixelBufferRetain(pixelBuffer);
+        }
+        
+        id<MTLTexture> rgbaTexture = CVMetalTextureGetTexture(rgbaTextureRef);
+        
+        // Prepare range parameter
         int isFullRange = (colorSpace.range == agora::media::base::ColorSpace::RANGEID_FULL) ? 1 : 0;
         id<MTLBuffer> rangeBuffer = [self.metalDevice newBufferWithBytes:&isFullRange 
                                                                  length:sizeof(int)
                                                                 options:MTLResourceStorageModeShared];
         
-        // Execute compute shader
+        // Execute compute shader: YUV -> RGBA with correct color space
         id<MTLCommandBuffer> commandBuffer = [self.commandQueue commandBuffer];
         id<MTLComputeCommandEncoder> computeEncoder = [commandBuffer computeCommandEncoder];
         
         [computeEncoder setComputePipelineState:self.colorSpacePipelineState];
         [computeEncoder setTexture:yTexture atIndex:0];
         [computeEncoder setTexture:uvTexture atIndex:1];
-        [computeEncoder setTexture:outputTexture atIndex:2];
+        [computeEncoder setTexture:rgbaTexture atIndex:2];
         [computeEncoder setBuffer:self.colorMatrixBuffer offset:0 atIndex:0];
         [computeEncoder setBuffer:rangeBuffer offset:0 atIndex:1];
         
@@ -577,84 +630,21 @@ public:
         [commandBuffer commit];
         [commandBuffer waitUntilCompleted];
         
-        // Key: Need to convert processed RGB data back to YUV format and write to original CVPixelBuffer
-        [self copyProcessedRGBABackToYUVPixelBuffer:outputTexture pixelBuffer:pixelBuffer];
-        
-        // Cleanup
+        // Cleanup Metal textures
         CFRelease(yTextureRef);
         CFRelease(uvTextureRef);
+        CFRelease(rgbaTextureRef);
         
-        // NSLog(@"Applied ColorSpace transform - Matrix:%d, Range:%d (%s)", 
+        // NSLog(@"Applied ColorSpace transform - Matrix:%d, Range:%d (%s), returning RGBA buffer", 
             //   colorSpace.matrix, colorSpace.range, 
             //   (colorSpace.range == agora::media::base::ColorSpace::RANGEID_FULL) ? "Full" : "Limited");
+        
+        // Return the RGBA buffer directly (already retained by CVPixelBufferCreate)
+        return rgbaPixelBuffer;
     }
 }
 
-- (void)copyProcessedRGBABackToYUVPixelBuffer:(id<MTLTexture>)rgbaTexture
-                                 pixelBuffer:(CVPixelBufferRef)pixelBuffer {
-
-    // Lock CVPixelBuffer for writing
-    CVReturn result = CVPixelBufferLockBaseAddress(pixelBuffer, 0);
-    if (result != kCVReturnSuccess) {
-        // NSLog(@"Failed to lock pixel buffer: %d", result);
-        return;
-    }
-    
-    size_t width = CVPixelBufferGetWidth(pixelBuffer);
-    size_t height = CVPixelBufferGetHeight(pixelBuffer);
-    
-    // For simplicity, create a temporary RGB data buffer here
-    size_t rgbaDataSize = width * height * 4;
-    uint8_t* rgbaData = (uint8_t*)malloc(rgbaDataSize);
-    
-    // Read RGBA data from Metal texture
-    [rgbaTexture getBytes:rgbaData
-              bytesPerRow:width * 4
-               fromRegion:MTLRegionMake2D(0, 0, width, height)
-              mipmapLevel:0];
-    
-    // Get YUV plane pointers
-    uint8_t* yPlane = (uint8_t*)CVPixelBufferGetBaseAddressOfPlane(pixelBuffer, 0);
-    uint8_t* uvPlane = (uint8_t*)CVPixelBufferGetBaseAddressOfPlane(pixelBuffer, 1);
-    size_t yBytesPerRow = CVPixelBufferGetBytesPerRowOfPlane(pixelBuffer, 0);
-    size_t uvBytesPerRow = CVPixelBufferGetBytesPerRowOfPlane(pixelBuffer, 1);
-    
-    // Convert RGBA back to YUV (simplified conversion - using BT.709 matrix)
-    for (size_t y = 0; y < height; y++) {
-        for (size_t x = 0; x < width; x++) {
-            size_t rgbaIdx = (y * width + x) * 4;
-            uint8_t r = rgbaData[rgbaIdx];
-            uint8_t g = rgbaData[rgbaIdx + 1];
-            uint8_t b = rgbaData[rgbaIdx + 2];
-            
-            // RGB to YUV conversion (BT.709)
-            int yVal = (int)(0.2126 * r + 0.7152 * g + 0.0722 * b);
-            int uVal = (int)(-0.1146 * r - 0.3854 * g + 0.5 * b + 128);
-            int vVal = (int)(0.5 * r - 0.4542 * g - 0.0458 * b + 128);
-            
-            // Clamp values
-            yVal = MAX(0, MIN(255, yVal));
-            uVal = MAX(0, MIN(255, uVal));
-            vVal = MAX(0, MIN(255, vVal));
-            
-            // Write Y value
-            yPlane[y * yBytesPerRow + x] = (uint8_t)yVal;
-            
-            // Write UV values (subsampled)
-            if (y % 2 == 0 && x % 2 == 0) {
-                size_t uvY = y / 2;
-                size_t uvX = x / 2;
-                uvPlane[uvY * uvBytesPerRow + uvX * 2] = (uint8_t)uVal;
-                uvPlane[uvY * uvBytesPerRow + uvX * 2 + 1] = (uint8_t)vVal;
-            }
-        }
-    }
-    
-    free(rgbaData);
-    CVPixelBufferUnlockBaseAddress(pixelBuffer, 0);
-    
-    // NSLog(@"Copied processed RGBA back to YUV CVPixelBuffer");
-}
+// This method is no longer needed - we return RGBA buffer directly
 
 - (void)dealloc {
     // If dispose was already called, only clean up resources that weren't handled in dispose

@@ -624,40 +624,49 @@ class YUVRendering final : public RenderingOp {
                  GL_LUMINANCE, GL_UNSIGNED_BYTE, vBuffer);
     CHECK_GL_ERROR()
 
+    // Debug: Log entry into color space processing
+    int matrixId = (int)video_frame->colorSpace.matrix;
+    int rangeId = (int)video_frame->colorSpace.range;
+    LOGCATD("YUV Rendering - colorMatrixLoc_:%d, rangeLoc_:%d, matrix:%d, range:%d", 
+            colorMatrixLoc_, rangeLoc_, matrixId, rangeId);
+
     if (colorMatrixLoc_ != -1) {
-      // BT.601 Full Range 
+      // BT.601 Full Range: R=Y+1.402*Cr, G=Y-0.344136*Cb-0.714136*Cr, B=Y+1.772*Cb
       float bt601_full[9] = {
-          1.0f, 1.0f, 1.0f,
-          0.0f, -0.344136f, 1.772f,
-          1.402f, -0.714136f, 0.0f
+          1.0f, 0.0f, 1.402f,                // R
+          1.0f, -0.344136f, -0.714136f,      // G
+          1.0f, 1.772f, 0.0f                 // B
       };
       
-      // BT.601 Limited Range 
+      // BT.601 Limited Range: similar formula with 1.164 scaling
       float bt601_limit[9] = {
-          1.164384f, 1.164384f, 1.164384f,
-          0.0f, -0.391762f, 2.017232f,
-          1.596027f, -0.812968f, 0.0f
+          1.164384f, 0.0f, 1.596027f,        // R
+          1.164384f, -0.391762f, -0.812968f, // G
+          1.164384f, 2.017232f, 0.0f         // B
       };
       
-      // BT.709 Full Range 
+      
+      // BT.709 Full Range: R=Y+1.5748*Cr, G=Y-0.187324*Cb-0.468124*Cr, B=Y+1.8556*Cb
       float bt709_full[9] = {
-          1.0f, 1.0f, 1.0f,
-          0.0f, -0.187324f, 1.8556f,
-          1.5748f, -0.468124f, 0.0f
+          1.0f, 0.0f, 1.5748f,               // R
+          1.0f, -0.187324f, -0.468124f,      // G
+          1.0f, 1.8556f, 0.0f                // B
       };
       
-      // BT.709 Limited Range 
+      
+      // BT.709 Limited Range: similar with 1.164 scaling
       float bt709_limit[9] = {
-          1.164384f, 1.164384f, 1.164384f,
-          0.0f, -0.213249f, 2.112402f,
-          1.792741f, -0.532909f, 0.0f
+          1.164384f, 0.0f, 1.792741f,        // R
+          1.164384f, -0.213249f, -0.532909f, // G
+          1.164384f, 2.112402f, 0.0f         // B
       };
       
-      // BT.2020 Full Range 
+      
+      // BT.2020 Full Range
       float bt2020_full[9] = {
-          1.0f, 1.0f, 1.0f,
-          0.0f, -0.164553f, 1.8814f,
-          1.4746f, -0.571353f, 0.0f
+          1.0f, 0.0f, 1.4746f,               // R
+          1.0f, -0.164553f, -0.571353f,      // G
+          1.0f, 1.8814f, 0.0f                // B
       };
       
       // BT.2020 Limited Range 
@@ -668,37 +677,45 @@ class YUVRendering final : public RenderingOp {
       };
 
       float mat[9];
-      int matrixId = (int)video_frame->colorSpace.matrix;
-      int rangeId = (int)video_frame->colorSpace.range;
       
-      bool isFullRange = (rangeId == agora::media::base::ColorSpace::RANGEID_FULL);
+      // TEMP: Force Full Range processing to test metadata mismatch hypothesis
+      bool isFullRange = true;  // (rangeId == agora::media::base::ColorSpace::RANGEID_FULL);
       
       // Select matrix based on colorSpace.matrix and range 
       switch (matrixId) {
         case agora::media::base::ColorSpace::MATRIXID_SMPTE170M:
         case agora::media::base::ColorSpace::MATRIXID_BT470BG:
           memcpy(mat, isFullRange ? bt601_full : bt601_limit, sizeof(mat));
+          LOGCATD("Using BT.601 matrix - %s range", isFullRange ? "Full" : "Limited");
           break;
         case agora::media::base::ColorSpace::MATRIXID_BT709:
           memcpy(mat, isFullRange ? bt709_full : bt709_limit, sizeof(mat));
+          LOGCATD("Using BT.709 matrix - %s range", isFullRange ? "Full" : "Limited");
           break;
         case agora::media::base::ColorSpace::MATRIXID_BT2020_NCL:
         case agora::media::base::ColorSpace::MATRIXID_BT2020_CL:
-          memcpy(mat, bt2020_full, sizeof(mat));
+          memcpy(mat, isFullRange ? bt2020_full : bt2020_limit, sizeof(mat));
+          LOGCATD("Using BT.2020 matrix - %s range", isFullRange ? "Full" : "Limited");
           break;
         default:
           memcpy(mat, isFullRange ? bt709_full : bt709_limit, sizeof(mat));
+          LOGCATD("Using default (BT.709) matrix - %s range", isFullRange ? "Full" : "Limited");
           break;
       }
-      glUniformMatrix3fv(colorMatrixLoc_, 1, GL_FALSE, mat);
+      
+      LOGCATD("Applying color matrix: [%.3f, %.3f, %.3f]", mat[0], mat[1], mat[2]);
+      glUniformMatrix3fv(colorMatrixLoc_, 1, GL_TRUE, mat);
+    } else {
+      LOGCATE("colorMatrixLoc_ is -1, COLOR SPACE MATRIX NOT APPLIED!");
     }
 
     if (rangeLoc_ != -1) {
-      int rangeId = (int)video_frame->colorSpace.range;
       bool isFullRange = (rangeId == agora::media::base::ColorSpace::RANGEID_FULL);
       int rangeVal = isFullRange ? 1 : 0;
       glUniform1i(rangeLoc_, rangeVal);
-      
+      LOGCATD("Set uRange uniform to %d (%s)", rangeVal, isFullRange ? "Full" : "Limited");
+    } else {
+      LOGCATE("rangeLoc_ is -1, RANGE UNIFORM NOT APPLIED!");
     }
 
     glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
@@ -742,18 +759,17 @@ class YUVRendering final : public RenderingOp {
       "  float u = texture2D(uTexture, vTextCoord).r;\n"
       "  float v = texture2D(vTexture, vTextCoord).r;\n"
       "\n"
+      "  // TEMP: Force Full Range\n"
       "  vec3 yuv;\n"
-      "  if (uRange == 0) { // LIMITED: apply 0.0627 offset\n"
-      "    yuv[0] = clamp(y, 0.0, 1.0) - 0.0627;\n"
-      "  } else { // FULL: no offset\n"
-      "    yuv[0] = clamp(y, 0.0, 1.0);\n"
-      "  }\n"
-      "  yuv[1] = clamp(u - 0.5, -0.5, 0.5);\n"
-      "  yuv[2] = clamp(v - 0.5, -0.5, 0.5);\n"
+      "  yuv[0] = y;\n"
+      "  yuv[1] = u - 0.5;\n"
+      "  yuv[2] = v - 0.5;\n"
       "\n"
+      "  // Matrix transposed via GL_TRUE, can multiply directly\n"
       "  vec3 rgb = uColorMatrix * yuv;\n"
       "\n"
-      "  gl_FragColor = vec4(clamp(rgb, 0.0, 1.0), 1.0);\n"
+      "  // Remove clamp to preserve subtle differences at extremes\n"
+      "  gl_FragColor = vec4(rgb, 1.0);\n"
       "}\n";
 
   // clang-format off
