@@ -28,7 +28,7 @@ class _State extends State<JoinChannelVideo> {
   Set<int> remoteUid = {};
   late TextEditingController _controller;
   late TextEditingController uidController;
-  Map<int, VideoViewController> _remoteVideoControllers = {};
+  final Map<int, VideoViewController> _remoteVideoControllers = {};
   bool test = false;
   bool _isUseFlutterTexture = true;
   bool _isUseAndroidSurfaceView = false;
@@ -154,7 +154,7 @@ class _State extends State<JoinChannelVideo> {
 
     _remoteVideoControllers[uid] = VideoViewController.remote(
       rtcEngine: _engine,
-      canvas: VideoCanvas(uid: uid),
+      canvas: VideoCanvas(uid: uid, renderMode: RenderModeType.renderModeFit),
       connection: connection,
       useFlutterTexture: _isUseFlutterTexture,
       useAndroidSurfaceView: _isUseAndroidSurfaceView,
@@ -247,8 +247,8 @@ class _State extends State<JoinChannelVideo> {
                     child: Row(
                       children: List.of(remoteUid.map(
                         (e) => SizedBox(
-                          width: 200,
-                          height: 200,
+                          width: MediaQuery.of(context).size.width,
+                          height: MediaQuery.of(context).size.height / 3,
                           child: StatsMonitoringWidget(
                             rtcEngine: _engine,
                             uid: e,
@@ -271,8 +271,8 @@ class _State extends State<JoinChannelVideo> {
                     child: Row(
                         children: List.of(remoteUid.map(
                       (e) => SizedBox(
-                        width: 200,
-                        height: 200,
+                        width: MediaQuery.of(context).size.width,
+                        height: MediaQuery.of(context).size.height / 3,
                         child: StatsMonitoringWidget(
                           rtcEngine: _engine,
                           uid: e,
