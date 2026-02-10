@@ -133,11 +133,11 @@ jobs:
       matrix:
         include:
           - version: "3.16"
-            model: "iPhone 16"
-            os_version: "18.4"
+            model: "iPhone 16 Pro"
+            os_version: ">=18.0"
           - version: "3.38.5"
-            model: "iPhone 16"
-            os_version: "18.4"
+            model: "iPhone 16 Pro"
+            os_version: ">=18.0"
     runs-on: macos-latest  # Updated from macos-13
     timeout-minutes: 120
     env:
@@ -261,7 +261,7 @@ jobs:
           flutter build ${{ matrix.os }} --no-codesign
         working-directory: test_shard/integration_test_swiftpm
         env:
-          IOS_SIMULATOR_SDK_VERSION: 18.4
+          IOS_SIMULATOR_SDK_VERSION: 18.0
 
   integration_test_windows:
     name: Run Flutter Windows Integration Tests
@@ -392,7 +392,7 @@ jobs:
         run: flutter build ios --no-codesign --simulator
         working-directory: example
         env:
-          IOS_SIMULATOR_SDK_VERSION: 18.4
+          IOS_SIMULATOR_SDK_VERSION: 18.0
 
   build_web:
     name: Build Web
@@ -476,9 +476,9 @@ jobs:
           cache: true
       - uses: futureware-tech/simulator-action@v4
         with:
-          model: 'iPhone 16'
+          model: 'iPhone 16 Pro'
           os: iOS
-          os_version: '18.4'
+          os_version: '>=18.0'
           erase_before_boot: true
           wait_for_boot: true
           shutdown_after_job: true
