@@ -630,6 +630,12 @@ class YUVRendering final : public RenderingOp {
     LOGCATD("YUV Rendering - colorMatrixLoc_:%d, rangeLoc_:%d, matrix:%d, range:%d", 
             colorMatrixLoc_, rangeLoc_, matrixId, rangeId);
 
+    // Production Logic: Default to Full Range if metadata is ambiguous (Unspecified or Invalid)
+    // to avoid destructive highlight/shadow clipping.
+    bool isFullRange = (rangeId == agora::media::base::ColorSpace::RANGEID_FULL) || 
+                       (rangeId == agora::media::base::ColorSpace::RANGEID_INVALID) ||
+                       (matrixId == agora::media::base::ColorSpace::MATRIXID_UNSPECIFIED);
+
     if (colorMatrixLoc_ != -1) {
       // BT.601 Full Range: R=Y+1.402*Cr, G=Y-0.344136*Cb-0.714136*Cr, B=Y+1.772*Cb
       float bt601_full[9] = {
@@ -678,9 +684,6 @@ class YUVRendering final : public RenderingOp {
 
       float mat[9];
       
-      // TEMP: Force Full Range processing to test metadata mismatch hypothesis
-      bool isFullRange = true;  // (rangeId == agora::media::base::ColorSpace::RANGEID_FULL);
-      
       // Select matrix based on colorSpace.matrix and range 
       switch (matrixId) {
         case agora::media::base::ColorSpace::MATRIXID_SMPTE170M:
@@ -710,7 +713,7 @@ class YUVRendering final : public RenderingOp {
     }
 
     if (rangeLoc_ != -1) {
-      bool isFullRange = (rangeId == agora::media::base::ColorSpace::RANGEID_FULL);
+      // Use the same refined logic for consistency with matrix selection
       int rangeVal = isFullRange ? 1 : 0;
       glUniform1i(rangeLoc_, rangeVal);
       LOGCATD("Set uRange uniform to %d (%s)", rangeVal, isFullRange ? "Full" : "Limited");
@@ -746,7 +749,7 @@ class YUVRendering final : public RenderingOp {
       "}\n";
 
   const char *frag_shader_yuv_ =
-      "precision mediump float;\n"
+      "precision highp float;\n"
       "varying vec2 vTextCoord;\n"
       "uniform sampler2D yTexture;\n"
       "uniform sampler2D uTexture;\n"
@@ -759,16 +762,21 @@ class YUVRendering final : public RenderingOp {
       "  float u = texture2D(uTexture, vTextCoord).r;\n"
       "  float v = texture2D(vTexture, vTextCoord).r;\n"
       "\n"
-      "  // TEMP: Force Full Range\n"
       "  vec3 yuv;\n"
-      "  yuv[0] = y;\n"
-      "  yuv[1] = u - 0.5;\n"
-      "  yuv[2] = v - 0.5;\n"
+      "  if (uRange == 0) { // LIMITED\n"
+      "    yuv[0] = y - 16.0/255.0;\n"
+      "    yuv[1] = (u - 128.0/255.0) * 255.0/224.0;\n"
+      "    yuv[2] = (v - 128.0/255.0) * 255.0/224.0;\n"
+      "  } else { // FULL\n"
+      "    yuv[0] = y;\n"
+      "    yuv[1] = u - 0.5;\n"
+      "    yuv[2] = v - 0.5;\n"
+      "  }\n"
       "\n"
       "  // Matrix transposed via GL_TRUE, can multiply directly\n"
       "  vec3 rgb = uColorMatrix * yuv;\n"
       "\n"
-      "  // Remove clamp to preserve subtle differences at extremes\n"
+      "  // No clamp on final output to preserve subtle differences at extremes\n"
       "  gl_FragColor = vec4(rgb, 1.0);\n"
       "}\n";
 
