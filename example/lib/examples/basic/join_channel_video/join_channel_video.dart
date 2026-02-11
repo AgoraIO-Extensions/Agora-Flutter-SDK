@@ -247,15 +247,17 @@ class _State extends State<JoinChannelVideo> {
                     child: Row(
                       children: List.of(remoteUid.map(
                         (e) => SizedBox(
-                          width: MediaQuery.of(context).size.width,
                           height: MediaQuery.of(context).size.height / 3,
-                          child: StatsMonitoringWidget(
-                            rtcEngine: _engine,
-                            uid: e,
-                            channelId: _controller.text,
-                            child: AgoraVideoView(
-                              key: ValueKey('true_$e'),
-                              controller: _remoteVideoControllers[e]!,
+                          child: AspectRatio(
+                            aspectRatio: 16 / 9,
+                            child: StatsMonitoringWidget(
+                              rtcEngine: _engine,
+                              uid: e,
+                              channelId: _controller.text,
+                              child: AgoraVideoView(
+                                key: ValueKey('true_$e'),
+                                controller: _remoteVideoControllers[e]!,
+                              ),
                             ),
                           ),
                         ),
@@ -271,15 +273,17 @@ class _State extends State<JoinChannelVideo> {
                     child: Row(
                         children: List.of(remoteUid.map(
                       (e) => SizedBox(
-                        width: MediaQuery.of(context).size.width,
                         height: MediaQuery.of(context).size.height / 3,
-                        child: StatsMonitoringWidget(
-                          rtcEngine: _engine,
-                          uid: e,
-                          channelId: _controller.text,
-                          child: AgoraVideoView(
-                            key: ValueKey('false_$e'),
-                            controller: _remoteVideoControllers[e]!,
+                        child: AspectRatio(
+                          aspectRatio: 16 / 9,
+                          child: StatsMonitoringWidget(
+                            rtcEngine: _engine,
+                            uid: e,
+                            channelId: _controller.text,
+                            child: AgoraVideoView(
+                              key: ValueKey('false_$e'),
+                              controller: _remoteVideoControllers[e]!,
+                            ),
                           ),
                         ),
                       ),
