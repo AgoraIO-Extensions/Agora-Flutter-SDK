@@ -263,6 +263,22 @@ jobs:
 
           # prepare build command, android: apk, ios: ipa, macos: macos, windows: (empty), web: web
           build_command=""
+                    
+          if [ "$platform" == "web" ]; then
+             filtered_extra_build_arguments="${extra_build_arguments//--debug/}"
+             filtered_extra_build_arguments="${filtered_extra_build_arguments//--profile/}"
+             filtered_extra_build_arguments="${filtered_extra_build_arguments//--release/}"
+             filtered_extra_build_arguments=$(echo "$filtered_extra_build_arguments" | sed 's/  */ /g' | sed 's/^ *//;s/ *$//')
+          elif [ "$platform" == "ios" ]; then
+             if [[ "$extra_build_arguments" == *"--debug"* ]]; then
+               filtered_extra_build_arguments="${extra_build_arguments//--debug/--Profile}"
+             else
+               filtered_extra_build_arguments="$extra_build_arguments"
+             fi
+          else
+             filtered_extra_build_arguments="$extra_build_arguments"
+          fi
+
           if [ "$platform" == "android" ]; then
             build_command="flutter build apk"
           elif [ "$platform" == "ios" ]; then
@@ -291,14 +307,19 @@ jobs:
           build_arguments="--dart-define=TEST_APP_ID=$DEFAULT_BUILD_APP_ID --dart-define=TEST_TOKEN="" --dart-define=TEST_CHANNEL_ID="testapi" --dart-define=INTERNAL_TESTING=true"
 
           # append extra build arguments
-          if [ -n "$extra_build_arguments" ]; then
-            build_arguments="$build_arguments $extra_build_arguments"
+          if [ -n "$filtered_extra_build_arguments" ]; then
+            build_arguments="$build_arguments $filtered_extra_build_arguments"
           fi
 
           # append build arguments for ios
           if [ "$platform" == "ios" ]; then
             build_arguments="--export-options-plist ios/export.plist $build_arguments"
           fi
+
+          echo "========================================="
+          echo "🔨 Building for platform: $platform"
+          echo "🚀 Command: $build_command $build_options $build_arguments"
+          echo "========================================="
 
           # run build command
           $build_command $build_options $build_arguments
@@ -313,14 +334,17 @@ jobs:
             # copy files in build/app/outputs/flutter-apk directory to ../output directory
             cp build/app/outputs/flutter-apk/* ../output
 
-            # copy whole symbol directory to ../output directory
-            cp -r build/app/outputs/native-debug-symbols ../output
+            # copy whole symbol directory to ../output directory if it exists
+            if [ -d "build/app/outputs/native-debug-symbols" ]; then
+              cp -r build/app/outputs/native-debug-symbols ../output
+            fi
           elif [ "$platform" == "ios" ]; then
             # copy build/ios/ipa/agora_rtc_engine_example.ipa to ../output directory
             cp build/ios/ipa/agora_rtc_engine_example.ipa ../output
 
-            # copy dSYMs in build/ios/archive/Runner.xcarchive/dSYMs directory to ../output directory
-            cp -RP build/ios/archive/Runner.xcarchive/dSYMs ../output
+            if [ -d "build/ios/archive/Runner.xcarchive/dSYMs" ]; then
+              cp -RP build/ios/archive/Runner.xcarchive/dSYMs ../output
+            fi
           elif [ "$platform" == "macos" ]; then
             # cp example/build/macos/Build/Products/*/agora_rtc_engine_example.app to ../output directory
             cp -RP build/macos/Build/Products/*/agora_rtc_engine_example.app ../output
@@ -349,6 +373,13 @@ jobs:
 
               # copy all pdb files in build/windows/x64/plugins/**/Debug/ to ../output/Debug
               cp -r build/windows/x64/plugins/**/Debug/*.pdb ../output/Debug
+            fi
+
+            if [ -d "build/windows/x64/runner/Profile" ]; then
+              cp -r build/windows/x64/runner/Profile ../output
+
+              # copy all pdb files in build/windows/x64/plugins/**/Profile/ to ../output/Profile
+              cp -r build/windows/x64/plugins/**/Profile/*.pdb ../output/Profile
             fi
           elif [ "$platform" == "web" ]; then
             # copy all files and files in subdirectories to ../output directory

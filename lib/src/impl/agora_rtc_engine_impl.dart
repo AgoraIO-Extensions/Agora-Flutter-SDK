@@ -15,7 +15,7 @@ import '/src/agora_rtc_engine.dart';
 import '/src/agora_rtc_engine_ex.dart';
 import '/src/agora_rtc_engine_ext.dart';
 import '/src/agora_spatial_audio.dart';
-import '/src/audio_device_manager.dart';
+import '/src/audio_device_manager.dart'; 
 import '/src/binding/agora_base_event_impl.dart';
 import '/src/binding/agora_media_base_event_impl.dart';
 import '/src/binding/agora_media_engine_impl.dart';
@@ -562,6 +562,8 @@ class RtcEngineImpl extends rtc_engine_ex_binding.RtcEngineExImpl
       jsonEncode({'appType': 4}),
     ));
 
+    PerformanceDataCollector.instance.dispose();
+
     _rtcEngineState.isInitialzed = true;
     _isReleased = false;
     _initializingCompleter?.complete(null);
@@ -600,6 +602,8 @@ class RtcEngineImpl extends rtc_engine_ex_binding.RtcEngineExImpl
 
     _rtcEngineStateInternal?.dispose();
     _rtcEngineStateInternal = null;
+    
+    PerformanceDataCollector.instance.dispose();
 
     await _objectPool.clear();
 
@@ -991,6 +995,33 @@ class RtcEngineImpl extends rtc_engine_ex_binding.RtcEngineExImpl
       throw AgoraRtcException(code: result);
     }
   }
+  @override
+  Future<void> joinChannelWithUserAccount(
+      {required String token,
+      required String channelId,
+      required String userAccount,
+      ChannelMediaOptions? options}) async {
+    final apiType = options == null
+        ? 'RtcEngine_joinChannelWithUserAccount_0e4f59e'
+        : 'RtcEngine_joinChannelWithUserAccount_4685af9';
+    final param = createParams({
+      'token': token,
+      'channelId': channelId,
+      'userAccount': userAccount,
+      'options': options?.toJson()
+    });
+    final callApiResult = await irisMethodChannel
+        .invokeMethod(IrisMethodCall(apiType, jsonEncode(param)));
+    if (callApiResult.irisReturnCode < 0) {
+      throw AgoraRtcException(code: callApiResult.irisReturnCode);
+    }
+    final rm = callApiResult.data;
+    final result = rm['result'];
+    if (result < 0) {
+      throw AgoraRtcException(code: result);
+    }
+  }
+
 
   @override
   void registerAudioEncodedFrameObserver(
