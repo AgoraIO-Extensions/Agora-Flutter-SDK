@@ -49,7 +49,6 @@ class ChannelConnectionManager {
     for (final sourceType in keysToRemove) {
       _publishingVideoConnections.remove(sourceType);
     }
-
   }
 
   /// Set publishing video connection for a specific source type

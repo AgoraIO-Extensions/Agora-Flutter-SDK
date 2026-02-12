@@ -12,12 +12,12 @@ import '/src/impl/agora_pip_controller_impl.dart';
 
 /// @nodoc
 extension RtcEngineExt on RtcEngine {
-  /// Obtains the actual absolute path of the Asset through the relative path of the Asset.
+  /// Get the actual absolute path of an asset from its relative asset path.
   ///
   /// * [assetPath] The flutter -> assets field configured in the pubspec.yaml file.
   ///
   /// Returns
-  /// The actual path of the Asset.
+  /// The actual path of the asset.
   Future<String?> getAssetAbsolutePath(String assetPath) async {
     final impl = this as RtcEngineImpl;
     return impl.getAssetAbsolutePath(assetPath);
@@ -67,47 +67,32 @@ extension RtcEngineExt on RtcEngine {
   }
 }
 
-/// Error codes and error messages.
+/// Error code and description.
 class AgoraRtcException implements Exception {
   /// @nodoc
   AgoraRtcException({required this.code, this.message});
 
-  /// The error code. See ErrorCodeType.
+  /// Error code. See ErrorCodeType.
   final int code;
 
-  /// The error message.
+  /// Error description.
   final String? message;
 
   @override
   String toString() => 'AgoraRtcException($code, $message)';
 }
 
-/// Creates one RtcEngine object.
-///
-/// Currently, the Agora RTC SDK v6.x supports creating only one RtcEngine object for each app.
-///
-/// Returns
-/// RtcEngine object.
+/// @nodoc
 RtcEngine createAgoraRtcEngine({Object? sharedNativeHandle}) {
   return impl.RtcEngineImpl.create(sharedNativeHandle: sharedNativeHandle);
 }
 
-/// Creates one RtcEngineEx object.
-///
-/// Currently, the Agora RTC v6.x SDK supports creating only one RtcEngineEx object for each app.
-///
-/// Returns
-/// RtcEngineEx object.
+/// @nodoc
 RtcEngineEx createAgoraRtcEngineEx({Object? sharedNativeHandle}) {
   return impl.RtcEngineImpl.create(sharedNativeHandle: sharedNativeHandle);
 }
 
-/// Gets one MediaPlayerCacheManager instance.
-///
-/// Before calling any APIs in the MediaPlayerCacheManager class, you need to call this method to get a cache manager instance of a media player.
-///
-/// Returns
-/// The MediaPlayerCacheManager instance.
+/// @nodoc
 MediaPlayerCacheManager getMediaPlayerCacheManager(RtcEngine rtcEngine) {
   return MediaPlayerCacheManagerImpl.create(rtcEngine);
 }

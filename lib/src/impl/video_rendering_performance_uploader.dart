@@ -36,7 +36,7 @@ class PerformanceStatsHandler implements VideoRenderingPerformanceEventHandler {
   void unregister(int textureId) {
     // Keep context for a while to handle final reports arriving after dispose
     // Future.delayed(const Duration(seconds: 2), () {
-      _contextMap.remove(textureId);
+    _contextMap.remove(textureId);
     // });
   }
 
@@ -424,10 +424,7 @@ class _UidFrameBuffer {
     if (_drawCostSamples.isNotEmpty) {
       final avgDrawCost =
           _drawCostSamples.reduce((a, b) => a + b) / _drawCostSamples.length;
-      counters.add({
-        "counterId": drawCostId,
-        "value": avgDrawCost.round()
-      });
+      counters.add({"counterId": drawCostId, "value": avgDrawCost.round()});
     }
 
     return counters;

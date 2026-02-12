@@ -23,11 +23,11 @@ A new flutter plugin project.
     s.dependency 'AgoraRtcEngine_macOS', '4.6.0'
   else
     # iris dependencies start
-    s.dependency 'AgoraIrisRTC_macOS', '4.6.2-dev.16'
+    s.dependency 'AgoraIrisRTC_macOS2', '4.6.2-build.1'
     # iris dependencies end
 
     # native dependencies start
-    s.dependency 'ShengwangRtcEngine_macOS', '4.6.2'
+    s.dependency 'ShengwangVideo_Special_macOS', '4.6.2.70'
     # native dependencies end
   end
 
