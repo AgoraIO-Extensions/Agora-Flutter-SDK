@@ -436,7 +436,7 @@ class _AgoraRtcRenderTextureState extends State<AgoraRtcRenderTexture>
           controller.textureWidth = _width;
           controller.textureHeight = _height;
         }
-        
+
         if (mounted) {
           setState(() {});
         }

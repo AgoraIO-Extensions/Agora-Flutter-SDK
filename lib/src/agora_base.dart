@@ -2,22 +2,22 @@ import '/src/_serializable.dart';
 import '/src/binding_forward_export.dart';
 part 'agora_base.g.dart';
 
-/// The channel profile.
+/// Channel profile.
 @JsonEnum(alwaysCreate: true)
 enum ChannelProfileType {
-  /// 0: Communication. Use this profile when there are only two users in the channel.
+  /// 0: Communication profile. Agora recommends using the live broadcasting profile for a better audio and video experience.
   @JsonValue(0)
   channelProfileCommunication,
 
-  /// 1: Live streaming. Use this profile when there are more than two users in the channel.
+  /// 1: (Default) Live broadcasting profile.
   @JsonValue(1)
   channelProfileLiveBroadcasting,
 
-  /// 2: Gaming.
+  /// 2: Gaming profile. Deprecated: Use channelProfileLiveBroadcasting instead.
   @JsonValue(2)
   channelProfileGame,
 
-  /// Cloud gaming. The scenario is optimized for latency. Use this profile if the use case requires frequent interactions between users.
+  /// 3: Interactive profile. This profile is optimized for low latency. If your scenario involves frequent interactions among users, this profile is recommended. Deprecated: Use channelProfileLiveBroadcasting instead.
   @JsonValue(3)
   channelProfileCloudGaming,
 
@@ -186,59 +186,57 @@ extension WarnCodeTypeExt on WarnCodeType {
 
 /// Error codes.
 ///
-/// An error code indicates that the SDK encountered an unrecoverable error that requires application intervention. For example, an error is returned when the camera fails to open, and the app needs to inform the user that the camera cannot be used.
+/// Error codes indicate that the SDK has encountered an unrecoverable error requiring application intervention. For example, an error is returned when the camera fails to open, and the app needs to notify the user that the camera cannot be used.
 @JsonEnum(alwaysCreate: true)
 enum ErrorCodeType {
   /// 0: No error.
   @JsonValue(0)
   errOk,
 
-  /// 1: General error with no classified reason. Try calling the method again.
+  /// 1: General error (uncategorized error cause). Please try calling the method again.
   @JsonValue(1)
   errFailed,
 
-  /// 2: An invalid parameter is used. For example, the specified channel name includes illegal characters. Reset the parameter.
+  /// 2: Invalid parameter set in the method. For example, the specified channel name contains illegal characters. Please reset the parameters.
   @JsonValue(2)
   errInvalidArgument,
 
-  /// 3: The SDK is not ready. Possible reasons include the following:
-  ///  The initialization of RtcEngine fails. Reinitialize the RtcEngine.
-  ///  No user has joined the channel when the method is called. Check the code logic.
-  ///  The user has not left the channel when the rate or complain method is called. Check the code logic.
-  ///  The audio module is disabled.
-  ///  The program is not complete.
+  /// 3: SDK is not ready. Possible reasons include: RtcEngine initialization failed. Please reinitialize RtcEngine.
+  ///  User has not joined the channel when calling the method. Please check the method call logic.
+  ///  User has not left the channel when calling rate or complain. Please check the method call logic.
+  ///  Audio module is not enabled.
+  ///  Incomplete assembly.
   @JsonValue(3)
   errNotReady,
 
-  /// 4: The RtcEngine does not support the request. Possible reasons include the following:
-  ///  The built-in encryption mode is incorrect, or the SDK fails to load the external encryption library. Check the encryption mode setting, or reload the external encryption library.
+  /// 4: The current state of RtcEngine does not support this operation. Possible reasons include:
+  ///  When using built-in encryption, the encryption mode is incorrect or loading the external encryption library failed. Please check whether the encryption enum value is correct or reload the external encryption library.
   @JsonValue(4)
   errNotSupported,
 
-  /// 5: The request is rejected. Possible reasons include the following:
-  ///  The RtcEngine initialization fails. Reinitialize the RtcEngine.
-  ///  The channel name is set as the empty string "" when joining the channel. Reset the channel name.
-  ///  When the joinChannelEx method is called to join multiple channels, the specified channel name is already in use. Reset the channel name.
+  /// 5: This method call was rejected. Possible reasons include: RtcEngine initialization failed. Please reinitialize RtcEngine.
+  ///  An empty string "" was set as the channel name when joining the channel. Please reset the channel name.
+  ///  In multi-channel scenarios, the specified channel name already exists when calling joinChannelEx to join a channel. Please reset the channel name.
   @JsonValue(5)
   errRefused,
 
-  /// 6: The buffer size is insufficient to store the returned data.
+  /// 6: Buffer size is insufficient to hold the returned data.
   @JsonValue(6)
   errBufferTooSmall,
 
-  /// 7: A method is called before the initialization of RtcEngine. Ensure that the RtcEngine object is initialized before using this method.
+  /// 7: Method is called before RtcEngine is initialized. Please ensure that the RtcEngine object is created and initialized before calling this method.
   @JsonValue(7)
   errNotInitialized,
 
-  /// 8: Invalid state.
+  /// 8: Invalid current state.
   @JsonValue(8)
   errInvalidState,
 
-  /// 9: Permission to access is not granted. Check whether your app has access to the audio and video device.
+  /// 9: No permission to operate. Please check whether the user has granted the app permission to use audio and video devices.
   @JsonValue(9)
   errNoPermission,
 
-  /// 10: A timeout occurs. Some API calls require the SDK to return the execution result. This error occurs if the SDK takes too long (more than 10 seconds) to return the result.
+  /// 10: Method call timed out. Some method calls require a result from the SDK. If the SDK takes too long to process the event and does not return within 10 seconds, this error occurs.
   @JsonValue(10)
   errTimedout,
 
@@ -258,31 +256,31 @@ enum ErrorCodeType {
   @JsonValue(14)
   errNetDown,
 
-  /// 17: The request to join the channel is rejected. Possible reasons include the following:
-  ///  The user is already in the channel. Agora recommends that you use the onConnectionStateChanged callback to see whether the user is in the channel. Do not call this method to join the channel unless you receive the connectionStateDisconnected (1) state.
-  ///  After calling startEchoTest for the call test, the user tries to join the channel without calling stopEchoTest to end the current test. To join a channel, the call test must be ended by calling stopEchoTest.
+  /// 17: Joining the channel was rejected. Possible reasons include:
+  ///  The user is already in the channel. It is recommended to determine whether the user is in the channel via the onConnectionStateChanged callback. Do not call this method again to join the channel unless receiving the connectionStateDisconnected (1) state.
+  ///  After calling startEchoTest for a call test, the user attempts to join the channel without calling stopEchoTest to end the current test. After starting the call test, you must call stopEchoTest to end the test before joining the channel.
   @JsonValue(17)
   errJoinChannelRejected,
 
-  /// 18: Fails to leave the channel. Possible reasons include the following:
-  ///  The user has left the channel before calling the leaveChannel method. Stop calling this method to clear this error.
-  ///  The user calls the leaveChannel method to leave the channel before joining the channel. In this case, no extra operation is needed.
+  /// 18: Failed to leave the channel. Possible reasons include:
+  ///  The user has already left the channel before calling leaveChannel. Stop calling this method.
+  ///  The user calls leaveChannel to exit the channel without having joined it. No further action is needed in this case.
   @JsonValue(18)
   errLeaveChannelRejected,
 
-  /// 19: Resources are already in use.
+  /// 19: The resource is already in use and cannot be reused.
   @JsonValue(19)
   errAlreadyInUse,
 
-  /// 20: The request is abandoned by the SDK, possibly because the request has been sent too frequently.
+  /// 20: SDK aborted the request, possibly due to too many requests.
   @JsonValue(20)
   errAborted,
 
-  /// 21: The RtcEngine fails to initialize and has crashed because of specific Windows firewall settings.
+  /// 21: Specific firewall settings on Windows caused RtcEngine initialization to fail and crash.
   @JsonValue(21)
   errInitNetEngine,
 
-  /// 22: The SDK fails to allocate resources because your app uses too many system resources or system resources are insufficient.
+  /// 22: SDK failed to allocate resources, possibly because the app is using too many resources or system resources are exhausted.
   @JsonValue(22)
   errResourceLimited,
 
@@ -290,73 +288,73 @@ enum ErrorCodeType {
   @JsonValue(23)
   errFuncIsProhibited,
 
-  /// 101: The specified App ID is invalid. Rejoin the channel with a valid App ID.
+  /// 101: Invalid App ID. Please use a valid App ID to rejoin the channel.
   @JsonValue(101)
   errInvalidAppId,
 
-  /// 102: The specified channel name is invalid. A possible reason is that the parameter's data type is incorrect. Rejoin the channel with a valid channel name.
+  /// 102: Invalid channel name. Possible reason is incorrect data type set for the parameter. Please use a valid channel name to rejoin the channel.
   @JsonValue(102)
   errInvalidChannelName,
 
-  /// 103: Fails to get server resources in the specified region. Try another region when initializing RtcEngine.
+  /// 103: Unable to obtain server resources in the current region. Try specifying a different region when initializing RtcEngine.
   @JsonValue(103)
   errNoServerResources,
 
-  /// 109: The current token has expired. Apply for a new token on the server and call renewToken. Deprecated: This enumerator is deprecated. Use connectionChangedTokenExpired (9) in the onConnectionStateChanged callback instead.
+  /// 109: The current Token has expired and is no longer valid. Please request a new Token from the server and call renewToken to update it. Deprecated: This enum is deprecated. Use connectionChangedTokenExpired (9) in the onConnectionStateChanged callback instead.
   @JsonValue(109)
   errTokenExpired,
 
-  /// 110: Invalid token. Typical reasons include the following:
-  ///  App Certificate is enabled in Agora Console, but the code still uses App ID for authentication. Once App Certificate is enabled for a project, you must use token-based authentication.
-  ///  The uid used to generate the token is not the same as the uid used to join the channel. Deprecated: This enumerator is deprecated. Use connectionChangedInvalidToken (8) in the onConnectionStateChanged callback instead.
+  /// Deprecated: This enum is deprecated. Use connectionChangedInvalidToken (8) in the onConnectionStateChanged callback instead. 110: Invalid Token. Common reasons include:
+  ///  App certificate is enabled in the console, but App ID + Token authentication is not used. When the project enables the App certificate, Token authentication must be used.
+  ///  The uid field used when generating the Token does not match the uid used when the user joins the channel.
   @JsonValue(110)
   errInvalidToken,
 
-  /// 111: The network connection is interrupted. The SDK triggers this callback when it loses connection with the server for more than four seconds after the connection is established.
+  /// 111: Network connection interrupted. SDK lost network connection for more than 4 seconds after establishing a connection with the server.
   @JsonValue(111)
   errConnectionInterrupted,
 
-  /// 112: The network connection is lost. Occurs when the SDK cannot reconnect to Agora's edge server 10 seconds after its connection to the server is interrupted.
+  /// 112: Network connection lost. The network was interrupted and the SDK could not reconnect to the server within 10 seconds.
   @JsonValue(112)
   errConnectionLost,
 
-  /// 113: The user is not in the channel when calling the sendStreamMessage method.
+  /// 113: User is not in the channel when calling the sendStreamMessage method.
   @JsonValue(113)
   errNotInChannel,
 
-  /// 114: The data size exceeds 1 KB when calling the sendStreamMessage method.
+  /// 114: The data length exceeds 1 KB when calling sendStreamMessage.
   @JsonValue(114)
   errSizeTooLarge,
 
-  /// 115: The data bitrate exceeds 6 KB/s when calling the sendStreamMessage method.
+  /// 115: The data sending frequency exceeds the limit (6 KB/s) when calling sendStreamMessage.
   @JsonValue(115)
   errBitrateLimit,
 
-  /// 116: More than five data streams are created when calling the createDataStream method.
+  /// 116: The number of data streams created exceeds the limit (5) when calling createDataStream.
   @JsonValue(116)
   errTooManyDataStreams,
 
-  /// 117: The data stream transmission times out.
+  /// 117: Data stream sending timed out.
   @JsonValue(117)
   errStreamMessageTimeout,
 
-  /// 119: Switching roles fails, try rejoining the channel.
+  /// 119: Failed to switch user role. Please try rejoining the channel.
   @JsonValue(119)
   errSetClientRoleNotAuthorized,
 
-  /// 120: Media streams decryption fails. The user might use an incorrect password to join the channel. Check the entered password, or tell the user to try rejoining the channel.
+  /// 120: Media stream decryption failed. Possibly due to an incorrect key used when the user joined the channel. Please check the key entered when joining the channel or guide the user to try rejoining.
   @JsonValue(120)
   errDecryptionFailed,
 
-  /// 121: The user ID is invalid.
+  /// 121: Invalid user ID.
   @JsonValue(121)
   errInvalidUserId,
 
-  /// 122: Data streams decryption fails. The user might use an incorrect password to join the channel. Check the entered password, or tell the user to try rejoining the channel.
+  /// 122: Data stream decryption failed. Possibly due to an incorrect key used when the user joined the channel. Please check the key entered when joining the channel or guide the user to try rejoining.
   @JsonValue(122)
   errDatastreamDecryptionFailed,
 
-  /// 123: The user is banned from the server.
+  /// 123: The user is banned by the server.
   @JsonValue(123)
   errClientIsBannedByServer,
 
@@ -368,7 +366,7 @@ enum ErrorCodeType {
   @JsonValue(131)
   errLicenseCredentialInvalid,
 
-  /// 134: The user account is invalid, possibly because it contains invalid parameters.
+  /// 134: Invalid user account, possibly due to invalid parameters.
   @JsonValue(134)
   errInvalidUserAccount,
 
@@ -424,11 +422,11 @@ enum ErrorCodeType {
   @JsonValue(168)
   errCertRequest,
 
-  /// @nodoc
+  /// 200: Unsupported PCM format.
   @JsonValue(200)
   errPcmsendFormat,
 
-  /// @nodoc
+  /// 201: Buffer overflow, PCM sending rate is too fast.
   @JsonValue(201)
   errPcmsendBufferoverflow,
 
@@ -460,39 +458,39 @@ enum ErrorCodeType {
   @JsonValue(428)
   errLoginAlreadyLogin,
 
-  /// 1001: The SDK fails to load the media engine.
+  /// 1001: Failed to load media engine.
   @JsonValue(1001)
   errLoadMediaEngine,
 
-  /// 1005: A general error occurs (no specified reason). Check whether the audio device is already in use by another app, or try rejoining the channel.
+  /// 1005: Audio device error (unspecified). Please check whether the audio device is occupied by another application, or try rejoining the channel.
   @JsonValue(1005)
   errAdmGeneralError,
 
-  /// 1008: An error occurs when initializing the playback device. Check whether the playback device is already in use by another app, or try rejoining the channel.
+  /// 1008: Error initializing playback device. Please check whether the playback device is occupied by another application, or try rejoining the channel.
   @JsonValue(1008)
   errAdmInitPlayout,
 
-  /// 1009: An error occurs when starting the playback device. Check the playback device.
+  /// 1009: Error starting playback device. Please check whether the playback device is functioning properly.
   @JsonValue(1009)
   errAdmStartPlayout,
 
-  /// 1010: An error occurs when stopping the playback device.
+  /// 1010: Error stopping playback device.
   @JsonValue(1010)
   errAdmStopPlayout,
 
-  /// 1011: An error occurs when initializing the recording device. Check the recording device, or try rejoining the channel.
+  /// 1011: Error initializing recording device. Please check whether the recording device is functioning properly, or try rejoining the channel.
   @JsonValue(1011)
   errAdmInitRecording,
 
-  /// 1012: An error occurs when starting the recording device. Check the recording device.
+  /// 1012: Error starting recording device. Please check whether the recording device is functioning properly.
   @JsonValue(1012)
   errAdmStartRecording,
 
-  /// 1013: An error occurs when stopping the recording device.
+  /// 1013: Error stopping recording device.
   @JsonValue(1013)
   errAdmStopRecording,
 
-  /// 1501: Permission to access the camera is not granted. Check whether permission to access the camera permission is granted.
+  /// 1501: No permission to use the camera. Please check whether camera permission is enabled.
   @JsonValue(1501)
   errVdmCameraNotAuthorized,
 }
@@ -551,26 +549,26 @@ extension LicenseErrorTypeExt on LicenseErrorType {
   }
 }
 
-/// The operation permissions of the SDK on the audio session.
+/// SDK's operation permissions for Audio Session.
 @JsonEnum(alwaysCreate: true)
 enum AudioSessionOperationRestriction {
-  /// 0: No restriction, the SDK can change the audio session.
+  /// 0: No restriction. SDK can modify the Audio Session.
   @JsonValue(0)
   audioSessionOperationRestrictionNone,
 
-  /// 1: The SDK cannot change the audio session category.
+  /// 1: SDK cannot change the Audio Session category.
   @JsonValue(1)
   audioSessionOperationRestrictionSetCategory,
 
-  /// 2: The SDK cannot change the audio session category, mode, or categoryOptions.
+  /// 2: SDK cannot change the Audio Session category, mode, or categoryOptions.
   @JsonValue(1 << 1)
   audioSessionOperationRestrictionConfigureSession,
 
-  /// 4: The SDK keeps the audio session active when the user leaves the channel, for example, to play an audio file in the background.
+  /// 4: When leaving the channel, the SDK keeps the Audio Session active, for example, to continue audio playback in the background.
   @JsonValue(1 << 2)
   audioSessionOperationRestrictionDeactivateSession,
 
-  /// 128: Completely restricts the operation permissions of the SDK on the audio session; the SDK cannot change the audio session.
+  /// 128: Fully restricts the SDK's operation permissions for Audio Session. SDK cannot make any changes to the Audio Session.
   @JsonValue(1 << 7)
   audioSessionOperationRestrictionAll,
 }
@@ -588,18 +586,18 @@ extension AudioSessionOperationRestrictionExt
   }
 }
 
-/// Reasons for a user being offline.
+/// Reason for user going offline.
 @JsonEnum(alwaysCreate: true)
 enum UserOfflineReasonType {
-  /// 0: The user quits the call.
+  /// 0: User left voluntarily.
   @JsonValue(0)
   userOfflineQuit,
 
-  /// 1: The SDK times out and the user drops offline because no data packet is received within a certain period of time. If the user quits the call and the message is not passed to the SDK (due to an unreliable channel), the SDK assumes the user dropped offline.
+  /// 1: Timed out due to not receiving packets from the peer for a long time. Since the SDK uses an unreliable channel, it is also possible that the peer left the channel voluntarily, but the local side did not receive the leave message and mistakenly judged it as a timeout.
   @JsonValue(1)
   userOfflineDropped,
 
-  /// 2: The user switches the client role from the host to the audience.
+  /// 2: User switched role from host to audience.
   @JsonValue(2)
   userOfflineBecomeAudience,
 }
@@ -617,22 +615,22 @@ extension UserOfflineReasonTypeExt on UserOfflineReasonType {
   }
 }
 
-/// The interface class.
+/// Interface class.
 @JsonEnum(alwaysCreate: true)
 enum InterfaceIdType {
-  /// 1: The AudioDeviceManager interface class.
+  /// 1: AudioDeviceManager interface class.
   @JsonValue(1)
   agoraIidAudioDeviceManager,
 
-  /// 2: The VideoDeviceManager interface class.
+  /// 2: VideoDeviceManager interface class.
   @JsonValue(2)
   agoraIidVideoDeviceManager,
 
-  /// This interface class is deprecated.
+  /// 3: This interface class is deprecated.
   @JsonValue(3)
   agoraIidParameterEngine,
 
-  /// 4: The MediaEngine interface class.
+  /// 4: MediaEngine interface class.
   @JsonValue(4)
   agoraIidMediaEngine,
 
@@ -648,7 +646,7 @@ enum InterfaceIdType {
   @JsonValue(7)
   agoraIidRtcConnection,
 
-  /// @nodoc
+  /// 8: This interface class is deprecated.
   @JsonValue(8)
   agoraIidSignalingEngine,
 
@@ -656,7 +654,7 @@ enum InterfaceIdType {
   @JsonValue(9)
   agoraIidMediaEngineRegulator,
 
-  /// @nodoc
+  /// 11: LocalSpatialAudioEngine interface class.
   @JsonValue(11)
   agoraIidLocalSpatialAudio,
 
@@ -668,7 +666,7 @@ enum InterfaceIdType {
   @JsonValue(14)
   agoraIidMetaService,
 
-  /// @nodoc
+  /// 15: MusicContentCenter interface class.
   @JsonValue(15)
   agoraIidMusicContentCenter,
 
@@ -690,34 +688,34 @@ extension InterfaceIdTypeExt on InterfaceIdType {
   }
 }
 
-/// Network quality types.
+/// Network quality.
 @JsonEnum(alwaysCreate: true)
 enum QualityType {
-  /// 0: The network quality is unknown.
+  /// 0: Network quality is unknown.
   @JsonValue(0)
   qualityUnknown,
 
-  /// 1: The network quality is excellent.
+  /// 1: Excellent network quality.
   @JsonValue(1)
   qualityExcellent,
 
-  /// 2: The network quality is quite good, but the bitrate may be slightly lower than excellent.
+  /// 2: Subjectively similar to excellent, but bitrate may be slightly lower.
   @JsonValue(2)
   qualityGood,
 
-  /// 3: Users can feel the communication is slightly impaired.
+  /// 3: Slightly impaired user experience but still allows communication.
   @JsonValue(3)
   qualityPoor,
 
-  /// 4: Users cannot communicate smoothly.
+  /// 4: Barely communicable but not smooth.
   @JsonValue(4)
   qualityBad,
 
-  /// 5: The quality is so bad that users can barely communicate.
+  /// 5: Very poor network quality, communication is almost impossible.
   @JsonValue(5)
   qualityVbad,
 
-  /// 6: The network is down and users cannot communicate at all.
+  /// 6: Communication is completely impossible.
   @JsonValue(6)
   qualityDown,
 
@@ -725,7 +723,7 @@ enum QualityType {
   @JsonValue(7)
   qualityUnsupported,
 
-  /// 8: The last-mile network probe test is in progress.
+  /// 8: Network quality detection in progress.
   @JsonValue(8)
   qualityDetecting,
 }
@@ -768,22 +766,22 @@ extension FitModeTypeExt on FitModeType {
   }
 }
 
-/// The clockwise rotation of the video.
+/// Video clockwise rotation information.
 @JsonEnum(alwaysCreate: true)
 enum VideoOrientation {
-  /// 0: (Default) No rotation.
+  /// 0: (Default) Rotates 0 degrees clockwise.
   @JsonValue(0)
   videoOrientation0,
 
-  /// 90: 90 degrees.
+  /// 90: Rotates 90 degrees clockwise.
   @JsonValue(90)
   videoOrientation90,
 
-  /// 180: 180 degrees.
+  /// 180: Rotates 180 degrees clockwise.
   @JsonValue(180)
   videoOrientation180,
 
-  /// 270: 270 degrees.
+  /// 270: Rotates 270 degrees clockwise.
   @JsonValue(270)
   videoOrientation270,
 }
@@ -801,7 +799,7 @@ extension VideoOrientationExt on VideoOrientation {
   }
 }
 
-/// The video frame rate.
+/// Video frame rate.
 @JsonEnum(alwaysCreate: true)
 enum FrameRate {
   /// 1: 1 fps.
@@ -828,7 +826,7 @@ enum FrameRate {
   @JsonValue(30)
   frameRateFps30,
 
-  /// 60: 60 fps. For Windows and macOS only.
+  /// 60: 60 fps. (Windows and macOS only)
   @JsonValue(60)
   frameRateFps60,
 }
@@ -888,10 +886,10 @@ extension FrameHeightExt on FrameHeight {
   }
 }
 
-/// The video frame type.
+/// Video frame type.
 @JsonEnum(alwaysCreate: true)
 enum VideoFrameType {
-  /// 0: A black frame.
+  /// 0: Black frame.
   @JsonValue(0)
   videoFrameTypeBlankFrame,
 
@@ -903,11 +901,11 @@ enum VideoFrameType {
   @JsonValue(4)
   videoFrameTypeDeltaFrame,
 
-  /// 5: The B frame.
+  /// 5: B frame.
   @JsonValue(5)
   videoFrameTypeBFrame,
 
-  /// 6: A discarded frame.
+  /// 6: Droppable frame.
   @JsonValue(6)
   videoFrameTypeDroppableFrame,
 
@@ -929,20 +927,20 @@ extension VideoFrameTypeExt on VideoFrameType {
   }
 }
 
-/// Video output orientation mode.
+/// Orientation mode for video encoding.
 @JsonEnum(alwaysCreate: true)
 enum OrientationMode {
-  /// 0: (Default) The output video always follows the orientation of the captured video. The receiver takes the rotational information passed on from the video encoder. This mode applies to scenarios where video orientation can be adjusted on the receiver.
-  ///  If the captured video is in landscape mode, the output video is in landscape mode.
-  ///  If the captured video is in portrait mode, the output video is in portrait mode.
+  /// 0: (Default) In this mode, the SDK outputs video with the same orientation as the captured video. The receiving end rotates the video based on the received rotation info. This mode is suitable when the receiver can adjust video orientation.
+  ///  If the captured video is landscape, the output video is also landscape.
+  ///  If the captured video is portrait, the output video is also portrait.
   @JsonValue(0)
   orientationModeAdaptive,
 
-  /// 1: In this mode, the SDK always outputs videos in landscape (horizontal) mode. If the captured video is in portrait mode, the video encoder crops it to fit the output. Applies to situations where the receiving end cannot process the rotational information. For example, CDN live streaming.
+  /// 1: In this mode, the SDK outputs video in fixed landscape mode. If the captured video is portrait, the encoder crops it. This mode is suitable when the receiver cannot adjust video orientation, such as in CDN streaming scenarios.
   @JsonValue(1)
   orientationModeFixedLandscape,
 
-  /// 2: In this mode, the SDK always outputs video in portrait (portrait) mode. If the captured video is in landscape mode, the video encoder crops it to fit the output. Applies to situations where the receiving end cannot process the rotational information. For example, CDN live streaming.
+  /// 2: In this mode, the SDK outputs video in fixed portrait mode. If the captured video is landscape, the encoder crops it. This mode is suitable when the receiver cannot adjust video orientation, such as in CDN streaming scenarios.
   @JsonValue(2)
   orientationModeFixedPortrait,
 }
@@ -960,26 +958,26 @@ extension OrientationModeExt on OrientationMode {
   }
 }
 
-/// Video degradation preferences when the bandwidth is a constraint.
+/// Video encoding degradation preference when bandwidth is limited.
 @JsonEnum(alwaysCreate: true)
 enum DegradationPreference {
-  /// -1: (Default) Automatic mode. The SDK will automatically select maintainFramerate, maintainBalanced or maintainResolution based on the video scenario you set, in order to achieve the best overall quality of experience (QoE).
+  /// -1: (Default) Auto mode. The SDK automatically selects maintainFramerate, maintainBalanced, or maintainResolution based on your video scenario settings to achieve optimal overall quality experience (QoE).
   @JsonValue(-1)
   maintainAuto,
 
-  /// 0: Prefers to reduce the video frame rate while maintaining video resolution during video encoding under limited bandwidth. This degradation preference is suitable for scenarios where video quality is prioritized. Deprecated: This enumerator is deprecated. Use other enumerations instead.
+  /// 0: When bandwidth is limited, prioritize reducing video frame rate while maintaining resolution. This preference is suitable for scenarios prioritizing image quality. Deprecated: This enumeration is deprecated. Use other enumerations instead.
   @JsonValue(0)
   maintainQuality,
 
-  /// 1: Reduces the video resolution while maintaining the video frame rate during video encoding under limited bandwidth. This degradation preference is suitable for scenarios where smoothness is prioritized and video quality is allowed to be reduced.
+  /// 1: When bandwidth is limited, prioritize reducing video resolution while maintaining frame rate. This preference is suitable for scenarios prioritizing smoothness and allowing reduced image quality.
   @JsonValue(1)
   maintainFramerate,
 
-  /// 2: Reduces the video frame rate and video resolution simultaneously during video encoding under limited bandwidth. The maintainBalanced has a lower reduction than maintainQuality and maintainFramerate, and this preference is suitable for scenarios where both smoothness and video quality are a priority. The resolution of the video sent may change, so remote users need to handle this issue. See onVideoSizeChanged.
+  /// 2: When bandwidth is limited, reduce both video frame rate and resolution. The degradation level of maintainBalanced is lower than maintainQuality and maintainFramerate, suitable for scenarios with limited smoothness and image quality. The resolution of the locally sent video may change. Remote users must be able to handle this situation. See onVideoSizeChanged.
   @JsonValue(2)
   maintainBalanced,
 
-  /// 3: Reduces the video frame rate while maintaining the video resolution during video encoding under limited bandwidth. This degradation preference is suitable for scenarios where video quality is prioritized.
+  /// 3: When bandwidth is limited, prioritize reducing video frame rate while keeping resolution unchanged. This preference is suitable for scenarios prioritizing image quality.
   @JsonValue(3)
   maintainResolution,
 
@@ -1001,17 +999,17 @@ extension DegradationPreferenceExt on DegradationPreference {
   }
 }
 
-/// The video dimension.
+/// Video dimensions.
 @JsonSerializable(explicitToJson: true, includeIfNull: false)
 class VideoDimensions implements AgoraSerializable {
   /// @nodoc
   const VideoDimensions({this.width, this.height});
 
-  /// The width (pixels) of the video.
+  /// Video width in pixels.
   @JsonKey(name: 'width')
   final int? width;
 
-  /// The height (pixels) of the video.
+  /// Video height in pixels.
   @JsonKey(name: 'height')
   final int? height;
 
@@ -1035,18 +1033,18 @@ const defaultMinBitrate = -1;
 /// @nodoc
 const defaultMinBitrateEqualToTargetBitrate = -2;
 
-/// The highest frame rate supported by the screen sharing device.
+/// Maximum frame rate supported by the screen sharing device.
 @JsonEnum(alwaysCreate: true)
 enum ScreenCaptureFramerateCapability {
-  /// 0: The device supports the frame rate of up to 15 fps.
+  /// 0: Supports up to 15 fps.
   @JsonValue(0)
   screenCaptureFramerateCapability15Fps,
 
-  /// 1: The device supports the frame rate of up to 30 fps.
+  /// 1: Supports up to 30 fps.
   @JsonValue(1)
   screenCaptureFramerateCapability30Fps,
 
-  /// 2: The device supports the frame rate of up to 60 fps.
+  /// 2: Supports up to 60 fps.
   @JsonValue(2)
   screenCaptureFramerateCapability60Fps,
 }
@@ -1064,26 +1062,26 @@ extension ScreenCaptureFramerateCapabilityExt
   }
 }
 
-/// The level of the codec capability.
+/// Video codec capability level.
 @JsonEnum(alwaysCreate: true)
 enum VideoCodecCapabilityLevel {
-  /// -1: Unsupported video type. Currently, only H.264 and H.265 formats are supported. If the video is in another format, this value will be returned.
+  /// -1: Unsupported video type. Currently only H.264 and H.265 formats are supported. If the video is in another format, this value is returned.
   @JsonValue(-1)
   codecCapabilityLevelUnspecified,
 
-  /// 5: Supports encoding and decoding videos up to 1080p and 30 fps.
+  /// 5: Basic codec support, i.e., encoding and decoding for video up to 1080p and 30 fps.
   @JsonValue(5)
   codecCapabilityLevelBasicSupport,
 
-  /// 10: Supports encoding and decoding videos up to1080p and 30 fps.
+  /// 10: Supports encoding and decoding for video up to 1080p and 30 fps.
   @JsonValue(10)
   codecCapabilityLevel1080p30fps,
 
-  /// 20: Support encoding and decoding videos up to 1080p and 60 fps.
+  /// 20: Supports encoding and decoding for video up to 1080p and 60 fps.
   @JsonValue(20)
   codecCapabilityLevel1080p60fps,
 
-  /// 30: Support encoding and decoding videos up to 4K and 30 fps.
+  /// 30: Supports encoding and decoding for video up to 4K and 30 fps.
   @JsonValue(30)
   codecCapabilityLevel4k60fps,
 }
@@ -1101,10 +1099,10 @@ extension VideoCodecCapabilityLevelExt on VideoCodecCapabilityLevel {
   }
 }
 
-/// Video codec types.
+/// Video codec format.
 @JsonEnum(alwaysCreate: true)
 enum VideoCodecType {
-  /// 0: (Default) Unspecified codec format. The SDK automatically matches the appropriate codec format based on the current video stream's resolution and device performance.
+  /// 0: (Default) No specific codec format. The SDK automatically selects a suitable codec format based on the resolution of the current video stream and device performance.
   @JsonValue(0)
   videoCodecNone,
 
@@ -1120,7 +1118,7 @@ enum VideoCodecType {
   @JsonValue(3)
   videoCodecH265,
 
-  /// 6: Generic. This type is used for transmitting raw video data, such as encrypted video frames. The SDK returns this type of video frames in callbacks, and you need to decode and render the frames yourself.
+  /// 6: Generic. This type is mainly used for transmitting raw video data (e.g., user-encrypted video frames). The video frames of this type are returned to the user via callback, and the user needs to decode and render them manually.
   @JsonValue(6)
   videoCodecGeneric,
 
@@ -1136,7 +1134,7 @@ enum VideoCodecType {
   @JsonValue(13)
   videoCodecVp9,
 
-  /// 20: Generic JPEG. This type consumes minimum computing resources and applies to IoT devices.
+  /// 20: Generic JPEG. Requires less computing power and can be used on IoT devices with limited processing capabilities.
   @JsonValue(20)
   videoCodecGenericJpeg,
 }
@@ -1154,9 +1152,9 @@ extension VideoCodecTypeExt on VideoCodecType {
   }
 }
 
-/// The camera focal length types.
+/// Camera focal length type.
 ///
-/// This enumeration class applies to Android and iOS only.
+/// (Android and iOS only)
 @JsonEnum(alwaysCreate: true)
 enum CameraFocalLengthType {
   /// 0: (Default) Standard lens.
@@ -1171,7 +1169,7 @@ enum CameraFocalLengthType {
   @JsonValue(2)
   cameraFocalLengthUltraWide,
 
-  /// 3: (For iOS only) Telephoto lens.
+  /// 3: (iOS only) Telephoto lens.
   @JsonValue(3)
   cameraFocalLengthTelephoto,
 }
@@ -1240,7 +1238,7 @@ class SenderOptions implements AgoraSerializable {
   Map<String, dynamic> toJson() => _$SenderOptionsToJson(this);
 }
 
-/// The codec type of audio.
+/// Audio codec format.
 @JsonEnum(alwaysCreate: true)
 enum AudioCodecType {
   /// 1: OPUS.
@@ -1300,47 +1298,47 @@ extension AudioCodecTypeExt on AudioCodecType {
 /// Audio encoding type.
 @JsonEnum(alwaysCreate: true)
 enum AudioEncodingType {
-  /// 0x010101: AAC encoding format, 16000 Hz sampling rate, bass quality. A file with an audio duration of 10 minutes is approximately 1.2 MB after encoding.
+  /// 0x010101: AAC encoding format, 16000 Hz sample rate, low quality. The file size of 10 minutes of audio is approximately 1.2 MB after encoding.
   @JsonValue(0x010101)
   audioEncodingTypeAac16000Low,
 
-  /// 0x010102: AAC encoding format, 16000 Hz sampling rate, medium sound quality. A file with an audio duration of 10 minutes is approximately 2 MB after encoding.
+  /// 0x010102: AAC encoding format, 16000 Hz sample rate, medium quality. The file size of 10 minutes of audio is approximately 2 MB after encoding.
   @JsonValue(0x010102)
   audioEncodingTypeAac16000Medium,
 
-  /// 0x010201: AAC encoding format, 32000 Hz sampling rate, bass quality. A file with an audio duration of 10 minutes is approximately 1.2 MB after encoding.
+  /// 0x010201: AAC encoding format, 32000 Hz sample rate, low quality. The file size of 10 minutes of audio is approximately 1.2 MB after encoding.
   @JsonValue(0x010201)
   audioEncodingTypeAac32000Low,
 
-  /// 0x010202: AAC encoding format, 32000 Hz sampling rate, medium sound quality. A file with an audio duration of 10 minutes is approximately 2 MB after encoding.
+  /// 0x010202: AAC encoding format, 32000 Hz sample rate, medium quality. The file size of 10 minutes of audio is approximately 2 MB after encoding.
   @JsonValue(0x010202)
   audioEncodingTypeAac32000Medium,
 
-  /// 0x010203: AAC encoding format, 32000 Hz sampling rate, high sound quality. A file with an audio duration of 10 minutes is approximately 3.5 MB after encoding.
+  /// 0x010203: AAC encoding format, 32000 Hz sample rate, high quality. The file size of 10 minutes of audio is approximately 3.5 MB after encoding.
   @JsonValue(0x010203)
   audioEncodingTypeAac32000High,
 
-  /// 0x010302: AAC encoding format, 48000 Hz sampling rate, medium sound quality. A file with an audio duration of 10 minutes is approximately 2 MB after encoding.
+  /// 0x010302: AAC encoding format, 48000 Hz sample rate, medium quality. The file size of 10 minutes of audio is approximately 2 MB after encoding.
   @JsonValue(0x010302)
   audioEncodingTypeAac48000Medium,
 
-  /// 0x010303: AAC encoding format, 48000 Hz sampling rate, high sound quality. A file with an audio duration of 10 minutes is approximately 3.5 MB after encoding.
+  /// 0x010303: AAC encoding format, 48000 Hz sample rate, high quality. The file size of 10 minutes of audio is approximately 3.5 MB after encoding.
   @JsonValue(0x010303)
   audioEncodingTypeAac48000High,
 
-  /// 0x020101: OPUS encoding format, 16000 Hz sampling rate, bass quality. A file with an audio duration of 10 minutes is approximately 2 MB after encoding.
+  /// 0x020101: OPUS encoding format, 16000 Hz sample rate, low quality. The file size of 10 minutes of audio is approximately 2 MB after encoding.
   @JsonValue(0x020101)
   audioEncodingTypeOpus16000Low,
 
-  /// 0x020102: OPUS encoding format, 16000 Hz sampling rate, medium sound quality. A file with an audio duration of 10 minutes is approximately 2 MB after encoding.
+  /// 0x020102: OPUS encoding format, 16000 Hz sample rate, medium quality. The file size of 10 minutes of audio is approximately 2 MB after encoding.
   @JsonValue(0x020102)
   audioEncodingTypeOpus16000Medium,
 
-  /// 0x020302: OPUS encoding format, 48000 Hz sampling rate, medium sound quality. A file with an audio duration of 10 minutes is approximately 2 MB after encoding.
+  /// 0x020302: OPUS encoding format, 48000 Hz sample rate, medium quality. The file size of 10 minutes of audio is approximately 2 MB after encoding.
   @JsonValue(0x020302)
   audioEncodingTypeOpus48000Medium,
 
-  /// 0x020303: OPUS encoding format, 48000 Hz sampling rate, high sound quality. A file with an audio duration of 10 minutes is approximately 3.5 MB after encoding.
+  /// 0x020303: OPUS encoding format, 48000 Hz sample rate, high quality. The file size of 10 minutes of audio is approximately 3.5 MB after encoding.
   @JsonValue(0x020303)
   audioEncodingTypeOpus48000High,
 }
@@ -1358,14 +1356,14 @@ extension AudioEncodingTypeExt on AudioEncodingType {
   }
 }
 
-/// The adaptation mode of the watermark.
+/// Watermark fit mode.
 @JsonEnum(alwaysCreate: true)
 enum WatermarkFitMode {
-  /// 0: Use the positionInLandscapeMode and positionInPortraitMode values you set in WatermarkOptions. The settings in WatermarkRatio are invalid.
+  /// 0: Uses the positionInLandscapeMode and positionInPortraitMode values set in WatermarkOptions. The settings in WatermarkRatio are ignored.
   @JsonValue(0)
   fitModeCoverPosition,
 
-  /// 1: Use the value you set in WatermarkRatio. The settings in positionInLandscapeMode and positionInPortraitMode in WatermarkOptions are invalid.
+  /// 1: Uses the value set in WatermarkRatio. The positionInLandscapeMode and positionInPortraitMode settings in WatermarkOptions are ignored.
   @JsonValue(1)
   fitModeUseImageRatio,
 }
@@ -1407,7 +1405,7 @@ class EncodedAudioFrameAdvancedSettings implements AgoraSerializable {
       _$EncodedAudioFrameAdvancedSettingsToJson(this);
 }
 
-/// Audio information after encoding.
+/// Information about the encoded audio.
 @JsonSerializable(explicitToJson: true, includeIfNull: false)
 class EncodedAudioFrameInfo implements AgoraSerializable {
   /// @nodoc
@@ -1419,7 +1417,7 @@ class EncodedAudioFrameInfo implements AgoraSerializable {
       this.advancedSettings,
       this.captureTimeMs});
 
-  /// Audio Codec type: AudioCodecType.
+  /// Audio codec type: AudioCodecType.
   @JsonKey(name: 'codec')
   final AudioCodecType? codec;
 
@@ -1427,19 +1425,19 @@ class EncodedAudioFrameInfo implements AgoraSerializable {
   @JsonKey(name: 'sampleRateHz')
   final int? sampleRateHz;
 
-  /// The number of audio samples per channel.
+  /// Number of audio samples per channel.
   @JsonKey(name: 'samplesPerChannel')
   final int? samplesPerChannel;
 
-  /// The number of audio channels.
+  /// Number of channels.
   @JsonKey(name: 'numberOfChannels')
   final int? numberOfChannels;
 
-  /// This function is currently not supported.
+  /// This feature is not supported yet.
   @JsonKey(name: 'advancedSettings')
   final EncodedAudioFrameAdvancedSettings? advancedSettings;
 
-  /// The Unix timestamp (ms) for capturing the external encoded video frames.
+  /// Unix timestamp (ms) when the external encoded video frame was captured.
   @JsonKey(name: 'captureTimeMs')
   final int? captureTimeMs;
 
@@ -1515,14 +1513,14 @@ extension H264PacketizeModeExt on H264PacketizeMode {
   }
 }
 
-/// The type of video streams.
+/// Video stream type.
 @JsonEnum(alwaysCreate: true)
 enum VideoStreamType {
-  /// 0: High-quality video stream, that is, a video stream with the highest resolution and bitrate.
+  /// 0: High video stream, i.e., high-resolution and high-bitrate video stream.
   @JsonValue(0)
   videoStreamHigh,
 
-  /// 1: Low-quality video stream, that is, a video stream with the lowest resolution and bitrate.
+  /// 1: Low video stream, i.e., low-resolution and low-bitrate video stream.
   @JsonValue(1)
   videoStreamLow,
 
@@ -1564,17 +1562,17 @@ extension VideoStreamTypeExt on VideoStreamType {
   }
 }
 
-/// Video subscription options.
+/// Video subscription settings.
 @JsonSerializable(explicitToJson: true, includeIfNull: false)
 class VideoSubscriptionOptions implements AgoraSerializable {
   /// @nodoc
   const VideoSubscriptionOptions({this.type, this.encodedFrameOnly});
 
-  /// The video stream type that you want to subscribe to. The default value is videoStreamHigh, indicating that the high-quality video streams are subscribed. See VideoStreamType.
+  /// Type of video stream to subscribe to. Default is videoStreamHigh, which subscribes to the high-quality video stream. See VideoStreamType for details.
   @JsonKey(name: 'type')
   final VideoStreamType? type;
 
-  /// Whether to subscribe to encoded video frames only: true : Subscribe to the encoded video data (structured data) only; the SDK does not decode or render raw video data. false : (Default) Subscribe to both raw video data and encoded video data.
+  /// Whether to subscribe only to encoded video streams: true : Subscribe only to encoded video data (structured data). The SDK does not decode or render the video data. false : (Default) Subscribe to both raw and encoded video data.
   @JsonKey(name: 'encodedFrameOnly')
   final bool? encodedFrameOnly;
 
@@ -1586,10 +1584,10 @@ class VideoSubscriptionOptions implements AgoraSerializable {
   Map<String, dynamic> toJson() => _$VideoSubscriptionOptionsToJson(this);
 }
 
-/// The maximum length of the user account.
+/// Maximum length of user account.
 @JsonEnum(alwaysCreate: true)
 enum MaxUserAccountLengthType {
-  /// The maximum length of the user account is 256 bytes.
+  /// The maximum length of the user account is 255 characters.
   @JsonValue(256)
   maxUserAccountLength,
 }
@@ -1624,35 +1622,36 @@ class EncodedVideoFrameInfo implements AgoraSerializable {
       this.streamType,
       this.presentationMs});
 
-  /// The codec type of the local video stream. See VideoCodecType. The default value is videoCodecH264 (2).
+  /// Video codec type. See VideoCodecType. Default is videoCodecH264 (2).
   @JsonKey(name: 'codecType')
   final VideoCodecType? codecType;
 
-  /// Width (pixel) of the video frame.
+  /// Width of the video frame (px).
   @JsonKey(name: 'width')
   final int? width;
 
-  /// Height (pixel) of the video frame.
+  /// Height of the video frame (px).
   @JsonKey(name: 'height')
   final int? height;
 
-  /// The number of video frames per second. When this parameter is not 0, you can use it to calculate the Unix timestamp of externally encoded video frames.
+  /// Frames per second.
+  /// When this parameter is not 0, you can use it to calculate the Unix timestamp of the externally encoded video frame.
   @JsonKey(name: 'framesPerSecond')
   final int? framesPerSecond;
 
-  /// The video frame type. See VideoFrameType.
+  /// Type of the video frame. See VideoFrameType.
   @JsonKey(name: 'frameType')
   final VideoFrameType? frameType;
 
-  /// The rotation information of the video frame. See VideoOrientation.
+  /// Rotation information of the video frame. See VideoOrientation.
   @JsonKey(name: 'rotation')
   final VideoOrientation? rotation;
 
-  /// Reserved for future use.
+  /// Reserved parameter.
   @JsonKey(name: 'trackId')
   final int? trackId;
 
-  /// The Unix timestamp (ms) for capturing the external encoded video frames.
+  /// Unix timestamp (ms) when the external encoded video frame was captured.
   @JsonKey(name: 'captureTimeMs')
   final int? captureTimeMs;
 
@@ -1660,7 +1659,7 @@ class EncodedVideoFrameInfo implements AgoraSerializable {
   @JsonKey(name: 'decodeTimeMs')
   final int? decodeTimeMs;
 
-  /// The type of video streams. See VideoStreamType.
+  /// Video stream type. See VideoStreamType.
   @JsonKey(name: 'streamType')
   final VideoStreamType? streamType;
 
@@ -1676,14 +1675,14 @@ class EncodedVideoFrameInfo implements AgoraSerializable {
   Map<String, dynamic> toJson() => _$EncodedVideoFrameInfoToJson(this);
 }
 
-/// Compression preference for video encoding.
+/// Compression preference type for video encoding.
 @JsonEnum(alwaysCreate: true)
 enum CompressionPreference {
-  /// -1: (Default) Automatic mode. The SDK will automatically select preferLowLatency or preferQuality based on the video scenario you set to achieve the best user experience.
+  /// -1: (Default) Automatic mode. The SDK automatically selects preferLowLatency or preferQuality based on your video scenario to provide the best user experience.
   @JsonValue(-1)
   preferCompressionAuto,
 
-  /// 0: Low latency preference. The SDK compresses video frames to reduce latency. This preference is suitable for scenarios where smoothness is prioritized and reduced video quality is acceptable.
+  /// 0: Low latency preference. The SDK compresses video frames to reduce latency. This preference is suitable for scenarios where smoothness is prioritized and some quality loss is acceptable.
   @JsonValue(0)
   preferLowLatency,
 
@@ -1708,15 +1707,15 @@ extension CompressionPreferenceExt on CompressionPreference {
 /// Video encoder preference.
 @JsonEnum(alwaysCreate: true)
 enum EncodingPreference {
-  /// -1: Adaptive preference. The SDK automatically selects the optimal encoding type for encoding based on factors such as platform and device type.
+  /// -1: Adaptive preference. The SDK automatically selects the optimal encoding type based on platform, device type, and other factors.
   @JsonValue(-1)
   preferAuto,
 
-  /// 0: Software coding preference. The SDK prefers software encoders for video encoding.
+  /// 0: Software encoding preference. The SDK prefers using the software encoder for video encoding.
   @JsonValue(0)
   preferSoftware,
 
-  /// 1: Hardware encoding preference. The SDK prefers a hardware encoder for video encoding. When the device does not support hardware encoding, the SDK automatically uses software encoding and reports the currently used video encoder type through hwEncoderAccelerating in the onLocalVideoStats callback.
+  /// 1: Hardware encoding preference. The SDK prefers using the hardware encoder for video encoding. If the device does not support hardware encoding, the SDK automatically switches to software encoding and reports the current encoder type via the hwEncoderAccelerating field in the onLocalVideoStats callback.
   @JsonValue(1)
   preferHardware,
 }
@@ -1749,7 +1748,7 @@ class AdvanceOptions implements AgoraSerializable {
   @JsonKey(name: 'compressionPreference')
   final CompressionPreference? compressionPreference;
 
-  /// Whether to encode and send the Alpha data present in the video frame to the remote end: true : Encode and send Alpha data. false : (Default) Do not encode and send Alpha data.
+  /// When the video frame contains Alpha channel data, sets whether to encode and send the Alpha data to the remote end: true : Encode and send the Alpha data. false : (Default) Do not encode and send the Alpha data.
   @JsonKey(name: 'encodeAlpha')
   final bool? encodeAlpha;
 
@@ -1761,12 +1760,12 @@ class AdvanceOptions implements AgoraSerializable {
   Map<String, dynamic> toJson() => _$AdvanceOptionsToJson(this);
 }
 
-/// Video mirror mode.
+/// Mirror mode type.
 @JsonEnum(alwaysCreate: true)
 enum VideoMirrorModeType {
-  /// 0: The SDK determines the mirror mode.
-  ///  For the mirror mode of the local video view: If you use a front camera, the SDK enables the mirror mode by default; if you use a rear camera, the SDK disables the mirror mode by default.
-  ///  For the remote user: The mirror mode is disabled by default.
+  /// 0: Mirror mode is determined by the SDK.
+  ///  Local view mirror mode: If you use the front camera, local mirror mode is enabled by default; if you use the rear camera, it is disabled by default.
+  ///  Remote user view mirror mode: Disabled by default.
   @JsonValue(0)
   videoMirrorModeAuto,
 
@@ -1887,26 +1886,26 @@ extension HdrCapabilityExt on HdrCapability {
   }
 }
 
-/// The bit mask of the codec type.
+/// Codec capability bit mask.
 @JsonEnum(alwaysCreate: true)
 enum CodecCapMask {
-  /// (0): The device does not support encoding or decoding.
+  /// (0): Codec not supported.
   @JsonValue(0)
   codecCapMaskNone,
 
-  /// (1 << 0): The device supports hardware decoding.
+  /// (1 << 0): Supports hardware decoding.
   @JsonValue(1 << 0)
   codecCapMaskHwDec,
 
-  /// (1 << 1): The device supports hardware encoding.
+  /// (1 << 1): Supports hardware encoding.
   @JsonValue(1 << 1)
   codecCapMaskHwEnc,
 
-  /// (1 << 2): The device supports software decoding.
+  /// (1 << 2): Supports software decoding.
   @JsonValue(1 << 2)
   codecCapMaskSwDec,
 
-  /// (1 << 3): The device supports software ecoding.
+  /// (1 << 3): Supports software encoding.
   @JsonValue(1 << 3)
   codecCapMaskSwEnc,
 }
@@ -1924,17 +1923,17 @@ extension CodecCapMaskExt on CodecCapMask {
   }
 }
 
-/// The level of the codec capability.
+/// Codec capability levels.
 @JsonSerializable(explicitToJson: true, includeIfNull: false)
 class CodecCapLevels implements AgoraSerializable {
   /// @nodoc
   const CodecCapLevels({this.hwDecodingLevel, this.swDecodingLevel});
 
-  /// Hardware decoding capability level, which represents the device's ability to perform hardware decoding on videos of different quality. See VideoCodecCapabilityLevel.
+  /// Hardware decoding capability level, indicating the device's ability to decode videos of different qualities using hardware. See VideoCodecCapabilityLevel.
   @JsonKey(name: 'hwDecodingLevel')
   final VideoCodecCapabilityLevel? hwDecodingLevel;
 
-  /// Software decoding capability level, which represents the device's ability to perform software decoding on videos of different quality. See VideoCodecCapabilityLevel.
+  /// Software decoding capability level, indicating the device's ability to decode videos of different qualities using software. See VideoCodecCapabilityLevel.
   @JsonKey(name: 'swDecodingLevel')
   final VideoCodecCapabilityLevel? swDecodingLevel;
 
@@ -1946,21 +1945,21 @@ class CodecCapLevels implements AgoraSerializable {
   Map<String, dynamic> toJson() => _$CodecCapLevelsToJson(this);
 }
 
-/// The codec capability of the SDK.
+/// Information about codec capabilities supported by the SDK.
 @JsonSerializable(explicitToJson: true, includeIfNull: false)
 class CodecCapInfo implements AgoraSerializable {
   /// @nodoc
   const CodecCapInfo({this.codecType, this.codecCapMask, this.codecLevels});
 
-  /// The video codec types. See VideoCodecType.
+  /// Video codec type. See VideoCodecType.
   @JsonKey(name: 'codecType')
   final VideoCodecType? codecType;
 
-  /// Bit mask of the codec types in SDK. See CodecCapMask.
+  /// Bit mask of codec types supported by the SDK. See CodecCapMask.
   @JsonKey(name: 'codecCapMask')
   final int? codecCapMask;
 
-  /// Codec capability of the SDK. See CodecCapLevels.
+  /// Codec capability levels supported by the SDK. See CodecCapLevels.
   @JsonKey(name: 'codecLevels')
   final CodecCapLevels? codecLevels;
 
@@ -1972,19 +1971,19 @@ class CodecCapInfo implements AgoraSerializable {
   Map<String, dynamic> toJson() => _$CodecCapInfoToJson(this);
 }
 
-/// Focal length information supported by the camera, including the camera direction and focal length type.
+/// Focal length information supported by the camera, including camera direction and focal length type.
 ///
-/// This enumeration class applies to Android and iOS only.
+/// (Android and iOS only)
 @JsonSerializable(explicitToJson: true, includeIfNull: false)
 class FocalLengthInfo implements AgoraSerializable {
   /// @nodoc
   const FocalLengthInfo({this.cameraDirection, this.focalLengthType});
 
-  /// The camera direction. See CameraDirection.
+  /// Camera direction. See CameraDirection.
   @JsonKey(name: 'cameraDirection')
   final int? cameraDirection;
 
-  /// The focal length type. See CameraFocalLengthType.
+  /// Focal length type. See CameraFocalLengthType.
   @JsonKey(name: 'focalLengthType')
   final CameraFocalLengthType? focalLengthType;
 
@@ -1996,7 +1995,7 @@ class FocalLengthInfo implements AgoraSerializable {
   Map<String, dynamic> toJson() => _$FocalLengthInfoToJson(this);
 }
 
-/// Video encoder configurations.
+/// Configuration for the video encoder.
 @JsonSerializable(explicitToJson: true, includeIfNull: false)
 class VideoEncoderConfiguration implements AgoraSerializable {
   /// @nodoc
@@ -2011,35 +2010,38 @@ class VideoEncoderConfiguration implements AgoraSerializable {
       this.mirrorMode,
       this.advanceOptions});
 
-  /// The codec type of the local video stream. See VideoCodecType.
+  /// Video codec type. See VideoCodecType.
   @JsonKey(name: 'codecType')
   final VideoCodecType? codecType;
 
-  /// The dimensions of the encoded video (px). See VideoDimensions. This parameter measures the video encoding quality in the format of length × width. The default value is 960 × 540. You can set a custom value.
+  /// Resolution (px) for video encoding. See VideoDimensions. This parameter is used to evaluate encoding quality and is expressed as width × height. The default value is 960 × 540. You can set the resolution as needed.
   @JsonKey(name: 'dimensions')
   final VideoDimensions? dimensions;
 
-  /// The frame rate (fps) of the encoding video frame. The default value is 15. See FrameRate.
+  /// Frame rate (fps) for video encoding. The default value is 15. See FrameRate.
   @JsonKey(name: 'frameRate')
   final int? frameRate;
 
-  /// The encoding bitrate (Kbps) of the video. This parameter does not need to be set; keeping the default value standardBitrate is sufficient. The SDK automatically matches the most suitable bitrate based on the video resolution and frame rate you have set. For the correspondence between video resolution and frame rate, see. standardBitrate (0): (Recommended) Standard bitrate mode. compatibleBitrate (-1): Adaptive bitrate mode. In general, Agora suggests that you do not use this value.
+  /// Bitrate for video encoding, in Kbps. You do not need to set this parameter. Keep the default value standardBitrate. The SDK automatically selects the optimal bitrate based on the resolution and frame rate you set. For the relationship between resolution and frame rate, see [Video Profile](https://doc.shengwang.cn/doc/rtc/flutter/basic-features/video-profile#%E8%A7%86%E9%A2%91%E5%B1%9E%E6%80%A7%E5%8F%82%E8%80%83).
+  ///  standardBitrate (0): (Default) Standard bitrate mode.
+  ///  compatibleBitrate (-1): Compatible bitrate mode. In general, Agora recommends not using this value.
   @JsonKey(name: 'bitrate')
   final int? bitrate;
 
-  /// The minimum encoding bitrate (Kbps) of the video. The SDK automatically adjusts the encoding bitrate to adapt to the network conditions. Using a value greater than the default value forces the video encoder to output high-quality images but may cause more packet loss and sacrifice the smoothness of the video transmission. Unless you have special requirements for image quality, Agora does not recommend changing this value. This parameter only applies to the interactive streaming profile.
+  /// Minimum encoding bitrate, in Kbps.
+  /// The SDK automatically adjusts the video encoding bitrate based on network conditions. Setting this parameter higher than the default forces the encoder to output higher-quality images, but may cause packet loss and video stuttering under poor network conditions. Unless you have specific requirements for video quality, Agora recommends not modifying this parameter. This parameter applies to live streaming only.
   @JsonKey(name: 'minBitrate')
   final int? minBitrate;
 
-  /// The orientation mode of the encoded video. See OrientationMode.
+  /// Orientation mode for video encoding. See OrientationMode.
   @JsonKey(name: 'orientationMode')
   final OrientationMode? orientationMode;
 
-  /// Video degradation preference under limited bandwidth. See DegradationPreference. When this parameter is set to maintainFramerate (1) or maintainBalanced (2), orientationMode needs to be set to orientationModeAdaptive (0) at the same time, otherwise the setting will not take effect.
+  /// Encoding degradation preference when bandwidth is limited. See DegradationPreference. If this parameter is set to maintainFramerate (1) or maintainBalanced (2), you must also set orientationMode to orientationModeAdaptive (0), otherwise the setting will not take effect.
   @JsonKey(name: 'degradationPreference')
   final DegradationPreference? degradationPreference;
 
-  /// Sets the mirror mode of the published local video stream. It only affects the video that the remote user sees. See VideoMirrorModeType. By default, the video is not mirrored.
+  /// Whether to enable mirror mode when sending encoded video. This only affects the video seen by remote users. See VideoMirrorModeType. Mirror mode is disabled by default.
   @JsonKey(name: 'mirrorMode')
   final VideoMirrorModeType? mirrorMode;
 
@@ -2055,19 +2057,24 @@ class VideoEncoderConfiguration implements AgoraSerializable {
   Map<String, dynamic> toJson() => _$VideoEncoderConfigurationToJson(this);
 }
 
-/// The configurations for the data stream.
+/// Data stream settings.
 ///
-/// The following table shows the SDK behaviors under different parameter settings:
+/// The table below shows the SDK behavior under different parameter settings: syncWithAudio ordered
+/// SDK Behavior false false
+/// The SDK immediately triggers the onStreamMessage callback upon receiving a data packet. true false
+/// If the data packet delay is within the audio delay range, the SDK triggers the onStreamMessage callback synchronized with the audio packet during audio playback. If the delay exceeds the audio delay, the SDK triggers the callback immediately upon receiving the data packet, which may cause desynchronization between audio and data packets. false true
+/// If the data packet delay is within 5 seconds, the SDK corrects the packet disorder. If the delay exceeds 5 seconds, the SDK discards the packet. true true
+/// If the data packet delay is within the audio delay range, the SDK corrects the packet disorder. If the delay exceeds the audio delay, the SDK discards the packet.
 @JsonSerializable(explicitToJson: true, includeIfNull: false)
 class DataStreamConfig implements AgoraSerializable {
   /// @nodoc
   const DataStreamConfig({this.syncWithAudio, this.ordered});
 
-  /// Whether to synchronize the data packet with the published audio packet. true : Synchronize the data packet with the audio packet. This setting is suitable for special scenarios such as lyrics synchronization. false : Do not synchronize the data packet with the audio packet. This setting is suitable for scenarios where data packets need to arrive at the receiving end immediately. When you set the data packet to synchronize with the audio, then if the data packet delay is within the audio delay, the SDK triggers the onStreamMessage callback when the synchronized audio packet is played out.
+  /// Whether to synchronize with the locally sent audio stream. true : The data stream is synchronized with the audio stream. Suitable for scenarios like lyrics synchronization. false : The data stream is not synchronized with the audio stream. Suitable for scenarios where data packets need to reach the receiver immediately. When synchronization is enabled, if the data packet delay is within the audio delay range, the SDK triggers the onStreamMessage callback synchronized with the audio packet during audio playback.
   @JsonKey(name: 'syncWithAudio')
   final bool? syncWithAudio;
 
-  /// Whether the SDK guarantees that the receiver receives the data in the sent order. true : Guarantee that the receiver receives the data in the sent order. false : Do not guarantee that the receiver receives the data in the sent order. Do not set this parameter as true if you need the receiver to receive the data packet immediately.
+  /// Whether to ensure the received data is in the same order as sent. true : Ensures the SDK outputs data packets in the same order as sent. false : Does not ensure the SDK outputs data packets in the same order as sent. Do not set this parameter to true if you require data packets to reach the receiver immediately.
   @JsonKey(name: 'ordered')
   final bool? ordered;
 
@@ -2079,18 +2086,18 @@ class DataStreamConfig implements AgoraSerializable {
   Map<String, dynamic> toJson() => _$DataStreamConfigToJson(this);
 }
 
-/// The mode in which the video stream is sent.
+/// Mode for sending video streams.
 @JsonEnum(alwaysCreate: true)
 enum SimulcastStreamMode {
-  /// -1: By default, do not send the low-quality video stream until a subscription request for the low-quality video stream is received from the receiving end, then automatically start sending low-quality video stream.
+  /// -1: By default, the low stream is not sent until a subscription request for the low stream is received from the receiver.
   @JsonValue(-1)
   autoSimulcastStream,
 
-  /// 0: Never send low-quality video stream.
+  /// 0: Never send the low stream.
   @JsonValue(0)
   disableSimulcastStream,
 
-  /// 1: Always send low-quality video stream.
+  /// 1: Always send the low stream.
   @JsonValue(1)
   enableSimulcastStream,
 }
@@ -2108,21 +2115,21 @@ extension SimulcastStreamModeExt on SimulcastStreamMode {
   }
 }
 
-/// The configuration of the low-quality video stream.
+/// Configuration for the video low stream.
 @JsonSerializable(explicitToJson: true, includeIfNull: false)
 class SimulcastStreamConfig implements AgoraSerializable {
   /// @nodoc
   const SimulcastStreamConfig({this.dimensions, this.kBitrate, this.framerate});
 
-  /// The video dimension. See VideoDimensions. The default value is 50% of the high-quality video stream.
+  /// Video dimensions. See VideoDimensions. The default value is 50% of the high stream.
   @JsonKey(name: 'dimensions')
   final VideoDimensions? dimensions;
 
-  /// Video bitrate (Kbps). The default value is -1. This parameter does not need to be set. The SDK automatically matches the most suitable bitrate based on the video resolution and frame rate you set.
+  /// Video bitrate (Kbps). The default value is -1. You don't need to set this parameter. The SDK automatically selects the optimal bitrate based on the resolution and frame rate you set.
   @JsonKey(name: 'kBitrate')
   final int? kBitrate;
 
-  /// The frame rate (fps) of the local video. The default value is 5.
+  /// Video frame rate (fps). The default value is 5.
   @JsonKey(name: 'framerate')
   final int? framerate;
 
@@ -2231,17 +2238,17 @@ class StreamLayerConfig implements AgoraSerializable {
   Map<String, dynamic> toJson() => _$StreamLayerConfigToJson(this);
 }
 
-/// The location of the target area relative to the screen or window. If you do not set this parameter, the SDK selects the whole screen or window.
+/// The position of the target area relative to the entire screen or window. If not specified, it refers to the entire screen or window.
 @JsonSerializable(explicitToJson: true, includeIfNull: false)
 class Rectangle implements AgoraSerializable {
   /// @nodoc
   const Rectangle({this.x, this.y, this.width, this.height});
 
-  /// The horizontal offset from the top-left corner.
+  /// The horizontal offset of the top-left corner.
   @JsonKey(name: 'x')
   final int? x;
 
-  /// The vertical offset from the top-left corner.
+  /// The vertical offset of the top-left corner.
   @JsonKey(name: 'y')
   final int? y;
 
@@ -2261,25 +2268,24 @@ class Rectangle implements AgoraSerializable {
   Map<String, dynamic> toJson() => _$RectangleToJson(this);
 }
 
-/// The position and size of the watermark on the screen.
+/// Position and size of the watermark on the screen.
 ///
 /// The position and size of the watermark on the screen are determined by xRatio, yRatio, and widthRatio :
-///  (xRatio, yRatio) refers to the coordinates of the upper left corner of the watermark, which determines the distance from the upper left corner of the watermark to the upper left corner of the screen.
-///  The widthRatio determines the width of the watermark.
+///  (xRatio, yRatio) specify the coordinates of the top-left corner of the watermark, determining the distance from the top-left corner of the screen. widthRatio determines the width of the watermark.
 @JsonSerializable(explicitToJson: true, includeIfNull: false)
 class WatermarkRatio implements AgoraSerializable {
   /// @nodoc
   const WatermarkRatio({this.xRatio, this.yRatio, this.widthRatio});
 
-  /// The x-coordinate of the upper left corner of the watermark. The horizontal position relative to the origin, where the upper left corner of the screen is the origin, and the x-coordinate is the upper left corner of the watermark. The value range is [0.0,1.0], and the default value is 0.
+  /// The x-coordinate of the top-left corner of the watermark. The origin is the top-left corner of the screen. The x-coordinate is the horizontal offset of the watermark's top-left corner relative to the origin. Value range: [0.0, 1.0], default is 0.
   @JsonKey(name: 'xRatio')
   final double? xRatio;
 
-  /// The y-coordinate of the upper left corner of the watermark. The vertical position relative to the origin, where the upper left corner of the screen is the origin, and the y-coordinate is the upper left corner of the screen. The value range is [0.0,1.0], and the default value is 0.
+  /// The y-coordinate of the top-left corner of the watermark. The origin is the top-left corner of the screen. The y-coordinate is the vertical offset of the watermark's top-left corner relative to the origin. Value range: [0.0, 1.0], default is 0.
   @JsonKey(name: 'yRatio')
   final double? yRatio;
 
-  /// The width of the watermark. The SDK calculates the height of the watermark proportionally according to this parameter value to ensure that the enlarged or reduced watermark image is not distorted. The value range is [0,1], and the default value is 0, which means no watermark is displayed.
+  /// The width of the watermark. The SDK calculates the proportional height of the watermark based on this value to ensure the image is not distorted when scaled. Value range: [0.0, 1.0], default is 0, meaning the watermark is not displayed.
   @JsonKey(name: 'widthRatio')
   final double? widthRatio;
 
@@ -2291,9 +2297,9 @@ class WatermarkRatio implements AgoraSerializable {
   Map<String, dynamic> toJson() => _$WatermarkRatioToJson(this);
 }
 
-/// Watermark image configurations.
+/// Configure watermark image.
 ///
-/// Configuration options for setting the watermark image to be added.
+/// Used to configure the watermark image to be added.
 @JsonSerializable(explicitToJson: true, includeIfNull: false)
 class WatermarkOptions implements AgoraSerializable {
   /// @nodoc
@@ -2309,23 +2315,23 @@ class WatermarkOptions implements AgoraSerializable {
   @JsonKey(name: 'visibleInPreview')
   final bool? visibleInPreview;
 
-  /// When the adaptation mode of the watermark is fitModeCoverPosition, it is used to set the area of the watermark image in landscape mode. See Rectangle.
+  /// When the watermark fit mode is fitModeCoverPosition, this parameter sets the area of the watermark image in landscape mode. See Rectangle.
   @JsonKey(name: 'positionInLandscapeMode')
   final Rectangle? positionInLandscapeMode;
 
-  /// When the adaptation mode of the watermark is fitModeCoverPosition, it is used to set the area of the watermark image in portrait mode. See Rectangle.
+  /// When the watermark fit mode is fitModeCoverPosition, this parameter sets the area of the watermark image in portrait mode. See Rectangle.
   @JsonKey(name: 'positionInPortraitMode')
   final Rectangle? positionInPortraitMode;
 
-  /// When the watermark adaptation mode is fitModeUseImageRatio, this parameter is used to set the watermark coordinates. See WatermarkRatio.
+  /// When the watermark fit mode is fitModeUseImageRatio, this parameter sets the watermark coordinates in scaling mode. See WatermarkRatio.
   @JsonKey(name: 'watermarkRatio')
   final WatermarkRatio? watermarkRatio;
 
-  /// The adaptation mode of the watermark. See WatermarkFitMode.
+  /// The fit mode of the watermark. See WatermarkFitMode.
   @JsonKey(name: 'mode')
   final WatermarkFitMode? mode;
 
-  /// @nodoc
+  /// Z-order of the watermark image. Default value is 0.
   @JsonKey(name: 'zOrder')
   final int? zOrder;
 
@@ -2337,22 +2343,24 @@ class WatermarkOptions implements AgoraSerializable {
   Map<String, dynamic> toJson() => _$WatermarkOptionsToJson(this);
 }
 
-/// @nodoc
+/// Watermark source type.
+///
+/// Since Available since v4.6.2.
 @JsonEnum(alwaysCreate: true)
 enum WatermarkSourceType {
-  /// @nodoc
+  /// (0): The watermark source is an image.
   @JsonValue(0)
   image,
 
-  /// @nodoc
+  /// (1): The watermark source is a buffer.
   @JsonValue(1)
   buffer,
 
-  /// @nodoc
+  /// (2): The watermark source is a text literal. Supported on Linux only.
   @JsonValue(2)
   literal,
 
-  /// @nodoc
+  /// (3): The watermark source is a timestamp. Supported on Linux only.
   @JsonValue(3)
   timestamps,
 }
@@ -2370,26 +2378,28 @@ extension WatermarkSourceTypeExt on WatermarkSourceType {
   }
 }
 
-/// @nodoc
+/// Used to configure timestamp watermark.
+///
+/// Since Available since v4.6.2. (Linux only)
 @JsonSerializable(explicitToJson: true, includeIfNull: false)
 class WatermarkTimestamp implements AgoraSerializable {
   /// @nodoc
   const WatermarkTimestamp(
       {this.fontSize, this.fontFilePath, this.strokeWidth, this.format});
 
-  /// @nodoc
+  /// Font size of the timestamp. Default is 10.
   @JsonKey(name: 'fontSize')
   final int? fontSize;
 
-  /// @nodoc
+  /// Path to the font file for the timestamp. Default is NULL. The font file must be in .ttf format. If not set, the SDK uses the system default font (if available). If used asynchronously, copy the path to memory that will not be released.
   @JsonKey(name: 'fontFilePath')
   final String? fontFilePath;
 
-  /// @nodoc
+  /// Stroke width of the timestamp. Default is 1.
   @JsonKey(name: 'strokeWidth')
   final int? strokeWidth;
 
-  /// @nodoc
+  /// Format of the timestamp. Default is %F %X. The format follows the C standard library function strftime. See strftime. If used asynchronously, copy the format string to memory that will not be released.
   @JsonKey(name: 'format')
   final String? format;
 
@@ -2401,26 +2411,28 @@ class WatermarkTimestamp implements AgoraSerializable {
   Map<String, dynamic> toJson() => _$WatermarkTimestampToJson(this);
 }
 
-/// @nodoc
+/// Used to configure text watermark.
+///
+/// Since Available since v4.6.2. (Linux only)
 @JsonSerializable(explicitToJson: true, includeIfNull: false)
 class WatermarkLiteral implements AgoraSerializable {
   /// @nodoc
   const WatermarkLiteral(
       {this.fontSize, this.strokeWidth, this.wmLiteral, this.fontFilePath});
 
-  /// @nodoc
+  /// Font size of the text. Default is 10.
   @JsonKey(name: 'fontSize')
   final int? fontSize;
 
-  /// @nodoc
+  /// Stroke width of the text. Default is 1.
   @JsonKey(name: 'strokeWidth')
   final int? strokeWidth;
 
-  /// @nodoc
+  /// Text content of the watermark. Default is NULL. If used asynchronously, copy the string to memory that will not be released.
   @JsonKey(name: 'wmLiteral')
   final String? wmLiteral;
 
-  /// @nodoc
+  /// Path to the font file. Default is NULL. The font file should be in .ttf format. If not set, the SDK uses the system default font (if available). If used asynchronously, copy the string to memory that will not be released.
   @JsonKey(name: 'fontFilePath')
   final String? fontFilePath;
 
@@ -2432,30 +2444,32 @@ class WatermarkLiteral implements AgoraSerializable {
   Map<String, dynamic> toJson() => _$WatermarkLiteralToJson(this);
 }
 
-/// @nodoc
+/// Used to configure the format, size, and pixel buffer of a watermark image.
+///
+/// Since Available since v4.6.2.
 @JsonSerializable(explicitToJson: true, includeIfNull: false)
 class WatermarkBuffer implements AgoraSerializable {
   /// @nodoc
   const WatermarkBuffer(
       {this.width, this.height, this.length, this.format, this.buffer});
 
-  /// @nodoc
+  /// The width of the watermark image in pixels.
   @JsonKey(name: 'width')
   final int? width;
 
-  /// @nodoc
+  /// The height of the watermark image in pixels.
   @JsonKey(name: 'height')
   final int? height;
 
-  /// @nodoc
+  /// The length of the watermark image buffer in bytes.
   @JsonKey(name: 'length')
   final int? length;
 
-  /// @nodoc
+  /// The pixel format of the watermark image. See VideoPixelFormat.
   @JsonKey(name: 'format')
   final VideoPixelFormat? format;
 
-  /// @nodoc
+  /// The pixel buffer data of the watermark image.
   @JsonKey(name: 'buffer', ignore: true)
   final Uint8List? buffer;
 
@@ -2467,7 +2481,9 @@ class WatermarkBuffer implements AgoraSerializable {
   Map<String, dynamic> toJson() => _$WatermarkBufferToJson(this);
 }
 
-/// @nodoc
+/// Used to configure watermark information.
+///
+/// Since Available since v4.6.2.
 @JsonSerializable(explicitToJson: true, includeIfNull: false)
 class WatermarkConfig implements AgoraSerializable {
   /// @nodoc
@@ -2480,31 +2496,31 @@ class WatermarkConfig implements AgoraSerializable {
       this.imageUrl,
       this.options});
 
-  /// @nodoc
+  /// The unique identifier of the watermark. It is recommended to use a UUID.
   @JsonKey(name: 'id')
   final String? id;
 
-  /// @nodoc
+  /// The type of watermark. See WatermarkSourceType.
   @JsonKey(name: 'type')
   final WatermarkSourceType? type;
 
-  /// @nodoc
+  /// The buffer of the watermark. See WatermarkBuffer.
   @JsonKey(name: 'buffer')
   final WatermarkBuffer? buffer;
 
-  /// @nodoc
+  /// The timestamp of the watermark. (Linux only)
   @JsonKey(name: 'timestamp')
   final WatermarkTimestamp? timestamp;
 
-  /// @nodoc
+  /// The text content of the watermark. (Linux only)
   @JsonKey(name: 'literal')
   final WatermarkLiteral? literal;
 
-  /// @nodoc
+  /// The URL of the watermark image file. The default value is NULL.
   @JsonKey(name: 'imageUrl')
   final String? imageUrl;
 
-  /// @nodoc
+  /// The configuration options for the watermark. See WatermarkOptions.
   @JsonKey(name: 'options')
   final WatermarkOptions? options;
 
@@ -2516,14 +2532,16 @@ class WatermarkConfig implements AgoraSerializable {
   Map<String, dynamic> toJson() => _$WatermarkConfigToJson(this);
 }
 
-/// @nodoc
+/// Mode for multipath data transmission.
+///
+/// Since Available since v4.6.2.
 @JsonEnum(alwaysCreate: true)
 enum MultipathMode {
-  /// @nodoc
+  /// (0): Redundant transmission mode. The same data is redundantly transmitted through all available paths.
   @JsonValue(0)
   duplicate,
 
-  /// @nodoc
+  /// (1): Dynamic transmission mode. The SDK dynamically selects the optimal path based on current network conditions to improve transmission performance.
   @JsonValue(1)
   dynamic,
 }
@@ -2541,22 +2559,24 @@ extension MultipathModeExt on MultipathMode {
   }
 }
 
-/// @nodoc
+/// Network path types used for multipath transmission.
+///
+/// Since Available since v4.6.2.
 @JsonEnum(alwaysCreate: true)
 enum MultipathType {
-  /// @nodoc
+  /// (0): Local Area Network (LAN) path.
   @JsonValue(0)
   lan,
 
-  /// @nodoc
+  /// (1): Wi-Fi path.
   @JsonValue(1)
   wifi,
 
-  /// @nodoc
+  /// (2): Mobile network path.
   @JsonValue(2)
   mobile,
 
-  /// @nodoc
+  /// (99): Unknown or unspecified network path.
   @JsonValue(99)
   unknown,
 }
@@ -2574,21 +2594,23 @@ extension MultipathTypeExt on MultipathType {
   }
 }
 
-/// @nodoc
+/// Used to obtain statistics for a specific network path.
+///
+/// Since Available since v4.6.2.
 @JsonSerializable(explicitToJson: true, includeIfNull: false)
 class PathStats implements AgoraSerializable {
   /// @nodoc
   const PathStats({this.type, this.txKBitRate, this.rxKBitRate});
 
-  /// @nodoc
+  /// The type of network path. See MultipathType.
   @JsonKey(name: 'type')
   final MultipathType? type;
 
-  /// @nodoc
+  /// The transmission bitrate on this path, in Kbps.
   @JsonKey(name: 'txKBitRate')
   final int? txKBitRate;
 
-  /// @nodoc
+  /// The receiving bitrate on this path, in Kbps.
   @JsonKey(name: 'rxKBitRate')
   final int? rxKBitRate;
 
@@ -2600,7 +2622,9 @@ class PathStats implements AgoraSerializable {
   Map<String, dynamic> toJson() => _$PathStatsToJson(this);
 }
 
-/// @nodoc
+/// Used to summarize statistics of each network path in multipath transmission.
+///
+/// Since Available since v4.6.2.
 @JsonSerializable(explicitToJson: true, includeIfNull: false)
 class MultipathStats implements AgoraSerializable {
   /// @nodoc
@@ -2614,35 +2638,35 @@ class MultipathStats implements AgoraSerializable {
       this.activePathNum,
       this.pathStats});
 
-  /// @nodoc
+  /// Total bytes sent over the LAN path.
   @JsonKey(name: 'lanTxBytes')
   final int? lanTxBytes;
 
-  /// @nodoc
+  /// Total bytes received over the LAN path.
   @JsonKey(name: 'lanRxBytes')
   final int? lanRxBytes;
 
-  /// @nodoc
+  /// Total bytes sent over the Wi-Fi path.
   @JsonKey(name: 'wifiTxBytes')
   final int? wifiTxBytes;
 
-  /// @nodoc
+  /// Total bytes received over the Wi-Fi path.
   @JsonKey(name: 'wifiRxBytes')
   final int? wifiRxBytes;
 
-  /// @nodoc
+  /// Total bytes sent over the mobile network path.
   @JsonKey(name: 'mobileTxBytes')
   final int? mobileTxBytes;
 
-  /// @nodoc
+  /// Total bytes received over the mobile network path.
   @JsonKey(name: 'mobileRxBytes')
   final int? mobileRxBytes;
 
-  /// @nodoc
+  /// The number of currently active transmission paths.
   @JsonKey(name: 'activePathNum')
   final int? activePathNum;
 
-  /// @nodoc
+  /// An array of statistics for each active transmission path. See PathStats.
   @JsonKey(name: 'pathStats')
   final List<PathStats>? pathStats;
 
@@ -2654,7 +2678,7 @@ class MultipathStats implements AgoraSerializable {
   Map<String, dynamic> toJson() => _$MultipathStatsToJson(this);
 }
 
-/// Statistics of a call session.
+/// Call-related statistics.
 @JsonSerializable(explicitToJson: true, includeIfNull: false)
 class RtcStats implements AgoraSerializable {
   /// @nodoc
@@ -2694,94 +2718,98 @@ class RtcStats implements AgoraSerializable {
       this.rxPacketLossRate,
       this.lanAccelerateState});
 
-  /// Call duration of the local user in seconds, represented by an aggregate value.
+  /// Call duration of the local user (seconds), cumulative value.
   @JsonKey(name: 'duration')
   final int? duration;
 
-  /// The number of bytes sent.
+  /// Bytes sent.
   @JsonKey(name: 'txBytes')
   final int? txBytes;
 
-  /// The number of bytes received.
+  /// Bytes received.
   @JsonKey(name: 'rxBytes')
   final int? rxBytes;
 
-  /// The total number of audio bytes sent, represented by an aggregate value.
+  /// Audio bytes sent, cumulative value.
   @JsonKey(name: 'txAudioBytes')
   final int? txAudioBytes;
 
-  /// The total number of video bytes sent, represented by an aggregate value.
+  /// Video bytes sent, cumulative value.
   @JsonKey(name: 'txVideoBytes')
   final int? txVideoBytes;
 
-  /// The total number of audio bytes received, represented by an aggregate value.
+  /// Audio bytes received, cumulative value.
   @JsonKey(name: 'rxAudioBytes')
   final int? rxAudioBytes;
 
-  /// The total number of video bytes received, represented by an aggregate value.
+  /// Video bytes received, cumulative value.
   @JsonKey(name: 'rxVideoBytes')
   final int? rxVideoBytes;
 
-  /// The actual bitrate (Kbps) while sending the local video stream.
+  /// Sending bitrate (Kbps).
   @JsonKey(name: 'txKBitRate')
   final int? txKBitRate;
 
-  /// The receiving bitrate (Kbps).
+  /// Receiving bitrate (Kbps).
   @JsonKey(name: 'rxKBitRate')
   final int? rxKBitRate;
 
-  /// The bitrate (Kbps) of receiving the audio.
+  /// Audio receiving bitrate (Kbps).
   @JsonKey(name: 'rxAudioKBitRate')
   final int? rxAudioKBitRate;
 
-  /// The bitrate (Kbps) of sending the audio packet.
+  /// Audio packet sending bitrate (Kbps).
   @JsonKey(name: 'txAudioKBitRate')
   final int? txAudioKBitRate;
 
-  /// The bitrate (Kbps) of receiving the video.
+  /// Video receiving bitrate (Kbps).
   @JsonKey(name: 'rxVideoKBitRate')
   final int? rxVideoKBitRate;
 
-  /// The bitrate (Kbps) of sending the video.
+  /// Video sending bitrate (Kbps).
   @JsonKey(name: 'txVideoKBitRate')
   final int? txVideoKBitRate;
 
-  /// The client-to-server delay (milliseconds).
+  /// Client-to-access-server latency (milliseconds).
   @JsonKey(name: 'lastmileDelay')
   final int? lastmileDelay;
 
-  /// The number of users in the channel.
+  /// Number of users in the current channel.
   @JsonKey(name: 'userCount')
   final int? userCount;
 
-  /// Application CPU usage (%).
-  ///  The value of cpuAppUsage is always reported as 0 in the onLeaveChannel callback.
-  ///  As of Android 8.1, you cannot get the CPU usage from this attribute due to system limitations.
+  /// CPU usage (%) of the current app.
+  ///  The cpuAppUsage reported in the onLeaveChannel callback is always 0.
+  ///  Starting from Android 8.1, due to system limitations, you may not be able to obtain CPU usage via this property.
   @JsonKey(name: 'cpuAppUsage')
   final double? cpuAppUsage;
 
-  /// The system CPU usage (%). For Windows, in the multi-kernel environment, this member represents the average CPU usage. The value = (100 - System Idle Progress in Task Manager)/100.
-  ///  The value of cpuTotalUsage is always reported as 0 in the onLeaveChannel callback.
+  /// CPU usage (%) of the current system.
+  /// For Windows platform, in multi-core environments, this member indicates the average usage of multi-core CPUs. The calculation is (100 - CPU usage of system idle process shown in Task Manager)/100.
+  ///  The cpuTotalUsage reported in the onLeaveChannel callback is always 0.
   @JsonKey(name: 'cpuTotalUsage')
   final double? cpuTotalUsage;
 
-  /// The round-trip time delay (ms) from the client to the local router. This property is disabled on devices running iOS 14 or later, and enabled on devices running versions earlier than iOS 14 by default. To enable this property on devices running iOS 14 or later,. On Android, to get gatewayRtt, ensure that you add the android.permission.ACCESS_WIFI_STATE permission after </application> in the AndroidManifest.xml file in your project.
+  /// Round-trip time from client to local router (ms). This property is enabled by default on devices running iOS versions earlier than 14, and disabled on iOS 14 and later.
+  ///
+  ///  To enable this property on iOS 14 and later, please [contact technical support](https://ticket.shengwang.cn/).
+  /// On Android, to obtain gatewayRtt, make sure you have added the android.permission.ACCESS_WIFI_STATE permission after </application> in your project's AndroidManifest.xml file.
   @JsonKey(name: 'gatewayRtt')
   final int? gatewayRtt;
 
-  /// The memory ratio occupied by the app (%). This value is for reference only. Due to system limitations, you may not get this value.
+  /// Memory usage ratio (%) of the current app. This value is for reference only. It may not be retrievable due to system limitations.
   @JsonKey(name: 'memoryAppUsageRatio')
   final double? memoryAppUsageRatio;
 
-  /// The memory occupied by the system (%). This value is for reference only. Due to system limitations, you may not get this value.
+  /// Memory usage ratio (%) of the current system. This value is for reference only. It may not be retrievable due to system limitations.
   @JsonKey(name: 'memoryTotalUsageRatio')
   final double? memoryTotalUsageRatio;
 
-  /// The memory size occupied by the app (KB). This value is for reference only. Due to system limitations, you may not get this value.
+  /// Memory usage of the current app (KB). This value is for reference only. It may not be retrievable due to system limitations.
   @JsonKey(name: 'memoryAppUsageInKbytes')
   final int? memoryAppUsageInKbytes;
 
-  /// The duration (ms) between the SDK starts connecting and the connection is established. If the value reported is 0, it means invalid.
+  /// Time from starting to establish connection to successful connection (milliseconds). A value of 0 indicates invalid.
   @JsonKey(name: 'connectTimeMs')
   final int? connectTimeMs;
 
@@ -2821,11 +2849,11 @@ class RtcStats implements AgoraSerializable {
   @JsonKey(name: 'firstVideoKeyFrameRenderedDurationAfterUnmute')
   final int? firstVideoKeyFrameRenderedDurationAfterUnmute;
 
-  /// The packet loss rate (%) from the client to the Agora server before applying the anti-packet-loss algorithm.
+  /// Uplink packet loss rate (%) from client to server before applying anti-packet-loss technology.
   @JsonKey(name: 'txPacketLossRate')
   final int? txPacketLossRate;
 
-  /// The packet loss rate (%) from the Agora server to the client before using the anti-packet-loss method.
+  /// Downlink packet loss rate (%) from server to client before applying anti-packet-loss technology.
   @JsonKey(name: 'rxPacketLossRate')
   final int? rxPacketLossRate;
 
@@ -2841,14 +2869,14 @@ class RtcStats implements AgoraSerializable {
   Map<String, dynamic> toJson() => _$RtcStatsToJson(this);
 }
 
-/// The user role in the interactive live streaming.
+/// User role in live broadcasting profile.
 @JsonEnum(alwaysCreate: true)
 enum ClientRoleType {
-  /// 1: Host. A host can both send and receive streams.
+  /// 1: Broadcaster. A broadcaster can both send and receive streams.
   @JsonValue(1)
   clientRoleBroadcaster,
 
-  /// 2: (Default) Audience. An audience member can only receive streams.
+  /// 2: (Default) Audience. An audience member can only receive streams but cannot send them.
   @JsonValue(2)
   clientRoleAudience,
 }
@@ -2866,18 +2894,18 @@ extension ClientRoleTypeExt on ClientRoleType {
   }
 }
 
-/// Quality change of the local video in terms of target frame rate and target bit rate since last count.
+/// Local video quality adaptation since the last statistics (based on target frame rate and target bitrate).
 @JsonEnum(alwaysCreate: true)
 enum QualityAdaptIndication {
-  /// 0: The local video quality stays the same.
+  /// 0: No change in local video quality.
   @JsonValue(0)
   adaptNone,
 
-  /// 1: The local video quality improves because the network bandwidth increases.
+  /// 1: Local video quality improves due to increased network bandwidth.
   @JsonValue(1)
   adaptUpBandwidth,
 
-  /// 2: The local video quality deteriorates because the network bandwidth decreases.
+  /// 2: Local video quality degrades due to decreased network bandwidth.
   @JsonValue(2)
   adaptDownBandwidth,
 }
@@ -2895,14 +2923,14 @@ extension QualityAdaptIndicationExt on QualityAdaptIndication {
   }
 }
 
-/// The latency level of an audience member in interactive live streaming. This enum takes effect only when the user role is set to clientRoleAudience .
+/// Latency level for audience in a live broadcast channel. This enum is effective only when the user role is set to clientRoleAudience.
 @JsonEnum(alwaysCreate: true)
 enum AudienceLatencyLevelType {
   /// 1: Low latency.
   @JsonValue(1)
   audienceLatencyLevelLowLatency,
 
-  /// 2: (Default) Ultra low latency.
+  /// 2: (Default) Ultra-low latency.
   @JsonValue(2)
   audienceLatencyLevelUltraLowLatency,
 }
@@ -2920,13 +2948,13 @@ extension AudienceLatencyLevelTypeExt on AudienceLatencyLevelType {
   }
 }
 
-/// Setting of user role properties.
+/// User role property settings.
 @JsonSerializable(explicitToJson: true, includeIfNull: false)
 class ClientRoleOptions implements AgoraSerializable {
   /// @nodoc
   const ClientRoleOptions({this.audienceLatencyLevel});
 
-  /// The latency level of an audience member in interactive live streaming. See AudienceLatencyLevelType.
+  /// Audience latency level. See AudienceLatencyLevelType.
   @JsonKey(name: 'audienceLatencyLevel')
   final AudienceLatencyLevelType? audienceLatencyLevel;
 
@@ -2938,14 +2966,14 @@ class ClientRoleOptions implements AgoraSerializable {
   Map<String, dynamic> toJson() => _$ClientRoleOptionsToJson(this);
 }
 
-/// The Quality of Experience (QoE) of the local user when receiving a remote audio stream.
+/// The subjective experience quality of the local user when receiving remote audio.
 @JsonEnum(alwaysCreate: true)
 enum ExperienceQualityType {
-  /// 0: The QoE of the local user is good.
+  /// 0: Good subjective experience quality.
   @JsonValue(0)
   experienceQualityGood,
 
-  /// 1: The QoE of the local user is poor.
+  /// 1: Poor subjective experience quality.
   @JsonValue(1)
   experienceQualityBad,
 }
@@ -2963,26 +2991,26 @@ extension ExperienceQualityTypeExt on ExperienceQualityType {
   }
 }
 
-/// Reasons why the QoE of the local user when receiving a remote audio stream is poor.
+/// The reason for poor subjective experience quality of the local user when receiving remote audio.
 @JsonEnum(alwaysCreate: true)
 enum ExperiencePoorReason {
-  /// 0: No reason, indicating a good QoE of the local user.
+  /// 0: No reason, indicating good subjective experience quality.
   @JsonValue(0)
   experienceReasonNone,
 
-  /// 1: The remote user's network quality is poor.
+  /// 1: Poor network condition of the remote user.
   @JsonValue(1)
   remoteNetworkQualityPoor,
 
-  /// 2: The local user's network quality is poor.
+  /// 2: Poor network condition of the local user.
   @JsonValue(2)
   localNetworkQualityPoor,
 
-  /// 4: The local user's Wi-Fi or mobile network signal is weak.
+  /// 4: Weak Wi-Fi or mobile data signal of the local user.
   @JsonValue(4)
   wirelessSignalPoor,
 
-  /// 8: The local user enables both Wi-Fi and bluetooth, and their signals interfere with each other. As a result, audio transmission quality is undermined.
+  /// 8: Wi-Fi and Bluetooth are enabled simultaneously on the local device, causing signal interference and degraded audio transmission quality.
   @JsonValue(8)
   wifiBluetoothCoexist,
 }
@@ -3000,18 +3028,18 @@ extension ExperiencePoorReasonExt on ExperiencePoorReason {
   }
 }
 
-/// AI noise suppression modes.
+/// AI noise reduction mode.
 @JsonEnum(alwaysCreate: true)
 enum AudioAinsMode {
-  /// 0: (Default) Balance mode. This mode allows for a balanced performance on noice suppression and time delay.
+  /// 0: (Default) Balanced noise reduction mode. Choose this mode if you want a balanced effect between noise suppression and latency.
   @JsonValue(0)
   ainsModeBalanced,
 
-  /// 1: Aggressive mode. In scenarios where high performance on noise suppression is required, such as live streaming outdoor events, this mode reduces nosie more dramatically, but may sometimes affect the original character of the audio.
+  /// 1: Aggressive noise reduction mode. Suitable for scenarios with high noise suppression requirements, such as outdoor live streaming. This mode can significantly reduce noise but may slightly affect voice quality.
   @JsonValue(1)
   ainsModeAggressive,
 
-  /// 2: Aggressive mode with low latency. The noise suppression delay of this mode is about only half of that of the balance and aggressive modes. It is suitable for scenarios that have high requirements on noise suppression with low latency, such as sing together online in real time.
+  /// 2: Low-latency aggressive noise reduction mode. This mode has approximately half the latency of the weak and aggressive noise reduction modes. It is suitable for scenarios requiring both noise reduction and low latency, such as real-time chorus.
   @JsonValue(2)
   ainsModeUltralowlatency,
 }
@@ -3029,41 +3057,44 @@ extension AudioAinsModeExt on AudioAinsMode {
   }
 }
 
-/// The audio profile.
+/// Audio encoding attributes.
 @JsonEnum(alwaysCreate: true)
 enum AudioProfileType {
-  /// 0: The default audio profile.
-  ///  For the interactive streaming profile: A sample rate of 48 kHz, music encoding, mono, and a bitrate of up to 64 Kbps.
-  ///  For the communication profile:
-  ///  Windows: A sample rate of 16 kHz, audio encoding, mono, and a bitrate of up to 16 Kbps. Android/macOS/iOS: A sample rate of 32 kHz, audio encoding, mono, and a bitrate of up to 18 Kbps.
+  /// 0: Default value.
+  ///  In live broadcast: 48 kHz sample rate, music encoding, mono, max bitrate 64 Kbps.
+  ///  In communication:
+  ///  Windows: 16 kHz sample rate, voice encoding, mono, max bitrate 16 Kbps.
+  ///  Android, macOS, iOS: 32 kHz sample rate, voice encoding, mono, max bitrate 18 Kbps.
   @JsonValue(0)
   audioProfileDefault,
 
-  /// 1: A sample rate of 32 kHz, audio encoding, mono, and a bitrate of up to 18 Kbps.
+  /// 1: 32 kHz sample rate, voice encoding, mono, max bitrate 18 Kbps.
   @JsonValue(1)
   audioProfileSpeechStandard,
 
-  /// 2: A sample rate of 48 kHz, music encoding, mono, and a bitrate of up to 64 Kbps.
+  /// 2: 48 kHz sample rate, music encoding, mono, max bitrate 64 Kbps.
   @JsonValue(2)
   audioProfileMusicStandard,
 
-  /// 3: A sample rate of 48 kHz, music encoding, stereo, and a bitrate of up to 80 Kbps. To implement stereo audio, you also need to call setAdvancedAudioOptions and set audioProcessingChannels to audioProcessingStereo in AdvancedAudioOptions.
+  /// 3: 48 kHz sample rate, music encoding, stereo, max bitrate 80 Kbps.
+  /// To enable stereo, you also need to call setAdvancedAudioOptions and set audioProcessingChannels to audioProcessingStereo in AdvancedAudioOptions.
   @JsonValue(3)
   audioProfileMusicStandardStereo,
 
-  /// 4: A sample rate of 48 kHz, music encoding, mono, and a bitrate of up to 96 Kbps.
+  /// 4: 48 kHz sample rate, music encoding, mono, max bitrate 96 Kbps.
   @JsonValue(4)
   audioProfileMusicHighQuality,
 
-  /// 5: A sample rate of 48 kHz, music encoding, stereo, and a bitrate of up to 128 Kbps. To implement stereo audio, you also need to call setAdvancedAudioOptions and set audioProcessingChannels to audioProcessingStereo in AdvancedAudioOptions.
+  /// 5: 48 kHz sample rate, music encoding, stereo, max bitrate 128 Kbps.
+  /// To enable stereo, you also need to call setAdvancedAudioOptions and set audioProcessingChannels to audioProcessingStereo in AdvancedAudioOptions.
   @JsonValue(5)
   audioProfileMusicHighQualityStereo,
 
-  /// 6: A sample rate of 16 kHz, audio encoding, mono, and Acoustic Echo Cancellation (AEC) enabled.
+  /// 6: 16 kHz sample rate, voice encoding, mono, applies echo cancellation algorithm AEC.
   @JsonValue(6)
   audioProfileIot,
 
-  /// Enumerator boundary.
+  /// Enum boundary value.
   @JsonValue(7)
   audioProfileNum,
 }
@@ -3081,26 +3112,26 @@ extension AudioProfileTypeExt on AudioProfileType {
   }
 }
 
-/// The audio scenarios.
+/// Audio scenarios.
 @JsonEnum(alwaysCreate: true)
 enum AudioScenarioType {
-  /// 0: (Default) Automatic scenario match, where the SDK chooses the appropriate audio quality according to the user role and audio route.
+  /// 0: (default) Automatic scenario selection. Matches appropriate audio quality based on user role and audio route.
   @JsonValue(0)
   audioScenarioDefault,
 
-  /// 3: High-quality audio scenario, where users mainly play music. For example, instrument tutoring.
+  /// 3: High-quality audio scenario, suitable for music-centric use cases. For example: instrument practice.
   @JsonValue(3)
   audioScenarioGameStreaming,
 
-  /// 5: Chatroom scenario, where users need to frequently switch the user role or mute and unmute the microphone. For example, education scenarios.
+  /// 5: Chatroom scenario, suitable for use cases where users frequently join and leave the mic. For example: education scenarios.
   @JsonValue(5)
   audioScenarioChatroom,
 
-  /// 7: Real-time chorus scenario, where users have good network conditions and require ultra-low latency.
+  /// 7: Chorus scenario. Suitable for real-time chorus with low latency under good network conditions.
   @JsonValue(7)
   audioScenarioChorus,
 
-  /// 8: Meeting scenario that mainly contains the human voice.
+  /// 8: Meeting scenario, suitable for multi-person meetings focusing on voice.
   @JsonValue(8)
   audioScenarioMeeting,
 
@@ -3108,11 +3139,11 @@ enum AudioScenarioType {
   @JsonValue(9)
   audioScenarioAiServer,
 
-  /// 10: AI conversation scenario, which is only applicable to scenarios where the user interacts with the conversational AI agent created by.
+  /// 10: AI conversation scenario, only applicable for interactions with agents created using [Agora Conversational AI Engine](https://doc.shengwang.cn/doc/convoai/restful/landing-page).
   @JsonValue(10)
   audioScenarioAiClient,
 
-  /// The number of enumerations.
+  /// Number of enumerations.
   @JsonValue(11)
   audioScenarioNum,
 }
@@ -3130,21 +3161,21 @@ extension AudioScenarioTypeExt on AudioScenarioType {
   }
 }
 
-/// The format of the video frame.
+/// Video frame format.
 @JsonSerializable(explicitToJson: true, includeIfNull: false)
 class VideoFormat implements AgoraSerializable {
   /// @nodoc
   const VideoFormat({this.width, this.height, this.fps});
 
-  /// The width (px) of the video frame. The default value is 960.
+  /// Width of the video frame (px). Default is 960.
   @JsonKey(name: 'width')
   final int? width;
 
-  /// The height (px) of the video frame. The default value is 540.
+  /// Height of the video frame (px). Default is 540.
   @JsonKey(name: 'height')
   final int? height;
 
-  /// The video frame rate (fps). The default value is 15.
+  /// Frame rate of the video frame. Default is 15.
   @JsonKey(name: 'fps')
   final int? fps;
 
@@ -3156,18 +3187,18 @@ class VideoFormat implements AgoraSerializable {
   Map<String, dynamic> toJson() => _$VideoFormatToJson(this);
 }
 
-/// The content hint for screen sharing.
+/// Content type for screen sharing.
 @JsonEnum(alwaysCreate: true)
 enum VideoContentHint {
-  /// (Default) No content hint.
+  /// (Default) No specified content type.
   @JsonValue(0)
   contentHintNone,
 
-  /// Motion-intensive content. Choose this option if you prefer smoothness or when you are sharing a video clip, movie, or video game.
+  /// Content type is motion. Recommended when the shared content is video, movie, or video game.
   @JsonValue(1)
   contentHintMotion,
 
-  /// Motionless content. Choose this option if you prefer sharpness or when you are sharing a picture, PowerPoint slides, or texts.
+  /// Content type is details. Recommended when the shared content is image or text.
   @JsonValue(2)
   contentHintDetails,
 }
@@ -3185,22 +3216,22 @@ extension VideoContentHintExt on VideoContentHint {
   }
 }
 
-/// The screen sharing scenario.
+/// Screen sharing scenario.
 @JsonEnum(alwaysCreate: true)
 enum ScreenScenarioType {
-  /// 1: (Default) Document. This scenario prioritizes the video quality of screen sharing and reduces the latency of the shared video for the receiver. If you share documents, slides, and tables, you can set this scenario.
+  /// 1: (Default) Document. In this scenario, image quality is prioritized and latency on the receiving end is reduced. Use this scenario when sharing documents, slides, or spreadsheets.
   @JsonValue(1)
   screenScenarioDocument,
 
-  /// 2: Game. This scenario prioritizes the smoothness of screen sharing. If you share games, you can set this scenario.
+  /// 2: Gaming. In this scenario, smoothness is prioritized. Use this scenario when sharing games.
   @JsonValue(2)
   screenScenarioGaming,
 
-  /// 3: Video. This scenario prioritizes the smoothness of screen sharing. If you share movies or live videos, you can set this scenario.
+  /// 3: Video. In this scenario, smoothness is prioritized. Use this scenario when sharing movies or live video.
   @JsonValue(3)
   screenScenarioVideo,
 
-  /// 4: Remote control. This scenario prioritizes the video quality of screen sharing and reduces the latency of the shared video for the receiver. If you share the device desktop being remotely controlled, you can set this scenario.
+  /// 4: Remote control. In this scenario, image quality is prioritized and latency on the receiving end is reduced. Use this scenario when sharing the desktop of a remotely controlled device.
   @JsonValue(4)
   screenScenarioRdc,
 }
@@ -3218,35 +3249,22 @@ extension ScreenScenarioTypeExt on ScreenScenarioType {
   }
 }
 
-/// The video application scenarios.
+/// Video application scenario type.
 @JsonEnum(alwaysCreate: true)
 enum VideoApplicationScenarioType {
-  /// 0: (Default) The general scenario.
+  /// 0: (Default) General scenario.
   @JsonValue(0)
   applicationScenarioGeneral,
 
-  /// applicationScenarioMeeting (1) is suitable for meeting scenarios. The SDK automatically enables the following strategies:
-  ///  In meeting scenarios where low-quality video streams are required to have a high bitrate, the SDK automatically enables multiple technologies used to deal with network congestions, to enhance the performance of the low-quality streams and to ensure the smooth reception by subscribers.
-  ///  The SDK monitors the number of subscribers to the high-quality video stream in real time and dynamically adjusts its configuration based on the number of subscribers.
-  ///  If nobody subscribers to the high-quality stream, the SDK automatically reduces its bitrate and frame rate to save upstream bandwidth.
-  ///  If someone subscribes to the high-quality stream, the SDK resets the high-quality stream to the VideoEncoderConfiguration configuration used in the most recent calling of setVideoEncoderConfiguration. If no configuration has been set by the user previously, the following values are used:
-  ///  Resolution: (Windows and macOS) 1280 × 720; (Android and iOS) 960 × 540
-  ///  Frame rate: 15 fps
-  ///  Bitrate: (Windows and macOS) 1600 Kbps; (Android and iOS) 1000 Kbps
-  ///  The SDK monitors the number of subscribers to the low-quality video stream in real time and dynamically enables or disables it based on the number of subscribers. If the user has called setDualStreamMode to set that never send low-quality video stream (disableSimulcastStream), the dynamic adjustment of the low-quality stream in meeting scenarios will not take effect.
-  ///  If nobody subscribes to the low-quality stream, the SDK automatically disables it to save upstream bandwidth.
-  ///  If someone subscribes to the low-quality stream, the SDK enables the low-quality stream and resets it to the SimulcastStreamConfig configuration used in the most recent calling of setDualStreamMode. If no configuration has been set by the user previously, the following values are used:
-  ///  Resolution: 480 × 272
-  ///  Frame rate: 15 fps
-  ///  Bitrate: 500 Kbps 1: The meeting scenario.
+  /// 1: Meeting scenario.
   @JsonValue(1)
   applicationScenarioMeeting,
 
-  /// applicationScenario1v1 (2) This is applicable to the scenario. To meet the requirements for low latency and high-quality video in this scenario, the SDK optimizes its strategies, improving performance in terms of video quality, first frame rendering, latency on mid-to-low-end devices, and smoothness under weak network conditions. This enumeration value is only applicable to the broadcaster vs. broadcaster scenario. 2: 1v1 video call scenario.
+  /// 2: 1v1 video call
   @JsonValue(2)
   applicationScenario1v1,
 
-  /// applicationScenarioLiveshow (3) This is applicable to the scenario. In this scenario, fast video rendering and high image quality are crucial. The SDK implements several performance optimizations, including automatically enabling accelerated audio and video frame rendering to minimize first-frame latency (no need to call enableInstantMediaRendering), and B-frame encoding to achieve better image quality and bandwidth efficiency. The SDK also provides enhanced video quality and smooth playback, even in poor network conditions or on lower-end devices. 3. Live show scenario.
+  /// 3: Live show
   @JsonValue(3)
   applicationScenarioLiveshow,
 }
@@ -3297,22 +3315,22 @@ extension VideoQoePreferenceTypeExt on VideoQoePreferenceType {
   }
 }
 
-/// The brightness level of the video image captured by the local camera.
+/// Brightness level of locally captured video quality.
 @JsonEnum(alwaysCreate: true)
 enum CaptureBrightnessLevelType {
-  /// -1: The SDK does not detect the brightness level of the video image. Wait a few seconds to get the brightness level from captureBrightnessLevel in the next callback.
+  /// -1: SDK did not detect the brightness level of the locally captured video. Please wait a few seconds and get the brightness level from the next captureBrightnessLevel callback.
   @JsonValue(-1)
   captureBrightnessLevelInvalid,
 
-  /// 0: The brightness level of the video image is normal.
+  /// 0: Brightness of the locally captured video is normal.
   @JsonValue(0)
   captureBrightnessLevelNormal,
 
-  /// 1: The brightness level of the video image is too bright.
+  /// 1: Brightness of the locally captured video is too bright.
   @JsonValue(1)
   captureBrightnessLevelBright,
 
-  /// 2: The brightness level of the video image is too dark.
+  /// 2: Brightness of the locally captured video is too dark.
   @JsonValue(2)
   captureBrightnessLevelDark,
 }
@@ -3330,16 +3348,16 @@ extension CaptureBrightnessLevelTypeExt on CaptureBrightnessLevelType {
   }
 }
 
-/// Camera stabilization modes.
+/// Camera stabilization mode.
 ///
-/// The camera stabilization effect increases in the order of 1 < 2 < 3, and the latency will also increase accordingly.
+/// Camera stabilization effect increases in the order of 1 < 2 < 3, and the latency increases accordingly.
 @JsonEnum(alwaysCreate: true)
 enum CameraStabilizationMode {
-  /// -1: (Default) Camera stabilization mode off.
+  /// -1: (Default) Camera stabilization is off.
   @JsonValue(-1)
   cameraStabilizationModeOff,
 
-  /// 0: Automatic camera stabilization. The system automatically selects a stabilization mode based on the status of the camera. However, the latency is relatively high in this mode, so it is recommended not to use this enumeration.
+  /// 0: Camera auto stabilization. The system automatically selects a stabilization mode based on the camera status. However, this mode has higher latency, so it is not recommended to use this enum.
   @JsonValue(0)
   cameraStabilizationModeAuto,
 
@@ -3373,22 +3391,22 @@ extension CameraStabilizationModeExt on CameraStabilizationMode {
   }
 }
 
-/// The state of the local audio.
+/// Local audio state.
 @JsonEnum(alwaysCreate: true)
 enum LocalAudioStreamState {
-  /// 0: The local audio is in the initial state.
+  /// 0: Default initial state of local audio.
   @JsonValue(0)
   localAudioStreamStateStopped,
 
-  /// 1: The local audio capturing device starts successfully.
+  /// 1: Local audio capture device started successfully.
   @JsonValue(1)
   localAudioStreamStateRecording,
 
-  /// 2: The first audio frame encodes successfully.
+  /// 2: First frame of local audio encoded successfully.
   @JsonValue(2)
   localAudioStreamStateEncoding,
 
-  /// 3: The local audio fails to start.
+  /// 3: Failed to start local audio.
   @JsonValue(3)
   localAudioStreamStateFailed,
 }
@@ -3406,50 +3424,50 @@ extension LocalAudioStreamStateExt on LocalAudioStreamState {
   }
 }
 
-/// Reasons for local audio state changes.
+/// Reasons for local audio state change.
 @JsonEnum(alwaysCreate: true)
 enum LocalAudioStreamReason {
-  /// 0: The local audio is normal.
+  /// 0: Local audio is working properly.
   @JsonValue(0)
   localAudioStreamReasonOk,
 
-  /// 1: No specified reason for the local audio failure. Remind your users to try to rejoin the channel.
+  /// 1: Unknown reason for local audio failure. Suggest prompting the user to try rejoining the channel.
   @JsonValue(1)
   localAudioStreamReasonFailure,
 
-  /// 2: No permission to use the local audio capturing device. Remind your users to grant permission. Deprecated: This enumerator is deprecated. Please use recordAudio in the onPermissionError callback instead.
+  /// 2: No permission to start local audio capture device. Prompt the user to grant permission. Deprecated: This enum is deprecated. Use recordAudio in the onPermissionError callback instead.
   @JsonValue(2)
   localAudioStreamReasonDeviceNoPermission,
 
-  /// 3: (Android and iOS only) The local audio capture device is already in use. Remind your users to check whether another application occupies the microphone. Local audio capture automatically resumes after the microphone is idle for about five seconds. You can also try to rejoin the channel after the microphone is idle.
+  /// 3: (Android and iOS only) Local audio capture device is in use. Prompt the user to check if the microphone is occupied by another app. Local audio capture will automatically resume about 5 seconds after the microphone becomes idle, or you can try rejoining the channel after it becomes idle.
   @JsonValue(3)
   localAudioStreamReasonDeviceBusy,
 
-  /// 4: The local audio capture fails.
+  /// 4: Local audio capture failed.
   @JsonValue(4)
   localAudioStreamReasonRecordFailure,
 
-  /// 5: The local audio encoding fails.
+  /// 5: Local audio encoding failed.
   @JsonValue(5)
   localAudioStreamReasonEncodeFailure,
 
-  /// 6: (Windows and macOS only) No local audio capture device. Remind your users to check whether the microphone is connected to the device properly in the control panel of the device or if the microphone is working properly.
+  /// 6: (Windows and macOS only) No local audio capture device. Prompt the user to check in the control panel whether the microphone is properly connected and working.
   @JsonValue(6)
   localAudioStreamReasonNoRecordingDevice,
 
-  /// 7: (Windows and macOS only) No local audio capture device. Remind your users to check whether the speaker is connected to the device properly in the control panel of the device or if the speaker is working properly.
+  /// 7: (Windows and macOS only) No local audio playback device. Prompt the user to check in the control panel whether the speaker is properly connected and working.
   @JsonValue(7)
   localAudioStreamReasonNoPlayoutDevice,
 
-  /// 8: (Android and iOS only) The local audio capture is interrupted by a system call, smart assistants, or alarm clock. Prompt your users to end the phone call, smart assistants, or alarm clock if the local audio capture is required.
+  /// 8: (Android and iOS only) Local audio capture was interrupted by system call, smart assistant, or alarm. To resume local audio capture, ask the user to end the call, assistant, or alarm.
   @JsonValue(8)
   localAudioStreamReasonInterrupted,
 
-  /// 9: (Windows only) The ID of the local audio-capture device is invalid. Prompt the user to check the audio capture device ID.
+  /// 9: (Windows only) Invalid ID for local audio capture device. Prompt the user to check the audio capture device ID.
   @JsonValue(9)
   localAudioStreamReasonRecordInvalidId,
 
-  /// 10: (Windows only) The ID of the local audio-playback device is invalid. Prompt the user to check the audio playback device ID.
+  /// 10: (Windows only) Invalid ID for local audio playback device. Prompt the user to check the audio playback device ID.
   @JsonValue(10)
   localAudioStreamReasonPlayoutInvalidId,
 }
@@ -3467,22 +3485,22 @@ extension LocalAudioStreamReasonExt on LocalAudioStreamReason {
   }
 }
 
-/// Local video state types.
+/// Local video state.
 @JsonEnum(alwaysCreate: true)
 enum LocalVideoStreamState {
-  /// 0: The local video is in the initial state.
+  /// 0: Default initial state of local video.
   @JsonValue(0)
   localVideoStreamStateStopped,
 
-  /// 1: The local video capturing device starts successfully.
+  /// 1: Local video capture device started successfully.
   @JsonValue(1)
   localVideoStreamStateCapturing,
 
-  /// 2: The first video frame is successfully encoded.
+  /// 2: First frame of local video encoded successfully.
   @JsonValue(2)
   localVideoStreamStateEncoding,
 
-  /// 3: Fails to start the local video.
+  /// 3: Failed to start local video.
   @JsonValue(3)
   localVideoStreamStateFailed,
 }
@@ -3500,22 +3518,24 @@ extension LocalVideoStreamStateExt on LocalVideoStreamState {
   }
 }
 
-/// @nodoc
+/// Local video event types.
+///
+/// Since Available since v4.6.1.
 @JsonEnum(alwaysCreate: true)
 enum LocalVideoEventType {
-  /// @nodoc
+  /// (1): The screen capture window is hidden (Android only).
   @JsonValue(1)
   localVideoEventTypeScreenCaptureWindowHidden,
 
-  /// @nodoc
+  /// (2): The screen capture window is restored from hidden state (Android only).
   @JsonValue(2)
   localVideoEventTypeScreenCaptureWindowRecoverFromHidden,
 
-  /// @nodoc
+  /// (3): Screen capture is stopped by the user (Android only).
   @JsonValue(3)
   localVideoEventTypeScreenCaptureStoppedByUser,
 
-  /// @nodoc
+  /// (4): A system internal error occurs during screen capture (Android only).
   @JsonValue(4)
   localVideoEventTypeScreenCaptureSystemInternalError,
 }
@@ -3533,79 +3553,80 @@ extension LocalVideoEventTypeExt on LocalVideoEventType {
   }
 }
 
-/// Reasons for local video state changes.
+/// Reason for local video state change.
 @JsonEnum(alwaysCreate: true)
 enum LocalVideoStreamReason {
-  /// 0: The local video is normal.
+  /// 0: Local video is in normal state.
   @JsonValue(0)
   localVideoStreamReasonOk,
 
-  /// 1: No specified reason for the local video failure.
+  /// 1: Unknown error.
   @JsonValue(1)
   localVideoStreamReasonFailure,
 
-  /// 2: No permission to use the local video capturing device. Prompt the user to grant permissions and rejoin the channel. Deprecated: This enumerator is deprecated. Please use camera in the onPermissionError callback instead.
+  /// 2: No permission to start the local video capture device. Prompt the user to enable device permissions and rejoin the channel. Deprecated: This enum is deprecated. Use onPermissionError callback with camera instead.
   @JsonValue(2)
   localVideoStreamReasonDeviceNoPermission,
 
-  /// 3: The local video capturing device is in use. Prompt the user to check if the camera is being used by another app, or try to rejoin the channel.
+  /// 3: The local video capture device is currently in use. Prompt the user to check if the camera is occupied by another app or try rejoining the channel.
   @JsonValue(3)
   localVideoStreamReasonDeviceBusy,
 
-  /// 4: The local video capture fails. Prompt the user to check whether the video capture device is working properly, whether the camera is used by another app, or try to rejoin the channel.
+  /// 4: Failed to capture local video. Prompt the user to check if the video capture device is working properly, whether the camera is occupied by another app, or try rejoining the channel.
   @JsonValue(4)
   localVideoStreamReasonCaptureFailure,
 
-  /// 5: The local video encoding fails.
+  /// 5: Failed to encode local video.
   @JsonValue(5)
   localVideoStreamReasonCodecNotSupport,
 
-  /// 6: (iOS only) The app is in the background. Prompt the user that video capture cannot be performed normally when the app is in the background.
+  /// 6: (iOS only) The app is in the background. Prompt the user that video capture cannot function properly while the app is in the background.
   @JsonValue(6)
   localVideoStreamReasonCaptureInbackground,
 
-  /// 7: (iOS only) The current app window is running in Slide Over, Split View, or Picture in Picture mode, and another app is occupying the camera. Prompt the user that the app cannot capture video properly when it is running in Slide Over, Split View, or Picture in Picture mode and another app is occupying the camera.
+  /// 7: (iOS only) The current app window is in Slide Over, Split View, or Picture-in-Picture mode, and another app is using the camera. Prompt the user that video capture cannot function properly under these conditions.
   @JsonValue(7)
   localVideoStreamReasonCaptureMultipleForegroundApps,
 
-  /// 8: Fails to find a local video capture device. Remind the user to check whether the camera is connected to the device properly or the camera is working properly, and then to rejoin the channel.
+  /// 8: Local video capture device not found. Check if the camera is properly connected and functioning, or try rejoining the channel.
   @JsonValue(8)
   localVideoStreamReasonDeviceNotFound,
 
-  /// 9: (macOS and Windows only) The video capture device currently in use is disconnected (such as being unplugged).
+  /// 9: (macOS and Windows only) The video capture device in use has been disconnected (e.g., unplugged).
   @JsonValue(9)
   localVideoStreamReasonDeviceDisconnected,
 
-  /// 10: (macOS and Windows only) The SDK cannot find the video device in the video device list. Check whether the ID of the video device is valid.
+  /// 10: (macOS and Windows only) The SDK cannot find the video device in the device list. Check if the video device ID is valid.
   @JsonValue(10)
   localVideoStreamReasonDeviceInvalidId,
 
-  /// 14: (Android only) Video capture is interrupted. Possible reasons include the following:
-  ///  The camera is being used by another app. Prompt the user to check if the camera is being used by another app.
-  ///  The current app has been switched to the background. You can use foreground services to notify the operating system and ensure that the app can still collect video when it switches to the background.
+  /// 14: (Android only) Video capture interrupted. Possible reasons:
+  ///  The camera is occupied by another app. Prompt the user to check if the camera is in use.
+  ///  The app has been sent to the background. Use a foreground service notification to ensure video capture continues in the background. See [Why does audio/video capture fail when the app is locked or in the background on some Android versions?](https://doc.shengwang.cn/faq/quality-issues/android-background).
   @JsonValue(14)
   localVideoStreamReasonDeviceInterrupt,
 
-  /// 15: (Android only) The video capture device encounters an error. Prompt the user to close and restart the camera to restore functionality. If this operation does not solve the problem, check if the camera has a hardware failure.
+  /// 15: (Android only) Video capture device error. Prompt the user to turn the camera off and on again. If the issue persists, check for hardware failure.
   @JsonValue(15)
   localVideoStreamReasonDeviceFatalError,
 
-  /// 101: The current video capture device is unavailable due to excessive system pressure.
+  /// 101: The video capture device is unavailable due to excessive system pressure.
   @JsonValue(101)
   localVideoStreamReasonDeviceSystemPressure,
 
-  /// 11: (macOS and Windows only) The shared window is minimized when you call the startScreenCaptureByWindowId method to share a window. The SDK cannot share a minimized window. Please prompt the user to unminimize the shared window.
+  /// 11: (macOS and Windows only) The window shared via startScreenCaptureByWindowId is minimized. The SDK cannot share minimized windows. Prompt the user to restore the window.
   @JsonValue(11)
   localVideoStreamReasonScreenCaptureWindowMinimized,
 
-  /// 12: (macOS and Windows only) The error code indicates that a window shared by the window ID has been closed or a full-screen window shared by the window ID has exited full-screen mode. After exiting full-screen mode, remote users cannot see the shared window. To prevent remote users from seeing a black screen, Agora recommends that you immediately stop screen sharing. Common scenarios reporting this error code:
+  /// 12: (macOS and Windows only) The window shared by window ID has been closed, or a fullscreen window shared by ID has exited fullscreen. After exiting fullscreen, remote users will not see the shared window. To avoid black screens, it is recommended to end the sharing session immediately.
+  /// Common scenarios for this error code:
   ///  The local user closes the shared window.
-  ///  The local user shows some slides in full-screen mode first, and then shares the windows of the slides. After the user exits full-screen mode, the SDK reports this error code.
-  ///  The local user watches a web video or reads a web document in full-screen mode first, and then shares the window of the web video or document. After the user exits full-screen mode, the SDK reports this error code.
+  ///  The local user plays a slideshow and shares it. When the slideshow ends, the SDK reports this error code.
+  ///  The local user views a web video or document in fullscreen, then shares it. When exiting fullscreen, the SDK reports this error code.
   @JsonValue(12)
   localVideoStreamReasonScreenCaptureWindowClosed,
 
-  /// 13: (Windows only) The window being shared is overlapped by another window, so the overlapped area is blacked out by the SDK during window sharing.
+  /// 13: (Windows only) The window to be shared is occluded by another window. The occluded part will appear black in the shared content.
   @JsonValue(13)
   localVideoStreamReasonScreenCaptureWindowOccluded,
 
@@ -3613,39 +3634,39 @@ enum LocalVideoStreamReason {
   @JsonValue(20)
   localVideoStreamReasonScreenCaptureWindowNotSupported,
 
-  /// 21: (Windows and Android only) The currently captured window has no data.
+  /// 21: (Windows and Android only) No data from the currently captured window.
   @JsonValue(21)
   localVideoStreamReasonScreenCaptureFailure,
 
-  /// 22: (Windows and macOS only) No permission for screen capture.
+  /// 22: (Windows and macOS only) No permission to capture the screen.
   @JsonValue(22)
   localVideoStreamReasonScreenCaptureNoPermission,
 
-  /// 24: (Windows only) An unexpected error occurred during screen sharing (possibly due to window blocking failure), resulting in decreased performance, but the screen sharing process itself was not affected. During screen sharing, if blocking a specific window fails due to device driver issues, the SDK will report this event and automatically fall back to sharing the entire screen. If your use case requires masking specific windows to protect privacy, we recommend listening for this event and implementing additional privacy protection mechanisms when it is triggered.
+  /// 24: (Windows only) An unexpected error occurred during screen sharing (possibly due to failure to block a window), causing the screen sharing strategy to fall back. The sharing process itself is not affected. During screen sharing, if the SDK fails to block a specific window due to driver or hardware issues, it will report this event and automatically fall back to sharing the entire screen. If your use case requires blocking specific windows for privacy, listen for this event and implement additional privacy protections when triggered.
   @JsonValue(24)
   localVideoStreamReasonScreenCaptureAutoFallback,
 
-  /// 25: (Windows only) The window for the current screen capture is hidden and not visible on the current screen.
+  /// 25: (Windows only) The window being captured is hidden and not visible on the current screen.
   @JsonValue(25)
   localVideoStreamReasonScreenCaptureWindowHidden,
 
-  /// 26: (Windows only) The window for screen capture has been restored from hidden state.
+  /// 26: (Windows only) The window being captured has recovered from a hidden state.
   @JsonValue(26)
   localVideoStreamReasonScreenCaptureWindowRecoverFromHidden,
 
-  /// 27: (macOS and Windows only) The window for screen capture has been restored from the minimized state.
+  /// 27: (macOS and Windows only) The window being captured has recovered from a minimized state.
   @JsonValue(27)
   localVideoStreamReasonScreenCaptureWindowRecoverFromMinimized,
 
-  /// 28: (Windows only) Screen capture has been paused. Common scenarios reporting this error code: The current screen may have been switched to a secure desktop, such as a UAC dialog box or Winlogon desktop.
+  /// 28: (Windows only) Screen capture is paused. Common scenario: the screen may have switched to a secure desktop, such as a UAC dialog or Winlogon desktop.
   @JsonValue(28)
   localVideoStreamReasonScreenCapturePaused,
 
-  /// 29: (Windows only) Screen capture has resumed from paused state.
+  /// 29: (Windows only) Screen capture has resumed from a paused state.
   @JsonValue(29)
   localVideoStreamReasonScreenCaptureResumed,
 
-  /// 30: (Windows and macOS only) The displayer used for screen capture is disconnected. The current screen sharing has been paused. Prompt the user to restart the screen sharing.
+  /// 30: (Windows and macOS only) The display being captured has been disconnected. Prompt the user that screen sharing is paused and restart screen sharing.
   @JsonValue(30)
   localVideoStreamReasonScreenCaptureDisplayDisconnected,
 
@@ -3679,26 +3700,26 @@ extension LocalVideoStreamReasonExt on LocalVideoStreamReason {
   }
 }
 
-/// Remote audio states.
+/// Remote audio stream state.
 @JsonEnum(alwaysCreate: true)
 enum RemoteAudioState {
-  /// 0: The local audio is in the initial state. The SDK reports this state in the case of remoteAudioReasonLocalMuted, remoteAudioReasonRemoteMuted or remoteAudioReasonRemoteOffline.
+  /// 0: The default initial state of the remote audio. This state is reported in cases of remoteAudioReasonLocalMuted, remoteAudioReasonRemoteMuted, or remoteAudioReasonRemoteOffline.
   @JsonValue(0)
   remoteAudioStateStopped,
 
-  /// 1: The first remote audio packet is received.
+  /// 1: The local user has received the first packet of the remote audio.
   @JsonValue(1)
   remoteAudioStateStarting,
 
-  /// 2: The remote audio stream is decoded and plays normally. The SDK reports this state in the case of remoteAudioReasonNetworkRecovery, remoteAudioReasonLocalUnmuted or remoteAudioReasonRemoteUnmuted.
+  /// 2: The remote audio stream is decoding and playing normally. This state is reported in cases of remoteAudioReasonNetworkRecovery, remoteAudioReasonLocalUnmuted, or remoteAudioReasonRemoteUnmuted.
   @JsonValue(2)
   remoteAudioStateDecoding,
 
-  /// 3: The remote audio is frozen. The SDK reports this state in the case of remoteAudioReasonNetworkCongestion.
+  /// 3: The remote audio stream is frozen. This state is reported in the case of remoteAudioReasonNetworkCongestion.
   @JsonValue(3)
   remoteAudioStateFrozen,
 
-  /// 4: The remote audio fails to start. The SDK reports this state in the case of remoteAudioReasonInternal.
+  /// 4: The remote audio stream failed to play. This state is reported in the case of remoteAudioReasonInternal.
   @JsonValue(4)
   remoteAudioStateFailed,
 }
@@ -3716,10 +3737,10 @@ extension RemoteAudioStateExt on RemoteAudioState {
   }
 }
 
-/// The reason for the remote audio state change.
+/// Reason for remote audio stream state change.
 @JsonEnum(alwaysCreate: true)
 enum RemoteAudioStateReason {
-  /// 0: The SDK reports this reason when the audio state changes.
+  /// 0: This reason is reported when the audio state changes.
   @JsonValue(0)
   remoteAudioReasonInternal,
 
@@ -3727,27 +3748,27 @@ enum RemoteAudioStateReason {
   @JsonValue(1)
   remoteAudioReasonNetworkCongestion,
 
-  /// 2: Network recovery.
+  /// 2: Network recovered.
   @JsonValue(2)
   remoteAudioReasonNetworkRecovery,
 
-  /// 3: The local user stops receiving the remote audio stream or disables the audio module.
+  /// 3: Local user stopped receiving remote audio stream or disabled the audio module.
   @JsonValue(3)
   remoteAudioReasonLocalMuted,
 
-  /// 4: The local user resumes receiving the remote audio stream or enables the audio module.
+  /// 4: Local user resumed receiving remote audio stream or enabled the audio module.
   @JsonValue(4)
   remoteAudioReasonLocalUnmuted,
 
-  /// 5: The remote user stops sending the audio stream or disables the audio module.
+  /// 5: Remote user stopped sending audio stream or disabled the audio module.
   @JsonValue(5)
   remoteAudioReasonRemoteMuted,
 
-  /// 6: The remote user resumes sending the audio stream or enables the audio module.
+  /// 6: Remote user resumed sending audio stream or enabled the audio module.
   @JsonValue(6)
   remoteAudioReasonRemoteUnmuted,
 
-  /// 7: The remote user leaves the channel.
+  /// 7: Remote user left the channel.
   @JsonValue(7)
   remoteAudioReasonRemoteOffline,
 
@@ -3773,26 +3794,26 @@ extension RemoteAudioStateReasonExt on RemoteAudioStateReason {
   }
 }
 
-/// The state of the remote video stream.
+/// Remote video stream state.
 @JsonEnum(alwaysCreate: true)
 enum RemoteVideoState {
-  /// 0: The remote video is in the initial state. The SDK reports this state in the case of remoteVideoStateReasonLocalMuted, remoteVideoStateReasonRemoteMuted, or remoteVideoStateReasonRemoteOffline.
+  /// 0: The default initial state of the remote video. This state is reported in cases of remoteVideoStateReasonLocalMuted, remoteVideoStateReasonRemoteMuted, or remoteVideoStateReasonRemoteOffline.
   @JsonValue(0)
   remoteVideoStateStopped,
 
-  /// 1: The first remote video packet is received.
+  /// 1: The local user has received the first packet of the remote video.
   @JsonValue(1)
   remoteVideoStateStarting,
 
-  /// 2: The remote video stream is decoded and plays normally. The SDK reports this state in the case of remoteVideoStateReasonNetworkRecovery, remoteVideoStateReasonLocalUnmuted, remoteVideoStateReasonRemoteUnmuted, or remoteVideoStateReasonAudioFallbackRecovery.
+  /// 2: The remote video stream is decoding and playing normally. This state is reported in cases of remoteVideoStateReasonNetworkRecovery, remoteVideoStateReasonLocalUnmuted, remoteVideoStateReasonRemoteUnmuted, or remoteVideoStateReasonAudioFallbackRecovery.
   @JsonValue(2)
   remoteVideoStateDecoding,
 
-  /// 3: The remote video is frozen. The SDK reports this state in the case of remoteVideoStateReasonNetworkCongestion or remoteVideoStateReasonAudioFallback.
+  /// 3: The remote video stream is frozen. This state is reported in cases of remoteVideoStateReasonNetworkCongestion or remoteVideoStateReasonAudioFallback.
   @JsonValue(3)
   remoteVideoStateFrozen,
 
-  /// 4: The remote video fails to start. The SDK reports this state in the case of remoteVideoStateReasonInternal.
+  /// 4: The remote video stream failed to play. This state is reported in the case of remoteVideoStateReasonInternal.
   @JsonValue(4)
   remoteVideoStateFailed,
 }
@@ -3810,10 +3831,10 @@ extension RemoteVideoStateExt on RemoteVideoState {
   }
 }
 
-/// The reason for the remote video state change.
+/// Reason for remote video stream state change.
 @JsonEnum(alwaysCreate: true)
 enum RemoteVideoStateReason {
-  /// 0: The SDK reports this reason when the video state changes.
+  /// 0: This reason is reported when the video state changes.
   @JsonValue(0)
   remoteVideoStateReasonInternal,
 
@@ -3821,7 +3842,7 @@ enum RemoteVideoStateReason {
   @JsonValue(1)
   remoteVideoStateReasonNetworkCongestion,
 
-  /// 2: Network is recovered.
+  /// 2: Network recovery.
   @JsonValue(2)
   remoteVideoStateReasonNetworkRecovery,
 
@@ -3845,11 +3866,11 @@ enum RemoteVideoStateReason {
   @JsonValue(7)
   remoteVideoStateReasonRemoteOffline,
 
-  /// 8: The remote audio-and-video stream falls back to the audio-only stream due to poor network conditions.
+  /// 8: Under poor network conditions, the remote audio and video stream falls back to audio only.
   @JsonValue(8)
   remoteVideoStateReasonAudioFallback,
 
-  /// 9: The remote audio-only stream switches back to the audio-and-video stream after the network conditions improve.
+  /// 9: When the network improves, the remote audio stream recovers to audio and video stream.
   @JsonValue(9)
   remoteVideoStateReasonAudioFallbackRecovery,
 
@@ -3865,7 +3886,7 @@ enum RemoteVideoStateReason {
   @JsonValue(12)
   remoteVideoStateReasonSdkInBackground,
 
-  /// 13: The local video decoder does not support decoding the remote video stream.
+  /// 13: The local video decoder does not support decoding the received remote video stream.
   @JsonValue(13)
   remoteVideoStateReasonCodecNotSupport,
 }
@@ -4007,31 +4028,30 @@ extension RemoteVideoDownscaleLevelExt on RemoteVideoDownscaleLevel {
   }
 }
 
-/// The volume information of users.
+/// User volume information.
 @JsonSerializable(explicitToJson: true, includeIfNull: false)
 class AudioVolumeInfo implements AgoraSerializable {
   /// @nodoc
   const AudioVolumeInfo({this.uid, this.volume, this.vad, this.voicePitch});
 
-  /// The user ID.
+  /// User ID.
   ///  In the local user's callback, uid is 0.
-  ///  In the remote users' callback, uid is the user ID of a remote user whose instantaneous volume is the highest.
+  ///  In the remote user's callback, uid is the ID of the remote user with the highest instantaneous volume (up to 3 users).
   @JsonKey(name: 'uid')
   final int? uid;
 
-  /// The volume of the user. The value ranges between 0 (the lowest volume) and 255 (the highest volume). If the local user enables audio capturing and calls muteLocalAudioStream and set it as true to mute, the value of volume indicates the volume of locally captured audio signal.
+  /// User volume, range [0,255]. If the user mutes themselves (sets muteLocalAudioStream to true) but audio capture is enabled, the volume value represents the volume of the locally captured signal.
   @JsonKey(name: 'volume')
   final int? volume;
 
-  /// Voice activity status of the local user.
-  ///  0: The local user is not speaking.
-  ///  1: The local user is speaking.
-  ///  The vad parameter does not report the voice activity status of remote users. In a remote user's callback, the value of vad is always 1.
-  ///  To use this parameter, you must set reportVad to true when calling enableAudioVolumeIndication.
+  /// vad does not report the voice status of remote users. For remote users, the value of vad is always 1.
+  ///  To use this parameter, set reportVad to true when calling enableAudioVolumeIndication. Voice activity status of the local user.
+  ///  0: No voice detected locally.
+  ///  1: Voice detected locally.
   @JsonKey(name: 'vad')
   final int? vad;
 
-  /// The voice pitch of the local user. The value ranges between 0.0 and 4000.0. The voicePitch parameter does not report the voice pitch of remote users. In the remote users' callback, the value of voicePitch is always 0.0.
+  /// Voice pitch of the local user (Hz). Value range: [0.0, 4000.0]. voicePitch does not report the voice pitch of remote users. For remote users, the value of voicePitch is always 0.0.
   @JsonKey(name: 'voicePitch')
   final double? voicePitch;
 
@@ -4043,15 +4063,15 @@ class AudioVolumeInfo implements AgoraSerializable {
   Map<String, dynamic> toJson() => _$AudioVolumeInfoToJson(this);
 }
 
-/// The audio device information.
+/// Audio device information.
 ///
-/// This class is for Android only.
+/// This class is only applicable to the Android platform.
 @JsonSerializable(explicitToJson: true, includeIfNull: false)
 class DeviceInfo implements AgoraSerializable {
   /// @nodoc
   const DeviceInfo({this.isLowLatencyAudioSupported});
 
-  /// Whether the audio device supports ultra-low-latency capture and playback: true : The device supports ultra-low-latency capture and playback. false : The device does not support ultra-low-latency capture and playback.
+  /// Whether ultra-low latency audio capture and playback is supported: true : Supported false : Not supported
   @JsonKey(name: 'isLowLatencyAudioSupported')
   final bool? isLowLatencyAudioSupported;
 
@@ -4084,7 +4104,7 @@ class Packet implements AgoraSerializable {
   Map<String, dynamic> toJson() => _$PacketToJson(this);
 }
 
-/// The audio sampling rate of the stream to be pushed to the CDN.
+/// Sampling rate of the audio output during streaming.
 @JsonEnum(alwaysCreate: true)
 enum AudioSampleRateType {
   /// 32000: 32 kHz
@@ -4095,7 +4115,7 @@ enum AudioSampleRateType {
   @JsonValue(44100)
   audioSampleRate44100,
 
-  /// 48000: (Default) 48 kHz
+  /// 48000: (default) 48 kHz
   @JsonValue(48000)
   audioSampleRate48000,
 }
@@ -4113,7 +4133,7 @@ extension AudioSampleRateTypeExt on AudioSampleRateType {
   }
 }
 
-/// The codec type of the output video.
+/// Codec type for transcoded output video stream.
 @JsonEnum(alwaysCreate: true)
 enum VideoCodecTypeForStream {
   /// 1: (Default) H.264.
@@ -4138,18 +4158,18 @@ extension VideoCodecTypeForStreamExt on VideoCodecTypeForStream {
   }
 }
 
-/// Video codec profile types.
+/// Codec profile for video in CDN streaming.
 @JsonEnum(alwaysCreate: true)
 enum VideoCodecProfileType {
-  /// 66: Baseline video codec profile; generally used for video calls on mobile phones.
+  /// 66: Baseline profile, generally used for low-end or error-tolerant applications such as video calls and mobile videos.
   @JsonValue(66)
   videoCodecProfileBaseline,
 
-  /// 77: Main video codec profile; generally used in mainstream electronics such as MP4 players, portable video players, PSP, and iPads.
+  /// 77: Main profile, generally used in mainstream consumer electronics such as MP4 players, portable video players, PSP, iPad, etc.
   @JsonValue(77)
   videoCodecProfileMain,
 
-  /// 100: (Default) High video codec profile; generally used in high-resolution live streaming or television.
+  /// 100: (Default) High profile, generally used for broadcasting, video disc storage, and HDTV.
   @JsonValue(100)
   videoCodecProfileHigh,
 }
@@ -4167,18 +4187,18 @@ extension VideoCodecProfileTypeExt on VideoCodecProfileType {
   }
 }
 
-/// Self-defined audio codec profile.
+/// Audio codec profile for stream output. Defaults to LC-AAC.
 @JsonEnum(alwaysCreate: true)
 enum AudioCodecProfileType {
-  /// 0: (Default) LC-AAC.
+  /// 0: (Default) LC-AAC profile.
   @JsonValue(0)
   audioCodecProfileLcAac,
 
-  /// 1: HE-AAC.
+  /// 1: HE-AAC profile.
   @JsonValue(1)
   audioCodecProfileHeAac,
 
-  /// 2: HE-AAC v2.
+  /// 2: HE-AAC v2 profile.
   @JsonValue(2)
   audioCodecProfileHeAacV2,
 }
@@ -4211,27 +4231,27 @@ class LocalAudioStats implements AgoraSerializable {
       this.earMonitorDelay,
       this.aecEstimatedDelay});
 
-  /// The number of audio channels.
+  /// Number of audio channels.
   @JsonKey(name: 'numChannels')
   final int? numChannels;
 
-  /// The sampling rate (Hz) of sending the local user's audio stream.
+  /// Sampling rate of the sent local audio, in Hz.
   @JsonKey(name: 'sentSampleRate')
   final int? sentSampleRate;
 
-  /// The average bitrate (Kbps) of sending the local user's audio stream.
+  /// Average bitrate of the sent local audio, in Kbps.
   @JsonKey(name: 'sentBitrate')
   final int? sentBitrate;
 
-  /// The internal payload codec.
+  /// Internal payload type.
   @JsonKey(name: 'internalCodec')
   final int? internalCodec;
 
-  /// The packet loss rate (%) from the local client to the Agora server before applying the anti-packet loss strategies.
+  /// Packet loss rate (%) from the local end to the Agora edge server before network resilience is applied.
   @JsonKey(name: 'txPacketLossRate')
   final int? txPacketLossRate;
 
-  /// The audio device module delay (ms) when playing or recording audio.
+  /// Delay (ms) of the audio device module during audio playback or recording.
   @JsonKey(name: 'audioDeviceDelay')
   final int? audioDeviceDelay;
 
@@ -4239,11 +4259,11 @@ class LocalAudioStats implements AgoraSerializable {
   @JsonKey(name: 'audioPlayoutDelay')
   final int? audioPlayoutDelay;
 
-  /// The ear monitor delay (ms), which is the delay from microphone input to headphone output.
+  /// Ear monitor delay (ms), i.e., the delay from microphone input to headphone output.
   @JsonKey(name: 'earMonitorDelay')
   final int? earMonitorDelay;
 
-  /// Acoustic echo cancellation (AEC) module estimated delay (ms), which is the signal delay between when audio is played locally before being locally captured.
+  /// Acoustic Echo Cancellation (AEC) delay (ms), i.e., the delay estimated by the AEC module between audio playback and the signal captured locally.
   @JsonKey(name: 'aecEstimatedDelay')
   final int? aecEstimatedDelay;
 
@@ -4255,32 +4275,32 @@ class LocalAudioStats implements AgoraSerializable {
   Map<String, dynamic> toJson() => _$LocalAudioStatsToJson(this);
 }
 
-/// States of the Media Push.
+/// The state of RTMP streaming.
 @JsonEnum(alwaysCreate: true)
 enum RtmpStreamPublishState {
-  /// 0: The Media Push has not started or has ended.
+  /// 0: Streaming has not started or has ended.
   @JsonValue(0)
   rtmpStreamPublishStateIdle,
 
-  /// 1: The streaming server and CDN server are being connected.
+  /// 1: Connecting to the streaming server and CDN server.
   @JsonValue(1)
   rtmpStreamPublishStateConnecting,
 
-  /// 2: The RTMP or RTMPS streaming publishes. The SDK successfully publishes the RTMP or RTMPS streaming and returns this state.
+  /// 2: Streaming is in progress. This state is returned after successful streaming.
   @JsonValue(2)
   rtmpStreamPublishStateRunning,
 
-  /// 3: The RTMP or RTMPS streaming is recovering. When exceptions occur to the CDN, or the streaming is interrupted, the SDK tries to resume RTMP or RTMPS streaming and returns this state.
-  ///  If the SDK successfully resumes the streaming, rtmpStreamPublishStateRunning (2) returns.
-  ///  If the streaming does not resume within 60 seconds or server errors occur, rtmpStreamPublishStateFailure (4) returns. If you feel that 60 seconds is too long, you can also actively try to reconnect.
+  /// 3: Recovering the stream. When the CDN encounters an issue or the stream is briefly interrupted, the SDK automatically attempts to recover the stream and returns this state.
+  ///  If recovery is successful, it transitions to rtmpStreamPublishStateRunning(2).
+  ///  If the server fails or recovery is not successful within 60 seconds, it transitions to rtmpStreamPublishStateFailure(4). If 60 seconds is too long, you can also manually attempt reconnection.
   @JsonValue(3)
   rtmpStreamPublishStateRecovering,
 
-  /// 4: The RTMP or RTMPS streaming fails. After a failure, you can troubleshoot the cause of the error through the returned error code.
+  /// 4: Streaming failed. After failure, you can troubleshoot the error based on the returned error code.
   @JsonValue(4)
   rtmpStreamPublishStateFailure,
 
-  /// 5: The SDK is disconnecting from the Agora streaming server and CDN. When you call stopRtmpStream to stop the Media Push normally, the SDK reports the Media Push state as rtmpStreamPublishStateDisconnecting and rtmpStreamPublishStateIdle in sequence.
+  /// 5: The SDK is disconnecting from the streaming server and CDN server. When you call the stopRtmpStream method to end streaming normally, the SDK reports the streaming state as rtmpStreamPublishStateDisconnecting, then rtmpStreamPublishStateIdle.
   @JsonValue(5)
   rtmpStreamPublishStateDisconnecting,
 }
@@ -4298,62 +4318,62 @@ extension RtmpStreamPublishStateExt on RtmpStreamPublishState {
   }
 }
 
-/// Reasons for changes in the status of RTMP or RTMPS streaming.
+/// The reason for RTMP stream publishing state change.
 @JsonEnum(alwaysCreate: true)
 enum RtmpStreamPublishReason {
-  /// 0: The RTMP or RTMPS streaming has not started or has ended.
+  /// 0: Stream published successfully.
   @JsonValue(0)
   rtmpStreamPublishReasonOk,
 
-  /// 1: Invalid argument used. Check the parameter setting.
+  /// 1: Invalid parameter. Please check whether the input parameters are correct.
   @JsonValue(1)
   rtmpStreamPublishReasonInvalidArgument,
 
-  /// 2: The RTMP or RTMPS streaming is encrypted and cannot be published.
+  /// 2: The stream is encrypted and cannot be published.
   @JsonValue(2)
   rtmpStreamPublishReasonEncryptedStreamNotAllowed,
 
-  /// 3: Timeout for the RTMP or RTMPS streaming.
+  /// 3: Publishing timed out and failed.
   @JsonValue(3)
   rtmpStreamPublishReasonConnectionTimeout,
 
-  /// 4: An error occurs in Agora's streaming server.
+  /// 4: An error occurred on the streaming server.
   @JsonValue(4)
   rtmpStreamPublishReasonInternalServerError,
 
-  /// 5: An error occurs in the CDN server.
+  /// 5: An error occurred on the CDN server.
   @JsonValue(5)
   rtmpStreamPublishReasonRtmpServerError,
 
-  /// 6: The RTMP or RTMPS streaming publishes too frequently.
+  /// 6: Streaming requests are too frequent.
   @JsonValue(6)
   rtmpStreamPublishReasonTooOften,
 
-  /// 7: The host publishes more than 10 URLs. Delete the unnecessary URLs before adding new ones.
+  /// 7: The number of streaming URLs for a single broadcaster has reached the limit of 10. Please remove some unused URLs before adding new ones.
   @JsonValue(7)
   rtmpStreamPublishReasonReachLimit,
 
-  /// 8: The host manipulates other hosts' URLs. For example, the host updates or stops other hosts' streams. Check your app logic.
+  /// 8: The broadcaster is operating on a stream that does not belong to them. For example, updating or stopping another broadcaster's stream. Please check your app logic.
   @JsonValue(8)
   rtmpStreamPublishReasonNotAuthorized,
 
-  /// 9: Agora's server fails to find the RTMP or RTMPS streaming.
+  /// 9: The server could not find the stream.
   @JsonValue(9)
   rtmpStreamPublishReasonStreamNotFound,
 
-  /// 10: The format of the RTMP or RTMPS streaming URL is not supported. Check whether the URL format is correct.
+  /// 10: The streaming URL format is incorrect. Please check whether the format is valid.
   @JsonValue(10)
   rtmpStreamPublishReasonFormatNotSupported,
 
-  /// 11: The user role is not host, so the user cannot use the CDN live streaming function. Check your application code logic.
+  /// 11: The user role is not broadcaster, and the user cannot use the streaming feature. Please check your application logic.
   @JsonValue(11)
   rtmpStreamPublishReasonNotBroadcaster,
 
-  /// 13: The updateRtmpTranscoding method is called to update the transcoding configuration in a scenario where there is streaming without transcoding. Check your application code logic.
+  /// 13: The updateRtmpTranscoding method was called to update transcoding properties when not using transcoding streaming. Please check your application logic.
   @JsonValue(13)
   rtmpStreamPublishReasonTranscodingNoMixStream,
 
-  /// 14: Errors occurred in the host's network.
+  /// 14: The broadcaster's network encountered an error.
   @JsonValue(14)
   rtmpStreamPublishReasonNetDown,
 
@@ -4361,11 +4381,11 @@ enum RtmpStreamPublishReason {
   @JsonValue(15)
   rtmpStreamPublishReasonInvalidAppid,
 
-  /// 16: Your project does not have permission to use streaming services.
+  /// 16: Your project does not have permission to use the streaming service.
   @JsonValue(16)
   rtmpStreamPublishReasonInvalidPrivilege,
 
-  /// 100: The streaming has been stopped normally. After you stop the Media Push, the SDK returns this value.
+  /// 100: Streaming has ended normally. After you stop streaming, the SDK returns this value.
   @JsonValue(100)
   rtmpStreamUnpublishReasonOk,
 }
@@ -4383,22 +4403,22 @@ extension RtmpStreamPublishReasonExt on RtmpStreamPublishReason {
   }
 }
 
-/// Events during the Media Push.
+/// Events that occur during RTMP streaming.
 @JsonEnum(alwaysCreate: true)
 enum RtmpStreamingEvent {
-  /// 1: An error occurs when you add a background image or a watermark image in the Media Push.
+  /// 1: Failed to add background image or watermark during RTMP streaming.
   @JsonValue(1)
   rtmpStreamingEventFailedLoadImage,
 
-  /// 2: The streaming URL is already being used for Media Push. If you want to start new streaming, use a new streaming URL.
+  /// 2: The streaming URL is already in use. If you want to start a new stream, please use a new streaming URL.
   @JsonValue(2)
   rtmpStreamingEventUrlAlreadyInUse,
 
-  /// 3: The feature is not supported.
+  /// 3: Feature not supported.
   @JsonValue(3)
   rtmpStreamingEventAdvancedFeatureNotSupport,
 
-  /// 4: Reserved.
+  /// 4: Reserved parameter.
   @JsonValue(4)
   rtmpStreamingEventRequestTooOften,
 }
@@ -4418,7 +4438,7 @@ extension RtmpStreamingEventExt on RtmpStreamingEvent {
 
 /// Image properties.
 ///
-/// This class sets the properties of the watermark and background images in the live video.
+/// Used to set the properties of watermark and background images in live video.
 @JsonSerializable(explicitToJson: true, includeIfNull: false)
 class RtcImage implements AgoraSerializable {
   /// @nodoc
@@ -4431,15 +4451,15 @@ class RtcImage implements AgoraSerializable {
       this.zOrder,
       this.alpha});
 
-  /// The HTTP/HTTPS URL address of the image in the live video. The maximum length of this parameter is 1024 bytes.
+  /// The HTTP/HTTPS URL of the image on the live video. The character length must not exceed 1024 bytes.
   @JsonKey(name: 'url')
   final String? url;
 
-  /// The x-coordinate (px) of the image on the video frame (taking the upper left corner of the video frame as the origin).
+  /// The x-coordinate (px) of the image on the video frame, using the top-left corner of the output video frame as the origin.
   @JsonKey(name: 'x')
   final int? x;
 
-  /// The y-coordinate (px) of the image on the video frame (taking the upper left corner of the video frame as the origin).
+  /// The y-coordinate (px) of the image on the video frame, using the top-left corner of the output video frame as the origin.
   @JsonKey(name: 'y')
   final int? y;
 
@@ -4451,13 +4471,13 @@ class RtcImage implements AgoraSerializable {
   @JsonKey(name: 'height')
   final int? height;
 
-  /// The layer index of the watermark or background image. When you use the watermark array to add a watermark or multiple watermarks, you must pass a value to zOrder in the range [1,255]; otherwise, the SDK reports an error. In other cases, zOrder can optionally be passed in the range [0,255], with 0 being the default value. 0 means the bottom layer and 255 means the top layer.
+  /// The layer index of the watermark or background image. When adding one or more watermarks using a watermark array, you must assign a value to zOrder. The valid range is [1,255]; otherwise, the SDK will report an error. In other cases, zOrder is optional. The valid range is [0,255], with 0 as the default. 0 represents the bottom layer, and 255 represents the top layer.
   @JsonKey(name: 'zOrder')
   final int? zOrder;
 
-  /// The transparency of the watermark or background image. The range of the value is [0.0,1.0]:
-  ///  0.0: Completely transparent.
-  ///  1.0: (Default) Opaque.
+  /// The transparency of the watermark or background image. The valid range is [0.0,1.0]:
+  ///  0.0: Fully transparent.
+  ///  1.0: (Default) Fully opaque.
   @JsonKey(name: 'alpha')
   final double? alpha;
 
@@ -4469,19 +4489,19 @@ class RtcImage implements AgoraSerializable {
   Map<String, dynamic> toJson() => _$RtcImageToJson(this);
 }
 
-/// The configuration for advanced features of the RTMP or RTMPS streaming with transcoding.
+/// Advanced feature configuration for transcoding live streaming.
 ///
-/// If you want to enable the advanced features of streaming with transcoding, contact.
+/// To use advanced transcoding live streaming features, please [contact sales](https://www.shengwang.cn/contact-sales/).
 @JsonSerializable(explicitToJson: true, includeIfNull: false)
 class LiveStreamAdvancedFeature implements AgoraSerializable {
   /// @nodoc
   const LiveStreamAdvancedFeature({this.featureName, this.opened});
 
-  /// The feature names, including LBHQ (high-quality video with a lower bitrate) and VEO (optimized video encoder).
+  /// The name of the advanced transcoding live streaming feature, including LBHQ (low-bitrate high-definition video) and VEO (optimized video encoder).
   @JsonKey(name: 'featureName')
   final String? featureName;
 
-  /// Whether to enable the advanced features of streaming with transcoding: true : Enable the advanced features. false : (Default) Do not enable the advanced features.
+  /// Whether to enable the advanced transcoding live streaming feature: true : Enable the advanced transcoding live streaming feature. false : (default) Disable the advanced transcoding live streaming feature.
   @JsonKey(name: 'opened')
   final bool? opened;
 
@@ -4493,34 +4513,34 @@ class LiveStreamAdvancedFeature implements AgoraSerializable {
   Map<String, dynamic> toJson() => _$LiveStreamAdvancedFeatureToJson(this);
 }
 
-/// Connection states.
+/// Network connection state.
 @JsonEnum(alwaysCreate: true)
 enum ConnectionStateType {
-  /// 1: The SDK is disconnected from the Agora edge server. The state indicates the SDK is in one of the following phases:
-  ///  Theinitial state before calling the joinChannel method.
-  ///  The app calls the leaveChannel method.
+  /// 1: Disconnected from the network. This state indicates the SDK is:
+  ///  In the initialization phase before calling joinChannel.
+  ///  Or in the phase after calling leaveChannel.
   @JsonValue(1)
   connectionStateDisconnected,
 
-  /// 2: The SDK is connecting to the Agora edge server. This state indicates that the SDK is establishing a connection with the specified channel after the app calls joinChannel.
-  ///  If the SDK successfully joins the channel, it triggers the onConnectionStateChanged callback and the connection state switches to connectionStateConnected.
-  ///  After the connection is established, the SDK also initializes the media and triggers onJoinChannelSuccess when everything is ready.
+  /// 2: Connecting to the network. This state indicates the SDK is establishing a connection to the specified channel after calling joinChannel.
+  ///  If the channel is joined successfully, the app receives the onConnectionStateChanged callback indicating the network state has changed to connectionStateConnected.
+  ///  After establishing the connection, the SDK initializes media and calls back onJoinChannelSuccess when everything is ready.
   @JsonValue(2)
   connectionStateConnecting,
 
-  /// 3: The SDK is connected to the Agora edge server. This state also indicates that the user has joined a channel and can now publish or subscribe to a media stream in the channel. If the connection to the channel is lost because, for example, if the network is down or switched, the SDK automatically tries to reconnect and triggers onConnectionStateChanged callback, notifying that the current network state becomes connectionStateReconnecting.
+  /// 3: Network connected. This state indicates the user has joined the channel and can publish or subscribe to media streams. If the connection to the channel is lost due to network issues or switching, the SDK attempts to reconnect. The app receives the onConnectionStateChanged callback indicating the network state has changed to connectionStateReconnecting.
   @JsonValue(3)
   connectionStateConnected,
 
-  /// 4: The SDK keeps reconnecting to the Agora edge server. The SDK keeps rejoining the channel after being disconnected from a joined channel because of network issues.
-  ///  If the SDK cannot rejoin the channel within 10 seconds, it triggers onConnectionLost, stays in the connectionStateReconnecting state, and keeps rejoining the channel.
-  ///  If the SDK fails to rejoin the channel 20 minutes after being disconnected from the Agora edge server, the SDK triggers the onConnectionStateChanged callback, switches to the connectionStateFailed state, and stops rejoining the channel.
+  /// 4: Reconnecting to the network. This state indicates the SDK had previously joined the channel but the connection was interrupted due to network issues. The SDK automatically attempts to rejoin the channel.
+  ///  If the SDK fails to rejoin within 10 seconds, onConnectionLost is triggered. The SDK remains in the connectionStateReconnecting state and continues trying to rejoin.
+  ///  If the SDK fails to rejoin the channel within 20 minutes after disconnection, the app receives the onConnectionStateChanged callback indicating the network state has changed to connectionStateFailed, and the SDK stops trying to reconnect.
   @JsonValue(4)
   connectionStateReconnecting,
 
-  /// 5: The SDK fails to connect to the Agora edge server or join the channel. This state indicates that the SDK stops trying to rejoin the channel. You must call leaveChannel to leave the channel.
-  ///  You can call joinChannel to rejoin the channel.
-  ///  If the SDK is banned from joining the channel by the Agora edge server through the RESTful API, the SDK triggers the onConnectionStateChanged callback.
+  /// 5: Network connection failed. This state indicates the SDK has stopped trying to rejoin the channel and you need to call leaveChannel to leave.
+  ///  If the user wants to rejoin the channel, call joinChannel again.
+  ///  If the SDK is forbidden to join the channel due to the server using RESTful API, the app receives onConnectionStateChanged.
   @JsonValue(5)
   connectionStateFailed,
 }
@@ -4538,7 +4558,7 @@ extension ConnectionStateTypeExt on ConnectionStateType {
   }
 }
 
-/// Transcoding configurations of each host.
+/// Settings for each host involved in transcoding and mixing.
 @JsonSerializable(explicitToJson: true, includeIfNull: false)
 class TranscodingUser implements AgoraSerializable {
   /// @nodoc
@@ -4552,41 +4572,40 @@ class TranscodingUser implements AgoraSerializable {
       this.alpha,
       this.audioChannel});
 
-  /// The user ID of the host.
+  /// User ID of the host.
   @JsonKey(name: 'uid')
   final int? uid;
 
-  /// The x coordinate (pixel) of the host's video on the output video frame (taking the upper left corner of the video frame as the origin). The value range is [0, width], where width is the width set in LiveTranscoding.
+  /// X-coordinate (px) of the host video in the output video, with the top-left corner of the output video as the origin. Value range: [0, width], where width is set in LiveTranscoding.
   @JsonKey(name: 'x')
   final int? x;
 
-  /// The y coordinate (pixel) of the host's video on the output video frame (taking the upper left corner of the video frame as the origin). The value range is [0, height], where height is the height set in LiveTranscoding.
+  /// Y-coordinate (px) of the host video in the output video, with the top-left corner of the output video as the origin. Value range: [0, height], where height is set in LiveTranscoding.
   @JsonKey(name: 'y')
   final int? y;
 
-  /// The width (pixel) of the host's video.
+  /// Width of the host video (px).
   @JsonKey(name: 'width')
   final int? width;
 
-  /// The height (pixel) of the host's video.
+  /// Height of the host video (px).
   @JsonKey(name: 'height')
   final int? height;
 
-  /// The layer index number of the host's video. The value range is [0, 100].
-  ///  0: (Default) The host's video is the bottom layer.
-  ///  100: The host's video is the top layer.
-  ///  If the value is less than 0 or greater than 100, errInvalidArgument error is returned.
-  ///  Setting zOrder to 0 is supported.
+  /// If the value is less than 0 or greater than 100, an errInvalidArgument error is returned.
+  ///  Setting zOrder to 0 is supported. Layer number of the host video. Value range: [0,100].
+  ///  0: (Default) Video is at the bottom layer.
+  ///  100: Video is at the top layer.
   @JsonKey(name: 'zOrder')
   final int? zOrder;
 
-  /// The transparency of the host's video. The value range is [0.0,1.0].
-  ///  0.0: Completely transparent.
-  ///  1.0: (Default) Opaque.
+  /// Transparency of the host video. Value range: [0.0, 1.0].
+  ///  0.0: Fully transparent.
+  ///  1.0: (Default) Fully opaque.
   @JsonKey(name: 'alpha')
   final double? alpha;
 
-  /// The audio channel used by the host's audio in the output audio. The default value is 0, and the value range is [0, 5]. 0 : (Recommended) The defaut setting, which supports dual channels at most and depends on the upstream of the host. 1 : The host's audio uses the FL audio channel. If the host's upstream uses multiple audio channels, the Agora server mixes them into mono first. 2 : The host's audio uses the FC audio channel. If the host's upstream uses multiple audio channels, the Agora server mixes them into mono first. 3 : The host's audio uses the FR audio channel. If the host's upstream uses multiple audio channels, the Agora server mixes them into mono first. 4 : The host's audio uses the BL audio channel. If the host's upstream uses multiple audio channels, the Agora server mixes them into mono first. 5 : The host's audio uses the BR audio channel. If the host's upstream uses multiple audio channels, the Agora server mixes them into mono first. 0xFF or a value greater than 5 : The host's audio is muted, and the Agora server removes the host's audio. If the value is not 0, a special player is required.
+  /// When the value is not 0, a special player is required. Audio channel occupied by the host audio in the output audio. Default is 0. Value range: [0,5]: 0 : (Recommended) Default audio mixing setting, supports up to stereo, related to the host's upstream audio. 1 : Host audio in the FL channel of the output audio. If the host's upstream audio is multi-channel, the Agora server mixes it into mono. 2 : Host audio in the FC channel of the output audio. If the host's upstream audio is multi-channel, the Agora server mixes it into mono. 3 : Host audio in the FR channel of the output audio. If the host's upstream audio is multi-channel, the Agora server mixes it into mono. 4 : Host audio in the BL channel of the output audio. If the host's upstream audio is multi-channel, the Agora server mixes it into mono. 5 : Host audio in the BR channel of the output audio. If the host's upstream audio is multi-channel, the Agora server mixes it into mono. 0xFF or values greater than 5 : The host audio is muted, and the Agora server removes the host's audio.
   @JsonKey(name: 'audioChannel')
   final int? audioChannel;
 
@@ -4598,7 +4617,7 @@ class TranscodingUser implements AgoraSerializable {
   Map<String, dynamic> toJson() => _$TranscodingUserToJson(this);
 }
 
-/// Transcoding configurations for Media Push.
+/// Transcoding properties for CDN live streaming.
 @JsonSerializable(explicitToJson: true, includeIfNull: false)
 class LiveTranscoding implements AgoraSerializable {
   /// @nodoc
@@ -4627,104 +4646,106 @@ class LiveTranscoding implements AgoraSerializable {
       this.advancedFeatures,
       this.advancedFeatureCount});
 
-  /// The width of the video in pixels. The default value is 360.
-  ///  When pushing video streams to the CDN, the value range of width is [64,1920]. If the value is less than 64, Agora server automatically adjusts it to 64; if the value is greater than 1920, Agora server automatically adjusts it to 1920.
-  ///  When pushing audio streams to the CDN, set width and height as 0.
+  /// Total width of the video stream in pixels. Default is 360.
+  ///  For video streams, the value range is [64,1920]. If the value is less than 64, it is automatically adjusted to 64 by the Agora server; if it is greater than 1920, it is adjusted to 1920.
+  ///  For audio-only streams, set both width and height to 0.
   @JsonKey(name: 'width')
   final int? width;
 
-  /// The height of the video in pixels. The default value is 640.
-  ///  When pushing video streams to the CDN, the value range of height is [64,1080]. If the value is less than 64, Agora server automatically adjusts it to 64; if the value is greater than 1080, Agora server automatically adjusts it to 1080.
-  ///  When pushing audio streams to the CDN, set width and height as 0.
+  /// Total height of the video stream in pixels. Default is 640.
+  ///  For video streams, the value range is [64,1080]. If the value is less than 64, it is automatically adjusted to 64 by the Agora server; if it is greater than 1080, it is adjusted to 1080.
+  ///  For audio-only streams, set both width and height to 0.
   @JsonKey(name: 'height')
   final int? height;
 
-  /// The encoding bitrate (Kbps) of the video. This parameter does not need to be set; keeping the default value standardBitrate is sufficient. The SDK automatically matches the most suitable bitrate based on the video resolution and frame rate you have set. For the correspondence between video resolution and frame rate, see.
+  /// Video encoding bitrate in Kbps. You do not need to set this parameter. Keep the default value standardBitrate. The SDK automatically matches the most appropriate bitrate based on the video resolution and frame rate you set. For the mapping between resolution and frame rate, see [Video Profile](https://doc.shengwang.cn/doc/rtc/flutter/basic-features/video-profile#%E8%A7%86%E9%A2%91%E5%B1%9E%E6%80%A7%E5%8F%82%E8%80%83).
   @JsonKey(name: 'videoBitrate')
   final int? videoBitrate;
 
-  /// Frame rate (fps) of the output video stream set for Media Push. The default value is 15. The value range is (0,30]. The Agora server adjusts any value over 30 to 30.
+  /// Frame rate of the output video for CDN live streaming. Value range is (0,30], in fps. Default is 15 fps. The Agora server adjusts any value above 30 fps to 30 fps.
   @JsonKey(name: 'videoFramerate')
   final int? videoFramerate;
 
-  /// Deprecated This member is deprecated. Latency mode: true : Low latency with unassured quality. false : (Default) High latency with assured quality.
+  /// Deprecated. Not recommended. Low latency mode true : Low latency, video quality not guaranteed. false : (Default) High latency, video quality guaranteed.
   @JsonKey(name: 'lowLatency')
   final bool? lowLatency;
 
-  /// GOP (Group of Pictures) in fps of the video frames for Media Push. The default value is 30.
+  /// GOP (Group of Pictures) of the output video for CDN live streaming, in frames. Default is 30.
   @JsonKey(name: 'videoGop')
   final int? videoGop;
 
-  /// Video codec profile type for Media Push. Set it as 66, 77, or 100 (default). See VideoCodecProfileType for details. If you set this parameter to any other value, Agora adjusts it to the default value.
+  /// Encoding profile of the output video for CDN live streaming. Can be set to 66, 77, or 100. See VideoCodecProfileType. If you set this parameter to other values, the Agora server adjusts it to the default value.
   @JsonKey(name: 'videoCodecProfile')
   final VideoCodecProfileType? videoCodecProfile;
 
-  /// The background color in RGB hex value. Value only. Do not include a preceeding #. For example, 0xFFB6C1 (light pink). The default value is 0x000000 (black).
+  /// Background color of the output video for CDN live streaming, in hexadecimal RGB integer format without the # sign. For example, 0xFFB6C1 represents light pink. Default is 0x000000 (black).
   @JsonKey(name: 'backgroundColor')
   final int? backgroundColor;
 
-  /// Video codec profile types for Media Push. See VideoCodecTypeForStream.
+  /// Codec type of the output video for CDN live streaming. See VideoCodecTypeForStream.
   @JsonKey(name: 'videoCodecType')
   final VideoCodecTypeForStream? videoCodecType;
 
-  /// The number of users in the Media Push. The value range is [0,17].
+  /// Number of users in the video mix. Default is 0. Value range is [0,17].
   @JsonKey(name: 'userCount')
   final int? userCount;
 
-  /// Manages the user layout configuration in the Media Push. Agora supports a maximum of 17 transcoding users in a Media Push channel. See TranscodingUser.
+  /// Users participating in video mixing for CDN live streaming. Supports up to 17 users simultaneously. See TranscodingUser.
   @JsonKey(name: 'transcodingUsers')
   final List<TranscodingUser>? transcodingUsers;
 
-  /// Reserved property. Extra user-defined information to send SEI for the H.264/H.265 video stream to the CDN live client. Maximum length: 4096 bytes. For more information on SEI, see SEI-related questions.
+  /// Reserved parameter: Custom information sent to the CDN streaming client, used to populate SEI frames in H264/H265 video. Length limit: 4096 bytes. For details on SEI, see [SEI Frame Related Issues](https://doc.shengwang.cn/faq/quality-issues/sei).
   @JsonKey(name: 'transcodingExtraInfo')
   final String? transcodingExtraInfo;
 
-  /// Deprecated Obsolete and not recommended for use. The metadata sent to the CDN client.
+  /// Metadata sent to the CDN client. Deprecated. Not recommended.
   @JsonKey(name: 'metadata')
   final String? metadata;
 
-  /// The watermark on the live video. The image format needs to be PNG. See RtcImage. You can add one watermark, or add multiple watermarks using an array.
+  /// Watermark on the live video. The image format must be PNG. See RtcImage.
+  /// You can add one watermark or use an array to add multiple watermarks.
   @JsonKey(name: 'watermark')
   final List<RtcImage>? watermark;
 
-  /// The number of watermarks on the live video. The total number of watermarks and background images can range from 0 to 10. This parameter is used with watermark.
+  /// Number of watermarks on the live video. The total number of watermarks and background images must be between 0 and 10. This parameter is used together with watermark.
   @JsonKey(name: 'watermarkCount')
   final int? watermarkCount;
 
-  /// The number of background images on the live video. The image format needs to be PNG. See RtcImage. You can add a background image or use an array to add multiple background images. This parameter is used with backgroundImageCount.
+  /// Background image on the live video. The image format must be PNG. See RtcImage.
+  /// You can add one background image or use an array to add multiple background images. This parameter is used together with backgroundImageCount.
   @JsonKey(name: 'backgroundImage')
   final List<RtcImage>? backgroundImage;
 
-  /// The number of background images on the live video. The total number of watermarks and background images can range from 0 to 10. This parameter is used with backgroundImage.
+  /// Number of background images on the live video. The total number of watermarks and background images must be between 0 and 10. This parameter is used together with backgroundImage.
   @JsonKey(name: 'backgroundImageCount')
   final int? backgroundImageCount;
 
-  /// The audio sampling rate (Hz) of the output media stream. See AudioSampleRateType.
+  /// Audio sample rate (Hz) of the output media stream for CDN streaming. See AudioSampleRateType.
   @JsonKey(name: 'audioSampleRate')
   final AudioSampleRateType? audioSampleRate;
 
-  /// Bitrate (Kbps) of the audio output stream for Media Push. The default value is 48, and the highest value is 128.
+  /// Bitrate of the output audio for CDN live streaming, in Kbps. Default is 48, maximum is 128.
   @JsonKey(name: 'audioBitrate')
   final int? audioBitrate;
 
-  /// The number of audio channels for Media Push. Agora recommends choosing 1 (mono), or 2 (stereo) audio channels. Special players are required if you choose 3, 4, or 5.
-  ///  1: (Default) Mono.
-  ///  2: Stereo.
-  ///  3: Three audio channels.
-  ///  4: Four audio channels.
-  ///  5: Five audio channels.
+  /// Number of audio channels in the output audio for CDN live streaming. Default is 1. Acceptable integer values are [1,5]. Recommended values are 1 or 2. Values 3, 4, and 5 require special player support:
+  ///  1: (Default) Mono
+  ///  2: Stereo
+  ///  3: Three channels
+  ///  4: Four channels
+  ///  5: Five channels
   @JsonKey(name: 'audioChannels')
   final int? audioChannels;
 
-  /// Audio codec profile type for Media Push. See AudioCodecProfileType.
+  /// Audio codec profile of the output audio for CDN live streaming. See AudioCodecProfileType.
   @JsonKey(name: 'audioCodecProfile')
   final AudioCodecProfileType? audioCodecProfile;
 
-  /// Advanced features of the Media Push with transcoding. See LiveStreamAdvancedFeature.
+  /// Advanced features for transcoding and streaming. See LiveStreamAdvancedFeature.
   @JsonKey(name: 'advancedFeatures')
   final List<LiveStreamAdvancedFeature>? advancedFeatures;
 
-  /// The number of enabled advanced features. The default value is 0.
+  /// Number of enabled advanced features. Default is 0.
   @JsonKey(name: 'advancedFeatureCount')
   final int? advancedFeatureCount;
 
@@ -4736,7 +4757,7 @@ class LiveTranscoding implements AgoraSerializable {
   Map<String, dynamic> toJson() => _$LiveTranscodingToJson(this);
 }
 
-/// The video streams for local video mixing.
+/// Video streams involved in local compositing.
 @JsonSerializable(explicitToJson: true, includeIfNull: false)
 class TranscodingVideoStream implements AgoraSerializable {
   /// @nodoc
@@ -4753,15 +4774,15 @@ class TranscodingVideoStream implements AgoraSerializable {
       this.alpha,
       this.mirror});
 
-  /// The video source type for local video mixing. See VideoSourceType.
+  /// Type of video source involved in local compositing. See VideoSourceType.
   @JsonKey(name: 'sourceType')
   final VideoSourceType? sourceType;
 
-  /// The user ID of the remote user. Use this parameter only when the source type is videoSourceRemote for local video mixing.
+  /// Remote user ID. Use this parameter only when the video source type for local compositing is videoSourceRemote.
   @JsonKey(name: 'remoteUserUid')
   final int? remoteUserUid;
 
-  /// The file path of local images. Use this parameter only when the source type is the image for local video mixing. Examples:
+  /// Use this parameter only when the video source type for local compositing is an image. Path to the local image. Example paths:
   ///  Android: /storage/emulated/0/Pictures/image.png
   ///  iOS: /var/mobile/Containers/Data/Application/<APP-UUID>/Documents/image.png
   ///  macOS: ~/Pictures/image.png
@@ -4769,37 +4790,37 @@ class TranscodingVideoStream implements AgoraSerializable {
   @JsonKey(name: 'imageUrl')
   final String? imageUrl;
 
-  /// (Optional) Media player ID. Use the parameter only when you set sourceType to videoSourceMediaPlayer.
+  /// (Optional) Media player ID. Set this parameter when sourceType is set to videoSourceMediaPlayer.
   @JsonKey(name: 'mediaPlayerId')
   final int? mediaPlayerId;
 
-  /// The relative lateral displacement of the top left corner of the video for local video mixing to the origin (the top left corner of the canvas).
+  /// Horizontal offset of the top-left corner of the video relative to the top-left corner (origin) of the canvas.
   @JsonKey(name: 'x')
   final int? x;
 
-  /// The relative longitudinal displacement of the top left corner of the captured video to the origin (the top left corner of the canvas).
+  /// Vertical offset of the top-left corner of the video relative to the top-left corner (origin) of the canvas.
   @JsonKey(name: 'y')
   final int? y;
 
-  /// The width (px) of the video for local video mixing on the canvas.
+  /// Width of the video involved in local compositing (px).
   @JsonKey(name: 'width')
   final int? width;
 
-  /// The height (px) of the video for local video mixing on the canvas.
+  /// Height of the video involved in local compositing (px).
   @JsonKey(name: 'height')
   final int? height;
 
-  /// The number of the layer to which the video for the local video mixing belongs. The value range is [0, 100].
-  ///  0: (Default) The layer is at the bottom.
-  ///  100: The layer is at the top.
+  /// Layer number of the video involved in local compositing. Value range: [0,100].
+  ///  0: (Default) Bottom layer.
+  ///  100: Top layer.
   @JsonKey(name: 'zOrder')
   final int? zOrder;
 
-  /// The transparency of the video for local video mixing. The value range is [0.0, 1.0]. 0.0 indicates that the video is completely transparent, and 1.0 indicates that it is opaque.
+  /// Transparency of the video involved in local compositing. Value range: [0.0,1.0]. 0.0 means fully transparent, 1.0 means fully opaque.
   @JsonKey(name: 'alpha')
   final double? alpha;
 
-  /// Whether to mirror the video for the local video mixing. true : Mirror the video for the local video mixing. false : (Default) Do not mirror the video for the local video mixing. This parameter only takes effect on video source types that are cameras.
+  /// This parameter takes effect only for video sources from the camera. Whether to mirror the video involved in local compositing: true : Mirror the video. false : (Default) Do not mirror the video.
   @JsonKey(name: 'mirror')
   final bool? mirror;
 
@@ -4811,7 +4832,7 @@ class TranscodingVideoStream implements AgoraSerializable {
   Map<String, dynamic> toJson() => _$TranscodingVideoStreamToJson(this);
 }
 
-/// The configuration of the video mixing on the local client.
+/// Local video compositing configuration.
 @JsonSerializable(explicitToJson: true, includeIfNull: false)
 class LocalTranscoderConfiguration implements AgoraSerializable {
   /// @nodoc
@@ -4821,15 +4842,15 @@ class LocalTranscoderConfiguration implements AgoraSerializable {
       this.videoOutputConfiguration,
       this.syncWithPrimaryCamera});
 
-  /// The number of the video streams for the video mixing on the local client.
+  /// Number of video streams participating in local video compositing.
   @JsonKey(name: 'streamCount')
   final int? streamCount;
 
-  /// The video streams for local video mixing. See TranscodingVideoStream.
+  /// Video streams participating in local video compositing. See TranscodingVideoStream.
   @JsonKey(name: 'videoInputStreams')
   final List<TranscodingVideoStream>? videoInputStreams;
 
-  /// The encoding configuration of the mixed video stream after the local video mixing. See VideoEncoderConfiguration.
+  /// Encoding configuration of the composited video after local video compositing. See VideoEncoderConfiguration.
   @JsonKey(name: 'videoOutputConfiguration')
   final VideoEncoderConfiguration? videoOutputConfiguration;
 
@@ -4845,30 +4866,30 @@ class LocalTranscoderConfiguration implements AgoraSerializable {
   Map<String, dynamic> toJson() => _$LocalTranscoderConfigurationToJson(this);
 }
 
-/// The error code of the local video mixing failure.
+/// Local video mixing error codes.
 @JsonEnum(alwaysCreate: true)
 enum VideoTranscoderError {
-  /// 1: The selected video source has not started video capture. You need to create a video track for it and start video capture.
+  /// 1: The specified video source has not started video capture. You need to create a video track for it and start video capture.
   @JsonValue(1)
   vtErrVideoSourceNotReady,
 
-  /// 2: The video source type is invalid. You need to re-specify the supported video source type.
+  /// 2: Invalid video source type. You need to reassign a supported video source type.
   @JsonValue(2)
   vtErrInvalidVideoSourceType,
 
-  /// 3: The image path is invalid. You need to re-specify the correct image path.
+  /// 3: Invalid image path. You need to reassign the correct image path.
   @JsonValue(3)
   vtErrInvalidImagePath,
 
-  /// 4: The image format is invalid. Make sure the image format is one of PNG, JPEG, or GIF.
+  /// 4: Invalid image format. Ensure the image format is one of PNG, JPEG, or GIF.
   @JsonValue(4)
   vtErrUnsupportImageFormat,
 
-  /// 5: The video encoding resolution after video mixing is invalid.
+  /// 5: Invalid resolution for the encoded video after mixing.
   @JsonValue(5)
   vtErrInvalidLayout,
 
-  /// 20: Unknown internal error.
+  /// 20: Internal unknown error.
   @JsonValue(20)
   vtErrInternal,
 }
@@ -4886,30 +4907,26 @@ extension VideoTranscoderErrorExt on VideoTranscoderError {
   }
 }
 
-/// The source of the audio streams that are mixed locally.
+/// @nodoc
 @JsonSerializable(explicitToJson: true, includeIfNull: false)
 class MixedAudioStream implements AgoraSerializable {
   /// @nodoc
   const MixedAudioStream(
       {this.sourceType, this.remoteUserUid, this.channelId, this.trackId});
 
-  /// The type of the audio source. See AudioSourceType.
+  /// @nodoc
   @JsonKey(name: 'sourceType')
   final AudioSourceType? sourceType;
 
-  /// The user ID of the remote user. Set this parameter if the source type of the locally mixed audio steams is audioSourceRemoteUser.
+  /// @nodoc
   @JsonKey(name: 'remoteUserUid')
   final int? remoteUserUid;
 
-  /// The channel name. This parameter signifies the channel in which users engage in real-time audio and video interaction. Under the premise of the same App ID, users who fill in the same channel ID enter the same channel for audio and video interaction. The string length must be less than 64 bytes. Supported characters (89 characters in total):
-  ///  All lowercase English letters: a to z.
-  ///  All uppercase English letters: A to Z.
-  ///  All numeric characters: 0 to 9.
-  ///  "!", "#", "$", "%", "&", "(", ")", "+", "-", ":", ";", "<", "=", ".", ">", "?", "@", "[", "]", "^", "_", "{", "}", "|", "~", "," Set this parameter if the source type of the locally mixed audio streams is audioSourceRemoteChannel or audioSourceRemoteUser.
+  /// @nodoc
   @JsonKey(name: 'channelId')
   final String? channelId;
 
-  /// The audio track ID. Set this parameter to the custom audio track ID returned in createCustomAudioTrack. Set this parameter if the source type of the locally mixed audio steams is audioSourceCustom.
+  /// @nodoc
   @JsonKey(name: 'trackId')
   final int? trackId;
 
@@ -4921,22 +4938,22 @@ class MixedAudioStream implements AgoraSerializable {
   Map<String, dynamic> toJson() => _$MixedAudioStreamToJson(this);
 }
 
-/// The configurations for mixing the local audio.
+/// Local audio mixing configuration.
 @JsonSerializable(explicitToJson: true, includeIfNull: false)
 class LocalAudioMixerConfiguration implements AgoraSerializable {
   /// @nodoc
   const LocalAudioMixerConfiguration(
       {this.streamCount, this.audioInputStreams, this.syncWithLocalMic});
 
-  /// The number of the audio streams that are mixed locally.
+  /// Number of audio streams to be mixed locally.
   @JsonKey(name: 'streamCount')
   final int? streamCount;
 
-  /// The source of the audio streams that are mixed locally. See MixedAudioStream.
+  /// Audio sources to be mixed locally. See MixedAudioStream.
   @JsonKey(name: 'audioInputStreams')
   final List<MixedAudioStream>? audioInputStreams;
 
-  /// Whether the mxied audio stream uses the timestamp of the audio frames captured by the local microphone. true : (Default) Yes. Set to this value if you want all locally captured audio streams synchronized. false : No. The SDK uses the timestamp of the audio frames at the time when they are mixed.
+  /// Whether the mixed audio stream uses timestamps from the local microphone audio frames: true : (default) Uses timestamps from the local microphone audio frames. Set this value if you want all locally captured audio streams to stay synchronized. false : Does not use timestamps from the local microphone audio frames. The SDK uses the timestamp when the mixed audio frame is constructed.
   @JsonKey(name: 'syncWithLocalMic')
   final bool? syncWithLocalMic;
 
@@ -4948,7 +4965,7 @@ class LocalAudioMixerConfiguration implements AgoraSerializable {
   Map<String, dynamic> toJson() => _$LocalAudioMixerConfigurationToJson(this);
 }
 
-/// Configurations of the last-mile network test.
+/// Last mile network probe configuration.
 @JsonSerializable(explicitToJson: true, includeIfNull: false)
 class LastmileProbeConfig implements AgoraSerializable {
   /// @nodoc
@@ -4958,19 +4975,19 @@ class LastmileProbeConfig implements AgoraSerializable {
       this.expectedUplinkBitrate,
       this.expectedDownlinkBitrate});
 
-  /// Sets whether to test the uplink network. Some users, for example, the audience members in a LIVE_BROADCASTING channel, do not need such a test. true : Test the uplink network. false : Do not test the uplink network.
+  /// Whether to probe the uplink network. Some users, such as audience members in a live broadcast channel, do not need network probing: true : Probe the uplink network. false : Do not probe the uplink network.
   @JsonKey(name: 'probeUplink')
   final bool? probeUplink;
 
-  /// Sets whether to test the downlink network: true : Test the downlink network. false : Do not test the downlink network.
+  /// Whether to probe the downlink network: true : Probe the downlink network. false : Do not probe the downlink network.
   @JsonKey(name: 'probeDownlink')
   final bool? probeDownlink;
 
-  /// The expected maximum uplink bitrate (bps) of the local user. The value range is [100000, 5000000]. Agora recommends referring to setVideoEncoderConfiguration to set the value.
+  /// Expected maximum uplink bitrate in bps. Range: [100000,5000000]. It is recommended to refer to the bitrate value in setVideoEncoderConfiguration when setting this parameter.
   @JsonKey(name: 'expectedUplinkBitrate')
   final int? expectedUplinkBitrate;
 
-  /// The expected maximum downlink bitrate (bps) of the local user. The value range is [100000,5000000].
+  /// Expected maximum downlink bitrate in bps. Range: [100000,5000000].
   @JsonKey(name: 'expectedDownlinkBitrate')
   final int? expectedDownlinkBitrate;
 
@@ -4982,18 +4999,18 @@ class LastmileProbeConfig implements AgoraSerializable {
   Map<String, dynamic> toJson() => _$LastmileProbeConfigToJson(this);
 }
 
-/// The status of the last-mile probe test.
+/// Status of last mile quality probe result.
 @JsonEnum(alwaysCreate: true)
 enum LastmileProbeResultState {
-  /// 1: The last-mile network probe test is complete.
+  /// 1: Indicates that the last mile probe result is complete.
   @JsonValue(1)
   lastmileProbeResultComplete,
 
-  /// 2: The last-mile network probe test is incomplete because the bandwidth estimation is not available due to limited test resources. One possible reason is that testing resources are temporarily limited.
+  /// 2: Indicates that the last mile probe did not perform bandwidth estimation, so the result is incomplete. A possible reason is temporarily limited testing resources.
   @JsonValue(2)
   lastmileProbeResultIncompleteNoBwe,
 
-  /// 3: The last-mile network probe test is not carried out. Probably due to poor network conditions.
+  /// 3: Last mile probe was not performed. A possible reason is network disconnection.
   @JsonValue(3)
   lastmileProbeResultUnavailable,
 }
@@ -5011,22 +5028,22 @@ extension LastmileProbeResultStateExt on LastmileProbeResultState {
   }
 }
 
-/// Results of the uplink or downlink last-mile network test.
+/// Uplink or downlink last mile network probe result.
 @JsonSerializable(explicitToJson: true, includeIfNull: false)
 class LastmileProbeOneWayResult implements AgoraSerializable {
   /// @nodoc
   const LastmileProbeOneWayResult(
       {this.packetLossRate, this.jitter, this.availableBandwidth});
 
-  /// The packet loss rate (%).
+  /// Packet loss rate.
   @JsonKey(name: 'packetLossRate')
   final int? packetLossRate;
 
-  /// The network jitter (ms).
+  /// Network jitter (ms).
   @JsonKey(name: 'jitter')
   final int? jitter;
 
-  /// The estimated available bandwidth (bps).
+  /// Estimated available network bandwidth (bps).
   @JsonKey(name: 'availableBandwidth')
   final int? availableBandwidth;
 
@@ -5038,26 +5055,26 @@ class LastmileProbeOneWayResult implements AgoraSerializable {
   Map<String, dynamic> toJson() => _$LastmileProbeOneWayResultToJson(this);
 }
 
-/// Results of the uplink and downlink last-mile network tests.
+/// Last mile uplink and downlink network quality probe result.
 @JsonSerializable(explicitToJson: true, includeIfNull: false)
 class LastmileProbeResult implements AgoraSerializable {
   /// @nodoc
   const LastmileProbeResult(
       {this.state, this.uplinkReport, this.downlinkReport, this.rtt});
 
-  /// The status of the last-mile network tests. See LastmileProbeResultState.
+  /// The status of the last mile quality probe result. See: LastmileProbeResultState.
   @JsonKey(name: 'state')
   final LastmileProbeResultState? state;
 
-  /// Results of the uplink last-mile network test. See LastmileProbeOneWayResult.
+  /// Uplink network quality report. See LastmileProbeOneWayResult.
   @JsonKey(name: 'uplinkReport')
   final LastmileProbeOneWayResult? uplinkReport;
 
-  /// Results of the downlink last-mile network test. See LastmileProbeOneWayResult.
+  /// Downlink network quality report. See LastmileProbeOneWayResult.
   @JsonKey(name: 'downlinkReport')
   final LastmileProbeOneWayResult? downlinkReport;
 
-  /// The round-trip time (ms).
+  /// Round-trip time (ms).
   @JsonKey(name: 'rtt')
   final int? rtt;
 
@@ -5069,102 +5086,98 @@ class LastmileProbeResult implements AgoraSerializable {
   Map<String, dynamic> toJson() => _$LastmileProbeResultToJson(this);
 }
 
-/// Reasons causing the change of the connection state.
+/// Reason for changes in network connection state.
 @JsonEnum(alwaysCreate: true)
 enum ConnectionChangedReasonType {
-  /// 0: The SDK is connecting to the Agora edge server.
+  /// 0: Connecting to the network.
   @JsonValue(0)
   connectionChangedConnecting,
 
-  /// 1: The SDK has joined the channel successfully.
+  /// 1: Successfully joined the channel.
   @JsonValue(1)
   connectionChangedJoinSuccess,
 
-  /// 2: The connection between the SDK and the Agora edge server is interrupted.
+  /// 2: Network connection interrupted.
   @JsonValue(2)
   connectionChangedInterrupted,
 
-  /// 3: The connection between the SDK and the Agora edge server is banned by the Agora edge server. For example, when a user is kicked out of the channel, this status will be returned.
+  /// 3: Network connection is banned by the server. For example, this status is returned when a user is kicked out of the channel.
   @JsonValue(3)
   connectionChangedBannedByServer,
 
-  /// 4: The SDK fails to join the channel. When the SDK fails to join the channel for more than 20 minutes, this code will be returned and the SDK stops reconnecting to the channel. You need to prompt the user to try to switch to another network and rejoin the channel.
+  /// 4: Failed to join the channel. If the SDK fails to join the channel after trying for 20 minutes, this status is returned and it stops trying to reconnect. Prompt the user to switch networks and try joining the channel again.
   @JsonValue(4)
   connectionChangedJoinFailed,
 
-  /// 5: The SDK has left the channel.
+  /// 5: Left the channel.
   @JsonValue(5)
   connectionChangedLeaveChannel,
 
-  /// 6: The App ID is invalid. You need to rejoin the channel with a valid APP ID and make sure the App ID you are using is consistent with the one generated in the Agora Console.
+  /// 6: Invalid App ID. Use a valid App ID to rejoin the channel and ensure the App ID matches the one generated in the Agora Console.
   @JsonValue(6)
   connectionChangedInvalidAppId,
 
-  /// 7: Invalid channel name. Rejoin the channel with a valid channel name. A valid channel name is a string of up to 64 bytes in length. Supported characters (89 characters in total):
-  ///  All lowercase English letters: a to z.
-  ///  All uppercase English letters: A to Z.
-  ///  All numeric characters: 0 to 9.
-  ///  "!", "#", "$", "%", "&", "(", ")", "+", "-", ":", ";", "<", "=", ".", ">", "?", "@", "[", "]", "^", "_", "{", "}", "|", "~", ","
+  /// 7: Invalid channel name. Use a valid channel name to rejoin the channel. A valid channel name is a string within 64 bytes. The supported character set includes 89 characters:
   @JsonValue(7)
   connectionChangedInvalidChannelName,
 
-  /// 8: Invalid token. Possible reasons are as follows:
-  ///  The App Certificate for the project is enabled in Agora Console, but you do not pass in a token when joining a channel.
-  ///  The uid specified when calling joinChannel to join the channel is inconsistent with the uid passed in when generating the token.
-  ///  The generated token and the token used to join the channel are not consistent. Ensure the following:
-  ///  When your project enables App Certificate, you need to pass in a token to join a channel.
-  ///  The user ID specified when generating the token is consistent with the user ID used when joining the channel.
-  ///  The generated token is the same as the token passed in to join the channel.
+  /// 8: Invalid Token. Possible reasons include:
+  ///  Your project has enabled App Certificate, but you joined the channel without using a Token.
+  ///  The user ID specified when calling joinChannel does not match the one used when generating the Token.
+  ///  The Token used to join the channel is different from the one generated. Ensure that:
+  ///  When your project has enabled App Certificate, use a Token to join the channel.
+  ///  The user ID specified when generating the Token matches the one used to join the channel.
+  ///  The Token used to join the channel matches the one generated.
   @JsonValue(8)
   connectionChangedInvalidToken,
 
-  /// 9: The token currently being used has expired. You need to generate a new token on your server and rejoin the channel with the new token.
+  /// 9: The current Token has expired. Generate a new Token on your server and use it to rejoin the channel.
   @JsonValue(9)
   connectionChangedTokenExpired,
 
-  /// 10: The connection is rejected by server. Possible reasons are as follows:
-  ///  The user is already in the channel and still calls a method, for example, joinChannel, to join the channel. Stop calling this method to clear this error.
-  ///  The user tries to join a channel while a test call is in progress. The user needs to join the channel after the call test ends.
+  /// 10: This user is banned by the server. Possible reasons include:
+  ///  The user has already joined the channel and calls the join API again, such as joinChannel, which returns this status. Stop calling the method.
+  ///  The user tries to join a channel during a call test. Wait until the test ends before joining the channel.
   @JsonValue(10)
   connectionChangedRejectedByServer,
 
-  /// 11: The connection state changed to reconnecting because the SDK has set a proxy server.
+  /// 11: SDK attempts to reconnect due to proxy server settings.
   @JsonValue(11)
   connectionChangedSettingProxyServer,
 
-  /// 12: The connection state changed because the token is renewed.
+  /// 12: Network connection state changed due to Token renewal.
   @JsonValue(12)
   connectionChangedRenewToken,
 
-  /// 13: Client IP address changed. If you receive this code multiple times, You need to prompt the user to switch networks and try joining the channel again.
+  /// 13: Client IP address changed. If this status occurs multiple times, prompt the user to switch networks and try rejoining the channel.
   @JsonValue(13)
   connectionChangedClientIpAddressChanged,
 
-  /// 14: Timeout for the keep-alive of the connection between the SDK and the Agora edge server. The SDK tries to reconnect to the server automatically.
+  /// 14: Keep-alive timeout between SDK and server, entering auto-reconnect state.
   @JsonValue(14)
   connectionChangedKeepAliveTimeout,
 
-  /// 15: The user has rejoined the channel successfully.
+  /// 15: Successfully rejoined the channel.
   @JsonValue(15)
   connectionChangedRejoinSuccess,
 
-  /// 16: The connection between the SDK and the server is lost.
+  /// 16: SDK lost connection with the server.
   @JsonValue(16)
   connectionChangedLost,
 
-  /// 17: The connection state changes due to the echo test.
+  /// 17: Connection state changed due to echo test.
   @JsonValue(17)
   connectionChangedEchoTest,
 
-  /// 18: The local IP address was changed by the user.
+  /// 18: Local IP address changed by user.
   @JsonValue(18)
   connectionChangedClientIpAddressChangedByUser,
 
-  /// 19: The user joined the same channel from different devices with the same UID.
+  /// 19: Joined the same channel from different devices using the same UID.
   @JsonValue(19)
   connectionChangedSameUidLogin,
 
-  /// 20: The number of hosts in the channel has reached the upper limit.
+  /// 20: The number of broadcasters in the channel has reached the limit.
   @JsonValue(20)
   connectionChangedTooManyBroadcasters,
 
@@ -5198,22 +5211,22 @@ extension ConnectionChangedReasonTypeExt on ConnectionChangedReasonType {
   }
 }
 
-/// The reason for a user role switch failure.
+/// Reason for failing to switch user roles.
 @JsonEnum(alwaysCreate: true)
 enum ClientRoleChangeFailedReason {
-  /// 1: The number of hosts in the channel exceeds the limit. This enumerator is reported only when the support for 128 users is enabled. The maximum number of hosts is based on the actual number of hosts configured when you enable the 128-user feature.
+  /// 1: The number of broadcasters in the channel has reached the limit. This enum is only reported when the 128-user feature is enabled. The broadcaster limit depends on the actual number configured when enabling the 128-user feature.
   @JsonValue(1)
   clientRoleChangeFailedTooManyBroadcasters,
 
-  /// 2: The request is rejected by the Agora server. Agora recommends you prompt the user to try to switch their user role again.
+  /// 2: The request is rejected by the server. It is recommended to prompt the user to try switching roles again.
   @JsonValue(2)
   clientRoleChangeFailedNotAuthorized,
 
-  /// 3: The request is timed out. Agora recommends you prompt the user to check the network connection and try to switch their user role again. Deprecated: This enumerator is deprecated since v4.4.0 and is not recommended for use.
+  /// 3: The request timed out. It is recommended to prompt the user to check the network connection and try switching roles again. Deprecated: This enum value is deprecated as of v4.4.0 and is not recommended for use.
   @JsonValue(3)
   clientRoleChangeFailedRequestTimeOut,
 
-  /// 4: The SDK is disconnected from the Agora edge server. You can troubleshoot the failure through the reason reported by onConnectionStateChanged. Deprecated: This enumerator is deprecated since v4.4.0 and is not recommended for use.
+  /// 4: Network connection lost. You can troubleshoot the specific cause of the network failure based on the reason reported by onConnectionStateChanged. Deprecated: This enum value is deprecated as of v4.4.0 and is not recommended for use.
   @JsonValue(4)
   clientRoleChangeFailedConnectionFailed,
 }
@@ -5231,38 +5244,38 @@ extension ClientRoleChangeFailedReasonExt on ClientRoleChangeFailedReason {
   }
 }
 
-/// Network type.
+/// Network connection type.
 @JsonEnum(alwaysCreate: true)
 enum NetworkType {
-  /// -1: The network type is unknown.
+  /// -1: Network connection type is unknown.
   @JsonValue(-1)
   networkTypeUnknown,
 
-  /// 0: The SDK disconnects from the network.
+  /// 0: Network connection is disconnected.
   @JsonValue(0)
   networkTypeDisconnected,
 
-  /// 1: The network type is LAN.
+  /// 1: Network type is LAN.
   @JsonValue(1)
   networkTypeLan,
 
-  /// 2: The network type is Wi-Fi (including hotspots).
+  /// 2: Network type is Wi-Fi (including hotspots).
   @JsonValue(2)
   networkTypeWifi,
 
-  /// 3: The network type is mobile 2G.
+  /// 3: Network type is 2G mobile network.
   @JsonValue(3)
   networkTypeMobile2g,
 
-  /// 4: The network type is mobile 3G.
+  /// 4: Network type is 3G mobile network.
   @JsonValue(4)
   networkTypeMobile3g,
 
-  /// 5: The network type is mobile 4G.
+  /// 5: Network type is 4G mobile network.
   @JsonValue(5)
   networkTypeMobile4g,
 
-  /// 6: The network type is mobile 5G.
+  /// 6: Network type is 5G mobile network.
   @JsonValue(6)
   networkTypeMobile5g,
 }
@@ -5280,10 +5293,10 @@ extension NetworkTypeExt on NetworkType {
   }
 }
 
-/// Setting mode of the view.
+/// View setup mode.
 @JsonEnum(alwaysCreate: true)
 enum VideoViewSetupMode {
-  /// 0: (Default) Clear all added views and replace with a new view.
+  /// 0: (Default) Clears all added views and replaces with a new view.
   @JsonValue(0)
   videoViewSetupReplace,
 
@@ -5291,7 +5304,7 @@ enum VideoViewSetupMode {
   @JsonValue(1)
   videoViewSetupAdd,
 
-  /// 2: Deletes a view. When you no longer need to use a certain view, it is recommended to delete the view by setting setupMode to videoViewSetupRemove, otherwise it may lead to leak of rendering resources.
+  /// 2: Removes a view. When you no longer need a view, it is recommended to set setupMode to videoViewSetupRemove in time to remove the view, otherwise it may lead to rendering resource leaks.
   @JsonValue(2)
   videoViewSetupRemove,
 }
@@ -5309,7 +5322,7 @@ extension VideoViewSetupModeExt on VideoViewSetupMode {
   }
 }
 
-/// Attributes of the video canvas object.
+/// Properties of the video canvas object.
 @JsonSerializable(explicitToJson: true, includeIfNull: false)
 class VideoCanvas implements AgoraSerializable {
   /// @nodoc
@@ -5327,55 +5340,54 @@ class VideoCanvas implements AgoraSerializable {
       this.enableAlphaMask,
       this.position});
 
-  /// User ID that publishes the video source.
+  /// For Android and iOS platforms, when the video source is a composite video stream (videoSourceTranscoded), this parameter indicates the user ID that publishes the composite video stream.
   @JsonKey(name: 'uid')
   final int? uid;
 
-  /// The ID of the user who publishes a specific sub-video stream within the mixed video stream.
+  /// User ID that publishes a specific composite sub-video stream.
   @JsonKey(name: 'subviewUid')
   final int? subviewUid;
 
-  /// The video display window. In one VideoCanvas, you can only choose to set either view or surfaceTexture. If both are set, only the settings in view take effect.
+  /// Video display window. In a VideoCanvas, you can only set either view or surfaceTexture. If both are set, only the configuration in view takes effect.
   @JsonKey(name: 'view', readValue: readIntPtr)
   final int? view;
 
-  /// The background color of the video canvas in RGBA format. The default value is 0x00000000, which represents black.
+  /// Background color of the video canvas in RGBA format. The default is 0x00000000, which represents black.
   @JsonKey(name: 'backgroundColor')
   final int? backgroundColor;
 
-  /// The rendering mode of the video. See RenderModeType.
+  /// Video rendering mode. See RenderModeType.
   @JsonKey(name: 'renderMode')
   final RenderModeType? renderMode;
 
-  /// The mirror mode of the view. See VideoMirrorModeType.
-  ///  For the mirror mode of the local video view: If you use a front camera, the SDK enables the mirror mode by default; if you use a rear camera, the SDK disables the mirror mode by default.
-  ///  For the remote user: The mirror mode is disabled by default.
+  /// View mirroring mode. See VideoMirrorModeType.
+  ///  Local view mirroring mode: If you use the front camera, local view mirroring is enabled by default; if you use the rear camera, it is disabled by default.
+  ///  Remote user view mirroring mode: Disabled by default.
   @JsonKey(name: 'mirrorMode')
   final VideoMirrorModeType? mirrorMode;
 
-  /// Setting mode of the view. See VideoViewSetupMode.
+  /// View setup mode. See VideoViewSetupMode.
   @JsonKey(name: 'setupMode')
   final VideoViewSetupMode? setupMode;
 
-  /// The type of the video source. See VideoSourceType.
+  /// Type of video source. See VideoSourceType.
   @JsonKey(name: 'sourceType')
   final VideoSourceType? sourceType;
 
-  /// The ID of the media player. You can get the Device ID by calling getMediaPlayerId.
+  /// Media player ID. You can get it through getMediaPlayerId.
   @JsonKey(name: 'mediaPlayerId')
   final int? mediaPlayerId;
 
-  /// (Optional) Display area of the video frame, see Rectangle. width and height represent the video pixel width and height of the area. The default value is null (width or height is 0), which means that the actual resolution of the video frame is displayed.
+  /// (Optional) Display area of the video frame. See Rectangle. width and height represent the pixel width and height of the video in this area. The default is null (width or height is 0), which means the actual resolution of the video frame is displayed.
   @JsonKey(name: 'cropArea')
   final Rectangle? cropArea;
 
-  /// (Optional) Whether to enable alpha mask rendering: true : Enable alpha mask rendering. false : (Default) Disable alpha mask rendering. Alpha mask rendering can create images with transparent effects and extract portraits from videos. When used in combination with other methods, you can implement effects such as portrait-in-picture and watermarking.
-  ///  The receiver can render alpha channel information only when the sender enables alpha transmission.
-  ///  To enable alpha transmission,.
+  /// The receiver can only render alpha channel information when the sender enables the alpha transmission feature.
+  ///  To enable alpha transmission, please [contact technical support](https://ticket.shengwang.cn/). (Optional) Whether to enable alpha mask rendering: true : Enable alpha mask rendering. false : (Default) Disable alpha mask rendering. Alpha mask rendering can create images with transparency effects and extract portraits from videos. When used with other methods, it can achieve effects such as portrait picture-in-picture or watermark overlays.
   @JsonKey(name: 'enableAlphaMask')
   final bool? enableAlphaMask;
 
-  /// The observation position of the video frame in the video link. See VideoModulePosition.
+  /// Position of the video frame in the video pipeline. See VideoModulePosition.
   @JsonKey(name: 'position')
   final VideoModulePosition? position;
 
@@ -5387,7 +5399,7 @@ class VideoCanvas implements AgoraSerializable {
   Map<String, dynamic> toJson() => _$VideoCanvasToJson(this);
 }
 
-/// Image enhancement options.
+/// Beauty effect options.
 @JsonSerializable(explicitToJson: true, includeIfNull: false)
 class BeautyOptions implements AgoraSerializable {
   /// @nodoc
@@ -5398,23 +5410,23 @@ class BeautyOptions implements AgoraSerializable {
       this.rednessLevel,
       this.sharpnessLevel});
 
-  /// The contrast level, used with the lighteningLevel parameter. The larger the value, the greater the contrast between light and dark. See LighteningContrastLevel.
+  /// Contrast level, usually used together with lighteningLevel. The higher the value, the greater the contrast. See LighteningContrastLevel.
   @JsonKey(name: 'lighteningContrastLevel')
   final LighteningContrastLevel? lighteningContrastLevel;
 
-  /// The brightening level, in the range [0.0,1.0], where 0.0 means the original brightening. The default value is 0.0. The higher the value, the greater the degree of brightening.
+  /// Whitening level, range is [0.0, 1.0], where 0.0 means original brightness. Default is 0.0. The higher the value, the higher the whitening level.
   @JsonKey(name: 'lighteningLevel')
   final double? lighteningLevel;
 
-  /// The smoothness level, in the range [0.0,1.0], where 0.0 means the original smoothness. The default value is 0.0. The greater the value, the greater the smoothness level.
+  /// Smoothing level, range is [0.0, 1.0], where 0.0 means original smoothness. Default is 0.0. The higher the value, the more smoothing is applied.
   @JsonKey(name: 'smoothnessLevel')
   final double? smoothnessLevel;
 
-  /// The redness level, in the range [0.0,1.0], where 0.0 means the original redness. The default value is 0.0. The larger the value, the greater the redness level.
+  /// Redness level, range is [0.0, 1.0], where 0.0 means original redness. Default is 0.0. The higher the value, the more redness is applied.
   @JsonKey(name: 'rednessLevel')
   final double? rednessLevel;
 
-  /// The sharpness level, in the range [0.0,1.0], where 0.0 means the original sharpness. The default value is 0.0. The larger the value, the greater the sharpness level.
+  /// Sharpness level, range is [0.0, 1.0], where 0.0 means original sharpness. Default is 0.0. The higher the value, the more sharpening is applied.
   @JsonKey(name: 'sharpnessLevel')
   final double? sharpnessLevel;
 
@@ -5426,18 +5438,18 @@ class BeautyOptions implements AgoraSerializable {
   Map<String, dynamic> toJson() => _$BeautyOptionsToJson(this);
 }
 
-/// The contrast level.
+/// Brightness contrast level.
 @JsonEnum(alwaysCreate: true)
 enum LighteningContrastLevel {
-  /// 0: Low contrast level.
+  /// 0: Low contrast.
   @JsonValue(0)
   lighteningContrastLow,
 
-  /// 1: (Default) Normal contrast level.
+  /// 1: Normal contrast.
   @JsonValue(1)
   lighteningContrastNormal,
 
-  /// 2: High contrast level.
+  /// 2: High contrast.
   @JsonValue(2)
   lighteningContrastHigh,
 }
@@ -5455,17 +5467,17 @@ extension LighteningContrastLevelExt on LighteningContrastLevel {
   }
 }
 
-/// @nodoc
+/// Filter effect options.
 @JsonSerializable(explicitToJson: true, includeIfNull: false)
 class FaceShapeAreaOptions implements AgoraSerializable {
   /// @nodoc
   const FaceShapeAreaOptions({this.shapeArea, this.shapeIntensity});
 
-  /// @nodoc
+  /// Facial area. See FaceShapeArea.
   @JsonKey(name: 'shapeArea')
   final FaceShapeArea? shapeArea;
 
-  /// @nodoc
+  /// Modification intensity. The definition of modification intensity (including direction, range, default value, etc.) varies by area. See FaceShapeArea.
   @JsonKey(name: 'shapeIntensity')
   final int? shapeIntensity;
 
@@ -5477,126 +5489,128 @@ class FaceShapeAreaOptions implements AgoraSerializable {
   Map<String, dynamic> toJson() => _$FaceShapeAreaOptionsToJson(this);
 }
 
-/// @nodoc
+/// Selects the specific facial area to adjust.
+///
+/// Since Available since v4.4.0.
 @JsonEnum(alwaysCreate: true)
 enum FaceShapeArea {
-  /// @nodoc
+  /// (-1): Default value, indicates an invalid area. The face shaping effect is not applied.
   @JsonValue(-1)
   faceShapeAreaNone,
 
-  /// @nodoc
+  /// (100): Head area, used to achieve a smaller head effect. Value range is [0, 100], default is 50. The larger the value, the more noticeable the adjustment.
   @JsonValue(100)
   faceShapeAreaHeadscale,
 
-  /// @nodoc
+  /// (101): Forehead area, used to adjust the hairline height. Value range is [0, 100], default is 0. The larger the value, the more noticeable the adjustment.
   @JsonValue(101)
   faceShapeAreaForehead,
 
-  /// @nodoc
+  /// (102): Face contour area, used to achieve a slimmer face effect. Value range is [0, 100], default is 0. The larger the value, the more noticeable the adjustment.
   @JsonValue(102)
   faceShapeAreaFacecontour,
 
-  /// @nodoc
+  /// (103): Face length area, used to elongate the face. Value range is [-100, 100], default is 0. The greater the absolute value, the more noticeable the adjustment; negative values indicate the opposite direction.
   @JsonValue(103)
   faceShapeAreaFacelength,
 
-  /// @nodoc
+  /// (104): Face width area, used to achieve a narrower face effect. Value range is [0, 100], default is 0. The larger the value, the more noticeable the adjustment.
   @JsonValue(104)
   faceShapeAreaFacewidth,
 
-  /// @nodoc
+  /// (105): Cheekbone area, used to adjust cheekbone width. Value range is [0, 100], default is 0. The larger the value, the more noticeable the adjustment.
   @JsonValue(105)
   faceShapeAreaCheekbone,
 
-  /// @nodoc
+  /// (106): Cheek area, used to adjust cheek width. Value range is [0, 100], default is 0. The larger the value, the more noticeable the adjustment.
   @JsonValue(106)
   faceShapeAreaCheek,
 
-  /// @nodoc
+  /// (107): Jawbone area, used to adjust jawbone width. Value range is [0, 100], default is 0. The larger the value, the more noticeable the adjustment.
   @JsonValue(107)
   faceShapeAreaMandible,
 
-  /// @nodoc
+  /// (108): Chin area, used to adjust chin length. Value range is [-100, 100], default is 0. The greater the absolute value, the more noticeable the adjustment; negative values indicate the opposite direction.
   @JsonValue(108)
   faceShapeAreaChin,
 
-  /// @nodoc
+  /// (200): Eye area, used to achieve a bigger eye effect. Value range is [0, 100], default is 50. The larger the value, the more noticeable the adjustment.
   @JsonValue(200)
   faceShapeAreaEyescale,
 
-  /// @nodoc
+  /// (201): Eye distance area, used to adjust the distance between the eyes. Value range is [-100, 100], default is 0. The greater the absolute value, the more noticeable the adjustment; negative values indicate the opposite direction.
   @JsonValue(201)
   faceShapeAreaEyedistance,
 
-  /// @nodoc
+  /// (202): Eye position area, used to adjust the overall position of the eyes. Value range is [-100, 100], default is 0. The greater the absolute value, the more noticeable the adjustment; negative values indicate the opposite direction.
   @JsonValue(202)
   faceShapeAreaEyeposition,
 
-  /// @nodoc
+  /// (203): Lower eyelid area, used to adjust the shape of the lower eyelid. Value range is [0, 100], default is 0. The larger the value, the more noticeable the adjustment.
   @JsonValue(203)
   faceShapeAreaLowereyelid,
 
-  /// @nodoc
+  /// (204): Pupil area, used to adjust pupil size. Value range is [0, 100], default is 0. The larger the value, the more noticeable the adjustment.
   @JsonValue(204)
   faceShapeAreaEyepupils,
 
-  /// @nodoc
+  /// (205): Inner eye corner area, used to adjust the shape of the inner eye corner. Value range is [-100, 100], default is 0. The greater the absolute value, the more noticeable the adjustment; negative values indicate the opposite direction.
   @JsonValue(205)
   faceShapeAreaEyeinnercorner,
 
-  /// @nodoc
+  /// (206): Outer eye corner area, used to adjust the shape of the outer eye corner. Value range is [-100, 100], default is 0. The greater the absolute value, the more noticeable the adjustment; negative values indicate the opposite direction.
   @JsonValue(206)
   faceShapeAreaEyeoutercorner,
 
-  /// @nodoc
+  /// (300): Nose length area, used to elongate the nose. Value range is [-100, 100], default is 0. The greater the absolute value, the more noticeable the adjustment; negative values indicate the opposite direction.
   @JsonValue(300)
   faceShapeAreaNoselength,
 
-  /// @nodoc
+  /// (301): Nose width area, used to achieve a slimmer nose effect. Value range is [0, 100], default is 0. The larger the value, the more noticeable the slimming effect.
   @JsonValue(301)
   faceShapeAreaNosewidth,
 
-  /// @nodoc
+  /// (302): Alar area, used to adjust the width of the alar. Value range is [0, 100], default is 10. The larger the value, the more noticeable the adjustment.
   @JsonValue(302)
   faceShapeAreaNosewing,
 
-  /// @nodoc
+  /// (303): Nasal root area, used to adjust the height of the nasal root. Value range is [0, 100], default is 0. The larger the value, the more noticeable the adjustment.
   @JsonValue(303)
   faceShapeAreaNoseroot,
 
-  /// @nodoc
+  /// (304): Nose bridge area, used to adjust the height of the nose bridge. Value range is [0, 100], default is 50. The larger the value, the more noticeable the adjustment.
   @JsonValue(304)
   faceShapeAreaNosebridge,
 
-  /// @nodoc
+  /// (305): Nose tip area, used to adjust the shape of the nose tip. Value range is [0, 100], default is 50. The larger the value, the more noticeable the adjustment.
   @JsonValue(305)
   faceShapeAreaNosetip,
 
-  /// @nodoc
+  /// (306): Overall nose area, used to adjust the overall nose shape. Value range is [-100, 100], default is 50. The greater the absolute value, the more noticeable the adjustment; negative values indicate the opposite direction.
   @JsonValue(306)
   faceShapeAreaNosegeneral,
 
-  /// @nodoc
+  /// (400): Mouth area, used to achieve a larger mouth effect. Value range is [-100, 100], default is 20. The greater the absolute value, the more noticeable the adjustment; negative values indicate the opposite direction.
   @JsonValue(400)
   faceShapeAreaMouthscale,
 
-  /// @nodoc
+  /// (401): Mouth position area, used to adjust the overall position of the mouth. Value range is [0, 100], default is 0. The larger the value, the more noticeable the adjustment.
   @JsonValue(401)
   faceShapeAreaMouthposition,
 
-  /// @nodoc
+  /// (402): Smile corner area, used to adjust the degree of mouth corner lift. Value range is [0, 1], default is 0. The larger the value, the more noticeable the adjustment.
   @JsonValue(402)
   faceShapeAreaMouthsmile,
 
-  /// @nodoc
+  /// (403): Lip shape area, used to adjust the shape of the lips. Value range is [0, 100], default is 0. The larger the value, the more noticeable the adjustment.
   @JsonValue(403)
   faceShapeAreaMouthlip,
 
-  /// @nodoc
+  /// (500): Eyebrow position area, used to adjust the overall position of the eyebrows. Value range is [-100, 100], default is 0. The greater the absolute value, the more noticeable the adjustment; negative values indicate the opposite direction.
   @JsonValue(500)
   faceShapeAreaEyebrowposition,
 
-  /// @nodoc
+  /// (501): Eyebrow thickness area, used to adjust eyebrow thickness. Value range is [-100, 100], default is 0. The larger the value, the more noticeable the adjustment.
   @JsonValue(501)
   faceShapeAreaEyebrowthickness,
 }
@@ -5614,17 +5628,17 @@ extension FaceShapeAreaExt on FaceShapeArea {
   }
 }
 
-/// @nodoc
+/// Face shaping style options.
 @JsonSerializable(explicitToJson: true, includeIfNull: false)
 class FaceShapeBeautyOptions implements AgoraSerializable {
   /// @nodoc
   const FaceShapeBeautyOptions({this.shapeStyle, this.styleIntensity});
 
-  /// @nodoc
+  /// Face shaping style. See FaceShapeBeautyStyle.
   @JsonKey(name: 'shapeStyle')
   final FaceShapeBeautyStyle? shapeStyle;
 
-  /// @nodoc
+  /// Face shaping style intensity. Value range is [0,100], with a default value of 0.0, indicating no face shaping effect. The higher the value, the more noticeable the modification.
   @JsonKey(name: 'styleIntensity')
   final int? styleIntensity;
 
@@ -5636,18 +5650,20 @@ class FaceShapeBeautyOptions implements AgoraSerializable {
   Map<String, dynamic> toJson() => _$FaceShapeBeautyOptionsToJson(this);
 }
 
-/// @nodoc
+/// Face shaping style makeup effect options.
+///
+/// Since Available since v4.4.0.
 @JsonEnum(alwaysCreate: true)
 enum FaceShapeBeautyStyle {
-  /// @nodoc
+  /// (0): (Default) Female style makeup effect.
   @JsonValue(0)
   faceShapeBeautyStyleFemale,
 
-  /// @nodoc
+  /// (1): Male style makeup effect.
   @JsonValue(1)
   faceShapeBeautyStyleMale,
 
-  /// @nodoc
+  /// (2): Natural style makeup effect, only minimal adjustments to facial features.
   @JsonValue(2)
   faceShapeBeautyStyleNatural,
 }
@@ -5671,18 +5687,17 @@ class FilterEffectOptions implements AgoraSerializable {
   /// @nodoc
   const FilterEffectOptions({this.path, this.strength});
 
-  /// The absolute path to the local cube map texture file, which can be used to customize the filter effect. The specified .cude file should strictly follow the Cube LUT Format Specification; otherwise, the filter options do not take effect. The following is a sample of the .cude file:
-  /// LUT_3D_SIZE 32
+  /// Local absolute path to the 3D cube map file used to implement custom filter effects. The referenced .cube file must strictly follow the Cube LUT (Lookup Table) specification, otherwise the filter effect will not take effect. Below is an example of a .cube file: LUT_3D_SIZE 32
   /// 0.0039215689 0 0.0039215682
   /// 0.0086021447 0.0037950677 0
   /// ...
   /// 0.0728652592 0.0039215689 0
-  ///  The identifier LUT_3D_SIZE on the first line of the cube map file represents the size of the three-dimensional lookup table. The LUT size for filter effect can only be set to 32.
-  ///  The SDK provides a built-in built_in_whiten_filter.cube file. You can pass the absolute path of this file to get the whitening filter effect.
+  ///  The first line of the cube map file contains the LUT_3D_SIZE identifier, indicating the size of the 3D lookup table. Currently, only a LUT size of 32 is supported.
+  ///  The SDK provides a built-in built_in_whiten_filter.cube file. Passing the absolute path of this file applies a whitening filter effect.
   @JsonKey(name: 'path')
   final String? path;
 
-  /// The intensity of the filter effect, with a range value of [0.0,1.0], in which 0.0 represents no filter effect. The default value is 0.5. The higher the value, the stronger the filter effect.
+  /// Filter effect intensity. Value range is [0.0,1.0], where 0.0 indicates no filter effect. Default value is 0.5. The higher the value, the stronger the filter effect.
   @JsonKey(name: 'strength')
   final double? strength;
 
@@ -5694,17 +5709,17 @@ class FilterEffectOptions implements AgoraSerializable {
   Map<String, dynamic> toJson() => _$FilterEffectOptionsToJson(this);
 }
 
-/// The low-light enhancement options.
+/// Low light enhancement options.
 @JsonSerializable(explicitToJson: true, includeIfNull: false)
 class LowlightEnhanceOptions implements AgoraSerializable {
   /// @nodoc
   const LowlightEnhanceOptions({this.mode, this.level});
 
-  /// The low-light enhancement mode. See LowLightEnhanceMode.
+  /// Low light enhancement mode. See LowLightEnhanceMode.
   @JsonKey(name: 'mode')
   final LowLightEnhanceMode? mode;
 
-  /// The low-light enhancement level. See LowLightEnhanceLevel.
+  /// Low light enhancement level. See LowLightEnhanceLevel.
   @JsonKey(name: 'level')
   final LowLightEnhanceLevel? level;
 
@@ -5716,14 +5731,14 @@ class LowlightEnhanceOptions implements AgoraSerializable {
   Map<String, dynamic> toJson() => _$LowlightEnhanceOptionsToJson(this);
 }
 
-/// The low-light enhancement mode.
+/// Low-light enhancement mode.
 @JsonEnum(alwaysCreate: true)
 enum LowLightEnhanceMode {
-  /// 0: (Default) Automatic mode. The SDK automatically enables or disables the low-light enhancement feature according to the ambient light to compensate for the lighting level or prevent overexposure, as necessary.
+  /// 0: (Default) Auto mode. The SDK automatically enables or disables the low-light enhancement feature based on ambient brightness to provide appropriate fill light and prevent overexposure.
   @JsonValue(0)
   lowLightEnhanceAuto,
 
-  /// 1: Manual mode. Users need to enable or disable the low-light enhancement feature manually.
+  /// 1: Manual mode. You need to manually enable or disable the low-light enhancement feature.
   @JsonValue(1)
   lowLightEnhanceManual,
 }
@@ -5741,14 +5756,14 @@ extension LowLightEnhanceModeExt on LowLightEnhanceMode {
   }
 }
 
-/// The low-light enhancement level.
+/// Low-light enhancement level.
 @JsonEnum(alwaysCreate: true)
 enum LowLightEnhanceLevel {
-  /// 0: (Default) Promotes video quality during low-light enhancement. It processes the brightness, details, and noise of the video image. The performance consumption is moderate, the processing speed is moderate, and the overall video quality is optimal.
+  /// 0: (Default) High-quality low-light enhancement. Processes video brightness, detail, and noise. Offers moderate performance consumption and processing speed, with optimal overall image quality.
   @JsonValue(0)
   lowLightEnhanceLevelHighQuality,
 
-  /// 1: Promotes performance during low-light enhancement. It processes the brightness and details of the video image. The processing speed is faster.
+  /// 1: Performance-prioritized low-light enhancement. Processes video brightness and detail. Consumes less performance and processes faster.
   @JsonValue(1)
   lowLightEnhanceLevelFast,
 }
@@ -5766,17 +5781,17 @@ extension LowLightEnhanceLevelExt on LowLightEnhanceLevel {
   }
 }
 
-/// Video noise reduction options.
+/// Video denoising options.
 @JsonSerializable(explicitToJson: true, includeIfNull: false)
 class VideoDenoiserOptions implements AgoraSerializable {
   /// @nodoc
   const VideoDenoiserOptions({this.mode, this.level});
 
-  /// Video noise reduction mode.
+  /// Video denoising mode.
   @JsonKey(name: 'mode')
   final VideoDenoiserMode? mode;
 
-  /// Video noise reduction level.
+  /// Video denoising level.
   @JsonKey(name: 'level')
   final VideoDenoiserLevel? level;
 
@@ -5788,14 +5803,14 @@ class VideoDenoiserOptions implements AgoraSerializable {
   Map<String, dynamic> toJson() => _$VideoDenoiserOptionsToJson(this);
 }
 
-/// Video noise reduction mode.
+/// Video denoising mode.
 @JsonEnum(alwaysCreate: true)
 enum VideoDenoiserMode {
-  /// 0: (Default) Automatic mode. The SDK automatically enables or disables the video noise reduction feature according to the ambient light.
+  /// 0: (Default) Auto mode. The SDK automatically enables or disables video denoising based on ambient light brightness.
   @JsonValue(0)
   videoDenoiserAuto,
 
-  /// 1: Manual mode. Users need to enable or disable the video noise reduction feature manually.
+  /// 1: Manual mode. You need to manually enable or disable video denoising.
   @JsonValue(1)
   videoDenoiserManual,
 }
@@ -5813,14 +5828,14 @@ extension VideoDenoiserModeExt on VideoDenoiserMode {
   }
 }
 
-/// Video noise reduction level.
+/// Video denoising level.
 @JsonEnum(alwaysCreate: true)
 enum VideoDenoiserLevel {
-  /// 0: (Default) Promotes video quality during video noise reduction. balances performance consumption and video noise reduction quality. The performance consumption is moderate, the video noise reduction speed is moderate, and the overall video quality is optimal.
+  /// 0: (Default) Video denoising prioritizing image quality. Balances performance consumption and denoising effect. Moderate performance consumption and denoising speed, optimal overall image quality.
   @JsonValue(0)
   videoDenoiserLevelHighQuality,
 
-  /// 1: Promotes reducing performance consumption during video noise reduction. It prioritizes reducing performance consumption over video noise reduction quality. The performance consumption is lower, and the video noise reduction speed is faster. To avoid a noticeable shadowing effect (shadows trailing behind moving objects) in the processed video, Agora recommends that you use this setting when the camera is fixed.
+  /// 1: Video denoising prioritizing performance. Focuses on saving performance at the cost of denoising effect. Lower performance consumption and faster denoising speed. To avoid noticeable trailing effects in processed video, it is recommended to use this setting when the camera is stationary.
   @JsonValue(1)
   videoDenoiserLevelFast,
 }
@@ -5838,19 +5853,19 @@ extension VideoDenoiserLevelExt on VideoDenoiserLevel {
   }
 }
 
-/// The color enhancement options.
+/// Color enhancement options.
 @JsonSerializable(explicitToJson: true, includeIfNull: false)
 class ColorEnhanceOptions implements AgoraSerializable {
   /// @nodoc
   const ColorEnhanceOptions({this.strengthLevel, this.skinProtectLevel});
 
-  /// The level of color enhancement. The value range is [0.0, 1.0]. 0.0 is the default value, which means no color enhancement is applied to the video. The higher the value, the higher the level of color enhancement. The default value is 0.5.
+  /// Color enhancement level. Value range is [0.0, 1.0]. 0.0 means no color enhancement is applied to the video. The higher the value, the stronger the color enhancement. Default is 0.5.
   @JsonKey(name: 'strengthLevel')
   final double? strengthLevel;
 
-  /// The level of skin tone protection. The value range is [0.0, 1.0]. 0.0 means no skin tone protection. The higher the value, the higher the level of skin tone protection. The default value is 1.0.
-  ///  When the level of color enhancement is higher, the portrait skin tone can be significantly distorted, so you need to set the level of skin tone protection.
-  ///  When the level of skin tone protection is higher, the color enhancement effect can be slightly reduced. Therefore, to get the best color enhancement effect, Agora recommends that you adjust strengthLevel and skinProtectLevel to get the most appropriate values.
+  /// Skin tone protection level. Value range is [0.0, 1.0]. 0.0 means no skin tone protection is applied. The higher the value, the stronger the protection. Default is 1.0.
+  ///  When the color enhancement level is high, facial skin tones may appear distorted. You need to set the skin tone protection level.
+  ///  A higher skin tone protection level slightly reduces the color enhancement effect. Therefore, to achieve the best color enhancement effect, it is recommended that you dynamically adjust strengthLevel and skinProtectLevel to achieve the optimal result.
   @JsonKey(name: 'skinProtectLevel')
   final double? skinProtectLevel;
 
@@ -5862,26 +5877,28 @@ class ColorEnhanceOptions implements AgoraSerializable {
   Map<String, dynamic> toJson() => _$ColorEnhanceOptionsToJson(this);
 }
 
-/// The custom background.
+/// Custom background.
 @JsonSerializable(explicitToJson: true, includeIfNull: false)
 class VirtualBackgroundSource implements AgoraSerializable {
   /// @nodoc
   const VirtualBackgroundSource(
       {this.backgroundSourceType, this.color, this.source, this.blurDegree});
 
-  /// The custom background. See backgroundSourceType.
+  /// Custom background. See backgroundSourceType.
   @JsonKey(name: 'background_source_type')
   final BackgroundSourceType? backgroundSourceType;
 
-  /// The type of the custom background image. The color of the custom background image. The format is a hexadecimal integer defined by RGB, without the # sign, such as 0xFFB6C1 for light pink. The default value is 0xFFFFFF, which signifies white. The value range is [0x000000, 0xffffff]. If the value is invalid, the SDK replaces the original background image with a white background image. This parameter is only applicable to custom backgrounds of the following types: backgroundColor : The background image is a solid-colored image of the color passed in by the parameter. backgroundImg : If the image in source has a transparent background, the transparent background will be filled with the color passed in by the parameter.
+  /// Color of the custom background image. The format is a hexadecimal integer defined in RGB, without the # symbol. For example, 0xFFB6C1 represents light pink. The default value is 0xFFFFFF, which represents white. The valid range is [0x000000, 0xffffff]. If the value is invalid, the SDK will replace the original background image with a white background. This parameter takes effect only when the custom background is one of the following types:
+  ///  backgroundColor: The background image is a solid color image of the color passed in this parameter.
+  ///  backgroundImg: If the image in source has a transparent background, the color passed in this parameter will be used to fill the transparent background.
   @JsonKey(name: 'color')
   final int? color;
 
-  /// The local absolute path of the custom background image. Supports PNG, JPG, MP4, AVI, MKV, and FLV formats. If the path is invalid, the SDK will use either the original background image or the solid color image specified by color. This parameter takes effect only when the type of the custom background image is backgroundImg or backgroundVideo.
+  /// The absolute local path of the custom background. Supports PNG, JPG, MP4, AVI, MKV, and FLV formats. If the path is invalid, the SDK will use the original background image or a solid color background specified by color. This parameter takes effect only when the custom background type is backgroundImg or backgroundVideo.
   @JsonKey(name: 'source')
   final String? source;
 
-  /// The degree of blurring applied to the custom background image. This parameter takes effect only when the type of the custom background image is backgroundBlur.
+  /// The blur level of the custom background image. This parameter takes effect only when the custom background type is backgroundBlur.
   @JsonKey(name: 'blur_degree')
   final BackgroundBlurDegree? blurDegree;
 
@@ -5893,26 +5910,26 @@ class VirtualBackgroundSource implements AgoraSerializable {
   Map<String, dynamic> toJson() => _$VirtualBackgroundSourceToJson(this);
 }
 
-/// The custom background.
+/// Custom background.
 @JsonEnum(alwaysCreate: true)
 enum BackgroundSourceType {
-  /// 0: Process the background as alpha data without replacement, only separating the portrait and the background. After setting this value, you can call startLocalVideoTranscoder to implement the picture-in-picture effect.
+  /// 0: Process the background as alpha data without replacement, only segmenting the portrait from the background. After setting this, you can call startLocalVideoTranscoder to achieve a picture-in-picture effect of the portrait.
   @JsonValue(0)
   backgroundNone,
 
-  /// 1: (Default) The background image is a solid color.
+  /// 1: (Default) Background is a solid color.
   @JsonValue(1)
   backgroundColor,
 
-  /// 2: The background is an image in PNG or JPG format.
+  /// 2: Background is an image in PNG or JPG format.
   @JsonValue(2)
   backgroundImg,
 
-  /// 3: The background is a blurred version of the original background.
+  /// 3: Background is a blurred version of the original.
   @JsonValue(3)
   backgroundBlur,
 
-  /// 4: The background is a local video in MP4, AVI, MKV, FLV, or other supported formats.
+  /// 4: Background is a local video in formats such as MP4, AVI, MKV, FLV, etc.
   @JsonValue(4)
   backgroundVideo,
 }
@@ -5930,18 +5947,18 @@ extension BackgroundSourceTypeExt on BackgroundSourceType {
   }
 }
 
-/// The degree of blurring applied to the custom background image.
+/// Degree of background blur for custom background images.
 @JsonEnum(alwaysCreate: true)
 enum BackgroundBlurDegree {
-  /// 1: The degree of blurring applied to the custom background image is low. The user can almost see the background clearly.
+  /// 1: Low degree of background blur. Users can almost clearly see the background.
   @JsonValue(1)
   blurDegreeLow,
 
-  /// 2: The degree of blurring applied to the custom background image is medium. It is difficult for the user to recognize details in the background.
+  /// 2: Medium degree of background blur. Users have some difficulty seeing the background clearly.
   @JsonValue(2)
   blurDegreeMedium,
 
-  /// 3: (Default) The degree of blurring applied to the custom background image is high. The user can barely see any distinguishing features in the background.
+  /// 3: (Default) High degree of background blur. Users can barely see the background.
   @JsonValue(3)
   blurDegreeHigh,
 }
@@ -5966,15 +5983,15 @@ class SegmentationProperty implements AgoraSerializable {
   const SegmentationProperty(
       {this.modelType, this.greenCapacity, this.screenColorType});
 
-  /// The type of algorithms to user for background processing. See SegModelType.
+  /// Algorithm used for background processing. See SegModelType.
   @JsonKey(name: 'modelType')
   final SegModelType? modelType;
 
-  /// The accuracy range for recognizing background colors in the image. The value range is [0,1], and the default value is 0.5. The larger the value, the wider the range of identifiable shades of pure color. When the value of this parameter is too large, the edge of the portrait and the pure color in the portrait range are also detected. Agora recommends that you dynamically adjust the value of this parameter according to the actual effect. This parameter only takes effect when modelType is set to segModelGreen.
+  /// Precision range for recognizing background color in the image. Value range is [0,1], default is 0.5. A larger value means a wider range of solid colors can be recognized. If the value is too large, solid colors within the portrait area or along its edges may also be recognized. You are advised to adjust this parameter dynamically based on the actual effect. This parameter takes effect only when modelType is set to segModelGreen.
   @JsonKey(name: 'greenCapacity')
   final double? greenCapacity;
 
-  /// @nodoc
+  /// Type of screen color. See ScreenColorType.
   @JsonKey(name: 'screenColorType')
   final ScreenColorType? screenColorType;
 
@@ -5986,14 +6003,14 @@ class SegmentationProperty implements AgoraSerializable {
   Map<String, dynamic> toJson() => _$SegmentationPropertyToJson(this);
 }
 
-/// The type of algorithms to user for background processing.
+/// Algorithm for background processing.
 @JsonEnum(alwaysCreate: true)
 enum SegModelType {
-  /// 1: (Default) Use the algorithm suitable for all scenarios.
+  /// 1: (Default) Background processing algorithm suitable for all scenarios.
   @JsonValue(1)
   segModelAi,
 
-  /// 2: Use the algorithm designed specifically for scenarios with a green screen background.
+  /// 2: (Green screen only) Background processing algorithm suitable only for green screen backgrounds.
   @JsonValue(2)
   segModelGreen,
 }
@@ -6011,18 +6028,18 @@ extension SegModelTypeExt on SegModelType {
   }
 }
 
-/// @nodoc
+/// Screen color types.
 @JsonEnum(alwaysCreate: true)
 enum ScreenColorType {
-  /// @nodoc
+  /// (0): Automatically select screen color.
   @JsonValue(0)
   screenColorAuto,
 
-  /// @nodoc
+  /// (1): Green screen color.
   @JsonValue(1)
   screenColorGreen,
 
-  /// @nodoc
+  /// (2): Blue screen color.
   @JsonValue(2)
   screenColorBlue,
 }
@@ -6040,18 +6057,18 @@ extension ScreenColorTypeExt on ScreenColorType {
   }
 }
 
-/// The type of the audio track.
+/// Types of custom audio capture tracks.
 @JsonEnum(alwaysCreate: true)
 enum AudioTrackType {
   /// @nodoc
   @JsonValue(-1)
   audioTrackInvalid,
 
-  /// 0: Mixable audio tracks. This type of audio track supports mixing with other audio streams (such as audio streams captured by microphone) and playing locally or publishing to channels after mixing. The latency of mixable audio tracks is higher than that of direct audio tracks.
+  /// 0: Mixable audio track. Supports mixing with other audio streams (e.g., microphone-captured audio) before local playback or publishing to the channel. Has higher latency compared to non-mixable tracks.
   @JsonValue(0)
   audioTrackMixable,
 
-  /// 1: Direct audio tracks. This type of audio track will replace the audio streams captured by the microphone and does not support mixing with other audio streams. The latency of direct audio tracks is lower than that of mixable audio tracks. If audioTrackDirect is specified for this parameter, you must set publishMicrophoneTrack to false in ChannelMediaOptions when calling joinChannel to join the channel; otherwise, joining the channel fails and returns the error code -2.
+  /// 1: Non-mixable audio track. Replaces microphone capture and does not support mixing with other audio streams. Has lower latency compared to mixable tracks. If audioTrackDirect is specified, you must set publishMicrophoneTrack in ChannelMediaOptions to false when calling joinChannel, otherwise joining the channel fails and returns error code -2.
   @JsonValue(1)
   audioTrackDirect,
 }
@@ -6069,18 +6086,18 @@ extension AudioTrackTypeExt on AudioTrackType {
   }
 }
 
-/// The configuration of custom audio tracks.
+/// Configuration options for custom audio tracks.
 @JsonSerializable(explicitToJson: true, includeIfNull: false)
 class AudioTrackConfig implements AgoraSerializable {
   /// @nodoc
   const AudioTrackConfig(
       {this.enableLocalPlayback, this.enableAudioProcessing});
 
-  /// Whether to enable the local audio-playback device: true : (Default) Enable the local audio-playback device. false : Do not enable the local audio-playback device.
+  /// Whether to enable local audio playback: true : (Default) Enable local audio playback. false : Disable local audio playback.
   @JsonKey(name: 'enableLocalPlayback')
   final bool? enableLocalPlayback;
 
-  /// Whether to enable audio processing module: true : Enable the audio processing module to apply the Automatic Echo Cancellation (AEC), Automatic Noise Suppression (ANS), and Automatic Gain Control (AGC) effects. false : (Default) Do not enable the audio processing module. This parameter only takes effect on audioTrackDirect in custom audio capturing.
+  /// This setting only takes effect for custom audio capture tracks of type audioTrackDirect. Whether to enable the audio processing module: true : Enable the audio processing module, including echo cancellation (AEC), noise suppression (ANS), and automatic gain control (AGC). false : (Default) Do not enable the audio processing module.
   @JsonKey(name: 'enableAudioProcessing')
   final bool? enableAudioProcessing;
 
@@ -6092,40 +6109,40 @@ class AudioTrackConfig implements AgoraSerializable {
   Map<String, dynamic> toJson() => _$AudioTrackConfigToJson(this);
 }
 
-/// The options for SDK preset voice beautifier effects.
+/// Preset voice beautifier options.
 @JsonEnum(alwaysCreate: true)
 enum VoiceBeautifierPreset {
-  /// Turn off voice beautifier effects and use the original voice.
+  /// Original voice, i.e., disables voice beautifier effect.
   @JsonValue(0x00000000)
   voiceBeautifierOff,
 
-  /// A more magnetic voice. Agora recommends using this enumerator to process a male-sounding voice; otherwise, you may experience vocal distortion.
+  /// Magnetic (male). This setting is only effective for male voices. Do not use it for female voices, or the audio will be distorted.
   @JsonValue(0x01010100)
   chatBeautifierMagnetic,
 
-  /// A fresher voice. Agora recommends using this enumerator to process a female-sounding voice; otherwise, you may experience vocal distortion.
+  /// Fresh (female). This setting is only effective for female voices. Do not use it for male voices, or the audio will be distorted.
   @JsonValue(0x01010200)
   chatBeautifierFresh,
 
-  /// A more vital voice. Agora recommends using this enumerator to process a female-sounding voice; otherwise, you may experience vocal distortion.
+  /// Vibrant (female). This setting is only effective for female voices. Do not use it for male voices, or the audio will be distorted.
   @JsonValue(0x01010300)
   chatBeautifierVitality,
 
-  /// Singing beautifier effect.
-  ///  If you call setVoiceBeautifierPreset (singingBeautifier), you can beautify a male-sounding voice and add a reverberation effect that sounds like singing in a small room. Agora recommends using this enumerator to process a male-sounding voice; otherwise, you might experience vocal distortion.
-  ///  If you call setVoiceBeautifierParameters (singingBeautifier, param1, param2), you can beautify a male or female-sounding voice and add a reverberation effect.
+  /// Singing beautifier.
+  ///  If you call setVoiceBeautifierPreset (singingBeautifier), you can beautify male voices and add a small-room reverb effect. Do not use it for female voices, or the audio will be distorted.
+  ///  If you call setVoiceBeautifierParameters (singingBeautifier, param1, param2), you can beautify male or female voices and add reverb effects.
   @JsonValue(0x01020100)
   singingBeautifier,
 
-  /// A more vigorous voice.
+  /// Vigorous.
   @JsonValue(0x01030100)
   timbreTransformationVigorous,
 
-  /// A deep voice.
+  /// Deep.
   @JsonValue(0x01030200)
   timbreTransformationDeep,
 
-  /// A mellower voice.
+  /// Mellow.
   @JsonValue(0x01030300)
   timbreTransformationMellow,
 
@@ -6133,25 +6150,25 @@ enum VoiceBeautifierPreset {
   @JsonValue(0x01030400)
   timbreTransformationFalsetto,
 
-  /// A fuller voice.
+  /// Full.
   @JsonValue(0x01030500)
   timbreTransformationFull,
 
-  /// A clearer voice.
+  /// Clear.
   @JsonValue(0x01030600)
   timbreTransformationClear,
 
-  /// A more resounding voice.
+  /// Resounding.
   @JsonValue(0x01030700)
   timbreTransformationResounding,
 
-  /// A more ringing voice.
+  /// Ringing.
   @JsonValue(0x01030800)
   timbreTransformationRinging,
 
-  /// A ultra-high quality voice, which makes the audio clearer and restores more details.
-  ///  To achieve better audio effect quality, Agora recommends that you set the profile of to audioProfileMusicHighQuality (4) or audioProfileMusicHighQualityStereo (5) and scenario to audioScenarioGameStreaming (3) before calling setVoiceBeautifierPreset.
-  ///  If you have an audio capturing device that can already restore audio details to a high degree, Agora recommends that you do not enable ultra-high quality; otherwise, the SDK may over-restore audio details, and you may not hear the anticipated voice effect.
+  /// Ultra-high audio quality, which makes audio clearer and more detailed.
+  ///  For better results, it is recommended to set the profile parameter of setAudioProfile2 to audioProfileMusicHighQuality (4) or audioProfileMusicHighQualityStereo (5), and the scenario parameter to audioScenarioGameStreaming (3), before calling setVoiceBeautifierPreset.
+  ///  If the user's audio capture device can highly reproduce audio details, it is recommended not to enable ultra-high audio quality, as the SDK may over-enhance the details and fail to achieve the desired effect.
   @JsonValue(0x01040100)
   ultraHighQualityVoice,
 }
@@ -6169,92 +6186,96 @@ extension VoiceBeautifierPresetExt on VoiceBeautifierPreset {
   }
 }
 
-/// Preset audio effects.
+/// Preset audio effect options.
 ///
-/// To get better audio effects, Agora recommends calling setAudioProfile and setting the profile parameter as recommended below before using the preset audio effects.
+/// setAudioProfile profile
+/// Preset audio effects profile
+///  roomAcousticsVirtualStereo
+///  roomAcoustics3dVoice
+///  roomAcousticsVirtualSurroundSound audioProfileMusicHighQualityStereo or audioProfileMusicStandardStereo Other preset audio effects (excluding audioEffectOff) audioProfileMusicHighQuality or audioProfileMusicHighQualityStereo
 @JsonEnum(alwaysCreate: true)
 enum AudioEffectPreset {
-  /// Turn off voice effects, that is, use the original voice.
+  /// Original sound, i.e., disables voice effects.
   @JsonValue(0x00000000)
   audioEffectOff,
 
-  /// The voice effect typical of a KTV venue.
+  /// KTV.
   @JsonValue(0x02010100)
   roomAcousticsKtv,
 
-  /// The voice effect typical of a concert hall.
+  /// Concert.
   @JsonValue(0x02010200)
   roomAcousticsVocalConcert,
 
-  /// The voice effect typical of a recording studio.
+  /// Studio.
   @JsonValue(0x02010300)
   roomAcousticsStudio,
 
-  /// The voice effect typical of a vintage phonograph.
+  /// Phonograph.
   @JsonValue(0x02010400)
   roomAcousticsPhonograph,
 
-  /// The virtual stereo effect, which renders monophonic audio as stereo audio.
+  /// Virtual stereo, where the SDK renders mono audio into stereo sound.
   @JsonValue(0x02010500)
   roomAcousticsVirtualStereo,
 
-  /// A more spatial voice effect.
+  /// Spacious.
   @JsonValue(0x02010600)
   roomAcousticsSpacial,
 
-  /// A more ethereal voice effect.
+  /// Ethereal.
   @JsonValue(0x02010700)
   roomAcousticsEthereal,
 
-  /// A 3D voice effect that makes the voice appear to be moving around the user. The default cycle period is 10 seconds. After setting this effect, you can call setAudioEffectParameters to modify the movement period. If the 3D voice effect is enabled, users need to use stereo audio playback devices to hear the anticipated voice effect.
+  /// 3D voice, where the SDK renders audio to surround the user. The surround cycle defaults to 10 seconds. After setting this effect, you can also call setAudioEffectParameters to modify the surround cycle. To experience the expected effect of 3D voice, users need to use audio playback devices that support stereo.
   @JsonValue(0x02010800)
   roomAcoustics3dVoice,
 
-  /// Virtual surround sound, that is, the SDK generates a simulated surround sound field on the basis of stereo channels, thereby creating a surround sound effect. If the virtual surround sound is enabled, users need to use stereo audio playback devices to hear the anticipated audio effect.
+  /// Virtual surround sound, where the SDK simulates surround sound based on stereo channels to create an immersive effect. To experience the expected effect of virtual surround sound, users need to use audio playback devices that support stereo.
   @JsonValue(0x02010900)
   roomAcousticsVirtualSurroundSound,
 
-  /// The audio effect of chorus. Agora recommends using this effect in chorus scenarios to enhance the sense of depth and dimension in the vocals.
+  /// Chorus. Agora recommends using this in chorus scenarios to make vocals sound more spatial and three-dimensional.
   @JsonValue(0x02010D00)
   roomAcousticsChorus,
 
-  /// A middle-aged man's voice. Agora recommends using this preset to process a male-sounding voice; otherwise, you may not hear the anticipated voice effect.
+  /// Deep male voice. Recommended for processing male voices; otherwise, the effect may not be as expected.
   @JsonValue(0x02020100)
   voiceChangerEffectUncle,
 
-  /// An older man's voice. Agora recommends using this preset to process a male-sounding voice; otherwise, you may not hear the anticipated voice effect.
+  /// Elderly male. Recommended for processing male voices; otherwise, the effect may not be as expected.
   @JsonValue(0x02020200)
   voiceChangerEffectOldman,
 
-  /// A boy's voice. Agora recommends using this preset to process a male-sounding voice; otherwise, you may not hear the anticipated voice effect.
+  /// Boy. Recommended for processing male voices; otherwise, the effect may not be as expected.
   @JsonValue(0x02020300)
   voiceChangerEffectBoy,
 
-  /// A young woman's voice. Agora recommends using this preset to process a female-sounding voice; otherwise, you may not hear the anticipated voice effect.
+  /// Young woman. Recommended for processing female voices; otherwise, the effect may not be as expected.
   @JsonValue(0x02020400)
   voiceChangerEffectSister,
 
-  /// A girl's voice. Agora recommends using this preset to process a female-sounding voice; otherwise, you may not hear the anticipated voice effect.
+  /// Girl. Recommended for processing female voices; otherwise, the effect may not be as expected.
   @JsonValue(0x02020500)
   voiceChangerEffectGirl,
 
-  /// The voice of Pig King, a character in Journey to the West who has a voice like a growling bear.
+  /// Pigsy.
   @JsonValue(0x02020600)
   voiceChangerEffectPigking,
 
-  /// The Hulk's voice.
+  /// Hulk.
   @JsonValue(0x02020700)
   voiceChangerEffectHulk,
 
-  /// The voice effect typical of R&B music.
+  /// R&B.
   @JsonValue(0x02030100)
   styleTransformationRnb,
 
-  /// The voice effect typical of popular music.
+  /// Pop.
   @JsonValue(0x02030200)
   styleTransformationPopular,
 
-  /// A pitch correction effect that corrects the user's pitch based on the pitch of the natural C major scale. After setting this voice effect, you can call setAudioEffectParameters to adjust the basic mode of tuning and the pitch of the main tone.
+  /// Electronic voice, where the SDK corrects the pitch based on the natural major scale with C as the tonic. After setting this effect, you can also call setAudioEffectParameters to adjust the base scale and tonic pitch.
   @JsonValue(0x02040100)
   pitchCorrection,
 }
@@ -6272,26 +6293,26 @@ extension AudioEffectPresetExt on AudioEffectPreset {
   }
 }
 
-/// The options for SDK preset voice conversion effects.
+/// Preset voice conversion options.
 @JsonEnum(alwaysCreate: true)
 enum VoiceConversionPreset {
-  /// Turn off voice conversion effects and use the original voice.
+  /// Original voice, i.e., disables voice conversion effect.
   @JsonValue(0x00000000)
   voiceConversionOff,
 
-  /// A gender-neutral voice. To avoid audio distortion, ensure that you use this enumerator to process a female-sounding voice.
+  /// Neutral. To avoid audio distortion, make sure to apply this effect only to female voices.
   @JsonValue(0x03010100)
   voiceChangerNeutral,
 
-  /// A sweet voice. To avoid audio distortion, ensure that you use this enumerator to process a female-sounding voice.
+  /// Sweet. To avoid audio distortion, make sure to apply this effect only to female voices.
   @JsonValue(0x03010200)
   voiceChangerSweet,
 
-  /// A steady voice. To avoid audio distortion, ensure that you use this enumerator to process a male-sounding voice.
+  /// Steady. To avoid audio distortion, make sure to apply this effect only to male voices.
   @JsonValue(0x03010300)
   voiceChangerSolid,
 
-  /// A deep voice. To avoid audio distortion, ensure that you use this enumerator to process a male-sounding voice.
+  /// Deep. To avoid audio distortion, make sure to apply this effect only to male voices.
   @JsonValue(0x03010400)
   voiceChangerBass,
 
@@ -6356,15 +6377,15 @@ extension VoiceConversionPresetExt on VoiceConversionPreset {
 /// Preset headphone equalizer types.
 @JsonEnum(alwaysCreate: true)
 enum HeadphoneEqualizerPreset {
-  /// The headphone equalizer is disabled, and the original audio is heard.
+  /// Turn off headphone equalizer and listen to original audio.
   @JsonValue(0x00000000)
   headphoneEqualizerOff,
 
-  /// An equalizer is used for headphones.
+  /// Use over-ear headphone equalizer.
   @JsonValue(0x04000001)
   headphoneEqualizerOverear,
 
-  /// An equalizer is used for in-ear headphones.
+  /// Use in-ear headphone equalizer.
   @JsonValue(0x04000002)
   headphoneEqualizerInear,
 }
@@ -6382,7 +6403,7 @@ extension HeadphoneEqualizerPresetExt on HeadphoneEqualizerPreset {
   }
 }
 
-/// Voice AI tuner sound types.
+/// AI tuner voice effect types.
 @JsonEnum(alwaysCreate: true)
 enum VoiceAiTunerType {
   /// 0: Mature male voice. A deep and magnetic male voice.
@@ -6397,31 +6418,31 @@ enum VoiceAiTunerType {
   @JsonValue(2)
   voiceAiTunerElegantFemale,
 
-  /// 3: Sweet female voice. A high-pitched and cute female voice.
+  /// 3: Sweet girl voice. A high-pitched and cute female voice.
   @JsonValue(3)
   voiceAiTunerSweetFemale,
 
-  /// 4: Warm male singing. A warm and melodious male voice.
+  /// 4: Warm male singing voice. A warm and melodious male voice.
   @JsonValue(4)
   voiceAiTunerWarmMaleSinging,
 
-  /// 5: Gentle female singing. A soft and delicate female voice.
+  /// 5: Gentle female singing voice. A soft and delicate female voice.
   @JsonValue(5)
   voiceAiTunerGentleFemaleSinging,
 
-  /// 6: Husky male singing. A unique husky male voice.
+  /// 6: Husky male singing voice. A unique hoarse male voice.
   @JsonValue(6)
   voiceAiTunerHuskyMaleSinging,
 
-  /// 7: Warm elegant female singing. A warm and mature female voice.
+  /// 7: Warm elegant female singing voice. A warm and mature female voice.
   @JsonValue(7)
   voiceAiTunerWarmElegantFemaleSinging,
 
-  /// 8: Powerful male singing. A strong and powerful male voice.
+  /// 8: Powerful male singing voice. A strong and forceful male voice.
   @JsonValue(8)
   voiceAiTunerPowerfulMaleSinging,
 
-  /// 9: Dreamy female singing. A dreamy and soft female voice.
+  /// 9: Dreamy female singing voice. A dreamy and soft female voice.
   @JsonValue(9)
   voiceAiTunerDreamyFemaleSinging,
 }
@@ -6439,9 +6460,9 @@ extension VoiceAiTunerTypeExt on VoiceAiTunerType {
   }
 }
 
-/// The audio configuration for the shared screen stream.
+/// Audio configuration for screen sharing stream.
 ///
-/// Only available where captureAudio is true.
+/// (flutter only) Only applicable when captureAudio is set to true.
 @JsonSerializable(explicitToJson: true, includeIfNull: false)
 class ScreenAudioParameters implements AgoraSerializable {
   /// @nodoc
@@ -6451,15 +6472,15 @@ class ScreenAudioParameters implements AgoraSerializable {
       this.captureSignalVolume,
       this.excludeCurrentProcessAudio});
 
-  /// Audio sample rate (Hz). The default value is 16000.
+  /// Audio sampling rate (Hz). Default is 16000.
   @JsonKey(name: 'sampleRate')
   final int? sampleRate;
 
-  /// The number of audio channels. The default value is 2, which means stereo.
+  /// Number of audio channels. Default is 2, which means stereo.
   @JsonKey(name: 'channels')
   final int? channels;
 
-  /// The volume of the captured system audio. The value range is [0, 100]. The default value is 100.
+  /// Captured system volume. Value range is [0,100]. Default is 100.
   @JsonKey(name: 'captureSignalVolume')
   final int? captureSignalVolume;
 
@@ -6475,7 +6496,7 @@ class ScreenAudioParameters implements AgoraSerializable {
   Map<String, dynamic> toJson() => _$ScreenAudioParametersToJson(this);
 }
 
-/// Screen sharing configurations.
+/// Parameter configuration for screen sharing.
 @JsonSerializable(explicitToJson: true, includeIfNull: false)
 class ScreenCaptureParameters implements AgoraSerializable {
   /// @nodoc
@@ -6501,51 +6522,51 @@ class ScreenCaptureParameters implements AgoraSerializable {
   @JsonKey(name: 'audioParams')
   final ScreenAudioParameters? audioParams;
 
-  /// The video encoding resolution of the screen sharing stream. See VideoDimensions. The default value is 1920 × 1080, that is, 2,073,600 pixels. Agora uses the value of this parameter to calculate the charges. If the screen dimensions are different from the value of this parameter, Agora applies the following strategies for encoding. Suppose dimensions is set to 1920 × 1080:
-  ///  If the value of the screen dimensions is lower than that of dimensions, for example, 1000 × 1000 pixels, the SDK uses the screen dimensions, that is, 1000 × 1000 pixels, for encoding.
-  ///  If the value of the screen dimensions is higher than that of dimensions, for example, 2000 × 1500, the SDK uses the maximum value under dimensions with the aspect ratio of the screen dimension (4:3) for encoding, that is, 1440 × 1080. When setting the encoding resolution in the scenario of sharing documents (screenScenarioDocument), choose one of the following two methods:
-  ///  If you require the best image quality, it is recommended to set the encoding resolution to be the same as the capture resolution.
-  ///  If you wish to achieve a relative balance between image quality, bandwidth, and system performance, then:
-  ///  When the capture resolution is greater than 1920 × 1080, it is recommended that the encoding resolution is not less than 1920 × 1080.
-  ///  When the capture resolution is less than 1920 × 1080, it is recommended that the encoding resolution is not less than 1280 × 720.
+  /// When setting encoding resolution in a document sharing scenario (screenScenarioDocument), choose one of the following:
+  ///  For optimal image quality, set the encoding resolution the same as the capture resolution.
+  ///  For a balance between quality, bandwidth, and performance:
+  ///  If capture resolution is greater than 1920 × 1080, set encoding resolution no lower than 1920 × 1080.
+  ///  If capture resolution is less than 1920 × 1080, set encoding resolution no lower than 1280 × 720. Video encoding resolution of the screen sharing stream. See VideoDimensions. Default is 1920 × 1080, i.e., 2073600 pixels. This pixel count is used for billing. If the aspect ratio of the shared screen resolution differs from this setting, the SDK encodes according to the following strategy. Assuming dimensions is set to 1920 × 1080:
+  ///  If the screen resolution is smaller than dimensions, e.g., 1000 × 1000, the SDK encodes at 1000 × 1000.
+  ///  If the screen resolution is larger than dimensions, e.g., 2000 × 1500, the SDK encodes at the maximum resolution within dimensions that matches the screen's aspect ratio (4:3), i.e., 1440 × 1080.
   @JsonKey(name: 'dimensions')
   final VideoDimensions? dimensions;
 
-  /// The frame rate of the shared region. The frame rate (fps) of the shared region. The default value is 5. Agora does not recommend setting this to a value greater than 15.
+  /// Frame rate of the shared video, in fps. Default is 5. It is recommended not to exceed 15.
   @JsonKey(name: 'frameRate')
   final int? frameRate;
 
-  /// The bitrate of the shared region. The bitrate (Kbps) of the shared region. The default value is 0 (the SDK works out a bitrate according to the dimensions of the current screen).
+  /// Bitrate of the shared video, in Kbps. Default is 0, meaning the SDK calculates a reasonable value based on the current screen resolution.
   @JsonKey(name: 'bitrate')
   final int? bitrate;
 
-  /// Whether to capture the mouse in screen sharing: true : (Default) Capture the mouse. false : Do not capture the mouse. Due to macOS system restrictions, setting this parameter to false is ineffective during screen sharing (it has no impact when sharing a window).
+  /// Due to macOS system limitations, setting this parameter to false has no effect when sharing the screen (no impact when sharing a window). Whether to capture the mouse cursor during screen sharing: true : (Default) Capture mouse. false : Do not capture mouse.
   @JsonKey(name: 'captureMouseCursor')
   final bool? captureMouseCursor;
 
-  /// Whether to bring the window to the front when calling the startScreenCaptureByWindowId method to share it: true : Bring the window to the front. false : (Default) Do not bring the window to the front. Due to macOS system limitations, when setting this member to bring the window to the front, if the current app has multiple windows, only the main window will be brought to the front.
+  /// Due to macOS system limitations, when setting this member to bring a window to the front, only the main window is brought to the front if the app has multiple windows. When calling startScreenCaptureByWindowId to share a window, whether to bring the window to the front: true : Bring to front. false : (Default) Do not bring to front.
   @JsonKey(name: 'windowFocus')
   final bool? windowFocus;
 
-  /// The ID list of the windows to be blocked. When calling startScreenCaptureByDisplayId to start screen sharing, you can use this parameter to block a specified window. When calling updateScreenCaptureParameters to update screen sharing configurations, you can use this parameter to dynamically block a specified window.
+  /// List of window IDs to exclude. When calling startScreenCaptureByDisplayId to start screen sharing, you can use this parameter to exclude specific windows. You can also dynamically exclude windows by passing this parameter when calling updateScreenCaptureParameters to update screen sharing configuration.
   @JsonKey(name: 'excludeWindowList', readValue: readIntPtrList)
   final List<int>? excludeWindowList;
 
-  /// The number of windows to be excluded. On the Windows platform, the maximum value of this parameter is 24; if this value is exceeded, excluding the window fails.
+  /// Number of windows to exclude. On Windows, the maximum value is 24. If exceeded, window exclusion does not take effect.
   @JsonKey(name: 'excludeWindowCount')
   final int? excludeWindowCount;
 
-  /// (For macOS and Windows only) The width (px) of the border. The default value is 5, and the value range is (0, 50]. This parameter only takes effect when highLighted is set to true.
+  /// (macOS and Windows only) Width of the highlight border (px). Default is 5. Valid range is (0,50]. This parameter takes effect only when highLighted is set to true.
   @JsonKey(name: 'highLightWidth')
   final int? highLightWidth;
 
-  /// (For macOS and Windows only)
-  ///  On Windows platforms, the color of the border in ARGB format. The default value is 0xFF8CBF26.
+  /// (macOS and Windows only)
+  ///  On Windows, specifies the ARGB color of the highlight. Default is 0xFF8CBF26.
   ///  On macOS, COLOR_CLASS refers to NSColor.
   @JsonKey(name: 'highLightColor')
   final int? highLightColor;
 
-  /// (For macOS and Windows only) Whether to place a border around the shared window or screen: true : Place a border. false : (Default) Do not place a border. When you share a part of a window or screen, the SDK places a border around the entire window or screen if you set this parameter to true.
+  /// When sharing a partial region of a window or screen, if this parameter is set to true, the SDK highlights the entire window or screen. (macOS and Windows only) Whether to highlight the shared window or screen: true : Highlight. false : (Default) Do not highlight.
   @JsonKey(name: 'enableHighLight')
   final bool? enableHighLight;
 
@@ -6557,22 +6578,22 @@ class ScreenCaptureParameters implements AgoraSerializable {
   Map<String, dynamic> toJson() => _$ScreenCaptureParametersToJson(this);
 }
 
-/// Recording quality.
+/// Audio recording quality.
 @JsonEnum(alwaysCreate: true)
 enum AudioRecordingQualityType {
-  /// 0: Low quality. The sample rate is 32 kHz, and the file size is around 1.2 MB after 10 minutes of recording.
+  /// 0: Low quality. 32 kHz sample rate, file size for 10 minutes is about 1.2 MB.
   @JsonValue(0)
   audioRecordingQualityLow,
 
-  /// 1: Medium quality. The sample rate is 32 kHz, and the file size is around 2 MB after 10 minutes of recording.
+  /// 1: Medium quality. 32 kHz sample rate, file size for 10 minutes is about 2 MB.
   @JsonValue(1)
   audioRecordingQualityMedium,
 
-  /// 2: High quality. The sample rate is 32 kHz, and the file size is around 3.75 MB after 10 minutes of recording.
+  /// 2: High quality. 32 kHz sample rate, file size for 10 minutes is about 3.75 MB.
   @JsonValue(2)
   audioRecordingQualityHigh,
 
-  /// 3: Ultra high quality. The sample rate is 32 kHz, and the file size is around 7.5 MB after 10 minutes of recording.
+  /// 3: Ultra-high quality. 32 kHz sample rate, file size for 10 minutes is about 7.5 MB.
   @JsonValue(3)
   audioRecordingQualityUltraHigh,
 }
@@ -6593,15 +6614,15 @@ extension AudioRecordingQualityTypeExt on AudioRecordingQualityType {
 /// Recording content. Set in startAudioRecording.
 @JsonEnum(alwaysCreate: true)
 enum AudioFileRecordingType {
-  /// 1: Only records the audio of the local user.
+  /// 1: Record only the local user's audio.
   @JsonValue(1)
   audioFileRecordingMic,
 
-  /// 2: Only records the audio of all remote users.
+  /// 2: Record only the audio of all remote users.
   @JsonValue(2)
   audioFileRecordingPlayback,
 
-  /// 3: Records the mixed audio of the local and all remote users.
+  /// 3: Record the mixed audio of the local and all remote users.
   @JsonValue(3)
   audioFileRecordingMixed,
 }
@@ -6619,18 +6640,18 @@ extension AudioFileRecordingTypeExt on AudioFileRecordingType {
   }
 }
 
-/// Audio profile.
+/// Audio encoding content.
 @JsonEnum(alwaysCreate: true)
 enum AudioEncodedFrameObserverPosition {
-  /// 1: Only records the audio of the local user.
+  /// 1: Encode only the local user's audio.
   @JsonValue(1)
   audioEncodedFrameObserverPositionRecord,
 
-  /// 2: Only records the audio of all remote users.
+  /// 2: Encode only all remote users' audio.
   @JsonValue(2)
   audioEncodedFrameObserverPositionPlayback,
 
-  /// 3: Records the mixed audio of the local and all remote users.
+  /// 3: Encode the mixed audio of local and all remote users.
   @JsonValue(3)
   audioEncodedFrameObserverPositionMixed,
 }
@@ -6648,7 +6669,7 @@ extension AudioEncodedFrameObserverPositionExt
   }
 }
 
-/// Recording configurations.
+/// Recording configuration.
 @JsonSerializable(explicitToJson: true, includeIfNull: false)
 class AudioRecordingConfiguration implements AgoraSerializable {
   /// @nodoc
@@ -6660,35 +6681,35 @@ class AudioRecordingConfiguration implements AgoraSerializable {
       this.quality,
       this.recordingChannel});
 
-  /// The absolute path (including the filename extensions) of the recording file. For example: C:\music\audio.aac. Ensure that the directory for the log files exists and is writable.
+  /// The absolute path where the recording file is saved locally. Must include the file name and extension. For example: C:\music\audio.aac. Make sure the specified path exists and is writable.
   @JsonKey(name: 'filePath')
   final String? filePath;
 
-  /// Whether to encode the audio data: true : Encode audio data in AAC. false : (Default) Do not encode audio data, but save the recorded audio data directly.
+  /// Specifies whether to encode the audio data: true : Encode the audio data using AAC. false : (Default) Do not encode the audio data; save the raw recorded audio data directly.
   @JsonKey(name: 'encode')
   final bool? encode;
 
-  /// Recording sample rate (Hz).
+  /// If you set this parameter to 44100 or 48000, to ensure recording quality, it is recommended to record in WAV format or use AAC files with quality set to audioRecordingQualityMedium or audioRecordingQualityHigh. Recording sample rate (Hz).
   ///  16000
-  ///  (Default) 32000
+  ///  32000 (default)
   ///  44100
-  ///  48000 If you set this parameter to 44100 or 48000, Agora recommends recording WAV files, or AAC files with quality set as audioRecordingQualityMedium or audioRecordingQualityHigh for better recording quality.
+  ///  48000
   @JsonKey(name: 'sampleRate')
   final int? sampleRate;
 
-  /// The recording content. See AudioFileRecordingType.
+  /// Recording content. See AudioFileRecordingType.
   @JsonKey(name: 'fileRecordingType')
   final AudioFileRecordingType? fileRecordingType;
 
-  /// Recording quality. See audiorecordingqualitytype. This parameter applies to AAC files only.
+  /// Recording quality. See audiorecordingqualitytype. This parameter applies only to AAC files.
   @JsonKey(name: 'quality')
   final AudioRecordingQualityType? quality;
 
-  /// The audio channel of recording: The parameter supports the following values:
+  /// The actual recorded audio channel depends on the captured audio channel:
+  ///  If the captured audio is mono and recordingChannel is set to 2, the recorded audio will be stereo with duplicated mono data, not true stereo.
+  ///  If the captured audio is stereo and recordingChannel is set to 1, the recorded audio will be mono with mixed stereo data. In addition, the integration scheme may affect the final recorded audio channel. If you want to record true stereo, please [contact technical support](https://ticket.shengwang.cn/) for assistance. Number of audio channels to record. Supported values:
   ///  1: (Default) Mono.
-  ///  2: Stereo. The actual recorded audio channel is related to the audio channel that you capture.
-  ///  If the captured audio is mono and recordingChannel is 2, the recorded audio is the dual-channel data that is copied from mono data, not stereo.
-  ///  If the captured audio is dual channel and recordingChannel is 1, the recorded audio is the mono data that is mixed by dual-channel data. The integration scheme also affects the final recorded audio channel. If you need to record in stereo, contact.
+  ///  2: Stereo.
   @JsonKey(name: 'recordingChannel')
   final int? recordingChannel;
 
@@ -6700,13 +6721,13 @@ class AudioRecordingConfiguration implements AgoraSerializable {
   Map<String, dynamic> toJson() => _$AudioRecordingConfigurationToJson(this);
 }
 
-/// Observer settings for the encoded audio.
+/// Observer settings for encoded audio.
 @JsonSerializable(explicitToJson: true, includeIfNull: false)
 class AudioEncodedFrameObserverConfig implements AgoraSerializable {
   /// @nodoc
   const AudioEncodedFrameObserverConfig({this.postionType, this.encodingType});
 
-  /// Audio observer position. See AudioEncodedFrameObserverPosition.
+  /// Audio encoding content. See AudioEncodedFrameObserverPosition.
   @JsonKey(name: 'postionType')
   final AudioEncodedFrameObserverPosition? postionType;
 
@@ -6723,7 +6744,7 @@ class AudioEncodedFrameObserverConfig implements AgoraSerializable {
       _$AudioEncodedFrameObserverConfigToJson(this);
 }
 
-/// The encoded audio observer.
+/// Observer for encoded audio.
 class AudioEncodedFrameObserver {
   /// @nodoc
   const AudioEncodedFrameObserver({
@@ -6732,66 +6753,53 @@ class AudioEncodedFrameObserver {
     this.onMixedAudioEncodedFrame,
   });
 
-  /// Gets the encoded audio data of the local user.
+  /// Retrieves the audio encoded data of the local user.
   ///
-  /// After calling registerAudioEncodedFrameObserver and setting the encoded audio as audioEncodedFrameObserverPositionRecord, you can get the encoded audio data of the local user from this callback.
+  /// After calling registerAudioEncodedFrameObserver and setting the audio encoded content to audioEncodedFrameObserverPositionRecord, you can use this callback to get the audio encoded data of the local user.
   ///
-  /// * [channels] The number of channels.
-  ///  1: Mono.
-  ///  2: Stereo. If the channel uses stereo, the data is interleaved.
-  /// * [frameBuffer] The audio buffer.
-  /// * [length] The data length (byte).
-  /// * [audioEncodedFrameInfo] Audio information after encoding. See EncodedAudioFrameInfo.
+  /// * [frameBuffer] Audio buffer.
+  /// * [length] Length of the audio data in bytes.
+  /// * [audioEncodedFrameInfo] Information about the encoded audio. See EncodedAudioFrameInfo.
   final void Function(Uint8List frameBuffer, int length,
       EncodedAudioFrameInfo audioEncodedFrameInfo)? onRecordAudioEncodedFrame;
 
-  /// Gets the encoded audio data of all remote users.
+  /// Retrieves the audio encoded data of all remote users.
   ///
-  /// After calling registerAudioEncodedFrameObserver and setting the encoded audio as audioEncodedFrameObserverPositionPlayback, you can get encoded audio data of all remote users through this callback.
+  /// After calling registerAudioEncodedFrameObserver and setting the audio encoded content to audioEncodedFrameObserverPositionPlayback, you can use this callback to get the audio encoded data of all remote users.
   ///
-  /// * [samplesPerSec] Recording sample rate (Hz).
-  /// * [channels] The number of channels.
-  ///  1: Mono.
-  ///  2: Stereo. If the channel uses stereo, the data is interleaved.
-  /// * [samplesPerChannel] The number of samples per channel in the audio frame.
-  /// * [frameBuffer] The audio buffer.
-  /// * [length] The data length (byte).
-  /// * [audioEncodedFrameInfo] Audio information after encoding. See EncodedAudioFrameInfo.
+  /// * [frameBuffer] Audio buffer.
+  /// * [length] Length of the audio data in bytes.
+  /// * [audioEncodedFrameInfo] Information about the encoded audio. See EncodedAudioFrameInfo.
   final void Function(Uint8List frameBuffer, int length,
       EncodedAudioFrameInfo audioEncodedFrameInfo)? onPlaybackAudioEncodedFrame;
 
-  /// Gets the mixed and encoded audio data of the local and all remote users.
+  /// Retrieves the encoded audio data after mixing local and all remote users' audio.
   ///
-  /// After calling registerAudioEncodedFrameObserver and setting the audio profile as audioEncodedFrameObserverPositionMixed, you can get the mixed and encoded audio data of the local and all remote users through this callback.
+  /// After calling registerAudioEncodedFrameObserver and setting the audio encoding content to audioEncodedFrameObserverPositionMixed, you can use this callback to get the mixed and encoded audio data from the local and all remote users.
   ///
-  /// * [samplesPerSec] Recording sample rate (Hz).
-  /// * [channels] The number of channels.
-  ///  1: Mono.
-  ///  2: Stereo. If the channel uses stereo, the data is interleaved.
-  /// * [samplesPerChannel] The number of samples per channel in the audio frame.
-  /// * [frameBuffer] The audio buffer.
-  /// * [length] The data length (byte).
-  /// * [audioEncodedFrameInfo] Audio information after encoding. See EncodedAudioFrameInfo.
+  /// * [frameBuffer] Audio buffer.
+  /// * [length] Length of the audio data in bytes.
+  /// * [audioEncodedFrameInfo] Information about the encoded audio. See EncodedAudioFrameInfo.
   final void Function(Uint8List frameBuffer, int length,
       EncodedAudioFrameInfo audioEncodedFrameInfo)? onMixedAudioEncodedFrame;
 }
 
-/// The region for connection, which is the region where the server the SDK connects to is located.
+/// Access region, i.e., the region of the server that the SDK connects to.
 @JsonEnum(alwaysCreate: true)
 enum AreaCode {
   /// Mainland China.
   @JsonValue(0x00000001)
   areaCodeCn,
 
-  /// North America.
+  /// North America region.
   @JsonValue(0x00000002)
   areaCodeNa,
 
-  /// Europe.
+  /// Europe region.
   @JsonValue(0x00000004)
   areaCodeEu,
 
-  /// Asia, excluding Mainland China.
+  /// Asia region excluding China.
   @JsonValue(0x00000008)
   areaCodeAs,
 
@@ -6870,54 +6878,56 @@ extension AreaCodeExExt on AreaCodeEx {
   }
 }
 
-/// The error code of the channel media relay.
+/// Error codes for media stream relay across channels.
 @JsonEnum(alwaysCreate: true)
 enum ChannelMediaRelayError {
-  /// 0: No error.
+  /// 0: Everything works fine.
   @JsonValue(0)
   relayOk,
 
-  /// 1: An error occurs in the server response.
+  /// 1: Server error response.
   @JsonValue(1)
   relayErrorServerErrorResponse,
 
-  /// 2: No server response. This error may be caused by poor network connections. If this error occurs when initiating a channel media relay, you can try again later; if this error occurs during channel media relay, you can call leaveChannel to leave the channel. This error can also occur if the channel media relay service is not enabled in the project. You can contact to enable the service.
+  /// 2: No response from the server.
+  /// This error may be caused by poor network conditions. If this error is reported when initiating cross-channel media relay, you can try again later; if reported during the relay process, you can call the leaveChannel method to leave the channel.
+  /// This error may also occur if the current App ID has not enabled cross-channel media relay. You can [contact technical support](https://ticket.shengwang.cn/) to apply for enabling it.
   @JsonValue(2)
   relayErrorServerNoResponse,
 
-  /// 3: The SDK fails to access the service, probably due to limited resources of the server.
+  /// 3: SDK failed to get the service, possibly due to limited server resources.
   @JsonValue(3)
   relayErrorNoResourceAvailable,
 
-  /// 4: Fails to send the relay request.
+  /// 4: Failed to initiate media stream relay across channels.
   @JsonValue(4)
   relayErrorFailedJoinSrc,
 
-  /// 5: Fails to accept the relay request.
+  /// 5: Failed to accept media stream relay across channels.
   @JsonValue(5)
   relayErrorFailedJoinDest,
 
-  /// 6: The server fails to receive the media stream.
+  /// 6: Server failed to receive media stream relay across channels.
   @JsonValue(6)
   relayErrorFailedPacketReceivedFromSrc,
 
-  /// 7: The server fails to send the media stream.
+  /// 7: Server failed to send media stream relay across channels.
   @JsonValue(7)
   relayErrorFailedPacketSentToDest,
 
-  /// 8: The SDK disconnects from the server due to poor network connections. You can call leaveChannel to leave the channel.
+  /// 8: SDK disconnected from the server due to poor network quality. You can call the leaveChannel method to leave the current channel.
   @JsonValue(8)
   relayErrorServerConnectionLost,
 
-  /// 9: An internal error occurs in the server.
+  /// 9: Internal server error.
   @JsonValue(9)
   relayErrorInternalError,
 
-  /// 10: The token of the source channel has expired.
+  /// 10: Token of the source channel has expired.
   @JsonValue(10)
   relayErrorSrcTokenExpired,
 
-  /// 11: The token of the destination channel has expired.
+  /// 11: Token of the destination channel has expired.
   @JsonValue(11)
   relayErrorDestTokenExpired,
 }
@@ -6935,22 +6945,22 @@ extension ChannelMediaRelayErrorExt on ChannelMediaRelayError {
   }
 }
 
-/// The state code of the channel media relay.
+/// State codes for media stream relay across channels.
 @JsonEnum(alwaysCreate: true)
 enum ChannelMediaRelayState {
-  /// 0: The initial state. After you successfully stop the channel media relay by calling stopChannelMediaRelay, the onChannelMediaRelayStateChanged callback returns this state.
+  /// 0: Initial state. After successfully calling stopChannelMediaRelay to stop media stream relay across channels, onChannelMediaRelayStateChanged will return this state.
   @JsonValue(0)
   relayStateIdle,
 
-  /// 1: The SDK tries to relay the media stream to the destination channel.
+  /// 1: SDK is attempting cross-channel connection.
   @JsonValue(1)
   relayStateConnecting,
 
-  /// 2: The SDK successfully relays the media stream to the destination channel.
+  /// 2: Broadcaster in the source channel has successfully joined the destination channel.
   @JsonValue(2)
   relayStateRunning,
 
-  /// 3: An error occurs. See code in onChannelMediaRelayStateChanged for the error code.
+  /// 3: An error occurred. See the code parameter in onChannelMediaRelayStateChanged for error details.
   @JsonValue(3)
   relayStateFailure,
 }
@@ -6974,15 +6984,15 @@ class ChannelMediaInfo implements AgoraSerializable {
   /// @nodoc
   const ChannelMediaInfo({this.uid, this.channelName, this.token});
 
-  /// The user ID.
+  /// User ID.
   @JsonKey(name: 'uid')
   final int? uid;
 
-  /// The channel name.
+  /// Channel name.
   @JsonKey(name: 'channelName')
   final String? channelName;
 
-  /// The token that enables the user to join the channel.
+  /// Token used to join the channel.
   @JsonKey(name: 'token')
   final String? token;
 
@@ -6994,26 +7004,26 @@ class ChannelMediaInfo implements AgoraSerializable {
   Map<String, dynamic> toJson() => _$ChannelMediaInfoToJson(this);
 }
 
-/// Configuration of cross channel media relay.
+/// Configuration information for media stream relay across channels.
 @JsonSerializable(explicitToJson: true, includeIfNull: false)
 class ChannelMediaRelayConfiguration implements AgoraSerializable {
   /// @nodoc
   const ChannelMediaRelayConfiguration(
       {this.srcInfo, this.destInfos, this.destCount});
 
-  /// The information of the source channel. See ChannelMediaInfo. It contains the following members: channelName : The name of the source channel. The default value is NULL, which means the SDK applies the name of the current channel. token : The token for joining the source channel. This token is generated with the channelName and uid you set in srcInfo.
-  ///  If you have not enabled the App Certificate, set this parameter as the default value NULL, which means the SDK applies the App ID.
-  ///  If you have enabled the App Certificate, you must use the token generated with the channelName and uid, and the uid must be set as 0. uid : The unique user ID to identify the relay stream in the source channel. Agora recommends leaving the default value of 0 unchanged.
+  /// Source channel information ChannelMediaInfo, which includes the following members: channelName : Name of the source channel. Default is NULL, which means the SDK fills in the current channel name. token : The token used to join the source channel. It is generated based on the channelName and uid you set in srcInfo.
+  ///  If App Certificate is not enabled, you can set this parameter to the default value NULL, which means the SDK fills in the App ID.
+  ///  If App Certificate is enabled, you must provide a token generated using the channelName and uid, and the uid must be 0. uid : The UID that identifies the media stream being relayed in the source channel. Default is 0. Do not modify.
   @JsonKey(name: 'srcInfo')
   final ChannelMediaInfo? srcInfo;
 
-  /// The information of the target channel ChannelMediaInfo. It contains the following members: channelName : The name of the target channel. token : The token for joining the target channel. It is generated with the channelName and uid you set in destInfos.
-  ///  If you have not enabled the App Certificate, set this parameter as the default value NULL, which means the SDK applies the App ID.
-  ///  If you have enabled the App Certificate, you must use the token generated with the channelName and uid. If the token of any target channel expires, the whole media relay stops; hence Agora recommends that you specify the same expiration time for the tokens of all the target channels. uid : The unique user ID to identify the relay stream in the target channel. The value ranges from 0 to (2 32 -1). To avoid user ID conflicts, this user ID must be different from any other user ID in the target channel. The default value is 0, which means the SDK generates a random UID.
+  /// If the token for any destination channel expires, all cross-channel relays will stop. Therefore, it is recommended that you set the same expiration duration for the tokens of all destination channels. Destination channel information ChannelMediaInfo, which includes the following members: channelName : Name of the destination channel. token : The token used to join the destination channel. It is generated based on the channelName and uid you set in destInfos.
+  ///  If App Certificate is not enabled, you can set this parameter to the default value NULL, which means the SDK fills in the App ID.
+  ///  If App Certificate is enabled, you must provide a token generated using the channelName and uid. uid : The UID that identifies the media stream being relayed in the destination channel. The value range is 0 to (2^32 - 1). Ensure it is different from all UIDs in the destination channel. Default is 0, which means the SDK assigns a UID randomly.
   @JsonKey(name: 'destInfos')
   final List<ChannelMediaInfo>? destInfos;
 
-  /// The number of target channels. The default value is 0, and the value range is from 0 to 6. Ensure that the value of this parameter corresponds to the number of ChannelMediaInfo structs you define in destInfo.
+  /// Number of destination channels. Default is 0. Value range is [0,6]. This parameter should match the number of ChannelMediaInfo objects defined in destInfos.
   @JsonKey(name: 'destCount')
   final int? destCount;
 
@@ -7025,13 +7035,13 @@ class ChannelMediaRelayConfiguration implements AgoraSerializable {
   Map<String, dynamic> toJson() => _$ChannelMediaRelayConfigurationToJson(this);
 }
 
-/// The uplink network information.
+/// Uplink network information.
 @JsonSerializable(explicitToJson: true, includeIfNull: false)
 class UplinkNetworkInfo implements AgoraSerializable {
   /// @nodoc
   const UplinkNetworkInfo({this.videoEncoderTargetBitrateBps});
 
-  /// The target video encoder bitrate (bps).
+  /// Target bitrate (bps) of the video encoder.
   @JsonKey(name: 'video_encoder_target_bitrate_bps')
   final int? videoEncoderTargetBitrateBps;
 
@@ -7116,9 +7126,9 @@ class PeerDownlinkInfo implements AgoraSerializable {
   Map<String, dynamic> toJson() => _$PeerDownlinkInfoToJson(this);
 }
 
-/// The built-in encryption mode.
+/// Built-in encryption mode.
 ///
-/// Agora recommends using aes128Gcm2 or aes256Gcm2 encrypted mode. These two modes support the use of salt for higher security.
+/// It is recommended to use aes128Gcm2 or aes256Gcm2 encryption modes. These modes support salt and offer higher security.
 @JsonEnum(alwaysCreate: true)
 enum EncryptionMode {
   /// 1: 128-bit AES encryption, XTS mode.
@@ -7145,15 +7155,15 @@ enum EncryptionMode {
   @JsonValue(6)
   aes256Gcm,
 
-  /// 7: (Default) 128-bit AES encryption, GCM mode. This encryption mode requires the setting of salt (encryptionKdfSalt).
+  /// 7: (Default) 128-bit AES encryption, GCM mode. This encryption mode requires setting a salt (encryptionKdfSalt).
   @JsonValue(7)
   aes128Gcm2,
 
-  /// 8: 256-bit AES encryption, GCM mode. This encryption mode requires the setting of salt (encryptionKdfSalt).
+  /// 8: 256-bit AES encryption, GCM mode. This encryption mode requires setting a salt (encryptionKdfSalt).
   @JsonValue(8)
   aes256Gcm2,
 
-  /// Enumerator boundary.
+  /// Enumeration value boundary.
   @JsonValue(9)
   modeEnd,
 }
@@ -7171,7 +7181,7 @@ extension EncryptionModeExt on EncryptionMode {
   }
 }
 
-/// Built-in encryption configurations.
+/// Configures built-in encryption mode and key.
 @JsonSerializable(explicitToJson: true, includeIfNull: false)
 class EncryptionConfig implements AgoraSerializable {
   /// @nodoc
@@ -7181,15 +7191,15 @@ class EncryptionConfig implements AgoraSerializable {
       this.encryptionKdfSalt,
       this.datastreamEncryptionEnabled});
 
-  /// The built-in encryption mode. See EncryptionMode. Agora recommends using aes128Gcm2 or aes256Gcm2 encrypted mode. These two modes support the use of salt for higher security.
+  /// Built-in encryption mode. See EncryptionMode. It is recommended to use aes128Gcm2 or aes256Gcm2 encryption modes. These two modes support salt and offer higher security.
   @JsonKey(name: 'encryptionMode')
   final EncryptionMode? encryptionMode;
 
-  /// Encryption key in string type with unlimited length. Agora recommends using a 32-byte key. If you do not set an encryption key or set it as NULL, you cannot use the built-in encryption, and the SDK returns -2.
+  /// Built-in encryption key, of type String, with no length limit. It is recommended to use a 32-byte key. If this parameter is not specified or set to NULL, built-in encryption cannot be enabled, and the SDK returns error code -2.
   @JsonKey(name: 'encryptionKey')
   final String? encryptionKey;
 
-  /// Salt, 32 bytes in length. Agora recommends that you use OpenSSL to generate salt on the server side. See Media Stream Encryption for details. This parameter takes effect only in aes128Gcm2 or aes256Gcm2 encrypted mode. In this case, ensure that this parameter is not 0.
+  /// Salt, 32 bytes in length. It is recommended to generate the salt on the server side using OpenSSL. This parameter takes effect only when using aes128Gcm2 or aes256Gcm2 encryption modes. In this case, ensure that the value provided for this parameter is not all 0.
   @JsonKey(name: 'encryptionKdfSalt', ignore: true)
   final Uint8List? encryptionKdfSalt;
 
@@ -7205,14 +7215,14 @@ class EncryptionConfig implements AgoraSerializable {
   Map<String, dynamic> toJson() => _$EncryptionConfigToJson(this);
 }
 
-/// Encryption error type.
+/// Built-in encryption error type.
 @JsonEnum(alwaysCreate: true)
 enum EncryptionErrorType {
   /// 0: Internal reason.
   @JsonValue(0)
   encryptionErrorInternalFailure,
 
-  /// 1: Media stream decryption error. Ensure that the receiver and the sender use the same encryption mode and key.
+  /// 1: Media stream decryption error. Make sure the encryption mode or key used by the sender and receiver is the same.
   @JsonValue(1)
   encryptionErrorDecryptionFailure,
 
@@ -7220,7 +7230,7 @@ enum EncryptionErrorType {
   @JsonValue(2)
   encryptionErrorEncryptionFailure,
 
-  /// 3: Data stream decryption error. Ensure that the receiver and the sender use the same encryption mode and key.
+  /// 3: Data stream decryption error. Make sure the encryption mode or key used by the sender and receiver is the same.
   @JsonValue(3)
   encryptionErrorDatastreamDecryptionFailure,
 
@@ -7271,34 +7281,36 @@ extension UploadErrorReasonExt on UploadErrorReason {
   }
 }
 
-/// @nodoc
+/// Error codes after calling renewToken.
+///
+/// Since Available since 4.6.0.
 @JsonEnum(alwaysCreate: true)
 enum RenewTokenErrorCode {
-  /// @nodoc
+  /// (0): Token updated successfully.
   @JsonValue(0)
   renewTokenSuccess,
 
-  /// @nodoc
+  /// (1): Token update failed due to an unknown server error. Check the parameters used to generate the Token, regenerate the Token, and retry renewToken.
   @JsonValue(1)
   renewTokenFailure,
 
-  /// @nodoc
+  /// (2): Token update failed because the provided Token has expired. Generate a new Token with a longer expiration time and retry renewToken.
   @JsonValue(2)
   renewTokenTokenExpired,
 
-  /// @nodoc
+  /// (3): Token update failed because the provided Token is invalid. Common reasons include: the project has enabled App Certificate in the Agora Console but the Token was not used when joining the channel; the uid specified in joinChannel is different from the one used to generate the Token; the channel name specified in joinChannel is different from the one used to generate the Token. Check the Token generation process, regenerate the Token, and retry renewToken.
   @JsonValue(3)
   renewTokenInvalidToken,
 
-  /// @nodoc
+  /// (4): Token update failed because the channel name in the Token does not match the current channel. Check the channel name, regenerate the Token, and retry renewToken.
   @JsonValue(4)
   renewTokenInvalidChannelName,
 
-  /// @nodoc
+  /// (5): Token update failed because the App ID in the Token does not match the current App ID. Check the App ID, regenerate the Token, and retry renewToken.
   @JsonValue(5)
   renewTokenInconsistentAppid,
 
-  /// @nodoc
+  /// (6): The previous Token update request was canceled due to a new request being initiated.
   @JsonValue(6)
   renewTokenCanceledByNewRequest,
 }
@@ -7316,18 +7328,18 @@ extension RenewTokenErrorCodeExt on RenewTokenErrorCode {
   }
 }
 
-/// The type of the device permission.
+/// Device permission types.
 @JsonEnum(alwaysCreate: true)
 enum PermissionType {
-  /// 0: Permission for the audio capture device.
+  /// 0: Permission for audio recording devices.
   @JsonValue(0)
   recordAudio,
 
-  /// 1: Permission for the camera.
+  /// 1: Camera permission.
   @JsonValue(1)
   camera,
 
-  /// (For Android only) 2: Permission for screen sharing.
+  /// (Android only) 2: Screen sharing permission.
   @JsonValue(2)
   screenCapture,
 }
@@ -7345,22 +7357,22 @@ extension PermissionTypeExt on PermissionType {
   }
 }
 
-/// The subscribing state.
+/// Subscribe state.
 @JsonEnum(alwaysCreate: true)
 enum StreamSubscribeState {
-  /// 0: The initial publishing state after joining the channel.
+  /// 0: Initial subscribe state after joining the channel.
   @JsonValue(0)
   subStateIdle,
 
-  /// 1: Fails to subscribe to the remote stream. Possible reasons:
-  ///  The remote user:
-  ///  Calls muteLocalAudioStream (true) or muteLocalVideoStream (true) to stop sending local media stream.
-  ///  Calls disableAudio or disableVideo to disable the local audio or video module.
-  ///  Calls enableLocalAudio (false) or enableLocalVideo (false) to disable local audio or video capture.
-  ///  The role of the remote user is audience.
-  ///  The local user calls the following methods to stop receiving remote streams:
-  ///  Call muteRemoteAudioStream (true) or muteAllRemoteAudioStreams (true) to stop receiving the remote audio stream.
-  ///  Call muteRemoteVideoStream (true) or muteAllRemoteVideoStreams (true) to stop receiving the remote video stream.
+  /// 1: Subscription failed. Possible reasons:
+  ///  Remote user:
+  ///  Called muteLocalAudioStream (true) or muteLocalVideoStream (true) to stop sending local media streams.
+  ///  Called disableAudio or disableVideo to disable local audio or video modules.
+  ///  Called enableLocalAudio (false) or enableLocalVideo (false) to disable local audio or video capture.
+  ///  User is an audience member.
+  ///  Local user called the following methods to stop receiving remote media streams:
+  ///  Called muteRemoteAudioStream (true), muteAllRemoteAudioStreams (true) to stop receiving remote audio streams.
+  ///  Called muteRemoteVideoStream (true), muteAllRemoteVideoStreams (true) to stop receiving remote video streams.
   @JsonValue(1)
   subStateNoSubscribed,
 
@@ -7368,7 +7380,7 @@ enum StreamSubscribeState {
   @JsonValue(2)
   subStateSubscribing,
 
-  /// 3: The remote stream is received, and the subscription is successful.
+  /// 3: Remote stream received, subscription successful.
   @JsonValue(3)
   subStateSubscribed,
 }
@@ -7386,18 +7398,18 @@ extension StreamSubscribeStateExt on StreamSubscribeState {
   }
 }
 
-/// The publishing state.
+/// Publish state.
 @JsonEnum(alwaysCreate: true)
 enum StreamPublishState {
-  /// 0: The initial publishing state after joining the channel.
+  /// 0: Initial publish state after joining the channel.
   @JsonValue(0)
   pubStateIdle,
 
-  /// 1: Fails to publish the local stream. Possible reasons:
-  ///  The local user calls muteLocalAudioStream (true) or muteLocalVideoStream (true) to stop sending local media streams.
-  ///  The local user calls disableAudio or disableVideo to disable the local audio or video module.
-  ///  The local user calls enableLocalAudio (false) or enableLocalVideo (false) to disable the local audio or video capture.
-  ///  The role of the local user is audience.
+  /// 1: Publish failed. Possible reasons:
+  ///  The local user called muteLocalAudioStream (true) or muteLocalVideoStream (true) to stop sending local media streams.
+  ///  The local user called disableAudio or disableVideo to disable local audio or video modules.
+  ///  The local user called enableLocalAudio (false) or enableLocalVideo (false) to disable local audio or video capture.
+  ///  The local user is an audience member.
   @JsonValue(1)
   pubStateNoPublished,
 
@@ -7405,7 +7417,7 @@ enum StreamPublishState {
   @JsonValue(2)
   pubStatePublishing,
 
-  /// 3: Publishes successfully.
+  /// 3: Published successfully.
   @JsonValue(3)
   pubStatePublished,
 }
@@ -7423,7 +7435,7 @@ extension StreamPublishStateExt on StreamPublishState {
   }
 }
 
-/// The configuration of the audio and video call loop test.
+/// Configuration for audio and video echo test.
 @JsonSerializable(explicitToJson: true, includeIfNull: false)
 class EchoTestConfiguration implements AgoraSerializable {
   /// @nodoc
@@ -7435,29 +7447,29 @@ class EchoTestConfiguration implements AgoraSerializable {
       this.channelId,
       this.intervalInSeconds});
 
-  /// The view used to render the local user's video. This parameter is only applicable to scenarios testing video devices, that is, when enableVideo is true.
+  /// The view used to render the local user's video. This parameter only applies to scenarios testing video devices. Make sure enableVideo is set to true.
   @JsonKey(name: 'view', readValue: readIntPtr)
   final int? view;
 
-  /// Whether to enable the audio device for the loop test: true : (Default) Enable the audio device. To test the audio device, set this parameter as true. false : Disable the audio device.
+  /// Whether to enable the audio device: true : (Default) Enables the audio device. Set to true to test the audio device. false : Disables the audio device.
   @JsonKey(name: 'enableAudio')
   final bool? enableAudio;
 
-  /// Whether to enable the video device for the loop test. Currently, video device loop test is not supported. Please set this parameter to false.
+  /// Whether to enable the video device. Video device detection is not supported yet. Set this parameter to false.
   @JsonKey(name: 'enableVideo')
   final bool? enableVideo;
 
-  /// The token used to secure the audio and video call loop test. If you do not enable App Certificate in Agora Console, you do not need to pass a value in this parameter; if you have enabled App Certificate in Agora Console, you must pass a token in this parameter; the uid used when you generate the token must be 0xFFFFFFFF, and the channel name used must be the channel name that identifies each audio and video call loop tested. For server-side token generation, see.
+  /// Token used to ensure the security of the audio and video echo test. If you have not enabled the App Certificate in the console, you do not need to set this parameter. If you have enabled the App Certificate, you must provide a Token, and the uid used to generate the Token must be 0xFFFFFFFF, and the channel name used must uniquely identify each echo test. For how to generate a Token on the server, refer to [Use Token for Authentication](https://doc.shengwang.cn/doc/rtc/flutter/basic-features/token-authentication).
   @JsonKey(name: 'token')
   final String? token;
 
-  /// The channel name that identifies each audio and video call loop. To ensure proper loop test functionality, the channel name passed in to identify each loop test cannot be the same when users of the same project (App ID) perform audio and video call loop tests on different devices.
+  /// Channel name identifying each audio and video echo test. To ensure proper functioning of the echo test, the channel name used by each terminal user under the same project (App ID) on different devices must be unique.
   @JsonKey(name: 'channelId')
   final String? channelId;
 
-  /// Set the time interval or delay for returning the results of the audio and video loop test. The value range is [2,10], in seconds, with the default value being 2 seconds.
-  ///  For audio loop tests, the test results will be returned according to the time interval you set.
-  ///  For video loop tests, the video will be displayed in a short time, after which the delay will gradually increase until it reaches the delay you set.
+  /// Sets the interval or delay for returning the audio and video echo test results. Value range is [2,10] in seconds. Default is 2 seconds.
+  ///  For audio echo test, the result is returned at the interval you set.
+  ///  For video echo test, the video is displayed briefly, then the delay gradually increases until it reaches the set value.
   @JsonKey(name: 'intervalInSeconds')
   final int? intervalInSeconds;
 
@@ -7469,17 +7481,17 @@ class EchoTestConfiguration implements AgoraSerializable {
   Map<String, dynamic> toJson() => _$EchoTestConfigurationToJson(this);
 }
 
-/// The information of the user.
+/// User information.
 @JsonSerializable(explicitToJson: true, includeIfNull: false)
 class UserInfo implements AgoraSerializable {
   /// @nodoc
   const UserInfo({this.uid, this.userAccount});
 
-  /// The user ID.
+  /// User ID.
   @JsonKey(name: 'uid')
   final int? uid;
 
-  /// User account. The maximum data length is MaxUserAccountLengthType.
+  /// User account. Length limit is MaxUserAccountLengthType.
   @JsonKey(name: 'userAccount')
   final String? userAccount;
 
@@ -7491,22 +7503,22 @@ class UserInfo implements AgoraSerializable {
   Map<String, dynamic> toJson() => _$UserInfoToJson(this);
 }
 
-/// The audio filter types of in-ear monitoring.
+/// Ear monitoring audio filter type.
 @JsonEnum(alwaysCreate: true)
 enum EarMonitoringFilterType {
-  /// 1<<0: No audio filter added to in-ear monitoring.
+  /// 1<<0: Do not add audio filter to ear monitoring.
   @JsonValue((1 << 0))
   earMonitoringFilterNone,
 
-  /// 1<<1: Add vocal effects audio filter to in-ear monitoring. If you implement functions such as voice beautifier and audio effect, users can hear the voice after adding these effects.
+  /// 1<<1: Add vocal effect audio filter to ear monitoring. If you implement features like voice beautification or sound effects, users can hear the processed sound through ear monitoring.
   @JsonValue((1 << 1))
   earMonitoringFilterBuiltInAudioFilters,
 
-  /// 1<<2: Add noise suppression audio filter to in-ear monitoring.
+  /// 1<<2: Add noise suppression audio filter to ear monitoring.
   @JsonValue((1 << 2))
   earMonitoringFilterNoiseSuppression,
 
-  /// 1<<15: Reuse the audio filter that has been processed on the sending end for in-ear monitoring. This enumerator reduces CPU usage while increasing in-ear monitoring latency, which is suitable for latency-tolerant scenarios requiring low CPU consumption.
+  /// 1<<15: Reuse the audio filter already applied on the sending end. Reusing the audio filter reduces CPU usage for ear monitoring but increases ear monitoring latency. Suitable for scenarios where lower CPU usage is required and latency is not critical.
   @JsonValue((1 << 15))
   earMonitoringFilterReusePostProcessingFilter,
 }
@@ -7565,26 +7577,26 @@ extension ThreadPriorityTypeExt on ThreadPriorityType {
   }
 }
 
-/// The video configuration for the shared screen stream.
+/// Video encoding configuration for screen sharing stream.
 @JsonSerializable(explicitToJson: true, includeIfNull: false)
 class ScreenVideoParameters implements AgoraSerializable {
   /// @nodoc
   const ScreenVideoParameters(
       {this.dimensions, this.frameRate, this.bitrate, this.contentHint});
 
-  /// The video encoding dimension. The default value is 1280 × 720.
+  /// Resolution for video encoding. Default is 1280 × 720.
   @JsonKey(name: 'dimensions')
   final VideoDimensions? dimensions;
 
-  /// The video encoding frame rate (fps). The default value is 15.
+  /// Video encoding frame rate (fps). Default is 15.
   @JsonKey(name: 'frameRate')
   final int? frameRate;
 
-  /// The video encoding bitrate (Kbps).
+  /// Video encoding bitrate (Kbps).
   @JsonKey(name: 'bitrate')
   final int? bitrate;
 
-  /// The content hint for screen sharing.
+  /// Content type of the screen sharing video.
   @JsonKey(name: 'contentHint')
   final VideoContentHint? contentHint;
 
@@ -7596,7 +7608,7 @@ class ScreenVideoParameters implements AgoraSerializable {
   Map<String, dynamic> toJson() => _$ScreenVideoParametersToJson(this);
 }
 
-/// Screen sharing configurations.
+/// Parameter configuration for screen sharing.
 @JsonSerializable(explicitToJson: true, includeIfNull: false)
 class ScreenCaptureParameters2 implements AgoraSerializable {
   /// @nodoc
@@ -7606,21 +7618,20 @@ class ScreenCaptureParameters2 implements AgoraSerializable {
       this.captureVideo,
       this.videoParams});
 
-  /// Determines whether to capture system audio during screen sharing: true : Capture system audio. false : (Default) Do not capture system audio.
-  ///  Due to system limitations, capturing system audio is only applicable to Android API level 29 and later (that is, Android 10 and later).
-  ///  To improve the success rate of capturing system audio during screen sharing, ensure that you have called the setAudioScenario method and set the audio scenario to audioScenarioGameStreaming.
+  /// Due to system limitations, capturing system audio is only supported on Android API level 29 and above, i.e., Android 10 and above.
+  ///  To improve the success rate of capturing system audio during screen sharing, ensure that you have called the setAudioScenario method and set the audio scenario to audioScenarioGameStreaming. Whether to capture system audio during screen sharing: true : Capture system audio. false : (Default) Do not capture system audio.
   @JsonKey(name: 'captureAudio')
   final bool? captureAudio;
 
-  /// The audio configuration for the shared screen stream. See ScreenAudioParameters. This parameter only takes effect when captureAudio is true.
+  /// Audio configuration for the screen sharing stream. See ScreenAudioParameters. This parameter takes effect only when captureAudio is true.
   @JsonKey(name: 'audioParams')
   final ScreenAudioParameters? audioParams;
 
-  /// Whether to capture the screen when screen sharing: true : (Default) Capture the screen. false : Do not capture the screen. Due to system limitations, the capture screen is only applicable to Android API level 21 and above, that is, Android 5 and above.
+  /// Due to system limitations, screen capture is only supported on Android API level 21 and above, i.e., Android 5 and above. Whether to capture the screen during screen sharing: true : (Default) Capture screen. false : Do not capture screen.
   @JsonKey(name: 'captureVideo')
   final bool? captureVideo;
 
-  /// The video configuration for the shared screen stream. See ScreenVideoParameters. This parameter only takes effect when captureVideo is true.
+  /// Video encoding configuration for the screen sharing stream. See ScreenVideoParameters. This parameter takes effect only when captureVideo is true.
   @JsonKey(name: 'videoParams')
   final ScreenVideoParameters? videoParams;
 
@@ -7632,14 +7643,14 @@ class ScreenCaptureParameters2 implements AgoraSerializable {
   Map<String, dynamic> toJson() => _$ScreenCaptureParameters2ToJson(this);
 }
 
-/// The rendering state of the media frame.
+/// Rendering status of media frames.
 @JsonEnum(alwaysCreate: true)
 enum MediaTraceEvent {
-  /// 0: The video frame has been rendered.
+  /// 0: Video frame rendered.
   @JsonValue(0)
   mediaTraceEventVideoRendered,
 
-  /// 1: The video frame has been decoded.
+  /// 1: Video frame decoded.
   @JsonValue(1)
   mediaTraceEventVideoDecoded,
 }
@@ -7657,7 +7668,7 @@ extension MediaTraceEventExt on MediaTraceEvent {
   }
 }
 
-/// Indicators during video frame rendering progress.
+/// Metric information during video frame rendering.
 @JsonSerializable(explicitToJson: true, includeIfNull: false)
 class VideoRenderingTracingInfo implements AgoraSerializable {
   /// @nodoc
@@ -7670,43 +7681,43 @@ class VideoRenderingTracingInfo implements AgoraSerializable {
       this.remoteJoined2UnmuteVideo,
       this.remoteJoined2PacketReceived});
 
-  /// The time interval (ms) from startMediaRenderingTracing to SDK triggering the onVideoRenderingTracingResult callback. Agora recommends you call startMediaRenderingTracing before joining a channel.
+  /// The time interval (ms) from calling startMediaRenderingTracing to triggering the onVideoRenderingTracingResult callback. It is recommended to call startMediaRenderingTracing before joining the channel.
   @JsonKey(name: 'elapsedTime')
   final int? elapsedTime;
 
-  /// The time interval (ms) from startMediaRenderingTracing to joinChannel. A negative number indicates that startMediaRenderingTracing is called after calling joinChannel.
+  /// The time interval (ms) from calling startMediaRenderingTracing to calling joinChannel. A negative value indicates that startMediaRenderingTracing was called after joinChannel.
   @JsonKey(name: 'start2JoinChannel')
   final int? start2JoinChannel;
 
-  /// The time interval (ms) from or joinChannel to successfully joining the channel.
+  /// The time interval (ms) from calling joinChannel1 or joinChannel to successfully joining the channel.
   @JsonKey(name: 'join2JoinSuccess')
   final int? join2JoinSuccess;
 
-  /// If the local user calls startMediaRenderingTracing before successfully joining the channel, this value is the time interval (ms) from the local user successfully joining the channel to the remote user joining the channel.
-  ///  If the local user calls startMediaRenderingTracing after successfully joining the channel, the value is the time interval (ms) from startMediaRenderingTracing to when the remote user joins the channel.
-  ///  If the local user calls startMediaRenderingTracing after the remote user joins the channel, the value is 0 and meaningless.
-  ///  In order to reduce the time of rendering the first frame for remote users, Agora recommends that the local user joins the channel when the remote user is in the channel to reduce this value.
+  /// If the local user calls startMediaRenderingTracing after the remote user has joined the channel, this value is 0 and has no reference value.
+  ///  To improve the speed of remote user video display, it is recommended that the local user joins the channel after the remote user has joined to reduce this value.
+  ///  If the local user calls startMediaRenderingTracing before successfully joining the channel, this is the time interval (ms) from the local user successfully joining the channel to the remote user joining the channel.
+  ///  If the local user calls startMediaRenderingTracing after successfully joining the channel, this is the time interval (ms) from calling startMediaRenderingTracing to the remote user joining the channel.
   @JsonKey(name: 'joinSuccess2RemoteJoined')
   final int? joinSuccess2RemoteJoined;
 
-  /// If the local user calls startMediaRenderingTracing before the remote user joins the channel, this value is the time interval (ms) from when the remote user joins the channel to when the local user sets the remote view.
-  ///  If the local user calls startMediaRenderingTracing after the remote user joins the channel, this value is the time interval (ms) from calling startMediaRenderingTracing to setting the remote view.
-  ///  If the local user calls startMediaRenderingTracing after setting the remote view, the value is 0 and has no effect.
-  ///  In order to reduce the time of rendering the first frame for remote users, Agora recommends that the local user sets the remote view before the remote user joins the channel, or sets the remote view immediately after the remote user joins the channel to reduce this value.
+  /// If the local user calls startMediaRenderingTracing after setting the remote view, this value is 0 and has no reference value.
+  ///  To improve the speed of remote user video display, it is recommended to set the remote view before the remote user joins the channel, or immediately after the remote user joins, to reduce this value.
+  ///  If the local user calls startMediaRenderingTracing before the remote user joins the channel, this is the time interval (ms) from the remote user joining the channel to the local user setting the remote view.
+  ///  If the local user calls startMediaRenderingTracing after the remote user joins the channel, this is the time interval (ms) from calling startMediaRenderingTracing to setting the remote view.
   @JsonKey(name: 'remoteJoined2SetView')
   final int? remoteJoined2SetView;
 
-  /// If the local user calls startMediaRenderingTracing before the remote user joins the channel, this value is the time interval (ms) from the remote user joining the channel to subscribing to the remote video stream.
-  ///  If the local user calls startMediaRenderingTracing after the remote user joins the channel, this value is the time interval (ms) from startMediaRenderingTracing to subscribing to the remote video stream.
-  ///  If the local user calls startMediaRenderingTracing after subscribing to the remote video stream, the value is 0 and has no effect.
-  ///  In order to reduce the time of rendering the first frame for remote users, Agora recommends that after the remote user joins the channel, the local user immediately subscribes to the remote video stream to reduce this value.
+  /// If startMediaRenderingTracing is called after subscribing to the remote video stream, this value is 0 and has no reference value.
+  ///  To improve the speed of remote user video display, it is recommended that the local user subscribes to the remote video stream immediately after the remote user joins the channel to reduce this value.
+  ///  If the local user calls startMediaRenderingTracing before the remote user joins the channel, this is the time interval (ms) from the remote user joining the channel to subscribing to the remote video stream.
+  ///  If the local user calls startMediaRenderingTracing after the remote user joins the channel, this is the time interval (ms) from calling startMediaRenderingTracing to subscribing to the remote video stream.
   @JsonKey(name: 'remoteJoined2UnmuteVideo')
   final int? remoteJoined2UnmuteVideo;
 
-  /// If the local user calls startMediaRenderingTracing before the remote user joins the channel, this value is the time interval (ms) from when the remote user joins the channel to when the local user receives the remote video stream.
-  ///  If the local user calls startMediaRenderingTracing after the remote user joins the channel, this value is the time interval (ms) from startMediaRenderingTracing to receiving the remote video stream.
-  ///  If the local user calls startMediaRenderingTracing after receiving the remote video stream, the value is 0 and has no effect.
-  ///  In order to reduce the time of rendering the first frame for remote users, Agora recommends that the remote user publishes video streams immediately after joining the channel, and the local user immediately subscribes to remote video streams to reduce this value.
+  /// If startMediaRenderingTracing is called after receiving the remote video stream, this value is 0 and has no reference value.
+  ///  To improve the speed of remote user video display, it is recommended that the remote user publishes the video stream immediately after joining the channel and the local user subscribes to the remote video stream immediately to reduce this value.
+  ///  If the local user calls startMediaRenderingTracing before the remote user joins the channel, this is the time interval (ms) from the remote user joining the channel to the local user receiving the first remote data packet.
+  ///  If the local user calls startMediaRenderingTracing after the remote user joins the channel, this is the time interval (ms) from calling startMediaRenderingTracing to receiving the first remote data packet.
   @JsonKey(name: 'remoteJoined2PacketReceived')
   final int? remoteJoined2PacketReceived;
 
@@ -7768,26 +7779,26 @@ extension LocalProxyModeExt on LocalProxyMode {
   }
 }
 
-/// @nodoc
+/// Configuration information of the log server.
 @JsonSerializable(explicitToJson: true, includeIfNull: false)
 class LogUploadServerInfo implements AgoraSerializable {
   /// @nodoc
   const LogUploadServerInfo(
       {this.serverDomain, this.serverPath, this.serverPort, this.serverHttps});
 
-  /// @nodoc
+  /// Domain name of the log server.
   @JsonKey(name: 'serverDomain')
   final String? serverDomain;
 
-  /// @nodoc
+  /// Storage path of the log on the server.
   @JsonKey(name: 'serverPath')
   final String? serverPath;
 
-  /// @nodoc
+  /// Port of the log server.
   @JsonKey(name: 'serverPort')
   final int? serverPort;
 
-  /// @nodoc
+  /// Whether the log server uses HTTPS protocol: true : Uses HTTPS protocol. false : Uses HTTP protocol.
   @JsonKey(name: 'serverHttps')
   final bool? serverHttps;
 
@@ -7799,13 +7810,13 @@ class LogUploadServerInfo implements AgoraSerializable {
   Map<String, dynamic> toJson() => _$LogUploadServerInfoToJson(this);
 }
 
-/// @nodoc
+/// Advanced options for Local Access Point.
 @JsonSerializable(explicitToJson: true, includeIfNull: false)
 class AdvancedConfigInfo implements AgoraSerializable {
   /// @nodoc
   const AdvancedConfigInfo({this.logUploadServer});
 
-  /// @nodoc
+  /// Custom log upload server. By default, the SDK uploads logs to the Agora log server. You can use this parameter to change the log upload server. See LogUploadServerInfo.
   @JsonKey(name: 'logUploadServer')
   final LogUploadServerInfo? logUploadServer;
 
@@ -7817,7 +7828,7 @@ class AdvancedConfigInfo implements AgoraSerializable {
   Map<String, dynamic> toJson() => _$AdvancedConfigInfoToJson(this);
 }
 
-/// @nodoc
+/// Local Access Point configuration.
 @JsonSerializable(explicitToJson: true, includeIfNull: false)
 class LocalAccessPointConfiguration implements AgoraSerializable {
   /// @nodoc
@@ -7831,31 +7842,31 @@ class LocalAccessPointConfiguration implements AgoraSerializable {
       this.advancedConfig,
       this.disableAut});
 
-  /// @nodoc
+  /// Internal IP address list of the Local Access Point. Either ipList or domainList must be provided.
   @JsonKey(name: 'ipList')
   final List<String>? ipList;
 
-  /// @nodoc
+  /// Number of internal IP addresses for the Local Access Point. This value must match the number of IP addresses you provide.
   @JsonKey(name: 'ipListSize')
   final int? ipListSize;
 
-  /// @nodoc
+  /// Domain name list of the Local Access Point. The SDK resolves the IP addresses of the Local Access Point based on the provided domain names. The domain resolution timeout is 10 seconds. Either ipList or domainList must be provided. If you specify both IP addresses and domain names, the SDK merges and deduplicates the resolved IPs and the specified IPs, then randomly connects to one IP for load balancing.
   @JsonKey(name: 'domainList')
   final List<String>? domainList;
 
-  /// @nodoc
+  /// Number of domain names for the Local Access Point. This value must match the number of domain names you provide.
   @JsonKey(name: 'domainListSize')
   final int? domainListSize;
 
-  /// @nodoc
+  /// Domain name used for internal certificate verification. If left empty, the SDK uses the default certificate verification domain secure-edge.local.
   @JsonKey(name: 'verifyDomainName')
   final String? verifyDomainName;
 
-  /// @nodoc
+  /// Connection mode. See LocalProxyMode.
   @JsonKey(name: 'mode')
   final LocalProxyMode? mode;
 
-  /// @nodoc
+  /// Advanced options for the Local Access Point. See AdvancedConfigInfo.
   @JsonKey(name: 'advancedConfig')
   final AdvancedConfigInfo? advancedConfig;
 
@@ -7988,7 +7999,7 @@ extension RdtStateExt on RdtState {
   }
 }
 
-/// The spatial audio parameters.
+/// Spatial audio parameters.
 @JsonSerializable(explicitToJson: true, includeIfNull: false)
 class SpatialAudioParams implements AgoraSerializable {
   /// @nodoc
@@ -8042,7 +8053,7 @@ class SpatialAudioParams implements AgoraSerializable {
   Map<String, dynamic> toJson() => _$SpatialAudioParamsToJson(this);
 }
 
-/// Layout information of a specific sub-video stream within the mixed stream.
+/// Layout information of a sub video stream in a composite stream.
 @JsonSerializable(explicitToJson: true, includeIfNull: false)
 class VideoLayout implements AgoraSerializable {
   /// @nodoc
@@ -8056,38 +8067,38 @@ class VideoLayout implements AgoraSerializable {
       this.height,
       this.videoState});
 
-  /// The channel name to which the sub-video stream belongs.
+  /// Channel name to which the sub video stream belongs.
   @JsonKey(name: 'channelId')
   final String? channelId;
 
-  /// User ID who published this sub-video stream.
+  /// User ID that publishes the sub video stream.
   @JsonKey(name: 'uid')
   final int? uid;
 
-  /// Reserved for future use.
+  /// Reserved parameter.
   @JsonKey(name: 'strUid')
   final String? strUid;
 
-  /// X-coordinate (px) of the sub-video stream on the mixing canvas. The relative lateral displacement of the top left corner of the video for video mixing to the origin (the top left corner of the canvas).
+  /// The x-coordinate (px) of the sub video stream on the composite canvas. That is, the horizontal offset of the top-left corner of the sub video stream relative to the top-left corner (origin) of the composite canvas.
   @JsonKey(name: 'x')
   final int? x;
 
-  /// Y-coordinate (px) of the sub-video stream on the mixing canvas. The relative longitudinal displacement of the top left corner of the captured video to the origin (the top left corner of the canvas).
+  /// The y-coordinate (px) of the sub video stream on the composite canvas. That is, the vertical offset of the top-left corner of the sub video stream relative to the top-left corner (origin) of the composite canvas.
   @JsonKey(name: 'y')
   final int? y;
 
-  /// Width (px) of the sub-video stream.
+  /// Width of the sub video stream (px).
   @JsonKey(name: 'width')
   final int? width;
 
-  /// Heitht (px) of the sub-video stream.
+  /// Height of the sub video stream (px)
   @JsonKey(name: 'height')
   final int? height;
 
-  /// Status of the sub-video stream on the video mixing canvas.
-  ///  0: Normal. The sub-video stream has been rendered onto the mixing canvas.
-  ///  1: Placeholder image. The sub-video stream has no video frames and is displayed as a placeholder on the mixing canvas.
-  ///  2: Black image. The sub-video stream is replaced by a black image.
+  /// State of the sub video stream on the composite canvas.
+  ///  0: Normal. The video stream is rendered on the composite canvas.
+  ///  1: Placeholder. The video stream has no video frame and is displayed as a placeholder on the composite canvas.
+  ///  2: Black image. The video stream is replaced with a black image.
   @JsonKey(name: 'videoState')
   final int? videoState;
 

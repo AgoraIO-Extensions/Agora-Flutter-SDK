@@ -1,9 +1,9 @@
 # iris dependencies start
-set(IRIS_SDK_DOWNLOAD_URL "https://download.agora.io/sdk/release/iris_4.6.2-dev.16_DCG_Windows_Video_Standalone_20260116_0600_31907.zip")
+set(IRIS_SDK_DOWNLOAD_URL "https://download.agora.io/sdk/release/iris_4.6.2-build.1_DCG_Windows_Video_Standalone_20260212_0947_31926.zip")
 # iris dependencies end
 
 # native dependencies start
-set(NATIVE_SDK_DOWNLOAD_URL "https://download.shengwang.cn/sdk/release/Shengwang_Native_SDK_for_Windows_v4.6.2_FULL.zip")
+set(NATIVE_SDK_DOWNLOAD_URL "https://download.shengwang.cn/sdk/release/Shengwang_Native_SDK_for_Windows_rel.v4.6.2.70_31616_FULL_20260211_1433_1009683.zip")
 # native dependencies end
 
 function(download_and_extract URL TARGET_DIR EXTRACTED_DIR)

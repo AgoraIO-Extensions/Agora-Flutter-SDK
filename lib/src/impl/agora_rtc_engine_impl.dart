@@ -15,7 +15,7 @@ import '/src/agora_rtc_engine.dart';
 import '/src/agora_rtc_engine_ex.dart';
 import '/src/agora_rtc_engine_ext.dart';
 import '/src/agora_spatial_audio.dart';
-import '/src/audio_device_manager.dart'; 
+import '/src/audio_device_manager.dart';
 import '/src/binding/agora_base_event_impl.dart';
 import '/src/binding/agora_media_base_event_impl.dart';
 import '/src/binding/agora_media_engine_impl.dart';
@@ -602,7 +602,7 @@ class RtcEngineImpl extends rtc_engine_ex_binding.RtcEngineExImpl
 
     _rtcEngineStateInternal?.dispose();
     _rtcEngineStateInternal = null;
-    
+
     PerformanceDataCollector.instance.dispose();
 
     await _objectPool.clear();
@@ -995,6 +995,7 @@ class RtcEngineImpl extends rtc_engine_ex_binding.RtcEngineExImpl
       throw AgoraRtcException(code: result);
     }
   }
+
   @override
   Future<void> joinChannelWithUserAccount(
       {required String token,
@@ -1021,7 +1022,6 @@ class RtcEngineImpl extends rtc_engine_ex_binding.RtcEngineExImpl
       throw AgoraRtcException(code: result);
     }
   }
-
 
   @override
   void registerAudioEncodedFrameObserver(
