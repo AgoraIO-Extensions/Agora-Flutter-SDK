@@ -251,7 +251,7 @@ mixin VideoViewControllerBaseMixin implements VideoViewControllerBase {
       _platformViewId = kInvalidPlatformViewId;
     }
 
-    if (connection != null) {
+    if (connection?.channelId != null && connection?.localUid != null) {
       PerformanceDataCollector.instance.clearChannelData(
           connection!.channelId ?? '',
           connection!.localUid ?? 0,
