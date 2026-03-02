@@ -29,7 +29,7 @@ Pod::Spec.new do |s|
     # iris dependencies end
 
     # native dependencies start
-    s.dependency 'ShengwangVideo_Special_iOS', '4.6.2.70'
+    s.dependency 'AgoraVideo_Special_iOS', '4.6.2.70'
     # native dependencies end
   end
   
