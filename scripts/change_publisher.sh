@@ -39,4 +39,8 @@ sed "s/${old_name}:/${new_name}:/g" ${change_file} >tmp && mv tmp ${change_file}
 
 find "$change_dir" -name "*.bak" -type f -delete
 
+# ./tool/terra/terra_config_main.yaml
+change_file=${PROJECT_ROOT}/tool/terra/terra_config_main.yaml
+sed "s|flutter_ng_json_template_en.json|flutter_ng_json_template_cn.json|g" ${change_file} >tmp && mv tmp ${change_file}
+
 echo "All replacements completed successfully, and backup files have been deleted."
