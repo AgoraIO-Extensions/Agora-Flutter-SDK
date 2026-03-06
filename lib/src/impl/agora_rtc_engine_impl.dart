@@ -32,6 +32,7 @@ import '/src/impl/agora_spatial_audio_impl_override.dart'
     as agora_spatial_audio_impl;
 import '/src/impl/audio_device_manager_impl.dart' as audio_device_manager_impl;
 import '/src/impl/media_player_impl.dart' as media_player_impl;
+import '/src/impl/video_effect_object_impl.dart' as video_effect_object_impl;
 
 import '/src/impl/platform/platform_bindings_provider.dart';
 import 'package:async/async.dart' show AsyncMemoizer;
@@ -579,6 +580,51 @@ class RtcEngineImpl extends rtc_engine_ex_binding.RtcEngineExImpl
     const apiType = 'RtcEngine_destroyMediaPlayer_328a49b';
     final playerId = mediaPlayer.getMediaPlayerId();
     final param = createParams({'playerId': playerId});
+    final callApiResult = await irisMethodChannel
+        .invokeMethod(IrisMethodCall(apiType, jsonEncode(param)));
+    if (callApiResult.irisReturnCode < 0) {
+      throw AgoraRtcException(code: callApiResult.irisReturnCode);
+    }
+    final rm = callApiResult.data;
+    final result = rm['result'];
+    if (result < 0) {
+      throw AgoraRtcException(code: result);
+    }
+  }
+
+  @override
+  Future<VideoEffectObject?> createVideoEffectObject(
+      {required String bundlePath,
+      MediaSourceType type = MediaSourceType.primaryCameraSource}) async {
+    const apiType = 'RtcEngine_createVideoEffectObject_65bd50d';
+    final param =
+        createParams({'bundlePath': bundlePath, 'type': type.value()});
+    final callApiResult = await irisMethodChannel
+        .invokeMethod(IrisMethodCall(apiType, jsonEncode(param)));
+    if (callApiResult.irisReturnCode < 0) {
+      return null;
+    }
+    final rm = callApiResult.data;
+    // iris returns objectId (int) — the key in its internal object map.
+    // A negative value means failure.
+    final int objectId = rm['result'] as int;
+    if (objectId < 0) {
+      return null;
+    }
+    // Wrap the objectId so that every subsequent VideoEffectObject call
+    // injects it into the params, letting iris route to the right native object.
+    return video_effect_object_impl.VideoEffectObjectImpl.create(
+        objectId, irisMethodChannel);
+  }
+
+  @override
+  Future<void> destroyVideoEffectObject(
+      covariant VideoEffectObject videoEffectObject) async {
+    const apiType = 'RtcEngine_destroyVideoEffectObject_66d092b';
+    // Cast to our impl to extract the objectId for the iris call.
+    final impl =
+        videoEffectObject as video_effect_object_impl.VideoEffectObjectImpl;
+    final param = createParams({'objectId': impl.objectId});
     final callApiResult = await irisMethodChannel
         .invokeMethod(IrisMethodCall(apiType, jsonEncode(param)));
     if (callApiResult.irisReturnCode < 0) {
