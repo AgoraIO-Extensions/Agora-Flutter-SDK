@@ -198,9 +198,9 @@ public:
   // Use `dispatch_sync` because `copyPixelBuffer` API requires synchronous
   // return.
   dispatch_sync(self.pixelBufferSynchronizationQueue, ^{
-    // No need weak self because it's dispatch_sync.
-    pixelBuffer = self.latestPixelBuffer;
-    self.latestPixelBuffer = nil;
+    if (self.latestPixelBuffer) {
+        pixelBuffer = CVPixelBufferRetain(self.latestPixelBuffer);
+    }
   });
   return pixelBuffer;
 }
