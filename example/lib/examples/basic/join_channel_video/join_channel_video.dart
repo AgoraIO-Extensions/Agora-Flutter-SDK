@@ -30,7 +30,7 @@ class _State extends State<JoinChannelVideo> {
   late TextEditingController uidController;
   Map<int, VideoViewController> _remoteVideoControllers = {};
   bool test = false;
-  bool _isUseFlutterTexture = true;
+  bool _isUseFlutterTexture = false;
   bool _isUseAndroidSurfaceView = false;
 
   // Test switches
