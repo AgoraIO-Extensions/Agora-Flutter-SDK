@@ -2,10 +2,10 @@ import '/src/_serializable.dart';
 import '/src/binding_forward_export.dart';
 part 'audio_device_manager.g.dart';
 
-/// The maximum length of the device ID.
+/// Maximum length of device ID.
 @JsonEnum(alwaysCreate: true)
 enum MaxDeviceIdLengthType {
-  /// The maximum length of the device ID is 512 bytes.
+  /// The maximum length of the device ID is 512 characters.
   @JsonValue(512)
   maxDeviceIdLength,
 }
@@ -23,273 +23,280 @@ extension MaxDeviceIdLengthTypeExt on MaxDeviceIdLengthType {
   }
 }
 
-/// Audio device management methods.
+/// Methods for managing audio devices.
 abstract class AudioDeviceManager {
-  /// Enumerates the audio playback devices.
+  /// Gets a list of all playback devices in the system.
   ///
-  /// This method is for Windows and macOS only.
+  /// This method is applicable only to Windows and macOS.
   ///
   /// Returns
-  /// Success: Returns an AudioDeviceInfo array, which includes all the audio playback devices.
-  ///  Failure: An empty array.
+  /// If the method call succeeds, returns an array of AudioDeviceInfo containing the device ID and name of all playback devices.
+  ///  If the method call fails: returns an empty list.
   Future<List<AudioDeviceInfo>> enumeratePlaybackDevices();
 
-  /// Enumerates the audio capture devices.
+  /// Gets the list of all audio recording devices in the system.
   ///
-  /// This method is for Windows and macOS only.
+  /// This method is applicable to Windows and macOS only.
   ///
   /// Returns
-  /// Success: An AudioDeviceInfo array, which includes all the audio capture devices.
-  ///  Failure: An empty array.
+  /// If the method call succeeds, returns an array of AudioDeviceInfo containing the device ID and device name of all audio recording devices.
+  ///  If the method call fails: returns an empty list.
   Future<List<AudioDeviceInfo>> enumerateRecordingDevices();
 
-  /// Sets the audio playback device.
+  /// Specifies the playback device.
   ///
-  /// This method is for Windows and macOS only. You can call this method to change the audio route currently being used, but this does not change the default audio route. For example, if the default audio route is speaker 1, you call this method to set the audio route as speaker 2 before joinging a channel and then start a device test, the SDK conducts device test on speaker 2. After the device test is completed and you join a channel, the SDK still uses speaker 1, the default audio route.
+  /// This method changes the current audio route but does not change the system default audio route. For example, if the system default audio route is Speaker 1, and you call this method to set the current audio route to Speaker 2 before joining a channel, the SDK will test Speaker 2 during device testing. After testing, when you join the channel, the SDK will still use the system default audio route, i.e., Speaker 1. This method is applicable to Windows and macOS only.
   ///
-  /// * [deviceId] The ID of the specified audio playback device. You can get the device ID by calling enumeratePlaybackDevices. Connecting or disconnecting the audio device does not change the value of deviceId.
+  /// * [deviceId] Specifies the playback device. Obtained via enumeratePlaybackDevices. Plugging or unplugging devices does not affect deviceId.
   ///
   /// Returns
-  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown. You need to catch the exception and handle it accordingly.
+  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown. You need to catch the exception and handle it accordingly. See [Error Codes](https://docs.agora.io/en/video-calling/troubleshooting/error-codes) for details and resolution suggestions.
   Future<void> setPlaybackDevice(String deviceId);
 
-  /// Retrieves the audio playback device associated with the device ID.
+  /// Gets the current audio playback device.
   ///
-  /// This method is for Windows and macOS only.
+  /// This method is applicable to Windows and macOS only.
   ///
   /// Returns
   /// The current audio playback device.
   Future<String> getPlaybackDevice();
 
-  /// Retrieves the information of the audio playback device.
+  /// Gets audio playback device information.
   ///
-  /// This method is for Windows and macOS only.
+  /// This method is applicable to Windows and macOS only.
   ///
   /// Returns
-  /// An AudioDeviceInfo object, which contains the ID and device name of the audio devices.
+  /// An AudioDeviceInfo object containing the device ID and device name of the audio playback device.
   Future<AudioDeviceInfo> getPlaybackDeviceInfo();
 
-  /// Sets the volume of the audio playback device.
+  /// Sets the playback device volume.
   ///
-  /// This method applies to Windows only.
+  /// (Windows only)
   ///
-  /// * [volume] The volume of the audio playback device. The value range is [0,255].
+  /// * [volume] Playback device volume. Value range: [0,255].
   ///
   /// Returns
-  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown. You need to catch the exception and handle it accordingly.
+  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown. You need to catch the exception and handle it accordingly. See [Error Codes](https://docs.agora.io/en/video-calling/troubleshooting/error-codes) for details and resolution suggestions.
   Future<void> setPlaybackDeviceVolume(int volume);
 
-  /// Retrieves the volume of the audio playback device.
+  /// Gets the playback device volume.
   ///
   /// Returns
-  /// The volume of the audio playback device. The value range is [0,255].
+  /// Playback device volume. Value range: [0,255].
   Future<int> getPlaybackDeviceVolume();
 
-  /// Sets the audio capture device.
+  /// Specifies the audio recording device.
   ///
-  /// This method is for Windows and macOS only. You can call this method to change the audio route currently being used, but this does not change the default audio route. For example, if the default audio route is microphone, you call this method to set the audio route as bluetooth earphones before joinging a channel and then start a device test, the SDK conducts device test on the bluetooth earphones. After the device test is completed and you join a channel, the SDK still uses the microphone for audio capturing.
+  /// This method allows you to change the current audio recording device without changing the system default audio recording device. Suppose the system default recording device is Microphone 1. If you call this method before joining a channel to set the current audio route to Bluetooth Headset 1, the SDK will test Bluetooth Headset 1 during device testing. After the test, when you join a channel, the SDK will still use the system default recording device, i.e., Microphone 1. (Windows and macOS only)
   ///
-  /// * [deviceId] The ID of the audio capture device. You can get the Device ID by calling enumerateRecordingDevices. Connecting or disconnecting the audio device does not change the value of deviceId.
+  /// * [deviceId] The Device ID of the audio recording device. You can get it through enumerateRecordingDevices. Plugging or unplugging the device does not affect the deviceId.
   ///
   /// Returns
-  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown. You need to catch the exception and handle it accordingly.
+  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown. You need to catch the exception and handle it accordingly. See [Error Codes](https://docs.agora.io/en/video-calling/troubleshooting/error-codes) for details and resolution suggestions.
   Future<void> setRecordingDevice(String deviceId);
 
   /// Gets the current audio recording device.
   ///
-  /// This method is for Windows and macOS only.
+  /// This method is applicable to Windows and macOS only.
   ///
   /// Returns
   /// The current audio recording device.
   Future<String> getRecordingDevice();
 
-  /// Retrieves the information of the audio recording device.
+  /// Gets information about the audio recording device.
   ///
-  /// This method is for Windows and macOS only.
+  /// This method is applicable to Windows and macOS only.
   ///
   /// Returns
-  /// An AudioDeviceInfo object, which includes the device ID and device name.
+  /// AudioDeviceInfo object containing the device ID and name of the audio recording device.
   Future<AudioDeviceInfo> getRecordingDeviceInfo();
 
-  /// Sets the volume of the audio capture device.
+  /// Sets the volume of the audio recording device.
   ///
-  /// This method is for Windows and macOS only.
+  /// (Windows and macOS only)
   ///
-  /// * [volume] The volume of the audio recording device. The value range is [0,255]. 0 means no sound, 255 means maximum volume.
+  /// * [volume] Volume of the audio recording device. Value range: [0,255]. 0 means muted, 255 means maximum volume.
   ///
   /// Returns
-  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown. You need to catch the exception and handle it accordingly.
+  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown. You need to catch the exception and handle it accordingly. See [Error Codes](https://docs.agora.io/en/video-calling/troubleshooting/error-codes) for details and resolution suggestions.
   Future<void> setRecordingDeviceVolume(int volume);
 
-  /// Retrieves the volume of the audio recording device.
+  /// Gets the volume of the audio recording device.
   ///
-  /// This method applies to Windows only.
+  /// This method is applicable to Windows only.
   ///
   /// Returns
-  /// The volume of the audio recording device. The value range is [0,255].
+  /// Audio recording device volume. Value range: [0,255].
   Future<int> getRecordingDeviceVolume();
 
-  /// Sets the loopback device.
+  /// Specifies the sound card capture device.
   ///
-  /// The SDK uses the current playback device as the loopback device by default. If you want to specify another audio device as the loopback device, call this method, and set deviceId to the loopback device you want to specify. You can call this method to change the audio route currently being used, but this does not change the default audio route. For example, if the default audio route is microphone, you call this method to set the audio route as a sound card before joinging a channel and then start a device test, the SDK conducts device test on the sound card. After the device test is completed and you join a channel, the SDK still uses the microphone for audio capturing. This method is for Windows and macOS only. The scenarios where this method is applicable are as follows: Use app A to play music through a Bluetooth headset; when using app B for a video conference, play through the speakers.
-  ///  If the loopback device is set as the Bluetooth headset, the SDK publishes the music in app A to the remote end.
-  ///  If the loopback device is set as the speaker, the SDK does not publish the music in app A to the remote end.
-  ///  If you set the loopback device as the Bluetooth headset, and then use a wired headset to play the music in app A, you need to call this method again, set the loopback device as the wired headset, and the SDK continues to publish the music in app A to remote end.
+  /// By default, the SDK uses the current playback device as the sound card capture device. To specify another audio device as the sound card capture device, call this method and set deviceId to the desired device.
+  /// This method changes the current recording device but does not change the system default recording device. For example, if the system default recording device is Microphone 1, and you call this method to set the current audio route to Sound Card 1 before joining a channel, the SDK will test Sound Card 1 during device testing. After testing, when you join the channel, the SDK will still use the system default recording device, i.e., Microphone 1. This method is applicable to Windows and macOS only.
+  /// Applicable scenarios:
+  /// App A plays music through Bluetooth headset; App B conducts a video conference through speaker.
+  ///  If the sound card capture device is set to the Bluetooth headset, the SDK will publish the music from App A to the remote end.
+  ///  If the sound card capture device is set to the speaker, the SDK will not publish the music from App A.
+  ///  If you switch from Bluetooth headset to wired headset for App A after setting the sound card capture device to Bluetooth headset, you need to call this method again to set the sound card capture device to wired headset, so that the SDK continues publishing App A's music to the remote end.
   ///
-  /// * [deviceId] Specifies the loopback device of the SDK. You can get the device ID by calling enumeratePlaybackDevices. Connecting or disconnecting the audio device does not change the value of deviceId. The maximum length is MaxDeviceIdLengthType.
+  /// * [deviceId] Specifies the SDK's sound card capture device. Obtained via enumeratePlaybackDevices. Plugging or unplugging devices does not affect deviceId.
+  /// Maximum length is MaxDeviceIdLengthType.
   ///
   /// Returns
-  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown. You need to catch the exception and handle it accordingly.
+  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown. You need to catch the exception and handle it accordingly. See [Error Codes](https://docs.agora.io/en/video-calling/troubleshooting/error-codes) for details and resolution suggestions.
   Future<void> setLoopbackDevice(String deviceId);
 
-  /// Gets the current loopback device.
+  /// Gets the current sound card capture device.
   ///
-  /// This method is for Windows and macOS only.
+  /// This method is applicable to Windows and macOS only.
   ///
   /// Returns
-  /// The ID of the current loopback device.
+  /// The ID of the current sound card capture device.
   Future<String> getLoopbackDevice();
 
-  /// Mutes the audio playback device.
+  /// Sets the playback device to mute.
   ///
-  /// * [mute] Whether to mute the audio playback device: true : Mute the audio playback device. false : Unmute the audio playback device.
+  /// * [mute] Whether to mute the playback device: true : Mute the playback device. false : Do not mute the playback device.
   ///
   /// Returns
-  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown. You need to catch the exception and handle it accordingly.
+  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown. You need to catch the exception and handle it accordingly. See [Error Codes](https://docs.agora.io/en/video-calling/troubleshooting/error-codes) for details and resolution suggestions.
   Future<void> setPlaybackDeviceMute(bool mute);
 
-  /// Retrieves whether the audio playback device is muted.
+  /// Gets the mute status of the current playback device.
   ///
   /// Returns
-  /// true : The audio playback device is muted. false : The audio playback device is unmuted.
+  /// true : The playback device is muted. false : The playback device is not muted.
   Future<bool> getPlaybackDeviceMute();
 
-  /// Sets the mute status of the audio capture device.
+  /// Mutes the current audio recording device.
   ///
-  /// * [mute] Whether to mute the audio recording device: true : Mute the audio capture device. false : Unmute the audio capture device.
+  /// * [mute] Whether to mute the audio recording device: true : Mute the recording device. false : Unmute the recording device.
   ///
   /// Returns
-  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown. You need to catch the exception and handle it accordingly.
+  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown. You need to catch the exception and handle it accordingly. See [Error Codes](https://docs.agora.io/en/video-calling/troubleshooting/error-codes) for details and resolution suggestions.
   Future<void> setRecordingDeviceMute(bool mute);
 
-  /// Gets whether the audio capture device is muted.
+  /// Gets the mute status of the current recording device.
   ///
   /// Returns
-  /// true : The microphone is muted. false : The microphone is unmuted.
+  /// true : The recording device is muted. false : The recording device is not muted.
   Future<bool> getRecordingDeviceMute();
 
   /// Starts the audio playback device test.
   ///
-  /// This method tests whether the audio device for local playback works properly. Once a user starts the test, the SDK plays an audio file specified by the user. If the user can hear the audio, the playback device works properly. After calling this method, the SDK triggers the onAudioVolumeIndication callback every 100 ms, reporting uid = 1 and the volume information of the playback device. The difference between this method and the startEchoTest method is that the former checks if the local audio playback device is working properly, while the latter can check the audio and video devices and network conditions. Call this method before joining a channel. After the test is completed, call stopPlaybackDeviceTest to stop the test before joining a channel.
+  /// This method tests whether the local audio playback device is working properly. After starting the test, the SDK plays the specified audio file. If you can hear the sound, it indicates that the playback device is functioning correctly.
+  /// After calling this method, the SDK triggers the onAudioVolumeIndication callback every 100 ms to report the volume information of uid = 1 and the playback device.
+  /// The difference between this method and startEchoTest is that this method checks whether the local audio playback device works properly, while the latter checks whether the audio/video devices and network are functioning correctly. You must call this method before joining a channel. After the test is complete, if you want to join a channel, make sure to call stopPlaybackDeviceTest to stop the device test first.
   ///
-  /// * [testAudioFilePath] The path of the audio file. The data format is string in UTF-8.
-  ///  Supported file formats: wav, mp3, m4a, and aac.
-  ///  Supported file sample rates: 8000, 16000, 32000, 44100, and 48000 Hz.
+  /// * [testAudioFilePath] The absolute path of the audio file. The path string must be encoded in UTF-8.
+  ///  Supported file formats: wav, mp3, m4a, aac.
+  ///  Supported sample rates: 8000, 16000, 32000, 44100, 48000.
   ///
   /// Returns
-  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown. You need to catch the exception and handle it accordingly.
+  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown. You need to catch the exception and handle it accordingly. See [Error Codes](https://docs.agora.io/en/video-calling/troubleshooting/error-codes) for details and resolution suggestions.
   Future<void> startPlaybackDeviceTest(String testAudioFilePath);
 
   /// Stops the audio playback device test.
   ///
-  /// This method stops the audio playback device test. You must call this method to stop the test after calling the startPlaybackDeviceTest method. Call this method before joining a channel.
+  /// This method stops the audio playback device test. After calling startPlaybackDeviceTest, you must call this method to stop the test. You must call this method before joining a channel.
   ///
   /// Returns
-  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown. You need to catch the exception and handle it accordingly.
+  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown. You need to catch the exception and handle it accordingly. See [Error Codes](https://docs.agora.io/en/video-calling/troubleshooting/error-codes) for details and resolution suggestions.
   Future<void> stopPlaybackDeviceTest();
 
-  /// Starts the audio capturing device test.
+  /// Starts the audio recording device test.
   ///
-  /// This method tests whether the audio capturing device works properly. After calling this method, the SDK triggers the onAudioVolumeIndication callback at the time interval set in this method, which reports uid = 0 and the volume information of the capturing device. The difference between this method and the startEchoTest method is that the former checks if the local audio capturing device is working properly, while the latter can check the audio and video devices and network conditions. Call this method before joining a channel. After the test is completed, call stopRecordingDeviceTest to stop the test before joining a channel.
+  /// This method tests whether the local audio recording device works properly. After you call this method, the SDK triggers the onAudioVolumeIndication callback at the specified time interval to report the volume information of the recording device with uid = 0.
+  /// The difference between this method and startEchoTest is that this method checks whether the local audio recording device works properly, while the latter checks whether the audio and video devices and network are functioning properly. You must call this method before joining a channel. After the test is complete, if you want to join a channel, make sure to call stopRecordingDeviceTest to stop the device test.
   ///
-  /// * [indicationInterval] The interval (ms) for triggering the onAudioVolumeIndication callback. This value should be set to greater than 10, otherwise, you will not receive the onAudioVolumeIndication callback and the SDK returns the error code -2. Agora recommends that you set this value to 100.
+  /// * [indicationInterval] The time interval at which the SDK triggers the onAudioVolumeIndication callback, in milliseconds. The minimum value is 10. Otherwise, the onAudioVolumeIndication callback will not be received, and the SDK returns error code -2. Agora recommends setting this value to 100.
   ///
   /// Returns
-  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown. You need to catch the exception and handle it accordingly.
-  ///  < 0: Failure.
-  ///  -2: Invalid parameters. Check your parameter settings.
+  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown. You need to catch the exception and handle it accordingly. See [Error Codes](https://docs.agora.io/en/video-calling/troubleshooting/error-codes) for details and resolution suggestions.
+  ///  < 0: Method call failed. See [Error Codes](https://docs.agora.io/en/video-calling/troubleshooting/error-codes) for details and resolution suggestions.
+  ///  -2: Invalid parameter setting. Please reset the parameter.
   Future<void> startRecordingDeviceTest(int indicationInterval);
 
-  /// Stops the audio capturing device test.
+  /// Stops the audio recording device test.
   ///
-  /// This method stops the audio capturing device test. You must call this method to stop the test after calling the startRecordingDeviceTest method. Call this method before joining a channel.
+  /// This method stops the audio recording device test. After calling startRecordingDeviceTest, you must call this method to stop the test. You must call this method before joining a channel.
   ///
   /// Returns
-  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown. You need to catch the exception and handle it accordingly.
+  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown. You need to catch the exception and handle it accordingly. See [Error Codes](https://docs.agora.io/en/video-calling/troubleshooting/error-codes) for details and resolution suggestions.
   Future<void> stopRecordingDeviceTest();
 
-  /// Starts an audio device loopback test.
+  /// Starts the audio device loopback test.
   ///
-  /// This method tests whether the local audio capture device and playback device are working properly. After starting the test, the audio capture device records the local audio, and the audio playback device plays the captured audio. The SDK triggers two independent onAudioVolumeIndication callbacks at the time interval set in this method, which reports the volume information of the capture device (uid = 0) and the volume information of the playback device (uid = 1) respectively.
-  ///  This method is for Windows and macOS only.
-  ///  You can call this method either before or after joining a channel.
-  ///  This method only takes effect when called by the host.
-  ///  This method tests local audio devices and does not report the network conditions.
-  ///  When you finished testing, call stopAudioDeviceLoopbackTest to stop the audio device loopback test.
+  /// This method tests whether the audio recording and playback devices are working properly. Once the test starts, the recording device captures local audio and the playback device plays it back. The SDK triggers two onAudioVolumeIndication callbacks at the specified interval, reporting the volume information of the recording device (uid = 0) and the playback device (uid = 1).
+  ///  (Windows and macOS only)
+  ///  Can be called before or after joining a channel.
+  ///  Only supported for the broadcaster role.
+  ///  This method only tests local audio devices and does not involve network connection.
+  ///  After the test is complete, you must call stopAudioDeviceLoopbackTest to stop the loopback test.
   ///
-  /// * [indicationInterval] The time interval (ms) at which the SDK triggers the onAudioVolumeIndication callback. Agora recommends setting a value greater than 200 ms. This value must not be less than 10 ms; otherwise, you can not receive the onAudioVolumeIndication callback.
+  /// * [indicationInterval] The time interval (in milliseconds) at which the SDK triggers the onAudioVolumeIndication callback. It is recommended to set it greater than 200 ms. It must not be less than 10 ms, otherwise the onAudioVolumeIndication callback will not be received.
   ///
   /// Returns
-  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown. You need to catch the exception and handle it accordingly.
+  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown. You need to catch the exception and handle it accordingly. See [Error Codes](https://docs.agora.io/en/video-calling/troubleshooting/error-codes) for details and resolution suggestions.
   Future<void> startAudioDeviceLoopbackTest(int indicationInterval);
 
   /// Stops the audio device loopback test.
   ///
-  /// This method is for Windows and macOS only.
+  /// This method is only applicable to Windows and macOS.
   ///  You can call this method either before or after joining a channel.
-  ///  This method only takes effect when called by the host.
-  ///  Ensure that you call this method to stop the loopback test after calling the startAudioDeviceLoopbackTest method.
+  ///  Only the host role is allowed to call this method.
+  ///  After calling startAudioDeviceLoopbackTest, you must call this method to stop the audio device loopback test.
   ///
   /// Returns
-  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown. You need to catch the exception and handle it accordingly.
+  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown. You need to catch the exception and handle it accordingly. See [Error Codes](https://docs.agora.io/en/video-calling/troubleshooting/error-codes) for details and resolution suggestions.
   Future<void> stopAudioDeviceLoopbackTest();
 
-  /// Sets the audio playback device used by the SDK to follow the system default audio playback device.
+  /// Sets whether the audio playback device used by the SDK follows the system default playback device.
   ///
-  /// This method is for Windows and macOS only.
+  /// This method is applicable to Windows and macOS only.
   ///
-  /// * [enable] Whether to follow the system default audio playback device: true : Follow the system default audio playback device. The SDK immediately switches the audio playback device when the system default audio playback device changes. false : Do not follow the system default audio playback device. The SDK switches the audio playback device to the system default audio playback device only when the currently used audio playback device is disconnected.
+  /// * [enable] Whether to follow the system default audio playback device: true : Follow. When the system default playback device changes, the SDK immediately switches the audio playback device. false : Do not follow. The SDK switches to the system default playback device only when the current audio playback device is removed.
   ///
   /// Returns
-  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown. You need to catch the exception and handle it accordingly.
+  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown. You need to catch the exception and handle it accordingly. See [Error Codes](https://docs.agora.io/en/video-calling/troubleshooting/error-codes) for details and resolution suggestions.
   Future<void> followSystemPlaybackDevice(bool enable);
 
-  /// Sets the audio recording device used by the SDK to follow the system default audio recording device.
+  /// Sets whether the audio recording device used by the SDK follows the system default recording device.
   ///
-  /// This method is for Windows and macOS only.
+  /// This method is applicable to Windows and macOS only.
   ///
-  /// * [enable] Whether to follow the system default audio recording device: true : Follow the system default audio playback device. The SDK immediately switches the audio recording device when the system default audio recording device changes. false : Do not follow the system default audio playback device. The SDK switches the audio recording device to the system default audio recording device only when the currently used audio recording device is disconnected.
+  /// * [enable] Whether to follow the system default audio recording device: true : Follow. When the system default recording device changes, the SDK immediately switches the recording device. false : Do not follow. The SDK switches to the system default recording device only when the current recording device is removed.
   ///
   /// Returns
-  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown. You need to catch the exception and handle it accordingly.
+  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown. You need to catch the exception and handle it accordingly. See [Error Codes](https://docs.agora.io/en/video-calling/troubleshooting/error-codes) for details and resolution suggestions.
   Future<void> followSystemRecordingDevice(bool enable);
 
-  /// Sets whether the loopback device follows the system default playback device.
+  /// Sets whether the loopback recording device follows the system default playback device.
   ///
-  /// This method is for Windows and macOS only.
+  /// This method is applicable to Windows and macOS only.
   ///
-  /// * [enable] Whether to follow the system default audio playback device: true : Follow the system default audio playback device. When the default playback device of the system is changed, the SDK immediately switches to the loopback device. false : Do not follow the system default audio playback device. The SDK switches the audio loopback device to the system default audio playback device only when the current audio playback device is disconnected.
+  /// * [enable] Whether to follow the system default playback device: true : Follow. When the system default playback device changes, the SDK immediately switches the loopback recording device. false : Do not follow. The SDK switches to the system default playback device only when the current loopback recording device is removed.
   ///
   /// Returns
-  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown. You need to catch the exception and handle it accordingly.
+  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown. You need to catch the exception and handle it accordingly. See [Error Codes](https://docs.agora.io/en/video-calling/troubleshooting/error-codes) for details and resolution suggestions.
   Future<void> followSystemLoopbackDevice(bool enable);
 
-  /// Releases all the resources occupied by the AudioDeviceManager object.
+  /// Releases all resources used by the AudioDeviceManager object.
   Future<void> release();
 
-  /// Gets the default audio playback device.
+  /// Gets the system default audio playback device.
   ///
-  /// This method is for Windows and macOS only.
+  /// This method is applicable to Windows and macOS only.
   ///
   /// Returns
-  /// The details about the default audio playback device. See AudioDeviceInfo.
+  /// Information about the default audio playback device. See AudioDeviceInfo.
   Future<AudioDeviceInfo> getPlaybackDefaultDevice();
 
-  /// Gets the default audio capture device.
+  /// Gets the system default audio recording device.
   ///
-  /// This method is for Windows and macOS only.
+  /// This method is applicable to Windows and macOS only.
   ///
   /// Returns
-  /// The details about the default audio capture device. See AudioDeviceInfo.
+  /// Information about the default audio recording device. See AudioDeviceInfo.
   Future<AudioDeviceInfo> getRecordingDefaultDevice();
 }
