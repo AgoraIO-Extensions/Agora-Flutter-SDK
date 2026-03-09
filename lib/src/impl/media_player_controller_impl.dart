@@ -30,9 +30,31 @@ class MediaPlayerControllerImpl
   RtcEngine get rtcEngine => _rtcEngine;
 
   final VideoCanvas _canvas;
+  VideoCanvas? _cachedCanvas;
 
   @override
-  VideoCanvas get canvas => _canvas;
+  VideoCanvas get canvas {
+    if (_mediaPlayer != null) {
+      if (_canvas.enableAlphaMask == true) {
+        if (_canvas.mediaPlayerId == null) {
+          _cachedCanvas ??= VideoCanvas(
+            uid: _canvas.uid,
+            view: _canvas.view,
+            renderMode: _canvas.renderMode,
+            mirrorMode: _canvas.mirrorMode,
+            setupMode: _canvas.setupMode,
+            sourceType: VideoSourceType.videoSourceMediaPlayer,
+            mediaPlayerId: getMediaPlayerId(),
+            cropArea: _canvas.cropArea,
+            enableAlphaMask: _canvas.enableAlphaMask,
+            position: _canvas.position,
+          );
+          return _cachedCanvas!;
+        }
+      }
+    }
+    return _canvas;
+  }
 
   final RtcConnection? _connection;
 
@@ -365,6 +387,11 @@ class MediaPlayerControllerImpl
 
   @override
   Future<void> setupView(int platformViewId, int nativeViewPtr) async {
+    if (canvas.enableAlphaMask == true) {
+      await super.setupView(platformViewId, nativeViewPtr);
+      return;
+    }
+
     return setView(nativeViewPtr);
   }
 
