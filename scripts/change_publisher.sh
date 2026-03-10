@@ -37,10 +37,17 @@ new_docs_zip2="shengwang_rtc_docs"
 MY_PATH=$(realpath "$(dirname "$0")")
 ROOT=$(realpath "${MY_PATH}/..")
 
+# Cross-platform in-place sed: macOS requires `sed -i ''`, Linux requires `sed -i`
+if [[ "$OSTYPE" == "darwin"* ]]; then
+  sed_i() { sed -i '' "$@"; }
+else
+  sed_i() { sed -i "$@"; }
+fi
+
 replace_in_file() {
   local file="$1"; shift
   for expr in "$@"; do
-    sed -i '' "$expr" "$file"
+    sed_i "$expr" "$file"
   done
 }
 
@@ -53,7 +60,7 @@ replace_in_dir() {
     ! -path "*/.dart_tool/*" \
     ! -path "*/build/*" | while read -r file; do
     if grep -q "$old" "$file" 2>/dev/null; then
-      sed -i '' "s|${old}|${new}|g" "$file"
+      sed_i "s|${old}|${new}|g" "$file"
     fi
   done
 }
@@ -82,7 +89,7 @@ for platform in ios macos; do
   spec="${ROOT}/${platform}/${new_pkg}.podspec"
   if [ -f "$spec" ]; then
     if grep -qE "s\.name\s*=\s*'${old_pkg}'" "$spec"; then
-      sed -i '' "s|s\.name *= *'${old_pkg}'|s.name             = '${new_pkg}'|g" "$spec"
+      sed_i "s|s\.name *= *'${old_pkg}'|s.name             = '${new_pkg}'|g" "$spec"
     fi
   fi
 done
@@ -191,14 +198,14 @@ done
 echo "Updating test_shard/ pubspec and dart files"
 find "${ROOT}/test_shard" -name "pubspec.yaml" | while read -r file; do
   if grep -q "${old_pkg}" "$file" 2>/dev/null; then
-    sed -i '' "s|  ${old_pkg}:|  ${new_pkg}:|g" "$file"
+    sed_i "s|  ${old_pkg}:|  ${new_pkg}:|g" "$file"
   fi
 done
 replace_in_dir "${ROOT}/test_shard" "*.dart" "package:${old_pkg}/" "package:${new_pkg}/"
 
 for pbxproj in $(find "${ROOT}/test_shard" -name "project.pbxproj" 2>/dev/null); do
   if grep -q "${old_bundle_prefix}" "$pbxproj" 2>/dev/null; then
-    sed -i '' "s|${old_bundle_prefix}\.|${new_bundle_prefix}.|g" "$pbxproj"
+    sed_i "s|${old_bundle_prefix}\.|${new_bundle_prefix}.|g" "$pbxproj"
   fi
 done
 
