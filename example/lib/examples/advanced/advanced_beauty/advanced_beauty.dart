@@ -32,10 +32,8 @@ class AdvancedBeauty extends StatefulWidget {
 // ---------- Beauty template options ----------
 /// Beauty presets — template names come from the SDK resource bundle's config.json.
 enum _BeautyTemplate {
-  broadcaster('Anchor (主播)', 'Beauty-Anchor'),
-  show('Show (秀场)', 'Beauty-Show'),
-  basic('Basic (基础)', 'Beauty-Basic'),
-  ordinary('Ordinary (普通)', 'Beauty-Ordinary');
+
+  basic('Basic (基础)', 'Beauty-Basic');
 
   const _BeautyTemplate(this.label, this.templateName);
   final String label;
@@ -89,7 +87,7 @@ class _State extends State<AdvancedBeauty> with KeepRemoteVideoViewsMixin {
 
   // ---- UI state ----
   bool _beautyEnabled = false;
-  _BeautyTemplate _beautyTemplate = _BeautyTemplate.broadcaster;
+  _BeautyTemplate _beautyTemplate = _BeautyTemplate.basic;
 
   // beauty_effect_option params
   double _smoothness = 0.5; // 磨皮  0~1
@@ -292,7 +290,9 @@ class _State extends State<AdvancedBeauty> with KeepRemoteVideoViewsMixin {
       );
 
       // Fetch the actual parameters from the SDK and update the UI
-      await _syncBeautyUI();
+      Future.delayed(const Duration(milliseconds: 500), () {
+        _syncBeautyUI();
+      });
 
       logSink
           .log('[applyBeauty] DONE. template: ${_beautyTemplate.templateName}');
