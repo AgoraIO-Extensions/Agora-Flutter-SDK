@@ -81,7 +81,15 @@ for platform in ios macos; do
   old_spec="${ROOT}/${platform}/${old_pkg}.podspec"
   new_spec="${ROOT}/${platform}/${new_pkg}.podspec"
   if [ -f "$old_spec" ]; then
-    mv "$old_spec" "$new_spec"
+    if [ -s "$old_spec" ]; then
+      if [ ! -s "$new_spec" ]; then
+        mv "$old_spec" "$new_spec"
+      else
+        rm "$old_spec"
+      fi
+    else
+      rm "$old_spec"
+    fi
   fi
 done
 
@@ -247,3 +255,9 @@ if [ -f "$f" ]; then
     "s|${old_repo_name}|${new_repo_name}|g" \
     "s|the ${old_pkg}|the ${new_pkg}|g"
 fi
+
+echo "Updating ci/run_update_deps.sh podspec filenames"
+f="${ROOT}/ci/run_update_deps.sh"
+[ -f "$f" ] && replace_in_file "$f" \
+  "s|dep_file_ios=ios/${old_pkg}\.podspec|dep_file_ios=ios/${new_pkg}.podspec|g" \
+  "s|dep_file_macos=macos/${old_pkg}\.podspec|dep_file_macos=macos/${new_pkg}.podspec|g"
