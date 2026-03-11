@@ -32,7 +32,6 @@ class AdvancedBeauty extends StatefulWidget {
 // ---------- Beauty template options ----------
 /// Beauty presets — template names come from the SDK resource bundle's config.json.
 enum _BeautyTemplate {
-
   basic('Basic (基础)', 'Beauty-Basic');
 
   const _BeautyTemplate(this.label, this.templateName);
