@@ -5,23 +5,23 @@ part 'agora_rhythm_player.g.dart';
 /// Virtual metronome state.
 @JsonEnum(alwaysCreate: true)
 enum RhythmPlayerStateType {
-  /// 810: The virtual metronome is not enabled or disabled already.
+  /// 810: The virtual metronome is not started or has been stopped.
   @JsonValue(810)
   rhythmPlayerStateIdle,
 
-  /// 811: Opening the beat files.
+  /// 811: Opening the beat audio file.
   @JsonValue(811)
   rhythmPlayerStateOpening,
 
-  /// 812: Decoding the beat files.
+  /// 812: Decoding the beat audio file.
   @JsonValue(812)
   rhythmPlayerStateDecoding,
 
-  /// 813: The beat files are playing.
+  /// 813: Playing the beat audio file.
   @JsonValue(813)
   rhythmPlayerStatePlaying,
 
-  /// 814: Failed to start virtual metronome. You can use the reported errorCode to troubleshoot the cause of the error, or you can try to start the virtual metronome again.
+  /// 814: Failed to start the virtual metronome. You can troubleshoot the issue using the reported error code errorCode, or try starting the virtual metronome again.
   @JsonValue(814)
   rhythmPlayerStateFailed,
 }
@@ -39,26 +39,26 @@ extension RhythmPlayerStateTypeExt on RhythmPlayerStateType {
   }
 }
 
-/// Virtual Metronome error message.
+/// Virtual metronome error information.
 @JsonEnum(alwaysCreate: true)
 enum RhythmPlayerReason {
-  /// 0: The beat files are played normally without errors.
+  /// 0: The beat audio file plays normally with no errors.
   @JsonValue(0)
   rhythmPlayerReasonOk,
 
-  /// 1: A general error; no specific reason.
+  /// 1: General error with no specific reason.
   @JsonValue(1)
   rhythmPlayerReasonFailed,
 
-  /// 801: There is an error when opening the beat files.
+  /// 801: Failed to open the beat audio file.
   @JsonValue(801)
   rhythmPlayerReasonCanNotOpen,
 
-  /// 802: There is an error when playing the beat files.
+  /// 802: Failed to play the beat audio file.
   @JsonValue(802)
   rhythmPlayerReasonCanNotPlay,
 
-  /// 803: The duration of the beat file exceeds the limit. The maximum duration is 1.2 seconds.
+  /// 803: The duration of the beat audio file exceeds the limit. The maximum duration is 1.2 seconds.
   @JsonValue(803)
   rhythmPlayerReasonFileOverDurationLimit,
 }
@@ -76,17 +76,17 @@ extension RhythmPlayerReasonExt on RhythmPlayerReason {
   }
 }
 
-/// The metronome configuration.
+/// Virtual metronome configuration.
 @JsonSerializable(explicitToJson: true, includeIfNull: false)
 class AgoraRhythmPlayerConfig implements AgoraSerializable {
   /// @nodoc
   const AgoraRhythmPlayerConfig({this.beatsPerMeasure, this.beatsPerMinute});
 
-  /// The number of beats per measure, which ranges from 1 to 9. The default value is 4, which means that each measure contains one downbeat and three upbeats.
+  /// Number of beats per measure, range: [1,9]. Default is 4, which means 1 strong beat and 3 weak beats per measure.
   @JsonKey(name: 'beatsPerMeasure')
   final int? beatsPerMeasure;
 
-  /// The beat speed (beats/minute), which ranges from 60 to 360. The default value is 60, which means that the metronome plays 60 beats in one minute.
+  /// Tempo (beats per minute), range: [60,360]. Default is 60, meaning 60 beats per minute.
   @JsonKey(name: 'beatsPerMinute')
   final int? beatsPerMinute;
 
