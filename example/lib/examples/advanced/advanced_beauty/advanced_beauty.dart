@@ -44,9 +44,7 @@ enum _BeautyTemplate {
 /// Style makeup combines multiple makeup layers in one template.
 enum _StyleMakeupTemplate {
   none('None', null),
-  natural
-  ('Natural (自然)', 'Makeup-Natural');
-  // mature('Mature (学姐)', 'Makeup-Mature'),
+  mature('Xuejie (学姐)', 'Makeup-Xuejie');
   // graceful('Graceful (优雅)', 'Makeup-Graceful'),
   // aura('Aura (气质)', 'Makeup-Aura'),
   // maiden('Maiden (少女)', 'Makeup-Maiden'),
@@ -61,7 +59,8 @@ enum _StyleMakeupTemplate {
 /// Filter template names (English) from the "暖色系" category of the bundle.
 enum _FilterTemplate {
   none('None', null),
-  whitetea('White Tea (白茶)', 'Filter-Whitetea');
+  nenbai('Nenbai', 'Filter-Nenbai'),
+  lengbai('Lengbai', 'Filter-Lengbai');
   // serene('Serene (沉稳)', 'Filter-Serene'),
   // urban('Urban (都市)', 'Filter-Urban'),
   // glow('Glow (流光)', 'Filter-Glow'),
