@@ -174,7 +174,7 @@ jobs:
           committer: GitHub <noreply@github.com>
           author: ${{ github.actor }} <${{ github.actor }}@users.noreply.github.com>
           signoff: false
-          branch: dev/${{ steps.prepare_target_branch.outputs.final_target_branch }}
+          branch: ${{ steps.prepare_target_branch.outputs.final_target_branch }}-dep-update
           base: ${{ steps.prepare_target_branch.outputs.final_target_branch }}
           delete-branch: true
           draft: false
