@@ -1062,7 +1062,7 @@ void main() {
   });
 
   test(
-      'refreshing publishing connections with real local stats connection updates local and remote to the same upload group',
+      'refreshing publishing connections updates upload group connection without rewriting remote uid',
       () async {
     final localEngine = _RecordingRtcEngine();
     final remoteEngine = _RecordingRtcEngine();
@@ -1114,7 +1114,7 @@ void main() {
     });
     expect(
       (payload['data'] as List).map((entry) => entry['uid']).toSet(),
-      {0, 8888889},
+      {0, 12321},
     );
   });
 
