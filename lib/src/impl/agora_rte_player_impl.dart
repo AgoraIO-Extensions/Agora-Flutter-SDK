@@ -14,7 +14,6 @@ class AgoraRtePlayerImpl implements AgoraRtePlayer {
 
   /// Handle callbacks (called by AgoraRteCoreImpl)
   void handleCallback(String method, Map args) {
-    print('xpz = $method $args');
     if (_observer == null) return;
 
     switch (method) {

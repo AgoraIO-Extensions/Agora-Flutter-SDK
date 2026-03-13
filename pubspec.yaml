@@ -39,5 +39,7 @@ flutter:
       windows:
         pluginClass: AgoraRtcEnginePlugin
       web:
-        pluginClass: AgoraRtcEngineWeb
-        fileName: agora_rtc_engine_web.dart
+        pluginClass: AgoraRteEngineWeb
+        fileName: agora_rte_engine_web.dart
+assets:
+    - web/rte.js
