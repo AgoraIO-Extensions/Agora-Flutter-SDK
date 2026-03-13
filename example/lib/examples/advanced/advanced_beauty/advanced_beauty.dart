@@ -374,10 +374,6 @@ class _State extends State<AdvancedBeauty> with KeepRemoteVideoViewsMixin {
       }
       setState(() {
         _styleMakeup = template;
-        // Makeup and filter are mutually exclusive (makeup takes priority)
-        if (template != _StyleMakeupTemplate.none) {
-          _filter = _FilterTemplate.none;
-        }
       });
     } on AgoraRtcException catch (e) {
       logSink
@@ -397,12 +393,6 @@ class _State extends State<AdvancedBeauty> with KeepRemoteVideoViewsMixin {
             .removeVideoEffect(VideoEffectNodeId.filter.value());
         logSink.log('[removeVideoEffect] filter removed');
       } else {
-        // Style makeup takes priority: remove makeup first
-        if (_styleMakeup != _StyleMakeupTemplate.none) {
-          await _videoEffectObject!
-              .removeVideoEffect(VideoEffectNodeId.styleMakeup.value());
-          logSink.log('[removeVideoEffect] styleMakeup removed for filter');
-        }
         await _videoEffectObject!.addOrUpdateVideoEffect(
           nodeId: VideoEffectNodeId.filter.value(),
           templateName: template.templateName!,
@@ -416,9 +406,6 @@ class _State extends State<AdvancedBeauty> with KeepRemoteVideoViewsMixin {
       }
       setState(() {
         _filter = template;
-        if (template != _FilterTemplate.none) {
-          _styleMakeup = _StyleMakeupTemplate.none;
-        }
       });
     } on AgoraRtcException catch (e) {
       logSink.log('[applyFilter] AgoraRtcException: ${e.code}, ${e.message}');
