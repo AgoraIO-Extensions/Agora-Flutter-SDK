@@ -93,6 +93,18 @@ Map<String, dynamic> _$MediaPlayerGetPublishSignalVolumeJsonToJson(
       'volume': instance.volume,
     };
 
+MediaPlayerGetAudioBufferDelayJson _$MediaPlayerGetAudioBufferDelayJsonFromJson(
+        Map<String, dynamic> json) =>
+    MediaPlayerGetAudioBufferDelayJson(
+      (json['delayMs'] as num).toInt(),
+    );
+
+Map<String, dynamic> _$MediaPlayerGetAudioBufferDelayJsonToJson(
+        MediaPlayerGetAudioBufferDelayJson instance) =>
+    <String, dynamic>{
+      'delayMs': instance.delayMs,
+    };
+
 MediaPlayerCacheManagerGetCacheDirJson
     _$MediaPlayerCacheManagerGetCacheDirJsonFromJson(
             Map<String, dynamic> json) =>

@@ -89,12 +89,21 @@ class _State extends State<ScreenSharing> with KeepRemoteVideoViewsMixin {
         default:
           break;
       }
+    }, onUserJoined: (RtcConnection connection, int remoteUid, int elapsed) {
+      logSink.log(
+          '[onUserJoined] connection: ${connection.toJson()} remoteUid: $remoteUid elapsed: $elapsed');
+    }, onUserOffline: (RtcConnection connection, int remoteUid,
+            UserOfflineReasonType reason) {
+      logSink.log(
+          '[onUserOffline] connection: ${connection.toJson()} remoteUid: $remoteUid reason: $reason');
     });
     _engine = createAgoraRtcEngineEx();
     await _engine.initialize(RtcEngineContext(
       appId: config.appId,
       channelProfile: ChannelProfileType.channelProfileLiveBroadcasting,
     ));
+    // Set enableArgusCounters after initialize (since RtcEngineContext is auto-generated)
+    _engine.setEnableArgusCounters(true);
     await _engine.setLogLevel(LogLevel.logLevelError);
 
     _engine.registerEventHandler(_rtcEngineEventHandler);
@@ -107,6 +116,7 @@ class _State extends State<ScreenSharing> with KeepRemoteVideoViewsMixin {
     setState(() {
       _isReadyPreview = true;
     });
+    await _engine.startPreview();
   }
 
   void _joinChannel() async {
@@ -188,6 +198,7 @@ class _State extends State<ScreenSharing> with KeepRemoteVideoViewsMixin {
                 canvas: const VideoCanvas(
                   uid: 0,
                 ),
+                useFlutterTexture: true,
               )),
             ),
           ),
@@ -204,6 +215,7 @@ class _State extends State<ScreenSharing> with KeepRemoteVideoViewsMixin {
                         sourceType: VideoSourceType.videoSourceScreen,
                         renderMode: RenderModeType.renderModeFit,
                       ),
+                      useFlutterTexture: true,
                     ))
                   : Container(
                       color: Colors.grey[200],
@@ -291,12 +303,12 @@ class _State extends State<ScreenSharing> with KeepRemoteVideoViewsMixin {
                     onPressed: () {
                       if (_isStartedPreview) {
                         _engine.stopPreview();
-                        _engine.stopPreview(
-                            sourceType: VideoSourceType.videoSourceScreen);
+                        // _engine.stopPreview(
+                        //     sourceType: VideoSourceType.videoSourceScreen);
                       } else {
                         _engine.startPreview();
-                        _engine.startPreview(
-                            sourceType: VideoSourceType.videoSourceScreen);
+                        // _engine.startPreview(
+                        //     sourceType: VideoSourceType.videoSourceScreen);
                       }
 
                       setState(() {
@@ -357,6 +369,7 @@ class _State extends State<ScreenSharing> with KeepRemoteVideoViewsMixin {
                     }
                   },
                   onStopScreenShare: () {}),
+            SizedBox(height: 100),
           ],
         );
       },

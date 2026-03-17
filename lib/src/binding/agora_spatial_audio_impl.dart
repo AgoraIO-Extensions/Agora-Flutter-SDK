@@ -27,9 +27,9 @@ class LocalSpatialAudioEngineImpl implements LocalSpatialAudioEngine {
   Future<void> release() async {
     final apiType =
         '${isOverrideClassName ? className : 'LocalSpatialAudioEngine'}_release';
-    final param = createParams({});
+    final requestParam = createParams({});
     final callApiResult = await irisMethodChannel.invokeMethod(
-        IrisMethodCall(apiType, jsonEncode(param), buffers: null));
+        IrisMethodCall(apiType, jsonEncode(requestParam), buffers: null));
     if (callApiResult.irisReturnCode < 0) {
       throw AgoraRtcException(code: callApiResult.irisReturnCode);
     }
@@ -44,9 +44,9 @@ class LocalSpatialAudioEngineImpl implements LocalSpatialAudioEngine {
   Future<void> initialize() async {
     final apiType =
         '${isOverrideClassName ? className : 'LocalSpatialAudioEngine'}_initialize_cf94fbf';
-    final param = createParams({});
+    final requestParam = createParams({});
     final callApiResult = await irisMethodChannel.invokeMethod(
-        IrisMethodCall(apiType, jsonEncode(param), buffers: null));
+        IrisMethodCall(apiType, jsonEncode(requestParam), buffers: null));
     if (callApiResult.irisReturnCode < 0) {
       throw AgoraRtcException(code: callApiResult.irisReturnCode);
     }
@@ -62,11 +62,12 @@ class LocalSpatialAudioEngineImpl implements LocalSpatialAudioEngine {
       {required int uid, required RemoteVoicePositionInfo posInfo}) async {
     final apiType =
         '${isOverrideClassName ? className : 'LocalSpatialAudioEngine'}_updateRemotePosition_adc0909';
-    final param = createParams({'uid': uid, 'posInfo': posInfo.toJson()});
+    final requestParam =
+        createParams({'uid': uid, 'posInfo': posInfo.toJson()});
     final List<Uint8List> buffers = [];
     buffers.addAll(posInfo.collectBufferList());
     final callApiResult = await irisMethodChannel.invokeMethod(
-        IrisMethodCall(apiType, jsonEncode(param), buffers: buffers));
+        IrisMethodCall(apiType, jsonEncode(requestParam), buffers: buffers));
     if (callApiResult.irisReturnCode < 0) {
       throw AgoraRtcException(code: callApiResult.irisReturnCode);
     }
@@ -84,7 +85,7 @@ class LocalSpatialAudioEngineImpl implements LocalSpatialAudioEngine {
       required RtcConnection connection}) async {
     final apiType =
         '${isOverrideClassName ? className : 'LocalSpatialAudioEngine'}_updateRemotePositionEx_f0252d9';
-    final param = createParams({
+    final requestParam = createParams({
       'uid': uid,
       'posInfo': posInfo.toJson(),
       'connection': connection.toJson()
@@ -93,7 +94,7 @@ class LocalSpatialAudioEngineImpl implements LocalSpatialAudioEngine {
     buffers.addAll(posInfo.collectBufferList());
     buffers.addAll(connection.collectBufferList());
     final callApiResult = await irisMethodChannel.invokeMethod(
-        IrisMethodCall(apiType, jsonEncode(param), buffers: buffers));
+        IrisMethodCall(apiType, jsonEncode(requestParam), buffers: buffers));
     if (callApiResult.irisReturnCode < 0) {
       throw AgoraRtcException(code: callApiResult.irisReturnCode);
     }
@@ -108,9 +109,9 @@ class LocalSpatialAudioEngineImpl implements LocalSpatialAudioEngine {
   Future<void> removeRemotePosition(int uid) async {
     final apiType =
         '${isOverrideClassName ? className : 'LocalSpatialAudioEngine'}_removeRemotePosition_c8d091a';
-    final param = createParams({'uid': uid});
+    final requestParam = createParams({'uid': uid});
     final callApiResult = await irisMethodChannel.invokeMethod(
-        IrisMethodCall(apiType, jsonEncode(param), buffers: null));
+        IrisMethodCall(apiType, jsonEncode(requestParam), buffers: null));
     if (callApiResult.irisReturnCode < 0) {
       throw AgoraRtcException(code: callApiResult.irisReturnCode);
     }
@@ -126,11 +127,12 @@ class LocalSpatialAudioEngineImpl implements LocalSpatialAudioEngine {
       {required int uid, required RtcConnection connection}) async {
     final apiType =
         '${isOverrideClassName ? className : 'LocalSpatialAudioEngine'}_removeRemotePositionEx_58a9850';
-    final param = createParams({'uid': uid, 'connection': connection.toJson()});
+    final requestParam =
+        createParams({'uid': uid, 'connection': connection.toJson()});
     final List<Uint8List> buffers = [];
     buffers.addAll(connection.collectBufferList());
     final callApiResult = await irisMethodChannel.invokeMethod(
-        IrisMethodCall(apiType, jsonEncode(param), buffers: buffers));
+        IrisMethodCall(apiType, jsonEncode(requestParam), buffers: buffers));
     if (callApiResult.irisReturnCode < 0) {
       throw AgoraRtcException(code: callApiResult.irisReturnCode);
     }
@@ -145,11 +147,11 @@ class LocalSpatialAudioEngineImpl implements LocalSpatialAudioEngine {
   Future<void> clearRemotePositionsEx(RtcConnection connection) async {
     final apiType =
         '${isOverrideClassName ? className : 'LocalSpatialAudioEngine'}_clearRemotePositionsEx_c81e1a4';
-    final param = createParams({'connection': connection.toJson()});
+    final requestParam = createParams({'connection': connection.toJson()});
     final List<Uint8List> buffers = [];
     buffers.addAll(connection.collectBufferList());
     final callApiResult = await irisMethodChannel.invokeMethod(
-        IrisMethodCall(apiType, jsonEncode(param), buffers: buffers));
+        IrisMethodCall(apiType, jsonEncode(requestParam), buffers: buffers));
     if (callApiResult.irisReturnCode < 0) {
       throw AgoraRtcException(code: callApiResult.irisReturnCode);
     }
@@ -169,7 +171,7 @@ class LocalSpatialAudioEngineImpl implements LocalSpatialAudioEngine {
       required RtcConnection connection}) async {
     final apiType =
         '${isOverrideClassName ? className : 'LocalSpatialAudioEngine'}_updateSelfPositionEx_502183a';
-    final param = createParams({
+    final requestParam = createParams({
       'position': position,
       'axisForward': axisForward,
       'axisRight': axisRight,
@@ -179,7 +181,7 @@ class LocalSpatialAudioEngineImpl implements LocalSpatialAudioEngine {
     final List<Uint8List> buffers = [];
     buffers.addAll(connection.collectBufferList());
     final callApiResult = await irisMethodChannel.invokeMethod(
-        IrisMethodCall(apiType, jsonEncode(param), buffers: buffers));
+        IrisMethodCall(apiType, jsonEncode(requestParam), buffers: buffers));
     if (callApiResult.irisReturnCode < 0) {
       throw AgoraRtcException(code: callApiResult.irisReturnCode);
     }
@@ -194,9 +196,9 @@ class LocalSpatialAudioEngineImpl implements LocalSpatialAudioEngine {
   Future<void> setMaxAudioRecvCount(int maxCount) async {
     final apiType =
         '${isOverrideClassName ? className : 'LocalSpatialAudioEngine'}_setMaxAudioRecvCount_46f8ab7';
-    final param = createParams({'maxCount': maxCount});
+    final requestParam = createParams({'maxCount': maxCount});
     final callApiResult = await irisMethodChannel.invokeMethod(
-        IrisMethodCall(apiType, jsonEncode(param), buffers: null));
+        IrisMethodCall(apiType, jsonEncode(requestParam), buffers: null));
     if (callApiResult.irisReturnCode < 0) {
       throw AgoraRtcException(code: callApiResult.irisReturnCode);
     }
@@ -211,9 +213,9 @@ class LocalSpatialAudioEngineImpl implements LocalSpatialAudioEngine {
   Future<void> setAudioRecvRange(double range) async {
     final apiType =
         '${isOverrideClassName ? className : 'LocalSpatialAudioEngine'}_setAudioRecvRange_685e803';
-    final param = createParams({'range': range});
+    final requestParam = createParams({'range': range});
     final callApiResult = await irisMethodChannel.invokeMethod(
-        IrisMethodCall(apiType, jsonEncode(param), buffers: null));
+        IrisMethodCall(apiType, jsonEncode(requestParam), buffers: null));
     if (callApiResult.irisReturnCode < 0) {
       throw AgoraRtcException(code: callApiResult.irisReturnCode);
     }
@@ -228,9 +230,9 @@ class LocalSpatialAudioEngineImpl implements LocalSpatialAudioEngine {
   Future<void> setDistanceUnit(double unit) async {
     final apiType =
         '${isOverrideClassName ? className : 'LocalSpatialAudioEngine'}_setDistanceUnit_685e803';
-    final param = createParams({'unit': unit});
+    final requestParam = createParams({'unit': unit});
     final callApiResult = await irisMethodChannel.invokeMethod(
-        IrisMethodCall(apiType, jsonEncode(param), buffers: null));
+        IrisMethodCall(apiType, jsonEncode(requestParam), buffers: null));
     if (callApiResult.irisReturnCode < 0) {
       throw AgoraRtcException(code: callApiResult.irisReturnCode);
     }
@@ -249,14 +251,14 @@ class LocalSpatialAudioEngineImpl implements LocalSpatialAudioEngine {
       required List<double> axisUp}) async {
     final apiType =
         '${isOverrideClassName ? className : 'LocalSpatialAudioEngine'}_updateSelfPosition_9c9930f';
-    final param = createParams({
+    final requestParam = createParams({
       'position': position,
       'axisForward': axisForward,
       'axisRight': axisRight,
       'axisUp': axisUp
     });
     final callApiResult = await irisMethodChannel.invokeMethod(
-        IrisMethodCall(apiType, jsonEncode(param), buffers: null));
+        IrisMethodCall(apiType, jsonEncode(requestParam), buffers: null));
     if (callApiResult.irisReturnCode < 0) {
       throw AgoraRtcException(code: callApiResult.irisReturnCode);
     }
@@ -273,12 +275,12 @@ class LocalSpatialAudioEngineImpl implements LocalSpatialAudioEngine {
       required RemoteVoicePositionInfo positionInfo}) async {
     final apiType =
         '${isOverrideClassName ? className : 'LocalSpatialAudioEngine'}_updatePlayerPositionInfo_b37c59d';
-    final param = createParams(
+    final requestParam = createParams(
         {'playerId': playerId, 'positionInfo': positionInfo.toJson()});
     final List<Uint8List> buffers = [];
     buffers.addAll(positionInfo.collectBufferList());
     final callApiResult = await irisMethodChannel.invokeMethod(
-        IrisMethodCall(apiType, jsonEncode(param), buffers: buffers));
+        IrisMethodCall(apiType, jsonEncode(requestParam), buffers: buffers));
     if (callApiResult.irisReturnCode < 0) {
       throw AgoraRtcException(code: callApiResult.irisReturnCode);
     }
@@ -293,9 +295,9 @@ class LocalSpatialAudioEngineImpl implements LocalSpatialAudioEngine {
   Future<void> setParameters(String params) async {
     final apiType =
         '${isOverrideClassName ? className : 'LocalSpatialAudioEngine'}_setParameters_3a2037f';
-    final param = createParams({'params': params});
+    final requestParam = createParams({'params': params});
     final callApiResult = await irisMethodChannel.invokeMethod(
-        IrisMethodCall(apiType, jsonEncode(param), buffers: null));
+        IrisMethodCall(apiType, jsonEncode(requestParam), buffers: null));
     if (callApiResult.irisReturnCode < 0) {
       throw AgoraRtcException(code: callApiResult.irisReturnCode);
     }
@@ -310,9 +312,9 @@ class LocalSpatialAudioEngineImpl implements LocalSpatialAudioEngine {
   Future<void> muteLocalAudioStream(bool mute) async {
     final apiType =
         '${isOverrideClassName ? className : 'LocalSpatialAudioEngine'}_muteLocalAudioStream_5039d15';
-    final param = createParams({'mute': mute});
+    final requestParam = createParams({'mute': mute});
     final callApiResult = await irisMethodChannel.invokeMethod(
-        IrisMethodCall(apiType, jsonEncode(param), buffers: null));
+        IrisMethodCall(apiType, jsonEncode(requestParam), buffers: null));
     if (callApiResult.irisReturnCode < 0) {
       throw AgoraRtcException(code: callApiResult.irisReturnCode);
     }
@@ -327,9 +329,9 @@ class LocalSpatialAudioEngineImpl implements LocalSpatialAudioEngine {
   Future<void> muteAllRemoteAudioStreams(bool mute) async {
     final apiType =
         '${isOverrideClassName ? className : 'LocalSpatialAudioEngine'}_muteAllRemoteAudioStreams_5039d15';
-    final param = createParams({'mute': mute});
+    final requestParam = createParams({'mute': mute});
     final callApiResult = await irisMethodChannel.invokeMethod(
-        IrisMethodCall(apiType, jsonEncode(param), buffers: null));
+        IrisMethodCall(apiType, jsonEncode(requestParam), buffers: null));
     if (callApiResult.irisReturnCode < 0) {
       throw AgoraRtcException(code: callApiResult.irisReturnCode);
     }
@@ -345,9 +347,9 @@ class LocalSpatialAudioEngineImpl implements LocalSpatialAudioEngine {
       {required int uid, required bool mute}) async {
     final apiType =
         '${isOverrideClassName ? className : 'LocalSpatialAudioEngine'}_muteRemoteAudioStream_dbdc15a';
-    final param = createParams({'uid': uid, 'mute': mute});
+    final requestParam = createParams({'uid': uid, 'mute': mute});
     final callApiResult = await irisMethodChannel.invokeMethod(
-        IrisMethodCall(apiType, jsonEncode(param), buffers: null));
+        IrisMethodCall(apiType, jsonEncode(requestParam), buffers: null));
     if (callApiResult.irisReturnCode < 0) {
       throw AgoraRtcException(code: callApiResult.irisReturnCode);
     }
@@ -365,10 +367,10 @@ class LocalSpatialAudioEngineImpl implements LocalSpatialAudioEngine {
       required bool forceSet}) async {
     final apiType =
         '${isOverrideClassName ? className : 'LocalSpatialAudioEngine'}_setRemoteAudioAttenuation_74c3e98';
-    final param = createParams(
+    final requestParam = createParams(
         {'uid': uid, 'attenuation': attenuation, 'forceSet': forceSet});
     final callApiResult = await irisMethodChannel.invokeMethod(
-        IrisMethodCall(apiType, jsonEncode(param), buffers: null));
+        IrisMethodCall(apiType, jsonEncode(requestParam), buffers: null));
     if (callApiResult.irisReturnCode < 0) {
       throw AgoraRtcException(code: callApiResult.irisReturnCode);
     }
@@ -385,14 +387,14 @@ class LocalSpatialAudioEngineImpl implements LocalSpatialAudioEngine {
     final apiType =
         '${isOverrideClassName ? className : 'LocalSpatialAudioEngine'}_setZones_414a27e';
     final zonesJsonList = zones.map((e) => e.toJson()).toList();
-    final param =
+    final requestParam =
         createParams({'zones': zonesJsonList, 'zoneCount': zoneCount});
     final List<Uint8List> buffers = [];
     for (final e in zones) {
       buffers.addAll(e.collectBufferList());
     }
     final callApiResult = await irisMethodChannel.invokeMethod(
-        IrisMethodCall(apiType, jsonEncode(param), buffers: buffers));
+        IrisMethodCall(apiType, jsonEncode(requestParam), buffers: buffers));
     if (callApiResult.irisReturnCode < 0) {
       throw AgoraRtcException(code: callApiResult.irisReturnCode);
     }
@@ -410,13 +412,13 @@ class LocalSpatialAudioEngineImpl implements LocalSpatialAudioEngine {
       required bool forceSet}) async {
     final apiType =
         '${isOverrideClassName ? className : 'LocalSpatialAudioEngine'}_setPlayerAttenuation_a15bc51';
-    final param = createParams({
+    final requestParam = createParams({
       'playerId': playerId,
       'attenuation': attenuation,
       'forceSet': forceSet
     });
     final callApiResult = await irisMethodChannel.invokeMethod(
-        IrisMethodCall(apiType, jsonEncode(param), buffers: null));
+        IrisMethodCall(apiType, jsonEncode(requestParam), buffers: null));
     if (callApiResult.irisReturnCode < 0) {
       throw AgoraRtcException(code: callApiResult.irisReturnCode);
     }
@@ -431,9 +433,9 @@ class LocalSpatialAudioEngineImpl implements LocalSpatialAudioEngine {
   Future<void> clearRemotePositions() async {
     final apiType =
         '${isOverrideClassName ? className : 'LocalSpatialAudioEngine'}_clearRemotePositions';
-    final param = createParams({});
+    final requestParam = createParams({});
     final callApiResult = await irisMethodChannel.invokeMethod(
-        IrisMethodCall(apiType, jsonEncode(param), buffers: null));
+        IrisMethodCall(apiType, jsonEncode(requestParam), buffers: null));
     if (callApiResult.irisReturnCode < 0) {
       throw AgoraRtcException(code: callApiResult.irisReturnCode);
     }

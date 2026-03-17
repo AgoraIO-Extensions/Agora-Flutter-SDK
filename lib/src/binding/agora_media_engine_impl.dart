@@ -27,10 +27,10 @@ class MediaEngineImpl implements MediaEngine {
   void registerAudioFrameObserver(AudioFrameObserver observer) {
     // Implementation template
 // final apiType = '${isOverrideClassName ? className : 'MediaEngine'}_registerAudioFrameObserver_d873a64';
-// final param = createParams({
+// final requestParam = createParams({
 //   'observer': observer
 // });
-// final callApiResult = await irisMethodChannel.invokeMethod(IrisMethodCall(apiType, jsonEncode(param), buffers:null));
+// final callApiResult = await irisMethodChannel.invokeMethod(IrisMethodCall(apiType, jsonEncode(requestParam), buffers:null));
 // if (callApiResult.irisReturnCode < 0) {
 //   throw AgoraRtcException(code: callApiResult.irisReturnCode);
 // }
@@ -44,10 +44,10 @@ class MediaEngineImpl implements MediaEngine {
   void registerVideoFrameObserver(VideoFrameObserver observer) {
     // Implementation template
 // final apiType = '${isOverrideClassName ? className : 'MediaEngine'}_registerVideoFrameObserver_2cc0ef1';
-// final param = createParams({
+// final requestParam = createParams({
 //   'observer': observer
 // });
-// final callApiResult = await irisMethodChannel.invokeMethod(IrisMethodCall(apiType, jsonEncode(param), buffers:null));
+// final callApiResult = await irisMethodChannel.invokeMethod(IrisMethodCall(apiType, jsonEncode(requestParam), buffers:null));
 // if (callApiResult.irisReturnCode < 0) {
 //   throw AgoraRtcException(code: callApiResult.irisReturnCode);
 // }
@@ -61,10 +61,10 @@ class MediaEngineImpl implements MediaEngine {
   void registerVideoEncodedFrameObserver(VideoEncodedFrameObserver observer) {
     // Implementation template
 // final apiType = '${isOverrideClassName ? className : 'MediaEngine'}_registerVideoEncodedFrameObserver_d45d579';
-// final param = createParams({
+// final requestParam = createParams({
 //   'observer': observer
 // });
-// final callApiResult = await irisMethodChannel.invokeMethod(IrisMethodCall(apiType, jsonEncode(param), buffers:null));
+// final callApiResult = await irisMethodChannel.invokeMethod(IrisMethodCall(apiType, jsonEncode(requestParam), buffers:null));
 // if (callApiResult.irisReturnCode < 0) {
 //   throw AgoraRtcException(code: callApiResult.irisReturnCode);
 // }
@@ -79,10 +79,10 @@ class MediaEngineImpl implements MediaEngine {
   void registerFaceInfoObserver(FaceInfoObserver observer) {
     // Implementation template
 // final apiType = '${isOverrideClassName ? className : 'MediaEngine'}_registerFaceInfoObserver_0303ed6';
-// final param = createParams({
+// final requestParam = createParams({
 //   'observer': observer
 // });
-// final callApiResult = await irisMethodChannel.invokeMethod(IrisMethodCall(apiType, jsonEncode(param), buffers:null));
+// final callApiResult = await irisMethodChannel.invokeMethod(IrisMethodCall(apiType, jsonEncode(requestParam), buffers:null));
 // if (callApiResult.irisReturnCode < 0) {
 //   throw AgoraRtcException(code: callApiResult.irisReturnCode);
 // }
@@ -97,11 +97,12 @@ class MediaEngineImpl implements MediaEngine {
       {required AudioFrame frame, int trackId = 0}) async {
     final apiType =
         '${isOverrideClassName ? className : 'MediaEngine'}_pushAudioFrame_c71f4ab';
-    final param = createParams({'frame': frame.toJson(), 'trackId': trackId});
+    final requestParam =
+        createParams({'frame': frame.toJson(), 'trackId': trackId});
     final List<Uint8List> buffers = [];
     buffers.addAll(frame.collectBufferList());
     final callApiResult = await irisMethodChannel.invokeMethod(
-        IrisMethodCall(apiType, jsonEncode(param), buffers: buffers));
+        IrisMethodCall(apiType, jsonEncode(requestParam), buffers: buffers));
     if (callApiResult.irisReturnCode < 0) {
       throw AgoraRtcException(code: callApiResult.irisReturnCode);
     }
@@ -116,11 +117,11 @@ class MediaEngineImpl implements MediaEngine {
   Future<void> pullAudioFrame(AudioFrame frame) async {
     final apiType =
         '${isOverrideClassName ? className : 'MediaEngine'}_pullAudioFrame_2c74a9c';
-    final param = createParams({'frame': frame.toJson()});
+    final requestParam = createParams({'frame': frame.toJson()});
     final List<Uint8List> buffers = [];
     buffers.addAll(frame.collectBufferList());
     final callApiResult = await irisMethodChannel.invokeMethod(
-        IrisMethodCall(apiType, jsonEncode(param), buffers: buffers));
+        IrisMethodCall(apiType, jsonEncode(requestParam), buffers: buffers));
     if (callApiResult.irisReturnCode < 0) {
       throw AgoraRtcException(code: callApiResult.irisReturnCode);
     }
@@ -139,7 +140,7 @@ class MediaEngineImpl implements MediaEngine {
       SenderOptions encodedVideoOption = const SenderOptions()}) async {
     final apiType =
         '${isOverrideClassName ? className : 'MediaEngine'}_setExternalVideoSource_fff99b6';
-    final param = createParams({
+    final requestParam = createParams({
       'enabled': enabled,
       'useTexture': useTexture,
       'sourceType': sourceType.value(),
@@ -148,7 +149,7 @@ class MediaEngineImpl implements MediaEngine {
     final List<Uint8List> buffers = [];
     buffers.addAll(encodedVideoOption.collectBufferList());
     final callApiResult = await irisMethodChannel.invokeMethod(
-        IrisMethodCall(apiType, jsonEncode(param), buffers: buffers));
+        IrisMethodCall(apiType, jsonEncode(requestParam), buffers: buffers));
     if (callApiResult.irisReturnCode < 0) {
       throw AgoraRtcException(code: callApiResult.irisReturnCode);
     }
@@ -163,9 +164,9 @@ class MediaEngineImpl implements MediaEngine {
   Future<void> setExternalRemoteEglContext(int eglContext) async {
     final apiType =
         '${isOverrideClassName ? className : 'MediaEngine'}_setExternalRemoteEglContext_f337cbf';
-    final param = createParams({'eglContext': eglContext});
+    final requestParam = createParams({'eglContext': eglContext});
     final callApiResult = await irisMethodChannel.invokeMethod(
-        IrisMethodCall(apiType, jsonEncode(param), buffers: null));
+        IrisMethodCall(apiType, jsonEncode(requestParam), buffers: null));
     if (callApiResult.irisReturnCode < 0) {
       throw AgoraRtcException(code: callApiResult.irisReturnCode);
     }
@@ -185,7 +186,7 @@ class MediaEngineImpl implements MediaEngine {
       bool publish = true}) async {
     final apiType =
         '${isOverrideClassName ? className : 'MediaEngine'}_setExternalAudioSource_e6538be';
-    final param = createParams({
+    final requestParam = createParams({
       'enabled': enabled,
       'sampleRate': sampleRate,
       'channels': channels,
@@ -193,7 +194,7 @@ class MediaEngineImpl implements MediaEngine {
       'publish': publish
     });
     final callApiResult = await irisMethodChannel.invokeMethod(
-        IrisMethodCall(apiType, jsonEncode(param), buffers: null));
+        IrisMethodCall(apiType, jsonEncode(requestParam), buffers: null));
     if (callApiResult.irisReturnCode < 0) {
       throw AgoraRtcException(code: callApiResult.irisReturnCode);
     }
@@ -210,12 +211,12 @@ class MediaEngineImpl implements MediaEngine {
       required AudioTrackConfig config}) async {
     final apiType =
         '${isOverrideClassName ? className : 'MediaEngine'}_createCustomAudioTrack_5a0bf1a';
-    final param = createParams(
+    final requestParam = createParams(
         {'trackType': trackType.value(), 'config': config.toJson()});
     final List<Uint8List> buffers = [];
     buffers.addAll(config.collectBufferList());
     final callApiResult = await irisMethodChannel.invokeMethod(
-        IrisMethodCall(apiType, jsonEncode(param), buffers: buffers));
+        IrisMethodCall(apiType, jsonEncode(requestParam), buffers: buffers));
     if (callApiResult.irisReturnCode < 0) {
       throw AgoraRtcException(code: callApiResult.irisReturnCode);
     }
@@ -228,9 +229,9 @@ class MediaEngineImpl implements MediaEngine {
   Future<void> destroyCustomAudioTrack(int trackId) async {
     final apiType =
         '${isOverrideClassName ? className : 'MediaEngine'}_destroyCustomAudioTrack_6178b5d';
-    final param = createParams({'trackId': trackId});
+    final requestParam = createParams({'trackId': trackId});
     final callApiResult = await irisMethodChannel.invokeMethod(
-        IrisMethodCall(apiType, jsonEncode(param), buffers: null));
+        IrisMethodCall(apiType, jsonEncode(requestParam), buffers: null));
     if (callApiResult.irisReturnCode < 0) {
       throw AgoraRtcException(code: callApiResult.irisReturnCode);
     }
@@ -248,10 +249,10 @@ class MediaEngineImpl implements MediaEngine {
       required int channels}) async {
     final apiType =
         '${isOverrideClassName ? className : 'MediaEngine'}_setExternalAudioSink_d275ce0';
-    final param = createParams(
+    final requestParam = createParams(
         {'enabled': enabled, 'sampleRate': sampleRate, 'channels': channels});
     final callApiResult = await irisMethodChannel.invokeMethod(
-        IrisMethodCall(apiType, jsonEncode(param), buffers: null));
+        IrisMethodCall(apiType, jsonEncode(requestParam), buffers: null));
     if (callApiResult.irisReturnCode < 0) {
       throw AgoraRtcException(code: callApiResult.irisReturnCode);
     }
@@ -267,9 +268,9 @@ class MediaEngineImpl implements MediaEngine {
       {required int trackId, required bool enabled}) async {
     final apiType =
         '${isOverrideClassName ? className : 'MediaEngine'}_enableCustomAudioLocalPlayback_5f38e8a';
-    final param = createParams({'trackId': trackId, 'enabled': enabled});
+    final requestParam = createParams({'trackId': trackId, 'enabled': enabled});
     final callApiResult = await irisMethodChannel.invokeMethod(
-        IrisMethodCall(apiType, jsonEncode(param), buffers: null));
+        IrisMethodCall(apiType, jsonEncode(requestParam), buffers: null));
     if (callApiResult.irisReturnCode < 0) {
       throw AgoraRtcException(code: callApiResult.irisReturnCode);
     }
@@ -285,12 +286,12 @@ class MediaEngineImpl implements MediaEngine {
       {required ExternalVideoFrame frame, int videoTrackId = 0}) async {
     final apiType =
         '${isOverrideClassName ? className : 'MediaEngine'}_pushVideoFrame_4e544e2';
-    final param =
+    final requestParam =
         createParams({'frame': frame.toJson(), 'videoTrackId': videoTrackId});
     final List<Uint8List> buffers = [];
     buffers.addAll(frame.collectBufferList());
     final callApiResult = await irisMethodChannel.invokeMethod(
-        IrisMethodCall(apiType, jsonEncode(param), buffers: buffers));
+        IrisMethodCall(apiType, jsonEncode(requestParam), buffers: buffers));
     if (callApiResult.irisReturnCode < 0) {
       throw AgoraRtcException(code: callApiResult.irisReturnCode);
     }
@@ -309,7 +310,7 @@ class MediaEngineImpl implements MediaEngine {
       int videoTrackId = 0}) async {
     final apiType =
         '${isOverrideClassName ? className : 'MediaEngine'}_pushEncodedVideoImage_e71452b';
-    final param = createParams({
+    final requestParam = createParams({
       'length': length,
       'videoEncodedFrameInfo': videoEncodedFrameInfo.toJson(),
       'videoTrackId': videoTrackId
@@ -318,7 +319,7 @@ class MediaEngineImpl implements MediaEngine {
     buffers.add(imageBuffer);
     buffers.addAll(videoEncodedFrameInfo.collectBufferList());
     final callApiResult = await irisMethodChannel.invokeMethod(
-        IrisMethodCall(apiType, jsonEncode(param), buffers: buffers));
+        IrisMethodCall(apiType, jsonEncode(requestParam), buffers: buffers));
     if (callApiResult.irisReturnCode < 0) {
       throw AgoraRtcException(code: callApiResult.irisReturnCode);
     }
@@ -333,9 +334,9 @@ class MediaEngineImpl implements MediaEngine {
   Future<void> release() async {
     final apiType =
         '${isOverrideClassName ? className : 'MediaEngine'}_release';
-    final param = createParams({});
+    final requestParam = createParams({});
     final callApiResult = await irisMethodChannel.invokeMethod(
-        IrisMethodCall(apiType, jsonEncode(param), buffers: null));
+        IrisMethodCall(apiType, jsonEncode(requestParam), buffers: null));
     if (callApiResult.irisReturnCode < 0) {
       throw AgoraRtcException(code: callApiResult.irisReturnCode);
     }
@@ -350,10 +351,10 @@ class MediaEngineImpl implements MediaEngine {
   void unregisterAudioFrameObserver(AudioFrameObserver observer) {
     // Implementation template
 // final apiType = '${isOverrideClassName ? className : 'MediaEngine'}_unregisterAudioFrameObserver';
-// final param = createParams({
+// final requestParam = createParams({
 //   'observer': observer
 // });
-// final callApiResult = await irisMethodChannel.invokeMethod(IrisMethodCall(apiType, jsonEncode(param), buffers:null));
+// final callApiResult = await irisMethodChannel.invokeMethod(IrisMethodCall(apiType, jsonEncode(requestParam), buffers:null));
 // if (callApiResult.irisReturnCode < 0) {
 //   throw AgoraRtcException(code: callApiResult.irisReturnCode);
 // }
@@ -367,10 +368,10 @@ class MediaEngineImpl implements MediaEngine {
   void unregisterVideoFrameObserver(VideoFrameObserver observer) {
     // Implementation template
 // final apiType = '${isOverrideClassName ? className : 'MediaEngine'}_unregisterVideoFrameObserver';
-// final param = createParams({
+// final requestParam = createParams({
 //   'observer': observer
 // });
-// final callApiResult = await irisMethodChannel.invokeMethod(IrisMethodCall(apiType, jsonEncode(param), buffers:null));
+// final callApiResult = await irisMethodChannel.invokeMethod(IrisMethodCall(apiType, jsonEncode(requestParam), buffers:null));
 // if (callApiResult.irisReturnCode < 0) {
 //   throw AgoraRtcException(code: callApiResult.irisReturnCode);
 // }
@@ -384,10 +385,10 @@ class MediaEngineImpl implements MediaEngine {
   void unregisterVideoEncodedFrameObserver(VideoEncodedFrameObserver observer) {
     // Implementation template
 // final apiType = '${isOverrideClassName ? className : 'MediaEngine'}_unregisterVideoEncodedFrameObserver';
-// final param = createParams({
+// final requestParam = createParams({
 //   'observer': observer
 // });
-// final callApiResult = await irisMethodChannel.invokeMethod(IrisMethodCall(apiType, jsonEncode(param), buffers:null));
+// final callApiResult = await irisMethodChannel.invokeMethod(IrisMethodCall(apiType, jsonEncode(requestParam), buffers:null));
 // if (callApiResult.irisReturnCode < 0) {
 //   throw AgoraRtcException(code: callApiResult.irisReturnCode);
 // }
@@ -402,10 +403,10 @@ class MediaEngineImpl implements MediaEngine {
   void unregisterFaceInfoObserver(FaceInfoObserver observer) {
     // Implementation template
 // final apiType = '${isOverrideClassName ? className : 'MediaEngine'}_unregisterFaceInfoObserver';
-// final param = createParams({
+// final requestParam = createParams({
 //   'observer': observer
 // });
-// final callApiResult = await irisMethodChannel.invokeMethod(IrisMethodCall(apiType, jsonEncode(param), buffers:null));
+// final callApiResult = await irisMethodChannel.invokeMethod(IrisMethodCall(apiType, jsonEncode(requestParam), buffers:null));
 // if (callApiResult.irisReturnCode < 0) {
 //   throw AgoraRtcException(code: callApiResult.irisReturnCode);
 // }

@@ -130,6 +130,10 @@ Please refer to the [Flutter documentation](https://docs.flutter.dev/platform-in
 * [Windows](https://api-ref.agora.io/en/video-sdk/cpp/4.x/API/rtc_api_overview_ng.html)
 * [Web](https://api-ref.agora.io/en/video-sdk/web/4.x/index.html)
 
+## Integration document
+
+* [Picture-in-Picture](docs/integration/Picture-in-Picture.md)
+
 ## Feedback
 
 If you have any problems or suggestions regarding the sample projects, feel free to file an [issue](https://github.com/AgoraIO-Community/agora_rtc_engine/issues) OR pull request.

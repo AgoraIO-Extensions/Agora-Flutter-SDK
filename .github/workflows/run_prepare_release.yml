@@ -20,10 +20,13 @@ jobs:
   prepare_release:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
         with:
           ref: ${{ inputs.release_branch }}
           fetch-depth: 0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
       - name: Install release-it
         run: |
           npm install -g release-it

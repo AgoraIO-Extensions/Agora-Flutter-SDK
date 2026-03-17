@@ -1,12 +1,14 @@
 import 'dart:io';
 
 import 'package:agora_rtc_engine_example/examples/advanced/music_player/music_player.dart';
+import 'package:agora_rtc_engine_example/examples/advanced/picture_in_picture/picture_in_picture.dart';
 import 'package:agora_rtc_engine_example/examples/advanced/push_video_frame/push_video_frame.dart';
 import 'package:agora_rtc_engine_example/examples/advanced/rtmp_streaming/rtmp_streaming.dart';
 import 'package:agora_rtc_engine_example/examples/advanced/screen_sharing/screen_sharing.dart';
 import 'package:agora_rtc_engine_example/examples/advanced/send_multi_camera_stream/send_multi_camera_stream.dart';
 import 'package:agora_rtc_engine_example/examples/advanced/send_multi_camera_stream/send_multi_camera_stream_mobile.dart';
 import 'package:agora_rtc_engine_example/examples/advanced/send_multi_video_stream/send_multi_video_stream.dart';
+import 'package:agora_rtc_engine_example/examples/advanced/advanced_beauty/advanced_beauty.dart';
 import 'package:agora_rtc_engine_example/examples/advanced/set_beauty_effect/set_beauty_effect.dart';
 import 'package:agora_rtc_engine_example/examples/advanced/set_encryption/set_encryption.dart';
 import 'package:agora_rtc_engine_example/examples/advanced/set_video_encoder_configuration/set_video_encoder_configuration.dart';
@@ -71,6 +73,8 @@ final advanced = [
   if (!kIsWeb) {'name': 'SendMetadata', 'widget': const SendMetadata()},
   if (!kIsWeb) {'name': 'SetBeautyEffect', 'widget': const SetBeautyEffect()},
   if (!kIsWeb)
+    {'name': 'AdvancedBeauty', 'widget': const AdvancedBeauty()},
+  if (!kIsWeb)
     {'name': 'SetContentInspect', 'widget': const SetContentInspect()},
   if (!kIsWeb && !(Platform.isAndroid || Platform.isIOS))
     {
@@ -106,4 +110,6 @@ final advanced = [
     {'name': 'PreCallTest', 'widget': const PreCallTest()},
   if (!kIsWeb && (Platform.isAndroid || Platform.isIOS))
     {'name': 'MusicPlayer', 'widget': const MusicPlayerExample()},
+  if (!kIsWeb && (Platform.isAndroid || Platform.isIOS))
+    {'name': 'PictureInPicture', 'widget': const PictureInPicture()},
 ];

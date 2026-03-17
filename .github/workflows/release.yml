@@ -5,7 +5,7 @@ on:
   workflow_dispatch:
     inputs:
       increment:
-        description: 'The version to be released (e.g., 6.5.3 for standard, 6.5.2-sp.452143 for special)'
+        description: 'The version to be released (e.g., 6.5.3 for standard, 6.5.3-sp.453163 for special)'
         required: true
         type: string
       dry-run:
@@ -18,7 +18,7 @@ on:
   workflow_call:
     inputs:
       increment:
-        description: 'The version to be released (e.g., 6.5.3 for standard, 6.5.2-sp.452143 for special)'
+        description: 'The version to be released (e.g., 6.5.3 for standard, 6.5.3-sp.453163 for special)'
         required: false
         type: string
       dry-run:
@@ -81,15 +81,15 @@ jobs:
 
           # Get dry-run mode
           if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
-            DRY-RUN="${{ github.event.inputs.dry-run }}"
+            DRY_RUN="${{ github.event.inputs.dry-run }}"
           elif [ "${{ github.event_name }}" = "workflow_call" ]; then
-            DRY-RUN="${{ inputs.dry-run }}"
+            DRY_RUN="${{ inputs.dry-run }}"
           else
-            DRY-RUN="false" # PR triggers are always production mode
+            DRY_RUN="false" # PR triggers are always production mode
           fi
 
-          echo "Dry-run mode: $DRY-RUN"
-          echo "dry-run=$DRY-RUN" >> $GITHUB_OUTPUT
+          echo "Dry-run mode: $DRY_RUN"
+          echo "dry-run=$DRY_RUN" >> $GITHUB_OUTPUT
 
           # Get version from inputs (for workflow_dispatch and workflow_call) or pubspec.yaml (for PR)
           if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
@@ -122,7 +122,7 @@ jobs:
               echo "🚀 Detected standard release version: $RELEASE_VERSION"
             else
               # Special version: any version with suffix
-              # Examples: 6.5.0-beta.1, 6.5.0-rc.2, 6.5.2-sp.452143, 6.5.0+build.123
+              # Examples: 6.5.3-beta.1, 6.5.3-rc.2, 6.5.3-sp.452163, 6.5.3+build.123
               RELEASE_TYPE="special"
               IS_PRERELEASE="true"
               echo "🔧 Detected special release version: $RELEASE_VERSION"
@@ -136,32 +136,6 @@ jobs:
           echo "version=$RELEASE_VERSION" >> $GITHUB_OUTPUT
           echo "release_type=$RELEASE_TYPE" >> $GITHUB_OUTPUT
           echo "is_prerelease=$IS_PRERELEASE" >> $GITHUB_OUTPUT
-
-      - name: Update pubspec.yaml version
-        if: ${{ github.event_name == 'workflow_dispatch' || github.event_name == 'workflow_call' }}
-        run: |
-          set -eo pipefail
-
-          RELEASE_VERSION="${{ steps.version_check.outputs.version }}"
-          RELEASE_TYPE="${{ steps.version_check.outputs.release_type }}"
-          
-          echo "📝 Updating pubspec.yaml version to $RELEASE_VERSION (type: $RELEASE_TYPE)"
-
-          # Update version in pubspec.yaml for both standard and special versions
-          sed -i.bak "s/^version: .*/version: $RELEASE_VERSION/" pubspec.yaml
-
-          # Verify the change
-          UPDATED_VERSION=$(grep 'version: ' pubspec.yaml | sed -e 's,.*: \(.*\),\1,')
-          echo "✅ Updated pubspec.yaml version: $UPDATED_VERSION"
-
-          if [ "$UPDATED_VERSION" != "$RELEASE_VERSION" ]; then
-            echo "❌ Error: Version update failed!"
-            exit 1
-          fi
-
-          # Show the change
-          echo "📋 Changes made:"
-          git diff pubspec.yaml
 
       - name: Install release tools
         run: |
@@ -180,12 +154,12 @@ jobs:
           # Use auto-detected release type
           RELEASE_TYPE="${{ steps.version_check.outputs.release_type }}"
           IS_PRERELEASE="${{ steps.version_check.outputs.is_prerelease }}"
-          DRY-RUN="${{ steps.version_check.outputs.dry-run }}"
+          DRY_RUN="${{ steps.version_check.outputs.dry-run }}"
 
           # Build release-it command
           RELEASE_IT_CMD="release-it ${{ steps.version_check.outputs.version }}"
           
-          if [ "$DRY-RUN" = "true" ]; then
+          if [ "$DRY_RUN" = "true" ]; then
             echo "[DRY-RUN MODE] No commits/tags/releases will be created"
             RELEASE_IT_CMD="$RELEASE_IT_CMD --dry-run"
           fi
@@ -228,10 +202,10 @@ jobs:
         run: |
           RELEASE_TYPE="${{ steps.version_check.outputs.release_type }}"
           RELEASE_VERSION="${{ steps.version_check.outputs.version }}"
-          DRY-RUN="${{ steps.version_check.outputs.dry-run }}"
+          DRY_RUN="${{ steps.version_check.outputs.dry-run }}"
 
           # PR triggers always run in production mode (dry-run=false)
-          if [ "$DRY-RUN" = "true" ]; then
+          if [ "$DRY_RUN" = "true" ]; then
             echo "Warning: PR triggers ignore dry-run mode"
           fi
 
@@ -261,16 +235,19 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Setup Dart for pub publish
+      - name: Setup Flutter for pub publish
         if: ${{ steps.version_check.outputs.release_type == 'standard' }}
-        uses: dart-lang/setup-dart@v1
+        uses: subosito/flutter-action@v2
+        with:
+          channel: 'stable'
+          cache: true
 
       - name: Publish to pub.dev (dry-run check)
         if: ${{ steps.version_check.outputs.release_type == 'standard' && steps.version_check.outputs.dry-run == 'true' }}
         run: |
           echo "[DRY-RUN MODE] Running pub publish dry-run"
-          dart pub get
-          dart pub publish --dry-run
+          flutter pub get
+          flutter pub publish --dry-run
       
       - name: Publish to pub.dev (real)
         if: ${{ steps.version_check.outputs.release_type == 'standard' && steps.version_check.outputs.dry-run == 'false' }}
@@ -324,20 +301,20 @@ jobs:
           # Generate DartDoc
           dart doc
           # Create a zip file of the DartDoc output
-          zip -r agora_rtc_engine_docs.zip doc
+          zip -r agora_rtc_docs.zip doc
 
       - name: Upload DartDoc Artifact ⬆️
         uses: actions/upload-artifact@v4
         with:
-          name: agora_rtc_engine_docs.zip
-          path: agora_rtc_engine_docs.zip
+          name: agora_rtc_docs.zip
+          path: agora_rtc_docs.zip
 
       - name: Upload DartDoc Archive to GitHub release ⬆️
         uses: svenstaro/upload-release-action@v2
         with:
           repo_token: ${{ secrets.GITHUB_TOKEN }}
-          file: agora_rtc_engine_docs.zip
-          asset_name: agora_rtc_engine_docs.zip
+          file: agora_rtc_docs.zip
+          asset_name: agora_rtc_docs.zip
           tag: ${{ steps.doc_version.outputs.version }}
           overwrite: true
 
@@ -395,3 +372,19 @@ jobs:
           echo "❌ Release failed!"
           echo "Please check the logs and try again."
           exit 1
+
+      - name: print publish info
+        run: |
+          RELEASE_VERSION="${{ needs.release.outputs.increment }}"
+          RELEASE_TYPE="${{ needs.release.outputs.release_type }}"
+          
+          if [ "$RELEASE_TYPE" = "standard" ]; then
+            echo "[publish info]  dependencies:"
+            echo "[publish info]    agora_rtc_engine: ^$RELEASE_VERSION"
+          else
+            echo "[publish info]  dependencies:"
+            echo "[publish info]    agora_rtc_engine:"
+            echo "[publish info]     git:"
+            echo "[publish info]      url: https://github.com/AgoraIO-Extensions/Agora-Flutter-SDK.git"
+            echo "[publish info]      ref: $RELEASE_VERSION"
+          fi

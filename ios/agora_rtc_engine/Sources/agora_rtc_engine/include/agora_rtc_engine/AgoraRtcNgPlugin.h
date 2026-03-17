@@ -1,4 +1,7 @@
 #import <Flutter/Flutter.h>
 
-@interface AgoraRtcNgPlugin : NSObject <FlutterPlugin>
+#import <AgoraRtcWrapper/AgoraPIPController.h>
+
+@interface AgoraRtcNgPlugin
+    : NSObject <FlutterPlugin, AgoraPIPStateChangedDelegate>
 @end

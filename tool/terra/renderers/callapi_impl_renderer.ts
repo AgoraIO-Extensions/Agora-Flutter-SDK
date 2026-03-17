@@ -51,6 +51,12 @@ export default function CallApiImplRenderer(
     let subContents = cxxFile.nodes
       .filter((it) => it.__TYPE == CXXTYPE.Clazz)
       .filter((it) => !isCallbackClass(it.asClazz()))
+      .filter((it) => {
+        // Filter out classes with empty dartName to avoid generating empty impl files
+        let clazz = it.asClazz();
+        let clazzName = dartName(clazz);
+        return clazzName.length > 0;
+      })
       .map((it) => {
         let clazz = it.asClazz();
         let clazzName = dartName(clazz);
@@ -103,6 +109,11 @@ export default function CallApiImplRenderer(
       })
       .join("\n\n");
 
+    // Skip generating file if no valid classes found (only generate impl files for classes with valid names)
+    if (subContents.trim().length === 0) {
+      return null;
+    }
+
     let content = `
       ${defaultDartHeader}
       
@@ -121,7 +132,8 @@ export default function CallApiImplRenderer(
     };
   });
 
-  return [...renderResults, callApiImplParamsJsonFile(parseResult, cxxFiles)];
+  let validRenderResults = renderResults.filter((result) => result !== null) as RenderResult[];
+  return [...validRenderResults, callApiImplParamsJsonFile(parseResult, cxxFiles)];
 }
 
 interface JsonMapInitBlock {
@@ -243,7 +255,7 @@ function callApiImplBlock(
     `
 ${apiType}
 ${paramJsonMapBlock.map((it) => it.preInitBlock).join("\n")}
-final param = createParams({
+final requestParam = createParams({
   ${paramJsonMapBlock
     .filter((it) => it.jsonKey && it.jsonValue)
     .map((it) => `${it.nullCheckBlock}'${it.jsonKey}': ${it.jsonValue}`)
@@ -251,7 +263,7 @@ final param = createParams({
 });
 ${isNeedAddBufferExtBlock ? "final List<Uint8List> buffers = [];" : ""}
 ${paramJsonMapBlock.map((it) => it.addBufferExtBlock).join("\n")}
-final callApiResult = await irisMethodChannel.invokeMethod(IrisMethodCall(apiType, jsonEncode(param), buffers:${buffersValueInJsonMap}));
+final callApiResult = await irisMethodChannel.invokeMethod(IrisMethodCall(apiType, jsonEncode(requestParam), buffers:${buffersValueInJsonMap}));
 if (callApiResult.irisReturnCode < 0) {
   throw AgoraRtcException(code: callApiResult.irisReturnCode);
 }

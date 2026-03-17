@@ -30,10 +30,10 @@ class H265TranscoderImpl implements H265Transcoder {
       required int uid}) async {
     final apiType =
         '${isOverrideClassName ? className : 'H265Transcoder'}_enableTranscode_a0779eb';
-    final param =
+    final requestParam =
         createParams({'token': token, 'channel': channel, 'uid': uid});
     final callApiResult = await irisMethodChannel.invokeMethod(
-        IrisMethodCall(apiType, jsonEncode(param), buffers: null));
+        IrisMethodCall(apiType, jsonEncode(requestParam), buffers: null));
     if (callApiResult.irisReturnCode < 0) {
       throw AgoraRtcException(code: callApiResult.irisReturnCode);
     }
@@ -51,10 +51,10 @@ class H265TranscoderImpl implements H265Transcoder {
       required int uid}) async {
     final apiType =
         '${isOverrideClassName ? className : 'H265Transcoder'}_queryChannel_a0779eb';
-    final param =
+    final requestParam =
         createParams({'token': token, 'channel': channel, 'uid': uid});
     final callApiResult = await irisMethodChannel.invokeMethod(
-        IrisMethodCall(apiType, jsonEncode(param), buffers: null));
+        IrisMethodCall(apiType, jsonEncode(requestParam), buffers: null));
     if (callApiResult.irisReturnCode < 0) {
       throw AgoraRtcException(code: callApiResult.irisReturnCode);
     }
@@ -70,10 +70,10 @@ class H265TranscoderImpl implements H265Transcoder {
       required int uid}) async {
     final apiType =
         '${isOverrideClassName ? className : 'H265Transcoder'}_triggerTranscode_a0779eb';
-    final param =
+    final requestParam =
         createParams({'token': token, 'channel': channel, 'uid': uid});
     final callApiResult = await irisMethodChannel.invokeMethod(
-        IrisMethodCall(apiType, jsonEncode(param), buffers: null));
+        IrisMethodCall(apiType, jsonEncode(requestParam), buffers: null));
     if (callApiResult.irisReturnCode < 0) {
       throw AgoraRtcException(code: callApiResult.irisReturnCode);
     }
@@ -88,10 +88,10 @@ class H265TranscoderImpl implements H265Transcoder {
   void registerTranscoderObserver(H265TranscoderObserver observer) {
     // Implementation template
 // final apiType = '${isOverrideClassName ? className : 'H265Transcoder'}_registerTranscoderObserver_e1ee996';
-// final param = createParams({
+// final requestParam = createParams({
 //   'observer': observer
 // });
-// final callApiResult = await irisMethodChannel.invokeMethod(IrisMethodCall(apiType, jsonEncode(param), buffers:null));
+// final callApiResult = await irisMethodChannel.invokeMethod(IrisMethodCall(apiType, jsonEncode(requestParam), buffers:null));
 // if (callApiResult.irisReturnCode < 0) {
 //   throw AgoraRtcException(code: callApiResult.irisReturnCode);
 // }
@@ -105,10 +105,10 @@ class H265TranscoderImpl implements H265Transcoder {
   void unregisterTranscoderObserver(H265TranscoderObserver observer) {
     // Implementation template
 // final apiType = '${isOverrideClassName ? className : 'H265Transcoder'}_unregisterTranscoderObserver_e1ee996';
-// final param = createParams({
+// final requestParam = createParams({
 //   'observer': observer
 // });
-// final callApiResult = await irisMethodChannel.invokeMethod(IrisMethodCall(apiType, jsonEncode(param), buffers:null));
+// final callApiResult = await irisMethodChannel.invokeMethod(IrisMethodCall(apiType, jsonEncode(requestParam), buffers:null));
 // if (callApiResult.irisReturnCode < 0) {
 //   throw AgoraRtcException(code: callApiResult.irisReturnCode);
 // }

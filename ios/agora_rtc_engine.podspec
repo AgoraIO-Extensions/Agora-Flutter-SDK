@@ -21,14 +21,15 @@ Pod::Spec.new do |s|
   plugin_dev_path = File.join(File.dirname(File.realpath(__FILE__)), '.plugin_dev')
   if File.exist?(plugin_dev_path)
     puts '[plugin_dev] Found .plugin_dev file, use vendored_frameworks instead.'
-    s.vendored_frameworks = 'libs/*.xcframework'
+    s.vendored_frameworks = 'libs/*.xcframework', 'libs/*.framework'
+    s.dependency 'AgoraRtcEngine_iOS', '4.6.0'
   else
     # iris dependencies start
-    s.dependency 'AgoraIrisRTC_iOS', '4.5.2-build.1'
+    s.dependency 'AgoraIrisRTC_iOS2', '4.6.2-build.1'
     # iris dependencies end
 
     # native dependencies start
-    s.dependency 'AgoraRtcEngine_iOS', '4.5.2'
+    s.dependency 'AgoraVideo_Special_iOS', '4.6.2.70'
     # native dependencies end
   end
   

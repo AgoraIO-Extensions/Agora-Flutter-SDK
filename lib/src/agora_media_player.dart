@@ -1,155 +1,158 @@
 import '/src/_serializable.dart';
 import '/src/binding_forward_export.dart';
 
-/// This class provides media player functions and supports multiple instances.
+/// Class that provides media player functionality and supports multiple instances.
 abstract class MediaPlayer {
-  /// Gets the ID of the media player.
+  /// Gets the player ID.
   ///
   /// Returns
-  /// Success. The ID of the media player.
-  ///  < 0: Failure.
+  /// If the method call succeeds, returns the player ID.
+  ///  < 0: The method call fails. See [Error Codes](https://docs.agora.io/en/video-calling/troubleshooting/error-codes) for details and resolution suggestions.
   int getMediaPlayerId();
 
-  /// Opens the media resource.
+  /// Opens a media resource.
   ///
-  /// This method is called asynchronously.
+  /// This method is asynchronous.
   ///
-  /// * [url] The path of the media file. Both local path and online path are supported.
-  /// * [startPos] The starting position (ms) for playback. Default value is 0.
+  /// * [url] Sets the path of the media file. Supports both local and online files.
+  /// * [startPos] Sets the start playback position in milliseconds. Default is 0.
   ///
   /// Returns
-  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown. You need to catch the exception and handle it accordingly.
+  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown. You need to catch the exception and handle it accordingly. See [Error Codes](https://docs.agora.io/en/video-calling/troubleshooting/error-codes) for details and resolution suggestions.
   Future<void> open({required String url, required int startPos});
 
-  /// Opens a media file and configures the playback scenarios.
+  /// Opens a media resource and sets playback options.
   ///
-  /// This method supports opening media files of different sources, including a custom media source, and allows you to configure the playback scenarios.
+  /// This method allows you to open different types of media resources, including custom media files, and configure playback settings. This method is asynchronous. To play the media file, call the play method after receiving the onPlayerSourceStateChanged callback reporting the state playerStateOpenCompleted.
   ///
-  /// * [source] Media resources. See MediaSource.
+  /// * [source] Media resource. See MediaSource.
   ///
   /// Returns
-  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown. You need to catch the exception and handle it accordingly.
-  ///  < 0: Failure.
+  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown. You need to catch the exception and handle it accordingly. See [Error Codes](https://docs.agora.io/en/video-calling/troubleshooting/error-codes) for details and resolution suggestions.
+  ///  < 0: Failure. See [Error Codes](https://docs.agora.io/en/video-calling/troubleshooting/error-codes) for details and resolution suggestions.
   Future<void> openWithMediaSource(MediaSource source);
 
   /// Plays the media file.
   ///
   /// Returns
-  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown. You need to catch the exception and handle it accordingly.
+  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown. You need to catch the exception and handle it accordingly. See [Error Codes](https://docs.agora.io/en/video-calling/troubleshooting/error-codes) for details and resolution suggestions.
   Future<void> play();
 
-  /// Pauses the playback.
+  /// Pauses playback.
   ///
   /// Returns
-  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown. You need to catch the exception and handle it accordingly.
+  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown. You need to catch the exception and handle it accordingly. See [Error Codes](https://docs.agora.io/en/video-calling/troubleshooting/error-codes) for details and resolution suggestions.
   Future<void> pause();
 
-  /// Stops playing the media track.
+  /// Stops playback.
   ///
-  /// After calling this method to stop playback, if you want to play again, you need to call open or openWithMediaSource to open the media resource.
+  /// After calling this method to stop playback, you need to call open or openWithMediaSource to open the media resource again if you want to replay.
   ///
   /// Returns
-  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown. You need to catch the exception and handle it accordingly.
+  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown. You need to catch the exception and handle it accordingly. See [Error Codes](https://docs.agora.io/en/video-calling/troubleshooting/error-codes) for details and resolution suggestions.
   Future<void> stop();
 
-  /// Resumes playing the media file.
+  /// Resumes playback after pausing.
   ///
   /// Returns
-  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown. You need to catch the exception and handle it accordingly.
+  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown. You need to catch the exception and handle it accordingly. See [Error Codes](https://docs.agora.io/en/video-calling/troubleshooting/error-codes) for details and resolution suggestions.
   Future<void> resume();
 
-  /// Seeks to a new playback position.
+  /// Seeks to the specified playback position in the media file.
   ///
-  /// If you call seek after the playback has completed (upon receiving callback onPlayerSourceStateChanged reporting playback status as playerStatePlaybackCompleted or playerStatePlaybackAllLoopsCompleted), the SDK will play the media file from the specified position. At this point, you will receive callback onPlayerSourceStateChanged reporting playback status as playerStatePlaying.
-  ///  If you call seek while the playback is paused, upon successful call of this method, the SDK will seek to the specified position. To resume playback, call resume or play .
+  /// If you call seek after playback has completed (i.e., you received the onPlayerSourceStateChanged callback reporting the playback state as playerStatePlaybackCompleted or playerStatePlaybackAllLoopsCompleted), the SDK will automatically start playback from the specified position upon success. You will receive the onPlayerSourceStateChanged callback reporting the state as playerStatePlaying.
+  ///  If you call seek while playback is paused, the SDK will seek to the specified position upon success. To start playback, call resume or play.
   ///
-  /// * [newPos] The new playback position (ms).
+  /// * [newPos] The specified position (in milliseconds).
   ///
   /// Returns
-  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown. You need to catch the exception and handle it accordingly.
+  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown. You need to catch the exception and handle it accordingly. See [Error Codes](https://docs.agora.io/en/video-calling/troubleshooting/error-codes) for details and resolution suggestions.
   Future<void> seek(int newPos);
 
-  /// Sets the pitch of the current media resource.
+  /// Adjusts the pitch of the currently playing media resource.
   ///
-  /// Call this method after calling open.
+  /// You need to call this method after calling open.
   ///
-  /// * [pitch] Sets the pitch of the local music file by the chromatic scale. The default value is 0, which means keeping the original pitch. The value ranges from -12 to 12, and the pitch value between consecutive values is a chromatic value. The greater the absolute value of this parameter, the higher or lower the pitch of the local music file.
+  /// * [pitch] Adjusts the pitch of the locally played music file in semitone steps. The default value is 0, meaning no pitch adjustment. The valid range is [-12, 12], where each adjacent value differs by a semitone. The greater the absolute value, the more the pitch is increased or decreased.
   ///
   /// Returns
-  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown. You need to catch the exception and handle it accordingly.
+  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown. You need to catch the exception and handle it accordingly. See [Error Codes](https://docs.agora.io/en/video-calling/troubleshooting/error-codes) for details and resolution suggestions.
   Future<void> setAudioPitch(int pitch);
 
-  /// Gets the duration of the media resource.
+  /// Gets the total duration of the media file.
   ///
   /// Returns
-  /// The total duration (ms) of the media file.
+  /// Total duration of the media file (in milliseconds).
   Future<int> getDuration();
 
-  /// Gets current local playback progress.
+  /// Gets the current playback position.
   ///
   /// Returns
-  /// Returns the current playback progress (ms) if the call succeeds.
-  ///  < 0: Failure. See MediaPlayerReason.
+  /// If the method call succeeds, returns the current playback position (milliseconds).
+  ///  < 0: The method call fails. See MediaPlayerReason.
   Future<int> getPlayPosition();
 
-  /// Gets the number of the media streams in the media resource.
+  /// Gets the number of media streams in the current media file.
   ///
-  /// Call this method after you call open and receive the onPlayerSourceStateChanged callback reporting the state playerStateOpenCompleted.
+  /// Call this method after open and after receiving the onPlayerSourceStateChanged callback reporting the playback state as playerStateOpenCompleted.
   ///
   /// Returns
-  /// The number of the media streams in the media resource if the method call succeeds.
-  ///  < 0: Failure. See MediaPlayerReason.
+  /// If the method call succeeds, returns the number of media streams in the media file.
+  ///  < 0: The method call fails. See MediaPlayerReason.
   Future<int> getStreamCount();
 
-  /// Gets the detailed information of the media stream.
+  /// Gets media stream information by stream index.
   ///
-  /// * [index] The index of the media stream. This parameter must be less than the return value of getStreamCount.
+  /// * [index] Media stream index. The value must be less than the return value of getStreamCount.
   ///
   /// Returns
-  /// If the call succeeds, returns the detailed information of the media stream. See PlayerStreamInfo. NULL, if the method call fails.
+  /// If the method call succeeds, returns the media stream information. See PlayerStreamInfo.
+  ///  If the method call fails, returns NULL.
   Future<PlayerStreamInfo> getStreamInfo(int index);
 
-  /// Sets the loop playback.
+  /// Sets loop playback.
   ///
-  /// If you want to loop, call this method and set the number of the loops. When the loop finishes, the SDK triggers onPlayerSourceStateChanged and reports the playback state as playerStatePlaybackAllLoopsCompleted.
+  /// If you want to enable loop playback, call this method and set the number of loops.
+  /// When loop playback ends, the SDK triggers the onPlayerSourceStateChanged callback to report the playback state as playerStatePlaybackAllLoopsCompleted.
   ///
-  /// * [loopCount] The number of times the audio effect loops:
-  ///  ≥0: Number of times for playing. For example, setting it to 0 means no loop playback, playing only once; setting it to 1 means loop playback once, playing a total of twice.
-  ///  -1: Play the audio file in an infinite loop.
+  /// * [loopCount] Number of playback loops.
+  ///  ≥0: Number of loops. For example, 0 means no loop, play once in total; 1 means loop once, play twice in total.
+  ///  -1: Infinite loop.
   ///
   /// Returns
-  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown. You need to catch the exception and handle it accordingly.
+  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown. You need to catch the exception and handle it accordingly. See [Error Codes](https://docs.agora.io/en/video-calling/troubleshooting/error-codes) for details and resolution suggestions.
   Future<void> setLoopCount(int loopCount);
 
-  /// Sets the channel mode of the current audio file.
+  /// Sets the playback speed of the current audio file.
   ///
-  /// Call this method after calling open.
+  /// You need to call this method after open.
   ///
-  /// * [speed] The playback speed. Agora recommends that you set this to a value between 30 and 400, defined as follows:
-  ///  30: 0.3 times the original speed.
-  ///  100: The original speed.
-  ///  400: 4 times the original speed.
+  /// * [speed] Playback speed. Recommended range is [30, 400], where:
+  ///  30: 0.3x speed.
+  ///  100: original speed.
+  ///  400: 4x speed.
   ///
   /// Returns
-  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown. You need to catch the exception and handle it accordingly.
+  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown. You need to catch the exception and handle it accordingly. See [Error Codes](https://docs.agora.io/en/video-calling/troubleshooting/error-codes) for details and resolution suggestions.
   Future<void> setPlaybackSpeed(int speed);
 
-  /// Selects the audio track used during playback.
+  /// Specifies the audio track for the current audio file.
   ///
-  /// After getting the track index of the audio file, you can call this method to specify any track to play. For example, if different tracks of a multi-track file store songs in different languages, you can call this method to set the playback language. You need to call this method after calling getStreamInfo to get the audio stream index value.
+  /// After obtaining the audio track index of the audio file, you can call this method to select any track for playback. If different tracks in a multi-track file contain songs in different languages, you can call this method to set the playback language. You need to call this method after calling getStreamInfo to get the audio stream index.
   ///
-  /// * [index] The index of the audio track.
+  /// * [index] Index of the audio track.
   ///
   /// Returns
-  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown. You need to catch the exception and handle it accordingly.
+  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown. You need to catch the exception and handle it accordingly. See [Error Codes](https://docs.agora.io/en/video-calling/troubleshooting/error-codes) for details and resolution suggestions.
   Future<void> selectAudioTrack(int index);
 
-  /// Selects the audio tracks that you want to play on your local device and publish to the channel respectively.
+  /// Selects the audio tracks for local playback and remote publishing.
   ///
-  /// You can call this method to determine the audio track to be played on your local device and published to the channel. Before calling this method, you need to open the media file with the openWithMediaSource method and set enableMultiAudioTrack in MediaSource as true.
+  /// You can call this method to separately set the audio tracks for local playback and for publishing to the remote end.
+  /// Before calling this method, you must open the media file using openWithMediaSource and set enableMultiAudioTrack to true via MediaSource.
   ///
-  /// * [playoutTrackIndex] The index of audio tracks for local playback. You can obtain the index through getStreamInfo.
-  /// * [publishTrackIndex] The index of audio tracks to be published in the channel. You can obtain the index through getStreamInfo.
+  /// * [playoutTrackIndex] The index of the audio track used for local playback. You can get the index via getStreamInfo.
+  /// * [publishTrackIndex] The index of the audio track used for publishing to the remote end. You can get the index via getStreamInfo.
   ///
   /// Returns
   /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown. You need to catch the exception and handle it accordingly.
@@ -166,134 +169,134 @@ abstract class MediaPlayer {
   /// @nodoc
   Future<void> setExternalSubtitle(String url);
 
-  /// Gets current playback state.
+  /// Gets the current state of the player.
   ///
   /// Returns
-  /// The current playback state. See MediaPlayerState.
+  /// The current state of the player. See MediaPlayerState.
   Future<MediaPlayerState> getState();
 
-  /// Sets whether to mute the media file.
+  /// Sets whether to mute.
   ///
-  /// * [muted] Whether to mute the media file: true : Mute the media file. false : (Default) Unmute the media file.
+  /// * [muted] Mute option. true : Mute. false : (Default) Do not mute.
   ///
   /// Returns
-  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown. You need to catch the exception and handle it accordingly.
+  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown. You need to catch the exception and handle it accordingly. See [Error Codes](https://docs.agora.io/en/video-calling/troubleshooting/error-codes) for details and resolution suggestions.
   Future<void> mute(bool muted);
 
-  /// Reports whether the media resource is muted.
+  /// Gets whether the currently playing media file is muted.
   ///
   /// Returns
-  /// true : Reports whether the media resource is muted. false : Reports whether the media resource is muted.
+  /// true : The currently playing media file is muted. false : The currently playing media file is not muted.
   Future<bool> getMute();
 
   /// Adjusts the local playback volume.
   ///
-  /// * [volume] The local playback volume, which ranges from 0 to 100:
+  /// * [volume] Local playback volume, ranging from 0 to 100:
   ///  0: Mute.
-  ///  100: (Default) The original volume.
+  ///  100: (Default) Original playback volume of the media file.
   ///
   /// Returns
-  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown. You need to catch the exception and handle it accordingly.
+  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown. You need to catch the exception and handle it accordingly. See [Error Codes](https://docs.agora.io/en/video-calling/troubleshooting/error-codes) for details and resolution suggestions.
   Future<void> adjustPlayoutVolume(int volume);
 
-  /// Gets the local playback volume.
+  /// Gets the current local playback volume.
   ///
   /// Returns
-  /// The local playback volume, which ranges from 0 to 100.
-  ///  0: Mute.
-  ///  100: (Default) The original volume.
+  /// Returns the current local playback volume, ranging from 0 to 100:
+  ///  0: Silent.
+  ///  100: (Default) Original playback volume of the media file.
   Future<int> getPlayoutVolume();
 
-  /// Adjusts the volume of the media file for publishing.
+  /// Adjusts the volume heard by remote users.
   ///
-  /// After connected to the Agora server, you can call this method to adjust the volume of the media file heard by the remote user.
+  /// After connecting to the Agora server, you can call this method to adjust the volume of the media file heard by remote users.
   ///
-  /// * [volume] The volume, which ranges from 0 to 400:
+  /// * [volume] Signal volume, ranging from 0 to 400:
   ///  0: Mute.
-  ///  100: (Default) The original volume.
-  ///  400: Four times the original volume (amplifying the audio signals by four times).
+  ///  100: (Default) Original volume of the media file.
+  ///  400: Four times the original volume (with built-in overflow protection).
   ///
   /// Returns
-  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown. You need to catch the exception and handle it accordingly.
+  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown. You need to catch the exception and handle it accordingly. See [Error Codes](https://docs.agora.io/en/video-calling/troubleshooting/error-codes) for details and resolution suggestions.
   Future<void> adjustPublishSignalVolume(int volume);
 
-  /// Gets the volume of the media file for publishing.
+  /// Gets the volume heard by remote users.
   ///
   /// Returns
-  /// ≥ 0: The remote playback volume.
-  ///  < 0: Failure.
+  /// ≥ 0: Remote playback volume of the media file.
+  ///  < 0: The method call fails. See [Error Codes](https://docs.agora.io/en/video-calling/troubleshooting/error-codes) for details and resolution suggestions.
   Future<int> getPublishSignalVolume();
 
-  /// Sets the view.
+  /// Sets the player rendering view.
   ///
-  /// In Flutter, you don't need to call this method. Use AgoraVideoView instead to render local and remote views.
+  /// In Flutter, you do not need to call this method manually. Use AgoraVideoView to render local and remote views.
   ///
-  /// * [view] The render view. On Windows, this parameter sets the window handle (HWND).
+  /// * [view] Rendering view. On Windows, this is a window handle (HWND).
   ///
   /// Returns
-  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown. You need to catch the exception and handle it accordingly.
+  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown. You need to catch the exception and handle it accordingly. See [Error Codes](https://docs.agora.io/en/video-calling/troubleshooting/error-codes) for details and resolution suggestions.
   Future<void> setView(int view);
 
-  /// Sets the render mode of the media player.
+  /// Sets the rendering mode of the player view.
   ///
-  /// * [renderMode] Sets the render mode of the view. See RenderModeType.
+  /// * [renderMode] Rendering mode of the player view. See RenderModeType.
   ///
   /// Returns
-  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown. You need to catch the exception and handle it accordingly.
+  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown. You need to catch the exception and handle it accordingly. See [Error Codes](https://docs.agora.io/en/video-calling/troubleshooting/error-codes) for details and resolution suggestions.
   Future<void> setRenderMode(RenderModeType renderMode);
 
-  /// Registers a media player observer.
+  /// Registers a playback observer.
   ///
-  /// * [observer] The player observer, listening for events during the playback. See MediaPlayerSourceObserver.
+  /// * [observer] Playback observer that reports events during playback. See MediaPlayerSourceObserver.
   ///
   /// Returns
-  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown. You need to catch the exception and handle it accordingly.
+  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown. You need to catch the exception and handle it accordingly. See [Error Codes](https://docs.agora.io/en/video-calling/troubleshooting/error-codes) for details and resolution suggestions.
   void registerPlayerSourceObserver(MediaPlayerSourceObserver observer);
 
-  /// Releases a media player observer.
+  /// Unregisters the playback observer.
   ///
-  /// * [observer] The player observer, listening for events during the playback. See MediaPlayerSourceObserver.
+  /// * [observer] Playback observer that reports events during playback. See MediaPlayerSourceObserver.
   ///
   /// Returns
-  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown. You need to catch the exception and handle it accordingly.
+  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown. You need to catch the exception and handle it accordingly. See [Error Codes](https://docs.agora.io/en/video-calling/troubleshooting/error-codes) for details and resolution suggestions.
   void unregisterPlayerSourceObserver(MediaPlayerSourceObserver observer);
 
-  /// Registers an audio frame observer object.
+  /// Registers an audio frame observer.
   ///
-  /// * [observer] The audio frame observer, reporting the reception of each audio frame. See AudioPcmFrameSink.
-  /// * [mode] The use mode of the audio frame. See RawAudioFrameOpModeType.
+  /// * [observer] Audio frame observer that monitors the reception of each audio frame. See AudioPcmFrameSink.
+  /// * [mode] Usage mode of the audio frame. See RawAudioFrameOpModeType.
   ///
   /// Returns
-  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown. You need to catch the exception and handle it accordingly.
+  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown. You need to catch the exception and handle it accordingly. See [Error Codes](https://docs.agora.io/en/video-calling/troubleshooting/error-codes) for details and resolution suggestions.
   void registerAudioFrameObserver(
       {required AudioPcmFrameSink observer,
       RawAudioFrameOpModeType mode =
           RawAudioFrameOpModeType.rawAudioFrameOpModeReadOnly});
 
-  /// Unregisters an audio frame observer.
+  /// Unregisters the audio frame observer.
   ///
-  /// * [observer] The audio observer. See AudioPcmFrameSink.
+  /// * [observer] Audio frame observer. See AudioPcmFrameSink.
   ///
   /// Returns
-  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown. You need to catch the exception and handle it accordingly.
+  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown. You need to catch the exception and handle it accordingly. See [Error Codes](https://docs.agora.io/en/video-calling/troubleshooting/error-codes) for details and resolution suggestions.
   void unregisterAudioFrameObserver(AudioPcmFrameSink observer);
 
-  /// Registers a video frame observer object.
+  /// Registers a video frame observer.
   ///
-  /// You need to implement the MediaPlayerVideoFrameObserver class in this method and register callbacks according to your scenarios. After you successfully register the video frame observer, the SDK triggers the registered callbacks each time a video frame is received.
+  /// You need to implement a MediaPlayerVideoFrameObserver class in this method and register its callbacks as needed based on your scenario. Once the video frame observer is successfully registered, the SDK triggers the registered callbacks upon capturing each video frame.
   ///
-  /// * [observer] The video observer, reporting the reception of each video frame. See MediaPlayerVideoFrameObserver.
+  /// * [observer] Video frame observer that monitors the reception of each video frame. See MediaPlayerVideoFrameObserver.
   ///
   /// Returns
-  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown. You need to catch the exception and handle it accordingly.
+  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown. You need to catch the exception and handle it accordingly. See [Error Codes](https://docs.agora.io/en/video-calling/troubleshooting/error-codes) for details and resolution suggestions.
   void registerVideoFrameObserver(MediaPlayerVideoFrameObserver observer);
 
   /// Unregisters the video frame observer.
   ///
-  /// * [observer] The video observer, reporting the reception of each video frame. See MediaPlayerVideoFrameObserver.
+  /// * [observer] Video frame observer that monitors the reception of each video frame. See MediaPlayerVideoFrameObserver.
   ///
   /// Returns
-  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown. You need to catch the exception and handle it accordingly.
+  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown. You need to catch the exception and handle it accordingly. See [Error Codes](https://docs.agora.io/en/video-calling/troubleshooting/error-codes) for details and resolution suggestions.
   void unregisterVideoFrameObserver(MediaPlayerVideoFrameObserver observer);
 
   /// @nodoc
@@ -306,14 +309,14 @@ abstract class MediaPlayer {
 
   /// Sets the channel mode of the current audio file.
   ///
-  /// In a stereo music file, the left and right channels can store different audio data. According to your needs, you can set the channel mode to original mode, left channel mode, right channel mode, or mixed channel mode. For example, in the KTV scenario, the left channel of the music file stores the musical accompaniment, and the right channel stores the singing voice. If you only need to listen to the accompaniment, call this method to set the channel mode of the music file to left channel mode; if you need to listen to the accompaniment and the singing voice at the same time, call this method to set the channel mode to mixed channel mode.
-  ///  Call this method after calling open.
-  ///  This method only applies to stereo audio files.
+  /// In stereo audio files, the left and right channels can store different audio data. Depending on your needs, you can set the channel mode to original, left channel, right channel, or mixed mode. For example, in a KTV scenario, the left channel of an audio file stores the accompaniment, and the right channel stores the original vocal. If you only want to hear the accompaniment, call this method to set the channel mode to left channel; if you want to hear both the accompaniment and the original vocal, set the channel mode to mixed mode.
+  ///  You need to call this method after calling open.
+  ///  This method applies to stereo audio files only.
   ///
-  /// * [mode] The channel mode. See AudioDualMonoMode.
+  /// * [mode] Channel mode. See AudioDualMonoMode.
   ///
   /// Returns
-  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown. You need to catch the exception and handle it accordingly.
+  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown. You need to catch the exception and handle it accordingly. See [Error Codes](https://docs.agora.io/en/video-calling/troubleshooting/error-codes) for details and resolution suggestions.
   Future<void> setAudioDualMonoMode(AudioDualMonoMode mode);
 
   /// @nodoc
@@ -347,213 +350,221 @@ abstract class MediaPlayer {
   /// @nodoc
   Future<void> switchAgoraCDNSrc({required String src, bool syncPts = false});
 
-  /// Switches the media resource being played.
+  /// Switches the media resource.
   ///
-  /// You can call this method to switch the media resource to be played according to the current network status. For example:
-  ///  When the network is poor, the media resource to be played is switched to a media resource address with a lower bitrate.
-  ///  When the network is good, the media resource to be played is switched to a media resource address with a higher bitrate. After calling this method, if you receive the onPlayerEvent callback report the playerEventSwitchComplete event, the switching is successful. If the switching fails, the SDK will automatically retry 3 times. If it still fails, you will receive the onPlayerEvent callback reporting the playerEventSwitchError event indicating an error occurred during media resource switching.
-  ///  Ensure that you call this method after open.
-  ///  To ensure normal playback, pay attention to the following when calling this method:
-  ///  Do not call this method when playback is paused.
-  ///  Do not call the seek method during switching.
-  ///  Before switching the media resource, make sure that the playback position does not exceed the total duration of the media resource to be switched.
+  /// You can call this method to switch the bitrate of the media resource being played based on the current network conditions. For example:
+  ///  When the network is poor, switch to a lower bitrate media resource.
+  ///  When the network is good, switch to a higher bitrate media resource. After calling this method, if you receive the onPlayerEvent callback reporting the playerEventSwitchComplete event, the media resource has been switched successfully. If the switch fails, the SDK retries 3 times. If it still fails, you receive the onPlayerEvent callback reporting the playerEventSwitchError event, indicating an error occurred during the switch.
+  ///  Make sure to call this method after open.
+  ///  To ensure normal playback, note the following when calling this method:
+  ///  Do not call this method while playback is paused.
+  ///  Do not call seek during bitrate switching.
+  ///  Ensure the playback position before switching does not exceed the total duration of the media resource to be switched.
   ///
-  /// * [src] The URL of the media resource.
-  /// * [syncPts] Whether to synchronize the playback position (ms) before and after the switch: true : Synchronize the playback position before and after the switch. false : (Default) Do not synchronize the playback position before and after the switch.
+  /// * [src] Network path of the media resource.
+  /// * [syncPts] Whether to synchronize the start playback position before and after switching: true : Synchronize. false : (Default) Do not synchronize.
   ///
   /// Returns
-  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown. You need to catch the exception and handle it accordingly.
+  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown. You need to catch the exception and handle it accordingly. See [Error Codes](https://docs.agora.io/en/video-calling/troubleshooting/error-codes) for details and resolution suggestions.
   Future<void> switchSrc({required String src, bool syncPts = true});
 
   /// Preloads a media resource.
   ///
-  /// You can call this method to preload a media resource into the playlist. If you need to preload multiple media resources, you can call this method multiple times. If the preload is successful and you want to play the media resource, call playPreloadedSrc; if you want to clear the playlist, call stop.
-  ///  Before calling this method, ensure that you have called open or openWithMediaSource to open the media resource successfully.
-  ///  Agora does not support preloading duplicate media resources to the playlist. However, you can preload the media resources that are being played to the playlist again.
+  /// You can call this method to preload a media resource into the playlist. To preload multiple media resources, call this method multiple times.
+  /// After preloading succeeds, call playPreloadedSrc to play the media resource, or call stop to clear the playlist.
+  ///  Before calling this method, make sure you have successfully called open or openWithMediaSource to open the media resource.
+  ///  The SDK does not support preloading duplicate media resources into the playlist, but supports preloading the currently playing media resource again into the playlist.
   ///
-  /// * [src] The URL of the media resource.
-  /// * [startPos] The starting position (ms) for playing after the media resource is preloaded to the playlist. When preloading a live stream, set this parameter to 0.
+  /// * [src] Network path of the media resource.
+  /// * [startPos] Start position (in milliseconds) when playback begins after preloading into the playlist. Set to 0 when preloading a live stream.
   ///
   /// Returns
-  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown. You need to catch the exception and handle it accordingly.
+  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown. You need to catch the exception and handle it accordingly. See [Error Codes](https://docs.agora.io/en/video-calling/troubleshooting/error-codes) for details and resolution suggestions.
   Future<void> preloadSrc({required String src, required int startPos});
 
-  /// Plays preloaded media resources.
+  /// Plays a preloaded media resource.
   ///
-  /// After calling the preloadSrc method to preload the media resource into the playlist, you can call this method to play the preloaded media resource. After calling this method, if you receive the onPlayerSourceStateChanged callback which reports the playerStatePlaying state, the playback is successful. If you want to change the preloaded media resource to be played, you can call this method again and specify the URL of the new media resource that you want to preload. If you want to replay the media resource, you need to call preloadSrc to preload the media resource to the playlist again before playing. If you want to clear the playlist, call the stop method. If you call this method when playback is paused, this method does not take effect until playback is resumed.
+  /// After calling the preloadSrc method to preload a media resource into the playlist, you can call this method to play the preloaded media resource. After calling this method, if you receive the onPlayerSourceStateChanged callback reporting the state as playerStatePlaying, the playback is successful.
+  /// If you want to change the preloaded media resource being played, you can call this method again and specify a new media resource path. If you want to replay the media resource, you need to call preloadSrc again to preload the media resource into the playlist before playing. To clear the playlist, call stop. If you call this method while playback is paused, it will take effect only after playback resumes.
   ///
-  /// * [src] The URL of the media resource in the playlist must be consistent with the src set by the preloadSrc method; otherwise, the media resource cannot be played.
+  /// * [src] The URL of the media resource in the playlist. It must match the src set in the preloadSrc method; otherwise, playback will fail.
   ///
   /// Returns
-  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown. You need to catch the exception and handle it accordingly.
+  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown. You need to catch the exception and handle it accordingly. See [Error Codes](https://docs.agora.io/en/video-calling/troubleshooting/error-codes) for details and resolution suggestions.
   Future<void> playPreloadedSrc(String src);
 
-  /// Unloads media resources that are preloaded.
+  /// Releases the preloaded media resource.
   ///
-  /// This method cannot release the media resource being played.
-  ///
-  /// * [src] The URL of the media resource.
+  /// * [src] Network path of the media resource.
   ///
   /// Returns
-  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown. You need to catch the exception and handle it accordingly.
+  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown. You need to catch the exception and handle it accordingly. See [Error Codes](https://docs.agora.io/en/video-calling/troubleshooting/error-codes) for details and resolution suggestions.
   Future<void> unloadSrc(String src);
 
-  /// Enables or disables the spatial audio effect for the media player.
+  /// Enables or disables spatial audio for the media player.
   ///
-  /// After successfully setting the spatial audio effect parameters of the media player, the SDK enables the spatial audio effect for the media player, and the local user can hear the media resources with a sense of space. If you need to disable the spatial audio effect for the media player, set the params parameter to null.
+  /// After successfully setting the spatial audio parameters of the media player, the SDK enables spatial audio for the media player, allowing the local user to perceive spatial sound from media resources.
+  /// To disable spatial audio for the media player, you need to set the params parameter to null.
   ///
-  /// * [params] The spatial audio effect parameters of the media player. See SpatialAudioParams.
+  /// * [params] Spatial audio parameters for the media player. See SpatialAudioParams.
   ///
   /// Returns
-  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown. You need to catch the exception and handle it accordingly.
+  /// When the method call succeeds, there is no return value; when it fails, the AgoraRtcException exception is thrown. You need to catch the exception and handle it accordingly. See [Error Codes](https://docs.agora.io/en/video-calling/troubleshooting/error-codes) for details and resolution suggestions.
   Future<void> setSpatialAudioParams(SpatialAudioParams params);
 
   /// @nodoc
   Future<void> setSoundPositionParams(
       {required double pan, required double gain});
 
+  /// @nodoc
+  Future<int> getAudioBufferDelay();
+
   /// Sets media player options.
   ///
-  /// The media player supports setting options through key and value. The difference between this method and setPlayerOptionInString is that the value parameter of this method is of type Int, while the value of setPlayerOptionInString is of type String. These two methods cannot be used together.
+  /// The media player supports setting options using key and value.
+  /// The difference between this method and setPlayerOptionInString is that this method uses an Int type for value, while setPlayerOptionInString uses a String type. The two cannot be mixed.
   ///
-  /// * [key] The key of the option.
-  /// * [value] The value of the key.
+  /// * [key] Key value.
+  /// * [value] Value.
   ///
   /// Returns
-  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown. You need to catch the exception and handle it accordingly.
+  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown. You need to catch the exception and handle it accordingly. See [Error Codes](https://docs.agora.io/en/video-calling/troubleshooting/error-codes) for details and resolution suggestions.
   Future<void> setPlayerOptionInInt({required String key, required int value});
 
   /// Sets media player options.
   ///
-  /// The media player supports setting options through key and value. The difference between this method and setPlayerOptionInInt is that the value parameter of this method is of type String, while the value of setPlayerOptionInInt is of type String. These two methods cannot be used together.
+  /// The media player supports setting options using key and value.
+  /// The difference between this method and setPlayerOptionInInt is that this method uses a String type for value, while setPlayerOptionInInt uses an Int type. The two cannot be mixed.
   ///
-  /// * [key] The key of the option.
-  /// * [value] The value of the key.
+  /// * [key] Key value.
+  /// * [value] Value.
   ///
   /// Returns
-  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown. You need to catch the exception and handle it accordingly.
+  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown. You need to catch the exception and handle it accordingly. See [Error Codes](https://docs.agora.io/en/video-calling/troubleshooting/error-codes) for details and resolution suggestions.
   Future<void> setPlayerOptionInString(
       {required String key, required String value});
 }
 
-/// This class provides methods to manage cached media files.
+/// This class provides methods for managing cached media files in the media player.
 abstract class MediaPlayerCacheManager {
   /// Deletes all cached media files in the media player.
   ///
-  /// The cached media file currently being played will not be deleted.
+  /// This method does not delete cached media files that are currently playing.
   ///
   /// Returns
-  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown. You need to catch the exception and handle it accordingly.
+  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown. You need to catch the exception and handle it accordingly. See [Error Codes](https://docs.agora.io/en/video-calling/troubleshooting/error-codes) for details and resolution suggestions.
   ///  < 0: Failure. See MediaPlayerReason.
   Future<void> removeAllCaches();
 
-  /// Deletes a cached media file that is the least recently used.
+  /// Deletes the least recently used cached media file in the media player.
   ///
-  /// You can call this method to delete a cached media file when the storage space for the cached files is about to reach its limit. After you call this method, the SDK deletes the cached media file that is least used. The cached media file currently being played will not be deleted.
+  /// When cached media files occupy too much space, you can call this method to clean up cache files. After calling this method, the SDK deletes the least recently used cached media file. When you call this method to delete cached media files, the currently playing cached media file will not be deleted.
   ///
   /// Returns
-  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown. You need to catch the exception and handle it accordingly.
+  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown. You need to catch the exception and handle it accordingly. See [Error Codes](https://docs.agora.io/en/video-calling/troubleshooting/error-codes) for details and resolution suggestions.
   ///  < 0: Failure. See MediaPlayerReason.
   Future<void> removeOldCache();
 
-  /// Deletes a cached media file.
+  /// Deletes a specified cached media file.
   ///
-  /// The cached media file currently being played will not be deleted.
+  /// This method does not delete cached media files that are currently playing.
   ///
-  /// * [uri] The URI (Uniform Resource Identifier) of the media file to be deleted.
+  /// * [uri] The URI (Uniform Resource Identifier) of the cache file to be deleted, which can be used to identify the media file.
   ///
   /// Returns
-  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown. You need to catch the exception and handle it accordingly.
+  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown. You need to catch the exception and handle it accordingly. See [Error Codes](https://docs.agora.io/en/video-calling/troubleshooting/error-codes) for details and resolution suggestions.
   ///  < 0: Failure. See MediaPlayerReason.
   Future<void> removeCacheByUri(String uri);
 
-  /// Sets the storage path for the media files that you want to cache.
+  /// Sets the storage path for media files to be cached.
   ///
-  /// Make sure RtcEngine is initialized before you call this method.
+  /// This method must be called after initializing RtcEngine.
   ///
-  /// * [path] The absolute path of the media files to be cached. Ensure that the directory for the media files exists and is writable.
+  /// * [path] The absolute path for storing cached files. Make sure the specified directory exists and is writable.
   ///
   /// Returns
-  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown. You need to catch the exception and handle it accordingly.
+  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown. You need to catch the exception and handle it accordingly. See [Error Codes](https://docs.agora.io/en/video-calling/troubleshooting/error-codes) for details and resolution suggestions.
   ///  < 0: Failure. See MediaPlayerReason.
   Future<void> setCacheDir(String path);
 
-  /// Sets the maximum number of media files that can be cached.
+  /// Sets the maximum number of cached media files.
   ///
-  /// * [count] The maximum number of media files that can be cached. The default value is 1,000.
+  /// * [count] The maximum number of media files that can be cached. The default value is 1000.
   ///
   /// Returns
-  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown. You need to catch the exception and handle it accordingly.
+  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown. You need to catch the exception and handle it accordingly. See [Error Codes](https://docs.agora.io/en/video-calling/troubleshooting/error-codes) for details and resolution suggestions.
   ///  < 0: Failure. See MediaPlayerReason.
   Future<void> setMaxCacheFileCount(int count);
 
-  /// Sets the maximum size of the aggregate storage space for cached media files.
+  /// Sets the upper limit of the total cache size for media files.
   ///
-  /// * [cacheSize] The maximum size (bytes) of the aggregate storage space for cached media files. The default value is 1 GB.
+  /// * [cacheSize] The total cache size limit for media files, in bytes. The default is 1 GB.
   ///
   /// Returns
-  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown. You need to catch the exception and handle it accordingly.
+  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown. You need to catch the exception and handle it accordingly. See [Error Codes](https://docs.agora.io/en/video-calling/troubleshooting/error-codes) for details and resolution suggestions.
   ///  < 0: Failure. See MediaPlayerReason.
   Future<void> setMaxCacheFileSize(int cacheSize);
 
-  /// Sets whether to delete cached media files automatically.
+  /// Enables or disables the automatic cache file removal feature.
   ///
-  /// If you enable this function to remove cached media files automatically, when the cached media files exceed either the number or size limit you set, the SDK automatically deletes the least recently used cache file.
+  /// When automatic cache file removal is enabled, if the number or total size of cached media files in the player exceeds the set limit, the SDK automatically removes the least recently used cache file.
   ///
-  /// * [enable] Whether to enable the SDK to delete cached media files automatically: true : Delete cached media files automatically. false : (Default) Do not delete cached media files automatically.
+  /// * [enable] Whether to enable automatic cache file removal: true : Enables automatic cache file removal. false : (Default) Disables automatic cache file removal.
   ///
   /// Returns
-  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown. You need to catch the exception and handle it accordingly.
+  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown. You need to catch the exception and handle it accordingly. See [Error Codes](https://docs.agora.io/en/video-calling/troubleshooting/error-codes) for details and resolution suggestions.
   ///  < 0: Failure. See MediaPlayerReason.
   Future<void> enableAutoRemoveCache(bool enable);
 
-  /// Gets the storage path of the cached media files.
+  /// Gets the storage path of the cached files.
   ///
-  /// If you have not called the setCacheDir method to set the storage path for the media files to be cached before calling this method, you get the default storage path used by the SDK.
+  /// If you have not called the setCacheDir method to customize the cache file storage path before calling this method, the method returns the SDK's default cache file storage path.
   ///
-  /// * [length] An input parameter; the maximum length of the cache file storage path string.
+  /// * [length] Input parameter. The maximum length of the cache file storage path string.
   ///
   /// Returns
-  /// The call succeeds, and the SDK returns the storage path of the cached media files.
+  /// On success, returns the storage path of the cached files.
   ///  < 0: Failure. See MediaPlayerReason.
   Future<String> getCacheDir(int length);
 
-  /// Gets the maximum number of media files that can be cached.
+  /// Gets the maximum number of cache files set.
   ///
-  /// By default, the maximum number of media files that can be cached is 1,000.
+  /// The default maximum number of cache files in the SDK is 1000.
   ///
   /// Returns
-  /// > 0: The call succeeds and returns the maximum number of media files that can be cached.
+  /// > 0: Success. Returns the maximum number of cache files.
   ///  < 0: Failure. See MediaPlayerReason.
   Future<int> getMaxCacheFileCount();
 
-  /// Gets the maximum size of the aggregate storage space for cached media files.
+  /// Gets the maximum total cache size of cache files set.
   ///
-  /// By default, the maximum size of the aggregate storage space for cached media files is 1 GB. You can call the setMaxCacheFileSize method to set the limit according to your scenarios.
+  /// The default maximum total cache size of cache files in the SDK is 1GB. You can call the setMaxCacheFileSize method to customize the limit.
   ///
   /// Returns
-  /// > 0: The call succeeds and returns the maximum size (in bytes) of the aggregate storage space for cached media files.
+  /// > 0: Success. Returns the maximum total cache size in bytes.
   ///  < 0: Failure. See MediaPlayerReason.
   Future<int> getMaxCacheFileSize();
 
-  /// Gets the number of media files that are cached.
+  /// Gets the total number of currently cached media files.
   ///
   /// Returns
-  /// ≥ 0: The call succeeds and returns the number of media files that are cached.
+  /// ≥ 0: Success. Returns the total number of currently cached media files.
   ///  < 0: Failure. See MediaPlayerReason.
   Future<int> getCacheFileCount();
 }
 
-/// The video frame observer for the media player.
+/// Video data observer for the media player.
+///
+/// You can call registerVideoFrameObserver to register or unregister the MediaPlayerVideoFrameObserver.
 class MediaPlayerVideoFrameObserver {
   /// @nodoc
   const MediaPlayerVideoFrameObserver({
     this.onFrame,
   });
 
-  /// Occurs each time the player receives a video frame.
+  /// Callback when a video frame is received.
   ///
-  /// After registering the video frame observer, the callback occurs every time the player receives a video frame, reporting the detailed information of the video frame.
+  /// After registering the video observer, this callback is triggered every time a video frame is received, reporting video frame information.
   ///
   /// * [frame] Video frame information. See VideoFrame.
   final void Function(VideoFrame frame)? onFrame;
