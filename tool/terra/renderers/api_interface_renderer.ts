@@ -77,8 +77,8 @@ export default function ApiInterfaceRenderer(
       }) != undefined;
 
     let content = _trim(`
-        import '/src/_serializable.dart';
-        import '/src/binding_forward_export.dart';
+        import 'package:agora_rtc_engine/src/_serializable.dart';
+        import 'package:agora_rtc_engine/src/binding_forward_export.dart';
         ${
           isNeedImportGDartFile ? `part '${dartFileName(cxxFile)}.g.dart';` : ""
         }

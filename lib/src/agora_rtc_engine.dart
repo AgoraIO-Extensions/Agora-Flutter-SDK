@@ -1,5 +1,5 @@
-import '/src/_serializable.dart';
-import '/src/binding_forward_export.dart';
+import 'package:agora_rtc_engine/src/_serializable.dart';
+import 'package:agora_rtc_engine/src/binding_forward_export.dart';
 part 'agora_rtc_engine.g.dart';
 
 /// Device type.
@@ -785,7 +785,7 @@ class VideoCompositingLayout implements AgoraSerializable {
   final int? regionCount;
 
   /// @nodoc
-  @JsonKey(name: 'appData', ignore: true)
+  @JsonKey(name: 'appData', includeFromJson: false, includeToJson: false)
   final Uint8List? appData;
 
   /// @nodoc
@@ -1194,7 +1194,7 @@ class ThumbImageBuffer implements AgoraSerializable {
   const ThumbImageBuffer({this.buffer, this.length, this.width, this.height});
 
   /// Buffer of the thumbnail or icon.
-  @JsonKey(name: 'buffer', ignore: true)
+  @JsonKey(name: 'buffer', includeFromJson: false, includeToJson: false)
   final Uint8List? buffer;
 
   /// Length of the thumbnail or icon buffer in bytes.
@@ -3154,7 +3154,7 @@ class Metadata implements AgoraSerializable {
   final int? size;
 
   /// The buffer address of the received Metadata.
-  @JsonKey(name: 'buffer', ignore: true)
+  @JsonKey(name: 'buffer', includeFromJson: false, includeToJson: false)
   final Uint8List? buffer;
 
   /// The timestamp when the Metadata is sent, in milliseconds.

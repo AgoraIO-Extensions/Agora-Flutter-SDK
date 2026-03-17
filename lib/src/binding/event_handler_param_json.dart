@@ -2,8 +2,8 @@
 
 // ignore_for_file: public_member_api_docs, unused_local_variable, unused_import, prefer_is_empty
 
-import '/src/_serializable.dart';
-import '/src/binding_forward_export.dart';
+import 'package:agora_rtc_engine/src/_serializable.dart';
+import 'package:agora_rtc_engine/src/binding_forward_export.dart';
 part 'event_handler_param_json.g.dart';
 
 @JsonSerializable(explicitToJson: true, includeIfNull: false)
@@ -12,7 +12,7 @@ class AudioEncodedFrameObserverOnRecordAudioEncodedFrameJson
   const AudioEncodedFrameObserverOnRecordAudioEncodedFrameJson(
       {this.frameBuffer, this.length, this.audioEncodedFrameInfo});
 
-  @JsonKey(name: 'frameBuffer', ignore: true)
+  @JsonKey(name: 'frameBuffer', includeFromJson: false, includeToJson: false)
   final Uint8List? frameBuffer;
 
   @JsonKey(name: 'length')
@@ -60,7 +60,7 @@ class AudioEncodedFrameObserverOnPlaybackAudioEncodedFrameJson
   const AudioEncodedFrameObserverOnPlaybackAudioEncodedFrameJson(
       {this.frameBuffer, this.length, this.audioEncodedFrameInfo});
 
-  @JsonKey(name: 'frameBuffer', ignore: true)
+  @JsonKey(name: 'frameBuffer', includeFromJson: false, includeToJson: false)
   final Uint8List? frameBuffer;
 
   @JsonKey(name: 'length')
@@ -108,7 +108,7 @@ class AudioEncodedFrameObserverOnMixedAudioEncodedFrameJson
   const AudioEncodedFrameObserverOnMixedAudioEncodedFrameJson(
       {this.frameBuffer, this.length, this.audioEncodedFrameInfo});
 
-  @JsonKey(name: 'frameBuffer', ignore: true)
+  @JsonKey(name: 'frameBuffer', includeFromJson: false, includeToJson: false)
   final Uint8List? frameBuffer;
 
   @JsonKey(name: 'length')
@@ -432,7 +432,7 @@ class VideoEncodedFrameObserverOnEncodedVideoFrameReceivedJson
   @JsonKey(name: 'uid')
   final int? uid;
 
-  @JsonKey(name: 'imageBuffer', ignore: true)
+  @JsonKey(name: 'imageBuffer', includeFromJson: false, includeToJson: false)
   final Uint8List? imageBuffer;
 
   @JsonKey(name: 'length')
@@ -992,7 +992,7 @@ extension MediaPlayerSourceObserverOnPlayerEventJsonBufferExt
 class MediaPlayerSourceObserverOnMetaDataJson implements AgoraSerializable {
   const MediaPlayerSourceObserverOnMetaDataJson({this.data, this.length});
 
-  @JsonKey(name: 'data', ignore: true)
+  @JsonKey(name: 'data', includeFromJson: false, includeToJson: false)
   final Uint8List? data;
 
   @JsonKey(name: 'length')
@@ -1354,7 +1354,7 @@ class MusicContentCenterEventHandlerOnMusicCollectionResultJson
   @JsonKey(name: 'requestId')
   final String? requestId;
 
-  @JsonKey(name: 'result', ignore: true)
+  @JsonKey(name: 'result', includeFromJson: false, includeToJson: false)
   final MusicCollection? result;
 
   @JsonKey(name: 'reason')
@@ -3237,7 +3237,7 @@ class RtcEngineEventHandlerOnStreamMessageJson implements AgoraSerializable {
   @JsonKey(name: 'streamId')
   final int? streamId;
 
-  @JsonKey(name: 'data', ignore: true)
+  @JsonKey(name: 'data', includeFromJson: false, includeToJson: false)
   final Uint8List? data;
 
   @JsonKey(name: 'length')
@@ -4919,7 +4919,7 @@ class RtcEngineEventHandlerOnAudioMetadataReceivedJson
   @JsonKey(name: 'uid')
   final int? uid;
 
-  @JsonKey(name: 'metadata', ignore: true)
+  @JsonKey(name: 'metadata', includeFromJson: false, includeToJson: false)
   final Uint8List? metadata;
 
   @JsonKey(name: 'length')

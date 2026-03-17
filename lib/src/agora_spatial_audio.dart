@@ -1,5 +1,5 @@
-import '/src/_serializable.dart';
-import '/src/binding_forward_export.dart';
+import 'package:agora_rtc_engine/src/_serializable.dart';
+import 'package:agora_rtc_engine/src/binding_forward_export.dart';
 part 'agora_spatial_audio.g.dart';
 
 /// Spatial position information of the remote user or media player.

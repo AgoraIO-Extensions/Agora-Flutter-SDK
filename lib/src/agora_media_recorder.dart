@@ -1,5 +1,5 @@
-import '/src/_serializable.dart';
-import '/src/binding_forward_export.dart';
+import 'package:agora_rtc_engine/src/_serializable.dart';
+import 'package:agora_rtc_engine/src/binding_forward_export.dart';
 
 /// @nodoc
 abstract class MediaRecorder {

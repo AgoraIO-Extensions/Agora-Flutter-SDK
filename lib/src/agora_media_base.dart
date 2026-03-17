@@ -1,5 +1,5 @@
-import '/src/_serializable.dart';
-import '/src/binding_forward_export.dart';
+import 'package:agora_rtc_engine/src/_serializable.dart';
+import 'package:agora_rtc_engine/src/binding_forward_export.dart';
 part 'agora_media_base.g.dart';
 
 /// @nodoc
@@ -1130,7 +1130,7 @@ class ExternalVideoFrame implements AgoraSerializable {
   final VideoPixelFormat? format;
 
   /// Video buffer.
-  @JsonKey(name: 'buffer', ignore: true)
+  @JsonKey(name: 'buffer', includeFromJson: false, includeToJson: false)
   final Uint8List? buffer;
 
   /// Stride of the input video frame, in pixels (not bytes). For Texture, this refers to the width of the Texture.
@@ -1182,7 +1182,7 @@ class ExternalVideoFrame implements AgoraSerializable {
   final List<double>? matrix;
 
   /// This parameter only applies to video data in Texture format. Refers to the data buffer of MetaData, default value is NULL.
-  @JsonKey(name: 'metadataBuffer', ignore: true)
+  @JsonKey(name: 'metadataBuffer', includeFromJson: false, includeToJson: false)
   final Uint8List? metadataBuffer;
 
   /// This parameter only applies to video data in Texture format. Refers to the size of MetaData, default value is 0.
@@ -1191,7 +1191,7 @@ class ExternalVideoFrame implements AgoraSerializable {
 
   /// Alpha channel data output by portrait segmentation algorithm. This data matches the size of the video frame. Each pixel value ranges from [0,255], where 0 represents background and 255 represents foreground (portrait).
   /// You can use this parameter to render the video background with various effects, such as transparency, solid color, image, video, etc. In custom video rendering scenarios, make sure both the input video frame and alphaBuffer are of Full Range type; other types may cause incorrect rendering of alpha data.
-  @JsonKey(name: 'alphaBuffer', ignore: true)
+  @JsonKey(name: 'alphaBuffer', includeFromJson: false, includeToJson: false)
   final Uint8List? alphaBuffer;
 
   /// For video data in BGRA or RGBA format, you can choose either method to set the alpha channel data:
@@ -1337,15 +1337,15 @@ class VideoFrame implements AgoraSerializable {
   final int? vStride;
 
   /// For YUV data, the pointer to the Y buffer; for RGBA data, the data buffer.
-  @JsonKey(name: 'yBuffer', ignore: true)
+  @JsonKey(name: 'yBuffer', includeFromJson: false, includeToJson: false)
   final Uint8List? yBuffer;
 
   /// For YUV data, the pointer to the U buffer; for RGBA data, the value is null.
-  @JsonKey(name: 'uBuffer', ignore: true)
+  @JsonKey(name: 'uBuffer', includeFromJson: false, includeToJson: false)
   final Uint8List? uBuffer;
 
   /// For YUV data, the pointer to the V buffer; for RGBA data, the value is null.
-  @JsonKey(name: 'vBuffer', ignore: true)
+  @JsonKey(name: 'vBuffer', includeFromJson: false, includeToJson: false)
   final Uint8List? vBuffer;
 
   /// Clockwise rotation angle of this frame before rendering. Supported values are 0, 90, 180, and 270 degrees.
@@ -1361,7 +1361,8 @@ class VideoFrame implements AgoraSerializable {
   final int? avsyncType;
 
   /// This parameter applies only to video data in Texture format. It refers to the data buffer of MetaData. Default is NULL.
-  @JsonKey(name: 'metadata_buffer', ignore: true)
+  @JsonKey(
+      name: 'metadata_buffer', includeFromJson: false, includeToJson: false)
   final Uint8List? metadataBuffer;
 
   /// This parameter applies only to video data in Texture format. It refers to the size of MetaData. Default is 0.
@@ -1380,7 +1381,7 @@ class VideoFrame implements AgoraSerializable {
   /// By setting this parameter, you can render the video background with various effects such as transparency, solid color, image, or video.
   ///  In custom video rendering scenarios, ensure that both the video frame and alphaBuffer are Full Range type; other types may result in incorrect rendering of Alpha data.
   ///  Make sure that the dimensions of alphaBuffer exactly match the video frame (width × height), otherwise the app may crash.
-  @JsonKey(name: 'alphaBuffer', ignore: true)
+  @JsonKey(name: 'alphaBuffer', includeFromJson: false, includeToJson: false)
   final Uint8List? alphaBuffer;
 
   /// When the video frame contains Alpha channel data, sets the relative position of alphaBuffer and the video frame. See AlphaStitchMode.
@@ -1388,7 +1389,7 @@ class VideoFrame implements AgoraSerializable {
   final AlphaStitchMode? alphaStitchMode;
 
   /// @nodoc
-  @JsonKey(name: 'pixelBuffer', ignore: true)
+  @JsonKey(name: 'pixelBuffer', includeFromJson: false, includeToJson: false)
   final Uint8List? pixelBuffer;
 
   /// Metadata in the video frame. This parameter requires [contacting technical support](https://ticket.shengwang.cn/) to use.
@@ -1753,7 +1754,7 @@ class AudioFrame implements AgoraSerializable {
 
   /// Audio data buffer (data is interleaved if stereo).
   /// Buffer size buffer = samples × channels × bytesPerSample.
-  @JsonKey(name: 'buffer', ignore: true)
+  @JsonKey(name: 'buffer', includeFromJson: false, includeToJson: false)
   final Uint8List? buffer;
 
   /// Render timestamp of the external audio frame.

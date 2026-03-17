@@ -20,13 +20,14 @@ if [ -n "$NEW_VERSION" ]; then
   echo "Updated version to ${NEW_VERSION} in $TERRA_MAIN_FILE"
 fi
 
-bash ${MY_PATH}/prepare.sh
+# bash ${MY_PATH}/prepare.sh
 
 pushd ${MY_PATH}
 
 npm exec terra -- run \
     --config ${TERRA_MAIN_FILE}  \
-    --output-dir=${PROJECT_ROOT}
+    --output-dir=${PROJECT_ROOT} \
+    --clean
 
 popd
 

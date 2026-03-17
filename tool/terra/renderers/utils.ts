@@ -173,7 +173,7 @@ export function renderJsonSerializable(
         let nullableSurffix = forceExplicitNullableType ? "?" : "";
         let jsonKeyAnnotations = [
           `name: '${it.name}'`,
-          ...(isIgnoreJson ? ["ignore: true"] : []),
+          ...(isIgnoreJson ? ["includeFromJson: false", "includeToJson: false"] : []),
           ...(isNeedReadValueWithReadIntPtr &&
           !isNeedReadValueWithReadIntPtrList
             ? ["readValue: readIntPtr"]

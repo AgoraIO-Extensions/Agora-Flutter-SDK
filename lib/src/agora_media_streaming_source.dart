@@ -1,5 +1,5 @@
-import '/src/_serializable.dart';
-import '/src/binding_forward_export.dart';
+import 'package:agora_rtc_engine/src/_serializable.dart';
+import 'package:agora_rtc_engine/src/binding_forward_export.dart';
 part 'agora_media_streaming_source.g.dart';
 
 /// @nodoc
@@ -176,7 +176,7 @@ class InputSeiData implements AgoraSerializable {
   final int? frameIndex;
 
   /// @nodoc
-  @JsonKey(name: 'private_data', ignore: true)
+  @JsonKey(name: 'private_data', includeFromJson: false, includeToJson: false)
   final Uint8List? privateData;
 
   /// @nodoc

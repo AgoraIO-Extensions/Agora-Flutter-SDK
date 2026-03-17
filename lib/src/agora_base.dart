@@ -1,5 +1,5 @@
-import '/src/_serializable.dart';
-import '/src/binding_forward_export.dart';
+import 'package:agora_rtc_engine/src/_serializable.dart';
+import 'package:agora_rtc_engine/src/binding_forward_export.dart';
 part 'agora_base.g.dart';
 
 /// Channel profile.
@@ -2470,7 +2470,7 @@ class WatermarkBuffer implements AgoraSerializable {
   final VideoPixelFormat? format;
 
   /// The pixel buffer data of the watermark image.
-  @JsonKey(name: 'buffer', ignore: true)
+  @JsonKey(name: 'buffer', includeFromJson: false, includeToJson: false)
   final Uint8List? buffer;
 
   /// @nodoc
@@ -4090,7 +4090,7 @@ class Packet implements AgoraSerializable {
   const Packet({this.buffer, this.size});
 
   /// @nodoc
-  @JsonKey(name: 'buffer', ignore: true)
+  @JsonKey(name: 'buffer', includeFromJson: false, includeToJson: false)
   final Uint8List? buffer;
 
   /// @nodoc
@@ -7200,7 +7200,8 @@ class EncryptionConfig implements AgoraSerializable {
   final String? encryptionKey;
 
   /// Salt, 32 bytes in length. It is recommended to generate the salt on the server side using OpenSSL. This parameter takes effect only when using aes128Gcm2 or aes256Gcm2 encryption modes. In this case, ensure that the value provided for this parameter is not all 0.
-  @JsonKey(name: 'encryptionKdfSalt', ignore: true)
+  @JsonKey(
+      name: 'encryptionKdfSalt', includeFromJson: false, includeToJson: false)
   final Uint8List? encryptionKdfSalt;
 
   /// Whether to enable data stream encryption: true : Enable data stream encryption. false : (Default) Disable data stream encryption.
