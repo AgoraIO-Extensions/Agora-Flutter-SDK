@@ -1,5 +1,5 @@
 // ignore: avoid_web_libraries_in_flutter
-import 'dart:js_util';
+import 'dart:js_util' as js_util;
 
 import '/src/binding_forward_export.dart';
 import '/src/impl/platform/web/iris_web_rtc_bindings_js.dart';
@@ -87,8 +87,8 @@ class IrisApiEngineBindingsDelegateJS
       return CallApiResult(irisReturnCode: 0, data: {'result': 0});
     }
 
-    final promiseFuture =
-        promiseToFuture(js.callIrisApi(nApiEnginePtr, nParam));
+    final promiseFuture = js_util.promiseToFuture<js.CallIrisApiResult>(
+        js.callIrisApi(nApiEnginePtr, nParam));
 
     final js.CallIrisApiResult irisApiResult = await promiseFuture;
 

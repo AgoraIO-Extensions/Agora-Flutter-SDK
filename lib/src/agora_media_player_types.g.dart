@@ -26,30 +26,24 @@ PlayerStreamInfo _$PlayerStreamInfoFromJson(Map<String, dynamic> json) =>
       duration: (json['duration'] as num?)?.toInt(),
     );
 
-Map<String, dynamic> _$PlayerStreamInfoToJson(PlayerStreamInfo instance) {
-  final val = <String, dynamic>{};
-
-  void writeNotNull(String key, dynamic value) {
-    if (value != null) {
-      val[key] = value;
-    }
-  }
-
-  writeNotNull('streamIndex', instance.streamIndex);
-  writeNotNull('streamType', _$MediaStreamTypeEnumMap[instance.streamType]);
-  writeNotNull('codecName', instance.codecName);
-  writeNotNull('language', instance.language);
-  writeNotNull('videoFrameRate', instance.videoFrameRate);
-  writeNotNull('videoBitRate', instance.videoBitRate);
-  writeNotNull('videoWidth', instance.videoWidth);
-  writeNotNull('videoHeight', instance.videoHeight);
-  writeNotNull('videoRotation', instance.videoRotation);
-  writeNotNull('audioSampleRate', instance.audioSampleRate);
-  writeNotNull('audioChannels', instance.audioChannels);
-  writeNotNull('audioBitsPerSample', instance.audioBitsPerSample);
-  writeNotNull('duration', instance.duration);
-  return val;
-}
+Map<String, dynamic> _$PlayerStreamInfoToJson(PlayerStreamInfo instance) =>
+    <String, dynamic>{
+      if (instance.streamIndex case final value?) 'streamIndex': value,
+      if (_$MediaStreamTypeEnumMap[instance.streamType] case final value?)
+        'streamType': value,
+      if (instance.codecName case final value?) 'codecName': value,
+      if (instance.language case final value?) 'language': value,
+      if (instance.videoFrameRate case final value?) 'videoFrameRate': value,
+      if (instance.videoBitRate case final value?) 'videoBitRate': value,
+      if (instance.videoWidth case final value?) 'videoWidth': value,
+      if (instance.videoHeight case final value?) 'videoHeight': value,
+      if (instance.videoRotation case final value?) 'videoRotation': value,
+      if (instance.audioSampleRate case final value?) 'audioSampleRate': value,
+      if (instance.audioChannels case final value?) 'audioChannels': value,
+      if (instance.audioBitsPerSample case final value?)
+        'audioBitsPerSample': value,
+      if (instance.duration case final value?) 'duration': value,
+    };
 
 const _$MediaStreamTypeEnumMap = {
   MediaStreamType.streamTypeUnknown: 0,
@@ -63,19 +57,10 @@ SrcInfo _$SrcInfoFromJson(Map<String, dynamic> json) => SrcInfo(
       name: json['name'] as String?,
     );
 
-Map<String, dynamic> _$SrcInfoToJson(SrcInfo instance) {
-  final val = <String, dynamic>{};
-
-  void writeNotNull(String key, dynamic value) {
-    if (value != null) {
-      val[key] = value;
-    }
-  }
-
-  writeNotNull('bitrateInKbps', instance.bitrateInKbps);
-  writeNotNull('name', instance.name);
-  return val;
-}
+Map<String, dynamic> _$SrcInfoToJson(SrcInfo instance) => <String, dynamic>{
+      if (instance.bitrateInKbps case final value?) 'bitrateInKbps': value,
+      if (instance.name case final value?) 'name': value,
+    };
 
 CacheStatistics _$CacheStatisticsFromJson(Map<String, dynamic> json) =>
     CacheStatistics(
@@ -84,20 +69,12 @@ CacheStatistics _$CacheStatisticsFromJson(Map<String, dynamic> json) =>
       downloadSize: (json['downloadSize'] as num?)?.toInt(),
     );
 
-Map<String, dynamic> _$CacheStatisticsToJson(CacheStatistics instance) {
-  final val = <String, dynamic>{};
-
-  void writeNotNull(String key, dynamic value) {
-    if (value != null) {
-      val[key] = value;
-    }
-  }
-
-  writeNotNull('fileSize', instance.fileSize);
-  writeNotNull('cacheSize', instance.cacheSize);
-  writeNotNull('downloadSize', instance.downloadSize);
-  return val;
-}
+Map<String, dynamic> _$CacheStatisticsToJson(CacheStatistics instance) =>
+    <String, dynamic>{
+      if (instance.fileSize case final value?) 'fileSize': value,
+      if (instance.cacheSize case final value?) 'cacheSize': value,
+      if (instance.downloadSize case final value?) 'downloadSize': value,
+    };
 
 PlayerPlaybackStats _$PlayerPlaybackStatsFromJson(Map<String, dynamic> json) =>
     PlayerPlaybackStats(
@@ -107,21 +84,17 @@ PlayerPlaybackStats _$PlayerPlaybackStatsFromJson(Map<String, dynamic> json) =>
       totalBitrateInKbps: (json['totalBitrateInKbps'] as num?)?.toInt(),
     );
 
-Map<String, dynamic> _$PlayerPlaybackStatsToJson(PlayerPlaybackStats instance) {
-  final val = <String, dynamic>{};
-
-  void writeNotNull(String key, dynamic value) {
-    if (value != null) {
-      val[key] = value;
-    }
-  }
-
-  writeNotNull('videoFps', instance.videoFps);
-  writeNotNull('videoBitrateInKbps', instance.videoBitrateInKbps);
-  writeNotNull('audioBitrateInKbps', instance.audioBitrateInKbps);
-  writeNotNull('totalBitrateInKbps', instance.totalBitrateInKbps);
-  return val;
-}
+Map<String, dynamic> _$PlayerPlaybackStatsToJson(
+        PlayerPlaybackStats instance) =>
+    <String, dynamic>{
+      if (instance.videoFps case final value?) 'videoFps': value,
+      if (instance.videoBitrateInKbps case final value?)
+        'videoBitrateInKbps': value,
+      if (instance.audioBitrateInKbps case final value?)
+        'audioBitrateInKbps': value,
+      if (instance.totalBitrateInKbps case final value?)
+        'totalBitrateInKbps': value,
+    };
 
 PlayerUpdatedInfo _$PlayerUpdatedInfoFromJson(Map<String, dynamic> json) =>
     PlayerUpdatedInfo(
@@ -134,24 +107,18 @@ PlayerUpdatedInfo _$PlayerUpdatedInfoFromJson(Map<String, dynamic> json) =>
       audioBitsPerSample: (json['audioBitsPerSample'] as num?)?.toInt(),
     );
 
-Map<String, dynamic> _$PlayerUpdatedInfoToJson(PlayerUpdatedInfo instance) {
-  final val = <String, dynamic>{};
-
-  void writeNotNull(String key, dynamic value) {
-    if (value != null) {
-      val[key] = value;
-    }
-  }
-
-  writeNotNull('internalPlayerUuid', instance.internalPlayerUuid);
-  writeNotNull('deviceId', instance.deviceId);
-  writeNotNull('videoHeight', instance.videoHeight);
-  writeNotNull('videoWidth', instance.videoWidth);
-  writeNotNull('audioSampleRate', instance.audioSampleRate);
-  writeNotNull('audioChannels', instance.audioChannels);
-  writeNotNull('audioBitsPerSample', instance.audioBitsPerSample);
-  return val;
-}
+Map<String, dynamic> _$PlayerUpdatedInfoToJson(PlayerUpdatedInfo instance) =>
+    <String, dynamic>{
+      if (instance.internalPlayerUuid case final value?)
+        'internalPlayerUuid': value,
+      if (instance.deviceId case final value?) 'deviceId': value,
+      if (instance.videoHeight case final value?) 'videoHeight': value,
+      if (instance.videoWidth case final value?) 'videoWidth': value,
+      if (instance.audioSampleRate case final value?) 'audioSampleRate': value,
+      if (instance.audioChannels case final value?) 'audioChannels': value,
+      if (instance.audioBitsPerSample case final value?)
+        'audioBitsPerSample': value,
+    };
 
 MediaSource _$MediaSourceFromJson(Map<String, dynamic> json) => MediaSource(
       url: json['url'] as String?,
@@ -164,25 +131,18 @@ MediaSource _$MediaSourceFromJson(Map<String, dynamic> json) => MediaSource(
       isLiveSource: json['isLiveSource'] as bool?,
     );
 
-Map<String, dynamic> _$MediaSourceToJson(MediaSource instance) {
-  final val = <String, dynamic>{};
-
-  void writeNotNull(String key, dynamic value) {
-    if (value != null) {
-      val[key] = value;
-    }
-  }
-
-  writeNotNull('url', instance.url);
-  writeNotNull('uri', instance.uri);
-  writeNotNull('startPos', instance.startPos);
-  writeNotNull('autoPlay', instance.autoPlay);
-  writeNotNull('enableCache', instance.enableCache);
-  writeNotNull('enableMultiAudioTrack', instance.enableMultiAudioTrack);
-  writeNotNull('isAgoraSource', instance.isAgoraSource);
-  writeNotNull('isLiveSource', instance.isLiveSource);
-  return val;
-}
+Map<String, dynamic> _$MediaSourceToJson(MediaSource instance) =>
+    <String, dynamic>{
+      if (instance.url case final value?) 'url': value,
+      if (instance.uri case final value?) 'uri': value,
+      if (instance.startPos case final value?) 'startPos': value,
+      if (instance.autoPlay case final value?) 'autoPlay': value,
+      if (instance.enableCache case final value?) 'enableCache': value,
+      if (instance.enableMultiAudioTrack case final value?)
+        'enableMultiAudioTrack': value,
+      if (instance.isAgoraSource case final value?) 'isAgoraSource': value,
+      if (instance.isLiveSource case final value?) 'isLiveSource': value,
+    };
 
 const _$MediaPlayerStateEnumMap = {
   MediaPlayerState.playerStateIdle: 0,

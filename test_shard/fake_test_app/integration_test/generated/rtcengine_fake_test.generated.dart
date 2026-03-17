@@ -5,10 +5,62 @@
 import 'package:agora_rtc_engine/agora_rtc_engine.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'dart:typed_data';
+import 'dart:io';
 import 'package:flutter/foundation.dart';
+import 'package:flutter/services.dart';
 import 'package:fake_test_app/main.dart' as app;
 import 'package:iris_tester/iris_tester.dart';
 import 'package:iris_method_channel/iris_method_channel.dart';
+import 'package:path_provider/path_provider.dart';
+import 'package:archive/archive_io.dart';
+
+Future<String> _setupBeautyMaterials() async {
+  final directory = await getApplicationDocumentsDirectory();
+  final ByteData data =
+      await rootBundle.load('assets/zips/beauty_material.zip');
+  final archive = ZipDecoder().decodeBytes(data.buffer.asUint8List());
+
+  // Find root dir name
+  final rootDirNames = <String>{};
+  for (final file in archive.files) {
+    final entryName = file.name;
+    if (entryName.startsWith('__MACOSX/') || entryName.endsWith('.DS_Store')) {
+      continue;
+    }
+    final segments = entryName.split('/');
+    if (segments.isNotEmpty && segments.first.isNotEmpty) {
+      rootDirNames.add(segments.first);
+    }
+  }
+  final rootDirName = rootDirNames.length == 1
+      ? rootDirNames.first
+      : (rootDirNames.contains('beauty_material_functional')
+          ? 'beauty_material_functional'
+          : rootDirNames.first);
+
+  final targetDir = Directory('${directory.path}/$rootDirName');
+  if (await targetDir.exists()) {
+    await targetDir.delete(recursive: true);
+  }
+
+  for (final file in archive.files) {
+    final entryName = file.name;
+    if (entryName.startsWith('__MACOSX/') || entryName.endsWith('.DS_Store')) {
+      continue;
+    }
+    final outputPath = '${directory.path}/$entryName';
+    if (file.isFile) {
+      final data = file.content as List<int>;
+      File(outputPath)
+        ..createSync(recursive: true)
+        ..writeAsBytesSync(data);
+    } else {
+      Directory(outputPath).createSync(recursive: true);
+    }
+  }
+
+  return targetDir.path;
+}
 
 void rtcEngineSmokeTestCases() {
   testWidgets(
@@ -308,6 +360,9 @@ void rtcEngineSmokeTestCases() {
             VideoStreamType.videoStreamHigh;
         ChannelProfileType optionsChannelProfile =
             ChannelProfileType.channelProfileCommunication;
+        MultipathMode optionsUplinkMultipathMode = MultipathMode.duplicate;
+        MultipathMode optionsDownlinkMultipathMode = MultipathMode.duplicate;
+        MultipathType optionsPreferMultipathType = MultipathType.lan;
         bool optionsPublishCameraTrack = true;
         bool optionsPublishSecondaryCameraTrack = true;
         bool optionsPublishThirdCameraTrack = true;
@@ -341,6 +396,7 @@ void rtcEngineSmokeTestCases() {
         int optionsCustomVideoTrackId = 5;
         bool optionsIsAudioFilterable = true;
         String optionsParameters = "hello";
+        bool optionsEnableMultipath = true;
         ChannelMediaOptions options = ChannelMediaOptions(
           publishCameraTrack: optionsPublishCameraTrack,
           publishSecondaryCameraTrack: optionsPublishSecondaryCameraTrack,
@@ -379,6 +435,10 @@ void rtcEngineSmokeTestCases() {
           customVideoTrackId: optionsCustomVideoTrackId,
           isAudioFilterable: optionsIsAudioFilterable,
           parameters: optionsParameters,
+          enableMultipath: optionsEnableMultipath,
+          uplinkMultipathMode: optionsUplinkMultipathMode,
+          downlinkMultipathMode: optionsDownlinkMultipathMode,
+          preferMultipathType: optionsPreferMultipathType,
         );
         await rtcEngine.joinChannel(
           token: token,
@@ -424,6 +484,9 @@ void rtcEngineSmokeTestCases() {
             VideoStreamType.videoStreamHigh;
         ChannelProfileType optionsChannelProfile =
             ChannelProfileType.channelProfileCommunication;
+        MultipathMode optionsUplinkMultipathMode = MultipathMode.duplicate;
+        MultipathMode optionsDownlinkMultipathMode = MultipathMode.duplicate;
+        MultipathType optionsPreferMultipathType = MultipathType.lan;
         bool optionsPublishCameraTrack = true;
         bool optionsPublishSecondaryCameraTrack = true;
         bool optionsPublishThirdCameraTrack = true;
@@ -457,6 +520,7 @@ void rtcEngineSmokeTestCases() {
         int optionsCustomVideoTrackId = 5;
         bool optionsIsAudioFilterable = true;
         String optionsParameters = "hello";
+        bool optionsEnableMultipath = true;
         ChannelMediaOptions options = ChannelMediaOptions(
           publishCameraTrack: optionsPublishCameraTrack,
           publishSecondaryCameraTrack: optionsPublishSecondaryCameraTrack,
@@ -495,6 +559,10 @@ void rtcEngineSmokeTestCases() {
           customVideoTrackId: optionsCustomVideoTrackId,
           isAudioFilterable: optionsIsAudioFilterable,
           parameters: optionsParameters,
+          enableMultipath: optionsEnableMultipath,
+          uplinkMultipathMode: optionsUplinkMultipathMode,
+          downlinkMultipathMode: optionsDownlinkMultipathMode,
+          preferMultipathType: optionsPreferMultipathType,
         );
         await rtcEngine.updateChannelMediaOptions(
           options,
@@ -1348,7 +1416,12 @@ void rtcEngineSmokeTestCases() {
       await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
-        VideoEffectObject? videoEffectObject = null;
+        final bundlePath = await _setupBeautyMaterials();
+        VideoEffectObject? videoEffectObject =
+            await rtcEngine.createVideoEffectObject(
+          bundlePath: bundlePath,
+          type: MediaSourceType.primaryCameraSource,
+        );
         await rtcEngine.destroyVideoEffectObject(
           videoEffectObject,
         );
@@ -1532,10 +1605,13 @@ void rtcEngineSmokeTestCases() {
           blurDegree: backgroundSourceBlurDegree,
         );
         SegModelType segpropertyModelType = SegModelType.segModelAi;
+        ScreenColorType segpropertyScreenColorType =
+            ScreenColorType.screenColorAuto;
         double segpropertyGreenCapacity = 5.0;
         SegmentationProperty segproperty = SegmentationProperty(
           modelType: segpropertyModelType,
           greenCapacity: segpropertyGreenCapacity,
+          screenColorType: segpropertyScreenColorType,
         );
         MediaSourceType type = MediaSourceType.audioPlayoutSource;
         await rtcEngine.enableVirtualBackground(
@@ -4804,8 +4880,10 @@ void rtcEngineSmokeTestCases() {
 
       try {
         List<StreamLayerConfig> simulcastConfigConfigs = [];
+        bool simulcastConfigPublishFallbackEnable = true;
         SimulcastConfig simulcastConfig = SimulcastConfig(
           configs: simulcastConfigConfigs,
+          publishFallbackEnable: simulcastConfigPublishFallbackEnable,
         );
         await rtcEngine.setSimulcastConfig(
           simulcastConfig,
@@ -5044,9 +5122,11 @@ void rtcEngineSmokeTestCases() {
       try {
         int sampleRate = 5;
         int channel = 5;
+        int samplesPerCall = 5;
         await rtcEngine.setPlaybackAudioFrameBeforeMixingParameters(
           sampleRate: sampleRate,
           channel: channel,
+          samplesPerCall: samplesPerCall,
         );
       } catch (e) {
         if (e is! AgoraRtcException) {
@@ -5336,42 +5416,6 @@ void rtcEngineSmokeTestCases() {
         if (e is! AgoraRtcException) {
           debugPrint(
               '[RtcEngine.adjustUserPlaybackSignalVolume] error: ${e.toString()}');
-          rethrow;
-        }
-
-        if (e.code != -4) {
-          // Only not supported error supported.
-          rethrow;
-        }
-      }
-
-      await rtcEngine.release();
-    },
-  );
-
-  testWidgets(
-    'RtcEngine.setLocalPublishFallbackOption',
-    (WidgetTester tester) async {
-      String engineAppId = const String.fromEnvironment('TEST_APP_ID',
-          defaultValue: '<YOUR_APP_ID>');
-
-      RtcEngine rtcEngine = createAgoraRtcEngine();
-      await rtcEngine.initialize(RtcEngineContext(
-        appId: engineAppId,
-        areaCode: AreaCode.areaCodeGlob.value(),
-      ));
-      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
-
-      try {
-        StreamFallbackOptions option =
-            StreamFallbackOptions.streamFallbackOptionDisabled;
-        await rtcEngine.setLocalPublishFallbackOption(
-          option,
-        );
-      } catch (e) {
-        if (e is! AgoraRtcException) {
-          debugPrint(
-              '[RtcEngine.setLocalPublishFallbackOption] error: ${e.toString()}');
           rethrow;
         }
 
@@ -8534,7 +8578,6 @@ void rtcEngineSmokeTestCases() {
               QualityType txQuality, QualityType rxQuality) {},
           onIntraRequestReceived: (RtcConnection connection) {},
           onUplinkNetworkInfoUpdated: (UplinkNetworkInfo info) {},
-          onDownlinkNetworkInfoUpdated: (DownlinkNetworkInfo info) {},
           onLastmileQuality: (QualityType quality) {},
           onFirstLocalVideoFrame:
               (VideoSourceType source, int width, int height, int elapsed) {},
@@ -8548,6 +8591,8 @@ void rtcEngineSmokeTestCases() {
               int width,
               int height,
               int rotation) {},
+          onLocalVideoEvent:
+              (VideoSourceType source, LocalVideoEventType event) {},
           onLocalVideoStateChanged: (VideoSourceType source,
               LocalVideoStreamState state, LocalVideoStreamReason reason) {},
           onRemoteVideoStateChanged: (RtcConnection connection,
@@ -8575,8 +8620,8 @@ void rtcEngineSmokeTestCases() {
               (RtcConnection connection, RemoteAudioStats stats) {},
           onLocalAudioStats:
               (RtcConnection connection, LocalAudioStats stats) {},
-          onLocalVideoStats:
-              (RtcConnection connection, LocalVideoStats stats) {},
+          onLocalVideoStats: (RtcConnection connection,
+              VideoSourceType sourceType, LocalVideoStats stats) {},
           onRemoteVideoStats:
               (RtcConnection connection, RemoteVideoStats stats) {},
           onCameraReady: () {},
@@ -8596,6 +8641,12 @@ void rtcEngineSmokeTestCases() {
               int streamId, Uint8List data, int length, int sentTs) {},
           onStreamMessageError: (RtcConnection connection, int remoteUid,
               int streamId, ErrorCodeType code, int missed, int cached) {},
+          onRdtMessage: (RtcConnection connection, int userId,
+              RdtStreamType type, String data, int length) {},
+          onRdtStateChanged:
+              (RtcConnection connection, int userId, RdtState state) {},
+          onMediaControlMessage: (RtcConnection connection, int userId,
+              String data, int length) {},
           onRequestToken: (RtcConnection connection) {},
           onTokenPrivilegeWillExpire:
               (RtcConnection connection, String token) {},
@@ -8634,7 +8685,6 @@ void rtcEngineSmokeTestCases() {
           onAudioRoutingChanged: (int routing) {},
           onChannelMediaRelayStateChanged:
               (ChannelMediaRelayState state, ChannelMediaRelayError code) {},
-          onLocalPublishFallbackToAudioOnly: (bool isFallbackOrRecover) {},
           onRemoteSubscribeFallbackToAudioOnly:
               (int uid, bool isFallbackOrRecover) {},
           onRemoteAudioTransportStats: (RtcConnection connection, int remoteUid,
@@ -8643,14 +8693,11 @@ void rtcEngineSmokeTestCases() {
               int delay, int lost, int rxKBitRate) {},
           onConnectionStateChanged: (RtcConnection connection,
               ConnectionStateType state, ConnectionChangedReasonType reason) {},
-          onWlAccMessage: (RtcConnection connection, WlaccMessageReason reason,
-              WlaccSuggestAction action, String wlAccMsg) {},
-          onWlAccStats: (RtcConnection connection, WlAccStats currentStats,
-              WlAccStats averageStats) {},
           onNetworkTypeChanged: (RtcConnection connection, NetworkType type) {},
           onEncryptionError:
               (RtcConnection connection, EncryptionErrorType errorType) {},
           onPermissionError: (PermissionType permissionType) {},
+          onPermissionGranted: (PermissionType permissionType) {},
           onLocalUserRegistered: (int uid, String userAccount) {},
           onUserInfoUpdated: (int uid, UserInfo info) {},
           onUserAccountUpdated: (RtcConnection connection, int remoteUid,
@@ -8693,6 +8740,9 @@ void rtcEngineSmokeTestCases() {
           onExtensionErrorWithContext:
               (ExtensionContext context, int error, String message) {},
           onSetRtmFlagResult: (RtcConnection connection, int code) {},
+          onMultipathStats: (RtcConnection connection, MultipathStats stats) {},
+          onRenewTokenResult: (RtcConnection connection, String token,
+              RenewTokenErrorCode code) {},
         );
         rtcEngine.registerEventHandler(
           eventHandler,
@@ -8751,7 +8801,6 @@ void rtcEngineSmokeTestCases() {
               QualityType txQuality, QualityType rxQuality) {},
           onIntraRequestReceived: (RtcConnection connection) {},
           onUplinkNetworkInfoUpdated: (UplinkNetworkInfo info) {},
-          onDownlinkNetworkInfoUpdated: (DownlinkNetworkInfo info) {},
           onLastmileQuality: (QualityType quality) {},
           onFirstLocalVideoFrame:
               (VideoSourceType source, int width, int height, int elapsed) {},
@@ -8765,6 +8814,8 @@ void rtcEngineSmokeTestCases() {
               int width,
               int height,
               int rotation) {},
+          onLocalVideoEvent:
+              (VideoSourceType source, LocalVideoEventType event) {},
           onLocalVideoStateChanged: (VideoSourceType source,
               LocalVideoStreamState state, LocalVideoStreamReason reason) {},
           onRemoteVideoStateChanged: (RtcConnection connection,
@@ -8792,8 +8843,8 @@ void rtcEngineSmokeTestCases() {
               (RtcConnection connection, RemoteAudioStats stats) {},
           onLocalAudioStats:
               (RtcConnection connection, LocalAudioStats stats) {},
-          onLocalVideoStats:
-              (RtcConnection connection, LocalVideoStats stats) {},
+          onLocalVideoStats: (RtcConnection connection,
+              VideoSourceType sourceType, LocalVideoStats stats) {},
           onRemoteVideoStats:
               (RtcConnection connection, RemoteVideoStats stats) {},
           onCameraReady: () {},
@@ -8813,6 +8864,12 @@ void rtcEngineSmokeTestCases() {
               int streamId, Uint8List data, int length, int sentTs) {},
           onStreamMessageError: (RtcConnection connection, int remoteUid,
               int streamId, ErrorCodeType code, int missed, int cached) {},
+          onRdtMessage: (RtcConnection connection, int userId,
+              RdtStreamType type, String data, int length) {},
+          onRdtStateChanged:
+              (RtcConnection connection, int userId, RdtState state) {},
+          onMediaControlMessage: (RtcConnection connection, int userId,
+              String data, int length) {},
           onRequestToken: (RtcConnection connection) {},
           onTokenPrivilegeWillExpire:
               (RtcConnection connection, String token) {},
@@ -8851,7 +8908,6 @@ void rtcEngineSmokeTestCases() {
           onAudioRoutingChanged: (int routing) {},
           onChannelMediaRelayStateChanged:
               (ChannelMediaRelayState state, ChannelMediaRelayError code) {},
-          onLocalPublishFallbackToAudioOnly: (bool isFallbackOrRecover) {},
           onRemoteSubscribeFallbackToAudioOnly:
               (int uid, bool isFallbackOrRecover) {},
           onRemoteAudioTransportStats: (RtcConnection connection, int remoteUid,
@@ -8860,14 +8916,11 @@ void rtcEngineSmokeTestCases() {
               int delay, int lost, int rxKBitRate) {},
           onConnectionStateChanged: (RtcConnection connection,
               ConnectionStateType state, ConnectionChangedReasonType reason) {},
-          onWlAccMessage: (RtcConnection connection, WlaccMessageReason reason,
-              WlaccSuggestAction action, String wlAccMsg) {},
-          onWlAccStats: (RtcConnection connection, WlAccStats currentStats,
-              WlAccStats averageStats) {},
           onNetworkTypeChanged: (RtcConnection connection, NetworkType type) {},
           onEncryptionError:
               (RtcConnection connection, EncryptionErrorType errorType) {},
           onPermissionError: (PermissionType permissionType) {},
+          onPermissionGranted: (PermissionType permissionType) {},
           onLocalUserRegistered: (int uid, String userAccount) {},
           onUserInfoUpdated: (int uid, UserInfo info) {},
           onUserAccountUpdated: (RtcConnection connection, int remoteUid,
@@ -8910,6 +8963,9 @@ void rtcEngineSmokeTestCases() {
           onExtensionErrorWithContext:
               (ExtensionContext context, int error, String message) {},
           onSetRtmFlagResult: (RtcConnection connection, int code) {},
+          onMultipathStats: (RtcConnection connection, MultipathStats stats) {},
+          onRenewTokenResult: (RtcConnection connection, String token,
+              RenewTokenErrorCode code) {},
         );
         rtcEngine.unregisterEventHandler(
           eventHandler,
@@ -9052,6 +9108,85 @@ void rtcEngineSmokeTestCases() {
   );
 
   testWidgets(
+    'RtcEngine.sendRdtMessage',
+    (WidgetTester tester) async {
+      String engineAppId = const String.fromEnvironment('TEST_APP_ID',
+          defaultValue: '<YOUR_APP_ID>');
+
+      RtcEngine rtcEngine = createAgoraRtcEngine();
+      await rtcEngine.initialize(RtcEngineContext(
+        appId: engineAppId,
+        areaCode: AreaCode.areaCodeGlob.value(),
+      ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
+
+      try {
+        int uid = 5;
+        RdtStreamType type = RdtStreamType.rdtStreamCmd;
+        String data = "hello";
+        int length = 5;
+        await rtcEngine.sendRdtMessage(
+          uid: uid,
+          type: type,
+          data: data,
+          length: length,
+        );
+      } catch (e) {
+        if (e is! AgoraRtcException) {
+          debugPrint('[RtcEngine.sendRdtMessage] error: ${e.toString()}');
+          rethrow;
+        }
+
+        if (e.code != -4) {
+          // Only not supported error supported.
+          rethrow;
+        }
+      }
+
+      await rtcEngine.release();
+    },
+  );
+
+  testWidgets(
+    'RtcEngine.sendMediaControlMessage',
+    (WidgetTester tester) async {
+      String engineAppId = const String.fromEnvironment('TEST_APP_ID',
+          defaultValue: '<YOUR_APP_ID>');
+
+      RtcEngine rtcEngine = createAgoraRtcEngine();
+      await rtcEngine.initialize(RtcEngineContext(
+        appId: engineAppId,
+        areaCode: AreaCode.areaCodeGlob.value(),
+      ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
+
+      try {
+        int uid = 5;
+        String data = "hello";
+        int length = 5;
+        await rtcEngine.sendMediaControlMessage(
+          uid: uid,
+          data: data,
+          length: length,
+        );
+      } catch (e) {
+        if (e is! AgoraRtcException) {
+          debugPrint(
+              '[RtcEngine.sendMediaControlMessage] error: ${e.toString()}');
+          rethrow;
+        }
+
+        if (e.code != -4) {
+          // Only not supported error supported.
+          rethrow;
+        }
+      }
+
+      await rtcEngine.release();
+    },
+  );
+
+  testWidgets(
     'RtcEngine.addVideoWatermark',
     (WidgetTester tester) async {
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
@@ -9096,12 +9231,14 @@ void rtcEngineSmokeTestCases() {
         );
         WatermarkFitMode optionsMode = WatermarkFitMode.fitModeCoverPosition;
         bool optionsVisibleInPreview = true;
+        int optionsZOrder = 5;
         WatermarkOptions options = WatermarkOptions(
           visibleInPreview: optionsVisibleInPreview,
           positionInLandscapeMode: optionsPositionInLandscapeMode,
           positionInPortraitMode: optionsPositionInPortraitMode,
           watermarkRatio: optionsWatermarkRatio,
           mode: optionsMode,
+          zOrder: optionsZOrder,
         );
         await rtcEngine.addVideoWatermark(
           watermarkUrl: watermarkUrl,
@@ -9110,6 +9247,40 @@ void rtcEngineSmokeTestCases() {
       } catch (e) {
         if (e is! AgoraRtcException) {
           debugPrint('[RtcEngine.addVideoWatermark] error: ${e.toString()}');
+          rethrow;
+        }
+
+        if (e.code != -4) {
+          // Only not supported error supported.
+          rethrow;
+        }
+      }
+
+      await rtcEngine.release();
+    },
+  );
+
+  testWidgets(
+    'RtcEngine.removeVideoWatermark',
+    (WidgetTester tester) async {
+      String engineAppId = const String.fromEnvironment('TEST_APP_ID',
+          defaultValue: '<YOUR_APP_ID>');
+
+      RtcEngine rtcEngine = createAgoraRtcEngine();
+      await rtcEngine.initialize(RtcEngineContext(
+        appId: engineAppId,
+        areaCode: AreaCode.areaCodeGlob.value(),
+      ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
+
+      try {
+        String id = "hello";
+        await rtcEngine.removeVideoWatermark(
+          id,
+        );
+      } catch (e) {
+        if (e is! AgoraRtcException) {
+          debugPrint('[RtcEngine.removeVideoWatermark] error: ${e.toString()}');
           rethrow;
         }
 
@@ -9554,6 +9725,9 @@ void rtcEngineSmokeTestCases() {
             VideoStreamType.videoStreamHigh;
         ChannelProfileType optionsChannelProfile =
             ChannelProfileType.channelProfileCommunication;
+        MultipathMode optionsUplinkMultipathMode = MultipathMode.duplicate;
+        MultipathMode optionsDownlinkMultipathMode = MultipathMode.duplicate;
+        MultipathType optionsPreferMultipathType = MultipathType.lan;
         bool optionsPublishCameraTrack = true;
         bool optionsPublishSecondaryCameraTrack = true;
         bool optionsPublishThirdCameraTrack = true;
@@ -9587,6 +9761,7 @@ void rtcEngineSmokeTestCases() {
         int optionsCustomVideoTrackId = 5;
         bool optionsIsAudioFilterable = true;
         String optionsParameters = "hello";
+        bool optionsEnableMultipath = true;
         ChannelMediaOptions options = ChannelMediaOptions(
           publishCameraTrack: optionsPublishCameraTrack,
           publishSecondaryCameraTrack: optionsPublishSecondaryCameraTrack,
@@ -9625,6 +9800,10 @@ void rtcEngineSmokeTestCases() {
           customVideoTrackId: optionsCustomVideoTrackId,
           isAudioFilterable: optionsIsAudioFilterable,
           parameters: optionsParameters,
+          enableMultipath: optionsEnableMultipath,
+          uplinkMultipathMode: optionsUplinkMultipathMode,
+          downlinkMultipathMode: optionsDownlinkMultipathMode,
+          preferMultipathType: optionsPreferMultipathType,
         );
         await rtcEngine.joinChannelWithUserAccount(
           token: token,
@@ -9674,6 +9853,9 @@ void rtcEngineSmokeTestCases() {
             VideoStreamType.videoStreamHigh;
         ChannelProfileType optionsChannelProfile =
             ChannelProfileType.channelProfileCommunication;
+        MultipathMode optionsUplinkMultipathMode = MultipathMode.duplicate;
+        MultipathMode optionsDownlinkMultipathMode = MultipathMode.duplicate;
+        MultipathType optionsPreferMultipathType = MultipathType.lan;
         bool optionsPublishCameraTrack = true;
         bool optionsPublishSecondaryCameraTrack = true;
         bool optionsPublishThirdCameraTrack = true;
@@ -9707,6 +9889,7 @@ void rtcEngineSmokeTestCases() {
         int optionsCustomVideoTrackId = 5;
         bool optionsIsAudioFilterable = true;
         String optionsParameters = "hello";
+        bool optionsEnableMultipath = true;
         ChannelMediaOptions options = ChannelMediaOptions(
           publishCameraTrack: optionsPublishCameraTrack,
           publishSecondaryCameraTrack: optionsPublishSecondaryCameraTrack,
@@ -9745,6 +9928,10 @@ void rtcEngineSmokeTestCases() {
           customVideoTrackId: optionsCustomVideoTrackId,
           isAudioFilterable: optionsIsAudioFilterable,
           parameters: optionsParameters,
+          enableMultipath: optionsEnableMultipath,
+          uplinkMultipathMode: optionsUplinkMultipathMode,
+          downlinkMultipathMode: optionsDownlinkMultipathMode,
+          preferMultipathType: optionsPreferMultipathType,
         );
         await rtcEngine.joinChannelWithUserAccountEx(
           token: token,
@@ -10637,41 +10824,6 @@ void rtcEngineSmokeTestCases() {
   );
 
   testWidgets(
-    'RtcEngine.enableWirelessAccelerate',
-    (WidgetTester tester) async {
-      String engineAppId = const String.fromEnvironment('TEST_APP_ID',
-          defaultValue: '<YOUR_APP_ID>');
-
-      RtcEngine rtcEngine = createAgoraRtcEngine();
-      await rtcEngine.initialize(RtcEngineContext(
-        appId: engineAppId,
-        areaCode: AreaCode.areaCodeGlob.value(),
-      ));
-      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
-
-      try {
-        bool enabled = true;
-        await rtcEngine.enableWirelessAccelerate(
-          enabled,
-        );
-      } catch (e) {
-        if (e is! AgoraRtcException) {
-          debugPrint(
-              '[RtcEngine.enableWirelessAccelerate] error: ${e.toString()}');
-          rethrow;
-        }
-
-        if (e.code != -4) {
-          // Only not supported error supported.
-          rethrow;
-        }
-      }
-
-      await rtcEngine.release();
-    },
-  );
-
-  testWidgets(
     'RtcEngine.getNetworkType',
     (WidgetTester tester) async {
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
@@ -10923,6 +11075,123 @@ void rtcEngineSmokeTestCases() {
       } catch (e) {
         if (e is! AgoraRtcException) {
           debugPrint('[RtcEngine.queryHDRCapability] error: ${e.toString()}');
+          rethrow;
+        }
+
+        if (e.code != -4) {
+          // Only not supported error supported.
+          rethrow;
+        }
+      }
+
+      await rtcEngine.release();
+    },
+  );
+
+  testWidgets(
+    'RtcEngine.addVideoWatermarkWithConfig',
+    (WidgetTester tester) async {
+      String engineAppId = const String.fromEnvironment('TEST_APP_ID',
+          defaultValue: '<YOUR_APP_ID>');
+
+      RtcEngine rtcEngine = createAgoraRtcEngine();
+      await rtcEngine.initialize(RtcEngineContext(
+        appId: engineAppId,
+        areaCode: AreaCode.areaCodeGlob.value(),
+      ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
+
+      try {
+        WatermarkSourceType configsType = WatermarkSourceType.image;
+        int positionInLandscapeModeX = 5;
+        int positionInLandscapeModeY = 5;
+        int positionInLandscapeModeWidth = 5;
+        int positionInLandscapeModeHeight = 5;
+        Rectangle optionsPositionInLandscapeMode = Rectangle(
+          x: positionInLandscapeModeX,
+          y: positionInLandscapeModeY,
+          width: positionInLandscapeModeWidth,
+          height: positionInLandscapeModeHeight,
+        );
+        int positionInPortraitModeX = 5;
+        int positionInPortraitModeY = 5;
+        int positionInPortraitModeWidth = 5;
+        int positionInPortraitModeHeight = 5;
+        Rectangle optionsPositionInPortraitMode = Rectangle(
+          x: positionInPortraitModeX,
+          y: positionInPortraitModeY,
+          width: positionInPortraitModeWidth,
+          height: positionInPortraitModeHeight,
+        );
+        double watermarkRatioXRatio = 5.0;
+        double watermarkRatioYRatio = 5.0;
+        double watermarkRatioWidthRatio = 5.0;
+        WatermarkRatio optionsWatermarkRatio = WatermarkRatio(
+          xRatio: watermarkRatioXRatio,
+          yRatio: watermarkRatioYRatio,
+          widthRatio: watermarkRatioWidthRatio,
+        );
+        WatermarkFitMode optionsMode = WatermarkFitMode.fitModeCoverPosition;
+        bool optionsVisibleInPreview = true;
+        int optionsZOrder = 5;
+        WatermarkOptions configsOptions = WatermarkOptions(
+          visibleInPreview: optionsVisibleInPreview,
+          positionInLandscapeMode: optionsPositionInLandscapeMode,
+          positionInPortraitMode: optionsPositionInPortraitMode,
+          watermarkRatio: optionsWatermarkRatio,
+          mode: optionsMode,
+          zOrder: optionsZOrder,
+        );
+        VideoPixelFormat bufferFormat = VideoPixelFormat.videoPixelDefault;
+        int bufferWidth = 5;
+        int bufferHeight = 5;
+        int bufferLength = 5;
+        Uint8List bufferBuffer = Uint8List.fromList([1, 1, 1, 1, 1]);
+        WatermarkBuffer configsBuffer = WatermarkBuffer(
+          width: bufferWidth,
+          height: bufferHeight,
+          length: bufferLength,
+          format: bufferFormat,
+          buffer: bufferBuffer,
+        );
+        int timestampFontSize = 5;
+        String timestampFontFilePath = "hello";
+        int timestampStrokeWidth = 5;
+        String timestampFormat = "hello";
+        WatermarkTimestamp configsTimestamp = WatermarkTimestamp(
+          fontSize: timestampFontSize,
+          fontFilePath: timestampFontFilePath,
+          strokeWidth: timestampStrokeWidth,
+          format: timestampFormat,
+        );
+        int literalFontSize = 5;
+        int literalStrokeWidth = 5;
+        String literalWmLiteral = "hello";
+        String literalFontFilePath = "hello";
+        WatermarkLiteral configsLiteral = WatermarkLiteral(
+          fontSize: literalFontSize,
+          strokeWidth: literalStrokeWidth,
+          wmLiteral: literalWmLiteral,
+          fontFilePath: literalFontFilePath,
+        );
+        String configsId = "hello";
+        String configsImageUrl = "hello";
+        WatermarkConfig configs = WatermarkConfig(
+          id: configsId,
+          type: configsType,
+          options: configsOptions,
+          buffer: configsBuffer,
+          timestamp: configsTimestamp,
+          literal: configsLiteral,
+          imageUrl: configsImageUrl,
+        );
+        await rtcEngine.addVideoWatermarkWithConfig(
+          configs,
+        );
+      } catch (e) {
+        if (e is! AgoraRtcException) {
+          debugPrint(
+              '[RtcEngine.addVideoWatermarkWithConfig] error: ${e.toString()}');
           rethrow;
         }
 

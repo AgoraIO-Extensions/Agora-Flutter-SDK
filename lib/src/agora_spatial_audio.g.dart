@@ -20,19 +20,11 @@ RemoteVoicePositionInfo _$RemoteVoicePositionInfoFromJson(
     );
 
 Map<String, dynamic> _$RemoteVoicePositionInfoToJson(
-    RemoteVoicePositionInfo instance) {
-  final val = <String, dynamic>{};
-
-  void writeNotNull(String key, dynamic value) {
-    if (value != null) {
-      val[key] = value;
-    }
-  }
-
-  writeNotNull('position', instance.position);
-  writeNotNull('forward', instance.forward);
-  return val;
-}
+        RemoteVoicePositionInfo instance) =>
+    <String, dynamic>{
+      if (instance.position case final value?) 'position': value,
+      if (instance.forward case final value?) 'forward': value,
+    };
 
 SpatialAudioZone _$SpatialAudioZoneFromJson(Map<String, dynamic> json) =>
     SpatialAudioZone(
@@ -55,23 +47,16 @@ SpatialAudioZone _$SpatialAudioZoneFromJson(Map<String, dynamic> json) =>
       audioAttenuation: (json['audioAttenuation'] as num?)?.toDouble(),
     );
 
-Map<String, dynamic> _$SpatialAudioZoneToJson(SpatialAudioZone instance) {
-  final val = <String, dynamic>{};
-
-  void writeNotNull(String key, dynamic value) {
-    if (value != null) {
-      val[key] = value;
-    }
-  }
-
-  writeNotNull('zoneSetId', instance.zoneSetId);
-  writeNotNull('position', instance.position);
-  writeNotNull('forward', instance.forward);
-  writeNotNull('right', instance.right);
-  writeNotNull('up', instance.up);
-  writeNotNull('forwardLength', instance.forwardLength);
-  writeNotNull('rightLength', instance.rightLength);
-  writeNotNull('upLength', instance.upLength);
-  writeNotNull('audioAttenuation', instance.audioAttenuation);
-  return val;
-}
+Map<String, dynamic> _$SpatialAudioZoneToJson(SpatialAudioZone instance) =>
+    <String, dynamic>{
+      if (instance.zoneSetId case final value?) 'zoneSetId': value,
+      if (instance.position case final value?) 'position': value,
+      if (instance.forward case final value?) 'forward': value,
+      if (instance.right case final value?) 'right': value,
+      if (instance.up case final value?) 'up': value,
+      if (instance.forwardLength case final value?) 'forwardLength': value,
+      if (instance.rightLength case final value?) 'rightLength': value,
+      if (instance.upLength case final value?) 'upLength': value,
+      if (instance.audioAttenuation case final value?)
+        'audioAttenuation': value,
+    };

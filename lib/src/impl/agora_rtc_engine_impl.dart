@@ -2,6 +2,8 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:typed_data';
 
+import 'package:agora_rtc_engine/src/impl/channel_connection_manager.dart';
+
 import '/src/agora_base.dart';
 import '/src/agora_h265_transcoder.dart';
 import '/src/agora_media_base.dart';
@@ -46,6 +48,7 @@ import 'package:flutter/foundation.dart'
 import 'package:flutter/services.dart' show MethodCall, MethodChannel;
 import 'package:flutter/widgets.dart' show VoidCallback, TargetPlatform;
 import 'package:iris_method_channel/iris_method_channel.dart';
+import '/src/impl/video_rendering_performance_uploader.dart';
 import 'package:meta/meta.dart';
 
 import 'platform/global_video_view_controller.dart';
@@ -295,6 +298,79 @@ extension MetadataObserverExt on MetadataObserver {
   }
 }
 
+class _RtcEngineEventHandlerWrapper extends RtcEngineEventHandlerWrapper {
+  _RtcEngineEventHandlerWrapper(RtcEngineEventHandler rtcEngineEventHandler)
+      : super(rtcEngineEventHandler);
+
+  @override
+  bool handleEventInternal(
+      String eventName, String eventData, List<Uint8List> buffers) {
+    switch (eventName) {
+      case 'onJoinChannelSuccess_263e4cd':
+      case 'onRejoinChannelSuccess_263e4cd':
+        final Map jsonMap = jsonDecode(eventData);
+        RtcEngineEventHandlerOnJoinChannelSuccessJson paramJson =
+            RtcEngineEventHandlerOnJoinChannelSuccessJson.fromJson(
+                jsonMap.cast<String, dynamic>());
+        RtcConnection? connection = paramJson.connection;
+        if (connection != null) {
+          ChannelConnectionManager.instance.addConnection(connection);
+        }
+        break;
+      case 'onLeaveChannel_c8e730d':
+        final Map jsonMap = jsonDecode(eventData);
+        RtcEngineEventHandlerOnLeaveChannelJson paramJson =
+            RtcEngineEventHandlerOnLeaveChannelJson.fromJson(
+                jsonMap.cast<String, dynamic>());
+        RtcConnection? connection = paramJson.connection;
+        if (connection?.channelId != null) {
+          PerformanceDataCollector.instance.clearChannelData(
+              connection!.channelId!, connection.localUid ?? 0);
+          // removeConnection will automatically trigger cleanup if all channels are left
+          ChannelConnectionManager.instance
+              .removeConnection(connection.channelId!);
+        }
+        break;
+      case 'onLocalVideoStats_0cebfd7':
+        final Map jsonMap = jsonDecode(eventData);
+        RtcEngineEventHandlerOnLocalVideoStatsJson paramJson =
+            RtcEngineEventHandlerOnLocalVideoStatsJson.fromJson(
+                jsonMap.cast<String, dynamic>());
+        RtcConnection? connection = paramJson.connection;
+        VideoSourceType? sourceType = paramJson.sourceType;
+        if (connection != null && sourceType != null) {
+          ChannelConnectionManager.instance
+              .setPublishingVideoConnectionBySource(sourceType, connection);
+        }
+        break;
+      case 'onRemoteVideoStats_2f43a70':
+        final Map jsonMap = jsonDecode(eventData);
+        RtcEngineEventHandlerOnRemoteVideoStatsJson paramJson =
+            RtcEngineEventHandlerOnRemoteVideoStatsJson.fromJson(
+                jsonMap.cast<String, dynamic>());
+        RtcConnection? connection = paramJson.connection;
+        if (connection != null) {
+          ChannelConnectionManager.instance.addConnection(connection);
+        }
+        break;
+    }
+
+    return super.handleEventInternal(eventName, eventData, buffers);
+  }
+
+  @override
+  bool operator ==(Object other) {
+    if (other.runtimeType != runtimeType) {
+      return false;
+    }
+    return other is _RtcEngineEventHandlerWrapper &&
+        other.rtcEngineEventHandler == rtcEngineEventHandler;
+  }
+
+  @override
+  int get hashCode => rtcEngineEventHandler.hashCode;
+}
+
 @internal
 class InitializationState extends ChangeNotifier {
   bool _isInitialzed = false;
@@ -367,6 +443,21 @@ class RtcEngineImpl extends rtc_engine_ex_binding.RtcEngineExImpl
       methodChannelHandlers = {};
 
   AsyncMemoizer? _initializeCallOnce;
+
+  bool? _enableArgusCounters =
+      true; // Default to true for backward compatibility
+  bool get enableArgusCounters => _enableArgusCounters ?? true;
+
+  /// Set whether to enable Argus counters for texture rendering performance statistics.
+  /// This should be called after initialize() if you want to change the default value.
+  ///
+  /// [enabled] true: Enable Argus counters (default). When using texture rendering,
+  ///           performance data will be collected and uploaded.
+  ///           false: Disable Argus counters. No performance data will be collected
+  ///           or uploaded when using texture rendering.
+  void setEnableArgusCounters(bool enabled) {
+    _enableArgusCounters = enabled;
+  }
 
   static RtcEngineEx create({
     Object? sharedNativeHandle,
@@ -462,12 +553,17 @@ class RtcEngineImpl extends rtc_engine_ex_binding.RtcEngineExImpl
       await _initializeInternal(context);
     });
 
+    // Note: enableArgusCounters cannot be added to RtcEngineContext as it's auto-generated
+    // It will be set via setEnableArgusCounters method if needed, default is true
+
     await super.initialize(context);
 
     await irisMethodChannel.invokeMethod(IrisMethodCall(
       'RtcEngine_setAppType',
       jsonEncode({'appType': 4}),
     ));
+
+    PerformanceDataCollector.instance.dispose();
 
     _rtcEngineState.isInitialzed = true;
     _isReleased = false;
@@ -508,6 +604,8 @@ class RtcEngineImpl extends rtc_engine_ex_binding.RtcEngineExImpl
     _rtcEngineStateInternal?.dispose();
     _rtcEngineStateInternal = null;
 
+    PerformanceDataCollector.instance.dispose();
+
     await _objectPool.clear();
 
     await _globalVideoViewController
@@ -530,7 +628,7 @@ class RtcEngineImpl extends rtc_engine_ex_binding.RtcEngineExImpl
   @override
   void registerEventHandler(
       covariant RtcEngineEventHandler eventHandler) async {
-    final eventHandlerWrapper = RtcEngineEventHandlerWrapper(eventHandler);
+    final eventHandlerWrapper = _RtcEngineEventHandlerWrapper(eventHandler);
     final param = createParams({});
 
     await irisMethodChannel.registerEventHandler(
@@ -545,7 +643,7 @@ class RtcEngineImpl extends rtc_engine_ex_binding.RtcEngineExImpl
   @override
   void unregisterEventHandler(
       covariant RtcEngineEventHandler eventHandler) async {
-    final eventHandlerWrapper = RtcEngineEventHandlerWrapper(eventHandler);
+    final eventHandlerWrapper = _RtcEngineEventHandlerWrapper(eventHandler);
     final param = createParams({});
 
     await irisMethodChannel.unregisterEventHandler(
@@ -1144,7 +1242,6 @@ class RtcEngineImpl extends rtc_engine_ex_binding.RtcEngineExImpl
 
     return Future.value();
   }
-
   /////////// debug ////////
 
   /// [type] see [VideoSourceType], only [VideoSourceType.videoSourceCamera], [VideoSourceType.videoSourceRemote] supported

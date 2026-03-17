@@ -14,19 +14,11 @@ MusicChartInfo _$MusicChartInfoFromJson(Map<String, dynamic> json) =>
       id: (json['id'] as num?)?.toInt(),
     );
 
-Map<String, dynamic> _$MusicChartInfoToJson(MusicChartInfo instance) {
-  final val = <String, dynamic>{};
-
-  void writeNotNull(String key, dynamic value) {
-    if (value != null) {
-      val[key] = value;
-    }
-  }
-
-  writeNotNull('chartName', instance.chartName);
-  writeNotNull('id', instance.id);
-  return val;
-}
+Map<String, dynamic> _$MusicChartInfoToJson(MusicChartInfo instance) =>
+    <String, dynamic>{
+      if (instance.chartName case final value?) 'chartName': value,
+      if (instance.id case final value?) 'id': value,
+    };
 
 MusicCacheInfo _$MusicCacheInfoFromJson(Map<String, dynamic> json) =>
     MusicCacheInfo(
@@ -35,19 +27,12 @@ MusicCacheInfo _$MusicCacheInfoFromJson(Map<String, dynamic> json) =>
           $enumDecodeNullable(_$MusicCacheStatusTypeEnumMap, json['status']),
     );
 
-Map<String, dynamic> _$MusicCacheInfoToJson(MusicCacheInfo instance) {
-  final val = <String, dynamic>{};
-
-  void writeNotNull(String key, dynamic value) {
-    if (value != null) {
-      val[key] = value;
-    }
-  }
-
-  writeNotNull('songCode', instance.songCode);
-  writeNotNull('status', _$MusicCacheStatusTypeEnumMap[instance.status]);
-  return val;
-}
+Map<String, dynamic> _$MusicCacheInfoToJson(MusicCacheInfo instance) =>
+    <String, dynamic>{
+      if (instance.songCode case final value?) 'songCode': value,
+      if (_$MusicCacheStatusTypeEnumMap[instance.status] case final value?)
+        'status': value,
+    };
 
 const _$MusicCacheStatusTypeEnumMap = {
   MusicCacheStatusType.musicCacheStatusTypeCached: 0,
@@ -59,19 +44,11 @@ MvProperty _$MvPropertyFromJson(Map<String, dynamic> json) => MvProperty(
       bandwidth: json['bandwidth'] as String?,
     );
 
-Map<String, dynamic> _$MvPropertyToJson(MvProperty instance) {
-  final val = <String, dynamic>{};
-
-  void writeNotNull(String key, dynamic value) {
-    if (value != null) {
-      val[key] = value;
-    }
-  }
-
-  writeNotNull('resolution', instance.resolution);
-  writeNotNull('bandwidth', instance.bandwidth);
-  return val;
-}
+Map<String, dynamic> _$MvPropertyToJson(MvProperty instance) =>
+    <String, dynamic>{
+      if (instance.resolution case final value?) 'resolution': value,
+      if (instance.bandwidth case final value?) 'bandwidth': value,
+    };
 
 ClimaxSegment _$ClimaxSegmentFromJson(Map<String, dynamic> json) =>
     ClimaxSegment(
@@ -79,19 +56,11 @@ ClimaxSegment _$ClimaxSegmentFromJson(Map<String, dynamic> json) =>
       endTimeMs: (json['endTimeMs'] as num?)?.toInt(),
     );
 
-Map<String, dynamic> _$ClimaxSegmentToJson(ClimaxSegment instance) {
-  final val = <String, dynamic>{};
-
-  void writeNotNull(String key, dynamic value) {
-    if (value != null) {
-      val[key] = value;
-    }
-  }
-
-  writeNotNull('startTimeMs', instance.startTimeMs);
-  writeNotNull('endTimeMs', instance.endTimeMs);
-  return val;
-}
+Map<String, dynamic> _$ClimaxSegmentToJson(ClimaxSegment instance) =>
+    <String, dynamic>{
+      if (instance.startTimeMs case final value?) 'startTimeMs': value,
+      if (instance.endTimeMs case final value?) 'endTimeMs': value,
+    };
 
 Music _$MusicFromJson(Map<String, dynamic> json) => Music(
       songCode: (json['songCode'] as num?)?.toInt(),
@@ -116,33 +85,27 @@ Music _$MusicFromJson(Map<String, dynamic> json) => Music(
           .toList(),
     );
 
-Map<String, dynamic> _$MusicToJson(Music instance) {
-  final val = <String, dynamic>{};
-
-  void writeNotNull(String key, dynamic value) {
-    if (value != null) {
-      val[key] = value;
-    }
-  }
-
-  writeNotNull('songCode', instance.songCode);
-  writeNotNull('name', instance.name);
-  writeNotNull('singer', instance.singer);
-  writeNotNull('poster', instance.poster);
-  writeNotNull('releaseTime', instance.releaseTime);
-  writeNotNull('durationS', instance.durationS);
-  writeNotNull('type', instance.type);
-  writeNotNull('pitchType', instance.pitchType);
-  writeNotNull('lyricCount', instance.lyricCount);
-  writeNotNull('lyricList', instance.lyricList);
-  writeNotNull('climaxSegmentCount', instance.climaxSegmentCount);
-  writeNotNull('climaxSegmentList',
-      instance.climaxSegmentList?.map((e) => e.toJson()).toList());
-  writeNotNull('mvPropertyCount', instance.mvPropertyCount);
-  writeNotNull('mvPropertyList',
-      instance.mvPropertyList?.map((e) => e.toJson()).toList());
-  return val;
-}
+Map<String, dynamic> _$MusicToJson(Music instance) => <String, dynamic>{
+      if (instance.songCode case final value?) 'songCode': value,
+      if (instance.name case final value?) 'name': value,
+      if (instance.singer case final value?) 'singer': value,
+      if (instance.poster case final value?) 'poster': value,
+      if (instance.releaseTime case final value?) 'releaseTime': value,
+      if (instance.durationS case final value?) 'durationS': value,
+      if (instance.type case final value?) 'type': value,
+      if (instance.pitchType case final value?) 'pitchType': value,
+      if (instance.lyricCount case final value?) 'lyricCount': value,
+      if (instance.lyricList case final value?) 'lyricList': value,
+      if (instance.climaxSegmentCount case final value?)
+        'climaxSegmentCount': value,
+      if (instance.climaxSegmentList?.map((e) => e.toJson()).toList()
+          case final value?)
+        'climaxSegmentList': value,
+      if (instance.mvPropertyCount case final value?) 'mvPropertyCount': value,
+      if (instance.mvPropertyList?.map((e) => e.toJson()).toList()
+          case final value?)
+        'mvPropertyList': value,
+    };
 
 MusicContentCenterConfiguration _$MusicContentCenterConfigurationFromJson(
         Map<String, dynamic> json) =>
@@ -155,22 +118,14 @@ MusicContentCenterConfiguration _$MusicContentCenterConfigurationFromJson(
     );
 
 Map<String, dynamic> _$MusicContentCenterConfigurationToJson(
-    MusicContentCenterConfiguration instance) {
-  final val = <String, dynamic>{};
-
-  void writeNotNull(String key, dynamic value) {
-    if (value != null) {
-      val[key] = value;
-    }
-  }
-
-  writeNotNull('appId', instance.appId);
-  writeNotNull('token', instance.token);
-  writeNotNull('mccUid', instance.mccUid);
-  writeNotNull('maxCacheSize', instance.maxCacheSize);
-  writeNotNull('mccDomain', instance.mccDomain);
-  return val;
-}
+        MusicContentCenterConfiguration instance) =>
+    <String, dynamic>{
+      if (instance.appId case final value?) 'appId': value,
+      if (instance.token case final value?) 'token': value,
+      if (instance.mccUid case final value?) 'mccUid': value,
+      if (instance.maxCacheSize case final value?) 'maxCacheSize': value,
+      if (instance.mccDomain case final value?) 'mccDomain': value,
+    };
 
 const _$MusicPlayModeEnumMap = {
   MusicPlayMode.kMusicPlayModeOriginal: 0,

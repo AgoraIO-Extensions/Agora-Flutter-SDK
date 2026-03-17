@@ -21,20 +21,12 @@ AudioEncodedFrameObserverOnRecordAudioEncodedFrameJson
 
 Map<String, dynamic>
     _$AudioEncodedFrameObserverOnRecordAudioEncodedFrameJsonToJson(
-        AudioEncodedFrameObserverOnRecordAudioEncodedFrameJson instance) {
-  final val = <String, dynamic>{};
-
-  void writeNotNull(String key, dynamic value) {
-    if (value != null) {
-      val[key] = value;
-    }
-  }
-
-  writeNotNull('length', instance.length);
-  writeNotNull(
-      'audioEncodedFrameInfo', instance.audioEncodedFrameInfo?.toJson());
-  return val;
-}
+            AudioEncodedFrameObserverOnRecordAudioEncodedFrameJson instance) =>
+        <String, dynamic>{
+          if (instance.length case final value?) 'length': value,
+          if (instance.audioEncodedFrameInfo?.toJson() case final value?)
+            'audioEncodedFrameInfo': value,
+        };
 
 AudioEncodedFrameObserverOnPlaybackAudioEncodedFrameJson
     _$AudioEncodedFrameObserverOnPlaybackAudioEncodedFrameJsonFromJson(
@@ -47,22 +39,14 @@ AudioEncodedFrameObserverOnPlaybackAudioEncodedFrameJson
                   json['audioEncodedFrameInfo'] as Map<String, dynamic>),
         );
 
-Map<String, dynamic>
-    _$AudioEncodedFrameObserverOnPlaybackAudioEncodedFrameJsonToJson(
-        AudioEncodedFrameObserverOnPlaybackAudioEncodedFrameJson instance) {
-  final val = <String, dynamic>{};
-
-  void writeNotNull(String key, dynamic value) {
-    if (value != null) {
-      val[key] = value;
-    }
-  }
-
-  writeNotNull('length', instance.length);
-  writeNotNull(
-      'audioEncodedFrameInfo', instance.audioEncodedFrameInfo?.toJson());
-  return val;
-}
+Map<String,
+    dynamic> _$AudioEncodedFrameObserverOnPlaybackAudioEncodedFrameJsonToJson(
+        AudioEncodedFrameObserverOnPlaybackAudioEncodedFrameJson instance) =>
+    <String, dynamic>{
+      if (instance.length case final value?) 'length': value,
+      if (instance.audioEncodedFrameInfo?.toJson() case final value?)
+        'audioEncodedFrameInfo': value,
+    };
 
 AudioEncodedFrameObserverOnMixedAudioEncodedFrameJson
     _$AudioEncodedFrameObserverOnMixedAudioEncodedFrameJsonFromJson(
@@ -77,20 +61,12 @@ AudioEncodedFrameObserverOnMixedAudioEncodedFrameJson
 
 Map<String, dynamic>
     _$AudioEncodedFrameObserverOnMixedAudioEncodedFrameJsonToJson(
-        AudioEncodedFrameObserverOnMixedAudioEncodedFrameJson instance) {
-  final val = <String, dynamic>{};
-
-  void writeNotNull(String key, dynamic value) {
-    if (value != null) {
-      val[key] = value;
-    }
-  }
-
-  writeNotNull('length', instance.length);
-  writeNotNull(
-      'audioEncodedFrameInfo', instance.audioEncodedFrameInfo?.toJson());
-  return val;
-}
+            AudioEncodedFrameObserverOnMixedAudioEncodedFrameJson instance) =>
+        <String, dynamic>{
+          if (instance.length case final value?) 'length': value,
+          if (instance.audioEncodedFrameInfo?.toJson() case final value?)
+            'audioEncodedFrameInfo': value,
+        };
 
 AudioPcmFrameSinkOnFrameJson _$AudioPcmFrameSinkOnFrameJsonFromJson(
         Map<String, dynamic> json) =>
@@ -101,18 +77,10 @@ AudioPcmFrameSinkOnFrameJson _$AudioPcmFrameSinkOnFrameJsonFromJson(
     );
 
 Map<String, dynamic> _$AudioPcmFrameSinkOnFrameJsonToJson(
-    AudioPcmFrameSinkOnFrameJson instance) {
-  final val = <String, dynamic>{};
-
-  void writeNotNull(String key, dynamic value) {
-    if (value != null) {
-      val[key] = value;
-    }
-  }
-
-  writeNotNull('frame', instance.frame?.toJson());
-  return val;
-}
+        AudioPcmFrameSinkOnFrameJson instance) =>
+    <String, dynamic>{
+      if (instance.frame?.toJson() case final value?) 'frame': value,
+    };
 
 AudioFrameObserverBaseOnRecordAudioFrameJson
     _$AudioFrameObserverBaseOnRecordAudioFrameJsonFromJson(
@@ -125,19 +93,11 @@ AudioFrameObserverBaseOnRecordAudioFrameJson
         );
 
 Map<String, dynamic> _$AudioFrameObserverBaseOnRecordAudioFrameJsonToJson(
-    AudioFrameObserverBaseOnRecordAudioFrameJson instance) {
-  final val = <String, dynamic>{};
-
-  void writeNotNull(String key, dynamic value) {
-    if (value != null) {
-      val[key] = value;
-    }
-  }
-
-  writeNotNull('channelId', instance.channelId);
-  writeNotNull('audioFrame', instance.audioFrame?.toJson());
-  return val;
-}
+        AudioFrameObserverBaseOnRecordAudioFrameJson instance) =>
+    <String, dynamic>{
+      if (instance.channelId case final value?) 'channelId': value,
+      if (instance.audioFrame?.toJson() case final value?) 'audioFrame': value,
+    };
 
 AudioFrameObserverBaseOnPlaybackAudioFrameJson
     _$AudioFrameObserverBaseOnPlaybackAudioFrameJsonFromJson(
@@ -150,19 +110,11 @@ AudioFrameObserverBaseOnPlaybackAudioFrameJson
         );
 
 Map<String, dynamic> _$AudioFrameObserverBaseOnPlaybackAudioFrameJsonToJson(
-    AudioFrameObserverBaseOnPlaybackAudioFrameJson instance) {
-  final val = <String, dynamic>{};
-
-  void writeNotNull(String key, dynamic value) {
-    if (value != null) {
-      val[key] = value;
-    }
-  }
-
-  writeNotNull('channelId', instance.channelId);
-  writeNotNull('audioFrame', instance.audioFrame?.toJson());
-  return val;
-}
+        AudioFrameObserverBaseOnPlaybackAudioFrameJson instance) =>
+    <String, dynamic>{
+      if (instance.channelId case final value?) 'channelId': value,
+      if (instance.audioFrame?.toJson() case final value?) 'audioFrame': value,
+    };
 
 AudioFrameObserverBaseOnMixedAudioFrameJson
     _$AudioFrameObserverBaseOnMixedAudioFrameJsonFromJson(
@@ -175,19 +127,11 @@ AudioFrameObserverBaseOnMixedAudioFrameJson
         );
 
 Map<String, dynamic> _$AudioFrameObserverBaseOnMixedAudioFrameJsonToJson(
-    AudioFrameObserverBaseOnMixedAudioFrameJson instance) {
-  final val = <String, dynamic>{};
-
-  void writeNotNull(String key, dynamic value) {
-    if (value != null) {
-      val[key] = value;
-    }
-  }
-
-  writeNotNull('channelId', instance.channelId);
-  writeNotNull('audioFrame', instance.audioFrame?.toJson());
-  return val;
-}
+        AudioFrameObserverBaseOnMixedAudioFrameJson instance) =>
+    <String, dynamic>{
+      if (instance.channelId case final value?) 'channelId': value,
+      if (instance.audioFrame?.toJson() case final value?) 'audioFrame': value,
+    };
 
 AudioFrameObserverBaseOnEarMonitoringAudioFrameJson
     _$AudioFrameObserverBaseOnEarMonitoringAudioFrameJsonFromJson(
@@ -200,18 +144,11 @@ AudioFrameObserverBaseOnEarMonitoringAudioFrameJson
 
 Map<String, dynamic>
     _$AudioFrameObserverBaseOnEarMonitoringAudioFrameJsonToJson(
-        AudioFrameObserverBaseOnEarMonitoringAudioFrameJson instance) {
-  final val = <String, dynamic>{};
-
-  void writeNotNull(String key, dynamic value) {
-    if (value != null) {
-      val[key] = value;
-    }
-  }
-
-  writeNotNull('audioFrame', instance.audioFrame?.toJson());
-  return val;
-}
+            AudioFrameObserverBaseOnEarMonitoringAudioFrameJson instance) =>
+        <String, dynamic>{
+          if (instance.audioFrame?.toJson() case final value?)
+            'audioFrame': value,
+        };
 
 AudioFrameObserverOnPlaybackAudioFrameBeforeMixingJson
     _$AudioFrameObserverOnPlaybackAudioFrameBeforeMixingJsonFromJson(
@@ -226,20 +163,13 @@ AudioFrameObserverOnPlaybackAudioFrameBeforeMixingJson
 
 Map<String, dynamic>
     _$AudioFrameObserverOnPlaybackAudioFrameBeforeMixingJsonToJson(
-        AudioFrameObserverOnPlaybackAudioFrameBeforeMixingJson instance) {
-  final val = <String, dynamic>{};
-
-  void writeNotNull(String key, dynamic value) {
-    if (value != null) {
-      val[key] = value;
-    }
-  }
-
-  writeNotNull('channelId', instance.channelId);
-  writeNotNull('uid', instance.uid);
-  writeNotNull('audioFrame', instance.audioFrame?.toJson());
-  return val;
-}
+            AudioFrameObserverOnPlaybackAudioFrameBeforeMixingJson instance) =>
+        <String, dynamic>{
+          if (instance.channelId case final value?) 'channelId': value,
+          if (instance.uid case final value?) 'uid': value,
+          if (instance.audioFrame?.toJson() case final value?)
+            'audioFrame': value,
+        };
 
 AudioSpectrumObserverOnLocalAudioSpectrumJson
     _$AudioSpectrumObserverOnLocalAudioSpectrumJsonFromJson(
@@ -252,18 +182,10 @@ AudioSpectrumObserverOnLocalAudioSpectrumJson
         );
 
 Map<String, dynamic> _$AudioSpectrumObserverOnLocalAudioSpectrumJsonToJson(
-    AudioSpectrumObserverOnLocalAudioSpectrumJson instance) {
-  final val = <String, dynamic>{};
-
-  void writeNotNull(String key, dynamic value) {
-    if (value != null) {
-      val[key] = value;
-    }
-  }
-
-  writeNotNull('data', instance.data?.toJson());
-  return val;
-}
+        AudioSpectrumObserverOnLocalAudioSpectrumJson instance) =>
+    <String, dynamic>{
+      if (instance.data?.toJson() case final value?) 'data': value,
+    };
 
 AudioSpectrumObserverOnRemoteAudioSpectrumJson
     _$AudioSpectrumObserverOnRemoteAudioSpectrumJsonFromJson(
@@ -277,20 +199,12 @@ AudioSpectrumObserverOnRemoteAudioSpectrumJson
         );
 
 Map<String, dynamic> _$AudioSpectrumObserverOnRemoteAudioSpectrumJsonToJson(
-    AudioSpectrumObserverOnRemoteAudioSpectrumJson instance) {
-  final val = <String, dynamic>{};
-
-  void writeNotNull(String key, dynamic value) {
-    if (value != null) {
-      val[key] = value;
-    }
-  }
-
-  writeNotNull(
-      'spectrums', instance.spectrums?.map((e) => e.toJson()).toList());
-  writeNotNull('spectrumNumber', instance.spectrumNumber);
-  return val;
-}
+        AudioSpectrumObserverOnRemoteAudioSpectrumJson instance) =>
+    <String, dynamic>{
+      if (instance.spectrums?.map((e) => e.toJson()).toList() case final value?)
+        'spectrums': value,
+      if (instance.spectrumNumber case final value?) 'spectrumNumber': value,
+    };
 
 VideoEncodedFrameObserverOnEncodedVideoFrameReceivedJson
     _$VideoEncodedFrameObserverOnEncodedVideoFrameReceivedJsonFromJson(
@@ -304,23 +218,15 @@ VideoEncodedFrameObserverOnEncodedVideoFrameReceivedJson
                   json['videoEncodedFrameInfo'] as Map<String, dynamic>),
         );
 
-Map<String, dynamic>
-    _$VideoEncodedFrameObserverOnEncodedVideoFrameReceivedJsonToJson(
-        VideoEncodedFrameObserverOnEncodedVideoFrameReceivedJson instance) {
-  final val = <String, dynamic>{};
-
-  void writeNotNull(String key, dynamic value) {
-    if (value != null) {
-      val[key] = value;
-    }
-  }
-
-  writeNotNull('uid', instance.uid);
-  writeNotNull('length', instance.length);
-  writeNotNull(
-      'videoEncodedFrameInfo', instance.videoEncodedFrameInfo?.toJson());
-  return val;
-}
+Map<String,
+    dynamic> _$VideoEncodedFrameObserverOnEncodedVideoFrameReceivedJsonToJson(
+        VideoEncodedFrameObserverOnEncodedVideoFrameReceivedJson instance) =>
+    <String, dynamic>{
+      if (instance.uid case final value?) 'uid': value,
+      if (instance.length case final value?) 'length': value,
+      if (instance.videoEncodedFrameInfo?.toJson() case final value?)
+        'videoEncodedFrameInfo': value,
+    };
 
 VideoFrameObserverOnCaptureVideoFrameJson
     _$VideoFrameObserverOnCaptureVideoFrameJsonFromJson(
@@ -334,19 +240,12 @@ VideoFrameObserverOnCaptureVideoFrameJson
         );
 
 Map<String, dynamic> _$VideoFrameObserverOnCaptureVideoFrameJsonToJson(
-    VideoFrameObserverOnCaptureVideoFrameJson instance) {
-  final val = <String, dynamic>{};
-
-  void writeNotNull(String key, dynamic value) {
-    if (value != null) {
-      val[key] = value;
-    }
-  }
-
-  writeNotNull('sourceType', _$VideoSourceTypeEnumMap[instance.sourceType]);
-  writeNotNull('videoFrame', instance.videoFrame?.toJson());
-  return val;
-}
+        VideoFrameObserverOnCaptureVideoFrameJson instance) =>
+    <String, dynamic>{
+      if (_$VideoSourceTypeEnumMap[instance.sourceType] case final value?)
+        'sourceType': value,
+      if (instance.videoFrame?.toJson() case final value?) 'videoFrame': value,
+    };
 
 const _$VideoSourceTypeEnumMap = {
   VideoSourceType.videoSourceCameraPrimary: 0,
@@ -382,19 +281,12 @@ VideoFrameObserverOnPreEncodeVideoFrameJson
         );
 
 Map<String, dynamic> _$VideoFrameObserverOnPreEncodeVideoFrameJsonToJson(
-    VideoFrameObserverOnPreEncodeVideoFrameJson instance) {
-  final val = <String, dynamic>{};
-
-  void writeNotNull(String key, dynamic value) {
-    if (value != null) {
-      val[key] = value;
-    }
-  }
-
-  writeNotNull('sourceType', _$VideoSourceTypeEnumMap[instance.sourceType]);
-  writeNotNull('videoFrame', instance.videoFrame?.toJson());
-  return val;
-}
+        VideoFrameObserverOnPreEncodeVideoFrameJson instance) =>
+    <String, dynamic>{
+      if (_$VideoSourceTypeEnumMap[instance.sourceType] case final value?)
+        'sourceType': value,
+      if (instance.videoFrame?.toJson() case final value?) 'videoFrame': value,
+    };
 
 VideoFrameObserverOnMediaPlayerVideoFrameJson
     _$VideoFrameObserverOnMediaPlayerVideoFrameJsonFromJson(
@@ -407,19 +299,11 @@ VideoFrameObserverOnMediaPlayerVideoFrameJson
         );
 
 Map<String, dynamic> _$VideoFrameObserverOnMediaPlayerVideoFrameJsonToJson(
-    VideoFrameObserverOnMediaPlayerVideoFrameJson instance) {
-  final val = <String, dynamic>{};
-
-  void writeNotNull(String key, dynamic value) {
-    if (value != null) {
-      val[key] = value;
-    }
-  }
-
-  writeNotNull('videoFrame', instance.videoFrame?.toJson());
-  writeNotNull('mediaPlayerId', instance.mediaPlayerId);
-  return val;
-}
+        VideoFrameObserverOnMediaPlayerVideoFrameJson instance) =>
+    <String, dynamic>{
+      if (instance.videoFrame?.toJson() case final value?) 'videoFrame': value,
+      if (instance.mediaPlayerId case final value?) 'mediaPlayerId': value,
+    };
 
 VideoFrameObserverOnRenderVideoFrameJson
     _$VideoFrameObserverOnRenderVideoFrameJsonFromJson(
@@ -433,20 +317,12 @@ VideoFrameObserverOnRenderVideoFrameJson
         );
 
 Map<String, dynamic> _$VideoFrameObserverOnRenderVideoFrameJsonToJson(
-    VideoFrameObserverOnRenderVideoFrameJson instance) {
-  final val = <String, dynamic>{};
-
-  void writeNotNull(String key, dynamic value) {
-    if (value != null) {
-      val[key] = value;
-    }
-  }
-
-  writeNotNull('channelId', instance.channelId);
-  writeNotNull('remoteUid', instance.remoteUid);
-  writeNotNull('videoFrame', instance.videoFrame?.toJson());
-  return val;
-}
+        VideoFrameObserverOnRenderVideoFrameJson instance) =>
+    <String, dynamic>{
+      if (instance.channelId case final value?) 'channelId': value,
+      if (instance.remoteUid case final value?) 'remoteUid': value,
+      if (instance.videoFrame?.toJson() case final value?) 'videoFrame': value,
+    };
 
 VideoFrameObserverOnTranscodedVideoFrameJson
     _$VideoFrameObserverOnTranscodedVideoFrameJsonFromJson(
@@ -458,18 +334,10 @@ VideoFrameObserverOnTranscodedVideoFrameJson
         );
 
 Map<String, dynamic> _$VideoFrameObserverOnTranscodedVideoFrameJsonToJson(
-    VideoFrameObserverOnTranscodedVideoFrameJson instance) {
-  final val = <String, dynamic>{};
-
-  void writeNotNull(String key, dynamic value) {
-    if (value != null) {
-      val[key] = value;
-    }
-  }
-
-  writeNotNull('videoFrame', instance.videoFrame?.toJson());
-  return val;
-}
+        VideoFrameObserverOnTranscodedVideoFrameJson instance) =>
+    <String, dynamic>{
+      if (instance.videoFrame?.toJson() case final value?) 'videoFrame': value,
+    };
 
 FaceInfoObserverOnFaceInfoJson _$FaceInfoObserverOnFaceInfoJsonFromJson(
         Map<String, dynamic> json) =>
@@ -478,18 +346,10 @@ FaceInfoObserverOnFaceInfoJson _$FaceInfoObserverOnFaceInfoJsonFromJson(
     );
 
 Map<String, dynamic> _$FaceInfoObserverOnFaceInfoJsonToJson(
-    FaceInfoObserverOnFaceInfoJson instance) {
-  final val = <String, dynamic>{};
-
-  void writeNotNull(String key, dynamic value) {
-    if (value != null) {
-      val[key] = value;
-    }
-  }
-
-  writeNotNull('outFaceInfo', instance.outFaceInfo);
-  return val;
-}
+        FaceInfoObserverOnFaceInfoJson instance) =>
+    <String, dynamic>{
+      if (instance.outFaceInfo case final value?) 'outFaceInfo': value,
+    };
 
 MediaRecorderObserverOnRecorderStateChangedJson
     _$MediaRecorderObserverOnRecorderStateChangedJsonFromJson(
@@ -503,21 +363,15 @@ MediaRecorderObserverOnRecorderStateChangedJson
         );
 
 Map<String, dynamic> _$MediaRecorderObserverOnRecorderStateChangedJsonToJson(
-    MediaRecorderObserverOnRecorderStateChangedJson instance) {
-  final val = <String, dynamic>{};
-
-  void writeNotNull(String key, dynamic value) {
-    if (value != null) {
-      val[key] = value;
-    }
-  }
-
-  writeNotNull('channelId', instance.channelId);
-  writeNotNull('uid', instance.uid);
-  writeNotNull('state', _$RecorderStateEnumMap[instance.state]);
-  writeNotNull('reason', _$RecorderReasonCodeEnumMap[instance.reason]);
-  return val;
-}
+        MediaRecorderObserverOnRecorderStateChangedJson instance) =>
+    <String, dynamic>{
+      if (instance.channelId case final value?) 'channelId': value,
+      if (instance.uid case final value?) 'uid': value,
+      if (_$RecorderStateEnumMap[instance.state] case final value?)
+        'state': value,
+      if (_$RecorderReasonCodeEnumMap[instance.reason] case final value?)
+        'reason': value,
+    };
 
 const _$RecorderStateEnumMap = {
   RecorderState.recorderStateError: -1,
@@ -545,20 +399,12 @@ MediaRecorderObserverOnRecorderInfoUpdatedJson
         );
 
 Map<String, dynamic> _$MediaRecorderObserverOnRecorderInfoUpdatedJsonToJson(
-    MediaRecorderObserverOnRecorderInfoUpdatedJson instance) {
-  final val = <String, dynamic>{};
-
-  void writeNotNull(String key, dynamic value) {
-    if (value != null) {
-      val[key] = value;
-    }
-  }
-
-  writeNotNull('channelId', instance.channelId);
-  writeNotNull('uid', instance.uid);
-  writeNotNull('info', instance.info?.toJson());
-  return val;
-}
+        MediaRecorderObserverOnRecorderInfoUpdatedJson instance) =>
+    <String, dynamic>{
+      if (instance.channelId case final value?) 'channelId': value,
+      if (instance.uid case final value?) 'uid': value,
+      if (instance.info?.toJson() case final value?) 'info': value,
+    };
 
 H265TranscoderObserverOnEnableTranscodeJson
     _$H265TranscoderObserverOnEnableTranscodeJsonFromJson(
@@ -569,18 +415,11 @@ H265TranscoderObserverOnEnableTranscodeJson
         );
 
 Map<String, dynamic> _$H265TranscoderObserverOnEnableTranscodeJsonToJson(
-    H265TranscoderObserverOnEnableTranscodeJson instance) {
-  final val = <String, dynamic>{};
-
-  void writeNotNull(String key, dynamic value) {
-    if (value != null) {
-      val[key] = value;
-    }
-  }
-
-  writeNotNull('result', _$H265TranscodeResultEnumMap[instance.result]);
-  return val;
-}
+        H265TranscoderObserverOnEnableTranscodeJson instance) =>
+    <String, dynamic>{
+      if (_$H265TranscodeResultEnumMap[instance.result] case final value?)
+        'result': value,
+    };
 
 const _$H265TranscodeResultEnumMap = {
   H265TranscodeResult.h265TranscodeResultUnknown: -1,
@@ -608,20 +447,14 @@ H265TranscoderObserverOnQueryChannelJson
         );
 
 Map<String, dynamic> _$H265TranscoderObserverOnQueryChannelJsonToJson(
-    H265TranscoderObserverOnQueryChannelJson instance) {
-  final val = <String, dynamic>{};
-
-  void writeNotNull(String key, dynamic value) {
-    if (value != null) {
-      val[key] = value;
-    }
-  }
-
-  writeNotNull('result', _$H265TranscodeResultEnumMap[instance.result]);
-  writeNotNull('originChannel', instance.originChannel);
-  writeNotNull('transcodeChannel', instance.transcodeChannel);
-  return val;
-}
+        H265TranscoderObserverOnQueryChannelJson instance) =>
+    <String, dynamic>{
+      if (_$H265TranscodeResultEnumMap[instance.result] case final value?)
+        'result': value,
+      if (instance.originChannel case final value?) 'originChannel': value,
+      if (instance.transcodeChannel case final value?)
+        'transcodeChannel': value,
+    };
 
 H265TranscoderObserverOnTriggerTranscodeJson
     _$H265TranscoderObserverOnTriggerTranscodeJsonFromJson(
@@ -632,18 +465,11 @@ H265TranscoderObserverOnTriggerTranscodeJson
         );
 
 Map<String, dynamic> _$H265TranscoderObserverOnTriggerTranscodeJsonToJson(
-    H265TranscoderObserverOnTriggerTranscodeJson instance) {
-  final val = <String, dynamic>{};
-
-  void writeNotNull(String key, dynamic value) {
-    if (value != null) {
-      val[key] = value;
-    }
-  }
-
-  writeNotNull('result', _$H265TranscodeResultEnumMap[instance.result]);
-  return val;
-}
+        H265TranscoderObserverOnTriggerTranscodeJson instance) =>
+    <String, dynamic>{
+      if (_$H265TranscodeResultEnumMap[instance.result] case final value?)
+        'result': value,
+    };
 
 MediaPlayerVideoFrameObserverOnFrameJson
     _$MediaPlayerVideoFrameObserverOnFrameJsonFromJson(
@@ -655,18 +481,10 @@ MediaPlayerVideoFrameObserverOnFrameJson
         );
 
 Map<String, dynamic> _$MediaPlayerVideoFrameObserverOnFrameJsonToJson(
-    MediaPlayerVideoFrameObserverOnFrameJson instance) {
-  final val = <String, dynamic>{};
-
-  void writeNotNull(String key, dynamic value) {
-    if (value != null) {
-      val[key] = value;
-    }
-  }
-
-  writeNotNull('frame', instance.frame?.toJson());
-  return val;
-}
+        MediaPlayerVideoFrameObserverOnFrameJson instance) =>
+    <String, dynamic>{
+      if (instance.frame?.toJson() case final value?) 'frame': value,
+    };
 
 MediaPlayerSourceObserverOnPlayerSourceStateChangedJson
     _$MediaPlayerSourceObserverOnPlayerSourceStateChangedJsonFromJson(
@@ -679,19 +497,13 @@ MediaPlayerSourceObserverOnPlayerSourceStateChangedJson
 
 Map<String, dynamic>
     _$MediaPlayerSourceObserverOnPlayerSourceStateChangedJsonToJson(
-        MediaPlayerSourceObserverOnPlayerSourceStateChangedJson instance) {
-  final val = <String, dynamic>{};
-
-  void writeNotNull(String key, dynamic value) {
-    if (value != null) {
-      val[key] = value;
-    }
-  }
-
-  writeNotNull('state', _$MediaPlayerStateEnumMap[instance.state]);
-  writeNotNull('reason', _$MediaPlayerReasonEnumMap[instance.reason]);
-  return val;
-}
+            MediaPlayerSourceObserverOnPlayerSourceStateChangedJson instance) =>
+        <String, dynamic>{
+          if (_$MediaPlayerStateEnumMap[instance.state] case final value?)
+            'state': value,
+          if (_$MediaPlayerReasonEnumMap[instance.reason] case final value?)
+            'reason': value,
+        };
 
 const _$MediaPlayerStateEnumMap = {
   MediaPlayerState.playerStateIdle: 0,
@@ -742,19 +554,11 @@ MediaPlayerSourceObserverOnPositionChangedJson
         );
 
 Map<String, dynamic> _$MediaPlayerSourceObserverOnPositionChangedJsonToJson(
-    MediaPlayerSourceObserverOnPositionChangedJson instance) {
-  final val = <String, dynamic>{};
-
-  void writeNotNull(String key, dynamic value) {
-    if (value != null) {
-      val[key] = value;
-    }
-  }
-
-  writeNotNull('positionMs', instance.positionMs);
-  writeNotNull('timestampMs', instance.timestampMs);
-  return val;
-}
+        MediaPlayerSourceObserverOnPositionChangedJson instance) =>
+    <String, dynamic>{
+      if (instance.positionMs case final value?) 'positionMs': value,
+      if (instance.timestampMs case final value?) 'timestampMs': value,
+    };
 
 MediaPlayerSourceObserverOnPlayerEventJson
     _$MediaPlayerSourceObserverOnPlayerEventJsonFromJson(
@@ -767,20 +571,13 @@ MediaPlayerSourceObserverOnPlayerEventJson
         );
 
 Map<String, dynamic> _$MediaPlayerSourceObserverOnPlayerEventJsonToJson(
-    MediaPlayerSourceObserverOnPlayerEventJson instance) {
-  final val = <String, dynamic>{};
-
-  void writeNotNull(String key, dynamic value) {
-    if (value != null) {
-      val[key] = value;
-    }
-  }
-
-  writeNotNull('eventCode', _$MediaPlayerEventEnumMap[instance.eventCode]);
-  writeNotNull('elapsedTime', instance.elapsedTime);
-  writeNotNull('message', instance.message);
-  return val;
-}
+        MediaPlayerSourceObserverOnPlayerEventJson instance) =>
+    <String, dynamic>{
+      if (_$MediaPlayerEventEnumMap[instance.eventCode] case final value?)
+        'eventCode': value,
+      if (instance.elapsedTime case final value?) 'elapsedTime': value,
+      if (instance.message case final value?) 'message': value,
+    };
 
 const _$MediaPlayerEventEnumMap = {
   MediaPlayerEvent.playerEventSeekBegin: 0,
@@ -811,18 +608,10 @@ MediaPlayerSourceObserverOnMetaDataJson
         );
 
 Map<String, dynamic> _$MediaPlayerSourceObserverOnMetaDataJsonToJson(
-    MediaPlayerSourceObserverOnMetaDataJson instance) {
-  final val = <String, dynamic>{};
-
-  void writeNotNull(String key, dynamic value) {
-    if (value != null) {
-      val[key] = value;
-    }
-  }
-
-  writeNotNull('length', instance.length);
-  return val;
-}
+        MediaPlayerSourceObserverOnMetaDataJson instance) =>
+    <String, dynamic>{
+      if (instance.length case final value?) 'length': value,
+    };
 
 MediaPlayerSourceObserverOnPlayBufferUpdatedJson
     _$MediaPlayerSourceObserverOnPlayBufferUpdatedJsonFromJson(
@@ -832,18 +621,11 @@ MediaPlayerSourceObserverOnPlayBufferUpdatedJson
         );
 
 Map<String, dynamic> _$MediaPlayerSourceObserverOnPlayBufferUpdatedJsonToJson(
-    MediaPlayerSourceObserverOnPlayBufferUpdatedJson instance) {
-  final val = <String, dynamic>{};
-
-  void writeNotNull(String key, dynamic value) {
-    if (value != null) {
-      val[key] = value;
-    }
-  }
-
-  writeNotNull('playCachedBuffer', instance.playCachedBuffer);
-  return val;
-}
+        MediaPlayerSourceObserverOnPlayBufferUpdatedJson instance) =>
+    <String, dynamic>{
+      if (instance.playCachedBuffer case final value?)
+        'playCachedBuffer': value,
+    };
 
 MediaPlayerSourceObserverOnPreloadEventJson
     _$MediaPlayerSourceObserverOnPreloadEventJsonFromJson(
@@ -855,19 +637,12 @@ MediaPlayerSourceObserverOnPreloadEventJson
         );
 
 Map<String, dynamic> _$MediaPlayerSourceObserverOnPreloadEventJsonToJson(
-    MediaPlayerSourceObserverOnPreloadEventJson instance) {
-  final val = <String, dynamic>{};
-
-  void writeNotNull(String key, dynamic value) {
-    if (value != null) {
-      val[key] = value;
-    }
-  }
-
-  writeNotNull('src', instance.src);
-  writeNotNull('event', _$PlayerPreloadEventEnumMap[instance.event]);
-  return val;
-}
+        MediaPlayerSourceObserverOnPreloadEventJson instance) =>
+    <String, dynamic>{
+      if (instance.src case final value?) 'src': value,
+      if (_$PlayerPreloadEventEnumMap[instance.event] case final value?)
+        'event': value,
+    };
 
 const _$PlayerPreloadEventEnumMap = {
   PlayerPreloadEvent.playerPreloadEventBegin: 0,
@@ -908,19 +683,11 @@ MediaPlayerSourceObserverOnPlayerSrcInfoChangedJson
 
 Map<String, dynamic>
     _$MediaPlayerSourceObserverOnPlayerSrcInfoChangedJsonToJson(
-        MediaPlayerSourceObserverOnPlayerSrcInfoChangedJson instance) {
-  final val = <String, dynamic>{};
-
-  void writeNotNull(String key, dynamic value) {
-    if (value != null) {
-      val[key] = value;
-    }
-  }
-
-  writeNotNull('from', instance.from?.toJson());
-  writeNotNull('to', instance.to?.toJson());
-  return val;
-}
+            MediaPlayerSourceObserverOnPlayerSrcInfoChangedJson instance) =>
+        <String, dynamic>{
+          if (instance.from?.toJson() case final value?) 'from': value,
+          if (instance.to?.toJson() case final value?) 'to': value,
+        };
 
 MediaPlayerSourceObserverOnPlayerInfoUpdatedJson
     _$MediaPlayerSourceObserverOnPlayerInfoUpdatedJsonFromJson(
@@ -933,18 +700,10 @@ MediaPlayerSourceObserverOnPlayerInfoUpdatedJson
         );
 
 Map<String, dynamic> _$MediaPlayerSourceObserverOnPlayerInfoUpdatedJsonToJson(
-    MediaPlayerSourceObserverOnPlayerInfoUpdatedJson instance) {
-  final val = <String, dynamic>{};
-
-  void writeNotNull(String key, dynamic value) {
-    if (value != null) {
-      val[key] = value;
-    }
-  }
-
-  writeNotNull('info', instance.info?.toJson());
-  return val;
-}
+        MediaPlayerSourceObserverOnPlayerInfoUpdatedJson instance) =>
+    <String, dynamic>{
+      if (instance.info?.toJson() case final value?) 'info': value,
+    };
 
 MediaPlayerSourceObserverOnPlayerCacheStatsJson
     _$MediaPlayerSourceObserverOnPlayerCacheStatsJsonFromJson(
@@ -956,18 +715,10 @@ MediaPlayerSourceObserverOnPlayerCacheStatsJson
         );
 
 Map<String, dynamic> _$MediaPlayerSourceObserverOnPlayerCacheStatsJsonToJson(
-    MediaPlayerSourceObserverOnPlayerCacheStatsJson instance) {
-  final val = <String, dynamic>{};
-
-  void writeNotNull(String key, dynamic value) {
-    if (value != null) {
-      val[key] = value;
-    }
-  }
-
-  writeNotNull('stats', instance.stats?.toJson());
-  return val;
-}
+        MediaPlayerSourceObserverOnPlayerCacheStatsJson instance) =>
+    <String, dynamic>{
+      if (instance.stats?.toJson() case final value?) 'stats': value,
+    };
 
 MediaPlayerSourceObserverOnPlayerPlaybackStatsJson
     _$MediaPlayerSourceObserverOnPlayerPlaybackStatsJsonFromJson(
@@ -980,18 +731,10 @@ MediaPlayerSourceObserverOnPlayerPlaybackStatsJson
         );
 
 Map<String, dynamic> _$MediaPlayerSourceObserverOnPlayerPlaybackStatsJsonToJson(
-    MediaPlayerSourceObserverOnPlayerPlaybackStatsJson instance) {
-  final val = <String, dynamic>{};
-
-  void writeNotNull(String key, dynamic value) {
-    if (value != null) {
-      val[key] = value;
-    }
-  }
-
-  writeNotNull('stats', instance.stats?.toJson());
-  return val;
-}
+        MediaPlayerSourceObserverOnPlayerPlaybackStatsJson instance) =>
+    <String, dynamic>{
+      if (instance.stats?.toJson() case final value?) 'stats': value,
+    };
 
 MediaPlayerSourceObserverOnAudioVolumeIndicationJson
     _$MediaPlayerSourceObserverOnAudioVolumeIndicationJsonFromJson(
@@ -1002,18 +745,10 @@ MediaPlayerSourceObserverOnAudioVolumeIndicationJson
 
 Map<String, dynamic>
     _$MediaPlayerSourceObserverOnAudioVolumeIndicationJsonToJson(
-        MediaPlayerSourceObserverOnAudioVolumeIndicationJson instance) {
-  final val = <String, dynamic>{};
-
-  void writeNotNull(String key, dynamic value) {
-    if (value != null) {
-      val[key] = value;
-    }
-  }
-
-  writeNotNull('volume', instance.volume);
-  return val;
-}
+            MediaPlayerSourceObserverOnAudioVolumeIndicationJson instance) =>
+        <String, dynamic>{
+          if (instance.volume case final value?) 'volume': value,
+        };
 
 MusicContentCenterEventHandlerOnMusicChartsResultJson
     _$MusicContentCenterEventHandlerOnMusicChartsResultJsonFromJson(
@@ -1029,21 +764,16 @@ MusicContentCenterEventHandlerOnMusicChartsResultJson
 
 Map<String, dynamic>
     _$MusicContentCenterEventHandlerOnMusicChartsResultJsonToJson(
-        MusicContentCenterEventHandlerOnMusicChartsResultJson instance) {
-  final val = <String, dynamic>{};
-
-  void writeNotNull(String key, dynamic value) {
-    if (value != null) {
-      val[key] = value;
-    }
-  }
-
-  writeNotNull('requestId', instance.requestId);
-  writeNotNull('result', instance.result?.map((e) => e.toJson()).toList());
-  writeNotNull(
-      'reason', _$MusicContentCenterStateReasonEnumMap[instance.reason]);
-  return val;
-}
+            MusicContentCenterEventHandlerOnMusicChartsResultJson instance) =>
+        <String, dynamic>{
+          if (instance.requestId case final value?) 'requestId': value,
+          if (instance.result?.map((e) => e.toJson()).toList()
+              case final value?)
+            'result': value,
+          if (_$MusicContentCenterStateReasonEnumMap[instance.reason]
+              case final value?)
+            'reason': value,
+        };
 
 const _$MusicContentCenterStateReasonEnumMap = {
   MusicContentCenterStateReason.kMusicContentCenterReasonOk: 0,
@@ -1066,22 +796,15 @@ MusicContentCenterEventHandlerOnMusicCollectionResultJson
               _$MusicContentCenterStateReasonEnumMap, json['reason']),
         );
 
-Map<String, dynamic>
-    _$MusicContentCenterEventHandlerOnMusicCollectionResultJsonToJson(
-        MusicContentCenterEventHandlerOnMusicCollectionResultJson instance) {
-  final val = <String, dynamic>{};
-
-  void writeNotNull(String key, dynamic value) {
-    if (value != null) {
-      val[key] = value;
-    }
-  }
-
-  writeNotNull('requestId', instance.requestId);
-  writeNotNull(
-      'reason', _$MusicContentCenterStateReasonEnumMap[instance.reason]);
-  return val;
-}
+Map<String,
+    dynamic> _$MusicContentCenterEventHandlerOnMusicCollectionResultJsonToJson(
+        MusicContentCenterEventHandlerOnMusicCollectionResultJson instance) =>
+    <String, dynamic>{
+      if (instance.requestId case final value?) 'requestId': value,
+      if (_$MusicContentCenterStateReasonEnumMap[instance.reason]
+          case final value?)
+        'reason': value,
+    };
 
 MusicContentCenterEventHandlerOnLyricResultJson
     _$MusicContentCenterEventHandlerOnLyricResultJsonFromJson(
@@ -1095,22 +818,15 @@ MusicContentCenterEventHandlerOnLyricResultJson
         );
 
 Map<String, dynamic> _$MusicContentCenterEventHandlerOnLyricResultJsonToJson(
-    MusicContentCenterEventHandlerOnLyricResultJson instance) {
-  final val = <String, dynamic>{};
-
-  void writeNotNull(String key, dynamic value) {
-    if (value != null) {
-      val[key] = value;
-    }
-  }
-
-  writeNotNull('requestId', instance.requestId);
-  writeNotNull('songCode', instance.songCode);
-  writeNotNull('lyricUrl', instance.lyricUrl);
-  writeNotNull(
-      'reason', _$MusicContentCenterStateReasonEnumMap[instance.reason]);
-  return val;
-}
+        MusicContentCenterEventHandlerOnLyricResultJson instance) =>
+    <String, dynamic>{
+      if (instance.requestId case final value?) 'requestId': value,
+      if (instance.songCode case final value?) 'songCode': value,
+      if (instance.lyricUrl case final value?) 'lyricUrl': value,
+      if (_$MusicContentCenterStateReasonEnumMap[instance.reason]
+          case final value?)
+        'reason': value,
+    };
 
 MusicContentCenterEventHandlerOnSongSimpleInfoResultJson
     _$MusicContentCenterEventHandlerOnSongSimpleInfoResultJsonFromJson(
@@ -1123,24 +839,17 @@ MusicContentCenterEventHandlerOnSongSimpleInfoResultJson
               _$MusicContentCenterStateReasonEnumMap, json['reason']),
         );
 
-Map<String, dynamic>
-    _$MusicContentCenterEventHandlerOnSongSimpleInfoResultJsonToJson(
-        MusicContentCenterEventHandlerOnSongSimpleInfoResultJson instance) {
-  final val = <String, dynamic>{};
-
-  void writeNotNull(String key, dynamic value) {
-    if (value != null) {
-      val[key] = value;
-    }
-  }
-
-  writeNotNull('requestId', instance.requestId);
-  writeNotNull('songCode', instance.songCode);
-  writeNotNull('simpleInfo', instance.simpleInfo);
-  writeNotNull(
-      'reason', _$MusicContentCenterStateReasonEnumMap[instance.reason]);
-  return val;
-}
+Map<String,
+    dynamic> _$MusicContentCenterEventHandlerOnSongSimpleInfoResultJsonToJson(
+        MusicContentCenterEventHandlerOnSongSimpleInfoResultJson instance) =>
+    <String, dynamic>{
+      if (instance.requestId case final value?) 'requestId': value,
+      if (instance.songCode case final value?) 'songCode': value,
+      if (instance.simpleInfo case final value?) 'simpleInfo': value,
+      if (_$MusicContentCenterStateReasonEnumMap[instance.reason]
+          case final value?)
+        'reason': value,
+    };
 
 MusicContentCenterEventHandlerOnPreLoadEventJson
     _$MusicContentCenterEventHandlerOnPreLoadEventJsonFromJson(
@@ -1156,24 +865,18 @@ MusicContentCenterEventHandlerOnPreLoadEventJson
         );
 
 Map<String, dynamic> _$MusicContentCenterEventHandlerOnPreLoadEventJsonToJson(
-    MusicContentCenterEventHandlerOnPreLoadEventJson instance) {
-  final val = <String, dynamic>{};
-
-  void writeNotNull(String key, dynamic value) {
-    if (value != null) {
-      val[key] = value;
-    }
-  }
-
-  writeNotNull('requestId', instance.requestId);
-  writeNotNull('songCode', instance.songCode);
-  writeNotNull('percent', instance.percent);
-  writeNotNull('lyricUrl', instance.lyricUrl);
-  writeNotNull('state', _$PreloadStateEnumMap[instance.state]);
-  writeNotNull(
-      'reason', _$MusicContentCenterStateReasonEnumMap[instance.reason]);
-  return val;
-}
+        MusicContentCenterEventHandlerOnPreLoadEventJson instance) =>
+    <String, dynamic>{
+      if (instance.requestId case final value?) 'requestId': value,
+      if (instance.songCode case final value?) 'songCode': value,
+      if (instance.percent case final value?) 'percent': value,
+      if (instance.lyricUrl case final value?) 'lyricUrl': value,
+      if (_$PreloadStateEnumMap[instance.state] case final value?)
+        'state': value,
+      if (_$MusicContentCenterStateReasonEnumMap[instance.reason]
+          case final value?)
+        'reason': value,
+    };
 
 const _$PreloadStateEnumMap = {
   PreloadState.kPreloadStateCompleted: 0,
@@ -1194,19 +897,11 @@ RtcEngineEventHandlerOnJoinChannelSuccessJson
         );
 
 Map<String, dynamic> _$RtcEngineEventHandlerOnJoinChannelSuccessJsonToJson(
-    RtcEngineEventHandlerOnJoinChannelSuccessJson instance) {
-  final val = <String, dynamic>{};
-
-  void writeNotNull(String key, dynamic value) {
-    if (value != null) {
-      val[key] = value;
-    }
-  }
-
-  writeNotNull('connection', instance.connection?.toJson());
-  writeNotNull('elapsed', instance.elapsed);
-  return val;
-}
+        RtcEngineEventHandlerOnJoinChannelSuccessJson instance) =>
+    <String, dynamic>{
+      if (instance.connection?.toJson() case final value?) 'connection': value,
+      if (instance.elapsed case final value?) 'elapsed': value,
+    };
 
 RtcEngineEventHandlerOnRejoinChannelSuccessJson
     _$RtcEngineEventHandlerOnRejoinChannelSuccessJsonFromJson(
@@ -1220,19 +915,11 @@ RtcEngineEventHandlerOnRejoinChannelSuccessJson
         );
 
 Map<String, dynamic> _$RtcEngineEventHandlerOnRejoinChannelSuccessJsonToJson(
-    RtcEngineEventHandlerOnRejoinChannelSuccessJson instance) {
-  final val = <String, dynamic>{};
-
-  void writeNotNull(String key, dynamic value) {
-    if (value != null) {
-      val[key] = value;
-    }
-  }
-
-  writeNotNull('connection', instance.connection?.toJson());
-  writeNotNull('elapsed', instance.elapsed);
-  return val;
-}
+        RtcEngineEventHandlerOnRejoinChannelSuccessJson instance) =>
+    <String, dynamic>{
+      if (instance.connection?.toJson() case final value?) 'connection': value,
+      if (instance.elapsed case final value?) 'elapsed': value,
+    };
 
 RtcEngineEventHandlerOnProxyConnectedJson
     _$RtcEngineEventHandlerOnProxyConnectedJsonFromJson(
@@ -1246,22 +933,15 @@ RtcEngineEventHandlerOnProxyConnectedJson
         );
 
 Map<String, dynamic> _$RtcEngineEventHandlerOnProxyConnectedJsonToJson(
-    RtcEngineEventHandlerOnProxyConnectedJson instance) {
-  final val = <String, dynamic>{};
-
-  void writeNotNull(String key, dynamic value) {
-    if (value != null) {
-      val[key] = value;
-    }
-  }
-
-  writeNotNull('channel', instance.channel);
-  writeNotNull('uid', instance.uid);
-  writeNotNull('proxyType', _$ProxyTypeEnumMap[instance.proxyType]);
-  writeNotNull('localProxyIp', instance.localProxyIp);
-  writeNotNull('elapsed', instance.elapsed);
-  return val;
-}
+        RtcEngineEventHandlerOnProxyConnectedJson instance) =>
+    <String, dynamic>{
+      if (instance.channel case final value?) 'channel': value,
+      if (instance.uid case final value?) 'uid': value,
+      if (_$ProxyTypeEnumMap[instance.proxyType] case final value?)
+        'proxyType': value,
+      if (instance.localProxyIp case final value?) 'localProxyIp': value,
+      if (instance.elapsed case final value?) 'elapsed': value,
+    };
 
 const _$ProxyTypeEnumMap = {
   ProxyType.noneProxyType: 0,
@@ -1281,19 +961,11 @@ RtcEngineEventHandlerOnErrorJson _$RtcEngineEventHandlerOnErrorJsonFromJson(
     );
 
 Map<String, dynamic> _$RtcEngineEventHandlerOnErrorJsonToJson(
-    RtcEngineEventHandlerOnErrorJson instance) {
-  final val = <String, dynamic>{};
-
-  void writeNotNull(String key, dynamic value) {
-    if (value != null) {
-      val[key] = value;
-    }
-  }
-
-  writeNotNull('err', _$ErrorCodeTypeEnumMap[instance.err]);
-  writeNotNull('msg', instance.msg);
-  return val;
-}
+        RtcEngineEventHandlerOnErrorJson instance) =>
+    <String, dynamic>{
+      if (_$ErrorCodeTypeEnumMap[instance.err] case final value?) 'err': value,
+      if (instance.msg case final value?) 'msg': value,
+    };
 
 const _$ErrorCodeTypeEnumMap = {
   ErrorCodeType.errOk: 0,
@@ -1379,22 +1051,15 @@ RtcEngineEventHandlerOnAudioQualityJson
         );
 
 Map<String, dynamic> _$RtcEngineEventHandlerOnAudioQualityJsonToJson(
-    RtcEngineEventHandlerOnAudioQualityJson instance) {
-  final val = <String, dynamic>{};
-
-  void writeNotNull(String key, dynamic value) {
-    if (value != null) {
-      val[key] = value;
-    }
-  }
-
-  writeNotNull('connection', instance.connection?.toJson());
-  writeNotNull('remoteUid', instance.remoteUid);
-  writeNotNull('quality', _$QualityTypeEnumMap[instance.quality]);
-  writeNotNull('delay', instance.delay);
-  writeNotNull('lost', instance.lost);
-  return val;
-}
+        RtcEngineEventHandlerOnAudioQualityJson instance) =>
+    <String, dynamic>{
+      if (instance.connection?.toJson() case final value?) 'connection': value,
+      if (instance.remoteUid case final value?) 'remoteUid': value,
+      if (_$QualityTypeEnumMap[instance.quality] case final value?)
+        'quality': value,
+      if (instance.delay case final value?) 'delay': value,
+      if (instance.lost case final value?) 'lost': value,
+    };
 
 const _$QualityTypeEnumMap = {
   QualityType.qualityUnknown: 0,
@@ -1419,18 +1084,10 @@ RtcEngineEventHandlerOnLastmileProbeResultJson
         );
 
 Map<String, dynamic> _$RtcEngineEventHandlerOnLastmileProbeResultJsonToJson(
-    RtcEngineEventHandlerOnLastmileProbeResultJson instance) {
-  final val = <String, dynamic>{};
-
-  void writeNotNull(String key, dynamic value) {
-    if (value != null) {
-      val[key] = value;
-    }
-  }
-
-  writeNotNull('result', instance.result?.toJson());
-  return val;
-}
+        RtcEngineEventHandlerOnLastmileProbeResultJson instance) =>
+    <String, dynamic>{
+      if (instance.result?.toJson() case final value?) 'result': value,
+    };
 
 RtcEngineEventHandlerOnAudioVolumeIndicationJson
     _$RtcEngineEventHandlerOnAudioVolumeIndicationJsonFromJson(
@@ -1448,21 +1105,14 @@ RtcEngineEventHandlerOnAudioVolumeIndicationJson
         );
 
 Map<String, dynamic> _$RtcEngineEventHandlerOnAudioVolumeIndicationJsonToJson(
-    RtcEngineEventHandlerOnAudioVolumeIndicationJson instance) {
-  final val = <String, dynamic>{};
-
-  void writeNotNull(String key, dynamic value) {
-    if (value != null) {
-      val[key] = value;
-    }
-  }
-
-  writeNotNull('connection', instance.connection?.toJson());
-  writeNotNull('speakers', instance.speakers?.map((e) => e.toJson()).toList());
-  writeNotNull('speakerNumber', instance.speakerNumber);
-  writeNotNull('totalVolume', instance.totalVolume);
-  return val;
-}
+        RtcEngineEventHandlerOnAudioVolumeIndicationJson instance) =>
+    <String, dynamic>{
+      if (instance.connection?.toJson() case final value?) 'connection': value,
+      if (instance.speakers?.map((e) => e.toJson()).toList() case final value?)
+        'speakers': value,
+      if (instance.speakerNumber case final value?) 'speakerNumber': value,
+      if (instance.totalVolume case final value?) 'totalVolume': value,
+    };
 
 RtcEngineEventHandlerOnLeaveChannelJson
     _$RtcEngineEventHandlerOnLeaveChannelJsonFromJson(
@@ -1478,19 +1128,11 @@ RtcEngineEventHandlerOnLeaveChannelJson
         );
 
 Map<String, dynamic> _$RtcEngineEventHandlerOnLeaveChannelJsonToJson(
-    RtcEngineEventHandlerOnLeaveChannelJson instance) {
-  final val = <String, dynamic>{};
-
-  void writeNotNull(String key, dynamic value) {
-    if (value != null) {
-      val[key] = value;
-    }
-  }
-
-  writeNotNull('connection', instance.connection?.toJson());
-  writeNotNull('stats', instance.stats?.toJson());
-  return val;
-}
+        RtcEngineEventHandlerOnLeaveChannelJson instance) =>
+    <String, dynamic>{
+      if (instance.connection?.toJson() case final value?) 'connection': value,
+      if (instance.stats?.toJson() case final value?) 'stats': value,
+    };
 
 RtcEngineEventHandlerOnRtcStatsJson
     _$RtcEngineEventHandlerOnRtcStatsJsonFromJson(Map<String, dynamic> json) =>
@@ -1505,19 +1147,11 @@ RtcEngineEventHandlerOnRtcStatsJson
         );
 
 Map<String, dynamic> _$RtcEngineEventHandlerOnRtcStatsJsonToJson(
-    RtcEngineEventHandlerOnRtcStatsJson instance) {
-  final val = <String, dynamic>{};
-
-  void writeNotNull(String key, dynamic value) {
-    if (value != null) {
-      val[key] = value;
-    }
-  }
-
-  writeNotNull('connection', instance.connection?.toJson());
-  writeNotNull('stats', instance.stats?.toJson());
-  return val;
-}
+        RtcEngineEventHandlerOnRtcStatsJson instance) =>
+    <String, dynamic>{
+      if (instance.connection?.toJson() case final value?) 'connection': value,
+      if (instance.stats?.toJson() case final value?) 'stats': value,
+    };
 
 RtcEngineEventHandlerOnAudioDeviceStateChangedJson
     _$RtcEngineEventHandlerOnAudioDeviceStateChangedJsonFromJson(
@@ -1531,21 +1165,14 @@ RtcEngineEventHandlerOnAudioDeviceStateChangedJson
         );
 
 Map<String, dynamic> _$RtcEngineEventHandlerOnAudioDeviceStateChangedJsonToJson(
-    RtcEngineEventHandlerOnAudioDeviceStateChangedJson instance) {
-  final val = <String, dynamic>{};
-
-  void writeNotNull(String key, dynamic value) {
-    if (value != null) {
-      val[key] = value;
-    }
-  }
-
-  writeNotNull('deviceId', instance.deviceId);
-  writeNotNull('deviceType', _$MediaDeviceTypeEnumMap[instance.deviceType]);
-  writeNotNull(
-      'deviceState', _$MediaDeviceStateTypeEnumMap[instance.deviceState]);
-  return val;
-}
+        RtcEngineEventHandlerOnAudioDeviceStateChangedJson instance) =>
+    <String, dynamic>{
+      if (instance.deviceId case final value?) 'deviceId': value,
+      if (_$MediaDeviceTypeEnumMap[instance.deviceType] case final value?)
+        'deviceType': value,
+      if (_$MediaDeviceStateTypeEnumMap[instance.deviceState] case final value?)
+        'deviceState': value,
+    };
 
 const _$MediaDeviceTypeEnumMap = {
   MediaDeviceType.unknownAudioDevice: -1,
@@ -1576,18 +1203,10 @@ RtcEngineEventHandlerOnAudioMixingPositionChangedJson
 
 Map<String, dynamic>
     _$RtcEngineEventHandlerOnAudioMixingPositionChangedJsonToJson(
-        RtcEngineEventHandlerOnAudioMixingPositionChangedJson instance) {
-  final val = <String, dynamic>{};
-
-  void writeNotNull(String key, dynamic value) {
-    if (value != null) {
-      val[key] = value;
-    }
-  }
-
-  writeNotNull('position', instance.position);
-  return val;
-}
+            RtcEngineEventHandlerOnAudioMixingPositionChangedJson instance) =>
+        <String, dynamic>{
+          if (instance.position case final value?) 'position': value,
+        };
 
 RtcEngineEventHandlerOnAudioMixingFinishedJson
     _$RtcEngineEventHandlerOnAudioMixingFinishedJsonFromJson(
@@ -1606,18 +1225,10 @@ RtcEngineEventHandlerOnAudioEffectFinishedJson
         );
 
 Map<String, dynamic> _$RtcEngineEventHandlerOnAudioEffectFinishedJsonToJson(
-    RtcEngineEventHandlerOnAudioEffectFinishedJson instance) {
-  final val = <String, dynamic>{};
-
-  void writeNotNull(String key, dynamic value) {
-    if (value != null) {
-      val[key] = value;
-    }
-  }
-
-  writeNotNull('soundId', instance.soundId);
-  return val;
-}
+        RtcEngineEventHandlerOnAudioEffectFinishedJson instance) =>
+    <String, dynamic>{
+      if (instance.soundId case final value?) 'soundId': value,
+    };
 
 RtcEngineEventHandlerOnVideoDeviceStateChangedJson
     _$RtcEngineEventHandlerOnVideoDeviceStateChangedJsonFromJson(
@@ -1631,21 +1242,14 @@ RtcEngineEventHandlerOnVideoDeviceStateChangedJson
         );
 
 Map<String, dynamic> _$RtcEngineEventHandlerOnVideoDeviceStateChangedJsonToJson(
-    RtcEngineEventHandlerOnVideoDeviceStateChangedJson instance) {
-  final val = <String, dynamic>{};
-
-  void writeNotNull(String key, dynamic value) {
-    if (value != null) {
-      val[key] = value;
-    }
-  }
-
-  writeNotNull('deviceId', instance.deviceId);
-  writeNotNull('deviceType', _$MediaDeviceTypeEnumMap[instance.deviceType]);
-  writeNotNull(
-      'deviceState', _$MediaDeviceStateTypeEnumMap[instance.deviceState]);
-  return val;
-}
+        RtcEngineEventHandlerOnVideoDeviceStateChangedJson instance) =>
+    <String, dynamic>{
+      if (instance.deviceId case final value?) 'deviceId': value,
+      if (_$MediaDeviceTypeEnumMap[instance.deviceType] case final value?)
+        'deviceType': value,
+      if (_$MediaDeviceStateTypeEnumMap[instance.deviceState] case final value?)
+        'deviceState': value,
+    };
 
 RtcEngineEventHandlerOnNetworkQualityJson
     _$RtcEngineEventHandlerOnNetworkQualityJsonFromJson(
@@ -1663,21 +1267,15 @@ RtcEngineEventHandlerOnNetworkQualityJson
         );
 
 Map<String, dynamic> _$RtcEngineEventHandlerOnNetworkQualityJsonToJson(
-    RtcEngineEventHandlerOnNetworkQualityJson instance) {
-  final val = <String, dynamic>{};
-
-  void writeNotNull(String key, dynamic value) {
-    if (value != null) {
-      val[key] = value;
-    }
-  }
-
-  writeNotNull('connection', instance.connection?.toJson());
-  writeNotNull('remoteUid', instance.remoteUid);
-  writeNotNull('txQuality', _$QualityTypeEnumMap[instance.txQuality]);
-  writeNotNull('rxQuality', _$QualityTypeEnumMap[instance.rxQuality]);
-  return val;
-}
+        RtcEngineEventHandlerOnNetworkQualityJson instance) =>
+    <String, dynamic>{
+      if (instance.connection?.toJson() case final value?) 'connection': value,
+      if (instance.remoteUid case final value?) 'remoteUid': value,
+      if (_$QualityTypeEnumMap[instance.txQuality] case final value?)
+        'txQuality': value,
+      if (_$QualityTypeEnumMap[instance.rxQuality] case final value?)
+        'rxQuality': value,
+    };
 
 RtcEngineEventHandlerOnIntraRequestReceivedJson
     _$RtcEngineEventHandlerOnIntraRequestReceivedJsonFromJson(
@@ -1690,18 +1288,10 @@ RtcEngineEventHandlerOnIntraRequestReceivedJson
         );
 
 Map<String, dynamic> _$RtcEngineEventHandlerOnIntraRequestReceivedJsonToJson(
-    RtcEngineEventHandlerOnIntraRequestReceivedJson instance) {
-  final val = <String, dynamic>{};
-
-  void writeNotNull(String key, dynamic value) {
-    if (value != null) {
-      val[key] = value;
-    }
-  }
-
-  writeNotNull('connection', instance.connection?.toJson());
-  return val;
-}
+        RtcEngineEventHandlerOnIntraRequestReceivedJson instance) =>
+    <String, dynamic>{
+      if (instance.connection?.toJson() case final value?) 'connection': value,
+    };
 
 RtcEngineEventHandlerOnUplinkNetworkInfoUpdatedJson
     _$RtcEngineEventHandlerOnUplinkNetworkInfoUpdatedJsonFromJson(
@@ -1715,18 +1305,10 @@ RtcEngineEventHandlerOnUplinkNetworkInfoUpdatedJson
 
 Map<String, dynamic>
     _$RtcEngineEventHandlerOnUplinkNetworkInfoUpdatedJsonToJson(
-        RtcEngineEventHandlerOnUplinkNetworkInfoUpdatedJson instance) {
-  final val = <String, dynamic>{};
-
-  void writeNotNull(String key, dynamic value) {
-    if (value != null) {
-      val[key] = value;
-    }
-  }
-
-  writeNotNull('info', instance.info?.toJson());
-  return val;
-}
+            RtcEngineEventHandlerOnUplinkNetworkInfoUpdatedJson instance) =>
+        <String, dynamic>{
+          if (instance.info?.toJson() case final value?) 'info': value,
+        };
 
 RtcEngineEventHandlerOnDownlinkNetworkInfoUpdatedJson
     _$RtcEngineEventHandlerOnDownlinkNetworkInfoUpdatedJsonFromJson(
@@ -1740,18 +1322,10 @@ RtcEngineEventHandlerOnDownlinkNetworkInfoUpdatedJson
 
 Map<String, dynamic>
     _$RtcEngineEventHandlerOnDownlinkNetworkInfoUpdatedJsonToJson(
-        RtcEngineEventHandlerOnDownlinkNetworkInfoUpdatedJson instance) {
-  final val = <String, dynamic>{};
-
-  void writeNotNull(String key, dynamic value) {
-    if (value != null) {
-      val[key] = value;
-    }
-  }
-
-  writeNotNull('info', instance.info?.toJson());
-  return val;
-}
+            RtcEngineEventHandlerOnDownlinkNetworkInfoUpdatedJson instance) =>
+        <String, dynamic>{
+          if (instance.info?.toJson() case final value?) 'info': value,
+        };
 
 RtcEngineEventHandlerOnLastmileQualityJson
     _$RtcEngineEventHandlerOnLastmileQualityJsonFromJson(
@@ -1761,18 +1335,11 @@ RtcEngineEventHandlerOnLastmileQualityJson
         );
 
 Map<String, dynamic> _$RtcEngineEventHandlerOnLastmileQualityJsonToJson(
-    RtcEngineEventHandlerOnLastmileQualityJson instance) {
-  final val = <String, dynamic>{};
-
-  void writeNotNull(String key, dynamic value) {
-    if (value != null) {
-      val[key] = value;
-    }
-  }
-
-  writeNotNull('quality', _$QualityTypeEnumMap[instance.quality]);
-  return val;
-}
+        RtcEngineEventHandlerOnLastmileQualityJson instance) =>
+    <String, dynamic>{
+      if (_$QualityTypeEnumMap[instance.quality] case final value?)
+        'quality': value,
+    };
 
 RtcEngineEventHandlerOnFirstLocalVideoFrameJson
     _$RtcEngineEventHandlerOnFirstLocalVideoFrameJsonFromJson(
@@ -1785,21 +1352,14 @@ RtcEngineEventHandlerOnFirstLocalVideoFrameJson
         );
 
 Map<String, dynamic> _$RtcEngineEventHandlerOnFirstLocalVideoFrameJsonToJson(
-    RtcEngineEventHandlerOnFirstLocalVideoFrameJson instance) {
-  final val = <String, dynamic>{};
-
-  void writeNotNull(String key, dynamic value) {
-    if (value != null) {
-      val[key] = value;
-    }
-  }
-
-  writeNotNull('source', _$VideoSourceTypeEnumMap[instance.source]);
-  writeNotNull('width', instance.width);
-  writeNotNull('height', instance.height);
-  writeNotNull('elapsed', instance.elapsed);
-  return val;
-}
+        RtcEngineEventHandlerOnFirstLocalVideoFrameJson instance) =>
+    <String, dynamic>{
+      if (_$VideoSourceTypeEnumMap[instance.source] case final value?)
+        'source': value,
+      if (instance.width case final value?) 'width': value,
+      if (instance.height case final value?) 'height': value,
+      if (instance.elapsed case final value?) 'elapsed': value,
+    };
 
 RtcEngineEventHandlerOnFirstLocalVideoFramePublishedJson
     _$RtcEngineEventHandlerOnFirstLocalVideoFramePublishedJsonFromJson(
@@ -1812,21 +1372,13 @@ RtcEngineEventHandlerOnFirstLocalVideoFramePublishedJson
           elapsed: (json['elapsed'] as num?)?.toInt(),
         );
 
-Map<String, dynamic>
-    _$RtcEngineEventHandlerOnFirstLocalVideoFramePublishedJsonToJson(
-        RtcEngineEventHandlerOnFirstLocalVideoFramePublishedJson instance) {
-  final val = <String, dynamic>{};
-
-  void writeNotNull(String key, dynamic value) {
-    if (value != null) {
-      val[key] = value;
-    }
-  }
-
-  writeNotNull('connection', instance.connection?.toJson());
-  writeNotNull('elapsed', instance.elapsed);
-  return val;
-}
+Map<String,
+    dynamic> _$RtcEngineEventHandlerOnFirstLocalVideoFramePublishedJsonToJson(
+        RtcEngineEventHandlerOnFirstLocalVideoFramePublishedJson instance) =>
+    <String, dynamic>{
+      if (instance.connection?.toJson() case final value?) 'connection': value,
+      if (instance.elapsed case final value?) 'elapsed': value,
+    };
 
 RtcEngineEventHandlerOnFirstRemoteVideoDecodedJson
     _$RtcEngineEventHandlerOnFirstRemoteVideoDecodedJsonFromJson(
@@ -1843,22 +1395,14 @@ RtcEngineEventHandlerOnFirstRemoteVideoDecodedJson
         );
 
 Map<String, dynamic> _$RtcEngineEventHandlerOnFirstRemoteVideoDecodedJsonToJson(
-    RtcEngineEventHandlerOnFirstRemoteVideoDecodedJson instance) {
-  final val = <String, dynamic>{};
-
-  void writeNotNull(String key, dynamic value) {
-    if (value != null) {
-      val[key] = value;
-    }
-  }
-
-  writeNotNull('connection', instance.connection?.toJson());
-  writeNotNull('remoteUid', instance.remoteUid);
-  writeNotNull('width', instance.width);
-  writeNotNull('height', instance.height);
-  writeNotNull('elapsed', instance.elapsed);
-  return val;
-}
+        RtcEngineEventHandlerOnFirstRemoteVideoDecodedJson instance) =>
+    <String, dynamic>{
+      if (instance.connection?.toJson() case final value?) 'connection': value,
+      if (instance.remoteUid case final value?) 'remoteUid': value,
+      if (instance.width case final value?) 'width': value,
+      if (instance.height case final value?) 'height': value,
+      if (instance.elapsed case final value?) 'elapsed': value,
+    };
 
 RtcEngineEventHandlerOnVideoSizeChangedJson
     _$RtcEngineEventHandlerOnVideoSizeChangedJsonFromJson(
@@ -1877,23 +1421,16 @@ RtcEngineEventHandlerOnVideoSizeChangedJson
         );
 
 Map<String, dynamic> _$RtcEngineEventHandlerOnVideoSizeChangedJsonToJson(
-    RtcEngineEventHandlerOnVideoSizeChangedJson instance) {
-  final val = <String, dynamic>{};
-
-  void writeNotNull(String key, dynamic value) {
-    if (value != null) {
-      val[key] = value;
-    }
-  }
-
-  writeNotNull('connection', instance.connection?.toJson());
-  writeNotNull('sourceType', _$VideoSourceTypeEnumMap[instance.sourceType]);
-  writeNotNull('uid', instance.uid);
-  writeNotNull('width', instance.width);
-  writeNotNull('height', instance.height);
-  writeNotNull('rotation', instance.rotation);
-  return val;
-}
+        RtcEngineEventHandlerOnVideoSizeChangedJson instance) =>
+    <String, dynamic>{
+      if (instance.connection?.toJson() case final value?) 'connection': value,
+      if (_$VideoSourceTypeEnumMap[instance.sourceType] case final value?)
+        'sourceType': value,
+      if (instance.uid case final value?) 'uid': value,
+      if (instance.width case final value?) 'width': value,
+      if (instance.height case final value?) 'height': value,
+      if (instance.rotation case final value?) 'rotation': value,
+    };
 
 RtcEngineEventHandlerOnLocalVideoEventJson
     _$RtcEngineEventHandlerOnLocalVideoEventJsonFromJson(
@@ -1905,19 +1442,13 @@ RtcEngineEventHandlerOnLocalVideoEventJson
         );
 
 Map<String, dynamic> _$RtcEngineEventHandlerOnLocalVideoEventJsonToJson(
-    RtcEngineEventHandlerOnLocalVideoEventJson instance) {
-  final val = <String, dynamic>{};
-
-  void writeNotNull(String key, dynamic value) {
-    if (value != null) {
-      val[key] = value;
-    }
-  }
-
-  writeNotNull('source', _$VideoSourceTypeEnumMap[instance.source]);
-  writeNotNull('event', _$LocalVideoEventTypeEnumMap[instance.event]);
-  return val;
-}
+        RtcEngineEventHandlerOnLocalVideoEventJson instance) =>
+    <String, dynamic>{
+      if (_$VideoSourceTypeEnumMap[instance.source] case final value?)
+        'source': value,
+      if (_$LocalVideoEventTypeEnumMap[instance.event] case final value?)
+        'event': value,
+    };
 
 const _$LocalVideoEventTypeEnumMap = {
   LocalVideoEventType.localVideoEventTypeScreenCaptureWindowHidden: 1,
@@ -1939,20 +1470,15 @@ RtcEngineEventHandlerOnLocalVideoStateChangedJson
         );
 
 Map<String, dynamic> _$RtcEngineEventHandlerOnLocalVideoStateChangedJsonToJson(
-    RtcEngineEventHandlerOnLocalVideoStateChangedJson instance) {
-  final val = <String, dynamic>{};
-
-  void writeNotNull(String key, dynamic value) {
-    if (value != null) {
-      val[key] = value;
-    }
-  }
-
-  writeNotNull('source', _$VideoSourceTypeEnumMap[instance.source]);
-  writeNotNull('state', _$LocalVideoStreamStateEnumMap[instance.state]);
-  writeNotNull('reason', _$LocalVideoStreamReasonEnumMap[instance.reason]);
-  return val;
-}
+        RtcEngineEventHandlerOnLocalVideoStateChangedJson instance) =>
+    <String, dynamic>{
+      if (_$VideoSourceTypeEnumMap[instance.source] case final value?)
+        'source': value,
+      if (_$LocalVideoStreamStateEnumMap[instance.state] case final value?)
+        'state': value,
+      if (_$LocalVideoStreamReasonEnumMap[instance.reason] case final value?)
+        'reason': value,
+    };
 
 const _$LocalVideoStreamStateEnumMap = {
   LocalVideoStreamState.localVideoStreamStateStopped: 0,
@@ -2011,22 +1537,16 @@ RtcEngineEventHandlerOnRemoteVideoStateChangedJson
         );
 
 Map<String, dynamic> _$RtcEngineEventHandlerOnRemoteVideoStateChangedJsonToJson(
-    RtcEngineEventHandlerOnRemoteVideoStateChangedJson instance) {
-  final val = <String, dynamic>{};
-
-  void writeNotNull(String key, dynamic value) {
-    if (value != null) {
-      val[key] = value;
-    }
-  }
-
-  writeNotNull('connection', instance.connection?.toJson());
-  writeNotNull('remoteUid', instance.remoteUid);
-  writeNotNull('state', _$RemoteVideoStateEnumMap[instance.state]);
-  writeNotNull('reason', _$RemoteVideoStateReasonEnumMap[instance.reason]);
-  writeNotNull('elapsed', instance.elapsed);
-  return val;
-}
+        RtcEngineEventHandlerOnRemoteVideoStateChangedJson instance) =>
+    <String, dynamic>{
+      if (instance.connection?.toJson() case final value?) 'connection': value,
+      if (instance.remoteUid case final value?) 'remoteUid': value,
+      if (_$RemoteVideoStateEnumMap[instance.state] case final value?)
+        'state': value,
+      if (_$RemoteVideoStateReasonEnumMap[instance.reason] case final value?)
+        'reason': value,
+      if (instance.elapsed case final value?) 'elapsed': value,
+    };
 
 const _$RemoteVideoStateEnumMap = {
   RemoteVideoState.remoteVideoStateStopped: 0,
@@ -2068,22 +1588,14 @@ RtcEngineEventHandlerOnFirstRemoteVideoFrameJson
         );
 
 Map<String, dynamic> _$RtcEngineEventHandlerOnFirstRemoteVideoFrameJsonToJson(
-    RtcEngineEventHandlerOnFirstRemoteVideoFrameJson instance) {
-  final val = <String, dynamic>{};
-
-  void writeNotNull(String key, dynamic value) {
-    if (value != null) {
-      val[key] = value;
-    }
-  }
-
-  writeNotNull('connection', instance.connection?.toJson());
-  writeNotNull('remoteUid', instance.remoteUid);
-  writeNotNull('width', instance.width);
-  writeNotNull('height', instance.height);
-  writeNotNull('elapsed', instance.elapsed);
-  return val;
-}
+        RtcEngineEventHandlerOnFirstRemoteVideoFrameJson instance) =>
+    <String, dynamic>{
+      if (instance.connection?.toJson() case final value?) 'connection': value,
+      if (instance.remoteUid case final value?) 'remoteUid': value,
+      if (instance.width case final value?) 'width': value,
+      if (instance.height case final value?) 'height': value,
+      if (instance.elapsed case final value?) 'elapsed': value,
+    };
 
 RtcEngineEventHandlerOnUserJoinedJson
     _$RtcEngineEventHandlerOnUserJoinedJsonFromJson(
@@ -2098,20 +1610,12 @@ RtcEngineEventHandlerOnUserJoinedJson
         );
 
 Map<String, dynamic> _$RtcEngineEventHandlerOnUserJoinedJsonToJson(
-    RtcEngineEventHandlerOnUserJoinedJson instance) {
-  final val = <String, dynamic>{};
-
-  void writeNotNull(String key, dynamic value) {
-    if (value != null) {
-      val[key] = value;
-    }
-  }
-
-  writeNotNull('connection', instance.connection?.toJson());
-  writeNotNull('remoteUid', instance.remoteUid);
-  writeNotNull('elapsed', instance.elapsed);
-  return val;
-}
+        RtcEngineEventHandlerOnUserJoinedJson instance) =>
+    <String, dynamic>{
+      if (instance.connection?.toJson() case final value?) 'connection': value,
+      if (instance.remoteUid case final value?) 'remoteUid': value,
+      if (instance.elapsed case final value?) 'elapsed': value,
+    };
 
 RtcEngineEventHandlerOnUserOfflineJson
     _$RtcEngineEventHandlerOnUserOfflineJsonFromJson(
@@ -2127,20 +1631,13 @@ RtcEngineEventHandlerOnUserOfflineJson
         );
 
 Map<String, dynamic> _$RtcEngineEventHandlerOnUserOfflineJsonToJson(
-    RtcEngineEventHandlerOnUserOfflineJson instance) {
-  final val = <String, dynamic>{};
-
-  void writeNotNull(String key, dynamic value) {
-    if (value != null) {
-      val[key] = value;
-    }
-  }
-
-  writeNotNull('connection', instance.connection?.toJson());
-  writeNotNull('remoteUid', instance.remoteUid);
-  writeNotNull('reason', _$UserOfflineReasonTypeEnumMap[instance.reason]);
-  return val;
-}
+        RtcEngineEventHandlerOnUserOfflineJson instance) =>
+    <String, dynamic>{
+      if (instance.connection?.toJson() case final value?) 'connection': value,
+      if (instance.remoteUid case final value?) 'remoteUid': value,
+      if (_$UserOfflineReasonTypeEnumMap[instance.reason] case final value?)
+        'reason': value,
+    };
 
 const _$UserOfflineReasonTypeEnumMap = {
   UserOfflineReasonType.userOfflineQuit: 0,
@@ -2161,20 +1658,12 @@ RtcEngineEventHandlerOnUserMuteAudioJson
         );
 
 Map<String, dynamic> _$RtcEngineEventHandlerOnUserMuteAudioJsonToJson(
-    RtcEngineEventHandlerOnUserMuteAudioJson instance) {
-  final val = <String, dynamic>{};
-
-  void writeNotNull(String key, dynamic value) {
-    if (value != null) {
-      val[key] = value;
-    }
-  }
-
-  writeNotNull('connection', instance.connection?.toJson());
-  writeNotNull('remoteUid', instance.remoteUid);
-  writeNotNull('muted', instance.muted);
-  return val;
-}
+        RtcEngineEventHandlerOnUserMuteAudioJson instance) =>
+    <String, dynamic>{
+      if (instance.connection?.toJson() case final value?) 'connection': value,
+      if (instance.remoteUid case final value?) 'remoteUid': value,
+      if (instance.muted case final value?) 'muted': value,
+    };
 
 RtcEngineEventHandlerOnUserMuteVideoJson
     _$RtcEngineEventHandlerOnUserMuteVideoJsonFromJson(
@@ -2189,20 +1678,12 @@ RtcEngineEventHandlerOnUserMuteVideoJson
         );
 
 Map<String, dynamic> _$RtcEngineEventHandlerOnUserMuteVideoJsonToJson(
-    RtcEngineEventHandlerOnUserMuteVideoJson instance) {
-  final val = <String, dynamic>{};
-
-  void writeNotNull(String key, dynamic value) {
-    if (value != null) {
-      val[key] = value;
-    }
-  }
-
-  writeNotNull('connection', instance.connection?.toJson());
-  writeNotNull('remoteUid', instance.remoteUid);
-  writeNotNull('muted', instance.muted);
-  return val;
-}
+        RtcEngineEventHandlerOnUserMuteVideoJson instance) =>
+    <String, dynamic>{
+      if (instance.connection?.toJson() case final value?) 'connection': value,
+      if (instance.remoteUid case final value?) 'remoteUid': value,
+      if (instance.muted case final value?) 'muted': value,
+    };
 
 RtcEngineEventHandlerOnUserEnableVideoJson
     _$RtcEngineEventHandlerOnUserEnableVideoJsonFromJson(
@@ -2217,20 +1698,12 @@ RtcEngineEventHandlerOnUserEnableVideoJson
         );
 
 Map<String, dynamic> _$RtcEngineEventHandlerOnUserEnableVideoJsonToJson(
-    RtcEngineEventHandlerOnUserEnableVideoJson instance) {
-  final val = <String, dynamic>{};
-
-  void writeNotNull(String key, dynamic value) {
-    if (value != null) {
-      val[key] = value;
-    }
-  }
-
-  writeNotNull('connection', instance.connection?.toJson());
-  writeNotNull('remoteUid', instance.remoteUid);
-  writeNotNull('enabled', instance.enabled);
-  return val;
-}
+        RtcEngineEventHandlerOnUserEnableVideoJson instance) =>
+    <String, dynamic>{
+      if (instance.connection?.toJson() case final value?) 'connection': value,
+      if (instance.remoteUid case final value?) 'remoteUid': value,
+      if (instance.enabled case final value?) 'enabled': value,
+    };
 
 RtcEngineEventHandlerOnUserStateChangedJson
     _$RtcEngineEventHandlerOnUserStateChangedJsonFromJson(
@@ -2245,20 +1718,12 @@ RtcEngineEventHandlerOnUserStateChangedJson
         );
 
 Map<String, dynamic> _$RtcEngineEventHandlerOnUserStateChangedJsonToJson(
-    RtcEngineEventHandlerOnUserStateChangedJson instance) {
-  final val = <String, dynamic>{};
-
-  void writeNotNull(String key, dynamic value) {
-    if (value != null) {
-      val[key] = value;
-    }
-  }
-
-  writeNotNull('connection', instance.connection?.toJson());
-  writeNotNull('remoteUid', instance.remoteUid);
-  writeNotNull('state', instance.state);
-  return val;
-}
+        RtcEngineEventHandlerOnUserStateChangedJson instance) =>
+    <String, dynamic>{
+      if (instance.connection?.toJson() case final value?) 'connection': value,
+      if (instance.remoteUid case final value?) 'remoteUid': value,
+      if (instance.state case final value?) 'state': value,
+    };
 
 RtcEngineEventHandlerOnUserEnableLocalVideoJson
     _$RtcEngineEventHandlerOnUserEnableLocalVideoJsonFromJson(
@@ -2273,20 +1738,12 @@ RtcEngineEventHandlerOnUserEnableLocalVideoJson
         );
 
 Map<String, dynamic> _$RtcEngineEventHandlerOnUserEnableLocalVideoJsonToJson(
-    RtcEngineEventHandlerOnUserEnableLocalVideoJson instance) {
-  final val = <String, dynamic>{};
-
-  void writeNotNull(String key, dynamic value) {
-    if (value != null) {
-      val[key] = value;
-    }
-  }
-
-  writeNotNull('connection', instance.connection?.toJson());
-  writeNotNull('remoteUid', instance.remoteUid);
-  writeNotNull('enabled', instance.enabled);
-  return val;
-}
+        RtcEngineEventHandlerOnUserEnableLocalVideoJson instance) =>
+    <String, dynamic>{
+      if (instance.connection?.toJson() case final value?) 'connection': value,
+      if (instance.remoteUid case final value?) 'remoteUid': value,
+      if (instance.enabled case final value?) 'enabled': value,
+    };
 
 RtcEngineEventHandlerOnRemoteAudioStatsJson
     _$RtcEngineEventHandlerOnRemoteAudioStatsJsonFromJson(
@@ -2303,19 +1760,11 @@ RtcEngineEventHandlerOnRemoteAudioStatsJson
         );
 
 Map<String, dynamic> _$RtcEngineEventHandlerOnRemoteAudioStatsJsonToJson(
-    RtcEngineEventHandlerOnRemoteAudioStatsJson instance) {
-  final val = <String, dynamic>{};
-
-  void writeNotNull(String key, dynamic value) {
-    if (value != null) {
-      val[key] = value;
-    }
-  }
-
-  writeNotNull('connection', instance.connection?.toJson());
-  writeNotNull('stats', instance.stats?.toJson());
-  return val;
-}
+        RtcEngineEventHandlerOnRemoteAudioStatsJson instance) =>
+    <String, dynamic>{
+      if (instance.connection?.toJson() case final value?) 'connection': value,
+      if (instance.stats?.toJson() case final value?) 'stats': value,
+    };
 
 RtcEngineEventHandlerOnLocalAudioStatsJson
     _$RtcEngineEventHandlerOnLocalAudioStatsJsonFromJson(
@@ -2331,19 +1780,11 @@ RtcEngineEventHandlerOnLocalAudioStatsJson
         );
 
 Map<String, dynamic> _$RtcEngineEventHandlerOnLocalAudioStatsJsonToJson(
-    RtcEngineEventHandlerOnLocalAudioStatsJson instance) {
-  final val = <String, dynamic>{};
-
-  void writeNotNull(String key, dynamic value) {
-    if (value != null) {
-      val[key] = value;
-    }
-  }
-
-  writeNotNull('connection', instance.connection?.toJson());
-  writeNotNull('stats', instance.stats?.toJson());
-  return val;
-}
+        RtcEngineEventHandlerOnLocalAudioStatsJson instance) =>
+    <String, dynamic>{
+      if (instance.connection?.toJson() case final value?) 'connection': value,
+      if (instance.stats?.toJson() case final value?) 'stats': value,
+    };
 
 RtcEngineEventHandlerOnLocalVideoStatsJson
     _$RtcEngineEventHandlerOnLocalVideoStatsJsonFromJson(
@@ -2359,19 +1800,11 @@ RtcEngineEventHandlerOnLocalVideoStatsJson
         );
 
 Map<String, dynamic> _$RtcEngineEventHandlerOnLocalVideoStatsJsonToJson(
-    RtcEngineEventHandlerOnLocalVideoStatsJson instance) {
-  final val = <String, dynamic>{};
-
-  void writeNotNull(String key, dynamic value) {
-    if (value != null) {
-      val[key] = value;
-    }
-  }
-
-  writeNotNull('connection', instance.connection?.toJson());
-  writeNotNull('stats', instance.stats?.toJson());
-  return val;
-}
+        RtcEngineEventHandlerOnLocalVideoStatsJson instance) =>
+    <String, dynamic>{
+      if (instance.connection?.toJson() case final value?) 'connection': value,
+      if (instance.stats?.toJson() case final value?) 'stats': value,
+    };
 
 RtcEngineEventHandlerOnRemoteVideoStatsJson
     _$RtcEngineEventHandlerOnRemoteVideoStatsJsonFromJson(
@@ -2388,19 +1821,11 @@ RtcEngineEventHandlerOnRemoteVideoStatsJson
         );
 
 Map<String, dynamic> _$RtcEngineEventHandlerOnRemoteVideoStatsJsonToJson(
-    RtcEngineEventHandlerOnRemoteVideoStatsJson instance) {
-  final val = <String, dynamic>{};
-
-  void writeNotNull(String key, dynamic value) {
-    if (value != null) {
-      val[key] = value;
-    }
-  }
-
-  writeNotNull('connection', instance.connection?.toJson());
-  writeNotNull('stats', instance.stats?.toJson());
-  return val;
-}
+        RtcEngineEventHandlerOnRemoteVideoStatsJson instance) =>
+    <String, dynamic>{
+      if (instance.connection?.toJson() case final value?) 'connection': value,
+      if (instance.stats?.toJson() case final value?) 'stats': value,
+    };
 
 RtcEngineEventHandlerOnCameraReadyJson
     _$RtcEngineEventHandlerOnCameraReadyJsonFromJson(
@@ -2422,21 +1847,13 @@ RtcEngineEventHandlerOnCameraFocusAreaChangedJson
         );
 
 Map<String, dynamic> _$RtcEngineEventHandlerOnCameraFocusAreaChangedJsonToJson(
-    RtcEngineEventHandlerOnCameraFocusAreaChangedJson instance) {
-  final val = <String, dynamic>{};
-
-  void writeNotNull(String key, dynamic value) {
-    if (value != null) {
-      val[key] = value;
-    }
-  }
-
-  writeNotNull('x', instance.x);
-  writeNotNull('y', instance.y);
-  writeNotNull('width', instance.width);
-  writeNotNull('height', instance.height);
-  return val;
-}
+        RtcEngineEventHandlerOnCameraFocusAreaChangedJson instance) =>
+    <String, dynamic>{
+      if (instance.x case final value?) 'x': value,
+      if (instance.y case final value?) 'y': value,
+      if (instance.width case final value?) 'width': value,
+      if (instance.height case final value?) 'height': value,
+    };
 
 RtcEngineEventHandlerOnCameraExposureAreaChangedJson
     _$RtcEngineEventHandlerOnCameraExposureAreaChangedJsonFromJson(
@@ -2450,21 +1867,13 @@ RtcEngineEventHandlerOnCameraExposureAreaChangedJson
 
 Map<String, dynamic>
     _$RtcEngineEventHandlerOnCameraExposureAreaChangedJsonToJson(
-        RtcEngineEventHandlerOnCameraExposureAreaChangedJson instance) {
-  final val = <String, dynamic>{};
-
-  void writeNotNull(String key, dynamic value) {
-    if (value != null) {
-      val[key] = value;
-    }
-  }
-
-  writeNotNull('x', instance.x);
-  writeNotNull('y', instance.y);
-  writeNotNull('width', instance.width);
-  writeNotNull('height', instance.height);
-  return val;
-}
+            RtcEngineEventHandlerOnCameraExposureAreaChangedJson instance) =>
+        <String, dynamic>{
+          if (instance.x case final value?) 'x': value,
+          if (instance.y case final value?) 'y': value,
+          if (instance.width case final value?) 'width': value,
+          if (instance.height case final value?) 'height': value,
+        };
 
 RtcEngineEventHandlerOnFacePositionChangedJson
     _$RtcEngineEventHandlerOnFacePositionChangedJsonFromJson(
@@ -2482,23 +1891,16 @@ RtcEngineEventHandlerOnFacePositionChangedJson
         );
 
 Map<String, dynamic> _$RtcEngineEventHandlerOnFacePositionChangedJsonToJson(
-    RtcEngineEventHandlerOnFacePositionChangedJson instance) {
-  final val = <String, dynamic>{};
-
-  void writeNotNull(String key, dynamic value) {
-    if (value != null) {
-      val[key] = value;
-    }
-  }
-
-  writeNotNull('imageWidth', instance.imageWidth);
-  writeNotNull('imageHeight', instance.imageHeight);
-  writeNotNull(
-      'vecRectangle', instance.vecRectangle?.map((e) => e.toJson()).toList());
-  writeNotNull('vecDistance', instance.vecDistance);
-  writeNotNull('numFaces', instance.numFaces);
-  return val;
-}
+        RtcEngineEventHandlerOnFacePositionChangedJson instance) =>
+    <String, dynamic>{
+      if (instance.imageWidth case final value?) 'imageWidth': value,
+      if (instance.imageHeight case final value?) 'imageHeight': value,
+      if (instance.vecRectangle?.map((e) => e.toJson()).toList()
+          case final value?)
+        'vecRectangle': value,
+      if (instance.vecDistance case final value?) 'vecDistance': value,
+      if (instance.numFaces case final value?) 'numFaces': value,
+    };
 
 RtcEngineEventHandlerOnVideoStoppedJson
     _$RtcEngineEventHandlerOnVideoStoppedJsonFromJson(
@@ -2520,19 +1922,13 @@ RtcEngineEventHandlerOnAudioMixingStateChangedJson
         );
 
 Map<String, dynamic> _$RtcEngineEventHandlerOnAudioMixingStateChangedJsonToJson(
-    RtcEngineEventHandlerOnAudioMixingStateChangedJson instance) {
-  final val = <String, dynamic>{};
-
-  void writeNotNull(String key, dynamic value) {
-    if (value != null) {
-      val[key] = value;
-    }
-  }
-
-  writeNotNull('state', _$AudioMixingStateTypeEnumMap[instance.state]);
-  writeNotNull('reason', _$AudioMixingReasonTypeEnumMap[instance.reason]);
-  return val;
-}
+        RtcEngineEventHandlerOnAudioMixingStateChangedJson instance) =>
+    <String, dynamic>{
+      if (_$AudioMixingStateTypeEnumMap[instance.state] case final value?)
+        'state': value,
+      if (_$AudioMixingReasonTypeEnumMap[instance.reason] case final value?)
+        'reason': value,
+    };
 
 const _$AudioMixingStateTypeEnumMap = {
   AudioMixingStateType.audioMixingStatePlaying: 710,
@@ -2564,19 +1960,13 @@ RtcEngineEventHandlerOnRhythmPlayerStateChangedJson
 
 Map<String, dynamic>
     _$RtcEngineEventHandlerOnRhythmPlayerStateChangedJsonToJson(
-        RtcEngineEventHandlerOnRhythmPlayerStateChangedJson instance) {
-  final val = <String, dynamic>{};
-
-  void writeNotNull(String key, dynamic value) {
-    if (value != null) {
-      val[key] = value;
-    }
-  }
-
-  writeNotNull('state', _$RhythmPlayerStateTypeEnumMap[instance.state]);
-  writeNotNull('reason', _$RhythmPlayerReasonEnumMap[instance.reason]);
-  return val;
-}
+            RtcEngineEventHandlerOnRhythmPlayerStateChangedJson instance) =>
+        <String, dynamic>{
+          if (_$RhythmPlayerStateTypeEnumMap[instance.state] case final value?)
+            'state': value,
+          if (_$RhythmPlayerReasonEnumMap[instance.reason] case final value?)
+            'reason': value,
+        };
 
 const _$RhythmPlayerStateTypeEnumMap = {
   RhythmPlayerStateType.rhythmPlayerStateIdle: 810,
@@ -2605,18 +1995,10 @@ RtcEngineEventHandlerOnConnectionLostJson
         );
 
 Map<String, dynamic> _$RtcEngineEventHandlerOnConnectionLostJsonToJson(
-    RtcEngineEventHandlerOnConnectionLostJson instance) {
-  final val = <String, dynamic>{};
-
-  void writeNotNull(String key, dynamic value) {
-    if (value != null) {
-      val[key] = value;
-    }
-  }
-
-  writeNotNull('connection', instance.connection?.toJson());
-  return val;
-}
+        RtcEngineEventHandlerOnConnectionLostJson instance) =>
+    <String, dynamic>{
+      if (instance.connection?.toJson() case final value?) 'connection': value,
+    };
 
 RtcEngineEventHandlerOnConnectionInterruptedJson
     _$RtcEngineEventHandlerOnConnectionInterruptedJsonFromJson(
@@ -2629,18 +2011,10 @@ RtcEngineEventHandlerOnConnectionInterruptedJson
         );
 
 Map<String, dynamic> _$RtcEngineEventHandlerOnConnectionInterruptedJsonToJson(
-    RtcEngineEventHandlerOnConnectionInterruptedJson instance) {
-  final val = <String, dynamic>{};
-
-  void writeNotNull(String key, dynamic value) {
-    if (value != null) {
-      val[key] = value;
-    }
-  }
-
-  writeNotNull('connection', instance.connection?.toJson());
-  return val;
-}
+        RtcEngineEventHandlerOnConnectionInterruptedJson instance) =>
+    <String, dynamic>{
+      if (instance.connection?.toJson() case final value?) 'connection': value,
+    };
 
 RtcEngineEventHandlerOnConnectionBannedJson
     _$RtcEngineEventHandlerOnConnectionBannedJsonFromJson(
@@ -2653,18 +2027,10 @@ RtcEngineEventHandlerOnConnectionBannedJson
         );
 
 Map<String, dynamic> _$RtcEngineEventHandlerOnConnectionBannedJsonToJson(
-    RtcEngineEventHandlerOnConnectionBannedJson instance) {
-  final val = <String, dynamic>{};
-
-  void writeNotNull(String key, dynamic value) {
-    if (value != null) {
-      val[key] = value;
-    }
-  }
-
-  writeNotNull('connection', instance.connection?.toJson());
-  return val;
-}
+        RtcEngineEventHandlerOnConnectionBannedJson instance) =>
+    <String, dynamic>{
+      if (instance.connection?.toJson() case final value?) 'connection': value,
+    };
 
 RtcEngineEventHandlerOnStreamMessageJson
     _$RtcEngineEventHandlerOnStreamMessageJsonFromJson(
@@ -2681,22 +2047,14 @@ RtcEngineEventHandlerOnStreamMessageJson
         );
 
 Map<String, dynamic> _$RtcEngineEventHandlerOnStreamMessageJsonToJson(
-    RtcEngineEventHandlerOnStreamMessageJson instance) {
-  final val = <String, dynamic>{};
-
-  void writeNotNull(String key, dynamic value) {
-    if (value != null) {
-      val[key] = value;
-    }
-  }
-
-  writeNotNull('connection', instance.connection?.toJson());
-  writeNotNull('remoteUid', instance.remoteUid);
-  writeNotNull('streamId', instance.streamId);
-  writeNotNull('length', instance.length);
-  writeNotNull('sentTs', instance.sentTs);
-  return val;
-}
+        RtcEngineEventHandlerOnStreamMessageJson instance) =>
+    <String, dynamic>{
+      if (instance.connection?.toJson() case final value?) 'connection': value,
+      if (instance.remoteUid case final value?) 'remoteUid': value,
+      if (instance.streamId case final value?) 'streamId': value,
+      if (instance.length case final value?) 'length': value,
+      if (instance.sentTs case final value?) 'sentTs': value,
+    };
 
 RtcEngineEventHandlerOnStreamMessageErrorJson
     _$RtcEngineEventHandlerOnStreamMessageErrorJsonFromJson(
@@ -2714,23 +2072,16 @@ RtcEngineEventHandlerOnStreamMessageErrorJson
         );
 
 Map<String, dynamic> _$RtcEngineEventHandlerOnStreamMessageErrorJsonToJson(
-    RtcEngineEventHandlerOnStreamMessageErrorJson instance) {
-  final val = <String, dynamic>{};
-
-  void writeNotNull(String key, dynamic value) {
-    if (value != null) {
-      val[key] = value;
-    }
-  }
-
-  writeNotNull('connection', instance.connection?.toJson());
-  writeNotNull('remoteUid', instance.remoteUid);
-  writeNotNull('streamId', instance.streamId);
-  writeNotNull('code', _$ErrorCodeTypeEnumMap[instance.code]);
-  writeNotNull('missed', instance.missed);
-  writeNotNull('cached', instance.cached);
-  return val;
-}
+        RtcEngineEventHandlerOnStreamMessageErrorJson instance) =>
+    <String, dynamic>{
+      if (instance.connection?.toJson() case final value?) 'connection': value,
+      if (instance.remoteUid case final value?) 'remoteUid': value,
+      if (instance.streamId case final value?) 'streamId': value,
+      if (_$ErrorCodeTypeEnumMap[instance.code] case final value?)
+        'code': value,
+      if (instance.missed case final value?) 'missed': value,
+      if (instance.cached case final value?) 'cached': value,
+    };
 
 RtcEngineEventHandlerOnRequestTokenJson
     _$RtcEngineEventHandlerOnRequestTokenJsonFromJson(
@@ -2743,18 +2094,10 @@ RtcEngineEventHandlerOnRequestTokenJson
         );
 
 Map<String, dynamic> _$RtcEngineEventHandlerOnRequestTokenJsonToJson(
-    RtcEngineEventHandlerOnRequestTokenJson instance) {
-  final val = <String, dynamic>{};
-
-  void writeNotNull(String key, dynamic value) {
-    if (value != null) {
-      val[key] = value;
-    }
-  }
-
-  writeNotNull('connection', instance.connection?.toJson());
-  return val;
-}
+        RtcEngineEventHandlerOnRequestTokenJson instance) =>
+    <String, dynamic>{
+      if (instance.connection?.toJson() case final value?) 'connection': value,
+    };
 
 RtcEngineEventHandlerOnTokenPrivilegeWillExpireJson
     _$RtcEngineEventHandlerOnTokenPrivilegeWillExpireJsonFromJson(
@@ -2769,19 +2112,12 @@ RtcEngineEventHandlerOnTokenPrivilegeWillExpireJson
 
 Map<String, dynamic>
     _$RtcEngineEventHandlerOnTokenPrivilegeWillExpireJsonToJson(
-        RtcEngineEventHandlerOnTokenPrivilegeWillExpireJson instance) {
-  final val = <String, dynamic>{};
-
-  void writeNotNull(String key, dynamic value) {
-    if (value != null) {
-      val[key] = value;
-    }
-  }
-
-  writeNotNull('connection', instance.connection?.toJson());
-  writeNotNull('token', instance.token);
-  return val;
-}
+            RtcEngineEventHandlerOnTokenPrivilegeWillExpireJson instance) =>
+        <String, dynamic>{
+          if (instance.connection?.toJson() case final value?)
+            'connection': value,
+          if (instance.token case final value?) 'token': value,
+        };
 
 RtcEngineEventHandlerOnLicenseValidationFailureJson
     _$RtcEngineEventHandlerOnLicenseValidationFailureJsonFromJson(
@@ -2797,19 +2133,13 @@ RtcEngineEventHandlerOnLicenseValidationFailureJson
 
 Map<String, dynamic>
     _$RtcEngineEventHandlerOnLicenseValidationFailureJsonToJson(
-        RtcEngineEventHandlerOnLicenseValidationFailureJson instance) {
-  final val = <String, dynamic>{};
-
-  void writeNotNull(String key, dynamic value) {
-    if (value != null) {
-      val[key] = value;
-    }
-  }
-
-  writeNotNull('connection', instance.connection?.toJson());
-  writeNotNull('reason', _$LicenseErrorTypeEnumMap[instance.reason]);
-  return val;
-}
+            RtcEngineEventHandlerOnLicenseValidationFailureJson instance) =>
+        <String, dynamic>{
+          if (instance.connection?.toJson() case final value?)
+            'connection': value,
+          if (_$LicenseErrorTypeEnumMap[instance.reason] case final value?)
+            'reason': value,
+        };
 
 const _$LicenseErrorTypeEnumMap = {
   LicenseErrorType.licenseErrInvalid: 1,
@@ -2831,21 +2161,13 @@ RtcEngineEventHandlerOnFirstLocalAudioFramePublishedJson
           elapsed: (json['elapsed'] as num?)?.toInt(),
         );
 
-Map<String, dynamic>
-    _$RtcEngineEventHandlerOnFirstLocalAudioFramePublishedJsonToJson(
-        RtcEngineEventHandlerOnFirstLocalAudioFramePublishedJson instance) {
-  final val = <String, dynamic>{};
-
-  void writeNotNull(String key, dynamic value) {
-    if (value != null) {
-      val[key] = value;
-    }
-  }
-
-  writeNotNull('connection', instance.connection?.toJson());
-  writeNotNull('elapsed', instance.elapsed);
-  return val;
-}
+Map<String,
+    dynamic> _$RtcEngineEventHandlerOnFirstLocalAudioFramePublishedJsonToJson(
+        RtcEngineEventHandlerOnFirstLocalAudioFramePublishedJson instance) =>
+    <String, dynamic>{
+      if (instance.connection?.toJson() case final value?) 'connection': value,
+      if (instance.elapsed case final value?) 'elapsed': value,
+    };
 
 RtcEngineEventHandlerOnFirstRemoteAudioDecodedJson
     _$RtcEngineEventHandlerOnFirstRemoteAudioDecodedJsonFromJson(
@@ -2860,20 +2182,12 @@ RtcEngineEventHandlerOnFirstRemoteAudioDecodedJson
         );
 
 Map<String, dynamic> _$RtcEngineEventHandlerOnFirstRemoteAudioDecodedJsonToJson(
-    RtcEngineEventHandlerOnFirstRemoteAudioDecodedJson instance) {
-  final val = <String, dynamic>{};
-
-  void writeNotNull(String key, dynamic value) {
-    if (value != null) {
-      val[key] = value;
-    }
-  }
-
-  writeNotNull('connection', instance.connection?.toJson());
-  writeNotNull('uid', instance.uid);
-  writeNotNull('elapsed', instance.elapsed);
-  return val;
-}
+        RtcEngineEventHandlerOnFirstRemoteAudioDecodedJson instance) =>
+    <String, dynamic>{
+      if (instance.connection?.toJson() case final value?) 'connection': value,
+      if (instance.uid case final value?) 'uid': value,
+      if (instance.elapsed case final value?) 'elapsed': value,
+    };
 
 RtcEngineEventHandlerOnFirstRemoteAudioFrameJson
     _$RtcEngineEventHandlerOnFirstRemoteAudioFrameJsonFromJson(
@@ -2888,20 +2202,12 @@ RtcEngineEventHandlerOnFirstRemoteAudioFrameJson
         );
 
 Map<String, dynamic> _$RtcEngineEventHandlerOnFirstRemoteAudioFrameJsonToJson(
-    RtcEngineEventHandlerOnFirstRemoteAudioFrameJson instance) {
-  final val = <String, dynamic>{};
-
-  void writeNotNull(String key, dynamic value) {
-    if (value != null) {
-      val[key] = value;
-    }
-  }
-
-  writeNotNull('connection', instance.connection?.toJson());
-  writeNotNull('userId', instance.userId);
-  writeNotNull('elapsed', instance.elapsed);
-  return val;
-}
+        RtcEngineEventHandlerOnFirstRemoteAudioFrameJson instance) =>
+    <String, dynamic>{
+      if (instance.connection?.toJson() case final value?) 'connection': value,
+      if (instance.userId case final value?) 'userId': value,
+      if (instance.elapsed case final value?) 'elapsed': value,
+    };
 
 RtcEngineEventHandlerOnLocalAudioStateChangedJson
     _$RtcEngineEventHandlerOnLocalAudioStateChangedJsonFromJson(
@@ -2918,20 +2224,14 @@ RtcEngineEventHandlerOnLocalAudioStateChangedJson
         );
 
 Map<String, dynamic> _$RtcEngineEventHandlerOnLocalAudioStateChangedJsonToJson(
-    RtcEngineEventHandlerOnLocalAudioStateChangedJson instance) {
-  final val = <String, dynamic>{};
-
-  void writeNotNull(String key, dynamic value) {
-    if (value != null) {
-      val[key] = value;
-    }
-  }
-
-  writeNotNull('connection', instance.connection?.toJson());
-  writeNotNull('state', _$LocalAudioStreamStateEnumMap[instance.state]);
-  writeNotNull('reason', _$LocalAudioStreamReasonEnumMap[instance.reason]);
-  return val;
-}
+        RtcEngineEventHandlerOnLocalAudioStateChangedJson instance) =>
+    <String, dynamic>{
+      if (instance.connection?.toJson() case final value?) 'connection': value,
+      if (_$LocalAudioStreamStateEnumMap[instance.state] case final value?)
+        'state': value,
+      if (_$LocalAudioStreamReasonEnumMap[instance.reason] case final value?)
+        'reason': value,
+    };
 
 const _$LocalAudioStreamStateEnumMap = {
   LocalAudioStreamState.localAudioStreamStateStopped: 0,
@@ -2970,22 +2270,16 @@ RtcEngineEventHandlerOnRemoteAudioStateChangedJson
         );
 
 Map<String, dynamic> _$RtcEngineEventHandlerOnRemoteAudioStateChangedJsonToJson(
-    RtcEngineEventHandlerOnRemoteAudioStateChangedJson instance) {
-  final val = <String, dynamic>{};
-
-  void writeNotNull(String key, dynamic value) {
-    if (value != null) {
-      val[key] = value;
-    }
-  }
-
-  writeNotNull('connection', instance.connection?.toJson());
-  writeNotNull('remoteUid', instance.remoteUid);
-  writeNotNull('state', _$RemoteAudioStateEnumMap[instance.state]);
-  writeNotNull('reason', _$RemoteAudioStateReasonEnumMap[instance.reason]);
-  writeNotNull('elapsed', instance.elapsed);
-  return val;
-}
+        RtcEngineEventHandlerOnRemoteAudioStateChangedJson instance) =>
+    <String, dynamic>{
+      if (instance.connection?.toJson() case final value?) 'connection': value,
+      if (instance.remoteUid case final value?) 'remoteUid': value,
+      if (_$RemoteAudioStateEnumMap[instance.state] case final value?)
+        'state': value,
+      if (_$RemoteAudioStateReasonEnumMap[instance.reason] case final value?)
+        'reason': value,
+      if (instance.elapsed case final value?) 'elapsed': value,
+    };
 
 const _$RemoteAudioStateEnumMap = {
   RemoteAudioState.remoteAudioStateStopped: 0,
@@ -3020,19 +2314,11 @@ RtcEngineEventHandlerOnActiveSpeakerJson
         );
 
 Map<String, dynamic> _$RtcEngineEventHandlerOnActiveSpeakerJsonToJson(
-    RtcEngineEventHandlerOnActiveSpeakerJson instance) {
-  final val = <String, dynamic>{};
-
-  void writeNotNull(String key, dynamic value) {
-    if (value != null) {
-      val[key] = value;
-    }
-  }
-
-  writeNotNull('connection', instance.connection?.toJson());
-  writeNotNull('uid', instance.uid);
-  return val;
-}
+        RtcEngineEventHandlerOnActiveSpeakerJson instance) =>
+    <String, dynamic>{
+      if (instance.connection?.toJson() case final value?) 'connection': value,
+      if (instance.uid case final value?) 'uid': value,
+    };
 
 RtcEngineEventHandlerOnContentInspectResultJson
     _$RtcEngineEventHandlerOnContentInspectResultJsonFromJson(
@@ -3043,18 +2329,11 @@ RtcEngineEventHandlerOnContentInspectResultJson
         );
 
 Map<String, dynamic> _$RtcEngineEventHandlerOnContentInspectResultJsonToJson(
-    RtcEngineEventHandlerOnContentInspectResultJson instance) {
-  final val = <String, dynamic>{};
-
-  void writeNotNull(String key, dynamic value) {
-    if (value != null) {
-      val[key] = value;
-    }
-  }
-
-  writeNotNull('result', _$ContentInspectResultEnumMap[instance.result]);
-  return val;
-}
+        RtcEngineEventHandlerOnContentInspectResultJson instance) =>
+    <String, dynamic>{
+      if (_$ContentInspectResultEnumMap[instance.result] case final value?)
+        'result': value,
+    };
 
 const _$ContentInspectResultEnumMap = {
   ContentInspectResult.contentInspectNeutral: 1,
@@ -3078,23 +2357,15 @@ RtcEngineEventHandlerOnSnapshotTakenJson
         );
 
 Map<String, dynamic> _$RtcEngineEventHandlerOnSnapshotTakenJsonToJson(
-    RtcEngineEventHandlerOnSnapshotTakenJson instance) {
-  final val = <String, dynamic>{};
-
-  void writeNotNull(String key, dynamic value) {
-    if (value != null) {
-      val[key] = value;
-    }
-  }
-
-  writeNotNull('connection', instance.connection?.toJson());
-  writeNotNull('uid', instance.uid);
-  writeNotNull('filePath', instance.filePath);
-  writeNotNull('width', instance.width);
-  writeNotNull('height', instance.height);
-  writeNotNull('errCode', instance.errCode);
-  return val;
-}
+        RtcEngineEventHandlerOnSnapshotTakenJson instance) =>
+    <String, dynamic>{
+      if (instance.connection?.toJson() case final value?) 'connection': value,
+      if (instance.uid case final value?) 'uid': value,
+      if (instance.filePath case final value?) 'filePath': value,
+      if (instance.width case final value?) 'width': value,
+      if (instance.height case final value?) 'height': value,
+      if (instance.errCode case final value?) 'errCode': value,
+    };
 
 RtcEngineEventHandlerOnClientRoleChangedJson
     _$RtcEngineEventHandlerOnClientRoleChangedJsonFromJson(
@@ -3115,21 +2386,16 @@ RtcEngineEventHandlerOnClientRoleChangedJson
         );
 
 Map<String, dynamic> _$RtcEngineEventHandlerOnClientRoleChangedJsonToJson(
-    RtcEngineEventHandlerOnClientRoleChangedJson instance) {
-  final val = <String, dynamic>{};
-
-  void writeNotNull(String key, dynamic value) {
-    if (value != null) {
-      val[key] = value;
-    }
-  }
-
-  writeNotNull('connection', instance.connection?.toJson());
-  writeNotNull('oldRole', _$ClientRoleTypeEnumMap[instance.oldRole]);
-  writeNotNull('newRole', _$ClientRoleTypeEnumMap[instance.newRole]);
-  writeNotNull('newRoleOptions', instance.newRoleOptions?.toJson());
-  return val;
-}
+        RtcEngineEventHandlerOnClientRoleChangedJson instance) =>
+    <String, dynamic>{
+      if (instance.connection?.toJson() case final value?) 'connection': value,
+      if (_$ClientRoleTypeEnumMap[instance.oldRole] case final value?)
+        'oldRole': value,
+      if (_$ClientRoleTypeEnumMap[instance.newRole] case final value?)
+        'newRole': value,
+      if (instance.newRoleOptions?.toJson() case final value?)
+        'newRoleOptions': value,
+    };
 
 const _$ClientRoleTypeEnumMap = {
   ClientRoleType.clientRoleBroadcaster: 1,
@@ -3151,21 +2417,15 @@ RtcEngineEventHandlerOnClientRoleChangeFailedJson
         );
 
 Map<String, dynamic> _$RtcEngineEventHandlerOnClientRoleChangeFailedJsonToJson(
-    RtcEngineEventHandlerOnClientRoleChangeFailedJson instance) {
-  final val = <String, dynamic>{};
-
-  void writeNotNull(String key, dynamic value) {
-    if (value != null) {
-      val[key] = value;
-    }
-  }
-
-  writeNotNull('connection', instance.connection?.toJson());
-  writeNotNull(
-      'reason', _$ClientRoleChangeFailedReasonEnumMap[instance.reason]);
-  writeNotNull('currentRole', _$ClientRoleTypeEnumMap[instance.currentRole]);
-  return val;
-}
+        RtcEngineEventHandlerOnClientRoleChangeFailedJson instance) =>
+    <String, dynamic>{
+      if (instance.connection?.toJson() case final value?) 'connection': value,
+      if (_$ClientRoleChangeFailedReasonEnumMap[instance.reason]
+          case final value?)
+        'reason': value,
+      if (_$ClientRoleTypeEnumMap[instance.currentRole] case final value?)
+        'currentRole': value,
+    };
 
 const _$ClientRoleChangeFailedReasonEnumMap = {
   ClientRoleChangeFailedReason.clientRoleChangeFailedTooManyBroadcasters: 1,
@@ -3186,20 +2446,13 @@ RtcEngineEventHandlerOnAudioDeviceVolumeChangedJson
 
 Map<String, dynamic>
     _$RtcEngineEventHandlerOnAudioDeviceVolumeChangedJsonToJson(
-        RtcEngineEventHandlerOnAudioDeviceVolumeChangedJson instance) {
-  final val = <String, dynamic>{};
-
-  void writeNotNull(String key, dynamic value) {
-    if (value != null) {
-      val[key] = value;
-    }
-  }
-
-  writeNotNull('deviceType', _$MediaDeviceTypeEnumMap[instance.deviceType]);
-  writeNotNull('volume', instance.volume);
-  writeNotNull('muted', instance.muted);
-  return val;
-}
+            RtcEngineEventHandlerOnAudioDeviceVolumeChangedJson instance) =>
+        <String, dynamic>{
+          if (_$MediaDeviceTypeEnumMap[instance.deviceType] case final value?)
+            'deviceType': value,
+          if (instance.volume case final value?) 'volume': value,
+          if (instance.muted case final value?) 'muted': value,
+        };
 
 RtcEngineEventHandlerOnRtmpStreamingStateChangedJson
     _$RtcEngineEventHandlerOnRtmpStreamingStateChangedJsonFromJson(
@@ -3214,20 +2467,15 @@ RtcEngineEventHandlerOnRtmpStreamingStateChangedJson
 
 Map<String, dynamic>
     _$RtcEngineEventHandlerOnRtmpStreamingStateChangedJsonToJson(
-        RtcEngineEventHandlerOnRtmpStreamingStateChangedJson instance) {
-  final val = <String, dynamic>{};
-
-  void writeNotNull(String key, dynamic value) {
-    if (value != null) {
-      val[key] = value;
-    }
-  }
-
-  writeNotNull('url', instance.url);
-  writeNotNull('state', _$RtmpStreamPublishStateEnumMap[instance.state]);
-  writeNotNull('reason', _$RtmpStreamPublishReasonEnumMap[instance.reason]);
-  return val;
-}
+            RtcEngineEventHandlerOnRtmpStreamingStateChangedJson instance) =>
+        <String, dynamic>{
+          if (instance.url case final value?) 'url': value,
+          if (_$RtmpStreamPublishStateEnumMap[instance.state] case final value?)
+            'state': value,
+          if (_$RtmpStreamPublishReasonEnumMap[instance.reason]
+              case final value?)
+            'reason': value,
+        };
 
 const _$RtmpStreamPublishStateEnumMap = {
   RtmpStreamPublishState.rtmpStreamPublishStateIdle: 0,
@@ -3268,19 +2516,12 @@ RtcEngineEventHandlerOnRtmpStreamingEventJson
         );
 
 Map<String, dynamic> _$RtcEngineEventHandlerOnRtmpStreamingEventJsonToJson(
-    RtcEngineEventHandlerOnRtmpStreamingEventJson instance) {
-  final val = <String, dynamic>{};
-
-  void writeNotNull(String key, dynamic value) {
-    if (value != null) {
-      val[key] = value;
-    }
-  }
-
-  writeNotNull('url', instance.url);
-  writeNotNull('eventCode', _$RtmpStreamingEventEnumMap[instance.eventCode]);
-  return val;
-}
+        RtcEngineEventHandlerOnRtmpStreamingEventJson instance) =>
+    <String, dynamic>{
+      if (instance.url case final value?) 'url': value,
+      if (_$RtmpStreamingEventEnumMap[instance.eventCode] case final value?)
+        'eventCode': value,
+    };
 
 const _$RtmpStreamingEventEnumMap = {
   RtmpStreamingEvent.rtmpStreamingEventFailedLoadImage: 1,
@@ -3306,18 +2547,10 @@ RtcEngineEventHandlerOnAudioRoutingChangedJson
         );
 
 Map<String, dynamic> _$RtcEngineEventHandlerOnAudioRoutingChangedJsonToJson(
-    RtcEngineEventHandlerOnAudioRoutingChangedJson instance) {
-  final val = <String, dynamic>{};
-
-  void writeNotNull(String key, dynamic value) {
-    if (value != null) {
-      val[key] = value;
-    }
-  }
-
-  writeNotNull('routing', instance.routing);
-  return val;
-}
+        RtcEngineEventHandlerOnAudioRoutingChangedJson instance) =>
+    <String, dynamic>{
+      if (instance.routing case final value?) 'routing': value,
+    };
 
 RtcEngineEventHandlerOnChannelMediaRelayStateChangedJson
     _$RtcEngineEventHandlerOnChannelMediaRelayStateChangedJsonFromJson(
@@ -3329,21 +2562,15 @@ RtcEngineEventHandlerOnChannelMediaRelayStateChangedJson
               _$ChannelMediaRelayErrorEnumMap, json['code']),
         );
 
-Map<String, dynamic>
-    _$RtcEngineEventHandlerOnChannelMediaRelayStateChangedJsonToJson(
-        RtcEngineEventHandlerOnChannelMediaRelayStateChangedJson instance) {
-  final val = <String, dynamic>{};
-
-  void writeNotNull(String key, dynamic value) {
-    if (value != null) {
-      val[key] = value;
-    }
-  }
-
-  writeNotNull('state', _$ChannelMediaRelayStateEnumMap[instance.state]);
-  writeNotNull('code', _$ChannelMediaRelayErrorEnumMap[instance.code]);
-  return val;
-}
+Map<String,
+    dynamic> _$RtcEngineEventHandlerOnChannelMediaRelayStateChangedJsonToJson(
+        RtcEngineEventHandlerOnChannelMediaRelayStateChangedJson instance) =>
+    <String, dynamic>{
+      if (_$ChannelMediaRelayStateEnumMap[instance.state] case final value?)
+        'state': value,
+      if (_$ChannelMediaRelayErrorEnumMap[instance.code] case final value?)
+        'code': value,
+    };
 
 const _$ChannelMediaRelayStateEnumMap = {
   ChannelMediaRelayState.relayStateIdle: 0,
@@ -3374,20 +2601,13 @@ RtcEngineEventHandlerOnLocalPublishFallbackToAudioOnlyJson
           isFallbackOrRecover: json['isFallbackOrRecover'] as bool?,
         );
 
-Map<String, dynamic>
-    _$RtcEngineEventHandlerOnLocalPublishFallbackToAudioOnlyJsonToJson(
-        RtcEngineEventHandlerOnLocalPublishFallbackToAudioOnlyJson instance) {
-  final val = <String, dynamic>{};
-
-  void writeNotNull(String key, dynamic value) {
-    if (value != null) {
-      val[key] = value;
-    }
-  }
-
-  writeNotNull('isFallbackOrRecover', instance.isFallbackOrRecover);
-  return val;
-}
+Map<String,
+    dynamic> _$RtcEngineEventHandlerOnLocalPublishFallbackToAudioOnlyJsonToJson(
+        RtcEngineEventHandlerOnLocalPublishFallbackToAudioOnlyJson instance) =>
+    <String, dynamic>{
+      if (instance.isFallbackOrRecover case final value?)
+        'isFallbackOrRecover': value,
+    };
 
 RtcEngineEventHandlerOnRemoteSubscribeFallbackToAudioOnlyJson
     _$RtcEngineEventHandlerOnRemoteSubscribeFallbackToAudioOnlyJsonFromJson(
@@ -3399,20 +2619,13 @@ RtcEngineEventHandlerOnRemoteSubscribeFallbackToAudioOnlyJson
 
 Map<String, dynamic>
     _$RtcEngineEventHandlerOnRemoteSubscribeFallbackToAudioOnlyJsonToJson(
-        RtcEngineEventHandlerOnRemoteSubscribeFallbackToAudioOnlyJson
-            instance) {
-  final val = <String, dynamic>{};
-
-  void writeNotNull(String key, dynamic value) {
-    if (value != null) {
-      val[key] = value;
-    }
-  }
-
-  writeNotNull('uid', instance.uid);
-  writeNotNull('isFallbackOrRecover', instance.isFallbackOrRecover);
-  return val;
-}
+            RtcEngineEventHandlerOnRemoteSubscribeFallbackToAudioOnlyJson
+                instance) =>
+        <String, dynamic>{
+          if (instance.uid case final value?) 'uid': value,
+          if (instance.isFallbackOrRecover case final value?)
+            'isFallbackOrRecover': value,
+        };
 
 RtcEngineEventHandlerOnRemoteAudioTransportStatsJson
     _$RtcEngineEventHandlerOnRemoteAudioTransportStatsJsonFromJson(
@@ -3430,22 +2643,15 @@ RtcEngineEventHandlerOnRemoteAudioTransportStatsJson
 
 Map<String, dynamic>
     _$RtcEngineEventHandlerOnRemoteAudioTransportStatsJsonToJson(
-        RtcEngineEventHandlerOnRemoteAudioTransportStatsJson instance) {
-  final val = <String, dynamic>{};
-
-  void writeNotNull(String key, dynamic value) {
-    if (value != null) {
-      val[key] = value;
-    }
-  }
-
-  writeNotNull('connection', instance.connection?.toJson());
-  writeNotNull('remoteUid', instance.remoteUid);
-  writeNotNull('delay', instance.delay);
-  writeNotNull('lost', instance.lost);
-  writeNotNull('rxKBitRate', instance.rxKBitRate);
-  return val;
-}
+            RtcEngineEventHandlerOnRemoteAudioTransportStatsJson instance) =>
+        <String, dynamic>{
+          if (instance.connection?.toJson() case final value?)
+            'connection': value,
+          if (instance.remoteUid case final value?) 'remoteUid': value,
+          if (instance.delay case final value?) 'delay': value,
+          if (instance.lost case final value?) 'lost': value,
+          if (instance.rxKBitRate case final value?) 'rxKBitRate': value,
+        };
 
 RtcEngineEventHandlerOnRemoteVideoTransportStatsJson
     _$RtcEngineEventHandlerOnRemoteVideoTransportStatsJsonFromJson(
@@ -3463,22 +2669,15 @@ RtcEngineEventHandlerOnRemoteVideoTransportStatsJson
 
 Map<String, dynamic>
     _$RtcEngineEventHandlerOnRemoteVideoTransportStatsJsonToJson(
-        RtcEngineEventHandlerOnRemoteVideoTransportStatsJson instance) {
-  final val = <String, dynamic>{};
-
-  void writeNotNull(String key, dynamic value) {
-    if (value != null) {
-      val[key] = value;
-    }
-  }
-
-  writeNotNull('connection', instance.connection?.toJson());
-  writeNotNull('remoteUid', instance.remoteUid);
-  writeNotNull('delay', instance.delay);
-  writeNotNull('lost', instance.lost);
-  writeNotNull('rxKBitRate', instance.rxKBitRate);
-  return val;
-}
+            RtcEngineEventHandlerOnRemoteVideoTransportStatsJson instance) =>
+        <String, dynamic>{
+          if (instance.connection?.toJson() case final value?)
+            'connection': value,
+          if (instance.remoteUid case final value?) 'remoteUid': value,
+          if (instance.delay case final value?) 'delay': value,
+          if (instance.lost case final value?) 'lost': value,
+          if (instance.rxKBitRate case final value?) 'rxKBitRate': value,
+        };
 
 RtcEngineEventHandlerOnConnectionStateChangedJson
     _$RtcEngineEventHandlerOnConnectionStateChangedJsonFromJson(
@@ -3495,20 +2694,15 @@ RtcEngineEventHandlerOnConnectionStateChangedJson
         );
 
 Map<String, dynamic> _$RtcEngineEventHandlerOnConnectionStateChangedJsonToJson(
-    RtcEngineEventHandlerOnConnectionStateChangedJson instance) {
-  final val = <String, dynamic>{};
-
-  void writeNotNull(String key, dynamic value) {
-    if (value != null) {
-      val[key] = value;
-    }
-  }
-
-  writeNotNull('connection', instance.connection?.toJson());
-  writeNotNull('state', _$ConnectionStateTypeEnumMap[instance.state]);
-  writeNotNull('reason', _$ConnectionChangedReasonTypeEnumMap[instance.reason]);
-  return val;
-}
+        RtcEngineEventHandlerOnConnectionStateChangedJson instance) =>
+    <String, dynamic>{
+      if (instance.connection?.toJson() case final value?) 'connection': value,
+      if (_$ConnectionStateTypeEnumMap[instance.state] case final value?)
+        'state': value,
+      if (_$ConnectionChangedReasonTypeEnumMap[instance.reason]
+          case final value?)
+        'reason': value,
+    };
 
 const _$ConnectionStateTypeEnumMap = {
   ConnectionStateType.connectionStateDisconnected: 1,
@@ -3562,21 +2756,15 @@ RtcEngineEventHandlerOnWlAccMessageJson
         );
 
 Map<String, dynamic> _$RtcEngineEventHandlerOnWlAccMessageJsonToJson(
-    RtcEngineEventHandlerOnWlAccMessageJson instance) {
-  final val = <String, dynamic>{};
-
-  void writeNotNull(String key, dynamic value) {
-    if (value != null) {
-      val[key] = value;
-    }
-  }
-
-  writeNotNull('connection', instance.connection?.toJson());
-  writeNotNull('reason', _$WlaccMessageReasonEnumMap[instance.reason]);
-  writeNotNull('action', _$WlaccSuggestActionEnumMap[instance.action]);
-  writeNotNull('wlAccMsg', instance.wlAccMsg);
-  return val;
-}
+        RtcEngineEventHandlerOnWlAccMessageJson instance) =>
+    <String, dynamic>{
+      if (instance.connection?.toJson() case final value?) 'connection': value,
+      if (_$WlaccMessageReasonEnumMap[instance.reason] case final value?)
+        'reason': value,
+      if (_$WlaccSuggestActionEnumMap[instance.action] case final value?)
+        'action': value,
+      if (instance.wlAccMsg case final value?) 'wlAccMsg': value,
+    };
 
 const _$WlaccMessageReasonEnumMap = {
   WlaccMessageReason.wlaccMessageReasonWeakSignal: 0,
@@ -3609,20 +2797,14 @@ RtcEngineEventHandlerOnWlAccStatsJson
         );
 
 Map<String, dynamic> _$RtcEngineEventHandlerOnWlAccStatsJsonToJson(
-    RtcEngineEventHandlerOnWlAccStatsJson instance) {
-  final val = <String, dynamic>{};
-
-  void writeNotNull(String key, dynamic value) {
-    if (value != null) {
-      val[key] = value;
-    }
-  }
-
-  writeNotNull('connection', instance.connection?.toJson());
-  writeNotNull('currentStats', instance.currentStats?.toJson());
-  writeNotNull('averageStats', instance.averageStats?.toJson());
-  return val;
-}
+        RtcEngineEventHandlerOnWlAccStatsJson instance) =>
+    <String, dynamic>{
+      if (instance.connection?.toJson() case final value?) 'connection': value,
+      if (instance.currentStats?.toJson() case final value?)
+        'currentStats': value,
+      if (instance.averageStats?.toJson() case final value?)
+        'averageStats': value,
+    };
 
 RtcEngineEventHandlerOnNetworkTypeChangedJson
     _$RtcEngineEventHandlerOnNetworkTypeChangedJsonFromJson(
@@ -3636,19 +2818,11 @@ RtcEngineEventHandlerOnNetworkTypeChangedJson
         );
 
 Map<String, dynamic> _$RtcEngineEventHandlerOnNetworkTypeChangedJsonToJson(
-    RtcEngineEventHandlerOnNetworkTypeChangedJson instance) {
-  final val = <String, dynamic>{};
-
-  void writeNotNull(String key, dynamic value) {
-    if (value != null) {
-      val[key] = value;
-    }
-  }
-
-  writeNotNull('connection', instance.connection?.toJson());
-  writeNotNull('type', _$NetworkTypeEnumMap[instance.type]);
-  return val;
-}
+        RtcEngineEventHandlerOnNetworkTypeChangedJson instance) =>
+    <String, dynamic>{
+      if (instance.connection?.toJson() case final value?) 'connection': value,
+      if (_$NetworkTypeEnumMap[instance.type] case final value?) 'type': value,
+    };
 
 const _$NetworkTypeEnumMap = {
   NetworkType.networkTypeUnknown: -1,
@@ -3674,19 +2848,12 @@ RtcEngineEventHandlerOnEncryptionErrorJson
         );
 
 Map<String, dynamic> _$RtcEngineEventHandlerOnEncryptionErrorJsonToJson(
-    RtcEngineEventHandlerOnEncryptionErrorJson instance) {
-  final val = <String, dynamic>{};
-
-  void writeNotNull(String key, dynamic value) {
-    if (value != null) {
-      val[key] = value;
-    }
-  }
-
-  writeNotNull('connection', instance.connection?.toJson());
-  writeNotNull('errorType', _$EncryptionErrorTypeEnumMap[instance.errorType]);
-  return val;
-}
+        RtcEngineEventHandlerOnEncryptionErrorJson instance) =>
+    <String, dynamic>{
+      if (instance.connection?.toJson() case final value?) 'connection': value,
+      if (_$EncryptionErrorTypeEnumMap[instance.errorType] case final value?)
+        'errorType': value,
+    };
 
 const _$EncryptionErrorTypeEnumMap = {
   EncryptionErrorType.encryptionErrorInternalFailure: 0,
@@ -3705,19 +2872,11 @@ RtcEngineEventHandlerOnPermissionErrorJson
         );
 
 Map<String, dynamic> _$RtcEngineEventHandlerOnPermissionErrorJsonToJson(
-    RtcEngineEventHandlerOnPermissionErrorJson instance) {
-  final val = <String, dynamic>{};
-
-  void writeNotNull(String key, dynamic value) {
-    if (value != null) {
-      val[key] = value;
-    }
-  }
-
-  writeNotNull(
-      'permissionType', _$PermissionTypeEnumMap[instance.permissionType]);
-  return val;
-}
+        RtcEngineEventHandlerOnPermissionErrorJson instance) =>
+    <String, dynamic>{
+      if (_$PermissionTypeEnumMap[instance.permissionType] case final value?)
+        'permissionType': value,
+    };
 
 const _$PermissionTypeEnumMap = {
   PermissionType.recordAudio: 0,
@@ -3734,19 +2893,11 @@ RtcEngineEventHandlerOnLocalUserRegisteredJson
         );
 
 Map<String, dynamic> _$RtcEngineEventHandlerOnLocalUserRegisteredJsonToJson(
-    RtcEngineEventHandlerOnLocalUserRegisteredJson instance) {
-  final val = <String, dynamic>{};
-
-  void writeNotNull(String key, dynamic value) {
-    if (value != null) {
-      val[key] = value;
-    }
-  }
-
-  writeNotNull('uid', instance.uid);
-  writeNotNull('userAccount', instance.userAccount);
-  return val;
-}
+        RtcEngineEventHandlerOnLocalUserRegisteredJson instance) =>
+    <String, dynamic>{
+      if (instance.uid case final value?) 'uid': value,
+      if (instance.userAccount case final value?) 'userAccount': value,
+    };
 
 RtcEngineEventHandlerOnUserInfoUpdatedJson
     _$RtcEngineEventHandlerOnUserInfoUpdatedJsonFromJson(
@@ -3759,19 +2910,11 @@ RtcEngineEventHandlerOnUserInfoUpdatedJson
         );
 
 Map<String, dynamic> _$RtcEngineEventHandlerOnUserInfoUpdatedJsonToJson(
-    RtcEngineEventHandlerOnUserInfoUpdatedJson instance) {
-  final val = <String, dynamic>{};
-
-  void writeNotNull(String key, dynamic value) {
-    if (value != null) {
-      val[key] = value;
-    }
-  }
-
-  writeNotNull('uid', instance.uid);
-  writeNotNull('info', instance.info?.toJson());
-  return val;
-}
+        RtcEngineEventHandlerOnUserInfoUpdatedJson instance) =>
+    <String, dynamic>{
+      if (instance.uid case final value?) 'uid': value,
+      if (instance.info?.toJson() case final value?) 'info': value,
+    };
 
 RtcEngineEventHandlerOnUserAccountUpdatedJson
     _$RtcEngineEventHandlerOnUserAccountUpdatedJsonFromJson(
@@ -3786,20 +2929,13 @@ RtcEngineEventHandlerOnUserAccountUpdatedJson
         );
 
 Map<String, dynamic> _$RtcEngineEventHandlerOnUserAccountUpdatedJsonToJson(
-    RtcEngineEventHandlerOnUserAccountUpdatedJson instance) {
-  final val = <String, dynamic>{};
-
-  void writeNotNull(String key, dynamic value) {
-    if (value != null) {
-      val[key] = value;
-    }
-  }
-
-  writeNotNull('connection', instance.connection?.toJson());
-  writeNotNull('remoteUid', instance.remoteUid);
-  writeNotNull('remoteUserAccount', instance.remoteUserAccount);
-  return val;
-}
+        RtcEngineEventHandlerOnUserAccountUpdatedJson instance) =>
+    <String, dynamic>{
+      if (instance.connection?.toJson() case final value?) 'connection': value,
+      if (instance.remoteUid case final value?) 'remoteUid': value,
+      if (instance.remoteUserAccount case final value?)
+        'remoteUserAccount': value,
+    };
 
 RtcEngineEventHandlerOnVideoRenderingTracingResultJson
     _$RtcEngineEventHandlerOnVideoRenderingTracingResultJsonFromJson(
@@ -3820,21 +2956,16 @@ RtcEngineEventHandlerOnVideoRenderingTracingResultJson
 
 Map<String, dynamic>
     _$RtcEngineEventHandlerOnVideoRenderingTracingResultJsonToJson(
-        RtcEngineEventHandlerOnVideoRenderingTracingResultJson instance) {
-  final val = <String, dynamic>{};
-
-  void writeNotNull(String key, dynamic value) {
-    if (value != null) {
-      val[key] = value;
-    }
-  }
-
-  writeNotNull('connection', instance.connection?.toJson());
-  writeNotNull('uid', instance.uid);
-  writeNotNull('currentEvent', _$MediaTraceEventEnumMap[instance.currentEvent]);
-  writeNotNull('tracingInfo', instance.tracingInfo?.toJson());
-  return val;
-}
+            RtcEngineEventHandlerOnVideoRenderingTracingResultJson instance) =>
+        <String, dynamic>{
+          if (instance.connection?.toJson() case final value?)
+            'connection': value,
+          if (instance.uid case final value?) 'uid': value,
+          if (_$MediaTraceEventEnumMap[instance.currentEvent] case final value?)
+            'currentEvent': value,
+          if (instance.tracingInfo?.toJson() case final value?)
+            'tracingInfo': value,
+        };
 
 const _$MediaTraceEventEnumMap = {
   MediaTraceEvent.mediaTraceEventVideoRendered: 0,
@@ -3855,19 +2986,12 @@ RtcEngineEventHandlerOnLocalVideoTranscoderErrorJson
 
 Map<String, dynamic>
     _$RtcEngineEventHandlerOnLocalVideoTranscoderErrorJsonToJson(
-        RtcEngineEventHandlerOnLocalVideoTranscoderErrorJson instance) {
-  final val = <String, dynamic>{};
-
-  void writeNotNull(String key, dynamic value) {
-    if (value != null) {
-      val[key] = value;
-    }
-  }
-
-  writeNotNull('stream', instance.stream?.toJson());
-  writeNotNull('error', _$VideoTranscoderErrorEnumMap[instance.error]);
-  return val;
-}
+            RtcEngineEventHandlerOnLocalVideoTranscoderErrorJson instance) =>
+        <String, dynamic>{
+          if (instance.stream?.toJson() case final value?) 'stream': value,
+          if (_$VideoTranscoderErrorEnumMap[instance.error] case final value?)
+            'error': value,
+        };
 
 const _$VideoTranscoderErrorEnumMap = {
   VideoTranscoderError.vtErrVideoSourceNotReady: 1,
@@ -3893,21 +3017,14 @@ RtcEngineEventHandlerOnUploadLogResultJson
         );
 
 Map<String, dynamic> _$RtcEngineEventHandlerOnUploadLogResultJsonToJson(
-    RtcEngineEventHandlerOnUploadLogResultJson instance) {
-  final val = <String, dynamic>{};
-
-  void writeNotNull(String key, dynamic value) {
-    if (value != null) {
-      val[key] = value;
-    }
-  }
-
-  writeNotNull('connection', instance.connection?.toJson());
-  writeNotNull('requestId', instance.requestId);
-  writeNotNull('success', instance.success);
-  writeNotNull('reason', _$UploadErrorReasonEnumMap[instance.reason]);
-  return val;
-}
+        RtcEngineEventHandlerOnUploadLogResultJson instance) =>
+    <String, dynamic>{
+      if (instance.connection?.toJson() case final value?) 'connection': value,
+      if (instance.requestId case final value?) 'requestId': value,
+      if (instance.success case final value?) 'success': value,
+      if (_$UploadErrorReasonEnumMap[instance.reason] case final value?)
+        'reason': value,
+    };
 
 const _$UploadErrorReasonEnumMap = {
   UploadErrorReason.uploadSuccess: 0,
@@ -3930,22 +3047,19 @@ RtcEngineEventHandlerOnAudioSubscribeStateChangedJson
 
 Map<String, dynamic>
     _$RtcEngineEventHandlerOnAudioSubscribeStateChangedJsonToJson(
-        RtcEngineEventHandlerOnAudioSubscribeStateChangedJson instance) {
-  final val = <String, dynamic>{};
-
-  void writeNotNull(String key, dynamic value) {
-    if (value != null) {
-      val[key] = value;
-    }
-  }
-
-  writeNotNull('channel', instance.channel);
-  writeNotNull('uid', instance.uid);
-  writeNotNull('oldState', _$StreamSubscribeStateEnumMap[instance.oldState]);
-  writeNotNull('newState', _$StreamSubscribeStateEnumMap[instance.newState]);
-  writeNotNull('elapseSinceLastState', instance.elapseSinceLastState);
-  return val;
-}
+            RtcEngineEventHandlerOnAudioSubscribeStateChangedJson instance) =>
+        <String, dynamic>{
+          if (instance.channel case final value?) 'channel': value,
+          if (instance.uid case final value?) 'uid': value,
+          if (_$StreamSubscribeStateEnumMap[instance.oldState]
+              case final value?)
+            'oldState': value,
+          if (_$StreamSubscribeStateEnumMap[instance.newState]
+              case final value?)
+            'newState': value,
+          if (instance.elapseSinceLastState case final value?)
+            'elapseSinceLastState': value,
+        };
 
 const _$StreamSubscribeStateEnumMap = {
   StreamSubscribeState.subStateIdle: 0,
@@ -3969,22 +3083,19 @@ RtcEngineEventHandlerOnVideoSubscribeStateChangedJson
 
 Map<String, dynamic>
     _$RtcEngineEventHandlerOnVideoSubscribeStateChangedJsonToJson(
-        RtcEngineEventHandlerOnVideoSubscribeStateChangedJson instance) {
-  final val = <String, dynamic>{};
-
-  void writeNotNull(String key, dynamic value) {
-    if (value != null) {
-      val[key] = value;
-    }
-  }
-
-  writeNotNull('channel', instance.channel);
-  writeNotNull('uid', instance.uid);
-  writeNotNull('oldState', _$StreamSubscribeStateEnumMap[instance.oldState]);
-  writeNotNull('newState', _$StreamSubscribeStateEnumMap[instance.newState]);
-  writeNotNull('elapseSinceLastState', instance.elapseSinceLastState);
-  return val;
-}
+            RtcEngineEventHandlerOnVideoSubscribeStateChangedJson instance) =>
+        <String, dynamic>{
+          if (instance.channel case final value?) 'channel': value,
+          if (instance.uid case final value?) 'uid': value,
+          if (_$StreamSubscribeStateEnumMap[instance.oldState]
+              case final value?)
+            'oldState': value,
+          if (_$StreamSubscribeStateEnumMap[instance.newState]
+              case final value?)
+            'newState': value,
+          if (instance.elapseSinceLastState case final value?)
+            'elapseSinceLastState': value,
+        };
 
 RtcEngineEventHandlerOnAudioPublishStateChangedJson
     _$RtcEngineEventHandlerOnAudioPublishStateChangedJsonFromJson(
@@ -4000,21 +3111,16 @@ RtcEngineEventHandlerOnAudioPublishStateChangedJson
 
 Map<String, dynamic>
     _$RtcEngineEventHandlerOnAudioPublishStateChangedJsonToJson(
-        RtcEngineEventHandlerOnAudioPublishStateChangedJson instance) {
-  final val = <String, dynamic>{};
-
-  void writeNotNull(String key, dynamic value) {
-    if (value != null) {
-      val[key] = value;
-    }
-  }
-
-  writeNotNull('channel', instance.channel);
-  writeNotNull('oldState', _$StreamPublishStateEnumMap[instance.oldState]);
-  writeNotNull('newState', _$StreamPublishStateEnumMap[instance.newState]);
-  writeNotNull('elapseSinceLastState', instance.elapseSinceLastState);
-  return val;
-}
+            RtcEngineEventHandlerOnAudioPublishStateChangedJson instance) =>
+        <String, dynamic>{
+          if (instance.channel case final value?) 'channel': value,
+          if (_$StreamPublishStateEnumMap[instance.oldState] case final value?)
+            'oldState': value,
+          if (_$StreamPublishStateEnumMap[instance.newState] case final value?)
+            'newState': value,
+          if (instance.elapseSinceLastState case final value?)
+            'elapseSinceLastState': value,
+        };
 
 const _$StreamPublishStateEnumMap = {
   StreamPublishState.pubStateIdle: 0,
@@ -4038,22 +3144,18 @@ RtcEngineEventHandlerOnVideoPublishStateChangedJson
 
 Map<String, dynamic>
     _$RtcEngineEventHandlerOnVideoPublishStateChangedJsonToJson(
-        RtcEngineEventHandlerOnVideoPublishStateChangedJson instance) {
-  final val = <String, dynamic>{};
-
-  void writeNotNull(String key, dynamic value) {
-    if (value != null) {
-      val[key] = value;
-    }
-  }
-
-  writeNotNull('source', _$VideoSourceTypeEnumMap[instance.source]);
-  writeNotNull('channel', instance.channel);
-  writeNotNull('oldState', _$StreamPublishStateEnumMap[instance.oldState]);
-  writeNotNull('newState', _$StreamPublishStateEnumMap[instance.newState]);
-  writeNotNull('elapseSinceLastState', instance.elapseSinceLastState);
-  return val;
-}
+            RtcEngineEventHandlerOnVideoPublishStateChangedJson instance) =>
+        <String, dynamic>{
+          if (_$VideoSourceTypeEnumMap[instance.source] case final value?)
+            'source': value,
+          if (instance.channel case final value?) 'channel': value,
+          if (_$StreamPublishStateEnumMap[instance.oldState] case final value?)
+            'oldState': value,
+          if (_$StreamPublishStateEnumMap[instance.newState] case final value?)
+            'newState': value,
+          if (instance.elapseSinceLastState case final value?)
+            'elapseSinceLastState': value,
+        };
 
 RtcEngineEventHandlerOnTranscodedStreamLayoutInfoJson
     _$RtcEngineEventHandlerOnTranscodedStreamLayoutInfoJsonFromJson(
@@ -4074,24 +3176,18 @@ RtcEngineEventHandlerOnTranscodedStreamLayoutInfoJson
 
 Map<String, dynamic>
     _$RtcEngineEventHandlerOnTranscodedStreamLayoutInfoJsonToJson(
-        RtcEngineEventHandlerOnTranscodedStreamLayoutInfoJson instance) {
-  final val = <String, dynamic>{};
-
-  void writeNotNull(String key, dynamic value) {
-    if (value != null) {
-      val[key] = value;
-    }
-  }
-
-  writeNotNull('connection', instance.connection?.toJson());
-  writeNotNull('uid', instance.uid);
-  writeNotNull('width', instance.width);
-  writeNotNull('height', instance.height);
-  writeNotNull('layoutCount', instance.layoutCount);
-  writeNotNull(
-      'layoutlist', instance.layoutlist?.map((e) => e.toJson()).toList());
-  return val;
-}
+            RtcEngineEventHandlerOnTranscodedStreamLayoutInfoJson instance) =>
+        <String, dynamic>{
+          if (instance.connection?.toJson() case final value?)
+            'connection': value,
+          if (instance.uid case final value?) 'uid': value,
+          if (instance.width case final value?) 'width': value,
+          if (instance.height case final value?) 'height': value,
+          if (instance.layoutCount case final value?) 'layoutCount': value,
+          if (instance.layoutlist?.map((e) => e.toJson()).toList()
+              case final value?)
+            'layoutlist': value,
+        };
 
 RtcEngineEventHandlerOnAudioMetadataReceivedJson
     _$RtcEngineEventHandlerOnAudioMetadataReceivedJsonFromJson(
@@ -4106,20 +3202,12 @@ RtcEngineEventHandlerOnAudioMetadataReceivedJson
         );
 
 Map<String, dynamic> _$RtcEngineEventHandlerOnAudioMetadataReceivedJsonToJson(
-    RtcEngineEventHandlerOnAudioMetadataReceivedJson instance) {
-  final val = <String, dynamic>{};
-
-  void writeNotNull(String key, dynamic value) {
-    if (value != null) {
-      val[key] = value;
-    }
-  }
-
-  writeNotNull('connection', instance.connection?.toJson());
-  writeNotNull('uid', instance.uid);
-  writeNotNull('length', instance.length);
-  return val;
-}
+        RtcEngineEventHandlerOnAudioMetadataReceivedJson instance) =>
+    <String, dynamic>{
+      if (instance.connection?.toJson() case final value?) 'connection': value,
+      if (instance.uid case final value?) 'uid': value,
+      if (instance.length case final value?) 'length': value,
+    };
 
 RtcEngineEventHandlerOnExtensionEventWithContextJson
     _$RtcEngineEventHandlerOnExtensionEventWithContextJsonFromJson(
@@ -4135,20 +3223,12 @@ RtcEngineEventHandlerOnExtensionEventWithContextJson
 
 Map<String, dynamic>
     _$RtcEngineEventHandlerOnExtensionEventWithContextJsonToJson(
-        RtcEngineEventHandlerOnExtensionEventWithContextJson instance) {
-  final val = <String, dynamic>{};
-
-  void writeNotNull(String key, dynamic value) {
-    if (value != null) {
-      val[key] = value;
-    }
-  }
-
-  writeNotNull('context', instance.context?.toJson());
-  writeNotNull('key', instance.key);
-  writeNotNull('value', instance.value);
-  return val;
-}
+            RtcEngineEventHandlerOnExtensionEventWithContextJson instance) =>
+        <String, dynamic>{
+          if (instance.context?.toJson() case final value?) 'context': value,
+          if (instance.key case final value?) 'key': value,
+          if (instance.value case final value?) 'value': value,
+        };
 
 RtcEngineEventHandlerOnExtensionStartedWithContextJson
     _$RtcEngineEventHandlerOnExtensionStartedWithContextJsonFromJson(
@@ -4162,18 +3242,10 @@ RtcEngineEventHandlerOnExtensionStartedWithContextJson
 
 Map<String, dynamic>
     _$RtcEngineEventHandlerOnExtensionStartedWithContextJsonToJson(
-        RtcEngineEventHandlerOnExtensionStartedWithContextJson instance) {
-  final val = <String, dynamic>{};
-
-  void writeNotNull(String key, dynamic value) {
-    if (value != null) {
-      val[key] = value;
-    }
-  }
-
-  writeNotNull('context', instance.context?.toJson());
-  return val;
-}
+            RtcEngineEventHandlerOnExtensionStartedWithContextJson instance) =>
+        <String, dynamic>{
+          if (instance.context?.toJson() case final value?) 'context': value,
+        };
 
 RtcEngineEventHandlerOnExtensionStoppedWithContextJson
     _$RtcEngineEventHandlerOnExtensionStoppedWithContextJsonFromJson(
@@ -4187,18 +3259,10 @@ RtcEngineEventHandlerOnExtensionStoppedWithContextJson
 
 Map<String, dynamic>
     _$RtcEngineEventHandlerOnExtensionStoppedWithContextJsonToJson(
-        RtcEngineEventHandlerOnExtensionStoppedWithContextJson instance) {
-  final val = <String, dynamic>{};
-
-  void writeNotNull(String key, dynamic value) {
-    if (value != null) {
-      val[key] = value;
-    }
-  }
-
-  writeNotNull('context', instance.context?.toJson());
-  return val;
-}
+            RtcEngineEventHandlerOnExtensionStoppedWithContextJson instance) =>
+        <String, dynamic>{
+          if (instance.context?.toJson() case final value?) 'context': value,
+        };
 
 RtcEngineEventHandlerOnExtensionErrorWithContextJson
     _$RtcEngineEventHandlerOnExtensionErrorWithContextJsonFromJson(
@@ -4214,20 +3278,12 @@ RtcEngineEventHandlerOnExtensionErrorWithContextJson
 
 Map<String, dynamic>
     _$RtcEngineEventHandlerOnExtensionErrorWithContextJsonToJson(
-        RtcEngineEventHandlerOnExtensionErrorWithContextJson instance) {
-  final val = <String, dynamic>{};
-
-  void writeNotNull(String key, dynamic value) {
-    if (value != null) {
-      val[key] = value;
-    }
-  }
-
-  writeNotNull('context', instance.context?.toJson());
-  writeNotNull('error', instance.error);
-  writeNotNull('message', instance.message);
-  return val;
-}
+            RtcEngineEventHandlerOnExtensionErrorWithContextJson instance) =>
+        <String, dynamic>{
+          if (instance.context?.toJson() case final value?) 'context': value,
+          if (instance.error case final value?) 'error': value,
+          if (instance.message case final value?) 'message': value,
+        };
 
 RtcEngineEventHandlerOnSetRtmFlagResultJson
     _$RtcEngineEventHandlerOnSetRtmFlagResultJsonFromJson(
@@ -4241,19 +3297,11 @@ RtcEngineEventHandlerOnSetRtmFlagResultJson
         );
 
 Map<String, dynamic> _$RtcEngineEventHandlerOnSetRtmFlagResultJsonToJson(
-    RtcEngineEventHandlerOnSetRtmFlagResultJson instance) {
-  final val = <String, dynamic>{};
-
-  void writeNotNull(String key, dynamic value) {
-    if (value != null) {
-      val[key] = value;
-    }
-  }
-
-  writeNotNull('connection', instance.connection?.toJson());
-  writeNotNull('code', instance.code);
-  return val;
-}
+        RtcEngineEventHandlerOnSetRtmFlagResultJson instance) =>
+    <String, dynamic>{
+      if (instance.connection?.toJson() case final value?) 'connection': value,
+      if (instance.code case final value?) 'code': value,
+    };
 
 RtcEngineEventHandlerOnMultipathStatsJson
     _$RtcEngineEventHandlerOnMultipathStatsJsonFromJson(
@@ -4269,19 +3317,11 @@ RtcEngineEventHandlerOnMultipathStatsJson
         );
 
 Map<String, dynamic> _$RtcEngineEventHandlerOnMultipathStatsJsonToJson(
-    RtcEngineEventHandlerOnMultipathStatsJson instance) {
-  final val = <String, dynamic>{};
-
-  void writeNotNull(String key, dynamic value) {
-    if (value != null) {
-      val[key] = value;
-    }
-  }
-
-  writeNotNull('connection', instance.connection?.toJson());
-  writeNotNull('stats', instance.stats?.toJson());
-  return val;
-}
+        RtcEngineEventHandlerOnMultipathStatsJson instance) =>
+    <String, dynamic>{
+      if (instance.connection?.toJson() case final value?) 'connection': value,
+      if (instance.stats?.toJson() case final value?) 'stats': value,
+    };
 
 MetadataObserverOnMetadataReceivedJson
     _$MetadataObserverOnMetadataReceivedJsonFromJson(
@@ -4293,18 +3333,10 @@ MetadataObserverOnMetadataReceivedJson
         );
 
 Map<String, dynamic> _$MetadataObserverOnMetadataReceivedJsonToJson(
-    MetadataObserverOnMetadataReceivedJson instance) {
-  final val = <String, dynamic>{};
-
-  void writeNotNull(String key, dynamic value) {
-    if (value != null) {
-      val[key] = value;
-    }
-  }
-
-  writeNotNull('metadata', instance.metadata?.toJson());
-  return val;
-}
+        MetadataObserverOnMetadataReceivedJson instance) =>
+    <String, dynamic>{
+      if (instance.metadata?.toJson() case final value?) 'metadata': value,
+    };
 
 DirectCdnStreamingEventHandlerOnDirectCdnStreamingStateChangedJson
     _$DirectCdnStreamingEventHandlerOnDirectCdnStreamingStateChangedJsonFromJson(
@@ -4319,21 +3351,17 @@ DirectCdnStreamingEventHandlerOnDirectCdnStreamingStateChangedJson
 
 Map<String, dynamic>
     _$DirectCdnStreamingEventHandlerOnDirectCdnStreamingStateChangedJsonToJson(
-        DirectCdnStreamingEventHandlerOnDirectCdnStreamingStateChangedJson
-            instance) {
-  final val = <String, dynamic>{};
-
-  void writeNotNull(String key, dynamic value) {
-    if (value != null) {
-      val[key] = value;
-    }
-  }
-
-  writeNotNull('state', _$DirectCdnStreamingStateEnumMap[instance.state]);
-  writeNotNull('reason', _$DirectCdnStreamingReasonEnumMap[instance.reason]);
-  writeNotNull('message', instance.message);
-  return val;
-}
+            DirectCdnStreamingEventHandlerOnDirectCdnStreamingStateChangedJson
+                instance) =>
+        <String, dynamic>{
+          if (_$DirectCdnStreamingStateEnumMap[instance.state]
+              case final value?)
+            'state': value,
+          if (_$DirectCdnStreamingReasonEnumMap[instance.reason]
+              case final value?)
+            'reason': value,
+          if (instance.message case final value?) 'message': value,
+        };
 
 const _$DirectCdnStreamingStateEnumMap = {
   DirectCdnStreamingState.directCdnStreamingStateIdle: 0,
@@ -4364,15 +3392,8 @@ DirectCdnStreamingEventHandlerOnDirectCdnStreamingStatsJson
 
 Map<String, dynamic>
     _$DirectCdnStreamingEventHandlerOnDirectCdnStreamingStatsJsonToJson(
-        DirectCdnStreamingEventHandlerOnDirectCdnStreamingStatsJson instance) {
-  final val = <String, dynamic>{};
-
-  void writeNotNull(String key, dynamic value) {
-    if (value != null) {
-      val[key] = value;
-    }
-  }
-
-  writeNotNull('stats', instance.stats?.toJson());
-  return val;
-}
+            DirectCdnStreamingEventHandlerOnDirectCdnStreamingStatsJson
+                instance) =>
+        <String, dynamic>{
+          if (instance.stats?.toJson() case final value?) 'stats': value,
+        };
