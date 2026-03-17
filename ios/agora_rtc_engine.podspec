@@ -28,7 +28,7 @@ Pod::Spec.new do |s|
     # iris dependencies end
 
     # native dependencies start
-    s.dependency 'AgoraVideo_Special_iOS', '4.5.2.9'
+    s.dependency 'AgoraRtcEngine_Special_iOS', '4.5.2.196'
     # native dependencies end
   end
   
