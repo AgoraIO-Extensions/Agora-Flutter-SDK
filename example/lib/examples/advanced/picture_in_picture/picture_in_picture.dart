@@ -34,6 +34,7 @@ class _State extends State<PictureInPicture> with WidgetsBindingObserver {
   bool? _isPipSupported;
   bool _isPipAutoEnterSupported = false;
   AppLifecycleState _lastAppLifecycleState = AppLifecycleState.resumed;
+  bool _isDependenciesInit = false;
 
   double _pipContentRow = 1;
   double _pipContentCol = 0;
@@ -52,7 +53,15 @@ class _State extends State<PictureInPicture> with WidgetsBindingObserver {
     _channelIdController = TextEditingController(text: config.channelId);
 
     _initEngine();
-    _initContentSizeByPhysicalSize();
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    if (!_isDependenciesInit) {
+      _isDependenciesInit = true;
+      _initContentSizeByPhysicalSize();
+    }
   }
 
   @override
@@ -154,8 +163,9 @@ class _State extends State<PictureInPicture> with WidgetsBindingObserver {
     // which will make the PiP experience more seamless.
 
     // Initialize controllers with default values based on platform
-    final size = WidgetsBinding.instance.window.physicalSize;
-    final scale = WidgetsBinding.instance.window.devicePixelRatio;
+    final flutterView = View.of(context);
+    final size = flutterView.physicalSize;
+    final scale = flutterView.devicePixelRatio;
     final width = size.width / scale;
     final height = size.height / scale;
 

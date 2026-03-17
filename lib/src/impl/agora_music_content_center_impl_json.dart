@@ -1,5 +1,6 @@
-import '/src/_serializable.dart';
-import '/src/agora_music_content_center.dart';
+
+import 'package:agora_rtc_engine/src/agora_music_content_center.dart';
+import 'package:agora_rtc_engine/src/_serializable.dart';
 import 'package:json_annotation/json_annotation.dart';
 
 part 'agora_music_content_center_impl_json.g.dart';

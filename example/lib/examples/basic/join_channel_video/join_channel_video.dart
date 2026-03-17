@@ -31,6 +31,7 @@ class _State extends State<JoinChannelVideo> {
   final Map<int, VideoViewController> _remoteVideoControllers = {};
   bool test = false;
   bool _isUseFlutterTexture = false;
+  // ignore: prefer_final_fields
   bool _isUseAndroidSurfaceView = false;
 
   // Test switches

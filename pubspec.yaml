@@ -19,6 +19,7 @@ dependencies:
   meta: ^1.7.0
   iris_method_channel: ^2.2.4
   js: ^0.6.3
+  web: ^0.5.1
 dev_dependencies:
   flutter_test:
     sdk: flutter

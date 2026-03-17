@@ -369,7 +369,7 @@ class _State extends State<ScreenSharing> with KeepRemoteVideoViewsMixin {
                     }
                   },
                   onStopScreenShare: () {}),
-            SizedBox(height: 100),
+            const SizedBox(height: 100),
           ],
         );
       },
