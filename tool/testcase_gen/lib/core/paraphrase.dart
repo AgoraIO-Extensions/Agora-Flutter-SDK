@@ -685,9 +685,9 @@ class DefaultVisitorImpl extends DefaultVisitor<Object?> {
       Extensionz extensionz = Extensionz()
         ..name = node.name?.lexeme ?? ''
         ..uri = _currentVisitUri!;
-      if (node.onClause?.extendedType is dart_ast.NamedType) {
+      if (node.extendedType is dart_ast.NamedType) {
         extensionz.extendedType =
-            (node.onClause!.extendedType as dart_ast.NamedType).name2.lexeme;
+            (node.extendedType as dart_ast.NamedType).name2.lexeme;
       }
       for (final member in node.members) {
         if (member is MethodDeclaration) {
