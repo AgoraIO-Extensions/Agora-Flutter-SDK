@@ -13,8 +13,13 @@ on:
         required: false
         type: boolean
         default: true
-      force-publish-to-pub:
-        description: 'Force publish to pub.dev regardless of version format'
+      force-publish-ignore-version:
+        description: '⚠️ Force publish to pub.dev regardless of version format (previously force-publish-to-pub)'
+        required: false
+        type: boolean
+        default: false
+      force-publish-ignore-warnings:
+        description: '⚠️ Force publish to pub.dev ignoring analyzer warnings/hints'
         required: false
         type: boolean
         default: false
@@ -31,8 +36,13 @@ on:
         required: false
         type: boolean
         default: true
-      force-publish-to-pub:
-        description: 'Force publish to pub.dev regardless of version format'
+      force-publish-ignore-version:
+        description: '⚠️ Force publish to pub.dev regardless of version format (previously force-publish-to-pub)'
+        required: false
+        type: boolean
+        default: false
+      force-publish-ignore-warnings:
+        description: '⚠️ Force publish to pub.dev ignoring analyzer warnings/hints'
         required: false
         type: boolean
         default: false
@@ -92,18 +102,23 @@ jobs:
           # Get dry-run mode
           if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
             DRY_RUN="${{ github.event.inputs.dry-run }}"
-            FORCE_PUBLISH="${{ github.event.inputs.force-publish-to-pub }}"
+            FORCE_IGNORE_VERSION="${{ github.event.inputs.force-publish-ignore-version }}"
+            FORCE_IGNORE_WARNINGS="${{ github.event.inputs.force-publish-ignore-warnings }}"
           elif [ "${{ github.event_name }}" = "workflow_call" ]; then
             DRY_RUN="${{ inputs.dry-run }}"
-            FORCE_PUBLISH="${{ inputs.force-publish-to-pub }}"
+            FORCE_IGNORE_VERSION="${{ inputs.force-publish-ignore-version }}"
+            FORCE_IGNORE_WARNINGS="${{ inputs.force-publish-ignore-warnings }}"
           else
             DRY_RUN="false" # PR triggers are always production mode
-            FORCE_PUBLISH="false"
+            FORCE_IGNORE_VERSION="false"
+            FORCE_IGNORE_WARNINGS="false"
           fi
 
           echo "Dry-run mode: $DRY_RUN"
-          echo "Force publish mode: $FORCE_PUBLISH"
+          echo "Force ignore version mode: $FORCE_IGNORE_VERSION"
+          echo "Force ignore warnings mode: $FORCE_IGNORE_WARNINGS"
           echo "dry-run=$DRY_RUN" >> $GITHUB_OUTPUT
+          echo "force-ignore-warnings=$FORCE_IGNORE_WARNINGS" >> $GITHUB_OUTPUT
 
           # Get version from inputs (for workflow_dispatch and workflow_call) or pubspec.yaml (for PR)
           if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
@@ -129,7 +144,7 @@ jobs:
             # Auto-detect release type based on version format for manual/callable triggers
             # Only clean semantic versions (MAJOR.MINOR.PATCH) are considered standard
             # Any version with suffix (pre-release, build metadata, etc.) is special
-            if [ "$FORCE_PUBLISH" = "true" ]; then
+            if [ "$FORCE_IGNORE_VERSION" = "true" ]; then
               # Forced to publish: treat as standard
               RELEASE_TYPE="standard"
               # Still detect if it's a prerelease format for other informational purposes
@@ -269,9 +284,14 @@ jobs:
       - name: Publish to pub.dev (dry-run check)
         if: ${{ steps.version_check.outputs.release_type == 'standard' && steps.version_check.outputs.dry-run == 'true' }}
         run: |
+          FORCE_ARG=""
+          if [ "${{ steps.version_check.outputs.force-ignore-warnings }}" = "true" ]; then
+            FORCE_ARG="--force"
+            echo "🚀 Running dry-run with --force"
+          fi
           echo "[DRY-RUN MODE] Running pub publish dry-run"
           flutter pub get
-          flutter pub publish --dry-run
+          flutter pub publish --dry-run $FORCE_ARG
       
       - name: Publish to pub.dev (real)
         if: ${{ steps.version_check.outputs.release_type == 'standard' && steps.version_check.outputs.dry-run == 'false' }}
@@ -279,7 +299,7 @@ jobs:
         with:
           accessToken: ${{ secrets.OAUTH_ACCESS_TOKEN }}
           refreshToken: ${{ secrets.OAUTH_REFRESH_TOKEN }}
-          force: false
+          force: ${{ steps.version_check.outputs.force-ignore-warnings == 'true' }}
           skipTests: true
 
   # Generate and attach documentation (only for standard releases in production mode)
