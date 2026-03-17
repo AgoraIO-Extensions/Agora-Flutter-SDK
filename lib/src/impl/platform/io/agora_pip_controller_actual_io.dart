@@ -1,13 +1,6 @@
-import 'dart:io';
-
-import 'package:flutter/cupertino.dart';
-import 'package:flutter/foundation.dart';
-
-import '/src/agora_base.dart';
 import '/src/agora_rtc_engine.dart';
 import '/src/agora_rtc_engine_ext.dart';
 import '/src/agora_pip_controller.dart';
-import '/src/impl/agora_rtc_engine_impl.dart';
 
 class AgoraPipControllerImpl extends AgoraPipController {
   final RtcEngine _rtcEngine;

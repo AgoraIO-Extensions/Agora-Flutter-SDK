@@ -6,7 +6,7 @@ import '/src/impl/video_rendering_performance_uploader.dart';
 import '/src/render/video_view_controller.dart';
 import '/src/render/video_rendering_performance_monitor.dart';
 import 'package:flutter/foundation.dart';
-import 'package:meta/meta.dart';
+import 'package:meta/meta.dart' show internal;
 
 // ignore_for_file: public_member_api_docs
 

@@ -144,7 +144,7 @@ ${listInitializerBuilder.toString()}
       isNullable = true;
       initBlockBuilder.write('null');
     } else {
-      final constructor = parameterClass.constructors[0];
+      // final constructor = parameterClass.constructors[0];
 
       initBlockBuilder.write(parameterClass.name);
       initBlockBuilder.write('(');
