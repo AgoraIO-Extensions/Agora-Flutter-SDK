@@ -62,8 +62,8 @@ dependencies {
     // iris dependencies end
 
     // native dependencies start
-    api 'io.agora.rtc:agora-special-full:4.5.2.184'
     api 'io.agora.rtc:full-screen-sharing:4.5.2.184'
+    api 'io.agora.rtc:agora-special-full:4.5.2.175.CSDTEST2'
     // native dependencies end
   }
 }
