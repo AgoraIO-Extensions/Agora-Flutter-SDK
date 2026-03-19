@@ -28,7 +28,7 @@ class _State extends State<JoinChannelVideo> {
   Set<int> remoteUid = {};
   late TextEditingController _controller;
   bool _isUseFlutterTexture = false;
-  bool _isUseAndroidSurfaceView = false;
+  final bool _isUseAndroidSurfaceView = false;
   ChannelProfileType _channelProfileType =
       ChannelProfileType.channelProfileLiveBroadcasting;
   late final RtcEngineEventHandler _rtcEngineEventHandler;

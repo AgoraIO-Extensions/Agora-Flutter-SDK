@@ -4,6 +4,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
 
+// Web-only imports via conditional
+import 'impl/web/agora_rte_video_view_web.dart'
+    if (dart.library.io) 'impl/web/agora_rte_video_view_stub.dart'
+    as web_view;
+
 /// A Flutter widget that displays RTE video content.
 ///
 /// This widget encapsulates the platform view creation and automatic canvas
@@ -114,12 +119,70 @@ class AgoraRteVideoView extends StatefulWidget {
   /// ```
   final Function(String)? onLog;
 
+  /// (Web only) Optional callback to customize the wrapper `<div>` element.
+  ///
+  /// Called after default styles (width/height/overflow/position) are applied.
+  /// Use this to add extra CSS, attributes, or event listeners.
+  /// The parameter type is `web.HTMLDivElement` from `package:web`.
+  ///
+  /// **Example:**
+  /// ```dart
+  /// import 'package:web/web.dart' as web;
+  /// AgoraRteVideoView(
+  ///   wrapperCustomizer: (wrapper) {
+  ///     (wrapper as web.HTMLDivElement).style.borderRadius = '8px';
+  ///   },
+  /// )
+  /// ```
+  final Function? wrapperCustomizer;
+
+  /// (Web only) Optional callback to customize the injected `<style>` element.
+  ///
+  /// Called after the default CSS rules are set. You can replace
+  /// `style.textContent` entirely or append additional rules.
+  /// Parameters: `(web.HTMLStyleElement style, int viewKey)`.
+  ///
+  /// **Example:**
+  /// ```dart
+  /// import 'package:web/web.dart' as web;
+  /// AgoraRteVideoView(
+  ///   styleCustomizer: (style, viewKey) {
+  ///     (style as web.HTMLStyleElement).textContent = '''
+  ///       #agora-rte-wrapper-\$viewKey > video {
+  ///         object-fit: cover !important;
+  ///       }
+  ///     ''';
+  ///   },
+  /// )
+  /// ```
+  final Function? styleCustomizer;
+
+  /// (Web only) Optional callback to customize the `<video>` element.
+  ///
+  /// Called after default attributes (autoplay, controls, playsinline) are set.
+  /// Use this to disable controls, set muted, add poster, etc.
+  /// The parameter type is `web.HTMLVideoElement` from `package:web`.
+  ///
+  /// **Example:**
+  /// ```dart
+  /// import 'package:web/web.dart' as web;
+  /// AgoraRteVideoView(
+  ///   videoCustomizer: (video) {
+  ///     (video as web.HTMLVideoElement).controls = false;
+  ///   },
+  /// )
+  /// ```
+  final Function? videoCustomizer;
+
   const AgoraRteVideoView({
     Key? key,
     this.canvas,
     this.player,
     this.onViewCreated,
     this.onLog,
+    this.wrapperCustomizer,
+    this.styleCustomizer,
+    this.videoCustomizer,
   }) : super(key: key);
 
   @override
@@ -161,8 +224,14 @@ class _AgoraRteVideoViewState extends State<AgoraRteVideoView> {
   @override
   Widget build(BuildContext context) {
     if (kIsWeb) {
-      return const Center(
-        child: Text('Web platform not supported for RTE video view'),
+      return web_view.buildWebVideoView(
+        canvas: widget.canvas,
+        player: widget.player,
+        onViewCreated: widget.onViewCreated,
+        onLog: widget.onLog,
+        wrapperCustomizer: widget.wrapperCustomizer,
+        styleCustomizer: widget.styleCustomizer,
+        videoCustomizer: widget.videoCustomizer,
       );
     }
 

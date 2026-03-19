@@ -2,6 +2,7 @@ import 'dart:js_interop';
 import 'package:agora_rtc_engine/src/agora_rte.dart';
 import 'package:agora_rtc_engine/src/agora_rte_canvas_config.dart';
 import 'package:agora_rtc_engine/src/agora_rte_enums.dart';
+import 'agora_rte_web_view_registry.dart';
 import 'agora_rte_js_interop.dart';
 
 /// Web implementation of [AgoraRteCanvas].
@@ -57,9 +58,20 @@ class AgoraRteCanvasWebImpl implements AgoraRteCanvas {
 
   @override
   Future<void> addView(int viewPtr, {AgoraRteViewConfig? config}) async {
+    final element = AgoraRteWebViewRegistry.get(viewPtr);
+    if (element == null) {
+      throw StateError(
+          'No HTMLElement registered for viewPtr=$viewPtr. '
+          'Ensure AgoraRteVideoView is built before addView is called.');
+    }
+    // Pass the HTMLElement directly — JS SDK accepts HTMLElement at runtime
+    await jsCanvas.addView(element).toDart;
   }
 
   @override
   Future<void> removeView(int viewPtr, {AgoraRteViewConfig? config}) async {
+    final element = AgoraRteWebViewRegistry.get(viewPtr);
+    if (element == null) return;
+    await jsCanvas.removeView(element).toDart;
   }
 }
