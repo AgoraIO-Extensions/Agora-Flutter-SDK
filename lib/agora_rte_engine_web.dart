@@ -1,14 +1,13 @@
-// In order to *not* need this ignore, consider extracting the "web" version
-// of your plugin as a separate package, instead of inlining it in the same
-// package as the core of your plugin.
-// ignore: avoid_web_libraries_in_flutter
-
 import 'package:flutter_web_plugins/flutter_web_plugins.dart';
 
+/// Flutter web plugin registration entry point.
+///
+/// Required by Flutter's web plugin mechanism (declared in pubspec.yaml).
+/// The actual RTE implementation uses dart:js_interop directly via
+/// [createAgoraRte] → conditional import → AgoraRteWebImpl,
+/// so this class is intentionally empty.
 class AgoraRteEngineWeb {
-  AgoraRteEngineWeb();
-
   static void registerWith(Registrar registrar) {
-    // do nothing
+    // No-op. RTE web uses direct JS interop, not MethodChannel.
   }
 }

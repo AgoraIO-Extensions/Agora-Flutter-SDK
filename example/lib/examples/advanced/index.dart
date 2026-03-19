@@ -38,7 +38,7 @@ import 'rte_player/rte_player.dart';
 /// Data source for advanced examples
 final advanced = [
   {'name': 'Advanced'},
-  if (!kIsWeb && (Platform.isAndroid || Platform.isIOS))
+  if (kIsWeb || (Platform.isAndroid || Platform.isIOS))
     {'name': 'RtePlayer', 'widget': const RtePlayerExample()},
   if (!kIsWeb)
     {'name': 'AudioEffectMixing', 'widget': const AudioEffectMixing()},

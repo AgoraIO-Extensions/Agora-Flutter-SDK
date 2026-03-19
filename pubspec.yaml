@@ -19,6 +19,7 @@ dependencies:
   meta: ^1.7.0
   iris_method_channel: '>=2.2.3'
   js: '>=0.6.3'
+  web: ^1.0.0
 dev_dependencies:
   flutter_test:
     sdk: flutter
@@ -41,5 +42,5 @@ flutter:
       web:
         pluginClass: AgoraRteEngineWeb
         fileName: agora_rte_engine_web.dart
-assets:
+  assets:
     - web/rte.js

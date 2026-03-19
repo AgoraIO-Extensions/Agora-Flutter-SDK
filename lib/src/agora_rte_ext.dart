@@ -1,5 +1,6 @@
 import 'package:agora_rtc_engine/src/agora_rte.dart';
-import 'package:agora_rtc_engine/src/impl/agora_rte_impl.dart' as impl;
+import 'impl/agora_rte_impl.dart'
+    if (dart.library.js_interop) 'impl/web/agora_rte_web_impl.dart';
 
 /// Creates and returns an [AgoraRte] instance.
 ///
@@ -39,7 +40,5 @@ import 'package:agora_rtc_engine/src/impl/agora_rte_impl.dart' as impl;
 ///
 /// **Since:** v4.4.0
 ///
-/// **Platform:** iOS, Android
-AgoraRte createAgoraRte() {
-  return impl.AgoraRteImpl.create();
-}
+/// **Platform:** iOS, Android, Web
+AgoraRte createAgoraRte() => createAgoraRteImpl();
