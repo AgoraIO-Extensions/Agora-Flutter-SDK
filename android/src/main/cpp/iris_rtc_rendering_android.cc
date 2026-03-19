@@ -2,6 +2,8 @@
 #include "iris_engine_base.h"
 #include "iris_rtc_rendering_c.h"
 #include "iris_rtc_rendering_cxx.h"
+#define TEXTURE_RENDER_LOGGER_IMPL
+#include "texture_render_logger.h"
 #include "vm_util.h"
 #include <EGL/egl.h>
 #include <GLES2/gl2.h>
@@ -12,6 +14,7 @@
 #include <jni.h>
 #include <memory>
 #include <vector>
+#include <time.h>
 
 namespace agora {
 namespace iris {
@@ -723,6 +726,35 @@ class YUVRendering final : public RenderingOp {
   std::unique_ptr<ScopedShader> shader_;
 };
 
+/// Statistics window for periodic summary logging (Android).
+struct FrameStatsAndroid {
+  int64_t frame_count = 0;
+  int64_t out_of_order_count = 0;
+  int64_t stutter_count = 0;
+  int64_t burst_count = 0;
+  int64_t gl_error_count = 0;
+  double min_interval_ms = 1e9;
+  double max_interval_ms = 0;
+  double sum_interval_ms = 0;
+  int64_t first_render_time_ms = 0;
+  int64_t last_render_time_ms = 0;
+  uint64_t window_start_ns = 0;
+
+  void reset(uint64_t now_ns) {
+    frame_count = 0;
+    out_of_order_count = 0;
+    stutter_count = 0;
+    burst_count = 0;
+    gl_error_count = 0;
+    min_interval_ms = 1e9;
+    max_interval_ms = 0;
+    sum_interval_ms = 0;
+    first_render_time_ms = 0;
+    last_render_time_ms = 0;
+    window_start_ns = now_ns;
+  }
+};
+
 class NativeTextureRenderer final
     : public agora::iris::VideoFrameObserverDelegate {
  public:
@@ -731,7 +763,12 @@ class NativeTextureRenderer final
       agora::iris::IrisRtcRendering *iris_rtc_rendering, unsigned int uid,
       const char *channel_id, int video_source_type, int video_view_setup_mode)
       : jvm_(nullptr), iris_rtc_rendering_(iris_rtc_rendering), width_(0),
-        height_(0), last_frame_time_ms_(0) {
+        height_(0), last_frame_time_ms_(0), total_frame_count_(0),
+        last_receive_time_ns_(0), uid_(uid) {
+    struct timespec ts_init;
+    clock_gettime(CLOCK_MONOTONIC, &ts_init);
+    stats_.reset((uint64_t)ts_init.tv_sec * 1000000000ULL + ts_init.tv_nsec);
+
     env->GetJavaVM(&jvm_);
     j_iris_renderer_obj_ = env->NewGlobalRef(j_iris_renderer_obj);
     jclass j_caller_class = env->GetObjectClass(j_iris_renderer_obj_);
@@ -773,39 +810,94 @@ class NativeTextureRenderer final
 
     if (video_frame->width == 0 || video_frame->height == 0) { return; }
 
-    // Log video frame type for debugging
-    static int frame_count_for_type = 0;
-    frame_count_for_type++;
-    if (frame_count_for_type % 30 == 1) {
-      const char* type_name = "UNKNOWN";
-      switch(video_frame->type) {
-        case agora::media::base::VIDEO_PIXEL_FORMAT::VIDEO_TEXTURE_2D:
-          type_name = "VIDEO_TEXTURE_2D";
-          break;
-        case agora::media::base::VIDEO_PIXEL_FORMAT::VIDEO_TEXTURE_OES:
-          type_name = "VIDEO_TEXTURE_OES";
-          break;
-        case agora::media::base::VIDEO_PIXEL_FORMAT::VIDEO_PIXEL_I420:
-          type_name = "VIDEO_PIXEL_I420 (YUV)";
-          break;
-        default:
-          type_name = "UNKNOWN";
-          break;
-      }
-      LOGCATD("Video Frame [%d] - Type: %s (%d), Size: %dx%d, UID: %u",
-              frame_count_for_type, type_name, video_frame->type,
-              video_frame->width, video_frame->height, config.uid);
-    }
+    struct timespec ts;
+    clock_gettime(CLOCK_MONOTONIC, &ts);
+    uint64_t now_ns = (uint64_t)ts.tv_sec * 1000000000ULL + ts.tv_nsec;
 
+    // --- Anomaly: out-of-order renderTimeMs ---
     if (video_frame->renderTimeMs < last_frame_time_ms_) {
+      stats_.out_of_order_count++;
       LOGCATE("Frame dropped: current time %lld ms, last frame time %lld ms",
               video_frame->renderTimeMs, last_frame_time_ms_);
+      TextureRenderLoggerAndroid::Log("NativeRenderer",
+          "WARN out_of_order: renderTimeMs=%lld, prev=%lld, "
+          "delta=%lldms, total_recv=%lld, uid=%u",
+          video_frame->renderTimeMs, last_frame_time_ms_,
+          last_frame_time_ms_ - video_frame->renderTimeMs,
+          total_frame_count_, uid_);
       return;
     }
 
+    // --- Frame interval tracking ---
+    if (last_receive_time_ns_ > 0) {
+      double delta_ms = (double)(now_ns - last_receive_time_ns_) / 1e6;
+      stats_.sum_interval_ms += delta_ms;
+      if (delta_ms < stats_.min_interval_ms) stats_.min_interval_ms = delta_ms;
+      if (delta_ms > stats_.max_interval_ms) stats_.max_interval_ms = delta_ms;
+
+      if (delta_ms > 200.0) {
+        stats_.stutter_count++;
+        TextureRenderLoggerAndroid::Log("NativeRenderer",
+            "WARN recv_stutter: interval=%.1fms, renderTimeMs=%lld, "
+            "total_recv=%lld, uid=%u",
+            delta_ms, video_frame->renderTimeMs, total_frame_count_, uid_);
+      } else if (delta_ms < 5.0) {
+        stats_.burst_count++;
+        TextureRenderLoggerAndroid::Log("NativeRenderer",
+            "WARN recv_burst: interval=%.1fms, renderTimeMs=%lld, "
+            "total_recv=%lld, uid=%u",
+            delta_ms, video_frame->renderTimeMs, total_frame_count_, uid_);
+      }
+    }
+    last_receive_time_ns_ = now_ns;
+
     last_frame_time_ms_ = video_frame->renderTimeMs;
+    total_frame_count_++;
+    stats_.frame_count++;
+    if (stats_.first_render_time_ms == 0) {
+      stats_.first_render_time_ms = video_frame->renderTimeMs;
+    }
+    stats_.last_render_time_ms = video_frame->renderTimeMs;
+
+    // --- Periodic summary: every 5 seconds ---
+    double window_sec = (double)(now_ns - stats_.window_start_ns) / 1e9;
+    if (window_sec >= 5.0 && stats_.frame_count > 0) {
+      double avg_interval = stats_.frame_count > 1
+          ? stats_.sum_interval_ms / (stats_.frame_count - 1) : 0;
+      double fps = stats_.frame_count / window_sec;
+      const char* type_name = "UNKNOWN";
+      switch(video_frame->type) {
+        case agora::media::base::VIDEO_PIXEL_FORMAT::VIDEO_TEXTURE_2D:
+          type_name = "TEXTURE_2D"; break;
+        case agora::media::base::VIDEO_PIXEL_FORMAT::VIDEO_TEXTURE_OES:
+          type_name = "TEXTURE_OES"; break;
+        case agora::media::base::VIDEO_PIXEL_FORMAT::VIDEO_PIXEL_I420:
+          type_name = "I420"; break;
+        default: break;
+      }
+      TextureRenderLoggerAndroid::Log("NativeRenderer",
+          "STATS window=%.1fs | "
+          "recv: count=%lld fps=%.1f interval_ms(min/avg/max)=%.1f/%.1f/%.1f | "
+          "warn: ooo=%lld stutter=%lld burst=%lld gl_err=%lld | "
+          "renderTimeMs: first=%lld last=%lld | "
+          "type=%s, size=%dx%d, uid=%u, total_recv=%lld",
+          window_sec, stats_.frame_count, fps,
+          stats_.min_interval_ms, avg_interval, stats_.max_interval_ms,
+          stats_.out_of_order_count, stats_.stutter_count,
+          stats_.burst_count, stats_.gl_error_count,
+          stats_.first_render_time_ms, stats_.last_render_time_ms,
+          type_name, video_frame->width, video_frame->height,
+          uid_, total_frame_count_);
+      stats_.reset(now_ns);
+    }
 
     if (width_ != video_frame->width || height_ != video_frame->height) {
+      TextureRenderLoggerAndroid::Log("NativeRenderer",
+          "size_changed: %dx%d -> %dx%d, renderTimeMs=%lld, "
+          "total_recv=%lld, uid=%u",
+          width_, height_, video_frame->width, video_frame->height,
+          video_frame->renderTimeMs, total_frame_count_, uid_);
+
       NotifySizeChangeCallback(video_frame->width, video_frame->height);
       width_ = video_frame->width;
       height_ = video_frame->height;
@@ -819,12 +911,20 @@ class NativeTextureRenderer final
     }
 
     if (!gl_context_->SetupSurface(native_windows_)) {
+      stats_.gl_error_count++;
       LOGCATE("GLContext#SetupSurface failed ");
+      TextureRenderLoggerAndroid::Log("NativeRenderer",
+          "WARN gl_setup_surface_failed: total_recv=%lld, uid=%u",
+          total_frame_count_, uid_);
       return;
     }
 
     if (!gl_context_->GLContextMakeCurrent(video_frame->sharedContext)) {
+      stats_.gl_error_count++;
       LOGCATE("GLContext#CreateContextAndMakeCurrent failed ");
+      TextureRenderLoggerAndroid::Log("NativeRenderer",
+          "WARN gl_make_current_failed: total_recv=%lld, uid=%u",
+          total_frame_count_, uid_);
       return;
     }
 
@@ -851,7 +951,11 @@ class NativeTextureRenderer final
     // Check framebuffer status
     GLenum status = glCheckFramebufferStatus(GL_FRAMEBUFFER);
     if (status != GL_FRAMEBUFFER_COMPLETE) {
+      stats_.gl_error_count++;
       LOGCATE("Framebuffer is not complete: %d", status);
+      TextureRenderLoggerAndroid::Log("NativeRenderer",
+          "WARN framebuffer_incomplete: status=%d, total_recv=%lld, uid=%u",
+          status, total_frame_count_, uid_);
       return;
     }
 
@@ -900,8 +1004,13 @@ class NativeTextureRenderer final
   int height_;
 
   int delegate_id_;
+  unsigned int uid_;
 
   int64_t last_frame_time_ms_;
+  int64_t total_frame_count_;
+  uint64_t last_receive_time_ns_;
+
+  FrameStatsAndroid stats_;
 
   std::shared_ptr<GLContext> gl_context_;
   std::unique_ptr<RenderingOp> rendering_op_;
@@ -936,4 +1045,18 @@ Java_io_agora_agora_1rtc_1ng_IrisRenderer_nativeStopRenderingToSurface(
       reinterpret_cast<NativeTextureRenderer *>(native_renderer_handle);
   renderer->Dispose();
   delete renderer;
+}
+
+extern "C" JNIEXPORT void JNICALL
+Java_io_agora_agora_1rtc_1ng_TextureRenderLogger_nativeEnableLogger(
+    JNIEnv *env, jclass clazz, jstring log_dir) {
+  const char *dir = env->GetStringUTFChars(log_dir, nullptr);
+  TextureRenderLoggerAndroid::Enable(dir);
+  env->ReleaseStringUTFChars(log_dir, dir);
+}
+
+extern "C" JNIEXPORT void JNICALL
+Java_io_agora_agora_1rtc_1ng_TextureRenderLogger_nativeDisableLogger(
+    JNIEnv *env, jclass clazz) {
+  TextureRenderLoggerAndroid::Disable();
 }

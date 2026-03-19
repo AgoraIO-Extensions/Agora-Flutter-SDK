@@ -9,6 +9,7 @@ import 'package:agora_rtc_engine/src/impl/platform/global_video_view_controller.
 import 'package:agora_rtc_engine/src/render/video_view_controller.dart';
 import 'package:flutter/foundation.dart';
 import 'package:meta/meta.dart';
+import 'package:agora_rtc_engine/src/impl/texture_render_logger.dart';
 
 // ignore_for_file: public_member_api_docs
 
@@ -26,7 +27,16 @@ class TextureRenderDisposable {
     VideoViewControllerBaseMixin controller,
     int viewId,
   ) async {
+    TextureRenderLogger.log('TextureRenderDisposable',
+        'create: viewId=$viewId, '
+        'uid=${controller.canvas.uid}, '
+        'channelId=${controller.connection?.channelId}');
+
     await controller._acquireTextureRender(viewId);
+
+    TextureRenderLogger.log('TextureRenderDisposable',
+        'created: viewId=$viewId, textureId=${controller.getTextureId()}');
+
     return TextureRenderDisposable._(controller, viewId);
   }
 
@@ -39,6 +49,8 @@ class TextureRenderDisposable {
       return;
     }
     _isDisposed = true;
+    TextureRenderLogger.log('TextureRenderDisposable',
+        'dispose: viewId=$_viewId, textureId=${_controller.getTextureId()}');
     await _controller._releaseTextureRender(_viewId);
   }
 }
@@ -144,19 +156,36 @@ mixin VideoViewControllerBaseMixin implements VideoViewControllerBase {
     }
     
     if (_activeViewIds.contains(viewId)) {
+      TextureRenderLogger.log('Controller',
+          '_acquireTextureRender: viewId=$viewId already active, '
+          'textureId=$_textureId, activeViews=$_activeViewIds');
       return;
     }
     
     _activeViewIds.add(viewId);
     
     if (_textureId == kTextureNotInit) {
+      final uid = canvas.uid!;
+      final channelId = connection?.channelId ?? '';
+      final sourceType = canvas.sourceType?.value() ?? getVideoSourceType();
+      final setupMode = canvas.setupMode?.value() ??
+          VideoViewSetupMode.videoViewSetupReplace.value();
+
+      TextureRenderLogger.log('Controller',
+          '_acquireTextureRender: creating texture render, '
+          'viewId=$viewId, uid=$uid, channelId=$channelId, '
+          'sourceType=$sourceType, setupMode=$setupMode');
+
       _textureId = await createTextureRender(
-        canvas.uid!,
-        connection?.channelId ?? '',
-        canvas.sourceType?.value() ?? getVideoSourceType(),
-        canvas.setupMode?.value() ??
-            VideoViewSetupMode.videoViewSetupReplace.value(),
+        uid,
+        channelId,
+        sourceType,
+        setupMode,
       );
+
+      TextureRenderLogger.log('Controller',
+          '_acquireTextureRender: texture render created, '
+          'textureId=$_textureId, activeViews=$_activeViewIds');
     }
   }
 
@@ -166,16 +195,29 @@ mixin VideoViewControllerBaseMixin implements VideoViewControllerBase {
     }
     
     if (!_activeViewIds.contains(viewId)) {
+      TextureRenderLogger.log('Controller',
+          '_releaseTextureRender: viewId=$viewId not in activeViews=$_activeViewIds');
       return;
     }
     
     _activeViewIds.remove(viewId);
     
     if (_activeViewIds.isEmpty && _textureId != kTextureNotInit) {
+      TextureRenderLogger.log('Controller',
+          '_releaseTextureRender: destroying texture render, '
+          'textureId=$_textureId, viewId=$viewId');
+
       await rtcEngine.globalVideoViewController?.destroyTextureRender(_textureId);
       _textureId = kTextureNotInit;
       _textureWidth = 0;
       _textureHeight = 0;
+
+      TextureRenderLogger.log('Controller',
+          '_releaseTextureRender: texture render destroyed');
+    } else {
+      TextureRenderLogger.log('Controller',
+          '_releaseTextureRender: viewId=$viewId removed, '
+          'remaining activeViews=$_activeViewIds, textureId=$_textureId');
     }
   }
 

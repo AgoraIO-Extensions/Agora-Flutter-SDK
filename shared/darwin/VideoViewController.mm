@@ -1,6 +1,7 @@
 #import <Foundation/Foundation.h>
 #import "VideoViewController.h"
 #import "TextureRenderer.h"
+#import "TextureRenderLogger.h"
 #import <AgoraRtcWrapper/iris_engine_base.h>
 #import <AgoraRtcWrapper/iris_rtc_rendering_cxx.h>
 
@@ -193,6 +194,13 @@
       result(@(YES));
   } else if ([@"dispose" isEqualToString:call.method]) {
       [self dispose];
+      result(@(YES));
+  } else if ([@"enableTextureRenderLog" isEqualToString:call.method]) {
+      NSString *logDir = call.arguments;
+      [TextureRenderLogger enableWithDirectory:logDir];
+      result([TextureRenderLogger logFilePath]);
+  } else if ([@"disableTextureRenderLog" isEqualToString:call.method]) {
+      [TextureRenderLogger disable];
       result(@(YES));
   }
 }

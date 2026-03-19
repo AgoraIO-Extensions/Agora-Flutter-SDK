@@ -230,6 +230,17 @@ public class VideoViewController implements MethodChannel.MethodCallHandler, Act
 
                 break;
             }
+            case "enableTextureRenderLog": {
+                final String logDir = (String) call.arguments;
+                TextureRenderLogger.enable(logDir);
+                result.success(true);
+                break;
+            }
+            case "disableTextureRenderLog": {
+                TextureRenderLogger.disable();
+                result.success(true);
+                break;
+            }
             case "updateTextureRenderData":
             default:
                 result.notImplemented();

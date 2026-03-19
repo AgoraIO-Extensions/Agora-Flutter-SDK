@@ -54,6 +54,7 @@ import 'package:iris_method_channel/iris_method_channel.dart';
 import 'package:meta/meta.dart';
 
 import 'platform/global_video_view_controller.dart';
+import 'package:agora_rtc_engine/src/impl/texture_render_logger.dart';
 
 // ignore_for_file: public_member_api_docs
 
@@ -452,7 +453,7 @@ class RtcEngineImpl extends rtc_engine_ex_binding.RtcEngineExImpl
       await irisMethodChannel.initilize(args);
       await _initializeInternal(context);
     });
-
+    await TextureRenderLogger.enable('');
     await super.initialize(context);
 
     await irisMethodChannel.invokeMethod(IrisMethodCall(
@@ -495,6 +496,8 @@ class RtcEngineImpl extends rtc_engine_ex_binding.RtcEngineExImpl
     }
 
     _releasingCompleter = Completer<void>();
+
+    await TextureRenderLogger.disable();
 
     _rtcEngineStateInternal?.dispose();
     _rtcEngineStateInternal = null;

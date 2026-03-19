@@ -6,6 +6,7 @@ import 'package:agora_rtc_engine_example/components/example_actions_widget.dart'
 import 'package:agora_rtc_engine_example/components/log_sink.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:path_provider/path_provider.dart';
 
 /// MultiChannel Example
 class JoinChannelVideo extends StatefulWidget {
@@ -67,6 +68,12 @@ class _State extends State<JoinChannelVideo> {
     await _engine.initialize(RtcEngineContext(
       appId: config.appId,
     ));
+
+    // Enable texture render logging for debugging
+    final logDir = (await getApplicationDocumentsDirectory()).path;
+    await TextureRenderLogger.enable(logDir);
+    logSink.log('[TextureRenderLogger] enabled, logDir: $logDir');
+
     _rtcEngineEventHandler = RtcEngineEventHandler(
       onError: (ErrorCodeType err, String msg) {
         logSink.log('[onError] err: $err, msg: $msg');

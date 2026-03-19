@@ -6,6 +6,7 @@ import 'package:agora_rtc_engine/src/agora_rtc_engine.dart';
 import 'package:agora_rtc_engine/src/impl/platform/global_video_view_controller_platform.dart';
 import 'package:agora_rtc_engine/src/impl/platform/io/native_iris_api_engine_binding_delegate.dart';
 import 'package:agora_rtc_engine/src/impl/video_view_controller_impl.dart';
+import 'package:agora_rtc_engine/src/impl/texture_render_logger.dart';
 import 'package:flutter/services.dart';
 import 'package:iris_method_channel/iris_method_channel.dart';
 
@@ -81,8 +82,16 @@ class GlobalVideoViewControllerIO extends GlobalVideoViewControllerPlatfrom {
   Future<int> createTextureRender(int uid, String channelId,
       int videoSourceType, int videoViewSetupMode) async {
     if (_irisRtcRenderingHandle == 0) {
+      TextureRenderLogger.log('GlobalController',
+          'createTextureRender: irisRtcRenderingHandle is 0, returning kTextureNotInit');
       return kTextureNotInit;
     }
+
+    TextureRenderLogger.log('GlobalController',
+        'createTextureRender: uid=$uid, channelId=$channelId, '
+        'videoSourceType=$videoSourceType, videoViewSetupMode=$videoViewSetupMode, '
+        'irisRtcRenderingHandle=$_irisRtcRenderingHandle');
+
     final textureId =
         await methodChannel.invokeMethod<int>('createTextureRender', {
       'irisRtcRenderingHandle': _irisRtcRenderingHandle,
@@ -91,6 +100,10 @@ class GlobalVideoViewControllerIO extends GlobalVideoViewControllerPlatfrom {
       'videoSourceType': videoSourceType,
       'videoViewSetupMode': videoViewSetupMode,
     });
+
+    TextureRenderLogger.log('GlobalController',
+        'createTextureRender: result textureId=${textureId ?? kTextureNotInit}');
+
     return textureId ?? kTextureNotInit;
   }
 
@@ -98,10 +111,18 @@ class GlobalVideoViewControllerIO extends GlobalVideoViewControllerPlatfrom {
   @override
   Future<void> destroyTextureRender(int textureId) async {
     if (_irisRtcRenderingHandle == 0) {
+      TextureRenderLogger.log('GlobalController',
+          'destroyTextureRender: irisRtcRenderingHandle is 0, skipping');
       return;
     }
 
+    TextureRenderLogger.log('GlobalController',
+        'destroyTextureRender: textureId=$textureId');
+
     await methodChannel.invokeMethod('destroyTextureRender', textureId);
+
+    TextureRenderLogger.log('GlobalController',
+        'destroyTextureRender: textureId=$textureId done');
   }
 
   /// Increase the ref count of the native view(`UIView` in iOS, `SurfaceView` or `TextureView` in Android) of the `platformViewId`.

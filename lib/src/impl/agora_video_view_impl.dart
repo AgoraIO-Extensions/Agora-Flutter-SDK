@@ -12,6 +12,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 
 import 'agora_rtc_renderer.dart';
+import 'texture_render_logger.dart';
 
 // ignore_for_file: public_member_api_docs
 
@@ -318,6 +319,7 @@ class _AgoraRtcRenderTextureState extends State<AgoraRtcRenderTexture>
   @override
   void initState() {
     super.initState();
+    TextureRenderLogger.log('TextureWidget', 'initState hashCode=$hashCode');
     _initialize();
   }
 
@@ -325,6 +327,13 @@ class _AgoraRtcRenderTextureState extends State<AgoraRtcRenderTexture>
     final sourceController = widget.controller as VideoViewControllerBaseMixin;
     _controllerInternal = _VideoViewControllerInternal(sourceController, hashCode);
     
+    TextureRenderLogger.log('TextureWidget',
+        '_initialize hashCode=$hashCode, '
+        'uid=${sourceController.canvas.uid}, '
+        'channelId=${sourceController.connection?.channelId}, '
+        'sourceType=${sourceController.canvas.sourceType}, '
+        'isInitialized=${_controllerInternal!.isInitialzed}');
+
     if (!_controllerInternal!.isInitialzed) {
       _listener ??= () {
         _controllerInternal?.removeInitializedCompletedListener(_listener!);
@@ -340,11 +349,23 @@ class _AgoraRtcRenderTextureState extends State<AgoraRtcRenderTexture>
 
   Future<void> _initializeTexture() async {
     if (_controllerInternal == null) {
+      TextureRenderLogger.log('TextureWidget',
+          '_initializeTexture: _controllerInternal is null, hashCode=$hashCode');
       return;
     }
 
+    TextureRenderLogger.log('TextureWidget',
+        '_initializeTexture: starting, hashCode=$hashCode');
+
     await _controllerInternal!.initializeRender();
     final textureId = _controllerInternal!.getTextureId();
+
+    TextureRenderLogger.log('TextureWidget',
+        '_initializeTexture: textureId=$textureId, '
+        'width=${_controllerInternal!.textureWidth}, '
+        'height=${_controllerInternal!.textureHeight}, '
+        'hashCode=$hashCode');
+
     if (textureId != kTextureNotInit) {
       if (_controllerInternal!.textureWidth != 0 &&
           _controllerInternal!.textureHeight != 0) {
@@ -376,6 +397,10 @@ class _AgoraRtcRenderTextureState extends State<AgoraRtcRenderTexture>
       return;
     }
     if (!oldWidget.controller.isSame(widget.controller)) {
+      TextureRenderLogger.log('TextureWidget',
+          'didUpdateWidget: controller changed, '
+          'textureId=${_controllerInternal!.getTextureId()}, '
+          'hashCode=$hashCode, re-initializing');
       await _controllerInternal?.disposeTextureRender();
       await _initialize();
     }
@@ -392,6 +417,10 @@ class _AgoraRtcRenderTextureState extends State<AgoraRtcRenderTexture>
 
   @override
   void dispose() {
+    TextureRenderLogger.log('TextureWidget',
+        'dispose: textureId=${_controllerInternal?.getTextureId()}, '
+        'hashCode=$hashCode');
+
     methodChannel?.setMethodCallHandler(null);
     
     _controllerInternal?.disposeTextureRender();
@@ -413,10 +442,18 @@ class _AgoraRtcRenderTextureState extends State<AgoraRtcRenderTexture>
     methodChannel = MethodChannel('agora_rtc_engine/texture_render_$textureId');
     methodChannel!.setMethodCallHandler((call) async {
       if (call.method == 'onSizeChanged') {
+        final oldWidth = _width;
+        final oldHeight = _height;
         _width = call.arguments['width'];
         _height = call.arguments['height'];
         _controllerInternal!.textureWidth = _width;
         _controllerInternal!.textureHeight = _height;
+
+        TextureRenderLogger.log('TextureWidget',
+            'onSizeChanged: textureId=$textureId, '
+            'oldSize=${oldWidth}x$oldHeight, newSize=${_width}x$_height, '
+            'hashCode=$hashCode');
+
         if (mounted) {
           setState(() {});
         }
