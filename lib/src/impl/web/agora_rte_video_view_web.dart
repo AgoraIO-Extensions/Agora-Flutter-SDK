@@ -57,7 +57,7 @@ Widget buildWebVideoView({
           position: absolute !important;
           top: 0 !important;
           left: 0 !important;
-          object-fit: contain !important;
+          // object-fit: contain !important; // Cannot be set, affecting canvas render mode
         }
       ''';
 

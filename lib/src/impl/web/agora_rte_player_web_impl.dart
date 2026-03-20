@@ -1,4 +1,5 @@
 import 'dart:js_interop';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 import 'package:agora_rtc_engine/src/agora_rte.dart';
 import 'package:agora_rtc_engine/src/agora_rte_enums.dart';
@@ -105,7 +106,16 @@ class AgoraRtePlayerWebImpl implements AgoraRtePlayer {
   @override
   Future<void> switchWithUrl(String url, bool syncPts) async {
     // JS SDK: switchWithUrl(url, startTime) — syncPts not applicable on web
-    await jsPlayer.switchWithUrl(url.toJS, 0.toJS).toDart;
+    if (url.isEmpty) {
+      throw PlatformException(
+          code: 'RTE_ERROR', message: 'url is empty');
+    }
+    try {
+      await jsPlayer.switchWithUrl(url.toJS, 0.toJS).toDart;
+    } catch (e) {
+      debugPrint('switchWithUrl failed: $e');
+    }
+   
   }
 
   @override

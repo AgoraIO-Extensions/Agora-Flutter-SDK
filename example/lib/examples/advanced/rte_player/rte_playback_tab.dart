@@ -255,8 +255,8 @@ class _RtePlaybackTabState extends State<RtePlaybackTab>
 
             // Video display area - using AgoraRteVideoView from SDK
             Container(
-              height: kIsWeb ? 500 : 200,
-              color: Colors.white,
+              height: kIsWeb ? 500 : 300,
+              color: Colors.black,
               child: Stack(
                 children: [
                   if (widget.isReady == true && widget.canvas != null)

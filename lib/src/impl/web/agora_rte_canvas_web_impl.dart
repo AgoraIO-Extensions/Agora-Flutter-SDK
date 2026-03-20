@@ -2,6 +2,7 @@ import 'dart:js_interop';
 import 'package:agora_rtc_engine/src/agora_rte.dart';
 import 'package:agora_rtc_engine/src/agora_rte_canvas_config.dart';
 import 'package:agora_rtc_engine/src/agora_rte_enums.dart';
+import 'package:flutter/foundation.dart';
 import 'agora_rte_web_view_registry.dart';
 import 'agora_rte_js_interop.dart';
 
@@ -24,11 +25,35 @@ class AgoraRteCanvasWebImpl implements AgoraRteCanvas {
       videoMirrorMode: config.videoMirrorMode ?? _config.videoMirrorMode,
       cropArea: config.cropArea ?? _config.cropArea,
     );
-    final rConfig = JsCanvasConfig(
-      renderMode: _config.videoRenderMode?.index.toJS,
-      mirrorMode: _config.videoMirrorMode?.index.toJS,
-    );
-    await jsCanvas.setConfigs(rConfig).toDart;
+    // Only include non-null fields. JS SDK rejects explicit null —
+    // it expects the field to be absent (undefined), not null.
+    final hasRender = _config.videoRenderMode != null;
+    final hasMirror = _config.videoMirrorMode != null;
+
+    if (!hasRender && !hasMirror) return;
+
+    final JsCanvasConfig rConfig;
+    if (hasRender && hasMirror) {
+      rConfig = JsCanvasConfig(
+        renderMode: _config.videoRenderMode!.index.toJS,
+        mirrorMode: _config.videoMirrorMode!.index.toJS,
+      );
+    } else if (hasRender) {
+      rConfig = JsCanvasConfig(
+        renderMode: _config.videoRenderMode!.index.toJS,
+      );
+    } else {
+      rConfig = JsCanvasConfig(
+        mirrorMode: _config.videoMirrorMode!.index.toJS,
+      );
+    }
+
+    try {
+      await jsCanvas.setConfigs(rConfig).toDart;
+    } catch (e) {
+      debugPrint('Failed to set canvas configs: $e');
+    }
+    
   }
 
   @override
