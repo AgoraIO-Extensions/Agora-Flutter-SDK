@@ -173,7 +173,7 @@ class AgoraRteVideoView extends StatefulWidget {
   final Function? videoCustomizer;
 
   const AgoraRteVideoView({
-    Key? key,
+    super.key,
     this.canvas,
     this.player,
     this.onViewCreated,
@@ -181,7 +181,7 @@ class AgoraRteVideoView extends StatefulWidget {
     this.wrapperCustomizer,
     this.styleCustomizer,
     this.videoCustomizer,
-  }) : super(key: key);
+  });
 
   @override
   State<AgoraRteVideoView> createState() => _AgoraRteVideoViewState();

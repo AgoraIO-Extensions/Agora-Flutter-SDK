@@ -184,7 +184,40 @@ class AgoraRteCoreWebImpl {
       throw PlatformException(
           code: 'RTE_ERROR', message: 'RTE engine not initialized');
     }
-    return _config;
+    final jsConfig = _jsRte!.getConfigs();
+    return AgoraRteConfig(
+      appId: jsConfig.appId.toDart,
+      areaCode: _reverseMapAreaCode(jsConfig.areaCode?.toDart),
+      cloudProxy: jsConfig.cloudProxy?.toDart,
+      // Fields only stored locally (JS SDK doesn't return these)
+      logFolder: _config.logFolder,
+      logFileSize: _config.logFileSize,
+      jsonParameter: _config.jsonParameter,
+      useStringUid: _config.useStringUid,
+    );
+  }
+
+  /// JS areaCode string → native bitmask int
+  static int? _reverseMapAreaCode(String? code) {
+    if (code == null) return null;
+    switch (code) {
+      case JsRteAreaCode.cn:
+        return 0x00000001;
+      case JsRteAreaCode.na:
+        return 0x00000002;
+      case JsRteAreaCode.eu:
+        return 0x00000004;
+      case JsRteAreaCode.as_:
+        return 0x00000008;
+      case JsRteAreaCode.jp:
+        return 0x00000010;
+      case JsRteAreaCode.in_:
+        return 0x00000020;
+      case JsRteAreaCode.glob:
+        return 0xFFFFFFFF;
+      default:
+        return null;
+    }
   }
 
   Future<AgoraRtePlayer> createPlayer(AgoraRtePlayerConfig config) async {

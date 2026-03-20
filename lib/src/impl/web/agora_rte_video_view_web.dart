@@ -70,7 +70,6 @@ Widget buildWebVideoView({
       final video = web.document.createElement('video') as web.HTMLVideoElement;
       video.id = videoElId;
       video.autoplay = true;
-      video.controls = true;
       video.setAttribute('playsinline', 'true');
 
       if (videoCustomizer != null) {

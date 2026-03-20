@@ -188,7 +188,7 @@ class AgoraRtePlayerWebImpl implements AgoraRtePlayer {
       autoPlay: _config.autoPlay?.toJS,
       // Native playbackSpeed is percentage (100=1x), JS SDK expects multiplier (1.0)
       playbackSpeed: _config.playbackSpeed != null
-          ? (_config.playbackSpeed! / 100.0).toJS
+          ? (_config.playbackSpeed!).toJS
           : null,
       playoutVolume: _config.playoutVolume?.toJS,
       loopCount: _config.loopCount?.toJS,
@@ -205,7 +205,7 @@ class AgoraRtePlayerWebImpl implements AgoraRtePlayer {
     final jsSpeed = jsConfig.playbackSpeed?.toDartDouble;
     return AgoraRtePlayerConfig(
       autoPlay: jsConfig.autoPlay?.toDart,
-      playbackSpeed: jsSpeed != null ? (jsSpeed * 100).round() : null,
+      playbackSpeed: jsSpeed != null ? (jsSpeed).round() : null,
       playoutVolume: jsConfig.playoutVolume?.toDartInt,
       loopCount: jsConfig.loopCount?.toDartInt,
       abrSubscriptionLayer:

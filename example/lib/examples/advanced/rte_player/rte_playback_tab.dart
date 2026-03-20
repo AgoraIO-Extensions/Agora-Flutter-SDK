@@ -14,6 +14,7 @@ class RtePlaybackTab extends StatefulWidget {
   final int? playbackSpeed;
   final int? volume;
   final int? audioVolume;
+
   /// Whether the player is currently playing (used to decide whether to resume after seek).
   final bool? isPlaying;
   final Function(String)? onLog;
@@ -60,7 +61,8 @@ class _RtePlaybackTabState extends State<RtePlaybackTab>
   @override
   bool get wantKeepAlive => true;
 
-  final TextEditingController _urlController = TextEditingController(text:'https://download.agora.io/demo/test/Agora.io-Interactions.mp4');
+  final TextEditingController _urlController = TextEditingController(
+      text: 'https://download.agora.io/demo/test/Agora.io-Interactions.mp4');
 
   final TextEditingController _switchUrlController =
       TextEditingController(text: 'rte://your_channel_id_2?token=xxx&uid=xxx');
@@ -69,10 +71,13 @@ class _RtePlaybackTabState extends State<RtePlaybackTab>
 
   bool _isAudioMuted = false;
   bool _isVideoMuted = false;
+
   /// True while user is dragging the progress slider.
   bool _isSliding = false;
+
   /// Local slider value during drag (so thumb follows finger without triggering seek).
   double _sliderValue = 0;
+
   /// Captured at onChangeStart: whether to call play() after seek.
   bool _wasPlayingBeforeSeek = false;
 
@@ -137,10 +142,11 @@ class _RtePlaybackTabState extends State<RtePlaybackTab>
       await widget.player!.seek(value.toInt());
       // if (resumePlayback) {
       //   Future.delayed(const Duration(milliseconds: 100), () async {
-            widget.player!.play();
+      widget.player!.play();
       //   });
       // }
-      widget.onLog?.call('Seek to ${value.toInt()}ms${resumePlayback ? ', resumed' : ''}');
+      widget.onLog?.call(
+          'Seek to ${value.toInt()}ms${resumePlayback ? ', resumed' : ''}');
     } catch (e) {
       widget.onLog?.call('Seek error: $e');
     }
@@ -249,8 +255,8 @@ class _RtePlaybackTabState extends State<RtePlaybackTab>
 
             // Video display area - using AgoraRteVideoView from SDK
             Container(
-              height: 200,
-              color: Colors.black,
+              height: kIsWeb ? 500 : 200,
+              color: Colors.white,
               child: Stack(
                 children: [
                   if (widget.isReady == true && widget.canvas != null)
@@ -288,7 +294,7 @@ class _RtePlaybackTabState extends State<RtePlaybackTab>
               ),
             ),
 
-            // Playback progress 
+            // Playback progress
             if (widget.duration != null && widget.duration! > 0) ...[
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 16.0),
@@ -297,7 +303,8 @@ class _RtePlaybackTabState extends State<RtePlaybackTab>
                     Slider(
                       value: _isSliding
                           ? _sliderValue
-                          : (widget.currentPosition?.toDouble() ?? 0),
+                          : (widget.currentPosition?.toDouble() ?? 0)
+                              .clamp(0, widget.duration?.toDouble() ?? 0),
                       min: 0,
                       max: widget.duration?.toDouble() ?? 0,
                       onChangeStart: (value) {

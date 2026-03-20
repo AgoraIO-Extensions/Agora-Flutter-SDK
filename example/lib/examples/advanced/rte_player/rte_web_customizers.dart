@@ -8,7 +8,7 @@ class RteWebCustomizers {
   /// Customize wrapper div: border-radius, background, etc.
   static void wrapper(dynamic wrapper) {
     final el = wrapper as web.HTMLDivElement;
-    el.style.borderRadius = '8px';
+    // el.style.borderRadius = '8px';
     // el.style.border = '2px solid red';
     // el.style.backgroundColor = '#1a1a1a';
     // el.style.boxShadow = '0 4px 12px rgba(0,0,0,0.3)';
@@ -26,25 +26,24 @@ class RteWebCustomizers {
      * scale-down
      */
     
-    el.textContent = '''
-      #$wrapperId > video {
-        width: 100% !important;
-        height: 100% !important;
-        position: absolute !important;
-        top: 0 !important;
-        left: 0 !important;
-        object-fit: scale-down !important;
-      }
-    ''';
-    // el.media = 'screen and (max-width: 600px)';
+    // el.textContent = '''
+    //   #$wrapperId > video {
+    //     width: 100% !important;
+    //     height: 100% !important;
+    //     position: absolute !important;
+    //     top: 0 !important;
+    //     left: 0 !important;
+    //     object-fit: contain !important;
+    //   }
+    // ''';
+    // el.media = 'screen and (max-width: 700px)';
     // el.disabled = true;
   }
 
   /// Customize video element: controls, poster, muted, etc.
   static void video(dynamic video) {
-    final el = video as web.HTMLVideoElement;
-    el.controls = false;
-    // el.muted = true;
+    // final el = video as web.HTMLVideoElement;
+    // el.controls = false;
     // el.poster = 'https://example.com/poster.jpg';
     // el.style.filter = 'brightness(0.9)';
   }

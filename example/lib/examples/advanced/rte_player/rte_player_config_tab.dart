@@ -1,4 +1,5 @@
 import 'package:agora_rtc_engine/agora_rte_engine.dart';
+import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter/material.dart';
 
 class RtePlayerConfigTab extends StatefulWidget {
@@ -28,12 +29,12 @@ class _RtePlayerConfigTabState extends State<RtePlayerConfigTab> {
   int _loopCount = 0;
   int _playoutAudioTrackIdx = 0;
   int _publishAudioTrackIdx = 0;
-  int _audioTrackIdx = 0; // Defines which audio track to play
-  int _subtitleTrackIdx = 0; // Defines which subtitle track to play
+  int _audioTrackIdx = 0;
+  int _subtitleTrackIdx = 0;
   int _externalSubtitleTrackIdx = 0;
   int _audioPitch = 0;
   int _audioPlaybackDelay = 0;
-  int _audioDualMonoMode = 0; // 0: L, 1: R, 2: Mix
+  int _audioDualMonoMode = 0;
   int _publishVolume = 100;
   String _playerJsonParameter = '';
   AgoraRteAbrSubscriptionLayer _abrSubscriptionLayer =
@@ -82,7 +83,7 @@ class _RtePlayerConfigTabState extends State<RtePlayerConfigTab> {
           _abrFallbackLayer = rtePlayerConfig.abrFallbackLayer ??
               AgoraRteAbrFallbackLayer.disabled;
         });
-        
+
         widget.onPlaybackSpeedChanged?.call(_playbackSpeed);
         widget.onVolumeChanged?.call(_volume);
       }
@@ -113,6 +114,7 @@ class _RtePlayerConfigTabState extends State<RtePlayerConfigTab> {
         _playbackSpeed = speed;
       });
       widget.onPlaybackSpeedChanged?.call(speed);
+      await _loadPlayerConfig();
       widget.onLog('Set PlaybackSpeed: ${speed / 100.0}x');
     } catch (e) {
       widget.onLog('Set PlaybackSpeed error: $e');
@@ -128,6 +130,7 @@ class _RtePlayerConfigTabState extends State<RtePlayerConfigTab> {
         _volume = volume;
       });
       widget.onVolumeChanged?.call(volume);
+      await _loadPlayerConfig();
       widget.onLog('Set PlayoutVolume: $volume');
     } catch (e) {
       widget.onLog('Set PlayoutVolume error: $e');
@@ -141,6 +144,7 @@ class _RtePlayerConfigTabState extends State<RtePlayerConfigTab> {
       setState(() {
         _loopCount = count;
       });
+      await _loadPlayerConfig();
       widget.onLog('Set LoopCount: $count');
     } catch (e) {
       widget.onLog('Set LoopCount error: $e');
@@ -291,7 +295,6 @@ class _RtePlayerConfigTabState extends State<RtePlayerConfigTab> {
     }
   }
 
-  /// Example: Using setConfigs() to set multiple player configs at once
   Future<void> _setPlayerConfigsBatch() async {
     if (widget.player == null) return;
     try {
@@ -309,7 +312,8 @@ class _RtePlayerConfigTabState extends State<RtePlayerConfigTab> {
         audioPlaybackDelay: _audioPlaybackDelay,
         audioDualMonoMode: _audioDualMonoMode,
         publishVolume: _publishVolume,
-        jsonParameter: _playerJsonParameter.isEmpty ? null : _playerJsonParameter,
+        jsonParameter:
+            _playerJsonParameter.isEmpty ? null : _playerJsonParameter,
         abrSubscriptionLayer: _abrSubscriptionLayer,
         abrFallbackLayer: _abrFallbackLayer,
       ));
@@ -368,43 +372,59 @@ class _RtePlayerConfigTabState extends State<RtePlayerConfigTab> {
                   'Playout Audio Track Idx',
                   '$_playoutAudioTrackIdx',
                   (value) =>
-                      _setPlayerPlayoutAudioTrackIdx(int.tryParse(value) ?? 0)),
+                      _setPlayerPlayoutAudioTrackIdx(int.tryParse(value) ?? 0),
+                  enabled: !kIsWeb),
               _buildConfigItem(
                   'Publish Audio Track Idx',
                   '$_publishAudioTrackIdx',
                   (value) =>
-                      _setPlayerPublishAudioTrackIdx(int.tryParse(value) ?? 0)),
-              _buildConfigItem('Audio Track Idx', '$_audioTrackIdx',
-                  (value) => _setPlayerAudioTrackIdx(int.tryParse(value) ?? 0)),
+                      _setPlayerPublishAudioTrackIdx(int.tryParse(value) ?? 0),
+                  enabled: !kIsWeb),
+              _buildConfigItem(
+                  'Audio Track Idx',
+                  '$_audioTrackIdx',
+                  (value) =>
+                      _setPlayerAudioTrackIdx(int.tryParse(value) ?? 0),
+                  enabled: !kIsWeb),
               _buildConfigItem(
                   'Subtitle Track Idx',
                   '$_subtitleTrackIdx',
                   (value) =>
-                      _setPlayerSubtitleTrackIdx(int.tryParse(value) ?? 0)),
+                      _setPlayerSubtitleTrackIdx(int.tryParse(value) ?? 0),
+                  enabled: !kIsWeb),
               _buildConfigItem(
                   'External Subtitle Track Idx',
                   '$_externalSubtitleTrackIdx',
                   (value) => _setPlayerExternalSubtitleTrackIdx(
-                      int.tryParse(value) ?? 0)),
-              _buildConfigItem('Audio Pitch', '$_audioPitch',
-                  (value) => _setPlayerAudioPitch(int.tryParse(value) ?? 0)),
+                      int.tryParse(value) ?? 0),
+                  enabled: !kIsWeb),
+              _buildConfigItem(
+                  'Audio Pitch',
+                  '$_audioPitch',
+                  (value) =>
+                      _setPlayerAudioPitch(int.tryParse(value) ?? 0),
+                  enabled: !kIsWeb),
               _buildConfigItem(
                   'Audio Playback Delay',
                   '$_audioPlaybackDelay',
                   (value) =>
-                      _setPlayerAudioPlaybackDelay(int.tryParse(value) ?? 0)),
+                      _setPlayerAudioPlaybackDelay(int.tryParse(value) ?? 0),
+                  enabled: !kIsWeb),
               _buildConfigItem(
                   'Audio Dual Mono Mode',
                   '$_audioDualMonoMode',
                   (value) =>
-                      _setPlayerAudioDualMonoMode(int.tryParse(value) ?? 0)),
+                      _setPlayerAudioDualMonoMode(int.tryParse(value) ?? 0),
+                  enabled: !kIsWeb),
               _buildConfigItem(
                   'Publish Volume',
                   '$_publishVolume',
                   (value) =>
-                      _setPlayerPublishVolume(int.tryParse(value) ?? 100)),
+                      _setPlayerPublishVolume(int.tryParse(value) ?? 100),
+                  enabled: !kIsWeb),
               _buildConfigItem('JSON Parameter', _playerJsonParameter,
-                  (value) => _setPlayerJsonParameter(value)),
+                  (value) => _setPlayerJsonParameter(value),
+                  enabled: !kIsWeb),
               const SizedBox(height: 8),
               const Text('ABR Subscription Layer:',
                   style: TextStyle(fontWeight: FontWeight.bold)),
@@ -455,7 +475,8 @@ class _RtePlayerConfigTabState extends State<RtePlayerConfigTab> {
     );
   }
 
-  Widget _buildConfigItem(String label, String value, Function(String) onSave) {
+  Widget _buildConfigItem(String label, String value, Function(String) onSave,
+      {bool enabled = true}) {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 8.0),
       child: Row(
@@ -467,11 +488,13 @@ class _RtePlayerConfigTabState extends State<RtePlayerConfigTab> {
           Expanded(
             child: TextField(
               controller: TextEditingController(text: value),
-              decoration: const InputDecoration(
-                border: OutlineInputBorder(),
+              enabled: enabled,
+              decoration: InputDecoration(
+                border: const OutlineInputBorder(),
                 isDense: true,
+                helperText: enabled ? null : 'Web is not supported',
               ),
-              onSubmitted: onSave,
+              onSubmitted: enabled ? onSave : null,
             ),
           ),
         ],
