@@ -9,14 +9,12 @@ import 'package:web/web.dart' as web;
 /// registers it in [AgoraRteWebViewRegistry], then calls canvas.addView
 /// so the JS SDK can use it for rendering.
 ///
-/// The wrapper div uses CSS to force the video element to stay within bounds,
-/// even if the JS SDK internally resets the video element's inline styles.
-///
-/// Optional customizer callbacks allow the caller to modify the wrapper div,
-/// style element, and video element after default properties are applied:
-/// - [wrapperCustomizer]: `void Function(web.HTMLDivElement wrapper)`
-/// - [styleCustomizer]: `void Function(web.HTMLStyleElement style, int viewKey)`
-/// - [videoCustomizer]: `void Function(web.HTMLVideoElement video)`
+/// Optional customizer callbacks (all passed as `Function?` for cross-platform
+/// compatibility — cast to concrete web types in your implementation):
+/// - [wrapperCustomizer]: `void Function(HTMLDivElement wrapper)`
+/// - [styleCustomizer]: `void Function(HTMLStyleElement style, String wrapperId)`
+///   — default CSS is already set on style.textContent before this is called.
+/// - [videoCustomizer]: `void Function(HTMLVideoElement video)`
 Widget buildWebVideoView({
   required AgoraRteCanvas? canvas,
   required AgoraRtePlayer? player,
@@ -32,30 +30,28 @@ Widget buildWebVideoView({
 
   final int viewKey = canvas.canvasId.hashCode;
   final String viewType = 'agora-rte-video-$viewKey';
+  final String wrapperId = 'agora-rte-wrapper-$viewKey';
+  final String videoElId = 'agora-rte-video-el-$viewKey';
 
   if (!_registeredViewTypes.contains(viewType)) {
     _registeredViewTypes.add(viewType);
     ui_web.platformViewRegistry.registerViewFactory(viewType, (int id) {
-      // Wrapper div that enforces size constraints via CSS.
-      final wrapper =
-          web.document.createElement('div') as web.HTMLDivElement;
-      wrapper.id = 'agora-rte-wrapper-$viewKey';
+      final wrapper = web.document.createElement('div') as web.HTMLDivElement;
+      wrapper.id = wrapperId;
       wrapper.style.width = '100%';
       wrapper.style.height = '100%';
       wrapper.style.overflow = 'hidden';
       wrapper.style.position = 'relative';
 
-      // Allow caller to customize wrapper after defaults
       if (wrapperCustomizer != null) {
         wrapperCustomizer(wrapper);
       }
 
-      // Inject a scoped style that forces the video to fill the wrapper.
-      // This beats any inline styles the JS SDK may set on the video.
-      final style =
-          web.document.createElement('style') as web.HTMLStyleElement;
+      // Scoped CSS that forces the video to fill the wrapper.
+      // Uses !important to beat any inline styles the JS SDK may set.
+      final style = web.document.createElement('style') as web.HTMLStyleElement;
       style.textContent = '''
-        #agora-rte-wrapper-$viewKey > video {
+        #$wrapperId > video {
           width: 100% !important;
           height: 100% !important;
           position: absolute !important;
@@ -65,34 +61,27 @@ Widget buildWebVideoView({
         }
       ''';
 
-      // Allow caller to customize or replace style content
       if (styleCustomizer != null) {
-        styleCustomizer(style, viewKey);
+        styleCustomizer(style, wrapperId);
       }
 
       wrapper.appendChild(style);
 
-      final video =
-          web.document.createElement('video') as web.HTMLVideoElement;
-      video.id = 'agora-rte-video-el-$viewKey';
+      final video = web.document.createElement('video') as web.HTMLVideoElement;
+      video.id = videoElId;
       video.autoplay = true;
       video.controls = true;
       video.setAttribute('playsinline', 'true');
 
-      // Allow caller to customize video element
       if (videoCustomizer != null) {
         videoCustomizer(video);
       }
 
       wrapper.appendChild(video);
 
-      // Register the video element so canvas impl can retrieve it
       AgoraRteWebViewRegistry.register(viewKey, video);
 
-      // Tell JS Canvas about this video element, then re-setCanvas on Player
-      // so JS SDK knows the video element is available for rendering.
-      // This fixes the timing issue where player.setCanvas was called
-      // before canvas had any view element.
+      // Bindcanvas → player after the video element is in the DOM.
       canvas.addView(viewKey).then((_) {
         onLog?.call('Web video element bound to canvas');
         if (player != null) {

@@ -138,22 +138,20 @@ class AgoraRteVideoView extends StatefulWidget {
 
   /// (Web only) Optional callback to customize the injected `<style>` element.
   ///
-  /// Called after the default CSS rules are set. You can replace
-  /// `style.textContent` entirely or append additional rules.
-  /// Parameters: `(web.HTMLStyleElement style, int viewKey)`.
+  /// Called after the default CSS rules are set on `textContent`. Receives the
+  /// `HTMLStyleElement` (as `dynamic`) and the wrapper element's id string.
+  /// Cast to `web.HTMLStyleElement` in your implementation to get full access.
+  /// Signature: `void Function(HTMLStyleElement style, String wrapperId)`
   ///
   /// **Example:**
   /// ```dart
   /// import 'package:web/web.dart' as web;
-  /// AgoraRteVideoView(
-  ///   styleCustomizer: (style, viewKey) {
-  ///     (style as web.HTMLStyleElement).textContent = '''
-  ///       #agora-rte-wrapper-\$viewKey > video {
-  ///         object-fit: cover !important;
-  ///       }
-  ///     ''';
-  ///   },
-  /// )
+  /// void myStyleCustomizer(dynamic style, String wrapperId) {
+  ///   final el = style as web.HTMLStyleElement;
+  ///   el.textContent = '#$wrapperId > video { object-fit: cover !important; }';
+  ///   // el.media = 'screen and (max-width: 600px)';
+  ///   // el.disabled = true;
+  /// }
   /// ```
   final Function? styleCustomizer;
 

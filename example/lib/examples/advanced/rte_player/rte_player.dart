@@ -1,18 +1,21 @@
 import 'dart:async';
 import 'dart:convert';
-import 'dart:typed_data';
 
 import 'package:agora_rtc_engine/agora_rte_engine.dart';
 import 'package:agora_rtc_engine_example/components/log_sink.dart';
 import 'package:agora_rtc_engine_example/config/agora.config.dart' as config;
+import 'package:agora_rtc_engine_example/examples/advanced/rte_player/rte_canvas_config_tab.dart';
+import 'package:agora_rtc_engine_example/examples/advanced/rte_player/rte_config_tab.dart';
+import 'package:agora_rtc_engine_example/examples/advanced/rte_player/rte_info_log_view.dart';
+import 'package:agora_rtc_engine_example/examples/advanced/rte_player/rte_playback_tab.dart';
+import 'package:agora_rtc_engine_example/examples/advanced/rte_player/rte_player_config_tab.dart';
+import 'package:agora_rtc_engine_example/examples/advanced/rte_player/rte_test_tab.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
-import 'rte_canvas_config_tab.dart';
-import 'rte_config_tab.dart';
-import 'rte_info_log_view.dart';
-import 'rte_playback_tab.dart';
-import 'rte_player_config_tab.dart';
-import 'rte_test_tab.dart';
+import 'package:agora_rtc_engine_example/examples/advanced/rte_player/rte_web_customizers.dart'
+    if (dart.library.io) 'package:agora_rtc_engine_example/examples/advanced/rte_player/rte_web_customizers_stub.dart'
+    as web_customizers;
 
 class RtePlayerExample extends StatefulWidget {
   const RtePlayerExample({Key? key}) : super(key: key);
@@ -238,6 +241,12 @@ class _PlayerViewState extends State<_PlayerView>
                   onLog: activeCtrl.addLog,
                   onVolumeChanged: (v) => activeCtrl.setVolume(v),
                   onPlaybackSpeedChanged: (s) => activeCtrl.setPlaybackSpeed(s),
+                  wrapperCustomizer:
+                      kIsWeb ? web_customizers.RteWebCustomizers.wrapper : null,
+                  styleCustomizer:
+                      kIsWeb ? web_customizers.RteWebCustomizers.style : null,
+                  videoCustomizer:
+                      kIsWeb ? web_customizers.RteWebCustomizers.video : null,
                 ),
                 _cachedRteConfigTab!,
                 _cachedPlayerConfigTab!,
@@ -368,20 +377,20 @@ class _PlayerController implements AgoraRtePlayerObserver {
   void updateStats() async {
     if (_disposed || player == null) return;
     try {
-        final stats = await player!.getStats();
-        final info = await player!.getInfo();
+      final stats = await player!.getStats();
+      final info = await player!.getInfo();
 
-        statsNotifier.value = stats;
-        playerInfoNotifier.value = info;
+      statsNotifier.value = stats;
+      playerInfoNotifier.value = info;
 
-        final newDuration = info.duration ?? 0;
-        if (duration != newDuration) {
-          duration = newDuration;
-          _controllerUpdateFromObserver();
-        }
-      } catch (e) {
-        // debugPrint('Get stats error: $e');
+      final newDuration = info.duration ?? 0;
+      if (duration != newDuration) {
+        duration = newDuration;
+        _controllerUpdateFromObserver();
       }
+    } catch (e) {
+      // debugPrint('Get stats error: $e');
+    }
   }
 
   void addLog(String message) {
@@ -456,27 +465,30 @@ class _PlayerController implements AgoraRtePlayerObserver {
     // Decode metadata content for better visibility
     String decodedContent = '';
     String hexContent = '';
-    
+
     if (data.isNotEmpty) {
       // Try to decode as UTF-8 string
       try {
         decodedContent = utf8.decode(data, allowMalformed: true);
         // Check if it's valid printable text
-        final isPrintable = decodedContent.codeUnits.every((code) => 
-            (code >= 32 && code <= 126) || 
-            code == 9 || code == 10 || code == 13);
+        final isPrintable = decodedContent.codeUnits.every((code) =>
+            (code >= 32 && code <= 126) ||
+            code == 9 ||
+            code == 10 ||
+            code == 13);
         if (!isPrintable || decodedContent.trim().isEmpty) {
           decodedContent = '';
         }
       } catch (e) {
         decodedContent = '';
       }
-      
+
       // Convert to hex string for binary data
       final maxHexBytes = data.length > 64 ? 64 : data.length;
       final hexBuffer = StringBuffer();
       for (int i = 0; i < maxHexBytes; i++) {
-        hexBuffer.write(data[i].toRadixString(16).padLeft(2, '0').toUpperCase());
+        hexBuffer
+            .write(data[i].toRadixString(16).padLeft(2, '0').toUpperCase());
         hexBuffer.write(' ');
         if ((i + 1) % 16 == 0) {
           hexBuffer.writeln();
@@ -487,10 +499,11 @@ class _PlayerController implements AgoraRtePlayerObserver {
       }
       hexContent = hexBuffer.toString();
     }
-    
+
     // Log decoded content
     final logMessage = StringBuffer();
-    logMessage.write('playerObserver onMetadata: ${type.name}, length: ${data.length}');
+    logMessage.write(
+        'playerObserver onMetadata: ${type.name}, length: ${data.length}');
     if (decodedContent.isNotEmpty) {
       logMessage.write('\n  Decoded (UTF-8): $decodedContent');
     }

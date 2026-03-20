@@ -20,6 +20,15 @@ class RtePlaybackTab extends StatefulWidget {
   final Function(int)? onVolumeChanged;
   final Function(int)? onPlaybackSpeedChanged;
 
+  /// (Web only) Customizer for the wrapper div element.
+  final Function? wrapperCustomizer;
+
+  /// (Web only) Customizer for the style element.
+  final Function? styleCustomizer;
+
+  /// (Web only) Customizer for the video element.
+  final Function? videoCustomizer;
+
   const RtePlaybackTab({
     Key? key,
     this.player,
@@ -37,6 +46,9 @@ class RtePlaybackTab extends StatefulWidget {
     this.onLog,
     this.onVolumeChanged,
     this.onPlaybackSpeedChanged,
+    this.wrapperCustomizer,
+    this.styleCustomizer,
+    this.videoCustomizer,
   }) : super(key: key);
 
   @override
@@ -249,6 +261,9 @@ class _RtePlaybackTabState extends State<RtePlaybackTab>
                       onViewCreated: () {
                         widget.onLog?.call('AgoraRteVideoView created');
                       },
+                      wrapperCustomizer: widget.wrapperCustomizer,
+                      styleCustomizer: widget.styleCustomizer,
+                      videoCustomizer: widget.videoCustomizer,
                     )
                   else
                     Center(
@@ -329,25 +344,37 @@ class _RtePlaybackTabState extends State<RtePlaybackTab>
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
                 IconButton(
-                  onPressed: () {
-                    widget.player?.play();
-                    widget.onLog?.call('Play');
+                  onPressed: () async {
+                    try {
+                      await widget.player?.play();
+                      widget.onLog?.call('Play');
+                    } catch (e) {
+                      widget.onLog?.call('Play error: $e');
+                    }
                   },
                   icon: const Icon(Icons.play_arrow),
                   tooltip: 'Play',
                 ),
                 IconButton(
-                  onPressed: () {
-                    widget.player?.pause();
-                    widget.onLog?.call('Pause');
+                  onPressed: () async {
+                    try {
+                      await widget.player?.pause();
+                      widget.onLog?.call('Pause');
+                    } catch (e) {
+                      widget.onLog?.call('Pause error: $e');
+                    }
                   },
                   icon: const Icon(Icons.pause),
                   tooltip: 'Pause',
                 ),
                 IconButton(
-                  onPressed: () {
-                    widget.player?.stop();
-                    widget.onLog?.call('Stop');
+                  onPressed: () async {
+                    try {
+                      await widget.player?.stop();
+                      widget.onLog?.call('Stop');
+                    } catch (e) {
+                      widget.onLog?.call('Stop error: $e');
+                    }
                   },
                   icon: const Icon(Icons.stop),
                   tooltip: 'Stop',
