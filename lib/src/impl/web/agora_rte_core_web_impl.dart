@@ -1,6 +1,5 @@
 import 'dart:convert';
 import 'dart:js_interop';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 import 'package:agora_rtc_engine/src/agora_rte.dart';
 import 'package:agora_rtc_engine/src/agora_rte_canvas_config.dart';
@@ -53,62 +52,16 @@ class AgoraRteCoreWebImpl {
 
   /// Build [JsRteConfig] from [AgoraRteConfig].
   ///
-  /// Expects `config.jsonParameter` to already contain the merged protected
-  /// params (via [_mergeJsonParameter]).  Converts the JSON string into the
-  /// `Array<SdkParameter>` format the JS SDK expects.
-  ///
-  /// JS SDK areaCode is a string ("cn","na","eu","as","jp","in","glob"),
-  /// while native uses bitmask integers. We map the most common values.
+  /// JS SDK's RteConfig only has: appId, logFolder?, cloudProxy?, jsonParameter?.
+  /// Fields like areaCode/logFileSize/useStringUid are stored locally in [_config]
+  /// for round-trip and are not passed to the JS SDK.
   JsRteConfig _buildJsRteConfig(AgoraRteConfig config) {
-    final jsSdkParams = <JSAny>[];
-
-    if (config.jsonParameter != null && config.jsonParameter!.isNotEmpty) {
-      try {
-        final Map<String, dynamic> paramMap =
-            Map<String, dynamic>.from(jsonDecode(config.jsonParameter!));
-        for (final e in paramMap.entries) {
-          jsSdkParams.add(JsSdkParameter(
-            key: e.key.toJS,
-            value: (e.value is String)
-                ? (e.value as String).toJS
-                : (e.value is num)
-                    ? (e.value as num).toJS
-                    : e.value.toString().toJS,
-          ) as JSAny);
-        }
-      } catch (e) {
-        debugPrint('_buildJsRteConfig: failed to parse jsonParameter: $e');
-      }
-    }
-
     return JsRteConfig(
       appId: (config.appId ?? '').toJS,
-      areaCode: _mapAreaCode(config.areaCode)?.toJS,
+      logFolder: config.logFolder?.toJS,
       cloudProxy: config.cloudProxy?.toJS,
-      sdkParameters: jsSdkParams.toJS,
+      jsonParameter: config.jsonParameter?.toJS,
     );
-  }
-
-  static String? _mapAreaCode(int? code) {
-    if (code == null) return null;
-    // Native bitmask → JS RteAreaCode string
-    switch (code) {
-      case 0x00000001:
-        return JsRteAreaCode.cn;
-      case 0x00000002:
-        return JsRteAreaCode.na;
-      case 0x00000004:
-        return JsRteAreaCode.eu;
-      case 0x00000008:
-        return JsRteAreaCode.as_;
-      case 0x00000010:
-        return JsRteAreaCode.jp;
-      case 0x00000020:
-        return JsRteAreaCode.in_;
-      case 0xFFFFFFFF:
-      default:
-        return JsRteAreaCode.glob;
-    }
   }
 
   Future<void> initMediaEngine() async {
@@ -175,37 +128,14 @@ class AgoraRteCoreWebImpl {
     final jsConfig = _jsRte!.getConfigs();
     return AgoraRteConfig(
       appId: jsConfig.appId.toDart,
-      areaCode: _reverseMapAreaCode(jsConfig.areaCode?.toDart),
-      cloudProxy: jsConfig.cloudProxy?.toDart,
-      // Fields only stored locally (JS SDK doesn't return these)
-      logFolder: _config.logFolder,
+      logFolder: jsConfig.logFolder?.toDart ?? _config.logFolder,
+      cloudProxy: jsConfig.cloudProxy?.toDart ?? _config.cloudProxy,
+      jsonParameter: jsConfig.jsonParameter?.toDart ?? _config.jsonParameter,
+      // Fields not in JS SDK's RteConfig — stored locally
+      areaCode: _config.areaCode,
       logFileSize: _config.logFileSize,
-      jsonParameter: _config.jsonParameter,
       useStringUid: _config.useStringUid,
     );
-  }
-
-  /// JS areaCode string → native bitmask int
-  static int? _reverseMapAreaCode(String? code) {
-    if (code == null) return null;
-    switch (code) {
-      case JsRteAreaCode.cn:
-        return 0x00000001;
-      case JsRteAreaCode.na:
-        return 0x00000002;
-      case JsRteAreaCode.eu:
-        return 0x00000004;
-      case JsRteAreaCode.as_:
-        return 0x00000008;
-      case JsRteAreaCode.jp:
-        return 0x00000010;
-      case JsRteAreaCode.in_:
-        return 0x00000020;
-      case JsRteAreaCode.glob:
-        return 0xFFFFFFFF;
-      default:
-        return null;
-    }
   }
 
   Future<AgoraRtePlayer> createPlayer(AgoraRtePlayerConfig config) async {

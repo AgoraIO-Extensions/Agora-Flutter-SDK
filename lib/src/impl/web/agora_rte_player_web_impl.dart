@@ -153,7 +153,7 @@ class AgoraRtePlayerWebImpl implements AgoraRtePlayer {
   @override
   Future<void> setCanvas(AgoraRteCanvas canvas) async {
     if (canvas is AgoraRteCanvasWebImpl) {
-      jsPlayer.setCanvas(canvas.jsCanvas);
+      await jsPlayer.setCanvas(canvas.jsCanvas).toDart;
     }
   }
 

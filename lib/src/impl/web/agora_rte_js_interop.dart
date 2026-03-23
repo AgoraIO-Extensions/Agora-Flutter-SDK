@@ -74,22 +74,6 @@ class JsPlayerMetadataType {
   static const int sei = 0;
 }
 
-/// Mirrors `type SdkParameterName = "enable-encoded-transform"`
-class JsSdkParameterName {
-  static const String enableEncodedTransform = 'enable-encoded-transform';
-}
-
-/// Mirrors `type RteAreaCode = "cn" | "na" | "eu" | "as" | "jp" | "in" | "glob"`
-class JsRteAreaCode {
-  static const String cn = 'cn';
-  static const String na = 'na';
-  static const String eu = 'eu';
-  static const String as_ = 'as'; // `as` is a Dart keyword
-  static const String jp = 'jp';
-  static const String in_ = 'in'; // `in` is a Dart keyword
-  static const String glob = 'glob';
-}
-
 // ─── RteSdk.Rte ──────────────────────────────────────────────────────────────
 
 @JS('RteSdk.Rte')
@@ -116,28 +100,17 @@ extension JsRteExt on JsRte {
 class JsRteConfig {
   external factory JsRteConfig({
     required JSString appId,
-    JSString? areaCode,
+    JSString? logFolder,
     JSString? cloudProxy,
-    JSArray? sdkParameters,
+    JSString? jsonParameter,
   });
 }
 
 extension JsRteConfigExt on JsRteConfig {
   external JSString get appId;
-  external JSString? get areaCode;
+  external JSString? get logFolder;
   external JSString? get cloudProxy;
-  external JSArray? get sdkParameters;
-}
-
-/// Matches `SdkParameter { key: SdkParameterName; value: any; }`
-@JS()
-@anonymous
-@staticInterop
-class JsSdkParameter {
-  external factory JsSdkParameter({
-    required JSString key,
-    required JSAny value,
-  });
+  external JSString? get jsonParameter;
 }
 
 // ─── RteSdk.Player ───────────────────────────────────────────────────────────
@@ -167,7 +140,7 @@ extension JsPlayerExt on JsPlayer {
   external JSPromise getStats();
   external JSPromise setConfigs(JsPlayerConfig config);
   external JsPlayerConfig getConfigs();
-  external void setCanvas(JsCanvas canvas);
+  external JSPromise setCanvas(JsCanvas canvas);
   external JSPromise takeScreenshot();
   external JSPromise destroy();
 

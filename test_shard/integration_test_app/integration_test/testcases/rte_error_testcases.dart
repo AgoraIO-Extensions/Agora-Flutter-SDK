@@ -231,14 +231,13 @@ void errorTestCases() {
 
     group('Player Error Cases - ', () {
       testWidgets('createPlayer - out of range playoutVolume values', (tester) async {
-        AgoraRtePlayer? testPlayer;
-
         // Test negative volume
+        AgoraRtePlayer? player;
         try {
-          testPlayer = await rte.createPlayer(AgoraRtePlayerConfig(
+          player = await rte.createPlayer(AgoraRtePlayerConfig(
             playoutVolume: -100,
           ));
-          final config = await testPlayer!.getConfigs();
+          final config = await player.getConfigs();
           debugPrint('Negative volume accepted: ${config.playoutVolume}');
         } catch (e) {
           debugPrint('SDK rejected negative volume: $e');
@@ -246,24 +245,24 @@ void errorTestCases() {
         }
 
         // 清理
-        if (testPlayer != null) {
-          await rte.destroyPlayer(testPlayer!.playerId);
-          testPlayer = null;
+        if (player != null) {
+          await rte.destroyPlayer(player.playerId);
+          player = null;
         }
 
         // Test extremely large volume
         try {
-          testPlayer = await rte.createPlayer(AgoraRtePlayerConfig(
+          player = await rte.createPlayer(AgoraRtePlayerConfig(
             playoutVolume: 999999,
           ));
-          final config = await testPlayer!.getConfigs();
+          final config = await player.getConfigs();
           debugPrint('Large volume resulted in: ${config.playoutVolume}');
         } catch (e) {
           debugPrint('Large volume error: $e');
-        } finally {
-          if (testPlayer != null) {
-            await rte.destroyPlayer(testPlayer!.playerId);
-          }
+        }
+
+        if (player != null) {
+          await rte.destroyPlayer(player.playerId);
         }
       });
 
@@ -312,17 +311,16 @@ void errorTestCases() {
       });
 
       testWidgets('Player setConfigs - invalid loopCount values', (tester) async {
-        if (testPlayer == null) {
-          testPlayer = await rte.createPlayer(AgoraRtePlayerConfig());
-        }
+        // Use a fresh player to avoid state pollution from previous tests
+        final loopPlayer = await rte.createPlayer(AgoraRtePlayerConfig());
 
         // Test very large negative loopCount - iOS rejects, Android may accept
         try {
-          await testPlayer!.setConfigs(AgoraRtePlayerConfig(
+          await loopPlayer.setConfigs(AgoraRtePlayerConfig(
             loopCount: -999999,
           ));
           // If we reach here, SDK accepted invalid value
-          var config = await testPlayer!.getConfigs();
+          var config = await loopPlayer.getConfigs();
           debugPrint(
               'Platform accepted large negative loopCount, resulted in: ${config.loopCount}');
         } catch (e) {
@@ -333,25 +331,21 @@ void errorTestCases() {
         }
 
         // Test very large positive loopCount
-        // According to API docs: 1=play once, 2=play twice, -1=infinite loop
-        // Inference: any positive integer N should mean play N times
-        await testPlayer!.setConfigs(AgoraRtePlayerConfig(
+        await loopPlayer.setConfigs(AgoraRtePlayerConfig(
           loopCount: 999999,
         ));
-        var config = await testPlayer!.getConfigs();
+        var config = await loopPlayer.getConfigs();
         debugPrint(
             'Large positive loopCount (999999) resulted in: ${config.loopCount}');
 
         // SDK clamps large value to 1, this might be a bug
         if (config.loopCount == 1 && 999999 != 1) {
           debugPrint('BUG: SDK incorrectly clamped loopCount 999999 to 1');
-          debugPrint(
-              '     According to API docs, positive integers should be supported');
-          debugPrint(
-              '     1=play once, 2=play twice, so 999999 should play 999999 times');
         } else if (config.loopCount == 999999) {
           debugPrint('Good: loopCount preserved as expected');
         }
+
+        await rte.destroyPlayer(loopPlayer.playerId);
       });
 
       testWidgets('Player - malformed jsonParameter', (tester) async {
