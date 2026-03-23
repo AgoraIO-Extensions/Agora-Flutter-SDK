@@ -1,7 +1,6 @@
 import 'dart:typed_data';
 
 import 'package:agora_rtc_engine/agora_rte_engine.dart';
-import 'package:agora_rtc_engine/src/impl/agora_rte_impl.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_test/flutter_test.dart';
 
@@ -44,7 +43,7 @@ void testCases() {
     AgoraRteCanvas? testCanvas;
 
     setUpAll(() {
-      rte = AgoraRteImpl.create();
+      rte = createAgoraRte();
     });
 
     tearDownAll(() async {

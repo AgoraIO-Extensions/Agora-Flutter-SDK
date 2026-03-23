@@ -1,7 +1,6 @@
 import 'dart:typed_data';
 
 import 'package:agora_rtc_engine/agora_rte_engine.dart';
-import 'package:agora_rtc_engine/src/impl/agora_rte_impl.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -44,7 +43,7 @@ void errorTestCases() {
     AgoraRteCanvas? testCanvas;
 
     setUpAll(() async {
-      rte = AgoraRteImpl.create();
+      rte = createAgoraRte();
       // Initialize RTE once for all tests in this group
       await rte.createWithConfig(AgoraRteConfig(appId: testAppId));
       await rte.initMediaEngine();
@@ -558,13 +557,13 @@ void errorTestCases() {
 
         // 2. Ensure we restore the shared instance for subsequent tests
         addTearDown(() async {
-          rte = AgoraRteImpl.create();
+          rte = createAgoraRte();
           await rte.createWithConfig(AgoraRteConfig(appId: testAppId));
           await rte.initMediaEngine();
         });
 
         // 3. Test logic: create fresh instance without config
-        final rteTest = AgoraRteImpl.create();
+        final rteTest = createAgoraRte();
 
         try {
           // Should fail because createWithConfig hasn't been called on this "new" instance
@@ -604,7 +603,7 @@ void errorTestCases() {
         // Restore for subsequent tests
         addTearDown(() async {
           rte.destroy();
-          rte = AgoraRteImpl.create();
+          rte = createAgoraRte();
           await rte.createWithConfig(AgoraRteConfig(appId: testAppId));
           await rte.initMediaEngine();
         });

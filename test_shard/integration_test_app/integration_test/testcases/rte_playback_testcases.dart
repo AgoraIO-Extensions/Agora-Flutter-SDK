@@ -1,7 +1,6 @@
 import 'dart:typed_data';
 
 import 'package:agora_rtc_engine/agora_rte_engine.dart';
-import 'package:agora_rtc_engine/src/impl/agora_rte_impl.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -23,7 +22,7 @@ void playbackTestCases() {
     _TestPlayerObserver? testObserver;
 
     setUpAll(() async {
-      rte = AgoraRteImpl.create();
+      rte = createAgoraRte();
       await rte.createWithConfig(AgoraRteConfig(appId: testAppId));
       // Initialize media engine before creating any players (required by SDK)
       await rte.initMediaEngine();
@@ -79,7 +78,7 @@ void playbackTestCases() {
         testPlayer = await rte.createPlayer(AgoraRtePlayerConfig());
 
         // Empty URL error is returned via callback, not thrown synchronously
-        Error? callbackError;
+        Object? callbackError;
         await testPlayer!.openWithUrl('', 0).catchError((e) {
           callbackError = e;
           // Expected: SDK rejects empty URL via callback
