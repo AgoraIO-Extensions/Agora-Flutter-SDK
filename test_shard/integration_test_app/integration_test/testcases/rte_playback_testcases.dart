@@ -10,8 +10,8 @@ final Matcher isSdkError = kIsWeb ? isNotNull : isA<PlatformException>();
 
 /// RTE Player Playback API Integration Test Cases
 ///
-/// Tests playback lifecycle and related APIs that exist in the Flutter SDK
-void playbackTestCases() {
+/// [getRte] provides the shared AgoraRte instance initialized by the caller.
+void playbackTestCases(AgoraRte Function() getRte) {
   const String testAppId =
       String.fromEnvironment('TEST_APP_ID', defaultValue: '<YOUR_APP_ID>');
 
@@ -25,10 +25,7 @@ void playbackTestCases() {
     _TestPlayerObserver? testObserver;
 
     setUpAll(() async {
-      rte = createAgoraRte();
-      await rte.createWithConfig(AgoraRteConfig(appId: testAppId));
-      // Initialize media engine before creating any players (required by SDK)
-      await rte.initMediaEngine();
+      rte = getRte();
     });
 
     tearDown(() async {
@@ -45,10 +42,14 @@ void playbackTestCases() {
     });
 
     tearDownAll(() async {
-      try {
-        await rte.destroy();
-      } catch (e) {
-        debugPrint('tearDownAll: destroy RTE error: $e');
+      if (testPlayer != null) {
+        try {
+          await rte.destroyPlayer(testPlayer!.playerId);
+        } catch (e) {
+          debugPrint('tearDownAll: destroyPlayer error: $e');
+        }
+        testPlayer = null;
+        testObserver = null;
       }
     });
 

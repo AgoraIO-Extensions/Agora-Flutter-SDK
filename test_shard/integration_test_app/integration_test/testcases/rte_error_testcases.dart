@@ -37,8 +37,9 @@ class _ErrorTestPlayerObserver implements AgoraRtePlayerObserver {
 
 /// RTE Error & Edge Case Integration Test Cases
 ///
-/// Tests error conditions, invalid parameters, and edge cases that upper layer might call incorrectly
-void errorTestCases() {
+/// [getRte] provides the shared AgoraRte instance.
+/// [setRte] allows lifecycle tests to update the shared reference after destroy/re-create.
+void errorTestCases(AgoraRte Function() getRte, void Function(AgoraRte) setRte) {
   const String testAppId =
       String.fromEnvironment('TEST_APP_ID', defaultValue: '<YOUR_APP_ID>');
 
@@ -48,14 +49,10 @@ void errorTestCases() {
     AgoraRteCanvas? testCanvas;
 
     setUpAll(() async {
-      rte = createAgoraRte();
-      // Initialize RTE once for all tests in this group
-      await rte.createWithConfig(AgoraRteConfig(appId: testAppId));
-      await rte.initMediaEngine();
+      rte = getRte();
     });
 
     tearDownAll(() async {
-      // Clean up all resources
       if (testPlayer != null) {
         try {
           await rte.destroyPlayer(testPlayer!.playerId);
@@ -64,7 +61,6 @@ void errorTestCases() {
         }
         testPlayer = null;
       }
-
       if (testCanvas != null) {
         try {
           await rte.destroyCanvas(testCanvas!.canvasId);
@@ -73,12 +69,7 @@ void errorTestCases() {
         }
         testCanvas = null;
       }
-
-      try {
-        await rte.destroy();
-      } catch (e) {
-        debugPrint('tearDownAll: destroy RTE error: $e');
-      }
+      setRte(rte);
     });
 
     group('Invalid Configuration - ', () {
@@ -546,28 +537,32 @@ void errorTestCases() {
     });
 
     group('Lifecycle Error Cases - ', () {
+      /// Helper: destroy + re-create the shared RTE instance.
+      /// Returns the new instance so callers can update their local reference.
+      Future<void> reinitializeRte() async {
+        try { await rte.destroy(); } catch (_) {}
+        rte = createAgoraRte();
+        await rte.createWithConfig(AgoraRteConfig(appId: testAppId));
+        await rte.initMediaEngine();
+        setRte(rte);
+      }
+
       testWidgets('initMediaEngine before createWithConfig', (tester) async {
-        // 1. Destroy the shared instance explicitly for this test
+        // Destroy the shared instance so native is in uninitialized state
         try {
           await rte.destroy();
         } catch (e) {
           debugPrint('Pre-test destroy failed: $e');
         }
 
-        // 2. Ensure we restore the shared instance for subsequent tests
-        addTearDown(() async {
-          rte = createAgoraRte();
-          await rte.createWithConfig(AgoraRteConfig(appId: testAppId));
-          await rte.initMediaEngine();
-        });
+        // Restore shared instance no matter what happens
+        addTearDown(() async => await reinitializeRte());
 
-        // 3. Test logic: create fresh instance without config
+        // createAgoraRte() returns the same Dart singleton; native is now destroyed
         final rteTest = createAgoraRte();
 
         try {
-          // Should fail because createWithConfig hasn't been called on this "new" instance
           await rteTest.initMediaEngine();
-
           fail('SDK should reject initMediaEngine before createWithConfig');
         } catch (e) {
           expect(e, isSdkError,
@@ -578,9 +573,7 @@ void errorTestCases() {
       testWidgets('Multiple createWithConfig calls', (tester) async {
         final config = AgoraRteConfig(appId: testAppId);
 
-        // RTE already initialized in setUpAll (1st call)
-        
-        // Try to create again - SDK should reject or handle gracefully
+        // RTE already initialized — try to create again
         try {
           await rte.createWithConfig(config);
           fail(
@@ -592,21 +585,14 @@ void errorTestCases() {
       });
 
       testWidgets('Operations after destroy', (tester) async {
-        // Destroy existing instance
         try {
           await rte.destroy();
         } catch (e) {
           debugPrint('Destroy failed: $e');
         }
 
-        // Restore for subsequent tests
-        addTearDown(() async {
-          await rte.destroy();
-          rte = createAgoraRte();
-          await rte.createWithConfig(AgoraRteConfig(appId: testAppId));
-          await rte.initMediaEngine();
-        });
-
+        // Restore shared instance no matter what happens
+        addTearDown(() async => await reinitializeRte());
 
         // Try to create player after destroy - should reject
         try {
@@ -624,10 +610,6 @@ void errorTestCases() {
         } catch (e) {
           expect(e, isSdkError);
         }
-
-        // Reinitialize for remaining tests
-        await rte.createWithConfig(AgoraRteConfig(appId: testAppId));
-        await rte.initMediaEngine();
       });
 
       testWidgets('Create many players and canvases', (tester) async {
@@ -657,10 +639,12 @@ void errorTestCases() {
         final player = await rte.createPlayer(AgoraRtePlayerConfig());
         final canvas = await rte.createCanvas(AgoraRteCanvasConfig());
 
+        // Restore shared instance no matter what happens
+        addTearDown(() async => await reinitializeRte());
+
         // Destroy RTE before destroying player/canvas
         try {
           await rte.destroy();
-          // If destroy succeeds, player/canvas should be invalid
         } catch (e) {
           debugPrint('Destroy with active resources: $e');
         }
@@ -672,10 +656,6 @@ void errorTestCases() {
         } catch (e) {
           expect(e, isNotNull);
         }
-
-        // Reinitialize for remaining tests
-        await rte.createWithConfig(AgoraRteConfig(appId: testAppId));
-        await rte.initMediaEngine();
       });
     });
 

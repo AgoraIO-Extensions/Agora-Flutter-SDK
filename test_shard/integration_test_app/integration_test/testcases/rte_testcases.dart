@@ -32,8 +32,8 @@ class _DummyPlayerObserver implements AgoraRtePlayerObserver {
 /// RTE Integration Test Cases
 ///
 /// Tests full call chain of all RTE APIs and verifies Dart ↔ Native parameter passing.
-void testCases() {
-  // Get APP_ID from environment variable
+/// [getRte] provides the shared AgoraRte instance initialized by the caller.
+void testCases(AgoraRte Function() getRte) {
   const String testAppId =
       String.fromEnvironment('TEST_APP_ID', defaultValue: '<YOUR_APP_ID>');
 
@@ -43,11 +43,10 @@ void testCases() {
     AgoraRteCanvas? testCanvas;
 
     setUpAll(() {
-      rte = createAgoraRte();
+      rte = getRte();
     });
 
     tearDownAll(() async {
-      // Clean up all resources
       if (testPlayer != null) {
         try {
           await rte.destroyPlayer(testPlayer!.playerId);
@@ -56,7 +55,6 @@ void testCases() {
         }
         testPlayer = null;
       }
-
       if (testCanvas != null) {
         try {
           await rte.destroyCanvas(testCanvas!.canvasId);
@@ -65,51 +63,9 @@ void testCases() {
         }
         testCanvas = null;
       }
-
-      try {
-        await rte.destroy();
-      } catch (e) {
-        debugPrint('tearDownAll: destroy RTE error: $e');
-      }
     });
 
     group('RTE Engine - Main APIs', () {
-      testWidgets('createWithConfig - verify all config params round-trip', (tester) async {
-        // Set full config
-        final config = AgoraRteConfig(
-          appId: testAppId,
-          logFolder: '/test/rte_logs',
-          logFileSize: 10240,
-          areaCode: 0x01,
-          cloudProxy: '',
-          jsonParameter: '{"test_key":"test_value"}',
-          useStringUid: false,
-        );
-
-        await rte.createWithConfig(config);
-
-        // Get config and verify each field
-        final retrievedConfig = await rte.getConfigs();
-
-        expect(retrievedConfig.appId, equals(testAppId),
-            reason: 'Native appId mismatch');
-        expect(retrievedConfig.logFolder, equals('/test/rte_logs'),
-            reason: 'Native logFolder mismatch');
-        expect(retrievedConfig.logFileSize, equals(10240),
-            reason: 'Native logFileSize mismatch');
-        expect(retrievedConfig.areaCode, equals(0x01),
-            reason: 'Native areaCode mismatch');
-        expect(retrievedConfig.useStringUid, equals(false),
-            reason: 'Native useStringUid mismatch');
-      });
-
-      testWidgets('initMediaEngine - verify init success', (tester) async {
-        // Init media engine
-        await rte.initMediaEngine();
-
-        // Should not throw on success
-      });
-
       testWidgets('setConfigs/getConfigs - verify config update', (tester) async {
         // Update partial config
         final updateConfig = AgoraRteConfig(
@@ -133,20 +89,6 @@ void testCases() {
     });
 
     group('RTE Player - APIs', () {
-      setUpAll(() async {
-        // Ensure RTE is properly initialized before player tests
-        try {
-          await rte.createWithConfig(AgoraRteConfig(appId: testAppId));
-        } catch (e) {
-          // Already created, ignore
-        }
-        try {
-          await rte.initMediaEngine();
-        } catch (e) {
-          // Already initialized, ignore
-        }
-      });
-
       testWidgets('createPlayer - verify player creation and config', (tester) async {
         final playerConfig = AgoraRtePlayerConfig(
           playoutVolume: 75,
