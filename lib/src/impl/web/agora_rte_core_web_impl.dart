@@ -146,7 +146,7 @@ class AgoraRteCoreWebImpl {
     final jsPlayer = JsPlayer(_jsRte!);
     final id = 'web_player_${++_playerCounter}';
     final player = AgoraRtePlayerWebImpl(id, jsPlayer);
-    player.setConfigs(config);
+    await player.setConfigs(config);
     _players[id] = player;
     return player;
   }
@@ -166,7 +166,7 @@ class AgoraRteCoreWebImpl {
     final jsCanvas = JsCanvas(_jsRte!);
     final id = 'web_canvas_${++_canvasCounter}';
     final canvas = AgoraRteCanvasWebImpl(id, jsCanvas);
-    canvas.setConfigs(config);
+    await canvas.setConfigs(config);
     _canvases[id] = canvas;
     return canvas;
   }
