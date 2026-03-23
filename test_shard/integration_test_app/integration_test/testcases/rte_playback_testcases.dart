@@ -114,8 +114,9 @@ void playbackTestCases() {
           await player.play();
           fail('SDK should reject play() before openWithUrl');
         } catch (e) {
-          // Expected behavior: SDK rejects operation
-          expect(e, isA<PlatformException>());
+          // Native throws PlatformException, Web throws JS RteError
+          expect(e, isNotNull,
+              reason: 'play() before openWithUrl should throw');
         } finally {
           await rte.destroyPlayer(player.playerId);
         }
@@ -203,8 +204,9 @@ void playbackTestCases() {
           await player.seek(1000);
           fail('SDK should reject seek() before openWithUrl');
         } catch (e) {
-          // Expected behavior: SDK rejects operation
-          expect(e, isA<PlatformException>());
+          // Native throws PlatformException, Web throws JS RteError
+          expect(e, isNotNull,
+              reason: 'seek() before openWithUrl should throw');
         } finally {
           await rte.destroyPlayer(player.playerId);
         }

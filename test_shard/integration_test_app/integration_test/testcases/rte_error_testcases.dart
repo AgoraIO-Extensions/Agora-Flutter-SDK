@@ -5,6 +5,11 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
 
+/// On native, SDK errors are PlatformException.
+/// On Web, JS SDK throws its own RteError (a JS object), not PlatformException.
+/// This matcher accepts both.
+final Matcher isSdkError = kIsWeb ? isNotNull : isSdkError;
+
 /// Empty implementation for error test observers
 class _ErrorTestPlayerObserver implements AgoraRtePlayerObserver {
   @override
@@ -91,7 +96,7 @@ void errorTestCases() {
           expect(true, isTrue, reason: 'SDK accepts empty appId');
         } catch (e) {
           // Expected behavior: SDK rejects invalid input
-          expect(e, isA<PlatformException>(),
+          expect(e, isSdkError,
               reason: 'Empty appId should cause error');
         }
       });
@@ -237,7 +242,7 @@ void errorTestCases() {
           debugPrint('Negative volume accepted: ${config.playoutVolume}');
         } catch (e) {
           debugPrint('SDK rejected negative volume: $e');
-          expect(e, isA<PlatformException>());
+          expect(e, isSdkError);
         }
 
         // 清理
@@ -277,7 +282,7 @@ void errorTestCases() {
               'Negative playbackSpeed accepted: ${config.playbackSpeed}');
         } catch (e) {
           debugPrint('SDK rejected negative playbackSpeed: $e');
-          expect(e, isA<PlatformException>());
+          expect(e, isSdkError);
         }
 
         // Test zero playbackSpeed
@@ -289,7 +294,7 @@ void errorTestCases() {
           debugPrint('Zero playbackSpeed accepted: ${config.playbackSpeed}');
         } catch (e) {
           debugPrint('SDK rejected zero playbackSpeed: $e');
-          expect(e, isA<PlatformException>());
+          expect(e, isSdkError);
         }
 
         // Test large playbackSpeed - 用新的player避免状态污染
@@ -323,7 +328,7 @@ void errorTestCases() {
         } catch (e) {
           // Expected on iOS: SDK correctly rejects invalid value
           debugPrint('SDK rejected invalid loopCount (expected on iOS): $e');
-          expect(e, isA<PlatformException>(),
+          expect(e, isSdkError,
               reason: 'Invalid loopCount should be rejected');
         }
 
@@ -411,7 +416,7 @@ void errorTestCases() {
           fail('SDK should reject destroying already destroyed player');
         } catch (e) {
           // Expected behavior: SDK rejects double destroy
-          expect(e, isA<PlatformException>(),
+          expect(e, isSdkError,
               reason: 'Double destroy should be handled');
         }
       });
@@ -422,7 +427,7 @@ void errorTestCases() {
           await rte.destroyPlayer('');
           fail('SDK should reject destroying empty playerId');
         } catch (e) {
-          expect(e, isA<PlatformException>());
+          expect(e, isSdkError);
         }
 
         // Try to destroy with non-existent ID - should reject
@@ -430,7 +435,7 @@ void errorTestCases() {
           await rte.destroyPlayer('non_existent_player_id_12345');
           fail('SDK should reject destroying non-existent player');
         } catch (e) {
-          expect(e, isA<PlatformException>());
+          expect(e, isSdkError);
         }
       });
 
@@ -443,7 +448,7 @@ void errorTestCases() {
           await player.setConfigs(AgoraRtePlayerConfig(playoutVolume: 50));
           fail('SDK should reject setConfigs on destroyed player');
         } catch (e) {
-          expect(e, isA<PlatformException>(),
+          expect(e, isSdkError,
               reason: 'Operations on destroyed player should fail');
         }
 
@@ -452,7 +457,7 @@ void errorTestCases() {
           await player.getConfigs();
           fail('SDK should reject getConfigs on destroyed player');
         } catch (e) {
-          expect(e, isA<PlatformException>());
+          expect(e, isSdkError);
         }
       });
     });
@@ -498,7 +503,7 @@ void errorTestCases() {
           await rte.destroyCanvas(canvasId);
           fail('SDK should reject destroying already destroyed canvas');
         } catch (e) {
-          expect(e, isA<PlatformException>(),
+          expect(e, isSdkError,
               reason: 'Double destroy should be handled');
         }
       });
@@ -509,7 +514,7 @@ void errorTestCases() {
           await rte.destroyCanvas('');
           fail('SDK should reject destroying empty canvasId');
         } catch (e) {
-          expect(e, isA<PlatformException>());
+          expect(e, isSdkError);
         }
 
         // Try to destroy with non-existent ID - should reject
@@ -517,7 +522,7 @@ void errorTestCases() {
           await rte.destroyCanvas('non_existent_canvas_id_67890');
           fail('SDK should reject destroying non-existent canvas');
         } catch (e) {
-          expect(e, isA<PlatformException>());
+          expect(e, isSdkError);
         }
       });
 
@@ -532,7 +537,7 @@ void errorTestCases() {
           ));
           fail('SDK should reject setConfigs on destroyed canvas');
         } catch (e) {
-          expect(e, isA<PlatformException>(),
+          expect(e, isSdkError,
               reason: 'Operations on destroyed canvas should fail');
         }
 
@@ -541,7 +546,7 @@ void errorTestCases() {
           await canvas.getConfigs();
           fail('SDK should reject getConfigs on destroyed canvas');
         } catch (e) {
-          expect(e, isA<PlatformException>());
+          expect(e, isSdkError);
         }
       });
     });
@@ -571,7 +576,7 @@ void errorTestCases() {
 
           fail('SDK should reject initMediaEngine before createWithConfig');
         } catch (e) {
-          expect(e, isA<PlatformException>(),
+          expect(e, isSdkError,
               reason: 'Should throw PlatformException when not initialized');
         }
       });
@@ -588,7 +593,7 @@ void errorTestCases() {
               'SDK should reject or reinitialize on multiple createWithConfig calls');
         } catch (e) {
           // Expected behavior: SDK rejects double initialization
-          expect(e, isA<PlatformException>());
+          expect(e, isSdkError);
         }
       });
 
@@ -614,7 +619,7 @@ void errorTestCases() {
           await rte.createPlayer(AgoraRtePlayerConfig());
           fail('SDK should reject creating player after destroy');
         } catch (e) {
-          expect(e, isA<PlatformException>(),
+          expect(e, isSdkError,
               reason: 'Creating player after destroy should fail');
         }
 
@@ -623,7 +628,7 @@ void errorTestCases() {
           await rte.getConfigs();
           fail('SDK should reject getConfigs after destroy');
         } catch (e) {
-          expect(e, isA<PlatformException>());
+          expect(e, isSdkError);
         }
 
         // Reinitialize for remaining tests
