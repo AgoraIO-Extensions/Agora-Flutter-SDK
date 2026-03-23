@@ -8,7 +8,7 @@ import 'package:flutter_test/flutter_test.dart';
 /// On native, SDK errors are PlatformException.
 /// On Web, JS SDK throws its own RteError (a JS object), not PlatformException.
 /// This matcher accepts both.
-final Matcher isSdkError = kIsWeb ? isNotNull : isSdkError;
+final Matcher isSdkError = kIsWeb ? isNotNull : isA<PlatformException>();
 
 /// Empty implementation for error test observers
 class _ErrorTestPlayerObserver implements AgoraRtePlayerObserver {
@@ -607,7 +607,7 @@ void errorTestCases() {
 
         // Restore for subsequent tests
         addTearDown(() async {
-          rte.destroy();
+          await rte.destroy();
           rte = createAgoraRte();
           await rte.createWithConfig(AgoraRteConfig(appId: testAppId));
           await rte.initMediaEngine();
@@ -633,6 +633,7 @@ void errorTestCases() {
 
         // Reinitialize for remaining tests
         await rte.createWithConfig(AgoraRteConfig(appId: testAppId));
+        await rte.initMediaEngine();
       });
 
       testWidgets('Create many players and canvases', (tester) async {
@@ -680,6 +681,7 @@ void errorTestCases() {
 
         // Reinitialize for remaining tests
         await rte.createWithConfig(AgoraRteConfig(appId: testAppId));
+        await rte.initMediaEngine();
       });
     });
 

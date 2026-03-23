@@ -1,4 +1,3 @@
-import 'dart:async';
 import 'dart:convert';
 import 'dart:js_interop';
 import 'package:flutter/foundation.dart';
@@ -7,19 +6,18 @@ import 'package:agora_rtc_engine/src/agora_rte.dart';
 import 'package:agora_rtc_engine/src/agora_rte_canvas_config.dart';
 import 'package:agora_rtc_engine/src/agora_rte_config.dart';
 import 'package:agora_rtc_engine/src/agora_rte_player_config.dart';
-import 'package:web/web.dart' as web;
 import 'agora_rte_js_interop.dart';
 import 'agora_rte_canvas_web_impl.dart';
 import 'agora_rte_player_web_impl.dart';
 
-/// Web core: loads rte.js, creates JS Rte/Player/Canvas instances.
+/// Web core: creates JS Rte/Player/Canvas instances.
+/// Requires rte.js to be loaded via <script> tag in index.html before use.
 class AgoraRteCoreWebImpl {
   static final AgoraRteCoreWebImpl instance = AgoraRteCoreWebImpl._();
   AgoraRteCoreWebImpl._();
 
   JsRte? _jsRte;
   AgoraRteConfig _config = AgoraRteConfig();
-  bool _scriptLoaded = false;
   int _playerCounter = 0;
   int _canvasCounter = 0;
 
@@ -29,87 +27,58 @@ class AgoraRteCoreWebImpl {
   AgoraRtePlayerWebImpl? getPlayer(String playerId) => _players[playerId];
   AgoraRteCanvasWebImpl? getCanvas(String canvasId) => _canvases[canvasId];
 
-  Future<void> _loadScript() async {
-    if (_scriptLoaded) return;
-    final scriptId = 'agora-rte-sdk';
-    if (web.document.getElementById(scriptId) != null) {
-      _scriptLoaded = true;
-      return;
-    }
-
-    // Flutter bundles plugin assets at this path in both debug and release mode.
-    const assetPath = 'assets/packages/agora_rtc_engine/web/rte.js';
-    try {
-      await _tryLoadScript(scriptId, assetPath);
-      _scriptLoaded = true;
-    } catch (_) {
-      throw Exception(
-          'Failed to load rte.js. '
-          'Ensure you have run "npm run build" in the plugin web/src/ directory.');
-    }
-  }
-
-  Future<void> _tryLoadScript(String id, String src) async {
-    final c = Completer<void>();
-    final script =
-        web.document.createElement('script') as web.HTMLScriptElement;
-    script.id = id;
-    script.src = src;
-    script.onload = (web.Event _) {
-      c.complete();
-    }.toJS;
-    script.onerror = (web.Event _) {
-      // Remove failed script element so next attempt can use the same id
-      script.remove();
-      c.completeError('Failed to load $src');
-    }.toJS;
-    web.document.head!.appendChild(script);
-    await c.future;
-  }
-
   Future<void> createWithConfig(AgoraRteConfig config) async {
     if (_jsRte != null) {
       throw PlatformException(
           code: 'RTE_ERROR', message: 'RTE engine already initialized');
     }
-    await _loadScript();
-    _config = config;
-    _jsRte = JsRte(_buildJsRteConfig(config));
+    // Check that rte.js has been loaded via <script> tag in index.html
+    if (!isRteSdkLoaded()) {
+      throw PlatformException(
+          code: 'RTE_ERROR',
+          message: 'RteSdk not found on window. '
+              'Add <script src="rte.js"></script> to your index.html before Flutter initialization.');
+    }
+    _config = AgoraRteConfig(
+      appId: config.appId,
+      logFolder: config.logFolder,
+      logFileSize: config.logFileSize,
+      areaCode: config.areaCode,
+      cloudProxy: config.cloudProxy,
+      jsonParameter: _mergeJsonParameter(config.jsonParameter),
+      useStringUid: config.useStringUid,
+    );
+    _jsRte = JsRte(_buildJsRteConfig(_config));
   }
 
-  /// Build a [JsRteConfig] from [AgoraRteConfig], mapping only the fields
-  /// that the JS SDK supports: appId, areaCode, cloudProxy.
+  /// Build [JsRteConfig] from [AgoraRteConfig].
+  ///
+  /// Expects `config.jsonParameter` to already contain the merged protected
+  /// params (via [_mergeJsonParameter]).  Converts the JSON string into the
+  /// `Array<SdkParameter>` format the JS SDK expects.
   ///
   /// JS SDK areaCode is a string ("cn","na","eu","as","jp","in","glob"),
   /// while native uses bitmask integers. We map the most common values.
   JsRteConfig _buildJsRteConfig(AgoraRteConfig config) {
-    // Build sdkParameters as Array<SdkParameter> per JS SDK definition.
-    // Native side passes jsonParameter as a JSON string of key-value pairs,
-    // e.g. '{"rtc.set_app_type": 4}'. We parse it and convert to
-    // [{key, value}, ...] format that JS SDK expects.
-    final Map<String, dynamic> paramMap = {};
+    final jsSdkParams = <JSAny>[];
 
     if (config.jsonParameter != null && config.jsonParameter!.isNotEmpty) {
       try {
-        paramMap.addAll(
-            Map<String, dynamic>.from(jsonDecode(config.jsonParameter!)));
+        final Map<String, dynamic> paramMap =
+            Map<String, dynamic>.from(jsonDecode(config.jsonParameter!));
+        for (final e in paramMap.entries) {
+          jsSdkParams.add(JsSdkParameter(
+            key: e.key.toJS,
+            value: (e.value is String)
+                ? (e.value as String).toJS
+                : (e.value is num)
+                    ? (e.value as num).toJS
+                    : e.value.toString().toJS,
+          ) as JSAny);
+        }
       } catch (e) {
-        debugPrint('Invalid jsonParameter, ignoring: $e');
+        debugPrint('_buildJsRteConfig: failed to parse jsonParameter: $e');
       }
-    }
-    // Force SDK protected parameter
-    paramMap['rtc.set_app_type'] = 4;
-
-    final jsSdkParams = <JSAny>[];
-    for (final e in paramMap.entries) {
-      jsSdkParams.add(JsSdkParameter(
-        key: e.key.toJS,
-        value: (e.value is String)
-            ? (e.value as String).toJS
-            : (e.value is num)
-                ? (e.value as num).toJS
-                : e.value.toString().toJS,
-      ) as JSAny);
     }
 
     return JsRteConfig(
@@ -172,11 +141,30 @@ class AgoraRteCoreWebImpl {
       logFileSize: config.logFileSize ?? _config.logFileSize,
       areaCode: config.areaCode ?? _config.areaCode,
       cloudProxy: config.cloudProxy ?? _config.cloudProxy,
-      jsonParameter: config.jsonParameter ?? _config.jsonParameter,
+      jsonParameter: _mergeJsonParameter(
+          config.jsonParameter ?? _config.jsonParameter),
       useStringUid: config.useStringUid ?? _config.useStringUid,
     );
     final rConfig = _buildJsRteConfig(_config);
     _jsRte?.setConfigs(rConfig);
+  }
+
+  /// Merge user jsonParameter with protected SDK parameters.
+  /// Ensures rtc.set_app_type=4 is always present, matching native behavior.
+  /// Throws PlatformException on invalid JSON to match native SDK behavior.
+  String? _mergeJsonParameter(String? jsonParam) {
+    final Map<String, dynamic> paramMap = {};
+    if (jsonParam != null && jsonParam.isNotEmpty) {
+      try {
+        paramMap.addAll(Map<String, dynamic>.from(jsonDecode(jsonParam)));
+      } catch (e) {
+        throw PlatformException(
+            code: 'RTE_ERROR',
+            message: 'Invalid jsonParameter: $e');
+      }
+    }
+    paramMap['rtc.set_app_type'] = 4;
+    return jsonEncode(paramMap);
   }
 
   Future<AgoraRteConfig> getConfigs() async {

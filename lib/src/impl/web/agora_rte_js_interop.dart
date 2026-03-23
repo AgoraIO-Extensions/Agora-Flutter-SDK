@@ -3,6 +3,14 @@ import 'dart:js_interop';
 /// JS interop bindings for @rtejs/rte SDK (window.RteSdk).
 /// Matches the exports from web/src/src/index.js bundled via webpack.
 
+// ─── SDK Load Check ─────────────────────────────────────────────────────────
+
+@JS('window.RteSdk')
+external JSAny? get windowRteSdk;
+
+/// Check if window.RteSdk is available (rte.js loaded via <script> tag).
+bool isRteSdkLoaded() => windowRteSdk != null;
+
 // ─── Constants ──────────────────────────────────────────────────────────────
 
 class JsPlayerState {

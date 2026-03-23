@@ -6,6 +6,9 @@ set -x
 MY_PATH=$(realpath $(dirname "$0"))
 PROJECT_ROOT=$(realpath ${MY_PATH}/..)
 
+# Copy rte.js to test app web directory so <script src="./rte.js"> can find it
+cp ${PROJECT_ROOT}/example/web/rte.js ${PROJECT_ROOT}/test_shard/integration_test_app/web/rte.js
+
 pushd ${PROJECT_ROOT}/test_shard/integration_test_app
 
 echo "Run RTE integration test on web"

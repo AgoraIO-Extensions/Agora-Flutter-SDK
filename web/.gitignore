@@ -1,2 +1,4 @@
 src/node_modules/
+*.js
+*.js.LICENSE.txt
 src/package-lock.json
