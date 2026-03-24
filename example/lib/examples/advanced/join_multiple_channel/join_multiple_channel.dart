@@ -114,7 +114,7 @@ class _State extends State<JoinMultipleChannel> {
           });
         }
       },
-      onLocalVideoStats: (RtcConnection connection, VideoSourceType sourceType,
+      onLocalVideoStats: (RtcConnection connection,
           LocalVideoStats stats) {
         logSink.log(
             'onLocalVideoStats: connection: ${connection.toJson()} stats: ${stats.uid}');

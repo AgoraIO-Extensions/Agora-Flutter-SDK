@@ -337,11 +337,11 @@ class _RtcEngineEventHandlerWrapper extends RtcEngineEventHandlerWrapper {
             RtcEngineEventHandlerOnLocalVideoStatsJson.fromJson(
                 jsonMap.cast<String, dynamic>());
         RtcConnection? connection = paramJson.connection;
-        VideoSourceType? sourceType = paramJson.sourceType;
-        if (connection != null && sourceType != null) {
-          ChannelConnectionManager.instance
-              .setPublishingVideoConnectionBySource(sourceType, connection);
-        }
+        // VideoSourceType? sourceType = paramJson.sourceType;
+        // if (connection != null && sourceType != null) {
+        //   ChannelConnectionManager.instance
+        //       .setPublishingVideoConnectionBySource(sourceType, connection);
+        // }
         break;
       case 'onRemoteVideoStats_2f43a70':
         final Map jsonMap = jsonDecode(eventData);
