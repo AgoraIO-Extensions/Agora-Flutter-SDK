@@ -1,14 +1,17 @@
 import 'package:agora_rtc_engine/src/agora_base.dart';
 import 'package:agora_rtc_engine/src/agora_media_base.dart';
+import 'package:agora_rtc_engine/src/agora_rtc_engine.dart';
+import 'package:agora_rtc_engine/src/agora_rtc_engine_ex.dart';
 
 import 'package:agora_rtc_engine/src/impl/video_view_controller_impl.dart';
 import 'package:agora_rtc_engine/src/render/agora_video_view.dart';
 import 'package:agora_rtc_engine/src/render/video_view_controller.dart';
 import 'package:flutter/foundation.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/scheduler.dart' show SchedulerBinding;
+import 'package:flutter/material.dart' show Colors;
 import 'package:flutter/services.dart';
+import 'package:flutter/widgets.dart';
 
 import 'agora_rtc_renderer.dart';
 
@@ -26,7 +29,6 @@ class AgoraVideoViewState extends State<AgoraVideoView> {
   Widget build(BuildContext context) {
     if (kIsWeb) {
       return AgoraRtcRenderPlatformView(
-        key: widget.key,
         controller: widget.controller,
         onAgoraVideoViewCreated: widget.onAgoraVideoViewCreated,
       );
@@ -35,7 +37,6 @@ class AgoraVideoViewState extends State<AgoraVideoView> {
     if (defaultTargetPlatform == TargetPlatform.macOS ||
         defaultTargetPlatform == TargetPlatform.windows) {
       return AgoraRtcRenderTexture(
-        key: widget.key,
         controller: widget.controller,
         onAgoraVideoViewCreated: widget.onAgoraVideoViewCreated,
       );
@@ -43,14 +44,12 @@ class AgoraVideoViewState extends State<AgoraVideoView> {
 
     if (widget.controller.useFlutterTexture) {
       return AgoraRtcRenderTexture(
-        key: widget.key,
         controller: widget.controller,
         onAgoraVideoViewCreated: widget.onAgoraVideoViewCreated,
       );
     }
 
     return AgoraRtcRenderPlatformView(
-      key: widget.key,
       controller: widget.controller,
       onAgoraVideoViewCreated: widget.onAgoraVideoViewCreated,
     );
@@ -162,7 +161,7 @@ class _AgoraRtcRenderPlatformViewState extends State<AgoraRtcRenderPlatformView>
       return;
     }
     try {
-      await widget.controller.setupView(_nativeViewIntPtr);
+      await widget.controller.setupView(_platformViewId, _nativeViewIntPtr);
     } catch (e) {
       debugPrint(
           '[AgoraVideoView] error when widget.controller.setupView: ${e.toString()}');
@@ -206,6 +205,95 @@ class _AgoraRtcRenderPlatformViewState extends State<AgoraRtcRenderPlatformView>
   }
 }
 
+/// Delegate of the `VideoViewController` to handle the state of the texture rendering.
+class _VideoViewControllerInternal with VideoViewControllerBaseMixin {
+  _VideoViewControllerInternal(this._controller, this._viewId);
+
+  final VideoViewControllerBaseMixin _controller;
+  final int _viewId;
+
+  TextureRenderDisposable? _renderDisposable;
+
+  @override
+  int get textureWidth => _controller.textureWidth;
+
+  @override
+  set textureWidth(int w) => _controller.textureWidth = w;
+
+  @override
+  int get textureHeight => _controller.textureHeight;
+
+  @override
+  set textureHeight(int h) => _controller.textureHeight = h;
+
+  @override
+  VideoCanvas get canvas => _controller.canvas;
+
+  @override
+  RtcConnection? get connection => _controller.connection;
+
+  @override
+  bool get useAndroidSurfaceView => _controller.useAndroidSurfaceView;
+
+  @override
+  bool get useFlutterTexture => _controller.useFlutterTexture;
+
+  @override
+  int getVideoSourceType() {
+    return _controller.getVideoSourceType();
+  }
+
+  @override
+  RtcEngine get rtcEngine => _controller.rtcEngine;
+
+  @override
+  bool get shouldHandlerRenderMode => _controller.shouldHandlerRenderMode;
+
+  @override
+  int getTextureId() => _renderDisposable?.textureId ?? kTextureNotInit;
+
+  @override
+  void addInitializedCompletedListener(VoidCallback listener) =>
+      _controller.addInitializedCompletedListener(listener);
+
+  @override
+  void removeInitializedCompletedListener(VoidCallback listener) =>
+      _controller.removeInitializedCompletedListener(listener);
+
+  @override
+  Future<void> dispose() => _controller.dispose();
+
+  @override
+  Future<void> disposeRenderInternal() => _controller.disposeRenderInternal();
+
+  @override
+  Future<int> createTextureRender(
+    int uid,
+    String channelId,
+    int videoSourceType,
+    int videoViewSetupMode,
+  ) =>
+      _controller.createTextureRender(
+          uid, channelId, videoSourceType, videoViewSetupMode);
+
+  @override
+  Future<void> initializeRender() async {
+    if (_renderDisposable != null && !_renderDisposable!.isDisposed) {
+      return;
+    }
+    _renderDisposable = await TextureRenderDisposable.create(_controller, _viewId);
+  }
+
+  Future<void> disposeTextureRender() async {
+    await _renderDisposable?.dispose();
+    _renderDisposable = null;
+  }
+
+  @override
+  Future<void> setupView(int platformViewId, int nativeViewPtr) =>
+      _controller.setupView(platformViewId, nativeViewPtr);
+}
+
 class AgoraRtcRenderTexture extends StatefulWidget {
   const AgoraRtcRenderTexture({
     Key? key,
@@ -227,39 +315,52 @@ class _AgoraRtcRenderTextureState extends State<AgoraRtcRenderTexture>
 
   VoidCallback? _listener;
 
+  _VideoViewControllerInternal? _controllerInternal;
+
   @override
   void initState() {
     super.initState();
-
     _initialize();
   }
 
   Future<void> _initialize() async {
-    if (!_controller(widget.controller).isInitialzed) {
+    final sourceController = widget.controller as VideoViewControllerBaseMixin;
+    _controllerInternal = _VideoViewControllerInternal(sourceController, hashCode);
+    
+    if (!_controllerInternal!.isInitialzed) {
       _listener ??= () {
-        _controller(widget.controller)
-            .removeInitializedCompletedListener(_listener!);
+        _controllerInternal?.removeInitializedCompletedListener(_listener!);
         _listener = null;
+
         _initializeTexture();
       };
-      _controller(widget.controller)
-          .addInitializedCompletedListener(_listener!);
+      _controllerInternal!.addInitializedCompletedListener(_listener!);
     } else {
       await _initializeTexture();
     }
   }
 
   Future<void> _initializeTexture() async {
-    final oldTextureId = widget.controller.getTextureId();
-    await widget.controller.initializeRender();
-    final textureId = widget.controller.getTextureId();
-    if (oldTextureId != textureId) {
-      _width = 0;
-      _height = 0;
-      // The parameters is no used
+    if (_controllerInternal == null) {
+      return;
+    }
+
+    await _controllerInternal!.initializeRender();
+    final textureId = _controllerInternal!.getTextureId();
+    if (textureId != kTextureNotInit) {
+      if (_controllerInternal!.textureWidth != 0 &&
+          _controllerInternal!.textureHeight != 0) {
+        _width = _controllerInternal!.textureWidth;
+        _height = _controllerInternal!.textureHeight;
+      } else {
+        _width = 0;
+        _height = 0;
+      }
       maybeCreateChannel(-1, '');
       widget.onAgoraVideoViewCreated?.call(textureId);
-      setState(() {});
+      if (mounted) {
+        setState(() {});
+      }
     }
   }
 
@@ -272,11 +373,13 @@ class _AgoraRtcRenderTextureState extends State<AgoraRtcRenderTexture>
 
   Future<void> _didUpdateWidget(
       covariant AgoraRtcRenderTexture oldWidget) async {
+    if (_controllerInternal == null ||
+        _controllerInternal!.getTextureId() == kTextureNotInit) {
+      return;
+    }
     if (!oldWidget.controller.isSame(widget.controller)) {
-      await oldWidget.controller.disposeRender();
+      await _controllerInternal?.disposeTextureRender();
       await _initialize();
-    } else {
-      _controller(widget.controller).updateController(oldWidget.controller);
     }
   }
 
@@ -284,28 +387,41 @@ class _AgoraRtcRenderTextureState extends State<AgoraRtcRenderTexture>
   void deactivate() {
     super.deactivate();
     if (_listener != null) {
-      _controller(widget.controller)
-          .removeInitializedCompletedListener(_listener!);
+      _controllerInternal?.removeInitializedCompletedListener(_listener!);
       _listener = null;
     }
   }
 
   @override
   void dispose() {
-    widget.controller.disposeRender();
+    methodChannel?.setMethodCallHandler(null);
+    
+    _controllerInternal?.disposeTextureRender();
+    _controllerInternal = null;
+
     super.dispose();
   }
 
   @override
   void maybeCreateChannel(int viewId, String viewType) {
-    // Only handle render mode on macos at this time
-    final textureId = widget.controller.getTextureId();
+    if (_controllerInternal == null) {
+      return;
+    }
+    final textureId = _controllerInternal!.getTextureId();
+    if (textureId == kTextureNotInit) {
+      return;
+    }
+
     methodChannel = MethodChannel('agora_rtc_engine/texture_render_$textureId');
     methodChannel!.setMethodCallHandler((call) async {
       if (call.method == 'onSizeChanged') {
         _width = call.arguments['width'];
         _height = call.arguments['height'];
-        setState(() {});
+        _controllerInternal!.textureWidth = _width;
+        _controllerInternal!.textureHeight = _height;
+        if (mounted) {
+          setState(() {});
+        }
         return true;
       }
       return false;
@@ -394,25 +510,28 @@ class _AgoraRtcRenderTextureState extends State<AgoraRtcRenderTexture>
   @override
   Widget build(BuildContext context) {
     Widget result = const SizedBox.expand();
-
-    if (widget.controller.getTextureId() != kTextureNotInit) {
+    if (_controllerInternal == null) {
+      return result;
+    }
+    final controller = _controllerInternal!;
+    if (controller.getTextureId() != kTextureNotInit) {
       if (_height != 0 && _width != 0) {
-        result = buildTexure(widget.controller.getTextureId());
-        final renderMode = widget.controller.canvas.renderMode ??
-            RenderModeType.renderModeHidden;
+        result = buildTexure(controller.getTextureId());
+        final renderMode =
+            controller.canvas.renderMode ?? RenderModeType.renderModeHidden;
 
-        if (widget.controller.shouldHandlerRenderMode) {
+        if (controller.shouldHandlerRenderMode) {
           result = _applyRenderMode(renderMode, result);
           VideoMirrorModeType mirrorMode;
-          if (widget.controller.isLocalUid) {
-            mirrorMode = widget.controller.canvas.mirrorMode ??
+          if (controller.isLocalUid) {
+            mirrorMode = controller.canvas.mirrorMode ??
                 VideoMirrorModeType.videoMirrorModeEnabled;
           } else {
-            mirrorMode = widget.controller.canvas.mirrorMode ??
+            mirrorMode = controller.canvas.mirrorMode ??
                 VideoMirrorModeType.videoMirrorModeDisabled;
           }
 
-          final sourceType = widget.controller.canvas.sourceType ??
+          final sourceType = controller.canvas.sourceType ??
               VideoSourceType.videoSourceCameraPrimary;
 
           result = _applyMirrorMode(mirrorMode, result, sourceType);

@@ -31,10 +31,16 @@ abstract class VideoViewControllerBase {
   int getTextureId();
 
   @internal
+  int getViewHandle();
+
+  @internal
+  int getPlatformViewId();
+
+  @internal
   int getVideoSourceType();
 
   @internal
-  Future<void> setupView(int nativeViewPtr);
+  Future<void> setupView(int platformViewId, int nativeViewPtr);
 
   @protected
   Future<int> createTextureRender(
