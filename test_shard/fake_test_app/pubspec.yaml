@@ -42,7 +42,7 @@ dependencies:
   iris_tester:
     path: ../iris_tester
 
-  path_provider: ^2.0.8
+  path_provider: ^2.1.0
 
 dev_dependencies:
   flutter_test:
