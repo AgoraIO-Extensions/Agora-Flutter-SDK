@@ -6,7 +6,7 @@ description: Demonstrates how to use the agora_rtc_engine plugin.
 publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 
 environment:
-  sdk: ">=2.19.0 <4.0.0"
+  sdk: ">=3.7.0 <4.0.0"
 
 # Dependencies specify other packages that your package needs in order to work.
 # To automatically upgrade your package dependencies to the latest versions
@@ -30,9 +30,9 @@ dependencies:
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^1.0.2
 
-  permission_handler: ^11.3.1
-  path_provider: ^2.1.0
-  archive: ^3.4.10
+  permission_handler: ^12.0.0
+  path_provider: ^2.1.5
+  archive: ^4.0.0
 
 dev_dependencies:
   flutter_test:
@@ -43,7 +43,7 @@ dev_dependencies:
   # activated in the `analysis_options.yaml` file located at the root of your
   # package. See that file for information about deactivating specific lint
   # rules and activating additional ones.
-  flutter_lints: ^1.0.0
+  flutter_lints: ^5.0.0
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec

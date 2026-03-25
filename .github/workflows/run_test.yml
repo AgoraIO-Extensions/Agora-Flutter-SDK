@@ -89,7 +89,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        version: ["3.16", "3.24.5", "3.38.5"]
+        version: ["3.29.0", "3.38.5"]
     runs-on: ubuntu-latest
     timeout-minutes: 120
     env:
@@ -132,7 +132,7 @@ jobs:
       fail-fast: false
       matrix:
         include:
-          - version: "3.16"
+          - version: "3.29.0"
             model: "iPhone 16 Pro"
             os_version: ">=18.0"
           - version: "3.38.5"
@@ -193,7 +193,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        version: ["3.16", "3.38.5"]
+        version: ["3.29.0", "3.38.5"]
     runs-on: macos-latest
     timeout-minutes: 120
     env:
@@ -269,7 +269,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        version: ["3.24.5", "3.38.5"]  # Note: 3.7.0 removed due to SDK compatibility issues
+        version: ["3.29.0", "3.38.5"]  # Minimum supported: Flutter 3.29 (Dart 3.7)
     runs-on: windows-2022
     timeout-minutes: 120
     env:
@@ -307,7 +307,7 @@ jobs:
     if: ${{ !contains(github.event.pull_request.labels.*.name, 'ci:skip') }}
     strategy:
       matrix:
-        version: ["3.24.5", "3.38.5"]
+        version: ["3.29.0", "3.38.5"]
     runs-on: ubuntu-latest
     timeout-minutes: 60
     env:
@@ -330,7 +330,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        version: ["3.16", "3.24.5", "3.38.5"]
+        version: ["3.29.0", "3.38.5"]
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -354,7 +354,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        version: ["3.16", "3.24.5", "3.38.5"]
+        version: ["3.29.0", "3.38.5"]
     runs-on: windows-2022
     steps:
       - uses: actions/checkout@v4
@@ -378,7 +378,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        version: ["3.16", "3.38.5"]
+        version: ["3.29.0", "3.38.5"]
     runs-on: macos-latest
     timeout-minutes: 120
     steps:
@@ -400,7 +400,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        version: ["3.24.5", "3.38.5"]
+        version: ["3.29.0", "3.38.5"]
     runs-on: ubuntu-latest
     timeout-minutes: 120
     steps:
@@ -463,7 +463,7 @@ jobs:
     if: ${{ !contains(github.event.pull_request.labels.*.name, 'ci:skip') }}
     strategy:
       matrix:
-        version: ["3.24.5", "3.38.5"]
+        version: ["3.29.0", "3.38.5"]
     runs-on: macos-latest  # Updated: macos-13 is retired
     timeout-minutes: 60
     env:
@@ -495,7 +495,7 @@ jobs:
     if: ${{ !contains(github.event.pull_request.labels.*.name, 'ci:skip') }}
     strategy:
       matrix:
-        version: ["3.24.5", "3.38.5"]
+        version: ["3.29.0", "3.38.5"]
     runs-on: macos-latest
     timeout-minutes: 120
     env:
@@ -522,7 +522,7 @@ jobs:
     if: ${{ !contains(github.event.pull_request.labels.*.name, 'ci:skip') }}
     strategy:
       matrix:
-        version: ["3.24.5", "3.38.5"]
+        version: ["3.29.0", "3.38.5"]
     runs-on: windows-2022
     timeout-minutes: 120
     env:
@@ -551,7 +551,7 @@ jobs:
     if: ${{ !contains(github.event.pull_request.labels.*.name, 'ci:skip') }}
     strategy:
       matrix:
-        version: ["3.24.5", "3.38.5"]
+        version: ["3.29.0", "3.38.5"]
     runs-on: ubuntu-latest
     timeout-minutes: 60
     env:
