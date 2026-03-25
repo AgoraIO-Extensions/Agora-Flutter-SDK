@@ -1,15 +1,15 @@
 import 'dart:js_interop';
 
-/// JS interop bindings for @rtejs/rte SDK (window.RteSdk).
+/// JS interop bindings for @rtejs/rte SDK (window.AgoraRte).
 /// Matches the exports from web/src/src/index.js bundled via webpack.
 
 // ─── SDK Load Check ─────────────────────────────────────────────────────────
 
-@JS('window.RteSdk')
-external JSAny? get windowRteSdk;
+@JS('window.AgoraRte')
+external JSAny? get windowAgoraRte;
 
-/// Check if window.RteSdk is available (rte.js loaded via <script> tag).
-bool isRteSdkLoaded() => windowRteSdk != null;
+/// Check if window.AgoraRte is available (rte.js loaded via <script> tag).
+bool isRteSdkLoaded() => windowAgoraRte != null;
 
 // ─── Constants ──────────────────────────────────────────────────────────────
 
@@ -74,9 +74,9 @@ class JsPlayerMetadataType {
   static const int sei = 0;
 }
 
-// ─── RteSdk.Rte ──────────────────────────────────────────────────────────────
+// ─── AgoraRte.Rte ──────────────────────────────────────────────────────────────
 
-@JS('RteSdk.Rte')
+@JS('AgoraRte.Rte')
 @staticInterop
 class JsRte {
   external factory JsRte(JsRteConfig config);
@@ -113,9 +113,9 @@ extension JsRteConfigExt on JsRteConfig {
   external JSString? get jsonParameter;
 }
 
-// ─── RteSdk.Player ───────────────────────────────────────────────────────────
+// ─── AgoraRte.Player ───────────────────────────────────────────────────────────
 
-@JS('RteSdk.Player')
+@JS('AgoraRte.Player')
 @staticInterop
 class JsPlayer {
   external factory JsPlayer(JsRte rte, [JsPlayerInitialConfig? config]);
@@ -216,9 +216,9 @@ extension JsPlayerStatsExt on JsPlayerStats {
   external JSNumber? get audioBitrate;
 }
 
-// ─── RteSdk.Canvas ───────────────────────────────────────────────────────────
+// ─── AgoraRte.Canvas ───────────────────────────────────────────────────────────
 
-@JS('RteSdk.Canvas')
+@JS('AgoraRte.Canvas')
 @staticInterop
 class JsCanvas {
   external factory JsCanvas(JsRte rte, [JsCanvasConfig? config]);
@@ -248,9 +248,9 @@ extension JsCanvasConfigExt on JsCanvasConfig {
   external JSNumber? get renderMode;
 }
 
-// ─── RteSdk.RteError ─────────────────────────────────────────────────────────
+// ─── AgoraRte.RteError ─────────────────────────────────────────────────────────
 
-@JS('RteSdk.RteError')
+@JS('AgoraRte.RteError')
 @staticInterop
 class JsRteError {}
 
