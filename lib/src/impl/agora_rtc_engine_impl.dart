@@ -92,13 +92,17 @@ extension RtcEngineExt on RtcEngine {
 
     VideoCanvas newVideoCanvas = VideoCanvas(
       view: view as int,
+      backgroundColor:videoCanvas.backgroundColor,
       renderMode: videoCanvas.renderMode,
       mirrorMode: videoCanvas.mirrorMode,
       uid: videoCanvas.uid,
+      subviewUid: videoCanvas.subviewUid,
       sourceType: videoCanvas.sourceType,
       cropArea: videoCanvas.cropArea,
       setupMode: videoCanvas.setupMode,
       mediaPlayerId: videoCanvas.mediaPlayerId,
+      enableAlphaMask: videoCanvas.enableAlphaMask,
+      position: videoCanvas.position,
     );
     try {
       if (newVideoCanvas.uid != 0) {
