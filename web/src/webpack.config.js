@@ -6,7 +6,7 @@ module.exports = {
     filename: 'rte.js',
     path: path.resolve(__dirname, '..'),
     library: {
-      name: 'RteSdk',
+      name: 'AgoraRte',
       type: 'window',
     },
   },

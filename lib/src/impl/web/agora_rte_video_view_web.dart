@@ -8,21 +8,11 @@ import 'package:web/web.dart' as web;
 /// Creates an HTMLVideoElement inside a constraining wrapper div,
 /// registers it in [AgoraRteWebViewRegistry], then calls canvas.addView
 /// so the JS SDK can use it for rendering.
-///
-/// Optional customizer callbacks (all passed as `Function?` for cross-platform
-/// compatibility — cast to concrete web types in your implementation):
-/// - [wrapperCustomizer]: `void Function(HTMLDivElement wrapper)`
-/// - [styleCustomizer]: `void Function(HTMLStyleElement style, String wrapperId)`
-///   — default CSS is already set on style.textContent before this is called.
-/// - [videoCustomizer]: `void Function(HTMLVideoElement video)`
 Widget buildWebVideoView({
   required AgoraRteCanvas? canvas,
   required AgoraRtePlayer? player,
   required VoidCallback? onViewCreated,
   required Function(String)? onLog,
-  Function? wrapperCustomizer,
-  Function? styleCustomizer,
-  Function? videoCustomizer,
 }) {
   if (canvas == null) {
     return const SizedBox.shrink();
@@ -43,10 +33,6 @@ Widget buildWebVideoView({
       wrapper.style.overflow = 'hidden';
       wrapper.style.position = 'relative';
 
-      if (wrapperCustomizer != null) {
-        wrapperCustomizer(wrapper);
-      }
-
       // Scoped CSS that forces the video to fill the wrapper.
       // Uses !important to beat any inline styles the JS SDK may set.
       final style = web.document.createElement('style') as web.HTMLStyleElement;
@@ -61,20 +47,12 @@ Widget buildWebVideoView({
         }
       ''';
 
-      if (styleCustomizer != null) {
-        styleCustomizer(style, wrapperId);
-      }
-
       wrapper.appendChild(style);
 
       final video = web.document.createElement('video') as web.HTMLVideoElement;
       video.id = videoElId;
       video.autoplay = true;
       video.setAttribute('playsinline', 'true');
-
-      if (videoCustomizer != null) {
-        videoCustomizer(video);
-      }
 
       wrapper.appendChild(video);
 

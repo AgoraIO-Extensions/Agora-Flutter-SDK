@@ -359,70 +359,87 @@ class _RtePlayerConfigTabState extends State<RtePlayerConfigTab> {
               _buildConfigItem(
                   'Playback Speed',
                   '$_playbackSpeed',
+                  (value) => _playbackSpeed = int.tryParse(value) ?? 100,
                   (value) =>
                       _setPlayerPlaybackSpeed(int.tryParse(value) ?? 100)),
               _buildConfigItem(
                   'Playout Volume',
                   '$_volume',
+                  (value) => _volume = int.tryParse(value) ?? 100,
                   (value) =>
                       _setPlayerPlayoutVolume(int.tryParse(value) ?? 100)),
-              _buildConfigItem('Loop Count', '$_loopCount',
+              _buildConfigItem(
+                  'Loop Count',
+                  '$_loopCount',
+                  (value) => _loopCount = int.tryParse(value) ?? 0,
                   (value) => _setPlayerLoopCount(int.tryParse(value) ?? 0)),
               _buildConfigItem(
                   'Playout Audio Track Idx',
                   '$_playoutAudioTrackIdx',
+                  (value) => _playoutAudioTrackIdx = int.tryParse(value) ?? 0,
                   (value) =>
                       _setPlayerPlayoutAudioTrackIdx(int.tryParse(value) ?? 0),
                   enabled: !kIsWeb),
               _buildConfigItem(
                   'Publish Audio Track Idx',
                   '$_publishAudioTrackIdx',
+                  (value) => _publishAudioTrackIdx = int.tryParse(value) ?? 0,
                   (value) =>
                       _setPlayerPublishAudioTrackIdx(int.tryParse(value) ?? 0),
                   enabled: !kIsWeb),
               _buildConfigItem(
                   'Audio Track Idx',
                   '$_audioTrackIdx',
+                  (value) => _audioTrackIdx = int.tryParse(value) ?? 0,
                   (value) =>
                       _setPlayerAudioTrackIdx(int.tryParse(value) ?? 0),
                   enabled: !kIsWeb),
               _buildConfigItem(
                   'Subtitle Track Idx',
                   '$_subtitleTrackIdx',
+                  (value) => _subtitleTrackIdx = int.tryParse(value) ?? 0,
                   (value) =>
                       _setPlayerSubtitleTrackIdx(int.tryParse(value) ?? 0),
                   enabled: !kIsWeb),
               _buildConfigItem(
                   'External Subtitle Track Idx',
                   '$_externalSubtitleTrackIdx',
+                  (value) => _externalSubtitleTrackIdx = int.tryParse(value) ?? 0,
                   (value) => _setPlayerExternalSubtitleTrackIdx(
                       int.tryParse(value) ?? 0),
                   enabled: !kIsWeb),
               _buildConfigItem(
                   'Audio Pitch',
                   '$_audioPitch',
+                  (value) => _audioPitch = int.tryParse(value) ?? 0,
                   (value) =>
                       _setPlayerAudioPitch(int.tryParse(value) ?? 0),
                   enabled: !kIsWeb),
               _buildConfigItem(
                   'Audio Playback Delay',
                   '$_audioPlaybackDelay',
+                  (value) => _audioPlaybackDelay = int.tryParse(value) ?? 0,
                   (value) =>
                       _setPlayerAudioPlaybackDelay(int.tryParse(value) ?? 0),
                   enabled: !kIsWeb),
               _buildConfigItem(
                   'Audio Dual Mono Mode',
                   '$_audioDualMonoMode',
+                  (value) => _audioDualMonoMode = int.tryParse(value) ?? 0,
                   (value) =>
                       _setPlayerAudioDualMonoMode(int.tryParse(value) ?? 0),
                   enabled: !kIsWeb),
               _buildConfigItem(
                   'Publish Volume',
                   '$_publishVolume',
+                  (value) => _publishVolume = int.tryParse(value) ?? 100,
                   (value) =>
                       _setPlayerPublishVolume(int.tryParse(value) ?? 100),
                   enabled: !kIsWeb),
-              _buildConfigItem('JSON Parameter', _playerJsonParameter,
+              _buildConfigItem(
+                  'JSON Parameter',
+                  _playerJsonParameter,
+                  (value) => _playerJsonParameter = value,
                   (value) => _setPlayerJsonParameter(value),
                   enabled: !kIsWeb),
               const SizedBox(height: 8),
@@ -475,7 +492,7 @@ class _RtePlayerConfigTabState extends State<RtePlayerConfigTab> {
     );
   }
 
-  Widget _buildConfigItem(String label, String value, Function(String) onSave,
+  Widget _buildConfigItem(String label, String value, Function(String) onChanged, Function(String) onSave,
       {bool enabled = true}) {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 8.0),
@@ -494,6 +511,7 @@ class _RtePlayerConfigTabState extends State<RtePlayerConfigTab> {
                 isDense: true,
                 helperText: enabled ? null : 'Web is not supported',
               ),
+              onChanged: enabled ? onChanged : null,
               onSubmitted: enabled ? onSave : null,
             ),
           ),

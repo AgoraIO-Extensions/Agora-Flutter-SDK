@@ -8,9 +8,6 @@ Widget buildWebVideoView({
   required AgoraRtePlayer? player,
   required VoidCallback? onViewCreated,
   required Function(String)? onLog,
-  Function? wrapperCustomizer,
-  Function? styleCustomizer,
-  Function? videoCustomizer,
 }) {
   return const SizedBox.shrink();
 }

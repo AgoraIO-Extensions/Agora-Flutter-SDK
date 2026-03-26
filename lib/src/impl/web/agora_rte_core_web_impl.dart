@@ -35,7 +35,7 @@ class AgoraRteCoreWebImpl {
     if (!isRteSdkLoaded()) {
       throw PlatformException(
           code: 'RTE_ERROR',
-          message: 'RteSdk not found on window. '
+          message: 'AgoraRte not found on window. '
               'Add <script src="rte.js"></script> to your index.html before Flutter initialization.');
     }
     _config = AgoraRteConfig(

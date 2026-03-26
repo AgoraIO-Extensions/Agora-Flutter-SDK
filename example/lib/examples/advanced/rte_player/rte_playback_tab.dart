@@ -21,15 +21,6 @@ class RtePlaybackTab extends StatefulWidget {
   final Function(int)? onVolumeChanged;
   final Function(int)? onPlaybackSpeedChanged;
 
-  /// (Web only) Customizer for the wrapper div element.
-  final Function? wrapperCustomizer;
-
-  /// (Web only) Customizer for the style element.
-  final Function? styleCustomizer;
-
-  /// (Web only) Customizer for the video element.
-  final Function? videoCustomizer;
-
   const RtePlaybackTab({
     Key? key,
     this.player,
@@ -47,9 +38,6 @@ class RtePlaybackTab extends StatefulWidget {
     this.onLog,
     this.onVolumeChanged,
     this.onPlaybackSpeedChanged,
-    this.wrapperCustomizer,
-    this.styleCustomizer,
-    this.videoCustomizer,
   }) : super(key: key);
 
   @override
@@ -267,9 +255,6 @@ class _RtePlaybackTabState extends State<RtePlaybackTab>
                       onViewCreated: () {
                         widget.onLog?.call('AgoraRteVideoView created');
                       },
-                      wrapperCustomizer: widget.wrapperCustomizer,
-                      styleCustomizer: widget.styleCustomizer,
-                      videoCustomizer: widget.videoCustomizer,
                     )
                   else
                     Center(

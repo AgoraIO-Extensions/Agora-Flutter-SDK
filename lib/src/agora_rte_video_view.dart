@@ -119,68 +119,12 @@ class AgoraRteVideoView extends StatefulWidget {
   /// ```
   final Function(String)? onLog;
 
-  /// (Web only) Optional callback to customize the wrapper `<div>` element.
-  ///
-  /// Called after default styles (width/height/overflow/position) are applied.
-  /// Use this to add extra CSS, attributes, or event listeners.
-  /// The parameter type is `web.HTMLDivElement` from `package:web`.
-  ///
-  /// **Example:**
-  /// ```dart
-  /// import 'package:web/web.dart' as web;
-  /// AgoraRteVideoView(
-  ///   wrapperCustomizer: (wrapper) {
-  ///     (wrapper as web.HTMLDivElement).style.borderRadius = '8px';
-  ///   },
-  /// )
-  /// ```
-  final Function? wrapperCustomizer;
-
-  /// (Web only) Optional callback to customize the injected `<style>` element.
-  ///
-  /// Called after the default CSS rules are set on `textContent`. Receives the
-  /// `HTMLStyleElement` (as `dynamic`) and the wrapper element's id string.
-  /// Cast to `web.HTMLStyleElement` in your implementation to get full access.
-  /// Signature: `void Function(HTMLStyleElement style, String wrapperId)`
-  ///
-  /// **Example:**
-  /// ```dart
-  /// import 'package:web/web.dart' as web;
-  /// void myStyleCustomizer(dynamic style, String wrapperId) {
-  ///   final el = style as web.HTMLStyleElement;
-  ///   el.textContent = '#$wrapperId > video { object-fit: cover !important; }';
-  ///   // el.media = 'screen and (max-width: 600px)';
-  ///   // el.disabled = true;
-  /// }
-  /// ```
-  final Function? styleCustomizer;
-
-  /// (Web only) Optional callback to customize the `<video>` element.
-  ///
-  /// Called after default attributes (autoplay, controls, playsinline) are set.
-  /// Use this to disable controls, set muted, add poster, etc.
-  /// The parameter type is `web.HTMLVideoElement` from `package:web`.
-  ///
-  /// **Example:**
-  /// ```dart
-  /// import 'package:web/web.dart' as web;
-  /// AgoraRteVideoView(
-  ///   videoCustomizer: (video) {
-  ///     (video as web.HTMLVideoElement).controls = false;
-  ///   },
-  /// )
-  /// ```
-  final Function? videoCustomizer;
-
   const AgoraRteVideoView({
     super.key,
     this.canvas,
     this.player,
     this.onViewCreated,
     this.onLog,
-    this.wrapperCustomizer,
-    this.styleCustomizer,
-    this.videoCustomizer,
   });
 
   @override
@@ -227,9 +171,6 @@ class _AgoraRteVideoViewState extends State<AgoraRteVideoView> {
         player: widget.player,
         onViewCreated: widget.onViewCreated,
         onLog: widget.onLog,
-        wrapperCustomizer: widget.wrapperCustomizer,
-        styleCustomizer: widget.styleCustomizer,
-        videoCustomizer: widget.videoCustomizer,
       );
     }
 

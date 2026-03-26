@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:convert';
+import 'dart:typed_data';
 
 import 'package:agora_rtc_engine/agora_rte_engine.dart';
 import 'package:agora_rtc_engine_example/components/log_sink.dart';
@@ -10,12 +11,7 @@ import 'package:agora_rtc_engine_example/examples/advanced/rte_player/rte_info_l
 import 'package:agora_rtc_engine_example/examples/advanced/rte_player/rte_playback_tab.dart';
 import 'package:agora_rtc_engine_example/examples/advanced/rte_player/rte_player_config_tab.dart';
 import 'package:agora_rtc_engine_example/examples/advanced/rte_player/rte_test_tab.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-
-import 'package:agora_rtc_engine_example/examples/advanced/rte_player/rte_web_customizers.dart'
-    if (dart.library.io) 'package:agora_rtc_engine_example/examples/advanced/rte_player/rte_web_customizers_stub.dart'
-    as web_customizers;
 
 class RtePlayerExample extends StatefulWidget {
   const RtePlayerExample({Key? key}) : super(key: key);
@@ -241,12 +237,6 @@ class _PlayerViewState extends State<_PlayerView>
                   onLog: activeCtrl.addLog,
                   onVolumeChanged: (v) => activeCtrl.setVolume(v),
                   onPlaybackSpeedChanged: (s) => activeCtrl.setPlaybackSpeed(s),
-                  wrapperCustomizer:
-                      kIsWeb ? web_customizers.RteWebCustomizers.wrapper : null,
-                  styleCustomizer:
-                      kIsWeb ? web_customizers.RteWebCustomizers.style : null,
-                  videoCustomizer:
-                      kIsWeb ? web_customizers.RteWebCustomizers.video : null,
                 ),
                 _cachedRteConfigTab!,
                 _cachedPlayerConfigTab!,
