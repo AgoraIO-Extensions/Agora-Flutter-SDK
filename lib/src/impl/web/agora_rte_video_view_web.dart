@@ -32,6 +32,10 @@ Widget buildWebVideoView({
       wrapper.style.height = '100%';
       wrapper.style.overflow = 'hidden';
       wrapper.style.position = 'relative';
+      // Force GPU compositing layer to prevent scroll glitches on older browsers
+      wrapper.style.setProperty('will-change', 'transform');
+      wrapper.style.setProperty('transform', 'translateZ(0)');
+      wrapper.style.setProperty('backface-visibility', 'hidden');
 
       // Scoped CSS that forces the video to fill the wrapper.
       // Uses !important to beat any inline styles the JS SDK may set.
