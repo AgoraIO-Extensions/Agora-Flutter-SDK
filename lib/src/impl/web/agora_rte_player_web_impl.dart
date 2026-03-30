@@ -19,17 +19,45 @@ class AgoraRtePlayerWebImpl implements AgoraRtePlayer {
   final Map<String, JSFunction> _jsCallbacks = {};
 
   AgoraRtePlayerConfig _config = const AgoraRtePlayerConfig();
+  AgoraRtePlayerState _currentState = AgoraRtePlayerState.idle;
 
   AgoraRtePlayerWebImpl(this.playerId, this.jsPlayer);
 
   void _bindJsEvents() {
     _registerJsCallback('stateChanged',
-        (JSNumber oldState, JSNumber newState) {
-      _observer?.onStateChanged(
-        AgoraRtePlayerState.values[oldState.toDartInt],
-        AgoraRtePlayerState.values[newState.toDartInt],
-        null,
-      );
+        (JSNumber oldState, JSNumber newState, [JsRteError? error]) {
+          final oldS = AgoraRtePlayerState.values[oldState.toDartInt];
+          final newS = AgoraRtePlayerState.values[newState.toDartInt];
+          _currentState = newS;
+
+          AgoraRteErrorCode? dartError;
+          if (error != null) {
+            final code = error.code.toDartInt;
+            if (code >= 0 && code < AgoraRteErrorCode.values.length) {
+              dartError = AgoraRteErrorCode.values[code];
+            } else {
+              dartError = AgoraRteErrorCode.errorDefault;
+            }
+          }
+          _observer?.onStateChanged(oldS, newS, dartError);
+        }.toJS);
+
+    _registerJsCallback(
+        'error',
+        (JsRteError error) {
+          final code = error.code.toDartInt;
+          AgoraRteErrorCode? dartError;
+          if (code >= 0 && code < AgoraRteErrorCode.values.length) {
+            dartError = AgoraRteErrorCode.values[code];
+          } else {
+            dartError = AgoraRteErrorCode.errorDefault;
+          }
+
+          // Synthesize state transition to failed using the tracked current state
+          final oldS = _currentState;
+          _currentState = AgoraRtePlayerState.failed;
+          _observer?.onStateChanged(
+              oldS, AgoraRtePlayerState.failed, dartError);
     }.toJS);
 
     _registerJsCallback('positionChanged', (JSNumber position) {
