@@ -36,6 +36,7 @@ Widget buildWebVideoView({
       wrapper.style.setProperty('will-change', 'transform');
       wrapper.style.setProperty('transform', 'translateZ(0)');
       wrapper.style.setProperty('backface-visibility', 'hidden');
+      wrapper.style.setProperty('contain', 'strict');
 
       // Scoped CSS that forces the video to fill the wrapper.
       // Uses !important to beat any inline styles the JS SDK may set.
