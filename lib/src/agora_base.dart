@@ -2024,7 +2024,7 @@ class VideoEncoderConfiguration implements AgoraSerializable {
   @JsonKey(name: 'frameRate')
   final int? frameRate;
 
-  /// Bitrate for video encoding, in Kbps. You do not need to set this parameter. Keep the default value standardBitrate. The SDK automatically selects the optimal bitrate based on the resolution and frame rate you set. For the relationship between resolution and frame rate, see [Video Profile](https://doc.shengwang.cn/doc/rtc/flutter/basic-features/video-profile#%E8%A7%86%E9%A2%91%E5%B1%9E%E6%80%A7%E5%8F%82%E8%80%83).
+  /// Bitrate for video encoding, in Kbps. You do not need to set this parameter. Keep the default value standardBitrate. The SDK automatically selects the optimal bitrate based on the resolution and frame rate you set. For the relationship between resolution and frame rate, see [Video Profile](https://docs.agora.io/en/video-calling/enhance-call-quality/configure-video-encoding).
   ///  standardBitrate (0): (Default) Standard bitrate mode.
   ///  compatibleBitrate (-1): Compatible bitrate mode. In general, Agora recommends not using this value.
   @JsonKey(name: 'bitrate')
@@ -2449,7 +2449,7 @@ class RtcStats implements AgoraSerializable {
 
   /// Round-trip time from client to local router (ms). This property is enabled by default on devices running iOS versions earlier than 14, and disabled on iOS 14 and later.
   ///
-  ///  To enable this property on iOS 14 and later, please [contact technical support](https://ticket.shengwang.cn/).
+  ///  To enable this property on iOS 14 and later, please [contact technical support](https://www.agora.io/cn/contact/).
   /// On Android, to obtain gatewayRtt, make sure you have added the android.permission.ACCESS_WIFI_STATE permission after </application> in your project's AndroidManifest.xml file.
   @JsonKey(name: 'gatewayRtt')
   final int? gatewayRtt;
@@ -2792,7 +2792,7 @@ enum AudioScenarioType {
   @JsonValue(9)
   audioScenarioAiServer,
 
-  /// 10: AI conversation scenario, only applicable for interactions with agents created using [Agora Conversational AI Engine](https://doc.shengwang.cn/doc/convoai/restful/landing-page).
+  /// 10: AI conversation scenario, only applicable for interactions with agents created using [Agora Conversational AI Engine](https://docs.agora.io/en/conversational-ai/overview/product-overview).
   @JsonValue(10)
   audioScenarioAiClient,
 
@@ -3220,7 +3220,7 @@ enum LocalVideoStreamReason {
 
   /// 14: (Android only) Video capture interrupted. Possible reasons:
   ///  The camera is occupied by another app. Prompt the user to check if the camera is in use.
-  ///  The app has been sent to the background. Use a foreground service notification to ensure video capture continues in the background. See [Why does audio/video capture fail when the app is locked or in the background on some Android versions?](https://doc.shengwang.cn/faq/quality-issues/android-background).
+  ///  The app has been sent to the background. Use a foreground service notification to ensure video capture continues in the background.
   @JsonValue(14)
   localVideoStreamReasonDeviceInterrupt,
 
@@ -4093,7 +4093,7 @@ class RtcImage implements AgoraSerializable {
 
 /// Advanced feature configuration for transcoding live streaming.
 ///
-/// To use advanced transcoding live streaming features, please [contact sales](https://www.shengwang.cn/contact-sales/).
+/// To use advanced transcoding live streaming features, please [contact sales](mailto:support@agora.io).
 @JsonSerializable(explicitToJson: true, includeIfNull: false)
 class LiveStreamAdvancedFeature implements AgoraSerializable {
   /// @nodoc
@@ -4260,7 +4260,7 @@ class LiveTranscoding implements AgoraSerializable {
   @JsonKey(name: 'height')
   final int? height;
 
-  /// Video encoding bitrate in Kbps. You do not need to set this parameter. Keep the default value standardBitrate. The SDK automatically matches the most appropriate bitrate based on the video resolution and frame rate you set. For the mapping between resolution and frame rate, see [Video Profile](https://doc.shengwang.cn/doc/rtc/flutter/basic-features/video-profile#%E8%A7%86%E9%A2%91%E5%B1%9E%E6%80%A7%E5%8F%82%E8%80%83).
+  /// Video encoding bitrate in Kbps. You do not need to set this parameter. Keep the default value standardBitrate. The SDK automatically matches the most appropriate bitrate based on the video resolution and frame rate you set. For the mapping between resolution and frame rate, see [Video Profile](https://docs.agora.io/en/video-calling/enhance-call-quality/configure-video-encoding).
   @JsonKey(name: 'videoBitrate')
   final int? videoBitrate;
 
@@ -4296,7 +4296,7 @@ class LiveTranscoding implements AgoraSerializable {
   @JsonKey(name: 'transcodingUsers')
   final List<TranscodingUser>? transcodingUsers;
 
-  /// Reserved parameter: Custom information sent to the CDN streaming client, used to populate SEI frames in H264/H265 video. Length limit: 4096 bytes. For details on SEI, see [SEI Frame Related Issues](https://doc.shengwang.cn/faq/quality-issues/sei).
+  /// Reserved parameter: Custom information sent to the CDN streaming client, used to populate SEI frames in H264/H265 video. Length limit: 4096 bytes.
   @JsonKey(name: 'transcodingExtraInfo')
   final String? transcodingExtraInfo;
 
@@ -5070,7 +5070,7 @@ class VideoCanvas implements AgoraSerializable {
   final Rectangle? cropArea;
 
   /// The receiver can only render alpha channel information when the sender enables the alpha transmission feature.
-  ///  To enable alpha transmission, please [contact technical support](https://ticket.shengwang.cn/). (Optional) Whether to enable alpha mask rendering: true : Enable alpha mask rendering. false : (Default) Disable alpha mask rendering. Alpha mask rendering can create images with transparency effects and extract portraits from videos. When used with other methods, it can achieve effects such as portrait picture-in-picture or watermark overlays.
+  ///  To enable alpha transmission, please [contact technical support](https://www.agora.io/cn/contact/). (Optional) Whether to enable alpha mask rendering: true : Enable alpha mask rendering. false : (Default) Disable alpha mask rendering. Alpha mask rendering can create images with transparency effects and extract portraits from videos. When used with other methods, it can achieve effects such as portrait picture-in-picture or watermark overlays.
   @JsonKey(name: 'enableAlphaMask')
   final bool? enableAlphaMask;
 
@@ -6360,7 +6360,7 @@ class AudioRecordingConfiguration implements AgoraSerializable {
 
   /// The actual recorded audio channel depends on the captured audio channel:
   ///  If the captured audio is mono and recordingChannel is set to 2, the recorded audio will be stereo with duplicated mono data, not true stereo.
-  ///  If the captured audio is stereo and recordingChannel is set to 1, the recorded audio will be mono with mixed stereo data. In addition, the integration scheme may affect the final recorded audio channel. If you want to record true stereo, please [contact technical support](https://ticket.shengwang.cn/) for assistance. Number of audio channels to record. Supported values:
+  ///  If the captured audio is stereo and recordingChannel is set to 1, the recorded audio will be mono with mixed stereo data. In addition, the integration scheme may affect the final recorded audio channel. If you want to record true stereo, please [contact technical support](https://www.agora.io/cn/contact/) for assistance. Number of audio channels to record. Supported values:
   ///  1: (Default) Mono.
   ///  2: Stereo.
   @JsonKey(name: 'recordingChannel')
@@ -6544,7 +6544,7 @@ enum ChannelMediaRelayError {
 
   /// 2: No response from the server.
   /// This error may be caused by poor network conditions. If this error is reported when initiating cross-channel media relay, you can try again later; if reported during the relay process, you can call the leaveChannel method to leave the channel.
-  /// This error may also occur if the current App ID has not enabled cross-channel media relay. You can [contact technical support](https://ticket.shengwang.cn/) to apply for enabling it.
+  /// This error may also occur if the current App ID has not enabled cross-channel media relay. You can [contact technical support](https://www.agora.io/cn/contact/) to apply for enabling it.
   @JsonValue(2)
   relayErrorServerNoResponse,
 
@@ -7065,7 +7065,7 @@ class EchoTestConfiguration implements AgoraSerializable {
   @JsonKey(name: 'enableVideo')
   final bool? enableVideo;
 
-  /// Token used to ensure the security of the audio and video echo test. If you have not enabled the App Certificate in the console, you do not need to set this parameter. If you have enabled the App Certificate, you must provide a Token, and the uid used to generate the Token must be 0xFFFFFFFF, and the channel name used must uniquely identify each echo test. For how to generate a Token on the server, refer to [Use Token for Authentication](https://doc.shengwang.cn/doc/rtc/flutter/basic-features/token-authentication).
+  /// Token used to ensure the security of the audio and video echo test. If you have not enabled the App Certificate in the console, you do not need to set this parameter. If you have enabled the App Certificate, you must provide a Token, and the uid used to generate the Token must be 0xFFFFFFFF, and the channel name used must uniquely identify each echo test. For how to generate a Token on the server, refer to [Use Token for Authentication](https://docs.agora.io/en/video-calling/token-authentication/deploy-token-server).
   @JsonKey(name: 'token')
   final String? token;
 
