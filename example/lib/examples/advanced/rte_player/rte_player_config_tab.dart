@@ -3,6 +3,7 @@ import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter/material.dart';
 
 class RtePlayerConfigTab extends StatefulWidget {
+  final bool initialEnableAudioVolumeLog;
   final AgoraRtePlayer? player;
   final Function(String) onLog;
   final Function(int)? onPlaybackSpeedChanged;
@@ -16,13 +17,15 @@ class RtePlayerConfigTab extends StatefulWidget {
     this.onPlaybackSpeedChanged,
     this.onVolumeChanged,
     this.onEnableAudioVolumeLogChanged,
+    this.initialEnableAudioVolumeLog = false,
   }) : super(key: key);
 
   @override
   State<RtePlayerConfigTab> createState() => _RtePlayerConfigTabState();
 }
 
-class _RtePlayerConfigTabState extends State<RtePlayerConfigTab> {
+class _RtePlayerConfigTabState extends State<RtePlayerConfigTab>
+    with AutomaticKeepAliveClientMixin {
   bool _autoPlay = false;
   int _playbackSpeed = 100;
   int _volume = 100;
@@ -46,6 +49,7 @@ class _RtePlayerConfigTabState extends State<RtePlayerConfigTab> {
   @override
   void initState() {
     super.initState();
+    _enableAudioVolumeLog = widget.initialEnableAudioVolumeLog;
     _loadPlayerConfig();
   }
 
@@ -325,7 +329,11 @@ class _RtePlayerConfigTabState extends State<RtePlayerConfigTab> {
   }
 
   @override
+  bool get wantKeepAlive => true;
+
+  @override
   Widget build(BuildContext context) {
+    super.build(context);
     if (widget.player == null) {
       return const Center(child: Text('Player not initialized'));
     }

@@ -139,7 +139,7 @@ class _PlayerView extends StatefulWidget {
 }
 
 class _PlayerViewState extends State<_PlayerView>
-    with SingleTickerProviderStateMixin {
+    with SingleTickerProviderStateMixin, AutomaticKeepAliveClientMixin {
   late TabController _tabController;
   Widget? _cachedRteConfigTab;
   Widget? _cachedPlayerConfigTab;
@@ -167,6 +167,7 @@ class _PlayerViewState extends State<_PlayerView>
       onVolumeChanged: (v) => activeCtrl.setVolume(v),
       onEnableAudioVolumeLogChanged: (enable) =>
           activeCtrl.setEnableAudioVolumeLog(enable),
+      initialEnableAudioVolumeLog: activeCtrl.enableAudioVolumeLog,
     );
     _cachedCanvasConfigTab = RteCanvasConfigTab(
       key: ValueKey('cconfig_${activeCtrl.id}'),
@@ -191,7 +192,11 @@ class _PlayerViewState extends State<_PlayerView>
   }
 
   @override
+  bool get wantKeepAlive => true;
+
+  @override
   Widget build(BuildContext context) {
+    super.build(context);
     final activeCtrl = widget.controller;
 
     return Scaffold(
@@ -402,6 +407,8 @@ class _PlayerController implements AgoraRtePlayerObserver {
     playbackSpeed = s;
     onUpdate();
   }
+
+  bool get enableAudioVolumeLog => _enableAudioVolumeLog;
 
   void setEnableAudioVolumeLog(bool enable) {
     _enableAudioVolumeLog = enable;
