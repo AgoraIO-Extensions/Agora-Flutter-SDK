@@ -138,12 +138,7 @@ class AgoraRtePlayerWebImpl implements AgoraRtePlayer {
       throw PlatformException(
           code: 'RTE_ERROR', message: 'url is empty');
     }
-    try {
-      await jsPlayer.switchWithUrl(url.toJS, 0.toJS).toDart;
-    } catch (e) {
-      debugPrint('switchWithUrl failed: $e');
-    }
-   
+    await jsPlayer.switchWithUrl(url.toJS, 0.toJS).toDart;
   }
 
   @override

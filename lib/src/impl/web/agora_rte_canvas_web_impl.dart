@@ -2,7 +2,7 @@ import 'dart:js_interop';
 import 'package:agora_rtc_engine/src/agora_rte.dart';
 import 'package:agora_rtc_engine/src/agora_rte_canvas_config.dart';
 import 'package:agora_rtc_engine/src/agora_rte_enums.dart';
-import 'package:flutter/foundation.dart';
+
 import 'agora_rte_web_view_registry.dart';
 import 'agora_rte_js_interop.dart';
 
@@ -48,12 +48,7 @@ class AgoraRteCanvasWebImpl implements AgoraRteCanvas {
       );
     }
 
-    try {
-      await jsCanvas.setConfigs(rConfig).toDart;
-    } catch (e) {
-      debugPrint('Failed to set canvas configs: $e');
-    }
-    
+    await jsCanvas.setConfigs(rConfig).toDart;
   }
 
   @override
