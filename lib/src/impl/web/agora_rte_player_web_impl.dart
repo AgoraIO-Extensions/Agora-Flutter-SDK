@@ -110,11 +110,7 @@ class AgoraRtePlayerWebImpl implements AgoraRtePlayer {
 
   void _registerJsCallback(String event, JSFunction callback) {
     _jsCallbacks[event] = callback;
-    try {
-      js_util.callMethod(jsPlayer, 'registerObserver', [event.toJS, callback]);
-    } catch (e) {
-      debugPrint('[RTE Web] Failed to bind event "$event": $e');
-    }
+    jsPlayer.on(event.toJS, callback);
   }
 
   void _unbindJsEvents() {
