@@ -19,45 +19,41 @@ class AgoraRtePlayerWebImpl implements AgoraRtePlayer {
   final Map<String, JSFunction> _jsCallbacks = {};
 
   AgoraRtePlayerConfig _config = const AgoraRtePlayerConfig();
-  AgoraRtePlayerState _currentState = AgoraRtePlayerState.idle;
 
   AgoraRtePlayerWebImpl(this.playerId, this.jsPlayer);
 
   void _bindJsEvents() {
     _registerJsCallback('stateChanged',
-        (JSNumber oldState, JSNumber newState, [JsRteError? error]) {
+        (JSNumber oldState, JSNumber newState, [JSAny? error]) {
           final oldS = AgoraRtePlayerState.values[oldState.toDartInt];
           final newS = AgoraRtePlayerState.values[newState.toDartInt];
-          _currentState = newS;
 
           AgoraRteErrorCode? dartError;
           if (error != null) {
-            final code = error.code.toDartInt;
-            if (code >= 0 && code < AgoraRteErrorCode.values.length) {
-              dartError = AgoraRteErrorCode.values[code];
-            } else {
-              dartError = AgoraRteErrorCode.errorDefault;
+            final errVal = error.dartify();
+            int? code;
+            if (errVal is num) {
+              code = errVal.toInt();
+            } else if (errVal is Map) {
+              code = (errVal['code'] as num?)?.toInt();
+            }
+
+            if (code != null && code > 0) {
+              if (code < AgoraRteErrorCode.values.length) {
+                dartError = AgoraRteErrorCode.values[code];
+              } else {
+                dartError = AgoraRteErrorCode.errorDefault;
+              }
             }
           }
+      
           _observer?.onStateChanged(oldS, newS, dartError);
         }.toJS);
 
     _registerJsCallback(
         'error',
-        (JsRteError error) {
-          final code = error.code.toDartInt;
-          AgoraRteErrorCode? dartError;
-          if (code >= 0 && code < AgoraRteErrorCode.values.length) {
-            dartError = AgoraRteErrorCode.values[code];
-          } else {
-            dartError = AgoraRteErrorCode.errorDefault;
-          }
-
-          // Synthesize state transition to failed using the tracked current state
-          final oldS = _currentState;
-          _currentState = AgoraRtePlayerState.failed;
-          _observer?.onStateChanged(
-              oldS, AgoraRtePlayerState.failed, dartError);
+        (JSAny? error) {
+          debugPrint('[RTE Web] Player "error" event fired!');
     }.toJS);
 
     _registerJsCallback('positionChanged', (JSNumber position) {
@@ -183,13 +179,22 @@ class AgoraRtePlayerWebImpl implements AgoraRtePlayer {
   @override
   Future<AgoraRtePlayerStats> getStats() async {
     final jsStats = await jsPlayer.getStats().toDart;
-    final stats = jsStats as JsPlayerStats;
-    return AgoraRtePlayerStats(
-      videoDecodeFrameRate: stats.videoDecodeFrameRate?.toDartInt,
-      videoRenderFrameRate: stats.videoRenderFrameRate?.toDartInt,
-      videoBitrate: stats.videoBitrate?.toDartInt,
-      audioBitrate: stats.audioBitrate?.toDartInt,
-    );
+    final stats = jsStats?.dartify();
+    if (stats is Map) {
+      final videoDecodeFrameRate =
+          (stats['videoDecodeFrameRate'] as num?)?.toInt();
+      final videoRenderFrameRate =
+          (stats['videoRenderFrameRate'] as num?)?.toInt();
+      final videoBitrate = (stats['videoBitrate'] as num?)?.toInt();
+      final audioBitrate = (stats['audioBitrate'] as num?)?.toInt();
+      return AgoraRtePlayerStats(
+        videoDecodeFrameRate: videoDecodeFrameRate,
+        videoRenderFrameRate: videoRenderFrameRate,
+        videoBitrate: videoBitrate,
+        audioBitrate: audioBitrate,
+      );
+    }
+    return const AgoraRtePlayerStats();
   }
 
   @override

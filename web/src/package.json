@@ -7,7 +7,7 @@
     "dev": "webpack --mode development"
   },
   "dependencies": {
-    "@rtejs/rte": "^1.0.0-dev.3"
+    "@rtejs/rte": "^1.0.0-dev.22"
   },
   "devDependencies": {
     "webpack": "^5.0.0",
