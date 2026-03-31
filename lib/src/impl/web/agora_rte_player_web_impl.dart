@@ -1,4 +1,5 @@
 import 'dart:js_interop';
+import 'dart:js_util' as js_util;
 import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 import 'package:agora_rtc_engine/src/agora_rte.dart';
@@ -6,6 +7,10 @@ import 'package:agora_rtc_engine/src/agora_rte_enums.dart';
 import 'package:agora_rtc_engine/src/agora_rte_player_config.dart';
 import 'agora_rte_js_interop.dart';
 import 'agora_rte_canvas_web_impl.dart';
+
+extension type JsObjectWithCode._(JSObject _) implements JSObject {
+  external JSNumber? get code;
+}
 
 /// Web implementation of [AgoraRtePlayer].
 class AgoraRtePlayerWebImpl implements AgoraRtePlayer {
@@ -30,15 +35,25 @@ class AgoraRtePlayerWebImpl implements AgoraRtePlayer {
 
           AgoraRteErrorCode? dartError;
           if (error != null) {
-            final errVal = error.dartify();
             int? code;
-            if (errVal is num) {
-              code = errVal.toInt();
-            } else if (errVal is Map) {
-              code = (errVal['code'] as num?)?.toInt();
+            
+            // Modern way: Use extension type to access 'code'
+            if (error.isA<JSObject>()) {
+              final jsErr = error as JsObjectWithCode;
+              code = jsErr.code?.toDartInt;
+            }
+            
+            // Fallback for older JS objects or different SDK behaviors
+            if (code == null) {
+              final jsCode = js_util.getProperty(error, 'code');
+              if (jsCode is num) {
+                code = jsCode.toInt();
+              }
             }
 
-            if (code != null && code > 0) {
+            debugPrint('[RTE Web] stateChanged error detected. Code: $code');
+
+            if (code != null && code >= 0) {
               if (code < AgoraRteErrorCode.values.length) {
                 dartError = AgoraRteErrorCode.values[code];
               } else {
@@ -53,7 +68,8 @@ class AgoraRtePlayerWebImpl implements AgoraRtePlayer {
     _registerJsCallback(
         'error',
         (JSAny? error) {
-          debugPrint('[RTE Web] Player "error" event fired!');
+          final errVal = error?.dartify();
+          debugPrint('[RTE Web] Player "error" event fired! Raw: $errVal');
     }.toJS);
 
     _registerJsCallback('positionChanged', (JSNumber position) {

@@ -530,7 +530,7 @@ abstract class IrisLogLevel {
   static const int LOG_LEVEL_OFF = 6;
 }
 
-class EventParam extends ffi.Struct {
+base class EventParam extends ffi.Struct {
   external ffi.Pointer<ffi.Int8> event;
 
   external ffi.Pointer<ffi.Int8> data;
@@ -548,7 +548,7 @@ class EventParam extends ffi.Struct {
   external int buffer_count;
 }
 
-class IrisCEventHandler extends ffi.Struct {
+base class IrisCEventHandler extends ffi.Struct {
   external Func_Event OnEvent;
 }
 
@@ -560,7 +560,7 @@ typedef Func_Event = ffi
 ///
 /// NOTE: If the agora::media::base::VideoFrame is updated, make sure this struct be up to date.
 /// TODO(littlegnal): maybe we can use terra to generate the C projection.
-class IrisCVideoFrame extends ffi.Struct {
+base class IrisCVideoFrame extends ffi.Struct {
   /// The agora::media::base::VideoFrame.type, but convert it to int type
   @ffi.Int32()
   external int type;
@@ -606,7 +606,7 @@ class IrisCVideoFrame extends ffi.Struct {
   external ffi.Pointer<ffi.Uint8> alphaBuffer;
 }
 
-class IrisRtcVideoFrameConfig extends ffi.Struct {
+base class IrisRtcVideoFrameConfig extends ffi.Struct {
   /// int value of agora::rtc::VIDEO_SOURCE_TYPE
   @ffi.Int32()
   external int video_source_type;
@@ -638,7 +638,7 @@ abstract class IRIS_VIDEO_PROCESS_ERR {
   static const int ERR_FRAM_TYPE_NOT_MATCHING = 6;
 }
 
-class IrisVideoFrameBufferConfig extends ffi.Struct {
+base class IrisVideoFrameBufferConfig extends ffi.Struct {
   @ffi.Int32()
   external int type;
 
@@ -676,7 +676,7 @@ abstract class IrisVideoSourceType {
   static const int kVideoSourceTypeUnknown = 100;
 }
 
-class IrisCVideoFrameBuffer extends ffi.Struct {
+base class IrisCVideoFrameBuffer extends ffi.Struct {
   @ffi.Int32()
   external int type;
 
@@ -698,7 +698,7 @@ typedef Func_VideoFrame = ffi.Pointer<
         ffi.Void Function(ffi.Pointer<IrisVideoFrame>,
             ffi.Pointer<IrisVideoFrameBufferConfig>, ffi.Int32)>>;
 
-class IrisVideoFrame extends ffi.Struct {
+base class IrisVideoFrame extends ffi.Struct {
   @ffi.Int32()
   external int type;
 
