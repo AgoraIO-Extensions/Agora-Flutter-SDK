@@ -1,4 +1,5 @@
 import 'package:agora_rtc_engine/agora_rte_engine.dart';
+import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter/material.dart';
 
 class RteConfigTab extends StatefulWidget {
@@ -23,6 +24,7 @@ class _RteConfigTabState extends State<RteConfigTab> {
   String _cloudProxy = '';
   String _jsonParameter = '';
   bool _useStringUid = false;
+
   @override
   void initState() {
     super.initState();
@@ -39,7 +41,6 @@ class _RteConfigTabState extends State<RteConfigTab> {
 
   Future<AgoraRteConfig> _loadRteConfig() async {
     try {
-      // Example: Using getConfigs() to get all configs at once
       final config = await widget.rte.getConfigs();
       if (mounted) {
         setState(() {
@@ -59,7 +60,7 @@ class _RteConfigTabState extends State<RteConfigTab> {
       return AgoraRteConfig();
     }
   }
-  /// Example: Using setConfigs() to set multiple configs at once
+
   Future<void> _setRteConfigsBatch() async {
     try {
       await widget.rte.setConfigs(AgoraRteConfig(
@@ -90,47 +91,45 @@ class _RteConfigTabState extends State<RteConfigTab> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              _buildConfigItem(
-                  'App ID', _appId, (value) async {
+              _buildConfigItem('App ID', _appId, (value) async {
                 await widget.rte.setConfigs(AgoraRteConfig(appId: value));
                 await _loadRteConfig();
               }),
-              _buildConfigItem(
-                  'Log Folder', _logFolder, (value) async {
+              _buildConfigItem('Log Folder', _logFolder, (value) async {
                 await widget.rte.setConfigs(AgoraRteConfig(logFolder: value));
                 await _loadRteConfig();
-              }),
-              _buildConfigItem('Log File Size', '$_logFileSize',
-                  (value) async {
+              }, enabled: !kIsWeb),
+              _buildConfigItem('Log File Size', '$_logFileSize', (value) async {
                 await widget.rte.setConfigs(
                     AgoraRteConfig(logFileSize: int.tryParse(value) ?? 0));
                 await _loadRteConfig();
-              }),
-              _buildConfigItem('Area Code', '$_areaCode',
-                  (value) async {
+              }, enabled: !kIsWeb),
+              _buildConfigItem('Area Code', '$_areaCode', (value) async {
                 await widget.rte.setConfigs(
                     AgoraRteConfig(areaCode: int.tryParse(value) ?? 0));
                 await _loadRteConfig();
               }),
-              _buildConfigItem('Cloud Proxy', _cloudProxy,
-                  (value) async {
+              _buildConfigItem('Cloud Proxy', _cloudProxy, (value) async {
                 await widget.rte.setConfigs(AgoraRteConfig(cloudProxy: value));
                 await _loadRteConfig();
               }),
-              _buildConfigItem('JSON Parameter', _jsonParameter,
-                  (value) async {
+              _buildConfigItem('JSON Parameter', _jsonParameter, (value) async {
                 await widget.rte
                     .setConfigs(AgoraRteConfig(jsonParameter: value));
                 await _loadRteConfig();
-              }),
+              }, enabled: !kIsWeb),
               SwitchListTile(
-                title: const Text('Use String UID'),
+                title: const Text(
+                  'Use String UID${kIsWeb ? ' (Web is not supported)' : ''}',
+                ),
                 value: _useStringUid,
-                onChanged: (value) async {
-                  await widget.rte
-                      .setConfigs(AgoraRteConfig(useStringUid: value));
-                  await _loadRteConfig();
-                },
+                onChanged: kIsWeb
+                    ? null
+                    : (value) async {
+                        await widget.rte
+                            .setConfigs(AgoraRteConfig(useStringUid: value));
+                        await _loadRteConfig();
+                      },
               ),
               const SizedBox(height: 16),
               ElevatedButton(
@@ -154,7 +153,8 @@ class _RteConfigTabState extends State<RteConfigTab> {
   }
 
   Widget _buildConfigItem(
-      String label, String value, Future<void> Function(String) onSave) {
+      String label, String value, Future<void> Function(String) onSave,
+      {bool enabled = true}) {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 8.0),
       child: Row(
@@ -166,11 +166,13 @@ class _RteConfigTabState extends State<RteConfigTab> {
           Expanded(
             child: TextField(
               controller: TextEditingController(text: value),
-              decoration: const InputDecoration(
-                border: OutlineInputBorder(),
+              enabled: enabled,
+              decoration: InputDecoration(
+                border: const OutlineInputBorder(),
                 isDense: true,
+                helperText: enabled ? null : 'Web is not supported',
               ),
-              onSubmitted: onSave,
+              onSubmitted: enabled ? onSave : null,
             ),
           ),
         ],

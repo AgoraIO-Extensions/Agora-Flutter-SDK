@@ -272,6 +272,7 @@ jobs:
           elif [ "$platform" == "windows" ]; then
             build_command="flutter build windows"
           elif [ "$platform" == "web" ]; then
+            # build_command="flutter build web --web-renderer html"
             build_command="flutter build web"
           fi
 

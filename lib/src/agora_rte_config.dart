@@ -73,11 +73,13 @@ class AgoraRteConfig implements AgoraSerializable {
   /// This can improve connection quality by routing to geographically closer
   /// servers. Multiple regions can be combined using bitwise OR.
   ///
-  /// Common values:
-  /// - `0x00000001`: North America
-  /// - `0x00000002`: Europe
-  /// - `0x00000004`: Asia excluding China
-  /// - `0x00000008`: China
+  /// Common values (same as native `AreaCode` enum in agora_base.dart):
+  /// - `0x00000001`: China (cn)
+  /// - `0x00000002`: North America (na)
+  /// - `0x00000004`: Europe (eu)
+  /// - `0x00000008`: Asia excluding China (as)
+  /// - `0x00000010`: Japan (jp)
+  /// - `0x00000020`: India (in)
   /// - `0xFFFFFFFF`: Global (default)
   ///
   /// **Default:** `0xFFFFFFFF` (Global)

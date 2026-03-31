@@ -1,15 +1,17 @@
 import 'dart:typed_data';
 
 import 'package:agora_rtc_engine/agora_rte_engine.dart';
-import 'package:agora_rtc_engine/src/impl/agora_rte_impl.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
 
+/// Native throws PlatformException, Web throws JS RteError.
+final Matcher isSdkError = kIsWeb ? isNotNull : isA<PlatformException>();
+
 /// RTE Player Playback API Integration Test Cases
 ///
-/// Tests playback lifecycle and related APIs that exist in the Flutter SDK
-void playbackTestCases() {
+/// [getRte] provides the shared AgoraRte instance initialized by the caller.
+void playbackTestCases(AgoraRte Function() getRte) {
   const String testAppId =
       String.fromEnvironment('TEST_APP_ID', defaultValue: '<YOUR_APP_ID>');
 
@@ -23,10 +25,7 @@ void playbackTestCases() {
     _TestPlayerObserver? testObserver;
 
     setUpAll(() async {
-      rte = AgoraRteImpl.create();
-      await rte.createWithConfig(AgoraRteConfig(appId: testAppId));
-      // Initialize media engine before creating any players (required by SDK)
-      await rte.initMediaEngine();
+      rte = getRte();
     });
 
     tearDown(() async {
@@ -43,10 +42,14 @@ void playbackTestCases() {
     });
 
     tearDownAll(() async {
-      try {
-        await rte.destroy();
-      } catch (e) {
-        debugPrint('tearDownAll: destroy RTE error: $e');
+      if (testPlayer != null) {
+        try {
+          await rte.destroyPlayer(testPlayer!.playerId);
+        } catch (e) {
+          debugPrint('tearDownAll: destroyPlayer error: $e');
+        }
+        testPlayer = null;
+        testObserver = null;
       }
     });
 
@@ -79,7 +82,7 @@ void playbackTestCases() {
         testPlayer = await rte.createPlayer(AgoraRtePlayerConfig());
 
         // Empty URL error is returned via callback, not thrown synchronously
-        Error? callbackError;
+        Object? callbackError;
         await testPlayer!.openWithUrl('', 0).catchError((e) {
           callbackError = e;
           // Expected: SDK rejects empty URL via callback
@@ -115,8 +118,9 @@ void playbackTestCases() {
           await player.play();
           fail('SDK should reject play() before openWithUrl');
         } catch (e) {
-          // Expected behavior: SDK rejects operation
-          expect(e, isA<PlatformException>());
+          // Native throws PlatformException, Web throws JS RteError
+          expect(e, isSdkError,
+              reason: 'play() before openWithUrl should throw');
         } finally {
           await rte.destroyPlayer(player.playerId);
         }
@@ -204,8 +208,9 @@ void playbackTestCases() {
           await player.seek(1000);
           fail('SDK should reject seek() before openWithUrl');
         } catch (e) {
-          // Expected behavior: SDK rejects operation
-          expect(e, isA<PlatformException>());
+          // Native throws PlatformException, Web throws JS RteError
+          expect(e, isSdkError,
+              reason: 'seek() before openWithUrl should throw');
         } finally {
           await rte.destroyPlayer(player.playerId);
         }
@@ -315,10 +320,16 @@ void playbackTestCases() {
           debugPrint('Stats videoBitrate: ${stats.videoBitrate}');
           debugPrint('Stats audioBitrate: ${stats.audioBitrate}');
 
-          expect(stats.videoDecodeFrameRate, isNotNull);
-          expect(stats.videoRenderFrameRate, greaterThanOrEqualTo(0));
-          expect(stats.videoBitrate, greaterThanOrEqualTo(0));
-          expect(stats.audioBitrate, greaterThanOrEqualTo(0));
+          // On Web, stats fields may be null when no media is playing.
+          // On native, they default to 0.
+          if (kIsWeb) {
+            debugPrint('Web: stats fields may be null without active media');
+          } else {
+            expect(stats.videoDecodeFrameRate, isNotNull);
+            expect(stats.videoRenderFrameRate, greaterThanOrEqualTo(0));
+            expect(stats.videoBitrate, greaterThanOrEqualTo(0));
+            expect(stats.audioBitrate, greaterThanOrEqualTo(0));
+          }
         } catch (e) {
           debugPrint('getStats error: $e');
         }

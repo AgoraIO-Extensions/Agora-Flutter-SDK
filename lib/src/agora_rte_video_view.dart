@@ -4,6 +4,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
 
+// Web-only imports via conditional
+import 'impl/web/agora_rte_video_view_web.dart'
+    if (dart.library.io) 'impl/web/agora_rte_video_view_stub.dart'
+    as web_view;
+
 /// A Flutter widget that displays RTE video content.
 ///
 /// This widget encapsulates the platform view creation and automatic canvas
@@ -115,12 +120,12 @@ class AgoraRteVideoView extends StatefulWidget {
   final Function(String)? onLog;
 
   const AgoraRteVideoView({
-    Key? key,
+    super.key,
     this.canvas,
     this.player,
     this.onViewCreated,
     this.onLog,
-  }) : super(key: key);
+  });
 
   @override
   State<AgoraRteVideoView> createState() => _AgoraRteVideoViewState();
@@ -161,8 +166,11 @@ class _AgoraRteVideoViewState extends State<AgoraRteVideoView> {
   @override
   Widget build(BuildContext context) {
     if (kIsWeb) {
-      return const Center(
-        child: Text('Web platform not supported for RTE video view'),
+      return web_view.buildWebVideoView(
+        canvas: widget.canvas,
+        player: widget.player,
+        onViewCreated: widget.onViewCreated,
+        onLog: widget.onLog,
       );
     }
 

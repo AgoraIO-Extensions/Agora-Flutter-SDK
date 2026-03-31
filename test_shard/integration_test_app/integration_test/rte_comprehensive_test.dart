@@ -1,3 +1,6 @@
+import 'package:agora_rtc_engine/agora_rte_engine.dart';
+import 'package:flutter/foundation.dart';
+import 'package:flutter_test/flutter_test.dart';
 import 'package:integration_test/integration_test.dart';
 
 import 'testcases/rte_testcases.dart' as rte_basic;
@@ -6,29 +9,43 @@ import 'testcases/rte_playback_testcases.dart' as rte_playback;
 
 /// RTE Comprehensive Integration Test Suite
 ///
-/// Includes:
-/// - Basic functionality tests (parameter passing, config round-trip)
-/// - Error handling tests (invalid params, edge cases)
-/// - Playback API tests (openWithUrl, play/pause/stop, seek, mute/unmute)
-/// - Observer callback tests
-/// - Lifecycle tests (creation/destruction order)
-/// - Concurrent operation tests
-/// - Protected parameter tests
-///
-/// ```bash
-/// cd test_shard/integration_test_app
-/// flutter test integration_test/rte_comprehensive_test.dart \
-///   --dart-define=TEST_APP_ID=your_app_id
-/// ```
+/// Single global SDK lifecycle shared across all test suites.
+/// This avoids "RTE instance already created" on Android where the
+/// native singleton does not tolerate repeated createWithConfig calls.
 void main() {
   IntegrationTestWidgetsFlutterBinding.ensureInitialized();
 
-  // Run basic RTE tests
-  rte_basic.testCases();
+  const String testAppId =
+      String.fromEnvironment('TEST_APP_ID', defaultValue: '<YOUR_APP_ID>');
 
-  // Run error and edge case tests
-  rte_error.errorTestCases();
+  late AgoraRte rte;
 
-  // Run playback API tests (NEW)
-  rte_playback.playbackTestCases();
+  setUpAll(() async {
+    rte = createAgoraRte();
+    // Defensive: destroy any stale native state from a previous run
+    // (e.g. hot-restart on a real device where the app process survived).
+    try {
+      await rte.destroy();
+      debugPrint('=== Global setUpAll: cleared stale RTE state ===');
+    } catch (_) {
+      // Expected on a clean start — no instance to destroy.
+    }
+    rte = createAgoraRte();
+    await rte.createWithConfig(AgoraRteConfig(appId: testAppId));
+    await rte.initMediaEngine();
+    debugPrint('=== Global setUpAll: RTE initialized ===');
+  });
+
+  tearDownAll(() async {
+    try {
+      await rte.destroy();
+      debugPrint('=== Global tearDownAll: RTE destroyed ===');
+    } catch (e) {
+      debugPrint('=== Global tearDownAll: destroy error: $e ===');
+    }
+  });
+
+  rte_basic.testCases(() => rte);
+  rte_error.errorTestCases(() => rte, (r) => rte = r);
+  rte_playback.playbackTestCases(() => rte);
 }

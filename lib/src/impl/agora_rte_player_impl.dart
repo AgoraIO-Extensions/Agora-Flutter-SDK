@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'package:agora_rtc_engine/agora_rte_engine.dart';
 import 'package:agora_rtc_engine/src/impl/agora_rte_core_impl.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 
 /// RTE player implementation
@@ -14,7 +15,6 @@ class AgoraRtePlayerImpl implements AgoraRtePlayer {
 
   /// Handle callbacks (called by AgoraRteCoreImpl)
   void handleCallback(String method, Map args) {
-    print('xpz = $method $args');
     if (_observer == null) return;
 
     switch (method) {
@@ -94,11 +94,16 @@ class AgoraRtePlayerImpl implements AgoraRtePlayer {
 
   @override
   Future<void> switchWithUrl(String url, bool syncPts) async {
-    await _channel.invokeMethod('rtePlayerSwitchWithUrl', {
+    try {
+      await _channel.invokeMethod('rtePlayerSwitchWithUrl', {
       'playerId': playerId,
       'url': url,
       'syncPts': syncPts,
     });
+    } catch (e) {
+      debugPrint("switchWithUrl error: $e");
+    }
+    
   }
 
   @override

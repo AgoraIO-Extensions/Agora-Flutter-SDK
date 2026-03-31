@@ -1,4 +1,5 @@
 import 'package:agora_rtc_engine/agora_rte_engine.dart';
+import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter/material.dart';
 
 class RteCanvasConfigTab extends StatefulWidget {
@@ -89,13 +90,11 @@ class _RteCanvasConfigTabState extends State<RteCanvasConfigTab> {
       setState(() {
         _cropArea = rect;
       });
-      // Removing log spam for onChanged
     } catch (e) {
       widget.onLog('Set CropArea error: $e');
     }
   }
 
-  /// Example: Using setConfigs() to set multiple canvas configs at once
   Future<void> _setCanvasConfigsBatch() async {
     if (widget.canvas == null) return;
     try {
@@ -156,74 +155,82 @@ class _RteCanvasConfigTabState extends State<RteCanvasConfigTab> {
                 }).toList(),
               ),
               const SizedBox(height: 16),
-              const Text('Crop Area:',
-                  style: TextStyle(fontWeight: FontWeight.bold)),
-              Text('X: ${_cropArea.x}, Y: ${_cropArea.y}'),
-              Text('Width: ${_cropArea.width}, Height: ${_cropArea.height}'),
-              Row(
-                children: [
-                  Expanded(
-                    child: TextField(
-                      decoration: const InputDecoration(labelText: 'X'),
-                      keyboardType: TextInputType.datetime,
-                      onSubmitted: (value) {
-                        final x = int.tryParse(value) ?? 0;
-                        _setCanvasCropArea(AgoraRteRect(
-                          x: x,
-                          y: _cropArea.y,
-                          width: _cropArea.width,
-                          height: _cropArea.height,
-                        ));
-                      },
-                    ),
-                  ),
-                  Expanded(
-                    child: TextField(
-                      decoration: const InputDecoration(labelText: 'Y'),
-                      keyboardType: TextInputType.datetime,
-                      onSubmitted: (value) {
-                        final y = int.tryParse(value) ?? 0;
-                        _setCanvasCropArea(AgoraRteRect(
-                          x: _cropArea.x,
-                          y: y,
-                          width: _cropArea.width,
-                          height: _cropArea.height,
-                        ));
-                      },
-                    ),
-                  ),
-                  Expanded(
-                    child: TextField(
-                      decoration: const InputDecoration(labelText: 'Width'),
-                      keyboardType: TextInputType.datetime,
-                      onSubmitted: (value) {
-                        final width = int.tryParse(value) ?? 0;
-                        _setCanvasCropArea(AgoraRteRect(
-                          x: _cropArea.x,
-                          y: _cropArea.y,
-                          width: width,
-                          height: _cropArea.height,
-                        ));
-                      },
-                    ),
-                  ),
-                  Expanded(
-                    child: TextField(
-                      decoration: const InputDecoration(labelText: 'Height'),
-                      keyboardType: TextInputType.datetime,
-                      onSubmitted: (value) {
-                        final height = int.tryParse(value) ?? 0;
-                        _setCanvasCropArea(AgoraRteRect(
-                          x: _cropArea.x,
-                          y: _cropArea.y,
-                          width: _cropArea.width,
-                          height: height,
-                        ));
-                      },
-                    ),
-                  ),
-                ],
+              const Text(
+                'Crop Area:${kIsWeb ? ' (Web is not supported)' : ''}',
+                style: TextStyle(fontWeight: FontWeight.bold),
               ),
+              if (!kIsWeb) ...[
+                Text('X: ${_cropArea.x}, Y: ${_cropArea.y}'),
+                Text('Width: ${_cropArea.width}, Height: ${_cropArea.height}'),
+                Row(
+                  children: [
+                    Expanded(
+                      child: TextField(
+                        decoration: const InputDecoration(labelText: 'X'),
+                        keyboardType: TextInputType.datetime,
+                        onSubmitted: (value) {
+                          final x = int.tryParse(value) ?? 0;
+                          _setCanvasCropArea(AgoraRteRect(
+                            x: x,
+                            y: _cropArea.y,
+                            width: _cropArea.width,
+                            height: _cropArea.height,
+                          ));
+                        },
+                      ),
+                    ),
+                    Expanded(
+                      child: TextField(
+                        decoration: const InputDecoration(labelText: 'Y'),
+                        keyboardType: TextInputType.datetime,
+                        onSubmitted: (value) {
+                          final y = int.tryParse(value) ?? 0;
+                          _setCanvasCropArea(AgoraRteRect(
+                            x: _cropArea.x,
+                            y: y,
+                            width: _cropArea.width,
+                            height: _cropArea.height,
+                          ));
+                        },
+                      ),
+                    ),
+                    Expanded(
+                      child: TextField(
+                        decoration: const InputDecoration(labelText: 'Width'),
+                        keyboardType: TextInputType.datetime,
+                        onSubmitted: (value) {
+                          final width = int.tryParse(value) ?? 0;
+                          _setCanvasCropArea(AgoraRteRect(
+                            x: _cropArea.x,
+                            y: _cropArea.y,
+                            width: width,
+                            height: _cropArea.height,
+                          ));
+                        },
+                      ),
+                    ),
+                    Expanded(
+                      child: TextField(
+                        decoration: const InputDecoration(labelText: 'Height'),
+                        keyboardType: TextInputType.datetime,
+                        onSubmitted: (value) {
+                          final height = int.tryParse(value) ?? 0;
+                          _setCanvasCropArea(AgoraRteRect(
+                            x: _cropArea.x,
+                            y: _cropArea.y,
+                            width: _cropArea.width,
+                            height: height,
+                          ));
+                        },
+                      ),
+                    ),
+                  ],
+                ),
+              ] else
+                const Text(
+                  'JS SDK CanvasConfig does not include cropArea',
+                  style: TextStyle(fontSize: 12, color: Colors.grey),
+                ),
               const SizedBox(height: 16),
               ElevatedButton(
                 onPressed: () {

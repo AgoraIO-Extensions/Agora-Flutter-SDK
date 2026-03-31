@@ -6,7 +6,7 @@ version: 6.5.2-sp.452185
 homepage: https://www.agora.io
 repository: https://github.com/AgoraIO-Extensions/Agora-Flutter-SDK/tree/main
 environment:
-  sdk: '>=2.17.0 <4.0.0'
+  sdk: '>=3.4.0 <4.0.0'
   flutter: '>=3.7.0'
 dependencies:
   flutter:
@@ -19,6 +19,7 @@ dependencies:
   meta: ^1.7.0
   iris_method_channel: '>=2.2.3'
   js: '>=0.6.3'
+  web: ^1.0.0
 dev_dependencies:
   flutter_test:
     sdk: flutter
@@ -39,5 +40,5 @@ flutter:
       windows:
         pluginClass: AgoraRtcEnginePlugin
       web:
-        pluginClass: AgoraRtcEngineWeb
-        fileName: agora_rtc_engine_web.dart
+        pluginClass: AgoraRteEngineWeb
+        fileName: agora_rte_engine_web.dart

@@ -111,3 +111,7 @@ class AgoraRteImpl implements AgoraRte {
   //   return await _config.useStringUid();
   // }
 }
+
+/// Native stub — same function name used by conditional import in agora_rte_ext.dart.
+// ignore: non_constant_identifier_names
+AgoraRte createAgoraRteImpl() => AgoraRteImpl.create();
