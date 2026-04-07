@@ -32,6 +32,7 @@ dependencies:
 
   permission_handler: ^10.2.0
   path_provider: ^2.0.8
+  archive: ^3.4.10
 
 dev_dependencies:
   flutter_test:
@@ -73,6 +74,7 @@ flutter:
     - assets/ding.mp3
     - assets/gif.gif
     - assets/jpg.jpg
+    - assets/zips/beauty_material.zip
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.
