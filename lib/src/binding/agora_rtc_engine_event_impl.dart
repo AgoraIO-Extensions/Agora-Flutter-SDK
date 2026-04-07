@@ -472,6 +472,23 @@ class RtcEngineEventHandlerWrapper implements EventLoopEventHandler {
             connection, sourceType, uid, width, height, rotation);
         return true;
 
+      case 'onLocalVideoEvent_7c57d16':
+        if (rtcEngineEventHandler.onLocalVideoEvent == null) {
+          return true;
+        }
+        final jsonMap = jsonDecode(eventData);
+        RtcEngineEventHandlerOnLocalVideoEventJson paramJson =
+            RtcEngineEventHandlerOnLocalVideoEventJson.fromJson(jsonMap);
+        paramJson = paramJson.fillBuffers(buffers);
+        VideoSourceType? source = paramJson.source;
+        LocalVideoEventType? event = paramJson.event;
+        if (source == null || event == null) {
+          return true;
+        }
+
+        rtcEngineEventHandler.onLocalVideoEvent!(source, event);
+        return true;
+
       case 'onLocalVideoStateChanged_a44228a':
         if (rtcEngineEventHandler.onLocalVideoStateChanged == null) {
           return true;
@@ -1896,6 +1913,24 @@ class RtcEngineEventHandlerWrapper implements EventLoopEventHandler {
         }
         connection = connection.fillBuffers(buffers);
         rtcEngineEventHandler.onSetRtmFlagResult!(connection, code);
+        return true;
+
+      case 'onMultipathStats_bc711cf':
+        if (rtcEngineEventHandler.onMultipathStats == null) {
+          return true;
+        }
+        final jsonMap = jsonDecode(eventData);
+        RtcEngineEventHandlerOnMultipathStatsJson paramJson =
+            RtcEngineEventHandlerOnMultipathStatsJson.fromJson(jsonMap);
+        paramJson = paramJson.fillBuffers(buffers);
+        RtcConnection? connection = paramJson.connection;
+        MultipathStats? stats = paramJson.stats;
+        if (connection == null || stats == null) {
+          return true;
+        }
+        connection = connection.fillBuffers(buffers);
+        stats = stats.fillBuffers(buffers);
+        rtcEngineEventHandler.onMultipathStats!(connection, stats);
         return true;
     }
     return false;

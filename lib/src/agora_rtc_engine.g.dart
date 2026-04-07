@@ -671,7 +671,13 @@ ChannelMediaOptions _$ChannelMediaOptionsFromJson(Map<String, dynamic> json) =>
       customVideoTrackId: (json['customVideoTrackId'] as num?)?.toInt(),
       isAudioFilterable: json['isAudioFilterable'] as bool?,
       parameters: json['parameters'] as String?,
-      customUserInfo: json['customUserInfo'] as String?,
+      enableMultipath: json['enableMultipath'] as bool?,
+      uplinkMultipathMode: $enumDecodeNullable(
+          _$MultipathModeEnumMap, json['uplinkMultipathMode']),
+      downlinkMultipathMode: $enumDecodeNullable(
+          _$MultipathModeEnumMap, json['downlinkMultipathMode']),
+      preferMultipathType: $enumDecodeNullable(
+          _$MultipathTypeEnumMap, json['preferMultipathType']),
     );
 
 Map<String, dynamic> _$ChannelMediaOptionsToJson(ChannelMediaOptions instance) {
@@ -731,7 +737,13 @@ Map<String, dynamic> _$ChannelMediaOptionsToJson(ChannelMediaOptions instance) {
   writeNotNull('customVideoTrackId', instance.customVideoTrackId);
   writeNotNull('isAudioFilterable', instance.isAudioFilterable);
   writeNotNull('parameters', instance.parameters);
-  writeNotNull('customUserInfo', instance.customUserInfo);
+  writeNotNull('enableMultipath', instance.enableMultipath);
+  writeNotNull('uplinkMultipathMode',
+      _$MultipathModeEnumMap[instance.uplinkMultipathMode]);
+  writeNotNull('downlinkMultipathMode',
+      _$MultipathModeEnumMap[instance.downlinkMultipathMode]);
+  writeNotNull('preferMultipathType',
+      _$MultipathTypeEnumMap[instance.preferMultipathType]);
   return val;
 }
 
@@ -751,6 +763,18 @@ const _$ChannelProfileTypeEnumMap = {
   ChannelProfileType.channelProfileGame: 2,
   ChannelProfileType.channelProfileCloudGaming: 3,
   ChannelProfileType.channelProfileCommunication1v1: 4,
+};
+
+const _$MultipathModeEnumMap = {
+  MultipathMode.duplicate: 0,
+  MultipathMode.dynamic: 1,
+};
+
+const _$MultipathTypeEnumMap = {
+  MultipathType.lan: 0,
+  MultipathType.wifi: 1,
+  MultipathType.mobile: 2,
+  MultipathType.unknown: 99,
 };
 
 LeaveChannelOptions _$LeaveChannelOptionsFromJson(Map<String, dynamic> json) =>

@@ -629,6 +629,69 @@ const _$WatermarkFitModeEnumMap = {
   WatermarkFitMode.fitModeUseImageRatio: 1,
 };
 
+PathStats _$PathStatsFromJson(Map<String, dynamic> json) => PathStats(
+      type: $enumDecodeNullable(_$MultipathTypeEnumMap, json['type']),
+      txKBitRate: (json['txKBitRate'] as num?)?.toInt(),
+      rxKBitRate: (json['rxKBitRate'] as num?)?.toInt(),
+    );
+
+Map<String, dynamic> _$PathStatsToJson(PathStats instance) {
+  final val = <String, dynamic>{};
+
+  void writeNotNull(String key, dynamic value) {
+    if (value != null) {
+      val[key] = value;
+    }
+  }
+
+  writeNotNull('type', _$MultipathTypeEnumMap[instance.type]);
+  writeNotNull('txKBitRate', instance.txKBitRate);
+  writeNotNull('rxKBitRate', instance.rxKBitRate);
+  return val;
+}
+
+const _$MultipathTypeEnumMap = {
+  MultipathType.lan: 0,
+  MultipathType.wifi: 1,
+  MultipathType.mobile: 2,
+  MultipathType.unknown: 99,
+};
+
+MultipathStats _$MultipathStatsFromJson(Map<String, dynamic> json) =>
+    MultipathStats(
+      lanTxBytes: (json['lanTxBytes'] as num?)?.toInt(),
+      lanRxBytes: (json['lanRxBytes'] as num?)?.toInt(),
+      wifiTxBytes: (json['wifiTxBytes'] as num?)?.toInt(),
+      wifiRxBytes: (json['wifiRxBytes'] as num?)?.toInt(),
+      mobileTxBytes: (json['mobileTxBytes'] as num?)?.toInt(),
+      mobileRxBytes: (json['mobileRxBytes'] as num?)?.toInt(),
+      activePathNum: (json['activePathNum'] as num?)?.toInt(),
+      pathStats: (json['pathStats'] as List<dynamic>?)
+          ?.map((e) => PathStats.fromJson(e as Map<String, dynamic>))
+          .toList(),
+    );
+
+Map<String, dynamic> _$MultipathStatsToJson(MultipathStats instance) {
+  final val = <String, dynamic>{};
+
+  void writeNotNull(String key, dynamic value) {
+    if (value != null) {
+      val[key] = value;
+    }
+  }
+
+  writeNotNull('lanTxBytes', instance.lanTxBytes);
+  writeNotNull('lanRxBytes', instance.lanRxBytes);
+  writeNotNull('wifiTxBytes', instance.wifiTxBytes);
+  writeNotNull('wifiRxBytes', instance.wifiRxBytes);
+  writeNotNull('mobileTxBytes', instance.mobileTxBytes);
+  writeNotNull('mobileRxBytes', instance.mobileRxBytes);
+  writeNotNull('activePathNum', instance.activePathNum);
+  writeNotNull(
+      'pathStats', instance.pathStats?.map((e) => e.toJson()).toList());
+  return val;
+}
+
 RtcStats _$RtcStatsFromJson(Map<String, dynamic> json) => RtcStats(
       duration: (json['duration'] as num?)?.toInt(),
       txBytes: (json['txBytes'] as num?)?.toInt(),
@@ -2120,7 +2183,6 @@ Map<String, dynamic> _$EchoTestConfigurationToJson(
 UserInfo _$UserInfoFromJson(Map<String, dynamic> json) => UserInfo(
       uid: (json['uid'] as num?)?.toInt(),
       userAccount: json['userAccount'] as String?,
-      customUserInfo: json['customUserInfo'] as String?,
     );
 
 Map<String, dynamic> _$UserInfoToJson(UserInfo instance) {
@@ -2134,7 +2196,6 @@ Map<String, dynamic> _$UserInfoToJson(UserInfo instance) {
 
   writeNotNull('uid', instance.uid);
   writeNotNull('userAccount', instance.userAccount);
-  writeNotNull('customUserInfo', instance.customUserInfo);
   return val;
 }
 
@@ -2628,10 +2689,6 @@ const _$MaxUserAccountLengthTypeEnumMap = {
   MaxUserAccountLengthType.maxUserAccountLength: 256,
 };
 
-const _$MaxCustomUserInfoLengthTypeEnumMap = {
-  MaxCustomUserInfoLengthType.maxCustomUserInfoLength: 1024,
-};
-
 const _$CameraFormatTypeEnumMap = {
   CameraFormatType.cameraFormatNv12: 0,
   CameraFormatType.cameraFormatBgra: 1,
@@ -2675,6 +2732,11 @@ const _$StreamLayerIndexEnumMap = {
   StreamLayerIndex.streamLayer6: 5,
   StreamLayerIndex.streamLow: 6,
   StreamLayerIndex.streamLayerCountMax: 7,
+};
+
+const _$MultipathModeEnumMap = {
+  MultipathMode.duplicate: 0,
+  MultipathMode.dynamic: 1,
 };
 
 const _$ClientRoleTypeEnumMap = {
@@ -2792,6 +2854,14 @@ const _$LocalVideoStreamStateEnumMap = {
   LocalVideoStreamState.localVideoStreamStateCapturing: 1,
   LocalVideoStreamState.localVideoStreamStateEncoding: 2,
   LocalVideoStreamState.localVideoStreamStateFailed: 3,
+};
+
+const _$LocalVideoEventTypeEnumMap = {
+  LocalVideoEventType.localVideoEventTypeScreenCaptureWindowHidden: 1,
+  LocalVideoEventType.localVideoEventTypeScreenCaptureWindowRecoverFromHidden:
+      2,
+  LocalVideoEventType.localVideoEventTypeScreenCaptureStoppedByUser: 3,
+  LocalVideoEventType.localVideoEventTypeScreenCaptureSystemInternalError: 4,
 };
 
 const _$LocalVideoStreamReasonEnumMap = {
