@@ -14,6 +14,21 @@
 
 * update dependencies ([#2552](https://github.com/AgoraIO-Extensions/Agora-Flutter-SDK/issues/2552)) ([78860b3](https://github.com/AgoraIO-Extensions/Agora-Flutter-SDK/commit/78860b3fe451ffe740e6bfb444b004c8794b5bb0))
 
+## [6.5.2-dev.452184](https://github.com/AgoraIO-Extensions/Agora-Flutter-SDK/compare/6.5.2-sp.452184.b.1...6.5.2-dev.452184) (2026-01-28)
+
+### Features
+
+* update dependencies ([#2543](https://github.com/AgoraIO-Extensions/Agora-Flutter-SDK/issues/2543)) ([9f64c26](https://github.com/AgoraIO-Extensions/Agora-Flutter-SDK/commit/9f64c26ded1c52f2399f29b3150a45601f354db9))
+## 6.5.2-sp.452184.b.1 (2026-01-27)
+
+### Features
+
+* Update Android Native sdk version ([e5c4887](https://github.com/AgoraIO-Extensions/Agora-Flutter-SDK/commit/e5c48873f6bd10565aa8c76c49402c013d47aa60))
+## 6.5.2-sp.452184 (2026-01-23)
+
+### Features
+
+* update dependencies ([#2540](https://github.com/AgoraIO-Extensions/Agora-Flutter-SDK/issues/2540)) ([2b2583e](https://github.com/AgoraIO-Extensions/Agora-Flutter-SDK/commit/2b2583e56865bb99ff0f0ae77c2a148bb14e6afb))
 ## 6.5.2-sp.4528 (2026-01-14)
 
 ### Features
@@ -23,13 +38,11 @@
 ### Bug Fixes
 
 * improve RTC version extraction from dependencies ([35192f0](https://github.com/AgoraIO-Extensions/Agora-Flutter-SDK/commit/35192f03f15176ae79ae8c578d54fdc37c29645a))
-
 ## 6.5.2-sp.452172.a.basic (2026-01-13)
 
 ### Features
 
 * update dependencies ([#2529](https://github.com/AgoraIO-Extensions/Agora-Flutter-SDK/issues/2529)) ([3d3aabb](https://github.com/AgoraIO-Extensions/Agora-Flutter-SDK/commit/3d3aabb54ddcbab77bdfeb551b6402158c0c4796))
-
 ## 6.5.2-sp.452175 (2025-12-31)
 
 ### Features
@@ -42,6 +55,8 @@
 
 * update dependencies ([#2510](https://github.com/AgoraIO-Extensions/Agora-Flutter-SDK/issues/2510)) ([273d01b](https://github.com/AgoraIO-Extensions/Agora-Flutter-SDK/commit/273d01b7b6620f9c1cfa115e9741eaf5d7a4b4c5))
 
+* update dependencies ([#2510](https://github.com/AgoraIO-Extensions/Agora-Flutter-SDK/issues/2510)) ([273d01b](https://github.com/AgoraIO-Extensions/Agora-Flutter-SDK/commit/273d01b7b6620f9c1cfa115e9741eaf5d7a4b4c5))
+* update dependencies ([#2521](https://github.com/AgoraIO-Extensions/Agora-Flutter-SDK/issues/2521)) ([240ff36](https://github.com/AgoraIO-Extensions/Agora-Flutter-SDK/commit/240ff3696b80533827aef6e77e8d3b1c46689849))
 ## 6.5.2-sp.4527 (2025-12-23)
 
 ### Features
@@ -692,6 +707,16 @@
 
 * update dependencies ([#2552](https://github.com/AgoraIO-Extensions/Agora-Flutter-SDK/issues/2552)) ([78860b3](https://github.com/AgoraIO-Extensions/Agora-Flutter-SDK/commit/78860b3fe451ffe740e6bfb444b004c8794b5bb0))
 
+## [6.5.2-sp.452184.b.1](https://github.com/AgoraIO-Extensions/Agora-Flutter-SDK/compare/6.5.2-sp.452184...6.5.2-sp.452184.b.1) (2026-01-27)
+
+### Features
+
+* Update Android Native sdk version ([e5c4887](https://github.com/AgoraIO-Extensions/Agora-Flutter-SDK/commit/e5c48873f6bd10565aa8c76c49402c013d47aa60))
+## 6.5.2-sp.452184 (2026-01-23)
+
+### Features
+
+* update dependencies ([#2540](https://github.com/AgoraIO-Extensions/Agora-Flutter-SDK/issues/2540)) ([2b2583e](https://github.com/AgoraIO-Extensions/Agora-Flutter-SDK/commit/2b2583e56865bb99ff0f0ae77c2a148bb14e6afb))
 ## 6.5.2-sp.4528 (2026-01-14)
 
 ### Features
@@ -1028,6 +1053,11 @@
 ### Features
 
 * update dependencies ([#2552](https://github.com/AgoraIO-Extensions/Agora-Flutter-SDK/issues/2552)) ([78860b3](https://github.com/AgoraIO-Extensions/Agora-Flutter-SDK/commit/78860b3fe451ffe740e6bfb444b004c8794b5bb0))
+## [6.5.2-sp.452184](https://github.com/AgoraIO-Extensions/Agora-Flutter-SDK/compare/6.5.2-sp.4528...6.5.2-sp.452184) (2026-01-23)
+
+### Features
+
+* update dependencies ([#2540](https://github.com/AgoraIO-Extensions/Agora-Flutter-SDK/issues/2540)) ([2b2583e](https://github.com/AgoraIO-Extensions/Agora-Flutter-SDK/commit/2b2583e56865bb99ff0f0ae77c2a148bb14e6afb))
 ## 6.5.2-sp.4528 (2026-01-14)
 
 ### Features

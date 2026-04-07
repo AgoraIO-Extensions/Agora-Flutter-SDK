@@ -1396,7 +1396,8 @@ class ChannelMediaOptions implements AgoraSerializable {
       this.isInteractiveAudience,
       this.customVideoTrackId,
       this.isAudioFilterable,
-      this.parameters});
+      this.parameters,
+      this.customUserInfo});
 
   /// Sets whether to publish the video captured by the camera: true : Publish the video captured by the camera. false : Do not publish the video captured by the camera.
   @JsonKey(name: 'publishCameraTrack')
@@ -1549,6 +1550,10 @@ class ChannelMediaOptions implements AgoraSerializable {
   /// @nodoc
   @JsonKey(name: 'parameters')
   final String? parameters;
+
+  /// @nodoc
+  @JsonKey(name: 'customUserInfo')
+  final String? customUserInfo;
 
   /// @nodoc
   factory ChannelMediaOptions.fromJson(Map<String, dynamic> json) =>

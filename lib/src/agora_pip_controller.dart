@@ -13,10 +13,12 @@ class AgoraPipVideoStream {
   /// The canvas configuration used to render this video stream. See VideoCanvas.
   final VideoCanvas canvas;
 
-  /// @nodoc
+  /// Creates an [AgoraPipVideoStream] instance.
+  ///
+  /// Both [connection] and [canvas] parameters are required to properly
+  /// configure the video stream in PiP mode.
   const AgoraPipVideoStream({required this.connection, required this.canvas});
 
-  /// @nodoc
   Map<String, dynamic> toDictionary() {
     final val = <String, dynamic>{};
 
@@ -48,7 +50,10 @@ class AgoraPipContentViewLayout {
   /// Maximum number of video streams per row. Once the maximum is reached, a new row is started. If null, video streams will flow to fill the available width. Must be greater than 0 or null.
   final int? column;
 
-  /// @nodoc
+  /// Creates an [AgoraPipContentViewLayout] instance.
+  ///
+  /// The [streams] parameter is required and specifies which video streams
+  /// should be shown in the layout in sequential order.
   const AgoraPipContentViewLayout({
     this.padding,
     this.spacing,
@@ -56,7 +61,6 @@ class AgoraPipContentViewLayout {
     this.column,
   });
 
-  /// @nodoc
   Map<String, dynamic> toDictionary() {
     final val = <String, dynamic>{};
 
@@ -78,7 +82,9 @@ class AgoraPipContentViewLayout {
 ///
 /// Since Available since v4.6.2. This class provides platform-specific options to configure picture-in-picture behavior on Android and iOS platforms.
 class AgoraPipOptions {
-  /// @nodoc
+  /// Creates an [AgoraPipOptions] instance.
+  ///
+  /// All parameters are optional and platform-specific.
   AgoraPipOptions({
     this.autoEnterEnabled,
 
@@ -266,7 +272,10 @@ enum AgoraPipState {
 ///
 /// Since Available since v4.6.2. Implement this class to receive notifications about picture-in-picture state transitions and potential errors.
 class AgoraPipStateChangedObserver {
-  /// @nodoc
+  /// Creates an observer for PiP state changes.
+  ///
+  /// The [onPipStateChanged] callback is required and will be called
+  /// whenever the PiP state changes.
   const AgoraPipStateChangedObserver({required this.onPipStateChanged});
 
   /// Callback for picture-in-picture state changes.

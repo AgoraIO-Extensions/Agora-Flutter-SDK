@@ -1581,6 +1581,27 @@ extension MaxUserAccountLengthTypeExt on MaxUserAccountLengthType {
   }
 }
 
+/// @nodoc
+@JsonEnum(alwaysCreate: true)
+enum MaxCustomUserInfoLengthType {
+  /// @nodoc
+  @JsonValue(1024)
+  maxCustomUserInfoLength,
+}
+
+/// @nodoc
+extension MaxCustomUserInfoLengthTypeExt on MaxCustomUserInfoLengthType {
+  /// @nodoc
+  static MaxCustomUserInfoLengthType fromValue(int value) {
+    return $enumDecode(_$MaxCustomUserInfoLengthTypeEnumMap, value);
+  }
+
+  /// @nodoc
+  int value() {
+    return _$MaxCustomUserInfoLengthTypeEnumMap[this]!;
+  }
+}
+
 /// Information about externally encoded video frames.
 @JsonSerializable(explicitToJson: true, includeIfNull: false)
 class EncodedVideoFrameInfo implements AgoraSerializable {
@@ -7070,7 +7091,7 @@ class EchoTestConfiguration implements AgoraSerializable {
 @JsonSerializable(explicitToJson: true, includeIfNull: false)
 class UserInfo implements AgoraSerializable {
   /// @nodoc
-  const UserInfo({this.uid, this.userAccount});
+  const UserInfo({this.uid, this.userAccount, this.customUserInfo});
 
   /// User ID.
   @JsonKey(name: 'uid')
@@ -7079,6 +7100,10 @@ class UserInfo implements AgoraSerializable {
   /// User account. Length limit is MaxUserAccountLengthType.
   @JsonKey(name: 'userAccount')
   final String? userAccount;
+
+  /// @nodoc
+  @JsonKey(name: 'customUserInfo')
+  final String? customUserInfo;
 
   /// @nodoc
   factory UserInfo.fromJson(Map<String, dynamic> json) =>
