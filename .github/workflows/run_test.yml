@@ -89,7 +89,9 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        version: ["3.16", "3.24.5", "3.38.5"]
+        # Probe the actual support floor with real runtime tests before we
+        # commit to a higher minimum Flutter version in package metadata.
+        version: ["3.10", "3.13", "3.16", "3.24.5", "3.38.5"]
     runs-on: ubuntu-latest
     timeout-minutes: 120
     env:
@@ -111,6 +113,45 @@ jobs:
           sudo udevadm control --reload-rules
           sudo udevadm trigger --name-match=kvm
       - name: run flutter android integration tests
+        uses: reactivecircus/android-emulator-runner@v2
+        with:
+          api-level: 31
+          arch: x86_64
+          profile: pixel_5
+          ram-size: 2048M
+          heap-size: 2048M
+          disk-size: 6144M
+          emulator-boot-timeout: 600
+          disable-animations: true
+          force-avd-creation: false
+          emulator-options: -no-snapshot-save -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim
+          script: bash ci/run_flutter_integration_test_android.sh
+
+  integration_test_android_canary:
+    name: Run Flutter Android Integration Tests (latest stable canary)
+    if: ${{ !contains(github.event.pull_request.labels.*.name, 'ci:skip') }}
+    continue-on-error: true
+    runs-on: ubuntu-latest
+    timeout-minutes: 120
+    env:
+      TEST_APP_ID: ${{ secrets.APP_ID }}
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install JDK
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'zulu'
+          java-version: '17'
+      - uses: subosito/flutter-action@v2
+        with:
+          channel: 'stable'
+          cache: true
+      - name: Enable KVM
+        run: |
+          echo 'KERNEL=="kvm", GROUP="kvm", MODE="0666", OPTIONS+="static_node=kvm"' | sudo tee /etc/udev/rules.d/99-kvm4all.rules
+          sudo udevadm control --reload-rules
+          sudo udevadm trigger --name-match=kvm
+      - name: run flutter android integration tests on latest stable
         uses: reactivecircus/android-emulator-runner@v2
         with:
           api-level: 31
@@ -389,6 +430,25 @@ jobs:
           cache: true
       - run: flutter pub get
       - name: Run flutter build ios --no-codesign --simulator
+        run: flutter build ios --no-codesign --simulator
+        working-directory: example
+        env:
+          IOS_SIMULATOR_SDK_VERSION: 18.0
+
+  build_ios_canary:
+    name: Build iOS (latest stable canary)
+    if: ${{ !contains(github.event.pull_request.labels.*.name, 'ci:skip') }}
+    continue-on-error: true
+    runs-on: macos-latest
+    timeout-minutes: 120
+    steps:
+      - uses: actions/checkout@v4
+      - uses: subosito/flutter-action@v2
+        with:
+          channel: 'stable'
+          cache: true
+      - run: flutter pub get
+      - name: Run flutter build ios --no-codesign --simulator on latest stable
         run: flutter build ios --no-codesign --simulator
         working-directory: example
         env:
