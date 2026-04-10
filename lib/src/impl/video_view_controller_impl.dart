@@ -1,5 +1,6 @@
 import '/src/agora_base.dart';
 import '/src/agora_media_base.dart';
+import '/src/agora_rtc_engine_ex.dart';
 import '/src/impl/agora_rtc_engine_impl.dart';
 import '/src/impl/platform/global_video_view_controller.dart';
 import '/src/impl/video_rendering_performance_uploader.dart';
@@ -103,6 +104,10 @@ mixin VideoViewControllerBaseMixin implements VideoViewControllerBase {
   @internal
   bool get isInitialzed => (rtcEngine as RtcEngineImpl).isInitialzed;
 
+  @visibleForTesting
+  VideoSourceType get resolvedTextureVideoSourceType =>
+      canvas.sourceType ?? VideoSourceTypeExt.fromValue(getVideoSourceType());
+
   @internal
   void addInitializedCompletedListener(VoidCallback listener) {
     final engine = rtcEngine as RtcEngineImpl;
@@ -150,8 +155,8 @@ mixin VideoViewControllerBaseMixin implements VideoViewControllerBase {
     if (_textureId == kTextureNotInit) {
       _textureId = await createTextureRender(
         canvas.uid!,
-        connection?.channelId ?? '',
-        canvas.sourceType?.value() ?? getVideoSourceType(),
+        connection,
+        resolvedTextureVideoSourceType.value(),
         canvas.setupMode?.value() ??
             VideoViewSetupMode.videoViewSetupReplace.value(),
       );
@@ -169,8 +174,7 @@ mixin VideoViewControllerBaseMixin implements VideoViewControllerBase {
         rtcEngine: rtcEngine,
         uid: canvas.uid ?? 0,
         connection: connection,
-        sourceType: canvas.sourceType ??
-            VideoSourceTypeExt.fromValue(getVideoSourceType()),
+        sourceType: resolvedTextureVideoSourceType,
       ),
     );
     VideoRenderingPerformanceMonitor.instance.startMonitoring(textureId);
@@ -217,7 +221,7 @@ mixin VideoViewControllerBaseMixin implements VideoViewControllerBase {
         PerformanceDataCollector.instance.clearChannelData(
             connection!.channelId ?? '',
             connection!.localUid ?? 0,
-            VideoSourceTypeExt.fromValue(getVideoSourceType()));
+            resolvedTextureVideoSourceType);
       }
       return;
     }
@@ -255,7 +259,7 @@ mixin VideoViewControllerBaseMixin implements VideoViewControllerBase {
       PerformanceDataCollector.instance.clearChannelData(
           connection!.channelId ?? '',
           connection!.localUid ?? 0,
-          VideoSourceTypeExt.fromValue(getVideoSourceType()));
+          resolvedTextureVideoSourceType);
     }
   }
 
@@ -269,7 +273,7 @@ mixin VideoViewControllerBaseMixin implements VideoViewControllerBase {
   @override
   Future<int> createTextureRender(
     int uid,
-    String channelId,
+    RtcConnection? connection,
     int videoSourceType,
     int videoViewSetupMode,
   ) async {
@@ -280,7 +284,7 @@ mixin VideoViewControllerBaseMixin implements VideoViewControllerBase {
     final textureId =
         await rtcEngine.globalVideoViewController!.createTextureRender(
       uid,
-      channelId,
+      connection,
       videoSourceType,
       videoViewSetupMode,
     );
@@ -294,8 +298,8 @@ mixin VideoViewControllerBaseMixin implements VideoViewControllerBase {
       if (_textureId == kTextureNotInit) {
         _textureId = await createTextureRender(
           canvas.uid!,
-          connection?.channelId ?? '',
-          canvas.sourceType?.value() ?? getVideoSourceType(),
+          connection,
+          resolvedTextureVideoSourceType.value(),
           canvas.setupMode?.value() ??
               VideoViewSetupMode.videoViewSetupReplace.value(),
         );

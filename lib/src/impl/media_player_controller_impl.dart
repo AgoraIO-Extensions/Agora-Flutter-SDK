@@ -357,10 +357,10 @@ class MediaPlayerControllerImpl
   }
 
   @override
-  Future<int> createTextureRender(
-      int uid, String channelId, int videoSourceType, int videoViewSetupMode) {
+  Future<int> createTextureRender(int uid, RtcConnection? connection,
+      int videoSourceType, int videoViewSetupMode) {
     return super.createTextureRender(
-        getMediaPlayerId(), channelId, videoSourceType, videoViewSetupMode);
+        getMediaPlayerId(), connection, videoSourceType, videoViewSetupMode);
   }
 
   @override

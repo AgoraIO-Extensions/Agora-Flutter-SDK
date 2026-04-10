@@ -1,5 +1,75 @@
 import 'package:agora_rtc_engine/src/agora_media_base.dart';
+import 'package:agora_rtc_engine/src/agora_rtc_engine.dart';
 import 'package:agora_rtc_engine/src/agora_rtc_engine_ex.dart';
+
+Iterable<VideoSourceType> _sourceAliases(VideoSourceType sourceType) sync* {
+  switch (sourceType) {
+    case VideoSourceType.videoSourceCamera:
+    case VideoSourceType.videoSourceCameraPrimary:
+      yield VideoSourceType.videoSourceCamera;
+      yield VideoSourceType.videoSourceCameraPrimary;
+      break;
+    case VideoSourceType.videoSourceScreen:
+    case VideoSourceType.videoSourceScreenPrimary:
+      yield VideoSourceType.videoSourceScreen;
+      yield VideoSourceType.videoSourceScreenPrimary;
+      break;
+    default:
+      yield sourceType;
+      break;
+  }
+}
+
+void syncPublishingConnectionsFromMediaOptions({
+  required ChannelConnectionManager manager,
+  required RtcConnection? connection,
+  required ChannelMediaOptions options,
+}) {
+  if (connection == null) {
+    return;
+  }
+
+  bool hasEnabledVideoSource = false;
+
+  void apply(bool? enabled, VideoSourceType sourceType) {
+    if (enabled == null) {
+      return;
+    }
+
+    if (enabled) {
+      hasEnabledVideoSource = true;
+      manager.setPublishingVideoConnectionBySource(sourceType, connection);
+    } else {
+      manager.removePublishingVideoConnectionBySource(sourceType);
+    }
+  }
+
+  apply(options.publishCameraTrack, VideoSourceType.videoSourceCameraPrimary);
+  apply(options.publishSecondaryCameraTrack,
+      VideoSourceType.videoSourceCameraSecondary);
+  apply(
+      options.publishThirdCameraTrack, VideoSourceType.videoSourceCameraThird);
+  apply(options.publishFourthCameraTrack,
+      VideoSourceType.videoSourceCameraFourth);
+  apply(options.publishScreenCaptureVideo,
+      VideoSourceType.videoSourceScreenPrimary);
+  apply(options.publishScreenTrack, VideoSourceType.videoSourceScreenPrimary);
+  apply(options.publishSecondaryScreenTrack,
+      VideoSourceType.videoSourceScreenSecondary);
+  apply(
+      options.publishThirdScreenTrack, VideoSourceType.videoSourceScreenThird);
+  apply(options.publishFourthScreenTrack,
+      VideoSourceType.videoSourceScreenFourth);
+  apply(options.publishCustomVideoTrack, VideoSourceType.videoSourceCustom);
+  apply(options.publishMediaPlayerVideoTrack,
+      VideoSourceType.videoSourceMediaPlayer);
+  apply(options.publishTranscodedVideoTrack,
+      VideoSourceType.videoSourceTranscoded);
+
+  if (hasEnabledVideoSource) {
+    manager.setPublishingVideoConnection(connection);
+  }
+}
 
 class ChannelConnectionManager {
   static final ChannelConnectionManager _instance =
@@ -54,18 +124,60 @@ class ChannelConnectionManager {
   /// Set publishing video connection for a specific source type
   void setPublishingVideoConnectionBySource(
       VideoSourceType sourceType, RtcConnection connection) {
-    final existing = _publishingVideoConnections[sourceType];
-    if (_isSameConnection(existing, connection)) {
+    for (final alias in _sourceAliases(sourceType)) {
+      final existing = _publishingVideoConnections[alias];
+      if (_isSameConnection(existing, connection)) {
+        continue;
+      }
+
+      _publishingVideoConnections[alias] = connection;
+    }
+  }
+
+  void setPublishingVideoConnection(RtcConnection connection) {
+    if (_isSameConnection(_publishingVideoConnection, connection)) {
       return;
     }
 
-    _publishingVideoConnections[sourceType] = connection;
+    _publishingVideoConnection = connection;
+  }
+
+  void refreshPublishingConnections(RtcConnection connection) {
+    if (connection.channelId == null || connection.channelId!.isEmpty) {
+      return;
+    }
+
+    _publishingVideoConnection = connection;
+
+    final sourceTypes = _publishingVideoConnections.keys.toList();
+    for (final sourceType in sourceTypes) {
+      final existing = _publishingVideoConnections[sourceType];
+      if (existing == null) {
+        continue;
+      }
+
+      if (existing.channelId == connection.channelId) {
+        _publishingVideoConnections[sourceType] = connection;
+      }
+    }
+  }
+
+  void removePublishingVideoConnectionBySource(VideoSourceType sourceType) {
+    for (final alias in _sourceAliases(sourceType)) {
+      _publishingVideoConnections.remove(alias);
+    }
   }
 
   /// Get publishing video connection for a specific source type
   RtcConnection? getPublishingVideoConnectionBySource(
       VideoSourceType sourceType) {
-    return _publishingVideoConnections[sourceType];
+    for (final alias in _sourceAliases(sourceType)) {
+      final connection = _publishingVideoConnections[alias];
+      if (connection != null) {
+        return connection;
+      }
+    }
+    return null;
   }
 
   /// Legacy method: Get publishing video connection

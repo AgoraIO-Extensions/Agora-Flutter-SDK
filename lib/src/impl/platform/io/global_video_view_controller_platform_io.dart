@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'dart:ffi' as ffi;
 
 import '/src/agora_rtc_engine.dart';
+import '/src/agora_rtc_engine_ex.dart';
 import '/src/impl/platform/global_video_view_controller_platform.dart';
 import '/src/impl/platform/io/native_iris_api_engine_binding_delegate.dart';
 import '/src/impl/video_view_controller_impl.dart';
@@ -90,7 +91,7 @@ class GlobalVideoViewControllerIO extends GlobalVideoViewControllerPlatfrom {
   }
 
   @override
-  Future<int> createTextureRender(int uid, String channelId,
+  Future<int> createTextureRender(int uid, RtcConnection? connection,
       int videoSourceType, int videoViewSetupMode) async {
     if (_irisRtcRenderingHandle == 0) {
       return kTextureNotInit;
@@ -111,7 +112,7 @@ class GlobalVideoViewControllerIO extends GlobalVideoViewControllerPlatfrom {
         await methodChannel.invokeMethod<int>('createTextureRender', {
       'irisRtcRenderingHandle': _irisRtcRenderingHandle,
       'uid': uid,
-      'channelId': channelId,
+      'channelId': connection?.channelId ?? '',
       'videoSourceType': videoSourceType,
       'videoViewSetupMode': videoViewSetupMode,
       'enableArgusCounters': enableArgusCounters,

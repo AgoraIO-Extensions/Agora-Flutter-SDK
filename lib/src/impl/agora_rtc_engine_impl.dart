@@ -331,17 +331,16 @@ class _RtcEngineEventHandlerWrapper extends RtcEngineEventHandlerWrapper {
               .removeConnection(connection.channelId!);
         }
         break;
-      case 'onLocalVideoStats_0cebfd7':
+      case 'onLocalVideoStats_3ac0eb4':
         final Map jsonMap = jsonDecode(eventData);
         RtcEngineEventHandlerOnLocalVideoStatsJson paramJson =
             RtcEngineEventHandlerOnLocalVideoStatsJson.fromJson(
                 jsonMap.cast<String, dynamic>());
         RtcConnection? connection = paramJson.connection;
-        // VideoSourceType? sourceType = paramJson.sourceType;
-        // if (connection != null && sourceType != null) {
-        //   ChannelConnectionManager.instance
-        //       .setPublishingVideoConnectionBySource(sourceType, connection);
-        // }
+        if (connection != null) {
+          ChannelConnectionManager.instance
+              .refreshPublishingConnections(connection);
+        }
         break;
       case 'onRemoteVideoStats_2f43a70':
         final Map jsonMap = jsonDecode(eventData);
@@ -503,6 +502,17 @@ class RtcEngineImpl extends rtc_engine_ex_binding.RtcEngineExImpl
         .attachVideoFrameBufferManager(irisMethodChannel.getApiEngineHandle());
   }
 
+  void _syncPublishingConnections(
+    RtcConnection? connection,
+    ChannelMediaOptions options,
+  ) {
+    syncPublishingConnectionsFromMediaOptions(
+      manager: ChannelConnectionManager.instance,
+      connection: connection,
+      options: options,
+    );
+  }
+
   @override
   Future<void> initialize(RtcEngineContext context) async {
     // The `RtcEngine` is a singleton, a new `initialize` should be called after the
@@ -569,6 +579,58 @@ class RtcEngineImpl extends rtc_engine_ex_binding.RtcEngineExImpl
     _isReleased = false;
     _initializingCompleter?.complete(null);
     _initializingCompleter = null;
+  }
+
+  @override
+  Future<void> joinChannel(
+      {required String token,
+      required String channelId,
+      required int uid,
+      required ChannelMediaOptions options}) async {
+    await super.joinChannel(
+      token: token,
+      channelId: channelId,
+      uid: uid,
+      options: options,
+    );
+
+    _syncPublishingConnections(
+      RtcConnection(channelId: channelId, localUid: uid),
+      options,
+    );
+  }
+
+  @override
+  Future<void> updateChannelMediaOptions(ChannelMediaOptions options) async {
+    await super.updateChannelMediaOptions(options);
+    _syncPublishingConnections(
+      ChannelConnectionManager.instance.getDefaultConnection(),
+      options,
+    );
+  }
+
+  @override
+  Future<void> joinChannelEx(
+      {required String token,
+      required RtcConnection connection,
+      required ChannelMediaOptions options}) async {
+    await super.joinChannelEx(
+      token: token,
+      connection: connection,
+      options: options,
+    );
+    _syncPublishingConnections(connection, options);
+  }
+
+  @override
+  Future<void> updateChannelMediaOptionsEx(
+      {required ChannelMediaOptions options,
+      required RtcConnection connection}) async {
+    await super.updateChannelMediaOptionsEx(
+      options: options,
+      connection: connection,
+    );
+    _syncPublishingConnections(connection, options);
   }
 
   @internal

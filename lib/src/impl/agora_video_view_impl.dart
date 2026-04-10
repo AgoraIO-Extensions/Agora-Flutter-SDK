@@ -269,12 +269,12 @@ class _VideoViewControllerInternal with VideoViewControllerBaseMixin {
   @override
   Future<int> createTextureRender(
     int uid,
-    String channelId,
+    RtcConnection? connection,
     int videoSourceType,
     int videoViewSetupMode,
   ) =>
       _controller.createTextureRender(
-          uid, channelId, videoSourceType, videoViewSetupMode);
+          uid, connection, videoSourceType, videoViewSetupMode);
 
   @override
   Future<void> initializeRender() async {
