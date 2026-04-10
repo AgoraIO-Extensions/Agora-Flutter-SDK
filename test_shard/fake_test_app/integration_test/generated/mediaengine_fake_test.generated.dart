@@ -123,11 +123,8 @@ void mediaEngineSmokeTestCases() {
 
       try {
         VideoEncodedFrameObserver observer = VideoEncodedFrameObserver(
-          onEncodedVideoFrameReceived: (String channelId,
-              int uid,
-              Uint8List imageBuffer,
-              int length,
-              EncodedVideoFrameInfo videoEncodedFrameInfo) {},
+          onEncodedVideoFrameReceived: (int uid, Uint8List imageBuffer,
+              int length, EncodedVideoFrameInfo videoEncodedFrameInfo) {},
         );
         mediaEngine.registerVideoEncodedFrameObserver(
           observer,
@@ -727,6 +724,7 @@ void mediaEngineSmokeTestCases() {
             VideoOrientation.videoOrientation0;
         VideoStreamType videoEncodedFrameInfoStreamType =
             VideoStreamType.videoStreamHigh;
+        int videoEncodedFrameInfoUid = 5;
         int videoEncodedFrameInfoWidth = 5;
         int videoEncodedFrameInfoHeight = 5;
         int videoEncodedFrameInfoFramesPerSecond = 5;
@@ -735,6 +733,7 @@ void mediaEngineSmokeTestCases() {
         int videoEncodedFrameInfoDecodeTimeMs = 5;
         int videoEncodedFrameInfoPresentationMs = 5;
         EncodedVideoFrameInfo videoEncodedFrameInfo = EncodedVideoFrameInfo(
+          uid: videoEncodedFrameInfoUid,
           codecType: videoEncodedFrameInfoCodecType,
           width: videoEncodedFrameInfoWidth,
           height: videoEncodedFrameInfoHeight,
@@ -920,11 +919,8 @@ void mediaEngineSmokeTestCases() {
 
       try {
         VideoEncodedFrameObserver observer = VideoEncodedFrameObserver(
-          onEncodedVideoFrameReceived: (String channelId,
-              int uid,
-              Uint8List imageBuffer,
-              int length,
-              EncodedVideoFrameInfo videoEncodedFrameInfo) {},
+          onEncodedVideoFrameReceived: (int uid, Uint8List imageBuffer,
+              int length, EncodedVideoFrameInfo videoEncodedFrameInfo) {},
         );
         mediaEngine.unregisterVideoEncodedFrameObserver(
           observer,
@@ -989,3 +985,4 @@ void mediaEngineSmokeTestCases() {
 //  skip: !(),
   );
 }
+

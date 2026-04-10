@@ -113,6 +113,7 @@ testWidgets('{{TEST_CASE_NAME}}', (WidgetTester tester) async {
       skipMemberFunctions: [
         'destroyMediaPlayer',
         'destroyMediaRecorder',
+        'destroyVideoEffectObject',
         // These cases should handle the list size manually.
         'setLocalAccessPoint',
         'startChannelMediaRelay',

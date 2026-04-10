@@ -1098,3 +1098,4 @@ void audioDeviceManagerSmokeTestCases() {
     },
   );
 }
+

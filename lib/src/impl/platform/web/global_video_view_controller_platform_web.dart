@@ -1,15 +1,13 @@
 import 'dart:async';
-import 'dart:html' as html;
+import 'dart:js_interop';
+import 'package:web/web.dart' as web;
 import 'dart:ui_web' as ui_web;
 
 import '/agora_rtc_engine.dart';
 import '/src/impl/platform/global_video_view_controller_platform.dart';
 import 'package:iris_method_channel/iris_method_channel.dart';
 
-// Keep `dart:html` here while probing older Flutter support floors.
-// Switching back to `package:web` is preferable once we finalize a newer minimum
-// SDK and no longer need compatibility investigation on older toolchains.
-// ignore_for_file: deprecated_member_use, public_member_api_docs
+// ignore_for_file: public_member_api_docs
 
 const _platformRendererViewType = 'AgoraSurfaceView';
 
@@ -19,25 +17,26 @@ String _getViewType(int id) {
 
 class _View {
   _View(int platformViewId)
-      : _element = html.DivElement()
+      : _element = (web.document.createElement('div') as web.HTMLDivElement)
           ..id = _getViewType(platformViewId)
           ..style.width = '100%'
           ..style.height = '100%' {
     // Wait until the element is injected into the DOM,
     // see https://github.com/flutter/flutter/issues/143922#issuecomment-1960133128
-    final observer = html.IntersectionObserver((entries, observer) {
-      if (_element.parent != null) {
+    final observer = web.IntersectionObserver(
+        (JSArray entries, web.IntersectionObserver observer) {
+      if (_element.isConnected == true) {
         observer.unobserve(_element);
         _viewCompleter.complete(_element);
       }
-    });
+    }.toJS);
     observer.observe(_element);
   }
 
-  final html.DivElement _element;
-  html.DivElement get element => _element;
+  final web.HTMLElement _element;
+  web.HTMLElement get element => _element;
 
-  final _viewCompleter = Completer<html.DivElement>();
+  final _viewCompleter = Completer<web.HTMLElement>();
 
   Future<String> waitAndGetId() async {
     final div = await _viewCompleter.future;

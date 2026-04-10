@@ -91,7 +91,7 @@ jobs:
       matrix:
         # Probe the actual support floor with real runtime tests before we
         # commit to a higher minimum Flutter version in package metadata.
-        version: ["3.10", "3.13", "3.16", "3.24.5", "3.38.5"]
+        version: ["3.16", "3.24.5", "3.38.5"]
     runs-on: ubuntu-latest
     timeout-minutes: 120
     env:

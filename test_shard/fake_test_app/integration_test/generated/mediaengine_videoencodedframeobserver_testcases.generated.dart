@@ -27,11 +27,8 @@ void generatedTestCases(ValueGetter<IrisTester> irisTester) {
 
       final onEncodedVideoFrameReceivedCompleter = Completer<bool>();
       final theVideoEncodedFrameObserver = VideoEncodedFrameObserver(
-        onEncodedVideoFrameReceived: (String channelId,
-            int uid,
-            Uint8List imageBuffer,
-            int length,
-            EncodedVideoFrameInfo videoEncodedFrameInfo) {
+        onEncodedVideoFrameReceived: (int uid, Uint8List imageBuffer,
+            int length, EncodedVideoFrameInfo videoEncodedFrameInfo) {
           onEncodedVideoFrameReceivedCompleter.complete(true);
         },
       );
@@ -44,7 +41,6 @@ void generatedTestCases(ValueGetter<IrisTester> irisTester) {
       await Future.delayed(const Duration(milliseconds: 500));
 
       {
-        String channelId = "hello";
         int uid = 5;
         Uint8List imageBuffer = Uint8List.fromList([1, 1, 1, 1, 1]);
         int length = 5;
@@ -56,6 +52,7 @@ void generatedTestCases(ValueGetter<IrisTester> irisTester) {
             VideoOrientation.videoOrientation0;
         VideoStreamType videoEncodedFrameInfoStreamType =
             VideoStreamType.videoStreamHigh;
+        int videoEncodedFrameInfoUid = 5;
         int videoEncodedFrameInfoWidth = 5;
         int videoEncodedFrameInfoHeight = 5;
         int videoEncodedFrameInfoFramesPerSecond = 5;
@@ -64,6 +61,7 @@ void generatedTestCases(ValueGetter<IrisTester> irisTester) {
         int videoEncodedFrameInfoDecodeTimeMs = 5;
         int videoEncodedFrameInfoPresentationMs = 5;
         EncodedVideoFrameInfo videoEncodedFrameInfo = EncodedVideoFrameInfo(
+          uid: videoEncodedFrameInfoUid,
           codecType: videoEncodedFrameInfoCodecType,
           width: videoEncodedFrameInfoWidth,
           height: videoEncodedFrameInfoHeight,
@@ -78,7 +76,6 @@ void generatedTestCases(ValueGetter<IrisTester> irisTester) {
         );
 
         final eventJson = {
-          'channelId': channelId,
           'uid': uid,
           'imageBuffer': imageBuffer.toList(),
           'length': length,
@@ -117,3 +114,4 @@ void generatedTestCases(ValueGetter<IrisTester> irisTester) {
     timeout: const Timeout(Duration(minutes: 2)),
   );
 }
+
