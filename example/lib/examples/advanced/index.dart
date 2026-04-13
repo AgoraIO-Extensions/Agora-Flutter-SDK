@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:agora_rtc_engine_example/examples/advanced/music_player/music_player.dart';
 import 'package:agora_rtc_engine_example/examples/advanced/picture_in_picture/picture_in_picture.dart';
+import 'package:agora_rtc_engine_example/examples/advanced/picture_in_picture_join_channel_ex/picture_in_picture_join_channel_ex.dart';
 import 'package:agora_rtc_engine_example/examples/advanced/push_video_frame/push_video_frame.dart';
 import 'package:agora_rtc_engine_example/examples/advanced/rtmp_streaming/rtmp_streaming.dart';
 import 'package:agora_rtc_engine_example/examples/advanced/screen_sharing/screen_sharing.dart';
@@ -16,6 +17,7 @@ import 'package:agora_rtc_engine_example/examples/advanced/start_direct_cdn_stre
 import 'package:agora_rtc_engine_example/examples/advanced/start_local_video_transcoder/start_local_video_transcoder.dart';
 import 'package:agora_rtc_engine_example/examples/advanced/stream_message/stream_message.dart';
 import 'package:agora_rtc_engine_example/examples/advanced/take_snapshot/take_snapshot.dart';
+import 'package:agora_rtc_engine_example/examples/advanced/unregister_in_callback/unregister_in_callback.dart';
 import 'package:flutter/foundation.dart';
 
 import 'audio_effect_mixing/audio_effect_mixing.dart';
@@ -66,6 +68,11 @@ final advanced = [
   if (!kIsWeb) {'name': 'TakeSnapshot', 'widget': const TakeSnapshot()},
   if (!kIsWeb)
     {
+      'name': 'UnregisterInCallback',
+      'widget': const UnregisterInCallbackExample()
+    },
+  if (!kIsWeb)
+    {
       'name': 'StartDirectCDNStreaming',
       'widget': const StartDirectCDNStreaming()
     },
@@ -109,4 +116,9 @@ final advanced = [
     {'name': 'MusicPlayer', 'widget': const MusicPlayerExample()},
   if (!kIsWeb && (Platform.isAndroid || Platform.isIOS))
     {'name': 'PictureInPicture', 'widget': const PictureInPicture()},
+  if (!kIsWeb && (Platform.isAndroid || Platform.isIOS))
+    {
+      'name': 'PictureInPictureJoinChannelEx',
+      'widget': const PictureInPictureJoinChannelEx()
+    },
 ];
