@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:agora_rtc_engine_example/examples/advanced/music_player/music_player.dart';
 import 'package:agora_rtc_engine_example/examples/advanced/picture_in_picture/picture_in_picture.dart';
+import 'package:agora_rtc_engine_example/examples/advanced/picture_in_picture_join_channel_ex/picture_in_picture_join_channel_ex.dart';
 import 'package:agora_rtc_engine_example/examples/advanced/push_video_frame/push_video_frame.dart';
 import 'package:agora_rtc_engine_example/examples/advanced/rtmp_streaming/rtmp_streaming.dart';
 import 'package:agora_rtc_engine_example/examples/advanced/screen_sharing/screen_sharing.dart';
@@ -16,6 +17,7 @@ import 'package:agora_rtc_engine_example/examples/advanced/start_direct_cdn_stre
 import 'package:agora_rtc_engine_example/examples/advanced/start_local_video_transcoder/start_local_video_transcoder.dart';
 import 'package:agora_rtc_engine_example/examples/advanced/stream_message/stream_message.dart';
 import 'package:agora_rtc_engine_example/examples/advanced/take_snapshot/take_snapshot.dart';
+import 'package:agora_rtc_engine_example/examples/advanced/unregister_in_callback/unregister_in_callback.dart';
 import 'package:flutter/foundation.dart';
 
 import 'audio_effect_mixing/audio_effect_mixing.dart';
@@ -23,6 +25,7 @@ import 'audio_spectrum/audio_spectrum.dart';
 import 'channel_media_relay/channel_media_relay.dart';
 import 'device_manager/device_manager.dart';
 import 'enable_virtualbackground/enable_virtualbackground.dart';
+import 'iris_method_channel_concurrent_modification_repro/iris_method_channel_concurrent_modification_repro.dart';
 import 'join_multiple_channel/join_multiple_channel.dart';
 import 'media_player/media_player.dart';
 import 'media_recorder/media_recorder.dart';
@@ -64,6 +67,16 @@ final advanced = [
   if (!kIsWeb)
     {'name': 'SendMultiVideoStream', 'widget': const SendMultiVideoStream()},
   if (!kIsWeb) {'name': 'TakeSnapshot', 'widget': const TakeSnapshot()},
+  if (!kIsWeb)
+    {
+      'name': 'IrisMethodChannelConcurrentModificationRepro',
+      'widget': const IrisMethodChannelConcurrentModificationRepro()
+    },
+  if (!kIsWeb)
+    {
+      'name': 'UnregisterInCallback',
+      'widget': const UnregisterInCallbackExample()
+    },
   if (!kIsWeb)
     {
       'name': 'StartDirectCDNStreaming',
@@ -109,4 +122,9 @@ final advanced = [
     {'name': 'MusicPlayer', 'widget': const MusicPlayerExample()},
   if (!kIsWeb && (Platform.isAndroid || Platform.isIOS))
     {'name': 'PictureInPicture', 'widget': const PictureInPicture()},
+  if (!kIsWeb && (Platform.isAndroid || Platform.isIOS))
+    {
+      'name': 'PictureInPictureJoinChannelEx',
+      'widget': const PictureInPictureJoinChannelEx()
+    },
 ];
