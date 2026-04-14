@@ -187,13 +187,10 @@ class _State extends State<JoinChannelVideo> {
   }
 
   Future<void> _switchCamera() async {
-    _engine.setParameters(
-        '{"rtc.report.argus_counters":{"data":[{"uid":8888889,"counters":[{"counterId":537,"value":15},{"counterId":576,"value":2.89}]},{"uid":0,"counters":[{"counterId":526,"value":15},{"counterId":577,"value":1.37}]}],"connection":{"channelId":"XPZ123","localUid":914261727}}}');
-
-    // await _engine.switchCamera();
-    // setState(() {
-    //   switchCamera = !switchCamera;
-    // });
+    await _engine.switchCamera();
+    setState(() {
+      switchCamera = !switchCamera;
+    });
   }
 
   _openCamera() async {

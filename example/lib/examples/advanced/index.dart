@@ -25,6 +25,7 @@ import 'audio_spectrum/audio_spectrum.dart';
 import 'channel_media_relay/channel_media_relay.dart';
 import 'device_manager/device_manager.dart';
 import 'enable_virtualbackground/enable_virtualbackground.dart';
+import 'iris_method_channel_concurrent_modification_repro/iris_method_channel_concurrent_modification_repro.dart';
 import 'join_multiple_channel/join_multiple_channel.dart';
 import 'media_player/media_player.dart';
 import 'media_recorder/media_recorder.dart';
@@ -66,6 +67,11 @@ final advanced = [
   if (!kIsWeb)
     {'name': 'SendMultiVideoStream', 'widget': const SendMultiVideoStream()},
   if (!kIsWeb) {'name': 'TakeSnapshot', 'widget': const TakeSnapshot()},
+  if (!kIsWeb)
+    {
+      'name': 'IrisMethodChannelConcurrentModificationRepro',
+      'widget': const IrisMethodChannelConcurrentModificationRepro()
+    },
   if (!kIsWeb)
     {
       'name': 'UnregisterInCallback',
