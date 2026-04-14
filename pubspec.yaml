@@ -14,7 +14,7 @@ dependencies:
   flutter_web_plugins:
     sdk: flutter
   json_annotation: ^4.4.0
-  ffi: '>=1.1.2 <3.0.0'
+  ffi: ^1.1.2
   async: ^2.11.0
   meta: ^1.7.0
   iris_method_channel: ^2.2.4
