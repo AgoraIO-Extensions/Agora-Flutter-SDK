@@ -233,6 +233,35 @@ jobs:
           name: iris-logs-macos-${{ matrix.version }}
           path: iris-logs-macos/*
 
+  pub_package_smoke_test_macos:
+    name: Run Flutter macOS Published Package Smoke Test
+    if: ${{ !contains(github.event.pull_request.labels.*.name, 'ci:skip') }}
+    runs-on: macos-latest
+    timeout-minutes: 60
+    steps:
+      - uses: actions/checkout@v4
+      - uses: subosito/flutter-action@v2
+        with:
+          flutter-version: "3.38.5"
+          cache: true
+      - run: flutter config --enable-macos-desktop
+      - name: Run macOS published package smoke test
+        run: bash ci/run_flutter_macos_published_package_smoke_test.sh
+
+  pub_package_smoke_test_ios:
+    name: Run Flutter iOS Published Package Smoke Test
+    if: ${{ !contains(github.event.pull_request.labels.*.name, 'ci:skip') }}
+    runs-on: macos-latest
+    timeout-minutes: 90
+    steps:
+      - uses: actions/checkout@v4
+      - uses: subosito/flutter-action@v2
+        with:
+          flutter-version: "3.38.5"
+          cache: true
+      - name: Run iOS published package smoke test
+        run: bash ci/run_flutter_ios_published_package_smoke_test.sh
+
   integration_test_swiftpm:
     name: Run Flutter SwiftPM Integration Tests
     if: ${{ !contains(github.event.pull_request.labels.*.name, 'ci:skip') }}
