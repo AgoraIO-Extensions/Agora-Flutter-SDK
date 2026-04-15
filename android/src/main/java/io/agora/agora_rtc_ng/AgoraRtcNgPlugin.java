@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.graphics.Rect;
 import android.os.Build;
+import android.util.Log;
 import android.util.Rational;
 
 import androidx.annotation.NonNull;
@@ -11,6 +12,7 @@ import androidx.annotation.Nullable;
 
 import io.agora.iris.pip.AgoraPIPActivityProxy;
 import io.agora.iris.pip.AgoraPIPController;
+import io.agora.rtc2.RtcEngine;
 import io.flutter.embedding.engine.plugins.FlutterPlugin;
 import io.flutter.embedding.engine.plugins.activity.ActivityAware;
 import io.flutter.embedding.engine.plugins.activity.ActivityPluginBinding;
@@ -23,6 +25,11 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class AgoraRtcNgPlugin implements FlutterPlugin, MethodChannel.MethodCallHandler, ActivityAware {
+    private static final String TAG = "AgoraRtcNgPlugin";
+    @Nullable
+    private static Long cachedNativeRtcEngineHandle;
+    @Nullable
+    private static Boolean cachedNativeRtcEngineOwnedByFlutter;
 
     private MethodChannel channel;
     private WeakReference<FlutterPluginBinding> flutterPluginBindingRef;
@@ -30,6 +37,57 @@ public class AgoraRtcNgPlugin implements FlutterPlugin, MethodChannel.MethodCall
     private AgoraPIPController pipController;
     @Nullable
     private Context applicationContext;
+
+    private boolean hasCachedNativeRtcEngineHandle() {
+        return cachedNativeRtcEngineHandle != null && cachedNativeRtcEngineHandle != 0L;
+    }
+
+    private void cacheNativeRtcEngineHandle(@Nullable Number nativeHandle) {
+        if (nativeHandle == null || nativeHandle.longValue() == 0L) {
+            Log.i(TAG, "Clear cached native engine handle");
+            cachedNativeRtcEngineHandle = null;
+            return;
+        }
+
+        cachedNativeRtcEngineHandle = nativeHandle.longValue();
+        Log.i(TAG, "Cache native engine handle=" + cachedNativeRtcEngineHandle);
+    }
+
+    @NonNull
+    private Map<String, Object> buildAndroidInitResult() {
+        final Map<String, Object> result = new HashMap<>();
+        result.put("cachedNativeHandle",
+                cachedNativeRtcEngineHandle != null ? cachedNativeRtcEngineHandle : 0L);
+        result.put(
+                "destroyExistingEngine",
+                hasCachedNativeRtcEngineHandle()
+                        && Boolean.TRUE.equals(cachedNativeRtcEngineOwnedByFlutter));
+        Log.i(TAG, "androidInit cachedNativeHandle=" + result.get("cachedNativeHandle")
+                + ", destroyExistingEngine=" + result.get("destroyExistingEngine")
+                + ", ownedByFlutter=" + cachedNativeRtcEngineOwnedByFlutter);
+        return result;
+    }
+
+    private void clearCachedNativeEngineState() {
+        cacheNativeRtcEngineHandle(null);
+        cachedNativeRtcEngineOwnedByFlutter = null;
+    }
+
+    private boolean forceReleaseRtcEngineFromJava(long nativeHandle) {
+        if (nativeHandle == 0L) {
+            return false;
+        }
+
+        try {
+            Log.i(TAG, "Force release stale engine by Java destroy, handle=" + nativeHandle);
+            RtcEngine.destroy();
+            Log.i(TAG, "Force release stale engine success, handle=" + nativeHandle);
+            return true;
+        } catch (Throwable throwable) {
+            Log.e(TAG, "Force release stale engine failed, handle=" + nativeHandle, throwable);
+            return false;
+        }
+    }
 
     @Override
     public void onAttachedToEngine(@NonNull FlutterPluginBinding flutterPluginBinding) {
@@ -69,12 +127,34 @@ public class AgoraRtcNgPlugin implements FlutterPlugin, MethodChannel.MethodCall
     public void onMethodCall(@NonNull MethodCall call, @NonNull MethodChannel.Result result) {
         if ("getAssetAbsolutePath".equals(call.method)) {
             getAssetAbsolutePath(call, result);
+        } else if ("androidCacheNativeEngineHandle".equals(call.method)) {
+            final Number nativeHandle = call.argument("nativeHandle");
+            final Boolean ownedByFlutter = call.argument("ownedByFlutter");
+            cacheNativeRtcEngineHandle(nativeHandle);
+            cachedNativeRtcEngineOwnedByFlutter =
+                    ownedByFlutter != null && ownedByFlutter;
+            Log.i(TAG, "androidCacheNativeEngineHandle ownedByFlutter="
+                    + cachedNativeRtcEngineOwnedByFlutter);
+            result.success(hasCachedNativeRtcEngineHandle());
+        } else if ("androidForceReleaseCachedNativeEngine".equals(call.method)) {
+            final long nativeHandle =
+                    cachedNativeRtcEngineHandle != null ? cachedNativeRtcEngineHandle : 0L;
+            if (nativeHandle == 0L || !Boolean.TRUE.equals(cachedNativeRtcEngineOwnedByFlutter)) {
+                Log.i(TAG, "Skip force release, handle=" + nativeHandle
+                        + ", ownedByFlutter=" + cachedNativeRtcEngineOwnedByFlutter);
+                result.success(false);
+                return;
+            }
+
+            result.success(forceReleaseRtcEngineFromJava(nativeHandle));
+        } else if ("androidClearNativeEngineHandle".equals(call.method)) {
+            clearCachedNativeEngineState();
+            result.success(true);
         } else if ("androidInit".equals(call.method)) {
             // dart ffi DynamicLibrary.open do not trigger JNI_OnLoad in iris, so we need call java
             // System.loadLibrary here to trigger the JNI_OnLoad explicitly.
             System.loadLibrary("AgoraRtcWrapper");
-
-            result.success(true);
+            result.success(buildAndroidInitResult());
         } else if (call.method.startsWith("pip")) {
             handlePipMethodCall(call, result);
         } else {

@@ -407,6 +407,12 @@ class RtcEngineImpl extends rtc_engine_ex_binding.RtcEngineExImpl
     return irisMethodChannel;
   }
 
+  String _debugShortStackTrace() {
+    final lines = StackTrace.current.toString().trim().split('\n');
+    final end = lines.length > 6 ? 6 : lines.length;
+    return lines.take(end).join(' | ');
+  }
+
   Future<void> _initializeInternal(RtcEngineContext context) async {
     await globalVideoViewController
         .attachVideoFrameBufferManager(irisMethodChannel.getApiEngineHandle());
@@ -414,6 +420,13 @@ class RtcEngineImpl extends rtc_engine_ex_binding.RtcEngineExImpl
 
   @override
   Future<void> initialize(RtcEngineContext context) async {
+    debugPrint(
+        '[RtcEngineImpl] initialize called: instance=${identityHashCode(this)}, '
+        'hasRun=${_initializeCallOnce?.hasRun}, '
+        'isInitialized=${_rtcEngineState.isInitialzed}, '
+        'isReleased=$_isReleased, '
+        'sharedNativeHandle=$_sharedNativeHandle, '
+        'stack=${_debugShortStackTrace()}');
     // The `RtcEngine` is a singleton, a new `initialize` should be called after the
     // previous `release` is completed, or the following API calls maybe call to the
     // previous `RtcEngine` instance, which maybe cause some unexpected error. so we
@@ -434,7 +447,33 @@ class RtcEngineImpl extends rtc_engine_ex_binding.RtcEngineExImpl
       engineMethodChannel = const MethodChannel('agora_rtc_ng');
 
       if (!kIsWeb && defaultTargetPlatform == TargetPlatform.android) {
-        await engineMethodChannel.invokeMethod('androidInit');
+        final initResult =
+            await engineMethodChannel.invokeMethod<dynamic>('androidInit');
+        debugPrint(
+            '[RtcEngineImpl] androidInit result=$initResult, sharedNativeHandle=$_sharedNativeHandle');
+        if (_sharedNativeHandle == null && initResult is Map) {
+          final destroyExistingEngine =
+              initResult['destroyExistingEngine'] == true;
+          final cachedNativeHandle = initResult['cachedNativeHandle'];
+          if (destroyExistingEngine &&
+              cachedNativeHandle is int &&
+              cachedNativeHandle != 0) {
+            debugPrint(
+                '[RtcEngineImpl] force release stale cached engine before initialize: $cachedNativeHandle');
+            try {
+              await engineMethodChannel.invokeMethod(
+                'androidForceReleaseCachedNativeEngine',
+              );
+            } finally {
+              try {
+                await engineMethodChannel
+                    .invokeMethod('androidClearNativeEngineHandle');
+              } catch (e) {
+                // Best-effort stale engine cleanup on Android.
+              }
+            }
+          }
+        }
       }
 
       engineMethodChannel.setMethodCallHandler((call) async {
@@ -469,6 +508,23 @@ class RtcEngineImpl extends rtc_engine_ex_binding.RtcEngineExImpl
       jsonEncode({'appType': 4}),
     ));
 
+    if (!kIsWeb && defaultTargetPlatform == TargetPlatform.android) {
+      try {
+        final nativeHandle = await getNativeHandle();
+        debugPrint(
+            '[RtcEngineImpl] cache current native handle after initialize: $nativeHandle');
+        await engineMethodChannel.invokeMethod(
+          'androidCacheNativeEngineHandle',
+          {
+            'nativeHandle': nativeHandle,
+            'ownedByFlutter': _sharedNativeHandle == null,
+          },
+        );
+      } catch (e) {
+        // Best-effort cache update on Android.
+      }
+    }
+
     _rtcEngineState.isInitialzed = true;
     _isReleased = false;
     _initializingCompleter?.complete(null);
@@ -487,6 +543,12 @@ class RtcEngineImpl extends rtc_engine_ex_binding.RtcEngineExImpl
 
   @override
   Future<void> release({bool sync = false}) async {
+    debugPrint(
+        '[RtcEngineImpl] release called: instance=${identityHashCode(this)}, '
+        'isInitialized=${_rtcEngineState.isInitialzed}, '
+        'isReleased=$_isReleased, '
+        'sync=$sync, '
+        'stack=${_debugShortStackTrace()}');
     // Same as explanation inside `initialize`. We should wait for
     // the `initialize` function is completed here.
     if (_initializingCompleter != null &&
@@ -517,6 +579,15 @@ class RtcEngineImpl extends rtc_engine_ex_binding.RtcEngineExImpl
     await irisMethodChannel.unregisterEventHandlers(_rtcEngineImplScopedKey);
 
     await super.release(sync: sync);
+
+    if (!kIsWeb && defaultTargetPlatform == TargetPlatform.android) {
+      try {
+        await engineMethodChannel
+            .invokeMethod('androidClearNativeEngineHandle');
+      } catch (e) {
+        // Best-effort cache clear on Android.
+      }
+    }
 
     await irisMethodChannel.dispose();
     _isReleased = true;
