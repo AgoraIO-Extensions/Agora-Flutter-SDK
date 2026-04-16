@@ -7,10 +7,25 @@ import 'package:analyzer/dart/analysis/results.dart' show ParsedUnitResult;
 import 'package:analyzer/dart/analysis/session.dart' show AnalysisSession;
 import 'package:analyzer/dart/ast/ast.dart';
 import 'package:analyzer/dart/ast/ast.dart' as dart_ast;
+import 'package:analyzer/dart/ast/token.dart';
 import 'package:analyzer/dart/ast/visitor.dart' as dart_ast_visitor;
 import 'package:analyzer/dart/element/type.dart';
 import 'package:analyzer/error/error.dart' show AnalysisError;
 import 'package:analyzer/file_system/file_system.dart';
+
+/// Lexeme of the type-name token on [type].
+///
+/// Older analyzer releases use [NamedType.name2]; newer ones use
+/// [NamedType.name] again (see analyzer changelog around the Token-based AST
+/// cleanup). This helper supports both so `^6.4.1` does not break on 10.x.
+String _namedTypeNameLexeme(NamedType type) {
+  final dynamic t = type;
+  try {
+    return (t.name2 as Token).lexeme;
+  } catch (_) {
+    return (t.name as Token).lexeme;
+  }
+}
 
 class CallApiInvoke {
   late String apiType;
@@ -301,7 +316,7 @@ class DefaultVisitorImpl extends DefaultVisitor<Object?> {
         ..source = node.toString()
         ..uri = _currentVisitUri!;
 
-      Type t = Type()..type = type.name2.lexeme;
+      Type t = Type()..type = _namedTypeNameLexeme(type);
       field.type = t;
 
       clazz.fields.add(field);
@@ -438,10 +453,10 @@ class DefaultVisitorImpl extends DefaultVisitor<Object?> {
 
         final namedType = p.type as NamedType;
         for (final ta in namedType.typeArguments?.arguments ?? []) {
-          type.typeArguments.add((ta as NamedType).name2.lexeme);
+          type.typeArguments.add(_namedTypeNameLexeme(ta as NamedType));
         }
 
-        type.type = namedType.name2.lexeme;
+        type.type = _namedTypeNameLexeme(namedType);
         parameter.isNamed = p.isNamed;
         parameter.isOptional = p.isOptional;
       } else if (p is DefaultFormalParameter) {
@@ -460,10 +475,11 @@ class DefaultVisitorImpl extends DefaultVisitor<Object?> {
           if (simpleFormalParameter.type is NamedType) {
             final namedType = simpleFormalParameter.type as NamedType;
             for (final ta in namedType.typeArguments?.arguments ?? []) {
-              typeArguments.add((ta as NamedType).name2.lexeme);
+              typeArguments.add(_namedTypeNameLexeme(ta as NamedType));
             }
 
-            typeName = (simpleFormalParameter.type as NamedType).name2.lexeme;
+            typeName =
+                _namedTypeNameLexeme(simpleFormalParameter.type as NamedType);
           } else if (simpleFormalParameter.type is GenericFunctionType) {
             typeName = (simpleFormalParameter.type as GenericFunctionType)
                 .functionKeyword
@@ -486,10 +502,10 @@ class DefaultVisitorImpl extends DefaultVisitor<Object?> {
                   final fieldName = classMember.fields.variables[0].name.lexeme;
                   if (fieldType is dart_ast.NamedType) {
                     if (fieldName == fieldFormalParameter.name.lexeme) {
-                      typeName = fieldType.name2.lexeme;
+                      typeName = _namedTypeNameLexeme(fieldType);
                       for (final ta
                           in fieldType.typeArguments?.arguments ?? []) {
-                        typeArguments.add((ta as NamedType).name2.lexeme);
+                        typeArguments.add(_namedTypeNameLexeme(ta as NamedType));
                       }
                       break;
                     }
@@ -532,9 +548,9 @@ class DefaultVisitorImpl extends DefaultVisitor<Object?> {
               final fieldName = classMember.fields.variables[0].name.lexeme;
               if (fieldType is dart_ast.NamedType) {
                 if (fieldName == p.name.lexeme) {
-                  typeName = fieldType.name2.lexeme;
+                  typeName = _namedTypeNameLexeme(fieldType);
                   for (final ta in fieldType.typeArguments?.arguments ?? []) {
-                    typeArguments.add((ta as NamedType).name2.lexeme);
+                    typeArguments.add(_namedTypeNameLexeme(ta as NamedType));
                   }
                   break;
                 }
@@ -628,9 +644,9 @@ class DefaultVisitorImpl extends DefaultVisitor<Object?> {
     if (node.returnType != null && node.returnType is NamedType) {
       final returnType = node.returnType as NamedType;
       method.returnType = Type()
-        ..type = returnType.name2.lexeme
+        ..type = _namedTypeNameLexeme(returnType)
         ..typeArguments = returnType.typeArguments?.arguments
-                .map((ta) => (ta as NamedType).name2.lexeme)
+                .map((ta) => _namedTypeNameLexeme(ta as NamedType))
                 .toList() ??
             [];
     }
@@ -687,7 +703,7 @@ class DefaultVisitorImpl extends DefaultVisitor<Object?> {
         ..uri = _currentVisitUri!;
       if (node.extendedType is dart_ast.NamedType) {
         extensionz.extendedType =
-            (node.extendedType as dart_ast.NamedType).name2.lexeme;
+            _namedTypeNameLexeme(node.extendedType as dart_ast.NamedType);
       }
       for (final member in node.members) {
         if (member is MethodDeclaration) {

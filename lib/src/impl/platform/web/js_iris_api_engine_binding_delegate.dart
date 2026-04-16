@@ -1,6 +1,3 @@
-// ignore: avoid_web_libraries_in_flutter
-import 'dart:js_interop';
-
 import '/src/binding_forward_export.dart';
 import '/src/impl/platform/web/iris_web_rtc_bindings_js.dart';
 import 'package:iris_method_channel/iris_method_channel.dart';
@@ -23,7 +20,7 @@ class IrisApiEngineBindingsDelegateJS
     assert(() {
       if (args.isNotEmpty) {
         final arg = args[0].provide(irisApiEngineHandle)();
-        options = InitIrisRtcOptions(irisRtcEngine: arg as JSAny?);
+        options = InitIrisRtcOptions(irisRtcEngine: arg);
       }
 
       return true;
