@@ -1,5 +1,6 @@
 import '/src/binding_forward_export.dart';
 import '/src/impl/platform/web/iris_web_rtc_bindings_js.dart';
+import '/src/impl/platform/web/web_call_api_result_parser.dart';
 import 'package:iris_method_channel/iris_method_channel.dart';
 import 'package:iris_method_channel/iris_method_channel_bindings_web.dart'
     as js;
@@ -86,9 +87,8 @@ class IrisApiEngineBindingsDelegateJS
 
     final irisReturnCode = js.callIrisApi(nApiEnginePtr, nParam);
 
-    return CallApiResult(
+    return parseWebCallApiResult(
       irisReturnCode: irisReturnCode,
-      data: jsonDecode(nParam.result),
       rawData: nParam.result,
     );
   }
