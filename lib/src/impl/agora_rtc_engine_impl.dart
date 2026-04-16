@@ -420,13 +420,16 @@ class RtcEngineImpl extends rtc_engine_ex_binding.RtcEngineExImpl
 
   @override
   Future<void> initialize(RtcEngineContext context) async {
-    debugPrint(
-        '[RtcEngineImpl] initialize called: instance=${identityHashCode(this)}, '
-        'hasRun=${_initializeCallOnce?.hasRun}, '
-        'isInitialized=${_rtcEngineState.isInitialzed}, '
-        'isReleased=$_isReleased, '
-        'sharedNativeHandle=$_sharedNativeHandle, '
-        'stack=${_debugShortStackTrace()}');
+    assert(() {
+      debugPrint(
+          '[RtcEngineImpl] initialize called: instance=${identityHashCode(this)}, '
+          'hasRun=${_initializeCallOnce?.hasRun}, '
+          'isInitialized=${_rtcEngineState.isInitialzed}, '
+          'isReleased=$_isReleased, '
+          'sharedNativeHandle=$_sharedNativeHandle, '
+          'stack=${_debugShortStackTrace()}');
+      return true;
+    }());
     // The `RtcEngine` is a singleton, a new `initialize` should be called after the
     // previous `release` is completed, or the following API calls maybe call to the
     // previous `RtcEngine` instance, which maybe cause some unexpected error. so we
