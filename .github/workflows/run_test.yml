@@ -22,6 +22,8 @@ jobs:
           channel: 'stable'
           cache: true
       - name: Check Dart Format
+        id: pub_publish_check
+        continue-on-error: true
         run: bash ci/dart_pub_publish_check.sh
       - uses: axel-op/dart-package-analyzer@v3
         id: analysis
@@ -37,6 +39,11 @@ jobs:
             echo Pub Score too low.
             exit 1
           fi
+      - name: Fail on publish dry-run check
+        if: ${{ always() && steps.pub_publish_check.outcome == 'failure' }}
+        run: |
+          echo "Publication check failed."
+          exit 1
 
   flutter_ut:
     name: Flutter unit test

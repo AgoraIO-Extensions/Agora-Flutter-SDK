@@ -87,10 +87,13 @@ class IrisApiEngineBindingsDelegateJS
       return CallApiResult(irisReturnCode: 0, data: const {'result': 0});
     }
 
-    final jsResult = await js.callIrisApi(nApiEnginePtr, nParam).toDart;
-    final js.CallIrisApiResult irisApiResult = jsResult as js.CallIrisApiResult;
+    final irisReturnCode = js.callIrisApi(nApiEnginePtr, nParam);
 
-    return irisApiResult.toCallApiResult();
+    return CallApiResult(
+      irisReturnCode: irisReturnCode,
+      data: jsonDecode(nParam.result),
+      rawData: nParam.result,
+    );
   }
 
   @override
