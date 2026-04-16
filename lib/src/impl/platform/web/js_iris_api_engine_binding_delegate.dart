@@ -87,10 +87,7 @@ class IrisApiEngineBindingsDelegateJS
       return CallApiResult(irisReturnCode: 0, data: const {'result': 0});
     }
 
-    final jsPromise = (js.callIrisApi(nApiEnginePtr, nParam) as JSAny).dartify()
-        as Future<dynamic>;
-
-    final jsResult = await jsPromise;
+    final jsResult = await js.callIrisApi(nApiEnginePtr, nParam).toDart;
     final js.CallIrisApiResult irisApiResult = jsResult as js.CallIrisApiResult;
 
     return irisApiResult.toCallApiResult();
