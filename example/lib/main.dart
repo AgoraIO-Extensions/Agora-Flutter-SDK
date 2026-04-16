@@ -9,6 +9,7 @@ import 'package:permission_handler/permission_handler.dart';
 
 import 'examples/advanced/index.dart';
 import 'examples/basic/index.dart';
+import 'examples/repro/rtc_lifecycle_verify_page.dart';
 import 'config/agora.config.dart' as config;
 import 'components/log_sink.dart';
 
@@ -46,12 +47,16 @@ class _MyAppState extends State<MyApp> {
   bool _showPerformanceOverlay = false;
 
   bool _isWebSetup = false;
+  bool _showRtcLifecycleVerifyPage = true;
 
   bool _isConfigInvalid() {
     return config.appId == '<YOUR_APP_ID>' ||
         config.token == '<YOUR_TOKEN>' ||
         config.channelId == '<YOUR_CHANNEL_ID>';
   }
+
+  bool get _showAndroidEntrySelector =>
+      !kIsWeb && defaultTargetPlatform == TargetPlatform.android;
 
   @override
   void initState() {
@@ -116,6 +121,31 @@ class _MyAppState extends State<MyApp> {
       return const InvalidConfigWidget();
     }
 
+    if (_showAndroidEntrySelector) {
+      return _AndroidEntrySelector(
+        showRtcLifecycleVerifyPage: _showRtcLifecycleVerifyPage,
+        onSelectRtcLifecycleVerifyPage: () {
+          setState(() {
+            _showRtcLifecycleVerifyPage = true;
+          });
+        },
+        onSelectExampleList: () {
+          setState(() {
+            _showRtcLifecycleVerifyPage = false;
+          });
+        },
+        child: _showRtcLifecycleVerifyPage
+            ? const AndroidForegroundServiceWidget(
+                child: RtcLifecycleVerifyPage(),
+              )
+            : _buildExampleList(),
+      );
+    }
+
+    return _buildExampleList();
+  }
+
+  Widget _buildExampleList() {
     return ListView.builder(
       itemCount: _data.length,
       itemBuilder: (context, index) {
@@ -165,6 +195,53 @@ class _WebSetupPage extends StatefulWidget {
 
   @override
   State<_WebSetupPage> createState() => _WebSetupPageState();
+}
+
+class _AndroidEntrySelector extends StatelessWidget {
+  const _AndroidEntrySelector({
+    required this.showRtcLifecycleVerifyPage,
+    required this.onSelectRtcLifecycleVerifyPage,
+    required this.onSelectExampleList,
+    required this.child,
+  });
+
+  final bool showRtcLifecycleVerifyPage;
+  final VoidCallback onSelectRtcLifecycleVerifyPage;
+  final VoidCallback onSelectExampleList;
+  final Widget child;
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        Padding(
+          padding: const EdgeInsets.fromLTRB(16, 16, 16, 0),
+          child: Row(
+            children: [
+              Expanded(
+                child: ElevatedButton(
+                  onPressed: showRtcLifecycleVerifyPage
+                      ? null
+                      : onSelectRtcLifecycleVerifyPage,
+                  child: const Text('RTC Lifecycle Verify'),
+                ),
+              ),
+              const SizedBox(width: 12),
+              Expanded(
+                child: ElevatedButton(
+                  onPressed:
+                      showRtcLifecycleVerifyPage ? onSelectExampleList : null,
+                  child: const Text('Example List'),
+                ),
+              ),
+            ],
+          ),
+        ),
+        const SizedBox(height: 12),
+        Expanded(child: child),
+      ],
+    );
+  }
 }
 
 class _WebSetupPageState extends State<_WebSetupPage> {

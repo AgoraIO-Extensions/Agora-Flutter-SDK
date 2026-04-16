@@ -13,12 +13,12 @@ dependencies:
     sdk: flutter
   flutter_web_plugins:
     sdk: flutter
+  js: ^0.6.7
   json_annotation: ^4.4.0
   ffi: '>=1.1.2'
   async: '>=2.8.2'
   meta: ^1.7.0
-  iris_method_channel: '>=2.2.3'
-  js: '>=0.6.3'
+  iris_method_channel: ^2.2.5
 dev_dependencies:
   flutter_test:
     sdk: flutter

@@ -1,5 +1,6 @@
 package io.agora.agora_rtc_ng_example
 
+import android.app.PictureInPictureParams
 import android.content.Context
 import android.os.Bundle
 import android.util.Log
@@ -13,6 +14,14 @@ class MainActivity: AgoraPIPFlutterActivity() {
     private lateinit var methodChannel: MethodChannel
     private lateinit var sharedNativeHandleMethodChannel: MethodChannel
     private var videoRawDataController: VideoRawDataController? = null
+
+    override fun setPictureInPictureParams(params: PictureInPictureParams) {
+        try {
+            super.setPictureInPictureParams(params)
+        } catch (e: IllegalStateException) {
+            Log.w("MainActivity", "Ignore stale PiP params update", e)
+        }
+    }
 
     override fun provideFlutterEngine(context: Context): FlutterEngine? {
         return (context.applicationContext as MyApplication).getFlutterEngine()
