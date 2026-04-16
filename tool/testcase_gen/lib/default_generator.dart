@@ -52,9 +52,7 @@ abstract class DefaultGenerator implements Generator {
       type.type == 'Set' ||
       type.type == 'Uint8List';
 
-  String defualtValueOfType(
-    Type type,
-  ) {
+  String defualtValueOfType(Type type) {
     switch (type.type) {
       case 'int':
         return '5';
@@ -88,11 +86,14 @@ abstract class DefaultGenerator implements Generator {
 
   @protected
   String createListBuilderBlockForList(
-      ParseResult parseResult, Parameter parameter) {
+    ParseResult parseResult,
+    Parameter parameter,
+  ) {
     if (parameter.type.typeArguments.isNotEmpty) {
       final listTypeArgumentType = parameter.type.typeArguments[0];
-      final listTypeArgumentTypeClazzes =
-          parseResult.getClazz(listTypeArgumentType);
+      final listTypeArgumentTypeClazzes = parseResult.getClazz(
+        listTypeArgumentType,
+      );
       if (listTypeArgumentTypeClazzes.isNotEmpty) {
         final clazz = listTypeArgumentTypeClazzes[0];
         final toParamType = Type()..type = clazz.name;
@@ -101,7 +102,11 @@ abstract class DefaultGenerator implements Generator {
           ..name = '${parameter.name}Item';
         final listInitializerBuilder = StringBuffer();
         createConstructorInitializerForMethodParameter(
-            parseResult, null, pp, listInitializerBuilder);
+          parseResult,
+          null,
+          pp,
+          listInitializerBuilder,
+        );
         final listBuilder = '''
 final ${getParamType(parameter)} ${parameter.name} = () {
 ${listInitializerBuilder.toString()}
@@ -128,7 +133,8 @@ ${listInitializerBuilder.toString()}
       final enumz = parseResult.getEnum(parameter.type.type)[0];
 
       initializerBuilder.writeln(
-          '${getParamType(parameter)} ${_concatParamName(rootParameter?.name, parameter.name)} = ${enumz.enumConstants[0].name};');
+        '${getParamType(parameter)} ${_concatParamName(rootParameter?.name, parameter.name)} = ${enumz.enumConstants[0].name};',
+      );
 
       return _concatParamName(rootParameter?.name, parameter.name);
     }
@@ -144,8 +150,6 @@ ${listInitializerBuilder.toString()}
       isNullable = true;
       initBlockBuilder.write('null');
     } else {
-      final constructor = parameterClass.constructors[0];
-
       initBlockBuilder.write(parameterClass.name);
       initBlockBuilder.write('(');
 
@@ -154,7 +158,8 @@ ${listInitializerBuilder.toString()}
         if (cp.isNamed) {
           if (cp.type.type == 'Function') {
             stdout.writeln(
-                'cp.type.parameters: ${cp.type.parameters.map((e) => e.name.toString()).toString()}');
+              'cp.type.parameters: ${cp.type.parameters.map((e) => e.name.toString()).toString()}',
+            );
             final functionParamsList = cp.type.parameters
                 .map((t) => '${t.type.type} ${t.name}')
                 .join(', ');
@@ -163,23 +168,31 @@ ${listInitializerBuilder.toString()}
           } else if (cp.isPrimitiveType) {
             if (getParamType(cp) == 'Uint8List') {
               initBlockParameterListBuilder.writeln(
-                  '${getParamType(cp)} $adjustedParamName = ${defualtValueOfType(cp.type)};');
+                '${getParamType(cp)} $adjustedParamName = ${defualtValueOfType(cp.type)};',
+              );
             } else {
               if (getParamType(cp).startsWith('List') &&
                   parameter.type.typeArguments.isNotEmpty) {
-                final listBuilderBlock =
-                    createListBuilderBlockForList(parseResult, parameter);
+                final listBuilderBlock = createListBuilderBlockForList(
+                  parseResult,
+                  parameter,
+                );
                 initBlockParameterListBuilder.writeln(listBuilderBlock);
               } else {
                 initBlockParameterListBuilder.writeln(
-                    '${getParamType(cp)} $adjustedParamName = ${defualtValueOfType(cp.type)};');
+                  '${getParamType(cp)} $adjustedParamName = ${defualtValueOfType(cp.type)};',
+                );
               }
             }
 
             initBlockBuilder.write('${cp.name}: $adjustedParamName,');
           } else {
             createConstructorInitializerForMethodParameter(
-                parseResult, parameter, cp, initializerBuilder);
+              parseResult,
+              parameter,
+              cp,
+              initializerBuilder,
+            );
             initBlockBuilder.write('${cp.name}: $adjustedParamName,');
           }
         } else {
@@ -192,23 +205,31 @@ ${listInitializerBuilder.toString()}
           } else if (cp.isPrimitiveType) {
             if (getParamType(cp) == 'Uint8List') {
               initBlockParameterListBuilder.writeln(
-                  '${getParamType(cp)} $adjustedParamName = ${defualtValueOfType(cp.type)};');
+                '${getParamType(cp)} $adjustedParamName = ${defualtValueOfType(cp.type)};',
+              );
             } else {
               if (getParamType(cp).startsWith('List') &&
                   parameter.type.typeArguments.isNotEmpty) {
-                final listBuilderBlock =
-                    createListBuilderBlockForList(parseResult, parameter);
+                final listBuilderBlock = createListBuilderBlockForList(
+                  parseResult,
+                  parameter,
+                );
                 initBlockParameterListBuilder.writeln(listBuilderBlock);
               } else {
                 initBlockParameterListBuilder.writeln(
-                    '${getParamType(cp)} $adjustedParamName = ${defualtValueOfType(cp.type)};');
+                  '${getParamType(cp)} $adjustedParamName = ${defualtValueOfType(cp.type)};',
+                );
               }
             }
 
             initBlockBuilder.write('$adjustedParamName,');
           } else {
             createConstructorInitializerForMethodParameter(
-                parseResult, parameter, cp, initializerBuilder);
+              parseResult,
+              parameter,
+              cp,
+              initializerBuilder,
+            );
             initBlockBuilder.write('$adjustedParamName,');
           }
         }
@@ -221,8 +242,52 @@ ${listInitializerBuilder.toString()}
     // final keywordPrefix = shouldBeConst ? 'const' : 'final';
 
     initializerBuilder.writeln(
-        '${getParamType(parameter)}${isNullable ? '?' : ''} ${_concatParamName(rootParameter?.name, parameter.name)} = ${initBlockBuilder.toString()};');
+      '${getParamType(parameter)}${isNullable ? '?' : ''} ${_concatParamName(rootParameter?.name, parameter.name)} = ${initBlockBuilder.toString()};',
+    );
     return _concatParamName(rootParameter?.name, parameter.name);
+  }
+
+  @protected
+  bool canInitializeParameter(
+    ParseResult parseResult,
+    Parameter parameter, {
+    Set<String>? visitingTypes,
+  }) {
+    if (parameter.type.type == 'Function' ||
+        parameter.isPrimitiveType ||
+        parseResult.hasEnum(parameter.type.type)) {
+      return true;
+    }
+
+    final parameterClasses = parseResult.getClazz(parameter.type.type);
+    if (parameterClasses.isEmpty) {
+      return false;
+    }
+
+    final parameterClass = parameterClasses[0];
+    if (parameterClass.constructors.isEmpty) {
+      return false;
+    }
+
+    final localVisitingTypes = visitingTypes ?? <String>{};
+    if (!localVisitingTypes.add(parameter.type.type)) {
+      return true;
+    }
+
+    final constructor = parameterClass.constructors[0];
+    for (final constructorParameter in constructor.parameters) {
+      if (!canInitializeParameter(
+        parseResult,
+        constructorParameter,
+        visitingTypes: localVisitingTypes,
+      )) {
+        localVisitingTypes.remove(parameter.type.type);
+        return false;
+      }
+    }
+
+    localVisitingTypes.remove(parameter.type.type);
+    return true;
   }
 
   String generateWithTemplate({
@@ -248,6 +313,22 @@ ${listInitializerBuilder.toString()}
       if (methodName.startsWith('_')) continue;
       if (methodName.startsWith('create')) continue;
 
+      Parameter? unsupportedParameter;
+      for (final parameter in method.parameters) {
+        if (!canInitializeParameter(parseResult, parameter)) {
+          unsupportedParameter = parameter;
+          break;
+        }
+      }
+      if (unsupportedParameter != null) {
+        stderr.writeln(
+          'Skip generating ${clazz.name}.$methodName because '
+          '${unsupportedParameter.type.type} ${unsupportedParameter.name} '
+          'has no supported default initializer.',
+        );
+        continue;
+      }
+
       StringBuffer pb = StringBuffer();
 
       for (final parameter in method.parameters) {
@@ -258,21 +339,29 @@ ${listInitializerBuilder.toString()}
           final parameterType = getParamType(parameter);
           if (parameterType == 'Uint8List') {
             pb.writeln(
-                '${getParamType(parameter)} ${parameter.name} = ${defualtValueOfType(parameter.type)};');
+              '${getParamType(parameter)} ${parameter.name} = ${defualtValueOfType(parameter.type)};',
+            );
           } else {
             if (parameterType.startsWith('List') &&
                 parameter.type.typeArguments.isNotEmpty) {
-              final listBuilderBlock =
-                  createListBuilderBlockForList(parseResult, parameter);
+              final listBuilderBlock = createListBuilderBlockForList(
+                parseResult,
+                parameter,
+              );
               pb.writeln(listBuilderBlock);
             } else {
               pb.writeln(
-                  '${getParamType(parameter)} ${parameter.name} = ${defualtValueOfType(parameter.type)};');
+                '${getParamType(parameter)} ${parameter.name} = ${defualtValueOfType(parameter.type)};',
+              );
             }
           }
         } else {
           createConstructorInitializerForMethodParameter(
-              parseResult, null, parameter, pb);
+            parseResult,
+            null,
+            parameter,
+            pb,
+          );
         }
       }
 
@@ -280,7 +369,8 @@ ${listInitializerBuilder.toString()}
       bool isFuture = method.returnType.type == 'Future';
       // methodCallBuilder.write('await screenShareHelper.$methodName(');
       methodCallBuilder.write(
-          '${isFuture ? 'await ' : ''}$methodInvokeObjectName.$methodName(');
+        '${isFuture ? 'await ' : ''}$methodInvokeObjectName.$methodName(',
+      );
       for (final parameter in method.parameters) {
         if (parameter.isNamed) {
           methodCallBuilder.write('${parameter.name}:${parameter.name},');
@@ -309,7 +399,9 @@ ${listInitializerBuilder.toString()}
       }
 
       String testCase = testCaseTemplate.replaceAll(
-          '{{TEST_CASE_NAME}}', '${clazz.name}.$methodName');
+        '{{TEST_CASE_NAME}}',
+        '${clazz.name}.$methodName',
+      );
       testCase = testCase.replaceAll('{{TEST_CASE_BODY}}', pb.toString());
       testCase = testCase.replaceAll('{{TEST_CASE_SKIP}}', skipExpression);
       testCases.add(testCase);
