@@ -9,10 +9,8 @@ class InitIrisRtcOptions {
 }
 
 void initIrisRtc(Object irisApiEngine, InitIrisRtcOptions? options) {
-  final irisWebRtc = globalContext['IrisWebRtc'] as JSObject?;
-  if (irisWebRtc == null) {
-    throw StateError('IrisWebRtc is not available on the global scope.');
-  }
+  final irisWebRtc = globalContext['IrisWebRtc'] as JSObject? ??
+      (throw StateError('IrisWebRtc is not available on the global scope.'));
 
   irisWebRtc.callMethodVarArgs<JSAny?>('initIrisRtc'.toJS, [
     _toJSValue(irisApiEngine),
@@ -32,18 +30,10 @@ JSObject _toJsOptions(InitIrisRtcOptions options) {
   return jsOptions;
 }
 
-JSAny _toJSValue(Object value) {
-  if (value is String) {
-    return value.toJS;
-  }
-  if (value is int) {
-    return value.toJS;
-  }
-  if (value is double) {
-    return value.toJS;
-  }
-  if (value is bool) {
-    return value.toJS;
-  }
-  return JSObject.fromInteropObject(value);
-}
+JSAny _toJSValue(Object value) => switch (value) {
+      String value => value.toJS,
+      int value => value.toJS,
+      double value => value.toJS,
+      bool value => value.toJS,
+      _ => JSObject.fromInteropObject(value),
+    };
