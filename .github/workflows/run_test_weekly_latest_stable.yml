@@ -1,0 +1,401 @@
+name: 'schedule: run weekly test latest stable'
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: '0 0 * * 6'
+      timezone: 'Asia/Shanghai'
+
+jobs:
+  flutter_codestyle_check:
+    name: Flutter codestyle/analyze check
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: subosito/flutter-action@v2
+        with:
+          channel: 'stable'
+          cache: true
+      - name: Check Dart Format
+        run: bash ci/dart_pub_publish_check.sh
+      - uses: axel-op/dart-package-analyzer@v3
+        id: analysis
+        with:
+          githubToken: ${{ secrets.GITHUB_TOKEN }}
+      - name: Check scores
+        env:
+          TOTAL: ${{ steps.analysis.outputs.total }}
+          TOTAL_MAX: ${{ steps.analysis.outputs.total_max }}
+        run: |
+          if (( $TOTAL_MAX - $TOTAL > 10 ))
+          then
+            echo Pub Score too low.
+            exit 1
+          fi
+
+  flutter_ut:
+    name: Flutter unit test
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: subosito/flutter-action@v2
+        with:
+          channel: 'stable'
+          cache: true
+      - run: flutter test
+
+  attach_docs:
+    name: Attach dartdoc
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: subosito/flutter-action@v2
+        with:
+          channel: 'stable'
+          cache: true
+      - name: Build DartDoc 📖
+        run: |
+          dart pub get
+          dart doc
+          zip -r agora_rtc_engine_docs.zip doc
+      - name: Upload DartDoc Artifact ⬆️
+        uses: actions/upload-artifact@v4
+        with:
+          name: agora_rtc_engine_docs.zip
+          path: agora_rtc_engine_docs.zip
+
+  pub_publish_check:
+    name: pub publish check
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: subosito/flutter-action@v2
+        with:
+          channel: 'stable'
+          cache: true
+      - run: bash ci/dart_pub_publish_check.sh
+
+  integration_test_android:
+    name: Run Flutter Android Integration Tests (latest stable)
+    runs-on: ubuntu-latest
+    timeout-minutes: 120
+    env:
+      TEST_APP_ID: ${{ secrets.APP_ID }}
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install JDK
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'zulu'
+          java-version: '17'
+      - uses: subosito/flutter-action@v2
+        with:
+          channel: 'stable'
+          cache: true
+      - name: Enable KVM
+        run: |
+          echo 'KERNEL=="kvm", GROUP="kvm", MODE="0666", OPTIONS+="static_node=kvm"' | sudo tee /etc/udev/rules.d/99-kvm4all.rules
+          sudo udevadm control --reload-rules
+          sudo udevadm trigger --name-match=kvm
+      - name: run flutter android integration tests
+        uses: reactivecircus/android-emulator-runner@v2
+        with:
+          api-level: 31
+          arch: x86_64
+          profile: pixel_5
+          ram-size: 2048M
+          heap-size: 2048M
+          disk-size: 6144M
+          emulator-boot-timeout: 600
+          disable-animations: true
+          force-avd-creation: false
+          emulator-options: -no-snapshot-save -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim
+          script: bash ci/run_flutter_integration_test_android.sh
+
+  integration_test_ios:
+    name: Run Flutter iOS Integration Tests (latest stable)
+    runs-on: macos-latest
+    timeout-minutes: 120
+    env:
+      TEST_APP_ID: ${{ secrets.APP_ID }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: subosito/flutter-action@v2
+        with:
+          channel: 'stable'
+          cache: true
+      - name: Switch to Xcode 16.4
+        run: |
+          sudo xcode-select --switch /Applications/Xcode_16.4.app
+          xcode-select --print-path
+          xcodebuild -version
+          echo "Available iOS SDKs:"
+          xcodebuild -showsdks | grep iphoneos
+          echo "Available iOS Simulator SDKs:"
+          xcodebuild -showsdks | grep iphonesimulator
+      - uses: futureware-tech/simulator-action@v4
+        with:
+          model: "iPhone 16 Pro"
+          os: iOS
+          os_version: ">=18.0"
+          erase_before_boot: true
+          wait_for_boot: true
+          shutdown_after_job: true
+      - run: bash ci/run_flutter_integration_test_ios.sh
+      - name: Get ios crash logs
+        if: always()
+        run: |
+          sleep 30
+
+          mkdir logs-ios
+
+          CRASH_DIR="${HOME}/Library/Logs/DiagnosticReports/"
+          OUTPUT_CRASH_DIR=./logs-ios/crash
+          mkdir -p ${OUTPUT_CRASH_DIR}
+
+          cp -RP $CRASH_DIR* $OUTPUT_CRASH_DIR || true
+
+      - name: Upload ios logs
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: logs-ios-stable
+          path: logs-ios/*
+
+  integration_test_macos:
+    name: Run Flutter macOS Integration Tests (latest stable)
+    runs-on: macos-latest
+    timeout-minutes: 120
+    env:
+      TEST_APP_ID: ${{ secrets.APP_ID }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: subosito/flutter-action@v2
+        with:
+          channel: 'stable'
+          cache: true
+      - run: flutter config --enable-macos-desktop
+      - run: bash ci/run_flutter_macos_integration_test.sh
+      - name: Get iris logs macos
+        if: always()
+        run: |
+          sleep 30
+
+          mkdir iris-logs-macos
+          if [ -f "${HOME}/Library/Containers/com.example.fakeTestApp/Data/Library/agora-iris.log" ]; then
+            cp -RP ${HOME}/Library/Containers/com.example.fakeTestApp/Data/Library/agora-iris.log ./iris-logs-macos/agora-iris-fake-test.log || true
+          fi
+          if [ -f "${HOME}/Library/Containers/com.example.integrationTestApp/Data/Library/agora-iris.log" ]; then
+            cp -RP ${HOME}/Library/Containers/com.example.integrationTestApp/Data/Library/agora-iris.log ./iris-logs-macos/agora-iris-integration-test.log || true
+          fi
+
+          CRASH_DIR="${HOME}/Library/Logs/DiagnosticReports/"
+          OUTPUT_CRASH_DIR=./iris-logs-macos/crash
+          mkdir -p ${OUTPUT_CRASH_DIR}
+
+          cp -RP $CRASH_DIR* $OUTPUT_CRASH_DIR || true
+
+      - name: Upload iris logs macos
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: iris-logs-macos-stable
+          path: iris-logs-macos/*
+
+  integration_test_swiftpm:
+    name: Run Flutter SwiftPM Integration Tests
+    strategy:
+      fail-fast: false
+      matrix:
+        os: ["macos", "ios"]
+    runs-on: macos-latest
+    timeout-minutes: 120
+    steps:
+      - uses: actions/checkout@v4
+      - uses: subosito/flutter-action@v2
+        with:
+          channel: 'stable'
+          cache: true
+      - name: Run flutter integration test swiftpm for ${{ matrix.os }}
+        if: ${{ matrix.os == 'macos' }}
+        run: |
+          flutter pub get
+          flutter build ${{ matrix.os }}
+        working-directory: test_shard/integration_test_swiftpm
+      - name: Run flutter integration test swiftpm for ${{ matrix.os }}
+        if: ${{ matrix.os == 'ios' }}
+        run: |
+          flutter pub get
+          flutter build ${{ matrix.os }} --no-codesign
+        working-directory: test_shard/integration_test_swiftpm
+        env:
+          IOS_SIMULATOR_SDK_VERSION: 18.0
+
+  integration_test_windows:
+    name: Run Flutter Windows Integration Tests (latest stable)
+    runs-on: windows-2022
+    timeout-minutes: 120
+    env:
+      TEST_APP_ID: ${{ secrets.APP_ID }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: subosito/flutter-action@v2
+        with:
+          channel: 'stable'
+          cache: true
+      - name: Set up crash dump environment
+        run: .\ci\setup-crash-dumps.ps1
+        shell: powershell
+      - run: flutter config --enable-windows-desktop
+      - name: Clean build artifacts
+        shell: bash
+        run: |
+          cd test_shard/integration_test_app
+          flutter clean
+          flutter pub get
+      - name: Run windows integration test
+        shell: bash
+        run: |
+          bash ci/run_flutter_windows_integration_test.sh
+
+      - name: Upload crash dumps if exist
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: windows-crash-dumps-stable
+          path: ./CrashDumps/*
+
+  integration_test_web:
+    name: Run Flutter Web Integration Tests (latest stable)
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    env:
+      TEST_APP_ID: ${{ secrets.APP_ID }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: subosito/flutter-action@v2
+        with:
+          channel: 'stable'
+          cache: true
+      - name: Run web integration test
+        shell: bash
+        run: |
+          chromedriver --port=4444 --trace-buffer-size=100000 &
+          bash ci/run_flutter_integration_test_web.sh
+
+  build_android_ubuntu:
+    name: Build Android on Ubuntu (latest stable)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install JDK
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'zulu'
+          java-version: '17'
+      - uses: subosito/flutter-action@v2
+        with:
+          channel: 'stable'
+          cache: true
+      - run: flutter pub get
+      - name: Run flutter build apk
+        run: flutter build apk
+        working-directory: example
+
+  build_android_windows:
+    name: Build Android on Windows (latest stable)
+    runs-on: windows-2022
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install JDK
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'zulu'
+          java-version: '17'
+      - uses: subosito/flutter-action@v2
+        with:
+          channel: 'stable'
+          cache: true
+      - run: flutter pub get
+      - name: Run flutter build apk
+        run: flutter build apk
+        working-directory: example
+
+  build_ios:
+    name: Build iOS (latest stable)
+    runs-on: macos-latest
+    timeout-minutes: 120
+    steps:
+      - uses: actions/checkout@v4
+      - uses: subosito/flutter-action@v2
+        with:
+          channel: 'stable'
+          cache: true
+      - run: flutter pub get
+      - name: Run flutter build ios --no-codesign --simulator
+        run: flutter build ios --no-codesign --simulator
+        working-directory: example
+        env:
+          IOS_SIMULATOR_SDK_VERSION: 18.0
+
+  build_web:
+    name: Build Web (latest stable)
+    runs-on: ubuntu-latest
+    timeout-minutes: 120
+    steps:
+      - uses: actions/checkout@v4
+      - uses: subosito/flutter-action@v2
+        with:
+          channel: 'stable'
+          cache: true
+      - run: flutter packages get
+      - name: Run flutter build web
+        run: flutter build web
+        working-directory: example
+
+  rendering_test_android:
+    name: Run Flutter Android Rendering Tests (latest stable)
+    runs-on: ubuntu-latest
+    timeout-minutes: 120
+    env:
+      TEST_APP_ID: ${{ secrets.APP_ID }}
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install JDK
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'zulu'
+          java-version: '17'
+      - uses: subosito/flutter-action@v2
+        with:
+          channel: 'stable'
+          cache: true
+      - name: Enable KVM
+        run: |
+          echo 'KERNEL=="kvm", GROUP="kvm", MODE="0666", OPTIONS+="static_node=kvm"' | sudo tee /etc/udev/rules.d/99-kvm4all.rules
+          sudo udevadm control --reload-rules
+          sudo udevadm trigger --name-match=kvm
+      - name: run flutter android integration tests
+        uses: reactivecircus/android-emulator-runner@v2
+        with:
+          api-level: 31
+          arch: x86_64
+          profile: pixel_5
+          ram-size: 2048M
+          heap-size: 2048M
+          disk-size: 6144M
+          emulator-boot-timeout: 600
+          disable-animations: true
+          force-avd-creation: false
+          emulator-options: -no-snapshot-save -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim
+          script: bash ci/rendering_test_android.sh
+
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: android-debug-golden-files
+          path: test_shard/rendering_test/screenshot/*.debug.png
