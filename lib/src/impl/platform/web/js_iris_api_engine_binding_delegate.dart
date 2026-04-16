@@ -1,6 +1,8 @@
+// ignore: avoid_web_libraries_in_flutter
+import 'dart:js_interop';
+
 import '/src/binding_forward_export.dart';
 import '/src/impl/platform/web/iris_web_rtc_bindings_js.dart';
-import '/src/impl/platform/web/web_call_api_result_parser.dart';
 import 'package:iris_method_channel/iris_method_channel.dart';
 import 'package:iris_method_channel/iris_method_channel_bindings_web.dart'
     as js;
@@ -21,7 +23,7 @@ class IrisApiEngineBindingsDelegateJS
     assert(() {
       if (args.isNotEmpty) {
         final arg = args[0].provide(irisApiEngineHandle)();
-        options = InitIrisRtcOptions(irisRtcEngine: arg);
+        options = InitIrisRtcOptions(irisRtcEngine: arg as JSAny?);
       }
 
       return true;
@@ -87,8 +89,9 @@ class IrisApiEngineBindingsDelegateJS
 
     final irisReturnCode = js.callIrisApi(nApiEnginePtr, nParam);
 
-    return parseWebCallApiResult(
+    return CallApiResult(
       irisReturnCode: irisReturnCode,
+      data: jsonDecode(nParam.result),
       rawData: nParam.result,
     );
   }
