@@ -1,39 +1,20 @@
-import 'dart:js_interop';
-import 'dart:js_interop_unsafe';
+@JS()
+library iris_web_rtc;
 
+import 'package:iris_method_channel/iris_method_channel_bindings_web.dart';
+import 'package:js/js.dart';
+
+@JS('IrisWebRtc.initIrisRtc')
+external void initIrisRtc(
+    IrisApiEngine irisApiEngine, InitIrisRtcOptions? options);
+
+@JS('InitIrisRtcOptions')
+@anonymous
 class InitIrisRtcOptions {
-  const InitIrisRtcOptions({this.agoraRTC, this.irisRtcEngine});
+  // Must have an unnamed factory constructor with named arguments.
+  external factory InitIrisRtcOptions(
+      {Object? agoraRTC, Object? irisRtcEngine});
 
-  final Object? agoraRTC;
-  final Object? irisRtcEngine;
+  external Object get agoraRTC;
+  external Object get irisRtcEngine;
 }
-
-void initIrisRtc(Object irisApiEngine, InitIrisRtcOptions? options) {
-  final irisWebRtc = globalContext['IrisWebRtc'] as JSObject? ??
-      (throw StateError('IrisWebRtc is not available on the global scope.'));
-
-  irisWebRtc.callMethodVarArgs<JSAny?>('initIrisRtc'.toJS, [
-    _toJSValue(irisApiEngine),
-    if (options != null) _toJsOptions(options),
-  ]);
-}
-
-JSObject _toJsOptions(InitIrisRtcOptions options) {
-  final jsOptions = JSObject();
-  if (options.agoraRTC != null) {
-    jsOptions['agoraRTC'] = _toJSValue(options.agoraRTC!);
-  }
-  if (options.irisRtcEngine != null) {
-    jsOptions['irisRtcEngine'] = _toJSValue(options.irisRtcEngine!);
-  }
-
-  return jsOptions;
-}
-
-JSAny _toJSValue(Object value) => switch (value) {
-      String value => value.toJS,
-      int value => value.toJS,
-      double value => value.toJS,
-      bool value => value.toJS,
-      _ => JSObject.fromInteropObject(value),
-    };

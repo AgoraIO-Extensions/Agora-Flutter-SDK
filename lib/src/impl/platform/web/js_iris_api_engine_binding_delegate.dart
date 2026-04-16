@@ -1,3 +1,6 @@
+// ignore: avoid_web_libraries_in_flutter
+import 'dart:js_interop';
+
 import '/src/binding_forward_export.dart';
 import '/src/impl/platform/web/iris_web_rtc_bindings_js.dart';
 import 'package:iris_method_channel/iris_method_channel.dart';
@@ -26,7 +29,10 @@ class IrisApiEngineBindingsDelegateJS
       return true;
     }());
     initIrisRtc(apiEnginePtr, options);
-    return CreateApiEngineResult(irisApiEngineHandle);
+
+    final res = CreateApiEngineResult(irisApiEngineHandle);
+
+    return res;
   }
 
   static const _skipCalls = ['CreateIrisRtcRendering'];
@@ -47,23 +53,33 @@ class IrisApiEngineBindingsDelegateJS
     IrisApiParamHandle param,
   ) async {
     final nApiEnginePtr = apiEnginePtr() as js.IrisApiEngine;
-    final buffers = <Object>[
-      ...?methodCall.buffers,
-      ...?methodCall.rawBufferParams?.map((rb) => rb.intPtr()),
-    ];
-    final bufferLengths = <int>[
-      ...?methodCall.buffers?.map((rb) => rb.length),
-      ...?methodCall.rawBufferParams?.map((rb) => rb.length),
-    ];
+
+    List<Object> buffer = [];
+    List<int> lenOfBuffer = [];
+    int bufferCount = 0;
+    if (methodCall.buffers != null) {
+      bufferCount += methodCall.buffers!.length;
+      for (final rb in methodCall.buffers!) {
+        buffer.add(rb);
+        lenOfBuffer.add(rb.length);
+      }
+    }
+    if (methodCall.rawBufferParams != null) {
+      bufferCount += methodCall.rawBufferParams!.length;
+      for (final rb in methodCall.rawBufferParams!) {
+        buffer.add(rb.intPtr());
+        lenOfBuffer.add(rb.length);
+      }
+    }
 
     final nParam = js.EventParam(
       event: methodCall.funcName,
       data: methodCall.params,
       data_size: methodCall.params.length,
       result: '',
-      buffer: buffers,
-      length: bufferLengths,
-      buffer_count: buffers.length,
+      buffer: buffer,
+      length: lenOfBuffer,
+      buffer_count: bufferCount,
     );
 
     if (_skipCalls.contains(methodCall.funcName)) {
@@ -71,13 +87,13 @@ class IrisApiEngineBindingsDelegateJS
       return CallApiResult(irisReturnCode: 0, data: const {'result': 0});
     }
 
-    final irisReturnCode = js.callIrisApi(nApiEnginePtr, nParam);
+    final jsPromise = (js.callIrisApi(nApiEnginePtr, nParam) as JSAny).dartify()
+        as Future<dynamic>;
 
-    return CallApiResult(
-      irisReturnCode: irisReturnCode,
-      data: jsonDecode(nParam.result),
-      rawData: nParam.result,
-    );
+    final jsResult = await jsPromise;
+    final js.CallIrisApiResult irisApiResult = jsResult as js.CallIrisApiResult;
+
+    return irisApiResult.toCallApiResult();
   }
 
   @override
