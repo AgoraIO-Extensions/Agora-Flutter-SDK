@@ -5,7 +5,7 @@ import '/src/agora_rtc_engine_ex.dart';
 
 /// Video stream configuration for picture-in-picture mode.
 ///
-/// Since Available since v4.6.2. This class stores the connection and canvas settings required to display the video stream in the picture-in-picture window.
+/// Since Available since v6.6.2. This class stores the connection and canvas settings required to display the video stream in the picture-in-picture window.
 class AgoraPipVideoStream {
   /// The RTC connection associated with this video stream.
   final RtcConnection connection;
@@ -34,7 +34,7 @@ class AgoraPipVideoStream {
 
 /// Layout configuration for picture-in-picture video streams.
 ///
-/// Since Available since v4.6.2. This class defines the arrangement of multiple video streams in a flowing layout, where video streams are arranged from left to right and top to bottom.
+/// Since Available since v6.6.2. This class defines the arrangement of multiple video streams in a flowing layout, where video streams are arranged from left to right and top to bottom.
 class AgoraPipContentViewLayout {
   /// Padding around the entire layout in pixels. Used to create space between the layout edges and the video streams. If null, no padding is applied.
   final int? padding;
@@ -76,7 +76,7 @@ class AgoraPipContentViewLayout {
 
 /// Configuration options for Agora picture-in-picture mode.
 ///
-/// Since Available since v4.6.2. This class provides platform-specific options to configure picture-in-picture behavior on Android and iOS platforms.
+/// Since Available since v6.6.2. This class provides platform-specific options to configure picture-in-picture behavior on Android and iOS platforms.
 class AgoraPipOptions {
   /// @nodoc
   AgoraPipOptions({
@@ -250,7 +250,7 @@ class AgoraPipOptions {
 
 /// Represents the current state of Picture-in-Picture mode.
 ///
-/// Since Available since v4.6.2.
+/// Since Available since v6.6.2.
 enum AgoraPipState {
   /// Picture-in-Picture mode has started successfully.
   pipStateStarted,
@@ -264,14 +264,14 @@ enum AgoraPipState {
 
 /// Observer for picture-in-picture state changes.
 ///
-/// Since Available since v4.6.2. Implement this class to receive notifications about picture-in-picture state transitions and potential errors.
+/// Since Available since v6.6.2. Implement this class to receive notifications about picture-in-picture state transitions and potential errors.
 class AgoraPipStateChangedObserver {
   /// @nodoc
   const AgoraPipStateChangedObserver({required this.onPipStateChanged});
 
   /// Callback for picture-in-picture state changes.
   ///
-  /// Since Available since v4.6.2. This callback is triggered by the SDK when the picture-in-picture state changes.
+  /// Since Available since v6.6.2. This callback is triggered by the SDK when the picture-in-picture state changes.
   ///
   /// * [state] The new picture-in-picture state. See AgoraPipState.
   /// * [error] Returns an error message if the state change fails; otherwise returns null.
@@ -280,16 +280,16 @@ class AgoraPipStateChangedObserver {
 
 /// Controller interface for managing picture-in-picture functionality.
 ///
-/// Since Available since v4.6.2. This abstract class defines the methods required to control picture-in-picture mode, including setup, state management, and lifecycle operations.
+/// Since Available since v6.6.2. This abstract class defines the methods required to control picture-in-picture mode, including setup, state management, and lifecycle operations.
 abstract class AgoraPipController {
   /// Releases resources related to picture-in-picture.
   ///
-  /// Since Available since v4.6.2.
+  /// Since Available since v6.6.2.
   Future<void> dispose();
 
   /// Registers a picture-in-picture state change observer.
   ///
-  /// Since Available since v4.6.2.
+  /// Since Available since v6.6.2.
   ///
   /// * [observer] Picture-in-picture state change observer. See AgoraPipStateChangedObserver.
   Future<void> registerPipStateChangedObserver(
@@ -298,12 +298,12 @@ abstract class AgoraPipController {
 
   /// Unregisters the picture-in-picture state change observer.
   ///
-  /// Since Available since v4.6.2.
+  /// Since Available since v6.6.2.
   Future<void> unregisterPipStateChangedObserver();
 
   /// Checks whether the current device supports picture-in-picture mode.
   ///
-  /// Since Available since v4.6.2.
+  /// Since Available since v6.6.2.
   ///
   /// Returns
   /// true : The current device supports picture-in-picture mode. false : The current device does not support picture-in-picture mode.
@@ -311,7 +311,7 @@ abstract class AgoraPipController {
 
   /// Checks whether automatic entry into picture-in-picture mode is supported.
   ///
-  /// Since Available since v4.6.2.
+  /// Since Available since v6.6.2.
   ///
   /// Returns
   /// true : Automatic entry into picture-in-picture mode is supported. false : Automatic entry into picture-in-picture mode is not supported.
@@ -319,7 +319,7 @@ abstract class AgoraPipController {
 
   /// Checks whether picture-in-picture mode is activated.
   ///
-  /// Since Available since v4.6.2.
+  /// Since Available since v6.6.2.
   ///
   /// Returns
   /// true : Picture-in-picture mode is activated. false : Picture-in-picture mode is not activated.
@@ -327,7 +327,7 @@ abstract class AgoraPipController {
 
   /// Configures picture-in-picture mode.
   ///
-  /// Since Available since v4.6.2.
+  /// Since Available since v6.6.2.
   ///
   /// * [options] Picture-in-picture configuration options. See AgoraPipOptions.
   ///
@@ -337,7 +337,7 @@ abstract class AgoraPipController {
 
   /// Starts picture-in-picture mode.
   ///
-  /// Since Available since v4.6.2.
+  /// Since Available since v6.6.2.
   ///
   /// Returns
   /// true : Success. false : Failure.
@@ -345,11 +345,11 @@ abstract class AgoraPipController {
 
   /// Stops picture-in-picture mode.
   ///
-  /// Since Available since v4.6.2.
+  /// Since Available since v6.6.2.
   Future<void> pipStop();
 
   /// Releases resources related to picture-in-picture.
   ///
-  /// Since Available since v4.6.2.
+  /// Since Available since v6.6.2.
   Future<void> pipDispose();
 }
