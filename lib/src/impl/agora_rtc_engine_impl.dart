@@ -581,14 +581,16 @@ class RtcEngineImpl extends rtc_engine_ex_binding.RtcEngineExImpl
 
     await irisMethodChannel.unregisterEventHandlers(_rtcEngineImplScopedKey);
 
-    await super.release(sync: sync);
-
-    if (!kIsWeb && defaultTargetPlatform == TargetPlatform.android) {
-      try {
-        await engineMethodChannel
-            .invokeMethod('androidClearNativeEngineHandle');
-      } catch (e) {
-        // Best-effort cache clear on Android.
+    try {
+      await super.release(sync: sync);
+    } finally {
+      if (!kIsWeb && defaultTargetPlatform == TargetPlatform.android) {
+        try {
+          await engineMethodChannel
+              .invokeMethod('androidClearNativeEngineHandle');
+        } catch (e) {
+          // Best-effort cache clear on Android.
+        }
       }
     }
 
