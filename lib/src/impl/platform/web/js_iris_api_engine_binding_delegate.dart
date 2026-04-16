@@ -23,7 +23,7 @@ class IrisApiEngineBindingsDelegateJS
     assert(() {
       if (args.isNotEmpty) {
         final arg = args[0].provide(irisApiEngineHandle)();
-        options = InitIrisRtcOptions(irisRtcEngine: arg);
+        options = InitIrisRtcOptions(irisRtcEngine: arg as JSAny?);
       }
 
       return true;

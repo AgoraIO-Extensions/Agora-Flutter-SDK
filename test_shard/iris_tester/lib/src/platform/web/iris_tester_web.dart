@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:js_interop';
 
 import 'package:iris_tester/src/platform/iris_tester_interface.dart';
 import 'package:iris_tester/src/platform/web/iris_tester_bindings_web.dart'
@@ -20,7 +21,8 @@ class IrisTesterWeb implements IrisTester {
     }
 
     isCreatedIrisRtcEngineFake = true;
-    _irisRtcEngineFake = bindings.createIrisRtcEngineFake(irisApiEngine);
+    _irisRtcEngineFake =
+        bindings.createIrisRtcEngineFake(irisApiEngine as JSAny) as Object;
     bindings.irisMock();
 
     return _irisRtcEngineFake;
