@@ -1,3 +1,6 @@
+// ignore: avoid_web_libraries_in_flutter
+import 'dart:js_interop';
+
 import 'dart:convert';
 
 import 'package:iris_tester/src/platform/iris_tester_interface.dart';
@@ -20,7 +23,7 @@ class IrisTesterWeb implements IrisTester {
     }
 
     isCreatedIrisRtcEngineFake = true;
-    _irisRtcEngineFake = bindings.createIrisRtcEngineFake(irisApiEngine);
+    _irisRtcEngineFake = bindings.createIrisRtcEngineFake(irisApiEngine as JSAny);
     bindings.irisMock();
 
     return _irisRtcEngineFake;
@@ -41,13 +44,14 @@ class IrisTesterWeb implements IrisTester {
   bool fireEvent(String eventName, {Map params = const {}}) {
     final pJson = jsonEncode(params);
     final param = bindings.EventParam(
-        event: eventName,
-        data: pJson,
-        data_size: pJson.length,
-        result: '',
-        buffer: [],
-        length: [],
-        buffer_count: 0);
+      event: eventName,
+      data: pJson,
+      dataSize: pJson.length,
+      result: '',
+      buffer: JSArray<JSAny?>(),
+      length: JSArray<JSNumber>(),
+      bufferCount: 0,
+    );
 
     final ret = bindings.triggerEventWithFakeApiEngine(eventName, param);
 

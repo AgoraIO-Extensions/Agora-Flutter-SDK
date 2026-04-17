@@ -557,7 +557,7 @@ class _State extends State<PictureInPicture> with WidgetsBindingObserver {
               bottom: 0,
               child: Container(
                 padding: const EdgeInsets.all(8),
-                color: Colors.black.withValues(alpha: 0.5),
+                color: Colors.black.withOpacity(0.5),
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
                   crossAxisAlignment: CrossAxisAlignment.start,
