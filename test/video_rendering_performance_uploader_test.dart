@@ -90,7 +90,8 @@ void main() {
     ChannelConnectionManager.instance.clear();
   });
 
-  test('local camera view does not upload without a valid rtc connection', () async {
+  test('local camera view does not upload without a valid rtc connection',
+      () async {
     final engine = _RecordingRtcEngine();
     final controller = VideoViewController(
       rtcEngine: engine,
@@ -144,7 +145,8 @@ void main() {
     );
   });
 
-  test('media player uploads with its own source type when connection is passed',
+  test(
+      'media player uploads with its own source type when connection is passed',
       () async {
     final engine = _RecordingRtcEngine();
     final controller = MediaPlayerControllerImpl(
@@ -210,7 +212,8 @@ void main() {
     );
   });
 
-  test('remote view uploads with explicit rtc connection and remote source type',
+  test(
+      'remote view uploads with explicit rtc connection and remote source type',
       () async {
     final engine = _RecordingRtcEngine();
     final controller = VideoViewController.remote(
@@ -331,7 +334,8 @@ void main() {
     expect(
       payloads
           .map((payload) => payload['connection'])
-          .map((connection) => '${connection['channelId']}-${connection['localUid']}')
+          .map((connection) =>
+              '${connection['channelId']}-${connection['localUid']}')
           .toSet(),
       {'room-1', 'room-2'},
     );
@@ -469,7 +473,8 @@ void main() {
       seedManager: () {
         syncPublishingConnectionsFromMediaOptions(
           manager: ChannelConnectionManager.instance,
-          connection: const RtcConnection(channelId: 'media-option', localUid: 12),
+          connection:
+              const RtcConnection(channelId: 'media-option', localUid: 12),
           options: const ChannelMediaOptions(
             publishMediaPlayerVideoTrack: true,
           ),
@@ -497,7 +502,8 @@ void main() {
     );
   });
 
-  test('local custom source uploads when custom video publish option is enabled',
+  test(
+      'local custom source uploads when custom video publish option is enabled',
       () async {
     final engine = _RecordingRtcEngine();
     final controller = VideoViewController(
@@ -706,7 +712,8 @@ void main() {
     );
   });
 
-  test('local fourth camera uploads when fourth camera publish option is enabled',
+  test(
+      'local fourth camera uploads when fourth camera publish option is enabled',
       () async {
     final engine = _RecordingRtcEngine();
     final controller = VideoViewController(
@@ -776,7 +783,8 @@ void main() {
       seedManager: () {
         syncPublishingConnectionsFromMediaOptions(
           manager: ChannelConnectionManager.instance,
-          connection: const RtcConnection(channelId: 'screen-capture', localUid: 71),
+          connection:
+              const RtcConnection(channelId: 'screen-capture', localUid: 71),
           options: const ChannelMediaOptions(
             publishScreenCaptureVideo: true,
           ),
@@ -798,7 +806,8 @@ void main() {
     );
   });
 
-  test('local secondary screen uploads when secondary screen publish option is enabled',
+  test(
+      'local secondary screen uploads when secondary screen publish option is enabled',
       () async {
     final engine = _RecordingRtcEngine();
     final controller = VideoViewController(
@@ -890,7 +899,8 @@ void main() {
     );
   });
 
-  test('local fourth screen uploads when fourth screen publish option is enabled',
+  test(
+      'local fourth screen uploads when fourth screen publish option is enabled',
       () async {
     final engine = _RecordingRtcEngine();
     final controller = VideoViewController(
@@ -972,14 +982,16 @@ void main() {
       seedManager: () {
         syncPublishingConnectionsFromMediaOptions(
           manager: ChannelConnectionManager.instance,
-          connection: const RtcConnection(channelId: 'camera-room', localUid: 51),
+          connection:
+              const RtcConnection(channelId: 'camera-room', localUid: 51),
           options: const ChannelMediaOptions(
             publishCameraTrack: true,
           ),
         );
         syncPublishingConnectionsFromMediaOptions(
           manager: ChannelConnectionManager.instance,
-          connection: const RtcConnection(channelId: 'screen-room', localUid: 52),
+          connection:
+              const RtcConnection(channelId: 'screen-room', localUid: 52),
           options: const ChannelMediaOptions(
             publishScreenTrack: true,
           ),
