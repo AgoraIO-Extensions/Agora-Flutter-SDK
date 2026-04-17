@@ -16,11 +16,19 @@ AgoraRhythmPlayerConfig _$AgoraRhythmPlayerConfigFromJson(
     );
 
 Map<String, dynamic> _$AgoraRhythmPlayerConfigToJson(
-        AgoraRhythmPlayerConfig instance) =>
-    <String, dynamic>{
-      if (instance.beatsPerMeasure case final value?) 'beatsPerMeasure': value,
-      if (instance.beatsPerMinute case final value?) 'beatsPerMinute': value,
-    };
+    AgoraRhythmPlayerConfig instance) {
+  final val = <String, dynamic>{};
+
+  void writeNotNull(String key, dynamic value) {
+    if (value != null) {
+      val[key] = value;
+    }
+  }
+
+  writeNotNull('beatsPerMeasure', instance.beatsPerMeasure);
+  writeNotNull('beatsPerMinute', instance.beatsPerMinute);
+  return val;
+}
 
 const _$RhythmPlayerStateTypeEnumMap = {
   RhythmPlayerStateType.rhythmPlayerStateIdle: 810,

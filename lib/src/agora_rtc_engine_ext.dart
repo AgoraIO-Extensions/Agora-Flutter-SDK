@@ -12,12 +12,12 @@ import '/src/impl/agora_pip_controller_impl.dart';
 
 /// @nodoc
 extension RtcEngineExt on RtcEngine {
-/// Get the actual absolute path of an asset from its relative asset path.
-///
-/// * [assetPath] The flutter -> assets field configured in the pubspec.yaml file.
-///
-/// Returns
-/// The actual path of the asset.
+  /// Get the actual absolute path of an asset from its relative asset path.
+  ///
+  /// * [assetPath] The flutter -> assets field configured in the pubspec.yaml file.
+  ///
+  /// Returns
+  /// The actual path of the asset.
   Future<String?> getAssetAbsolutePath(String assetPath) async {
     final impl = this as RtcEngineImpl;
     return impl.getAssetAbsolutePath(assetPath);
@@ -72,27 +72,27 @@ class AgoraRtcException implements Exception {
   /// @nodoc
   AgoraRtcException({required this.code, this.message});
 
-/// Error code. See ErrorCodeType.
+  /// Error code. See ErrorCodeType.
   final int code;
 
-/// Error description.
+  /// Error description.
   final String? message;
 
   @override
   String toString() => 'AgoraRtcException($code, $message)';
 }
 
-  /// @nodoc
+/// @nodoc
 RtcEngine createAgoraRtcEngine({Object? sharedNativeHandle}) {
   return impl.RtcEngineImpl.create(sharedNativeHandle: sharedNativeHandle);
 }
 
-  /// @nodoc
+/// @nodoc
 RtcEngineEx createAgoraRtcEngineEx({Object? sharedNativeHandle}) {
   return impl.RtcEngineImpl.create(sharedNativeHandle: sharedNativeHandle);
 }
 
-  /// @nodoc
+/// @nodoc
 MediaPlayerCacheManager getMediaPlayerCacheManager(RtcEngine rtcEngine) {
   return MediaPlayerCacheManagerImpl.create(rtcEngine);
 }

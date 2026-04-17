@@ -1,4 +1,3 @@
-
 import 'package:agora_rtc_engine/src/agora_music_content_center.dart';
 import 'package:agora_rtc_engine/src/_serializable.dart';
 import 'package:json_annotation/json_annotation.dart';

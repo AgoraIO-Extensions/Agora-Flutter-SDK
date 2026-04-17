@@ -505,7 +505,8 @@ class DefaultVisitorImpl extends DefaultVisitor<Object?> {
                       typeName = _namedTypeNameLexeme(fieldType);
                       for (final ta
                           in fieldType.typeArguments?.arguments ?? []) {
-                        typeArguments.add(_namedTypeNameLexeme(ta as NamedType));
+                        typeArguments
+                            .add(_namedTypeNameLexeme(ta as NamedType));
                       }
                       break;
                     }
