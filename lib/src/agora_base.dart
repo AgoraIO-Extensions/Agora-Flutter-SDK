@@ -2575,7 +2575,7 @@ class RtcStats implements AgoraSerializable {
   /// Round-trip time from client to local router (ms). This property is enabled by default on devices running iOS versions earlier than 14, and disabled on iOS 14 and later.
   ///
   ///  To enable this property on iOS 14 and later, please [contact technical support](https://www.agora.io/cn/contact/).
-  /// On Android, to obtain gatewayRtt, make sure you have added the android.permission.ACCESS_WIFI_STATE permission after </application> in your project's AndroidManifest.xml file.
+  /// On Android, to obtain gatewayRtt, make sure you have added the android.permission.ACCESS_WIFI_STATE permission after the closing `</application>` tag in your project's AndroidManifest.xml file.
   @JsonKey(name: 'gatewayRtt')
   final int? gatewayRtt;
 
@@ -3852,7 +3852,7 @@ class Packet implements AgoraSerializable {
   const Packet({this.buffer, this.size});
 
   /// @nodoc
-  @JsonKey(name: 'buffer', ignore: true)
+  @JsonKey(name: 'buffer', includeFromJson: false, includeToJson: false)
   final Uint8List? buffer;
 
   /// @nodoc
@@ -4546,7 +4546,7 @@ class TranscodingVideoStream implements AgoraSerializable {
 
   /// Use this parameter only when the video source type for local compositing is an image. Path to the local image. Example paths:
   ///  Android: /storage/emulated/0/Pictures/image.png
-  ///  iOS: /var/mobile/Containers/Data/Application/<APP-UUID>/Documents/image.png
+  ///  iOS: `/var/mobile/Containers/Data/Application/<APP-UUID>/Documents/image.png`
   ///  macOS: ~/Pictures/image.png
   ///  Windows: C:\\Users\\{username}\\Pictures\\image.png
   @JsonKey(name: 'imageUrl')
@@ -7013,7 +7013,8 @@ class EncryptionConfig implements AgoraSerializable {
   final String? encryptionKey;
 
   /// Salt, 32 bytes in length. It is recommended to generate the salt on the server side using OpenSSL. This parameter takes effect only when using aes128Gcm2 or aes256Gcm2 encryption modes. In this case, ensure that the value provided for this parameter is not all 0.
-  @JsonKey(name: 'encryptionKdfSalt', ignore: true)
+  @JsonKey(
+      name: 'encryptionKdfSalt', includeFromJson: false, includeToJson: false)
   final Uint8List? encryptionKdfSalt;
 
   /// Whether to enable data stream encryption: true : Enable data stream encryption. false : (Default) Disable data stream encryption.

@@ -819,29 +819,31 @@ class _State extends State<AdvancedBeauty> with KeepRemoteVideoViewsMixin {
           const Text(
               '脸型风格【-1: None(无)、0: Goddess(女神)、1: Male(男神)、2: Natural(自然)】',
               style: TextStyle(fontSize: 11, color: Colors.grey)),
-          Row(children: [
-            for (final s in [-1, 0, 1, 2])
-              Expanded(
-                child: RadioListTile<int>(
-                  title: Text('$s', style: const TextStyle(fontSize: 11)),
-                  value: s,
-                  groupValue: _faceStyle,
-                  onChanged: (v) async {
-                    if (v == null) return;
-                    setState(() => _faceStyle = v);
-                    if (_videoEffectObject != null) {
-                      if (!_beautyEnabled) await _applyBeauty();
-                      await _videoEffectObject!.setVideoEffectIntParam(
-                        option: 'face_shape_beauty_option',
-                        key: 'style',
-                        param: v,
-                      );
-                    }
-                  },
-                  contentPadding: EdgeInsets.zero,
+          Row(
+            children: [
+              for (final s in [-1, 0, 1, 2])
+                Expanded(
+                  child: RadioListTile<int>(
+                    title: Text('$s', style: const TextStyle(fontSize: 11)),
+                    value: s,
+                    groupValue: _faceStyle,
+                    onChanged: (v) async {
+                      if (v == null) return;
+                      setState(() => _faceStyle = v);
+                      if (_videoEffectObject != null) {
+                        if (!_beautyEnabled) await _applyBeauty();
+                        await _videoEffectObject!.setVideoEffectIntParam(
+                          option: 'face_shape_beauty_option',
+                          key: 'style',
+                          param: v,
+                        );
+                      }
+                    },
+                    contentPadding: EdgeInsets.zero,
+                  ),
                 ),
-              ),
-          ]),
+            ],
+          ),
           _buildSlider(
             label: '美型强度 intensity (0-100)',
             value: _faceIntensity.toDouble(),

@@ -255,8 +255,18 @@ class _AudioEffectMixingState extends State<AudioEffectMixing> {
                             _loopback = changed;
                           });
                         },
-                  activeTrackColor: Colors.grey[350],
-                  activeColor: Colors.white,
+                  thumbColor: MaterialStateProperty.resolveWith((states) {
+                    if (states.contains(MaterialState.selected)) {
+                      return Colors.white;
+                    }
+                    return null;
+                  }),
+                  trackColor: MaterialStateProperty.resolveWith((states) {
+                    if (states.contains(MaterialState.selected)) {
+                      return Colors.grey[350];
+                    }
+                    return null;
+                  }),
                 )
               ]),
               Row(
