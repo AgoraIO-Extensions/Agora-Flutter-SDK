@@ -293,7 +293,7 @@ class _State extends State<EnableSpatialAudio> {
                     }
                   : null,
               activeTrackColor: Colors.grey[350],
-              activeColor: Colors.white,
+              activeThumbColor: Colors.white,
             )
           ],
         ),
@@ -323,7 +323,7 @@ class _State extends State<EnableSpatialAudio> {
                     }
                   : null,
               activeTrackColor: Colors.grey[350],
-              activeColor: Colors.white,
+              activeThumbColor: Colors.white,
             )
           ],
         ),

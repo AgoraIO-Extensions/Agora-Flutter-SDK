@@ -723,10 +723,10 @@ abstract class RtcEngineEx implements RtcEngine {
   /// * [connection] Connection information. See RtcConnection.
   /// * [uid] User ID. Set to 0 to capture the local user's video.
   /// * [filePath] Make sure the directory exists and is writable. The local path to save the snapshot. The path must include the file name and format, for example:
-  ///  Windows: C:\Users\<user_name>\AppData\Local\Agora\<process_name>\example.jpg
+  ///  Windows: `C:\Users\<user_name>\AppData\Local\Agora\<process_name>\example.jpg`
   ///  iOS: /App Sandbox/Library/Caches/example.jpg
   ///  macOS: ～/Library/Logs/example.jpg
-  ///  Android: /storage/emulated/0/Android/data/<package name>/files/example.jpg
+  ///  Android: `/storage/emulated/0/Android/data/<package name>/files/example.jpg`
   ///
   /// Returns
   /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown. You need to catch the exception and handle it accordingly. See [Error Codes](https://docs.agora.io/en/video-calling/troubleshooting/error-codes) for details and resolution suggestions.

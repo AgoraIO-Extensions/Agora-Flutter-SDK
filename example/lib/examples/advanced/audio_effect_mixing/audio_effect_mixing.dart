@@ -256,7 +256,7 @@ class _AudioEffectMixingState extends State<AudioEffectMixing> {
                           });
                         },
                   activeTrackColor: Colors.grey[350],
-                  activeColor: Colors.white,
+                  activeThumbColor: Colors.white,
                 )
               ]),
               Row(

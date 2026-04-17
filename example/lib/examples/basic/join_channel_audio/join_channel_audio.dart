@@ -345,7 +345,7 @@ class _State extends State<JoinChannelAudio> {
                             value: _enableInEarMonitoring,
                             onChanged: isJoined ? _toggleInEarMonitoring : null,
                             activeTrackColor: Colors.grey[350],
-                            activeColor: Colors.white,
+                            activeThumbColor: Colors.white,
                           )
                         ]),
                         if (_enableInEarMonitoring)

@@ -167,7 +167,7 @@ jobs:
 
       - name: Commit and create pull request
         id: create_pr
-        uses: peter-evans/create-pull-request@v4
+        uses: peter-evans/create-pull-request@v8
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
           commit-message: "feat: update dependencies"
