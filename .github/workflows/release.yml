@@ -13,6 +13,11 @@ on:
         required: false
         type: boolean
         default: true
+      force-publish-to-pub:
+        description: 'Force publish to pub.dev regardless of version format'
+        required: false
+        type: boolean
+        default: false
 
   # Callable workflow - can be called by other workflows
   workflow_call:
@@ -26,6 +31,11 @@ on:
         required: false
         type: boolean
         default: true
+      force-publish-to-pub:
+        description: 'Force publish to pub.dev regardless of version format'
+        required: false
+        type: boolean
+        default: false
     outputs:
       increment:
         description: 'The version that was released'
@@ -82,13 +92,17 @@ jobs:
           # Get dry-run mode
           if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
             DRY_RUN="${{ github.event.inputs.dry-run }}"
+            FORCE_PUBLISH="${{ github.event.inputs.force-publish-to-pub }}"
           elif [ "${{ github.event_name }}" = "workflow_call" ]; then
             DRY_RUN="${{ inputs.dry-run }}"
+            FORCE_PUBLISH="${{ inputs.force-publish-to-pub }}"
           else
             DRY_RUN="false" # PR triggers are always production mode
+            FORCE_PUBLISH="false"
           fi
 
           echo "Dry-run mode: $DRY_RUN"
+          echo "Force publish mode: $FORCE_PUBLISH"
           echo "dry-run=$DRY_RUN" >> $GITHUB_OUTPUT
 
           # Get version from inputs (for workflow_dispatch and workflow_call) or pubspec.yaml (for PR)
@@ -115,7 +129,17 @@ jobs:
             # Auto-detect release type based on version format for manual/callable triggers
             # Only clean semantic versions (MAJOR.MINOR.PATCH) are considered standard
             # Any version with suffix (pre-release, build metadata, etc.) is special
-            if [[ $RELEASE_VERSION =~ ^[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
+            if [ "$FORCE_PUBLISH" = "true" ]; then
+              # Forced to publish: treat as standard
+              RELEASE_TYPE="standard"
+              # Still detect if it's a prerelease format for other informational purposes
+              if [[ $RELEASE_VERSION =~ ^[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
+                IS_PRERELEASE="false"
+              else
+                IS_PRERELEASE="true"
+              fi
+              echo "✅ Forced standard release: $RELEASE_VERSION"
+            elif [[ $RELEASE_VERSION =~ ^[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
               # Clean semantic version: 6.5.0 (no suffix)
               RELEASE_TYPE="standard"
               IS_PRERELEASE="false"
@@ -318,12 +342,36 @@ jobs:
           tag: ${{ steps.doc_version.outputs.version }}
           overwrite: true
 
+  upload_release_metadata:
+    name: 'Upload Release Metadata'
+    runs-on: ubuntu-latest
+    needs: release
+    if: ${{ needs.release.result == 'success' }}
+    steps:
+      - name: Write release metadata
+        run: |
+          cat > release-metadata.env <<EOF
+          RELEASE_VERSION=${{ needs.release.outputs.increment }}
+          RELEASE_TYPE=${{ needs.release.outputs.release_type }}
+          IS_PRERELEASE=${{ needs.release.outputs.is_prerelease }}
+          DRY_RUN=${{ needs.release.outputs.dry-run }}
+          GIT_URL=${{ github.server_url }}/${{ github.repository }}.git
+          REPOSITORY=${{ github.repository }}
+          EOF
+
+      - name: Upload release metadata
+        uses: actions/upload-artifact@v4
+        with:
+          name: release-metadata
+          path: release-metadata.env
+          retention-days: 7
+
   # Post-release verification
   verify_release:
     name: 'Verify Release'
     runs-on: ubuntu-latest
-    needs: [release, attach_documentation]
-    if: always() && (needs.release.result == 'success' || needs.attach_documentation.result == 'success')
+    needs: [release, attach_documentation, upload_release_metadata]
+    if: always() && (needs.release.result == 'success' || needs.attach_documentation.result == 'success' || needs.upload_release_metadata.result == 'success')
     steps:
       - name: Checkout repository 🛎️
         uses: actions/checkout@v4
@@ -356,18 +404,20 @@ jobs:
             echo "  • GitHub Release: ✅ Created"
             echo "  • Pub.dev: ✅ Published"
             echo "  • Documentation: ✅ Generated and attached"
+            echo "  • Consumer Smoke: handled by release_consumer_smoke workflow"
           else
             echo "  • Status: Special version (internal use only)"
             echo "  • GitHub Release: ❌ Not created (internal version)"
             echo "  • Pub.dev: ❌ Not published (internal version)"
             echo "  • Documentation: ❌ Not generated (internal version)"
+            echo "  • Consumer Smoke: handled by release_consumer_smoke workflow"
           fi
 
           echo ""
           echo "🎉 Release workflow completed successfully!"
 
       - name: Notify on failure
-        if: needs.release.result == 'failure'
+        if: ${{ needs.release.result == 'failure' }}
         run: |
           echo "❌ Release failed!"
           echo "Please check the logs and try again."

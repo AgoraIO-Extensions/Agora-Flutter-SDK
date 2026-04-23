@@ -40,6 +40,9 @@ void rtcEngineExSmokeTestCases() {
             VideoStreamType.videoStreamHigh;
         ChannelProfileType optionsChannelProfile =
             ChannelProfileType.channelProfileCommunication;
+        MultipathMode optionsUplinkMultipathMode = MultipathMode.duplicate;
+        MultipathMode optionsDownlinkMultipathMode = MultipathMode.duplicate;
+        MultipathType optionsPreferMultipathType = MultipathType.lan;
         bool optionsPublishCameraTrack = true;
         bool optionsPublishSecondaryCameraTrack = true;
         bool optionsPublishThirdCameraTrack = true;
@@ -73,6 +76,7 @@ void rtcEngineExSmokeTestCases() {
         int optionsCustomVideoTrackId = 5;
         bool optionsIsAudioFilterable = true;
         String optionsParameters = "hello";
+        bool optionsEnableMultipath = true;
         ChannelMediaOptions options = ChannelMediaOptions(
           publishCameraTrack: optionsPublishCameraTrack,
           publishSecondaryCameraTrack: optionsPublishSecondaryCameraTrack,
@@ -111,6 +115,10 @@ void rtcEngineExSmokeTestCases() {
           customVideoTrackId: optionsCustomVideoTrackId,
           isAudioFilterable: optionsIsAudioFilterable,
           parameters: optionsParameters,
+          enableMultipath: optionsEnableMultipath,
+          uplinkMultipathMode: optionsUplinkMultipathMode,
+          downlinkMultipathMode: optionsDownlinkMultipathMode,
+          preferMultipathType: optionsPreferMultipathType,
         );
         await rtcEngineEx.joinChannelEx(
           token: token,
@@ -256,6 +264,9 @@ void rtcEngineExSmokeTestCases() {
             VideoStreamType.videoStreamHigh;
         ChannelProfileType optionsChannelProfile =
             ChannelProfileType.channelProfileCommunication;
+        MultipathMode optionsUplinkMultipathMode = MultipathMode.duplicate;
+        MultipathMode optionsDownlinkMultipathMode = MultipathMode.duplicate;
+        MultipathType optionsPreferMultipathType = MultipathType.lan;
         bool optionsPublishCameraTrack = true;
         bool optionsPublishSecondaryCameraTrack = true;
         bool optionsPublishThirdCameraTrack = true;
@@ -289,6 +300,7 @@ void rtcEngineExSmokeTestCases() {
         int optionsCustomVideoTrackId = 5;
         bool optionsIsAudioFilterable = true;
         String optionsParameters = "hello";
+        bool optionsEnableMultipath = true;
         ChannelMediaOptions options = ChannelMediaOptions(
           publishCameraTrack: optionsPublishCameraTrack,
           publishSecondaryCameraTrack: optionsPublishSecondaryCameraTrack,
@@ -327,6 +339,10 @@ void rtcEngineExSmokeTestCases() {
           customVideoTrackId: optionsCustomVideoTrackId,
           isAudioFilterable: optionsIsAudioFilterable,
           parameters: optionsParameters,
+          enableMultipath: optionsEnableMultipath,
+          uplinkMultipathMode: optionsUplinkMultipathMode,
+          downlinkMultipathMode: optionsDownlinkMultipathMode,
+          preferMultipathType: optionsPreferMultipathType,
         );
         String connectionChannelId = "hello";
         int connectionLocalUid = 5;
@@ -2461,59 +2477,6 @@ void rtcEngineExSmokeTestCases() {
         if (e is! AgoraRtcException) {
           debugPrint(
               '[RtcEngineEx.sendAudioMetadataEx] error: ${e.toString()}');
-          rethrow;
-        }
-
-        if (e.code != -4) {
-          // Only not supported error supported.
-          rethrow;
-        }
-      }
-
-      await rtcEngineEx.release();
-    },
-//  skip: !(),
-  );
-
-  testWidgets(
-    'RtcEngineEx.enableVideoImageSourceEx',
-    (WidgetTester tester) async {
-      String engineAppId = const String.fromEnvironment('TEST_APP_ID',
-          defaultValue: '<YOUR_APP_ID>');
-
-      RtcEngineEx rtcEngineEx = createAgoraRtcEngineEx();
-      await rtcEngineEx.initialize(RtcEngineContext(
-        appId: engineAppId,
-        areaCode: AreaCode.areaCodeGlob.value(),
-      ));
-      await rtcEngineEx.setParameters('{"rtc.enable_debug_log": true}');
-
-      try {
-        bool enable = true;
-        VideoMirrorModeType optionsMirrorMode =
-            VideoMirrorModeType.videoMirrorModeAuto;
-        String optionsImageUrl = "hello";
-        int optionsFps = 5;
-        ImageTrackOptions options = ImageTrackOptions(
-          imageUrl: optionsImageUrl,
-          fps: optionsFps,
-          mirrorMode: optionsMirrorMode,
-        );
-        String connectionChannelId = "hello";
-        int connectionLocalUid = 5;
-        RtcConnection connection = RtcConnection(
-          channelId: connectionChannelId,
-          localUid: connectionLocalUid,
-        );
-        await rtcEngineEx.enableVideoImageSourceEx(
-          enable: enable,
-          options: options,
-          connection: connection,
-        );
-      } catch (e) {
-        if (e is! AgoraRtcException) {
-          debugPrint(
-              '[RtcEngineEx.enableVideoImageSourceEx] error: ${e.toString()}');
           rethrow;
         }
 

@@ -3,11 +3,15 @@ import 'dart:convert';
 import 'dart:ffi' as ffi;
 
 import '/src/agora_rtc_engine.dart';
+import '/src/agora_rtc_engine_ex.dart';
 import '/src/impl/platform/global_video_view_controller_platform.dart';
 import '/src/impl/platform/io/native_iris_api_engine_binding_delegate.dart';
 import '/src/impl/video_view_controller_impl.dart';
 import 'package:flutter/services.dart';
 import 'package:iris_method_channel/iris_method_channel.dart';
+import '/src/render/video_rendering_performance_monitor.dart';
+import '/src/impl/agora_rtc_engine_impl.dart';
+import 'package:flutter/foundation.dart';
 
 // ignore_for_file: public_member_api_docs
 
@@ -16,10 +20,19 @@ const kNullViewHandle = 0;
 class GlobalVideoViewControllerIO extends GlobalVideoViewControllerPlatfrom {
   GlobalVideoViewControllerIO(
       IrisMethodChannel irisMethodChannel, RtcEngine rtcEngine)
-      : super(irisMethodChannel, rtcEngine);
+      : super(irisMethodChannel, rtcEngine) {
+    methodChannel.setMethodCallHandler(_handleMethodCall);
+  }
 
   final MethodChannel methodChannel =
       const MethodChannel('agora_rtc_ng/video_view_controller');
+
+  Future<dynamic> _handleMethodCall(MethodCall call) async {
+    if (call.method == 'onVideoRenderingPerformance') {
+      VideoRenderingPerformanceMonitor.instance
+          .handlePerformanceStatsFromNative(call.arguments);
+    }
+  }
 
   int _irisRtcRenderingHandle = 0;
   @override
@@ -66,30 +79,43 @@ class GlobalVideoViewControllerIO extends GlobalVideoViewControllerPlatfrom {
 
     irisMethodChannel.removeHotRestartListener(_hotRestartListener);
 
-    await methodChannel.invokeMethod('dispose');
-
-    await irisMethodChannel.invokeMethod(IrisMethodCall(
-      'FreeIrisRtcRendering',
-      jsonEncode({
-        'irisRtcEngineNativeHandle': irisRtcEngineIntPtr,
-        'irisRtcRenderingHandle': irisRtcRenderingHandle,
-      }),
-    ));
+    await methodChannel.invokeMethod('dispose').then((value) {
+      return irisMethodChannel.invokeMethod(IrisMethodCall(
+        'FreeIrisRtcRendering',
+        jsonEncode({
+          'irisRtcEngineNativeHandle': irisRtcEngineIntPtr,
+          'irisRtcRenderingHandle': irisRtcRenderingHandle,
+        }),
+      ));
+    });
   }
 
   @override
-  Future<int> createTextureRender(int uid, String channelId,
+  Future<int> createTextureRender(int uid, RtcConnection? connection,
       int videoSourceType, int videoViewSetupMode) async {
     if (_irisRtcRenderingHandle == 0) {
       return kTextureNotInit;
     }
+
+    // Get enableArgusCounters from RtcEngine
+    bool enableArgusCounters = true;
+    try {
+      final rtcEngineImpl = rtcEngine as RtcEngineImpl;
+      enableArgusCounters = rtcEngineImpl.enableArgusCounters;
+    } catch (e) {
+      // If cast fails, use default (enabled)
+      debugPrint(
+          '[GlobalVideoViewControllerIO] Failed to get enableArgusCounters: $e');
+    }
+
     final textureId =
         await methodChannel.invokeMethod<int>('createTextureRender', {
       'irisRtcRenderingHandle': _irisRtcRenderingHandle,
       'uid': uid,
-      'channelId': channelId,
+      'channelId': connection?.channelId ?? '',
       'videoSourceType': videoSourceType,
       'videoViewSetupMode': videoViewSetupMode,
+      'enableArgusCounters': enableArgusCounters,
     });
     return textureId ?? kTextureNotInit;
   }

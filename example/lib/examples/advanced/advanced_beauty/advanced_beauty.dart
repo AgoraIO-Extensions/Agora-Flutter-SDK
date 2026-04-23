@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:io';
 import 'package:agora_rtc_engine/agora_rtc_engine.dart';
 import 'package:agora_rtc_engine_example/config/agora.config.dart' as config;
@@ -29,44 +30,152 @@ class AdvancedBeauty extends StatefulWidget {
   State<StatefulWidget> createState() => _State();
 }
 
-// ---------- Beauty template options ----------
-/// Beauty presets — template names come from the SDK resource bundle's config.json.
-enum _BeautyTemplate {
-  basic('Basic (基础)', 'Beauty-Basic');
+class AdvancedBeautyTemplateOption {
+  const AdvancedBeautyTemplateOption(this.label, this.templateName);
 
-  const _BeautyTemplate(this.label, this.templateName);
-  final String label;
-  final String templateName;
-}
-
-// ---------- Style makeup options ----------
-/// Style makeup combines multiple makeup layers in one template.
-enum _StyleMakeupTemplate {
-  none('None', null),
-  mature('Mature (学姐)', 'Makeup-Mature'),
-  graceful('Graceful (优雅)', 'Makeup-Graceful'),
-  aura('Aura (气质)', 'Makeup-Aura'),
-  maiden('Maiden (少女)', 'Makeup-Maiden'),
-  young('Young (学妹)', 'Makeup-Young');
-
-  const _StyleMakeupTemplate(this.label, this.templateName);
   final String label;
   final String? templateName;
+
+  bool get isNone => templateName == null;
 }
 
-// ---------- Filter options ----------
-/// Filter template names (English) from the "暖色系" category of the bundle.
-enum _FilterTemplate {
-  none('None', null),
-  serene('Serene (沉稳)', 'Filter-Serene'),
-  urban('Urban (都市)', 'Filter-Urban'),
-  glow('Glow (流光)', 'Filter-Glow'),
-  gilt('Gilt (鎏金)', 'Filter-Gilt'),
-  cream('Cream (奶油)', 'Filter-Cream');
+const advancedBeautyNoneTemplate = AdvancedBeautyTemplateOption('None', null);
 
-  const _FilterTemplate(this.label, this.templateName);
-  final String label;
-  final String? templateName;
+class AdvancedBeautyTemplateCatalog {
+  const AdvancedBeautyTemplateCatalog({
+    required this.beautyTemplates,
+    required this.styleMakeupTemplates,
+    required this.filterTemplates,
+    required this.stickerTemplates,
+    this.defaultBeautyTemplateName,
+  });
+
+  const AdvancedBeautyTemplateCatalog.empty()
+      : beautyTemplates = const [],
+        styleMakeupTemplates = const [advancedBeautyNoneTemplate],
+        filterTemplates = const [advancedBeautyNoneTemplate],
+        stickerTemplates = const [advancedBeautyNoneTemplate],
+        defaultBeautyTemplateName = null;
+
+  final List<AdvancedBeautyTemplateOption> beautyTemplates;
+  final List<AdvancedBeautyTemplateOption> styleMakeupTemplates;
+  final List<AdvancedBeautyTemplateOption> filterTemplates;
+  final List<AdvancedBeautyTemplateOption> stickerTemplates;
+  final String? defaultBeautyTemplateName;
+}
+
+AdvancedBeautyTemplateCatalog advancedBeautyTemplateCatalogFromConfigJson(
+  String configJson,
+) {
+  final decoded = jsonDecode(configJson);
+  if (decoded is! Map<String, dynamic>) {
+    return const AdvancedBeautyTemplateCatalog.empty();
+  }
+  return advancedBeautyTemplateCatalogFromConfig(decoded);
+}
+
+AdvancedBeautyTemplateCatalog advancedBeautyTemplateCatalogFromConfig(
+  Map<String, dynamic> config,
+) {
+  final options = <String, dynamic>{};
+  final userInterfaceOption = config['user_interface_option'];
+  if (userInterfaceOption is Map) {
+    for (final entry in userInterfaceOption.entries) {
+      if (entry.key is String) {
+        options[entry.key as String] = entry.value;
+      }
+    }
+  }
+
+  return AdvancedBeautyTemplateCatalog(
+    beautyTemplates: _templateOptionsByPrefix(options, 'Beauty-'),
+    styleMakeupTemplates: [
+      advancedBeautyNoneTemplate,
+      ..._templateOptionsByPrefix(options, 'Makeup-'),
+    ],
+    filterTemplates: [
+      advancedBeautyNoneTemplate,
+      ..._templateOptionsByPrefix(options, 'Filter-'),
+    ],
+    stickerTemplates: [
+      advancedBeautyNoneTemplate,
+      ..._templateOptionsByPrefix(options, 'Sticker-'),
+    ],
+    defaultBeautyTemplateName: config['beauty_config'] as String?,
+  );
+}
+
+List<AdvancedBeautyTemplateOption> _templateOptionsByPrefix(
+  Map<String, dynamic> options,
+  String prefix,
+) {
+  return options.keys
+      .where((name) => name.startsWith(prefix))
+      .map((name) => AdvancedBeautyTemplateOption(name, name))
+      .toList(growable: false);
+}
+
+bool _shouldSkipBeautyMaterialArchiveEntry(String entryName) {
+  return entryName.startsWith('__MACOSX/') || entryName.endsWith('.DS_Store');
+}
+
+String _resolveBeautyMaterialRootDirName(Archive archive) {
+  final rootDirNames = <String>{};
+  for (final file in archive.files) {
+    final entryName = file.name;
+    if (_shouldSkipBeautyMaterialArchiveEntry(entryName)) {
+      continue;
+    }
+    final segments = entryName.split('/');
+    if (segments.isNotEmpty && segments.first.isNotEmpty) {
+      rootDirNames.add(segments.first);
+    }
+  }
+
+  if (rootDirNames.isEmpty) {
+    throw StateError('No valid beauty material root directory found in zip');
+  }
+  if (rootDirNames.length == 1) {
+    return rootDirNames.first;
+  }
+  if (rootDirNames.contains('beauty_material_functional')) {
+    return 'beauty_material_functional';
+  }
+  throw StateError(
+    'Expected a single beauty material root directory, found: $rootDirNames',
+  );
+}
+
+Future<String> extractBeautyMaterialZip({
+  required List<int> zipBytes,
+  required String targetRootPath,
+}) async {
+  final archive = ZipDecoder().decodeBytes(zipBytes);
+  final rootDirName = _resolveBeautyMaterialRootDirName(archive);
+  final targetDir = Directory('$targetRootPath/$rootDirName');
+
+  if (await targetDir.exists()) {
+    await targetDir.delete(recursive: true);
+  }
+
+  for (final file in archive.files) {
+    final entryName = file.name;
+    if (_shouldSkipBeautyMaterialArchiveEntry(entryName)) {
+      continue;
+    }
+
+    final outputPath = '$targetRootPath/$entryName';
+    if (file.isFile) {
+      final data = file.content as List<int>;
+      File(outputPath)
+        ..createSync(recursive: true)
+        ..writeAsBytesSync(data);
+    } else {
+      Directory(outputPath).createSync(recursive: true);
+    }
+  }
+
+  return targetDir.path;
 }
 
 class _State extends State<AdvancedBeauty> with KeepRemoteVideoViewsMixin {
@@ -75,10 +184,6 @@ class _State extends State<AdvancedBeauty> with KeepRemoteVideoViewsMixin {
   bool _isJoined = false;
   late TextEditingController _channelIdController;
 
-  // Editable sub-dir inside Documents.
-  // Switch to 'beauty_material_efficient' for the lightweight version.
-  late final TextEditingController _bundleDirController;
-
   // Resolved absolute path shown in the UI.
   String? _resolvedBundlePath;
 
@@ -86,7 +191,9 @@ class _State extends State<AdvancedBeauty> with KeepRemoteVideoViewsMixin {
 
   // ---- UI state ----
   bool _beautyEnabled = false;
-  _BeautyTemplate _beautyTemplate = _BeautyTemplate.basic;
+  AdvancedBeautyTemplateCatalog _templateCatalog =
+      const AdvancedBeautyTemplateCatalog.empty();
+  AdvancedBeautyTemplateOption? _beautyTemplate;
 
   // beauty_effect_option params
   double _smoothness = 0.5; // 磨皮  0~1
@@ -101,25 +208,26 @@ class _State extends State<AdvancedBeauty> with KeepRemoteVideoViewsMixin {
   int _faceStyle = -1;
   int _faceIntensity = 50; // 0~100
 
-  _StyleMakeupTemplate _styleMakeup = _StyleMakeupTemplate.none;
+  AdvancedBeautyTemplateOption _styleMakeup = advancedBeautyNoneTemplate;
   double _makeupIntensity = 1.0; // style_effect_option / styleIntensity 0~1
 
-  _FilterTemplate _filter = _FilterTemplate.none;
+  AdvancedBeautyTemplateOption _filter = advancedBeautyNoneTemplate;
   double _filterStrength = 0.5; // filter_effect_option / strength 0~1
+
+  AdvancedBeautyTemplateOption _sticker = advancedBeautyNoneTemplate;
+  double _stickerStrength = 1.0; // sticker_effect_option / strength 0~1
+  bool _stickerEnabled = false;
 
   @override
   void initState() {
     super.initState();
     _channelIdController = TextEditingController(text: config.channelId);
-    _bundleDirController =
-        TextEditingController(text: 'beauty_material_functional');
     _initEngine();
   }
 
   @override
   void dispose() {
     super.dispose();
-    _bundleDirController.dispose();
     _channelIdController.dispose();
     _dispose();
   }
@@ -180,36 +288,86 @@ class _State extends State<AdvancedBeauty> with KeepRemoteVideoViewsMixin {
   // ---- VideoEffectObject lifecycle ----
   Future<String> setupBeautyMaterials() async {
     final directory = await getApplicationDocumentsDirectory();
-    final targetPath = '${directory.path}/beauty_material_functional';
-    final targetDir = Directory(targetPath);
-
-    if (await targetDir.exists()) {
-      return targetPath;
-    }
-
     final ByteData data =
         await rootBundle.load('assets/zips/beauty_material.zip');
-    final bytes = data.buffer.asUint8List();
+    return extractBeautyMaterialZip(
+      zipBytes: data.buffer.asUint8List(),
+      targetRootPath: directory.path,
+    );
+  }
 
-    final archive = ZipDecoder().decodeBytes(bytes);
-    for (final file in archive) {
-      final filename = file.name;
-      if (file.isFile) {
-        final data = file.content as List<int>;
-        File('${directory.path}/$filename')
-          ..createSync(recursive: true)
-          ..writeAsBytesSync(data);
-      } else {
-        Directory('${directory.path}/$filename').createSync(recursive: true);
+  Future<AdvancedBeautyTemplateCatalog> _loadTemplateCatalog(
+    String bundlePath,
+  ) async {
+    final configFile = File('$bundlePath/config.json');
+    if (!await configFile.exists()) {
+      return const AdvancedBeautyTemplateCatalog.empty();
+    }
+    return advancedBeautyTemplateCatalogFromConfigJson(
+      await configFile.readAsString(),
+    );
+  }
+
+  AdvancedBeautyTemplateOption? _findTemplateOption(
+    List<AdvancedBeautyTemplateOption> options,
+    String? templateName,
+  ) {
+    if (templateName == null) return null;
+    for (final option in options) {
+      if (option.templateName == templateName) {
+        return option;
       }
     }
-    return targetPath;
+    return null;
+  }
+
+  AdvancedBeautyTemplateOption? _resolveBeautyTemplate(
+    AdvancedBeautyTemplateCatalog catalog,
+  ) {
+    return _findTemplateOption(
+          catalog.beautyTemplates,
+          _beautyTemplate?.templateName,
+        ) ??
+        _findTemplateOption(
+          catalog.beautyTemplates,
+          catalog.defaultBeautyTemplateName,
+        ) ??
+        (catalog.beautyTemplates.isNotEmpty
+            ? catalog.beautyTemplates.first
+            : null);
+  }
+
+  AdvancedBeautyTemplateOption _resolveOptionalTemplate(
+    List<AdvancedBeautyTemplateOption> options,
+    String? templateName,
+  ) {
+    return _findTemplateOption(options, templateName) ?? options.first;
+  }
+
+  void _applyTemplateCatalog(AdvancedBeautyTemplateCatalog catalog) {
+    setState(() {
+      _templateCatalog = catalog;
+      _beautyTemplate = _resolveBeautyTemplate(catalog);
+      _styleMakeup = _resolveOptionalTemplate(
+        catalog.styleMakeupTemplates,
+        _styleMakeup.templateName,
+      );
+      _filter = _resolveOptionalTemplate(
+        catalog.filterTemplates,
+        _filter.templateName,
+      );
+      _sticker = _resolveOptionalTemplate(
+        catalog.stickerTemplates,
+        _sticker.templateName,
+      );
+    });
   }
 
   Future<void> _createVideoEffectObject() async {
     if (_videoEffectObject != null) return;
     try {
       _resolvedBundlePath = await setupBeautyMaterials();
+      _applyTemplateCatalog(await _loadTemplateCatalog(_resolvedBundlePath!));
       logSink.log('[createVideoEffectObject] bundlePath: $_resolvedBundlePath');
       _videoEffectObject = await _engine.createVideoEffectObject(
         bundlePath: _resolvedBundlePath!,
@@ -221,7 +379,9 @@ class _State extends State<AdvancedBeauty> with KeepRemoteVideoViewsMixin {
         return;
       }
       logSink.log('[createVideoEffectObject] success');
-      await _applyBeauty();
+      if (_beautyTemplate != null) {
+        await _applyBeauty();
+      }
       setState(() {});
     } catch (e) {
       logSink.log('[createVideoEffectObject] failed: $e');
@@ -239,8 +399,11 @@ class _State extends State<AdvancedBeauty> with KeepRemoteVideoViewsMixin {
       setState(() {
         _videoEffectObject = null;
         _beautyEnabled = false;
-        _styleMakeup = _StyleMakeupTemplate.none;
-        _filter = _FilterTemplate.none;
+        _beautyTemplate = _resolveBeautyTemplate(_templateCatalog);
+        _styleMakeup = _templateCatalog.styleMakeupTemplates.first;
+        _filter = _templateCatalog.filterTemplates.first;
+        _sticker = _templateCatalog.stickerTemplates.first;
+        _stickerEnabled = false;
       });
     }
   }
@@ -280,12 +443,15 @@ class _State extends State<AdvancedBeauty> with KeepRemoteVideoViewsMixin {
   // ---- Beauty (BEAUTY node) ----
 
   Future<void> _applyBeauty() async {
-    if (_videoEffectObject == null) return;
+    final beautyTemplate = _beautyTemplate;
+    if (_videoEffectObject == null || beautyTemplate?.templateName == null) {
+      return;
+    }
     try {
       // Load beauty template (this activates the node and loads saved configs / defaults)
       await _videoEffectObject!.addOrUpdateVideoEffect(
         nodeId: VideoEffectNodeId.beauty.value(),
-        templateName: _beautyTemplate.templateName,
+        templateName: beautyTemplate!.templateName!,
       );
 
       // Fetch the actual parameters from the SDK and update the UI
@@ -294,7 +460,7 @@ class _State extends State<AdvancedBeauty> with KeepRemoteVideoViewsMixin {
       });
 
       logSink
-          .log('[applyBeauty] DONE. template: ${_beautyTemplate.templateName}');
+          .log('[applyBeauty] DONE. template: ${beautyTemplate.templateName}');
       setState(() {
         _beautyEnabled = true;
       });
@@ -348,10 +514,10 @@ class _State extends State<AdvancedBeauty> with KeepRemoteVideoViewsMixin {
 
   // ---- Style Makeup (STYLE_MAKEUP node) ----
 
-  Future<void> _applyStyleMakeup(_StyleMakeupTemplate template) async {
+  Future<void> _applyStyleMakeup(AdvancedBeautyTemplateOption template) async {
     if (_videoEffectObject == null) return;
     try {
-      if (template == _StyleMakeupTemplate.none) {
+      if (template.isNone) {
         await _videoEffectObject!
             .removeVideoEffect(VideoEffectNodeId.styleMakeup.value());
         logSink.log('[removeVideoEffect] styleMakeup removed');
@@ -372,8 +538,8 @@ class _State extends State<AdvancedBeauty> with KeepRemoteVideoViewsMixin {
       setState(() {
         _styleMakeup = template;
         // Makeup and filter are mutually exclusive (makeup takes priority)
-        if (template != _StyleMakeupTemplate.none) {
-          _filter = _FilterTemplate.none;
+        if (!template.isNone) {
+          _filter = _templateCatalog.filterTemplates.first;
         }
       });
     } on AgoraRtcException catch (e) {
@@ -386,16 +552,16 @@ class _State extends State<AdvancedBeauty> with KeepRemoteVideoViewsMixin {
 
   // ---- Filter (FILTER node) ----
 
-  Future<void> _applyFilter(_FilterTemplate template) async {
+  Future<void> _applyFilter(AdvancedBeautyTemplateOption template) async {
     if (_videoEffectObject == null) return;
     try {
-      if (template == _FilterTemplate.none) {
+      if (template.isNone) {
         await _videoEffectObject!
             .removeVideoEffect(VideoEffectNodeId.filter.value());
         logSink.log('[removeVideoEffect] filter removed');
       } else {
         // Style makeup takes priority: remove makeup first
-        if (_styleMakeup != _StyleMakeupTemplate.none) {
+        if (!_styleMakeup.isNone) {
           await _videoEffectObject!
               .removeVideoEffect(VideoEffectNodeId.styleMakeup.value());
           logSink.log('[removeVideoEffect] styleMakeup removed for filter');
@@ -413,14 +579,51 @@ class _State extends State<AdvancedBeauty> with KeepRemoteVideoViewsMixin {
       }
       setState(() {
         _filter = template;
-        if (template != _FilterTemplate.none) {
-          _styleMakeup = _StyleMakeupTemplate.none;
+        if (!template.isNone) {
+          _styleMakeup = _templateCatalog.styleMakeupTemplates.first;
         }
       });
     } on AgoraRtcException catch (e) {
       logSink.log('[applyFilter] AgoraRtcException: ${e.code}, ${e.message}');
     } catch (e) {
       logSink.log('[applyFilter] failed: $e');
+    }
+  }
+
+  // ---- Sticker (STICKER node) ----
+
+  Future<void> _applySticker(AdvancedBeautyTemplateOption template) async {
+    if (_videoEffectObject == null) return;
+    try {
+      if (template.isNone) {
+        await _videoEffectObject!
+            .removeVideoEffect(VideoEffectNodeId.sticker.value());
+        logSink.log('[removeVideoEffect] sticker removed');
+      } else {
+        await _videoEffectObject!.addOrUpdateVideoEffect(
+          nodeId: VideoEffectNodeId.sticker.value(),
+          templateName: template.templateName!,
+        );
+        await _videoEffectObject!.setVideoEffectBoolParam(
+          option: 'sticker_effect_option',
+          key: 'enable',
+          param: true,
+        );
+        await _videoEffectObject!.setVideoEffectFloatParam(
+          option: 'sticker_effect_option',
+          key: 'strength',
+          param: _stickerStrength,
+        );
+        logSink.log('[applySticker] DONE. template: ${template.templateName}');
+      }
+      setState(() {
+        _sticker = template;
+        _stickerEnabled = !template.isNone;
+      });
+    } on AgoraRtcException catch (e) {
+      logSink.log('[applySticker] AgoraRtcException: ${e.code}, ${e.message}');
+    } catch (e) {
+      logSink.log('[applySticker] failed: $e');
     }
   }
 
@@ -498,14 +701,9 @@ class _State extends State<AdvancedBeauty> with KeepRemoteVideoViewsMixin {
         const Text('Video Effect Object',
             style: TextStyle(fontWeight: FontWeight.bold)),
         const SizedBox(height: 4),
-        TextField(
-          controller: _bundleDirController,
-          enabled: !hasObject,
-          decoration: const InputDecoration(
-            labelText: 'Bundle sub-dir (in Documents)',
-            hintText: 'beauty_material_functional',
-            isDense: true,
-          ),
+        const Text(
+          'Source zip: assets/zips/beauty_material.zip',
+          style: TextStyle(fontSize: 12, color: Colors.grey),
         ),
         if (_resolvedBundlePath != null)
           Padding(
@@ -540,18 +738,24 @@ class _State extends State<AdvancedBeauty> with KeepRemoteVideoViewsMixin {
               style: TextStyle(fontWeight: FontWeight.bold)),
           const SizedBox(height: 4),
           const Text('Template:', style: TextStyle(fontSize: 12)),
-          DropdownButton<_BeautyTemplate>(
-            isExpanded: true,
-            value: _beautyTemplate,
-            items: _BeautyTemplate.values.map((t) {
-              return DropdownMenuItem(value: t, child: Text(t.label));
-            }).toList(),
-            onChanged: (t) {
-              if (t == null) return;
-              setState(() => _beautyTemplate = t);
-              _applyBeauty();
-            },
-          ),
+          if (_templateCatalog.beautyTemplates.isNotEmpty)
+            DropdownButton<AdvancedBeautyTemplateOption>(
+              isExpanded: true,
+              value: _beautyTemplate,
+              items: _templateCatalog.beautyTemplates.map((t) {
+                return DropdownMenuItem(value: t, child: Text(t.label));
+              }).toList(),
+              onChanged: (t) {
+                if (t == null) return;
+                setState(() => _beautyTemplate = t);
+                _applyBeauty();
+              },
+            )
+          else
+            const Text(
+              'No beauty templates found in config.json',
+              style: TextStyle(fontSize: 12, color: Colors.grey),
+            ),
           _buildSlider(
             label: '磨皮 smoothness',
             value: _smoothness,
@@ -685,10 +889,10 @@ class _State extends State<AdvancedBeauty> with KeepRemoteVideoViewsMixin {
             'Style makeup and filters are mutually exclusive, and filters are automatically removed when selecting makeup',
             style: TextStyle(fontSize: 11, color: Colors.grey),
           ),
-          DropdownButton<_StyleMakeupTemplate>(
+          DropdownButton<AdvancedBeautyTemplateOption>(
             isExpanded: true,
             value: _styleMakeup,
-            items: _StyleMakeupTemplate.values.map((t) {
+            items: _templateCatalog.styleMakeupTemplates.map((t) {
               return DropdownMenuItem(value: t, child: Text(t.label));
             }).toList(),
             onChanged: (t) {
@@ -696,7 +900,7 @@ class _State extends State<AdvancedBeauty> with KeepRemoteVideoViewsMixin {
               _applyStyleMakeup(t);
             },
           ),
-          if (_styleMakeup != _StyleMakeupTemplate.none)
+          if (!_styleMakeup.isNone)
             _buildSlider(
               label: '妆容强度 styleIntensity',
               value: _makeupIntensity,
@@ -715,10 +919,10 @@ class _State extends State<AdvancedBeauty> with KeepRemoteVideoViewsMixin {
           // ---- FILTER ----
           const Text('Filter (FILTER node)',
               style: TextStyle(fontWeight: FontWeight.bold)),
-          DropdownButton<_FilterTemplate>(
+          DropdownButton<AdvancedBeautyTemplateOption>(
             isExpanded: true,
             value: _filter,
-            items: _FilterTemplate.values.map((t) {
+            items: _templateCatalog.filterTemplates.map((t) {
               return DropdownMenuItem(value: t, child: Text(t.label));
             }).toList(),
             onChanged: (t) {
@@ -726,7 +930,7 @@ class _State extends State<AdvancedBeauty> with KeepRemoteVideoViewsMixin {
               _applyFilter(t);
             },
           ),
-          if (_filter != _FilterTemplate.none)
+          if (!_filter.isNone)
             _buildSlider(
               label: '滤镜强度 strength',
               value: _filterStrength,
@@ -735,6 +939,36 @@ class _State extends State<AdvancedBeauty> with KeepRemoteVideoViewsMixin {
                 // Live update filter strength
                 _videoEffectObject?.setVideoEffectFloatParam(
                   option: 'filter_effect_option',
+                  key: 'strength',
+                  param: v,
+                );
+              },
+            ),
+
+          const Divider(),
+
+          // ---- STICKER ----
+          const Text('Sticker (STICKER node)',
+              style: TextStyle(fontWeight: FontWeight.bold)),
+          DropdownButton<AdvancedBeautyTemplateOption>(
+            isExpanded: true,
+            value: _sticker,
+            items: _templateCatalog.stickerTemplates.map((t) {
+              return DropdownMenuItem(value: t, child: Text(t.label));
+            }).toList(),
+            onChanged: (t) {
+              if (t == null) return;
+              _applySticker(t);
+            },
+          ),
+          if (_stickerEnabled)
+            _buildSlider(
+              label: '贴纸强度 strength',
+              value: _stickerStrength,
+              onChanged: (v) {
+                setState(() => _stickerStrength = v);
+                _videoEffectObject?.setVideoEffectFloatParam(
+                  option: 'sticker_effect_option',
                   key: 'strength',
                   param: v,
                 );

@@ -4,7 +4,7 @@ version: 1.0.0
 # homepage: https://www.example.com
 
 environment:
-  sdk: '>=2.17.0 <3.0.0'
+  sdk: '>=2.17.0 <4.0.0'
 
 publish_to: none
 
@@ -16,4 +16,5 @@ dev_dependencies:
   lints: ^1.0.0
   # lock the version of analyzer to avoid non-consistent generated code and errors like:
   # lib/core/paraphrase.dart:352:53: Error: The getter 'name' isn't defined for the class 'Token'.
-  analyzer: 4.7.0
+  analyzer: ^6.4.1
+  test: ^1.25.0

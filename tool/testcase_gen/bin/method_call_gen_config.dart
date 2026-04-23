@@ -113,6 +113,7 @@ testWidgets('{{TEST_CASE_NAME}}', (WidgetTester tester) async {
       skipMemberFunctions: [
         'destroyMediaPlayer',
         'destroyMediaRecorder',
+        'destroyVideoEffectObject',
         // These cases should handle the list size manually.
         'setLocalAccessPoint',
         'startChannelMediaRelay',
@@ -124,6 +125,9 @@ testWidgets('{{TEST_CASE_NAME}}', (WidgetTester tester) async {
         'queryCodecCapability',
         'setHighPriorityUserList',
         'startOrUpdateChannelMediaRelay',
+        // Deprecated/removed APIs
+        'enableWirelessAccelerate',
+        'setLocalPublishFallbackOption',
       ],
       outputFileSuffixName: 'fake_test',
     ),
@@ -187,6 +191,8 @@ testWidgets('{{TEST_CASE_NAME}}', (WidgetTester tester) async {
         'updateChannelMediaRelayEx',
         'startOrUpdateChannelMediaRelayEx',
         'setHighPriorityUserListEx',
+        // Deprecated/removed APIs
+        'enableVideoImageSourceEx',
       ],
       outputFileSuffixName: 'fake_test',
     ),

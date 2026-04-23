@@ -52,6 +52,8 @@ class _State extends State<JoinMultipleChannel> {
       appId: config.appId,
       channelProfile: ChannelProfileType.channelProfileLiveBroadcasting,
     ));
+    // Set enableArgusCounters after initialize (since RtcEngineContext is auto-generated)
+    _engine.setEnableArgusCounters(true);
 
     _engine.registerEventHandler(RtcEngineEventHandler(
       onError: (ErrorCodeType err, String msg) {
@@ -111,6 +113,10 @@ class _State extends State<JoinMultipleChannel> {
             remoteUid1.clear();
           });
         }
+      },
+      onLocalVideoStats: (RtcConnection connection, LocalVideoStats stats) {
+        logSink.log(
+            'onLocalVideoStats: connection: ${connection.toJson()} stats: ${stats.uid}');
       },
     ));
 
@@ -212,7 +218,12 @@ class _State extends State<JoinMultipleChannel> {
               controller: VideoViewController(
                 rtcEngine: _engine,
                 canvas: const VideoCanvas(uid: 0),
+                useFlutterTexture: true,
+                useAndroidSurfaceView: false,
               ),
+              onAgoraVideoViewCreated: (viewId) {
+                _engine.startPreview();
+              },
             ),
             if (remoteUid.isNotEmpty)
               Align(
@@ -228,6 +239,7 @@ class _State extends State<JoinMultipleChannel> {
                                 rtcEngine: _engine,
                                 canvas: VideoCanvas(uid: e),
                                 connection: connection,
+                                useFlutterTexture: true,
                               ),
                             )),
                       )

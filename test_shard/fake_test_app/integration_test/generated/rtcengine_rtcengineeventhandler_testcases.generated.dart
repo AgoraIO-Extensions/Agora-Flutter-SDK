@@ -1721,6 +1721,71 @@ void generatedTestCases(ValueGetter<IrisTester> irisTester) {
   );
 
   testWidgets(
+    'RtcEngineEventHandler.onLocalVideoEvent',
+    (WidgetTester tester) async {
+      RtcEngine rtcEngine = createAgoraRtcEngine();
+      await rtcEngine.initialize(RtcEngineContext(
+        appId: 'app_id',
+        areaCode: AreaCode.areaCodeGlob.value(),
+      ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
+
+      final onLocalVideoEventCompleter = Completer<bool>();
+      final theRtcEngineEventHandler = RtcEngineEventHandler(
+        onLocalVideoEvent: (VideoSourceType source, LocalVideoEventType event) {
+          onLocalVideoEventCompleter.complete(true);
+        },
+      );
+
+      rtcEngine.registerEventHandler(
+        theRtcEngineEventHandler,
+      );
+
+// Delay 500 milliseconds to ensure the registerEventHandler call completed.
+      await Future.delayed(const Duration(milliseconds: 500));
+
+      {
+        VideoSourceType source = VideoSourceType.videoSourceCameraPrimary;
+        LocalVideoEventType event =
+            LocalVideoEventType.localVideoEventTypeScreenCaptureWindowHidden;
+
+        final eventJson = {
+          'source': source.value(),
+          'event': event.value(),
+        };
+
+        final eventIds =
+            eventIdsMapping['RtcEngineEventHandler_onLocalVideoEvent'] ?? [];
+        for (final event in eventIds) {
+          final ret = irisTester().fireEvent(event, params: eventJson);
+          // Delay 200 milliseconds to ensure the callback is called.
+          await Future.delayed(const Duration(milliseconds: 200));
+          // TODO(littlegnal): Most of callbacks on web are not implemented, we're temporarily skip these callbacks at this time.
+          if (kIsWeb && ret) {
+            if (!onLocalVideoEventCompleter.isCompleted) {
+              onLocalVideoEventCompleter.complete(true);
+            }
+          }
+        }
+      }
+
+      final eventCalled = await onLocalVideoEventCompleter.future;
+      expect(eventCalled, isTrue);
+
+      {
+        rtcEngine.unregisterEventHandler(
+          theRtcEngineEventHandler,
+        );
+      }
+// Delay 500 milliseconds to ensure the unregisterEventHandler call completed.
+      await Future.delayed(const Duration(milliseconds: 500));
+
+      await rtcEngine.release();
+    },
+    timeout: const Timeout(Duration(minutes: 2)),
+  );
+
+  testWidgets(
     'RtcEngineEventHandler.onLocalVideoStateChanged',
     (WidgetTester tester) async {
       RtcEngine rtcEngine = createAgoraRtcEngine();
@@ -6889,6 +6954,92 @@ void generatedTestCases(ValueGetter<IrisTester> irisTester) {
       }
 
       final eventCalled = await onSetRtmFlagResultCompleter.future;
+      expect(eventCalled, isTrue);
+
+      {
+        rtcEngine.unregisterEventHandler(
+          theRtcEngineEventHandler,
+        );
+      }
+// Delay 500 milliseconds to ensure the unregisterEventHandler call completed.
+      await Future.delayed(const Duration(milliseconds: 500));
+
+      await rtcEngine.release();
+    },
+    timeout: const Timeout(Duration(minutes: 2)),
+  );
+
+  testWidgets(
+    'RtcEngineEventHandler.onMultipathStats',
+    (WidgetTester tester) async {
+      RtcEngine rtcEngine = createAgoraRtcEngine();
+      await rtcEngine.initialize(RtcEngineContext(
+        appId: 'app_id',
+        areaCode: AreaCode.areaCodeGlob.value(),
+      ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
+
+      final onMultipathStatsCompleter = Completer<bool>();
+      final theRtcEngineEventHandler = RtcEngineEventHandler(
+        onMultipathStats: (RtcConnection connection, MultipathStats stats) {
+          onMultipathStatsCompleter.complete(true);
+        },
+      );
+
+      rtcEngine.registerEventHandler(
+        theRtcEngineEventHandler,
+      );
+
+// Delay 500 milliseconds to ensure the registerEventHandler call completed.
+      await Future.delayed(const Duration(milliseconds: 500));
+
+      {
+        String connectionChannelId = "hello";
+        int connectionLocalUid = 5;
+        RtcConnection connection = RtcConnection(
+          channelId: connectionChannelId,
+          localUid: connectionLocalUid,
+        );
+        int statsLanTxBytes = 5;
+        int statsLanRxBytes = 5;
+        int statsWifiTxBytes = 5;
+        int statsWifiRxBytes = 5;
+        int statsMobileTxBytes = 5;
+        int statsMobileRxBytes = 5;
+        int statsActivePathNum = 5;
+        List<PathStats> statsPathStats = [];
+        MultipathStats stats = MultipathStats(
+          lanTxBytes: statsLanTxBytes,
+          lanRxBytes: statsLanRxBytes,
+          wifiTxBytes: statsWifiTxBytes,
+          wifiRxBytes: statsWifiRxBytes,
+          mobileTxBytes: statsMobileTxBytes,
+          mobileRxBytes: statsMobileRxBytes,
+          activePathNum: statsActivePathNum,
+          pathStats: statsPathStats,
+        );
+
+        final eventJson = {
+          'connection': connection.toJson(),
+          'stats': stats.toJson(),
+        };
+
+        final eventIds =
+            eventIdsMapping['RtcEngineEventHandler_onMultipathStats'] ?? [];
+        for (final event in eventIds) {
+          final ret = irisTester().fireEvent(event, params: eventJson);
+          // Delay 200 milliseconds to ensure the callback is called.
+          await Future.delayed(const Duration(milliseconds: 200));
+          // TODO(littlegnal): Most of callbacks on web are not implemented, we're temporarily skip these callbacks at this time.
+          if (kIsWeb && ret) {
+            if (!onMultipathStatsCompleter.isCompleted) {
+              onMultipathStatsCompleter.complete(true);
+            }
+          }
+        }
+      }
+
+      final eventCalled = await onMultipathStatsCompleter.future;
       expect(eventCalled, isTrue);
 
       {

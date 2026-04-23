@@ -91,8 +91,6 @@ class _State extends State<MediaPlayer> {
       },
     ));
 
-    _mediaPlayerController = MediaPlayerController(
-        rtcEngine: _engine, canvas: const VideoCanvas(uid: 0));
     await _mediaPlayerController.initialize();
     _mediaPlayerController.registerPlayerSourceObserver(
       MediaPlayerSourceObserver(

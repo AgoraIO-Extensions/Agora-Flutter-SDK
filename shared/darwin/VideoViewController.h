@@ -26,7 +26,8 @@
                            uid:(NSNumber *)uid
                      channelId:(NSString *)channelId
                videoSourceType:(NSNumber *)videoSourceType
-            videoViewSetupMode:(NSNumber *)videoViewSetupMode;
+            videoViewSetupMode:(NSNumber *)videoViewSetupMode
+           enableArgusCounters:(BOOL)enableArgusCounters;
 
 - (BOOL)destroyTextureRender:(int64_t)textureId;
 
