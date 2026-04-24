@@ -638,6 +638,9 @@ ChannelMediaOptions _$ChannelMediaOptionsFromJson(Map<String, dynamic> json) =>
       publishCustomAudioTrack: json['publishCustomAudioTrack'] as bool?,
       publishCustomAudioTrackId:
           (json['publishCustomAudioTrackId'] as num?)?.toInt(),
+      publishLoopbackAudioTrack: json['publishLoopbackAudioTrack'] as bool?,
+      publishLoopbackAudioTrackId:
+          (json['publishLoopbackAudioTrackId'] as num?)?.toInt(),
       publishCustomVideoTrack: json['publishCustomVideoTrack'] as bool?,
       publishEncodedVideoTrack: json['publishEncodedVideoTrack'] as bool?,
       publishMediaPlayerAudioTrack:
@@ -698,6 +701,9 @@ Map<String, dynamic> _$ChannelMediaOptionsToJson(ChannelMediaOptions instance) {
   writeNotNull('publishFourthScreenTrack', instance.publishFourthScreenTrack);
   writeNotNull('publishCustomAudioTrack', instance.publishCustomAudioTrack);
   writeNotNull('publishCustomAudioTrackId', instance.publishCustomAudioTrackId);
+  writeNotNull('publishLoopbackAudioTrack', instance.publishLoopbackAudioTrack);
+  writeNotNull(
+      'publishLoopbackAudioTrackId', instance.publishLoopbackAudioTrackId);
   writeNotNull('publishCustomVideoTrack', instance.publishCustomVideoTrack);
   writeNotNull('publishEncodedVideoTrack', instance.publishEncodedVideoTrack);
   writeNotNull(
