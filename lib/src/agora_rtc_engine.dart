@@ -1373,6 +1373,8 @@ class ChannelMediaOptions implements AgoraSerializable {
       this.publishFourthScreenTrack,
       this.publishCustomAudioTrack,
       this.publishCustomAudioTrackId,
+      this.publishLoopbackAudioTrack,
+      this.publishLoopbackAudioTrackId,
       this.publishCustomVideoTrack,
       this.publishEncodedVideoTrack,
       this.publishMediaPlayerAudioTrack,
@@ -1450,6 +1452,14 @@ class ChannelMediaOptions implements AgoraSerializable {
   /// ID of the custom audio track to be published. Default is 0. You can get the custom audio track ID via the createCustomAudioTrack method.
   @JsonKey(name: 'publishCustomAudioTrackId')
   final int? publishCustomAudioTrackId;
+
+  /// @nodoc
+  @JsonKey(name: 'publishLoopbackAudioTrack')
+  final bool? publishLoopbackAudioTrack;
+
+  /// @nodoc
+  @JsonKey(name: 'publishLoopbackAudioTrackId')
+  final int? publishLoopbackAudioTrackId;
 
   /// Sets whether to publish custom captured video: true : Publish the custom captured video. false : Do not publish the custom captured video.
   @JsonKey(name: 'publishCustomVideoTrack')

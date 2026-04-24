@@ -1362,6 +1362,13 @@ const _$ErrorCodeTypeEnumMap = {
   ErrorCodeType.errAdmStartRecording: 1012,
   ErrorCodeType.errAdmStopRecording: 1013,
   ErrorCodeType.errVdmCameraNotAuthorized: 1501,
+  ErrorCodeType.errAdmApplicationLoopback: 2007,
+  ErrorCodeType.errAdmApplicationLoopbackStopped: 2008,
+  ErrorCodeType.errAdmSystemLoopback: 2009,
+  ErrorCodeType.errAdmSystemLoopbackStopped: 2010,
+  ErrorCodeType.errAdmLoopbackNoPermission: 2011,
+  ErrorCodeType.errAdmLoopbackSilentDetected: 2012,
+  ErrorCodeType.errAdmLoopbackSilentRecovered: 2013,
 };
 
 RtcEngineEventHandlerOnAudioQualityJson
