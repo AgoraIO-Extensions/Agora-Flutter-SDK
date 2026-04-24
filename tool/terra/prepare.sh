@@ -11,7 +11,7 @@ rm -rf yarn.lock
 
 echo "nodeLinker: node-modules" >> .yarnrc.yml
 echo "enableImmutableInstalls: false" >> .yarnrc.yml
-yarn set version berry
+yarn set version 4.12.0
 yarn
 
 popd
