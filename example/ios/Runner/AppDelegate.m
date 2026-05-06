@@ -14,6 +14,9 @@
 
 - (BOOL)application:(UIApplication *)application
     didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
+    // Flutter: register all plugins before custom native setup that uses the engine.
+    [GeneratedPluginRegistrant registerWithRegistry:self];
+
     // On low power mode, the system force keep the screen on for 30s only,
     // we keep the screen on to help internal testing.
     [application setIdleTimerDisabled: YES];
@@ -79,7 +82,6 @@
         result(FlutterMethodNotImplemented);
     }];
 
-  [GeneratedPluginRegistrant registerWithRegistry:self];
   // Override point for customization after application launch.
   return [super application:application didFinishLaunchingWithOptions:launchOptions];
 }
