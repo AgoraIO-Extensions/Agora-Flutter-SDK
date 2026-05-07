@@ -1,6 +1,8 @@
 #import "TextureRenderer.h"
 #if defined(TARGET_OS_OSX) && TARGET_OS_OSX
 #import "AgoraCVPixelBufferUtils.h"
+#elif TARGET_OS_IPHONE
+#import "AgoraTextureRenderPixelBufferConverter.h"
 #endif
 
 #import <AgoraRtcKit/AgoraMediaBase.h>
@@ -26,6 +28,10 @@ using namespace agora::iris;
 @property(readwrite, nonatomic) CVPixelBufferRef latestPixelBuffer;
 /// The queue on which `latestPixelBuffer` property is accessed.
 @property(strong, nonatomic) dispatch_queue_t pixelBufferSynchronizationQueue;
+#if TARGET_OS_IPHONE
+@property(nonatomic, strong)
+    AgoraTextureRenderPixelBufferConverter *pixelBufferConverter;
+#endif
 
 @end
 
@@ -106,7 +112,9 @@ public:
       strongRenderer.latestPixelBuffer =
           [AgoraCVPixelBufferUtils copyCVPixelBuffer:pixelBuffer];
 #else
-      strongRenderer.latestPixelBuffer = CVPixelBufferRetain(pixelBuffer);
+      strongRenderer.latestPixelBuffer =
+          [strongRenderer.pixelBufferConverter
+              copyPixelBufferForFlutter:pixelBuffer];
 #endif
     });
     if (previousPixelBuffer) {
@@ -166,6 +174,10 @@ public:
         [[NSString stringWithFormat:@"io.agora.flutter.render_%lld", _textureId]
             UTF8String],
         nil);
+#if TARGET_OS_IPHONE
+    self.pixelBufferConverter =
+        [[AgoraTextureRenderPixelBufferConverter alloc] init];
+#endif
   }
   return self;
 }
