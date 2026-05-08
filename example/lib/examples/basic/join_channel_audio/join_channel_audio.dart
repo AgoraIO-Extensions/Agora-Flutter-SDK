@@ -344,8 +344,18 @@ class _State extends State<JoinChannelAudio> {
                           Switch(
                             value: _enableInEarMonitoring,
                             onChanged: isJoined ? _toggleInEarMonitoring : null,
-                            activeTrackColor: Colors.grey[350],
-                            activeColor: Colors.white,
+                            thumbColor: MaterialStateProperty.resolveWith((states) {
+                              if (states.contains(MaterialState.selected)) {
+                                return Colors.white;
+                              }
+                              return null;
+                            }),
+                            trackColor: MaterialStateProperty.resolveWith((states) {
+                              if (states.contains(MaterialState.selected)) {
+                                return Colors.grey[350];
+                              }
+                              return null;
+                            }),
                           )
                         ]),
                         if (_enableInEarMonitoring)

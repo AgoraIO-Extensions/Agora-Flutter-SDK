@@ -4,8 +4,9 @@ version: 0.0.1
 homepage:
 
 environment:
-  sdk: '>=3.2.0 <4.0.0'
-  flutter: '>=3.16.0'
+  sdk: '>=3.3.0 <4.0.0'
+  # Dart >=3.3 (extension types / dart:js_interop) ships with Flutter ~3.19+.
+  flutter: '>=3.19.0'
 
 dependencies:
   flutter:
@@ -14,7 +15,6 @@ dependencies:
     sdk: flutter
   plugin_platform_interface: ^2.0.2
   ffi: '>=2.0.0 <3.0.0'
-  js: ^0.6.3
 
 dev_dependencies:
   flutter_test:

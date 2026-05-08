@@ -770,7 +770,7 @@ class VideoCompositingLayout implements AgoraSerializable {
   final int? regionCount;
 
   /// @nodoc
-  @JsonKey(name: 'appData', ignore: true)
+  @JsonKey(name: 'appData', includeFromJson: false, includeToJson: false)
   final Uint8List? appData;
 
   /// @nodoc
@@ -1179,7 +1179,7 @@ class ThumbImageBuffer implements AgoraSerializable {
   const ThumbImageBuffer({this.buffer, this.length, this.width, this.height});
 
   /// Buffer of the thumbnail or icon.
-  @JsonKey(name: 'buffer', ignore: true)
+  @JsonKey(name: 'buffer', includeFromJson: false, includeToJson: false)
   final Uint8List? buffer;
 
   /// Length of the thumbnail or icon buffer in bytes.
@@ -3140,7 +3140,7 @@ class Metadata implements AgoraSerializable {
   final int? size;
 
   /// The buffer address of the received Metadata.
-  @JsonKey(name: 'buffer', ignore: true)
+  @JsonKey(name: 'buffer', includeFromJson: false, includeToJson: false)
   final Uint8List? buffer;
 
   /// The timestamp when the Metadata is sent, in milliseconds.
@@ -3441,7 +3441,7 @@ abstract class RtcEngine {
   ///  26 lowercase letters a~z
   ///  26 uppercase letters A~Z
   ///  10 digits 0~9
-  ///  "!", "#", "$", "%", "&", "(", ")", "+", "-", ":", ";", "<", "=", ".", ">", "?", "@", "[", "]", "^", "_", "{", "}", "|", "~", ","
+  ///  `"!", "#", "$", "%", "&", "(", ")", "+", "-", ":", ";", "<", "=", ".", ">", "?", "@", "[", "]", "^", "_", "{", "}", "|", "~", ","`
   /// * [uid] User ID. This parameter identifies the user in the real-time audio and video channel. You need to set and manage the user ID yourself and ensure it is unique within the same channel. This parameter is a 32-bit unsigned integer. Recommended range: 1 to 2^32-1. If not specified (i.e., set to 0), the SDK automatically assigns one and returns it in the onJoinChannelSuccess callback. The application must store and manage this return value, as the SDK does not maintain it.
   ///
   /// Returns
@@ -3471,13 +3471,13 @@ abstract class RtcEngine {
   ///  26 lowercase letters a~z
   ///  26 uppercase letters A~Z
   ///  10 digits 0~9
-  ///  "!", "#", "$", "%", "&", "(", ")", "+", "-", ":", ";", "<", "=", ".", ">", "?", "@", "[", "]", "^", "_", "{", "}", "|", "~", ","
+  ///  `"!", "#", "$", "%", "&", "(", ")", "+", "-", ":", ";", "<", "=", ".", ">", "?", "@", "[", "]", "^", "_", "{", "}", "|", "~", ","`
   /// * [userAccount] User account. This parameter identifies the user in the real-time audio and video channel. You need to set and manage the user account yourself and ensure it is unique within the same channel. This parameter is required, must not exceed 255 bytes, and cannot be null. Supported character set (89 characters total):
   ///  26 lowercase letters a-z
   ///  26 uppercase letters A-Z
   ///  10 digits 0-9
   ///  Space
-  ///  "!", "#", "$", "%", "&", "(", ")", "+", "-", ":", ";", "<", "=", ".", ">", "?", "@", "[", "]", "^", "_", "{", "}", "|", "~", ","
+  ///  `"!", "#", "$", "%", "&", "(", ")", "+", "-", ":", ";", "<", "=", ".", ">", "?", "@", "[", "]", "^", "_", "{", "}", "|", "~", ","`
   ///
   /// Returns
   /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown. You need to catch the exception and handle it accordingly. See [Error Codes](https://docs.agora.io/en/video-calling/troubleshooting/error-codes) for details and resolution suggestions.
@@ -3515,7 +3515,7 @@ abstract class RtcEngine {
   ///  26 lowercase letters a~z
   ///  26 uppercase letters A~Z
   ///  10 digits 0~9
-  ///  "!", "#", "$", "%", "&", "(", ")", "+", "-", ":", ";", "<", "=", ".", ">", "?", "@", "[", "]", "^", "_", "{", "}", "|", "~", ","
+  ///  `"!", "#", "$", "%", "&", "(", ")", "+", "-", ":", ";", "<", "=", ".", ">", "?", "@", "[", "]", "^", "_", "{", "}", "|", "~", ","`
   /// * [uid] User ID. This parameter identifies the user in the real-time audio and video interaction channel. You must set and manage the user ID yourself and ensure that each user ID is unique within the same channel. This parameter is a 32-bit unsigned integer. Recommended range: 1 to 2^32-1. If not specified (i.e., set to 0), the SDK automatically assigns one and returns it in the onJoinChannelSuccess callback. The application must remember and maintain this return value; the SDK does not maintain it.
   /// * [options] Channel media options. See ChannelMediaOptions.
   ///
@@ -6358,7 +6358,7 @@ abstract class RtcEngine {
   ///  26 uppercase letters A-Z
   ///  10 digits 0-9
   ///  Space
-  ///  "!", "#", "$", "%", "&", "(", ")", "+", "-", ":", ";", "<", "=", ".", ">", "?", "@", "[", "]", "^", "_", "{", "}", "|", "~", ","
+  ///  `"!", "#", "$", "%", "&", "(", ")", "+", "-", ":", ";", "<", "=", ".", ">", "?", "@", "[", "]", "^", "_", "{", "}", "|", "~", ","`
   ///
   /// Returns
   /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown. You need to catch the exception and handle it accordingly. See [Error Codes](https://docs.agora.io/en/video-calling/troubleshooting/error-codes) for details and resolution suggestions.
@@ -6383,7 +6383,7 @@ abstract class RtcEngine {
   ///  26 uppercase letters A–Z
   ///  10 digits 0–9
   ///  Space
-  ///  "!", "#", "$", "%", "&", "(", ")", "+", "-", ":", ";", "<", "=", ".", ">", "?", "@", "[", "]", "^", "_", "{", "}", "|", "~", ","
+  ///  `"!", "#", "$", "%", "&", "(", ")", "+", "-", ":", ";", "<", "=", ".", ">", "?", "@", "[", "]", "^", "_", "{", "}", "|", "~", ","`
   /// * [options] Channel media configuration options. See ChannelMediaOptions.
   ///
   /// Returns
@@ -6420,7 +6420,7 @@ abstract class RtcEngine {
   ///  26 uppercase letters A–Z
   ///  10 digits 0–9
   ///  Space
-  ///  "!", "#", "$", "%", "&", "(", ")", "+", "-", ":", ";", "<", "=", ".", ">", "?", "@", "[", "]", "^", "_", "{", "}", "|", "~", ","
+  ///  `"!", "#", "$", "%", "&", "(", ")", "+", "-", ":", ";", "<", "=", ".", ">", "?", "@", "[", "]", "^", "_", "{", "}", "|", "~", ","`
   /// * [options] Channel media configuration options. See ChannelMediaOptions.
   ///
   /// Returns
@@ -6577,10 +6577,10 @@ abstract class RtcEngine {
   ///
   /// * [uid] User ID. Set to 0 to capture the local user's video.
   /// * [filePath] Make sure the directory exists and is writable. The local path to save the snapshot. The path must include the file name and format, for example:
-  ///  Windows: C:\Users\<user_name>\AppData\Local\Agora\<process_name>\example.jpg
+  ///  Windows: `C:\Users\<user_name>\AppData\Local\Agora\<process_name>\example.jpg`
   ///  iOS: /App Sandbox/Library/Caches/example.jpg
   ///  macOS: ～/Library/Logs/example.jpg
-  ///  Android: /storage/emulated/0/Android/data/<package name>/files/example.jpg
+  ///  Android: `/storage/emulated/0/Android/data/<package name>/files/example.jpg`
   ///
   /// Returns
   /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown. You need to catch the exception and handle it accordingly. See [Error Codes](https://docs.agora.io/en/video-calling/troubleshooting/error-codes) for details and resolution suggestions.

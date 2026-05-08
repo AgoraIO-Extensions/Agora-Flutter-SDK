@@ -176,7 +176,7 @@ class InputSeiData implements AgoraSerializable {
   final int? frameIndex;
 
   /// @nodoc
-  @JsonKey(name: 'private_data', ignore: true)
+  @JsonKey(name: 'private_data', includeFromJson: false, includeToJson: false)
   final Uint8List? privateData;
 
   /// @nodoc
