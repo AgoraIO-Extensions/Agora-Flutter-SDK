@@ -432,8 +432,12 @@ class _State extends State<AdvancedBeauty> with KeepRemoteVideoViewsMixin {
         option: 'face_buffing_option',
         key: 'eye_pouch',
       );
+      _faceStyle = await _videoEffectObject!.getVideoEffectIntParam(
+        option: 'face_shape_beauty_option',
+        key: 'style',
+      );
       logSink.log(
-          '[_syncBeautyUI] synchronized from SDK: smoothness=$_smoothness, lightness=$_lightness, redness=$_redness, eyePouch=$_eyePouch');
+          '[_syncBeautyUI] synchronized from SDK: smoothness=$_smoothness, lightness=$_lightness, redness=$_redness, eyePouch=$_eyePouch, faceStyle=$_faceStyle');
       setState(() {});
     } catch (e) {
       logSink.log('[_syncBeautyUI] failed: $e');
@@ -537,10 +541,10 @@ class _State extends State<AdvancedBeauty> with KeepRemoteVideoViewsMixin {
       }
       setState(() {
         _styleMakeup = template;
-        // Makeup and filter are mutually exclusive (makeup takes priority)
-        if (!template.isNone) {
-          _filter = _templateCatalog.filterTemplates.first;
-        }
+        // // Makeup and filter are mutually exclusive (makeup takes priority)
+        // if (!template.isNone) {
+        //   _filter = _templateCatalog.filterTemplates.first;
+        // }
       });
     } on AgoraRtcException catch (e) {
       logSink
@@ -561,11 +565,11 @@ class _State extends State<AdvancedBeauty> with KeepRemoteVideoViewsMixin {
         logSink.log('[removeVideoEffect] filter removed');
       } else {
         // Style makeup takes priority: remove makeup first
-        if (!_styleMakeup.isNone) {
-          await _videoEffectObject!
-              .removeVideoEffect(VideoEffectNodeId.styleMakeup.value());
-          logSink.log('[removeVideoEffect] styleMakeup removed for filter');
-        }
+        // if (!_styleMakeup.isNone) {
+        //   await _videoEffectObject!
+        //       .removeVideoEffect(VideoEffectNodeId.styleMakeup.value());
+        //   logSink.log('[removeVideoEffect] styleMakeup removed for filter');
+        // }
         await _videoEffectObject!.addOrUpdateVideoEffect(
           nodeId: VideoEffectNodeId.filter.value(),
           templateName: template.templateName!,
@@ -579,9 +583,9 @@ class _State extends State<AdvancedBeauty> with KeepRemoteVideoViewsMixin {
       }
       setState(() {
         _filter = template;
-        if (!template.isNone) {
-          _styleMakeup = _templateCatalog.styleMakeupTemplates.first;
-        }
+        // if (!template.isNone) {
+        //   _styleMakeup = _templateCatalog.styleMakeupTemplates.first;
+        // }
       });
     } on AgoraRtcException catch (e) {
       logSink.log('[applyFilter] AgoraRtcException: ${e.code}, ${e.message}');
