@@ -40,13 +40,18 @@ class _State extends State<JoinChannelVideo> {
   ChannelProfileType _channelProfileType =
       ChannelProfileType.channelProfileLiveBroadcasting;
   late final RtcEngineEventHandler _rtcEngineEventHandler;
+
+  /// Completes after [RtcEngine.initialize], main handler registration, preview —
+  /// passed to [StatsMonitoringWidget] so overlay handlers register only then.
+  late final Future<void> _engineReadyFuture;
+
   @override
   void initState() {
     super.initState();
     _controller = TextEditingController(text: config.channelId);
     uidController = TextEditingController(text: '0');
 
-    _initEngine();
+    _engineReadyFuture = _initEngine();
   }
 
   @override
@@ -226,6 +231,7 @@ class _State extends State<JoinChannelVideo> {
           children: [
             StatsMonitoringWidget(
               rtcEngine: _engine,
+              engineReadyFuture: _engineReadyFuture,
               uid: 0,
               child: AgoraVideoView(
                 controller: VideoViewController(
@@ -253,6 +259,7 @@ class _State extends State<JoinChannelVideo> {
                             aspectRatio: 16 / 9,
                             child: StatsMonitoringWidget(
                               rtcEngine: _engine,
+                              engineReadyFuture: _engineReadyFuture,
                               uid: e,
                               channelId: _controller.text,
                               child: AgoraVideoView(
@@ -279,6 +286,7 @@ class _State extends State<JoinChannelVideo> {
                           aspectRatio: 16 / 9,
                           child: StatsMonitoringWidget(
                             rtcEngine: _engine,
+                            engineReadyFuture: _engineReadyFuture,
                             uid: e,
                             channelId: _controller.text,
                             child: AgoraVideoView(

@@ -1,21 +1,32 @@
+import 'dart:async';
+
 import 'package:agora_rtc_engine/agora_rtc_engine.dart';
 import 'package:flutter/material.dart';
 
 /// A widget that overlay the local/remote stats info above the child widget.
+///
+/// Pass [engineReadyFuture] from the page after [RtcEngine.initialize] (and any
+/// setup you need before secondary handlers run). Otherwise this widget may call
+/// [RtcEngine.registerEventHandler] before initialization completes.
 class StatsMonitoringWidget extends StatelessWidget {
-  const StatsMonitoringWidget(
-      {Key? key,
-      required this.rtcEngine,
-      required this.uid,
-      this.channelId,
-      required this.child})
-      : super(key: key);
+  const StatsMonitoringWidget({
+    Key? key,
+    required this.rtcEngine,
+    required this.uid,
+    this.channelId,
+    this.engineReadyFuture,
+    required this.child,
+  }) : super(key: key);
 
   final RtcEngine rtcEngine;
 
   final int uid;
 
   final String? channelId;
+
+  /// Completes when [RtcEngine.initialize] (and typically the owning page's
+  /// `_initEngine`) has finished — **before** registering this overlay handler.
+  final Future<void>? engineReadyFuture;
 
   final Widget child;
 
@@ -31,6 +42,7 @@ class StatsMonitoringWidget extends StatelessWidget {
             rtcEngine: rtcEngine,
             uid: uid,
             channelId: channelId,
+            engineReadyFuture: engineReadyFuture,
           ),
         ),
       ],
@@ -44,6 +56,7 @@ class _StatsMonitoringInternalWidget extends StatefulWidget {
     required this.rtcEngine,
     required this.uid,
     this.channelId,
+    this.engineReadyFuture,
   }) : super(key: key);
 
   final RtcEngine rtcEngine;
@@ -52,6 +65,8 @@ class _StatsMonitoringInternalWidget extends StatefulWidget {
 
   final String? channelId;
 
+  final Future<void>? engineReadyFuture;
+
   @override
   State<_StatsMonitoringInternalWidget> createState() =>
       __StatsMonitoringInternalWidgetState();
@@ -59,7 +74,8 @@ class _StatsMonitoringInternalWidget extends StatefulWidget {
 
 class __StatsMonitoringInternalWidgetState
     extends State<_StatsMonitoringInternalWidget> {
-  late final RtcEngineEventHandler _eventHandler;
+  RtcEngineEventHandler? _eventHandler;
+  bool _registeredWithEngine = false;
 
   RtcStats? _rtcStats;
   LocalAudioStats? _localAudioStats;
@@ -71,11 +87,25 @@ class __StatsMonitoringInternalWidgetState
   @override
   void initState() {
     super.initState();
-
-    _init();
+    _registerWhenReady();
   }
 
-  void _init() {
+  Future<void> _registerWhenReady() async {
+    final ready = widget.engineReadyFuture;
+    if (ready != null) {
+      try {
+        await ready;
+      } catch (_) {
+        return;
+      }
+    } else {
+      final c = Completer<void>();
+      WidgetsBinding.instance.addPostFrameCallback((_) => c.complete());
+      await c.future;
+    }
+
+    if (!mounted) return;
+
     _eventHandler = RtcEngineEventHandler(
       onRtcStats: (connection, stats) {
         setState(() {
@@ -113,21 +143,24 @@ class __StatsMonitoringInternalWidgetState
         }
       },
     );
-    widget.rtcEngine.registerEventHandler(_eventHandler);
-    widget.rtcEngine.enableAudioVolumeIndication(
+
+    widget.rtcEngine.registerEventHandler(_eventHandler!);
+    _registeredWithEngine = true;
+    await widget.rtcEngine.enableAudioVolumeIndication(
         interval: 200, smooth: 3, reportVad: false);
   }
 
   @override
   void dispose() {
-    widget.rtcEngine.unregisterEventHandler(_eventHandler);
+    if (_registeredWithEngine && _eventHandler != null) {
+      widget.rtcEngine.unregisterEventHandler(_eventHandler!);
+    }
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
     final isLocal = widget.channelId == null;
-    final isRemote = !isLocal;
 
     final width = (isLocal
             ? _localVideoStats?.captureFrameWidth
@@ -173,7 +206,7 @@ class __StatsMonitoringInternalWidgetState
           Text('CPU: $cpuAppUsage% | $cpuTotalUsage%', style: style),
           Text('Send Loss: $txPacketLossRate%', style: style),
         ],
-        if (isRemote) ...[
+        if (!isLocal) ...[
           Text('VRecv: ${videoReceivedBitrate}kbps', style: style),
           Text('ARecv: ${audioReceivedBitrate}kbps', style: style),
           Text('VLoss: $packetLossRate%', style: style),
