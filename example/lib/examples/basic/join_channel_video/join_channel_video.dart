@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:agora_rtc_engine/agora_rtc_engine.dart';
 import 'package:agora_rtc_engine_example/components/basic_video_configuration_widget.dart';
 import 'package:agora_rtc_engine_example/components/stats_monitoring_widget.dart';
@@ -29,13 +31,11 @@ class _State extends State<JoinChannelVideo> {
   late TextEditingController _controller;
   late TextEditingController uidController;
   Map<int, VideoViewController> _remoteVideoControllers = {};
-  bool test = false;
-  bool _isUseFlutterTexture = false;
+  bool _isUseFlutterTexture = true;
   bool _isUseAndroidSurfaceView = false;
 
   // Test switches
   bool _reuseController = true;
-  bool _switchViewLevel = true;
   ChannelProfileType _channelProfileType =
       ChannelProfileType.channelProfileLiveBroadcasting;
   late final RtcEngineEventHandler _rtcEngineEventHandler;
@@ -134,8 +134,32 @@ class _State extends State<JoinChannelVideo> {
     );
 
     _engine.registerEventHandler(_rtcEngineEventHandler);
+    await _applyPrivateVideoParameters();
     await _engine.enableVideo();
     await _engine.startPreview();
+  }
+
+  /// Private codec / decoder / audio flags aligned with on-prem or TDS configs for repro.
+  Future<void> _applyPrivateVideoParameters() async {
+    final params = <String, dynamic>{
+      'che.video.videoCodecIndex': 1,
+      'engine.video.enable_hw_decoder': true,
+      'rtc.video.enable_pvc': false,
+      'rtc.video.enable_sr': <String, dynamic>{
+        'enabled': false,
+        'mode': 2,
+      },
+      'che.audio.sf.enabled': false,
+      'che.audio.md.enable': false,
+      'che.audio.agc.enable': false,
+      'che.audio.ans.enable': true,
+      'che.audio.use_media_volume_in_solo': 0,
+      // Interactive audience playout floor delay (ms); common values 0 / 100 / 200.
+      'rtc.video.interactive_audience_playout_delay_min': 100,
+    };
+    final json = jsonEncode(params);
+    await _engine.setParameters(json);
+    logSink.log('[JoinChannelVideo] setParameters: $json');
   }
 
   Future<void> _updateRemoteVideoController(
@@ -157,10 +181,6 @@ class _State extends State<JoinChannelVideo> {
       useAndroidSurfaceView: _isUseAndroidSurfaceView,
     );
 
-    if (_switchViewLevel) {
-      // Switch view level
-      test = !test;
-    }
     setState(() {});
   }
 
@@ -172,7 +192,7 @@ class _State extends State<JoinChannelVideo> {
       uid: uid,
       options: ChannelMediaOptions(
         channelProfile: _channelProfileType,
-        clientRoleType: ClientRoleType.clientRoleBroadcaster,
+        clientRoleType: ClientRoleType.clientRoleAudience,
       ),
     );
   }
@@ -236,53 +256,37 @@ class _State extends State<JoinChannelVideo> {
               ),
             ),
             if (_remoteVideoControllers.isNotEmpty)
-              if (test)
-                Align(
-                  alignment: Alignment.topLeft,
+              Align(
+                alignment: Alignment.topCenter,
+                child: SizedBox(
+                  height: 200,
+                  width: double.infinity,
                   child: SingleChildScrollView(
                     scrollDirection: Axis.horizontal,
+                    padding: const EdgeInsets.symmetric(horizontal: 8),
                     child: Row(
                       children: List.of(remoteUid.map(
-                        (e) => SizedBox(
-                          width: 200,
-                          height: 200,
-                          child: StatsMonitoringWidget(
-                            rtcEngine: _engine,
-                            uid: e,
-                            channelId: _controller.text,
-                            child: AgoraVideoView(
-                              key: ValueKey('true_$e'),
-                              controller: _remoteVideoControllers[e]!,
+                        (e) => Padding(
+                          padding: const EdgeInsets.only(right: 8),
+                          child: SizedBox(
+                            width: 200,
+                            height: 200,
+                            child: StatsMonitoringWidget(
+                              rtcEngine: _engine,
+                              uid: e,
+                              channelId: _controller.text,
+                              child: AgoraVideoView(
+                                key: ValueKey('remote_$e'),
+                                controller: _remoteVideoControllers[e]!,
+                              ),
                             ),
                           ),
                         ),
                       )),
                     ),
                   ),
-                )
-              else
-                Align(
-                  alignment: Alignment.topRight,
-                  child: SingleChildScrollView(
-                    scrollDirection: Axis.horizontal,
-                    child: Row(
-                        children: List.of(remoteUid.map(
-                      (e) => SizedBox(
-                        width: 200,
-                        height: 200,
-                        child: StatsMonitoringWidget(
-                          rtcEngine: _engine,
-                          uid: e,
-                          channelId: _controller.text,
-                          child: AgoraVideoView(
-                            key: ValueKey('false_$e'),
-                            controller: _remoteVideoControllers[e]!,
-                          ),
-                        ),
-                      ),
-                    ))),
-                  ),
-                )
+                ),
+              )
           ],
         );
       },
@@ -408,33 +412,8 @@ class _State extends State<JoinChannelVideo> {
                       ),
                     ],
                   ),
-                  Row(
-                    children: [
-                      const Expanded(
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text('Switch View Level',
-                                style: TextStyle(fontSize: 12)),
-                            Text(
-                              'Views/Nodes at different levels of the tree structures',
-                              style: TextStyle(fontSize: 9, color: Colors.grey),
-                            ),
-                          ],
-                        ),
-                      ),
-                      Switch(
-                        value: _switchViewLevel,
-                        onChanged: (changed) {
-                          setState(() {
-                            _switchViewLevel = changed;
-                          });
-                        },
-                      ),
-                    ],
-                  ),
                   Text(
-                    'Current: test=$test, controller count=${_remoteVideoControllers.length}',
+                    'Remote controllers: ${_remoteVideoControllers.length}',
                     style: const TextStyle(fontSize: 10, color: Colors.blue),
                   ),
                 ],

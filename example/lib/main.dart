@@ -6,29 +6,78 @@ import 'package:agora_rtc_engine_example/components/config_override.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:permission_handler/permission_handler.dart';
+import 'package:sentry_flutter/sentry_flutter.dart';
 
 import 'examples/advanced/index.dart';
 import 'examples/basic/index.dart';
 import 'config/agora.config.dart' as config;
 import 'components/log_sink.dart';
 
-void main() {
+const _exampleSentryDsn = String.fromEnvironment(
+  '',
+  defaultValue: '',
+);
+
+/// Initializes bindings and error reporting in the same zone as [runApp].
+///
+/// With [SentryFlutter.init], `ensureInitialized` may already run in [appRunner]'s
+/// zone before this runs; do not wrap [runApp] in an extra [runZonedGuarded] inside
+/// [appRunner], or bindings attach in the parent zone while [runApp] runs in a
+/// child zone and Flutter reports a zone mismatch.
+void _bootstrapApp(Widget app) {
+  WidgetsFlutterBinding.ensureInitialized();
   FlutterError.onError = (details) {
     FlutterError.presentError(details);
     logSink.log(details.toString());
   };
+  runApp(app);
+}
 
+Future<void> main() async {
   // TODO(littlegnal): The newer version of Flutter SDK doc shows use of the
   // `PlatformDispatcher.instance.onError` but not `runZonedGuarded` to
   // handle "Errors not caught by Flutter",
   // see: https://docs.flutter.dev/testing/errors#handling-all-types-of-errors,
   // follow the Flutter SDK doc after we can bump the mini supported Flutter SDK (currently 2.10.x)
   // to the newer version of Flutter SDK.
-  runZonedGuarded(() {
-    runApp(const MyApp());
-  }, (error, stackTrace) {
-    logSink.log(error.toString());
-  });
+  if (_exampleSentryDsn.isEmpty) {
+    logSink.log(
+      '[sentry] SENTRY_DSN is empty, starting example without sentry_flutter. '
+      'Pass --dart-define=SENTRY_DSN=<dsn> to enable screenshot capture flow.',
+    );
+    runZonedGuarded(() {
+      _bootstrapApp(const MyApp());
+    }, (error, stackTrace) {
+      logSink.log(error.toString());
+    });
+    return;
+  }
+
+  await SentryFlutter.init(
+    (options) {
+      options.dsn = _exampleSentryDsn;
+      options.tracesSampleRate = 1.0;
+      options.sampleRate = 1.0;
+      options.enableAutoPerformanceTracing = false;
+      options.attachScreenshot = true;
+      options.replay.onErrorSampleRate = 1.0;
+      options.replay.sessionSampleRate = 1.0;
+      options.privacy.maskAllText = false;
+      options.enableLogs = true;
+      options.debug = false;
+      options.beforeCaptureScreenshot = (event, hint, shouldDebounce) {
+        logSink.log(
+          '[sentry] beforeCaptureScreenshot '
+          'shouldDebounce=$shouldDebounce '
+          'event=${event.eventId}',
+        );
+        return !shouldDebounce;
+      };
+    },
+    appRunner: () {
+      _bootstrapApp(SentryWidget(child: const MyApp()));
+    },
+  );
 }
 
 /// This widget is the root of your application.
