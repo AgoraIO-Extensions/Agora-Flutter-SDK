@@ -88,7 +88,8 @@ class IrisApiEngineBindingsDelegateJS
     }
 
     // Keep js_util conversion for Flutter 3.24.x web builds.
-    final promiseFuture = promiseToFuture(js.callIrisApi(nApiEnginePtr, nParam));
+    final promiseFuture =
+        promiseToFuture(js.callIrisApi(nApiEnginePtr, nParam));
     final js.CallIrisApiResult irisApiResult = await promiseFuture;
 
     return irisApiResult.toCallApiResult();

@@ -234,10 +234,11 @@ class _RtcLifecycleVerifyPageState extends State<RtcLifecycleVerifyPage> {
                 ),
                 const SizedBox(height: 12),
                 _buildCheckRow('Join invoked', _roundJoinInvoked),
-                _buildCheckRow('onJoinChannelSuccess received',
-                    _roundJoinSuccess),
+                _buildCheckRow(
+                    'onJoinChannelSuccess received', _roundJoinSuccess),
                 _buildCheckRow('Connected callback received', _roundConnected),
-                _buildCheckRow('Remote user callback received', _roundUserJoined),
+                _buildCheckRow(
+                    'Remote user callback received', _roundUserJoined),
                 const SizedBox(height: 12),
                 Row(
                   children: [
