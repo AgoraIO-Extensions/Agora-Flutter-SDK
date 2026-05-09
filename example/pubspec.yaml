@@ -32,6 +32,7 @@ dependencies:
 
   permission_handler: ^10.2.0
   path_provider: ^2.0.8
+  sentry_flutter: ^9.20.0
 
 dev_dependencies:
   flutter_test:

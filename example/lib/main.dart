@@ -6,35 +6,101 @@ import 'package:agora_rtc_engine_example/components/config_override.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:permission_handler/permission_handler.dart';
+import 'package:sentry_flutter/sentry_flutter.dart';
 
 import 'examples/advanced/index.dart';
 import 'examples/basic/index.dart';
 import 'config/agora.config.dart' as config;
 import 'components/log_sink.dart';
 
-void main() {
+/// Optional: `--dart-define=SENTRY_DSN=...` skips the in-app DSN field and
+/// initializes Sentry in [main].
+const _sentryDsnFromEnv = String.fromEnvironment(
+  'SENTRY_DSN',
+  defaultValue: '',
+);
+
+void _configureSentryOptions(SentryFlutterOptions options, String dsn) {
+  options.dsn = dsn;
+  options.tracesSampleRate = 1.0;
+  options.sampleRate = 1.0;
+  options.enableAutoPerformanceTracing = false;
+  options.attachScreenshot = true;
+  options.replay.onErrorSampleRate = 1.0;
+  options.replay.sessionSampleRate = 1.0;
+  options.privacy.maskAllText = false;
+  options.enableLogs = true;
+  options.debug = false;
+  options.beforeCaptureScreenshot = (event, hint, shouldDebounce) {
+    logSink.log(
+      '[sentry] beforeCaptureScreenshot '
+      'shouldDebounce=$shouldDebounce '
+      'event=${event.eventId}',
+    );
+    return !shouldDebounce;
+  };
+}
+
+/// Initializes bindings and error reporting in the same zone as [runApp].
+///
+/// Do not call [WidgetsFlutterBinding.ensureInitialized] in [main] before a
+/// [runZonedGuarded] that calls this — bindings must attach in the same zone as
+/// [runApp]. Prefer keeping [runApp] in the root zone (no extra zone wrapper).
+///
+/// With [SentryFlutter.init], `ensureInitialized` may already run in [appRunner]'s
+/// zone before this runs; do not wrap [runApp] in an extra [runZonedGuarded] inside
+/// [appRunner], or bindings attach in the parent zone while [runApp] runs in a
+/// child zone and Flutter reports a zone mismatch.
+void _bootstrapApp(Widget app) {
+  WidgetsFlutterBinding.ensureInitialized();
   FlutterError.onError = (details) {
     FlutterError.presentError(details);
     logSink.log(details.toString());
   };
+  PlatformDispatcher.instance.onError = (error, stack) {
+    logSink.log(error.toString());
+    return true;
+  };
+  runApp(app);
+}
 
+Future<void> main() async {
   // TODO(littlegnal): The newer version of Flutter SDK doc shows use of the
   // `PlatformDispatcher.instance.onError` but not `runZonedGuarded` to
   // handle "Errors not caught by Flutter",
   // see: https://docs.flutter.dev/testing/errors#handling-all-types-of-errors,
   // follow the Flutter SDK doc after we can bump the mini supported Flutter SDK (currently 2.10.x)
   // to the newer version of Flutter SDK.
-  runZonedGuarded(() {
-    runApp(const MyApp());
-  }, (error, stackTrace) {
-    logSink.log(error.toString());
-  });
+
+  final envDsn = _sentryDsnFromEnv.trim();
+  if (envDsn.isNotEmpty) {
+    await SentryFlutter.init(
+      (options) => _configureSentryOptions(options, envDsn),
+      appRunner: () {
+        _bootstrapApp(
+          SentryWidget(child: const MyApp(sentryGateDone: true)),
+        );
+      },
+    );
+    return;
+  }
+
+  logSink.log(
+    '[sentry] No SENTRY_DSN at compile time — show DSN field first, '
+    'or pass --dart-define=SENTRY_DSN=...',
+  );
+  _bootstrapApp(const MyApp(sentryGateDone: false));
 }
 
 /// This widget is the root of your application.
 class MyApp extends StatefulWidget {
   /// Construct the [MyApp]
-  const MyApp({Key? key}) : super(key: key);
+  ///
+  /// [sentryGateDone] is true when Sentry was already configured ([main] or
+  /// after submitting DSN on [_SentryDsnSetupPage]).
+  const MyApp({Key? key, this.sentryGateDone = false}) : super(key: key);
+
+  final bool sentryGateDone;
 
   @override
   State<MyApp> createState() => _MyAppState();
@@ -44,6 +110,8 @@ class _MyAppState extends State<MyApp> {
   final _data = [...basic, ...advanced];
 
   bool _showPerformanceOverlay = false;
+
+  late bool _sentryGatePassed;
 
   bool _isWebSetup = false;
 
@@ -57,9 +125,21 @@ class _MyAppState extends State<MyApp> {
   void initState() {
     super.initState();
 
+    _sentryGatePassed = widget.sentryGateDone;
     _isWebSetup = !kIsWeb;
 
     _requestPermissionIfNeed();
+  }
+
+  Future<void> _applySentryDsnFromInput(String dsn) async {
+    await SentryFlutter.init(
+      (options) => _configureSentryOptions(options, dsn),
+      appRunner: () {
+        _bootstrapApp(
+          SentryWidget(child: const MyApp(sentryGateDone: true)),
+        );
+      },
+    );
   }
 
   Future<void> _requestPermissionIfNeed() async {
@@ -104,6 +184,18 @@ class _MyAppState extends State<MyApp> {
   }
 
   Widget _body() {
+    if (!_sentryGatePassed) {
+      return _SentryDsnSetupPage(
+        setupCompletedWithSentry: _applySentryDsnFromInput,
+        setupCompletedSkip: () {
+          logSink.log('[sentry] skipped — continuing without sentry_flutter.');
+          setState(() {
+            _sentryGatePassed = true;
+          });
+        },
+      );
+    }
+
     if (!_isWebSetup) {
       return _WebSetupPage(setupCompleted: () {
         setState(() {
@@ -153,6 +245,97 @@ class _MyAppState extends State<MyApp> {
                 ),
               );
       },
+    );
+  }
+}
+
+/// Same layout as [_WebSetupPage]: centered column, TextField, Done / skip.
+class _SentryDsnSetupPage extends StatefulWidget {
+  const _SentryDsnSetupPage({
+    Key? key,
+    required this.setupCompletedWithSentry,
+    required this.setupCompletedSkip,
+  }) : super(key: key);
+
+  final Future<void> Function(String dsn) setupCompletedWithSentry;
+  final VoidCallback setupCompletedSkip;
+
+  @override
+  State<_SentryDsnSetupPage> createState() => _SentryDsnSetupPageState();
+}
+
+class _SentryDsnSetupPageState extends State<_SentryDsnSetupPage> {
+  late final TextEditingController _dsnController;
+
+  bool _busy = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _dsnController = TextEditingController();
+    _dsnController.addListener(() => setState(() {}));
+  }
+
+  Future<void> _onDone() async {
+    final dsn = _dsnController.text.trim();
+    if (dsn.isEmpty || _busy) {
+      return;
+    }
+    setState(() => _busy = true);
+    try {
+      await widget.setupCompletedWithSentry(dsn);
+    } catch (e, st) {
+      logSink.log('[sentry] init failed: $e\n$st');
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Sentry init failed: $e')),
+        );
+      }
+    } finally {
+      if (mounted) {
+        setState(() => _busy = false);
+      }
+    }
+  }
+
+  @override
+  void dispose() {
+    _dsnController.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final canSubmit = _dsnController.text.trim().isNotEmpty && !_busy;
+
+    return Center(
+      child: SizedBox(
+        width: 300,
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            const Text('Input Your Sentry DSN'),
+            TextField(
+              controller: _dsnController,
+              decoration: const InputDecoration(
+                labelText: 'SENTRY_DSN',
+              ),
+              autocorrect: false,
+              enableSuggestions: false,
+              keyboardType: TextInputType.url,
+            ),
+            const SizedBox(height: 12),
+            ElevatedButton(
+              onPressed: canSubmit ? _onDone : null,
+              child: Text(_busy ? '…' : 'Done'),
+            ),
+            TextButton(
+              onPressed: _busy ? null : widget.setupCompletedSkip,
+              child: const Text('Skip (no Sentry)'),
+            ),
+          ],
+        ),
+      ),
     );
   }
 }
