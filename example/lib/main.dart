@@ -13,8 +13,6 @@ import 'examples/basic/index.dart';
 import 'config/agora.config.dart' as config;
 import 'components/log_sink.dart';
 
-/// Optional: `--dart-define=SENTRY_DSN=...` skips the in-app DSN field and
-/// initializes Sentry in [main].
 const _sentryDsnFromEnv = String.fromEnvironment(
   'SENTRY_DSN',
   defaultValue: '',
@@ -26,10 +24,9 @@ void _configureSentryOptions(SentryFlutterOptions options, String dsn) {
   options.sampleRate = 1.0;
   options.enableAutoPerformanceTracing = false;
   options.attachScreenshot = true;
-  options.replay.onErrorSampleRate = 1.0;
-  options.replay.sessionSampleRate = 1.0;
-  options.privacy.maskAllText = false;
-  options.enableLogs = true;
+  options.experimental.replay.onErrorSampleRate = 1.0;
+  options.experimental.replay.sessionSampleRate = 1.0;
+  options.experimental.privacy.maskAllText = false;
   options.debug = false;
   options.beforeCaptureScreenshot = (event, hint, shouldDebounce) {
     logSink.log(
@@ -41,16 +38,6 @@ void _configureSentryOptions(SentryFlutterOptions options, String dsn) {
   };
 }
 
-/// Initializes bindings and error reporting in the same zone as [runApp].
-///
-/// Do not call [WidgetsFlutterBinding.ensureInitialized] in [main] before a
-/// [runZonedGuarded] that calls this — bindings must attach in the same zone as
-/// [runApp]. Prefer keeping [runApp] in the root zone (no extra zone wrapper).
-///
-/// With [SentryFlutter.init], `ensureInitialized` may already run in [appRunner]'s
-/// zone before this runs; do not wrap [runApp] in an extra [runZonedGuarded] inside
-/// [appRunner], or bindings attach in the parent zone while [runApp] runs in a
-/// child zone and Flutter reports a zone mismatch.
 void _bootstrapApp(Widget app) {
   WidgetsFlutterBinding.ensureInitialized();
   FlutterError.onError = (details) {
@@ -65,13 +52,6 @@ void _bootstrapApp(Widget app) {
 }
 
 Future<void> main() async {
-  // TODO(littlegnal): The newer version of Flutter SDK doc shows use of the
-  // `PlatformDispatcher.instance.onError` but not `runZonedGuarded` to
-  // handle "Errors not caught by Flutter",
-  // see: https://docs.flutter.dev/testing/errors#handling-all-types-of-errors,
-  // follow the Flutter SDK doc after we can bump the mini supported Flutter SDK (currently 2.10.x)
-  // to the newer version of Flutter SDK.
-
   final envDsn = _sentryDsnFromEnv.trim();
   if (envDsn.isNotEmpty) {
     await SentryFlutter.init(
@@ -92,12 +72,7 @@ Future<void> main() async {
   _bootstrapApp(const MyApp(sentryGateDone: false));
 }
 
-/// This widget is the root of your application.
 class MyApp extends StatefulWidget {
-  /// Construct the [MyApp]
-  ///
-  /// [sentryGateDone] is true when Sentry was already configured ([main] or
-  /// after submitting DSN on [_SentryDsnSetupPage]).
   const MyApp({Key? key, this.sentryGateDone = false}) : super(key: key);
 
   final bool sentryGateDone;
@@ -249,7 +224,6 @@ class _MyAppState extends State<MyApp> {
   }
 }
 
-/// Same layout as [_WebSetupPage]: centered column, TextField, Done / skip.
 class _SentryDsnSetupPage extends StatefulWidget {
   const _SentryDsnSetupPage({
     Key? key,
@@ -435,9 +409,7 @@ class _WebSetupPageState extends State<_WebSetupPage> {
   }
 }
 
-/// This widget is used to indicate the configuration is invalid
 class InvalidConfigWidget extends StatelessWidget {
-  /// Construct the [InvalidConfigWidget]
   const InvalidConfigWidget({Key? key}) : super(key: key);
 
   @override

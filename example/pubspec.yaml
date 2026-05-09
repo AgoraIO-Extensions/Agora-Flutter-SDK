@@ -30,9 +30,13 @@ dependencies:
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^1.0.2
 
-  permission_handler: ^10.2.0
+  permission_handler: ^11.3.1
   path_provider: ^2.0.8
-  sentry_flutter: ^9.20.0
+  sentry_flutter: ^8.14.2
+
+# sentry 会传递依赖 package_info_plus；9.x 的 Android 工程在 Flutter 3.24.5 上易失败，与业务代码无关。
+dependency_overrides:
+  package_info_plus: 7.0.0
 
 dev_dependencies:
   flutter_test:
