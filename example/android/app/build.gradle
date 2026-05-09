@@ -8,7 +8,7 @@ android {
     namespace "io.agora.agora_rtc_ng_example"
 
     compileSdkVersion flutter.compileSdkVersion
-    ndkVersion flutter.ndkVersion
+    ndkVersion "27.0.12077973"
 
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_17
@@ -34,6 +34,10 @@ android {
     buildTypes {
         release {
             signingConfig signingConfigs.debug
+            // So AGP emits build/app/outputs/native-debug-symbols (CI copies this path).
+            ndk {
+                debugSymbolLevel "SYMBOL_TABLE"
+            }
         }
     }
 }
