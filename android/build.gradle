@@ -63,7 +63,7 @@ dependencies {
     // iris dependencies end
 
     // native dependencies start
-    api 'io.agora.rtc:agora-special-full:4.5.2.185'
+    api 'io.agora.rtc:agora-special-full:4.5.2.203.CSDTEST'
     // native dependencies end
   }
 }
