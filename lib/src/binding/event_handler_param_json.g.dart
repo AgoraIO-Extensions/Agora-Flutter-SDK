@@ -1820,7 +1820,7 @@ const _$LocalVideoStreamErrorEnumMap = {
       .localVideoStreamErrorScreenCaptureWindowRecoverFromHidden: 26,
   LocalVideoStreamError
       .localVideoStreamErrorScreenCaptureWindowRecoverFromMinimized: 27,
-  LocalVideoStreamError.localVideoStreamReasonScreenCaptureDisplayDiscnnected:
+  LocalVideoStreamError.localVideoStreamReasonScreenCaptureDisplayDisconnected:
       30,
 };
 
@@ -3571,6 +3571,29 @@ const _$PermissionTypeEnumMap = {
   PermissionType.camera: 1,
   PermissionType.screenCapture: 2,
 };
+
+RtcEngineEventHandlerOnPermissionGrantedJson
+    _$RtcEngineEventHandlerOnPermissionGrantedJsonFromJson(
+            Map<String, dynamic> json) =>
+        RtcEngineEventHandlerOnPermissionGrantedJson(
+          permissionType: $enumDecodeNullable(
+              _$PermissionTypeEnumMap, json['permissionType']),
+        );
+
+Map<String, dynamic> _$RtcEngineEventHandlerOnPermissionGrantedJsonToJson(
+    RtcEngineEventHandlerOnPermissionGrantedJson instance) {
+  final val = <String, dynamic>{};
+
+  void writeNotNull(String key, dynamic value) {
+    if (value != null) {
+      val[key] = value;
+    }
+  }
+
+  writeNotNull(
+      'permissionType', _$PermissionTypeEnumMap[instance.permissionType]);
+  return val;
+}
 
 RtcEngineEventHandlerOnLocalUserRegisteredJson
     _$RtcEngineEventHandlerOnLocalUserRegisteredJsonFromJson(

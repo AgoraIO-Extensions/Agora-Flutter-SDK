@@ -1,13 +1,13 @@
 import 'package:agora_rtc_engine/src/binding_forward_export.dart';
 part 'agora_spatial_audio.g.dart';
 
-/// The spatial position of the remote user or the media player.
+/// Spatial position information of the remote user or media player.
 @JsonSerializable(explicitToJson: true, includeIfNull: false)
 class RemoteVoicePositionInfo {
   /// @nodoc
   const RemoteVoicePositionInfo({this.position, this.forward});
 
-  /// @nodoc
+  /// Coordinates in the world coordinate system. This parameter is an array of length 3, where the three values represent the coordinates in the front, right, and up directions respectively.
   @JsonKey(name: 'position')
   final List<double>? position;
 
@@ -23,7 +23,7 @@ class RemoteVoicePositionInfo {
   Map<String, dynamic> toJson() => _$RemoteVoicePositionInfoToJson(this);
 }
 
-/// Sound insulation area settings.
+/// Sound insulation zone settings.
 @JsonSerializable(explicitToJson: true, includeIfNull: false)
 class SpatialAudioZone {
   /// @nodoc
@@ -38,43 +38,43 @@ class SpatialAudioZone {
       this.upLength,
       this.audioAttenuation});
 
-  /// The ID of the sound insulation area.
+  /// ID of the sound insulation zone.
   @JsonKey(name: 'zoneSetId')
   final int? zoneSetId;
 
-  /// The spatial center point of the sound insulation area. This parameter is an array of length 3, and the three values represent the front, right, and top coordinates in turn.
+  /// The spatial center point of the sound insulation zone. This parameter is an array of length 3, representing the coordinates in the forward, right, and up directions.
   @JsonKey(name: 'position')
   final List<double>? position;
 
-  /// Starting at position, the forward unit vector. This parameter is an array of length 3, and the three values represent the front, right, and top coordinates in turn.
+  /// Unit vector in the forward direction starting from position. This parameter is an array of length 3, representing the coordinates in the forward, right, and up directions.
   @JsonKey(name: 'forward')
   final List<double>? forward;
 
-  /// Starting at position, the right unit vector. This parameter is an array of length 3, and the three values represent the front, right, and top coordinates in turn.
+  /// Unit vector in the right direction starting from position. This parameter is an array of length 3, representing the coordinates in the forward, right, and up directions.
   @JsonKey(name: 'right')
   final List<double>? right;
 
-  /// Starting at position, the up unit vector. This parameter is an array of length 3, and the three values represent the front, right, and top coordinates in turn.
+  /// Unit vector in the upward direction starting from position. This parameter is an array of length 3, representing the coordinates in the forward, right, and up directions.
   @JsonKey(name: 'up')
   final List<double>? up;
 
-  /// The entire sound insulation area is regarded as a cube; this represents the length of the forward side in the unit length of the game engine.
+  /// Assuming the sound insulation zone is a cube, this represents the length in the forward direction, in game engine units.
   @JsonKey(name: 'forwardLength')
   final double? forwardLength;
 
-  /// The entire sound insulation area is regarded as a cube; this represents the length of the right side in the unit length of the game engine.
+  /// Assuming the sound insulation zone is a cube, this represents the length in the right direction, in game engine units.
   @JsonKey(name: 'rightLength')
   final double? rightLength;
 
-  /// The entire sound insulation area is regarded as a cube; this represents the length of the up side in the unit length of the game engine.
+  /// Assuming the sound insulation zone is a cube, this represents the length in the upward direction, in game engine units.
   @JsonKey(name: 'upLength')
   final double? upLength;
 
-  /// The sound attenuation coefficient when users within the sound insulation area communicate with external users. The value range is [0,1]. The values are as follows:
-  ///  0: Broadcast mode, where the volume and timbre are not attenuated with distance, and the volume and timbre heard by local users do not change regardless of distance.
-  ///  (0,0.5): Weak attenuation mode, that is, the volume and timbre are only weakly attenuated during the propagation process, and the sound can travel farther than the real environment.
-  ///  0.5: (Default) simulates the attenuation of the volume in the real environment; the effect is equivalent to not setting the audioAttenuation parameter.
-  ///  (0.5,1]: Strong attenuation mode (default value is 1), that is, the volume and timbre attenuate rapidly during propagation.
+  /// Sound attenuation coefficient when users inside and outside the sound insulation zone communicate. Value range: [0,1]:
+  ///  0: Broadcast mode. Volume and timbre do not attenuate with distance.
+  ///  (0,0.5): Weak attenuation. Slight attenuation of volume and timbre during transmission. Sound travels farther than in real environments.
+  ///  0.5: Simulates real-world volume attenuation. Equivalent to not setting the audioAttenuation parameter.
+  ///  (0.5,1]: Strong attenuation (default is 1). Rapid attenuation of volume and timbre during transmission.
   @JsonKey(name: 'audioAttenuation')
   final double? audioAttenuation;
 
@@ -86,56 +86,58 @@ class SpatialAudioZone {
   Map<String, dynamic> toJson() => _$SpatialAudioZoneToJson(this);
 }
 
-/// This class contains some of the APIs in the LocalSpatialAudioEngine class.
+/// This class contains some APIs from the LocalSpatialAudioEngine class.
 ///
 /// The LocalSpatialAudioEngine class inherits from BaseSpatialAudioEngine.
 abstract class BaseSpatialAudioEngine {
-  /// Destroys BaseSpatialAudioEngine.
+  /// Destroys the BaseSpatialAudioEngine.
   ///
-  /// This method releases all resources under BaseSpatialAudioEngine. When the user does not need to use the spatial audio effect, you can call this method to release resources for other operations. After calling this method, you can no longer use any of the APIs under BaseSpatialAudioEngine. Call this method before the release method under RtcEngine.
+  /// This method releases all resources under BaseSpatialAudioEngine. When you no longer need to use spatial audio, you can call this method to release resources for other operations.
+  /// After calling this method, you will no longer be able to use any API under BaseSpatialAudioEngine.
   Future<void> release();
 
-  /// Sets the maximum number of streams that a user can receive in a specified audio reception range.
+  /// Sets the maximum number of audio streams that can be received within the audio reception range.
   ///
-  /// If the number of receivable streams exceeds the set value, the local user receives the maxCount streams that are closest to the local user.
+  /// If the number of audio streams that can be received within the audio reception range exceeds the set value, the local user will receive the maxCount audio streams from the closest audio sources.
   ///
-  /// * [maxCount] The maximum number of streams that a user can receive within a specified audio reception range. The value of this parameter should be ≤ 16, and the default value is 10.
+  /// * [maxCount] The maximum number of audio streams that can be received within the audio reception range. The value must be ≤ 16. The default value is 10.
   ///
   /// Returns
-  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown. You need to catch the exception and handle it accordingly.
+  /// When the method call succeeds, there is no return value; when it fails, the AgoraRtcException exception is thrown. You need to catch the exception and handle it accordingly. See [Error Codes](https://docs.agora.io/en/video-calling/troubleshooting/error-codes) for details and resolution suggestions.
   Future<void> setMaxAudioRecvCount(int maxCount);
 
-  /// Sets the audio reception range of the local user.
+  /// Sets the audio receive range for the local user.
   ///
-  /// After the setting is successful, the local user can only hear the remote users within the setting range or belonging to the same team. You can call this method at any time to update the audio reception range.
+  /// After setting successfully, the user can only hear remote users within the specified range or those in the same team. You can call this method at any time to update the audio receive range.
   ///
-  /// * [range] The maximum audio reception range. The unit is meters. The value of this parameter must be greater than 0, and the default value is 20.
+  /// * [range] Maximum range for receiving audio, in the distance unit used by the game engine. The value must be greater than 0. The default is 20.
   ///
   /// Returns
-  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown. You need to catch the exception and handle it accordingly.
+  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown. You need to catch the exception and handle it accordingly. See [Error Codes](https://docs.agora.io/en/video-calling/troubleshooting/error-codes) for details and resolution suggestions.
   Future<void> setAudioRecvRange(double range);
 
-  /// Sets the length (in meters) of the game engine distance per unit.
+  /// Sets the length (in meters) of one unit of distance in the game engine.
   ///
-  /// In a game engine, the unit of distance is customized, while in the Agora spatial audio algorithm, distance is measured in meters. By default, the SDK converts the game engine distance per unit to one meter. You can call this method to convert the game engine distance per unit to a specified number of meters.
+  /// The distance unit in the game engine is defined by the game engine itself, while the distance unit of the Agora spatial audio algorithm is in meters. By default, the SDK converts each unit of game engine distance to one meter. You can call this method to convert one unit of game engine distance to a specified number of meters.
   ///
-  /// * [unit] The number of meters that the game engine distance per unit is equal to. The value of this parameter must be greater than 0.00, and the default value is 1.00. For example, setting unit as 2.00 means the game engine distance per unit equals 2 meters. The larger the value is, the faster the sound heard by the local user attenuates when the remote user moves far away from the local user.
+  /// * [unit] The number of meters corresponding to one unit of game engine distance. The value must be greater than 0.00. The default is 1.00. For example, setting unit to 2.00 means one unit of game engine distance equals 2 meters.
+  /// The larger the value, the faster the sound attenuation when the remote user moves away from the local user.
   ///
   /// Returns
-  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown. You need to catch the exception and handle it accordingly.
+  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown. You need to catch the exception and handle it accordingly. See [Error Codes](https://docs.agora.io/en/video-calling/troubleshooting/error-codes) for details and resolution suggestions.
   Future<void> setDistanceUnit(double unit);
 
-  /// Updates the spatial position of the local user.
+  /// Updates the local user's spatial position.
   ///
-  /// Under the LocalSpatialAudioEngine class, this method needs to be used with updateRemotePosition. The SDK calculates the relative position between the local and remote users according to this method and the parameter settings in updateRemotePosition, and then calculates the user's spatial audio effect parameters.
+  /// Under the LocalSpatialAudioEngine class, this method needs to be used together with updateRemotePosition. The SDK calculates the relative position between the local and remote users based on the parameters set by this method and updateRemotePosition, and then calculates the spatial audio parameters.
   ///
-  ///
-  ///
-  /// * [axisRight] The unit vector of the y axis in the coordinate system. This parameter is an array of length 3, and the three values represent the front, right, and top coordinates in turn.
-  /// * [axisUp] The unit vector of the z axis in the coordinate system. This parameter is an array of length 3, and the three values represent the front, right, and top coordinates in turn.
+  /// * [position] Coordinates in the world coordinate system. This parameter is an array of length 3, representing the coordinates in the forward, right, and up directions respectively.
+  /// * [axisForward] Unit vector of the forward axis in the world coordinate system. This parameter is an array of length 3, representing the coordinates in the forward, right, and up directions respectively.
+  /// * [axisRight] Unit vector of the right axis in the world coordinate system. This parameter is an array of length 3, representing the coordinates in the forward, right, and up directions respectively.
+  /// * [axisUp] Unit vector of the up axis in the world coordinate system. This parameter is an array of length 3, representing the coordinates in the forward, right, and up directions respectively.
   ///
   /// Returns
-  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown. You need to catch the exception and handle it accordingly.
+  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown. You need to catch the exception and handle it accordingly. See [Error Codes](https://docs.agora.io/en/video-calling/troubleshooting/error-codes) for details and resolution suggestions.
   Future<void> updateSelfPosition(
       {required List<double> position,
       required List<double> axisForward,
@@ -152,13 +154,13 @@ abstract class BaseSpatialAudioEngine {
 
   /// Updates the spatial position of the media player.
   ///
-  /// After a successful update, the local user can hear the change in the spatial position of the media player.
+  /// After a successful update, the local user can hear the spatial position changes of the media player.
   ///
-  /// * [playerId] The ID of the media player.
-  /// * [positionInfo] The spatial position of the media player. See RemoteVoicePositionInfo.
+  /// * [playerId] Media player ID.
+  /// * [positionInfo] Spatial position information of the media player. See RemoteVoicePositionInfo.
   ///
   /// Returns
-  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown. You need to catch the exception and handle it accordingly.
+  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown. You need to catch the exception and handle it accordingly. See [Error Codes](https://docs.agora.io/en/video-calling/troubleshooting/error-codes) for details and resolution suggestions.
   Future<void> updatePlayerPositionInfo(
       {required int playerId, required RemoteVoicePositionInfo positionInfo});
 
@@ -167,99 +169,96 @@ abstract class BaseSpatialAudioEngine {
 
   /// Stops or resumes publishing the local audio stream.
   ///
-  /// This method does not affect any ongoing audio recording, because it does not disable the audio capture device.
-  ///  Call this method after the or joinChannel method.
-  ///  When using the spatial audio effect, if you need to set whether to stop subscribing to the audio stream of a specified user, Agora recommends calling this method instead of the muteLocalAudioStream method in RtcEngine.
-  ///  A successful call of this method triggers the onUserMuteAudio and onRemoteAudioStateChanged callbacks on the remote client.
+  /// This method does not affect the audio capture state, as it does not disable the audio capturing device.
+  ///  You must call this method after joinChannel1 or joinChannel.
+  ///  When using spatial audio, to set whether to publish the local audio stream, it is recommended to call this method instead of the muteLocalAudioStream method of RtcEngine.
+  ///  After successfully calling this method, the remote side will trigger the onUserMuteAudio and onRemoteAudioStateChanged callbacks.
   ///
   /// * [mute] Whether to stop publishing the local audio stream: true : Stop publishing the local audio stream. false : Publish the local audio stream.
   ///
   /// Returns
-  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown. You need to catch the exception and handle it accordingly.
+  /// When the method call succeeds, there is no return value; when it fails, the AgoraRtcException exception is thrown. You need to catch the exception and handle it accordingly. See [Error Codes](https://docs.agora.io/en/video-calling/troubleshooting/error-codes) for details and resolution suggestions.
   Future<void> muteLocalAudioStream(bool mute);
 
-  /// Stops or resumes subscribing to the audio streams of all remote users.
+  /// Stops or resumes subscribing to all remote users' audio streams.
   ///
-  /// After successfully calling this method, the local user stops or resumes subscribing to the audio streams of all remote users, including all subsequent users.
-  ///  Call this method after the or joinChannel method.
-  ///  When using the spatial audio effect, if you need to set whether to stop subscribing to the audio streams of all remote users, Agora recommends calling this method instead of the muteAllRemoteAudioStreams method in RtcEngine.
-  ///  After calling this method, you need to call updateSelfPosition and updateRemotePosition to update the spatial location of the local user and the remote user; otherwise, the settings in this method do not take effect.
+  /// After successfully calling this method, the local user will stop or resume subscribing to all remote users' audio streams, including those who join the channel after the method is called.
+  ///  You must call this method after joinChannel.
+  ///  When using spatial audio, to set whether to subscribe to all remote users' audio streams, it is recommended to call this method instead of the muteAllRemoteAudioStreams method of RtcEngine.
+  ///  After calling this method, you need to call updateSelfPosition and updateRemotePosition to update the spatial positions of the local and remote users; otherwise, the settings in this method will not take effect.
   ///
-  /// * [mute] Whether to stop subscribing to the audio streams of all remote users: true : Stop subscribing to the audio streams of all remote users. false : Subscribe to the audio streams of all remote users.
+  /// * [mute] Whether to stop subscribing to all remote users' audio streams: true : Stop subscribing to all remote users' audio streams. false : Subscribe to all remote users' audio streams.
   ///
   /// Returns
-  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown. You need to catch the exception and handle it accordingly.
+  /// When the method call succeeds, there is no return value; when it fails, the AgoraRtcException exception is thrown. You need to catch the exception and handle it accordingly. See [Error Codes](https://docs.agora.io/en/video-calling/troubleshooting/error-codes) for details and resolution suggestions.
   Future<void> muteAllRemoteAudioStreams(bool mute);
 
-  /// Sets the sound insulation area.
+  /// Sets sound insulation zones.
   ///
-  /// In virtual interactive scenarios, you can use this method to set the sound insulation area and sound attenuation coefficient. When the sound source (which can be the user or the media player) and the listener belong to the inside and outside of the sound insulation area, they can experience the attenuation effect of sound similar to the real environment when it encounters a building partition.
-  ///  When the sound source and the listener belong to the inside and outside of the sound insulation area, the sound attenuation effect is determined by the sound attenuation coefficient in SpatialAudioZone.
-  ///  If the user or media player is in the same sound insulation area, it is not affected by SpatialAudioZone, and the sound attenuation effect is determined by the attenuation parameter in setPlayerAttenuation or setRemoteAudioAttenuation. If you do not call setPlayerAttenuation or setRemoteAudioAttenuation, the default sound attenuation coefficient of the SDK is 0.5, which simulates the attenuation of the sound in the real environment.
-  ///  If the sound source and the receiver belong to two sound insulation areas, the receiver cannot hear the sound source. If this method is called multiple times, the last sound insulation area set takes effect.
+  /// In virtual interactive scenarios, you can use this method to set sound insulation zones and sound attenuation coefficients. When the audio source (which can be a user or media player) and the listener are in and out of the sound insulation zone respectively, the user experiences attenuation similar to how sound is blocked by structures in the real world.
+  ///  When the audio source and listener are in and out of the sound insulation zone respectively, the attenuation effect is determined by the sound attenuation coefficient in SpatialAudioZone.
+  ///  If the user or media player is within the same sound insulation zone, the attenuation effect is not affected by SpatialAudioZone and is instead determined by the attenuation parameter in setPlayerAttenuation or setRemoteAudioAttenuation. If neither method is called, the SDK defaults to an attenuation coefficient of 0.5, simulating real-world sound attenuation.
+  ///  If the audio source and receiver are in different sound insulation zones, the receiver cannot hear the audio source. If this method is called multiple times, the most recent configuration of sound insulation zones takes effect.
   ///
-  /// * [zones] Sound insulation area settings. See SpatialAudioZone. When you set this parameter to NULL, it means clearing all sound insulation zones. On the Windows platform, it is necessary to ensure that the number of members in the zones array is equal to the value of zoneCount; otherwise, it may cause a crash.
-  /// * [zoneCount] The number of sound insulation areas.
+  /// * [zones] Configuration of sound insulation zones. See SpatialAudioZone. Setting this parameter to NULL clears all sound insulation zones. On the Windows platform, ensure that the number of elements in the zones array matches the value of zoneCount, otherwise a crash may occur.
+  /// * [zoneCount] The number of sound insulation zones.
   ///
   /// Returns
-  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown. You need to catch the exception and handle it accordingly.
+  /// When the method call succeeds, there is no return value; when it fails, the AgoraRtcException exception is thrown. You need to catch the exception and handle it accordingly. See [Error Codes](https://docs.agora.io/en/video-calling/troubleshooting/error-codes) for details and resolution suggestions.
   Future<void> setZones(
       {required List<SpatialAudioZone> zones, required int zoneCount});
 
   /// Sets the sound attenuation properties of the media player.
   ///
-  /// * [playerId] The ID of the media player.
-  /// * [attenuation] The sound attenuation coefficient of the remote user or media player. The value range is [0,1]. The values are as follows:
-  ///  0: Broadcast mode, where the volume and timbre are not attenuated with distance, and the volume and timbre heard by local users do not change regardless of distance.
-  ///  (0,0.5): Weak attenuation mode, that is, the volume and timbre are only weakly attenuated during the propagation process, and the sound can travel farther than the real environment.
-  ///  0.5: (Default) simulates the attenuation of the volume in the real environment; the effect is equivalent to not setting the speaker_attenuation parameter.
-  ///  (0.5,1]: Strong attenuation mode, that is, the volume and timbre attenuate rapidly during the propagation process.
-  /// * [forceSet] Whether to force the sound attenuation effect of the media player: true : Force attenuation to set the attenuation of the media player. At this time, the attenuation coefficient of the sound insulation are set in the audioAttenuation in the SpatialAudioZone does not take effect for the media player. false : Do not force attenuation to set the sound attenuation effect of the media player, as shown in the following two cases.
-  ///  If the sound source and listener are inside and outside the sound isolation area, the sound attenuation effect is determined by the audioAttenuation in SpatialAudioZone.
-  ///  If the sound source and the listener are in the same sound insulation area or outside the same sound insulation area, the sound attenuation effect is determined by attenuation in this method.
+  /// * [playerId] Media player ID.
+  /// * [attenuation] The sound attenuation coefficient of the media player, ranging from [0,1].
+  ///  0: Broadcast mode, where volume and timbre do not attenuate with distance. The local user hears no change in volume or timbre regardless of distance.
+  ///  (0,0.5): Weak attenuation mode, where volume and timbre attenuate slightly during propagation. Compared to the real world, sound can travel farther.
+  ///  0.5: (Default) Simulates attenuation in a real environment. Equivalent to not setting the attenuation parameter.
+  ///  (0.5,1]: Strong attenuation mode, where volume and timbre attenuate rapidly during propagation.
+  /// * [forceSet] Whether to forcibly apply the attenuation effect to the media player: true : Forces the use of attenuation to set the media player's sound attenuation effect. In this case, the audioAttenuation value set in SpatialAudioZone has no effect on the media player. false : Does not forcibly apply attenuation to the media player. Behavior depends on the following:
+  ///  If the audio source and listener are in and out of the sound insulation zone respectively, the attenuation effect is determined by audioAttenuation in SpatialAudioZone.
+  ///  If the audio source and listener are both inside or both outside the same sound insulation zone, the attenuation effect is determined by the attenuation parameter in this method.
   ///
   /// Returns
-  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown. You need to catch the exception and handle it accordingly.
+  /// When the method call succeeds, there is no return value; when it fails, the AgoraRtcException exception is thrown. You need to catch the exception and handle it accordingly. See [Error Codes](https://docs.agora.io/en/video-calling/troubleshooting/error-codes) for details and resolution suggestions.
   Future<void> setPlayerAttenuation(
       {required int playerId,
       required double attenuation,
       required bool forceSet});
 
-  /// Stops or resumes subscribing to the audio stream of a specified user.
+  /// Stops or resumes subscribing to the audio stream of a specified remote user.
   ///
-  /// Call this method after the or joinChannel method.
-  ///  When using the spatial audio effect, if you need to set whether to stop subscribing to the audio stream of a specified user, Agora recommends calling this method instead of the muteRemoteAudioStream method in RtcEngine.
-  ///
-  /// * [uid] The user ID. This parameter must be the same as the user ID passed in when the user joined the channel.
-  /// * [mute] Whether to subscribe to the specified remote user's audio stream. true : Stop subscribing to the audio stream of the specified user. false : (Default) Subscribe to the audio stream of the specified user. The SDK decides whether to subscribe according to the distance between the local user and the remote user.
+  /// * [uid] The user ID. It must be the same as the user ID used when the user joins the channel.
+  /// * [mute] Whether to stop subscribing to the specified remote user's audio stream: true : Stop subscribing to the specified user's audio stream. false : (Default) Subscribe to the specified user's audio stream. The SDK determines whether to subscribe based on the distance between the local and remote users.
   ///
   /// Returns
-  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown. You need to catch the exception and handle it accordingly.
+  /// When the method call succeeds, there is no return value; when it fails, the AgoraRtcException exception is thrown. You need to catch the exception and handle it accordingly. See [Error Codes](https://docs.agora.io/en/video-calling/troubleshooting/error-codes) for details and resolution suggestions.
   Future<void> muteRemoteAudioStream({required int uid, required bool mute});
 }
 
-/// This class calculates user positions through the SDK to implement the spatial audio effect.
+/// This class calculates user coordinates through the SDK to implement spatial audio.
 ///
-/// This class inherits from BaseSpatialAudioEngine. Before calling other APIs in this class, you need to call the initialize method to initialize this class.
+/// This class inherits from BaseSpatialAudioEngine. Before calling other APIs under this class, you need to call the initialize method to initialize it.
 abstract class LocalSpatialAudioEngine implements BaseSpatialAudioEngine {
-  /// Initializes LocalSpatialAudioEngine.
+  /// Initializes the LocalSpatialAudioEngine.
   ///
-  /// Before calling other methods of the LocalSpatialAudioEngine class, you need to call this method to initialize LocalSpatialAudioEngine.
-  ///  The SDK supports creating only one LocalSpatialAudioEngine instance for an app.
+  /// You must call this method to initialize the LocalSpatialAudioEngine before calling other methods of the LocalSpatialAudioEngine class.
+  ///  The SDK supports only one LocalSpatialAudioEngine instance per app.
   ///
   /// Returns
-  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown. You need to catch the exception and handle it accordingly.
+  /// When the method call succeeds, there is no return value; when it fails, the AgoraRtcException exception is thrown. You need to catch the exception and handle it accordingly. See [Error Codes](https://docs.agora.io/en/video-calling/troubleshooting/error-codes) for details and resolution suggestions.
   Future<void> initialize();
 
-  /// Updates the spatial position of the specified remote user.
+  /// Updates the spatial position information of a remote user.
   ///
-  /// After successfully calling this method, the SDK calculates the spatial audio parameters based on the relative position of the local and remote user. Call this method after the or joinChannel method.
+  /// After successfully calling this method, the SDK calculates spatial audio parameters based on the relative position of the local and remote users. You must call this method after joinChannel.
   ///
-  /// * [uid] The user ID. This parameter must be the same as the user ID passed in when the user joined the channel.
-  /// * [posInfo] The spatial position of the remote user. See RemoteVoicePositionInfo.
+  /// * [uid] The user ID. It must be the same as the user ID used when the user joins the channel.
+  /// * [posInfo] The spatial position information of the remote user. See RemoteVoicePositionInfo.
   ///
   /// Returns
-  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown. You need to catch the exception and handle it accordingly.
+  /// When the method call succeeds, there is no return value; when it fails, the AgoraRtcException exception is thrown. You need to catch the exception and handle it accordingly. See [Error Codes](https://docs.agora.io/en/video-calling/troubleshooting/error-codes) for details and resolution suggestions.
   Future<void> updateRemotePosition(
       {required int uid, required RemoteVoicePositionInfo posInfo});
 
@@ -269,45 +268,43 @@ abstract class LocalSpatialAudioEngine implements BaseSpatialAudioEngine {
       required RemoteVoicePositionInfo posInfo,
       required RtcConnection connection});
 
-  /// Removes the spatial position of the specified remote user.
+  /// Deletes the spatial position information of the specified remote user.
   ///
-  /// After successfully calling this method, the local user no longer hears the specified remote user. After leaving the channel, to avoid wasting computing resources, call this method to delete the spatial position information of the specified remote user. Otherwise, the user's spatial position information will be saved continuously. When the number of remote users exceeds the number of audio streams that can be received as set in setMaxAudioRecvCount, the system automatically unsubscribes from the audio stream of the user who is furthest away based on relative distance.
+  /// After this method is successfully called, the local user will no longer hear the specified remote user.
+  /// After leaving the channel, to avoid wasting computing resources, you need to call this method to delete the spatial position information of the specified remote user. Otherwise, the user's spatial position information will continue to be stored. When the number of remote users exceeds the number of audio streams set in setMaxAudioRecvCount, the SDK will automatically unsubscribe from the audio streams of the farthest users based on relative distance.
   ///
-  /// * [uid] The user ID. This parameter must be the same as the user ID passed in when the user joined the channel.
+  /// * [uid] User ID. Must match the user ID used when joining the channel.
   ///
   /// Returns
-  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown. You need to catch the exception and handle it accordingly.
+  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown. You need to catch the exception and handle it accordingly. See [Error Codes](https://docs.agora.io/en/video-calling/troubleshooting/error-codes) for details and resolution suggestions.
   Future<void> removeRemotePosition(int uid);
 
   /// @nodoc
   Future<void> removeRemotePositionEx(
       {required int uid, required RtcConnection connection});
 
-  /// Removes the spatial positions of all remote users.
+  /// Deletes the spatial position information of all remote users.
   ///
-  /// After successfully calling this method, the local user no longer hears any remote users. After leaving the channel, to avoid wasting resources, you can also call this method to delete the spatial positions of all remote users.
+  /// After this method is successfully called, the local user will no longer hear any remote users.
+  /// After leaving the channel, you can also call this method to delete all remote users' spatial position information to avoid wasting computing resources.
   ///
   /// Returns
-  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown. You need to catch the exception and handle it accordingly.
+  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown. You need to catch the exception and handle it accordingly. See [Error Codes](https://docs.agora.io/en/video-calling/troubleshooting/error-codes) for details and resolution suggestions.
   Future<void> clearRemotePositions();
 
   /// @nodoc
   Future<void> clearRemotePositionsEx(RtcConnection connection);
 
-  /// Sets the sound attenuation effect for the specified user.
+  /// Sets the sound attenuation effect for a specified user.
   ///
-  /// * [uid] The user ID. This parameter must be the same as the user ID passed in when the user joined the channel.
-  /// * [attenuation] For the user's sound attenuation coefficient, the value range is [0,1]. The values are as follows:
-  ///  0: Broadcast mode, where the volume and timbre are not attenuated with distance, and the volume and timbre heard by local users do not change regardless of distance.
-  ///  (0,0.5): Weak attenuation mode, that is, the volume and timbre are only weakly attenuated during the propagation process, and the sound can travel farther than the real environment.
-  ///  0.5: (Default) simulates the attenuation of the volume in the real environment; the effect is equivalent to not setting the speaker_attenuation parameter.
-  ///  (0.5,1]: Strong attenuation mode, that is, the volume and timbre attenuate rapidly during the propagation process.
-  /// * [forceSet] Whether to force the user's sound attenuation effect: true : Force attenuation to set the sound attenuation of the user. At this time, the attenuation coefficient of the sound insulation area set in the audioAttenuation of the SpatialAudioZone does not take effect for the user.
-  ///  If the sound source and listener are inside and outside the sound isolation area, the sound attenuation effect is determined by the audioAttenuation in SpatialAudioZone.
-  ///  If the sound source and the listener are in the same sound insulation area or outside the same sound insulation area, the sound attenuation effect is determined by attenuation in this method. false : Do not force attenuation to set the user's sound attenuation effect, as shown in the following two cases.
+  /// * [uid] User ID. Must match the user ID used when joining the channel.
+  /// * [attenuation] The sound attenuation coefficient for the specified user, ranging from [0,1].
+  /// * [forceSet] Whether to forcibly apply the sound attenuation effect for the user: true : Forces the use of attenuation to set the user's sound attenuation effect. In this case, the audioAttenuation value set in SpatialAudioZone has no effect on this user. false : Does not forcibly apply attenuation to the user. Behavior depends on the following:
+  ///  If the audio source and listener are in and out of the sound insulation zone respectively, the attenuation effect is determined by audioAttenuation in SpatialAudioZone.
+  ///  If the audio source and listener are both inside or both outside the same sound insulation zone, the attenuation effect is determined by the attenuation parameter in this method.
   ///
   /// Returns
-  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown. You need to catch the exception and handle it accordingly.
+  /// When the method call succeeds, there is no return value; when it fails, the AgoraRtcException exception is thrown. You need to catch the exception and handle it accordingly. See [Error Codes](https://docs.agora.io/en/video-calling/troubleshooting/error-codes) for details and resolution suggestions.
   Future<void> setRemoteAudioAttenuation(
       {required int uid, required double attenuation, required bool forceSet});
 }
