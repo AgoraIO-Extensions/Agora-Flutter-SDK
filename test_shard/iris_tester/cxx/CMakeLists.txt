@@ -141,10 +141,20 @@ elseif (CMAKE_SYSTEM_NAME STREQUAL "Darwin")
         "${FRAMEWORKS}"
         )
 else()
-    set(IRIS_SDK_DOWNLOAD_NAME "iris_3.7.0.3_RTC_Windows_20220719_0357")
-    set(LIBS_DIR
-    "${CMAKE_CURRENT_SOURCE_DIR}/../../windows/third_party/iris/${IRIS_SDK_DOWNLOAD_NAME}/x64/Release/AgoraRtcWrapper.lib"
+    set(WINDOWS_THIRD_PARTY_DIR
+        "${CMAKE_CURRENT_SOURCE_DIR}/../../windows/third_party/iris"
         )
+    set(LIBS_DIR "")
+    file(GLOB_RECURSE WINDOWS_WRAPPER_LIBS
+        "${WINDOWS_THIRD_PARTY_DIR}/*/AgoraRtcWrapper.lib"
+        )
+    list(LENGTH WINDOWS_WRAPPER_LIBS WINDOWS_WRAPPER_LIB_COUNT)
+    if(WINDOWS_WRAPPER_LIB_COUNT GREATER 0)
+        list(GET WINDOWS_WRAPPER_LIBS 0 LIBS_DIR)
+    endif()
+    if(LIBS_DIR STREQUAL "")
+        message(FATAL_ERROR "Failed to find AgoraRtcWrapper.lib under ${WINDOWS_THIRD_PARTY_DIR}")
+    endif()
     target_link_libraries(${LIBRARY_NAME} PUBLIC 
                           ${LIBS_DIR}
                           )
