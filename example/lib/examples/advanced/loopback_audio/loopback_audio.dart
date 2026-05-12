@@ -105,9 +105,8 @@ class _State extends State<LoopbackAudio> {
       channelId: _controller.text,
       uid: config.uid,
       options: const ChannelMediaOptions(
-        channelProfile: ChannelProfileType.channelProfileLiveBroadcasting,
-        clientRoleType: ClientRoleType.clientRoleBroadcaster
-      ),
+          channelProfile: ChannelProfileType.channelProfileLiveBroadcasting,
+          clientRoleType: ClientRoleType.clientRoleBroadcaster),
     );
   }
 
