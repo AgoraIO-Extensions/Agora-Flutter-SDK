@@ -74,15 +74,30 @@ jobs:
       dry-run: ${{ steps.version_check.outputs.dry-run }}
     runs-on: ubuntu-latest
     steps:
+      - name: Resolve target branch
+        id: target_branch
+        run: |
+          if [ "${{ github.event_name }}" = "pull_request" ]; then
+            TARGET_BRANCH="${{ github.event.pull_request.base.ref }}"
+          else
+            TARGET_BRANCH="${{ github.ref_name }}"
+          fi
+
+          echo "Target branch: $TARGET_BRANCH"
+          echo "branch=$TARGET_BRANCH" >> "$GITHUB_OUTPUT"
+
       - name: Checkout repository 🛎️
         uses: actions/checkout@v4
         with:
-          ref: ${{ github.ref }}
+          ref: ${{ steps.target_branch.outputs.branch }}
           fetch-depth: 0
           token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Get tags
         run: git fetch --tags origin
+
+      - name: Switch to target branch
+        run: git checkout -B "${{ steps.target_branch.outputs.branch }}" "origin/${{ steps.target_branch.outputs.branch }}"
 
       - name: Get version information ℹ️
         id: version_check
@@ -172,92 +187,57 @@ jobs:
           git config user.name "${GITHUB_ACTOR}"
           git config user.email "${GITHUB_ACTOR}@users.noreply.github.com"
 
-      - name: Create release commit and tag (triggered by manual/callable)
+      - name: Prepare release files (triggered by manual/callable)
         if: ${{ github.event_name == 'workflow_dispatch' || github.event_name == 'workflow_call' }}
         run: |
-          # Use auto-detected release type
-          RELEASE_TYPE="${{ steps.version_check.outputs.release_type }}"
-          IS_PRERELEASE="${{ steps.version_check.outputs.is_prerelease }}"
-          DRY_RUN="${{ steps.version_check.outputs.dry-run }}"
+          set -eo pipefail
 
-          # Build release-it command
-          RELEASE_IT_CMD="release-it ${{ steps.version_check.outputs.version }}"
-          
-          if [ "$DRY_RUN" = "true" ]; then
-            echo "[DRY-RUN MODE] No commits/tags/releases will be created"
-            RELEASE_IT_CMD="$RELEASE_IT_CMD --dry-run"
-          fi
-
-          if [ "$RELEASE_TYPE" = "special" ]; then
-            echo "Creating special release (only Git tag, no GitHub release)..."
-            # Use git.commit to let release-it handle the commit
-            $RELEASE_IT_CMD \
-              --git.commit \
-              --'git.commitMessage="chore: release ${{ steps.version_check.outputs.version }}"' \
-              --git.tag \
-              --'git.tagName="${{ steps.version_check.outputs.version }}"' \
-              --'git.tagAnnotation="Release ${{ steps.version_check.outputs.version }}"' \
-              --git.push \
-              --no-github.release \
-              --no-github.web \
-              --ci
-          else
-            echo "🚀 Creating standard release (with GitHub release)..."
-            if [ "$IS_PRERELEASE" = "true" ]; then
-              echo "🔖 This is a pre-release version"
-            fi
-            # Use git.commit to let release-it handle the commit
-            $RELEASE_IT_CMD \
-              --git.commit \
-              --'git.commitMessage="chore: release ${{ steps.version_check.outputs.version }}"' \
-              --git.tag \
-              --'git.tagName="${{ steps.version_check.outputs.version }}"' \
-              --'git.tagAnnotation="Release ${{ steps.version_check.outputs.version }}"' \
-              --git.push \
-              --github.release \
-              --no-github.web \
-              --ci
-          fi
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
-      - name: Create release commit and tag (triggered by PR merge)
-        if: github.event_name == 'pull_request'
-        run: |
-          RELEASE_TYPE="${{ steps.version_check.outputs.release_type }}"
           RELEASE_VERSION="${{ steps.version_check.outputs.version }}"
-          DRY_RUN="${{ steps.version_check.outputs.dry-run }}"
 
-          # PR triggers always run in production mode (dry-run=false)
-          if [ "$DRY_RUN" = "true" ]; then
-            echo "Warning: PR triggers ignore dry-run mode"
-          fi
-
-          if [ "$RELEASE_TYPE" = "special" ]; then
-            echo "Creating special release from PR (only Git tag, no GitHub release)..."
-            release-it $RELEASE_VERSION \
-              --no-git.commit \
-              --git.tag \
-              --'git.tagName="${version}"' \
-              --'git.tagAnnotation="Release ${version}"' \
-              --git.push \
-              --no-github.release \
-              --no-github.web \
-              --ci
-          else
-            echo "🚀 Creating standard release from PR (with GitHub release)..."
-            release-it $RELEASE_VERSION \
-              --no-git.commit \
-              --git.tag \
-              --'git.tagName="${version}"' \
-              --'git.tagAnnotation="Release ${version}"' \
-              --git.push \
-              --github.release \
-              --no-github.web \
-              --ci
-          fi
+          echo "Preparing release files for $RELEASE_VERSION"
+          release-it "$RELEASE_VERSION" \
+            --no-git \
+            --no-github.release \
+            --no-github.web \
+            --ci
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Archive changelog for pub.dev
+        if: ${{ steps.version_check.outputs.release_type == 'standard' }}
+        run: |
+          bash scripts/archive_changelog.sh
+
+      - name: Verify prepared release version
+        run: |
+          set -eo pipefail
+
+          CURRENT_VERSION="$(grep 'version: ' pubspec.yaml | sed -e 's,.*: \(.*\),\1,')"
+          EXPECTED_VERSION="${{ steps.version_check.outputs.version }}"
+
+          echo "Prepared pubspec version: $CURRENT_VERSION"
+          echo "Expected release version: $EXPECTED_VERSION"
+
+          if [ "$CURRENT_VERSION" != "$EXPECTED_VERSION" ]; then
+            echo "Prepared pubspec version does not match release version." >&2
+            exit 1
+          fi
+
+      - name: Commit prepared release files locally
+        run: |
+          set -eo pipefail
+
+          RELEASE_VERSION="${{ steps.version_check.outputs.version }}"
+
+          if ! git diff --quiet || ! git diff --cached --quiet; then
+            git add pubspec.yaml CHANGELOG.md
+            if [ -f docs/CHANGELOG.archive.md ]; then
+              git add docs/CHANGELOG.archive.md
+            fi
+            git commit -m "chore: release $RELEASE_VERSION"
+          else
+            echo "No release file changes to commit"
+          fi
 
       - name: Setup Flutter for pub publish
         if: ${{ steps.version_check.outputs.release_type == 'standard' }}
@@ -275,12 +255,52 @@ jobs:
       
       - name: Publish to pub.dev (real)
         if: ${{ steps.version_check.outputs.release_type == 'standard' && steps.version_check.outputs.dry-run == 'false' }}
+        id: pub_publish
         uses: k-paxian/dart-package-publisher@master
         with:
           accessToken: ${{ secrets.OAUTH_ACCESS_TOKEN }}
           refreshToken: ${{ secrets.OAUTH_REFRESH_TOKEN }}
           force: false
           skipTests: true
+
+      - name: Fail if pub publish did not report success
+        if: ${{ steps.version_check.outputs.release_type == 'standard' && steps.version_check.outputs.dry-run == 'false' }}
+        run: |
+          set -eo pipefail
+
+          if [ "${{ steps.pub_publish.outputs.success }}" != "true" ]; then
+            echo "pub publish step did not report success." >&2
+            echo "Action output success=${{ steps.pub_publish.outputs.success }}" >&2
+            exit 1
+          fi
+
+      - name: Finalize release artifacts
+        if: ${{ steps.version_check.outputs.dry-run == 'false' }}
+        run: |
+          set -eo pipefail
+
+          RELEASE_TYPE="${{ steps.version_check.outputs.release_type }}"
+          RELEASE_VERSION="${{ steps.version_check.outputs.version }}"
+          TARGET_BRANCH="${{ steps.target_branch.outputs.branch }}"
+          RELEASE_NOTES_FILE="$(mktemp)"
+
+          git push origin "HEAD:${TARGET_BRANCH}"
+          git tag -a "$RELEASE_VERSION" -m "Release $RELEASE_VERSION"
+          git push origin "refs/tags/$RELEASE_VERSION"
+
+          if [ "$RELEASE_TYPE" = "standard" ]; then
+            python3 -c 'import re, sys; from pathlib import Path; version = sys.argv[1]; output = Path(sys.argv[2]); text = Path("CHANGELOG.md").read_text(); pattern = re.compile(rf"(^## .*{re.escape(version)}.*?(?=^## |\\Z))", re.MULTILINE | re.DOTALL); match = pattern.search(text); (_ for _ in ()).throw(SystemExit(f"Unable to find release notes for {version} in CHANGELOG.md")) if not match else output.write_text(match.group(1).strip() + "\n")' \
+              "$RELEASE_VERSION" "$RELEASE_NOTES_FILE"
+
+            gh release create "$RELEASE_VERSION" \
+              --repo "${{ github.repository }}" \
+              --title "Release $RELEASE_VERSION" \
+              --notes-file "$RELEASE_NOTES_FILE"
+          else
+            echo "Skipping GitHub release for special release"
+          fi
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
   # Generate and attach documentation (only for standard releases in production mode)
   attach_documentation:
