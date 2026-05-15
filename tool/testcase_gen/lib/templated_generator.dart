@@ -196,8 +196,8 @@ class TemplatedGenerator extends DefaultGenerator {
           .map((t) => '${t.type.type} ${t.name}')
           .join(', ');
 
-      final isSuffixEx =
-          field.type.parameters.any((p) => p.type.type == 'RtcConnection');
+      // final isSuffixEx =
+      //     field.type.parameters.any((p) => p.type.type == 'RtcConnection');
 
       String eventName = field.name;
 

@@ -12,6 +12,8 @@
 #include <jni.h>
 #include <memory>
 #include <vector>
+#include <cstring>
+#include <chrono>
 
 namespace agora {
 namespace iris {
@@ -508,6 +510,10 @@ class YUVRendering final : public RenderingOp {
     uTextureLoc_ = glGetUniformLocation(program, "uTexture");
     vTextureLoc_ = glGetUniformLocation(program, "vTexture");
 
+    // Get locations for ColorSpace uniforms
+    colorMatrixLoc_ = glGetUniformLocation(program, "uColorMatrix");
+    rangeLoc_ = glGetUniformLocation(program, "uRange");
+
     glGenTextures(3, texs_);
     CHECK_GL_ERROR()
   }
@@ -618,12 +624,108 @@ class YUVRendering final : public RenderingOp {
                  GL_LUMINANCE, GL_UNSIGNED_BYTE, vBuffer);
     CHECK_GL_ERROR()
 
+    // Debug: Log entry into color space processing
+    int matrixId = (int)video_frame->colorSpace.matrix;
+    int rangeId = (int)video_frame->colorSpace.range;
+    LOGCATD("YUV Rendering - colorMatrixLoc_:%d, rangeLoc_:%d, matrix:%d, range:%d", 
+            colorMatrixLoc_, rangeLoc_, matrixId, rangeId);
+
+    // Production Logic: Default to Full Range if metadata is ambiguous (Unspecified or Invalid)
+    // to avoid destructive highlight/shadow clipping.
+    bool isFullRange = (rangeId == agora::media::base::ColorSpace::RANGEID_FULL) || 
+                       (rangeId == agora::media::base::ColorSpace::RANGEID_INVALID) ||
+                       (matrixId == agora::media::base::ColorSpace::MATRIXID_UNSPECIFIED);
+
+    if (colorMatrixLoc_ != -1) {
+      // BT.601 Full Range: R=Y+1.402*Cr, G=Y-0.344136*Cb-0.714136*Cr, B=Y+1.772*Cb
+      float bt601_full[9] = {
+          1.0f, 0.0f, 1.402f,                // R
+          1.0f, -0.344136f, -0.714136f,      // G
+          1.0f, 1.772f, 0.0f                 // B
+      };
+      
+      // BT.601 Limited Range: similar formula with 1.164 scaling
+      float bt601_limit[9] = {
+          1.164384f, 0.0f, 1.596027f,        // R
+          1.164384f, -0.391762f, -0.812968f, // G
+          1.164384f, 2.017232f, 0.0f         // B
+      };
+      
+      
+      // BT.709 Full Range: R=Y+1.5748*Cr, G=Y-0.187324*Cb-0.468124*Cr, B=Y+1.8556*Cb
+      float bt709_full[9] = {
+          1.0f, 0.0f, 1.5748f,               // R
+          1.0f, -0.187324f, -0.468124f,      // G
+          1.0f, 1.8556f, 0.0f                // B
+      };
+      
+      
+      // BT.709 Limited Range: similar with 1.164 scaling
+      float bt709_limit[9] = {
+          1.164384f, 0.0f, 1.792741f,        // R
+          1.164384f, -0.213249f, -0.532909f, // G
+          1.164384f, 2.112402f, 0.0f         // B
+      };
+      
+      
+      // BT.2020 Full Range
+      float bt2020_full[9] = {
+          1.0f, 0.0f, 1.4746f,               // R
+          1.0f, -0.164553f, -0.571353f,      // G
+          1.0f, 1.8814f, 0.0f                // B
+      };
+      
+      // BT.2020 Limited Range 
+      float bt2020_limit[9] = {
+          1.167808f, 1.167808f, 1.167808f,
+          0.0f, -0.187877f, 2.148072f,
+          1.683611f, -0.652337f, 0.0f
+      };
+
+      float mat[9];
+      
+      // Select matrix based on colorSpace.matrix and range 
+      switch (matrixId) {
+        case agora::media::base::ColorSpace::MATRIXID_SMPTE170M:
+        case agora::media::base::ColorSpace::MATRIXID_BT470BG:
+          memcpy(mat, isFullRange ? bt601_full : bt601_limit, sizeof(mat));
+          LOGCATD("Using BT.601 matrix - %s range", isFullRange ? "Full" : "Limited");
+          break;
+        case agora::media::base::ColorSpace::MATRIXID_BT709:
+          memcpy(mat, isFullRange ? bt709_full : bt709_limit, sizeof(mat));
+          LOGCATD("Using BT.709 matrix - %s range", isFullRange ? "Full" : "Limited");
+          break;
+        case agora::media::base::ColorSpace::MATRIXID_BT2020_NCL:
+        case agora::media::base::ColorSpace::MATRIXID_BT2020_CL:
+          memcpy(mat, isFullRange ? bt2020_full : bt2020_limit, sizeof(mat));
+          LOGCATD("Using BT.2020 matrix - %s range", isFullRange ? "Full" : "Limited");
+          break;
+        default:
+          memcpy(mat, isFullRange ? bt709_full : bt709_limit, sizeof(mat));
+          LOGCATD("Using default (BT.709) matrix - %s range", isFullRange ? "Full" : "Limited");
+          break;
+      }
+      
+      LOGCATD("Applying color matrix: [%.3f, %.3f, %.3f]", mat[0], mat[1], mat[2]);
+      glUniformMatrix3fv(colorMatrixLoc_, 1, GL_TRUE, mat);
+    } else {
+      LOGCATE("colorMatrixLoc_ is -1, COLOR SPACE MATRIX NOT APPLIED!");
+    }
+
+    if (rangeLoc_ != -1) {
+      // Use the same refined logic for consistency with matrix selection
+      int rangeVal = isFullRange ? 1 : 0;
+      glUniform1i(rangeLoc_, rangeVal);
+      LOGCATD("Set uRange uniform to %d (%s)", rangeVal, isFullRange ? "Full" : "Limited");
+    } else {
+      LOGCATE("rangeLoc_ is -1, RANGE UNIFORM NOT APPLIED!");
+    }
+
     glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
     CHECK_GL_ERROR()
 
     gl_context_->Swap();
 
-    // Clean up
     glDisableVertexAttribArray(aPositionLoc_);
     CHECK_GL_ERROR()
     glDisableVertexAttribArray(texCoordLoc_);
@@ -642,25 +744,40 @@ class YUVRendering final : public RenderingOp {
       "attribute vec2 aTextCoord;\n"
       "varying vec2 vTextCoord;\n"
       "void main() {\n"
-      "    vTextCoord = vec2(aTextCoord.x, 1.0 - aTextCoord.y);\n"
-      "    gl_Position = aPosition;\n"
+      "  gl_Position = aPosition;\n"
+      "  vTextCoord = vec2(aTextCoord.x, 1.0 - aTextCoord.y);\n"
       "}\n";
 
   const char *frag_shader_yuv_ =
-      "precision mediump float;\n"
+      "precision highp float;\n"
       "varying vec2 vTextCoord;\n"
       "uniform sampler2D yTexture;\n"
       "uniform sampler2D uTexture;\n"
       "uniform sampler2D vTexture;\n"
+      "uniform mat3 uColorMatrix;\n"
+      "uniform int uRange;\n"
+      "\n"
       "void main() {\n"
-      "    vec3 yuv;\n"
-      "    vec3 rgb;\n"
-      "    yuv.r = texture2D(yTexture, vTextCoord).r;\n"
-      "    yuv.g = texture2D(uTexture, vTextCoord).r - 0.5;\n"
-      "    yuv.b = texture2D(vTexture, vTextCoord).r - 0.5;\n"
-      "    rgb = mat3(1.0, 1.0, 1.0, 0.0, -0.39465, 2.03211, 1.13983, "
-      "-0.58060, 0.0) * yuv;\n"
-      "    gl_FragColor = vec4(rgb, 1.0);\n"
+      "  float y = texture2D(yTexture, vTextCoord).r;\n"
+      "  float u = texture2D(uTexture, vTextCoord).r;\n"
+      "  float v = texture2D(vTexture, vTextCoord).r;\n"
+      "\n"
+      "  vec3 yuv;\n"
+      "  if (uRange == 0) { // LIMITED\n"
+      "    yuv[0] = y - 16.0/255.0;\n"
+      "    yuv[1] = (u - 128.0/255.0) * 255.0/224.0;\n"
+      "    yuv[2] = (v - 128.0/255.0) * 255.0/224.0;\n"
+      "  } else { // FULL\n"
+      "    yuv[0] = y;\n"
+      "    yuv[1] = u - 0.5;\n"
+      "    yuv[2] = v - 0.5;\n"
+      "  }\n"
+      "\n"
+      "  // Matrix transposed via GL_TRUE, can multiply directly\n"
+      "  vec3 rgb = uColorMatrix * yuv;\n"
+      "\n"
+      "  // No clamp on final output to preserve subtle differences at extremes\n"
+      "  gl_FragColor = vec4(rgb, 1.0);\n"
       "}\n";
 
   // clang-format off
@@ -680,6 +797,8 @@ class YUVRendering final : public RenderingOp {
   GLint yTextureLoc_;
   GLint uTextureLoc_;
   GLint vTextureLoc_;
+  GLint colorMatrixLoc_ = -1;
+  GLint rangeLoc_ = -1;
 
   std::unique_ptr<ScopedShader> shader_;
 };
@@ -691,13 +810,19 @@ class NativeTextureRenderer final
       JNIEnv *env, jobject j_iris_renderer_obj, jobject surface_jni,
       agora::iris::IrisRtcRendering *iris_rtc_rendering, unsigned int uid,
       const char *channel_id, int video_source_type, int video_view_setup_mode)
-      : jvm_(nullptr), iris_rtc_rendering_(iris_rtc_rendering), width_(0),
+      : jvm_(nullptr), iris_rtc_rendering_(iris_rtc_rendering), uid_(uid), width_(0),
         height_(0) {
     env->GetJavaVM(&jvm_);
     j_iris_renderer_obj_ = env->NewGlobalRef(j_iris_renderer_obj);
     jclass j_caller_class = env->GetObjectClass(j_iris_renderer_obj_);
     j_on_size_changed_method_ =
         env->GetMethodID(j_caller_class, "onSizeChanged", "(II)V");
+    j_record_frame_received_method_ =
+        env->GetMethodID(j_caller_class, "recordFrameReceived", "()V");
+    j_record_frame_rendered_interval_method_ =
+        env->GetMethodID(j_caller_class, "recordFrameRenderedInterval", "()V");
+    j_record_render_draw_cost_method_ =
+        env->GetMethodID(j_caller_class, "recordRenderDrawCost", "(D)V");
     env->DeleteLocalRef(j_caller_class);
 
     native_windows_ = ANativeWindow_fromSurface(env, surface_jni);
@@ -733,6 +858,13 @@ class NativeTextureRenderer final
         static_cast<const agora::media::base::VideoFrame *>(videoFrame);
 
     if (video_frame->width == 0 || video_frame->height == 0) { return; }
+
+    // Capture frame received timestamp locally to avoid race conditions
+    int64_t frame_received_time_micros = std::chrono::duration_cast<std::chrono::microseconds>(
+        std::chrono::steady_clock::now().time_since_epoch()).count();
+
+    // Record frame received for FPS calculation
+    RecordFrameReceived();
 
     if (width_ != video_frame->width || height_ != video_frame->height) {
       NotifySizeChangeCallback(video_frame->width, video_frame->height);
@@ -777,9 +909,22 @@ class NativeTextureRenderer final
       }
     }
 
+    // Record frame rendered interval before actual rendering
+    // This measures the time between consecutive textureFrameAvailable notifications
+    RecordFrameRenderedInterval();
+
     rendering_op_->Rendering(video_frame);
 
     gl_context_->GLContextClearCurrent();
+
+    // Calculate render draw cost using the locally captured timestamp
+    // Measured after GLContextClearCurrent() to include the complete rendering pipeline
+    int64_t now_micros = std::chrono::duration_cast<std::chrono::microseconds>(
+        std::chrono::steady_clock::now().time_since_epoch()).count();
+    double draw_cost_ms = (now_micros - frame_received_time_micros) / 1000.0;
+
+    // Record render draw cost with the calculated value
+    RecordRenderDrawCostWithValue(draw_cost_ms);
   }
 
   void Dispose() {
@@ -811,14 +956,36 @@ class NativeTextureRenderer final
   }
 
  private:
+  void RecordFrameReceived() {
+    if (!j_iris_renderer_obj_) { return; }
+    ::iris::AttachThreadScoped ats(jvm_);
+    ats.env()->CallVoidMethod(j_iris_renderer_obj_, j_record_frame_received_method_);
+  }
+
+  void RecordFrameRenderedInterval() {
+    if (!j_iris_renderer_obj_) { return; }
+    ::iris::AttachThreadScoped ats(jvm_);
+    ats.env()->CallVoidMethod(j_iris_renderer_obj_, j_record_frame_rendered_interval_method_);
+  }
+
+  void RecordRenderDrawCostWithValue(double draw_cost_ms) {
+    if (!j_iris_renderer_obj_) { return; }
+    ::iris::AttachThreadScoped ats(jvm_);
+    ats.env()->CallVoidMethod(j_iris_renderer_obj_, j_record_render_draw_cost_method_, draw_cost_ms);
+  }
+
   JavaVM *jvm_;
   jobject j_iris_renderer_obj_;
   jmethodID j_on_size_changed_method_;
+  jmethodID j_record_frame_received_method_;
+  jmethodID j_record_frame_rendered_interval_method_;
+  jmethodID j_record_render_draw_cost_method_;
 
   agora::iris::IrisRtcRendering *iris_rtc_rendering_;
   ANativeWindow *native_windows_;
   int width_;
   int height_;
+  unsigned int uid_;
 
   int delegate_id_;
 

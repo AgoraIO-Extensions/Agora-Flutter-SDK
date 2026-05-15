@@ -5,7 +5,7 @@ import {
   TerraContext,
 } from "@agoraio-extensions/terra-core";
 import { isCallbackClass } from "./utils";
-import { dartFileName } from "../parsers/dart_syntax_parser";
+import { dartFileName, dartName } from "../parsers/dart_syntax_parser";
 
 /// Generate the files:
 /// - lib/src/binding_forward_export.dart
@@ -22,10 +22,20 @@ export default function ForwardExportRenderer(
     bindingExportFiles.push(`export '/src/${dartFileName(cxxFile)}.dart';`);
 
     let hasImplClass = cxxFile.nodes.find((node) => {
-      return node.__TYPE == CXXTYPE.Clazz && !isCallbackClass(node as Clazz);
+      if (node.__TYPE == CXXTYPE.Clazz && !isCallbackClass(node as Clazz)) {
+        // Check if dartName is not empty to avoid exporting non-existent impl files
+        let clazz = node as Clazz;
+        return dartName(clazz).length > 0;
+      }
+      return false;
     });
     let hasCallbackImplClass = cxxFile.nodes.find((node) => {
-      return node.__TYPE == CXXTYPE.Clazz && isCallbackClass(node as Clazz);
+      if (node.__TYPE == CXXTYPE.Clazz && isCallbackClass(node as Clazz)) {
+        // Check if dartName is not empty
+        let clazz = node as Clazz;
+        return dartName(clazz).length > 0;
+      }
+      return false;
     });
     if (hasImplClass) {
       implExportFiles.push(`export '/src/binding/${dartFileName(cxxFile)}_impl.dart';`);

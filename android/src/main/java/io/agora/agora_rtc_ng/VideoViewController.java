@@ -140,15 +140,18 @@ public class VideoViewController implements MethodChannel.MethodCallHandler {
             long uid,
             String channelId,
             int videoSourceType,
-            int videoViewSetupMode) {
+            int videoViewSetupMode,
+            boolean enableArgusCounters) {
         final TextureRenderer textureRenderer = new TextureRenderer(
                 textureRegistry,
                 binaryMessenger,
+                methodChannel,  // Pass shared method channel
                 irisRtcRenderingHandle,
                 uid,
                 channelId,
                 videoSourceType,
-                videoViewSetupMode);
+                videoViewSetupMode,
+                enableArgusCounters);
         final long textureId = textureRenderer.getTextureId();
         textureRendererMap.put(textureId, textureRenderer);
 
@@ -195,13 +198,15 @@ public class VideoViewController implements MethodChannel.MethodCallHandler {
                 final String channelId = (String) args.get("channelId");
                 final int videoSourceType = (int) args.get("videoSourceType");
                 final int videoViewSetupMode = (int) args.get("videoViewSetupMode");
+                final boolean enableArgusCounters = args.containsKey("enableArgusCounters") ? (boolean) args.get("enableArgusCounters") : true;
 
                 final long textureId = createTextureRender(
                         irisRtcRenderingHandle,
                         uid,
                         channelId,
                         videoSourceType,
-                        videoViewSetupMode);
+                        videoViewSetupMode,
+                        enableArgusCounters);
                 result.success(textureId);
                 break;
             }

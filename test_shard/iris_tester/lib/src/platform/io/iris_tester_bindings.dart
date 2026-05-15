@@ -169,7 +169,7 @@ class NativeIrisTesterBinding {
 typedef IrisApiEnginePtr = ffi.Pointer<ffi.Void>;
 typedef ApiParam = EventParam;
 
-class EventParam extends ffi.Struct {
+final class EventParam extends ffi.Struct {
   external ffi.Pointer<ffi.Int8> event;
 
   external ffi.Pointer<ffi.Int8> data;

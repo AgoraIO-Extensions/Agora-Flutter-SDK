@@ -161,87 +161,88 @@ void testCases(ValueGetter<IrisTester> irisTester) {
 //     skip: kIsWeb || !Platform.isAndroid,
 //   );
 
-  testWidgets(
-    'RtcEngineEventHandler.onDownlinkNetworkInfoUpdated',
-    (WidgetTester tester) async {
-      RtcEngine rtcEngine = createAgoraRtcEngine();
-      await rtcEngine.initialize(RtcEngineContext(
-        appId: 'app_id',
-        areaCode: AreaCode.areaCodeGlob.value(),
-      ));
-      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
+// It's removed from SDK 4.6.2 - onDownlinkNetworkInfoUpdated callback no longer exists
+//   testWidgets(
+//     'RtcEngineEventHandler.onDownlinkNetworkInfoUpdated',
+//     (WidgetTester tester) async {
+//       RtcEngine rtcEngine = createAgoraRtcEngine();
+//       await rtcEngine.initialize(RtcEngineContext(
+//         appId: 'app_id',
+//         areaCode: AreaCode.areaCodeGlob.value(),
+//       ));
+//       await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
 
-      final onDownlinkNetworkInfoUpdatedCompleter = Completer<bool>();
-      final theRtcEngineEventHandler = RtcEngineEventHandler(
-        onDownlinkNetworkInfoUpdated: (DownlinkNetworkInfo info) {
-          onDownlinkNetworkInfoUpdatedCompleter.complete(true);
-        },
-      );
+//       final onDownlinkNetworkInfoUpdatedCompleter = Completer<bool>();
+//       final theRtcEngineEventHandler = RtcEngineEventHandler(
+//         onDownlinkNetworkInfoUpdated: (DownlinkNetworkInfo info) {
+//           onDownlinkNetworkInfoUpdatedCompleter.complete(true);
+//         },
+//       );
 
-      rtcEngine.registerEventHandler(
-        theRtcEngineEventHandler,
-      );
+//       rtcEngine.registerEventHandler(
+//         theRtcEngineEventHandler,
+//       );
 
-// Delay 500 milliseconds to ensure the registerEventHandler call completed.
-      await Future.delayed(const Duration(milliseconds: 500));
+// // Delay 500 milliseconds to ensure the registerEventHandler call completed.
+//       await Future.delayed(const Duration(milliseconds: 500));
 
-      {
-        const int infoLastmileBufferDelayTimeMs = 1;
-        const int infoBandwidthEstimationBps = 1;
-        const int infoTotalDownscaleLevelCount = 1;
-        const List<PeerDownlinkInfo> infoPeerDownlinkInfo = [
-          PeerDownlinkInfo(
-            userId: '123',
-            streamType: VideoStreamType.videoStreamLow,
-            currentDownscaleLevel:
-                RemoteVideoDownscaleLevel.remoteVideoDownscaleLevel1,
-            expectedBitrateBps: 1,
-          ),
-        ];
-        const int infoTotalReceivedVideoCount = 1;
-        const DownlinkNetworkInfo info = DownlinkNetworkInfo(
-          lastmileBufferDelayTimeMs: infoLastmileBufferDelayTimeMs,
-          bandwidthEstimationBps: infoBandwidthEstimationBps,
-          totalDownscaleLevelCount: infoTotalDownscaleLevelCount,
-          peerDownlinkInfo: infoPeerDownlinkInfo,
-          totalReceivedVideoCount: infoTotalReceivedVideoCount,
-        );
+//       {
+//         const int infoLastmileBufferDelayTimeMs = 1;
+//         const int infoBandwidthEstimationBps = 1;
+//         const int infoTotalDownscaleLevelCount = 1;
+//         const List<PeerDownlinkInfo> infoPeerDownlinkInfo = [
+//           PeerDownlinkInfo(
+//             userId: '123',
+//             streamType: VideoStreamType.videoStreamLow,
+//             currentDownscaleLevel:
+//                 RemoteVideoDownscaleLevel.remoteVideoDownscaleLevel1,
+//             expectedBitrateBps: 1,
+//           ),
+//         ];
+//         const int infoTotalReceivedVideoCount = 1;
+//         const DownlinkNetworkInfo info = DownlinkNetworkInfo(
+//           lastmileBufferDelayTimeMs: infoLastmileBufferDelayTimeMs,
+//           bandwidthEstimationBps: infoBandwidthEstimationBps,
+//           totalDownscaleLevelCount: infoTotalDownscaleLevelCount,
+//           peerDownlinkInfo: infoPeerDownlinkInfo,
+//           totalReceivedVideoCount: infoTotalReceivedVideoCount,
+//         );
 
-        final eventJson = {
-          'info': info.toJson(),
-        };
+//         final eventJson = {
+//           'info': info.toJson(),
+//         };
 
-        final eventIds = eventIdsMapping[
-                'RtcEngineEventHandler_onDownlinkNetworkInfoUpdated'] ??
-            [];
-        for (final event in eventIds) {
-          final ret = irisTester().fireEvent(event, params: eventJson);
-          // Delay 200 milliseconds to ensure the callback is called.
-          await Future.delayed(const Duration(milliseconds: 200));
-          // TODO(littlegnal): Most of callbacks on web are not implemented, we're temporarily skip these callbacks at this time.
-          if (kIsWeb && ret) {
-            if (!onDownlinkNetworkInfoUpdatedCompleter.isCompleted) {
-              onDownlinkNetworkInfoUpdatedCompleter.complete(true);
-            }
-          }
-        }
-      }
+//         final eventIds = eventIdsMapping[
+//                 'RtcEngineEventHandler_onDownlinkNetworkInfoUpdated'] ??
+//             [];
+//         for (final event in eventIds) {
+//           final ret = irisTester().fireEvent(event, params: eventJson);
+//           // Delay 200 milliseconds to ensure the callback is called.
+//           await Future.delayed(const Duration(milliseconds: 200));
+//           // TODO(littlegnal): Most of callbacks on web are not implemented, we're temporarily skip these callbacks at this time.
+//           if (kIsWeb && ret) {
+//             if (!onDownlinkNetworkInfoUpdatedCompleter.isCompleted) {
+//               onDownlinkNetworkInfoUpdatedCompleter.complete(true);
+//             }
+//           }
+//         }
+//       }
 
-      final eventCalled = await onDownlinkNetworkInfoUpdatedCompleter.future;
-      expect(eventCalled, isTrue);
+//       final eventCalled = await onDownlinkNetworkInfoUpdatedCompleter.future;
+//       expect(eventCalled, isTrue);
 
-      {
-        rtcEngine.unregisterEventHandler(
-          theRtcEngineEventHandler,
-        );
-      }
-// Delay 500 milliseconds to ensure the unregisterEventHandler call completed.
-      await Future.delayed(const Duration(milliseconds: 500));
+//       {
+//         rtcEngine.unregisterEventHandler(
+//           theRtcEngineEventHandler,
+//         );
+//       }
+// // Delay 500 milliseconds to ensure the unregisterEventHandler call completed.
+//       await Future.delayed(const Duration(milliseconds: 500));
 
-      await rtcEngine.release();
-    },
-    timeout: const Timeout(Duration(minutes: 2)),
-  );
+//       await rtcEngine.release();
+//     },
+//     timeout: const Timeout(Duration(minutes: 2)),
+//   );
 
   testWidgets(
     'RtcEngineEventHandler.onStreamMessage',

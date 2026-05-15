@@ -33,10 +33,10 @@ abstract class RtcEngineEx implements RtcEngine {
   /// Call this method to join multiple channels simultaneously. If you want to join the same channel on different devices, make sure the user IDs used on each device are different. If you are already in a channel, you cannot join the same channel again with the same user ID.
   /// Before joining a channel, ensure that the App ID used to generate the Token is the same as the one used in the initialize method. Otherwise, joining the channel using the Token will fail.
   ///
-  /// * [token] The dynamic key generated on your server for authentication. See [Token Authentication](https://doc.shengwang.cn/doc/rtc/flutter/basic-features/token-authentication).
+  /// * [token] The dynamic key generated on your server for authentication. See [Token Authentication](https://docs.agora.io/en/video-calling/token-authentication/deploy-token-server).
   ///  (Recommended) If your project enables security mode (i.e., uses APP ID + Token for authentication), this parameter is required.
   ///  If your project only enables debug mode (i.e., uses APP ID for authentication), you can join a channel without providing a Token. You will automatically leave the channel after 24 hours.
-  ///  If you need to join multiple channels at once or frequently switch between channels, Agora recommends using a wildcard Token to avoid requesting a new Token from your server for each new channel. See [Wildcard Token](https://doc.shengwang.cn/doc/rtc/flutter/best-practice/wildcard-token).
+  ///  If you need to join multiple channels at once or frequently switch between channels, Agora recommends using a wildcard Token to avoid requesting a new Token from your server for each new channel. See [Wildcard Token](https://docs.agora.io/en/video-calling/token-authentication/deploy-token-server).
   /// * [connection] Connection information. See RtcConnection.
   /// * [options] Channel media options. See ChannelMediaOptions.
   ///
@@ -434,7 +434,7 @@ abstract class RtcEngineEx implements RtcEngine {
 
   /// Creates a data stream.
   ///
-  /// If you need a more comprehensive, low-latency, high-concurrency, and scalable real-time messaging and state synchronization solution, we recommend using [Real-time Messaging](https://doc.shengwang.cn/doc/rtm2/flutter/landing-page).
+  /// If you need a more comprehensive, low-latency, high-concurrency, and scalable real-time messaging and state synchronization solution, we recommend using [Real-time Messaging](https://docs.agora.io/en/signaling/overview/product-overview).
   /// During the lifecycle of RtcEngine, each user can create up to 5 data streams. The data streams are destroyed when leaving the channel. If needed again, you must recreate them.
   ///
   /// * [config] Data stream configuration. See DataStreamConfig.
@@ -452,7 +452,7 @@ abstract class RtcEngineEx implements RtcEngine {
   /// The SDK imposes the following restrictions on this method:
   ///  Each client in the channel can have up to 5 data channels simultaneously, with a total sending bitrate limit of 30 KB/s shared among all channels.
   ///  Each data channel can send up to 60 packets per second, with each packet limited to 1 KB. After this method is successfully called, the remote side triggers the onStreamMessage callback, through which remote users can receive the stream message. If the call fails, the remote side triggers the onStreamMessageError callback.
-  ///  If you need a more comprehensive solution for low-latency, high-concurrency, and scalable real-time messaging and state synchronization, we recommend using [Real-time Messaging](https://doc.shengwang.cn/doc/rtm2/flutter/landing-page).
+  ///  If you need a more comprehensive solution for low-latency, high-concurrency, and scalable real-time messaging and state synchronization, we recommend using [Real-time Messaging](https://docs.agora.io/en/signaling/overview/product-overview).
   ///  This method must be called after joinChannelEx.
   ///  Make sure you have called createDataStreamEx to create the data channel before calling this method.
   ///
@@ -503,7 +503,7 @@ abstract class RtcEngineEx implements RtcEngine {
 
   /// Custom data reporting and analytics service.
   ///
-  /// Agora provides a custom data reporting and analytics service. This service is currently in a free beta period. During the beta, you can report up to 10 data entries within 6 seconds. Each custom data entry must not exceed 256 bytes, and each string must not exceed 100 bytes. To try this service, please [contact sales](https://www.shengwang.cn/contact-sales/) to enable it and agree on the custom data format.
+  /// Agora provides a custom data reporting and analytics service. This service is currently in a free beta period. During the beta, you can report up to 10 data entries within 6 seconds. Each custom data entry must not exceed 256 bytes, and each string must not exceed 100 bytes. To try this service, please [contact sales](mailto:support@agora.io) to enable it and agree on the custom data format.
   Future<void> sendCustomReportMessageEx(
       {required String id,
       required String category,
@@ -534,7 +534,7 @@ abstract class RtcEngineEx implements RtcEngine {
 
   /// Starts pushing streams without transcoding.
   ///
-  /// Agora recommends using the more comprehensive server-side streaming feature. See [Implement Server-Side Streaming](https://doc.shengwang.cn/doc/media-push/restful/landing-page).
+  /// Agora recommends using the more comprehensive server-side streaming feature. See [Implement Server-Side Streaming](https://docs.agora.io/en/media-push/get-started/enable-media-push).
   /// You can call this method to push live audio and video streams to a specified CDN streaming URL. This method can only push to one URL at a time. To push to multiple URLs, you must call this method multiple times.
   /// After calling this method, the SDK triggers the onRtmpStreamingStateChanged callback locally to report the streaming status.
   ///  Call this method after joining a channel.
@@ -551,7 +551,7 @@ abstract class RtcEngineEx implements RtcEngine {
 
   /// Starts pushing streams with transcoding settings.
   ///
-  /// Agora recommends using the more comprehensive server-side streaming feature. See [Implement Server-Side Streaming](https://doc.shengwang.cn/doc/media-push/restful/landing-page).
+  /// Agora recommends using the more comprehensive server-side streaming feature. See [Implement Server-Side Streaming](https://docs.agora.io/en/media-push/get-started/enable-media-push).
   /// You can call this method to push live audio and video streams to a specified CDN streaming URL with transcoding settings. This method can only push to one URL at a time. To push to multiple URLs, you must call this method multiple times.
   /// After calling this method, the SDK triggers the onRtmpStreamingStateChanged callback locally to report the streaming status.
   ///  Make sure the CDN streaming service is enabled.
@@ -572,7 +572,7 @@ abstract class RtcEngineEx implements RtcEngine {
 
   /// Updates the RTMP transcoding configuration.
   ///
-  /// Agora recommends using the more comprehensive server-side streaming feature. See [Implement Server-Side RTMP Streaming](https://doc.shengwang.cn/doc/media-push/restful/landing-page).
+  /// Agora recommends using the more comprehensive server-side streaming feature. See [Implement Server-Side RTMP Streaming](https://docs.agora.io/en/media-push/get-started/enable-media-push).
   /// After enabling transcoding streaming, you can dynamically update the transcoding configuration based on your scenario needs. After the transcoding configuration is updated, the SDK triggers the onTranscodingUpdated callback.
   ///
   /// * [transcoding] The transcoding configuration for RTMP streaming. See LiveTranscoding.
@@ -586,7 +586,7 @@ abstract class RtcEngineEx implements RtcEngine {
 
   /// Stops the RTMP stream.
   ///
-  /// Agora recommends using the more comprehensive server-side streaming feature. See [Implement Server-Side RTMP Streaming](https://doc.shengwang.cn/doc/media-push/restful/landing-page).
+  /// Agora recommends using the more comprehensive server-side streaming feature. See [Implement Server-Side RTMP Streaming](https://docs.agora.io/en/media-push/get-started/enable-media-push).
   /// Call this method to stop the live stream on the specified RTMP streaming URL. This method can only stop one streaming URL at a time. If you need to stop multiple streaming URLs, call this method multiple times.
   /// After calling this method, the SDK triggers the onRtmpStreamingStateChanged callback locally to report the streaming status.
   ///
@@ -606,7 +606,7 @@ abstract class RtcEngineEx implements RtcEngine {
   ///  If the onChannelMediaRelayStateChanged callback reports relayStateFailure (3), it indicates an exception occurred in the cross-channel media stream relay.
   ///  Call this method after successfully joining a channel.
   ///  In a live broadcast scenario, only users with the broadcaster role can call this method.
-  ///  The cross-channel media stream relay feature requires [contacting technical support](https://ticket.shengwang.cn/) to enable.
+  ///  The cross-channel media stream relay feature requires [contacting technical support](https://www.agora.io/cn/contact/) to enable.
   ///  This feature does not support String-type UIDs.
   ///
   /// * [configuration] Configuration for cross-channel media stream relay. See ChannelMediaRelayConfiguration.
@@ -737,7 +737,7 @@ abstract class RtcEngineEx implements RtcEngine {
 
   /// Enables/disables local snapshot upload.
   ///
-  /// This method can take and upload snapshots for multiple video streams. After enabling local snapshot upload, the SDK takes and uploads snapshots of the video sent by the local user based on the module type and frequency set in ContentInspectConfig. After the snapshot is completed, the Agora server sends a callback notification to your server via HTTPS request and uploads all snapshots to your specified third-party cloud storage. Before calling this method, please [contact technical support](https://ticket.shengwang.cn/) to enable the local snapshot upload service.
+  /// This method can take and upload snapshots for multiple video streams. After enabling local snapshot upload, the SDK takes and uploads snapshots of the video sent by the local user based on the module type and frequency set in ContentInspectConfig. After the snapshot is completed, the Agora server sends a callback notification to your server via HTTPS request and uploads all snapshots to your specified third-party cloud storage. Before calling this method, please [contact technical support](https://www.agora.io/cn/contact/) to enable the local snapshot upload service.
   ///
   /// * [enabled] Sets whether to enable local snapshot upload: true : Enable local snapshot upload. false : Disable local snapshot upload.
   /// * [config] Local snapshot upload configuration. See ContentInspectConfig.
@@ -787,7 +787,7 @@ abstract class RtcEngineEx implements RtcEngine {
 
   /// Preloads the specified audio effect into the channel.
   ///
-  /// Since Available since v4.6.2. Each time you call this method, only one audio effect file can be preloaded into memory. To preload multiple audio effect files, call this method multiple times. After preloading, you can call playEffect to play the preloaded audio effect, or call playAllEffects to play all preloaded audio effects.
+  /// Since Available since v6.6.2. Each time you call this method, only one audio effect file can be preloaded into memory. To preload multiple audio effect files, call this method multiple times. After preloading, you can call playEffect to play the preloaded audio effect, or call playAllEffects to play all preloaded audio effects.
   ///  To ensure smooth usage, the size of the audio effect file should not exceed the limit.
   ///  Agora recommends calling this method before joining the channel.
   ///  If you call preloadEffectEx before playEffectEx, the file resource is not released after playEffectEx is executed. The next time you call playEffectEx, it will start playing from the beginning.
@@ -809,7 +809,7 @@ abstract class RtcEngineEx implements RtcEngine {
 
   /// Plays the specified audio effect in the channel.
   ///
-  /// Since Available since v4.6.2. You can call this method to play a specified audio effect to all users in the channel. Each call plays only one audio effect. To play multiple audio effects simultaneously, call this method multiple times with different soundId and filePath. You can also set whether to publish the audio effect in the channel.
+  /// Since Available since v6.6.2. You can call this method to play a specified audio effect to all users in the channel. Each call plays only one audio effect. To play multiple audio effects simultaneously, call this method multiple times with different soundId and filePath. You can also set whether to publish the audio effect in the channel.
   ///  Agora recommends not playing more than three audio effects simultaneously.
   ///  The audio effect ID and file path in this method must match those in the preloadEffectEx method.
   ///  If preloadEffectEx is called before playEffectEx, the file resource is not released after playEffectEx is executed. The next time you call playEffectEx, it will start playing from the beginning.

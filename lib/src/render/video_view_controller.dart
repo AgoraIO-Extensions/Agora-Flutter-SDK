@@ -45,7 +45,7 @@ abstract class VideoViewControllerBase {
   @protected
   Future<int> createTextureRender(
     int uid,
-    String channelId,
+    RtcConnection? connection,
     int videoSourceType,
     int videoViewSetupMode,
   );

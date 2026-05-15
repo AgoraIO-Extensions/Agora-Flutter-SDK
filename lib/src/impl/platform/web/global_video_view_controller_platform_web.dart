@@ -1,5 +1,6 @@
 import 'dart:async';
-import 'dart:html' as html;
+import 'dart:js_interop';
+import 'package:web/web.dart' as web;
 import 'dart:ui_web' as ui_web;
 
 import '/agora_rtc_engine.dart';
@@ -16,25 +17,26 @@ String _getViewType(int id) {
 
 class _View {
   _View(int platformViewId)
-      : _element = html.DivElement()
+      : _element = (web.document.createElement('div') as web.HTMLDivElement)
           ..id = _getViewType(platformViewId)
           ..style.width = '100%'
           ..style.height = '100%' {
     // Wait until the element is injected into the DOM,
     // see https://github.com/flutter/flutter/issues/143922#issuecomment-1960133128
-    final observer = html.IntersectionObserver((entries, observer) {
+    final observer = web.IntersectionObserver(
+        (JSArray entries, web.IntersectionObserver observer) {
       if (_element.isConnected == true) {
         observer.unobserve(_element);
         _viewCompleter.complete(_element);
       }
-    });
+    }.toJS);
     observer.observe(_element);
   }
 
-  final html.HtmlElement _element;
-  html.HtmlElement get element => _element;
+  final web.HTMLElement _element;
+  web.HTMLElement get element => _element;
 
-  final _viewCompleter = Completer<html.HtmlElement>();
+  final _viewCompleter = Completer<web.HTMLElement>();
 
   Future<String> waitAndGetId() async {
     final div = await _viewCompleter.future;

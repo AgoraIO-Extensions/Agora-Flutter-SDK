@@ -1895,6 +1895,38 @@ Map<String, dynamic> _$RtcEngineEventHandlerOnVideoSizeChangedJsonToJson(
   return val;
 }
 
+RtcEngineEventHandlerOnLocalVideoEventJson
+    _$RtcEngineEventHandlerOnLocalVideoEventJsonFromJson(
+            Map<String, dynamic> json) =>
+        RtcEngineEventHandlerOnLocalVideoEventJson(
+          source: $enumDecodeNullable(_$VideoSourceTypeEnumMap, json['source']),
+          event:
+              $enumDecodeNullable(_$LocalVideoEventTypeEnumMap, json['event']),
+        );
+
+Map<String, dynamic> _$RtcEngineEventHandlerOnLocalVideoEventJsonToJson(
+    RtcEngineEventHandlerOnLocalVideoEventJson instance) {
+  final val = <String, dynamic>{};
+
+  void writeNotNull(String key, dynamic value) {
+    if (value != null) {
+      val[key] = value;
+    }
+  }
+
+  writeNotNull('source', _$VideoSourceTypeEnumMap[instance.source]);
+  writeNotNull('event', _$LocalVideoEventTypeEnumMap[instance.event]);
+  return val;
+}
+
+const _$LocalVideoEventTypeEnumMap = {
+  LocalVideoEventType.localVideoEventTypeScreenCaptureWindowHidden: 1,
+  LocalVideoEventType.localVideoEventTypeScreenCaptureWindowRecoverFromHidden:
+      2,
+  LocalVideoEventType.localVideoEventTypeScreenCaptureStoppedByUser: 3,
+  LocalVideoEventType.localVideoEventTypeScreenCaptureSystemInternalError: 4,
+};
+
 RtcEngineEventHandlerOnLocalVideoStateChangedJson
     _$RtcEngineEventHandlerOnLocalVideoStateChangedJsonFromJson(
             Map<String, dynamic> json) =>
@@ -4220,6 +4252,34 @@ Map<String, dynamic> _$RtcEngineEventHandlerOnSetRtmFlagResultJsonToJson(
 
   writeNotNull('connection', instance.connection?.toJson());
   writeNotNull('code', instance.code);
+  return val;
+}
+
+RtcEngineEventHandlerOnMultipathStatsJson
+    _$RtcEngineEventHandlerOnMultipathStatsJsonFromJson(
+            Map<String, dynamic> json) =>
+        RtcEngineEventHandlerOnMultipathStatsJson(
+          connection: json['connection'] == null
+              ? null
+              : RtcConnection.fromJson(
+                  json['connection'] as Map<String, dynamic>),
+          stats: json['stats'] == null
+              ? null
+              : MultipathStats.fromJson(json['stats'] as Map<String, dynamic>),
+        );
+
+Map<String, dynamic> _$RtcEngineEventHandlerOnMultipathStatsJsonToJson(
+    RtcEngineEventHandlerOnMultipathStatsJson instance) {
+  final val = <String, dynamic>{};
+
+  void writeNotNull(String key, dynamic value) {
+    if (value != null) {
+      val[key] = value;
+    }
+  }
+
+  writeNotNull('connection', instance.connection?.toJson());
+  writeNotNull('stats', instance.stats?.toJson());
   return val;
 }
 

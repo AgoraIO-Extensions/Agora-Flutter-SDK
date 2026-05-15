@@ -1,0 +1,144 @@
+name: 'Release Consumer Smoke'
+
+on:
+  workflow_run:
+    workflows: ['Release to pub.dev and GitHub']
+    types:
+      - completed
+
+jobs:
+  prepare:
+    name: 'Prepare Release Consumer Smoke'
+    runs-on: ubuntu-latest
+    outputs:
+      should_run: ${{ steps.metadata.outputs.should_run }}
+      release_version: ${{ steps.metadata.outputs.release_version }}
+      release_type: ${{ steps.metadata.outputs.release_type }}
+      git_url: ${{ steps.metadata.outputs.git_url }}
+      run_pub: ${{ steps.metadata.outputs.run_pub }}
+    steps:
+      - name: Download release metadata
+        id: metadata
+        env:
+          GH_TOKEN: ${{ github.token }}
+          REPOSITORY: ${{ github.repository }}
+        run: |
+          set -euo pipefail
+
+          RUN_ID="${{ github.event.workflow_run.id }}"
+          mkdir -p metadata
+
+          gh run download "$RUN_ID" \
+            --repo "${REPOSITORY}" \
+            -n release-metadata \
+            -D metadata
+
+          source metadata/release-metadata.env
+
+          if [[ "${DRY_RUN}" == "true" ]]; then
+            echo "Release workflow was dry-run, skipping consumer smoke."
+            echo "should_run=false" >> "$GITHUB_OUTPUT"
+            echo "run_pub=false" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+
+          echo "should_run=true" >> "$GITHUB_OUTPUT"
+          echo "release_version=${RELEASE_VERSION}" >> "$GITHUB_OUTPUT"
+          echo "release_type=${RELEASE_TYPE}" >> "$GITHUB_OUTPUT"
+          echo "git_url=${GIT_URL}" >> "$GITHUB_OUTPUT"
+
+          if [[ "${RELEASE_TYPE}" == "standard" ]]; then
+            echo "run_pub=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "run_pub=false" >> "$GITHUB_OUTPUT"
+          fi
+
+  consumer_smoke_git:
+    name: 'Consumer Smoke Test (git, ${{ matrix.platform }})'
+    runs-on: ${{ matrix.os }}
+    needs: prepare
+    if: ${{ needs.prepare.outputs.should_run == 'true' }}
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - os: ubuntu-latest
+            platform: android
+          - os: ubuntu-latest
+            platform: web
+          - os: macos-latest
+            platform: ios
+          - os: macos-latest
+            platform: macos
+          - os: windows-latest
+            platform: windows
+    steps:
+      - name: Checkout repository 🛎️
+        uses: actions/checkout@v4
+
+      - name: Setup JDK for Android
+        if: ${{ matrix.platform == 'android' }}
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'zulu'
+          java-version: '17'
+
+      - name: Setup Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          channel: 'stable'
+          cache: true
+
+      - name: Run consumer smoke test against git tag
+        shell: bash
+        env:
+          CONSUMER_PLATFORM: ${{ matrix.platform }}
+          PACKAGE_SOURCE: git
+          RELEASE_VERSION: ${{ needs.prepare.outputs.release_version }}
+          GIT_REF: ${{ needs.prepare.outputs.release_version }}
+          GIT_URL: ${{ needs.prepare.outputs.git_url }}
+        run: bash ci/run_flutter_release_consumer_smoke_test.sh
+
+  consumer_smoke_pub:
+    name: 'Consumer Smoke Test (pub, ${{ matrix.platform }})'
+    runs-on: ${{ matrix.os }}
+    needs: prepare
+    if: ${{ needs.prepare.outputs.should_run == 'true' && needs.prepare.outputs.run_pub == 'true' }}
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - os: ubuntu-latest
+            platform: android
+          - os: ubuntu-latest
+            platform: web
+          - os: macos-latest
+            platform: ios
+          - os: macos-latest
+            platform: macos
+          - os: windows-latest
+            platform: windows
+    steps:
+      - name: Checkout repository 🛎️
+        uses: actions/checkout@v4
+
+      - name: Setup JDK for Android
+        if: ${{ matrix.platform == 'android' }}
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'zulu'
+          java-version: '17'
+
+      - name: Setup Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          channel: 'stable'
+          cache: true
+
+      - name: Run consumer smoke test against pub.dev release
+        shell: bash
+        env:
+          CONSUMER_PLATFORM: ${{ matrix.platform }}
+          PACKAGE_SOURCE: pub
+          RELEASE_VERSION: ${{ needs.prepare.outputs.release_version }}
+        run: bash ci/run_flutter_release_consumer_smoke_test.sh

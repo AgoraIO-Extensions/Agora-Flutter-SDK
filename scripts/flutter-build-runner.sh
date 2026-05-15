@@ -25,6 +25,6 @@ rm -rf $AGORA_FLUTTER_PROJECT_PATH/test_shard/rendering_test/macos/Flutter/ephem
 rm -rf $AGORA_FLUTTER_PROJECT_PATH/test_shard/rendering_test/windows/Flutter/ephemeral
 rm -rf $AGORA_FLUTTER_PROJECT_PATH/test_shard/rendering_test/ios/.symlinks
 
-flutter packages pub run build_runner build --delete-conflicting-outputs
+dart run build_runner build --delete-conflicting-outputs
 
 popd

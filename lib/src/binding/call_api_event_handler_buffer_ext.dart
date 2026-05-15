@@ -233,6 +233,30 @@ extension WatermarkOptionsBufferExt on WatermarkOptions {
   }
 }
 
+extension PathStatsBufferExt on PathStats {
+  PathStats fillBuffers(List<Uint8List> bufferList) {
+    if (bufferList.isEmpty) return this;
+    return this;
+  }
+
+  List<Uint8List> collectBufferList() {
+    final bufferList = <Uint8List>[];
+    return bufferList;
+  }
+}
+
+extension MultipathStatsBufferExt on MultipathStats {
+  MultipathStats fillBuffers(List<Uint8List> bufferList) {
+    if (bufferList.isEmpty) return this;
+    return this;
+  }
+
+  List<Uint8List> collectBufferList() {
+    final bufferList = <Uint8List>[];
+    return bufferList;
+  }
+}
+
 extension RtcStatsBufferExt on RtcStats {
   RtcStats fillBuffers(List<Uint8List> bufferList) {
     if (bufferList.isEmpty) return this;

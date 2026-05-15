@@ -16,6 +16,7 @@ private:
     flutter::BinaryMessenger *messenger_;
     flutter::TextureRegistrar *texture_registrar_;
     std::map<int64_t, TextureRender *> renderers_;
+    std::unique_ptr<flutter::MethodChannel<flutter::EncodableValue>> shared_method_channel_;
 
     void HandleMethodCall(
         const flutter::MethodCall<flutter::EncodableValue> &method_call,
@@ -30,7 +31,8 @@ private:
         unsigned int uid,
         const std::string &channelId,
         unsigned int videoSourceType,
-        unsigned int videoViewSetupMode);
+        unsigned int videoViewSetupMode,
+        bool enableArgusCounters);
 
     bool DestroyTextureRender(int64_t textureId);
 

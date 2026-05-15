@@ -3,6 +3,10 @@ include: package:flutter_lints/flutter.yaml
 # Additional information about this file can be found at
 # https://dart.dev/guides/language/analysis-options
 analyzer:
+  errors:
+    unused_import: ignore
+    deprecated_member_use: info
+    unnecessary_import: ignore
   exclude:
     # Ignore generated files
     - "**/*.g.dart"

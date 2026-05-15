@@ -26,7 +26,7 @@ abstract class GlobalVideoViewControllerPlatfrom {
   Future<void> detachVideoFrameBufferManager(int irisRtcEngineIntPtr) =>
       SynchronousFuture(null);
 
-  Future<int> createTextureRender(int uid, String channelId,
+  Future<int> createTextureRender(int uid, RtcConnection? connection,
           int videoSourceType, int videoViewSetupMode) =>
       SynchronousFuture(kTextureNotInit);
 

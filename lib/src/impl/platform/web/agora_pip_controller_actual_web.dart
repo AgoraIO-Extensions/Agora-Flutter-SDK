@@ -1,12 +1,8 @@
-import 'package:flutter/foundation.dart';
-
 import '/src/agora_rtc_engine.dart';
 import '/src/agora_pip_controller.dart';
 
 class AgoraPipControllerImpl extends AgoraPipController {
-  final RtcEngine _rtcEngine;
-
-  AgoraPipControllerImpl(this._rtcEngine) {
+  AgoraPipControllerImpl(RtcEngine rtcEngine) {
     throw UnimplementedError();
   }
 
