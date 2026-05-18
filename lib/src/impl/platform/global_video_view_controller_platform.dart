@@ -30,8 +30,15 @@ abstract class GlobalVideoViewControllerPlatfrom {
           int videoSourceType, int videoViewSetupMode) =>
       SynchronousFuture(kTextureNotInit);
 
+  Future<Map<String, int>?> createSurfaceTextureRenderTarget(
+          int uid, String channelId, int videoSourceType, int videoViewSetupMode) =>
+      SynchronousFuture(null);
+
   /// Call `IrisVideoFrameBufferManager.DisableVideoFrameBuffer` in the native side
   Future<void> destroyTextureRender(int textureId) => SynchronousFuture(null);
+
+  Future<void> destroySurfaceTextureRenderTarget(int textureId) =>
+      SynchronousFuture(null);
 
   /// Increase the ref count of the native view(`UIView` in iOS, `SurfaceView` or `TextureView` in Android) of the `platformViewId`.
   Future<void> addPlatformRenderRef(int platformViewId) =>
