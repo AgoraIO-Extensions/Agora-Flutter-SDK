@@ -225,6 +225,15 @@ mixin VideoViewControllerBaseMixin implements VideoViewControllerBase {
     return defaultTargetPlatform == TargetPlatform.android && useFlutterTexture;
   }
 
+  @protected
+  int getSurfaceTextureObserverId() => canvas.uid!;
+
+  @protected
+  Future<void> bindSdkSurfaceTextureTarget(int surfaceTextureHandle) async {}
+
+  @protected
+  Future<void> unbindSdkSurfaceTextureTarget() async {}
+
   Future<void> setupSdkSurfaceTextureRender() async {
     if (!shouldUseSdkSurfaceTextureRender ||
         _sdkTextureTargetHandle == kNullViewHandle) {
@@ -238,6 +247,8 @@ mixin VideoViewControllerBaseMixin implements VideoViewControllerBase {
       'textureId=$_textureId '
       'surfaceTextureHandle=$_sdkTextureTargetHandle',
     );
+
+    await bindSdkSurfaceTextureTarget(_sdkTextureTargetHandle);
 
     final newCanvas = VideoCanvas(
       uid: canvas.uid,
@@ -279,7 +290,7 @@ mixin VideoViewControllerBaseMixin implements VideoViewControllerBase {
         _sdkTextureTargetHandle == kNullViewHandle) {
       final renderTarget = await rtcEngine.globalVideoViewController
           ?.createSurfaceTextureRenderTarget(
-        canvas.uid!,
+        getSurfaceTextureObserverId(),
         connection?.channelId ?? '',
         canvas.sourceType?.value() ?? getVideoSourceType(),
         canvas.setupMode?.value() ??
@@ -405,6 +416,8 @@ mixin VideoViewControllerBaseMixin implements VideoViewControllerBase {
 
       await rtcEngine.globalVideoViewController
           ?.setupVideoView(kNullViewHandle, newCanvas, connection: connection);
+
+      await unbindSdkSurfaceTextureTarget();
 
       _sdkTextureTargetHandle = kNullViewHandle;
     }
