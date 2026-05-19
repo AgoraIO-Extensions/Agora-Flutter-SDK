@@ -11,6 +11,40 @@ import 'package:meta/meta.dart';
 const int kTextureNotInit = -1;
 const int kInvalidPlatformViewId = -1;
 
+class SurfaceTextureRenderTargetDisposable {
+  SurfaceTextureRenderTargetDisposable._(
+      this._controller, this._viewId, this.textureId);
+
+  final VideoViewControllerBaseMixin _controller;
+  final int _viewId;
+  final int textureId;
+  bool _isDisposed = false;
+
+  static Future<SurfaceTextureRenderTargetDisposable> create(
+    VideoViewControllerBaseMixin controller,
+    int viewId,
+  ) async {
+    final renderTarget = await controller._acquireSurfaceTextureRenderTarget(
+      viewId,
+    );
+    return SurfaceTextureRenderTargetDisposable._(
+      controller,
+      viewId,
+      renderTarget['textureId']!,
+    );
+  }
+
+  bool get isDisposed => _isDisposed;
+
+  Future<void> dispose() async {
+    if (_isDisposed) {
+      return;
+    }
+    _isDisposed = true;
+    await _controller._releaseSurfaceTextureRenderTarget(_viewId);
+  }
+}
+
 class TextureRenderDisposable {
   TextureRenderDisposable._(this._controller, this._viewId);
 
@@ -75,6 +109,7 @@ extension VideoViewControllerBaseExt on VideoViewControllerBase {
 
 mixin VideoViewControllerBaseMixin implements VideoViewControllerBase {
   int _textureId = kTextureNotInit;
+  int _sdkTextureTargetHandle = kNullViewHandle;
   int _viewHandle = kNullViewHandle;
   int _platformViewId = kInvalidPlatformViewId;
 
@@ -116,6 +151,9 @@ mixin VideoViewControllerBaseMixin implements VideoViewControllerBase {
   @override
   int getTextureId() => _textureId;
 
+  @internal
+  int getSdkTextureTargetHandle() => _sdkTextureTargetHandle;
+
   @override
   int getViewHandle() => _viewHandle;
 
@@ -127,6 +165,7 @@ mixin VideoViewControllerBaseMixin implements VideoViewControllerBase {
     assert(oldController is VideoViewControllerBaseMixin);
     final oldControllerMixin = oldController as VideoViewControllerBaseMixin;
     _textureId = oldControllerMixin.getTextureId();
+    _sdkTextureTargetHandle = oldControllerMixin.getSdkTextureTargetHandle();
     _viewHandle = oldControllerMixin.getViewHandle();
     _platformViewId = oldControllerMixin.getPlatformViewId();
   }
@@ -156,6 +195,93 @@ mixin VideoViewControllerBaseMixin implements VideoViewControllerBase {
     }
   }
 
+  @internal
+  bool get shouldUseSdkSurfaceTextureRender {
+    return defaultTargetPlatform == TargetPlatform.android && useFlutterTexture;
+  }
+
+  @protected
+  int getSurfaceTextureObserverId() => canvas.uid!;
+
+  @protected
+  Future<void> bindSdkSurfaceTextureTarget(int surfaceTextureHandle) async {}
+
+  @protected
+  Future<void> unbindSdkSurfaceTextureTarget() async {}
+
+  Future<void> setupSdkSurfaceTextureRender() async {
+    if (!shouldUseSdkSurfaceTextureRender ||
+        _sdkTextureTargetHandle == kNullViewHandle) {
+      return;
+    }
+
+    debugPrint(
+      '[AgoraSurfaceTexture] bind '
+      'uid=${canvas.uid} '
+      'remote=${canvas.uid != 0} '
+      'textureId=$_textureId '
+      'surfaceTextureHandle=$_sdkTextureTargetHandle',
+    );
+
+    await bindSdkSurfaceTextureTarget(_sdkTextureTargetHandle);
+
+    final newCanvas = VideoCanvas(
+      uid: canvas.uid,
+      subviewUid: canvas.subviewUid,
+      view: _sdkTextureTargetHandle,
+      backgroundColor: canvas.backgroundColor,
+      renderMode: canvas.renderMode,
+      mirrorMode: canvas.mirrorMode,
+      setupMode: canvas.setupMode,
+      sourceType: canvas.sourceType,
+      mediaPlayerId: canvas.mediaPlayerId,
+      cropArea: canvas.cropArea,
+      enableAlphaMask: canvas.enableAlphaMask,
+      position: canvas.position,
+    );
+
+    await rtcEngine.globalVideoViewController
+        ?.setupVideoView(kNullViewHandle, newCanvas, connection: connection);
+  }
+
+  Future<Map<String, int>> _acquireSurfaceTextureRenderTarget(int viewId) async {
+    if (!shouldUseSdkSurfaceTextureRender) {
+      return {
+        'textureId': kTextureNotInit,
+        'surfaceTextureHandle': kNullViewHandle,
+      };
+    }
+
+    if (_activeViewIds.contains(viewId) && _textureId != kTextureNotInit) {
+      return {
+        'textureId': _textureId,
+        'surfaceTextureHandle': _sdkTextureTargetHandle,
+      };
+    }
+
+    _activeViewIds.add(viewId);
+
+    if (_textureId == kTextureNotInit ||
+        _sdkTextureTargetHandle == kNullViewHandle) {
+      final renderTarget = await rtcEngine.globalVideoViewController
+          ?.createSurfaceTextureRenderTarget(
+        getSurfaceTextureObserverId(),
+        connection?.channelId ?? '',
+        canvas.sourceType?.value() ?? getVideoSourceType(),
+        canvas.setupMode?.value() ??
+            VideoViewSetupMode.videoViewSetupReplace.value(),
+      );
+      _textureId = renderTarget?['textureId'] ?? kTextureNotInit;
+      _sdkTextureTargetHandle =
+          renderTarget?['surfaceTextureHandle'] ?? kNullViewHandle;
+    }
+
+    return {
+      'textureId': _textureId,
+      'surfaceTextureHandle': _sdkTextureTargetHandle,
+    };
+  }
+
   Future<void> _releaseTextureRender(int viewId) async {
     if (!shouldUseFlutterTexture) {
       return;
@@ -171,6 +297,32 @@ mixin VideoViewControllerBaseMixin implements VideoViewControllerBase {
       await rtcEngine.globalVideoViewController
           ?.destroyTextureRender(_textureId);
       _textureId = kTextureNotInit;
+      _textureWidth = 0;
+      _textureHeight = 0;
+    }
+  }
+
+  Future<void> _releaseSurfaceTextureRenderTarget(int viewId) async {
+    if (!shouldUseSdkSurfaceTextureRender) {
+      return;
+    }
+
+    if (!_activeViewIds.contains(viewId)) {
+      return;
+    }
+
+    _activeViewIds.remove(viewId);
+
+    if (_activeViewIds.isEmpty && _textureId != kTextureNotInit) {
+      debugPrint(
+        '[AgoraSurfaceTexture] release target '
+        'textureId=$_textureId '
+        'surfaceTextureHandle=$_sdkTextureTargetHandle',
+      );
+      await rtcEngine.globalVideoViewController
+          ?.destroySurfaceTextureRenderTarget(_textureId);
+      _textureId = kTextureNotInit;
+      _sdkTextureTargetHandle = kNullViewHandle;
       _textureWidth = 0;
       _textureHeight = 0;
     }
@@ -197,6 +349,33 @@ mixin VideoViewControllerBaseMixin implements VideoViewControllerBase {
           ?.setupVideoView(_viewHandle, newCanvas, connection: connection);
 
       _viewHandle = kNullViewHandle;
+    }
+
+    if (_sdkTextureTargetHandle != kNullViewHandle) {
+      debugPrint(
+        '[AgoraSurfaceTexture] unbind '
+        'uid=${canvas.uid} '
+        'remote=${canvas.uid != 0} '
+        'textureId=$_textureId '
+        'surfaceTextureHandle=$_sdkTextureTargetHandle',
+      );
+      final newCanvas = VideoCanvas(
+        view: _sdkTextureTargetHandle,
+        renderMode: canvas.renderMode,
+        mirrorMode: canvas.mirrorMode,
+        uid: canvas.uid,
+        sourceType: canvas.sourceType,
+        cropArea: canvas.cropArea,
+        setupMode: VideoViewSetupMode.videoViewSetupRemove,
+        mediaPlayerId: canvas.mediaPlayerId,
+      );
+
+      await rtcEngine.globalVideoViewController
+          ?.setupVideoView(kNullViewHandle, newCanvas, connection: connection);
+
+      await unbindSdkSurfaceTextureTarget();
+
+      _sdkTextureTargetHandle = kNullViewHandle;
     }
 
     // We need to ensure the platform view is valid before calling setupVideoView since

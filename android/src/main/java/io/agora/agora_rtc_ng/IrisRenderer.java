@@ -4,7 +4,7 @@ import android.view.Surface;
 import androidx.annotation.Keep;
 
 /**
- * An IrisRenderer allow you to rendering the raw data to android Surface
+ * An IrisRenderer allows observing texture size changes and optionally rendering raw data to Surface.
  */
 public class IrisRenderer {
 
@@ -52,10 +52,24 @@ public class IrisRenderer {
         videoViewSetupMode);
   }
 
+  public void startObservingTextureSize() {
+    if (nativeRendererHandle != 0L) { return; }
+    nativeRendererHandle = nativeStartObservingTextureSize(
+        videoFrameManagerNativeHandle, uid, channelId, videoSourceType,
+        videoViewSetupMode);
+  }
+
   public void stopRenderingToSurface() {
     if (nativeRendererHandle == 0L) { return; }
 
     nativeStopRenderingToSurface(nativeRendererHandle);
+    nativeRendererHandle = 0L;
+  }
+
+  public void stopObservingTextureSize() {
+    if (nativeRendererHandle == 0L) { return; }
+
+    nativeStopObservingTextureSize(nativeRendererHandle);
     nativeRendererHandle = 0L;
   }
 
@@ -65,5 +79,13 @@ public class IrisRenderer {
                                                     int videoSourceType,
                                                     int videoViewSetupMode);
 
+  private native long nativeStartObservingTextureSize(long bufferManagerIntPtr,
+                                                      long uid,
+                                                      String channelId,
+                                                      int videoSourceType,
+                                                      int videoViewSetupMode);
+
   private native void nativeStopRenderingToSurface(long nativeRendererHandle);
+
+  private native void nativeStopObservingTextureSize(long nativeRendererHandle);
 }

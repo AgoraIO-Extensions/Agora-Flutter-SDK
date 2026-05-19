@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import '/src/agora_base.dart';
 import '/src/agora_media_base.dart';
 import '/src/agora_rtc_engine.dart';
@@ -210,6 +212,7 @@ class _VideoViewControllerInternal with VideoViewControllerBaseMixin {
   final int _viewId;
 
   TextureRenderDisposable? _renderDisposable;
+  SurfaceTextureRenderTargetDisposable? _surfaceTextureRenderTargetDisposable;
 
   @override
   int get textureWidth => _controller.textureWidth;
@@ -247,7 +250,13 @@ class _VideoViewControllerInternal with VideoViewControllerBaseMixin {
   bool get shouldHandlerRenderMode => _controller.shouldHandlerRenderMode;
 
   @override
-  int getTextureId() => _renderDisposable?.textureId ?? kTextureNotInit;
+  int getTextureId() {
+    if (_controller.shouldUseSdkSurfaceTextureRender) {
+      return _surfaceTextureRenderTargetDisposable?.textureId ??
+          kTextureNotInit;
+    }
+    return _renderDisposable?.textureId ?? kTextureNotInit;
+  }
 
   @override
   void addInitializedCompletedListener(VoidCallback listener) =>
@@ -275,6 +284,19 @@ class _VideoViewControllerInternal with VideoViewControllerBaseMixin {
 
   @override
   Future<void> initializeRender() async {
+    if (_controller.shouldUseSdkSurfaceTextureRender) {
+      if (_surfaceTextureRenderTargetDisposable != null &&
+          !_surfaceTextureRenderTargetDisposable!.isDisposed) {
+        return;
+      }
+      _surfaceTextureRenderTargetDisposable =
+          await SurfaceTextureRenderTargetDisposable.create(
+        _controller,
+        _viewId,
+      );
+      return;
+    }
+
     if (_renderDisposable != null && !_renderDisposable!.isDisposed) {
       return;
     }
@@ -283,6 +305,8 @@ class _VideoViewControllerInternal with VideoViewControllerBaseMixin {
   }
 
   Future<void> disposeTextureRender() async {
+    await _surfaceTextureRenderTargetDisposable?.dispose();
+    _surfaceTextureRenderTargetDisposable = null;
     await _renderDisposable?.dispose();
     _renderDisposable = null;
   }
@@ -347,6 +371,9 @@ class _AgoraRtcRenderTextureState extends State<AgoraRtcRenderTexture>
     await _controllerInternal!.initializeRender();
     final textureId = _controllerInternal!.getTextureId();
     if (textureId != kTextureNotInit) {
+      if (_controllerInternal!._controller.shouldUseSdkSurfaceTextureRender) {
+        await _controllerInternal!._controller.setupSdkSurfaceTextureRender();
+      }
       if (_controllerInternal!.textureWidth != 0 &&
           _controllerInternal!.textureHeight != 0) {
         _width = _controllerInternal!.textureWidth;
@@ -377,8 +404,11 @@ class _AgoraRtcRenderTextureState extends State<AgoraRtcRenderTexture>
       return;
     }
     if (!oldWidget.controller.isSame(widget.controller)) {
+      await _controllerInternal?.disposeRenderInternal();
       await _controllerInternal?.disposeTextureRender();
       await _initialize();
+    } else if (_controllerInternal!._controller.shouldUseSdkSurfaceTextureRender) {
+      await _controllerInternal!._controller.setupSdkSurfaceTextureRender();
     }
   }
 
@@ -395,10 +425,19 @@ class _AgoraRtcRenderTextureState extends State<AgoraRtcRenderTexture>
   void dispose() {
     methodChannel?.setMethodCallHandler(null);
 
-    _controllerInternal?.disposeTextureRender();
+    final controllerInternal = _controllerInternal;
     _controllerInternal = null;
+    if (controllerInternal != null) {
+      unawaited(_disposeTextureWidget(controllerInternal));
+    }
 
     super.dispose();
+  }
+
+  Future<void> _disposeTextureWidget(
+      _VideoViewControllerInternal controllerInternal) async {
+    await controllerInternal.disposeRenderInternal();
+    await controllerInternal.disposeTextureRender();
   }
 
   @override

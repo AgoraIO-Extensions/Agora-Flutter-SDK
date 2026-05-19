@@ -134,8 +134,23 @@ class _State extends State<JoinChannelVideo> {
     );
 
     _engine.registerEventHandler(_rtcEngineEventHandler);
+    await _applyDebugRenderParameters();
+
     await _engine.enableVideo();
     await _engine.startPreview();
+  }
+
+  Future<void> _applyDebugRenderParameters() async {
+    await _engine.setParameters(
+      '{"rtc.video.enable_sr":{"mode":2,"enabled":false}}',
+    );
+    await _engine.setParameters('{"rtc.video.avsync": false}');
+    await _engine.setParameters('{"rtc.video.playout_delay_min": 0}');
+    await _engine.setParameters('{"rtc.video.decoder_out_byte_frame": false}');
+    await _engine.setParameters('{"rtc.video.enable_pvc":false}');
+    await _engine.setParameters('{"rtc.video.enable_local_sr":false}');
+    await _engine
+        .setParameters('{"che.video.android.hwdec_texture.copy_enable":false}');
   }
 
   Future<void> _updateRemoteVideoController(

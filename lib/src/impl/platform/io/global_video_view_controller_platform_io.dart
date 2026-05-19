@@ -94,6 +94,31 @@ class GlobalVideoViewControllerIO extends GlobalVideoViewControllerPlatfrom {
     return textureId ?? kTextureNotInit;
   }
 
+  @override
+  Future<Map<String, int>?> createSurfaceTextureRenderTarget(
+      int uid,
+      String channelId,
+      int videoSourceType,
+      int videoViewSetupMode) async {
+    final renderTarget = await methodChannel
+        .invokeMapMethod<String, dynamic>('createSurfaceTextureRenderTarget', {
+      'irisRtcRenderingHandle': _irisRtcRenderingHandle,
+      'uid': uid,
+      'channelId': channelId,
+      'videoSourceType': videoSourceType,
+      'videoViewSetupMode': videoViewSetupMode,
+    });
+    if (renderTarget == null) {
+      return null;
+    }
+
+    return {
+      'textureId': int.parse(renderTarget['textureId'].toString()),
+      'surfaceTextureHandle':
+          int.parse(renderTarget['surfaceTextureHandle'].toString()),
+    };
+  }
+
   /// Call `IrisVideoFrameBufferManager.DisableVideoFrameBuffer` in the native side
   @override
   Future<void> destroyTextureRender(int textureId) async {
@@ -102,6 +127,12 @@ class GlobalVideoViewControllerIO extends GlobalVideoViewControllerPlatfrom {
     }
 
     await methodChannel.invokeMethod('destroyTextureRender', textureId);
+  }
+
+  @override
+  Future<void> destroySurfaceTextureRenderTarget(int textureId) async {
+    await methodChannel.invokeMethod(
+        'destroySurfaceTextureRenderTarget', textureId);
   }
 
   /// Increase the ref count of the native view(`UIView` in iOS, `SurfaceView` or `TextureView` in Android) of the `platformViewId`.

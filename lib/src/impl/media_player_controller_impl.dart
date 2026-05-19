@@ -363,6 +363,19 @@ class MediaPlayerControllerImpl
   int getVideoSourceType() => VideoSourceType.videoSourceMediaPlayer.value();
 
   @override
+  int getSurfaceTextureObserverId() => getMediaPlayerId();
+
+  @override
+  Future<void> bindSdkSurfaceTextureTarget(int surfaceTextureHandle) {
+    return setView(surfaceTextureHandle);
+  }
+
+  @override
+  Future<void> unbindSdkSurfaceTextureTarget() {
+    return setView(0);
+  }
+
+  @override
   Future<void> initialize() async {
     _mediaPlayer = await rtcEngine.createMediaPlayer();
     _initState.isInitialzed = true;

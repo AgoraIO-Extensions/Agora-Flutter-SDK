@@ -1,6 +1,7 @@
 package io.agora.agora_rtc_ng;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.View;
 
 import androidx.annotation.NonNull;
@@ -99,6 +100,7 @@ class PlatformRenderPool {
 }
 
 public class VideoViewController implements MethodChannel.MethodCallHandler {
+    private static final String TAG = "AgoraSurfaceTexture";
 
     private final TextureRegistry textureRegistry;
     private final BinaryMessenger binaryMessenger;
@@ -107,6 +109,8 @@ public class VideoViewController implements MethodChannel.MethodCallHandler {
     private final PlatformRenderPool pool;
 
     private final Map<Long, TextureRenderer> textureRendererMap = new HashMap<>();
+    private final Map<Long, SurfaceTextureRenderTarget> surfaceTextureRenderTargetMap =
+            new HashMap<>();
 
     VideoViewController(TextureRegistry textureRegistry, BinaryMessenger binaryMessenger) {
         this.textureRegistry = textureRegistry;
@@ -166,6 +170,48 @@ public class VideoViewController implements MethodChannel.MethodCallHandler {
         return false;
     }
 
+    private Map<String, Long> createSurfaceTextureRenderTarget(
+            long irisRtcRenderingHandle,
+            long uid,
+            String channelId,
+            int videoSourceType,
+            int videoViewSetupMode) {
+        final SurfaceTextureRenderTarget renderTarget =
+                new SurfaceTextureRenderTarget(
+                        textureRegistry,
+                        binaryMessenger,
+                        irisRtcRenderingHandle,
+                        uid,
+                        channelId,
+                        videoSourceType,
+                        videoViewSetupMode);
+        final long textureId = renderTarget.getTextureId();
+        surfaceTextureRenderTargetMap.put(textureId, renderTarget);
+
+        Log.i(TAG, "create target textureId=" + textureId
+                + " surfaceTextureHandle=" + renderTarget.getSurfaceTextureHandle());
+
+        return new HashMap<String, Long>() {
+            {
+                put("textureId", textureId);
+                put("surfaceTextureHandle", renderTarget.getSurfaceTextureHandle());
+            }
+        };
+    }
+
+    private boolean destroySurfaceTextureRenderTarget(long textureId) {
+        final SurfaceTextureRenderTarget renderTarget =
+                surfaceTextureRenderTargetMap.get(textureId);
+        if (renderTarget != null) {
+            Log.i(TAG, "destroy target textureId=" + textureId);
+            renderTarget.dispose();
+            surfaceTextureRenderTargetMap.remove(textureId);
+            return true;
+        }
+
+        return false;
+    }
+
     @Override
     public void onMethodCall(@NonNull MethodCall call, @NonNull MethodChannel.Result result) {
         switch (call.method) {
@@ -211,6 +257,28 @@ public class VideoViewController implements MethodChannel.MethodCallHandler {
                 result.success(success);
                 break;
             }
+            case "createSurfaceTextureRenderTarget": {
+                final Map<?, ?> args = (Map<?, ?>) call.arguments;
+                @SuppressWarnings("ConstantConditions") final long irisRtcRenderingHandle = getLong(args.get("irisRtcRenderingHandle"));
+                @SuppressWarnings("ConstantConditions") final long uid = getLong(args.get("uid"));
+                final String channelId = (String) args.get("channelId");
+                final int videoSourceType = (int) args.get("videoSourceType");
+                final int videoViewSetupMode = (int) args.get("videoViewSetupMode");
+                final Map<String, Long> response = createSurfaceTextureRenderTarget(
+                        irisRtcRenderingHandle,
+                        uid,
+                        channelId,
+                        videoSourceType,
+                        videoViewSetupMode);
+                result.success(response);
+                break;
+            }
+            case "destroySurfaceTextureRenderTarget": {
+                final long textureId = getLong(call.arguments);
+                final boolean success = destroySurfaceTextureRenderTarget(textureId);
+                result.success(success);
+                break;
+            }
             case "dispose": {
                 disposeAllRenderers();
                 result.success(true);
@@ -228,6 +296,12 @@ public class VideoViewController implements MethodChannel.MethodCallHandler {
             textureRenderer.dispose();
         }
         textureRendererMap.clear();
+
+        for (final SurfaceTextureRenderTarget renderTarget :
+                surfaceTextureRenderTargetMap.values()) {
+            renderTarget.dispose();
+        }
+        surfaceTextureRenderTargetMap.clear();
     }
 
     /**

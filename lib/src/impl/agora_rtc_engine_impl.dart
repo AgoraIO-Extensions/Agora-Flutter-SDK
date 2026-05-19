@@ -85,13 +85,15 @@ extension RtcEngineExt on RtcEngine {
 
   Future<void> setupVideoView(Object viewHandle, VideoCanvas videoCanvas,
       {RtcConnection? connection}) async {
-    Object view = viewHandle;
+    Object? view = viewHandle;
     if (kIsWeb) {
       view = 0;
+    } else if (viewHandle == kNullViewHandle) {
+      view = videoCanvas.view;
     }
 
     VideoCanvas newVideoCanvas = VideoCanvas(
-      view: view as int,
+      view: view as int?,
       renderMode: videoCanvas.renderMode,
       mirrorMode: videoCanvas.mirrorMode,
       uid: videoCanvas.uid,

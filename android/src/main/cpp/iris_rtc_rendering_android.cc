@@ -826,6 +826,92 @@ class NativeTextureRenderer final
   std::unique_ptr<RenderingOp> rendering_op_;
 };
 
+class NativeTextureSizeObserver final
+    : public agora::iris::VideoFrameObserverDelegate {
+ public:
+  explicit NativeTextureSizeObserver(
+      JNIEnv *env, jobject j_iris_renderer_obj,
+      agora::iris::IrisRtcRendering *iris_rtc_rendering, unsigned int uid,
+      const char *channel_id, int video_source_type, int video_view_setup_mode)
+      : jvm_(nullptr), iris_rtc_rendering_(iris_rtc_rendering), width_(0),
+        height_(0) {
+    env->GetJavaVM(&jvm_);
+    j_iris_renderer_obj_ = env->NewGlobalRef(j_iris_renderer_obj);
+    jclass j_caller_class = env->GetObjectClass(j_iris_renderer_obj_);
+    j_on_size_changed_method_ =
+        env->GetMethodID(j_caller_class, "onSizeChanged", "(II)V");
+    env->DeleteLocalRef(j_caller_class);
+
+    IrisRtcVideoFrameConfig config;
+    config.uid = uid;
+    config.video_source_type = video_source_type;
+    config.video_frame_format =
+        agora::media::base::VIDEO_PIXEL_FORMAT::VIDEO_PIXEL_DEFAULT;
+    if (channel_id) {
+      strcpy(config.channelId, channel_id);
+    } else {
+      strcpy(config.channelId, "");
+    }
+    config.video_view_setup_mode = video_view_setup_mode;
+    config.observed_frame_position =
+        agora::media::base::VIDEO_MODULE_POSITION::POSITION_POST_CAPTURER |
+        agora::media::base::VIDEO_MODULE_POSITION::POSITION_PRE_RENDERER;
+
+    if (iris_rtc_rendering_) {
+      delegate_id_ =
+          iris_rtc_rendering_->AddVideoFrameObserverDelegate(config, this);
+    }
+  }
+
+  ~NativeTextureSizeObserver() final {}
+
+  void OnVideoFrameReceived(const void *videoFrame,
+                            const IrisRtcVideoFrameConfig &config,
+                            bool resize) override {
+    const auto *video_frame =
+        static_cast<const agora::media::base::VideoFrame *>(videoFrame);
+
+    if (video_frame->width == 0 || video_frame->height == 0) { return; }
+
+    if (width_ != video_frame->width || height_ != video_frame->height) {
+      width_ = video_frame->width;
+      height_ = video_frame->height;
+      NotifySizeChangeCallback(width_, height_);
+    }
+  }
+
+  void Dispose() {
+    if (iris_rtc_rendering_) {
+      iris_rtc_rendering_->RemoveVideoFrameObserverDelegate(delegate_id_);
+      iris_rtc_rendering_ = nullptr;
+    }
+
+    if (j_iris_renderer_obj_) {
+      ::iris::AttachThreadScoped ats(jvm_);
+      ats.env()->DeleteGlobalRef(j_iris_renderer_obj_);
+      j_iris_renderer_obj_ = nullptr;
+    }
+  }
+
+  void NotifySizeChangeCallback(int width, int height) {
+    if (!j_iris_renderer_obj_) { return; }
+    ::iris::AttachThreadScoped ats(jvm_);
+    ats.env()->CallVoidMethod(j_iris_renderer_obj_, j_on_size_changed_method_,
+                              width, height);
+  }
+
+ private:
+  JavaVM *jvm_;
+  jobject j_iris_renderer_obj_;
+  jmethodID j_on_size_changed_method_;
+
+  agora::iris::IrisRtcRendering *iris_rtc_rendering_;
+  int width_;
+  int height_;
+
+  int delegate_id_;
+};
+
 }// namespace rendering
 }// namespace iris
 }// namespace agora
@@ -848,6 +934,21 @@ Java_io_agora_agora_1rtc_1ng_IrisRenderer_nativeStartRenderingToSurface(
   return reinterpret_cast<jlong>(renderer);
 }
 
+extern "C" JNIEXPORT jlong JNICALL
+Java_io_agora_agora_1rtc_1ng_IrisRenderer_nativeStartObservingTextureSize(
+    JNIEnv *env, jobject thiz, jlong buffer_manager_int_ptr, jlong uid,
+    jstring channel_id, jint video_source_type, jint video_view_setup_mode) {
+  auto *iris_rtc_rendering =
+      reinterpret_cast<agora::iris::IrisRtcRendering *>(buffer_manager_int_ptr);
+
+  auto *j_channel_id = env->GetStringUTFChars(channel_id, nullptr);
+  auto *observer = new NativeTextureSizeObserver(
+      env, thiz, iris_rtc_rendering, uid, j_channel_id, video_source_type,
+      video_view_setup_mode);
+  env->ReleaseStringUTFChars(channel_id, j_channel_id);
+  return reinterpret_cast<jlong>(observer);
+}
+
 extern "C" JNIEXPORT void JNICALL
 Java_io_agora_agora_1rtc_1ng_IrisRenderer_nativeStopRenderingToSurface(
     JNIEnv *env, jobject thiz, jlong native_renderer_handle) {
@@ -855,4 +956,13 @@ Java_io_agora_agora_1rtc_1ng_IrisRenderer_nativeStopRenderingToSurface(
       reinterpret_cast<NativeTextureRenderer *>(native_renderer_handle);
   renderer->Dispose();
   delete renderer;
+}
+
+extern "C" JNIEXPORT void JNICALL
+Java_io_agora_agora_1rtc_1ng_IrisRenderer_nativeStopObservingTextureSize(
+    JNIEnv *env, jobject thiz, jlong native_renderer_handle) {
+  auto *observer =
+      reinterpret_cast<NativeTextureSizeObserver *>(native_renderer_handle);
+  observer->Dispose();
+  delete observer;
 }
