@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:agora_rtc_engine/agora_rtc_engine.dart';
 import 'package:agora_rtc_engine_example/components/basic_video_configuration_widget.dart';
 import 'package:agora_rtc_engine_example/components/stats_monitoring_widget.dart';
@@ -28,6 +30,7 @@ class _State extends State<JoinChannelVideo> {
   Set<int> remoteUid = {};
   late TextEditingController _controller;
   late TextEditingController uidController;
+  late TextEditingController _privateParamsController;
   Map<int, VideoViewController> _remoteVideoControllers = {};
   bool test = false;
   bool _isUseFlutterTexture = false;
@@ -44,12 +47,22 @@ class _State extends State<JoinChannelVideo> {
     super.initState();
     _controller = TextEditingController(text: config.channelId);
     uidController = TextEditingController(text: '0');
+    _privateParamsController = TextEditingController(
+      text: const JsonEncoder.withIndent('  ').convert(<String, dynamic>{
+        'che.audio.aiaec.working_mode': 1,
+        'che.audio.ains_mode': 0,
+        'che.video.videoCodecIndex': 11,
+      }),
+    );
 
     _initEngine();
   }
 
   @override
   void dispose() {
+    _controller.dispose();
+    uidController.dispose();
+    _privateParamsController.dispose();
     super.dispose();
     _dispose();
   }
@@ -134,8 +147,36 @@ class _State extends State<JoinChannelVideo> {
     );
 
     _engine.registerEventHandler(_rtcEngineEventHandler);
+    await _applyPrivateParameters();
     await _engine.enableVideo();
     await _engine.startPreview();
+  }
+
+  Future<void> _applyPrivateParameters() async {
+    final raw = _privateParamsController.text.trim();
+    if (raw.isEmpty) {
+      logSink.log('[JoinChannelVideo] setParameters skipped: empty JSON');
+      return;
+    }
+
+    final dynamic decoded;
+    try {
+      decoded = jsonDecode(raw);
+    } catch (e) {
+      logSink.log('[JoinChannelVideo] setParameters failed: invalid JSON ($e)');
+      return;
+    }
+
+    if (decoded is! Map) {
+      logSink.log(
+          '[JoinChannelVideo] setParameters failed: JSON root must be an object');
+      return;
+    }
+
+    final params = Map<String, dynamic>.from(decoded);
+    final payload = jsonEncode(params);
+    await _engine.setParameters(payload);
+    logSink.log('[JoinChannelVideo] setParameters: $payload');
   }
 
   Future<void> _updateRemoteVideoController(
@@ -438,6 +479,33 @@ class _State extends State<JoinChannelVideo> {
                     style: const TextStyle(fontSize: 10, color: Colors.blue),
                   ),
                 ],
+              ),
+            ),
+            const SizedBox(
+              height: 20,
+            ),
+            const Text(
+              'Private parameters (JSON)',
+              style: TextStyle(fontWeight: FontWeight.bold),
+            ),
+            const SizedBox(height: 8),
+            TextField(
+              controller: _privateParamsController,
+              decoration: const InputDecoration(
+                hintText: '{"che.audio.aiaec.working_mode":1}',
+                border: OutlineInputBorder(),
+                alignLabelWithHint: true,
+              ),
+              keyboardType: TextInputType.multiline,
+              minLines: 4,
+              maxLines: 8,
+            ),
+            const SizedBox(height: 8),
+            SizedBox(
+              width: double.infinity,
+              child: ElevatedButton(
+                onPressed: _applyPrivateParameters,
+                child: const Text('Apply private parameters'),
               ),
             ),
             const SizedBox(
