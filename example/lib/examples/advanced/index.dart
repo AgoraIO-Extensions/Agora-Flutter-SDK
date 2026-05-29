@@ -100,6 +100,6 @@ final advanced = [
   if (!kIsWeb && !(Platform.isAndroid || Platform.isIOS))
     {'name': 'PreCallTest', 'widget': const PreCallTest()},
   {'name': 'MusicPlayer', 'widget': const MusicPlayerExample()},
-  if (Platform.isWindows || Platform.isMacOS)
+  if (!kIsWeb && (Platform.isWindows || Platform.isMacOS))
     {'name': 'LoopbackAudio', 'widget': const LoopbackAudio()},
 ];

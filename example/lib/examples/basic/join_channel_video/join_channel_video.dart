@@ -29,7 +29,6 @@ class _State extends State<JoinChannelVideo> {
   late TextEditingController _controller;
   late TextEditingController uidController;
   VideoViewController? _remoteVideoController;
-  bool test = false;
   bool _isUseFlutterTexture = false;
   bool _isUseAndroidSurfaceView = false;
 
@@ -156,10 +155,6 @@ class _State extends State<JoinChannelVideo> {
       );
     }
 
-    if (_switchViewLevel) {
-      // Switch view level
-      test = !test;
-    }
     setState(() {});
   }
 
@@ -235,7 +230,7 @@ class _State extends State<JoinChannelVideo> {
               ),
             ),
             if (_remoteVideoController != null)
-              if (test)
+              if (_switchViewLevel)
                 Align(
                   alignment: Alignment.topLeft,
                   child: SingleChildScrollView(
@@ -433,7 +428,7 @@ class _State extends State<JoinChannelVideo> {
                     ],
                   ),
                   Text(
-                    'Current: test=$test, controller=${_remoteVideoController?.hashCode ?? "null"}',
+                    'Current: _switchViewLevel=$_switchViewLevel, controller=${_remoteVideoController?.hashCode ?? "null"}',
                     style: const TextStyle(fontSize: 10, color: Colors.blue),
                   ),
                 ],

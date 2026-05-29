@@ -165,8 +165,6 @@ class _AgoraRtcRenderPlatformViewState extends State<AgoraRtcRenderPlatformView>
     } catch (e) {
       debugPrint(
           '[AgoraVideoView] error when widget.controller.setupView: ${e.toString()}');
-    } finally {
-      await _controller(widget.controller).dePlatformRenderRef(_platformViewId);
     }
 
     widget.onAgoraVideoViewCreated?.call(_nativeViewIntPtr);

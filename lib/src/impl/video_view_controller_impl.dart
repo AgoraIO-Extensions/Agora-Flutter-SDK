@@ -61,9 +61,10 @@ extension VideoViewControllerBaseExt on VideoViewControllerBase {
 
   @internal
   bool get shouldUseFlutterTexture =>
-      (defaultTargetPlatform == TargetPlatform.macOS ||
-          defaultTargetPlatform == TargetPlatform.windows) ||
-      useFlutterTexture;
+      !kIsWeb &&
+      ((defaultTargetPlatform == TargetPlatform.macOS ||
+              defaultTargetPlatform == TargetPlatform.windows) ||
+          useFlutterTexture);
 
   @internal
   bool get shouldHandlerRenderMode =>
@@ -179,11 +180,15 @@ mixin VideoViewControllerBaseMixin implements VideoViewControllerBase {
 
   @protected
   Future<void> disposeRenderInternal() async {
-    // Pass view handle with kNullViewHandle will clear all setup renderers,
-    // since we decide to use VideoViewSetupMode.videoViewSetupRemove to remove
-    // the renderers, we should return directly here.
+    if (shouldUseFlutterTexture) {
+      await rtcEngine.globalVideoViewController
+          ?.destroyTextureRender(getTextureId());
+      _textureId = kTextureNotInit;
+      return;
+    }
+
     if (_viewHandle != kNullViewHandle) {
-      VideoCanvas newCanvas = VideoCanvas(
+      final removeCanvas = VideoCanvas(
         view: _viewHandle,
         renderMode: canvas.renderMode,
         mirrorMode: canvas.mirrorMode,
@@ -193,16 +198,11 @@ mixin VideoViewControllerBaseMixin implements VideoViewControllerBase {
         setupMode: VideoViewSetupMode.videoViewSetupRemove,
         mediaPlayerId: canvas.mediaPlayerId,
       );
-
       await rtcEngine.globalVideoViewController
-          ?.setupVideoView(_viewHandle, newCanvas, connection: connection);
-
+          ?.setupVideoView(_viewHandle, removeCanvas, connection: connection);
       _viewHandle = kNullViewHandle;
     }
 
-    // We need to ensure the platform view is valid before calling setupVideoView since
-    // we use VideoViewSetupMode.videoViewSetupRemove to remove renderers. This is important
-    // because the platform view is shared between the app and native side via a GlobalRef address.
     if (_platformViewId != kInvalidPlatformViewId) {
       await dePlatformRenderRef(_platformViewId);
       _platformViewId = kInvalidPlatformViewId;
@@ -240,22 +240,21 @@ mixin VideoViewControllerBaseMixin implements VideoViewControllerBase {
 
   @override
   Future<void> initializeRender() async {
-    if (!shouldUseFlutterTexture) {
-      if (kIsWeb) {
-        // Make sure the `platformViewRegistry.registerViewFactory` is called.
-        rtcEngine.globalVideoViewController;
-      }
+    if (shouldUseFlutterTexture) {
+      return;
+    }
+    if (kIsWeb) {
+      // Make sure the `platformViewRegistry.registerViewFactory` is called.
+      rtcEngine.globalVideoViewController;
+      return;
     }
   }
+
 
   @override
   Future<void> setupView(int platformViewId, int nativeViewPtr) async {
     _platformViewId = platformViewId;
     _viewHandle = nativeViewPtr;
-
-    if (_platformViewId != kInvalidPlatformViewId) {
-      await addPlatformRenderRef(_platformViewId);
-    }
 
     await rtcEngine.globalVideoViewController
         ?.setupVideoView(nativeViewPtr, canvas, connection: connection);
