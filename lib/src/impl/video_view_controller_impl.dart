@@ -187,7 +187,10 @@ mixin VideoViewControllerBaseMixin implements VideoViewControllerBase {
       return;
     }
 
-    if (_viewHandle != kNullViewHandle) {
+    final hasPlatformView = kIsWeb
+        ? _platformViewId != kInvalidPlatformViewId
+        : _viewHandle != kNullViewHandle;
+    if (hasPlatformView) {
       final removeCanvas = VideoCanvas(
         view: _viewHandle,
         renderMode: canvas.renderMode,

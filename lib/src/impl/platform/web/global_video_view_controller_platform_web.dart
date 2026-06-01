@@ -1,9 +1,10 @@
-import 'dart:async';
 import 'dart:html' as html;
 import 'dart:ui_web' as ui;
 
 import 'package:agora_rtc_engine/agora_rtc_engine.dart';
 import 'package:agora_rtc_engine/src/impl/platform/global_video_view_controller_platform.dart';
+import 'package:agora_rtc_engine/src/impl/platform/web/html_element_attach_gate.dart';
+import 'package:flutter/foundation.dart';
 import 'package:iris_method_channel/iris_method_channel.dart';
 
 // ignore_for_file: public_member_api_docs
@@ -22,27 +23,33 @@ class _View {
           ..style.height = '100%' {
     // Wait until the element is injected into the DOM,
     // see https://github.com/flutter/flutter/issues/143922#issuecomment-1960133128
-    final observer = html.IntersectionObserver((entries, observer) {
-      if (_element.isConnected == true) {
-        observer.unobserve(_element);
-        _viewCompleter.complete(_element);
-      }
-    });
-    observer.observe(_element);
+    _attachGate = HtmlElementAttachGate(_element);
   }
 
   final html.HtmlElement _element;
   html.HtmlElement get element => _element;
 
-  final _viewCompleter = Completer<html.HtmlElement>();
+  late final HtmlElementAttachGate _attachGate;
+  bool _isDisposed = false;
 
-  Future<String> waitAndGetId() async {
-    final div = await _viewCompleter.future;
-    return div.id;
+  bool get isDisposed => _isDisposed;
+
+  void dispose() {
+    if (_isDisposed) {
+      return;
+    }
+
+    _isDisposed = true;
+    _attachGate.dispose();
+    _element.children.clear();
+  }
+
+  Future<String?> waitAndGetId() async {
+    final div = await _attachGate.attachedElement;
+    return div?.id;
   }
 }
 
-// TODO(littlegnal): Need handle remove view logic on web
 final Map<int, _View> _viewMap = {};
 
 class GlobalVideoViewControllerWeb extends GlobalVideoViewControllerPlatfrom {
@@ -59,9 +66,12 @@ class GlobalVideoViewControllerWeb extends GlobalVideoViewControllerPlatfrom {
   }
 
   @override
-  Future<void> detachVideoFrameBufferManager(int irisRtcEngineIntPtr) {
+  Future<void> detachVideoFrameBufferManager(int irisRtcEngineIntPtr) async {
+    for (final view in _viewMap.values) {
+      view.dispose();
+    }
     _viewMap.clear();
-    return super.detachVideoFrameBufferManager(irisRtcEngineIntPtr);
+    await super.detachVideoFrameBufferManager(irisRtcEngineIntPtr);
   }
 
   @override
@@ -70,9 +80,36 @@ class GlobalVideoViewControllerWeb extends GlobalVideoViewControllerPlatfrom {
     // The `viewHandle` is the platform view id on web
     final viewId = viewHandle as int;
 
-    final div = _viewMap[viewId]!;
-    final divId = await div.waitAndGetId();
+    if (videoCanvas.setupMode == VideoViewSetupMode.videoViewSetupRemove) {
+      final view = _viewMap[viewId];
+      if (view?.element.isConnected == true) {
+        view!.element.children.clear();
+      } else {
+        _viewMap.remove(viewId)?.dispose();
+      }
+      return;
+    }
+
+    final view = _viewMap[viewId];
+    if (view == null || view.isDisposed) {
+      return;
+    }
+
+    final divId = await view.waitAndGetId();
+    if (divId == null ||
+        view.isDisposed ||
+        view.element.isConnected != true ||
+        !identical(_viewMap[viewId], view)) {
+      return;
+    }
 
     await super.setupVideoView(divId, videoCanvas, connection: connection);
+  }
+
+  @visibleForTesting
+  html.HtmlElement debugCreatePlatformView(int viewId) {
+    final view = _View(viewId);
+    _viewMap[viewId] = view;
+    return view.element;
   }
 }
