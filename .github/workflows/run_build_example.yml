@@ -283,6 +283,15 @@ jobs:
             build_options="$build_options $extra_build_options"
           fi
 
+          if [ "$platform" == "web" ]; then
+            if [[ "$build_options" != *"--web-renderer"* ]]; then
+              build_options="$build_options --web-renderer html"
+            fi
+            if [[ "$build_options" != *"--pwa-strategy"* ]]; then
+              build_options="$build_options --pwa-strategy=none"
+            fi
+          fi
+
           # prepare default build arguments, if current platform is web, set DEFAULT_BUILD_APP_ID to empty string
           if [ "$platform" == "web" ]; then
             DEFAULT_BUILD_APP_ID=""
@@ -351,6 +360,11 @@ jobs:
               cp -r build/windows/x64/plugins/**/Debug/*.pdb ../output/Debug
             fi
           elif [ "$platform" == "web" ]; then
+            # Make the downloaded artifact usable from a local extracted folder
+            # or any sub-path by resolving web resources relative to index.html.
+            sed -i.bak 's#<base href="/">#<base href="./">#' build/web/index.html
+            rm -f build/web/index.html.bak
+
             # copy all files and files in subdirectories to ../output directory
             cp -r build/web/* ../output
           fi
