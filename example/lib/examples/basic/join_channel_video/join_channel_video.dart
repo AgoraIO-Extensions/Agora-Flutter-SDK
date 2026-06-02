@@ -18,6 +18,7 @@ class JoinChannelVideo extends StatefulWidget {
 
 class _State extends State<JoinChannelVideo> {
   late final RtcEngine _engine;
+  bool _isReadyPreview = false;
 
   bool isJoined = false,
       switchCamera = true,
@@ -38,8 +39,6 @@ class _State extends State<JoinChannelVideo> {
   ChannelProfileType _channelProfileType =
       ChannelProfileType.channelProfileLiveBroadcasting;
   late final RtcEngineEventHandler _rtcEngineEventHandler;
-  // global key
-  final GlobalKey _agoraVideoViewKey = GlobalKey();
   @override
   void initState() {
     super.initState();
@@ -128,6 +127,10 @@ class _State extends State<JoinChannelVideo> {
 
     await _engine.enableVideo();
     await _engine.startPreview();
+
+    setState(() {
+      _isReadyPreview = true;
+    });
   }
 
   Future<void> _updateRemoteVideoController(
@@ -212,6 +215,7 @@ class _State extends State<JoinChannelVideo> {
   Widget build(BuildContext context) {
     return ExampleActionsWidget(
       displayContentBuilder: (context, isLayoutHorizontal) {
+        if (!_isReadyPreview) return Container();
         return Stack(
           children: [
             StatsMonitoringWidget(
