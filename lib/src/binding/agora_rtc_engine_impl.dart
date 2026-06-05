@@ -3032,6 +3032,30 @@ class RtcEngineImpl implements RtcEngine {
   }
 
   @override
+  Future<void> setPlaybackAudioFrameBeforeMixingParameters(
+      {required int sampleRate,
+      required int channel,
+      required int samplesPerCall}) async {
+    final apiType =
+        '${isOverrideClassName ? className : 'RtcEngine'}_setPlaybackAudioFrameBeforeMixingParameters_ee7e270';
+    final requestParam = createParams({
+      'sampleRate': sampleRate,
+      'channel': channel,
+      'samplesPerCall': samplesPerCall
+    });
+    final callApiResult = await irisMethodChannel.invokeMethod(
+        IrisMethodCall(apiType, jsonEncode(requestParam), buffers: null));
+    if (callApiResult.irisReturnCode < 0) {
+      throw AgoraRtcException(code: callApiResult.irisReturnCode);
+    }
+    final rm = callApiResult.data;
+    final result = rm['result'];
+    if (result < 0) {
+      throw AgoraRtcException(code: result);
+    }
+  }
+
+  @override
   Future<void> enableAudioSpectrumMonitor({int intervalInMS = 100}) async {
     final apiType =
         '${isOverrideClassName ? className : 'RtcEngine'}_enableAudioSpectrumMonitor_46f8ab7';

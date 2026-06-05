@@ -678,6 +678,7 @@ ChannelMediaOptions _$ChannelMediaOptionsFromJson(Map<String, dynamic> json) =>
           _$MultipathModeEnumMap, json['downlinkMultipathMode']),
       preferMultipathType: $enumDecodeNullable(
           _$MultipathTypeEnumMap, json['preferMultipathType']),
+      customUserInfo: json['customUserInfo'] as String?,
     );
 
 Map<String, dynamic> _$ChannelMediaOptionsToJson(ChannelMediaOptions instance) {
@@ -744,6 +745,7 @@ Map<String, dynamic> _$ChannelMediaOptionsToJson(ChannelMediaOptions instance) {
       _$MultipathModeEnumMap[instance.downlinkMultipathMode]);
   writeNotNull('preferMultipathType',
       _$MultipathTypeEnumMap[instance.preferMultipathType]);
+  writeNotNull('customUserInfo', instance.customUserInfo);
   return val;
 }
 
@@ -818,6 +820,7 @@ RtcEngineContext _$RtcEngineContextFromJson(Map<String, dynamic> json) =>
       useExternalEglContext: json['useExternalEglContext'] as bool?,
       domainLimit: json['domainLimit'] as bool?,
       autoRegisterAgoraExtensions: json['autoRegisterAgoraExtensions'] as bool?,
+      parameters: json['parameters'] as String?,
     );
 
 Map<String, dynamic> _$RtcEngineContextToJson(RtcEngineContext instance) {
@@ -843,6 +846,7 @@ Map<String, dynamic> _$RtcEngineContextToJson(RtcEngineContext instance) {
   writeNotNull('domainLimit', instance.domainLimit);
   writeNotNull(
       'autoRegisterAgoraExtensions', instance.autoRegisterAgoraExtensions);
+  writeNotNull('parameters', instance.parameters);
   return val;
 }
 

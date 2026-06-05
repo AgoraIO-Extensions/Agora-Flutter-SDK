@@ -1400,7 +1400,8 @@ class ChannelMediaOptions implements AgoraSerializable {
       this.enableMultipath,
       this.uplinkMultipathMode,
       this.downlinkMultipathMode,
-      this.preferMultipathType});
+      this.preferMultipathType,
+      this.customUserInfo});
 
   /// Sets whether to publish the video captured by the camera: true : Publish the video captured by the camera. false : Do not publish the video captured by the camera.
   @JsonKey(name: 'publishCameraTrack')
@@ -1573,6 +1574,10 @@ class ChannelMediaOptions implements AgoraSerializable {
   /// Preferred transmission path type. See MultipathType. When using this parameter, make sure enableMultipath is set to true.
   @JsonKey(name: 'preferMultipathType')
   final MultipathType? preferMultipathType;
+
+  /// @nodoc
+  @JsonKey(name: 'customUserInfo')
+  final String? customUserInfo;
 
   /// @nodoc
   factory ChannelMediaOptions.fromJson(Map<String, dynamic> json) =>
@@ -2999,7 +3004,8 @@ class RtcEngineContext implements AgoraSerializable {
       this.threadPriority,
       this.useExternalEglContext,
       this.domainLimit,
-      this.autoRegisterAgoraExtensions});
+      this.autoRegisterAgoraExtensions,
+      this.parameters});
 
   /// The App ID issued by Agora to the app developer. Only apps using the same App ID can join the same channel for communication or live streaming. One App ID can only be used to create one RtcEngine. To change the App ID, you must first call release to destroy the current RtcEngine and then create a new one.
   @JsonKey(name: 'appId')
@@ -3042,6 +3048,10 @@ class RtcEngineContext implements AgoraSerializable {
   /// Whether to automatically register Agora extensions when initializing RtcEngine : true : (default) Automatically register Agora extensions when initializing RtcEngine. false : Do not register Agora extensions when initializing RtcEngine. You need to call enableExtension to register the Agora extensions.
   @JsonKey(name: 'autoRegisterAgoraExtensions')
   final bool? autoRegisterAgoraExtensions;
+
+  /// @nodoc
+  @JsonKey(name: 'parameters')
+  final String? parameters;
 
   /// @nodoc
   factory RtcEngineContext.fromJson(Map<String, dynamic> json) =>
@@ -5171,6 +5181,23 @@ abstract class RtcEngine {
   /// This method returns no value if the call succeeds. If the method call fails, it throws an AgoraRtcException, which you need to catch and handle. See [Error Codes](https://docs.agora.io/en/video-calling/troubleshooting/error-codes) for details and troubleshooting suggestions.
   Future<void> setPlaybackAudioFrameBeforeMixingParameters(
       {required int sampleRate, required int channel});
+
+  /// Sets the format of the raw audio playback data before mixing.
+  ///
+  /// The SDK triggers the onPlaybackAudioFrameBeforeMixing callback based on the sampling interval.
+  ///
+  /// * [sampleRate] The sample rate (Hz) of the audio data. You can set it to 8000, 16000, 32000, 44100, or 48000.
+  /// * [channel] The number of audio channels. You can set it to 1 or 2:
+  ///  1: Mono.
+  ///  2: Stereo.
+  /// * [samplesPerCall] Sets the number of audio samples returned in the onPlaybackAudioFrameBeforeMixing callback. In RTMP streaming scenarios, it is recommended to set this to 1024.
+  ///
+  /// Returns
+  /// This method returns no value if the call succeeds. If the method call fails, it throws an AgoraRtcException, which you need to catch and handle. See [Error Codes](https://docs.agora.io/en/video-calling/troubleshooting/error-codes) for details and troubleshooting suggestions.
+  Future<void> setPlaybackAudioFrameBeforeMixingParameters(
+      {required int sampleRate,
+      required int channel,
+      required int samplesPerCall});
 
   /// Enables audio spectrum monitoring.
   ///
