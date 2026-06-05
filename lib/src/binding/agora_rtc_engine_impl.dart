@@ -3014,11 +3014,16 @@ class RtcEngineImpl implements RtcEngine {
 
   @override
   Future<void> setPlaybackAudioFrameBeforeMixingParameters(
-      {required int sampleRate, required int channel}) async {
+      {required int sampleRate,
+      required int channel,
+      required int samplesPerCall}) async {
     final apiType =
-        '${isOverrideClassName ? className : 'RtcEngine'}_setPlaybackAudioFrameBeforeMixingParameters_4e92b3c';
-    final requestParam =
-        createParams({'sampleRate': sampleRate, 'channel': channel});
+        '${isOverrideClassName ? className : 'RtcEngine'}_setPlaybackAudioFrameBeforeMixingParameters_ee7e270';
+    final requestParam = createParams({
+      'sampleRate': sampleRate,
+      'channel': channel,
+      'samplesPerCall': samplesPerCall
+    });
     final callApiResult = await irisMethodChannel.invokeMethod(
         IrisMethodCall(apiType, jsonEncode(requestParam), buffers: null));
     if (callApiResult.irisReturnCode < 0) {

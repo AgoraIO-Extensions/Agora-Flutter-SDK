@@ -44,6 +44,7 @@ void rtcEngineSmokeTestCases() {
         bool contextUseExternalEglContext = true;
         bool contextDomainLimit = true;
         bool contextAutoRegisterAgoraExtensions = true;
+        String contextParameters = "hello";
         RtcEngineContext context = RtcEngineContext(
           appId: contextAppId,
           channelProfile: contextChannelProfile,
@@ -55,6 +56,7 @@ void rtcEngineSmokeTestCases() {
           useExternalEglContext: contextUseExternalEglContext,
           domainLimit: contextDomainLimit,
           autoRegisterAgoraExtensions: contextAutoRegisterAgoraExtensions,
+          parameters: contextParameters,
         );
         await rtcEngine.initialize(
           context,
@@ -345,6 +347,7 @@ void rtcEngineSmokeTestCases() {
         bool optionsIsAudioFilterable = true;
         String optionsParameters = "hello";
         bool optionsEnableMultipath = true;
+        String optionsCustomUserInfo = "hello";
         ChannelMediaOptions options = ChannelMediaOptions(
           publishCameraTrack: optionsPublishCameraTrack,
           publishSecondaryCameraTrack: optionsPublishSecondaryCameraTrack,
@@ -387,6 +390,7 @@ void rtcEngineSmokeTestCases() {
           uplinkMultipathMode: optionsUplinkMultipathMode,
           downlinkMultipathMode: optionsDownlinkMultipathMode,
           preferMultipathType: optionsPreferMultipathType,
+          customUserInfo: optionsCustomUserInfo,
         );
         await rtcEngine.joinChannel(
           token: token,
@@ -469,6 +473,7 @@ void rtcEngineSmokeTestCases() {
         bool optionsIsAudioFilterable = true;
         String optionsParameters = "hello";
         bool optionsEnableMultipath = true;
+        String optionsCustomUserInfo = "hello";
         ChannelMediaOptions options = ChannelMediaOptions(
           publishCameraTrack: optionsPublishCameraTrack,
           publishSecondaryCameraTrack: optionsPublishSecondaryCameraTrack,
@@ -511,6 +516,7 @@ void rtcEngineSmokeTestCases() {
           uplinkMultipathMode: optionsUplinkMultipathMode,
           downlinkMultipathMode: optionsDownlinkMultipathMode,
           preferMultipathType: optionsPreferMultipathType,
+          customUserInfo: optionsCustomUserInfo,
         );
         await rtcEngine.updateChannelMediaOptions(
           options,
@@ -5025,9 +5031,11 @@ void rtcEngineSmokeTestCases() {
       try {
         int sampleRate = 5;
         int channel = 5;
+        int samplesPerCall = 5;
         await rtcEngine.setPlaybackAudioFrameBeforeMixingParameters(
           sampleRate: sampleRate,
           channel: channel,
+          samplesPerCall: samplesPerCall,
         );
       } catch (e) {
         if (e is! AgoraRtcException) {
@@ -9542,6 +9550,7 @@ void rtcEngineSmokeTestCases() {
         bool optionsIsAudioFilterable = true;
         String optionsParameters = "hello";
         bool optionsEnableMultipath = true;
+        String optionsCustomUserInfo = "hello";
         ChannelMediaOptions options = ChannelMediaOptions(
           publishCameraTrack: optionsPublishCameraTrack,
           publishSecondaryCameraTrack: optionsPublishSecondaryCameraTrack,
@@ -9584,6 +9593,7 @@ void rtcEngineSmokeTestCases() {
           uplinkMultipathMode: optionsUplinkMultipathMode,
           downlinkMultipathMode: optionsDownlinkMultipathMode,
           preferMultipathType: optionsPreferMultipathType,
+          customUserInfo: optionsCustomUserInfo,
         );
         await rtcEngine.joinChannelWithUserAccount(
           token: token,
@@ -9670,6 +9680,7 @@ void rtcEngineSmokeTestCases() {
         bool optionsIsAudioFilterable = true;
         String optionsParameters = "hello";
         bool optionsEnableMultipath = true;
+        String optionsCustomUserInfo = "hello";
         ChannelMediaOptions options = ChannelMediaOptions(
           publishCameraTrack: optionsPublishCameraTrack,
           publishSecondaryCameraTrack: optionsPublishSecondaryCameraTrack,
@@ -9712,6 +9723,7 @@ void rtcEngineSmokeTestCases() {
           uplinkMultipathMode: optionsUplinkMultipathMode,
           downlinkMultipathMode: optionsDownlinkMultipathMode,
           preferMultipathType: optionsPreferMultipathType,
+          customUserInfo: optionsCustomUserInfo,
         );
         await rtcEngine.joinChannelWithUserAccountEx(
           token: token,
