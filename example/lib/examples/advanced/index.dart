@@ -72,8 +72,7 @@ final advanced = [
     },
   if (!kIsWeb) {'name': 'SendMetadata', 'widget': const SendMetadata()},
   if (!kIsWeb) {'name': 'SetBeautyEffect', 'widget': const SetBeautyEffect()},
-  if (!kIsWeb)
-    {'name': 'AdvancedBeauty', 'widget': const AdvancedBeauty()},
+  if (!kIsWeb) {'name': 'AdvancedBeauty', 'widget': const AdvancedBeauty()},
   if (!kIsWeb)
     {'name': 'SetContentInspect', 'widget': const SetContentInspect()},
   if (!kIsWeb && !(Platform.isAndroid || Platform.isIOS))
