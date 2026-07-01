@@ -1801,6 +1801,43 @@ Map<String, dynamic> _$AudioTrackConfigToJson(AudioTrackConfig instance) {
   return val;
 }
 
+LoopbackAudioTrackConfig _$LoopbackAudioTrackConfigFromJson(
+        Map<String, dynamic> json) =>
+    LoopbackAudioTrackConfig(
+      loopbackType: $enumDecodeNullable(
+          _$LoopbackAudioTrackTypeEnumMap, json['loopbackType']),
+      volume: (json['volume'] as num?)?.toInt(),
+      deviceName: json['deviceName'] as String?,
+      appName: json['appName'] as String?,
+      processId: (json['processId'] as num?)?.toInt(),
+    );
+
+Map<String, dynamic> _$LoopbackAudioTrackConfigToJson(
+    LoopbackAudioTrackConfig instance) {
+  final val = <String, dynamic>{};
+
+  void writeNotNull(String key, dynamic value) {
+    if (value != null) {
+      val[key] = value;
+    }
+  }
+
+  writeNotNull(
+      'loopbackType', _$LoopbackAudioTrackTypeEnumMap[instance.loopbackType]);
+  writeNotNull('volume', instance.volume);
+  writeNotNull('deviceName', instance.deviceName);
+  writeNotNull('appName', instance.appName);
+  writeNotNull('processId', instance.processId);
+  return val;
+}
+
+const _$LoopbackAudioTrackTypeEnumMap = {
+  LoopbackAudioTrackType.loopbackSystem: 0,
+  LoopbackAudioTrackType.loopbackSystemExcludeSelf: 1,
+  LoopbackAudioTrackType.loopbackApplication: 2,
+  LoopbackAudioTrackType.loopbackProcess: 3,
+};
+
 ScreenAudioParameters _$ScreenAudioParametersFromJson(
         Map<String, dynamic> json) =>
     ScreenAudioParameters(
@@ -2183,7 +2220,6 @@ Map<String, dynamic> _$EchoTestConfigurationToJson(
 UserInfo _$UserInfoFromJson(Map<String, dynamic> json) => UserInfo(
       uid: (json['uid'] as num?)?.toInt(),
       userAccount: json['userAccount'] as String?,
-      customUserInfo: json['customUserInfo'] as String?,
     );
 
 Map<String, dynamic> _$UserInfoToJson(UserInfo instance) {
@@ -2197,7 +2233,6 @@ Map<String, dynamic> _$UserInfoToJson(UserInfo instance) {
 
   writeNotNull('uid', instance.uid);
   writeNotNull('userAccount', instance.userAccount);
-  writeNotNull('customUserInfo', instance.customUserInfo);
   return val;
 }
 
@@ -2596,6 +2631,13 @@ const _$ErrorCodeTypeEnumMap = {
   ErrorCodeType.errAdmStartRecording: 1012,
   ErrorCodeType.errAdmStopRecording: 1013,
   ErrorCodeType.errVdmCameraNotAuthorized: 1501,
+  ErrorCodeType.errAdmApplicationLoopback: 2007,
+  ErrorCodeType.errAdmApplicationLoopbackStopped: 2008,
+  ErrorCodeType.errAdmSystemLoopback: 2009,
+  ErrorCodeType.errAdmSystemLoopbackStopped: 2010,
+  ErrorCodeType.errAdmLoopbackNoPermission: 2011,
+  ErrorCodeType.errAdmLoopbackSilentDetected: 2012,
+  ErrorCodeType.errAdmLoopbackSilentRecovered: 2013,
 };
 
 const _$LicenseErrorTypeEnumMap = {
@@ -2689,10 +2731,6 @@ const _$H264PacketizeModeEnumMap = {
 
 const _$MaxUserAccountLengthTypeEnumMap = {
   MaxUserAccountLengthType.maxUserAccountLength: 256,
-};
-
-const _$MaxCustomUserInfoLengthTypeEnumMap = {
-  MaxCustomUserInfoLengthType.maxCustomUserInfoLength: 1024,
 };
 
 const _$CameraFormatTypeEnumMap = {

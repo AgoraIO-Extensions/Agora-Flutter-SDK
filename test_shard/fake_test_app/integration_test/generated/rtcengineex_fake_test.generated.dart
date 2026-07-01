@@ -56,6 +56,8 @@ void rtcEngineExSmokeTestCases() {
         bool optionsPublishFourthScreenTrack = true;
         bool optionsPublishCustomAudioTrack = true;
         int optionsPublishCustomAudioTrackId = 5;
+        bool optionsPublishLoopbackAudioTrack = true;
+        int optionsPublishLoopbackAudioTrackId = 5;
         bool optionsPublishCustomVideoTrack = true;
         bool optionsPublishEncodedVideoTrack = true;
         bool optionsPublishMediaPlayerAudioTrack = true;
@@ -77,7 +79,6 @@ void rtcEngineExSmokeTestCases() {
         bool optionsIsAudioFilterable = true;
         String optionsParameters = "hello";
         bool optionsEnableMultipath = true;
-        String optionsCustomUserInfo = "hello";
         ChannelMediaOptions options = ChannelMediaOptions(
           publishCameraTrack: optionsPublishCameraTrack,
           publishSecondaryCameraTrack: optionsPublishSecondaryCameraTrack,
@@ -92,6 +93,8 @@ void rtcEngineExSmokeTestCases() {
           publishFourthScreenTrack: optionsPublishFourthScreenTrack,
           publishCustomAudioTrack: optionsPublishCustomAudioTrack,
           publishCustomAudioTrackId: optionsPublishCustomAudioTrackId,
+          publishLoopbackAudioTrack: optionsPublishLoopbackAudioTrack,
+          publishLoopbackAudioTrackId: optionsPublishLoopbackAudioTrackId,
           publishCustomVideoTrack: optionsPublishCustomVideoTrack,
           publishEncodedVideoTrack: optionsPublishEncodedVideoTrack,
           publishMediaPlayerAudioTrack: optionsPublishMediaPlayerAudioTrack,
@@ -120,7 +123,6 @@ void rtcEngineExSmokeTestCases() {
           uplinkMultipathMode: optionsUplinkMultipathMode,
           downlinkMultipathMode: optionsDownlinkMultipathMode,
           preferMultipathType: optionsPreferMultipathType,
-          customUserInfo: optionsCustomUserInfo,
         );
         await rtcEngineEx.joinChannelEx(
           token: token,
@@ -282,6 +284,8 @@ void rtcEngineExSmokeTestCases() {
         bool optionsPublishFourthScreenTrack = true;
         bool optionsPublishCustomAudioTrack = true;
         int optionsPublishCustomAudioTrackId = 5;
+        bool optionsPublishLoopbackAudioTrack = true;
+        int optionsPublishLoopbackAudioTrackId = 5;
         bool optionsPublishCustomVideoTrack = true;
         bool optionsPublishEncodedVideoTrack = true;
         bool optionsPublishMediaPlayerAudioTrack = true;
@@ -303,7 +307,6 @@ void rtcEngineExSmokeTestCases() {
         bool optionsIsAudioFilterable = true;
         String optionsParameters = "hello";
         bool optionsEnableMultipath = true;
-        String optionsCustomUserInfo = "hello";
         ChannelMediaOptions options = ChannelMediaOptions(
           publishCameraTrack: optionsPublishCameraTrack,
           publishSecondaryCameraTrack: optionsPublishSecondaryCameraTrack,
@@ -318,6 +321,8 @@ void rtcEngineExSmokeTestCases() {
           publishFourthScreenTrack: optionsPublishFourthScreenTrack,
           publishCustomAudioTrack: optionsPublishCustomAudioTrack,
           publishCustomAudioTrackId: optionsPublishCustomAudioTrackId,
+          publishLoopbackAudioTrack: optionsPublishLoopbackAudioTrack,
+          publishLoopbackAudioTrackId: optionsPublishLoopbackAudioTrackId,
           publishCustomVideoTrack: optionsPublishCustomVideoTrack,
           publishEncodedVideoTrack: optionsPublishEncodedVideoTrack,
           publishMediaPlayerAudioTrack: optionsPublishMediaPlayerAudioTrack,
@@ -346,7 +351,6 @@ void rtcEngineExSmokeTestCases() {
           uplinkMultipathMode: optionsUplinkMultipathMode,
           downlinkMultipathMode: optionsDownlinkMultipathMode,
           preferMultipathType: optionsPreferMultipathType,
-          customUserInfo: optionsCustomUserInfo,
         );
         String connectionChannelId = "hello";
         int connectionLocalUid = 5;

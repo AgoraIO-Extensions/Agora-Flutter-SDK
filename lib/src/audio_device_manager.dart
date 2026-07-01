@@ -23,6 +23,31 @@ extension MaxDeviceIdLengthTypeExt on MaxDeviceIdLengthType {
   }
 }
 
+/// @nodoc
+@JsonSerializable(explicitToJson: true, includeIfNull: false)
+class RecordingDeviceTestConfiguration implements AgoraSerializable {
+  /// @nodoc
+  const RecordingDeviceTestConfiguration(
+      {this.indicationInterval, this.enablePlayback});
+
+  /// @nodoc
+  @JsonKey(name: 'indicationInterval')
+  final int? indicationInterval;
+
+  /// @nodoc
+  @JsonKey(name: 'enablePlayback')
+  final bool? enablePlayback;
+
+  /// @nodoc
+  factory RecordingDeviceTestConfiguration.fromJson(
+          Map<String, dynamic> json) =>
+      _$RecordingDeviceTestConfigurationFromJson(json);
+
+  @override
+  Map<String, dynamic> toJson() =>
+      _$RecordingDeviceTestConfigurationToJson(this);
+}
+
 /// Methods for managing audio devices.
 abstract class AudioDeviceManager {
   /// Gets a list of all playback devices in the system.
@@ -216,6 +241,20 @@ abstract class AudioDeviceManager {
   ///  < 0: Method call failed. See [Error Codes](https://docs.agora.io/en/video-calling/troubleshooting/error-codes) for details and resolution suggestions.
   ///  -2: Invalid parameter setting. Please reset the parameter.
   Future<void> startRecordingDeviceTest(int indicationInterval);
+
+  /// Starts the audio recording device test.
+  ///
+  /// This method tests whether the local audio recording device works properly. After you call this method, the SDK triggers the onAudioVolumeIndication callback at the specified time interval to report the volume information of the recording device with uid = 0.
+  /// The difference between this method and startEchoTest is that this method checks whether the local audio recording device works properly, while the latter checks whether the audio and video devices and network are functioning properly. You must call this method before joining a channel. After the test is complete, if you want to join a channel, make sure to call stopRecordingDeviceTest to stop the device test.
+  ///
+  /// * [indicationInterval] The time interval at which the SDK triggers the onAudioVolumeIndication callback, in milliseconds. The minimum value is 10. Otherwise, the onAudioVolumeIndication callback will not be received, and the SDK returns error code -2. Agora recommends setting this value to 100.
+  ///
+  /// Returns
+  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown. You need to catch the exception and handle it accordingly. See [Error Codes](https://docs.agora.io/en/video-calling/troubleshooting/error-codes) for details and resolution suggestions.
+  ///  < 0: Method call failed. See [Error Codes](https://docs.agora.io/en/video-calling/troubleshooting/error-codes) for details and resolution suggestions.
+  ///  -2: Invalid parameter setting. Please reset the parameter.
+  Future<void> startRecordingDeviceTest(
+      RecordingDeviceTestConfiguration config);
 
   /// Stops the audio recording device test.
   ///

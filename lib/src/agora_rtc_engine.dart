@@ -1251,7 +1251,8 @@ class ScreenCaptureSourceInfo implements AgoraSerializable {
       this.isOccluded,
       this.position,
       this.minimizeWindow,
-      this.sourceDisplayId});
+      this.sourceDisplayId,
+      this.processId});
 
   /// Type of the sharing target. See ScreenCaptureSourceType.
   @JsonKey(name: 'type')
@@ -1300,6 +1301,10 @@ class ScreenCaptureSourceInfo implements AgoraSerializable {
   /// (Windows only) ID of the screen where the window is located. If the window spans multiple screens, this indicates the screen with the largest intersection area. If the window is outside the visible screen area, the value is -2.
   @JsonKey(name: 'sourceDisplayId')
   final int? sourceDisplayId;
+
+  /// @nodoc
+  @JsonKey(name: 'process_id')
+  final int? processId;
 
   /// @nodoc
   factory ScreenCaptureSourceInfo.fromJson(Map<String, dynamic> json) =>
@@ -1373,6 +1378,8 @@ class ChannelMediaOptions implements AgoraSerializable {
       this.publishFourthScreenTrack,
       this.publishCustomAudioTrack,
       this.publishCustomAudioTrackId,
+      this.publishLoopbackAudioTrack,
+      this.publishLoopbackAudioTrackId,
       this.publishCustomVideoTrack,
       this.publishEncodedVideoTrack,
       this.publishMediaPlayerAudioTrack,
@@ -1400,8 +1407,7 @@ class ChannelMediaOptions implements AgoraSerializable {
       this.enableMultipath,
       this.uplinkMultipathMode,
       this.downlinkMultipathMode,
-      this.preferMultipathType,
-      this.customUserInfo});
+      this.preferMultipathType});
 
   /// Sets whether to publish the video captured by the camera: true : Publish the video captured by the camera. false : Do not publish the video captured by the camera.
   @JsonKey(name: 'publishCameraTrack')
@@ -1454,6 +1460,14 @@ class ChannelMediaOptions implements AgoraSerializable {
   /// ID of the custom audio track to be published. Default is 0. You can get the custom audio track ID via the createCustomAudioTrack method.
   @JsonKey(name: 'publishCustomAudioTrackId')
   final int? publishCustomAudioTrackId;
+
+  /// @nodoc
+  @JsonKey(name: 'publishLoopbackAudioTrack')
+  final bool? publishLoopbackAudioTrack;
+
+  /// @nodoc
+  @JsonKey(name: 'publishLoopbackAudioTrackId')
+  final int? publishLoopbackAudioTrackId;
 
   /// Sets whether to publish custom captured video: true : Publish the custom captured video. false : Do not publish the custom captured video.
   @JsonKey(name: 'publishCustomVideoTrack')
@@ -1574,10 +1588,6 @@ class ChannelMediaOptions implements AgoraSerializable {
   /// Preferred transmission path type. See MultipathType. When using this parameter, make sure enableMultipath is set to true.
   @JsonKey(name: 'preferMultipathType')
   final MultipathType? preferMultipathType;
-
-  /// @nodoc
-  @JsonKey(name: 'customUserInfo')
-  final String? customUserInfo;
 
   /// @nodoc
   factory ChannelMediaOptions.fromJson(Map<String, dynamic> json) =>
@@ -5180,6 +5190,21 @@ abstract class RtcEngine {
   /// Returns
   /// This method returns no value if the call succeeds. If the method call fails, it throws an AgoraRtcException, which you need to catch and handle. See [Error Codes](https://docs.agora.io/en/video-calling/troubleshooting/error-codes) for details and troubleshooting suggestions.
   Future<void> setPlaybackAudioFrameBeforeMixingParameters(
+      {required int sampleRate, required int channel});
+
+  /// Sets the format of the raw audio playback data before mixing.
+  ///
+  /// The SDK triggers the onPlaybackAudioFrameBeforeMixing callback based on the sampling interval.
+  ///
+  /// * [sampleRate] The sample rate (Hz) of the audio data. You can set it to 8000, 16000, 32000, 44100, or 48000.
+  /// * [channel] The number of audio channels. You can set it to 1 or 2:
+  ///  1: Mono.
+  ///  2: Stereo.
+  /// * [samplesPerCall] Sets the number of audio samples returned in the onPlaybackAudioFrameBeforeMixing callback. In RTMP streaming scenarios, it is recommended to set this to 1024.
+  ///
+  /// Returns
+  /// This method returns no value if the call succeeds. If the method call fails, it throws an AgoraRtcException, which you need to catch and handle. See [Error Codes](https://docs.agora.io/en/video-calling/troubleshooting/error-codes) for details and troubleshooting suggestions.
+  Future<void> setPlaybackAudioFrameBeforeMixingParameters(
       {required int sampleRate,
       required int channel,
       required int samplesPerCall});
@@ -6954,6 +6979,10 @@ enum MediaDeviceStateType {
   /// 8: Device is unplugged.
   @JsonValue(8)
   mediaDeviceStateUnplugged,
+
+  /// @nodoc
+  @JsonValue(9)
+  mediaDeviceStateDefaultDeviceChangedReady,
 }
 
 /// @nodoc
