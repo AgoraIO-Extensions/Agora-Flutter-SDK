@@ -5759,11 +5759,9 @@ void generatedTestCases(ValueGetter<IrisTester> irisTester) {
         int uid = 5;
         int infoUid = 5;
         String infoUserAccount = "hello";
-        String infoCustomUserInfo = "hello";
         UserInfo info = UserInfo(
           uid: infoUid,
           userAccount: infoUserAccount,
-          customUserInfo: infoCustomUserInfo,
         );
 
         final eventJson = {
