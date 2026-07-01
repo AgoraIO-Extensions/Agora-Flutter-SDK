@@ -93,7 +93,7 @@ class AudioDeviceManagerImpl implements AudioDeviceManager {
   @override
   Future<AudioDeviceInfo> getPlaybackDeviceInfo() async {
     final apiType =
-        '${isOverrideClassName ? className : 'AudioDeviceManager'}_getPlaybackDeviceInfo';
+        '${isOverrideClassName ? className : 'AudioDeviceManager'}_getPlaybackDeviceInfo_ed3a96d';
     final param = createParams({});
     final callApiResult = await irisMethodChannel.invokeMethod(
         IrisMethodCall(apiType, jsonEncode(param), buffers: null));
@@ -182,7 +182,7 @@ class AudioDeviceManagerImpl implements AudioDeviceManager {
   @override
   Future<AudioDeviceInfo> getRecordingDeviceInfo() async {
     final apiType =
-        '${isOverrideClassName ? className : 'AudioDeviceManager'}_getRecordingDeviceInfo';
+        '${isOverrideClassName ? className : 'AudioDeviceManager'}_getRecordingDeviceInfo_ed3a96d';
     final param = createParams({});
     final callApiResult = await irisMethodChannel.invokeMethod(
         IrisMethodCall(apiType, jsonEncode(param), buffers: null));
@@ -383,6 +383,26 @@ class AudioDeviceManagerImpl implements AudioDeviceManager {
     final param = createParams({'indicationInterval': indicationInterval});
     final callApiResult = await irisMethodChannel.invokeMethod(
         IrisMethodCall(apiType, jsonEncode(param), buffers: null));
+    if (callApiResult.irisReturnCode < 0) {
+      throw AgoraRtcException(code: callApiResult.irisReturnCode);
+    }
+    final rm = callApiResult.data;
+    final result = rm['result'];
+    if (result < 0) {
+      throw AgoraRtcException(code: result);
+    }
+  }
+
+  @override
+  Future<void> startRecordingDeviceTest(
+      RecordingDeviceTestConfiguration config) async {
+    final apiType =
+        '${isOverrideClassName ? className : 'AudioDeviceManager'}_startRecordingDeviceTest';
+    final param = createParams({'config': config.toJson()});
+    final List<Uint8List> buffers = [];
+    buffers.addAll(config.collectBufferList());
+    final callApiResult = await irisMethodChannel.invokeMethod(
+        IrisMethodCall(apiType, jsonEncode(param), buffers: buffers));
     if (callApiResult.irisReturnCode < 0) {
       throw AgoraRtcException(code: callApiResult.irisReturnCode);
     }

@@ -86,6 +86,12 @@ const eventIdsMapping = {
   "MediaPlayerSourceObserver_onPlayerInfoUpdated": [
     "MediaPlayerSourceObserver_onPlayerInfoUpdated"
   ],
+  "MediaPlayerSourceObserver_onPlayerCacheStats": [
+    "MediaPlayerSourceObserver_onPlayerCacheStats"
+  ],
+  "MediaPlayerSourceObserver_onPlayerPlaybackStats": [
+    "MediaPlayerSourceObserver_onPlayerPlaybackStats"
+  ],
   "MediaPlayerSourceObserver_onAudioVolumeIndication": [
     "MediaPlayerSourceObserver_onAudioVolumeIndication"
   ],
@@ -191,6 +197,9 @@ const eventIdsMapping = {
     "RtcEngineEventHandlerEx_onVideoSizeChanged",
     "RtcEngineEventHandler_onVideoSizeChangedEx"
   ],
+  "RtcEngineEventHandler_onLocalVideoEvent": [
+    "RtcEngineEventHandler_onLocalVideoEvent"
+  ],
   "RtcEngineEventHandler_onLocalVideoStateChanged": [
     "RtcEngineEventHandler_onLocalVideoStateChanged"
   ],
@@ -239,15 +248,15 @@ const eventIdsMapping = {
     "RtcEngineEventHandlerEx_onUserEnableLocalVideo",
     "RtcEngineEventHandler_onUserEnableLocalVideoEx"
   ],
-  "RtcEngineEventHandler_onLocalAudioStats": [
-    "RtcEngineEventHandler_onLocalAudioStats",
-    "RtcEngineEventHandlerEx_onLocalAudioStats",
-    "RtcEngineEventHandler_onLocalAudioStatsEx"
-  ],
   "RtcEngineEventHandler_onRemoteAudioStats": [
     "RtcEngineEventHandler_onRemoteAudioStats",
     "RtcEngineEventHandlerEx_onRemoteAudioStats",
     "RtcEngineEventHandler_onRemoteAudioStatsEx"
+  ],
+  "RtcEngineEventHandler_onLocalAudioStats": [
+    "RtcEngineEventHandler_onLocalAudioStats",
+    "RtcEngineEventHandlerEx_onLocalAudioStats",
+    "RtcEngineEventHandler_onLocalAudioStatsEx"
   ],
   "RtcEngineEventHandler_onLocalVideoStats": [
     "RtcEngineEventHandler_onLocalVideoStats"
@@ -323,15 +332,15 @@ const eventIdsMapping = {
     "RtcEngineEventHandlerEx_onFirstLocalAudioFramePublished",
     "RtcEngineEventHandler_onFirstLocalAudioFramePublishedEx"
   ],
-  "RtcEngineEventHandler_onFirstRemoteAudioFrame": [
-    "RtcEngineEventHandler_onFirstRemoteAudioFrame",
-    "RtcEngineEventHandlerEx_onFirstRemoteAudioFrame",
-    "RtcEngineEventHandler_onFirstRemoteAudioFrameEx"
-  ],
   "RtcEngineEventHandler_onFirstRemoteAudioDecoded": [
     "RtcEngineEventHandler_onFirstRemoteAudioDecoded",
     "RtcEngineEventHandlerEx_onFirstRemoteAudioDecoded",
     "RtcEngineEventHandler_onFirstRemoteAudioDecodedEx"
+  ],
+  "RtcEngineEventHandler_onFirstRemoteAudioFrame": [
+    "RtcEngineEventHandler_onFirstRemoteAudioFrame",
+    "RtcEngineEventHandlerEx_onFirstRemoteAudioFrame",
+    "RtcEngineEventHandler_onFirstRemoteAudioFrameEx"
   ],
   "RtcEngineEventHandler_onLocalAudioStateChanged": [
     "RtcEngineEventHandler_onLocalAudioStateChanged",
@@ -384,9 +393,6 @@ const eventIdsMapping = {
   "RtcEngineEventHandler_onChannelMediaRelayStateChanged": [
     "RtcEngineEventHandler_onChannelMediaRelayStateChanged"
   ],
-  "RtcEngineEventHandler_onChannelMediaRelayEvent": [
-    "RtcEngineEventHandler_onChannelMediaRelayEvent"
-  ],
   "RtcEngineEventHandler_onLocalPublishFallbackToAudioOnly": [
     "RtcEngineEventHandler_onLocalPublishFallbackToAudioOnly"
   ],
@@ -437,6 +443,19 @@ const eventIdsMapping = {
   "RtcEngineEventHandler_onUserInfoUpdated": [
     "RtcEngineEventHandler_onUserInfoUpdated"
   ],
+  "RtcEngineEventHandler_onUserAccountUpdated": [
+    "RtcEngineEventHandler_onUserAccountUpdated",
+    "RtcEngineEventHandlerEx_onUserAccountUpdated",
+    "RtcEngineEventHandler_onUserAccountUpdatedEx"
+  ],
+  "RtcEngineEventHandler_onVideoRenderingTracingResult": [
+    "RtcEngineEventHandler_onVideoRenderingTracingResult",
+    "RtcEngineEventHandlerEx_onVideoRenderingTracingResult",
+    "RtcEngineEventHandler_onVideoRenderingTracingResultEx"
+  ],
+  "RtcEngineEventHandler_onLocalVideoTranscoderError": [
+    "RtcEngineEventHandler_onLocalVideoTranscoderError"
+  ],
   "RtcEngineEventHandler_onUploadLogResult": [
     "RtcEngineEventHandler_onUploadLogResult",
     "RtcEngineEventHandlerEx_onUploadLogResult",
@@ -454,30 +473,37 @@ const eventIdsMapping = {
   "RtcEngineEventHandler_onVideoPublishStateChanged": [
     "RtcEngineEventHandler_onVideoPublishStateChanged"
   ],
-  "RtcEngineEventHandler_onExtensionEvent": [
-    "RtcEngineEventHandler_onExtensionEvent"
+  "RtcEngineEventHandler_onTranscodedStreamLayoutInfo": [
+    "RtcEngineEventHandler_onTranscodedStreamLayoutInfo",
+    "RtcEngineEventHandlerEx_onTranscodedStreamLayoutInfo",
+    "RtcEngineEventHandler_onTranscodedStreamLayoutInfoEx"
   ],
-  "RtcEngineEventHandler_onExtensionStarted": [
-    "RtcEngineEventHandler_onExtensionStarted"
+  "RtcEngineEventHandler_onAudioMetadataReceived": [
+    "RtcEngineEventHandler_onAudioMetadataReceived",
+    "RtcEngineEventHandlerEx_onAudioMetadataReceived",
+    "RtcEngineEventHandler_onAudioMetadataReceivedEx"
   ],
-  "RtcEngineEventHandler_onExtensionStopped": [
-    "RtcEngineEventHandler_onExtensionStopped"
+  "RtcEngineEventHandler_onExtensionEventWithContext": [
+    "RtcEngineEventHandler_onExtensionEventWithContext"
   ],
-  "RtcEngineEventHandler_onExtensionError": [
-    "RtcEngineEventHandler_onExtensionError"
+  "RtcEngineEventHandler_onExtensionStartedWithContext": [
+    "RtcEngineEventHandler_onExtensionStartedWithContext"
   ],
-  "RtcEngineEventHandler_onUserAccountUpdated": [
-    "RtcEngineEventHandler_onUserAccountUpdated",
-    "RtcEngineEventHandlerEx_onUserAccountUpdated",
-    "RtcEngineEventHandler_onUserAccountUpdatedEx"
+  "RtcEngineEventHandler_onExtensionStoppedWithContext": [
+    "RtcEngineEventHandler_onExtensionStoppedWithContext"
   ],
-  "RtcEngineEventHandler_onLocalVideoTranscoderError": [
-    "RtcEngineEventHandler_onLocalVideoTranscoderError"
+  "RtcEngineEventHandler_onExtensionErrorWithContext": [
+    "RtcEngineEventHandler_onExtensionErrorWithContext"
   ],
-  "RtcEngineEventHandler_onVideoRenderingTracingResult": [
-    "RtcEngineEventHandler_onVideoRenderingTracingResult",
-    "RtcEngineEventHandlerEx_onVideoRenderingTracingResult",
-    "RtcEngineEventHandler_onVideoRenderingTracingResultEx"
+  "RtcEngineEventHandler_onSetRtmFlagResult": [
+    "RtcEngineEventHandler_onSetRtmFlagResult",
+    "RtcEngineEventHandlerEx_onSetRtmFlagResult",
+    "RtcEngineEventHandler_onSetRtmFlagResultEx"
+  ],
+  "RtcEngineEventHandler_onMultipathStats": [
+    "RtcEngineEventHandler_onMultipathStats",
+    "RtcEngineEventHandlerEx_onMultipathStats",
+    "RtcEngineEventHandler_onMultipathStatsEx"
   ],
   "MetadataObserver_onMetadataReceived": [
     "MetadataObserver_onMetadataReceived"

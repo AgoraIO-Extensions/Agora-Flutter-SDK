@@ -555,16 +555,16 @@ class MediaRecorderObserverWrapper implements EventLoopEventHandler {
         String? channelId = paramJson.channelId;
         int? uid = paramJson.uid;
         RecorderState? state = paramJson.state;
-        RecorderErrorCode? error = paramJson.error;
+        RecorderReasonCode? reason = paramJson.reason;
         if (channelId == null ||
             uid == null ||
             state == null ||
-            error == null) {
+            reason == null) {
           return true;
         }
 
         mediaRecorderObserver.onRecorderStateChanged!(
-            channelId, uid, state, error);
+            channelId, uid, state, reason);
         return true;
 
       case 'onRecorderInfoUpdated':
