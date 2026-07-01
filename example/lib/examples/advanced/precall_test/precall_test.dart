@@ -292,7 +292,7 @@ class _State extends State<PreCallTest> {
 
                       if (_isStartRecordingDeviceTest) {
                         await _audioDeviceManager
-                            .startRecordingDeviceTest(1000);
+                            .startRecordingDeviceTest(const RecordingDeviceTestConfiguration(indicationInterval: 100));
 
                         // _videoDeviceManager.startDeviceTest(1000);
                       } else {
