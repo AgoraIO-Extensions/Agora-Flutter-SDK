@@ -70,7 +70,7 @@ jobs:
             platform: ios
           - os: macos-latest
             platform: macos
-          - os: windows-latest
+          - os: windows-2022
             platform: windows
     steps:
       - name: Checkout repository 🛎️
@@ -116,7 +116,7 @@ jobs:
             platform: ios
           - os: macos-latest
             platform: macos
-          - os: windows-latest
+          - os: windows-2022
             platform: windows
     steps:
       - name: Checkout repository 🛎️

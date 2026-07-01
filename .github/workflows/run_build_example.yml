@@ -133,7 +133,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        os: [ubuntu-latest, macos-latest, windows-latest]
+        os: [ubuntu-latest, macos-latest, windows-2022]
         platform: ${{ fromJson(needs.split-platforms.outputs.platforms) }}
         exclude:
           - os: ubuntu-latest
@@ -148,13 +148,13 @@ jobs:
             platform: windows
           - os: macos-latest
             platform: web
-          - os: windows-latest
+          - os: windows-2022
             platform: android
-          - os: windows-latest
+          - os: windows-2022
             platform: ios
-          - os: windows-latest
+          - os: windows-2022
             platform: macos
-          - os: windows-latest
+          - os: windows-2022
             platform: web
     env:
         platform: ${{ matrix.platform }}
