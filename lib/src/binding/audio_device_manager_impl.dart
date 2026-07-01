@@ -395,6 +395,26 @@ class AudioDeviceManagerImpl implements AudioDeviceManager {
   }
 
   @override
+  Future<void> startRecordingDeviceTest(
+      RecordingDeviceTestConfiguration config) async {
+    final apiType =
+        '${isOverrideClassName ? className : 'AudioDeviceManager'}_startRecordingDeviceTest_db21a14';
+    final requestParam = createParams({'config': config.toJson()});
+    final List<Uint8List> buffers = [];
+    buffers.addAll(config.collectBufferList());
+    final callApiResult = await irisMethodChannel.invokeMethod(
+        IrisMethodCall(apiType, jsonEncode(requestParam), buffers: buffers));
+    if (callApiResult.irisReturnCode < 0) {
+      throw AgoraRtcException(code: callApiResult.irisReturnCode);
+    }
+    final rm = callApiResult.data;
+    final result = rm['result'];
+    if (result < 0) {
+      throw AgoraRtcException(code: result);
+    }
+  }
+
+  @override
   Future<void> stopRecordingDeviceTest() async {
     final apiType =
         '${isOverrideClassName ? className : 'AudioDeviceManager'}_stopRecordingDeviceTest';

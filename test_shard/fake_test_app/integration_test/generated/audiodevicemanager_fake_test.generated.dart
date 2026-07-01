@@ -773,6 +773,50 @@ void audioDeviceManagerSmokeTestCases() {
   );
 
   testWidgets(
+    'AudioDeviceManager.startRecordingDeviceTest',
+    (WidgetTester tester) async {
+      String engineAppId = const String.fromEnvironment('TEST_APP_ID',
+          defaultValue: '<YOUR_APP_ID>');
+
+      RtcEngine rtcEngine = createAgoraRtcEngine();
+      await rtcEngine.initialize(RtcEngineContext(
+        appId: engineAppId,
+        areaCode: AreaCode.areaCodeGlob.value(),
+      ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
+
+      final audioDeviceManager = rtcEngine.getAudioDeviceManager();
+
+      try {
+        int configIndicationInterval = 5;
+        bool configEnablePlayback = true;
+        RecordingDeviceTestConfiguration config =
+            RecordingDeviceTestConfiguration(
+          indicationInterval: configIndicationInterval,
+          enablePlayback: configEnablePlayback,
+        );
+        await audioDeviceManager.startRecordingDeviceTest(
+          config,
+        );
+      } catch (e) {
+        if (e is! AgoraRtcException) {
+          debugPrint(
+              '[AudioDeviceManager.startRecordingDeviceTest] error: ${e.toString()}');
+          rethrow;
+        }
+
+        if (e.code != -4) {
+          // Only not supported error supported.
+          rethrow;
+        }
+      }
+
+      await audioDeviceManager.release();
+      await rtcEngine.release();
+    },
+  );
+
+  testWidgets(
     'AudioDeviceManager.stopRecordingDeviceTest',
     (WidgetTester tester) async {
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
