@@ -5,155 +5,120 @@
 import 'package:agora_rtc_engine/src/binding_forward_export.dart';
 import 'package:agora_rtc_engine/src/binding/impl_forward_export.dart';
 import 'package:iris_method_channel/iris_method_channel.dart';
+  
+    class MusicContentCenterEventHandlerWrapper implements EventLoopEventHandler {
+const MusicContentCenterEventHandlerWrapper(this.musicContentCenterEventHandler);
 
-class MusicContentCenterEventHandlerWrapper implements EventLoopEventHandler {
-  const MusicContentCenterEventHandlerWrapper(
-      this.musicContentCenterEventHandler);
+final MusicContentCenterEventHandler musicContentCenterEventHandler;
 
-  final MusicContentCenterEventHandler musicContentCenterEventHandler;
-
-  @override
-  bool operator ==(Object other) {
-    if (other.runtimeType != runtimeType) {
-      return false;
-    }
-    return other is MusicContentCenterEventHandlerWrapper &&
-        other.musicContentCenterEventHandler == musicContentCenterEventHandler;
+@override
+bool operator ==(Object other) {
+  if (other.runtimeType != runtimeType) {
+    return false;
   }
+  return other is MusicContentCenterEventHandlerWrapper &&
+      other.musicContentCenterEventHandler == musicContentCenterEventHandler;
+}
+@override
+int get hashCode => musicContentCenterEventHandler.hashCode;
 
-  @override
-  int get hashCode => musicContentCenterEventHandler.hashCode;
-
-  @override
-  bool handleEventInternal(
-      String eventName, String eventData, List<Uint8List> buffers) {
+@override
+bool handleEventInternal(String eventName, String eventData, List<Uint8List> buffers) {
     switch (eventName) {
-      case 'onMusicChartsResult':
-        if (musicContentCenterEventHandler.onMusicChartsResult == null) {
-          return true;
-        }
-        final jsonMap = jsonDecode(eventData);
-        MusicContentCenterEventHandlerOnMusicChartsResultJson paramJson =
-            MusicContentCenterEventHandlerOnMusicChartsResultJson.fromJson(
-                jsonMap);
-        paramJson = paramJson.fillBuffers(buffers);
-        String? requestId = paramJson.requestId;
-        List<MusicChartInfo>? result = paramJson.result;
-        MusicContentCenterStatusCode? errorCode = paramJson.errorCode;
-        if (requestId == null || result == null || errorCode == null) {
-          return true;
-        }
-        result = result.map((e) => e.fillBuffers(buffers)).toList();
-        musicContentCenterEventHandler.onMusicChartsResult!(
-            requestId, result, errorCode);
-        return true;
+        
+case 'onMusicChartsResult_fb18135':
+if (musicContentCenterEventHandler.onMusicChartsResult == null) {
+    return true;
+}
+final jsonMap = jsonDecode(eventData);
+MusicContentCenterEventHandlerOnMusicChartsResultJson paramJson = MusicContentCenterEventHandlerOnMusicChartsResultJson.fromJson(jsonMap);
+paramJson = paramJson.fillBuffers(buffers);
+String? requestId = paramJson.requestId;
+List<MusicChartInfo>? result = paramJson.result;
+MusicContentCenterStateReason? reason = paramJson.reason;
+  if (requestId == null||result == null||reason == null) { return true; }
+  result = result.map((e) => e.fillBuffers(buffers)).toList();
+  musicContentCenterEventHandler.onMusicChartsResult!(requestId,result,reason);
+  return true;
 
-      case 'onMusicCollectionResult':
-        if (musicContentCenterEventHandler.onMusicCollectionResult == null) {
-          return true;
-        }
-        final jsonMap = jsonDecode(eventData);
-        MusicContentCenterEventHandlerOnMusicCollectionResultJson paramJson =
-            MusicContentCenterEventHandlerOnMusicCollectionResultJson.fromJson(
-                jsonMap);
-        paramJson = paramJson.fillBuffers(buffers);
-        String? requestId = paramJson.requestId;
-        MusicCollection? result = paramJson.result;
-        MusicContentCenterStatusCode? errorCode = paramJson.errorCode;
-        if (requestId == null || result == null || errorCode == null) {
-          return true;
-        }
 
-        musicContentCenterEventHandler.onMusicCollectionResult!(
-            requestId, result, errorCode);
-        return true;
+case 'onMusicCollectionResult_c30c2e6':
+if (musicContentCenterEventHandler.onMusicCollectionResult == null) {
+    return true;
+}
+final jsonMap = jsonDecode(eventData);
+MusicContentCenterEventHandlerOnMusicCollectionResultJson paramJson = MusicContentCenterEventHandlerOnMusicCollectionResultJson.fromJson(jsonMap);
+paramJson = paramJson.fillBuffers(buffers);
+String? requestId = paramJson.requestId;
+MusicCollection? result = paramJson.result;
+MusicContentCenterStateReason? reason = paramJson.reason;
+  if (requestId == null||result == null||reason == null) { return true; }
+  
+  musicContentCenterEventHandler.onMusicCollectionResult!(requestId,result,reason);
+  return true;
 
-      case 'onLyricResult':
-        if (musicContentCenterEventHandler.onLyricResult == null) {
-          return true;
-        }
-        final jsonMap = jsonDecode(eventData);
-        MusicContentCenterEventHandlerOnLyricResultJson paramJson =
-            MusicContentCenterEventHandlerOnLyricResultJson.fromJson(jsonMap);
-        paramJson = paramJson.fillBuffers(buffers);
-        String? requestId = paramJson.requestId;
-        int? songCode = paramJson.songCode;
-        String? lyricUrl = paramJson.lyricUrl;
-        MusicContentCenterStatusCode? errorCode = paramJson.errorCode;
-        if (requestId == null ||
-            songCode == null ||
-            lyricUrl == null ||
-            errorCode == null) {
-          return true;
-        }
 
-        musicContentCenterEventHandler.onLyricResult!(
-            requestId, songCode, lyricUrl, errorCode);
-        return true;
+case 'onLyricResult_9ad9c90':
+if (musicContentCenterEventHandler.onLyricResult == null) {
+    return true;
+}
+final jsonMap = jsonDecode(eventData);
+MusicContentCenterEventHandlerOnLyricResultJson paramJson = MusicContentCenterEventHandlerOnLyricResultJson.fromJson(jsonMap);
+paramJson = paramJson.fillBuffers(buffers);
+String? requestId = paramJson.requestId;
+int? songCode = paramJson.songCode;
+String? lyricUrl = paramJson.lyricUrl;
+MusicContentCenterStateReason? reason = paramJson.reason;
+  if (requestId == null||songCode == null||lyricUrl == null||reason == null) { return true; }
+  
+  musicContentCenterEventHandler.onLyricResult!(requestId,songCode,lyricUrl,reason);
+  return true;
 
-      case 'onSongSimpleInfoResult':
-        if (musicContentCenterEventHandler.onSongSimpleInfoResult == null) {
-          return true;
-        }
-        final jsonMap = jsonDecode(eventData);
-        MusicContentCenterEventHandlerOnSongSimpleInfoResultJson paramJson =
-            MusicContentCenterEventHandlerOnSongSimpleInfoResultJson.fromJson(
-                jsonMap);
-        paramJson = paramJson.fillBuffers(buffers);
-        String? requestId = paramJson.requestId;
-        int? songCode = paramJson.songCode;
-        String? simpleInfo = paramJson.simpleInfo;
-        MusicContentCenterStatusCode? errorCode = paramJson.errorCode;
-        if (requestId == null ||
-            songCode == null ||
-            simpleInfo == null ||
-            errorCode == null) {
-          return true;
-        }
 
-        musicContentCenterEventHandler.onSongSimpleInfoResult!(
-            requestId, songCode, simpleInfo, errorCode);
-        return true;
+case 'onSongSimpleInfoResult_9ad9c90':
+if (musicContentCenterEventHandler.onSongSimpleInfoResult == null) {
+    return true;
+}
+final jsonMap = jsonDecode(eventData);
+MusicContentCenterEventHandlerOnSongSimpleInfoResultJson paramJson = MusicContentCenterEventHandlerOnSongSimpleInfoResultJson.fromJson(jsonMap);
+paramJson = paramJson.fillBuffers(buffers);
+String? requestId = paramJson.requestId;
+int? songCode = paramJson.songCode;
+String? simpleInfo = paramJson.simpleInfo;
+MusicContentCenterStateReason? reason = paramJson.reason;
+  if (requestId == null||songCode == null||simpleInfo == null||reason == null) { return true; }
+  
+  musicContentCenterEventHandler.onSongSimpleInfoResult!(requestId,songCode,simpleInfo,reason);
+  return true;
 
-      case 'onPreLoadEvent':
-        if (musicContentCenterEventHandler.onPreLoadEvent == null) {
-          return true;
-        }
-        final jsonMap = jsonDecode(eventData);
-        MusicContentCenterEventHandlerOnPreLoadEventJson paramJson =
-            MusicContentCenterEventHandlerOnPreLoadEventJson.fromJson(jsonMap);
-        paramJson = paramJson.fillBuffers(buffers);
-        String? requestId = paramJson.requestId;
-        int? songCode = paramJson.songCode;
-        int? percent = paramJson.percent;
-        String? lyricUrl = paramJson.lyricUrl;
-        PreloadStatusCode? status = paramJson.status;
-        MusicContentCenterStatusCode? errorCode = paramJson.errorCode;
-        if (requestId == null ||
-            songCode == null ||
-            percent == null ||
-            lyricUrl == null ||
-            status == null ||
-            errorCode == null) {
-          return true;
-        }
 
-        musicContentCenterEventHandler.onPreLoadEvent!(
-            requestId, songCode, percent, lyricUrl, status, errorCode);
-        return true;
+case 'onPreLoadEvent_20170bc':
+if (musicContentCenterEventHandler.onPreLoadEvent == null) {
+    return true;
+}
+final jsonMap = jsonDecode(eventData);
+MusicContentCenterEventHandlerOnPreLoadEventJson paramJson = MusicContentCenterEventHandlerOnPreLoadEventJson.fromJson(jsonMap);
+paramJson = paramJson.fillBuffers(buffers);
+String? requestId = paramJson.requestId;
+int? songCode = paramJson.songCode;
+int? percent = paramJson.percent;
+String? lyricUrl = paramJson.lyricUrl;
+PreloadState? state = paramJson.state;
+MusicContentCenterStateReason? reason = paramJson.reason;
+  if (requestId == null||songCode == null||percent == null||lyricUrl == null||state == null||reason == null) { return true; }
+  
+  musicContentCenterEventHandler.onPreLoadEvent!(requestId,songCode,percent,lyricUrl,state,reason);
+  return true;
+
     }
     return false;
-  }
+}
 
-  @override
-  bool handleEvent(
-      String eventName, String eventData, List<Uint8List> buffers) {
+@override
+bool handleEvent(String eventName, String eventData, List<Uint8List> buffers) {
     if (!eventName.startsWith('MusicContentCenterEventHandler')) return false;
-    final newEvent =
-        eventName.replaceFirst('MusicContentCenterEventHandler_', '');
-    if (handleEventInternal(newEvent, eventData, buffers)) {
-      return true;
-    }
+    final newEvent = eventName.replaceFirst('MusicContentCenterEventHandler_', '');
+    if (handleEventInternal(newEvent, eventData, buffers)) { return true; }
     return false;
-  }
+}
 }

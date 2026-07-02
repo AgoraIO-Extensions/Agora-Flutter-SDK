@@ -5,597 +5,509 @@
 import 'package:agora_rtc_engine/src/binding_forward_export.dart';
 import 'package:agora_rtc_engine/src/binding/impl_forward_export.dart';
 import 'package:iris_method_channel/iris_method_channel.dart';
+  
+    class AudioPcmFrameSinkWrapper implements EventLoopEventHandler {
+const AudioPcmFrameSinkWrapper(this.audioPcmFrameSink);
 
-class AudioPcmFrameSinkWrapper implements EventLoopEventHandler {
-  const AudioPcmFrameSinkWrapper(this.audioPcmFrameSink);
+final AudioPcmFrameSink audioPcmFrameSink;
 
-  final AudioPcmFrameSink audioPcmFrameSink;
-
-  @override
-  bool operator ==(Object other) {
-    if (other.runtimeType != runtimeType) {
-      return false;
-    }
-    return other is AudioPcmFrameSinkWrapper &&
-        other.audioPcmFrameSink == audioPcmFrameSink;
-  }
-
-  @override
-  int get hashCode => audioPcmFrameSink.hashCode;
-
-  @override
-  bool handleEventInternal(
-      String eventName, String eventData, List<Uint8List> buffers) {
-    switch (eventName) {
-      case 'onFrame':
-        if (audioPcmFrameSink.onFrame == null) {
-          return true;
-        }
-        final jsonMap = jsonDecode(eventData);
-        AudioPcmFrameSinkOnFrameJson paramJson =
-            AudioPcmFrameSinkOnFrameJson.fromJson(jsonMap);
-        paramJson = paramJson.fillBuffers(buffers);
-        AudioPcmFrame? frame = paramJson.frame;
-        if (frame == null) {
-          return true;
-        }
-        frame = frame.fillBuffers(buffers);
-        audioPcmFrameSink.onFrame!(frame);
-        return true;
-    }
+@override
+bool operator ==(Object other) {
+  if (other.runtimeType != runtimeType) {
     return false;
   }
+  return other is AudioPcmFrameSinkWrapper &&
+      other.audioPcmFrameSink == audioPcmFrameSink;
+}
+@override
+int get hashCode => audioPcmFrameSink.hashCode;
 
-  @override
-  bool handleEvent(
-      String eventName, String eventData, List<Uint8List> buffers) {
+@override
+bool handleEventInternal(String eventName, String eventData, List<Uint8List> buffers) {
+    switch (eventName) {
+        
+case 'onFrame_95f515a':
+if (audioPcmFrameSink.onFrame == null) {
+    return true;
+}
+final jsonMap = jsonDecode(eventData);
+AudioPcmFrameSinkOnFrameJson paramJson = AudioPcmFrameSinkOnFrameJson.fromJson(jsonMap);
+paramJson = paramJson.fillBuffers(buffers);
+AudioPcmFrame? frame = paramJson.frame;
+  if (frame == null) { return true; }
+  frame = frame.fillBuffers(buffers);
+  audioPcmFrameSink.onFrame!(frame);
+  return true;
+
+    }
+    return false;
+}
+
+@override
+bool handleEvent(String eventName, String eventData, List<Uint8List> buffers) {
     if (!eventName.startsWith('AudioPcmFrameSink')) return false;
     final newEvent = eventName.replaceFirst('AudioPcmFrameSink_', '');
-    if (handleEventInternal(newEvent, eventData, buffers)) {
-      return true;
-    }
+    if (handleEventInternal(newEvent, eventData, buffers)) { return true; }
+    return false;
+}
+}
+class AudioFrameObserverBaseWrapper implements EventLoopEventHandler {
+const AudioFrameObserverBaseWrapper(this.audioFrameObserverBase);
+
+final AudioFrameObserverBase audioFrameObserverBase;
+
+@override
+bool operator ==(Object other) {
+  if (other.runtimeType != runtimeType) {
     return false;
   }
+  return other is AudioFrameObserverBaseWrapper &&
+      other.audioFrameObserverBase == audioFrameObserverBase;
+}
+@override
+int get hashCode => audioFrameObserverBase.hashCode;
+
+@override
+bool handleEventInternal(String eventName, String eventData, List<Uint8List> buffers) {
+    switch (eventName) {
+        
+case 'onRecordAudioFrame_4c8de15':
+if (audioFrameObserverBase.onRecordAudioFrame == null) {
+    return true;
+}
+final jsonMap = jsonDecode(eventData);
+AudioFrameObserverBaseOnRecordAudioFrameJson paramJson = AudioFrameObserverBaseOnRecordAudioFrameJson.fromJson(jsonMap);
+paramJson = paramJson.fillBuffers(buffers);
+String? channelId = paramJson.channelId;
+AudioFrame? audioFrame = paramJson.audioFrame;
+  if (channelId == null||audioFrame == null) { return true; }
+  audioFrame = audioFrame.fillBuffers(buffers);
+  audioFrameObserverBase.onRecordAudioFrame!(channelId,audioFrame);
+  return true;
+
+
+case 'onPlaybackAudioFrame_4c8de15':
+if (audioFrameObserverBase.onPlaybackAudioFrame == null) {
+    return true;
+}
+final jsonMap = jsonDecode(eventData);
+AudioFrameObserverBaseOnPlaybackAudioFrameJson paramJson = AudioFrameObserverBaseOnPlaybackAudioFrameJson.fromJson(jsonMap);
+paramJson = paramJson.fillBuffers(buffers);
+String? channelId = paramJson.channelId;
+AudioFrame? audioFrame = paramJson.audioFrame;
+  if (channelId == null||audioFrame == null) { return true; }
+  audioFrame = audioFrame.fillBuffers(buffers);
+  audioFrameObserverBase.onPlaybackAudioFrame!(channelId,audioFrame);
+  return true;
+
+
+case 'onMixedAudioFrame_4c8de15':
+if (audioFrameObserverBase.onMixedAudioFrame == null) {
+    return true;
+}
+final jsonMap = jsonDecode(eventData);
+AudioFrameObserverBaseOnMixedAudioFrameJson paramJson = AudioFrameObserverBaseOnMixedAudioFrameJson.fromJson(jsonMap);
+paramJson = paramJson.fillBuffers(buffers);
+String? channelId = paramJson.channelId;
+AudioFrame? audioFrame = paramJson.audioFrame;
+  if (channelId == null||audioFrame == null) { return true; }
+  audioFrame = audioFrame.fillBuffers(buffers);
+  audioFrameObserverBase.onMixedAudioFrame!(channelId,audioFrame);
+  return true;
+
+
+case 'onEarMonitoringAudioFrame_5405a47':
+if (audioFrameObserverBase.onEarMonitoringAudioFrame == null) {
+    return true;
+}
+final jsonMap = jsonDecode(eventData);
+AudioFrameObserverBaseOnEarMonitoringAudioFrameJson paramJson = AudioFrameObserverBaseOnEarMonitoringAudioFrameJson.fromJson(jsonMap);
+paramJson = paramJson.fillBuffers(buffers);
+AudioFrame? audioFrame = paramJson.audioFrame;
+  if (audioFrame == null) { return true; }
+  audioFrame = audioFrame.fillBuffers(buffers);
+  audioFrameObserverBase.onEarMonitoringAudioFrame!(audioFrame);
+  return true;
+
+    }
+    return false;
 }
 
-class AudioFrameObserverBaseWrapper implements EventLoopEventHandler {
-  const AudioFrameObserverBaseWrapper(this.audioFrameObserverBase);
-
-  final AudioFrameObserverBase audioFrameObserverBase;
-
-  @override
-  bool operator ==(Object other) {
-    if (other.runtimeType != runtimeType) {
-      return false;
-    }
-    return other is AudioFrameObserverBaseWrapper &&
-        other.audioFrameObserverBase == audioFrameObserverBase;
-  }
-
-  @override
-  int get hashCode => audioFrameObserverBase.hashCode;
-
-  @override
-  bool handleEventInternal(
-      String eventName, String eventData, List<Uint8List> buffers) {
-    switch (eventName) {
-      case 'onRecordAudioFrame':
-        if (audioFrameObserverBase.onRecordAudioFrame == null) {
-          return true;
-        }
-        final jsonMap = jsonDecode(eventData);
-        AudioFrameObserverBaseOnRecordAudioFrameJson paramJson =
-            AudioFrameObserverBaseOnRecordAudioFrameJson.fromJson(jsonMap);
-        paramJson = paramJson.fillBuffers(buffers);
-        String? channelId = paramJson.channelId;
-        AudioFrame? audioFrame = paramJson.audioFrame;
-        if (channelId == null || audioFrame == null) {
-          return true;
-        }
-        audioFrame = audioFrame.fillBuffers(buffers);
-        audioFrameObserverBase.onRecordAudioFrame!(channelId, audioFrame);
-        return true;
-
-      case 'onPlaybackAudioFrame':
-        if (audioFrameObserverBase.onPlaybackAudioFrame == null) {
-          return true;
-        }
-        final jsonMap = jsonDecode(eventData);
-        AudioFrameObserverBaseOnPlaybackAudioFrameJson paramJson =
-            AudioFrameObserverBaseOnPlaybackAudioFrameJson.fromJson(jsonMap);
-        paramJson = paramJson.fillBuffers(buffers);
-        String? channelId = paramJson.channelId;
-        AudioFrame? audioFrame = paramJson.audioFrame;
-        if (channelId == null || audioFrame == null) {
-          return true;
-        }
-        audioFrame = audioFrame.fillBuffers(buffers);
-        audioFrameObserverBase.onPlaybackAudioFrame!(channelId, audioFrame);
-        return true;
-
-      case 'onMixedAudioFrame':
-        if (audioFrameObserverBase.onMixedAudioFrame == null) {
-          return true;
-        }
-        final jsonMap = jsonDecode(eventData);
-        AudioFrameObserverBaseOnMixedAudioFrameJson paramJson =
-            AudioFrameObserverBaseOnMixedAudioFrameJson.fromJson(jsonMap);
-        paramJson = paramJson.fillBuffers(buffers);
-        String? channelId = paramJson.channelId;
-        AudioFrame? audioFrame = paramJson.audioFrame;
-        if (channelId == null || audioFrame == null) {
-          return true;
-        }
-        audioFrame = audioFrame.fillBuffers(buffers);
-        audioFrameObserverBase.onMixedAudioFrame!(channelId, audioFrame);
-        return true;
-
-      case 'onEarMonitoringAudioFrame':
-        if (audioFrameObserverBase.onEarMonitoringAudioFrame == null) {
-          return true;
-        }
-        final jsonMap = jsonDecode(eventData);
-        AudioFrameObserverBaseOnEarMonitoringAudioFrameJson paramJson =
-            AudioFrameObserverBaseOnEarMonitoringAudioFrameJson.fromJson(
-                jsonMap);
-        paramJson = paramJson.fillBuffers(buffers);
-        AudioFrame? audioFrame = paramJson.audioFrame;
-        if (audioFrame == null) {
-          return true;
-        }
-        audioFrame = audioFrame.fillBuffers(buffers);
-        audioFrameObserverBase.onEarMonitoringAudioFrame!(audioFrame);
-        return true;
-    }
-    return false;
-  }
-
-  @override
-  bool handleEvent(
-      String eventName, String eventData, List<Uint8List> buffers) {
+@override
+bool handleEvent(String eventName, String eventData, List<Uint8List> buffers) {
     if (!eventName.startsWith('AudioFrameObserverBase')) return false;
     final newEvent = eventName.replaceFirst('AudioFrameObserverBase_', '');
-    if (handleEventInternal(newEvent, eventData, buffers)) {
-      return true;
-    }
+    if (handleEventInternal(newEvent, eventData, buffers)) { return true; }
+    return false;
+}
+}
+class AudioFrameObserverWrapper extends AudioFrameObserverBaseWrapper {
+const AudioFrameObserverWrapper(this.audioFrameObserver): super(audioFrameObserver);
+
+final AudioFrameObserver audioFrameObserver;
+
+@override
+bool operator ==(Object other) {
+  if (other.runtimeType != runtimeType) {
     return false;
   }
+  return other is AudioFrameObserverWrapper &&
+      other.audioFrameObserver == audioFrameObserver;
+}
+@override
+int get hashCode => audioFrameObserver.hashCode;
+
+@override
+bool handleEventInternal(String eventName, String eventData, List<Uint8List> buffers) {
+    switch (eventName) {
+        
+case 'onPlaybackAudioFrameBeforeMixing_85ec0fc':
+if (audioFrameObserver.onPlaybackAudioFrameBeforeMixing == null) {
+    return true;
+}
+final jsonMap = jsonDecode(eventData);
+AudioFrameObserverOnPlaybackAudioFrameBeforeMixingJson paramJson = AudioFrameObserverOnPlaybackAudioFrameBeforeMixingJson.fromJson(jsonMap);
+paramJson = paramJson.fillBuffers(buffers);
+String? channelId = paramJson.channelId;
+int? uid = paramJson.uid;
+AudioFrame? audioFrame = paramJson.audioFrame;
+  if (channelId == null||uid == null||audioFrame == null) { return true; }
+  audioFrame = audioFrame.fillBuffers(buffers);
+  audioFrameObserver.onPlaybackAudioFrameBeforeMixing!(channelId,uid,audioFrame);
+  return true;
+
+    }
+    return false;
 }
 
-class AudioFrameObserverWrapper extends AudioFrameObserverBaseWrapper {
-  const AudioFrameObserverWrapper(this.audioFrameObserver)
-      : super(audioFrameObserver);
-
-  final AudioFrameObserver audioFrameObserver;
-
-  @override
-  bool operator ==(Object other) {
-    if (other.runtimeType != runtimeType) {
-      return false;
-    }
-    return other is AudioFrameObserverWrapper &&
-        other.audioFrameObserver == audioFrameObserver;
-  }
-
-  @override
-  int get hashCode => audioFrameObserver.hashCode;
-
-  @override
-  bool handleEventInternal(
-      String eventName, String eventData, List<Uint8List> buffers) {
-    switch (eventName) {
-      case 'onPlaybackAudioFrameBeforeMixing':
-        if (audioFrameObserver.onPlaybackAudioFrameBeforeMixing == null) {
-          return true;
-        }
-        final jsonMap = jsonDecode(eventData);
-        AudioFrameObserverOnPlaybackAudioFrameBeforeMixingJson paramJson =
-            AudioFrameObserverOnPlaybackAudioFrameBeforeMixingJson.fromJson(
-                jsonMap);
-        paramJson = paramJson.fillBuffers(buffers);
-        String? channelId = paramJson.channelId;
-        int? uid = paramJson.uid;
-        AudioFrame? audioFrame = paramJson.audioFrame;
-        if (channelId == null || uid == null || audioFrame == null) {
-          return true;
-        }
-        audioFrame = audioFrame.fillBuffers(buffers);
-        audioFrameObserver.onPlaybackAudioFrameBeforeMixing!(
-            channelId, uid, audioFrame);
-        return true;
-    }
-    return false;
-  }
-
-  @override
-  bool handleEvent(
-      String eventName, String eventData, List<Uint8List> buffers) {
+@override
+bool handleEvent(String eventName, String eventData, List<Uint8List> buffers) {
     if (!eventName.startsWith('AudioFrameObserver')) return false;
     final newEvent = eventName.replaceFirst('AudioFrameObserver_', '');
-    if (handleEventInternal(newEvent, eventData, buffers)) {
-      return true;
-    }
+    if (handleEventInternal(newEvent, eventData, buffers)) { return true; }
     return super.handleEventInternal(newEvent, eventData, buffers);
-  }
 }
-
+}
 class AudioSpectrumObserverWrapper implements EventLoopEventHandler {
-  const AudioSpectrumObserverWrapper(this.audioSpectrumObserver);
+const AudioSpectrumObserverWrapper(this.audioSpectrumObserver);
 
-  final AudioSpectrumObserver audioSpectrumObserver;
+final AudioSpectrumObserver audioSpectrumObserver;
 
-  @override
-  bool operator ==(Object other) {
-    if (other.runtimeType != runtimeType) {
-      return false;
-    }
-    return other is AudioSpectrumObserverWrapper &&
-        other.audioSpectrumObserver == audioSpectrumObserver;
-  }
-
-  @override
-  int get hashCode => audioSpectrumObserver.hashCode;
-
-  @override
-  bool handleEventInternal(
-      String eventName, String eventData, List<Uint8List> buffers) {
-    switch (eventName) {
-      case 'onLocalAudioSpectrum':
-        if (audioSpectrumObserver.onLocalAudioSpectrum == null) {
-          return true;
-        }
-        final jsonMap = jsonDecode(eventData);
-        AudioSpectrumObserverOnLocalAudioSpectrumJson paramJson =
-            AudioSpectrumObserverOnLocalAudioSpectrumJson.fromJson(jsonMap);
-        paramJson = paramJson.fillBuffers(buffers);
-        AudioSpectrumData? data = paramJson.data;
-        if (data == null) {
-          return true;
-        }
-        data = data.fillBuffers(buffers);
-        audioSpectrumObserver.onLocalAudioSpectrum!(data);
-        return true;
-
-      case 'onRemoteAudioSpectrum':
-        if (audioSpectrumObserver.onRemoteAudioSpectrum == null) {
-          return true;
-        }
-        final jsonMap = jsonDecode(eventData);
-        AudioSpectrumObserverOnRemoteAudioSpectrumJson paramJson =
-            AudioSpectrumObserverOnRemoteAudioSpectrumJson.fromJson(jsonMap);
-        paramJson = paramJson.fillBuffers(buffers);
-        List<UserAudioSpectrumInfo>? spectrums = paramJson.spectrums;
-        int? spectrumNumber = paramJson.spectrumNumber;
-        if (spectrums == null || spectrumNumber == null) {
-          return true;
-        }
-        spectrums = spectrums.map((e) => e.fillBuffers(buffers)).toList();
-        audioSpectrumObserver.onRemoteAudioSpectrum!(spectrums, spectrumNumber);
-        return true;
-    }
+@override
+bool operator ==(Object other) {
+  if (other.runtimeType != runtimeType) {
     return false;
   }
+  return other is AudioSpectrumObserverWrapper &&
+      other.audioSpectrumObserver == audioSpectrumObserver;
+}
+@override
+int get hashCode => audioSpectrumObserver.hashCode;
 
-  @override
-  bool handleEvent(
-      String eventName, String eventData, List<Uint8List> buffers) {
+@override
+bool handleEventInternal(String eventName, String eventData, List<Uint8List> buffers) {
+    switch (eventName) {
+        
+case 'onLocalAudioSpectrum_5822fed':
+if (audioSpectrumObserver.onLocalAudioSpectrum == null) {
+    return true;
+}
+final jsonMap = jsonDecode(eventData);
+AudioSpectrumObserverOnLocalAudioSpectrumJson paramJson = AudioSpectrumObserverOnLocalAudioSpectrumJson.fromJson(jsonMap);
+paramJson = paramJson.fillBuffers(buffers);
+AudioSpectrumData? data = paramJson.data;
+  if (data == null) { return true; }
+  data = data.fillBuffers(buffers);
+  audioSpectrumObserver.onLocalAudioSpectrum!(data);
+  return true;
+
+
+case 'onRemoteAudioSpectrum_8ea2cde':
+if (audioSpectrumObserver.onRemoteAudioSpectrum == null) {
+    return true;
+}
+final jsonMap = jsonDecode(eventData);
+AudioSpectrumObserverOnRemoteAudioSpectrumJson paramJson = AudioSpectrumObserverOnRemoteAudioSpectrumJson.fromJson(jsonMap);
+paramJson = paramJson.fillBuffers(buffers);
+List<UserAudioSpectrumInfo>? spectrums = paramJson.spectrums;
+int? spectrumNumber = paramJson.spectrumNumber;
+  if (spectrums == null||spectrumNumber == null) { return true; }
+  spectrums = spectrums.map((e) => e.fillBuffers(buffers)).toList();
+  audioSpectrumObserver.onRemoteAudioSpectrum!(spectrums,spectrumNumber);
+  return true;
+
+    }
+    return false;
+}
+
+@override
+bool handleEvent(String eventName, String eventData, List<Uint8List> buffers) {
     if (!eventName.startsWith('AudioSpectrumObserver')) return false;
     final newEvent = eventName.replaceFirst('AudioSpectrumObserver_', '');
-    if (handleEventInternal(newEvent, eventData, buffers)) {
-      return true;
-    }
+    if (handleEventInternal(newEvent, eventData, buffers)) { return true; }
+    return false;
+}
+}
+class VideoEncodedFrameObserverWrapper implements EventLoopEventHandler {
+const VideoEncodedFrameObserverWrapper(this.videoEncodedFrameObserver);
+
+final VideoEncodedFrameObserver videoEncodedFrameObserver;
+
+@override
+bool operator ==(Object other) {
+  if (other.runtimeType != runtimeType) {
     return false;
   }
+  return other is VideoEncodedFrameObserverWrapper &&
+      other.videoEncodedFrameObserver == videoEncodedFrameObserver;
+}
+@override
+int get hashCode => videoEncodedFrameObserver.hashCode;
+
+@override
+bool handleEventInternal(String eventName, String eventData, List<Uint8List> buffers) {
+    switch (eventName) {
+        
+case 'onEncodedVideoFrameReceived_6922697':
+if (videoEncodedFrameObserver.onEncodedVideoFrameReceived == null) {
+    return true;
+}
+final jsonMap = jsonDecode(eventData);
+VideoEncodedFrameObserverOnEncodedVideoFrameReceivedJson paramJson = VideoEncodedFrameObserverOnEncodedVideoFrameReceivedJson.fromJson(jsonMap);
+paramJson = paramJson.fillBuffers(buffers);
+int? uid = paramJson.uid;
+Uint8List? imageBuffer = paramJson.imageBuffer;
+int? length = paramJson.length;
+EncodedVideoFrameInfo? videoEncodedFrameInfo = paramJson.videoEncodedFrameInfo;
+  if (uid == null||imageBuffer == null||length == null||videoEncodedFrameInfo == null) { return true; }
+  videoEncodedFrameInfo = videoEncodedFrameInfo.fillBuffers(buffers);
+  videoEncodedFrameObserver.onEncodedVideoFrameReceived!(uid,imageBuffer,length,videoEncodedFrameInfo);
+  return true;
+
+    }
+    return false;
 }
 
-class VideoEncodedFrameObserverWrapper implements EventLoopEventHandler {
-  const VideoEncodedFrameObserverWrapper(this.videoEncodedFrameObserver);
-
-  final VideoEncodedFrameObserver videoEncodedFrameObserver;
-
-  @override
-  bool operator ==(Object other) {
-    if (other.runtimeType != runtimeType) {
-      return false;
-    }
-    return other is VideoEncodedFrameObserverWrapper &&
-        other.videoEncodedFrameObserver == videoEncodedFrameObserver;
-  }
-
-  @override
-  int get hashCode => videoEncodedFrameObserver.hashCode;
-
-  @override
-  bool handleEventInternal(
-      String eventName, String eventData, List<Uint8List> buffers) {
-    switch (eventName) {
-      case 'onEncodedVideoFrameReceived':
-        if (videoEncodedFrameObserver.onEncodedVideoFrameReceived == null) {
-          return true;
-        }
-        final jsonMap = jsonDecode(eventData);
-        VideoEncodedFrameObserverOnEncodedVideoFrameReceivedJson paramJson =
-            VideoEncodedFrameObserverOnEncodedVideoFrameReceivedJson.fromJson(
-                jsonMap);
-        paramJson = paramJson.fillBuffers(buffers);
-        int? uid = paramJson.uid;
-        Uint8List? imageBuffer = paramJson.imageBuffer;
-        int? length = paramJson.length;
-        EncodedVideoFrameInfo? videoEncodedFrameInfo =
-            paramJson.videoEncodedFrameInfo;
-        if (uid == null ||
-            imageBuffer == null ||
-            length == null ||
-            videoEncodedFrameInfo == null) {
-          return true;
-        }
-        videoEncodedFrameInfo = videoEncodedFrameInfo.fillBuffers(buffers);
-        videoEncodedFrameObserver.onEncodedVideoFrameReceived!(
-            uid, imageBuffer, length, videoEncodedFrameInfo);
-        return true;
-    }
-    return false;
-  }
-
-  @override
-  bool handleEvent(
-      String eventName, String eventData, List<Uint8List> buffers) {
+@override
+bool handleEvent(String eventName, String eventData, List<Uint8List> buffers) {
     if (!eventName.startsWith('VideoEncodedFrameObserver')) return false;
     final newEvent = eventName.replaceFirst('VideoEncodedFrameObserver_', '');
-    if (handleEventInternal(newEvent, eventData, buffers)) {
-      return true;
-    }
+    if (handleEventInternal(newEvent, eventData, buffers)) { return true; }
+    return false;
+}
+}
+class VideoFrameObserverWrapper implements EventLoopEventHandler {
+const VideoFrameObserverWrapper(this.videoFrameObserver);
+
+final VideoFrameObserver videoFrameObserver;
+
+@override
+bool operator ==(Object other) {
+  if (other.runtimeType != runtimeType) {
     return false;
   }
+  return other is VideoFrameObserverWrapper &&
+      other.videoFrameObserver == videoFrameObserver;
+}
+@override
+int get hashCode => videoFrameObserver.hashCode;
+
+@override
+bool handleEventInternal(String eventName, String eventData, List<Uint8List> buffers) {
+    switch (eventName) {
+        
+case 'onCaptureVideoFrame_1673590':
+if (videoFrameObserver.onCaptureVideoFrame == null) {
+    return true;
+}
+final jsonMap = jsonDecode(eventData);
+VideoFrameObserverOnCaptureVideoFrameJson paramJson = VideoFrameObserverOnCaptureVideoFrameJson.fromJson(jsonMap);
+paramJson = paramJson.fillBuffers(buffers);
+VideoSourceType? sourceType = paramJson.sourceType;
+VideoFrame? videoFrame = paramJson.videoFrame;
+  if (sourceType == null||videoFrame == null) { return true; }
+  videoFrame = videoFrame.fillBuffers(buffers);
+  videoFrameObserver.onCaptureVideoFrame!(sourceType,videoFrame);
+  return true;
+
+
+case 'onPreEncodeVideoFrame_1673590':
+if (videoFrameObserver.onPreEncodeVideoFrame == null) {
+    return true;
+}
+final jsonMap = jsonDecode(eventData);
+VideoFrameObserverOnPreEncodeVideoFrameJson paramJson = VideoFrameObserverOnPreEncodeVideoFrameJson.fromJson(jsonMap);
+paramJson = paramJson.fillBuffers(buffers);
+VideoSourceType? sourceType = paramJson.sourceType;
+VideoFrame? videoFrame = paramJson.videoFrame;
+  if (sourceType == null||videoFrame == null) { return true; }
+  videoFrame = videoFrame.fillBuffers(buffers);
+  videoFrameObserver.onPreEncodeVideoFrame!(sourceType,videoFrame);
+  return true;
+
+
+case 'onMediaPlayerVideoFrame_e648e2c':
+if (videoFrameObserver.onMediaPlayerVideoFrame == null) {
+    return true;
+}
+final jsonMap = jsonDecode(eventData);
+VideoFrameObserverOnMediaPlayerVideoFrameJson paramJson = VideoFrameObserverOnMediaPlayerVideoFrameJson.fromJson(jsonMap);
+paramJson = paramJson.fillBuffers(buffers);
+VideoFrame? videoFrame = paramJson.videoFrame;
+int? mediaPlayerId = paramJson.mediaPlayerId;
+  if (videoFrame == null||mediaPlayerId == null) { return true; }
+  videoFrame = videoFrame.fillBuffers(buffers);
+  videoFrameObserver.onMediaPlayerVideoFrame!(videoFrame,mediaPlayerId);
+  return true;
+
+
+case 'onRenderVideoFrame_43dcf82':
+if (videoFrameObserver.onRenderVideoFrame == null) {
+    return true;
+}
+final jsonMap = jsonDecode(eventData);
+VideoFrameObserverOnRenderVideoFrameJson paramJson = VideoFrameObserverOnRenderVideoFrameJson.fromJson(jsonMap);
+paramJson = paramJson.fillBuffers(buffers);
+String? channelId = paramJson.channelId;
+int? remoteUid = paramJson.remoteUid;
+VideoFrame? videoFrame = paramJson.videoFrame;
+  if (channelId == null||remoteUid == null||videoFrame == null) { return true; }
+  videoFrame = videoFrame.fillBuffers(buffers);
+  videoFrameObserver.onRenderVideoFrame!(channelId,remoteUid,videoFrame);
+  return true;
+
+
+case 'onTranscodedVideoFrame_27754d8':
+if (videoFrameObserver.onTranscodedVideoFrame == null) {
+    return true;
+}
+final jsonMap = jsonDecode(eventData);
+VideoFrameObserverOnTranscodedVideoFrameJson paramJson = VideoFrameObserverOnTranscodedVideoFrameJson.fromJson(jsonMap);
+paramJson = paramJson.fillBuffers(buffers);
+VideoFrame? videoFrame = paramJson.videoFrame;
+  if (videoFrame == null) { return true; }
+  videoFrame = videoFrame.fillBuffers(buffers);
+  videoFrameObserver.onTranscodedVideoFrame!(videoFrame);
+  return true;
+
+    }
+    return false;
 }
 
-class VideoFrameObserverWrapper implements EventLoopEventHandler {
-  const VideoFrameObserverWrapper(this.videoFrameObserver);
-
-  final VideoFrameObserver videoFrameObserver;
-
-  @override
-  bool operator ==(Object other) {
-    if (other.runtimeType != runtimeType) {
-      return false;
-    }
-    return other is VideoFrameObserverWrapper &&
-        other.videoFrameObserver == videoFrameObserver;
-  }
-
-  @override
-  int get hashCode => videoFrameObserver.hashCode;
-
-  @override
-  bool handleEventInternal(
-      String eventName, String eventData, List<Uint8List> buffers) {
-    switch (eventName) {
-      case 'onCaptureVideoFrame':
-        if (videoFrameObserver.onCaptureVideoFrame == null) {
-          return true;
-        }
-        final jsonMap = jsonDecode(eventData);
-        VideoFrameObserverOnCaptureVideoFrameJson paramJson =
-            VideoFrameObserverOnCaptureVideoFrameJson.fromJson(jsonMap);
-        paramJson = paramJson.fillBuffers(buffers);
-        VideoSourceType? sourceType = paramJson.sourceType;
-        VideoFrame? videoFrame = paramJson.videoFrame;
-        if (sourceType == null || videoFrame == null) {
-          return true;
-        }
-        videoFrame = videoFrame.fillBuffers(buffers);
-        videoFrameObserver.onCaptureVideoFrame!(sourceType, videoFrame);
-        return true;
-
-      case 'onPreEncodeVideoFrame':
-        if (videoFrameObserver.onPreEncodeVideoFrame == null) {
-          return true;
-        }
-        final jsonMap = jsonDecode(eventData);
-        VideoFrameObserverOnPreEncodeVideoFrameJson paramJson =
-            VideoFrameObserverOnPreEncodeVideoFrameJson.fromJson(jsonMap);
-        paramJson = paramJson.fillBuffers(buffers);
-        VideoSourceType? sourceType = paramJson.sourceType;
-        VideoFrame? videoFrame = paramJson.videoFrame;
-        if (sourceType == null || videoFrame == null) {
-          return true;
-        }
-        videoFrame = videoFrame.fillBuffers(buffers);
-        videoFrameObserver.onPreEncodeVideoFrame!(sourceType, videoFrame);
-        return true;
-
-      case 'onMediaPlayerVideoFrame':
-        if (videoFrameObserver.onMediaPlayerVideoFrame == null) {
-          return true;
-        }
-        final jsonMap = jsonDecode(eventData);
-        VideoFrameObserverOnMediaPlayerVideoFrameJson paramJson =
-            VideoFrameObserverOnMediaPlayerVideoFrameJson.fromJson(jsonMap);
-        paramJson = paramJson.fillBuffers(buffers);
-        VideoFrame? videoFrame = paramJson.videoFrame;
-        int? mediaPlayerId = paramJson.mediaPlayerId;
-        if (videoFrame == null || mediaPlayerId == null) {
-          return true;
-        }
-        videoFrame = videoFrame.fillBuffers(buffers);
-        videoFrameObserver.onMediaPlayerVideoFrame!(videoFrame, mediaPlayerId);
-        return true;
-
-      case 'onRenderVideoFrame':
-        if (videoFrameObserver.onRenderVideoFrame == null) {
-          return true;
-        }
-        final jsonMap = jsonDecode(eventData);
-        VideoFrameObserverOnRenderVideoFrameJson paramJson =
-            VideoFrameObserverOnRenderVideoFrameJson.fromJson(jsonMap);
-        paramJson = paramJson.fillBuffers(buffers);
-        String? channelId = paramJson.channelId;
-        int? remoteUid = paramJson.remoteUid;
-        VideoFrame? videoFrame = paramJson.videoFrame;
-        if (channelId == null || remoteUid == null || videoFrame == null) {
-          return true;
-        }
-        videoFrame = videoFrame.fillBuffers(buffers);
-        videoFrameObserver.onRenderVideoFrame!(
-            channelId, remoteUid, videoFrame);
-        return true;
-
-      case 'onTranscodedVideoFrame':
-        if (videoFrameObserver.onTranscodedVideoFrame == null) {
-          return true;
-        }
-        final jsonMap = jsonDecode(eventData);
-        VideoFrameObserverOnTranscodedVideoFrameJson paramJson =
-            VideoFrameObserverOnTranscodedVideoFrameJson.fromJson(jsonMap);
-        paramJson = paramJson.fillBuffers(buffers);
-        VideoFrame? videoFrame = paramJson.videoFrame;
-        if (videoFrame == null) {
-          return true;
-        }
-        videoFrame = videoFrame.fillBuffers(buffers);
-        videoFrameObserver.onTranscodedVideoFrame!(videoFrame);
-        return true;
-    }
-    return false;
-  }
-
-  @override
-  bool handleEvent(
-      String eventName, String eventData, List<Uint8List> buffers) {
+@override
+bool handleEvent(String eventName, String eventData, List<Uint8List> buffers) {
     if (!eventName.startsWith('VideoFrameObserver')) return false;
     final newEvent = eventName.replaceFirst('VideoFrameObserver_', '');
-    if (handleEventInternal(newEvent, eventData, buffers)) {
-      return true;
-    }
+    if (handleEventInternal(newEvent, eventData, buffers)) { return true; }
+    return false;
+}
+}
+class FaceInfoObserverWrapper implements EventLoopEventHandler {
+const FaceInfoObserverWrapper(this.faceInfoObserver);
+
+final FaceInfoObserver faceInfoObserver;
+
+@override
+bool operator ==(Object other) {
+  if (other.runtimeType != runtimeType) {
     return false;
   }
+  return other is FaceInfoObserverWrapper &&
+      other.faceInfoObserver == faceInfoObserver;
+}
+@override
+int get hashCode => faceInfoObserver.hashCode;
+
+@override
+bool handleEventInternal(String eventName, String eventData, List<Uint8List> buffers) {
+    switch (eventName) {
+        
+case 'onFaceInfo_3a2037f':
+if (faceInfoObserver.onFaceInfo == null) {
+    return true;
+}
+final jsonMap = jsonDecode(eventData);
+FaceInfoObserverOnFaceInfoJson paramJson = FaceInfoObserverOnFaceInfoJson.fromJson(jsonMap);
+paramJson = paramJson.fillBuffers(buffers);
+String? outFaceInfo = paramJson.outFaceInfo;
+  if (outFaceInfo == null) { return true; }
+  
+  faceInfoObserver.onFaceInfo!(outFaceInfo);
+  return true;
+
+    }
+    return false;
 }
 
-class FaceInfoObserverWrapper implements EventLoopEventHandler {
-  const FaceInfoObserverWrapper(this.faceInfoObserver);
-
-  final FaceInfoObserver faceInfoObserver;
-
-  @override
-  bool operator ==(Object other) {
-    if (other.runtimeType != runtimeType) {
-      return false;
-    }
-    return other is FaceInfoObserverWrapper &&
-        other.faceInfoObserver == faceInfoObserver;
-  }
-
-  @override
-  int get hashCode => faceInfoObserver.hashCode;
-
-  @override
-  bool handleEventInternal(
-      String eventName, String eventData, List<Uint8List> buffers) {
-    switch (eventName) {
-      case 'onFaceInfo':
-        if (faceInfoObserver.onFaceInfo == null) {
-          return true;
-        }
-        final jsonMap = jsonDecode(eventData);
-        FaceInfoObserverOnFaceInfoJson paramJson =
-            FaceInfoObserverOnFaceInfoJson.fromJson(jsonMap);
-        paramJson = paramJson.fillBuffers(buffers);
-        String? outFaceInfo = paramJson.outFaceInfo;
-        if (outFaceInfo == null) {
-          return true;
-        }
-
-        faceInfoObserver.onFaceInfo!(outFaceInfo);
-        return true;
-    }
-    return false;
-  }
-
-  @override
-  bool handleEvent(
-      String eventName, String eventData, List<Uint8List> buffers) {
+@override
+bool handleEvent(String eventName, String eventData, List<Uint8List> buffers) {
     if (!eventName.startsWith('FaceInfoObserver')) return false;
     final newEvent = eventName.replaceFirst('FaceInfoObserver_', '');
-    if (handleEventInternal(newEvent, eventData, buffers)) {
-      return true;
-    }
+    if (handleEventInternal(newEvent, eventData, buffers)) { return true; }
+    return false;
+}
+}
+class MediaRecorderObserverWrapper implements EventLoopEventHandler {
+const MediaRecorderObserverWrapper(this.mediaRecorderObserver);
+
+final MediaRecorderObserver mediaRecorderObserver;
+
+@override
+bool operator ==(Object other) {
+  if (other.runtimeType != runtimeType) {
     return false;
   }
+  return other is MediaRecorderObserverWrapper &&
+      other.mediaRecorderObserver == mediaRecorderObserver;
+}
+@override
+int get hashCode => mediaRecorderObserver.hashCode;
+
+@override
+bool handleEventInternal(String eventName, String eventData, List<Uint8List> buffers) {
+    switch (eventName) {
+        
+case 'onRecorderStateChanged_c38849f':
+if (mediaRecorderObserver.onRecorderStateChanged == null) {
+    return true;
+}
+final jsonMap = jsonDecode(eventData);
+MediaRecorderObserverOnRecorderStateChangedJson paramJson = MediaRecorderObserverOnRecorderStateChangedJson.fromJson(jsonMap);
+paramJson = paramJson.fillBuffers(buffers);
+String? channelId = paramJson.channelId;
+int? uid = paramJson.uid;
+RecorderState? state = paramJson.state;
+RecorderReasonCode? reason = paramJson.reason;
+  if (channelId == null||uid == null||state == null||reason == null) { return true; }
+  
+  mediaRecorderObserver.onRecorderStateChanged!(channelId,uid,state,reason);
+  return true;
+
+
+case 'onRecorderInfoUpdated_64fa74a':
+if (mediaRecorderObserver.onRecorderInfoUpdated == null) {
+    return true;
+}
+final jsonMap = jsonDecode(eventData);
+MediaRecorderObserverOnRecorderInfoUpdatedJson paramJson = MediaRecorderObserverOnRecorderInfoUpdatedJson.fromJson(jsonMap);
+paramJson = paramJson.fillBuffers(buffers);
+String? channelId = paramJson.channelId;
+int? uid = paramJson.uid;
+RecorderInfo? info = paramJson.info;
+  if (channelId == null||uid == null||info == null) { return true; }
+  info = info.fillBuffers(buffers);
+  mediaRecorderObserver.onRecorderInfoUpdated!(channelId,uid,info);
+  return true;
+
+    }
+    return false;
 }
 
-class MediaRecorderObserverWrapper implements EventLoopEventHandler {
-  const MediaRecorderObserverWrapper(this.mediaRecorderObserver);
-
-  final MediaRecorderObserver mediaRecorderObserver;
-
-  @override
-  bool operator ==(Object other) {
-    if (other.runtimeType != runtimeType) {
-      return false;
-    }
-    return other is MediaRecorderObserverWrapper &&
-        other.mediaRecorderObserver == mediaRecorderObserver;
-  }
-
-  @override
-  int get hashCode => mediaRecorderObserver.hashCode;
-
-  @override
-  bool handleEventInternal(
-      String eventName, String eventData, List<Uint8List> buffers) {
-    switch (eventName) {
-      case 'onRecorderStateChanged':
-        if (mediaRecorderObserver.onRecorderStateChanged == null) {
-          return true;
-        }
-        final jsonMap = jsonDecode(eventData);
-        MediaRecorderObserverOnRecorderStateChangedJson paramJson =
-            MediaRecorderObserverOnRecorderStateChangedJson.fromJson(jsonMap);
-        paramJson = paramJson.fillBuffers(buffers);
-        String? channelId = paramJson.channelId;
-        int? uid = paramJson.uid;
-        RecorderState? state = paramJson.state;
-        RecorderErrorCode? error = paramJson.error;
-        if (channelId == null ||
-            uid == null ||
-            state == null ||
-            error == null) {
-          return true;
-        }
-
-        mediaRecorderObserver.onRecorderStateChanged!(
-            channelId, uid, state, error);
-        return true;
-
-      case 'onRecorderInfoUpdated':
-        if (mediaRecorderObserver.onRecorderInfoUpdated == null) {
-          return true;
-        }
-        final jsonMap = jsonDecode(eventData);
-        MediaRecorderObserverOnRecorderInfoUpdatedJson paramJson =
-            MediaRecorderObserverOnRecorderInfoUpdatedJson.fromJson(jsonMap);
-        paramJson = paramJson.fillBuffers(buffers);
-        String? channelId = paramJson.channelId;
-        int? uid = paramJson.uid;
-        RecorderInfo? info = paramJson.info;
-        if (channelId == null || uid == null || info == null) {
-          return true;
-        }
-        info = info.fillBuffers(buffers);
-        mediaRecorderObserver.onRecorderInfoUpdated!(channelId, uid, info);
-        return true;
-    }
-    return false;
-  }
-
-  @override
-  bool handleEvent(
-      String eventName, String eventData, List<Uint8List> buffers) {
+@override
+bool handleEvent(String eventName, String eventData, List<Uint8List> buffers) {
     if (!eventName.startsWith('MediaRecorderObserver')) return false;
     final newEvent = eventName.replaceFirst('MediaRecorderObserver_', '');
-    if (handleEventInternal(newEvent, eventData, buffers)) {
-      return true;
-    }
+    if (handleEventInternal(newEvent, eventData, buffers)) { return true; }
     return false;
-  }
+}
 }
