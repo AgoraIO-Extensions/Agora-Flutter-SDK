@@ -181,11 +181,11 @@ jobs:
       matrix:
         include:
           - version: "3.16"
-            model: "iPhone 16 Pro"
-            os_version: ">=18.0"
+            model: "iPhone 15"
+            os_version: ">=17.0"
           - version: "3.38.5"
-            model: "iPhone 16 Pro"
-            os_version: ">=18.0"
+            model: "iPhone 15"
+            os_version: ">=17.0"
     runs-on: macos-latest  # Updated from macos-13
     timeout-minutes: 120
     env:

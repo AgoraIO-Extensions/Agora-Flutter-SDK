@@ -180,9 +180,9 @@ jobs:
           xcodebuild -showsdks | grep iphonesimulator
       - uses: futureware-tech/simulator-action@v4
         with:
-          model: "iPhone 16 Pro"
+          model: "iPhone 15"
           os: iOS
-          os_version: ">=18.0"
+          os_version: ">=17.0"
           erase_before_boot: true
           wait_for_boot: true
           shutdown_after_job: true
