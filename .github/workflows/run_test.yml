@@ -181,12 +181,12 @@ jobs:
       matrix:
         include:
           - version: "3.16"
-            model: "iPhone 15"
-            os_version: ">=17.0"
+            model: "iPhone 16e"
+            os_version: ">=26.2"
           - version: "3.38.5"
-            model: "iPhone 15"
-            os_version: ">=17.0"
-    runs-on: macos-latest  # Updated from macos-13
+            model: "iPhone 16e"
+            os_version: ">=26.2"
+    runs-on: macos-26
     timeout-minutes: 120
     env:
       TEST_APP_ID: ${{ secrets.APP_ID }}
