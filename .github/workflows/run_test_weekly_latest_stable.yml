@@ -166,9 +166,12 @@ jobs:
           channel: ${{ needs.resolve_flutter_version.outputs.flutter_channel }}
           flutter-version: ${{ needs.resolve_flutter_version.outputs.flutter_version }}
           cache: true
-      - name: Switch to Xcode 16.4
+      - name: Setup latest stable Xcode
+        uses: maxim-lobanov/setup-xcode@v1
+        with:
+          xcode-version: latest-stable
+      - name: Verify Xcode
         run: |
-          sudo xcode-select --switch /Applications/Xcode_16.4.app
           xcode-select --print-path
           xcodebuild -version
           echo "Available iOS SDKs:"
