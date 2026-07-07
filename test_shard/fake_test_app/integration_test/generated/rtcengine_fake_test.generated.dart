@@ -326,8 +326,6 @@ void rtcEngineSmokeTestCases() {
         bool optionsPublishFourthScreenTrack = true;
         bool optionsPublishCustomAudioTrack = true;
         int optionsPublishCustomAudioTrackId = 5;
-        bool optionsPublishLoopbackAudioTrack = true;
-        int optionsPublishLoopbackAudioTrackId = 5;
         bool optionsPublishCustomVideoTrack = true;
         bool optionsPublishEncodedVideoTrack = true;
         bool optionsPublishMediaPlayerAudioTrack = true;
@@ -363,8 +361,6 @@ void rtcEngineSmokeTestCases() {
           publishFourthScreenTrack: optionsPublishFourthScreenTrack,
           publishCustomAudioTrack: optionsPublishCustomAudioTrack,
           publishCustomAudioTrackId: optionsPublishCustomAudioTrackId,
-          publishLoopbackAudioTrack: optionsPublishLoopbackAudioTrack,
-          publishLoopbackAudioTrackId: optionsPublishLoopbackAudioTrackId,
           publishCustomVideoTrack: optionsPublishCustomVideoTrack,
           publishEncodedVideoTrack: optionsPublishEncodedVideoTrack,
           publishMediaPlayerAudioTrack: optionsPublishMediaPlayerAudioTrack,
@@ -454,8 +450,6 @@ void rtcEngineSmokeTestCases() {
         bool optionsPublishFourthScreenTrack = true;
         bool optionsPublishCustomAudioTrack = true;
         int optionsPublishCustomAudioTrackId = 5;
-        bool optionsPublishLoopbackAudioTrack = true;
-        int optionsPublishLoopbackAudioTrackId = 5;
         bool optionsPublishCustomVideoTrack = true;
         bool optionsPublishEncodedVideoTrack = true;
         bool optionsPublishMediaPlayerAudioTrack = true;
@@ -491,8 +485,6 @@ void rtcEngineSmokeTestCases() {
           publishFourthScreenTrack: optionsPublishFourthScreenTrack,
           publishCustomAudioTrack: optionsPublishCustomAudioTrack,
           publishCustomAudioTrackId: optionsPublishCustomAudioTrackId,
-          publishLoopbackAudioTrack: optionsPublishLoopbackAudioTrack,
-          publishLoopbackAudioTrackId: optionsPublishLoopbackAudioTrackId,
           publishCustomVideoTrack: optionsPublishCustomVideoTrack,
           publishEncodedVideoTrack: optionsPublishEncodedVideoTrack,
           publishMediaPlayerAudioTrack: optionsPublishMediaPlayerAudioTrack,
@@ -9533,8 +9525,6 @@ void rtcEngineSmokeTestCases() {
         bool optionsPublishFourthScreenTrack = true;
         bool optionsPublishCustomAudioTrack = true;
         int optionsPublishCustomAudioTrackId = 5;
-        bool optionsPublishLoopbackAudioTrack = true;
-        int optionsPublishLoopbackAudioTrackId = 5;
         bool optionsPublishCustomVideoTrack = true;
         bool optionsPublishEncodedVideoTrack = true;
         bool optionsPublishMediaPlayerAudioTrack = true;
@@ -9570,8 +9560,6 @@ void rtcEngineSmokeTestCases() {
           publishFourthScreenTrack: optionsPublishFourthScreenTrack,
           publishCustomAudioTrack: optionsPublishCustomAudioTrack,
           publishCustomAudioTrackId: optionsPublishCustomAudioTrackId,
-          publishLoopbackAudioTrack: optionsPublishLoopbackAudioTrack,
-          publishLoopbackAudioTrackId: optionsPublishLoopbackAudioTrackId,
           publishCustomVideoTrack: optionsPublishCustomVideoTrack,
           publishEncodedVideoTrack: optionsPublishEncodedVideoTrack,
           publishMediaPlayerAudioTrack: optionsPublishMediaPlayerAudioTrack,
@@ -9665,8 +9653,6 @@ void rtcEngineSmokeTestCases() {
         bool optionsPublishFourthScreenTrack = true;
         bool optionsPublishCustomAudioTrack = true;
         int optionsPublishCustomAudioTrackId = 5;
-        bool optionsPublishLoopbackAudioTrack = true;
-        int optionsPublishLoopbackAudioTrackId = 5;
         bool optionsPublishCustomVideoTrack = true;
         bool optionsPublishEncodedVideoTrack = true;
         bool optionsPublishMediaPlayerAudioTrack = true;
@@ -9702,8 +9688,6 @@ void rtcEngineSmokeTestCases() {
           publishFourthScreenTrack: optionsPublishFourthScreenTrack,
           publishCustomAudioTrack: optionsPublishCustomAudioTrack,
           publishCustomAudioTrackId: optionsPublishCustomAudioTrackId,
-          publishLoopbackAudioTrack: optionsPublishLoopbackAudioTrack,
-          publishLoopbackAudioTrackId: optionsPublishLoopbackAudioTrackId,
           publishCustomVideoTrack: optionsPublishCustomVideoTrack,
           publishEncodedVideoTrack: optionsPublishEncodedVideoTrack,
           publishMediaPlayerAudioTrack: optionsPublishMediaPlayerAudioTrack,

@@ -1554,6 +1554,7 @@ const _$FaceShapeAreaEnumMap = {
   FaceShapeArea.faceShapeAreaCheek: 106,
   FaceShapeArea.faceShapeAreaMandible: 107,
   FaceShapeArea.faceShapeAreaChin: 108,
+  FaceShapeArea.faceShapeAreaFacesmall: 109,
   FaceShapeArea.faceShapeAreaEyescale: 200,
   FaceShapeArea.faceShapeAreaEyedistance: 201,
   FaceShapeArea.faceShapeAreaEyeposition: 202,
@@ -1561,6 +1562,7 @@ const _$FaceShapeAreaEnumMap = {
   FaceShapeArea.faceShapeAreaEyepupils: 204,
   FaceShapeArea.faceShapeAreaEyeinnercorner: 205,
   FaceShapeArea.faceShapeAreaEyeoutercorner: 206,
+  FaceShapeArea.faceShapeAreaEyeangle: 207,
   FaceShapeArea.faceShapeAreaNoselength: 300,
   FaceShapeArea.faceShapeAreaNosewidth: 301,
   FaceShapeArea.faceShapeAreaNosewing: 302,
@@ -1800,43 +1802,6 @@ Map<String, dynamic> _$AudioTrackConfigToJson(AudioTrackConfig instance) {
   writeNotNull('enableAudioProcessing', instance.enableAudioProcessing);
   return val;
 }
-
-LoopbackAudioTrackConfig _$LoopbackAudioTrackConfigFromJson(
-        Map<String, dynamic> json) =>
-    LoopbackAudioTrackConfig(
-      loopbackType: $enumDecodeNullable(
-          _$LoopbackAudioTrackTypeEnumMap, json['loopbackType']),
-      volume: (json['volume'] as num?)?.toInt(),
-      deviceName: json['deviceName'] as String?,
-      appName: json['appName'] as String?,
-      processId: (json['processId'] as num?)?.toInt(),
-    );
-
-Map<String, dynamic> _$LoopbackAudioTrackConfigToJson(
-    LoopbackAudioTrackConfig instance) {
-  final val = <String, dynamic>{};
-
-  void writeNotNull(String key, dynamic value) {
-    if (value != null) {
-      val[key] = value;
-    }
-  }
-
-  writeNotNull(
-      'loopbackType', _$LoopbackAudioTrackTypeEnumMap[instance.loopbackType]);
-  writeNotNull('volume', instance.volume);
-  writeNotNull('deviceName', instance.deviceName);
-  writeNotNull('appName', instance.appName);
-  writeNotNull('processId', instance.processId);
-  return val;
-}
-
-const _$LoopbackAudioTrackTypeEnumMap = {
-  LoopbackAudioTrackType.loopbackSystem: 0,
-  LoopbackAudioTrackType.loopbackSystemExcludeSelf: 1,
-  LoopbackAudioTrackType.loopbackApplication: 2,
-  LoopbackAudioTrackType.loopbackProcess: 3,
-};
 
 ScreenAudioParameters _$ScreenAudioParametersFromJson(
         Map<String, dynamic> json) =>
@@ -2631,13 +2596,13 @@ const _$ErrorCodeTypeEnumMap = {
   ErrorCodeType.errAdmStartRecording: 1012,
   ErrorCodeType.errAdmStopRecording: 1013,
   ErrorCodeType.errVdmCameraNotAuthorized: 1501,
-  ErrorCodeType.errAdmApplicationLoopback: 2007,
-  ErrorCodeType.errAdmApplicationLoopbackStopped: 2008,
-  ErrorCodeType.errAdmSystemLoopback: 2009,
-  ErrorCodeType.errAdmSystemLoopbackStopped: 2010,
-  ErrorCodeType.errAdmLoopbackNoPermission: 2011,
-  ErrorCodeType.errAdmLoopbackSilentDetected: 2012,
-  ErrorCodeType.errAdmLoopbackSilentRecovered: 2013,
+  ErrorCodeType.errVideoeffectAssetInvalid: 1700,
+  ErrorCodeType.errVideoeffectSaveFailed: 1701,
+  ErrorCodeType.errVideoeffectEngineInvalid: 1702,
+  ErrorCodeType.errVideoeffectNodeNotActive: 1704,
+  ErrorCodeType.errVideoeffectInvalidParam: 1705,
+  ErrorCodeType.errVideoeffectNotSupported: 1706,
+  ErrorCodeType.errVideoeffectInvalidBundlePath: 1707,
 };
 
 const _$LicenseErrorTypeEnumMap = {

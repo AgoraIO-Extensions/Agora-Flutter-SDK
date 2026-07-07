@@ -638,18 +638,6 @@ extension AudioTrackConfigBufferExt on AudioTrackConfig {
   }
 }
 
-extension LoopbackAudioTrackConfigBufferExt on LoopbackAudioTrackConfig {
-  LoopbackAudioTrackConfig fillBuffers(List<Uint8List> bufferList) {
-    if (bufferList.isEmpty) return this;
-    return this;
-  }
-
-  List<Uint8List> collectBufferList() {
-    final bufferList = <Uint8List>[];
-    return bufferList;
-  }
-}
-
 extension ScreenAudioParametersBufferExt on ScreenAudioParameters {
   ScreenAudioParameters fillBuffers(List<Uint8List> bufferList) {
     if (bufferList.isEmpty) return this;
@@ -1801,19 +1789,6 @@ extension RemoteVoicePositionInfoBufferExt on RemoteVoicePositionInfo {
 
 extension SpatialAudioZoneBufferExt on SpatialAudioZone {
   SpatialAudioZone fillBuffers(List<Uint8List> bufferList) {
-    if (bufferList.isEmpty) return this;
-    return this;
-  }
-
-  List<Uint8List> collectBufferList() {
-    final bufferList = <Uint8List>[];
-    return bufferList;
-  }
-}
-
-extension RecordingDeviceTestConfigurationBufferExt
-    on RecordingDeviceTestConfiguration {
-  RecordingDeviceTestConfiguration fillBuffers(List<Uint8List> bufferList) {
     if (bufferList.isEmpty) return this;
     return this;
   }

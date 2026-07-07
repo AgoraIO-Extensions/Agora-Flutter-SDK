@@ -538,7 +538,6 @@ ScreenCaptureSourceInfo _$ScreenCaptureSourceInfoFromJson(
           : Rectangle.fromJson(json['position'] as Map<String, dynamic>),
       minimizeWindow: json['minimizeWindow'] as bool?,
       sourceDisplayId: (json['sourceDisplayId'] as num?)?.toInt(),
-      processId: (json['process_id'] as num?)?.toInt(),
     );
 
 Map<String, dynamic> _$ScreenCaptureSourceInfoToJson(
@@ -563,7 +562,6 @@ Map<String, dynamic> _$ScreenCaptureSourceInfoToJson(
   writeNotNull('position', instance.position?.toJson());
   writeNotNull('minimizeWindow', instance.minimizeWindow);
   writeNotNull('sourceDisplayId', instance.sourceDisplayId);
-  writeNotNull('process_id', instance.processId);
   return val;
 }
 
@@ -640,9 +638,6 @@ ChannelMediaOptions _$ChannelMediaOptionsFromJson(Map<String, dynamic> json) =>
       publishCustomAudioTrack: json['publishCustomAudioTrack'] as bool?,
       publishCustomAudioTrackId:
           (json['publishCustomAudioTrackId'] as num?)?.toInt(),
-      publishLoopbackAudioTrack: json['publishLoopbackAudioTrack'] as bool?,
-      publishLoopbackAudioTrackId:
-          (json['publishLoopbackAudioTrackId'] as num?)?.toInt(),
       publishCustomVideoTrack: json['publishCustomVideoTrack'] as bool?,
       publishEncodedVideoTrack: json['publishEncodedVideoTrack'] as bool?,
       publishMediaPlayerAudioTrack:
@@ -709,9 +704,6 @@ Map<String, dynamic> _$ChannelMediaOptionsToJson(ChannelMediaOptions instance) {
   writeNotNull('publishFourthScreenTrack', instance.publishFourthScreenTrack);
   writeNotNull('publishCustomAudioTrack', instance.publishCustomAudioTrack);
   writeNotNull('publishCustomAudioTrackId', instance.publishCustomAudioTrackId);
-  writeNotNull('publishLoopbackAudioTrack', instance.publishLoopbackAudioTrack);
-  writeNotNull(
-      'publishLoopbackAudioTrackId', instance.publishLoopbackAudioTrackId);
   writeNotNull('publishCustomVideoTrack', instance.publishCustomVideoTrack);
   writeNotNull('publishEncodedVideoTrack', instance.publishEncodedVideoTrack);
   writeNotNull(
@@ -1225,7 +1217,6 @@ const _$MediaDeviceStateTypeEnumMap = {
   MediaDeviceStateType.mediaDeviceStatePluggedIn: 3,
   MediaDeviceStateType.mediaDeviceStateNotPresent: 4,
   MediaDeviceStateType.mediaDeviceStateUnplugged: 8,
-  MediaDeviceStateType.mediaDeviceStateDefaultDeviceChangedReady: 9,
 };
 
 const _$VideoProfileTypeEnumMap = {

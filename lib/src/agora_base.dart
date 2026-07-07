@@ -471,32 +471,32 @@ enum ErrorCodeType {
   errVdmCameraNotAuthorized,
 
   /// @nodoc
-  @JsonValue(2007)
-  errAdmApplicationLoopback,
+  @JsonValue(1700)
+  errVideoeffectAssetInvalid,
 
   /// @nodoc
-  @JsonValue(2008)
-  errAdmApplicationLoopbackStopped,
+  @JsonValue(1701)
+  errVideoeffectSaveFailed,
 
   /// @nodoc
-  @JsonValue(2009)
-  errAdmSystemLoopback,
+  @JsonValue(1702)
+  errVideoeffectEngineInvalid,
 
   /// @nodoc
-  @JsonValue(2010)
-  errAdmSystemLoopbackStopped,
+  @JsonValue(1704)
+  errVideoeffectNodeNotActive,
 
   /// @nodoc
-  @JsonValue(2011)
-  errAdmLoopbackNoPermission,
+  @JsonValue(1705)
+  errVideoeffectInvalidParam,
 
   /// @nodoc
-  @JsonValue(2012)
-  errAdmLoopbackSilentDetected,
+  @JsonValue(1706)
+  errVideoeffectNotSupported,
 
   /// @nodoc
-  @JsonValue(2013)
-  errAdmLoopbackSilentRecovered,
+  @JsonValue(1707)
+  errVideoeffectInvalidBundlePath,
 }
 
 /// @nodoc
@@ -5409,6 +5409,10 @@ enum FaceShapeArea {
   @JsonValue(108)
   faceShapeAreaChin,
 
+  /// @nodoc
+  @JsonValue(109)
+  faceShapeAreaFacesmall,
+
   /// (200): Eye area, used to achieve a bigger eye effect. Value range is [0, 100], default is 50. The larger the value, the more noticeable the adjustment.
   @JsonValue(200)
   faceShapeAreaEyescale,
@@ -5436,6 +5440,10 @@ enum FaceShapeArea {
   /// (206): Outer eye corner area, used to adjust the shape of the outer eye corner. Value range is [-100, 100], default is 0. The greater the absolute value, the more noticeable the adjustment; negative values indicate the opposite direction.
   @JsonValue(206)
   faceShapeAreaEyeoutercorner,
+
+  /// @nodoc
+  @JsonValue(207)
+  faceShapeAreaEyeangle,
 
   /// (300): Nose length area, used to elongate the nose. Value range is [-100, 100], default is 0. The greater the absolute value, the more noticeable the adjustment; negative values indicate the opposite direction.
   @JsonValue(300)
@@ -5948,78 +5956,6 @@ class AudioTrackConfig implements AgoraSerializable {
 
   @override
   Map<String, dynamic> toJson() => _$AudioTrackConfigToJson(this);
-}
-
-/// @nodoc
-@JsonEnum(alwaysCreate: true)
-enum LoopbackAudioTrackType {
-  /// @nodoc
-  @JsonValue(0)
-  loopbackSystem,
-
-  /// @nodoc
-  @JsonValue(1)
-  loopbackSystemExcludeSelf,
-
-  /// @nodoc
-  @JsonValue(2)
-  loopbackApplication,
-
-  /// @nodoc
-  @JsonValue(3)
-  loopbackProcess,
-}
-
-/// @nodoc
-extension LoopbackAudioTrackTypeExt on LoopbackAudioTrackType {
-  /// @nodoc
-  static LoopbackAudioTrackType fromValue(int value) {
-    return $enumDecode(_$LoopbackAudioTrackTypeEnumMap, value);
-  }
-
-  /// @nodoc
-  int value() {
-    return _$LoopbackAudioTrackTypeEnumMap[this]!;
-  }
-}
-
-/// @nodoc
-@JsonSerializable(explicitToJson: true, includeIfNull: false)
-class LoopbackAudioTrackConfig implements AgoraSerializable {
-  /// @nodoc
-  const LoopbackAudioTrackConfig(
-      {this.loopbackType,
-      this.volume,
-      this.deviceName,
-      this.appName,
-      this.processId});
-
-  /// @nodoc
-  @JsonKey(name: 'loopbackType')
-  final LoopbackAudioTrackType? loopbackType;
-
-  /// @nodoc
-  @JsonKey(name: 'volume')
-  final int? volume;
-
-  /// @nodoc
-  @JsonKey(name: 'deviceName')
-  final String? deviceName;
-
-  /// @nodoc
-  @JsonKey(name: 'appName')
-  final String? appName;
-
-  /// @nodoc
-  @JsonKey(name: 'processId')
-  final int? processId;
-
-  /// @nodoc
-  factory LoopbackAudioTrackConfig.fromJson(Map<String, dynamic> json) =>
-      _$LoopbackAudioTrackConfigFromJson(json);
-
-  @override
-  Map<String, dynamic> toJson() => _$LoopbackAudioTrackConfigToJson(this);
 }
 
 /// Preset voice beautifier options.

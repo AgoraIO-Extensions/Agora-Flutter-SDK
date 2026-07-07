@@ -750,15 +750,9 @@ void audioDeviceManagerSmokeTestCases() {
       final audioDeviceManager = rtcEngine.getAudioDeviceManager();
 
       try {
-        int configIndicationInterval = 5;
-        bool configEnablePlayback = true;
-        RecordingDeviceTestConfiguration config =
-            RecordingDeviceTestConfiguration(
-          indicationInterval: configIndicationInterval,
-          enablePlayback: configEnablePlayback,
-        );
+        int indicationInterval = 5;
         await audioDeviceManager.startRecordingDeviceTest(
-          config,
+          indicationInterval,
         );
       } catch (e) {
         if (e is! AgoraRtcException) {
