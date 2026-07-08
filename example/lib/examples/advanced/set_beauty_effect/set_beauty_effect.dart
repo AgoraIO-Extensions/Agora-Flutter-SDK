@@ -25,6 +25,7 @@ class _State extends State<SetBeautyEffect> with KeepRemoteVideoViewsMixin {
   double _smoothnessLevel = 0.0;
   double _rednessLevel = 0.0;
   double _sharpnessLevel = 0.0;
+  int _selectedFrameRate = FrameRate.frameRateFps30.value();
 
   LighteningContrastLevel _selectedLighteningContrastLevel =
       LighteningContrastLevel.lighteningContrastHigh;
@@ -112,10 +113,20 @@ class _State extends State<SetBeautyEffect> with KeepRemoteVideoViewsMixin {
         extension: "clear_vision");
 
     await _engine.setClientRole(role: ClientRoleType.clientRoleBroadcaster);
+    await _setVideoEncoderConfiguration();
+
+    await _engine.startPreview();
+
+    setState(() {
+      _isReadyPreview = true;
+    });
+  }
+
+  Future<void> _setVideoEncoderConfiguration({int? frameRate}) async {
     await _engine.setVideoEncoderConfiguration(
       VideoEncoderConfiguration(
         dimensions: const VideoDimensions(width: 1280, height: 720),
-        frameRate: FrameRate.frameRateFps15.value(),
+        frameRate: frameRate ?? _selectedFrameRate,
         bitrate: 0,
         minBitrate: -1,
         orientationMode: OrientationMode.orientationModeAdaptive,
@@ -123,12 +134,6 @@ class _State extends State<SetBeautyEffect> with KeepRemoteVideoViewsMixin {
         mirrorMode: VideoMirrorModeType.videoMirrorModeAuto,
       ),
     );
-
-    await _engine.startPreview();
-
-    setState(() {
-      _isReadyPreview = true;
-    });
   }
 
   void _joinChannel() async {
@@ -324,12 +329,44 @@ class _State extends State<SetBeautyEffect> with KeepRemoteVideoViewsMixin {
   }
 
   Widget _buildOptions() {
+    final frameRateItems = [
+      FrameRate.frameRateFps1,
+      FrameRate.frameRateFps7,
+      FrameRate.frameRateFps10,
+      FrameRate.frameRateFps15,
+      FrameRate.frameRateFps24,
+      FrameRate.frameRateFps30,
+      FrameRate.frameRateFps60,
+    ]
+        .map((e) => DropdownMenuItem<int>(
+              value: e.value(),
+              child: Text('${e.value()} fps'),
+            ))
+        .toList();
+
     return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         TextField(
           controller: _channelIdController,
           decoration: const InputDecoration(hintText: 'Channel ID'),
         ),
+        const SizedBox(height: 20),
+        const Text('Frame Rate: '),
+        DropdownButton<int>(
+          items: frameRateItems,
+          value: _selectedFrameRate,
+          onChanged: (v) async {
+            if (v == null) {
+              return;
+            }
+            setState(() {
+              _selectedFrameRate = v;
+            });
+            await _setVideoEncoderConfiguration(frameRate: v);
+          },
+        ),
+        const SizedBox(height: 20),
         Row(
           children: [
             Expanded(
