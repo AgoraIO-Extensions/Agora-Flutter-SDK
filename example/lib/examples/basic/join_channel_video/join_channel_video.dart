@@ -38,6 +38,7 @@ class _State extends State<JoinChannelVideo> {
   // Test switches
   bool _reuseController = true;
   bool _switchViewLevel = true;
+  int _selectedFrameRate = FrameRate.frameRateFps15.value();
   ChannelProfileType _channelProfileType =
       ChannelProfileType.channelProfileLiveBroadcasting;
   late final RtcEngineEventHandler _rtcEngineEventHandler;
@@ -140,15 +141,7 @@ class _State extends State<JoinChannelVideo> {
     _engine.registerEventHandler(_rtcEngineEventHandler);
 
     await _engine.enableVideo();
-    await _engine.setVideoEncoderConfiguration(VideoEncoderConfiguration(
-      dimensions: const VideoDimensions(width: 1280, height: 720),
-      frameRate: FrameRate.frameRateFps15.value(),
-      bitrate: 0,
-      minBitrate: -1,
-      orientationMode: OrientationMode.orientationModeAdaptive,
-      degradationPreference: DegradationPreference.maintainFramerate,
-      mirrorMode: VideoMirrorModeType.videoMirrorModeAuto,
-    ));
+    await _setVideoEncoderConfiguration();
     if (!kIsWeb) {
       await _engine.enableExtension(
           provider: "agora_video_filters_clear_vision",
@@ -156,6 +149,18 @@ class _State extends State<JoinChannelVideo> {
       await _applyBeautyEffect(enabled: _isBeautyEnabled);
     }
     await _engine.startPreview();
+  }
+
+  Future<void> _setVideoEncoderConfiguration({int? frameRate}) async {
+    await _engine.setVideoEncoderConfiguration(VideoEncoderConfiguration(
+      dimensions: const VideoDimensions(width: 1280, height: 720),
+      frameRate: frameRate ?? _selectedFrameRate,
+      bitrate: 0,
+      minBitrate: -1,
+      orientationMode: OrientationMode.orientationModeAdaptive,
+      degradationPreference: DegradationPreference.maintainFramerate,
+      mirrorMode: VideoMirrorModeType.videoMirrorModeAuto,
+    ));
   }
 
   Future<void> _updateRemoteVideoController(
@@ -187,7 +192,7 @@ class _State extends State<JoinChannelVideo> {
   Future<void> _applyBeautyEffect({required bool enabled}) async {
     await _engine.setBeautyEffectOptions(
       enabled: enabled,
-      options: BeautyOptions(
+      options: const BeautyOptions(
         lighteningContrastLevel:
             LighteningContrastLevel.lighteningContrastNormal,
         lighteningLevel: 0.1,
@@ -346,6 +351,20 @@ class _State extends State<JoinChannelVideo> {
                   value: e,
                 ))
             .toList();
+        final frameRateItems = [
+          FrameRate.frameRateFps1,
+          FrameRate.frameRateFps7,
+          FrameRate.frameRateFps10,
+          FrameRate.frameRateFps15,
+          FrameRate.frameRateFps24,
+          FrameRate.frameRateFps30,
+          FrameRate.frameRateFps60,
+        ]
+            .map((e) => DropdownMenuItem<int>(
+                  value: e.value(),
+                  child: Text('${e.value()} fps'),
+                ))
+            .toList();
 
         return Column(
           mainAxisAlignment: MainAxisAlignment.start,
@@ -418,6 +437,25 @@ class _State extends State<JoinChannelVideo> {
                       setState(() {
                         _channelProfileType = v!;
                       });
+                    },
+            ),
+            const SizedBox(
+              height: 20,
+            ),
+            const Text('Frame Rate: '),
+            DropdownButton<int>(
+              items: frameRateItems,
+              value: _selectedFrameRate,
+              onChanged: isJoined
+                  ? null
+                  : (v) async {
+                      if (v == null) {
+                        return;
+                      }
+                      setState(() {
+                        _selectedFrameRate = v;
+                      });
+                      await _setVideoEncoderConfiguration(frameRate: v);
                     },
             ),
             const SizedBox(
@@ -505,10 +543,12 @@ class _State extends State<JoinChannelVideo> {
               height: 20,
             ),
             BasicVideoConfigurationWidget(
+              key: ValueKey(_selectedFrameRate),
               rtcEngine: _engine,
               title: 'Video Encoder Configuration',
               width: 1280,
               height: 720,
+              frameRate: _selectedFrameRate,
               setConfigButtonText: const Text(
                 'setVideoEncoderConfiguration',
                 style: TextStyle(fontSize: 10),
