@@ -153,6 +153,337 @@ class MusicCollectionImpl implements MusicCollection {
   }
 }
 
+class WordImpl implements Word {
+  WordImpl(this.irisMethodChannel);
+
+  @protected
+  final IrisMethodChannel irisMethodChannel;
+
+  @protected
+  Map<String, dynamic> createParams(Map<String, dynamic> param) {
+    return param;
+  }
+
+  @protected
+  bool get isOverrideClassName => false;
+
+  @protected
+  String get className => 'Word';
+
+  @override
+  Future<int> getBegin() async {
+    final apiType = '${isOverrideClassName ? className : 'Word'}_getBegin';
+    final requestParam = createParams({});
+    final callApiResult = await irisMethodChannel.invokeMethod(
+        IrisMethodCall(apiType, jsonEncode(requestParam), buffers: null));
+    if (callApiResult.irisReturnCode < 0) {
+      throw AgoraRtcException(code: callApiResult.irisReturnCode);
+    }
+    final rm = callApiResult.data;
+    final result = rm['result'];
+    return result as int;
+  }
+
+  @override
+  Future<int> getDuration() async {
+    final apiType = '${isOverrideClassName ? className : 'Word'}_getDuration';
+    final requestParam = createParams({});
+    final callApiResult = await irisMethodChannel.invokeMethod(
+        IrisMethodCall(apiType, jsonEncode(requestParam), buffers: null));
+    if (callApiResult.irisReturnCode < 0) {
+      throw AgoraRtcException(code: callApiResult.irisReturnCode);
+    }
+    final rm = callApiResult.data;
+    final result = rm['result'];
+    return result as int;
+  }
+
+  @override
+  Future<double> getRefPitch() async {
+    final apiType = '${isOverrideClassName ? className : 'Word'}_getRefPitch';
+    final requestParam = createParams({});
+    final callApiResult = await irisMethodChannel.invokeMethod(
+        IrisMethodCall(apiType, jsonEncode(requestParam), buffers: null));
+    if (callApiResult.irisReturnCode < 0) {
+      throw AgoraRtcException(code: callApiResult.irisReturnCode);
+    }
+    final rm = callApiResult.data;
+    final result = rm['result'];
+    return result as double;
+  }
+
+  @override
+  Future<String> getWord() async {
+    final apiType = '${isOverrideClassName ? className : 'Word'}_getWord';
+    final requestParam = createParams({});
+    final callApiResult = await irisMethodChannel.invokeMethod(
+        IrisMethodCall(apiType, jsonEncode(requestParam), buffers: null));
+    if (callApiResult.irisReturnCode < 0) {
+      throw AgoraRtcException(code: callApiResult.irisReturnCode);
+    }
+    final rm = callApiResult.data;
+    final result = rm['result'];
+    return result as String;
+  }
+
+  @override
+  Future<int> getScore() async {
+    final apiType = '${isOverrideClassName ? className : 'Word'}_getScore';
+    final requestParam = createParams({});
+    final callApiResult = await irisMethodChannel.invokeMethod(
+        IrisMethodCall(apiType, jsonEncode(requestParam), buffers: null));
+    if (callApiResult.irisReturnCode < 0) {
+      throw AgoraRtcException(code: callApiResult.irisReturnCode);
+    }
+    final rm = callApiResult.data;
+    final result = rm['result'];
+    return result as int;
+  }
+}
+
+class SentenceImpl implements Sentence {
+  SentenceImpl(this.irisMethodChannel);
+
+  @protected
+  final IrisMethodChannel irisMethodChannel;
+
+  @protected
+  Map<String, dynamic> createParams(Map<String, dynamic> param) {
+    return param;
+  }
+
+  @protected
+  bool get isOverrideClassName => false;
+
+  @protected
+  String get className => 'Sentence';
+
+  @override
+  Future<String> getContent() async {
+    final apiType =
+        '${isOverrideClassName ? className : 'Sentence'}_getContent';
+    final requestParam = createParams({});
+    final callApiResult = await irisMethodChannel.invokeMethod(
+        IrisMethodCall(apiType, jsonEncode(requestParam), buffers: null));
+    if (callApiResult.irisReturnCode < 0) {
+      throw AgoraRtcException(code: callApiResult.irisReturnCode);
+    }
+    final rm = callApiResult.data;
+    final result = rm['result'];
+    return result as String;
+  }
+
+  @override
+  Future<int> getBegin() async {
+    final apiType = '${isOverrideClassName ? className : 'Sentence'}_getBegin';
+    final requestParam = createParams({});
+    final callApiResult = await irisMethodChannel.invokeMethod(
+        IrisMethodCall(apiType, jsonEncode(requestParam), buffers: null));
+    if (callApiResult.irisReturnCode < 0) {
+      throw AgoraRtcException(code: callApiResult.irisReturnCode);
+    }
+    final rm = callApiResult.data;
+    final result = rm['result'];
+    return result as int;
+  }
+
+  @override
+  Future<int> getDuration() async {
+    final apiType =
+        '${isOverrideClassName ? className : 'Sentence'}_getDuration';
+    final requestParam = createParams({});
+    final callApiResult = await irisMethodChannel.invokeMethod(
+        IrisMethodCall(apiType, jsonEncode(requestParam), buffers: null));
+    if (callApiResult.irisReturnCode < 0) {
+      throw AgoraRtcException(code: callApiResult.irisReturnCode);
+    }
+    final rm = callApiResult.data;
+    final result = rm['result'];
+    return result as int;
+  }
+
+  @override
+  Future<Word?> getWord(int index) async {
+    final apiType =
+        '${isOverrideClassName ? className : 'Sentence'}_getWord_8fcdcef';
+    final requestParam = createParams({'index': index});
+    final callApiResult = await irisMethodChannel.invokeMethod(
+        IrisMethodCall(apiType, jsonEncode(requestParam), buffers: null));
+    if (callApiResult.irisReturnCode < 0) {
+      throw AgoraRtcException(code: callApiResult.irisReturnCode);
+    }
+    final rm = callApiResult.data;
+    final result = rm['result'];
+    return result as Word;
+  }
+
+  @override
+  Future<int> getWordCount() async {
+    final apiType =
+        '${isOverrideClassName ? className : 'Sentence'}_getWordCount';
+    final requestParam = createParams({});
+    final callApiResult = await irisMethodChannel.invokeMethod(
+        IrisMethodCall(apiType, jsonEncode(requestParam), buffers: null));
+    if (callApiResult.irisReturnCode < 0) {
+      throw AgoraRtcException(code: callApiResult.irisReturnCode);
+    }
+    final rm = callApiResult.data;
+    final result = rm['result'];
+    return result as int;
+  }
+
+  @override
+  Future<int> getScore() async {
+    final apiType = '${isOverrideClassName ? className : 'Sentence'}_getScore';
+    final requestParam = createParams({});
+    final callApiResult = await irisMethodChannel.invokeMethod(
+        IrisMethodCall(apiType, jsonEncode(requestParam), buffers: null));
+    if (callApiResult.irisReturnCode < 0) {
+      throw AgoraRtcException(code: callApiResult.irisReturnCode);
+    }
+    final rm = callApiResult.data;
+    final result = rm['result'];
+    return result as int;
+  }
+}
+
+class LyricInfoImpl implements LyricInfo {
+  LyricInfoImpl(this.irisMethodChannel);
+
+  @protected
+  final IrisMethodChannel irisMethodChannel;
+
+  @protected
+  Map<String, dynamic> createParams(Map<String, dynamic> param) {
+    return param;
+  }
+
+  @protected
+  bool get isOverrideClassName => false;
+
+  @protected
+  String get className => 'LyricInfo';
+
+  @override
+  Future<String> getName() async {
+    final apiType = '${isOverrideClassName ? className : 'LyricInfo'}_getName';
+    final requestParam = createParams({});
+    final callApiResult = await irisMethodChannel.invokeMethod(
+        IrisMethodCall(apiType, jsonEncode(requestParam), buffers: null));
+    if (callApiResult.irisReturnCode < 0) {
+      throw AgoraRtcException(code: callApiResult.irisReturnCode);
+    }
+    final rm = callApiResult.data;
+    final result = rm['result'];
+    return result as String;
+  }
+
+  @override
+  Future<String> getSinger() async {
+    final apiType =
+        '${isOverrideClassName ? className : 'LyricInfo'}_getSinger';
+    final requestParam = createParams({});
+    final callApiResult = await irisMethodChannel.invokeMethod(
+        IrisMethodCall(apiType, jsonEncode(requestParam), buffers: null));
+    if (callApiResult.irisReturnCode < 0) {
+      throw AgoraRtcException(code: callApiResult.irisReturnCode);
+    }
+    final rm = callApiResult.data;
+    final result = rm['result'];
+    return result as String;
+  }
+
+  @override
+  Future<int> getPreludeEndPosition() async {
+    final apiType =
+        '${isOverrideClassName ? className : 'LyricInfo'}_getPreludeEndPosition';
+    final requestParam = createParams({});
+    final callApiResult = await irisMethodChannel.invokeMethod(
+        IrisMethodCall(apiType, jsonEncode(requestParam), buffers: null));
+    if (callApiResult.irisReturnCode < 0) {
+      throw AgoraRtcException(code: callApiResult.irisReturnCode);
+    }
+    final rm = callApiResult.data;
+    final result = rm['result'];
+    return result as int;
+  }
+
+  @override
+  Future<int> getDuration() async {
+    final apiType =
+        '${isOverrideClassName ? className : 'LyricInfo'}_getDuration';
+    final requestParam = createParams({});
+    final callApiResult = await irisMethodChannel.invokeMethod(
+        IrisMethodCall(apiType, jsonEncode(requestParam), buffers: null));
+    if (callApiResult.irisReturnCode < 0) {
+      throw AgoraRtcException(code: callApiResult.irisReturnCode);
+    }
+    final rm = callApiResult.data;
+    final result = rm['result'];
+    return result as int;
+  }
+
+  @override
+  Future<bool> getHasPitch() async {
+    final apiType =
+        '${isOverrideClassName ? className : 'LyricInfo'}_getHasPitch';
+    final requestParam = createParams({});
+    final callApiResult = await irisMethodChannel.invokeMethod(
+        IrisMethodCall(apiType, jsonEncode(requestParam), buffers: null));
+    if (callApiResult.irisReturnCode < 0) {
+      throw AgoraRtcException(code: callApiResult.irisReturnCode);
+    }
+    final rm = callApiResult.data;
+    final result = rm['result'];
+    return result as bool;
+  }
+
+  @override
+  Future<LyricSourceType> getSourceType() async {
+    final apiType =
+        '${isOverrideClassName ? className : 'LyricInfo'}_getSourceType';
+    final requestParam = createParams({});
+    final callApiResult = await irisMethodChannel.invokeMethod(
+        IrisMethodCall(apiType, jsonEncode(requestParam), buffers: null));
+    if (callApiResult.irisReturnCode < 0) {
+      throw AgoraRtcException(code: callApiResult.irisReturnCode);
+    }
+    final rm = callApiResult.data;
+    final result = rm['result'];
+    return LyricSourceTypeExt.fromValue(result);
+  }
+
+  @override
+  Future<Sentence?> getSentence(int index) async {
+    final apiType =
+        '${isOverrideClassName ? className : 'LyricInfo'}_getSentence_8fcdcef';
+    final requestParam = createParams({'index': index});
+    final callApiResult = await irisMethodChannel.invokeMethod(
+        IrisMethodCall(apiType, jsonEncode(requestParam), buffers: null));
+    if (callApiResult.irisReturnCode < 0) {
+      throw AgoraRtcException(code: callApiResult.irisReturnCode);
+    }
+    final rm = callApiResult.data;
+    final result = rm['result'];
+    return result as Sentence;
+  }
+
+  @override
+  Future<int> getSentenceCount() async {
+    final apiType =
+        '${isOverrideClassName ? className : 'LyricInfo'}_getSentenceCount';
+    final requestParam = createParams({});
+    final callApiResult = await irisMethodChannel.invokeMethod(
+        IrisMethodCall(apiType, jsonEncode(requestParam), buffers: null));
+    if (callApiResult.irisReturnCode < 0) {
+      throw AgoraRtcException(code: callApiResult.irisReturnCode);
+    }
+    final rm = callApiResult.data;
+    final result = rm['result'];
+    return result as int;
+  }
+}
+
 class MusicPlayerImpl extends MediaPlayerImpl implements MusicPlayer {
   MusicPlayerImpl(IrisMethodChannel irisMethodChannel)
       : super(irisMethodChannel);
@@ -246,10 +577,50 @@ class MusicContentCenterImpl implements MusicContentCenter {
   }
 
   @override
-  Future<void> renewToken(String token) async {
+  Future<void> addVendor(
+      {required MusicContentCenterVendorID vendorId,
+      required String jsonVendorConfig}) async {
     final apiType =
-        '${isOverrideClassName ? className : 'MusicContentCenter'}_renewToken_3a2037f';
-    final requestParam = createParams({'token': token});
+        '${isOverrideClassName ? className : 'MusicContentCenter'}_addVendor_db3598d';
+    final requestParam = createParams(
+        {'vendorId': vendorId.value(), 'jsonVendorConfig': jsonVendorConfig});
+    final callApiResult = await irisMethodChannel.invokeMethod(
+        IrisMethodCall(apiType, jsonEncode(requestParam), buffers: null));
+    if (callApiResult.irisReturnCode < 0) {
+      throw AgoraRtcException(code: callApiResult.irisReturnCode);
+    }
+    final rm = callApiResult.data;
+    final result = rm['result'];
+    if (result < 0) {
+      throw AgoraRtcException(code: result);
+    }
+  }
+
+  @override
+  Future<void> removeVendor(MusicContentCenterVendorID vendorId) async {
+    final apiType =
+        '${isOverrideClassName ? className : 'MusicContentCenter'}_removeVendor_387dbf0';
+    final requestParam = createParams({'vendorId': vendorId.value()});
+    final callApiResult = await irisMethodChannel.invokeMethod(
+        IrisMethodCall(apiType, jsonEncode(requestParam), buffers: null));
+    if (callApiResult.irisReturnCode < 0) {
+      throw AgoraRtcException(code: callApiResult.irisReturnCode);
+    }
+    final rm = callApiResult.data;
+    final result = rm['result'];
+    if (result < 0) {
+      throw AgoraRtcException(code: result);
+    }
+  }
+
+  @override
+  Future<void> renewToken(
+      {required MusicContentCenterVendorID vendorId,
+      required String token}) async {
+    final apiType =
+        '${isOverrideClassName ? className : 'MusicContentCenter'}_renewToken_db3598d';
+    final requestParam =
+        createParams({'vendorId': vendorId.value(), 'token': token});
     final callApiResult = await irisMethodChannel.invokeMethod(
         IrisMethodCall(apiType, jsonEncode(requestParam), buffers: null));
     if (callApiResult.irisReturnCode < 0) {
@@ -297,10 +668,11 @@ class MusicContentCenterImpl implements MusicContentCenter {
   }
 
   @override
-  void unregisterEventHandler() {
+  void unregisterEventHandler(MusicContentCenterEventHandler eventHandler) {
     // Implementation template
-// final apiType = '${isOverrideClassName ? className : 'MusicContentCenter'}_unregisterEventHandler';
+// final apiType = '${isOverrideClassName ? className : 'MusicContentCenter'}_unregisterEventHandler_ae49451';
 // final requestParam = createParams({
+//   'eventHandler': eventHandler
 // });
 // final callApiResult = await irisMethodChannel.invokeMethod(IrisMethodCall(apiType, jsonEncode(requestParam), buffers:null));
 // if (callApiResult.irisReturnCode < 0) {
@@ -441,10 +813,149 @@ class MusicContentCenterImpl implements MusicContentCenter {
   }
 
   @override
-  Future<void> removeCache(int songCode) async {
+  void registerScoreEventHandler(ScoreEventHandler scoreEventHandler) {
+    // Implementation template
+// final apiType = '${isOverrideClassName ? className : 'MusicContentCenter'}_registerScoreEventHandler_0932be1';
+// final requestParam = createParams({
+//   'scoreEventHandler': scoreEventHandler
+// });
+// final callApiResult = await irisMethodChannel.invokeMethod(IrisMethodCall(apiType, jsonEncode(requestParam), buffers:null));
+// if (callApiResult.irisReturnCode < 0) {
+//   throw AgoraRtcException(code: callApiResult.irisReturnCode);
+// }
+// final rm = callApiResult.data;
+// final result = rm['result'];
+// if (result < 0) { throw AgoraRtcException(code: result); }
+    throw UnimplementedError('Unimplement for registerScoreEventHandler');
+  }
+
+  @override
+  void unregisterScoreEventHandler(ScoreEventHandler scoreEventHandler) {
+    // Implementation template
+// final apiType = '${isOverrideClassName ? className : 'MusicContentCenter'}_unregisterScoreEventHandler_0932be1';
+// final requestParam = createParams({
+//   'scoreEventHandler': scoreEventHandler
+// });
+// final callApiResult = await irisMethodChannel.invokeMethod(IrisMethodCall(apiType, jsonEncode(requestParam), buffers:null));
+// if (callApiResult.irisReturnCode < 0) {
+//   throw AgoraRtcException(code: callApiResult.irisReturnCode);
+// }
+// final rm = callApiResult.data;
+// final result = rm['result'];
+// if (result < 0) { throw AgoraRtcException(code: result); }
+    throw UnimplementedError('Unimplement for unregisterScoreEventHandler');
+  }
+
+  @override
+  Future<void> setScoreLevel(ScoreLevel level) async {
+    final apiType =
+        '${isOverrideClassName ? className : 'MusicContentCenter'}_setScoreLevel_fef2f2f';
+    final requestParam = createParams({'level': level.value()});
+    final callApiResult = await irisMethodChannel.invokeMethod(
+        IrisMethodCall(apiType, jsonEncode(requestParam), buffers: null));
+    if (callApiResult.irisReturnCode < 0) {
+      throw AgoraRtcException(code: callApiResult.irisReturnCode);
+    }
+    final rm = callApiResult.data;
+    final result = rm['result'];
+    if (result < 0) {
+      throw AgoraRtcException(code: result);
+    }
+  }
+
+  @override
+  Future<void> startScore(int internalSongCode) async {
+    final apiType =
+        '${isOverrideClassName ? className : 'MusicContentCenter'}_startScore_f631116';
+    final requestParam = createParams({'internalSongCode': internalSongCode});
+    final callApiResult = await irisMethodChannel.invokeMethod(
+        IrisMethodCall(apiType, jsonEncode(requestParam), buffers: null));
+    if (callApiResult.irisReturnCode < 0) {
+      throw AgoraRtcException(code: callApiResult.irisReturnCode);
+    }
+    final rm = callApiResult.data;
+    final result = rm['result'];
+    if (result < 0) {
+      throw AgoraRtcException(code: result);
+    }
+  }
+
+  @override
+  Future<void> stopScore() async {
+    final apiType =
+        '${isOverrideClassName ? className : 'MusicContentCenter'}_stopScore';
+    final requestParam = createParams({});
+    final callApiResult = await irisMethodChannel.invokeMethod(
+        IrisMethodCall(apiType, jsonEncode(requestParam), buffers: null));
+    if (callApiResult.irisReturnCode < 0) {
+      throw AgoraRtcException(code: callApiResult.irisReturnCode);
+    }
+    final rm = callApiResult.data;
+    final result = rm['result'];
+    if (result < 0) {
+      throw AgoraRtcException(code: result);
+    }
+  }
+
+  @override
+  Future<void> pauseScore() async {
+    final apiType =
+        '${isOverrideClassName ? className : 'MusicContentCenter'}_pauseScore';
+    final requestParam = createParams({});
+    final callApiResult = await irisMethodChannel.invokeMethod(
+        IrisMethodCall(apiType, jsonEncode(requestParam), buffers: null));
+    if (callApiResult.irisReturnCode < 0) {
+      throw AgoraRtcException(code: callApiResult.irisReturnCode);
+    }
+    final rm = callApiResult.data;
+    final result = rm['result'];
+    if (result < 0) {
+      throw AgoraRtcException(code: result);
+    }
+  }
+
+  @override
+  Future<void> resumeScore() async {
+    final apiType =
+        '${isOverrideClassName ? className : 'MusicContentCenter'}_resumeScore';
+    final requestParam = createParams({});
+    final callApiResult = await irisMethodChannel.invokeMethod(
+        IrisMethodCall(apiType, jsonEncode(requestParam), buffers: null));
+    if (callApiResult.irisReturnCode < 0) {
+      throw AgoraRtcException(code: callApiResult.irisReturnCode);
+    }
+    final rm = callApiResult.data;
+    final result = rm['result'];
+    if (result < 0) {
+      throw AgoraRtcException(code: result);
+    }
+  }
+
+  @override
+  Future<CumulativeScoreData> getCumulativeScoreData() async {
+    final apiType =
+        '${isOverrideClassName ? className : 'MusicContentCenter'}_getCumulativeScoreData_c8fad3d';
+    final requestParam = createParams({});
+    final callApiResult = await irisMethodChannel.invokeMethod(
+        IrisMethodCall(apiType, jsonEncode(requestParam), buffers: null));
+    if (callApiResult.irisReturnCode < 0) {
+      throw AgoraRtcException(code: callApiResult.irisReturnCode);
+    }
+    final rm = callApiResult.data;
+    final result = rm['result'];
+    if (result < 0) {
+      throw AgoraRtcException(code: result);
+    }
+    final getCumulativeScoreDataJson =
+        MusicContentCenterGetCumulativeScoreDataJson.fromJson(rm);
+    return getCumulativeScoreDataJson.cumulativeScoreData;
+  }
+
+  @override
+  Future<void> removeCache(int internalSongCode) async {
     final apiType =
         '${isOverrideClassName ? className : 'MusicContentCenter'}_removeCache_f631116';
-    final requestParam = createParams({'songCode': songCode});
+    final requestParam = createParams({'internalSongCode': internalSongCode});
     final callApiResult = await irisMethodChannel.invokeMethod(
         IrisMethodCall(apiType, jsonEncode(requestParam), buffers: null));
     if (callApiResult.irisReturnCode < 0) {
@@ -477,10 +988,10 @@ class MusicContentCenterImpl implements MusicContentCenter {
   }
 
   @override
-  Future<bool> isPreloaded(int songCode) async {
+  Future<bool> isPreloaded(int internalSongCode) async {
     final apiType =
         '${isOverrideClassName ? className : 'MusicContentCenter'}_isPreloaded_f631116';
-    final requestParam = createParams({'songCode': songCode});
+    final requestParam = createParams({'internalSongCode': internalSongCode});
     final callApiResult = await irisMethodChannel.invokeMethod(
         IrisMethodCall(apiType, jsonEncode(requestParam), buffers: null));
     if (callApiResult.irisReturnCode < 0) {
@@ -492,11 +1003,13 @@ class MusicContentCenterImpl implements MusicContentCenter {
   }
 
   @override
-  Future<String> getLyric({required int songCode, int lyricType = 0}) async {
+  Future<String> getLyric(
+      {required int internalSongCode,
+      LyricSourceType lyricType = LyricSourceType.kLyricSourceXml}) async {
     final apiType =
-        '${isOverrideClassName ? className : 'MusicContentCenter'}_getLyric_5ab5efd';
-    final requestParam =
-        createParams({'songCode': songCode, 'lyricType': lyricType});
+        '${isOverrideClassName ? className : 'MusicContentCenter'}_getLyric_41919ed';
+    final requestParam = createParams(
+        {'internalSongCode': internalSongCode, 'lyricType': lyricType.value()});
     final callApiResult = await irisMethodChannel.invokeMethod(
         IrisMethodCall(apiType, jsonEncode(requestParam), buffers: null));
     if (callApiResult.irisReturnCode < 0) {
@@ -512,10 +1025,29 @@ class MusicContentCenterImpl implements MusicContentCenter {
   }
 
   @override
-  Future<String> getSongSimpleInfo(int songCode) async {
+  Future<String> getLyricInfo(int internalSongCode) async {
+    final apiType =
+        '${isOverrideClassName ? className : 'MusicContentCenter'}_getLyricInfo_d3baeab';
+    final requestParam = createParams({'internalSongCode': internalSongCode});
+    final callApiResult = await irisMethodChannel.invokeMethod(
+        IrisMethodCall(apiType, jsonEncode(requestParam), buffers: null));
+    if (callApiResult.irisReturnCode < 0) {
+      throw AgoraRtcException(code: callApiResult.irisReturnCode);
+    }
+    final rm = callApiResult.data;
+    final result = rm['result'];
+    if (result < 0) {
+      throw AgoraRtcException(code: result);
+    }
+    final getLyricInfoJson = MusicContentCenterGetLyricInfoJson.fromJson(rm);
+    return getLyricInfoJson.requestId;
+  }
+
+  @override
+  Future<String> getSongSimpleInfo(int internalSongCode) async {
     final apiType =
         '${isOverrideClassName ? className : 'MusicContentCenter'}_getSongSimpleInfo_d3baeab';
-    final requestParam = createParams({'songCode': songCode});
+    final requestParam = createParams({'internalSongCode': internalSongCode});
     final callApiResult = await irisMethodChannel.invokeMethod(
         IrisMethodCall(apiType, jsonEncode(requestParam), buffers: null));
     if (callApiResult.irisReturnCode < 0) {
@@ -533,11 +1065,16 @@ class MusicContentCenterImpl implements MusicContentCenter {
 
   @override
   Future<int> getInternalSongCode(
-      {required int songCode, required String jsonOption}) async {
+      {required MusicContentCenterVendorID vendorId,
+      required String songCode,
+      required String jsonOption}) async {
     final apiType =
-        '${isOverrideClassName ? className : 'MusicContentCenter'}_getInternalSongCode_3a3d1e7';
-    final requestParam =
-        createParams({'songCode': songCode, 'jsonOption': jsonOption});
+        '${isOverrideClassName ? className : 'MusicContentCenter'}_getInternalSongCode_d71d94d';
+    final requestParam = createParams({
+      'vendorId': vendorId.value(),
+      'songCode': songCode,
+      'jsonOption': jsonOption
+    });
     final callApiResult = await irisMethodChannel.invokeMethod(
         IrisMethodCall(apiType, jsonEncode(requestParam), buffers: null));
     if (callApiResult.irisReturnCode < 0) {

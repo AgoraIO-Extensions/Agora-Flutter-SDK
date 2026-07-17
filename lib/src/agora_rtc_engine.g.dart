@@ -684,6 +684,8 @@ ChannelMediaOptions _$ChannelMediaOptionsFromJson(Map<String, dynamic> json) =>
           _$MultipathModeEnumMap, json['downlinkMultipathMode']),
       preferMultipathType: $enumDecodeNullable(
           _$MultipathTypeEnumMap, json['preferMultipathType']),
+      channelType:
+          $enumDecodeNullable(_$ChannelTypeEnumMap, json['channelType']),
     );
 
 Map<String, dynamic> _$ChannelMediaOptionsToJson(ChannelMediaOptions instance) {
@@ -750,6 +752,7 @@ Map<String, dynamic> _$ChannelMediaOptionsToJson(ChannelMediaOptions instance) {
       _$MultipathModeEnumMap[instance.downlinkMultipathMode]);
   writeNotNull('preferMultipathType',
       _$MultipathTypeEnumMap[instance.preferMultipathType]);
+  writeNotNull('channelType', _$ChannelTypeEnumMap[instance.channelType]);
   return val;
 }
 
@@ -781,6 +784,11 @@ const _$MultipathTypeEnumMap = {
   MultipathType.wifi: 1,
   MultipathType.mobile: 2,
   MultipathType.unknown: 99,
+};
+
+const _$ChannelTypeEnumMap = {
+  ChannelType.channelTypeStandard: 0,
+  ChannelType.channelTypeLargeScale: 1,
 };
 
 LeaveChannelOptions _$LeaveChannelOptionsFromJson(Map<String, dynamic> json) =>
@@ -1034,28 +1042,6 @@ Map<String, dynamic> _$VideoDeviceInfoToJson(VideoDeviceInfo instance) {
   }
 
   writeNotNull('deviceId', instance.deviceId);
-  writeNotNull('deviceName', instance.deviceName);
-  return val;
-}
-
-AudioDeviceInfo _$AudioDeviceInfoFromJson(Map<String, dynamic> json) =>
-    AudioDeviceInfo(
-      deviceId: json['deviceId'] as String?,
-      deviceTypeName: json['deviceTypeName'] as String?,
-      deviceName: json['deviceName'] as String?,
-    );
-
-Map<String, dynamic> _$AudioDeviceInfoToJson(AudioDeviceInfo instance) {
-  final val = <String, dynamic>{};
-
-  void writeNotNull(String key, dynamic value) {
-    if (value != null) {
-      val[key] = value;
-    }
-  }
-
-  writeNotNull('deviceId', instance.deviceId);
-  writeNotNull('deviceTypeName', instance.deviceTypeName);
   writeNotNull('deviceName', instance.deviceName);
   return val;
 }

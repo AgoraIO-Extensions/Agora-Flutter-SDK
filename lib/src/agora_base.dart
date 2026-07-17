@@ -41,6 +41,31 @@ extension ChannelProfileTypeExt on ChannelProfileType {
 
 /// @nodoc
 @JsonEnum(alwaysCreate: true)
+enum ChannelType {
+  /// @nodoc
+  @JsonValue(0)
+  channelTypeStandard,
+
+  /// @nodoc
+  @JsonValue(1)
+  channelTypeLargeScale,
+}
+
+/// @nodoc
+extension ChannelTypeExt on ChannelType {
+  /// @nodoc
+  static ChannelType fromValue(int value) {
+    return $enumDecode(_$ChannelTypeEnumMap, value);
+  }
+
+  /// @nodoc
+  int value() {
+    return _$ChannelTypeEnumMap[this]!;
+  }
+}
+
+/// @nodoc
+@JsonEnum(alwaysCreate: true)
 enum WarnCodeType {
   /// @nodoc
   @JsonValue(8)
@@ -6202,6 +6227,18 @@ enum AudioEffectPreset {
   /// KTV.
   @JsonValue(0x02010100)
   roomAcousticsKtv,
+
+  /// @nodoc
+  @JsonValue(0x02010110)
+  roomAcousticsBathroom,
+
+  /// @nodoc
+  @JsonValue(0x02010120)
+  roomAcousticsStairwell,
+
+  /// @nodoc
+  @JsonValue(0x02010130)
+  roomAcousticsNature,
 
   /// Concert.
   @JsonValue(0x02010200)

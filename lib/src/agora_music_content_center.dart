@@ -4,6 +4,31 @@ part 'agora_music_content_center.g.dart';
 
 /// @nodoc
 @JsonEnum(alwaysCreate: true)
+enum MusicContentCenterVendorID {
+  /// @nodoc
+  @JsonValue(1)
+  kMusicContentCenterVendorDefault,
+
+  /// @nodoc
+  @JsonValue(2)
+  kMusicContentCenterVendor2,
+}
+
+/// @nodoc
+extension MusicContentCenterVendorIDExt on MusicContentCenterVendorID {
+  /// @nodoc
+  static MusicContentCenterVendorID fromValue(int value) {
+    return $enumDecode(_$MusicContentCenterVendorIDEnumMap, value);
+  }
+
+  /// @nodoc
+  int value() {
+    return _$MusicContentCenterVendorIDEnumMap[this]!;
+  }
+}
+
+/// @nodoc
+@JsonEnum(alwaysCreate: true)
 enum MusicPlayMode {
   /// @nodoc
   @JsonValue(0)
@@ -33,34 +58,42 @@ extension MusicPlayModeExt on MusicPlayMode {
 
 /// @nodoc
 @JsonEnum(alwaysCreate: true)
-enum PreloadState {
+enum MusicContentCenterState {
   /// @nodoc
   @JsonValue(0)
-  kPreloadStateCompleted,
+  kMusicContentCenterStatePreloadOk,
 
   /// @nodoc
   @JsonValue(1)
-  kPreloadStateFailed,
+  kMusicContentCenterStatePreloadFailed,
 
   /// @nodoc
   @JsonValue(2)
-  kPreloadStatePreloading,
+  kMusicContentCenterStatePreloading,
 
   /// @nodoc
   @JsonValue(3)
-  kPreloadStateRemoved,
+  kMusicContentCenterStatePreloadRemoved,
+
+  /// @nodoc
+  @JsonValue(4)
+  kMusicContentCenterStateStartScoreCompleted,
+
+  /// @nodoc
+  @JsonValue(5)
+  kMusicContentCenterStateStartScoreFailed,
 }
 
 /// @nodoc
-extension PreloadStateExt on PreloadState {
+extension MusicContentCenterStateExt on MusicContentCenterState {
   /// @nodoc
-  static PreloadState fromValue(int value) {
-    return $enumDecode(_$PreloadStateEnumMap, value);
+  static MusicContentCenterState fromValue(int value) {
+    return $enumDecode(_$MusicContentCenterStateEnumMap, value);
   }
 
   /// @nodoc
   int value() {
-    return _$PreloadStateEnumMap[this]!;
+    return _$MusicContentCenterStateEnumMap[this]!;
   }
 }
 
@@ -145,6 +178,14 @@ enum MusicCacheStatusType {
   /// @nodoc
   @JsonValue(1)
   musicCacheStatusTypeCaching,
+
+  /// @nodoc
+  @JsonValue(2)
+  musicCacheStatusTypeNoCached,
+
+  /// @nodoc
+  @JsonValue(3)
+  musicCacheStatusTypeNoResource,
 }
 
 /// @nodoc
@@ -164,15 +205,19 @@ extension MusicCacheStatusTypeExt on MusicCacheStatusType {
 @JsonSerializable(explicitToJson: true, includeIfNull: false)
 class MusicCacheInfo implements AgoraSerializable {
   /// @nodoc
-  const MusicCacheInfo({this.songCode, this.status});
+  const MusicCacheInfo({this.songCode, this.musicStatus, this.lyricStatus});
 
   /// @nodoc
   @JsonKey(name: 'songCode')
   final int? songCode;
 
   /// @nodoc
-  @JsonKey(name: 'status')
-  final MusicCacheStatusType? status;
+  @JsonKey(name: 'musicStatus')
+  final MusicCacheStatusType? musicStatus;
+
+  /// @nodoc
+  @JsonKey(name: 'lyricStatus')
+  final MusicCacheStatusType? lyricStatus;
 
   /// @nodoc
   factory MusicCacheInfo.fromJson(Map<String, dynamic> json) =>
@@ -337,14 +382,289 @@ abstract class MusicCollection {
 }
 
 /// @nodoc
+@JsonEnum(alwaysCreate: true)
+enum LyricSourceType {
+  /// @nodoc
+  @JsonValue(0)
+  kLyricSourceXml,
+
+  /// @nodoc
+  @JsonValue(1)
+  kLyricSourceLrc,
+
+  /// @nodoc
+  @JsonValue(2)
+  kLyricSourceLrcWithPitches,
+
+  /// @nodoc
+  @JsonValue(3)
+  kLyricSourceKrc,
+}
+
+/// @nodoc
+extension LyricSourceTypeExt on LyricSourceType {
+  /// @nodoc
+  static LyricSourceType fromValue(int value) {
+    return $enumDecode(_$LyricSourceTypeEnumMap, value);
+  }
+
+  /// @nodoc
+  int value() {
+    return _$LyricSourceTypeEnumMap[this]!;
+  }
+}
+
+/// @nodoc
+@JsonEnum(alwaysCreate: true)
+enum ScoreLevel {
+  /// @nodoc
+  @JsonValue(1)
+  kScoreLevel1,
+
+  /// @nodoc
+  @JsonValue(2)
+  kScoreLevel2,
+
+  /// @nodoc
+  @JsonValue(3)
+  kScoreLevel3,
+
+  /// @nodoc
+  @JsonValue(4)
+  kScoreLevel4,
+
+  /// @nodoc
+  @JsonValue(5)
+  kScoreLevel5,
+}
+
+/// @nodoc
+extension ScoreLevelExt on ScoreLevel {
+  /// @nodoc
+  static ScoreLevel fromValue(int value) {
+    return $enumDecode(_$ScoreLevelEnumMap, value);
+  }
+
+  /// @nodoc
+  int value() {
+    return _$ScoreLevelEnumMap[this]!;
+  }
+}
+
+/// @nodoc
+abstract class Word {
+  /// @nodoc
+  Future<int> getBegin();
+
+  /// @nodoc
+  Future<int> getDuration();
+
+  /// @nodoc
+  Future<double> getRefPitch();
+
+  /// @nodoc
+  Future<String> getWord();
+
+  /// @nodoc
+  Future<int> getScore();
+}
+
+/// @nodoc
+abstract class Sentence {
+  /// @nodoc
+  Future<String> getContent();
+
+  /// @nodoc
+  Future<int> getBegin();
+
+  /// @nodoc
+  Future<int> getDuration();
+
+  /// @nodoc
+  Future<Word?> getWord(int index);
+
+  /// @nodoc
+  Future<int> getWordCount();
+
+  /// @nodoc
+  Future<int> getScore();
+}
+
+/// @nodoc
+abstract class LyricInfo {
+  /// @nodoc
+  Future<String> getName();
+
+  /// @nodoc
+  Future<String> getSinger();
+
+  /// @nodoc
+  Future<int> getPreludeEndPosition();
+
+  /// @nodoc
+  Future<int> getDuration();
+
+  /// @nodoc
+  Future<bool> getHasPitch();
+
+  /// @nodoc
+  Future<LyricSourceType> getSourceType();
+
+  /// @nodoc
+  Future<Sentence?> getSentence(int index);
+
+  /// @nodoc
+  Future<int> getSentenceCount();
+}
+
+/// @nodoc
+@JsonSerializable(explicitToJson: true, includeIfNull: false)
+class RawScoreData implements AgoraSerializable {
+  /// @nodoc
+  const RawScoreData({this.progressInMs, this.speakerPitch, this.pitchScore});
+
+  /// @nodoc
+  @JsonKey(name: 'progressInMs')
+  final int? progressInMs;
+
+  /// @nodoc
+  @JsonKey(name: 'speakerPitch')
+  final double? speakerPitch;
+
+  /// @nodoc
+  @JsonKey(name: 'pitchScore')
+  final double? pitchScore;
+
+  /// @nodoc
+  factory RawScoreData.fromJson(Map<String, dynamic> json) =>
+      _$RawScoreDataFromJson(json);
+
+  @override
+  Map<String, dynamic> toJson() => _$RawScoreDataToJson(this);
+}
+
+/// @nodoc
+@JsonSerializable(explicitToJson: true, includeIfNull: false)
+class LineScoreData implements AgoraSerializable {
+  /// @nodoc
+  const LineScoreData(
+      {this.progressInMs,
+      this.index,
+      this.totalLines,
+      this.pitchScore,
+      this.cumulativePitchScore,
+      this.energyScore});
+
+  /// @nodoc
+  @JsonKey(name: 'progressInMs')
+  final int? progressInMs;
+
+  /// @nodoc
+  @JsonKey(name: 'index')
+  final int? index;
+
+  /// @nodoc
+  @JsonKey(name: 'totalLines')
+  final int? totalLines;
+
+  /// @nodoc
+  @JsonKey(name: 'pitchScore')
+  final double? pitchScore;
+
+  /// @nodoc
+  @JsonKey(name: 'cumulativePitchScore')
+  final double? cumulativePitchScore;
+
+  /// @nodoc
+  @JsonKey(name: 'energyScore')
+  final double? energyScore;
+
+  /// @nodoc
+  factory LineScoreData.fromJson(Map<String, dynamic> json) =>
+      _$LineScoreDataFromJson(json);
+
+  @override
+  Map<String, dynamic> toJson() => _$LineScoreDataToJson(this);
+}
+
+/// @nodoc
+@JsonSerializable(explicitToJson: true, includeIfNull: false)
+class CumulativeScoreData implements AgoraSerializable {
+  /// @nodoc
+  const CumulativeScoreData(
+      {this.progressInMs, this.cumulativePitchScore, this.energyScore});
+
+  /// @nodoc
+  @JsonKey(name: 'progressInMs')
+  final int? progressInMs;
+
+  /// @nodoc
+  @JsonKey(name: 'cumulativePitchScore')
+  final double? cumulativePitchScore;
+
+  /// @nodoc
+  @JsonKey(name: 'energyScore')
+  final double? energyScore;
+
+  /// @nodoc
+  factory CumulativeScoreData.fromJson(Map<String, dynamic> json) =>
+      _$CumulativeScoreDataFromJson(json);
+
+  @override
+  Map<String, dynamic> toJson() => _$CumulativeScoreDataToJson(this);
+}
+
+/// @nodoc
+@JsonEnum(alwaysCreate: true)
+enum ChargeMode {
+  /// @nodoc
+  @JsonValue(1)
+  kChargeModeMonthly,
+
+  /// @nodoc
+  @JsonValue(2)
+  kChargeModeOnce,
+}
+
+/// @nodoc
+extension ChargeModeExt on ChargeMode {
+  /// @nodoc
+  static ChargeMode fromValue(int value) {
+    return $enumDecode(_$ChargeModeEnumMap, value);
+  }
+
+  /// @nodoc
+  int value() {
+    return _$ChargeModeEnumMap[this]!;
+  }
+}
+
+/// @nodoc
+class ScoreEventHandler {
+  /// @nodoc
+  const ScoreEventHandler({
+    this.onPitch,
+    this.onLineScore,
+  });
+
+  /// @nodoc
+  final RawScoreData Function(int internalSongCode)? onPitch;
+
+  /// @nodoc
+  final LineScoreData Function(int internalSongCode)? onLineScore;
+}
+
+/// @nodoc
 class MusicContentCenterEventHandler {
   /// @nodoc
   const MusicContentCenterEventHandler({
     this.onMusicChartsResult,
     this.onMusicCollectionResult,
     this.onLyricResult,
+    this.onLyricInfoResult,
     this.onSongSimpleInfoResult,
     this.onPreLoadEvent,
+    this.onStartScoreResult,
   });
 
   /// @nodoc
@@ -356,21 +676,32 @@ class MusicContentCenterEventHandler {
       MusicContentCenterStateReason reason)? onMusicCollectionResult;
 
   /// @nodoc
-  final void Function(String requestId, int songCode, String lyricUrl,
+  final void Function(String requestId, int internalSongCode, String payload,
       MusicContentCenterStateReason reason)? onLyricResult;
 
   /// @nodoc
-  final void Function(String requestId, int songCode, String simpleInfo,
+  final void Function(
+      String requestId,
+      int internalSongCode,
+      LyricInfo lyricInfo,
+      MusicContentCenterStateReason reason)? onLyricInfoResult;
+
+  /// @nodoc
+  final void Function(String requestId, int internalSongCode, String simpleInfo,
       MusicContentCenterStateReason reason)? onSongSimpleInfoResult;
 
   /// @nodoc
   final void Function(
       String requestId,
-      int songCode,
+      int internalSongCode,
       int percent,
-      String lyricUrl,
-      PreloadState state,
+      String payload,
+      MusicContentCenterState state,
       MusicContentCenterStateReason reason)? onPreLoadEvent;
+
+  /// @nodoc
+  final void Function(int internalSongCode, MusicContentCenterState state,
+      MusicContentCenterStateReason reason)? onStartScoreResult;
 }
 
 /// @nodoc
@@ -378,7 +709,36 @@ class MusicContentCenterEventHandler {
 class MusicContentCenterConfiguration implements AgoraSerializable {
   /// @nodoc
   const MusicContentCenterConfiguration(
-      {this.appId, this.token, this.mccUid, this.maxCacheSize, this.mccDomain});
+      {this.maxCacheSize, this.scoreEventHandler, this.audioFrameObserver});
+
+  /// @nodoc
+  @JsonKey(name: 'maxCacheSize')
+  final int? maxCacheSize;
+
+  /// @nodoc
+  @JsonKey(name: 'scoreEventHandler')
+  final ScoreEventHandler? scoreEventHandler;
+
+  /// @nodoc
+  @JsonKey(name: 'audioFrameObserver')
+  final AudioFrameObserver? audioFrameObserver;
+
+  /// @nodoc
+  factory MusicContentCenterConfiguration.fromJson(Map<String, dynamic> json) =>
+      _$MusicContentCenterConfigurationFromJson(json);
+
+  @override
+  Map<String, dynamic> toJson() =>
+      _$MusicContentCenterConfigurationToJson(this);
+}
+
+/// @nodoc
+@JsonSerializable(explicitToJson: true, includeIfNull: false)
+class MusicContentCenterVendorDefaultConfiguration
+    implements AgoraSerializable {
+  /// @nodoc
+  const MusicContentCenterVendorDefaultConfiguration(
+      {this.appId, this.token, this.userId, this.mccDomain});
 
   /// @nodoc
   @JsonKey(name: 'appId')
@@ -389,24 +749,77 @@ class MusicContentCenterConfiguration implements AgoraSerializable {
   final String? token;
 
   /// @nodoc
-  @JsonKey(name: 'mccUid')
-  final int? mccUid;
-
-  /// @nodoc
-  @JsonKey(name: 'maxCacheSize')
-  final int? maxCacheSize;
+  @JsonKey(name: 'userId')
+  final String? userId;
 
   /// @nodoc
   @JsonKey(name: 'mccDomain')
   final String? mccDomain;
 
   /// @nodoc
-  factory MusicContentCenterConfiguration.fromJson(Map<String, dynamic> json) =>
-      _$MusicContentCenterConfigurationFromJson(json);
+  factory MusicContentCenterVendorDefaultConfiguration.fromJson(
+          Map<String, dynamic> json) =>
+      _$MusicContentCenterVendorDefaultConfigurationFromJson(json);
 
   @override
   Map<String, dynamic> toJson() =>
-      _$MusicContentCenterConfigurationToJson(this);
+      _$MusicContentCenterVendorDefaultConfigurationToJson(this);
+}
+
+/// @nodoc
+@JsonSerializable(explicitToJson: true, includeIfNull: false)
+class MusicContentCenterVendor2Configuration implements AgoraSerializable {
+  /// @nodoc
+  const MusicContentCenterVendor2Configuration(
+      {this.appId,
+      this.appKey,
+      this.token,
+      this.userId,
+      this.roomId,
+      this.deviceId,
+      this.urlTokenExpireTime,
+      this.chargeMode});
+
+  /// @nodoc
+  @JsonKey(name: 'appId')
+  final String? appId;
+
+  /// @nodoc
+  @JsonKey(name: 'appKey')
+  final String? appKey;
+
+  /// @nodoc
+  @JsonKey(name: 'token')
+  final String? token;
+
+  /// @nodoc
+  @JsonKey(name: 'userId')
+  final String? userId;
+
+  /// @nodoc
+  @JsonKey(name: 'roomId')
+  final String? roomId;
+
+  /// @nodoc
+  @JsonKey(name: 'deviceId')
+  final String? deviceId;
+
+  /// @nodoc
+  @JsonKey(name: 'urlTokenExpireTime')
+  final int? urlTokenExpireTime;
+
+  /// @nodoc
+  @JsonKey(name: 'chargeMode')
+  final int? chargeMode;
+
+  /// @nodoc
+  factory MusicContentCenterVendor2Configuration.fromJson(
+          Map<String, dynamic> json) =>
+      _$MusicContentCenterVendor2ConfigurationFromJson(json);
+
+  @override
+  Map<String, dynamic> toJson() =>
+      _$MusicContentCenterVendor2ConfigurationToJson(this);
 }
 
 /// @nodoc
@@ -424,7 +837,16 @@ abstract class MusicContentCenter {
   Future<void> initialize(MusicContentCenterConfiguration configuration);
 
   /// @nodoc
-  Future<void> renewToken(String token);
+  Future<void> addVendor(
+      {required MusicContentCenterVendorID vendorId,
+      required String jsonVendorConfig});
+
+  /// @nodoc
+  Future<void> removeVendor(MusicContentCenterVendorID vendorId);
+
+  /// @nodoc
+  Future<void> renewToken(
+      {required MusicContentCenterVendorID vendorId, required String token});
 
   /// @nodoc
   Future<void> release();
@@ -433,7 +855,7 @@ abstract class MusicContentCenter {
   void registerEventHandler(MusicContentCenterEventHandler eventHandler);
 
   /// @nodoc
-  void unregisterEventHandler();
+  void unregisterEventHandler(MusicContentCenterEventHandler eventHandler);
 
   /// @nodoc
   Future<MusicPlayer?> createMusicPlayer();
@@ -462,21 +884,52 @@ abstract class MusicContentCenter {
   Future<String> preload(int songCode);
 
   /// @nodoc
-  Future<void> removeCache(int songCode);
+  void registerScoreEventHandler(ScoreEventHandler scoreEventHandler);
+
+  /// @nodoc
+  void unregisterScoreEventHandler(ScoreEventHandler scoreEventHandler);
+
+  /// @nodoc
+  Future<void> setScoreLevel(ScoreLevel level);
+
+  /// @nodoc
+  Future<void> startScore(int internalSongCode);
+
+  /// @nodoc
+  Future<void> stopScore();
+
+  /// @nodoc
+  Future<void> pauseScore();
+
+  /// @nodoc
+  Future<void> resumeScore();
+
+  /// @nodoc
+  Future<CumulativeScoreData> getCumulativeScoreData();
+
+  /// @nodoc
+  Future<void> removeCache(int internalSongCode);
 
   /// @nodoc
   Future<List<MusicCacheInfo>> getCaches(int cacheInfoSize);
 
   /// @nodoc
-  Future<bool> isPreloaded(int songCode);
+  Future<bool> isPreloaded(int internalSongCode);
 
   /// @nodoc
-  Future<String> getLyric({required int songCode, int lyricType = 0});
+  Future<String> getLyric(
+      {required int internalSongCode,
+      LyricSourceType lyricType = LyricSourceType.kLyricSourceXml});
 
   /// @nodoc
-  Future<String> getSongSimpleInfo(int songCode);
+  Future<String> getLyricInfo(int internalSongCode);
+
+  /// @nodoc
+  Future<String> getSongSimpleInfo(int internalSongCode);
 
   /// @nodoc
   Future<int> getInternalSongCode(
-      {required int songCode, required String jsonOption});
+      {required MusicContentCenterVendorID vendorId,
+      required String songCode,
+      required String jsonOption});
 }

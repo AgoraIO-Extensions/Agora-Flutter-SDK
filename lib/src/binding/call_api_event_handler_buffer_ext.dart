@@ -1463,9 +1463,73 @@ extension MusicBufferExt on Music {
   }
 }
 
+extension RawScoreDataBufferExt on RawScoreData {
+  RawScoreData fillBuffers(List<Uint8List> bufferList) {
+    if (bufferList.isEmpty) return this;
+    return this;
+  }
+
+  List<Uint8List> collectBufferList() {
+    final bufferList = <Uint8List>[];
+    return bufferList;
+  }
+}
+
+extension LineScoreDataBufferExt on LineScoreData {
+  LineScoreData fillBuffers(List<Uint8List> bufferList) {
+    if (bufferList.isEmpty) return this;
+    return this;
+  }
+
+  List<Uint8List> collectBufferList() {
+    final bufferList = <Uint8List>[];
+    return bufferList;
+  }
+}
+
+extension CumulativeScoreDataBufferExt on CumulativeScoreData {
+  CumulativeScoreData fillBuffers(List<Uint8List> bufferList) {
+    if (bufferList.isEmpty) return this;
+    return this;
+  }
+
+  List<Uint8List> collectBufferList() {
+    final bufferList = <Uint8List>[];
+    return bufferList;
+  }
+}
+
 extension MusicContentCenterConfigurationBufferExt
     on MusicContentCenterConfiguration {
   MusicContentCenterConfiguration fillBuffers(List<Uint8List> bufferList) {
+    if (bufferList.isEmpty) return this;
+    return this;
+  }
+
+  List<Uint8List> collectBufferList() {
+    final bufferList = <Uint8List>[];
+    return bufferList;
+  }
+}
+
+extension MusicContentCenterVendorDefaultConfigurationBufferExt
+    on MusicContentCenterVendorDefaultConfiguration {
+  MusicContentCenterVendorDefaultConfiguration fillBuffers(
+      List<Uint8List> bufferList) {
+    if (bufferList.isEmpty) return this;
+    return this;
+  }
+
+  List<Uint8List> collectBufferList() {
+    final bufferList = <Uint8List>[];
+    return bufferList;
+  }
+}
+
+extension MusicContentCenterVendor2ConfigurationBufferExt
+    on MusicContentCenterVendor2Configuration {
+  MusicContentCenterVendor2Configuration fillBuffers(
+      List<Uint8List> bufferList) {
     if (bufferList.isEmpty) return this;
     return this;
   }
@@ -1789,18 +1853,6 @@ extension SDKBuildInfoBufferExt on SDKBuildInfo {
 
 extension VideoDeviceInfoBufferExt on VideoDeviceInfo {
   VideoDeviceInfo fillBuffers(List<Uint8List> bufferList) {
-    if (bufferList.isEmpty) return this;
-    return this;
-  }
-
-  List<Uint8List> collectBufferList() {
-    final bufferList = <Uint8List>[];
-    return bufferList;
-  }
-}
-
-extension AudioDeviceInfoBufferExt on AudioDeviceInfo {
-  AudioDeviceInfo fillBuffers(List<Uint8List> bufferList) {
     if (bufferList.isEmpty) return this;
     return this;
   }

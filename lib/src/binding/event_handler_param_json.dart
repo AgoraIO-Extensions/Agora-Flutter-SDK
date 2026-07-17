@@ -1308,6 +1308,62 @@ extension MediaPlayerSourceObserverOnAudioVolumeIndicationJsonBufferExt
 }
 
 @JsonSerializable(explicitToJson: true, includeIfNull: false)
+class ScoreEventHandlerOnPitchJson implements AgoraSerializable {
+  const ScoreEventHandlerOnPitchJson({this.internalSongCode});
+
+  @JsonKey(name: 'internalSongCode')
+  final int? internalSongCode;
+
+  factory ScoreEventHandlerOnPitchJson.fromJson(Map<String, dynamic> json) =>
+      _$ScoreEventHandlerOnPitchJsonFromJson(json);
+
+  @override
+  Map<String, dynamic> toJson() => _$ScoreEventHandlerOnPitchJsonToJson(this);
+}
+
+extension ScoreEventHandlerOnPitchJsonBufferExt
+    on ScoreEventHandlerOnPitchJson {
+  ScoreEventHandlerOnPitchJson fillBuffers(List<Uint8List> bufferList) {
+    if (bufferList.isEmpty) return this;
+    return this;
+  }
+
+  List<Uint8List> collectBufferList() {
+    final bufferList = <Uint8List>[];
+    return bufferList;
+  }
+}
+
+@JsonSerializable(explicitToJson: true, includeIfNull: false)
+class ScoreEventHandlerOnLineScoreJson implements AgoraSerializable {
+  const ScoreEventHandlerOnLineScoreJson({this.internalSongCode});
+
+  @JsonKey(name: 'internalSongCode')
+  final int? internalSongCode;
+
+  factory ScoreEventHandlerOnLineScoreJson.fromJson(
+          Map<String, dynamic> json) =>
+      _$ScoreEventHandlerOnLineScoreJsonFromJson(json);
+
+  @override
+  Map<String, dynamic> toJson() =>
+      _$ScoreEventHandlerOnLineScoreJsonToJson(this);
+}
+
+extension ScoreEventHandlerOnLineScoreJsonBufferExt
+    on ScoreEventHandlerOnLineScoreJson {
+  ScoreEventHandlerOnLineScoreJson fillBuffers(List<Uint8List> bufferList) {
+    if (bufferList.isEmpty) return this;
+    return this;
+  }
+
+  List<Uint8List> collectBufferList() {
+    final bufferList = <Uint8List>[];
+    return bufferList;
+  }
+}
+
+@JsonSerializable(explicitToJson: true, includeIfNull: false)
 class MusicContentCenterEventHandlerOnMusicChartsResultJson
     implements AgoraSerializable {
   const MusicContentCenterEventHandlerOnMusicChartsResultJson(
@@ -1387,16 +1443,16 @@ extension MusicContentCenterEventHandlerOnMusicCollectionResultJsonBufferExt
 class MusicContentCenterEventHandlerOnLyricResultJson
     implements AgoraSerializable {
   const MusicContentCenterEventHandlerOnLyricResultJson(
-      {this.requestId, this.songCode, this.lyricUrl, this.reason});
+      {this.requestId, this.internalSongCode, this.payload, this.reason});
 
   @JsonKey(name: 'requestId')
   final String? requestId;
 
-  @JsonKey(name: 'songCode')
-  final int? songCode;
+  @JsonKey(name: 'internalSongCode')
+  final int? internalSongCode;
 
-  @JsonKey(name: 'lyricUrl')
-  final String? lyricUrl;
+  @JsonKey(name: 'payload')
+  final String? payload;
 
   @JsonKey(name: 'reason')
   final MusicContentCenterStateReason? reason;
@@ -1425,16 +1481,57 @@ extension MusicContentCenterEventHandlerOnLyricResultJsonBufferExt
 }
 
 @JsonSerializable(explicitToJson: true, includeIfNull: false)
-class MusicContentCenterEventHandlerOnSongSimpleInfoResultJson
+class MusicContentCenterEventHandlerOnLyricInfoResultJson
     implements AgoraSerializable {
-  const MusicContentCenterEventHandlerOnSongSimpleInfoResultJson(
-      {this.requestId, this.songCode, this.simpleInfo, this.reason});
+  const MusicContentCenterEventHandlerOnLyricInfoResultJson(
+      {this.requestId, this.internalSongCode, this.lyricInfo, this.reason});
 
   @JsonKey(name: 'requestId')
   final String? requestId;
 
-  @JsonKey(name: 'songCode')
-  final int? songCode;
+  @JsonKey(name: 'internalSongCode')
+  final int? internalSongCode;
+
+  @JsonKey(name: 'lyricInfo')
+  final LyricInfo? lyricInfo;
+
+  @JsonKey(name: 'reason')
+  final MusicContentCenterStateReason? reason;
+
+  factory MusicContentCenterEventHandlerOnLyricInfoResultJson.fromJson(
+          Map<String, dynamic> json) =>
+      _$MusicContentCenterEventHandlerOnLyricInfoResultJsonFromJson(json);
+
+  @override
+  Map<String, dynamic> toJson() =>
+      _$MusicContentCenterEventHandlerOnLyricInfoResultJsonToJson(this);
+}
+
+extension MusicContentCenterEventHandlerOnLyricInfoResultJsonBufferExt
+    on MusicContentCenterEventHandlerOnLyricInfoResultJson {
+  MusicContentCenterEventHandlerOnLyricInfoResultJson fillBuffers(
+      List<Uint8List> bufferList) {
+    if (bufferList.isEmpty) return this;
+    return this;
+  }
+
+  List<Uint8List> collectBufferList() {
+    final bufferList = <Uint8List>[];
+    return bufferList;
+  }
+}
+
+@JsonSerializable(explicitToJson: true, includeIfNull: false)
+class MusicContentCenterEventHandlerOnSongSimpleInfoResultJson
+    implements AgoraSerializable {
+  const MusicContentCenterEventHandlerOnSongSimpleInfoResultJson(
+      {this.requestId, this.internalSongCode, this.simpleInfo, this.reason});
+
+  @JsonKey(name: 'requestId')
+  final String? requestId;
+
+  @JsonKey(name: 'internalSongCode')
+  final int? internalSongCode;
 
   @JsonKey(name: 'simpleInfo')
   final String? simpleInfo;
@@ -1470,26 +1567,26 @@ class MusicContentCenterEventHandlerOnPreLoadEventJson
     implements AgoraSerializable {
   const MusicContentCenterEventHandlerOnPreLoadEventJson(
       {this.requestId,
-      this.songCode,
+      this.internalSongCode,
       this.percent,
-      this.lyricUrl,
+      this.payload,
       this.state,
       this.reason});
 
   @JsonKey(name: 'requestId')
   final String? requestId;
 
-  @JsonKey(name: 'songCode')
-  final int? songCode;
+  @JsonKey(name: 'internalSongCode')
+  final int? internalSongCode;
 
   @JsonKey(name: 'percent')
   final int? percent;
 
-  @JsonKey(name: 'lyricUrl')
-  final String? lyricUrl;
+  @JsonKey(name: 'payload')
+  final String? payload;
 
   @JsonKey(name: 'state')
-  final PreloadState? state;
+  final MusicContentCenterState? state;
 
   @JsonKey(name: 'reason')
   final MusicContentCenterStateReason? reason;
@@ -1506,6 +1603,44 @@ class MusicContentCenterEventHandlerOnPreLoadEventJson
 extension MusicContentCenterEventHandlerOnPreLoadEventJsonBufferExt
     on MusicContentCenterEventHandlerOnPreLoadEventJson {
   MusicContentCenterEventHandlerOnPreLoadEventJson fillBuffers(
+      List<Uint8List> bufferList) {
+    if (bufferList.isEmpty) return this;
+    return this;
+  }
+
+  List<Uint8List> collectBufferList() {
+    final bufferList = <Uint8List>[];
+    return bufferList;
+  }
+}
+
+@JsonSerializable(explicitToJson: true, includeIfNull: false)
+class MusicContentCenterEventHandlerOnStartScoreResultJson
+    implements AgoraSerializable {
+  const MusicContentCenterEventHandlerOnStartScoreResultJson(
+      {this.internalSongCode, this.state, this.reason});
+
+  @JsonKey(name: 'internalSongCode')
+  final int? internalSongCode;
+
+  @JsonKey(name: 'state')
+  final MusicContentCenterState? state;
+
+  @JsonKey(name: 'reason')
+  final MusicContentCenterStateReason? reason;
+
+  factory MusicContentCenterEventHandlerOnStartScoreResultJson.fromJson(
+          Map<String, dynamic> json) =>
+      _$MusicContentCenterEventHandlerOnStartScoreResultJsonFromJson(json);
+
+  @override
+  Map<String, dynamic> toJson() =>
+      _$MusicContentCenterEventHandlerOnStartScoreResultJsonToJson(this);
+}
+
+extension MusicContentCenterEventHandlerOnStartScoreResultJsonBufferExt
+    on MusicContentCenterEventHandlerOnStartScoreResultJson {
+  MusicContentCenterEventHandlerOnStartScoreResultJson fillBuffers(
       List<Uint8List> bufferList) {
     if (bufferList.isEmpty) return this;
     return this;
