@@ -42,7 +42,8 @@ class AgoraVideoViewState extends State<AgoraVideoView> {
       );
     }
 
-    if (widget.controller.useFlutterTexture) {
+    if (widget.controller.useFlutterTexture &&
+        defaultTargetPlatform != TargetPlatform.ohos) {
       return AgoraRtcRenderTexture(
         controller: widget.controller,
         onAgoraVideoViewCreated: widget.onAgoraVideoViewCreated,
@@ -76,6 +77,7 @@ class _AgoraRtcRenderPlatformViewState extends State<AgoraRtcRenderPlatformView>
     with RtcRenderMixin {
   static const String _viewTypeAgoraTextureView = 'AgoraTextureView';
   static const String _viewTypeAgoraSurfaceView = 'AgoraSurfaceView';
+  static const String _viewTypeAgoraOhosView = 'AgoraOhosView';
 
   int _platformViewId = 0;
   int _nativeViewIntPtr = 0;
@@ -99,6 +101,8 @@ class _AgoraRtcRenderPlatformViewState extends State<AgoraRtcRenderPlatformView>
       }
     } else if (defaultTargetPlatform == TargetPlatform.iOS) {
       _viewType = _viewTypeAgoraSurfaceView;
+    } else if (defaultTargetPlatform == TargetPlatform.ohos) {
+      _viewType = _viewTypeAgoraOhosView;
     } else {
       throw ArgumentError('PlatformView render is not supported on desktop');
     }
@@ -143,6 +147,9 @@ class _AgoraRtcRenderPlatformViewState extends State<AgoraRtcRenderPlatformView>
   Widget build(BuildContext context) {
     return buildPlatformView(
       viewType: _viewType,
+      creationParams: <String, dynamic>{
+        'uid': widget.controller.canvas.uid,
+      },
       onPlatformViewCreated: (int id) {
         _platformViewId = id;
         _setupVideo();
@@ -157,7 +164,9 @@ class _AgoraRtcRenderPlatformViewState extends State<AgoraRtcRenderPlatformView>
 
     // On web, the `_nativeViewIntPtr` is assigned with the platform view id, so
     // the initialize value is 0, only check the 0(null value) on non-web.
-    if (!kIsWeb && _nativeViewIntPtr == 0) {
+    if (!kIsWeb &&
+        defaultTargetPlatform != TargetPlatform.ohos &&
+        _nativeViewIntPtr == 0) {
       return;
     }
     try {
@@ -175,6 +184,8 @@ class _AgoraRtcRenderPlatformViewState extends State<AgoraRtcRenderPlatformView>
   Future<void> _setupVideo() async {
     if (kIsWeb) {
       // On web, we maintain the platform view id and `HtmlElement` mapping internally
+      _nativeViewIntPtr = _platformViewId;
+    } else if (defaultTargetPlatform == TargetPlatform.ohos) {
       _nativeViewIntPtr = _platformViewId;
     } else {
       _nativeViewIntPtr =

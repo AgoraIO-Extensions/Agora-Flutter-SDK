@@ -87,6 +87,9 @@ extension RtcEngineExt on RtcEngine {
   IrisMethodChannel get irisMethodChannel =>
       (this as RtcEngineImpl)._getIrisMethodChannel();
 
+  MethodChannel get engineMethodChannel =>
+      (this as RtcEngineImpl)._getEngineMethodChannel();
+
   Future<void> setupVideoView(Object viewHandle, VideoCanvas videoCanvas,
       {RtcConnection? connection}) async {
     Object view = viewHandle;
@@ -125,6 +128,9 @@ extension RtcEngineExt on RtcEngine {
     if (kIsWeb) {
       return _setupRemoteVideoExWeb(viewHandle, canvas, connection);
     }
+    if (defaultTargetPlatform == TargetPlatform.ohos) {
+      return _setupRemoteVideoExOhos(viewHandle, canvas, connection);
+    }
     return (this as RtcEngineImpl)
         .setupRemoteVideoEx(canvas: canvas, connection: connection);
   }
@@ -134,6 +140,9 @@ extension RtcEngineExt on RtcEngine {
     if (kIsWeb) {
       return _setupRemoteVideoWeb(viewHandle, canvas);
     }
+    if (defaultTargetPlatform == TargetPlatform.ohos) {
+      return _setupRemoteVideoOhos(viewHandle, canvas);
+    }
     return setupRemoteVideo(canvas);
   }
 
@@ -141,6 +150,9 @@ extension RtcEngineExt on RtcEngine {
       Object viewHandle, VideoCanvas canvas) async {
     if (kIsWeb) {
       return _setupLocalVideoWeb(canvas, viewHandle);
+    }
+    if (defaultTargetPlatform == TargetPlatform.ohos) {
+      return _setupLocalVideoOhos(viewHandle, canvas);
     }
     return setupLocalVideo(canvas);
   }
@@ -153,6 +165,14 @@ extension RtcEngineExt on RtcEngine {
       if (connection != null) 'connection': connection.toJson(),
     };
     return param;
+  }
+
+  Map<String, dynamic> _createParamsOhos(Object viewHandle, VideoCanvas canvas,
+      {RtcConnection? connection}) {
+    return {
+      'canvas': canvas.toJson()..['view'] = viewHandle,
+      if (connection != null) 'connection': connection.toJson(),
+    };
   }
 
   Future<void> _setupRemoteVideoExWeb(
@@ -208,6 +228,43 @@ extension RtcEngineExt on RtcEngine {
       throw AgoraRtcException(code: callApiResult.irisReturnCode);
     }
     return;
+  }
+
+  Future<void> _invokeOhosVideoMethod(
+    String method,
+    Object viewHandle,
+    VideoCanvas canvas, {
+    RtcConnection? connection,
+  }) async {
+    final param = _createParamsOhos(viewHandle, canvas, connection: connection);
+    final result = await engineMethodChannel.invokeMethod<int>(
+      method,
+      jsonEncode(param),
+    );
+    if (result == null) {
+      throw StateError('$method returned no result');
+    }
+    if (result < 0) {
+      throw AgoraRtcException(code: result);
+    }
+  }
+
+  Future<void> _setupRemoteVideoExOhos(
+      Object viewHandle, VideoCanvas canvas, RtcConnection connection) {
+    return _invokeOhosVideoMethod(
+      'setupRemoteVideoEx',
+      viewHandle,
+      canvas,
+      connection: connection,
+    );
+  }
+
+  Future<void> _setupRemoteVideoOhos(Object viewHandle, VideoCanvas canvas) {
+    return _invokeOhosVideoMethod('setupRemoteVideo', viewHandle, canvas);
+  }
+
+  Future<void> _setupLocalVideoOhos(Object viewHandle, VideoCanvas canvas) {
+    return _invokeOhosVideoMethod('setupLocalVideo', viewHandle, canvas);
   }
 }
 
@@ -421,6 +478,8 @@ class RtcEngineImpl extends rtc_engine_ex_binding.RtcEngineExImpl
 
   Completer<void>? _initializingCompleter;
   Completer<void>? _releasingCompleter;
+  Object? _releaseError;
+  StackTrace? _releaseErrorStackTrace;
 
   final _rtcEngineImplScopedKey = const TypedScopedKey(RtcEngineImpl);
 
@@ -498,9 +557,49 @@ class RtcEngineImpl extends rtc_engine_ex_binding.RtcEngineExImpl
     return irisMethodChannel;
   }
 
+  MethodChannel _getEngineMethodChannel() {
+    return engineMethodChannel;
+  }
+
   Future<void> _initializeInternal(RtcEngineContext context) async {
     await globalVideoViewController
         .attachVideoFrameBufferManager(irisMethodChannel.getApiEngineHandle());
+  }
+
+  Future<void> _rollbackFailedInitialization({
+    required bool irisInitialized,
+    required bool ohosNativeEngineCreated,
+  }) async {
+    var canDestroyOhosEngine = true;
+    if (irisInitialized) {
+      try {
+        await _globalVideoViewController?.detachVideoFrameBufferManager(
+          irisMethodChannel.getApiEngineHandle(),
+        );
+        _globalVideoViewController = null;
+      } catch (error) {
+        canDestroyOhosEngine = false;
+        debugPrint('Failed to roll back Iris RTC rendering: $error');
+      }
+    }
+
+    if (irisInitialized && canDestroyOhosEngine) {
+      try {
+        await irisMethodChannel.dispose();
+      } catch (error) {
+        canDestroyOhosEngine = false;
+        debugPrint('Failed to roll back Iris initialization: $error');
+      }
+    }
+
+    if (ohosNativeEngineCreated && canDestroyOhosEngine) {
+      try {
+        await engineMethodChannel.invokeMethod<void>('ohosDestroy');
+      } catch (error) {
+        debugPrint('Failed to roll back OHOS RTC engine: $error');
+      }
+      _sharedNativeHandle = null;
+    }
   }
 
   @override
@@ -512,6 +611,12 @@ class RtcEngineImpl extends rtc_engine_ex_binding.RtcEngineExImpl
     if (_releasingCompleter != null && !_releasingCompleter!.isCompleted) {
       await _releasingCompleter?.future;
     }
+    if (_releaseError != null) {
+      Error.throwWithStackTrace(
+        _releaseError!,
+        _releaseErrorStackTrace ?? StackTrace.current,
+      );
+    }
 
     // If previous initialization still in progess, skip it.
     if (_initializingCompleter != null &&
@@ -521,54 +626,80 @@ class RtcEngineImpl extends rtc_engine_ex_binding.RtcEngineExImpl
 
     _initializingCompleter = Completer<void>();
     _initializeCallOnce ??= AsyncMemoizer();
-    await _initializeCallOnce!.runOnce(() async {
-      engineMethodChannel = const MethodChannel('agora_rtc_ng');
+    var irisInitialized = false;
+    var ohosNativeEngineCreated = false;
+    try {
+      await _initializeCallOnce!.runOnce(() async {
+        engineMethodChannel = const MethodChannel('agora_rtc_ng');
 
-      if (!kIsWeb && defaultTargetPlatform == TargetPlatform.android) {
-        await engineMethodChannel.invokeMethod('androidInit');
-      }
-
-      engineMethodChannel.setMethodCallHandler((call) async {
-        try {
-          methodChannelHandlers[call.method]?.forEach((handler) async {
-            await handler(call);
-          });
-        } catch (e) {
-          assert(false, 'methodChannel error: $e');
+        if (!kIsWeb && defaultTargetPlatform == TargetPlatform.android) {
+          await engineMethodChannel.invokeMethod('androidInit');
         }
+
+        if (!kIsWeb && defaultTargetPlatform == TargetPlatform.ohos) {
+          final nativeHandle = await engineMethodChannel.invokeMethod<String>(
+            'ohosInit',
+            jsonEncode(context.toJson()),
+          );
+          if (nativeHandle == null) {
+            throw StateError('ohosInit returned no native handle');
+          }
+          ohosNativeEngineCreated = true;
+          _sharedNativeHandle = _string2IntPtr(nativeHandle);
+        }
+
+        engineMethodChannel.setMethodCallHandler((call) async {
+          try {
+            methodChannelHandlers[call.method]?.forEach((handler) async {
+              await handler(call);
+            });
+          } catch (e) {
+            assert(false, 'methodChannel error: $e');
+          }
+        });
+
+        List<InitilizationArgProvider> args = [
+          if (_sharedNativeHandle != null)
+            SharedNativeHandleInitilizationArgProvider(_sharedNativeHandle!)
+        ];
+        assert(() {
+          if (_mockRtcEngineProvider != null) {
+            args.add(_mockRtcEngineProvider!);
+          }
+          return true;
+        }());
+
+        await irisMethodChannel.initilize(args);
+        irisInitialized = true;
+        await _initializeInternal(context);
       });
 
-      List<InitilizationArgProvider> args = [
-        if (_sharedNativeHandle != null)
-          SharedNativeHandleInitilizationArgProvider(_sharedNativeHandle!)
-      ];
-      assert(() {
-        if (_mockRtcEngineProvider != null) {
-          args.add(_mockRtcEngineProvider!);
-        }
-        return true;
-      }());
+      // Note: enableArgusCounters cannot be added to RtcEngineContext as it's auto-generated
+      // It will be set via setEnableArgusCounters method if needed, default is true
 
-      await irisMethodChannel.initilize(args);
-      await _initializeInternal(context);
-    });
+      await super.initialize(context);
 
-    // Note: enableArgusCounters cannot be added to RtcEngineContext as it's auto-generated
-    // It will be set via setEnableArgusCounters method if needed, default is true
+      await irisMethodChannel.invokeMethod(IrisMethodCall(
+        'RtcEngine_setAppType',
+        jsonEncode({'appType': 4}),
+      ));
 
-    await super.initialize(context);
+      PerformanceDataCollector.instance.dispose();
 
-    await irisMethodChannel.invokeMethod(IrisMethodCall(
-      'RtcEngine_setAppType',
-      jsonEncode({'appType': 4}),
-    ));
-
-    PerformanceDataCollector.instance.dispose();
-
-    _rtcEngineState.isInitialzed = true;
-    _isReleased = false;
-    _initializingCompleter?.complete(null);
-    _initializingCompleter = null;
+      _rtcEngineState.isInitialzed = true;
+      _isReleased = false;
+      _initializingCompleter?.complete(null);
+      _initializingCompleter = null;
+    } catch (error) {
+      await _rollbackFailedInitialization(
+        irisInitialized: irisInitialized,
+        ohosNativeEngineCreated: ohosNativeEngineCreated,
+      );
+      _initializeCallOnce = null;
+      _initializingCompleter?.complete(null);
+      _initializingCompleter = null;
+      rethrow;
+    }
   }
 
   @internal
@@ -600,29 +731,41 @@ class RtcEngineImpl extends rtc_engine_ex_binding.RtcEngineExImpl
     }
 
     _releasingCompleter = Completer<void>();
+    _releaseError = null;
+    _releaseErrorStackTrace = null;
+    try {
+      PerformanceDataCollector.instance.dispose();
 
-    _rtcEngineStateInternal?.dispose();
-    _rtcEngineStateInternal = null;
+      await _objectPool.clear();
 
-    PerformanceDataCollector.instance.dispose();
+      await _globalVideoViewController?.detachVideoFrameBufferManager(
+          irisMethodChannel.getApiEngineHandle());
+      _globalVideoViewController = null;
 
-    await _objectPool.clear();
+      await irisMethodChannel.unregisterEventHandlers(_rtcEngineImplScopedKey);
 
-    await _globalVideoViewController
-        ?.detachVideoFrameBufferManager(irisMethodChannel.getApiEngineHandle());
-    _globalVideoViewController = null;
+      await super.release(sync: sync);
 
-    await irisMethodChannel.unregisterEventHandlers(_rtcEngineImplScopedKey);
-
-    await super.release(sync: sync);
-
-    await irisMethodChannel.dispose();
-    _isReleased = true;
-    _releasingCompleter?.complete(null);
-    _releasingCompleter = null;
-    assert(_initializeCallOnce!.hasRun);
-    _initializeCallOnce = null;
-    _instance = null;
+      await irisMethodChannel.dispose();
+      if (!kIsWeb && defaultTargetPlatform == TargetPlatform.ohos) {
+        await engineMethodChannel.invokeMethod<void>('ohosDestroy');
+      }
+      _rtcEngineStateInternal?.dispose();
+      _rtcEngineStateInternal = null;
+      _isReleased = true;
+      assert(_initializeCallOnce!.hasRun);
+      _initializeCallOnce = null;
+      _instance = null;
+    } catch (error, stackTrace) {
+      _releaseError = error;
+      _releaseErrorStackTrace = stackTrace;
+      rethrow;
+    } finally {
+      if (!(_releasingCompleter?.isCompleted ?? true)) {
+        _releasingCompleter?.complete(null);
+      }
+      _releasingCompleter = null;
+    }
   }
 
   @override
@@ -993,7 +1136,17 @@ class RtcEngineImpl extends rtc_engine_ex_binding.RtcEngineExImpl
   @override
   Future<void> enableVideo() async {
     if (_instance == null) return;
-    super.enableVideo();
+    if (!kIsWeb && defaultTargetPlatform == TargetPlatform.ohos) {
+      final result = await engineMethodChannel.invokeMethod<int>('enableVideo');
+      if (result == null) {
+        throw StateError('enableVideo returned no result');
+      }
+      if (result < 0) {
+        throw AgoraRtcException(code: result);
+      }
+    } else {
+      await super.enableVideo();
+    }
   }
 
   @override

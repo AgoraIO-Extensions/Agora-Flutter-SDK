@@ -120,6 +120,17 @@ mixin RtcRenderMixin<T extends StatefulWidget> on State<T> {
           gestureRecognizers: gestureRecognizers,
         ),
       );
+    } else if (defaultTargetPlatform == TargetPlatform.ohos) {
+      return OhosView(
+        viewType: viewType,
+        onPlatformViewCreated: _onPlatformViewCreated(
+          viewType,
+          onPlatformViewCreated,
+        ),
+        hitTestBehavior: PlatformViewHitTestBehavior.translucent,
+        creationParams: creationParams,
+        creationParamsCodec: const StandardMessageCodec(),
+      );
     } else if (kIsWeb) {
       return GestureDetector(
         behavior: HitTestBehavior.opaque,

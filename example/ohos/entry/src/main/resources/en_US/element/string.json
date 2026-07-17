@@ -1,0 +1,24 @@
+{
+  "string": [
+    {
+      "name": "module_desc",
+      "value": "module description"
+    },
+    {
+      "name": "EntryAbility_desc",
+      "value": "description"
+    },
+    {
+      "name": "EntryAbility_label",
+      "value": "agora_rtc_engine_example"
+    },
+    {
+      "name": "microphone_permission_reason",
+      "value": "Used for audio calls."
+    },
+    {
+      "name": "camera_permission_reason",
+      "value": "Used for video calls."
+    }
+  ]
+}

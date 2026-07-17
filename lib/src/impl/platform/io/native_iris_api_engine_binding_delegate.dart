@@ -20,7 +20,7 @@ ffi.DynamicLibrary _loadLib() {
     return ffi.DynamicLibrary.open('$_libName.dll');
   }
 
-  if (Platform.isAndroid) {
+  if (Platform.isAndroid || Platform.operatingSystem == 'ohos') {
     return ffi.DynamicLibrary.open("lib$_libName.so");
   }
 

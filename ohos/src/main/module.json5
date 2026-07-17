@@ -1,0 +1,10 @@
+{
+  "module": {
+    "name": "agora_rtc_engine",
+    "type": "har",
+    "deviceTypes": [
+      "default",
+      "tablet"
+    ]
+  }
+}

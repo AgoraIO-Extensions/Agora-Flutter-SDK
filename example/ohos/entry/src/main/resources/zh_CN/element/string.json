@@ -1,0 +1,24 @@
+{
+  "string": [
+    {
+      "name": "module_desc",
+      "value": "模块描述"
+    },
+    {
+      "name": "EntryAbility_desc",
+      "value": "description"
+    },
+    {
+      "name": "EntryAbility_label",
+      "value": "agora_rtc_engine_example"
+    },
+    {
+      "name": "microphone_permission_reason",
+      "value": "用于语音通话。"
+    },
+    {
+      "name": "camera_permission_reason",
+      "value": "用于视频通话。"
+    }
+  ]
+}

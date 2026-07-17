@@ -62,9 +62,10 @@ extension VideoViewControllerBaseExt on VideoViewControllerBase {
 
   @internal
   bool get shouldUseFlutterTexture =>
-      (defaultTargetPlatform == TargetPlatform.macOS ||
-          defaultTargetPlatform == TargetPlatform.windows) ||
-      useFlutterTexture;
+      defaultTargetPlatform != TargetPlatform.ohos &&
+      ((defaultTargetPlatform == TargetPlatform.macOS ||
+              defaultTargetPlatform == TargetPlatform.windows) ||
+          useFlutterTexture);
 
   @internal
   bool get shouldHandlerRenderMode =>

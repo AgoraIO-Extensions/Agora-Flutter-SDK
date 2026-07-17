@@ -31,7 +31,19 @@ dependencies:
   cupertino_icons: ^1.0.2
 
   permission_handler: ^11.3.1
+  permission_handler_ohos:
+    git:
+      url: https://gitcode.com/openharmony-sig/flutter_permission_handler.git
+      ref: d85e01d53601732d4a7f5f0e4561d669c3d19a33
+      path: permission_handler_ohos
+
   path_provider: ^2.0.8
+  path_provider_ohos:
+    git:
+      url: https://gitcode.com/openharmony-tpc/flutter_packages.git
+      ref: 52ccce43abf9ae9472e48e4a819b9ca0b0025d8e
+      path: packages/path_provider/path_provider_ohos
+
   archive: ^3.4.10
 
 dev_dependencies:
@@ -44,6 +56,10 @@ dev_dependencies:
   # package. See that file for information about deactivating specific lint
   # rules and activating additional ones.
   flutter_lints: ^1.0.0
+
+dependency_overrides:
+  # The OHOS implementation still declares platform_interface ^3.11.2.
+  permission_handler_platform_interface: ^4.3.0
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec

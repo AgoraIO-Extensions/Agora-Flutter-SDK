@@ -66,6 +66,8 @@ class _MyAppState extends State<MyApp> {
     if (defaultTargetPlatform == TargetPlatform.android) {
       await [Permission.audio, Permission.microphone, Permission.camera]
           .request();
+    } else if (defaultTargetPlatform == TargetPlatform.ohos) {
+      await [Permission.microphone, Permission.camera].request();
     }
   }
 

@@ -485,7 +485,8 @@ class _State extends State<JoinChannelVideo> {
             ),
             if (!kIsWeb &&
                 (defaultTargetPlatform == TargetPlatform.android ||
-                    defaultTargetPlatform == TargetPlatform.iOS)) ...[
+                    defaultTargetPlatform == TargetPlatform.iOS ||
+                    defaultTargetPlatform == TargetPlatform.ohos)) ...[
               const SizedBox(
                 height: 20,
               ),

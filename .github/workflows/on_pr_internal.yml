@@ -44,6 +44,15 @@ jobs:
       P12_PASSWORD: ${{ secrets.P12_PASSWORD }}
       BUILD_PROVISION_PROFILE_BASE64: ${{ secrets.BUILD_PROVISION_PROFILE_BASE64 }}
       KEYCHAIN_PASSWORD: ${{ secrets.KEYCHAIN_PASSWORD }}
+      FLUTTER_3_35_8_OHOS_1_0_1: ${{ secrets.FLUTTER_3_35_8_OHOS_1_0_1 }}
+      OHOS_CMDLINE_TOOLS_API_24: ${{ secrets.OHOS_CMDLINE_TOOLS_API_24 }}
+      OHOS_SIGNING_MATERIAL_FILE: ${{ secrets.OHOS_SIGNING_MATERIAL_FILE }}
+      OHOS_SIGNING_P12: ${{ secrets.OHOS_SIGNING_P12 }}
+      OHOS_SIGNING_P12_PWD: ${{ secrets.OHOS_SIGNING_P12_PWD }}
+      OHOS_SIGNING_KEY_ALIAS: ${{ secrets.OHOS_SIGNING_KEY_ALIAS }}
+      OHOS_SIGNING_KEY_PWD: ${{ secrets.OHOS_SIGNING_KEY_PWD }}
+      OHOS_SIGNING_PROFILE: ${{ secrets.OHOS_SIGNING_PROFILE }}
+      OHOS_SIGNING_CER: ${{ secrets.OHOS_SIGNING_CER }}
 
 
   run_test:
@@ -54,4 +63,3 @@ jobs:
     uses: ./.github/workflows/run_test.yml
     secrets:
       APP_ID: ${{ secrets.APP_ID }}
-            

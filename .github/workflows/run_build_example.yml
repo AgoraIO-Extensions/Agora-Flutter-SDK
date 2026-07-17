@@ -7,7 +7,7 @@ on:
         description: 'Target platforms, e.g. android, ios, macos, windows, web, etc; separated by comma, default is all platforms'
         type: string
         required: true
-        default: 'android, ios, macos, windows, web'
+        default: 'android, ios, macos, windows, web, ohos'
       target_branch:
         description: 'Target branch, leave empty will use the same as the workflow trigger branch'
         type: string
@@ -43,7 +43,7 @@ on:
       target_platforms:
         description: 'Target platforms, e.g. android, ios, macos, windows, web, etc; separated by comma, default is all platforms'
         type: string
-        default: 'android, ios, macos, windows, web'
+        default: 'android, ios, macos, windows, web, ohos'
       target_branch:
         description: 'Target branch, leave empty will use the same as the workflow trigger branch'
         type: string
@@ -93,7 +93,24 @@ on:
         required: true
       KEYCHAIN_PASSWORD:
         required: true
-        
+      FLUTTER_3_35_8_OHOS_1_0_1:
+        required: true
+      OHOS_CMDLINE_TOOLS_API_24:
+        required: true
+      OHOS_SIGNING_MATERIAL_FILE:
+        required: true
+      OHOS_SIGNING_P12:
+        required: true
+      OHOS_SIGNING_P12_PWD:
+        required: true
+      OHOS_SIGNING_KEY_ALIAS:
+        required: true
+      OHOS_SIGNING_KEY_PWD:
+        required: true
+      OHOS_SIGNING_PROFILE:
+        required: true
+      OHOS_SIGNING_CER:
+        required: true
 
 jobs:
   # remove label ci:build_example if the issue_number is not null and the workflow is run by workflow_call not workflow_dispatch
@@ -120,8 +137,8 @@ jobs:
         run: |
           platforms=$(echo "$target_platforms" | sed 's/ //g' | tr ',' '\n' | sort -u | sed '/^$/d' | jq -R -s -c 'split("\n")[:-1]')
           echo "splited platforms: $platforms"
-          # remove not supported platforms, only keep supported platforms: android, ios, macos, windows, web
-          platforms=$(echo "$platforms" | jq -e 'map(select(. == "android" or . == "ios" or . == "macos" or . == "windows" or . == "web"))')
+          # remove not supported platforms, only keep supported platforms: android, ios, macos, windows, web, ohos
+          platforms=$(echo "$platforms" | jq -e 'map(select(. == "android" or . == "ios" or . == "macos" or . == "windows" or . == "web" or . == "ohos"))')
           # make platforms in oneline, and keep json format
           platforms=$(echo "$platforms" | jq -c .)
           echo "final jsonlized platforms: $platforms"
@@ -144,6 +161,8 @@ jobs:
             platform: macos
           - os: ubuntu-latest
             platform: windows
+          - os: ubuntu-latest
+            platform: ohos
           - os: macos-latest
             platform: windows
           - os: macos-latest
@@ -156,6 +175,8 @@ jobs:
             platform: macos
           - os: windows-latest
             platform: web
+          - os: windows-latest
+            platform: ohos
     env:
         platform: ${{ matrix.platform }}
         extra_build_options: ${{ inputs.extra_build_options }}
@@ -166,6 +187,7 @@ jobs:
       artifact_nightly_link_macos: ${{ steps.setup_output.outputs.artifact_nightly_link_macos }}
       artifact_nightly_link_windows: ${{ steps.setup_output.outputs.artifact_nightly_link_windows }}
       artifact_nightly_link_web: ${{ steps.setup_output.outputs.artifact_nightly_link_web }}
+      artifact_nightly_link_ohos: ${{ steps.setup_output.outputs.artifact_nightly_link_ohos }}
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -175,8 +197,8 @@ jobs:
           lfs: 'true'
           submodules: 'true'
 
-      - name: Setup JDK for Android
-        if: ${{ matrix.platform == 'android' }}
+      - name: Setup JDK for Android and OHOS
+        if: ${{ matrix.platform == 'android' || matrix.platform == 'ohos' }}
         uses: actions/setup-java@v4
         with:
           distribution: 'zulu'
@@ -243,11 +265,112 @@ jobs:
         run: pod repo update
 
       - name: Setup Flutter
+        if: ${{ matrix.platform != 'ohos' }}
         uses: subosito/flutter-action@v2
         with:
           channel: ${{ inputs.flutter_channel }}
           flutter-version: ${{ inputs.flutter_version }}
           cache: true
+
+      - name: Check OHOS build secrets
+        if: ${{ matrix.platform == 'ohos' }}
+        shell: bash
+        env:
+          FLUTTER_3_35_8_OHOS_1_0_1: ${{ secrets.FLUTTER_3_35_8_OHOS_1_0_1 }}
+          OHOS_CMDLINE_TOOLS_API_24: ${{ secrets.OHOS_CMDLINE_TOOLS_API_24 }}
+          OHOS_SIGNING_MATERIAL_FILE: ${{ secrets.OHOS_SIGNING_MATERIAL_FILE }}
+          OHOS_SIGNING_P12: ${{ secrets.OHOS_SIGNING_P12 }}
+          OHOS_SIGNING_P12_PWD: ${{ secrets.OHOS_SIGNING_P12_PWD }}
+          OHOS_SIGNING_KEY_ALIAS: ${{ secrets.OHOS_SIGNING_KEY_ALIAS }}
+          OHOS_SIGNING_KEY_PWD: ${{ secrets.OHOS_SIGNING_KEY_PWD }}
+          OHOS_SIGNING_PROFILE: ${{ secrets.OHOS_SIGNING_PROFILE }}
+          OHOS_SIGNING_CER: ${{ secrets.OHOS_SIGNING_CER }}
+        run: |
+          missing=0
+          for name in \
+            FLUTTER_3_35_8_OHOS_1_0_1 \
+            OHOS_CMDLINE_TOOLS_API_24 \
+            OHOS_SIGNING_MATERIAL_FILE \
+            OHOS_SIGNING_P12 \
+            OHOS_SIGNING_P12_PWD \
+            OHOS_SIGNING_KEY_ALIAS \
+            OHOS_SIGNING_KEY_PWD \
+            OHOS_SIGNING_PROFILE \
+            OHOS_SIGNING_CER; do
+            if [ -z "${!name}" ]; then
+              echo "::error::Repository secret ${name} is not configured"
+              missing=1
+            fi
+          done
+          exit "${missing}"
+
+      - name: Setup OHOS Flutter
+        if: ${{ matrix.platform == 'ohos' }}
+        uses: AgoraIO-Extensions/actions/.github/actions/setup-ohos-flutter@main
+        with:
+          flutter_version: '3.35.8-ohos-1.0.1'
+          flutter_download_url: ${{ secrets.FLUTTER_3_35_8_OHOS_1_0_1 }}
+          cache: true
+
+      - name: Setup OHOS SDK
+        if: ${{ matrix.platform == 'ohos' }}
+        uses: AgoraIO-Extensions/actions/.github/actions/setup-ohos@main
+        with:
+          ohos_version: '6.1.1.125-api24'
+          ohos_download_url: ${{ secrets.OHOS_CMDLINE_TOOLS_API_24 }}
+          cache: true
+
+      - name: Setup signing key for OHOS
+        if: ${{ matrix.platform == 'ohos' }}
+        working-directory: example/ohos
+        shell: bash
+        env:
+          DEFAULT_OHOS_SIGNING_MATERIAL_FILE: ${{ secrets.OHOS_SIGNING_MATERIAL_FILE }}
+          DEFAULT_OHOS_SIGNING_P12_FILE: ${{ secrets.OHOS_SIGNING_P12 }}
+          DEFAULT_OHOS_SIGNING_P12_PWD: ${{ secrets.OHOS_SIGNING_P12_PWD }}
+          DEFAULT_OHOS_SIGNING_KEY_ALIAS: ${{ secrets.OHOS_SIGNING_KEY_ALIAS }}
+          DEFAULT_OHOS_SIGNING_KEY_PWD: ${{ secrets.OHOS_SIGNING_KEY_PWD }}
+          DEFAULT_OHOS_SIGNING_PROFILE: ${{ secrets.OHOS_SIGNING_PROFILE }}
+          DEFAULT_OHOS_SIGNING_CER: ${{ secrets.OHOS_SIGNING_CER }}
+        run: |
+          signing_dir="$RUNNER_TEMP/signing"
+          mkdir -p "${signing_dir}"
+
+          material_path="${signing_dir}/material.zip"
+          p12_path="${signing_dir}/agora_rtc_engine_example.p12"
+          profile_path="${signing_dir}/agora_rtc_engine_example.p7b"
+          cert_path="${signing_dir}/agora_rtc_engine_example.cer"
+
+          printf '%s' "$DEFAULT_OHOS_SIGNING_MATERIAL_FILE" | base64 --decode --output "${material_path}"
+          printf '%s' "$DEFAULT_OHOS_SIGNING_P12_FILE" | base64 --decode --output "${p12_path}"
+          printf '%s' "$DEFAULT_OHOS_SIGNING_PROFILE" | base64 --decode --output "${profile_path}"
+          printf '%s' "$DEFAULT_OHOS_SIGNING_CER" | base64 --decode --output "${cert_path}"
+          unzip -oq "${material_path}" -d "${signing_dir}"
+
+          DEFAULT_OHOS_SIGNING_P12_FILE_PATH="${p12_path}" \
+          DEFAULT_OHOS_SIGNING_PROFILE_PATH="${profile_path}" \
+          DEFAULT_OHOS_SIGNING_CER_PATH="${cert_path}" \
+          node <<'NODE'
+          const fs = require('fs');
+          const profilePath = 'build-profile.json5';
+          const profile = JSON.parse(fs.readFileSync(profilePath, 'utf8'));
+          profile.app.signingConfigs = [
+            {
+              name: 'default',
+              type: 'HarmonyOS',
+              material: {
+                storeFile: process.env.DEFAULT_OHOS_SIGNING_P12_FILE_PATH,
+                storePassword: process.env.DEFAULT_OHOS_SIGNING_P12_PWD,
+                keyAlias: process.env.DEFAULT_OHOS_SIGNING_KEY_ALIAS,
+                keyPassword: process.env.DEFAULT_OHOS_SIGNING_KEY_PWD,
+                signAlg: 'SHA256withECDSA',
+                profile: process.env.DEFAULT_OHOS_SIGNING_PROFILE_PATH,
+                certpath: process.env.DEFAULT_OHOS_SIGNING_CER_PATH,
+              },
+            },
+          ];
+          fs.writeFileSync(profilePath, `${JSON.stringify(profile, null, 2)}\n`);
+          NODE
 
       - name: Build
         env:
@@ -289,6 +412,8 @@ jobs:
             build_command="flutter build windows"
           elif [ "$platform" == "web" ]; then
             build_command="flutter build web"
+          elif [ "$platform" == "ohos" ]; then
+            build_command="flutter build hap"
           fi
 
           # prepare build options
@@ -384,6 +509,13 @@ jobs:
           elif [ "$platform" == "web" ]; then
             # copy all files and files in subdirectories to ../output directory
             cp -r build/web/* ../output
+          elif [ "$platform" == "ohos" ]; then
+            signed_hap=$(find build/ohos/hap -maxdepth 1 -type f -name '*-signed.hap' -print -quit)
+            if [ -z "${signed_hap}" ]; then
+              echo "Signed OHOS HAP was not generated" >&2
+              exit 1
+            fi
+            cp "${signed_hap}" ../output
           fi
 
       - name: Generate artifact name
@@ -434,5 +566,6 @@ jobs:
               - ${{ needs.build.outputs.artifact_nightly_link_macos }}
               - ${{ needs.build.outputs.artifact_nightly_link_windows }}
               - ${{ needs.build.outputs.artifact_nightly_link_web }}
+              - ${{ needs.build.outputs.artifact_nightly_link_ohos }}
 
             > This comment is commented by bot, do not edit it directly
