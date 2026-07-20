@@ -4,7 +4,7 @@
 #import <VideoToolbox/VideoToolbox.h>
 
 @implementation AgoraTextureRenderPixelBufferConverter {
-  CFTypeRef _pixelTransferSession;
+  VTPixelTransferSessionRef _pixelTransferSession API_AVAILABLE(ios(16.0));
   CVPixelBufferPoolRef _bgraPixelBufferPool;
   size_t _bgraPixelBufferWidth;
   size_t _bgraPixelBufferHeight;
@@ -52,12 +52,12 @@
 }
 
 - (void)dealloc {
-  if (_pixelTransferSession) {
-    if (@available(iOS 16.0, *)) {
-      VTPixelTransferSessionInvalidate(
-          (VTPixelTransferSessionRef)_pixelTransferSession);
+  if (@available(iOS 16.0, *)) {
+    if (_pixelTransferSession) {
+      VTPixelTransferSessionInvalidate(_pixelTransferSession);
+      CFRelease(_pixelTransferSession);
+      _pixelTransferSession = nil;
     }
-    CFRelease(_pixelTransferSession);
   }
   if (_bgraPixelBufferPool) {
     CVPixelBufferPoolRelease(_bgraPixelBufferPool);
@@ -106,8 +106,7 @@
 
   BOOL converted = NO;
   if (@available(iOS 16.0, *)) {
-    VTPixelTransferSessionRef session =
-        (VTPixelTransferSessionRef)_pixelTransferSession;
+    VTPixelTransferSessionRef session = _pixelTransferSession;
     if (!session) {
       OSStatus sessionStatus =
           VTPixelTransferSessionCreate(kCFAllocatorDefault, &session);

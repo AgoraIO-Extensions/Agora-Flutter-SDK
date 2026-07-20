@@ -94,6 +94,7 @@ public:
     }
 
     __block CVPixelBufferRef previousPixelBuffer = nil;
+    __block BOOL didUpdatePixelBuffer = NO;
     // Use `dispatch_sync` to avoid unnecessary context switch under common
     // non-contest scenarios;
     // Under rare contest scenarios, it will not block for too long since
@@ -103,20 +104,29 @@ public:
     // to check if the renderer is still valid before accessing its
     // properties.
     dispatch_sync(strongRenderer.pixelBufferSynchronizationQueue, ^{
-      previousPixelBuffer = strongRenderer.latestPixelBuffer;
       // There has been a bug since RTC 4.4.0 that the pixel buffer ref count is not updated correctly,
       // which will cause the flutter engine copy the wrong pixel buffer to the skia texture.
       // So we need to copy the pixel buffer directly to work around this issue for now, after the issue is fixed,
       // we can revert to the original code.
+      CVPixelBufferRef nextPixelBuffer = nil;
 #if defined(TARGET_OS_OSX) && TARGET_OS_OSX
-      strongRenderer.latestPixelBuffer =
+      nextPixelBuffer =
           [AgoraCVPixelBufferUtils copyCVPixelBuffer:pixelBuffer];
 #else
-      strongRenderer.latestPixelBuffer =
+      nextPixelBuffer =
           [strongRenderer.pixelBufferConverter
               copyPixelBufferForFlutter:pixelBuffer];
 #endif
+      if (!nextPixelBuffer) {
+        return;
+      }
+      previousPixelBuffer = strongRenderer.latestPixelBuffer;
+      strongRenderer.latestPixelBuffer = nextPixelBuffer;
+      didUpdatePixelBuffer = YES;
     });
+    if (!didUpdatePixelBuffer) {
+      return;
+    }
     if (previousPixelBuffer) {
       CVPixelBufferRelease(previousPixelBuffer);
     }
