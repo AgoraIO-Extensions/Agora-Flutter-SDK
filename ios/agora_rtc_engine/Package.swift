@@ -23,6 +23,9 @@ let package = Package(
             ],
             cSettings: [
                 .headerSearchPath("include/agora_rtc_engine")
+            ],
+            linkerSettings: [
+                .linkedFramework("VideoToolbox")
             ]
         ),
         .binaryTarget(
