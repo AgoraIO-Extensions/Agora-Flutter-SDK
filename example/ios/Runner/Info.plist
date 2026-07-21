@@ -36,6 +36,8 @@
 		<string>audio</string>
 		<string>processing</string>
 	</array>
+    <key>FLTEnableImpeller</key>
+    <false/>
 	<key>UIFileSharingEnabled</key>
 	<true/>
 	<key>UILaunchStoryboardName</key>
