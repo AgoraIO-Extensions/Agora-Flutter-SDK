@@ -1,8 +1,10 @@
 #import "AgoraTextureRenderPixelBufferConverter.h"
 
 #import <CoreImage/CoreImage.h>
+#import <VideoToolbox/VideoToolbox.h>
 
 @implementation AgoraTextureRenderPixelBufferConverter {
+  VTPixelTransferSessionRef _pixelTransferSession API_AVAILABLE(ios(16.0));
   CVPixelBufferPoolRef _bgraPixelBufferPool;
   size_t _bgraPixelBufferWidth;
   size_t _bgraPixelBufferHeight;
@@ -50,6 +52,13 @@
 }
 
 - (void)dealloc {
+  if (@available(iOS 16.0, *)) {
+    if (_pixelTransferSession) {
+      VTPixelTransferSessionInvalidate(_pixelTransferSession);
+      CFRelease(_pixelTransferSession);
+      _pixelTransferSession = nil;
+    }
+  }
   if (_bgraPixelBufferPool) {
     CVPixelBufferPoolRelease(_bgraPixelBufferPool);
     _bgraPixelBufferPool = nil;
@@ -85,29 +94,48 @@
   }
 
   if (!_bgraPixelBufferPool) {
-    return CVPixelBufferRetain(sourcePixelBuffer);
+    return nil;
   }
 
   CVPixelBufferRef destPixelBuffer = nil;
   CVReturn status = CVPixelBufferPoolCreatePixelBuffer(
       kCFAllocatorDefault, _bgraPixelBufferPool, &destPixelBuffer);
   if (status != kCVReturnSuccess || !destPixelBuffer) {
-    return CVPixelBufferRetain(sourcePixelBuffer);
+    return nil;
   }
 
-  CIImage *image = [CIImage imageWithCVPixelBuffer:sourcePixelBuffer];
-  if (!image) {
+  BOOL converted = NO;
+  if (@available(iOS 16.0, *)) {
+    VTPixelTransferSessionRef session = _pixelTransferSession;
+    if (!session) {
+      OSStatus sessionStatus =
+          VTPixelTransferSessionCreate(kCFAllocatorDefault, &session);
+      if (sessionStatus != noErr) {
+        CVPixelBufferRelease(destPixelBuffer);
+        return nil;
+      }
+      _pixelTransferSession = session;
+    }
+    OSStatus transferStatus = VTPixelTransferSessionTransferImage(
+        session, sourcePixelBuffer, destPixelBuffer);
+    converted = transferStatus == noErr;
+  } else {
+    CIImage *image = [CIImage imageWithCVPixelBuffer:sourcePixelBuffer];
+    if (image) {
+      CGRect bounds = CGRectMake(0, 0, width, height);
+      [[AgoraTextureRenderPixelBufferConverter sharedConversionContext]
+          render:image
+                     toCVPixelBuffer:destPixelBuffer
+                              bounds:bounds
+                          colorSpace:[AgoraTextureRenderPixelBufferConverter
+                                         sharedRGBColorSpace]];
+      converted = YES;
+    }
+  }
+  if (!converted) {
     CVPixelBufferRelease(destPixelBuffer);
-    return CVPixelBufferRetain(sourcePixelBuffer);
+    return nil;
   }
-
-  CGRect bounds = CGRectMake(0, 0, width, height);
-  [[AgoraTextureRenderPixelBufferConverter sharedConversionContext]
-      render:image
-                         toCVPixelBuffer:destPixelBuffer
-                                  bounds:bounds
-                              colorSpace:[AgoraTextureRenderPixelBufferConverter
-                                             sharedRGBColorSpace]];
   return destPixelBuffer;
 }
 

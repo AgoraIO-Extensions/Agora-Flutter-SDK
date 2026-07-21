@@ -94,6 +94,9 @@ public:
     }
 
     __block CVPixelBufferRef previousPixelBuffer = nil;
+#if !defined(TARGET_OS_OSX) || !TARGET_OS_OSX
+    __block BOOL didUpdatePixelBuffer = NO;
+#endif
     // Use `dispatch_sync` to avoid unnecessary context switch under common
     // non-contest scenarios;
     // Under rare contest scenarios, it will not block for too long since
@@ -112,11 +115,22 @@ public:
       strongRenderer.latestPixelBuffer =
           [AgoraCVPixelBufferUtils copyCVPixelBuffer:pixelBuffer];
 #else
-      strongRenderer.latestPixelBuffer =
+      CVPixelBufferRef nextPixelBuffer =
           [strongRenderer.pixelBufferConverter
               copyPixelBufferForFlutter:pixelBuffer];
+      if (!nextPixelBuffer) {
+        previousPixelBuffer = nil;
+        return;
+      }
+      strongRenderer.latestPixelBuffer = nextPixelBuffer;
+      didUpdatePixelBuffer = YES;
 #endif
     });
+#if !defined(TARGET_OS_OSX) || !TARGET_OS_OSX
+    if (!didUpdatePixelBuffer) {
+      return;
+    }
+#endif
     if (previousPixelBuffer) {
       CVPixelBufferRelease(previousPixelBuffer);
     }
