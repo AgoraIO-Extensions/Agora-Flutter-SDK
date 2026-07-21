@@ -1415,7 +1415,8 @@ class ChannelMediaOptions implements AgoraSerializable {
       this.enableMultipath,
       this.uplinkMultipathMode,
       this.downlinkMultipathMode,
-      this.preferMultipathType});
+      this.preferMultipathType,
+      this.channelType});
 
   /// Sets whether to publish the video captured by the camera: true : Publish the video captured by the camera. false : Do not publish the video captured by the camera.
   @JsonKey(name: 'publishCameraTrack')
@@ -1588,6 +1589,10 @@ class ChannelMediaOptions implements AgoraSerializable {
   /// Preferred transmission path type. See MultipathType. When using this parameter, make sure enableMultipath is set to true.
   @JsonKey(name: 'preferMultipathType')
   final MultipathType? preferMultipathType;
+
+  /// @nodoc
+  @JsonKey(name: 'channelType')
+  final ChannelType? channelType;
 
   /// @nodoc
   factory ChannelMediaOptions.fromJson(Map<String, dynamic> json) =>
@@ -7343,30 +7348,4 @@ class VideoDeviceInfo implements AgoraSerializable {
 
   @override
   Map<String, dynamic> toJson() => _$VideoDeviceInfoToJson(this);
-}
-
-/// The AudioDeviceInfo class, containing the audio device ID and device name.
-@JsonSerializable(explicitToJson: true, includeIfNull: false)
-class AudioDeviceInfo implements AgoraSerializable {
-  /// @nodoc
-  const AudioDeviceInfo({this.deviceId, this.deviceTypeName, this.deviceName});
-
-  /// Device ID.
-  @JsonKey(name: 'deviceId')
-  final String? deviceId;
-
-  /// Audio device type, such as: built-in, USB, HDMI, etc.
-  @JsonKey(name: 'deviceTypeName')
-  final String? deviceTypeName;
-
-  /// Device name.
-  @JsonKey(name: 'deviceName')
-  final String? deviceName;
-
-  /// @nodoc
-  factory AudioDeviceInfo.fromJson(Map<String, dynamic> json) =>
-      _$AudioDeviceInfoFromJson(json);
-
-  @override
-  Map<String, dynamic> toJson() => _$AudioDeviceInfoToJson(this);
 }

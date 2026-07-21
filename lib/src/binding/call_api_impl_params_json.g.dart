@@ -168,6 +168,20 @@ Map<String, dynamic> _$MusicContentCenterPreloadJsonToJson(
       'requestId': instance.requestId,
     };
 
+MusicContentCenterGetCumulativeScoreDataJson
+    _$MusicContentCenterGetCumulativeScoreDataJsonFromJson(
+            Map<String, dynamic> json) =>
+        MusicContentCenterGetCumulativeScoreDataJson(
+          CumulativeScoreData.fromJson(
+              json['cumulativeScoreData'] as Map<String, dynamic>),
+        );
+
+Map<String, dynamic> _$MusicContentCenterGetCumulativeScoreDataJsonToJson(
+        MusicContentCenterGetCumulativeScoreDataJson instance) =>
+    <String, dynamic>{
+      'cumulativeScoreData': instance.cumulativeScoreData.toJson(),
+    };
+
 MusicContentCenterGetCachesJson _$MusicContentCenterGetCachesJsonFromJson(
         Map<String, dynamic> json) =>
     MusicContentCenterGetCachesJson(
@@ -190,6 +204,18 @@ MusicContentCenterGetLyricJson _$MusicContentCenterGetLyricJsonFromJson(
 
 Map<String, dynamic> _$MusicContentCenterGetLyricJsonToJson(
         MusicContentCenterGetLyricJson instance) =>
+    <String, dynamic>{
+      'requestId': instance.requestId,
+    };
+
+MusicContentCenterGetLyricInfoJson _$MusicContentCenterGetLyricInfoJsonFromJson(
+        Map<String, dynamic> json) =>
+    MusicContentCenterGetLyricInfoJson(
+      json['requestId'] as String,
+    );
+
+Map<String, dynamic> _$MusicContentCenterGetLyricInfoJsonToJson(
+        MusicContentCenterGetLyricInfoJson instance) =>
     <String, dynamic>{
       'requestId': instance.requestId,
     };

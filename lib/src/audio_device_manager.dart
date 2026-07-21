@@ -69,6 +69,14 @@ abstract class AudioDeviceManager {
   /// An AudioDeviceInfo object containing the device ID and device name of the audio playback device.
   Future<AudioDeviceInfo> getPlaybackDeviceInfo();
 
+  /// Gets audio playback device information.
+  ///
+  /// This method is applicable to Windows and macOS only.
+  ///
+  /// Returns
+  /// An AudioDeviceInfo object containing the device ID and device name of the audio playback device.
+  Future<AudioDeviceInfo> getPlaybackDeviceInfo();
+
   /// Sets the playback device volume.
   ///
   /// (Windows only)
@@ -102,6 +110,14 @@ abstract class AudioDeviceManager {
   /// Returns
   /// The current audio recording device.
   Future<String> getRecordingDevice();
+
+  /// Gets information about the audio recording device.
+  ///
+  /// This method is applicable to Windows and macOS only.
+  ///
+  /// Returns
+  /// AudioDeviceInfo object containing the device ID and name of the audio recording device.
+  Future<AudioDeviceInfo> getRecordingDeviceInfo();
 
   /// Gets information about the audio recording device.
   ///
@@ -283,20 +299,4 @@ abstract class AudioDeviceManager {
 
   /// Releases all resources used by the AudioDeviceManager object.
   Future<void> release();
-
-  /// Gets the system default audio playback device.
-  ///
-  /// This method is applicable to Windows and macOS only.
-  ///
-  /// Returns
-  /// Information about the default audio playback device. See AudioDeviceInfo.
-  Future<AudioDeviceInfo> getPlaybackDefaultDevice();
-
-  /// Gets the system default audio recording device.
-  ///
-  /// This method is applicable to Windows and macOS only.
-  ///
-  /// Returns
-  /// Information about the default audio recording device. See AudioDeviceInfo.
-  Future<AudioDeviceInfo> getRecordingDefaultDevice();
 }
