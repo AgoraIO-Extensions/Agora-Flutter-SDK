@@ -93,8 +93,6 @@ on:
         required: true
       KEYCHAIN_PASSWORD:
         required: true
-      FLUTTER_3_35_8_OHOS_1_0_1:
-        required: true
       OHOS_CMDLINE_TOOLS_API_24:
         required: true
       OHOS_SIGNING_MATERIAL_FILE:
@@ -106,6 +104,8 @@ on:
       OHOS_SIGNING_KEY_ALIAS:
         required: true
       OHOS_SIGNING_KEY_PWD:
+        required: true
+      OHOS_SIGNING_SIGN_ALG:
         required: true
       OHOS_SIGNING_PROFILE:
         required: true
@@ -276,25 +276,25 @@ jobs:
         if: ${{ matrix.platform == 'ohos' }}
         shell: bash
         env:
-          FLUTTER_3_35_8_OHOS_1_0_1: ${{ secrets.FLUTTER_3_35_8_OHOS_1_0_1 }}
           OHOS_CMDLINE_TOOLS_API_24: ${{ secrets.OHOS_CMDLINE_TOOLS_API_24 }}
           OHOS_SIGNING_MATERIAL_FILE: ${{ secrets.OHOS_SIGNING_MATERIAL_FILE }}
           OHOS_SIGNING_P12: ${{ secrets.OHOS_SIGNING_P12 }}
           OHOS_SIGNING_P12_PWD: ${{ secrets.OHOS_SIGNING_P12_PWD }}
           OHOS_SIGNING_KEY_ALIAS: ${{ secrets.OHOS_SIGNING_KEY_ALIAS }}
           OHOS_SIGNING_KEY_PWD: ${{ secrets.OHOS_SIGNING_KEY_PWD }}
+          OHOS_SIGNING_SIGN_ALG: ${{ secrets.OHOS_SIGNING_SIGN_ALG }}
           OHOS_SIGNING_PROFILE: ${{ secrets.OHOS_SIGNING_PROFILE }}
           OHOS_SIGNING_CER: ${{ secrets.OHOS_SIGNING_CER }}
         run: |
           missing=0
           for name in \
-            FLUTTER_3_35_8_OHOS_1_0_1 \
             OHOS_CMDLINE_TOOLS_API_24 \
             OHOS_SIGNING_MATERIAL_FILE \
             OHOS_SIGNING_P12 \
             OHOS_SIGNING_P12_PWD \
             OHOS_SIGNING_KEY_ALIAS \
             OHOS_SIGNING_KEY_PWD \
+            OHOS_SIGNING_SIGN_ALG \
             OHOS_SIGNING_PROFILE \
             OHOS_SIGNING_CER; do
             if [ -z "${!name}" ]; then
@@ -304,13 +304,67 @@ jobs:
           done
           exit "${missing}"
 
+      - name: Cache OHOS Flutter
+        if: ${{ matrix.platform == 'ohos' }}
+        id: cache-ohos-flutter
+        uses: actions/cache@v4
+        with:
+          path: ${{ runner.temp }}/flutter/3.35.8-ohos-1.0.1
+          key: flutter-ohos-git-${{ runner.os }}-${{ runner.arch }}-3.35.8-ohos-1.0.1-a82fc2f1e07432b99713a508d2f9fc1a6c3873b1-v1
+
+      - name: Download OHOS Flutter
+        if: ${{ matrix.platform == 'ohos' && steps.cache-ohos-flutter.outputs.cache-hit != 'true' }}
+        shell: bash
+        env:
+          OHOS_FLUTTER_HOME: ${{ runner.temp }}/flutter/3.35.8-ohos-1.0.1
+          OHOS_FLUTTER_GIT_URL: 'https://gitcode.com/CPF-Flutter/flutter_flutter.git'
+          OHOS_FLUTTER_GIT_TAG: '3.35.8-ohos-1.0.1'
+          OHOS_FLUTTER_GIT_COMMIT: 'a82fc2f1e07432b99713a508d2f9fc1a6c3873b1'
+        run: |
+          set -euo pipefail
+          mkdir -p "$(dirname "${OHOS_FLUTTER_HOME}")"
+          git init "${OHOS_FLUTTER_HOME}"
+          git -C "${OHOS_FLUTTER_HOME}" remote add origin "${OHOS_FLUTTER_GIT_URL}"
+          git -C "${OHOS_FLUTTER_HOME}" fetch --depth 1 origin \
+            "refs/tags/${OHOS_FLUTTER_GIT_TAG}:refs/tags/${OHOS_FLUTTER_GIT_TAG}"
+
+          actual_commit=$(git -C "${OHOS_FLUTTER_HOME}" rev-list -n 1 "refs/tags/${OHOS_FLUTTER_GIT_TAG}")
+          if [ "${actual_commit}" != "${OHOS_FLUTTER_GIT_COMMIT}" ]; then
+            echo "::error::Unexpected OHOS Flutter commit: ${actual_commit}"
+            exit 1
+          fi
+
+          git -C "${OHOS_FLUTTER_HOME}" checkout --detach "refs/tags/${OHOS_FLUTTER_GIT_TAG}"
+
       - name: Setup OHOS Flutter
         if: ${{ matrix.platform == 'ohos' }}
-        uses: AgoraIO-Extensions/actions/.github/actions/setup-ohos-flutter@main
-        with:
-          flutter_version: '3.35.8-ohos-1.0.1'
-          flutter_download_url: ${{ secrets.FLUTTER_3_35_8_OHOS_1_0_1 }}
-          cache: true
+        shell: bash
+        env:
+          OHOS_FLUTTER_HOME: ${{ runner.temp }}/flutter/3.35.8-ohos-1.0.1
+          OHOS_FLUTTER_GIT_URL: 'https://gitcode.com/CPF-Flutter/flutter_flutter.git'
+          OHOS_FLUTTER_GIT_TAG: '3.35.8-ohos-1.0.1'
+          OHOS_FLUTTER_GIT_COMMIT: 'a82fc2f1e07432b99713a508d2f9fc1a6c3873b1'
+        run: |
+          set -euo pipefail
+          test -x "${OHOS_FLUTTER_HOME}/bin/flutter"
+          test "$(git -C "${OHOS_FLUTTER_HOME}" rev-parse HEAD)" = "${OHOS_FLUTTER_GIT_COMMIT}"
+          test "$(git -C "${OHOS_FLUTTER_HOME}" rev-list -n 1 "refs/tags/${OHOS_FLUTTER_GIT_TAG}")" = "${OHOS_FLUTTER_GIT_COMMIT}"
+          if ! git -C "${OHOS_FLUTTER_HOME}" diff --quiet HEAD --; then
+            echo "::error::Cached OHOS Flutter working tree does not match the pinned commit"
+            git -C "${OHOS_FLUTTER_HOME}" status --short
+            exit 1
+          fi
+
+          {
+            echo "FLUTTER_HOME=${OHOS_FLUTTER_HOME}"
+            echo "FLUTTER_HOME_BIN=${OHOS_FLUTTER_HOME}/bin"
+            echo "PUB_CACHE=${OHOS_FLUTTER_HOME}/.pub-cache"
+            echo "PUB_HOSTED_URL=https://pub.flutter-io.cn"
+            echo "FLUTTER_STORAGE_BASE_URL=https://storage.flutter-io.cn"
+            echo "FLUTTER_GIT_URL=${OHOS_FLUTTER_GIT_URL}"
+            echo "FLUTTER_GIT_REF=${OHOS_FLUTTER_GIT_TAG}"
+          } >> "${GITHUB_ENV}"
+          echo "${OHOS_FLUTTER_HOME}/bin" >> "${GITHUB_PATH}"
 
       - name: Setup OHOS SDK
         if: ${{ matrix.platform == 'ohos' }}
@@ -330,6 +384,7 @@ jobs:
           DEFAULT_OHOS_SIGNING_P12_PWD: ${{ secrets.OHOS_SIGNING_P12_PWD }}
           DEFAULT_OHOS_SIGNING_KEY_ALIAS: ${{ secrets.OHOS_SIGNING_KEY_ALIAS }}
           DEFAULT_OHOS_SIGNING_KEY_PWD: ${{ secrets.OHOS_SIGNING_KEY_PWD }}
+          DEFAULT_OHOS_SIGNING_SIGN_ALG: ${{ secrets.OHOS_SIGNING_SIGN_ALG }}
           DEFAULT_OHOS_SIGNING_PROFILE: ${{ secrets.OHOS_SIGNING_PROFILE }}
           DEFAULT_OHOS_SIGNING_CER: ${{ secrets.OHOS_SIGNING_CER }}
         run: |
@@ -363,7 +418,7 @@ jobs:
                 storePassword: process.env.DEFAULT_OHOS_SIGNING_P12_PWD,
                 keyAlias: process.env.DEFAULT_OHOS_SIGNING_KEY_ALIAS,
                 keyPassword: process.env.DEFAULT_OHOS_SIGNING_KEY_PWD,
-                signAlg: 'SHA256withECDSA',
+                signAlg: process.env.DEFAULT_OHOS_SIGNING_SIGN_ALG,
                 profile: process.env.DEFAULT_OHOS_SIGNING_PROFILE_PATH,
                 certpath: process.env.DEFAULT_OHOS_SIGNING_CER_PATH,
               },
