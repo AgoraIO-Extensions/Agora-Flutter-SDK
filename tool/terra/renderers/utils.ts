@@ -100,9 +100,15 @@ export function isNeedIgnoreJsonInJsonObject(
   parseResult: ParseResult,
   type: SimpleType
 ): boolean {
-  let isIgnoreJson = ignoreJsonTypes.includes(dartName(type));
+  let isIgnoreJson =
+    ignoreJsonTypes.includes(dartName(type)) ||
+    type.source.includes("agora_refptr");
 
   return isIgnoreJson;
+}
+
+function isRefCountInterfaceClass(clazz: Clazz): boolean {
+  return clazz.base_clazzs.some((it) => it.endsWith("RefCountInterface"));
 }
 
 export function isDartBufferType(type: SimpleType): boolean {
@@ -164,10 +170,16 @@ export function renderJsonSerializable(
         // Campatible with the old code.
         isIgnoreJson =
           isIgnoreJson || dartName(actualNode) == "MusicCollection";
+        isIgnoreJson =
+          isIgnoreJson ||
+          (actualNode.__TYPE == CXXTYPE.Clazz &&
+            (isCallbackClass(actualNode.asClazz()) ||
+              isRefCountInterfaceClass(actualNode.asClazz())));
         // TODO(littlegnal): Add converter annotation for class type.
         // We should add converter annotation for class type, but we only add it for VideoFrameMetaInfo
         // due to the historical reason.
         let isClazz =
+          !isIgnoreJson &&
           actualNode.__TYPE == CXXTYPE.Clazz &&
           dartName(actualNode) == "VideoFrameMetaInfo";
         let nullableSurffix = forceExplicitNullableType ? "?" : "";
