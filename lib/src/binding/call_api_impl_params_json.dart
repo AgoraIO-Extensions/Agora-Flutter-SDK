@@ -203,6 +203,23 @@ class MusicContentCenterPreloadJson implements AgoraSerializable {
 }
 
 @JsonSerializable(explicitToJson: true, includeIfNull: false)
+class MusicContentCenterGetCumulativeScoreDataJson
+    implements AgoraSerializable {
+  const MusicContentCenterGetCumulativeScoreDataJson(this.cumulativeScoreData);
+
+  @JsonKey(name: 'cumulativeScoreData')
+  final CumulativeScoreData cumulativeScoreData;
+
+  factory MusicContentCenterGetCumulativeScoreDataJson.fromJson(
+          Map<String, dynamic> json) =>
+      _$MusicContentCenterGetCumulativeScoreDataJsonFromJson(json);
+
+  @override
+  Map<String, dynamic> toJson() =>
+      _$MusicContentCenterGetCumulativeScoreDataJsonToJson(this);
+}
+
+@JsonSerializable(explicitToJson: true, includeIfNull: false)
 class MusicContentCenterGetCachesJson implements AgoraSerializable {
   const MusicContentCenterGetCachesJson(this.cacheInfo);
 
@@ -229,6 +246,22 @@ class MusicContentCenterGetLyricJson implements AgoraSerializable {
 
   @override
   Map<String, dynamic> toJson() => _$MusicContentCenterGetLyricJsonToJson(this);
+}
+
+@JsonSerializable(explicitToJson: true, includeIfNull: false)
+class MusicContentCenterGetLyricInfoJson implements AgoraSerializable {
+  const MusicContentCenterGetLyricInfoJson(this.requestId);
+
+  @JsonKey(name: 'requestId')
+  final String requestId;
+
+  factory MusicContentCenterGetLyricInfoJson.fromJson(
+          Map<String, dynamic> json) =>
+      _$MusicContentCenterGetLyricInfoJsonFromJson(json);
+
+  @override
+  Map<String, dynamic> toJson() =>
+      _$MusicContentCenterGetLyricInfoJsonToJson(this);
 }
 
 @JsonSerializable(explicitToJson: true, includeIfNull: false)

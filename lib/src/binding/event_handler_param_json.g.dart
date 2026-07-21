@@ -1017,6 +1017,46 @@ Map<String, dynamic>
   return val;
 }
 
+ScoreEventHandlerOnPitchJson _$ScoreEventHandlerOnPitchJsonFromJson(
+        Map<String, dynamic> json) =>
+    ScoreEventHandlerOnPitchJson(
+      internalSongCode: (json['internalSongCode'] as num?)?.toInt(),
+    );
+
+Map<String, dynamic> _$ScoreEventHandlerOnPitchJsonToJson(
+    ScoreEventHandlerOnPitchJson instance) {
+  final val = <String, dynamic>{};
+
+  void writeNotNull(String key, dynamic value) {
+    if (value != null) {
+      val[key] = value;
+    }
+  }
+
+  writeNotNull('internalSongCode', instance.internalSongCode);
+  return val;
+}
+
+ScoreEventHandlerOnLineScoreJson _$ScoreEventHandlerOnLineScoreJsonFromJson(
+        Map<String, dynamic> json) =>
+    ScoreEventHandlerOnLineScoreJson(
+      internalSongCode: (json['internalSongCode'] as num?)?.toInt(),
+    );
+
+Map<String, dynamic> _$ScoreEventHandlerOnLineScoreJsonToJson(
+    ScoreEventHandlerOnLineScoreJson instance) {
+  final val = <String, dynamic>{};
+
+  void writeNotNull(String key, dynamic value) {
+    if (value != null) {
+      val[key] = value;
+    }
+  }
+
+  writeNotNull('internalSongCode', instance.internalSongCode);
+  return val;
+}
+
 MusicContentCenterEventHandlerOnMusicChartsResultJson
     _$MusicContentCenterEventHandlerOnMusicChartsResultJsonFromJson(
             Map<String, dynamic> json) =>
@@ -1090,8 +1130,8 @@ MusicContentCenterEventHandlerOnLyricResultJson
             Map<String, dynamic> json) =>
         MusicContentCenterEventHandlerOnLyricResultJson(
           requestId: json['requestId'] as String?,
-          songCode: (json['songCode'] as num?)?.toInt(),
-          lyricUrl: json['lyricUrl'] as String?,
+          internalSongCode: (json['internalSongCode'] as num?)?.toInt(),
+          payload: json['payload'] as String?,
           reason: $enumDecodeNullable(
               _$MusicContentCenterStateReasonEnumMap, json['reason']),
         );
@@ -1107,8 +1147,36 @@ Map<String, dynamic> _$MusicContentCenterEventHandlerOnLyricResultJsonToJson(
   }
 
   writeNotNull('requestId', instance.requestId);
-  writeNotNull('songCode', instance.songCode);
-  writeNotNull('lyricUrl', instance.lyricUrl);
+  writeNotNull('internalSongCode', instance.internalSongCode);
+  writeNotNull('payload', instance.payload);
+  writeNotNull(
+      'reason', _$MusicContentCenterStateReasonEnumMap[instance.reason]);
+  return val;
+}
+
+MusicContentCenterEventHandlerOnLyricInfoResultJson
+    _$MusicContentCenterEventHandlerOnLyricInfoResultJsonFromJson(
+            Map<String, dynamic> json) =>
+        MusicContentCenterEventHandlerOnLyricInfoResultJson(
+          requestId: json['requestId'] as String?,
+          internalSongCode: (json['internalSongCode'] as num?)?.toInt(),
+          reason: $enumDecodeNullable(
+              _$MusicContentCenterStateReasonEnumMap, json['reason']),
+        );
+
+Map<String, dynamic>
+    _$MusicContentCenterEventHandlerOnLyricInfoResultJsonToJson(
+        MusicContentCenterEventHandlerOnLyricInfoResultJson instance) {
+  final val = <String, dynamic>{};
+
+  void writeNotNull(String key, dynamic value) {
+    if (value != null) {
+      val[key] = value;
+    }
+  }
+
+  writeNotNull('requestId', instance.requestId);
+  writeNotNull('internalSongCode', instance.internalSongCode);
   writeNotNull(
       'reason', _$MusicContentCenterStateReasonEnumMap[instance.reason]);
   return val;
@@ -1119,7 +1187,7 @@ MusicContentCenterEventHandlerOnSongSimpleInfoResultJson
             Map<String, dynamic> json) =>
         MusicContentCenterEventHandlerOnSongSimpleInfoResultJson(
           requestId: json['requestId'] as String?,
-          songCode: (json['songCode'] as num?)?.toInt(),
+          internalSongCode: (json['internalSongCode'] as num?)?.toInt(),
           simpleInfo: json['simpleInfo'] as String?,
           reason: $enumDecodeNullable(
               _$MusicContentCenterStateReasonEnumMap, json['reason']),
@@ -1137,7 +1205,7 @@ Map<String, dynamic>
   }
 
   writeNotNull('requestId', instance.requestId);
-  writeNotNull('songCode', instance.songCode);
+  writeNotNull('internalSongCode', instance.internalSongCode);
   writeNotNull('simpleInfo', instance.simpleInfo);
   writeNotNull(
       'reason', _$MusicContentCenterStateReasonEnumMap[instance.reason]);
@@ -1149,10 +1217,11 @@ MusicContentCenterEventHandlerOnPreLoadEventJson
             Map<String, dynamic> json) =>
         MusicContentCenterEventHandlerOnPreLoadEventJson(
           requestId: json['requestId'] as String?,
-          songCode: (json['songCode'] as num?)?.toInt(),
+          internalSongCode: (json['internalSongCode'] as num?)?.toInt(),
           percent: (json['percent'] as num?)?.toInt(),
-          lyricUrl: json['lyricUrl'] as String?,
-          state: $enumDecodeNullable(_$PreloadStateEnumMap, json['state']),
+          payload: json['payload'] as String?,
+          state: $enumDecodeNullable(
+              _$MusicContentCenterStateEnumMap, json['state']),
           reason: $enumDecodeNullable(
               _$MusicContentCenterStateReasonEnumMap, json['reason']),
         );
@@ -1168,21 +1237,52 @@ Map<String, dynamic> _$MusicContentCenterEventHandlerOnPreLoadEventJsonToJson(
   }
 
   writeNotNull('requestId', instance.requestId);
-  writeNotNull('songCode', instance.songCode);
+  writeNotNull('internalSongCode', instance.internalSongCode);
   writeNotNull('percent', instance.percent);
-  writeNotNull('lyricUrl', instance.lyricUrl);
-  writeNotNull('state', _$PreloadStateEnumMap[instance.state]);
+  writeNotNull('payload', instance.payload);
+  writeNotNull('state', _$MusicContentCenterStateEnumMap[instance.state]);
   writeNotNull(
       'reason', _$MusicContentCenterStateReasonEnumMap[instance.reason]);
   return val;
 }
 
-const _$PreloadStateEnumMap = {
-  PreloadState.kPreloadStateCompleted: 0,
-  PreloadState.kPreloadStateFailed: 1,
-  PreloadState.kPreloadStatePreloading: 2,
-  PreloadState.kPreloadStateRemoved: 3,
+const _$MusicContentCenterStateEnumMap = {
+  MusicContentCenterState.kMusicContentCenterStatePreloadOk: 0,
+  MusicContentCenterState.kMusicContentCenterStatePreloadFailed: 1,
+  MusicContentCenterState.kMusicContentCenterStatePreloading: 2,
+  MusicContentCenterState.kMusicContentCenterStatePreloadRemoved: 3,
+  MusicContentCenterState.kMusicContentCenterStateStartScoreCompleted: 4,
+  MusicContentCenterState.kMusicContentCenterStateStartScoreFailed: 5,
 };
+
+MusicContentCenterEventHandlerOnStartScoreResultJson
+    _$MusicContentCenterEventHandlerOnStartScoreResultJsonFromJson(
+            Map<String, dynamic> json) =>
+        MusicContentCenterEventHandlerOnStartScoreResultJson(
+          internalSongCode: (json['internalSongCode'] as num?)?.toInt(),
+          state: $enumDecodeNullable(
+              _$MusicContentCenterStateEnumMap, json['state']),
+          reason: $enumDecodeNullable(
+              _$MusicContentCenterStateReasonEnumMap, json['reason']),
+        );
+
+Map<String, dynamic>
+    _$MusicContentCenterEventHandlerOnStartScoreResultJsonToJson(
+        MusicContentCenterEventHandlerOnStartScoreResultJson instance) {
+  final val = <String, dynamic>{};
+
+  void writeNotNull(String key, dynamic value) {
+    if (value != null) {
+      val[key] = value;
+    }
+  }
+
+  writeNotNull('internalSongCode', instance.internalSongCode);
+  writeNotNull('state', _$MusicContentCenterStateEnumMap[instance.state]);
+  writeNotNull(
+      'reason', _$MusicContentCenterStateReasonEnumMap[instance.reason]);
+  return val;
+}
 
 RtcEngineEventHandlerOnJoinChannelSuccessJson
     _$RtcEngineEventHandlerOnJoinChannelSuccessJsonFromJson(

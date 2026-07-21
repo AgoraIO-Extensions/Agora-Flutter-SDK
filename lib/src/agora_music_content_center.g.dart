@@ -31,8 +31,10 @@ Map<String, dynamic> _$MusicChartInfoToJson(MusicChartInfo instance) {
 MusicCacheInfo _$MusicCacheInfoFromJson(Map<String, dynamic> json) =>
     MusicCacheInfo(
       songCode: (json['songCode'] as num?)?.toInt(),
-      status:
-          $enumDecodeNullable(_$MusicCacheStatusTypeEnumMap, json['status']),
+      musicStatus: $enumDecodeNullable(
+          _$MusicCacheStatusTypeEnumMap, json['musicStatus']),
+      lyricStatus: $enumDecodeNullable(
+          _$MusicCacheStatusTypeEnumMap, json['lyricStatus']),
     );
 
 Map<String, dynamic> _$MusicCacheInfoToJson(MusicCacheInfo instance) {
@@ -45,13 +47,18 @@ Map<String, dynamic> _$MusicCacheInfoToJson(MusicCacheInfo instance) {
   }
 
   writeNotNull('songCode', instance.songCode);
-  writeNotNull('status', _$MusicCacheStatusTypeEnumMap[instance.status]);
+  writeNotNull(
+      'musicStatus', _$MusicCacheStatusTypeEnumMap[instance.musicStatus]);
+  writeNotNull(
+      'lyricStatus', _$MusicCacheStatusTypeEnumMap[instance.lyricStatus]);
   return val;
 }
 
 const _$MusicCacheStatusTypeEnumMap = {
   MusicCacheStatusType.musicCacheStatusTypeCached: 0,
   MusicCacheStatusType.musicCacheStatusTypeCaching: 1,
+  MusicCacheStatusType.musicCacheStatusTypeNoCached: 2,
+  MusicCacheStatusType.musicCacheStatusTypeNoResource: 3,
 };
 
 MvProperty _$MvPropertyFromJson(Map<String, dynamic> json) => MvProperty(
@@ -144,14 +151,81 @@ Map<String, dynamic> _$MusicToJson(Music instance) {
   return val;
 }
 
+RawScoreData _$RawScoreDataFromJson(Map<String, dynamic> json) => RawScoreData(
+      progressInMs: (json['progressInMs'] as num?)?.toInt(),
+      speakerPitch: (json['speakerPitch'] as num?)?.toDouble(),
+      pitchScore: (json['pitchScore'] as num?)?.toDouble(),
+    );
+
+Map<String, dynamic> _$RawScoreDataToJson(RawScoreData instance) {
+  final val = <String, dynamic>{};
+
+  void writeNotNull(String key, dynamic value) {
+    if (value != null) {
+      val[key] = value;
+    }
+  }
+
+  writeNotNull('progressInMs', instance.progressInMs);
+  writeNotNull('speakerPitch', instance.speakerPitch);
+  writeNotNull('pitchScore', instance.pitchScore);
+  return val;
+}
+
+LineScoreData _$LineScoreDataFromJson(Map<String, dynamic> json) =>
+    LineScoreData(
+      progressInMs: (json['progressInMs'] as num?)?.toInt(),
+      index: (json['index'] as num?)?.toInt(),
+      totalLines: (json['totalLines'] as num?)?.toInt(),
+      pitchScore: (json['pitchScore'] as num?)?.toDouble(),
+      cumulativePitchScore: (json['cumulativePitchScore'] as num?)?.toDouble(),
+      energyScore: (json['energyScore'] as num?)?.toDouble(),
+    );
+
+Map<String, dynamic> _$LineScoreDataToJson(LineScoreData instance) {
+  final val = <String, dynamic>{};
+
+  void writeNotNull(String key, dynamic value) {
+    if (value != null) {
+      val[key] = value;
+    }
+  }
+
+  writeNotNull('progressInMs', instance.progressInMs);
+  writeNotNull('index', instance.index);
+  writeNotNull('totalLines', instance.totalLines);
+  writeNotNull('pitchScore', instance.pitchScore);
+  writeNotNull('cumulativePitchScore', instance.cumulativePitchScore);
+  writeNotNull('energyScore', instance.energyScore);
+  return val;
+}
+
+CumulativeScoreData _$CumulativeScoreDataFromJson(Map<String, dynamic> json) =>
+    CumulativeScoreData(
+      progressInMs: (json['progressInMs'] as num?)?.toInt(),
+      cumulativePitchScore: (json['cumulativePitchScore'] as num?)?.toDouble(),
+      energyScore: (json['energyScore'] as num?)?.toDouble(),
+    );
+
+Map<String, dynamic> _$CumulativeScoreDataToJson(CumulativeScoreData instance) {
+  final val = <String, dynamic>{};
+
+  void writeNotNull(String key, dynamic value) {
+    if (value != null) {
+      val[key] = value;
+    }
+  }
+
+  writeNotNull('progressInMs', instance.progressInMs);
+  writeNotNull('cumulativePitchScore', instance.cumulativePitchScore);
+  writeNotNull('energyScore', instance.energyScore);
+  return val;
+}
+
 MusicContentCenterConfiguration _$MusicContentCenterConfigurationFromJson(
         Map<String, dynamic> json) =>
     MusicContentCenterConfiguration(
-      appId: json['appId'] as String?,
-      token: json['token'] as String?,
-      mccUid: (json['mccUid'] as num?)?.toInt(),
       maxCacheSize: (json['maxCacheSize'] as num?)?.toInt(),
-      mccDomain: json['mccDomain'] as String?,
     );
 
 Map<String, dynamic> _$MusicContentCenterConfigurationToJson(
@@ -164,13 +238,76 @@ Map<String, dynamic> _$MusicContentCenterConfigurationToJson(
     }
   }
 
+  writeNotNull('maxCacheSize', instance.maxCacheSize);
+  return val;
+}
+
+MusicContentCenterVendorDefaultConfiguration
+    _$MusicContentCenterVendorDefaultConfigurationFromJson(
+            Map<String, dynamic> json) =>
+        MusicContentCenterVendorDefaultConfiguration(
+          appId: json['appId'] as String?,
+          token: json['token'] as String?,
+          userId: json['userId'] as String?,
+          mccDomain: json['mccDomain'] as String?,
+        );
+
+Map<String, dynamic> _$MusicContentCenterVendorDefaultConfigurationToJson(
+    MusicContentCenterVendorDefaultConfiguration instance) {
+  final val = <String, dynamic>{};
+
+  void writeNotNull(String key, dynamic value) {
+    if (value != null) {
+      val[key] = value;
+    }
+  }
+
   writeNotNull('appId', instance.appId);
   writeNotNull('token', instance.token);
-  writeNotNull('mccUid', instance.mccUid);
-  writeNotNull('maxCacheSize', instance.maxCacheSize);
+  writeNotNull('userId', instance.userId);
   writeNotNull('mccDomain', instance.mccDomain);
   return val;
 }
+
+MusicContentCenterVendor2Configuration
+    _$MusicContentCenterVendor2ConfigurationFromJson(
+            Map<String, dynamic> json) =>
+        MusicContentCenterVendor2Configuration(
+          appId: json['appId'] as String?,
+          appKey: json['appKey'] as String?,
+          token: json['token'] as String?,
+          userId: json['userId'] as String?,
+          roomId: json['roomId'] as String?,
+          deviceId: json['deviceId'] as String?,
+          urlTokenExpireTime: (json['urlTokenExpireTime'] as num?)?.toInt(),
+          chargeMode: (json['chargeMode'] as num?)?.toInt(),
+        );
+
+Map<String, dynamic> _$MusicContentCenterVendor2ConfigurationToJson(
+    MusicContentCenterVendor2Configuration instance) {
+  final val = <String, dynamic>{};
+
+  void writeNotNull(String key, dynamic value) {
+    if (value != null) {
+      val[key] = value;
+    }
+  }
+
+  writeNotNull('appId', instance.appId);
+  writeNotNull('appKey', instance.appKey);
+  writeNotNull('token', instance.token);
+  writeNotNull('userId', instance.userId);
+  writeNotNull('roomId', instance.roomId);
+  writeNotNull('deviceId', instance.deviceId);
+  writeNotNull('urlTokenExpireTime', instance.urlTokenExpireTime);
+  writeNotNull('chargeMode', instance.chargeMode);
+  return val;
+}
+
+const _$MusicContentCenterVendorIDEnumMap = {
+  MusicContentCenterVendorID.kMusicContentCenterVendorDefault: 1,
+  MusicContentCenterVendorID.kMusicContentCenterVendor2: 2,
+};
 
 const _$MusicPlayModeEnumMap = {
   MusicPlayMode.kMusicPlayModeOriginal: 0,
@@ -178,11 +315,13 @@ const _$MusicPlayModeEnumMap = {
   MusicPlayMode.kMusicPlayModeLeadSing: 2,
 };
 
-const _$PreloadStateEnumMap = {
-  PreloadState.kPreloadStateCompleted: 0,
-  PreloadState.kPreloadStateFailed: 1,
-  PreloadState.kPreloadStatePreloading: 2,
-  PreloadState.kPreloadStateRemoved: 3,
+const _$MusicContentCenterStateEnumMap = {
+  MusicContentCenterState.kMusicContentCenterStatePreloadOk: 0,
+  MusicContentCenterState.kMusicContentCenterStatePreloadFailed: 1,
+  MusicContentCenterState.kMusicContentCenterStatePreloading: 2,
+  MusicContentCenterState.kMusicContentCenterStatePreloadRemoved: 3,
+  MusicContentCenterState.kMusicContentCenterStateStartScoreCompleted: 4,
+  MusicContentCenterState.kMusicContentCenterStateStartScoreFailed: 5,
 };
 
 const _$MusicContentCenterStateReasonEnumMap = {
@@ -195,4 +334,24 @@ const _$MusicContentCenterStateReasonEnumMap = {
   MusicContentCenterStateReason.kMusicContentCenterReasonMusicLoading: 5,
   MusicContentCenterStateReason.kMusicContentCenterReasonMusicDecryption: 6,
   MusicContentCenterStateReason.kMusicContentCenterReasonHttpInternalError: 7,
+};
+
+const _$LyricSourceTypeEnumMap = {
+  LyricSourceType.kLyricSourceXml: 0,
+  LyricSourceType.kLyricSourceLrc: 1,
+  LyricSourceType.kLyricSourceLrcWithPitches: 2,
+  LyricSourceType.kLyricSourceKrc: 3,
+};
+
+const _$ScoreLevelEnumMap = {
+  ScoreLevel.kScoreLevel1: 1,
+  ScoreLevel.kScoreLevel2: 2,
+  ScoreLevel.kScoreLevel3: 3,
+  ScoreLevel.kScoreLevel4: 4,
+  ScoreLevel.kScoreLevel5: 5,
+};
+
+const _$ChargeModeEnumMap = {
+  ChargeMode.kChargeModeMonthly: 1,
+  ChargeMode.kChargeModeOnce: 2,
 };

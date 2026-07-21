@@ -2620,6 +2620,11 @@ const _$ChannelProfileTypeEnumMap = {
   ChannelProfileType.channelProfileCommunication1v1: 4,
 };
 
+const _$ChannelTypeEnumMap = {
+  ChannelType.channelTypeStandard: 0,
+  ChannelType.channelTypeLargeScale: 1,
+};
+
 const _$WarnCodeTypeEnumMap = {
   WarnCodeType.warnInvalidView: 8,
   WarnCodeType.warnInitVideo: 16,
@@ -3217,6 +3222,9 @@ const _$VoiceBeautifierPresetEnumMap = {
 const _$AudioEffectPresetEnumMap = {
   AudioEffectPreset.audioEffectOff: 0,
   AudioEffectPreset.roomAcousticsKtv: 33620224,
+  AudioEffectPreset.roomAcousticsBathroom: 33620240,
+  AudioEffectPreset.roomAcousticsStairwell: 33620256,
+  AudioEffectPreset.roomAcousticsNature: 33620272,
   AudioEffectPreset.roomAcousticsVocalConcert: 33620480,
   AudioEffectPreset.roomAcousticsStudio: 33620736,
   AudioEffectPreset.roomAcousticsPhonograph: 33620992,

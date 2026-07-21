@@ -104,6 +104,8 @@ const eventIdsMapping = {
   "MediaPlayerSourceObserver_onAudioVolumeIndication": [
     "MediaPlayerSourceObserver_onAudioVolumeIndication_46f8ab7"
   ],
+  "ScoreEventHandler_onPitch": ["ScoreEventHandler_onPitch_5b7d529"],
+  "ScoreEventHandler_onLineScore": ["ScoreEventHandler_onLineScore_e4987ce"],
   "MusicContentCenterEventHandler_onMusicChartsResult": [
     "MusicContentCenterEventHandler_onMusicChartsResult_fb18135"
   ],
@@ -113,11 +115,17 @@ const eventIdsMapping = {
   "MusicContentCenterEventHandler_onLyricResult": [
     "MusicContentCenterEventHandler_onLyricResult_9ad9c90"
   ],
+  "MusicContentCenterEventHandler_onLyricInfoResult": [
+    "MusicContentCenterEventHandler_onLyricInfoResult_4725ebf"
+  ],
   "MusicContentCenterEventHandler_onSongSimpleInfoResult": [
     "MusicContentCenterEventHandler_onSongSimpleInfoResult_9ad9c90"
   ],
   "MusicContentCenterEventHandler_onPreLoadEvent": [
-    "MusicContentCenterEventHandler_onPreLoadEvent_20170bc"
+    "MusicContentCenterEventHandler_onPreLoadEvent_d238b4d"
+  ],
+  "MusicContentCenterEventHandler_onStartScoreResult": [
+    "MusicContentCenterEventHandler_onStartScoreResult_c579a23"
   ],
   "RtcEngineEventHandler_onJoinChannelSuccess": [
     "RtcEngineEventHandler_onJoinChannelSuccess_263e4cd"
