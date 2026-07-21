@@ -22,6 +22,7 @@ class _MusicPlayerExampleState extends State<MusicPlayerExample> {
   late TextEditingController _musicCenterAppIdController;
   late final TextEditingController _searchMusicController;
   late final MusicContentCenter _musicContentCenter;
+  MusicContentCenterEventHandler? _musicContentCenterEventHandler;
   late final MusicPlayer _musicPlayer;
   late final MediaPlayerSourceObserver _mediaPlayerSourceObserver;
   Completer<void>? _preloadCompleted;
@@ -56,7 +57,12 @@ class _MusicPlayerExampleState extends State<MusicPlayerExample> {
   }
 
   Future<void> _dispose() async {
-    _musicContentCenter.unregisterEventHandler();
+    final musicContentCenterEventHandler = _musicContentCenterEventHandler;
+    if (musicContentCenterEventHandler != null) {
+      _musicContentCenter
+          .unregisterEventHandler(musicContentCenterEventHandler);
+      _musicContentCenterEventHandler = null;
+    }
     if (_isPlaying) {
       await _musicPlayer.stop();
       await _engine.destroyMediaPlayer(_musicPlayer);
@@ -210,7 +216,7 @@ class _MusicPlayerExampleState extends State<MusicPlayerExample> {
               _getLyricCompleted = Completer();
               await _musicContentCenter.preload(_selectedMusic.songCode!);
               _getLyricRequestId = await _musicContentCenter.getLyric(
-                  songCode: _selectedMusic.songCode!);
+                  internalSongCode: _selectedMusic.songCode!);
             } else {
               _preloadCompleted = null;
               _getLyricCompleted = null;
@@ -277,12 +283,12 @@ class _MusicPlayerExampleState extends State<MusicPlayerExample> {
 
   Future<void> _initMusicCenter() async {
     await _musicContentCenter.initialize(MusicContentCenterConfiguration(
-      appId: _musicCenterAppIdController.text,
-      token: _rtmTokenController.text,
-      mccUid: 123,
+      // appId: _musicCenterAppIdController.text,
+      // token: _rtmTokenController.text,
+      // mccUid: 123,
     ));
 
-    _musicContentCenter.registerEventHandler(MusicContentCenterEventHandler(
+    final musicContentCenterEventHandler = MusicContentCenterEventHandler(
       onMusicChartsResult: (String requestId, List<MusicChartInfo> result,
           MusicContentCenterStateReason errorCode) {
         logSink.log(
@@ -311,18 +317,16 @@ class _MusicPlayerExampleState extends State<MusicPlayerExample> {
           });
         }
       },
-      onPreLoadEvent: (
-        String requestId,
-        int songCode,
-        int percent,
-        String lyricUrl,
-        PreloadState status,
-        MusicContentCenterStateReason errorCode,
-      ) {
+      onPreLoadEvent: (String requestId,
+          int internalSongCode,
+          int percent,
+          String payload,
+          MusicContentCenterState state,
+          MusicContentCenterStateReason reason) {
         logSink.log(
-            '[onPreLoadEvent], requestId: $requestId songCode: $songCode, percent: $percent status: $status, errorCode: $errorCode, lyricUrl: $lyricUrl');
-        if (_selectedMusic.songCode == songCode &&
-            status == PreloadState.kPreloadStateCompleted) {
+            '[onPreLoadEvent], requestId: $requestId internalSongCode: $internalSongCode, percent: $percent state: $state, reason: $reason');
+        if (_selectedMusic.songCode == internalSongCode &&
+            state == MusicContentCenterState.kMusicContentCenterStateStartScoreCompleted) {
           _preloadCompleted?.complete();
           _preloadCompleted = null;
         }
@@ -340,7 +344,9 @@ class _MusicPlayerExampleState extends State<MusicPlayerExample> {
           _getLyricCompleted = null;
         }
       },
-    ));
+    );
+    _musicContentCenterEventHandler = musicContentCenterEventHandler;
+    _musicContentCenter.registerEventHandler(musicContentCenterEventHandler);
 
     _musicPlayer = (await _musicContentCenter.createMusicPlayer())!;
 

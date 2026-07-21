@@ -193,7 +193,8 @@ class MusicContentCenterImpl extends binding.MusicContentCenterImpl
   }
 
   @override
-  void unregisterEventHandler() async {
+  void unregisterEventHandler(
+      MusicContentCenterEventHandler eventHandler) async {
     if (_musicContentCenterEventHandler == null) return;
     final eventHandlerWrapper =
         MusicContentCenterEventHandlerWrapper(_musicContentCenterEventHandler!);
