@@ -37,12 +37,12 @@ class MediaPlayerSourceObserverWrapper implements EventLoopEventHandler {
                 jsonMap);
         paramJson = paramJson.fillBuffers(buffers);
         MediaPlayerState? state = paramJson.state;
-        MediaPlayerError? ec = paramJson.ec;
-        if (state == null || ec == null) {
+        MediaPlayerReason? reason = paramJson.reason;
+        if (state == null || reason == null) {
           return true;
         }
 
-        mediaPlayerSourceObserver.onPlayerSourceStateChanged!(state, ec);
+        mediaPlayerSourceObserver.onPlayerSourceStateChanged!(state, reason);
         return true;
 
       case 'onPositionChanged':
@@ -54,11 +54,12 @@ class MediaPlayerSourceObserverWrapper implements EventLoopEventHandler {
             MediaPlayerSourceObserverOnPositionChangedJson.fromJson(jsonMap);
         paramJson = paramJson.fillBuffers(buffers);
         int? positionMs = paramJson.positionMs;
-        if (positionMs == null) {
+        int? timestampMs = paramJson.timestampMs;
+        if (positionMs == null || timestampMs == null) {
           return true;
         }
 
-        mediaPlayerSourceObserver.onPositionChanged!(positionMs);
+        mediaPlayerSourceObserver.onPositionChanged!(positionMs, timestampMs);
         return true;
 
       case 'onPlayerEvent':
@@ -186,6 +187,39 @@ class MediaPlayerSourceObserverWrapper implements EventLoopEventHandler {
         }
         info = info.fillBuffers(buffers);
         mediaPlayerSourceObserver.onPlayerInfoUpdated!(info);
+        return true;
+
+      case 'onPlayerCacheStats':
+        if (mediaPlayerSourceObserver.onPlayerCacheStats == null) {
+          return true;
+        }
+        final jsonMap = jsonDecode(eventData);
+        MediaPlayerSourceObserverOnPlayerCacheStatsJson paramJson =
+            MediaPlayerSourceObserverOnPlayerCacheStatsJson.fromJson(jsonMap);
+        paramJson = paramJson.fillBuffers(buffers);
+        CacheStatistics? stats = paramJson.stats;
+        if (stats == null) {
+          return true;
+        }
+        stats = stats.fillBuffers(buffers);
+        mediaPlayerSourceObserver.onPlayerCacheStats!(stats);
+        return true;
+
+      case 'onPlayerPlaybackStats':
+        if (mediaPlayerSourceObserver.onPlayerPlaybackStats == null) {
+          return true;
+        }
+        final jsonMap = jsonDecode(eventData);
+        MediaPlayerSourceObserverOnPlayerPlaybackStatsJson paramJson =
+            MediaPlayerSourceObserverOnPlayerPlaybackStatsJson.fromJson(
+                jsonMap);
+        paramJson = paramJson.fillBuffers(buffers);
+        PlayerPlaybackStats? stats = paramJson.stats;
+        if (stats == null) {
+          return true;
+        }
+        stats = stats.fillBuffers(buffers);
+        mediaPlayerSourceObserver.onPlayerPlaybackStats!(stats);
         return true;
 
       case 'onAudioVolumeIndication':

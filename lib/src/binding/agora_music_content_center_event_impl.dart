@@ -39,13 +39,13 @@ class MusicContentCenterEventHandlerWrapper implements EventLoopEventHandler {
         paramJson = paramJson.fillBuffers(buffers);
         String? requestId = paramJson.requestId;
         List<MusicChartInfo>? result = paramJson.result;
-        MusicContentCenterStatusCode? errorCode = paramJson.errorCode;
-        if (requestId == null || result == null || errorCode == null) {
+        MusicContentCenterStateReason? reason = paramJson.reason;
+        if (requestId == null || result == null || reason == null) {
           return true;
         }
         result = result.map((e) => e.fillBuffers(buffers)).toList();
         musicContentCenterEventHandler.onMusicChartsResult!(
-            requestId, result, errorCode);
+            requestId, result, reason);
         return true;
 
       case 'onMusicCollectionResult':
@@ -59,13 +59,13 @@ class MusicContentCenterEventHandlerWrapper implements EventLoopEventHandler {
         paramJson = paramJson.fillBuffers(buffers);
         String? requestId = paramJson.requestId;
         MusicCollection? result = paramJson.result;
-        MusicContentCenterStatusCode? errorCode = paramJson.errorCode;
-        if (requestId == null || result == null || errorCode == null) {
+        MusicContentCenterStateReason? reason = paramJson.reason;
+        if (requestId == null || result == null || reason == null) {
           return true;
         }
 
         musicContentCenterEventHandler.onMusicCollectionResult!(
-            requestId, result, errorCode);
+            requestId, result, reason);
         return true;
 
       case 'onLyricResult':
@@ -79,16 +79,16 @@ class MusicContentCenterEventHandlerWrapper implements EventLoopEventHandler {
         String? requestId = paramJson.requestId;
         int? songCode = paramJson.songCode;
         String? lyricUrl = paramJson.lyricUrl;
-        MusicContentCenterStatusCode? errorCode = paramJson.errorCode;
+        MusicContentCenterStateReason? reason = paramJson.reason;
         if (requestId == null ||
             songCode == null ||
             lyricUrl == null ||
-            errorCode == null) {
+            reason == null) {
           return true;
         }
 
         musicContentCenterEventHandler.onLyricResult!(
-            requestId, songCode, lyricUrl, errorCode);
+            requestId, songCode, lyricUrl, reason);
         return true;
 
       case 'onSongSimpleInfoResult':
@@ -103,16 +103,16 @@ class MusicContentCenterEventHandlerWrapper implements EventLoopEventHandler {
         String? requestId = paramJson.requestId;
         int? songCode = paramJson.songCode;
         String? simpleInfo = paramJson.simpleInfo;
-        MusicContentCenterStatusCode? errorCode = paramJson.errorCode;
+        MusicContentCenterStateReason? reason = paramJson.reason;
         if (requestId == null ||
             songCode == null ||
             simpleInfo == null ||
-            errorCode == null) {
+            reason == null) {
           return true;
         }
 
         musicContentCenterEventHandler.onSongSimpleInfoResult!(
-            requestId, songCode, simpleInfo, errorCode);
+            requestId, songCode, simpleInfo, reason);
         return true;
 
       case 'onPreLoadEvent':
@@ -127,19 +127,19 @@ class MusicContentCenterEventHandlerWrapper implements EventLoopEventHandler {
         int? songCode = paramJson.songCode;
         int? percent = paramJson.percent;
         String? lyricUrl = paramJson.lyricUrl;
-        PreloadStatusCode? status = paramJson.status;
-        MusicContentCenterStatusCode? errorCode = paramJson.errorCode;
+        PreloadState? state = paramJson.state;
+        MusicContentCenterStateReason? reason = paramJson.reason;
         if (requestId == null ||
             songCode == null ||
             percent == null ||
             lyricUrl == null ||
-            status == null ||
-            errorCode == null) {
+            state == null ||
+            reason == null) {
           return true;
         }
 
         musicContentCenterEventHandler.onPreLoadEvent!(
-            requestId, songCode, percent, lyricUrl, status, errorCode);
+            requestId, songCode, percent, lyricUrl, state, reason);
         return true;
     }
     return false;

@@ -279,7 +279,8 @@ class _VideoViewControllerInternal with VideoViewControllerBaseMixin {
     if (_renderDisposable != null && !_renderDisposable!.isDisposed) {
       return;
     }
-    _renderDisposable = await TextureRenderDisposable.create(_controller, _viewId);
+    _renderDisposable =
+        await TextureRenderDisposable.create(_controller, _viewId);
   }
 
   Future<void> disposeTextureRender() async {
@@ -323,8 +324,9 @@ class _AgoraRtcRenderTextureState extends State<AgoraRtcRenderTexture>
 
   Future<void> _initialize() async {
     final sourceController = widget.controller as VideoViewControllerBaseMixin;
-    _controllerInternal = _VideoViewControllerInternal(sourceController, hashCode);
-    
+    _controllerInternal =
+        _VideoViewControllerInternal(sourceController, hashCode);
+
     if (!_controllerInternal!.isInitialzed) {
       _listener ??= () {
         _controllerInternal?.removeInitializedCompletedListener(_listener!);
@@ -393,7 +395,7 @@ class _AgoraRtcRenderTextureState extends State<AgoraRtcRenderTexture>
   @override
   void dispose() {
     methodChannel?.setMethodCallHandler(null);
-    
+
     _controllerInternal?.disposeTextureRender();
     _controllerInternal = null;
 

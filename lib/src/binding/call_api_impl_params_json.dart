@@ -100,6 +100,21 @@ class MediaPlayerGetPublishSignalVolumeJson {
 }
 
 @JsonSerializable(explicitToJson: true, includeIfNull: false)
+class MediaPlayerGetAudioBufferDelayJson {
+  const MediaPlayerGetAudioBufferDelayJson(this.delayMs);
+
+  @JsonKey(name: 'delayMs')
+  final int delayMs;
+
+  factory MediaPlayerGetAudioBufferDelayJson.fromJson(
+          Map<String, dynamic> json) =>
+      _$MediaPlayerGetAudioBufferDelayJsonFromJson(json);
+
+  Map<String, dynamic> toJson() =>
+      _$MediaPlayerGetAudioBufferDelayJsonToJson(this);
+}
+
+@JsonSerializable(explicitToJson: true, includeIfNull: false)
 class MediaPlayerCacheManagerGetCacheDirJson {
   const MediaPlayerCacheManagerGetCacheDirJson(this.path);
 
@@ -274,6 +289,36 @@ class RtcEngineQueryCodecCapabilityJson {
 }
 
 @JsonSerializable(explicitToJson: true, includeIfNull: false)
+class RtcEngineGetFaceShapeBeautyOptionsJson {
+  const RtcEngineGetFaceShapeBeautyOptionsJson(this.options);
+
+  @JsonKey(name: 'options')
+  final FaceShapeBeautyOptions options;
+
+  factory RtcEngineGetFaceShapeBeautyOptionsJson.fromJson(
+          Map<String, dynamic> json) =>
+      _$RtcEngineGetFaceShapeBeautyOptionsJsonFromJson(json);
+
+  Map<String, dynamic> toJson() =>
+      _$RtcEngineGetFaceShapeBeautyOptionsJsonToJson(this);
+}
+
+@JsonSerializable(explicitToJson: true, includeIfNull: false)
+class RtcEngineGetFaceShapeAreaOptionsJson {
+  const RtcEngineGetFaceShapeAreaOptionsJson(this.options);
+
+  @JsonKey(name: 'options')
+  final FaceShapeAreaOptions options;
+
+  factory RtcEngineGetFaceShapeAreaOptionsJson.fromJson(
+          Map<String, dynamic> json) =>
+      _$RtcEngineGetFaceShapeAreaOptionsJsonFromJson(json);
+
+  Map<String, dynamic> toJson() =>
+      _$RtcEngineGetFaceShapeAreaOptionsJsonToJson(this);
+}
+
+@JsonSerializable(explicitToJson: true, includeIfNull: false)
 class RtcEngineUploadLogFileJson {
   const RtcEngineUploadLogFileJson(this.requestId);
 
@@ -313,6 +358,21 @@ class RtcEngineGetAudioDeviceInfoJson {
 
   Map<String, dynamic> toJson() =>
       _$RtcEngineGetAudioDeviceInfoJsonToJson(this);
+}
+
+@JsonSerializable(explicitToJson: true, includeIfNull: false)
+class RtcEngineQueryCameraFocalLengthCapabilityJson {
+  const RtcEngineQueryCameraFocalLengthCapabilityJson(this.focalLengthInfos);
+
+  @JsonKey(name: 'focalLengthInfos')
+  final FocalLengthInfo focalLengthInfos;
+
+  factory RtcEngineQueryCameraFocalLengthCapabilityJson.fromJson(
+          Map<String, dynamic> json) =>
+      _$RtcEngineQueryCameraFocalLengthCapabilityJsonFromJson(json);
+
+  Map<String, dynamic> toJson() =>
+      _$RtcEngineQueryCameraFocalLengthCapabilityJsonToJson(this);
 }
 
 @JsonSerializable(explicitToJson: true, includeIfNull: false)
@@ -367,6 +427,20 @@ class RtcEngineGetUserInfoByUidJson {
       _$RtcEngineGetUserInfoByUidJsonFromJson(json);
 
   Map<String, dynamic> toJson() => _$RtcEngineGetUserInfoByUidJsonToJson(this);
+}
+
+@JsonSerializable(explicitToJson: true, includeIfNull: false)
+class RtcEngineQueryHDRCapabilityJson {
+  const RtcEngineQueryHDRCapabilityJson(this.capability);
+
+  @JsonKey(name: 'capability')
+  final HdrCapability capability;
+
+  factory RtcEngineQueryHDRCapabilityJson.fromJson(Map<String, dynamic> json) =>
+      _$RtcEngineQueryHDRCapabilityJsonFromJson(json);
+
+  Map<String, dynamic> toJson() =>
+      _$RtcEngineQueryHDRCapabilityJsonToJson(this);
 }
 
 @JsonSerializable(explicitToJson: true, includeIfNull: false)

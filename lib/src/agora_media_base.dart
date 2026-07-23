@@ -1,99 +1,176 @@
 import 'package:agora_rtc_engine/src/binding_forward_export.dart';
-part 'agora_media_base.g.dart';
+        part 'agora_media_base.g.dart';
+        
+        
 
-/// @nodoc
-const invalidTrackId = 0xffffffff;
 
-/// @nodoc
-const defaultConnectionId = 0;
 
-/// @nodoc
-const dummyConnectionId = 4294967295;
 
-/// @nodoc
-const kAdmMaxDeviceNameSize = 128;
 
-/// @nodoc
-const kAdmMaxGuidSize = 128;
 
-/// The type of the video source.
-@JsonEnum(alwaysCreate: true)
-enum VideoSourceType {
-  /// 0: (Default) The primary camera.
-  @JsonValue(0)
-  videoSourceCameraPrimary,
-
-  /// 0: (Default) The primary camera.
-  @JsonValue(0)
-  videoSourceCamera,
-
-  /// 1: The secondary camera.
-  @JsonValue(1)
-  videoSourceCameraSecondary,
-
-  /// 2: The primary screen.
-  @JsonValue(2)
-  videoSourceScreenPrimary,
-
-  /// 2: The primary screen.
-  @JsonValue(2)
-  videoSourceScreen,
-
-  /// 3: The secondary screen.
-  @JsonValue(3)
-  videoSourceScreenSecondary,
-
-  /// 4: A custom video source.
-  @JsonValue(4)
-  videoSourceCustom,
-
-  /// 5: The media player.
-  @JsonValue(5)
-  videoSourceMediaPlayer,
-
-  /// 6: One PNG image.
-  @JsonValue(6)
-  videoSourceRtcImagePng,
-
-  /// 7: One JPEG image.
-  @JsonValue(7)
-  videoSourceRtcImageJpeg,
-
-  /// 8: One GIF image.
-  @JsonValue(8)
-  videoSourceRtcImageGif,
-
-  /// 9: One remote video acquired by the network.
-  @JsonValue(9)
-  videoSourceRemote,
-
-  /// 10: One transcoded video source.
-  @JsonValue(10)
-  videoSourceTranscoded,
-
-  /// 11: (For Android, Windows, and macOS only) The third camera.
-  @JsonValue(11)
-  videoSourceCameraThird,
-
-  /// 12: (For Android, Windows, and macOS only) The fourth camera.
-  @JsonValue(12)
-  videoSourceCameraFourth,
-
-  /// 13: (For Windows and macOS only) The third screen.
-  @JsonValue(13)
-  videoSourceScreenThird,
-
-  /// 14: (For Windows and macOS only) The fourth screen.
-  @JsonValue(14)
-  videoSourceScreenFourth,
 
   /// @nodoc
-  @JsonValue(15)
-  videoSourceSpeechDriven,
+const invalidTrackId = 0xffffffff;
 
-  /// 100: An unknown video source.
-  @JsonValue(100)
-  videoSourceUnknown,
+
+  /// @nodoc
+const defaultConnectionId = 0;
+
+
+  /// @nodoc
+const dummyConnectionId = 4294967295;
+
+
+
+/// Plugin context information.
+  @JsonSerializable(explicitToJson: true, includeIfNull: false)
+  class ExtensionContext {
+  /// @nodoc
+    const ExtensionContext(
+      {this.isValid,this.uid,this.providerName,this.extensionName}
+    );
+
+/// Whether the uid reported in ExtensionContext is valid: true : uid is valid. false : uid is invalid.
+    @JsonKey(name: 'isValid')
+      final bool? isValid;
+
+/// User ID. 0 represents the local user, values greater than 0 represent remote users.
+@JsonKey(name: 'uid')
+      final int? uid;
+
+/// Name of the plugin provider.
+@JsonKey(name: 'providerName')
+      final String? providerName;
+
+/// Name of the plugin.
+@JsonKey(name: 'extensionName')
+      final String? extensionName;
+
+/// @nodoc
+    factory ExtensionContext.fromJson(Map<String, dynamic> json) => _$ExtensionContextFromJson(json);
+
+/// @nodoc
+    Map<String, dynamic> toJson() => _$ExtensionContextToJson(this);
+  }
+  
+
+
+/// Type of video source.
+@JsonEnum(alwaysCreate: true)
+enum VideoSourceType {
+  
+/// 0: (Default) Video source is the first camera.
+    @JsonValue(0)
+    videoSourceCameraPrimary,
+    
+
+
+/// 0: (Default) Video source is the first camera.
+    @JsonValue(0)
+    videoSourceCamera,
+    
+
+
+/// 1: Video source is the second camera.
+    @JsonValue(1)
+    videoSourceCameraSecondary,
+    
+
+
+/// 2: Video source is the first screen.
+    @JsonValue(2)
+    videoSourceScreenPrimary,
+    
+
+
+/// 2: Video source is the first screen.
+    @JsonValue(2)
+    videoSourceScreen,
+    
+
+
+/// 3: Video source is the second screen.
+    @JsonValue(3)
+    videoSourceScreenSecondary,
+    
+
+
+/// 4: Custom video source.
+    @JsonValue(4)
+    videoSourceCustom,
+    
+
+
+/// 5: Video source is media player.
+    @JsonValue(5)
+    videoSourceMediaPlayer,
+    
+
+
+/// 6: Video source is a PNG image.
+    @JsonValue(6)
+    videoSourceRtcImagePng,
+    
+
+
+/// 7: Video source is a JPEG image.
+    @JsonValue(7)
+    videoSourceRtcImageJpeg,
+    
+
+
+/// 8: Video source is a GIF image.
+    @JsonValue(8)
+    videoSourceRtcImageGif,
+    
+
+
+/// 9: Video source is remote video obtained from the network.
+    @JsonValue(9)
+    videoSourceRemote,
+    
+
+
+/// 10: Transcoded video source.
+    @JsonValue(10)
+    videoSourceTranscoded,
+    
+
+
+/// 11: (Android, Windows, and macOS only) Video source is the third camera.
+    @JsonValue(11)
+    videoSourceCameraThird,
+    
+
+
+/// 12: (Android, Windows, and macOS only) Video source is the fourth camera.
+    @JsonValue(12)
+    videoSourceCameraFourth,
+    
+
+
+/// 13: (Windows and macOS only) Video source is the third screen.
+    @JsonValue(13)
+    videoSourceScreenThird,
+    
+
+
+/// 14: (Windows and macOS only) Video source is the fourth screen.
+    @JsonValue(14)
+    videoSourceScreenFourth,
+    
+
+
+/// 15: Video source is post-processed by a speech-driven plugin.
+    @JsonValue(15)
+    videoSourceSpeechDriven,
+    
+
+
+/// 100: Unknown video source.
+    @JsonValue(100)
+    videoSourceUnknown,
+    
 }
 
 /// @nodoc
@@ -103,66 +180,155 @@ extension VideoSourceTypeExt on VideoSourceType {
     return $enumDecode(_$VideoSourceTypeEnumMap, value);
   }
 
-  /// @nodoc
+/// @nodoc
   int value() {
     return _$VideoSourceTypeEnumMap[this]!;
   }
 }
 
-/// The type of the audio route.
+
+
+/// Audio source types.
+@JsonEnum(alwaysCreate: true)
+enum AudioSourceType {
+  
+/// 0: (default) Microphone.
+    @JsonValue(0)
+    audioSourceMicrophone,
+    
+
+
+/// 1: Custom captured audio stream.
+    @JsonValue(1)
+    audioSourceCustom,
+    
+
+
+/// 2: Media player.
+    @JsonValue(2)
+    audioSourceMediaPlayer,
+    
+
+
+/// 3: System audio stream captured during screen sharing.
+    @JsonValue(3)
+    audioSourceLoopbackRecording,
+    
+
+
+  /// @nodoc
+    @JsonValue(4)
+    audioSourceMixedStream,
+    
+
+
+/// 5: Audio stream of a specified remote user.
+    @JsonValue(5)
+    audioSourceRemoteUser,
+    
+
+
+/// 6: Mixed stream of all audio streams in the current channel.
+    @JsonValue(6)
+    audioSourceRemoteChannel,
+    
+
+
+/// 100: Unknown audio source.
+    @JsonValue(100)
+    audioSourceUnknown,
+    
+}
+
+/// @nodoc
+extension AudioSourceTypeExt on AudioSourceType {
+  /// @nodoc
+  static AudioSourceType fromValue(int value) {
+    return $enumDecode(_$AudioSourceTypeEnumMap, value);
+  }
+
+/// @nodoc
+  int value() {
+    return _$AudioSourceTypeEnumMap[this]!;
+  }
+}
+
+
+
+/// Audio routing types.
 @JsonEnum(alwaysCreate: true)
 enum AudioRoute {
-  /// -1: The default audio route.
-  @JsonValue(-1)
-  routeDefault,
+  
+/// -1: Use the default audio route.
+    @JsonValue(-1)
+    routeDefault,
+    
 
-  /// 0: Audio output routing is a headset with microphone.
-  @JsonValue(0)
-  routeHeadset,
 
-  /// 1: The audio route is an earpiece.
-  @JsonValue(1)
-  routeEarpiece,
+/// 0: Audio routed to a headset with microphone.
+    @JsonValue(0)
+    routeHeadset,
+    
 
-  /// 2: The audio route is a headset without a microphone.
-  @JsonValue(2)
-  routeHeadsetnomic,
 
-  /// 3: The audio route is the speaker that comes with the device.
-  @JsonValue(3)
-  routeSpeakerphone,
+/// 1: Audio routed to the earpiece.
+    @JsonValue(1)
+    routeEarpiece,
+    
 
-  /// 4: The audio route is an external speaker. (iOS and macOS only)
-  @JsonValue(4)
-  routeLoudspeaker,
 
-  /// 5: The audio route is a Bluetooth device using the HFP protocol.
-  @JsonValue(5)
-  routeHeadsetbluetooth,
+/// 2: Audio routed to a headset without microphone.
+    @JsonValue(2)
+    routeHeadsetnomic,
+    
 
-  /// 6: The audio route is a USB peripheral device. (For macOS only)
-  @JsonValue(6)
-  routeUsb,
 
-  /// 7: The audio route is an HDMI peripheral device. (For macOS only)
-  @JsonValue(7)
-  routeHdmi,
+/// 3: Audio routed to the device's built-in speaker.
+    @JsonValue(3)
+    routeSpeakerphone,
+    
 
-  /// 8: The audio route is a DisplayPort peripheral device. (For macOS only)
-  @JsonValue(8)
-  routeDisplayport,
 
-  /// 9: The audio route is Apple AirPlay. (For macOS only)
-  @JsonValue(9)
-  routeAirplay,
+/// 4: Audio routed to an external speaker. (iOS and macOS only)
+    @JsonValue(4)
+    routeLoudspeaker,
+    
+
 
   /// @nodoc
-  @JsonValue(10)
-  routeVirtual,
+    @JsonValue(5)
+    routeBluetoothDeviceHfp,
+    
+
+
+/// 6: Audio routed to a USB peripheral device. (macOS only)
+    @JsonValue(6)
+    routeUsb,
+    
+
+
+/// 7: Audio routed to an HDMI peripheral device. (macOS only)
+    @JsonValue(7)
+    routeHdmi,
+    
+
+
+/// 8: Audio routed to a DisplayPort peripheral device. (macOS only)
+    @JsonValue(8)
+    routeDisplayport,
+    
+
+
+/// 9: Audio routed to Apple AirPlay. (macOS only)
+    @JsonValue(9)
+    routeAirplay,
+    
+
 
   /// @nodoc
-  @JsonValue(11)
-  routeContinuity,
+    @JsonValue(10)
+    routeBluetoothDeviceA2dp,
+    
 }
 
 /// @nodoc
@@ -172,18 +338,22 @@ extension AudioRouteExt on AudioRoute {
     return $enumDecode(_$AudioRouteEnumMap, value);
   }
 
-  /// @nodoc
+/// @nodoc
   int value() {
     return _$AudioRouteEnumMap[this]!;
   }
 }
 
-/// @nodoc
+
+
+  /// @nodoc
 @JsonEnum(alwaysCreate: true)
 enum BytesPerSample {
+  
   /// @nodoc
-  @JsonValue(2)
-  twoBytesPerSample,
+    @JsonValue(2)
+    twoBytesPerSample,
+    
 }
 
 /// @nodoc
@@ -193,48 +363,57 @@ extension BytesPerSampleExt on BytesPerSample {
     return $enumDecode(_$BytesPerSampleEnumMap, value);
   }
 
-  /// @nodoc
+/// @nodoc
   int value() {
     return _$BytesPerSampleEnumMap[this]!;
   }
 }
 
+
+
+  /// @nodoc
+  @JsonSerializable(explicitToJson: true, includeIfNull: false)
+  class AudioParameters {
+  /// @nodoc
+    const AudioParameters(
+      {this.sampleRate,this.channels,this.framesPerBuffer}
+    );
+
+  /// @nodoc
+    @JsonKey(name: 'sample_rate')
+      final int? sampleRate;
+
+  /// @nodoc
+@JsonKey(name: 'channels')
+      final int? channels;
+
+  /// @nodoc
+@JsonKey(name: 'frames_per_buffer')
+      final int? framesPerBuffer;
+
 /// @nodoc
-@JsonSerializable(explicitToJson: true, includeIfNull: false)
-class AudioParameters {
-  /// @nodoc
-  const AudioParameters({this.sampleRate, this.channels, this.framesPerBuffer});
+    factory AudioParameters.fromJson(Map<String, dynamic> json) => _$AudioParametersFromJson(json);
 
-  /// @nodoc
-  @JsonKey(name: 'sample_rate')
-  final int? sampleRate;
+/// @nodoc
+    Map<String, dynamic> toJson() => _$AudioParametersToJson(this);
+  }
+  
 
-  /// @nodoc
-  @JsonKey(name: 'channels')
-  final int? channels;
 
-  /// @nodoc
-  @JsonKey(name: 'frames_per_buffer')
-  final int? framesPerBuffer;
-
-  /// @nodoc
-  factory AudioParameters.fromJson(Map<String, dynamic> json) =>
-      _$AudioParametersFromJson(json);
-
-  /// @nodoc
-  Map<String, dynamic> toJson() => _$AudioParametersToJson(this);
-}
-
-/// The use mode of the audio data.
+/// Usage mode of audio data.
 @JsonEnum(alwaysCreate: true)
 enum RawAudioFrameOpModeType {
-  /// 0: Read-only mode, For example, when users acquire the data with the Agora SDK, then start the media push.
-  @JsonValue(0)
-  rawAudioFrameOpModeReadOnly,
+  
+/// 0: (Default) Read-only mode. For example, if you collect data via the SDK and perform bypass streaming yourself, you can choose this mode.
+    @JsonValue(0)
+    rawAudioFrameOpModeReadOnly,
+    
 
-  /// 2: Read and write mode, For example, when users have their own audio-effect processing module and perform some voice preprocessing, such as a voice change.
-  @JsonValue(2)
-  rawAudioFrameOpModeReadWrite,
+
+/// 2: Read-write mode. For example, if you have your own audio effects processing module and want to pre-process the data (e.g., voice changing), you can choose this mode.
+    @JsonValue(2)
+    rawAudioFrameOpModeReadWrite,
+    
 }
 
 /// @nodoc
@@ -244,138 +423,106 @@ extension RawAudioFrameOpModeTypeExt on RawAudioFrameOpModeType {
     return $enumDecode(_$RawAudioFrameOpModeTypeEnumMap, value);
   }
 
-  /// @nodoc
+/// @nodoc
   int value() {
     return _$RawAudioFrameOpModeTypeEnumMap[this]!;
   }
 }
 
-/// @nodoc
-@JsonEnum(alwaysCreate: true)
-enum TrackAudioMixedPolicyType {
-  /// @nodoc
-  @JsonValue(1 << 0)
-  trackAudioMixedLocal,
 
-  /// @nodoc
-  @JsonValue(1 << 1)
-  trackAudioMixedRemote,
-}
 
-/// @nodoc
-extension TrackAudioMixedPolicyTypeExt on TrackAudioMixedPolicyType {
-  /// @nodoc
-  static TrackAudioMixedPolicyType fromValue(int value) {
-    return $enumDecode(_$TrackAudioMixedPolicyTypeEnumMap, value);
-  }
-
-  /// @nodoc
-  int value() {
-    return _$TrackAudioMixedPolicyTypeEnumMap[this]!;
-  }
-}
-
-/// The AudioDeviceInfo class that contains the ID, name and type of the audio devices.
-@JsonSerializable(explicitToJson: true, includeIfNull: false)
-class AudioDeviceInfo {
-  /// @nodoc
-  const AudioDeviceInfo(
-      {this.deviceName,
-      this.deviceId,
-      this.isCurrentSelected,
-      this.isPlayoutDevice,
-      this.routing});
-
-  /// The device name.
-  @JsonKey(name: 'deviceName')
-  final String? deviceName;
-
-  /// The device ID.
-  @JsonKey(name: 'deviceId')
-  final String? deviceId;
-
-  /// @nodoc
-  @JsonKey(name: 'isCurrentSelected')
-  final bool? isCurrentSelected;
-
-  /// @nodoc
-  @JsonKey(name: 'isPlayoutDevice')
-  final bool? isPlayoutDevice;
-
-  /// @nodoc
-  @JsonKey(name: 'routing')
-  final AudioRoute? routing;
-
-  /// @nodoc
-  factory AudioDeviceInfo.fromJson(Map<String, dynamic> json) =>
-      _$AudioDeviceInfoFromJson(json);
-
-  /// @nodoc
-  Map<String, dynamic> toJson() => _$AudioDeviceInfoToJson(this);
-}
-
-/// Media source type.
+/// Media source types.
 @JsonEnum(alwaysCreate: true)
 enum MediaSourceType {
-  /// 0: Audio playback device.
-  @JsonValue(0)
-  audioPlayoutSource,
+  
+/// 0: Audio playback device.
+    @JsonValue(0)
+    audioPlayoutSource,
+    
 
-  /// 1: Audio capturing device.
-  @JsonValue(1)
-  audioRecordingSource,
 
-  /// 2: The primary camera.
-  @JsonValue(2)
-  primaryCameraSource,
+/// 1: Audio capture device.
+    @JsonValue(1)
+    audioRecordingSource,
+    
 
-  /// 3: A secondary camera.
-  @JsonValue(3)
-  secondaryCameraSource,
 
-  /// @nodoc
-  @JsonValue(4)
-  primaryScreenSource,
+/// 2: Primary camera.
+    @JsonValue(2)
+    primaryCameraSource,
+    
 
-  /// @nodoc
-  @JsonValue(5)
-  secondaryScreenSource,
 
-  /// 6: Custom video source.
-  @JsonValue(6)
-  customVideoSource,
+/// 3: Secondary camera.
+    @JsonValue(3)
+    secondaryCameraSource,
+    
+
 
   /// @nodoc
-  @JsonValue(7)
-  mediaPlayerSource,
+    @JsonValue(4)
+    primaryScreenSource,
+    
+
 
   /// @nodoc
-  @JsonValue(8)
-  rtcImagePngSource,
+    @JsonValue(5)
+    secondaryScreenSource,
+    
+
+
+/// 6: Custom video capture source.
+    @JsonValue(6)
+    customVideoSource,
+    
+
 
   /// @nodoc
-  @JsonValue(9)
-  rtcImageJpegSource,
+    @JsonValue(7)
+    mediaPlayerSource,
+    
+
 
   /// @nodoc
-  @JsonValue(10)
-  rtcImageGifSource,
+    @JsonValue(8)
+    rtcImagePngSource,
+    
+
 
   /// @nodoc
-  @JsonValue(11)
-  remoteVideoSource,
+    @JsonValue(9)
+    rtcImageJpegSource,
+    
+
 
   /// @nodoc
-  @JsonValue(12)
-  transcodedVideoSource,
+    @JsonValue(10)
+    rtcImageGifSource,
+    
+
 
   /// @nodoc
-  @JsonValue(13)
-  speechDrivenVideoSource,
+    @JsonValue(11)
+    remoteVideoSource,
+    
 
-  /// 100: Unknown media source.
-  @JsonValue(100)
-  unknownMediaSource,
+
+  /// @nodoc
+    @JsonValue(12)
+    transcodedVideoSource,
+    
+
+
+/// 13: Video source processed by speech-driven plugin.
+    @JsonValue(13)
+    speechDrivenVideoSource,
+    
+
+
+/// 100: Unknown media source.
+    @JsonValue(100)
+    unknownMediaSource,
+    
 }
 
 /// @nodoc
@@ -385,236 +532,147 @@ extension MediaSourceTypeExt on MediaSourceType {
     return $enumDecode(_$MediaSourceTypeEnumMap, value);
   }
 
-  /// @nodoc
+/// @nodoc
   int value() {
     return _$MediaSourceTypeEnumMap[this]!;
   }
 }
 
-/// @nodoc
-@JsonEnum(alwaysCreate: true)
-enum ContentInspectResult {
-  /// @nodoc
-  @JsonValue(1)
-  contentInspectNeutral,
+
+
+
+
 
   /// @nodoc
-  @JsonValue(2)
-  contentInspectSexy,
-
-  /// @nodoc
-  @JsonValue(3)
-  contentInspectPorn,
-}
-
-/// @nodoc
-extension ContentInspectResultExt on ContentInspectResult {
-  /// @nodoc
-  static ContentInspectResult fromValue(int value) {
-    return $enumDecode(_$ContentInspectResultEnumMap, value);
-  }
-
-  /// @nodoc
-  int value() {
-    return _$ContentInspectResultEnumMap[this]!;
-  }
-}
-
-/// The type of video content moderation module.
-@JsonEnum(alwaysCreate: true)
-enum ContentInspectType {
-  /// 0: (Default) This module has no actual function. Do not set type to this value.
-  @JsonValue(0)
-  contentInspectInvalid,
-
-  /// @nodoc
-  @JsonValue(1)
-  contentInspectModeration,
-
-  /// 2: Video screenshot and upload via Agora self-developed extension. SDK takes screenshots of the video stream in the channel and uploads them.
-  @JsonValue(2)
-  contentInspectSupervision,
-
-  /// 3: Video screenshot and upload via extensions from Agora Extensions Marketplace. SDK uses video moderation extensions from Agora Extensions Marketplace to take screenshots of the video stream in the channel and uploads them.
-  @JsonValue(3)
-  contentInspectImageModeration,
-}
-
-/// @nodoc
-extension ContentInspectTypeExt on ContentInspectType {
-  /// @nodoc
-  static ContentInspectType fromValue(int value) {
-    return $enumDecode(_$ContentInspectTypeEnumMap, value);
-  }
-
-  /// @nodoc
-  int value() {
-    return _$ContentInspectTypeEnumMap[this]!;
-  }
-}
-
-/// ContentInspectModule A structure used to configure the frequency of video screenshot and upload.
-@JsonSerializable(explicitToJson: true, includeIfNull: false)
-class ContentInspectModule {
-  /// @nodoc
-  const ContentInspectModule({this.type, this.interval});
-
-  /// Types of functional module. See ContentInspectType.
-  @JsonKey(name: 'type')
-  final ContentInspectType? type;
-
-  /// The frequency (s) of video screenshot and upload. The value should be set as larger than 0. The default value is 0, the SDK does not take screenshots. Agora recommends that you set the value as 10; you can also adjust it according to your business needs.
-  @JsonKey(name: 'interval')
-  final int? interval;
-
-  /// @nodoc
-  factory ContentInspectModule.fromJson(Map<String, dynamic> json) =>
-      _$ContentInspectModuleFromJson(json);
-
-  /// @nodoc
-  Map<String, dynamic> toJson() => _$ContentInspectModuleToJson(this);
-}
-
-/// Screenshot and upload configuration.
-@JsonSerializable(explicitToJson: true, includeIfNull: false)
-class ContentInspectConfig {
-  /// @nodoc
-  const ContentInspectConfig(
-      {this.extraInfo, this.serverConfig, this.modules, this.moduleCount});
-
-  /// Additional information on the video content (maximum length: 1024 Bytes). The SDK sends the screenshots and additional information on the video content to the Agora server. Once the video screenshot and upload process is completed, the Agora server sends the additional information and the callback notification to your server.
-  @JsonKey(name: 'extraInfo')
-  final String? extraInfo;
-
-  /// (Optional) Server configuration related to uploading video screenshots via extensions from Agora Extensions Marketplace. This parameter only takes effect when type in ContentInspectModule is set to contentInspectImageModeration. If you want to use it, contact.
-  @JsonKey(name: 'serverConfig')
-  final String? serverConfig;
-
-  /// Functional module. See ContentInspectModule. A maximum of 32 ContentInspectModule instances can be configured, and the value range of MAX_CONTENT_INSPECT_MODULE_COUNT is an integer in [1,32]. A function module can only be configured with one instance at most. Currently only the video screenshot and upload function is supported.
-  @JsonKey(name: 'modules')
-  final List<ContentInspectModule>? modules;
-
-  /// The number of functional modules, that is,the number of configured ContentInspectModule instances, must be the same as the number of instances configured in modules. The maximum number is 32.
-  @JsonKey(name: 'moduleCount')
-  final int? moduleCount;
-
-  /// @nodoc
-  factory ContentInspectConfig.fromJson(Map<String, dynamic> json) =>
-      _$ContentInspectConfigFromJson(json);
-
-  /// @nodoc
-  Map<String, dynamic> toJson() => _$ContentInspectConfigToJson(this);
-}
-
-/// @nodoc
 const kMaxCodecNameLength = 50;
 
-/// @nodoc
-@JsonSerializable(explicitToJson: true, includeIfNull: false)
-class PacketOptions {
-  /// @nodoc
-  const PacketOptions({this.timestamp, this.audioLevelIndication});
+
 
   /// @nodoc
-  @JsonKey(name: 'timestamp')
-  final int? timestamp;
+  @JsonSerializable(explicitToJson: true, includeIfNull: false)
+  class PacketOptions {
+  /// @nodoc
+    const PacketOptions(
+      {this.timestamp,this.audioLevelIndication}
+    );
 
   /// @nodoc
-  @JsonKey(name: 'audioLevelIndication')
-  final int? audioLevelIndication;
+    @JsonKey(name: 'timestamp')
+      final int? timestamp;
 
   /// @nodoc
-  factory PacketOptions.fromJson(Map<String, dynamic> json) =>
-      _$PacketOptionsFromJson(json);
-
-  /// @nodoc
-  Map<String, dynamic> toJson() => _$PacketOptionsToJson(this);
-}
+@JsonKey(name: 'audioLevelIndication')
+      final int? audioLevelIndication;
 
 /// @nodoc
-@JsonSerializable(explicitToJson: true, includeIfNull: false)
-class AudioEncodedFrameInfo {
-  /// @nodoc
-  const AudioEncodedFrameInfo({this.sendTs, this.codec});
+    factory PacketOptions.fromJson(Map<String, dynamic> json) => _$PacketOptionsFromJson(json);
+
+/// @nodoc
+    Map<String, dynamic> toJson() => _$PacketOptionsToJson(this);
+  }
+  
+
 
   /// @nodoc
-  @JsonKey(name: 'sendTs')
-  final int? sendTs;
+  @JsonSerializable(explicitToJson: true, includeIfNull: false)
+  class AudioEncodedFrameInfo {
+  /// @nodoc
+    const AudioEncodedFrameInfo(
+      {this.sendTs,this.codec}
+    );
 
   /// @nodoc
-  @JsonKey(name: 'codec')
-  final int? codec;
+    @JsonKey(name: 'sendTs')
+      final int? sendTs;
 
   /// @nodoc
-  factory AudioEncodedFrameInfo.fromJson(Map<String, dynamic> json) =>
-      _$AudioEncodedFrameInfoFromJson(json);
+@JsonKey(name: 'codec')
+      final int? codec;
+
+/// @nodoc
+    factory AudioEncodedFrameInfo.fromJson(Map<String, dynamic> json) => _$AudioEncodedFrameInfoFromJson(json);
+
+/// @nodoc
+    Map<String, dynamic> toJson() => _$AudioEncodedFrameInfoToJson(this);
+  }
+  
+
+
+/// Information of external PCM format audio frame.
+  @JsonSerializable(explicitToJson: true, includeIfNull: false)
+  class AudioPcmFrame {
+  /// @nodoc
+    const AudioPcmFrame(
+      {this.captureTimestamp,this.samplesPerChannel,this.sampleRateHz,this.numChannels,this.audioTrackNumber,this.bytesPerSample,this.data,this.isStereo}
+    );
+
+/// Timestamp (ms) of the audio frame.
+    @JsonKey(name: 'capture_timestamp')
+      final int? captureTimestamp;
+
+/// Number of samples per channel.
+@JsonKey(name: 'samples_per_channel_')
+      final int? samplesPerChannel;
+
+/// Audio sample rate (Hz).
+@JsonKey(name: 'sample_rate_hz_')
+      final int? sampleRateHz;
+
+/// Number of audio channels.
+@JsonKey(name: 'num_channels_')
+      final int? numChannels;
 
   /// @nodoc
-  Map<String, dynamic> toJson() => _$AudioEncodedFrameInfoToJson(this);
-}
+@JsonKey(name: 'audio_track_number_')
+      final int? audioTrackNumber;
 
-/// The parameters of the audio frame in PCM format.
-@JsonSerializable(explicitToJson: true, includeIfNull: false)
-class AudioPcmFrame {
-  /// @nodoc
-  const AudioPcmFrame(
-      {this.captureTimestamp,
-      this.samplesPerChannel,
-      this.sampleRateHz,
-      this.numChannels,
-      this.bytesPerSample,
-      this.data});
+/// Number of bytes per audio sample.
+@JsonKey(name: 'bytes_per_sample')
+      final BytesPerSample? bytesPerSample;
 
-  /// The timestamp (ms) of the audio frame.
-  @JsonKey(name: 'capture_timestamp')
-  final int? captureTimestamp;
-
-  /// The number of samples per channel in the audio frame.
-  @JsonKey(name: 'samples_per_channel_')
-  final int? samplesPerChannel;
-
-  /// Audio sample rate (Hz).
-  @JsonKey(name: 'sample_rate_hz_')
-  final int? sampleRateHz;
-
-  /// The number of audio channels.
-  @JsonKey(name: 'num_channels_')
-  final int? numChannels;
-
-  /// The number of bytes per sample.
-  @JsonKey(name: 'bytes_per_sample')
-  final BytesPerSample? bytesPerSample;
-
-  /// The audio frame.
-  @JsonKey(name: 'data_')
-  final List<int>? data;
+/// Audio frame data.
+@JsonKey(name: 'data_')
+      final List<int>? data;
 
   /// @nodoc
-  factory AudioPcmFrame.fromJson(Map<String, dynamic> json) =>
-      _$AudioPcmFrameFromJson(json);
+@JsonKey(name: 'is_stereo_')
+      final bool? isStereo;
 
-  /// @nodoc
-  Map<String, dynamic> toJson() => _$AudioPcmFrameToJson(this);
-}
+/// @nodoc
+    factory AudioPcmFrame.fromJson(Map<String, dynamic> json) => _$AudioPcmFrameFromJson(json);
 
-/// The channel mode.
+/// @nodoc
+    Map<String, dynamic> toJson() => _$AudioPcmFrameToJson(this);
+  }
+  
+
+
+/// Channel mode.
 @JsonEnum(alwaysCreate: true)
 enum AudioDualMonoMode {
-  /// 0: Original mode.
-  @JsonValue(0)
-  audioDualMonoStereo,
+  
+/// 0: Original mode.
+    @JsonValue(0)
+    audioDualMonoStereo,
+    
 
-  /// 1: Left channel mode. This mode replaces the audio of the right channel with the audio of the left channel, which means the user can only hear the audio of the left channel.
-  @JsonValue(1)
-  audioDualMonoL,
 
-  /// 2: Right channel mode. This mode replaces the audio of the left channel with the audio of the right channel, which means the user can only hear the audio of the right channel.
-  @JsonValue(2)
-  audioDualMonoR,
+/// 1: Left channel mode. This mode replaces the right channel audio with the left channel audio, so the user hears only the left channel.
+    @JsonValue(1)
+    audioDualMonoL,
+    
 
-  /// 3: Mixed channel mode. This mode mixes the audio of the left channel and the right channel, which means the user can hear the audio of the left channel and the right channel at the same time.
-  @JsonValue(3)
-  audioDualMonoMix,
+
+/// 2: Right channel mode. This mode replaces the left channel audio with the right channel audio, so the user hears only the right channel.
+    @JsonValue(2)
+    audioDualMonoR,
+    
+
+
+/// 3: Mix mode. This mode mixes the left and right channel data, so the user hears both channels simultaneously.
+    @JsonValue(3)
+    audioDualMonoMix,
+    
 }
 
 /// @nodoc
@@ -624,70 +682,106 @@ extension AudioDualMonoModeExt on AudioDualMonoMode {
     return $enumDecode(_$AudioDualMonoModeEnumMap, value);
   }
 
-  /// @nodoc
+/// @nodoc
   int value() {
     return _$AudioDualMonoModeEnumMap[this]!;
   }
 }
 
-/// The video pixel format.
+
+
+/// Video pixel format.
 @JsonEnum(alwaysCreate: true)
 enum VideoPixelFormat {
-  /// 0: Raw video pixel format.
-  @JsonValue(0)
-  videoPixelDefault,
+  
+/// 0: Original video pixel format.
+    @JsonValue(0)
+    videoPixelDefault,
+    
 
-  /// 1: The format is I420.
-  @JsonValue(1)
-  videoPixelI420,
 
-  /// @nodoc
-  @JsonValue(2)
-  videoPixelBgra,
+/// 1: I420 format.
+    @JsonValue(1)
+    videoPixelI420,
+    
 
-  /// @nodoc
-  @JsonValue(3)
-  videoPixelNv21,
-
-  /// 4: The format is RGBA.
-  @JsonValue(4)
-  videoPixelRgba,
 
   /// @nodoc
-  @JsonValue(8)
-  videoPixelNv12,
+    @JsonValue(2)
+    videoPixelBgra,
+    
+
 
   /// @nodoc
-  @JsonValue(10)
-  videoTexture2d,
+    @JsonValue(3)
+    videoPixelNv21,
+    
+
+
+/// 4: RGBA format.
+    @JsonValue(4)
+    videoPixelRgba,
+    
+
 
   /// @nodoc
-  @JsonValue(11)
-  videoTextureOes,
+    @JsonValue(8)
+    videoPixelNv12,
+    
+
 
   /// @nodoc
-  @JsonValue(12)
-  videoCvpixelNv12,
+    @JsonValue(10)
+    videoTexture2d,
+    
+
 
   /// @nodoc
-  @JsonValue(13)
-  videoCvpixelI420,
+    @JsonValue(11)
+    videoTextureOes,
+    
+
 
   /// @nodoc
-  @JsonValue(14)
-  videoCvpixelBgra,
+    @JsonValue(12)
+    videoCvpixelNv12,
+    
 
-  /// 16: The format is I422.
-  @JsonValue(16)
-  videoPixelI422,
-
-  /// 17: The ID3D11TEXTURE2D format. Currently supported types are DXGI_FORMAT_B8G8R8A8_UNORM, DXGI_FORMAT_B8G8R8A8_TYPELESS and DXGI_FORMAT_NV12.
-  @JsonValue(17)
-  videoTextureId3d11texture2d,
 
   /// @nodoc
-  @JsonValue(18)
-  videoPixelI010,
+    @JsonValue(13)
+    videoCvpixelI420,
+    
+
+
+  /// @nodoc
+    @JsonValue(14)
+    videoCvpixelBgra,
+    
+
+
+  /// @nodoc
+    @JsonValue(15)
+    videoCvpixelP010,
+    
+
+
+/// 16: I422 format.
+    @JsonValue(16)
+    videoPixelI422,
+    
+
+
+/// 17: ID3D11TEXTURE2D format. Currently supported types include DXGI_FORMAT_B8G8R8A8_UNORM, DXGI_FORMAT_B8G8R8A8_TYPELESS, and DXGI_FORMAT_NV12.
+    @JsonValue(17)
+    videoTextureId3d11texture2d,
+    
+
+
+  /// @nodoc
+    @JsonValue(18)
+    videoPixelI010,
+    
 }
 
 /// @nodoc
@@ -697,26 +791,34 @@ extension VideoPixelFormatExt on VideoPixelFormat {
     return $enumDecode(_$VideoPixelFormatEnumMap, value);
   }
 
-  /// @nodoc
+/// @nodoc
   int value() {
     return _$VideoPixelFormatEnumMap[this]!;
   }
 }
 
-/// Video display modes.
+
+
+/// Video display mode.
 @JsonEnum(alwaysCreate: true)
 enum RenderModeType {
-  /// 1: Hidden mode. Uniformly scale the video until one of its dimension fits the boundary (zoomed to fit). One dimension of the video may have clipped contents.
-  @JsonValue(1)
-  renderModeHidden,
+  
+/// 1: Video is scaled proportionally. Priority is to fill the view. Excess video that does not fit due to aspect ratio differences is cropped.
+    @JsonValue(1)
+    renderModeHidden,
+    
 
-  /// 2: Fit mode. Uniformly scale the video until one of its dimension fits the boundary (zoomed to fit). Areas that are not filled due to disparity in the aspect ratio are filled with black.
-  @JsonValue(2)
-  renderModeFit,
 
-  /// 3: Adaptive mode. Deprecated: This enumerator is deprecated and not recommended for use.
-  @JsonValue(3)
-  renderModeAdaptive,
+/// 2: Video is scaled proportionally. Priority is to display the entire video content. Black bars are added to fill areas not covered due to aspect ratio differences.
+    @JsonValue(2)
+    renderModeFit,
+    
+
+
+/// 3: Adaptive mode. Deprecated: This enum is deprecated and not recommended for use.
+    @JsonValue(3)
+    renderModeAdaptive,
+    
 }
 
 /// @nodoc
@@ -726,26 +828,34 @@ extension RenderModeTypeExt on RenderModeType {
     return $enumDecode(_$RenderModeTypeEnumMap, value);
   }
 
-  /// @nodoc
+/// @nodoc
   int value() {
     return _$RenderModeTypeEnumMap[this]!;
   }
 }
 
-/// @nodoc
+
+
+  /// @nodoc
 @JsonEnum(alwaysCreate: true)
 enum CameraVideoSourceType {
+  
   /// @nodoc
-  @JsonValue(0)
-  cameraSourceFront,
+    @JsonValue(0)
+    cameraSourceFront,
+    
+
 
   /// @nodoc
-  @JsonValue(1)
-  cameraSourceBack,
+    @JsonValue(1)
+    cameraSourceBack,
+    
+
 
   /// @nodoc
-  @JsonValue(2)
-  videoSourceUnspecified,
+    @JsonValue(2)
+    videoSourceUnspecified,
+    
 }
 
 /// @nodoc
@@ -755,24 +865,30 @@ extension CameraVideoSourceTypeExt on CameraVideoSourceType {
     return $enumDecode(_$CameraVideoSourceTypeEnumMap, value);
   }
 
-  /// @nodoc
+/// @nodoc
   int value() {
     return _$CameraVideoSourceTypeEnumMap[this]!;
   }
 }
 
-/// @nodoc
-abstract class VideoFrameMetaInfo {
-  /// @nodoc
-  Future<String> getMetaInfoStr(MetaInfoKey key);
-}
 
-/// @nodoc
+
+  /// @nodoc
+abstract class VideoFrameMetaInfo  {
+  /// @nodoc
+     Future<String> getMetaInfoStr( MetaInfoKey key) ;
+}
+    
+
+
+  /// @nodoc
 @JsonEnum(alwaysCreate: true)
 enum MetaInfoKey {
+  
   /// @nodoc
-  @JsonValue(0)
-  keyFaceCapture,
+    @JsonValue(0)
+    keyFaceCapture,
+    
 }
 
 /// @nodoc
@@ -782,131 +898,649 @@ extension MetaInfoKeyExt on MetaInfoKey {
     return $enumDecode(_$MetaInfoKeyEnumMap, value);
   }
 
-  /// @nodoc
+/// @nodoc
   int value() {
     return _$MetaInfoKeyEnumMap[this]!;
   }
 }
 
-/// The external video frame.
-@JsonSerializable(explicitToJson: true, includeIfNull: false)
-class ExternalVideoFrame {
-  /// @nodoc
-  const ExternalVideoFrame(
-      {this.type,
-      this.format,
-      this.buffer,
-      this.stride,
-      this.height,
-      this.cropLeft,
-      this.cropTop,
-      this.cropRight,
-      this.cropBottom,
-      this.rotation,
-      this.timestamp,
-      this.eglType,
-      this.textureId,
-      this.matrix,
-      this.metadataBuffer,
-      this.metadataSize,
-      this.alphaBuffer,
-      this.fillAlphaBuffer,
-      this.textureSliceIndex});
 
-  /// The video type. See VideoBufferType.
-  @JsonKey(name: 'type')
-  final VideoBufferType? type;
-
-  /// The pixel format. See VideoPixelFormat.
-  @JsonKey(name: 'format')
-  final VideoPixelFormat? format;
-
-  /// Video frame buffer.
-  @JsonKey(name: 'buffer', ignore: true)
-  final Uint8List? buffer;
-
-  /// Line spacing of the incoming video frame, which must be in pixels instead of bytes. For textures, it is the width of the texture.
-  @JsonKey(name: 'stride')
-  final int? stride;
-
-  /// Height of the incoming video frame.
-  @JsonKey(name: 'height')
-  final int? height;
-
-  /// Raw data related parameter. The number of pixels trimmed from the left. The default value is 0.
-  @JsonKey(name: 'cropLeft')
-  final int? cropLeft;
-
-  /// Raw data related parameter. The number of pixels trimmed from the top. The default value is 0.
-  @JsonKey(name: 'cropTop')
-  final int? cropTop;
-
-  /// Raw data related parameter. The number of pixels trimmed from the right. The default value is 0.
-  @JsonKey(name: 'cropRight')
-  final int? cropRight;
-
-  /// Raw data related parameter. The number of pixels trimmed from the bottom. The default value is 0.
-  @JsonKey(name: 'cropBottom')
-  final int? cropBottom;
-
-  /// Raw data related parameter. The clockwise rotation of the video frame. You can set the rotation angle as 0, 90, 180, or 270. The default value is 0.
-  @JsonKey(name: 'rotation')
-  final int? rotation;
-
-  /// Timestamp (ms) of the incoming video frame. An incorrect timestamp results in frame loss or unsynchronized audio and video.
-  @JsonKey(name: 'timestamp')
-  final int? timestamp;
-
-  /// This parameter only applies to video data in Texture format. Texture ID of the video frame.
-  @JsonKey(name: 'eglType')
-  final EglContextType? eglType;
-
-  /// This parameter only applies to video data in Texture format. Incoming 4 × 4 transformational matrix. The typical value is a unit matrix.
-  @JsonKey(name: 'textureId')
-  final int? textureId;
-
-  /// This parameter only applies to video data in Texture format. Incoming 4 × 4 transformational matrix. The typical value is a unit matrix.
-  @JsonKey(name: 'matrix')
-  final List<double>? matrix;
-
-  /// This parameter only applies to video data in Texture format. The MetaData buffer. The default value is NULL.
-  @JsonKey(name: 'metadata_buffer', ignore: true)
-  final Uint8List? metadataBuffer;
 
   /// @nodoc
-  @JsonKey(name: 'metadata_size')
-  final int? metadataSize;
+  @JsonSerializable(explicitToJson: true, includeIfNull: false)
+  class ColorSpace {
+  /// @nodoc
+    const ColorSpace(
+      {this.primaries,this.transfer,this.matrix,this.range}
+    );
 
   /// @nodoc
-  @JsonKey(name: 'alphaBuffer', ignore: true)
-  final Uint8List? alphaBuffer;
+    @JsonKey(name: 'primaries')
+      final PrimaryID? primaries;
 
   /// @nodoc
-  @JsonKey(name: 'fillAlphaBuffer')
-  final bool? fillAlphaBuffer;
-
-  /// This parameter only applies to video data in Windows Texture format. It represents an index of an ID3D11Texture2D texture object used by the video frame in the ID3D11Texture2D array.
-  @JsonKey(name: 'texture_slice_index')
-  final int? textureSliceIndex;
+@JsonKey(name: 'transfer')
+      final TransferID? transfer;
 
   /// @nodoc
-  factory ExternalVideoFrame.fromJson(Map<String, dynamic> json) =>
-      _$ExternalVideoFrameFromJson(json);
+@JsonKey(name: 'matrix')
+      final MatrixID? matrix;
 
   /// @nodoc
-  Map<String, dynamic> toJson() => _$ExternalVideoFrameToJson(this);
+@JsonKey(name: 'range')
+      final RangeID? range;
+
+/// @nodoc
+    factory ColorSpace.fromJson(Map<String, dynamic> json) => _$ColorSpaceFromJson(json);
+
+/// @nodoc
+    Map<String, dynamic> toJson() => _$ColorSpaceToJson(this);
+  }
+  
+
+
+  /// @nodoc
+@JsonEnum(alwaysCreate: true)
+enum PrimaryID {
+  
+  /// @nodoc
+    @JsonValue(1)
+    primaryidBt709,
+    
+
+
+  /// @nodoc
+    @JsonValue(2)
+    primaryidUnspecified,
+    
+
+
+  /// @nodoc
+    @JsonValue(4)
+    primaryidBt470m,
+    
+
+
+  /// @nodoc
+    @JsonValue(5)
+    primaryidBt470bg,
+    
+
+
+  /// @nodoc
+    @JsonValue(6)
+    primaryidSmpte170m,
+    
+
+
+  /// @nodoc
+    @JsonValue(7)
+    primaryidSmpte240m,
+    
+
+
+  /// @nodoc
+    @JsonValue(8)
+    primaryidFilm,
+    
+
+
+  /// @nodoc
+    @JsonValue(9)
+    primaryidBt2020,
+    
+
+
+  /// @nodoc
+    @JsonValue(10)
+    primaryidSmptest428,
+    
+
+
+  /// @nodoc
+    @JsonValue(11)
+    primaryidSmptest431,
+    
+
+
+  /// @nodoc
+    @JsonValue(12)
+    primaryidSmptest432,
+    
+
+
+  /// @nodoc
+    @JsonValue(22)
+    primaryidJedecp22,
+    
 }
 
 /// @nodoc
-@JsonEnum(alwaysCreate: true)
-enum EglContextType {
+extension PrimaryIDExt on PrimaryID {
   /// @nodoc
-  @JsonValue(0)
-  eglContext10,
+  static PrimaryID fromValue(int value) {
+    return $enumDecode(_$PrimaryIDEnumMap, value);
+  }
+
+/// @nodoc
+  int value() {
+    return _$PrimaryIDEnumMap[this]!;
+  }
+}
+
+
 
   /// @nodoc
-  @JsonValue(1)
-  eglContext14,
+@JsonEnum(alwaysCreate: true)
+enum RangeID {
+  
+  /// @nodoc
+    @JsonValue(0)
+    rangeidInvalid,
+    
+
+
+  /// @nodoc
+    @JsonValue(1)
+    rangeidLimited,
+    
+
+
+  /// @nodoc
+    @JsonValue(2)
+    rangeidFull,
+    
+
+
+  /// @nodoc
+    @JsonValue(3)
+    rangeidDerived,
+    
+}
+
+/// @nodoc
+extension RangeIDExt on RangeID {
+  /// @nodoc
+  static RangeID fromValue(int value) {
+    return $enumDecode(_$RangeIDEnumMap, value);
+  }
+
+/// @nodoc
+  int value() {
+    return _$RangeIDEnumMap[this]!;
+  }
+}
+
+
+
+  /// @nodoc
+@JsonEnum(alwaysCreate: true)
+enum MatrixID {
+  
+  /// @nodoc
+    @JsonValue(0)
+    matrixidRgb,
+    
+
+
+  /// @nodoc
+    @JsonValue(1)
+    matrixidBt709,
+    
+
+
+  /// @nodoc
+    @JsonValue(2)
+    matrixidUnspecified,
+    
+
+
+  /// @nodoc
+    @JsonValue(4)
+    matrixidFcc,
+    
+
+
+  /// @nodoc
+    @JsonValue(5)
+    matrixidBt470bg,
+    
+
+
+  /// @nodoc
+    @JsonValue(6)
+    matrixidSmpte170m,
+    
+
+
+  /// @nodoc
+    @JsonValue(7)
+    matrixidSmpte240m,
+    
+
+
+  /// @nodoc
+    @JsonValue(8)
+    matrixidYcocg,
+    
+
+
+  /// @nodoc
+    @JsonValue(9)
+    matrixidBt2020Ncl,
+    
+
+
+  /// @nodoc
+    @JsonValue(10)
+    matrixidBt2020Cl,
+    
+
+
+  /// @nodoc
+    @JsonValue(11)
+    matrixidSmpte2085,
+    
+
+
+  /// @nodoc
+    @JsonValue(12)
+    matrixidCdncls,
+    
+
+
+  /// @nodoc
+    @JsonValue(13)
+    matrixidCdcls,
+    
+
+
+  /// @nodoc
+    @JsonValue(14)
+    matrixidBt2100Ictcp,
+    
+}
+
+/// @nodoc
+extension MatrixIDExt on MatrixID {
+  /// @nodoc
+  static MatrixID fromValue(int value) {
+    return $enumDecode(_$MatrixIDEnumMap, value);
+  }
+
+/// @nodoc
+  int value() {
+    return _$MatrixIDEnumMap[this]!;
+  }
+}
+
+
+
+  /// @nodoc
+@JsonEnum(alwaysCreate: true)
+enum TransferID {
+  
+  /// @nodoc
+    @JsonValue(1)
+    transferidBt709,
+    
+
+
+  /// @nodoc
+    @JsonValue(2)
+    transferidUnspecified,
+    
+
+
+  /// @nodoc
+    @JsonValue(4)
+    transferidGamma22,
+    
+
+
+  /// @nodoc
+    @JsonValue(5)
+    transferidGamma28,
+    
+
+
+  /// @nodoc
+    @JsonValue(6)
+    transferidSmpte170m,
+    
+
+
+  /// @nodoc
+    @JsonValue(7)
+    transferidSmpte240m,
+    
+
+
+  /// @nodoc
+    @JsonValue(8)
+    transferidLinear,
+    
+
+
+  /// @nodoc
+    @JsonValue(9)
+    transferidLog,
+    
+
+
+  /// @nodoc
+    @JsonValue(10)
+    transferidLogSqrt,
+    
+
+
+  /// @nodoc
+    @JsonValue(11)
+    transferidIec6196624,
+    
+
+
+  /// @nodoc
+    @JsonValue(12)
+    transferidBt1361Ecg,
+    
+
+
+  /// @nodoc
+    @JsonValue(13)
+    transferidIec6196621,
+    
+
+
+  /// @nodoc
+    @JsonValue(14)
+    transferidBt202010,
+    
+
+
+  /// @nodoc
+    @JsonValue(15)
+    transferidBt202012,
+    
+
+
+  /// @nodoc
+    @JsonValue(16)
+    transferidSmptest2084,
+    
+
+
+  /// @nodoc
+    @JsonValue(17)
+    transferidSmptest428,
+    
+
+
+  /// @nodoc
+    @JsonValue(18)
+    transferidAribStdB67,
+    
+}
+
+/// @nodoc
+extension TransferIDExt on TransferID {
+  /// @nodoc
+  static TransferID fromValue(int value) {
+    return $enumDecode(_$TransferIDEnumMap, value);
+  }
+
+/// @nodoc
+  int value() {
+    return _$TransferIDEnumMap[this]!;
+  }
+}
+
+
+
+  /// @nodoc
+  @JsonSerializable(explicitToJson: true, includeIfNull: false)
+  class Hdr10MetadataInfo {
+  /// @nodoc
+    const Hdr10MetadataInfo(
+      {this.redPrimaryX,this.redPrimaryY,this.greenPrimaryX,this.greenPrimaryY,this.bluePrimaryX,this.bluePrimaryY,this.whitePointX,this.whitePointY,this.maxMasteringLuminance,this.minMasteringLuminance,this.maxContentLightLevel,this.maxFrameAverageLightLevel}
+    );
+
+  /// @nodoc
+    @JsonKey(name: 'redPrimaryX')
+      final int? redPrimaryX;
+
+  /// @nodoc
+@JsonKey(name: 'redPrimaryY')
+      final int? redPrimaryY;
+
+  /// @nodoc
+@JsonKey(name: 'greenPrimaryX')
+      final int? greenPrimaryX;
+
+  /// @nodoc
+@JsonKey(name: 'greenPrimaryY')
+      final int? greenPrimaryY;
+
+  /// @nodoc
+@JsonKey(name: 'bluePrimaryX')
+      final int? bluePrimaryX;
+
+  /// @nodoc
+@JsonKey(name: 'bluePrimaryY')
+      final int? bluePrimaryY;
+
+  /// @nodoc
+@JsonKey(name: 'whitePointX')
+      final int? whitePointX;
+
+  /// @nodoc
+@JsonKey(name: 'whitePointY')
+      final int? whitePointY;
+
+  /// @nodoc
+@JsonKey(name: 'maxMasteringLuminance')
+      final int? maxMasteringLuminance;
+
+  /// @nodoc
+@JsonKey(name: 'minMasteringLuminance')
+      final int? minMasteringLuminance;
+
+  /// @nodoc
+@JsonKey(name: 'maxContentLightLevel')
+      final int? maxContentLightLevel;
+
+  /// @nodoc
+@JsonKey(name: 'maxFrameAverageLightLevel')
+      final int? maxFrameAverageLightLevel;
+
+/// @nodoc
+    factory Hdr10MetadataInfo.fromJson(Map<String, dynamic> json) => _$Hdr10MetadataInfoFromJson(json);
+
+/// @nodoc
+    Map<String, dynamic> toJson() => _$Hdr10MetadataInfoToJson(this);
+  }
+  
+
+
+/// The relative position of alphaBuffer and the video frame.
+@JsonEnum(alwaysCreate: true)
+enum AlphaStitchMode {
+  
+/// 0: (Default) Only the video frame, i.e., alphaBuffer is not stitched with the video frame.
+    @JsonValue(0)
+    noAlphaStitch,
+    
+
+
+/// 1: alphaBuffer is above the video frame.
+    @JsonValue(1)
+    alphaStitchUp,
+    
+
+
+/// 2: alphaBuffer is below the video frame.
+    @JsonValue(2)
+    alphaStitchBelow,
+    
+
+
+/// 3: alphaBuffer is on the left side of the video frame.
+    @JsonValue(3)
+    alphaStitchLeft,
+    
+
+
+/// 4: alphaBuffer is on the right side of the video frame.
+    @JsonValue(4)
+    alphaStitchRight,
+    
+}
+
+/// @nodoc
+extension AlphaStitchModeExt on AlphaStitchMode {
+  /// @nodoc
+  static AlphaStitchMode fromValue(int value) {
+    return $enumDecode(_$AlphaStitchModeEnumMap, value);
+  }
+
+/// @nodoc
+  int value() {
+    return _$AlphaStitchModeEnumMap[this]!;
+  }
+}
+
+
+
+/// External video frame.
+  @JsonSerializable(explicitToJson: true, includeIfNull: false)
+  class ExternalVideoFrame {
+  /// @nodoc
+    const ExternalVideoFrame(
+      {this.type,this.format,this.buffer,this.stride,this.height,this.cropLeft,this.cropTop,this.cropRight,this.cropBottom,this.rotation,this.timestamp,this.eglType,this.textureId,this.fenceObject,this.matrix,this.metadataBuffer,this.metadataSize,this.alphaBuffer,this.fillAlphaBuffer,this.alphaStitchMode,this.d3d11Texture2d,this.textureSliceIndex,this.hdr10MetadataInfo,this.colorSpace}
+    );
+
+/// Video type. See VideoBufferType.
+    @JsonKey(name: 'type')
+      final VideoBufferType? type;
+
+/// Pixel format. See VideoPixelFormat.
+@JsonKey(name: 'format')
+      final VideoPixelFormat? format;
+
+/// Video buffer.
+@JsonKey(name: 'buffer',ignore: true)
+      final Uint8List? buffer;
+
+/// Stride of the input video frame, in pixels (not bytes). For Texture, this refers to the width of the Texture.
+@JsonKey(name: 'stride')
+      final int? stride;
+
+/// Height of the input video frame.
+@JsonKey(name: 'height')
+      final int? height;
+
+/// This parameter only applies to raw video data.
+@JsonKey(name: 'cropLeft')
+      final int? cropLeft;
+
+/// This parameter only applies to raw video data.
+@JsonKey(name: 'cropTop')
+      final int? cropTop;
+
+/// This parameter only applies to raw video data.
+@JsonKey(name: 'cropRight')
+      final int? cropRight;
+
+/// This parameter only applies to raw video data.
+@JsonKey(name: 'cropBottom')
+      final int? cropBottom;
+
+/// Field related to raw data. Specifies whether to rotate the input video frame clockwise. Options are 0, 90, 180, 270. Default is 0.
+@JsonKey(name: 'rotation')
+      final int? rotation;
+
+/// Timestamp of the input video frame, in milliseconds. Incorrect timestamps may cause frame drops or audio-video desynchronization.
+@JsonKey(name: 'timestamp')
+      final int? timestamp;
+
+/// This parameter only applies to video data in Texture format. Refers to the Texture ID of the video frame.
+@JsonKey(name: 'eglType')
+      final EglContextType? eglType;
+
+/// This parameter only applies to video data in Texture format. It is a 4x4 input transformation matrix, typically an identity matrix.
+@JsonKey(name: 'textureId')
+      final int? textureId;
+
+  /// @nodoc
+@JsonKey(name: 'fenceObject')
+      final int? fenceObject;
+
+/// This parameter only applies to video data in Texture format. It is a 4x4 input transformation matrix, typically an identity matrix.
+@JsonKey(name: 'matrix')
+      final List<double>? matrix;
+
+/// This parameter only applies to video data in Texture format. Refers to the data buffer of MetaData, default value is NULL.
+@JsonKey(name: 'metadataBuffer',ignore: true)
+      final Uint8List? metadataBuffer;
+
+/// This parameter only applies to video data in Texture format. Refers to the size of MetaData, default value is 0.
+@JsonKey(name: 'metadataSize')
+      final int? metadataSize;
+
+/// Alpha channel data output by portrait segmentation algorithm. This data matches the size of the video frame. Each pixel value ranges from [0,255], where 0 represents background and 255 represents foreground (portrait).
+/// You can use this parameter to render the video background with various effects, such as transparency, solid color, image, video, etc. In custom video rendering scenarios, make sure both the input video frame and alphaBuffer are of Full Range type; other types may cause incorrect rendering of alpha data.
+@JsonKey(name: 'alphaBuffer',ignore: true)
+      final Uint8List? alphaBuffer;
+
+/// For video data in BGRA or RGBA format, you can choose either method to set the alpha channel data:
+///  Automatically fill by setting this parameter to true.
+///  Set via the alphaBuffer parameter. This parameter only applies to video data in BGRA or RGBA format. Sets whether to extract the alpha channel data from the video frame and automatically fill it into alphaBuffer : true : Extract and fill alpha channel data. false : (default) Do not extract or fill alpha channel data.
+@JsonKey(name: 'fillAlphaBuffer')
+      final bool? fillAlphaBuffer;
+
+/// When the video frame contains alpha channel data, sets the relative position of alphaBuffer to the video frame. See AlphaStitchMode.
+@JsonKey(name: 'alphaStitchMode')
+      final AlphaStitchMode? alphaStitchMode;
+
+/// This parameter only applies to video data in Windows Texture format. Represents a pointer to an object of type ID3D11Texture2D, which is used by the video frame.
+@JsonKey(name: 'd3d11Texture2d',readValue: readIntPtr)
+      final void? d3d11Texture2d;
+
+/// This parameter only applies to video data in Windows Texture format. Indicates the index of the ID3D11Texture2D texture object used by the video frame in the ID3D11Texture2D array.
+@JsonKey(name: 'textureSliceIndex')
+      final int? textureSliceIndex;
+
+  /// @nodoc
+@JsonKey(name: 'hdr10MetadataInfo')
+      final Hdr10MetadataInfo? hdr10MetadataInfo;
+
+/// Color space property of the video frame. By default, Full Range and BT.709 standard configuration is applied. You can customize the setting based on your custom capture or rendering requirements. See [VideoColorSpace](https://developer.mozilla.org/en-US/docs/Web/API/VideoColorSpace).
+@JsonKey(name: 'colorSpace')
+      final ColorSpace? colorSpace;
+
+/// @nodoc
+    factory ExternalVideoFrame.fromJson(Map<String, dynamic> json) => _$ExternalVideoFrameFromJson(json);
+
+/// @nodoc
+    Map<String, dynamic> toJson() => _$ExternalVideoFrameToJson(this);
+  }
+  
+
+
+  /// @nodoc
+@JsonEnum(alwaysCreate: true)
+enum EglContextType {
+  
+  /// @nodoc
+    @JsonValue(0)
+    eglContext10,
+    
+
+
+  /// @nodoc
+    @JsonValue(1)
+    eglContext14,
+    
 }
 
 /// @nodoc
@@ -916,26 +1550,34 @@ extension EglContextTypeExt on EglContextType {
     return $enumDecode(_$EglContextTypeEnumMap, value);
   }
 
-  /// @nodoc
+/// @nodoc
   int value() {
     return _$EglContextTypeEnumMap[this]!;
   }
 }
 
-/// The video buffer type.
+
+
+/// Video buffer type.
 @JsonEnum(alwaysCreate: true)
 enum VideoBufferType {
-  /// 1: The video buffer in the format of raw data.
-  @JsonValue(1)
-  videoBufferRawData,
+  
+/// 1: Type is raw data.
+    @JsonValue(1)
+    videoBufferRawData,
+    
 
-  /// 2: The video buffer in the format of raw data.
-  @JsonValue(2)
-  videoBufferArray,
 
-  /// 3: The video buffer in the format of Texture.
-  @JsonValue(3)
-  videoBufferTexture,
+/// 2: Type is raw data.
+    @JsonValue(2)
+    videoBufferArray,
+    
+
+
+/// 3: Type is Texture.
+    @JsonValue(3)
+    videoBufferTexture,
+    
 }
 
 /// @nodoc
@@ -945,138 +1587,145 @@ extension VideoBufferTypeExt on VideoBufferType {
     return $enumDecode(_$VideoBufferTypeEnumMap, value);
   }
 
-  /// @nodoc
+/// @nodoc
   int value() {
     return _$VideoBufferTypeEnumMap[this]!;
   }
 }
 
-/// Configurations of the video frame.
+
+
+/// Video frame property settings.
 ///
-/// Note that the buffer provides a pointer to a pointer. This interface cannot modify the pointer of the buffer, but it can modify the content of the buffer.
-@JsonSerializable(explicitToJson: true, includeIfNull: false)
-class VideoFrame {
+/// The buffer is a pointer to a pointer. This interface cannot modify the buffer pointer, only the content of the buffer.
+  @JsonSerializable(explicitToJson: true, includeIfNull: false)
+  class VideoFrame {
   /// @nodoc
-  const VideoFrame(
-      {this.type,
-      this.width,
-      this.height,
-      this.yStride,
-      this.uStride,
-      this.vStride,
-      this.yBuffer,
-      this.uBuffer,
-      this.vBuffer,
-      this.rotation,
-      this.renderTimeMs,
-      this.avsyncType,
-      this.metadataBuffer,
-      this.metadataSize,
-      this.textureId,
-      this.matrix,
-      this.alphaBuffer,
-      this.pixelBuffer,
-      this.metaInfo});
+    const VideoFrame(
+      {this.type,this.width,this.height,this.yStride,this.uStride,this.vStride,this.yBuffer,this.uBuffer,this.vBuffer,this.rotation,this.renderTimeMs,this.avsyncType,this.metadataBuffer,this.metadataSize,this.textureId,this.matrix,this.alphaBuffer,this.alphaStitchMode,this.pixelBuffer,this.metaInfo,this.hdr10MetadataInfo,this.colorSpace}
+    );
 
-  /// The pixel format. See VideoPixelFormat.
-  @JsonKey(name: 'type')
-  final VideoPixelFormat? type;
+/// Pixel format. See VideoPixelFormat.
+    @JsonKey(name: 'type')
+      final VideoPixelFormat? type;
 
-  /// The width of the video, in pixels.
-  @JsonKey(name: 'width')
-  final int? width;
+/// Pixel width of the video.
+@JsonKey(name: 'width')
+      final int? width;
 
-  /// The height of the video, in pixels.
-  @JsonKey(name: 'height')
-  final int? height;
+/// Pixel height of the video.
+@JsonKey(name: 'height')
+      final int? height;
 
-  /// For YUV data, the line span of the Y buffer; for RGBA data, the total data length. When dealing with video data, it is necessary to process the offset between each line of pixel data based on this parameter, otherwise it may result in image distortion.
-  @JsonKey(name: 'yStride')
-  final int? yStride;
+/// For YUV data, the line stride of the Y buffer; for RGBA data, the total data length. When processing video data, you must handle the offset between each row of pixel data based on this parameter; otherwise, image distortion may occur.
+@JsonKey(name: 'yStride')
+      final int? yStride;
 
-  /// For YUV data, the line span of the U buffer; for RGBA data, the value is 0. When dealing with video data, it is necessary to process the offset between each line of pixel data based on this parameter, otherwise it may result in image distortion.
-  @JsonKey(name: 'uStride')
-  final int? uStride;
+/// For YUV data, the line stride of the U buffer; for RGBA data, the value is 0. When processing video data, you must handle the offset between each row of pixel data based on this parameter; otherwise, image distortion may occur.
+@JsonKey(name: 'uStride')
+      final int? uStride;
 
-  /// For YUV data, the line span of the V buffer; for RGBA data, the value is 0. When dealing with video data, it is necessary to process the offset between each line of pixel data based on this parameter, otherwise it may result in image distortion.
-  @JsonKey(name: 'vStride')
-  final int? vStride;
+/// For YUV data, the line stride of the V buffer; for RGBA data, the value is 0. When processing video data, you must handle the offset between each row of pixel data based on this parameter; otherwise, image distortion may occur.
+@JsonKey(name: 'vStride')
+      final int? vStride;
 
-  /// For YUV data, the pointer to the Y buffer; for RGBA data, the data buffer.
-  @JsonKey(name: 'yBuffer', ignore: true)
-  final Uint8List? yBuffer;
+/// For YUV data, the pointer to the Y buffer; for RGBA data, the data buffer.
+@JsonKey(name: 'yBuffer',ignore: true)
+      final Uint8List? yBuffer;
 
-  /// For YUV data, the pointer to the U buffer; for RGBA data, the value is 0.
-  @JsonKey(name: 'uBuffer', ignore: true)
-  final Uint8List? uBuffer;
+/// For YUV data, the pointer to the U buffer; for RGBA data, the value is null.
+@JsonKey(name: 'uBuffer',ignore: true)
+      final Uint8List? uBuffer;
 
-  /// For YUV data, the pointer to the V buffer; for RGBA data, the value is 0.
-  @JsonKey(name: 'vBuffer', ignore: true)
-  final Uint8List? vBuffer;
+/// For YUV data, the pointer to the V buffer; for RGBA data, the value is null.
+@JsonKey(name: 'vBuffer',ignore: true)
+      final Uint8List? vBuffer;
 
-  /// The clockwise rotation of the video frame before rendering. Supported values include 0, 90, 180, and 270 degrees.
-  @JsonKey(name: 'rotation')
-  final int? rotation;
+/// Clockwise rotation angle of this frame before rendering. Supported values are 0, 90, 180, and 270 degrees.
+@JsonKey(name: 'rotation')
+      final int? rotation;
 
-  /// The Unix timestamp (ms) when the video frame is rendered. This timestamp can be used to guide the rendering of the video frame. This parameter is required.
-  @JsonKey(name: 'renderTimeMs')
-  final int? renderTimeMs;
+/// Unix timestamp (in milliseconds) when the video frame is rendered. This timestamp can be used to guide video frame rendering. This parameter is required.
+@JsonKey(name: 'renderTimeMs')
+      final int? renderTimeMs;
 
-  /// Reserved for future use.
-  @JsonKey(name: 'avsync_type')
-  final int? avsyncType;
+/// Reserved parameter.
+@JsonKey(name: 'avsync_type')
+      final int? avsyncType;
 
-  /// This parameter only applies to video data in Texture format. The MetaData buffer. The default value is NULL.
-  @JsonKey(name: 'metadata_buffer', ignore: true)
-  final Uint8List? metadataBuffer;
+/// This parameter applies only to video data in Texture format. It refers to the data buffer of MetaData. Default is NULL.
+@JsonKey(name: 'metadata_buffer',ignore: true)
+      final Uint8List? metadataBuffer;
 
-  /// This parameter only applies to video data in Texture format. The MetaData size. The default value is 0.
-  @JsonKey(name: 'metadata_size')
-  final int? metadataSize;
+/// This parameter applies only to video data in Texture format. It refers to the size of MetaData. Default is 0.
+@JsonKey(name: 'metadata_size')
+      final int? metadataSize;
 
-  /// This parameter only applies to video data in Texture format. Texture ID.
-  @JsonKey(name: 'textureId')
-  final int? textureId;
+/// This parameter applies only to video data in Texture format. Texture ID.
+@JsonKey(name: 'textureId')
+      final int? textureId;
+
+/// This parameter applies only to video data in Texture format. A 4x4 transformation matrix input, typically an identity matrix.
+@JsonKey(name: 'matrix')
+      final List<double>? matrix;
+
+/// Alpha channel data output by portrait segmentation algorithm. This data has the same dimensions as the video frame. Each pixel value ranges from [0,255], where 0 represents background and 255 represents foreground (portrait).
+/// By setting this parameter, you can render the video background with various effects such as transparency, solid color, image, or video.
+///  In custom video rendering scenarios, ensure that both the video frame and alphaBuffer are Full Range type; other types may result in incorrect rendering of Alpha data.
+///  Make sure that the dimensions of alphaBuffer exactly match the video frame (width × height), otherwise the app may crash.
+@JsonKey(name: 'alphaBuffer',ignore: true)
+      final Uint8List? alphaBuffer;
+
+/// When the video frame contains Alpha channel data, sets the relative position of alphaBuffer and the video frame. See AlphaStitchMode.
+@JsonKey(name: 'alphaStitchMode')
+      final AlphaStitchMode? alphaStitchMode;
 
   /// @nodoc
-  @JsonKey(name: 'matrix')
-  final List<double>? matrix;
+@JsonKey(name: 'pixelBuffer',ignore: true)
+      final Uint8List? pixelBuffer;
+
+/// Metadata in the video frame. This parameter requires [contacting technical support](https://www.agora.io/cn/contact/) to use.
+@VideoFrameMetaInfoConverter()
+      @JsonKey(name: 'metaInfo')
+      final VideoFrameMetaInfo? metaInfo;
 
   /// @nodoc
-  @JsonKey(name: 'alphaBuffer', ignore: true)
-  final Uint8List? alphaBuffer;
+@JsonKey(name: 'hdr10MetadataInfo')
+      final Hdr10MetadataInfo? hdr10MetadataInfo;
 
-  /// @nodoc
-  @JsonKey(name: 'pixelBuffer', ignore: true)
-  final Uint8List? pixelBuffer;
-
-  /// The meta information in the video frame. To use this parameter, please contact.
-  @VideoFrameMetaInfoConverter()
-  @JsonKey(name: 'metaInfo')
-  final VideoFrameMetaInfo? metaInfo;
-
-  /// @nodoc
-  factory VideoFrame.fromJson(Map<String, dynamic> json) =>
-      _$VideoFrameFromJson(json);
-
-  /// @nodoc
-  Map<String, dynamic> toJson() => _$VideoFrameToJson(this);
-}
+/// Color space properties of the video frame. By default, Full Range and BT.709 configuration is applied. You can customize it according to the needs of custom capture and rendering. See [VideoColorSpace](https://developer.mozilla.org/en-US/docs/Web/API/VideoColorSpace).
+@JsonKey(name: 'colorSpace')
+      final ColorSpace? colorSpace;
 
 /// @nodoc
+    factory VideoFrame.fromJson(Map<String, dynamic> json) => _$VideoFrameFromJson(json);
+
+/// @nodoc
+    Map<String, dynamic> toJson() => _$VideoFrameToJson(this);
+  }
+  
+
+
+  /// @nodoc
 @JsonEnum(alwaysCreate: true)
 enum MediaPlayerSourceType {
+  
   /// @nodoc
-  @JsonValue(0)
-  mediaPlayerSourceDefault,
+    @JsonValue(0)
+    mediaPlayerSourceDefault,
+    
+
 
   /// @nodoc
-  @JsonValue(1)
-  mediaPlayerSourceFullFeatured,
+    @JsonValue(1)
+    mediaPlayerSourceFullFeatured,
+    
+
 
   /// @nodoc
-  @JsonValue(2)
-  mediaPlayerSourceSimple,
+    @JsonValue(2)
+    mediaPlayerSourceSimple,
+    
 }
 
 /// @nodoc
@@ -1086,28 +1735,42 @@ extension MediaPlayerSourceTypeExt on MediaPlayerSourceType {
     return $enumDecode(_$MediaPlayerSourceTypeEnumMap, value);
   }
 
-  /// @nodoc
+/// @nodoc
   int value() {
     return _$MediaPlayerSourceTypeEnumMap[this]!;
   }
 }
 
-/// The frame position of the video observer.
+
+
+/// Video observation position.
 @JsonEnum(alwaysCreate: true)
 enum VideoModulePosition {
-  /// 1: The location of the locally collected video data after preprocessing corresponds to the onCaptureVideoFrame callback. The observed video here has the effect of video pre-processing, which can be verified by enabling image enhancement, virtual background, or watermark.
-  @JsonValue(1 << 0)
-  positionPostCapturer,
+  
+/// 1: Position after local video capture and preprocessing, corresponding to the onCaptureVideoFrame callback. The observed video at this position includes preprocessing effects and can be verified by enabling beautification, virtual background, or watermark.
+    @JsonValue(1<<0)
+    positionPostCapturer,
+    
 
-  /// 2: The pre-renderer position, which corresponds to the video data in the onRenderVideoFrame callback.
-  @JsonValue(1 << 1)
-  positionPreRenderer,
 
-  /// 4: The pre-encoder position, which corresponds to the video data in the onPreEncodeVideoFrame callback. The observed video here has the effects of video pre-processing and encoding pre-processing.
-  ///  To verify the pre-processing effects of the video, you can enable image enhancement, virtual background, or watermark.
-  ///  To verify the pre-encoding processing effect, you can set a lower frame rate (for example, 5 fps).
-  @JsonValue(1 << 2)
-  positionPreEncoder,
+/// 2: Position before rendering received remote video, corresponding to the onRenderVideoFrame callback.
+    @JsonValue(1<<1)
+    positionPreRenderer,
+    
+
+
+/// 4: Position before local video encoding, corresponding to the onPreEncodeVideoFrame callback. The observed video at this position includes preprocessing and pre-encoding effects:
+///  For preprocessing effects, verify by enabling beautification, virtual background, or watermark.
+///  For pre-encoding effects, verify by setting a low frame rate (e.g., 5 fps).
+    @JsonValue(1<<2)
+    positionPreEncoder,
+    
+
+
+/// 8: Position after local video capture and before preprocessing. The observed video at this position does not include preprocessing effects and can be verified by enabling beautification, virtual background, or watermark.
+    @JsonValue(1<<3)
+    positionPostCapturerOrigin,
+    
 }
 
 /// @nodoc
@@ -1117,84 +1780,261 @@ extension VideoModulePositionExt on VideoModulePosition {
     return $enumDecode(_$VideoModulePositionEnumMap, value);
   }
 
-  /// @nodoc
+/// @nodoc
   int value() {
     return _$VideoModulePositionEnumMap[this]!;
   }
 }
 
-/// This class is used to get raw PCM audio.
+
+
+  /// @nodoc
+@JsonEnum(alwaysCreate: true)
+enum ContentInspectResult {
+  
+  /// @nodoc
+    @JsonValue(1)
+    contentInspectNeutral,
+    
+
+
+  /// @nodoc
+    @JsonValue(2)
+    contentInspectSexy,
+    
+
+
+  /// @nodoc
+    @JsonValue(3)
+    contentInspectPorn,
+    
+}
+
+/// @nodoc
+extension ContentInspectResultExt on ContentInspectResult {
+  /// @nodoc
+  static ContentInspectResult fromValue(int value) {
+    return $enumDecode(_$ContentInspectResultEnumMap, value);
+  }
+
+/// @nodoc
+  int value() {
+    return _$ContentInspectResultEnumMap[this]!;
+  }
+}
+
+
+
+/// Type of video content inspection module.
+@JsonEnum(alwaysCreate: true)
+enum ContentInspectType {
+  
+/// 0: (Default) This module has no actual functionality. Do not set type to this value.
+    @JsonValue(0)
+    contentInspectInvalid,
+    
+
+
+  /// @nodoc
+    @JsonValue(1)
+    contentInspectModeration,
+    
+
+
+/// 2: Uses Agora's proprietary plugin for screenshot upload. The SDK captures and uploads screenshots of the video stream.
+    @JsonValue(2)
+    contentInspectSupervision,
+    
+
+
+/// 3: Uses Cloud Marketplace plugin for screenshot upload. The SDK uses the Cloud Marketplace video moderation plugin to capture and upload screenshots of the video stream.
+    @JsonValue(3)
+    contentInspectImageModeration,
+    
+}
+
+/// @nodoc
+extension ContentInspectTypeExt on ContentInspectType {
+  /// @nodoc
+  static ContentInspectType fromValue(int value) {
+    return $enumDecode(_$ContentInspectTypeEnumMap, value);
+  }
+
+/// @nodoc
+  int value() {
+    return _$ContentInspectTypeEnumMap[this]!;
+  }
+}
+
+
+
+/// ContentInspectModule struct for configuring the upload frequency of local screenshots.
+  @JsonSerializable(explicitToJson: true, includeIfNull: false)
+  class ContentInspectModule {
+  /// @nodoc
+    const ContentInspectModule(
+      {this.type,this.interval,this.position}
+    );
+
+/// The type of function module. See ContentInspectType.
+    @JsonKey(name: 'type')
+      final ContentInspectType? type;
+
+/// Interval for uploading local screenshots, in seconds. The value must be greater than 0. Default is 0, meaning no screenshot upload. Recommended value is 10 seconds, but you can adjust it based on your business requirements.
+@JsonKey(name: 'interval')
+      final int? interval;
+
+/// Position of the video observer. See VideoModulePosition.
+@JsonKey(name: 'position')
+      final VideoModulePosition? position;
+
+/// @nodoc
+    factory ContentInspectModule.fromJson(Map<String, dynamic> json) => _$ContentInspectModuleFromJson(json);
+
+/// @nodoc
+    Map<String, dynamic> toJson() => _$ContentInspectModuleToJson(this);
+  }
+  
+
+
+/// Local screenshot upload configuration.
+  @JsonSerializable(explicitToJson: true, includeIfNull: false)
+  class ContentInspectConfig {
+  /// @nodoc
+    const ContentInspectConfig(
+      {this.extraInfo,this.serverConfig,this.modules,this.moduleCount}
+    );
+
+/// Additional information, with a maximum length of 1024 bytes.
+/// The SDK uploads the additional information along with the screenshot to the Agora server; after the screenshot is completed, the Agora server sends the additional information to your server along with the callback notification.
+    @JsonKey(name: 'extraInfo')
+      final String? extraInfo;
+
+/// (Optional) Server configuration related to video moderation in the Cloud Marketplace. This parameter takes effect only when the type in ContentInspectModule is set to contentInspectImageModeration. To use this feature, please [contact technical support](https://www.agora.io/cn/contact/).
+@JsonKey(name: 'serverConfig')
+      final String? serverConfig;
+
+/// Function modules. See ContentInspectModule.
+/// Supports up to 32 ContentInspectModule instances. The value range for MAX_CONTENT_INSPECT_MODULE_COUNT is an integer between [1, 32]. Only one instance can be configured for each function module. Currently, only screenshot upload is supported.
+@JsonKey(name: 'modules')
+      final List<ContentInspectModule>? modules;
+
+/// The number of function modules, i.e., the number of configured ContentInspectModule instances. Must match the number of instances configured in modules. Maximum value is 32.
+@JsonKey(name: 'moduleCount')
+      final int? moduleCount;
+
+/// @nodoc
+    factory ContentInspectConfig.fromJson(Map<String, dynamic> json) => _$ContentInspectConfigFromJson(json);
+
+/// @nodoc
+    Map<String, dynamic> toJson() => _$ContentInspectConfigToJson(this);
+  }
+  
+
+
+/// Video snapshot settings.
+  @JsonSerializable(explicitToJson: true, includeIfNull: false)
+  class SnapshotConfig {
+  /// @nodoc
+    const SnapshotConfig(
+      {this.filePath,this.position}
+    );
+
+/// Make sure the directory exists and is writable. Local path to save the snapshot, including file name and format. For example:
+///  Windows: C:\Users\<user_name>\AppData\Local\Agora\<process_name>\example.jpg
+///  iOS: /App Sandbox/Library/Caches/example.jpg
+///  macOS: ～/Library/Logs/example.jpg
+///  Android: /storage/emulated/0/Android/data/<package name>/files/example.jpg
+    @JsonKey(name: 'filePath')
+      final String? filePath;
+
+/// The position of the video frame to snapshot within the video pipeline. See VideoModulePosition.
+@JsonKey(name: 'position')
+      final VideoModulePosition? position;
+
+/// @nodoc
+    factory SnapshotConfig.fromJson(Map<String, dynamic> json) => _$SnapshotConfigFromJson(json);
+
+/// @nodoc
+    Map<String, dynamic> toJson() => _$SnapshotConfigToJson(this);
+  }
+  
+
+/// This class is used to obtain raw PCM audio data.
 ///
-/// You can inherit this class and implement the onFrame callback to get raw PCM audio.
-class AudioPcmFrameSink {
+/// You can inherit this class and implement the onFrame callback to get PCM audio data.
+class AudioPcmFrameSink  {
+
   /// @nodoc
   const AudioPcmFrameSink({
     this.onFrame,
-  });
+  })
+  ;
 
-  /// Occurs each time the player receives an audio frame.
-  ///
-  /// After registering the audio frame observer, the callback occurs every time the player receives an audio frame, reporting the detailed information of the audio frame.
-  ///
-  /// * [frame] The audio frame information. See AudioPcmFrame.
+/// Callback for received audio frame.
+///
+/// After registering the audio data observer, this callback is triggered each time an audio frame is received to report audio frame information.
+///
+/// * [frame] Audio frame information. See AudioPcmFrame.
   final void Function(AudioPcmFrame frame)? onFrame;
-}
+  }
 
-/// The audio frame observer.
-class AudioFrameObserverBase {
+/// Audio observer.
+///
+/// You can call registerAudioFrameObserver to register or unregister the AudioFrameObserverBase.
+class AudioFrameObserverBase  {
+
   /// @nodoc
   const AudioFrameObserverBase({
-    this.onRecordAudioFrame,
-    this.onPlaybackAudioFrame,
-    this.onMixedAudioFrame,
-    this.onEarMonitoringAudioFrame,
-  });
+    this.onRecordAudioFrame,this.onPlaybackAudioFrame,this.onMixedAudioFrame,this.onEarMonitoringAudioFrame,
+  })
+  ;
 
-  /// Gets the captured audio frame.
-  ///
-  /// To ensure that the data format of captured audio frame is as expected, Agora recommends that you set the audio data format as follows: After calling setRecordingAudioFrameParameters to set the audio data format, call registerAudioFrameObserver to register the audio observer object, the SDK will calculate the sampling interval according to the parameters set in this method, and triggers the onRecordAudioFrame callback according to the sampling interval.
-  ///  Due to framework limitations, this callback does not support sending processed audio data back to the SDK.
-  ///
-  /// * [audioFrame] The raw audio data. See AudioFrame.
-  /// * [channelId] The channel ID.
-  final void Function(String channelId, AudioFrame audioFrame)?
-      onRecordAudioFrame;
+/// Retrieves the raw audio data collected.
+///
+/// To ensure the format of the recorded audio data meets expectations, you can set the audio data format using the following methods: Call setRecordingAudioFrameParameters to set the audio data format, then call registerAudioFrameObserver to register the audio frame observer object. The SDK calculates the sampling interval based on the parameters of this method and triggers the onRecordAudioFrame callback accordingly.
+///  Due to framework limitations, this callback does not support sending the processed audio data back to the SDK.
+///
+/// * [audioFrame] Raw audio data. See AudioFrame.
+/// * [channelId] Channel ID.
+  final void Function(String channelId, AudioFrame audioFrame)? onRecordAudioFrame;
 
-  /// Gets the raw audio frame for playback.
-  ///
-  /// To ensure that the data format of audio frame for playback is as expected, Agora recommends that you set the audio data format as follows: After calling setPlaybackAudioFrameParameters to set the audio data format and registerAudioFrameObserver to register the audio frame observer object, the SDK calculates the sampling interval according to the parameters set in the methods, and triggers the onPlaybackAudioFrame callback according to the sampling interval.
-  ///  Due to framework limitations, this callback does not support sending processed audio data back to the SDK.
-  ///
-  /// * [audioFrame] The raw audio data. See AudioFrame.
-  /// * [channelId] The channel ID.
-  final void Function(String channelId, AudioFrame audioFrame)?
-      onPlaybackAudioFrame;
+/// Retrieves the raw audio data being played.
+///
+/// To ensure the format of the playback audio data meets expectations, you can set the audio data format using the following methods: Call setPlaybackAudioFrameParameters to set the audio data format, then call registerAudioFrameObserver to register the audio frame observer object. The SDK calculates the sampling interval based on the parameters of this method and triggers the onPlaybackAudioFrame callback accordingly.
+///  Due to framework limitations, this callback does not support sending the processed audio data back to the SDK.
+///
+/// * [audioFrame] Raw audio data. See AudioFrame.
+/// * [channelId] Channel ID.
+final void Function(String channelId, AudioFrame audioFrame)? onPlaybackAudioFrame;
 
-  /// Retrieves the mixed captured and playback audio frame.
-  ///
-  /// To ensure that the data format of mixed captured and playback audio frame meets the expectations, Agora recommends that you set the data format as follows: After calling setMixedAudioFrameParameters to set the audio data format and registerAudioFrameObserver to register the audio frame observer object, the SDK calculates the sampling interval according to the parameters set in the methods, and triggers the onMixedAudioFrame callback according to the sampling interval.
-  ///  Due to framework limitations, this callback does not support sending processed audio data back to the SDK.
-  ///
-  /// * [audioFrame] The raw audio data. See AudioFrame.
-  /// * [channelId] The channel ID.
-  final void Function(String channelId, AudioFrame audioFrame)?
-      onMixedAudioFrame;
+/// Retrieves the data after mixing recorded and playback audio.
+///
+/// To ensure the format of the mixed audio data from recording and playback meets expectations, you can set the audio data format using the following methods: Call setMixedAudioFrameParameters to set the audio data format, then call registerAudioFrameObserver to register the audio frame observer object. The SDK calculates the sampling interval based on the parameters of this method and triggers the onMixedAudioFrame callback accordingly.
+///  Due to framework limitations, this callback does not support sending the processed audio data back to the SDK.
+///
+/// * [audioFrame] Raw audio data. See AudioFrame.
+/// * [channelId] Channel ID.
+final void Function(String channelId, AudioFrame audioFrame)? onMixedAudioFrame;
 
-  /// Gets the in-ear monitoring audio frame.
-  ///
-  /// In order to ensure that the obtained in-ear audio data meets the expectations, Agora recommends that you set the in-ear monitoring-ear audio data format as follows: After calling setEarMonitoringAudioFrameParameters to set the audio data format and registerAudioFrameObserver to register the audio frame observer object, the SDK calculates the sampling interval according to the parameters set in the methods, and triggers the onEarMonitoringAudioFrame callback according to the sampling interval.
-  ///  Due to framework limitations, this callback does not support sending processed audio data back to the SDK.
-  ///
-  /// * [audioFrame] The raw audio data. See AudioFrame.
-  final void Function(AudioFrame audioFrame)? onEarMonitoringAudioFrame;
-}
+/// Receives the raw audio data for ear monitoring.
+///
+/// To ensure the audio data format for ear monitoring meets expectations, you can set the format using the following methods: Call setEarMonitoringAudioFrameParameters to set the audio data format, then call registerAudioFrameObserver to register the audio observer object. The SDK calculates the sampling interval based on the parameters in this method and triggers the onEarMonitoringAudioFrame callback accordingly.
+///  Due to framework limitations, this callback does not support sending the processed audio data back to the SDK.
+///
+/// * [audioFrame] The raw audio data. See AudioFrame.
+final void Function(AudioFrame audioFrame)? onEarMonitoringAudioFrame;
+  }
+
 
 /// Audio frame type.
 @JsonEnum(alwaysCreate: true)
 enum AudioFrameType {
-  /// 0: PCM 16
-  @JsonValue(0)
-  frameTypePcm16,
+  
+/// 0: PCM 16
+    @JsonValue(0)
+    frameTypePcm16,
+    
 }
 
 /// @nodoc
@@ -1204,109 +2044,117 @@ extension AudioFrameTypeExt on AudioFrameType {
     return $enumDecode(_$AudioFrameTypeEnumMap, value);
   }
 
-  /// @nodoc
+/// @nodoc
   int value() {
     return _$AudioFrameTypeEnumMap[this]!;
   }
 }
 
+
+
 /// Raw audio data.
-@JsonSerializable(explicitToJson: true, includeIfNull: false)
-class AudioFrame {
+  @JsonSerializable(explicitToJson: true, includeIfNull: false)
+  class AudioFrame {
   /// @nodoc
-  const AudioFrame(
-      {this.type,
-      this.samplesPerChannel,
-      this.bytesPerSample,
-      this.channels,
-      this.samplesPerSec,
-      this.buffer,
-      this.renderTimeMs,
-      this.avsyncType,
-      this.presentationMs,
-      this.audioTrackNumber,
-      this.rtpTimestamp});
+    const AudioFrame(
+      {this.type,this.samplesPerChannel,this.bytesPerSample,this.channels,this.samplesPerSec,this.buffer,this.renderTimeMs,this.avsyncType,this.presentationMs,this.audioTrackNumber,this.rtpTimestamp}
+    );
 
-  /// The type of the audio frame. See AudioFrameType.
-  @JsonKey(name: 'type')
-  final AudioFrameType? type;
+/// Audio frame type. See AudioFrameType.
+    @JsonKey(name: 'type')
+      final AudioFrameType? type;
 
-  /// The number of samples per channel in the audio frame.
-  @JsonKey(name: 'samplesPerChannel')
-  final int? samplesPerChannel;
+/// Number of samples per channel.
+@JsonKey(name: 'samplesPerChannel')
+      final int? samplesPerChannel;
 
-  /// The number of bytes per sample. For PCM, this parameter is generally set to 16 bits (2 bytes).
-  @JsonKey(name: 'bytesPerSample')
-  final BytesPerSample? bytesPerSample;
+/// Number of bytes per sample. For PCM, typically 16 bits, i.e., two bytes.
+@JsonKey(name: 'bytesPerSample')
+      final BytesPerSample? bytesPerSample;
 
-  /// The number of audio channels (the data are interleaved if it is stereo).
-  ///  1: Mono.
-  ///  2: Stereo.
-  @JsonKey(name: 'channels')
-  final int? channels;
+/// Number of channels (data is interleaved if stereo).
+///  1: Mono
+///  2: Stereo
+@JsonKey(name: 'channels')
+      final int? channels;
 
-  /// The number of samples per channel in the audio frame.
-  @JsonKey(name: 'samplesPerSec')
-  final int? samplesPerSec;
+/// Number of samples per second per channel.
+@JsonKey(name: 'samplesPerSec')
+      final int? samplesPerSec;
 
-  /// The data buffer of the audio frame. When the audio frame uses a stereo channel, the data buffer is interleaved. The size of the data buffer is as follows: buffer = samples × channels × bytesPerSample.
-  @JsonKey(name: 'buffer', ignore: true)
-  final Uint8List? buffer;
+/// Audio data buffer (data is interleaved if stereo).
+/// Buffer size buffer = samples × channels × bytesPerSample.
+@JsonKey(name: 'buffer',ignore: true)
+      final Uint8List? buffer;
 
-  /// The timestamp (ms) of the external audio frame. You can use this timestamp to restore the order of the captured audio frame, and synchronize audio and video frames in video scenarios, including scenarios where external video sources are used.
-  @JsonKey(name: 'renderTimeMs')
-  final int? renderTimeMs;
+/// Render timestamp of the external audio frame.
+/// You can use this timestamp to restore the audio frame order; in scenarios with video (including external video source), this parameter can be used to achieve audio-video synchronization.
+@JsonKey(name: 'renderTimeMs')
+      final int? renderTimeMs;
 
-  /// Reserved for future use.
-  @JsonKey(name: 'avsync_type')
-  final int? avsyncType;
+/// Reserved parameter.
+@JsonKey(name: 'avsync_type')
+      final int? avsyncType;
 
   /// @nodoc
-  @JsonKey(name: 'presentationMs')
-  final int? presentationMs;
+@JsonKey(name: 'presentationMs')
+      final int? presentationMs;
 
   /// @nodoc
-  @JsonKey(name: 'audioTrackNumber')
-  final int? audioTrackNumber;
+@JsonKey(name: 'audioTrackNumber')
+      final int? audioTrackNumber;
 
   /// @nodoc
-  @JsonKey(name: 'rtpTimestamp')
-  final int? rtpTimestamp;
-
-  /// @nodoc
-  factory AudioFrame.fromJson(Map<String, dynamic> json) =>
-      _$AudioFrameFromJson(json);
-
-  /// @nodoc
-  Map<String, dynamic> toJson() => _$AudioFrameToJson(this);
-}
+@JsonKey(name: 'rtpTimestamp')
+      final int? rtpTimestamp;
 
 /// @nodoc
+    factory AudioFrame.fromJson(Map<String, dynamic> json) => _$AudioFrameFromJson(json);
+
+/// @nodoc
+    Map<String, dynamic> toJson() => _$AudioFrameToJson(this);
+  }
+  
+
+
+  /// @nodoc
 @JsonEnum(alwaysCreate: true)
 enum AudioFramePosition {
+  
   /// @nodoc
-  @JsonValue(0x0000)
-  audioFramePositionNone,
+    @JsonValue(0x0000)
+    audioFramePositionNone,
+    
+
 
   /// @nodoc
-  @JsonValue(0x0001)
-  audioFramePositionPlayback,
+    @JsonValue(0x0001)
+    audioFramePositionPlayback,
+    
+
 
   /// @nodoc
-  @JsonValue(0x0002)
-  audioFramePositionRecord,
+    @JsonValue(0x0002)
+    audioFramePositionRecord,
+    
+
 
   /// @nodoc
-  @JsonValue(0x0004)
-  audioFramePositionMixed,
+    @JsonValue(0x0004)
+    audioFramePositionMixed,
+    
+
 
   /// @nodoc
-  @JsonValue(0x0008)
-  audioFramePositionBeforeMixing,
+    @JsonValue(0x0008)
+    audioFramePositionBeforeMixing,
+    
+
 
   /// @nodoc
-  @JsonValue(0x0010)
-  audioFramePositionEarMonitoring,
+    @JsonValue(0x0010)
+    audioFramePositionEarMonitoring,
+    
 }
 
 /// @nodoc
@@ -1316,252 +2164,262 @@ extension AudioFramePositionExt on AudioFramePosition {
     return $enumDecode(_$AudioFramePositionEnumMap, value);
   }
 
-  /// @nodoc
+/// @nodoc
   int value() {
     return _$AudioFramePositionEnumMap[this]!;
   }
 }
 
+
+
 /// Audio data format.
 ///
-/// The SDK calculates the sampling interval through the samplesPerCall, sampleRate, and channel parameters in AudioParams, and triggers the onRecordAudioFrame, onPlaybackAudioFrame, onMixedAudioFrame, and onEarMonitoringAudioFrame callbacks according to the sampling interval. Sample interval (sec) = samplePerCall /(sampleRate × channel).
-///  Ensure that the sample interval ≥ 0.01 (s).
-@JsonSerializable(explicitToJson: true, includeIfNull: false)
-class AudioParams {
+/// The SDK calculates the sampling interval based on the samplesPerCall, sampleRate, and channel parameters in AudioParams, and triggers the onRecordAudioFrame, onPlaybackAudioFrame, onMixedAudioFrame, and onEarMonitoringAudioFrame callbacks accordingly.
+///  Sampling interval = samplesPerCall / (sampleRate × channel).
+///  Make sure the sampling interval is not less than 0.01 (s).
+  @JsonSerializable(explicitToJson: true, includeIfNull: false)
+  class AudioParams {
   /// @nodoc
-  const AudioParams(
-      {this.sampleRate, this.channels, this.mode, this.samplesPerCall});
+    const AudioParams(
+      {this.sampleRate,this.channels,this.mode,this.samplesPerCall}
+    );
 
-  /// The audio sample rate (Hz), which can be set as one of the following values:
-  ///  8000.
-  ///  (Default) 16000.
-  ///  32000.
-  ///  44100
-  ///  48000
-  @JsonKey(name: 'sample_rate')
-  final int? sampleRate;
+/// Sampling rate of the data in Hz. The possible values are:
+///  8000
+///  16000 (default)
+///  32000
+///  44100
+///  48000
+    @JsonKey(name: 'sample_rate')
+      final int? sampleRate;
 
-  /// The number of audio channels, which can be set as either of the following values:
-  ///  1: (Default) Mono.
-  ///  2: Stereo.
-  @JsonKey(name: 'channels')
-  final int? channels;
+/// Number of audio channels. The possible values are:
+///  1: Mono (default)
+///  2: Stereo
+@JsonKey(name: 'channels')
+      final int? channels;
 
-  /// The use mode of the audio data. See RawAudioFrameOpModeType.
-  @JsonKey(name: 'mode')
-  final RawAudioFrameOpModeType? mode;
+/// Usage mode of the data. See RawAudioFrameOpModeType.
+@JsonKey(name: 'mode')
+      final RawAudioFrameOpModeType? mode;
 
-  /// The number of samples, such as 1024 for the media push.
-  @JsonKey(name: 'samples_per_call')
-  final int? samplesPerCall;
+/// Number of audio samples per call, typically 1024 in scenarios like media stream relay.
+@JsonKey(name: 'samples_per_call')
+      final int? samplesPerCall;
 
-  /// @nodoc
-  factory AudioParams.fromJson(Map<String, dynamic> json) =>
-      _$AudioParamsFromJson(json);
+/// @nodoc
+    factory AudioParams.fromJson(Map<String, dynamic> json) => _$AudioParamsFromJson(json);
 
-  /// @nodoc
-  Map<String, dynamic> toJson() => _$AudioParamsToJson(this);
-}
+/// @nodoc
+    Map<String, dynamic> toJson() => _$AudioParamsToJson(this);
+  }
+  
 
-/// The audio frame observer.
+/// Audio observer.
+///
+/// You can call registerAudioFrameObserver to register or unregister the AudioFrameObserver.
 class AudioFrameObserver extends AudioFrameObserverBase {
+
   /// @nodoc
   const AudioFrameObserver({
-    /// @nodoc
-    void Function(String channelId, AudioFrame audioFrame)? onRecordAudioFrame,
-
-    /// @nodoc
-    void Function(String channelId, AudioFrame audioFrame)?
-        onPlaybackAudioFrame,
-
-    /// @nodoc
-    void Function(String channelId, AudioFrame audioFrame)? onMixedAudioFrame,
-
-    /// @nodoc
-    void Function(AudioFrame audioFrame)? onEarMonitoringAudioFrame,
-    this.onPlaybackAudioFrameBeforeMixing,
-  }) : super(
-          onRecordAudioFrame: onRecordAudioFrame,
-          onPlaybackAudioFrame: onPlaybackAudioFrame,
-          onMixedAudioFrame: onMixedAudioFrame,
-          onEarMonitoringAudioFrame: onEarMonitoringAudioFrame,
-        );
-
-  /// Retrieves the audio frame before mixing of subscribed remote users.
-  ///
-  /// Due to framework limitations, this callback does not support sending processed audio data back to the SDK.
-  ///
-  /// * [channelId] The channel ID.
-  /// * [uid] The ID of subscribed remote users.
-  /// * [audioFrame] The raw audio data. See AudioFrame.
-  final void Function(String channelId, int uid, AudioFrame audioFrame)?
-      onPlaybackAudioFrameBeforeMixing;
-}
-
-/// The audio spectrum data.
-@JsonSerializable(explicitToJson: true, includeIfNull: false)
-class AudioSpectrumData {
   /// @nodoc
-  const AudioSpectrumData({this.audioSpectrumData, this.dataLength});
+    void Function(String channelId, AudioFrame audioFrame)? onRecordAudioFrame,void Function(String channelId, AudioFrame audioFrame)? onPlaybackAudioFrame,void Function(String channelId, AudioFrame audioFrame)? onMixedAudioFrame,void Function(AudioFrame audioFrame)? onEarMonitoringAudioFrame,this.onPlaybackAudioFrameBeforeMixing,
+  })
+  : 
+super(
+onRecordAudioFrame : onRecordAudioFrame,onPlaybackAudioFrame : onPlaybackAudioFrame,onMixedAudioFrame : onMixedAudioFrame,onEarMonitoringAudioFrame : onEarMonitoringAudioFrame,
+)
+;
 
-  /// The audio spectrum data. Agora divides the audio frequency into 256 frequency domains, and reports the energy value of each frequency domain through this parameter. The value range of each energy type is [-300, 1] and the unit is dBFS.
-  @JsonKey(name: 'audioSpectrumData')
-  final List<double>? audioSpectrumData;
+/// Retrieves the audio of a subscribed remote user before mixing.
+///
+/// Due to framework limitations, this callback does not support sending the processed audio data back to the SDK.
+///
+/// * [channelId] Channel ID.
+/// * [uid] ID of the subscribed remote user.
+/// * [audioFrame] Raw audio data. See AudioFrame.
+  final void Function(String channelId, int uid, AudioFrame audioFrame)? onPlaybackAudioFrameBeforeMixing;
+  }
 
-  /// The audio spectrum data length is 256.
-  @JsonKey(name: 'dataLength')
-  final int? dataLength;
 
+/// Audio spectrum data.
+  @JsonSerializable(explicitToJson: true, includeIfNull: false)
+  class AudioSpectrumData {
   /// @nodoc
-  factory AudioSpectrumData.fromJson(Map<String, dynamic> json) =>
-      _$AudioSpectrumDataFromJson(json);
+    const AudioSpectrumData(
+      {this.audioSpectrumData,this.dataLength}
+    );
 
+/// Audio spectrum data. The SDK divides the audio frequency into 256 bands and reports the energy value of each band through this parameter. The value range of each energy is [-300, 1], in dBFS.
+    @JsonKey(name: 'audioSpectrumData')
+      final List<double>? audioSpectrumData;
+
+/// The length of the audio spectrum data is 256.
+@JsonKey(name: 'dataLength')
+      final int? dataLength;
+
+/// @nodoc
+    factory AudioSpectrumData.fromJson(Map<String, dynamic> json) => _$AudioSpectrumDataFromJson(json);
+
+/// @nodoc
+    Map<String, dynamic> toJson() => _$AudioSpectrumDataToJson(this);
+  }
+  
+
+
+/// Audio spectrum information of a remote user.
+  @JsonSerializable(explicitToJson: true, includeIfNull: false)
+  class UserAudioSpectrumInfo {
   /// @nodoc
-  Map<String, dynamic> toJson() => _$AudioSpectrumDataToJson(this);
-}
+    const UserAudioSpectrumInfo(
+      {this.uid,this.spectrumData}
+    );
 
-/// Audio spectrum information of the remote user.
-@JsonSerializable(explicitToJson: true, includeIfNull: false)
-class UserAudioSpectrumInfo {
-  /// @nodoc
-  const UserAudioSpectrumInfo({this.uid, this.spectrumData});
+/// Remote user ID.
+    @JsonKey(name: 'uid')
+      final int? uid;
 
-  /// The user ID of the remote user.
-  @JsonKey(name: 'uid')
-  final int? uid;
+/// Audio spectrum data of the remote user. See AudioSpectrumData.
+@JsonKey(name: 'spectrumData')
+      final AudioSpectrumData? spectrumData;
 
-  /// Audio spectrum information of the remote user. See AudioSpectrumData.
-  @JsonKey(name: 'spectrumData')
-  final AudioSpectrumData? spectrumData;
+/// @nodoc
+    factory UserAudioSpectrumInfo.fromJson(Map<String, dynamic> json) => _$UserAudioSpectrumInfoFromJson(json);
 
-  /// @nodoc
-  factory UserAudioSpectrumInfo.fromJson(Map<String, dynamic> json) =>
-      _$UserAudioSpectrumInfoFromJson(json);
+/// @nodoc
+    Map<String, dynamic> toJson() => _$UserAudioSpectrumInfoToJson(this);
+  }
+  
 
-  /// @nodoc
-  Map<String, dynamic> toJson() => _$UserAudioSpectrumInfoToJson(this);
-}
+/// Audio spectrum observer.
+class AudioSpectrumObserver  {
 
-/// The audio spectrum observer.
-class AudioSpectrumObserver {
   /// @nodoc
   const AudioSpectrumObserver({
-    this.onLocalAudioSpectrum,
-    this.onRemoteAudioSpectrum,
-  });
+    this.onLocalAudioSpectrum,this.onRemoteAudioSpectrum,
+  })
+  ;
 
-  /// Gets the statistics of a local audio spectrum.
-  ///
-  /// After successfully calling registerAudioSpectrumObserver to implement the onLocalAudioSpectrum callback in AudioSpectrumObserver and calling enableAudioSpectrumMonitor to enable audio spectrum monitoring, the SDK triggers this callback as the time interval you set to report the received remote audio data spectrum before encoding.
-  ///
-  /// * [data] The audio spectrum data of the local user. See AudioSpectrumData.
+/// Gets the local audio spectrum.
+///
+/// After successfully calling registerAudioSpectrumObserver to implement the onLocalAudioSpectrum callback in AudioSpectrumObserver and calling enableAudioSpectrumMonitor to enable audio spectrum monitoring, the SDK triggers this callback at the set time interval to report the spectrum of the local audio data before encoding.
+///
+/// * [data] The local user's audio spectrum data. See AudioSpectrumData.
   final void Function(AudioSpectrumData data)? onLocalAudioSpectrum;
 
-  /// Gets the remote audio spectrum.
-  ///
-  /// After successfully calling registerAudioSpectrumObserver to implement the onRemoteAudioSpectrum callback in the AudioSpectrumObserver and calling enableAudioSpectrumMonitor to enable audio spectrum monitoring, the SDK will trigger the callback as the time interval you set to report the received remote audio data spectrum.
-  ///
-  /// * [spectrums] The audio spectrum information of the remote user, see UserAudioSpectrumInfo. The number of arrays is the number of remote users monitored by the SDK. If the array is null, it means that no audio spectrum of remote users is detected.
-  /// * [spectrumNumber] The number of remote users.
-  final void Function(
-          List<UserAudioSpectrumInfo> spectrums, int spectrumNumber)?
-      onRemoteAudioSpectrum;
-}
+/// Gets the remote audio spectrum.
+///
+/// After successfully calling registerAudioSpectrumObserver to implement the onRemoteAudioSpectrum callback in AudioSpectrumObserver and calling enableAudioSpectrumMonitor to enable audio spectrum monitoring, the SDK triggers this callback at the set time interval to report the spectrum of the received remote audio data.
+///
+/// * [spectrums] The audio spectrum information of remote users. See UserAudioSpectrumInfo. The number of elements in the array equals the number of remote users detected by the SDK. An empty array means no remote audio spectrum is detected.
+/// * [spectrumNumber] The number of remote users.
+final void Function(List<UserAudioSpectrumInfo> spectrums, int spectrumNumber)? onRemoteAudioSpectrum;
+  }
 
-/// Receives encoded video images.
-class VideoEncodedFrameObserver {
+/// Class used to receive encoded video frames.
+class VideoEncodedFrameObserver  {
+
   /// @nodoc
   const VideoEncodedFrameObserver({
     this.onEncodedVideoFrameReceived,
-  });
+  })
+  ;
 
-  /// Reports that the receiver has received the to-be-decoded video frame sent by the remote end.
-  ///
-  /// If you call the setRemoteVideoSubscriptionOptions method and set encodedFrameOnly to true, the SDK triggers this callback locally to report the received encoded video frame information.
-  ///
-  /// * [uid] The user ID of the remote user.
-  /// * [imageBuffer] The encoded video image buffer.
-  /// * [length] The data length of the video image.
-  /// * [videoEncodedFrameInfo] For the information of the encoded video frame, see EncodedVideoFrameInfo.
-  final void Function(int uid, Uint8List imageBuffer, int length,
-      EncodedVideoFrameInfo videoEncodedFrameInfo)? onEncodedVideoFrameReceived;
-}
+/// Reports that the receiver has received a remote encoded video frame.
+///
+/// When you call the setRemoteVideoSubscriptionOptions method and set encodedFrameOnly to true, the SDK triggers this callback locally to report the received encoded video frame information.
+///
+/// * [channelId] Channel name.
+/// * [uid] Remote user ID.
+/// * [imageBuffer] Video frame buffer.
+/// * [length] Data length of the video frame.
+/// * [videoEncodedFrameInfo] Information about the encoded video frame. See EncodedVideoFrameInfo.
+  final void Function(int uid, Uint8List imageBuffer, int length, EncodedVideoFrameInfo videoEncodedFrameInfo)? onEncodedVideoFrameReceived;
+  }
 
-/// The IVideoFrameObserver class.
-class VideoFrameObserver {
+/// Video observer.
+///
+/// You can call registerVideoFrameObserver to register or unregister the VideoFrameObserver.
+class VideoFrameObserver  {
+
   /// @nodoc
   const VideoFrameObserver({
-    this.onCaptureVideoFrame,
-    this.onPreEncodeVideoFrame,
-    this.onMediaPlayerVideoFrame,
-    this.onRenderVideoFrame,
-    this.onTranscodedVideoFrame,
-  });
+    this.onCaptureVideoFrame,this.onPreEncodeVideoFrame,this.onMediaPlayerVideoFrame,this.onRenderVideoFrame,this.onTranscodedVideoFrame,
+  })
+  ;
 
-  /// Occurs each time the SDK receives a video frame captured by local devices.
-  ///
-  /// You can get raw video data collected by the local device through this callback.
-  ///
-  /// * [sourceType] Video source types, including cameras, screens, or media player. See VideoSourceType.
-  /// * [videoFrame] The video frame. See VideoFrame. The default value of the video frame data format obtained through this callback is as follows:
-  ///  Android: I420
-  ///  iOS: I420
-  ///  macOS: I420
-  ///  Windows: YUV420
-  final void Function(VideoSourceType sourceType, VideoFrame videoFrame)?
-      onCaptureVideoFrame;
+/// Gets the video data captured by the local device.
+///
+/// You can get the raw video data captured by the local device in the callback.
+///  If the video data you get is of RGBA type, the SDK does not support processing the Alpha channel.
+///  It is recommended that you ensure the modified parameters in videoFrame match the actual video frame in the buffer; otherwise, unexpected rotation, distortion, etc., may occur in the local preview or remote video.
+///  Due to framework limitations, this callback does not support sending the processed video data back to the SDK.
+///
+/// * [sourceType] Type of video source, which may include camera, screen, or media player. See VideoSourceType.
+/// * [videoFrame] Video frame data. See VideoFrame. The default format of the video frame data obtained through this callback is as follows:
+///  Android: I420
+///  iOS: I420
+///  macOS: I420
+///  Windows: YUV420
+  final void Function(VideoSourceType sourceType, VideoFrame videoFrame)? onCaptureVideoFrame;
 
-  /// Occurs each time the SDK receives a video frame before encoding.
-  ///
-  /// After you successfully register the video frame observer, the SDK triggers this callback each time it receives a video frame. In this callback, you can get the video data before encoding and then process the data according to your particular scenarios.
-  ///  It is recommended that you ensure the modified parameters in videoFrame are consistent with the actual situation of the video frames in the video frame buffer. Otherwise, it may cause unexpected rotation, distortion, and other issues in the local preview and remote video display.
-  ///  Due to framework limitations, this callback does not support sending processed video data back to the SDK.
-  ///  The video data that this callback gets has been preprocessed, with its content cropped and rotated, and the image enhanced.
-  ///
-  /// * [videoFrame] The video frame. See VideoFrame. The default value of the video frame data format obtained through this callback is as follows:
-  ///  Android: I420
-  ///  iOS: I420
-  ///  macOS: I420
-  ///  Windows: YUV420
-  /// * [sourceType] The type of the video source. See VideoSourceType.
-  final void Function(VideoSourceType sourceType, VideoFrame videoFrame)?
-      onPreEncodeVideoFrame;
+/// Gets the video data before local encoding.
+///
+/// After successfully registering the video data observer, the SDK triggers this callback each time a video frame is captured. You can get the video data before encoding in the callback and process it as needed for your scenario.
+///  Due to framework limitations, this callback does not support sending the processed video data back to the SDK.
+///  The video data obtained here has already undergone preprocessing such as cropping, rotation, and beauty effects.
+///  It is recommended that you ensure the modified parameters in videoFrame match the actual video frame in the buffer; otherwise, unexpected rotation, distortion, etc., may occur in the local preview or remote video.
+///
+/// * [sourceType] Type of video source. See VideoSourceType.
+/// * [videoFrame] Video frame data. See VideoFrame. The default format of the video frame data obtained through this callback is as follows:
+///  Android: I420
+///  iOS: I420
+///  macOS: I420
+///  Windows: YUV420
+final void Function(VideoSourceType sourceType, VideoFrame videoFrame)? onPreEncodeVideoFrame;
 
   /// @nodoc
-  final void Function(VideoFrame videoFrame, int mediaPlayerId)?
-      onMediaPlayerVideoFrame;
+final void Function(VideoFrame videoFrame, int mediaPlayerId)? onMediaPlayerVideoFrame;
 
-  /// Occurs each time the SDK receives a video frame sent by the remote user.
-  ///
-  /// After you successfully register the video frame observer, the SDK triggers this callback each time it receives a video frame. In this callback, you can get the video data sent from the remote end before rendering, and then process it according to the particular scenarios.
-  ///  It is recommended that you ensure the modified parameters in videoFrame are consistent with the actual situation of the video frames in the video frame buffer. Otherwise, it may cause unexpected rotation, distortion, and other issues in the local preview and remote video display.
-  ///  If the video data type you get is RGBA, the SDK does not support processing the data of the alpha channel.
-  ///  Due to framework limitations, this callback does not support sending processed video data back to the SDK.
-  ///
-  /// * [videoFrame] The video frame. See VideoFrame. The default value of the video frame data format obtained through this callback is as follows:
-  ///  Android: I420
-  ///  iOS: I420
-  ///  macOS: I420
-  ///  Windows: YUV420
-  /// * [remoteUid] The user ID of the remote user who sends the current video frame.
-  /// * [channelId] The channel ID.
-  final void Function(String channelId, int remoteUid, VideoFrame videoFrame)?
-      onRenderVideoFrame;
+/// Gets the video data sent from the remote user.
+///
+/// After successfully registering the video data observer, the SDK triggers this callback each time a video frame is captured. You can get the video data sent from the remote user before rendering and process it as needed for your scenario.
+///  If the video data you get is of RGBA type, the SDK does not support processing the Alpha channel.
+///  Due to framework limitations, this callback does not support sending the processed video data back to the SDK.
+///  It is recommended that you ensure the modified parameters in videoFrame match the actual video frame in the buffer; otherwise, unexpected rotation, distortion, etc., may occur in the local preview or remote video.
+///
+/// * [remoteUid] Remote user ID who sent the video frame.
+/// * [videoFrame] Video frame data. See VideoFrame. The default format of the video frame data obtained through this callback is as follows:
+///  Android: I420
+///  iOS: I420
+///  macOS: I420
+///  Windows: YUV420
+/// * [channelId] Channel ID.
+final void Function(String channelId, int remoteUid, VideoFrame videoFrame)? onRenderVideoFrame;
 
   /// @nodoc
-  final void Function(VideoFrame videoFrame)? onTranscodedVideoFrame;
-}
+final void Function(VideoFrame videoFrame)? onTranscodedVideoFrame;
+  }
 
-/// The process mode of the video frame:
+
+
+
+/// Video frame processing mode.
 @JsonEnum(alwaysCreate: true)
 enum VideoFrameProcessMode {
-  /// Read-only mode. In this mode, you do not modify the video frame. The video frame observer is a renderer.
-  @JsonValue(0)
-  processModeReadOnly,
+  
+/// Read-only mode.
+/// In read-only mode, you do not modify video frames. The video observer acts as a renderer.
+    @JsonValue(0)
+    processModeReadOnly,
+    
 
-  /// Read and write mode. In this mode, you modify the video frame. The video frame observer is a video filter.
-  @JsonValue(1)
-  processModeReadWrite,
+
+/// Read-write mode.
+/// In read-write mode, you modify video frames. The video observer acts as a video filter.
+    @JsonValue(1)
+    processModeReadWrite,
+    
 }
 
 /// @nodoc
@@ -1571,22 +2429,28 @@ extension VideoFrameProcessModeExt on VideoFrameProcessMode {
     return $enumDecode(_$VideoFrameProcessModeEnumMap, value);
   }
 
-  /// @nodoc
+/// @nodoc
   int value() {
     return _$VideoFrameProcessModeEnumMap[this]!;
   }
 }
 
-/// The external video frame encoding type.
+
+
+/// Encoding type of external video frames.
 @JsonEnum(alwaysCreate: true)
 enum ExternalVideoSourceType {
-  /// 0: The video frame is not encoded.
-  @JsonValue(0)
-  videoFrame,
+  
+/// 0: Unencoded video frame.
+    @JsonValue(0)
+    videoFrame,
+    
 
-  /// 1: The video frame is encoded.
-  @JsonValue(1)
-  encodedVideoFrame,
+
+/// 1: Encoded video frame.
+    @JsonValue(1)
+    encodedVideoFrame,
+    
 }
 
 /// @nodoc
@@ -1596,18 +2460,22 @@ extension ExternalVideoSourceTypeExt on ExternalVideoSourceType {
     return $enumDecode(_$ExternalVideoSourceTypeEnumMap, value);
   }
 
-  /// @nodoc
+/// @nodoc
   int value() {
     return _$ExternalVideoSourceTypeEnumMap[this]!;
   }
 }
 
-/// @nodoc
+
+
+  /// @nodoc
 @JsonEnum(alwaysCreate: true)
 enum MediaRecorderContainerFormat {
+  
   /// @nodoc
-  @JsonValue(1)
-  formatMp4,
+    @JsonValue(1)
+    formatMp4,
+    
 }
 
 /// @nodoc
@@ -1617,26 +2485,34 @@ extension MediaRecorderContainerFormatExt on MediaRecorderContainerFormat {
     return $enumDecode(_$MediaRecorderContainerFormatEnumMap, value);
   }
 
-  /// @nodoc
+/// @nodoc
   int value() {
     return _$MediaRecorderContainerFormatEnumMap[this]!;
   }
 }
 
-/// The recording content.
+
+
+  /// @nodoc
 @JsonEnum(alwaysCreate: true)
 enum MediaRecorderStreamType {
-  /// Only audio.
-  @JsonValue(0x01)
-  streamTypeAudio,
+  
+  /// @nodoc
+    @JsonValue(0x01)
+    streamTypeAudio,
+    
 
-  /// Only video.
-  @JsonValue(0x02)
-  streamTypeVideo,
 
-  /// (Default) Audio and video.
-  @JsonValue(0x01 | 0x02)
-  streamTypeBoth,
+  /// @nodoc
+    @JsonValue(0x02)
+    streamTypeVideo,
+    
+
+
+  /// @nodoc
+    @JsonValue(0x01|0x02)
+    streamTypeBoth,
+    
 }
 
 /// @nodoc
@@ -1646,26 +2522,34 @@ extension MediaRecorderStreamTypeExt on MediaRecorderStreamType {
     return $enumDecode(_$MediaRecorderStreamTypeEnumMap, value);
   }
 
-  /// @nodoc
+/// @nodoc
   int value() {
     return _$MediaRecorderStreamTypeEnumMap[this]!;
   }
 }
 
-/// The current recording state.
+
+
+/// Current recording state.
 @JsonEnum(alwaysCreate: true)
 enum RecorderState {
-  /// -1: An error occurs during the recording. See RecorderReasonCode for the reason.
-  @JsonValue(-1)
-  recorderStateError,
+  
+/// -1: Audio/video stream recording error. See RecorderReasonCode.
+    @JsonValue(-1)
+    recorderStateError,
+    
 
-  /// 2: The audio and video recording starts.
-  @JsonValue(2)
-  recorderStateStart,
 
-  /// 3: The audio and video recording stops.
-  @JsonValue(3)
-  recorderStateStop,
+/// 2: Audio/video stream recording started.
+    @JsonValue(2)
+    recorderStateStart,
+    
+
+
+/// 3: Audio/video stream recording stopped.
+    @JsonValue(3)
+    recorderStateStop,
+    
 }
 
 /// @nodoc
@@ -1675,152 +2559,191 @@ extension RecorderStateExt on RecorderState {
     return $enumDecode(_$RecorderStateEnumMap, value);
   }
 
-  /// @nodoc
+/// @nodoc
   int value() {
     return _$RecorderStateEnumMap[this]!;
   }
 }
 
-/// @nodoc
+
+
+/// Reason for recording state error.
 @JsonEnum(alwaysCreate: true)
-enum RecorderErrorCode {
-  /// @nodoc
-  @JsonValue(0)
-  recorderErrorNone,
+enum RecorderReasonCode {
+  
+/// 0: Everything is normal.
+    @JsonValue(0)
+    recorderReasonNone,
+    
 
-  /// @nodoc
-  @JsonValue(1)
-  recorderErrorWriteFailed,
 
-  /// @nodoc
-  @JsonValue(2)
-  recorderErrorNoStream,
+/// 1: Failed to write the recording file.
+    @JsonValue(1)
+    recorderReasonWriteFailed,
+    
 
-  /// @nodoc
-  @JsonValue(3)
-  recorderErrorOverMaxDuration,
 
-  /// @nodoc
-  @JsonValue(4)
-  recorderErrorConfigChanged,
+/// 2: No audio/video stream to record or the stream was interrupted for more than 5 seconds.
+    @JsonValue(2)
+    recorderReasonNoStream,
+    
+
+
+/// 3: Recording duration exceeds the limit.
+    @JsonValue(3)
+    recorderReasonOverMaxDuration,
+    
+
+
+/// 4: Recording configuration changed.
+    @JsonValue(4)
+    recorderReasonConfigChanged,
+    
 }
 
 /// @nodoc
-extension RecorderErrorCodeExt on RecorderErrorCode {
+extension RecorderReasonCodeExt on RecorderReasonCode {
   /// @nodoc
-  static RecorderErrorCode fromValue(int value) {
-    return $enumDecode(_$RecorderErrorCodeEnumMap, value);
+  static RecorderReasonCode fromValue(int value) {
+    return $enumDecode(_$RecorderReasonCodeEnumMap, value);
   }
 
-  /// @nodoc
+/// @nodoc
   int value() {
-    return _$RecorderErrorCodeEnumMap[this]!;
+    return _$RecorderReasonCodeEnumMap[this]!;
   }
 }
 
+
+
+  /// @nodoc
+  @JsonSerializable(explicitToJson: true, includeIfNull: false)
+  class MediaRecorderConfiguration {
+  /// @nodoc
+    const MediaRecorderConfiguration(
+      {this.storagePath,this.containerFormat,this.streamType,this.maxDurationMs,this.recorderInfoUpdateInterval,this.width,this.height,this.fps,this.sampleRate,this.channelNum,this.videoSourceType}
+    );
+
+  /// @nodoc
+    @JsonKey(name: 'storagePath')
+      final String? storagePath;
+
+  /// @nodoc
+@JsonKey(name: 'containerFormat')
+      final MediaRecorderContainerFormat? containerFormat;
+
+  /// @nodoc
+@JsonKey(name: 'streamType')
+      final MediaRecorderStreamType? streamType;
+
+  /// @nodoc
+@JsonKey(name: 'maxDurationMs')
+      final int? maxDurationMs;
+
+  /// @nodoc
+@JsonKey(name: 'recorderInfoUpdateInterval')
+      final int? recorderInfoUpdateInterval;
+
+  /// @nodoc
+@JsonKey(name: 'width')
+      final int? width;
+
+  /// @nodoc
+@JsonKey(name: 'height')
+      final int? height;
+
+  /// @nodoc
+@JsonKey(name: 'fps')
+      final int? fps;
+
+  /// @nodoc
+@JsonKey(name: 'sample_rate')
+      final int? sampleRate;
+
+  /// @nodoc
+@JsonKey(name: 'channel_num')
+      final int? channelNum;
+
+  /// @nodoc
+@JsonKey(name: 'videoSourceType')
+      final VideoSourceType? videoSourceType;
+
 /// @nodoc
-@JsonSerializable(explicitToJson: true, includeIfNull: false)
-class MediaRecorderConfiguration {
-  /// @nodoc
-  const MediaRecorderConfiguration(
-      {this.storagePath,
-      this.containerFormat,
-      this.streamType,
-      this.maxDurationMs,
-      this.recorderInfoUpdateInterval});
+    factory MediaRecorderConfiguration.fromJson(Map<String, dynamic> json) => _$MediaRecorderConfigurationFromJson(json);
 
-  /// @nodoc
-  @JsonKey(name: 'storagePath')
-  final String? storagePath;
+/// @nodoc
+    Map<String, dynamic> toJson() => _$MediaRecorderConfigurationToJson(this);
+  }
+  
 
-  /// @nodoc
-  @JsonKey(name: 'containerFormat')
-  final MediaRecorderContainerFormat? containerFormat;
-
-  /// @nodoc
-  @JsonKey(name: 'streamType')
-  final MediaRecorderStreamType? streamType;
-
-  /// @nodoc
-  @JsonKey(name: 'maxDurationMs')
-  final int? maxDurationMs;
-
-  /// @nodoc
-  @JsonKey(name: 'recorderInfoUpdateInterval')
-  final int? recorderInfoUpdateInterval;
-
-  /// @nodoc
-  factory MediaRecorderConfiguration.fromJson(Map<String, dynamic> json) =>
-      _$MediaRecorderConfigurationFromJson(json);
-
-  /// @nodoc
-  Map<String, dynamic> toJson() => _$MediaRecorderConfigurationToJson(this);
-}
-
-/// Facial information observer.
+/// Face information observer.
 ///
-/// You can call registerFaceInfoObserver to register one FaceInfoObserver observer.
-class FaceInfoObserver {
+/// You can call registerFaceInfoObserver to register the FaceInfoObserver.
+class FaceInfoObserver  {
+
   /// @nodoc
   const FaceInfoObserver({
     this.onFaceInfo,
-  });
+  })
+  ;
 
-  /// Occurs when the facial information processed by speech driven extension is received.
-  ///
-  /// * [outFaceInfo] Output parameter, the JSON string of the facial information processed by the voice driver plugin, including the following fields:
-  ///  faces: Object sequence. The collection of facial information, with each face corresponding to an object.
-  ///  blendshapes: Object. The collection of face capture coefficients, named according to ARkit standards, with each key-value pair representing a blendshape coefficient. The blendshape coefficient is a floating point number with a range of [0.0, 1.0].
-  ///  rotation: Object sequence. The rotation of the head, which includes the following three key-value pairs, with values as floating point numbers ranging from -180.0 to 180.0:
-  ///  pitch: Head pitch angle. A positve value means looking down, while a negative value means looking up.
-  ///  yaw: Head yaw angle. A positve value means turning left, while a negative value means turning right.
-  ///  roll: Head roll angle. A positve value means tilting to the right, while a negative value means tilting to the left.
-  ///  timestamp: String. The timestamp of the output result, in milliseconds. Here is an example of JSON: { "faces":[{ "blendshapes":{ "eyeBlinkLeft":0.9, "eyeLookDownLeft":0.0, "eyeLookInLeft":0.0, "eyeLookOutLeft":0.0, "eyeLookUpLeft":0.0, "eyeSquintLeft":0.0, "eyeWideLeft":0.0, "eyeBlinkRight":0.0, "eyeLookDownRight":0.0, "eyeLookInRight":0.0, "eyeLookOutRight":0.0, "eyeLookUpRight":0.0, "eyeSquintRight":0.0, "eyeWideRight":0.0, "jawForward":0.0, "jawLeft":0.0, "jawRight":0.0, "jawOpen":0.0, "mouthClose":0.0, "mouthFunnel":0.0, "mouthPucker":0.0, "mouthLeft":0.0, "mouthRight":0.0, "mouthSmileLeft":0.0, "mouthSmileRight":0.0, "mouthFrownLeft":0.0, "mouthFrownRight":0.0, "mouthDimpleLeft":0.0, "mouthDimpleRight":0.0, "mouthStretchLeft":0.0, "mouthStretchRight":0.0, "mouthRollLower":0.0, "mouthRollUpper":0.0, "mouthShrugLower":0.0, "mouthShrugUpper":0.0, "mouthPressLeft":0.0, "mouthPressRight":0.0, "mouthLowerDownLeft":0.0, "mouthLowerDownRight":0.0, "mouthUpperUpLeft":0.0, "mouthUpperUpRight":0.0, "browDownLeft":0.0, "browDownRight":0.0, "browInnerUp":0.0, "browOuterUpLeft":0.0, "browOuterUpRight":0.0, "cheekPuff":0.0, "cheekSquintLeft":0.0, "cheekSquintRight":0.0, "noseSneerLeft":0.0, "noseSneerRight":0.0, "tongueOut":0.0 }, "rotation":{"pitch":30.0, "yaw":25.5, "roll":-15.5}, }], "timestamp":"654879876546" }
-  ///
-  /// Returns
-  /// true : Facial information JSON parsing successful. false : Facial information JSON parsing failed.
+/// Reports the face information processed by the voice driver plugin.
+///
+/// * [outFaceInfo] Output parameter. A JSON string of face information processed by the voice driver plugin, containing the following fields:
+///  faces: Array of objects. Contains information of detected faces, each face corresponds to one object.
+///  blendshapes: Object. Blend shape coefficient set, named according to ARkit standards. Each key-value pair represents a blend shape coefficient. The coefficient is a float ranging from [0.0, 1.0].
+///  rotation: Array of objects. Head rotation values, including the following three key-value pairs, with float values ranging from [-180.0, 180.0]:
+///  pitch: Head pitch angle. Positive when looking down, negative when looking up.
+///  yaw: Head yaw angle. Positive when turning left, negative when turning right.
+///  roll: Head roll angle. Positive when tilting right, negative when tilting left.
+///  timestamp: String. Timestamp of the output result in milliseconds. Example JSON: { "faces":[{ "blendshapes":{ "eyeBlinkLeft":0.9, "eyeLookDownLeft":0.0, "eyeLookInLeft":0.0, "eyeLookOutLeft":0.0, "eyeLookUpLeft":0.0, "eyeSquintLeft":0.0, "eyeWideLeft":0.0, "eyeBlinkRight":0.0, "eyeLookDownRight":0.0, "eyeLookInRight":0.0, "eyeLookOutRight":0.0, "eyeLookUpRight":0.0, "eyeSquintRight":0.0, "eyeWideRight":0.0, "jawForward":0.0, "jawLeft":0.0, "jawRight":0.0, "jawOpen":0.0, "mouthClose":0.0, "mouthFunnel":0.0, "mouthPucker":0.0, "mouthLeft":0.0, "mouthRight":0.0, "mouthSmileLeft":0.0, "mouthSmileRight":0.0, "mouthFrownLeft":0.0, "mouthFrownRight":0.0, "mouthDimpleLeft":0.0, "mouthDimpleRight":0.0, "mouthStretchLeft":0.0, "mouthStretchRight":0.0, "mouthRollLower":0.0, "mouthRollUpper":0.0, "mouthShrugLower":0.0, "mouthShrugUpper":0.0, "mouthPressLeft":0.0, "mouthPressRight":0.0, "mouthLowerDownLeft":0.0, "mouthLowerDownRight":0.0, "mouthUpperUpLeft":0.0, "mouthUpperUpRight":0.0, "browDownLeft":0.0, "browDownRight":0.0, "browInnerUp":0.0, "browOuterUpLeft":0.0, "browOuterUpRight":0.0, "cheekPuff":0.0, "cheekSquintLeft":0.0, "cheekSquintRight":0.0, "noseSneerLeft":0.0, "noseSneerRight":0.0, "tongueOut":0.0 }, "rotation":{"pitch":30.0, "yaw":25.5, "roll":-15.5}, }], "timestamp":"654879876546" }
+///
+/// Returns
+/// true : Face information JSON parsed successfully. false : Face information JSON parsing failed.
   final void Function(String outFaceInfo)? onFaceInfo;
-}
+  }
+
+
+  /// @nodoc
+  @JsonSerializable(explicitToJson: true, includeIfNull: false)
+  class RecorderInfo {
+  /// @nodoc
+    const RecorderInfo(
+      {this.fileName,this.durationMs,this.fileSize}
+    );
+
+  /// @nodoc
+    @JsonKey(name: 'fileName')
+      final String? fileName;
+
+  /// @nodoc
+@JsonKey(name: 'durationMs')
+      final int? durationMs;
+
+  /// @nodoc
+@JsonKey(name: 'fileSize')
+      final int? fileSize;
 
 /// @nodoc
-@JsonSerializable(explicitToJson: true, includeIfNull: false)
-class RecorderInfo {
-  /// @nodoc
-  const RecorderInfo({this.fileName, this.durationMs, this.fileSize});
-
-  /// @nodoc
-  @JsonKey(name: 'fileName')
-  final String? fileName;
-
-  /// @nodoc
-  @JsonKey(name: 'durationMs')
-  final int? durationMs;
-
-  /// @nodoc
-  @JsonKey(name: 'fileSize')
-  final int? fileSize;
-
-  /// @nodoc
-  factory RecorderInfo.fromJson(Map<String, dynamic> json) =>
-      _$RecorderInfoFromJson(json);
-
-  /// @nodoc
-  Map<String, dynamic> toJson() => _$RecorderInfoToJson(this);
-}
+    factory RecorderInfo.fromJson(Map<String, dynamic> json) => _$RecorderInfoFromJson(json);
 
 /// @nodoc
-class MediaRecorderObserver {
+    Map<String, dynamic> toJson() => _$RecorderInfoToJson(this);
+  }
+  
+
+  /// @nodoc
+class MediaRecorderObserver  {
+
   /// @nodoc
   const MediaRecorderObserver({
-    this.onRecorderStateChanged,
-    this.onRecorderInfoUpdated,
-  });
+    this.onRecorderStateChanged,this.onRecorderInfoUpdated,
+  })
+  ;
 
   /// @nodoc
-  final void Function(String channelId, int uid, RecorderState state,
-      RecorderErrorCode error)? onRecorderStateChanged;
+  final void Function(String channelId, int uid, RecorderState state, RecorderReasonCode reason)? onRecorderStateChanged;
 
   /// @nodoc
-  final void Function(String channelId, int uid, RecorderInfo info)?
-      onRecorderInfoUpdated;
-}
+final void Function(String channelId, int uid, RecorderInfo info)? onRecorderInfoUpdated;
+  }

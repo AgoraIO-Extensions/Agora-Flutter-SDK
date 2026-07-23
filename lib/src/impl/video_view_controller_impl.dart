@@ -28,7 +28,8 @@ class TextureRenderDisposable {
     return TextureRenderDisposable._(controller, viewId);
   }
 
-  int get textureId => _isDisposed ? kTextureNotInit : _controller.getTextureId();
+  int get textureId =>
+      _isDisposed ? kTextureNotInit : _controller.getTextureId();
 
   bool get isDisposed => _isDisposed;
 
@@ -81,7 +82,7 @@ mixin VideoViewControllerBaseMixin implements VideoViewControllerBase {
   int _platformViewId = kInvalidPlatformViewId;
 
   final Set<int> _activeViewIds = {};
-  
+
   int _textureWidth = 0;
   int _textureHeight = 0;
 
@@ -96,7 +97,7 @@ mixin VideoViewControllerBaseMixin implements VideoViewControllerBase {
 
   @internal
   set textureHeight(int height) => _textureHeight = height;
-  
+
   @internal
   int get renderRefCount => _activeViewIds.length;
 
@@ -134,20 +135,19 @@ mixin VideoViewControllerBaseMixin implements VideoViewControllerBase {
   }
 
   @override
-  Future<void> dispose() async {
-  }
+  Future<void> dispose() async {}
 
   Future<void> _acquireTextureRender(int viewId) async {
     if (!shouldUseFlutterTexture) {
       return;
     }
-    
+
     if (_activeViewIds.contains(viewId)) {
       return;
     }
-    
+
     _activeViewIds.add(viewId);
-    
+
     if (_textureId == kTextureNotInit) {
       _textureId = await createTextureRender(
         canvas.uid!,
@@ -163,15 +163,16 @@ mixin VideoViewControllerBaseMixin implements VideoViewControllerBase {
     if (!shouldUseFlutterTexture) {
       return;
     }
-    
+
     if (!_activeViewIds.contains(viewId)) {
       return;
     }
-    
+
     _activeViewIds.remove(viewId);
-    
+
     if (_activeViewIds.isEmpty && _textureId != kTextureNotInit) {
-      await rtcEngine.globalVideoViewController?.destroyTextureRender(_textureId);
+      await rtcEngine.globalVideoViewController
+          ?.destroyTextureRender(_textureId);
       _textureId = kTextureNotInit;
       _textureWidth = 0;
       _textureHeight = 0;
@@ -252,7 +253,6 @@ mixin VideoViewControllerBaseMixin implements VideoViewControllerBase {
       return;
     }
   }
-
 
   @override
   Future<void> setupView(int platformViewId, int nativeViewPtr) async {

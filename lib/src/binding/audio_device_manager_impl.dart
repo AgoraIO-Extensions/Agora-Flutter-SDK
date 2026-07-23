@@ -93,7 +93,7 @@ class AudioDeviceManagerImpl implements AudioDeviceManager {
   @override
   Future<AudioDeviceInfo> getPlaybackDeviceInfo() async {
     final apiType =
-        '${isOverrideClassName ? className : 'AudioDeviceManager'}_getPlaybackDeviceInfo';
+        '${isOverrideClassName ? className : 'AudioDeviceManager'}_getPlaybackDeviceInfo_ed3a96d';
     final param = createParams({});
     final callApiResult = await irisMethodChannel.invokeMethod(
         IrisMethodCall(apiType, jsonEncode(param), buffers: null));
@@ -182,7 +182,7 @@ class AudioDeviceManagerImpl implements AudioDeviceManager {
   @override
   Future<AudioDeviceInfo> getRecordingDeviceInfo() async {
     final apiType =
-        '${isOverrideClassName ? className : 'AudioDeviceManager'}_getRecordingDeviceInfo';
+        '${isOverrideClassName ? className : 'AudioDeviceManager'}_getRecordingDeviceInfo_ed3a96d';
     final param = createParams({});
     final callApiResult = await irisMethodChannel.invokeMethod(
         IrisMethodCall(apiType, jsonEncode(param), buffers: null));
@@ -377,12 +377,15 @@ class AudioDeviceManagerImpl implements AudioDeviceManager {
   }
 
   @override
-  Future<void> startRecordingDeviceTest(int indicationInterval) async {
+  Future<void> startRecordingDeviceTest(
+      RecordingDeviceTestConfiguration config) async {
     final apiType =
-        '${isOverrideClassName ? className : 'AudioDeviceManager'}_startRecordingDeviceTest';
-    final param = createParams({'indicationInterval': indicationInterval});
+        '${isOverrideClassName ? className : 'AudioDeviceManager'}_startRecordingDeviceTest_db21a14';
+    final param = createParams({'config': config.toJson()});
+    final List<Uint8List> buffers = [];
+    buffers.addAll(config.collectBufferList());
     final callApiResult = await irisMethodChannel.invokeMethod(
-        IrisMethodCall(apiType, jsonEncode(param), buffers: null));
+        IrisMethodCall(apiType, jsonEncode(param), buffers: buffers));
     if (callApiResult.irisReturnCode < 0) {
       throw AgoraRtcException(code: callApiResult.irisReturnCode);
     }
