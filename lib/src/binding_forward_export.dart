@@ -13,6 +13,7 @@ export 'agora_rtc_engine.dart';
 export 'agora_rtc_engine_ex.dart';
 export 'agora_spatial_audio.dart';
 export 'audio_device_manager.dart';
+export 'rte.dart';
 export 'dart:convert';
 export 'dart:typed_data';
 export 'package:json_annotation/json_annotation.dart';
