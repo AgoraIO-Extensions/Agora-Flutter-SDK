@@ -110,8 +110,10 @@ class _State extends State<ScreenSharing> with KeepRemoteVideoViewsMixin {
 
     await _engine.enableVideo();
     await _engine.setClientRole(role: ClientRoleType.clientRoleBroadcaster);
-    await _engine
-        .setScreenCaptureScenario(ScreenScenarioType.screenScenarioGaming);
+    if (defaultTargetPlatform != TargetPlatform.ohos) {
+      await _engine
+          .setScreenCaptureScenario(ScreenScenarioType.screenScenarioGaming);
+    }
 
     setState(() {
       _isReadyPreview = true;
@@ -347,7 +349,8 @@ class _State extends State<ScreenSharing> with KeepRemoteVideoViewsMixin {
                   onStopScreenShare: () {}),
             if (!kIsWeb &&
                 (defaultTargetPlatform == TargetPlatform.android ||
-                    defaultTargetPlatform == TargetPlatform.iOS))
+                    defaultTargetPlatform == TargetPlatform.iOS ||
+                    defaultTargetPlatform == TargetPlatform.ohos))
               ScreenShareMobile(
                   rtcEngine: _engine,
                   isScreenShared: _isScreenShared,
