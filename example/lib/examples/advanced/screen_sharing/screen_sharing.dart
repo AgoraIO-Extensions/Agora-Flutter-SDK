@@ -1,3 +1,5 @@
+import 'dart:io' show Platform;
+
 import 'package:agora_rtc_engine/agora_rtc_engine.dart';
 import 'package:agora_rtc_engine_example/components/rgba_image.dart';
 import 'package:agora_rtc_engine_example/components/basic_video_configuration_widget.dart';
@@ -176,7 +178,11 @@ class _State extends State<ScreenSharing> with KeepRemoteVideoViewsMixin {
   }
 
   _leaveChannel() async {
-    await _engine.stopScreenCapture();
+    if (Platform.isOhos) {
+      await _engine.stopScreenCaptureBySourceType(VideoSourceType.videoSourceScreen);
+    } else {
+      await _engine.stopScreenCapture();
+    }
     await _engine.leaveChannel();
   }
 
@@ -516,8 +522,11 @@ class _ScreenShareMobileState extends State<ScreenShareMobile>
   @override
   void stopScreenShare() async {
     if (!isScreenShared) return;
-
-    await rtcEngine.stopScreenCapture();
+    if (Platform.isOhos) {
+      await rtcEngine.stopScreenCaptureBySourceType(VideoSourceType.videoSourceScreen);
+    } else {
+      await rtcEngine.stopScreenCapture();
+    }
     onStopScreenShare();
   }
 
