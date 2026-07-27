@@ -1,7 +1,10 @@
+import 'dart:io';
+
 import 'package:agora_rtc_engine/agora_rtc_engine.dart';
 import 'package:agora_rtc_engine_example/config/agora.config.dart' as config;
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:permission_handler/permission_handler.dart';
 
 import 'package:agora_rtc_engine_example/components/log_sink.dart';
@@ -27,6 +30,7 @@ class _State extends State<JoinChannelAudio> {
       playEffect = false;
   bool _isSetDefaultAudioRouteToSpeakerphone = false;
   bool _enableInEarMonitoring = false;
+  bool _isAudioRecording = false;
   double _recordingVolume = 100,
       _playbackVolume = 100,
       _inEarMonitoringVolume = 100;
@@ -51,6 +55,9 @@ class _State extends State<JoinChannelAudio> {
   }
 
   Future<void> _dispose() async {
+    if (_isAudioRecording) {
+      await _engine.stopAudioRecording();
+    }
     _engine.unregisterEventHandler(_rtcEngineEventHandler);
     await _engine.leaveChannel();
     await _engine.release();
@@ -101,7 +108,7 @@ class _State extends State<JoinChannelAudio> {
   }
 
   _joinChannel() async {
-    if (defaultTargetPlatform == TargetPlatform.android) {
+    if (!kIsWeb) {
       await Permission.microphone.request();
     }
 
@@ -116,6 +123,9 @@ class _State extends State<JoinChannelAudio> {
   }
 
   _leaveChannel() async {
+    if (_isAudioRecording) {
+      await _engine.stopAudioRecording();
+    }
     await _engine.leaveChannel();
     setState(() {
       isJoined = false;
@@ -125,6 +135,7 @@ class _State extends State<JoinChannelAudio> {
       enableSpeakerphone = true;
       playEffect = false;
       _enableInEarMonitoring = false;
+      _isAudioRecording = false;
       _recordingVolume = 100;
       _playbackVolume = 100;
       _inEarMonitoringVolume = 100;
@@ -176,6 +187,28 @@ class _State extends State<JoinChannelAudio> {
     } catch (e) {
       // Do nothing
     }
+  }
+
+  Future<void> _toggleAudioRecording() async {
+    if (_isAudioRecording) {
+      await _engine.stopAudioRecording();
+    } else {
+      final Directory directory = await getApplicationDocumentsDirectory();
+      final recordingPath = '${directory.path}/agora-audio-recording.aac';
+      final recordingConfig = AudioRecordingConfiguration(
+        filePath: recordingPath,
+        encode: true,
+        sampleRate: 48000,
+        fileRecordingType: AudioFileRecordingType.audioFileRecordingMixed,
+        quality: AudioRecordingQualityType.audioRecordingQualityHigh,
+        recordingChannel: 2,
+      );
+      logSink.log('[startAudioRecording] config: ${recordingConfig.toJson()}');
+      await _engine.startAudioRecording(recordingConfig);
+    }
+    setState(() {
+      _isAudioRecording = !_isAudioRecording;
+    });
   }
 
   @override
@@ -290,6 +323,11 @@ class _State extends State<JoinChannelAudio> {
                       onPressed: isJoined ? _switchSpeakerphone : null,
                       child: Text(
                           enableSpeakerphone ? 'Speakerphone' : 'Earpiece'),
+                    ),
+                    ElevatedButton(
+                      onPressed: isJoined ? _toggleAudioRecording : null,
+                      child: Text(
+                          '${_isAudioRecording ? 'Stop' : 'Start'} Audio Recording'),
                     ),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.end,

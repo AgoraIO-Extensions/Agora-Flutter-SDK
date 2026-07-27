@@ -25,6 +25,7 @@ class _State extends State<JoinChannelVideo> {
       openCamera = true,
       muteCamera = false,
       muteAllRemoteVideo = false;
+  bool _isVideoModuleEnabled = true;
   Set<int> remoteUid = {};
   late TextEditingController _controller;
   late TextEditingController uidController;
@@ -215,6 +216,18 @@ class _State extends State<JoinChannelVideo> {
     await _engine.muteAllRemoteVideoStreams(!muteAllRemoteVideo);
     setState(() {
       muteAllRemoteVideo = !muteAllRemoteVideo;
+    });
+  }
+
+  Future<void> _toggleVideoModule() async {
+    if (_isVideoModuleEnabled) {
+      await _engine.disableVideo();
+    } else {
+      await _engine.enableVideo();
+      await _engine.startPreview();
+    }
+    setState(() {
+      _isVideoModuleEnabled = !_isVideoModuleEnabled;
     });
   }
 
@@ -493,6 +506,11 @@ class _State extends State<JoinChannelVideo> {
               ElevatedButton(
                 onPressed: _switchCamera,
                 child: Text('Camera ${switchCamera ? 'front' : 'rear'}'),
+              ),
+              ElevatedButton(
+                onPressed: _toggleVideoModule,
+                child: Text(
+                    '${_isVideoModuleEnabled ? 'Disable' : 'Enable'} Video Module'),
               ),
             ],
             if (kIsWeb) ...[

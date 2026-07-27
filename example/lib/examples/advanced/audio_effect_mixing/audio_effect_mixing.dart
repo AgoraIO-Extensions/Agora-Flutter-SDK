@@ -80,6 +80,9 @@ class _AudioEffectMixingState extends State<AudioEffectMixing> {
       onAudioMixingFinished: () {
         logSink.log('[onAudioMixingFinished]');
       },
+      onAudioEffectFinished: (int soundId) {
+        logSink.log('[onAudioEffectFinished] soundId: $soundId');
+      },
       onAudioMixingStateChanged:
           (AudioMixingStateType state, AudioMixingReasonType errorCode) {
         logSink.log(
@@ -198,6 +201,10 @@ class _AudioEffectMixingState extends State<AudioEffectMixing> {
               ElevatedButton(
                 onPressed: _playEffect,
                 child: Text('${!playEffect ? 'play' : 'stop'}Effect'),
+              ),
+              ElevatedButton(
+                onPressed: _playEffectOnce,
+                child: const Text('Play Effect Once'),
               ),
               ElevatedButton(
                 onPressed: playEffect
@@ -431,5 +438,17 @@ class _AudioEffectMixingState extends State<AudioEffectMixing> {
         playEffect = true;
       });
     }
+  }
+
+  Future<void> _playEffectOnce() {
+    return _engine.playEffect(
+      soundId: _effectSoundId,
+      filePath: _effectUrl,
+      loopCount: 0,
+      pitch: 1,
+      pan: 1,
+      gain: 100,
+      publish: true,
+    );
   }
 }
