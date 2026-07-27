@@ -23,8 +23,6 @@ import {
 import {
   createRtcEventHandler,
   destroyRtcEventHandler,
-  notifyRtcEventHandlerNativeEngineCreated,
-  notifyRtcEventHandlerNativeEngineDestroyed,
   setIrisDefaultLogPath,
 } from '@shengwang/rtc-wrapper';
 
@@ -184,7 +182,6 @@ export default class AgoraRtcEnginePlugin
       this.nativeEventHandler = null;
       throw new Error('create rtc engine failed');
     }
-    notifyRtcEventHandlerNativeEngineCreated(nativeEventHandler);
 
     const nativeHandle = this.engine.getNativeHandle().toString();
     AgoraLog.i(TAG, 'native handle: ' + nativeHandle);
@@ -207,11 +204,10 @@ export default class AgoraRtcEnginePlugin
       .then(() => {
         const nativeEventHandler = this.nativeEventHandler;
         if (nativeEventHandler !== null) {
-          notifyRtcEventHandlerNativeEngineDestroyed(nativeEventHandler);
-          const result = destroyRtcEventHandler(nativeEventHandler);
-          if (result !== 0) {
-            throw new Error('failed to destroy native rtc event handler: ' + result);
-          }
+          // The Dart side destroys its Iris API engine before invoking
+          // ohosDestroy. RtcEngine.destroy() has now completed, so neither
+          // Iris nor the native engine can access this handler.
+          destroyRtcEventHandler(nativeEventHandler);
           this.nativeEventHandler = null;
         }
         this.engine = null;
