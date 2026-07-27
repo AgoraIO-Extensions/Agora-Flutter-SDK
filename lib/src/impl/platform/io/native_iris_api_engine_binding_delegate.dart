@@ -8,6 +8,7 @@ import 'native_iris_api_engine_bindings.dart' as bindings;
 import 'package:iris_method_channel/iris_method_channel.dart';
 import 'package:iris_method_channel/iris_method_channel_bindings_io.dart'
     as iris_bindings;
+import '../../shared_native_engine_initialization_arg_provider.dart';
 
 // ignore_for_file: public_member_api_docs
 
@@ -41,16 +42,41 @@ class NativeIrisApiEngineBindingsDelegate
   @override
   CreateApiEngineResult createApiEngine(List<InitilizationArgProvider> args) {
     ffi.Pointer<ffi.Void> enginePtr = ffi.nullptr;
-    if (args.isNotEmpty) {
-      assert(args.length == 1);
+    ffi.Pointer<ffi.Void>? eventHandlerPtr;
+
+    SharedNativeEngineInitializationArgProvider? sharedNativeEngine;
+    for (final arg in args) {
+      if (arg is SharedNativeEngineInitializationArgProvider) {
+        assert(sharedNativeEngine == null);
+        sharedNativeEngine = arg;
+      }
+    }
+
+    if (sharedNativeEngine != null) {
       final engineIntPtr =
-          args[0].provide(const IrisApiEngineHandle(0))() as int;
+          sharedNativeEngine.provide(const IrisApiEngineHandle(0))() as int;
+      if (engineIntPtr != 0) {
+        enginePtr = ffi.Pointer<ffi.Void>.fromAddress(engineIntPtr);
+      }
+      final eventHandlerIntPtr =
+          sharedNativeEngine.sharedNativeEventHandler as int?;
+      if (eventHandlerIntPtr != null && eventHandlerIntPtr != 0) {
+        eventHandlerPtr = ffi.Pointer<ffi.Void>.fromAddress(eventHandlerIntPtr);
+      }
+    } else if (args.isNotEmpty) {
+      final engineIntPtr =
+          args.first.provide(const IrisApiEngineHandle(0))() as int;
       if (engineIntPtr != 0) {
         enginePtr = ffi.Pointer<ffi.Void>.fromAddress(engineIntPtr);
       }
     }
 
-    final apiEnginePtr = _binding.CreateIrisApiEngine(enginePtr);
+    final apiEnginePtr = eventHandlerPtr != null
+        ? _binding.CreateIrisApiEngineWithEventHandler(
+            enginePtr,
+            eventHandlerPtr,
+          )
+        : _binding.CreateIrisApiEngine(enginePtr);
 
     return CreateApiEngineResult(IrisApiEngineHandle(apiEnginePtr));
   }

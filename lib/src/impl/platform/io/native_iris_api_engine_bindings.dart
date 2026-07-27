@@ -423,6 +423,24 @@ class NativeIrisApiEngineBinding {
   late final _CreateIrisApiEngine = _CreateIrisApiEnginePtr.asFunction<
       IrisApiEnginePtr Function(ffi.Pointer<ffi.Void>)>();
 
+  IrisApiEnginePtr CreateIrisApiEngineWithEventHandler(
+    ffi.Pointer<ffi.Void> rtcEngine,
+    ffi.Pointer<ffi.Void> eventHandler,
+  ) {
+    return _CreateIrisApiEngineWithEventHandler(rtcEngine, eventHandler);
+  }
+
+  late final _CreateIrisApiEngineWithEventHandlerPtr = _lookup<
+      ffi.NativeFunction<
+          IrisApiEnginePtr Function(
+              ffi.Pointer<ffi.Void>, ffi.Pointer<ffi.Void>)>>(
+    'CreateIrisApiEngineWithEventHandler',
+  );
+  late final _CreateIrisApiEngineWithEventHandler =
+      _CreateIrisApiEngineWithEventHandlerPtr.asFunction<
+          IrisApiEnginePtr Function(
+              ffi.Pointer<ffi.Void>, ffi.Pointer<ffi.Void>)>();
+
   void DestroyIrisApiEngine(
     IrisApiEnginePtr engine_ptr,
   ) {

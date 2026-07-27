@@ -20,7 +20,11 @@ import {
   RtcEngineEx,
   VideoCanvas,
 } from '@shengwang/rtc-full';
-import { setIrisDefaultLogPath } from '@shengwang/rtc-wrapper';
+import {
+  createRtcEventHandler,
+  destroyRtcEventHandler,
+  setIrisDefaultLogPath,
+} from '@shengwang/rtc-wrapper';
 
 import {
   AgoraPlatformView,
@@ -68,6 +72,7 @@ export default class AgoraRtcEnginePlugin
   private channel: MethodChannel | null = null;
   private applicationContext: common.Context | null = null;
   private engine: RtcEngineEx | null = null;
+  private nativeEventHandler: BigInt | null = null;
 
   constructor() {
     AgoraLog.i(TAG, 'constructor');
@@ -121,7 +126,13 @@ export default class AgoraRtcEnginePlugin
 
     if (this.engine !== null) {
       AgoraLog.w(TAG, 'already created rtc engine');
-      return this.engine.getNativeHandle().toString();
+      if (this.nativeEventHandler === null) {
+        throw new Error('rtc engine exists without native event handler');
+      }
+      return JSON.stringify({
+        engine: this.engine.getNativeHandle().toString(),
+        eventHandler: this.nativeEventHandler.toString(),
+      });
     }
     if (this.applicationContext === null) {
       throw new Error('plugin is not attached to a Flutter engine');
@@ -159,14 +170,25 @@ export default class AgoraRtcEnginePlugin
       }
     }
 
-    this.engine = RtcEngine.create(config) as RtcEngineEx;
+    const nativeEventHandler = createRtcEventHandler();
+    this.nativeEventHandler = nativeEventHandler;
+    const nativeEventHandlerHandle = nativeEventHandler.toString();
+    this.engine = RtcEngine.createWithNativeEventHandler(
+      config,
+      nativeEventHandlerHandle,
+    ) as RtcEngineEx;
     if (this.engine === null) {
+      destroyRtcEventHandler(nativeEventHandler);
+      this.nativeEventHandler = null;
       throw new Error('create rtc engine failed');
     }
 
     const nativeHandle = this.engine.getNativeHandle().toString();
     AgoraLog.i(TAG, 'native handle: ' + nativeHandle);
-    return nativeHandle;
+    return JSON.stringify({
+      engine: nativeHandle,
+      eventHandler: nativeEventHandlerHandle,
+    });
   }
 
   private onOhosDestroy(result: MethodResult): void {
@@ -180,6 +202,14 @@ export default class AgoraRtcEnginePlugin
 
     RtcEngine.destroy()
       .then(() => {
+        const nativeEventHandler = this.nativeEventHandler;
+        if (nativeEventHandler !== null) {
+          // The Dart side destroys its Iris API engine before invoking
+          // ohosDestroy. RtcEngine.destroy() has now completed, so neither
+          // Iris nor the native engine can access this handler.
+          destroyRtcEventHandler(nativeEventHandler);
+          this.nativeEventHandler = null;
+        }
         this.engine = null;
         AgoraLog.i(TAG, 'onOhosDestroy finished');
         result.success(0);
