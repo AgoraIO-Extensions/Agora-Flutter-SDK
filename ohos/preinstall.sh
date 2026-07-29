@@ -2,8 +2,8 @@
 
 set -euo pipefail
 
-IRIS_SDK_URL="https://download.agora.io/sdk/release/iris_4.6.70.121-build.2_DCG_OHOS_Video_20260727_0656_75.zip"
-IRIS_SDK_SHA256="c7c818132bc1337c75965f3f44aa6c9a1c985bde041a91ea443ffd29a9abec1d"
+IRIS_SDK_URL="https://download.agora.io/sdk/release/iris_4.6.70.122-dev.1_DCG_OHOS_Video_20260729_1027_76.zip"
+IRIS_SDK_SHA256="8023a8a4fdfc8b467f031c4a7ebe0aed0d4291f84da46b1aaff43be4f267122d"
 
 SCRIPT_DIR=$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)
 HAR_DIR="${SCRIPT_DIR}/har"

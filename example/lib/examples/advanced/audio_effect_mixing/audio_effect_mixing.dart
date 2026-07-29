@@ -94,7 +94,7 @@ class _AudioEffectMixingState extends State<AudioEffectMixing> {
             '[onRemoteAudioStateChanged] uid: ${connection.toJson()}, state: $state, reason: $reason, elapsed: $elapsed');
       },
     ));
-
+    _engine.setAudioScenario(AudioScenarioType.audioScenarioGameStreaming);
     await _engine.enableAudio();
     await _engine.setClientRole(role: ClientRoleType.clientRoleBroadcaster);
   }
