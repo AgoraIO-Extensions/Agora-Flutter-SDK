@@ -5,8 +5,10 @@ description: Demonstrates how to use the agora_rtc_engine plugin.
 # pub.dev using `pub publish`. This is preferred for private packages.
 publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 
+version: 1.0.0+1
+
 environment:
-  sdk: '>=2.12.0 <3.0.0'
+  sdk: '>=2.12.0 <4.0.0'
 
 dependencies:
   flutter:
@@ -24,7 +26,7 @@ dependencies:
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^1.0.2
 
-  permission_handler: ^8.3.0
+  permission_handler: ^12.0.0
   path_provider: ^2.0.8
 
 dev_dependencies:

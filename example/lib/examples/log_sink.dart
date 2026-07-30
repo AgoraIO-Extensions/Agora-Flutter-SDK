@@ -92,7 +92,7 @@ class _LogActionWidgetState extends State<LogActionWidget> {
                 ),
               );
             });
-            Overlay.of(context)?.insert(_overlayEntry!);
+            Overlay.of(context).insert(_overlayEntry!);
           }
           _isOverlayShowed = !_isOverlayShowed;
           // setState(() {

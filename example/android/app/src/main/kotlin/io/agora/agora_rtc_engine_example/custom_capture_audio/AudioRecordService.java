@@ -60,7 +60,7 @@ public class AudioRecordService extends Service
         createNotificationChannel();
         Intent notificationIntent = new Intent(this, clazz);
         PendingIntent pendingIntent = PendingIntent.getActivity(this,
-                0, notificationIntent, 0);
+                0, notificationIntent, PendingIntent.FLAG_IMMUTABLE);
 
         Notification notification = new NotificationCompat.Builder(this, TAG)
                 .setContentTitle(TAG)

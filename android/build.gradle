@@ -6,7 +6,7 @@ def safeExtGet(prop, fallback) {
 }
 
 buildscript {
-  ext.agora_rtc_engine_kt_version = '1.5.31'
+  ext.agora_rtc_engine_kt_version = '1.8.22'
   def kotlin_version = rootProject.ext.has('kotlin_version') ? rootProject.ext.get('kotlin_version') : "$agora_rtc_engine_kt_version"
 
   repositories {
@@ -30,7 +30,17 @@ apply plugin: 'com.android.library'
 apply plugin: 'kotlin-android'
 
 android {
+  namespace 'io.agora.agora_rtc_engine'
   compileSdkVersion safeExtGet('compileSdkVersion', 31)
+
+  compileOptions {
+    sourceCompatibility JavaVersion.VERSION_11
+    targetCompatibility JavaVersion.VERSION_11
+  }
+
+  kotlinOptions {
+    jvmTarget = JavaVersion.VERSION_11.toString()
+  }
 
   defaultConfig {
     minSdkVersion safeExtGet('minSdkVersion', 16)
