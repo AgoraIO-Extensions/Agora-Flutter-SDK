@@ -199,10 +199,30 @@ class _AgoraRtcRenderPlatformViewState extends State<AgoraRtcRenderPlatformView>
             .removeInitializedCompletedListener(_listener!);
         _listener = null;
 
-        _setupNativeView();
+        _safeSetupNativeView();
       };
       _controller(widget.controller)
           .addInitializedCompletedListener(_listener!);
+    } else {
+      await _safeSetupNativeView();
+    }
+  }
+
+  Future<void> _safeSetupNativeView() async {
+    if (defaultTargetPlatform == TargetPlatform.ohos) {
+      // 1. Listen for the event (Push)
+      getMethodChannel()?.setMethodCallHandler((call) async {
+        if (call.method == 'onSurfaceReady') {
+          await _setupNativeView();
+        }
+      });
+
+      // 2. Query current state (Pull)
+      final bool? isReady =
+          await getMethodChannel()?.invokeMethod<bool>('getSurfaceReady');
+      if (isReady == true && mounted) {
+        await _setupNativeView();
+      }
     } else {
       await _setupNativeView();
     }

@@ -1,11 +1,13 @@
+import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
+
 import 'package:agora_rtc_engine/agora_rtc_engine.dart';
 import 'package:agora_rtc_engine_example/components/basic_video_configuration_widget.dart';
 import 'package:agora_rtc_engine_example/components/stats_monitoring_widget.dart';
 import 'package:agora_rtc_engine_example/config/agora.config.dart' as config;
 import 'package:agora_rtc_engine_example/components/example_actions_widget.dart';
 import 'package:agora_rtc_engine_example/components/log_sink.dart';
-import 'package:flutter/foundation.dart';
-import 'package:flutter/material.dart';
+import 'package:permission_handler/permission_handler.dart';
 
 /// MultiChannel Example
 class JoinChannelVideo extends StatefulWidget {
@@ -24,27 +26,24 @@ class _State extends State<JoinChannelVideo> {
       switchRender = true,
       openCamera = true,
       muteCamera = false,
-      muteAllRemoteVideo = false;
+      muteAllRemoteVideo = false,
+      openMicrophone = true,
+      muteMicrophone = false,
+      muteAllRemoteAudio = false;
   Set<int> remoteUid = {};
   late TextEditingController _controller;
-  late TextEditingController uidController;
-  final Map<int, VideoViewController> _remoteVideoControllers = {};
-  bool test = false;
+  late TextEditingController _tokenController;
   bool _isUseFlutterTexture = false;
-  // ignore: prefer_final_fields
   bool _isUseAndroidSurfaceView = false;
-
-  // Test switches
-  bool _reuseController = true;
-  bool _switchViewLevel = true;
   ChannelProfileType _channelProfileType =
       ChannelProfileType.channelProfileLiveBroadcasting;
   late final RtcEngineEventHandler _rtcEngineEventHandler;
+
   @override
   void initState() {
     super.initState();
     _controller = TextEditingController(text: config.channelId);
-    uidController = TextEditingController(text: '0');
+    _tokenController = TextEditingController(text: '');
 
     _initEngine();
   }
@@ -52,14 +51,12 @@ class _State extends State<JoinChannelVideo> {
   @override
   void dispose() {
     super.dispose();
+    _controller.dispose();
+    _tokenController.dispose();
     _dispose();
   }
 
   Future<void> _dispose() async {
-    _remoteVideoControllers.forEach((key, value) {
-      value.dispose();
-    });
-    _remoteVideoControllers.clear();
     _engine.unregisterEventHandler(_rtcEngineEventHandler);
     await _engine.leaveChannel();
     await _engine.release();
@@ -67,11 +64,14 @@ class _State extends State<JoinChannelVideo> {
 
   Future<void> _initEngine() async {
     _engine = createAgoraRtcEngine();
+
+    if (defaultTargetPlatform == TargetPlatform.ohos) {
+      await [Permission.microphone, Permission.camera].request();
+    }
+
     await _engine.initialize(RtcEngineContext(
       appId: config.appId,
     ));
-    // Set enableArgusCounters after initialize (since RtcEngineContext is auto-generated)
-    _engine.setEnableArgusCounters(true);
     _rtcEngineEventHandler = RtcEngineEventHandler(
       onError: (ErrorCodeType err, String msg) {
         logSink.log('[onError] err: $err, msg: $msg');
@@ -86,7 +86,6 @@ class _State extends State<JoinChannelVideo> {
       onUserJoined: (RtcConnection connection, int rUid, int elapsed) {
         logSink.log(
             '[onUserJoined] connection: ${connection.toJson()} remoteUid: $rUid elapsed: $elapsed');
-        _updateRemoteVideoController(rUid, connection);
         setState(() {
           remoteUid.add(rUid);
         });
@@ -97,8 +96,6 @@ class _State extends State<JoinChannelVideo> {
             '[onUserOffline] connection: ${connection.toJson()}  rUid: $rUid reason: $reason');
         setState(() {
           remoteUid.removeWhere((element) => element == rUid);
-          final vc = _remoteVideoControllers.remove(rUid);
-          vc?.dispose();
         });
       },
       onLeaveChannel: (RtcConnection connection, RtcStats stats) {
@@ -107,10 +104,6 @@ class _State extends State<JoinChannelVideo> {
         setState(() {
           isJoined = false;
           remoteUid.clear();
-          _remoteVideoControllers.forEach((key, value) {
-            value.dispose();
-          });
-          _remoteVideoControllers.clear();
         });
       },
       onRemoteVideoStateChanged: (RtcConnection connection, int remoteUid,
@@ -118,21 +111,25 @@ class _State extends State<JoinChannelVideo> {
         logSink.log(
             '[onRemoteVideoStateChanged] connection: ${connection.toJson()} remoteUid: $remoteUid state: $state reason: $reason elapsed: $elapsed');
       },
+      onLocalVideoStateChanged: (VideoSourceType source,
+          LocalVideoStreamState state, LocalVideoStreamReason error) {
+        logSink.log(
+            '[onLocalVideoStateChanged] source: $source, state: $state, error: $error');
+      },
       onFirstRemoteVideoDecoded: (RtcConnection connection, int remoteUid,
           int width, int height, int elapsed) {
         logSink.log(
             '[onFirstRemoteVideoDecoded] connection: ${connection.toJson()} remoteUid: $remoteUid width: $width height: $height elapsed: $elapsed');
       },
-      onFirstRemoteVideoFrame: (RtcConnection connection, int remoteUid,
-          int width, int height, int elapsed) {
+      onRemoteAudioStateChanged: (RtcConnection connection, int remoteUid,
+          RemoteAudioState state, RemoteAudioStateReason reason, int elapsed) {
         logSink.log(
-            '[onFirstRemoteVideoFrame] connection: ${connection.toJson()} remoteUid: $remoteUid width: $width height: $height elapsed: $elapsed');
+            '[onRemoteAudioStateChanged] connection: ${connection.toJson()} remoteUid: $remoteUid state: $state reason: $reason elapsed: $elapsed');
       },
-      onVideoSizeChanged:
-          (connection, sourceType, uid, width, height, rotation) {
+      onAudioPublishStateChanged: (String channel, StreamPublishState oldState,
+          StreamPublishState newState, int elapsed) {
         logSink.log(
-            '[onVideoSizeChanged] connection: ${connection.toJson()} sourceType: $sourceType uid: $uid width: $width height: $height rotation: $rotation');
-        _updateRemoteVideoController(uid, connection);
+            '[onAudioPublishStateChanged] channel: $channel oldState: $oldState newState: $newState elapsed: $elapsed');
       },
     );
 
@@ -140,40 +137,16 @@ class _State extends State<JoinChannelVideo> {
 
     await _engine.enableVideo();
     await _engine.startPreview();
-  }
 
-  Future<void> _updateRemoteVideoController(
-      int uid, RtcConnection connection) async {
-    if (uid == 0) {
-      return;
-    }
-    if (_reuseController && _remoteVideoControllers.containsKey(uid)) {
-      return;
-    }
-
-    _remoteVideoControllers[uid]?.dispose();
-
-    _remoteVideoControllers[uid] = VideoViewController.remote(
-      rtcEngine: _engine,
-      canvas: VideoCanvas(uid: uid, renderMode: RenderModeType.renderModeFit),
-      connection: connection,
-      useFlutterTexture: _isUseFlutterTexture,
-      useAndroidSurfaceView: _isUseAndroidSurfaceView,
-    );
-
-    if (_switchViewLevel) {
-      // Switch view level
-      test = !test;
-    }
-    setState(() {});
+    await _engine.setParameters('{"rtc.enable_debug_log": true}');
   }
 
   Future<void> _joinChannel() async {
-    final uid = int.tryParse(uidController.text) ?? 0;
     await _engine.joinChannel(
-      token: config.token,
+      token:
+          _tokenController.text.isEmpty ? config.token : _tokenController.text,
       channelId: _controller.text,
-      uid: uid,
+      uid: config.uid,
       options: ChannelMediaOptions(
         channelProfile: _channelProfileType,
         clientRoleType: ClientRoleType.clientRoleBroadcaster,
@@ -187,6 +160,8 @@ class _State extends State<JoinChannelVideo> {
       openCamera = true;
       muteCamera = false;
       muteAllRemoteVideo = false;
+      openMicrophone = true;
+      muteMicrophone = false;
     });
   }
 
@@ -218,6 +193,27 @@ class _State extends State<JoinChannelVideo> {
     });
   }
 
+  _openMicrophone() async {
+    await _engine.enableLocalAudio(!openMicrophone);
+    setState(() {
+      openMicrophone = !openMicrophone;
+    });
+  }
+
+  _muteMicrophoneStream() async {
+    await _engine.muteLocalAudioStream(!muteMicrophone);
+    setState(() {
+      muteMicrophone = !muteMicrophone;
+    });
+  }
+
+  _muteAllRemoteAudioStreams() async {
+    await _engine.muteAllRemoteAudioStreams(!muteAllRemoteAudio);
+    setState(() {
+      muteAllRemoteAudio = !muteAllRemoteAudio;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return ExampleActionsWidget(
@@ -235,62 +231,45 @@ class _State extends State<JoinChannelVideo> {
                   useAndroidSurfaceView: _isUseAndroidSurfaceView,
                 ),
                 onAgoraVideoViewCreated: (viewId) {
+                  logSink.log('[onAgoraVideoViewCreated] viewId: $viewId');
                   _engine.startPreview();
                 },
               ),
             ),
-            if (_remoteVideoControllers.isNotEmpty)
-              if (test)
-                Align(
-                  alignment: Alignment.topLeft,
-                  child: SingleChildScrollView(
-                    scrollDirection: Axis.horizontal,
-                    child: Row(
-                      children: List.of(remoteUid.map(
-                        (e) => SizedBox(
-                          height: MediaQuery.of(context).size.height / 3,
-                          child: AspectRatio(
-                            aspectRatio: 16 / 9,
-                            child: StatsMonitoringWidget(
-                              rtcEngine: _engine,
-                              uid: e,
-                              channelId: _controller.text,
-                              child: AgoraVideoView(
-                                key: ValueKey('true_$e'),
-                                controller: _remoteVideoControllers[e]!,
-                              ),
-                            ),
-                          ),
-                        ),
-                      )),
-                    ),
-                  ),
-                )
-              else
-                Align(
-                  alignment: Alignment.topRight,
-                  child: SingleChildScrollView(
-                    scrollDirection: Axis.horizontal,
-                    child: Row(
-                        children: List.of(remoteUid.map(
-                      (e) => SizedBox(
-                        height: MediaQuery.of(context).size.height / 3,
-                        child: AspectRatio(
-                          aspectRatio: 16 / 9,
-                          child: StatsMonitoringWidget(
+            Align(
+              alignment: Alignment.topLeft,
+              child: SingleChildScrollView(
+                scrollDirection: Axis.horizontal,
+                child: Row(
+                  children: List.of(remoteUid.map(
+                    (e) => SizedBox(
+                      width: 200,
+                      height: 200,
+                      child: StatsMonitoringWidget(
+                        rtcEngine: _engine,
+                        uid: e,
+                        channelId: _controller.text,
+                        child: AgoraVideoView(
+                          controller: VideoViewController.remote(
                             rtcEngine: _engine,
-                            uid: e,
-                            channelId: _controller.text,
-                            child: AgoraVideoView(
-                              key: ValueKey('false_$e'),
-                              controller: _remoteVideoControllers[e]!,
-                            ),
+                            canvas: VideoCanvas(uid: e),
+                            connection: RtcConnection(
+                                channelId: _controller.text,
+                                localUid: config.uid),
+                            useFlutterTexture: _isUseFlutterTexture,
+                            useAndroidSurfaceView: _isUseAndroidSurfaceView,
                           ),
+                          onAgoraVideoViewCreated: (viewId) {
+                            logSink.log(
+                                '[onAgoraVideoViewCreated] viewId: $viewId');
+                          },
                         ),
                       ),
-                    ))),
-                  ),
-                )
+                    ),
+                  )),
+                ),
+              ),
+            )
           ],
         );
       },
@@ -317,14 +296,10 @@ class _State extends State<JoinChannelVideo> {
               controller: _controller,
               decoration: const InputDecoration(hintText: 'Channel ID'),
             ),
-            const SizedBox(height: 8),
+            const SizedBox(height: 10),
             TextField(
-              controller: uidController,
-              decoration: const InputDecoration(
-                hintText: 'UID for joinChannel (default: 0)',
-                labelText: ' UID',
-              ),
-              keyboardType: TextInputType.number,
+              controller: _tokenController,
+              decoration: const InputDecoration(hintText: 'Token (optional)'),
             ),
             if (!kIsWeb &&
                 (defaultTargetPlatform == TargetPlatform.android ||
@@ -346,9 +321,6 @@ class _State extends State<JoinChannelVideo> {
                               : (changed) {
                                   setState(() {
                                     _isUseFlutterTexture = changed;
-                                    if (changed == true) {
-                                      _engine.stopPreview();
-                                    }
                                   });
                                 },
                         )
@@ -369,87 +341,6 @@ class _State extends State<JoinChannelVideo> {
                         _channelProfileType = v!;
                       });
                     },
-            ),
-            const SizedBox(
-              height: 20,
-            ),
-            // Test switches area
-            Container(
-              padding: const EdgeInsets.all(8),
-              decoration: BoxDecoration(
-                color: Colors.grey[200],
-                borderRadius: BorderRadius.circular(8),
-              ),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  const Text(
-                    'Test Switches',
-                    style: TextStyle(fontWeight: FontWeight.bold),
-                  ),
-                  const Text(
-                    'Triggers onVideoSizeChanged when remote resolution changes',
-                    style: TextStyle(fontSize: 10, color: Colors.grey),
-                  ),
-                  const SizedBox(height: 8),
-                  Row(
-                    children: [
-                      const Expanded(
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text('Reuse Controller',
-                                style: TextStyle(fontSize: 12)),
-                            Text(
-                              'ON: Reuse same controller\nOFF: Create new controller each time',
-                              style: TextStyle(fontSize: 9, color: Colors.grey),
-                            ),
-                          ],
-                        ),
-                      ),
-                      Switch(
-                        value: _reuseController,
-                        onChanged: isJoined
-                            ? null
-                            : (changed) {
-                                setState(() {
-                                  _reuseController = changed;
-                                });
-                              },
-                      ),
-                    ],
-                  ),
-                  Row(
-                    children: [
-                      const Expanded(
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text('Switch View Level',
-                                style: TextStyle(fontSize: 12)),
-                            Text(
-                              'Views/Nodes at different levels of the tree structures',
-                              style: TextStyle(fontSize: 9, color: Colors.grey),
-                            ),
-                          ],
-                        ),
-                      ),
-                      Switch(
-                        value: _switchViewLevel,
-                        onChanged: (changed) {
-                          setState(() {
-                            _switchViewLevel = changed;
-                          });
-                        },
-                      ),
-                    ],
-                  ),
-                  Text(
-                    'Current: test=$test, controller count=${_remoteVideoControllers.length}',
-                    style: const TextStyle(fontSize: 10, color: Colors.blue),
-                  ),
-                ],
-              ),
             ),
             const SizedBox(
               height: 20,
@@ -495,7 +386,7 @@ class _State extends State<JoinChannelVideo> {
                 child: Text('Camera ${switchCamera ? 'front' : 'rear'}'),
               ),
             ],
-            if (kIsWeb) ...[
+            if (kIsWeb || defaultTargetPlatform == TargetPlatform.ohos) ...[
               const SizedBox(
                 height: 20,
               ),
@@ -511,6 +402,31 @@ class _State extends State<JoinChannelVideo> {
               ElevatedButton(
                 onPressed: _openCamera,
                 child: Text('Camera ${openCamera ? 'on' : 'off'}'),
+              ),
+              const SizedBox(
+                height: 20,
+              ),
+              ElevatedButton(
+                onPressed: _muteAllRemoteAudioStreams,
+                child: Text(
+                    'All Remote Audio ${muteAllRemoteAudio ? 'muted' : 'unmute'}'),
+              ),
+            ],
+            if (!kIsWeb && defaultTargetPlatform == TargetPlatform.ohos) ...[
+              const SizedBox(
+                height: 20,
+              ),
+              ElevatedButton(
+                onPressed: _openMicrophone,
+                child: Text('Microphone ${openMicrophone ? 'on' : 'off'}'),
+              ),
+              const SizedBox(
+                height: 20,
+              ),
+              ElevatedButton(
+                onPressed: _muteMicrophoneStream,
+                child:
+                    Text('Microphone ${muteMicrophone ? 'muted' : 'unmute'}'),
               ),
             ],
           ],

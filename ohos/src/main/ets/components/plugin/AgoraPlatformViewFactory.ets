@@ -51,6 +51,12 @@ struct InternalComponent {
       type: XComponentType.SURFACE,
       libraryname: Constants.AGORA_LIB_NAME,
     })
+      .onLoad(() => {
+        this.platformView.notifySurfaceReady();
+      })
+      .onDestroy(() => {
+        this.platformView.notifySurfaceDestroyed();
+      })
       .backgroundColor(Color.Black)
       .direction(Direction.Ltr)
       .width('100%')
@@ -72,6 +78,7 @@ export class AgoraPlatformView
   private methodChannel: MethodChannel;
   private uid: number = 0;
   private viewId: number = -1;
+  private isSurfaceReady: boolean = false;
 
   public static getXComponentIdByViewId(viewId: number): string {
     return AgoraPlatformView.VIEW_TYPE + '_' + viewId.toString();
@@ -101,7 +108,11 @@ export class AgoraPlatformView
   }
 
   onMethodCall(call: MethodCall, result: MethodResult): void {
-    result.notImplemented();
+    if (call.method === 'getSurfaceReady') {
+      result.success(this.isSurfaceReady);
+    } else {
+      result.notImplemented();
+    }
   }
 
   public getUid(): number {
@@ -110,6 +121,16 @@ export class AgoraPlatformView
 
   public getViewId(): number {
     return this.viewId;
+  }
+
+  public notifySurfaceReady(): void {
+    this.isSurfaceReady = true;
+    this.methodChannel.invokeMethod('onSurfaceReady', null);
+  }
+
+  public notifySurfaceDestroyed(): void {
+    this.isSurfaceReady = false;
+    this.methodChannel.invokeMethod('onSurfaceDestroyed', null);
   }
 
   getView(): WrappedBuilder<[Params]> {

@@ -1,3 +1,5 @@
+import 'dart:io' show Platform;
+
 import 'package:agora_rtc_engine/agora_rtc_engine.dart';
 import 'package:agora_rtc_engine_example/components/rgba_image.dart';
 import 'package:agora_rtc_engine_example/components/basic_video_configuration_widget.dart';
@@ -110,8 +112,10 @@ class _State extends State<ScreenSharing> with KeepRemoteVideoViewsMixin {
 
     await _engine.enableVideo();
     await _engine.setClientRole(role: ClientRoleType.clientRoleBroadcaster);
-    await _engine
-        .setScreenCaptureScenario(ScreenScenarioType.screenScenarioGaming);
+    if (defaultTargetPlatform != TargetPlatform.ohos) {
+      await _engine
+          .setScreenCaptureScenario(ScreenScenarioType.screenScenarioGaming);
+    }
 
     setState(() {
       _isReadyPreview = true;
@@ -174,7 +178,11 @@ class _State extends State<ScreenSharing> with KeepRemoteVideoViewsMixin {
   }
 
   _leaveChannel() async {
-    await _engine.stopScreenCapture();
+    if (Platform.isOhos) {
+      await _engine.stopScreenCaptureBySourceType(VideoSourceType.videoSourceScreen);
+    } else {
+      await _engine.stopScreenCapture();
+    }
     await _engine.leaveChannel();
   }
 
@@ -347,7 +355,8 @@ class _State extends State<ScreenSharing> with KeepRemoteVideoViewsMixin {
                   onStopScreenShare: () {}),
             if (!kIsWeb &&
                 (defaultTargetPlatform == TargetPlatform.android ||
-                    defaultTargetPlatform == TargetPlatform.iOS))
+                    defaultTargetPlatform == TargetPlatform.iOS ||
+                    defaultTargetPlatform == TargetPlatform.ohos))
               ScreenShareMobile(
                   rtcEngine: _engine,
                   isScreenShared: _isScreenShared,
@@ -513,8 +522,11 @@ class _ScreenShareMobileState extends State<ScreenShareMobile>
   @override
   void stopScreenShare() async {
     if (!isScreenShared) return;
-
-    await rtcEngine.stopScreenCapture();
+    if (Platform.isOhos) {
+      await rtcEngine.stopScreenCaptureBySourceType(VideoSourceType.videoSourceScreen);
+    } else {
+      await rtcEngine.stopScreenCapture();
+    }
     onStopScreenShare();
   }
 

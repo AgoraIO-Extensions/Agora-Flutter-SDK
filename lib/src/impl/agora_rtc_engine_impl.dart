@@ -52,6 +52,7 @@ import '/src/impl/video_rendering_performance_uploader.dart';
 import 'package:meta/meta.dart';
 
 import 'platform/global_video_view_controller.dart';
+import 'shared_native_engine_initialization_arg_provider.dart';
 
 // ignore_for_file: public_member_api_docs
 
@@ -442,17 +443,6 @@ class InitializationState extends ChangeNotifier {
   }
 }
 
-class SharedNativeHandleInitilizationArgProvider
-    implements InitilizationArgProvider {
-  const SharedNativeHandleInitilizationArgProvider(this.sharedNativeHandle);
-
-  final Object sharedNativeHandle;
-  @override
-  IrisHandle provide(IrisApiEngineHandle apiEngineHandle) {
-    return ObjectIrisHandle(sharedNativeHandle);
-  }
-}
-
 class RtcEngineImpl extends rtc_engine_ex_binding.RtcEngineExImpl
     implements RtcEngineEx {
   RtcEngineImpl._({
@@ -464,6 +454,7 @@ class RtcEngineImpl extends rtc_engine_ex_binding.RtcEngineExImpl
   static RtcEngineImpl? _instance;
 
   Object? _sharedNativeHandle;
+  Object? _sharedNativeEventHandler;
 
   InitializationState? _rtcEngineStateInternal;
   InitializationState get _rtcEngineState {
@@ -599,6 +590,7 @@ class RtcEngineImpl extends rtc_engine_ex_binding.RtcEngineExImpl
         debugPrint('Failed to roll back OHOS RTC engine: $error');
       }
       _sharedNativeHandle = null;
+      _sharedNativeEventHandler = null;
     }
   }
 
@@ -637,15 +629,22 @@ class RtcEngineImpl extends rtc_engine_ex_binding.RtcEngineExImpl
         }
 
         if (!kIsWeb && defaultTargetPlatform == TargetPlatform.ohos) {
-          final nativeHandle = await engineMethodChannel.invokeMethod<String>(
+          final nativeHandles = await engineMethodChannel.invokeMethod<String>(
             'ohosInit',
             jsonEncode(context.toJson()),
           );
-          if (nativeHandle == null) {
+          if (nativeHandles == null) {
             throw StateError('ohosInit returned no native handle');
+          }
+          final handles = jsonDecode(nativeHandles) as Map<String, dynamic>;
+          final nativeHandle = handles['engine'] as String?;
+          final nativeEventHandler = handles['eventHandler'] as String?;
+          if (nativeHandle == null || nativeEventHandler == null) {
+            throw StateError('ohosInit returned incomplete native handles');
           }
           ohosNativeEngineCreated = true;
           _sharedNativeHandle = _string2IntPtr(nativeHandle);
+          _sharedNativeEventHandler = _string2IntPtr(nativeEventHandler);
         }
 
         engineMethodChannel.setMethodCallHandler((call) async {
@@ -658,9 +657,17 @@ class RtcEngineImpl extends rtc_engine_ex_binding.RtcEngineExImpl
           }
         });
 
+        if (_sharedNativeHandle == null && _sharedNativeEventHandler != null) {
+          throw StateError(
+              'A shared native event handler requires a native engine handle');
+        }
+
         List<InitilizationArgProvider> args = [
           if (_sharedNativeHandle != null)
-            SharedNativeHandleInitilizationArgProvider(_sharedNativeHandle!)
+            SharedNativeEngineInitializationArgProvider(
+              _sharedNativeHandle!,
+              sharedNativeEventHandler: _sharedNativeEventHandler,
+            ),
         ];
         assert(() {
           if (_mockRtcEngineProvider != null) {
@@ -749,6 +756,7 @@ class RtcEngineImpl extends rtc_engine_ex_binding.RtcEngineExImpl
       await irisMethodChannel.dispose();
       if (!kIsWeb && defaultTargetPlatform == TargetPlatform.ohos) {
         await engineMethodChannel.invokeMethod<void>('ohosDestroy');
+        _sharedNativeEventHandler = null;
       }
       _rtcEngineStateInternal?.dispose();
       _rtcEngineStateInternal = null;

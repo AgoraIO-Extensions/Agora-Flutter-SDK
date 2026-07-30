@@ -118,7 +118,8 @@ class _State extends State<StartLocalVideoTranscoder> {
     _videoDeviceManager = _engine.getVideoDeviceManager();
 
     if (!(defaultTargetPlatform == TargetPlatform.android ||
-        defaultTargetPlatform == TargetPlatform.iOS)) {
+        defaultTargetPlatform == TargetPlatform.iOS ||
+        defaultTargetPlatform == TargetPlatform.ohos)) {
       _videoDevices = await _videoDeviceManager.enumerateVideoDevices();
     }
 

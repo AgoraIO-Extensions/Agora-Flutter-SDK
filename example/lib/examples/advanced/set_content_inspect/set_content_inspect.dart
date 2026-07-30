@@ -184,7 +184,7 @@ class _State extends State<SetContentInspect> with KeepRemoteVideoViewsMixin {
                               modules: [
                                 ContentInspectModule(
                                   type: ContentInspectType
-                                      .contentInspectModeration,
+                                      .contentInspectImageModeration,
                                   interval: 2,
                                 )
                               ],
@@ -197,7 +197,7 @@ class _State extends State<SetContentInspect> with KeepRemoteVideoViewsMixin {
                               modules: [
                                 ContentInspectModule(
                                   type: ContentInspectType
-                                      .contentInspectModeration,
+                                      .contentInspectImageModeration,
                                   interval: 2,
                                 )
                               ],

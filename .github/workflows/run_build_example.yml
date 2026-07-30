@@ -93,8 +93,6 @@ on:
         required: true
       KEYCHAIN_PASSWORD:
         required: true
-      OHOS_CMDLINE_TOOLS_API_24:
-        required: true
       OHOS_SIGNING_MATERIAL_FILE:
         required: true
       OHOS_SIGNING_P12:
@@ -272,11 +270,10 @@ jobs:
           flutter-version: ${{ inputs.flutter_version }}
           cache: true
 
-      - name: Check OHOS build secrets
+      - name: Check OHOS signing secrets
         if: ${{ matrix.platform == 'ohos' }}
         shell: bash
         env:
-          OHOS_CMDLINE_TOOLS_API_24: ${{ secrets.OHOS_CMDLINE_TOOLS_API_24 }}
           OHOS_SIGNING_MATERIAL_FILE: ${{ secrets.OHOS_SIGNING_MATERIAL_FILE }}
           OHOS_SIGNING_P12: ${{ secrets.OHOS_SIGNING_P12 }}
           OHOS_SIGNING_P12_PWD: ${{ secrets.OHOS_SIGNING_P12_PWD }}
@@ -288,7 +285,6 @@ jobs:
         run: |
           missing=0
           for name in \
-            OHOS_CMDLINE_TOOLS_API_24 \
             OHOS_SIGNING_MATERIAL_FILE \
             OHOS_SIGNING_P12 \
             OHOS_SIGNING_P12_PWD \
@@ -366,13 +362,29 @@ jobs:
           } >> "${GITHUB_ENV}"
           echo "${OHOS_FLUTTER_HOME}/bin" >> "${GITHUB_PATH}"
 
-      - name: Setup OHOS SDK
+      - name: Setup HarmonyOS CLI tools (API 24)
+        id: setup-ohos
         if: ${{ matrix.platform == 'ohos' }}
-        uses: AgoraIO-Extensions/actions/.github/actions/setup-ohos@main
+        uses: ErBWs/setup-ohos@4dbb63025116eb6165ceac58a4bf47cbdc5ac721 # v2.0.0
         with:
-          ohos_version: '6.1.1.125-api24'
-          ohos_download_url: ${{ secrets.OHOS_CMDLINE_TOOLS_API_24 }}
+          version: 6.1.1.280
           cache: true
+
+      - name: Verify HarmonyOS SDK
+        if: ${{ matrix.platform == 'ohos' }}
+        shell: bash
+        env:
+          HARMONYOS_SDK_VERSION: ${{ steps.setup-ohos.outputs.sdk-version }}
+          HARMONYOS_API_VERSION: ${{ steps.setup-ohos.outputs.api-version }}
+        run: |
+          if [ "${HARMONYOS_SDK_VERSION}" != "6.1.1.125" ]; then
+            echo "::error::Expected HarmonyOS SDK 6.1.1.125, got ${HARMONYOS_SDK_VERSION}"
+            exit 1
+          fi
+          if [ "${HARMONYOS_API_VERSION}" != "24" ]; then
+            echo "::error::Expected HarmonyOS API 24, got ${HARMONYOS_API_VERSION}"
+            exit 1
+          fi
 
       - name: Setup signing key for OHOS
         if: ${{ matrix.platform == 'ohos' }}

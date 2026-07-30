@@ -42,7 +42,7 @@ final advanced = [
     {'name': 'AudioEffectMixing', 'widget': const AudioEffectMixing()},
   if (!kIsWeb)
     {'name': 'ChannelMediaRelay', 'widget': const ChannelMediaRelay()},
-  if (kIsWeb || !(Platform.isAndroid || Platform.isIOS))
+  if (kIsWeb || !(Platform.isAndroid || Platform.isIOS || Platform.isOhos))
     {'name': 'DeviceManager', 'widget': const DeviceManager()},
   if (!kIsWeb)
     {'name': 'JoinMultipleChannel', 'widget': const JoinMultipleChannel()},
@@ -75,7 +75,7 @@ final advanced = [
   if (!kIsWeb) {'name': 'AdvancedBeauty', 'widget': const AdvancedBeauty()},
   if (!kIsWeb)
     {'name': 'SetContentInspect', 'widget': const SetContentInspect()},
-  if (!kIsWeb && !(Platform.isAndroid || Platform.isIOS))
+  if (!kIsWeb && !(Platform.isAndroid || Platform.isIOS || Platform.isOhos))
     {
       'name': 'SendMultiCameraStream',
       'widget': const SendMultiCameraStreamDesktop()
@@ -92,7 +92,7 @@ final advanced = [
       'name': 'StartLocalVideoTranscoder',
       'widget': const StartLocalVideoTranscoder()
     },
-  if (!kIsWeb && (Platform.isAndroid || Platform.isIOS))
+  if (!kIsWeb && (Platform.isAndroid || Platform.isIOS || Platform.isOhos))
     {'name': 'ProcessVideoRawData', 'widget': const ProcessVideoRawData()},
   if (!kIsWeb)
     {'name': 'ProcessAudioRawData', 'widget': const ProcessAudioRawData()},
@@ -105,10 +105,10 @@ final advanced = [
       'name': 'SpatialAudioWithMediaPlayer',
       'widget': const SpatialAudioWithMediaPlayer()
     },
-  if (!kIsWeb && !(Platform.isAndroid || Platform.isIOS))
+  if (!kIsWeb && !(Platform.isAndroid || Platform.isIOS || Platform.isOhos))
     {'name': 'PreCallTest', 'widget': const PreCallTest()},
-  if (!kIsWeb && (Platform.isAndroid || Platform.isIOS))
+  if (!kIsWeb && (Platform.isAndroid || Platform.isIOS || Platform.isOhos))
     {'name': 'MusicPlayer', 'widget': const MusicPlayerExample()},
-  if (!kIsWeb && (Platform.isAndroid || Platform.isIOS))
+  if (!kIsWeb && (Platform.isAndroid || Platform.isIOS || Platform.isOhos))
     {'name': 'PictureInPicture', 'widget': const PictureInPicture()},
 ];

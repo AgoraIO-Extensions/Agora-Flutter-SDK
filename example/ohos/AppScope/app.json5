@@ -1,6 +1,6 @@
 {
   "app": {
-    "bundleName": "io.agora.agora_rtc_engine_example",
+    "bundleName": "io.agora.agora_rtc_engine_example_ohos",
     "vendor": "example",
     "versionCode": 1000000,
     "versionName": "1.0.0",
