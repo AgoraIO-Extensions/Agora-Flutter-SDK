@@ -364,7 +364,10 @@ jobs:
               cp -r build/windows/x64/runner/Release ../output
 
               # copy all pdb files in build/windows/x64/plugins/**/Release/ to ../output/Release
-              cp -r build/windows/x64/plugins/**/Release/*.pdb ../output/Release
+              pdb_files=(build/windows/x64/plugins/**/Release/*.pdb)
+              if [ -e "${pdb_files[0]}" ]; then
+                cp -r "${pdb_files[@]}" ../output/Release
+              fi
             fi
 
             # copy whole build/windows/x64/runner/Debug directory to ../output if the directory exists
@@ -372,14 +375,20 @@ jobs:
               cp -r build/windows/x64/runner/Debug ../output
 
               # copy all pdb files in build/windows/x64/plugins/**/Debug/ to ../output/Debug
-              cp -r build/windows/x64/plugins/**/Debug/*.pdb ../output/Debug
+              pdb_files=(build/windows/x64/plugins/**/Debug/*.pdb)
+              if [ -e "${pdb_files[0]}" ]; then
+                cp -r "${pdb_files[@]}" ../output/Debug
+              fi
             fi
 
             if [ -d "build/windows/x64/runner/Profile" ]; then
               cp -r build/windows/x64/runner/Profile ../output
 
               # copy all pdb files in build/windows/x64/plugins/**/Profile/ to ../output/Profile
-              cp -r build/windows/x64/plugins/**/Profile/*.pdb ../output/Profile
+              pdb_files=(build/windows/x64/plugins/**/Profile/*.pdb)
+              if [ -e "${pdb_files[0]}" ]; then
+                cp -r "${pdb_files[@]}" ../output/Profile
+              fi
             fi
           elif [ "$platform" == "web" ]; then
             # copy all files and files in subdirectories to ../output directory

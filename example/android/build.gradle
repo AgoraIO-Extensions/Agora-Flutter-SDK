@@ -1,0 +1,25 @@
+import org.gradle.api.tasks.compile.JavaCompile
+
+allprojects {
+    repositories {
+        google()
+        mavenCentral()
+    }
+}
+
+rootProject.buildDir = "../build"
+subprojects {
+    project.buildDir = "${rootProject.buildDir}/${project.name}"
+
+    tasks.withType(JavaCompile).configureEach {
+        options.compilerArgs.removeAll { it == "-Werror" }
+        options.compilerArgs.add("-Xlint:-options")
+    }
+}
+subprojects {
+    project.evaluationDependsOn(":app")
+}
+
+tasks.register("clean", Delete) {
+    delete rootProject.buildDir
+}
