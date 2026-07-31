@@ -20,7 +20,7 @@ Pod::Spec.new do |s|
   s.dependency 'AgoraAudio_Special_iOS', '3.7.3.5'
   s.dependency 'AgoraIrisRTC_iOS', '3.7.3.5'
 #   s.dependency 'AgoraRtcWrapper'
-  s.platform = :ios, '9.0'
+  s.platform = :ios, '13.0'
   s.swift_version = '5.0'
   s.libraries = 'stdc++'
 

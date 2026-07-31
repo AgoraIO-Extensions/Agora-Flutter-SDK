@@ -3,47 +3,58 @@ library agora_rtc_engine_web;
 
 import 'dart:async';
 import 'dart:convert';
+import 'dart:js_interop';
 
 // In order to *not* need this ignore, consider extracting the "web" version
 // of your plugin as a separate package, instead of inlining it in the same
 // package as the core of your plugin.
 // ignore: avoid_web_libraries_in_flutter
 import 'dart:html';
-import 'dart:ui' as ui;
+import 'dart:ui_web' as ui;
 
 import 'package:agora_rtc_engine/src/enums.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_web_plugins/flutter_web_plugins.dart';
-import 'package:js/js.dart';
-import 'package:js/js_util.dart';
 
 @JS('IrisRtcEngine')
+@staticInterop
 class _IrisRtcEngine {
-  external _IrisRtcEngine();
+  external factory _IrisRtcEngine();
+}
 
+extension _IrisRtcEngineExtension on _IrisRtcEngine {
   external _IrisRtcChannel get channel;
 
   external _IrisRtcDeviceManager get deviceManager;
 
-  external Future<dynamic> callApi(int apiType, String params, [Object? extra]);
+  external JSPromise<JSAny?> callApi(int apiType, String params,
+      [JSAny? extra]);
 
-  external void setEventHandler(Function params);
+  external void setEventHandler(JSFunction params);
 }
 
 @JS('IrisRtcChannel')
-class _IrisRtcChannel {
-  external Future<dynamic> callApi(int apiType, String params, [Object? extra]);
+@staticInterop
+class _IrisRtcChannel {}
 
-  external void setEventHandler(Function params);
+extension _IrisRtcChannelExtension on _IrisRtcChannel {
+  external JSPromise<JSAny?> callApi(int apiType, String params);
+
+  external void setEventHandler(JSFunction params);
 }
 
 @JS('IrisRtcDeviceManager')
-class _IrisRtcDeviceManager {
-  external Future<dynamic> callApiAudio(int apiType, String params,
-      [Object? extra]);
+@staticInterop
+class _IrisRtcDeviceManager {}
 
-  external Future<dynamic> callApiVideo(int apiType, String params,
-      [Object? extra]);
+extension _IrisRtcDeviceManagerExtension on _IrisRtcDeviceManager {
+  external JSPromise<JSAny?> callApiAudio(int apiType, String params);
+
+  external JSPromise<JSAny?> callApiVideo(int apiType, String params);
+}
+
+Future<Object?> _toDartFuture(JSPromise<JSAny?> promise) async {
+  return (await promise.toDart)?.dartify();
 }
 
 /// A web implementation of the AgoraRtcEngine plugin.
@@ -132,24 +143,22 @@ class AgoraRtcEngineWeb {
     if (call.method == 'callApi') {
       int apiType = args['apiType'];
       if (apiType == 0) {
-        _engine(args).setEventHandler(allowInterop((String event, String data) {
+        _engine(args).setEventHandler(((JSString event, JSString data) {
           _controllerEngine.add({
-            'methodName': event,
-            'data': data,
+            'methodName': event.toDart,
+            'data': data.toDart,
             'subProcess': _engine(args) == _engineSub,
           });
-        }));
-        _engine(args)
-            .channel
-            .setEventHandler(allowInterop((String event, String data) {
-          _controllerChannel.add({
-            'methodName': event,
-            'data': data,
-          });
-        }));
+        }).toJS);
+        _engine(args).channel.setEventHandler(((JSString event, JSString data) {
+              _controllerChannel.add({
+                'methodName': event.toDart,
+                'data': data.toDart,
+              });
+            }).toJS);
       }
       String param = args['params'];
-      return promiseToFuture(_engine(args).callApi(apiType, param));
+      return _toDartFuture(_engine(args).callApi(apiType, param));
     } else {
       throw PlatformException(code: ErrorCode.NotSupported.toString());
     }
@@ -164,7 +173,7 @@ class AgoraRtcEngineWeb {
     if (call.method == 'callApi') {
       int apiType = args['apiType'];
       String param = args['params'];
-      return promiseToFuture(_engineMain.channel.callApi(apiType, param));
+      return _toDartFuture(_engineMain.channel.callApi(apiType, param));
     } else {
       throw PlatformException(code: ErrorCode.NotSupported.toString());
     }
@@ -179,7 +188,7 @@ class AgoraRtcEngineWeb {
     if (call.method == 'callApi') {
       int apiType = args['apiType'];
       String param = args['params'];
-      return promiseToFuture(
+      return _toDartFuture(
           _engineMain.deviceManager.callApiAudio(apiType, param));
     } else {
       throw PlatformException(code: ErrorCode.NotSupported.toString());
@@ -195,7 +204,7 @@ class AgoraRtcEngineWeb {
     if (call.method == 'callApi') {
       int apiType = args['apiType'];
       String param = args['params'];
-      return promiseToFuture(
+      return _toDartFuture(
           _engineMain.deviceManager.callApiVideo(apiType, param));
     } else {
       throw PlatformException(code: ErrorCode.NotSupported.toString());
@@ -212,7 +221,7 @@ class AgoraRtcEngineWeb {
       final uid = data['userId'];
       if (uid == 0) {
         const kEngineSetupLocalVideo = 20;
-        return promiseToFuture(_engine(data).callApi(
+        return _toDartFuture(_engine(data).callApi(
             kEngineSetupLocalVideo,
             jsonEncode({
               'canvas': {
@@ -222,10 +231,10 @@ class AgoraRtcEngineWeb {
                 'mirrorMode': data['mirrorMode'],
               },
             }),
-            element));
+            JSObject.fromInteropObject(element)));
       } else {
         const kEngineSetupRemoteVideo = 21;
-        return promiseToFuture(_engine(data).callApi(
+        return _toDartFuture(_engine(data).callApi(
             kEngineSetupRemoteVideo,
             jsonEncode({
               'canvas': {
@@ -235,7 +244,7 @@ class AgoraRtcEngineWeb {
                 'mirrorMode': data['mirrorMode'],
               }
             }),
-            element));
+            JSObject.fromInteropObject(element)));
       }
     } else {
       throw PlatformException(
