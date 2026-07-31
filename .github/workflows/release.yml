@@ -1,0 +1,460 @@
+name: 'Release to pub.dev and GitHub'
+
+on:
+  # Manual trigger - users can manually trigger this workflow
+  workflow_dispatch:
+    inputs:
+      increment:
+        description: 'The version to be released (e.g., 6.5.3 for standard, 6.5.3-sp.453163 for special)'
+        required: true
+        type: string
+      dry-run:
+        description: 'Dry-run mode (will not create real Tag/Release/publish to pub.dev)'
+        required: false
+        type: boolean
+        default: true
+      force-publish-to-pub:
+        description: 'Force publish to pub.dev regardless of version format'
+        required: false
+        type: boolean
+        default: false
+
+  # Callable workflow - can be called by other workflows
+  workflow_call:
+    inputs:
+      increment:
+        description: 'The version to be released (e.g., 6.5.3 for standard, 6.5.3-sp.453163 for special)'
+        required: false
+        type: string
+      dry-run:
+        description: 'Dry-run mode (will not create real Tag/Release/publish to pub.dev)'
+        required: false
+        type: boolean
+        default: true
+      force-publish-to-pub:
+        description: 'Force publish to pub.dev regardless of version format'
+        required: false
+        type: boolean
+        default: false
+    outputs:
+      increment:
+        description: 'The version that was released'
+        value: ${{ jobs.release.outputs.increment }}
+      release_type:
+        description: 'The type of release (standard or special)'
+        value: ${{ jobs.release.outputs.release_type }}
+      release_success:
+        description: 'Whether the release was successful'
+        value: ${{ jobs.release.result == 'success' }}
+      documentation_generated:
+        description: 'Whether documentation was generated'
+        value: ${{ jobs.attach_documentation.result == 'success' }}
+      documentation_version:
+        description: 'The documentation version'
+        value: ${{ jobs.attach_documentation.outputs.doc_version }}
+
+  # Also allow automatic trigger from PR merge with specific labels
+  pull_request:
+    types:
+      - closed
+
+jobs:
+  # Main release job - handles manual, callable, and automatic releases
+  release:
+    if: ${{ github.event_name == 'workflow_dispatch' ||
+            github.event_name == 'workflow_call' ||
+            (github.event_name == 'pull_request' &&
+             github.event.pull_request.merged == true &&
+             ((github.event.pull_request.base.ref == 'main' && contains(github.event.pull_request.labels.*.name, 'ci:prepare_release')) ||
+              contains(github.event.pull_request.labels.*.name, 'ci:ready_release_special'))) }}
+    outputs:
+      increment: ${{ steps.version_check.outputs.version }}
+      release_type: ${{ steps.version_check.outputs.release_type }}
+      is_prerelease: ${{ steps.version_check.outputs.is_prerelease }}
+      dry-run: ${{ steps.version_check.outputs.dry-run }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Resolve target branch
+        id: target_branch
+        run: |
+          if [ "${{ github.event_name }}" = "pull_request" ]; then
+            TARGET_BRANCH="${{ github.event.pull_request.base.ref }}"
+          else
+            TARGET_BRANCH="${{ github.ref_name }}"
+          fi
+
+          echo "Target branch: $TARGET_BRANCH"
+          echo "branch=$TARGET_BRANCH" >> "$GITHUB_OUTPUT"
+
+      - name: Checkout repository 🛎️
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ steps.target_branch.outputs.branch }}
+          fetch-depth: 0
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Get tags
+        run: git fetch --tags origin
+
+      - name: Switch to target branch
+        run: git checkout -B "${{ steps.target_branch.outputs.branch }}" "origin/${{ steps.target_branch.outputs.branch }}"
+
+      - name: Get version information ℹ️
+        id: version_check
+        run: |
+          set -eo pipefail
+
+          # Get dry-run mode
+          if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
+            DRY_RUN="${{ github.event.inputs.dry-run }}"
+            FORCE_PUBLISH="${{ github.event.inputs.force-publish-to-pub }}"
+          elif [ "${{ github.event_name }}" = "workflow_call" ]; then
+            DRY_RUN="${{ inputs.dry-run }}"
+            FORCE_PUBLISH="${{ inputs.force-publish-to-pub }}"
+          else
+            DRY_RUN="false" # PR triggers are always production mode
+            FORCE_PUBLISH="false"
+          fi
+
+          echo "Dry-run mode: $DRY_RUN"
+          echo "Force publish mode: $FORCE_PUBLISH"
+          echo "dry-run=$DRY_RUN" >> $GITHUB_OUTPUT
+
+          # Get version from inputs (for workflow_dispatch and workflow_call) or pubspec.yaml (for PR)
+          if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
+            RELEASE_VERSION="${{ github.event.inputs.increment }}"
+          elif [ "${{ github.event_name }}" = "workflow_call" ]; then
+            RELEASE_VERSION="${{ inputs.increment }}"
+          else
+            RELEASE_VERSION=$(grep 'version: ' pubspec.yaml | sed -e 's,.*: \(.*\),\1,')
+          fi
+
+          # Determine release type based on PR labels or version format
+          if [ "${{ github.event_name }}" = "pull_request" ]; then
+            if [ "${{ contains(github.event.pull_request.labels.*.name, 'ci:prepare_release') }}" = "true" ]; then
+              RELEASE_TYPE="standard"
+              IS_PRERELEASE="false"
+              echo "🚀 PR triggered standard release: $RELEASE_VERSION"
+            elif [ "${{ contains(github.event.pull_request.labels.*.name, 'ci:ready_release_special') }}" = "true" ]; then
+              RELEASE_TYPE="special"
+              IS_PRERELEASE="true"
+              echo "🔧 PR triggered special release: $RELEASE_VERSION"
+            fi
+          else
+            # Auto-detect release type based on version format for manual/callable triggers
+            # Only clean semantic versions (MAJOR.MINOR.PATCH) are considered standard
+            # Any version with suffix (pre-release, build metadata, etc.) is special
+            if [ "$FORCE_PUBLISH" = "true" ]; then
+              # Forced to publish: treat as standard
+              RELEASE_TYPE="standard"
+              # Still detect if it's a prerelease format for other informational purposes
+              if [[ $RELEASE_VERSION =~ ^[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
+                IS_PRERELEASE="false"
+              else
+                IS_PRERELEASE="true"
+              fi
+              echo "✅ Forced standard release: $RELEASE_VERSION"
+            elif [[ $RELEASE_VERSION =~ ^[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
+              # Clean semantic version: 6.5.0 (no suffix)
+              RELEASE_TYPE="standard"
+              IS_PRERELEASE="false"
+              echo "🚀 Detected standard release version: $RELEASE_VERSION"
+            else
+              # Special version: any version with suffix
+              # Examples: 6.5.3-beta.1, 6.5.3-rc.2, 6.5.3-sp.452163, 6.5.3+build.123
+              RELEASE_TYPE="special"
+              IS_PRERELEASE="true"
+              echo "🔧 Detected special release version: $RELEASE_VERSION"
+            fi
+          fi
+
+          echo "Release version: $RELEASE_VERSION"
+          echo "Release type: $RELEASE_TYPE"
+          echo "Is prerelease: $IS_PRERELEASE"
+
+          echo "version=$RELEASE_VERSION" >> $GITHUB_OUTPUT
+          echo "release_type=$RELEASE_TYPE" >> $GITHUB_OUTPUT
+          echo "is_prerelease=$IS_PRERELEASE" >> $GITHUB_OUTPUT
+
+      - name: Install release tools
+        run: |
+          npm install -g release-it
+          npm install -g release-it/bumper
+          npm install -g release-it/conventional-changelog
+
+      - name: Configure git
+        run: |
+          git config user.name "${GITHUB_ACTOR}"
+          git config user.email "${GITHUB_ACTOR}@users.noreply.github.com"
+
+      - name: Prepare release files (triggered by manual/callable)
+        if: ${{ github.event_name == 'workflow_dispatch' || github.event_name == 'workflow_call' }}
+        run: |
+          set -eo pipefail
+
+          RELEASE_VERSION="${{ steps.version_check.outputs.version }}"
+
+          echo "Preparing release files for $RELEASE_VERSION"
+          release-it "$RELEASE_VERSION" \
+            --no-git \
+            --no-github.release \
+            --no-github.web \
+            --ci
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Archive changelog for pub.dev
+        if: ${{ steps.version_check.outputs.release_type == 'standard' }}
+        run: |
+          bash scripts/archive_changelog.sh
+
+      - name: Verify prepared release version
+        run: |
+          set -eo pipefail
+
+          CURRENT_VERSION="$(grep 'version: ' pubspec.yaml | sed -e 's,.*: \(.*\),\1,')"
+          EXPECTED_VERSION="${{ steps.version_check.outputs.version }}"
+
+          echo "Prepared pubspec version: $CURRENT_VERSION"
+          echo "Expected release version: $EXPECTED_VERSION"
+
+          if [ "$CURRENT_VERSION" != "$EXPECTED_VERSION" ]; then
+            echo "Prepared pubspec version does not match release version." >&2
+            exit 1
+          fi
+
+      - name: Commit prepared release files locally
+        run: |
+          set -eo pipefail
+
+          RELEASE_VERSION="${{ steps.version_check.outputs.version }}"
+
+          if ! git diff --quiet || ! git diff --cached --quiet; then
+            git add pubspec.yaml CHANGELOG.md
+            if [ -f docs/CHANGELOG.archive.md ]; then
+              git add docs/CHANGELOG.archive.md
+            fi
+            git commit -m "chore: release $RELEASE_VERSION"
+          else
+            echo "No release file changes to commit"
+          fi
+
+      - name: Setup Flutter for pub publish
+        if: ${{ steps.version_check.outputs.release_type == 'standard' }}
+        uses: subosito/flutter-action@v2
+        with:
+          channel: 'stable'
+          cache: true
+
+      - name: Publish to pub.dev (dry-run check)
+        if: ${{ steps.version_check.outputs.release_type == 'standard' && steps.version_check.outputs.dry-run == 'true' }}
+        run: |
+          echo "[DRY-RUN MODE] Running pub publish dry-run"
+          flutter pub get
+          flutter pub publish --dry-run
+
+      - name: Publish to pub.dev (real)
+        if: ${{ steps.version_check.outputs.release_type == 'standard' && steps.version_check.outputs.dry-run == 'false' }}
+        id: pub_publish
+        uses: k-paxian/dart-package-publisher@master
+        with:
+          accessToken: ${{ secrets.OAUTH_ACCESS_TOKEN }}
+          refreshToken: ${{ secrets.OAUTH_REFRESH_TOKEN }}
+          force: false
+          skipTests: true
+
+      - name: Fail if pub publish did not report success
+        if: ${{ steps.version_check.outputs.release_type == 'standard' && steps.version_check.outputs.dry-run == 'false' }}
+        run: |
+          set -eo pipefail
+
+          if [ "${{ steps.pub_publish.outputs.success }}" != "true" ]; then
+            echo "pub publish step did not report success." >&2
+            echo "Action output success=${{ steps.pub_publish.outputs.success }}" >&2
+            exit 1
+          fi
+
+      - name: Finalize release artifacts
+        if: ${{ steps.version_check.outputs.dry-run == 'false' }}
+        run: |
+          set -eo pipefail
+
+          RELEASE_TYPE="${{ steps.version_check.outputs.release_type }}"
+          RELEASE_VERSION="${{ steps.version_check.outputs.version }}"
+          TARGET_BRANCH="${{ steps.target_branch.outputs.branch }}"
+          RELEASE_NOTES_FILE="$(mktemp)"
+
+          git push origin "HEAD:${TARGET_BRANCH}"
+          git tag -a "$RELEASE_VERSION" -m "Release $RELEASE_VERSION"
+          git push origin "refs/tags/$RELEASE_VERSION"
+
+          if [ "$RELEASE_TYPE" = "standard" ]; then
+            python3 -c 'import re, sys; from pathlib import Path; version = sys.argv[1]; output = Path(sys.argv[2]); text = Path("CHANGELOG.md").read_text(); pattern = re.compile(rf"(^## .*{re.escape(version)}.*?(?=^## |\\Z))", re.MULTILINE | re.DOTALL); match = pattern.search(text); (_ for _ in ()).throw(SystemExit(f"Unable to find release notes for {version} in CHANGELOG.md")) if not match else output.write_text(match.group(1).strip() + "\n")' \
+              "$RELEASE_VERSION" "$RELEASE_NOTES_FILE"
+
+            gh release create "$RELEASE_VERSION" \
+              --repo "${{ github.repository }}" \
+              --title "Release $RELEASE_VERSION" \
+              --notes-file "$RELEASE_NOTES_FILE"
+          else
+            echo "Skipping GitHub release for special release"
+          fi
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+  # Generate and attach documentation (only for standard releases in production mode)
+  attach_documentation:
+    name: 'Generate and Attach Documentation'
+    runs-on: ubuntu-latest
+    needs: release
+    if: ${{ needs.release.result == 'success' &&
+            needs.release.outputs.release_type == 'standard' &&
+            needs.release.outputs.dry-run == 'false' }}
+    outputs:
+      doc_version: ${{ steps.doc_version.outputs.version }}
+    steps:
+      - name: Checkout repository 🛎️
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.ref }}
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      # Get version information from release job output
+      - name: Get version for documentation
+        id: doc_version
+        run: |
+          set -eo pipefail
+
+          # Get version from release job output
+          VERSION="${{ needs.release.outputs.increment }}"
+          echo "Documentation version: $VERSION"
+          echo "version=$VERSION" >> $GITHUB_OUTPUT
+
+      - name: Setup Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          channel: 'stable'
+          cache: true
+
+      - name: Install dependencies
+        run: |
+          dart pub get
+
+      - name: Generate DartDoc 📖
+        run: |
+          # Generate DartDoc
+          dart doc
+          # Create a zip file of the DartDoc output
+          zip -r agora_rtc_docs.zip doc
+
+      - name: Upload DartDoc Artifact ⬆️
+        uses: actions/upload-artifact@v4
+        with:
+          name: agora_rtc_docs.zip
+          path: agora_rtc_docs.zip
+
+      - name: Upload DartDoc Archive to GitHub release ⬆️
+        uses: svenstaro/upload-release-action@v2
+        with:
+          repo_token: ${{ secrets.GITHUB_TOKEN }}
+          file: agora_rtc_docs.zip
+          asset_name: agora_rtc_docs.zip
+          tag: ${{ steps.doc_version.outputs.version }}
+          overwrite: true
+
+  upload_release_metadata:
+    name: 'Upload Release Metadata'
+    runs-on: ubuntu-latest
+    needs: release
+    if: ${{ needs.release.result == 'success' }}
+    steps:
+      - name: Write release metadata
+        run: |
+          cat > release-metadata.env <<EOF
+          RELEASE_VERSION=${{ needs.release.outputs.increment }}
+          RELEASE_TYPE=${{ needs.release.outputs.release_type }}
+          IS_PRERELEASE=${{ needs.release.outputs.is_prerelease }}
+          DRY_RUN=${{ needs.release.outputs.dry-run }}
+          GIT_URL=${{ github.server_url }}/${{ github.repository }}.git
+          REPOSITORY=${{ github.repository }}
+          EOF
+
+      - name: Upload release metadata
+        uses: actions/upload-artifact@v4
+        with:
+          name: release-metadata
+          path: release-metadata.env
+          retention-days: 7
+
+  # Post-release verification
+  verify_release:
+    name: 'Verify Release'
+    runs-on: ubuntu-latest
+    needs: [release, attach_documentation, upload_release_metadata]
+    if: always() && (needs.release.result == 'success' || needs.attach_documentation.result == 'success' || needs.upload_release_metadata.result == 'success')
+    steps:
+      - name: Checkout repository 🛎️
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.ref }}
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Verify release details
+        run: |
+          set -eo pipefail
+
+          RELEASE_VERSION="${{ needs.release.outputs.increment }}"
+          RELEASE_TYPE="${{ needs.release.outputs.release_type }}"
+          IS_PRERELEASE="${{ needs.release.outputs.is_prerelease }}"
+
+          echo "🔍 Verifying release: $RELEASE_VERSION"
+          echo "📋 Release Summary:"
+          echo "  • Version: $RELEASE_VERSION"
+          echo "  • Type: $RELEASE_TYPE"
+          echo "  • Pre-release: $IS_PRERELEASE"
+          echo "  • Branch: ${{ github.ref_name || 'main' }}"
+          echo "  • Triggered by: ${{ (github.event_name == 'workflow_dispatch' && 'Manual trigger') || (github.event_name == 'workflow_call' && 'Workflow call') || 'PR merge' }}"
+
+          if [ "$RELEASE_TYPE" = "standard" ]; then
+            if [ "$IS_PRERELEASE" = "true" ]; then
+              echo "  • Status: Pre-release version published"
+            else
+              echo "  • Status: Standard version published"
+            fi
+            echo "  • GitHub Release: ✅ Created"
+            echo "  • Pub.dev: ✅ Published"
+            echo "  • Documentation: ✅ Generated and attached"
+            echo "  • Consumer Smoke: handled by release_consumer_smoke workflow"
+          else
+            echo "  • Status: Special version (internal use only)"
+            echo "  • GitHub Release: ❌ Not created (internal version)"
+            echo "  • Pub.dev: ❌ Not published (internal version)"
+            echo "  • Documentation: ❌ Not generated (internal version)"
+            echo "  • Consumer Smoke: handled by release_consumer_smoke workflow"
+          fi
+
+          echo ""
+          echo "🎉 Release workflow completed successfully!"
+
+      - name: Notify on failure
+        if: ${{ needs.release.result == 'failure' }}
+        run: |
+          echo "❌ Release failed!"
+          echo "Please check the logs and try again."
+          exit 1
+
+      - name: print publish info
+        run: |
+          RELEASE_VERSION="${{ needs.release.outputs.increment }}"
+          RELEASE_TYPE="${{ needs.release.outputs.release_type }}"
+
+          if [ "$RELEASE_TYPE" = "standard" ]; then
+            echo "[publish info]  dependencies:"
+            echo "[publish info]    agora_rtc_engine: ^$RELEASE_VERSION"
+          else
+            echo "[publish info]  dependencies:"
+            echo "[publish info]    agora_rtc_engine:"
+            echo "[publish info]     git:"
+            echo "[publish info]      url: https://github.com/AgoraIO-Extensions/Agora-Flutter-SDK.git"
+            echo "[publish info]      ref: $RELEASE_VERSION"
+          fi
