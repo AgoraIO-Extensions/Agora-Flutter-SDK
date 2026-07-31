@@ -64,8 +64,13 @@ dependencies {
   if (isDev(project)) {
     api fileTree(dir: "libs", include: ["*.jar", "*.aar"])
   } else {
+    // native dependencies start
     api 'io.agora.rtc:agora-special-voice:3.7.3.5'
+    // native dependencies end
+
+    // iris dependencies start
     api 'io.agora.rtc:iris-rtc:3.7.3.5'
+    // iris dependencies end
   }
 
   // implementation 'io.agora.rtc:full-screen-sharing:3.7.3.5'

@@ -45,10 +45,10 @@ on:
         value: ${{ jobs.release.outputs.release_type }}
       release_success:
         description: 'Whether the release was successful'
-        value: ${{ jobs.release.result == 'success' }}
+        value: ${{ jobs.release.outputs.release_success == 'true' }}
       documentation_generated:
         description: 'Whether documentation was generated'
-        value: ${{ jobs.attach_documentation.result == 'success' }}
+        value: ${{ jobs.attach_documentation.outputs.documentation_generated == 'true' }}
       documentation_version:
         description: 'The documentation version'
         value: ${{ jobs.attach_documentation.outputs.doc_version }}
@@ -65,13 +65,14 @@ jobs:
             github.event_name == 'workflow_call' ||
             (github.event_name == 'pull_request' &&
              github.event.pull_request.merged == true &&
-             ((github.event.pull_request.base.ref == 'main' && contains(github.event.pull_request.labels.*.name, 'ci:prepare_release')) ||
+             ((github.event.pull_request.base.ref == github.event.repository.default_branch && contains(github.event.pull_request.labels.*.name, 'ci:prepare_release')) ||
               contains(github.event.pull_request.labels.*.name, 'ci:ready_release_special'))) }}
     outputs:
       increment: ${{ steps.version_check.outputs.version }}
       release_type: ${{ steps.version_check.outputs.release_type }}
       is_prerelease: ${{ steps.version_check.outputs.is_prerelease }}
       dry-run: ${{ steps.version_check.outputs.dry-run }}
+      release_success: ${{ steps.release_status.outputs.success }}
     runs-on: ubuntu-latest
     steps:
       - name: Resolve target branch
@@ -302,6 +303,10 @@ jobs:
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
+      - name: Mark release job success
+        id: release_status
+        run: echo "success=true" >> "$GITHUB_OUTPUT"
+
   # Generate and attach documentation (only for standard releases in production mode)
   attach_documentation:
     name: 'Generate and Attach Documentation'
@@ -312,11 +317,12 @@ jobs:
             needs.release.outputs.dry-run == 'false' }}
     outputs:
       doc_version: ${{ steps.doc_version.outputs.version }}
+      documentation_generated: ${{ steps.documentation_status.outputs.success }}
     steps:
       - name: Checkout repository 🛎️
         uses: actions/checkout@v4
         with:
-          ref: ${{ github.ref }}
+          ref: ${{ needs.release.outputs.increment }}
           token: ${{ secrets.GITHUB_TOKEN }}
 
       # Get version information from release job output
@@ -361,6 +367,10 @@ jobs:
           asset_name: agora_rtc_docs.zip
           tag: ${{ steps.doc_version.outputs.version }}
           overwrite: true
+
+      - name: Mark documentation generation success
+        id: documentation_status
+        run: echo "success=true" >> "$GITHUB_OUTPUT"
 
   upload_release_metadata:
     name: 'Upload Release Metadata'

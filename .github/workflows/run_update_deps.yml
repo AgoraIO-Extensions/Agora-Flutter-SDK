@@ -4,7 +4,7 @@ on:
   workflow_dispatch:
     inputs:
       target_branch:
-        description: 'Target branch to compare against. If a branch name, will compare directly against it. If a commit hash or tag, a new branch named "special/<pub_version>" will be created from that ref. The pub_version will be either the input pub_version or latest version from target branch pubspec.yaml. Defaults to "main".'
+        description: 'Target branch to compare against. If empty, uses the current workflow branch. If a commit hash or tag, a new branch named "special/<pub_version>" will be created from that ref.'
         type: string
         required: false
         default: ''
@@ -99,9 +99,11 @@ jobs:
       - name: Update dependencies with parsed dependencies content
         if: ${{ inputs.dependencies_content != '' }}
         shell: bash
+        env:
+          DEPENDENCIES_CONTENT: ${{ steps.parse_dependencies_content.outputs.matches }}
         run: |
           # call ci/run_update_deps.sh with output of steps.parse_dependencies_content.outputs.matches
-          bash ci/run_update_deps.sh ${{ steps.parse_dependencies_content.outputs.matches }}
+          bash ci/run_update_deps.sh "$DEPENDENCIES_CONTENT"
 
       - name: Update pub version into pubspec.yaml
         if: ${{ inputs.pub_version != '' }}
@@ -114,13 +116,17 @@ jobs:
         id: extract_rtc_version
         if: ${{ inputs.run_gen_code == true }}
         shell: bash
+        env:
+          DEPENDENCIES_CONTENT: ${{ steps.parse_dependencies_content.outputs.matches }}
         run: |
           if [ -n "${{ inputs.code_gen_public_headers }}" ]; then
             rtc_version="${{ inputs.code_gen_public_headers }}"
             echo "Using explicitly provided version: ${rtc_version}"
           else
-            dependencies_raw='${{ steps.parse_dependencies_content.outputs.matches }}'
-            dependencies_json=$(echo "$dependencies_raw" | sed 's/^"//;s/"$//' | sed 's/\\"/"/g')
+            dependencies_json=""
+            if [ -n "$DEPENDENCIES_CONTENT" ]; then
+              dependencies_json=$(printf '%s' "$DEPENDENCIES_CONTENT" | jq -c 'if type == "string" then fromjson else . end')
+            fi
 
             if [ -n "$dependencies_json" ] && [ "$dependencies_json" != "null" ] && [ "$dependencies_json" != "" ]; then
               version=$(echo "$dependencies_json" | jq -r '.[] | select(.platform == "Windows") | .version' | head -n1)
@@ -167,7 +173,7 @@ jobs:
 
       - name: Commit and create pull request
         id: create_pr
-        uses: peter-evans/create-pull-request@v4
+        uses: peter-evans/create-pull-request@v7
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
           commit-message: "feat: update dependencies"

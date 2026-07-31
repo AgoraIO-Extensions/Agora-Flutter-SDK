@@ -17,8 +17,14 @@ Pod::Spec.new do |s|
   s.source           = { :path => '.' }
   s.source_files = 'Classes/**/*.{h,mm}', 'Classes/File.swift'
   s.dependency 'FlutterMacOS'
+
+  # native dependencies start
   s.dependency 'AgoraRtcEngine_macOS', '3.7.0.3'
+  # native dependencies end
+
+  # iris dependencies start
   s.dependency 'AgoraIrisRTC_macOS', '3.7.0.3'
+  # iris dependencies end
 #   s.dependency 'AgoraRtcWrapper'
   s.platform = :osx, '10.15'
 end
