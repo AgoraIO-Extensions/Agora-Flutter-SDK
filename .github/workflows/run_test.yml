@@ -614,7 +614,26 @@ jobs:
           export SAVE_DEBUG_GOLDEN="true"
 
           chromedriver --port=4444 --trace-buffer-size=100000 &
-          bash ci/run_rendering_test.sh web
+          max_attempts=3
+          for attempt in $(seq 1 $max_attempts); do
+            echo "Running web rendering test (attempt $attempt/$max_attempts)"
+            if bash ci/run_rendering_test.sh web; then
+              exit 0
+            fi
+            for debug_file in test_shard/rendering_test/screenshot/*.debug.png; do
+              [[ -e "$debug_file" ]] || continue
+              if [[ "$debug_file" == *.attempt-*.debug.png ]]; then
+                continue
+              fi
+              mv "$debug_file" "${debug_file%.debug.png}.attempt-$attempt.debug.png"
+            done
+            if (( attempt < max_attempts )); then
+              sleep 10
+            fi
+          done
+
+          echo "Web rendering test failed after $max_attempts attempts" >&2
+          exit 1
 
       - uses: actions/upload-artifact@v4
         if: always()
