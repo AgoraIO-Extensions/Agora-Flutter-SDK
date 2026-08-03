@@ -148,7 +148,7 @@ jobs:
   integration_test_ios:
     name: Run Flutter iOS Integration Tests (Flutter ${{ needs.resolve_flutter_version.outputs.flutter_version }})
     needs: resolve_flutter_version
-    runs-on: macos-latest
+    runs-on: macos-26
     timeout-minutes: 120
     env:
       TEST_APP_ID: ${{ secrets.APP_ID }}
@@ -159,9 +159,12 @@ jobs:
           channel: ${{ needs.resolve_flutter_version.outputs.flutter_channel }}
           flutter-version: ${{ needs.resolve_flutter_version.outputs.flutter_version }}
           cache: true
-      - name: Switch to Xcode 16.4
+      - name: Setup latest stable Xcode
+        uses: maxim-lobanov/setup-xcode@v1
+        with:
+          xcode-version: latest-stable
+      - name: Verify Xcode
         run: |
-          sudo xcode-select --switch /Applications/Xcode_16.4.app
           xcode-select --print-path
           xcodebuild -version
           echo "Available iOS SDKs:"
@@ -170,9 +173,9 @@ jobs:
           xcodebuild -showsdks | grep iphonesimulator
       - uses: futureware-tech/simulator-action@v4
         with:
-          model: "iPhone 16 Pro"
+          model: "iPhone 16e"
           os: iOS
-          os_version: ">=18.0"
+          os_version: ">=26.2"
           erase_before_boot: true
           wait_for_boot: true
           shutdown_after_job: true

@@ -22,15 +22,26 @@ function(download_and_extract URL TARGET_DIR EXTRACTED_DIR)
 
     # Download the file if it doesn't exist
     if(NOT EXISTS "${TARGET_FILE}")
-        file(DOWNLOAD ${URL_ESCAPED} ${TARGET_FILE} SHOW_PROGRESS STATUS status)
-        list(GET status 0 status_code)
-        list(GET status 1 status_string)
-        if(NOT status_code EQUAL 0)
-          # Remove the file if it exists when the download fails
+        foreach(DOWNLOAD_ATTEMPT RANGE 1 3)
+          file(DOWNLOAD ${URL_ESCAPED} ${TARGET_FILE} SHOW_PROGRESS STATUS status)
+          list(GET status 0 status_code)
+          list(GET status 1 status_string)
+          if(status_code EQUAL 0)
+            break()
+          endif()
+
+          # A failed transfer can leave a partial archive that must not be reused.
           if(EXISTS "${TARGET_FILE}")
             file(REMOVE "${TARGET_FILE}")
           endif()
-          message(FATAL_ERROR "Download failed: ${STATUS_STRING}")
+          if(DOWNLOAD_ATTEMPT LESS 3)
+            message(WARNING "Download attempt ${DOWNLOAD_ATTEMPT} of 3 failed: ${status_string}. Retrying...")
+            execute_process(COMMAND ${CMAKE_COMMAND} -E sleep 5)
+          endif()
+        endforeach()
+
+        if(NOT status_code EQUAL 0)
+          message(FATAL_ERROR "Download failed: ${status_string}")
         endif()
     endif()
 
