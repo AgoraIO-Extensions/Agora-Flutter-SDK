@@ -395,6 +395,7 @@ test('dependency update workflow tests, runs, and validates the SPM updater befo
   assert.ok(updateSpmIndex > testUpdaterIndex, 'workflow must update manifests after tests');
   assert.match(workflow, /SPM manifest validation skipped for target ref/);
   assert.ok(validateSpmIndex > updateSpmIndex, 'workflow must validate generated manifests');
+  assert.match(workflow, /uses: peter-evans\/create-pull-request@v8/);
   assert.ok(createPrIndex > validateSpmIndex, 'workflow must validate manifests before PR creation');
 });
 
