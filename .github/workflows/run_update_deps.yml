@@ -14,7 +14,11 @@ on:
         required: false
         default: ''
       dependencies_content:
-        description: 'The dependencies content to update, including native SDKs and Iris dependencies across Maven, CocoaPods, and CDN links'
+        description: |
+          Dependencies to update across Maven, CocoaPods, CDN, and Apple SPM.
+          Keep each Apple SPM platform on one line with explicit fields:
+          platform:iOS github:https://github.com/AgoraIO/AgoraRtcEngine_iOS.git tag:4.6.2 products:RtcBasic iris-url:https://download.agora.io/sdk/release/AgoraIrisRTC_iOS2-4.6.2-build.1.zip iris-checksum:eba8f9fc5b3d93d9d083d0c3f16e6c98fcd993e49989fb851e6df2941ca29825
+          platform:macOS github:https://github.com/AgoraIO/AgoraRtcEngine_macOS.git tag:4.6.2 products:RtcBasic iris-url:https://download.agora.io/sdk/release/AgoraIrisRTC_macOS2-4.6.2-build.1.zip iris-checksum:dbfe2db86b0cb2c1012202212248bd6588173020c357dc13fc5a6dcf0a7b97cf
         type: string
         required: true
         default: ''
@@ -52,6 +56,14 @@ jobs:
           fetch-depth: '1'
           lfs: 'true'
           submodules: 'true'
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Test SPM dependency updater
+        run: node --test ci/update_spm_deps.test.mjs
 
       - name: Parse dependencies content
         id: parse_dependencies_content
@@ -102,6 +114,17 @@ jobs:
         run: |
           # call ci/run_update_deps.sh with output of steps.parse_dependencies_content.outputs.matches
           bash ci/run_update_deps.sh ${{ steps.parse_dependencies_content.outputs.matches }}
+
+      - name: Update Apple SPM dependencies
+        if: ${{ inputs.dependencies_content != '' }}
+        env:
+          DEPENDENCIES_CONTENT: ${{ inputs.dependencies_content }}
+        run: node ci/update_spm_deps.mjs --dependencies-content "$DEPENDENCIES_CONTENT"
+
+      - name: Validate Apple SPM manifests
+        run: |
+          swift package dump-package --package-path ios/agora_rtc_engine > /dev/null
+          swift package dump-package --package-path macos/agora_rtc_engine > /dev/null
 
       - name: Update pub version into pubspec.yaml
         if: ${{ inputs.pub_version != '' }}

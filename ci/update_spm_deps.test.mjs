@@ -13,6 +13,7 @@ const repoRoot = path.resolve(ciDir, '..');
 const updaterPath = path.join(ciDir, 'update_spm_deps.mjs');
 const sourceIosManifest = path.join(repoRoot, 'ios/agora_rtc_engine/Package.swift');
 const sourceMacosManifest = path.join(repoRoot, 'macos/agora_rtc_engine/Package.swift');
+const updateDepsWorkflow = path.join(repoRoot, '.github/workflows/run_update_deps.yml');
 
 const iosIrisUrl =
   'https://download.agora.io/sdk/release/AgoraIrisRTC_iOS2-4.6.2-build.1.zip';
@@ -198,4 +199,25 @@ test('is idempotent when the same dependency input is applied twice', async () =
 
   assert.equal(await readFile(manifests.iosManifest, 'utf8'), iosAfterFirstRun);
   assert.equal(await readFile(manifests.macosManifest, 'utf8'), macosAfterFirstRun);
+});
+
+test('dependency update workflow tests, runs, and validates the SPM updater before PR creation', async () => {
+  const workflow = await readFile(updateDepsWorkflow, 'utf8');
+  const setupNodeIndex = workflow.indexOf('uses: actions/setup-node@v4');
+  const testUpdaterIndex = workflow.indexOf('node --test ci/update_spm_deps.test.mjs');
+  const updateSpmIndex = workflow.indexOf(
+    'node ci/update_spm_deps.mjs --dependencies-content "$DEPENDENCIES_CONTENT"',
+  );
+  const validateSpmIndex = workflow.indexOf('swift package dump-package');
+  const createPrIndex = workflow.indexOf('name: Commit and create pull request');
+
+  assert.ok(setupNodeIndex >= 0, 'workflow must set up Node');
+  assert.match(workflow, /node-version: ['"]?22['"]?/);
+  assert.match(workflow, /platform:iOS github:/);
+  assert.match(workflow, /platform:macOS github:/);
+  assert.ok(testUpdaterIndex > setupNodeIndex, 'workflow must run updater tests after setup');
+  assert.match(workflow, /DEPENDENCIES_CONTENT: \$\{\{ inputs\.dependencies_content \}\}/);
+  assert.ok(updateSpmIndex > testUpdaterIndex, 'workflow must update manifests after tests');
+  assert.ok(validateSpmIndex > updateSpmIndex, 'workflow must validate generated manifests');
+  assert.ok(createPrIndex > validateSpmIndex, 'workflow must validate manifests before PR creation');
 });
