@@ -247,6 +247,7 @@ test('preserves version and tag fields in non-Apple legacy records', async () =>
 
   assert.match(result.stdout, /platform:Android.*version:4\.6\.2 tag:android-preview/);
   assert.match(result.stdout, /platform:Windows.*version:4\.6\.2\.70 tag:windows-preview/);
+  assert.match(result.stdout, /tag:android-preview\nplatform:iOS\nplatform:Windows/);
   assert.doesNotMatch(result.stdout, /AgoraRtcEngine_iOS|products:|iris-url:|iris-checksum:/i);
 });
 

@@ -146,7 +146,7 @@ function createLegacyDependenciesContent(content) {
   }
 
   return chunks
-    .join('')
+    .join('\n')
     .split(/\r?\n/)
     .map((line) => line.trim())
     .filter(Boolean)
