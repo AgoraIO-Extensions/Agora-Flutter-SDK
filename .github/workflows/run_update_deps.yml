@@ -16,9 +16,15 @@ on:
       dependencies_content:
         description: |
           Dependencies to update across Maven, CocoaPods, CDN, and Apple SPM.
-          Keep each Apple SPM platform on one line with explicit fields:
-          platform:iOS github:https://github.com/AgoraIO/AgoraRtcEngine_iOS.git tag:4.6.2 products:RtcBasic iris-url:https://download.agora.io/sdk/release/AgoraIrisRTC_iOS2-4.6.2-build.1.zip iris-checksum:eba8f9fc5b3d93d9d083d0c3f16e6c98fcd993e49989fb851e6df2941ca29825
-          platform:macOS github:https://github.com/AgoraIO/AgoraRtcEngine_macOS.git tag:4.6.2 products:RtcBasic iris-url:https://download.agora.io/sdk/release/AgoraIrisRTC_macOS2-4.6.2-build.1.zip iris-checksum:dbfe2db86b0cb2c1012202212248bd6588173020c357dc13fc5a6dcf0a7b97cf
+          Each platform field starts an Apple SPM block. Fields may stay on that line or continue on following lines until the next platform field.
+          platform:iOS
+          github:https://github.com/AgoraIO/AgoraRtcEngine_iOS.git tag:4.6.2
+          products:RtcBasic,AINS
+          iris-url:https://download.agora.io/sdk/release/AgoraIrisRTC_iOS2-4.6.2-build.1.zip
+          iris-checksum:eba8f9fc5b3d93d9d083d0c3f16e6c98fcd993e49989fb851e6df2941ca29825
+          platform:macOS
+          github:https://github.com/AgoraIO/AgoraRtcEngine_macOS.git tag:4.6.2 products:RtcBasic
+          iris-url:https://download.agora.io/sdk/release/AgoraIrisRTC_macOS2-4.6.2-build.1.zip iris-checksum:dbfe2db86b0cb2c1012202212248bd6588173020c357dc13fc5a6dcf0a7b97cf
         type: string
         required: true
         default: ''

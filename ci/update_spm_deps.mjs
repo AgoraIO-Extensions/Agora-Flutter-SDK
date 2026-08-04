@@ -93,49 +93,82 @@ function countLabeledFields(line, labelPattern) {
   return [...line.matchAll(fieldPattern)].length;
 }
 
+function countSpmFields(record) {
+  const tagCount = countLabeledFields(record, 'tag');
+  const versionCount = countLabeledFields(record, 'version');
+  return {
+    platform: countLabeledFields(record, 'platform'),
+    github: countLabeledFields(record, 'github'),
+    'tag/version': tagCount + versionCount,
+    products: countLabeledFields(record, 'products?'),
+    'iris-url': countLabeledFields(record, 'iris-url'),
+    'iris-checksum': countLabeledFields(record, 'iris-checksum'),
+  };
+}
+
+function hasStrongSpmMetadata(fieldCounts) {
+  return (
+    fieldCounts.github > 0 ||
+    fieldCounts.products > 0 ||
+    fieldCounts['iris-url'] > 0 ||
+    fieldCounts['iris-checksum'] > 0
+  );
+}
+
+function splitPlatformRecords(content) {
+  const platformPattern =
+    /(?:^|[\s|])platform\s*[:=]\s*(?:"[^"]*"|'[^']*'|[^\s|]+)(?=$|[\s|])/gi;
+  const matches = [...content.matchAll(platformPattern)];
+  const preambleEnd = matches[0]?.index ?? content.length;
+  const preambleCounts = countSpmFields(content.slice(0, preambleEnd));
+
+  const hasUnscopedTag =
+    countLabeledFields(content.slice(0, preambleEnd), 'tag') > 0;
+  if (hasStrongSpmMetadata(preambleCounts) || hasUnscopedTag) {
+    throw new Error('SPM metadata requires an explicit platform field');
+  }
+
+  return matches.map((match, index) => {
+    const nextStart = matches[index + 1]?.index ?? content.length;
+    return content.slice(match.index, nextStart);
+  });
+}
+
 function parsePlatformDependencies(content) {
   const dependencies = new Map();
+  const seenApplePlatforms = new Set();
   const normalizedContent = content
     .replaceAll(String.raw`\r\n`, '\n')
     .replaceAll(String.raw`\n`, '\n')
     .replaceAll(String.raw`\r`, '\n');
 
-  for (const line of normalizedContent.split(/\r?\n/)) {
-    const tagCount = countLabeledFields(line, 'tag');
-    const versionCount = countLabeledFields(line, 'version');
-    const fieldCounts = {
-      platform: countLabeledFields(line, 'platform'),
-      github: countLabeledFields(line, 'github'),
-      'tag/version': tagCount + versionCount,
-      products: countLabeledFields(line, 'products?'),
-      'iris-url': countLabeledFields(line, 'iris-url'),
-      'iris-checksum': countLabeledFields(line, 'iris-checksum'),
-    };
+  for (const record of splitPlatformRecords(normalizedContent)) {
+    const fieldCounts = countSpmFields(record);
+    const platformValues = parseLabeledValues(record, 'platform');
+
+    const platformValue = platformValues[0];
+    const isApplePlatform = /^(?:iOS|macOS)$/i.test(platformValue);
     const hasSpmMetadata =
-      fieldCounts.github > 0 ||
-      tagCount > 0 ||
-      fieldCounts.products > 0 ||
-      fieldCounts['iris-url'] > 0 ||
-      fieldCounts['iris-checksum'] > 0;
-    const platformValues = parseLabeledValues(line, 'platform');
-    if (platformValues.length === 0) {
+      hasStrongSpmMetadata(fieldCounts) ||
+      (isApplePlatform && fieldCounts['tag/version'] > 0);
+    const platform = isApplePlatform
+      ? (platformValue.toLowerCase() === 'ios' ? 'iOS' : 'macOS')
+      : null;
+    if (platform && seenApplePlatforms.has(platform)) {
       if (hasSpmMetadata) {
-        if (fieldCounts.platform === 0) {
-          throw new Error('SPM metadata requires an explicit platform field');
-        }
-        throw new Error('Invalid SPM platform field');
+        throw new Error(`Duplicate SPM metadata for ${platform}`);
       }
-      continue;
+      throw new Error(`Duplicate SPM fields for ${platform}: platform`);
+    }
+    if (platform) {
+      seenApplePlatforms.add(platform);
     }
     if (!hasSpmMetadata) {
       continue;
     }
-
-    const platformValue = platformValues[0];
-    if (!/^(?:iOS|macOS)$/i.test(platformValue)) {
+    if (!isApplePlatform) {
       throw new Error(`Unsupported SPM platform: ${platformValue}`);
     }
-    const platform = platformValue.toLowerCase() === 'ios' ? 'iOS' : 'macOS';
     const duplicateFields = Object.entries(fieldCounts)
       .filter(([_field, count]) => count > 1)
       .map(([field]) => field);
@@ -145,11 +178,11 @@ function parsePlatformDependencies(content) {
     if (dependencies.has(platform)) {
       throw new Error(`Duplicate SPM metadata for ${platform}`);
     }
-    const githubValue = parseLabeledValues(line, 'github')[0] ?? null;
-    const versionValue = parseLabeledValues(line, 'tag|version')[0] ?? null;
-    const products = parseProducts(line);
-    const irisUrlValue = parseLabeledValues(line, 'iris-url')[0] ?? null;
-    const checksumValue = parseLabeledValues(line, 'iris-checksum')[0] ?? null;
+    const githubValue = parseLabeledValues(record, 'github')[0] ?? null;
+    const versionValue = parseLabeledValues(record, 'tag|version')[0] ?? null;
+    const products = parseProducts(record);
+    const irisUrlValue = parseLabeledValues(record, 'iris-url')[0] ?? null;
+    const checksumValue = parseLabeledValues(record, 'iris-checksum')[0] ?? null;
 
     const missingFields = Object.entries(fieldCounts)
       .filter(([field, count]) => field !== 'platform' && count === 0)
@@ -239,8 +272,8 @@ function updateManifest(source, dependency, platform) {
   const packageStartMarker = '        // agora-spm-updater:managed-packages-start';
   const packageEndMarker = '        // agora-spm-updater:managed-packages-end';
   const packageDependencies = [
-    packageStartMarker,
     '        .package(name: "FlutterFramework", path: "../FlutterFramework"),',
+    packageStartMarker,
     `        .package(url: "${dependency.packageUrl}", exact: "${dependency.version}"),`,
     packageEndMarker,
   ];
@@ -291,6 +324,15 @@ function updateManifest(source, dependency, platform) {
         }
       }
 
+      for (const [index, line] of lines.entries()) {
+        if (
+          line.includes('.package(name: "FlutterFramework"') &&
+          !managedIndexes.includes(index)
+        ) {
+          managedIndexes.push(index);
+        }
+      }
+
       if (nativePackageCount !== 1) {
         throw new Error('Unable to locate Native package dependency in Package.swift');
       }
@@ -306,8 +348,8 @@ function updateManifest(source, dependency, platform) {
   const targetStartMarker = '                // agora-spm-updater:managed-products-start';
   const targetEndMarker = '                // agora-spm-updater:managed-products-end';
   const targetDependencies = [
-    targetStartMarker,
     '                .product(name: "FlutterFramework", package: "FlutterFramework"),',
+    targetStartMarker,
     ...dependency.products.map(
       (product) =>
         `                .product(name: "${product}", package: "${dependency.packageName}"),`,
@@ -352,6 +394,15 @@ function updateManifest(source, dependency, platform) {
             managedIndexes.push(index);
             nativeProductCount += 1;
           }
+        }
+      }
+
+      for (const [index, line] of lines.entries()) {
+        if (
+          line.includes('.product(name: "FlutterFramework", package: "FlutterFramework")') &&
+          !managedIndexes.includes(index)
+        ) {
+          managedIndexes.push(index);
         }
       }
 

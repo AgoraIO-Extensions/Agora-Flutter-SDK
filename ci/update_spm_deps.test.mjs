@@ -114,6 +114,35 @@ test('updates both Apple manifests from complete platform-scoped input', async (
   assert.match(macos, /cxxLanguageStandard: \.cxx14/);
 });
 
+test('keeps FlutterFramework outside Native updater marker regions', async () => {
+  const manifests = await createTemporaryManifests();
+
+  await runUpdater(completeDependenciesContent, manifests);
+
+  for (const manifestPath of [manifests.iosManifest, manifests.macosManifest]) {
+    const manifest = await readFile(manifestPath, 'utf8');
+    const packageRegion = manifest.match(
+      /\/\/ agora-spm-updater:managed-packages-start([\s\S]*?)\/\/ agora-spm-updater:managed-packages-end/,
+    );
+    const productRegion = manifest.match(
+      /\/\/ agora-spm-updater:managed-products-start([\s\S]*?)\/\/ agora-spm-updater:managed-products-end/,
+    );
+
+    assert.ok(packageRegion, 'Native package marker region must exist');
+    assert.ok(productRegion, 'Native product marker region must exist');
+    assert.doesNotMatch(packageRegion[1], /FlutterFramework/);
+    assert.doesNotMatch(productRegion[1], /FlutterFramework/);
+    assert.match(
+      manifest,
+      /\.package\(name: "FlutterFramework", path: "\.\.\/FlutterFramework"\)/,
+    );
+    assert.match(
+      manifest,
+      /\.product\(name: "FlutterFramework", package: "FlutterFramework"\)/,
+    );
+  }
+});
+
 test('accepts GitHub workflow input with literal escaped newlines', async () => {
   const manifests = await createTemporaryManifests();
   const escapedInput = completeDependenciesContent.replaceAll('\n', String.raw`\n`);
@@ -124,6 +153,41 @@ test('accepts GitHub workflow input with literal escaped newlines', async () => 
   const macos = await readFile(manifests.macosManifest, 'utf8');
   assert.match(ios, /AgoraRtcEngine_iOS\.git", exact: "4\.6\.2"/);
   assert.match(macos, /AgoraRtcEngine_macOS\.git", exact: "4\.6\.2"/);
+});
+
+test('accepts mixed legacy content and multiline reordered SPM platform blocks', async () => {
+  const manifests = await createTemporaryManifests();
+  const mixedInput = [
+    "platform:Android native maven: implementation 'io.agora.rtc:full-sdk:4.6.2' version:4.6.2",
+    "platform:iOS cocoapods: pod 'AgoraVideo_Special_iOS', '4.6.2.70'",
+    'products = "RtcBasic, AINS"',
+    `iris-checksum = '${iosIrisChecksum}'`,
+    'github = git@github.com:AgoraIO/AgoraRtcEngine_iOS.git',
+    'version = 4.6.2',
+    `iris-url = "${iosIrisUrl}"`,
+    "platform:macOS cocoapods: pod 'AgoraVideo_Special_macOS', '4.6.2.70'",
+    `iris-url = '${macosIrisUrl}'`,
+    'tag = 4.6.2',
+    'products = RtcBasic',
+    'github = https://github.com/AgoraIO/AgoraRtcEngine_macOS.git',
+    `iris-checksum = ${macosIrisChecksum}`,
+    'platform:Windows native cdn: https://download.agora.io/example.zip version:4.6.2',
+  ].join('\n');
+
+  await runUpdater(mixedInput, manifests);
+
+  const ios = await readFile(manifests.iosManifest, 'utf8');
+  assert.match(ios, /\.product\(name: "RtcBasic", package: "AgoraRtcEngine_iOS"\)/);
+  assert.match(ios, /\.product\(name: "AINS", package: "AgoraRtcEngine_iOS"\)/);
+  assert.match(ios, new RegExp(`url: "${iosIrisUrl.replaceAll('.', '\\.')}"`));
+
+  const macos = await readFile(manifests.macosManifest, 'utf8');
+  assert.match(
+    macos,
+    /\.product\(name: "RtcBasic", package: "AgoraRtcEngine_macOS"\)/,
+  );
+  assert.doesNotMatch(macos, /\.product\(name: "AINS"/);
+  assert.match(macos, new RegExp(`url: "${macosIrisUrl.replaceAll('.', '\\.')}"`));
 });
 
 test('preserves unrelated package and target dependencies', async () => {
@@ -247,13 +311,13 @@ test('rejects a standalone SPM tag instead of treating it as legacy input', asyn
   }
 });
 
-test('accepts quoted reordered fields, SSH GitHub URLs, and future products', async () => {
+test('accepts quoted reordered fields, SSH GitHub URLs, and iOS-only AINS product', async () => {
   const manifests = await createTemporaryManifests();
   const macosBefore = await readFile(manifests.macosManifest, 'utf8');
   const input = [
     'platform = iOS',
     `iris-checksum = '${iosIrisChecksum}'`,
-    'products = RtcBasic, SomeFutureProduct',
+    'products = RtcBasic, AINS',
     `iris-url = "${iosIrisUrl}"`,
     'version = 4.6.2',
     'github = git@github.com:AgoraIO/AgoraRtcEngine_iOS.git',
@@ -268,9 +332,11 @@ test('accepts quoted reordered fields, SSH GitHub URLs, and future products', as
   );
   assert.match(
     ios,
-    /\.product\(name: "SomeFutureProduct", package: "AgoraRtcEngine_iOS"\)/,
+    /\.product\(name: "AINS", package: "AgoraRtcEngine_iOS"\)/,
   );
-  assert.equal(await readFile(manifests.macosManifest, 'utf8'), macosBefore);
+  const macos = await readFile(manifests.macosManifest, 'utf8');
+  assert.equal(macos, macosBefore);
+  assert.doesNotMatch(macos, /\.product\(name: "AINS"/);
 });
 
 test('uses the explicitly labeled GitHub URL instead of an earlier URL', async () => {
@@ -352,25 +418,33 @@ test('is idempotent when the same dependency input is applied twice', async () =
   assert.equal(await readFile(manifests.macosManifest, 'utf8'), macosAfterFirstRun);
 });
 
-test('can switch the managed Native package repository more than once', async () => {
+test('can switch the managed Native package repository from Audio to Video', async () => {
   const manifests = await createTemporaryManifests();
   const iosInput = completeDependenciesContent.split('\n')[0];
-  const repoAInput = iosInput.replace(
+  const audioInput = iosInput.replace(
     'AgoraIO/AgoraRtcEngine_iOS.git',
-    'example/NativeRepoA.git',
+    'example/AgoraRtcEngine_iOS_Audio.git',
   );
-  const repoBInput = iosInput.replace(
-    'AgoraIO/AgoraRtcEngine_iOS.git',
-    'example/NativeRepoB.git',
-  );
+  const videoInput = iosInput
+    .replace(
+      'AgoraIO/AgoraRtcEngine_iOS.git',
+      'example/AgoraRtcEngine_iOS_Video.git',
+    )
+    .replace('products:RtcBasic', 'products:RtcBasic,AINS');
 
-  await runUpdater(repoAInput, manifests);
-  await runUpdater(repoBInput, manifests);
+  await runUpdater(audioInput, manifests);
+  const audioManifest = await readFile(manifests.iosManifest, 'utf8');
+  assert.match(audioManifest, /github\.com\/example\/AgoraRtcEngine_iOS_Audio\.git/);
+  assert.match(audioManifest, /package: "AgoraRtcEngine_iOS_Audio"/);
+  assert.doesNotMatch(audioManifest, /\.product\(name: "AINS"/);
+
+  await runUpdater(videoInput, manifests);
 
   const ios = await readFile(manifests.iosManifest, 'utf8');
-  assert.match(ios, /github\.com\/example\/NativeRepoB\.git/);
-  assert.match(ios, /package: "NativeRepoB"/);
-  assert.doesNotMatch(ios, /NativeRepoA/);
+  assert.match(ios, /github\.com\/example\/AgoraRtcEngine_iOS_Video\.git/);
+  assert.match(ios, /package: "AgoraRtcEngine_iOS_Video"/);
+  assert.match(ios, /\.product\(name: "AINS", package: "AgoraRtcEngine_iOS_Video"\)/);
+  assert.doesNotMatch(ios, /AgoraRtcEngine_iOS_Audio/);
 });
 
 test('dependency update workflow tests, runs, and validates the SPM updater before PR creation', async () => {
@@ -385,8 +459,10 @@ test('dependency update workflow tests, runs, and validates the SPM updater befo
 
   assert.ok(setupNodeIndex >= 0, 'workflow must set up Node');
   assert.match(workflow, /node-version: ['"]?22['"]?/);
-  assert.match(workflow, /platform:iOS github:/);
-  assert.match(workflow, /platform:macOS github:/);
+  assert.match(workflow, /platform:iOS[\s\S]*github:/);
+  assert.match(workflow, /platform:macOS[\s\S]*github:/);
+  assert.match(workflow, /Each platform field starts an Apple SPM block/);
+  assert.match(workflow, /Fields may stay on that line or continue on following lines/);
   assert.ok(testUpdaterIndex > setupNodeIndex, 'workflow must run updater tests after setup');
   assert.match(workflow, /if \[\[ -f ci\/update_spm_deps\.test\.mjs \]\]/);
   assert.match(workflow, /DEPENDENCIES_CONTENT: \$\{\{ inputs\.dependencies_content \}\}/);
