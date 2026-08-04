@@ -141,7 +141,7 @@ jobs:
             os_version: ">=26.2"
             max_attempts: 3
     runs-on: macos-26
-    timeout-minutes: 180
+    timeout-minutes: 60
     env:
       TEST_APP_ID: ${{ secrets.APP_ID }}
       IOS_TEST_MAX_ATTEMPTS: ${{ matrix.max_attempts }}
