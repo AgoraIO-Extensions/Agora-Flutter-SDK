@@ -12,13 +12,16 @@ function parseArgs(argv) {
     dependenciesContent: '',
     iosManifest: path.join(repoRoot, 'ios/agora_rtc_engine/Package.swift'),
     macosManifest: path.join(repoRoot, 'macos/agora_rtc_engine/Package.swift'),
+    printLegacyContent: false,
   };
 
   for (let index = 0; index < argv.length; index += 1) {
     const arg = argv[index];
     const value = argv[index + 1] ?? '';
 
-    if (arg === '--dependencies-content') {
+    if (arg === '--print-legacy-content') {
+      args.printLegacyContent = true;
+    } else if (arg === '--dependencies-content') {
       args.dependenciesContent = value;
       index += 1;
     } else if (arg === '--ios-manifest') {
@@ -93,6 +96,33 @@ function countLabeledFields(line, labelPattern) {
   return [...line.matchAll(fieldPattern)].length;
 }
 
+function normalizeDependenciesContent(content) {
+  return content
+    .replaceAll(String.raw`\r\n`, '\n')
+    .replaceAll(String.raw`\n`, '\n')
+    .replaceAll(String.raw`\r`, '\n');
+}
+
+function createLegacyDependenciesContent(content) {
+  const scalarSpmField =
+    /(^|[\s|])(?:github|tag|version|iris-url|iris-checksum)\s*[:=]\s*(?:"[^"]*"|'[^']*'|[^\s|]+)/gi;
+  const productsField =
+    /(^|[\s|])products?\s*[:=]\s*(?:"[^"]*"|'[^']*'|[A-Za-z0-9_]+(?:\s*,\s*[A-Za-z0-9_]+)*)/gi;
+  const preserveSeparator = (_match, separator) =>
+    separator === '|' ? ' ' : separator;
+
+  return normalizeDependenciesContent(content)
+    .split(/\r?\n/)
+    .map((line) =>
+      line
+        .replace(productsField, preserveSeparator)
+        .replace(scalarSpmField, preserveSeparator)
+        .trim(),
+    )
+    .filter(Boolean)
+    .join('\n');
+}
+
 function countSpmFields(record) {
   const tagCount = countLabeledFields(record, 'tag');
   const versionCount = countLabeledFields(record, 'version');
@@ -137,10 +167,7 @@ function splitPlatformRecords(content) {
 function parsePlatformDependencies(content) {
   const dependencies = new Map();
   const seenApplePlatforms = new Set();
-  const normalizedContent = content
-    .replaceAll(String.raw`\r\n`, '\n')
-    .replaceAll(String.raw`\n`, '\n')
-    .replaceAll(String.raw`\r`, '\n');
+  const normalizedContent = normalizeDependenciesContent(content);
 
   for (const record of splitPlatformRecords(normalizedContent)) {
     const fieldCounts = countSpmFields(record);
@@ -454,6 +481,11 @@ async function writeAtomically(filePath, content) {
 }
 
 const args = parseArgs(process.argv.slice(2));
+if (args.printLegacyContent) {
+  console.log(createLegacyDependenciesContent(args.dependenciesContent));
+  process.exit(0);
+}
+
 const dependencies = parsePlatformDependencies(args.dependenciesContent);
 
 if (dependencies.size === 0) {

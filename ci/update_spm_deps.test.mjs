@@ -52,6 +52,20 @@ async function runUpdater(dependenciesContent, manifests) {
   ]);
 }
 
+async function printLegacyContent(dependenciesContent) {
+  const manifests = await createTemporaryManifests();
+  return execFileAsync(process.execPath, [
+    updaterPath,
+    '--dependencies-content',
+    dependenciesContent,
+    '--print-legacy-content',
+    '--ios-manifest',
+    manifests.iosManifest,
+    '--macos-manifest',
+    manifests.macosManifest,
+  ]);
+}
+
 function extractWorkflowRunScript(workflow, stepName) {
   const stepMarker = `      - name: ${stepName}\n`;
   const stepStart = workflow.indexOf(stepMarker);
@@ -188,6 +202,25 @@ test('accepts mixed legacy content and multiline reordered SPM platform blocks',
   );
   assert.doesNotMatch(macos, /\.product\(name: "AINS"/);
   assert.match(macos, new RegExp(`url: "${macosIrisUrl.replaceAll('.', '\\.')}"`));
+});
+
+test('prints legacy dependency content without SPM-only fields', async () => {
+  const mixedInput = [
+    "platform:Android native maven: implementation 'io.agora.rtc:full-sdk:4.6.2'",
+    "platform:iOS cocoapods: pod 'AgoraVideo_Special_iOS', '4.6.2.70'",
+    'products = "RtcBasic, AINS"',
+    `iris-checksum = '${iosIrisChecksum}'`,
+    'github = git@github.com:AgoraIO/AgoraRtcEngine_iOS.git',
+    'version = 4.6.2',
+    `iris-url = "${iosIrisUrl}"`,
+  ].join('\n');
+
+  const result = await printLegacyContent(mixedInput);
+
+  assert.match(result.stdout, /platform:Android native maven:/);
+  assert.match(result.stdout, /platform:iOS cocoapods:/);
+  assert.doesNotMatch(result.stdout, /products|iris-checksum|github|iris-url|version/i);
+  assert.doesNotMatch(result.stdout, /"/);
 });
 
 test('preserves unrelated package and target dependencies', async () => {
@@ -451,6 +484,8 @@ test('dependency update workflow tests, runs, and validates the SPM updater befo
   const workflow = await readFile(updateDepsWorkflow, 'utf8');
   const setupNodeIndex = workflow.indexOf('uses: actions/setup-node@v4');
   const testUpdaterIndex = workflow.indexOf('node --test ci/update_spm_deps.test.mjs');
+  const prepareLegacyIndex = workflow.indexOf('name: Prepare legacy dependency content');
+  const parseLegacyIndex = workflow.indexOf('name: Parse dependencies content');
   const updateSpmIndex = workflow.indexOf(
     'node ci/update_spm_deps.mjs --dependencies-content "$DEPENDENCIES_CONTENT"',
   );
@@ -464,6 +499,13 @@ test('dependency update workflow tests, runs, and validates the SPM updater befo
   assert.match(workflow, /Each platform field starts an Apple SPM block/);
   assert.match(workflow, /Fields may stay on that line or continue on following lines/);
   assert.ok(testUpdaterIndex > setupNodeIndex, 'workflow must run updater tests after setup');
+  assert.ok(prepareLegacyIndex > testUpdaterIndex, 'workflow must sanitize legacy input after tests');
+  assert.ok(parseLegacyIndex > prepareLegacyIndex, 'workflow must parse sanitized legacy input');
+  assert.match(workflow, /--print-legacy-content/);
+  assert.match(
+    workflow,
+    /dependencies-content: \$\{\{ steps\.prepare_legacy_dependencies\.outputs\.content \}\}/,
+  );
   assert.match(workflow, /if \[\[ -f ci\/update_spm_deps\.test\.mjs \]\]/);
   assert.match(workflow, /DEPENDENCIES_CONTENT: \$\{\{ inputs\.dependencies_content \}\}/);
   assert.match(workflow, /if \[\[ -f ci\/update_spm_deps\.mjs \]\]/);
