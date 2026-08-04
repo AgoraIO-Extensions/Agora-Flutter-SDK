@@ -114,6 +114,18 @@ test('updates both Apple manifests from complete platform-scoped input', async (
   assert.match(macos, /cxxLanguageStandard: \.cxx14/);
 });
 
+test('accepts GitHub workflow input with literal escaped newlines', async () => {
+  const manifests = await createTemporaryManifests();
+  const escapedInput = completeDependenciesContent.replaceAll('\n', String.raw`\n`);
+
+  await runUpdater(escapedInput, manifests);
+
+  const ios = await readFile(manifests.iosManifest, 'utf8');
+  const macos = await readFile(manifests.macosManifest, 'utf8');
+  assert.match(ios, /AgoraRtcEngine_iOS\.git", exact: "4\.6\.2"/);
+  assert.match(macos, /AgoraRtcEngine_macOS\.git", exact: "4\.6\.2"/);
+});
+
 test('preserves unrelated package and target dependencies', async () => {
   const manifests = await createTemporaryManifests();
   const iosWithUnrelatedDependencies = (await readFile(manifests.iosManifest, 'utf8'))

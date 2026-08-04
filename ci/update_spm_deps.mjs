@@ -95,8 +95,12 @@ function countLabeledFields(line, labelPattern) {
 
 function parsePlatformDependencies(content) {
   const dependencies = new Map();
+  const normalizedContent = content
+    .replaceAll(String.raw`\r\n`, '\n')
+    .replaceAll(String.raw`\n`, '\n')
+    .replaceAll(String.raw`\r`, '\n');
 
-  for (const line of content.split(/\r?\n/)) {
+  for (const line of normalizedContent.split(/\r?\n/)) {
     const tagCount = countLabeledFields(line, 'tag');
     const versionCount = countLabeledFields(line, 'version');
     const fieldCounts = {
