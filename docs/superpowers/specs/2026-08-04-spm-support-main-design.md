@@ -54,32 +54,47 @@ iOS 和 macOS manifest 保持同一结构：
 
 ## 依赖更新数据流
 
-`ci/run_update_deps.sh` 继续接收平台化 JSON，但 SPM 更新必须使用显式字段，不从 CocoaPods 字符串或文件名隐式推导：
+参考 `AgoraIO-Extensions/agora-cocos-rtc` 的依赖更新模式：workflow 保留一个可粘贴 release note 内容的 `dependencies_content` 输入，由仓库内可测试的 Node 解析器提取 SPM 信息，完成更新后再执行统一验证和创建 PR。
 
-- `spm_native_version`
-- `spm_native_products`
-- `spm_iris_url`
-- `spm_iris_checksum`
+Cocos 仓库实际更新的是 `sdk/agora-rtc/sdk-config.json`，并不直接维护 `Package.swift`。Flutter 仓库不新增一份重复配置；两份已提交的 `Package.swift` 继续是最终 manifest，解析器只负责对其中稳定、明确的依赖字段做原子更新。
+
+原始输入按平台分块，避免 iOS/macOS 和 Native/Iris 之间产生歧义：
+
+```text
+platform:iOS github:https://github.com/AgoraIO/AgoraRtcEngine_iOS.git tag:4.6.2 products:RtcBasic iris-url:https://download.agora.io/sdk/release/AgoraIrisRTC_iOS2-4.6.2-build.1.zip iris-checksum:eba8f9fc5b3d93d9d083d0c3f16e6c98fcd993e49989fb851e6df2941ca29825
+platform:macOS github:https://github.com/AgoraIO/AgoraRtcEngine_macOS.git tag:4.6.2 products:RtcBasic iris-url:https://download.agora.io/sdk/release/AgoraIrisRTC_macOS2-4.6.2-build.1.zip iris-checksum:dbfe2db86b0cb2c1012202212248bd6588173020c357dc13fc5a6dcf0a7b97cf
+```
+
+新增无第三方 npm 依赖的 Node `.mjs` 解析器，复用 Cocos 已验证的规则：
+
+- GitHub source 识别 `https` 和 `git@github.com:` 两种形式，并规范化为 `https` URL。
+- Native version 必须带 `tag:` 或 `version:` 标签，不能从 Maven/CocoaPods 版本猜测。
+- products 必须带 `products:` 标签，允许未来新增 product 名称，不在解析器中硬编码白名单。
+- Iris URL 和 checksum 必须使用显式标签，并与同一 platform 块绑定。
+- 输入顺序和空格可以变化，但平台标签及关键字段不能含糊。
 
 iOS 和 macOS 分别更新自己的 manifest。脚本遵循以下规则：
 
-- SPM 四类元数据完整时，原子更新对应 `Package.swift`。
+- 某个平台的 source、tag、products、Iris URL 和 checksum 完整时，原子更新对应 `Package.swift`。
 - 只有部分 SPM 元数据时直接失败，并列出缺失字段。
-- 完全没有 SPM 元数据时继续兼容旧调用，仅更新 CocoaPods/Maven/CDN，同时明确输出 `SPM dependencies unchanged`。
+- 完全没有平台化 SPM 内容时，现有 `ci/run_update_deps.sh` 继续兼容旧调用，仅更新 CocoaPods/Maven/CDN，同时明确输出 `SPM dependencies unchanged`。
 - Native exact version、products、Iris URL 和 checksum 必须一起进入 review diff。
+- `.github/workflows/run_update_deps.yml` 在现有依赖更新后调用该解析器，并在创建 PR 前执行解析器测试与 `swift package dump-package`。
 
-这套直接 JSON 合约先通过本仓库脚本测试验证。外部 `AgoraIO-Extensions/actions/.../dep` 是否会保留新增字段需要单独验证；未验证前，正式发布流程不得宣称会自动更新 SPM。
+现有 `AgoraIO-Extensions/actions/.../dep` 仍负责 Maven/CocoaPods/CDN 的平台化解析；SPM 更新直接使用 workflow 的原始输入，不依赖外部 action 是否认识新增字段。
 
 ## 测试与验收
 
 ### 脚本测试
 
-新增 fixture 驱动的 shell 回归测试，至少覆盖：
+参照 Cocos 的 `tests/update-native-deps.test.ts`，新增基于 Node 内置 `node:test` 的回归测试，至少覆盖：
 
 - iOS/macOS CocoaPods 与 SPM 同时更新成功。
 - 缺失 checksum 等部分元数据时失败且不留下半更新文件。
 - 旧格式输入继续只更新原平台依赖。
 - 特殊版本与 SPM exact version 可不同，脚本不会自行截断或猜测。
+- `https`/SSH GitHub source、输入乱序、不同空格和重复字段。
+- product 名称不会从 URL 或其他依赖文本中被误识别。
 
 ### Manifest 验证
 
