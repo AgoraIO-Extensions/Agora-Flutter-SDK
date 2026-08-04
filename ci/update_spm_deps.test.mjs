@@ -204,6 +204,19 @@ test('accepts mixed legacy content and multiline reordered SPM platform blocks',
   assert.match(macos, new RegExp(`url: "${macosIrisUrl.replaceAll('.', '\\.')}"`));
 });
 
+test('accepts a legacy-only block after SPM metadata for the same platform', async () => {
+  const manifests = await createTemporaryManifests();
+  const input = [
+    completeDependenciesContent.split('\n')[0],
+    "platform:iOS cocoapods: pod 'AgoraVideo_Special_iOS', '4.6.2.70'",
+  ].join('\n');
+
+  await runUpdater(input, manifests);
+
+  const ios = await readFile(manifests.iosManifest, 'utf8');
+  assert.match(ios, /\.product\(name: "RtcBasic", package: "AgoraRtcEngine_iOS"\)/);
+});
+
 test('prints legacy dependency content without SPM-only fields', async () => {
   const mixedInput = [
     "platform:Android native maven: implementation 'io.agora.rtc:full-sdk:4.6.2'",
@@ -221,6 +234,20 @@ test('prints legacy dependency content without SPM-only fields', async () => {
   assert.match(result.stdout, /platform:iOS cocoapods:/);
   assert.doesNotMatch(result.stdout, /products|iris-checksum|github|iris-url|version/i);
   assert.doesNotMatch(result.stdout, /"/);
+});
+
+test('preserves version and tag fields in non-Apple legacy records', async () => {
+  const input = [
+    "platform:Android native maven: implementation 'io.agora.rtc:full-sdk:4.6.2' version:4.6.2 tag:android-preview",
+    completeDependenciesContent.split('\n')[0],
+    'platform:Windows native cdn: https://download.agora.io/example.zip version:4.6.2.70 tag:windows-preview',
+  ].join('\n');
+
+  const result = await printLegacyContent(input);
+
+  assert.match(result.stdout, /platform:Android.*version:4\.6\.2 tag:android-preview/);
+  assert.match(result.stdout, /platform:Windows.*version:4\.6\.2\.70 tag:windows-preview/);
+  assert.doesNotMatch(result.stdout, /AgoraRtcEngine_iOS|products:|iris-url:|iris-checksum:/i);
 });
 
 test('preserves unrelated package and target dependencies', async () => {
@@ -430,7 +457,6 @@ test('rejects duplicate fields within one SPM platform record', async () => {
     `${validInput} products:RtcBasic`,
     `${validInput} iris-url:${iosIrisUrl}`,
     `${validInput} iris-checksum:${iosIrisChecksum}`,
-    `${validInput} platform:iOS`,
   ];
 
   for (const input of duplicateInputs) {

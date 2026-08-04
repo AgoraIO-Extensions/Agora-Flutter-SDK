@@ -103,7 +103,7 @@ function normalizeDependenciesContent(content) {
     .replaceAll(String.raw`\r`, '\n');
 }
 
-function createLegacyDependenciesContent(content) {
+function stripSpmFields(record) {
   const scalarSpmField =
     /(^|[\s|])(?:github|tag|version|iris-url|iris-checksum)\s*[:=]\s*(?:"[^"]*"|'[^']*'|[^\s|]+)/gi;
   const productsField =
@@ -111,7 +111,7 @@ function createLegacyDependenciesContent(content) {
   const preserveSeparator = (_match, separator) =>
     separator === '|' ? ' ' : separator;
 
-  return normalizeDependenciesContent(content)
+  return record
     .split(/\r?\n/)
     .map((line) =>
       line
@@ -119,6 +119,36 @@ function createLegacyDependenciesContent(content) {
         .replace(scalarSpmField, preserveSeparator)
         .trim(),
     )
+    .filter(Boolean)
+    .join('\n');
+}
+
+function createLegacyDependenciesContent(content) {
+  const normalizedContent = normalizeDependenciesContent(content);
+  const platformPattern =
+    /(?:^|[\s|])platform\s*[:=]\s*(?:"[^"]*"|'[^']*'|[^\s|]+)(?=$|[\s|])/gi;
+  const matches = [...normalizedContent.matchAll(platformPattern)];
+  const chunks = [normalizedContent.slice(0, matches[0]?.index ?? normalizedContent.length)];
+
+  for (const [index, match] of matches.entries()) {
+    const nextStart = matches[index + 1]?.index ?? normalizedContent.length;
+    const record = normalizedContent.slice(match.index, nextStart);
+    const platformValue = parseLabeledValues(record, 'platform')[0] ?? '';
+    const isApplePlatform = /^(?:iOS|macOS)$/i.test(platformValue);
+    const fieldCounts = countSpmFields(record);
+    const hasSpmMetadata =
+      hasStrongSpmMetadata(fieldCounts) ||
+      (isApplePlatform && fieldCounts['tag/version'] > 0);
+
+    chunks.push(
+      isApplePlatform && hasSpmMetadata ? stripSpmFields(record) : record,
+    );
+  }
+
+  return chunks
+    .join('')
+    .split(/\r?\n/)
+    .map((line) => line.trim())
     .filter(Boolean)
     .join('\n');
 }
@@ -181,9 +211,6 @@ function parsePlatformDependencies(content) {
       ? (platformValue.toLowerCase() === 'ios' ? 'iOS' : 'macOS')
       : null;
     if (!hasSpmMetadata) {
-      if (platform && dependencies.has(platform)) {
-        throw new Error(`Duplicate SPM fields for ${platform}: platform`);
-      }
       continue;
     }
     if (!isApplePlatform) {
