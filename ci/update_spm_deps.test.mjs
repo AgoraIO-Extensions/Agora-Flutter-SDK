@@ -320,6 +320,24 @@ test('leaves legacy platform-scoped input unchanged when it has no SPM fields', 
   assert.equal(await readFile(manifests.macosManifest, 'utf8'), macosBefore);
 });
 
+test('leaves repeated legacy-only Apple platform blocks unchanged', async () => {
+  const manifests = await createTemporaryManifests();
+  const iosBefore = await readFile(manifests.iosManifest, 'utf8');
+  const macosBefore = await readFile(manifests.macosManifest, 'utf8');
+  const legacyInput = [
+    "platform:iOS cocoapods: pod 'AgoraVideo_Special_iOS', '4.6.2.70'",
+    "platform:iOS iris cocoapods: pod 'AgoraIrisRTC_iOS2', '4.6.2-build.1'",
+    "platform:macOS cocoapods: pod 'AgoraVideo_Special_macOS', '4.6.2.70'",
+    "platform:macOS iris cocoapods: pod 'AgoraIrisRTC_macOS2', '4.6.2-build.1'",
+  ].join('\n');
+
+  const result = await runUpdater(legacyInput, manifests);
+
+  assert.match(result.stdout, /SPM dependencies unchanged/);
+  assert.equal(await readFile(manifests.iosManifest, 'utf8'), iosBefore);
+  assert.equal(await readFile(manifests.macosManifest, 'utf8'), macosBefore);
+});
+
 test('rejects SPM metadata that omits the platform field', async () => {
   const manifests = await createTemporaryManifests();
   const iosBefore = await readFile(manifests.iosManifest, 'utf8');

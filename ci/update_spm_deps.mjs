@@ -166,7 +166,6 @@ function splitPlatformRecords(content) {
 
 function parsePlatformDependencies(content) {
   const dependencies = new Map();
-  const seenApplePlatforms = new Set();
   const normalizedContent = normalizeDependenciesContent(content);
 
   for (const record of splitPlatformRecords(normalizedContent)) {
@@ -181,16 +180,10 @@ function parsePlatformDependencies(content) {
     const platform = isApplePlatform
       ? (platformValue.toLowerCase() === 'ios' ? 'iOS' : 'macOS')
       : null;
-    if (platform && seenApplePlatforms.has(platform)) {
-      if (hasSpmMetadata) {
-        throw new Error(`Duplicate SPM metadata for ${platform}`);
-      }
-      throw new Error(`Duplicate SPM fields for ${platform}: platform`);
-    }
-    if (platform) {
-      seenApplePlatforms.add(platform);
-    }
     if (!hasSpmMetadata) {
+      if (platform && dependencies.has(platform)) {
+        throw new Error(`Duplicate SPM fields for ${platform}: platform`);
+      }
       continue;
     }
     if (!isApplePlatform) {
