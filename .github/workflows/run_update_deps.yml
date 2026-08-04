@@ -63,7 +63,13 @@ jobs:
           node-version: '22'
 
       - name: Test SPM dependency updater
-        run: node --test ci/update_spm_deps.test.mjs
+        shell: bash
+        run: |
+          if [[ -f ci/update_spm_deps.test.mjs ]]; then
+            node --test ci/update_spm_deps.test.mjs
+          else
+            echo "SPM updater tests skipped for target ref without updater rules"
+          fi
 
       - name: Parse dependencies content
         id: parse_dependencies_content
@@ -119,10 +125,24 @@ jobs:
         if: ${{ inputs.dependencies_content != '' }}
         env:
           DEPENDENCIES_CONTENT: ${{ inputs.dependencies_content }}
-        run: node ci/update_spm_deps.mjs --dependencies-content "$DEPENDENCIES_CONTENT"
+        shell: bash
+        run: |
+          if [[ -f ci/update_spm_deps.mjs ]]; then
+            node ci/update_spm_deps.mjs --dependencies-content "$DEPENDENCIES_CONTENT"
+          elif printf '%s\n' "$DEPENDENCIES_CONTENT" | grep -Eqi '(github[[:space:]]*[:=]|tag[[:space:]]*[:=]|products?[[:space:]]*[:=]|iris-(url|checksum)[[:space:]]*[:=])'; then
+            echo "::error title=SPM updater unavailable::Target ref does not contain the Apple SPM dependency updater"
+            exit 1
+          else
+            echo "SPM dependencies unchanged"
+          fi
 
       - name: Validate Apple SPM manifests
+        shell: bash
         run: |
+          if [[ ! -f ci/update_spm_deps.mjs ]]; then
+            echo "SPM manifest validation skipped for target ref without updater rules"
+            exit 0
+          fi
           swift package dump-package --package-path ios/agora_rtc_engine > /dev/null
           swift package dump-package --package-path macos/agora_rtc_engine > /dev/null
 

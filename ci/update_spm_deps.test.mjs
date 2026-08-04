@@ -52,6 +52,23 @@ async function runUpdater(dependenciesContent, manifests) {
   ]);
 }
 
+function extractWorkflowRunScript(workflow, stepName) {
+  const stepMarker = `      - name: ${stepName}\n`;
+  const stepStart = workflow.indexOf(stepMarker);
+  assert.ok(stepStart >= 0, `workflow step not found: ${stepName}`);
+  const remaining = workflow.slice(stepStart + stepMarker.length);
+  const nextStep = remaining.indexOf('\n      - name:');
+  const step = nextStep >= 0 ? remaining.slice(0, nextStep) : remaining;
+  const runMarker = '        run: |\n';
+  const runStart = step.indexOf(runMarker);
+  assert.ok(runStart >= 0, `workflow run script not found: ${stepName}`);
+  return step
+    .slice(runStart + runMarker.length)
+    .split('\n')
+    .map((line) => line.replace(/^          /, ''))
+    .join('\n');
+}
+
 test('updates both Apple manifests from complete platform-scoped input', async () => {
   const manifests = await createTemporaryManifests();
 
@@ -95,6 +112,40 @@ test('updates both Apple manifests from complete platform-scoped input', async (
   assert.match(macos, new RegExp(`checksum: "${macosIrisChecksum}"`));
   assert.doesNotMatch(macos, /unsafeFlags/);
   assert.match(macos, /cxxLanguageStandard: \.cxx14/);
+});
+
+test('preserves unrelated package and target dependencies', async () => {
+  const manifests = await createTemporaryManifests();
+  const iosWithUnrelatedDependencies = (await readFile(manifests.iosManifest, 'utf8'))
+    .replace(
+      '    dependencies: [\n',
+      [
+        '    dependencies: [',
+        '        .package(url: "https://github.com/example/Other.git", exact: "1.0.0"),',
+        '',
+      ].join('\n'),
+    )
+    .replace(
+      '            dependencies: [\n',
+      [
+        '            dependencies: [',
+        '                .product(name: "OtherProduct", package: "Other"),',
+        '',
+      ].join('\n'),
+    );
+  await writeFile(manifests.iosManifest, iosWithUnrelatedDependencies, 'utf8');
+
+  await runUpdater(completeDependenciesContent.split('\n')[0], manifests);
+
+  const ios = await readFile(manifests.iosManifest, 'utf8');
+  assert.match(
+    ios,
+    /\.package\(url: "https:\/\/github\.com\/example\/Other\.git", exact: "1\.0\.0"\)/,
+  );
+  assert.match(
+    ios,
+    /\.product\(name: "OtherProduct", package: "Other"\)/,
+  );
 });
 
 test('rejects duplicate platform blocks before writing either manifest', async () => {
@@ -145,6 +196,45 @@ test('leaves manifests unchanged when old input contains no SPM blocks', async (
   assert.equal(await readFile(manifests.macosManifest, 'utf8'), macosBefore);
 });
 
+test('leaves legacy platform-scoped input unchanged when it has no SPM fields', async () => {
+  const manifests = await createTemporaryManifests();
+  const iosBefore = await readFile(manifests.iosManifest, 'utf8');
+  const macosBefore = await readFile(manifests.macosManifest, 'utf8');
+
+  const result = await runUpdater(
+    "platform:iOS cocoapods:pod 'AgoraVideo_Special_iOS', '4.6.2.70'",
+    manifests,
+  );
+
+  assert.match(result.stdout, /SPM dependencies unchanged/);
+  assert.equal(await readFile(manifests.iosManifest, 'utf8'), iosBefore);
+  assert.equal(await readFile(manifests.macosManifest, 'utf8'), macosBefore);
+});
+
+test('rejects SPM metadata that omits the platform field', async () => {
+  const manifests = await createTemporaryManifests();
+  const iosBefore = await readFile(manifests.iosManifest, 'utf8');
+  const macosBefore = await readFile(manifests.macosManifest, 'utf8');
+  const missingPlatform = completeDependenciesContent
+    .split('\n')[0]
+    .replace('platform:iOS ', '');
+
+  await assert.rejects(
+    runUpdater(missingPlatform, manifests),
+    /SPM metadata requires an explicit platform field/,
+  );
+
+  assert.equal(await readFile(manifests.iosManifest, 'utf8'), iosBefore);
+  assert.equal(await readFile(manifests.macosManifest, 'utf8'), macosBefore);
+});
+
+test('rejects a standalone SPM tag instead of treating it as legacy input', async () => {
+  for (const input of ['platform:iOS tag:4.6.2', 'tag:4.6.2']) {
+    const manifests = await createTemporaryManifests();
+    await assert.rejects(runUpdater(input, manifests), /SPM metadata|Incomplete SPM/);
+  }
+});
+
 test('accepts quoted reordered fields, SSH GitHub URLs, and future products', async () => {
   const manifests = await createTemporaryManifests();
   const macosBefore = await readFile(manifests.macosManifest, 'utf8');
@@ -171,6 +261,55 @@ test('accepts quoted reordered fields, SSH GitHub URLs, and future products', as
   assert.equal(await readFile(manifests.macosManifest, 'utf8'), macosBefore);
 });
 
+test('uses the explicitly labeled GitHub URL instead of an earlier URL', async () => {
+  const manifests = await createTemporaryManifests();
+  const input = completeDependenciesContent
+    .split('\n')[0]
+    .replace('platform:iOS ', 'platform:iOS notes:https://github.com/example/Wrong.git ');
+
+  await runUpdater(input, manifests);
+
+  const ios = await readFile(manifests.iosManifest, 'utf8');
+  assert.match(
+    ios,
+    /\.package\(url: "https:\/\/github\.com\/AgoraIO\/AgoraRtcEngine_iOS\.git", exact: "4\.6\.2"\)/,
+  );
+  assert.doesNotMatch(ios, /example\/Wrong/);
+});
+
+test('rejects trailing characters instead of truncating SPM field values', async () => {
+  const validInput = completeDependenciesContent.split('\n')[0];
+  const malformedInputs = [
+    validInput.replace('AgoraRtcEngine_iOS.git', 'AgoraRtcEngine_iOS.git/extra'),
+    validInput.replace('tag:4.6.2', 'tag:4.6.2???'),
+    validInput.replace('products:RtcBasic', 'products:RtcBasic extra'),
+    validInput.replace('products:RtcBasic', 'products:"RtcBasic'),
+    validInput.replace(iosIrisChecksum, `${iosIrisChecksum}a`),
+  ];
+
+  for (const input of malformedInputs) {
+    const manifests = await createTemporaryManifests();
+    await assert.rejects(runUpdater(input, manifests), /Invalid SPM metadata for iOS/);
+  }
+});
+
+test('rejects duplicate fields within one SPM platform record', async () => {
+  const validInput = completeDependenciesContent.split('\n')[0];
+  const duplicateInputs = [
+    `${validInput} github:https://github.com/AgoraIO/AgoraRtcEngine_iOS.git`,
+    `${validInput} version:4.6.2`,
+    `${validInput} products:RtcBasic`,
+    `${validInput} iris-url:${iosIrisUrl}`,
+    `${validInput} iris-checksum:${iosIrisChecksum}`,
+    `${validInput} platform:iOS`,
+  ];
+
+  for (const input of duplicateInputs) {
+    const manifests = await createTemporaryManifests();
+    await assert.rejects(runUpdater(input, manifests), /Duplicate SPM fields for iOS/);
+  }
+});
+
 test('does not harvest a product name from a URL', async () => {
   const manifests = await createTemporaryManifests();
   const malformedProducts = [
@@ -184,7 +323,7 @@ test('does not harvest a product name from a URL', async () => {
 
   await assert.rejects(
     runUpdater(malformedProducts, manifests),
-    /Incomplete SPM metadata for iOS/,
+    /Invalid SPM metadata for iOS: products/,
   );
 });
 
@@ -199,6 +338,27 @@ test('is idempotent when the same dependency input is applied twice', async () =
 
   assert.equal(await readFile(manifests.iosManifest, 'utf8'), iosAfterFirstRun);
   assert.equal(await readFile(manifests.macosManifest, 'utf8'), macosAfterFirstRun);
+});
+
+test('can switch the managed Native package repository more than once', async () => {
+  const manifests = await createTemporaryManifests();
+  const iosInput = completeDependenciesContent.split('\n')[0];
+  const repoAInput = iosInput.replace(
+    'AgoraIO/AgoraRtcEngine_iOS.git',
+    'example/NativeRepoA.git',
+  );
+  const repoBInput = iosInput.replace(
+    'AgoraIO/AgoraRtcEngine_iOS.git',
+    'example/NativeRepoB.git',
+  );
+
+  await runUpdater(repoAInput, manifests);
+  await runUpdater(repoBInput, manifests);
+
+  const ios = await readFile(manifests.iosManifest, 'utf8');
+  assert.match(ios, /github\.com\/example\/NativeRepoB\.git/);
+  assert.match(ios, /package: "NativeRepoB"/);
+  assert.doesNotMatch(ios, /NativeRepoA/);
 });
 
 test('dependency update workflow tests, runs, and validates the SPM updater before PR creation', async () => {
@@ -216,8 +376,40 @@ test('dependency update workflow tests, runs, and validates the SPM updater befo
   assert.match(workflow, /platform:iOS github:/);
   assert.match(workflow, /platform:macOS github:/);
   assert.ok(testUpdaterIndex > setupNodeIndex, 'workflow must run updater tests after setup');
+  assert.match(workflow, /if \[\[ -f ci\/update_spm_deps\.test\.mjs \]\]/);
   assert.match(workflow, /DEPENDENCIES_CONTENT: \$\{\{ inputs\.dependencies_content \}\}/);
+  assert.match(workflow, /if \[\[ -f ci\/update_spm_deps\.mjs \]\]/);
+  assert.match(workflow, /Target ref does not contain the Apple SPM dependency updater/);
   assert.ok(updateSpmIndex > testUpdaterIndex, 'workflow must update manifests after tests');
+  assert.match(workflow, /SPM manifest validation skipped for target ref/);
   assert.ok(validateSpmIndex > updateSpmIndex, 'workflow must validate generated manifests');
   assert.ok(createPrIndex > validateSpmIndex, 'workflow must validate manifests before PR creation');
+});
+
+test('workflow old-ref guard preserves legacy input and rejects SPM intent', async () => {
+  const workflow = await readFile(updateDepsWorkflow, 'utf8');
+  const script = extractWorkflowRunScript(workflow, 'Update Apple SPM dependencies');
+  const oldTarget = await mkdtemp(path.join(os.tmpdir(), 'agora-old-target-'));
+
+  const legacyResult = await execFileAsync('bash', ['-c', script], {
+    cwd: oldTarget,
+    env: {
+      ...process.env,
+      DEPENDENCIES_CONTENT:
+        "platform:iOS cocoapods:pod 'AgoraVideo_Special_iOS', '4.6.2.70'",
+    },
+  });
+  assert.match(legacyResult.stdout, /SPM dependencies unchanged/);
+
+  let spmError;
+  try {
+    await execFileAsync('bash', ['-c', script], {
+      cwd: oldTarget,
+      env: { ...process.env, DEPENDENCIES_CONTENT: 'tag:4.6.2' },
+    });
+  } catch (error) {
+    spmError = error;
+  }
+  assert.ok(spmError, 'SPM input must fail when the target ref has no updater');
+  assert.match(spmError.stdout, /Target ref does not contain the Apple SPM dependency updater/);
 });
