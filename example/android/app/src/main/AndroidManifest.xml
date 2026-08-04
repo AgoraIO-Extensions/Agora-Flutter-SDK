@@ -1,6 +1,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
     <uses-permission android:name="android.permission.WAKE_LOCK" />
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE"/>
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE_MICROPHONE"/>
     <application
         android:label="agora_rtc_engine_example"
         android:name="${applicationName}"
@@ -35,7 +36,8 @@
 
       <service
         android:name="io.agora.agora_rtc_engine_example.custom_capture_audio.AudioRecordService"
-        android:exported="false" />
+        android:exported="false"
+        android:foregroundServiceType="microphone" />
     </application>
     <!-- Required to query activities that can process text, see:
          https://developer.android.com/training/package-visibility and

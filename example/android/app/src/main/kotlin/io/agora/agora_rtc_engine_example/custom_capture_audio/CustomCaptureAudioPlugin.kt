@@ -6,6 +6,7 @@ import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
 import android.media.AudioFormat
+import android.os.Build
 import io.agora.rtc.Constants
 import io.agora.rtc.RtcEngine
 import io.agora.rtc.base.RtcEnginePlugin
@@ -41,7 +42,14 @@ class CustomCaptureAudioPlugin(private val activity: WeakReference<Activity>) :
 
   override fun onRtcEngineCreated(rtcEngine: RtcEngine?) {
     this.rtcEngine = rtcEngine
-    activity.get()?.registerReceiver(broadcastReceiver, IntentFilter("AudioRecordRead"))
+    activity.get()?.let {
+      val filter = IntentFilter("AudioRecordRead")
+      if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+        it.registerReceiver(broadcastReceiver, filter, Context.RECEIVER_NOT_EXPORTED)
+      } else {
+        it.registerReceiver(broadcastReceiver, filter)
+      }
+    }
   }
 
   override fun onRtcEngineDestroyed() {
