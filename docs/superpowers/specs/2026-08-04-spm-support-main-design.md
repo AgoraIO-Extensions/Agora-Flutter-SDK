@@ -21,7 +21,7 @@
 
 ### Flutter
 
-两个 plugin manifest 都增加 Flutter 新模板要求的本地 `FlutterFramework` package，并让 plugin target 依赖其 `Flutter` product。路径分别解析到平台工程生成的 `Flutter/ephemeral/Packages/FlutterFramework`。
+两个 plugin manifest 都增加 Flutter `3.44.8` 官方模板要求的本地 package：`.package(name: "FlutterFramework", path: "../FlutterFramework")`，并让 plugin target 依赖 `.product(name: "FlutterFramework", package: "FlutterFramework")`。
 
 ### Native SDK
 
@@ -47,7 +47,7 @@ iOS 和 macOS manifest 保持同一结构：
 - `swift-tools-version` 保持 `5.9`。
 - 增加本地 `FlutterFramework` package dependency。
 - Native SDK 使用 exact version。
-- target dependencies 包含 `Flutter`、`RtcBasic` 和 `AgoraRtcWrapper`。
+- target dependencies 包含 `FlutterFramework`、`RtcBasic` 和 `AgoraRtcWrapper`。
 - Iris URL/checksum 更新为已验证值。
 - macOS 删除 `.unsafeFlags(["-std=c++14"])`，改为 package 级 `cxxLanguageStandard: .cxx14`。
 - 保留现有平台最低版本和已存在的 linker settings。
