@@ -541,7 +541,11 @@ test('dependency update workflow tests, runs, and validates the SPM updater befo
   assert.match(workflow, /node-version: ['"]?22['"]?/);
   assert.match(workflow, /platform:iOS[\s\S]*github:/);
   assert.match(workflow, /platform:macOS[\s\S]*github:/);
-  assert.match(workflow, /Each platform field starts an Apple SPM block/);
+  assert.match(workflow, /Each platform field starts a dependency record/);
+  assert.match(
+    workflow,
+    /Apple records containing SPM metadata are processed as SPM blocks/,
+  );
   assert.match(workflow, /Fields may stay on that line or continue on following lines/);
   assert.ok(testUpdaterIndex > setupNodeIndex, 'workflow must run updater tests after setup');
   assert.ok(prepareLegacyIndex > testUpdaterIndex, 'workflow must sanitize legacy input after tests');

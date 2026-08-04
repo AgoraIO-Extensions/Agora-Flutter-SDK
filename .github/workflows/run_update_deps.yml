@@ -16,7 +16,7 @@ on:
       dependencies_content:
         description: |
           Dependencies to update across Maven, CocoaPods, CDN, and Apple SPM.
-          Each platform field starts an Apple SPM block. Fields may stay on that line or continue on following lines until the next platform field.
+          Each platform field starts a dependency record. Apple records containing SPM metadata are processed as SPM blocks. Fields may stay on that line or continue on following lines until the next platform field.
           platform:iOS
           github:https://github.com/AgoraIO/AgoraRtcEngine_iOS.git tag:4.6.2
           products:RtcBasic,AINS
