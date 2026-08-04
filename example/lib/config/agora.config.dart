@@ -1,24 +1,18 @@
+import 'package:agora_rtc_engine_example/components/config_override.dart';
+
 /// Get your own App ID at https://dashboard.agora.io/
 String get appId {
-  // Allow pass an `appId` as an environment variable with name `TEST_APP_ID` by using --dart-define
-  return const String.fromEnvironment('TEST_APP_ID',
-      defaultValue: '<YOUR_APP_ID>');
+  return ExampleConfigOverride().getAppId();
 }
 
 /// Please refer to https://docs.agora.io/en/Agora%20Platform/token
 String get token {
-  // Allow pass a `token` as an environment variable with name `TEST_TOKEN` by using --dart-define
-  return const String.fromEnvironment('TEST_TOKEN',
-      defaultValue: '<YOUR_TOKEN>');
+  return ExampleConfigOverride().getToken();
 }
 
 /// Your channel ID
 String get channelId {
-  // Allow pass a `channelId` as an environment variable with name `TEST_CHANNEL_ID` by using --dart-define
-  return const String.fromEnvironment(
-    'TEST_CHANNEL_ID',
-    defaultValue: '<YOUR_CHANNEL_ID>',
-  );
+  return ExampleConfigOverride().getChannelId();
 }
 
 /// Your int user ID
