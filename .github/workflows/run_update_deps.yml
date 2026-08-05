@@ -16,15 +16,18 @@ on:
       dependencies_content:
         description: |
           Dependencies to update across Maven, CocoaPods, CDN, and Apple SPM.
-          Each platform field starts a dependency record. Apple records containing SPM metadata are processed as SPM blocks. Fields may stay on that line or continue on following lines until the next platform field.
-          platform:iOS
-          github:https://github.com/AgoraIO/AgoraRtcEngine_iOS.git tag:4.6.2
-          products:RtcBasic,AINS
-          iris-url:https://download.agora.io/sdk/release/AgoraIrisRTC_iOS2-4.6.2-build.1.zip
-          iris-checksum:eba8f9fc5b3d93d9d083d0c3f16e6c98fcd993e49989fb851e6df2941ca29825
-          platform:macOS
-          github:https://github.com/AgoraIO/AgoraRtcEngine_macOS.git tag:4.6.2 products:RtcBasic
-          iris-url:https://download.agora.io/sdk/release/AgoraIrisRTC_macOS2-4.6.2-build.1.zip iris-checksum:dbfe2db86b0cb2c1012202212248bd6588173020c357dc13fc5a6dcf0a7b97cf
+          Real mixed input is accepted, for example:
+          【Maven】
+          implementation 'io.agora.rtc:agora-special-full:4.5.2.211.FAV'
+          【Cocoapods】
+          pod 'AgoraRtcEngine_Special_iOS', '4.5.2.211.FAV'
+          【swiftPM】
+          github:git@github.com:AgoraIO/AgoraRtcEngine_iOS.git | tag:4.5.2.211
+          Compact input is also accepted: github:https://github.com/AgoraIO/AgoraAudio_iOS.git tag:4.5.3-a1 products:RtcBasic implementation 'io.agora.rtc:agora-special-voice:4.5.3.1.BASIC1'
+          Iris binary input may use: url: "https://download.agora.io/sdk/release/AgoraIrisRTC_iOS2-4.6.2-build.1.zip"
+          Platform is inferred from the Native repository or Iris archive name; platform:iOS and platform:macOS remain supported.
+          products is optional; omitted Native, products, or Iris fields keep the current Package.swift values.
+          Missing Iris checksum is computed with swift package compute-checksum. An explicit checksum field is also accepted.
         type: string
         required: true
         default: ''
@@ -155,7 +158,7 @@ jobs:
         run: |
           if [[ -f ci/update_spm_deps.mjs ]]; then
             node ci/update_spm_deps.mjs --dependencies-content "$DEPENDENCIES_CONTENT"
-          elif printf '%s\n' "$DEPENDENCIES_CONTENT" | grep -Eqi '(github[[:space:]]*[:=]|tag[[:space:]]*[:=]|products?[[:space:]]*[:=]|iris-(url|checksum)[[:space:]]*[:=])'; then
+          elif printf '%s\n' "$DEPENDENCIES_CONTENT" | grep -Eqi '(【[[:space:]]*swiftpm[[:space:]]*】|github[[:space:]]*[:=]|tag[[:space:]]*[:=]|products?[[:space:]]*[:=]|iris-url[[:space:]]*[:=]|(iris-)?checksum[[:space:]]*[:=]|url[[:space:]]*[:=].*AgoraIrisRTC[_-]?(iOS|macOS))'; then
             echo "::error title=SPM updater unavailable::Target ref does not contain the Apple SPM dependency updater"
             exit 1
           else

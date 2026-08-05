@@ -1,11 +1,42 @@
 #!/usr/bin/env node
 
-import { readFile, rename, writeFile } from 'node:fs/promises';
+import { execFile } from 'node:child_process';
+import { randomUUID } from 'node:crypto';
+import { createWriteStream } from 'node:fs';
+import { mkdtemp, readFile, rename, rm, writeFile } from 'node:fs/promises';
+import os from 'node:os';
 import path from 'node:path';
+import { Readable, Transform } from 'node:stream';
+import { pipeline } from 'node:stream/promises';
 import { fileURLToPath } from 'node:url';
+import { promisify } from 'node:util';
 
-const ciDir = path.dirname(fileURLToPath(import.meta.url));
+const modulePath = fileURLToPath(import.meta.url);
+const ciDir = path.dirname(modulePath);
 const repoRoot = path.resolve(ciDir, '..');
+const execFileAsync = promisify(execFile);
+const defaultFileOperations = { writeFile, rename, rm };
+const defaultArtifactMaxBytes = 512 * 1024 * 1024;
+
+function readPositiveIntegerEnv(name, fallback) {
+  const value = process.env[name];
+  if (value === undefined) {
+    return fallback;
+  }
+  if (!/^[1-9][0-9]*$/.test(value) || !Number.isSafeInteger(Number(value))) {
+    throw new Error(`${name} must be a positive integer`);
+  }
+  return Number(value);
+}
+
+const artifactMaxBytes = readPositiveIntegerEnv(
+  'AGORA_SPM_ARTIFACT_MAX_BYTES',
+  defaultArtifactMaxBytes,
+);
+const artifactTimeoutMs = readPositiveIntegerEnv(
+  'AGORA_SPM_ARTIFACT_TIMEOUT_MS',
+  120_000,
+);
 
 function parseArgs(argv) {
   const args = {
@@ -46,8 +77,14 @@ function normalizeGithubUrl(value) {
   return `https://github.com/${match[1]}.git`;
 }
 
-function parseProducts(line) {
-  const fieldMatch = line.match(
+function isProductBoundary(value) {
+  return /^(?:\s*$|\s*\||\s*\r?\n|\s+(?:(?:platform|github|tag|version|products?|iris-url|iris-checksum|url|checksum)\s*[:=]|implementation\b|pod\b|【))/i.test(
+    value,
+  );
+}
+
+function parseProducts(record) {
+  const fieldMatch = record.match(
     /(?:^|[\s|])products?\s*[:=]\s*/i,
   );
   if (!fieldMatch) {
@@ -55,24 +92,33 @@ function parseProducts(line) {
   }
 
   const valueStart = fieldMatch.index + fieldMatch[0].length;
-  const nextFieldPattern =
-    /(?:^|[\s|])(?:platform|github|tag|version|products?|iris-url|iris-checksum)\s*[:=]/gi;
-  nextFieldPattern.lastIndex = valueStart;
-  const nextField = nextFieldPattern.exec(line);
-  const valueEnd = nextField?.index ?? line.length;
-  let value = line.slice(valueStart, valueEnd).trim().replace(/\|\s*$/, '').trim();
+  const remaining = record.slice(valueStart);
+  let value;
+  let valueEnd;
 
-  if (value.startsWith('"') || value.startsWith("'")) {
-    const quote = value[0];
-    if (value.length < 2 || !value.endsWith(quote)) {
+  if (remaining.startsWith('"') || remaining.startsWith("'")) {
+    const quote = remaining[0];
+    const closingQuote = remaining.indexOf(quote, 1);
+    if (closingQuote < 0) {
       return null;
     }
-    value = value.slice(1, -1);
-  } else if (value.includes('"') || value.includes("'")) {
-    return null;
+    value = remaining.slice(1, closingQuote);
+    valueEnd = closingQuote + 1;
+  } else {
+    const valueMatch = remaining.match(
+      /^[A-Za-z0-9_]+(?:\s*,\s*[A-Za-z0-9_]+)*/,
+    );
+    if (!valueMatch) {
+      return null;
+    }
+    value = valueMatch[0];
+    valueEnd = value.length;
   }
 
-  if (!/^[A-Za-z0-9_]+(?:\s*,\s*[A-Za-z0-9_]+)*$/.test(value)) {
+  if (
+    !/^[A-Za-z0-9_]+(?:\s*,\s*[A-Za-z0-9_]+)*$/.test(value) ||
+    !isProductBoundary(remaining.slice(valueEnd))
+  ) {
     return null;
   }
   return value.split(',').map((product) => product.trim());
@@ -80,7 +126,7 @@ function parseProducts(line) {
 
 function parseLabeledValues(line, labelPattern) {
   const fieldPattern = new RegExp(
-    `(?:^|[\\s|])(?:${labelPattern})\\s*[:=]\\s*(?:"([^"]*)"|'([^']*)'|([^\\s|]+))(?=$|[\\s|])`,
+    `(?:^|[\\s|])(?:${labelPattern})\\s*[:=]\\s*(?:"([^"]*)"|'([^']*)'|([^\\s|,]+))(?:\\s*,)?(?=$|[\\s|])`,
     'gi',
   );
   return [...line.matchAll(fieldPattern)].map(
@@ -103,36 +149,248 @@ function normalizeDependenciesContent(content) {
     .replaceAll(String.raw`\r`, '\n');
 }
 
-function stripSpmFields(record) {
+function inferPlatformFromPackageUrl(packageUrl) {
+  const packageName = path.basename(packageUrl, '.git');
+  if (/(?:^|[_-])ios(?:$|[_-])/i.test(packageName)) {
+    return 'iOS';
+  }
+  if (/(?:^|[_-])macos(?:$|[_-])/i.test(packageName)) {
+    return 'macOS';
+  }
+  return null;
+}
+
+function inferPlatformFromIrisUrl(irisUrl) {
+  const match = irisUrl.match(/AgoraIrisRTC[_-]?(iOS|macOS)/i);
+  if (!match) {
+    return null;
+  }
+  return match[1].toLowerCase() === 'ios' ? 'iOS' : 'macOS';
+}
+
+function parseIrisUrlValues(record) {
+  const explicitValues = parseLabeledValues(record, 'iris-url');
+  const genericValues = parseLabeledValues(record, 'url').filter((value) =>
+    inferPlatformFromIrisUrl(value),
+  );
+  return [...explicitValues, ...genericValues];
+}
+
+function stripSpmFields(record, stripGenericIrisFields = false) {
   const scalarSpmField =
-    /(^|[\s|])(?:github|tag|version|iris-url|iris-checksum)\s*[:=]\s*(?:"[^"]*"|'[^']*'|[^\s|]+)/gi;
+    /(^|[\s|])\s*(?:github|tag|version|iris-url|iris-checksum)\s*[:=]\s*(?:"[^"]*"|'[^']*'|[^\s|,]+)(?:\s*,)?(?=$|[\s|])/gi;
   const productsField =
-    /(^|[\s|])products?\s*[:=]\s*(?:"[^"]*"|'[^']*'|[A-Za-z0-9_]+(?:\s*,\s*[A-Za-z0-9_]+)*)/gi;
+    /(^|[\s|])\s*products?\s*[:=]\s*(?:"[^"]*"|'[^']*'|[A-Za-z0-9_]+(?:\s*,\s*[A-Za-z0-9_]+)*)/gi;
+  const genericUrlField =
+    /(^|[\s|])\s*url\s*[:=]\s*(?:"([^"]*)"|'([^']*)'|([^\s|,]+))(?:\s*,)?(?=$|[\s|])/gi;
+  const genericChecksumField =
+    /(^|[\s|])\s*checksum\s*[:=]\s*(?:"[^"]*"|'[^']*'|[^\s|,]+)(?:\s*,)?(?=$|[\s|])/gi;
   const preserveSeparator = (_match, separator) =>
     separator === '|' ? ' ' : separator;
+  const containsAppleIrisUrl = parseIrisUrlValues(record).some((value) =>
+    inferPlatformFromIrisUrl(value),
+  );
 
   return record
     .split(/\r?\n/)
-    .map((line) =>
-      line
+    .map((line) => {
+      let sanitized = line
         .replace(productsField, preserveSeparator)
         .replace(scalarSpmField, preserveSeparator)
-        .trim(),
-    )
+        .replace(genericUrlField, (match, separator, doubleQuoted, singleQuoted, bare) => {
+          const value = doubleQuoted ?? singleQuoted ?? bare;
+          return inferPlatformFromIrisUrl(value)
+            ? preserveSeparator(match, separator)
+            : match;
+        });
+      if (stripGenericIrisFields || containsAppleIrisUrl) {
+        sanitized = sanitized.replace(genericChecksumField, preserveSeparator);
+      }
+      return sanitized.trim();
+    })
     .filter(Boolean)
     .join('\n');
 }
 
-function createLegacyDependenciesContent(content) {
-  const normalizedContent = normalizeDependenciesContent(content);
+function hasAppleGithubUrl(record) {
+  return parseLabeledValues(record, 'github').some((value) => {
+    try {
+      return inferPlatformFromPackageUrl(normalizeGithubUrl(value));
+    } catch {
+      return false;
+    }
+  });
+}
+
+function hasUnscopedSpmIntent(record) {
+  const fieldCounts = countSpmFields(record);
+  return (
+    hasStrongSpmMetadata(fieldCounts) ||
+    fieldCounts['tag/version'] > 0 ||
+    hasAppleGithubUrl(record)
+  );
+}
+
+function inferPlatformsFromRecord(record) {
+  const platforms = new Set();
+  for (const value of parseLabeledValues(record, 'github')) {
+    try {
+      const platform = inferPlatformFromPackageUrl(normalizeGithubUrl(value));
+      if (platform) {
+        platforms.add(platform);
+      }
+    } catch {
+      // Invalid URLs remain in the record for strict validation later.
+    }
+  }
+  for (const value of parseIrisUrlValues(record)) {
+    const platform = inferPlatformFromIrisUrl(value);
+    if (platform) {
+      platforms.add(platform);
+    }
+  }
+  return platforms;
+}
+
+function splitUnscopedSpmSection(body) {
+  const records = [];
+  let currentLines = [];
+  let currentPlatform = null;
+
+  const finishCurrentRecord = () => {
+    const record = currentLines.join('\n').trim();
+    if (record) {
+      records.push(record);
+    }
+    currentLines = [];
+    currentPlatform = null;
+  };
+
+  for (const line of body.split(/\r?\n/)) {
+    if (!line.trim()) {
+      continue;
+    }
+    const linePlatforms = inferPlatformsFromRecord(line);
+    const linePlatform = linePlatforms.size === 1 ? [...linePlatforms][0] : null;
+
+    if (linePlatforms.size > 1) {
+      finishCurrentRecord();
+      records.push(line.trim());
+      continue;
+    }
+    if (linePlatform && currentPlatform && linePlatform !== currentPlatform) {
+      finishCurrentRecord();
+    }
+
+    currentLines.push(line);
+    currentPlatform ??= linePlatform;
+  }
+  finishCurrentRecord();
+  return records;
+}
+
+function processUnscopedContent(content, transformSpmRecord) {
+  const sectionPattern = /【\s*([^】]+?)\s*】/g;
+  const sections = [...content.matchAll(sectionPattern)];
+  const processOutsideSections = (outside) =>
+    outside
+      .split(/\r?\n/)
+      .map((line) =>
+        hasUnscopedSpmIntent(line) ? transformSpmRecord(line, false) : line,
+      )
+      .join('\n');
+
+  if (sections.length === 0) {
+    return processOutsideSections(content);
+  }
+
+  const chunks = [processOutsideSections(content.slice(0, sections[0].index))];
+  for (const [index, section] of sections.entries()) {
+    const bodyStart = section.index + section[0].length;
+    const bodyEnd = sections[index + 1]?.index ?? content.length;
+    const body = content.slice(bodyStart, bodyEnd);
+    const isSwiftPm = section[1].replaceAll(/\s/g, '').toLowerCase() === 'swiftpm';
+    if (isSwiftPm) {
+      chunks.push(
+        splitUnscopedSpmSection(body)
+          .map((record) => transformSpmRecord(record, true))
+          .join('\n'),
+      );
+    } else {
+      chunks.push(section[0], body);
+    }
+  }
+  return chunks.join('');
+}
+
+function splitExplicitPlatformContent(content) {
   const platformPattern =
     /(?:^|[\s|])platform\s*[:=]\s*(?:"[^"]*"|'[^']*'|[^\s|]+)(?=$|[\s|])/gi;
-  const matches = [...normalizedContent.matchAll(platformPattern)];
-  const chunks = [normalizedContent.slice(0, matches[0]?.index ?? normalizedContent.length)];
+  const matches = [...content.matchAll(platformPattern)];
+  return {
+    preamble: content.slice(0, matches[0]?.index ?? content.length),
+    records: matches.map((match, index) => {
+      const nextStart = matches[index + 1]?.index ?? content.length;
+      return content.slice(match.index, nextStart);
+    }),
+  };
+}
 
-  for (const [index, match] of matches.entries()) {
-    const nextStart = matches[index + 1]?.index ?? normalizedContent.length;
-    const record = normalizedContent.slice(match.index, nextStart);
+function extractSectionedSpmRecords(content) {
+  const sectionPattern = /【\s*([^】]+?)\s*】/g;
+  const sections = [...content.matchAll(sectionPattern)];
+  if (sections.length === 0) {
+    return { contentWithoutSwiftPmSections: content, records: [] };
+  }
+
+  const records = [];
+  const chunks = [content.slice(0, sections[0].index)];
+  for (const [index, section] of sections.entries()) {
+    const bodyStart = section.index + section[0].length;
+    const bodyEnd = sections[index + 1]?.index ?? content.length;
+    const body = content.slice(bodyStart, bodyEnd);
+    const isSwiftPm = section[1].replaceAll(/\s/g, '').toLowerCase() === 'swiftpm';
+    if (!isSwiftPm) {
+      chunks.push(section[0], body);
+      continue;
+    }
+
+    const { preamble, records: platformRecords } = splitExplicitPlatformContent(body);
+    const sectionRecords = [
+      ...splitUnscopedSpmSection(preamble),
+      ...platformRecords,
+    ];
+    records.push(...sectionRecords);
+    chunks.push(
+      sectionRecords
+        .map((record) => stripSpmFields(record, true))
+        .filter(Boolean)
+        .join('\n'),
+      '\n',
+    );
+  }
+
+  return {
+    contentWithoutSwiftPmSections: chunks.join(''),
+    records,
+  };
+}
+
+function createLegacyDependenciesContent(content) {
+  const normalizedContent = normalizeDependenciesContent(content);
+  const { contentWithoutSwiftPmSections } =
+    extractSectionedSpmRecords(normalizedContent);
+  const { preamble, records } = splitExplicitPlatformContent(
+    contentWithoutSwiftPmSections,
+  );
+  const chunks = [
+    processUnscopedContent(
+      preamble,
+      (record, isSwiftPmSection) => stripSpmFields(record, isSwiftPmSection),
+    ),
+  ];
+
+  for (const record of records) {
     const platformValue = parseLabeledValues(record, 'platform')[0] ?? '';
     const isApplePlatform = /^(?:iOS|macOS)$/i.test(platformValue);
     const fieldCounts = countSpmFields(record);
@@ -141,7 +399,7 @@ function createLegacyDependenciesContent(content) {
       (isApplePlatform && fieldCounts['tag/version'] > 0);
 
     chunks.push(
-      isApplePlatform && hasSpmMetadata ? stripSpmFields(record) : record,
+      isApplePlatform && hasSpmMetadata ? stripSpmFields(record, true) : record,
     );
   }
 
@@ -161,8 +419,8 @@ function countSpmFields(record) {
     github: countLabeledFields(record, 'github'),
     'tag/version': tagCount + versionCount,
     products: countLabeledFields(record, 'products?'),
-    'iris-url': countLabeledFields(record, 'iris-url'),
-    'iris-checksum': countLabeledFields(record, 'iris-checksum'),
+    'iris-url': parseIrisUrlValues(record).length,
+    'iris-checksum': countLabeledFields(record, '(?:iris-)?checksum'),
   };
 }
 
@@ -175,104 +433,156 @@ function hasStrongSpmMetadata(fieldCounts) {
   );
 }
 
-function splitPlatformRecords(content) {
-  const platformPattern =
-    /(?:^|[\s|])platform\s*[:=]\s*(?:"[^"]*"|'[^']*'|[^\s|]+)(?=$|[\s|])/gi;
-  const matches = [...content.matchAll(platformPattern)];
-  const preambleEnd = matches[0]?.index ?? content.length;
-  const preambleCounts = countSpmFields(content.slice(0, preambleEnd));
-
-  const hasUnscopedTag =
-    countLabeledFields(content.slice(0, preambleEnd), 'tag') > 0;
-  if (hasStrongSpmMetadata(preambleCounts) || hasUnscopedTag) {
-    throw new Error('SPM metadata requires an explicit platform field');
-  }
-
-  return matches.map((match, index) => {
-    const nextStart = matches[index + 1]?.index ?? content.length;
-    return content.slice(match.index, nextStart);
+function collectUnscopedSpmRecords(content) {
+  const records = [];
+  processUnscopedContent(content, (record) => {
+    if (record.trim()) {
+      records.push(record);
+    }
+    return record;
   });
+  return records;
+}
+
+function mergeDependency(dependencies, platform, dependency) {
+  const existing = dependencies.get(platform) ?? {};
+  const duplicateFields = Object.keys(dependency).filter(
+    (field) => existing[field] !== undefined,
+  );
+  if (duplicateFields.length > 0) {
+    throw new Error(
+      `Duplicate SPM metadata for ${platform}: ${duplicateFields.join(', ')}`,
+    );
+  }
+  dependencies.set(platform, { ...existing, ...dependency });
 }
 
 function parsePlatformDependencies(content) {
   const dependencies = new Map();
   const normalizedContent = normalizeDependenciesContent(content);
+  const { contentWithoutSwiftPmSections, records: sectionRecords } =
+    extractSectionedSpmRecords(normalizedContent);
+  const { preamble, records: platformRecords } =
+    splitExplicitPlatformContent(contentWithoutSwiftPmSections);
+  const records = [
+    ...collectUnscopedSpmRecords(preamble),
+    ...platformRecords,
+    ...sectionRecords,
+  ];
 
-  for (const record of splitPlatformRecords(normalizedContent)) {
+  for (const record of records) {
     const fieldCounts = countSpmFields(record);
     const platformValues = parseLabeledValues(record, 'platform');
-
-    const platformValue = platformValues[0];
-    const isApplePlatform = /^(?:iOS|macOS)$/i.test(platformValue);
+    const platformValue = platformValues[0] ?? null;
+    const isExplicitApplePlatform = /^(?:iOS|macOS)$/i.test(platformValue ?? '');
     const hasSpmMetadata =
       hasStrongSpmMetadata(fieldCounts) ||
-      (isApplePlatform && fieldCounts['tag/version'] > 0);
-    const platform = isApplePlatform
-      ? (platformValue.toLowerCase() === 'ios' ? 'iOS' : 'macOS')
-      : null;
+      (isExplicitApplePlatform && fieldCounts['tag/version'] > 0) ||
+      (!platformValue && fieldCounts['tag/version'] > 0);
     if (!hasSpmMetadata) {
       continue;
     }
-    if (!isApplePlatform) {
+    if (platformValue && !isExplicitApplePlatform) {
       throw new Error(`Unsupported SPM platform: ${platformValue}`);
     }
     const duplicateFields = Object.entries(fieldCounts)
       .filter(([_field, count]) => count > 1)
       .map(([field]) => field);
-    if (duplicateFields.length > 0) {
-      throw new Error(`Duplicate SPM fields for ${platform}: ${duplicateFields.join(', ')}`);
-    }
-    if (dependencies.has(platform)) {
-      throw new Error(`Duplicate SPM metadata for ${platform}`);
-    }
+    const explicitPlatform = isExplicitApplePlatform
+      ? (platformValue.toLowerCase() === 'ios' ? 'iOS' : 'macOS')
+      : null;
     const githubValue = parseLabeledValues(record, 'github')[0] ?? null;
     const versionValue = parseLabeledValues(record, 'tag|version')[0] ?? null;
-    const products = parseProducts(record);
-    const irisUrlValue = parseLabeledValues(record, 'iris-url')[0] ?? null;
-    const checksumValue = parseLabeledValues(record, 'iris-checksum')[0] ?? null;
+    const products = fieldCounts.products > 0 ? parseProducts(record) : undefined;
+    const irisUrlValue = parseIrisUrlValues(record)[0] ?? null;
+    const checksumValue =
+      parseLabeledValues(record, '(?:iris-)?checksum')[0] ?? null;
 
-    const missingFields = Object.entries(fieldCounts)
-      .filter(([field, count]) => field !== 'platform' && count === 0)
-      .map(([field]) => field);
-    if (missingFields.length > 0) {
-      throw new Error(`Incomplete SPM metadata for ${platform}: ${missingFields.join(', ')}`);
-    }
-
-    const invalidFields = [];
     let packageUrl;
     if (githubValue) {
       try {
         packageUrl = normalizeGithubUrl(githubValue);
       } catch {
-        invalidFields.push('github');
+        packageUrl = null;
       }
-    } else {
+    }
+    const packagePlatform = packageUrl
+      ? inferPlatformFromPackageUrl(packageUrl)
+      : null;
+    const irisPlatform = irisUrlValue
+      ? inferPlatformFromIrisUrl(irisUrlValue)
+      : null;
+    const inferredPlatforms = new Set(
+      [explicitPlatform, packagePlatform, irisPlatform].filter(Boolean),
+    );
+    if (inferredPlatforms.size !== 1) {
+      throw new Error(
+        inferredPlatforms.size === 0
+          ? 'SPM metadata requires an inferable Apple platform'
+          : `Conflicting SPM platforms: ${[...inferredPlatforms].join(', ')}`,
+      );
+    }
+    const platform = [...inferredPlatforms][0];
+
+    if (duplicateFields.length > 0) {
+      throw new Error(`Duplicate SPM fields for ${platform}: ${duplicateFields.join(', ')}`);
+    }
+
+    const invalidFields = [];
+    if (fieldCounts.github > 0 && (!githubValue || !packageUrl || !packagePlatform)) {
       invalidFields.push('github');
     }
-    if (!versionValue || !/^[A-Za-z0-9_.+-]+$/.test(versionValue)) {
+    if (
+      fieldCounts['tag/version'] > 0 &&
+      (!versionValue || !/^[A-Za-z0-9_.+-]+$/.test(versionValue))
+    ) {
       invalidFields.push('tag/version');
     }
-    if (!products) {
+    if (fieldCounts.products > 0 && !products) {
       invalidFields.push('products');
     }
-    if (!irisUrlValue || !/^https?:\/\/[^\s|,'"]+$/.test(irisUrlValue)) {
+    if (
+      irisUrlValue &&
+      (!/^https?:\/\/[^\s|,'"]+$/.test(irisUrlValue) || !irisPlatform)
+    ) {
       invalidFields.push('iris-url');
     }
-    if (!checksumValue || !/^[a-f0-9]{64}$/i.test(checksumValue)) {
+    if (
+      fieldCounts['iris-checksum'] > 0 &&
+      (!checksumValue || !/^[a-f0-9]{64}$/i.test(checksumValue))
+    ) {
       invalidFields.push('iris-checksum');
     }
     if (invalidFields.length > 0) {
       throw new Error(`Invalid SPM metadata for ${platform}: ${invalidFields.join(', ')}`);
     }
 
-    dependencies.set(platform, {
-      packageUrl,
-      packageName: path.basename(packageUrl, '.git'),
-      version: versionValue,
-      products,
-      irisUrl: irisUrlValue,
-      irisChecksum: checksumValue.toLowerCase(),
-    });
+    if (Boolean(githubValue) !== Boolean(versionValue)) {
+      throw new Error(
+        `Incomplete Native SPM metadata for ${platform}: github and tag/version must be provided together`,
+      );
+    }
+    if (checksumValue && !irisUrlValue) {
+      throw new Error(
+        `Incomplete Iris SPM metadata for ${platform}: checksum requires url`,
+      );
+    }
+
+    const dependency = {};
+    if (packageUrl) {
+      dependency.packageUrl = packageUrl;
+      dependency.version = versionValue;
+    }
+    if (products) {
+      dependency.products = products;
+    }
+    if (irisUrlValue) {
+      dependency.irisUrl = irisUrlValue;
+      if (checksumValue) {
+        dependency.irisChecksum = checksumValue.toLowerCase();
+      }
+    }
+    mergeDependency(dependencies, platform, dependency);
   }
 
   return dependencies;
@@ -312,16 +622,251 @@ function findManagedLineIndexes(lines, startMarker, endMarker, description) {
   );
 }
 
-function updateManifest(source, dependency, platform) {
-  const existingPackageName =
-    platform === 'iOS' ? 'AgoraRtcEngine_iOS' : 'AgoraRtcEngine_macOS';
-  const managedPackageNames = new Set([existingPackageName, dependency.packageName]);
-  const packageStartMarker = '        // agora-spm-updater:managed-packages-start';
-  const packageEndMarker = '        // agora-spm-updater:managed-packages-end';
+const packageStartMarker = '        // agora-spm-updater:managed-packages-start';
+const packageEndMarker = '        // agora-spm-updater:managed-packages-end';
+const targetStartMarker = '                // agora-spm-updater:managed-products-start';
+const targetEndMarker = '                // agora-spm-updater:managed-products-end';
+
+function parsePackageDeclaration(line) {
+  const match = line.match(
+    /^\s*(\.package\(url:\s*"([^"]+)",\s*(?:exact:\s*"[^"]+"|\.upToNextMajor\(from:\s*"[^"]+"\))\),?)\s*$/,
+  );
+  if (!match) {
+    return null;
+  }
+
+  let packageUrl;
+  try {
+    packageUrl = normalizeGithubUrl(match[2]);
+  } catch {
+    return null;
+  }
+
+  return {
+    declaration: `${match[1].replace(/,$/, '')},`,
+    packageUrl,
+    packageName: path.basename(packageUrl, '.git'),
+  };
+}
+
+function parseManifestDependency(source, platform) {
+  const packageSection = source.match(
+    /    dependencies: \[\n([\s\S]*?)\n    \],\n    targets: \[/,
+  );
+  if (!packageSection) {
+    throw new Error('Unable to locate package dependencies in Package.swift');
+  }
+
+  const packageLines = packageSection[1].split('\n');
+  const markedPackageIndexes = findManagedLineIndexes(
+    packageLines,
+    packageStartMarker,
+    packageEndMarker,
+    'managed package dependency',
+  );
+  const packageCandidates = packageLines
+    .map((line, index) => ({ index, parsed: parsePackageDeclaration(line) }))
+    .filter(({ index, parsed }) => {
+      if (!parsed) {
+        return false;
+      }
+      return markedPackageIndexes
+        ? markedPackageIndexes.includes(index)
+        : inferPlatformFromPackageUrl(parsed.packageUrl) === platform;
+    });
+  if (packageCandidates.length !== 1) {
+    throw new Error('Unable to locate Native package dependency in Package.swift');
+  }
+  const nativePackage = packageCandidates[0].parsed;
+
+  const targetSection = source.match(
+    /            dependencies: \[\n([\s\S]*?)\n            \],\n            cSettings:/,
+  );
+  if (!targetSection) {
+    throw new Error('Unable to locate plugin target dependencies in Package.swift');
+  }
+
+  const targetLines = targetSection[1].split('\n');
+  const markedProductIndexes = findManagedLineIndexes(
+    targetLines,
+    targetStartMarker,
+    targetEndMarker,
+    'managed product dependency',
+  );
+  const products = targetLines
+    .map((line, index) => {
+      const match = line.match(
+        /\.product\(name:\s*"([A-Za-z0-9_]+)",\s*package:\s*"([^"]+)"\)/,
+      );
+      return match ? { index, name: match[1], packageName: match[2] } : null;
+    })
+    .filter((product) => {
+      if (!product || product.packageName === 'FlutterFramework') {
+        return false;
+      }
+      return markedProductIndexes
+        ? markedProductIndexes.includes(product.index)
+        : product.packageName === nativePackage.packageName;
+    });
+  if (
+    products.length === 0 ||
+    products.some((product) => product.packageName !== nativePackage.packageName)
+  ) {
+    throw new Error('Unable to locate Native product dependencies in Package.swift');
+  }
+
+  const binaryTargets = [
+    ...source.matchAll(
+      /\.binaryTarget\(\s*name:\s*"AgoraRtcWrapper",\s*url:\s*"([^"]+)",\s*checksum:\s*"([^"]+)"\s*\)/g,
+    ),
+  ];
+  if (binaryTargets.length !== 1) {
+    throw new Error('Unable to locate AgoraRtcWrapper binary target in Package.swift');
+  }
+  const [, irisUrl, irisChecksum] = binaryTargets[0];
+  if (!/^https?:\/\/[^\s,'"]+$/.test(irisUrl) || !/^[a-f0-9]{64}$/i.test(irisChecksum)) {
+    throw new Error('Invalid AgoraRtcWrapper binary target in Package.swift');
+  }
+
+  return {
+    packageUrl: nativePackage.packageUrl,
+    packageName: nativePackage.packageName,
+    packageDeclaration: nativePackage.declaration,
+    products: products.map((product) => product.name),
+    irisUrl,
+    irisChecksum: irisChecksum.toLowerCase(),
+  };
+}
+
+async function computeIrisChecksum(artifactUrl) {
+  const temporaryDirectory = await mkdtemp(
+    path.join(os.tmpdir(), 'agora-iris-spm-checksum-'),
+  );
+  const artifactPath = path.join(temporaryDirectory, 'artifact.zip');
+
+  try {
+    let response;
+    const downloadSignal = AbortSignal.timeout(artifactTimeoutMs);
+    try {
+      response = await fetch(artifactUrl, { signal: downloadSignal });
+      if (!response.ok) {
+        throw new Error(`HTTP ${response.status} ${response.statusText}`.trim());
+      }
+      if (!response.body) {
+        throw new Error('response body is empty');
+      }
+      const contentLength = Number(response.headers.get('content-length'));
+      if (Number.isFinite(contentLength) && contentLength > artifactMaxBytes) {
+        throw new Error(
+          `artifact exceeds maximum size of ${artifactMaxBytes} bytes`,
+        );
+      }
+
+      let downloadedBytes = 0;
+      const byteLimit = new Transform({
+        transform(chunk, _encoding, callback) {
+          downloadedBytes += chunk.length;
+          if (downloadedBytes > artifactMaxBytes) {
+            callback(
+              new Error(
+                `artifact exceeds maximum size of ${artifactMaxBytes} bytes`,
+              ),
+            );
+            return;
+          }
+          callback(null, chunk);
+        },
+      });
+      await pipeline(
+        Readable.fromWeb(response.body),
+        byteLimit,
+        createWriteStream(artifactPath),
+      );
+    } catch (error) {
+      const message = downloadSignal.aborted
+        ? `download timed out after ${artifactTimeoutMs} ms`
+        : error.message;
+      throw new Error(
+        `Failed to download Iris SPM artifact ${artifactUrl}: ${message}`,
+      );
+    }
+
+    let archiveEntries;
+    try {
+      ({ stdout: archiveEntries } = await execFileAsync('unzip', ['-Z1', artifactPath], {
+        maxBuffer: 1024 * 1024,
+      }));
+    } catch {
+      throw new Error(
+        `Invalid Iris SPM artifact ${artifactUrl}: archive is not a valid zip`,
+      );
+    }
+    if (
+      !archiveEntries
+        .split(/\r?\n/)
+        .some((entry) => entry.startsWith('AgoraRtcWrapper.xcframework/'))
+    ) {
+      throw new Error(
+        `Invalid Iris SPM artifact ${artifactUrl}: archive must contain AgoraRtcWrapper.xcframework at archive root`,
+      );
+    }
+
+    let stdout;
+    try {
+      ({ stdout } = await execFileAsync(
+        'swift',
+        ['package', 'compute-checksum', artifactPath],
+        { maxBuffer: 1024 * 1024 },
+      ));
+    } catch (error) {
+      throw new Error(
+        `Failed to compute Iris SPM checksum for ${artifactUrl}: ${error.message}`,
+      );
+    }
+
+    const checksum = stdout.trim();
+    if (!/^[a-f0-9]{64}$/i.test(checksum)) {
+      throw new Error(
+        `Invalid Iris SPM checksum output for ${artifactUrl}: ${checksum}`,
+      );
+    }
+    return checksum.toLowerCase();
+  } finally {
+    await rm(temporaryDirectory, { recursive: true, force: true });
+  }
+}
+
+async function resolveManifestDependency(source, dependency, platform) {
+  const current = parseManifestDependency(source, platform);
+  const resolved = { ...current };
+
+  if (dependency.packageUrl) {
+    resolved.packageUrl = dependency.packageUrl;
+    resolved.packageName = path.basename(dependency.packageUrl, '.git');
+    resolved.packageDeclaration =
+      `.package(url: "${dependency.packageUrl}", exact: "${dependency.version}"),`;
+  }
+  if (dependency.products) {
+    resolved.products = dependency.products;
+  }
+  if (dependency.irisUrl) {
+    resolved.irisUrl = dependency.irisUrl;
+    resolved.irisChecksum =
+      dependency.irisChecksum ?? (await computeIrisChecksum(dependency.irisUrl));
+  }
+
+  return { current, resolved };
+}
+
+function updateManifest(source, dependency, platform, currentDependency) {
+  const managedPackageNames = new Set([
+    currentDependency.packageName,
+    dependency.packageName,
+  ]);
   const packageDependencies = [
     '        .package(name: "FlutterFramework", path: "../FlutterFramework"),',
     packageStartMarker,
-    `        .package(url: "${dependency.packageUrl}", exact: "${dependency.version}"),`,
+    `        ${dependency.packageDeclaration}`,
     packageEndMarker,
   ];
 
@@ -392,8 +937,6 @@ function updateManifest(source, dependency, platform) {
     'package dependencies',
   );
 
-  const targetStartMarker = '                // agora-spm-updater:managed-products-start';
-  const targetEndMarker = '                // agora-spm-updater:managed-products-end';
   const targetDependencies = [
     '                .product(name: "FlutterFramework", package: "FlutterFramework"),',
     targetStartMarker,
@@ -494,40 +1037,170 @@ function updateManifest(source, dependency, platform) {
   return updated;
 }
 
-async function writeAtomically(filePath, content) {
-  const temporaryPath = `${filePath}.tmp-${process.pid}`;
-  await writeFile(temporaryPath, content, 'utf8');
-  await rename(temporaryPath, filePath);
+async function commitUpdates(updates, fileOperations = defaultFileOperations) {
+  const transactionId = `${process.pid}-${randomUUID()}`;
+  const entries = updates.map(({ filePath, content }) => ({
+    filePath,
+    content,
+    temporaryPath: `${filePath}.tmp-${transactionId}`,
+    backupPath: `${filePath}.backup-${transactionId}`,
+    originalMoved: false,
+    updateInstalled: false,
+  }));
+
+  const preparationResults = await Promise.allSettled(
+    entries.map(({ temporaryPath, content }) =>
+      fileOperations.writeFile(temporaryPath, content, 'utf8'),
+    ),
+  );
+  const preparationErrors = preparationResults
+    .filter((result) => result.status === 'rejected')
+    .map((result) => result.reason);
+  if (preparationErrors.length > 0) {
+    const cleanupResults = await Promise.allSettled(
+      entries.map(({ temporaryPath }) =>
+        fileOperations.rm(temporaryPath, { force: true }),
+      ),
+    );
+    const cleanupErrors = cleanupResults
+      .filter((result) => result.status === 'rejected')
+      .map((result) => result.reason);
+    if (preparationErrors.length > 1 || cleanupErrors.length > 0) {
+      const preparationDetail =
+        preparationErrors.length > 1
+          ? ` (${preparationErrors.length} temporary writes failed)`
+          : '';
+      const cleanupDetail =
+        cleanupErrors.length > 0
+          ? ` and clean up ${cleanupErrors.length} temporary file(s)`
+          : '';
+      throw new AggregateError(
+        [...preparationErrors, ...cleanupErrors],
+        `Failed to prepare SPM manifests${preparationDetail}${cleanupDetail}`,
+      );
+    }
+    throw preparationErrors[0];
+  }
+
+  try {
+    for (const entry of entries) {
+      await fileOperations.rename(entry.filePath, entry.backupPath);
+      entry.originalMoved = true;
+      await fileOperations.rename(entry.temporaryPath, entry.filePath);
+      entry.updateInstalled = true;
+    }
+  } catch (error) {
+    const rollbackErrors = [];
+    for (const entry of [...entries].reverse()) {
+      if (!entry.originalMoved) {
+        continue;
+      }
+      try {
+        if (entry.updateInstalled) {
+          await fileOperations.rm(entry.filePath, { force: true });
+        }
+        await fileOperations.rename(entry.backupPath, entry.filePath);
+        entry.originalMoved = false;
+      } catch (rollbackError) {
+        rollbackErrors.push(rollbackError);
+      }
+    }
+    const cleanupResults = await Promise.allSettled(
+      entries.map(({ temporaryPath }) =>
+        fileOperations.rm(temporaryPath, { force: true }),
+      ),
+    );
+    const cleanupErrors = cleanupResults
+      .filter((result) => result.status === 'rejected')
+      .map((result) => result.reason);
+    if (rollbackErrors.length > 0 || cleanupErrors.length > 0) {
+      const failedRecoveryActions = [];
+      if (rollbackErrors.length > 0) {
+        failedRecoveryActions.push(`roll back ${rollbackErrors.length} file(s)`);
+      }
+      if (cleanupErrors.length > 0) {
+        failedRecoveryActions.push(
+          `clean up ${cleanupErrors.length} temporary file(s)`,
+        );
+      }
+      throw new AggregateError(
+        [error, ...rollbackErrors, ...cleanupErrors],
+        `Failed to commit SPM manifests and ${failedRecoveryActions.join(' and ')}`,
+      );
+    }
+    throw error;
+  }
+
+  const backupCleanupResults = await Promise.allSettled(
+    entries.map(({ backupPath }) =>
+      fileOperations.rm(backupPath, { force: true }),
+    ),
+  );
+  const backupCleanupErrors = backupCleanupResults
+    .filter((result) => result.status === 'rejected')
+    .map((result) => result.reason);
+  if (backupCleanupErrors.length > 1) {
+    throw new AggregateError(
+      backupCleanupErrors,
+      `Failed to clean up ${backupCleanupErrors.length} SPM manifest backup file(s)`,
+    );
+  }
+  if (backupCleanupErrors.length === 1) {
+    throw backupCleanupErrors[0];
+  }
 }
 
-const args = parseArgs(process.argv.slice(2));
-if (args.printLegacyContent) {
-  console.log(createLegacyDependenciesContent(args.dependenciesContent));
-  process.exit(0);
+async function main(argv) {
+  const args = parseArgs(argv);
+  if (args.printLegacyContent) {
+    console.log(createLegacyDependenciesContent(args.dependenciesContent));
+    return;
+  }
+
+  const dependencies = parsePlatformDependencies(args.dependenciesContent);
+
+  if (dependencies.size === 0) {
+    console.log('SPM dependencies unchanged');
+    return;
+  }
+
+  const requestedUpdates = [];
+  if (dependencies.has('iOS')) {
+    requestedUpdates.push({
+      filePath: args.iosManifest,
+      platform: 'iOS',
+      dependency: dependencies.get('iOS'),
+    });
+  }
+  if (dependencies.has('macOS')) {
+    requestedUpdates.push({
+      filePath: args.macosManifest,
+      platform: 'macOS',
+      dependency: dependencies.get('macOS'),
+    });
+  }
+
+  const updates = await Promise.all(
+    requestedUpdates.map(async ({ filePath, platform, dependency }) => {
+      const source = await readFile(filePath, 'utf8');
+      const { current, resolved } = await resolveManifestDependency(
+        source,
+        dependency,
+        platform,
+      );
+      return {
+        filePath,
+        content: updateManifest(source, resolved, platform, current),
+      };
+    }),
+  );
+
+  await commitUpdates(updates);
+  console.log(`Updated SPM dependencies for ${[...dependencies.keys()].join(', ')}`);
 }
 
-const dependencies = parsePlatformDependencies(args.dependenciesContent);
-
-if (dependencies.size === 0) {
-  console.log('SPM dependencies unchanged');
-  process.exit(0);
+if (process.argv[1] && path.resolve(process.argv[1]) === modulePath) {
+  await main(process.argv.slice(2));
 }
 
-const updates = [];
-if (dependencies.has('iOS')) {
-  const source = await readFile(args.iosManifest, 'utf8');
-  updates.push({
-    filePath: args.iosManifest,
-    content: updateManifest(source, dependencies.get('iOS'), 'iOS'),
-  });
-}
-if (dependencies.has('macOS')) {
-  const source = await readFile(args.macosManifest, 'utf8');
-  updates.push({
-    filePath: args.macosManifest,
-    content: updateManifest(source, dependencies.get('macOS'), 'macOS'),
-  });
-}
-
-await Promise.all(updates.map(({ filePath, content }) => writeAtomically(filePath, content)));
-console.log(`Updated SPM dependencies for ${[...dependencies.keys()].join(', ')}`);
+export { commitUpdates };

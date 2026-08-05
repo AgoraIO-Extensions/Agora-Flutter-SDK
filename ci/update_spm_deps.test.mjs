@@ -1,11 +1,23 @@
 import assert from 'node:assert/strict';
 import { execFile } from 'node:child_process';
-import { mkdtemp, readFile, writeFile } from 'node:fs/promises';
+import { createHash } from 'node:crypto';
+import {
+  mkdir,
+  mkdtemp,
+  readFile,
+  readdir,
+  rename,
+  rm,
+  writeFile,
+} from 'node:fs/promises';
+import { createServer } from 'node:http';
 import os from 'node:os';
 import path from 'node:path';
 import test from 'node:test';
 import { fileURLToPath } from 'node:url';
 import { promisify } from 'node:util';
+
+import { commitUpdates } from './update_spm_deps.mjs';
 
 const execFileAsync = promisify(execFile);
 const ciDir = path.dirname(fileURLToPath(import.meta.url));
@@ -29,6 +41,18 @@ const completeDependenciesContent = [
   `platform:macOS github:https://github.com/AgoraIO/AgoraRtcEngine_macOS.git tag:4.6.2 products:RtcBasic iris-url:${macosIrisUrl} iris-checksum:${macosIrisChecksum}`,
 ].join('\n');
 
+const sectionedNativeDependenciesContent = [
+  '【Maven】',
+  "implementation 'io.agora.rtc:agora-special-full:4.5.2.211.FAV'",
+  '【Cocoapods】',
+  "pod 'AgoraRtcEngine_Special_iOS', '4.5.2.211.FAV'",
+  '【swiftPM】',
+  'github:git@github.com:AgoraIO/AgoraRtcEngine_iOS.git | tag:4.5.2.211',
+].join('\n');
+
+const compactAudioDependenciesContent =
+  "github:https://github.com/AgoraIO/AgoraAudio_iOS.git tag:4.5.3-a1 products:RtcBasic implementation 'io.agora.rtc:agora-special-voice:4.5.3.1.BASIC1'";
+
 async function createTemporaryManifests() {
   const tempRoot = await mkdtemp(path.join(os.tmpdir(), 'agora-spm-deps-'));
   const iosManifest = path.join(tempRoot, 'ios-Package.swift');
@@ -40,16 +64,24 @@ async function createTemporaryManifests() {
   return { iosManifest, macosManifest };
 }
 
-async function runUpdater(dependenciesContent, manifests) {
-  return execFileAsync(process.execPath, [
-    updaterPath,
-    '--dependencies-content',
-    dependenciesContent,
-    '--ios-manifest',
-    manifests.iosManifest,
-    '--macos-manifest',
-    manifests.macosManifest,
-  ]);
+async function runUpdater(
+  dependenciesContent,
+  manifests,
+  { env = {}, timeout } = {},
+) {
+  return execFileAsync(
+    process.execPath,
+    [
+      updaterPath,
+      '--dependencies-content',
+      dependenciesContent,
+      '--ios-manifest',
+      manifests.iosManifest,
+      '--macos-manifest',
+      manifests.macosManifest,
+    ],
+    { env: { ...process.env, ...env }, timeout },
+  );
 }
 
 async function printLegacyContent(dependenciesContent) {
@@ -64,6 +96,62 @@ async function printLegacyContent(dependenciesContent) {
     '--macos-manifest',
     manifests.macosManifest,
   ]);
+}
+
+async function withArtifactServer(
+  fileName,
+  bytes,
+  callback,
+  statusOrOptions = 200,
+) {
+  const options =
+    typeof statusOrOptions === 'number'
+      ? { statusCode: statusOrOptions }
+      : statusOrOptions;
+  const { statusCode = 200, stall = false } = options;
+  const server = createServer((_request, response) => {
+    if (stall) {
+      return;
+    }
+    response.writeHead(statusCode, { 'content-type': 'application/zip' });
+    response.end(bytes);
+  });
+
+  await new Promise((resolve, reject) => {
+    server.once('error', reject);
+    server.listen(0, '127.0.0.1', resolve);
+  });
+
+  const address = server.address();
+  assert.ok(address && typeof address === 'object');
+  try {
+    return await callback(`http://127.0.0.1:${address.port}/${fileName}`);
+  } finally {
+    await new Promise((resolve, reject) => {
+      server.close((error) => (error ? reject(error) : resolve()));
+    });
+  }
+}
+
+async function createArtifactZip(rootDirectory = 'AgoraRtcWrapper.xcframework') {
+  const tempRoot = await mkdtemp(path.join(os.tmpdir(), 'agora-spm-artifact-'));
+  const contentsRoot = path.join(tempRoot, 'contents');
+  const artifactPath = path.join(tempRoot, 'artifact.zip');
+  await mkdir(path.join(contentsRoot, rootDirectory), { recursive: true });
+  await writeFile(
+    path.join(contentsRoot, rootDirectory, 'Info.plist'),
+    'SwiftPM artifact fixture',
+    'utf8',
+  );
+
+  try {
+    await execFileAsync('zip', ['-qry', artifactPath, rootDirectory], {
+      cwd: contentsRoot,
+    });
+    return await readFile(artifactPath);
+  } finally {
+    await rm(tempRoot, { recursive: true, force: true });
+  }
 }
 
 function extractWorkflowRunScript(workflow, stepName) {
@@ -126,6 +214,514 @@ test('updates both Apple manifests from complete platform-scoped input', async (
   assert.match(macos, new RegExp(`checksum: "${macosIrisChecksum}"`));
   assert.doesNotMatch(macos, /unsafeFlags/);
   assert.match(macos, /cxxLanguageStandard: \.cxx14/);
+});
+
+test('accepts real sectioned Native SPM input without platform or omitted fields', async () => {
+  const manifests = await createTemporaryManifests();
+  const iosBefore = await readFile(manifests.iosManifest, 'utf8');
+  const macosBefore = await readFile(manifests.macosManifest, 'utf8');
+  const wrapperBefore = iosBefore.match(
+    /name: "AgoraRtcWrapper",\n            url: "([^"]+)",\n            checksum: "([^"]+)"/,
+  );
+  assert.ok(wrapperBefore);
+
+  await runUpdater(sectionedNativeDependenciesContent, manifests);
+
+  const ios = await readFile(manifests.iosManifest, 'utf8');
+  assert.match(
+    ios,
+    /\.package\(url: "https:\/\/github\.com\/AgoraIO\/AgoraRtcEngine_iOS\.git", exact: "4\.5\.2\.211"\)/,
+  );
+  assert.match(ios, /\.product\(name: "RtcBasic", package: "AgoraRtcEngine_iOS"\)/);
+  assert.match(ios, new RegExp(`url: "${wrapperBefore[1].replaceAll('.', '\\.')}"`));
+  assert.match(ios, new RegExp(`checksum: "${wrapperBefore[2]}"`));
+  assert.equal(await readFile(manifests.macosManifest, 'utf8'), macosBefore);
+
+  const legacy = await printLegacyContent(sectionedNativeDependenciesContent);
+  assert.match(legacy.stdout, /implementation 'io\.agora\.rtc:agora-special-full:/);
+  assert.match(legacy.stdout, /pod 'AgoraRtcEngine_Special_iOS'/);
+  assert.doesNotMatch(legacy.stdout, /github:|\btag:/i);
+  assert.doesNotMatch(legacy.stdout, /^\s*\|/m);
+});
+
+test('reads RtcBasic before trailing Maven content in compact unscoped input', async () => {
+  const manifests = await createTemporaryManifests();
+  const iosBefore = await readFile(manifests.iosManifest, 'utf8');
+  await writeFile(
+    manifests.iosManifest,
+    iosBefore.replace(
+      '                .product(name: "RtcBasic", package: "AgoraRtcEngine_iOS"),',
+      [
+        '                .product(name: "RtcBasic", package: "AgoraRtcEngine_iOS"),',
+        '                .product(name: "AINS", package: "AgoraRtcEngine_iOS"),',
+      ].join('\n'),
+    ),
+    'utf8',
+  );
+
+  await runUpdater(compactAudioDependenciesContent, manifests);
+
+  const ios = await readFile(manifests.iosManifest, 'utf8');
+  assert.match(
+    ios,
+    /\.package\(url: "https:\/\/github\.com\/AgoraIO\/AgoraAudio_iOS\.git", exact: "4\.5\.3-a1"\)/,
+  );
+  assert.match(ios, /\.product\(name: "RtcBasic", package: "AgoraAudio_iOS"\)/);
+  assert.doesNotMatch(ios, /\.product\(name: "AINS"/);
+
+  const legacy = await printLegacyContent(compactAudioDependenciesContent);
+  assert.match(
+    legacy.stdout,
+    /implementation 'io\.agora\.rtc:agora-special-voice:4\.5\.3\.1\.BASIC1'/,
+  );
+  assert.doesNotMatch(legacy.stdout, /github:|\btag:|products:/i);
+});
+
+test('computes a missing checksum for unscoped iOS and macOS Iris URLs', async () => {
+  const artifact = await createArtifactZip();
+  const expectedChecksum = createHash('sha256').update(artifact).digest('hex');
+
+  for (const platform of ['iOS', 'macOS']) {
+    const manifests = await createTemporaryManifests();
+    const targetManifest = platform === 'iOS' ? manifests.iosManifest : manifests.macosManifest;
+    const otherManifest = platform === 'iOS' ? manifests.macosManifest : manifests.iosManifest;
+    const otherBefore = await readFile(otherManifest, 'utf8');
+
+    await withArtifactServer(
+      `AgoraIrisRTC_${platform}2-4.6.3-build.1.zip`,
+      artifact,
+      async (artifactUrl) => {
+        await runUpdater(`【swiftPM】\nurl: "${artifactUrl}"`, manifests);
+
+        const manifest = await readFile(targetManifest, 'utf8');
+        assert.match(manifest, new RegExp(`url: "${artifactUrl.replaceAll('.', '\\.')}"`));
+        assert.match(manifest, new RegExp(`checksum: "${expectedChecksum}"`));
+
+        const legacy = await printLegacyContent(`【swiftPM】\nurl: "${artifactUrl}"`);
+        assert.doesNotMatch(legacy.stdout, /AgoraIrisRTC_|\burl:/i);
+      },
+    );
+
+    assert.equal(await readFile(otherManifest, 'utf8'), otherBefore);
+  }
+});
+
+test('accepts a Swift binary target snippet with an explicitly supplied checksum', async () => {
+  const manifests = await createTemporaryManifests();
+  const macosBefore = await readFile(manifests.macosManifest, 'utf8');
+  const input = [
+    '【swiftPM】',
+    `url: "${iosIrisUrl}",`,
+    `checksum: "${iosIrisChecksum}"`,
+  ].join('\n');
+
+  await runUpdater(input, manifests);
+
+  const ios = await readFile(manifests.iosManifest, 'utf8');
+  assert.ok(ios.includes(`url: "${iosIrisUrl}"`));
+  assert.match(ios, new RegExp(`checksum: "${iosIrisChecksum}"`));
+  assert.match(ios, /AgoraRtcEngine_iOS\.git/);
+  assert.match(ios, /\.product\(name: "RtcBasic", package: "AgoraRtcEngine_iOS"\)/);
+  assert.equal(await readFile(manifests.macosManifest, 'utf8'), macosBefore);
+});
+
+test('splits iOS and macOS records inside one unscoped SwiftPM section', async () => {
+  const manifests = await createTemporaryManifests();
+  const input = [
+    '【swiftPM】',
+    'github:git@github.com:AgoraIO/AgoraRtcEngine_iOS.git tag:4.6.2 products:RtcBasic,AINS',
+    `url: "${iosIrisUrl}",`,
+    `checksum: "${iosIrisChecksum}"`,
+    'github:https://github.com/AgoraIO/AgoraRtcEngine_macOS.git tag:4.6.2 products:RtcBasic',
+    `url: "${macosIrisUrl}",`,
+    `checksum: "${macosIrisChecksum}"`,
+  ].join('\n');
+
+  await runUpdater(input, manifests);
+
+  const ios = await readFile(manifests.iosManifest, 'utf8');
+  assert.match(ios, /AgoraRtcEngine_iOS\.git", exact: "4\.6\.2"/);
+  assert.match(ios, /\.product\(name: "AINS", package: "AgoraRtcEngine_iOS"\)/);
+  assert.ok(ios.includes(`url: "${iosIrisUrl}"`));
+  assert.match(ios, new RegExp(`checksum: "${iosIrisChecksum}"`));
+
+  const macos = await readFile(manifests.macosManifest, 'utf8');
+  assert.match(macos, /AgoraRtcEngine_macOS\.git", exact: "4\.6\.2"/);
+  assert.doesNotMatch(macos, /\.product\(name: "AINS"/);
+  assert.ok(macos.includes(`url: "${macosIrisUrl}"`));
+  assert.match(macos, new RegExp(`checksum: "${macosIrisChecksum}"`));
+
+  const legacy = await printLegacyContent(input);
+  assert.equal(legacy.stdout, '\n');
+});
+
+test('preserves products while changing the Native package repository', async () => {
+  const manifests = await createTemporaryManifests();
+  const iosBefore = await readFile(manifests.iosManifest, 'utf8');
+  await writeFile(
+    manifests.iosManifest,
+    iosBefore.replace(
+      '                .product(name: "RtcBasic", package: "AgoraRtcEngine_iOS"),',
+      [
+        '                .product(name: "RtcBasic", package: "AgoraRtcEngine_iOS"),',
+        '                .product(name: "AINS", package: "AgoraRtcEngine_iOS"),',
+      ].join('\n'),
+    ),
+    'utf8',
+  );
+
+  await runUpdater(
+    'github:https://github.com/AgoraIO/AgoraAudio_iOS.git tag:4.5.3-a1',
+    manifests,
+  );
+
+  const ios = await readFile(manifests.iosManifest, 'utf8');
+  assert.match(ios, /AgoraAudio_iOS\.git", exact: "4\.5\.3-a1"/);
+  assert.match(ios, /\.product\(name: "RtcBasic", package: "AgoraAudio_iOS"\)/);
+  assert.match(ios, /\.product\(name: "AINS", package: "AgoraAudio_iOS"\)/);
+});
+
+test('does not write either manifest when an Iris artifact download fails', async () => {
+  const manifests = await createTemporaryManifests();
+  const iosBefore = await readFile(manifests.iosManifest, 'utf8');
+  const macosBefore = await readFile(manifests.macosManifest, 'utf8');
+
+  await withArtifactServer(
+    'AgoraIrisRTC_macOS2-4.6.3-build.1.zip',
+    Buffer.from('not found'),
+    async (artifactUrl) => {
+      const input = [
+        'github:https://github.com/AgoraIO/AgoraAudio_iOS.git tag:4.5.3-a1 products:RtcBasic',
+        `url: "${artifactUrl}"`,
+      ].join('\n');
+
+      await assert.rejects(
+        runUpdater(input, manifests),
+        /Failed to download Iris SPM artifact.*404/,
+      );
+    },
+    404,
+  );
+
+  assert.equal(await readFile(manifests.iosManifest, 'utf8'), iosBefore);
+  assert.equal(await readFile(manifests.macosManifest, 'utf8'), macosBefore);
+});
+
+test('rolls back both manifests when the second commit rename fails', async () => {
+  const tempRoot = await mkdtemp(path.join(os.tmpdir(), 'agora-spm-commit-'));
+  const iosManifest = path.join(tempRoot, 'ios-Package.swift');
+  const macosManifest = path.join(tempRoot, 'macos-Package.swift');
+  const iosBefore = 'original iOS manifest';
+  const macosBefore = 'original macOS manifest';
+  await writeFile(iosManifest, iosBefore, 'utf8');
+  await writeFile(macosManifest, macosBefore, 'utf8');
+
+  let markIosInstalled;
+  const iosInstalled = new Promise((resolve) => {
+    markIosInstalled = resolve;
+  });
+  const fileOperations = {
+    writeFile,
+    rename: async (source, destination) => {
+      if (source.startsWith(`${iosManifest}.tmp-`) && destination === iosManifest) {
+        await rename(source, destination);
+        markIosInstalled();
+        return;
+      }
+      if (
+        source.startsWith(`${macosManifest}.tmp-`) &&
+        destination === macosManifest
+      ) {
+        await iosInstalled;
+        throw new Error('injected second manifest rename failure');
+      }
+      await rename(source, destination);
+    },
+    rm,
+  };
+
+  try {
+    await assert.rejects(
+      commitUpdates(
+        [
+          { filePath: iosManifest, content: 'updated iOS manifest' },
+          { filePath: macosManifest, content: 'updated macOS manifest' },
+        ],
+        fileOperations,
+      ),
+      /injected second manifest rename failure/,
+    );
+
+    assert.equal(await readFile(iosManifest, 'utf8'), iosBefore);
+    assert.equal(await readFile(macosManifest, 'utf8'), macosBefore);
+    assert.deepEqual(
+      (await readdir(tempRoot)).sort(),
+      ['ios-Package.swift', 'macos-Package.swift'],
+    );
+  } finally {
+    await rm(tempRoot, { recursive: true, force: true });
+  }
+});
+
+test('waits for all temporary writes before cleaning up a failed preparation', async () => {
+  const tempRoot = await mkdtemp(path.join(os.tmpdir(), 'agora-spm-prepare-'));
+  const iosManifest = path.join(tempRoot, 'ios-Package.swift');
+  const macosManifest = path.join(tempRoot, 'macos-Package.swift');
+  await writeFile(iosManifest, 'original iOS manifest', 'utf8');
+  await writeFile(macosManifest, 'original macOS manifest', 'utf8');
+  const fileOperations = {
+    writeFile: async (filePath, content, encoding) => {
+      if (filePath.startsWith(`${iosManifest}.tmp-`)) {
+        await new Promise((resolve) => setTimeout(resolve, 50));
+        await writeFile(filePath, content, encoding);
+        return;
+      }
+      if (filePath.startsWith(`${macosManifest}.tmp-`)) {
+        throw new Error('injected temporary write failure');
+      }
+      await writeFile(filePath, content, encoding);
+    },
+    rename,
+    rm,
+  };
+
+  try {
+    await assert.rejects(
+      commitUpdates(
+        [
+          { filePath: iosManifest, content: 'updated iOS manifest' },
+          { filePath: macosManifest, content: 'updated macOS manifest' },
+        ],
+        fileOperations,
+      ),
+      /injected temporary write failure/,
+    );
+    await new Promise((resolve) => setTimeout(resolve, 75));
+
+    assert.deepEqual(
+      (await readdir(tempRoot)).sort(),
+      ['ios-Package.swift', 'macos-Package.swift'],
+    );
+  } finally {
+    await rm(tempRoot, { recursive: true, force: true });
+  }
+});
+
+test('reports temporary cleanup failures after preparation fails', async () => {
+  const fileOperations = {
+    writeFile: async () => {
+      throw new Error('injected preparation failure');
+    },
+    rename,
+    rm: async () => {
+      throw new Error('injected preparation cleanup failure');
+    },
+  };
+
+  await assert.rejects(
+    commitUpdates(
+      [{ filePath: '/unused/Package.swift', content: 'updated manifest' }],
+      fileOperations,
+    ),
+    (error) => {
+      assert.ok(error instanceof AggregateError);
+      assert.match(error.message, /prepare SPM manifests and clean up 1 temporary file/);
+      assert.deepEqual(
+        error.errors.map((nestedError) => nestedError.message),
+        ['injected preparation failure', 'injected preparation cleanup failure'],
+      );
+      return true;
+    },
+  );
+});
+
+test('reports every temporary write failure during preparation', async () => {
+  const fileOperations = {
+    writeFile: async (filePath) => {
+      if (filePath.includes('ios-Package.swift')) {
+        throw new Error('injected iOS preparation failure');
+      }
+      throw new Error('injected macOS preparation failure');
+    },
+    rename,
+    rm: async () => {},
+  };
+
+  await assert.rejects(
+    commitUpdates(
+      [
+        { filePath: '/unused/ios-Package.swift', content: 'updated iOS manifest' },
+        {
+          filePath: '/unused/macos-Package.swift',
+          content: 'updated macOS manifest',
+        },
+      ],
+      fileOperations,
+    ),
+    (error) => {
+      assert.ok(error instanceof AggregateError);
+      assert.match(error.message, /2 temporary writes failed/);
+      assert.deepEqual(
+        error.errors.map((nestedError) => nestedError.message),
+        ['injected iOS preparation failure', 'injected macOS preparation failure'],
+      );
+      return true;
+    },
+  );
+});
+
+test('reports temporary cleanup failures after commit fails', async () => {
+  const fileOperations = {
+    writeFile: async () => {},
+    rename: async () => {
+      throw new Error('injected commit failure');
+    },
+    rm: async () => {
+      throw new Error('injected commit cleanup failure');
+    },
+  };
+
+  await assert.rejects(
+    commitUpdates(
+      [{ filePath: '/unused/Package.swift', content: 'updated manifest' }],
+      fileOperations,
+    ),
+    (error) => {
+      assert.ok(error instanceof AggregateError);
+      assert.match(error.message, /commit SPM manifests and clean up 1 temporary file/);
+      assert.deepEqual(
+        error.errors.map((nestedError) => nestedError.message),
+        ['injected commit failure', 'injected commit cleanup failure'],
+      );
+      return true;
+    },
+  );
+});
+
+test('reports every backup cleanup failure after a successful commit', async () => {
+  const fileOperations = {
+    writeFile: async () => {},
+    rename: async () => {},
+    rm: async (filePath) => {
+      if (filePath.includes('ios-Package.swift')) {
+        throw new Error('injected iOS backup cleanup failure');
+      }
+      throw new Error('injected macOS backup cleanup failure');
+    },
+  };
+
+  await assert.rejects(
+    commitUpdates(
+      [
+        { filePath: '/unused/ios-Package.swift', content: 'updated iOS manifest' },
+        {
+          filePath: '/unused/macos-Package.swift',
+          content: 'updated macOS manifest',
+        },
+      ],
+      fileOperations,
+    ),
+    (error) => {
+      assert.ok(error instanceof AggregateError);
+      assert.match(error.message, /clean up 2 SPM manifest backup file/);
+      assert.deepEqual(
+        error.errors.map((nestedError) => nestedError.message),
+        [
+          'injected iOS backup cleanup failure',
+          'injected macOS backup cleanup failure',
+        ],
+      );
+      return true;
+    },
+  );
+});
+
+test('rejects a downloaded Iris artifact that is not a valid zip', async () => {
+  const manifests = await createTemporaryManifests();
+  const iosBefore = await readFile(manifests.iosManifest, 'utf8');
+  const macosBefore = await readFile(manifests.macosManifest, 'utf8');
+
+  await withArtifactServer(
+    'AgoraIrisRTC_iOS2-invalid.zip',
+    Buffer.from('not a zip archive'),
+    async (artifactUrl) => {
+      await assert.rejects(
+        runUpdater(`url:"${artifactUrl}"`, manifests),
+        /Invalid Iris SPM artifact.*valid zip/,
+      );
+    },
+  );
+
+  assert.equal(await readFile(manifests.iosManifest, 'utf8'), iosBefore);
+  assert.equal(await readFile(manifests.macosManifest, 'utf8'), macosBefore);
+});
+
+test('rejects an Iris zip without AgoraRtcWrapper.xcframework at its root', async () => {
+  const manifests = await createTemporaryManifests();
+  const iosBefore = await readFile(manifests.iosManifest, 'utf8');
+  const macosBefore = await readFile(manifests.macosManifest, 'utf8');
+  const artifact = await createArtifactZip('Other.xcframework');
+
+  await withArtifactServer(
+    'AgoraIrisRTC_iOS2-wrong-root.zip',
+    artifact,
+    async (artifactUrl) => {
+      await assert.rejects(
+        runUpdater(`url:"${artifactUrl}"`, manifests),
+        /must contain AgoraRtcWrapper\.xcframework at archive root/,
+      );
+    },
+  );
+
+  assert.equal(await readFile(manifests.iosManifest, 'utf8'), iosBefore);
+  assert.equal(await readFile(manifests.macosManifest, 'utf8'), macosBefore);
+});
+
+test('rejects an Iris artifact that exceeds the download size limit', async () => {
+  const manifests = await createTemporaryManifests();
+  const iosBefore = await readFile(manifests.iosManifest, 'utf8');
+  const macosBefore = await readFile(manifests.macosManifest, 'utf8');
+  const artifact = await createArtifactZip();
+
+  await withArtifactServer(
+    'AgoraIrisRTC_iOS2-too-large.zip',
+    artifact,
+    async (artifactUrl) => {
+      await assert.rejects(
+        runUpdater(`url:"${artifactUrl}"`, manifests, {
+          env: { AGORA_SPM_ARTIFACT_MAX_BYTES: '8' },
+        }),
+        /exceeds maximum size of 8 bytes/,
+      );
+    },
+  );
+
+  assert.equal(await readFile(manifests.iosManifest, 'utf8'), iosBefore);
+  assert.equal(await readFile(manifests.macosManifest, 'utf8'), macosBefore);
+});
+
+test('times out a stalled Iris artifact download before writing manifests', async () => {
+  const manifests = await createTemporaryManifests();
+  const iosBefore = await readFile(manifests.iosManifest, 'utf8');
+  const macosBefore = await readFile(manifests.macosManifest, 'utf8');
+
+  await withArtifactServer(
+    'AgoraIrisRTC_iOS2-stalled.zip',
+    Buffer.alloc(0),
+    async (artifactUrl) => {
+      await assert.rejects(
+        runUpdater(`url:"${artifactUrl}"`, manifests, {
+          env: { AGORA_SPM_ARTIFACT_TIMEOUT_MS: '50' },
+          timeout: 1000,
+        }),
+        /download timed out after 50 ms/,
+      );
+    },
+    { stall: true },
+  );
+
+  assert.equal(await readFile(manifests.iosManifest, 'utf8'), iosBefore);
+  assert.equal(await readFile(manifests.macosManifest, 'utf8'), macosBefore);
 });
 
 test('keeps FlutterFramework outside Native updater marker regions', async () => {
@@ -204,6 +800,22 @@ test('accepts mixed legacy content and multiline reordered SPM platform blocks',
   assert.match(macos, new RegExp(`url: "${macosIrisUrl.replaceAll('.', '\\.')}"`));
 });
 
+test('does not attach an unscoped SwiftPM section to a preceding legacy platform record', async () => {
+  const manifests = await createTemporaryManifests();
+  const macosBefore = await readFile(manifests.macosManifest, 'utf8');
+  const input = [
+    "platform:Android implementation 'io.agora.rtc:agora-special-full:4.6.2'",
+    '【swiftPM】',
+    'github:https://github.com/AgoraIO/AgoraRtcEngine_iOS.git tag:4.6.2',
+  ].join('\n');
+
+  await runUpdater(input, manifests);
+
+  const ios = await readFile(manifests.iosManifest, 'utf8');
+  assert.match(ios, /AgoraRtcEngine_iOS\.git", exact: "4\.6\.2"/);
+  assert.equal(await readFile(manifests.macosManifest, 'utf8'), macosBefore);
+});
+
 test('accepts a legacy-only block after SPM metadata for the same platform', async () => {
   const manifests = await createTemporaryManifests();
   const input = [
@@ -234,6 +846,19 @@ test('prints legacy dependency content without SPM-only fields', async () => {
   assert.match(result.stdout, /platform:iOS cocoapods:/);
   assert.doesNotMatch(result.stdout, /products|iris-checksum|github|iris-url|version/i);
   assert.doesNotMatch(result.stdout, /"/);
+});
+
+test('removes a SwiftPM section after a legacy platform record from legacy content', async () => {
+  const input = [
+    "platform:Android implementation 'io.agora.rtc:agora-special-full:4.6.2'",
+    '【swiftPM】',
+    'github:https://github.com/AgoraIO/AgoraRtcEngine_iOS.git tag:4.6.2',
+  ].join('\n');
+
+  const result = await printLegacyContent(input);
+
+  assert.match(result.stdout, /platform:Android implementation/);
+  assert.doesNotMatch(result.stdout, /swiftpm|github|tag:/i);
 });
 
 test('preserves version and tag fields in non-Apple legacy records', async () => {
@@ -300,18 +925,67 @@ test('rejects duplicate platform blocks before writing either manifest', async (
   assert.equal(await readFile(manifests.macosManifest, 'utf8'), macosBefore);
 });
 
-test('rejects incomplete metadata before writing either manifest', async () => {
+test('rejects a Native GitHub URL without a tag before writing either manifest', async () => {
   const manifests = await createTemporaryManifests();
   const iosBefore = await readFile(manifests.iosManifest, 'utf8');
   const macosBefore = await readFile(manifests.macosManifest, 'utf8');
-  const incompleteInput = completeDependenciesContent.replace(
-    ` iris-checksum:${macosIrisChecksum}`,
-    '',
-  );
+  const incompleteInput =
+    'platform:macOS github:https://github.com/AgoraIO/AgoraRtcEngine_macOS.git';
 
   await assert.rejects(
     runUpdater(incompleteInput, manifests),
-    /Incomplete SPM metadata for macOS/,
+    /Incomplete Native SPM metadata for macOS/,
+  );
+
+  assert.equal(await readFile(manifests.iosManifest, 'utf8'), iosBefore);
+  assert.equal(await readFile(manifests.macosManifest, 'utf8'), macosBefore);
+});
+
+test('rejects an empty GitHub field before writing either manifest', async () => {
+  const manifests = await createTemporaryManifests();
+  const iosBefore = await readFile(manifests.iosManifest, 'utf8');
+  const macosBefore = await readFile(manifests.macosManifest, 'utf8');
+
+  await assert.rejects(
+    runUpdater('platform:iOS github:', manifests),
+    /Invalid SPM metadata for iOS: github/,
+  );
+
+  assert.equal(await readFile(manifests.iosManifest, 'utf8'), iosBefore);
+  assert.equal(await readFile(manifests.macosManifest, 'utf8'), macosBefore);
+});
+
+test('rejects an empty tag field before writing either manifest', async () => {
+  const manifests = await createTemporaryManifests();
+  const iosBefore = await readFile(manifests.iosManifest, 'utf8');
+  const macosBefore = await readFile(manifests.macosManifest, 'utf8');
+  const input =
+    'platform:iOS github:https://github.com/AgoraIO/AgoraRtcEngine_iOS.git tag:';
+
+  await assert.rejects(
+    runUpdater(input, manifests),
+    /Invalid SPM metadata for iOS: tag\/version/,
+  );
+
+  assert.equal(await readFile(manifests.iosManifest, 'utf8'), iosBefore);
+  assert.equal(await readFile(manifests.macosManifest, 'utf8'), macosBefore);
+});
+
+test('rejects an empty checksum field before writing either manifest', async () => {
+  const manifests = await createTemporaryManifests();
+  const iosBefore = await readFile(manifests.iosManifest, 'utf8');
+  const macosBefore = await readFile(manifests.macosManifest, 'utf8');
+
+  await withArtifactServer(
+    'AgoraIrisRTC_iOS2-empty-checksum.zip',
+    Buffer.from('unused artifact'),
+    async (artifactUrl) => {
+      const input = `platform:iOS url:"${artifactUrl}" checksum:`;
+      await assert.rejects(
+        runUpdater(input, manifests),
+        /Invalid SPM metadata for iOS: iris-checksum/,
+      );
+    },
   );
 
   assert.equal(await readFile(manifests.iosManifest, 'utf8'), iosBefore);
@@ -366,20 +1040,20 @@ test('leaves repeated legacy-only Apple platform blocks unchanged', async () => 
   assert.equal(await readFile(manifests.macosManifest, 'utf8'), macosBefore);
 });
 
-test('rejects SPM metadata that omits the platform field', async () => {
+test('infers the platform when SPM metadata omits the platform field', async () => {
   const manifests = await createTemporaryManifests();
-  const iosBefore = await readFile(manifests.iosManifest, 'utf8');
   const macosBefore = await readFile(manifests.macosManifest, 'utf8');
   const missingPlatform = completeDependenciesContent
     .split('\n')[0]
     .replace('platform:iOS ', '');
 
-  await assert.rejects(
-    runUpdater(missingPlatform, manifests),
-    /SPM metadata requires an explicit platform field/,
-  );
+  await runUpdater(missingPlatform, manifests);
 
-  assert.equal(await readFile(manifests.iosManifest, 'utf8'), iosBefore);
+  const ios = await readFile(manifests.iosManifest, 'utf8');
+  assert.match(
+    ios,
+    /\.package\(url: "https:\/\/github\.com\/AgoraIO\/AgoraRtcEngine_iOS\.git", exact: "4\.6\.2"\)/,
+  );
   assert.equal(await readFile(manifests.macosManifest, 'utf8'), macosBefore);
 });
 
@@ -539,14 +1213,11 @@ test('dependency update workflow tests, runs, and validates the SPM updater befo
 
   assert.ok(setupNodeIndex >= 0, 'workflow must set up Node');
   assert.match(workflow, /node-version: ['"]?22['"]?/);
-  assert.match(workflow, /platform:iOS[\s\S]*github:/);
-  assert.match(workflow, /platform:macOS[\s\S]*github:/);
-  assert.match(workflow, /Each platform field starts a dependency record/);
-  assert.match(
-    workflow,
-    /Apple records containing SPM metadata are processed as SPM blocks/,
-  );
-  assert.match(workflow, /Fields may stay on that line or continue on following lines/);
+  assert.match(workflow, /【swiftPM】/);
+  assert.match(workflow, /github:git@github\.com:AgoraIO\/AgoraRtcEngine_iOS\.git/);
+  assert.match(workflow, /Platform is inferred from the Native repository or Iris archive name/);
+  assert.match(workflow, /products is optional/);
+  assert.match(workflow, /Missing Iris checksum is computed/);
   assert.ok(testUpdaterIndex > setupNodeIndex, 'workflow must run updater tests after setup');
   assert.ok(prepareLegacyIndex > testUpdaterIndex, 'workflow must sanitize legacy input after tests');
   assert.ok(parseLegacyIndex > prepareLegacyIndex, 'workflow must parse sanitized legacy input');
@@ -581,15 +1252,24 @@ test('workflow old-ref guard preserves legacy input and rejects SPM intent', asy
   });
   assert.match(legacyResult.stdout, /SPM dependencies unchanged/);
 
-  let spmError;
-  try {
-    await execFileAsync('bash', ['-c', script], {
-      cwd: oldTarget,
-      env: { ...process.env, DEPENDENCIES_CONTENT: 'tag:4.6.2' },
-    });
-  } catch (error) {
-    spmError = error;
+  const spmInputs = [
+    'tag:4.6.2',
+    `checksum:${iosIrisChecksum}`,
+    'github:https://github.com/AgoraIO/AgoraRtcEngine_iOS.git tag:4.6.2',
+    `【swiftPM】\nurl: "${iosIrisUrl}"`,
+    `url: "${macosIrisUrl}"`,
+  ];
+  for (const dependenciesContent of spmInputs) {
+    let spmError;
+    try {
+      await execFileAsync('bash', ['-c', script], {
+        cwd: oldTarget,
+        env: { ...process.env, DEPENDENCIES_CONTENT: dependenciesContent },
+      });
+    } catch (error) {
+      spmError = error;
+    }
+    assert.ok(spmError, `SPM input must fail without updater: ${dependenciesContent}`);
+    assert.match(spmError.stdout, /Target ref does not contain the Apple SPM dependency updater/);
   }
-  assert.ok(spmError, 'SPM input must fail when the target ref has no updater');
-  assert.match(spmError.stdout, /Target ref does not contain the Apple SPM dependency updater/);
 });
