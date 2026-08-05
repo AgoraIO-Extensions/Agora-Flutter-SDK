@@ -356,6 +356,39 @@ test('rejects Iris SPM derivation from an Apple build section marked failed', ()
   );
 });
 
+test('rejects a failed Apple build section without a CocoaPods result', () => {
+  const failedBuildResult = [
+    'Iris iOS:',
+    'CDN:',
+    'https://download.agora.io/sdk/release/iris_4.7.0-dev.2_DCG_iOS_Video_Standalone.zip',
+    'Failure found on above jobs',
+    'Iris Android:',
+    "api 'io.agora.rtc:iris-rtc:4.7.0-dev.2'",
+    '【swiftPM】',
+    'github:https://github.com/AgoraIO/AgoraRtcEngine_iOS.git tag:4.7.0 products:RtcBasic',
+  ].join('\n');
+
+  assert.throws(
+    () => spmUpdater.parsePlatformDependencies(failedBuildResult),
+    /Iris iOS build result is marked failed/,
+  );
+});
+
+test('rejects an explicit Iris SPM URL inside a failed Apple build section', () => {
+  const failedBuildResult = [
+    'Iris iOS:',
+    'url:https://download.agora.io/sdk/release/AgoraIrisRTC_iOS2-4.7.0-dev.2.zip',
+    'Failure found on above jobs',
+    'Iris Android:',
+    "api 'io.agora.rtc:iris-rtc:4.7.0-dev.2'",
+  ].join('\n');
+
+  assert.throws(
+    () => spmUpdater.parsePlatformDependencies(failedBuildResult),
+    /Iris iOS build result is marked failed/,
+  );
+});
+
 test('computes a missing checksum for unscoped iOS and macOS Iris URLs', async () => {
   const artifact = await createArtifactZip();
   const expectedChecksum = createHash('sha256').update(artifact).digest('hex');

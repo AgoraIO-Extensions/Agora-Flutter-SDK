@@ -174,15 +174,16 @@ function findFailedIrisApplePlatforms(content) {
 function parseIrisCocoaPodsDependencies(content) {
   const dependencies = new Map();
   const failedPlatforms = findFailedIrisApplePlatforms(content);
+  const failedPlatform = failedPlatforms.values().next().value;
+  if (failedPlatform) {
+    throw new Error(`Iris ${failedPlatform} build result is marked failed`);
+  }
   const irisPodPattern =
     /\bpod\s+(['"])(AgoraIrisRTC_(iOS|macOS)[A-Za-z0-9_-]*)\1\s*,\s*(['"])([A-Za-z0-9_.+-]+)\4/gi;
 
   for (const match of content.matchAll(irisPodPattern)) {
     const [, , podName, platformName, , version] = match;
     const platform = platformName.toLowerCase() === 'ios' ? 'iOS' : 'macOS';
-    if (failedPlatforms.has(platform)) {
-      throw new Error(`Iris ${platform} build result is marked failed`);
-    }
     if (dependencies.has(platform)) {
       throw new Error(`Duplicate Iris CocoaPods metadata for ${platform}`);
     }
