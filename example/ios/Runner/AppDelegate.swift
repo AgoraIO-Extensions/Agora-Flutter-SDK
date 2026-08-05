@@ -2,7 +2,7 @@ import UIKit
 import Flutter
 import agora_rtc_engine
 
-@UIApplicationMain
+@main
 @objc class AppDelegate: FlutterAppDelegate {
     
     private var customCaptureAudioPlugin: CustomCaptureAudioPlugin!

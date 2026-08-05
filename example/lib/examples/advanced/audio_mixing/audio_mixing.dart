@@ -30,10 +30,12 @@ class _AudioMixingState extends State<AudioMixing> {
   late final TextEditingController _controller;
 
   bool _isStartedAudioMixing = false;
+  bool _isPausedAudioMixing = false;
   bool _loopback = false;
   bool _replace = false;
   double _cycle = 1.0;
   double _startPos = 1000;
+  double _mixingVolume = 100;
 
   @override
   void initState() {
@@ -123,10 +125,12 @@ class _AudioMixingState extends State<AudioMixing> {
   Future<void> _leaveChannel() async {
     await _stopAudioMixing();
     _isStartedAudioMixing = false;
+    _isPausedAudioMixing = false;
     _loopback = false;
     _replace = false;
     _cycle = 1.0;
     _startPos = 0;
+    _mixingVolume = 100;
     await _engine.leaveChannel();
   }
 
@@ -153,6 +157,7 @@ class _AudioMixingState extends State<AudioMixing> {
     );
     setState(() {
       _isStartedAudioMixing = true;
+      _isPausedAudioMixing = false;
     });
   }
 
@@ -160,12 +165,36 @@ class _AudioMixingState extends State<AudioMixing> {
     await _engine.stopAudioMixing();
     setState(() {
       _isStartedAudioMixing = false;
+      _isPausedAudioMixing = false;
     });
+  }
+
+  Future<void> _toggleAudioMixingPaused() async {
+    if (_isPausedAudioMixing) {
+      await _engine.resumeAudioMixing();
+    } else {
+      await _engine.pauseAudioMixing();
+    }
+    setState(() {
+      _isPausedAudioMixing = !_isPausedAudioMixing;
+    });
+  }
+
+  Future<void> _logAudioMixingPosition() async {
+    final position = await _engine.getAudioMixingCurrentPosition();
+    logSink.log('getAudioMixingCurrentPosition $position');
+  }
+
+  Future<void> _setAudioMixingVolume(double value) async {
+    setState(() {
+      _mixingVolume = value;
+    });
+    await _engine.adjustAudioMixingVolume(value.toInt());
   }
 
   @override
   Widget build(BuildContext context) {
-    return Column(
+    return ListView(
       children: [
         TextField(
           controller: _controller,
@@ -270,6 +299,40 @@ class _AudioMixingState extends State<AudioMixing> {
                     : _stopAudioMixing,
                 child: Text(
                     '${_isStartedAudioMixing ? 'Stop' : 'Start'} Audio Mixing'),
+              ),
+              Row(
+                children: [
+                  const Text('Mixing volume:'),
+                  Expanded(
+                    child: Slider(
+                      value: _mixingVolume,
+                      min: 0,
+                      max: 100,
+                      divisions: 10,
+                      label: _mixingVolume.round().toString(),
+                      onChanged:
+                          _isStartedAudioMixing ? _setAudioMixingVolume : null,
+                    ),
+                  ),
+                ],
+              ),
+              Wrap(
+                spacing: 8,
+                runSpacing: 8,
+                children: [
+                  ElevatedButton(
+                    onPressed:
+                        _isStartedAudioMixing ? _toggleAudioMixingPaused : null,
+                    child: Text(
+                      _isPausedAudioMixing ? 'Resume mixing' : 'Pause mixing',
+                    ),
+                  ),
+                  ElevatedButton(
+                    onPressed:
+                        _isStartedAudioMixing ? _logAudioMixingPosition : null,
+                    child: const Text('Mixing position'),
+                  ),
+                ],
               ),
             ],
           ),

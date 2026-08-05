@@ -309,8 +309,8 @@ class _State extends State<DeviceManager> {
     return Expanded(
         child: Stack(
       children: [
-        Row(
-          children: const [
+        const Row(
+          children: [
             Expanded(
                 flex: 1,
                 child: kIsWeb

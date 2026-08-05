@@ -8,7 +8,7 @@ import 'rtc_engine.dart';
 
 // ignore_for_file: non_constant_identifier_names
 
-class _Rect extends Struct {
+final class _Rect extends Struct {
   @Double()
   external double x;
   @Double()
@@ -28,7 +28,7 @@ class _Rect extends Struct {
   }
 }
 
-class _Display extends Struct {
+final class _Display extends Struct {
   @Uint32()
   external int id;
   @Float()
@@ -67,7 +67,7 @@ class Display {
       _display.rotation);
 }
 
-class _DisplayCollection extends Struct {
+final class _DisplayCollection extends Struct {
   external Pointer<_Display> displays;
   @Uint32()
   external int length;
@@ -75,7 +75,7 @@ class _DisplayCollection extends Struct {
 
 const _kBasicResultLength = 512;
 
-class _Window extends Struct {
+final class _Window extends Struct {
   @Uint32()
   external int id;
   @Array(_kBasicResultLength)
@@ -120,7 +120,7 @@ class Window {
   }
 }
 
-class _WindowCollection extends Struct {
+final class _WindowCollection extends Struct {
   external Pointer<_Window> windows;
   @Uint32()
   external int length;

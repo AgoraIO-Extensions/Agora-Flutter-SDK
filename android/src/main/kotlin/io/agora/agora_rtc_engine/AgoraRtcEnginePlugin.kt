@@ -14,7 +14,6 @@ import io.flutter.embedding.engine.plugins.FlutterPlugin
 import io.flutter.plugin.common.*
 import io.flutter.plugin.common.MethodChannel.MethodCallHandler
 import io.flutter.plugin.common.MethodChannel.Result
-import io.flutter.plugin.common.PluginRegistry.Registrar
 import io.flutter.plugin.platform.PlatformViewRegistry
 import kotlin.math.abs
 
@@ -125,7 +124,6 @@ open class CallApiMethodCallHandler(
 
 /** AgoraRtcEnginePlugin */
 class AgoraRtcEnginePlugin : FlutterPlugin, MethodCallHandler, EventChannel.StreamHandler {
-  private var registrar: Registrar? = null
   private var binding: FlutterPlugin.FlutterPluginBinding? = null
   private lateinit var applicationContext: Context
 
@@ -143,26 +141,6 @@ class AgoraRtcEnginePlugin : FlutterPlugin, MethodCallHandler, EventChannel.Stre
   private val handler = Handler(Looper.getMainLooper())
   private lateinit var rtcChannelPlugin: AgoraRtcChannelPlugin;// = AgoraRtcChannelPlugin(irisRtcEngine)
   private lateinit var callApiMethodCallHandler: CallApiMethodCallHandler
-
-  // This static function is optional and equivalent to onAttachedToEngine. It supports the old
-  // pre-Flutter-1.12 Android projects. You are encouraged to continue supporting
-  // plugin registration via this function while apps migrate to use the new Android APIs
-  // post-flutter-1.12 via https://flutter.dev/go/android-project-migration.
-  //
-  // It is encouraged to share logic between onAttachedToEngine and registerWith to keep
-  // them functionally equivalent. Only one of onAttachedToEngine or registerWith will be called
-  // depending on the user's project. onAttachedToEngine or registerWith must both be defined
-  // in the same class.
-  companion object {
-    @JvmStatic
-    fun registerWith(registrar: Registrar) {
-      AgoraRtcEnginePlugin().apply {
-        this.registrar = registrar
-
-        initPlugin(registrar.context(), registrar.messenger(), registrar.platformViewRegistry())
-      }
-    }
-  }
 
   private fun initPlugin(
     context: Context,
@@ -224,9 +202,6 @@ class AgoraRtcEnginePlugin : FlutterPlugin, MethodCallHandler, EventChannel.Stre
 //  }
 
   override fun onMethodCall(@NonNull call: MethodCall, @NonNull result: Result) {
-//    val textureRegistry = registrar?.textures() ?: binding?.textureRegistry
-//    val messenger = registrar?.messenger() ?: binding?.binaryMessenger
-
     // Iris supported
     when (call.method) {
         "createTextureRender" -> {
@@ -250,8 +225,7 @@ class AgoraRtcEnginePlugin : FlutterPlugin, MethodCallHandler, EventChannel.Stre
 
   private fun getAssetAbsolutePath(call: MethodCall, result: Result) {
     call.arguments<String>()?.let {
-      val assetKey = registrar?.lookupKeyForAsset(it)
-        ?: binding?.flutterAssets?.getAssetFilePathByName(it)
+      val assetKey = binding?.flutterAssets?.getAssetFilePathByName(it)
       try {
         applicationContext.assets.openFd(assetKey!!).close()
         result.success("/assets/$assetKey")
