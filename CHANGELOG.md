@@ -1,5 +1,283 @@
 # Changelog
 
+## [5.3.1-sp.3735.b.2](https://github.com/AgoraIO-Extensions/Agora-Flutter-SDK/compare/5.3.1-sp.3735.b.1...5.3.1-sp.3735.b.2) (2026-08-05)
+
+### Bug Fixes
+
+* remove Flutter v1 embedding from 5.3.1 special ([#2661](https://github.com/AgoraIO-Extensions/Agora-Flutter-SDK/issues/2661)) ([f030d9d](https://github.com/AgoraIO-Extensions/Agora-Flutter-SDK/commit/f030d9d31f6db3bbdd8347b8d525cd5ca8738ea0))
+
+## [5.3.1-sp.3735.b.1](https://github.com/AgoraIO-Extensions/Agora-Flutter-SDK/compare/5.3.1-sp.3735...5.3.1-sp.3735.b.1) (2025-08-14)
+
+## [5.3.1-sp.3735](https://github.com/AgoraIO-Extensions/Agora-Flutter-SDK/compare/v5.3.1...5.3.1-sp.3735) (2025-07-16)
+
+## [5.3.1](https://github.com/AgoraIO-Extensions/Agora-Flutter-SDK/compare/v5.3.0...v5.3.1) (2022-09-27)
+
+### Bug Fixes
+
+* fix 'Sending a message before the FlutterEngine has been run.' error ([2e74ad3](https://github.com/AgoraIO-Extensions/Agora-Flutter-SDK/commit/2e74ad3b9ee2235d29d755edf5731f5d5e0e4ac7))
+* Fix [#738](https://github.com/AgoraIO-Extensions/Agora-Flutter-SDK/issues/738), [#752](https://github.com/AgoraIO-Extensions/Agora-Flutter-SDK/issues/752), [#739](https://github.com/AgoraIO-Extensions/Agora-Flutter-SDK/issues/739) ([#767](https://github.com/AgoraIO-Extensions/Agora-Flutter-SDK/issues/767)) ([574e814](https://github.com/AgoraIO-Extensions/Agora-Flutter-SDK/commit/574e814b96a44cb2886269248f5364df9498933a))
+
+## [5.3.0](https://github.com/AgoraIO-Extensions/Agora-Flutter-SDK/compare/v5.2.0...v5.3.0) (2022-07-19)
+
+### Features
+
+* Upgrade native sdk 3.7.0 ([#702](https://github.com/AgoraIO-Extensions/Agora-Flutter-SDK/issues/702)) ([a6e53f4](https://github.com/AgoraIO-Extensions/Agora-Flutter-SDK/commit/a6e53f477f0cd3072a5639eff5762bf0b866ed4b))
+
+### Bug Fixes
+
+* web joinChannelWithUserAccount not publish stream ([#704](https://github.com/AgoraIO-Extensions/Agora-Flutter-SDK/issues/704)) ([1bc00ca](https://github.com/AgoraIO-Extensions/Agora-Flutter-SDK/commit/1bc00ca6f3d44f8125d0517d664eaf65716cbc9c))
+
+## [5.2.0](https://github.com/AgoraIO-Extensions/Agora-Flutter-SDK/compare/v5.1.1...v5.2.0) (2022-05-20)
+
+### Features
+
+* Upgrade Flutter SDK 3.0 ([#685](https://github.com/AgoraIO-Extensions/Agora-Flutter-SDK/issues/685)) ([626e7c7](https://github.com/AgoraIO-Extensions/Agora-Flutter-SDK/commit/626e7c7c4d57a1f8f44b6d145735b4b6695c7e17))
+
+## [5.1.1](https://github.com/AgoraIO-Extensions/Agora-Flutter-SDK/compare/v5.1.0...v5.1.1) (2022-05-13)
+
+### Features
+
+* Upgrade gradle version to 7.x ([dee7443](https://github.com/AgoraIO-Extensions/Agora-Flutter-SDK/commit/dee744333948a752aa38aab52d4c4f6394ba1254))
+
+### Bug Fixes
+
+* fix IrisEventHandler crash ([#667](https://github.com/AgoraIO-Extensions/Agora-Flutter-SDK/issues/667)) ([95bf140](https://github.com/AgoraIO-Extensions/Agora-Flutter-SDK/commit/95bf140e455567f36c63989961570d937dfd4194))
+
+## [5.1.0](https://github.com/AgoraIO-Extensions/Agora-Flutter-SDK/compare/v5.0.1...v5.1.0) (2022-04-15)
+
+### Features
+
+* Upgrade native sdk 3.6.2 ([#651](https://github.com/AgoraIO-Extensions/Agora-Flutter-SDK/issues/651)) ([8d03ff3](https://github.com/AgoraIO-Extensions/Agora-Flutter-SDK/commit/8d03ff34e04b84557bfb8f51d054dcc459bf8377))
+
+### Bug Fixes
+
+* Add missing named parameter 'channelId' for SurfaceView in example ([#642](https://github.com/AgoraIO-Extensions/Agora-Flutter-SDK/issues/642)) ([3c62be4](https://github.com/AgoraIO-Extensions/Agora-Flutter-SDK/commit/3c62be4b9732ea517d177904722630a4fab1f4e7))
+
+## [5.0.1](https://github.com/AgoraIO-Extensions/Agora-Flutter-SDK/compare/v5.0.1-rc.1...v5.0.1) (2022-03-16)
+
+## [5.0.1-rc.1](https://github.com/AgoraIO-Extensions/Agora-Flutter-SDK/compare/v5.0.0...v5.0.1-rc.1) (2022-03-13)
+
+### Features
+
+* Enhance flutter analyze ([868995b](https://github.com/AgoraIO-Extensions/Agora-Flutter-SDK/commit/868995bd88335d52f8efaaa6fc19b22655327742))
+
+### Bug Fixes
+
+* Fix pana static analyze ([a35bb13](https://github.com/AgoraIO-Extensions/Agora-Flutter-SDK/commit/a35bb13ba8174ace050172e874b6d72e7b332f5e))
+
+## [5.0.0](https://github.com/AgoraIO-Extensions/Agora-Flutter-SDK/compare/v4.2.1...v5.0.0) (2022-02-21)
+
+### Features
+
+* Add no-response bot ([#586](https://github.com/AgoraIO-Extensions/Agora-Flutter-SDK/issues/586)) ([3027cc5](https://github.com/AgoraIO-Extensions/Agora-Flutter-SDK/commit/3027cc5a0c3ca1765d636bfb6ebcfc92ec42c62e))
+* Support flutter desktop ([#600](https://github.com/AgoraIO-Extensions/Agora-Flutter-SDK/issues/600)) ([39b5ea3](https://github.com/AgoraIO-Extensions/Agora-Flutter-SDK/commit/39b5ea38294ce4f2f72a48f20f474753aace255b))
+
+## [4.2.1](https://github.com/AgoraIO-Extensions/Agora-Flutter-SDK/compare/v4.2.0...v4.2.1) (2022-02-08)
+
+## [4.2.0](https://github.com/AgoraIO-Extensions/Agora-Flutter-SDK/compare/v4.2.0-rc.2...v4.2.0) (2022-01-11)
+
+## [4.2.0-rc.2](https://github.com/AgoraIO-Extensions/Agora-Flutter-SDK/compare/v4.2.0-rc.1...v4.2.0-rc.2) (2021-12-24)
+
+### Bug Fixes
+
+* enable to enabled ([7a5e5b9](https://github.com/AgoraIO-Extensions/Agora-Flutter-SDK/commit/7a5e5b9d9c0bb909b3cbeb301b9d7198b2dd311f))
+
+## [4.2.0-rc.1](https://github.com/AgoraIO-Extensions/Agora-Flutter-SDK/compare/v4.2.0-rc.0...v4.2.0-rc.1) (2021-12-14)
+
+### Bug Fixes
+
+* optimize `getAudioFileInfo` & `selectAudioTrack` ([#526](https://github.com/AgoraIO-Extensions/Agora-Flutter-SDK/issues/526)) ([df31b7c](https://github.com/AgoraIO-Extensions/Agora-Flutter-SDK/commit/df31b7c77e0f3a518ab2abb326f8f07f0b1ccb01)), references [#4](https://github.com/AgoraIO-Extensions/Agora-Flutter-SDK/issues/4) [#3](https://github.com/AgoraIO-Extensions/Agora-Flutter-SDK/issues/3) [#2](https://github.com/AgoraIO-Extensions/Agora-Flutter-SDK/issues/2) [#6](https://github.com/AgoraIO-Extensions/Agora-Flutter-SDK/issues/6) [#5](https://github.com/AgoraIO-Extensions/Agora-Flutter-SDK/issues/5) [#4](https://github.com/AgoraIO-Extensions/Agora-Flutter-SDK/issues/4) [#3](https://github.com/AgoraIO-Extensions/Agora-Flutter-SDK/issues/3) [#2](https://github.com/AgoraIO-Extensions/Agora-Flutter-SDK/issues/2)
+
+## [4.2.0-rc.0](https://github.com/AgoraIO-Extensions/Agora-Flutter-SDK/compare/v4.1.0-rc.0...v4.2.0-rc.0) (2021-12-13)
+
+### Features
+
+* support native 3.5.2 ([#525](https://github.com/AgoraIO-Extensions/Agora-Flutter-SDK/issues/525)) ([f1ccf63](https://github.com/AgoraIO-Extensions/Agora-Flutter-SDK/commit/f1ccf634bf6a362e12e86a90e2145666f500605b))
+
+## [4.1.0-rc.0](https://github.com/AgoraIO-Extensions/Agora-Flutter-SDK/compare/v4.0.7...v4.1.0-rc.0) (2021-12-13)
+
+### Features
+
+* [Android] Implement custom audio source example ([#475](https://github.com/AgoraIO-Extensions/Agora-Flutter-SDK/issues/475)) ([9cd787d](https://github.com/AgoraIO-Extensions/Agora-Flutter-SDK/commit/9cd787d74be15e19328103b6f97cbb71a76d9b9f))
+* [iOS] Implement custom audio source example ([#481](https://github.com/AgoraIO-Extensions/Agora-Flutter-SDK/issues/481)) ([7be84b3](https://github.com/AgoraIO-Extensions/Agora-Flutter-SDK/commit/7be84b3b9877d6146b952bcf66d82d87f5974aba))
+* add missing flutter implementation for native sdk 3.5.1 ([#477](https://github.com/AgoraIO-Extensions/Agora-Flutter-SDK/issues/477)) ([d44f02f](https://github.com/AgoraIO-Extensions/Agora-Flutter-SDK/commit/d44f02ff486b01261c1f5fe27dc105d93c6562e6))
+* Adjust example structure ([#488](https://github.com/AgoraIO-Extensions/Agora-Flutter-SDK/issues/488)) ([e7c142c](https://github.com/AgoraIO-Extensions/Agora-Flutter-SDK/commit/e7c142c1593f8ca2afbf48a6d8f0c20bd039b2f9))
+* Basic setup ci to run unit test for Android/iOS ([#471](https://github.com/AgoraIO-Extensions/Agora-Flutter-SDK/issues/471)) ([1800f83](https://github.com/AgoraIO-Extensions/Agora-Flutter-SDK/commit/1800f83bd9d5f700d3993908d45d087879a0255c))
+* Full support for native sdk 3.5.1 ([#484](https://github.com/AgoraIO-Extensions/Agora-Flutter-SDK/issues/484)) ([a7efd53](https://github.com/AgoraIO-Extensions/Agora-Flutter-SDK/commit/a7efd53153a8eb649600e4b7ba19d697790b452c))
+* Implement RtcEngine plugin feature ([#470](https://github.com/AgoraIO-Extensions/Agora-Flutter-SDK/issues/470)) ([2f807be](https://github.com/AgoraIO-Extensions/Agora-Flutter-SDK/commit/2f807be988132e48b7c0b11e94f56e5bdefde86a))
+* support native sdk 3.5.1 ([#472](https://github.com/AgoraIO-Extensions/Agora-Flutter-SDK/issues/472)) ([d137594](https://github.com/AgoraIO-Extensions/Agora-Flutter-SDK/commit/d1375947112e14dd12c4e799fa261fd11060e67e))
+
+### Bug Fixes
+
+* fix return type not supported error on iOS ([#480](https://github.com/AgoraIO-Extensions/Agora-Flutter-SDK/issues/480)) ([4d86d46](https://github.com/AgoraIO-Extensions/Agora-Flutter-SDK/commit/4d86d46e7e6cccfdf981b08d956d2e6644906d05))
+
+## [4.0.7](https://github.com/AgoraIO-Extensions/Agora-Flutter-SDK/compare/v4.0.7-rc.0...v4.0.7) (2021-09-16)
+
+### Features
+
+* support native 3.5.0.2 ([87fadea](https://github.com/AgoraIO-Extensions/Agora-Flutter-SDK/commit/87fadea7a54fbffc7b9ab6cee08bb7690ab1aca5))
+
+## [4.0.7-rc.0](https://github.com/AgoraIO-Extensions/Agora-Flutter-SDK/compare/v4.0.6-rc.0...v4.0.7-rc.0) (2021-09-08)
+
+### Features
+
+* null-safety for 3.5.0.2 ([058b150](https://github.com/AgoraIO-Extensions/Agora-Flutter-SDK/commit/058b150fa6ec9487182b700da16ccdf0b1c44b50))
+* support native 3.5.0.2 ([adb0e69](https://github.com/AgoraIO-Extensions/Agora-Flutter-SDK/commit/adb0e6911394ea45fb3b063286d302247dea0163))
+* support native 3.5.0.3 ([299d364](https://github.com/AgoraIO-Extensions/Agora-Flutter-SDK/commit/299d3640b6c8480f743c99c59a53de07f558ac80))
+
+## [4.0.6-rc.0](https://github.com/AgoraIO-Extensions/Agora-Flutter-SDK/compare/v3.1.0...v4.0.6-rc.0) (2021-09-02)
+
+### Features
+
+* Android add getNativeHandle ([0eab471](https://github.com/AgoraIO-Extensions/Agora-Flutter-SDK/commit/0eab47114cde933482f90879e177fd019430cafd))
+* iOS raw data plugin ([374f3e9](https://github.com/AgoraIO-Extensions/Agora-Flutter-SDK/commit/374f3e987fe2f0c51f81865e9fb3f6812f6defbc))
+* support 3.0.+ ([b9393b6](https://github.com/AgoraIO-Extensions/Agora-Flutter-SDK/commit/b9393b6a3c206b68ec6143dbf927db828037b1fa))
+* support 3.0.+ ([21c7655](https://github.com/AgoraIO-Extensions/Agora-Flutter-SDK/commit/21c7655c72f00e40d8f08c3be7abdd6f783f4630))
+* support 3.0.+ ([ed3b61b](https://github.com/AgoraIO-Extensions/Agora-Flutter-SDK/commit/ed3b61bf82eb968727c4d2d05fdde08cfa0d0711))
+* support 3.1.+ ([90f0eba](https://github.com/AgoraIO-Extensions/Agora-Flutter-SDK/commit/90f0eba1a2ed4b179a1afceb4ee6c8b5ee767e6a))
+* support 3.2.+ ([e536fd0](https://github.com/AgoraIO-Extensions/Agora-Flutter-SDK/commit/e536fd0213ebe48d629d2b21a20b3972b7d2b76b))
+* support 3.3.+ ([c25bbf2](https://github.com/AgoraIO-Extensions/Agora-Flutter-SDK/commit/c25bbf24a8589bc9144766eb5c1db97b3474c3ef))
+* support 3.4.+ ([52c8e52](https://github.com/AgoraIO-Extensions/Agora-Flutter-SDK/commit/52c8e522abb1b1ec861ffea3197142a4d82732d5))
+
+### Bug Fixes
+
+* `MetadataReceived` event parameters bug ([9ab28a7](https://github.com/AgoraIO-Extensions/Agora-Flutter-SDK/commit/9ab28a7ae559f3bd5ce8ab8e0455860d9de89977))
+* `MetadataReceived` event parameters bug ([56ab25b](https://github.com/AgoraIO-Extensions/Agora-Flutter-SDK/commit/56ab25bcf41b9b7034049fb307cca95fdfae3e4c))
+* `RtcSurfaceView` memory leak ([c8845fe](https://github.com/AgoraIO-Extensions/Agora-Flutter-SDK/commit/c8845fe04c1596fe2e7242302bf160bc671910cb))
+* add config file ([c0a6a1d](https://github.com/AgoraIO-Extensions/Agora-Flutter-SDK/commit/c0a6a1db0b177490fc6c2070feff7ed9630d7695))
+* merge some bug fix ([ad03101](https://github.com/AgoraIO-Extensions/Agora-Flutter-SDK/commit/ad03101fa6a5b2e36b1bde17d3ed635caefa8ce8))
+* merge some bug fix ([b87cce2](https://github.com/AgoraIO-Extensions/Agora-Flutter-SDK/commit/b87cce298890cbc2949082b1bdce7aada70766d4))
+* some rendering problems when change render widget order ([12e2561](https://github.com/AgoraIO-Extensions/Agora-Flutter-SDK/commit/12e25618ce8fabd5bf9b34e418792450518e219e))
+* some rendering problems when change render widget order ([c737102](https://github.com/AgoraIO-Extensions/Agora-Flutter-SDK/commit/c737102ecc22e3cb563f9762a88d9b519fdc599f))
+* use the better way to fix rendering problems ([75f572d](https://github.com/AgoraIO-Extensions/Agora-Flutter-SDK/commit/75f572df2afed36a4bbd3ccffd0baad7bace2eae))
+* use the better way to fix rendering problems ([a290e73](https://github.com/AgoraIO-Extensions/Agora-Flutter-SDK/commit/a290e7313e3d189dc9ea69e49c0c3be4799a7933))
+
+## [3.0.1-dev.6](https://github.com/AgoraIO-Extensions/Agora-Flutter-SDK/compare/3.0.1-dev.5...3.0.1-dev.6) (2020-08-06)
+
+## [3.0.1-dev.5](https://github.com/AgoraIO-Extensions/Agora-Flutter-SDK/compare/3.0.1-dev.4...3.0.1-dev.5) (2020-08-05)
+
+## [3.0.1-dev.4](https://github.com/AgoraIO-Extensions/Agora-Flutter-SDK/compare/3.0.1-dev.3...3.0.1-dev.4) (2020-07-21)
+
+## [3.0.1-dev.3](https://github.com/AgoraIO-Extensions/Agora-Flutter-SDK/compare/3.0.1-dev.2...3.0.1-dev.3) (2020-07-21)
+
+## [3.0.1-dev.2](https://github.com/AgoraIO-Extensions/Agora-Flutter-SDK/compare/3.0.1-dev.1...3.0.1-dev.2) (2020-07-13)
+
+## [3.0.1-dev.1](https://github.com/AgoraIO-Extensions/Agora-Flutter-SDK/compare/1.0.13...3.0.1-dev.1) (2020-07-06)
+
+## [1.0.13](https://github.com/AgoraIO-Extensions/Agora-Flutter-SDK/compare/v3.0.0...1.0.13) (2020-06-19)
+
+## [1.0.12](https://github.com/AgoraIO-Extensions/Agora-Flutter-SDK/compare/1.0.11...1.0.12) (2020-05-11)
+
+## [1.0.6](https://github.com/AgoraIO-Extensions/Agora-Flutter-SDK/compare/1.0.5...1.0.6) (2020-02-17)
+
+## [1.0.4](https://github.com/AgoraIO-Extensions/Agora-Flutter-SDK/compare/1.0.3...1.0.4) (2020-01-09)
+
+## [1.0.1](https://github.com/AgoraIO-Extensions/Agora-Flutter-SDK/compare/1.0.0...1.0.1) (2019-10-13)
+
+## [1.0.0](https://github.com/AgoraIO-Extensions/Agora-Flutter-SDK/compare/0.9.9...1.0.0) (2019-08-30)
+
+## [0.9.9](https://github.com/AgoraIO-Extensions/Agora-Flutter-SDK/compare/0.9.8...0.9.9) (2019-08-16)
+
+## [0.9.8](https://github.com/AgoraIO-Extensions/Agora-Flutter-SDK/compare/0.9.7...0.9.8) (2019-07-22)
+
+## [0.9.7](https://github.com/AgoraIO-Extensions/Agora-Flutter-SDK/compare/0.9.6...0.9.7) (2019-06-25)
+
+## [0.9.6](https://github.com/AgoraIO-Extensions/Agora-Flutter-SDK/compare/0.9.5...0.9.6) (2019-06-18)
+
+## [0.9.5](https://github.com/AgoraIO-Extensions/Agora-Flutter-SDK/compare/0.9.4...0.9.5) (2019-05-22)
+
+## [0.9.4](https://github.com/AgoraIO-Extensions/Agora-Flutter-SDK/compare/0.9.3...0.9.4) (2019-04-08)
+
+## [0.9.3](https://github.com/AgoraIO-Extensions/Agora-Flutter-SDK/compare/0.9.2...0.9.3) (2019-02-26)
+
+## [0.9.2](https://github.com/AgoraIO-Extensions/Agora-Flutter-SDK/compare/0.9.1...0.9.2) (2019-02-13)
+
+## [0.9.1](https://github.com/AgoraIO-Extensions/Agora-Flutter-SDK/compare/0.9.0...0.9.1) (2019-02-09)
+
+## 0.9.0 (2019-02-08)
+
+## [3.1.0](https://github.com/AgoraIO-Extensions/Agora-Flutter-SDK/compare/v3.0.1...v3.1.0) (2020-10-15)
+
+## [1.0.13](https://github.com/AgoraIO-Extensions/Agora-Flutter-SDK/compare/v3.0.0...1.0.13) (2020-06-19)
+
+## [3.0.1-dev.6](https://github.com/AgoraIO-Extensions/Agora-Flutter-SDK/compare/3.0.1-dev.5...3.0.1-dev.6) (2020-08-06)
+
+## [3.0.1-dev.5](https://github.com/AgoraIO-Extensions/Agora-Flutter-SDK/compare/3.0.1-dev.4...3.0.1-dev.5) (2020-08-05)
+
+## [3.0.1-dev.4](https://github.com/AgoraIO-Extensions/Agora-Flutter-SDK/compare/3.0.1-dev.3...3.0.1-dev.4) (2020-07-21)
+
+## [3.0.1-dev.3](https://github.com/AgoraIO-Extensions/Agora-Flutter-SDK/compare/3.0.1-dev.2...3.0.1-dev.3) (2020-07-21)
+
+## [3.0.1-dev.2](https://github.com/AgoraIO-Extensions/Agora-Flutter-SDK/compare/3.0.1-dev.1...3.0.1-dev.2) (2020-07-13)
+
+## [3.0.1-dev.1](https://github.com/AgoraIO-Extensions/Agora-Flutter-SDK/compare/1.0.13...3.0.1-dev.1) (2020-07-06)
+
+## [3.0.0](https://github.com/AgoraIO-Extensions/Agora-Flutter-SDK/compare/1.0.12...v3.0.0) (2020-06-08)
+
+## [1.0.13](https://github.com/AgoraIO-Extensions/Agora-Flutter-SDK/compare/v3.0.0...1.0.13) (2020-06-19)
+
+## [1.0.12](https://github.com/AgoraIO-Extensions/Agora-Flutter-SDK/compare/1.0.11...1.0.12) (2020-05-11)
+
+## [1.0.6](https://github.com/AgoraIO-Extensions/Agora-Flutter-SDK/compare/1.0.5...1.0.6) (2020-02-17)
+
+## [1.0.4](https://github.com/AgoraIO-Extensions/Agora-Flutter-SDK/compare/1.0.3...1.0.4) (2020-01-09)
+
+## [1.0.1](https://github.com/AgoraIO-Extensions/Agora-Flutter-SDK/compare/1.0.0...1.0.1) (2019-10-13)
+
+## [1.0.0](https://github.com/AgoraIO-Extensions/Agora-Flutter-SDK/compare/0.9.9...1.0.0) (2019-08-30)
+
+## [0.9.9](https://github.com/AgoraIO-Extensions/Agora-Flutter-SDK/compare/0.9.8...0.9.9) (2019-08-16)
+
+## [0.9.8](https://github.com/AgoraIO-Extensions/Agora-Flutter-SDK/compare/0.9.7...0.9.8) (2019-07-22)
+
+## [0.9.7](https://github.com/AgoraIO-Extensions/Agora-Flutter-SDK/compare/0.9.6...0.9.7) (2019-06-25)
+
+## [0.9.6](https://github.com/AgoraIO-Extensions/Agora-Flutter-SDK/compare/0.9.5...0.9.6) (2019-06-18)
+
+## [0.9.5](https://github.com/AgoraIO-Extensions/Agora-Flutter-SDK/compare/0.9.4...0.9.5) (2019-05-22)
+
+## [0.9.4](https://github.com/AgoraIO-Extensions/Agora-Flutter-SDK/compare/0.9.3...0.9.4) (2019-04-08)
+
+## [0.9.3](https://github.com/AgoraIO-Extensions/Agora-Flutter-SDK/compare/0.9.2...0.9.3) (2019-02-26)
+
+## [0.9.2](https://github.com/AgoraIO-Extensions/Agora-Flutter-SDK/compare/0.9.1...0.9.2) (2019-02-13)
+
+## [0.9.1](https://github.com/AgoraIO-Extensions/Agora-Flutter-SDK/compare/0.9.0...0.9.1) (2019-02-09)
+
+## 0.9.0 (2019-02-08)
+
+## [3.0.0](https://github.com/AgoraIO-Extensions/Agora-Flutter-SDK/compare/1.0.12...v3.0.0) (2020-06-08)
+
+## [1.0.12](https://github.com/AgoraIO-Extensions/Agora-Flutter-SDK/compare/1.0.11...1.0.12) (2020-05-11)
+
+## [1.0.6](https://github.com/AgoraIO-Extensions/Agora-Flutter-SDK/compare/1.0.5...1.0.6) (2020-02-17)
+
+## [1.0.4](https://github.com/AgoraIO-Extensions/Agora-Flutter-SDK/compare/1.0.3...1.0.4) (2020-01-09)
+
+## [1.0.1](https://github.com/AgoraIO-Extensions/Agora-Flutter-SDK/compare/1.0.0...1.0.1) (2019-10-13)
+
+## [1.0.0](https://github.com/AgoraIO-Extensions/Agora-Flutter-SDK/compare/0.9.9...1.0.0) (2019-08-30)
+
+## [0.9.9](https://github.com/AgoraIO-Extensions/Agora-Flutter-SDK/compare/0.9.8...0.9.9) (2019-08-16)
+
+## [0.9.8](https://github.com/AgoraIO-Extensions/Agora-Flutter-SDK/compare/0.9.7...0.9.8) (2019-07-22)
+
+## [0.9.7](https://github.com/AgoraIO-Extensions/Agora-Flutter-SDK/compare/0.9.6...0.9.7) (2019-06-25)
+
+## [0.9.6](https://github.com/AgoraIO-Extensions/Agora-Flutter-SDK/compare/0.9.5...0.9.6) (2019-06-18)
+
+## [0.9.5](https://github.com/AgoraIO-Extensions/Agora-Flutter-SDK/compare/0.9.4...0.9.5) (2019-05-22)
+
+## [0.9.4](https://github.com/AgoraIO-Extensions/Agora-Flutter-SDK/compare/0.9.3...0.9.4) (2019-04-08)
+
+## [0.9.3](https://github.com/AgoraIO-Extensions/Agora-Flutter-SDK/compare/0.9.2...0.9.3) (2019-02-26)
+
+## [0.9.2](https://github.com/AgoraIO-Extensions/Agora-Flutter-SDK/compare/0.9.1...0.9.2) (2019-02-13)
+
+## [0.9.1](https://github.com/AgoraIO-Extensions/Agora-Flutter-SDK/compare/0.9.0...0.9.1) (2019-02-09)
+
+## 0.9.0 (2019-02-08)
+
 ## [5.3.1](https://github.com/AgoraIO/Agora-Flutter-SDK/compare/v5.3.0...v5.3.1) (2022-09-27)
 
 
