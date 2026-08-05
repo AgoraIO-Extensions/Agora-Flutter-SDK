@@ -17,7 +17,9 @@ import test from 'node:test';
 import { fileURLToPath } from 'node:url';
 import { promisify } from 'node:util';
 
-import { commitUpdates } from './update_spm_deps.mjs';
+import * as spmUpdater from './update_spm_deps.mjs';
+
+const { commitUpdates } = spmUpdater;
 
 const execFileAsync = promisify(execFile);
 const ciDir = path.dirname(fileURLToPath(import.meta.url));
@@ -52,6 +54,24 @@ const sectionedNativeDependenciesContent = [
 
 const compactAudioDependenciesContent =
   "github:https://github.com/AgoraIO/AgoraAudio_iOS.git tag:4.5.3-a1 products:RtcBasic implementation 'io.agora.rtc:agora-special-voice:4.5.3.1.BASIC1'";
+
+const irisBuildResultWithoutFailures = [
+  'Iris SDK Build Result',
+  'Build version:4.7.0-dev.2',
+  'Iris macOS:',
+  'CDN:',
+  'https://download.agora.io/sdk/release/iris_4.7.0-dev.2_DCG_Mac_Video_Standalone_20260805_0512_32933.zip',
+  'Cocoapods:',
+  "pod 'AgoraIrisRTC_macOS', '4.7.0-dev.2'",
+  'Iris iOS:',
+  'CDN:',
+  'https://download.agora.io/sdk/release/iris_4.7.0-dev.2_DCG_iOS_Video_Standalone_20260805_0512_33960.zip',
+  'Cocoapods:',
+  "pod 'AgoraIrisRTC_iOS', '4.7.0-dev.2'",
+  'Iris Android:',
+  'Maven:',
+  "api 'io.agora.rtc:iris-rtc:4.7.0-dev.2'",
+].join('\n');
 
 async function createTemporaryManifests() {
   const tempRoot = await mkdtemp(path.join(os.tmpdir(), 'agora-spm-deps-'));
@@ -277,6 +297,65 @@ test('reads RtcBasic before trailing Maven content in compact unscoped input', a
   assert.doesNotMatch(legacy.stdout, /github:|\btag:|products:/i);
 });
 
+test('reports whether products came from input or the target Package.swift', async () => {
+  const explicitManifests = await createTemporaryManifests();
+  const explicitResult = await runUpdater(
+    compactAudioDependenciesContent,
+    explicitManifests,
+  );
+  assert.match(explicitResult.stdout, /products: RtcBasic \(input\)/);
+
+  const preservedManifests = await createTemporaryManifests();
+  const preservedResult = await runUpdater(
+    sectionedNativeDependenciesContent,
+    preservedManifests,
+  );
+  assert.match(
+    preservedResult.stdout,
+    /products: RtcBasic \(preserved from Package\.swift\)/,
+  );
+});
+
+test('parses Native products and derives Iris URLs from a real mixed build result', () => {
+  assert.equal(typeof spmUpdater.parsePlatformDependencies, 'function');
+
+  const dependencies = spmUpdater.parsePlatformDependencies(
+    [
+      irisBuildResultWithoutFailures,
+      '【swiftPM】',
+      'github:https://github.com/AgoraIO/AgoraRtcEngine_iOS.git tag:4.6.2 products:RtcBasic,AINS',
+      'github:https://github.com/AgoraIO/AgoraRtcEngine_macOS.git tag:4.6.2 products:RtcBasic',
+    ].join('\n'),
+  );
+
+  assert.deepEqual(dependencies.get('iOS')?.products, ['RtcBasic', 'AINS']);
+  assert.equal(
+    dependencies.get('iOS')?.irisUrl,
+    'https://download.agora.io/sdk/release/AgoraIrisRTC_iOS-4.7.0-dev.2.zip',
+  );
+  assert.equal(
+    dependencies.get('iOS')?.irisUrlSource,
+    "derived from pod 'AgoraIrisRTC_iOS', '4.7.0-dev.2'",
+  );
+  assert.equal(
+    dependencies.get('macOS')?.irisUrl,
+    'https://download.agora.io/sdk/release/AgoraIrisRTC_macOS-4.7.0-dev.2.zip',
+  );
+  assert.deepEqual(dependencies.get('macOS')?.products, ['RtcBasic']);
+});
+
+test('rejects Iris SPM derivation from an Apple build section marked failed', () => {
+  const failedBuildResult = irisBuildResultWithoutFailures.replace(
+    'Iris Android:',
+    'Failure found on above jobs\nIris Android:',
+  );
+
+  assert.throws(
+    () => spmUpdater.parsePlatformDependencies(failedBuildResult),
+    /Iris iOS build result is marked failed/,
+  );
+});
+
 test('computes a missing checksum for unscoped iOS and macOS Iris URLs', async () => {
   const artifact = await createArtifactZip();
   const expectedChecksum = createHash('sha256').update(artifact).digest('hex');
@@ -325,6 +404,35 @@ test('accepts a Swift binary target snippet with an explicitly supplied checksum
   assert.equal(await readFile(manifests.macosManifest, 'utf8'), macosBefore);
 });
 
+test('accepts an explicit Iris URL when it matches the CocoaPods-derived URL', async () => {
+  const manifests = await createTemporaryManifests();
+  const input = [
+    "pod 'AgoraIrisRTC_iOS2', '4.6.2-build.1'",
+    completeDependenciesContent.split('\n')[0],
+  ].join('\n');
+
+  await runUpdater(input, manifests);
+
+  const ios = await readFile(manifests.iosManifest, 'utf8');
+  assert.ok(ios.includes(`url: "${iosIrisUrl}"`));
+  assert.match(ios, new RegExp(`checksum: "${iosIrisChecksum}"`));
+});
+
+test('rejects an explicit Iris URL that conflicts with its CocoaPods identity', async () => {
+  const manifests = await createTemporaryManifests();
+  const input = [
+    "pod 'AgoraIrisRTC_iOS2', '4.6.2-build.1'",
+    completeDependenciesContent
+      .split('\n')[0]
+      .replace('AgoraIrisRTC_iOS2-', 'AgoraIrisRTC_iOS-'),
+  ].join('\n');
+
+  await assert.rejects(
+    runUpdater(input, manifests),
+    /Iris SPM URL conflict for iOS.*does not match.*AgoraIrisRTC_iOS2/,
+  );
+});
+
 test('splits iOS and macOS records inside one unscoped SwiftPM section', async () => {
   const manifests = await createTemporaryManifests();
   const input = [
@@ -355,30 +463,16 @@ test('splits iOS and macOS records inside one unscoped SwiftPM section', async (
   assert.equal(legacy.stdout, '\n');
 });
 
-test('preserves products while changing the Native package repository', async () => {
+test('requires explicit products when changing the Native package repository', async () => {
   const manifests = await createTemporaryManifests();
-  const iosBefore = await readFile(manifests.iosManifest, 'utf8');
-  await writeFile(
-    manifests.iosManifest,
-    iosBefore.replace(
-      '                .product(name: "RtcBasic", package: "AgoraRtcEngine_iOS"),',
-      [
-        '                .product(name: "RtcBasic", package: "AgoraRtcEngine_iOS"),',
-        '                .product(name: "AINS", package: "AgoraRtcEngine_iOS"),',
-      ].join('\n'),
+
+  await assert.rejects(
+    runUpdater(
+      'github:https://github.com/AgoraIO/AgoraAudio_iOS.git tag:4.5.3-a1',
+      manifests,
     ),
-    'utf8',
+    /Native package changed for iOS.*products must be provided/,
   );
-
-  await runUpdater(
-    'github:https://github.com/AgoraIO/AgoraAudio_iOS.git tag:4.5.3-a1',
-    manifests,
-  );
-
-  const ios = await readFile(manifests.iosManifest, 'utf8');
-  assert.match(ios, /AgoraAudio_iOS\.git", exact: "4\.5\.3-a1"/);
-  assert.match(ios, /\.product\(name: "RtcBasic", package: "AgoraAudio_iOS"\)/);
-  assert.match(ios, /\.product\(name: "AINS", package: "AgoraAudio_iOS"\)/);
 });
 
 test('does not write either manifest when an Iris artifact download fails', async () => {
@@ -1022,10 +1116,7 @@ test('leaves legacy platform-scoped input unchanged when it has no SPM fields', 
   assert.equal(await readFile(manifests.macosManifest, 'utf8'), macosBefore);
 });
 
-test('leaves repeated legacy-only Apple platform blocks unchanged', async () => {
-  const manifests = await createTemporaryManifests();
-  const iosBefore = await readFile(manifests.iosManifest, 'utf8');
-  const macosBefore = await readFile(manifests.macosManifest, 'utf8');
+test('derives Iris SPM URLs while preserving repeated Apple blocks for legacy parsing', async () => {
   const legacyInput = [
     "platform:iOS cocoapods: pod 'AgoraVideo_Special_iOS', '4.6.2.70'",
     "platform:iOS iris cocoapods: pod 'AgoraIrisRTC_iOS2', '4.6.2-build.1'",
@@ -1033,11 +1124,12 @@ test('leaves repeated legacy-only Apple platform blocks unchanged', async () => 
     "platform:macOS iris cocoapods: pod 'AgoraIrisRTC_macOS2', '4.6.2-build.1'",
   ].join('\n');
 
-  const result = await runUpdater(legacyInput, manifests);
+  const dependencies = spmUpdater.parsePlatformDependencies(legacyInput);
+  assert.equal(dependencies.get('iOS')?.irisUrl, iosIrisUrl);
+  assert.equal(dependencies.get('macOS')?.irisUrl, macosIrisUrl);
 
-  assert.match(result.stdout, /SPM dependencies unchanged/);
-  assert.equal(await readFile(manifests.iosManifest, 'utf8'), iosBefore);
-  assert.equal(await readFile(manifests.macosManifest, 'utf8'), macosBefore);
+  const legacy = await printLegacyContent(legacyInput);
+  assert.equal(legacy.stdout.trim(), legacyInput);
 });
 
 test('infers the platform when SPM metadata omits the platform field', async () => {
@@ -1215,9 +1307,14 @@ test('dependency update workflow tests, runs, and validates the SPM updater befo
   assert.match(workflow, /node-version: ['"]?22['"]?/);
   assert.match(workflow, /【swiftPM】/);
   assert.match(workflow, /github:git@github\.com:AgoraIO\/AgoraRtcEngine_iOS\.git/);
-  assert.match(workflow, /Platform is inferred from the Native repository or Iris archive name/);
-  assert.match(workflow, /products is optional/);
+  assert.match(workflow, /pod 'AgoraIrisRTC_iOS', '4\.7\.0-dev\.2'/);
+  assert.match(workflow, /Iris SPM URL is derived from the CocoaPods package name and version/);
+  assert.match(workflow, /A Native repository change requires explicit products/);
+  assert.match(workflow, /products are preserved only when the Native repository is unchanged/);
+  assert.match(workflow, /Failure found on above jobs/);
   assert.match(workflow, /Missing Iris checksum is computed/);
+  assert.match(workflow, /Apple SPM dependency resolution/);
+  assert.match(workflow, /GITHUB_STEP_SUMMARY/);
   assert.ok(testUpdaterIndex > setupNodeIndex, 'workflow must run updater tests after setup');
   assert.ok(prepareLegacyIndex > testUpdaterIndex, 'workflow must sanitize legacy input after tests');
   assert.ok(parseLegacyIndex > prepareLegacyIndex, 'workflow must parse sanitized legacy input');
@@ -1255,6 +1352,7 @@ test('workflow old-ref guard preserves legacy input and rejects SPM intent', asy
   const spmInputs = [
     'tag:4.6.2',
     `checksum:${iosIrisChecksum}`,
+    "pod 'AgoraIrisRTC_iOS', '4.7.0-dev.2'",
     'github:https://github.com/AgoraIO/AgoraRtcEngine_iOS.git tag:4.6.2',
     `【swiftPM】\nurl: "${iosIrisUrl}"`,
     `url: "${macosIrisUrl}"`,

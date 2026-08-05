@@ -149,6 +149,54 @@ function normalizeDependenciesContent(content) {
     .replaceAll(String.raw`\r`, '\n');
 }
 
+function findFailedIrisApplePlatforms(content) {
+  const failedPlatforms = new Set();
+  const sectionPattern = /^Iris\s+(iOS|macOS|Android|Windows):\s*$/gim;
+  const sections = [...content.matchAll(sectionPattern)];
+
+  for (const [index, section] of sections.entries()) {
+    const bodyStart = section.index + section[0].length;
+    const bodyEnd = sections[index + 1]?.index ?? content.length;
+    if (!/Failure found on above jobs/i.test(content.slice(bodyStart, bodyEnd))) {
+      continue;
+    }
+    const platformName = section[1].toLowerCase();
+    if (platformName === 'ios') {
+      failedPlatforms.add('iOS');
+    } else if (platformName === 'macos') {
+      failedPlatforms.add('macOS');
+    }
+  }
+
+  return failedPlatforms;
+}
+
+function parseIrisCocoaPodsDependencies(content) {
+  const dependencies = new Map();
+  const failedPlatforms = findFailedIrisApplePlatforms(content);
+  const irisPodPattern =
+    /\bpod\s+(['"])(AgoraIrisRTC_(iOS|macOS)[A-Za-z0-9_-]*)\1\s*,\s*(['"])([A-Za-z0-9_.+-]+)\4/gi;
+
+  for (const match of content.matchAll(irisPodPattern)) {
+    const [, , podName, platformName, , version] = match;
+    const platform = platformName.toLowerCase() === 'ios' ? 'iOS' : 'macOS';
+    if (failedPlatforms.has(platform)) {
+      throw new Error(`Iris ${platform} build result is marked failed`);
+    }
+    if (dependencies.has(platform)) {
+      throw new Error(`Duplicate Iris CocoaPods metadata for ${platform}`);
+    }
+    dependencies.set(platform, {
+      irisUrl: `https://download.agora.io/sdk/release/${podName}-${version}.zip`,
+      irisUrlSource: `derived from pod '${podName}', '${version}'`,
+      irisPodName: podName,
+      irisPodVersion: version,
+    });
+  }
+
+  return dependencies;
+}
+
 function inferPlatformFromPackageUrl(packageUrl) {
   const packageName = path.basename(packageUrl, '.git');
   if (/(?:^|[_-])ios(?:$|[_-])/i.test(packageName)) {
@@ -223,6 +271,9 @@ function hasAppleGithubUrl(record) {
 }
 
 function hasUnscopedSpmIntent(record) {
+  if (/^\s*Build\s+version\s*:/i.test(record)) {
+    return false;
+  }
   const fieldCounts = countSpmFields(record);
   return (
     hasStrongSpmMetadata(fieldCounts) ||
@@ -446,9 +497,25 @@ function collectUnscopedSpmRecords(content) {
 
 function mergeDependency(dependencies, platform, dependency) {
   const existing = dependencies.get(platform) ?? {};
-  const duplicateFields = Object.keys(dependency).filter(
-    (field) => existing[field] !== undefined,
-  );
+  if (
+    dependency.irisUrl &&
+    existing.irisUrlSource?.startsWith('derived from pod ') &&
+    existing.irisUrl !== dependency.irisUrl
+  ) {
+    throw new Error(
+      `Iris SPM URL conflict for ${platform}: input URL ${dependency.irisUrl} does not match CocoaPods-derived URL ${existing.irisUrl} from ${existing.irisPodName}`,
+    );
+  }
+  const duplicateFields = Object.keys(dependency).filter((field) => {
+    if (existing[field] === undefined) {
+      return false;
+    }
+    return !(
+      field === 'irisUrl' &&
+      existing.irisUrlSource?.startsWith('derived from pod ') &&
+      existing.irisUrl === dependency.irisUrl
+    );
+  });
   if (duplicateFields.length > 0) {
     throw new Error(
       `Duplicate SPM metadata for ${platform}: ${duplicateFields.join(', ')}`,
@@ -458,8 +525,8 @@ function mergeDependency(dependencies, platform, dependency) {
 }
 
 function parsePlatformDependencies(content) {
-  const dependencies = new Map();
   const normalizedContent = normalizeDependenciesContent(content);
+  const dependencies = parseIrisCocoaPodsDependencies(normalizedContent);
   const { contentWithoutSwiftPmSections, records: sectionRecords } =
     extractSectionedSpmRecords(normalizedContent);
   const { preamble, records: platformRecords } =
@@ -839,6 +906,26 @@ async function computeIrisChecksum(artifactUrl) {
 async function resolveManifestDependency(source, dependency, platform) {
   const current = parseManifestDependency(source, platform);
   const resolved = { ...current };
+  const sources = {
+    packageUrl: dependency.packageUrl ? 'input' : 'preserved from Package.swift',
+    products: dependency.products ? 'input' : 'preserved from Package.swift',
+    irisUrl: dependency.irisUrl
+      ? (dependency.irisUrlSource ?? 'input')
+      : 'preserved from Package.swift',
+    irisChecksum: dependency.irisUrl
+      ? (dependency.irisChecksum ? 'input' : 'computed')
+      : 'preserved from Package.swift',
+  };
+
+  if (
+    dependency.packageUrl &&
+    dependency.packageUrl !== current.packageUrl &&
+    !dependency.products
+  ) {
+    throw new Error(
+      `Native package changed for ${platform}; products must be provided explicitly`,
+    );
+  }
 
   if (dependency.packageUrl) {
     resolved.packageUrl = dependency.packageUrl;
@@ -855,7 +942,17 @@ async function resolveManifestDependency(source, dependency, platform) {
       dependency.irisChecksum ?? (await computeIrisChecksum(dependency.irisUrl));
   }
 
-  return { current, resolved };
+  return { current, resolved, sources };
+}
+
+function formatResolutionSummary(platform, dependency, sources) {
+  return [
+    `${platform} SPM resolution:`,
+    `  Native package: ${dependency.packageUrl} (${sources.packageUrl})`,
+    `  products: ${dependency.products.join(',')} (${sources.products})`,
+    `  Iris URL: ${dependency.irisUrl} (${sources.irisUrl})`,
+    `  Iris checksum: ${dependency.irisChecksum} (${sources.irisChecksum})`,
+  ].join('\n');
 }
 
 function updateManifest(source, dependency, platform, currentDependency) {
@@ -1183,7 +1280,7 @@ async function main(argv) {
   const updates = await Promise.all(
     requestedUpdates.map(async ({ filePath, platform, dependency }) => {
       const source = await readFile(filePath, 'utf8');
-      const { current, resolved } = await resolveManifestDependency(
+      const { current, resolved, sources } = await resolveManifestDependency(
         source,
         dependency,
         platform,
@@ -1191,11 +1288,15 @@ async function main(argv) {
       return {
         filePath,
         content: updateManifest(source, resolved, platform, current),
+        summary: formatResolutionSummary(platform, resolved, sources),
       };
     }),
   );
 
   await commitUpdates(updates);
+  for (const update of updates) {
+    console.log(update.summary);
+  }
   console.log(`Updated SPM dependencies for ${[...dependencies.keys()].join(', ')}`);
 }
 
@@ -1203,4 +1304,4 @@ if (process.argv[1] && path.resolve(process.argv[1]) === modulePath) {
   await main(process.argv.slice(2));
 }
 
-export { commitUpdates };
+export { commitUpdates, parsePlatformDependencies };
