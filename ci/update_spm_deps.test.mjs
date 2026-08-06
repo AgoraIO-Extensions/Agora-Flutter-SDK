@@ -220,8 +220,8 @@ test('updates both Apple manifests from complete platform-scoped input', async (
   );
   assert.match(macos, new RegExp(`url: "${macosIrisUrl.replaceAll('.', '\\.')}"`));
   assert.match(macos, new RegExp(`checksum: "${macosIrisChecksum}"`));
-  assert.doesNotMatch(macos, /unsafeFlags/);
-  assert.match(macos, /cxxLanguageStandard: \.cxx14/);
+  assert.match(macos, /\.unsafeFlags\(\["-std=c\+\+14"\]\)/);
+  assert.doesNotMatch(macos, /cxxLanguageStandard/);
 });
 
 test('accepts real sectioned Native SPM input without platform or omitted fields', async () => {
