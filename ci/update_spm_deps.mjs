@@ -665,36 +665,6 @@ function replaceExactlyOnce(source, pattern, replacement, description) {
   return source.replace(pattern, replacement);
 }
 
-function findManagedLineIndexes(lines, startMarker, endMarker, description) {
-  const startIndexes = lines
-    .map((line, index) => (line === startMarker ? index : -1))
-    .filter((index) => index >= 0);
-  const endIndexes = lines
-    .map((line, index) => (line === endMarker ? index : -1))
-    .filter((index) => index >= 0);
-
-  if (startIndexes.length === 0 && endIndexes.length === 0) {
-    return null;
-  }
-  if (
-    startIndexes.length !== 1 ||
-    endIndexes.length !== 1 ||
-    startIndexes[0] >= endIndexes[0]
-  ) {
-    throw new Error(`Invalid ${description} markers in Package.swift`);
-  }
-
-  return Array.from(
-    { length: endIndexes[0] - startIndexes[0] + 1 },
-    (_value, offset) => startIndexes[0] + offset,
-  );
-}
-
-const packageStartMarker = '        // agora-spm-updater:managed-packages-start';
-const packageEndMarker = '        // agora-spm-updater:managed-packages-end';
-const targetStartMarker = '                // agora-spm-updater:managed-products-start';
-const targetEndMarker = '                // agora-spm-updater:managed-products-end';
-
 function parsePackageDeclaration(line) {
   const match = line.match(
     /^\s*(\.package\(url:\s*"([^"]+)",\s*(?:exact:\s*"[^"]+"|\.upToNextMajor\(from:\s*"[^"]+"\))\),?)\s*$/,
@@ -726,26 +696,15 @@ function parseManifestDependency(source, platform) {
   }
 
   const packageLines = packageSection[1].split('\n');
-  const markedPackageIndexes = findManagedLineIndexes(
-    packageLines,
-    packageStartMarker,
-    packageEndMarker,
-    'managed package dependency',
-  );
   const packageCandidates = packageLines
-    .map((line, index) => ({ index, parsed: parsePackageDeclaration(line) }))
-    .filter(({ index, parsed }) => {
-      if (!parsed) {
-        return false;
-      }
-      return markedPackageIndexes
-        ? markedPackageIndexes.includes(index)
-        : inferPlatformFromPackageUrl(parsed.packageUrl) === platform;
-    });
+    .map((line) => parsePackageDeclaration(line))
+    .filter(
+      (parsed) => parsed && inferPlatformFromPackageUrl(parsed.packageUrl) === platform,
+    );
   if (packageCandidates.length !== 1) {
     throw new Error('Unable to locate Native package dependency in Package.swift');
   }
-  const nativePackage = packageCandidates[0].parsed;
+  const nativePackage = packageCandidates[0];
 
   const targetSection = source.match(
     /            dependencies: \[\n([\s\S]*?)\n            \],\n            cSettings:/,
@@ -755,12 +714,6 @@ function parseManifestDependency(source, platform) {
   }
 
   const targetLines = targetSection[1].split('\n');
-  const markedProductIndexes = findManagedLineIndexes(
-    targetLines,
-    targetStartMarker,
-    targetEndMarker,
-    'managed product dependency',
-  );
   const products = targetLines
     .map((line, index) => {
       const match = line.match(
@@ -772,9 +725,7 @@ function parseManifestDependency(source, platform) {
       if (!product || product.packageName === 'FlutterFramework') {
         return false;
       }
-      return markedProductIndexes
-        ? markedProductIndexes.includes(product.index)
-        : product.packageName === nativePackage.packageName;
+      return product.packageName === nativePackage.packageName;
     });
   if (
     products.length === 0 ||
@@ -956,145 +907,51 @@ function formatResolutionSummary(platform, dependency, sources) {
   ].join('\n');
 }
 
-function updateManifest(source, dependency, platform, currentDependency) {
-  const managedPackageNames = new Set([
-    currentDependency.packageName,
-    dependency.packageName,
-  ]);
-  const packageDependencies = [
-    '        .package(name: "FlutterFramework", path: "../FlutterFramework"),',
-    packageStartMarker,
-    `        ${dependency.packageDeclaration}`,
-    packageEndMarker,
-  ];
-
+function updateManifest(source, dependency, currentDependency) {
   let updated = replaceExactlyOnce(
     source,
     /(    dependencies: \[\n)([\s\S]*?)(\n    \],\n    targets: \[)/,
     (_match, prefix, body, suffix) => {
       const lines = body.split('\n');
-      const managedIndexes = [];
-      let nativePackageCount = 0;
-      const markedIndexes = findManagedLineIndexes(
-        lines,
-        packageStartMarker,
-        packageEndMarker,
-        'managed package dependency',
-      );
+      const managedIndexes = lines
+        .map((line, index) => ({ index, parsed: parsePackageDeclaration(line) }))
+        .filter(
+          ({ parsed }) => parsed?.packageName === currentDependency.packageName,
+        )
+        .map(({ index }) => index);
 
-      if (markedIndexes) {
-        managedIndexes.push(...markedIndexes);
-        nativePackageCount = markedIndexes.filter((index) =>
-          lines[index].includes('.package(url:'),
-        ).length;
-      } else {
-        for (const [index, line] of lines.entries()) {
-          if (line.includes('.package(name: "FlutterFramework"')) {
-            managedIndexes.push(index);
-            continue;
-          }
-
-          const packageMatch = line.match(/\.package\(url: "([^"]+)"/);
-          if (!packageMatch) {
-            continue;
-          }
-
-          try {
-            const packageName = path.basename(
-              normalizeGithubUrl(packageMatch[1]),
-              '.git',
-            );
-            if (managedPackageNames.has(packageName)) {
-              managedIndexes.push(index);
-              nativePackageCount += 1;
-            }
-          } catch {
-            // An unrelated non-GitHub package remains untouched.
-          }
-        }
-      }
-
-      for (const [index, line] of lines.entries()) {
-        if (
-          line.includes('.package(name: "FlutterFramework"') &&
-          !managedIndexes.includes(index)
-        ) {
-          managedIndexes.push(index);
-        }
-      }
-
-      if (nativePackageCount !== 1) {
+      if (managedIndexes.length !== 1) {
         throw new Error('Unable to locate Native package dependency in Package.swift');
       }
 
-      const insertionIndex = Math.min(...managedIndexes);
+      const insertionIndex = managedIndexes[0];
       const preservedLines = lines.filter((_line, index) => !managedIndexes.includes(index));
-      preservedLines.splice(insertionIndex, 0, ...packageDependencies);
+      preservedLines.splice(insertionIndex, 0, `        ${dependency.packageDeclaration}`);
       return `${prefix}${preservedLines.join('\n')}${suffix}`;
     },
     'package dependencies',
   );
 
-  const targetDependencies = [
-    '                .product(name: "FlutterFramework", package: "FlutterFramework"),',
-    targetStartMarker,
-    ...dependency.products.map(
-      (product) =>
-        `                .product(name: "${product}", package: "${dependency.packageName}"),`,
-    ),
-    targetEndMarker,
-  ];
+  const targetDependencies = dependency.products.map(
+    (product) =>
+      `                .product(name: "${product}", package: "${dependency.packageName}"),`,
+  );
 
   updated = replaceExactlyOnce(
     updated,
     /(            dependencies: \[\n)([\s\S]*?)(\n            \],\n            cSettings:)/,
     (_match, prefix, body, suffix) => {
       const lines = body.split('\n');
-      const managedIndexes = [];
-      let nativeProductCount = 0;
-      const markedIndexes = findManagedLineIndexes(
-        lines,
-        targetStartMarker,
-        targetEndMarker,
-        'managed product dependency',
-      );
-
-      if (markedIndexes) {
-        managedIndexes.push(...markedIndexes);
-        nativeProductCount = markedIndexes.filter((index) => {
-          const productMatch = lines[index].match(
-            /\.product\(name: "[^"]+", package: "([^"]+)"\)/,
-          );
-          return productMatch && productMatch[1] !== 'FlutterFramework';
-        }).length;
-      } else {
-        for (const [index, line] of lines.entries()) {
+      const managedIndexes = lines
+        .map((line, index) => {
           const productMatch = line.match(
             /\.product\(name: "[^"]+", package: "([^"]+)"\)/,
           );
-          if (!productMatch) {
-            continue;
-          }
+          return productMatch?.[1] === currentDependency.packageName ? index : -1;
+        })
+        .filter((index) => index >= 0);
 
-          if (productMatch[1] === 'FlutterFramework') {
-            managedIndexes.push(index);
-          } else if (managedPackageNames.has(productMatch[1])) {
-            managedIndexes.push(index);
-            nativeProductCount += 1;
-          }
-        }
-      }
-
-      for (const [index, line] of lines.entries()) {
-        if (
-          line.includes('.product(name: "FlutterFramework", package: "FlutterFramework")') &&
-          !managedIndexes.includes(index)
-        ) {
-          managedIndexes.push(index);
-        }
-      }
-
-      if (nativeProductCount === 0) {
+      if (managedIndexes.length === 0) {
         throw new Error('Unable to locate Native product dependencies in Package.swift');
       }
 
@@ -1112,25 +969,6 @@ function updateManifest(source, dependency, platform, currentDependency) {
     `$1"${dependency.irisUrl}"$2"${dependency.irisChecksum}"`,
     'AgoraRtcWrapper binary target',
   );
-
-  if (platform === 'macOS') {
-    const unsafeCxxSetting =
-      /,\n            cxxSettings: \[\n                \.unsafeFlags\(\["-std=c\+\+14"\]\)\n            \]/;
-    if (unsafeCxxSetting.test(updated)) {
-      updated = updated.replace(unsafeCxxSetting, '');
-    } else if (!updated.includes('cxxLanguageStandard: .cxx14')) {
-      throw new Error('Unable to locate macOS C++ setting in Package.swift');
-    }
-
-    if (!updated.includes('cxxLanguageStandard: .cxx14')) {
-      updated = replaceExactlyOnce(
-        updated,
-        /\n    \]\n\)\s*$/,
-        '\n    ],\n    cxxLanguageStandard: .cxx14\n)\n',
-        'macOS C++ language standard',
-      );
-    }
-  }
 
   return updated;
 }
@@ -1288,7 +1126,7 @@ async function main(argv) {
       );
       return {
         filePath,
-        content: updateManifest(source, resolved, platform, current),
+        content: updateManifest(source, resolved, current),
         summary: formatResolutionSummary(platform, resolved, sources),
       };
     }),

@@ -197,34 +197,22 @@ test('updates both Apple manifests from complete platform-scoped input', async (
   await runUpdater(completeDependenciesContent, manifests);
 
   const ios = await readFile(manifests.iosManifest, 'utf8');
-  assert.match(
-    ios,
-    /\.package\(name: "FlutterFramework", path: "\.\.\/FlutterFramework"\)/,
-  );
+  assert.doesNotMatch(ios, /FlutterFramework/);
+  assert.doesNotMatch(ios, /agora-spm-updater:/);
   assert.match(
     ios,
     /\.package\(url: "https:\/\/github\.com\/AgoraIO\/AgoraRtcEngine_iOS\.git", exact: "4\.6\.2"\)/,
-  );
-  assert.match(
-    ios,
-    /\.product\(name: "FlutterFramework", package: "FlutterFramework"\)/,
   );
   assert.match(ios, /\.product\(name: "RtcBasic", package: "AgoraRtcEngine_iOS"\)/);
   assert.match(ios, new RegExp(`url: "${iosIrisUrl.replaceAll('.', '\\.')}"`));
   assert.match(ios, new RegExp(`checksum: "${iosIrisChecksum}"`));
 
   const macos = await readFile(manifests.macosManifest, 'utf8');
-  assert.match(
-    macos,
-    /\.package\(name: "FlutterFramework", path: "\.\.\/FlutterFramework"\)/,
-  );
+  assert.doesNotMatch(macos, /FlutterFramework/);
+  assert.doesNotMatch(macos, /agora-spm-updater:/);
   assert.match(
     macos,
     /\.package\(url: "https:\/\/github\.com\/AgoraIO\/AgoraRtcEngine_macOS\.git", exact: "4\.6\.2"\)/,
-  );
-  assert.match(
-    macos,
-    /\.product\(name: "FlutterFramework", package: "FlutterFramework"\)/,
   );
   assert.match(
     macos,
@@ -232,8 +220,8 @@ test('updates both Apple manifests from complete platform-scoped input', async (
   );
   assert.match(macos, new RegExp(`url: "${macosIrisUrl.replaceAll('.', '\\.')}"`));
   assert.match(macos, new RegExp(`checksum: "${macosIrisChecksum}"`));
-  assert.doesNotMatch(macos, /unsafeFlags/);
-  assert.match(macos, /cxxLanguageStandard: \.cxx14/);
+  assert.match(macos, /\.unsafeFlags\(\["-std=c\+\+14"\]\)/);
+  assert.doesNotMatch(macos, /cxxLanguageStandard/);
 });
 
 test('accepts real sectioned Native SPM input without platform or omitted fields', async () => {
@@ -851,32 +839,55 @@ test('times out a stalled Iris artifact download before writing manifests', asyn
   assert.equal(await readFile(manifests.macosManifest, 'utf8'), macosBefore);
 });
 
-test('keeps FlutterFramework outside Native updater marker regions', async () => {
+test('does not add FlutterFramework or updater markers', async () => {
   const manifests = await createTemporaryManifests();
 
   await runUpdater(completeDependenciesContent, manifests);
 
   for (const manifestPath of [manifests.iosManifest, manifests.macosManifest]) {
     const manifest = await readFile(manifestPath, 'utf8');
-    const packageRegion = manifest.match(
-      /\/\/ agora-spm-updater:managed-packages-start([\s\S]*?)\/\/ agora-spm-updater:managed-packages-end/,
-    );
-    const productRegion = manifest.match(
-      /\/\/ agora-spm-updater:managed-products-start([\s\S]*?)\/\/ agora-spm-updater:managed-products-end/,
-    );
+    assert.doesNotMatch(manifest, /FlutterFramework/);
+    assert.doesNotMatch(manifest, /agora-spm-updater:/);
+  }
+});
 
-    assert.ok(packageRegion, 'Native package marker region must exist');
-    assert.ok(productRegion, 'Native product marker region must exist');
-    assert.doesNotMatch(packageRegion[1], /FlutterFramework/);
-    assert.doesNotMatch(productRegion[1], /FlutterFramework/);
-    assert.match(
-      manifest,
-      /\.package\(name: "FlutterFramework", path: "\.\.\/FlutterFramework"\)/,
+test('preserves an existing FlutterFramework dependency without managing it', async () => {
+  const manifests = await createTemporaryManifests();
+
+  for (const manifestPath of [manifests.iosManifest, manifests.macosManifest]) {
+    const source = (await readFile(manifestPath, 'utf8'))
+      .replace(
+        '    dependencies: [\n',
+        [
+          '    dependencies: [',
+          '        .package(name: "FlutterFramework", path: "../FlutterFramework"),',
+          '',
+        ].join('\n'),
+      )
+      .replace(
+        '            dependencies: [\n',
+        [
+          '            dependencies: [',
+          '                .product(name: "FlutterFramework", package: "FlutterFramework"),',
+          '',
+        ].join('\n'),
+      );
+    await writeFile(manifestPath, source, 'utf8');
+  }
+
+  await runUpdater(completeDependenciesContent, manifests);
+
+  for (const manifestPath of [manifests.iosManifest, manifests.macosManifest]) {
+    const manifest = await readFile(manifestPath, 'utf8');
+    assert.equal(
+      manifest.match(/\.package\(name: "FlutterFramework"/g)?.length,
+      1,
     );
-    assert.match(
-      manifest,
-      /\.product\(name: "FlutterFramework", package: "FlutterFramework"\)/,
+    assert.equal(
+      manifest.match(/\.product\(name: "FlutterFramework"/g)?.length,
+      1,
     );
+    assert.doesNotMatch(manifest, /agora-spm-updater:/);
   }
 });
 
