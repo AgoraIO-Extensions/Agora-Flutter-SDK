@@ -907,7 +907,7 @@ function formatResolutionSummary(platform, dependency, sources) {
   ].join('\n');
 }
 
-function updateManifest(source, dependency, currentDependency) {
+function updateManifest(source, dependency, platform, currentDependency) {
   let updated = replaceExactlyOnce(
     source,
     /(    dependencies: \[\n)([\s\S]*?)(\n    \],\n    targets: \[)/,
@@ -969,6 +969,25 @@ function updateManifest(source, dependency, currentDependency) {
     `$1"${dependency.irisUrl}"$2"${dependency.irisChecksum}"`,
     'AgoraRtcWrapper binary target',
   );
+
+  if (platform === 'macOS') {
+    const unsafeCxxSetting =
+      /,\n            cxxSettings: \[\n                \.unsafeFlags\(\["-std=c\+\+14"\]\)\n            \]/;
+    if (unsafeCxxSetting.test(updated)) {
+      updated = updated.replace(unsafeCxxSetting, '');
+    } else if (!updated.includes('cxxLanguageStandard: .cxx14')) {
+      throw new Error('Unable to locate macOS C++ setting in Package.swift');
+    }
+
+    if (!updated.includes('cxxLanguageStandard: .cxx14')) {
+      updated = replaceExactlyOnce(
+        updated,
+        /\n    \]\n\)\s*$/,
+        '\n    ],\n    cxxLanguageStandard: .cxx14\n)\n',
+        'macOS C++ language standard',
+      );
+    }
+  }
 
   return updated;
 }
@@ -1126,7 +1145,7 @@ async function main(argv) {
       );
       return {
         filePath,
-        content: updateManifest(source, resolved, current),
+        content: updateManifest(source, resolved, platform, current),
         summary: formatResolutionSummary(platform, resolved, sources),
       };
     }),
