@@ -30,8 +30,14 @@
 	<string>$(FLUTTER_BUILD_NUMBER)</string>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
+	<key>NSBonjourServices</key>
+	<array>
+		<string>_dartobservatory._tcp</string>
+	</array>
 	<key>NSCameraUsageDescription</key>
 	<string>CAMERA</string>
+	<key>NSLocalNetworkUsageDescription</key>
+	<string>Allow Flutter tools to debug.</string>
 	<key>NSMicrophoneUsageDescription</key>
 	<string>MIC</string>
 	<key>UIApplicationSupportsIndirectInputEvents</key>
