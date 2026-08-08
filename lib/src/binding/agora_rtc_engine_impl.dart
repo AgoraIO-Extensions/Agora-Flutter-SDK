@@ -3014,6 +3014,25 @@ class RtcEngineImpl implements RtcEngine {
 
   @override
   Future<void> setPlaybackAudioFrameBeforeMixingParameters(
+      {required int sampleRate, required int channel}) async {
+    final apiType =
+        '${isOverrideClassName ? className : 'RtcEngine'}_setPlaybackAudioFrameBeforeMixingParameters_4e92b3c';
+    final requestParam =
+        createParams({'sampleRate': sampleRate, 'channel': channel});
+    final callApiResult = await irisMethodChannel.invokeMethod(
+        IrisMethodCall(apiType, jsonEncode(requestParam), buffers: null));
+    if (callApiResult.irisReturnCode < 0) {
+      throw AgoraRtcException(code: callApiResult.irisReturnCode);
+    }
+    final rm = callApiResult.data;
+    final result = rm['result'];
+    if (result < 0) {
+      throw AgoraRtcException(code: result);
+    }
+  }
+
+  @override
+  Future<void> setPlaybackAudioFrameBeforeMixingParameters(
       {required int sampleRate,
       required int channel,
       required int samplesPerCall}) async {
@@ -4168,6 +4187,27 @@ class RtcEngineImpl implements RtcEngine {
       ScreenCaptureParameters2 captureParams) async {
     final apiType =
         '${isOverrideClassName ? className : 'RtcEngine'}_startScreenCapture_270da41';
+    final requestParam =
+        createParams({'captureParams': captureParams.toJson()});
+    final List<Uint8List> buffers = [];
+    buffers.addAll(captureParams.collectBufferList());
+    final callApiResult = await irisMethodChannel.invokeMethod(
+        IrisMethodCall(apiType, jsonEncode(requestParam), buffers: buffers));
+    if (callApiResult.irisReturnCode < 0) {
+      throw AgoraRtcException(code: callApiResult.irisReturnCode);
+    }
+    final rm = callApiResult.data;
+    final result = rm['result'];
+    if (result < 0) {
+      throw AgoraRtcException(code: result);
+    }
+  }
+
+  @override
+  Future<void> startScreenCaptureInApp(
+      ScreenCaptureParameters2 captureParams) async {
+    final apiType =
+        '${isOverrideClassName ? className : 'RtcEngine'}_startScreenCaptureInApp_270da41';
     final requestParam =
         createParams({'captureParams': captureParams.toJson()});
     final List<Uint8List> buffers = [];

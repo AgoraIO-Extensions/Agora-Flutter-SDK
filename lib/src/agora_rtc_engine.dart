@@ -5175,6 +5175,21 @@ abstract class RtcEngine {
   /// Returns
   /// This method returns no value if the call succeeds. If the method call fails, it throws an AgoraRtcException, which you need to catch and handle. See [Error Codes](https://docs.agora.io/en/video-calling/troubleshooting/error-codes) for details and troubleshooting suggestions.
   Future<void> setPlaybackAudioFrameBeforeMixingParameters(
+      {required int sampleRate, required int channel});
+
+  /// Sets the format of the raw audio playback data before mixing.
+  ///
+  /// The SDK triggers the onPlaybackAudioFrameBeforeMixing callback based on the sampling interval.
+  ///
+  /// * [sampleRate] The sample rate (Hz) of the audio data. You can set it to 8000, 16000, 32000, 44100, or 48000.
+  /// * [channel] The number of audio channels. You can set it to 1 or 2:
+  ///  1: Mono.
+  ///  2: Stereo.
+  /// * [samplesPerCall] Sets the number of audio samples returned in the onPlaybackAudioFrameBeforeMixing callback. In RTMP streaming scenarios, it is recommended to set this to 1024.
+  ///
+  /// Returns
+  /// This method returns no value if the call succeeds. If the method call fails, it throws an AgoraRtcException, which you need to catch and handle. See [Error Codes](https://docs.agora.io/en/video-calling/troubleshooting/error-codes) for details and troubleshooting suggestions.
+  Future<void> setPlaybackAudioFrameBeforeMixingParameters(
       {required int sampleRate,
       required int channel,
       required int samplesPerCall});
@@ -5901,6 +5916,9 @@ abstract class RtcEngine {
   /// Returns
   /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown. You need to catch the exception and handle it accordingly. See [Error Codes](https://docs.agora.io/en/video-calling/troubleshooting/error-codes) for details and resolution suggestions.
   Future<void> startScreenCapture(ScreenCaptureParameters2 captureParams);
+
+  /// @nodoc
+  Future<void> startScreenCaptureInApp(ScreenCaptureParameters2 captureParams);
 
   /// Updates the parameter configuration for screen capture.
   ///

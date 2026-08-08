@@ -5027,6 +5027,43 @@ void rtcEngineSmokeTestCases() {
       try {
         int sampleRate = 5;
         int channel = 5;
+        await rtcEngine.setPlaybackAudioFrameBeforeMixingParameters(
+          sampleRate: sampleRate,
+          channel: channel,
+        );
+      } catch (e) {
+        if (e is! AgoraRtcException) {
+          debugPrint(
+              '[RtcEngine.setPlaybackAudioFrameBeforeMixingParameters] error: ${e.toString()}');
+          rethrow;
+        }
+
+        if (e.code != -4) {
+          // Only not supported error supported.
+          rethrow;
+        }
+      }
+
+      await rtcEngine.release();
+    },
+  );
+
+  testWidgets(
+    'RtcEngine.setPlaybackAudioFrameBeforeMixingParameters',
+    (WidgetTester tester) async {
+      String engineAppId = const String.fromEnvironment('TEST_APP_ID',
+          defaultValue: '<YOUR_APP_ID>');
+
+      RtcEngine rtcEngine = createAgoraRtcEngine();
+      await rtcEngine.initialize(RtcEngineContext(
+        appId: engineAppId,
+        areaCode: AreaCode.areaCodeGlob.value(),
+      ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
+
+      try {
+        int sampleRate = 5;
+        int channel = 5;
         int samplesPerCall = 5;
         await rtcEngine.setPlaybackAudioFrameBeforeMixingParameters(
           sampleRate: sampleRate,
@@ -7345,6 +7382,74 @@ void rtcEngineSmokeTestCases() {
       } catch (e) {
         if (e is! AgoraRtcException) {
           debugPrint('[RtcEngine.startScreenCapture] error: ${e.toString()}');
+          rethrow;
+        }
+
+        if (e.code != -4) {
+          // Only not supported error supported.
+          rethrow;
+        }
+      }
+
+      await rtcEngine.release();
+    },
+  );
+
+  testWidgets(
+    'RtcEngine.startScreenCaptureInApp',
+    (WidgetTester tester) async {
+      String engineAppId = const String.fromEnvironment('TEST_APP_ID',
+          defaultValue: '<YOUR_APP_ID>');
+
+      RtcEngine rtcEngine = createAgoraRtcEngine();
+      await rtcEngine.initialize(RtcEngineContext(
+        appId: engineAppId,
+        areaCode: AreaCode.areaCodeGlob.value(),
+      ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
+
+      try {
+        int audioParamsSampleRate = 5;
+        int audioParamsChannels = 5;
+        int audioParamsCaptureSignalVolume = 5;
+        bool audioParamsExcludeCurrentProcessAudio = true;
+        ScreenAudioParameters captureParamsAudioParams = ScreenAudioParameters(
+          sampleRate: audioParamsSampleRate,
+          channels: audioParamsChannels,
+          captureSignalVolume: audioParamsCaptureSignalVolume,
+          excludeCurrentProcessAudio: audioParamsExcludeCurrentProcessAudio,
+        );
+        int dimensionsWidth = 5;
+        int dimensionsHeight = 5;
+        VideoDimensions videoParamsDimensions = VideoDimensions(
+          width: dimensionsWidth,
+          height: dimensionsHeight,
+        );
+        VideoContentHint videoParamsContentHint =
+            VideoContentHint.contentHintNone;
+        int videoParamsFrameRate = 5;
+        int videoParamsBitrate = 5;
+        ScreenVideoParameters captureParamsVideoParams = ScreenVideoParameters(
+          dimensions: videoParamsDimensions,
+          frameRate: videoParamsFrameRate,
+          bitrate: videoParamsBitrate,
+          contentHint: videoParamsContentHint,
+        );
+        bool captureParamsCaptureAudio = true;
+        bool captureParamsCaptureVideo = true;
+        ScreenCaptureParameters2 captureParams = ScreenCaptureParameters2(
+          captureAudio: captureParamsCaptureAudio,
+          audioParams: captureParamsAudioParams,
+          captureVideo: captureParamsCaptureVideo,
+          videoParams: captureParamsVideoParams,
+        );
+        await rtcEngine.startScreenCaptureInApp(
+          captureParams,
+        );
+      } catch (e) {
+        if (e is! AgoraRtcException) {
+          debugPrint(
+              '[RtcEngine.startScreenCaptureInApp] error: ${e.toString()}');
           rethrow;
         }
 
