@@ -113,7 +113,7 @@ abstract class MediaEngine {
   /// * [enabled] Whether to enable the external video source: true : Enable the external video source. The SDK is ready to receive external video frames. false : (Default) Do not enable the external video source.
   /// * [useTexture] Whether to use external video frames in Texture format: true : Use Texture format for external video frames. false : Do not use Texture format for external video frames.
   /// * [sourceType] Whether the external video frame is encoded. See ExternalVideoSourceType.
-  /// * [encodedVideoOption] Video encoding options. If sourceType is encodedVideoFrame, this parameter must be set. You can [contact technical support](https://ticket.shengwang.cn/) to learn how to configure this parameter.
+  /// * [encodedVideoOption] Video encoding options. If sourceType is encodedVideoFrame, this parameter must be set. You can [contact technical support](https://www.agora.io/cn/contact/) to learn how to configure this parameter.
   ///
   /// Returns
   /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown. You need to catch the exception and handle it accordingly. See [Error Codes](https://docs.agora.io/en/video-calling/troubleshooting/error-codes) for details and resolution suggestions.
