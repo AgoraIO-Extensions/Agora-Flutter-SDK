@@ -5902,6 +5902,9 @@ abstract class RtcEngine {
   /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown. You need to catch the exception and handle it accordingly. See [Error Codes](https://docs.agora.io/en/video-calling/troubleshooting/error-codes) for details and resolution suggestions.
   Future<void> startScreenCapture(ScreenCaptureParameters2 captureParams);
 
+  /// @nodoc
+  Future<void> startScreenCaptureInApp(ScreenCaptureParameters2 captureParams);
+
   /// Updates the parameter configuration for screen capture.
   ///
   /// If system audio is not captured when screen sharing is enabled and you want to update the configuration and publish system audio, follow these steps:
