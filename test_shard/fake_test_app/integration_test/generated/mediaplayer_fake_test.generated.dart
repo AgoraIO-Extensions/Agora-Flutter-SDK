@@ -2210,6 +2210,44 @@ void mediaPlayerControllerSmokeTestCases() {
   );
 
   testWidgets(
+    'MediaPlayer.getAudioBufferDelay',
+    (WidgetTester tester) async {
+      String engineAppId = const String.fromEnvironment('TEST_APP_ID',
+          defaultValue: '<YOUR_APP_ID>');
+
+      RtcEngine rtcEngine = createAgoraRtcEngine();
+      await rtcEngine.initialize(RtcEngineContext(
+        appId: engineAppId,
+        areaCode: AreaCode.areaCodeGlob.value(),
+      ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
+
+      final mediaPlayerController = MediaPlayerController(
+          rtcEngine: rtcEngine, canvas: const VideoCanvas(uid: 0));
+      await mediaPlayerController.initialize();
+
+      try {
+        await mediaPlayerController.getAudioBufferDelay();
+      } catch (e) {
+        if (e is! AgoraRtcException) {
+          debugPrint(
+              '[MediaPlayer.getAudioBufferDelay] error: ${e.toString()}');
+          rethrow;
+        }
+
+        if (e.code != -4) {
+          // Only not supported error supported.
+          rethrow;
+        }
+      }
+
+      await mediaPlayerController.dispose();
+      await rtcEngine.release();
+    },
+//  skip: !(),
+  );
+
+  testWidgets(
     'MediaPlayer.setPlayerOptionInInt',
     (WidgetTester tester) async {
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',

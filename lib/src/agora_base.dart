@@ -139,6 +139,10 @@ enum WarnCodeType {
   warnAdmPlayoutAudioLowlevel,
 
   /// @nodoc
+  @JsonValue(1033)
+  warnAdmRecordIsOccupied,
+
+  /// @nodoc
   @JsonValue(1040)
   warnAdmWindowsNoDataReadyEvent,
 
@@ -465,6 +469,34 @@ enum ErrorCodeType {
   /// 1501: No permission to use the camera. Please check whether camera permission is enabled.
   @JsonValue(1501)
   errVdmCameraNotAuthorized,
+
+  /// @nodoc
+  @JsonValue(1700)
+  errVideoeffectAssetInvalid,
+
+  /// @nodoc
+  @JsonValue(1701)
+  errVideoeffectSaveFailed,
+
+  /// @nodoc
+  @JsonValue(1702)
+  errVideoeffectEngineInvalid,
+
+  /// @nodoc
+  @JsonValue(1704)
+  errVideoeffectNodeNotActive,
+
+  /// @nodoc
+  @JsonValue(1705)
+  errVideoeffectInvalidParam,
+
+  /// @nodoc
+  @JsonValue(1706)
+  errVideoeffectNotSupported,
+
+  /// @nodoc
+  @JsonValue(1707)
+  errVideoeffectInvalidBundlePath,
 }
 
 /// @nodoc
@@ -2311,6 +2343,152 @@ class WatermarkOptions implements AgoraSerializable {
   Map<String, dynamic> toJson() => _$WatermarkOptionsToJson(this);
 }
 
+/// Mode for multipath data transmission.
+///
+/// Since Available since v6.6.2.
+@JsonEnum(alwaysCreate: true)
+enum MultipathMode {
+  /// (0): Redundant transmission mode. The same data is redundantly transmitted through all available paths.
+  @JsonValue(0)
+  duplicate,
+
+  /// @nodoc
+  @JsonValue(1)
+  dynamic,
+}
+
+/// @nodoc
+extension MultipathModeExt on MultipathMode {
+  /// @nodoc
+  static MultipathMode fromValue(int value) {
+    return $enumDecode(_$MultipathModeEnumMap, value);
+  }
+
+  /// @nodoc
+  int value() {
+    return _$MultipathModeEnumMap[this]!;
+  }
+}
+
+/// Network path types used for multipath transmission.
+///
+/// Since Available since v6.6.2.
+@JsonEnum(alwaysCreate: true)
+enum MultipathType {
+  /// (0): Local Area Network (LAN) path.
+  @JsonValue(0)
+  lan,
+
+  /// (1): Wi-Fi path.
+  @JsonValue(1)
+  wifi,
+
+  /// (2): Mobile network path.
+  @JsonValue(2)
+  mobile,
+
+  /// (99): Unknown or unspecified network path.
+  @JsonValue(99)
+  unknown,
+}
+
+/// @nodoc
+extension MultipathTypeExt on MultipathType {
+  /// @nodoc
+  static MultipathType fromValue(int value) {
+    return $enumDecode(_$MultipathTypeEnumMap, value);
+  }
+
+  /// @nodoc
+  int value() {
+    return _$MultipathTypeEnumMap[this]!;
+  }
+}
+
+/// Used to obtain statistics for a specific network path.
+///
+/// Since Available since v6.6.2.
+@JsonSerializable(explicitToJson: true, includeIfNull: false)
+class PathStats implements AgoraSerializable {
+  /// @nodoc
+  const PathStats({this.type, this.txKBitRate, this.rxKBitRate});
+
+  /// The type of network path. See MultipathType.
+  @JsonKey(name: 'type')
+  final MultipathType? type;
+
+  /// The transmission bitrate on this path, in Kbps.
+  @JsonKey(name: 'txKBitRate')
+  final int? txKBitRate;
+
+  /// The receiving bitrate on this path, in Kbps.
+  @JsonKey(name: 'rxKBitRate')
+  final int? rxKBitRate;
+
+  /// @nodoc
+  factory PathStats.fromJson(Map<String, dynamic> json) =>
+      _$PathStatsFromJson(json);
+
+  @override
+  Map<String, dynamic> toJson() => _$PathStatsToJson(this);
+}
+
+/// Used to summarize statistics of each network path in multipath transmission.
+///
+/// Since Available since v6.6.2.
+@JsonSerializable(explicitToJson: true, includeIfNull: false)
+class MultipathStats implements AgoraSerializable {
+  /// @nodoc
+  const MultipathStats(
+      {this.lanTxBytes,
+      this.lanRxBytes,
+      this.wifiTxBytes,
+      this.wifiRxBytes,
+      this.mobileTxBytes,
+      this.mobileRxBytes,
+      this.activePathNum,
+      this.pathStats});
+
+  /// Total bytes sent over the LAN path.
+  @JsonKey(name: 'lanTxBytes')
+  final int? lanTxBytes;
+
+  /// Total bytes received over the LAN path.
+  @JsonKey(name: 'lanRxBytes')
+  final int? lanRxBytes;
+
+  /// Total bytes sent over the Wi-Fi path.
+  @JsonKey(name: 'wifiTxBytes')
+  final int? wifiTxBytes;
+
+  /// Total bytes received over the Wi-Fi path.
+  @JsonKey(name: 'wifiRxBytes')
+  final int? wifiRxBytes;
+
+  /// Total bytes sent over the mobile network path.
+  @JsonKey(name: 'mobileTxBytes')
+  final int? mobileTxBytes;
+
+  /// Total bytes received over the mobile network path.
+  @JsonKey(name: 'mobileRxBytes')
+  final int? mobileRxBytes;
+
+  /// The number of currently active transmission paths.
+  @JsonKey(name: 'activePathNum')
+  final int? activePathNum;
+
+  /// An array of statistics for each active transmission path. See PathStats.
+  @JsonKey(name: 'pathStats')
+  final List<PathStats>? pathStats;
+
+  /// @nodoc
+  factory MultipathStats.fromJson(Map<String, dynamic> json) =>
+      _$MultipathStatsFromJson(json);
+
+  @override
+  Map<String, dynamic> toJson() => _$MultipathStatsToJson(this);
+}
+
 /// Call-related statistics.
 @JsonSerializable(explicitToJson: true, includeIfNull: false)
 class RtcStats implements AgoraSerializable {
@@ -3143,6 +3321,41 @@ extension LocalVideoStreamStateExt on LocalVideoStreamState {
   /// @nodoc
   int value() {
     return _$LocalVideoStreamStateEnumMap[this]!;
+  }
+}
+
+/// Local video event types.
+///
+/// Since Available since v6.6.2.
+@JsonEnum(alwaysCreate: true)
+enum LocalVideoEventType {
+  /// (1): The screen capture window is hidden (Android only).
+  @JsonValue(1)
+  localVideoEventTypeScreenCaptureWindowHidden,
+
+  /// (2): The screen capture window is restored from hidden state (Android only).
+  @JsonValue(2)
+  localVideoEventTypeScreenCaptureWindowRecoverFromHidden,
+
+  /// (3): Screen capture is stopped by the user (Android only).
+  @JsonValue(3)
+  localVideoEventTypeScreenCaptureStoppedByUser,
+
+  /// (4): A system internal error occurs during screen capture (Android only).
+  @JsonValue(4)
+  localVideoEventTypeScreenCaptureSystemInternalError,
+}
+
+/// @nodoc
+extension LocalVideoEventTypeExt on LocalVideoEventType {
+  /// @nodoc
+  static LocalVideoEventType fromValue(int value) {
+    return $enumDecode(_$LocalVideoEventTypeEnumMap, value);
+  }
+
+  /// @nodoc
+  int value() {
+    return _$LocalVideoEventTypeEnumMap[this]!;
   }
 }
 
@@ -5161,52 +5374,128 @@ enum FaceShapeArea {
   faceShapeAreaNone,
 
   /// (100): Head area, used to achieve a smaller head effect. Value range is [0, 100], default is 50. The larger the value, the more noticeable the adjustment.
-  @JsonValue(0)
+  @JsonValue(100)
   faceShapeAreaHeadscale,
 
   /// (101): Forehead area, used to adjust the hairline height. Value range is [0, 100], default is 0. The larger the value, the more noticeable the adjustment.
-  @JsonValue(1)
+  @JsonValue(101)
   faceShapeAreaForehead,
 
   /// (102): Face contour area, used to achieve a slimmer face effect. Value range is [0, 100], default is 0. The larger the value, the more noticeable the adjustment.
-  @JsonValue(2)
+  @JsonValue(102)
   faceShapeAreaFacecontour,
 
   /// (103): Face length area, used to elongate the face. Value range is [-100, 100], default is 0. The greater the absolute value, the more noticeable the adjustment; negative values indicate the opposite direction.
-  @JsonValue(3)
+  @JsonValue(103)
   faceShapeAreaFacelength,
 
   /// (104): Face width area, used to achieve a narrower face effect. Value range is [0, 100], default is 0. The larger the value, the more noticeable the adjustment.
-  @JsonValue(4)
+  @JsonValue(104)
   faceShapeAreaFacewidth,
 
   /// (105): Cheekbone area, used to adjust cheekbone width. Value range is [0, 100], default is 0. The larger the value, the more noticeable the adjustment.
-  @JsonValue(5)
+  @JsonValue(105)
   faceShapeAreaCheekbone,
 
   /// (106): Cheek area, used to adjust cheek width. Value range is [0, 100], default is 0. The larger the value, the more noticeable the adjustment.
-  @JsonValue(6)
+  @JsonValue(106)
   faceShapeAreaCheek,
 
+  /// (107): Jawbone area, used to adjust jawbone width. Value range is [0, 100], default is 0. The larger the value, the more noticeable the adjustment.
+  @JsonValue(107)
+  faceShapeAreaMandible,
+
   /// (108): Chin area, used to adjust chin length. Value range is [-100, 100], default is 0. The greater the absolute value, the more noticeable the adjustment; negative values indicate the opposite direction.
-  @JsonValue(7)
+  @JsonValue(108)
   faceShapeAreaChin,
 
+  /// @nodoc
+  @JsonValue(109)
+  faceShapeAreaFacesmall,
+
   /// (200): Eye area, used to achieve a bigger eye effect. Value range is [0, 100], default is 50. The larger the value, the more noticeable the adjustment.
-  @JsonValue(8)
+  @JsonValue(200)
   faceShapeAreaEyescale,
 
+  /// (201): Eye distance area, used to adjust the distance between the eyes. Value range is [-100, 100], default is 0. The greater the absolute value, the more noticeable the adjustment; negative values indicate the opposite direction.
+  @JsonValue(201)
+  faceShapeAreaEyedistance,
+
+  /// (202): Eye position area, used to adjust the overall position of the eyes. Value range is [-100, 100], default is 0. The greater the absolute value, the more noticeable the adjustment; negative values indicate the opposite direction.
+  @JsonValue(202)
+  faceShapeAreaEyeposition,
+
+  /// (203): Lower eyelid area, used to adjust the shape of the lower eyelid. Value range is [0, 100], default is 0. The larger the value, the more noticeable the adjustment.
+  @JsonValue(203)
+  faceShapeAreaLowereyelid,
+
+  /// (204): Pupil area, used to adjust pupil size. Value range is [0, 100], default is 0. The larger the value, the more noticeable the adjustment.
+  @JsonValue(204)
+  faceShapeAreaEyepupils,
+
+  /// (205): Inner eye corner area, used to adjust the shape of the inner eye corner. Value range is [-100, 100], default is 0. The greater the absolute value, the more noticeable the adjustment; negative values indicate the opposite direction.
+  @JsonValue(205)
+  faceShapeAreaEyeinnercorner,
+
+  /// (206): Outer eye corner area, used to adjust the shape of the outer eye corner. Value range is [-100, 100], default is 0. The greater the absolute value, the more noticeable the adjustment; negative values indicate the opposite direction.
+  @JsonValue(206)
+  faceShapeAreaEyeoutercorner,
+
+  /// @nodoc
+  @JsonValue(207)
+  faceShapeAreaEyeangle,
+
   /// (300): Nose length area, used to elongate the nose. Value range is [-100, 100], default is 0. The greater the absolute value, the more noticeable the adjustment; negative values indicate the opposite direction.
-  @JsonValue(9)
+  @JsonValue(300)
   faceShapeAreaNoselength,
 
   /// (301): Nose width area, used to achieve a slimmer nose effect. Value range is [0, 100], default is 0. The larger the value, the more noticeable the slimming effect.
-  @JsonValue(10)
+  @JsonValue(301)
   faceShapeAreaNosewidth,
 
+  /// (302): Alar area, used to adjust the width of the alar. Value range is [0, 100], default is 10. The larger the value, the more noticeable the adjustment.
+  @JsonValue(302)
+  faceShapeAreaNosewing,
+
+  /// (303): Nasal root area, used to adjust the height of the nasal root. Value range is [0, 100], default is 0. The larger the value, the more noticeable the adjustment.
+  @JsonValue(303)
+  faceShapeAreaNoseroot,
+
+  /// (304): Nose bridge area, used to adjust the height of the nose bridge. Value range is [0, 100], default is 50. The larger the value, the more noticeable the adjustment.
+  @JsonValue(304)
+  faceShapeAreaNosebridge,
+
+  /// (305): Nose tip area, used to adjust the shape of the nose tip. Value range is [0, 100], default is 50. The larger the value, the more noticeable the adjustment.
+  @JsonValue(305)
+  faceShapeAreaNosetip,
+
+  /// (306): Overall nose area, used to adjust the overall nose shape. Value range is [-100, 100], default is 50. The greater the absolute value, the more noticeable the adjustment; negative values indicate the opposite direction.
+  @JsonValue(306)
+  faceShapeAreaNosegeneral,
+
   /// (400): Mouth area, used to achieve a larger mouth effect. Value range is [-100, 100], default is 20. The greater the absolute value, the more noticeable the adjustment; negative values indicate the opposite direction.
-  @JsonValue(11)
+  @JsonValue(400)
   faceShapeAreaMouthscale,
+
+  /// (401): Mouth position area, used to adjust the overall position of the mouth. Value range is [0, 100], default is 0. The larger the value, the more noticeable the adjustment.
+  @JsonValue(401)
+  faceShapeAreaMouthposition,
+
+  /// (402): Smile corner area, used to adjust the degree of mouth corner lift. Value range is [0, 1], default is 0. The larger the value, the more noticeable the adjustment.
+  @JsonValue(402)
+  faceShapeAreaMouthsmile,
+
+  /// (403): Lip shape area, used to adjust the shape of the lips. Value range is [0, 100], default is 0. The larger the value, the more noticeable the adjustment.
+  @JsonValue(403)
+  faceShapeAreaMouthlip,
+
+  /// (500): Eyebrow position area, used to adjust the overall position of the eyebrows. Value range is [-100, 100], default is 0. The greater the absolute value, the more noticeable the adjustment; negative values indicate the opposite direction.
+  @JsonValue(500)
+  faceShapeAreaEyebrowposition,
+
+  /// (501): Eyebrow thickness area, used to adjust eyebrow thickness. Value range is [-100, 100], default is 0. The larger the value, the more noticeable the adjustment.
+  @JsonValue(501)
+  faceShapeAreaEyebrowthickness,
 }
 
 /// @nodoc
@@ -5256,6 +5545,10 @@ enum FaceShapeBeautyStyle {
   /// (1): Male style makeup effect.
   @JsonValue(1)
   faceShapeBeautyStyleMale,
+
+  /// (2): Natural style makeup effect, only minimal adjustments to facial features.
+  @JsonValue(2)
+  faceShapeBeautyStyleNatural,
 }
 
 /// @nodoc
@@ -6016,12 +6309,50 @@ extension VoiceAiTunerTypeExt on VoiceAiTunerType {
   }
 }
 
+/// Audio configuration for screen sharing stream.
+///
+/// (flutter only) Only applicable when captureAudio is set to true.
+@JsonSerializable(explicitToJson: true, includeIfNull: false)
+class ScreenAudioParameters implements AgoraSerializable {
+  /// @nodoc
+  const ScreenAudioParameters(
+      {this.sampleRate,
+      this.channels,
+      this.captureSignalVolume,
+      this.excludeCurrentProcessAudio});
+
+  /// Audio sampling rate (Hz). Default is 16000.
+  @JsonKey(name: 'sampleRate')
+  final int? sampleRate;
+
+  /// Number of audio channels. Default is 2, which means stereo.
+  @JsonKey(name: 'channels')
+  final int? channels;
+
+  /// Captured system volume. Value range is [0,100]. Default is 100.
+  @JsonKey(name: 'captureSignalVolume')
+  final int? captureSignalVolume;
+
+  /// @nodoc
+  @JsonKey(name: 'excludeCurrentProcessAudio')
+  final bool? excludeCurrentProcessAudio;
+
+  /// @nodoc
+  factory ScreenAudioParameters.fromJson(Map<String, dynamic> json) =>
+      _$ScreenAudioParametersFromJson(json);
+
+  @override
+  Map<String, dynamic> toJson() => _$ScreenAudioParametersToJson(this);
+}
+
 /// Parameter configuration for screen sharing.
 @JsonSerializable(explicitToJson: true, includeIfNull: false)
 class ScreenCaptureParameters implements AgoraSerializable {
   /// @nodoc
   const ScreenCaptureParameters(
-      {this.dimensions,
+      {this.captureAudio,
+      this.audioParams,
+      this.dimensions,
       this.frameRate,
       this.bitrate,
       this.captureMouseCursor,
@@ -6031,6 +6362,14 @@ class ScreenCaptureParameters implements AgoraSerializable {
       this.highLightWidth,
       this.highLightColor,
       this.enableHighLight});
+
+  /// @nodoc
+  @JsonKey(name: 'captureAudio')
+  final bool? captureAudio;
+
+  /// @nodoc
+  @JsonKey(name: 'audioParams')
+  final ScreenAudioParameters? audioParams;
 
   /// When setting encoding resolution in a document sharing scenario (screenScenarioDocument), choose one of the following:
   ///  For optimal image quality, set the encoding resolution the same as the capture resolution.
@@ -7069,35 +7408,6 @@ class ScreenVideoParameters implements AgoraSerializable {
 
   @override
   Map<String, dynamic> toJson() => _$ScreenVideoParametersToJson(this);
-}
-
-/// Audio configuration for screen sharing stream.
-///
-/// (flutter only) Only applicable when captureAudio is set to true.
-@JsonSerializable(explicitToJson: true, includeIfNull: false)
-class ScreenAudioParameters implements AgoraSerializable {
-  /// @nodoc
-  const ScreenAudioParameters(
-      {this.sampleRate, this.channels, this.captureSignalVolume});
-
-  /// Audio sampling rate (Hz). Default is 16000.
-  @JsonKey(name: 'sampleRate')
-  final int? sampleRate;
-
-  /// Number of audio channels. Default is 2, which means stereo.
-  @JsonKey(name: 'channels')
-  final int? channels;
-
-  /// Captured system volume. Value range is [0,100]. Default is 100.
-  @JsonKey(name: 'captureSignalVolume')
-  final int? captureSignalVolume;
-
-  /// @nodoc
-  factory ScreenAudioParameters.fromJson(Map<String, dynamic> json) =>
-      _$ScreenAudioParametersFromJson(json);
-
-  @override
-  Map<String, dynamic> toJson() => _$ScreenAudioParametersToJson(this);
 }
 
 /// Parameter configuration for screen sharing.

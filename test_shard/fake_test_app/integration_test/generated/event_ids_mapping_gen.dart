@@ -186,6 +186,9 @@ const eventIdsMapping = {
   "RtcEngineEventHandler_onVideoSizeChanged": [
     "RtcEngineEventHandler_onVideoSizeChanged_99bf45c"
   ],
+  "RtcEngineEventHandler_onLocalVideoEvent": [
+    "RtcEngineEventHandler_onLocalVideoEvent_7c57d16"
+  ],
   "RtcEngineEventHandler_onLocalVideoStateChanged": [
     "RtcEngineEventHandler_onLocalVideoStateChanged_a44228a"
   ],
@@ -401,6 +404,9 @@ const eventIdsMapping = {
   ],
   "RtcEngineEventHandler_onSetRtmFlagResult": [
     "RtcEngineEventHandler_onSetRtmFlagResult_263e4cd"
+  ],
+  "RtcEngineEventHandler_onMultipathStats": [
+    "RtcEngineEventHandler_onMultipathStats_bc711cf"
   ],
   "MetadataObserver_onMetadataReceived": [
     "MetadataObserver_onMetadataReceived_cb7661d"

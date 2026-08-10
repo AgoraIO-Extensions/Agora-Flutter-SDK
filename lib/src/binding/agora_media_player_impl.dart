@@ -944,6 +944,26 @@ class MediaPlayerImpl implements MediaPlayer {
   }
 
   @override
+  Future<int> getAudioBufferDelay() async {
+    final apiType =
+        '${isOverrideClassName ? className : 'MediaPlayer'}_getAudioBufferDelay_c30e349';
+    final requestParam = createParams({});
+    final callApiResult = await irisMethodChannel.invokeMethod(
+        IrisMethodCall(apiType, jsonEncode(requestParam), buffers: null));
+    if (callApiResult.irisReturnCode < 0) {
+      throw AgoraRtcException(code: callApiResult.irisReturnCode);
+    }
+    final rm = callApiResult.data;
+    final result = rm['result'];
+    if (result < 0) {
+      throw AgoraRtcException(code: result);
+    }
+    final getAudioBufferDelayJson =
+        MediaPlayerGetAudioBufferDelayJson.fromJson(rm);
+    return getAudioBufferDelayJson.delayMs;
+  }
+
+  @override
   Future<void> setPlayerOptionInInt(
       {required String key, required int value}) async {
     final apiType =

@@ -233,6 +233,30 @@ extension WatermarkOptionsBufferExt on WatermarkOptions {
   }
 }
 
+extension PathStatsBufferExt on PathStats {
+  PathStats fillBuffers(List<Uint8List> bufferList) {
+    if (bufferList.isEmpty) return this;
+    return this;
+  }
+
+  List<Uint8List> collectBufferList() {
+    final bufferList = <Uint8List>[];
+    return bufferList;
+  }
+}
+
+extension MultipathStatsBufferExt on MultipathStats {
+  MultipathStats fillBuffers(List<Uint8List> bufferList) {
+    if (bufferList.isEmpty) return this;
+    return this;
+  }
+
+  List<Uint8List> collectBufferList() {
+    final bufferList = <Uint8List>[];
+    return bufferList;
+  }
+}
+
 extension RtcStatsBufferExt on RtcStats {
   RtcStats fillBuffers(List<Uint8List> bufferList) {
     if (bufferList.isEmpty) return this;
@@ -614,6 +638,18 @@ extension AudioTrackConfigBufferExt on AudioTrackConfig {
   }
 }
 
+extension ScreenAudioParametersBufferExt on ScreenAudioParameters {
+  ScreenAudioParameters fillBuffers(List<Uint8List> bufferList) {
+    if (bufferList.isEmpty) return this;
+    return this;
+  }
+
+  List<Uint8List> collectBufferList() {
+    final bufferList = <Uint8List>[];
+    return bufferList;
+  }
+}
+
 extension ScreenCaptureParametersBufferExt on ScreenCaptureParameters {
   ScreenCaptureParameters fillBuffers(List<Uint8List> bufferList) {
     if (bufferList.isEmpty) return this;
@@ -771,18 +807,6 @@ extension ScreenVideoParametersBufferExt on ScreenVideoParameters {
   }
 }
 
-extension ScreenAudioParametersBufferExt on ScreenAudioParameters {
-  ScreenAudioParameters fillBuffers(List<Uint8List> bufferList) {
-    if (bufferList.isEmpty) return this;
-    return this;
-  }
-
-  List<Uint8List> collectBufferList() {
-    final bufferList = <Uint8List>[];
-    return bufferList;
-  }
-}
-
 extension ScreenCaptureParameters2BufferExt on ScreenCaptureParameters2 {
   ScreenCaptureParameters2 fillBuffers(List<Uint8List> bufferList) {
     if (bufferList.isEmpty) return this;
@@ -894,30 +918,6 @@ extension ExtensionContextBufferExt on ExtensionContext {
 
 extension AudioParametersBufferExt on AudioParameters {
   AudioParameters fillBuffers(List<Uint8List> bufferList) {
-    if (bufferList.isEmpty) return this;
-    return this;
-  }
-
-  List<Uint8List> collectBufferList() {
-    final bufferList = <Uint8List>[];
-    return bufferList;
-  }
-}
-
-extension ContentInspectModuleBufferExt on ContentInspectModule {
-  ContentInspectModule fillBuffers(List<Uint8List> bufferList) {
-    if (bufferList.isEmpty) return this;
-    return this;
-  }
-
-  List<Uint8List> collectBufferList() {
-    final bufferList = <Uint8List>[];
-    return bufferList;
-  }
-}
-
-extension ContentInspectConfigBufferExt on ContentInspectConfig {
-  ContentInspectConfig fillBuffers(List<Uint8List> bufferList) {
     if (bufferList.isEmpty) return this;
     return this;
   }
@@ -1117,6 +1117,30 @@ extension VideoFrameBufferExt on VideoFrame {
     if (pixelBuffer != null) {
       bufferList.add(pixelBuffer!);
     }
+    return bufferList;
+  }
+}
+
+extension ContentInspectModuleBufferExt on ContentInspectModule {
+  ContentInspectModule fillBuffers(List<Uint8List> bufferList) {
+    if (bufferList.isEmpty) return this;
+    return this;
+  }
+
+  List<Uint8List> collectBufferList() {
+    final bufferList = <Uint8List>[];
+    return bufferList;
+  }
+}
+
+extension ContentInspectConfigBufferExt on ContentInspectConfig {
+  ContentInspectConfig fillBuffers(List<Uint8List> bufferList) {
+    if (bufferList.isEmpty) return this;
+    return this;
+  }
+
+  List<Uint8List> collectBufferList() {
+    final bufferList = <Uint8List>[];
     return bufferList;
   }
 }
