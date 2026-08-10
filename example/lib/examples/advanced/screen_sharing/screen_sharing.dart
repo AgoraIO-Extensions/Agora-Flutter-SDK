@@ -81,10 +81,15 @@ class _State extends State<ScreenSharing> with KeepRemoteVideoViewsMixin {
           });
           break;
         case LocalVideoStreamState.localVideoStreamStateStopped:
+          setState(() {
+            _isScreenShared = false;
+          });
+          break;
         case LocalVideoStreamState.localVideoStreamStateFailed:
           setState(() {
             _isScreenShared = false;
           });
+          _engine.stopScreenCapture();
           break;
         default:
           break;
