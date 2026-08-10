@@ -416,9 +416,6 @@ abstract class MediaPlayer {
   Future<void> setSoundPositionParams(
       {required double pan, required double gain});
 
-  /// @nodoc
-  Future<int> getAudioBufferDelay();
-
   /// Sets media player options.
   ///
   /// The media player supports setting options using key and value.
