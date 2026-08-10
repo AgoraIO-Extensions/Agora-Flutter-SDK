@@ -1365,8 +1365,8 @@ class ChannelMediaOptions implements AgoraSerializable {
       this.publishThirdCameraTrack,
       this.publishFourthCameraTrack,
       this.publishMicrophoneTrack,
-      this.publishScreenCaptureVideo,
       this.publishScreenCaptureAudio,
+      this.publishScreenCaptureVideo,
       this.publishScreenTrack,
       this.publishSecondaryScreenTrack,
       this.publishThirdScreenTrack,
@@ -1396,7 +1396,11 @@ class ChannelMediaOptions implements AgoraSerializable {
       this.isInteractiveAudience,
       this.customVideoTrackId,
       this.isAudioFilterable,
-      this.parameters});
+      this.parameters,
+      this.enableMultipath,
+      this.uplinkMultipathMode,
+      this.downlinkMultipathMode,
+      this.preferMultipathType});
 
   /// Sets whether to publish the video captured by the camera: true : Publish the video captured by the camera. false : Do not publish the video captured by the camera.
   @JsonKey(name: 'publishCameraTrack')
@@ -1418,13 +1422,13 @@ class ChannelMediaOptions implements AgoraSerializable {
   @JsonKey(name: 'publishMicrophoneTrack')
   final bool? publishMicrophoneTrack;
 
-  /// This parameter is only applicable to Android and iOS platforms. Sets whether to publish the video captured from the screen: true : Publish the screen-captured video. false : Do not publish the screen-captured video.
-  @JsonKey(name: 'publishScreenCaptureVideo')
-  final bool? publishScreenCaptureVideo;
-
   /// This parameter is only applicable to Android and iOS platforms. Sets whether to publish the audio captured from the screen: true : Publish the screen-captured audio. false : Do not publish the screen-captured audio.
   @JsonKey(name: 'publishScreenCaptureAudio')
   final bool? publishScreenCaptureAudio;
+
+  /// This parameter is only applicable to Android and iOS platforms. Sets whether to publish the video captured from the screen: true : Publish the screen-captured video. false : Do not publish the screen-captured video.
+  @JsonKey(name: 'publishScreenCaptureVideo')
+  final bool? publishScreenCaptureVideo;
 
   /// This parameter is only applicable to Windows and macOS platforms. Sets whether to publish the video captured from the screen: true : Publish the screen-captured video. false : Do not publish the screen-captured video.
   @JsonKey(name: 'publishScreenTrack')
@@ -1550,6 +1554,26 @@ class ChannelMediaOptions implements AgoraSerializable {
   @JsonKey(name: 'parameters')
   final String? parameters;
 
+  /// Permissions and system requirements:
+  ///  Android: Android 7.0 or higher (API level 24+), requires ACCESS_NETWORK_STATE and CHANGE_NETWORK_STATE permissions.
+  ///  iOS: iOS 12.0 or higher.
+  ///  macOS: 10.14 or higher.
+  ///  Windows: Windows Vista or higher. Whether to enable multipath transmission: true : Enable multipath transmission. false : Disable multipath transmission.
+  @JsonKey(name: 'enableMultipath')
+  final bool? enableMultipath;
+
+  /// @nodoc
+  @JsonKey(name: 'uplinkMultipathMode')
+  final MultipathMode? uplinkMultipathMode;
+
+  /// @nodoc
+  @JsonKey(name: 'downlinkMultipathMode')
+  final MultipathMode? downlinkMultipathMode;
+
+  /// Preferred transmission path type. See MultipathType. When using this parameter, make sure enableMultipath is set to true.
+  @JsonKey(name: 'preferMultipathType')
+  final MultipathType? preferMultipathType;
+
   /// @nodoc
   factory ChannelMediaOptions.fromJson(Map<String, dynamic> json) =>
       _$ChannelMediaOptionsFromJson(json);
@@ -1633,7 +1657,10 @@ extension FeatureTypeExt on FeatureType {
 class LeaveChannelOptions implements AgoraSerializable {
   /// @nodoc
   const LeaveChannelOptions(
-      {this.stopAudioMixing, this.stopAllEffect, this.stopMicrophoneRecording});
+      {this.stopAudioMixing,
+      this.stopAllEffect,
+      this.unloadAllEffect,
+      this.stopMicrophoneRecording});
 
   /// Whether to stop playing music files and audio mixing when leaving the channel: true : (default) Stop playing music files and audio mixing. false : Do not stop playing music files and audio mixing.
   @JsonKey(name: 'stopAudioMixing')
@@ -1642,6 +1669,10 @@ class LeaveChannelOptions implements AgoraSerializable {
   /// Whether to stop playing sound effects when leaving the channel: true : (default) Stop playing sound effects. false : Do not stop playing sound effects.
   @JsonKey(name: 'stopAllEffect')
   final bool? stopAllEffect;
+
+  /// @nodoc
+  @JsonKey(name: 'unloadAllEffect')
+  final bool? unloadAllEffect;
 
   /// Whether to stop microphone capture when leaving the channel: true : (default) Stop microphone capture. false : Do not stop microphone capture.
   @JsonKey(name: 'stopMicrophoneRecording')
@@ -1686,6 +1717,7 @@ class RtcEngineEventHandler {
     this.onFirstLocalVideoFramePublished,
     this.onFirstRemoteVideoDecoded,
     this.onVideoSizeChanged,
+    this.onLocalVideoEvent,
     this.onLocalVideoStateChanged,
     this.onRemoteVideoStateChanged,
     this.onFirstRemoteVideoFrame,
@@ -1758,6 +1790,7 @@ class RtcEngineEventHandler {
     this.onExtensionStoppedWithContext,
     this.onExtensionErrorWithContext,
     this.onSetRtmFlagResult,
+    this.onMultipathStats,
   });
 
   /// Callback when successfully joined a channel.
@@ -1970,6 +2003,15 @@ class RtcEngineEventHandler {
   /// * [rotation] Rotation information, value range [0,360). On iOS, this value is always 0.
   final void Function(RtcConnection connection, VideoSourceType sourceType,
       int uid, int width, int height, int rotation)? onVideoSizeChanged;
+
+  /// Callback triggered when a local video event occurs.
+  ///
+  /// Since Available since v6.6.2. You can use this callback to get the reason for the local video event.
+  ///
+  /// * [source] Type of video source. See VideoSourceType.
+  /// * [event] Type of local video event. See LocalVideoEventType.
+  final void Function(VideoSourceType source, LocalVideoEventType event)?
+      onLocalVideoEvent;
 
   /// Callback when the local video state changes.
   ///
@@ -2676,6 +2718,14 @@ class RtcEngineEventHandler {
 
   /// @nodoc
   final void Function(RtcConnection connection, int code)? onSetRtmFlagResult;
+
+  /// Callback for multipath transmission statistics.
+  ///
+  /// Since Added since v6.6.2.
+  ///
+  /// * [stats] Multipath transmission statistics. See MultipathStats.
+  final void Function(RtcConnection connection, MultipathStats stats)?
+      onMultipathStats;
 }
 
 /// Methods for managing video devices.
@@ -2745,6 +2795,196 @@ abstract class VideoDeviceManager {
   Future<void> release();
 }
 
+/// Used to manage and configure video effects, such as beauty, makeup styles, and filters.
+///
+/// Since Available since v6.6.2.
+abstract class VideoEffectObject {
+  /// Adds or updates the effect for the specified video effect node and template.
+  ///
+  /// Since Available since v6.6.2. Priority rules:
+  ///  Style makeup nodes take precedence over filter effect nodes.
+  ///  To apply filter effects, you must first remove the style makeup effect node.
+  ///
+  /// * [nodeId] The unique identifier or combination of identifiers for the video effect node. See VideoEffectNodeId.
+  /// * [templateName] Name of the effect template. If set to NULL or an empty string, the SDK loads the default configuration from the resource package.
+  ///
+  /// Returns
+  /// 0: Method call succeeds.
+  ///  < 0: Method call fails.
+  Future<void> addOrUpdateVideoEffect(
+      {required int nodeId, required String templateName});
+
+  /// Removes the video effect for the specified node ID.
+  ///
+  /// Since Available since v6.6.2.
+  ///
+  /// * [nodeId] The unique identifier of the video effect node to be removed. See VideoEffectNodeId.
+  ///
+  /// Returns
+  /// 0: Method call succeeds.
+  ///  < 0: Method call fails.
+  Future<void> removeVideoEffect(int nodeId);
+
+  /// Performs an action on the specified video effect node.
+  ///
+  /// Since Available since v6.6.2.
+  ///
+  /// * [nodeId] The unique identifier of the video effect node.
+  /// * [actionId] The action to perform. See VideoEffectAction.
+  ///
+  /// Returns
+  /// 0: Method call succeeds.
+  ///  < 0: Method call fails.
+  Future<void> performVideoEffectAction(
+      {required int nodeId, required VideoEffectAction actionId});
+
+  /// @nodoc
+  Future<void> setVideoEffectStringParam(
+      {required String option, required String key, required String param});
+
+  /// Sets a float parameter for a video effect.
+  ///
+  /// Since Available since v6.6.2.
+  ///
+  /// * [option] The category of the parameter option.
+  /// * [key] The key name of the parameter.
+  /// * [param] The float value to set.
+  ///
+  /// Returns
+  /// 0: Method call succeeds.
+  ///  < 0: Method call fails.
+  Future<void> setVideoEffectFloatParam(
+      {required String option, required String key, required double param});
+
+  /// setVideoEffectIntParam : Sets an integer parameter for a video effect.
+  ///
+  /// Since Available since v6.6.2.
+  ///
+  /// * [option] The category of the option to which the parameter belongs.
+  /// * [key] The key name of the parameter.
+  /// * [param] The integer parameter value to set.
+  ///
+  /// Returns
+  /// 0: Method call succeeds.
+  ///  < 0: Method call fails.
+  Future<void> setVideoEffectIntParam(
+      {required String option, required String key, required int param});
+
+  /// Sets a boolean parameter for a video effect.
+  ///
+  /// Since Available since v6.6.2.
+  ///
+  /// * [option] The category of the parameter option.
+  /// * [key] The key name of the parameter.
+  /// * [param] The boolean value to set: true : Enables the option. false : Disables the option.
+  ///
+  /// Returns
+  /// 0: Method call succeeds.
+  ///  < 0: Method call fails.
+  Future<void> setVideoEffectBoolParam(
+      {required String option, required String key, required bool param});
+
+  /// Gets the value of the specified float type parameter in a video effect.
+  ///
+  /// Since Available since v6.6.2.
+  ///
+  /// * [option] The category of the option to which the parameter belongs.
+  /// * [key] The key name of the parameter.
+  ///
+  /// Returns
+  /// If the parameter exists, returns the corresponding float value.
+  ///  If the parameter does not exist or an error occurs, returns 0.0f.
+  Future<double> getVideoEffectFloatParam(
+      {required String option, required String key});
+
+  /// Gets the integer parameter from the video effect.
+  ///
+  /// Since Available since v6.6.2.
+  ///
+  /// * [option] Category of the parameter option.
+  /// * [key] Key name of the parameter.
+  ///
+  /// Returns
+  /// If the parameter exists, returns the corresponding integer value.
+  ///  If the parameter does not exist or an error occurs, returns 0.
+  Future<int> getVideoEffectIntParam(
+      {required String option, required String key});
+
+  /// Gets the boolean parameter from the video effect.
+  ///
+  /// Since Available since v6.6.2.
+  ///
+  /// * [option] Category of the parameter option.
+  /// * [key] Key name of the parameter.
+  ///
+  /// Returns
+  /// true : The parameter is enabled. false : The parameter is not enabled or does not exist.
+  Future<bool> getVideoEffectBoolParam(
+      {required String option, required String key});
+}
+
+/// Video effect node types.
+///
+/// Since Available since v6.6.2.
+@JsonEnum(alwaysCreate: true)
+enum VideoEffectNodeId {
+  /// (1): Beauty effect node.
+  @JsonValue(1 << 0)
+  beauty,
+
+  /// (2): Style makeup effect node.
+  @JsonValue(1 << 1)
+  styleMakeup,
+
+  /// (4): Filter effect node.
+  @JsonValue(1 << 2)
+  filter,
+
+  /// @nodoc
+  @JsonValue(1 << 3)
+  sticker,
+}
+
+/// @nodoc
+extension VideoEffectNodeIdExt on VideoEffectNodeId {
+  /// @nodoc
+  static VideoEffectNodeId fromValue(int value) {
+    return $enumDecode(_$VideoEffectNodeIdEnumMap, value);
+  }
+
+  /// @nodoc
+  int value() {
+    return _$VideoEffectNodeIdEnumMap[this]!;
+  }
+}
+
+/// Operation types for video effect nodes.
+///
+/// Since Available since v6.6.2.
+@JsonEnum(alwaysCreate: true)
+enum VideoEffectAction {
+  /// (1): Save the current parameters of the video effect.
+  @JsonValue(1)
+  save,
+
+  /// (2): Reset the video effect to default parameters.
+  @JsonValue(2)
+  reset,
+}
+
+/// @nodoc
+extension VideoEffectActionExt on VideoEffectAction {
+  /// @nodoc
+  static VideoEffectAction fromValue(int value) {
+    return $enumDecode(_$VideoEffectActionEnumMap, value);
+  }
+
+  /// @nodoc
+  int value() {
+    return _$VideoEffectActionEnumMap[this]!;
+  }
+}
+
 /// Definition of RtcEngineContext.
 @JsonSerializable(explicitToJson: true, includeIfNull: false)
 class RtcEngineContext implements AgoraSerializable {
@@ -2759,7 +2999,8 @@ class RtcEngineContext implements AgoraSerializable {
       this.threadPriority,
       this.useExternalEglContext,
       this.domainLimit,
-      this.autoRegisterAgoraExtensions});
+      this.autoRegisterAgoraExtensions,
+      this.parameters});
 
   /// The App ID issued by Agora to the app developer. Only apps using the same App ID can join the same channel for communication or live streaming. One App ID can only be used to create one RtcEngine. To change the App ID, you must first call release to destroy the current RtcEngine and then create a new one.
   @JsonKey(name: 'appId')
@@ -2802,6 +3043,10 @@ class RtcEngineContext implements AgoraSerializable {
   /// Whether to automatically register Agora extensions when initializing RtcEngine : true : (default) Automatically register Agora extensions when initializing RtcEngine. false : Do not register Agora extensions when initializing RtcEngine. You need to call enableExtension to register the Agora extensions.
   @JsonKey(name: 'autoRegisterAgoraExtensions')
   final bool? autoRegisterAgoraExtensions;
+
+  /// @nodoc
+  @JsonKey(name: 'parameters')
+  final String? parameters;
 
   /// @nodoc
   factory RtcEngineContext.fromJson(Map<String, dynamic> json) =>
@@ -3571,6 +3816,31 @@ abstract class RtcEngine {
       {required bool enabled,
       required FilterEffectOptions options,
       MediaSourceType type = MediaSourceType.primaryCameraSource});
+
+  /// Creates an IVideoEffectObject video effect object.
+  ///
+  /// Since Available since v6.6.2.
+  ///
+  /// * [bundlePath] Path to the video effect resource package.
+  /// * [type] Media source type. See MediaSourceType.
+  ///
+  /// Returns
+  /// If the method call succeeds, returns a pointer to the IVideoEffectObject object. See IVideoEffectObject.
+  ///  If the method call fails, returns NULL.
+  Future<VideoEffectObject?> createVideoEffectObject(
+      {required String bundlePath,
+      MediaSourceType type = MediaSourceType.primaryCameraSource});
+
+  /// Destroys the video effect object.
+  ///
+  /// Since Available since v6.6.2.
+  ///
+  /// * [videoEffectObject] The video effect object to destroy. See VideoEffectObject.
+  ///
+  /// Returns
+  /// 0: The method call succeeds.
+  ///  < 0: The method call fails.
+  Future<void> destroyVideoEffectObject(VideoEffectObject videoEffectObject);
 
   /// Sets the low-light enhancement feature.
   ///
@@ -4905,7 +5175,9 @@ abstract class RtcEngine {
   /// Returns
   /// This method returns no value if the call succeeds. If the method call fails, it throws an AgoraRtcException, which you need to catch and handle. See [Error Codes](https://docs.agora.io/en/video-calling/troubleshooting/error-codes) for details and troubleshooting suggestions.
   Future<void> setPlaybackAudioFrameBeforeMixingParameters(
-      {required int sampleRate, required int channel});
+      {required int sampleRate,
+      required int channel,
+      required int samplesPerCall});
 
   /// Enables audio spectrum monitoring.
   ///

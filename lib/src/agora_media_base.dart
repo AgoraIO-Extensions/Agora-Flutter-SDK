@@ -399,123 +399,6 @@ extension MediaSourceTypeExt on MediaSourceType {
 }
 
 /// @nodoc
-@JsonEnum(alwaysCreate: true)
-enum ContentInspectResult {
-  /// @nodoc
-  @JsonValue(1)
-  contentInspectNeutral,
-
-  /// @nodoc
-  @JsonValue(2)
-  contentInspectSexy,
-
-  /// @nodoc
-  @JsonValue(3)
-  contentInspectPorn,
-}
-
-/// @nodoc
-extension ContentInspectResultExt on ContentInspectResult {
-  /// @nodoc
-  static ContentInspectResult fromValue(int value) {
-    return $enumDecode(_$ContentInspectResultEnumMap, value);
-  }
-
-  /// @nodoc
-  int value() {
-    return _$ContentInspectResultEnumMap[this]!;
-  }
-}
-
-/// Type of video content inspection module.
-@JsonEnum(alwaysCreate: true)
-enum ContentInspectType {
-  /// 0: (Default) This module has no actual functionality. Do not set type to this value.
-  @JsonValue(0)
-  contentInspectInvalid,
-
-  /// @nodoc
-  @JsonValue(1)
-  contentInspectModeration,
-
-  /// 2: Uses Agora's proprietary plugin for screenshot upload. The SDK captures and uploads screenshots of the video stream.
-  @JsonValue(2)
-  contentInspectSupervision,
-
-  /// 3: Uses Cloud Marketplace plugin for screenshot upload. The SDK uses the Cloud Marketplace video moderation plugin to capture and upload screenshots of the video stream.
-  @JsonValue(3)
-  contentInspectImageModeration,
-}
-
-/// @nodoc
-extension ContentInspectTypeExt on ContentInspectType {
-  /// @nodoc
-  static ContentInspectType fromValue(int value) {
-    return $enumDecode(_$ContentInspectTypeEnumMap, value);
-  }
-
-  /// @nodoc
-  int value() {
-    return _$ContentInspectTypeEnumMap[this]!;
-  }
-}
-
-/// ContentInspectModule struct for configuring the upload frequency of local screenshots.
-@JsonSerializable(explicitToJson: true, includeIfNull: false)
-class ContentInspectModule implements AgoraSerializable {
-  /// @nodoc
-  const ContentInspectModule({this.type, this.interval});
-
-  /// The type of function module. See ContentInspectType.
-  @JsonKey(name: 'type')
-  final ContentInspectType? type;
-
-  /// Interval for uploading local screenshots, in seconds. The value must be greater than 0. Default is 0, meaning no screenshot upload. Recommended value is 10 seconds, but you can adjust it based on your business requirements.
-  @JsonKey(name: 'interval')
-  final int? interval;
-
-  /// @nodoc
-  factory ContentInspectModule.fromJson(Map<String, dynamic> json) =>
-      _$ContentInspectModuleFromJson(json);
-
-  @override
-  Map<String, dynamic> toJson() => _$ContentInspectModuleToJson(this);
-}
-
-/// Local screenshot upload configuration.
-@JsonSerializable(explicitToJson: true, includeIfNull: false)
-class ContentInspectConfig implements AgoraSerializable {
-  /// @nodoc
-  const ContentInspectConfig(
-      {this.extraInfo, this.serverConfig, this.modules, this.moduleCount});
-
-  /// Additional information, with a maximum length of 1024 bytes.
-  /// The SDK uploads the additional information along with the screenshot to the Agora server; after the screenshot is completed, the Agora server sends the additional information to your server along with the callback notification.
-  @JsonKey(name: 'extraInfo')
-  final String? extraInfo;
-
-  /// (Optional) Server configuration related to video moderation in the Cloud Marketplace. This parameter takes effect only when the type in ContentInspectModule is set to contentInspectImageModeration. To use this feature, please [contact technical support](https://www.agora.io/cn/contact/).
-  @JsonKey(name: 'serverConfig')
-  final String? serverConfig;
-
-  /// Function modules. See ContentInspectModule.
-  /// Supports up to 32 ContentInspectModule instances. The value range for MAX_CONTENT_INSPECT_MODULE_COUNT is an integer between [1, 32]. Only one instance can be configured for each function module. Currently, only screenshot upload is supported.
-  @JsonKey(name: 'modules')
-  final List<ContentInspectModule>? modules;
-
-  /// The number of function modules, i.e., the number of configured ContentInspectModule instances. Must match the number of instances configured in modules. Maximum value is 32.
-  @JsonKey(name: 'moduleCount')
-  final int? moduleCount;
-
-  /// @nodoc
-  factory ContentInspectConfig.fromJson(Map<String, dynamic> json) =>
-      _$ContentInspectConfigFromJson(json);
-
-  @override
-  Map<String, dynamic> toJson() => _$ContentInspectConfigToJson(this);
-}
-
-/// @nodoc
 const kMaxCodecNameLength = 50;
 
 /// @nodoc
@@ -1591,6 +1474,127 @@ extension VideoModulePositionExt on VideoModulePosition {
   int value() {
     return _$VideoModulePositionEnumMap[this]!;
   }
+}
+
+/// @nodoc
+@JsonEnum(alwaysCreate: true)
+enum ContentInspectResult {
+  /// @nodoc
+  @JsonValue(1)
+  contentInspectNeutral,
+
+  /// @nodoc
+  @JsonValue(2)
+  contentInspectSexy,
+
+  /// @nodoc
+  @JsonValue(3)
+  contentInspectPorn,
+}
+
+/// @nodoc
+extension ContentInspectResultExt on ContentInspectResult {
+  /// @nodoc
+  static ContentInspectResult fromValue(int value) {
+    return $enumDecode(_$ContentInspectResultEnumMap, value);
+  }
+
+  /// @nodoc
+  int value() {
+    return _$ContentInspectResultEnumMap[this]!;
+  }
+}
+
+/// Type of video content inspection module.
+@JsonEnum(alwaysCreate: true)
+enum ContentInspectType {
+  /// 0: (Default) This module has no actual functionality. Do not set type to this value.
+  @JsonValue(0)
+  contentInspectInvalid,
+
+  /// @nodoc
+  @JsonValue(1)
+  contentInspectModeration,
+
+  /// 2: Uses Agora's proprietary plugin for screenshot upload. The SDK captures and uploads screenshots of the video stream.
+  @JsonValue(2)
+  contentInspectSupervision,
+
+  /// 3: Uses Cloud Marketplace plugin for screenshot upload. The SDK uses the Cloud Marketplace video moderation plugin to capture and upload screenshots of the video stream.
+  @JsonValue(3)
+  contentInspectImageModeration,
+}
+
+/// @nodoc
+extension ContentInspectTypeExt on ContentInspectType {
+  /// @nodoc
+  static ContentInspectType fromValue(int value) {
+    return $enumDecode(_$ContentInspectTypeEnumMap, value);
+  }
+
+  /// @nodoc
+  int value() {
+    return _$ContentInspectTypeEnumMap[this]!;
+  }
+}
+
+/// ContentInspectModule struct for configuring the upload frequency of local screenshots.
+@JsonSerializable(explicitToJson: true, includeIfNull: false)
+class ContentInspectModule implements AgoraSerializable {
+  /// @nodoc
+  const ContentInspectModule({this.type, this.interval, this.position});
+
+  /// The type of function module. See ContentInspectType.
+  @JsonKey(name: 'type')
+  final ContentInspectType? type;
+
+  /// Interval for uploading local screenshots, in seconds. The value must be greater than 0. Default is 0, meaning no screenshot upload. Recommended value is 10 seconds, but you can adjust it based on your business requirements.
+  @JsonKey(name: 'interval')
+  final int? interval;
+
+  /// Position of the video observer. See VideoModulePosition.
+  @JsonKey(name: 'position')
+  final VideoModulePosition? position;
+
+  /// @nodoc
+  factory ContentInspectModule.fromJson(Map<String, dynamic> json) =>
+      _$ContentInspectModuleFromJson(json);
+
+  @override
+  Map<String, dynamic> toJson() => _$ContentInspectModuleToJson(this);
+}
+
+/// Local screenshot upload configuration.
+@JsonSerializable(explicitToJson: true, includeIfNull: false)
+class ContentInspectConfig implements AgoraSerializable {
+  /// @nodoc
+  const ContentInspectConfig(
+      {this.extraInfo, this.serverConfig, this.modules, this.moduleCount});
+
+  /// Additional information, with a maximum length of 1024 bytes.
+  /// The SDK uploads the additional information along with the screenshot to the Agora server; after the screenshot is completed, the Agora server sends the additional information to your server along with the callback notification.
+  @JsonKey(name: 'extraInfo')
+  final String? extraInfo;
+
+  /// (Optional) Server configuration related to video moderation in the Cloud Marketplace. This parameter takes effect only when the type in ContentInspectModule is set to contentInspectImageModeration. To use this feature, please [contact technical support](https://www.agora.io/cn/contact/).
+  @JsonKey(name: 'serverConfig')
+  final String? serverConfig;
+
+  /// Function modules. See ContentInspectModule.
+  /// Supports up to 32 ContentInspectModule instances. The value range for MAX_CONTENT_INSPECT_MODULE_COUNT is an integer between [1, 32]. Only one instance can be configured for each function module. Currently, only screenshot upload is supported.
+  @JsonKey(name: 'modules')
+  final List<ContentInspectModule>? modules;
+
+  /// The number of function modules, i.e., the number of configured ContentInspectModule instances. Must match the number of instances configured in modules. Maximum value is 32.
+  @JsonKey(name: 'moduleCount')
+  final int? moduleCount;
+
+  /// @nodoc
+  factory ContentInspectConfig.fromJson(Map<String, dynamic> json) =>
+      _$ContentInspectConfigFromJson(json);
+
+  @override
+  Map<String, dynamic> toJson() => _$ContentInspectConfigToJson(this);
 }
 
 /// Video snapshot settings.
