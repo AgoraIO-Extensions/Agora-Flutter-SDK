@@ -779,66 +779,6 @@ abstract class RtcEngineEx implements RtcEngine {
       required Uint8List metadata,
       required int length});
 
-  /// @nodoc
-  Future<void> enableVideoImageSourceEx(
-      {required bool enable,
-      required ImageTrackOptions options,
-      required RtcConnection connection});
-
-  /// Preloads the specified audio effect into the channel.
-  ///
-  /// Since Available since v6.6.2. Each time you call this method, only one audio effect file can be preloaded into memory. To preload multiple audio effect files, call this method multiple times. After preloading, you can call playEffect to play the preloaded audio effect, or call playAllEffects to play all preloaded audio effects.
-  ///  To ensure smooth usage, the size of the audio effect file should not exceed the limit.
-  ///  Agora recommends calling this method before joining the channel.
-  ///  If you call preloadEffectEx before playEffectEx, the file resource is not released after playEffectEx is executed. The next time you call playEffectEx, it will start playing from the beginning.
-  ///  If you do not call preloadEffectEx before playEffectEx, the resource is destroyed after playEffectEx is executed. The next time you call playEffectEx, it will attempt to reopen the file and play from the beginning.
-  ///
-  /// * [connection] Connection information. See RtcConnection.
-  /// * [soundId] Audio effect ID.
-  /// * [filePath] The absolute path of a local file or the URL of an online file. Supported audio formats include: mp3, mp4, m4a, aac, 3gp, mkv, and wav.
-  /// * [startPos] The start position for playing the audio effect file, in milliseconds.
-  ///
-  /// Returns
-  /// 0: Success.
-  ///  < 0: Failure.
-  Future<void> preloadEffectEx(
-      {required RtcConnection connection,
-      required int soundId,
-      required String filePath,
-      int startPos = 0});
-
-  /// Plays the specified audio effect in the channel.
-  ///
-  /// Since Available since v6.6.2. You can call this method to play a specified audio effect to all users in the channel. Each call plays only one audio effect. To play multiple audio effects simultaneously, call this method multiple times with different soundId and filePath. You can also set whether to publish the audio effect in the channel.
-  ///  Agora recommends not playing more than three audio effects simultaneously.
-  ///  The audio effect ID and file path in this method must match those in the preloadEffectEx method.
-  ///  If preloadEffectEx is called before playEffectEx, the file resource is not released after playEffectEx is executed. The next time you call playEffectEx, it will start playing from the beginning.
-  ///  If preloadEffectEx is not called before playEffectEx, the resource is destroyed after playEffectEx is executed. The next time you call playEffectEx, it will attempt to reopen the file and play from the beginning.
-  ///
-  /// * [connection] RtcConnection object. See RtcConnection.
-  /// * [soundId] Audio effect ID.
-  /// * [filePath] The absolute path of a local file or the URL of an online file. Supported audio formats include mp3, mp4, m4a, aac, 3gp, mkv, and wav.
-  /// * [loopCount] The number of times the audio effect is played: -1 : Loops indefinitely until stopEffect or stopAllEffects is called. 0 : Plays once. 1 : Plays twice.
-  /// * [pitch] The pitch of the audio effect. The range is 0.5 to 2.0. The default value is 1.0 (original pitch). The smaller the value, the lower the pitch.
-  /// * [pan] The spatial position of the audio effect. The range is -1.0 to 1.0: -1.0 : Audio effect comes from the user's left. 0.0 : Audio effect comes from the front. 1.0 : Audio effect comes from the user's right.
-  /// * [gain] The volume of the audio effect. The range is 0 to 100. The default value is 100 (original volume). The smaller the value, the lower the volume.
-  /// * [publish] Whether to publish the audio effect in the channel: true : Publishes the audio effect in the channel. false : (Default) Does not publish the audio effect in the channel.
-  /// * [startPos] The start position for playing the audio effect file, in milliseconds.
-  ///
-  /// Returns
-  /// 0: Success.
-  ///  < 0: Failure.
-  Future<void> playEffectEx(
-      {required RtcConnection connection,
-      required int soundId,
-      required String filePath,
-      required int loopCount,
-      required double pitch,
-      required double pan,
-      required int gain,
-      bool publish = false,
-      int startPos = 0});
-
   /// Takes a video snapshot at the specified observation point using the connection ID.
   ///
   /// This method takes a snapshot of the specified user's video stream, generates a JPG image, and saves it to the specified path.
