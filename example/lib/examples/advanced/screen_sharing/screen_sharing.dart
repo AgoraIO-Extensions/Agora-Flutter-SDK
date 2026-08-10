@@ -81,10 +81,15 @@ class _State extends State<ScreenSharing> with KeepRemoteVideoViewsMixin {
           });
           break;
         case LocalVideoStreamState.localVideoStreamStateStopped:
+          setState(() {
+            _isScreenShared = false;
+          });
+          break;
         case LocalVideoStreamState.localVideoStreamStateFailed:
           setState(() {
             _isScreenShared = false;
           });
+          _engine.stopScreenCapture();
           break;
         default:
           break;
@@ -96,6 +101,10 @@ class _State extends State<ScreenSharing> with KeepRemoteVideoViewsMixin {
             UserOfflineReasonType reason) {
       logSink.log(
           '[onUserOffline] connection: ${connection.toJson()} remoteUid: $remoteUid reason: $reason');
+    }, onPermissionError: (PermissionType permissionType) {
+      logSink.log('[onPermissionError] permissionType: $permissionType');
+    }, onLocalVideoEvent: (VideoSourceType source, LocalVideoEventType event) {
+      logSink.log('[onLocalVideoEvent] source: $source event: $event');
     });
     _engine = createAgoraRtcEngineEx();
     await _engine.initialize(RtcEngineContext(
@@ -356,6 +365,11 @@ class _State extends State<ScreenSharing> with KeepRemoteVideoViewsMixin {
                       _updateScreenShareChannelMediaOptions();
                     }
                   },
+                  onStartScreenSharedInApp: () {
+                    if (isJoined) {
+                      _updateScreenShareChannelMediaOptions();
+                    }
+                  },
                   onStopScreenShare: () {}),
             if (!kIsWeb &&
                 (defaultTargetPlatform == TargetPlatform.windows ||
@@ -452,12 +466,14 @@ class ScreenShareMobile extends StatefulWidget {
       required this.rtcEngine,
       required this.isScreenShared,
       required this.onStartScreenShared,
+      required this.onStartScreenSharedInApp,
       required this.onStopScreenShare})
       : super(key: key);
 
   final RtcEngine rtcEngine;
   final bool isScreenShared;
   final VoidCallback onStartScreenShared;
+  final VoidCallback onStartScreenSharedInApp;
   final VoidCallback onStopScreenShare;
 
   @override
@@ -469,12 +485,19 @@ class _ScreenShareMobileState extends State<ScreenShareMobile>
   final MethodChannel _iosScreenShareChannel =
       const MethodChannel('example_screensharing_ios');
 
+  bool get _isIOS =>
+      !kIsWeb && defaultTargetPlatform == TargetPlatform.iOS;
+
   @override
   bool get isScreenShared => widget.isScreenShared;
 
   @override
   void onStartScreenShared() {
     widget.onStartScreenShared();
+  }
+
+  void onStartScreenSharedInApp() {
+    widget.onStartScreenSharedInApp();
   }
 
   @override
@@ -487,23 +510,54 @@ class _ScreenShareMobileState extends State<ScreenShareMobile>
 
   @override
   Widget build(BuildContext context) {
-    return Row(
+    return Column(
       children: [
-        Expanded(
-          flex: 1,
-          child: ElevatedButton(
-            onPressed: !isScreenShared ? startScreenShare : stopScreenShare,
-            child: Text('${isScreenShared ? 'Stop' : 'Start'} screen share'),
+        if (_isIOS) ...[
+          Row(
+            children: [
+              Expanded(
+                flex: 1,
+                child: ElevatedButton(
+                  onPressed: !isScreenShared
+                      ? startScreenShareInApp
+                      : stopScreenShare,
+                  child: Text(
+                      '${isScreenShared ? 'Stop' : 'Start'} screen share in app'),
+                ),
+              )
+            ],
           ),
-        )
+          const SizedBox(height: 8),
+        ],
+        Row(
+          children: [
+            Expanded(
+              flex: 1,
+              child: ElevatedButton(
+                onPressed:
+                    !isScreenShared ? startScreenShare : stopScreenShare,
+                child: Text(
+                    '${isScreenShared ? 'Stop' : 'Start'} screen share'),
+              ),
+            )
+          ],
+        ),
       ],
     );
+  }
+
+  void startScreenShareInApp() async {
+    if (!_isIOS || isScreenShared) return;
+    logSink.log('startScreenCaptureInApp');
+    await rtcEngine.startScreenCaptureInApp(
+        const ScreenCaptureParameters2(captureAudio: true, captureVideo: true));
+    onStartScreenSharedInApp();
   }
 
   @override
   void startScreenShare() async {
     if (isScreenShared) return;
-
+    logSink.log('startScreenCapture');
     await rtcEngine.startScreenCapture(
         const ScreenCaptureParameters2(captureAudio: true, captureVideo: true));
     _showRPSystemBroadcastPickerViewIfNeed();
@@ -519,7 +573,7 @@ class _ScreenShareMobileState extends State<ScreenShareMobile>
   }
 
   Future<void> _showRPSystemBroadcastPickerViewIfNeed() async {
-    if (defaultTargetPlatform != TargetPlatform.iOS) {
+    if (!_isIOS) {
       return;
     }
 

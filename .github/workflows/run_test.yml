@@ -562,8 +562,18 @@ jobs:
     if: ${{ !contains(github.event.pull_request.labels.*.name, 'ci:skip') }}
     strategy:
       matrix:
-        version: ["3.24.5", "3.38.5"]
-    runs-on: macos-latest  # Updated: macos-13 is retired
+        include:
+          - version: "3.24.5"
+            runner: macos-15
+            model: "iPhone 16 Pro"
+            os_version: "18.5"
+            xcode_version: "16.4"
+          - version: "3.38.5"
+            runner: macos-26
+            model: "iPhone 16e"
+            os_version: ">=26.2"
+            xcode_version: latest-stable
+    runs-on: ${{ matrix.runner }}
     timeout-minutes: 60
     env:
       TEST_APP_ID: ${{ secrets.APP_ID }}
@@ -573,11 +583,15 @@ jobs:
         with:
           flutter-version: ${{ matrix.version }}
           cache: true
+      - name: Setup Xcode ${{ matrix.xcode_version }}
+        uses: maxim-lobanov/setup-xcode@v1
+        with:
+          xcode-version: ${{ matrix.xcode_version }}
       - uses: futureware-tech/simulator-action@v4
         with:
-          model: 'iPhone 16 Pro'
+          model: ${{ matrix.model }}
           os: iOS
-          os_version: '>=18.0'
+          os_version: ${{ matrix.os_version }}
           erase_before_boot: true
           wait_for_boot: true
           shutdown_after_job: true
