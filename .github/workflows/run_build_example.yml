@@ -38,6 +38,11 @@ on:
         # Here is the error log:
         # Caused by: org.gradle.api.GradleException: You are applying Flutter's app_plugin_loader Gradle plugin imperatively using the apply script method, which is not possible anymore. Migrate to applying Gradle plugins with the declarative plugins block: https://flutter.dev/to/flutter-gradle-plugin-apply
         default: '3.24.5'
+      disable_swift_package_manager:
+        description: 'Disable Swift Package Manager for iOS builds'
+        type: boolean
+        required: false
+        default: false
   workflow_call:
     inputs:
       target_platforms:
@@ -74,6 +79,11 @@ on:
         # Here is the error log:
         # Caused by: org.gradle.api.GradleException: You are applying Flutter's app_plugin_loader Gradle plugin imperatively using the apply script method, which is not possible anymore. Migrate to applying Gradle plugins with the declarative plugins block: https://flutter.dev/to/flutter-gradle-plugin-apply
         default: '3.24.5'
+      disable_swift_package_manager:
+        description: 'Disable Swift Package Manager for iOS builds'
+        type: boolean
+        required: false
+        default: false
     secrets:
       APP_ID:
         required: true
@@ -248,6 +258,10 @@ jobs:
           channel: ${{ inputs.flutter_channel }}
           flutter-version: ${{ inputs.flutter_version }}
           cache: true
+
+      - name: Disable Swift Package Manager
+        if: ${{ inputs.disable_swift_package_manager && matrix.platform == 'ios' }}
+        run: flutter config --no-enable-swift-package-manager
 
       - name: Build
         env:
