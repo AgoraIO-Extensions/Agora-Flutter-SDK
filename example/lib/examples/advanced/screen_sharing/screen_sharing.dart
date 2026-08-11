@@ -485,8 +485,7 @@ class _ScreenShareMobileState extends State<ScreenShareMobile>
   final MethodChannel _iosScreenShareChannel =
       const MethodChannel('example_screensharing_ios');
 
-  bool get _isIOS =>
-      !kIsWeb && defaultTargetPlatform == TargetPlatform.iOS;
+  bool get _isIOS => !kIsWeb && defaultTargetPlatform == TargetPlatform.iOS;
 
   @override
   bool get isScreenShared => widget.isScreenShared;
@@ -518,9 +517,8 @@ class _ScreenShareMobileState extends State<ScreenShareMobile>
               Expanded(
                 flex: 1,
                 child: ElevatedButton(
-                  onPressed: !isScreenShared
-                      ? startScreenShareInApp
-                      : stopScreenShare,
+                  onPressed:
+                      !isScreenShared ? startScreenShareInApp : stopScreenShare,
                   child: Text(
                       '${isScreenShared ? 'Stop' : 'Start'} screen share in app'),
                 ),
@@ -534,10 +532,9 @@ class _ScreenShareMobileState extends State<ScreenShareMobile>
             Expanded(
               flex: 1,
               child: ElevatedButton(
-                onPressed:
-                    !isScreenShared ? startScreenShare : stopScreenShare,
-                child: Text(
-                    '${isScreenShared ? 'Stop' : 'Start'} screen share'),
+                onPressed: !isScreenShared ? startScreenShare : stopScreenShare,
+                child:
+                    Text('${isScreenShared ? 'Stop' : 'Start'} screen share'),
               ),
             )
           ],
