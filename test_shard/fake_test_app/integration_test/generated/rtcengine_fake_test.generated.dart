@@ -5027,6 +5027,43 @@ void rtcEngineSmokeTestCases() {
       try {
         int sampleRate = 5;
         int channel = 5;
+        await rtcEngine.setPlaybackAudioFrameBeforeMixingParameters(
+          sampleRate: sampleRate,
+          channel: channel,
+        );
+      } catch (e) {
+        if (e is! AgoraRtcException) {
+          debugPrint(
+              '[RtcEngine.setPlaybackAudioFrameBeforeMixingParameters] error: ${e.toString()}');
+          rethrow;
+        }
+
+        if (e.code != -4) {
+          // Only not supported error supported.
+          rethrow;
+        }
+      }
+
+      await rtcEngine.release();
+    },
+  );
+
+  testWidgets(
+    'RtcEngine.setPlaybackAudioFrameBeforeMixingParameters',
+    (WidgetTester tester) async {
+      String engineAppId = const String.fromEnvironment('TEST_APP_ID',
+          defaultValue: '<YOUR_APP_ID>');
+
+      RtcEngine rtcEngine = createAgoraRtcEngine();
+      await rtcEngine.initialize(RtcEngineContext(
+        appId: engineAppId,
+        areaCode: AreaCode.areaCodeGlob.value(),
+      ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
+
+      try {
+        int sampleRate = 5;
+        int channel = 5;
         int samplesPerCall = 5;
         await rtcEngine.setPlaybackAudioFrameBeforeMixingParameters(
           sampleRate: sampleRate,
