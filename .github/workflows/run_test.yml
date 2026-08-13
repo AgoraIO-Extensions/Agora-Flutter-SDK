@@ -474,6 +474,95 @@ jobs:
         env:
           IOS_SIMULATOR_SDK_VERSION: 18.0
 
+  ios_dependency_linkage_matrix:
+    name: iOS dependency linkage - ${{ matrix.name }}
+    if: ${{ !contains(github.event.pull_request.labels.*.name, 'ci:skip') }}
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - name: agora_rtc_engine-cocoapods-iris_method_channel-cocoapods
+            disable_swift_package_manager: true
+            iris_method_channel_ref: 2.2.5
+            expect_framework: false
+          - name: agora_rtc_engine-cocoapods-iris_method_channel-spm-static
+            disable_swift_package_manager: false
+            iris_method_channel_ref: 2.2.5
+            expect_framework: false
+          - name: agora_rtc_engine-cocoapods-iris_method_channel-spm-dynamic
+            disable_swift_package_manager: false
+            iris_method_channel_ref: fix/iris-method-channel-spm-symbol-retain
+            expect_framework: true
+          # Enable after agora_rtc_engine/Package.swift is restored:
+          # - name: agora_rtc_engine-spm-iris_method_channel-spm-dynamic
+          #   disable_swift_package_manager: false
+          #   iris_method_channel_ref: fix/iris-method-channel-spm-symbol-retain
+          #   expect_framework: true
+    runs-on: macos-latest
+    timeout-minutes: 120
+    steps:
+      - uses: actions/checkout@v4
+      - uses: subosito/flutter-action@v2
+        with:
+          flutter-version: '3.44.4'
+          cache: true
+      - name: Configure Swift Package Manager
+        run: |
+          if [ "${{ matrix.disable_swift_package_manager }}" = "true" ]; then
+            flutter config --no-enable-swift-package-manager
+          else
+            flutter config --enable-swift-package-manager
+          fi
+          flutter config --list
+      - name: Select iris_method_channel revision
+        env:
+          IRIS_METHOD_CHANNEL_REF: ${{ matrix.iris_method_channel_ref }}
+        run: |
+          ruby -e 'path = "pubspec.yaml"; text = File.read(path); ref = ENV.fetch("IRIS_METHOD_CHANNEL_REF"); pattern = /(iris_method_channel:\s+git:\s+url:\s+\S+\s+ref:\s+)\S+/; abort "iris_method_channel ref not found" unless text.match?(pattern); File.write(path, text.sub(pattern, "\\1#{ref}"))'
+      - name: Resolve dependencies
+        run: flutter pub get
+        working-directory: example
+      - name: Build iOS app without signing
+        run: flutter build ios --release --no-codesign
+        working-directory: example
+      - name: Archive iOS app without signing
+        run: |
+          xcodebuild \
+            -workspace ios/Runner.xcworkspace \
+            -scheme Runner \
+            -configuration Release \
+            -sdk iphoneos \
+            -destination generic/platform=iOS \
+            -archivePath build/ios/archive/Runner.xcarchive \
+            CODE_SIGNING_ALLOWED=NO \
+            CODE_SIGNING_REQUIRED=NO \
+            archive
+        working-directory: example
+      - name: Check Iris framework and symbols
+        env:
+          EXPECT_FRAMEWORK: ${{ matrix.expect_framework }}
+        working-directory: example
+        run: |
+          set -euo pipefail
+          app="build/ios/iphoneos/Runner.app"
+          archive_app="build/ios/archive/Runner.xcarchive/Products/Applications/Runner.app"
+          framework="$app/Frameworks/iris-method-channel.framework/iris-method-channel"
+          archive_framework="$archive_app/Frameworks/iris-method-channel.framework/iris-method-channel"
+          echo "=== Runner.app layout ==="
+          find "$app/Frameworks" -maxdepth 1 -type d -iname '*iris*' -print 2>/dev/null || true
+          echo "=== Runner symbols ==="
+          nm -gU "$app/Runner" 2>/dev/null | grep -E 'Iris_(InitDartApiDL|Dispose|OnEvent|RegisterDartPort|UnregisterDartPort)' || true
+          echo "=== Archive symbols ==="
+          nm -gU "$archive_app/Runner" 2>/dev/null | grep -E 'Iris_(InitDartApiDL|Dispose|OnEvent|RegisterDartPort|UnregisterDartPort)' || true
+          if [ "$EXPECT_FRAMEWORK" = "true" ]; then
+            test -f "$framework"
+            test -f "$archive_framework"
+            for symbol in Iris_InitDartApiDL Iris_Dispose Iris_OnEvent Iris_RegisterDartPort Iris_UnregisterDartPort; do
+              nm -gU "$framework" | grep -q "_$symbol"
+              nm -gU "$archive_framework" | grep -q "_$symbol"
+            done
+          fi
+
   build_ios_canary:
     name: Build iOS (latest stable canary)
     if: ${{ !contains(github.event.pull_request.labels.*.name, 'ci:skip') }}

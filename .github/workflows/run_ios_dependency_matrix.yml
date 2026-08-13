@@ -20,17 +20,17 @@ jobs:
       fail-fast: false
       matrix:
         include:
-          - name: pods-pods
+          - name: agora_rtc_engine-cocoapods-iris_method_channel-cocoapods
             disable_swift_package_manager: true
             iris_method_channel_ref: 2.2.5
-          - name: pods-iris-spm-static
+          - name: agora_rtc_engine-cocoapods-iris_method_channel-spm-static
             disable_swift_package_manager: false
             iris_method_channel_ref: 2.2.5
-          - name: pods-iris-spm-dynamic
+          - name: agora_rtc_engine-cocoapods-iris_method_channel-spm-dynamic
             disable_swift_package_manager: false
             iris_method_channel_ref: fix/iris-method-channel-spm-symbol-retain
           # Enable after agora_rtc_engine/Package.swift is restored:
-          # - name: spm-spm-dynamic
+          # - name: agora_rtc_engine-spm-iris_method_channel-spm-dynamic
           #   disable_swift_package_manager: false
           #   iris_method_channel_ref: fix/iris-method-channel-spm-symbol-retain
     name: ${{ matrix.name }}
