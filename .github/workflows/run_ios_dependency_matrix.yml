@@ -1,0 +1,45 @@
+name: 'run: iOS dependency matrix'
+
+on:
+  workflow_dispatch:
+    inputs:
+      target_branch:
+        description: 'Branch to build'
+        type: string
+        required: true
+        default: 'release/6.5'
+      flutter_version:
+        description: 'Flutter version'
+        type: string
+        required: true
+        default: '3.44.4'
+
+jobs:
+  build:
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - name: pods-pods
+            disable_swift_package_manager: true
+            iris_method_channel_ref: 2.2.5
+          - name: pods-iris-spm-static
+            disable_swift_package_manager: false
+            iris_method_channel_ref: 2.2.5
+          - name: pods-iris-spm-dynamic
+            disable_swift_package_manager: false
+            iris_method_channel_ref: fix/iris-method-channel-spm-symbol-retain
+          # Enable after agora_rtc_engine/Package.swift is restored:
+          # - name: spm-spm-dynamic
+          #   disable_swift_package_manager: false
+          #   iris_method_channel_ref: fix/iris-method-channel-spm-symbol-retain
+    name: ${{ matrix.name }}
+    uses: ./.github/workflows/run_build_example.yml
+    with:
+      target_platforms: ios
+      target_branch: ${{ inputs.target_branch }}
+      flutter_channel: stable
+      flutter_version: ${{ inputs.flutter_version }}
+      disable_swift_package_manager: ${{ matrix.disable_swift_package_manager }}
+      iris_method_channel_ref: ${{ matrix.iris_method_channel_ref }}
+    secrets: inherit

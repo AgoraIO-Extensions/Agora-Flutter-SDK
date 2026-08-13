@@ -43,6 +43,11 @@ on:
         type: boolean
         required: false
         default: false
+      iris_method_channel_ref:
+        description: 'Temporary git ref for iris_method_channel matrix builds'
+        type: string
+        required: false
+        default: ''
   workflow_call:
     inputs:
       target_platforms:
@@ -84,6 +89,11 @@ on:
         type: boolean
         required: false
         default: false
+      iris_method_channel_ref:
+        description: 'Temporary git ref for iris_method_channel matrix builds'
+        type: string
+        required: false
+        default: ''
     secrets:
       APP_ID:
         required: true
@@ -266,6 +276,7 @@ jobs:
       - name: Build
         env:
           DEFAULT_BUILD_APP_ID: ${{ secrets.APP_ID }}
+          IRIS_METHOD_CHANNEL_REF: ${{ inputs.iris_method_channel_ref }}
         shell: bash
         working-directory: example
         run: |
@@ -273,6 +284,9 @@ jobs:
           flutter --version && which flutter
 
           # install dependencies
+          if [ -n "$IRIS_METHOD_CHANNEL_REF" ]; then
+            ruby -e 'path = "../pubspec.yaml"; text = File.read(path); ref = ENV.fetch("IRIS_METHOD_CHANNEL_REF"); pattern = /(iris_method_channel:\s+git:\s+url:\s+\S+\s+ref:\s+)\S+/; abort "iris_method_channel ref not found" unless text.match?(pattern); File.write(path, text.sub(pattern, "\\1#{ref}"))'
+          fi
           flutter pub get
 
           if [ "$platform" == "ios" ]; then
