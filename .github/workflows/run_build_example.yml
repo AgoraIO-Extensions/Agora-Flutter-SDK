@@ -353,6 +353,21 @@ jobs:
           echo "🚀 Command: $build_command $build_options $build_arguments"
           echo "========================================="
 
+          if [ "$platform" == "ios" ]; then
+            flutter build ios --release --no-codesign \
+              --dart-define=TEST_APP_ID="$DEFAULT_BUILD_APP_ID" \
+              --dart-define=TEST_TOKEN= \
+              --dart-define=TEST_CHANNEL_ID=testapi \
+              --dart-define=INTERNAL_TESTING=true
+            {
+              echo "=== Standard Release build Iris symbols ==="
+              standard_app="build/ios/iphoneos/Runner.app"
+              find "$standard_app/Frameworks" -maxdepth 1 -type d -iname '*iris*' -print 2>/dev/null || true
+              nm -gU "$standard_app/Runner" 2>/dev/null \
+                | grep -E 'Iris_(InitDartApiDL|Dispose|OnEvent|RegisterDartPort|UnregisterDartPort)' || true
+            } | tee -a ../output/ios-build-diagnostics.txt
+          fi
+
           # run build command
           $build_command $build_options $build_arguments
 
