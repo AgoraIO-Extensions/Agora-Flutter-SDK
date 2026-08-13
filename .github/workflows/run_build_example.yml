@@ -361,6 +361,11 @@ jobs:
               echo "=== Release build settings ==="
               xcodebuild -workspace ios/Runner.xcworkspace -scheme Runner -configuration Release -sdk iphoneos -showBuildSettings 2>&1 \
                 | grep -E 'COPY_PHASE_STRIP|DEAD_CODE_STRIPPING|STRIP_STYLE|STRIP_INSTALLED_PRODUCT|STRIP_SWIFT_SYMBOLS|LD_GENERATE_MAP_FILE|LD_MAP_FILE_PATH|OTHER_LDFLAGS' || true
+              echo "=== Archive Iris symbols ==="
+              archive_app="build/ios/archive/Runner.xcarchive/Products/Applications/Runner.app"
+              find "$archive_app/Frameworks" -maxdepth 1 -type d -iname '*iris*' -print 2>/dev/null || true
+              nm -gU "$archive_app/Runner" 2>/dev/null \
+                | grep -E 'Iris_(InitDartApiDL|Dispose|OnEvent|RegisterDartPort|UnregisterDartPort)' || true
               echo "=== IPA layout and Iris symbols ==="
               ipa="$(find build/ios/ipa -maxdepth 1 -name '*.ipa' -print -quit)"
               inspect_dir="$(mktemp -d)"
