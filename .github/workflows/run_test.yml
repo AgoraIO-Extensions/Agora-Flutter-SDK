@@ -475,7 +475,7 @@ jobs:
           IOS_SIMULATOR_SDK_VERSION: 18.0
 
   ios_dependency_linkage_matrix:
-    name: iOS dependency linkage - ${{ matrix.name }}
+    name: iOS dependency linkage - ${{ matrix.name }} (expected ${{ matrix.expected_result }})
     if: ${{ !contains(github.event.pull_request.labels.*.name, 'ci:skip') }}
     strategy:
       fail-fast: false
@@ -484,20 +484,24 @@ jobs:
           - name: agora_rtc_engine-cocoapods-iris_method_channel-cocoapods
             disable_swift_package_manager: true
             iris_method_channel_ref: 2.2.5
-            expect_framework: false
+            expected_result: pass
+            symbol_binary: Frameworks/iris_method_channel.framework/iris_method_channel
           - name: agora_rtc_engine-cocoapods-iris_method_channel-spm-static
             disable_swift_package_manager: false
             iris_method_channel_ref: 2.2.5
-            expect_framework: false
+            expected_result: fail
+            symbol_binary: ''
           - name: agora_rtc_engine-cocoapods-iris_method_channel-spm-dynamic
             disable_swift_package_manager: false
             iris_method_channel_ref: fix/iris-method-channel-spm-symbol-retain
-            expect_framework: true
+            expected_result: pass
+            symbol_binary: Frameworks/iris-method-channel.framework/iris-method-channel
           # Enable after agora_rtc_engine/Package.swift is restored:
           # - name: agora_rtc_engine-spm-iris_method_channel-spm-dynamic
           #   disable_swift_package_manager: false
           #   iris_method_channel_ref: fix/iris-method-channel-spm-symbol-retain
-          #   expect_framework: true
+          #   expected_result: pass
+          #   symbol_binary: Frameworks/iris-method-channel.framework/iris-method-channel
     runs-on: macos-latest
     timeout-minutes: 120
     steps:
@@ -538,29 +542,76 @@ jobs:
             CODE_SIGNING_REQUIRED=NO \
             archive
         working-directory: example
-      - name: Check Iris framework and symbols
+      - name: Verify expected Iris linkage result
         env:
-          EXPECT_FRAMEWORK: ${{ matrix.expect_framework }}
+          EXPECTED_RESULT: ${{ matrix.expected_result }}
+          SYMBOL_BINARY: ${{ matrix.symbol_binary }}
         working-directory: example
         run: |
           set -euo pipefail
           app="build/ios/iphoneos/Runner.app"
           archive_app="build/ios/archive/Runner.xcarchive/Products/Applications/Runner.app"
-          framework="$app/Frameworks/iris-method-channel.framework/iris-method-channel"
-          archive_framework="$archive_app/Frameworks/iris-method-channel.framework/iris-method-channel"
+
+          symbols=(
+            Iris_InitDartApiDL
+            Iris_Dispose
+            Iris_OnEvent
+            Iris_RegisterDartPort
+            Iris_UnregisterDartPort
+          )
+
+          assert_symbols() {
+            local binary="$1"
+            local output
+            test -f "$binary" || {
+              echo "::error::Missing expected binary: $binary"
+              return 1
+            }
+            output="$(nm -gU "$binary")"
+            for symbol in "${symbols[@]}"; do
+              grep -qE "[[:space:]]_$symbol$" <<< "$output" || {
+                echo "::error::$binary is missing _$symbol"
+                return 1
+              }
+            done
+            echo "All expected Iris symbols found in $binary"
+            grep -E 'Iris_(InitDartApiDL|Dispose|OnEvent|RegisterDartPort|UnregisterDartPort)' <<< "$output"
+          }
+
+          find_symbol_owner() {
+            local bundle="$1"
+            local binary
+            for binary in "$bundle/Runner" "$bundle"/Frameworks/*.framework/*; do
+              [ -f "$binary" ] || continue
+              if nm -gU "$binary" 2>/dev/null \
+                | grep -qE 'Iris_(InitDartApiDL|Dispose|OnEvent|RegisterDartPort|UnregisterDartPort)'; then
+                echo "$binary"
+                return 0
+              fi
+            done
+            return 1
+          }
+
           echo "=== Runner.app layout ==="
           find "$app/Frameworks" -maxdepth 1 -type d -iname '*iris*' -print 2>/dev/null || true
+          echo "=== Archive layout ==="
+          find "$archive_app/Frameworks" -maxdepth 1 -type d -iname '*iris*' -print 2>/dev/null || true
           echo "=== Runner symbols ==="
           nm -gU "$app/Runner" 2>/dev/null | grep -E 'Iris_(InitDartApiDL|Dispose|OnEvent|RegisterDartPort|UnregisterDartPort)' || true
           echo "=== Archive symbols ==="
           nm -gU "$archive_app/Runner" 2>/dev/null | grep -E 'Iris_(InitDartApiDL|Dispose|OnEvent|RegisterDartPort|UnregisterDartPort)' || true
-          if [ "$EXPECT_FRAMEWORK" = "true" ]; then
-            test -f "$framework"
-            test -f "$archive_framework"
-            for symbol in Iris_InitDartApiDL Iris_Dispose Iris_OnEvent Iris_RegisterDartPort Iris_UnregisterDartPort; do
-              nm -gU "$framework" | grep -q "_$symbol"
-              nm -gU "$archive_framework" | grep -q "_$symbol"
-            done
+
+          if [ "$EXPECTED_RESULT" = "pass" ]; then
+            assert_symbols "$app/$SYMBOL_BINARY"
+            assert_symbols "$archive_app/$SYMBOL_BINARY"
+            echo "::notice::Expected passing linkage verified before and after Archive"
+          else
+            assert_symbols "$app/Runner"
+            if owner="$(find_symbol_owner "$archive_app")"; then
+              echo "::error::Expected the known SPM static failure, but Archive still exports Iris symbols from $owner"
+              exit 1
+            fi
+            echo "::notice::Expected SPM static failure reproduced: Archive removed the Iris symbols"
           fi
 
   build_ios_canary:
