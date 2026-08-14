@@ -581,7 +581,7 @@ jobs:
           nm -gU "$archive_app/Runner" 2>/dev/null | grep -E 'Iris_(InitDartApiDL|Dispose|OnEvent|RegisterDartPort|UnregisterDartPort)' || true
           echo "=== Current project linkage configuration ==="
           grep -n 'use_frameworks!' ios/Podfile || true
-          package_swift="$(find ios/Flutter/ephemeral/Packages -path '*iris_method_channel*/Package.swift' -print -quit 2>/dev/null || true)"
+          package_swift="$(find -L ios/Flutter/ephemeral/Packages -path '*iris_method_channel*/Package.swift' -print -quit 2>/dev/null || true)"
           if [ -n "$package_swift" ]; then
             if grep -q 'type:[[:space:]]*\.dynamic' "$package_swift"; then
               echo "iris_method_channel SwiftPM product type: dynamic"

@@ -17,10 +17,7 @@ dependencies:
   ffi: '>=2.0.0 <3.0.0'
   async: ^2.11.0
   meta: ^1.7.0
-  iris_method_channel:
-    git:
-      url: https://github.com/AgoraIO-Extensions/iris_method_channel_flutter.git
-      ref: fix/iris-method-channel-spm-symbol-retain
+  iris_method_channel: 2.2.5
   js: ^0.6.3
   web: '>=0.3.0 <2.0.0'
 dev_dependencies:
