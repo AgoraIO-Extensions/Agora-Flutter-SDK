@@ -475,7 +475,7 @@ jobs:
           IOS_SIMULATOR_SDK_VERSION: 18.0
 
   ios_dependency_linkage_matrix:
-    name: iOS dependency linkage - ${{ matrix.name }} (expected ${{ matrix.expected_result }})
+    name: iOS dependency linkage - ${{ matrix.name }}
     if: ${{ !contains(github.event.pull_request.labels.*.name, 'ci:skip') }}
     strategy:
       fail-fast: false
@@ -483,25 +483,11 @@ jobs:
         include:
           - name: agora_rtc_engine-cocoapods-iris_method_channel-cocoapods
             disable_swift_package_manager: true
-            iris_method_channel_ref: 2.2.5
-            expected_result: pass
-            symbol_binary: Frameworks/iris_method_channel.framework/iris_method_channel
-          - name: agora_rtc_engine-cocoapods-iris_method_channel-spm-static
+          - name: agora_rtc_engine-cocoapods-iris_method_channel-spm
             disable_swift_package_manager: false
-            iris_method_channel_ref: 2.2.5
-            expected_result: fail
-            symbol_binary: ''
-          - name: agora_rtc_engine-cocoapods-iris_method_channel-spm-dynamic
-            disable_swift_package_manager: false
-            iris_method_channel_ref: fix/iris-method-channel-spm-symbol-retain
-            expected_result: pass
-            symbol_binary: Frameworks/iris-method-channel.framework/iris-method-channel
           # Enable after agora_rtc_engine/Package.swift is restored:
-          # - name: agora_rtc_engine-spm-iris_method_channel-spm-dynamic
+          # - name: agora_rtc_engine-spm-iris_method_channel-spm
           #   disable_swift_package_manager: false
-          #   iris_method_channel_ref: fix/iris-method-channel-spm-symbol-retain
-          #   expected_result: pass
-          #   symbol_binary: Frameworks/iris-method-channel.framework/iris-method-channel
     runs-on: macos-latest
     timeout-minutes: 120
     steps:
@@ -518,11 +504,6 @@ jobs:
             flutter config --enable-swift-package-manager
           fi
           flutter config --list
-      - name: Select iris_method_channel revision
-        env:
-          IRIS_METHOD_CHANNEL_REF: ${{ matrix.iris_method_channel_ref }}
-        run: |
-          ruby -e 'path = "pubspec.yaml"; text = File.read(path); ref = ENV.fetch("IRIS_METHOD_CHANNEL_REF"); pattern = /(iris_method_channel:\s+git:\s+url:\s+\S+\s+ref:\s+)\S+/; abort "iris_method_channel ref not found" unless text.match?(pattern); File.write(path, text.sub(pattern, "\\1#{ref}"))'
       - name: Resolve dependencies
         run: flutter pub get
         working-directory: example
@@ -542,10 +523,7 @@ jobs:
             CODE_SIGNING_REQUIRED=NO \
             archive
         working-directory: example
-      - name: Verify expected Iris linkage result
-        env:
-          EXPECTED_RESULT: ${{ matrix.expected_result }}
-          SYMBOL_BINARY: ${{ matrix.symbol_binary }}
+      - name: Verify current iris_method_channel linkage
         working-directory: example
         run: |
           set -euo pipefail
@@ -581,10 +559,11 @@ jobs:
           find_symbol_owner() {
             local bundle="$1"
             local binary
+            local output
             for binary in "$bundle/Runner" "$bundle"/Frameworks/*.framework/*; do
               [ -f "$binary" ] || continue
-              if nm -gU "$binary" 2>/dev/null \
-                | grep -qE 'Iris_(InitDartApiDL|Dispose|OnEvent|RegisterDartPort|UnregisterDartPort)'; then
+              output="$(nm -gU "$binary" 2>/dev/null)" || continue
+              if grep -qE '[[:space:]]_Iris_InitDartApiDL$' <<< "$output"; then
                 echo "$binary"
                 return 0
               fi
@@ -600,19 +579,34 @@ jobs:
           nm -gU "$app/Runner" 2>/dev/null | grep -E 'Iris_(InitDartApiDL|Dispose|OnEvent|RegisterDartPort|UnregisterDartPort)' || true
           echo "=== Archive symbols ==="
           nm -gU "$archive_app/Runner" 2>/dev/null | grep -E 'Iris_(InitDartApiDL|Dispose|OnEvent|RegisterDartPort|UnregisterDartPort)' || true
-
-          if [ "$EXPECTED_RESULT" = "pass" ]; then
-            assert_symbols "$app/$SYMBOL_BINARY"
-            assert_symbols "$archive_app/$SYMBOL_BINARY"
-            echo "::notice::Expected passing linkage verified before and after Archive"
-          else
-            assert_symbols "$app/Runner"
-            if owner="$(find_symbol_owner "$archive_app")"; then
-              echo "::error::Expected the known SPM static failure, but Archive still exports Iris symbols from $owner"
-              exit 1
+          echo "=== Current project linkage configuration ==="
+          grep -n 'use_frameworks!' ios/Podfile || true
+          package_swift="$(find ios/Flutter/ephemeral/Packages -path '*iris_method_channel*/Package.swift' -print -quit 2>/dev/null || true)"
+          if [ -n "$package_swift" ]; then
+            if grep -q 'type:[[:space:]]*\.dynamic' "$package_swift"; then
+              echo "iris_method_channel SwiftPM product type: dynamic"
+            elif grep -q 'type:[[:space:]]*\.static' "$package_swift"; then
+              echo "iris_method_channel SwiftPM product type: static"
+            else
+              echo "iris_method_channel SwiftPM product type: automatic"
             fi
-            echo "::notice::Expected SPM static failure reproduced: Archive removed the Iris symbols"
+          else
+            echo "iris_method_channel is not integrated through SwiftPM in this build"
           fi
+
+          app_owner="$(find_symbol_owner "$app")" || {
+            echo "::error::The current PR build does not export Iris_InitDartApiDL from any App-visible binary"
+            exit 1
+          }
+          archive_owner="$(find_symbol_owner "$archive_app")" || {
+            echo "::error::The current PR Archive does not export Iris_InitDartApiDL from any App-visible binary"
+            exit 1
+          }
+
+          assert_symbols "$app_owner"
+          assert_symbols "$archive_owner"
+          echo "::notice::Current PR linkage verified before Archive in $app_owner"
+          echo "::notice::Current PR linkage verified after Archive in $archive_owner"
 
   build_ios_canary:
     name: Build iOS (latest stable canary)

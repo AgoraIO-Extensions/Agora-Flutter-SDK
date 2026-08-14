@@ -22,17 +22,11 @@ jobs:
         include:
           - name: agora_rtc_engine-cocoapods-iris_method_channel-cocoapods
             disable_swift_package_manager: true
-            iris_method_channel_ref: 2.2.5
-          - name: agora_rtc_engine-cocoapods-iris_method_channel-spm-static
+          - name: agora_rtc_engine-cocoapods-iris_method_channel-spm
             disable_swift_package_manager: false
-            iris_method_channel_ref: 2.2.5
-          - name: agora_rtc_engine-cocoapods-iris_method_channel-spm-dynamic
-            disable_swift_package_manager: false
-            iris_method_channel_ref: fix/iris-method-channel-spm-symbol-retain
           # Enable after agora_rtc_engine/Package.swift is restored:
-          # - name: agora_rtc_engine-spm-iris_method_channel-spm-dynamic
+          # - name: agora_rtc_engine-spm-iris_method_channel-spm
           #   disable_swift_package_manager: false
-          #   iris_method_channel_ref: fix/iris-method-channel-spm-symbol-retain
     name: ${{ matrix.name }}
     uses: ./.github/workflows/run_build_example.yml
     with:
@@ -41,5 +35,4 @@ jobs:
       flutter_channel: stable
       flutter_version: ${{ inputs.flutter_version }}
       disable_swift_package_manager: ${{ matrix.disable_swift_package_manager }}
-      iris_method_channel_ref: ${{ matrix.iris_method_channel_ref }}
     secrets: inherit
