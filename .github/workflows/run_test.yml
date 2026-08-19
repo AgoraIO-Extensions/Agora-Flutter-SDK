@@ -429,6 +429,140 @@ jobs:
         env:
           IOS_SIMULATOR_SDK_VERSION: 18.0
 
+  ios_dependency_linkage_matrix:
+    name: iOS dependency linkage - ${{ matrix.name }}
+    if: ${{ !contains(github.event.pull_request.labels.*.name, 'ci:skip') }}
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - name: agora_rtc_engine-cocoapods-iris_method_channel-cocoapods
+            disable_swift_package_manager: true
+          - name: agora_rtc_engine-cocoapods-iris_method_channel-spm
+            disable_swift_package_manager: false
+          # Enable after agora_rtc_engine/Package.swift is restored:
+          # - name: agora_rtc_engine-spm-iris_method_channel-spm
+          #   disable_swift_package_manager: false
+    runs-on: macos-latest
+    timeout-minutes: 120
+    steps:
+      - uses: actions/checkout@v4
+      - uses: subosito/flutter-action@v2
+        with:
+          flutter-version: '3.44.4'
+          cache: true
+      - name: Configure Swift Package Manager
+        run: |
+          if [ "${{ matrix.disable_swift_package_manager }}" = "true" ]; then
+            flutter config --no-enable-swift-package-manager
+          else
+            flutter config --enable-swift-package-manager
+          fi
+          flutter config --list
+      - name: Resolve dependencies
+        run: flutter pub get
+        working-directory: example
+      - name: Build iOS app without signing
+        run: flutter build ios --release --no-codesign
+        working-directory: example
+      - name: Archive iOS app without signing
+        run: |
+          xcodebuild \
+            -workspace ios/Runner.xcworkspace \
+            -scheme Runner \
+            -configuration Release \
+            -sdk iphoneos \
+            -destination generic/platform=iOS \
+            -archivePath build/ios/archive/Runner.xcarchive \
+            CODE_SIGNING_ALLOWED=NO \
+            CODE_SIGNING_REQUIRED=NO \
+            archive
+        working-directory: example
+      - name: Verify current iris_method_channel linkage
+        working-directory: example
+        run: |
+          set -euo pipefail
+          app="build/ios/iphoneos/Runner.app"
+          archive_app="build/ios/archive/Runner.xcarchive/Products/Applications/Runner.app"
+
+          symbols=(
+            Iris_InitDartApiDL
+            Iris_Dispose
+            Iris_OnEvent
+            Iris_RegisterDartPort
+            Iris_UnregisterDartPort
+          )
+
+          assert_symbols() {
+            local binary="$1"
+            local output
+            test -f "$binary" || {
+              echo "::error::Missing expected binary: $binary"
+              return 1
+            }
+            output="$(nm -gU "$binary")"
+            for symbol in "${symbols[@]}"; do
+              grep -qE "[[:space:]]_$symbol$" <<< "$output" || {
+                echo "::error::$binary is missing _$symbol"
+                return 1
+              }
+            done
+            echo "All expected Iris symbols found in $binary"
+            grep -E 'Iris_(InitDartApiDL|Dispose|OnEvent|RegisterDartPort|UnregisterDartPort)' <<< "$output"
+          }
+
+          find_symbol_owner() {
+            local bundle="$1"
+            local binary
+            local output
+            for binary in "$bundle/Runner" "$bundle"/Frameworks/*.framework/*; do
+              [ -f "$binary" ] || continue
+              output="$(nm -gU "$binary" 2>/dev/null)" || continue
+              if grep -qE '[[:space:]]_Iris_InitDartApiDL$' <<< "$output"; then
+                echo "$binary"
+                return 0
+              fi
+            done
+            return 1
+          }
+
+          echo "=== Runner.app layout ==="
+          find "$app/Frameworks" -maxdepth 1 -type d -iname '*iris*' -print 2>/dev/null || true
+          echo "=== Archive layout ==="
+          find "$archive_app/Frameworks" -maxdepth 1 -type d -iname '*iris*' -print 2>/dev/null || true
+          echo "=== Runner symbols ==="
+          nm -gU "$app/Runner" 2>/dev/null | grep -E 'Iris_(InitDartApiDL|Dispose|OnEvent|RegisterDartPort|UnregisterDartPort)' || true
+          echo "=== Archive symbols ==="
+          nm -gU "$archive_app/Runner" 2>/dev/null | grep -E 'Iris_(InitDartApiDL|Dispose|OnEvent|RegisterDartPort|UnregisterDartPort)' || true
+          echo "=== Current project linkage configuration ==="
+          grep -n 'use_frameworks!' ios/Podfile || true
+          package_swift="$(find -L ios/Flutter/ephemeral/Packages -path '*iris_method_channel*/Package.swift' -print -quit 2>/dev/null || true)"
+          if [ -n "$package_swift" ]; then
+            if grep -q 'type:[[:space:]]*\.dynamic' "$package_swift"; then
+              echo "iris_method_channel SwiftPM product type: dynamic"
+            elif grep -q 'type:[[:space:]]*\.static' "$package_swift"; then
+              echo "iris_method_channel SwiftPM product type: static"
+            else
+              echo "iris_method_channel SwiftPM product type: automatic"
+            fi
+          else
+            echo "iris_method_channel is not integrated through SwiftPM in this build"
+          fi
+
+          app_owner="$(find_symbol_owner "$app")" || {
+            echo "::error::The current PR build does not export Iris_InitDartApiDL from any App-visible binary"
+            exit 1
+          }
+          archive_owner="$(find_symbol_owner "$archive_app")" || {
+            echo "::error::The current PR Archive does not export Iris_InitDartApiDL from any App-visible binary"
+            exit 1
+          }
+
+          assert_symbols "$app_owner"
+          assert_symbols "$archive_owner"
+          echo "::notice::Current PR linkage verified before Archive in $app_owner"
+          echo "::notice::Current PR linkage verified after Archive in $archive_owner"
+
   build_web:
     name: Build Web
     if: ${{ !contains(github.event.pull_request.labels.*.name, 'ci:skip') }}

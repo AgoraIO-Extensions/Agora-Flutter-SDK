@@ -261,6 +261,24 @@ jobs:
           # install dependencies
           flutter pub get
 
+          if [ "$platform" == "ios" ]; then
+            mkdir -p ../output
+            {
+              echo "=== Flutter diagnostics ==="
+              flutter --version
+              flutter config --list
+              echo "=== plugin integration state ==="
+              grep -o '"swift_package_manager_enabled"[^}]*}' .flutter-plugins-dependencies || true
+              echo "=== Iris dependency lock ==="
+              grep -A8 -B1 '^  iris_method_channel:' pubspec.lock || true
+              echo "=== generated Swift package ==="
+              sed -n '1,180p' ios/Flutter/ephemeral/Packages/FlutterGeneratedPluginSwiftPackage/Package.swift 2>/dev/null || true
+              echo "=== source revision ==="
+              git -C .. rev-parse HEAD
+              git -C .. status --short
+            } | tee ../output/ios-build-diagnostics.txt
+          fi
+
           # prepare build command, android: apk, ios: ipa, macos: macos, windows: (empty), web: web
           build_command=""
                     
@@ -321,8 +339,71 @@ jobs:
           echo "🚀 Command: $build_command $build_options $build_arguments"
           echo "========================================="
 
+          if [ "$platform" == "ios" ]; then
+            flutter build ios --release --no-codesign \
+              --dart-define=TEST_APP_ID="$DEFAULT_BUILD_APP_ID" \
+              --dart-define=TEST_TOKEN= \
+              --dart-define=TEST_CHANNEL_ID=testapi \
+              --dart-define=INTERNAL_TESTING=true
+            {
+              echo "=== Standard Release build Iris symbols ==="
+              standard_app="build/ios/iphoneos/Runner.app"
+              find "$standard_app/Frameworks" -maxdepth 1 -type d -iname '*iris*' -print 2>/dev/null || true
+              file "$standard_app/Runner"
+              dwarfdump --uuid "$standard_app/Runner"
+              nm -gU "$standard_app/Runner" 2>/dev/null \
+                | grep -E 'Iris_(InitDartApiDL|Dispose|OnEvent|RegisterDartPort|UnregisterDartPort)' || true
+            } | tee -a ../output/ios-build-diagnostics.txt
+            cp "build/ios/iphoneos/Runner.app/Runner" ../output/standard-build-Runner
+          fi
+
           # run build command
-          $build_command $build_options $build_arguments
+          if [ "$platform" == "ios" ]; then
+            $build_command $build_options $build_arguments -v 2>&1 \
+              | tee ../output/ios-archive-build.log
+          else
+            $build_command $build_options $build_arguments
+          fi
+
+          if [ "$platform" == "ios" ]; then
+            {
+              echo "=== Archive link, dSYM, and strip commands ==="
+              grep -E '(^|[[:space:]])(Ld|Strip|GenerateDSYMFile)([[:space:]]|$)|/strip([[:space:]]|$)|xcodebuild.*(-archivePath|archive|-exportArchive)' \
+                ../output/ios-archive-build.log || true
+              echo "=== Release build settings ==="
+              xcodebuild -workspace ios/Runner.xcworkspace -scheme Runner -configuration Release -sdk iphoneos -showBuildSettings 2>&1 \
+                | grep -E 'COPY_PHASE_STRIP|DEAD_CODE_STRIPPING|STRIP_STYLE|STRIP_INSTALLED_PRODUCT|STRIP_SWIFT_SYMBOLS|LD_GENERATE_MAP_FILE|LD_MAP_FILE_PATH|OTHER_LDFLAGS' || true
+              echo "=== All Runner Mach-O files after Archive ==="
+              while IFS= read -r -d '' binary; do
+                if file "$binary" | grep -q 'Mach-O'; then
+                  echo "[$binary]"
+                  ls -l "$binary"
+                  dwarfdump --uuid "$binary" || true
+                  nm -gU "$binary" 2>/dev/null \
+                    | grep -E 'Iris_(InitDartApiDL|Dispose|OnEvent|RegisterDartPort|UnregisterDartPort)' || true
+                fi
+              done < <(find build/ios "$HOME/Library/Developer/Xcode/DerivedData" -type f -name Runner -print0 2>/dev/null)
+              echo "=== Archive Iris symbols ==="
+              archive_app="build/ios/archive/Runner.xcarchive/Products/Applications/Runner.app"
+              find "$archive_app/Frameworks" -maxdepth 1 -type d -iname '*iris*' -print 2>/dev/null || true
+              nm -gU "$archive_app/Runner" 2>/dev/null \
+                | grep -E 'Iris_(InitDartApiDL|Dispose|OnEvent|RegisterDartPort|UnregisterDartPort)' || true
+              echo "=== IPA layout and Iris symbols ==="
+              ipa="$(find build/ios/ipa -maxdepth 1 -name '*.ipa' -print -quit)"
+              inspect_dir="$(mktemp -d)"
+              unzip -q "$ipa" -d "$inspect_dir"
+              app="$inspect_dir/Payload/Runner.app"
+              find "$app/Frameworks" -maxdepth 1 -type d -iname '*iris*' -print 2>/dev/null || true
+              while IFS= read -r -d '' binary; do
+                hits=$(nm -gU "$binary" 2>/dev/null | grep -E 'Iris_(InitDartApiDL|Dispose|OnEvent|RegisterDartPort|UnregisterDartPort)' || true)
+                if [ -n "$hits" ]; then
+                  echo "[$binary]"
+                  echo "$hits"
+                fi
+              done < <(find "$app" -type f -perm -111 -print0)
+              rm -rf "$inspect_dir"
+            } | tee -a ../output/ios-build-diagnostics.txt
+          fi
 
           # create output directory if it doesn't exist
           if [ ! -d "../output" ]; then
