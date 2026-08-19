@@ -252,24 +252,26 @@ jobs:
     runs-on: macos-latest
     timeout-minutes: 120
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout as agora_rtc_engine
+        uses: actions/checkout@v4
+        with:
+          path: agora_rtc_engine
       - uses: subosito/flutter-action@v2
         with:
           channel: ${{ needs.resolve_flutter_version.outputs.flutter_channel }}
           flutter-version: ${{ needs.resolve_flutter_version.outputs.flutter_version }}
           cache: true
       - name: Run flutter integration test swiftpm for ${{ matrix.os }}
-        if: ${{ matrix.os == 'macos' }}
+        working-directory: agora_rtc_engine/test_shard/integration_test_swiftpm
         run: |
+          flutter config --enable-swift-package-manager
           flutter pub get
-          flutter build ${{ matrix.os }}
-        working-directory: test_shard/integration_test_swiftpm
-      - name: Run flutter integration test swiftpm for ${{ matrix.os }}
-        if: ${{ matrix.os == 'ios' }}
-        run: |
-          flutter pub get
-          flutter build ${{ matrix.os }} --no-codesign
-        working-directory: test_shard/integration_test_swiftpm
+          if [ "${{ matrix.os }}" = "ios" ]; then
+            flutter build ios --no-codesign
+          else
+            flutter config --enable-macos-desktop
+            flutter build macos
+          fi
         env:
           IOS_SIMULATOR_SDK_VERSION: 18.0
 
