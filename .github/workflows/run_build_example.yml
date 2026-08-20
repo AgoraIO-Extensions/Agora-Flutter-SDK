@@ -31,7 +31,7 @@ on:
         required: false
         default: 'stable'
       flutter_version:
-        description: 'Target Flutter version, e.g. 3.24.5, 3.24.x, commit hash, or leave empty to use the latest release version of specified channel by flutter_version(default)'
+        description: 'Target Flutter version(s), separated by comma, e.g. "3.24.5, 3.44.8"'
         type: string
         required: false
         # we should use the latest stable version for building example later, however, the android build will fail with the latest stable version, so we fixed use the 3.24.5 version here for now
@@ -67,7 +67,7 @@ on:
         required: false
         default: 'stable'
       flutter_version:
-        description: 'Target Flutter version, e.g. 3.24.5, 3.24.x, commit hash, or leave empty to use the latest release version of specified channel by flutter_version(default)'
+        description: 'Target Flutter version(s), separated by comma, e.g. "3.24.5, 3.44.8"'
         type: string
         required: false
         # we should use the latest stable version for building example later, however, the android build will fail with the latest stable version, so we fixed use the 3.24.5 version here for now
@@ -127,35 +127,55 @@ jobs:
           echo "final jsonlized platforms: $platforms"
           echo "platforms=$platforms" >> $GITHUB_OUTPUT
 
+  build-matrix:
+    runs-on: ubuntu-latest
+    needs: split-platforms
+    outputs:
+      include: ${{ steps.build-matrix.outputs.include }}
+    steps:
+      - id: build-matrix
+        env:
+          platforms: ${{ needs.split-platforms.outputs.platforms }}
+          flutter_versions: ${{ inputs.flutter_version }}
+        run: |
+          set -euo pipefail
+
+          versions=$(printf '%s' "$flutter_versions" | sed 's/ //g' | tr ',' '\n' | jq -R -s -c 'split("\n") | map(select(length > 0))')
+          if [ "$(echo "$versions" | jq 'length')" -eq 0 ]; then
+            echo "::error::At least one Flutter version is required"
+            exit 1
+          fi
+
+          include=$(jq -c -n \
+            --argjson platforms "$platforms" \
+            --argjson versions "$versions" \
+            '
+              {
+                android: "macos-latest",
+                web:     "ubuntu-latest",
+                windows: "windows-latest",
+                ios:     "macos-latest",
+                macos:   "macos-latest"
+              } as $runners
+              | [ $platforms[] as $p
+                  | $versions[] as $v
+                  | { platform: $p,
+                      version: $v,
+                      os: $runners[$p],
+                      primary: ($v == $versions[0]) }
+                  | select(.os != null) ]
+            ')
+
+          echo "final include: $include"
+          echo "include=$include" >> $GITHUB_OUTPUT
+
   build:
     runs-on: ${{ matrix.os }}
-    needs: split-platforms
+    needs: build-matrix
     strategy:
       fail-fast: false
       matrix:
-        os: [ubuntu-latest, macos-latest, windows-latest]
-        platform: ${{ fromJson(needs.split-platforms.outputs.platforms) }}
-        exclude:
-          - os: ubuntu-latest
-            platform: android
-          - os: ubuntu-latest
-            platform: ios
-          - os: ubuntu-latest
-            platform: macos
-          - os: ubuntu-latest
-            platform: windows
-          - os: macos-latest
-            platform: windows
-          - os: macos-latest
-            platform: web
-          - os: windows-latest
-            platform: android
-          - os: windows-latest
-            platform: ios
-          - os: windows-latest
-            platform: macos
-          - os: windows-latest
-            platform: web
+        include: ${{ fromJson(needs.build-matrix.outputs.include) }}
     env:
         platform: ${{ matrix.platform }}
         extra_build_options: ${{ inputs.extra_build_options }}
@@ -247,7 +267,7 @@ jobs:
         uses: subosito/flutter-action@v2
         with:
           channel: ${{ inputs.flutter_channel }}
-          flutter-version: ${{ inputs.flutter_version }}
+          flutter-version: ${{ matrix.version }}
           cache: true
 
       - name: Build
@@ -479,8 +499,8 @@ jobs:
           # get build_timestamp
           build_timestamp=$(date +%Y%m%d%H%M%S)
 
-          # generate artifact_name
-          artifact_name="agora_rtc_engine_example_${{ matrix.platform }}_${pub_version}_${build_timestamp}_${{ github.run_id }}"
+          flutter_version_slug="$(printf '%s' "${{ matrix.version }}" | tr -c '[:alnum:].' '-')"
+          artifact_name="agora_rtc_engine_example_${{ matrix.platform }}_flutter${flutter_version_slug}_${pub_version}_${build_timestamp}_${{ github.run_id }}"
           echo "artifact_name=$artifact_name" >> $GITHUB_OUTPUT
 
       - name: Upload build artifacts
@@ -492,6 +512,7 @@ jobs:
 
       - name: Setup download url
         id: setup_output
+        if: ${{ matrix.primary }}
         shell: bash
         run: |
           # see https://docs.github.com/en/actions/writing-workflows/choosing-what-your-workflow-does/passing-information-between-jobs
