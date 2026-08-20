@@ -19,6 +19,22 @@ let package = Package(
             name: "agora_rtc_engine",
             dependencies: [
                 .product(name: "RtcBasic", package: "AgoraRtcEngine_macOS"),
+                .product(name: "AINS", package: "AgoraRtcEngine_macOS"),
+                .product(name: "AINSLL", package: "AgoraRtcEngine_macOS"),
+                .product(name: "AudioBeauty", package: "AgoraRtcEngine_macOS"),
+                .product(name: "ClearVision", package: "AgoraRtcEngine_macOS"),
+                .product(name: "ContentInspect", package: "AgoraRtcEngine_macOS"),
+                .product(name: "SpatialAudio", package: "AgoraRtcEngine_macOS"),
+                .product(name: "VirtualBackground", package: "AgoraRtcEngine_macOS"),
+                .product(name: "AIAEC", package: "AgoraRtcEngine_macOS"),
+                .product(name: "AIAECLL", package: "AgoraRtcEngine_macOS"),
+                .product(name: "VQA", package: "AgoraRtcEngine_macOS"),
+                .product(name: "FaceDetection", package: "AgoraRtcEngine_macOS"),
+                .product(name: "FaceCapture", package: "AgoraRtcEngine_macOS"),
+                .product(name: "LipSync", package: "AgoraRtcEngine_macOS"),
+                .product(name: "VideoCodecEnc", package: "AgoraRtcEngine_macOS"),
+                .product(name: "VideoAv1CodecEnc", package: "AgoraRtcEngine_macOS"),
+                .product(name: "ScreenCapture", package: "AgoraRtcEngine_macOS"),
                 "AgoraRtcWrapper"
             ],
             cSettings: [

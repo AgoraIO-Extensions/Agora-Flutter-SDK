@@ -1231,7 +1231,6 @@ test('accepts quoted reordered fields, SSH GitHub URLs, and iOS-only AINS produc
   );
   const macos = await readFile(manifests.macosManifest, 'utf8');
   assert.equal(macos, macosBefore);
-  assert.doesNotMatch(macos, /\.product\(name: "AINS"/);
 });
 
 test('uses the explicitly labeled GitHub URL instead of an earlier URL', async () => {

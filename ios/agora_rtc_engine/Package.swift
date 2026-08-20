@@ -19,6 +19,22 @@ let package = Package(
             name: "agora_rtc_engine",
             dependencies: [
                 .product(name: "RtcBasic", package: "AgoraRtcEngine_iOS"),
+                .product(name: "AINS", package: "AgoraRtcEngine_iOS"),
+                .product(name: "AINSLL", package: "AgoraRtcEngine_iOS"),
+                .product(name: "AudioBeauty", package: "AgoraRtcEngine_iOS"),
+                .product(name: "ClearVision", package: "AgoraRtcEngine_iOS"),
+                .product(name: "ContentInspect", package: "AgoraRtcEngine_iOS"),
+                .product(name: "SpatialAudio", package: "AgoraRtcEngine_iOS"),
+                .product(name: "VirtualBackground", package: "AgoraRtcEngine_iOS"),
+                .product(name: "AIAEC", package: "AgoraRtcEngine_iOS"),
+                .product(name: "AIAECLL", package: "AgoraRtcEngine_iOS"),
+                .product(name: "VQA", package: "AgoraRtcEngine_iOS"),
+                .product(name: "FaceDetection", package: "AgoraRtcEngine_iOS"),
+                .product(name: "FaceCapture", package: "AgoraRtcEngine_iOS"),
+                .product(name: "LipSync", package: "AgoraRtcEngine_iOS"),
+                .product(name: "VideoCodecEnc", package: "AgoraRtcEngine_iOS"),
+                .product(name: "VideoAv1CodecEnc", package: "AgoraRtcEngine_iOS"),
+                .product(name: "ReplayKit", package: "AgoraRtcEngine_iOS"),
                 "AgoraRtcWrapper"
             ],
             cSettings: [
