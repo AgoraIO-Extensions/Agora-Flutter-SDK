@@ -1,4 +1,4 @@
-name: 'run: Apple SwiftPM dependency matrix'
+name: 'run: Apple dependency matrix'
 
 on:
   workflow_call:
@@ -28,11 +28,19 @@ on:
 
 jobs:
   build:
-    name: ${{ matrix.platform }} dependency linkage - agora_rtc_engine-spm-iris_method_channel-spm
+    name: ${{ matrix.platform }} dependency linkage - agora_rtc_engine-${{ matrix.dependency_manager }}-iris_method_channel-${{ matrix.dependency_manager }}
     strategy:
       fail-fast: false
       matrix:
-        platform: [ios, macos]
+        include:
+          - platform: ios
+            dependency_manager: cocoapods
+          - platform: macos
+            dependency_manager: cocoapods
+          - platform: ios
+            dependency_manager: swiftpm
+          - platform: macos
+            dependency_manager: swiftpm
     runs-on: macos-latest
     timeout-minutes: 120
     steps:
@@ -50,9 +58,13 @@ jobs:
           flutter-version: ${{ inputs.flutter_version }}
           cache: true
 
-      - name: Enable Swift Package Manager
+      - name: Configure dependency manager
         run: |
-          flutter config --enable-swift-package-manager
+          if [ "${{ matrix.dependency_manager }}" = "cocoapods" ]; then
+            flutter config --no-enable-swift-package-manager
+          else
+            flutter config --enable-swift-package-manager
+          fi
           flutter config --list
 
       - name: Resolve dependencies
@@ -96,14 +108,16 @@ jobs:
               archive
           fi
 
-      - name: Verify ${{ matrix.platform }} SwiftPM linkage
+      - name: Verify ${{ matrix.platform }} ${{ matrix.dependency_manager }} linkage
         working-directory: agora_rtc_engine/example
         run: |
           set -euo pipefail
 
           platform="${{ matrix.platform }}"
+          dependency_manager="${{ matrix.dependency_manager }}"
           project_dir="$platform"
           package_swift="$project_dir/Flutter/ephemeral/Packages/FlutterGeneratedPluginSwiftPackage/Package.swift"
+          podfile_lock="$project_dir/Podfile.lock"
 
           if [ "$platform" = "ios" ]; then
             app="build/ios/iphoneos/Runner.app"
@@ -153,36 +167,53 @@ jobs:
             return 1
           }
 
-          test -f "$package_swift" || {
-            echo "::error::Missing generated Swift package: $package_swift"
-            exit 1
-          }
-          grep -Fq '.package(name: "agora_rtc_engine",' "$package_swift" || {
-            echo "::error::agora_rtc_engine is not integrated through SwiftPM"
-            exit 1
-          }
-          grep -Fq '.package(name: "iris_method_channel",' "$package_swift" || {
-            echo "::error::iris_method_channel is not integrated through SwiftPM"
-            exit 1
-          }
+          if [ "$dependency_manager" = "swiftpm" ]; then
+            test -f "$package_swift" || {
+              echo "::error::Missing generated Swift package: $package_swift"
+              exit 1
+            }
+            grep -Fq '.package(name: "agora_rtc_engine",' "$package_swift" || {
+              echo "::error::agora_rtc_engine is not integrated through SwiftPM"
+              exit 1
+            }
+            grep -Fq '.package(name: "iris_method_channel",' "$package_swift" || {
+              echo "::error::iris_method_channel is not integrated through SwiftPM"
+              exit 1
+            }
+            echo "=== Generated Swift package ==="
+            sed -n '1,180p' "$package_swift"
+          else
+            test -f "$podfile_lock" || {
+              echo "::error::Missing CocoaPods lockfile: $podfile_lock"
+              exit 1
+            }
+            grep -Fq 'agora_rtc_engine' "$podfile_lock" || {
+              echo "::error::agora_rtc_engine is not integrated through CocoaPods"
+              exit 1
+            }
+            grep -Fq 'iris_method_channel' "$podfile_lock" || {
+              echo "::error::iris_method_channel is not integrated through CocoaPods"
+              exit 1
+            }
+            echo "=== CocoaPods lockfile ==="
+            sed -n '1,240p' "$podfile_lock"
+          fi
 
-          echo "=== Generated Swift package ==="
-          sed -n '1,180p' "$package_swift"
           echo "=== App bundle layout ==="
           find "$app" -maxdepth 5 -type f -print
           echo "=== Archive bundle layout ==="
           find "$archive_app" -maxdepth 5 -type f -print
 
           app_owner="$(find_symbol_owner "$app")" || {
-            echo "::error::The $platform build does not export Iris_InitDartApiDL from any App-visible binary"
+            echo "::error::The $platform $dependency_manager build does not export Iris_InitDartApiDL from any App-visible binary"
             exit 1
           }
           archive_owner="$(find_symbol_owner "$archive_app")" || {
-            echo "::error::The $platform Archive does not export Iris_InitDartApiDL from any App-visible binary"
+            echo "::error::The $platform $dependency_manager Archive does not export Iris_InitDartApiDL from any App-visible binary"
             exit 1
           }
 
           assert_symbols "$app_owner"
           assert_symbols "$archive_owner"
-          echo "::notice::$platform linkage verified before Archive in $app_owner"
-          echo "::notice::$platform linkage verified after Archive in $archive_owner"
+          echo "::notice::$platform $dependency_manager linkage verified before Archive in $app_owner"
+          echo "::notice::$platform $dependency_manager linkage verified after Archive in $archive_owner"
