@@ -185,7 +185,7 @@ jobs:
               {
                 android: "ubuntu-latest",
                 web:     "ubuntu-latest",
-                windows: "windows-latest",
+                windows: "windows-2022",
                 ios:     "macos-latest",
                 macos:   "macos-latest"
               } as $runners
