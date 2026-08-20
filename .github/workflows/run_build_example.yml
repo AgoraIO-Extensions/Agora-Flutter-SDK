@@ -195,9 +195,7 @@ jobs:
                   | { platform: $p,
                       version: $v,
                       app_id_secret: $a,
-                      app_id_slug: ($a | ascii_downcase),
-                      os: $runners[$p],
-                      primary: ($v == $versions[0] and $a == $app_ids[0]) }
+                      os: $runners[$p] }
                   | select(.os != null) ]
             ')
 
@@ -205,6 +203,7 @@ jobs:
           echo "include=$include" >> $GITHUB_OUTPUT
 
   build:
+    name: build (${{ matrix.platform }}, Flutter ${{ matrix.version }}, ${{ matrix.app_id_secret }})
     runs-on: ${{ matrix.os }}
     needs: build-matrix
     strategy:
@@ -215,12 +214,6 @@ jobs:
         platform: ${{ matrix.platform }}
         extra_build_options: ${{ inputs.extra_build_options }}
         extra_build_arguments: ${{ inputs.extra_build_arguments }}
-    outputs:
-      artifact_nightly_link_android: ${{ steps.setup_output.outputs.artifact_nightly_link_android }}
-      artifact_nightly_link_ios: ${{ steps.setup_output.outputs.artifact_nightly_link_ios }}
-      artifact_nightly_link_macos: ${{ steps.setup_output.outputs.artifact_nightly_link_macos }}
-      artifact_nightly_link_windows: ${{ steps.setup_output.outputs.artifact_nightly_link_windows }}
-      artifact_nightly_link_web: ${{ steps.setup_output.outputs.artifact_nightly_link_web }}
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -546,7 +539,7 @@ jobs:
           build_timestamp=$(date +%Y%m%d%H%M%S)
 
           flutter_version_slug="$(printf '%s' "${{ matrix.version }}" | tr -c '[:alnum:].' '-')"
-          artifact_name="agora_rtc_engine_example_${{ matrix.platform }}_flutter${flutter_version_slug}_${{ matrix.app_id_slug }}_${pub_version}_${build_timestamp}_${{ github.run_id }}"
+          artifact_name="agora_rtc_engine_example_${{ matrix.platform }}_flutter${flutter_version_slug}_${{ matrix.app_id_secret }}_${pub_version}_${build_timestamp}_${{ github.run_id }}"
           echo "artifact_name=$artifact_name" >> $GITHUB_OUTPUT
 
       - name: Upload build artifacts
@@ -556,20 +549,30 @@ jobs:
           path: agora_rtc_engine/output
           if-no-files-found: error
 
-      - name: Setup download url
-        id: setup_output
-        if: ${{ matrix.primary }}
-        shell: bash
-        run: |
-          # see https://docs.github.com/en/actions/writing-workflows/choosing-what-your-workflow-does/passing-information-between-jobs
-          current_platform="${{ matrix.platform }}"
-          echo "artifact_nightly_link_${current_platform}=https://nightly.link/${{ github.repository }}/actions/runs/${{ github.run_id }}/${{ steps.generate_artifact_name.outputs.artifact_name }}.zip" >> $GITHUB_OUTPUT
-
   comment:
     runs-on: ubuntu-latest
     if: ${{ inputs.issue_number != null && !cancelled() }}
     needs: [build]
     steps:
+      - name: Generate artifact links
+        id: artifact-links
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        shell: bash
+        run: |
+          artifact_names=$(gh api "repos/${GITHUB_REPOSITORY}/actions/runs/${GITHUB_RUN_ID}/artifacts" --paginate --jq '.artifacts[] | select(.expired == false) | .name')
+          {
+            echo 'links<<EOF'
+            if [ -n "$artifact_names" ]; then
+              while IFS= read -r artifact_name; do
+                echo "- [$artifact_name](https://nightly.link/${GITHUB_REPOSITORY}/actions/runs/${GITHUB_RUN_ID}/${artifact_name}.zip)"
+              done <<< "$artifact_names"
+            else
+              echo '- No build artifacts were uploaded'
+            fi
+            echo 'EOF'
+          } >> "$GITHUB_OUTPUT"
+
       - uses: peter-evans/create-or-update-comment@v3
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
@@ -579,10 +582,6 @@ jobs:
               https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}
 
             Build Results:
-              - ${{ needs.build.outputs.artifact_nightly_link_android }}
-              - ${{ needs.build.outputs.artifact_nightly_link_ios }}
-              - ${{ needs.build.outputs.artifact_nightly_link_macos }}
-              - ${{ needs.build.outputs.artifact_nightly_link_windows }}
-              - ${{ needs.build.outputs.artifact_nightly_link_web }}
+            ${{ steps.artifact-links.outputs.links }}
 
             > This comment is commented by bot, do not edit it directly
