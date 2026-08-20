@@ -16,14 +16,16 @@ jobs:
         id: check_permission_by_secret
         # perform secret check & put boolean result as an output
         shell: bash
+        env:
+          APP_ID: ${{ secrets.APP_ID }}
+          MY_APP_ID: ${{ secrets.MY_APP_ID }}
         run: |
-          APP_ID="${{ secrets.APP_ID }}"
-          if [ ! -z "${APP_ID}" ]; then
+          if [ -n "$APP_ID" ] && [ -n "$MY_APP_ID" ]; then
             echo "has_permission=1" >> $GITHUB_OUTPUT;
-            echo "secrets.APP_ID is not empty, PR opened by the internal contributors"
+            echo "App ID secrets are available, PR opened by the internal contributors"
           else
             echo "has_permission=-1" >> $GITHUB_OUTPUT;
-            echo "secrets.APP_ID is empty, PR opened by the external contributors"
+            echo "App ID secrets are unavailable, PR opened by the external contributors"
           fi
 
   build_example:
@@ -36,6 +38,7 @@ jobs:
       issue_number: ${{ github.event.pull_request.number }}
     secrets:
       APP_ID: ${{ secrets.APP_ID }}
+      MY_APP_ID: ${{ secrets.MY_APP_ID }}
       BUILD_PROVISION_PROFILE_UUID: ${{ secrets.BUILD_PROVISION_PROFILE_UUID }}
       BUILD_PROVISION_PROFILE_NAME: ${{ secrets.BUILD_PROVISION_PROFILE_NAME }}
       BUILD_PROVISION_PROFILE_TEAMID: ${{ secrets.BUILD_PROVISION_PROFILE_TEAMID }}
@@ -54,4 +57,3 @@ jobs:
     uses: ./.github/workflows/run_test.yml
     secrets:
       APP_ID: ${{ secrets.APP_ID }}
-            

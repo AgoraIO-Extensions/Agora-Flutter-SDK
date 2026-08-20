@@ -38,6 +38,15 @@ on:
         # Here is the error log:
         # Caused by: org.gradle.api.GradleException: You are applying Flutter's app_plugin_loader Gradle plugin imperatively using the apply script method, which is not possible anymore. Migrate to applying Gradle plugins with the declarative plugins block: https://flutter.dev/to/flutter-gradle-plugin-apply
         default: '3.24.5'
+      app_id_secrets:
+        description: 'App ID secret(s) used for builds'
+        type: choice
+        required: false
+        default: 'MY_APP_ID'
+        options:
+          - 'MY_APP_ID'
+          - 'APP_ID'
+          - 'MY_APP_ID, APP_ID'
   workflow_call:
     inputs:
       target_platforms:
@@ -74,8 +83,15 @@ on:
         # Here is the error log:
         # Caused by: org.gradle.api.GradleException: You are applying Flutter's app_plugin_loader Gradle plugin imperatively using the apply script method, which is not possible anymore. Migrate to applying Gradle plugins with the declarative plugins block: https://flutter.dev/to/flutter-gradle-plugin-apply
         default: '3.24.5'
+      app_id_secrets:
+        description: 'App ID secret(s) used for builds, separated by comma'
+        type: string
+        required: false
+        default: 'MY_APP_ID'
     secrets:
       APP_ID:
+        required: false
+      MY_APP_ID:
         required: true
       BUILD_PROVISION_PROFILE_UUID:
         required: true
@@ -137,6 +153,7 @@ jobs:
         env:
           platforms: ${{ needs.split-platforms.outputs.platforms }}
           flutter_versions: ${{ inputs.flutter_version }}
+          app_id_secrets: ${{ inputs.app_id_secrets }}
         run: |
           set -euo pipefail
 
@@ -146,9 +163,24 @@ jobs:
             exit 1
           fi
 
+          app_ids=$(printf '%s' "$app_id_secrets" | sed 's/ //g' | tr ',' '\n' | jq -R -s -c 'split("\n") | map(select(length > 0))')
+          if [ "$(echo "$app_ids" | jq 'length')" -eq 0 ]; then
+            echo "::error::At least one App ID secret is required"
+            exit 1
+          fi
+          if [ "$(echo "$app_ids" | jq '[.[] | select(. != "MY_APP_ID" and . != "APP_ID")] | length')" -ne 0 ]; then
+            echo "::error::App ID secrets must be MY_APP_ID or APP_ID"
+            exit 1
+          fi
+          if [ "$(echo "$app_ids" | jq 'length')" -ne "$(echo "$app_ids" | jq 'unique | length')" ]; then
+            echo "::error::App ID secrets must not contain duplicates"
+            exit 1
+          fi
+
           include=$(jq -c -n \
             --argjson platforms "$platforms" \
             --argjson versions "$versions" \
+            --argjson app_ids "$app_ids" \
             '
               {
                 android: "macos-latest",
@@ -159,10 +191,13 @@ jobs:
               } as $runners
               | [ $platforms[] as $p
                   | $versions[] as $v
+                  | $app_ids[] as $a
                   | { platform: $p,
                       version: $v,
+                      app_id_secret: $a,
+                      app_id_slug: ($a | ascii_downcase),
                       os: $runners[$p],
-                      primary: ($v == $versions[0]) }
+                      primary: ($v == $versions[0] and $a == $app_ids[0]) }
                   | select(.os != null) ]
             ')
 
@@ -272,10 +307,21 @@ jobs:
 
       - name: Build
         env:
-          DEFAULT_BUILD_APP_ID: ${{ secrets.APP_ID }}
+          BUILD_APP_ID: ${{ secrets.APP_ID }}
+          BUILD_MY_APP_ID: ${{ secrets.MY_APP_ID }}
         shell: bash
         working-directory: agora_rtc_engine/example
         run: |
+          if [ "${{ matrix.app_id_secret }}" == "MY_APP_ID" ]; then
+            DEFAULT_BUILD_APP_ID="$BUILD_MY_APP_ID"
+          else
+            DEFAULT_BUILD_APP_ID="$BUILD_APP_ID"
+          fi
+          if [ -z "$DEFAULT_BUILD_APP_ID" ]; then
+            echo "::error::Selected secret ${{ matrix.app_id_secret }} is empty"
+            exit 1
+          fi
+
           # show flutter version
           flutter --version && which flutter
 
@@ -500,7 +546,7 @@ jobs:
           build_timestamp=$(date +%Y%m%d%H%M%S)
 
           flutter_version_slug="$(printf '%s' "${{ matrix.version }}" | tr -c '[:alnum:].' '-')"
-          artifact_name="agora_rtc_engine_example_${{ matrix.platform }}_flutter${flutter_version_slug}_${pub_version}_${build_timestamp}_${{ github.run_id }}"
+          artifact_name="agora_rtc_engine_example_${{ matrix.platform }}_flutter${flutter_version_slug}_${{ matrix.app_id_slug }}_${pub_version}_${build_timestamp}_${{ github.run_id }}"
           echo "artifact_name=$artifact_name" >> $GITHUB_OUTPUT
 
       - name: Upload build artifacts
