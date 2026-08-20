@@ -22,7 +22,7 @@ on:
           【Cocoapods】
           pod 'AgoraRtcEngine_Special_iOS', '4.5.2.211.FAV'
           【swiftPM】
-          github:git@github.com:AgoraIO/AgoraRtcEngine_iOS.git | tag:4.5.2.211 | products:RtcBasic,AINS
+          github:git@github.com:AgoraIO/AgoraRtcEngine_iOS.git | tag:4.5.2.211 | products:RtcBasic
           Compact input is also accepted: github:https://github.com/AgoraIO/AgoraAudio_iOS.git tag:4.5.3-a1 products:RtcBasic implementation 'io.agora.rtc:agora-special-voice:4.5.3.1.BASIC1'
           Iris build result example: pod 'AgoraIrisRTC_iOS', '4.7.0-dev.2'
           Iris SPM URL is derived from the CocoaPods package name and version; raw iris_* CDN and Standalone archives are not used as SPM binary targets.

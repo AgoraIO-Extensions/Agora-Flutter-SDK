@@ -294,13 +294,19 @@ test('reports whether products came from input or the target Package.swift', asy
   assert.match(explicitResult.stdout, /products: RtcBasic \(input\)/);
 
   const preservedManifests = await createTemporaryManifests();
+  const preservedIos = await readFile(preservedManifests.iosManifest, 'utf8');
+  const preservedProducts = [...preservedIos.matchAll(
+    /\.product\(name: "([A-Za-z0-9_]+)", package: "AgoraRtcEngine_iOS"\)/g,
+  )].map(([, product]) => product).join(',');
   const preservedResult = await runUpdater(
     sectionedNativeDependenciesContent,
     preservedManifests,
   );
   assert.match(
     preservedResult.stdout,
-    /products: RtcBasic \(preserved from Package\.swift\)/,
+    new RegExp(
+      `products: ${preservedProducts} \\(preserved from Package\\.swift\\)`,
+    ),
   );
 });
 

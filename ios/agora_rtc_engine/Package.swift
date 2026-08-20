@@ -19,7 +19,6 @@ let package = Package(
             name: "agora_rtc_engine",
             dependencies: [
                 .product(name: "RtcBasic", package: "AgoraRtcEngine_iOS"),
-                .product(name: "AINS", package: "AgoraRtcEngine_iOS"),
                 "AgoraRtcWrapper"
             ],
             cSettings: [
