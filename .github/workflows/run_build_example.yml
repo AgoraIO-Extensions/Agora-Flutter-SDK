@@ -170,6 +170,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
         with:
+          path: agora_rtc_engine
           ref: ${{ inputs.target_branch || github.ref_name }}
           fetch-depth: '1'
           lfs: 'true'
@@ -184,7 +185,7 @@ jobs:
 
       - name: Install compatible Bundler for iOS
         if: ${{ matrix.platform == 'ios' }}
-        working-directory: example/ios
+        working-directory: agora_rtc_engine/example/ios
         run: |
           # Install Bundler 2.7.x which is compatible with fastlane
           gem install bundler:2.7.2
@@ -197,7 +198,7 @@ jobs:
 
       - name: Setup signing key for iOS
         if: ${{ matrix.platform == 'ios' }}
-        working-directory: example/ios
+        working-directory: agora_rtc_engine/example/ios
         env:
           DEFAULT_BUILD_PROVISION_PROFILE_NAME: ${{ secrets.BUILD_PROVISION_PROFILE_NAME }}
           DEFAULT_BUILD_PROVISION_PROFILE_TEAMID: ${{ secrets.BUILD_PROVISION_PROFILE_TEAMID }}
@@ -253,7 +254,7 @@ jobs:
         env:
           DEFAULT_BUILD_APP_ID: ${{ secrets.APP_ID }}
         shell: bash
-        working-directory: example
+        working-directory: agora_rtc_engine/example
         run: |
           # show flutter version
           flutter --version && which flutter
@@ -470,6 +471,7 @@ jobs:
       - name: Generate artifact name
         id: generate_artifact_name
         shell: bash
+        working-directory: agora_rtc_engine
         run: |
           # get pub_version from pubspec.yaml
           pub_version=$(grep 'version: ' pubspec.yaml | sed -e 's,.*: \(.*\),\1,')
@@ -485,7 +487,7 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: ${{ steps.generate_artifact_name.outputs.artifact_name }}
-          path: output
+          path: agora_rtc_engine/output
           if-no-files-found: error
 
       - name: Setup download url
