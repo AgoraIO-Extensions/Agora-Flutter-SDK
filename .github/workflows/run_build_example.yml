@@ -183,7 +183,7 @@ jobs:
             --argjson app_ids "$app_ids" \
             '
               {
-                android: "macos-latest",
+                android: "ubuntu-latest",
                 web:     "ubuntu-latest",
                 windows: "windows-latest",
                 ios:     "macos-latest",
@@ -203,7 +203,7 @@ jobs:
           echo "include=$include" >> $GITHUB_OUTPUT
 
   build:
-    name: build (${{ matrix.platform }}, Flutter ${{ matrix.version }}, ${{ matrix.app_id_secret }})
+    name: build (${{ matrix.platform }}, Flutter ${{ matrix.version }}, ${{ matrix.app_id_secret }}, ${{ matrix.os }})
     runs-on: ${{ matrix.os }}
     needs: build-matrix
     strategy:
