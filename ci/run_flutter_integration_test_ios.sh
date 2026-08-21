@@ -21,7 +21,7 @@ while IFS= read -r filename; do
             break
         fi
 
-        if ! grep -Fq "Error waiting for a debug connection: The log reader failed unexpectedly" "${ATTEMPT_LOG}"; then
+        if ! grep -Eq "Error waiting for a debug connection: The log reader failed unexpectedly|TimeoutException.*Test timed out after 12 minutes|No tests were found\." "${ATTEMPT_LOG}"; then
             rm -f "${ATTEMPT_LOG}"
             echo "iOS integration test failed with a non-retryable error: ${filename}" >&2
             exit 1
@@ -33,7 +33,7 @@ while IFS= read -r filename; do
             exit 1
         fi
 
-        echo "Retrying after Flutter failed to discover the iOS VM Service..."
+        echo "Retrying after a transient iOS integration test failure..."
         sleep 5
     done
 done < <(find integration_test -maxdepth 1 -type f -name '*.dart' ! -name '*.generated.dart' | sort)

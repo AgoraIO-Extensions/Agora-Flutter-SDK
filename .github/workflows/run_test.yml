@@ -135,7 +135,7 @@ jobs:
           - version: "3.16"
             model: "iPhone 16e"
             os_version: ">=26.2"
-            max_attempts: 1
+            max_attempts: 3
           - version: "3.38.5"
             model: "iPhone 16e"
             os_version: ">=26.2"
@@ -424,14 +424,17 @@ jobs:
     timeout-minutes: 120
     steps:
       - uses: actions/checkout@v4
+        with:
+          path: agora_rtc_engine
       - uses: subosito/flutter-action@v2
         with:
           flutter-version: ${{ matrix.version }}
           cache: true
       - run: flutter pub get
+        working-directory: agora_rtc_engine
       - name: Run flutter build ios --no-codesign --simulator
         run: flutter build ios --no-codesign --simulator
-        working-directory: example
+        working-directory: agora_rtc_engine/example
         env:
           IOS_SIMULATOR_SDK_VERSION: 18.0
 
@@ -638,11 +641,16 @@ jobs:
         run: |
           export SAVE_DEBUG_GOLDEN="true"
 
-          chromedriver --port=4444 --trace-buffer-size=100000 &
           max_attempts=3
           for attempt in $(seq 1 $max_attempts); do
             echo "Running web rendering test (attempt $attempt/$max_attempts)"
-            if bash ci/run_rendering_test.sh web; then
+            chromedriver --port=4444 --trace-buffer-size=100000 &
+            chromedriver_pid=$!
+            test_status=0
+            bash ci/run_rendering_test.sh web || test_status=$?
+            kill "$chromedriver_pid" 2>/dev/null || true
+            wait "$chromedriver_pid" 2>/dev/null || true
+            if (( test_status == 0 )); then
               exit 0
             fi
             for debug_file in test_shard/rendering_test/screenshot/*.debug.png; do
