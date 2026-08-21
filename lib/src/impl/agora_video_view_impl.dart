@@ -419,7 +419,8 @@ class _AgoraRtcRenderTextureState extends State<AgoraRtcRenderTexture>
       await _controllerInternal?.disposeRenderInternal();
       await _controllerInternal?.disposeTextureRender();
       await _initialize();
-    } else if (_controllerInternal!._controller.shouldUseSdkSurfaceTextureRender) {
+    } else if (_controllerInternal!
+        ._controller.shouldUseSdkSurfaceTextureRender) {
       await _controllerInternal!._controller.setupSdkSurfaceTextureRender();
     }
   }

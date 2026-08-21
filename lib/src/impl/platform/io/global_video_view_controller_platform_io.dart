@@ -120,11 +120,8 @@ class GlobalVideoViewControllerIO extends GlobalVideoViewControllerPlatfrom {
   }
 
   @override
-  Future<Map<String, int>?> createSurfaceTextureRenderTarget(
-      int uid,
-      String channelId,
-      int videoSourceType,
-      int videoViewSetupMode) async {
+  Future<Map<String, int>?> createSurfaceTextureRenderTarget(int uid,
+      String channelId, int videoSourceType, int videoViewSetupMode) async {
     final renderTarget = await methodChannel
         .invokeMapMethod<String, dynamic>('createSurfaceTextureRenderTarget', {
       'irisRtcRenderingHandle': _irisRtcRenderingHandle,

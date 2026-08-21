@@ -269,7 +269,8 @@ mixin VideoViewControllerBaseMixin implements VideoViewControllerBase {
         ?.setupVideoView(kNullViewHandle, newCanvas, connection: connection);
   }
 
-  Future<Map<String, int>> _acquireSurfaceTextureRenderTarget(int viewId) async {
+  Future<Map<String, int>> _acquireSurfaceTextureRenderTarget(
+      int viewId) async {
     if (!shouldUseSdkSurfaceTextureRender) {
       return {
         'textureId': kTextureNotInit,
