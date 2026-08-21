@@ -85,7 +85,7 @@ jobs:
       - name: Parse dependencies content
         id: parse_dependencies_content
         if: ${{ inputs.dependencies_content != '' }}
-        uses: AgoraIO-Extensions/actions/.github/actions/dep@main
+        uses: AgoraIO-Extensions/actions/.github/actions/dep@fix/dep-compact-cdn-url-boundary
         with:
           dependencies-content: ${{ inputs.dependencies_content }}
         # Output: {steps.parse_dependencies_content.outputs.matches}, the parsed dependencies content in json format, the format is as follows:
