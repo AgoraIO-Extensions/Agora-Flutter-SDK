@@ -2,6 +2,7 @@ import 'package:agora_rtc_engine/agora_rtc_engine.dart';
 import 'package:agora_rtc_engine_example/config/agora.config.dart' as config;
 import 'package:agora_rtc_engine_example/components/example_actions_widget.dart';
 import 'package:agora_rtc_engine_example/components/log_sink.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 /// MediaPlayer Example
@@ -15,6 +16,7 @@ class MediaPlayer extends StatefulWidget {
 class _State extends State<MediaPlayer> {
   late final RtcEngineEx _engine;
   bool _isReadyPreview = false;
+  bool _useFlutterTexture = false;
 
   late MediaPlayerController _mediaPlayerController;
 
@@ -62,38 +64,7 @@ class _State extends State<MediaPlayer> {
     await _engine.release();
   }
 
-  Future<void> _initEngine() async {
-    _engine = createAgoraRtcEngineEx();
-    _mediaPlayerController = MediaPlayerController(
-        rtcEngine: _engine, canvas: const VideoCanvas(uid: 0));
-    await _engine.initialize(RtcEngineContext(
-      appId: config.appId,
-      channelProfile: ChannelProfileType.channelProfileLiveBroadcasting,
-    ));
-
-    _engine.registerEventHandler(RtcEngineEventHandler(
-      onError: (ErrorCodeType err, String msg) {
-        logSink.log('[onError] err: $err, msg: $msg');
-      },
-      onJoinChannelSuccess: (RtcConnection connection, int elapsed) {
-        logSink.log(
-            '[onJoinChannelSuccess] connection: ${connection.toJson()} elapsed: $elapsed');
-        setState(() {
-          isJoined = true;
-        });
-      },
-      onLeaveChannel: (RtcConnection connection, RtcStats stats) {
-        logSink.log(
-            '[onLeaveChannel] connection: ${connection.toJson()} stats: ${stats.toJson()}');
-        setState(() {
-          isJoined = false;
-        });
-      },
-    ));
-
-    _mediaPlayerController = MediaPlayerController(
-        rtcEngine: _engine, canvas: const VideoCanvas(uid: 0));
-    await _mediaPlayerController.initialize();
+  void _registerPlayerSourceObserver() {
     _mediaPlayerController.registerPlayerSourceObserver(
       MediaPlayerSourceObserver(
         onCompleted: () {
@@ -107,12 +78,10 @@ class _State extends State<MediaPlayer> {
             _duration = await _mediaPlayerController.getDuration();
             _isUrlOpened = true;
             _isPlaying = false;
-            // _isStop = false;
             _isPause = false;
           } else if (state == MediaPlayerState.playerStateStopped) {
             _isUrlOpened = false;
             _isPlaying = false;
-            // _isStop = true;
             _isPause = false;
             _seekPos = 0;
             _isMuted = false;
@@ -140,6 +109,46 @@ class _State extends State<MediaPlayer> {
         },
       ),
     );
+  }
+
+  Future<void> _initMediaPlayerController() async {
+    _mediaPlayerController = MediaPlayerController(
+      rtcEngine: _engine,
+      canvas: const VideoCanvas(uid: 0),
+      useFlutterTexture: _useFlutterTexture,
+    );
+    await _mediaPlayerController.initialize();
+    _registerPlayerSourceObserver();
+  }
+
+  Future<void> _initEngine() async {
+    _engine = createAgoraRtcEngineEx();
+    await _engine.initialize(RtcEngineContext(
+      appId: config.appId,
+      channelProfile: ChannelProfileType.channelProfileLiveBroadcasting,
+    ));
+
+    _engine.registerEventHandler(RtcEngineEventHandler(
+      onError: (ErrorCodeType err, String msg) {
+        logSink.log('[onError] err: $err, msg: $msg');
+      },
+      onJoinChannelSuccess: (RtcConnection connection, int elapsed) {
+        logSink.log(
+            '[onJoinChannelSuccess] connection: ${connection.toJson()} elapsed: $elapsed');
+        setState(() {
+          isJoined = true;
+        });
+      },
+      onLeaveChannel: (RtcConnection connection, RtcStats stats) {
+        logSink.log(
+            '[onLeaveChannel] connection: ${connection.toJson()} stats: ${stats.toJson()}');
+        setState(() {
+          isJoined = false;
+        });
+      },
+    ));
+
+    await _initMediaPlayerController();
 
     setState(() {
       _isReadyPreview = true;
@@ -169,6 +178,12 @@ class _State extends State<MediaPlayer> {
     );
   }
 
+  bool get _canToggleFlutterTexture =>
+      !_isUrlOpened &&
+      !kIsWeb &&
+      (defaultTargetPlatform == TargetPlatform.android ||
+          defaultTargetPlatform == TargetPlatform.iOS);
+
   @override
   Widget build(BuildContext context) {
     return ExampleActionsWidget(
@@ -176,6 +191,7 @@ class _State extends State<MediaPlayer> {
         if (!_isReadyPreview) return Container();
         if (_isUrlOpened) {
           return AgoraVideoView(
+            key: ValueKey(_useFlutterTexture),
             controller: _mediaPlayerController,
           );
         }
@@ -228,6 +244,26 @@ class _State extends State<MediaPlayer> {
                 ),
               ],
             ),
+            if (_canToggleFlutterTexture) ...[
+              const SizedBox(
+                height: 20,
+              ),
+              Row(
+                children: [
+                  const Text('Rendered by Flutter texture: '),
+                  Switch(
+                    value: _useFlutterTexture,
+                    onChanged: (changed) async {
+                      setState(() {
+                        _useFlutterTexture = changed;
+                      });
+                      await _mediaPlayerController.dispose();
+                      await _initMediaPlayerController();
+                    },
+                  ),
+                ],
+              ),
+            ],
             const SizedBox(
               height: 20,
             ),
