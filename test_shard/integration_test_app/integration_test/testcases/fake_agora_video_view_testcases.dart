@@ -130,21 +130,15 @@ class FakeMethodChannelController {
       methodCallQueue.add(message);
 
       if (message.method == 'createTextureRender') {
-        final t = ++textrueId;
-        final channelId = 'agora_rtc_engine/texture_render_$t';
-        final c = MethodChannel(channelId);
-        testDefaultBinaryMessenger.setMockMethodCallHandler(c, (message) async {
-          return 0;
-        });
-
-        mockedMethodChannels.add(c);
-        // Need a delay to ensure the channel `agora_rtc_engine/texture_render_xx` is registered.
-        Future.delayed(const Duration(milliseconds: 100), () {
-          triggerPlatformMessage(channelId,
-              const MethodCall('onSizeChanged', {'width': 50, 'height': 50}));
-        });
-        return t;
-      } else if (message.method == 'destroyTextureRender') {
+        return _createTextureRenderTarget();
+      } else if (message.method == 'createSurfaceTextureRenderTarget') {
+        final textureId = _createTextureRenderTarget();
+        return {
+          'textureId': textureId,
+          'surfaceTextureHandle': textureId + 1000,
+        };
+      } else if (message.method == 'destroyTextureRender' ||
+          message.method == 'destroySurfaceTextureRenderTarget') {
         return true;
       }
 
@@ -161,6 +155,35 @@ class FakeMethodChannelController {
   final List<MethodChannel> mockedMethodChannels = [];
 
   int textrueId = 0;
+
+  List<MethodCall> get createRenderCalls => methodCallQueue
+      .where((e) =>
+          e.method == 'createTextureRender' ||
+          e.method == 'createSurfaceTextureRenderTarget')
+      .toList();
+
+  List<MethodCall> get destroyRenderCalls => methodCallQueue
+      .where((e) =>
+          e.method == 'destroyTextureRender' ||
+          e.method == 'destroySurfaceTextureRenderTarget')
+      .toList();
+
+  int _createTextureRenderTarget() {
+    final t = ++textrueId;
+    final channelId = 'agora_rtc_engine/texture_render_$t';
+    final c = MethodChannel(channelId);
+    testDefaultBinaryMessenger.setMockMethodCallHandler(c, (message) async {
+      return 0;
+    });
+
+    mockedMethodChannels.add(c);
+    // Need a delay to ensure the texture channel is registered.
+    Future.delayed(const Duration(milliseconds: 100), () {
+      triggerPlatformMessage(channelId,
+          const MethodCall('onSizeChanged', {'width': 50, 'height': 50}));
+    });
+    return t;
+  }
 
   void reset() {
     methodCallQueue.clear();
@@ -569,15 +592,13 @@ void testCases() {
             await videoViewCreatedCompleter.future;
 
             {
-              final createTextureRenderCalls = fakeMethodChannelController
-                  .methodCallQueue
-                  .where((e) => e.method == 'createTextureRender')
-                  .toList();
+              final createRenderCalls =
+                  fakeMethodChannelController.createRenderCalls;
 
-              final createTextureRenderArg = Map<String, Object>.from(
-                  createTextureRenderCalls[0].arguments);
+              final createRenderArg =
+                  Map<String, Object>.from(createRenderCalls[0].arguments);
 
-              expect(createTextureRenderArg['uid'] == 0, isTrue);
+              expect(createRenderArg['uid'] == 0, isTrue);
 
               int textureId = -1;
               expect(find.byWidgetPredicate((widget) {
@@ -600,16 +621,14 @@ void testCases() {
             await Future.delayed(const Duration(seconds: 5));
 
             {
-              final disposeTextureRenderCalls = fakeMethodChannelController
-                  .methodCallQueue
-                  .where((e) => e.method == 'destroyTextureRender')
-                  .toList();
+              final destroyRenderCalls =
+                  fakeMethodChannelController.destroyRenderCalls;
 
               // texture id
-              final disposeTextureRenderTextureId =
-                  disposeTextureRenderCalls[0].arguments as int;
+              final destroyRenderTextureId =
+                  destroyRenderCalls[0].arguments as int;
 
-              expect(disposeTextureRenderTextureId != -1, isTrue);
+              expect(destroyRenderTextureId != -1, isTrue);
             }
           },
         );
@@ -693,11 +712,9 @@ void testCases() {
             await tester.pumpAndSettle(const Duration(milliseconds: 5000));
 
             {
-              final createTextureRenderCalls = fakeMethodChannelController
-                  .methodCallQueue
-                  .where((e) => e.method == 'createTextureRender')
-                  .toList();
-              expect(createTextureRenderCalls.length == 1, isTrue);
+              final createRenderCalls =
+                  fakeMethodChannelController.createRenderCalls;
+              expect(createRenderCalls.length == 1, isTrue);
 
               int textureId = -1;
               expect(find.byWidgetPredicate((widget) {
@@ -751,17 +768,15 @@ void testCases() {
             // pumpAndSettle again to ensure the `AgoraVideoView` shown
             await tester.pumpAndSettle(const Duration(milliseconds: 5000));
 
-            // Check `GlobalVideoViewController.createTextureRender` calls
+            // Check the render target creation call.
             {
-              final createTextureRenderCalls = fakeMethodChannelController
-                  .methodCallQueue
-                  .where((e) => e.method == 'createTextureRender')
-                  .toList();
+              final createRenderCalls =
+                  fakeMethodChannelController.createRenderCalls;
 
-              final createTextureRenderArg = Map<String, Object>.from(
-                  createTextureRenderCalls[0].arguments);
+              final createRenderArg =
+                  Map<String, Object>.from(createRenderCalls[0].arguments);
 
-              expect(createTextureRenderArg['uid'] == 0, isTrue);
+              expect(createRenderArg['uid'] == 0, isTrue);
             }
 
             // This step will call `didUpdateWidget`
@@ -805,19 +820,17 @@ void testCases() {
             // pumpAndSettle again to ensure the `AgoraVideoView` shown
             await tester.pumpAndSettle(const Duration(milliseconds: 5000));
 
-            // Check `GlobalVideoViewController.createTextureRender` calls for remote `AgoraVideoView`
+            // Check the render target creation call for remote `AgoraVideoView`.
             {
-              final createTextureRenderCalls = fakeMethodChannelController
-                  .methodCallQueue
-                  .where((e) => e.method == 'createTextureRender')
-                  .toList();
+              final createRenderCalls =
+                  fakeMethodChannelController.createRenderCalls;
 
-              expect(createTextureRenderCalls.length == 2, isTrue);
+              expect(createRenderCalls.length == 2, isTrue);
 
-              final createTextureRenderArg = Map<String, Object>.from(
-                  createTextureRenderCalls[1].arguments);
+              final createRenderArg =
+                  Map<String, Object>.from(createRenderCalls[1].arguments);
 
-              expect(createTextureRenderArg['uid'] != 0, isTrue);
+              expect(createRenderArg['uid'] != 0, isTrue);
 
               {
                 List<int> textureIds = [];
@@ -875,20 +888,17 @@ void testCases() {
             await tester.pumpAndSettle(const Duration(milliseconds: 5000));
 
             {
-              final createTextureRenderCalls = fakeMethodChannelController
-                  .methodCallQueue
-                  .where((e) => e.method == 'createTextureRender')
-                  .toList();
+              final createRenderCalls =
+                  fakeMethodChannelController.createRenderCalls;
 
-              // After `didUpdateWidget` called, the texture renderer will be re-created,
-              // so there're another 2 times' `createTextureRender` are called.
-              // So the value of `createTextureRenderCalls.length` is 4
-              expect(createTextureRenderCalls.length == 4, isTrue);
+              // After `didUpdateWidget` is called, both render targets are recreated,
+              // so the creation call count is 4.
+              expect(createRenderCalls.length == 4, isTrue);
 
-              final createTextureRenderArg = Map<String, Object>.from(
-                  createTextureRenderCalls[2].arguments);
+              final createRenderArg =
+                  Map<String, Object>.from(createRenderCalls[2].arguments);
 
-              expect(createTextureRenderArg['uid'] != 0, isTrue);
+              expect(createRenderArg['uid'] != 0, isTrue);
 
               {
                 List<int> textureIds = [];
