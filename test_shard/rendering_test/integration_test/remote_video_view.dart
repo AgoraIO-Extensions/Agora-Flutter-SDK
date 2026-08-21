@@ -34,7 +34,15 @@ class _RemoteVideoViewState extends State<RemoteVideoView> {
   late final MediaPlayerController mediaPlayerController;
   late final MediaPlayerSourceObserver mediaPlayerSourceObserver;
   late final VideoFrameObserver videoFrameObserver;
+  final Completer<void> _initializationDone = Completer<void>();
+  Completer<void>? _mediaPlayerPlayed;
   bool isMpkJoined = false;
+  bool _isDisposed = false;
+  bool _rtcEngineInitialized = false;
+  bool _mediaPlayerInitialized = false;
+  bool _eventHandlerRegistered = false;
+  bool _videoFrameObserverRegistered = false;
+  bool _sourceObserverRegistered = false;
 
   static const int _myUid = 12345;
   static const int _mpkRemoteUid = 67890;
@@ -44,7 +52,11 @@ class _RemoteVideoViewState extends State<RemoteVideoView> {
   void initState() {
     super.initState();
 
-    _init();
+    _init().whenComplete(() {
+      if (!_initializationDone.isCompleted) {
+        _initializationDone.complete();
+      }
+    });
   }
 
   Future<void> _init() async {
@@ -77,10 +89,12 @@ class _RemoteVideoViewState extends State<RemoteVideoView> {
       appId: engineAppId,
       areaCode: AreaCode.areaCodeGlob.value(),
     ));
+    _rtcEngineInitialized = true;
+    if (_isDisposed) return;
 
     rtcEngineEventHandler = RtcEngineEventHandler(
       onUserJoined: (RtcConnection connection, int remoteUid, int elapsed) {
-        if (remoteUid == _mpkRemoteUid) {
+        if (!_isDisposed && mounted && remoteUid == _mpkRemoteUid) {
           setState(() {
             isMpkJoined = true;
           });
@@ -89,17 +103,20 @@ class _RemoteVideoViewState extends State<RemoteVideoView> {
     );
 
     rtcEngine.registerEventHandler(rtcEngineEventHandler);
+    _eventHandlerRegistered = true;
 
     videoFrameObserver = VideoFrameObserver(
       onRenderVideoFrame: (channelId, remoteUid, videoFrame) {
         // Delay 2 seconds to ensure the first frame showed
         Future.delayed(const Duration(seconds: 2), () {
+          if (_isDisposed) return;
           widget.onRendered(rtcEngine);
         });
       },
     );
 
     rtcEngine.getMediaEngine().registerVideoFrameObserver(videoFrameObserver);
+    _videoFrameObserverRegistered = true;
 
     await rtcEngine.setVideoEncoderConfiguration(
       const VideoEncoderConfiguration(
@@ -108,8 +125,11 @@ class _RemoteVideoViewState extends State<RemoteVideoView> {
         bitrate: 800,
       ),
     );
+    if (_isDisposed) return;
 
     await mediaPlayerController.initialize();
+    _mediaPlayerInitialized = true;
+    if (_isDisposed) return;
 
     final mediaPlayerControllerPlayed = Completer<void>();
 
@@ -117,16 +137,28 @@ class _RemoteVideoViewState extends State<RemoteVideoView> {
       onPlayerSourceStateChanged:
           (MediaPlayerState state, MediaPlayerReason ec) async {
         if (state == MediaPlayerState.playerStateOpenCompleted) {
+          if (_isDisposed) {
+            if (!mediaPlayerControllerPlayed.isCompleted) {
+              mediaPlayerControllerPlayed.complete();
+            }
+            return;
+          }
           await mediaPlayerController.play();
+          if (_isDisposed) return;
           await mediaPlayerController.setLoopCount(99999);
-          mediaPlayerControllerPlayed.complete();
+          if (!mediaPlayerControllerPlayed.isCompleted) {
+            mediaPlayerControllerPlayed.complete();
+          }
         }
       },
     );
+    _mediaPlayerPlayed = mediaPlayerControllerPlayed;
     mediaPlayerController
         .registerPlayerSourceObserver(mediaPlayerSourceObserver);
+    _sourceObserverRegistered = true;
 
     await mediaPlayerController.open(url: widget.url, startPos: 0);
+    if (_isDisposed) return;
 
     await rtcEngine.joinChannelEx(
       token: '',
@@ -143,8 +175,10 @@ class _RemoteVideoViewState extends State<RemoteVideoView> {
         publishCameraTrack: false,
       ),
     );
+    if (_isDisposed) return;
 
     await mediaPlayerControllerPlayed.future;
+    if (_isDisposed) return;
 
     // Simulate a remote user join
     await rtcEngine.joinChannelEx(
@@ -167,18 +201,41 @@ class _RemoteVideoViewState extends State<RemoteVideoView> {
 
   @override
   void dispose() {
+    _isDisposed = true;
     _dispose();
     super.dispose();
   }
 
   Future<void> _dispose() async {
-    rtcEngine.getMediaEngine().unregisterVideoFrameObserver(videoFrameObserver);
-    rtcEngine.unregisterEventHandler(rtcEngineEventHandler);
-    mediaPlayerController
-        .unregisterPlayerSourceObserver(mediaPlayerSourceObserver);
-    await rtcEngine.leaveChannel();
-    await mediaPlayerController.dispose();
-    await rtcEngine.release();
+    final mediaPlayerPlayed = _mediaPlayerPlayed;
+    if (mediaPlayerPlayed != null && !mediaPlayerPlayed.isCompleted) {
+      mediaPlayerPlayed.complete();
+    }
+    await _initializationDone.future;
+    if (_videoFrameObserverRegistered) {
+      rtcEngine
+          .getMediaEngine()
+          .unregisterVideoFrameObserver(videoFrameObserver);
+      _videoFrameObserverRegistered = false;
+    }
+    if (_eventHandlerRegistered) {
+      rtcEngine.unregisterEventHandler(rtcEngineEventHandler);
+      _eventHandlerRegistered = false;
+    }
+    if (_sourceObserverRegistered) {
+      mediaPlayerController
+          .unregisterPlayerSourceObserver(mediaPlayerSourceObserver);
+      _sourceObserverRegistered = false;
+    }
+    if (_rtcEngineInitialized) {
+      await rtcEngine.leaveChannel();
+    }
+    if (_mediaPlayerInitialized) {
+      await mediaPlayerController.dispose();
+    }
+    if (_rtcEngineInitialized) {
+      await rtcEngine.release();
+    }
   }
 
   @override
