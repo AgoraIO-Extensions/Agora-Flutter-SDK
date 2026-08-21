@@ -4,6 +4,7 @@ import '/src/agora_base.dart';
 import '/src/agora_media_base.dart';
 import '/src/agora_rtc_engine.dart';
 import '/src/agora_rtc_engine_ex.dart';
+import '/src/impl/agora_rtc_engine_impl.dart';
 import '/src/impl/video_view_controller_impl.dart';
 import '/src/impl/agora_rtc_renderer.dart';
 
@@ -22,6 +23,13 @@ typedef AgoraVideoViewCreatedCallback = void Function(int viewId);
 
 VideoViewControllerBaseMixin _controller(VideoViewControllerBase controller) {
   return controller as VideoViewControllerBaseMixin;
+}
+
+void _registerVideoViewDisposal(RtcEngine rtcEngine, Future<void> disposal) {
+  if (rtcEngine is RtcEngineImpl) {
+    rtcEngine.registerVideoViewDisposal(disposal);
+  }
+  unawaited(disposal);
 }
 
 class AgoraVideoViewState extends State<AgoraVideoView> {
@@ -118,7 +126,8 @@ class _AgoraRtcRenderPlatformViewState extends State<AgoraRtcRenderPlatformView>
 
   @override
   void dispose() {
-    _disposeRender();
+    final disposal = _disposeRender();
+    _registerVideoViewDisposal(widget.controller.rtcEngine, disposal);
     super.dispose();
   }
 
@@ -442,7 +451,8 @@ class _AgoraRtcRenderTextureState extends State<AgoraRtcRenderTexture>
     final controllerInternal = _controllerInternal;
     _controllerInternal = null;
     if (controllerInternal != null) {
-      unawaited(_disposeTextureWidget(controllerInternal));
+      final disposal = _disposeTextureWidget(controllerInternal);
+      _registerVideoViewDisposal(widget.controller.rtcEngine, disposal);
     }
     super.dispose();
   }
