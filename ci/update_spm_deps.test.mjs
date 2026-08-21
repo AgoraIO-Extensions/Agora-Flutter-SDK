@@ -338,6 +338,27 @@ test('parses Native products and derives Iris URLs from a real mixed build resul
   assert.deepEqual(dependencies.get('macOS')?.products, ['RtcBasic']);
 });
 
+test('ignores a compact build result version while parsing Iris CocoaPods metadata', () => {
+  const compactBuildResult = [
+    'Iris SDK Build Result',
+    'Build version:4.7.0-dev.15',
+    'Iris macOS:',
+    "Cocoapods:pod 'AgoraIrisRTC_macOS', '4.7.0-dev.15'",
+    'Iris iOS:',
+    "Cocoapods:pod 'AgoraIrisRTC_iOS', '4.7.0-dev.15'",
+  ].join('');
+
+  const dependencies = spmUpdater.parsePlatformDependencies(compactBuildResult);
+  assert.equal(
+    dependencies.get('iOS')?.irisUrl,
+    'https://download.agora.io/sdk/release/AgoraIrisRTC_iOS-4.7.0-dev.15.zip',
+  );
+  assert.equal(
+    dependencies.get('macOS')?.irisUrl,
+    'https://download.agora.io/sdk/release/AgoraIrisRTC_macOS-4.7.0-dev.15.zip',
+  );
+});
+
 test('rejects Iris SPM derivation from an Apple build section marked failed', () => {
   const failedBuildResult = irisBuildResultWithoutFailures.replace(
     'Iris Android:',

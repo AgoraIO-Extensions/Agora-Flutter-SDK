@@ -546,7 +546,7 @@ function parsePlatformDependencies(content) {
     const hasSpmMetadata =
       hasStrongSpmMetadata(fieldCounts) ||
       (isExplicitApplePlatform && fieldCounts['tag/version'] > 0) ||
-      (!platformValue && fieldCounts['tag/version'] > 0);
+      (!platformValue && countLabeledFields(record, 'tag') > 0);
     if (!hasSpmMetadata) {
       continue;
     }
