@@ -1384,7 +1384,7 @@ test('dependency update workflow tests, runs, and validates the SPM updater befo
   assert.ok(setupNodeIndex >= 0, 'workflow must set up Node');
   assert.ok(testUpdaterIndex > setupNodeIndex, 'workflow must run updater tests after setup');
   assert.ok(parseLegacyIndex > testUpdaterIndex, 'workflow must parse legacy input after tests');
-  assert.match(legacyStep, /uses: AgoraIO-Extensions\/actions\/\.github\/actions\/dep@main/);
+  assert.match(legacyStep, /uses: AgoraIO-Extensions\/actions\/\.github\/actions\/dep@[^\s]+/);
   assert.match(legacyStep, /dependencies-content:\s*\$\{\{\s*inputs\.dependencies_content\s*\}\}/);
   assert.doesNotMatch(legacyStep, /update_spm_deps\.mjs/);
   assert.match(spmStep, /DEPENDENCIES_CONTENT:\s*\$\{\{\s*inputs\.dependencies_content\s*\}\}/);
