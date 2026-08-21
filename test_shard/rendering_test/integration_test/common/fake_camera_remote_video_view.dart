@@ -2,6 +2,7 @@ import 'package:agora_rtc_engine/agora_rtc_engine.dart';
 import 'package:flutter/material.dart';
 
 import 'fake_camera.dart';
+import 'widget_tester_ext.dart';
 
 class FakeCameraRemoteVideoView extends StatefulWidget {
   const FakeCameraRemoteVideoView(
@@ -39,7 +40,8 @@ class _FakeCameraRemoteVideoViewState extends State<FakeCameraRemoteVideoView> {
 
   @override
   void dispose() {
-    _dispose();
+    queueRtcEngineRelease(_rtcEngine);
+    _fakeCamera.dispose();
     super.dispose();
   }
 
@@ -100,11 +102,6 @@ class _FakeCameraRemoteVideoViewState extends State<FakeCameraRemoteVideoView> {
     // Delay 2 seconds to ensure the first frame showed
     await Future.delayed(const Duration(seconds: 2));
     widget.onFirstFrame();
-  }
-
-  Future<void> _dispose() async {
-    await _fakeCamera.dispose();
-    await _rtcEngine.release();
   }
 
   @override

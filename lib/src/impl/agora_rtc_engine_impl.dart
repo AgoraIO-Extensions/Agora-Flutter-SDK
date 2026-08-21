@@ -433,27 +433,6 @@ class RtcEngineImpl extends rtc_engine_ex_binding.RtcEngineExImpl
     return _globalVideoViewController!;
   }
 
-  final Set<Future<void>> _pendingVideoViewDisposals = <Future<void>>{};
-
-  @internal
-  void registerVideoViewDisposal(Future<void> disposal) {
-    _pendingVideoViewDisposals.add(disposal);
-    disposal.then<void>(
-      (_) {
-        _pendingVideoViewDisposals.remove(disposal);
-      },
-      onError: (Object error, StackTrace stackTrace) {
-        _pendingVideoViewDisposals.remove(disposal);
-      },
-    );
-  }
-
-  Future<void> _waitForVideoViewDisposals() async {
-    while (_pendingVideoViewDisposals.isNotEmpty) {
-      await Future.wait(_pendingVideoViewDisposals.toList());
-    }
-  }
-
   final ScopedObjects _objectPool = ScopedObjects();
 
   DirectCdnStreamingEventHandlerWrapper? _directCdnStreamingEventHandlerWrapper;
@@ -623,8 +602,6 @@ class RtcEngineImpl extends rtc_engine_ex_binding.RtcEngineExImpl
     }
 
     _releasingCompleter = Completer<void>();
-
-    await _waitForVideoViewDisposals();
 
     _rtcEngineStateInternal?.dispose();
     _rtcEngineStateInternal = null;
