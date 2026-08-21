@@ -362,6 +362,12 @@ abstract class RtcEngineEx implements RtcEngine {
       required VideoMirrorModeType mirrorMode,
       required RtcConnection connection});
 
+  /// @nodoc
+  Future<void> setRemoteRenderRotationEx(
+      {required int uid,
+      required VideoOrientation rotation,
+      required RtcConnection connection});
+
   /// Enables loopback recording.
   ///
   /// After enabling loopback recording, the sound played through the sound card is mixed into the local audio stream and can be sent to the remote end.

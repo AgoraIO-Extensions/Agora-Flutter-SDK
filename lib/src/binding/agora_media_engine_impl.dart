@@ -331,6 +331,61 @@ class MediaEngineImpl implements MediaEngine {
   }
 
   @override
+  Future<int> createLoopbackAudioTrack(LoopbackAudioTrackConfig config) async {
+    final apiType =
+        '${isOverrideClassName ? className : 'MediaEngine'}_createLoopbackAudioTrack_599af35';
+    final requestParam = createParams({'config': config.toJson()});
+    final List<Uint8List> buffers = [];
+    buffers.addAll(config.collectBufferList());
+    final callApiResult = await irisMethodChannel.invokeMethod(
+        IrisMethodCall(apiType, jsonEncode(requestParam), buffers: buffers));
+    if (callApiResult.irisReturnCode < 0) {
+      throw AgoraRtcException(code: callApiResult.irisReturnCode);
+    }
+    final rm = callApiResult.data;
+    final result = rm['result'];
+    return result as int;
+  }
+
+  @override
+  Future<void> destroyLoopbackAudioTrack(int trackId) async {
+    final apiType =
+        '${isOverrideClassName ? className : 'MediaEngine'}_destroyLoopbackAudioTrack_6178b5d';
+    final requestParam = createParams({'trackId': trackId});
+    final callApiResult = await irisMethodChannel.invokeMethod(
+        IrisMethodCall(apiType, jsonEncode(requestParam), buffers: null));
+    if (callApiResult.irisReturnCode < 0) {
+      throw AgoraRtcException(code: callApiResult.irisReturnCode);
+    }
+    final rm = callApiResult.data;
+    final result = rm['result'];
+    if (result < 0) {
+      throw AgoraRtcException(code: result);
+    }
+  }
+
+  @override
+  Future<void> updateLoopbackAudioTrackConfig(
+      {required int trackId, required LoopbackAudioTrackConfig config}) async {
+    final apiType =
+        '${isOverrideClassName ? className : 'MediaEngine'}_updateLoopbackAudioTrackConfig_080b602';
+    final requestParam =
+        createParams({'trackId': trackId, 'config': config.toJson()});
+    final List<Uint8List> buffers = [];
+    buffers.addAll(config.collectBufferList());
+    final callApiResult = await irisMethodChannel.invokeMethod(
+        IrisMethodCall(apiType, jsonEncode(requestParam), buffers: buffers));
+    if (callApiResult.irisReturnCode < 0) {
+      throw AgoraRtcException(code: callApiResult.irisReturnCode);
+    }
+    final rm = callApiResult.data;
+    final result = rm['result'];
+    if (result < 0) {
+      throw AgoraRtcException(code: result);
+    }
+  }
+
+  @override
   Future<void> release() async {
     final apiType =
         '${isOverrideClassName ? className : 'MediaEngine'}_release';

@@ -1388,6 +1388,8 @@ class ChannelMediaOptions implements AgoraSerializable {
       this.publishFourthScreenTrack,
       this.publishCustomAudioTrack,
       this.publishCustomAudioTrackId,
+      this.publishLoopbackAudioTrack,
+      this.publishLoopbackAudioTrackId,
       this.publishCustomVideoTrack,
       this.publishEncodedVideoTrack,
       this.publishMediaPlayerAudioTrack,
@@ -1415,7 +1417,8 @@ class ChannelMediaOptions implements AgoraSerializable {
       this.enableMultipath,
       this.uplinkMultipathMode,
       this.downlinkMultipathMode,
-      this.preferMultipathType});
+      this.preferMultipathType,
+      this.channelType});
 
   /// Sets whether to publish the video captured by the camera: true : Publish the video captured by the camera. false : Do not publish the video captured by the camera.
   @JsonKey(name: 'publishCameraTrack')
@@ -1468,6 +1471,14 @@ class ChannelMediaOptions implements AgoraSerializable {
   /// ID of the custom audio track to be published. Default is 0. You can get the custom audio track ID via the createCustomAudioTrack method.
   @JsonKey(name: 'publishCustomAudioTrackId')
   final int? publishCustomAudioTrackId;
+
+  /// @nodoc
+  @JsonKey(name: 'publishLoopbackAudioTrack')
+  final bool? publishLoopbackAudioTrack;
+
+  /// @nodoc
+  @JsonKey(name: 'publishLoopbackAudioTrackId')
+  final int? publishLoopbackAudioTrackId;
 
   /// Sets whether to publish custom captured video: true : Publish the custom captured video. false : Do not publish the custom captured video.
   @JsonKey(name: 'publishCustomVideoTrack')
@@ -1588,6 +1599,10 @@ class ChannelMediaOptions implements AgoraSerializable {
   /// Preferred transmission path type. See MultipathType. When using this parameter, make sure enableMultipath is set to true.
   @JsonKey(name: 'preferMultipathType')
   final MultipathType? preferMultipathType;
+
+  /// @nodoc
+  @JsonKey(name: 'channelType')
+  final ChannelType? channelType;
 
   /// @nodoc
   factory ChannelMediaOptions.fromJson(Map<String, dynamic> json) =>
@@ -2860,6 +2875,10 @@ abstract class VideoEffectObject {
   Future<void> performVideoEffectAction(
       {required int nodeId, required VideoEffectAction actionId});
 
+  /// @nodoc
+  Future<void> setVideoEffectStringParam(
+      {required String option, required String key, required String param});
+
   /// Sets a float parameter for a video effect.
   ///
   /// Since Available since v6.6.2.
@@ -2957,6 +2976,10 @@ enum VideoEffectNodeId {
   /// (4): Filter effect node.
   @JsonValue(1 << 2)
   filter,
+
+  /// @nodoc
+  @JsonValue(1 << 3)
+  sticker,
 }
 
 /// @nodoc
@@ -3013,7 +3036,8 @@ class RtcEngineContext implements AgoraSerializable {
       this.threadPriority,
       this.useExternalEglContext,
       this.domainLimit,
-      this.autoRegisterAgoraExtensions});
+      this.autoRegisterAgoraExtensions,
+      this.parameters});
 
   /// The App ID issued by Agora to the app developer. Only apps using the same App ID can join the same channel for communication or live streaming. One App ID can only be used to create one RtcEngine. To change the App ID, you must first call release to destroy the current RtcEngine and then create a new one.
   @JsonKey(name: 'appId')
@@ -3056,6 +3080,10 @@ class RtcEngineContext implements AgoraSerializable {
   /// Whether to automatically register Agora extensions when initializing RtcEngine : true : (default) Automatically register Agora extensions when initializing RtcEngine. false : Do not register Agora extensions when initializing RtcEngine. You need to call enableExtension to register the Agora extensions.
   @JsonKey(name: 'autoRegisterAgoraExtensions')
   final bool? autoRegisterAgoraExtensions;
+
+  /// @nodoc
+  @JsonKey(name: 'parameters')
+  final String? parameters;
 
   /// @nodoc
   factory RtcEngineContext.fromJson(Map<String, dynamic> json) =>
@@ -5835,6 +5863,10 @@ abstract class RtcEngine {
   ///  Non-null: The method call succeeds.
   ///  Null: The method call fails. See [Error Codes](https://docs.agora.io/en/video-calling/troubleshooting/error-codes) for details and resolution suggestions.
   Future<DeviceInfo> getAudioDeviceInfo();
+
+  /// @nodoc
+  Future<void> setRemoteRenderRotation(
+      {required int uid, required VideoOrientation rotation});
 
   /// Starts capturing the video stream of a specified window.
   ///

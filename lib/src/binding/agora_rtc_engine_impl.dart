@@ -238,6 +238,27 @@ class VideoEffectObjectImpl implements VideoEffectObject {
   }
 
   @override
+  Future<void> setVideoEffectStringParam(
+      {required String option,
+      required String key,
+      required String param}) async {
+    final apiType =
+        '${isOverrideClassName ? className : 'VideoEffectObject'}_setVideoEffectStringParam_0e4f59e';
+    final requestParam =
+        createParams({'option': option, 'key': key, 'param': param});
+    final callApiResult = await irisMethodChannel.invokeMethod(
+        IrisMethodCall(apiType, jsonEncode(requestParam), buffers: null));
+    if (callApiResult.irisReturnCode < 0) {
+      throw AgoraRtcException(code: callApiResult.irisReturnCode);
+    }
+    final rm = callApiResult.data;
+    final result = rm['result'];
+    if (result < 0) {
+      throw AgoraRtcException(code: result);
+    }
+  }
+
+  @override
   Future<void> setVideoEffectFloatParam(
       {required String option,
       required String key,
@@ -4038,6 +4059,25 @@ class RtcEngineImpl implements RtcEngine {
     }
     final getAudioDeviceInfoJson = RtcEngineGetAudioDeviceInfoJson.fromJson(rm);
     return getAudioDeviceInfoJson.deviceInfo;
+  }
+
+  @override
+  Future<void> setRemoteRenderRotation(
+      {required int uid, required VideoOrientation rotation}) async {
+    final apiType =
+        '${isOverrideClassName ? className : 'RtcEngine'}_setRemoteRenderRotation_41280f1';
+    final requestParam =
+        createParams({'uid': uid, 'rotation': rotation.value()});
+    final callApiResult = await irisMethodChannel.invokeMethod(
+        IrisMethodCall(apiType, jsonEncode(requestParam), buffers: null));
+    if (callApiResult.irisReturnCode < 0) {
+      throw AgoraRtcException(code: callApiResult.irisReturnCode);
+    }
+    final rm = callApiResult.data;
+    final result = rm['result'];
+    if (result < 0) {
+      throw AgoraRtcException(code: result);
+    }
   }
 
   @override
