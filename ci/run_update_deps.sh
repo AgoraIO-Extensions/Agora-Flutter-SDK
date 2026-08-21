@@ -115,9 +115,21 @@ function update_cmake_file() {
         mv "${dep_file}.tmp" "${dep_file}"
     fi
     
-    # Handle native dependencies
-    cdn=$(echo "${dep_item}" | jq -r '.cdn[0]')
-    if [ "${cdn}" != "null" ]; then
+    # Handle native dependencies. The shared parser can return adjacent CDN
+    # URLs as one value for compact single-line build results.
+    cdn=$(echo "${dep_item}" | jq -r '.cdn[]?' | awk '
+        {
+            count = split($0, parts, "https://")
+            for (part_index = 2; part_index <= count; part_index++) {
+                url = "https://" parts[part_index]
+                sub(/[[:space:]].*$/, "", url)
+                if (url ~ /^https:\/\/download\.(agora|shengwang)\./ && tolower(url) ~ /windows/) {
+                    print url
+                }
+            }
+        }
+    ' | head -n 1)
+    if [ -n "${cdn}" ]; then
         escaped_cdn=$(printf '%s\n' "$cdn" | sed 's/[\/&]/\\&/g')
         native_content="set(NATIVE_SDK_DOWNLOAD_URL \"${escaped_cdn}\")"
         
@@ -142,4 +154,3 @@ echo "${dependencies_content}" | jq -c '.[]' | while read -r dep_item; do
         update_cmake_file "${dep_file_windows}" "${dep_item}"
     fi
 done
-

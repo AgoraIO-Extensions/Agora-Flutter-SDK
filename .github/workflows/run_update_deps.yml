@@ -82,32 +82,12 @@ jobs:
             echo "SPM updater tests skipped for target ref without updater rules"
           fi
 
-      - name: Prepare legacy dependency content
-        id: prepare_legacy_dependencies
-        if: ${{ inputs.dependencies_content != '' }}
-        env:
-          DEPENDENCIES_CONTENT: ${{ inputs.dependencies_content }}
-        shell: bash
-        run: |
-          delimiter="AGORA_LEGACY_DEPS_${RANDOM}_${RANDOM}"
-          {
-            echo "content<<${delimiter}"
-            if [[ -f ci/update_spm_deps.mjs ]]; then
-              node ci/update_spm_deps.mjs \
-                --dependencies-content "$DEPENDENCIES_CONTENT" \
-                --print-legacy-content
-            else
-              printf '%s\n' "$DEPENDENCIES_CONTENT" | tr -d '"'
-            fi
-            echo "${delimiter}"
-          } >> "$GITHUB_OUTPUT"
-
       - name: Parse dependencies content
         id: parse_dependencies_content
         if: ${{ inputs.dependencies_content != '' }}
         uses: AgoraIO-Extensions/actions/.github/actions/dep@main
         with:
-          dependencies-content: ${{ steps.prepare_legacy_dependencies.outputs.content }}
+          dependencies-content: ${{ inputs.dependencies_content }}
         # Output: {steps.parse_dependencies_content.outputs.matches}, the parsed dependencies content in json format, the format is as follows:
         # [
         #     {

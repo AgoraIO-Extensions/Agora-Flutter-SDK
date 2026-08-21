@@ -1365,7 +1365,6 @@ test('dependency update workflow tests, runs, and validates the SPM updater befo
   const workflow = await readFile(updateDepsWorkflow, 'utf8');
   const setupNodeIndex = workflow.indexOf('uses: actions/setup-node@v4');
   const testUpdaterIndex = workflow.indexOf('node --test ci/update_spm_deps.test.mjs');
-  const prepareLegacyIndex = workflow.indexOf('name: Prepare legacy dependency content');
   const parseLegacyIndex = workflow.indexOf('name: Parse dependencies content');
   const updateSpmIndex = workflow.indexOf(
     'node ci/update_spm_deps.mjs --dependencies-content "$DEPENDENCIES_CONTENT"',
@@ -1386,13 +1385,10 @@ test('dependency update workflow tests, runs, and validates the SPM updater befo
   assert.match(workflow, /Apple SPM dependency resolution/);
   assert.match(workflow, /GITHUB_STEP_SUMMARY/);
   assert.ok(testUpdaterIndex > setupNodeIndex, 'workflow must run updater tests after setup');
-  assert.ok(prepareLegacyIndex > testUpdaterIndex, 'workflow must sanitize legacy input after tests');
-  assert.ok(parseLegacyIndex > prepareLegacyIndex, 'workflow must parse sanitized legacy input');
-  assert.match(workflow, /--print-legacy-content/);
-  assert.match(
-    workflow,
-    /dependencies-content: \$\{\{ steps\.prepare_legacy_dependencies\.outputs\.content \}\}/,
-  );
+  assert.ok(parseLegacyIndex > testUpdaterIndex, 'workflow must parse legacy input after tests');
+  assert.match(workflow, /dependencies-content: \$\{\{ inputs\.dependencies_content \}\}/);
+  assert.doesNotMatch(workflow, /--print-legacy-content/);
+  assert.doesNotMatch(workflow, /prepare_legacy_dependencies/);
   assert.match(workflow, /if \[\[ -f ci\/update_spm_deps\.test\.mjs \]\]/);
   assert.match(workflow, /DEPENDENCIES_CONTENT: \$\{\{ inputs\.dependencies_content \}\}/);
   assert.match(workflow, /if \[\[ -f ci\/update_spm_deps\.mjs \]\]/);
