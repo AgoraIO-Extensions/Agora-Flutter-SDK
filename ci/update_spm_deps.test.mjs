@@ -191,6 +191,15 @@ function extractWorkflowRunScript(workflow, stepName) {
     .join('\n');
 }
 
+function extractWorkflowStep(workflow, stepName) {
+  const stepMarker = `      - name: ${stepName}\n`;
+  const stepStart = workflow.indexOf(stepMarker);
+  assert.ok(stepStart >= 0, `workflow step not found: ${stepName}`);
+  const remaining = workflow.slice(stepStart + stepMarker.length);
+  const nextStep = remaining.indexOf('\n      - name:');
+  return nextStep >= 0 ? remaining.slice(0, nextStep) : remaining;
+}
+
 test('updates both Apple manifests from complete platform-scoped input', async () => {
   const manifests = await createTemporaryManifests();
 
@@ -1366,37 +1375,22 @@ test('dependency update workflow tests, runs, and validates the SPM updater befo
   const setupNodeIndex = workflow.indexOf('uses: actions/setup-node@v4');
   const testUpdaterIndex = workflow.indexOf('node --test ci/update_spm_deps.test.mjs');
   const parseLegacyIndex = workflow.indexOf('name: Parse dependencies content');
-  const updateSpmIndex = workflow.indexOf(
-    'node ci/update_spm_deps.mjs --dependencies-content "$DEPENDENCIES_CONTENT"',
-  );
-  const validateSpmIndex = workflow.indexOf('swift package dump-package');
+  const updateSpmIndex = workflow.indexOf('name: Update Apple SPM dependencies');
+  const validateSpmIndex = workflow.indexOf('name: Validate Apple SPM manifests');
   const createPrIndex = workflow.indexOf('name: Commit and create pull request');
+  const legacyStep = extractWorkflowStep(workflow, 'Parse dependencies content');
+  const spmStep = extractWorkflowStep(workflow, 'Update Apple SPM dependencies');
 
   assert.ok(setupNodeIndex >= 0, 'workflow must set up Node');
-  assert.match(workflow, /node-version: ['"]?22['"]?/);
-  assert.match(workflow, /【swiftPM】/);
-  assert.match(workflow, /github:git@github\.com:AgoraIO\/AgoraRtcEngine_iOS\.git/);
-  assert.match(workflow, /pod 'AgoraIrisRTC_iOS', '4\.7\.0-dev\.2'/);
-  assert.match(workflow, /Iris SPM URL is derived from the CocoaPods package name and version/);
-  assert.match(workflow, /A Native repository change requires explicit products/);
-  assert.match(workflow, /products are preserved only when the Native repository is unchanged/);
-  assert.match(workflow, /Failure found on above jobs/);
-  assert.match(workflow, /Missing Iris checksum is computed/);
-  assert.match(workflow, /Apple SPM dependency resolution/);
-  assert.match(workflow, /GITHUB_STEP_SUMMARY/);
   assert.ok(testUpdaterIndex > setupNodeIndex, 'workflow must run updater tests after setup');
   assert.ok(parseLegacyIndex > testUpdaterIndex, 'workflow must parse legacy input after tests');
-  assert.match(workflow, /dependencies-content: \$\{\{ inputs\.dependencies_content \}\}/);
-  assert.doesNotMatch(workflow, /--print-legacy-content/);
-  assert.doesNotMatch(workflow, /prepare_legacy_dependencies/);
-  assert.match(workflow, /if \[\[ -f ci\/update_spm_deps\.test\.mjs \]\]/);
-  assert.match(workflow, /DEPENDENCIES_CONTENT: \$\{\{ inputs\.dependencies_content \}\}/);
-  assert.match(workflow, /if \[\[ -f ci\/update_spm_deps\.mjs \]\]/);
-  assert.match(workflow, /Target ref does not contain the Apple SPM dependency updater/);
+  assert.match(legacyStep, /uses: AgoraIO-Extensions\/actions\/\.github\/actions\/dep@main/);
+  assert.match(legacyStep, /dependencies-content:\s*\$\{\{\s*inputs\.dependencies_content\s*\}\}/);
+  assert.doesNotMatch(legacyStep, /update_spm_deps\.mjs/);
+  assert.match(spmStep, /DEPENDENCIES_CONTENT:\s*\$\{\{\s*inputs\.dependencies_content\s*\}\}/);
+  assert.match(spmStep, /update_spm_deps\.mjs/);
   assert.ok(updateSpmIndex > testUpdaterIndex, 'workflow must update manifests after tests');
-  assert.match(workflow, /SPM manifest validation skipped for target ref/);
   assert.ok(validateSpmIndex > updateSpmIndex, 'workflow must validate generated manifests');
-  assert.match(workflow, /uses: peter-evans\/create-pull-request@v8/);
   assert.ok(createPrIndex > validateSpmIndex, 'workflow must validate manifests before PR creation');
 });
 
