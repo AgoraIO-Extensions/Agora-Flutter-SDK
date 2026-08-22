@@ -4,6 +4,7 @@ import 'package:agora_rtc_engine/agora_rtc_engine.dart';
 import 'package:flutter/material.dart';
 
 import 'agora_video_view_render_test.dart';
+import 'common/widget_tester_ext.dart';
 
 class RemoteVideoView extends StatefulWidget {
   const RemoteVideoView({
@@ -202,7 +203,7 @@ class _RemoteVideoViewState extends State<RemoteVideoView> {
   @override
   void dispose() {
     _isDisposed = true;
-    _dispose();
+    queueDisposal(_dispose());
     super.dispose();
   }
 

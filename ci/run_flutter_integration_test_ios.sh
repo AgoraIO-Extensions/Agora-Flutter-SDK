@@ -21,6 +21,14 @@ while IFS= read -r filename; do
             break
         fi
 
+        if grep -Fq "No tests were found." "${ATTEMPT_LOG}" && \
+            grep -Fq "✅" "${ATTEMPT_LOG}" && \
+            ! grep -Fq "❌" "${ATTEMPT_LOG}"; then
+            echo "Flutter reported no test results, but integration_test reported passing tests; accepting the run."
+            rm -f "${ATTEMPT_LOG}"
+            break
+        fi
+
         if ! grep -Eq "Error waiting for a debug connection: The log reader failed unexpectedly|TimeoutException.*Test timed out after 12 minutes|No tests were found\." "${ATTEMPT_LOG}"; then
             rm -f "${ATTEMPT_LOG}"
             echo "iOS integration test failed with a non-retryable error: ${filename}" >&2

@@ -4,6 +4,7 @@ import 'package:agora_rtc_engine/agora_rtc_engine.dart';
 import 'package:flutter/material.dart';
 
 import 'agora_video_view_render_test.dart';
+import 'common/widget_tester_ext.dart';
 
 class LocalVideoView extends StatefulWidget {
   const LocalVideoView({
@@ -144,7 +145,7 @@ class _LocalVideoViewState extends State<LocalVideoView> {
   @override
   void dispose() {
     _isDisposed = true;
-    _dispose();
+    queueDisposal(_dispose());
     super.dispose();
   }
 

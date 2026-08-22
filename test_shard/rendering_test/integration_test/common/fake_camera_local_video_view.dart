@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'dart:io';
 
 import 'fake_camera.dart';
+import 'widget_tester_ext.dart';
 
 class FakeCameraLocalVideoView extends StatefulWidget {
   const FakeCameraLocalVideoView(
@@ -34,7 +35,8 @@ class _FakeCameraLocalVideoViewState extends State<FakeCameraLocalVideoView> {
 
   @override
   void dispose() {
-    _dispose();
+    queueRtcEngineRelease(_rtcEngine);
+    _fakeCamera.dispose();
     super.dispose();
   }
 
@@ -58,11 +60,6 @@ class _FakeCameraLocalVideoViewState extends State<FakeCameraLocalVideoView> {
   Future<void> _waitFirstFrame() async {
     await _fakeCamera.onFirstFrame;
     widget.onFirstFrame();
-  }
-
-  Future<void> _dispose() async {
-    await _fakeCamera.dispose();
-    await _rtcEngine.release();
   }
 
   @override
