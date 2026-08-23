@@ -1,4 +1,5 @@
 import 'package:agora_rtc_engine/agora_rtc_engine.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 import 'fake_camera.dart';
@@ -47,6 +48,7 @@ class _FakeCameraRemoteVideoViewState extends State<FakeCameraRemoteVideoView> {
 
   Future<void> _init() async {
     _rtcEngine = widget.rtcEngine;
+    await waitPendingDisposals();
 
     String engineAppId = const String.fromEnvironment('TEST_APP_ID',
         defaultValue: '<YOUR_APP_ID>');
@@ -56,6 +58,11 @@ class _FakeCameraRemoteVideoViewState extends State<FakeCameraRemoteVideoView> {
     ));
 
     _rtcEngine.registerEventHandler(RtcEngineEventHandler(
+      onUserJoined: (connection, remoteUid, elapsed) {
+        if (!kIsWeb && remoteUid == _remoteUid) {
+          _waitFirstFrame();
+        }
+      },
       onFirstRemoteVideoFrame: (connection, remoteUid, width, height, elapsed) {
         if (remoteUid == _remoteUid) {
           _waitFirstFrame();

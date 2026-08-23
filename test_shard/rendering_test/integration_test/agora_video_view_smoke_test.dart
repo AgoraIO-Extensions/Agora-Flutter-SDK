@@ -15,6 +15,8 @@ const bool _useIosSimulatorScreenshot =
     bool.fromEnvironment('IOS_SIMULATOR_SCREENSHOT');
 const String _iosSimulatorScreenshotReadyFile = 'agora-ios-screenshot-ready';
 const String _iosSimulatorScreenshotDoneFile = 'agora-ios-screenshot-done';
+const String _iosSimulatorTestCompleteFile = 'agora-ios-test-complete';
+const String _iosSimulatorDriverDoneFile = 'agora-ios-driver-done';
 
 Future<void> _waitForIosSimulatorScreenshot() async {
   final ready =
@@ -45,11 +47,42 @@ Future<void> _waitForIosSimulatorScreenshot() async {
   }
 }
 
+Future<void> _reportIosSimulatorTestComplete(
+  IntegrationTestWidgetsFlutterBinding binding,
+) async {
+  final complete =
+      File('${Directory.systemTemp.path}/$_iosSimulatorTestCompleteFile');
+  final driverDone =
+      File('${Directory.systemTemp.path}/$_iosSimulatorDriverDoneFile');
+  complete.writeAsStringSync(
+    binding.failureMethodsDetails.isEmpty ? 'passed' : 'failed',
+  );
+
+  final deadline = DateTime.now().add(const Duration(minutes: 5));
+  try {
+    while (!driverDone.existsSync()) {
+      if (DateTime.now().isAfter(deadline)) {
+        throw TimeoutException('Timed out waiting for the simulator driver');
+      }
+      await Future<void>.delayed(const Duration(milliseconds: 100));
+    }
+  } finally {
+    if (complete.existsSync()) {
+      complete.deleteSync();
+    }
+    if (driverDone.existsSync()) {
+      driverDone.deleteSync();
+    }
+  }
+}
+
 void main() {
   if (_useIosSimulatorScreenshot) {
     for (final name in <String>[
       _iosSimulatorScreenshotReadyFile,
       _iosSimulatorScreenshotDoneFile,
+      _iosSimulatorTestCompleteFile,
+      _iosSimulatorDriverDoneFile,
     ]) {
       final marker = File('${Directory.systemTemp.path}/$name');
       if (marker.existsSync()) {
@@ -59,6 +92,9 @@ void main() {
   }
 
   final binding = IntegrationTestWidgetsFlutterBinding.ensureInitialized();
+  if (_useIosSimulatorScreenshot) {
+    tearDownAll(() => _reportIosSimulatorTestComplete(binding));
+  }
 
   group(
     'AgoraVideoView iOS',

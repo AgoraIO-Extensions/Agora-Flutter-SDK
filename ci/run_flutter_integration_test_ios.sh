@@ -29,6 +29,15 @@ while IFS= read -r filename; do
             break
         fi
 
+        if awk '/Test process is no longer needed by test harness/ { ended = 1; next } ended && /✅/ { late_pass = 1 } END { exit !late_pass }' "${ATTEMPT_LOG}" && \
+            grep -Eq "🎉 [1-9][0-9]* tests passed\." "${ATTEMPT_LOG}" && \
+            grep -Fq "test package returned with exit code 1" "${ATTEMPT_LOG}" && \
+            ! grep -Eq "❌|Some tests failed\.|Failure Details:" "${ATTEMPT_LOG}"; then
+            echo "Flutter exited after iOS reported all integration tests passed; accepting the run."
+            rm -f "${ATTEMPT_LOG}"
+            break
+        fi
+
         if ! grep -Eq "Error waiting for a debug connection: The log reader failed unexpectedly|TimeoutException.*Test timed out after 12 minutes|No tests were found\." "${ATTEMPT_LOG}"; then
             rm -f "${ATTEMPT_LOG}"
             echo "iOS integration test failed with a non-retryable error: ${filename}" >&2

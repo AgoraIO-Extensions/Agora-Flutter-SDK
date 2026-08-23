@@ -42,6 +42,7 @@ class _FakeCameraLocalVideoViewState extends State<FakeCameraLocalVideoView> {
 
   Future<void> _init() async {
     _rtcEngine = widget.rtcEngine;
+    await waitPendingDisposals();
 
     String engineAppId = const String.fromEnvironment('TEST_APP_ID',
         defaultValue: '<YOUR_APP_ID>');

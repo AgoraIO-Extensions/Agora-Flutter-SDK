@@ -14,6 +14,31 @@ void queueDisposal(Future<void> disposal) {
   _pendingDisposals.add(disposal);
 }
 
+Future<void> waitPendingDisposals([
+  IntegrationTestWidgetsFlutterBinding? binding,
+]) async {
+  if (_pendingDisposals.isEmpty && _pendingRtcEngineReleases.isEmpty) {
+    return;
+  }
+
+  const delay = Duration(seconds: 10);
+  if (binding == null) {
+    await Future<void>.delayed(delay);
+  } else {
+    await binding.delayed(delay);
+  }
+
+  final disposals = List<Future<void>>.of(_pendingDisposals);
+  _pendingDisposals.clear();
+  await Future.wait(disposals);
+
+  final engines = List<RtcEngine>.of(_pendingRtcEngineReleases);
+  _pendingRtcEngineReleases.clear();
+  for (final engine in engines) {
+    await engine.release();
+  }
+}
+
 Future<void> waitFrame(WidgetTester tester) async {
   // Call `pumpAndSettle` more times to ensure the video rendered
   for (int i = 0; i < 5; i++) {
@@ -28,15 +53,5 @@ Future<void> waitDisposed(
   // Force pump an empty Widget to trigger the dispose() for RemoteVideoView,
   // so that the previous RtcEngine can be released before the next test case start.
   await tester.pumpWidget(Container());
-  await binding.delayed(const Duration(seconds: 10));
-
-  final disposals = List<Future<void>>.of(_pendingDisposals);
-  _pendingDisposals.clear();
-  await Future.wait(disposals);
-
-  final engines = List<RtcEngine>.of(_pendingRtcEngineReleases);
-  _pendingRtcEngineReleases.clear();
-  for (final engine in engines) {
-    await engine.release();
-  }
+  await waitPendingDisposals(binding);
 }

@@ -15,6 +15,8 @@ const _iosSimulatorScreenshotKey = 'IOS_SIMULATOR_SCREENSHOT';
 const _iosSimulatorBundleId = 'com.example.renderingTest';
 const _iosSimulatorScreenshotReadyFile = 'agora-ios-screenshot-ready';
 const _iosSimulatorScreenshotDoneFile = 'agora-ios-screenshot-done';
+const _iosSimulatorTestCompleteFile = 'agora-ios-test-complete';
+const _iosSimulatorDriverDoneFile = 'agora-ios-driver-done';
 const _iosScreenshotName =
     'ios.agora_video_view.platform_view.smoke_test.start_preview_after_enable_video';
 
@@ -23,11 +25,9 @@ Future<void> main() async {
     // Flutter 3.47.1 exits during integration_test's native iOS screenshot.
     // Synchronize through the simulator data container and capture from host.
     final driver = await FlutterDriver.connect();
-    final integrationResult = integrationDriver(
-      driver: driver,
-      onScreenshot: _compareScreenshot,
-    );
-    final screenshotDone = await _waitForIosSimulatorScreenshotReady();
+    final simulatorTmp = await _waitForIosSimulatorScreenshotReady();
+    final screenshotDone =
+        File('${simulatorTmp.path}/$_iosSimulatorScreenshotDoneFile');
 
     var screenshotMatches = false;
     try {
@@ -39,13 +39,18 @@ Future<void> main() async {
       screenshotDone.writeAsStringSync('done');
     }
 
-    if (!screenshotMatches) {
-      await driver.close();
-      exit(1);
-    }
+    final testComplete =
+        File('${simulatorTmp.path}/$_iosSimulatorTestCompleteFile');
+    await _waitForFile(testComplete, 'the simulator test to complete');
+    final appTestPassed = testComplete.readAsStringSync().trim() == 'passed';
 
-    await integrationResult;
-    return;
+    try {
+      await driver.close();
+    } finally {
+      File('${simulatorTmp.path}/$_iosSimulatorDriverDoneFile')
+          .writeAsStringSync('done');
+    }
+    exit(screenshotMatches && appTestPassed ? 0 : 1);
   }
 
   await integrationDriver(
@@ -53,7 +58,7 @@ Future<void> main() async {
   );
 }
 
-Future<File> _waitForIosSimulatorScreenshotReady() async {
+Future<Directory> _waitForIosSimulatorScreenshotReady() async {
   final result = await Process.run(
     'xcrun',
     [
@@ -80,16 +85,20 @@ Future<File> _waitForIosSimulatorScreenshotReady() async {
   }
 
   final dataPath = result.stdout.toString().trim();
-  final ready = File('$dataPath/tmp/$_iosSimulatorScreenshotReadyFile');
-  final done = File('$dataPath/tmp/$_iosSimulatorScreenshotDoneFile');
+  final tmp = Directory('$dataPath/tmp');
+  final ready = File('${tmp.path}/$_iosSimulatorScreenshotReadyFile');
+  await _waitForFile(ready, 'the simulator screenshot');
+  return tmp;
+}
+
+Future<void> _waitForFile(File file, String description) async {
   final deadline = DateTime.now().add(const Duration(minutes: 5));
-  while (!ready.existsSync()) {
+  while (!file.existsSync()) {
     if (DateTime.now().isAfter(deadline)) {
-      throw TimeoutException('Timed out waiting for the simulator screenshot');
+      throw TimeoutException('Timed out waiting for $description');
     }
     await Future<void>.delayed(const Duration(milliseconds: 100));
   }
-  return done;
 }
 
 Future<List<int>> _takeIosSimulatorScreenshot() async {
@@ -108,7 +117,7 @@ Future<List<int>> _takeIosSimulatorScreenshot() async {
         result.exitCode,
       );
     }
-    return screenshot.readAsBytes();
+    return await screenshot.readAsBytes();
   } finally {
     await directory.delete(recursive: true);
   }
