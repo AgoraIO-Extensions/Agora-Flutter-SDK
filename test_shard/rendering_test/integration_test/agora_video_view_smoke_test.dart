@@ -133,10 +133,10 @@ void main() {
                   'ios.agora_video_view.platform_view.smoke_test.start_preview_after_enable_video');
             }
 
-            await waitDisposed(tester, binding);
             if (_useIosSimulatorScreenshot) {
               await _reportIosSimulatorTestComplete();
             }
+            await waitDisposed(tester, binding);
           },
         );
       });
@@ -380,7 +380,8 @@ void main() {
 
             await waitDisposed(tester, binding);
           },
-          skip: _webRenderingCase.isNotEmpty && _webRenderingCase != 'local',
+          skip: !kIsWeb ||
+              (_webRenderingCase.isNotEmpty && _webRenderingCase != 'local'),
         );
 
         testWidgets(
@@ -420,7 +421,8 @@ void main() {
 
             await waitDisposed(tester, binding);
           },
-          skip: _webRenderingCase.isNotEmpty && _webRenderingCase != 'remote',
+          skip: !kIsWeb ||
+              (_webRenderingCase.isNotEmpty && _webRenderingCase != 'remote'),
         );
       });
     },
