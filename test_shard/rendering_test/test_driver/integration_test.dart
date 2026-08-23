@@ -11,6 +11,7 @@ const _udpateGoldenKey = 'UPDATE_GOLDEN';
 
 /// export SAVE_DEBUG_GOLDEN="true"
 const _saveDebugGoldenKey = 'SAVE_DEBUG_GOLDEN';
+const _webRenderingCaseKey = 'WEB_RENDERING_CASE';
 const _iosSimulatorScreenshotKey = 'IOS_SIMULATOR_SCREENSHOT';
 const _iosSimulatorBundleId = 'com.example.renderingTest';
 const _iosSimulatorScreenshotReadyFile = 'agora-ios-screenshot-ready';
@@ -132,7 +133,7 @@ Future<bool> _compareScreenshot(
 
   final srcImage = decodeImage(screenshotBytes);
   if (srcImage == null) {
-    return false;
+    return _finishWebRenderingTest(false);
   }
 
   final srcWidth = srcImage.width;
@@ -154,7 +155,7 @@ Future<bool> _compareScreenshot(
   if (updateGolden == 'true') {
     imageFile.writeAsBytesSync(imageBytes);
     stdout.writeln('Updated golden file: $screenshotPath');
-    return true;
+    return _finishWebRenderingTest(true);
   }
 
   if ((Platform.environment[_saveDebugGoldenKey] ?? 'false') == 'true') {
@@ -176,5 +177,14 @@ Future<bool> _compareScreenshot(
   // https://github.com/AgoraIO-Extensions/Agora-Flutter-SDK/pull/1329
   //
   // see if we can reduce the result later
-  return result < (screenshotName.startsWith('android.') ? 0.03 : 0.01);
+  return _finishWebRenderingTest(
+    result < (screenshotName.startsWith('android.') ? 0.03 : 0.01),
+  );
+}
+
+bool _finishWebRenderingTest(bool matches) {
+  if ((Platform.environment[_webRenderingCaseKey] ?? '').isNotEmpty) {
+    exit(matches ? 0 : 1);
+  }
+  return matches;
 }

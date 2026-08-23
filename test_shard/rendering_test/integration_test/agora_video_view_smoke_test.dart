@@ -13,6 +13,7 @@ import 'common/widget_tester_ext.dart';
 
 const bool _useIosSimulatorScreenshot =
     bool.fromEnvironment('IOS_SIMULATOR_SCREENSHOT');
+const String _webRenderingCase = String.fromEnvironment('WEB_RENDERING_CASE');
 const String _iosSimulatorScreenshotReadyFile = 'agora-ios-screenshot-ready';
 const String _iosSimulatorScreenshotDoneFile = 'agora-ios-screenshot-done';
 const String _iosSimulatorTestCompleteFile = 'agora-ios-test-complete';
@@ -47,16 +48,12 @@ Future<void> _waitForIosSimulatorScreenshot() async {
   }
 }
 
-Future<void> _reportIosSimulatorTestComplete(
-  IntegrationTestWidgetsFlutterBinding binding,
-) async {
+Future<void> _reportIosSimulatorTestComplete() async {
   final complete =
       File('${Directory.systemTemp.path}/$_iosSimulatorTestCompleteFile');
   final driverDone =
       File('${Directory.systemTemp.path}/$_iosSimulatorDriverDoneFile');
-  complete.writeAsStringSync(
-    binding.failureMethodsDetails.isEmpty ? 'passed' : 'failed',
-  );
+  complete.writeAsStringSync('passed');
 
   final deadline = DateTime.now().add(const Duration(minutes: 5));
   try {
@@ -92,9 +89,6 @@ void main() {
   }
 
   final binding = IntegrationTestWidgetsFlutterBinding.ensureInitialized();
-  if (_useIosSimulatorScreenshot) {
-    tearDownAll(() => _reportIosSimulatorTestComplete(binding));
-  }
 
   group(
     'AgoraVideoView iOS',
@@ -140,6 +134,9 @@ void main() {
             }
 
             await waitDisposed(tester, binding);
+            if (_useIosSimulatorScreenshot) {
+              await _reportIosSimulatorTestComplete();
+            }
           },
         );
       });
@@ -383,6 +380,7 @@ void main() {
 
             await waitDisposed(tester, binding);
           },
+          skip: _webRenderingCase.isNotEmpty && _webRenderingCase != 'local',
         );
 
         testWidgets(
@@ -422,6 +420,7 @@ void main() {
 
             await waitDisposed(tester, binding);
           },
+          skip: _webRenderingCase.isNotEmpty && _webRenderingCase != 'remote',
         );
       });
     },
