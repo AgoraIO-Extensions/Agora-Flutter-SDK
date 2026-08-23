@@ -7,7 +7,6 @@ set -x
 MY_PATH=$(dirname "$0")
 
 export SAVE_DEBUG_GOLDEN="true"
-export IOS_SIMULATOR_SCREENSHOT="true"
 
 pushd ${MY_PATH}/../test_shard/rendering_test
 
@@ -24,7 +23,9 @@ for ((attempt = 1; attempt <= MAX_ATTEMPTS; attempt++)); do
   ATTEMPT_LOG=$(mktemp "${TMPDIR:-/tmp}/agora-ios-rendering-test.XXXXXX")
   if flutter drive --no-enable-impeller --driver=test_driver/integration_test.dart \
     --target=integration_test/agora_video_view_smoke_test.dart \
-    --dart-define=TEST_APP_ID="${TEST_APP_ID}" --verbose 2>&1 | tee "${ATTEMPT_LOG}"; then
+    --dart-define=TEST_APP_ID="${TEST_APP_ID}" \
+    --dart-define=IOS_SIMULATOR_SCREENSHOT="${IOS_SIMULATOR_SCREENSHOT:-false}" \
+    --verbose 2>&1 | tee "${ATTEMPT_LOG}"; then
     rm -f "${ATTEMPT_LOG}"
     break
   fi

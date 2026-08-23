@@ -56,7 +56,7 @@ class _FakeCameraRemoteVideoViewState extends State<FakeCameraRemoteVideoView> {
     ));
 
     _rtcEngine.registerEventHandler(RtcEngineEventHandler(
-      onUserJoined: (connection, remoteUid, elapsed) {
+      onFirstRemoteVideoFrame: (connection, remoteUid, width, height, elapsed) {
         if (remoteUid == _remoteUid) {
           _waitFirstFrame();
         }

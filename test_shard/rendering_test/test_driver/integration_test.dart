@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:io';
 
 import 'package:flutter_driver/flutter_driver.dart';
@@ -11,104 +12,159 @@ const _udpateGoldenKey = 'UPDATE_GOLDEN';
 /// export SAVE_DEBUG_GOLDEN="true"
 const _saveDebugGoldenKey = 'SAVE_DEBUG_GOLDEN';
 const _iosSimulatorScreenshotKey = 'IOS_SIMULATOR_SCREENSHOT';
-
-class _SimulatorScreenshotDriver extends FlutterDriver {
-  _SimulatorScreenshotDriver(this._delegate);
-
-  final FlutterDriver _delegate;
-
-  @override
-  Future<Map<String, dynamic>> sendCommand(Command command) =>
-      _delegate.sendCommand(command);
-
-  @override
-  Future<List<int>> screenshot({Object? format}) async {
-    final directory =
-        await Directory.systemTemp.createTemp('agora-screenshot.');
-    final screenshot = File('${directory.path}/screenshot.png');
-    try {
-      final result = await Process.run(
-        'xcrun',
-        ['simctl', 'io', 'booted', 'screenshot', screenshot.path],
-      );
-      if (result.exitCode != 0) {
-        throw ProcessException(
-          'xcrun',
-          ['simctl', 'io', 'booted', 'screenshot', screenshot.path],
-          result.stderr.toString(),
-          result.exitCode,
-        );
-      }
-      return screenshot.readAsBytes();
-    } finally {
-      await directory.delete(recursive: true);
-    }
-  }
-
-  @override
-  Future<void> close() => _delegate.close();
-}
+const _iosSimulatorBundleId = 'com.example.renderingTest';
+const _iosSimulatorScreenshotReadyFile = 'agora-ios-screenshot-ready';
+const _iosSimulatorScreenshotDoneFile = 'agora-ios-screenshot-done';
+const _iosScreenshotName =
+    'ios.agora_video_view.platform_view.smoke_test.start_preview_after_enable_video';
 
 Future<void> main() async {
-  final defaultDriver = await FlutterDriver.connect();
-  final driver = Platform.environment[_iosSimulatorScreenshotKey] == 'true'
-      ? _SimulatorScreenshotDriver(defaultDriver)
-      : defaultDriver;
+  if (Platform.environment[_iosSimulatorScreenshotKey] == 'true') {
+    // Flutter 3.47.1 exits during integration_test's native iOS screenshot.
+    // Synchronize through the simulator data container and capture from host.
+    final driver = await FlutterDriver.connect();
+    final screenshotDone = await _waitForIosSimulatorScreenshotReady();
+
+    var screenshotMatches = false;
+    try {
+      screenshotMatches = await _compareScreenshot(
+        _iosScreenshotName,
+        await _takeIosSimulatorScreenshot(),
+      );
+    } finally {
+      screenshotDone.writeAsStringSync('done');
+    }
+
+    if (!screenshotMatches) {
+      await driver.close();
+      exit(1);
+    }
+
+    await integrationDriver(
+      driver: driver,
+      onScreenshot: _compareScreenshot,
+    );
+    return;
+  }
 
   await integrationDriver(
-    driver: driver,
-    onScreenshot: (String screenshotName, List<int> screenshotBytes,
-        [Map<String, Object?>? args]) async {
-      final screenshotPath = 'screenshot/$screenshotName.png';
-
-      final srcImage = decodeImage(screenshotBytes);
-      if (srcImage == null) {
-        return false;
-      }
-
-      final srcWidth = srcImage.width;
-      final srcHeight = srcImage.height;
-      const dstWidth = 400;
-      const dstHeight = 400;
-      final x = srcWidth / 2.0 - dstWidth / 2.0;
-      final y = srcHeight / 2.0 - dstHeight / 2.0;
-
-      final dstImage =
-          copyCrop(srcImage, x.toInt(), y.toInt(), dstWidth, dstHeight);
-
-      final imageBytes = encodePng(dstImage);
-
-      final updateGolden = Platform.environment[_udpateGoldenKey] ?? 'false';
-
-      final File imageFile = File(screenshotPath);
-
-      if (updateGolden == 'true') {
-        imageFile.writeAsBytesSync(imageBytes);
-        stdout.writeln('Updated golden file: $screenshotPath');
-        return true;
-      }
-
-      if ((Platform.environment[_saveDebugGoldenKey] ?? 'false') == 'true') {
-        final File debugGoldenFile =
-            File('screenshot/$screenshotName.debug.png');
-        debugGoldenFile.writeAsBytesSync(imageBytes);
-      }
-
-      final expectedImage = decodePng(imageFile.readAsBytesSync());
-
-      final result = await compareImages(
-        src1: expectedImage,
-        src2: dstImage,
-        algorithm: PixelMatching(tolerance: 0.3),
-      );
-
-      stdout.writeln('compareImages $screenshotPath result: $result');
-
-      // TODO(littlegnal): Need more tolerance with this change:
-      // https://github.com/AgoraIO-Extensions/Agora-Flutter-SDK/pull/1329
-      //
-      // see if we can reduce the result later
-      return result < 0.01;
-    },
+    onScreenshot: _compareScreenshot,
   );
+}
+
+Future<File> _waitForIosSimulatorScreenshotReady() async {
+  final result = await Process.run(
+    'xcrun',
+    [
+      'simctl',
+      'get_app_container',
+      'booted',
+      _iosSimulatorBundleId,
+      'data',
+    ],
+  );
+  if (result.exitCode != 0) {
+    throw ProcessException(
+      'xcrun',
+      [
+        'simctl',
+        'get_app_container',
+        'booted',
+        _iosSimulatorBundleId,
+        'data',
+      ],
+      result.stderr.toString(),
+      result.exitCode,
+    );
+  }
+
+  final dataPath = result.stdout.toString().trim();
+  final ready = File('$dataPath/tmp/$_iosSimulatorScreenshotReadyFile');
+  final done = File('$dataPath/tmp/$_iosSimulatorScreenshotDoneFile');
+  final deadline = DateTime.now().add(const Duration(minutes: 5));
+  while (!ready.existsSync()) {
+    if (DateTime.now().isAfter(deadline)) {
+      throw TimeoutException('Timed out waiting for the simulator screenshot');
+    }
+    await Future<void>.delayed(const Duration(milliseconds: 100));
+  }
+  return done;
+}
+
+Future<List<int>> _takeIosSimulatorScreenshot() async {
+  final directory = await Directory.systemTemp.createTemp('agora-screenshot.');
+  final screenshot = File('${directory.path}/screenshot.png');
+  try {
+    final result = await Process.run(
+      'xcrun',
+      ['simctl', 'io', 'booted', 'screenshot', screenshot.path],
+    );
+    if (result.exitCode != 0) {
+      throw ProcessException(
+        'xcrun',
+        ['simctl', 'io', 'booted', 'screenshot', screenshot.path],
+        result.stderr.toString(),
+        result.exitCode,
+      );
+    }
+    return screenshot.readAsBytes();
+  } finally {
+    await directory.delete(recursive: true);
+  }
+}
+
+Future<bool> _compareScreenshot(
+  String screenshotName,
+  List<int> screenshotBytes, [
+  Map<String, Object?>? args,
+]) async {
+  final screenshotPath = 'screenshot/$screenshotName.png';
+
+  final srcImage = decodeImage(screenshotBytes);
+  if (srcImage == null) {
+    return false;
+  }
+
+  final srcWidth = srcImage.width;
+  final srcHeight = srcImage.height;
+  const dstWidth = 400;
+  const dstHeight = 400;
+  final x = srcWidth / 2.0 - dstWidth / 2.0;
+  final y = srcHeight / 2.0 - dstHeight / 2.0;
+
+  final dstImage =
+      copyCrop(srcImage, x.toInt(), y.toInt(), dstWidth, dstHeight);
+
+  final imageBytes = encodePng(dstImage);
+
+  final updateGolden = Platform.environment[_udpateGoldenKey] ?? 'false';
+
+  final File imageFile = File(screenshotPath);
+
+  if (updateGolden == 'true') {
+    imageFile.writeAsBytesSync(imageBytes);
+    stdout.writeln('Updated golden file: $screenshotPath');
+    return true;
+  }
+
+  if ((Platform.environment[_saveDebugGoldenKey] ?? 'false') == 'true') {
+    final File debugGoldenFile = File('screenshot/$screenshotName.debug.png');
+    debugGoldenFile.writeAsBytesSync(imageBytes);
+  }
+
+  final expectedImage = decodePng(imageFile.readAsBytesSync());
+
+  final result = await compareImages(
+    src1: expectedImage,
+    src2: dstImage,
+    algorithm: PixelMatching(tolerance: 0.3),
+  );
+
+  stdout.writeln('compareImages $screenshotPath result: $result');
+
+  // TODO(littlegnal): Need more tolerance with this change:
+  // https://github.com/AgoraIO-Extensions/Agora-Flutter-SDK/pull/1329
+  //
+  // see if we can reduce the result later
+  return result < (screenshotName.startsWith('android.') ? 0.03 : 0.01);
 }

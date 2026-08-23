@@ -517,6 +517,7 @@ jobs:
     name: Run Flutter iOS Rendering Tests
     if: ${{ !contains(github.event.pull_request.labels.*.name, 'ci:skip') }}
     strategy:
+      fail-fast: false
       matrix:
         include:
           - version: "3.24.5"
@@ -534,10 +535,12 @@ jobs:
             model: "iPhone 16e"
             os_version: ">=26.2"
             xcode_version: latest-stable
+            simulator_screenshot: true
     runs-on: ${{ matrix.runner }}
     timeout-minutes: 60
     env:
       TEST_APP_ID: ${{ secrets.APP_ID }}
+      IOS_SIMULATOR_SCREENSHOT: ${{ matrix.simulator_screenshot || false }}
     steps:
       - uses: actions/checkout@v4
       - uses: subosito/flutter-action@v2
@@ -568,6 +571,7 @@ jobs:
     name: Run Flutter macOS Rendering Tests
     if: ${{ !contains(github.event.pull_request.labels.*.name, 'ci:skip') }}
     strategy:
+      fail-fast: false
       matrix:
         version: ["3.24.5", "3.38.5", "3.47.1"]
     runs-on: macos-latest
@@ -595,6 +599,7 @@ jobs:
     name: Run Flutter Windows Rendering Tests
     if: ${{ !contains(github.event.pull_request.labels.*.name, 'ci:skip') }}
     strategy:
+      fail-fast: false
       matrix:
         version: ["3.24.5", "3.38.5", "3.47.1"]
     runs-on: windows-2022
@@ -624,6 +629,7 @@ jobs:
     name: Run Flutter Web Rendering Tests
     if: ${{ !contains(github.event.pull_request.labels.*.name, 'ci:skip') }}
     strategy:
+      fail-fast: false
       matrix:
         version: ["3.24.5", "3.38.5", "3.47.1"]
     runs-on: ubuntu-latest
