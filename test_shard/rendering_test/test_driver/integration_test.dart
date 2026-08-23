@@ -23,6 +23,10 @@ Future<void> main() async {
     // Flutter 3.47.1 exits during integration_test's native iOS screenshot.
     // Synchronize through the simulator data container and capture from host.
     final driver = await FlutterDriver.connect();
+    final integrationResult = integrationDriver(
+      driver: driver,
+      onScreenshot: _compareScreenshot,
+    );
     final screenshotDone = await _waitForIosSimulatorScreenshotReady();
 
     var screenshotMatches = false;
@@ -40,10 +44,7 @@ Future<void> main() async {
       exit(1);
     }
 
-    await integrationDriver(
-      driver: driver,
-      onScreenshot: _compareScreenshot,
-    );
+    await integrationResult;
     return;
   }
 
