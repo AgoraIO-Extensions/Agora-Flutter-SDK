@@ -7,6 +7,7 @@ set -x
 MY_PATH=$(dirname "$0")
 
 export SAVE_DEBUG_GOLDEN="true"
+export IOS_SIMULATOR_SCREENSHOT="true"
 
 pushd ${MY_PATH}/../test_shard/rendering_test
 

@@ -1,4 +1,6 @@
 import 'dart:io';
+
+import 'package:flutter_driver/flutter_driver.dart';
 import 'package:image_compare/image_compare.dart';
 import 'package:integration_test/integration_test_driver_extended.dart';
 import 'package:image/image.dart';
@@ -8,9 +10,53 @@ const _udpateGoldenKey = 'UPDATE_GOLDEN';
 
 /// export SAVE_DEBUG_GOLDEN="true"
 const _saveDebugGoldenKey = 'SAVE_DEBUG_GOLDEN';
+const _iosSimulatorScreenshotKey = 'IOS_SIMULATOR_SCREENSHOT';
+
+class _SimulatorScreenshotDriver extends FlutterDriver {
+  _SimulatorScreenshotDriver(this._delegate);
+
+  final FlutterDriver _delegate;
+
+  @override
+  Future<Map<String, dynamic>> sendCommand(Command command) =>
+      _delegate.sendCommand(command);
+
+  @override
+  Future<List<int>> screenshot({Object? format}) async {
+    final directory =
+        await Directory.systemTemp.createTemp('agora-screenshot.');
+    final screenshot = File('${directory.path}/screenshot.png');
+    try {
+      final result = await Process.run(
+        'xcrun',
+        ['simctl', 'io', 'booted', 'screenshot', screenshot.path],
+      );
+      if (result.exitCode != 0) {
+        throw ProcessException(
+          'xcrun',
+          ['simctl', 'io', 'booted', 'screenshot', screenshot.path],
+          result.stderr.toString(),
+          result.exitCode,
+        );
+      }
+      return screenshot.readAsBytes();
+    } finally {
+      await directory.delete(recursive: true);
+    }
+  }
+
+  @override
+  Future<void> close() => _delegate.close();
+}
 
 Future<void> main() async {
+  final defaultDriver = await FlutterDriver.connect();
+  final driver = Platform.environment[_iosSimulatorScreenshotKey] == 'true'
+      ? _SimulatorScreenshotDriver(defaultDriver)
+      : defaultDriver;
+
   await integrationDriver(
+    driver: driver,
     onScreenshot: (String screenshotName, List<int> screenshotBytes,
         [Map<String, Object?>? args]) async {
       final screenshotPath = 'screenshot/$screenshotName.png';
