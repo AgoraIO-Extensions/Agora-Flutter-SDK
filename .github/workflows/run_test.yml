@@ -204,10 +204,11 @@ jobs:
       fail-fast: false
       matrix:
         version: ["3.16", "3.38.5", "3.47.1"]
-    runs-on: ${{ matrix.version == '3.47.1' && 'macos-14' || 'macos-latest' }}
-    timeout-minutes: 120
+    runs-on: macos-latest
+    timeout-minutes: 45
     env:
       TEST_APP_ID: ${{ secrets.APP_ID }}
+      FLUTTER_VERSION: ${{ matrix.version }}
     steps:
       - uses: actions/checkout@v4
       - uses: subosito/flutter-action@v2
@@ -574,10 +575,11 @@ jobs:
       fail-fast: false
       matrix:
         version: ["3.24.5", "3.38.5", "3.47.1"]
-    runs-on: ${{ matrix.version == '3.47.1' && 'macos-14' || 'macos-latest' }}
-    timeout-minutes: 120
+    runs-on: macos-latest
+    timeout-minutes: 45
     env:
       TEST_APP_ID: ${{ secrets.APP_ID }}
+      FLUTTER_VERSION: ${{ matrix.version }}
     steps:
       - uses: actions/checkout@v4
       - uses: subosito/flutter-action@v2
