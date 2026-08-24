@@ -1,0 +1,21 @@
+diff --git a/lib/src/platform/io/iris_method_channel_internal_io.dart b/lib/src/platform/io/iris_method_channel_internal_io.dart
+index c2ea3e2..5a30cca 100644
+--- a/lib/src/platform/io/iris_method_channel_internal_io.dart
++++ b/lib/src/platform/io/iris_method_channel_internal_io.dart
+@@ -353,9 +353,9 @@ class _IrisMethodChannelNative {
+-    _nativeIrisApiEngineBinding
+-        .destroyNativeApiEngine(IrisApiEngineHandle(_irisApiEnginePtr!));
+-    _irisApiEnginePtr = null;
+-
+-    _irisEvent.dispose();
+-
+-    _nativeIrisApiEngineBinding
++    _irisEvent.dispose();
++
++    _nativeIrisApiEngineBinding
++        .destroyNativeApiEngine(IrisApiEngineHandle(_irisApiEnginePtr!));
++    _irisApiEnginePtr = null;
++
++    _nativeIrisApiEngineBinding
+         .destroyIrisEventHandler(IrisEventHandlerHandle(_irisEventHandler!));
+     _irisEventHandler = null;
