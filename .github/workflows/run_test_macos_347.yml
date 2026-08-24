@@ -20,11 +20,9 @@ jobs:
           - kind: integration
             name: Run Flutter macOS Integration Tests (3.47.1)
             process_name: integration_test_app
-            project: test_shard/integration_test_app
           - kind: rendering
             name: Run Flutter macOS Rendering Tests (3.47.1)
             process_name: rendering_test
-            project: test_shard/rendering_test
     runs-on: macos-15-intel
     timeout-minutes: 30
     env:
@@ -35,15 +33,6 @@ jobs:
         with:
           flutter-version: '3.47.1'
           cache: true
-      - name: Prepare dependencies
-        working-directory: ${{ matrix.project }}
-        run: flutter pub get
-      - name: Patch iris_method_channel disposal order
-        shell: bash
-        run: |
-          cd "$PUB_CACHE/hosted/pub.dev/iris_method_channel-2.2.7"
-          git apply --check "$GITHUB_WORKSPACE/ci/patches/iris_method_channel_2_2_7_dispose_order.patch"
-          git apply "$GITHUB_WORKSPACE/ci/patches/iris_method_channel_2_2_7_dispose_order.patch"
       - run: flutter config --enable-macos-desktop
       - name: Run ${{ matrix.kind }} test
         shell: bash
