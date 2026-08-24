@@ -15,15 +15,7 @@ for filename in integration_test/*.dart; do
         continue
     fi
     
-    # flutter/flutter#189192 can leave `flutter test` waiting on desktop logs.
-    if [[ "${FLUTTER_VERSION:-}" == "3.47.1" ]]; then
-        flutter drive -d macos \
-            --driver=test_driver/integration_test.dart \
-            --target="$filename" \
-            --dart-define=TEST_APP_ID="${TEST_APP_ID}"
-    else
-        flutter test "$filename" --dart-define=TEST_APP_ID="${TEST_APP_ID}" -d macos
-    fi
+    flutter test $filename --dart-define=TEST_APP_ID="${TEST_APP_ID}" -d macos
 done
 
 popd
