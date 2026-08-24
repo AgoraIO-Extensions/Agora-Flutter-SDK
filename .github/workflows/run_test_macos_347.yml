@@ -1,0 +1,64 @@
+name: 'run: macOS 3.47.1 diagnostics'
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+on:
+  workflow_call:
+    secrets:
+      APP_ID:
+        required: true
+
+jobs:
+  macos_347:
+    name: ${{ matrix.name }}
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - kind: integration
+            name: Run Flutter macOS Integration Tests (3.47.1)
+            process_name: integration_test_app
+          - kind: rendering
+            name: Run Flutter macOS Rendering Tests (3.47.1)
+            process_name: rendering_test
+    runs-on: macos-15-intel
+    timeout-minutes: 30
+    env:
+      TEST_APP_ID: ${{ secrets.APP_ID }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: subosito/flutter-action@v2
+        with:
+          flutter-version: '3.47.1'
+          cache: true
+      - run: flutter config --enable-macos-desktop
+      - name: Run ${{ matrix.kind }} test
+        shell: bash
+        run: |
+          (
+            sleep 300
+            app_pid=$(pgrep -f '/${{ matrix.process_name }}\.app/Contents/MacOS/${{ matrix.process_name }}' || true)
+            app_pid=${app_pid%%$'\n'*}
+            if [[ -n "$app_pid" ]]; then
+              echo "Sampling stalled ${{ matrix.process_name }} process $app_pid"
+              sample "$app_pid" 5 1 || true
+            else
+              echo "No ${{ matrix.process_name }} process found after 5 minutes"
+            fi
+          ) &
+          sampler_pid=$!
+          trap 'kill "$sampler_pid" 2>/dev/null || true' EXIT
+
+          if [[ '${{ matrix.kind }}' == 'integration' ]]; then
+            bash ci/run_flutter_macos_integration_test.sh
+          else
+            export SAVE_DEBUG_GOLDEN=true
+            bash ci/rendering_test_macos.sh
+          fi
+      - uses: actions/upload-artifact@v4
+        if: ${{ always() && matrix.kind == 'rendering' }}
+        with:
+          name: macos-debug-golden-files-3.47.1
+          path: test_shard/rendering_test/screenshot/*.debug.png
