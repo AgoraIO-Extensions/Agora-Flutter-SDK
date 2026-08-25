@@ -1,9 +1,7 @@
 import 'package:agora_rtc_engine/agora_rtc_engine.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 import 'fake_camera.dart';
-import 'widget_tester_ext.dart';
 
 class FakeCameraRemoteVideoView extends StatefulWidget {
   const FakeCameraRemoteVideoView(
@@ -41,14 +39,12 @@ class _FakeCameraRemoteVideoViewState extends State<FakeCameraRemoteVideoView> {
 
   @override
   void dispose() {
-    queueRtcEngineRelease(_rtcEngine);
-    _fakeCamera.dispose();
+    _dispose();
     super.dispose();
   }
 
   Future<void> _init() async {
     _rtcEngine = widget.rtcEngine;
-    await waitPendingDisposals();
 
     String engineAppId = const String.fromEnvironment('TEST_APP_ID',
         defaultValue: '<YOUR_APP_ID>');
@@ -59,11 +55,6 @@ class _FakeCameraRemoteVideoViewState extends State<FakeCameraRemoteVideoView> {
 
     _rtcEngine.registerEventHandler(RtcEngineEventHandler(
       onUserJoined: (connection, remoteUid, elapsed) {
-        if (!kIsWeb && remoteUid == _remoteUid) {
-          _waitFirstFrame();
-        }
-      },
-      onFirstRemoteVideoFrame: (connection, remoteUid, width, height, elapsed) {
         if (remoteUid == _remoteUid) {
           _waitFirstFrame();
         }
@@ -109,6 +100,11 @@ class _FakeCameraRemoteVideoViewState extends State<FakeCameraRemoteVideoView> {
     // Delay 2 seconds to ensure the first frame showed
     await Future.delayed(const Duration(seconds: 2));
     widget.onFirstFrame();
+  }
+
+  Future<void> _dispose() async {
+    await _fakeCamera.dispose();
+    await _rtcEngine.release();
   }
 
   @override

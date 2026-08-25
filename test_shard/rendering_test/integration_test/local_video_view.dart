@@ -4,7 +4,6 @@ import 'package:agora_rtc_engine/agora_rtc_engine.dart';
 import 'package:flutter/material.dart';
 
 import 'agora_video_view_render_test.dart';
-import 'common/widget_tester_ext.dart';
 
 class LocalVideoView extends StatefulWidget {
   const LocalVideoView({
@@ -34,23 +33,12 @@ class _LocalVideoViewState extends State<LocalVideoView> {
   late final MediaPlayerController mediaPlayerController;
   late final MediaPlayerVideoFrameObserver observer;
   late final MediaPlayerSourceObserver mediaPlayerSourceObserver;
-  final Completer<void> _initializationDone = Completer<void>();
-  Completer<void>? _mediaPlayerPlayed;
-  bool _isDisposed = false;
-  bool _rtcEngineInitialized = false;
-  bool _mediaPlayerInitialized = false;
-  bool _videoFrameObserverRegistered = false;
-  bool _sourceObserverRegistered = false;
 
   @override
   void initState() {
     super.initState();
 
-    _init().whenComplete(() {
-      if (!_initializationDone.isCompleted) {
-        _initializationDone.complete();
-      }
-    });
+    _init();
   }
 
   Future<void> _init() async {
@@ -85,8 +73,6 @@ class _LocalVideoViewState extends State<LocalVideoView> {
       appId: engineAppId,
       areaCode: AreaCode.areaCodeGlob.value(),
     ));
-    _rtcEngineInitialized = true;
-    if (_isDisposed) return;
 
     await rtcEngine.setVideoEncoderConfiguration(
       const VideoEncoderConfiguration(
@@ -95,20 +81,15 @@ class _LocalVideoViewState extends State<LocalVideoView> {
         bitrate: 800,
       ),
     );
-    if (_isDisposed) return;
 
     await mediaPlayerController.initialize();
-    _mediaPlayerInitialized = true;
-    if (_isDisposed) return;
 
     observer = MediaPlayerVideoFrameObserver(
       onFrame: (frame) {
-        if (_isDisposed) return;
         widget.onRendered(rtcEngine);
       },
     );
     mediaPlayerController.registerVideoFrameObserver(observer);
-    _videoFrameObserverRegistered = true;
 
     final mediaPlayerControllerPlayed = Completer<void>();
 
@@ -116,61 +97,30 @@ class _LocalVideoViewState extends State<LocalVideoView> {
       onPlayerSourceStateChanged:
           (MediaPlayerState state, MediaPlayerReason ec) async {
         if (state == MediaPlayerState.playerStateOpenCompleted) {
-          if (_isDisposed) {
-            if (!mediaPlayerControllerPlayed.isCompleted) {
-              mediaPlayerControllerPlayed.complete();
-            }
-            return;
-          }
           await mediaPlayerController.play();
-          if (_isDisposed) return;
           await mediaPlayerController.setLoopCount(99999);
-          if (!mediaPlayerControllerPlayed.isCompleted) {
-            mediaPlayerControllerPlayed.complete();
-          }
+          mediaPlayerControllerPlayed.complete();
         }
       },
     );
-    _mediaPlayerPlayed = mediaPlayerControllerPlayed;
     mediaPlayerController
         .registerPlayerSourceObserver(mediaPlayerSourceObserver);
-    _sourceObserverRegistered = true;
 
     await mediaPlayerController.open(url: widget.url, startPos: 0);
-    if (_isDisposed) return;
 
     await mediaPlayerControllerPlayed.future;
   }
 
   @override
   void dispose() {
-    _isDisposed = true;
-    queueDisposal(_dispose());
+    _dispose();
     super.dispose();
   }
 
   Future<void> _dispose() async {
-    final mediaPlayerPlayed = _mediaPlayerPlayed;
-    if (mediaPlayerPlayed != null && !mediaPlayerPlayed.isCompleted) {
-      mediaPlayerPlayed.complete();
-    }
-    await _initializationDone.future;
-    if (_videoFrameObserverRegistered) {
-      mediaPlayerController.unregisterVideoFrameObserver(observer);
-      _videoFrameObserverRegistered = false;
-    }
-    if (_sourceObserverRegistered) {
-      mediaPlayerController.unregisterPlayerSourceObserver(
-        mediaPlayerSourceObserver,
-      );
-      _sourceObserverRegistered = false;
-    }
-    if (_mediaPlayerInitialized) {
-      await mediaPlayerController.dispose();
-    }
-    if (_rtcEngineInitialized) {
-      await rtcEngine.release();
-    }
+    mediaPlayerController.unregisterVideoFrameObserver(observer);
+    await mediaPlayerController.dispose();
+    await rtcEngine.release();
   }
 
   @override

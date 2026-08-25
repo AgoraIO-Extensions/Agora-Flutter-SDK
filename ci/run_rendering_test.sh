@@ -19,15 +19,12 @@ if [[ ${PLATFORM} == "web" ]];then
 
     echo "Run rendering test on web"
 
-    for web_rendering_case in local remote; do
-        WEB_RENDERING_CASE="${web_rendering_case}" flutter drive \
-            --verbose-system-logs \
-            -d web-server \
-            --driver=test_driver/integration_test.dart \
-            --target=integration_test/agora_video_view_smoke_test.dart \
-            --dart-define=TEST_APP_ID="${TEST_APP_ID}" \
-            --dart-define=WEB_RENDERING_CASE="${web_rendering_case}"
-    done
+    flutter drive \
+        --verbose-system-logs \
+        -d web-server \
+        --driver=test_driver/integration_test.dart \
+        --target=integration_test/agora_video_view_smoke_test.dart \
+        --dart-define=TEST_APP_ID="${TEST_APP_ID}"
 
 elif [[ ${PLATFORM} == "android" || ${PLATFORM} == "ios" ]];then
     echo "Run rendering test on ${PLATFORM}"
