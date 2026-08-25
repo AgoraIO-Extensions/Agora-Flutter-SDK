@@ -204,8 +204,8 @@ jobs:
       fail-fast: false
       matrix:
         version: ["3.16", "3.38.5", "3.47.1"]
-    runs-on: ${{ matrix.version == '3.47.1' && 'macos-15-intel' || 'macos-latest' }}
-    timeout-minutes: 45
+    runs-on: macos-latest
+    timeout-minutes: 120
     env:
       TEST_APP_ID: ${{ secrets.APP_ID }}
     steps:
@@ -574,8 +574,8 @@ jobs:
       fail-fast: false
       matrix:
         version: ["3.24.5", "3.38.5", "3.47.1"]
-    runs-on: ${{ matrix.version == '3.47.1' && 'macos-15-intel' || 'macos-latest' }}
-    timeout-minutes: 45
+    runs-on: macos-latest
+    timeout-minutes: 120
     env:
       TEST_APP_ID: ${{ secrets.APP_ID }}
     steps:

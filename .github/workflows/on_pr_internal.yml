@@ -54,6 +54,6 @@ jobs:
     needs: check_permission
     # If the PR requested by a external contributor, the secrets.APP_ID should be empty, and skip this workflow
     if: ${{ needs.check_permission.outputs.has_permission == 1 && !contains(github.event.pull_request.labels.*.name, 'ci:skip') }}
-    uses: ./.github/workflows/run_test_macos_347.yml
+    uses: ./.github/workflows/run_test.yml
     secrets:
       APP_ID: ${{ secrets.APP_ID }}
