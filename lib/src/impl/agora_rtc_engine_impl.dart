@@ -441,97 +441,87 @@ class RtcEngineImpl extends rtc_engine_ex_binding.RtcEngineExImpl
     // If previous initialization still in progess, skip it.
     if (_initializingCompleter != null &&
         !_initializingCompleter!.isCompleted) {
+      await _initializingCompleter!.future;
+      if (!_rtcEngineState.isInitialzed) {
+        await initialize(context);
+      }
       return;
     }
 
-    _initializingCompleter = Completer<void>();
-    _initializeCallOnce ??= AsyncMemoizer();
-    await _initializeCallOnce!.runOnce(() async {
-      engineMethodChannel = const MethodChannel('agora_rtc_ng');
+    final initializingCompleter = Completer<void>();
+    _initializingCompleter = initializingCompleter;
+    try {
+      _initializeCallOnce ??= AsyncMemoizer();
+      await _initializeCallOnce!.runOnce(() async {
+        engineMethodChannel = const MethodChannel('agora_rtc_ng');
 
-      if (!kIsWeb && defaultTargetPlatform == TargetPlatform.android) {
-        final initResult =
-            await engineMethodChannel.invokeMethod<dynamic>('androidInit');
-        debugPrint(
-            '[RtcEngineImpl] androidInit result=$initResult, sharedNativeHandle=$_sharedNativeHandle');
-        if (_sharedNativeHandle == null && initResult is Map) {
-          final destroyExistingEngine =
-              initResult['destroyExistingEngine'] == true;
-          final cachedNativeHandle = initResult['cachedNativeHandle'];
-          if (destroyExistingEngine &&
-              cachedNativeHandle is int &&
-              cachedNativeHandle != 0) {
-            debugPrint(
-                '[RtcEngineImpl] force release stale cached engine before initialize: $cachedNativeHandle');
-            try {
-              await engineMethodChannel.invokeMethod(
-                'androidForceReleaseCachedNativeEngine',
-              );
-            } finally {
-              try {
-                await engineMethodChannel
-                    .invokeMethod('androidClearNativeEngineHandle');
-              } catch (e) {
-                // Best-effort stale engine cleanup on Android.
-              }
-            }
+        if (!kIsWeb && defaultTargetPlatform == TargetPlatform.android) {
+          await engineMethodChannel.invokeMethod('androidInit');
+        }
+
+        engineMethodChannel.setMethodCallHandler((call) async {
+          try {
+            methodChannelHandlers[call.method]?.forEach((handler) async {
+              await handler(call);
+            });
+          } catch (e) {
+            assert(false, 'methodChannel error: $e');
           }
-        }
-      }
+        });
 
-      engineMethodChannel.setMethodCallHandler((call) async {
-        try {
-          methodChannelHandlers[call.method]?.forEach((handler) async {
-            await handler(call);
-          });
-        } catch (e) {
-          assert(false, 'methodChannel error: $e');
-        }
+        List<InitilizationArgProvider> args = [
+          if (_sharedNativeHandle != null)
+            SharedNativeHandleInitilizationArgProvider(_sharedNativeHandle!)
+        ];
+        assert(() {
+          if (_mockRtcEngineProvider != null) {
+            args.add(_mockRtcEngineProvider!);
+          }
+          return true;
+        }());
+
+        await irisMethodChannel.initilize(args);
+        await _initializeInternal(context);
       });
 
-      List<InitilizationArgProvider> args = [
-        if (_sharedNativeHandle != null)
-          SharedNativeHandleInitilizationArgProvider(_sharedNativeHandle!)
-      ];
-      assert(() {
-        if (_mockRtcEngineProvider != null) {
-          args.add(_mockRtcEngineProvider!);
+      await super.initialize(context);
+
+      await irisMethodChannel.invokeMethod(IrisMethodCall(
+        'RtcEngine_setAppType',
+        jsonEncode({'appType': 4}),
+      ));
+
+      _rtcEngineState.isInitialzed = true;
+      _isReleased = false;
+    } catch (e, s) {
+      final videoViewController = _globalVideoViewController;
+      if (videoViewController != null) {
+        try {
+          await videoViewController.detachVideoFrameBufferManager(
+              irisMethodChannel.getApiEngineHandle());
+        } catch (cleanupError) {
+          debugPrint(
+              '[RtcEngineImpl] initialize renderer rollback failed: $cleanupError');
+        } finally {
+          _globalVideoViewController = null;
         }
-        return true;
-      }());
-
-      await irisMethodChannel.initilize(args);
-      await _initializeInternal(context);
-    });
-
-    await super.initialize(context);
-
-    await irisMethodChannel.invokeMethod(IrisMethodCall(
-      'RtcEngine_setAppType',
-      jsonEncode({'appType': 4}),
-    ));
-
-    if (!kIsWeb && defaultTargetPlatform == TargetPlatform.android) {
+      }
       try {
-        final nativeHandle = await getNativeHandle();
+        await irisMethodChannel.dispose();
+      } catch (cleanupError) {
         debugPrint(
-            '[RtcEngineImpl] cache current native handle after initialize: $nativeHandle');
-        await engineMethodChannel.invokeMethod(
-          'androidCacheNativeEngineHandle',
-          {
-            'nativeHandle': nativeHandle,
-            'ownedByFlutter': _sharedNativeHandle == null,
-          },
-        );
-      } catch (e) {
-        // Best-effort cache update on Android.
+            '[RtcEngineImpl] initialize Iris rollback failed: $cleanupError');
+      }
+      _initializeCallOnce = null;
+      Error.throwWithStackTrace(e, s);
+    } finally {
+      if (!initializingCompleter.isCompleted) {
+        initializingCompleter.complete();
+      }
+      if (identical(_initializingCompleter, initializingCompleter)) {
+        _initializingCompleter = null;
       }
     }
-
-    _rtcEngineState.isInitialzed = true;
-    _isReleased = false;
-    _initializingCompleter?.complete(null);
-    _initializingCompleter = null;
   }
 
   @internal
@@ -561,6 +551,7 @@ class RtcEngineImpl extends rtc_engine_ex_binding.RtcEngineExImpl
 
     // If previous release still in progess, skip it.
     if (_releasingCompleter != null && !_releasingCompleter!.isCompleted) {
+      await _releasingCompleter!.future;
       return;
     }
 
@@ -568,39 +559,57 @@ class RtcEngineImpl extends rtc_engine_ex_binding.RtcEngineExImpl
       return;
     }
 
-    _releasingCompleter = Completer<void>();
-
-    _rtcEngineStateInternal?.dispose();
-    _rtcEngineStateInternal = null;
-
-    await _objectPool.clear();
-
-    await _globalVideoViewController
-        ?.detachVideoFrameBufferManager(irisMethodChannel.getApiEngineHandle());
-    _globalVideoViewController = null;
-
-    await irisMethodChannel.unregisterEventHandlers(_rtcEngineImplScopedKey);
-
+    final releasingCompleter = Completer<void>();
+    _releasingCompleter = releasingCompleter;
     try {
-      await super.release(sync: sync);
-    } finally {
-      if (!kIsWeb && defaultTargetPlatform == TargetPlatform.android) {
+      Object? firstError;
+      StackTrace? firstStackTrace;
+
+      Future<void> runReleaseStep(Future<void> Function() step) async {
         try {
-          await engineMethodChannel
-              .invokeMethod('androidClearNativeEngineHandle');
-        } catch (e) {
-          // Best-effort cache clear on Android.
+          await step();
+        } catch (e, s) {
+          firstError ??= e;
+          firstStackTrace ??= s;
         }
       }
-    }
 
-    await irisMethodChannel.dispose();
-    _isReleased = true;
-    _releasingCompleter?.complete(null);
-    _releasingCompleter = null;
-    assert(_initializeCallOnce!.hasRun);
-    _initializeCallOnce = null;
-    _instance = null;
+      await runReleaseStep(() async {
+        try {
+          _rtcEngineStateInternal?.dispose();
+        } finally {
+          _rtcEngineStateInternal = null;
+        }
+      });
+      await runReleaseStep(_objectPool.clear);
+      await runReleaseStep(() async {
+        try {
+          await _globalVideoViewController?.detachVideoFrameBufferManager(
+              irisMethodChannel.getApiEngineHandle());
+        } finally {
+          _globalVideoViewController = null;
+        }
+      });
+      await runReleaseStep(() =>
+          irisMethodChannel.unregisterEventHandlers(_rtcEngineImplScopedKey));
+      await runReleaseStep(() => super.release(sync: sync));
+      await runReleaseStep(irisMethodChannel.dispose);
+
+      _isReleased = true;
+      _initializeCallOnce = null;
+      _instance = null;
+
+      if (firstError != null) {
+        Error.throwWithStackTrace(firstError!, firstStackTrace!);
+      }
+    } finally {
+      if (!releasingCompleter.isCompleted) {
+        releasingCompleter.complete();
+      }
+      if (identical(_releasingCompleter, releasingCompleter)) {
+        _releasingCompleter = null;
+      }
+    }
   }
 
   @override
