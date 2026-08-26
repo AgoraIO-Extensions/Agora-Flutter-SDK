@@ -28,15 +28,30 @@ ffi.DynamicLibrary _loadLib() {
 }
 
 class NativeIrisApiEngineBindingsDelegate
-    extends PlatformBindingsDelegateInterface {
+    extends PlatformBindingsDelegateInterface
+    implements NativeCleanupCallbackProvider {
+  late final ffi.DynamicLibrary _dynamicLibrary;
   late final bindings.NativeIrisApiEngineBinding _binding;
   bindings.NativeIrisApiEngineBinding get binding => _binding;
 
   @override
   void initialize() {
-    _binding = bindings.NativeIrisApiEngineBinding(_loadLib());
+    _dynamicLibrary = _loadLib();
+    _binding = bindings.NativeIrisApiEngineBinding(_dynamicLibrary);
     _binding.enableUseJsonArray(1);
   }
+
+  @override
+  int get destroyNativeApiEngineAddress => _dynamicLibrary
+      .lookup<ffi.NativeFunction<ffi.Void Function(ffi.Pointer<ffi.Void>)>>(
+          'DestroyIrisApiEngine')
+      .address;
+
+  @override
+  int get destroyIrisEventHandlerAddress => _dynamicLibrary
+      .lookup<ffi.NativeFunction<ffi.Void Function(ffi.Pointer<ffi.Void>)>>(
+          'DestroyIrisEventHandler')
+      .address;
 
   @override
   CreateApiEngineResult createApiEngine(List<InitilizationArgProvider> args) {
