@@ -41,6 +41,31 @@ extension ChannelProfileTypeExt on ChannelProfileType {
 
 /// @nodoc
 @JsonEnum(alwaysCreate: true)
+enum ChannelType {
+  /// @nodoc
+  @JsonValue(0)
+  channelTypeStandard,
+
+  /// @nodoc
+  @JsonValue(1)
+  channelTypeLargeScale,
+}
+
+/// @nodoc
+extension ChannelTypeExt on ChannelType {
+  /// @nodoc
+  static ChannelType fromValue(int value) {
+    return $enumDecode(_$ChannelTypeEnumMap, value);
+  }
+
+  /// @nodoc
+  int value() {
+    return _$ChannelTypeEnumMap[this]!;
+  }
+}
+
+/// @nodoc
+@JsonEnum(alwaysCreate: true)
 enum WarnCodeType {
   /// @nodoc
   @JsonValue(8)
@@ -137,6 +162,10 @@ enum WarnCodeType {
   /// @nodoc
   @JsonValue(1032)
   warnAdmPlayoutAudioLowlevel,
+
+  /// @nodoc
+  @JsonValue(1033)
+  warnAdmRecordIsOccupied,
 
   /// @nodoc
   @JsonValue(1040)
@@ -493,6 +522,62 @@ enum ErrorCodeType {
   /// 1501: No permission to use the camera. Please check whether camera permission is enabled.
   @JsonValue(1501)
   errVdmCameraNotAuthorized,
+
+  /// @nodoc
+  @JsonValue(1700)
+  errVideoeffectAssetInvalid,
+
+  /// @nodoc
+  @JsonValue(1701)
+  errVideoeffectSaveFailed,
+
+  /// @nodoc
+  @JsonValue(1702)
+  errVideoeffectEngineInvalid,
+
+  /// @nodoc
+  @JsonValue(1704)
+  errVideoeffectNodeNotActive,
+
+  /// @nodoc
+  @JsonValue(1705)
+  errVideoeffectInvalidParam,
+
+  /// @nodoc
+  @JsonValue(1706)
+  errVideoeffectNotSupported,
+
+  /// @nodoc
+  @JsonValue(1707)
+  errVideoeffectInvalidBundlePath,
+
+  /// @nodoc
+  @JsonValue(2007)
+  errAdmApplicationLoopback,
+
+  /// @nodoc
+  @JsonValue(2008)
+  errAdmApplicationLoopbackStopped,
+
+  /// @nodoc
+  @JsonValue(2009)
+  errAdmSystemLoopback,
+
+  /// @nodoc
+  @JsonValue(2010)
+  errAdmSystemLoopbackStopped,
+
+  /// @nodoc
+  @JsonValue(2011)
+  errAdmLoopbackNoPermission,
+
+  /// @nodoc
+  @JsonValue(2012)
+  errAdmLoopbackSilentDetected,
+
+  /// @nodoc
+  @JsonValue(2013)
+  errAdmLoopbackSilentRecovered,
 }
 
 /// @nodoc
@@ -5338,7 +5423,8 @@ class VideoCanvas implements AgoraSerializable {
       this.mediaPlayerId,
       this.cropArea,
       this.enableAlphaMask,
-      this.position});
+      this.position,
+      this.rotation});
 
   /// For Android and iOS platforms, when the video source is a composite video stream (videoSourceTranscoded), this parameter indicates the user ID that publishes the composite video stream.
   @JsonKey(name: 'uid')
@@ -5390,6 +5476,10 @@ class VideoCanvas implements AgoraSerializable {
   /// Position of the video frame in the video pipeline. See VideoModulePosition.
   @JsonKey(name: 'position')
   final VideoModulePosition? position;
+
+  /// @nodoc
+  @JsonKey(name: 'rotation')
+  final VideoOrientation? rotation;
 
   /// @nodoc
   factory VideoCanvas.fromJson(Map<String, dynamic> json) =>
@@ -5534,6 +5624,10 @@ enum FaceShapeArea {
   @JsonValue(108)
   faceShapeAreaChin,
 
+  /// @nodoc
+  @JsonValue(109)
+  faceShapeAreaFacesmall,
+
   /// (200): Eye area, used to achieve a bigger eye effect. Value range is [0, 100], default is 50. The larger the value, the more noticeable the adjustment.
   @JsonValue(200)
   faceShapeAreaEyescale,
@@ -5561,6 +5655,10 @@ enum FaceShapeArea {
   /// (206): Outer eye corner area, used to adjust the shape of the outer eye corner. Value range is [-100, 100], default is 0. The greater the absolute value, the more noticeable the adjustment; negative values indicate the opposite direction.
   @JsonValue(206)
   faceShapeAreaEyeoutercorner,
+
+  /// @nodoc
+  @JsonValue(207)
+  faceShapeAreaEyeangle,
 
   /// (300): Nose length area, used to elongate the nose. Value range is [-100, 100], default is 0. The greater the absolute value, the more noticeable the adjustment; negative values indicate the opposite direction.
   @JsonValue(300)
@@ -6107,6 +6205,78 @@ class AudioTrackConfig implements AgoraSerializable {
 
   @override
   Map<String, dynamic> toJson() => _$AudioTrackConfigToJson(this);
+}
+
+/// @nodoc
+@JsonEnum(alwaysCreate: true)
+enum LoopbackAudioTrackType {
+  /// @nodoc
+  @JsonValue(0)
+  loopbackSystem,
+
+  /// @nodoc
+  @JsonValue(1)
+  loopbackSystemExcludeSelf,
+
+  /// @nodoc
+  @JsonValue(2)
+  loopbackApplication,
+
+  /// @nodoc
+  @JsonValue(3)
+  loopbackProcess,
+}
+
+/// @nodoc
+extension LoopbackAudioTrackTypeExt on LoopbackAudioTrackType {
+  /// @nodoc
+  static LoopbackAudioTrackType fromValue(int value) {
+    return $enumDecode(_$LoopbackAudioTrackTypeEnumMap, value);
+  }
+
+  /// @nodoc
+  int value() {
+    return _$LoopbackAudioTrackTypeEnumMap[this]!;
+  }
+}
+
+/// @nodoc
+@JsonSerializable(explicitToJson: true, includeIfNull: false)
+class LoopbackAudioTrackConfig implements AgoraSerializable {
+  /// @nodoc
+  const LoopbackAudioTrackConfig(
+      {this.loopbackType,
+      this.volume,
+      this.deviceName,
+      this.appName,
+      this.processId});
+
+  /// @nodoc
+  @JsonKey(name: 'loopbackType')
+  final LoopbackAudioTrackType? loopbackType;
+
+  /// @nodoc
+  @JsonKey(name: 'volume')
+  final int? volume;
+
+  /// @nodoc
+  @JsonKey(name: 'deviceName')
+  final String? deviceName;
+
+  /// @nodoc
+  @JsonKey(name: 'appName')
+  final String? appName;
+
+  /// @nodoc
+  @JsonKey(name: 'processId')
+  final int? processId;
+
+  /// @nodoc
+  factory LoopbackAudioTrackConfig.fromJson(Map<String, dynamic> json) =>
+      _$LoopbackAudioTrackConfigFromJson(json);
+
+  @override
+  Map<String, dynamic> toJson() => _$LoopbackAudioTrackConfigToJson(this);
 }
 
 /// Preset voice beautifier options.

@@ -644,6 +644,9 @@ ChannelMediaOptions _$ChannelMediaOptionsFromJson(Map<String, dynamic> json) =>
       publishCustomAudioTrack: json['publishCustomAudioTrack'] as bool?,
       publishCustomAudioTrackId:
           (json['publishCustomAudioTrackId'] as num?)?.toInt(),
+      publishLoopbackAudioTrack: json['publishLoopbackAudioTrack'] as bool?,
+      publishLoopbackAudioTrackId:
+          (json['publishLoopbackAudioTrackId'] as num?)?.toInt(),
       publishCustomVideoTrack: json['publishCustomVideoTrack'] as bool?,
       publishEncodedVideoTrack: json['publishEncodedVideoTrack'] as bool?,
       publishMediaPlayerAudioTrack:
@@ -684,6 +687,8 @@ ChannelMediaOptions _$ChannelMediaOptionsFromJson(Map<String, dynamic> json) =>
           _$MultipathModeEnumMap, json['downlinkMultipathMode']),
       preferMultipathType: $enumDecodeNullable(
           _$MultipathTypeEnumMap, json['preferMultipathType']),
+      channelType:
+          $enumDecodeNullable(_$ChannelTypeEnumMap, json['channelType']),
     );
 
 Map<String, dynamic> _$ChannelMediaOptionsToJson(ChannelMediaOptions instance) {
@@ -710,6 +715,9 @@ Map<String, dynamic> _$ChannelMediaOptionsToJson(ChannelMediaOptions instance) {
   writeNotNull('publishFourthScreenTrack', instance.publishFourthScreenTrack);
   writeNotNull('publishCustomAudioTrack', instance.publishCustomAudioTrack);
   writeNotNull('publishCustomAudioTrackId', instance.publishCustomAudioTrackId);
+  writeNotNull('publishLoopbackAudioTrack', instance.publishLoopbackAudioTrack);
+  writeNotNull(
+      'publishLoopbackAudioTrackId', instance.publishLoopbackAudioTrackId);
   writeNotNull('publishCustomVideoTrack', instance.publishCustomVideoTrack);
   writeNotNull('publishEncodedVideoTrack', instance.publishEncodedVideoTrack);
   writeNotNull(
@@ -750,6 +758,7 @@ Map<String, dynamic> _$ChannelMediaOptionsToJson(ChannelMediaOptions instance) {
       _$MultipathModeEnumMap[instance.downlinkMultipathMode]);
   writeNotNull('preferMultipathType',
       _$MultipathTypeEnumMap[instance.preferMultipathType]);
+  writeNotNull('channelType', _$ChannelTypeEnumMap[instance.channelType]);
   return val;
 }
 
@@ -781,6 +790,11 @@ const _$MultipathTypeEnumMap = {
   MultipathType.wifi: 1,
   MultipathType.mobile: 2,
   MultipathType.unknown: 99,
+};
+
+const _$ChannelTypeEnumMap = {
+  ChannelType.channelTypeStandard: 0,
+  ChannelType.channelTypeLargeScale: 1,
 };
 
 LeaveChannelOptions _$LeaveChannelOptionsFromJson(Map<String, dynamic> json) =>
@@ -822,6 +836,7 @@ RtcEngineContext _$RtcEngineContextFromJson(Map<String, dynamic> json) =>
       useExternalEglContext: json['useExternalEglContext'] as bool?,
       domainLimit: json['domainLimit'] as bool?,
       autoRegisterAgoraExtensions: json['autoRegisterAgoraExtensions'] as bool?,
+      parameters: json['parameters'] as String?,
     );
 
 Map<String, dynamic> _$RtcEngineContextToJson(RtcEngineContext instance) {
@@ -847,6 +862,7 @@ Map<String, dynamic> _$RtcEngineContextToJson(RtcEngineContext instance) {
   writeNotNull('domainLimit', instance.domainLimit);
   writeNotNull(
       'autoRegisterAgoraExtensions', instance.autoRegisterAgoraExtensions);
+  writeNotNull('parameters', instance.parameters);
   return val;
 }
 
@@ -1171,6 +1187,7 @@ const _$VideoEffectNodeIdEnumMap = {
   VideoEffectNodeId.beauty: 1,
   VideoEffectNodeId.styleMakeup: 2,
   VideoEffectNodeId.filter: 4,
+  VideoEffectNodeId.sticker: 8,
 };
 
 const _$VideoEffectActionEnumMap = {
