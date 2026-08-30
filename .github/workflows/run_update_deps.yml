@@ -118,7 +118,7 @@ jobs:
 
       - name: Prepare target branch
         id: prepare_target_branch
-        uses: ./.github/actions/prepare_branch
+        uses: AgoraIO-Extensions/Agora-Flutter-SDK/.github/actions/prepare_branch@main
         with:
           target_branch: ${{ inputs.target_branch || github.ref_name }}
           pub_version: ${{ inputs.pub_version }}
