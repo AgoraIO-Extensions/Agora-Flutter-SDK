@@ -76,6 +76,10 @@ class _State extends State<JoinChannelVideo> {
       onError: (ErrorCodeType err, String msg) {
         logSink.log('[onError] err: $err, msg: $msg');
       },
+      onLocalVideoEvent: (VideoSourceType source, LocalVideoEventType event) {
+        logSink.log(
+            '[onLocalVideoEvent] source: $source, event: $event, value: ${event.value()}');
+      },
       onJoinChannelSuccess: (RtcConnection connection, int elapsed) {
         logSink.log(
             '[onJoinChannelSuccess] connection: ${connection.toJson()} elapsed: $elapsed');
