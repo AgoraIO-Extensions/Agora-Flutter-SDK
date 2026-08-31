@@ -21,6 +21,7 @@ import 'package:flutter/foundation.dart';
 
 import 'audio_effect_mixing/audio_effect_mixing.dart';
 import 'audio_spectrum/audio_spectrum.dart';
+import 'camera_capturer_configuration/camera_capturer_configuration.dart';
 import 'channel_media_relay/channel_media_relay.dart';
 import 'device_manager/device_manager.dart';
 import 'enable_virtualbackground/enable_virtualbackground.dart';
@@ -38,6 +39,11 @@ import 'voice_changer/voice_changer.dart';
 /// Data source for advanced examples
 final advanced = [
   {'name': 'Advanced'},
+  if (!kIsWeb && Platform.isAndroid)
+    {
+      'name': 'CameraCapturerConfiguration',
+      'widget': const CameraCapturerConfiguration()
+    },
   if (!kIsWeb)
     {'name': 'AudioEffectMixing', 'widget': const AudioEffectMixing()},
   if (!kIsWeb)
