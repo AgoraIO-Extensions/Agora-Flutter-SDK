@@ -3538,6 +3538,14 @@ enum LocalVideoEventType {
   /// (4): A system internal error occurs during screen capture (Android only).
   @JsonValue(4)
   localVideoEventTypeScreenCaptureSystemInternalError,
+
+  /// @nodoc
+  @JsonValue(5)
+  localVideoEventTypeCameraFocalLengthApplied,
+
+  /// @nodoc
+  @JsonValue(6)
+  localVideoEventTypeCameraFocalLengthFallbackToDefault,
 }
 
 /// @nodoc
