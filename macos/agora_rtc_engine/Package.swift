@@ -46,8 +46,8 @@ let package = Package(
         ),
         .binaryTarget(
             name: "AgoraRtcWrapper",
-            url: "https://download.agora.io/sdk/release/AgoraIrisRTC_macOS-4.6.4-build.3.zip",
-            checksum: "8d5de39bfed309073a38d0f7c409140a44e243f0a92c8bc5c3def9bb9b5d2328"
+            url: "https://download.agora.io/sdk/release/AgoraIrisRTC_macOS-4.6.4-build.4.zip",
+            checksum: "fc68fc284b99673226c5fd2d1ac48d450abe7bde7c562b8fca846d9f8fdad417"
         )
     ]
 )
