@@ -539,7 +539,8 @@ function parsePlatformDependencies(content) {
   ];
 
   for (const record of records) {
-    const fieldCounts = countSpmFields(record);
+    const spmRecord = record.replace(/Build\s+version(?=\s*[:=])/gi, 'Build-version');
+    const fieldCounts = countSpmFields(spmRecord);
     const platformValues = parseLabeledValues(record, 'platform');
     const platformValue = platformValues[0] ?? null;
     const isExplicitApplePlatform = /^(?:iOS|macOS)$/i.test(platformValue ?? '');
@@ -560,7 +561,7 @@ function parsePlatformDependencies(content) {
       ? (platformValue.toLowerCase() === 'ios' ? 'iOS' : 'macOS')
       : null;
     const githubValue = parseLabeledValues(record, 'github')[0] ?? null;
-    const versionValue = parseLabeledValues(record, 'tag|version')[0] ?? null;
+    const versionValue = parseLabeledValues(spmRecord, 'tag|version')[0] ?? null;
     const products = fieldCounts.products > 0 ? parseProducts(record) : undefined;
     const irisUrlValue = parseIrisUrlValues(record)[0] ?? null;
     const checksumValue =
