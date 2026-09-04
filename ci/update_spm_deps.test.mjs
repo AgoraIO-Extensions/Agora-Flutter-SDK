@@ -368,6 +368,20 @@ test('ignores a compact build result version while parsing Iris CocoaPods metada
   );
 });
 
+test('ignores a compact build result version when Native SPM metadata follows', () => {
+  const dependencies = spmUpdater.parsePlatformDependencies([
+    'Iris SDK Build ResultBuild version:4.6.4-build.4',
+    "Iris macOS:Cocoapods:pod 'AgoraIrisRTC_macOS', '4.6.4-build.4'",
+    "Iris iOS:Cocoapods:pod 'AgoraIrisRTC_iOS', '4.6.4-build.4'",
+    " pod 'AgoraRtcEngine_iOS', '4.6.4'",
+    ' github:git@github.com:AgoraIO/AgoraRtcEngine_iOS.git | tag:4.6.4',
+    " implementation 'io.agora.rtc:full-sdk:4.6.4'",
+  ].join(''));
+
+  assert.equal(dependencies.get('iOS')?.version, '4.6.4');
+  assert.equal(dependencies.get('iOS')?.irisPodVersion, '4.6.4-build.4');
+});
+
 test('rejects Iris SPM derivation from an Apple build section marked failed', () => {
   const failedBuildResult = irisBuildResultWithoutFailures.replace(
     'Iris Android:',

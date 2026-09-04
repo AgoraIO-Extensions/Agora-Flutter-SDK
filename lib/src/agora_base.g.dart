@@ -2997,6 +2997,8 @@ const _$LocalVideoEventTypeEnumMap = {
       2,
   LocalVideoEventType.localVideoEventTypeScreenCaptureStoppedByUser: 3,
   LocalVideoEventType.localVideoEventTypeScreenCaptureSystemInternalError: 4,
+  LocalVideoEventType.localVideoEventTypeCameraFocalLengthApplied: 5,
+  LocalVideoEventType.localVideoEventTypeCameraFocalLengthFallbackToDefault: 6,
 };
 
 const _$LocalVideoStreamReasonEnumMap = {
