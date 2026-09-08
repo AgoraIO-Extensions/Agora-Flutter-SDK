@@ -58,6 +58,14 @@ trap cleanup EXIT
 
 "${FLUTTER_BIN}" create --platforms="${CONSUMER_PLATFORM}" --org io.agora.smoke "${APP_DIR}"
 
+if [[ "${CONSUMER_PLATFORM}" == "android" ]]; then
+  if [[ -f "${APP_DIR}/android/build.gradle.kts" ]]; then
+    echo 'extra["compileSdkVersion"] = 34' >> "${APP_DIR}/android/build.gradle.kts"
+  else
+    echo 'ext.compileSdkVersion = 34' >> "${APP_DIR}/android/build.gradle"
+  fi
+fi
+
 if [[ "${PACKAGE_SOURCE}" == "git" ]]; then
   cat >"${DEPENDENCY_FILE}" <<EOF
   ${PACKAGE_NAME}:
