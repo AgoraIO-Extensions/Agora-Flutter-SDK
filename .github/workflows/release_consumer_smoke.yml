@@ -1,6 +1,20 @@
 name: 'Release Consumer Smoke'
 
 on:
+  workflow_dispatch:
+    inputs:
+      release_version:
+        description: 'Existing Git tag and package version to test'
+        required: true
+        type: string
+      release_type:
+        description: 'Standard tests both Git and pub.dev; special tests Git only'
+        required: true
+        type: choice
+        default: standard
+        options:
+          - standard
+          - special
   workflow_run:
     workflows: ['Release to pub.dev and GitHub']
     types:
@@ -17,23 +31,37 @@ jobs:
       git_url: ${{ steps.metadata.outputs.git_url }}
       run_pub: ${{ steps.metadata.outputs.run_pub }}
     steps:
-      - name: Download release metadata
+      - name: Resolve release metadata
         id: metadata
         env:
           GH_TOKEN: ${{ github.token }}
           REPOSITORY: ${{ github.repository }}
+          MANUAL_RELEASE_VERSION: ${{ inputs.release_version }}
+          MANUAL_RELEASE_TYPE: ${{ inputs.release_type }}
         run: |
           set -euo pipefail
 
-          RUN_ID="${{ github.event.workflow_run.id }}"
-          mkdir -p metadata
+          if [[ "${GITHUB_EVENT_NAME}" == "workflow_dispatch" ]]; then
+            if [[ ! "${MANUAL_RELEASE_VERSION}" =~ ^[0-9A-Za-z][0-9A-Za-z._+-]*$ ]]; then
+              echo "Invalid release version: ${MANUAL_RELEASE_VERSION}" >&2
+              exit 1
+            fi
 
-          gh run download "$RUN_ID" \
-            --repo "${REPOSITORY}" \
-            -n release-metadata \
-            -D metadata
+            RELEASE_VERSION="${MANUAL_RELEASE_VERSION}"
+            RELEASE_TYPE="${MANUAL_RELEASE_TYPE}"
+            GIT_URL="${GITHUB_SERVER_URL}/${GITHUB_REPOSITORY}.git"
+            DRY_RUN=false
+          else
+            RUN_ID="${{ github.event.workflow_run.id }}"
+            mkdir -p metadata
 
-          source metadata/release-metadata.env
+            gh run download "$RUN_ID" \
+              --repo "${REPOSITORY}" \
+              -n release-metadata \
+              -D metadata
+
+            source metadata/release-metadata.env
+          fi
 
           if [[ "${DRY_RUN}" == "true" ]]; then
             echo "Release workflow was dry-run, skipping consumer smoke."
