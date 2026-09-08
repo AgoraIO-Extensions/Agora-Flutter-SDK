@@ -23,7 +23,7 @@ class IrisApiEngineBindingsDelegateJS
     assert(() {
       if (args.isNotEmpty) {
         final arg = args[0].provide(irisApiEngineHandle)();
-        options = InitIrisRtcOptions(irisRtcEngine: arg);
+        options = InitIrisRtcOptions(irisRtcEngine: arg as JSAny?);
       }
 
       return true;
@@ -54,21 +54,23 @@ class IrisApiEngineBindingsDelegateJS
   ) async {
     final nApiEnginePtr = apiEnginePtr() as js.IrisApiEngine;
 
-    List<Object> buffer = [];
-    List<int> lenOfBuffer = [];
+    // The binding's array members are `JSArray` (required for dart2wasm,
+    // where Dart lists are not JS arrays), so convert each element here.
+    final buffer = <JSAny?>[];
+    final lenOfBuffer = <JSNumber>[];
     int bufferCount = 0;
     if (methodCall.buffers != null) {
       bufferCount += methodCall.buffers!.length;
       for (final rb in methodCall.buffers!) {
-        buffer.add(rb);
-        lenOfBuffer.add(rb.length);
+        buffer.add(rb.toJS);
+        lenOfBuffer.add(rb.length.toJS);
       }
     }
     if (methodCall.rawBufferParams != null) {
       bufferCount += methodCall.rawBufferParams!.length;
       for (final rb in methodCall.rawBufferParams!) {
-        buffer.add(rb.intPtr());
-        lenOfBuffer.add(rb.length);
+        buffer.add(rb.intPtr() as JSAny?);
+        lenOfBuffer.add(rb.length.toJS);
       }
     }
 
@@ -77,8 +79,8 @@ class IrisApiEngineBindingsDelegateJS
       data: methodCall.params,
       data_size: methodCall.params.length,
       result: '',
-      buffer: buffer,
-      length: lenOfBuffer,
+      buffer: buffer.toJS,
+      length: lenOfBuffer.toJS,
       buffer_count: bufferCount,
     );
 
@@ -87,11 +89,8 @@ class IrisApiEngineBindingsDelegateJS
       return CallApiResult(irisReturnCode: 0, data: const {'result': 0});
     }
 
-    final jsPromise = (js.callIrisApi(nApiEnginePtr, nParam) as JSAny).dartify()
-        as Future<dynamic>;
-
-    final jsResult = await jsPromise;
-    final js.CallIrisApiResult irisApiResult = jsResult as js.CallIrisApiResult;
+    final js.CallIrisApiResult irisApiResult =
+        await js.callIrisApi(nApiEnginePtr, nParam).toDart;
 
     return irisApiResult.toCallApiResult();
   }
