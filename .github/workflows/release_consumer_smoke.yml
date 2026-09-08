@@ -82,7 +82,7 @@ jobs:
           fi
 
   consumer_smoke_git:
-    name: 'Consumer Smoke Test (git, ${{ matrix.platform }})'
+    name: 'Consumer Smoke Test (git, ${{ matrix.platform }}, ${{ matrix.dependency_manager }})'
     runs-on: ${{ matrix.os }}
     needs: prepare
     if: ${{ needs.prepare.outputs.should_run == 'true' }}
@@ -92,14 +92,25 @@ jobs:
         include:
           - os: ubuntu-latest
             platform: android
+            dependency_manager: default
           - os: ubuntu-latest
             platform: web
+            dependency_manager: default
           - os: macos-latest
             platform: ios
+            dependency_manager: swiftpm
           - os: macos-latest
             platform: macos
+            dependency_manager: swiftpm
+          - os: macos-latest
+            platform: ios
+            dependency_manager: cocoapods
+          - os: macos-latest
+            platform: macos
+            dependency_manager: cocoapods
           - os: windows-latest
             platform: windows
+            dependency_manager: default
     steps:
       - name: Checkout repository 🛎️
         uses: actions/checkout@v4
@@ -121,6 +132,7 @@ jobs:
         shell: bash
         env:
           CONSUMER_PLATFORM: ${{ matrix.platform }}
+          APPLE_DEPENDENCY_MANAGER: ${{ matrix.dependency_manager }}
           PACKAGE_SOURCE: git
           RELEASE_VERSION: ${{ needs.prepare.outputs.release_version }}
           GIT_REF: ${{ needs.prepare.outputs.release_version }}
@@ -128,7 +140,7 @@ jobs:
         run: bash ci/run_flutter_release_consumer_smoke_test.sh
 
   consumer_smoke_pub:
-    name: 'Consumer Smoke Test (pub, ${{ matrix.platform }})'
+    name: 'Consumer Smoke Test (pub, ${{ matrix.platform }}, ${{ matrix.dependency_manager }})'
     runs-on: ${{ matrix.os }}
     needs: prepare
     if: ${{ needs.prepare.outputs.should_run == 'true' && needs.prepare.outputs.run_pub == 'true' }}
@@ -138,14 +150,25 @@ jobs:
         include:
           - os: ubuntu-latest
             platform: android
+            dependency_manager: default
           - os: ubuntu-latest
             platform: web
+            dependency_manager: default
           - os: macos-latest
             platform: ios
+            dependency_manager: swiftpm
           - os: macos-latest
             platform: macos
+            dependency_manager: swiftpm
+          - os: macos-latest
+            platform: ios
+            dependency_manager: cocoapods
+          - os: macos-latest
+            platform: macos
+            dependency_manager: cocoapods
           - os: windows-latest
             platform: windows
+            dependency_manager: default
     steps:
       - name: Checkout repository 🛎️
         uses: actions/checkout@v4
@@ -167,6 +190,7 @@ jobs:
         shell: bash
         env:
           CONSUMER_PLATFORM: ${{ matrix.platform }}
+          APPLE_DEPENDENCY_MANAGER: ${{ matrix.dependency_manager }}
           PACKAGE_SOURCE: pub
           RELEASE_VERSION: ${{ needs.prepare.outputs.release_version }}
         run: bash ci/run_flutter_release_consumer_smoke_test.sh

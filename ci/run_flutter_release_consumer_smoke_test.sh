@@ -12,6 +12,7 @@ GIT_URL="${GIT_URL:-}"
 GIT_REF="${GIT_REF:-${RELEASE_VERSION}}"
 FLUTTER_BIN="${FLUTTER_BIN:-flutter}"
 POD_BIN="${POD_BIN:-pod}"
+APPLE_DEPENDENCY_MANAGER="${APPLE_DEPENDENCY_MANAGER:-default}"
 
 case "${CONSUMER_PLATFORM}" in
   android|ios|macos|web|windows)
@@ -27,6 +28,15 @@ case "${PACKAGE_SOURCE}" in
     ;;
   *)
     echo "Unsupported PACKAGE_SOURCE: ${PACKAGE_SOURCE}" >&2
+    exit 1
+    ;;
+esac
+
+case "${APPLE_DEPENDENCY_MANAGER}" in
+  default|swiftpm|cocoapods)
+    ;;
+  *)
+    echo "Unsupported APPLE_DEPENDENCY_MANAGER: ${APPLE_DEPENDENCY_MANAGER}" >&2
     exit 1
     ;;
 esac
@@ -57,6 +67,12 @@ cleanup() {
 trap cleanup EXIT
 
 "${FLUTTER_BIN}" create --platforms="${CONSUMER_PLATFORM}" --org io.agora.smoke "${APP_DIR}"
+
+if [[ "${APPLE_DEPENDENCY_MANAGER}" == "swiftpm" ]]; then
+  "${FLUTTER_BIN}" config --enable-swift-package-manager
+elif [[ "${APPLE_DEPENDENCY_MANAGER}" == "cocoapods" ]]; then
+  "${FLUTTER_BIN}" config --no-enable-swift-package-manager
+fi
 
 if [[ "${CONSUMER_PLATFORM}" == "android" ]]; then
   if [[ -f "${APP_DIR}/android/build.gradle.kts" ]]; then
