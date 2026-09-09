@@ -9,6 +9,8 @@ set(NATIVE_SDK_DOWNLOAD_URL "https://download.agora.io/sdk/release/AgoraRtcEngin
 function(download_and_extract URL TARGET_DIR EXTRACTED_DIR)
     message(STATUS "Downloading ${URL} to ${TARGET_DIR}")
 
+    file(MAKE_DIRECTORY "${TARGET_DIR}")
+
     # Escape the URL for the command line
     string(REPLACE "+" "%2B" URL_ESCAPED ${URL})
 
@@ -62,8 +64,14 @@ endfunction()
 
 set(CONST_EXTRACTED_DIR_NAME "lib")
 
+# Consumer projects expose the plugin through a symlink, which is not a safe extraction root.
+set(SDK_DOWNLOAD_ROOT "${CMAKE_CURRENT_BINARY_DIR}/third_party")
+if(EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/.plugin_dev")
+    set(SDK_DOWNLOAD_ROOT "${CMAKE_CURRENT_SOURCE_DIR}/third_party")
+endif()
+
 # Download and extract the Iris SDK
-set(IRIS_DOWNLOAD_PATH "${CMAKE_CURRENT_SOURCE_DIR}/third_party/iris")
+set(IRIS_DOWNLOAD_PATH "${SDK_DOWNLOAD_ROOT}/iris")
 set(IRIS_EXTRACTED_DIR "${IRIS_DOWNLOAD_PATH}/${CONST_EXTRACTED_DIR_NAME}")
 
 # Download and extract the Iris SDK if the plugin is not in development mode
@@ -108,7 +116,7 @@ endif()
 
 
 # Download and extract the Native SDK
-set(NATIVE_DOWNLOAD_PATH "${CMAKE_CURRENT_SOURCE_DIR}/third_party/native")
+set(NATIVE_DOWNLOAD_PATH "${SDK_DOWNLOAD_ROOT}/native")
 set(NATIVE_EXTRACTED_DIR "${NATIVE_DOWNLOAD_PATH}/${CONST_EXTRACTED_DIR_NAME}")
 
 # Download and extract the Native SDK if the plugin is not in development mode
