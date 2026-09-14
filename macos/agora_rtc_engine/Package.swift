@@ -12,7 +12,7 @@ let package = Package(
         .library(name: "agora-rtc-engine", targets: ["agora_rtc_engine"])
     ],
     dependencies: [
-        .package(url: "https://github.com/AgoraIO/AgoraRtcEngine_macOS.git", .upToNextMajor(from: "4.5.2")),
+        .package(url: "https://github.com/AgoraIO/AgoraRtcEngine_macOS.git", exact: "4.5.3"),
     ],
     targets: [
         .target(
@@ -30,8 +30,8 @@ let package = Package(
         ),
         .binaryTarget(
             name: "AgoraRtcWrapper",
-            url: "https://download.agora.io/sdk/release/AgoraIrisRTC_macOS-4.5.2-build.2.zip",
-            checksum: "2993bdaaa96a3e41a49cc830ccf98d58d099d3beb14f5d0c820540c0619049a7"
+            url: "https://download.agora.io/sdk/release/AgoraIrisRTC_macOS-4.5.3-build.1.zip",
+            checksum: "4efe7f122383cf9e4ca7978a92b9ce5d7ea60009c1602d5b9b8181cbf7e5cfc2"
         )
     ]
 )
