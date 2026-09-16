@@ -19,6 +19,7 @@
 		97C146FC1CF9000F007C117D /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 97C146FA1CF9000F007C117D /* Main.storyboard */; };
 		97C146FE1CF9000F007C117D /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 97C146FD1CF9000F007C117D /* Assets.xcassets */; };
 		97C147011CF9000F007C117D /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 97C146FF1CF9000F007C117D /* LaunchScreen.storyboard */; };
+		98938FF4305A930A0057015A /* ReplayKit in Frameworks */ = {isa = PBXBuildFile; productRef = 98938FF3305A930A0057015A /* ReplayKit */; };
 		9DA4854253E6947D845E2F5D /* Pods_Runner.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D31D53834ADE5D55008417C7 /* Pods_Runner.framework */; };
 /* End PBXBuildFile section */
 
@@ -95,6 +96,7 @@
 			files = (
 				71BBA3BA28AB50E2007B0DBC /* ReplayKit.framework in Frameworks */,
 				06F3F243ED8ED3F65ADCB6E2 /* Pods_ScreenSharing.framework in Frameworks */,
+				98938FF4305A930A0057015A /* ReplayKit in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -272,6 +274,9 @@
 				Base,
 			);
 			mainGroup = 97C146E51CF9000F007C117D;
+			packageReferences = (
+				98938FF2305A92F90057015A /* XCRemoteSwiftPackageReference "AgoraRtcEngine_iOS" */,
+			);
 			productRefGroup = 97C146EF1CF9000F007C117D /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -852,6 +857,25 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		98938FF2305A92F90057015A /* XCRemoteSwiftPackageReference "AgoraRtcEngine_iOS" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/AgoraIO/AgoraRtcEngine_iOS.git";
+			requirement = {
+				kind = exactVersion;
+				version = "4.5.3-rc.70";
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		98938FF3305A930A0057015A /* ReplayKit */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 98938FF2305A92F90057015A /* XCRemoteSwiftPackageReference "AgoraRtcEngine_iOS" */;
+			productName = ReplayKit;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = 97C146E61CF9000F007C117D /* Project object */;
 }
