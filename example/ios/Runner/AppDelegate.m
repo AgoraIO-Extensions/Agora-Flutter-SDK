@@ -18,13 +18,21 @@
     // we keep the screen on to help internal testing.
     [application setIdleTimerDisabled: YES];
     
-    FlutterViewController* controller = (FlutterViewController*) self.window.rootViewController;
+    [GeneratedPluginRegistrant registerWithRegistry:self];
+    NSObject<FlutterPluginRegistrar>* registrar =
+        [self registrarForPlugin:@"AgoraRtcEngineExample"];
+    NSObject<FlutterBinaryMessenger>* messenger = [registrar messenger];
 
     FlutterMethodChannel* screensharingIOSChannel = [FlutterMethodChannel
                                             methodChannelWithName:@"example_screensharing_ios"
-                                            binaryMessenger:controller.binaryMessenger];
+                                            binaryMessenger:messenger];
 
     [screensharingIOSChannel setMethodCallHandler:^(FlutterMethodCall* call, FlutterResult result) {
+        if (![@"showRPSystemBroadcastPickerView" isEqualToString:call.method]) {
+            result(FlutterMethodNotImplemented);
+            return;
+        }
+
         if (@available(iOS 12.0, *)) {
             dispatch_async(dispatch_get_main_queue(), ^{
                 NSURL *url = [[NSBundle mainBundle] URLForResource:nil withExtension:@"appex" subdirectory:@"PlugIns"];
@@ -39,7 +47,10 @@
                         }
                     }
                 }
+                result(nil);
             });
+        } else {
+            result(FlutterMethodNotImplemented);
         }
     }];
     
@@ -47,7 +58,7 @@
     
     FlutterMethodChannel* sharedNativeHandleMethodChannel = [FlutterMethodChannel
                                             methodChannelWithName:@"agora_rtc_engine_example/shared_native_handle"
-                                            binaryMessenger:controller.binaryMessenger];
+                                            binaryMessenger:messenger];
 
     [sharedNativeHandleMethodChannel setMethodCallHandler:^(FlutterMethodCall* call, FlutterResult result) {
         if (!weakSelf) {
@@ -79,7 +90,6 @@
         result(FlutterMethodNotImplemented);
     }];
 
-  [GeneratedPluginRegistrant registerWithRegistry:self];
   // Override point for customization after application launch.
   return [super application:application didFinishLaunchingWithOptions:launchOptions];
 }
