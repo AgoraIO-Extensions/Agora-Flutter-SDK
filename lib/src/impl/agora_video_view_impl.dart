@@ -11,7 +11,7 @@ import '/src/render/video_view_controller.dart';
 import 'dart:async';
 
 import 'package:flutter/foundation.dart';
-import 'package:flutter/material.dart' show Colors;
+import 'package:flutter/material.dart' show Color, Colors;
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 
@@ -447,10 +447,17 @@ class _AgoraRtcRenderTextureState extends State<AgoraRtcRenderTexture>
     });
   }
 
-  Widget _applyRenderMode(RenderModeType renderMode, Widget child) {
+  Widget _applyRenderMode(
+    RenderModeType renderMode,
+    Widget child, {
+    int? backgroundColor,
+  }) {
     if (renderMode == RenderModeType.renderModeFit) {
+      final color = backgroundColor != null
+          ? Color(backgroundColor & 0xFFFFFFFF)
+          : Colors.black;
       return Container(
-        color: Colors.black,
+        color: color,
         constraints: const BoxConstraints.expand(),
         child: FittedBox(
           fit: BoxFit.contain,
@@ -530,7 +537,11 @@ class _AgoraRtcRenderTextureState extends State<AgoraRtcRenderTexture>
             controller.canvas.renderMode ?? RenderModeType.renderModeHidden;
 
         if (controller.shouldHandlerRenderMode) {
-          result = _applyRenderMode(renderMode, result);
+          result = _applyRenderMode(
+            renderMode,
+            result,
+            backgroundColor: controller.canvas.backgroundColor,
+          );
           VideoMirrorModeType mirrorMode;
           if (controller.isLocalUid) {
             mirrorMode = controller.canvas.mirrorMode ??
@@ -546,7 +557,11 @@ class _AgoraRtcRenderTextureState extends State<AgoraRtcRenderTexture>
           result = _applyMirrorMode(mirrorMode, result, sourceType);
         } else {
           // Fit mode by default if does not need to handle render mode
-          result = _applyRenderMode(RenderModeType.renderModeFit, result);
+          result = _applyRenderMode(
+            RenderModeType.renderModeFit,
+            result,
+            backgroundColor: controller.canvas.backgroundColor,
+          );
         }
       }
     }
