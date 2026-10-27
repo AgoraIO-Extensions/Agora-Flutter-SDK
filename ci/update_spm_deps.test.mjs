@@ -1446,8 +1446,6 @@ test('workflow old-ref guard preserves legacy input and rejects SPM intent', asy
   }
 });
 
-
-
 test('pins Native commit inputs as revisions and can update an existing revision', async () => {
   const manifests = await createTemporaryManifests();
   const sha = '1234567890abcdef1234567890abcdef12345678';
@@ -1460,15 +1458,26 @@ test('pins Native commit inputs as revisions and can update an existing revision
   assert.equal(await readFile(manifests.macosManifest, 'utf8'), macosBefore);
   await runUpdater(input, manifests);
   assert.equal(await readFile(manifests.iosManifest, 'utf8'), ios);
-  await runUpdater('github:https://github.com/AgoraIO/AgoraRtcEngine_iOS.git tag:4.6.4-sp.4641', manifests);
-  assert.ok((await readFile(manifests.iosManifest, 'utf8')).includes('exact: "4.6.4-sp.4641"'));
+  await runUpdater(
+    'github:https://github.com/AgoraIO/AgoraRtcEngine_iOS.git tag:4.6.4-sp.4641',
+    manifests,
+  );
+  assert.ok(
+    (await readFile(manifests.iosManifest, 'utf8')).includes('exact: "4.6.4-sp.4641"'),
+  );
 });
 
 test('preserves a pinned Native revision when updating only Iris', async () => {
   const manifests = await createTemporaryManifests();
   const sha = 'abcdef1234567890abcdef1234567890abcdef12';
-  await runUpdater(`github:https://github.com/AgoraIO/AgoraRtcEngine_iOS.git tag:${sha}`, manifests);
-  await runUpdater(`platform:iOS iris-url:${iosIrisUrl} iris-checksum:${iosIrisChecksum}`, manifests);
+  await runUpdater(
+    `github:https://github.com/AgoraIO/AgoraRtcEngine_iOS.git tag:${sha}`,
+    manifests,
+  );
+  await runUpdater(
+    `platform:iOS iris-url:${iosIrisUrl} iris-checksum:${iosIrisChecksum}`,
+    manifests,
+  );
   const ios = await readFile(manifests.iosManifest, 'utf8');
   assert.ok(ios.includes(`revision: "${sha}"`));
   assert.ok(ios.includes(`checksum: "${iosIrisChecksum}"`));
