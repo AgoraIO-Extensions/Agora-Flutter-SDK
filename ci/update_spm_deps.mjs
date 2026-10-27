@@ -668,7 +668,7 @@ function replaceExactlyOnce(source, pattern, replacement, description) {
 
 function parsePackageDeclaration(line) {
   const match = line.match(
-    /^\s*(\.package\(url:\s*"([^"]+)",\s*(?:exact:\s*"[^"]+"|\.upToNextMajor\(from:\s*"[^"]+"\))\),?)\s*$/,
+    /^\s*(\.package\(url:\s*"([^"]+)",\s*(?:(?:exact|revision):\s*"[^"]+"|\.upToNextMajor\(from:\s*"[^"]+"\))\),?)\s*$/,
   );
   if (!match) {
     return null;
@@ -883,8 +883,11 @@ async function resolveManifestDependency(source, dependency, platform) {
   if (dependency.packageUrl) {
     resolved.packageUrl = dependency.packageUrl;
     resolved.packageName = path.basename(dependency.packageUrl, '.git');
+    const requirement = /^[a-f0-9]{40}$/i.test(dependency.version)
+      ? 'revision'
+      : 'exact';
     resolved.packageDeclaration =
-      `.package(url: "${dependency.packageUrl}", exact: "${dependency.version}"),`;
+      `.package(url: "${dependency.packageUrl}", ${requirement}: "${dependency.version}"),`;
   }
   if (dependency.products) {
     resolved.products = dependency.products;
