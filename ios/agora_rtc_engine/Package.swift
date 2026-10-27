@@ -12,29 +12,23 @@ let package = Package(
         .library(name: "agora-rtc-engine", targets: ["agora_rtc_engine"])
     ],
     dependencies: [
-        .package(url: "https://github.com/AgoraIO/AgoraRtcEngine_iOS.git", exact: "4.6.4"),
+        .package(url: "https://github.com/AgoraIO/AgoraRtcEngine_iOS.git", revision: "721d25c986ed45b428b3cf6194fe5cd7a5d9a832"),
     ],
     targets: [
         .target(
             name: "agora_rtc_engine",
             dependencies: [
-                .product(name: "RtcBasic", package: "AgoraRtcEngine_iOS"),
-                .product(name: "AINS", package: "AgoraRtcEngine_iOS"),
-                .product(name: "AINSLL", package: "AgoraRtcEngine_iOS"),
-                .product(name: "AudioBeauty", package: "AgoraRtcEngine_iOS"),
+                .product(name: "AgoraInfra_iOS", package: "AgoraRtcEngine_iOS"),
+                .product(name: "AIAEC", package: "AgoraRtcEngine_iOS"),
                 .product(name: "ClearVision", package: "AgoraRtcEngine_iOS"),
                 .product(name: "ContentInspect", package: "AgoraRtcEngine_iOS"),
+                .product(name: "VQA", package: "AgoraRtcEngine_iOS"),
                 .product(name: "SpatialAudio", package: "AgoraRtcEngine_iOS"),
                 .product(name: "VirtualBackground", package: "AgoraRtcEngine_iOS"),
-                .product(name: "AIAEC", package: "AgoraRtcEngine_iOS"),
-                .product(name: "AIAECLL", package: "AgoraRtcEngine_iOS"),
-                .product(name: "VQA", package: "AgoraRtcEngine_iOS"),
-                .product(name: "FaceDetection", package: "AgoraRtcEngine_iOS"),
-                .product(name: "FaceCapture", package: "AgoraRtcEngine_iOS"),
-                .product(name: "LipSync", package: "AgoraRtcEngine_iOS"),
-                .product(name: "VideoCodecEnc", package: "AgoraRtcEngine_iOS"),
-                .product(name: "VideoAv1CodecEnc", package: "AgoraRtcEngine_iOS"),
+                .product(name: "AINS", package: "AgoraRtcEngine_iOS"),
                 .product(name: "ReplayKit", package: "AgoraRtcEngine_iOS"),
+                .product(name: "AudioBeauty", package: "AgoraRtcEngine_iOS"),
+                .product(name: "RtcBasic", package: "AgoraRtcEngine_iOS"),
                 "AgoraRtcWrapper"
             ],
             cSettings: [
@@ -43,8 +37,8 @@ let package = Package(
         ),
         .binaryTarget(
             name: "AgoraRtcWrapper",
-            url: "https://download.agora.io/sdk/release/AgoraIrisRTC_iOS-4.6.4-build.4.zip",
-            checksum: "38213d00a1e6581c1d2e82fb587270f29b10d91273885de3a24424fb782a061b"
+            url: "https://download.agora.io/sdk/release/AgoraIrisRTC_iOS-4.6.4.1-build.1.zip",
+            checksum: "12f04fc8e3256c7111d8455bbdb0037463937fc698a50cd5dce82857d2f3346c"
         )
     ]
 )

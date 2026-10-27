@@ -1,5 +1,13 @@
 # Changelog
 
+## 6.6.4-sp.4641
+
+### Dependency updates
+
+* Update Android and iOS to Native SDK 4.6.4.1 and Iris 4.6.4.1-build.1.
+* Resolve Android dependencies from the Agora Maven repository.
+* Pin the published Native iOS SwiftPM commit and match its available products.
+
 ## [6.6.4](https://github.com/AgoraIO-Extensions/Agora-Flutter-SDK/compare/6.6.3...6.6.4) (2026-09-04)
 
 ### Features
