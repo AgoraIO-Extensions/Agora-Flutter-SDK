@@ -6,6 +6,67 @@ import '/src/binding_forward_export.dart';
 import '/src/binding/impl_forward_export.dart';
 import 'package:iris_method_channel/iris_method_channel.dart';
 
+class AudioTrackObserverWrapper implements EventLoopEventHandler {
+  const AudioTrackObserverWrapper(this.audioTrackObserver);
+
+  final AudioTrackObserver audioTrackObserver;
+
+  @override
+  bool operator ==(Object other) {
+    if (other.runtimeType != runtimeType) {
+      return false;
+    }
+    return other is AudioTrackObserverWrapper &&
+        other.audioTrackObserver == audioTrackObserver;
+  }
+
+  @override
+  int get hashCode => audioTrackObserver.hashCode;
+
+  @override
+  bool handleEventInternal(
+      String eventName, String eventData, List<Uint8List> buffers) {
+    switch (eventName) {
+      case 'onAudioTrackVolumeIndication_9bd73f7':
+        if (audioTrackObserver.onAudioTrackVolumeIndication == null) {
+          return true;
+        }
+        final jsonMap = jsonDecode(eventData);
+        AudioTrackObserverOnAudioTrackVolumeIndicationJson paramJson =
+            AudioTrackObserverOnAudioTrackVolumeIndicationJson.fromJson(
+                jsonMap);
+        paramJson = paramJson.fillBuffers(buffers);
+        int? trackId = paramJson.trackId;
+        AudioTrackVolumeInfo? volumeInfo = paramJson.volumeInfo;
+        if (trackId == null || volumeInfo == null) {
+          return true;
+        }
+        volumeInfo = volumeInfo.fillBuffers(buffers);
+        audioTrackObserver.onAudioTrackVolumeIndication!(trackId, volumeInfo);
+        return true;
+    }
+    return false;
+  }
+
+  @override
+  bool handleEvent(
+      String eventName, String eventData, List<Uint8List> buffers) {
+    try {
+      if (!eventName.startsWith('AudioTrackObserver')) return false;
+      final newEvent = eventName.replaceFirst('AudioTrackObserver_', '');
+      if (handleEventInternal(newEvent, eventData, buffers)) {
+        return true;
+      }
+      return false;
+    } catch (e) {
+      // in normal case, the handleEventInternal will not throw exception if the event is not handled,
+      // so we need to return true here to break the event loop.
+      // we also need to log the error here to help developer to find the problem later.
+      return true;
+    }
+  }
+}
+
 class AudioEncodedFrameObserverWrapper implements EventLoopEventHandler {
   const AudioEncodedFrameObserverWrapper(this.audioEncodedFrameObserver);
 

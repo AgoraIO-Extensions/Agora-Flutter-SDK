@@ -1,5 +1,8 @@
 /// Event Ids mapping of iris api id.
 const eventIdsMapping = {
+  "AudioTrackObserver_onAudioTrackVolumeIndication": [
+    "AudioTrackObserver_onAudioTrackVolumeIndication_9bd73f7"
+  ],
   "AudioEncodedFrameObserver_onRecordAudioEncodedFrame": [
     "AudioEncodedFrameObserver_onRecordAudioEncodedFrame_d930ddc"
   ],
@@ -119,6 +122,9 @@ const eventIdsMapping = {
   "MusicContentCenterEventHandler_onPreLoadEvent": [
     "MusicContentCenterEventHandler_onPreLoadEvent_20170bc"
   ],
+  "MusicContentCenterEventHandler_onExtResponse": [
+    "MusicContentCenterEventHandler_onExtResponse_bd3489b"
+  ],
   "RtcEngineEventHandler_onJoinChannelSuccess": [
     "RtcEngineEventHandler_onJoinChannelSuccess_263e4cd"
   ],
@@ -176,6 +182,9 @@ const eventIdsMapping = {
   ],
   "RtcEngineEventHandler_onFirstLocalVideoFrame": [
     "RtcEngineEventHandler_onFirstLocalVideoFrame_ebdfd19"
+  ],
+  "RtcEngineEventHandler_onVideoBlackFrameDetected": [
+    "RtcEngineEventHandler_onVideoBlackFrameDetected_2ad83d8"
   ],
   "RtcEngineEventHandler_onFirstLocalVideoFramePublished": [
     "RtcEngineEventHandler_onFirstLocalVideoFramePublished_263e4cd"

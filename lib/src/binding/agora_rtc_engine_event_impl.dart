@@ -400,6 +400,24 @@ class RtcEngineEventHandlerWrapper implements EventLoopEventHandler {
             source, width, height, elapsed);
         return true;
 
+      case 'onVideoBlackFrameDetected_2ad83d8':
+        if (rtcEngineEventHandler.onVideoBlackFrameDetected == null) {
+          return true;
+        }
+        final jsonMap = jsonDecode(eventData);
+        RtcEngineEventHandlerOnVideoBlackFrameDetectedJson paramJson =
+            RtcEngineEventHandlerOnVideoBlackFrameDetectedJson.fromJson(
+                jsonMap);
+        paramJson = paramJson.fillBuffers(buffers);
+        VideoSourceType? source = paramJson.source;
+        int? reason = paramJson.reason;
+        if (source == null || reason == null) {
+          return true;
+        }
+
+        rtcEngineEventHandler.onVideoBlackFrameDetected!(source, reason);
+        return true;
+
       case 'onFirstLocalVideoFramePublished_263e4cd':
         if (rtcEngineEventHandler.onFirstLocalVideoFramePublished == null) {
           return true;

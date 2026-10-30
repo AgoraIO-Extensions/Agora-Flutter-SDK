@@ -214,6 +214,28 @@ abstract class MediaEngine {
       int videoTrackId = 0});
 
   /// @nodoc
+  Future<void> enableAudioTrackVolumeIndication(
+      {required int id, required int interval});
+
+  /// @nodoc
+  Future<int> createLoopbackAudioTrack(LoopbackAudioTrackConfig config);
+
+  /// @nodoc
+  Future<void> adjustLoopbackAudioPublishVolume(
+      {required int trackId, required int volume});
+
+  /// @nodoc
+  Future<void> destroyLoopbackAudioTrack(int trackId);
+
+  /// @nodoc
+  void registerAudioTrackObserver(
+      {required int id, required AudioTrackObserver observer});
+
+  /// @nodoc
+  void unregisterAudioTrackObserver(
+      {required int id, required AudioTrackObserver observer});
+
+  /// @nodoc
   Future<void> release();
 
   /// Unregisters the audio frame observer.

@@ -8,6 +8,32 @@ part of 'event_handler_param_json.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
+AudioTrackObserverOnAudioTrackVolumeIndicationJson
+    _$AudioTrackObserverOnAudioTrackVolumeIndicationJsonFromJson(
+            Map<String, dynamic> json) =>
+        AudioTrackObserverOnAudioTrackVolumeIndicationJson(
+          trackId: (json['trackId'] as num?)?.toInt(),
+          volumeInfo: json['volumeInfo'] == null
+              ? null
+              : AudioTrackVolumeInfo.fromJson(
+                  json['volumeInfo'] as Map<String, dynamic>),
+        );
+
+Map<String, dynamic> _$AudioTrackObserverOnAudioTrackVolumeIndicationJsonToJson(
+    AudioTrackObserverOnAudioTrackVolumeIndicationJson instance) {
+  final val = <String, dynamic>{};
+
+  void writeNotNull(String key, dynamic value) {
+    if (value != null) {
+      val[key] = value;
+    }
+  }
+
+  writeNotNull('trackId', instance.trackId);
+  writeNotNull('volumeInfo', instance.volumeInfo?.toJson());
+  return val;
+}
+
 AudioEncodedFrameObserverOnRecordAudioEncodedFrameJson
     _$AudioEncodedFrameObserverOnRecordAudioEncodedFrameJsonFromJson(
             Map<String, dynamic> json) =>
@@ -1182,6 +1208,33 @@ const _$PreloadStateEnumMap = {
   PreloadState.kPreloadStateRemoved: 3,
 };
 
+MusicContentCenterEventHandlerOnExtResponseJson
+    _$MusicContentCenterEventHandlerOnExtResponseJsonFromJson(
+            Map<String, dynamic> json) =>
+        MusicContentCenterEventHandlerOnExtResponseJson(
+          requestId: json['requestId'] as String?,
+          jsonOption: json['jsonOption'] as String?,
+          httpCode: (json['httpCode'] as num?)?.toInt(),
+          response: json['response'] as String?,
+        );
+
+Map<String, dynamic> _$MusicContentCenterEventHandlerOnExtResponseJsonToJson(
+    MusicContentCenterEventHandlerOnExtResponseJson instance) {
+  final val = <String, dynamic>{};
+
+  void writeNotNull(String key, dynamic value) {
+    if (value != null) {
+      val[key] = value;
+    }
+  }
+
+  writeNotNull('requestId', instance.requestId);
+  writeNotNull('jsonOption', instance.jsonOption);
+  writeNotNull('httpCode', instance.httpCode);
+  writeNotNull('response', instance.response);
+  return val;
+}
+
 RtcEngineEventHandlerOnJoinChannelSuccessJson
     _$RtcEngineEventHandlerOnJoinChannelSuccessJsonFromJson(
             Map<String, dynamic> json) =>
@@ -1369,6 +1422,13 @@ const _$ErrorCodeTypeEnumMap = {
   ErrorCodeType.errVideoeffectInvalidParam: 1705,
   ErrorCodeType.errVideoeffectNotSupported: 1706,
   ErrorCodeType.errVideoeffectInvalidBundlePath: 1707,
+  ErrorCodeType.errAdmApplicationLoopback: 2007,
+  ErrorCodeType.errAdmApplicationLoopbackStopped: 2008,
+  ErrorCodeType.errAdmSystemLoopback: 2009,
+  ErrorCodeType.errAdmSystemLoopbackStopped: 2010,
+  ErrorCodeType.errAdmLoopbackNoPermission: 2011,
+  ErrorCodeType.errAdmLoopbackSilentDetected: 2012,
+  ErrorCodeType.errAdmLoopbackSilentRecovered: 2013,
 };
 
 RtcEngineEventHandlerOnAudioQualityJson
@@ -1805,6 +1865,29 @@ Map<String, dynamic> _$RtcEngineEventHandlerOnFirstLocalVideoFrameJsonToJson(
   writeNotNull('width', instance.width);
   writeNotNull('height', instance.height);
   writeNotNull('elapsed', instance.elapsed);
+  return val;
+}
+
+RtcEngineEventHandlerOnVideoBlackFrameDetectedJson
+    _$RtcEngineEventHandlerOnVideoBlackFrameDetectedJsonFromJson(
+            Map<String, dynamic> json) =>
+        RtcEngineEventHandlerOnVideoBlackFrameDetectedJson(
+          source: $enumDecodeNullable(_$VideoSourceTypeEnumMap, json['source']),
+          reason: (json['reason'] as num?)?.toInt(),
+        );
+
+Map<String, dynamic> _$RtcEngineEventHandlerOnVideoBlackFrameDetectedJsonToJson(
+    RtcEngineEventHandlerOnVideoBlackFrameDetectedJson instance) {
+  final val = <String, dynamic>{};
+
+  void writeNotNull(String key, dynamic value) {
+    if (value != null) {
+      val[key] = value;
+    }
+  }
+
+  writeNotNull('source', _$VideoSourceTypeEnumMap[instance.source]);
+  writeNotNull('reason', instance.reason);
   return val;
 }
 

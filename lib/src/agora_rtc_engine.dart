@@ -1309,6 +1309,80 @@ class ScreenCaptureSourceInfo implements AgoraSerializable {
   Map<String, dynamic> toJson() => _$ScreenCaptureSourceInfoToJson(this);
 }
 
+/// @nodoc
+@JsonEnum(alwaysCreate: true)
+enum LoopbackRecordingSourceFlag {
+  /// @nodoc
+  @JsonValue(1 << 0)
+  loopbackRecordingSourceFlagAudioOutput,
+
+  /// @nodoc
+  @JsonValue(1 << 1)
+  loopbackRecordingSourceFlagRunningApplication,
+}
+
+/// @nodoc
+extension LoopbackRecordingSourceFlagExt on LoopbackRecordingSourceFlag {
+  /// @nodoc
+  static LoopbackRecordingSourceFlag fromValue(int value) {
+    return $enumDecode(_$LoopbackRecordingSourceFlagEnumMap, value);
+  }
+
+  /// @nodoc
+  int value() {
+    return _$LoopbackRecordingSourceFlagEnumMap[this]!;
+  }
+}
+
+/// @nodoc
+@JsonSerializable(explicitToJson: true, includeIfNull: false)
+class LoopbackRecordingSourceOptions implements AgoraSerializable {
+  /// @nodoc
+  const LoopbackRecordingSourceOptions({this.flags});
+
+  /// @nodoc
+  @JsonKey(name: 'flags')
+  final int? flags;
+
+  /// @nodoc
+  factory LoopbackRecordingSourceOptions.fromJson(Map<String, dynamic> json) =>
+      _$LoopbackRecordingSourceOptionsFromJson(json);
+
+  @override
+  Map<String, dynamic> toJson() => _$LoopbackRecordingSourceOptionsToJson(this);
+}
+
+/// @nodoc
+@JsonSerializable(explicitToJson: true, includeIfNull: false)
+class LoopbackRecordingSourceInfo implements AgoraSerializable {
+  /// @nodoc
+  const LoopbackRecordingSourceInfo(
+      {this.appName, this.windowTitle, this.processIds, this.processCount});
+
+  /// @nodoc
+  @JsonKey(name: 'appName')
+  final String? appName;
+
+  /// @nodoc
+  @JsonKey(name: 'windowTitle')
+  final String? windowTitle;
+
+  /// @nodoc
+  @JsonKey(name: 'processIds')
+  final List<int>? processIds;
+
+  /// @nodoc
+  @JsonKey(name: 'processCount')
+  final int? processCount;
+
+  /// @nodoc
+  factory LoopbackRecordingSourceInfo.fromJson(Map<String, dynamic> json) =>
+      _$LoopbackRecordingSourceInfoFromJson(json);
+
+  @override
+  Map<String, dynamic> toJson() => _$LoopbackRecordingSourceInfoToJson(this);
+}
+
 /// Advanced options for audio.
 @JsonSerializable(explicitToJson: true, includeIfNull: false)
 class AdvancedAudioOptions implements AgoraSerializable {
@@ -1353,6 +1427,28 @@ class ImageTrackOptions implements AgoraSerializable {
   Map<String, dynamic> toJson() => _$ImageTrackOptionsToJson(this);
 }
 
+/// @nodoc
+@JsonSerializable(explicitToJson: true, includeIfNull: false)
+class AudioTrackIdList implements AgoraSerializable {
+  /// @nodoc
+  const AudioTrackIdList({this.trackIds, this.trackCount});
+
+  /// @nodoc
+  @JsonKey(name: 'trackIds')
+  final List<int>? trackIds;
+
+  /// @nodoc
+  @JsonKey(name: 'trackCount')
+  final int? trackCount;
+
+  /// @nodoc
+  factory AudioTrackIdList.fromJson(Map<String, dynamic> json) =>
+      _$AudioTrackIdListFromJson(json);
+
+  @override
+  Map<String, dynamic> toJson() => _$AudioTrackIdListToJson(this);
+}
+
 /// Channel media configuration options.
 ///
 /// RtcConnection publishMicrophoneTrack publishCustomAudioTrack publishMediaPlayerAudioTrack true publishCameraTrack publishScreenCaptureVideo, publishScreenTrack, publishCustomVideoTrack publishEncodedVideoTrack true It is recommended that you configure the member parameters based on your business scenario. Otherwise, the SDK automatically assigns values to them.
@@ -1373,6 +1469,8 @@ class ChannelMediaOptions implements AgoraSerializable {
       this.publishFourthScreenTrack,
       this.publishCustomAudioTrack,
       this.publishCustomAudioTrackId,
+      this.publishLoopbackAudioTrack,
+      this.publishLoopbackAudioTrackIds,
       this.publishCustomVideoTrack,
       this.publishEncodedVideoTrack,
       this.publishMediaPlayerAudioTrack,
@@ -1400,7 +1498,8 @@ class ChannelMediaOptions implements AgoraSerializable {
       this.enableMultipath,
       this.uplinkMultipathMode,
       this.downlinkMultipathMode,
-      this.preferMultipathType});
+      this.preferMultipathType,
+      this.customUserInfo});
 
   /// Sets whether to publish the video captured by the camera: true : Publish the video captured by the camera. false : Do not publish the video captured by the camera.
   @JsonKey(name: 'publishCameraTrack')
@@ -1453,6 +1552,14 @@ class ChannelMediaOptions implements AgoraSerializable {
   /// ID of the custom audio track to be published. Default is 0. You can get the custom audio track ID via the createCustomAudioTrack method.
   @JsonKey(name: 'publishCustomAudioTrackId')
   final int? publishCustomAudioTrackId;
+
+  /// @nodoc
+  @JsonKey(name: 'publishLoopbackAudioTrack')
+  final bool? publishLoopbackAudioTrack;
+
+  /// @nodoc
+  @JsonKey(name: 'publishLoopbackAudioTrackIds')
+  final AudioTrackIdList? publishLoopbackAudioTrackIds;
 
   /// Sets whether to publish custom captured video: true : Publish the custom captured video. false : Do not publish the custom captured video.
   @JsonKey(name: 'publishCustomVideoTrack')
@@ -1573,6 +1680,10 @@ class ChannelMediaOptions implements AgoraSerializable {
   /// Preferred transmission path type. See MultipathType. When using this parameter, make sure enableMultipath is set to true.
   @JsonKey(name: 'preferMultipathType')
   final MultipathType? preferMultipathType;
+
+  /// @nodoc
+  @JsonKey(name: 'customUserInfo')
+  final String? customUserInfo;
 
   /// @nodoc
   factory ChannelMediaOptions.fromJson(Map<String, dynamic> json) =>
@@ -1714,6 +1825,7 @@ class RtcEngineEventHandler {
     this.onDownlinkNetworkInfoUpdated,
     this.onLastmileQuality,
     this.onFirstLocalVideoFrame,
+    this.onVideoBlackFrameDetected,
     this.onFirstLocalVideoFramePublished,
     this.onFirstRemoteVideoDecoded,
     this.onVideoSizeChanged,
@@ -1964,6 +2076,10 @@ class RtcEngineEventHandler {
           VideoSourceType source, int width, int height, int elapsed)?
       onFirstLocalVideoFrame;
 
+  /// @nodoc
+  final void Function(VideoSourceType source, int reason)?
+      onVideoBlackFrameDetected;
+
   /// Callback when the first local video frame is published.
   ///
   /// The SDK triggers this callback in the following scenarios:
@@ -2009,7 +2125,7 @@ class RtcEngineEventHandler {
   /// Since Available since v6.6.2. You can use this callback to get the reason for the local video event.
   ///
   /// * [source] Type of video source. See VideoSourceType.
-  /// * [event] Type of local video event. See LocalVideoEventType.
+  /// * [event] Type of local video event: localVideoEventTypeScreenCaptureWindowHidden : The screen capture window is hidden. localVideoEventTypeScreenCaptureWindowRecoverFromHidden : The screen capture window recovers from the hidden state. localVideoEventTypeScreenCaptureStoppedByUser : Screen capture is stopped by the user. localVideoEventTypeScreenCaptureSystemInternalError : A system internal error occurs during screen capture. localVideoEventTypeCameraFocalLengthApplied : The requested wide-angle or ultra-wide-angle camera is applied. localVideoEventTypeCameraFocalLengthFallbackToDefault : The requested wide-angle or ultra-wide-angle camera cannot be opened, and the SDK falls back to the default camera.
   final void Function(VideoSourceType source, LocalVideoEventType event)?
       onLocalVideoEvent;
 
@@ -5769,6 +5885,10 @@ abstract class RtcEngine {
       {required SIZE thumbSize,
       required SIZE iconSize,
       required bool includeScreen});
+
+  /// @nodoc
+  Future<List<LoopbackRecordingSourceInfo>> getLoopbackRecordingSources(
+      LoopbackRecordingSourceOptions options);
 
   /// Sets the SDK's permission to operate the Audio Session.
   ///

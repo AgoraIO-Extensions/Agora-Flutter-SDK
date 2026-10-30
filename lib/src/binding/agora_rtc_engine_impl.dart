@@ -3988,6 +3988,24 @@ class RtcEngineImpl implements RtcEngine {
   }
 
   @override
+  Future<List<LoopbackRecordingSourceInfo>> getLoopbackRecordingSources(
+      LoopbackRecordingSourceOptions options) async {
+    final apiType =
+        '${isOverrideClassName ? className : 'RtcEngine'}_getLoopbackRecordingSources_89105d0';
+    final requestParam = createParams({'options': options.toJson()});
+    final List<Uint8List> buffers = [];
+    buffers.addAll(options.collectBufferList());
+    final callApiResult = await irisMethodChannel.invokeMethod(
+        IrisMethodCall(apiType, jsonEncode(requestParam), buffers: buffers));
+    if (callApiResult.irisReturnCode < 0) {
+      throw AgoraRtcException(code: callApiResult.irisReturnCode);
+    }
+    final rm = callApiResult.data;
+    final result = rm['result'];
+    return result as List<LoopbackRecordingSourceInfo>;
+  }
+
+  @override
   Future<void> setAudioSessionOperationRestriction(
       AudioSessionOperationRestriction restriction) async {
     final apiType =

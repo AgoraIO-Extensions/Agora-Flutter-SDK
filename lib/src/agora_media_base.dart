@@ -1119,7 +1119,8 @@ class ExternalVideoFrame implements AgoraSerializable {
       this.d3d11Texture2d,
       this.textureSliceIndex,
       this.hdr10MetadataInfo,
-      this.colorSpace});
+      this.colorSpace,
+      this.pixelBuffer});
 
   /// Video type. See VideoBufferType.
   @JsonKey(name: 'type')
@@ -1219,6 +1220,10 @@ class ExternalVideoFrame implements AgoraSerializable {
   /// Color space property of the video frame. By default, Full Range and BT.709 standard configuration is applied. You can customize the setting based on your custom capture or rendering requirements. See [VideoColorSpace](https://developer.mozilla.org/en-US/docs/Web/API/VideoColorSpace).
   @JsonKey(name: 'colorSpace')
   final ColorSpace? colorSpace;
+
+  /// @nodoc
+  @JsonKey(name: 'pixelBuffer', ignore: true)
+  final Uint8List? pixelBuffer;
 
   /// @nodoc
   factory ExternalVideoFrame.fromJson(Map<String, dynamic> json) =>

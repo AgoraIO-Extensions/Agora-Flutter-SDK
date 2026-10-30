@@ -172,6 +172,11 @@ Map<String, dynamic> _$MusicContentCenterConfigurationToJson(
   return val;
 }
 
+const _$MusicContentCenterVendorIdEnumMap = {
+  MusicContentCenterVendorId.kMusicContentCenterVendorIdYjx: 1,
+  MusicContentCenterVendorId.kMusicContentCenterVendorIdTme: 2,
+};
+
 const _$MusicPlayModeEnumMap = {
   MusicPlayMode.kMusicPlayModeOriginal: 0,
   MusicPlayMode.kMusicPlayModeAccompany: 1,

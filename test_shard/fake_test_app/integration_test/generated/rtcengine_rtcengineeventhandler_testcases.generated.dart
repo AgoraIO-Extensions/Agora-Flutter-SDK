@@ -1491,6 +1491,71 @@ void generatedTestCases(ValueGetter<IrisTester> irisTester) {
   );
 
   testWidgets(
+    'RtcEngineEventHandler.onVideoBlackFrameDetected',
+    (WidgetTester tester) async {
+      RtcEngine rtcEngine = createAgoraRtcEngine();
+      await rtcEngine.initialize(RtcEngineContext(
+        appId: 'app_id',
+        areaCode: AreaCode.areaCodeGlob.value(),
+      ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
+
+      final onVideoBlackFrameDetectedCompleter = Completer<bool>();
+      final theRtcEngineEventHandler = RtcEngineEventHandler(
+        onVideoBlackFrameDetected: (VideoSourceType source, int reason) {
+          onVideoBlackFrameDetectedCompleter.complete(true);
+        },
+      );
+
+      rtcEngine.registerEventHandler(
+        theRtcEngineEventHandler,
+      );
+
+// Delay 500 milliseconds to ensure the registerEventHandler call completed.
+      await Future.delayed(const Duration(milliseconds: 500));
+
+      {
+        VideoSourceType source = VideoSourceType.videoSourceCameraPrimary;
+        int reason = 5;
+
+        final eventJson = {
+          'source': source.value(),
+          'reason': reason,
+        };
+
+        final eventIds = eventIdsMapping[
+                'RtcEngineEventHandler_onVideoBlackFrameDetected'] ??
+            [];
+        for (final event in eventIds) {
+          final ret = irisTester().fireEvent(event, params: eventJson);
+          // Delay 200 milliseconds to ensure the callback is called.
+          await Future.delayed(const Duration(milliseconds: 200));
+          // TODO(littlegnal): Most of callbacks on web are not implemented, we're temporarily skip these callbacks at this time.
+          if (kIsWeb && ret) {
+            if (!onVideoBlackFrameDetectedCompleter.isCompleted) {
+              onVideoBlackFrameDetectedCompleter.complete(true);
+            }
+          }
+        }
+      }
+
+      final eventCalled = await onVideoBlackFrameDetectedCompleter.future;
+      expect(eventCalled, isTrue);
+
+      {
+        rtcEngine.unregisterEventHandler(
+          theRtcEngineEventHandler,
+        );
+      }
+// Delay 500 milliseconds to ensure the unregisterEventHandler call completed.
+      await Future.delayed(const Duration(milliseconds: 500));
+
+      await rtcEngine.release();
+    },
+    timeout: const Timeout(Duration(minutes: 2)),
+  );
+
+  testWidgets(
     'RtcEngineEventHandler.onFirstLocalVideoFramePublished',
     (WidgetTester tester) async {
       RtcEngine rtcEngine = createAgoraRtcEngine();
@@ -5759,9 +5824,11 @@ void generatedTestCases(ValueGetter<IrisTester> irisTester) {
         int uid = 5;
         int infoUid = 5;
         String infoUserAccount = "hello";
+        String infoCustomUserInfo = "hello";
         UserInfo info = UserInfo(
           uid: infoUid,
           userAccount: infoUserAccount,
+          customUserInfo: infoCustomUserInfo,
         );
 
         final eventJson = {

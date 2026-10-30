@@ -32,6 +32,12 @@ void rtcEngineExSmokeTestCases() {
           channelId: connectionChannelId,
           localUid: connectionLocalUid,
         );
+        List<int> publishLoopbackAudioTrackIdsTrackIds = List.filled(5, 5);
+        int publishLoopbackAudioTrackIdsTrackCount = 5;
+        AudioTrackIdList optionsPublishLoopbackAudioTrackIds = AudioTrackIdList(
+          trackIds: publishLoopbackAudioTrackIdsTrackIds,
+          trackCount: publishLoopbackAudioTrackIdsTrackCount,
+        );
         ClientRoleType optionsClientRoleType =
             ClientRoleType.clientRoleBroadcaster;
         AudienceLatencyLevelType optionsAudienceLatencyLevel =
@@ -56,6 +62,7 @@ void rtcEngineExSmokeTestCases() {
         bool optionsPublishFourthScreenTrack = true;
         bool optionsPublishCustomAudioTrack = true;
         int optionsPublishCustomAudioTrackId = 5;
+        bool optionsPublishLoopbackAudioTrack = true;
         bool optionsPublishCustomVideoTrack = true;
         bool optionsPublishEncodedVideoTrack = true;
         bool optionsPublishMediaPlayerAudioTrack = true;
@@ -77,6 +84,7 @@ void rtcEngineExSmokeTestCases() {
         bool optionsIsAudioFilterable = true;
         String optionsParameters = "hello";
         bool optionsEnableMultipath = true;
+        String optionsCustomUserInfo = "hello";
         ChannelMediaOptions options = ChannelMediaOptions(
           publishCameraTrack: optionsPublishCameraTrack,
           publishSecondaryCameraTrack: optionsPublishSecondaryCameraTrack,
@@ -91,6 +99,8 @@ void rtcEngineExSmokeTestCases() {
           publishFourthScreenTrack: optionsPublishFourthScreenTrack,
           publishCustomAudioTrack: optionsPublishCustomAudioTrack,
           publishCustomAudioTrackId: optionsPublishCustomAudioTrackId,
+          publishLoopbackAudioTrack: optionsPublishLoopbackAudioTrack,
+          publishLoopbackAudioTrackIds: optionsPublishLoopbackAudioTrackIds,
           publishCustomVideoTrack: optionsPublishCustomVideoTrack,
           publishEncodedVideoTrack: optionsPublishEncodedVideoTrack,
           publishMediaPlayerAudioTrack: optionsPublishMediaPlayerAudioTrack,
@@ -119,6 +129,7 @@ void rtcEngineExSmokeTestCases() {
           uplinkMultipathMode: optionsUplinkMultipathMode,
           downlinkMultipathMode: optionsDownlinkMultipathMode,
           preferMultipathType: optionsPreferMultipathType,
+          customUserInfo: optionsCustomUserInfo,
         );
         await rtcEngineEx.joinChannelEx(
           token: token,
@@ -256,6 +267,12 @@ void rtcEngineExSmokeTestCases() {
       await rtcEngineEx.setParameters('{"rtc.enable_debug_log": true}');
 
       try {
+        List<int> publishLoopbackAudioTrackIdsTrackIds = List.filled(5, 5);
+        int publishLoopbackAudioTrackIdsTrackCount = 5;
+        AudioTrackIdList optionsPublishLoopbackAudioTrackIds = AudioTrackIdList(
+          trackIds: publishLoopbackAudioTrackIdsTrackIds,
+          trackCount: publishLoopbackAudioTrackIdsTrackCount,
+        );
         ClientRoleType optionsClientRoleType =
             ClientRoleType.clientRoleBroadcaster;
         AudienceLatencyLevelType optionsAudienceLatencyLevel =
@@ -280,6 +297,7 @@ void rtcEngineExSmokeTestCases() {
         bool optionsPublishFourthScreenTrack = true;
         bool optionsPublishCustomAudioTrack = true;
         int optionsPublishCustomAudioTrackId = 5;
+        bool optionsPublishLoopbackAudioTrack = true;
         bool optionsPublishCustomVideoTrack = true;
         bool optionsPublishEncodedVideoTrack = true;
         bool optionsPublishMediaPlayerAudioTrack = true;
@@ -301,6 +319,7 @@ void rtcEngineExSmokeTestCases() {
         bool optionsIsAudioFilterable = true;
         String optionsParameters = "hello";
         bool optionsEnableMultipath = true;
+        String optionsCustomUserInfo = "hello";
         ChannelMediaOptions options = ChannelMediaOptions(
           publishCameraTrack: optionsPublishCameraTrack,
           publishSecondaryCameraTrack: optionsPublishSecondaryCameraTrack,
@@ -315,6 +334,8 @@ void rtcEngineExSmokeTestCases() {
           publishFourthScreenTrack: optionsPublishFourthScreenTrack,
           publishCustomAudioTrack: optionsPublishCustomAudioTrack,
           publishCustomAudioTrackId: optionsPublishCustomAudioTrackId,
+          publishLoopbackAudioTrack: optionsPublishLoopbackAudioTrack,
+          publishLoopbackAudioTrackIds: optionsPublishLoopbackAudioTrackIds,
           publishCustomVideoTrack: optionsPublishCustomVideoTrack,
           publishEncodedVideoTrack: optionsPublishEncodedVideoTrack,
           publishMediaPlayerAudioTrack: optionsPublishMediaPlayerAudioTrack,
@@ -343,6 +364,7 @@ void rtcEngineExSmokeTestCases() {
           uplinkMultipathMode: optionsUplinkMultipathMode,
           downlinkMultipathMode: optionsDownlinkMultipathMode,
           preferMultipathType: optionsPreferMultipathType,
+          customUserInfo: optionsCustomUserInfo,
         );
         String connectionChannelId = "hello";
         int connectionLocalUid = 5;

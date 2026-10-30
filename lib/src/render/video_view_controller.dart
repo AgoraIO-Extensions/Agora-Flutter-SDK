@@ -21,7 +21,7 @@ abstract class VideoViewControllerBase {
   /// Connection information. See RtcConnection.
   RtcConnection? get connection;
 
-  /// FlutterTexture is only available on iOS, macOS, and Windows platforms. Whether to use FlutterTexture to render video: true : Use FlutterTexture to render video. false : Do not use FlutterTexture to render video.
+  /// FlutterTexture applies to Android, iOS, macOS, and Windows platforms. Whether to use FlutterTexture to render video: true : Use FlutterTexture to render video. false : Do not use FlutterTexture to render video.
   bool get useFlutterTexture;
 
   /// Android SurfaceView is only available on Android platform. Whether to use Android SurfaceView to render video: true : Use Android SurfaceView to render video. false : Do not use Android SurfaceView to render video.

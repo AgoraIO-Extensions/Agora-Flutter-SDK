@@ -497,6 +497,34 @@ enum ErrorCodeType {
   /// @nodoc
   @JsonValue(1707)
   errVideoeffectInvalidBundlePath,
+
+  /// @nodoc
+  @JsonValue(2007)
+  errAdmApplicationLoopback,
+
+  /// @nodoc
+  @JsonValue(2008)
+  errAdmApplicationLoopbackStopped,
+
+  /// @nodoc
+  @JsonValue(2009)
+  errAdmSystemLoopback,
+
+  /// @nodoc
+  @JsonValue(2010)
+  errAdmSystemLoopbackStopped,
+
+  /// @nodoc
+  @JsonValue(2011)
+  errAdmLoopbackNoPermission,
+
+  /// @nodoc
+  @JsonValue(2012)
+  errAdmLoopbackSilentDetected,
+
+  /// @nodoc
+  @JsonValue(2013)
+  errAdmLoopbackSilentRecovered,
 }
 
 /// @nodoc
@@ -1606,6 +1634,27 @@ extension MaxUserAccountLengthTypeExt on MaxUserAccountLengthType {
   /// @nodoc
   int value() {
     return _$MaxUserAccountLengthTypeEnumMap[this]!;
+  }
+}
+
+/// @nodoc
+@JsonEnum(alwaysCreate: true)
+enum MaxCustomUserInfoLengthType {
+  /// @nodoc
+  @JsonValue(1024)
+  maxCustomUserInfoLength,
+}
+
+/// @nodoc
+extension MaxCustomUserInfoLengthTypeExt on MaxCustomUserInfoLengthType {
+  /// @nodoc
+  static MaxCustomUserInfoLengthType fromValue(int value) {
+    return $enumDecode(_$MaxCustomUserInfoLengthTypeEnumMap, value);
+  }
+
+  /// @nodoc
+  int value() {
+    return _$MaxCustomUserInfoLengthTypeEnumMap[this]!;
   }
 }
 
@@ -5958,6 +6007,132 @@ class AudioTrackConfig implements AgoraSerializable {
   Map<String, dynamic> toJson() => _$AudioTrackConfigToJson(this);
 }
 
+/// @nodoc
+@JsonEnum(alwaysCreate: true)
+enum LoopbackAudioTrackType {
+  /// @nodoc
+  @JsonValue(0)
+  loopbackSystem,
+
+  /// @nodoc
+  @JsonValue(1)
+  loopbackSystemExcludeSelf,
+
+  /// @nodoc
+  @JsonValue(2)
+  loopbackApplication,
+
+  /// @nodoc
+  @JsonValue(3)
+  loopbackProcess,
+}
+
+/// @nodoc
+extension LoopbackAudioTrackTypeExt on LoopbackAudioTrackType {
+  /// @nodoc
+  static LoopbackAudioTrackType fromValue(int value) {
+    return $enumDecode(_$LoopbackAudioTrackTypeEnumMap, value);
+  }
+
+  /// @nodoc
+  int value() {
+    return _$LoopbackAudioTrackTypeEnumMap[this]!;
+  }
+}
+
+/// @nodoc
+@JsonSerializable(explicitToJson: true, includeIfNull: false)
+class AudioTrackVolumeInfo implements AgoraSerializable {
+  /// @nodoc
+  const AudioTrackVolumeInfo({this.channelCount, this.levels});
+
+  /// @nodoc
+  @JsonKey(name: 'channelCount')
+  final int? channelCount;
+
+  /// @nodoc
+  @JsonKey(name: 'levels')
+  final List<int>? levels;
+
+  /// @nodoc
+  factory AudioTrackVolumeInfo.fromJson(Map<String, dynamic> json) =>
+      _$AudioTrackVolumeInfoFromJson(json);
+
+  @override
+  Map<String, dynamic> toJson() => _$AudioTrackVolumeInfoToJson(this);
+}
+
+/// @nodoc
+class AudioTrackObserver {
+  /// @nodoc
+  const AudioTrackObserver({
+    this.onAudioTrackVolumeIndication,
+  });
+
+  /// @nodoc
+  final void Function(int trackId, AudioTrackVolumeInfo volumeInfo)?
+      onAudioTrackVolumeIndication;
+}
+
+/// @nodoc
+@JsonSerializable(explicitToJson: true, includeIfNull: false)
+class LoopbackAudioTrackConfig implements AgoraSerializable {
+  /// @nodoc
+  const LoopbackAudioTrackConfig(
+      {this.loopbackType,
+      this.volume,
+      this.deviceName,
+      this.appName,
+      this.processId,
+      this.excludedAppNames,
+      this.excludedAppCount,
+      this.excludedProcessIds,
+      this.excludedProcessCount});
+
+  /// @nodoc
+  @JsonKey(name: 'loopbackType')
+  final LoopbackAudioTrackType? loopbackType;
+
+  /// @nodoc
+  @JsonKey(name: 'volume')
+  final int? volume;
+
+  /// @nodoc
+  @JsonKey(name: 'deviceName')
+  final String? deviceName;
+
+  /// @nodoc
+  @JsonKey(name: 'appName')
+  final String? appName;
+
+  /// @nodoc
+  @JsonKey(name: 'processId')
+  final int? processId;
+
+  /// @nodoc
+  @JsonKey(name: 'excludedAppNames')
+  final List<String>? excludedAppNames;
+
+  /// @nodoc
+  @JsonKey(name: 'excludedAppCount')
+  final int? excludedAppCount;
+
+  /// @nodoc
+  @JsonKey(name: 'excludedProcessIds')
+  final List<int>? excludedProcessIds;
+
+  /// @nodoc
+  @JsonKey(name: 'excludedProcessCount')
+  final int? excludedProcessCount;
+
+  /// @nodoc
+  factory LoopbackAudioTrackConfig.fromJson(Map<String, dynamic> json) =>
+      _$LoopbackAudioTrackConfigFromJson(json);
+
+  @override
+  Map<String, dynamic> toJson() => _$LoopbackAudioTrackConfigToJson(this);
+}
+
 /// Preset voice beautifier options.
 @JsonEnum(alwaysCreate: true)
 enum VoiceBeautifierPreset {
@@ -7287,7 +7462,7 @@ class EchoTestConfiguration implements AgoraSerializable {
 @JsonSerializable(explicitToJson: true, includeIfNull: false)
 class UserInfo implements AgoraSerializable {
   /// @nodoc
-  const UserInfo({this.uid, this.userAccount});
+  const UserInfo({this.uid, this.userAccount, this.customUserInfo});
 
   /// User ID.
   @JsonKey(name: 'uid')
@@ -7296,6 +7471,10 @@ class UserInfo implements AgoraSerializable {
   /// User account. Length limit is MaxUserAccountLengthType.
   @JsonKey(name: 'userAccount')
   final String? userAccount;
+
+  /// @nodoc
+  @JsonKey(name: 'customUserInfo')
+  final String? customUserInfo;
 
   /// @nodoc
   factory UserInfo.fromJson(Map<String, dynamic> json) =>

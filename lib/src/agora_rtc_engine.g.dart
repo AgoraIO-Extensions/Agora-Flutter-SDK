@@ -572,6 +572,54 @@ const _$ScreenCaptureSourceTypeEnumMap = {
   ScreenCaptureSourceType.screencapturesourcetypeCustom: 2,
 };
 
+LoopbackRecordingSourceOptions _$LoopbackRecordingSourceOptionsFromJson(
+        Map<String, dynamic> json) =>
+    LoopbackRecordingSourceOptions(
+      flags: (json['flags'] as num?)?.toInt(),
+    );
+
+Map<String, dynamic> _$LoopbackRecordingSourceOptionsToJson(
+    LoopbackRecordingSourceOptions instance) {
+  final val = <String, dynamic>{};
+
+  void writeNotNull(String key, dynamic value) {
+    if (value != null) {
+      val[key] = value;
+    }
+  }
+
+  writeNotNull('flags', instance.flags);
+  return val;
+}
+
+LoopbackRecordingSourceInfo _$LoopbackRecordingSourceInfoFromJson(
+        Map<String, dynamic> json) =>
+    LoopbackRecordingSourceInfo(
+      appName: json['appName'] as String?,
+      windowTitle: json['windowTitle'] as String?,
+      processIds: (json['processIds'] as List<dynamic>?)
+          ?.map((e) => (e as num).toInt())
+          .toList(),
+      processCount: (json['processCount'] as num?)?.toInt(),
+    );
+
+Map<String, dynamic> _$LoopbackRecordingSourceInfoToJson(
+    LoopbackRecordingSourceInfo instance) {
+  final val = <String, dynamic>{};
+
+  void writeNotNull(String key, dynamic value) {
+    if (value != null) {
+      val[key] = value;
+    }
+  }
+
+  writeNotNull('appName', instance.appName);
+  writeNotNull('windowTitle', instance.windowTitle);
+  writeNotNull('processIds', instance.processIds);
+  writeNotNull('processCount', instance.processCount);
+  return val;
+}
+
 AdvancedAudioOptions _$AdvancedAudioOptionsFromJson(
         Map<String, dynamic> json) =>
     AdvancedAudioOptions(
@@ -622,6 +670,28 @@ const _$VideoMirrorModeTypeEnumMap = {
   VideoMirrorModeType.videoMirrorModeDisabled: 2,
 };
 
+AudioTrackIdList _$AudioTrackIdListFromJson(Map<String, dynamic> json) =>
+    AudioTrackIdList(
+      trackIds: (json['trackIds'] as List<dynamic>?)
+          ?.map((e) => (e as num).toInt())
+          .toList(),
+      trackCount: (json['trackCount'] as num?)?.toInt(),
+    );
+
+Map<String, dynamic> _$AudioTrackIdListToJson(AudioTrackIdList instance) {
+  final val = <String, dynamic>{};
+
+  void writeNotNull(String key, dynamic value) {
+    if (value != null) {
+      val[key] = value;
+    }
+  }
+
+  writeNotNull('trackIds', instance.trackIds);
+  writeNotNull('trackCount', instance.trackCount);
+  return val;
+}
+
 ChannelMediaOptions _$ChannelMediaOptionsFromJson(Map<String, dynamic> json) =>
     ChannelMediaOptions(
       publishCameraTrack: json['publishCameraTrack'] as bool?,
@@ -638,6 +708,11 @@ ChannelMediaOptions _$ChannelMediaOptionsFromJson(Map<String, dynamic> json) =>
       publishCustomAudioTrack: json['publishCustomAudioTrack'] as bool?,
       publishCustomAudioTrackId:
           (json['publishCustomAudioTrackId'] as num?)?.toInt(),
+      publishLoopbackAudioTrack: json['publishLoopbackAudioTrack'] as bool?,
+      publishLoopbackAudioTrackIds: json['publishLoopbackAudioTrackIds'] == null
+          ? null
+          : AudioTrackIdList.fromJson(
+              json['publishLoopbackAudioTrackIds'] as Map<String, dynamic>),
       publishCustomVideoTrack: json['publishCustomVideoTrack'] as bool?,
       publishEncodedVideoTrack: json['publishEncodedVideoTrack'] as bool?,
       publishMediaPlayerAudioTrack:
@@ -678,6 +753,7 @@ ChannelMediaOptions _$ChannelMediaOptionsFromJson(Map<String, dynamic> json) =>
           _$MultipathModeEnumMap, json['downlinkMultipathMode']),
       preferMultipathType: $enumDecodeNullable(
           _$MultipathTypeEnumMap, json['preferMultipathType']),
+      customUserInfo: json['customUserInfo'] as String?,
     );
 
 Map<String, dynamic> _$ChannelMediaOptionsToJson(ChannelMediaOptions instance) {
@@ -704,6 +780,9 @@ Map<String, dynamic> _$ChannelMediaOptionsToJson(ChannelMediaOptions instance) {
   writeNotNull('publishFourthScreenTrack', instance.publishFourthScreenTrack);
   writeNotNull('publishCustomAudioTrack', instance.publishCustomAudioTrack);
   writeNotNull('publishCustomAudioTrackId', instance.publishCustomAudioTrackId);
+  writeNotNull('publishLoopbackAudioTrack', instance.publishLoopbackAudioTrack);
+  writeNotNull('publishLoopbackAudioTrackIds',
+      instance.publishLoopbackAudioTrackIds?.toJson());
   writeNotNull('publishCustomVideoTrack', instance.publishCustomVideoTrack);
   writeNotNull('publishEncodedVideoTrack', instance.publishEncodedVideoTrack);
   writeNotNull(
@@ -744,6 +823,7 @@ Map<String, dynamic> _$ChannelMediaOptionsToJson(ChannelMediaOptions instance) {
       _$MultipathModeEnumMap[instance.downlinkMultipathMode]);
   writeNotNull('preferMultipathType',
       _$MultipathTypeEnumMap[instance.preferMultipathType]);
+  writeNotNull('customUserInfo', instance.customUserInfo);
   return val;
 }
 
@@ -1148,6 +1228,11 @@ const _$CloudProxyTypeEnumMap = {
   CloudProxyType.noneProxy: 0,
   CloudProxyType.udpProxy: 1,
   CloudProxyType.tcpProxy: 2,
+};
+
+const _$LoopbackRecordingSourceFlagEnumMap = {
+  LoopbackRecordingSourceFlag.loopbackRecordingSourceFlagAudioOutput: 1,
+  LoopbackRecordingSourceFlag.loopbackRecordingSourceFlagRunningApplication: 2,
 };
 
 const _$ProxyTypeEnumMap = {
