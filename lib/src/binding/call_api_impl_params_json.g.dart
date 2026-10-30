@@ -220,6 +220,18 @@ Map<String, dynamic> _$MusicContentCenterGetInternalSongCodeJsonToJson(
       'internalSongCode': instance.internalSongCode,
     };
 
+MusicContentCenterSendExtRequestJson
+    _$MusicContentCenterSendExtRequestJsonFromJson(Map<String, dynamic> json) =>
+        MusicContentCenterSendExtRequestJson(
+          json['requestId'] as String,
+        );
+
+Map<String, dynamic> _$MusicContentCenterSendExtRequestJsonToJson(
+        MusicContentCenterSendExtRequestJson instance) =>
+    <String, dynamic>{
+      'requestId': instance.requestId,
+    };
+
 VideoDeviceManagerGetDeviceJson _$VideoDeviceManagerGetDeviceJsonFromJson(
         Map<String, dynamic> json) =>
     VideoDeviceManagerGetDeviceJson(

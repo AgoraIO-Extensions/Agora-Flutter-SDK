@@ -49,3 +49,5 @@ test_shard/**/web/iris_web_version.js
 
 artifacts
 DerivedData
+# Task-local binding metadata copied from the SDK snapshot
+tool/terra/.binding_headers/

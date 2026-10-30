@@ -34,6 +34,24 @@ runs:
         flutter-version: ${{ inputs.flutter_version }}
         cache: true
 
+    - name: Match Terra libclang and C++ headers
+      shell: bash
+      run: |
+        # Xcode 26 C SDK headers also require newer clang builtins. Keep the
+        # SDK paired with the locally validated parser environment.
+        test -d /Applications/Xcode_16.4.app/Contents/Developer
+        echo "DEVELOPER_DIR=/Applications/Xcode_16.4.app/Contents/Developer" >> "$GITHUB_ENV"
+        # cppast_backend uses libclang 15. Use the matching standard library,
+        # rather than whichever libc++ a new Xcode image happens to select.
+        if ! brew list --versions llvm@15 >/dev/null 2>&1; then
+          HOMEBREW_NO_AUTO_UPDATE=1 brew install --force-bottle llvm@15
+        fi
+
+    - name: Verify parser diagnostic gate
+      shell: bash
+      working-directory: ${{ inputs.working_directory }}
+      run: python3 -m unittest discover -s tool/terra/tests -p "test_*.py"
+
     - name: Gen
       uses: AgoraIO-Extensions/actions/.github/actions/generate@main
       with:

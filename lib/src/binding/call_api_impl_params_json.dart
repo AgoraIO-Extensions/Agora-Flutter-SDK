@@ -264,6 +264,22 @@ class MusicContentCenterGetInternalSongCodeJson implements AgoraSerializable {
 }
 
 @JsonSerializable(explicitToJson: true, includeIfNull: false)
+class MusicContentCenterSendExtRequestJson implements AgoraSerializable {
+  const MusicContentCenterSendExtRequestJson(this.requestId);
+
+  @JsonKey(name: 'requestId')
+  final String requestId;
+
+  factory MusicContentCenterSendExtRequestJson.fromJson(
+          Map<String, dynamic> json) =>
+      _$MusicContentCenterSendExtRequestJsonFromJson(json);
+
+  @override
+  Map<String, dynamic> toJson() =>
+      _$MusicContentCenterSendExtRequestJsonToJson(this);
+}
+
+@JsonSerializable(explicitToJson: true, includeIfNull: false)
 class VideoDeviceManagerGetDeviceJson implements AgoraSerializable {
   const VideoDeviceManagerGetDeviceJson(this.deviceIdUTF8);
 

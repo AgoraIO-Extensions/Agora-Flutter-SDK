@@ -241,6 +241,13 @@ function callApiImplBlock(
     `);
   } else if (returnTypeNode.__TYPE == CXXTYPE.Enumz) {
     returnBlock = `return ${dartName(returnTypeNode)}Ext.fromValue(result);`;
+  } else if (
+    method.return_type.kind == SimpleTypeKind.array_t &&
+    returnTypeNode.__TYPE == CXXTYPE.Struct
+  ) {
+    returnBlock = `return (result as List).map((e) => ${dartName(
+      returnTypeNode
+    )}.fromJson(e as Map<String, dynamic>)).toList();`;
   } else if (method.return_type.name != "void") {
     let returnType = dartName(method.return_type);
     returnBlock = `return result as ${returnType};`;

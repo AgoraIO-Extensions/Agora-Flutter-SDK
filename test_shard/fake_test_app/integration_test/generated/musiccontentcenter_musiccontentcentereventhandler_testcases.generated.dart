@@ -401,4 +401,78 @@ void generatedTestCases(ValueGetter<IrisTester> irisTester) {
     },
     timeout: const Timeout(Duration(minutes: 2)),
   );
+
+  testWidgets(
+    'MusicContentCenterEventHandler.onExtResponse',
+    (WidgetTester tester) async {
+      RtcEngine rtcEngine = createAgoraRtcEngine();
+      await rtcEngine.initialize(RtcEngineContext(
+        appId: 'app_id',
+        areaCode: AreaCode.areaCodeGlob.value(),
+      ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
+
+      final musicContentCenter = rtcEngine.getMusicContentCenter();
+      const musicContentCenterConfiguration = MusicContentCenterConfiguration(
+          appId: 'app_id', token: 'token', mccUid: 10);
+      await musicContentCenter.initialize(musicContentCenterConfiguration);
+
+      final onExtResponseCompleter = Completer<bool>();
+      final theMusicContentCenterEventHandler = MusicContentCenterEventHandler(
+        onExtResponse: (String requestId, String jsonOption, int httpCode,
+            String response) {
+          onExtResponseCompleter.complete(true);
+        },
+      );
+
+      musicContentCenter.registerEventHandler(
+        theMusicContentCenterEventHandler,
+      );
+
+// Delay 500 milliseconds to ensure the registerEventHandler call completed.
+      await Future.delayed(const Duration(milliseconds: 500));
+
+      {
+        String requestId = "hello";
+        String jsonOption = "hello";
+        int httpCode = 5;
+        String response = "hello";
+
+        final eventJson = {
+          'requestId': requestId,
+          'jsonOption': jsonOption,
+          'httpCode': httpCode,
+          'response': response,
+        };
+
+        final eventIds =
+            eventIdsMapping['MusicContentCenterEventHandler_onExtResponse'] ??
+                [];
+        for (final event in eventIds) {
+          final ret = irisTester().fireEvent(event, params: eventJson);
+          // Delay 200 milliseconds to ensure the callback is called.
+          await Future.delayed(const Duration(milliseconds: 200));
+          // TODO(littlegnal): Most of callbacks on web are not implemented, we're temporarily skip these callbacks at this time.
+          if (kIsWeb && ret) {
+            if (!onExtResponseCompleter.isCompleted) {
+              onExtResponseCompleter.complete(true);
+            }
+          }
+        }
+      }
+
+      final eventCalled = await onExtResponseCompleter.future;
+      expect(eventCalled, isTrue);
+
+      {
+        musicContentCenter.unregisterEventHandler();
+      }
+// Delay 500 milliseconds to ensure the unregisterEventHandler call completed.
+      await Future.delayed(const Duration(milliseconds: 500));
+
+      await musicContentCenter.release();
+      await rtcEngine.release();
+    },
+    timeout: const Timeout(Duration(minutes: 2)),
+  );
 }

@@ -649,6 +649,7 @@ void mediaEngineSmokeTestCases() {
         bool frameFillAlphaBuffer = true;
         int frameD3d11Texture2d = 5;
         int frameTextureSliceIndex = 5;
+        Uint8List framePixelBuffer = Uint8List.fromList([1, 1, 1, 1, 1]);
         ExternalVideoFrame frame = ExternalVideoFrame(
           type: frameType,
           format: frameFormat,
@@ -674,6 +675,7 @@ void mediaEngineSmokeTestCases() {
           textureSliceIndex: frameTextureSliceIndex,
           hdr10MetadataInfo: frameHdr10MetadataInfo,
           colorSpace: frameColorSpace,
+          pixelBuffer: framePixelBuffer,
         );
         int videoTrackId = 5;
         await mediaEngine.pushVideoFrame(
@@ -757,6 +759,215 @@ void mediaEngineSmokeTestCases() {
         if (e is! AgoraRtcException) {
           debugPrint(
               '[MediaEngine.pushEncodedVideoImage] error: ${e.toString()}');
+          rethrow;
+        }
+
+        if (e.code != -4) {
+          // Only not supported error supported.
+          rethrow;
+        }
+      }
+
+      await mediaEngine.release();
+      await rtcEngine.release();
+    },
+//  skip: !(),
+  );
+
+  testWidgets(
+    'MediaEngine.enableAudioTrackVolumeIndication',
+    (WidgetTester tester) async {
+      String engineAppId = const String.fromEnvironment('TEST_APP_ID',
+          defaultValue: '<YOUR_APP_ID>');
+
+      RtcEngine rtcEngine = createAgoraRtcEngine();
+      await rtcEngine.initialize(RtcEngineContext(
+        appId: engineAppId,
+        areaCode: AreaCode.areaCodeGlob.value(),
+      ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
+
+      final mediaEngine = rtcEngine.getMediaEngine();
+
+      try {
+        int id = 5;
+        int interval = 5;
+        await mediaEngine.enableAudioTrackVolumeIndication(
+          id: id,
+          interval: interval,
+        );
+      } catch (e) {
+        if (e is! AgoraRtcException) {
+          debugPrint(
+              '[MediaEngine.enableAudioTrackVolumeIndication] error: ${e.toString()}');
+          rethrow;
+        }
+
+        if (e.code != -4) {
+          // Only not supported error supported.
+          rethrow;
+        }
+      }
+
+      await mediaEngine.release();
+      await rtcEngine.release();
+    },
+//  skip: !(),
+  );
+
+  testWidgets(
+    'MediaEngine.adjustLoopbackAudioPublishVolume',
+    (WidgetTester tester) async {
+      String engineAppId = const String.fromEnvironment('TEST_APP_ID',
+          defaultValue: '<YOUR_APP_ID>');
+
+      RtcEngine rtcEngine = createAgoraRtcEngine();
+      await rtcEngine.initialize(RtcEngineContext(
+        appId: engineAppId,
+        areaCode: AreaCode.areaCodeGlob.value(),
+      ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
+
+      final mediaEngine = rtcEngine.getMediaEngine();
+
+      try {
+        int trackId = 5;
+        int volume = 5;
+        await mediaEngine.adjustLoopbackAudioPublishVolume(
+          trackId: trackId,
+          volume: volume,
+        );
+      } catch (e) {
+        if (e is! AgoraRtcException) {
+          debugPrint(
+              '[MediaEngine.adjustLoopbackAudioPublishVolume] error: ${e.toString()}');
+          rethrow;
+        }
+
+        if (e.code != -4) {
+          // Only not supported error supported.
+          rethrow;
+        }
+      }
+
+      await mediaEngine.release();
+      await rtcEngine.release();
+    },
+//  skip: !(),
+  );
+
+  testWidgets(
+    'MediaEngine.destroyLoopbackAudioTrack',
+    (WidgetTester tester) async {
+      String engineAppId = const String.fromEnvironment('TEST_APP_ID',
+          defaultValue: '<YOUR_APP_ID>');
+
+      RtcEngine rtcEngine = createAgoraRtcEngine();
+      await rtcEngine.initialize(RtcEngineContext(
+        appId: engineAppId,
+        areaCode: AreaCode.areaCodeGlob.value(),
+      ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
+
+      final mediaEngine = rtcEngine.getMediaEngine();
+
+      try {
+        int trackId = 5;
+        await mediaEngine.destroyLoopbackAudioTrack(
+          trackId,
+        );
+      } catch (e) {
+        if (e is! AgoraRtcException) {
+          debugPrint(
+              '[MediaEngine.destroyLoopbackAudioTrack] error: ${e.toString()}');
+          rethrow;
+        }
+
+        if (e.code != -4) {
+          // Only not supported error supported.
+          rethrow;
+        }
+      }
+
+      await mediaEngine.release();
+      await rtcEngine.release();
+    },
+//  skip: !(),
+  );
+
+  testWidgets(
+    'MediaEngine.registerAudioTrackObserver',
+    (WidgetTester tester) async {
+      String engineAppId = const String.fromEnvironment('TEST_APP_ID',
+          defaultValue: '<YOUR_APP_ID>');
+
+      RtcEngine rtcEngine = createAgoraRtcEngine();
+      await rtcEngine.initialize(RtcEngineContext(
+        appId: engineAppId,
+        areaCode: AreaCode.areaCodeGlob.value(),
+      ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
+
+      final mediaEngine = rtcEngine.getMediaEngine();
+
+      try {
+        int id = 5;
+        AudioTrackObserver observer = AudioTrackObserver(
+          onAudioTrackVolumeIndication:
+              (int trackId, AudioTrackVolumeInfo volumeInfo) {},
+        );
+        mediaEngine.registerAudioTrackObserver(
+          id: id,
+          observer: observer,
+        );
+      } catch (e) {
+        if (e is! AgoraRtcException) {
+          debugPrint(
+              '[MediaEngine.registerAudioTrackObserver] error: ${e.toString()}');
+          rethrow;
+        }
+
+        if (e.code != -4) {
+          // Only not supported error supported.
+          rethrow;
+        }
+      }
+
+      await mediaEngine.release();
+      await rtcEngine.release();
+    },
+//  skip: !(),
+  );
+
+  testWidgets(
+    'MediaEngine.unregisterAudioTrackObserver',
+    (WidgetTester tester) async {
+      String engineAppId = const String.fromEnvironment('TEST_APP_ID',
+          defaultValue: '<YOUR_APP_ID>');
+
+      RtcEngine rtcEngine = createAgoraRtcEngine();
+      await rtcEngine.initialize(RtcEngineContext(
+        appId: engineAppId,
+        areaCode: AreaCode.areaCodeGlob.value(),
+      ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
+
+      final mediaEngine = rtcEngine.getMediaEngine();
+
+      try {
+        int id = 5;
+        AudioTrackObserver observer = AudioTrackObserver(
+          onAudioTrackVolumeIndication:
+              (int trackId, AudioTrackVolumeInfo volumeInfo) {},
+        );
+        mediaEngine.unregisterAudioTrackObserver(
+          id: id,
+          observer: observer,
+        );
+      } catch (e) {
+        if (e is! AgoraRtcException) {
+          debugPrint(
+              '[MediaEngine.unregisterAudioTrackObserver] error: ${e.toString()}');
           rethrow;
         }
 

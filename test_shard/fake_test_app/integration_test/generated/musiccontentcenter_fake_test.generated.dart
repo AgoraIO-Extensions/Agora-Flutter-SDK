@@ -165,6 +165,8 @@ void musicContentCenterSmokeTestCases() {
               String lyricUrl,
               PreloadState state,
               MusicContentCenterStateReason reason) {},
+          onExtResponse: (String requestId, String jsonOption, int httpCode,
+              String response) {},
         );
         musicContentCenter.registerEventHandler(
           eventHandler,
@@ -606,6 +608,45 @@ void musicContentCenterSmokeTestCases() {
         if (e is! AgoraRtcException) {
           debugPrint(
               '[MusicContentCenter.getInternalSongCode] error: ${e.toString()}');
+          rethrow;
+        }
+
+        if (e.code != -4) {
+          // Only not supported error supported.
+          rethrow;
+        }
+      }
+
+      await musicContentCenter.release();
+      await rtcEngine.release();
+    },
+//  skip: !(),
+  );
+
+  testWidgets(
+    'MusicContentCenter.sendExtRequest',
+    (WidgetTester tester) async {
+      String engineAppId = const String.fromEnvironment('TEST_APP_ID',
+          defaultValue: '<YOUR_APP_ID>');
+
+      RtcEngine rtcEngine = createAgoraRtcEngine();
+      await rtcEngine.initialize(RtcEngineContext(
+        appId: engineAppId,
+        areaCode: AreaCode.areaCodeGlob.value(),
+      ));
+      await rtcEngine.setParameters('{"rtc.enable_debug_log": true}');
+
+      final musicContentCenter = rtcEngine.getMusicContentCenter();
+
+      try {
+        String jsonOption = "hello";
+        await musicContentCenter.sendExtRequest(
+          jsonOption,
+        );
+      } catch (e) {
+        if (e is! AgoraRtcException) {
+          debugPrint(
+              '[MusicContentCenter.sendExtRequest] error: ${e.toString()}');
           rethrow;
         }
 

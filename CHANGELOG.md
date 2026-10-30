@@ -1,5 +1,17 @@
 # Changelog
 
+## 6.5.5-sp.4538
+
+### Features
+
+* Update Native 4.5.3.8 dependencies through Iris/Native Preview 4.5.3.8-build.2.
+
+### Bug Fixes
+
+* Decode loopback recording source JSON arrays into typed models.
+* Resolve Android Preview dependencies from Agora Maven.
+* Align Terra compiler SDKs and reject generation with C++ parser errors.
+
 ## [6.5.3-sp.453131](https://github.com/AgoraIO-Extensions/Agora-Flutter-SDK/compare/6.5.3-rc.453131...6.5.3-sp.453131) (2026-08-11)
 
 ### Features

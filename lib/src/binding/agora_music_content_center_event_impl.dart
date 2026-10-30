@@ -141,6 +141,29 @@ class MusicContentCenterEventHandlerWrapper implements EventLoopEventHandler {
         musicContentCenterEventHandler.onPreLoadEvent!(
             requestId, songCode, percent, lyricUrl, state, reason);
         return true;
+
+      case 'onExtResponse_bd3489b':
+        if (musicContentCenterEventHandler.onExtResponse == null) {
+          return true;
+        }
+        final jsonMap = jsonDecode(eventData);
+        MusicContentCenterEventHandlerOnExtResponseJson paramJson =
+            MusicContentCenterEventHandlerOnExtResponseJson.fromJson(jsonMap);
+        paramJson = paramJson.fillBuffers(buffers);
+        String? requestId = paramJson.requestId;
+        String? jsonOption = paramJson.jsonOption;
+        int? httpCode = paramJson.httpCode;
+        String? response = paramJson.response;
+        if (requestId == null ||
+            jsonOption == null ||
+            httpCode == null ||
+            response == null) {
+          return true;
+        }
+
+        musicContentCenterEventHandler.onExtResponse!(
+            requestId, jsonOption, httpCode, response);
+        return true;
     }
     return false;
   }

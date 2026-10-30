@@ -638,6 +638,30 @@ extension AudioTrackConfigBufferExt on AudioTrackConfig {
   }
 }
 
+extension AudioTrackVolumeInfoBufferExt on AudioTrackVolumeInfo {
+  AudioTrackVolumeInfo fillBuffers(List<Uint8List> bufferList) {
+    if (bufferList.isEmpty) return this;
+    return this;
+  }
+
+  List<Uint8List> collectBufferList() {
+    final bufferList = <Uint8List>[];
+    return bufferList;
+  }
+}
+
+extension LoopbackAudioTrackConfigBufferExt on LoopbackAudioTrackConfig {
+  LoopbackAudioTrackConfig fillBuffers(List<Uint8List> bufferList) {
+    if (bufferList.isEmpty) return this;
+    return this;
+  }
+
+  List<Uint8List> collectBufferList() {
+    final bufferList = <Uint8List>[];
+    return bufferList;
+  }
+}
+
 extension ScreenAudioParametersBufferExt on ScreenAudioParameters {
   ScreenAudioParameters fillBuffers(List<Uint8List> bufferList) {
     if (bufferList.isEmpty) return this;
@@ -1003,6 +1027,10 @@ extension ExternalVideoFrameBufferExt on ExternalVideoFrame {
     if (bufferList.length > 2) {
       alphaBuffer = bufferList[2];
     }
+    Uint8List? pixelBuffer;
+    if (bufferList.length > 3) {
+      pixelBuffer = bufferList[3];
+    }
     return ExternalVideoFrame(
         type: type,
         format: format,
@@ -1027,7 +1055,8 @@ extension ExternalVideoFrameBufferExt on ExternalVideoFrame {
         d3d11Texture2d: d3d11Texture2d,
         textureSliceIndex: textureSliceIndex,
         hdr10MetadataInfo: hdr10MetadataInfo,
-        colorSpace: colorSpace);
+        colorSpace: colorSpace,
+        pixelBuffer: pixelBuffer);
   }
 
   List<Uint8List> collectBufferList() {
@@ -1040,6 +1069,9 @@ extension ExternalVideoFrameBufferExt on ExternalVideoFrame {
     }
     if (alphaBuffer != null) {
       bufferList.add(alphaBuffer!);
+    }
+    if (pixelBuffer != null) {
+      bufferList.add(pixelBuffer!);
     }
     return bufferList;
   }
@@ -1606,6 +1638,31 @@ extension ScreenCaptureSourceInfoBufferExt on ScreenCaptureSourceInfo {
   }
 }
 
+extension LoopbackRecordingSourceOptionsBufferExt
+    on LoopbackRecordingSourceOptions {
+  LoopbackRecordingSourceOptions fillBuffers(List<Uint8List> bufferList) {
+    if (bufferList.isEmpty) return this;
+    return this;
+  }
+
+  List<Uint8List> collectBufferList() {
+    final bufferList = <Uint8List>[];
+    return bufferList;
+  }
+}
+
+extension LoopbackRecordingSourceInfoBufferExt on LoopbackRecordingSourceInfo {
+  LoopbackRecordingSourceInfo fillBuffers(List<Uint8List> bufferList) {
+    if (bufferList.isEmpty) return this;
+    return this;
+  }
+
+  List<Uint8List> collectBufferList() {
+    final bufferList = <Uint8List>[];
+    return bufferList;
+  }
+}
+
 extension AdvancedAudioOptionsBufferExt on AdvancedAudioOptions {
   AdvancedAudioOptions fillBuffers(List<Uint8List> bufferList) {
     if (bufferList.isEmpty) return this;
@@ -1620,6 +1677,18 @@ extension AdvancedAudioOptionsBufferExt on AdvancedAudioOptions {
 
 extension ImageTrackOptionsBufferExt on ImageTrackOptions {
   ImageTrackOptions fillBuffers(List<Uint8List> bufferList) {
+    if (bufferList.isEmpty) return this;
+    return this;
+  }
+
+  List<Uint8List> collectBufferList() {
+    final bufferList = <Uint8List>[];
+    return bufferList;
+  }
+}
+
+extension AudioTrackIdListBufferExt on AudioTrackIdList {
+  AudioTrackIdList fillBuffers(List<Uint8List> bufferList) {
     if (bufferList.isEmpty) return this;
     return this;
   }

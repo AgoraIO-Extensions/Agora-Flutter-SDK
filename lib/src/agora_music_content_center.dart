@@ -4,6 +4,31 @@ part 'agora_music_content_center.g.dart';
 
 /// @nodoc
 @JsonEnum(alwaysCreate: true)
+enum MusicContentCenterVendorId {
+  /// @nodoc
+  @JsonValue(1)
+  kMusicContentCenterVendorIdYjx,
+
+  /// @nodoc
+  @JsonValue(2)
+  kMusicContentCenterVendorIdTme,
+}
+
+/// @nodoc
+extension MusicContentCenterVendorIdExt on MusicContentCenterVendorId {
+  /// @nodoc
+  static MusicContentCenterVendorId fromValue(int value) {
+    return $enumDecode(_$MusicContentCenterVendorIdEnumMap, value);
+  }
+
+  /// @nodoc
+  int value() {
+    return _$MusicContentCenterVendorIdEnumMap[this]!;
+  }
+}
+
+/// @nodoc
+@JsonEnum(alwaysCreate: true)
 enum MusicPlayMode {
   /// @nodoc
   @JsonValue(0)
@@ -345,6 +370,7 @@ class MusicContentCenterEventHandler {
     this.onLyricResult,
     this.onSongSimpleInfoResult,
     this.onPreLoadEvent,
+    this.onExtResponse,
   });
 
   /// @nodoc
@@ -371,6 +397,11 @@ class MusicContentCenterEventHandler {
       String lyricUrl,
       PreloadState state,
       MusicContentCenterStateReason reason)? onPreLoadEvent;
+
+  /// @nodoc
+  final void Function(
+          String requestId, String jsonOption, int httpCode, String response)?
+      onExtResponse;
 }
 
 /// @nodoc
@@ -479,4 +510,7 @@ abstract class MusicContentCenter {
   /// @nodoc
   Future<int> getInternalSongCode(
       {required int songCode, required String jsonOption});
+
+  /// @nodoc
+  Future<String> sendExtRequest(String jsonOption);
 }

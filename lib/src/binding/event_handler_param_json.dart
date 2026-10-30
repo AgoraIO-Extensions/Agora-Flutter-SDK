@@ -7,6 +7,41 @@ import '/src/binding_forward_export.dart';
 part 'event_handler_param_json.g.dart';
 
 @JsonSerializable(explicitToJson: true, includeIfNull: false)
+class AudioTrackObserverOnAudioTrackVolumeIndicationJson
+    implements AgoraSerializable {
+  const AudioTrackObserverOnAudioTrackVolumeIndicationJson(
+      {this.trackId, this.volumeInfo});
+
+  @JsonKey(name: 'trackId')
+  final int? trackId;
+
+  @JsonKey(name: 'volumeInfo')
+  final AudioTrackVolumeInfo? volumeInfo;
+
+  factory AudioTrackObserverOnAudioTrackVolumeIndicationJson.fromJson(
+          Map<String, dynamic> json) =>
+      _$AudioTrackObserverOnAudioTrackVolumeIndicationJsonFromJson(json);
+
+  @override
+  Map<String, dynamic> toJson() =>
+      _$AudioTrackObserverOnAudioTrackVolumeIndicationJsonToJson(this);
+}
+
+extension AudioTrackObserverOnAudioTrackVolumeIndicationJsonBufferExt
+    on AudioTrackObserverOnAudioTrackVolumeIndicationJson {
+  AudioTrackObserverOnAudioTrackVolumeIndicationJson fillBuffers(
+      List<Uint8List> bufferList) {
+    if (bufferList.isEmpty) return this;
+    return this;
+  }
+
+  List<Uint8List> collectBufferList() {
+    final bufferList = <Uint8List>[];
+    return bufferList;
+  }
+}
+
+@JsonSerializable(explicitToJson: true, includeIfNull: false)
 class AudioEncodedFrameObserverOnRecordAudioEncodedFrameJson
     implements AgoraSerializable {
   const AudioEncodedFrameObserverOnRecordAudioEncodedFrameJson(
@@ -1510,6 +1545,47 @@ extension MusicContentCenterEventHandlerOnPreLoadEventJsonBufferExt
 }
 
 @JsonSerializable(explicitToJson: true, includeIfNull: false)
+class MusicContentCenterEventHandlerOnExtResponseJson
+    implements AgoraSerializable {
+  const MusicContentCenterEventHandlerOnExtResponseJson(
+      {this.requestId, this.jsonOption, this.httpCode, this.response});
+
+  @JsonKey(name: 'requestId')
+  final String? requestId;
+
+  @JsonKey(name: 'jsonOption')
+  final String? jsonOption;
+
+  @JsonKey(name: 'httpCode')
+  final int? httpCode;
+
+  @JsonKey(name: 'response')
+  final String? response;
+
+  factory MusicContentCenterEventHandlerOnExtResponseJson.fromJson(
+          Map<String, dynamic> json) =>
+      _$MusicContentCenterEventHandlerOnExtResponseJsonFromJson(json);
+
+  @override
+  Map<String, dynamic> toJson() =>
+      _$MusicContentCenterEventHandlerOnExtResponseJsonToJson(this);
+}
+
+extension MusicContentCenterEventHandlerOnExtResponseJsonBufferExt
+    on MusicContentCenterEventHandlerOnExtResponseJson {
+  MusicContentCenterEventHandlerOnExtResponseJson fillBuffers(
+      List<Uint8List> bufferList) {
+    if (bufferList.isEmpty) return this;
+    return this;
+  }
+
+  List<Uint8List> collectBufferList() {
+    final bufferList = <Uint8List>[];
+    return bufferList;
+  }
+}
+
+@JsonSerializable(explicitToJson: true, includeIfNull: false)
 class RtcEngineEventHandlerOnJoinChannelSuccessJson
     implements AgoraSerializable {
   const RtcEngineEventHandlerOnJoinChannelSuccessJson(
@@ -2197,6 +2273,41 @@ class RtcEngineEventHandlerOnFirstLocalVideoFrameJson
 extension RtcEngineEventHandlerOnFirstLocalVideoFrameJsonBufferExt
     on RtcEngineEventHandlerOnFirstLocalVideoFrameJson {
   RtcEngineEventHandlerOnFirstLocalVideoFrameJson fillBuffers(
+      List<Uint8List> bufferList) {
+    if (bufferList.isEmpty) return this;
+    return this;
+  }
+
+  List<Uint8List> collectBufferList() {
+    final bufferList = <Uint8List>[];
+    return bufferList;
+  }
+}
+
+@JsonSerializable(explicitToJson: true, includeIfNull: false)
+class RtcEngineEventHandlerOnVideoBlackFrameDetectedJson
+    implements AgoraSerializable {
+  const RtcEngineEventHandlerOnVideoBlackFrameDetectedJson(
+      {this.source, this.reason});
+
+  @JsonKey(name: 'source')
+  final VideoSourceType? source;
+
+  @JsonKey(name: 'reason')
+  final int? reason;
+
+  factory RtcEngineEventHandlerOnVideoBlackFrameDetectedJson.fromJson(
+          Map<String, dynamic> json) =>
+      _$RtcEngineEventHandlerOnVideoBlackFrameDetectedJsonFromJson(json);
+
+  @override
+  Map<String, dynamic> toJson() =>
+      _$RtcEngineEventHandlerOnVideoBlackFrameDetectedJsonToJson(this);
+}
+
+extension RtcEngineEventHandlerOnVideoBlackFrameDetectedJsonBufferExt
+    on RtcEngineEventHandlerOnVideoBlackFrameDetectedJson {
+  RtcEngineEventHandlerOnVideoBlackFrameDetectedJson fillBuffers(
       List<Uint8List> bufferList) {
     if (bufferList.isEmpty) return this;
     return this;

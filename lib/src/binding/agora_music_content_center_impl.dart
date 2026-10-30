@@ -552,4 +552,24 @@ class MusicContentCenterImpl implements MusicContentCenter {
         MusicContentCenterGetInternalSongCodeJson.fromJson(rm);
     return getInternalSongCodeJson.internalSongCode;
   }
+
+  @override
+  Future<String> sendExtRequest(String jsonOption) async {
+    final apiType =
+        '${isOverrideClassName ? className : 'MusicContentCenter'}_sendExtRequest_5651f34';
+    final requestParam = createParams({'jsonOption': jsonOption});
+    final callApiResult = await irisMethodChannel.invokeMethod(
+        IrisMethodCall(apiType, jsonEncode(requestParam), buffers: null));
+    if (callApiResult.irisReturnCode < 0) {
+      throw AgoraRtcException(code: callApiResult.irisReturnCode);
+    }
+    final rm = callApiResult.data;
+    final result = rm['result'];
+    if (result < 0) {
+      throw AgoraRtcException(code: result);
+    }
+    final sendExtRequestJson =
+        MusicContentCenterSendExtRequestJson.fromJson(rm);
+    return sendExtRequestJson.requestId;
+  }
 }
