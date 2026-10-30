@@ -28,7 +28,7 @@ on:
 
 jobs:
   gen_code:
-    runs-on: macos-latest
+    runs-on: macos-15
     steps:
       - name: Checkout target branch
         uses: actions/checkout@v4

@@ -1,7 +1,9 @@
 # Flutter binding generation
 
 Run `bash scripts/code_gen.sh rtc_<version>` from the SDK root. CI installs
-LLVM 15; local macOS generation also needs `llvm@15`. `build.sh` selects a
+LLVM 15 on macos-15 with Xcode 16.4; local macOS generation also needs
+`llvm@15` and a compatible C SDK. Xcode 26 C SDK headers are not supported by
+libclang 15. `build.sh` selects a
 matching compiler and C SDK headers for both Terra parser passes. Parser errors
 or a nonzero generator exit stop before serializers/test fixtures.
 
