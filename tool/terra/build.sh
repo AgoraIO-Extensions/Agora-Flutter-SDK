@@ -1,5 +1,6 @@
 #!/usr/bin/env bash
 set -e
+set -o pipefail
 set -x
 
 NEW_VERSION=$1
@@ -21,12 +22,24 @@ if [ -n "$NEW_VERSION" ]; then
 fi
 
 bash ${MY_PATH}/prepare.sh
+python3 "${MY_PATH}/stage_headers.py"
+source "${MY_PATH}/toolchain.sh"
 
 pushd ${MY_PATH}
 
-npm exec terra -- run \
-    --config ${TERRA_MAIN_FILE}  \
-    --output-dir=${PROJECT_ROOT}
+# Terra can return zero after libclang reports parse errors. Never generate
+# JSON serializers or test fixtures from a partially parsed header model.
+terra_log=$(mktemp)
+trap 'rm -f "$terra_log"; if [ -n "${terra_compiler_dir:-}" ]; then rm -f "$terra_compiler_dir/clang" "$terra_compiler_dir/clang++"; rmdir "$terra_compiler_dir"; fi' EXIT
+if ! npm exec terra -- run \
+    --config "${TERRA_MAIN_FILE}" \
+    --output-dir="${PROJECT_ROOT}" 2>&1 | tee "$terra_log"; then
+  exit 1
+fi
+if LC_ALL=C grep -Eq '\[libclang[^]]*\].*\[(error|fatal)\]|(^|[[:space:]])[1-9][0-9]* errors? generated\.' "$terra_log"; then
+  echo "Terra reported C++ parser errors; generated output must not be used." >&2
+  exit 1
+fi
 
 popd
 

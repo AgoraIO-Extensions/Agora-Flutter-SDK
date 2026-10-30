@@ -3984,7 +3984,9 @@ class RtcEngineImpl implements RtcEngine {
     }
     final rm = callApiResult.data;
     final result = rm['result'];
-    return result as List<ScreenCaptureSourceInfo>;
+    return (result as List)
+        .map((e) => ScreenCaptureSourceInfo.fromJson(e as Map<String, dynamic>))
+        .toList();
   }
 
   @override
@@ -4002,7 +4004,10 @@ class RtcEngineImpl implements RtcEngine {
     }
     final rm = callApiResult.data;
     final result = rm['result'];
-    return result as List<LoopbackRecordingSourceInfo>;
+    return (result as List)
+        .map((e) =>
+            LoopbackRecordingSourceInfo.fromJson(e as Map<String, dynamic>))
+        .toList();
   }
 
   @override
