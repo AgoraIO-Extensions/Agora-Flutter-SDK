@@ -53,20 +53,10 @@ on:
         description: 'The documentation version'
         value: ${{ jobs.attach_documentation.outputs.doc_version }}
 
-  # Also allow automatic trigger from PR merge with specific labels
-  pull_request:
-    types:
-      - closed
-
 jobs:
-  # Main release job - handles manual, callable, and automatic releases
+  # Publishing requires an explicit dispatch or workflow call.
   release:
-    if: ${{ github.event_name == 'workflow_dispatch' ||
-            github.event_name == 'workflow_call' ||
-            (github.event_name == 'pull_request' &&
-             github.event.pull_request.merged == true &&
-             ((github.event.pull_request.base.ref == 'main' && contains(github.event.pull_request.labels.*.name, 'ci:prepare_release')) ||
-              contains(github.event.pull_request.labels.*.name, 'ci:ready_release_special'))) }}
+    if: ${{ github.event_name == 'workflow_dispatch' || github.event_name == 'workflow_call' }}
     outputs:
       increment: ${{ steps.version_check.outputs.version }}
       release_type: ${{ steps.version_check.outputs.release_type }}
@@ -89,68 +79,42 @@ jobs:
         run: |
           set -eo pipefail
 
-          # Get dry-run mode
-          if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
-            DRY_RUN="${{ github.event.inputs.dry-run }}"
-            FORCE_PUBLISH="${{ github.event.inputs.force-publish-to-pub }}"
-          elif [ "${{ github.event_name }}" = "workflow_call" ]; then
-            DRY_RUN="${{ inputs.dry-run }}"
-            FORCE_PUBLISH="${{ inputs.force-publish-to-pub }}"
-          else
-            DRY_RUN="false" # PR triggers are always production mode
-            FORCE_PUBLISH="false"
+          # Both explicit entry points use the declared workflow inputs.
+          DRY_RUN="${{ inputs.dry-run }}"
+          FORCE_PUBLISH="${{ inputs.force-publish-to-pub }}"
+          RELEASE_VERSION="${{ inputs.increment }}"
+          if [ -z "$RELEASE_VERSION" ]; then
+            echo "::error::An explicit release version is required."
+            exit 1
           fi
 
           echo "Dry-run mode: $DRY_RUN"
           echo "Force publish mode: $FORCE_PUBLISH"
           echo "dry-run=$DRY_RUN" >> $GITHUB_OUTPUT
 
-          # Get version from inputs (for workflow_dispatch and workflow_call) or pubspec.yaml (for PR)
-          if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
-            RELEASE_VERSION="${{ github.event.inputs.increment }}"
-          elif [ "${{ github.event_name }}" = "workflow_call" ]; then
-            RELEASE_VERSION="${{ inputs.increment }}"
-          else
-            RELEASE_VERSION=$(grep 'version: ' pubspec.yaml | sed -e 's,.*: \(.*\),\1,')
-          fi
-
-          # Determine release type based on PR labels or version format
-          if [ "${{ github.event_name }}" = "pull_request" ]; then
-            if [ "${{ contains(github.event.pull_request.labels.*.name, 'ci:prepare_release') }}" = "true" ]; then
-              RELEASE_TYPE="standard"
+          # Only clean semantic versions (MAJOR.MINOR.PATCH) are considered standard
+          # Any version with suffix (pre-release, build metadata, etc.) is special
+          if [ "$FORCE_PUBLISH" = "true" ]; then
+            # Forced to publish: treat as standard
+            RELEASE_TYPE="standard"
+            # Still detect if it's a prerelease format for other informational purposes
+            if [[ $RELEASE_VERSION =~ ^[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
               IS_PRERELEASE="false"
-              echo "🚀 PR triggered standard release: $RELEASE_VERSION"
-            elif [ "${{ contains(github.event.pull_request.labels.*.name, 'ci:ready_release_special') }}" = "true" ]; then
-              RELEASE_TYPE="special"
-              IS_PRERELEASE="true"
-              echo "🔧 PR triggered special release: $RELEASE_VERSION"
-            fi
-          else
-            # Auto-detect release type based on version format for manual/callable triggers
-            # Only clean semantic versions (MAJOR.MINOR.PATCH) are considered standard
-            # Any version with suffix (pre-release, build metadata, etc.) is special
-            if [ "$FORCE_PUBLISH" = "true" ]; then
-              # Forced to publish: treat as standard
-              RELEASE_TYPE="standard"
-              # Still detect if it's a prerelease format for other informational purposes
-              if [[ $RELEASE_VERSION =~ ^[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
-                IS_PRERELEASE="false"
-              else
-                IS_PRERELEASE="true"
-              fi
-              echo "✅ Forced standard release: $RELEASE_VERSION"
-            elif [[ $RELEASE_VERSION =~ ^[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
-              # Clean semantic version: 6.5.0 (no suffix)
-              RELEASE_TYPE="standard"
-              IS_PRERELEASE="false"
-              echo "🚀 Detected standard release version: $RELEASE_VERSION"
             else
-              # Special version: any version with suffix
-              # Examples: 6.5.3-beta.1, 6.5.3-rc.2, 6.5.3-sp.452163, 6.5.3+build.123
-              RELEASE_TYPE="special"
               IS_PRERELEASE="true"
-              echo "🔧 Detected special release version: $RELEASE_VERSION"
             fi
+            echo "✅ Forced standard release: $RELEASE_VERSION"
+          elif [[ $RELEASE_VERSION =~ ^[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
+            # Clean semantic version: 6.5.0 (no suffix)
+            RELEASE_TYPE="standard"
+            IS_PRERELEASE="false"
+            echo "🚀 Detected standard release version: $RELEASE_VERSION"
+          else
+            # Special version: any version with suffix
+            # Examples: 6.5.3-beta.1, 6.5.3-rc.2, 6.5.3-sp.452163, 6.5.3+build.123
+            RELEASE_TYPE="special"
+            IS_PRERELEASE="true"
+            echo "🔧 Detected special release version: $RELEASE_VERSION"
           fi
 
           echo "Release version: $RELEASE_VERSION"
