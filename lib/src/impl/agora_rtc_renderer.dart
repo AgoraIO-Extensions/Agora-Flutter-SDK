@@ -71,12 +71,19 @@ mixin RtcRenderMixin<T extends StatefulWidget> on State<T> {
     methodChannel = MethodChannel('agora_rtc_ng/${viewType}_$viewId');
   }
 
+  /// [useAndroidHybridComposition] only affects Android. When `true` the platform view is
+  /// created with `PlatformViewsService.initSurfaceAndroidView`: Flutter keeps Texture Layer
+  /// Hybrid Composition (TLHC) unless the native view contains a SurfaceView, in which case it
+  /// uses Hybrid Composition and the SurfaceView stays a separate SurfaceFlinger layer (needed
+  /// for HDR). When `false` the view is an `AndroidView` (`initAndroidView`), which falls back
+  /// to Virtual Display for a SurfaceView.
   @protected
   Widget buildPlatformView({
     required String viewType,
     Map<String, Object?>? creationParams,
     PlatformViewCreatedCallback? onPlatformViewCreated,
     Set<Factory<OneSequenceGestureRecognizer>>? gestureRecognizers,
+    bool useAndroidHybridComposition = false,
   }) {
     // `kIsWeb` check needs put first, since `defaultTargetPlatform == TargetPlatform.android` or
     // `defaultTargetPlatform == TargetPlatform.iOS` is true in mobile web.
@@ -86,6 +93,41 @@ mixin RtcRenderMixin<T extends StatefulWidget> on State<T> {
         onPlatformViewCreated: _onPlatformViewCreated(
           viewType,
           onPlatformViewCreated,
+        ),
+      );
+    }
+
+    if (defaultTargetPlatform == TargetPlatform.android &&
+        useAndroidHybridComposition) {
+      return GestureDetector(
+        behavior: HitTestBehavior.opaque,
+        child: PlatformViewLink(
+          viewType: viewType,
+          surfaceFactory:
+              (BuildContext context, PlatformViewController controller) {
+            return AndroidViewSurface(
+              controller: controller as AndroidViewController,
+              hitTestBehavior: PlatformViewHitTestBehavior.transparent,
+              gestureRecognizers: gestureRecognizers ??
+                  const <Factory<OneSequenceGestureRecognizer>>{},
+            );
+          },
+          onCreatePlatformView: (PlatformViewCreationParams params) {
+            return PlatformViewsService.initSurfaceAndroidView(
+              id: params.id,
+              viewType: viewType,
+              // AndroidView takes the direction from the ambient Directionality; keep the same.
+              layoutDirection:
+                  Directionality.maybeOf(context) ?? TextDirection.ltr,
+              creationParams: creationParams,
+              creationParamsCodec: const StandardMessageCodec(),
+              onFocus: () => params.onFocusChanged(true),
+            )
+              ..addOnPlatformViewCreatedListener(params.onPlatformViewCreated)
+              ..addOnPlatformViewCreatedListener(
+                  _onPlatformViewCreated(viewType, onPlatformViewCreated))
+              ..create();
+          },
         ),
       );
     }
