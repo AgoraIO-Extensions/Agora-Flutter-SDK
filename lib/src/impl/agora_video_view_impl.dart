@@ -81,6 +81,10 @@ class _AgoraRtcRenderPlatformViewState extends State<AgoraRtcRenderPlatformView>
   int _nativeViewIntPtr = 0;
   late String _viewType;
 
+  /// Read once like [_viewType]: switching the embedding mode of a live platform view would
+  /// create a new native view while the old one is still bound to the controller.
+  late bool _useAndroidHybridComposition;
+
   VoidCallback? _listener;
 
   bool _isDisposed = false;
@@ -102,6 +106,9 @@ class _AgoraRtcRenderPlatformViewState extends State<AgoraRtcRenderPlatformView>
     } else {
       throw ArgumentError('PlatformView render is not supported on desktop');
     }
+    _useAndroidHybridComposition = !kIsWeb &&
+        defaultTargetPlatform == TargetPlatform.android &&
+        widget.controller.useAndroidHybridComposition;
 
     widget.controller.initializeRender();
   }
@@ -143,6 +150,7 @@ class _AgoraRtcRenderPlatformViewState extends State<AgoraRtcRenderPlatformView>
   Widget build(BuildContext context) {
     return buildPlatformView(
       viewType: _viewType,
+      useAndroidHybridComposition: _useAndroidHybridComposition,
       onPlatformViewCreated: (int id) {
         _platformViewId = id;
         _setupVideo();
@@ -234,6 +242,10 @@ class _VideoViewControllerInternal with VideoViewControllerBaseMixin {
 
   @override
   bool get useAndroidSurfaceView => _controller.useAndroidSurfaceView;
+
+  @override
+  bool get useAndroidHybridComposition =>
+      _controller.useAndroidHybridComposition;
 
   @override
   bool get useFlutterTexture => _controller.useFlutterTexture;

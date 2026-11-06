@@ -57,6 +57,8 @@ extension VideoViewControllerBaseExt on VideoViewControllerBase {
         connection?.localUid == other.connection?.localUid;
     isSame = isSame && shouldUseFlutterTexture == other.shouldUseFlutterTexture;
     isSame = isSame && useAndroidSurfaceView == other.useAndroidSurfaceView;
+    isSame = isSame &&
+        useAndroidHybridComposition == other.useAndroidHybridComposition;
     return isSame;
   }
 
