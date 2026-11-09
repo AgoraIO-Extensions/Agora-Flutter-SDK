@@ -58,7 +58,7 @@ on:
 
 jobs:
   update_deps:
-    runs-on: macos-14
+    runs-on: macos-latest
     steps:
       - name: Checkout target branch
         uses: actions/checkout@v4
