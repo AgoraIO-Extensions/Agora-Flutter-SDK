@@ -64,25 +64,28 @@ void TextureRender::OnVideoFrameReceived(const void *videoFrame,
         performance_monitor_->recordFrameReceived();
     }
 
-    std::lock_guard<std::mutex> lock_guard(buffer_mutex_);
-
-    if (!is_dirty_)
+    bool size_changed = false;
+    flutter::EncodableMap size_args;
     {
-        const agora::media::base::VideoFrame *video_frame = static_cast<const agora::media::base::VideoFrame *>(videoFrame);
+        std::lock_guard<std::mutex> lock_guard(buffer_mutex_);
 
-        const uint32_t bytes_per_pixel = 4;
-        const uint32_t pixels_total = video_frame->width * video_frame->height;
-        const uint32_t data_size = pixels_total * bytes_per_pixel;
-
-        if (buffer_.size() != data_size)
+        if (!is_dirty_)
         {
-            buffer_.resize(data_size);
+            const agora::media::base::VideoFrame *video_frame = static_cast<const agora::media::base::VideoFrame *>(videoFrame);
 
-            flutter::EncodableMap args = {
-                {EncodableValue("width"), EncodableValue(video_frame->width)},
-                {EncodableValue("height"), EncodableValue(video_frame->height)}};
-            method_channel_->InvokeMethod("onSizeChanged", std::make_unique<EncodableValue>(EncodableValue(args)));
-        }
+            const uint32_t bytes_per_pixel = 4;
+            const uint32_t pixels_total = video_frame->width * video_frame->height;
+            const uint32_t data_size = pixels_total * bytes_per_pixel;
+
+            if (buffer_.size() != data_size)
+            {
+                buffer_.resize(data_size);
+
+                size_args = {
+                    {EncodableValue("width"), EncodableValue(video_frame->width)},
+                    {EncodableValue("height"), EncodableValue(video_frame->height)}};
+                size_changed = true;
+            }
 
         // Record frame rendered interval before copying data
         if (performance_monitor_) {
@@ -96,10 +99,16 @@ void TextureRender::OnVideoFrameReceived(const void *videoFrame,
         frame_height_ = video_frame->height;
 
         is_dirty_ = true;
+        }
     }
+
     if (TextureRegistered() && is_dirty_)
     {
         registrar_->MarkTextureFrameAvailable(texture_id_);
+    }
+
+    if (size_changed && method_channel_) {
+        method_channel_->InvokeMethod("onSizeChanged", std::make_unique<EncodableValue>(EncodableValue(size_args)));
     }
 }
 

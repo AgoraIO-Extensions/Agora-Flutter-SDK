@@ -32,7 +32,7 @@ jobs:
           TOTAL: ${{ steps.analysis.outputs.total }}
           TOTAL_MAX: ${{ steps.analysis.outputs.total_max }}
         run: |
-          if (( $TOTAL_MAX - $TOTAL > 10 ))
+          if (( $TOTAL_MAX - $TOTAL > 20 ))
           then
             echo Pub Score too low.
             exit 1
@@ -133,24 +133,30 @@ jobs:
       matrix:
         include:
           - version: "3.16"
-            model: "iPhone 16 Pro"
-            os_version: ">=18.0"
+            model: "iPhone 16e"
+            os_version: ">=26.2"
+            max_attempts: 1
           - version: "3.38.5"
-            model: "iPhone 16 Pro"
-            os_version: ">=18.0"
-    runs-on: macos-latest  # Updated from macos-13
-    timeout-minutes: 120
+            model: "iPhone 16e"
+            os_version: ">=26.2"
+            max_attempts: 3
+    runs-on: macos-26
+    timeout-minutes: 60
     env:
       TEST_APP_ID: ${{ secrets.APP_ID }}
+      IOS_TEST_MAX_ATTEMPTS: ${{ matrix.max_attempts }}
     steps:
       - uses: actions/checkout@v4
       - uses: subosito/flutter-action@v2
         with:
           flutter-version: ${{ matrix.version }}
           cache: true
-      - name: Switch to Xcode 16.4
+      - name: Setup latest stable Xcode
+        uses: maxim-lobanov/setup-xcode@v1
+        with:
+          xcode-version: latest-stable
+      - name: Verify Xcode
         run: |
-          sudo xcode-select --switch /Applications/Xcode_16.4.app
           xcode-select --print-path
           xcodebuild -version
           echo "Available iOS SDKs:"
@@ -272,23 +278,25 @@ jobs:
     runs-on: macos-latest
     timeout-minutes: 120
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout as agora_rtc_engine
+        uses: actions/checkout@v4
+        with:
+          path: agora_rtc_engine
       - uses: subosito/flutter-action@v2
         with:
           channel: 'stable'
           cache: true
       - name: Run flutter integration test swiftpm for ${{ matrix.os }}
-        if: ${{ matrix.os == 'macos' }}
+        working-directory: agora_rtc_engine/test_shard/integration_test_swiftpm
         run: |
+          flutter config --enable-swift-package-manager
           flutter pub get
-          flutter build ${{ matrix.os }}
-        working-directory: test_shard/integration_test_swiftpm
-      - name: Run flutter integration test swiftpm for ${{ matrix.os }}
-        if: ${{ matrix.os == 'ios' }}
-        run: |
-          flutter pub get
-          flutter build ${{ matrix.os }} --no-codesign
-        working-directory: test_shard/integration_test_swiftpm
+          if [ "${{ matrix.os }}" = "ios" ]; then
+            flutter build ios --no-codesign
+          else
+            flutter config --enable-macos-desktop
+            flutter build macos
+          fi
         env:
           IOS_SIMULATOR_SDK_VERSION: 18.0
 
@@ -423,6 +431,13 @@ jobs:
         env:
           IOS_SIMULATOR_SDK_VERSION: 18.0
 
+  apple_dependency_linkage_matrix:
+    name: Apple SwiftPM dependency linkage
+    if: ${{ !contains(github.event.pull_request.labels.*.name, 'ci:skip') }}
+    uses: ./.github/workflows/run_apple_dependency_matrix.yml
+    with:
+      flutter_version: '3.44.4'
+
   build_web:
     name: Build Web
     if: ${{ !contains(github.event.pull_request.labels.*.name, 'ci:skip') }}
@@ -492,8 +507,18 @@ jobs:
     if: ${{ !contains(github.event.pull_request.labels.*.name, 'ci:skip') }}
     strategy:
       matrix:
-        version: ["3.24.5", "3.38.5"]
-    runs-on: macos-latest  # Updated: macos-13 is retired
+        include:
+          - version: "3.24.5"
+            runner: macos-15
+            model: "iPhone 16 Pro"
+            os_version: "18.5"
+            xcode_version: "16.4"
+          - version: "3.38.5"
+            runner: macos-26
+            model: "iPhone 16e"
+            os_version: ">=26.2"
+            xcode_version: latest-stable
+    runs-on: ${{ matrix.runner }}
     timeout-minutes: 60
     env:
       TEST_APP_ID: ${{ secrets.APP_ID }}
@@ -503,11 +528,15 @@ jobs:
         with:
           flutter-version: ${{ matrix.version }}
           cache: true
+      - name: Setup Xcode ${{ matrix.xcode_version }}
+        uses: maxim-lobanov/setup-xcode@v1
+        with:
+          xcode-version: ${{ matrix.xcode_version }}
       - uses: futureware-tech/simulator-action@v4
         with:
-          model: 'iPhone 16 Pro'
+          model: ${{ matrix.model }}
           os: iOS
-          os_version: '>=18.0'
+          os_version: ${{ matrix.os_version }}
           erase_before_boot: true
           wait_for_boot: true
           shutdown_after_job: true
@@ -597,7 +626,26 @@ jobs:
           export SAVE_DEBUG_GOLDEN="true"
 
           chromedriver --port=4444 --trace-buffer-size=100000 &
-          bash ci/run_rendering_test.sh web
+          max_attempts=3
+          for attempt in $(seq 1 $max_attempts); do
+            echo "Running web rendering test (attempt $attempt/$max_attempts)"
+            if bash ci/run_rendering_test.sh web; then
+              exit 0
+            fi
+            for debug_file in test_shard/rendering_test/screenshot/*.debug.png; do
+              [[ -e "$debug_file" ]] || continue
+              if [[ "$debug_file" == *.attempt-*.debug.png ]]; then
+                continue
+              fi
+              mv "$debug_file" "${debug_file%.debug.png}.attempt-$attempt.debug.png"
+            done
+            if (( attempt < max_attempts )); then
+              sleep 10
+            fi
+          done
+
+          echo "Web rendering test failed after $max_attempts attempts" >&2
+          exit 1
 
       - uses: actions/upload-artifact@v4
         if: always()

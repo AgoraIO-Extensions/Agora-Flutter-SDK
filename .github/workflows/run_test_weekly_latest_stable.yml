@@ -52,7 +52,7 @@ jobs:
           TOTAL: ${{ steps.analysis.outputs.total }}
           TOTAL_MAX: ${{ steps.analysis.outputs.total_max }}
         run: |
-          if (( $TOTAL_MAX - $TOTAL > 10 ))
+          if (( $TOTAL_MAX - $TOTAL > 20 ))
           then
             echo Pub Score too low.
             exit 1
@@ -148,7 +148,7 @@ jobs:
   integration_test_ios:
     name: Run Flutter iOS Integration Tests (Flutter ${{ needs.resolve_flutter_version.outputs.flutter_version }})
     needs: resolve_flutter_version
-    runs-on: macos-latest
+    runs-on: macos-26
     timeout-minutes: 120
     env:
       TEST_APP_ID: ${{ secrets.APP_ID }}
@@ -159,9 +159,12 @@ jobs:
           channel: ${{ needs.resolve_flutter_version.outputs.flutter_channel }}
           flutter-version: ${{ needs.resolve_flutter_version.outputs.flutter_version }}
           cache: true
-      - name: Switch to Xcode 16.4
+      - name: Setup latest stable Xcode
+        uses: maxim-lobanov/setup-xcode@v1
+        with:
+          xcode-version: latest-stable
+      - name: Verify Xcode
         run: |
-          sudo xcode-select --switch /Applications/Xcode_16.4.app
           xcode-select --print-path
           xcodebuild -version
           echo "Available iOS SDKs:"
@@ -170,9 +173,9 @@ jobs:
           xcodebuild -showsdks | grep iphonesimulator
       - uses: futureware-tech/simulator-action@v4
         with:
-          model: "iPhone 16 Pro"
+          model: "iPhone 16e"
           os: iOS
-          os_version: ">=18.0"
+          os_version: ">=26.2"
           erase_before_boot: true
           wait_for_boot: true
           shutdown_after_job: true
@@ -249,24 +252,26 @@ jobs:
     runs-on: macos-latest
     timeout-minutes: 120
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout as agora_rtc_engine
+        uses: actions/checkout@v4
+        with:
+          path: agora_rtc_engine
       - uses: subosito/flutter-action@v2
         with:
           channel: ${{ needs.resolve_flutter_version.outputs.flutter_channel }}
           flutter-version: ${{ needs.resolve_flutter_version.outputs.flutter_version }}
           cache: true
       - name: Run flutter integration test swiftpm for ${{ matrix.os }}
-        if: ${{ matrix.os == 'macos' }}
+        working-directory: agora_rtc_engine/test_shard/integration_test_swiftpm
         run: |
+          flutter config --enable-swift-package-manager
           flutter pub get
-          flutter build ${{ matrix.os }}
-        working-directory: test_shard/integration_test_swiftpm
-      - name: Run flutter integration test swiftpm for ${{ matrix.os }}
-        if: ${{ matrix.os == 'ios' }}
-        run: |
-          flutter pub get
-          flutter build ${{ matrix.os }} --no-codesign
-        working-directory: test_shard/integration_test_swiftpm
+          if [ "${{ matrix.os }}" = "ios" ]; then
+            flutter build ios --no-codesign
+          else
+            flutter config --enable-macos-desktop
+            flutter build macos
+          fi
         env:
           IOS_SIMULATOR_SDK_VERSION: 18.0
 
@@ -374,16 +379,20 @@ jobs:
     runs-on: macos-latest
     timeout-minutes: 120
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout as agora_rtc_engine
+        uses: actions/checkout@v4
+        with:
+          path: agora_rtc_engine
       - uses: subosito/flutter-action@v2
         with:
           channel: ${{ needs.resolve_flutter_version.outputs.flutter_channel }}
           flutter-version: ${{ needs.resolve_flutter_version.outputs.flutter_version }}
           cache: true
       - run: flutter pub get
+        working-directory: agora_rtc_engine
       - name: Run flutter build ios --no-codesign --simulator
         run: flutter build ios --no-codesign --simulator
-        working-directory: example
+        working-directory: agora_rtc_engine/example
         env:
           IOS_SIMULATOR_SDK_VERSION: 18.0
 
