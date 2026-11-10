@@ -81,8 +81,6 @@ class _AgoraRtcRenderPlatformViewState extends State<AgoraRtcRenderPlatformView>
   int _nativeViewIntPtr = 0;
   late String _viewType;
 
-  /// Read once like [_viewType]: switching the embedding mode of a live platform view would
-  /// create a new native view while the old one is still bound to the controller.
   late bool _useAndroidSurfaceViewHdr;
 
   VoidCallback? _listener;
@@ -96,8 +94,6 @@ class _AgoraRtcRenderPlatformViewState extends State<AgoraRtcRenderPlatformView>
     if (kIsWeb) {
       _viewType = _viewTypeAgoraSurfaceView;
     } else if (defaultTargetPlatform == TargetPlatform.android) {
-      // `useAndroidSurfaceViewHdr` takes priority over `useAndroidSurfaceView`: HDR needs a
-      // SurfaceView, so it counts as `useAndroidSurfaceView = true`.
       if (widget.controller.useAndroidSurfaceView ||
           widget.controller.useAndroidSurfaceViewHdr) {
         _viewType = _viewTypeAgoraSurfaceView;
@@ -109,9 +105,7 @@ class _AgoraRtcRenderPlatformViewState extends State<AgoraRtcRenderPlatformView>
     } else {
       throw ArgumentError('PlatformView render is not supported on desktop');
     }
-    _useAndroidSurfaceViewHdr = !kIsWeb &&
-        defaultTargetPlatform == TargetPlatform.android &&
-        widget.controller.useAndroidSurfaceViewHdr;
+    _useAndroidSurfaceViewHdr = widget.controller.useAndroidSurfaceViewHdr;
 
     widget.controller.initializeRender();
   }

@@ -27,25 +27,7 @@ abstract class VideoViewControllerBase {
   /// Android SurfaceView is only available on Android platform. Whether to use Android SurfaceView to render video: true : Use Android SurfaceView to render video. false : Do not use Android SurfaceView to render video.
   bool get useAndroidSurfaceView;
 
-  /// Android only. Whether to render HDR (PQ / HLG) video with an Android SurfaceView in Hybrid Composition.
-  ///
-  /// When `true`, this option takes priority over [useAndroidSurfaceView]: the video is rendered
-  /// with an Android SurfaceView as if [useAndroidSurfaceView] were `true`. The platform view is
-  /// created through `PlatformViewLink` and `PlatformViewsService.initSurfaceAndroidView`, so
-  /// Flutter uses Hybrid Composition and the SurfaceView stays a separate SurfaceFlinger layer.
-  /// This is required to display HDR video on Android.
-  ///
-  /// When `false` (default), the view is created with `AndroidView` (`initAndroidView`) as before.
-  /// An Android SurfaceView then falls back to Virtual Display and HDR video is shown as SDR.
-  ///
-  /// Hybrid Composition composes Flutter frames on the platform thread and copies each frame
-  /// before Android 10, which can lower the Flutter frame rate. Flutter transforms, clips and
-  /// opacity may not apply to a SurfaceView, so only enable this option for the views that need HDR.
-  ///
-  /// It does not affect [useFlutterTexture]: when [useFlutterTexture] is `true` the video is
-  /// rendered with Flutter Texture and this option is ignored. It is also ignored on platforms
-  /// other than Android. The value is read when the `AgoraVideoView` is created; to change it,
-  /// create a new `AgoraVideoView`.
+  /// Android SurfaceView HDR is only available on Android platform. Whether to render HDR (PQ / HLG) video with an Android SurfaceView in Hybrid Composition: true : Render video with an Android SurfaceView in Hybrid Composition. This takes priority over useAndroidSurfaceView and treats it as true. The Flutter UI performance may be lower. false : (Default) Do not change how the video is rendered. It is ignored when useFlutterTexture is true. It is read when the AgoraVideoView is created; to change it, create a new AgoraVideoView.
   bool get useAndroidSurfaceViewHdr;
 
   @internal

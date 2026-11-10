@@ -71,11 +71,6 @@ mixin RtcRenderMixin<T extends StatefulWidget> on State<T> {
     methodChannel = MethodChannel('agora_rtc_ng/${viewType}_$viewId');
   }
 
-  /// [useAndroidSurfaceViewHdr] only affects Android. When `true` the platform view is
-  /// created with `PlatformViewsService.initSurfaceAndroidView`: the native view is a SurfaceView,
-  /// so Flutter uses Hybrid Composition and the SurfaceView stays a separate SurfaceFlinger layer
-  /// (needed for HDR). When `false` the view is an `AndroidView` (`initAndroidView`), which falls
-  /// back to Virtual Display for a SurfaceView.
   @protected
   Widget buildPlatformView({
     required String viewType,
@@ -115,7 +110,6 @@ mixin RtcRenderMixin<T extends StatefulWidget> on State<T> {
             return PlatformViewsService.initSurfaceAndroidView(
               id: params.id,
               viewType: viewType,
-              // AndroidView takes the direction from the ambient Directionality; keep the same.
               layoutDirection:
                   Directionality.maybeOf(context) ?? TextDirection.ltr,
               creationParams: creationParams,

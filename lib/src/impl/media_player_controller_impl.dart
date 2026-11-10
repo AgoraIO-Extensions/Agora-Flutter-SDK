@@ -15,8 +15,6 @@ import 'package:flutter/foundation.dart';
 class MediaPlayerControllerImpl
     with VideoViewControllerBaseMixin
     implements MediaPlayerController, MediaPlayer {
-  // `useAndroidSurfaceViewHdr` is a named parameter so that existing subclasses that call
-  // this constructor positionally (for example the rendering test harness) keep compiling.
   MediaPlayerControllerImpl(this._rtcEngine, this._canvas, this._connection,
       this._useFlutterTexture, this._useAndroidSurfaceView,
       {bool useAndroidSurfaceViewHdr = false})
