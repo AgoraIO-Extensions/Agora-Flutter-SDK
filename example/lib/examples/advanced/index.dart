@@ -3,7 +3,6 @@ import 'dart:io';
 import 'package:agora_rtc_engine_example/examples/advanced/music_player/music_player.dart';
 import 'package:agora_rtc_engine_example/examples/advanced/picture_in_picture/picture_in_picture.dart';
 import 'package:agora_rtc_engine_example/examples/advanced/push_video_frame/push_video_frame.dart';
-import 'package:agora_rtc_engine_example/examples/advanced/rtc_hdr_render/rtc_hdr_render.dart';
 import 'package:agora_rtc_engine_example/examples/advanced/rtmp_streaming/rtmp_streaming.dart';
 import 'package:agora_rtc_engine_example/examples/advanced/screen_sharing/screen_sharing.dart';
 import 'package:agora_rtc_engine_example/examples/advanced/send_multi_camera_stream/send_multi_camera_stream.dart';
@@ -69,8 +68,6 @@ final advanced = [
       'widget': const EnableVirtualBackground()
     },
   if (!kIsWeb) {'name': 'MediaPlayer', 'widget': const MediaPlayer()},
-  if (!kIsWeb && (Platform.isAndroid || Platform.isIOS))
-    {'name': 'RTCHDRRender', 'widget': const RTCHDRRender()},
   if (!kIsWeb)
     {'name': 'SendMultiVideoStream', 'widget': const SendMultiVideoStream()},
   if (!kIsWeb) {'name': 'TakeSnapshot', 'widget': const TakeSnapshot()},
