@@ -37,9 +37,10 @@ class _State extends State<MediaPlayer> {
 
   bool isJoined = false;
 
-  // Android only. HDR video needs both switches on. Toggling recreates the player.
+  // Android only. HDR video needs `useAndroidSurfaceViewHdr`, which also counts as
+  // `useAndroidSurfaceView`. Toggling recreates the player.
   bool _useAndroidSurfaceView = false;
-  bool _useAndroidHybridComposition = false;
+  bool _useAndroidSurfaceViewHdr = false;
 
   @override
   void initState() {
@@ -104,7 +105,7 @@ class _State extends State<MediaPlayer> {
         rtcEngine: _engine,
         canvas: const VideoCanvas(uid: 0),
         useAndroidSurfaceView: _useAndroidSurfaceView,
-        useAndroidHybridComposition: _useAndroidHybridComposition);
+        useAndroidSurfaceViewHdr: _useAndroidSurfaceViewHdr);
     await _mediaPlayerController.initialize();
     _mediaPlayerController.registerPlayerSourceObserver(
       MediaPlayerSourceObserver(
@@ -168,7 +169,7 @@ class _State extends State<MediaPlayer> {
   }
 
   Widget _androidViewSwitch(
-      String title, bool value, ValueChanged<bool> onChanged) {
+      String title, bool value, ValueChanged<bool>? onChanged) {
     return Row(children: [
       Expanded(child: Text(title, style: const TextStyle(fontSize: 12))),
       Switch(value: value, onChanged: _isUrlOpened ? null : onChanged),
@@ -220,14 +221,19 @@ class _State extends State<MediaPlayer> {
           mainAxisSize: MainAxisSize.min,
           children: [
             if (!kIsWeb && defaultTargetPlatform == TargetPlatform.android) ...[
-              _androidViewSwitch('Android SurfaceView', _useAndroidSurfaceView,
-                  (changed) {
-                _useAndroidSurfaceView = changed;
-                _recreateMediaPlayer();
-              }),
-              _androidViewSwitch('Android Hybrid Composition (HDR)',
-                  _useAndroidHybridComposition, (changed) {
-                _useAndroidHybridComposition = changed;
+              // HDR takes priority and implies a SurfaceView, so this switch is locked on.
+              _androidViewSwitch(
+                  'Android SurfaceView',
+                  _useAndroidSurfaceView || _useAndroidSurfaceViewHdr,
+                  _useAndroidSurfaceViewHdr
+                      ? null
+                      : (changed) {
+                          _useAndroidSurfaceView = changed;
+                          _recreateMediaPlayer();
+                        }),
+              _androidViewSwitch('Android SurfaceView HDR (Hybrid Composition)',
+                  _useAndroidSurfaceViewHdr, (changed) {
+                _useAndroidSurfaceViewHdr = changed;
                 _recreateMediaPlayer();
               }),
             ],

@@ -1,5 +1,4 @@
 import 'dart:async';
-
 import 'package:agora_rtc_engine/agora_rtc_engine.dart';
 import 'package:agora_rtc_engine/src/impl/video_view_controller_impl.dart';
 import 'package:flutter/services.dart';
@@ -13,9 +12,7 @@ class _FakeRtcEngine extends Fake implements RtcEngine {}
 
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
-
   late List<Map<Object?, Object?>> createCalls;
-
   setUp(() {
     createCalls = <Map<Object?, Object?>>[];
     TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger
@@ -28,12 +25,10 @@ void main() {
       return Future<Object?>.value();
     });
   });
-
   tearDown(() {
     TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger
         .setMockMethodCallHandler(SystemChannels.platform_views, null);
   });
-
   Future<void> pumpView(
       WidgetTester tester, VideoViewControllerBase controller) async {
     await tester.pumpWidget(Directionality(
@@ -49,31 +44,39 @@ void main() {
 
   VideoViewController local({
     bool surfaceView = false,
-    bool hybrid = false,
+    bool hdr = false,
+    bool flutterTexture = false,
   }) =>
       VideoViewController(
         rtcEngine: _FakeRtcEngine(),
         canvas: const VideoCanvas(uid: 0),
+        useFlutterTexture: flutterTexture,
         useAndroidSurfaceView: surfaceView,
-        useAndroidHybridComposition: hybrid,
+        useAndroidSurfaceViewHdr: hdr,
       );
-
   final android = TargetPlatformVariant.only(TargetPlatform.android);
-
   group('Android', () {
-    testWidgets('default keeps AndroidView (initAndroidView)', (tester) async {
+    testWidgets('default uses AndroidView with a TextureView', (tester) async {
+      await pumpView(tester, local());
+      expect(find.byType(AndroidView), findsOneWidget);
+      expect(find.byType(PlatformViewLink), findsNothing);
+      expect(createCalls.single['viewType'], 'AgoraTextureView');
+      expect(createCalls.single.containsKey('hybrid'), isFalse);
+      expect(createCalls.single.containsKey('hybridFallback'), isFalse);
+    }, variant: android);
+    testWidgets(
+        'useAndroidSurfaceView only keeps AndroidView (initAndroidView)',
+        (tester) async {
       await pumpView(tester, local(surfaceView: true));
       expect(find.byType(AndroidView), findsOneWidget);
       expect(find.byType(PlatformViewLink), findsNothing);
-      expect(createCalls, hasLength(1));
       expect(createCalls.single['viewType'], 'AgoraSurfaceView');
       expect(createCalls.single.containsKey('hybrid'), isFalse);
       expect(createCalls.single.containsKey('hybridFallback'), isFalse);
     }, variant: android);
-
-    testWidgets('hybrid + SurfaceView uses initSurfaceAndroidView',
+    testWidgets('HDR + SurfaceView uses initSurfaceAndroidView',
         (tester) async {
-      await pumpView(tester, local(surfaceView: true, hybrid: true));
+      await pumpView(tester, local(surfaceView: true, hdr: true));
       expect(find.byType(PlatformViewLink), findsOneWidget);
       expect(find.byType(AndroidView), findsNothing);
       expect(createCalls, hasLength(1));
@@ -82,66 +85,72 @@ void main() {
       expect(createCalls.single['hybridFallback'], isTrue);
       expect(createCalls.single.containsKey('hybrid'), isFalse);
     }, variant: android);
-
-    testWidgets('hybrid + TextureView also uses initSurfaceAndroidView',
+    testWidgets('HDR alone is treated as useAndroidSurfaceView = true',
         (tester) async {
-      await pumpView(tester, local(hybrid: true));
+      await pumpView(tester, local(hdr: true));
       expect(find.byType(PlatformViewLink), findsOneWidget);
-      expect(createCalls.single['viewType'], 'AgoraTextureView');
+      expect(createCalls.single['viewType'], 'AgoraSurfaceView');
       expect(createCalls.single['hybridFallback'], isTrue);
     }, variant: android);
-
-    testWidgets('MediaPlayerController forwards the flag', (tester) async {
+    test('does not affect useFlutterTexture', () {
+      // AgoraVideoView returns the Flutter Texture renderer as soon as `useFlutterTexture` is
+      // set, before the platform view state (the only reader of the HDR option) exists. Mounting
+      // the Texture renderer needs a real RtcEngineImpl, so the decision is asserted here.
+      final controller = local(flutterTexture: true, hdr: true);
+      expect(controller.useFlutterTexture, isTrue);
+      expect(controller.shouldUseFlutterTexture, isTrue);
+      expect(controller.useAndroidSurfaceViewHdr, isTrue);
+      // The option is stored as given and does not turn Texture rendering off.
+      expect(local(flutterTexture: true).shouldUseFlutterTexture, isTrue);
+    });
+    testWidgets('MediaPlayerController forwards the option', (tester) async {
       final controller = MediaPlayerController(
         rtcEngine: _FakeRtcEngine(),
         canvas: const VideoCanvas(uid: 0),
-        useAndroidSurfaceView: true,
-        useAndroidHybridComposition: true,
+        useAndroidSurfaceViewHdr: true,
       );
-      expect(controller.useAndroidHybridComposition, isTrue);
+      expect(controller.useAndroidSurfaceViewHdr, isTrue);
       await pumpView(tester, controller);
       expect(find.byType(PlatformViewLink), findsOneWidget);
+      expect(createCalls.single['viewType'], 'AgoraSurfaceView');
       expect(createCalls.single['hybridFallback'], isTrue);
     }, variant: android);
   });
-
-  testWidgets('iOS ignores the flag', (tester) async {
-    await pumpView(tester, local(surfaceView: true, hybrid: true));
+  testWidgets('iOS ignores the option', (tester) async {
+    await pumpView(tester, local(surfaceView: true, hdr: true));
     expect(find.byType(UiKitView), findsOneWidget);
     expect(find.byType(PlatformViewLink), findsNothing);
   }, variant: TargetPlatformVariant.only(TargetPlatform.iOS));
-
-  test('isSame distinguishes the flag', () {
+  test('isSame distinguishes the option', () {
     final engine = _FakeRtcEngine();
-    VideoViewController make(bool hybrid) => VideoViewController(
+    VideoViewController make(bool hdr) => VideoViewController(
           rtcEngine: engine,
           canvas: const VideoCanvas(uid: 0),
           useAndroidSurfaceView: true,
-          useAndroidHybridComposition: hybrid,
+          useAndroidSurfaceViewHdr: hdr,
         );
     expect(make(false).isSame(make(false)), isTrue);
     expect(make(false).isSame(make(true)), isFalse);
   });
-
   test('defaults to false on every controller', () {
     final engine = _FakeRtcEngine();
     expect(
         VideoViewController(
                 rtcEngine: engine, canvas: const VideoCanvas(uid: 0))
-            .useAndroidHybridComposition,
+            .useAndroidSurfaceViewHdr,
         isFalse);
     expect(
         VideoViewController.remote(
           rtcEngine: engine,
           canvas: const VideoCanvas(uid: 1),
           connection: const RtcConnection(channelId: 'c'),
-        ).useAndroidHybridComposition,
+        ).useAndroidSurfaceViewHdr,
         isFalse);
     expect(
         MediaPlayerController(
           rtcEngine: engine,
           canvas: const VideoCanvas(uid: 0),
-        ).useAndroidHybridComposition,
+        ).useAndroidSurfaceViewHdr,
         isFalse);
   });
 }

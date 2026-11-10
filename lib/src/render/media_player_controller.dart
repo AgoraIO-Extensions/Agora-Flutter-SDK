@@ -15,14 +15,14 @@ abstract class MediaPlayerController
           RtcConnection? connection,
           bool useFlutterTexture = false,
           bool useAndroidSurfaceView = false,
-          bool useAndroidHybridComposition = false}) =>
+          bool useAndroidSurfaceViewHdr = false}) =>
       MediaPlayerControllerImpl(
         rtcEngine,
         canvas,
         connection,
         useFlutterTexture,
         useAndroidSurfaceView,
-        useAndroidHybridComposition: useAndroidHybridComposition,
+        useAndroidSurfaceViewHdr: useAndroidSurfaceViewHdr,
       );
 
   /// Creates a MediaPlayerController.

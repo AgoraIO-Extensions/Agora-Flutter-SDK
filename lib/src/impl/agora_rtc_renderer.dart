@@ -71,19 +71,18 @@ mixin RtcRenderMixin<T extends StatefulWidget> on State<T> {
     methodChannel = MethodChannel('agora_rtc_ng/${viewType}_$viewId');
   }
 
-  /// [useAndroidHybridComposition] only affects Android. When `true` the platform view is
-  /// created with `PlatformViewsService.initSurfaceAndroidView`: Flutter keeps Texture Layer
-  /// Hybrid Composition (TLHC) unless the native view contains a SurfaceView, in which case it
-  /// uses Hybrid Composition and the SurfaceView stays a separate SurfaceFlinger layer (needed
-  /// for HDR). When `false` the view is an `AndroidView` (`initAndroidView`), which falls back
-  /// to Virtual Display for a SurfaceView.
+  /// [useAndroidSurfaceViewHdr] only affects Android. When `true` the platform view is
+  /// created with `PlatformViewsService.initSurfaceAndroidView`: the native view is a SurfaceView,
+  /// so Flutter uses Hybrid Composition and the SurfaceView stays a separate SurfaceFlinger layer
+  /// (needed for HDR). When `false` the view is an `AndroidView` (`initAndroidView`), which falls
+  /// back to Virtual Display for a SurfaceView.
   @protected
   Widget buildPlatformView({
     required String viewType,
     Map<String, Object?>? creationParams,
     PlatformViewCreatedCallback? onPlatformViewCreated,
     Set<Factory<OneSequenceGestureRecognizer>>? gestureRecognizers,
-    bool useAndroidHybridComposition = false,
+    bool useAndroidSurfaceViewHdr = false,
   }) {
     // `kIsWeb` check needs put first, since `defaultTargetPlatform == TargetPlatform.android` or
     // `defaultTargetPlatform == TargetPlatform.iOS` is true in mobile web.
@@ -98,7 +97,7 @@ mixin RtcRenderMixin<T extends StatefulWidget> on State<T> {
     }
 
     if (defaultTargetPlatform == TargetPlatform.android &&
-        useAndroidHybridComposition) {
+        useAndroidSurfaceViewHdr) {
       return GestureDetector(
         behavior: HitTestBehavior.opaque,
         child: PlatformViewLink(

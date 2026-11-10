@@ -15,9 +15,9 @@ import 'package:flutter/material.dart';
 ///    automatically when the device reports it is supported.
 ///
 /// On Android, HDR video only reaches the display when the view uses a
-/// SurfaceView in Hybrid Composition, so this example exposes both switches.
-/// Turn on "Android SurfaceView" and "Android Hybrid Composition (HDR)" before
-/// joining to see the HDR effect.
+/// SurfaceView in Hybrid Composition. Turn on "Android SurfaceView HDR (Hybrid
+/// Composition)" before joining to see the HDR effect; it takes priority over
+/// "Android SurfaceView" and counts as turning it on.
 class RTCHDRRender extends StatefulWidget {
   /// Construct the [RTCHDRRender]
   const RTCHDRRender({Key? key}) : super(key: key);
@@ -41,9 +41,10 @@ class _State extends State<RTCHDRRender> {
   bool _hdrCaptureSupported = false;
   bool _hdrCaptureEnabled = false;
 
-  // Android only. HDR video needs both switches on. Both are locked after join.
+  // Android only. HDR video needs `useAndroidSurfaceViewHdr`, which also counts as
+  // `useAndroidSurfaceView`. Both are locked after join.
   bool _useAndroidSurfaceView = false;
-  bool _useAndroidHybridComposition = false;
+  bool _useAndroidSurfaceViewHdr = false;
 
   late final RtcEngineEventHandler _rtcEngineEventHandler;
 
@@ -161,7 +162,7 @@ class _State extends State<RTCHDRRender> {
       canvas: VideoCanvas(uid: uid, renderMode: RenderModeType.renderModeFit),
       connection: connection,
       useAndroidSurfaceView: _useAndroidSurfaceView,
-      useAndroidHybridComposition: _useAndroidHybridComposition,
+      useAndroidSurfaceViewHdr: _useAndroidSurfaceViewHdr,
     );
     setState(() {});
   }
@@ -210,7 +211,7 @@ class _State extends State<RTCHDRRender> {
   }
 
   Widget _androidViewSwitch(
-      String title, bool value, ValueChanged<bool> onChanged) {
+      String title, bool value, ValueChanged<bool>? onChanged) {
     return Row(children: [
       Expanded(child: Text(title, style: const TextStyle(fontSize: 12))),
       Switch(value: value, onChanged: isJoined ? null : onChanged),
@@ -223,7 +224,7 @@ class _State extends State<RTCHDRRender> {
         rtcEngine: _engine,
         canvas: const VideoCanvas(uid: 0),
         useAndroidSurfaceView: _useAndroidSurfaceView,
-        useAndroidHybridComposition: _useAndroidHybridComposition,
+        useAndroidSurfaceViewHdr: _useAndroidSurfaceViewHdr,
       ),
       onAgoraVideoViewCreated: (viewId) {
         _engine.startPreview();
@@ -329,16 +330,21 @@ class _State extends State<RTCHDRRender> {
               ),
             if (!kIsWeb && defaultTargetPlatform == TargetPlatform.android) ...[
               const SizedBox(height: 8),
-              _androidViewSwitch('Android SurfaceView', _useAndroidSurfaceView,
-                  (changed) {
+              // HDR takes priority and implies a SurfaceView, so this switch is locked on.
+              _androidViewSwitch(
+                  'Android SurfaceView',
+                  _useAndroidSurfaceView || _useAndroidSurfaceViewHdr,
+                  _useAndroidSurfaceViewHdr
+                      ? null
+                      : (changed) {
+                          setState(() {
+                            _useAndroidSurfaceView = changed;
+                          });
+                        }),
+              _androidViewSwitch('Android SurfaceView HDR (Hybrid Composition)',
+                  _useAndroidSurfaceViewHdr, (changed) {
                 setState(() {
-                  _useAndroidSurfaceView = changed;
-                });
-              }),
-              _androidViewSwitch('Android Hybrid Composition (HDR)',
-                  _useAndroidHybridComposition, (changed) {
-                setState(() {
-                  _useAndroidHybridComposition = changed;
+                  _useAndroidSurfaceViewHdr = changed;
                 });
               }),
             ],

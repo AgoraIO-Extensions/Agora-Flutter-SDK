@@ -27,26 +27,26 @@ abstract class VideoViewControllerBase {
   /// Android SurfaceView is only available on Android platform. Whether to use Android SurfaceView to render video: true : Use Android SurfaceView to render video. false : Do not use Android SurfaceView to render video.
   bool get useAndroidSurfaceView;
 
-  /// Android only. Whether to embed the Android platform view with Hybrid Composition.
+  /// Android only. Whether to render HDR (PQ / HLG) video with an Android SurfaceView in Hybrid Composition.
   ///
-  /// When `true`, the view is created through `PlatformViewLink` and
-  /// `PlatformViewsService.initSurfaceAndroidView`. Flutter then uses Hybrid Composition
-  /// when the native view contains a SurfaceView, so the video stays a separate
-  /// SurfaceFlinger layer. This is required to display HDR video on Android: set both
-  /// [useAndroidSurfaceView] and [useAndroidHybridComposition] to `true`.
+  /// When `true`, this option takes priority over [useAndroidSurfaceView]: the video is rendered
+  /// with an Android SurfaceView as if [useAndroidSurfaceView] were `true`. The platform view is
+  /// created through `PlatformViewLink` and `PlatformViewsService.initSurfaceAndroidView`, so
+  /// Flutter uses Hybrid Composition and the SurfaceView stays a separate SurfaceFlinger layer.
+  /// This is required to display HDR video on Android.
   ///
-  /// With the default TextureView ([useAndroidSurfaceView] is `false`) Flutter keeps
-  /// Texture Layer Hybrid Composition, so this option has no visible effect.
+  /// When `false` (default), the view is created with `AndroidView` (`initAndroidView`) as before.
+  /// An Android SurfaceView then falls back to Virtual Display and HDR video is shown as SDR.
   ///
-  /// When `false` (default), the view is created with `AndroidView`. A SurfaceView then
-  /// falls back to Virtual Display and HDR video is shown as SDR.
+  /// Hybrid Composition composes Flutter frames on the platform thread and copies each frame
+  /// before Android 10, which can lower the Flutter frame rate. Flutter transforms, clips and
+  /// opacity may not apply to a SurfaceView, so only enable this option for the views that need HDR.
   ///
-  /// Hybrid Composition composes Flutter frames on the platform thread and copies each
-  /// frame before Android 10, which can lower the Flutter frame rate. Flutter transforms,
-  /// clips and opacity may not apply to a SurfaceView. Ignored when [useFlutterTexture] is
-  /// `true` and on platforms other than Android. The value is read when the
-  /// `AgoraVideoView` is created; to change it, create a new `AgoraVideoView`.
-  bool get useAndroidHybridComposition;
+  /// It does not affect [useFlutterTexture]: when [useFlutterTexture] is `true` the video is
+  /// rendered with Flutter Texture and this option is ignored. It is also ignored on platforms
+  /// other than Android. The value is read when the `AgoraVideoView` is created; to change it,
+  /// create a new `AgoraVideoView`.
+  bool get useAndroidSurfaceViewHdr;
 
   @internal
   int getTextureId();
@@ -96,7 +96,7 @@ class VideoViewController
       required this.canvas,
       this.useFlutterTexture = false,
       this.useAndroidSurfaceView = false,
-      this.useAndroidHybridComposition = false})
+      this.useAndroidSurfaceViewHdr = false})
       : connection = const RtcConnection();
 
   /// @nodoc
@@ -106,7 +106,7 @@ class VideoViewController
       required this.connection,
       this.useFlutterTexture = false,
       this.useAndroidSurfaceView = false,
-      this.useAndroidHybridComposition = false})
+      this.useAndroidSurfaceViewHdr = false})
       : assert(canvas.uid != null && canvas.uid != 0,
             'Remote uid can not be null or 0'),
         assert(connection.channelId != null);
@@ -127,7 +127,7 @@ class VideoViewController
   final bool useAndroidSurfaceView;
 
   @override
-  final bool useAndroidHybridComposition;
+  final bool useAndroidSurfaceViewHdr;
 
   @protected
   @override

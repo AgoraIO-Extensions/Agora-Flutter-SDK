@@ -15,12 +15,12 @@ import 'package:flutter/foundation.dart';
 class MediaPlayerControllerImpl
     with VideoViewControllerBaseMixin
     implements MediaPlayerController, MediaPlayer {
-  // `useAndroidHybridComposition` is a named parameter so that existing subclasses that call
+  // `useAndroidSurfaceViewHdr` is a named parameter so that existing subclasses that call
   // this constructor positionally (for example the rendering test harness) keep compiling.
   MediaPlayerControllerImpl(this._rtcEngine, this._canvas, this._connection,
       this._useFlutterTexture, this._useAndroidSurfaceView,
-      {bool useAndroidHybridComposition = false})
-      : _useAndroidHybridComposition = useAndroidHybridComposition;
+      {bool useAndroidSurfaceViewHdr = false})
+      : _useAndroidSurfaceViewHdr = useAndroidSurfaceViewHdr;
 
   MediaPlayer? _mediaPlayer;
 
@@ -53,10 +53,10 @@ class MediaPlayerControllerImpl
   @override
   bool get useAndroidSurfaceView => _useAndroidSurfaceView;
 
-  final bool _useAndroidHybridComposition;
+  final bool _useAndroidSurfaceViewHdr;
 
   @override
-  bool get useAndroidHybridComposition => _useAndroidHybridComposition;
+  bool get useAndroidSurfaceViewHdr => _useAndroidSurfaceViewHdr;
 
   /// MediaPlayer does not support render mode and always Fit the video by default
   @override

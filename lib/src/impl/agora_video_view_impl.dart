@@ -83,7 +83,7 @@ class _AgoraRtcRenderPlatformViewState extends State<AgoraRtcRenderPlatformView>
 
   /// Read once like [_viewType]: switching the embedding mode of a live platform view would
   /// create a new native view while the old one is still bound to the controller.
-  late bool _useAndroidHybridComposition;
+  late bool _useAndroidSurfaceViewHdr;
 
   VoidCallback? _listener;
 
@@ -96,7 +96,10 @@ class _AgoraRtcRenderPlatformViewState extends State<AgoraRtcRenderPlatformView>
     if (kIsWeb) {
       _viewType = _viewTypeAgoraSurfaceView;
     } else if (defaultTargetPlatform == TargetPlatform.android) {
-      if (widget.controller.useAndroidSurfaceView) {
+      // `useAndroidSurfaceViewHdr` takes priority over `useAndroidSurfaceView`: HDR needs a
+      // SurfaceView, so it counts as `useAndroidSurfaceView = true`.
+      if (widget.controller.useAndroidSurfaceView ||
+          widget.controller.useAndroidSurfaceViewHdr) {
         _viewType = _viewTypeAgoraSurfaceView;
       } else {
         _viewType = _viewTypeAgoraTextureView;
@@ -106,9 +109,9 @@ class _AgoraRtcRenderPlatformViewState extends State<AgoraRtcRenderPlatformView>
     } else {
       throw ArgumentError('PlatformView render is not supported on desktop');
     }
-    _useAndroidHybridComposition = !kIsWeb &&
+    _useAndroidSurfaceViewHdr = !kIsWeb &&
         defaultTargetPlatform == TargetPlatform.android &&
-        widget.controller.useAndroidHybridComposition;
+        widget.controller.useAndroidSurfaceViewHdr;
 
     widget.controller.initializeRender();
   }
@@ -150,7 +153,7 @@ class _AgoraRtcRenderPlatformViewState extends State<AgoraRtcRenderPlatformView>
   Widget build(BuildContext context) {
     return buildPlatformView(
       viewType: _viewType,
-      useAndroidHybridComposition: _useAndroidHybridComposition,
+      useAndroidSurfaceViewHdr: _useAndroidSurfaceViewHdr,
       onPlatformViewCreated: (int id) {
         _platformViewId = id;
         _setupVideo();
@@ -244,8 +247,7 @@ class _VideoViewControllerInternal with VideoViewControllerBaseMixin {
   bool get useAndroidSurfaceView => _controller.useAndroidSurfaceView;
 
   @override
-  bool get useAndroidHybridComposition =>
-      _controller.useAndroidHybridComposition;
+  bool get useAndroidSurfaceViewHdr => _controller.useAndroidSurfaceViewHdr;
 
   @override
   bool get useFlutterTexture => _controller.useFlutterTexture;
