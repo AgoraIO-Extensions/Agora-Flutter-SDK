@@ -9,6 +9,26 @@ import 'package:image_compare/image_compare.dart';
 import 'package:path/path.dart' as path;
 
 Future<void> matchScreenShotDesktop(
+  RtcEngineEx rtcEngine,
+  String screenshotName, {
+  Duration timeout = const Duration(seconds: 15),
+}) async {
+  // The first decoded frame can arrive before the texture is composited.
+  // Poll the actual golden check instead of sleeping for every test case.
+  final stopwatch = Stopwatch()..start();
+  do {
+    if (await _matchesScreenShotDesktop(rtcEngine, screenshotName)
+        .timeout(timeout - stopwatch.elapsed)) {
+      return;
+    }
+    await Future<void>.delayed(const Duration(milliseconds: 100));
+  } while (stopwatch.elapsed < timeout);
+
+  fail('Screenshot $screenshotName did not match within $timeout '
+      '(the rendering_test window may be missing).');
+}
+
+Future<bool> _matchesScreenShotDesktop(
     RtcEngineEx rtcEngine, String screenshotName) async {
   String updateGolden =
       const String.fromEnvironment('UPDATE_GOLDEN', defaultValue: 'false');
@@ -71,27 +91,33 @@ Future<void> matchScreenShotDesktop(
           debugGoldenFile.writeAsBytesSync(imageBytes);
         }
 
-        final expectedImage = decodePng(imageFile.readAsBytesSync());
-
-        double tolerance = 0.3;
-
-        final result = await compareImages(
-          src1: expectedImage,
-          src2: dstImage,
-          algorithm: PixelMatching(tolerance: tolerance),
-        );
-        debugPrint('compareImages result: $result');
-
-        if (Platform.isMacOS) {
-          // TODO(littlegnal): Need more tolerance after upgrade to the native sdk 4.2.0, see if
-          // we can reduce the result later.
-          expect(result < 0.07, isTrue);
-        } else {
-          expect(result < 0.01, isTrue);
-        }
+        final expectedImage = decodePng(imageFile.readAsBytesSync())!;
+        return matchesDesktopGolden(expectedImage, dstImage);
       }
 
-      return;
+      return true;
     }
   }
+  return false;
+}
+
+Future<bool> matchesDesktopGolden(img.Image expected, img.Image actual) async {
+  final result = await compareImages(
+    src1: expected,
+    src2: actual,
+    algorithm: PixelMatching(tolerance: 0.3),
+  );
+  debugPrint('compareImages result: $result');
+  if (result >= (Platform.isMacOS ? 0.07 : 0.01)) {
+    return false;
+  }
+
+  // The 100x100 video occupies only 6.25% of the 400x400 golden. A blank
+  // white window can pass the macOS 7% tolerance; also require video content.
+  final videoResult = await compareImages(
+    src1: copyCrop(expected, 150, 150, 100, 100),
+    src2: copyCrop(actual, 150, 150, 100, 100),
+    algorithm: PixelMatching(tolerance: 0.3),
+  );
+  return videoResult < 0.5;
 }

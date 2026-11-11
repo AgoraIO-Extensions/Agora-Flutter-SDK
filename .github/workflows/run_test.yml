@@ -564,6 +564,11 @@ jobs:
         with:
           flutter-version: ${{ matrix.version }}
           cache: true
+      - name: Cache CocoaPods downloads
+        uses: actions/cache@v4
+        with:
+          path: ~/Library/Caches/CocoaPods
+          key: macos-rendering-pods-${{ runner.arch }}-${{ hashFiles('macos/*.podspec', 'pubspec.yaml', 'test_shard/rendering_test/pubspec.yaml', 'test_shard/rendering_test/macos/Podfile') }}
       - run: flutter config --enable-macos-desktop
       - name: Run macos rendering test
         run: |

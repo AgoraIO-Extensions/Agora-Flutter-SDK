@@ -4,6 +4,7 @@ import 'package:agora_rtc_engine/agora_rtc_engine.dart';
 import 'package:flutter/material.dart';
 
 import 'agora_video_view_render_test.dart';
+import 'common/widget_tester_ext.dart';
 
 class RemoteVideoView extends StatefulWidget {
   const RemoteVideoView({
@@ -28,7 +29,13 @@ class RemoteVideoView extends StatefulWidget {
   State<RemoteVideoView> createState() => _RemoteVideoViewState();
 }
 
-class _RemoteVideoViewState extends State<RemoteVideoView> {
+class _RemoteVideoViewState extends State<RemoteVideoView>
+    implements AsyncTestDisposal {
+  final Completer<void> _disposed = Completer<void>();
+
+  @override
+  Future<void> get disposed => _disposed.future;
+
   late final RtcEngineEventHandler rtcEngineEventHandler;
   late final RtcEngineEx rtcEngine;
   late final MediaPlayerController mediaPlayerController;
@@ -167,7 +174,7 @@ class _RemoteVideoViewState extends State<RemoteVideoView> {
 
   @override
   void dispose() {
-    _dispose();
+    _disposed.complete(_dispose());
     super.dispose();
   }
 
