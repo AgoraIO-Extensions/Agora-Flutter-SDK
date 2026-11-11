@@ -60,7 +60,7 @@ void main() {
 
     bool completed = false;
     final waiting = waitDisposed(tester, binding).then((_) => completed = true);
-    await tester.pump();
+    await Future<void>.delayed(const Duration(milliseconds: 100));
     expect(completed, isFalse);
 
     cleanup.complete();
@@ -72,11 +72,15 @@ void main() {
     final cleanup = Completer<void>();
     await tester.pumpWidget(_DisposableView(cleanup.future));
 
-    final waiting =
-        expectLater(waitDisposed(tester, binding), throwsA(isA<StateError>()));
-    await tester.pump();
+    Object? error;
+    final waiting = waitDisposed(tester, binding).then<void>((_) {},
+        onError: (Object caught) {
+      error = caught;
+    });
+    await Future<void>.delayed(const Duration(milliseconds: 100));
     cleanup.completeError(StateError('cleanup failed'));
     await waiting;
+    expect(error, isA<StateError>());
   });
 
   test('a missing screenshot window fails instead of passing silently',
