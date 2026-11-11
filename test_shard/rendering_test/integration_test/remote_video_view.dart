@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:math';
 
 import 'package:agora_rtc_engine/agora_rtc_engine.dart';
 import 'package:flutter/material.dart';
@@ -45,7 +46,9 @@ class _RemoteVideoViewState extends State<RemoteVideoView>
 
   static const int _myUid = 12345;
   static const int _mpkRemoteUid = 67890;
-  static const String _channelId = 'rendering_test';
+  // Parallel platforms/Flutter versions must not join the same channel/UIDs.
+  final String _channelId = 'rendering_test_'
+      '${DateTime.now().microsecondsSinceEpoch}_${Random().nextInt(0x7fffffff)}';
 
   @override
   void initState() {
