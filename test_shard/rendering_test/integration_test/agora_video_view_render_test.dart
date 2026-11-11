@@ -986,10 +986,10 @@ void main() {
               },
             ));
 
-            await tester.pumpAndSettle();
+            await tester.pump();
 
             await onFrameCompleter.future.timeout(const Duration(seconds: 15));
-            await tester.pumpAndSettle();
+            await tester.pump();
 
             await matchScreenShotDesktop(rtcEngine,
                 'macos.agora_video_view_render.texture.local.donot_handle_rendermode');
@@ -1018,10 +1018,10 @@ void main() {
               },
             ));
 
-            await tester.pumpAndSettle();
+            await tester.pump();
 
             await onFrameCompleter.future.timeout(const Duration(seconds: 15));
-            await tester.pumpAndSettle();
+            await tester.pump();
 
             await matchScreenShotDesktop(rtcEngine,
                 'macos.agora_video_view_render.texture.local.with_default_rendermode');
@@ -1051,10 +1051,10 @@ void main() {
               },
             ));
 
-            await tester.pumpAndSettle();
+            await tester.pump();
 
             await onFrameCompleter.future.timeout(const Duration(seconds: 15));
-            await tester.pumpAndSettle();
+            await tester.pump();
 
             await matchScreenShotDesktop(rtcEngine,
                 'macos.agora_video_view_render.texture.local.with_rendermodehidden');
@@ -1084,10 +1084,10 @@ void main() {
               },
             ));
 
-            await tester.pumpAndSettle();
+            await tester.pump();
 
             await onFrameCompleter.future.timeout(const Duration(seconds: 15));
-            await tester.pumpAndSettle();
+            await tester.pump();
 
             await matchScreenShotDesktop(rtcEngine,
                 'macos.agora_video_view_render.texture.local.with_rendermodefit');
@@ -1117,10 +1117,10 @@ void main() {
               },
             ));
 
-            await tester.pumpAndSettle();
+            await tester.pump();
 
             await onFrameCompleter.future.timeout(const Duration(seconds: 15));
-            await tester.pumpAndSettle();
+            await tester.pump();
 
             await matchScreenShotDesktop(rtcEngine,
                 'macos.agora_video_view_render.texture.local.with_rendermodeadaptive');
@@ -1150,10 +1150,10 @@ void main() {
               },
             ));
 
-            await tester.pumpAndSettle();
+            await tester.pump();
 
             await onFrameCompleter.future.timeout(const Duration(seconds: 15));
-            await tester.pumpAndSettle();
+            await tester.pump();
 
             await matchScreenShotDesktop(rtcEngine,
                 'macos.agora_video_view_render.texture.local.with_default_rendermode.with_videomirrormodedisabled');
@@ -1183,10 +1183,10 @@ void main() {
               },
             ));
 
-            await tester.pumpAndSettle();
+            await tester.pump();
 
             await onFrameCompleter.future.timeout(const Duration(seconds: 15));
-            await tester.pumpAndSettle();
+            await tester.pump();
 
             await matchScreenShotDesktop(rtcEngine,
                 'macos.agora_video_view_render.texture.remote.donot_handle_rendermode');
@@ -1214,10 +1214,10 @@ void main() {
               },
             ));
 
-            await tester.pumpAndSettle();
+            await tester.pump();
 
             await onFrameCompleter.future.timeout(const Duration(seconds: 15));
-            await tester.pumpAndSettle();
+            await tester.pump();
 
             await matchScreenShotDesktop(rtcEngine,
                 'macos.agora_video_view_render.texture.remote.with_default_rendermode');
@@ -1246,10 +1246,10 @@ void main() {
               },
             ));
 
-            await tester.pumpAndSettle();
+            await tester.pump();
 
             await onFrameCompleter.future.timeout(const Duration(seconds: 15));
-            await tester.pumpAndSettle();
+            await tester.pump();
 
             await matchScreenShotDesktop(rtcEngine,
                 'macos.agora_video_view_render.texture.remote.with_rendermodehidden');
@@ -1278,10 +1278,10 @@ void main() {
               },
             ));
 
-            await tester.pumpAndSettle();
+            await tester.pump();
 
             await onFrameCompleter.future.timeout(const Duration(seconds: 15));
-            await tester.pumpAndSettle();
+            await tester.pump();
 
             await matchScreenShotDesktop(rtcEngine,
                 'macos.agora_video_view_render.texture.remote.with_rendermodefit');
@@ -1310,10 +1310,10 @@ void main() {
               },
             ));
 
-            await tester.pumpAndSettle();
+            await tester.pump();
 
             await onFrameCompleter.future.timeout(const Duration(seconds: 15));
-            await tester.pumpAndSettle();
+            await tester.pump();
 
             await matchScreenShotDesktop(rtcEngine,
                 'macos.agora_video_view_render.texture.remote.with_rendermodeadaptive');
@@ -1342,10 +1342,10 @@ void main() {
               },
             ));
 
-            await tester.pumpAndSettle();
+            await tester.pump();
 
             await onFrameCompleter.future.timeout(const Duration(seconds: 15));
-            await tester.pumpAndSettle();
+            await tester.pump();
 
             await matchScreenShotDesktop(rtcEngine,
                 'macos.agora_video_view_render.texture.remote.with_default_rendermodede.with_videoMirrorModeEnabled');
@@ -1383,10 +1383,10 @@ void main() {
               },
             ));
 
-            await tester.pumpAndSettle();
+            await tester.pump();
 
             await onFrameCompleter.future.timeout(const Duration(seconds: 15));
-            await tester.pumpAndSettle();
+            await tester.pump();
 
             await matchScreenShotDesktop(rtcEngine,
                 'windows.agora_video_view_render.texture.local.donot_handle_rendermode');
@@ -1415,10 +1415,10 @@ void main() {
               },
             ));
 
-            await tester.pumpAndSettle();
+            await tester.pump();
 
             await onFrameCompleter.future.timeout(const Duration(seconds: 15));
-            await tester.pumpAndSettle();
+            await tester.pump();
 
             await matchScreenShotDesktop(rtcEngine,
                 'windows.agora_video_view_render.texture.local.with_default_rendermode');
@@ -1448,10 +1448,10 @@ void main() {
               },
             ));
 
-            await tester.pumpAndSettle();
+            await tester.pump();
 
             await onFrameCompleter.future.timeout(const Duration(seconds: 15));
-            await tester.pumpAndSettle();
+            await tester.pump();
 
             await matchScreenShotDesktop(rtcEngine,
                 'windows.agora_video_view_render.texture.local.with_rendermodehidden');
@@ -1481,10 +1481,10 @@ void main() {
               },
             ));
 
-            await tester.pumpAndSettle();
+            await tester.pump();
 
             await onFrameCompleter.future.timeout(const Duration(seconds: 15));
-            await tester.pumpAndSettle();
+            await tester.pump();
 
             await matchScreenShotDesktop(rtcEngine,
                 'windows.agora_video_view_render.texture.local.with_rendermodefit');
@@ -1514,10 +1514,10 @@ void main() {
               },
             ));
 
-            await tester.pumpAndSettle();
+            await tester.pump();
 
             await onFrameCompleter.future.timeout(const Duration(seconds: 15));
-            await tester.pumpAndSettle();
+            await tester.pump();
 
             await matchScreenShotDesktop(rtcEngine,
                 'windows.agora_video_view_render.texture.local.with_rendermodeadaptive');
@@ -1547,10 +1547,10 @@ void main() {
               },
             ));
 
-            await tester.pumpAndSettle();
+            await tester.pump();
 
             await onFrameCompleter.future.timeout(const Duration(seconds: 15));
-            await tester.pumpAndSettle();
+            await tester.pump();
 
             await matchScreenShotDesktop(rtcEngine,
                 'windows.agora_video_view_render.texture.local.with_default_rendermode.with_videomirrormodedisabled');
@@ -1581,10 +1581,10 @@ void main() {
               },
             ));
 
-            await tester.pumpAndSettle();
+            await tester.pump();
 
             await onFrameCompleter.future.timeout(const Duration(seconds: 15));
-            await tester.pumpAndSettle();
+            await tester.pump();
 
             await matchScreenShotDesktop(rtcEngine,
                 'windows.agora_video_view_render.texture.remote.donot_handle_rendermode');
@@ -1612,10 +1612,10 @@ void main() {
               },
             ));
 
-            await tester.pumpAndSettle();
+            await tester.pump();
 
             await onFrameCompleter.future.timeout(const Duration(seconds: 15));
-            await tester.pumpAndSettle();
+            await tester.pump();
 
             await matchScreenShotDesktop(rtcEngine,
                 'windows.agora_video_view_render.texture.remote.with_default_rendermode');
@@ -1644,10 +1644,10 @@ void main() {
               },
             ));
 
-            await tester.pumpAndSettle();
+            await tester.pump();
 
             await onFrameCompleter.future.timeout(const Duration(seconds: 15));
-            await tester.pumpAndSettle();
+            await tester.pump();
 
             await matchScreenShotDesktop(rtcEngine,
                 'windows.agora_video_view_render.texture.remote.with_rendermodehidden');
@@ -1676,10 +1676,10 @@ void main() {
               },
             ));
 
-            await tester.pumpAndSettle();
+            await tester.pump();
 
             await onFrameCompleter.future.timeout(const Duration(seconds: 15));
-            await tester.pumpAndSettle();
+            await tester.pump();
 
             await matchScreenShotDesktop(rtcEngine,
                 'windows.agora_video_view_render.texture.remote.with_rendermodefit');
@@ -1708,10 +1708,10 @@ void main() {
               },
             ));
 
-            await tester.pumpAndSettle();
+            await tester.pump();
 
             await onFrameCompleter.future.timeout(const Duration(seconds: 15));
-            await tester.pumpAndSettle();
+            await tester.pump();
 
             await matchScreenShotDesktop(rtcEngine,
                 'windows.agora_video_view_render.texture.remote.with_rendermodeadaptive');
@@ -1740,10 +1740,10 @@ void main() {
               },
             ));
 
-            await tester.pumpAndSettle();
+            await tester.pump();
 
             await onFrameCompleter.future.timeout(const Duration(seconds: 15));
-            await tester.pumpAndSettle();
+            await tester.pump();
 
             await matchScreenShotDesktop(rtcEngine,
                 'windows.agora_video_view_render.texture.remote.with_default_rendermodede.with_videoMirrorModeEnabled');
