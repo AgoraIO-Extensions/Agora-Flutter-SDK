@@ -49,3 +49,5 @@ test_shard/**/web/iris_web_version.js
 
 artifacts
 DerivedData
+# Vendored Agora iOS SDK downloaded by ios/scripts/download_ios_sdk.sh
+/ios/libs/
