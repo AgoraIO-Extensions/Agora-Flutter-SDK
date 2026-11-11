@@ -564,12 +564,18 @@ jobs:
         with:
           flutter-version: ${{ matrix.version }}
           cache: true
+          cache-key: 'flutter-macos-rendering-v1-:channel:-:version:-:arch:-:hash:'
       - name: Cache CocoaPods downloads
         uses: actions/cache@v4
         with:
           path: ~/Library/Caches/CocoaPods
           key: macos-rendering-pods-${{ runner.arch }}-${{ hashFiles('macos/*.podspec', 'pubspec.yaml', 'test_shard/rendering_test/pubspec.yaml', 'test_shard/rendering_test/macos/Podfile') }}
-      - run: flutter config --enable-macos-desktop
+      - run: flutter config --enable-macos-desktop --no-enable-android --no-enable-ios --no-enable-web
+      - name: Keep only desktop artifacts in the Flutter SDK cache
+        run: |
+          rm -rf "${FLUTTER_ROOT:?}/bin/cache/artifacts/engine"/android-* \
+            "${FLUTTER_ROOT:?}/bin/cache/artifacts/engine"/ios* \
+            "${FLUTTER_ROOT:?}/bin/cache/flutter_web_sdk"
       - name: Run macos rendering test
         run: |
           export SAVE_DEBUG_GOLDEN="true"
