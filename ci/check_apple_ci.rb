@@ -5,6 +5,8 @@ require 'yaml'
 root = File.expand_path('..', __dir__)
 workflow = YAML.load_file(File.join(root, '.github/workflows/run_test.yml'))
 packages = YAML.load_file(File.join(root, '.github/workflows/run_apple_dependency_matrix.yml'))
+ios_workflow = YAML.load_file(File.join(root, '.github/workflows/run_ios_integration_test.yml'))
+weekly = YAML.load_file(File.join(root, '.github/workflows/run_test_weekly_latest_stable.yml'))
 jobs = workflow.fetch('jobs')
 actual = []
 
@@ -33,8 +35,22 @@ expected = [
 end
 
 runtime = jobs.fetch('integration_test_ios')
-runtime.fetch('strategy').fetch('matrix').fetch('include').each do |row|
-  actual << ['ios runtime', row['version'], runtime['runs-on'], row['model'], row['os_version'], row['max_attempts']]
+legacy = weekly.fetch('jobs').fetch('legacy_ios_compatibility')
+raise 'Default iOS runtime must use the current Flutter version' unless runtime.fetch('with').fetch('flutter_version') == '3.38.5'
+raise 'Legacy iOS runtime must remain available manually' unless legacy.fetch('with').fetch('flutter_version') == '3.16'
+raise 'Legacy iOS runtime is not manual-only' unless legacy.fetch('if').include?("github.event_name == 'workflow_dispatch'") && legacy.fetch('if').include?('inputs.legacy_ios_only')
+triggers = weekly['on'] || weekly[true]
+raise 'Legacy-only dispatch must be opt-in' unless triggers.fetch('workflow_dispatch').fetch('inputs').fetch('legacy_ios_only').fetch('default') == false
+raise 'Legacy dispatch must skip the full weekly suite' unless weekly.fetch('jobs').fetch('resolve_flutter_version').fetch('if').include?('!inputs.legacy_ios_only')
+weekly.fetch('jobs').each do |id, job|
+  next if %w[resolve_flutter_version legacy_ios_compatibility].include?(id)
+  raise "Legacy-only dispatch would allocate #{id}" unless Array(job.fetch('needs')).include?('resolve_flutter_version')
+end
+ios = ios_workflow.fetch('jobs').fetch('runtime')
+simulator = ios.fetch('steps').find { |step| step['uses'] == 'futureware-tech/simulator-action@v4' }.fetch('with')
+[runtime, legacy].each do |call|
+  raise 'iOS runner setup must be shared' unless call.fetch('uses') == './.github/workflows/run_ios_integration_test.yml'
+  actual << ['ios runtime', call.fetch('with').fetch('flutter_version'), ios['runs-on'], simulator['model'], simulator['os_version'], ios.fetch('env').fetch('IOS_TEST_MAX_ATTEMPTS').to_i]
 end
 jobs.fetch('rendering_test_ios').fetch('strategy').fetch('matrix').fetch('include').each do |row|
   actual << ['ios rendering', row['version'], row['runner'], row['model'], row['os_version'], row['xcode_version']]
@@ -83,9 +99,9 @@ raise "Apple coverage changed:\n#{actual.inspect}" unless actual.map(&image).sor
 
 removed = %w[pub_package_smoke_test_macos pub_package_smoke_test_ios integration_test_swiftpm build_ios rendering_test_macos]
 raise 'Duplicate macOS allocations remain' if removed.any? { |id| jobs.key?(id) }
-allocations = runtime['strategy']['matrix']['include'].length +
+allocations = 1 +
   jobs['rendering_test_ios']['strategy']['matrix']['include'].length +
   mac['strategy']['matrix']['include'].length +
   package_job['strategy']['matrix']['platform'].length
-raise "Expected 8 macOS allocations, got #{allocations}" unless allocations == 8
-puts 'Apple CI: all 18 checks preserved across 8 macOS runner allocations.'
+raise "Expected 7 default macOS allocations, got #{allocations}" unless allocations == 7
+puts 'Apple CI: 17 default checks across 7 macOS allocations; legacy iOS remains manual (18 checks total).'

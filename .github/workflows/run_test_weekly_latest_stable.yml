@@ -1,11 +1,16 @@
 name: 'schedule: run weekly test latest stable'
 
 concurrency:
-  group: ${{ github.workflow }}-${{ github.ref }}
+  group: ${{ github.workflow }}-${{ github.ref }}-${{ inputs.legacy_ios_only || false }}
   cancel-in-progress: true
 
 on:
   workflow_dispatch:
+    inputs:
+      legacy_ios_only:
+        description: 'Run only Flutter 3.16 iOS compatibility tests'
+        type: boolean
+        default: false
   schedule:
     - cron: '0 0 * * 0'
       timezone: 'Asia/Shanghai'
@@ -13,6 +18,7 @@ on:
 jobs:
   resolve_flutter_version:
     name: Resolve Flutter stable version
+    if: ${{ !inputs.legacy_ios_only }}
     runs-on: ubuntu-latest
     outputs:
       flutter_version: ${{ steps.flutter-action.outputs.VERSION }}
@@ -29,6 +35,15 @@ jobs:
         run: |
           echo "Resolved Flutter channel: ${{ steps.flutter-action.outputs.CHANNEL }}"
           echo "Resolved Flutter version: ${{ steps.flutter-action.outputs.VERSION }}"
+
+  legacy_ios_compatibility:
+    name: Flutter 3.16 iOS compatibility (manual)
+    if: ${{ github.event_name == 'workflow_dispatch' && inputs.legacy_ios_only }}
+    uses: ./.github/workflows/run_ios_integration_test.yml
+    with:
+      flutter_version: '3.16'
+    secrets:
+      APP_ID: ${{ secrets.APP_ID }}
 
   flutter_codestyle_check:
     name: Flutter codestyle/analyze check (Flutter ${{ needs.resolve_flutter_version.outputs.flutter_version }})
