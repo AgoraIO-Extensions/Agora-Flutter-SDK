@@ -32,6 +32,13 @@ class VmServiceWatchdogTest(unittest.TestCase):
         )
         self.assertEqual(result.returncode, 0, result.stdout)
 
+    def test_repeated_waiting_messages_do_not_extend_the_deadline(self):
+        result = self.run_child(
+            "import time\nfor _ in range(20):\n"
+            " print('Waiting for VM Service port to be available...'); time.sleep(0.05)"
+        )
+        self.assertEqual(result.returncode, 124, result.stdout)
+
     def test_real_command_failure_is_propagated(self):
         result = self.run_child("raise SystemExit(7)")
         self.assertEqual(result.returncode, 7, result.stdout)

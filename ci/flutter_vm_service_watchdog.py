@@ -58,7 +58,7 @@ def run(command, timeout):
                     lines = re.split(rb"[\r\n]", pending)
                     pending = lines.pop()
                     for line in lines:
-                        if WAITING in line:
+                        if WAITING in line and deadline is None:
                             deadline = time.monotonic() + timeout
                         elif CONNECTED.search(line):
                             deadline = None
