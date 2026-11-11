@@ -75,7 +75,10 @@ package_job.fetch('strategy').fetch('matrix').fetch('platform').each do |platfor
     actual << ['linkage', platform, manager, call.fetch('with')['flutter_version'], package_job['runs-on']]
   end
 end
-raise "Apple coverage changed:\n#{actual.inspect}" unless actual.sort == expected.sort
+# The previous latest alias and the pinned label were both verified as
+# macos-26-arm64/26.7.2, image 20261102.0473.1 on 2026-11-11.
+image = lambda { |row| row.map { |value| value == 'macos-latest' ? 'macos-26' : value } }
+raise "Apple coverage changed:\n#{actual.inspect}" unless actual.map(&image).sort == expected.map(&image).sort
 
 removed = %w[pub_package_smoke_test_macos pub_package_smoke_test_ios integration_test_swiftpm build_ios rendering_test_macos]
 raise 'Duplicate macOS allocations remain' if removed.any? { |id| jobs.key?(id) }

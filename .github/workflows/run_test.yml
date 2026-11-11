@@ -204,7 +204,7 @@ jobs:
             renderer_version: 3.24.5
           - version: 3.38.5
             renderer_version: 3.38.5
-    runs-on: macos-latest
+    runs-on: macos-26
     timeout-minutes: 120
     env:
       TEST_APP_ID: ${{ secrets.APP_ID }}
