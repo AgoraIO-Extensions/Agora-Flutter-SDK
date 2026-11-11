@@ -112,7 +112,10 @@ mixin RtcRenderMixin<T extends StatefulWidget> on State<T> {
               viewType: viewType,
               layoutDirection:
                   Directionality.maybeOf(context) ?? TextDirection.ltr,
-              creationParams: creationParams,
+              creationParams: <String, Object?>{
+                ...?creationParams,
+                'useAndroidSurfaceViewHdr': true,
+              },
               creationParamsCodec: const StandardMessageCodec(),
               onFocus: () => params.onFocusChanged(true),
             )

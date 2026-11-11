@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:typed_data';
 import 'package:agora_rtc_engine/agora_rtc_engine.dart';
 import 'package:agora_rtc_engine/src/impl/video_view_controller_impl.dart';
 import 'package:flutter/services.dart';
@@ -29,6 +30,14 @@ void main() {
     TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger
         .setMockMethodCallHandler(SystemChannels.platform_views, null);
   });
+  bool sendsHdrFlag(Map<Object?, Object?> call) {
+    final bytes = call['params'];
+    if (bytes == null) return false;
+    final params = const StandardMessageCodec()
+        .decodeMessage(ByteData.sublistView(bytes as Uint8List));
+    return params is Map && params['useAndroidSurfaceViewHdr'] == true;
+  }
+
   Future<void> pumpView(
       WidgetTester tester, VideoViewControllerBase controller) async {
     await tester.pumpWidget(Directionality(
@@ -63,6 +72,7 @@ void main() {
       expect(createCalls.single['viewType'], 'AgoraTextureView');
       expect(createCalls.single.containsKey('hybrid'), isFalse);
       expect(createCalls.single.containsKey('hybridFallback'), isFalse);
+      expect(sendsHdrFlag(createCalls.single), isFalse);
     }, variant: android);
     testWidgets(
         'useAndroidSurfaceView only keeps AndroidView (initAndroidView)',
@@ -73,6 +83,7 @@ void main() {
       expect(createCalls.single['viewType'], 'AgoraSurfaceView');
       expect(createCalls.single.containsKey('hybrid'), isFalse);
       expect(createCalls.single.containsKey('hybridFallback'), isFalse);
+      expect(sendsHdrFlag(createCalls.single), isFalse);
     }, variant: android);
     testWidgets('HDR + SurfaceView uses initSurfaceAndroidView',
         (tester) async {
@@ -84,6 +95,7 @@ void main() {
       // initSurfaceAndroidView: TLHC request that lets the embedder fall back to HC.
       expect(createCalls.single['hybridFallback'], isTrue);
       expect(createCalls.single.containsKey('hybrid'), isFalse);
+      expect(sendsHdrFlag(createCalls.single), isTrue);
     }, variant: android);
     testWidgets('HDR alone is treated as useAndroidSurfaceView = true',
         (tester) async {
