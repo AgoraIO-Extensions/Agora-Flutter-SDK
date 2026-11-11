@@ -576,6 +576,23 @@ jobs:
           rm -rf "${FLUTTER_ROOT:?}/bin/cache/artifacts/engine"/android-* \
             "${FLUTTER_ROOT:?}/bin/cache/artifacts/engine"/ios* \
             "${FLUTTER_ROOT:?}/bin/cache/flutter_web_sdk"
+      - name: Resolve rendering test dependencies
+        run: flutter pub get
+        working-directory: test_shard/rendering_test
+      - name: Get Xcode build version
+        id: xcode_build
+        run: echo "version=$(xcodebuild -version | tail -n 1 | tr -d '[:space:]')" >> "$GITHUB_OUTPUT"
+      - name: Cache macOS rendering build
+        uses: actions/cache@v4
+        with:
+          path: |
+            test_shard/rendering_test/.dart_tool
+            test_shard/rendering_test/build/macos
+            test_shard/rendering_test/macos/Pods
+            test_shard/rendering_test/macos/Podfile.lock
+          key: macos-rendering-build-v1-${{ runner.arch }}-${{ matrix.version }}-${{ steps.xcode_build.outputs.version }}-${{ hashFiles('test_shard/rendering_test/pubspec.lock') }}-${{ github.sha }}
+          restore-keys: |
+            macos-rendering-build-v1-${{ runner.arch }}-${{ matrix.version }}-${{ steps.xcode_build.outputs.version }}-${{ hashFiles('test_shard/rendering_test/pubspec.lock') }}-
       - name: Run macos rendering test
         run: |
           export SAVE_DEBUG_GOLDEN="true"
