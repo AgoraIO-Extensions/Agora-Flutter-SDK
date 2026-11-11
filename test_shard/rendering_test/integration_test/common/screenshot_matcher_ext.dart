@@ -11,12 +11,16 @@ import 'package:path/path.dart' as path;
 Future<void> matchScreenShotDesktop(
   RtcEngineEx rtcEngine,
   String screenshotName, {
+  WidgetTester? tester,
   Duration timeout = const Duration(seconds: 15),
 }) async {
   // The first decoded frame can arrive before the texture is composited.
   // Poll the actual golden check instead of sleeping for every test case.
   final stopwatch = Stopwatch()..start();
   do {
+    if (tester != null) {
+      await tester.pump(const Duration(milliseconds: 100));
+    }
     if (await _matchesScreenShotDesktop(rtcEngine, screenshotName)
         .timeout(timeout - stopwatch.elapsed)) {
       return;
