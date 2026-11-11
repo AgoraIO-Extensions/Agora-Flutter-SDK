@@ -140,7 +140,7 @@ class _RemoteVideoViewState extends State<RemoteVideoView>
 
     await rtcEngine.joinChannelEx(
       token: '',
-      connection: const RtcConnection(
+      connection: RtcConnection(
         channelId: _channelId,
         localUid: _myUid,
       ),
@@ -159,7 +159,7 @@ class _RemoteVideoViewState extends State<RemoteVideoView>
     // Simulate a remote user join
     await rtcEngine.joinChannelEx(
       token: '',
-      connection: const RtcConnection(
+      connection: RtcConnection(
         channelId: _channelId,
         localUid: _mpkRemoteUid,
       ),
@@ -213,7 +213,7 @@ class _RemoteVideoViewState extends State<RemoteVideoView>
                     renderMode: widget.renderModeType,
                     mirrorMode: widget.mirrorModeType,
                   ),
-                  connection: const RtcConnection(
+                  connection: RtcConnection(
                     channelId: _channelId,
                     localUid: _myUid,
                   ),
