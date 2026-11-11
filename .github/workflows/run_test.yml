@@ -528,6 +528,8 @@ jobs:
       TEST_APP_ID: ${{ secrets.APP_ID }}
     steps:
       - uses: actions/checkout@v4
+      - name: Check VM Service discovery watchdog
+        run: python3 -m unittest ci/test_flutter_vm_service_watchdog.py
       - uses: subosito/flutter-action@v2
         with:
           flutter-version: ${{ matrix.version }}
