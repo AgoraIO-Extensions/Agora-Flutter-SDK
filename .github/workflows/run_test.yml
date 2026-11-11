@@ -194,29 +194,116 @@ jobs:
           path: logs-ios/*
 
   integration_test_macos:
-    name: Run Flutter macOS Integration Tests
+    name: Run Flutter macOS checks (${{ matrix.version }})
     if: ${{ !contains(github.event.pull_request.labels.*.name, 'ci:skip') }}
     strategy:
       fail-fast: false
       matrix:
-        version: ["3.16", "3.38.5"]
+        include:
+          - version: '3.16'
+            renderer_version: 3.24.5
+          - version: 3.38.5
+            renderer_version: 3.38.5
     runs-on: macos-latest
     timeout-minutes: 120
     env:
       TEST_APP_ID: ${{ secrets.APP_ID }}
+      SAVE_DEBUG_GOLDEN: 'true'
     steps:
       - uses: actions/checkout@v4
+      - name: Check Apple CI coverage
+        run: ruby ci/check_apple_ci.rb
       - uses: subosito/flutter-action@v2
         with:
           flutter-version: ${{ matrix.version }}
           cache: true
+        id: runtime_flutter
+      - name: Cache CocoaPods downloads
+        uses: actions/cache@v4
+        with:
+          path: ~/Library/Caches/CocoaPods
+          key: macos-rendering-pods-${{ runner.arch }}-${{ hashFiles('macos/*.podspec', 'pubspec.yaml', 'test_shard/rendering_test/pubspec.yaml', 'test_shard/rendering_test/macos/Podfile') }}
+        if: ${{ !cancelled() && steps.runtime_flutter.outcome == 'success' }}
       - run: flutter config --enable-macos-desktop
+        if: ${{ !cancelled() && steps.runtime_flutter.outcome == 'success' }}
       - run: bash ci/run_flutter_macos_integration_test.sh
+        id: macos_api
+        name: Run macOS integration tests
+        if: ${{ !cancelled() && steps.runtime_flutter.outcome == 'success' }}
+      - name: Run macOS published package smoke test
+        run: bash ci/run_flutter_macos_published_package_smoke_test.sh
+        id: published_macos
+        if: ${{ !cancelled() && steps.runtime_flutter.outcome == 'success' && matrix.version == '3.38.5' }}
+      - name: Run iOS published package smoke test
+        run: bash ci/run_flutter_ios_published_package_smoke_test.sh
+        id: published_ios
+        if: ${{ !cancelled() && steps.runtime_flutter.outcome == 'success' && matrix.version == '3.38.5' }}
+      - name: Resolve example dependencies
+        id: example_dependencies
+        if: ${{ !cancelled() && steps.runtime_flutter.outcome == 'success' }}
+        run: flutter pub get
+      - name: Build iOS example
+        id: ios_example
+        if: ${{ !cancelled() && steps.runtime_flutter.outcome == 'success' && steps.example_dependencies.outcome == 'success' }}
+        run: flutter build ios --no-codesign --simulator
+        working-directory: example
+        env:
+          IOS_SIMULATOR_SDK_VERSION: 18.0
+      - name: Set up rendering Flutter
+        id: renderer_flutter
+        if: ${{ !cancelled() && matrix.version == '3.16' }}
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: ${{ matrix.renderer_version }}
+          cache: true
+          cache-key: 'flutter-macos-rendering-v1-:channel:-:version:-:arch:-:hash:'
+      - name: Configure rendering Flutter
+        if: ${{ !cancelled() && ((matrix.version == '3.38.5' && steps.runtime_flutter.outcome == 'success') || steps.renderer_flutter.outcome == 'success') }}
+        run: |
+          flutter config --enable-macos-desktop
+          if [ "${{ matrix.version }}" = "3.16" ]; then
+            flutter config --no-enable-android --no-enable-ios --no-enable-web
+            rm -rf "${FLUTTER_ROOT:?}/bin/cache/artifacts/engine"/android-* \
+              "${FLUTTER_ROOT:?}/bin/cache/artifacts/engine"/ios* \
+              "${FLUTTER_ROOT:?}/bin/cache/flutter_web_sdk"
+          fi
+      - name: Resolve rendering test dependencies
+        run: flutter pub get
+        working-directory: test_shard/rendering_test
+        if: ${{ !cancelled() && ((matrix.version == '3.38.5' && steps.runtime_flutter.outcome == 'success') || steps.renderer_flutter.outcome == 'success') }}
+      - name: Get Xcode build version
+        id: xcode_build
+        run: echo "version=$(xcodebuild -version | tail -n 1 | tr -d '[:space:]')" >> "$GITHUB_OUTPUT"
+        if: ${{ !cancelled() && ((matrix.version == '3.38.5' && steps.runtime_flutter.outcome == 'success') || steps.renderer_flutter.outcome == 'success') }}
+      - name: Cache macOS rendering build
+        uses: actions/cache@v4
+        with:
+          path: |
+            test_shard/rendering_test/.dart_tool
+            test_shard/rendering_test/build/macos
+            test_shard/rendering_test/macos/Pods
+            test_shard/rendering_test/macos/Podfile.lock
+          key: macos-rendering-build-v1-${{ runner.arch }}-${{ matrix.renderer_version }}-${{ steps.xcode_build.outputs.version }}-${{ hashFiles('test_shard/rendering_test/pubspec.lock') }}-${{ github.sha }}
+          restore-keys: |
+            macos-rendering-build-v1-${{ runner.arch }}-${{ matrix.renderer_version }}-${{ steps.xcode_build.outputs.version }}-${{ hashFiles('test_shard/rendering_test/pubspec.lock') }}-
+        if: ${{ !cancelled() && ((matrix.version == '3.38.5' && steps.runtime_flutter.outcome == 'success') || steps.renderer_flutter.outcome == 'success') }}
+      - name: Run macos rendering test
+        run: |
+          export SAVE_DEBUG_GOLDEN="true"
+          bash ci/rendering_test_macos.sh
+        if: ${{ !cancelled() && ((matrix.version == '3.38.5' && steps.runtime_flutter.outcome == 'success') || steps.renderer_flutter.outcome == 'success') }}
+        id: macos_rendering
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: macos-debug-golden-files-${{ matrix.renderer_version }}
+          path: test_shard/rendering_test/screenshot/*.debug.png
+      - name: Wait for crash reports after a failure
+        if: ${{ failure() && !cancelled() }}
+        run: sleep 30
       - name: Get iris logs macos
         if: always()
         run: |
-          sleep 30
-
           mkdir iris-logs-macos
           if [ -f "${HOME}/Library/Containers/com.example.fakeTestApp/Data/Library/agora-iris.log" ]; then
             cp -RP ${HOME}/Library/Containers/com.example.fakeTestApp/Data/Library/agora-iris.log ./iris-logs-macos/agora-iris-fake-test.log || true
@@ -231,74 +318,12 @@ jobs:
 
           # Copy all files
           cp -RP $CRASH_DIR* $OUTPUT_CRASH_DIR || true
-          
       - name: Upload iris logs macos
         uses: actions/upload-artifact@v4
         if: always()
         with:
           name: iris-logs-macos-${{ matrix.version }}
           path: iris-logs-macos/*
-
-  pub_package_smoke_test_macos:
-    name: Run Flutter macOS Published Package Smoke Test
-    if: ${{ !contains(github.event.pull_request.labels.*.name, 'ci:skip') }}
-    runs-on: macos-latest
-    timeout-minutes: 60
-    steps:
-      - uses: actions/checkout@v4
-      - uses: subosito/flutter-action@v2
-        with:
-          flutter-version: "3.38.5"
-          cache: true
-      - run: flutter config --enable-macos-desktop
-      - name: Run macOS published package smoke test
-        run: bash ci/run_flutter_macos_published_package_smoke_test.sh
-
-  pub_package_smoke_test_ios:
-    name: Run Flutter iOS Published Package Smoke Test
-    if: ${{ !contains(github.event.pull_request.labels.*.name, 'ci:skip') }}
-    runs-on: macos-latest
-    timeout-minutes: 90
-    steps:
-      - uses: actions/checkout@v4
-      - uses: subosito/flutter-action@v2
-        with:
-          flutter-version: "3.38.5"
-          cache: true
-      - name: Run iOS published package smoke test
-        run: bash ci/run_flutter_ios_published_package_smoke_test.sh
-
-  integration_test_swiftpm:
-    name: Run Flutter SwiftPM Integration Tests
-    if: ${{ !contains(github.event.pull_request.labels.*.name, 'ci:skip') }}
-    strategy:
-      fail-fast: false
-      matrix:
-        os: ["macos", "ios"]
-    runs-on: macos-latest
-    timeout-minutes: 120
-    steps:
-      - name: Checkout as agora_rtc_engine
-        uses: actions/checkout@v4
-        with:
-          path: agora_rtc_engine
-      - uses: subosito/flutter-action@v2
-        with:
-          channel: 'stable'
-          cache: true
-      - name: Run flutter integration test swiftpm for ${{ matrix.os }}
-        working-directory: agora_rtc_engine/test_shard/integration_test_swiftpm
-        run: |
-          flutter config --enable-swift-package-manager
-          flutter pub get
-          if [ "${{ matrix.os }}" = "ios" ]; then
-            flutter build ios --no-codesign
-          else
-            flutter config --enable-macos-desktop
-            flutter build macos
-          fi
-        env:
-          IOS_SIMULATOR_SDK_VERSION: 18.0
 
   integration_test_windows:
     name: Run Flutter Windows Integration Tests
@@ -409,34 +434,13 @@ jobs:
         run: flutter build apk
         working-directory: example
 
-  build_ios:
-    name: Build iOS
-    if: ${{ !contains(github.event.pull_request.labels.*.name, 'ci:skip') }}
-    strategy:
-      fail-fast: false
-      matrix:
-        version: ["3.16", "3.38.5"]
-    runs-on: macos-latest
-    timeout-minutes: 120
-    steps:
-      - uses: actions/checkout@v4
-      - uses: subosito/flutter-action@v2
-        with:
-          flutter-version: ${{ matrix.version }}
-          cache: true
-      - run: flutter pub get
-      - name: Run flutter build ios --no-codesign --simulator
-        run: flutter build ios --no-codesign --simulator
-        working-directory: example
-        env:
-          IOS_SIMULATOR_SDK_VERSION: 18.0
-
   apple_dependency_linkage_matrix:
     name: Apple SwiftPM dependency linkage
     if: ${{ !contains(github.event.pull_request.labels.*.name, 'ci:skip') }}
     uses: ./.github/workflows/run_apple_dependency_matrix.yml
     with:
-      flutter_version: '3.44.4'
+      flutter_version: 3.44.4
+      include_swiftpm_integration: true
 
   build_web:
     name: Build Web
@@ -546,61 +550,6 @@ jobs:
         if: always()
         with:
           name: ios-debug-golden-files-${{ matrix.version }}
-          path: test_shard/rendering_test/screenshot/*.debug.png
-
-  rendering_test_macos:
-    name: Run Flutter macOS Rendering Tests
-    if: ${{ !contains(github.event.pull_request.labels.*.name, 'ci:skip') }}
-    strategy:
-      matrix:
-        version: ["3.24.5", "3.38.5"]
-    runs-on: macos-latest
-    timeout-minutes: 120
-    env:
-      TEST_APP_ID: ${{ secrets.APP_ID }}
-    steps:
-      - uses: actions/checkout@v4
-      - uses: subosito/flutter-action@v2
-        with:
-          flutter-version: ${{ matrix.version }}
-          cache: true
-          cache-key: 'flutter-macos-rendering-v1-:channel:-:version:-:arch:-:hash:'
-      - name: Cache CocoaPods downloads
-        uses: actions/cache@v4
-        with:
-          path: ~/Library/Caches/CocoaPods
-          key: macos-rendering-pods-${{ runner.arch }}-${{ hashFiles('macos/*.podspec', 'pubspec.yaml', 'test_shard/rendering_test/pubspec.yaml', 'test_shard/rendering_test/macos/Podfile') }}
-      - run: flutter config --enable-macos-desktop --no-enable-android --no-enable-ios --no-enable-web
-      - name: Keep only desktop artifacts in the Flutter SDK cache
-        run: |
-          rm -rf "${FLUTTER_ROOT:?}/bin/cache/artifacts/engine"/android-* \
-            "${FLUTTER_ROOT:?}/bin/cache/artifacts/engine"/ios* \
-            "${FLUTTER_ROOT:?}/bin/cache/flutter_web_sdk"
-      - name: Resolve rendering test dependencies
-        run: flutter pub get
-        working-directory: test_shard/rendering_test
-      - name: Get Xcode build version
-        id: xcode_build
-        run: echo "version=$(xcodebuild -version | tail -n 1 | tr -d '[:space:]')" >> "$GITHUB_OUTPUT"
-      - name: Cache macOS rendering build
-        uses: actions/cache@v4
-        with:
-          path: |
-            test_shard/rendering_test/.dart_tool
-            test_shard/rendering_test/build/macos
-            test_shard/rendering_test/macos/Pods
-            test_shard/rendering_test/macos/Podfile.lock
-          key: macos-rendering-build-v1-${{ runner.arch }}-${{ matrix.version }}-${{ steps.xcode_build.outputs.version }}-${{ hashFiles('test_shard/rendering_test/pubspec.lock') }}-${{ github.sha }}
-          restore-keys: |
-            macos-rendering-build-v1-${{ runner.arch }}-${{ matrix.version }}-${{ steps.xcode_build.outputs.version }}-${{ hashFiles('test_shard/rendering_test/pubspec.lock') }}-
-      - name: Run macos rendering test
-        run: |
-          export SAVE_DEBUG_GOLDEN="true"
-          bash ci/rendering_test_macos.sh
-      - uses: actions/upload-artifact@v4
-        if: always()
-        with:
-          name: macos-debug-golden-files-${{ matrix.version }}
           path: test_shard/rendering_test/screenshot/*.debug.png
 
   rendering_test_windows:
