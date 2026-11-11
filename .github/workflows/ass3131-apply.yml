@@ -1,0 +1,31 @@
+name: ass3131-apply
+
+on:
+  workflow_dispatch: {}
+
+permissions:
+  contents: write
+
+jobs:
+  apply:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: tmp/ass3131-push
+          fetch-depth: 0
+      - name: Apply patch and push
+        run: |
+          set -euo pipefail
+          cp ass3131-patch.b64 /tmp/a.b64
+          base64 -d /tmp/a.b64 | gunzip > /tmp/a.patch
+          ls -l /tmp/a.patch
+          head -5 /tmp/a.patch
+          git fetch origin release/6.6
+          git checkout -B special/6.6.4-sp.4642 origin/release/6.6
+          git config user.name "CaiYiPing"
+          git config user.email "caiyiping@agora.io"
+          git am /tmp/a.patch
+          git log --oneline -3
+          git show --stat --oneline HEAD | head -20
+          git push origin HEAD:refs/heads/special/6.6.4-sp.4642
