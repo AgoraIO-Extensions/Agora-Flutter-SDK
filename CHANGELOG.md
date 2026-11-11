@@ -1,5 +1,14 @@
 # Changelog
 
+## 6.6.4-sp.4642
+
+### Dependency updates
+
+* Update the iOS SDK to Native 4.6.4.2 (Agora brand) and Iris 4.6.4.2-build.1.
+* Integrate the iOS SDK from the Agora CDN: the podspec downloads the native SDK and the Iris wrapper in `prepare_command` and vendors the xcframeworks instead of depending on the `AgoraRtcEngine_Special_iOS` and `AgoraIrisRTC_iOS` CocoaPods pods.
+* Pin the iOS SwiftPM dependency to the published Native tag `4.6.4-rc.2` and its binary Iris wrapper.
+* Generate the Dart bindings from the `rtc_4.6.4.2` native headers (public headers are unchanged from 4.6.4).
+
 ## [6.6.4](https://github.com/AgoraIO-Extensions/Agora-Flutter-SDK/compare/6.6.3...6.6.4) (2026-09-04)
 
 ### Features
