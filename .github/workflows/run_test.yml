@@ -135,7 +135,7 @@ jobs:
           - version: "3.16"
             model: "iPhone 16e"
             os_version: ">=26.2"
-            max_attempts: 1
+            max_attempts: 3
           - version: "3.38.5"
             model: "iPhone 16e"
             os_version: ">=26.2"
@@ -147,6 +147,8 @@ jobs:
       IOS_TEST_MAX_ATTEMPTS: ${{ matrix.max_attempts }}
     steps:
       - uses: actions/checkout@v4
+      - name: Check iOS startup recovery
+        run: python3 -m unittest ci/test_flutter_vm_service_watchdog.py ci/test_ios_integration_startup_retry.py
       - uses: subosito/flutter-action@v2
         with:
           flutter-version: ${{ matrix.version }}

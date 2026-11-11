@@ -11,7 +11,8 @@ actual = []
 # The coverage contract predates consolidation: 18 checks, including the exact
 # simulator/Xcode combinations and both independent package managers.
 expected = [
-  ['ios runtime', '3.16', 'macos-26', 'iPhone 16e', '>=26.2', 1],
+  # Retry only startup failures, now consistently bounded to three attempts.
+  ['ios runtime', '3.16', 'macos-26', 'iPhone 16e', '>=26.2', 3],
   ['ios runtime', '3.38.5', 'macos-26', 'iPhone 16e', '>=26.2', 3],
   ['ios rendering', '3.24.5', 'macos-15', 'iPhone 16 Pro', '18.5', '16.4'],
   ['ios rendering', '3.38.5', 'macos-26', 'iPhone 16e', '>=26.2', 'latest-stable'],
