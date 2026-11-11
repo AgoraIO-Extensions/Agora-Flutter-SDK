@@ -3,6 +3,11 @@ name: 'on: pr internal'
 on:
   pull_request:
 
+# Cancel obsolete PR runs before their permission job needs a runner.
+concurrency:
+  group: pr-internal-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
 jobs:
   check_permission:
     name: Check permission
