@@ -44,6 +44,9 @@ raise 'No real failures may be ignored' if jobs.values.any? { |job| job['continu
 
 quality = jobs.fetch('quality_checks').fetch('steps')
 raise 'Root unit tests missing' unless quality.any? { |step| step['run'] == 'flutter test' }
+raise 'Default quality checks must use current Flutter' unless quality.find { |step| step['id'] == 'flutter' }.fetch('with').fetch('flutter-version') == '3.38.5'
+raise 'Native static analysis missing' unless quality.any? { |step| step['run'] == 'flutter analyze --no-fatal-infos lib test' }
+raise 'Pub scoring must not block default PRs' if quality.any? { |step| step['uses'].to_s.include?('dart-package-analyzer') }
 dry_runs = jobs.values.sum { |job| Array(job['steps']).count { |step| step['run'].to_s.include?('bash ci/dart_pub_publish_check.sh') } }
 raise 'Publish dry-run must run exactly once' unless dry_runs == 1
 raise 'Documentation artifacts still block PRs' if jobs.key?('attach_docs')
@@ -145,7 +148,7 @@ weekly_jobs.each do |id, job|
 end
 raise 'Weekly duplicate documentation/publish jobs remain' if %w[attach_docs pub_publish_check flutter_ut].any? { |id| weekly_jobs.key?(id) }
 raise 'Weekly unit coverage missing' unless weekly_jobs.fetch('flutter_codestyle_check').fetch('steps').any? { |step| step['run'] == 'flutter test' }
-[quality, weekly_jobs.fetch('flutter_codestyle_check').fetch('steps')].each do |sequence|
+[weekly_jobs.fetch('flutter_codestyle_check').fetch('steps')].each do |sequence|
   analysis = sequence.index { |step| step['id'] == 'analysis' }
   ownership = sequence.index { |step| step['name'] == 'Restore workspace ownership after package analysis' }
   unit = sequence.index { |step| step['run'] == 'flutter test' }

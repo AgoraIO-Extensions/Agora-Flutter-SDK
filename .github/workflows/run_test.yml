@@ -46,30 +46,13 @@ jobs:
       - uses: subosito/flutter-action@v2
         id: flutter
         with:
-          channel: 'stable'
+          flutter-version: '3.38.5'
           cache: true
       - name: Check publish package
         run: bash ci/dart_pub_publish_check.sh
-      - uses: axel-op/dart-package-analyzer@v3
+      - name: Analyze Dart sources
         if: ${{ !cancelled() && steps.flutter.outcome == 'success' }}
-        id: analysis
-        with:
-          githubToken: ${{ secrets.GITHUB_TOKEN }}
-      - name: Check scores
-        if: ${{ !cancelled() && steps.analysis.outcome == 'success' }}
-        env:
-          TOTAL: ${{ steps.analysis.outputs.total }}
-          TOTAL_MAX: ${{ steps.analysis.outputs.total_max }}
-        run: |
-          if (( $TOTAL_MAX - $TOTAL > 20 ))
-          then
-            echo Pub Score too low.
-            exit 1
-          fi
-      - name: Restore workspace ownership after package analysis
-        # The analysis container can leave files owned by its own user.
-        if: ${{ !cancelled() && steps.analysis.outcome != 'skipped' }}
-        run: sudo chown -R "$(id -u):$(id -g)" "$GITHUB_WORKSPACE"
+        run: flutter analyze --no-fatal-infos lib test
       - name: Run unit tests
         if: ${{ !cancelled() && steps.flutter.outcome == 'success' }}
         run: flutter test
