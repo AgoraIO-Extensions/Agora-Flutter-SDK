@@ -145,6 +145,12 @@ weekly_jobs.each do |id, job|
 end
 raise 'Weekly duplicate documentation/publish jobs remain' if %w[attach_docs pub_publish_check flutter_ut].any? { |id| weekly_jobs.key?(id) }
 raise 'Weekly unit coverage missing' unless weekly_jobs.fetch('flutter_codestyle_check').fetch('steps').any? { |step| step['run'] == 'flutter test' }
+[quality, weekly_jobs.fetch('flutter_codestyle_check').fetch('steps')].each do |sequence|
+  analysis = sequence.index { |step| step['id'] == 'analysis' }
+  ownership = sequence.index { |step| step['name'] == 'Restore workspace ownership after package analysis' }
+  unit = sequence.index { |step| step['run'] == 'flutter test' }
+  raise 'Container analysis must restore checkout ownership before host tests' unless analysis && ownership && unit && analysis < ownership && ownership < unit
+end
 
 count = lambda do |full_matrix, packaging|
   jobs.sum do |id, job|

@@ -66,6 +66,10 @@ jobs:
             echo Pub Score too low.
             exit 1
           fi
+      - name: Restore workspace ownership after package analysis
+        # The analysis container can leave files owned by its own user.
+        if: ${{ !cancelled() && steps.analysis.outcome != 'skipped' }}
+        run: sudo chown -R "$(id -u):$(id -g)" "$GITHUB_WORKSPACE"
       - name: Run unit tests
         if: ${{ !cancelled() && steps.flutter.outcome == 'success' }}
         run: flutter test
