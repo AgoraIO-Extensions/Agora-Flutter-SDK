@@ -2,6 +2,7 @@ import 'package:agora_rtc_engine/agora_rtc_engine.dart';
 import 'package:agora_rtc_engine_example/config/agora.config.dart' as config;
 import 'package:agora_rtc_engine_example/components/example_actions_widget.dart';
 import 'package:agora_rtc_engine_example/components/log_sink.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 /// MediaPlayer Example
@@ -35,6 +36,11 @@ class _State extends State<MediaPlayer> {
   int _streamCount = 0;
 
   bool isJoined = false;
+
+  // Android only, on by default. With Hybrid Composition++ enabled in
+  // AndroidManifest.xml (Flutter 3.44+, Android 14+, Impeller Vulkan) a
+  // SurfaceView shows HDR video; a TextureView is always SDR.
+  bool _useAndroidSurfaceView = true;
 
   @override
   void initState() {
@@ -91,8 +97,14 @@ class _State extends State<MediaPlayer> {
       },
     ));
 
+    await _createMediaPlayer();
+  }
+
+  Future<void> _createMediaPlayer() async {
     _mediaPlayerController = MediaPlayerController(
-        rtcEngine: _engine, canvas: const VideoCanvas(uid: 0));
+        rtcEngine: _engine,
+        canvas: const VideoCanvas(uid: 0),
+        useAndroidSurfaceView: _useAndroidSurfaceView);
     await _mediaPlayerController.initialize();
     _mediaPlayerController.registerPlayerSourceObserver(
       MediaPlayerSourceObserver(
@@ -146,6 +158,14 @@ class _State extends State<MediaPlayer> {
     });
   }
 
+  Future<void> _recreateMediaPlayer() async {
+    setState(() {
+      _isReadyPreview = false;
+    });
+    await _mediaPlayerController.dispose();
+    await _createMediaPlayer();
+  }
+
   void _leaveChannel() async {
     if (_isUrlOpened) {
       await _mediaPlayerController.stop();
@@ -190,6 +210,21 @@ class _State extends State<MediaPlayer> {
           crossAxisAlignment: CrossAxisAlignment.start,
           mainAxisSize: MainAxisSize.min,
           children: [
+            if (!kIsWeb && defaultTargetPlatform == TargetPlatform.android)
+              Row(children: [
+                const Expanded(
+                    child: Text('Android SurfaceView',
+                        style: TextStyle(fontSize: 12))),
+                Switch(
+                  value: _useAndroidSurfaceView,
+                  onChanged: _isUrlOpened || !_isReadyPreview
+                      ? null
+                      : (changed) {
+                          _useAndroidSurfaceView = changed;
+                          _recreateMediaPlayer();
+                        },
+                ),
+              ]),
             Row(children: [
               Expanded(
                 child: TextField(
