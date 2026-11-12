@@ -43,7 +43,7 @@ jobs:
       matrix:
         platform: [ios, macos]
     runs-on: macos-26
-    timeout-minutes: 120
+    timeout-minutes: 60
     steps:
       - name: Checkout workflow tools
         uses: actions/checkout@v4
@@ -67,6 +67,7 @@ jobs:
           channel: stable
           cache: true
       - name: Build SwiftPM integration consumer
+        timeout-minutes: 20
         if: ${{ !cancelled() && inputs.include_swiftpm_integration && steps.swiftpm_flutter.outcome == 'success' }}
         id: swiftpm_integration
         working-directory: agora_rtc_engine/test_shard/integration_test_swiftpm
@@ -93,10 +94,12 @@ jobs:
           flutter-version: ${{ inputs.flutter_version }}
           cache: true
       - name: Verify CocoaPods build and archive linkage
+        timeout-minutes: 20
         if: ${{ !cancelled() && (steps.dependency_flutter.outcome == 'success' || (steps.swiftpm_flutter.outcome == 'success' && steps.swiftpm_flutter.outputs.VERSION == inputs.flutter_version)) }}
         id: cocoapods_linkage
         run: bash ci-tools/ci/run_apple_dependency_linkage.sh "$GITHUB_WORKSPACE/agora_rtc_engine" '${{ matrix.platform }}' cocoapods
       - name: Verify SwiftPM build and archive linkage
+        timeout-minutes: 20
         if: ${{ !cancelled() && (steps.dependency_flutter.outcome == 'success' || (steps.swiftpm_flutter.outcome == 'success' && steps.swiftpm_flutter.outputs.VERSION == inputs.flutter_version)) }}
         id: swiftpm_linkage
         run: bash ci-tools/ci/run_apple_dependency_linkage.sh "$GITHUB_WORKSPACE/agora_rtc_engine" '${{ matrix.platform }}' swiftpm
