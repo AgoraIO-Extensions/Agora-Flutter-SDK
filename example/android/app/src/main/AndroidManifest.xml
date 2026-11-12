@@ -10,6 +10,14 @@
         android:label="agora_rtc_ng_example"
         android:name=".MyApplication"
         android:icon="@mipmap/ic_launcher">
+        <!-- Hybrid Composition++ (HCPP): Flutter 3.44+, Android 14+, Impeller Vulkan.
+             Platform views become their own SurfaceFlinger layers, so a SurfaceView
+             (useAndroidSurfaceView: true) can show HDR video. Applies to all platform
+             views of the app. Older Flutter versions ignore it; unsupported devices fall
+             back to the previous platform view mode. -->
+        <meta-data
+            android:name="io.flutter.embedding.android.EnableHcpp"
+            android:value="true" />
         <activity
             android:name=".MainActivity"
             android:exported="true"

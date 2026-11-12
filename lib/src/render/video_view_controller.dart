@@ -27,9 +27,6 @@ abstract class VideoViewControllerBase {
   /// Android SurfaceView is only available on Android platform. Whether to use Android SurfaceView to render video: true : Use Android SurfaceView to render video. false : Do not use Android SurfaceView to render video.
   bool get useAndroidSurfaceView;
 
-  /// Android SurfaceView HDR is only available on Android platform. Whether to render HDR (PQ / HLG) video with an Android SurfaceView in Hybrid Composition: true : Render video with an Android SurfaceView in Hybrid Composition. This takes priority over useAndroidSurfaceView and treats it as true. The Flutter UI performance may be lower. false : (Default) Do not change how the video is rendered. It is ignored when useFlutterTexture is true. It is read when the AgoraVideoView is created; to change it, create a new AgoraVideoView. On Flutter 3.44 or later, the app can also enable Hybrid Composition++ by adding the `io.flutter.embedding.android.EnableHcpp` meta-data to AndroidManifest.xml. Flutter then uses it on Android 14 or later with Impeller Vulkan, which avoids showing earlier Flutter UI in the video area before the first video frame, and falls back to Hybrid Composition on other devices. The meta-data applies to every platform view in the app.
-  bool get useAndroidSurfaceViewHdr;
-
   @internal
   int getTextureId();
 
@@ -77,8 +74,7 @@ class VideoViewController
       {required this.rtcEngine,
       required this.canvas,
       this.useFlutterTexture = false,
-      this.useAndroidSurfaceView = false,
-      this.useAndroidSurfaceViewHdr = false})
+      this.useAndroidSurfaceView = false})
       : connection = const RtcConnection();
 
   /// @nodoc
@@ -87,8 +83,7 @@ class VideoViewController
       required this.canvas,
       required this.connection,
       this.useFlutterTexture = false,
-      this.useAndroidSurfaceView = false,
-      this.useAndroidSurfaceViewHdr = false})
+      this.useAndroidSurfaceView = false})
       : assert(canvas.uid != null && canvas.uid != 0,
             'Remote uid can not be null or 0'),
         assert(connection.channelId != null);
@@ -107,9 +102,6 @@ class VideoViewController
 
   @override
   final bool useAndroidSurfaceView;
-
-  @override
-  final bool useAndroidSurfaceViewHdr;
 
   @protected
   @override

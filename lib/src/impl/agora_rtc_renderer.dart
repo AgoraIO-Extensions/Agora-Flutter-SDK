@@ -77,7 +77,6 @@ mixin RtcRenderMixin<T extends StatefulWidget> on State<T> {
     Map<String, Object?>? creationParams,
     PlatformViewCreatedCallback? onPlatformViewCreated,
     Set<Factory<OneSequenceGestureRecognizer>>? gestureRecognizers,
-    bool useAndroidSurfaceViewHdr = false,
   }) {
     // `kIsWeb` check needs put first, since `defaultTargetPlatform == TargetPlatform.android` or
     // `defaultTargetPlatform == TargetPlatform.iOS` is true in mobile web.
@@ -87,40 +86,6 @@ mixin RtcRenderMixin<T extends StatefulWidget> on State<T> {
         onPlatformViewCreated: _onPlatformViewCreated(
           viewType,
           onPlatformViewCreated,
-        ),
-      );
-    }
-
-    if (defaultTargetPlatform == TargetPlatform.android &&
-        useAndroidSurfaceViewHdr) {
-      return GestureDetector(
-        behavior: HitTestBehavior.opaque,
-        child: PlatformViewLink(
-          viewType: viewType,
-          surfaceFactory:
-              (BuildContext context, PlatformViewController controller) {
-            return AndroidViewSurface(
-              controller: controller as AndroidViewController,
-              hitTestBehavior: PlatformViewHitTestBehavior.transparent,
-              gestureRecognizers: gestureRecognizers ??
-                  const <Factory<OneSequenceGestureRecognizer>>{},
-            );
-          },
-          onCreatePlatformView: (PlatformViewCreationParams params) {
-            return PlatformViewsService.initSurfaceAndroidView(
-              id: params.id,
-              viewType: viewType,
-              layoutDirection:
-                  Directionality.maybeOf(context) ?? TextDirection.ltr,
-              creationParams: creationParams,
-              creationParamsCodec: const StandardMessageCodec(),
-              onFocus: () => params.onFocusChanged(true),
-            )
-              ..addOnPlatformViewCreatedListener(params.onPlatformViewCreated)
-              ..addOnPlatformViewCreatedListener(
-                  _onPlatformViewCreated(viewType, onPlatformViewCreated))
-              ..create();
-          },
         ),
       );
     }

@@ -81,8 +81,6 @@ class _AgoraRtcRenderPlatformViewState extends State<AgoraRtcRenderPlatformView>
   int _nativeViewIntPtr = 0;
   late String _viewType;
 
-  late bool _useAndroidSurfaceViewHdr;
-
   VoidCallback? _listener;
 
   bool _isDisposed = false;
@@ -94,8 +92,7 @@ class _AgoraRtcRenderPlatformViewState extends State<AgoraRtcRenderPlatformView>
     if (kIsWeb) {
       _viewType = _viewTypeAgoraSurfaceView;
     } else if (defaultTargetPlatform == TargetPlatform.android) {
-      if (widget.controller.useAndroidSurfaceView ||
-          widget.controller.useAndroidSurfaceViewHdr) {
+      if (widget.controller.useAndroidSurfaceView) {
         _viewType = _viewTypeAgoraSurfaceView;
       } else {
         _viewType = _viewTypeAgoraTextureView;
@@ -105,7 +102,6 @@ class _AgoraRtcRenderPlatformViewState extends State<AgoraRtcRenderPlatformView>
     } else {
       throw ArgumentError('PlatformView render is not supported on desktop');
     }
-    _useAndroidSurfaceViewHdr = widget.controller.useAndroidSurfaceViewHdr;
 
     widget.controller.initializeRender();
   }
@@ -147,7 +143,6 @@ class _AgoraRtcRenderPlatformViewState extends State<AgoraRtcRenderPlatformView>
   Widget build(BuildContext context) {
     return buildPlatformView(
       viewType: _viewType,
-      useAndroidSurfaceViewHdr: _useAndroidSurfaceViewHdr,
       onPlatformViewCreated: (int id) {
         _platformViewId = id;
         _setupVideo();
@@ -239,9 +234,6 @@ class _VideoViewControllerInternal with VideoViewControllerBaseMixin {
 
   @override
   bool get useAndroidSurfaceView => _controller.useAndroidSurfaceView;
-
-  @override
-  bool get useAndroidSurfaceViewHdr => _controller.useAndroidSurfaceViewHdr;
 
   @override
   bool get useFlutterTexture => _controller.useFlutterTexture;
