@@ -52,8 +52,19 @@ runs:
       working-directory: ${{ inputs.working_directory }}
       run: python3 -m unittest discover -s tool/terra/tests -p "test_*.py"
 
+    - name: Cache public code-generator package downloads
+      uses: actions/cache@v4
+      with:
+        path: ${{ runner.temp }}/flutter-codegen-yarn-cache
+        key: codegen-yarn-v1-${{ runner.os }}-${{ runner.arch }}-${{ hashFiles(format('{0}/tool/terra/package.json', inputs.working_directory)) }}-${{ github.run_id }}-${{ github.run_attempt }}
+        restore-keys: |
+          codegen-yarn-v1-${{ runner.os }}-${{ runner.arch }}-${{ hashFiles(format('{0}/tool/terra/package.json', inputs.working_directory)) }}-
+
     - name: Gen
       uses: AgoraIO-Extensions/actions/.github/actions/generate@main
+      env:
+        YARN_ENABLE_GLOBAL_CACHE: 'false'
+        YARN_CACHE_FOLDER: ${{ runner.temp }}/flutter-codegen-yarn-cache
       with:
         generate-code: true
         generate-comment: false

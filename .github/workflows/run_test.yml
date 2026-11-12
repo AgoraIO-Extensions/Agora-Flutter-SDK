@@ -1,142 +1,69 @@
 name: 'run: test'
 
 concurrency:
-  group: ${{ github.workflow }}-${{ github.ref }}
+  group: run-test-${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
   cancel-in-progress: true
 
 on:
   workflow_call:
+    inputs:
+      full_regression:
+        description: 'Run the full current-version API and screenshot suites'
+        type: boolean
+        default: false
+      full_compatibility:
+        description: 'Run the preserved historical Flutter and host matrix'
+        type: boolean
+        default: false
     secrets:
       APP_ID:
         required: true
 
 jobs:
-  flutter_codestyle_check:
-    name: Flutter codestyle/analyze check
+  check_changes:
+    name: Select Apple packaging checks
     if: ${{ !contains(github.event.pull_request.labels.*.name, 'ci:skip') }}
     runs-on: ubuntu-latest
+    outputs:
+      apple_packages: ${{ steps.scope.outputs.apple_packages }}
     steps:
       - uses: actions/checkout@v4
-      - uses: subosito/flutter-action@v2
-        with:
-          channel: 'stable'
-          cache: true
-      - name: Check Dart Format
-        id: pub_publish_check
-        continue-on-error: true
-        run: bash ci/dart_pub_publish_check.sh
-      - uses: axel-op/dart-package-analyzer@v3
-        id: analysis
-        with:
-          githubToken: ${{ secrets.GITHUB_TOKEN }}
-      - name: Check scores
+      - name: Inspect changed files
+        id: scope
         env:
-          TOTAL: ${{ steps.analysis.outputs.total }}
-          TOTAL_MAX: ${{ steps.analysis.outputs.total_max }}
-        run: |
-          if (( $TOTAL_MAX - $TOTAL > 20 ))
-          then
-            echo Pub Score too low.
-            exit 1
-          fi
-      - name: Fail on publish dry-run check
-        if: ${{ always() && steps.pub_publish_check.outcome == 'failure' }}
-        run: |
-          echo "Publication check failed."
-          exit 1
+          BASE_SHA: ${{ github.event.pull_request.base.sha }}
+          HEAD_SHA: ${{ github.event.pull_request.head.sha }}
+          FULL_COMPATIBILITY: ${{ inputs.full_compatibility }}
+        shell: bash
+        run: bash ci/select_apple_checks.sh
 
-  flutter_ut:
-    name: Flutter unit test
+  quality_checks:
+    name: Dart quality, unit tests and package check
     if: ${{ !contains(github.event.pull_request.labels.*.name, 'ci:skip') }}
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - uses: subosito/flutter-action@v2
-        with:
-          channel: 'stable'
-          cache: true
-      - run: flutter test
-
-  attach_docs:
-    name: Attach dartdoc
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      - uses: subosito/flutter-action@v2
-        with:
-          channel: 'stable'
-          cache: true
-      - name: Build DartDoc 📖
+      - name: Check CI policy and startup recovery
         run: |
-          dart pub get
-          # Generate DartDoc
-          dart doc
-          # Create a zip file of the DartDoc output
-          zip -r agora_rtc_engine_docs.zip doc
-      - name: Upload DartDoc Artifact ⬆️
-        uses: actions/upload-artifact@v4
-        with:
-          name: agora_rtc_engine_docs.zip
-          path: agora_rtc_engine_docs.zip
-  pub_publish_check:
-    name: pub publish check
-    if: ${{ !contains(github.event.pull_request.labels.*.name, 'ci:skip') }}
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
+          ruby ci/check_apple_ci.rb
+          python3 -m unittest ci/test_flutter_vm_service_watchdog.py ci/test_ios_integration_startup_retry.py ci/test_check_apple_changes.py ci/test_sdk_startup_smoke.py
       - uses: subosito/flutter-action@v2
+        id: flutter
         with:
-          channel: 'stable'
+          flutter-version: '3.38.5'
           cache: true
-      - run: bash ci/dart_pub_publish_check.sh
-
-  integration_test_android:
-    name: Run Flutter Android Integration Tests
-    if: ${{ !contains(github.event.pull_request.labels.*.name, 'ci:skip') }}
-    strategy:
-      fail-fast: false
-      matrix:
-        # Probe the actual support floor with real runtime tests before we
-        # commit to a higher minimum Flutter version in package metadata.
-        version: ["3.16", "3.24.5", "3.38.5"]
-    runs-on: ubuntu-latest
-    timeout-minutes: 120
-    env:
-      TEST_APP_ID: ${{ secrets.APP_ID }}
-    steps:
-      - uses: actions/checkout@v4
-      - name: Install JDK
-        uses: actions/setup-java@v4
-        with:
-          distribution: 'zulu'
-          java-version: '17'
-      - uses: subosito/flutter-action@v2
-        with:
-          flutter-version: ${{ matrix.version }}
-          cache: true
-      - name: Enable KVM
-        run: |
-          echo 'KERNEL=="kvm", GROUP="kvm", MODE="0666", OPTIONS+="static_node=kvm"' | sudo tee /etc/udev/rules.d/99-kvm4all.rules
-          sudo udevadm control --reload-rules
-          sudo udevadm trigger --name-match=kvm
-      - name: run flutter android integration tests
-        uses: reactivecircus/android-emulator-runner@v2
-        with:
-          api-level: 31
-          arch: x86_64
-          profile: pixel_5
-          ram-size: 2048M
-          heap-size: 2048M
-          disk-size: 6144M
-          emulator-boot-timeout: 600
-          disable-animations: true
-          force-avd-creation: false
-          emulator-options: -no-snapshot-save -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim
-          script: bash ci/run_flutter_integration_test_android.sh
+      - name: Check publish package
+        run: bash ci/dart_pub_publish_check.sh
+      - name: Analyze Dart sources
+        if: ${{ !cancelled() && steps.flutter.outcome == 'success' }}
+        run: flutter analyze --no-fatal-infos lib test
+      - name: Run unit tests
+        if: ${{ !cancelled() && steps.flutter.outcome == 'success' }}
+        run: flutter test
 
   integration_test_android_canary:
     name: Run Flutter Android Integration Tests (latest stable canary)
-    if: ${{ !contains(github.event.pull_request.labels.*.name, 'ci:skip') }}
+    if: ${{ inputs.full_compatibility && !contains(github.event.pull_request.labels.*.name, 'ci:skip') }}
     continue-on-error: true
     runs-on: ubuntu-latest
     timeout-minutes: 120
@@ -173,154 +100,33 @@ jobs:
           emulator-options: -no-snapshot-save -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim
           script: bash ci/run_flutter_integration_test_android.sh
 
-  integration_test_ios:
-    name: Run Flutter iOS Integration Tests
-    if: ${{ !contains(github.event.pull_request.labels.*.name, 'ci:skip') }}
-    strategy:
-      fail-fast: false
-      matrix:
-        include:
-          - version: "3.16"
-            model: "iPhone 16e"
-            os_version: ">=26.2"
-          - version: "3.38.5"
-            model: "iPhone 16e"
-            os_version: ">=26.2"
+  build_ios_canary:
+    name: Build iOS (latest stable canary)
+    if: ${{ inputs.full_compatibility && !contains(github.event.pull_request.labels.*.name, 'ci:skip') }}
+    continue-on-error: true
     runs-on: macos-26
     timeout-minutes: 120
-    env:
-      TEST_APP_ID: ${{ secrets.APP_ID }}
     steps:
       - uses: actions/checkout@v4
       - uses: subosito/flutter-action@v2
         with:
-          flutter-version: ${{ matrix.version }}
+          channel: 'stable'
           cache: true
-      - name: Setup latest stable Xcode
-        uses: maxim-lobanov/setup-xcode@v1
-        with:
-          xcode-version: latest-stable
-      - name: Verify Xcode
-        run: |
-          xcode-select --print-path
-          xcodebuild -version
-          echo "Available iOS SDKs:"
-          xcodebuild -showsdks | grep iphoneos
-          echo "Available iOS Simulator SDKs:"
-          xcodebuild -showsdks | grep iphonesimulator
-      - uses: futureware-tech/simulator-action@v4
-        with:
-          model: ${{ matrix.model }}
-          os: iOS
-          os_version: ${{ matrix.os_version }}
-          erase_before_boot: true
-          wait_for_boot: true
-          shutdown_after_job: true
-      - run: bash ci/run_flutter_integration_test_ios.sh
-      - name: Get ios crash logs
-        if: always()
-        run: |
-          sleep 30
-
-          mkdir logs-ios
-
-          CRASH_DIR="${HOME}/Library/Logs/DiagnosticReports/"
-          OUTPUT_CRASH_DIR=./logs-ios/crash
-          mkdir -p ${OUTPUT_CRASH_DIR}
-
-          # Copy all files
-          cp -RP $CRASH_DIR* $OUTPUT_CRASH_DIR || true
-        
-      - name: Upload ios logs
-        uses: actions/upload-artifact@v4
-        if: always()
-        with:
-          name: logs-ios-${{ matrix.version }}
-          path: logs-ios/*
-
-  integration_test_macos:
-    name: Run Flutter macOS Integration Tests
-    if: ${{ !contains(github.event.pull_request.labels.*.name, 'ci:skip') }}
-    strategy:
-      fail-fast: false
-      matrix:
-        version: ["3.16", "3.38.5"]
-    runs-on: macos-latest
-    timeout-minutes: 120
-    env:
-      TEST_APP_ID: ${{ secrets.APP_ID }}
-    steps:
-      - uses: actions/checkout@v4
-      - uses: subosito/flutter-action@v2
-        with:
-          flutter-version: ${{ matrix.version }}
-          cache: true
-      - run: flutter config --enable-macos-desktop
-      - run: bash ci/run_flutter_macos_integration_test.sh
-      - name: Get iris logs macos
-        if: always()
-        run: |
-          sleep 30
-
-          mkdir iris-logs-macos
-          if [ -f "${HOME}/Library/Containers/com.example.fakeTestApp/Data/Library/agora-iris.log" ]; then
-            cp -RP ${HOME}/Library/Containers/com.example.fakeTestApp/Data/Library/agora-iris.log ./iris-logs-macos/agora-iris-fake-test.log || true
-          fi
-          if [ -f "${HOME}/Library/Containers/com.example.integrationTestApp/Data/Library/agora-iris.log" ]; then
-            cp -RP ${HOME}/Library/Containers/com.example.integrationTestApp/Data/Library/agora-iris.log ./iris-logs-macos/agora-iris-integration-test.log || true
-          fi
-
-          CRASH_DIR="${HOME}/Library/Logs/DiagnosticReports/"
-          OUTPUT_CRASH_DIR=./iris-logs-macos/crash
-          mkdir -p ${OUTPUT_CRASH_DIR}
-
-          # Copy all files
-          cp -RP $CRASH_DIR* $OUTPUT_CRASH_DIR || true
-          
-      - name: Upload iris logs macos
-        uses: actions/upload-artifact@v4
-        if: always()
-        with:
-          name: iris-logs-macos-${{ matrix.version }}
-          path: iris-logs-macos/*
-
-  pub_package_smoke_test_macos:
-    name: Run Flutter macOS Published Package Smoke Test
-    if: ${{ !contains(github.event.pull_request.labels.*.name, 'ci:skip') }}
-    runs-on: macos-latest
-    timeout-minutes: 60
-    steps:
-      - uses: actions/checkout@v4
-      - uses: subosito/flutter-action@v2
-        with:
-          flutter-version: "3.38.5"
-          cache: true
-      - run: flutter config --enable-macos-desktop
-      - name: Run macOS published package smoke test
-        run: bash ci/run_flutter_macos_published_package_smoke_test.sh
-
-  pub_package_smoke_test_ios:
-    name: Run Flutter iOS Published Package Smoke Test
-    if: ${{ !contains(github.event.pull_request.labels.*.name, 'ci:skip') }}
-    runs-on: macos-latest
-    timeout-minutes: 90
-    steps:
-      - uses: actions/checkout@v4
-      - uses: subosito/flutter-action@v2
-        with:
-          flutter-version: "3.38.5"
-          cache: true
-      - name: Run iOS published package smoke test
-        run: bash ci/run_flutter_ios_published_package_smoke_test.sh
+      - run: flutter pub get
+      - name: Run flutter build ios --no-codesign --simulator on latest stable
+        run: flutter build ios --no-codesign --simulator
+        working-directory: example
+        env:
+          IOS_SIMULATOR_SDK_VERSION: 18.0
 
   integration_test_swiftpm:
     name: Run Flutter SwiftPM Integration Tests
-    if: ${{ !contains(github.event.pull_request.labels.*.name, 'ci:skip') }}
+    if: ${{ inputs.full_compatibility && !contains(github.event.pull_request.labels.*.name, 'ci:skip') }}
     strategy:
       fail-fast: false
       matrix:
         os: ["macos", "ios"]
-    runs-on: macos-latest
+    runs-on: macos-26
     timeout-minutes: 120
     steps:
       - uses: actions/checkout@v4
@@ -343,16 +149,209 @@ jobs:
         env:
           IOS_SIMULATOR_SDK_VERSION: 18.0
 
-  integration_test_windows:
-    name: Run Flutter Windows Integration Tests
+  integration_test_android:
+    name: Android SDK checks
     if: ${{ !contains(github.event.pull_request.labels.*.name, 'ci:skip') }}
     strategy:
       fail-fast: false
       matrix:
-        version: ["3.24.5", "3.38.5"]  # Note: 3.7.0 removed due to SDK compatibility issues
-    runs-on: windows-2022
-    timeout-minutes: 120
+        version: ${{ fromJSON(inputs.full_compatibility && '["3.16","3.24.5","3.38.5"]' || '["3.38.5"]') }}
+    runs-on: ubuntu-latest
+    timeout-minutes: ${{ (inputs.full_regression || inputs.full_compatibility) && 120 || 20 }}
     env:
+      FULL_REGRESSION: ${{ (inputs.full_regression || inputs.full_compatibility) }}
+      TEST_APP_ID: ${{ secrets.APP_ID }}
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install JDK
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'zulu'
+          java-version: '17'
+      - uses: subosito/flutter-action@v2
+        with:
+          flutter-version: ${{ matrix.version }}
+          cache: true
+      - name: Enable KVM
+        run: |
+          echo 'KERNEL=="kvm", GROUP="kvm", MODE="0666", OPTIONS+="static_node=kvm"' | sudo tee /etc/udev/rules.d/99-kvm4all.rules
+          sudo udevadm control --reload-rules
+          sudo udevadm trigger --name-match=kvm
+      - name: run flutter android integration tests
+        uses: reactivecircus/android-emulator-runner@v2
+        with:
+          api-level: 31
+          arch: x86_64
+          profile: pixel_5
+          ram-size: 2048M
+          heap-size: 2048M
+          disk-size: 6144M
+          emulator-boot-timeout: 600
+          disable-animations: true
+          force-avd-creation: false
+          emulator-options: -no-snapshot-save -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim
+          script: if [ "$FULL_REGRESSION" = true ]; then bash ci/run_flutter_integration_test_android.sh; else bash ci/run_sdk_startup_smoke.sh android; fi
+
+  integration_test_ios:
+    name: iOS SDK checks (${{ matrix.version }})
+    if: ${{ !contains(github.event.pull_request.labels.*.name, 'ci:skip') }}
+    strategy:
+      fail-fast: false
+      matrix:
+        version: ${{ fromJSON(inputs.full_compatibility && '["3.16","3.38.5"]' || '["3.38.5"]') }}
+    uses: ./.github/workflows/run_ios_integration_test.yml
+    with:
+      smoke_only: ${{ !(inputs.full_regression || inputs.full_compatibility) }}
+      flutter_version: ${{ matrix.version }}
+    secrets:
+      APP_ID: ${{ secrets.APP_ID }}
+
+  integration_test_macos:
+    name: macOS SDK checks (${{ matrix.version }})
+    if: ${{ !cancelled() && !contains(github.event.pull_request.labels.*.name, 'ci:skip') }}
+    needs: check_changes
+    strategy:
+      fail-fast: false
+      matrix:
+        include: ${{ fromJSON(inputs.full_compatibility && '[{"version":"3.16","renderer_version":"3.24.5"},{"version":"3.38.5","renderer_version":"3.38.5"}]' || '[{"version":"3.38.5","renderer_version":"3.38.5"}]') }}
+    runs-on: macos-26
+    timeout-minutes: ${{ (inputs.full_regression || inputs.full_compatibility) && 120 || 20 }}
+    env:
+      FULL_REGRESSION: ${{ (inputs.full_regression || inputs.full_compatibility) }}
+      TEST_APP_ID: ${{ secrets.APP_ID }}
+      SAVE_DEBUG_GOLDEN: 'true'
+    steps:
+      - uses: actions/checkout@v4
+      - name: Check Apple CI coverage
+        run: ruby ci/check_apple_ci.rb
+      - uses: subosito/flutter-action@v2
+        with:
+          flutter-version: ${{ matrix.version }}
+          cache: true
+        id: runtime_flutter
+      - name: Cache CocoaPods downloads
+        uses: actions/cache@v4
+        with:
+          path: ~/Library/Caches/CocoaPods
+          key: macos-rendering-pods-${{ runner.arch }}-${{ hashFiles('macos/*.podspec', 'pubspec.yaml', 'test_shard/rendering_test/pubspec.yaml', 'test_shard/rendering_test/macos/Podfile') }}
+        if: ${{ !cancelled() && steps.runtime_flutter.outcome == 'success' }}
+      - run: flutter config --enable-macos-desktop
+        if: ${{ !cancelled() && steps.runtime_flutter.outcome == 'success' }}
+      - run: |
+          if [[ "$FULL_REGRESSION" = true ]]; then
+            bash ci/run_flutter_macos_integration_test.sh
+          else
+            bash ci/run_sdk_startup_smoke.sh macos
+          fi
+        id: macos_api
+        name: Run macOS startup smoke or full API suite
+        if: ${{ !cancelled() && steps.runtime_flutter.outcome == 'success' }}
+      - name: Run macOS published package smoke test
+        run: bash ci/run_flutter_macos_published_package_smoke_test.sh
+        id: published_macos
+        if: ${{ !cancelled() && steps.runtime_flutter.outcome == 'success' && matrix.version == '3.38.5' && (inputs.full_compatibility || needs.check_changes.outputs.apple_packages != 'false') }}
+      - name: Run iOS published package smoke test
+        run: bash ci/run_flutter_ios_published_package_smoke_test.sh
+        id: published_ios
+        if: ${{ !cancelled() && steps.runtime_flutter.outcome == 'success' && matrix.version == '3.38.5' && (inputs.full_compatibility || needs.check_changes.outputs.apple_packages != 'false') }}
+      - name: Resolve example dependencies
+        id: example_dependencies
+        if: ${{ !cancelled() && steps.runtime_flutter.outcome == 'success' && (inputs.full_compatibility || needs.check_changes.outputs.apple_packages != 'false') }}
+        run: flutter pub get
+      - name: Build iOS example
+        id: ios_example
+        if: ${{ !cancelled() && steps.runtime_flutter.outcome == 'success' && steps.example_dependencies.outcome == 'success' }}
+        run: flutter build ios --no-codesign --simulator
+        working-directory: example
+        env:
+          IOS_SIMULATOR_SDK_VERSION: 18.0
+      - name: Set up rendering Flutter
+        id: renderer_flutter
+        if: ${{ (inputs.full_regression || inputs.full_compatibility) && !cancelled() && matrix.version == '3.16' }}
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: ${{ matrix.renderer_version }}
+          cache: true
+          cache-key: 'flutter-macos-rendering-v1-:channel:-:version:-:arch:-:hash:'
+      - name: Configure rendering Flutter
+        if: ${{ (inputs.full_regression || inputs.full_compatibility) && !cancelled() && ((matrix.version == '3.38.5' && steps.runtime_flutter.outcome == 'success') || steps.renderer_flutter.outcome == 'success') }}
+        run: |
+          flutter config --enable-macos-desktop
+          if [ "${{ matrix.version }}" = "3.16" ]; then
+            flutter config --no-enable-android --no-enable-ios --no-enable-web
+            rm -rf "${FLUTTER_ROOT:?}/bin/cache/artifacts/engine"/android-* \
+              "${FLUTTER_ROOT:?}/bin/cache/artifacts/engine"/ios* \
+              "${FLUTTER_ROOT:?}/bin/cache/flutter_web_sdk"
+          fi
+      - name: Resolve rendering test dependencies
+        run: flutter pub get
+        working-directory: test_shard/rendering_test
+        if: ${{ (inputs.full_regression || inputs.full_compatibility) && !cancelled() && ((matrix.version == '3.38.5' && steps.runtime_flutter.outcome == 'success') || steps.renderer_flutter.outcome == 'success') }}
+      - name: Get Xcode build version
+        id: xcode_build
+        run: echo "version=$(xcodebuild -version | tail -n 1 | tr -d '[:space:]')" >> "$GITHUB_OUTPUT"
+        if: ${{ (inputs.full_regression || inputs.full_compatibility) && !cancelled() && ((matrix.version == '3.38.5' && steps.runtime_flutter.outcome == 'success') || steps.renderer_flutter.outcome == 'success') }}
+      - name: Cache macOS rendering build
+        uses: actions/cache@v4
+        with:
+          path: |
+            test_shard/rendering_test/.dart_tool
+            test_shard/rendering_test/build/macos
+            test_shard/rendering_test/macos/Pods
+            test_shard/rendering_test/macos/Podfile.lock
+          key: macos-rendering-build-v1-${{ runner.arch }}-${{ matrix.renderer_version }}-${{ steps.xcode_build.outputs.version }}-${{ hashFiles('pubspec.yaml', 'macos/**/*.podspec', 'macos/**/Package.swift', 'src/**', 'test_shard/rendering_test/pubspec.lock') }}-${{ github.sha }}
+          restore-keys: |
+            macos-rendering-build-v1-${{ runner.arch }}-${{ matrix.renderer_version }}-${{ steps.xcode_build.outputs.version }}-${{ hashFiles('pubspec.yaml', 'macos/**/*.podspec', 'macos/**/Package.swift', 'src/**', 'test_shard/rendering_test/pubspec.lock') }}-
+        if: ${{ (inputs.full_regression || inputs.full_compatibility) && !cancelled() && ((matrix.version == '3.38.5' && steps.runtime_flutter.outcome == 'success') || steps.renderer_flutter.outcome == 'success') }}
+      - name: Run macos rendering test
+        run: |
+          export SAVE_DEBUG_GOLDEN="true"
+          bash ci/rendering_test_macos.sh
+        if: ${{ (inputs.full_regression || inputs.full_compatibility) && !cancelled() && ((matrix.version == '3.38.5' && steps.runtime_flutter.outcome == 'success') || steps.renderer_flutter.outcome == 'success') }}
+        id: macos_rendering
+      - uses: actions/upload-artifact@v4
+        if: ${{ (inputs.full_regression || inputs.full_compatibility) && always() }}
+        with:
+          name: macos-debug-golden-files-${{ matrix.renderer_version }}
+          path: test_shard/rendering_test/screenshot/*.debug.png
+      - name: Wait for crash reports after a failure
+        if: ${{ failure() && !cancelled() }}
+        run: sleep 30
+      - name: Get iris logs macos
+        if: always()
+        run: |
+          mkdir iris-logs-macos
+          if [ -f "${HOME}/Library/Containers/com.example.fakeTestApp/Data/Library/agora-iris.log" ]; then
+            cp -RP ${HOME}/Library/Containers/com.example.fakeTestApp/Data/Library/agora-iris.log ./iris-logs-macos/agora-iris-fake-test.log || true
+          fi
+          if [ -f "${HOME}/Library/Containers/com.example.integrationTestApp/Data/Library/agora-iris.log" ]; then
+            cp -RP ${HOME}/Library/Containers/com.example.integrationTestApp/Data/Library/agora-iris.log ./iris-logs-macos/agora-iris-integration-test.log || true
+          fi
+
+          CRASH_DIR="${HOME}/Library/Logs/DiagnosticReports/"
+          OUTPUT_CRASH_DIR=./iris-logs-macos/crash
+          mkdir -p ${OUTPUT_CRASH_DIR}
+
+          # Copy all files
+          cp -RP $CRASH_DIR* $OUTPUT_CRASH_DIR || true
+      - name: Upload iris logs macos
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: iris-logs-macos-${{ matrix.version }}
+          path: iris-logs-macos/*
+
+  integration_test_windows:
+    name: Windows SDK checks
+    if: ${{ !contains(github.event.pull_request.labels.*.name, 'ci:skip') }}
+    strategy:
+      fail-fast: false
+      matrix:
+        version: ${{ fromJSON(inputs.full_compatibility && '["3.24.5","3.38.5"]' || '["3.38.5"]') }}  # Note: 3.7.0 removed due to SDK compatibility issues
+    runs-on: windows-2022
+    timeout-minutes: ${{ (inputs.full_regression || inputs.full_compatibility) && 120 || 20 }}
+    env:
+      FULL_REGRESSION: ${{ (inputs.full_regression || inputs.full_compatibility) }}
       TEST_APP_ID: ${{ secrets.APP_ID }}
     steps:
       - uses: actions/checkout@v4
@@ -373,7 +372,11 @@ jobs:
       - name: Run windows integration test
         shell: bash
         run: |
-          bash ci/run_flutter_windows_integration_test.sh
+          if [[ "$FULL_REGRESSION" = true ]]; then
+            bash ci/run_flutter_windows_integration_test.sh
+          else
+            bash ci/run_sdk_startup_smoke.sh windows
+          fi
 
       - name: Upload crash dumps if exist
         uses: actions/upload-artifact@v4
@@ -384,10 +387,10 @@ jobs:
 
   integration_test_web:
     name: Run Flutter Web Integration Tests
-    if: ${{ !contains(github.event.pull_request.labels.*.name, 'ci:skip') }}
+    if: ${{ (inputs.full_regression || inputs.full_compatibility) && !contains(github.event.pull_request.labels.*.name, 'ci:skip') }}
     strategy:
       matrix:
-        version: ["3.24.5", "3.38.5"]
+        version: ${{ fromJSON(inputs.full_compatibility && '["3.24.5","3.38.5"]' || '["3.38.5"]') }}
     runs-on: ubuntu-latest
     timeout-minutes: 60
     env:
@@ -410,7 +413,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        version: ["3.16", "3.24.5", "3.38.5"]
+        version: ${{ fromJSON(inputs.full_compatibility && '["3.16","3.24.5","3.38.5"]' || '["3.38.5"]') }}
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -427,10 +430,13 @@ jobs:
       - name: Run flutter build apk
         run: flutter build apk
         working-directory: example
+      - name: Check Android 16 KB page alignment
+        if: ${{ matrix.version == '3.38.5' }}
+        run: bash scripts/check_android15_16k_page_alignment.sh example/build/app/intermediates/merged_native_libs/release/mergeReleaseNativeLibs/out/lib/arm64-v8a/libiris_rendering_android.so
 
   build_android_windows:
     name: Build Android on Windows
-    if: ${{ !contains(github.event.pull_request.labels.*.name, 'ci:skip') }}
+    if: ${{ inputs.full_compatibility && !contains(github.event.pull_request.labels.*.name, 'ci:skip') }}
     strategy:
       fail-fast: false
       matrix:
@@ -452,31 +458,10 @@ jobs:
         run: flutter build apk
         working-directory: example
 
-  build_ios:
-    name: Build iOS
-    if: ${{ !contains(github.event.pull_request.labels.*.name, 'ci:skip') }}
-    strategy:
-      fail-fast: false
-      matrix:
-        version: ["3.16", "3.38.5"]
-    runs-on: macos-latest
-    timeout-minutes: 120
-    steps:
-      - uses: actions/checkout@v4
-      - uses: subosito/flutter-action@v2
-        with:
-          flutter-version: ${{ matrix.version }}
-          cache: true
-      - run: flutter pub get
-      - name: Run flutter build ios --no-codesign --simulator
-        run: flutter build ios --no-codesign --simulator
-        working-directory: example
-        env:
-          IOS_SIMULATOR_SDK_VERSION: 18.0
-
   ios_dependency_linkage_matrix:
     name: iOS dependency linkage - ${{ matrix.name }}
-    if: ${{ !contains(github.event.pull_request.labels.*.name, 'ci:skip') }}
+    needs: check_changes
+    if: ${{ !cancelled() && !contains(github.event.pull_request.labels.*.name, 'ci:skip') && (inputs.full_compatibility || needs.check_changes.outputs.apple_packages != 'false') }}
     strategy:
       fail-fast: false
       matrix:
@@ -488,8 +473,8 @@ jobs:
           # Enable after agora_rtc_engine/Package.swift is restored:
           # - name: agora_rtc_engine-spm-iris_method_channel-spm
           #   disable_swift_package_manager: false
-    runs-on: macos-latest
-    timeout-minutes: 120
+    runs-on: macos-26
+    timeout-minutes: 60
     steps:
       - uses: actions/checkout@v4
       - uses: subosito/flutter-action@v2
@@ -508,9 +493,11 @@ jobs:
         run: flutter pub get
         working-directory: example
       - name: Build iOS app without signing
+        timeout-minutes: 20
         run: flutter build ios --release --no-codesign
         working-directory: example
       - name: Archive iOS app without signing
+        timeout-minutes: 20
         run: |
           xcodebuild \
             -workspace ios/Runner.xcworkspace \
@@ -529,6 +516,18 @@ jobs:
           set -euo pipefail
           app="build/ios/iphoneos/Runner.app"
           archive_app="build/ios/archive/Runner.xcarchive/Products/Applications/Runner.app"
+
+          grep -Fq 'agora_rtc_engine' ios/Podfile.lock
+          generated_package=ios/Flutter/ephemeral/Packages/FlutterGeneratedPluginSwiftPackage/Package.swift
+          if [ "${{ matrix.disable_swift_package_manager }}" = true ]; then
+            grep -Fq 'iris_method_channel' ios/Podfile.lock
+          else
+            grep -Fq '.package(name: "iris_method_channel",' "$generated_package"
+            if grep -Fq '.package(name: "agora_rtc_engine",' "$generated_package"; then
+              echo '::error::release/6.5 must keep the main plugin on CocoaPods'
+              exit 1
+            fi
+          fi
 
           symbols=(
             Iris_InitDartApiDL
@@ -608,32 +607,13 @@ jobs:
           echo "::notice::Current PR linkage verified before Archive in $app_owner"
           echo "::notice::Current PR linkage verified after Archive in $archive_owner"
 
-  build_ios_canary:
-    name: Build iOS (latest stable canary)
-    if: ${{ !contains(github.event.pull_request.labels.*.name, 'ci:skip') }}
-    continue-on-error: true
-    runs-on: macos-latest
-    timeout-minutes: 120
-    steps:
-      - uses: actions/checkout@v4
-      - uses: subosito/flutter-action@v2
-        with:
-          channel: 'stable'
-          cache: true
-      - run: flutter pub get
-      - name: Run flutter build ios --no-codesign --simulator on latest stable
-        run: flutter build ios --no-codesign --simulator
-        working-directory: example
-        env:
-          IOS_SIMULATOR_SDK_VERSION: 18.0
-
   build_web:
     name: Build Web
     if: ${{ !contains(github.event.pull_request.labels.*.name, 'ci:skip') }}
     strategy:
       fail-fast: false
       matrix:
-        version: ["3.24.5", "3.38.5"]
+        version: ${{ fromJSON(inputs.full_compatibility && '["3.24.5","3.38.5"]' || '["3.38.5"]') }}
     runs-on: ubuntu-latest
     timeout-minutes: 120
     steps:
@@ -649,7 +629,7 @@ jobs:
 
   rendering_test_android:
     name: Run Flutter Android Rendering Tests
-    if: ${{ !contains(github.event.pull_request.labels.*.name, 'ci:skip') }}
+    if: ${{ (inputs.full_regression || inputs.full_compatibility) && !contains(github.event.pull_request.labels.*.name, 'ci:skip') }}
     runs-on: ubuntu-latest
     timeout-minutes: 120
     env:
@@ -693,26 +673,18 @@ jobs:
 
   rendering_test_ios:
     name: Run Flutter iOS Rendering Tests
-    if: ${{ !contains(github.event.pull_request.labels.*.name, 'ci:skip') }}
+    if: ${{ (inputs.full_regression || inputs.full_compatibility) && !contains(github.event.pull_request.labels.*.name, 'ci:skip') }}
     strategy:
       matrix:
-        include:
-          - version: "3.24.5"
-            runner: macos-15
-            model: "iPhone 16 Pro"
-            os_version: "18.5"
-            xcode_version: "16.4"
-          - version: "3.38.5"
-            runner: macos-26
-            model: "iPhone 16e"
-            os_version: ">=26.2"
-            xcode_version: latest-stable
+        include: ${{ fromJSON(inputs.full_compatibility && '[{"version":"3.24.5","runner":"macos-15","model":"iPhone 16 Pro","os_version":"18.5","xcode_version":"16.4"},{"version":"3.38.5","runner":"macos-26","model":"iPhone 16e","os_version":">=26.2","xcode_version":"latest-stable"}]' || '[{"version":"3.38.5","runner":"macos-26","model":"iPhone 16e","os_version":">=26.2","xcode_version":"latest-stable"}]') }}
     runs-on: ${{ matrix.runner }}
     timeout-minutes: 60
     env:
       TEST_APP_ID: ${{ secrets.APP_ID }}
     steps:
       - uses: actions/checkout@v4
+      - name: Check VM Service discovery watchdog
+        run: python3 -m unittest ci/test_flutter_vm_service_watchdog.py
       - uses: subosito/flutter-action@v2
         with:
           flutter-version: ${{ matrix.version }}
@@ -737,39 +709,12 @@ jobs:
           name: ios-debug-golden-files-${{ matrix.version }}
           path: test_shard/rendering_test/screenshot/*.debug.png
 
-  rendering_test_macos:
-    name: Run Flutter macOS Rendering Tests
-    if: ${{ !contains(github.event.pull_request.labels.*.name, 'ci:skip') }}
-    strategy:
-      matrix:
-        version: ["3.24.5", "3.38.5"]
-    runs-on: macos-latest
-    timeout-minutes: 120
-    env:
-      TEST_APP_ID: ${{ secrets.APP_ID }}
-    steps:
-      - uses: actions/checkout@v4
-      - uses: subosito/flutter-action@v2
-        with:
-          flutter-version: ${{ matrix.version }}
-          cache: true
-      - run: flutter config --enable-macos-desktop
-      - name: Run macos rendering test
-        run: |
-          export SAVE_DEBUG_GOLDEN="true"
-          bash ci/rendering_test_macos.sh
-      - uses: actions/upload-artifact@v4
-        if: always()
-        with:
-          name: macos-debug-golden-files-${{ matrix.version }}
-          path: test_shard/rendering_test/screenshot/*.debug.png
-
   rendering_test_windows:
     name: Run Flutter Windows Rendering Tests
-    if: ${{ !contains(github.event.pull_request.labels.*.name, 'ci:skip') }}
+    if: ${{ (inputs.full_regression || inputs.full_compatibility) && !contains(github.event.pull_request.labels.*.name, 'ci:skip') }}
     strategy:
       matrix:
-        version: ["3.24.5", "3.38.5"]
+        version: ${{ fromJSON(inputs.full_compatibility && '["3.24.5","3.38.5"]' || '["3.38.5"]') }}
     runs-on: windows-2022
     timeout-minutes: 120
     env:
@@ -795,10 +740,10 @@ jobs:
 
   rendering_test_web:
     name: Run Flutter Web Rendering Tests
-    if: ${{ !contains(github.event.pull_request.labels.*.name, 'ci:skip') }}
+    if: ${{ (inputs.full_regression || inputs.full_compatibility) && !contains(github.event.pull_request.labels.*.name, 'ci:skip') }}
     strategy:
       matrix:
-        version: ["3.24.5", "3.38.5"]
+        version: ${{ fromJSON(inputs.full_compatibility && '["3.24.5","3.38.5"]' || '["3.38.5"]') }}
     runs-on: ubuntu-latest
     timeout-minutes: 60
     env:
@@ -822,28 +767,3 @@ jobs:
         with:
           name: web-debug-golden-files-${{ matrix.version }}
           path: test_shard/rendering_test/screenshot/*.debug.png
-
-  check_android15_16k_page_alignment:
-    name: Check android15 16k page size alignment
-    if: ${{ !contains(github.event.pull_request.labels.*.name, 'ci:skip') }}
-    strategy:
-      matrix:
-        version: ["3.38.5"]
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      - name: Install JDK
-        uses: actions/setup-java@v4
-        with:
-          distribution: 'zulu'
-          java-version: '17'
-      - uses: subosito/flutter-action@v2
-        with:
-          flutter-version: ${{ matrix.version }}
-          cache: true
-      - run: flutter pub get
-      - name: Run flutter build apk
-        run: flutter build apk
-        working-directory: example
-      - name: Check android15 16k page size alignment
-        run: bash scripts/check_android15_16k_page_alignment.sh example/build/app/intermediates/merged_native_libs/release/mergeReleaseNativeLibs/out/lib/arm64-v8a/libiris_rendering_android.so

@@ -19,7 +19,7 @@ on:
         required: true
         default: ''
       run_gen_code:
-        description: 'Whether to run gen code, default is true'
+        description: 'Generate bindings for API/header changes (default true). For binary-only replacements with unchanged APIs, set false for the fast path.'
         type: boolean
         required: false
         default: true
