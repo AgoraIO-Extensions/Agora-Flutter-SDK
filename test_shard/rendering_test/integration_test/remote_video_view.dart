@@ -1,9 +1,11 @@
 import 'dart:async';
+import 'dart:math';
 
 import 'package:agora_rtc_engine/agora_rtc_engine.dart';
 import 'package:flutter/material.dart';
 
 import 'agora_video_view_render_test.dart';
+import 'common/widget_tester_ext.dart';
 
 class RemoteVideoView extends StatefulWidget {
   const RemoteVideoView({
@@ -28,7 +30,13 @@ class RemoteVideoView extends StatefulWidget {
   State<RemoteVideoView> createState() => _RemoteVideoViewState();
 }
 
-class _RemoteVideoViewState extends State<RemoteVideoView> {
+class _RemoteVideoViewState extends State<RemoteVideoView>
+    implements AsyncTestDisposal {
+  final Completer<void> _disposed = Completer<void>();
+
+  @override
+  Future<void> get disposed => _disposed.future;
+
   late final RtcEngineEventHandler rtcEngineEventHandler;
   late final RtcEngineEx rtcEngine;
   late final MediaPlayerController mediaPlayerController;
@@ -38,7 +46,9 @@ class _RemoteVideoViewState extends State<RemoteVideoView> {
 
   static const int _myUid = 12345;
   static const int _mpkRemoteUid = 67890;
-  static const String _channelId = 'rendering_test';
+  // Parallel platforms/Flutter versions must not join the same channel/UIDs.
+  final String _channelId = 'rendering_test_'
+      '${DateTime.now().microsecondsSinceEpoch}_${Random().nextInt(0x7fffffff)}';
 
   @override
   void initState() {
@@ -130,7 +140,7 @@ class _RemoteVideoViewState extends State<RemoteVideoView> {
 
     await rtcEngine.joinChannelEx(
       token: '',
-      connection: const RtcConnection(
+      connection: RtcConnection(
         channelId: _channelId,
         localUid: _myUid,
       ),
@@ -149,7 +159,7 @@ class _RemoteVideoViewState extends State<RemoteVideoView> {
     // Simulate a remote user join
     await rtcEngine.joinChannelEx(
       token: '',
-      connection: const RtcConnection(
+      connection: RtcConnection(
         channelId: _channelId,
         localUid: _mpkRemoteUid,
       ),
@@ -167,7 +177,7 @@ class _RemoteVideoViewState extends State<RemoteVideoView> {
 
   @override
   void dispose() {
-    _dispose();
+    _disposed.complete(_dispose());
     super.dispose();
   }
 
@@ -203,7 +213,7 @@ class _RemoteVideoViewState extends State<RemoteVideoView> {
                     renderMode: widget.renderModeType,
                     mirrorMode: widget.mirrorModeType,
                   ),
-                  connection: const RtcConnection(
+                  connection: RtcConnection(
                     channelId: _channelId,
                     localUid: _myUid,
                   ),
