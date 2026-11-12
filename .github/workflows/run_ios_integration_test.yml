@@ -3,6 +3,10 @@ name: 'run: iOS integration test'
 on:
   workflow_call:
     inputs:
+      smoke_only:
+        description: 'Run only the native SDK startup smoke'
+        type: boolean
+        default: false
       flutter_version:
         required: true
         type: string
@@ -15,10 +19,11 @@ permissions:
 
 jobs:
   runtime:
-    name: iOS runtime (${{ inputs.flutter_version }})
+    name: ${{ inputs.smoke_only && 'iOS startup smoke' || 'Full iOS runtime' }} (${{ inputs.flutter_version }})
     runs-on: macos-26
-    timeout-minutes: 60
+    timeout-minutes: ${{ inputs.smoke_only && 20 || 60 }}
     env:
+      IOS_SMOKE_ONLY: ${{ inputs.smoke_only }}
       TEST_APP_ID: ${{ secrets.APP_ID }}
       IOS_TEST_MAX_ATTEMPTS: '3'
     steps:
@@ -49,7 +54,13 @@ jobs:
           erase_before_boot: true
           wait_for_boot: true
           shutdown_after_job: true
-      - run: bash ci/run_flutter_integration_test_ios.sh
+      - name: Run iOS startup smoke or full API suite
+        run: |
+          if [[ "$IOS_SMOKE_ONLY" = true ]]; then
+            bash ci/run_sdk_startup_smoke.sh ios
+          else
+            bash ci/run_flutter_integration_test_ios.sh
+          fi
       - name: Get ios crash logs
         if: always()
         run: |

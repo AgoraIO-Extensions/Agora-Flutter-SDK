@@ -40,6 +40,12 @@ while IFS= read -r filename; do
         echo "Retrying after Flutter failed to discover the iOS VM Service..."
         sleep 5
     done
-done < <(find integration_test -maxdepth 1 -type f -name '*.dart' ! -name '*.generated.dart' | sort)
+done < <(
+    if (($#)); then
+        printf '%s\n' "$@"
+    else
+        find integration_test -maxdepth 1 -type f -name '*.dart' ! -name '*.generated.dart' | sort
+    fi
+)
 
 popd

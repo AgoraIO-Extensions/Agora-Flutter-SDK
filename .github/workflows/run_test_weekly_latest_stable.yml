@@ -11,7 +11,7 @@ on:
         description: 'Checks to run'
         type: choice
         default: latest-stable
-        options: [latest-stable, full-compatibility, legacy-ios]
+        options: [latest-stable, current-regression, full-compatibility, legacy-ios]
   schedule:
     - cron: '0 0 * * 0'
       timezone: 'Asia/Shanghai'
@@ -43,6 +43,15 @@ jobs:
     uses: ./.github/workflows/run_ios_integration_test.yml
     with:
       flutter_version: '3.16'
+    secrets:
+      APP_ID: ${{ secrets.APP_ID }}
+
+  current_regression:
+    name: Full current-version API and screenshot regression (manual)
+    if: ${{ github.event_name == 'workflow_dispatch' && inputs.suite == 'current-regression' }}
+    uses: ./.github/workflows/run_test.yml
+    with:
+      full_regression: true
     secrets:
       APP_ID: ${{ secrets.APP_ID }}
 

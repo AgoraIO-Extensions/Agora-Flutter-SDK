@@ -21,6 +21,7 @@ class AppleChangesTest(unittest.TestCase):
                      "ios/agora_rtc_engine/Package.swift", "src/binding.cc",
                      "example/lib/main.dart", "test_shard/integration_test_swiftpm/lib/main.dart",
                      "ci/check_apple_changes.py", ".github/workflows/run_test.yml",
+                     ".github/actions/gen_code/action.yml",
                      "test_shard/rendering_test/pubspec.yaml"):
             with self.subTest(path=path):
                 self.assertTrue(needs_apple_packages([path]))

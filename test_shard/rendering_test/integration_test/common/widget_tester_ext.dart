@@ -7,9 +7,9 @@ abstract class AsyncTestDisposal {
 }
 
 Future<void> waitFrame(WidgetTester tester) async {
-  // Call `pumpAndSettle` more times to ensure the video rendered
+  // The caller has awaited the first video frame; pump the compositor before capture.
   for (int i = 0; i < 5; i++) {
-    await tester.pumpAndSettle(const Duration(seconds: 10));
+    await tester.pumpAndSettle(const Duration(milliseconds: 100));
   }
 }
 

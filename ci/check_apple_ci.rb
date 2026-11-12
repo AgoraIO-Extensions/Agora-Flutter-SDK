@@ -22,6 +22,7 @@ def values(job, field, full)
 end
 
 raise 'PRs must default to the current-version suite' unless triggers.call(workflow).fetch('workflow_call').fetch('inputs').fetch('full_compatibility').fetch('default') == false
+raise 'Full regression must be opt-in' unless triggers.call(workflow).fetch('workflow_call').fetch('inputs').fetch('full_regression').fetch('default') == false
 versions = {
   'integration_test_android' => %w[3.16 3.24.5 3.38.5],
   'integration_test_ios' => %w[3.16 3.38.5],
@@ -40,6 +41,20 @@ versions.each do |id, expected|
 end
 raise 'Windows-host Android builds must be opt-in' unless jobs.fetch('build_android_windows').fetch('if').include?('inputs.full_compatibility')
 raise 'Core Android rendering was removed' unless jobs.fetch('rendering_test_android').fetch('steps').any? { |step| step.dig('with', 'script') == 'bash ci/rendering_test_android.sh' }
+%w[integration_test_web rendering_test_android rendering_test_ios rendering_test_windows rendering_test_web].each do |id|
+  condition = jobs.fetch(id).fetch('if')
+  raise "Long regression must remain opt-in: #{id}" unless condition.include?('inputs.full_regression') && condition.include?('inputs.full_compatibility')
+end
+{
+  'integration_test_android' => ['android', 'bash ci/run_flutter_integration_test_android.sh'],
+  'integration_test_windows' => ['windows', 'bash ci/run_flutter_windows_integration_test.sh'],
+  'integration_test_macos' => ['macos', 'bash ci/run_flutter_macos_integration_test.sh']
+}.each do |id, (platform, full_command)|
+  job = jobs.fetch(id)
+  commands = job.fetch('steps').map { |step| step['run'].to_s + step.dig('with', 'script').to_s }.join("\n")
+  raise "Startup smoke or full API command missing: #{platform}" unless commands.include?("bash ci/run_sdk_startup_smoke.sh #{platform}") && commands.include?(full_command)
+end
+raise 'iOS fast checks must select startup-only mode' unless jobs.fetch('integration_test_ios').fetch('with').fetch('smoke_only').include?('!(inputs.full_regression || inputs.full_compatibility)')
 raise 'No real failures may be ignored' if jobs.values.any? { |job| job['continue-on-error'] == true || Array(job['steps']).any? { |step| step['continue-on-error'] == true } }
 
 quality = jobs.fetch('quality_checks').fetch('steps')
@@ -102,6 +117,9 @@ expected_mac = [
 raise 'Full macOS matrix changed' unless values(mac, 'include', true) == expected_mac
 raise 'Default macOS matrix repeats old versions' unless values(mac, 'include', false) == expected_mac.last(1)
 raise 'Default iOS rendering repeats old versions' unless values(jobs['rendering_test_ios'], 'include', false) == values(jobs['rendering_test_ios'], 'include', true).last(1)
+%w[renderer_flutter xcode_build macos_rendering].each do |id|
+  raise "macOS screenshot setup still blocks fast checks: #{id}" unless steps.fetch(id).fetch('if').include?('inputs.full_regression || inputs.full_compatibility')
+end
 expected_mac.each do |row|
   %w[macos\ runtime ios\ example].each do |kind|
     expected << [kind, row['version'], 'macos-26']
@@ -133,17 +151,20 @@ raise 'Packaging worker has no useful upper bound' unless package_job.fetch('tim
 
 weekly_triggers = triggers.call(weekly)
 suite = weekly_triggers.fetch('workflow_dispatch').fetch('inputs').fetch('suite')
-raise 'Manual suite choices changed' unless suite.fetch('default') == 'latest-stable' && suite.fetch('options').sort == %w[latest-stable full-compatibility legacy-ios].sort
+raise 'Manual suite choices changed' unless suite.fetch('default') == 'latest-stable' && suite.fetch('options').sort == %w[latest-stable current-regression full-compatibility legacy-ios].sort
 raise 'Weekly schedule changed' unless weekly_triggers.fetch('schedule') == [{ 'cron' => '0 0 * * 0', 'timezone' => 'Asia/Shanghai' }]
 weekly_jobs = weekly.fetch('jobs')
 full = weekly_jobs.fetch('full_compatibility')
+regression = weekly_jobs.fetch('current_regression')
+raise 'Current regression must call the same workflow' unless regression.fetch('uses') == './.github/workflows/run_test.yml' && regression.fetch('with').fetch('full_regression') == true
+raise 'Current regression must remain manual' unless regression.fetch('if').include?("inputs.suite == 'current-regression'")
 raise 'Full suite must call the same workflow' unless full.fetch('uses') == './.github/workflows/run_test.yml' && full.fetch('with').fetch('full_compatibility') == true
 raise 'Full compatibility must be manual' unless full.fetch('if').include?("github.event_name == 'workflow_dispatch'") && full.fetch('if').include?("inputs.suite == 'full-compatibility'")
 legacy = weekly_jobs.fetch('legacy_ios_compatibility')
 raise 'Legacy iOS manual entry missing' unless legacy.fetch('with').fetch('flutter_version') == '3.16' && legacy.fetch('if').include?("inputs.suite == 'legacy-ios'")
 raise 'Manual suites must skip weekly resolution' unless weekly_jobs.fetch('resolve_flutter_version').fetch('if').include?("inputs.suite == 'latest-stable'")
 weekly_jobs.each do |id, job|
-  next if %w[resolve_flutter_version legacy_ios_compatibility full_compatibility].include?(id)
+  next if %w[resolve_flutter_version legacy_ios_compatibility current_regression full_compatibility].include?(id)
   raise "Manual suites would also run #{id}" unless Array(job.fetch('needs')).include?('resolve_flutter_version')
 end
 raise 'Weekly duplicate documentation/publish jobs remain' if %w[attach_docs pub_publish_check flutter_ut].any? { |id| weekly_jobs.key?(id) }
@@ -155,16 +176,16 @@ raise 'Weekly unit coverage missing' unless weekly_jobs.fetch('flutter_codestyle
   raise 'Container analysis must restore checkout ownership before host tests' unless analysis && ownership && unit && analysis < ownership && ownership < unit
 end
 
-count = lambda do |full_matrix, packaging|
+count = lambda do |full_matrix, packaging, deep|
   jobs.sum do |id, job|
     next 0 if id == 'build_android_windows' && !full_matrix
+    next 0 if %w[integration_test_web rendering_test_android rendering_test_ios rendering_test_windows rendering_test_web].include?(id) && !full_matrix && !deep
     next (packaging || full_matrix ? 2 : 0) if id == 'apple_dependency_linkage_matrix'
     matrix = job.dig('strategy', 'matrix')
     matrix ? values(job, matrix.key?('include') ? 'include' : 'version', full_matrix).length : 1
   end
 end
-raise 'Unexpected runner count' unless [count.call(false, false), count.call(false, true), count.call(true, true)] == [13, 15, 30]
-normal_mac = values(jobs['integration_test_ios'], 'version', false).length +
-  values(jobs['rendering_test_ios'], 'include', false).length + values(mac, 'include', false).length
-raise 'Default macOS allocation count changed' unless normal_mac == 3
-puts 'CI policy: 14 PR runners (3 macOS), 16 with packaging (5 macOS), including the permission job; full compatibility preserves all 18 Apple groups.'
+raise 'Unexpected runner count' unless [count.call(false, false, false), count.call(false, true, false), count.call(false, true, true), count.call(true, true, true)] == [8, 10, 15, 30]
+normal_mac = values(jobs['integration_test_ios'], 'version', false).length + values(mac, 'include', false).length
+raise 'Default macOS allocation count changed' unless normal_mac == 2
+puts 'CI policy: 9 fast PR runners (2 macOS), 11 with packaging (4 macOS), including permission; full compatibility preserves all 18 Apple groups.'

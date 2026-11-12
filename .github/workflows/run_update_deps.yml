@@ -34,7 +34,7 @@ on:
         required: true
         default: ''
       run_gen_code:
-        description: 'Whether to run gen code, default is true'
+        description: 'Generate bindings for API/header changes (default true). For a binary-only dependency replacement with unchanged APIs, set false for the fast path.'
         type: boolean
         required: false
         default: true
@@ -58,7 +58,7 @@ on:
 
 jobs:
   update_deps:
-    runs-on: macos-latest
+    runs-on: macos-26
     steps:
       - name: Checkout target branch
         uses: actions/checkout@v4

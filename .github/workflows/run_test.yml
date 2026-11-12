@@ -7,6 +7,10 @@ concurrency:
 on:
   workflow_call:
     inputs:
+      full_regression:
+        description: 'Run the full current-version API and screenshot suites'
+        type: boolean
+        default: false
       full_compatibility:
         description: 'Run the preserved historical Flutter and host matrix'
         type: boolean
@@ -42,7 +46,7 @@ jobs:
       - name: Check CI policy and startup recovery
         run: |
           ruby ci/check_apple_ci.rb
-          python3 -m unittest ci/test_flutter_vm_service_watchdog.py ci/test_ios_integration_startup_retry.py ci/test_check_apple_changes.py
+          python3 -m unittest ci/test_flutter_vm_service_watchdog.py ci/test_ios_integration_startup_retry.py ci/test_check_apple_changes.py ci/test_sdk_startup_smoke.py
       - uses: subosito/flutter-action@v2
         id: flutter
         with:
@@ -58,15 +62,16 @@ jobs:
         run: flutter test
 
   integration_test_android:
-    name: Run Flutter Android Integration Tests
+    name: Android SDK checks
     if: ${{ !contains(github.event.pull_request.labels.*.name, 'ci:skip') }}
     strategy:
       fail-fast: false
       matrix:
         version: ${{ fromJSON(inputs.full_compatibility && '["3.16","3.24.5","3.38.5"]' || '["3.38.5"]') }}
     runs-on: ubuntu-latest
-    timeout-minutes: 120
+    timeout-minutes: ${{ (inputs.full_regression || inputs.full_compatibility) && 120 || 20 }}
     env:
+      FULL_REGRESSION: ${{ (inputs.full_regression || inputs.full_compatibility) }}
       TEST_APP_ID: ${{ secrets.APP_ID }}
     steps:
       - uses: actions/checkout@v4
@@ -97,10 +102,10 @@ jobs:
           disable-animations: true
           force-avd-creation: false
           emulator-options: -no-snapshot-save -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim
-          script: bash ci/run_flutter_integration_test_android.sh
+          script: if [ "$FULL_REGRESSION" = true ]; then bash ci/run_flutter_integration_test_android.sh; else bash ci/run_sdk_startup_smoke.sh android; fi
 
   integration_test_ios:
-    name: Run Flutter iOS Integration Tests (${{ matrix.version }})
+    name: iOS SDK checks (${{ matrix.version }})
     if: ${{ !contains(github.event.pull_request.labels.*.name, 'ci:skip') }}
     strategy:
       fail-fast: false
@@ -108,12 +113,13 @@ jobs:
         version: ${{ fromJSON(inputs.full_compatibility && '["3.16","3.38.5"]' || '["3.38.5"]') }}
     uses: ./.github/workflows/run_ios_integration_test.yml
     with:
+      smoke_only: ${{ !(inputs.full_regression || inputs.full_compatibility) }}
       flutter_version: ${{ matrix.version }}
     secrets:
       APP_ID: ${{ secrets.APP_ID }}
 
   integration_test_macos:
-    name: Run Flutter macOS checks (${{ matrix.version }})
+    name: macOS SDK checks (${{ matrix.version }})
     if: ${{ !cancelled() && !contains(github.event.pull_request.labels.*.name, 'ci:skip') }}
     needs: check_changes
     strategy:
@@ -121,8 +127,9 @@ jobs:
       matrix:
         include: ${{ fromJSON(inputs.full_compatibility && '[{"version":"3.16","renderer_version":"3.24.5"},{"version":"3.38.5","renderer_version":"3.38.5"}]' || '[{"version":"3.38.5","renderer_version":"3.38.5"}]') }}
     runs-on: macos-26
-    timeout-minutes: 120
+    timeout-minutes: ${{ (inputs.full_regression || inputs.full_compatibility) && 120 || 20 }}
     env:
+      FULL_REGRESSION: ${{ (inputs.full_regression || inputs.full_compatibility) }}
       TEST_APP_ID: ${{ secrets.APP_ID }}
       SAVE_DEBUG_GOLDEN: 'true'
     steps:
@@ -142,9 +149,14 @@ jobs:
         if: ${{ !cancelled() && steps.runtime_flutter.outcome == 'success' }}
       - run: flutter config --enable-macos-desktop
         if: ${{ !cancelled() && steps.runtime_flutter.outcome == 'success' }}
-      - run: bash ci/run_flutter_macos_integration_test.sh
+      - run: |
+          if [[ "$FULL_REGRESSION" = true ]]; then
+            bash ci/run_flutter_macos_integration_test.sh
+          else
+            bash ci/run_sdk_startup_smoke.sh macos
+          fi
         id: macos_api
-        name: Run macOS integration tests
+        name: Run macOS startup smoke or full API suite
         if: ${{ !cancelled() && steps.runtime_flutter.outcome == 'success' }}
       - name: Run macOS published package smoke test
         run: bash ci/run_flutter_macos_published_package_smoke_test.sh
@@ -167,14 +179,14 @@ jobs:
           IOS_SIMULATOR_SDK_VERSION: 18.0
       - name: Set up rendering Flutter
         id: renderer_flutter
-        if: ${{ !cancelled() && matrix.version == '3.16' }}
+        if: ${{ (inputs.full_regression || inputs.full_compatibility) && !cancelled() && matrix.version == '3.16' }}
         uses: subosito/flutter-action@v2
         with:
           flutter-version: ${{ matrix.renderer_version }}
           cache: true
           cache-key: 'flutter-macos-rendering-v1-:channel:-:version:-:arch:-:hash:'
       - name: Configure rendering Flutter
-        if: ${{ !cancelled() && ((matrix.version == '3.38.5' && steps.runtime_flutter.outcome == 'success') || steps.renderer_flutter.outcome == 'success') }}
+        if: ${{ (inputs.full_regression || inputs.full_compatibility) && !cancelled() && ((matrix.version == '3.38.5' && steps.runtime_flutter.outcome == 'success') || steps.renderer_flutter.outcome == 'success') }}
         run: |
           flutter config --enable-macos-desktop
           if [ "${{ matrix.version }}" = "3.16" ]; then
@@ -186,11 +198,11 @@ jobs:
       - name: Resolve rendering test dependencies
         run: flutter pub get
         working-directory: test_shard/rendering_test
-        if: ${{ !cancelled() && ((matrix.version == '3.38.5' && steps.runtime_flutter.outcome == 'success') || steps.renderer_flutter.outcome == 'success') }}
+        if: ${{ (inputs.full_regression || inputs.full_compatibility) && !cancelled() && ((matrix.version == '3.38.5' && steps.runtime_flutter.outcome == 'success') || steps.renderer_flutter.outcome == 'success') }}
       - name: Get Xcode build version
         id: xcode_build
         run: echo "version=$(xcodebuild -version | tail -n 1 | tr -d '[:space:]')" >> "$GITHUB_OUTPUT"
-        if: ${{ !cancelled() && ((matrix.version == '3.38.5' && steps.runtime_flutter.outcome == 'success') || steps.renderer_flutter.outcome == 'success') }}
+        if: ${{ (inputs.full_regression || inputs.full_compatibility) && !cancelled() && ((matrix.version == '3.38.5' && steps.runtime_flutter.outcome == 'success') || steps.renderer_flutter.outcome == 'success') }}
       - name: Cache macOS rendering build
         uses: actions/cache@v4
         with:
@@ -199,18 +211,18 @@ jobs:
             test_shard/rendering_test/build/macos
             test_shard/rendering_test/macos/Pods
             test_shard/rendering_test/macos/Podfile.lock
-          key: macos-rendering-build-v1-${{ runner.arch }}-${{ matrix.renderer_version }}-${{ steps.xcode_build.outputs.version }}-${{ hashFiles('test_shard/rendering_test/pubspec.lock') }}-${{ github.sha }}
+          key: macos-rendering-build-v1-${{ runner.arch }}-${{ matrix.renderer_version }}-${{ steps.xcode_build.outputs.version }}-${{ hashFiles('pubspec.yaml', 'macos/**/*.podspec', 'macos/**/Package.swift', 'src/**', 'test_shard/rendering_test/pubspec.lock') }}-${{ github.sha }}
           restore-keys: |
-            macos-rendering-build-v1-${{ runner.arch }}-${{ matrix.renderer_version }}-${{ steps.xcode_build.outputs.version }}-${{ hashFiles('test_shard/rendering_test/pubspec.lock') }}-
-        if: ${{ !cancelled() && ((matrix.version == '3.38.5' && steps.runtime_flutter.outcome == 'success') || steps.renderer_flutter.outcome == 'success') }}
+            macos-rendering-build-v1-${{ runner.arch }}-${{ matrix.renderer_version }}-${{ steps.xcode_build.outputs.version }}-${{ hashFiles('pubspec.yaml', 'macos/**/*.podspec', 'macos/**/Package.swift', 'src/**', 'test_shard/rendering_test/pubspec.lock') }}-
+        if: ${{ (inputs.full_regression || inputs.full_compatibility) && !cancelled() && ((matrix.version == '3.38.5' && steps.runtime_flutter.outcome == 'success') || steps.renderer_flutter.outcome == 'success') }}
       - name: Run macos rendering test
         run: |
           export SAVE_DEBUG_GOLDEN="true"
           bash ci/rendering_test_macos.sh
-        if: ${{ !cancelled() && ((matrix.version == '3.38.5' && steps.runtime_flutter.outcome == 'success') || steps.renderer_flutter.outcome == 'success') }}
+        if: ${{ (inputs.full_regression || inputs.full_compatibility) && !cancelled() && ((matrix.version == '3.38.5' && steps.runtime_flutter.outcome == 'success') || steps.renderer_flutter.outcome == 'success') }}
         id: macos_rendering
       - uses: actions/upload-artifact@v4
-        if: always()
+        if: ${{ (inputs.full_regression || inputs.full_compatibility) && always() }}
         with:
           name: macos-debug-golden-files-${{ matrix.renderer_version }}
           path: test_shard/rendering_test/screenshot/*.debug.png
@@ -242,15 +254,16 @@ jobs:
           path: iris-logs-macos/*
 
   integration_test_windows:
-    name: Run Flutter Windows Integration Tests
+    name: Windows SDK checks
     if: ${{ !contains(github.event.pull_request.labels.*.name, 'ci:skip') }}
     strategy:
       fail-fast: false
       matrix:
         version: ${{ fromJSON(inputs.full_compatibility && '["3.24.5","3.38.5"]' || '["3.38.5"]') }}  # Note: 3.7.0 removed due to SDK compatibility issues
     runs-on: windows-2022
-    timeout-minutes: 120
+    timeout-minutes: ${{ (inputs.full_regression || inputs.full_compatibility) && 120 || 20 }}
     env:
+      FULL_REGRESSION: ${{ (inputs.full_regression || inputs.full_compatibility) }}
       TEST_APP_ID: ${{ secrets.APP_ID }}
     steps:
       - uses: actions/checkout@v4
@@ -271,7 +284,11 @@ jobs:
       - name: Run windows integration test
         shell: bash
         run: |
-          bash ci/run_flutter_windows_integration_test.sh
+          if [[ "$FULL_REGRESSION" = true ]]; then
+            bash ci/run_flutter_windows_integration_test.sh
+          else
+            bash ci/run_sdk_startup_smoke.sh windows
+          fi
 
       - name: Upload crash dumps if exist
         uses: actions/upload-artifact@v4
@@ -282,7 +299,7 @@ jobs:
 
   integration_test_web:
     name: Run Flutter Web Integration Tests
-    if: ${{ !contains(github.event.pull_request.labels.*.name, 'ci:skip') }}
+    if: ${{ (inputs.full_regression || inputs.full_compatibility) && !contains(github.event.pull_request.labels.*.name, 'ci:skip') }}
     strategy:
       matrix:
         version: ${{ fromJSON(inputs.full_compatibility && '["3.24.5","3.38.5"]' || '["3.38.5"]') }}
@@ -384,7 +401,7 @@ jobs:
 
   rendering_test_android:
     name: Run Flutter Android Rendering Tests
-    if: ${{ !contains(github.event.pull_request.labels.*.name, 'ci:skip') }}
+    if: ${{ (inputs.full_regression || inputs.full_compatibility) && !contains(github.event.pull_request.labels.*.name, 'ci:skip') }}
     runs-on: ubuntu-latest
     timeout-minutes: 120
     env:
@@ -428,7 +445,7 @@ jobs:
 
   rendering_test_ios:
     name: Run Flutter iOS Rendering Tests
-    if: ${{ !contains(github.event.pull_request.labels.*.name, 'ci:skip') }}
+    if: ${{ (inputs.full_regression || inputs.full_compatibility) && !contains(github.event.pull_request.labels.*.name, 'ci:skip') }}
     strategy:
       matrix:
         include: ${{ fromJSON(inputs.full_compatibility && '[{"version":"3.24.5","runner":"macos-15","model":"iPhone 16 Pro","os_version":"18.5","xcode_version":"16.4"},{"version":"3.38.5","runner":"macos-26","model":"iPhone 16e","os_version":">=26.2","xcode_version":"latest-stable"}]' || '[{"version":"3.38.5","runner":"macos-26","model":"iPhone 16e","os_version":">=26.2","xcode_version":"latest-stable"}]') }}
@@ -466,7 +483,7 @@ jobs:
 
   rendering_test_windows:
     name: Run Flutter Windows Rendering Tests
-    if: ${{ !contains(github.event.pull_request.labels.*.name, 'ci:skip') }}
+    if: ${{ (inputs.full_regression || inputs.full_compatibility) && !contains(github.event.pull_request.labels.*.name, 'ci:skip') }}
     strategy:
       matrix:
         version: ${{ fromJSON(inputs.full_compatibility && '["3.24.5","3.38.5"]' || '["3.38.5"]') }}
@@ -495,7 +512,7 @@ jobs:
 
   rendering_test_web:
     name: Run Flutter Web Rendering Tests
-    if: ${{ !contains(github.event.pull_request.labels.*.name, 'ci:skip') }}
+    if: ${{ (inputs.full_regression || inputs.full_compatibility) && !contains(github.event.pull_request.labels.*.name, 'ci:skip') }}
     strategy:
       matrix:
         version: ${{ fromJSON(inputs.full_compatibility && '["3.24.5","3.38.5"]' || '["3.38.5"]') }}

@@ -6,7 +6,7 @@ import sys
 
 def needs_apple_packages(paths):
     prefixes = ("ios/", "macos/", "src/", "example/", "ci/",
-                ".github/workflows/", "test_shard/integration_test_swiftpm/")
+                ".github/workflows/", ".github/actions/", "test_shard/integration_test_swiftpm/")
     manifests = {"pubspec.yaml", "pubspec.lock", "Package.swift", "Podfile",
                  "Podfile.lock", ".pubignore", ".gitignore", ".gitattributes",
                  ".gitmodules"}
