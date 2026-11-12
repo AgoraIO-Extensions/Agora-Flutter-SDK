@@ -1,4 +1,5 @@
 import os
+import json
 from pathlib import Path
 import shutil
 import subprocess
@@ -7,7 +8,7 @@ import unittest
 
 
 class IosIntegrationStartupTest(unittest.TestCase):
-    def run_case(self, mode, smoke=False):
+    def run_case(self, mode, smoke=False, device=None):
         with tempfile.TemporaryDirectory(prefix="ios startup ") as directory:
             root = Path(directory)
             ci = root / "ci"
@@ -25,6 +26,7 @@ class IosIntegrationStartupTest(unittest.TestCase):
             flutter = commands / "flutter"
             flutter.write_text("""#!/usr/bin/env python3
 import os
+import json
 from pathlib import Path
 import sys
 if sys.argv[1:3] == ['packages', 'get']:
@@ -34,6 +36,8 @@ attempt = int(counter.read_text()) + 1 if counter.exists() else 1
 counter.write_text(str(attempt))
 with open(os.environ['TARGET_LOG'], 'a') as output:
     output.write(sys.argv[2] + '\\n')
+with open(os.environ['ARGUMENT_LOG'], 'a') as output:
+    output.write(json.dumps(sys.argv[1:]) + '\\n')
 mode = os.environ['FAILURE_MODE']
 if mode == 'test_failure':
     raise SystemExit(7)
@@ -55,7 +59,10 @@ if mode == 'log_reader_once' and attempt == 1:
             env = dict(os.environ, PATH=str(commands) + os.pathsep + os.environ["PATH"],
                        IOS_TEST_MAX_ATTEMPTS="3", TEST_APP_ID="test-app-id",
                        FAILURE_MODE=mode, ATTEMPT_COUNT=str(counter),
-                       TERMINATION_LOG=str(terminated), TARGET_LOG=str(root / "targets"))
+                       TERMINATION_LOG=str(terminated), TARGET_LOG=str(root / "targets"),
+                       ARGUMENT_LOG=str(root / "arguments"))
+            if device:
+                env['IOS_TEST_DEVICE_ID'] = device
             command = (["bash", str(ci / "run_sdk_startup_smoke.sh"), "ios"] if smoke
                        else ["bash", str(ci / "run_flutter_integration_test_ios.sh")])
             result = subprocess.run(
@@ -63,6 +70,7 @@ if mode == 'log_reader_once' and attempt == 1:
                 env=env, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, timeout=15,
             )
             self.targets = (root / "targets").read_text().splitlines()
+            self.arguments = [json.loads(line) for line in (root / "arguments").read_text().splitlines()]
             return result, int(counter.read_text()), (
                 terminated.read_text().splitlines() if terminated.exists() else []
             )
@@ -102,6 +110,12 @@ if mode == 'log_reader_once' and attempt == 1:
         result, attempts, _ = self.run_case("test_failure", smoke=True)
         self.assertEqual(result.returncode, 7, result.stdout)
         self.assertEqual(attempts, 1)
+
+    def test_smoke_is_bound_to_the_requested_ios_simulator(self):
+        result, attempts, _ = self.run_case("success", smoke=True, device="simulator-fixture-udid")
+        self.assertEqual(result.returncode, 0, result.stdout)
+        self.assertEqual(attempts, 1)
+        self.assertEqual(self.arguments[0][-2:], ["-d", "simulator-fixture-udid"])
 
 
 if __name__ == "__main__":

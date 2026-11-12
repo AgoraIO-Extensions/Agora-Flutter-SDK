@@ -47,22 +47,26 @@ jobs:
           echo "Available iOS Simulator SDKs:"
           xcodebuild -showsdks | grep iphonesimulator
       - uses: futureware-tech/simulator-action@v4
+        id: simulator
         with:
           model: "iPhone 16e"
           os: iOS
           os_version: ">=26.2"
-          erase_before_boot: true
-          wait_for_boot: true
+          erase_before_boot: ${{ !inputs.smoke_only }}
+          wait_for_boot: ${{ !inputs.smoke_only }}
           shutdown_after_job: true
       - name: Run iOS startup smoke or full API suite
+        env:
+          IOS_TEST_DEVICE_ID: ${{ inputs.smoke_only && steps.simulator.outputs.udid || '' }}
         run: |
           if [[ "$IOS_SMOKE_ONLY" = true ]]; then
+            test -n "$IOS_TEST_DEVICE_ID"
             bash ci/run_sdk_startup_smoke.sh ios
           else
             bash ci/run_flutter_integration_test_ios.sh
           fi
       - name: Get ios crash logs
-        if: always()
+        if: ${{ failure() || !inputs.smoke_only }}
         run: |
           sleep 30
 
@@ -77,7 +81,7 @@ jobs:
         
       - name: Upload ios logs
         uses: actions/upload-artifact@v4
-        if: always()
+        if: ${{ failure() || !inputs.smoke_only }}
         with:
           name: logs-ios-${{ inputs.flutter_version }}
           path: logs-ios/*

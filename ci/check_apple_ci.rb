@@ -97,6 +97,9 @@ end
 
 ios = ios_workflow.fetch('jobs').fetch('runtime')
 simulator = ios.fetch('steps').find { |step| step['uses'] == 'futureware-tech/simulator-action@v4' }.fetch('with')
+raise 'Fast iOS boot must preserve isolated/full boot behavior' unless simulator['erase_before_boot'].to_s.include?('!inputs.smoke_only') && simulator['wait_for_boot'].to_s.include?('!inputs.smoke_only')
+ios_run = ios.fetch('steps').find { |step| step['name'] == 'Run iOS startup smoke or full API suite' }
+raise 'Fast iOS checks must bind to the selected device' unless ios_run.fetch('env').fetch('IOS_TEST_DEVICE_ID').include?('steps.simulator.outputs.udid') && ios_run.fetch('run').include?('test -n "$IOS_TEST_DEVICE_ID"')
 raise 'iOS runtime setup must remain shared' unless jobs.fetch('integration_test_ios').fetch('uses') == './.github/workflows/run_ios_integration_test.yml'
 expected = [
   ['ios runtime', '3.16', 'macos-26', 'iPhone 16e', '>=26.2', 3],

@@ -16,8 +16,12 @@ while IFS= read -r filename; do
     for ((attempt = 1; attempt <= MAX_ATTEMPTS; attempt++)); do
         echo "Running iOS integration test: ${filename} (attempt ${attempt}/${MAX_ATTEMPTS})"
         ATTEMPT_LOG=$(mktemp "${TMPDIR:-/tmp}/agora-ios-integration-test.XXXXXX")
+        flutter_command=(flutter test "${filename}" --dart-define=TEST_APP_ID="${TEST_APP_ID}" --verbose)
+        if [[ -n "${IOS_TEST_DEVICE_ID:-}" ]]; then
+            flutter_command+=(-d "$IOS_TEST_DEVICE_ID")
+        fi
         if python3 "${MY_PATH}/flutter_vm_service_watchdog.py" --timeout 120 -- \
-            flutter test "${filename}" --dart-define=TEST_APP_ID="${TEST_APP_ID}" --verbose 2>&1 | tee "${ATTEMPT_LOG}"; then
+            "${flutter_command[@]}" 2>&1 | tee "${ATTEMPT_LOG}"; then
             rm -f "${ATTEMPT_LOG}"
             break
         else
