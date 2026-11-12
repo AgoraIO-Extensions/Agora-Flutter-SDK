@@ -1,11 +1,17 @@
 name: 'schedule: run weekly test latest stable'
 
 concurrency:
-  group: ${{ github.workflow }}-${{ github.ref }}
+  group: ${{ github.workflow }}-${{ github.ref }}-${{ inputs.suite || 'latest-stable' }}
   cancel-in-progress: true
 
 on:
   workflow_dispatch:
+    inputs:
+      suite:
+        description: 'Checks to run'
+        type: choice
+        default: latest-stable
+        options: [latest-stable, current-regression, full-compatibility, legacy-ios]
   schedule:
     - cron: '0 0 * * 0'
       timezone: 'Asia/Shanghai'
@@ -13,6 +19,7 @@ on:
 jobs:
   resolve_flutter_version:
     name: Resolve Flutter stable version
+    if: ${{ github.event_name != 'workflow_dispatch' || inputs.suite == 'latest-stable' }}
     runs-on: ubuntu-latest
     outputs:
       flutter_version: ${{ steps.flutter-action.outputs.VERSION }}
@@ -30,6 +37,33 @@ jobs:
           echo "Resolved Flutter channel: ${{ steps.flutter-action.outputs.CHANNEL }}"
           echo "Resolved Flutter version: ${{ steps.flutter-action.outputs.VERSION }}"
 
+  legacy_ios_compatibility:
+    name: Flutter 3.16 iOS compatibility (manual)
+    if: ${{ github.event_name == 'workflow_dispatch' && inputs.suite == 'legacy-ios' }}
+    uses: ./.github/workflows/run_ios_integration_test.yml
+    with:
+      flutter_version: '3.16'
+    secrets:
+      APP_ID: ${{ secrets.APP_ID }}
+
+  current_regression:
+    name: Full current-version API and screenshot regression (manual)
+    if: ${{ github.event_name == 'workflow_dispatch' && inputs.suite == 'current-regression' }}
+    uses: ./.github/workflows/run_test.yml
+    with:
+      full_regression: true
+    secrets:
+      APP_ID: ${{ secrets.APP_ID }}
+
+  full_compatibility:
+    name: Full Flutter compatibility matrix (manual)
+    if: ${{ github.event_name == 'workflow_dispatch' && inputs.suite == 'full-compatibility' }}
+    uses: ./.github/workflows/run_test.yml
+    with:
+      full_compatibility: true
+    secrets:
+      APP_ID: ${{ secrets.APP_ID }}
+
   flutter_codestyle_check:
     name: Flutter codestyle/analyze check (Flutter ${{ needs.resolve_flutter_version.outputs.flutter_version }})
     needs: resolve_flutter_version
@@ -37,13 +71,12 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - uses: subosito/flutter-action@v2
+        id: flutter
         with:
           channel: ${{ needs.resolve_flutter_version.outputs.flutter_channel }}
           flutter-version: ${{ needs.resolve_flutter_version.outputs.flutter_version }}
           cache: true
-      - name: Check Dart Format
-        id: pub_publish_check
-        continue-on-error: true
+      - name: Check publish package
         run: bash ci/dart_pub_publish_check.sh
       - uses: axel-op/dart-package-analyzer@v3
         id: analysis
@@ -59,59 +92,13 @@ jobs:
             echo Pub Score too low.
             exit 1
           fi
-      - name: Fail on publish dry-run check
-        if: ${{ always() && steps.pub_publish_check.outcome == 'failure' }}
-        run: |
-          echo "Publication check failed."
-          exit 1
-
-  flutter_ut:
-    name: Flutter unit test (Flutter ${{ needs.resolve_flutter_version.outputs.flutter_version }})
-    needs: resolve_flutter_version
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      - uses: subosito/flutter-action@v2
-        with:
-          channel: ${{ needs.resolve_flutter_version.outputs.flutter_channel }}
-          flutter-version: ${{ needs.resolve_flutter_version.outputs.flutter_version }}
-          cache: true
-      - run: flutter test
-
-  attach_docs:
-    name: Attach dartdoc (Flutter ${{ needs.resolve_flutter_version.outputs.flutter_version }})
-    needs: resolve_flutter_version
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      - uses: subosito/flutter-action@v2
-        with:
-          channel: ${{ needs.resolve_flutter_version.outputs.flutter_channel }}
-          flutter-version: ${{ needs.resolve_flutter_version.outputs.flutter_version }}
-          cache: true
-      - name: Build DartDoc 📖
-        run: |
-          dart pub get
-          dart doc
-          zip -r agora_rtc_engine_docs.zip doc
-      - name: Upload DartDoc Artifact ⬆️
-        uses: actions/upload-artifact@v4
-        with:
-          name: agora_rtc_engine_docs.zip
-          path: agora_rtc_engine_docs.zip
-
-  pub_publish_check:
-    name: pub publish check (Flutter ${{ needs.resolve_flutter_version.outputs.flutter_version }})
-    needs: resolve_flutter_version
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      - uses: subosito/flutter-action@v2
-        with:
-          channel: ${{ needs.resolve_flutter_version.outputs.flutter_channel }}
-          flutter-version: ${{ needs.resolve_flutter_version.outputs.flutter_version }}
-          cache: true
-      - run: bash ci/dart_pub_publish_check.sh
+      - name: Restore workspace ownership after package analysis
+        # The analysis container can leave files owned by its own user.
+        if: ${{ !cancelled() && steps.analysis.outcome != 'skipped' }}
+        run: sudo chown -R "$(id -u):$(id -g)" "$GITHUB_WORKSPACE"
+      - name: Run unit tests
+        if: ${{ !cancelled() && steps.flutter.outcome == 'success' }}
+        run: flutter test
 
   integration_test_android:
     name: Run Flutter Android Integration Tests (Flutter ${{ needs.resolve_flutter_version.outputs.flutter_version }})
@@ -259,24 +246,26 @@ jobs:
     runs-on: macos-latest
     timeout-minutes: 120
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout as agora_rtc_engine
+        uses: actions/checkout@v4
+        with:
+          path: agora_rtc_engine
       - uses: subosito/flutter-action@v2
         with:
           channel: ${{ needs.resolve_flutter_version.outputs.flutter_channel }}
           flutter-version: ${{ needs.resolve_flutter_version.outputs.flutter_version }}
           cache: true
       - name: Run flutter integration test swiftpm for ${{ matrix.os }}
-        if: ${{ matrix.os == 'macos' }}
+        working-directory: agora_rtc_engine/test_shard/integration_test_swiftpm
         run: |
+          flutter config --enable-swift-package-manager
           flutter pub get
-          flutter build ${{ matrix.os }}
-        working-directory: test_shard/integration_test_swiftpm
-      - name: Run flutter integration test swiftpm for ${{ matrix.os }}
-        if: ${{ matrix.os == 'ios' }}
-        run: |
-          flutter pub get
-          flutter build ${{ matrix.os }} --no-codesign
-        working-directory: test_shard/integration_test_swiftpm
+          if [ "${{ matrix.os }}" = "ios" ]; then
+            flutter build ios --no-codesign
+          else
+            flutter config --enable-macos-desktop
+            flutter build macos
+          fi
         env:
           IOS_SIMULATOR_SDK_VERSION: 18.0
 
@@ -384,16 +373,20 @@ jobs:
     runs-on: macos-latest
     timeout-minutes: 120
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout as agora_rtc_engine
+        uses: actions/checkout@v4
+        with:
+          path: agora_rtc_engine
       - uses: subosito/flutter-action@v2
         with:
           channel: ${{ needs.resolve_flutter_version.outputs.flutter_channel }}
           flutter-version: ${{ needs.resolve_flutter_version.outputs.flutter_version }}
           cache: true
       - run: flutter pub get
+        working-directory: agora_rtc_engine
       - name: Run flutter build ios --no-codesign --simulator
         run: flutter build ios --no-codesign --simulator
-        working-directory: example
+        working-directory: agora_rtc_engine/example
         env:
           IOS_SIMULATOR_SDK_VERSION: 18.0
 

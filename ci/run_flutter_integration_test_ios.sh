@@ -1,17 +1,55 @@
 #!/usr/bin/env bash
 
 set -e
+set -o pipefail
 set -x
 
-MY_PATH=$(dirname "$0")
+MY_PATH=$(cd "$(dirname "$0")" && pwd)
 
-pushd ${MY_PATH}/../test_shard/integration_test_app
+pushd "${MY_PATH}/../test_shard/integration_test_app"
 
 flutter packages get
 
+MAX_ATTEMPTS="${IOS_TEST_MAX_ATTEMPTS:-3}"
+
 while IFS= read -r filename; do
-    echo "Running iOS integration test: ${filename}"
-    flutter test "${filename}" --dart-define=TEST_APP_ID="${TEST_APP_ID}" --verbose
-done < <(find integration_test -maxdepth 1 -type f -name '*.dart' ! -name '*.generated.dart' | sort)
+    for ((attempt = 1; attempt <= MAX_ATTEMPTS; attempt++)); do
+        echo "Running iOS integration test: ${filename} (attempt ${attempt}/${MAX_ATTEMPTS})"
+        ATTEMPT_LOG=$(mktemp "${TMPDIR:-/tmp}/agora-ios-integration-test.XXXXXX")
+        flutter_command=(flutter test "${filename}" --dart-define=TEST_APP_ID="${TEST_APP_ID}" --verbose)
+        if [[ -n "${IOS_TEST_DEVICE_ID:-}" ]]; then
+            flutter_command+=(-d "$IOS_TEST_DEVICE_ID")
+        fi
+        if python3 "${MY_PATH}/flutter_vm_service_watchdog.py" --timeout 120 -- \
+            "${flutter_command[@]}" 2>&1 | tee "${ATTEMPT_LOG}"; then
+            rm -f "${ATTEMPT_LOG}"
+            break
+        else
+            result=$?
+        fi
+
+        if ((result != 124)) && ! grep -Fq "Error waiting for a debug connection: The log reader failed unexpectedly" "${ATTEMPT_LOG}"; then
+            rm -f "${ATTEMPT_LOG}"
+            echo "iOS integration test failed with a non-retryable error: ${filename}" >&2
+            exit "$result"
+        fi
+        rm -f "${ATTEMPT_LOG}"
+        xcrun simctl terminate booted io.agora.integrationtestapp.integrationTestApp || true
+
+        if ((attempt == MAX_ATTEMPTS)); then
+            echo "iOS integration test failed after ${MAX_ATTEMPTS} attempts: ${filename}" >&2
+            exit "$result"
+        fi
+
+        echo "Retrying after Flutter failed to discover the iOS VM Service..."
+        sleep 5
+    done
+done < <(
+    if (($#)); then
+        printf '%s\n' "$@"
+    else
+        find integration_test -maxdepth 1 -type f -name '*.dart' ! -name '*.generated.dart' | sort
+    fi
+)
 
 popd
