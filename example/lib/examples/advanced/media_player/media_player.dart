@@ -37,10 +37,10 @@ class _State extends State<MediaPlayer> {
 
   bool isJoined = false;
 
-  // Android only. With Hybrid Composition++ enabled in AndroidManifest.xml
-  // (Flutter 3.44+, Android 14+, Impeller Vulkan) a SurfaceView shows HDR
-  // video; the default TextureView is always SDR.
-  bool _useAndroidSurfaceView = false;
+  // Android only, on by default. With Hybrid Composition++ enabled in
+  // AndroidManifest.xml (Flutter 3.44+, Android 14+, Impeller Vulkan) a
+  // SurfaceView shows HDR video; a TextureView is always SDR.
+  bool _useAndroidSurfaceView = true;
 
   @override
   void initState() {
