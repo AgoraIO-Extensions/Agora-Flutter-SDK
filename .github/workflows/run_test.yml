@@ -46,7 +46,7 @@ jobs:
       - name: Check CI policy and startup recovery
         run: |
           ruby ci/check_apple_ci.rb
-          python3 -m unittest ci/test_flutter_vm_service_watchdog.py ci/test_ios_integration_startup_retry.py ci/test_check_apple_changes.py ci/test_sdk_startup_smoke.py
+          python3 -m unittest ci/test_flutter_vm_service_watchdog.py ci/test_ios_integration_startup_retry.py ci/test_check_apple_changes.py ci/test_sdk_startup_smoke.py ci/test_pub_publish_check.py
       - uses: subosito/flutter-action@v2
         id: flutter
         with:
