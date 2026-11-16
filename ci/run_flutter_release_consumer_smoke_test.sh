@@ -3,6 +3,8 @@
 set -euo pipefail
 set -x
 
+MY_PATH=$(cd "$(dirname "$0")" && pwd)
+
 : "${CONSUMER_PLATFORM:?CONSUMER_PLATFORM is required}"
 : "${PACKAGE_SOURCE:?PACKAGE_SOURCE is required}"
 : "${RELEASE_VERSION:?RELEASE_VERSION is required}"
@@ -158,6 +160,10 @@ for attempt in $(seq 1 10); do
 
   sleep 30
 done
+
+if [[ "${CONSUMER_PLATFORM}" == "ios" || "${CONSUMER_PLATFORM}" == "macos" ]]; then
+  ruby "${MY_PATH}/configure_cocoapods_sources.rb" "${APP_DIR}/${CONSUMER_PLATFORM}/Podfile"
+fi
 
 if [[ "${CONSUMER_PLATFORM}" == "macos" ]]; then
   "${FLUTTER_BIN}" config --enable-macos-desktop
