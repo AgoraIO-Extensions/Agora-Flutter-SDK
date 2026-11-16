@@ -3,18 +3,18 @@ parsers:
     package: '@agoraio-extensions/cxx-parser'
     args:
       includeHeaderDirs:
-        - '.binding_headers/rtc_4.5.3.8/include'
+        - '.binding_headers/rtc_4.5.3.9/include'
       parseFiles:
         include:
-          - '.binding_headers/rtc_4.5.3.8/include/*.h'
+          - '.binding_headers/rtc_4.5.3.9/include/*.h'
         exclude:
-          - '.binding_headers/rtc_4.5.3.8/include/AgoraRefPtr.h'
-          - '.binding_headers/rtc_4.5.3.8/include/time_utils.h'
-          - '.binding_headers/rtc_4.5.3.8/include/AgoraOptional.h'
-          - '.binding_headers/rtc_4.5.3.8/include/AgoraRefPtr.h'
-          - '.binding_headers/rtc_4.5.3.8/include/IAgoraMediaComponentFactory.h'
-          - '.binding_headers/rtc_4.5.3.8/include/IAgoraParameter.h'
-          - '.binding_headers/rtc_4.5.3.8/include/rte*.h'
+          - '.binding_headers/rtc_4.5.3.9/include/AgoraRefPtr.h'
+          - '.binding_headers/rtc_4.5.3.9/include/time_utils.h'
+          - '.binding_headers/rtc_4.5.3.9/include/AgoraOptional.h'
+          - '.binding_headers/rtc_4.5.3.9/include/AgoraRefPtr.h'
+          - '.binding_headers/rtc_4.5.3.9/include/IAgoraMediaComponentFactory.h'
+          - '.binding_headers/rtc_4.5.3.9/include/IAgoraParameter.h'
+          - '.binding_headers/rtc_4.5.3.9/include/rte*.h'
 
   - name: IrisApiIdParser
     package: '@agoraio-extensions/terra_shared_configs'
@@ -24,17 +24,17 @@ parsers:
     args:
       customHeaderFileNamePrefix: 'Custom'
       includeHeaderDirs:
-        - '.binding_headers/rtc_4.5.3.8/include'
+        - '.binding_headers/rtc_4.5.3.9/include'
       parseFiles:
         include:
-          - '.binding_headers/rtc_4.5.3.8/include/*.h'
-          - '.binding_headers/rtc_4.5.3.8/custom_headers/*.h'
+          - '.binding_headers/rtc_4.5.3.9/include/*.h'
+          - '.binding_headers/rtc_4.5.3.9/custom_headers/*.h'
         exclude:
-          - '.binding_headers/rtc_4.5.3.8/include/AgoraOptional.h'
-          - '.binding_headers/rtc_4.5.3.8/include/AgoraRefPtr.h'
-          - '.binding_headers/rtc_4.5.3.8/include/time_utils.h'
-          - '.binding_headers/rtc_4.5.3.8/include/IAgoraMediaComponentFactory.h'
-          - '.binding_headers/rtc_4.5.3.8/include/rte*.h'
+          - '.binding_headers/rtc_4.5.3.9/include/AgoraOptional.h'
+          - '.binding_headers/rtc_4.5.3.9/include/AgoraRefPtr.h'
+          - '.binding_headers/rtc_4.5.3.9/include/time_utils.h'
+          - '.binding_headers/rtc_4.5.3.9/include/IAgoraMediaComponentFactory.h'
+          - '.binding_headers/rtc_4.5.3.9/include/rte*.h'
 
   - path: parsers/cud_node_parser.ts
     args:
