@@ -39,5 +39,6 @@ ruby -e '
 
 pushd "${APP_DIR}"
 flutter pub get
+ruby "${MY_PATH}/configure_cocoapods_sources.rb" "${APP_DIR}/macos/Podfile"
 flutter build macos
 popd
