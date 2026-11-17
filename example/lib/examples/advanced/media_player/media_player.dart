@@ -2,6 +2,7 @@ import 'package:agora_rtc_engine/agora_rtc_engine.dart';
 import 'package:agora_rtc_engine_example/config/agora.config.dart' as config;
 import 'package:agora_rtc_engine_example/components/example_actions_widget.dart';
 import 'package:agora_rtc_engine_example/components/log_sink.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 /// MediaPlayer Example
@@ -35,6 +36,9 @@ class _State extends State<MediaPlayer> {
   int _streamCount = 0;
 
   bool isJoined = false;
+
+  bool _useAndroidSurfaceView = false;
+  bool _useAndroidSurfaceViewHdr = false;
 
   @override
   void initState() {
@@ -91,8 +95,15 @@ class _State extends State<MediaPlayer> {
       },
     ));
 
+    await _createMediaPlayer();
+  }
+
+  Future<void> _createMediaPlayer() async {
     _mediaPlayerController = MediaPlayerController(
-        rtcEngine: _engine, canvas: const VideoCanvas(uid: 0));
+        rtcEngine: _engine,
+        canvas: const VideoCanvas(uid: 0),
+        useAndroidSurfaceView: _useAndroidSurfaceView,
+        useAndroidSurfaceViewHdr: _useAndroidSurfaceViewHdr);
     await _mediaPlayerController.initialize();
     _mediaPlayerController.registerPlayerSourceObserver(
       MediaPlayerSourceObserver(
@@ -146,6 +157,24 @@ class _State extends State<MediaPlayer> {
     });
   }
 
+  Future<void> _recreateMediaPlayer() async {
+    setState(() {
+      _isReadyPreview = false;
+    });
+    await _mediaPlayerController.dispose();
+    await _createMediaPlayer();
+  }
+
+  Widget _androidViewSwitch(
+      String title, bool value, ValueChanged<bool>? onChanged) {
+    return Row(children: [
+      Expanded(child: Text(title, style: const TextStyle(fontSize: 12))),
+      Switch(
+          value: value,
+          onChanged: _isUrlOpened || !_isReadyPreview ? null : onChanged),
+    ]);
+  }
+
   void _leaveChannel() async {
     if (_isUrlOpened) {
       await _mediaPlayerController.stop();
@@ -190,6 +219,22 @@ class _State extends State<MediaPlayer> {
           crossAxisAlignment: CrossAxisAlignment.start,
           mainAxisSize: MainAxisSize.min,
           children: [
+            if (!kIsWeb && defaultTargetPlatform == TargetPlatform.android) ...[
+              _androidViewSwitch(
+                  'Android SurfaceView',
+                  _useAndroidSurfaceView || _useAndroidSurfaceViewHdr,
+                  _useAndroidSurfaceViewHdr
+                      ? null
+                      : (changed) {
+                          _useAndroidSurfaceView = changed;
+                          _recreateMediaPlayer();
+                        }),
+              _androidViewSwitch('Android SurfaceView HDR (Hybrid Composition)',
+                  _useAndroidSurfaceViewHdr, (changed) {
+                _useAndroidSurfaceViewHdr = changed;
+                _recreateMediaPlayer();
+              }),
+            ],
             Row(children: [
               Expanded(
                 child: TextField(
