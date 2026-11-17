@@ -394,7 +394,7 @@ class _State extends State<JoinChannelVideo> {
                   const SizedBox(height: 8),
                   Row(
                     children: [
-                      const Expanded(
+                      Expanded(
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
@@ -421,7 +421,7 @@ class _State extends State<JoinChannelVideo> {
                   ),
                   Row(
                     children: [
-                      const Expanded(
+                      Expanded(
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [

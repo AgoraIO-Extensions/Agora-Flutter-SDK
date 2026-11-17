@@ -1,3 +1,7 @@
+ext {
+    compileSdkVersion = 36
+}
+
 allprojects {
     repositories {
         google()
