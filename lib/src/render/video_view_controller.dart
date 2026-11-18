@@ -27,7 +27,14 @@ abstract class VideoViewControllerBase {
   /// Android SurfaceView is only available on Android platform. Whether to use Android SurfaceView to render video: true : Use Android SurfaceView to render video. false : Do not use Android SurfaceView to render video.
   bool get useAndroidSurfaceView;
 
-  /// Android SurfaceView HDR is only available on Android platform. Whether to render HDR (PQ / HLG) video with an Android SurfaceView in Hybrid Composition: true : Render video with an Android SurfaceView in Hybrid Composition. This takes priority over useAndroidSurfaceView and treats it as true. The Flutter UI performance may be lower. false : (Default) Do not change how the video is rendered. It is ignored when useFlutterTexture is true. It is read when the AgoraVideoView is created; to change it, create a new AgoraVideoView. For HDR video, it is recommended to use Flutter 3.47.9, the latest release that still builds with Android Gradle Plugin 8, and enable Hybrid Composition++ (HCPP) by adding the `io.flutter.embedding.android.EnableHcpp` meta-data to the app's AndroidManifest.xml. Flutter then uses HCPP on Android 14 or later with Impeller Vulkan, which avoids showing earlier Flutter UI in the video area before the first video frame, and falls back to Hybrid Composition on other devices. The meta-data applies to every platform view in the app.
+  /// Android only. Whether to render HDR (PQ / HLG) video with an Android SurfaceView in Hybrid Composition (HC), so the SurfaceView stays a separate layer and HDR reaches the display.
+  ///
+  /// - true: Use HC. It takes priority over [useAndroidSurfaceView] (treated as true). Flutter UI performance may be lower.
+  /// - false: (Default) The rendering is unchanged. It is ignored when [useFlutterTexture] is true.
+  ///
+  /// It is read when the [AgoraVideoView] is created.
+  ///
+  /// Recommended: use Flutter 3.47.9 (the latest version that builds with Android Gradle Plugin 8) and enable Hybrid Composition++ (HCPP) by adding the `io.flutter.embedding.android.EnableHcpp` meta-data (value `true`) to AndroidManifest.xml. On Android 14 or later with Impeller Vulkan, Flutter then uses HCPP, which avoids showing stale Flutter UI in the video area before the first video frame. Other devices fall back to HC. The meta-data applies to every platform view in the app.
   bool get useAndroidSurfaceViewHdr;
 
   @internal
