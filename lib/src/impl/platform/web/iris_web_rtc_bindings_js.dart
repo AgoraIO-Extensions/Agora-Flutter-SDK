@@ -1,20 +1,16 @@
-@JS()
-library iris_web_rtc;
+import 'dart:js_interop';
 
 import 'package:iris_method_channel/iris_method_channel_bindings_web.dart';
-import 'package:js/js.dart';
 
 @JS('IrisWebRtc.initIrisRtc')
 external void initIrisRtc(
     IrisApiEngine irisApiEngine, InitIrisRtcOptions? options);
 
-@JS('InitIrisRtcOptions')
-@anonymous
-class InitIrisRtcOptions {
-  // Must have an unnamed factory constructor with named arguments.
-  external factory InitIrisRtcOptions(
-      {Object? agoraRTC, Object? irisRtcEngine});
+extension type InitIrisRtcOptions._(JSObject _) implements JSObject {
+  // An external factory with only named arguments creates a JS object
+  // literal (the `dart:js_interop` equivalent of `@anonymous`).
+  external factory InitIrisRtcOptions({JSAny? agoraRTC, JSAny? irisRtcEngine});
 
-  external Object get agoraRTC;
-  external Object get irisRtcEngine;
+  external JSAny? get agoraRTC;
+  external JSAny? get irisRtcEngine;
 }
