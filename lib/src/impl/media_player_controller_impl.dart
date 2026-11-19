@@ -16,7 +16,9 @@ class MediaPlayerControllerImpl
     with VideoViewControllerBaseMixin
     implements MediaPlayerController, MediaPlayer {
   MediaPlayerControllerImpl(this._rtcEngine, this._canvas, this._connection,
-      this._useFlutterTexture, this._useAndroidSurfaceView);
+      this._useFlutterTexture, this._useAndroidSurfaceView,
+      {bool useAndroidSurfaceViewHdr = false})
+      : _useAndroidSurfaceViewHdr = useAndroidSurfaceViewHdr;
 
   MediaPlayer? _mediaPlayer;
 
@@ -48,6 +50,11 @@ class MediaPlayerControllerImpl
 
   @override
   bool get useAndroidSurfaceView => _useAndroidSurfaceView;
+
+  final bool _useAndroidSurfaceViewHdr;
+
+  @override
+  bool get useAndroidSurfaceViewHdr => _useAndroidSurfaceViewHdr;
 
   /// MediaPlayer does not support render mode and always Fit the video by default
   @override
