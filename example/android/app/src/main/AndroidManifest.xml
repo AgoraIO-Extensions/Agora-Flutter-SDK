@@ -10,9 +10,14 @@
         android:label="agora_rtc_ng_example"
         android:name=".MyApplication"
         android:icon="@mipmap/ic_launcher">
-        <!-- Optional, recommended for useAndroidSurfaceViewHdr with Flutter 3.47.9: enable
-             Hybrid Composition++ (HCPP) on Android 14+ with Impeller Vulkan. Other devices
-             keep using Hybrid Composition. It applies to every platform view in the app.
+        <!-- HDR video (MediaPlayer page, Android): enable Hybrid Composition++ (HCPP).
+             Recommended: Flutter 3.47.9 with AGP 8, or Flutter 3.50.0 with AGP 9.
+             Needs Flutter 3.44+, Android 14+, Impeller with Vulkan; otherwise Flutter falls back.
+             It applies to every platform view in the app, so it is off in this example.
+             1. HCPP only: enable this and turn on "Android SurfaceView" (useAndroidSurfaceView).
+                Devices without HCPP show SDR.
+             2. HCPP + HC: enable this and turn on "Android SurfaceView HDR"
+                (useAndroidSurfaceViewHdr). Devices without HCPP fall back to HC and still show HDR.
         <meta-data
             android:name="io.flutter.embedding.android.EnableHcpp"
             android:value="true" />

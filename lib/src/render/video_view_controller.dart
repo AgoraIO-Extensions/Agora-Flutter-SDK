@@ -27,14 +27,18 @@ abstract class VideoViewControllerBase {
   /// Android SurfaceView is only available on Android platform. Whether to use Android SurfaceView to render video: true : Use Android SurfaceView to render video. false : Do not use Android SurfaceView to render video.
   bool get useAndroidSurfaceView;
 
-  /// Android only. Whether to render HDR (PQ / HLG) video with an Android SurfaceView in Hybrid Composition (HC), so the SurfaceView stays a separate layer and HDR reaches the display.
+  /// Android only. Whether to render HDR (PQ / HLG) video so that the Android SurfaceView stays a separate layer and HDR reaches the display.
   ///
-  /// - true: Use HC. It takes priority over [useAndroidSurfaceView] (treated as true). Flutter UI performance may be lower.
+  /// - true: Create the view with `initSurfaceAndroidView`. Flutter uses Hybrid Composition++ (HCPP) when the app enables it and the device supports it, and falls back to Hybrid Composition (HC) otherwise. HDR works in both. It takes priority over [useAndroidSurfaceView] (treated as true), so you do not need to set both.
   /// - false: (Default) The rendering is unchanged. It is ignored when [useFlutterTexture] is true.
   ///
   /// It is read when the [AgoraVideoView] is created.
   ///
-  /// Recommended: use Flutter 3.47.9 (the latest version that builds with Android Gradle Plugin 8) and enable Hybrid Composition++ (HCPP) by adding the `io.flutter.embedding.android.EnableHcpp` meta-data (value `true`) to AndroidManifest.xml. On Android 14 or later with Impeller Vulkan, Flutter then uses HCPP, which avoids showing stale Flutter UI in the video area before the first video frame. Other devices fall back to HC. The meta-data applies to every platform view in the app.
+  /// HC has performance and rendering-residue compatibility issues, so enabling HCPP is recommended: add the `io.flutter.embedding.android.EnableHcpp` meta-data (value `true`) to AndroidManifest.xml. HCPP needs Flutter 3.44 or later, Android 14 (API 34) or later, and Impeller with Vulkan. The meta-data applies to every platform view in the app.
+  ///
+  /// Without this option, enabling HCPP and setting [useAndroidSurfaceView] to true also shows HDR, but only on devices that support HCPP; other devices show SDR.
+  ///
+  /// Flutter version: use Flutter 3.50.0 with Android Gradle Plugin (AGP) 9 (set `ext.compileSdkVersion = 36` in the app's root `build.gradle`), or Flutter 3.47.9 if the app stays on AGP 8.
   bool get useAndroidSurfaceViewHdr;
 
   @internal

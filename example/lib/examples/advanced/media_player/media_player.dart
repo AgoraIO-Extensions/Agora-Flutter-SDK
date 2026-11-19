@@ -220,8 +220,12 @@ class _State extends State<MediaPlayer> {
           mainAxisSize: MainAxisSize.min,
           children: [
             if (!kIsWeb && defaultTargetPlatform == TargetPlatform.android) ...[
+              // HDR on Android, see the comments in AndroidManifest.xml (EnableHcpp):
+              // 1. HCPP only: useAndroidSurfaceView, devices without HCPP show SDR.
+              // 2. HCPP + HC: useAndroidSurfaceViewHdr, devices without HCPP fall back
+              //    to HC and still show HDR. It makes useAndroidSurfaceView unnecessary.
               _androidViewSwitch(
-                  'Android SurfaceView',
+                  'Android SurfaceView (HCPP only)',
                   _useAndroidSurfaceView || _useAndroidSurfaceViewHdr,
                   _useAndroidSurfaceViewHdr
                       ? null
@@ -229,7 +233,7 @@ class _State extends State<MediaPlayer> {
                           _useAndroidSurfaceView = changed;
                           _recreateMediaPlayer();
                         }),
-              _androidViewSwitch('Android SurfaceView HDR (Hybrid Composition)',
+              _androidViewSwitch('Android SurfaceView HDR (HCPP + HC)',
                   _useAndroidSurfaceViewHdr, (changed) {
                 _useAndroidSurfaceViewHdr = changed;
                 _recreateMediaPlayer();
