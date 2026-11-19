@@ -27,7 +27,7 @@ android {
     if (project.android.hasProperty("namespace")) {
         namespace 'io.agora.agora_rtc_ng'
     }
-    compileSdkVersion safeExtGet('compileSdkVersion', 31)
+    compileSdkVersion safeExtGet('compileSdkVersion', 34)
 
     defaultConfig {
         minSdkVersion safeExtGet('minSdkVersion', 21)
