@@ -5,7 +5,7 @@ set -euo pipefail
 
 test -f pubspec.yaml
 test -f ios/Podfile
-plugin_name=$(ruby --disable-gems -ryaml -e 'puts YAML.load_file(ARGV.fetch(0)).fetch("name")' ../pubspec.yaml)
+plugin_name=$(ruby -ryaml -e 'puts YAML.load_file(ARGV.fetch(0)).fetch("name")' ../pubspec.yaml)
 
 for manager in cocoapods swiftpm; do
   echo "=== iOS Demo dependency check: $manager ==="
