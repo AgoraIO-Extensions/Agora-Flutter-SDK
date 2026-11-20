@@ -31,13 +31,18 @@ on:
         required: false
         default: 'stable'
       flutter_version:
-        description: 'Target Flutter version(s), separated by comma, e.g. "3.24.5, 3.44.8"'
+        description: 'Flutter version(s) for non-iOS platforms, separated by comma; iOS uses ios_flutter_version'
         type: string
         required: false
         # we should use the latest stable version for building example later, however, the android build will fail with the latest stable version, so we fixed use the 3.24.5 version here for now
         # Here is the error log:
         # Caused by: org.gradle.api.GradleException: You are applying Flutter's app_plugin_loader Gradle plugin imperatively using the apply script method, which is not possible anymore. Migrate to applying Gradle plugins with the declarative plugins block: https://flutter.dev/to/flutter-gradle-plugin-apply
         default: '3.24.5'
+      ios_flutter_version:
+        description: 'Flutter version for iOS CocoaPods regression and SwiftPM IPA builds (must support SwiftPM)'
+        type: string
+        required: false
+        default: '3.44.4'
       app_id_secrets:
         description: 'App ID secret(s) used for builds'
         type: choice
@@ -76,13 +81,18 @@ on:
         required: false
         default: 'stable'
       flutter_version:
-        description: 'Target Flutter version(s), separated by comma, e.g. "3.24.5, 3.44.8"'
+        description: 'Flutter version(s) for non-iOS platforms, separated by comma; iOS uses ios_flutter_version'
         type: string
         required: false
         # we should use the latest stable version for building example later, however, the android build will fail with the latest stable version, so we fixed use the 3.24.5 version here for now
         # Here is the error log:
         # Caused by: org.gradle.api.GradleException: You are applying Flutter's app_plugin_loader Gradle plugin imperatively using the apply script method, which is not possible anymore. Migrate to applying Gradle plugins with the declarative plugins block: https://flutter.dev/to/flutter-gradle-plugin-apply
         default: '3.24.5'
+      ios_flutter_version:
+        description: 'Flutter version for iOS CocoaPods regression and SwiftPM IPA builds (must support SwiftPM)'
+        type: string
+        required: false
+        default: '3.44.4'
       app_id_secrets:
         description: 'App ID secret(s) used for builds, separated by comma'
         type: string
@@ -153,6 +163,7 @@ jobs:
         env:
           platforms: ${{ needs.split-platforms.outputs.platforms }}
           flutter_versions: ${{ inputs.flutter_version }}
+          ios_flutter_version: ${{ inputs.ios_flutter_version }}
           app_id_secrets: ${{ inputs.app_id_secrets }}
         run: |
           set -euo pipefail
@@ -181,6 +192,7 @@ jobs:
             --argjson platforms "$platforms" \
             --argjson versions "$versions" \
             --argjson app_ids "$app_ids" \
+            --arg ios_version "$ios_flutter_version" \
             '
               {
                 android: "ubuntu-latest",
@@ -190,7 +202,7 @@ jobs:
                 macos:   "macos-latest"
               } as $runners
               | [ $platforms[] as $p
-                  | $versions[] as $v
+                  | (if $p == "ios" then [$ios_version] else $versions end)[] as $v
                   | $app_ids[] as $a
                   | { platform: $p,
                       version: $v,
@@ -223,6 +235,15 @@ jobs:
           fetch-depth: '1'
           lfs: 'true'
           submodules: 'true'
+
+      - name: Checkout iOS build checks from the workflow revision
+        if: ${{ matrix.platform == 'ios' }}
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.workflow_sha }}
+          path: demo-build-workflow
+          sparse-checkout: ci/build_ios_demo_dependencies.sh
+          sparse-checkout-cone-mode: false
 
       - name: Setup JDK for Android
         if: ${{ matrix.platform == 'android' }}
@@ -298,6 +319,10 @@ jobs:
           flutter-version: ${{ matrix.version }}
           cache: true
 
+      - name: Configure iOS Demo integration
+        if: ${{ matrix.platform == 'ios' }}
+        run: flutter config --enable-swift-package-manager
+
       - name: Build
         env:
           BUILD_APP_ID: ${{ secrets.APP_ID }}
@@ -305,6 +330,8 @@ jobs:
         shell: bash
         working-directory: agora_rtc_engine/example
         run: |
+          set -euo pipefail
+
           if [ "${{ matrix.app_id_secret }}" == "MY_APP_ID" ]; then
             DEFAULT_BUILD_APP_ID="$BUILD_MY_APP_ID"
           else
@@ -400,7 +427,7 @@ jobs:
           echo "========================================="
 
           if [ "$platform" == "ios" ]; then
-            flutter build ios --release --no-codesign \
+            bash ../../demo-build-workflow/ci/build_ios_demo_dependencies.sh \
               --dart-define=TEST_APP_ID="$DEFAULT_BUILD_APP_ID" \
               --dart-define=TEST_TOKEN= \
               --dart-define=TEST_CHANNEL_ID=testapi \
@@ -539,7 +566,11 @@ jobs:
           build_timestamp=$(date +%Y%m%d%H%M%S)
 
           flutter_version_slug="$(printf '%s' "${{ matrix.version }}" | tr -c '[:alnum:].' '-')"
-          artifact_name="agora_rtc_engine_example_${{ matrix.platform }}_flutter${flutter_version_slug}_${{ matrix.app_id_secret }}_${pub_version}_${build_timestamp}_${{ github.run_id }}"
+          platform_slug="${{ matrix.platform }}"
+          if [ "$platform_slug" == "ios" ]; then
+            platform_slug="ios_swiftpm"
+          fi
+          artifact_name="agora_rtc_engine_example_${platform_slug}_flutter${flutter_version_slug}_${{ matrix.app_id_secret }}_${pub_version}_${build_timestamp}_${{ github.run_id }}"
           echo "artifact_name=$artifact_name" >> $GITHUB_OUTPUT
 
       - name: Upload build artifacts
