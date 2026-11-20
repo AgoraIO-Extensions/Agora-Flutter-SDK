@@ -50,7 +50,7 @@ elif args[0] == 'build':
 
 def workflow():
     return json.loads(subprocess.check_output([
-        'ruby', '--disable-gems', '-ryaml', '-rjson', '-e',
+        'ruby', '-ryaml', '-rjson', '-e',
         'puts YAML.load_file(ARGV[0]).to_json', str(WORKFLOW),
     ], text=True))
 

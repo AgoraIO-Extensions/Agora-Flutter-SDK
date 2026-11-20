@@ -273,8 +273,18 @@ if [ -f "$f" ]; then
 fi
 
 f="${ROOT}/.github/workflows/run_build_example.yml"
-[ -f "$f" ] && replace_in_file "$f" \
-  "s|${old_bundle_prefix}\.agoraRtcEngineExample|${new_bundle_prefix}.shengwangRtcEngineExample|g"
+if [ -f "$f" ]; then
+  replace_in_file "$f" \
+    "s|${old_bundle_prefix}\.agoraRtcEngineExample|${new_bundle_prefix}.shengwangRtcEngineExample|g" \
+    "s|default: 'MY_APP_ID'|default: 'APP_ID'|g"
+  sed_i '/^      APP_ID:$/,/^      MY_APP_ID:$/s/required: false/required: true/' "$f"
+  sed_i '/^      MY_APP_ID:$/,/^      BUILD_PROVISION_PROFILE_UUID:$/s/required: true/required: false/' "$f"
+fi
+
+f="${ROOT}/.github/workflows/on_pr_internal.yml"
+if [ -f "$f" ]; then
+  replace_in_file "$f" 's|if \[ -n "$APP_ID" \] && \[ -n "$MY_APP_ID" \]; then|if [ -n "$APP_ID" ]; then|g'
+fi
 
 f="${ROOT}/.github/workflows/on_issue_labeled.yml"
 if [ -f "$f" ]; then
