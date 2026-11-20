@@ -14,6 +14,7 @@ FAKE_COMMAND = '''#!/usr/bin/env python3
 import json, os, sys
 from pathlib import Path
 root = Path(os.environ['DEMO_TEST_ROOT'])
+plugin = os.environ.get('DEMO_TEST_PLUGIN_NAME', 'agora_rtc_engine')
 args = sys.argv[1:]
 command = Path(sys.argv[0]).name
 mode_file = root / 'mode'
@@ -36,11 +37,11 @@ elif args[0] == 'build':
         assert not Path('ios/Podfile.lock').exists(), 'CocoaPods lockfile was reused'
     if mode == 'cocoapods' or os.environ.get('DEMO_TEST_FALLBACK'):
         Path('ios/Pods').mkdir(exist_ok=True)
-        Path('ios/Podfile.lock').write_text('  - agora_rtc_engine (6.6.4):\\n  - iris_method_channel (2.2.6):\\n')
+        Path('ios/Podfile.lock').write_text(f'  - {plugin} (6.6.4):\\n  - iris_method_channel (2.2.6):\\n')
     if mode == 'swiftpm' and os.environ.get('DEMO_TEST_MISSING_PACKAGE') != '1':
         manifest = Path('ios/Flutter/ephemeral/Packages/FlutterGeneratedPluginSwiftPackage/Package.swift')
         manifest.parent.mkdir(parents=True, exist_ok=True)
-        manifest.write_text('.package(name: "agora_rtc_engine", path: "a"),\\n.package(name: "iris_method_channel", path: "b"),\\n')
+        manifest.write_text(f'.package(name: "{plugin}", path: "a"),\\n.package(name: "iris_method_channel", path: "b"),\\n')
     output = Path('build/ios/iphoneos/Runner.app/Runner')
     output.parent.mkdir(parents=True, exist_ok=True)
     output.write_text(mode)
@@ -58,9 +59,12 @@ class DemoDependencyChecks(unittest.TestCase):
     def run_checks(self, **overrides):
         with tempfile.TemporaryDirectory() as directory:
             root = Path(directory)
-            (root / 'ios').mkdir()
-            (root / 'ios/Podfile').touch()
-            (root / 'pubspec.yaml').touch()
+            example = root / 'example'
+            (example / 'ios').mkdir(parents=True)
+            (example / 'ios/Podfile').touch()
+            (example / 'pubspec.yaml').touch()
+            plugin = overrides.get('DEMO_TEST_PLUGIN_NAME', 'agora_rtc_engine')
+            (root / 'pubspec.yaml').write_text(f'name: {plugin}\n')
             (root / 'bin').mkdir()
             for command in ['flutter', 'pod']:
                 stub = root / 'bin' / command
@@ -69,9 +73,9 @@ class DemoDependencyChecks(unittest.TestCase):
             env = dict(os.environ, PATH=str(root / 'bin') + os.pathsep + os.environ['PATH'],
                        DEMO_TEST_ROOT=str(root), GITHUB_STEP_SUMMARY=str(root / 'summary'), **overrides)
             result = subprocess.run(['bash', str(SCRIPT), '--dart-define=TEST_APP_ID=test'],
-                                    cwd=root, env=env, capture_output=True, text=True)
+                                    cwd=example, env=env, capture_output=True, text=True)
             calls = [json.loads(line) for line in (root / 'calls').read_text().splitlines()]
-            output = root / 'build/ios/iphoneos/Runner.app/Runner'
+            output = example / 'build/ios/iphoneos/Runner.app/Runner'
             return result, calls, output.read_text() if output.exists() else None
 
     def test_both_managers_build_and_leave_only_swiftpm_app(self):
@@ -81,6 +85,11 @@ class DemoDependencyChecks(unittest.TestCase):
         self.assertEqual([call[1] for call in builds], ['cocoapods', 'swiftpm'])
         self.assertTrue(all('--dart-define=TEST_APP_ID=test' in call[2] for call in builds))
         self.assertTrue(any(call[0] == 'pod' and call[2] == ['deintegrate'] for call in calls))
+        self.assertEqual(app, 'swiftpm')
+
+    def test_shengwang_plugin_is_checked_using_its_pubspec_name(self):
+        result, _, app = self.run_checks(DEMO_TEST_PLUGIN_NAME='shengwang_rtc_engine')
+        self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
         self.assertEqual(app, 'swiftpm')
 
     def test_cocoapods_failure_stops_before_swiftpm(self):
