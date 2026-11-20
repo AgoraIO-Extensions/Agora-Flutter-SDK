@@ -5,6 +5,7 @@ set -euo pipefail
 
 test -f pubspec.yaml
 test -f ios/Podfile
+plugin_name=$(ruby -ryaml -e 'puts YAML.load_file(ARGV.fetch(0)).fetch("name")' ../pubspec.yaml)
 
 for manager in cocoapods swiftpm; do
   echo "=== iOS Demo dependency check: $manager ==="
@@ -23,7 +24,7 @@ for manager in cocoapods swiftpm; do
   flutter pub get
   flutter build ios --release --no-codesign "$@"
 
-  for plugin in agora_rtc_engine iris_method_channel; do
+  for plugin in "$plugin_name" iris_method_channel; do
     if [ "$manager" = cocoapods ]; then
       grep -Fq "  - $plugin (" ios/Podfile.lock || {
         echo "::error::$plugin is not integrated through CocoaPods"
