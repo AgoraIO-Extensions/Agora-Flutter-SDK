@@ -102,6 +102,37 @@ for platform in ios macos; do
   fi
 done
 
+echo "Updating Apple Swift package names and source directories"
+for platform in ios macos; do
+  old_package="${ROOT}/${platform}/${old_pkg}"
+  package="${ROOT}/${platform}/${new_pkg}"
+  if [ -d "$old_package" ]; then
+    if [ -e "$package" ]; then
+      echo "Both Apple package directories exist: $old_package and $package" >&2
+      exit 1
+    fi
+    mv "$old_package" "$package"
+  fi
+  if [ -d "$package" ]; then
+    for suffix in "" "_swift"; do
+      if [ -d "$package/Sources/${old_pkg}${suffix}" ]; then
+        mv "$package/Sources/${old_pkg}${suffix}" "$package/Sources/${new_pkg}${suffix}"
+      fi
+    done
+    if [ -d "$package/Sources/${new_pkg}/include/${old_pkg}" ]; then
+      mv "$package/Sources/${new_pkg}/include/${old_pkg}" "$package/Sources/${new_pkg}/include/${new_pkg}"
+    fi
+    for pattern in '*.swift' '*.m' '*.mm' '*.h'; do
+      replace_in_dir "$package" "$pattern" "$old_pkg" "$new_pkg"
+    done
+    replace_in_dir "$package" '*.swift' "${old_pkg//_/-}" "${new_pkg//_/-}"
+  fi
+  spec="${ROOT}/${platform}/${new_pkg}.podspec"
+  if [ -f "$spec" ]; then
+    replace_in_file "$spec" "s|${old_pkg}/|${new_pkg}/|g"
+  fi
+done
+
 echo "Updating test/ package references"
 replace_in_dir "${ROOT}/test" "*.dart" "package:${old_pkg}/" "package:${new_pkg}/"
 
@@ -226,6 +257,8 @@ f="${ROOT}/tool/terra/terra_config_main.yaml"
   "s|flutter_ng_json_template_en.json|flutter_ng_json_template_cn.json|g"
 
 echo "Updating .github workflows"
+replace_in_dir "${ROOT}/.github" "*.yml" "$old_pkg" "$new_pkg"
+replace_in_dir "${ROOT}/.github" "*.yaml" "$old_pkg" "$new_pkg"
 replace_in_dir "${ROOT}/.github" "*.yml" "${old_pkg_example}" "${new_pkg_example}"
 replace_in_dir "${ROOT}/.github" "*.yaml" "${old_pkg_example}" "${new_pkg_example}"
 replace_in_dir "${ROOT}/.github" "*.yml" "${old_docs_zip}" "${new_docs_zip}"
@@ -257,6 +290,9 @@ if [ -f "$f" ]; then
 fi
 
 echo "Updating ci/run_update_deps.sh podspec filenames"
+for pattern in '*.sh' '*.mjs' '*.py'; do
+  replace_in_dir "${ROOT}/ci" "$pattern" "$old_pkg" "$new_pkg"
+done
 f="${ROOT}/ci/run_update_deps.sh"
 [ -f "$f" ] && replace_in_file "$f" \
   "s|dep_file_ios=ios/${old_pkg}\.podspec|dep_file_ios=ios/${new_pkg}.podspec|g" \
