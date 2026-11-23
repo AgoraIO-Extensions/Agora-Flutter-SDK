@@ -1217,6 +1217,49 @@ class RtcEngineImpl extends rtc_engine_ex_binding.RtcEngineExImpl
     return engineMethodChannel.invokeMethod<T>(method, arguments);
   }
 
+  /// Value types accepted by [getParameters]; each selects a native getter
+  /// (`IAgoraParameter::getBool / getInt / getUInt / getNumber / getString /
+  /// getObject / getArray`).
+  static const getParametersTypes = <String>{
+    'bool',
+    'int',
+    'uint',
+    'number',
+    'string',
+    'object',
+    'array',
+  };
+
+  /// Reads a parameter of the native SDK through iris `RtcEngine_getParameters`
+  /// (NMS-32110). Throws [AgoraRtcException] with the native code (for example
+  /// -7 when the key has never been set, -2 when it holds another type) or the
+  /// iris code (-1009 when the iris in use has no `RtcEngine_getParameters`).
+  @internal
+  Future<dynamic> getParameters(String key, String type, {String? args}) async {
+    if (key.isEmpty || !getParametersTypes.contains(type)) {
+      throw AgoraRtcException(code: -ErrorCodeType.errInvalidArgument.value());
+    }
+    final param = <String, dynamic>{'key': key, 'type': type};
+    if (args != null) param['args'] = args;
+    final callApiResult = await irisMethodChannel.invokeMethod(
+        IrisMethodCall('RtcEngine_getParameters', jsonEncode(param)));
+    if (callApiResult.irisReturnCode < 0) {
+      throw AgoraRtcException(code: callApiResult.irisReturnCode);
+    }
+    final rm = callApiResult.data;
+    final result = rm['result'];
+    if (result is! int) {
+      throw AgoraRtcException(code: -ErrorCodeType.errFailed.value());
+    }
+    if (result < 0) {
+      throw AgoraRtcException(code: result);
+    }
+    if (!rm.containsKey('value')) {
+      throw AgoraRtcException(code: -ErrorCodeType.errFailed.value());
+    }
+    return rm['value'];
+  }
+
   Future<void> registerMethodChannelHandler(
     String method,
     Future<dynamic> Function(MethodCall call) handler,

@@ -42,6 +42,21 @@ extension RtcEngineExt on RtcEngine {
   }
 
   /// @nodoc
+  /// Reads a parameter of the native SDK: the value in effect after
+  /// `setParameters`, the config service and other sources are merged by
+  /// priority. [type] is one of `bool`, `int`, `uint`, `number`, `string`,
+  /// `object`, `array` (object / array are returned as decoded JSON); [args] is
+  /// passed to the native getter for `array`. Call it after `initialize`.
+  ///
+  /// Throws [AgoraRtcException] when the value cannot be read, for example
+  /// -7 when the key has never been set, -2 when it holds another type, or
+  /// -1009 when the native library does not support this call.
+  Future<dynamic> getParameters(String key, String type, {String? args}) {
+    final impl = this as RtcEngineImpl;
+    return impl.getParameters(key, type, args: args);
+  }
+
+  /// @nodoc
   Future<void> registerMethodChannelHandler(
     String method,
     Future<dynamic> Function(MethodCall call) handler,
